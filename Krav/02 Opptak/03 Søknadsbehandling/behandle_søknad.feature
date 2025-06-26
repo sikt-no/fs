@@ -63,3 +63,52 @@ Egenskap: Saksbehandler behandler søknader
 
   Scenario: Saksbehandlere kan se oversikt over søkere som har tilbudsgaranti
 
+
+  # Grunnlag
+  Scenario: Saksbehandler skal alltid kunne velge grunnlaget "REA" (Realkompetanse) under saksbehandling
+
+  Scenario: Grunnlaget "REA" skal aldri kreve at søker har "GSK"
+
+  Scenario: Grunnlaget "PRA" skal aldri kreve at søker har "GSK"
+
+  Scenario: Grunnlaget "PRA" skal kun velges når søker kan tildeles "GSK" på bakgrunn av praksis og 6-packen (delfag?)
+
+  # Her må vi snakke om søker når ting skal vises
+  Scenario: Saksbehandler skal se alle grunnlag knyttet til regelverket utdanningstilbudet søkeren har søkt på er koblet til 
+
+  # Scenario: Saksbehandler skal ikke få opp grunnlag som krever at søker har bevist GSK før søkeren har bevist GSK
+
+  #Poengberegning
+  Scenario: Når saksbehandler krysser av for et grunnlag åpner det for poengtypene man kvalifiserer for 
+      # her må vi definere et case
+
+
+  # Rangering (må sjekkes. Dette er det jeg tror er dobbeltrangering. I det minste er det flre grunnlag på samme kvote -> Besr)
+  Scenario: Saksbehandler skal dobbeltrangere søkeren til fordel for søkeren 
+      Gitt Saksbehandler saksbehandler et opptak til en bachelorgrad
+      Og Søker har gyldig vitnemål fra VGS som gir GSK
+      Og søker er eldre enn 23 år
+      Og Søker har 5 års praksis
+      Og søker har delfag med bedre snitt enn skolepoeng fra Vitnemålet
+      Når Saksbehandler rangerer søkeren med Grunnlagene VES og PRA
+      Så skal søker rangeres i ordinær kvote med konkuransepoengene fra grunnlaget PRA
+
+  # Automatisk poengberegning (vet ikke helt sikkert hvor mange poeng man får?)
+  Scenario: Saksbehandler velger grunnlaget VES og VOV for en søknad
+      Og Søker har gjennomført militæret
+      Og Søker får kjønnspoeng
+      Så skal Søker sine VES-poeng være 3-4 poeng høyere enn VOV-poengene
+
+  Scenario: Saksbehandler velger grunnlaget VES og PRA
+      Og Søker er eldre enn 23 år
+      Og Søker har bedre snitt i delfagene sine enn på vitnemålet
+      Så skal Søker sine PRA-poeng være høyere enn VES-poengene
+
+  # GSK
+  Scenario: En søker skal kun ha et gyldig GSK-vedtak om gangen
+
+  Scenario: En søker har fått et nytt vitnemål men skal ikke få et nytt GSK vedtak
+
+  Scenario: En saksbehandler må kunne annulere et tidligere fattet GSK-vedtak, men det skal fortsatt være gyldig i inneværende opptak
+
+
