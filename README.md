@@ -4,8 +4,8 @@ I dette GitHub-repoet finner du:
 - FS Allmenningen 
 - Funksjonelle krav
 
-## FS Produktbacklog - Oversikt over saker 
-I FS produktbacklog kan du se ulike oversikter over saker vi har inne, og følge status på disse. 
+## FS Offentlig saksoversikt 
+FS offentlig saksoversikt inneholder saker som er under arbeid og som står i kø for utvikling (ofte kalt produktbacklog), saker som er til vurdering for om de skal tas inn i arbeidskø og saker som er ferdige. Du kan se sakene og status her:
 https://github.com/orgs/sikt-no/projects/4/views/3 
 
 ## FS Allmenningen - felles diskusjonsforum
