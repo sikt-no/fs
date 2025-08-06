@@ -63,3 +63,5 @@ Egenskap: Saksbehandler behandler søknader
 
   Scenario: Saksbehandlere kan se oversikt over søkere som har tilbudsgaranti
 
+  Scenario: Søknadsbehandler skal kunne sette grunnlag basert på hvilke grunnlag som er relevant for alle utdanningstilbudene søknaden gjelder for
+
