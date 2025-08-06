@@ -1,0 +1,145 @@
+name: Automatisk Startdato
+
+on:
+  project_card:
+    types: [moved]
+  issues:
+    types: [opened, edited, reopened]
+
+jobs:
+  update-start-date:
+    runs-on: ubuntu-latest
+    if: github.event.action == 'moved' || contains(github.event.issue.labels.*.name, 'under arbeid')
+    
+    steps:
+      - name: Sjekk om issue er flyttet til "Under arbeid"
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const today = new Date().toISOString().split('T')[0];
+            
+            // Hent issue nummer
+            let issueNumber;
+            if (context.eventName === 'project_card') {
+              if (!context.payload.project_card.content_url) return;
+              const match = context.payload.project_card.content_url.match(/issues\/(\d+)$/);
+              if (!match) return;
+              issueNumber = parseInt(match[1]);
+            } else {
+              issueNumber = context.payload.issue.number;
+            }
+            
+            // Hent issue detaljer
+            const { data: issue } = await github.rest.issues.get({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: issueNumber
+            });
+            
+            // Sjekk om kortet er i "Under arbeid" kolonne eller har "under arbeid" label
+            let isUnderArbeid = false;
+            
+            if (context.eventName === 'project_card') {
+              const { data: column } = await github.rest.projects.getColumn({
+                column_id: context.payload.project_card.column_id
+              });
+              isUnderArbeid = column.name.toLowerCase().includes('under arbeid') || 
+                             column.name.toLowerCase().includes('in progress') ||
+                             column.name.toLowerCase().includes('doing');
+            } else {
+              isUnderArbeid = issue.labels.some(label => 
+                label.name.toLowerCase().includes('under arbeid') ||
+                label.name.toLowerCase().includes('in progress')
+              );
+            }
+            
+            if (!isUnderArbeid) {
+              console.log('Issue er ikke i "Under arbeid" status');
+              return;
+            }
+            
+            // Sjekk om startdato allerede er satt
+            const body = issue.body || '';
+            const startDatePattern = /Startdato:\s*(\d{4}-\d{2}-\d{2})/i;
+            const existingStartDate = body.match(startDatePattern);
+            
+            if (existingStartDate) {
+              console.log('Startdato er allerede satt til:', existingStartDate[1]);
+              return;
+            }
+            
+            // Legg til startdato i issue body
+            let newBody = body;
+            
+            // Hvis body er tom, opprett grunnleggende struktur
+            if (!body.trim()) {
+              newBody = `## Beskrivelse\n\n## Startdato\n${today}\n\n## Akseptansekriterier\n- [ ] `;
+            } else {
+              // Legg til startdato etter beskrivelse eller på toppen
+              if (newBody.includes('## ') || newBody.includes('# ')) {
+                // Finn sted å sette inn startdato
+                const lines = newBody.split('\n');
+                let insertIndex = 0;
+                
+                for (let i = 0; i < lines.length; i++) {
+                  if (lines[i].startsWith('## ') && !lines[i].toLowerCase().includes('startdato')) {
+                    insertIndex = i + 1;
+                    // Finn slutten av denne seksjonen
+                    while (insertIndex < lines.length && !lines[insertIndex].startsWith('## ') && !lines[insertIndex].startsWith('# ')) {
+                      insertIndex++;
+                    }
+                    break;
+                  }
+                }
+                
+                lines.splice(insertIndex, 0, '', '## Startdato', today, '');
+                newBody = lines.join('\n');
+              } else {
+                // Legg til på toppen
+                newBody = `## Startdato\n${today}\n\n${newBody}`;
+              }
+            }
+            
+            // Oppdater issue
+            await github.rest.issues.update({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: issueNumber,
+              body: newBody
+            });
+            
+            console.log(`Startdato ${today} lagt til i issue #${issueNumber}`);
+
+      - name: Legg til startdato label hvis ikke finnes
+        uses: actions/github-script@v6
+        with:
+          script: |
+            let issueNumber;
+            if (context.eventName === 'project_card') {
+              if (!context.payload.project_card.content_url) return;
+              const match = context.payload.project_card.content_url.match(/issues\/(\d+)$/);
+              if (!match) return;
+              issueNumber = parseInt(match[1]);
+            } else {
+              issueNumber = context.payload.issue.number;
+            }
+            
+            const { data: issue } = await github.rest.issues.get({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: issueNumber
+            });
+            
+            const hasStartedLabel = issue.labels.some(label => 
+              label.name.toLowerCase().includes('startet') || 
+              label.name.toLowerCase().includes('under arbeid')
+            );
+            
+            if (!hasStartedLabel) {
+              await github.rest.issues.addLabels({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: issueNumber,
+                labels: ['under arbeid']
+              });
+            }

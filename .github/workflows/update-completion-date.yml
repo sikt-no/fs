@@ -1,0 +1,159 @@
+name: Automatisk Ferdigdato
+
+on:
+  project_card:
+    types: [moved]
+  issues:
+    types: [closed, edited, reopened]
+
+jobs:
+  update-completion-date:
+    runs-on: ubuntu-latest
+    if: github.event.action == 'moved' || github.event.action == 'closed' || contains(github.event.issue.labels.*.name, 'ferdig')
+    
+    steps:
+      - name: Sjekk om issue er flyttet til "Ferdig" eller lukket
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const today = new Date().toISOString().split('T')[0];
+            
+            // Hent issue nummer
+            let issueNumber;
+            if (context.eventName === 'project_card') {
+              if (!context.payload.project_card.content_url) return;
+              const match = context.payload.project_card.content_url.match(/issues\/(\d+)$/);
+              if (!match) return;
+              issueNumber = parseInt(match[1]);
+            } else {
+              issueNumber = context.payload.issue.number;
+            }
+            
+            // Hent issue detaljer
+            const { data: issue } = await github.rest.issues.get({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: issueNumber
+            });
+            
+            // Sjekk om kortet er i "Ferdig" kolonne, issue er lukket, eller har "ferdig" label
+            let isFerdig = false;
+            
+            if (context.eventName === 'project_card') {
+              const { data: column } = await github.rest.projects.getColumn({
+                column_id: context.payload.project_card.column_id
+              });
+              isFerdig = column.name.toLowerCase().includes('ferdig') || 
+                         column.name.toLowerCase().includes('done') ||
+                         column.name.toLowerCase().includes('complete') ||
+                         column.name.toLowerCase().includes('finished');
+            } else {
+              isFerdig = issue.state === 'closed' || 
+                         issue.labels.some(label => 
+                           label.name.toLowerCase().includes('ferdig') ||
+                           label.name.toLowerCase().includes('done') ||
+                           label.name.toLowerCase().includes('complete')
+                         );
+            }
+            
+            if (!isFerdig) {
+              console.log('Issue er ikke i "Ferdig" status');
+              return;
+            }
+            
+            // Sjekk om ferdigdato allerede er satt
+            const body = issue.body || '';
+            const completionDatePattern = /Ferdig\s*dato:\s*(\d{4}-\d{2}-\d{2})/i;
+            const existingCompletionDate = body.match(completionDatePattern);
+            
+            if (existingCompletionDate) {
+              console.log('Ferdigdato er allerede satt til:', existingCompletionDate[1]);
+              return;
+            }
+            
+            // Legg til ferdigdato i issue body
+            let newBody = body;
+            
+            // Hvis body er tom, opprett grunnleggende struktur
+            if (!body.trim()) {
+              newBody = `## Beskrivelse\n\n## Startdato\n\n## Ferdig dato\n${today}\n\n## Akseptansekriterier\n- [x] Ferdigstilt`;
+            } else {
+              // Legg til ferdigdato etter startdato eller på slutten
+              if (newBody.includes('## Startdato')) {
+                // Finn startdato seksjon og legg til ferdigdato etter den
+                const lines = newBody.split('\n');
+                let insertIndex = -1;
+                
+                for (let i = 0; i < lines.length; i++) {
+                  if (lines[i].toLowerCase().includes('startdato')) {
+                    insertIndex = i + 1;
+                    // Finn slutten av startdato seksjonen
+                    while (insertIndex < lines.length && 
+                           !lines[insertIndex].startsWith('## ') && 
+                           !lines[insertIndex].startsWith('# ') &&
+                           insertIndex < lines.length) {
+                      insertIndex++;
+                    }
+                    break;
+                  }
+                }
+                
+                if (insertIndex > -1) {
+                  lines.splice(insertIndex, 0, '', '## Ferdig dato', today, '');
+                } else {
+                  lines.push('', '## Ferdig dato', today, '');
+                }
+                newBody = lines.join('\n');
+              } else if (newBody.includes('## ') || newBody.includes('# ')) {
+                // Legg til ferdigdato på slutten av strukturert innhold
+                newBody = `${newBody}\n\n## Ferdig dato\n${today}`;
+              } else {
+                // Legg til på slutten
+                newBody = `${newBody}\n\n## Ferdig dato\n${today}`;
+              }
+            }
+            
+            // Oppdater issue
+            await github.rest.issues.update({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: issueNumber,
+              body: newBody
+            });
+            
+            console.log(`Ferdigdato ${today} lagt til i issue #${issueNumber}`);
+
+      - name: Legg til ferdig label hvis ikke finnes
+        uses: actions/github-script@v6
+        with:
+          script: |
+            let issueNumber;
+            if (context.eventName === 'project_card') {
+              if (!context.payload.project_card.content_url) return;
+              const match = context.payload.project_card.content_url.match(/issues\/(\d+)$/);
+              if (!match) return;
+              issueNumber = parseInt(match[1]);
+            } else {
+              issueNumber = context.payload.issue.number;
+            }
+            
+            const { data: issue } = await github.rest.issues.get({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: issueNumber
+            });
+            
+            const hasCompletedLabel = issue.labels.some(label => 
+              label.name.toLowerCase().includes('ferdig') || 
+              label.name.toLowerCase().includes('done') ||
+              label.name.toLowerCase().includes('complete')
+            );
+            
+            if (!hasCompletedLabel) {
+              await github.rest.issues.addLabels({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: issueNumber,
+                labels: ['ferdig']
+              });
+            }
