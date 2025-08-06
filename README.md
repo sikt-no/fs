@@ -1,6 +1,6 @@
 # Velkommen til FS-repoet
 I dette GitHub-repoet finner du: 
-- FS Produktbacklog
+- FS Saksoversikt
 - FS Allmenningen 
 - Funksjonelle krav
 
