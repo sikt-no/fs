@@ -1,0 +1,142 @@
+name: Sync Issues til FS Prosjekter
+
+on:
+  issues:
+    types: [opened]
+
+jobs:
+  sync-to-projects:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Legg til issue i FS Offentlig saksoversikt
+        uses: actions/github-script@v6
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const issueNumber = context.payload.issue.number;
+            const repoOwner = context.repo.owner;
+            const repoName = context.repo.repo;
+            
+            console.log(`Behandler issue #${issueNumber} i ${repoOwner}/${repoName}`);
+            
+            try {
+              // Finn FS Offentlig saksoversikt prosjekt (project #4)
+              const { data: projects } = await github.rest.projects.listForRepo({
+                owner: repoOwner,
+                repo: repoName,
+                state: 'open'
+              });
+              
+              console.log('Fant prosjekter:', projects.map(p => ({name: p.name, number: p.number})));
+              
+              const offentligProject = projects.find(p => 
+                p.name.toLowerCase().includes('offentlig') && 
+                p.name.toLowerCase().includes('saksoversikt')
+              );
+              
+              if (offentligProject) {
+                console.log(`Fant FS Offentlig saksoversikt: ${offentligProject.name} (#${offentligProject.number})`);
+                
+                // Finn første kolonne i prosjektet
+                const { data: columns } = await github.rest.projects.listColumns({
+                  project_id: offentligProject.id
+                });
+                
+                if (columns.length > 0) {
+                  const firstColumn = columns[0];
+                  console.log(`Legger til i kolonne: ${firstColumn.name}`);
+                  
+                  // Opprett kort i prosjektet
+                  await github.rest.projects.createCard({
+                    column_id: firstColumn.id,
+                    content_id: context.payload.issue.id,
+                    content_type: 'Issue'
+                  });
+                  
+                  console.log(`Issue #${issueNumber} lagt til i FS Offentlig saksoversikt`);
+                } else {
+                  console.log('Ingen kolonner funnet i FS Offentlig saksoversikt');
+                }
+              } else {
+                console.log('FS Offentlig saksoversikt prosjekt ikke funnet');
+              }
+              
+            } catch (error) {
+              console.error('Feil ved tilkobling til FS Offentlig saksoversikt:', error);
+            }
+
+      - name: Legg til issue i FS Saksoversikt (intern)
+        uses: actions/github-script@v6
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const issueNumber = context.payload.issue.number;
+            const repoOwner = context.repo.owner;
+            const repoName = context.repo.repo;
+            
+            try {
+              // Finn FS Saksoversikt (intern) prosjekt
+              const { data: projects } = await github.rest.projects.listForRepo({
+                owner: repoOwner,
+                repo: repoName,
+                state: 'open'
+              });
+              
+              const internProject = projects.find(p => 
+                p.name.toLowerCase().includes('saksoversikt') && 
+                p.name.toLowerCase().includes('intern')
+              );
+              
+              if (internProject) {
+                console.log(`Fant FS Saksoversikt (intern): ${internProject.name}`);
+                
+                // Finn første kolonne i prosjektet
+                const { data: columns } = await github.rest.projects.listColumns({
+                  project_id: internProject.id
+                });
+                
+                if (columns.length > 0) {
+                  const firstColumn = columns[0];
+                  console.log(`Legger til i kolonne: ${firstColumn.name}`);
+                  
+                  // Opprett kort i prosjektet
+                  await github.rest.projects.createCard({
+                    column_id: firstColumn.id,
+                    content_id: context.payload.issue.id,
+                    content_type: 'Issue'
+                  });
+                  
+                  console.log(`Issue #${issueNumber} lagt til i FS Saksoversikt (intern)`);
+                } else {
+                  console.log('Ingen kolonner funnet i FS Saksoversikt (intern)');
+                }
+              } else {
+                console.log('FS Saksoversikt (intern) prosjekt ikke funnet');
+                console.log('Tilgjengelige prosjekter:', projects.map(p => p.name));
+              }
+              
+            } catch (error) {
+              console.error('Feil ved tilkobling til FS Saksoversikt (intern):', error);
+            }
+
+      - name: Kommentar på issue om prosjekt-tilknytning
+        uses: actions/github-script@v6
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const issueNumber = context.payload.issue.number;
+            
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: issueNumber,
+              body: `🤖 **Automatisk prosjekt-tilknytning**
+              
+Denne issue har automatisk blitt lagt til i følgende prosjekter:
+- ✅ FS Offentlig saksoversikt  
+- ✅ FS Saksoversikt (intern)
+
+_Generert av GitHub Actions workflow_`
+            });
+            
+            console.log(`Kommentar lagt til på issue #${issueNumber}`);
