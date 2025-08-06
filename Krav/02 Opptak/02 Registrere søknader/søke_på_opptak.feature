@@ -87,7 +87,7 @@ Egenskap: Søke på opptak
     Så skal personen se en oversikt over alle påbegynte søknader
 
   Scenario: Søker går inn på en påbegynt søknader og fullfører den
-    Gitt Gitt personen har startet på en søknad og lagret den til senere
+    Gitt personen har startet på en søknad og lagret den til senere
     Og personen er på hovedsiden til personflaten
     Og personen trykker på Mine Søknader
     Når personen velger en påbegynt søknad

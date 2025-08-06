@@ -4,10 +4,10 @@ Egenskap: Tilby utdanning
 Som administrator ved lærested som tilbyr utdanning i Norge trenger jeg å aktivt tilby utdanning til
   søkere og studenter i en periode.
 
-  Scenario: Opprette utdanningstilbud i tid
+  Scenariomal: Opprette utdanningstilbud i tid
     Gitt at utdanning finnes og er tilknyttet minst ett lærested
-    Når administrator registrerer utdanning som et aktivt utdanningstilbud
-    Så opprettes utdanningsinstans for utdanningen
+    Når administrator registrerer "<utdanning>" som et aktivt utdanningstilbud
+    Så opprettes utdanningsinstans for "<utdanning>"
 
     Eksempler:
     |utdanning                             |

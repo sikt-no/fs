@@ -19,17 +19,17 @@ Søkere og studenter må vite at utdanning finnes og om den passer for dem der d
     |studieprogram HFB-ANT Antikkens kultur|NN-trigger|
 
 @versjon1    
-Scenariomal: Utdanning med entydig ID tilgjengeliggjøres
-  Gitt at lærested er selvakkrediterende
-  Gitt at lærested har FS som studieadministrativt system
-  Gitt at utdanningstype er studieprogram
-  Når "<studieprogram>" er tildelt entydig ID og er lagret i utdanningsregisteret
-  Så blir registrerte data om "<studieprogram>" åpent tilgjengelig for "<kjente tredjeparter>"
+  Scenariomal: Utdanning med entydig ID tilgjengeliggjøres
+    Gitt at lærested er selvakkrediterende
+    Gitt at lærested har FS som studieadministrativt system
+    Gitt at utdanningstype er studieprogram
+    Når "<studieprogram>" er tildelt entydig ID og er lagret i utdanningsregisteret
+    Så blir registrerte data om "<studieprogram>" åpent tilgjengelig for "<kjente tredjeparter>"
 
-Eksempler: 
-|studieprogram|kjente tredjeparter|
-|studieprogram HFB-ANT Antikkens kultur|Lånekassen|
-|studieprogram HFB-ANT Antikkens kultur|Opptak|
+    Eksempler: 
+    |studieprogram|kjente tredjeparter|
+    |studieprogram HFB-ANT Antikkens kultur|Lånekassen|
+    |studieprogram HFB-ANT Antikkens kultur|Opptak|
 
 @versjon1
   Scenariomal: Administrator oppretter nytt utdanningstilbud ved FS-lærested
@@ -45,28 +45,37 @@ Eksempler:
     |HFB-ANT Antikkens kultur  | HFB-ANT Antikkens kultur 2025 HØST|
 
 @versjon1    
-Scenariomal: Utdanningstilbud med entydig ID tilgjengeliggjøres
-  Gitt at lærested er selvakkrediterende
-  Gitt at lærested har FS som studieadministrativt system
-  Gitt at studieprogram er opprettet og tildelt entydig ID
-  Når "<utdanningstilbud>" er tildelt entydig ID og er lagret i utdanningsregisteret
-  Så blir registrerte data om "<utdanningstilbud>" åpent tilgjengelig for "<kjente tredjeparter>"
+  Scenariomal: Utdanningstilbud med entydig ID tilgjengeliggjøres
+    Gitt at lærested er selvakkrediterende
+    Gitt at lærested har FS som studieadministrativt system
+    Gitt at studieprogram er opprettet og tildelt entydig ID
+    Når "<utdanningstilbud>" er tildelt entydig ID og er lagret i utdanningsregisteret
+    Så blir registrerte data om "<utdanningstilbud>" åpent tilgjengelig for "<kjente tredjeparter>"
 
-Eksempler: 
-|utdanningstilbud|kjente tredjeparter|
-|studieprogram HFB-ANT Antikkens kultur HØST 2025|Lånekassen|
-|studieprogram HFB-ANT Antikkens kultur HØST 2025|Opptak|
+    Eksempler: 
+    |utdanningstilbud|kjente tredjeparter|
+    |studieprogram HFB-ANT Antikkens kultur HØST 2025|Lånekassen|
+    |studieprogram HFB-ANT Antikkens kultur HØST 2025|Opptak|
 
     
 
-Scenariomal: Grunnscenario - Administrator oppretter ny utdanning ved FS-lærested som er selvakkrediterende 
-  Gitt at lærested er selvakkreditterende
-  Gitt at lærested har FS som studieadministrativt system
-  Når administrator registrerer "<utdanning>"
-  Så lagres "<utdanning>" i utdanningsregisteret
-  Så tildeles "<utdanning>" én entydig ID fra utdanningsregisteret
+@versjon1
+  Scenariomal: Grunnscenario - Administrator oppretter ny utdanning ved FS-lærested som er selvakkrediterende 
+    Gitt at lærested er selvakkreditterende
+    Gitt at lærested har FS som studieadministrativt system
+    Når administrator registrerer "<utdanning>"
+    Så lagres "<utdanning>" i utdanningsregisteret
+    Så tildeles "<utdanning>" én entydig ID fra utdanningsregisteret
 
-    Scenario: opprette utdanningstype: emne og kurs
+    Eksempler:
+    |utdanning|
+    |studieprogram HFB-ANT Antikkens kultur|
+
+@versjon1
+  Scenario: Opprette utdanningstype: emne og kurs
+    Gitt at administrator vil opprette emne eller kurs
+    Når administrator registrerer ny utdanning av type emne eller kurs
+    Så lagres utdanningen i utdanningsregisteret
 
   Scenariomal: Administrator oppretter ny utdanning ved FS-lærested som er områdeakkreditert
     Gitt at lærested er områdeakkreditert
@@ -100,7 +109,8 @@ Scenariomal: Grunnscenario - Administrator oppretter ny utdanning ved FS-lærest
     |utdanning                             |fagområde|
     |studieprogram HFB-ANT Antikkens kultur|antikkene studier|
 
-@skip egen feature for akkreditteringsinfo? høyere utdanning og selvakkredittering først? 
+# @skip - egen feature for akkreditteringsinfo? høyere utdanning og selvakkreditering først?
+@versjon1
   Scenariomal: Administrator oppretter ny utdanning ved FS-lærested som er områdeakkreditert
     Gitt at lærested IKKE er områdeakkreditert
     Gitt at NOKUT sier ja
@@ -113,11 +123,13 @@ Scenariomal: Grunnscenario - Administrator oppretter ny utdanning ved FS-lærest
     |utdanning                             |fagområde|
     |studieprogram HFB-ANT Antikkens kultur|antikkene studier|
 
-Scenariomal: Utdanning med entydig ID tilgjengeliggjøres
-Gitt at "<utdanning>" er lagret med entydig ID
-Gitt at "<utdanning>" er tilknyttet minst ett "<lærested>" 
-Når administrator setter utdanning til aktiv (endre fra kladd, eller aktivt velge kladd, tilgangsstyring på ulike statuser av utdanningsliv?)
-Så blir utdanning tilgjengelig
+@versjon1
+  Scenariomal: Utdanning med entydig ID tilgjengeliggjøres
+    Gitt at "<utdanning>" er lagret med entydig ID
+    Gitt at "<utdanning>" er tilknyttet minst ett "<lærested>" 
+    Når administrator setter utdanning til aktiv
+    Så blir utdanning tilgjengelig
 
-Eksempler: 
-|utdanning|lærested|
+    Eksempler: 
+    |utdanning|lærested|
+    |studieprogram HFB-ANT Antikkens kultur|Høgskulen på Vestlandet|
