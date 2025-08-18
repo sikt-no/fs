@@ -1,6 +1,6 @@
 name: Issue Report
 description: Opprett en ny sak
-title: "[Type]: "
+title: "[Skriv inn tittel]: "
 body:
   - type: dropdown
     id: issue_type
@@ -10,7 +10,6 @@ body:
       options:
         - feature
         - bug
-        - task
         - enhancement
         - maintenance
     validations:
@@ -28,7 +27,7 @@ body:
   - type: textarea
     id: acceptance_criteria
     attributes:
-      label: Akseptkriterier
+      label: Akseptansekriterier
       description: Hva må være på plass for at denne saken skal anses som ferdig?
       placeholder: |
         - [ ] Kriterium 1
