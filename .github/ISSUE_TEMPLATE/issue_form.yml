@@ -1,0 +1,38 @@
+name: Issue Report
+description: Opprett en ny sak
+title: "[Type]: "
+body:
+  - type: dropdown
+    id: issue_type
+    attributes:
+      label: Issue Type
+      description: Velg type sak
+      options:
+        - feature
+        - bug
+        - task
+        - enhancement
+        - maintenance
+    validations:
+      required: true
+  
+  - type: textarea
+    id: description
+    attributes:
+      label: Beskrivelse
+      description: Beskriv saken
+      placeholder: Skriv en detaljert beskrivelse av saken...
+    validations:
+      required: true
+  
+  - type: textarea
+    id: acceptance_criteria
+    attributes:
+      label: Akseptkriterier
+      description: Hva må være på plass for at denne saken skal anses som ferdig?
+      placeholder: |
+        - [ ] Kriterium 1
+        - [ ] Kriterium 2
+        - [ ] Kriterium 3
+    validations:
+      required: false
