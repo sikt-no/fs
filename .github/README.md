@@ -63,7 +63,7 @@ Hver issue må ha én av disse ved oppretting:
 
 - `type:feature` - Ny funksjonalitet
 - `type:enhancement` - Forbedringer av eksisterende funksjonalitet  
-- `type:maintenance` - Teknisk gjeld, refaktorering, oppgraderinger
+- `type:maintenance` - Vedlikehold, teknisk gjeld, refaktorering, oppgraderinger
 - `type:bug` - Feilrettinger
 
 ### Prioritetslabels
@@ -82,6 +82,15 @@ Brukes for å vise viktighetsgrad:
 Disse settes automatisk av workflows:
 - `under arbeid` - Sak er startet
 - `ferdig` - Sak er fullført
+
+### Milestones (milepæler)
+Vi bruker milestones med datoer når vi har prosjektfinansiering med startdato og sluttdato. Issues knyttes til riktig prosjekt. 
+- Fremtidens opptak 
+- Utdanningsregister (ut 2025)
+
+Vi bruker også milestones til:
+- Årsmål for ÅR (Eksempel 2026: Modernisering og legacyavvikling), alle nye features (som ikke er på prosjekt) bør knyttes til og lede oss i retning av årsmålet. Årsmålet skifter hvert år (februar-januar) og må ikke tolkes som at alt skal være ferdig til dato, så her setter vi nok ikke sluttdato, men startdato. 
+- Stabilitet, sikkerhet og ytelse, en KPI-milestone som vi samler saker som i hovedsak gjelder bugfikser på ting i produksjon, planlagte vedlikeholds- og sikkerhetsoppgaver, samt stabilitets- og ytelsesforbedringer
 
 ---
 
