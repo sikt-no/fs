@@ -78,10 +78,25 @@ Brukes for å vise viktighetsgrad:
 
 **Merk**: `priority:critical` brukes sjelden og kun for akutte situasjoner!
 
-### Statuslabels (automatiske)
-Disse settes automatisk av workflows:
-- `under arbeid` - Sak er startet
-- `ferdig` - Sak er fullført
+### Status på saker
+- `Til vurdering` - Sak er opprettet og kan ses på/analyseres/utfleskes
+- `Arbeidskø` - Sak er prioritert for utvikling og klar til at et team tar den på seg.
+- `Under arbeid` - Arbeid på sak er startet
+- `Ferdig` - Sak er fullført
+- `Parkert` - Sak er satt på hold, eller vi har bestemt oss for å ikke gjøre noe med den
+  
+Standard status for innkomne saker er "til vurdering". Unntaket er bugs som blir markert med prioritetsnivå kritisk og en seksjon. Disse går rett til "arbeidskøen" og skal håndteres med en gang.
+Vi prøver å begrense antall saker i arbeidskø og under arbeid for å holde mengden arbeid i gang nede og heller ha fokus på å sluttføre sakerfør vi tar inn nye. Saker starter ofte som større entiteter og deles opp i mindre biter jo nærmere og mer inn i utviklingen vi kommer. 
+
+### Prosesslabels
+Kategorisering ut fra hvilket funksjons- eller prosessområde som FS støtter som en gitt sak gjelder. Eksempler: person, organisasjon, planlegge utdanning, opptak, studiegjennomføring, kompetanse, teknisk. 
+
+I denne kategorien har vi også
+- `Uplanlagt arbeid` - for å skille ut saker vi må jobbe med som vi ikke har planlagt (typisk, feil som må rettes)
+- `Trenger innhold` - Sak som ikke er godt nok beskrevet til å bli arbeidet med, men som allikevel har kommet seg inn i arbeidskø eller til arbeid
+
+### Interne labels
+Vi har også labels på seksjon og team, som vi kun bruker i den interne saksoversikten. 
 
 ### Milestones (milepæler)
 Vi bruker milestones med datoer når vi har prosjektfinansiering med startdato og sluttdato. Issues knyttes til riktig prosjekt. 
