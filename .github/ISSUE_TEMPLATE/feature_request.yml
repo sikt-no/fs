@@ -7,15 +7,15 @@ body:
     id: description
     attributes:
       label: Beskrivelse
-      description: Kort beskrivelse av hva som skal utvikles
-      placeholder: Beskriv den nye funksjonaliteten som skal utvikles...
+      description: Kort beskrivelse av hva som ønskes utviklet
+      placeholder: Beskriv den nye funksjonaliteten som ønskes utviklet
     validations:
       required: true
   
   - type: textarea
     id: user_value
     attributes:
-      label: Brukerverdi
+      label: Brukerhistorie
       description: Definer verdien for brukeren
       placeholder: |
         Som [rolle] ønsker jeg [funksjonalitet] slik at [nytte]
@@ -29,7 +29,7 @@ body:
     id: acceptance_criteria
     attributes:
       label: Akseptansekriterier
-      description: Konkrete kriterier som må oppfylles for at feature er ferdig
+      description: Konkrete kriterier som må oppfylles for at funksjonaliteten er ferdig
       placeholder: |
         - [ ] Kriterium 1
         - [ ] Kriterium 2  
@@ -54,11 +54,23 @@ body:
     validations:
       required: false
 
+   - type: textarea
+    id: additional_context
+    attributes:
+      label: Tilleggsinformasjon
+      description: Legg til eventuelle skjermbilder, wireframes, eller annen kontekst
+      placeholder: |
+        - Lenker til relaterte issues
+        - Skjermbilder eller mockups
+        - Referanser til funksjonelle krav
+    validations:
+      required: false
+
   - type: textarea
     id: technical_notes
     attributes:
       label: Tekniske notater
-      description: Eventuelle tekniske betraktninger eller avhengigheter
+      description: Eventuelle tekniske krav, betraktninger eller avhengigheter
       placeholder: |
         - Avhengigheter til andre systemer
         - Tekniske utfordringer
@@ -72,27 +84,17 @@ body:
       label: Definisjon av ferdig
       description: Standard sjekkliste for når en feature regnes som ferdig
       options:
+        - label: Brukertesting gjennomført
+          required: false
         - label: Kode utviklet og testet
           required: false
-        - label: Dokumentasjon oppdatert
-          required: false  
-        - label: Deploy til test miljø
-          required: false
         - label: Akseptansetester kjørt og godkjent
+          required: false
+        - label: Dokumentasjon og utgivelsesnotater oppdatert
+          required: false
+        - label: Tilgjengelig for brukere i produksjon
           required: false
         - label: Sikkerhetsvurdering gjennomført (hvis aktuelt)
           required: false
         - label: Tilgangsstyring konfigurert (hvis aktuelt)
           required: false
-
-  - type: textarea
-    id: additional_context
-    attributes:
-      label: Tilleggsinformasjon
-      description: Legg til eventuelle skjermbilder, wireframes, eller annen kontekst
-      placeholder: |
-        - Lenker til relaterte issues
-        - Skjermbilder eller mockups
-        - Referanser til dokumentasjon
-    validations:
-      required: false
