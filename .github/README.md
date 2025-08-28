@@ -112,14 +112,30 @@ Vi bruker standardiserte templates for å sikre kvalitet og fullstendighet:
 
 ## ⚙️ Automatiske workflows
 
-Vi har tre aktive workflows som automatiserer saksadministrasjon:
+Vi har flere aktive workflows som automatiserer saksadministrasjon:
+
+### 1. Issue oppretting
+- Når en sak opprettes i https://github.com/sikt-no/fs
+- Så blir den tilknyttet både offentlig og intern saksoversikt for FS
+
+- Når noen oppretter en sak
+- Så blir saken automatisk tildelt status "til vurdering"
+
+Unntaket er
+- Når en sak er opprettet med type "bug" og prioritet "kritisk" og saken er tilordnet en seksjon
+- Så blir saken automatisk tildelt status "arbeidskø"
+
 
 ### 1. Automatisk startdato
+Når en sak flyttes fra "arbeidskø" til "under arbeid"
+Så får saken automatisk satt startdato i issuebeskrivelsen både i intern og offentlig saksliste for FS
 - **Fil**: `update-start-date.yml`
 - **Trigger**: Issue flyttes til "Under arbeid" eller får `under arbeid` label
 - **Handling**: Legger til startdato i issue-beskrivelsen
 
 ### 2. Automatisk ferdigdato  
+Når en sak flyttes fra "under arbeid" til "ferdig"
+Så får saken automatisk satt ferdigdato i issuebeskrivelsen både i intern og offentlig saksliste for FS
 - **Fil**: `update-completion-date.yml`
 - **Trigger**: Issue flyttes til "Ferdig" eller lukkes
 - **Handling**: Legger til ferdigdato i issue-beskrivelsen
@@ -144,16 +160,17 @@ Følgende kolonnenavn aktiverer workflows:
 
 ## 🤝 Hvordan bidra
 
-### For Sikt-ansatte
+### For Sikt-ansatte som jobber med FS
 1. Opprett issue via GitHub issue template
-2. Velg riktig type-label og prioritet
+2. Velg riktig issue type
 3. Issues legges automatisk til begge prosjekter
 4. Produktledere prioriterer i dialog med team
 
 ### For eksterne bidragsytere  
-1. Opprett issue via GitHub issue template
-2. Issues legges automatisk til offentlig saksoversikt
+1. Opprett issue via GitHub issue template, meld inn sak via RT eller som tilbakemeldinger direkte fra brukerflatene
+2. Issue opprettes "til vurdering"
 3. Sikt-team vurderer og prioriterer
+4. Hvis saken krever modning konverteres saken til discussion/ide
 
 ### Produktansvar
 - **Produktledere** har ansvar for prioritering av produktbacklog
