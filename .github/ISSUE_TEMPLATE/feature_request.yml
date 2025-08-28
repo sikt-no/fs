@@ -1,0 +1,98 @@
+name: 🚀 Feature Request
+description: Foreslå ny funksjonalitet for FS
+title: "[FEATURE] "
+labels: ["type:feature"]
+body:
+  - type: textarea
+    id: description
+    attributes:
+      label: Beskrivelse
+      description: Kort beskrivelse av hva som skal utvikles
+      placeholder: Beskriv den nye funksjonaliteten som skal utvikles...
+    validations:
+      required: true
+  
+  - type: textarea
+    id: user_value
+    attributes:
+      label: Brukerverdi
+      description: Definer verdien for brukeren
+      placeholder: |
+        Som [rolle] ønsker jeg [funksjonalitet] slik at [nytte]
+        
+        Eksempel:
+        Som administrator ønsker jeg å kunne filtrere studenter etter studieprogram slik at jeg raskere kan finne relevante studentgrupper.
+    validations:
+      required: true
+
+  - type: textarea
+    id: acceptance_criteria
+    attributes:
+      label: Akseptansekriterier
+      description: Konkrete kriterier som må oppfylles for at feature er ferdig
+      placeholder: |
+        - [ ] Kriterium 1
+        - [ ] Kriterium 2  
+        - [ ] Kriterium 3
+      value: |
+        - [ ] 
+        - [ ] 
+        - [ ] 
+    validations:
+      required: true
+
+  - type: dropdown
+    id: priority
+    attributes:
+      label: Prioritet
+      description: Hvor viktig er denne featuren?
+      options:
+        - low
+        - medium
+        - high
+        - critical
+    validations:
+      required: false
+
+  - type: textarea
+    id: technical_notes
+    attributes:
+      label: Tekniske notater
+      description: Eventuelle tekniske betraktninger eller avhengigheter
+      placeholder: |
+        - Avhengigheter til andre systemer
+        - Tekniske utfordringer
+        - Foreslåtte løsningsmetoder
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: definition_of_done
+    attributes:
+      label: Definisjon av ferdig
+      description: Standard sjekkliste for når en feature regnes som ferdig
+      options:
+        - label: Kode utviklet og testet
+          required: false
+        - label: Dokumentasjon oppdatert
+          required: false  
+        - label: Deploy til test miljø
+          required: false
+        - label: Akseptansetester kjørt og godkjent
+          required: false
+        - label: Sikkerhetsvurdering gjennomført (hvis aktuelt)
+          required: false
+        - label: Tilgangsstyring konfigurert (hvis aktuelt)
+          required: false
+
+  - type: textarea
+    id: additional_context
+    attributes:
+      label: Tilleggsinformasjon
+      description: Legg til eventuelle skjermbilder, wireframes, eller annen kontekst
+      placeholder: |
+        - Lenker til relaterte issues
+        - Skjermbilder eller mockups
+        - Referanser til dokumentasjon
+    validations:
+      required: false

@@ -1,0 +1,104 @@
+name: ⚡ Enhancement
+description: Foreslå forbedring av eksisterende funksjonalitet
+title: "[ENHANCEMENT] "
+labels: ["type:enhancement"]
+body:
+  - type: textarea
+    id: current_situation
+    attributes:
+      label: Nåværende situasjon
+      description: Beskrivelse av dagens løsning
+      placeholder: |
+        Beskriv hvordan funktionaliteten fungerer i dag:
+        - Hva er utfordringene med dagens løsning?
+        - Hvilke begrensninger finnes?
+        - Hva fungerer dårlig?
+    validations:
+      required: true
+
+  - type: textarea
+    id: desired_improvement
+    attributes:
+      label: Ønsket forbedring
+      description: Hva skal forbedres og hvorfor
+      placeholder: |
+        Beskriv den ønskede forbedringen:
+        - Hva skal endres/forbedres?
+        - Hvorfor er denne forbedringen nødvendig?
+        - Hvilken verdi gir det til brukerne?
+    validations:
+      required: true
+
+  - type: textarea
+    id: success_criteria
+    attributes:
+      label: Suksesskriterier
+      description: Hvordan måle at forbedringen er vellykket
+      placeholder: |
+        Konkrete måter å måle suksess:
+        - [ ] Ytelse forbedret med X%
+        - [ ] Brukertilfredshet økt
+        - [ ] Feilrate redusert
+        - [ ] Arbeidsflyt forenklet
+      value: |
+        - [ ] 
+        - [ ] 
+        - [ ] 
+    validations:
+      required: true
+
+  - type: dropdown
+    id: priority
+    attributes:
+      label: Prioritet
+      description: Hvor viktig er denne forbedringen?
+      options:
+        - low
+        - medium
+        - high
+        - critical
+    validations:
+      required: false
+
+  - type: textarea
+    id: implementation_notes
+    attributes:
+      label: Implementeringsnotater
+      description: Tekniske detaljer om implementering
+      placeholder: |
+        Tekniske betraktninger:
+        - Foreslått teknisk tilnærming
+        - Potensielle utfordringer
+        - Avhengigheter til andre systemer
+        - Estimert kompleksitet
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: definition_of_done
+    attributes:
+      label: Definisjon av ferdig
+      description: Sjekkliste for når forbedringen regnes som ferdig
+      options:
+        - label: Kode utviklet og testet
+          required: false
+        - label: Ytelsestesting gjennomført
+          required: false
+        - label: Dokumentasjon oppdatert
+          required: false
+        - label: Deploy til test miljø
+          required: false
+        - label: Brukertesting gjennomført
+          required: false
+
+  - type: textarea
+    id: additional_context
+    attributes:
+      label: Tilleggsinformasjon
+      description: Eventuelle skjermbilder, benchmarks eller annen kontekst
+      placeholder: |
+        - Før/etter sammenligning
+        - Relaterte issues
+        - Brukerhenvendelser som har ført til dette
+    validations:
+      required: false

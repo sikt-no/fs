@@ -1,0 +1,148 @@
+name: 🐛 Bug Report
+description: Rapporter en feil i FS
+title: "[BUG] "
+labels: ["type:bug"]
+body:
+  - type: textarea
+    id: bug_description
+    attributes:
+      label: Beskrivelse av feil
+      description: En tydelig og kortfattet beskrivelse av feilen
+      placeholder: |
+        Beskriv feilen som oppstår:
+        - Hva skjer som ikke skal skje?
+        - Når oppstår feilen?
+        - Hvilke deler av systemet er påvirket?
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps_to_reproduce
+    attributes:
+      label: Steg for å reprodusere
+      description: Steg-for-steg instruksjoner for å gjenskape feilen
+      placeholder: |
+        1. Gå til '...'
+        2. Klikk på '...'
+        3. Skriv inn '...'
+        4. Se feilmeldingen
+      value: |
+        1. 
+        2. 
+        3. 
+        4. 
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected_behavior
+    attributes:
+      label: Forventet oppførsel
+      description: En tydelig beskrivelse av hva du forventet skulle skje
+      placeholder: Beskriv hva som skulle ha skjedd i stedet...
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual_behavior
+    attributes:
+      label: Faktisk oppførsel
+      description: Hva skjer i stedet for det forventede
+      placeholder: Beskriv nøyaktig hva som skjer...
+    validations:
+      required: true
+
+  - type: dropdown
+    id: priority
+    attributes:
+      label: Prioritet
+      description: Hvor kritisk er denne feilen?
+      options:
+        - low - Mindre feil som ikke påvirker hovedfunksjonalitet
+        - medium - Feil som påvirker funksjonalitet men har workaround
+        - high - Feil som betydelig påvirker brukere eller system
+        - critical - Kritisk feil som stopper produksjon eller sikkerhet
+    validations:
+      required: true
+
+  - type: dropdown
+    id: severity
+    attributes:
+      label: Alvorlighetsgrad
+      description: Hvor mange brukere/prosesser påvirkes?
+      options:
+        - Lav - Påvirker enkeltbrukere sporadisk
+        - Middels - Påvirker noen brukere regelmessig
+        - Høy - Påvirker mange brukere eller kritiske prosesser
+        - Kritisk - Påvirker alle brukere eller systemstabilitet
+    validations:
+      required: true
+
+  - type: textarea
+    id: environment
+    attributes:
+      label: Miljø
+      description: Hvor oppdages feilen?
+      placeholder: |
+        - Miljø: (test/staging/produksjon)
+        - Nettleser: (hvis relevant)
+        - Operativsystem: (hvis relevant)
+        - Versjon/branch: (hvis kjent)
+    validations:
+      required: false
+
+  - type: textarea
+    id: error_logs
+    attributes:
+      label: Feilmeldinger/Logger
+      description: Eventuelle feilmeldinger, stack traces eller logger
+      placeholder: |
+        Lim inn eventuelle:
+        - Feilmeldinger fra brukergrensesnittet
+        - Logger fra serveren
+        - Nettleser-konsoll feil
+        - Stack traces
+      render: text
+    validations:
+      required: false
+
+  - type: textarea
+    id: workaround
+    attributes:
+      label: Midlertidig løsning
+      description: Er det noen måte å omgå feilen på?
+      placeholder: Beskriv eventuelle workarounds eller midlertidige løsninger...
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: impact_areas
+    attributes:
+      label: Påvirkede områder
+      description: Hvilke deler av systemet påvirkes?
+      options:
+        - label: Brukergrensesnitt/Frontend
+          required: false
+        - label: Backend/API
+          required: false
+        - label: Database
+          required: false
+        - label: Integrasjoner
+          required: false
+        - label: Sikkerhet
+          required: false
+        - label: Ytelse
+          required: false
+
+  - type: textarea
+    id: additional_context
+    attributes:
+      label: Tilleggsinformasjon
+      description: Legg til eventuelle skjermbilder eller annen kontekst
+      placeholder: |
+        - Skjermbilder av feilen
+        - Relaterte issues
+        - Når feilen først ble oppdaget
+        - Frekvens av feilen
+    validations:
+      required: false
