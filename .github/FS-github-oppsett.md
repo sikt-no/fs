@@ -217,7 +217,7 @@ Workflows legger til metadata i følgende format:
 ## Startdato
 2024-01-15
 
-## Ferdig dato  
+## Ferdigdato  
 2024-01-20
 
 ## Beskrivelse
