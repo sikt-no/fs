@@ -25,7 +25,7 @@ body:
         Beskriv den ønskede forbedringen:
         - Hva skal endres/forbedres?
         - Hvorfor er denne forbedringen nødvendig?
-        - Hvilken verdi gir det til brukerne?
+        - Hvilken verdi gir det til brukere?
     validations:
       required: true
 
@@ -45,7 +45,7 @@ body:
         - [ ] 
         - [ ] 
     validations:
-      required: true
+      required: false
 
   - type: dropdown
     id: priority
@@ -80,17 +80,17 @@ body:
       label: Definisjon av ferdig
       description: Sjekkliste for når forbedringen regnes som ferdig
       options:
+       - label: Brukertesting gjennomført
+          required: false
         - label: Kode utviklet og testet
           required: false
         - label: Ytelsestesting gjennomført
           required: false
-        - label: Dokumentasjon oppdatert
+        - label: Dokumentasjon og utgivelsesnotater oppdatert
           required: false
-        - label: Deploy til test miljø
+        - label: Tilgjengelig for brukere i produksjon
           required: false
-        - label: Brukertesting gjennomført
-          required: false
-
+          
   - type: textarea
     id: additional_context
     attributes:
@@ -102,3 +102,5 @@ body:
         - Brukerhenvendelser som har ført til dette
     validations:
       required: false
+
+  
