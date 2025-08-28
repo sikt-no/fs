@@ -48,6 +48,7 @@ Hver issue i saksoversikten skal være:
 - Eksterne team (planlagt for fremtiden)
 
 ### Saksflyt
+Happy path:
 ```
 Ny sak → Til vurdering → I kø → Under arbeid → Ferdig
 ```
@@ -162,7 +163,7 @@ Vi har fire aktive workflows som automatiserer saksadministrasjon:
 ### Workflow-triggere
 
 **Kolonnenavn som aktiverer startdato-workflow:**
-- "arbeidskø", "under arbeid", "in progress", "doing"
+- "under arbeid", "in progress"
 
 **Kolonnenavn som aktiverer ferdigdato-workflow:**
 - "ferdig", "done", "complete", "finished"
