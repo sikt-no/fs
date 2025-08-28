@@ -34,19 +34,6 @@ body:
       required: true
 
   - type: textarea
-    id: proposed_solution
-    attributes:
-      label: Foreslått løsning
-      description: Hvordan skal vedlikeholdet utføres?
-      placeholder: |
-        Beskriv tilnærmingen:
-        - Konkrete steg som skal gjøres
-        - Tekniske valg og begrunnelser
-        - Alternative løsninger vurdert
-    validations:
-      required: true
-
-  - type: textarea
     id: benefits
     attributes:
       label: Fordeler ved vedlikeholdet
@@ -79,42 +66,10 @@ body:
     validations:
       required: false
 
-  - type: dropdown
-    id: complexity
-    attributes:
-      label: Estimert kompleksitet
-      description: Hvor komplisert er dette arbeidet?
-      options:
-        - Lav - Noen timer til 1 dag
-        - Middels - 1-3 dager  
-        - Høy - 1-2 uker
-        - Meget høy - Flere uker eller måneder
-    validations:
-      required: false
-
-  - type: checkboxes
-    id: risk_factors
-    attributes:
-      label: Risikofaktorer
-      description: Hva må vurderes ved dette arbeidet?
-      options:
-        - label: Påvirker produksjonssystem
-          required: false
-        - label: Krever database-migrering
-          required: false
-        - label: Påvirker integrasjoner
-          required: false  
-        - label: Krever koordinering med andre team
-          required: false
-        - label: Kan påvirke brukere midlertidig
-          required: false
-        - label: Krever testing av hele systemet
-          required: false
-
   - type: textarea
     id: testing_requirements
     attributes:
-      label: Testingkrav
+      label: Testkrav
       description: Hva må testes når arbeidet er ferdig?
       placeholder: |
         Testingkrav:
