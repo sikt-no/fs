@@ -1,0 +1,142 @@
+name: Automatisk Statustildeling
+
+on:
+  issues:
+    types: [opened]
+
+jobs:
+  assign-status:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Tildel status basert på issue-type og prioritet
+        uses: actions/github-script@v6
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const issueNumber = context.payload.issue.number;
+            const issue = context.payload.issue;
+            
+            console.log(`Behandler issue #${issueNumber}: ${issue.title}`);
+            
+            // Sjekk labels for type og prioritet
+            const labels = issue.labels.map(label => label.name.toLowerCase());
+            const hasBugType = labels.some(label => label.includes('type:bug'));
+            const hasCriticalPriority = labels.some(label => label.includes('priority:critical'));
+            
+            // Sjekk om issue er tilordnet en bruker (representerer seksjon)
+            const isAssigned = issue.assignee !== null || issue.assignees.length > 0;
+            
+            console.log(`Labels: ${labels.join(', ')}`);
+            console.log(`Er bug: ${hasBugType}, Er kritisk: ${hasCriticalPriority}, Er tilordnet: ${isAssigned}`);
+            
+            let targetStatus = "til vurdering"; // Standard status
+            
+            // Sjekk unntak for kritiske bugs
+            if (hasBugType && hasCriticalPriority && isAssigned) {
+              targetStatus = "arbeidskø";
+              console.log(`Kritisk bug med tilordning - setter status: ${targetStatus}`);
+            } else {
+              console.log(`Standard flyt - setter status: ${targetStatus}`);
+            }
+            
+            // Finn begge prosjekter
+            try {
+              const { data: projects } = await github.rest.projects.listForRepo({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                state: 'open'
+              });
+              
+              const offentligProject = projects.find(p => 
+                p.name.toLowerCase().includes('offentlig') && 
+                p.name.toLowerCase().includes('saksoversikt')
+              );
+              
+              const internProject = projects.find(p => 
+                p.name.toLowerCase().includes('saksoversikt') && 
+                p.name.toLowerCase().includes('intern')
+              );
+              
+              // Funksjon for å flytte kort til riktig kolonne
+              const moveCardToColumn = async (project, projectName) => {
+                if (!project) {
+                  console.log(`${projectName} prosjekt ikke funnet`);
+                  return;
+                }
+                
+                // Hent kolonner
+                const { data: columns } = await github.rest.projects.listColumns({
+                  project_id: project.id
+                });
+                
+                // Finn målkolonne
+                const targetColumn = columns.find(col => 
+                  col.name.toLowerCase().includes(targetStatus.toLowerCase()) ||
+                  (targetStatus === "til vurdering" && col.name.toLowerCase().includes('vurdering')) ||
+                  (targetStatus === "arbeidskø" && (col.name.toLowerCase().includes('arbeid') || col.name.toLowerCase().includes('kø')))
+                );
+                
+                if (targetColumn) {
+                  // Finn eksisterende kort for denne issue
+                  const { data: cards } = await github.rest.projects.listCards({
+                    column_id: targetColumn.id
+                  });
+                  
+                  // Sjekk alle kolonner for eksisterende kort
+                  let existingCard = null;
+                  for (const column of columns) {
+                    const { data: columnCards } = await github.rest.projects.listCards({
+                      column_id: column.id
+                    });
+                    existingCard = columnCards.find(card => 
+                      card.content_url && card.content_url.includes(`/issues/${issueNumber}`)
+                    );
+                    if (existingCard) break;
+                  }
+                  
+                  if (existingCard) {
+                    // Flytt eksisterende kort
+                    await github.rest.projects.moveCard({
+                      card_id: existingCard.id,
+                      position: "top",
+                      column_id: targetColumn.id
+                    });
+                    console.log(`Flyttet kort til "${targetColumn.name}" i ${projectName}`);
+                  } else {
+                    console.log(`Ingen eksisterende kort funnet for issue #${issueNumber} i ${projectName}`);
+                  }
+                } else {
+                  console.log(`Kunne ikke finne kolonne for status "${targetStatus}" i ${projectName}`);
+                  console.log(`Tilgjengelige kolonner: ${columns.map(c => c.name).join(', ')}`);
+                }
+              };
+              
+              // Flytt kort i begge prosjekter
+              await moveCardToColumn(offentligProject, "FS Offentlig saksoversikt");
+              await moveCardToColumn(internProject, "FS Saksoversikt (intern)");
+              
+              // Legg til kommentar hvis kritisk bug
+              if (targetStatus === "arbeidskø") {
+                await github.rest.issues.createComment({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  issue_number: issueNumber,
+                  body: `🚨 **Kritisk bug oppdaget**
+
+Denne saken har automatisk blitt flyttet til arbeidskø på grunn av:
+- ✅ Type: Bug  
+- ✅ Prioritet: Kritisk
+- ✅ Tilordnet seksjon
+
+Saken må håndteres umiddelbart og har forrang over planlagt arbeid.
+
+_Automatisk generert av GitHub Actions workflow_`
+                });
+                
+                console.log(`Kritisk bug-kommentar lagt til på issue #${issueNumber}`);
+              }
+              
+            } catch (error) {
+              console.error('Feil ved statustildeling:', error);
+            }

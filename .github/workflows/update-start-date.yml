@@ -36,25 +36,48 @@ jobs:
               issue_number: issueNumber
             });
             
-            // Sjekk om kortet er i "Under arbeid" kolonne eller har "under arbeid" label
-            let isUnderArbeid = false;
+            // Sjekk om kortet er flyttet til "Under arbeid" (ikke bare "arbeidskø")
+            let isMovedToWork = false;
+            let fromQueue = false;
             
             if (context.eventName === 'project_card') {
-              const { data: column } = await github.rest.projects.getColumn({
+              const { data: currentColumn } = await github.rest.projects.getColumn({
                 column_id: context.payload.project_card.column_id
               });
-              isUnderArbeid = column.name.toLowerCase().includes('under arbeid') || 
-                             column.name.toLowerCase().includes('in progress') ||
-                             column.name.toLowerCase().includes('doing');
+              
+              // Sjekk om målet er arbeidskolonne (ikke køkolonne)
+              isMovedToWork = currentColumn.name.toLowerCase().includes('under arbeid') || 
+                             currentColumn.name.toLowerCase().includes('in progress') ||
+                             currentColumn.name.toLowerCase().includes('doing');
+              
+              // Sjekk om kortet kommer fra arbeidskø (hvis previous_column_id finnes)
+              if (context.payload.project_card.previous_column_id) {
+                const { data: previousColumn } = await github.rest.projects.getColumn({
+                  column_id: context.payload.project_card.previous_column_id
+                });
+                fromQueue = previousColumn.name.toLowerCase().includes('arbeidskø') ||
+                           previousColumn.name.toLowerCase().includes('kø') ||
+                           previousColumn.name.toLowerCase().includes('queue');
+                           
+                console.log(`Flyttet fra: "${previousColumn.name}" til: "${currentColumn.name}"`);
+              }
             } else {
-              isUnderArbeid = issue.labels.some(label => 
+              // For label-baserte triggere
+              isMovedToWork = issue.labels.some(label => 
                 label.name.toLowerCase().includes('under arbeid') ||
                 label.name.toLowerCase().includes('in progress')
               );
+              fromQueue = true; // Anta gyldig flyt for label-triggere
             }
             
-            if (!isUnderArbeid) {
-              console.log('Issue er ikke i "Under arbeid" status');
+            if (!isMovedToWork) {
+              console.log('Issue er ikke flyttet til arbeidskolonne');
+              return;
+            }
+            
+            // For korttriggere: Kun sett startdato hvis flyttet fra kø eller ukjent opprinnelse
+            if (context.eventName === 'project_card' && context.payload.project_card.previous_column_id && !fromQueue) {
+              console.log('Issue ikke flyttet fra arbeidskø - hopper over startdato');
               return;
             }
             

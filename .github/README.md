@@ -112,48 +112,44 @@ Vi bruker standardiserte templates for å sikre kvalitet og fullstendighet:
 
 ## ⚙️ Automatiske workflows
 
-Vi har flere aktive workflows som automatiserer saksadministrasjon:
+Vi har fire aktive workflows som automatiserer saksadministrasjon:
 
-### 1. Issue oppretting
-- Når en sak opprettes i https://github.com/sikt-no/fs
-- Så blir den tilknyttet både offentlig og intern saksoversikt for FS
-
-- Når noen oppretter en sak
-- Så blir saken automatisk tildelt status "til vurdering"
-
-Unntaket er
-- Når en sak er opprettet med type "bug" og prioritet "kritisk" og saken er tilordnet en seksjon
-- Så blir saken automatisk tildelt status "arbeidskø"
-
-
-### 1. Automatisk startdato
-Når en sak flyttes fra "arbeidskø" til "under arbeid"
-Så får saken automatisk satt startdato i issuebeskrivelsen både i intern og offentlig saksliste for FS
-- **Fil**: `update-start-date.yml`
-- **Trigger**: Issue flyttes til "Under arbeid" eller får `under arbeid` label
-- **Handling**: Legger til startdato i issue-beskrivelsen
-
-### 2. Automatisk ferdigdato  
-Når en sak flyttes fra "under arbeid" til "ferdig"
-Så får saken automatisk satt ferdigdato i issuebeskrivelsen både i intern og offentlig saksliste for FS
-- **Fil**: `update-completion-date.yml`
-- **Trigger**: Issue flyttes til "Ferdig" eller lukkes
-- **Handling**: Legger til ferdigdato i issue-beskrivelsen
-
-### 3. Automatisk prosjekt-tilknytning
-- **Fil**: `sync-issues-to-projects.yml` 
+### 1. Automatisk prosjekt-tilknytning
+- **Fil**: `sync-issues-to-projects.yml`
 - **Trigger**: Nye issues opprettes
 - **Handling**: 
-  - Legger automatisk til i både offentlig og intern saksoversikt
-  - Kommenterer på issue om tilknytning
+  - Legger saken til både offentlig og intern saksoversikt
+  - Kommenterer på issue om prosjekt-tilknytning
+
+### 2. Automatisk statustildeling ved opprettelse  
+- **Fil**: `auto-status-assignment.yml` *(ønsket workflow)*
+- **Trigger**: Nye issues opprettes
+- **Handling**: 
+  - **Standard**: Tildeler status "til vurdering"
+  - **Unntak**: Issues med `type:bug` + `priority:critical` + tilordnet seksjon → status "arbeidskø"
+
+### 3. Automatisk startdato
+- **Fil**: `update-start-date.yml`
+- **Trigger**: Issue flyttes til kolonne med navn som inneholder arbeidsstatus
+- **Handling**: 
+  - Legger til dagens dato som startdato i issue-beskrivelsen
+  - Setter label `under arbeid`
+  - Synkroniserer til begge saksoversikter
+
+### 4. Automatisk ferdigdato
+- **Fil**: `update-completion-date.yml`  
+- **Trigger**: Issue flyttes til kolonne med ferdigstatus eller lukkes
+- **Handling**: 
+  - Legger til dagens dato som ferdigdato i issue-beskrivelsen
+  - Setter label `ferdig`
+  - Synkroniserer til begge saksoversikter
 
 ### Workflow-triggere
-Følgende kolonnenavn aktiverer workflows:
 
-**Startdato-workflow:**
-- "under arbeid", "in progress", "doing"
+**Kolonnenavn som aktiverer startdato-workflow:**
+- "arbeidskø", "under arbeid", "in progress", "doing"
 
-**Ferdigdato-workflow:**  
+**Kolonnenavn som aktiverer ferdigdato-workflow:**
 - "ferdig", "done", "complete", "finished"
 
 ---

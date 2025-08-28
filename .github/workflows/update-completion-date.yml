@@ -36,29 +36,51 @@ jobs:
               issue_number: issueNumber
             });
             
-            // Sjekk om kortet er i "Ferdig" kolonne, issue er lukket, eller har "ferdig" label
-            let isFerdig = false;
+            // Sjekk om kortet er flyttet til "Ferdig" eller issue er lukket
+            let isMovedToCompleted = false;
+            let fromWork = false;
             
             if (context.eventName === 'project_card') {
-              const { data: column } = await github.rest.projects.getColumn({
+              const { data: currentColumn } = await github.rest.projects.getColumn({
                 column_id: context.payload.project_card.column_id
               });
-              isFerdig = column.name.toLowerCase().includes('ferdig') || 
-                         column.name.toLowerCase().includes('done') ||
-                         column.name.toLowerCase().includes('complete') ||
-                         column.name.toLowerCase().includes('finished');
+              
+              // Sjekk om målet er ferdigkolonne
+              isMovedToCompleted = currentColumn.name.toLowerCase().includes('ferdig') || 
+                                  currentColumn.name.toLowerCase().includes('done') ||
+                                  currentColumn.name.toLowerCase().includes('complete') ||
+                                  currentColumn.name.toLowerCase().includes('finished');
+              
+              // Sjekk om kortet kommer fra arbeidskolonne (hvis previous_column_id finnes)
+              if (context.payload.project_card.previous_column_id) {
+                const { data: previousColumn } = await github.rest.projects.getColumn({
+                  column_id: context.payload.project_card.previous_column_id
+                });
+                fromWork = previousColumn.name.toLowerCase().includes('under arbeid') ||
+                          previousColumn.name.toLowerCase().includes('in progress') ||
+                          previousColumn.name.toLowerCase().includes('doing');
+                          
+                console.log(`Flyttet fra: "${previousColumn.name}" til: "${currentColumn.name}"`);
+              }
             } else {
-              isFerdig = issue.state === 'closed' || 
-                         issue.labels.some(label => 
-                           label.name.toLowerCase().includes('ferdig') ||
-                           label.name.toLowerCase().includes('done') ||
-                           label.name.toLowerCase().includes('complete')
-                         );
+              // For issue lukking eller label-triggere
+              isMovedToCompleted = issue.state === 'closed' || 
+                                  issue.labels.some(label => 
+                                    label.name.toLowerCase().includes('ferdig') ||
+                                    label.name.toLowerCase().includes('done') ||
+                                    label.name.toLowerCase().includes('complete')
+                                  );
+              fromWork = true; // Anta gyldig flyt for lukking/label-triggere
             }
             
-            if (!isFerdig) {
-              console.log('Issue er ikke i "Ferdig" status');
+            if (!isMovedToCompleted) {
+              console.log('Issue er ikke flyttet til ferdig-status eller lukket');
               return;
+            }
+            
+            // Legg til advarsel hvis ikke flyttet fra arbeid (men ikke blokker)
+            if (context.eventName === 'project_card' && context.payload.project_card.previous_column_id && !fromWork) {
+              console.log('Advarsel: Issue ikke flyttet fra arbeidskolonne, men setter likevel ferdigdato');
             }
             
             // Sjekk om ferdigdato allerede er satt
