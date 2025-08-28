@@ -26,9 +26,9 @@ Vi bruker to parallelle prosjekter som inneholder de samme sakene:
 ### FS Saksoversikt (intern)
 - **Formål**: Intern oppfølging og rapportering  
 - **Innhold**: Samme saker som offentlig, men med tilleggsinformasjon:
-  - Startdato og ferdigdato
+  - Planlagt startdato og planlagt ferdigdato
   - Estimert tid (ansattimer)
-  - Seksjonsinformasjon
+  - Seksjonsinformasjon, teaminformasjon
 - **Tilgang**: Kun Sikt-ansatte
 
 ---
