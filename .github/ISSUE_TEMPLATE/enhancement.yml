@@ -80,7 +80,7 @@ body:
       label: Definisjon av ferdig
       description: Sjekkliste for når forbedringen regnes som ferdig
       options:
-       - label: Brukertesting gjennomført
+        - label: Brukertesting gjennomført
           required: false
         - label: Kode utviklet og testet
           required: false
@@ -102,5 +102,3 @@ body:
         - Brukerhenvendelser som har ført til dette
     validations:
       required: false
-
-  
