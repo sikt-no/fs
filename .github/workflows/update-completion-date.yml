@@ -9,7 +9,7 @@ on:
 jobs:
   update-completion-date:
     runs-on: ubuntu-latest
-    if: github.event.action == 'moved' || github.event.action == 'closed' || contains(github.event.issue.labels.*.name, 'ferdig')
+    if: github.event.action == 'moved' || github.event.action == 'closed'
     
     steps:
       - name: Sjekk om issue er flyttet til "Ferdig" eller lukket
@@ -144,38 +144,3 @@ jobs:
             });
             
             console.log(`Ferdigdato ${today} lagt til i issue #${issueNumber}`);
-
-      - name: Legg til ferdig label hvis ikke finnes
-        uses: actions/github-script@v6
-        with:
-          script: |
-            let issueNumber;
-            if (context.eventName === 'project_card') {
-              if (!context.payload.project_card.content_url) return;
-              const match = context.payload.project_card.content_url.match(/issues\/(\d+)$/);
-              if (!match) return;
-              issueNumber = parseInt(match[1]);
-            } else {
-              issueNumber = context.payload.issue.number;
-            }
-            
-            const { data: issue } = await github.rest.issues.get({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              issue_number: issueNumber
-            });
-            
-            const hasCompletedLabel = issue.labels.some(label => 
-              label.name.toLowerCase().includes('ferdig') || 
-              label.name.toLowerCase().includes('done') ||
-              label.name.toLowerCase().includes('complete')
-            );
-            
-            if (!hasCompletedLabel) {
-              await github.rest.issues.addLabels({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                issue_number: issueNumber,
-                labels: ['ferdig']
-              });
-            }

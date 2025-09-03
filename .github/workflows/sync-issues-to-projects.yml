@@ -16,8 +16,21 @@ jobs:
             const issueNumber = context.payload.issue.number;
             const repoOwner = context.repo.owner;
             const repoName = context.repo.repo;
+            const issue = context.payload.issue;
             
             console.log(`Behandler issue #${issueNumber} i ${repoOwner}/${repoName}`);
+            
+            // Sjekk om issue har "intern" label
+            const labels = issue.labels.map(label => label.name.toLowerCase());
+            const hasInternLabel = labels.some(label => 
+              label === 'intern' || 
+              label === 'internal'
+            );
+            
+            if (hasInternLabel) {
+              console.log(`Issue #${issueNumber} har "intern" label - hopper over offentlig saksoversikt`);
+              return;
+            }
             
             try {
               // Finn FS Offentlig saksoversikt prosjekt (project #4)
@@ -125,18 +138,39 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
             const issueNumber = context.payload.issue.number;
+            const issue = context.payload.issue;
             
-            await github.rest.issues.createComment({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              issue_number: issueNumber,
-              body: `🤖 **Automatisk prosjekt-tilknytning**
+            // Sjekk om issue har "intern" label
+            const labels = issue.labels.map(label => label.name.toLowerCase());
+            const hasInternLabel = labels.some(label => 
+              label === 'intern' || 
+              label === 'internal'
+            );
+            
+            let commentBody;
+            if (hasInternLabel) {
+              commentBody = `🤖 **Automatisk prosjekt-tilknytning**
+              
+Denne issue har automatisk blitt lagt til i følgende prosjekter:
+- 🔒 FS Saksoversikt (intern) - Kun intern sak
+
+_Issue markert som "intern" vises ikke i offentlig saksoversikt_
+_Generert av GitHub Actions workflow_`;
+            } else {
+              commentBody = `🤖 **Automatisk prosjekt-tilknytning**
               
 Denne issue har automatisk blitt lagt til i følgende prosjekter:
 - ✅ FS Offentlig saksoversikt  
 - ✅ FS Saksoversikt (intern)
 
-_Generert av GitHub Actions workflow_`
+_Generert av GitHub Actions workflow_`;
+            }
+            
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: issueNumber,
+              body: commentBody
             });
             
             console.log(`Kommentar lagt til på issue #${issueNumber}`);
