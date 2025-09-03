@@ -1,7 +1,7 @@
 name: 🐛 Bug Report
 description: Rapporter en feil i FS
 title: "[BUG] "
-labels: ["type:bug"]
+type: ["bug"]
 body:
   - type: textarea
     id: bug_description
