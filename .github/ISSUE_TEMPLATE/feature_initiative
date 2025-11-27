@@ -1,0 +1,101 @@
+name: 🚀 Feature Initiativ
+description: Denne malen brukes til å beskrive initiativer som skal i veikart
+title: "[TITTEL PÅ INITIATIV] "
+labels: ["type:feature"]
+body:
+  - type: textarea
+    id: description
+    attributes:
+      label: Beskrivelse
+      description: Kort beskrivelse av utviklingsinitiativet
+      placeholder: Beskriv hva initiativet går ut på og hvorfor det er viktig
+    validations:
+      required: true
+  
+  - type: textarea
+    id: user_value
+    attributes:
+      label: Hvilke problem eller behov løser initiativet og for hvem?
+      description: Definer verdien for kunde og/eller bruker
+      placeholder: |
+        - Problem/behov
+        - målgruppe
+        
+
+    validations:
+      required: true
+
+  - type: textarea
+    id: acceptance_criteria
+    attributes:
+      label: Suksesskriterier
+      description: Konkrete kriterier som må oppfylles for at funksjonaliteten er ferdig
+      placeholder: |
+        - [ ] Kriterium 1
+        - [ ] Kriterium 2  
+        - [ ] Kriterium 3
+      value: |
+        - [ ] 
+        - [ ] 
+        - [ ] 
+    validations:
+      required: true
+
+  - type: dropdown
+    id: priority
+    attributes:
+      label: Prioritet
+      description: Hvor viktig er dette initiativet?
+      options:
+        - low
+        - medium
+        - high
+        - critical
+    validations:
+      required: false
+
+  - type: textarea
+    id: additional_context
+    attributes:
+      label: Tilleggsinformasjon
+      description: Legg til eventuelle skjermbilder, wireframes, eller annen kontekst
+      placeholder: |
+        - Lenker til relaterte issues
+        - Skjermbilder eller mockups
+        - Referanser til funksjonelle krav
+    validations:
+      required: false
+
+  - type: textarea
+    id: technical_notes
+    attributes:
+      label: Tekniske notater
+      description: Eventuelle tekniske krav, betraktninger eller avhengigheter
+      placeholder: |
+        - Berørte applikasjoner/tjenester
+        - Avhengigheter til andre systemer
+        - Tekniske utfordringer
+        - Foreslåtte løsningsmetoder
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: definition_of_done
+    attributes:
+      label: Definisjon av ferdig
+      description: Standard sjekkliste for når en feature regnes som ferdig
+      options:
+        - label: Brukertesting gjennomført
+          required: false
+        - label: Kode utviklet og testet
+          required: false
+        - label: Akseptansetester kjørt og godkjent
+          required: false
+        - label: Dokumentasjon og utgivelsesnotater oppdatert
+          required: false
+        - label: Tilgjengelig for brukere i produksjon
+          required: false
+        - label: Sikkerhetsvurdering gjennomført (hvis aktuelt)
+          required: false
+        - label: Tilgangsstyring konfigurert (hvis aktuelt)
+          required: false
