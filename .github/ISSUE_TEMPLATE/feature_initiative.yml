@@ -97,5 +97,5 @@ body:
           required: false
         - label: Tilgangsstyring konfigurert (hvis aktuelt)
           required: false
-          - label: Auditlogg innført (hvis aktuelt)
+        - label: Auditlogg innført (hvis aktuelt)
           required: false
