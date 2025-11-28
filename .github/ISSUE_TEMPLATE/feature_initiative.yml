@@ -16,11 +16,11 @@ body:
     id: user_value
     attributes:
       label: Hvilke problem eller behov løser initiativet og for hvem?
-      description: Definer verdien for kunde og/eller bruker
+      description: Definer verdien for kunde og/eller brukere
       placeholder: |
-        - Problem/behov
+        - problem/behov
         - målgruppe
-        
+        - lenk eventuelt til informasjon om prosess, innsikt eller lignende
 
     validations:
       required: true
@@ -28,8 +28,8 @@ body:
   - type: textarea
     id: acceptance_criteria
     attributes:
-      label: Suksesskriterier
-      description: Konkrete kriterier som må oppfylles for at funksjonaliteten er ferdig
+      label: Suksesskriterier og krav
+      description: Overordna suksesskriterier og krav som må oppfylles for at initiativet er ferdig
       placeholder: |
         - [ ] Kriterium 1
         - [ ] Kriterium 2  
@@ -57,12 +57,11 @@ body:
   - type: textarea
     id: additional_context
     attributes:
-      label: Tilleggsinformasjon
-      description: Legg til eventuelle skjermbilder, wireframes, eller annen kontekst
+      label: Berørte applikasjoner og tjenester
+      description: Legg informasjon om hvilke applikasjoner, tjenester som blir berørt av initiativet
       placeholder: |
-        - Lenker til relaterte issues
-        - Skjermbilder eller mockups
-        - Referanser til funksjonelle krav
+        - Nye tjenester
+        - Eldre tjenester
     validations:
       required: false
 
@@ -72,7 +71,6 @@ body:
       label: Tekniske notater
       description: Eventuelle tekniske krav, betraktninger eller avhengigheter
       placeholder: |
-        - Berørte applikasjoner/tjenester
         - Avhengigheter til andre systemer
         - Tekniske utfordringer
         - Foreslåtte løsningsmetoder
@@ -98,4 +96,6 @@ body:
         - label: Sikkerhetsvurdering gjennomført (hvis aktuelt)
           required: false
         - label: Tilgangsstyring konfigurert (hvis aktuelt)
+          required: false
+          - label: Auditlogg innført (hvis aktuelt)
           required: false
