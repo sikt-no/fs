@@ -22,6 +22,16 @@ body:
         - målgruppe
         - lenk eventuelt til informasjon om prosess, innsikt eller lignende
 
+  - type: textarea
+    id: research
+    attributes:
+      label: Tidligere arbeid
+      description: Her kan du vise til innsiktsarbeid, informasjon om dagens løsning eller lignende
+      placeholder: |
+        - problem/behov
+        - målgruppe
+        - lenk eventuelt til informasjon om prosess, innsikt eller lignende
+
     validations:
       required: true
 
@@ -58,12 +68,24 @@ body:
     id: additional_context
     attributes:
       label: Berørte applikasjoner og tjenester
-      description: Legg informasjon om hvilke applikasjoner, tjenester som blir berørt av initiativet
+      description: Legg informasjon om hvilke applikasjoner, tjenester som blir berørt av initiativet. Legg gjerne til sider eller bilder som inngår.
       placeholder: |
         - Nye tjenester
         - Eldre tjenester
     validations:
       required: false
+
+   - type: textarea
+    id: additional_context
+    attributes:
+      label: Hvilke prosesser inngår eller treffes av initiativet?
+      description: Legg informasjon om hvilke prosesser som inngår eller blir berørt av initiativet
+      placeholder: |
+        - Interne prosesser
+        - Studieadministrative prosesser
+        - Eksterne prosesser
+    validations:
+      required: false     
 
   - type: textarea
     id: technical_notes
