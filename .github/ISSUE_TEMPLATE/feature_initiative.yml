@@ -23,7 +23,7 @@ body:
         - lenk eventuelt til informasjon om prosess, innsikt eller lignende
 
   - type: textarea
-    id: research
+    id: user_value
     attributes:
       label: Tidligere arbeid
       description: Her kan du vise til innsiktsarbeid, informasjon om dagens løsning eller lignende
