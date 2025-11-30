@@ -62,7 +62,7 @@ body:
     validations:
       required: false
 
-   - type: textarea
+  - type: textarea
     id: context_process
     attributes:
       label: Hvilke prosesser inngår eller treffes av initiativet?
