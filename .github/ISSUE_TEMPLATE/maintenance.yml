@@ -1,5 +1,5 @@
-name: 🔧 Maintenance
-description: Teknisk gjeld, vedlikehold og oppgraderinger
+name: 🔧 Vedlikehold og drift
+description: Teknisk gjeld, vedlikehold og oppgraderinger (BAU/HART-aktiviteter)
 title: "[MAINTENANCE] "
 labels: ["type:maintenance"]
 body:
@@ -12,11 +12,13 @@ body:
         - Teknisk gjeld
         - Oppgradering av avhengigheter
         - Refaktorering
-        - Sikkerhet patch
+        - Sikkerhetspatch
         - Ytelsesoptimalisering  
         - Dokumentasjon
         - Testing/testdekning
         - CI/CD forbedringer
+        - drift
+        - Databaseoppgradering
     validations:
       required: true
 
