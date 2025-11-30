@@ -22,19 +22,6 @@ body:
         - målgruppe
         - lenk eventuelt til informasjon om prosess, innsikt eller lignende
 
-- type: textarea
-    id: research
-    attributes:
-      label: Tidligere arbeid
-      description: Her kan du vise til innsiktsarbeid, informasjon om dagens løsning eller lignende
-      placeholder: |
-        - problem/behov
-        - målgruppe
-        - lenk eventuelt til informasjon om prosess, innsikt eller lignende
-
-    validations:
-      required: true
-
   - type: textarea
     id: acceptance_criteria
     attributes:
