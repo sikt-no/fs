@@ -21,6 +21,20 @@ body:
         - problem/behov
         - målgruppe
         - lenk eventuelt til informasjon om prosess, innsikt eller lignende
+    validations:
+      required: true
+        
+   - type: textarea
+    id: research
+    attributes:
+      label: Tidligere arbeid
+      description: Her kan du legge lenke til innsikt eller annet tidligere arbeid
+      placeholder: |
+        - problem/behov
+        - målgruppe
+        - lenk eventuelt til informasjon om prosess, innsikt eller lignende  
+    validations:
+      required: false
 
   - type: textarea
     id: acceptance_criteria
