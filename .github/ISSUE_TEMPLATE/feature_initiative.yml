@@ -24,7 +24,7 @@ body:
     validations:
       required: true
         
-   - type: textarea
+  - type: textarea
     id: research
     attributes:
       label: Tidligere arbeid
