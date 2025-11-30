@@ -1,4 +1,4 @@
-name: 🚀 Feature Initiativ
+name: 🚀 Initiativ
 description: Denne malen brukes til å beskrive initiativer som skal i veikart
 title: "[TITTEL PÅ INITIATIV] "
 labels: ["type:feature"]
@@ -22,7 +22,7 @@ body:
         - målgruppe
         - lenk eventuelt til informasjon om prosess, innsikt eller lignende
 
-  - type: textarea
+- type: textarea
     id: research
     attributes:
       label: Tidligere arbeid
