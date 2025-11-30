@@ -23,7 +23,7 @@ body:
         - lenk eventuelt til informasjon om prosess, innsikt eller lignende
 
   - type: textarea
-    id: user_value
+    id: research
     attributes:
       label: Tidligere arbeid
       description: Her kan du vise til innsiktsarbeid, informasjon om dagens løsning eller lignende
@@ -65,7 +65,7 @@ body:
       required: false
 
   - type: textarea
-    id: additional_context
+    id: context_services
     attributes:
       label: Berørte applikasjoner og tjenester
       description: Legg informasjon om hvilke applikasjoner, tjenester som blir berørt av initiativet. Legg gjerne til sider eller bilder som inngår.
@@ -76,7 +76,7 @@ body:
       required: false
 
    - type: textarea
-    id: additional_context
+    id: context_process
     attributes:
       label: Hvilke prosesser inngår eller treffes av initiativet?
       description: Legg informasjon om hvilke prosesser som inngår eller blir berørt av initiativet
