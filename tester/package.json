@@ -1,0 +1,23 @@
+{
+  "name": "tester",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "bddgen": "bddgen",
+    "test": "bddgen && playwright test",
+    "test:headed": "bddgen && playwright test --headed",
+    "test:integration": "bddgen && playwright test --grep @integration",
+    "test:e2e": "bddgen && playwright test --grep @e2e"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "devDependencies": {
+    "@playwright/test": "^1.57.0",
+    "@types/node": "^25.0.3",
+    "playwright-bdd": "^8.4.2",
+    "typescript": "^5.9.3"
+  }
+}
