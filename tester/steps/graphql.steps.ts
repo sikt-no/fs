@@ -1,44 +1,53 @@
 import { expect } from '@playwright/test';
 import { createBdd } from 'playwright-bdd';
 import { createGraphQLClient, GraphQLResponse } from '../fixtures/graphql';
-import { HENT_ORGANISASJONER } from '../queries/organisasjon';
+import { HENT_UTDANNINGSINSTANSER } from '../queries/utdanning';
 
-const { Given, When, Then } = createBdd();
+const { When, Then } = createBdd();
 
 let graphqlResponse: GraphQLResponse;
 
-When('jeg henter liste over organisasjoner fra GraphQL', async ({ request }) => {
+// Utdanningsinstanser
+When('jeg henter liste over utdanningsinstanser fra GraphQL', async ({ request }) => {
   const client = createGraphQLClient(request);
-  graphqlResponse = await client.query(HENT_ORGANISASJONER, { first: 10 });
+  graphqlResponse = await client.query(HENT_UTDANNINGSINSTANSER);
 });
 
-Then('skal responsen inneholde organisasjoner', async () => {
+Then('skal responsen ikke inneholde feil', async () => {
   expect(graphqlResponse.errors).toBeUndefined();
-  expect(graphqlResponse.data).toBeDefined();
 });
 
-Then('hver organisasjon skal ha et navn', async () => {
+Then('skal responsen inneholde utdanningsinstanser', async () => {
+  expect(graphqlResponse.data).toBeDefined();
+  const data = graphqlResponse.data as { admissioUtdanningsinstanser?: unknown[] };
+  expect(data.admissioUtdanningsinstanser).toBeDefined();
+  expect(Array.isArray(data.admissioUtdanningsinstanser)).toBe(true);
+});
+
+Then('hver utdanningsinstans skal ha organisasjon, campus og terminer', async () => {
   const data = graphqlResponse.data as {
-    organisasjoner?: {
-      edges?: Array<{
-        node: {
-          navnAlleSprak: { nb?: string; nn?: string; en?: string }
-        }
-      }>
-    }
+    admissioUtdanningsinstanser?: Array<{
+      id: string;
+      campus?: { navn?: { nb?: string } };
+      organisasjon?: { navn?: { nb?: string } };
+      terminFra?: { arstall?: number };
+      terminTil?: { arstall?: number };
+    }>;
   };
-  const edges = data?.organisasjoner?.edges;
 
-  expect(edges).toBeDefined();
-  expect(Array.isArray(edges)).toBe(true);
+  const instanser = data.admissioUtdanningsinstanser;
+  expect(instanser).toBeDefined();
+  expect(instanser!.length).toBeGreaterThan(0);
 
-  if (edges && edges.length > 0) {
-    for (const edge of edges) {
-      expect(edge.node.navnAlleSprak).toBeDefined();
-    }
+  for (const instans of instanser!) {
+    expect(instans.id).toBeDefined();
+    expect(instans.organisasjon).toBeDefined();
+    expect(instans.terminFra).toBeDefined();
+    expect(instans.terminTil).toBeDefined();
   }
 });
 
+// Introspection
 When('jeg kjører en introspection query', async ({ request }) => {
   const client = createGraphQLClient(request);
   graphqlResponse = await client.query(`
