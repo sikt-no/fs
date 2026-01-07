@@ -3,8 +3,11 @@ import { defineBddConfig } from 'playwright-bdd';
 
 const testDir = defineBddConfig({
   featuresRoot: '../krav',
-  features: '**/*.feature',
+  features: '../krav/**/*.feature',
   steps: './steps/**/*.ts',
+  language: 'no',
+  missingSteps: 'skip-scenario',
+  tags: '@demo',
 });
 
 export default defineConfig({
