@@ -1,0 +1,9 @@
+**/node_modules/
+**/playwright-report/
+**/test-results/
+**/.features-gen/
+**/.env
+.git/
+.github/
+*.md
+.gitignore
