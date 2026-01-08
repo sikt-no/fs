@@ -55,8 +55,7 @@ jobs:
       - name: Run tests
         run: |
           docker run --rm \
-            -e GRAPHQL_ENDPOINT=${{ secrets.GRAPHQL_ENDPOINT }} \
-            -e GRAPHQL_TOKEN=${{ secrets.GRAPHQL_TOKEN }} \
+            -e GRAPHQL_ENDPOINT=https://supergraf-gateway-test.fsweb.no/graphql \
             -v ${{ github.workspace }}/test-results:/app/tester/test-results \
             -v ${{ github.workspace }}/playwright-report:/app/tester/playwright-report \
             ${{ env.REGISTRY }}/${{ env.REPO }}/${{ env.IMAGE_NAME }}:latest
