@@ -1,72 +1,67 @@
 import { expect } from '@playwright/test';
 import { createBdd } from 'playwright-bdd';
-import { createGraphQLClient, GraphQLResponse } from '../fixtures/graphql';
-import { HENT_UTDANNINGSINSTANSER } from '../queries/utdanning';
 
 const { When, Then } = createBdd();
 
+if (!process.env.GRAPHQL_ENDPOINT) {
+  throw new Error('GRAPHQL_ENDPOINT environment variable is required');
+}
+const GRAPHQL_ENDPOINT = process.env.GRAPHQL_ENDPOINT;
+
+interface GraphQLResponse {
+  data?: Record<string, unknown>;
+  errors?: Array<{ message: string }>;
+}
+
 let graphqlResponse: GraphQLResponse;
 
-// Utdanningsinstanser
 When('jeg henter liste over utdanningsinstanser fra GraphQL', async ({ request }) => {
-  const client = createGraphQLClient(request);
-  graphqlResponse = await client.query(HENT_UTDANNINGSINSTANSER);
+  const response = await request.post(GRAPHQL_ENDPOINT, {
+    headers: { 'Content-Type': 'application/json' },
+    data: {
+      query: `
+        query HentUtdanningsinstanser {
+          admissioUtdanningsinstanser {
+            id
+            organisasjon {
+              navn {
+                nb
+              }
+            }
+            terminFra {
+              arstall
+            }
+            terminTil {
+              arstall
+            }
+          }
+        }
+      `,
+    },
+  });
+
+  graphqlResponse = await response.json();
 });
 
 Then('skal responsen ikke inneholde feil', async () => {
   expect(graphqlResponse.errors).toBeUndefined();
 });
 
-Then('skal responsen inneholde utdanningsinstanser', async () => {
-  expect(graphqlResponse.data).toBeDefined();
-  const data = graphqlResponse.data as { admissioUtdanningsinstanser?: unknown[] };
-  expect(data.admissioUtdanningsinstanser).toBeDefined();
-  expect(Array.isArray(data.admissioUtdanningsinstanser)).toBe(true);
-});
-
-Then('hver utdanningsinstans skal ha organisasjon, campus og terminer', async () => {
+Then('skal hver utdanningsinstans inneholde følgende felt', async ({}, dataTable: { rows: () => string[][] }) => {
   const data = graphqlResponse.data as {
-    admissioUtdanningsinstanser?: Array<{
-      id: string;
-      campus?: { navn?: { nb?: string } };
-      organisasjon?: { navn?: { nb?: string } };
-      terminFra?: { arstall?: number };
-      terminTil?: { arstall?: number };
-    }>;
+    admissioUtdanningsinstanser?: Array<Record<string, unknown>>;
   };
 
   const instanser = data.admissioUtdanningsinstanser;
   expect(instanser).toBeDefined();
   expect(instanser!.length).toBeGreaterThan(0);
 
+  const felter = dataTable.rows().map(row => row[0]);
+
   for (const instans of instanser!) {
-    expect(instans.id).toBeDefined();
-    expect(instans.organisasjon).toBeDefined();
-    expect(instans.terminFra).toBeDefined();
-    expect(instans.terminTil).toBeDefined();
-  }
-});
-
-// Introspection
-When('jeg kjører en introspection query', async ({ request }) => {
-  const client = createGraphQLClient(request);
-  graphqlResponse = await client.query(`
-    query IntrospectionQuery {
-      __schema {
-        types {
-          name
-          kind
-        }
-      }
+    for (const felt of felter) {
+      const verdi = instans[felt];
+      expect(verdi, `Felt '${felt}' = ${JSON.stringify(verdi)}`).toBeDefined();
     }
-  `);
-});
-
-Then('skal responsen inneholde schema-informasjon', async () => {
-  expect(graphqlResponse.errors).toBeUndefined();
-  expect(graphqlResponse.data).toBeDefined();
-
-  const data = graphqlResponse.data as { __schema?: { types?: Array<{ name: string }> } };
-  expect(data?.__schema?.types).toBeDefined();
-  expect(Array.isArray(data?.__schema?.types)).toBe(true);
+  }
 });
