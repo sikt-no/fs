@@ -20,6 +20,8 @@ export default defineConfig({
   reporter: 'html',
   use: {
     baseURL: 'http://localhost:3000',
+    locale: 'nb-NO',
+    viewport: { width: 1920, height: 1080 },
     trace: 'on',
     video: 'on',
   },
