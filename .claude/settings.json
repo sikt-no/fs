@@ -1,0 +1,13 @@
+{
+  "enabledPlugins": {
+    "sta-product-discovery@sta-plugin-marketplace": true
+  },
+  "extraKnownMarketplaces": {
+    "sta-plugin-marketplace": {
+      "source": {
+        "source": "git",
+        "url": "git@gitlab.sikt.no:studieadm/ai-area/sta-claude-code-plugin-marketplace.git"
+      }
+    }
+  }
+}
