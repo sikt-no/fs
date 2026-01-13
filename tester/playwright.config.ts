@@ -24,9 +24,32 @@ export default defineConfig({
     video: 'on',
   },
   projects: [
+    // Setup project - runs first
+    {
+      name: 'fs-admin-setup',
+      testDir: './setup',
+      testMatch: '**/*.setup.ts',
+    },
+    // BDD tests with authentication
     {
       name: 'chromium',
-      use: { ...devices['Desktop Chrome'] },
+      testDir,
+      use: {
+        ...devices['Desktop Chrome'],
+        storageState: 'playwright/.auth/fs-admin.json',
+      },
+      dependencies: ['fs-admin-setup'],
+    },
+    // Regular Playwright tests with authentication
+    {
+      name: 'fs-admin-tests',
+      testDir: './tests',
+      testMatch: '**/*.spec.ts',
+      use: {
+        ...devices['Desktop Chrome'],
+        storageState: 'playwright/.auth/fs-admin.json',
+      },
+      dependencies: ['fs-admin-setup'],
     },
   ],
 });
