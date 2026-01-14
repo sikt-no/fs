@@ -10,9 +10,10 @@ setup('authenticate as FS-Admin', async ({ page }) => {
   await loginPage.goto()
   await loginPage.login(
     process.env.FS_ADMIN_USERNAME!,
-    process.env.FS_ADMIN_PASSWORD!
+    process.env.FS_ADMIN_PASSWORD!,
+    process.env.FS_ADMIN_OVERSTYRT_BRUKER
   )
-  
+
   // Save signed-in state
   await page.context().storageState({ path: authFile })
 })

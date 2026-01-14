@@ -19,39 +19,28 @@ export default defineConfig({
   workers: process.env.CI ? 1 : undefined,
   reporter: 'html',
   use: {
-    baseURL: 'http://localhost:3000',
+    baseURL: process.env.FS_ADMIN_URL,
     locale: 'nb-NO',
     viewport: { width: 1920, height: 1080 },
     trace: 'on',
     video: 'on',
   },
   projects: [
-    // Setup project - runs first
+    // Setup - logger inn og lagrer auth state
     {
-      name: 'fs-admin-setup',
+      name: 'setup',
       testDir: './setup',
       testMatch: '**/*.setup.ts',
     },
-    // BDD tests with authentication
+    // BDD tests - kjører med lagret auth
     {
-      name: 'chromium',
+      name: 'bdd',
       testDir,
       use: {
         ...devices['Desktop Chrome'],
         storageState: 'playwright/.auth/fs-admin.json',
       },
-      dependencies: ['fs-admin-setup'],
-    },
-    // Regular Playwright tests with authentication
-    {
-      name: 'fs-admin-tests',
-      testDir: './tests',
-      testMatch: '**/*.spec.ts',
-      use: {
-        ...devices['Desktop Chrome'],
-        storageState: 'playwright/.auth/fs-admin.json',
-      },
-      dependencies: ['fs-admin-setup'],
+      dependencies: ['setup'],
     },
   ],
 });
