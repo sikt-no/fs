@@ -19,14 +19,28 @@ export default defineConfig({
   workers: process.env.CI ? 1 : undefined,
   reporter: 'html',
   use: {
-    baseURL: 'http://localhost:3000',
+    baseURL: process.env.FS_ADMIN_URL,
+    locale: 'nb-NO',
+    viewport: { width: 1920, height: 1080 },
     trace: 'on',
     video: 'on',
   },
   projects: [
+    // Setup - logger inn og lagrer auth state
     {
-      name: 'chromium',
-      use: { ...devices['Desktop Chrome'] },
+      name: 'setup',
+      testDir: './setup',
+      testMatch: '**/*.setup.ts',
+    },
+    // BDD tests - kjører med lagret auth
+    {
+      name: 'bdd',
+      testDir,
+      use: {
+        ...devices['Desktop Chrome'],
+        storageState: 'playwright/.auth/fs-admin.json',
+      },
+      dependencies: ['setup'],
     },
   ],
 });
