@@ -1,57 +1,74 @@
-import { createBdd } from 'playwright-bdd';
-import { expect } from '@playwright/test';
+/**
+ * BDD Steps: Opptak
+ *
+ * Steg for opptaksflyt - bruker domain-objekter med state.
+ * Følger POM 2.0 arkitektur med norsk domenespråk.
+ */
 
-const { Given, When, Then } = createBdd();
+import { createBdd } from 'playwright-bdd'
+import { expect } from '@playwright/test'
+import { Opptaksflyt } from '../domain'
 
-// Lagrer sist opprettede opptak-navn for bruk i assertions
-let sisteOpptakNavn: string;
+const { Before, Given, When, Then } = createBdd()
 
-Given('at jeg er på opptakssiden', async ({ page }) => {
-  await page.goto('/opptak');
-});
+// Domain-objekt instans for gjeldende scenario
+let opptaksflyt: Opptaksflyt
 
-Given('at opptaket {string} er publisert', async ({ page }, opptakNavn: string) => {
-  // TODO: Implementer sjekk eller opprett opptak
-  await page.goto('/opptak');
-});
+// Opprett domain-objekt én gang per scenario (ikke per steg)
+Before(async ({ page }) => {
+  opptaksflyt = new Opptaksflyt(page)
+})
 
-When('jeg oppretter et nytt lokalt opptak', async ({ page }) => {
-  await page.getByRole('link', { name: 'Velg Lokalt opptak' }).click();
-});
+Given('at jeg er på opptakssiden', async () => {
+  await opptaksflyt.gåTilOpptakssiden()
+})
 
-When('jeg setter navn til {string}', async ({ page }, navn: string) => {
-  sisteOpptakNavn = `${navn} - ${Date.now()}`;
-  await page.getByRole('textbox', { name: 'Navn på opptaket (bokmål)' }).click();
-  await page.getByRole('textbox', { name: 'Navn på opptaket (bokmål)' }).fill(sisteOpptakNavn);
-});
+Given('at opptaket {string} er publisert', async ({}, opptakNavn: string) => {
+  // TODO: Implementer sjekk eller opprett opptak via domain
+  await opptaksflyt.gåTilOpptakssiden()
+  void opptakNavn
+})
 
-When('jeg setter type til {string}', async ({ page }, type: string) => {
-  // TODO: Map type-navn til value - nå hardkodet til "LOS"
-  await page.getByLabel('Hvilken type lokalt opptak?').selectOption('YTo1OiJMT0si');
-});
+When('jeg oppretter et nytt lokalt opptak', async () => {
+  await opptaksflyt.opprettLokaltOpptak()
+})
 
-When('jeg setter søknadsfrist til {string}', async ({ page }, frist: string) => {
-  // TODO: Implementer sett søknadsfrist
-});
+When('jeg setter navn til {string}', async ({}, navn: string) => {
+  await opptaksflyt.settNavn(navn)
+})
 
-When('jeg setter oppstartsdato til {string}', async ({ page }, dato: string) => {
-  // TODO: Implementer sett oppstartsdato
-});
+When('jeg setter type til {string}', async ({}, type: string) => {
+  await opptaksflyt.settType(type)
+})
 
-When('jeg publiserer opptaket', async ({ page }) => {
-  await page.getByRole('button', { name: 'Lagre' }).click();
-  await page.getByRole('link', { name: 'Avbryt' }).click();
-});
+When('jeg setter søknadsfrist til {string}', async ({}, frist: string) => {
+  // TODO: Implementer i Opptaksflyt
+  void frist
+})
 
-When('jeg tilknytter utdanningstilbudet {string} til opptaket', async ({ page }, utdanning: string) => {
-  // TODO: Implementer tilknytning
-});
+When('jeg setter oppstartsdato til {string}', async ({}, dato: string) => {
+  // TODO: Implementer i Opptaksflyt
+  void dato
+})
 
-Then('skal opptaket {string} være publisert', async ({ page }, _opptakNavn: string) => {
-  await page.goto('/opptak');
-  await expect(page.getByRole('cell', { name: sisteOpptakNavn })).toBeVisible();
-});
+When('jeg publiserer opptaket', async () => {
+  await opptaksflyt.publiserOpptak()
+})
 
-Then('skal {string} være søkbart for søkere', async ({ page }, utdanning: string) => {
+When('jeg tilknytter utdanningstilbudet {string} til opptaket', async ({}, utdanning: string) => {
+  // TODO: Implementer i Opptaksflyt
+  void utdanning
+})
+
+Then('skal opptaket {string} være publisert', async ({}, _opptakNavn: string) => {
+  const sisteNavn = opptaksflyt.hentSisteOpptakNavn()
+  expect(sisteNavn).toBeDefined()
+
+  const erSynlig = await opptaksflyt.erOpptakSynlig(sisteNavn!)
+  expect(erSynlig).toBe(true)
+})
+
+Then('skal {string} være søkbart for søkere', async ({}, utdanning: string) => {
   // TODO: Implementer verifisering
-});
+  void utdanning
+})

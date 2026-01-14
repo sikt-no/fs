@@ -216,3 +216,229 @@ Then('skal {string} vises', async ({ page }, tekst: string) => {
 
 - **GitHub Actions**: Bygger Docker-image med testmiljø
 - **GitLab**: Kjører testene fra Docker-imaget i bedriftens CI/CD
+
+---
+
+# POM 2.0: Minimalist Test Architecture
+
+## Hvorfor denne arkitekturen eksisterer
+
+Dette dokumentet etablerer arkitektoniske guardrails for å forhindre regresjon tilbake til klassisk Page Object Model (POM) og test spaghetti.
+
+**Klassisk POM er bevisst unngått fordi:**
+- Den skaper tett kobling mellom tester og UI-implementasjon
+- Den oppmuntrer til one-class-per-page abstraksjoner som blåser opp kodebasen
+- Den skjuler forretningshensikt bak mekaniske UI-operasjoner
+- Den gjør tester skjøre og dyre å vedlikeholde
+
+## Kjerneprinsipper
+
+1. **Tester beskriver forretningshensikt, ikke UI-mekanikk**
+   - Bra: `await brukerøkt.loggInnSom('administrator')`
+   - Dårlig: `await loginPage.usernameInput.fill('admin')`
+
+2. **UI-kunnskap er isolert og behandlet som adapter**
+   - Selectors og Playwright APIs lever KUN i `ui/`
+   - UI-adaptere er stateless, funksjonsbaserte, og fokuserer på "hvordan"
+
+3. **Domenekonsepter har strukturell tyngdekraft**
+   - Domain-objekter er klasser med state
+   - Bruker NORSK domenespråk (Brukerøkt, Opptaksflyt, etc.)
+   - Ingen flytende utility-funksjoner
+
+4. **Determinisme og debuggbarhet over kløkt**
+   - Eksplisitt er bedre enn abstrakt
+   - Kjedelig kode er vedlikeholdbar kode
+
+## Katalogansvar
+
+```
+/tests
+  Formål: Orkestrering + assertions KUN
+  Innhold: Test-scenarioer som beskriver forretningshensikt
+  Forbudt: Selectors, locators, Playwright page APIs
+
+/domain
+  Formål: Forretningsflyter og domeneobjekter
+  Innhold: Brukerøkt, Opptaksflyt, osv. (NORSK språk)
+  Type: Klasser med state (IKKE funksjoner)
+  Tillatt: Orkestrere UI-adaptere, forretningslogikk, holde state
+  Forbudt: Direkte selector-referanser, Playwright APIs
+
+/ui
+  Formål: Rene Playwright adapter-funksjoner
+  Innhold: Alle selectors og Playwright-interaksjoner
+  Tillatt: page.locator(), page.click(), page.fill()
+  Forbudt: Forretningslogikk, domenekonsepter
+
+/assertions (valgfritt)
+  Formål: Eksplisitte, lesbare forventninger
+  Innhold: Domenespesifikke assertion-hjelpere
+```
+
+## Harde regler (ikke-forhandlingsbare)
+
+### 1. Selector-isolasjon
+```typescript
+// ❌ FORBUDT i tests/ og domain/
+await page.getByRole('button', { name: 'Lagre' }).click()
+
+// ✅ PÅKREVD: Selectors kun i ui/
+// ui/admission.ts
+export function clickSaveButton(page: Page) {
+  return page.getByRole('button', { name: 'Lagre' }).click()
+}
+```
+
+### 2. Domain-objekter er klasser, UI-adaptere er funksjoner
+```typescript
+// ❌ FORBUDT: Page Object-klasser med UI-logikk
+export class LoginPage {
+  readonly loginButton: Locator
+  constructor(readonly page: Page) {}
+  async login(user: string) { ... }
+}
+
+// ✅ PÅKREVD: Domain-klasser (norsk språk) + UI-funksjoner
+// domain/Brukerøkt.ts
+export class Brukerøkt {
+  constructor(private readonly side: Page) {}
+
+  async loggInnMedFeide(brukernavn: string, passord: string) {
+    await ui.auth.clickLoginWithFeide(this.side)
+    await ui.auth.fillUsername(this.side, brukernavn)
+    // ...
+  }
+}
+
+// ui/auth.ts
+export async function fillUsername(page: Page, username: string) {
+  await page.getByLabel('Brukernavn').fill(username)
+}
+```
+
+### 3. Domain-objekter med state i step-filer
+```typescript
+// ❌ FORBUDT: Direkte UI-kall i step-filer
+When('jeg oppretter et nytt lokalt opptak', async ({ page }) => {
+  await page.getByRole('link', { name: 'Velg Lokalt opptak' }).click()
+})
+
+// ❌ FORBUDT: Funksjonsbasert domain uten state
+export function createLocalAdmission(page: Page) { ... }
+
+// ✅ PÅKREVD: Domain-klasse med state (norsk språk)
+// domain/Opptaksflyt.ts
+export class Opptaksflyt {
+  private sisteOpptakNavn?: string
+
+  constructor(private readonly side: Page) {}
+
+  async opprettLokaltOpptak() {
+    await ui.admission.clickCreateLocal(this.side)
+  }
+
+  async settNavn(navn: string) {
+    this.sisteOpptakNavn = `${navn} - ${Date.now()}`
+    await ui.admission.fillName(this.side, this.sisteOpptakNavn)
+  }
+
+  hentSisteOpptakNavn(): string | undefined {
+    return this.sisteOpptakNavn
+  }
+}
+
+// steps/opptak.steps.ts
+let opptaksflyt: Opptaksflyt
+
+Given('at jeg er på opptakssiden', async ({ page }) => {
+  opptaksflyt = new Opptaksflyt(page)
+  await opptaksflyt.gåTilOpptakssiden()
+})
+
+When('jeg oppretter et nytt lokalt opptak', async () => {
+  await opptaksflyt.opprettLokaltOpptak()
+})
+
+When('jeg setter navn til {string}', async ({}, navn: string) => {
+  await opptaksflyt.settNavn(navn)
+})
+```
+
+### 4. Ingen arvehierarkier, norsk domenespråk
+```typescript
+// ❌ FORBUDT: Arvehierarkier og engelsk domain-språk
+class BasePage { ... }
+class LoginPage extends BasePage { ... }
+class UserSession { ... }  // Engelsk
+
+// ✅ PÅKREVD: Komposisjon + norsk domenespråk
+import * as ui from '../ui'
+import { Brukerøkt, Opptaksflyt } from '../domain'
+
+let brukerøkt: Brukerøkt
+let opptaksflyt: Opptaksflyt
+```
+
+### 5. Ingen globale variabler for state
+```typescript
+// ❌ FORBUDT: Global state utenfor domain-objekter
+let sisteOpptakNavn: string  // Global variabel
+
+When('jeg setter navn', async () => {
+  sisteOpptakNavn = 'Mitt opptak'
+})
+
+// ✅ PÅKREVD: State i domain-objekter
+class Opptaksflyt {
+  private sisteOpptakNavn?: string  // State i klassen
+
+  settNavn(navn: string) {
+    this.sisteOpptakNavn = navn
+  }
+}
+```
+
+## E2E Test Reduction Strategy
+
+### Prinsipp: E2E-tester er dyre og skjøre
+Bruk kun E2E-tester for:
+1. **Kritiske brukerreiser** (innlogging, utsjekking, kjernearbeidsflyter)
+2. **Integrasjonsverifisering** (frontend + backend + database)
+3. **Visuell/UX-validering** (layout, responsivt design)
+
+### Erstatt E2E med raskere alternativer:
+
+| Testtype | Bruk når | Eksempel |
+|----------|----------|----------|
+| **API-tester** | Verifisering av backend-logikk via UI | GraphQL-spørringer, REST-endepunkter |
+| **Komponenttester** | Validering av UI-atferd isolert | Formvalidering, knappetilstander |
+| **Kontraktstester** | Sikring av API-kompatibilitet | Skjemavalidering, mock-responser |
+| **Fixtures/Seeding** | Oppsett av testdata | Database-seeding i stedet for UI-klikk |
+
+### Røde flagg for unødvendige E2E:
+- ❌ Test verifiserer kun backend-respons (bruk API-test)
+- ❌ Test setter opp data via UI-klikk (bruk fixtures/API-seeding)
+- ❌ Test gjentar samme oppsettstrinn (ekstraher til storageState)
+- ❌ Test validerer GraphQL-skjema (bruk kontrakttest)
+
+## Sjekkliste for ny kode
+
+Før commit, verifiser:
+
+- [ ] Ingen selectors eller Playwright APIs i `tests/` eller `domain/`
+- [ ] Alle UI-interaksjoner er i `ui/` adapter-funksjoner
+- [ ] Domain-objekter er klasser (IKKE funksjoner)
+- [ ] Domain-objekter bruker NORSK domenespråk (Brukerøkt, Opptaksflyt)
+- [ ] State holdes i domain-objekter, ikke i globale variabler
+- [ ] Step-filer instansierer domain-objekter: `let opptaksflyt: Opptaksflyt`
+- [ ] Domenekode representerer forretningskonsepter, ikke UI-mekanikk
+- [ ] Testfiler leser som forretningskrav
+- [ ] Ingen `BasePage`, `AbstractFlow`, eller arvehierarkier
+
+## Håndhevelse
+
+Denne arkitekturen håndheves av:
+1. **Code review**: Reviewere må avvise PRer som bryter disse reglene
+2. **AI-assistanse**: Claude og andre AI-verktøy refererer til dette dokumentet
+3. **Linting (fremtidig)**: Vurder ESLint-regler for å forby imports av `@playwright/test` utenfor `ui/`
