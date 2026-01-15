@@ -15,17 +15,17 @@ Dette dokumentet beskriver hvordan vi bruker GitHub Issues, prosjekter, labels, 
 
 ## 🏗️ Prosjektstruktur
 
-Vi bruker to parallelle prosjekter som inneholder de samme sakene:
+Vi bruker to parallelle prosjekter:
 
 ### FS Offentlig saksoversikt
-- **Formål**: Åpen produktbacklog synlig for alle
-- **Innhold**: Saker under arbeid, i kø for utvikling, til vurdering og ferdigstilte
+- **Formål**: Åpen oversikt over initiativer og saker synlig for alle interessenter
+- **Innhold**: Offentlig veikart med initiativer og offentlig saksoversikt med initiativer og saker
 - **Tilgang**: Offentlig tilgjengelig
 - **Link**: [FS Offentlig saksoversikt](https://github.com/orgs/sikt-no/projects/4/views/3)
 
 ### FS Saksoversikt (intern)
-- **Formål**: Intern oppfølging og rapportering  
-- **Innhold**: Samme saker som offentlig, men med tilleggsinformasjon:
+- **Formål**: Intern planlegging, oppfølging og status  
+- **Innhold**: Samme saker som offentlig, men med tilleggsinformasjon
   - Planlagt startdato og planlagt ferdigdato
   - Estimert tid (ansattimer)
   - Seksjonsinformasjon, teaminformasjon
@@ -35,22 +35,23 @@ Vi bruker to parallelle prosjekter som inneholder de samme sakene:
 
 ## 🎫 Issues og saksbehandling
 
-### Hva er en sak?
-Hver issue i saksoversikten skal være:
+### Hva er issuetypene sak og initiativ?
+Ethvert issue (sak eller initiativ) i saksoversikten skal være:
 - **Verdifull** i seg selv for kunder eller brukere
 - **Komplett problem/leveranse/behov** (ikke delt opp i tekniske komponenter)
 - **Prioriterbar** i forhold til andre saker
+- Et initiativ kan bestå av flere enkeltsaker, men det er kun initiativer som ligger i veikartet vi kommuniserer som vår mer langsiktige plan framover til sektor.
 
-### Hvem kan opprette saker?
+### Hvem kan opprette issues?
 - Brukerstøtte
 - Produktteam  
 - Andre Sikt-interne team
 - Eksterne team (planlagt for fremtiden)
 
 ### Saksflyt
-Happy path:
+Happy path gjennom vår utviklingsmodell: https://fs.sikt.no/utviklerhandbok/utviklingsmodell/
 ```
-Ny sak → Til vurdering → I kø → Under arbeid → Ferdig
+Ny sak → Til vurdering → Prioritert → Utforskning → Utvikling → Innføring → Ferdig
 ```
 
 **Viktig**: Produksjonskritiske feil har alltid forrang og kan komme rett til under arbeid!
@@ -66,13 +67,14 @@ Hver issue må ha én av disse ved oppretting:
 - `type:enhancement` - Forbedringer av eksisterende funksjonalitet  
 - `type:maintenance` - Vedlikehold, teknisk gjeld, refaktorering, oppgraderinger
 - `type:bug` - Feilrettinger
+- `type:task` - Annen type oppgave
 
 ### Prioritetslabels
 Brukes for å vise viktighetsgrad:
 
 | Label                 | Beskrivelse                           | Brukseksempler                                                              |
 |-----------------------|---------------------------------------|-----------------------------------------------------------------------------|
-| `priority:critical`   | **KRITISK** - Må løses umiddelbart   | Produksjonsfeil, sikkerhetshull, systemkrasj, juridiske krav med deadline |
+| `priority:critical`   | **KRITISK** - Må løses umiddelbart   | Produksjonsfeil, sikkerhetshull, systemkrasj, juridiske krav med deadline  |
 | `priority:high`       | **HØY** - Svært viktig for roadmap   | Sentrale features, viktige kundekrav, arkitektoniske endringer             |
 | `priority:medium`     | **MEDIUM** - Normal prioritering     | Vanlige features, refaktorering, mindre UX-forbedringer                    |
 | `priority:low`        | **LAV** - Nice-to-have               | Optimalisering, eksperimentelle ideer                                      |
@@ -80,9 +82,10 @@ Brukes for å vise viktighetsgrad:
 **Merk**: `priority:critical` brukes sjelden og kun for akutte situasjoner!
 
 ### Status på saker
-- `Til vurdering` - Sak er opprettet og kan ses på/analyseres/utfleskes
-- `Arbeidskø` - Sak er prioritert for utvikling og klar til at et team tar den på seg.
-- `Under arbeid` - Arbeid på sak er startet
+- `Til vurdering` - Sak er opprettet med grunnleggende beskrivelse, kan analyseres for prioritering
+- `Prioritert` - Sak er prioritert for arbeid og er klar nok til at et team kan begynne med behovsanalyse og kravspesifikasjon
+- `Utforskning` - Arbeid på sak er startet med behovsanalyse, kravspesifikasjon, eller utforskning av løsningsalternativer
+- `Utvikling` - Saken er under utvikling med 
 - `Ferdig` - Sak er fullført
 - `Parkert` - Sak er satt på hold, eller vi har bestemt oss for å ikke gjøre noe med den
   
