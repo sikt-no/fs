@@ -3,10 +3,11 @@ import { createBdd } from 'playwright-bdd';
 
 const { When, Then } = createBdd();
 
-if (!process.env.GRAPHQL_ENDPOINT) {
-  throw new Error('GRAPHQL_ENDPOINT environment variable is required');
+// Use FS-Admin GraphQL endpoint (authenticated via session cookies)
+if (!process.env.FS_ADMIN_GRAPHQL) {
+  throw new Error('FS_ADMIN_GRAPHQL environment variable is required');
 }
-const GRAPHQL_ENDPOINT = process.env.GRAPHQL_ENDPOINT;
+const FS_ADMIN_GRAPHQL = process.env.FS_ADMIN_GRAPHQL.trim();
 
 interface GraphQLResponse {
   data?: Record<string, unknown>;
@@ -16,8 +17,11 @@ interface GraphQLResponse {
 let graphqlResponse: GraphQLResponse;
 
 When('jeg henter liste over utdanningsinstanser fra GraphQL', async ({ request }) => {
-  const response = await request.post(GRAPHQL_ENDPOINT, {
-    headers: { 'Content-Type': 'application/json' },
+  // Uses the authenticated session from storageState (cookies)
+  const response = await request.post(FS_ADMIN_GRAPHQL, {
+    headers: {
+      'Content-Type': 'application/json',
+    },
     data: {
       query: `
         query HentUtdanningsinstanser {

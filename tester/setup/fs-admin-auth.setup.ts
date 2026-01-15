@@ -14,6 +14,6 @@ setup('authenticate as FS-Admin', async ({ page }) => {
     process.env.FS_ADMIN_OVERSTYRT_BRUKER
   )
 
-  // Save signed-in state
+  // Save signed-in state (cookies will be used for GraphQL API calls)
   await page.context().storageState({ path: authFile })
 })
