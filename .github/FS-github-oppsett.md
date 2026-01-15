@@ -35,18 +35,26 @@ Vi bruker to parallelle prosjekter:
 
 ## 🎫 Issues og saksbehandling
 
-### Hva er issuetypene sak og initiativ?
-Ethvert issue (sak eller initiativ) i saksoversikten skal være:
-- **Verdifull** i seg selv for kunder eller brukere
-- **Komplett problem/leveranse/behov** (ikke delt opp i tekniske komponenter)
-- **Prioriterbar** i forhold til andre saker
-- Et initiativ kan bestå av flere enkeltsaker, men det er kun initiativer som ligger i veikartet vi kommuniserer som vår mer langsiktige plan framover til sektor.
+### Produktansvar og redaksjonelt ansvar for saksoversikten
+- **Produktledere** har ansvar for prioritering og innhold
+- **Prioritering** skjer i dialog med team og eksterne interessenter
+- **Produksjonsfeil** kan alltid forsere køen
 
 ### Hvem kan opprette issues?
 - Brukerstøtte
 - Produktteam  
 - Andre Sikt-interne team
 - Eksterne team (planlagt for fremtiden)
+
+### Team som jobber med å løse en sak kan holde innholdet i saken ved like
+Dersom det er spørsmål om vesentlig endring av omfang eller tidsbruk, så skal produktleder involveres
+
+### Hva er issuetypene sak og initiativ?
+Ethvert issue (sak eller initiativ) i saksoversikten skal være:
+- **Verdifull** i seg selv for kunder eller brukere
+- **Komplett problem/leveranse/behov** (ikke delt opp i tekniske komponenter)
+- **Prioriterbar** i forhold til andre saker
+- Et initiativ kan bestå av flere enkeltsaker, men det er kun initiativer som ligger i veikartet vi kommuniserer som vår mer langsiktige plan framover til sektor.
 
 ### Saksflyt
 Happy path gjennom vår utviklingsmodell: https://fs.sikt.no/utviklerhandbok/utviklingsmodell/
@@ -81,15 +89,16 @@ Brukes for å vise viktighetsgrad:
 
 **Merk**: `priority:critical` brukes sjelden og kun for akutte situasjoner!
 
-### Status på saker
+### Status på saker skal følge utviklingsmodellen vår
+https://fs.sikt.no/utviklerhandbok/utviklingsmodell/ 
 - `Til vurdering` - Sak er opprettet med grunnleggende beskrivelse, kan analyseres for prioritering
 - `Prioritert` - Sak er prioritert for arbeid og er klar nok til at et team kan begynne med behovsanalyse og kravspesifikasjon
 - `Utforskning` - Arbeid på sak er startet med behovsanalyse, kravspesifikasjon, eller utforskning av løsningsalternativer
 - `Utvikling` - Saken er under utvikling med 
-- `Ferdig` - Sak er fullført
-- `Parkert` - Sak er satt på hold, eller vi har bestemt oss for å ikke gjøre noe med den
+- `Innføring` - Sak er fullført mht utvikling, men vi har et overgangsløp hvor er i tettere kontakt med brukere/samarbeidspartnere og kan gjøre justeringer
+- `Ferdig` - Sak er enten fullført eller lukket (som duplikat, eller vi gjør ikke noe med den)
   
-Standard status for innkomne saker er "til vurdering". Unntaket er bugs som blir markert med prioritetsnivå kritisk og en seksjon. Disse går rett til "arbeidskøen" og skal håndteres med en gang.
+Standard status for innkomne saker er "til vurdering". Unntaket er bugs som blir markert med prioritetsnivå kritisk og en seksjon. Disse går rett til "Utforskning" og skal håndteres med en gang.
 Vi prøver å begrense antall saker i arbeidskø og under arbeid for å holde mengden arbeid i gang nede og heller ha fokus på å sluttføre sakerfør vi tar inn nye. Saker starter ofte som større entiteter og deles opp i mindre biter jo nærmere og mer inn i utviklingen vi kommer. 
 
 ### Prosesslabels
@@ -102,14 +111,14 @@ I denne kategorien har vi også
 ### Interne labels
 Vi har også labels på seksjon og team, som vi kun bruker i den interne saksoversikten. 
 
-### Milestones (milepæler)
-Vi bruker milestones med datoer når vi har prosjektfinansiering med startdato og sluttdato. Issues knyttes til riktig prosjekt. 
-- Fremtidens opptak 
-- Utdanningsregister (ut 2025)
+### Label "initiativ"
+Settes på saker vi vil ha i veikart for å kommunisere til sektor hva vi planlegger å jobbe med tre tertialer framover i tid, og ev. temaer vi ikke planlegger å jobbe med de neste tre tertialene (senere)
 
-Vi bruker også milestones til:
-- Årsmål for ÅR (Eksempel 2026: Modernisering og legacyavvikling), alle nye features (som ikke er på prosjekt) bør knyttes til og lede oss i retning av årsmålet. Årsmålet skifter hvert år (februar-januar) og må ikke tolkes som at alt skal være ferdig til dato, så her setter vi nok ikke sluttdato, men startdato. 
-- Stabilitet, sikkerhet og ytelse, en KPI-milestone som vi samler saker som i hovedsak gjelder bugfikser på ting i produksjon, planlagte vedlikeholds- og sikkerhetsoppgaver, samt stabilitets- og ytelsesforbedringer
+### Milestones (milepæler)
+Vi bruker milestones til:
+- Årsmål for ÅR med startdato og sluttdato
+- Prosjektfinansiering med startdato og sluttdato
+- Felles samlemilepæl uten start og sluttdato for løpende vedlikehold og feilrettinger
 
 ---
 
@@ -187,10 +196,6 @@ Vi har fire aktive workflows som automatiserer saksadministrasjon:
 3. Sikt-team vurderer og prioriterer
 4. Hvis saken krever modning konverteres saken til discussion/ide
 
-### Produktansvar
-- **Produktledere** har ansvar for prioritering av produktbacklog
-- **Prioritering** skjer i dialog med team og eksterne interessenter
-- **Produksjonsfeil** kan alltid forsere køen
 
 ---
 
