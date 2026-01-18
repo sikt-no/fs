@@ -26,11 +26,21 @@ export default defineConfig({
     video: 'on',
   },
   projects: [
-    // Setup - logger inn og lagrer auth state
+    // Setup - logger inn og lagrer auth state for både admin og student
     {
       name: 'setup',
       testDir: './setup',
       testMatch: '**/*.setup.ts',
+    },
+    // Auth verification tests - verifiserer at setup fungerte
+    {
+      name: 'auth-tests',
+      testDir: './tests',
+      testMatch: '**/*-auth.spec.ts',
+      use: {
+        ...devices['Desktop Chrome'],
+      },
+      dependencies: ['setup'],
     },
     // BDD tests - kjører med lagret auth
     {

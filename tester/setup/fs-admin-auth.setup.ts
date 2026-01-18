@@ -4,7 +4,7 @@ import 'dotenv/config';
 
 const authFile = 'playwright/.auth/fs-admin.json'
 
-setup('authenticate as FS-Admin', async ({ page }) => {
+setup('autentiser som FS-Admin', async ({ page }) => {
   const loginPage = new FsAdminLoginPage(page)
 
   await loginPage.goto()
