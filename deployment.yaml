@@ -4,15 +4,18 @@ metadata:
   name: $CI_ENVIRONMENT_SLUG
   namespace: $KUBE_NAMESPACE
   labels:
+    name: $CI_ENVIRONMENT_SLUG
     app: $CI_ENVIRONMENT_SLUG
 spec:
   replicas: $REPLICAS
   selector:
     matchLabels:
+      name: $CI_ENVIRONMENT_SLUG
       app: $CI_ENVIRONMENT_SLUG
   template:
     metadata:
       labels:
+        name: $CI_ENVIRONMENT_SLUG
         app: $CI_ENVIRONMENT_SLUG
     spec:
       containers:
