@@ -1,5 +1,5 @@
 # language: no
-@demo
+@demo @implemented @must
 Egenskap: Opprette et opptak
   Som administrator ønsker jeg å kunne opprette et opptak og publisere det
   slik at det blir tilgjengelig for personer som ønsker å søke.
@@ -8,9 +8,10 @@ Egenskap: Opprette et opptak
     Gitt at jeg er logget inn som administrator
     Og at jeg er på opptakssiden
 
+  @implemented @must
   Regel: Et opptak må være publisert og ha utdanningstilbud for å være søkbart
 
-    @e2e
+    @e2e @implemented
     Scenario: Opprette og publisere et opptak
       Når jeg oppretter et nytt lokalt opptak
       Og jeg setter navn til "Høstopptak 2025"
@@ -20,7 +21,7 @@ Egenskap: Opprette et opptak
       Og jeg publiserer opptaket
       Så skal opptaket "Høstopptak 2025" være publisert
 
-    @e2e
+    @e2e @in-progress @should
     Scenario: Tilknytte utdanningstilbud til et opptak
       Gitt at opptaket "Våropptak 2025" er publisert
       Når jeg tilknytter utdanningstilbudet "Bachelorprogram i informatikk" til opptaket
