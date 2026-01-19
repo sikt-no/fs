@@ -280,7 +280,7 @@ krav_parser:
       aud: "https://vault.sikt.no:8200"
   secrets:
     DATABASE_URL:
-      vault: "productareas/studieadm/fs/krav-parser/db/url@secret"
+      vault: "gitlab/studieadm/sikt-no-fs/krav-parser/db/url@secret"
       file: false
   before_script:
     - cd krav-parser
@@ -303,8 +303,8 @@ export VAULT_ADDR=https://vault.sikt.no:8200
 vault login -method=ldap username=<your-username>
 
 # Create the database URL secret (includes password in connection string)
-vault kv put -mount=secret productareas/studieadm/fs/krav-parser/db \
-  url="postgresql://krav_user:password@your-rds-endpoint.amazonaws.com:5432/krav_db?sslmode=require"
+vault kv put -mount=secret gitlab/studieadm/sikt-no-fs/krav-parser/db \
+  url="postgresql://user:password@rds-endpoint.amazonaws.com:5432/fs-akseptansekrav?sslmode=require"
 ```
 
 The connection string format: `postgresql://user:password@host:port/database?sslmode=require`
