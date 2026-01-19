@@ -6,7 +6,7 @@ export class FsAdminLoginPage extends BaseFeideLoginPage {
 
   constructor(page: Page) {
     super(page)
-    this.overstyrtBrukerSelect = page.getByLabel('Overstyrt bruker')
+    this.overstyrtBrukerSelect = page.getByLabel('Overstyrt bruker').describe('Overstyrt bruker')
   }
 
   async goto() {

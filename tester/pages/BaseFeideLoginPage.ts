@@ -10,11 +10,11 @@ export abstract class BaseFeideLoginPage {
 
   constructor(page: Page) {
     this.page = page
-    this.loginWithFeideButton = page.getByRole('button', { name: 'Logg inn med Feide' })
-    this.feideTestUsersOption = page.getByRole('link', { name: /Feide testbrukere/ })
-    this.usernameInput = page.getByLabel('Brukernavn')
-    this.passwordInput = page.getByLabel('Passord', { exact: true })
-    this.loginButton = page.getByRole('button', { name: 'Logg inn', exact: true })
+    this.loginWithFeideButton = page.getByRole('button', { name: 'Logg inn med Feide' }).describe('Logg inn med Feide knapp')
+    this.feideTestUsersOption = page.getByRole('link', { name: /Feide testbrukere/ }).describe('Feide testbrukere lenke')
+    this.usernameInput = page.getByLabel('Brukernavn').describe('Brukernavn inputfelt')
+    this.passwordInput = page.getByLabel('Passord', { exact: true }).describe('Passord inputfelt')
+    this.loginButton = page.getByRole('button', { name: 'Logg inn', exact: true }).describe('Logg inn knapp')
   }
 
   abstract goto(): Promise<void>

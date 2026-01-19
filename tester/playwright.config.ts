@@ -32,25 +32,27 @@ export default defineConfig({
       testDir: './setup',
       testMatch: '**/*.setup.ts',
     },
-    // Auth verification tests - verifiserer at setup fungerte
+    // Auth verification - verifiserer at setup fungerte
     {
-      name: 'auth-tests',
-      testDir: './tests',
-      testMatch: '**/*-auth.spec.ts',
+      name: 'auth-verify',
+      testDir,
+      testMatch: '**/*autentisering*.spec.js',
+      grep: /@admin-auth-test|@student-auth-test/,
       use: {
         ...devices['Desktop Chrome'],
       },
       dependencies: ['setup'],
     },
-    // BDD tests - kjører med lagret auth
+    // BDD tests - andre tester med FS-Admin auth
     {
       name: 'bdd',
       testDir,
+      testIgnore: '**/*autentisering*.spec.js',
       use: {
         ...devices['Desktop Chrome'],
         storageState: 'playwright/.auth/fs-admin.json',
       },
-      dependencies: ['setup'],
+      dependencies: ['auth-verify'],
     },
   ],
 });

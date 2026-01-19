@@ -8,9 +8,9 @@ export class StudentLoginPage extends BaseFeideLoginPage {
 
   constructor(page: Page) {
     super(page)
-    this.mainContentLoginLink = page.locator('#main-content').getByRole('link', { name: 'Logg inn' })
-    this.menuButton = page.getByRole('button', { name: 'Meny' })
-    this.testUserSelect = page.getByLabel('Velg testsøker').last()
+    this.mainContentLoginLink = page.locator('#main-content').getByRole('link', { name: 'Logg inn' }).describe('Logg inn lenke i hovedinnhold')
+    this.menuButton = page.getByRole('button', { name: 'Meny' }).describe('Meny knapp')
+    this.testUserSelect = page.getByLabel('Velg testsøker').last().describe('Velg testsøker')
   }
 
   async goto() {
