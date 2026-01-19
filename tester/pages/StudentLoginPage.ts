@@ -27,7 +27,7 @@ export class StudentLoginPage extends BaseFeideLoginPage {
     await this.page.waitForLoadState('networkidle')
   }
 
-  async login(username: string, password: string, testUser: string = 'FIN SÅPE') {
+  async login(username: string, password: string, testUser: string) {
     await this.clickLoginLink()
     await this.clickLoginWithFeide()
     await this.clickFeideTestUsers()

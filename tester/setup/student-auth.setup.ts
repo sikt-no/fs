@@ -11,7 +11,7 @@ setup('autentiser som Student', async ({ page }) => {
   await loginPage.login(
     process.env.STUDENT_USERNAME!,
     process.env.STUDENT_PASSWORD!,
-    'FIN SÅPE'
+    process.env.STUDENT_TEST_USER!
   )
 
   // Lagre innlogget tilstand (cookies vil bli brukt for tester)
