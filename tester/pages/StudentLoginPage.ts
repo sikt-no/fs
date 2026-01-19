@@ -15,6 +15,20 @@ export class StudentLoginPage extends BaseFeideLoginPage {
 
   async goto() {
     await this.page.goto(process.env.MIN_KOMPETANSE_URL!)
+    await this.page.waitForLoadState('networkidle')
+  }
+
+  async erProfilLenkeSynlig(profilNavn: string): Promise<boolean> {
+    const profilLenke = this.page.getByRole('link', { name: new RegExp(profilNavn, 'i') })
+    return await profilLenke.isVisible()
+  }
+
+  async clickMeny() {
+    await this.menuButton.click()
+  }
+
+  async hentTestsøkerTekst(): Promise<string | null> {
+    return await this.testUserSelect.textContent()
   }
 
   async clickLoginLink() {

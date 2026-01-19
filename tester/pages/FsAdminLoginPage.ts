@@ -11,6 +11,16 @@ export class FsAdminLoginPage extends BaseFeideLoginPage {
 
   async goto() {
     await this.page.goto(process.env.FS_ADMIN_URL!)
+    await this.page.waitForLoadState('networkidle')
+  }
+
+  async hentBrukernavnTekst(navn: string): Promise<string | null> {
+    const brukerElement = this.page.getByText(navn).first()
+    return await brukerElement.textContent()
+  }
+
+  async hentOverstyrtBrukerVerdi(): Promise<string> {
+    return await this.overstyrtBrukerSelect.inputValue()
   }
 
   async login(username: string, password: string, overstyrtBruker?: string) {

@@ -1,19 +1,17 @@
-import { test, expect } from '@playwright/test';
+import { test, expect } from '../fixtures/pages';
 import 'dotenv/config';
 
 test.describe('Student innloggingstest', () => {
   test.use({ storageState: 'playwright/.auth/student.json' });
 
-  test('skal være innlogget som FIN SÅPE', async ({ page }) => {
-    await page.goto(process.env.MIN_KOMPETANSE_URL!)
-    await page.waitForLoadState('networkidle')
+  test('skal være innlogget med riktig testsøker', async ({ studentActions }) => {
+    await studentActions.gåTilMinKompetanse()
 
-    // Verifiser at profil-linken vises
-    await expect(page.getByRole('link', { name: /Profil: Kari/i })).toBeVisible()
+    const profilNavn = `Profil: ${process.env.TEST_USER_DISPLAY_NAME!.split(' ')[0]}`
+    const erProfilSynlig = await studentActions.erProfilLenkeSynlig(profilNavn)
+    expect(erProfilSynlig).toBe(true)
 
-    // Åpne meny og verifiser at testsøker er valgt
-    await page.getByRole('button', { name: 'Meny' }).click()
-    const testUserSelect = page.getByLabel('Velg testsøker').last()
-    await expect(testUserSelect).toContainText(process.env.STUDENT_TEST_USER!)
+    const valgtTestsøker = await studentActions.hentValgtTestsøker()
+    expect(valgtTestsøker).toContain(process.env.STUDENT_TEST_USER!)
   })
 })
