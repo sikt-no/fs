@@ -1,0 +1,68 @@
+include:
+  - component: $CI_SERVER_FQDN/platon/ci-components/docker/docker@2
+  - component: $CI_SERVER_FQDN/platon/ci-components/deploy/deploy@1
+
+variables:
+  KUBE_PROD_DOMAIN: fs-funksjonelltesting.sokrates.edupaas.no
+  KUBE_TEST_ID: fs-funksjonelltesting
+  HTTP_PORT: '80'
+  REPLICAS: '1'
+  # Test environment variables
+  GRAPHQL_ENDPOINT: https://supergraf-gateway-apollo-functionaltest.sokrates.edupaas.no/graphql
+  FS_ADMIN_GRAPHQL: https://studieadm-fs-admin-functionaltest.sokrates.edupaas.no/api/graphql
+  FS_ADMIN_URL: https://studieadm-fs-admin-functionaltest.sokrates.edupaas.no
+  FS_ADMIN_USERNAME: kari456staff
+  FS_ADMIN_PASSWORD: 098asd
+  FS_ADMIN_OVERSTYRT_BRUKER: "11906698511:970 422 528"
+
+stages:
+  - test
+  - build
+  - production
+
+e2e_tests:
+  stage: test
+  image: mcr.microsoft.com/playwright:v1.57.0-noble
+  before_script:
+    - cd tester
+    - npm ci
+  script:
+    - npm test || true
+  timeout: 30m
+  artifacts:
+    paths:
+      - tester/playwright-report/
+    when: always
+    expire_in: 1 week
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "schedule"
+    - if: $CI_PIPELINE_SOURCE == "web"
+    - if: $CI_PIPELINE_SOURCE == "trigger"
+
+build:
+  extends: .platon-docker-build
+  stage: build
+  needs:
+    - job: e2e_tests
+      artifacts: true
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "schedule"
+    - if: $CI_PIPELINE_SOURCE == "web"
+    - if: $CI_PIPELINE_SOURCE == "trigger"
+
+production:
+  extends: .production
+  stage: production
+  needs:
+    - job: build
+  script:
+    - deploy deployment.yaml
+  when: on_success
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "schedule"
+    - if: $CI_PIPELINE_SOURCE == "web"
+    - if: $CI_PIPELINE_SOURCE == "trigger"
+
+stop_production:
+  extends: .stop_production
+  stage: production
