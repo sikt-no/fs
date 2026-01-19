@@ -5,17 +5,15 @@ test.describe('Student innloggingstest', () => {
   test.use({ storageState: 'playwright/.auth/student.json' });
 
   test('skal være innlogget som FIN SÅPE', async ({ page }) => {
-    // Naviger til Min Kompetanse
     await page.goto(process.env.MIN_KOMPETANSE_URL!)
+    await page.waitForLoadState('networkidle')
 
-    // Verifiser at vi er innlogget (ikke omdirigert til innloggingsside)
-    await expect(page).not.toHaveURL(/logg-inn/)
+    // Verifiser at profil-linken vises
+    await expect(page.getByRole('link', { name: /Profil: Kari/i })).toBeVisible()
 
-    // Verifiser at vi er på Min Kompetanse siden
-    await expect(page).toHaveURL(new RegExp(process.env.MIN_KOMPETANSE_URL!))
-
-    // Enkel verifisering at bruker er autentisert
-    // TODO: Erstatt med faktisk element som viser at du er innlogget som FIN SÅPE
-    await expect(page).toHaveTitle(/.+/)
+    // Åpne meny og verifiser at testsøker er valgt
+    await page.getByRole('button', { name: 'Meny' }).click()
+    const testUserSelect = page.getByLabel('Velg testsøker').last()
+    await expect(testUserSelect).toContainText(process.env.STUDENT_TEST_USER!)
   })
 })
