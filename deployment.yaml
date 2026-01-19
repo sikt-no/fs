@@ -3,17 +3,21 @@ kind: Deployment
 metadata:
   name: $CI_ENVIRONMENT_SLUG
   namespace: $KUBE_NAMESPACE
+  annotations:
+    app.gitlab.com/env: $CI_ENVIRONMENT_SLUG
+    app.gitlab.com/app: $CI_PROJECT_PATH_SLUG
   labels:
-    name: $CI_ENVIRONMENT_SLUG
     app: $CI_ENVIRONMENT_SLUG
 spec:
   replicas: $REPLICAS
   selector:
     matchLabels:
       name: $CI_ENVIRONMENT_SLUG
-      app: $CI_ENVIRONMENT_SLUG
   template:
     metadata:
+      annotations:
+        app.gitlab.com/env: $CI_ENVIRONMENT_SLUG
+        app.gitlab.com/app: $CI_PROJECT_PATH_SLUG
       labels:
         name: $CI_ENVIRONMENT_SLUG
         app: $CI_ENVIRONMENT_SLUG
@@ -22,20 +26,20 @@ spec:
       - name: app
         image: $CI_REGISTRY_IMAGE:$CI_REGISTRY_TAG
         ports:
-        - name: http
-          containerPort: 80
+        - name: web
+          containerPort: $HTTP_PORT
         livenessProbe:
           httpGet:
             path: /
-            port: http
+            port: $HTTP_PORT
           initialDelaySeconds: 15
-          timeoutSeconds: 5
+          timeoutSeconds: 15
         readinessProbe:
           httpGet:
             path: /
-            port: http
+            port: $HTTP_PORT
           initialDelaySeconds: 5
-          timeoutSeconds: 3
+          timeoutSeconds: 15
         resources:
           requests:
             memory: 50Mi
