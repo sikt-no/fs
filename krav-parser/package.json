@@ -1,0 +1,22 @@
+{
+  "name": "krav-parser",
+  "version": "1.0.0",
+  "description": "Parser for .feature files to PostgreSQL",
+  "type": "module",
+  "scripts": {
+    "parse": "tsx src/index.ts",
+    "parse:watch": "tsx watch src/index.ts"
+  },
+  "dependencies": {
+    "@cucumber/gherkin": "^29.0.0",
+    "@cucumber/messages": "^26.0.0",
+    "sql.js": "^1.11.0",
+    "glob": "^11.0.0"
+  },
+  "devDependencies": {
+    "@types/sql.js": "^1.4.9",
+    "@types/node": "^22.0.0",
+    "tsx": "^4.0.0",
+    "typescript": "^5.0.0"
+  }
+}

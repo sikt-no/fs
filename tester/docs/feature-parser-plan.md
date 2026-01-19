@@ -119,7 +119,9 @@ CREATE INDEX idx_rules_requirement ON rules(requirement_id);
 
 - **Language:** Node.js/TypeScript (consistent with tester/ project)
 - **Gherkin Parser:** `@cucumber/gherkin` (official, supports Norwegian)
-- **Database:** `pg` (PostgreSQL client for Node.js)
+- **Database:**
+  - Local dev: `better-sqlite3` (SQLite)
+  - Production: `pg` (PostgreSQL)
 
 ### Key Dependencies
 
