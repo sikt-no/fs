@@ -5,14 +5,27 @@ import { parseFeatureFile } from './parser.js';
 
 const KRAV_ROOT = resolve(import.meta.dirname, '../../krav');
 
-const DATABASE_URL = process.env.DATABASE_URL;
-if (!DATABASE_URL) {
-  console.error('ERROR: DATABASE_URL environment variable is required');
-  console.error('Usage: DATABASE_URL="postgresql://user:pass@host:5432/dbname" npm run parse');
-  process.exit(1);
+// Build database URL from separate components or use DATABASE_URL directly
+function getDatabaseUrl(): string {
+  // If DATABASE_URL is provided, use it directly (backwards compatible)
+  if (process.env.DATABASE_URL) {
+    return process.env.DATABASE_URL;
+  }
+
+  // Otherwise, build from separate components
+  const { DB_HOST, DB_PORT, DB_NAME, DB_USR, DB_PW } = process.env;
+
+  if (!DB_HOST || !DB_NAME || !DB_USR || !DB_PW) {
+    console.error('ERROR: Database configuration required');
+    console.error('Either set DATABASE_URL or all of: DB_HOST, DB_PORT, DB_NAME, DB_USR, DB_PW');
+    process.exit(1);
+  }
+
+  const port = DB_PORT || '5432';
+  return `postgresql://${DB_USR}:${DB_PW}@${DB_HOST}:${port}/${DB_NAME}`;
 }
-// TypeScript now knows DATABASE_URL is defined
-const dbUrl: string = DATABASE_URL;
+
+const dbUrl = getDatabaseUrl();
 
 // Format steps as comma-separated text: "Gitt step1, Når step2, Så step3"
 function formatSteps(steps: { keyword: string; text: string }[]): string {
