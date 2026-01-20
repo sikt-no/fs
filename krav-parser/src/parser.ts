@@ -115,12 +115,12 @@ export function parseFeatureFile(filePath: string, kravRoot: string): ParsedFeat
   // Extract tags
   const { status, priority, otherTags } = extractTags(feature.tags);
 
-  // Extract background steps (to prepend to all examples)
+  // Extract background steps (to prepend to all scenarios)
   let backgroundSteps: { keyword: string; text: string }[] = [];
 
   // Process children (Background, Rules, Scenarios)
   const rules: ParsedFeature['rules'] = [];
-  const examples: ParsedFeature['examples'] = [];
+  const scenarios: ParsedFeature['scenarios'] = [];
 
   for (const child of feature.children) {
     if (child.background) {
@@ -129,7 +129,7 @@ export function parseFeatureFile(filePath: string, kravRoot: string): ParsedFeat
         text: step.text,
       }));
     } else if (child.rule) {
-      const ruleExamples: ParsedFeature['rules'][0]['examples'] = [];
+      const ruleScenarios: ParsedFeature['rules'][0]['scenarios'] = [];
 
       for (const ruleChild of child.rule.children) {
         if (ruleChild.scenario) {
@@ -143,7 +143,7 @@ export function parseFeatureFile(filePath: string, kravRoot: string): ParsedFeat
             })),
           ];
 
-          ruleExamples.push({
+          ruleScenarios.push({
             name: scenario.name,
             status: scenarioTags.status,
             priority: scenarioTags.priority,
@@ -158,7 +158,7 @@ export function parseFeatureFile(filePath: string, kravRoot: string): ParsedFeat
         name: child.rule.name,
         status: ruleTags.status,
         priority: ruleTags.priority,
-        examples: ruleExamples,
+        scenarios: ruleScenarios,
       });
     } else if (child.scenario) {
       const scenario = child.scenario;
@@ -171,7 +171,7 @@ export function parseFeatureFile(filePath: string, kravRoot: string): ParsedFeat
         })),
       ];
 
-      examples.push({
+      scenarios.push({
         name: scenario.name,
         status: scenarioTags.status,
         priority: scenarioTags.priority,
@@ -194,7 +194,7 @@ export function parseFeatureFile(filePath: string, kravRoot: string): ParsedFeat
       folder_name: subdomainFolder!,
       ...subdomainInfo,
     } : null,
-    requirement: {
+    feature: {
       name: feature.name,
       description: feature.description?.trim() || null,
       status,
@@ -202,7 +202,7 @@ export function parseFeatureFile(filePath: string, kravRoot: string): ParsedFeat
       tags: otherTags,
     },
     rules,
-    examples,
+    scenarios,
     openQuestions,
   };
 }

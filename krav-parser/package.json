@@ -10,12 +10,12 @@
   "dependencies": {
     "@cucumber/gherkin": "^29.0.0",
     "@cucumber/messages": "^26.0.0",
-    "sql.js": "^1.11.0",
-    "glob": "^11.0.0"
+    "glob": "^11.0.0",
+    "pg": "^8.17.1"
   },
   "devDependencies": {
-    "@types/sql.js": "^1.4.9",
     "@types/node": "^22.0.0",
+    "@types/pg": "^8.16.0",
     "tsx": "^4.0.0",
     "typescript": "^5.0.0"
   }

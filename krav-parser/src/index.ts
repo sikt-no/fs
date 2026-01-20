@@ -5,6 +5,15 @@ import { parseFeatureFile } from './parser.js';
 
 const KRAV_ROOT = resolve(import.meta.dirname, '../../krav');
 
+const DATABASE_URL = process.env.DATABASE_URL;
+if (!DATABASE_URL) {
+  console.error('ERROR: DATABASE_URL environment variable is required');
+  console.error('Usage: DATABASE_URL="postgresql://user:pass@host:5432/dbname" npm run parse');
+  process.exit(1);
+}
+// TypeScript now knows DATABASE_URL is defined
+const dbUrl: string = DATABASE_URL;
+
 // Format steps as comma-separated text: "Gitt step1, Når step2, Så step3"
 function formatSteps(steps: { keyword: string; text: string }[]): string {
   return steps.map(s => `${s.keyword} ${s.text}`).join(', ');
@@ -23,9 +32,9 @@ async function main() {
   console.log(`Found ${featureFiles.length} feature files`);
 
   // Initialize database
-  const db = new KravDatabase('krav.db');
+  const db = new KravDatabase(dbUrl);
   await db.init();
-  db.truncateAll();
+  await db.truncateAll();
 
   // Track domains and subdomains to avoid duplicates
   const domainCache = new Map<string, number>();
@@ -46,7 +55,7 @@ async function main() {
       // Get or create domain
       let domainId = domainCache.get(parsed.domain.folder_name);
       if (!domainId) {
-        domainId = db.insertDomain(parsed.domain);
+        domainId = await db.insertDomain(parsed.domain);
         domainCache.set(parsed.domain.folder_name, domainId);
       }
 
@@ -56,7 +65,7 @@ async function main() {
         const subdomainKey = `${domainId}:${parsed.subdomain.folder_name}`;
         subdomainId = subdomainCache.get(subdomainKey) ?? null;
         if (!subdomainId) {
-          subdomainId = db.insertSubdomain({
+          subdomainId = await db.insertSubdomain({
             domain_id: domainId,
             ...parsed.subdomain,
           });
@@ -64,64 +73,64 @@ async function main() {
         }
       }
 
-      // Insert requirement
-      const requirementId = db.insertRequirement({
+      // Insert feature
+      const featureId = await db.insertFeature({
         domain_id: domainId,
         subdomain_id: subdomainId,
         file_path: parsed.filePath,
         file_name: parsed.filePath.split('/').pop()!,
-        name: parsed.requirement.name,
-        description: parsed.requirement.description,
-        status: parsed.requirement.status,
-        priority: parsed.requirement.priority,
-        tags: parsed.requirement.tags,
+        name: parsed.feature.name,
+        description: parsed.feature.description,
+        status: parsed.feature.status,
+        priority: parsed.feature.priority,
+        tags: parsed.feature.tags,
       });
 
-      // Insert rules and their examples
+      // Insert rules and their scenarios
       for (let ruleIdx = 0; ruleIdx < parsed.rules.length; ruleIdx++) {
         const rule = parsed.rules[ruleIdx];
-        const ruleId = db.insertRule({
-          requirement_id: requirementId,
+        const ruleId = await db.insertRule({
+          feature_id: featureId,
           name: rule.name,
           status: rule.status,
           priority: rule.priority,
           sort_order: ruleIdx,
         });
 
-        for (let exampleIdx = 0; exampleIdx < rule.examples.length; exampleIdx++) {
-          const example = rule.examples[exampleIdx];
-          db.insertExample({
-            requirement_id: requirementId,
+        for (let scenarioIdx = 0; scenarioIdx < rule.scenarios.length; scenarioIdx++) {
+          const scenario = rule.scenarios[scenarioIdx];
+          await db.insertScenario({
+            feature_id: featureId,
             rule_id: ruleId,
-            name: example.name,
-            steps: formatSteps(example.steps),
-            status: example.status,
-            priority: example.priority,
-            tags: example.tags,
-            sort_order: exampleIdx,
+            name: scenario.name,
+            steps: formatSteps(scenario.steps),
+            status: scenario.status,
+            priority: scenario.priority,
+            tags: scenario.tags,
+            sort_order: scenarioIdx,
           });
         }
       }
 
-      // Insert examples not under any rule
-      for (let exampleIdx = 0; exampleIdx < parsed.examples.length; exampleIdx++) {
-        const example = parsed.examples[exampleIdx];
-        db.insertExample({
-          requirement_id: requirementId,
+      // Insert scenarios not under any rule
+      for (let scenarioIdx = 0; scenarioIdx < parsed.scenarios.length; scenarioIdx++) {
+        const scenario = parsed.scenarios[scenarioIdx];
+        await db.insertScenario({
+          feature_id: featureId,
           rule_id: null,
-          name: example.name,
-          steps: formatSteps(example.steps),
-          status: example.status,
-          priority: example.priority,
-          tags: example.tags,
-          sort_order: exampleIdx,
+          name: scenario.name,
+          steps: formatSteps(scenario.steps),
+          status: scenario.status,
+          priority: scenario.priority,
+          tags: scenario.tags,
+          sort_order: scenarioIdx,
         });
       }
 
       // Insert open questions
       for (const question of parsed.openQuestions) {
-        db.insertOpenQuestion({
-          requirement_id: requirementId,
+        await db.insertOpenQuestion({
+          feature_id: featureId,
           question,
         });
       }
@@ -138,12 +147,12 @@ async function main() {
   console.log(`Processed: ${successCount} files`);
   console.log(`Errors: ${errorCount} files`);
   console.log('\n--- Database Stats ---');
-  const stats = db.getStats();
+  const stats = await db.getStats();
   for (const [table, count] of Object.entries(stats)) {
     console.log(`${table}: ${count}`);
   }
 
-  db.close();
+  await db.close();
   console.log('\nDone!');
 }
 

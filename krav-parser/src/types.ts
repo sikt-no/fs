@@ -13,7 +13,7 @@ export interface Subdomain {
   sort_order: number;
 }
 
-export interface Requirement {
+export interface Feature {
   id?: number;
   domain_id: number;
   subdomain_id: number | null;
@@ -28,16 +28,16 @@ export interface Requirement {
 
 export interface Rule {
   id?: number;
-  requirement_id: number;
+  feature_id: number;
   name: string;
   status: string | null;
   priority: string | null;
   sort_order: number;
 }
 
-export interface Example {
+export interface Scenario {
   id?: number;
-  requirement_id: number;
+  feature_id: number;
   rule_id: number | null;
   name: string;
   steps: string;  // All steps as comma-separated text
@@ -49,7 +49,7 @@ export interface Example {
 
 export interface OpenQuestion {
   id?: number;
-  requirement_id: number;
+  feature_id: number;
   question: string;
 }
 
@@ -57,7 +57,7 @@ export interface ParsedFeature {
   filePath: string;
   domain: { folder_name: string; name: string; sort_order: number };
   subdomain: { folder_name: string; name: string; sort_order: number } | null;
-  requirement: {
+  feature: {
     name: string;
     description: string | null;
     status: string | null;
@@ -68,7 +68,7 @@ export interface ParsedFeature {
     name: string;
     status: string | null;
     priority: string | null;
-    examples: {
+    scenarios: {
       name: string;
       status: string | null;
       priority: string | null;
@@ -76,8 +76,8 @@ export interface ParsedFeature {
       steps: { keyword: string; text: string }[];
     }[];
   }[];
-  // Examples not under any rule
-  examples: {
+  // Scenarios not under any rule
+  scenarios: {
     name: string;
     status: string | null;
     priority: string | null;
