@@ -18,22 +18,4 @@ export class FsAdminLoginPage {
     this.loginButton = page.getByRole('button', { name: 'Logg inn', exact: true })
     this.overstyrtBrukerSelect = page.getByLabel('Overstyrt bruker')
   }
-
-  async goto() {
-    await this.page.goto(process.env.FS_ADMIN_URL!)
-  }
-
-  async login(username: string, password: string, overstyrtBruker?: string) {
-    await this.loginWithFeideButton.click()
-    await this.feideTestUsersOption.click()
-    await this.usernameInput.fill(username)
-    await this.passwordInput.fill(password)
-    await this.loginButton.click()
-    await this.page.waitForLoadState('networkidle')
-
-    if (overstyrtBruker) {
-      await this.overstyrtBrukerSelect.selectOption(overstyrtBruker)
-      await this.page.waitForLoadState('networkidle')
-    }
-  }
 }

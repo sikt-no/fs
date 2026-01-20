@@ -1,9 +1,12 @@
-import { createBdd } from 'playwright-bdd';
+import { createBdd } from 'playwright-bdd'
+import { test, expect } from '../fixtures/auth'
 
-const { Given } = createBdd();
+const { Given } = createBdd(test)
 
-// Steg for innlogging - auth håndteres av storageState i config
-Given('at jeg er logget inn som {word}', async ({ page }, rolle: string) => {
-  // Auth state er allerede lastet via storageState
-  // Dette steget bekrefter bare at vi er logget inn
-});
+Given('at jeg er logget inn som administrator', async ({ adminPage }) => {
+  await expect(adminPage).not.toHaveURL(/login/)
+})
+
+Given('at jeg er logget inn som person', async ({ personPage }) => {
+  await expect(personPage).not.toHaveURL(/login/)
+})
