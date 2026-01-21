@@ -76,7 +76,7 @@ Egenskap: [Navn]
       Så [forventet resultat]
 ```
 
-**Ved uklarheter:** Dokumenter med `# ÅPNE SPØRSMÅL:` og `@wip` tag.
+**Ved uklarheter:** Dokumenter med `# ÅPNE SPØRSMÅL:` kommentar.
 
 ### 5. Oppdater oversikt
 
