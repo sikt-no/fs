@@ -9,7 +9,7 @@ CREATE TABLE IF NOT EXISTS domains (
     created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
 );
 
--- Sub-domains (from nested folders like "03 Søknadsbehandling")
+-- Sub-domains (from nested folders like "10 Regelverk")
 CREATE TABLE IF NOT EXISTS subdomains (
     id SERIAL PRIMARY KEY,
     domain_id INTEGER NOT NULL REFERENCES domains(id) ON DELETE CASCADE,
@@ -20,11 +20,24 @@ CREATE TABLE IF NOT EXISTS subdomains (
     UNIQUE(domain_id, folder_name)
 );
 
--- Features (from Feature/Egenskap in .feature files)
-CREATE TABLE IF NOT EXISTS features (
+-- Capabilities (from nested folders like "01 Utdanning")
+CREATE TABLE IF NOT EXISTS capabilities (
     id SERIAL PRIMARY KEY,
+    subdomain_id INTEGER NOT NULL REFERENCES subdomains(id) ON DELETE CASCADE,
+    folder_name TEXT NOT NULL,
+    name TEXT NOT NULL,
+    sort_order INTEGER,
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE(subdomain_id, folder_name)
+);
+
+-- Features (from Feature/Egenskap in .feature files)
+-- feature_id is the primary key, extracted from @XXX-XXX-XXX-NNN tag
+CREATE TABLE IF NOT EXISTS features (
+    feature_id TEXT PRIMARY KEY,
     domain_id INTEGER NOT NULL REFERENCES domains(id) ON DELETE CASCADE,
     subdomain_id INTEGER REFERENCES subdomains(id) ON DELETE CASCADE,
+    capability_id INTEGER REFERENCES capabilities(id) ON DELETE CASCADE,
     file_path TEXT NOT NULL UNIQUE,
     file_name TEXT NOT NULL,
     name TEXT NOT NULL,
@@ -38,7 +51,7 @@ CREATE TABLE IF NOT EXISTS features (
 -- Rules (from Regel: in .feature files)
 CREATE TABLE IF NOT EXISTS rules (
     id SERIAL PRIMARY KEY,
-    feature_id INTEGER NOT NULL REFERENCES features(id) ON DELETE CASCADE,
+    feature_id TEXT NOT NULL REFERENCES features(feature_id) ON DELETE CASCADE,
     name TEXT NOT NULL,
     status TEXT,
     priority TEXT,
@@ -49,7 +62,7 @@ CREATE TABLE IF NOT EXISTS rules (
 -- Scenarios (from Scenario: in .feature files)
 CREATE TABLE IF NOT EXISTS scenarios (
     id SERIAL PRIMARY KEY,
-    feature_id INTEGER NOT NULL REFERENCES features(id) ON DELETE CASCADE,
+    feature_id TEXT NOT NULL REFERENCES features(feature_id) ON DELETE CASCADE,
     rule_id INTEGER REFERENCES rules(id) ON DELETE CASCADE,
     name TEXT NOT NULL,
     steps TEXT,
@@ -63,7 +76,7 @@ CREATE TABLE IF NOT EXISTS scenarios (
 -- Open Questions (from # OPEN QUESTIONS: sections)
 CREATE TABLE IF NOT EXISTS open_questions (
     id SERIAL PRIMARY KEY,
-    feature_id INTEGER NOT NULL REFERENCES features(id) ON DELETE CASCADE,
+    feature_id TEXT NOT NULL REFERENCES features(feature_id) ON DELETE CASCADE,
     question TEXT NOT NULL,
     created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
 );
@@ -71,8 +84,10 @@ CREATE TABLE IF NOT EXISTS open_questions (
 -- Indexes
 CREATE INDEX IF NOT EXISTS idx_features_domain ON features(domain_id);
 CREATE INDEX IF NOT EXISTS idx_features_subdomain ON features(subdomain_id);
+CREATE INDEX IF NOT EXISTS idx_features_capability ON features(capability_id);
 CREATE INDEX IF NOT EXISTS idx_features_status ON features(status);
 CREATE INDEX IF NOT EXISTS idx_features_priority ON features(priority);
 CREATE INDEX IF NOT EXISTS idx_scenarios_feature ON scenarios(feature_id);
 CREATE INDEX IF NOT EXISTS idx_scenarios_rule ON scenarios(rule_id);
 CREATE INDEX IF NOT EXISTS idx_rules_feature ON rules(feature_id);
+CREATE INDEX IF NOT EXISTS idx_capabilities_subdomain ON capabilities(subdomain_id);

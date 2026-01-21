@@ -7,124 +7,99 @@ Generert oversikt over alle BDD-krav i prosjektet.
 
 | ID | Feature | Sub-domene | Kapabilitet | Tags | Fil |
 |----|---------|------------|-------------|------|-----|
-|  | Timeplanlegge Utdanningsaktiviteter | 11 Planlegge undervisning |  |  | [timeplanlegge_utdanningsaktiviteter.feature](01%20Forberede%20studier/11%20Planlegge%20undervisning/timeplanlegge_utdanningsaktiviteter.feature) |
-|  | Oppnevne Sensor | 12 Planlegge vurdering |  |  | [oppnevne_sensor.feature](01%20Forberede%20studier/12%20Planlegge%20vurdering/oppnevne_sensor.feature) |
-|  | Planlegge Vurdering | 12 Planlegge vurdering |  |  | [planlegge_vurdering.feature](01%20Forberede%20studier/12%20Planlegge%20vurdering/planlegge_vurdering.feature) |
-|  | Avtale om Utdanningstilbud |  |  |  | [avtale_om_utdanningstilbud.feature](01%20Forberede%20studier/avtale_om_utdanningstilbud.feature) |
-|  | Endre eksisterende utdanning |  |  |  | [endre_utdanning.feature](01%20Forberede%20studier/endre_utdanning.feature) |
-|  | Evaluere og Vedlikeholde Utdanning |  |  |  | [evaluere_og_vedlikeholde_utdanning.feature](01%20Forberede%20studier/evaluere_og_vedlikeholde_utdanning.feature) |
-|  | Forberede Betaling |  |  |  | [forberede_betaling.feature](01%20Forberede%20studier/forberede_betaling.feature) |
-|  | Informasjon om Organisasjon |  |  |  | [informasjon_om_organisasjon.feature](01%20Forberede%20studier/informasjon_om_organisasjon.feature) |
-|  | Opprette kull |  |  |  | [opprette_kull.feature](01%20Forberede%20studier/opprette_kull.feature) |
-|  | Opprette utdanning |  |  |  | [opprette_utdanning.feature](01%20Forberede%20studier/opprette_utdanning.feature) |
-|  | Søk etter utdanninger |  |  |  | [søk_etter_utdanninger.feature](01%20Forberede%20studier/søk_etter_utdanninger.feature) |
-|  | Tilby utdanning |  |  |  | [tilby_utdanning.feature](01%20Forberede%20studier/tilby_utdanning.feature) |
+| FOR-ADM-UTD-002 | Endre eksisterende utdanning | 10 Administrere utdanning | 01 Utdanning | @FOR-ADM-UTD-002 | [endre_utdanning.feature](01%20Forberede%20studier/10%20Administrere%20utdanning/01%20Utdanning/endre_utdanning.feature) |
+| FOR-ADM-UTD-001 | Opprette utdanning | 10 Administrere utdanning | 01 Utdanning | @FOR-ADM-UTD-001 | [opprette_utdanning.feature](01%20Forberede%20studier/10%20Administrere%20utdanning/01%20Utdanning/opprette_utdanning.feature) |
+| FOR-ADM-UTD-004 | Søk etter utdanninger | 10 Administrere utdanning | 01 Utdanning | @FOR-ADM-UTD-004 | [søk_etter_utdanninger.feature](01%20Forberede%20studier/10%20Administrere%20utdanning/01%20Utdanning/søk_etter_utdanninger.feature) |
+| FOR-ADM-TIL-002 | Opprette kull | 10 Administrere utdanning | 02 Utdanningstilbud | @FOR-ADM-TIL-002 | [opprette_kull.feature](01%20Forberede%20studier/10%20Administrere%20utdanning/02%20Utdanningstilbud/opprette_kull.feature) |
+| FOR-ADM-TIL-001 | Tilby utdanning | 10 Administrere utdanning | 02 Utdanningstilbud | @FOR-ADM-TIL-001 | [tilby_utdanning.feature](01%20Forberede%20studier/10%20Administrere%20utdanning/02%20Utdanningstilbud/tilby_utdanning.feature) |
 
 ## 02 Opptak
 
 | ID | Feature | Sub-domene | Kapabilitet | Tags | Fil |
 |----|---------|------------|-------------|------|-----|
-|  |  | 01 Forberede opptak | 01 Regelverk og grunnlag |  | [grunnlag.feature](02%20Opptak/01%20Forberede%20opptak/01%20Regelverk%20og%20grunnlag/grunnlag.feature) |
-|  | Kompetanseregelverk | 01 Forberede opptak | 01 Regelverk og grunnlag | @opptakspilot @opptakspilotkritisk @fsadmin @ci | [kompetanseregelverk.feature](02%20Opptak/01%20Forberede%20opptak/01%20Regelverk%20og%20grunnlag/kompetanseregelverk.feature) |
-|  | Kvoter | 01 Forberede opptak | 01 Regelverk og grunnlag |  | [kvoterregelverk.feature](02%20Opptak/01%20Forberede%20opptak/01%20Regelverk%20og%20grunnlag/kvoterregelverk.feature) |
-|  |  | 01 Forberede opptak | 01 Regelverk og grunnlag |  | [rangeringsregelverk.feature](02%20Opptak/01%20Forberede%20opptak/01%20Regelverk%20og%20grunnlag/rangeringsregelverk.feature) |
-| OPT-REG-GRU-001 | Opprette et opptak | 01 Forberede opptak |  | @opptakspilot @fsadmin @ci @OPT-REG-GRU-001 | [opprette_opptak.feature](02%20Opptak/01%20Forberede%20opptak/opprette_opptak.feature) |
-|  | Opprette søknad for person | 02 Registrere søknader |  | @opptak @skip @nih | [opprette_søknad_for_person.feature](02%20Opptak/02%20Registrere%20søknader/opprette_søknad_for_person.feature) |
-|  | Søke på opptak | 02 Registrere søknader |  | @opptakspilot @ci | [søke_på_opptak.feature](02%20Opptak/02%20Registrere%20søknader/søke_på_opptak.feature) |
-|  | Saksbehandler behandler søknader | 03 Søknadsbehandling |  | @skip @opptakspilot @ci @focus | [behandle_søknad.feature](02%20Opptak/03%20Søknadsbehandling/behandle_søknad.feature) |
-|  | Kort om søknad | 03 Søknadsbehandling |  | @skip @søknad @opptak | [kort_om_søknad.feature](02%20Opptak/03%20Søknadsbehandling/kort_om_søknad.feature) |
-|  |  | 03 Søknadsbehandling |  |  | [saksbehandlertildeling.feature](02%20Opptak/03%20Søknadsbehandling/saksbehandlertildeling.feature) |
-|  | Plasstildeling | 04 Opptakskjøring |  |  | [plasstildeling_main.feature](02%20Opptak/04%20Opptakskjøring/plasstildeling_main.feature) |
-|  | Samordning av et opptak | 04 Opptakskjøring |  |  | [samordning.feature](02%20Opptak/04%20Opptakskjøring/samordning.feature) |
-|  | Svare på tilbud | 04 Opptakskjøring |  |  | [svare_på_tilbud.feature](02%20Opptak/04%20Opptakskjøring/svare_på_tilbud.feature) |
-|  | Tilbudsgaranti | 04 Opptakskjøring |  |  | [tilbudsgaranti.feature](02%20Opptak/04%20Opptakskjøring/tilbudsgaranti.feature) |
+| OPT-REG-KRA-001 | Kompetanseregelverk | 10 Regelverk | 02 Krav | @OPT-REG-KRA-001 @opptakspilot @opptakspilotkritisk @fsadmin @ci | [kompetanseregelverk.feature](02%20Opptak/10%20Regelverk/02%20Krav/kompetanseregelverk.feature) |
+| OPT-REG-KVO-001 | Kvoter | 10 Regelverk | 04 Kvoter | @OPT-REG-KVO-001 | [kvoterregelverk.feature](02%20Opptak/10%20Regelverk/04%20Kvoter/kvoterregelverk.feature) |
+| OPT-OPT-OPT-001 | Opprette et opptak | 11 Opptak | 01 Opptak | @OPT-OPT-OPT-001 @opptakspilot @fsadmin @ci | [opprette_opptak.feature](02%20Opptak/11%20Opptak/01%20Opptak/opprette_opptak.feature) |
+| OPT-SØK-SØK-002 | Opprette søknad for person | 12 Registrere søknad | 01 Søknad | @OPT-SØK-SØK-002 @opptak @skip @nih | [opprette_søknad_for_person.feature](02%20Opptak/12%20Registrere%20søknad/01%20Søknad/opprette_søknad_for_person.feature) |
+| OPT-SØK-SØK-001 | Søke på opptak | 12 Registrere søknad | 01 Søknad | @OPT-SØK-SØK-001 @opptakspilot @ci | [søke_på_opptak.feature](02%20Opptak/12%20Registrere%20søknad/01%20Søknad/søke_på_opptak.feature) |
+| OPT-BEH-BEH-001 | Saksbehandler behandler søknader | 13 Søknadsbehandling | 01 Behandling | @OPT-BEH-BEH-001 @skip @opptakspilot @ci @focus | [behandle_søknad.feature](02%20Opptak/13%20Søknadsbehandling/01%20Behandling/behandle_søknad.feature) |
+| OPT-BEH-BEH-002 | Kort om søknad | 13 Søknadsbehandling | 01 Behandling | @OPT-BEH-BEH-002 @skip @søknad @opptak | [kort_om_søknad.feature](02%20Opptak/13%20Søknadsbehandling/01%20Behandling/kort_om_søknad.feature) |
 
 ## 03 Gjennomføre studier
 
 | ID | Feature | Sub-domene | Kapabilitet | Tags | Fil |
 |----|---------|------------|-------------|------|-----|
-|  | Følge opp studenter |  |  | @skip | [følge_opp_studenter.feature](03%20Gjennomføre%20studier/følge_opp_studenter.feature) |
-|  | Planlegge Vurdering |  |  | @skip | [gjennomføre_vurdering.feature](03%20Gjennomføre%20studier/gjennomføre_vurdering.feature) |
-|  | Kort om studieprogram |  |  | @ci | [kort_om_studieprogram.feature](03%20Gjennomføre%20studier/kort_om_studieprogram.feature) |
-|  | Opplysninger om betalt semesteravgift |  |  | @skip @ci | [opplysninger_betalt_semesteravgift.feature](03%20Gjennomføre%20studier/opplysninger_betalt_semesteravgift.feature) |
-|  | Registrering av politiattest |  |  | @skip | [registrering_av_politattest.feature](03%20Gjennomføre%20studier/registrering_av_politattest.feature) |
-|  | Registrert inneværende semester |  |  | @ci @studieadministrasjon | [registrert_student.feature](03%20Gjennomføre%20studier/registrert_student.feature) |
-|  | Oversikt over samtykker og informasjon om datadeling |  |  | @skip @støtteprosesser | [samtykker_person.feature](03%20Gjennomføre%20studier/samtykker_person.feature) |
-|  | Studentopplysninger til Lånekassen |  |  | @lånekassen @fs @fsgraphql | [studentopplysninger_lånekassen_har_behov_for.feature](03%20Gjennomføre%20studier/studentopplysninger_lånekassen_har_behov_for.feature) |
-|  | Utdanningsoversikt for person |  |  | @skip @studieadministrasjon | [utdanningsoversikt.feature](03%20Gjennomføre%20studier/utdanningsoversikt.feature) |
+| GJE-STU-STA-002 | Opplysninger om betalt semesteravgift | 10 Studentstatus | 01 Status | @GJE-STU-STA-002 @skip @ci | [opplysninger_betalt_semesteravgift.feature](03%20Gjennomføre%20studier/10%20Studentstatus/01%20Status/opplysninger_betalt_semesteravgift.feature) |
+| GJE-STU-STA-001 | Registrert inneværende semester | 10 Studentstatus | 01 Status | @GJE-STU-STA-001 @ci @studieadministrasjon | [registrert_student.feature](03%20Gjennomføre%20studier/10%20Studentstatus/01%20Status/registrert_student.feature) |
+| GJE-STR-STR-001 | Kort om studieprogram | 11 Studierett | 01 Studierett | @GJE-STR-STR-001 @ci | [kort_om_studieprogram.feature](03%20Gjennomføre%20studier/11%20Studierett/01%20Studierett/kort_om_studieprogram.feature) |
+| GJE-STR-STR-002 | Utdanningsoversikt for person | 11 Studierett | 01 Studierett | @GJE-STR-STR-002 @skip @studieadministrasjon | [utdanningsoversikt.feature](03%20Gjennomføre%20studier/11%20Studierett/01%20Studierett/utdanningsoversikt.feature) |
+| GJE-DAT-INT-002 | Oversikt over samtykker og informasjon om datadeling | 12 Datadeling | 01 Integrasjoner | @GJE-DAT-INT-002 @skip @støtteprosesser | [samtykker_person.feature](03%20Gjennomføre%20studier/12%20Datadeling/01%20Integrasjoner/samtykker_person.feature) |
+| GJE-DAT-INT-001 | Studentopplysninger til Lånekassen | 12 Datadeling | 01 Integrasjoner | @GJE-DAT-INT-001 @lånekassen @fs @fsgraphql | [studentopplysninger_lånekassen_har_behov_for.feature](03%20Gjennomføre%20studier/12%20Datadeling/01%20Integrasjoner/studentopplysninger_lånekassen_har_behov_for.feature) |
 
 ## 04 Kompetanse
 
 | ID | Feature | Sub-domene | Kapabilitet | Tags | Fil |
 |----|---------|------------|-------------|------|-----|
-|  | Dele egne kompetansebevis |  |  | @skip | [dele_egne_kompetansebevis.feature](04%20Kompetanse/dele_egne_kompetansebevis.feature) |
-|  | Få studentbevis |  |  | @skip | [få_studentbevis.feature](04%20Kompetanse/få_studentbevis.feature) |
-|  | Hente resultater |  |  | @skip | [hente_resultater.feature](04%20Kompetanse/hente_resultater.feature) |
-|  | Se egne resultater |  |  |  | [se_egne_resultater.feature](04%20Kompetanse/se_egne_resultater.feature) |
-|  |  |  |  |  | [sensur.feature](04%20Kompetanse/sensur.feature) |
-|  |  |  |  |  | [tildele_kompetansebevis.feature](04%20Kompetanse/tildele_kompetansebevis.feature) |
-|  |  |  |  |  | [tildele_kvalifikasjon.feature](04%20Kompetanse/tildele_kvalifikasjon.feature) |
-|  |  |  |  |  | [tildele_resultat.feature](04%20Kompetanse/tildele_resultat.feature) |
+| KOM-RES-RES-001 | Se egne resultater | 10 Resultater | 01 Resultater | @KOM-RES-RES-001 | [se_egne_resultater.feature](04%20Kompetanse/10%20Resultater/01%20Resultater/se_egne_resultater.feature) |
 
 ## 05 Opplysninger om person
 
 | ID | Feature | Sub-domene | Kapabilitet | Tags | Fil |
 |----|---------|------------|-------------|------|-----|
-|  | Personsøk |  |  | @støtteprosesser | [01 personsøk.feature](05%20Opplysninger%20om%20person/01%20personsøk.feature) |
-|  | Gruppesøk |  |  |  | [02 gruppesøk.feature](05%20Opplysninger%20om%20person/02%20gruppesøk.feature) |
-|  | Se og endre egne kontaktopplysninger |  |  | @skip @personopplysning | [03 kontaktopplysningerFelles.feature](05%20Opplysninger%20om%20person/03%20kontaktopplysningerFelles.feature) |
-|  | Se og endre egne personopplysninger |  |  | @skip @personopplysning | [03 personopplysningerFelles.feature](05%20Opplysninger%20om%20person/03%20personopplysningerFelles.feature) |
-|  | Personprofil |  |  |  | [03 personprofil fsadmin.feature](05%20Opplysninger%20om%20person/03%20personprofil%20fsadmin.feature) |
-|  | Se og endre egne person- og kontaktopplysninger |  |  | @skip @personopplysning | [03 personprofil personflate.feature](05%20Opplysninger%20om%20person/03%20personprofil%20personflate.feature) |
-|  | Se og endre egne samtykker |  |  | @skip @personopplysninger | [05 samtykker.feature](05%20Opplysninger%20om%20person/05%20samtykker.feature) |
-|  | Integrasjon mot folkeregisteret for å oppdatere personopplysninger for læresteder |  |  | @skip @personopplysning | [06 folkeregisterintegrasjon.feature](05%20Opplysninger%20om%20person/06%20folkeregisterintegrasjon.feature) |
+| OPP-SØK-SØK-002 | Gruppesøk | 10 Søk | 01 Søk | @OPP-SØK-SØK-002 | [gruppesøk.feature](05%20Opplysninger%20om%20person/10%20Søk/01%20Søk/gruppesøk.feature) |
+| OPP-SØK-SØK-001 | Personsøk | 10 Søk | 01 Søk | @OPP-SØK-SØK-001 @støtteprosesser | [personsøk.feature](05%20Opplysninger%20om%20person/10%20Søk/01%20Søk/personsøk.feature) |
+| OPP-PRO-PRO-004 | Se og endre egne kontaktopplysninger | 11 Personprofil | 01 Profil | @OPP-PRO-PRO-004 @skip @personopplysning | [kontaktopplysninger_felles.feature](05%20Opplysninger%20om%20person/11%20Personprofil/01%20Profil/kontaktopplysninger_felles.feature) |
+| OPP-PRO-PRO-003 | Se og endre egne personopplysninger | 11 Personprofil | 01 Profil | @OPP-PRO-PRO-003 @skip @personopplysning | [personopplysninger_felles.feature](05%20Opplysninger%20om%20person/11%20Personprofil/01%20Profil/personopplysninger_felles.feature) |
+| OPP-PRO-PRO-001 | Personprofil | 11 Personprofil | 01 Profil | @OPP-PRO-PRO-001 | [personprofil_fsadmin.feature](05%20Opplysninger%20om%20person/11%20Personprofil/01%20Profil/personprofil_fsadmin.feature) |
+| OPP-PRO-PRO-002 | Se og endre egne person- og kontaktopplysninger | 11 Personprofil | 01 Profil | @OPP-PRO-PRO-002 @skip @personopplysning | [personprofil_personflate.feature](05%20Opplysninger%20om%20person/11%20Personprofil/01%20Profil/personprofil_personflate.feature) |
+| OPP-SAM-SAM-001 | Se og endre egne samtykker | 12 Samtykker | 01 Samtykker | @OPP-SAM-SAM-001 @skip @personopplysninger | [samtykker.feature](05%20Opplysninger%20om%20person/12%20Samtykker/01%20Samtykker/samtykker.feature) |
+| OPP-INT-FOL-001 | Integrasjon mot folkeregisteret for å oppdatere personopplysninger for læresteder | 13 Integrasjoner | 01 Folkeregister | @OPP-INT-FOL-001 @skip @personopplysning | [folkeregisterintegrasjon.feature](05%20Opplysninger%20om%20person/13%20Integrasjoner/01%20Folkeregister/folkeregisterintegrasjon.feature) |
 
 ## 07 Tilgangstyring
 
 | ID | Feature | Sub-domene | Kapabilitet | Tags | Fil |
 |----|---------|------------|-------------|------|-----|
-|  | Søker logger inn i brukerflaten med egenopprettet bruker |  |  |  | [egenopprettet_bruker_pålogging.feature](07%20Tilgangstyring/egenopprettet_bruker_pålogging.feature) |
-|  | Feide |  |  | @opptakspilot @focus @ci @opplysning | [feide_pålogging.feature](07%20Tilgangstyring/feide_pålogging.feature) |
-|  | ID-porten |  |  | @opptakspilot | [idporten_pålogging.feature](07%20Tilgangstyring/idporten_pålogging.feature) |
-|  | Opprettelse av personbruker |  |  | @skip @personopplysninger | [Opprette bruker.feature](07%20Tilgangstyring/Opprette%20bruker.feature) |
-|  | Organisasjonsinstansvalg for brukere med flere tilganger |  |  | @tilgangsstyring @organisasjonsinstansvalg | [organisasjonsinstansvalg_for_brukere_med_flere_tilganger.feature](07%20Tilgangstyring/organisasjonsinstansvalg_for_brukere_med_flere_tilganger.feature) |
-|  | Tilgangskontroll |  |  | @skip @støtteprosesser @sikkerhet | [tilgangskontroll.feature](07%20Tilgangstyring/tilgangskontroll.feature) |
-|  | Tilgangsstyring ansatt-bruker |  |  | @skip @støtteprosesser @sikkerhet | [tilgangsstyring_ansattbruker.feature](07%20Tilgangstyring/tilgangsstyring_ansattbruker.feature) |
-|  | Tilgangsstyring - Oversikt over API-tilganger |  |  | @skip @støtteprosesser @sikkerhet | [tilgangsstyring_api-tilganger_oversikt.feature](07%20Tilgangstyring/tilgangsstyring_api-tilganger_oversikt.feature) |
-|  | Tilgangsstyring - Oversikt over API-brukere |  |  | @skip @støtteprosesser @sikkerhet | [tilgangsstyring_maskinbruker_oversikt.feature](07%20Tilgangstyring/tilgangsstyring_maskinbruker_oversikt.feature) |
-|  | Tilgangsstyringsprosess |  |  | @skip @støtteprosesser @sikkerhet | [tilgangsstyring_prosess.feature](07%20Tilgangstyring/tilgangsstyring_prosess.feature) |
-|  | Tilgangstyring av saksbehandler |  |  |  | [tilgangsstyring_saksbehandler.feature](07%20Tilgangstyring/tilgangsstyring_saksbehandler.feature) |
+| TIL-PÅL-PÅL-001 | Feide | 10 Pålogging | 01 Pålogging | @TIL-PÅL-PÅL-001 @opptakspilot @focus @ci @opplysning | [feide_pålogging.feature](07%20Tilgangstyring/10%20Pålogging/01%20Pålogging/feide_pålogging.feature) |
+| TIL-PÅL-PÅL-002 | ID-porten | 10 Pålogging | 01 Pålogging | @TIL-PÅL-PÅL-002 @opptakspilot | [idporten_pålogging.feature](07%20Tilgangstyring/10%20Pålogging/01%20Pålogging/idporten_pålogging.feature) |
+| TIL-TIL-TIL-001 | Tilgangskontroll | 11 Tilganger | 01 Tilganger | @TIL-TIL-TIL-001 @skip @støtteprosesser @sikkerhet | [tilgangskontroll.feature](07%20Tilgangstyring/11%20Tilganger/01%20Tilganger/tilgangskontroll.feature) |
+| TIL-TIL-TIL-003 | Tilgangsstyring ansatt-bruker | 11 Tilganger | 01 Tilganger | @TIL-TIL-TIL-003 @skip @støtteprosesser @sikkerhet | [tilgangsstyring_ansattbruker.feature](07%20Tilgangstyring/11%20Tilganger/01%20Tilganger/tilgangsstyring_ansattbruker.feature) |
+| TIL-TIL-TIL-005 | Tilgangsstyring - Oversikt over API-tilganger | 11 Tilganger | 01 Tilganger | @TIL-TIL-TIL-005 @skip @støtteprosesser @sikkerhet | [tilgangsstyring_api-tilganger_oversikt.feature](07%20Tilgangstyring/11%20Tilganger/01%20Tilganger/tilgangsstyring_api-tilganger_oversikt.feature) |
+| TIL-TIL-TIL-004 | Tilgangsstyring - Oversikt over API-brukere | 11 Tilganger | 01 Tilganger | @TIL-TIL-TIL-004 @skip @støtteprosesser @sikkerhet | [tilgangsstyring_maskinbruker_oversikt.feature](07%20Tilgangstyring/11%20Tilganger/01%20Tilganger/tilgangsstyring_maskinbruker_oversikt.feature) |
+| TIL-TIL-TIL-006 | Tilgangsstyringsprosess | 11 Tilganger | 01 Tilganger | @TIL-TIL-TIL-006 @skip @støtteprosesser @sikkerhet | [tilgangsstyring_prosess.feature](07%20Tilgangstyring/11%20Tilganger/01%20Tilganger/tilgangsstyring_prosess.feature) |
+| TIL-TIL-TIL-002 | Tilgangstyring av saksbehandler | 11 Tilganger | 01 Tilganger | @TIL-TIL-TIL-002 | [tilgangsstyring_saksbehandler.feature](07%20Tilgangstyring/11%20Tilganger/01%20Tilganger/tilgangsstyring_saksbehandler.feature) |
+| TIL-BRU-BRU-001 | Opprettelse av personbruker | 12 Brukere | 01 Brukere | @TIL-BRU-BRU-001 @skip @personopplysninger | [opprette_bruker.feature](07%20Tilgangstyring/12%20Brukere/01%20Brukere/opprette_bruker.feature) |
+| TIL-BRU-BRU-002 | Organisasjonsinstansvalg for brukere med flere tilganger | 12 Brukere | 01 Brukere | @TIL-BRU-BRU-002 @tilgangsstyring @organisasjonsinstansvalg | [organisasjonsinstansvalg_for_brukere_med_flere_tilganger.feature](07%20Tilgangstyring/12%20Brukere/01%20Brukere/organisasjonsinstansvalg_for_brukere_med_flere_tilganger.feature) |
 
 ## 08 Teknisk
 
 | ID | Feature | Sub-domene | Kapabilitet | Tags | Fil |
 |----|---------|------------|-------------|------|-----|
-|  | 08 Teknisk: Gi tilbakemelding |  |  | @skip @støtteprosesser | [gi_tilbakemelding.feature](08%20Teknisk/gi_tilbakemelding.feature) |
-|  | 08 Teknisk: API-brukerprofil |  |  | @skip @støtteprosesser @sikkerhet | [maskinbrukerprofil.feature](08%20Teknisk/maskinbrukerprofil.feature) |
-|  | 08 Teknisk: Snarveismeny |  |  | @skip @støtteprosesser @kurs @ci | [snarveismeny.feature](08%20Teknisk/snarveismeny.feature) |
+|  | 08 Teknisk: Gi tilbakemelding | 10 Brukergrensesnitt | 01 UI | @TEK-BRU-UI-003 @skip @støtteprosesser | [gi_tilbakemelding.feature](08%20Teknisk/10%20Brukergrensesnitt/01%20UI/gi_tilbakemelding.feature) |
+|  | 08 Teknisk: API-brukerprofil | 10 Brukergrensesnitt | 01 UI | @TEK-BRU-UI-001 @skip @støtteprosesser @sikkerhet | [maskinbrukerprofil.feature](08%20Teknisk/10%20Brukergrensesnitt/01%20UI/maskinbrukerprofil.feature) |
+|  | 08 Teknisk: Snarveismeny | 10 Brukergrensesnitt | 01 UI | @TEK-BRU-UI-002 @skip @støtteprosesser @kurs @ci | [snarveismeny.feature](08%20Teknisk/10%20Brukergrensesnitt/01%20UI/snarveismeny.feature) |
 
 ## 10 Felleskrav
 
 | ID | Feature | Sub-domene | Kapabilitet | Tags | Fil |
 |----|---------|------------|-------------|------|-----|
-|  | 10 Felleskrav: Språkvalg påvirker søk og resultat | Sprakvalg |  |  | [sprakvalg_sok_resultat.feature](10%20Felleskrav/Sprakvalg/sprakvalg_sok_resultat.feature) |
-|  | 10 Felleskrav: Eksport | Tabellvisninger |  |  | [eksport.feature](10%20Felleskrav/Tabellvisninger/eksport.feature) |
-|  | 10 Felleskrav: Filter | Tabellvisninger |  | @fsadmin | [filter.feature](10%20Felleskrav/Tabellvisninger/filter.feature) |
+| FEL-TAB-TAB-002 | 10 Felleskrav: Eksport | 10 Tabellvisninger | 01 Tabeller | @FEL-TAB-TAB-002 | [eksport.feature](10%20Felleskrav/10%20Tabellvisninger/01%20Tabeller/eksport.feature) |
+| FEL-TAB-TAB-001 | 10 Felleskrav: Filter | 10 Tabellvisninger | 01 Tabeller | @FEL-TAB-TAB-001 @fsadmin | [filter.feature](10%20Felleskrav/10%20Tabellvisninger/01%20Tabeller/filter.feature) |
+| FEL-SPR-SPR-001 | 10 Felleskrav: Språkvalg påvirker søk og resultat | 11 Språk | 01 Språkvalg | @FEL-SPR-SPR-001 | [sprakvalg_sok_resultat.feature](10%20Felleskrav/11%20Språk/01%20Språkvalg/sprakvalg_sok_resultat.feature) |
 
 ## 99 Demo
 
 | ID | Feature | Sub-domene | Kapabilitet | Tags | Fil |
 |----|---------|------------|-------------|------|-----|
-|  | Filtrere og søke i studiekatalogen | 01 Studiekatalog | 01 Søk og filter | @demo @should | [studiekatalog_filtrering.feature](99%20Demo/01%20Studiekatalog/01%20Søk%20og%20filter/studiekatalog_filtrering.feature) |
-|  | Feide-innlogging | 02 Innlogging | 01 Feide | @demo | [feide_innlogging.feature](99%20Demo/02%20Innlogging/01%20Feide/feide_innlogging.feature) |
-|  | Opprette opptak via API | 03 Opptak | 01 Opptaksdemo | @demo @integration @planned @should | [opptak_demo_api.feature](99%20Demo/03%20Opptak/01%20Opptaksdemo/opptak_demo_api.feature) |
-|  | Opprette et opptak | 03 Opptak | 01 Opptaksdemo | @demo @implemented @must | [opptak_demo.feature](99%20Demo/03%20Opptak/01%20Opptaksdemo/opptak_demo.feature) |
-|  | GraphQL API integrasjon | 04 API | 01 GraphQL | @demo @integration @implemented @must | [graphql_integrasjon.feature](99%20Demo/04%20API/01%20GraphQL/graphql_integrasjon.feature) |
-|  | Personsøk | 05 Personsøk | 01 Personsøk | @demo | [personsok.feature](99%20Demo/05%20Personsøk/01%20Personsøk/personsok.feature) |
-|  | Organisasjonssøk | 06 Organisasjonssøk | 01 Organisasjonssøk | @demo | [organisasjonssok.feature](99%20Demo/06%20Organisasjonssøk/01%20Organisasjonssøk/organisasjonssok.feature) |
+| DEM-STU-SØK-001 | Filtrere og søke i studiekatalogen | 01 Studiekatalog | 01 Søk og filter | @DEM-STU-SØK-001 @demo @should | [studiekatalog_filtrering.feature](99%20Demo/01%20Studiekatalog/01%20Søk%20og%20filter/studiekatalog_filtrering.feature) |
+| DEM-INN-FEI-001 | Feide-innlogging | 02 Innlogging | 01 Feide | @DEM-INN-FEI-001 @demo | [feide_innlogging.feature](99%20Demo/02%20Innlogging/01%20Feide/feide_innlogging.feature) |
+| DEM-OPT-OPT-002 | Opprette opptak via API | 03 Opptak | 01 Opptaksdemo | @DEM-OPT-OPT-002 @demo @integration @planned @should | [opptak_demo_api.feature](99%20Demo/03%20Opptak/01%20Opptaksdemo/opptak_demo_api.feature) |
+| DEM-OPT-OPT-001 | Opprette et opptak | 03 Opptak | 01 Opptaksdemo | @DEM-OPT-OPT-001 @demo @implemented @must | [opptak_demo.feature](99%20Demo/03%20Opptak/01%20Opptaksdemo/opptak_demo.feature) |
+| DEM-API-GRA-001 | GraphQL API integrasjon | 04 API | 01 GraphQL | @DEM-API-GRA-001 @demo @integration @implemented @must | [graphql_integrasjon.feature](99%20Demo/04%20API/01%20GraphQL/graphql_integrasjon.feature) |
+| DEM-PER-PER-001 | Personsøk | 05 Personsøk | 01 Personsøk | @DEM-PER-PER-001 @demo | [personsok.feature](99%20Demo/05%20Personsøk/01%20Personsøk/personsok.feature) |
+| DEM-ORG-ORG-001 | Organisasjonssøk | 06 Organisasjonssøk | 01 Organisasjonssøk | @DEM-ORG-ORG-001 @demo | [organisasjonssok.feature](99%20Demo/06%20Organisasjonssøk/01%20Organisasjonssøk/organisasjonssok.feature) |
 
 ## Statistikk
 
-- Totalt: 75
+- Totalt: 50
 - Levert: 4
-- Skip: 28
+- Skip: 22
