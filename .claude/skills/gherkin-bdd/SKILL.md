@@ -25,20 +25,20 @@ Hvert scenario skal teste én spesifikk atferd. Hvis du trenger flere When-Then 
 ```gherkin
 # FEIL - tester to ting
 Scenario: Bruker logger inn og ser dashboard
-  When bruker logger inn
-  Then ser bruker velkommen-melding
-  When bruker klikker dashboard
-  Then ser bruker statistikk
+  Når bruker logger inn
+  Så ser bruker velkommen-melding
+  Når bruker klikker dashboard
+  Så ser bruker statistikk
 
 # RIKTIG - ett scenario per atferd
 Scenario: Vellykket innlogging
-  When bruker logger inn
-  Then ser bruker velkommen-melding
+  Når bruker logger inn
+  Så ser bruker velkommen-melding
 
 Scenario: Navigere til dashboard
-  Given bruker er logget inn
-  When bruker klikker dashboard
-  Then ser bruker statistikk
+  Gitt bruker er logget inn
+  Når bruker klikker dashboard
+  Så ser bruker statistikk
 ```
 
 ## Deklarativ vs Imperativ
@@ -47,14 +47,14 @@ Skriv HVA som skal skje, ikke HVORDAN.
 
 ```gherkin
 # FEIL - imperativ (hvordan)
-When jeg klikker på brukernavn-feltet
-And jeg skriver "test@example.com"
-And jeg klikker på passord-feltet
-And jeg skriver "password123"
-And jeg klikker på logg-inn-knappen
+Når jeg klikker på brukernavn-feltet
+Og jeg skriver "test@example.com"
+Og jeg klikker på passord-feltet
+Og jeg skriver "password123"
+Og jeg klikker på logg-inn-knappen
 
 # RIKTIG - deklarativ (hva)
-When jeg logger inn med "test@example.com"
+Når jeg logger inn med "test@example.com"
 ```
 
 ## Bruk Scenario Outline for Variasjoner
@@ -62,11 +62,11 @@ When jeg logger inn med "test@example.com"
 Når samme scenario gjentas med ulike verdier:
 
 ```gherkin
-Scenario Outline: Validering av input
-  When bruker skriver "<input>"
-  Then ser bruker "<resultat>"
+Scenariomal: Validering av input
+  Når bruker skriver "<input>"
+  Så ser bruker "<resultat>"
 
-  Examples:
+  Eksempler:
     | input    | resultat        |
     | gyldig   | Suksess         |
     | ugyldig  | Feilmelding     |
@@ -78,7 +78,7 @@ Scenario Outline: Validering av input
 Grupper relaterte scenarios under forretningsregler:
 
 ```gherkin
-Rule: Kun aktive brukere kan logge inn
+Regel: Kun aktive brukere kan logge inn
 
   Scenario: Aktiv bruker logger inn
     ...
@@ -92,13 +92,13 @@ Rule: Kun aktive brukere kan logge inn
 Flytt gjentatte Gitt-steg til Bakgrunn:
 
 ```gherkin
-Background:
-  Given bruker er logget inn
-  And bruker er på dashboard
+Bakgrunn:
+  Gitt bruker er logget inn
+  Og bruker er på dashboard
 
 Scenario: Se statistikk
-  When bruker klikker statistikk
-  Then ...
+  Når bruker klikker statistikk
+  Så ...
 ```
 
 ## Konkrete Eksempler
@@ -107,25 +107,68 @@ Bruk spesifikke, realistiske verdier:
 
 ```gherkin
 # FEIL - generisk
-Given en bruker finnes
-When bruker søker på noe
+Gitt en bruker finnes
+Når bruker søker på noe
 
 # RIKTIG - konkret
-Given brukeren "Ola Nordmann" finnes
-When bruker søker på "informatikk"
+Gitt brukeren "Ola Nordmann" finnes
+Når bruker søker på "informatikk"
 ```
 
 ## Gherkin Nøkkelord
 
-| Engelsk | Formål |
-|---------|--------|
-| Feature | Overordnet funksjonalitet |
-| Rule | Forretningsregel (grupperer scenarios) |
-| Background | Felles forutsetninger |
-| Scenario | Konkret testcase |
-| Scenario Outline | Parametrisert testcase |
-| Examples | Data for Scenario Outline |
-| Given | Forutsetning (kontekst) |
-| When | Handling (trigger) |
-| Then | Forventet resultat |
-| And/But | Fortsettelse av forrige step |
+| Engelsk | Norsk | Formål |
+|---------|-------|--------|
+| Feature | Egenskap | Overordnet funksjonalitet |
+| Rule | Regel | Forretningsregel (grupperer scenarios) |
+| Background | Bakgrunn | Felles forutsetninger |
+| Scenario | Scenario | Konkret testcase |
+| Scenario Outline | Scenariomal | Parametrisert testcase |
+| Examples | Eksempler | Data for Scenario Outline |
+| Given | Gitt | Forutsetning (kontekst) |
+| When | Når | Handling (trigger) |
+| Then | Så | Forventet resultat |
+| And/But | Og/Men | Fortsettelse av forrige step |
+
+## Ressurser
+
+### examples/perfekt-gherkin-eksempel.feature
+
+Komplett eksempel som demonstrerer alle beste praksis:
+- Norsk Gherkin-syntaks med `# language: no`
+- Flere Regel-seksjoner som organiserer scenarios etter forretningsregler
+- Bakgrunn for felles setup med datatabeller
+- MoSCoW-prioritering og status-tags (`@must`, `@should`, `@implemented`, `@planned`)
+- Scenariomal med Eksempler-tabell for parameteriserte tester
+- Doc strings for komplekse meldinger
+- Åpne spørsmål dokumentert med `# ÅPNE SPØRSMÅL:` kommentarer under feature-beskrivelsen
+- Deklarativ stil (fokus på "hva", ikke "hvordan")
+- Konkrete, spesifikke eksempler med realistiske verdier
+
+Les dette eksempelet når du trenger en mal for nye feature-filer.
+
+## Åpne Spørsmål
+
+Dokumenter uklarheter med kommentarer, **IKKE tags**:
+
+```gherkin
+Egenskap: Min egenskap
+  Som en bruker...
+
+  # ÅPNE SPØRSMÅL:
+  # - Spørsmål 1
+  # - Spørsmål 2
+
+  Bakgrunn:
+    ...
+```
+
+## Tags (FS-prosjektet)
+
+Se `rules/gherkin-conventions.md` for fullstendig liste. Hovedkategorier:
+
+| Kategori | Tags |
+|----------|------|
+| Prioritet (MoSCoW) | `@must`, `@should`, `@could`, `@wont` |
+| Status | `@implemented`, `@in-progress`, `@planned` |
+| Type | `@e2e`, `@integration`, `@demo` |
