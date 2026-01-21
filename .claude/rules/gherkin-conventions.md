@@ -37,7 +37,6 @@ krav/
 - `05 Opplysninger om person` - Persondata
 - `07 Tilgangstyring` - Autentisering og autorisasjon
 - `08 Teknisk` - Tekniske funksjoner
-- `09 Kommunikasjon` - Meldinger og varsler
 - `10 Felleskrav` - Tverrgående funksjonalitet
 - `99 Demo` - Demo og testing
 
@@ -52,6 +51,29 @@ krav/
 ```
 
 ## Tags
+
+### Feature-ID
+
+Hver feature **må tagges** med en unik ID. ID-en legges inn manuelt som tag i feature-filen.
+
+**Format:**
+```
+@DOM-SUB-KAP-NN
+```
+
+- `DOM` = Forkortelse for domene
+- `SUB` = Forkortelse for sub-domene
+- `KAP` = Forkortelse for kapabilitet
+- `NN` = Unikt løpenummer per feature (01, 02, 03...)
+
+**Forkortelser:** Utledes logisk fra mappenavnet (vanligvis 3 første bokstaver, men unntak for lesbarhet). Spør hvis usikker.
+
+**Eksempler:**
+- `@OPP-FOR-REG-01` = Opptak → Forberede → Regelverk → feature 01
+- `@OPP-FOR-REG-02` = Opptak → Forberede → Regelverk → feature 02
+- `@DEM-STU-SØK-01` = Demo → Studiekatalog → Søk → feature 01
+
+**Ved ny feature:** Sjekk eksisterende features i samme mappe for å finne neste ledige løpenummer.
 
 ### Prioritet (MoSCoW)
 - `@must` / `@should` / `@could` / `@wont`

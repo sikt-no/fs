@@ -1,6 +1,6 @@
 # language: no
 
-@studieplan @must
+@GJE-STU-PLA-01 @must
 Egenskap: Studieplanlegging for studenter
   Som en student på et studieprogram
   Ønsker jeg å planlegge min studieprogresjon
