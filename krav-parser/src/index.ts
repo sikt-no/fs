@@ -36,8 +36,8 @@ async function main() {
   console.log('Starting krav-parser...');
   console.log(`Scanning: ${KRAV_ROOT}`);
 
-  // Find all feature files (focusing on demo folder for now)
-  const featureFiles = await glob('99 Demo/**/*.feature', {
+  // Find all feature files in all domain folders
+  const featureFiles = await glob('**/*.feature', {
     cwd: KRAV_ROOT,
     absolute: true,
   });
@@ -49,18 +49,27 @@ async function main() {
   await db.init();
   await db.truncateAll();
 
-  // Track domains and subdomains to avoid duplicates
+  // Track domains, subdomains, and capabilities to avoid duplicates
   const domainCache = new Map<string, number>();
   const subdomainCache = new Map<string, number>();
+  const capabilityCache = new Map<string, number>();
 
   let successCount = 0;
   let errorCount = 0;
+  let skippedCount = 0;
 
   for (const filePath of featureFiles) {
     const parsed = parseFeatureFile(filePath, KRAV_ROOT);
 
     if (!parsed) {
       errorCount++;
+      continue;
+    }
+
+    // Skip files without Feature-ID (required as primary key)
+    if (!parsed.feature.feature_id) {
+      console.warn(`SKIPPED: ${parsed.filePath} - Missing Feature-ID`);
+      skippedCount++;
       continue;
     }
 
@@ -86,10 +95,26 @@ async function main() {
         }
       }
 
+      // Get or create capability
+      let capabilityId: number | null = null;
+      if (parsed.capability && subdomainId) {
+        const capabilityKey = `${subdomainId}:${parsed.capability.folder_name}`;
+        capabilityId = capabilityCache.get(capabilityKey) ?? null;
+        if (!capabilityId) {
+          capabilityId = await db.insertCapability({
+            subdomain_id: subdomainId,
+            ...parsed.capability,
+          });
+          capabilityCache.set(capabilityKey, capabilityId);
+        }
+      }
+
       // Insert feature
       const featureId = await db.insertFeature({
+        feature_id: parsed.feature.feature_id,
         domain_id: domainId,
         subdomain_id: subdomainId,
+        capability_id: capabilityId,
         file_path: parsed.filePath,
         file_name: parsed.filePath.split('/').pop()!,
         name: parsed.feature.name,
@@ -158,6 +183,7 @@ async function main() {
   // Print stats
   console.log('\n--- Results ---');
   console.log(`Processed: ${successCount} files`);
+  console.log(`Skipped (no Feature-ID): ${skippedCount} files`);
   console.log(`Errors: ${errorCount} files`);
   console.log('\n--- Database Stats ---');
   const stats = await db.getStats();

@@ -1,0 +1,9 @@
+{
+  "name": "fs-krav",
+  "version": "1.0.0",
+  "description": "BDD/Gherkin kravskriving for FS-prosjektet. Inkluderer kommandoer for å skrive krav, agenter for å finne steps og generere feature-filer, og regler for norsk Gherkin-syntaks.",
+  "author": {
+    "name": "FS-teamet"
+  },
+  "keywords": ["bdd", "gherkin", "krav", "feature", "norsk"]
+}

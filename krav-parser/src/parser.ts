@@ -7,6 +7,10 @@ import type { ParsedFeature } from './types.js';
 const STATUS_TAGS = ['implemented', 'in-progress', 'planned'];
 const PRIORITY_TAGS = ['must', 'should', 'could', 'wont'];
 
+// Feature-ID pattern: XXX-XXX-XXX-NNN (3 letters each segment, 3 digits)
+// Supports Norwegian characters (Æ, Ø, Å)
+const FEATURE_ID_PATTERN = /^[A-ZÆØÅ]{3}-[A-ZÆØÅ]{3}-[A-ZÆØÅ]{3}-\d{3}$/i;
+
 function extractFolderInfo(folderName: string): { name: string; sort_order: number } {
   // Extract number prefix and name from folder like "02 Opptak"
   const match = folderName.match(/^(\d+)\s+(.+)$/);
@@ -20,27 +24,33 @@ function extractFolderInfo(folderName: string): { name: string; sort_order: numb
 }
 
 function extractTags(tags: readonly Messages.Tag[]): {
+  featureId: string | null;
   status: string | null;
   priority: string | null;
   otherTags: string[];
 } {
+  let featureId: string | null = null;
   let status: string | null = null;
   let priority: string | null = null;
   const otherTags: string[] = [];
 
   for (const tag of tags) {
-    const tagName = tag.name.replace('@', '').toLowerCase();
+    const tagName = tag.name.replace('@', '');
+    const tagNameLower = tagName.toLowerCase();
 
-    if (STATUS_TAGS.includes(tagName)) {
-      status = tagName;
-    } else if (PRIORITY_TAGS.includes(tagName)) {
-      priority = tagName;
+    // Check for Feature-ID pattern first
+    if (FEATURE_ID_PATTERN.test(tagName)) {
+      featureId = tagName.toUpperCase();
+    } else if (STATUS_TAGS.includes(tagNameLower)) {
+      status = tagNameLower;
+    } else if (PRIORITY_TAGS.includes(tagNameLower)) {
+      priority = tagNameLower;
     } else {
       otherTags.push(tag.name);
     }
   }
 
-  return { status, priority, otherTags };
+  return { featureId, status, priority, otherTags };
 }
 
 function extractOpenQuestions(comments: readonly Messages.Comment[]): string[] {
@@ -97,7 +107,7 @@ export function parseFeatureFile(filePath: string, kravRoot: string): ParsedFeat
     return null;
   }
 
-  // Extract domain and subdomain from path
+  // Extract domain, subdomain, and capability from path
   const relativePath = relative(kravRoot, filePath);
   const parts = dirname(relativePath).split('/').filter(p => p && p !== '.');
 
@@ -108,12 +118,19 @@ export function parseFeatureFile(filePath: string, kravRoot: string): ParsedFeat
 
   const domainFolder = parts[0];
   const subdomainFolder = parts.length > 1 ? parts[1] : null;
+  const capabilityFolder = parts.length > 2 ? parts[2] : null;
 
   const domainInfo = extractFolderInfo(domainFolder);
   const subdomainInfo = subdomainFolder ? extractFolderInfo(subdomainFolder) : null;
+  const capabilityInfo = capabilityFolder ? extractFolderInfo(capabilityFolder) : null;
 
-  // Extract tags
-  const { status, priority, otherTags } = extractTags(feature.tags);
+  // Extract tags including Feature-ID
+  const { featureId, status, priority, otherTags } = extractTags(feature.tags);
+
+  // Validate Feature-ID exists
+  if (!featureId) {
+    console.warn(`WARNING: No Feature-ID found in ${filePath}`);
+  }
 
   // Extract background steps (to prepend to all scenarios)
   let backgroundSteps: { keyword: string; text: string }[] = [];
@@ -194,7 +211,12 @@ export function parseFeatureFile(filePath: string, kravRoot: string): ParsedFeat
       folder_name: subdomainFolder!,
       ...subdomainInfo,
     } : null,
+    capability: capabilityInfo ? {
+      folder_name: capabilityFolder!,
+      ...capabilityInfo,
+    } : null,
     feature: {
+      feature_id: featureId,
       name: feature.name,
       description: feature.description?.trim() || null,
       status,

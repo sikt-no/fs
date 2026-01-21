@@ -2,7 +2,7 @@ import { Pool } from 'pg';
 import { readFileSync } from 'fs';
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
-import type { Domain, Subdomain, Feature, Rule, Scenario, OpenQuestion } from './types.js';
+import type { Domain, Subdomain, Capability, Feature, Rule, Scenario, OpenQuestion } from './types.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -26,7 +26,7 @@ export class KravDatabase {
 
   async truncateAll(): Promise<void> {
     await this.pool.query(`
-      TRUNCATE open_questions, scenarios, rules, features, subdomains, domains CASCADE
+      TRUNCATE open_questions, scenarios, rules, features, capabilities, subdomains, domains CASCADE
     `);
     console.log('All tables truncated');
   }
@@ -64,14 +64,25 @@ export class KravDatabase {
     return result.rows[0].id;
   }
 
-  // Feature operations
-  async insertFeature(feature: Omit<Feature, 'id'>): Promise<number> {
+  // Capability operations
+  async insertCapability(capability: Omit<Capability, 'id'>): Promise<number> {
     const result = await this.pool.query(
-      `INSERT INTO features (domain_id, subdomain_id, file_path, file_name, name, description, status, priority, tags)
-       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING id`,
+      'INSERT INTO capabilities (subdomain_id, folder_name, name, sort_order) VALUES ($1, $2, $3, $4) RETURNING id',
+      [capability.subdomain_id, capability.folder_name, capability.name, capability.sort_order]
+    );
+    return result.rows[0].id;
+  }
+
+  // Feature operations
+  async insertFeature(feature: Feature): Promise<string> {
+    await this.pool.query(
+      `INSERT INTO features (feature_id, domain_id, subdomain_id, capability_id, file_path, file_name, name, description, status, priority, tags)
+       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)`,
       [
+        feature.feature_id,
         feature.domain_id,
         feature.subdomain_id,
+        feature.capability_id,
         feature.file_path,
         feature.file_name,
         feature.name,
@@ -81,7 +92,7 @@ export class KravDatabase {
         JSON.stringify(feature.tags),
       ]
     );
-    return result.rows[0].id;
+    return feature.feature_id;
   }
 
   // Rule operations
@@ -122,7 +133,7 @@ export class KravDatabase {
 
   // Stats
   async getStats(): Promise<Record<string, number>> {
-    const tables = ['domains', 'subdomains', 'features', 'rules', 'scenarios', 'open_questions'];
+    const tables = ['domains', 'subdomains', 'capabilities', 'features', 'rules', 'scenarios', 'open_questions'];
     const stats: Record<string, number> = {};
 
     for (const table of tables) {
