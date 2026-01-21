@@ -86,10 +86,16 @@ Egenskap: [Navn]
 Oppdater `krav/krav-oversikt.md` med den nye feature-filen:
 
 1. Scan `krav/**/*.feature`
-2. Ekstraher feature-navn og status-tags
+2. Ekstraher feature-ID, feature-navn og status-tags
 3. Grupper etter mappestruktur
 4. Generer markdown-tabell med lenker
 5. Skriv til `krav/krav-oversikt.md`
+
+**Feature-ID:** Utledes fra mappestrukturen (Domene → Sub-domene → Kapabilitet):
+- 3 første bokstaver fra hvert nivå (store bokstaver)
+- Tall fra kapabilitetsnivået
+
+Eksempel: `krav/05 Opplysninger om person/01 Personsøk/01 Grunnleggende/` → `OPP-PER-GRU-01`
 
 **Output-format:**
 ```markdown
@@ -97,9 +103,9 @@ Oppdater `krav/krav-oversikt.md` med den nye feature-filen:
 
 ## [Domene]
 
-| Feature | Status | Fil |
-|---------|--------|-----|
-| ... | ... | [link](...) |
+| ID | Feature | Status | Fil |
+|----|---------|--------|-----|
+| OPP-PER-GRU-01 | ... | ... | [link](...) |
 
 ## Statistikk
 
