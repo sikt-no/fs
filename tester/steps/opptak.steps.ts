@@ -1,5 +1,5 @@
 import { createBdd } from 'playwright-bdd'
-import { test, expect } from '../fixtures/auth'
+import { test, expect } from '../fixtures/logged-in-states'
 
 const { Given, When, Then } = createBdd(test)
 

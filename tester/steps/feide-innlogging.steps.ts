@@ -1,10 +1,12 @@
 import { createBdd } from 'playwright-bdd'
 import { expect } from '@playwright/test'
 import { FsAdminLoginPage } from '../pages/fs-admin/FsAdminLoginPage'
-import { MinKompetanseLoginPage } from '../pages/MinKompetanseLoginPage'
+import { MinKompetanseLoginPage } from '../pages/min-kompetanse/MinKompetanseLoginPage'
+import { test } from '../fixtures/logged-in-states'
 import 'dotenv/config'
 
 const { Given, When, Then } = createBdd()
+const { Given: GivenWithAuth } = createBdd(test)
 
 const ADMIN_AUTH_FILE = 'playwright/.auth/fs-admin.json'
 const PERSON_AUTH_FILE = 'playwright/.auth/person.json'
@@ -78,4 +80,14 @@ Then('skal personen se {string}', async ({ page }, expectedText: string) => {
 
 Then('innloggingstilstanden skal lagres for personflaten', async ({ page }) => {
   await page.context().storageState({ path: PERSON_AUTH_FILE })
+})
+
+// ============ Rolle steps (pre-authenticated) ============
+
+GivenWithAuth('at jeg er logget inn som administrator', async ({ adminPage }) => {
+  await expect(adminPage).not.toHaveURL(/login/)
+})
+
+GivenWithAuth('at jeg er logget inn som person', async ({ personPage }) => {
+  await expect(personPage).not.toHaveURL(/login/)
 })
