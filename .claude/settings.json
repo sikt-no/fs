@@ -1,6 +1,6 @@
 {
   "enabledPlugins": {
-    "sta-product-discovery@sta-plugin-marketplace": true
+    "sta-product-discovery@sta-plugin-marketplace": false
   },
   "extraKnownMarketplaces": {
     "sta-plugin-marketplace": {
