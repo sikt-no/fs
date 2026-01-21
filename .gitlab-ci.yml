@@ -25,13 +25,24 @@ e2e_tests:
   image: mcr.microsoft.com/playwright:v1.57.0-noble
   before_script:
     - cd tester
+    - apt-get update && apt-get install -y default-jre curl unzip
     - npm ci
+    # Fetch history from previous successful pipeline
+    - mkdir -p allure-results
+    - |
+      curl --location --output history.zip \
+        "${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/jobs/artifacts/main/download?job=e2e_tests&job_token=${CI_JOB_TOKEN}" \
+        && unzip -o history.zip -d previous \
+        && cp -r previous/tester/allure-report/history allure-results/history \
+        || echo "No previous history found, starting fresh"
   script:
     - npm test || true
+    - npx allure generate allure-results -o allure-report --clean
   timeout: 30m
   artifacts:
     paths:
       - tester/playwright-report/
+      - tester/allure-report/
     when: always
     expire_in: 1 week
   rules:
