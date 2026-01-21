@@ -80,7 +80,30 @@ Egenskap: [Navn]
 
 ### 5. Oppdater oversikt
 
-Informer brukeren om å kjøre `/oppdater-oversikt`.
+Oppdater `krav/krav-oversikt.md` med den nye feature-filen:
+
+1. Scan `krav/**/*.feature`
+2. Ekstraher feature-navn og status-tags
+3. Grupper etter mappestruktur
+4. Generer markdown-tabell med lenker
+5. Skriv til `krav/krav-oversikt.md`
+
+**Output-format:**
+```markdown
+# Kravoversikt
+
+## [Domene]
+
+| Feature | Status | Fil |
+|---------|--------|-----|
+| ... | ... | [link](...) |
+
+## Statistikk
+
+- Totalt: X
+- Implementert: Y
+- Under arbeid: Z
+```
 
 ## Referanser
 
