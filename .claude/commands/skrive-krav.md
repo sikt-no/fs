@@ -18,7 +18,26 @@ Spør brukeren:
 
 ### 2. Finn eksisterende steps
 
-Spawn `finn-steps` agenten via Task-verktøyet for å finne gjenbrukbare steps.
+Søk etter gjenbrukbare steps i kodebasen:
+
+**Søk i:**
+- `krav/**/*.feature` - eksisterende scenarios
+- `tester/steps/**/*.ts` - implementerte step-definisjoner
+
+**Grupper funn etter type:**
+
+```markdown
+## Gitt-steps
+- `at jeg er logget inn som administrator` - feide-innlogging.steps.ts
+
+## Når-steps
+- `jeg oppretter et nytt opptak` - opptak.steps.ts
+
+## Så-steps
+- `skal opptaket være lagret` - opptak.steps.ts
+```
+
+Marker steps med parametere (`{string}`, `{int}`).
 
 ### 3. Definer scenarios
 
@@ -31,7 +50,33 @@ For hvert scenario, spør om:
 
 ### 4. Generer feature-fil
 
-Spawn `lag-feature` agenten via Task-verktøyet.
+**Plassering:** Følg mappestrukturen i `rules/gherkin-conventions.md`:
+```
+krav/[NN] [Domene]/[NN] [Sub-domene]/[NN] [Kapabilitet]/feature-navn.feature
+```
+
+**Format:**
+```gherkin
+# language: no
+@[tags]
+
+Egenskap: [Navn]
+  Som en [aktør]
+  ønsker jeg å [handling]
+  slik at [verdi].
+
+  Bakgrunn:
+    Gitt [felles forutsetning]
+
+  Regel: [Forretningsregel]
+
+    Scenario: [Beskrivende navn]
+      Gitt [forutsetning]
+      Når [handling]
+      Så [forventet resultat]
+```
+
+**Ved uklarheter:** Dokumenter med `# ÅPNE SPØRSMÅL:` og `@wip` tag.
 
 ### 5. Oppdater oversikt
 
