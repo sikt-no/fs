@@ -7,6 +7,10 @@ playwright/.cache/
 test-results/
 .playwright/
 
+# Allure
+allure-results/
+allure-report/
+
 # playwright-bdd genererte filer
 .features-gen/
 

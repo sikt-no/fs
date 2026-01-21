@@ -1,7 +1,7 @@
-import { expect } from '@playwright/test';
 import { createBdd } from 'playwright-bdd';
+import { test, expect } from '../fixtures/allure.fixture';
 
-const { When, Then } = createBdd();
+const { When, Then } = createBdd(test);
 
 // Use FS-Admin GraphQL endpoint (authenticated via session cookies)
 if (!process.env.FS_ADMIN_GRAPHQL) {
