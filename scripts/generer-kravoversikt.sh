@@ -38,8 +38,8 @@ find "$KRAV_DIR" -name "*.feature" -type f | sort | while read file; do
         echo ""
         echo "## $domain"
         echo ""
-        echo "| ID | Feature | Domene | Sub-domene | Kapabilitet | Tags | Fil |"
-        echo "|----|---------|--------|------------|-------------|------|-----|"
+        echo "| ID | Feature | Sub-domene | Kapabilitet | Tags | Fil |"
+        echo "|----|---------|------------|-------------|------|-----|"
     fi
 
     # Build ID from path components
@@ -67,7 +67,7 @@ find "$KRAV_DIR" -name "*.feature" -type f | sort | while read file; do
     # Filename for display
     filename=$(basename "$file")
 
-    echo "| $id | $feature_name | $domain | $subdomain | $capability | $tags | [$filename]($encoded_path) |"
+    echo "| $id | $feature_name | $subdomain | $capability | $tags | [$filename]($encoded_path) |"
 done
 
 echo ""
