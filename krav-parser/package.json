@@ -5,7 +5,8 @@
   "type": "module",
   "scripts": {
     "parse": "tsx src/index.ts",
-    "parse:watch": "tsx watch src/index.ts"
+    "parse:watch": "tsx watch src/index.ts",
+    "generate-overview": "tsx src/markdown-generator.ts"
   },
   "dependencies": {
     "@cucumber/gherkin": "^29.0.0",
