@@ -1,6 +1,5 @@
 # language: no
-
-@demo @should
+@DEM-STU-SØK-001 @demo @should
 Egenskap: Filtrere og søke i studiekatalogen
   Som en søker
   Ønsker jeg å kunne filtrere og søke etter studier i studiekatalogen

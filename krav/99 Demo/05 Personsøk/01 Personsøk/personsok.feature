@@ -1,6 +1,5 @@
 # language: no
-@demo
-
+@DEM-PER-PER-001 @demo
 Egenskap: Personsøk
   Som en administrator av FS-systemet
   ønsker jeg å søke etter personer i personregisteret

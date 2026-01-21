@@ -1,5 +1,5 @@
 # language: no
-@demo @integration @planned @should
+@DEM-OPT-OPT-002 @demo @integration @planned @should
 Egenskap: Opprette opptak via API
   Som system administrator ønsker jeg å kunne opprette opptak programmatisk
   slik at jeg kan automatisere opprettelse av opptak i bulk.

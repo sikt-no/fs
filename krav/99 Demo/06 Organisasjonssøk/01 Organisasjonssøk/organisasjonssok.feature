@@ -1,6 +1,5 @@
 # language: no
-@demo
-
+@DEM-ORG-ORG-001 @demo
 Egenskap: Organisasjonssøk
   Som en administrator av FS-systemet
   ønsker jeg å søke etter organisasjoner
