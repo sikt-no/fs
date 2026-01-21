@@ -65,6 +65,9 @@ Egenskap: [Navn]
   ønsker jeg å [handling]
   slik at [verdi].
 
+  # ÅPNE SPØRSMÅL:
+  # - [Eventuelle uklarheter dokumenteres her]
+
   Bakgrunn:
     Gitt [felles forutsetning]
 
@@ -76,7 +79,7 @@ Egenskap: [Navn]
       Så [forventet resultat]
 ```
 
-**Ved uklarheter:** Dokumenter med `# ÅPNE SPØRSMÅL:` kommentar.
+**Ved uklarheter:** Dokumenter med `# ÅPNE SPØRSMÅL:` rett under feature-beskrivelsen (etter "slik at...").
 
 ### 5. Oppdater oversikt
 
