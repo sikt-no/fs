@@ -9,7 +9,11 @@
     "test:headed": "bddgen && playwright test --headed",
     "test:integration": "bddgen && playwright test --grep @integration",
     "test:e2e": "bddgen && playwright test --grep @e2e",
-    "codegen": "graphql-codegen --config codegen.ts"
+    "codegen": "graphql-codegen --config codegen.ts",
+    "allure:generate": "allure generate allure-results -o allure-report --clean",
+    "allure:open": "allure open allure-report",
+    "allure:serve": "allure serve allure-results",
+    "test:allure": "cp -r allure-report/history allure-results/history 2>/dev/null || true && bddgen && playwright test && npm run allure:generate"
   },
   "keywords": [],
   "author": "",
@@ -22,6 +26,8 @@
     "@graphql-codegen/typescript-operations": "^5.0.7",
     "@playwright/test": "^1.57.0",
     "@types/node": "^25.0.3",
+    "allure-commandline": "^2.32.0",
+    "allure-playwright": "^3.2.2",
     "dotenv": "^17.2.3",
     "graphql": "^16.12.0",
     "playwright-bdd": "^8.4.2",
