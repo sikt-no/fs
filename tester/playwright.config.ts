@@ -1,15 +1,15 @@
-import { defineConfig, devices } from '@playwright/test';
-import { defineBddConfig } from 'playwright-bdd';
-import 'dotenv/config';
+import { defineConfig, devices } from '@playwright/test'
+import { defineBddConfig } from 'playwright-bdd'
+import 'dotenv/config'
 
 const testDir = defineBddConfig({
   featuresRoot: '../krav',
   features: '../krav/**/*.feature',
-  steps: './steps/**/*.ts',
+  steps: ['./steps/**/*.ts', './fixtures/**/*.ts'],
   language: 'no',
   missingSteps: 'skip-scenario',
   tags: '@demo',
-});
+})
 
 export default defineConfig({
   testDir,
@@ -17,7 +17,7 @@ export default defineConfig({
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 2 : 0,
   workers: process.env.CI ? 1 : undefined,
-  reporter: 'html',
+  reporter: [['list'], ['html']],
   use: {
     baseURL: process.env.FS_ADMIN_URL,
     locale: 'nb-NO',
@@ -26,21 +26,22 @@ export default defineConfig({
     video: 'on',
   },
   projects: [
-    // Setup - logger inn og lagrer auth state
+    // Login - runs first, no auth state, generates auth files
     {
-      name: 'setup',
-      testDir: './setup',
-      testMatch: '**/*.setup.ts',
-    },
-    // BDD tests - kjører med lagret auth
-    {
-      name: 'bdd',
-      testDir,
+      name: 'login',
+      testMatch: '**/feide_innlogging*',
       use: {
         ...devices['Desktop Chrome'],
-        storageState: 'playwright/.auth/fs-admin.json',
       },
-      dependencies: ['setup'],
+    },
+    // BDD tests - runs after login
+    {
+      name: 'bdd',
+      testIgnore: '**/feide_innlogging*',
+      use: {
+        ...devices['Desktop Chrome'],
+      },
+      dependencies: ['login'],
     },
   ],
-});
+})
