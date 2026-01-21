@@ -127,9 +127,10 @@ Generert oversikt over alle BDD-krav i prosjektet.
 | DEM-OPP-OPP-01 | Opprette et opptak | 03 Opptak | 01 Opptaksdemo | @demo @implemented @must | [opptak_demo.feature](99%20Demo/03%20Opptak/01%20Opptaksdemo/opptak_demo.feature) |
 | DEM-API-GRA-01 | GraphQL API integrasjon | 04 API | 01 GraphQL | @demo @integration @implemented @must | [graphql_integrasjon.feature](99%20Demo/04%20API/01%20GraphQL/graphql_integrasjon.feature) |
 | DEM-PER-PER-01 | Personsøk | 05 Personsøk | 01 Personsøk | @demo | [personsok.feature](99%20Demo/05%20Personsøk/01%20Personsøk/personsok.feature) |
+| DEM-ORG-ORG-01 | Organisasjonssøk | 06 Organisasjonssøk | 01 Organisasjonssøk | @demo | [organisasjonssok.feature](99%20Demo/06%20Organisasjonssøk/01%20Organisasjonssøk/organisasjonssok.feature) |
 
 ## Statistikk
 
-- Totalt: 75
+- Totalt: 76
 - Levert: 4
 - Skip: 28
