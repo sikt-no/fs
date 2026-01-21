@@ -169,6 +169,7 @@ Se `rules/gherkin-conventions.md` for fullstendig liste. Hovedkategorier:
 
 | Kategori | Tags |
 |----------|------|
+| Feature-ID | `@DOM-SUB-KAP-NNN` (f.eks. `@OPT-REG-GRU-001`) |
 | Prioritet (MoSCoW) | `@must`, `@should`, `@could`, `@wont` |
 | Status | `@implemented`, `@in-progress`, `@planned` |
 | Type | `@e2e`, `@integration`, `@demo` |

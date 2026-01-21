@@ -29,30 +29,34 @@ function extractFolderInfo(folderName: string): { name: string; sortOrder: numbe
   return { sortOrder: 0, name: folderName };
 }
 
-function generateId(relativePath: string): string {
-  const dirPath = dirname(relativePath);
-  const parts = dirPath.split('/').filter((p: string) => p && p !== '.');
+function extractIdFromTags(filePath: string): string | null {
+  const content = readFileSync(filePath, 'utf-8');
+  const lines = content.split('\n');
 
-  const idParts: string[] = [];
+  // ID pattern: @DOM-SUB-KAP-NN or @DOM-SUB-KAP-NNN (e.g., @OPP-FOR-REG-01 or @OPT-REG-GRU-001)
+  const idPattern = /^@([A-ZÆØÅ]{3}-[A-ZÆØÅ]{3}-[A-ZÆØÅ]{3}-\d{2,3})$/;
 
-  for (const part of parts) {
-    const nameWithoutNumber = part.replace(/^\d+\s+/, '');
-    const abbrev = nameWithoutNumber.substring(0, 3).toUpperCase();
-    if (abbrev) {
-      idParts.push(abbrev);
+  for (const line of lines) {
+    const trimmed = line.trim();
+
+    // Stop if we hit the Feature/Egenskap line
+    if (trimmed.startsWith('Egenskap:') || trimmed.startsWith('Feature:')) {
+      break;
+    }
+
+    // Check each tag on the line
+    if (trimmed.startsWith('@')) {
+      const tags = trimmed.split(/\s+/);
+      for (const tag of tags) {
+        const match = tag.match(idPattern);
+        if (match) {
+          return match[1];
+        }
+      }
     }
   }
 
-  // Get number from last directory
-  const lastPart = parts[parts.length - 1];
-  const numberMatch = lastPart?.match(/^(\d+)/);
-
-  let id = idParts.join('-');
-  if (numberMatch) {
-    id += '-' + numberMatch[1];
-  }
-
-  return id;
+  return null;
 }
 
 function extractRawTags(filePath: string): string {
@@ -128,7 +132,7 @@ async function main(): Promise<void> {
       skipCount++;
     }
 
-    const id = generateId(relativePath);
+    const id = extractIdFromTags(absolutePath) || '';
     const pathInfo = extractPathInfo(relativePath);
 
     entries.push({

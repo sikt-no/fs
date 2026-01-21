@@ -58,20 +58,19 @@ Hver feature **må tagges** med en unik ID. ID-en legges inn manuelt som tag i f
 
 **Format:**
 ```
-@DOM-SUB-KAP-NN
+@DOM-SUB-KAP-NNN
 ```
 
-- `DOM` = Forkortelse for domene
-- `SUB` = Forkortelse for sub-domene
-- `KAP` = Forkortelse for kapabilitet
-- `NN` = Unikt løpenummer per feature (01, 02, 03...)
+- `DOM` = 3-bokstavs forkortelse for domene
+- `SUB` = 3-bokstavs forkortelse for sub-domene
+- `KAP` = 3-bokstavs forkortelse for kapabilitet
+- `NNN` = Unikt løpenummer per feature (001, 002, 003...)
 
 **Forkortelser:** Utledes logisk fra mappenavnet (vanligvis 3 første bokstaver, men unntak for lesbarhet). Spør hvis usikker.
 
 **Eksempler:**
-- `@OPP-FOR-REG-01` = Opptak → Forberede → Regelverk → feature 01
-- `@OPP-FOR-REG-02` = Opptak → Forberede → Regelverk → feature 02
-- `@DEM-STU-SØK-01` = Demo → Studiekatalog → Søk → feature 01
+- `@OPT-REG-GRU-001` = Opptak → Registrere → Grunnlag → feature 001
+- `@DEM-STU-SØK-001` = Demo → Studiekatalog → Søk → feature 001
 
 **Ved ny feature:** Sjekk eksisterende features i samme mappe for å finne neste ledige løpenummer.
 
