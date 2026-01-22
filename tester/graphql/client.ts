@@ -4,6 +4,7 @@ import type {
   OpprettOpptakInput,
   OpprettOpptakPayloadV2,
   OpptakFilterInput,
+  AdmissioUtdanningsinstans,
 } from './types';
 
 if (!process.env.FS_ADMIN_GRAPHQL) {
@@ -147,4 +148,40 @@ export async function hentOpptakById(
 ): Promise<Opptak | undefined> {
   const opptak = await hentOpptak(request, { opptaksIDer: [id] });
   return opptak[0];
+}
+
+// ============================================================
+// Utdanningsinstans Queries
+// ============================================================
+
+export async function hentUtdanningsinstanser(
+  request: APIRequestContext
+): Promise<AdmissioUtdanningsinstans[]> {
+  const response = await graphqlRequest<{ admissioUtdanningsinstanser: AdmissioUtdanningsinstans[] }>(
+    request,
+    `
+      query HentUtdanningsinstanser {
+        admissioUtdanningsinstanser {
+          id
+          organisasjon {
+            navn {
+              nb
+            }
+          }
+          terminFra {
+            arstall
+          }
+          terminTil {
+            arstall
+          }
+        }
+      }
+    `
+  );
+
+  if (response.errors?.length) {
+    throw new Error(`GraphQL errors: ${response.errors.map(e => e.message).join(', ')}`);
+  }
+
+  return response.data!.admissioUtdanningsinstanser;
 }

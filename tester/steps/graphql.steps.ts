@@ -1,70 +1,35 @@
 import { createBdd } from 'playwright-bdd';
 import { test, expect } from '../fixtures/allure.fixture';
+import { hentUtdanningsinstanser } from '../graphql/client';
+import type { AdmissioUtdanningsinstans } from '../graphql/types';
 
 const { When, Then } = createBdd(test);
 
-// Use FS-Admin GraphQL endpoint (authenticated via session cookies)
-if (!process.env.FS_ADMIN_GRAPHQL) {
-  throw new Error('FS_ADMIN_GRAPHQL environment variable is required');
-}
-const FS_ADMIN_GRAPHQL = process.env.FS_ADMIN_GRAPHQL.trim();
-
-interface GraphQLResponse {
-  data?: Record<string, unknown>;
-  errors?: Array<{ message: string }>;
-}
-
-let graphqlResponse: GraphQLResponse;
+let utdanningsinstanser: AdmissioUtdanningsinstans[];
+let graphqlError: Error | undefined;
 
 When('jeg henter liste over utdanningsinstanser fra GraphQL', async ({ request }) => {
-  // Uses the authenticated session from storageState (cookies)
-  const response = await request.post(FS_ADMIN_GRAPHQL, {
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    data: {
-      query: `
-        query HentUtdanningsinstanser {
-          admissioUtdanningsinstanser {
-            id
-            organisasjon {
-              navn {
-                nb
-              }
-            }
-            terminFra {
-              arstall
-            }
-            terminTil {
-              arstall
-            }
-          }
-        }
-      `,
-    },
-  });
-
-  graphqlResponse = await response.json();
+  try {
+    utdanningsinstanser = await hentUtdanningsinstanser(request);
+    graphqlError = undefined;
+  } catch (error) {
+    graphqlError = error as Error;
+  }
 });
 
 Then('skal responsen ikke inneholde feil', async () => {
-  expect(graphqlResponse.errors).toBeUndefined();
+  expect(graphqlError).toBeUndefined();
 });
 
 Then('skal hver utdanningsinstans inneholde følgende felt', async ({}, dataTable: { rows: () => string[][] }) => {
-  const data = graphqlResponse.data as {
-    admissioUtdanningsinstanser?: Array<Record<string, unknown>>;
-  };
-
-  const instanser = data.admissioUtdanningsinstanser;
-  expect(instanser).toBeDefined();
-  expect(instanser!.length).toBeGreaterThan(0);
+  expect(utdanningsinstanser).toBeDefined();
+  expect(utdanningsinstanser.length).toBeGreaterThan(0);
 
   const felter = dataTable.rows().map(row => row[0]);
 
-  for (const instans of instanser!) {
+  for (const instans of utdanningsinstanser) {
     for (const felt of felter) {
-      const verdi = instans[felt];
+      const verdi = (instans as Record<string, unknown>)[felt];
       expect(verdi, `Felt '${felt}' = ${JSON.stringify(verdi)}`).toBeDefined();
     }
   }
