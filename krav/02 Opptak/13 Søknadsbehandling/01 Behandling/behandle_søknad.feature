@@ -1,5 +1,5 @@
 # language: no
-@OPT-BEH-BEH-001 @skip @opptakspilot @ci @focus
+@OPT-BEH-BEH-001 @skip @opptakspilot @focus
 Egenskap: Saksbehandler behandler søknader
 
     Bakgrunn:

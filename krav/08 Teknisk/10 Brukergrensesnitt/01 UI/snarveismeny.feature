@@ -1,5 +1,5 @@
 # language: no
-@TEK-BRU-UI-002 @skip @støtteprosesser @kurs @ci
+@TEK-BRU-UI-002 @skip @støtteprosesser @kurs
 Egenskap: 08 Teknisk: Snarveismeny
   Som administrator trenger jeg å kunne finne noen kjernefunksjoner jeg bruker ofte veldig raskt fra hvor som helst i brukerflaten, gjennom å kunne bruke hurtigtaster på tastaturet. (Command palette)
   Fordi jeg vil spare meg for å klikke og navigere rundt i brukerflaten for å finne alle funksjoner jeg trenger. (minimere risiko for musarm)

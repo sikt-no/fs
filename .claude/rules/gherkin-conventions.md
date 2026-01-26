@@ -83,7 +83,10 @@ Hver feature **må tagges** med en unik ID. ID-en legges inn manuelt som tag i f
 - `@planned` - Planlagt
 
 ### Type
-- `@e2e` / `@integration` / `@demo`
+- `@e2e` - End-to-end brukerreiser
+- `@integration` - API-integrasjonstester
+- `@demo` - Demo/eksempeltester (kjøres lokalt som standard)
+- `@ci` - Tester som kjøres automatisk i CI-pipeline
 
 ## Åpne spørsmål
 

@@ -9,6 +9,7 @@
     "test:headed": "bddgen && playwright test --headed",
     "test:integration": "bddgen && playwright test --grep @integration",
     "test:e2e": "bddgen && playwright test --grep @e2e",
+    "test:ci": "BDD_TAGS='@ci' bddgen && playwright test",
     "codegen": "graphql-codegen --config codegen.ts",
     "allure:generate": "allure generate allure-results -o allure-report --clean",
     "allure:open": "allure open allure-report",

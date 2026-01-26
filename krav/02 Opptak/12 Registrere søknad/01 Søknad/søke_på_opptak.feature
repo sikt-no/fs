@@ -1,5 +1,5 @@
 # language: no
-@OPT-SØK-SØK-001 @opptakspilot @ci
+@OPT-SØK-SØK-001 @opptakspilot
 Egenskap: Søke på opptak
     Som borger ønsker jeg å kunne søke på et opptak til et studie jeg ønsker å delta på slik at jeg kan få skoleplass
 

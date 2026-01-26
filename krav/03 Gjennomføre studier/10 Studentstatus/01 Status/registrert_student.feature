@@ -1,5 +1,5 @@
 # language: no
-@GJE-STU-STA-001 @ci @studieadministrasjon
+@GJE-STU-STA-001 @studieadministrasjon
 Egenskap: Registrert inneværende semester
   Som administrator trenger jeg raskt å se om en person har registrert seg for inneværende periode, siden dette ofte er en kritisk betingelse for å få tilgang til utdanning og ulike tjenester ved lærestedet.
 

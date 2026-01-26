@@ -1,5 +1,5 @@
         # language: no
-        @OPT-REG-KRA-001 @opptakspilot @opptakspilotkritisk @fsadmin @ci
+        @OPT-REG-KRA-001 @opptakspilot @opptakspilotkritisk @fsadmin
         Egenskap: Kompetanseregelverk
         Som administrator ønsker jeg å kunne opprette og vedlikeholde kompetanseregelverk som definerer kvalifiseringskrav for utdanningstilbud. Kompetanseregelverk er det grunnleggende regelverket for å avgjøre om en søker er kvalifisert for et studium basert på ulike grunnlag som vitnemål, forkurs, realkompetanse eller andre kvalifikasjoner. Regelverket inneholder kravelementer som kan være fagkrav fra videregående opplæring, opptaksprøver, praksis, arbeidserfaring, språkkrav eller andre typer kompetanse, med mulighet for å sette spesifikke poengkrav som resultatkrav, standpunktkrav og eksamenskrav. Systemet støtter både enkle og komplekse regler med OG/ELLER-logikk mellom krav, og alle beskrivelser og titler kan registreres på Bokmål, Nynorsk, Engelsk og Nordsamisk for å sikre tilgjengelighet for alle søkere.
 

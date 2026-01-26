@@ -1,5 +1,5 @@
 # language: no
-@GJE-STR-STR-001 @ci
+@GJE-STR-STR-001
 Egenskap: Kort om studieprogram
   Som admninistrator trenger jeg å raskt kunne se sammenfattet info om en persons studieprogramtilknytninger, for å kunne gi tilpasset informasjon.
 # populært kalt lilla boks

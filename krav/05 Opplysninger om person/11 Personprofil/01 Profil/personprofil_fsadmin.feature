@@ -4,7 +4,6 @@ Egenskap: Personprofil
             Som administrator trenger jeg å kunne få opp person- og kontaktopplysninger for personer jeg slår opp for å sikre at jeg snakker med riktig person før jeg kan gi mer informasjon eller veiledning.
             Det er likegyldig om tilknytningsforholdet er at personen jeg har søkt på en utdanning, har eller har hatt studierett, har resultater registrert, eller kun er registrert som fagperson.
             #Happy path - mulig bilde må ut i første produksjonsiterasjon
-  @ci
   Scenariomal: Administrator ser person- og kontaktopplysninger i en personprofil
     Gitt at administrator er inne på personsøket
     Når administrator søker på unik "<input>"

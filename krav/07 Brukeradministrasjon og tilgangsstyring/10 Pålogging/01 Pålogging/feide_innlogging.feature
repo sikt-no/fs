@@ -1,5 +1,5 @@
 # language: no
-@DEM-INN-FEI-001 @demo
+@DEM-INN-FEI-001 @demo @ci
 Egenskap: Feide-innlogging
   Som en bruker av FS-systemene
   ønsker jeg å logge inn med Feide
