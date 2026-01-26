@@ -1,5 +1,5 @@
 # language: no
-@DEM-OPT-OPT-001 @demo @implemented @must
+@DEM-OPT-OPT-001 @demo @implemented @must @ci
 Egenskap: Opprette et opptak
   Som administrator ønsker jeg å kunne opprette et opptak og publisere det
   slik at det blir tilgjengelig for personer som ønsker å søke.

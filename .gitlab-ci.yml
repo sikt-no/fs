@@ -40,6 +40,13 @@ e2e_tests:
   script:
     - npm test || true
     - npx allure generate allure-results -o allure-report --clean
+  after_script:
+    - |
+      if grep -q 'failures="[1-9]' tester/test-results/junit.xml 2>/dev/null; then
+        curl -X POST -H 'Content-type: application/json' \
+          --data "{\"text\":\"E2E tests failed ❌. <https://fs-funksjonelltesting.sokrates.edupaas.no/|View Report>\"}" \
+          "$SLACK_WEBHOOK"
+      fi
   timeout: 30m
   artifacts:
     paths:
