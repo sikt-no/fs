@@ -9,6 +9,14 @@ Skriv nye BDD-krav i Gherkin-format.
 
 ## Arbeidsflyt
 
+### 0. Les konvensjoner
+
+**Først:** Les `.claude/rules/gherkin-conventions.md` for å forstå prosjektets konvensjoner for:
+- Mappestruktur (Domene → Sub-domene → Kapabilitet)
+- Feature-ID format (`@DOM-SUB-KAP-NNN`)
+- Tags (prioritet, status, type)
+- Aktører
+
 ### 1. Forstå behovet
 
 Spør brukeren:
