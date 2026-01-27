@@ -1,5 +1,5 @@
 include:
-  - component: $CI_SERVER_FQDN/platon/ci-components/docker/docker@3
+  - component: $CI_SERVER_FQDN/platon/ci-components/docker/docker@2
   - component: $CI_SERVER_FQDN/platon/ci-components/deploy/deploy@1
 
 variables:
