@@ -12,12 +12,7 @@
       "type": "section",
       "text": {
         "type": "mrkdwn",
-        "text": "*Alle tester passerte!*"
-      },
-      "accessory": {
-        "type": "image",
-        "image_url": "https://em-content.zobj.net/source/apple/391/check-mark-button_2705.png",
-        "alt_text": "success"
+        "text": ":white_check_mark: *Alle tester passerte!*"
       }
     },
     {

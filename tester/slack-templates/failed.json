@@ -12,12 +12,7 @@
       "type": "section",
       "text": {
         "type": "mrkdwn",
-        "text": "*En eller flere tester feilet*"
-      },
-      "accessory": {
-        "type": "image",
-        "image_url": "https://em-content.zobj.net/source/apple/391/cross-mark_274c.png",
-        "alt_text": "failed"
+        "text": ":x: *En eller flere tester feilet*"
       }
     },
     {
