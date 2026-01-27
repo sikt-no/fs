@@ -28,6 +28,7 @@ dist/
 .vscode/
 *.swp
 *.swo
+*.session.sql
 
 # OS
 .DS_Store
