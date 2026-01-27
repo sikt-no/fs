@@ -27,7 +27,7 @@ e2e_tests:
   image: mcr.microsoft.com/playwright:v1.57.0-noble
   before_script:
     - cd tester
-    - apt-get update && apt-get install -y default-jre curl unzip
+    - apt-get update && apt-get install -y default-jre curl unzip gettext-base
     - npm ci
     # Fetch history from previous successful pipeline
     - mkdir -p allure-results
@@ -43,14 +43,11 @@ e2e_tests:
   after_script:
     - |
       if grep -q 'failures="[1-9]' tester/test-results/junit.xml 2>/dev/null; then
-        curl -X POST -H 'Content-type: application/json' \
-          --data "{\"text\":\"E2E tests failed ❌ <https://fs-funksjonelltesting.sokrates.edupaas.no/|View Report>\"}" \
-          "$SLACK_WEBHOOK"
+        TEMPLATE="tester/slack-templates/failed.json"
       else
-        curl -X POST -H 'Content-type: application/json' \
-          --data "{\"text\":\"E2E tests passed ✅ <https://fs-funksjonelltesting.sokrates.edupaas.no/|View Report>\"}" \
-          "$SLACK_WEBHOOK"
+        TEMPLATE="tester/slack-templates/passed.json"
       fi
+      envsubst < "$TEMPLATE" | curl -X POST -H 'Content-type: application/json' -d @- "$SLACK_WEBHOOK"
   timeout: 30m
   artifacts:
     paths:

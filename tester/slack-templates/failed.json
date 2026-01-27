@@ -1,0 +1,55 @@
+{
+  "blocks": [
+    {
+      "type": "header",
+      "text": {
+        "type": "plain_text",
+        "text": "E2E-tester feilet",
+        "emoji": true
+      }
+    },
+    {
+      "type": "section",
+      "text": {
+        "type": "mrkdwn",
+        "text": "*En eller flere tester feilet*"
+      },
+      "accessory": {
+        "type": "image",
+        "image_url": "https://em-content.zobj.net/source/apple/391/cross-mark_274c.png",
+        "alt_text": "failed"
+      }
+    },
+    {
+      "type": "divider"
+    },
+    {
+      "type": "section",
+      "fields": [
+        {
+          "type": "mrkdwn",
+          "text": "*Branch:*\n${CI_COMMIT_REF_NAME}"
+        },
+        {
+          "type": "mrkdwn",
+          "text": "*Pipeline:*\n<${CI_PIPELINE_URL}|#${CI_PIPELINE_ID}>"
+        }
+      ]
+    },
+    {
+      "type": "actions",
+      "elements": [
+        {
+          "type": "button",
+          "text": {
+            "type": "plain_text",
+            "text": "Se testrapport",
+            "emoji": true
+          },
+          "url": "https://fs-funksjonelltesting.sokrates.edupaas.no/",
+          "style": "danger"
+        }
+      ]
+    }
+  ]
+}
