@@ -44,7 +44,11 @@ e2e_tests:
     - |
       if grep -q 'failures="[1-9]' tester/test-results/junit.xml 2>/dev/null; then
         curl -X POST -H 'Content-type: application/json' \
-          --data "{\"text\":\"E2E tests failed ❌. <https://fs-funksjonelltesting.sokrates.edupaas.no/|View Report>\"}" \
+          --data "{\"text\":\"E2E tests failed ❌ <https://fs-funksjonelltesting.sokrates.edupaas.no/|View Report>\"}" \
+          "$SLACK_WEBHOOK"
+      else
+        curl -X POST -H 'Content-type: application/json' \
+          --data "{\"text\":\"E2E tests passed ✅ <https://fs-funksjonelltesting.sokrates.edupaas.no/|View Report>\"}" \
           "$SLACK_WEBHOOK"
       fi
   timeout: 30m
