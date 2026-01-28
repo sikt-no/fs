@@ -32,28 +32,24 @@
       "type": "section",
       "text": {
         "type": "mrkdwn",
-        "text": "*Testmiljøer:*"
+        "text": "*Testmiljøer:*\n*FS Admin:* <${FS_ADMIN_URL}|${FS_ADMIN_URL}>\n*Min Kompetanse:* <${MIN_KOMPETANSE_URL}|${MIN_KOMPETANSE_URL}>\n*GraphQL Gateway:* <${GRAPHQL_ENDPOINT}|${GRAPHQL_ENDPOINT}>"
       }
+    },
+    {
+      "type": "divider"
     },
     {
       "type": "section",
       "fields": [
         {
           "type": "mrkdwn",
-          "text": "*FS Admin:*\n<${FS_ADMIN_URL}|${FS_ADMIN_URL}>"
+          "text": "*Pipeline:*\n<${CI_PIPELINE_URL}|#${CI_PIPELINE_ID}>"
         },
         {
           "type": "mrkdwn",
-          "text": "*Min Kompetanse:*\n<${MIN_KOMPETANSE_URL}|${MIN_KOMPETANSE_URL}>"
-        },
-        {
-          "type": "mrkdwn",
-          "text": "*GraphQL Gateway:*\n<${GRAPHQL_ENDPOINT}|${GRAPHQL_ENDPOINT}>"
+          "text": "*Tags:*\n${BDD_TAGS}"
         }
       ]
-    },
-    {
-      "type": "divider"
     },
     {
       "type": "actions",
@@ -62,17 +58,26 @@
           "type": "button",
           "text": {
             "type": "plain_text",
-            "text": "Allure Report",
+            "text": "Playwright Report",
             "emoji": true
           },
-          "url": "${CI_JOB_URL}/artifacts/file/tester/allure-report/index.html",
+          "url": "https://fs-funksjonelltesting.sokrates.edupaas.no/",
           "style": "danger"
         },
         {
           "type": "button",
           "text": {
             "type": "plain_text",
-            "text": "Pipeline Logs",
+            "text": "Allure Report",
+            "emoji": true
+          },
+          "url": "https://fs-funksjonelltesting.sokrates.edupaas.no/allure/"
+        },
+        {
+          "type": "button",
+          "text": {
+            "type": "plain_text",
+            "text": "Pipeline",
             "emoji": true
           },
           "url": "${CI_PIPELINE_URL}"
