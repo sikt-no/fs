@@ -12,7 +12,7 @@
       "type": "section",
       "text": {
         "type": "mrkdwn",
-        "text": ":x: *${TEST_TOTAL} tester • ${TEST_PASSED} bestått • ${TEST_FAILED} feilet • ${TEST_SKIPPED} hoppet over • ${TEST_DURATION}s*"
+        "text": ":x: *${TEST_TOTAL} tester • ${TEST_PASSED} bestått • ${TEST_FAILED} feilet • ${TEST_SKIPPED} hoppet over • ${TEST_DURATION}s • tags: ${BDD_TAGS}*"
       }
     },
     {
@@ -37,19 +37,6 @@
     },
     {
       "type": "divider"
-    },
-    {
-      "type": "section",
-      "fields": [
-        {
-          "type": "mrkdwn",
-          "text": "*Pipeline:*\n<${CI_PIPELINE_URL}|#${CI_PIPELINE_ID}>"
-        },
-        {
-          "type": "mrkdwn",
-          "text": "*Tags:*\n${BDD_TAGS}"
-        }
-      ]
     },
     {
       "type": "actions",
@@ -77,7 +64,7 @@
           "type": "button",
           "text": {
             "type": "plain_text",
-            "text": "Pipeline",
+            "text": "Pipeline (#${CI_PIPELINE_ID})",
             "emoji": true
           },
           "url": "${CI_PIPELINE_URL}"
