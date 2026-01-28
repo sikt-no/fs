@@ -22,7 +22,7 @@
       "type": "section",
       "text": {
         "type": "mrkdwn",
-        "text": "*Første feil:*\n`${FIRST_FAILED_TEST}`\n_${FIRST_FAILURE_MESSAGE}_"
+        "text": "*Første feil:* ${FAILURE_CATEGORY}\n`${FIRST_FAILED_TEST}`\n_${FIRST_FAILURE_MESSAGE}_"
       }
     },
     {

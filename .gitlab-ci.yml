@@ -72,9 +72,25 @@ e2e_tests:
           if [ -z "$FIRST_FAILURE_MESSAGE" ]; then
             export FIRST_FAILURE_MESSAGE="Se testrapportene for detaljer"
           fi
+
+          # Categorize error based on error message pattern (matches Allure categories)
+          if echo "$FIRST_FAILURE_MESSAGE" | grep -qi "ERR_NAME_NOT_RESOLVED\|ENOTFOUND\|getaddrinfo\|DNS"; then
+            export FAILURE_CATEGORY="🌐 DNS/Infrastruktur"
+          elif echo "$FIRST_FAILURE_MESSAGE" | grep -qi "timeout\|timed out"; then
+            export FAILURE_CATEGORY="⏱️ Timeout"
+          elif echo "$FIRST_FAILURE_MESSAGE" | grep -qi "auth\|login\|session\|token"; then
+            export FAILURE_CATEGORY="🔐 Authentication"
+          elif echo "$FIRST_FAILURE_MESSAGE" | grep -qi "locator\|element\|selector\|not found\|no element"; then
+            export FAILURE_CATEGORY="🔍 Element"
+          elif echo "$FIRST_FAILURE_MESSAGE" | grep -qi "5[0-9][0-9]\|network\|fetch\|request failed\|ECONNREFUSED"; then
+            export FAILURE_CATEGORY="🔴 Backend/Network"
+          else
+            export FAILURE_CATEGORY="⚠️ Testfeil"
+          fi
         else
           export FIRST_FAILED_TEST="N/A"
           export FIRST_FAILURE_MESSAGE="N/A"
+          export FAILURE_CATEGORY=""
         fi
       else
         # Fallback values if results.json not found
