@@ -59,8 +59,19 @@ e2e_tests:
 
         # Extract first failed test if any failures exist
         if [ "$TEST_FAILED" -gt 0 ]; then
-          export FIRST_FAILED_TEST=$(jq -r '[.suites[].suites[]?.specs[]? | select(.tests[].results[].status == "unexpected")] | first | .title // "Ukjent test"' "$RESULTS_FILE")
-          export FIRST_FAILURE_MESSAGE=$(jq -r '[.suites[].suites[]?.specs[]?.tests[]?.results[]? | select(.status == "unexpected")] | first | .error.message // "Se Allure-rapport for detaljer"' "$RESULTS_FILE" | head -c 200)
+          # Find spec title for first failed test (recursive search through nested structure)
+          export FIRST_FAILED_TEST=$(jq -r '.. | objects | select(.specs?) | .specs[]? | select(.tests[].results[].status == "unexpected") | .title' "$RESULTS_FILE" | head -1)
+
+          # Find error message from first unexpected result
+          export FIRST_FAILURE_MESSAGE=$(jq -r '.. | objects | select(.status? == "unexpected") | .error.message?' "$RESULTS_FILE" | head -1 | head -c 200)
+
+          # Fallback if queries return empty
+          if [ -z "$FIRST_FAILED_TEST" ]; then
+            export FIRST_FAILED_TEST="Ukjent test"
+          fi
+          if [ -z "$FIRST_FAILURE_MESSAGE" ]; then
+            export FIRST_FAILURE_MESSAGE="Se testrapportene for detaljer"
+          fi
         else
           export FIRST_FAILED_TEST="N/A"
           export FIRST_FAILURE_MESSAGE="N/A"
@@ -72,8 +83,8 @@ e2e_tests:
         export TEST_FAILED=0
         export TEST_SKIPPED=0
         export TEST_DURATION="0.0"
-        export FIRST_FAILED_TEST="N/A"
-        export FIRST_FAILURE_MESSAGE="results.json ikke funnet"
+        export FIRST_FAILED_TEST="Ukjent"
+        export FIRST_FAILURE_MESSAGE="Se testrapportene for detaljer"
       fi
 
       # Select template based on test results
