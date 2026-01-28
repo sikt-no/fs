@@ -60,10 +60,10 @@ e2e_tests:
         # Extract first failed test if any failures exist
         if [ "$TEST_FAILED" -gt 0 ]; then
           # Find spec title for first failed test (recursive search through nested structure)
-          export FIRST_FAILED_TEST=$(jq -r '.. | objects | select(.specs?) | .specs[]? | select(.tests[].results[].status == "unexpected") | .title' "$RESULTS_FILE" | head -1)
+          export FIRST_FAILED_TEST=$(jq -r '.. | objects | select(.specs?) | .specs[]? | select(.tests[].results[].status == "failed") | .title' "$RESULTS_FILE" | head -1)
 
-          # Find error message from first unexpected result
-          export FIRST_FAILURE_MESSAGE=$(jq -r '.. | objects | select(.status? == "unexpected") | .error.message?' "$RESULTS_FILE" | head -1 | head -c 200)
+          # Find error message from first failed result
+          export FIRST_FAILURE_MESSAGE=$(jq -r '.. | objects | select(.status? == "failed") | .error.message? // empty' "$RESULTS_FILE" | head -1 | head -c 300)
 
           # Fallback if queries return empty
           if [ -z "$FIRST_FAILED_TEST" ]; then
