@@ -64,7 +64,7 @@
           "type": "button",
           "text": {
             "type": "plain_text",
-            "text": "Pipeline (#${CI_PIPELINE_ID})",
+            "text": "Pipeline #${CI_PIPELINE_ID}",
             "emoji": true
           },
           "url": "${CI_PIPELINE_URL}"
