@@ -12,7 +12,7 @@
       "type": "section",
       "text": {
         "type": "mrkdwn",
-        "text": ":white_check_mark: *Alle tester passerte!*"
+        "text": ":white_check_mark: *${TEST_TOTAL} tester • ${TEST_PASSED} bestått • ${TEST_SKIPPED} hoppet over • ${TEST_DURATION}s*"
       }
     },
     {
@@ -20,16 +20,30 @@
     },
     {
       "type": "section",
+      "text": {
+        "type": "mrkdwn",
+        "text": "*Testmiljøer:*"
+      }
+    },
+    {
+      "type": "section",
       "fields": [
         {
           "type": "mrkdwn",
-          "text": "*Branch:*\n${CI_COMMIT_REF_NAME}"
+          "text": "*FS Admin:*\n<${FS_ADMIN_URL}|${FS_ADMIN_URL}>"
         },
         {
           "type": "mrkdwn",
-          "text": "*Pipeline:*\n<${CI_PIPELINE_URL}|#${CI_PIPELINE_ID}>"
+          "text": "*Min Kompetanse:*\n<${MIN_KOMPETANSE_URL}|${MIN_KOMPETANSE_URL}>"
+        },
+        {
+          "type": "mrkdwn",
+          "text": "*GraphQL Gateway:*\n<${GRAPHQL_ENDPOINT}|${GRAPHQL_ENDPOINT}>"
         }
       ]
+    },
+    {
+      "type": "divider"
     },
     {
       "type": "actions",
@@ -38,11 +52,20 @@
           "type": "button",
           "text": {
             "type": "plain_text",
-            "text": "Se testrapport",
+            "text": "Allure Report",
             "emoji": true
           },
-          "url": "https://fs-funksjonelltesting.sokrates.edupaas.no/",
+          "url": "${CI_JOB_URL}/artifacts/file/tester/allure-report/index.html",
           "style": "primary"
+        },
+        {
+          "type": "button",
+          "text": {
+            "type": "plain_text",
+            "text": "Pipeline Logs",
+            "emoji": true
+          },
+          "url": "${CI_PIPELINE_URL}"
         }
       ]
     }

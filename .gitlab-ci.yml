@@ -27,7 +27,7 @@ e2e_tests:
   image: mcr.microsoft.com/playwright:v1.57.0-noble
   before_script:
     - cd tester
-    - apt-get update && apt-get install -y default-jre curl unzip gettext-base
+    - apt-get update && apt-get install -y default-jre curl unzip gettext-base jq
     - npm ci
     # Fetch history from previous successful pipeline
     - mkdir -p allure-results
@@ -41,12 +41,49 @@ e2e_tests:
     - npm test || true
     - npx allure generate allure-results -o allure-report --clean
   after_script:
+    - cd tester
     - |
-      if grep -q 'failures="[1-9]' tester/test-results/junit.xml 2>/dev/null; then
-        TEMPLATE="tester/slack-templates/failed.json"
+      # Extract test metrics from Playwright JSON results
+      RESULTS_FILE="test-results/results.json"
+
+      if [ -f "$RESULTS_FILE" ]; then
+        # Parse JSON with jq
+        export TEST_PASSED=$(jq -r '.stats.expected // 0' "$RESULTS_FILE")
+        export TEST_FAILED=$(jq -r '.stats.unexpected // 0' "$RESULTS_FILE")
+        export TEST_SKIPPED=$(jq -r '.stats.skipped // 0' "$RESULTS_FILE")
+        export TEST_TOTAL=$((TEST_PASSED + TEST_FAILED + TEST_SKIPPED))
+
+        # Duration in seconds (convert from milliseconds)
+        TEST_DURATION_MS=$(jq -r '.stats.duration // 0' "$RESULTS_FILE")
+        export TEST_DURATION=$(awk "BEGIN {printf \"%.1f\", $TEST_DURATION_MS / 1000}")
+
+        # Extract first failed test if any failures exist
+        if [ "$TEST_FAILED" -gt 0 ]; then
+          export FIRST_FAILED_TEST=$(jq -r '[.suites[].suites[]?.specs[]? | select(.tests[].results[].status == "unexpected")] | first | .title // "Ukjent test"' "$RESULTS_FILE")
+          export FIRST_FAILURE_MESSAGE=$(jq -r '[.suites[].suites[]?.specs[]?.tests[]?.results[]? | select(.status == "unexpected")] | first | .error.message // "Se Allure-rapport for detaljer"' "$RESULTS_FILE" | head -c 200)
+        else
+          export FIRST_FAILED_TEST="N/A"
+          export FIRST_FAILURE_MESSAGE="N/A"
+        fi
       else
-        TEMPLATE="tester/slack-templates/passed.json"
+        # Fallback values if results.json not found
+        export TEST_TOTAL=0
+        export TEST_PASSED=0
+        export TEST_FAILED=0
+        export TEST_SKIPPED=0
+        export TEST_DURATION="0.0"
+        export FIRST_FAILED_TEST="N/A"
+        export FIRST_FAILURE_MESSAGE="results.json ikke funnet"
       fi
+
+      # Select template based on test results
+      if [ "$TEST_FAILED" -gt 0 ]; then
+        TEMPLATE="slack-templates/failed.json"
+      else
+        TEMPLATE="slack-templates/passed.json"
+      fi
+
+      # Send to Slack
       envsubst < "$TEMPLATE" | curl -X POST -H 'Content-type: application/json' -d @- "$SLACK_WEBHOOK"
   timeout: 30m
   artifacts:
