@@ -29,14 +29,23 @@ e2e_tests:
     - cd tester
     - apt-get update && apt-get install -y default-jre curl unzip gettext-base jq
     - npm ci
-    # Fetch history from previous successful pipeline
+    # Fetch Allure history from previous successful pipeline for trend graphs.
+    # Allure retains max 20 runs of history data for displaying test trends over time.
+    # Validering sikrer at vi kun kopierer gyldig history og logger status for debugging.
     - mkdir -p allure-results
     - |
-      curl --location --output history.zip \
-        "${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/jobs/artifacts/main/download?job=e2e_tests&job_token=${CI_JOB_TOKEN}" \
-        && unzip -o history.zip -d previous \
-        && cp -r previous/tester/allure-report/history allure-results/history \
-        || echo "No previous history found, starting fresh"
+      if curl --location --output history.zip \
+        "${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/jobs/artifacts/main/download?job=e2e_tests&job_token=${CI_JOB_TOKEN}"; then
+        unzip -o history.zip -d previous
+        if [ -d previous/tester/allure-report/history ]; then
+          cp -r previous/tester/allure-report/history allure-results/history
+          echo "✓ History loaded from previous run ($(ls -1 allure-results/history | wc -l) files)"
+        else
+          echo "⚠ No history folder in previous artifacts"
+        fi
+      else
+        echo "ℹ No previous artifacts found, starting fresh"
+      fi
   script:
     - npm test || true
     - npx allure generate allure-results -o allure-report --clean
@@ -119,7 +128,11 @@ e2e_tests:
       - tester/allure-report/
     reports:
       junit: tester/test-results/junit.xml
-    when: always
+    # Lagrer artifacts kun ved suksess for å beskytte Allure history mot korrupsjon.
+    # Med 'npm test || true' vil testfeil ikke feile jobben, så rapporter lagres ved testfeil.
+    # Kun pipeline-crashes (OOM, timeout, allure generate feiler) vil hindre lagring,
+    # og i de tilfellene er artifacts ofte korrupte og kan ødelegge Allure history permanent.
+    when: on_success
     expire_in: 1 week
   rules:
     - if: $CI_PIPELINE_SOURCE == "schedule"
