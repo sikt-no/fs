@@ -7,15 +7,15 @@ variables:
   KUBE_TEST_ID: fs-funksjonelltesting
   HTTP_PORT: '80'
   REPLICAS: '1'
-  # Test environment variables
-  GRAPHQL_ENDPOINT: https://supergraf-gateway-apollo-functionaltest.sokrates.edupaas.no/graphql
-  FS_ADMIN_GRAPHQL: https://studieadm-fs-admin-functionaltest.sokrates.edupaas.no/api/graphql
-  FS_ADMIN_URL: ${FS_ADMIN_URL:-https://studieadm-fs-admin-functionaltest.sokrates.edupaas.no}
-  MIN_KOMPETANSE_URL: https://minkompetanse-functionaltest.sokrates.edupaas.no/nb
+
+  # User-configurable variables (set when triggering pipeline)
+  TEST_ENV: "functionaltest"  # Options: "test" or "functionaltest"
+  BDD_TAGS: "@ci"
+
+  # Credentials (same for both environments)
   FS_ADMIN_USERNAME: kari456staff
   FS_ADMIN_PASSWORD: 098asd
   FS_ADMIN_OVERSTYRT_BRUKER: "11906698511:970 422 528"
-  BDD_TAGS: '@ci'
 
 stages:
   - test
@@ -29,6 +29,27 @@ e2e_tests:
     - cd tester
     - apt-get update && apt-get install -y default-jre curl unzip gettext-base jq
     - npm ci
+    # Set URLs based on TEST_ENV and write to env file for persistence
+    - |
+      if [ "$TEST_ENV" = "test" ]; then
+        cat > /tmp/test-env.sh << 'ENVEOF'
+      export FS_ADMIN_URL="https://test-fsadmin.sikt.no"
+      export FS_ADMIN_GRAPHQL="https://test-fsadmin.sikt.no/api/graphql"
+      export MIN_KOMPETANSE_URL="https://test.minkompetanse.no/nb"
+      export GRAPHQL_ENDPOINT="https://supergraf-gateway-apollo-test.sokrates.edupaas.no/graphql"
+      ENVEOF
+      else
+        cat > /tmp/test-env.sh << 'ENVEOF'
+      export FS_ADMIN_URL="https://studieadm-fs-admin-functionaltest.sokrates.edupaas.no"
+      export FS_ADMIN_GRAPHQL="https://studieadm-fs-admin-functionaltest.sokrates.edupaas.no/api/graphql"
+      export MIN_KOMPETANSE_URL="https://minkompetanse-functionaltest.sokrates.edupaas.no/nb"
+      export GRAPHQL_ENDPOINT="https://supergraf-gateway-apollo-functionaltest.sokrates.edupaas.no/graphql"
+      ENVEOF
+      fi
+      source /tmp/test-env.sh
+      echo "Using TEST_ENV=$TEST_ENV"
+      echo "FS_ADMIN_URL=$FS_ADMIN_URL"
+      echo "MIN_KOMPETANSE_URL=$MIN_KOMPETANSE_URL"
     # Fetch history from previous successful pipeline
     - mkdir -p allure-results
     - |
@@ -38,10 +59,12 @@ e2e_tests:
         && cp -r previous/tester/allure-report/history allure-results/history \
         || echo "No previous history found, starting fresh"
   script:
+    - source /tmp/test-env.sh
     - npm test || true
     - npx allure generate allure-results -o allure-report --clean
   after_script:
     - cd tester
+    - source /tmp/test-env.sh
     - |
       # Extract test metrics from Playwright JSON results
       RESULTS_FILE="test-results/results.json"
