@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 # organize-reports.sh
 # Organizes test reports into timestamped folders for Docker build
 
