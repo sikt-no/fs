@@ -66,7 +66,7 @@ e2e_tests:
   script:
     - source /tmp/test-env.sh
     - npm test || true
-    - npx allure generate allure-results -o allure-report --clean
+    - npx allure awesome allure-results -o allure-report
   after_script:
     - cd tester
     - source /tmp/test-env.sh

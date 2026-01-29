@@ -10,8 +10,9 @@
     "test:integration": "bddgen && playwright test --grep @integration",
     "test:e2e": "bddgen && playwright test --grep @e2e",
     "test:ci": "BDD_TAGS='@ci' bddgen && playwright test",
+    "test:smoke": "BDD_TAGS='@smoke' bddgen && playwright test",
     "codegen": "graphql-codegen --config codegen.ts",
-    "allure:generate": "allure generate allure-results -o allure-report --clean",
+    "allure:generate": "allure awesome allure-results -o allure-report",
     "allure:open": "allure open allure-report",
     "allure:serve": "allure serve allure-results",
     "test:allure": "cp -r allure-report/history allure-results/history 2>/dev/null || true && bddgen && playwright test && npm run allure:generate"
