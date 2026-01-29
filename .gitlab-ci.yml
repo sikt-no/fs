@@ -29,27 +29,32 @@ e2e_tests:
     - cd tester
     - apt-get update && apt-get install -y default-jre curl unzip gettext-base jq
     - npm ci
+    # Generate report timestamp (used for Slack links and report organization)
+    - export REPORT_TIMESTAMP=$(date +%Y-%m-%d_%H-%M-%S)
+    - echo "$REPORT_TIMESTAMP" > report-timestamp.txt
     # Set URLs based on TEST_ENV and write to env file for persistence
     - |
       if [ "$TEST_ENV" = "test" ]; then
-        cat > /tmp/test-env.sh << 'ENVEOF'
+        cat > /tmp/test-env.sh << ENVEOF
       export FS_ADMIN_URL="https://test-fsadmin.sikt.no"
       export FS_ADMIN_GRAPHQL="https://test-fsadmin.sikt.no/api/graphql"
       export MIN_KOMPETANSE_URL="https://test.minkompetanse.no/nb"
       export GRAPHQL_ENDPOINT="https://supergraf-gateway-apollo-test.sokrates.edupaas.no/graphql"
+      export REPORT_TIMESTAMP="$REPORT_TIMESTAMP"
       ENVEOF
       else
-        cat > /tmp/test-env.sh << 'ENVEOF'
+        cat > /tmp/test-env.sh << ENVEOF
       export FS_ADMIN_URL="https://studieadm-fs-admin-functionaltest.sokrates.edupaas.no"
       export FS_ADMIN_GRAPHQL="https://studieadm-fs-admin-functionaltest.sokrates.edupaas.no/api/graphql"
       export MIN_KOMPETANSE_URL="https://minkompetanse-functionaltest.sokrates.edupaas.no/nb"
       export GRAPHQL_ENDPOINT="https://supergraf-gateway-apollo-functionaltest.sokrates.edupaas.no/graphql"
+      export REPORT_TIMESTAMP="$REPORT_TIMESTAMP"
       ENVEOF
       fi
       source /tmp/test-env.sh
       echo "Using TEST_ENV=$TEST_ENV"
       echo "FS_ADMIN_URL=$FS_ADMIN_URL"
-      echo "MIN_KOMPETANSE_URL=$MIN_KOMPETANSE_URL"
+      echo "REPORT_TIMESTAMP=$REPORT_TIMESTAMP"
     # Fetch history from previous successful pipeline
     - mkdir -p allure-results
     - |
@@ -140,6 +145,7 @@ e2e_tests:
     paths:
       - tester/playwright-report/
       - tester/allure-report/
+      - tester/report-timestamp.txt
     reports:
       junit: tester/test-results/junit.xml
     when: always
@@ -155,6 +161,9 @@ build:
   needs:
     - job: e2e_tests
       artifacts: true
+  before_script:
+    - export REPORT_TIMESTAMP=$(cat tester/report-timestamp.txt)
+    - ./scripts/organize-reports.sh reports tester/playwright-report tester/allure-report "$REPORT_TIMESTAMP"
   rules:
     - if: $CI_PIPELINE_SOURCE == "schedule"
     - if: $CI_PIPELINE_SOURCE == "web"
