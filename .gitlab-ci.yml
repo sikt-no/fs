@@ -138,14 +138,15 @@ e2e_tests:
         TEMPLATE="slack-templates/passed.json"
       fi
 
-      # Send to Slack
-      envsubst < "$TEMPLATE" | curl -X POST -H 'Content-type: application/json' -d @- "$SLACK_WEBHOOK"
+      # Save Slack payload to file (will be sent after deploy)
+      envsubst < "$TEMPLATE" > slack-payload.json
   timeout: 30m
   artifacts:
     paths:
       - tester/playwright-report/
       - tester/allure-report/
       - tester/report-timestamp.txt
+      - tester/slack-payload.json
     reports:
       junit: tester/test-results/junit.xml
     when: always
@@ -164,6 +165,7 @@ prepare-reports:
   script:
     - export REPORT_TIMESTAMP=$(cat tester/report-timestamp.txt)
     - ./scripts/organize-reports.sh reports tester/playwright-report tester/allure-report "$REPORT_TIMESTAMP" "$TEST_ENV"
+    - cp tester/slack-payload.json reports/
   artifacts:
     paths:
       - reports/
@@ -189,8 +191,12 @@ production:
   stage: production
   needs:
     - job: build
+    - job: prepare-reports
+      artifacts: true
   script:
     - deploy deployment.yaml
+  after_script:
+    - curl -X POST -H 'Content-type: application/json' -d @reports/slack-payload.json "$SLACK_WEBHOOK"
   when: on_success
   rules:
     - if: $CI_PIPELINE_SOURCE == "schedule"
