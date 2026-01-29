@@ -8,26 +8,32 @@ REPORTS_DIR="${1:-reports}"
 PLAYWRIGHT_SOURCE="${2:-tester/playwright-report}"
 ALLURE_SOURCE="${3:-tester/allure-report}"
 REPORT_TIMESTAMP="${4:-$(date +%Y-%m-%d_%H-%M-%S)}"
+TEST_ENV="${5:-functionaltest}"
+
+FOLDER_NAME="${REPORT_TIMESTAMP}_${TEST_ENV}"
+LATEST_FOLDER="latest_${TEST_ENV}"
 
 echo "Report timestamp: $REPORT_TIMESTAMP"
+echo "Test environment: $TEST_ENV"
+echo "Folder name: $FOLDER_NAME"
 
 # Create reports directory
 mkdir -p "$REPORTS_DIR"
 
-# Copy new reports to timestamped folder
-echo "Creating timestamped report: $REPORT_TIMESTAMP"
-mkdir -p "${REPORTS_DIR}/${REPORT_TIMESTAMP}"
-cp -r "${PLAYWRIGHT_SOURCE}"/* "${REPORTS_DIR}/${REPORT_TIMESTAMP}/"
-mkdir -p "${REPORTS_DIR}/${REPORT_TIMESTAMP}/allure"
-cp -r "${ALLURE_SOURCE}"/* "${REPORTS_DIR}/${REPORT_TIMESTAMP}/allure/"
+# Copy new reports to timestamped folder with playwright/ and allure/ subdirs
+echo "Creating timestamped report: $FOLDER_NAME"
+mkdir -p "${REPORTS_DIR}/${FOLDER_NAME}/playwright"
+cp -r "${PLAYWRIGHT_SOURCE}"/* "${REPORTS_DIR}/${FOLDER_NAME}/playwright/"
+mkdir -p "${REPORTS_DIR}/${FOLDER_NAME}/allure"
+cp -r "${ALLURE_SOURCE}"/* "${REPORTS_DIR}/${FOLDER_NAME}/allure/"
 
-# Copy to latest (overwrite)
-echo "Updating latest report..."
-rm -rf "${REPORTS_DIR}/latest"
-mkdir -p "${REPORTS_DIR}/latest"
-cp -r "${PLAYWRIGHT_SOURCE}"/* "${REPORTS_DIR}/latest/"
-mkdir -p "${REPORTS_DIR}/latest/allure"
-cp -r "${ALLURE_SOURCE}"/* "${REPORTS_DIR}/latest/allure/"
+# Copy to latest_{env} (overwrite)
+echo "Updating ${LATEST_FOLDER}..."
+rm -rf "${REPORTS_DIR}/${LATEST_FOLDER}"
+mkdir -p "${REPORTS_DIR}/${LATEST_FOLDER}/playwright"
+cp -r "${PLAYWRIGHT_SOURCE}"/* "${REPORTS_DIR}/${LATEST_FOLDER}/playwright/"
+mkdir -p "${REPORTS_DIR}/${LATEST_FOLDER}/allure"
+cp -r "${ALLURE_SOURCE}"/* "${REPORTS_DIR}/${LATEST_FOLDER}/allure/"
 
 # Generate reports index
 ls -1 "$REPORTS_DIR" | sort -r > "${REPORTS_DIR}/reports-index.json.tmp"

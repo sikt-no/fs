@@ -32,9 +32,11 @@ CUTOFF=$(date -d "@$CUTOFF_SECONDS" +%Y-%m-%d_%H-%M-%S)
 for dir in "${REPORTS_DIR}"/*/; do
   [ -d "$dir" ] || continue
   dirname=$(basename "$dir")
-  # Skip 'latest' and any non-timestamp directories
-  if [ "$dirname" != "latest" ] && echo "$dirname" | grep -qE '^[0-9]{4}-[0-9]{2}-[0-9]{2}_'; then
-    if [ "$dirname" \< "$CUTOFF" ]; then
+  # Skip 'latest_*' folders and match timestamp_env pattern (e.g., 2026-01-29_14-30-00_functionaltest)
+  if ! echo "$dirname" | grep -qE '^latest_' && echo "$dirname" | grep -qE '^[0-9]{4}-[0-9]{2}-[0-9]{2}_[0-9]{2}-[0-9]{2}-[0-9]{2}_'; then
+    # Extract timestamp part for comparison (first 19 chars: YYYY-MM-DD_HH-MM-SS)
+    timestamp_part=$(echo "$dirname" | cut -c1-19)
+    if [ "$timestamp_part" \< "$CUTOFF" ]; then
       echo "  Removing old report: $dirname"
       rm -rf "$dir"
     fi
@@ -43,7 +45,7 @@ done
 
 # Update reports index
 echo "Updating reports index..."
-ls -1 "$REPORTS_DIR" 2>/dev/null | grep -E '^[0-9]{4}-[0-9]{2}-[0-9]{2}_|^latest$' | sort -r > /tmp/dirs.txt
+ls -1 "$REPORTS_DIR" 2>/dev/null | grep -E '^[0-9]{4}-[0-9]{2}-[0-9]{2}_|^latest_' | sort -r > /tmp/dirs.txt
 if [ -s /tmp/dirs.txt ]; then
   # Create JSON array from directory list
   echo "[" > "${REPORTS_DIR}/reports-index.json"

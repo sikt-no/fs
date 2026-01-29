@@ -163,7 +163,7 @@ prepare-reports:
       artifacts: true
   script:
     - export REPORT_TIMESTAMP=$(cat tester/report-timestamp.txt)
-    - ./scripts/organize-reports.sh reports tester/playwright-report tester/allure-report "$REPORT_TIMESTAMP"
+    - ./scripts/organize-reports.sh reports tester/playwright-report tester/allure-report "$REPORT_TIMESTAMP" "$TEST_ENV"
   artifacts:
     paths:
       - reports/
