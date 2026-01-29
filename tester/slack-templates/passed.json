@@ -38,7 +38,7 @@
             "text": "Playwright Report",
             "emoji": true
           },
-          "url": "https://fs-funksjonelltesting.sokrates.edupaas.no/",
+          "url": "https://fs-funksjonelltesting.sokrates.edupaas.no/${REPORT_TIMESTAMP}/",
           "style": "primary"
         },
         {
@@ -48,7 +48,7 @@
             "text": "Allure Report",
             "emoji": true
           },
-          "url": "https://fs-funksjonelltesting.sokrates.edupaas.no/allure/"
+          "url": "https://fs-funksjonelltesting.sokrates.edupaas.no/${REPORT_TIMESTAMP}/allure/"
         },
         {
           "type": "button",

@@ -1,3 +1,15 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: $CI_ENVIRONMENT_SLUG-reports
+  namespace: $KUBE_NAMESPACE
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -28,6 +40,9 @@ spec:
         ports:
         - name: web
           containerPort: $HTTP_PORT
+        volumeMounts:
+        - name: reports-storage
+          mountPath: /usr/share/nginx/html
         livenessProbe:
           httpGet:
             path: /
@@ -45,3 +60,7 @@ spec:
             memory: 50Mi
           limits:
             memory: 75Mi
+      volumes:
+      - name: reports-storage
+        persistentVolumeClaim:
+          claimName: $CI_ENVIRONMENT_SLUG-reports

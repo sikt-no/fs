@@ -1,12 +1,16 @@
 FROM nginx:alpine
 
-# Add the Playwright HTML report at root
-COPY tester/playwright-report/ /usr/share/nginx/html/
+# Install bash for entrypoint script
+RUN apk add --no-cache bash
 
-# Add the Allure report at /allure
-COPY tester/allure-report/ /usr/share/nginx/html/allure/
+# Copy reports to staging directory (will be deployed to persistent volume on startup)
+COPY reports/ /reports-staging/
 
-# nginx config for serving both reports with no-cache headers
+# Copy entrypoint script
+COPY scripts/entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+
+# nginx config for serving reports with no-cache headers and directory listing
 RUN echo 'server { \
     listen 80; \
     root /usr/share/nginx/html; \
@@ -16,7 +20,6 @@ RUN echo 'server { \
     location / { \
         autoindex on; \
     } \
-    location /allure/ { \
-        autoindex on; \
-    } \
 }' > /etc/nginx/conf.d/default.conf
+
+ENTRYPOINT ["/entrypoint.sh"]
