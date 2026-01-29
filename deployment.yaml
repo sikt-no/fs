@@ -22,6 +22,11 @@ metadata:
     app: $CI_ENVIRONMENT_SLUG
 spec:
   replicas: $REPLICAS
+  strategy:
+    type: Recreate
+    # Recreate strategy required for ReadWriteOnce PersistentVolumes (EBS)
+    # Ensures old pod terminates completely before new pod starts
+    # Prevents "Multi-Attach error" during deployments
   selector:
     matchLabels:
       name: $CI_ENVIRONMENT_SLUG
