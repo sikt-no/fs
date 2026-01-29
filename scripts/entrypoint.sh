@@ -46,8 +46,8 @@ done
 
 # Update reports index
 echo "Updating reports index..."
-# Use find instead of ls | grep for better handling of filenames
-find "$REPORTS_DIR" -maxdepth 1 -type d \( -name '[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]_*' -o -name 'latest_*' \) -printf '%f\n' | sort -r > /tmp/dirs.txt
+# Use find with sed (BusyBox-compatible, without -printf)
+find "$REPORTS_DIR" -maxdepth 1 -type d \( -name '[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]_*' -o -name 'latest_*' \) | sed 's|.*/||' | sort -r > /tmp/dirs.txt
 if [ -s /tmp/dirs.txt ]; then
   # Create JSON array from directory list
   echo "[" > "${REPORTS_DIR}/reports-index.json"

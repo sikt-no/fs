@@ -35,8 +35,8 @@ cp -r "${PLAYWRIGHT_SOURCE}"/* "${REPORTS_DIR}/${LATEST_FOLDER}/playwright/"
 mkdir -p "${REPORTS_DIR}/${LATEST_FOLDER}/allure"
 cp -r "${ALLURE_SOURCE}"/* "${REPORTS_DIR}/${LATEST_FOLDER}/allure/"
 
-# Generate reports index
-find "$REPORTS_DIR" -maxdepth 1 -mindepth 1 -type d -printf '%f\n' | sort -r > "${REPORTS_DIR}/reports-index.json.tmp"
+# Generate reports index (BusyBox-compatible find without -printf)
+find "$REPORTS_DIR" -maxdepth 1 -mindepth 1 -type d | sed 's|.*/||' | sort -r > "${REPORTS_DIR}/reports-index.json.tmp"
 echo "[" > "${REPORTS_DIR}/reports-index.json"
 first=true
 while read -r dir; do
