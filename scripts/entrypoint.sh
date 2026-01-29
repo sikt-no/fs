@@ -26,7 +26,9 @@ fi
 
 # Clean up reports older than retention period
 echo "Cleaning reports older than $RETENTION_DAYS days..."
-CUTOFF=$(date -d "${RETENTION_DAYS} days ago" +%Y-%m-%d_%H-%M-%S 2>/dev/null || date -v-${RETENTION_DAYS}d +%Y-%m-%d_%H-%M-%S)
+# Calculate cutoff using seconds (works with BusyBox)
+CUTOFF_SECONDS=$(($(date +%s) - RETENTION_DAYS * 86400))
+CUTOFF=$(date -d "@$CUTOFF_SECONDS" +%Y-%m-%d_%H-%M-%S)
 for dir in "${REPORTS_DIR}"/*/; do
   [ -d "$dir" ] || continue
   dirname=$(basename "$dir")
