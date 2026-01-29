@@ -10,7 +10,7 @@ variables:
 
   # User-configurable variables (set when triggering pipeline)
   TEST_ENV: "functionaltest"  # Options: "test" or "functionaltest"
-  BDD_TAGS: "@ci"
+  BDD_TAGS: "@smoke"
 
   # Credentials (same for both environments)
   FS_ADMIN_USERNAME: kari456staff
