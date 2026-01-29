@@ -16,7 +16,7 @@ if [ -d "$STAGING_DIR" ]; then
     [ -d "$dir" ] || continue
     dirname=$(basename "$dir")
     echo "Deploying report: $dirname"
-    rm -rf "${REPORTS_DIR}/${dirname}"
+    rm -rf "${REPORTS_DIR:?}/${dirname:?}"
     cp -r "$dir" "${REPORTS_DIR}/${dirname}"
   done
 
@@ -36,7 +36,8 @@ for dir in "${REPORTS_DIR}"/*/; do
   if ! echo "$dirname" | grep -qE '^latest_' && echo "$dirname" | grep -qE '^[0-9]{4}-[0-9]{2}-[0-9]{2}_[0-9]{2}-[0-9]{2}-[0-9]{2}_'; then
     # Extract timestamp part for comparison (first 19 chars: YYYY-MM-DD_HH-MM-SS)
     timestamp_part=$(echo "$dirname" | cut -c1-19)
-    if [ "$timestamp_part" \< "$CUTOFF" ]; then
+    # Use case statement for POSIX-compatible string comparison
+    if [ "$(printf '%s\n%s' "$timestamp_part" "$CUTOFF" | sort | head -1)" = "$timestamp_part" ] && [ "$timestamp_part" != "$CUTOFF" ]; then
       echo "  Removing old report: $dirname"
       rm -rf "$dir"
     fi
@@ -45,7 +46,8 @@ done
 
 # Update reports index
 echo "Updating reports index..."
-ls -1 "$REPORTS_DIR" 2>/dev/null | grep -E '^[0-9]{4}-[0-9]{2}-[0-9]{2}_|^latest_' | sort -r > /tmp/dirs.txt
+# Use find instead of ls | grep for better handling of filenames
+find "$REPORTS_DIR" -maxdepth 1 -type d \( -name '[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]_*' -o -name 'latest_*' \) -printf '%f\n' | sort -r > /tmp/dirs.txt
 if [ -s /tmp/dirs.txt ]; then
   # Create JSON array from directory list
   echo "[" > "${REPORTS_DIR}/reports-index.json"

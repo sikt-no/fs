@@ -15,7 +15,8 @@
     "allure:generate": "allure awesome allure-results -o allure-report",
     "allure:open": "allure open allure-report",
     "allure:serve": "allure serve allure-results",
-    "test:allure": "cp -r allure-report/history allure-results/history 2>/dev/null || true && bddgen && playwright test && npm run allure:generate"
+    "test:allure": "cp -r allure-report/history allure-results/history 2>/dev/null || true && bddgen && playwright test && npm run allure:generate",
+    "lint:scripts": "shellcheck ../scripts/*.sh"
   },
   "keywords": [],
   "author": "",
@@ -33,6 +34,7 @@
     "dotenv": "^17.2.3",
     "graphql": "^16.12.0",
     "playwright-bdd": "^8.4.2",
+    "shellcheck": "^3.1.0",
     "typescript": "^5.9.3"
   }
 }
