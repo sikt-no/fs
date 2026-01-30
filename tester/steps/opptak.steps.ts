@@ -50,10 +50,15 @@ When('jeg tilknytter utdanningstilbud til opptaket', async ({ userContext }) => 
   await userContext.currentPage.waitForLoadState('networkidle')
   await userContext.currentPage.getByRole('tab', { name: 'Legg til nytt studiealternativ' }).click()
   await userContext.currentPage.waitForLoadState('networkidle')
-  await userContext.currentPage.getByRole('button', { name: 'Vis forslag' }).click()
-  await userContext.currentPage.waitForTimeout(1000)
-  await userContext.currentPage.getByRole('option', { name: /Mastergrad i jordmorfag/ }).first().getByRole('button', { name: 'Legg til' }).click()
-  await userContext.currentPage.waitForTimeout(1000)
+  // Klikk på input-feltet for å fokusere, deretter på "Vis forslag" knappen
+  // Klikk direkte på "Vis forslag" knappen
+  const visForslagButton = userContext.currentPage.locator('button[aria-label="Vis forslag"]')
+  await visForslagButton.waitFor({ state: 'visible' })
+  await visForslagButton.click()
+  // Vent på at option vises i listen
+  const option = userContext.currentPage.getByRole('option', { name: /Mastergrad i jordmorfag/ }).first()
+  await option.waitFor({ state: 'visible' })
+  await option.getByRole('button', { name: 'Legg til' }).click()
   // Lukk combobox ved å trykke Escape
   await userContext.currentPage.keyboard.press('Escape')
   await userContext.currentPage.waitForLoadState('networkidle')
@@ -114,6 +119,11 @@ When('jeg legger til alle studier i kurven', async ({ userContext }) => {
 })
 
 When('jeg går til studiekurven', async ({ userContext }) => {
+  // Lukk informasjonskapsler-dialog hvis den vises
+  const cookieButton = userContext.currentPage.getByRole('button', { name: 'Avvis informasjonskapsler' })
+  if (await cookieButton.isVisible({ timeout: 2000 }).catch(() => false)) {
+    await cookieButton.click()
+  }
   await userContext.currentPage.getByRole('link', { name: 'studier i kurv Til studiekurv' }).click()
 })
 
