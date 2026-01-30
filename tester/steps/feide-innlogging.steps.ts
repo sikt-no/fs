@@ -2,11 +2,9 @@ import { createBdd } from 'playwright-bdd'
 import { expect } from '@playwright/test'
 import { FsAdminLoginPage } from '../pages/fs-admin/FsAdminLoginPage'
 import { MinKompetanseLoginPage } from '../pages/min-kompetanse/MinKompetanseLoginPage'
-import { test } from '../fixtures/logged-in-states'
 import 'dotenv/config'
 
 const { Given, When, Then } = createBdd()
-const { Given: GivenWithAuth } = createBdd(test)
 
 const ADMIN_AUTH_FILE = 'playwright/.auth/fs-admin.json'
 const PERSON_AUTH_FILE = 'playwright/.auth/person.json'
@@ -80,18 +78,4 @@ Then('skal personen se {string}', async ({ page }, expectedText: string) => {
 
 Then('innloggingstilstanden skal lagres for personflaten', async ({ page }) => {
   await page.context().storageState({ path: PERSON_AUTH_FILE })
-})
-
-// ============ Rolle steps (pre-authenticated) ============
-
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-GivenWithAuth('at jeg er logget inn som administrator', async ({ adminPage }) => {
-  // Requesting adminPage triggers the fixture which loads auth cookies and navigates.
-  // This step exists for Gherkin readability - the fixture does the actual work.
-})
-
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-GivenWithAuth('at jeg er logget inn som person', async ({ personPage }) => {
-  // Requesting personPage triggers the fixture which loads auth cookies and navigates.
-  // This step exists for Gherkin readability - the fixture does the actual work.
 })

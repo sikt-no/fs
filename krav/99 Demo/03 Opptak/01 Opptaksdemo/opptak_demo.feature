@@ -16,13 +16,11 @@ Egenskap: Opprette et opptak
       Når jeg oppretter et nytt lokalt opptak
       Og jeg setter navn til "Høstopptak 2025"
       Og jeg setter type til "Lokalt opptak"
-      Og jeg setter søknadsfrist til "15.04.2025"
-      Og jeg setter oppstartsdato til "15.08.2025"
-      Og jeg publiserer opptaket
-      Så skal opptaket "Høstopptak 2025" være publisert
-
-    @e2e @in-progress @should
-    Scenario: Tilknytte utdanningstilbud til et opptak
-      Gitt at opptaket "Våropptak 2025" er publisert
-      Når jeg tilknytter utdanningstilbudet "Bachelorprogram i informatikk" til opptaket
-      Så skal "Bachelorprogram i informatikk" være søkbart for søkere
+      Og jeg lagrer opptaket
+      Og jeg tilknytter utdanningstilbud til opptaket
+      Og jeg konfigurerer studiealternativet
+      Så hvis jeg logger inn som person
+      Og jeg søker etter "Jordmor" på finn studier
+      Og jeg legger til alle studier i kurven
+      Og jeg går til studiekurven
+      Så skal opptaket "Høstopptak 2025" være synlig
