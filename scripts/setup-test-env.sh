@@ -44,4 +44,5 @@ source /tmp/test-env.sh
 # Print configuration for debugging
 echo "Using TEST_ENV=$TEST_ENV"
 echo "FS_ADMIN_URL=$FS_ADMIN_URL"
+echo "MIN_KOMPETANSE_URL=$MIN_KOMPETANSE_URL"
 echo "REPORT_TIMESTAMP=$REPORT_TIMESTAMP"
