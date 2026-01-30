@@ -34,8 +34,9 @@ export GRAPHQL_ENDPOINT="https://supergraf-gateway-apollo-functionaltest.sokrate
 ENVEOF
 fi
 
-# Add REPORT_TIMESTAMP to env file
+# Add REPORT_TIMESTAMP and BDD_TAGS to env file
 echo "export REPORT_TIMESTAMP=\"$REPORT_TIMESTAMP\"" >> /tmp/test-env.sh
+echo "export BDD_TAGS=\"${BDD_TAGS:-@demo}\"" >> /tmp/test-env.sh
 
 # Source the env file to make variables available in current shell
 # shellcheck disable=SC1091  # File is generated dynamically by this script
@@ -46,3 +47,4 @@ echo "Using TEST_ENV=$TEST_ENV"
 echo "FS_ADMIN_URL=$FS_ADMIN_URL"
 echo "MIN_KOMPETANSE_URL=$MIN_KOMPETANSE_URL"
 echo "REPORT_TIMESTAMP=$REPORT_TIMESTAMP"
+echo "BDD_TAGS=$BDD_TAGS"
