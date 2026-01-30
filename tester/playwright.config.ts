@@ -8,7 +8,7 @@ const testDir = defineBddConfig({
   steps: ['./steps/**/*.ts', './fixtures/**/*.ts'],
   language: 'no',
   missingSteps: 'skip-scenario',
-  tags: process.env.BDD_TAGS || '@demo',
+  tags: process.env.BDD_TAGS || '@smoke',
 })
 
 export default defineConfig({
