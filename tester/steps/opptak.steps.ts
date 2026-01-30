@@ -12,7 +12,7 @@ Given('at jeg er på opptakssiden', async ({ userContext }) => {
 
 Given('at opptaket {string} er publisert', async ({ userContext }, opptakNavn: string) => {
   // TODO: Implementer sjekk eller opprett opptak
-  await userContext.currentPage.goto('/opptak')
+  await userContext.currentPage.goto(`${process.env.FS_ADMIN_URL}/opptak`)
 })
 
 When('jeg oppretter et nytt lokalt opptak', async ({ userContext }) => {
@@ -20,7 +20,7 @@ When('jeg oppretter et nytt lokalt opptak', async ({ userContext }) => {
 })
 
 When('jeg setter navn til {string}', async ({ userContext }, navn: string) => {
-  sisteOpptakNavn = `${navn} - ${Date.now()}`
+  sisteOpptakNavn = `Test ${Date.now()}`
   await userContext.currentPage.getByRole('textbox', { name: 'Navn på opptaket (bokmål)' }).click()
   await userContext.currentPage.getByRole('textbox', { name: 'Navn på opptaket (bokmål)' }).fill(sisteOpptakNavn)
 })
@@ -28,6 +28,8 @@ When('jeg setter navn til {string}', async ({ userContext }, navn: string) => {
 When('jeg setter type til {string}', async ({ userContext }, type: string) => {
   // TODO: Map type-navn til value - nå hardkodet til "LOS"
   await userContext.currentPage.getByLabel('Hvilken type lokalt opptak?').selectOption('YTo1OiJMT0si')
+  // Vent på at frister og andre data lastes inn
+  await userContext.currentPage.waitForLoadState('networkidle')
 })
 
 When('jeg setter søknadsfrist til {string}', async ({ userContext }, frist: string) => {
@@ -40,22 +42,40 @@ When('jeg setter oppstartsdato til {string}', async ({ userContext }, dato: stri
 
 When('jeg lagrer opptaket', async ({ userContext }) => {
   await userContext.currentPage.getByRole('button', { name: 'Lagre' }).click()
+  await userContext.currentPage.waitForTimeout(2000)
 })
 
 When('jeg tilknytter utdanningstilbud til opptaket', async ({ userContext }) => {
   await userContext.currentPage.getByRole('button', { name: 'Tilknytt utdanningstilbud' }).click()
+  await userContext.currentPage.waitForLoadState('networkidle')
   await userContext.currentPage.getByRole('tab', { name: 'Legg til nytt studiealternativ' }).click()
+  await userContext.currentPage.waitForLoadState('networkidle')
   await userContext.currentPage.getByRole('button', { name: 'Vis forslag' }).click()
-  await userContext.currentPage.getByRole('option', { name: 'Mastergrad i jordmorfag UIT,' }).first().getByRole('button').click()
+  await userContext.currentPage.waitForTimeout(1000)
+  await userContext.currentPage.getByRole('option', { name: /Mastergrad i jordmorfag/ }).first().getByRole('button', { name: 'Legg til' }).click()
+  await userContext.currentPage.waitForTimeout(1000)
+  // Lukk combobox ved å trykke Escape
+  await userContext.currentPage.keyboard.press('Escape')
   await userContext.currentPage.waitForLoadState('networkidle')
 })
 
 When('jeg konfigurerer studiealternativet', async ({ userContext }) => {
-  await userContext.currentPage.getByRole('button', { name: 'Vis', exact: true }).click()
+  await userContext.currentPage.waitForLoadState('networkidle')
+  const visButton = userContext.currentPage.getByRole('button', { name: 'Vis', exact: true })
+  await visButton.waitFor({ state: 'visible' })
+  await visButton.scrollIntoViewIfNeeded()
+  await visButton.click()
   await userContext.currentPage.getByLabel('Kompetanseregelverk (Kravkode').selectOption('YToxMTk6IktNMzEwMiI=')
   await userContext.currentPage.getByLabel('RangeringsregelverkIkke valgt').selectOption('YToxNToiUk0zMTAyIg==')
-  await userContext.currentPage.getByRole('combobox', { name: 'Kvoter' }).click()
+  await userContext.currentPage.waitForLoadState('networkidle')
+  const kvoterText = userContext.currentPage.getByText('KvoterTabell over')
+  await kvoterText.scrollIntoViewIfNeeded()
+  await expect(kvoterText).toBeVisible()
+  await userContext.currentPage.getByRole('button', { name: 'Vis forslag' }).click()
+  await userContext.currentPage.waitForTimeout(1000)
   await userContext.currentPage.getByRole('option', { name: 'Ordinær kvote' }).click()
+  await userContext.currentPage.keyboard.press('Escape')
+  await userContext.currentPage.waitForLoadState('networkidle')
   await userContext.currentPage.getByRole('button', { name: 'Lagre' }).click()
 })
 
@@ -69,7 +89,7 @@ When('jeg tilknytter utdanningstilbudet {string} til opptaket', async ({ userCon
 })
 
 Then('skal opptaket {string} være publisert', async ({ userContext }, _opptakNavn: string) => {
-  await userContext.currentPage.goto('/opptak')
+  await userContext.currentPage.goto(`${process.env.FS_ADMIN_URL}/opptak`)
   await expect(userContext.currentPage.getByRole('cell', { name: sisteOpptakNavn })).toBeVisible()
 })
 
@@ -78,9 +98,9 @@ Then('skal {string} være søkbart for søkere', async ({ userContext }, utdanni
 })
 
 When('jeg søker etter {string} på finn studier', async ({ userContext }, søkeord: string) => {
-  await userContext.currentPage.goto(`/nb/utforsk-studier?resultsPerPage=75&q=${encodeURIComponent(søkeord)}`)
+  await userContext.currentPage.goto(`${process.env.MIN_KOMPETANSE_URL}/utforsk-studier?resultsPerPage=75&sort=studiesDesc&q=${encodeURIComponent(søkeord)}`)
   await userContext.currentPage.waitForLoadState('networkidle')
-  await userContext.currentPage.waitForSelector('button:has-text("Legg til")', { timeout: 10000 })
+  await userContext.currentPage.getByRole('button', { name: 'Legg til' }).first().waitFor({ state: 'visible', timeout: 10000 })
 })
 
 When('jeg legger til alle studier i kurven', async ({ userContext }) => {

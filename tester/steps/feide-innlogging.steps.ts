@@ -59,7 +59,7 @@ When('personen logger inn med Feide testbruker', async ({ page }) => {
 
   // Accept consent if present
   try {
-    await loginPage.acceptConsentButton.click({ timeout: 2000 })
+    await loginPage.acceptConsentButton.click({ timeout: 1000 })
   } catch {
     // Consent screen not shown, continue
   }
