@@ -78,7 +78,11 @@ export const test = base.extend<{
 
     // Cleanup - lukk alle kontekster
     for (const context of contexts.values()) {
-      await context.close()
+      try {
+        await context.close()
+      } catch {
+        // Konteksten kan allerede være lukket
+      }
     }
   },
 })
