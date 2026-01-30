@@ -1,5 +1,5 @@
 # language: no
-@DEM-API-GRA-001 @demo @integration @implemented @must
+@DEM-API-GRA-001 @integration @implemented @must
 Egenskap: GraphQL API integrasjon
   Som utvikler ønsker jeg å verifisere at GraphQL APIet fungerer korrekt.
 

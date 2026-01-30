@@ -33,3 +33,42 @@ Given('at jeg er logget inn som {word}', async ({ userContext }, role: string) =
 Then('hvis jeg logger inn som {word}', async ({ userContext }, role: string) => {
   await userContext.switchTo(validateRole(role))
 })
+
+/**
+ * Bytter til en annen rolle midt i et scenario.
+ */
+When('jeg bytter til {word}', async ({ userContext }, role: string) => {
+  await userContext.switchTo(validateRole(role))
+})
+
+/**
+ * Verifiserer at tekst er synlig i menyen (administrator).
+ */
+Then('skal jeg se {string} i menyen', async ({ userContext }, tekst: string) => {
+  const { expect } = await import('@playwright/test')
+  await expect(userContext.currentPage.getByRole('navigation').getByText(tekst)).toBeVisible()
+})
+
+/**
+ * Verifiserer at tekst er synlig på siden.
+ */
+Then('skal jeg se {string} på siden', async ({ userContext }, tekst: string) => {
+  const { expect } = await import('@playwright/test')
+  await expect(userContext.currentPage.getByText(tekst)).toBeVisible()
+})
+
+/**
+ * Verifiserer at vi er på adminflaten basert på URL.
+ */
+Then('skal jeg være på adminflaten', async ({ userContext }) => {
+  const { expect } = await import('@playwright/test')
+  await expect(userContext.currentPage).toHaveURL(/fs-admin/)
+})
+
+/**
+ * Verifiserer at vi er på personflaten basert på URL.
+ */
+Then('skal jeg være på personflaten', async ({ userContext }) => {
+  const { expect } = await import('@playwright/test')
+  await expect(userContext.currentPage).toHaveURL(/minkompetanse/)
+})
