@@ -50,15 +50,15 @@ When('jeg tilknytter utdanningstilbud til opptaket', async ({ userContext }) => 
   await userContext.currentPage.waitForLoadState('networkidle')
   await userContext.currentPage.getByRole('tab', { name: 'Legg til nytt studiealternativ' }).click()
   await userContext.currentPage.waitForLoadState('networkidle')
-  // Klikk på input-feltet for å fokusere, deretter på "Vis forslag" knappen
-  // Klikk direkte på "Vis forslag" knappen
-  const visForslagButton = userContext.currentPage.locator('button[aria-label="Vis forslag"]')
-  await visForslagButton.waitFor({ state: 'visible' })
-  await visForslagButton.click()
+
+  // Klikk på "Vis forslag" knappen
+  await userContext.currentPage.getByRole('button', { name: 'Vis forslag' }).click()
+
   // Vent på at option vises i listen
   const option = userContext.currentPage.getByRole('option', { name: /Mastergrad i jordmorfag/ }).first()
   await option.waitFor({ state: 'visible' })
   await option.getByRole('button', { name: 'Legg til' }).click()
+
   // Lukk combobox ved å trykke Escape
   await userContext.currentPage.keyboard.press('Escape')
   await userContext.currentPage.waitForLoadState('networkidle')
