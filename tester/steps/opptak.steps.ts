@@ -26,7 +26,7 @@ When('jeg oppretter et nytt lokalt opptak', async ({ userContext }) => {
 })
 
 When('jeg setter navn til {string}', async ({ userContext }, navn: string) => {
-  sisteOpptakNavn = `Test ${Date.now()}`
+  sisteOpptakNavn = `${navn} - ${Date.now()}`
   await userContext.currentPage.getByRole('textbox', { name: 'Navn på opptaket (bokmål)' }).click()
   await userContext.currentPage.getByRole('textbox', { name: 'Navn på opptaket (bokmål)' }).fill(sisteOpptakNavn)
 })
@@ -128,7 +128,6 @@ When('jeg går til studiekurven', async ({ userContext }) => {
   await userContext.currentPage.getByRole('link', { name: 'studier i kurv Til studiekurv' }).click()
 })
 
-Then('skal opptaket {string} være synlig', async ({ userContext }, _opptakNavn: string) => {
-  // Bruker sisteOpptakNavn som ble satt da opptaket ble opprettet
+Then('skal opptaket være synlig', async ({ userContext }) => {
   await expect(userContext.currentPage.getByText(sisteOpptakNavn)).toBeVisible()
 })

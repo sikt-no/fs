@@ -23,4 +23,4 @@ Egenskap: Opprette et opptak
       Og jeg søker etter "Jordmor" på finn studier
       Og jeg legger til alle studier i kurven
       Og jeg går til studiekurven
-      Så skal opptaket "Høstopptak 2025" være synlig
+      Så skal opptaket være synlig
