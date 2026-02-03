@@ -1,6 +1,6 @@
 import { createBdd } from 'playwright-bdd'
 import { test, expect } from '../fixtures/user-context'
-import { openComboboxAndWaitForOptions, selectFromCombobox } from '../helpers/combobox'
+import { openCombobox } from '../helpers/combobox'
 
 const { Given, When, Then } = createBdd(test)
 
@@ -58,7 +58,7 @@ When('jeg tilknytter utdanningstilbud til opptaket', async ({ userContext }) => 
   await userContext.currentPage.waitForLoadState('networkidle')
   await userContext.currentPage.getByRole('tab', { name: 'Legg til nytt studiealternativ' }).click()
   await userContext.currentPage.waitForLoadState('networkidle')
-  await openComboboxAndWaitForOptions(userContext.currentPage)
+  await openCombobox(userContext.currentPage)
   const option = userContext.currentPage.getByRole('option', { name: /Mastergrad i jordmorfag/ }).first()
   await option.waitFor({ state: 'visible' })
   await option.getByRole('button', { name: 'Legg til' }).click()
@@ -79,7 +79,7 @@ When('jeg konfigurerer studiealternativet', async ({ userContext }) => {
   const kvoterText = userContext.currentPage.getByText('KvoterTabell over')
   await kvoterText.scrollIntoViewIfNeeded()
   await expect(kvoterText).toBeVisible()
-  await selectFromCombobox(userContext.currentPage, 'Ordinær kvote')
+  await openCombobox(userContext.currentPage, { select: 'Ordinær kvote' })
   await userContext.currentPage.keyboard.press('Escape')
   await userContext.currentPage.waitForLoadState('networkidle')
   await userContext.currentPage.getByRole('button', { name: 'Lagre' }).click()

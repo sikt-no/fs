@@ -1,6 +1,10 @@
 import { Page } from '@playwright/test'
 
-interface OpenComboboxOptions {
+interface ComboboxOptions {
+  /** Option som skal velges (valgfritt - hvis utelatt, åpnes bare combobox) */
+  select?: string | RegExp
+  /** Knappnavn for å åpne combobox (default: "Vis forslag") */
+  buttonName?: string
   /** Label på combobox-feltet for å scope søket (valgfritt) */
   comboboxLabel?: string
   /** Timeout i millisekunder (default: 10000) */
@@ -8,15 +12,24 @@ interface OpenComboboxOptions {
 }
 
 /**
- * Åpner en SDS combobox ved å klikke "Vis forslag" og venter på at options lastes.
- * Venter først på at GraphQL-data er lastet (networkidle), deretter klikker og venter på options.
+ * Åpner en SDS combobox og venter på at options lastes.
+ * Kan også velge en spesifikk option hvis `select` er satt.
+ *
+ * @example
+ * // Bare åpne combobox og vente på options
+ * await openCombobox(page)
+ *
+ * // Åpne og velge en option
+ * await openCombobox(page, { select: 'Ordinær kvote' })
+ *
+ * // Med regex-match
+ * await openCombobox(page, { select: /Mastergrad/ })
  */
-export async function openComboboxAndWaitForOptions(
+export async function openCombobox(
   page: Page,
-  buttonName: string = 'Vis forslag',
-  options: OpenComboboxOptions = {}
+  options: ComboboxOptions = {}
 ): Promise<void> {
-  const { comboboxLabel, timeout = 10000 } = options
+  const { select, buttonName = 'Vis forslag', comboboxLabel, timeout = 10000 } = options
 
   // Vent på at GraphQL-data er lastet før vi åpner combobox
   await page.waitForLoadState('networkidle')
@@ -34,30 +47,11 @@ export async function openComboboxAndWaitForOptions(
     .locator('[role="listbox"] [role="option"]')
     .first()
     .waitFor({ state: 'visible', timeout })
-}
 
-/**
- * Velger en option fra en åpen combobox listbox.
- */
-export async function selectComboboxOption(
-  page: Page,
-  optionName: string | RegExp
-): Promise<void> {
-  const option = page.getByRole('option', { name: optionName }).first()
-  await option.waitFor({ state: 'visible' })
-  await option.click()
-}
-
-/**
- * Åpner combobox, venter på options, og velger en spesifikk option.
- * Kombinerer openComboboxAndWaitForOptions og selectComboboxOption.
- */
-export async function selectFromCombobox(
-  page: Page,
-  optionName: string | RegExp,
-  buttonName: string = 'Vis forslag',
-  options: OpenComboboxOptions = {}
-): Promise<void> {
-  await openComboboxAndWaitForOptions(page, buttonName, options)
-  await selectComboboxOption(page, optionName)
+  // Velg option hvis spesifisert
+  if (select) {
+    const option = page.getByRole('option', { name: select }).first()
+    await option.waitFor({ state: 'visible' })
+    await option.click()
+  }
 }
