@@ -1,5 +1,6 @@
 import { createBdd } from 'playwright-bdd'
 import { test, expect } from '../fixtures/user-context'
+import { openComboboxAndWaitForOptions, selectFromCombobox } from '../helpers/combobox'
 
 const { Given, When, Then } = createBdd(test)
 
@@ -57,9 +58,7 @@ When('jeg tilknytter utdanningstilbud til opptaket', async ({ userContext }) => 
   await userContext.currentPage.waitForLoadState('networkidle')
   await userContext.currentPage.getByRole('tab', { name: 'Legg til nytt studiealternativ' }).click()
   await userContext.currentPage.waitForLoadState('networkidle')
-  await userContext.currentPage.getByRole('button', { name: 'Vis forslag' }).click()
-  // Vent på at listbox har innhold (GraphQL-query ferdig)
-  await userContext.currentPage.locator('[role="listbox"] [role="option"]').first().waitFor({ state: 'visible', timeout: 10000 })
+  await openComboboxAndWaitForOptions(userContext.currentPage)
   const option = userContext.currentPage.getByRole('option', { name: /Mastergrad i jordmorfag/ }).first()
   await option.waitFor({ state: 'visible' })
   await option.getByRole('button', { name: 'Legg til' }).click()
@@ -80,9 +79,7 @@ When('jeg konfigurerer studiealternativet', async ({ userContext }) => {
   const kvoterText = userContext.currentPage.getByText('KvoterTabell over')
   await kvoterText.scrollIntoViewIfNeeded()
   await expect(kvoterText).toBeVisible()
-  await userContext.currentPage.getByRole('button', { name: 'Vis forslag' }).click()
-  await userContext.currentPage.waitForLoadState('networkidle')
-  await userContext.currentPage.getByRole('option', { name: 'Ordinær kvote' }).click()
+  await selectFromCombobox(userContext.currentPage, 'Ordinær kvote')
   await userContext.currentPage.keyboard.press('Escape')
   await userContext.currentPage.waitForLoadState('networkidle')
   await userContext.currentPage.getByRole('button', { name: 'Lagre' }).click()
