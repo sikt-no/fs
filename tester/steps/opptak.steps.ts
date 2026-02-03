@@ -79,7 +79,7 @@ When('jeg konfigurerer studiealternativet', async ({ userContext }) => {
   const kvoterText = userContext.currentPage.getByText('KvoterTabell over')
   await kvoterText.scrollIntoViewIfNeeded()
   await expect(kvoterText).toBeVisible()
-  await openCombobox(userContext.currentPage, { select: 'Ordinær kvote' })
+  await openCombobox(userContext.currentPage, { comboboxLabel: 'Kvoter', buttonName: null, select: 'Ordinær kvote' })
   await userContext.currentPage.keyboard.press('Escape')
   await userContext.currentPage.waitForLoadState('networkidle')
   await userContext.currentPage.getByRole('button', { name: 'Lagre' }).click()

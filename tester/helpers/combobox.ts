@@ -3,9 +3,9 @@ import { Page } from '@playwright/test'
 interface ComboboxOptions {
   /** Option som skal velges (valgfritt - hvis utelatt, åpnes bare combobox) */
   select?: string | RegExp
-  /** Knappnavn for å åpne combobox (default: "Vis forslag") */
-  buttonName?: string
-  /** Label på combobox-feltet for å scope søket (valgfritt) */
+  /** Knappnavn for å åpne combobox (default: "Vis forslag"). Sett til null for å klikke på input direkte. */
+  buttonName?: string | null
+  /** Label på combobox-feltet (kreves når buttonName er null) */
   comboboxLabel?: string
   /** Timeout i millisekunder (default: 10000) */
   timeout?: number
@@ -16,14 +16,14 @@ interface ComboboxOptions {
  * Kan også velge en spesifikk option hvis `select` er satt.
  *
  * @example
- * // Bare åpne combobox og vente på options
+ * // Åpne via "Vis forslag" knapp (default)
  * await openCombobox(page)
+ *
+ * // Åpne ved å klikke på combobox-input direkte
+ * await openCombobox(page, { comboboxLabel: 'Kvoter', buttonName: null, select: 'Ordinær kvote' })
  *
  * // Åpne og velge en option
  * await openCombobox(page, { select: 'Ordinær kvote' })
- *
- * // Med regex-match
- * await openCombobox(page, { select: /Mastergrad/ })
  */
 export async function openCombobox(
   page: Page,
@@ -34,11 +34,17 @@ export async function openCombobox(
   // Vent på at GraphQL-data er lastet før vi åpner combobox
   await page.waitForLoadState('networkidle')
 
-  // Finn og klikk knappen, evt. scopet til en bestemt combobox
-  if (comboboxLabel) {
+  // Åpne combobox
+  if (buttonName === null) {
+    // Klikk direkte på combobox-input
+    const combobox = page.getByRole('combobox', { name: comboboxLabel })
+    await combobox.click()
+  } else if (comboboxLabel) {
+    // Klikk på knapp innenfor en spesifikk combobox
     const combobox = page.getByRole('combobox', { name: comboboxLabel })
     await combobox.getByRole('button', { name: buttonName }).click()
   } else {
+    // Klikk på "Vis forslag" knapp (default)
     await page.getByRole('button', { name: buttonName }).click()
   }
 
