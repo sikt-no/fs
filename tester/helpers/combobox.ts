@@ -33,6 +33,7 @@ export async function openCombobox(
 
   // Vent på at GraphQL-data er lastet før vi åpner combobox
   await page.waitForLoadState('networkidle')
+  await page.waitForTimeout(1000)
 
   // Åpne combobox
   if (buttonName === null) {
