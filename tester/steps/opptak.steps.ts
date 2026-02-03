@@ -8,6 +8,9 @@ let sisteOpptakNavn: string
 
 Given('at jeg er på opptakssiden', async ({ userContext }) => {
   await userContext.currentPage.getByRole('link', { name: 'Opptak' }).click()
+  await userContext.currentPage.waitForLoadState('networkidle')
+  // Vent på at tabellen er lastet (skeleton forsvinner)
+  await userContext.currentPage.getByRole('table').waitFor({ state: 'visible' })
 })
 
 Given('at opptaket {string} er publisert', async ({ userContext }, opptakNavn: string) => {
@@ -16,7 +19,9 @@ Given('at opptaket {string} er publisert', async ({ userContext }, opptakNavn: s
 })
 
 When('jeg oppretter et nytt lokalt opptak', async ({ userContext }) => {
-  await userContext.currentPage.getByRole('link', { name: 'Velg Lokalt opptak' }).click()
+  const lokaltOpptakLink = userContext.currentPage.getByRole('link', { name: 'Velg Lokalt opptak' })
+  await lokaltOpptakLink.waitFor({ state: 'visible' })
+  await lokaltOpptakLink.click()
 })
 
 When('jeg setter navn til {string}', async ({ userContext }, navn: string) => {
@@ -28,8 +33,10 @@ When('jeg setter navn til {string}', async ({ userContext }, navn: string) => {
 When('jeg setter type til {string}', async ({ userContext }, type: string) => {
   // TODO: Map type-navn til value - nå hardkodet til "LOS"
   await userContext.currentPage.getByLabel('Hvilken type lokalt opptak?').selectOption('YTo1OiJMT0si')
-  // Vent på at frister og andre data lastes inn
-  await userContext.currentPage.waitForLoadState('networkidle')
+  // Vent på at Frister-seksjonen er lastet inn (h2 "Frister" og h3 kategori-overskrift)
+  await userContext.currentPage.getByRole('heading', { name: 'Frister', level: 2 }).waitFor({ state: 'visible' })
+  // Vent på at frist-kategoriene er lastet (h3 overskrift betyr at data er hentet)
+  await userContext.currentPage.getByRole('heading', { level: 3 }).first().waitFor({ state: 'visible' })
 })
 
 When('jeg setter søknadsfrist til {string}', async ({ userContext }, frist: string) => {
@@ -42,7 +49,7 @@ When('jeg setter oppstartsdato til {string}', async ({ userContext }, dato: stri
 
 When('jeg lagrer opptaket', async ({ userContext }) => {
   await userContext.currentPage.getByRole('button', { name: 'Lagre' }).click()
-  await userContext.currentPage.waitForTimeout(2000)
+  await userContext.currentPage.waitForLoadState('networkidle')
 })
 
 When('jeg tilknytter utdanningstilbud til opptaket', async ({ userContext }) => {
@@ -50,16 +57,13 @@ When('jeg tilknytter utdanningstilbud til opptaket', async ({ userContext }) => 
   await userContext.currentPage.waitForLoadState('networkidle')
   await userContext.currentPage.getByRole('tab', { name: 'Legg til nytt studiealternativ' }).click()
   await userContext.currentPage.waitForLoadState('networkidle')
-
-  // Klikk på "Vis forslag" knappen
   await userContext.currentPage.getByRole('button', { name: 'Vis forslag' }).click()
-
-  // Vent på at option vises i listen
+  // Vent på at listbox har innhold (GraphQL-query ferdig)
+  await userContext.currentPage.locator('[role="listbox"] [role="option"]').first().waitFor({ state: 'visible', timeout: 10000 })
   const option = userContext.currentPage.getByRole('option', { name: /Mastergrad i jordmorfag/ }).first()
   await option.waitFor({ state: 'visible' })
   await option.getByRole('button', { name: 'Legg til' }).click()
-
-  // Lukk combobox ved å trykke Escape
+  await userContext.currentPage.getByText('Utdanningstilbud ble lagt til').waitFor({ state: 'visible' })
   await userContext.currentPage.keyboard.press('Escape')
   await userContext.currentPage.waitForLoadState('networkidle')
 })
@@ -77,7 +81,7 @@ When('jeg konfigurerer studiealternativet', async ({ userContext }) => {
   await kvoterText.scrollIntoViewIfNeeded()
   await expect(kvoterText).toBeVisible()
   await userContext.currentPage.getByRole('button', { name: 'Vis forslag' }).click()
-  await userContext.currentPage.waitForTimeout(1000)
+  await userContext.currentPage.waitForLoadState('networkidle')
   await userContext.currentPage.getByRole('option', { name: 'Ordinær kvote' }).click()
   await userContext.currentPage.keyboard.press('Escape')
   await userContext.currentPage.waitForLoadState('networkidle')
@@ -114,7 +118,7 @@ When('jeg legger til alle studier i kurven', async ({ userContext }) => {
 
   for (let i = 0; i < buttonCount; i++) {
     await addToCartButtons.first().click()
-    await userContext.currentPage.waitForTimeout(500)
+    await userContext.currentPage.waitForLoadState('networkidle')
   }
 })
 
