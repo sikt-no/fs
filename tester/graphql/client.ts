@@ -7,6 +7,9 @@ import type {
   AdmissioUtdanningsinstans,
   PersonProfil,
   QueryPersonProfilerFilterInput,
+  OpprettUtdanningstilbudInput,
+  OppdaterUtdanningstilbudV2Payload,
+  OppdaterUtdanningstilbudV2Input,
 } from './types';
 
 if (!process.env.FS_ADMIN_GRAPHQL) {
@@ -93,6 +96,74 @@ export async function opprettOpptak(
   return response.data!.opprettOpptakV2;
 }
 
+export async function opprettUtdanningstilbud(
+  request: APIRequestContext,
+  input: OpprettUtdanningstilbudInput
+): Promise<OppdaterUtdanningstilbudV2Payload> {
+  const response = await graphqlRequest<{ opprettUtdanningstilbudV2: OppdaterUtdanningstilbudV2Payload }>(
+    request,
+    /* GraphQL */ `
+      mutation OpprettUtdanningstilbud($input: OpprettUtdanningstilbudInput!) {
+        opprettUtdanningstilbudV2(input: $input) {
+          errors {
+            ... on Error {
+              message
+              __typename
+            }
+            __typename
+          }
+          utdanningstilbud {
+            id
+            __typename
+          }
+          __typename
+        }
+      }
+    `,
+    { input }
+  );
+
+  if (response.errors?.length) {
+    throw new Error(`GraphQL errors: ${response.errors.map(e => e.message).join(', ')}`);
+  }
+
+  return response.data!.opprettUtdanningstilbudV2;
+}
+
+export async function oppdaterUtdanningstilbud(
+  request: APIRequestContext,
+  input: OppdaterUtdanningstilbudV2Input
+): Promise<OppdaterUtdanningstilbudV2Payload> {
+  const response = await graphqlRequest<{ oppdaterUtdanningstilbudV2: OppdaterUtdanningstilbudV2Payload }>(
+    request,
+    /* GraphQL */ `
+      mutation updateUtdanningstilbudDetails($input: OppdaterUtdanningstilbudV2Input!) {
+        oppdaterUtdanningstilbudV2(input: $input) {
+          errors {
+            ... on Error {
+              message
+              __typename
+            }
+            __typename
+          }
+          utdanningstilbud {
+            id
+            __typename
+          }
+          __typename
+        }
+      }
+    `,
+    { input }
+  );
+
+  if (response.errors?.length) {
+    throw new Error(`GraphQL errors: ${response.errors.map(e => e.message).join(', ')}`);
+  }
+
+  return response.data!.oppdaterUtdanningstilbudV2;
+}
+
 // ============================================================
 // Opptak Queries
 // ============================================================
@@ -168,6 +239,13 @@ export async function hentUtdanningsinstanser(
           organisasjon {
             navn {
               nb
+            }
+          }
+          utdanningsmulighet {
+            navn {
+              nb
+              nn
+              en
             }
           }
           terminFra {
