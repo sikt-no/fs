@@ -1,5 +1,5 @@
 import { test as base } from 'playwright-bdd'
-import { Page, BrowserContext } from '@playwright/test'
+import { Page, BrowserContext, expect } from '@playwright/test'
 import 'dotenv/config'
 
 /**
@@ -52,6 +52,8 @@ export const test = base.extend<{
           const page = await context.newPage()
           await page.goto(BASE_URLS[role])
           await page.waitForLoadState('networkidle')
+          // Vent på at Sikt-logoen er synlig (siden er ferdig lastet)
+          await expect(page.getByRole('link', { name: 'Sikt Kunnskapssektorens' })).toBeVisible()
           contexts.set(role, context)
           pages.set(role, page)
         }
