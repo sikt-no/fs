@@ -25,6 +25,8 @@ stages:
 
 e2e_tests:
   stage: test
+  tags:
+    - fs-plattform
   image: mcr.microsoft.com/playwright:v1.57.0-noble
   before_script:
     - cd tester
