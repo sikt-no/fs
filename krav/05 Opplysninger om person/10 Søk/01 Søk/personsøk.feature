@@ -13,51 +13,89 @@ Egenskap: Personsøk
     Gitt at jeg er logget inn med tilgang til å lese personopplysninger
     Og at jeg er på personsøksiden
 
-  Regel: Eksakt treff gir direkte navigering til personprofil
+  @implemented
+  Regel: Det er mulig å søke på navn
 
-    @implemented
-    Scenario: Søk på fullt navn gir direktetreff
+    Scenario: Søk på fullt navn
       Når jeg søker etter "Økologisk Badering"
       Så skal jeg se personprofilen til "Økologisk Badering"
 
-    @implemented
-    Scenario: Søk på fødselsnummer gir direktetreff
-      Når jeg søker etter "22820998719"
+    Scenario: Søk på fornavn
+      Når jeg søker etter "Økologisk"
       Så skal jeg se personprofilen til "Økologisk Badering"
 
-    @implemented
-    Scenario: Søk på Feide-brukernavn gir direktetreff
-      Når jeg søker etter "no310236284_elev_4_10a@testusers.feide.no"
+    Scenario: Søk på etternavn
+      Når jeg søker etter "Badering"
       Så skal jeg se personprofilen til "Økologisk Badering"
 
-    @implemented
-    Scenario: Søk på e-post gir direktetreff
-      Når jeg søker etter "no310236284_elev_4_10a@testusers.feide.no"
-      Så skal jeg se personprofilen til "Økologisk Badering"
-
-    @implemented
-    Scenario: Søk på telefonnummer gir direktetreff
-      Når jeg søker etter "99999912"
-      Så skal jeg se personprofilen til "Økologisk Badering"
-
-    @implemented
-    Scenario: Søk på studentnummer gir direktetreff
-      Når jeg søker etter "000002"
-      Så skal jeg se personprofilen til "Økologisk Badering"
-
-  Regel: Delvis treff gir liste med resultater
-
-    @implemented
-    Scenario: Søk på deler av navn gir liste
+    Scenario: Søk på deler av navn
       Når jeg søker etter "Ba"
       Så skal jeg se en liste med søkeresultater
       Og listen skal inneholde "Økologisk Badering"
       Og listen skal inneholde "Familiær Bane"
       Og listen skal inneholde "Oppjaget Bas"
 
+  
+  @implemented
+  Regel: Det er mulig å søke på fødselsnummer
+
+    Scenario: Søk på fullt fødselsnummer
+      Når jeg søker etter "22820998719"
+      Så skal jeg se personprofilen til "Økologisk Badering"
+
+    Scenario: Søk på deler av fødselsnummer
+      Når jeg søker etter "228209"
+      Så skal jeg se en liste med søkeresultater
+      Og listen skal inneholde "Økologisk Badering"
+
+  @implemented
+  Regel: Det er mulig å søke på Feide-brukernavn
+
+   
+    Scenario: Søk på fullt Feide-brukernavn
+      Når jeg søker etter "no310236284_elev_4_10a@testusers.feide.no"
+      Så skal jeg se personprofilen til "Økologisk Badering"
+
+    Scenario: Søk på deler av Feide-brukernavn
+      Når jeg søker etter "no310236284"
+      Så skal jeg se en liste med søkeresultater
+      Og listen skal inneholde "Økologisk Badering"
+
+      @implemented
+  Regel: Det er mulig å søke på e-postadresse
+
+
+    Scenario: Søk på full e-postadresse
+      Når jeg søker etter "no310236284_elev_4_10a@testusers.feide.no"
+      Så skal jeg se personprofilen til "Økologisk Badering"
+
+    Scenario: Søk på deler av e-postadresse
+      Når jeg søker etter "elev_4_10a"
+      Så skal jeg se en liste med søkeresultater
+      Og listen skal inneholde "Økologisk Badering"
+
+  @implemented
+  Regel: Det er mulig å søke på telefonnummer
+   
+    Scenario: Søk på telefonnummer
+      Når jeg søker etter "99999912"
+      Så skal jeg se personprofilen til "Økologisk Badering"
+
+    Scenario: Søk på deler av telefonnummer
+      Når jeg søker etter "999999"
+      Så skal jeg se en liste med søkeresultater
+      Og listen skal inneholde "Økologisk Badering"
+
+  @implemented
+  Regel: Det er mulig å søke på studentnummer
+
+    Scenario: Søk på studentnummer
+      Når jeg søker etter "000002"
+      Så skal jeg se personprofilen til "Økologisk Badering"
+
+  @implemented
   Regel: Søk er case-insensitivt
 
-    @implemented
     Scenariomal: Søk ignorerer store og små bokstaver
       Når jeg søker etter "<input>"
       Så skal jeg se personprofilen til "Økologisk Badering"
@@ -68,9 +106,9 @@ Egenskap: Personsøk
         | ØKOLOGISK BADERING |
         | ØkoLoGiSk BaDeRiNg |
 
+  @implemented
   Regel: Søk gir tilbakemelding ved ingen treff
 
-    @implemented
     Scenario: Søk uten treff viser informativ melding
       Når jeg søker etter "XyzFinnesIkke123"
       Så skal jeg se ingen resultater

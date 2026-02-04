@@ -27,6 +27,14 @@ Given('at jeg er logget inn som {word}', async ({ userContext }, role: string) =
 })
 
 /**
+ * Logger inn som personsøk-administrator med tilgang til personopplysninger.
+ * Brukes i personsøk-scenarioer hvor produktleder ønsker en mer beskrivende formulering.
+ */
+Given('at jeg er logget inn med tilgang til å lese personopplysninger', async ({ userContext }) => {
+  await userContext.switchTo('personsok-administrator')
+})
+
+/**
  * Alternativ formulering for kontekst-bytte midt i et scenario.
  * Brukes typisk etter en "Så" for å skifte perspektiv.
  */
