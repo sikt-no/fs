@@ -52,6 +52,8 @@ export const test = base.extend<{
           const page = await context.newPage()
           await page.goto(BASE_URLS[role])
           await page.waitForLoadState('networkidle')
+          // Vent på at navigasjonsmenyen er synlig (siden er klar)
+          await page.getByRole('navigation').waitFor({ state: 'visible', timeout: 15000 })
           contexts.set(role, context)
           pages.set(role, page)
         }
