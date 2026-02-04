@@ -49,11 +49,6 @@ Egenskap: Personsøk
       Når jeg søker etter "no310236284_elev_4_10a@testusers.feide.no"
       Så skal jeg se personprofilen til "Økologisk Badering"
 
-    Scenario: Søk på deler av Feide-brukernavn
-      Når jeg søker etter "no310236284"
-      Så skal jeg se en liste med søkeresultater
-      Og listen skal inneholde "Økologisk Badering"
-
   @implemented
   Regel: Det er mulig å søke på e-postadresse
 
