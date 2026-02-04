@@ -1,81 +1,76 @@
 # language: no
-@OPP-SØK-SØK-001 @støtteprosesser
+@OPP-SØK-SØK-001 @must @nightly
 Egenskap: Personsøk
-  Som administrator trenger jeg å kunne søke opp personer knyttet til lærestedet (organisasjonen) jeg jobber for, uten av jeg på forhånd nødvendigvis vet om personen er søker, student eller resultateier hos oss, for å kunne ivareta informasjons- og veiledningsplikten vår på en god måte.
-  Hvis jeg har søkt opp en personer etter gitte kriterier, så må jeg enten få se den personen som matcher søket mitt, eller få opp en liste med relevante personer som matcher søket mitt.
+  Som en administrator
+  ønsker jeg å søke etter personer i systemet
+  slik at jeg raskt kan finne og administrere personopplysninger.
+
+  Personsøk lar administrator søke på tvers av flere identifikatorer
+  i ett enkelt søkefelt: navn, fødselsnummer, studentnummer,
+  Feide-brukernavn, e-post eller telefonnummer.
 
   Bakgrunn:
-    Gitt at administrator er inne på personsøket
-  # Returerer ingen treff
+    Gitt at jeg er logget inn som personsok-administrator
+    Og at jeg er på personsøksiden
 
-  Scenario: Administrator er ansatt ved organisasjon ved gjennomføring av personsøk
-  Gitt administratoren er ansatt ved organisasjon
-  Så ser administrator "Borghild Aga"
+  Regel: Eksakt treff gir direkte navigering til personprofil
 
-  @harTest @levert
-  Scenario: Administrator søker på en verdi som ikke finnes
-    Når administrator søker på "Erik Akselabb"
-    Så skal administrator få ingen resultater og informeres om at det er ingen resultater
+    @implemented
+    Scenario: Søk på fullt navn gir direktetreff
+      Når jeg søker etter "Økologisk Badering"
+      Så skal jeg se personprofilen til "Økologisk Badering"
 
-  @harTest @levert
-  Scenariomal: Administrator søker på en kombinasjon av flere numeriske verdier
-    Når administrator søker på "<input>"
-    Så skal administrator få ingen resultater og informeres om at det er ingen resultater
+    @implemented
+    Scenario: Søk på fødselsnummer gir direktetreff
+      Når jeg søker etter "22820998719"
+      Så skal jeg se personprofilen til "Økologisk Badering"
 
-    Eksempler:
-      | input                |
-      | 03891099923 99999910 |
-      |          11 99999911 |
+    @implemented
+    Scenario: Søk på Feide-brukernavn gir direktetreff
+      Når jeg søker etter "no310236284_elev_4_10a@testusers.feide.no"
+      Så skal jeg se personprofilen til "Økologisk Badering"
 
-  @harTest @levert
-  Scenariomal: Administrator gjør fritekstsøk etter personer som gir ett svar
-    Når administrator søker på "<input>"
-    Så ser administrator personprofilen til "<output>"
+    @implemented
+    Scenario: Søk på e-post gir direktetreff
+      Når jeg søker etter "no310236284_elev_4_10a@testusers.feide.no"
+      Så skal jeg se personprofilen til "Økologisk Badering"
 
-    Eksempler:
-      | inputtype     | input                            | output               |
-      | navn          | Misfornøyd Ambassade             | Misfornøyd Ambassade |
-      | fødselsdato   |                       03.09.2010 | Misfornøyd Ambassade |
-      | fødselsnummer |                      03891099923 | Misfornøyd Ambassade |
-      | telefonnummer |                         99999910 | Misfornøyd Ambassade |
-      | e-post org    | misfornoyd_ambassade@sikt-ths.no | Misfornøyd Ambassade |
-      | studentnummer |                               10 | Misfornøyd Ambassade |
-      | feidebruker   |                           123409 | Misfornøyd Ambassade |
-      | privat e-post | misfornoyd@mail.com              | Misfornøyd Ambassade |
+    @implemented
+    Scenario: Søk på telefonnummer gir direktetreff
+      Når jeg søker etter "99999912"
+      Så skal jeg se personprofilen til "Økologisk Badering"
 
+    @implemented
+    Scenario: Søk på studentnummer gir direktetreff
+      Når jeg søker etter "000002"
+      Så skal jeg se personprofilen til "Økologisk Badering"
 
+  Regel: Delvis treff gir liste med resultater
 
-      
-      #|søknadsnummer|MAS-0101010  | Hermione Granger | (vi har ikke søk på søknadsnummer ennå? Ta det samtidig med søknad?)
-  #|personløpenummer|1000001|Hermione Granger| (vi har ikke søk på personløpenummer ennå, til vurdering)
+    @implemented
+    Scenario: Søk på deler av navn gir liste
+      Når jeg søker etter "Ba"
+      Så skal jeg se en liste med søkeresultater
+      Og listen skal inneholde "Økologisk Badering"
+      Og listen skal inneholde "Familiær Bane"
+      Og listen skal inneholde "Oppjaget Bas"
 
-  @harTest @levert
-  Scenariomal: Administrator søker på en kombinasjon av navn og e-post
-    Når administrator søker på "<input>"
-    Så ser administrator personprofilen til "<output>"
+  Regel: Søk er case-insensitivt
 
-    Eksempler:
-      | input                      | output               |
-      | Misfornøyd Ambassade @sikt | Misfornøyd Ambassade |
-      | Ambassade misfornoy        | Misfornøyd Ambassade |
+    @implemented
+    Scenariomal: Søk ignorerer store og små bokstaver
+      Når jeg søker etter "<input>"
+      Så skal jeg se personprofilen til "Økologisk Badering"
 
-  @harTest @levert
-  Scenariomal: Case insensitive søk på navn
-    Når administrator søker på "<input>"
-    Så ser administrator personprofilen til "<output>"
+      Eksempler:
+        | input              |
+        | økologisk badering |
+        | ØKOLOGISK BADERING |
+        | ØkoLoGiSk BaDeRiNg |
 
-    Eksempler:
-      | input                | output               |
-      | misfornøyd ambassade | Misfornøyd Ambassade |
-      | misFornøyd AmbAssade | Misfornøyd Ambassade |
-  
-  Scenario: Administrator søker på verdi med flere svar
-    Når administrator søker på "Duck"
-    Så skal administrator få se "Dolly Duck" i en liste
-    Så skal administrator få se "Donald Duck" i en liste
-    Så skal administrator få se "Hetti Duck" i en liste
+  Regel: Søk gir tilbakemelding ved ingen treff
 
-  @harTest
-  Scenario: Resultat gir mer enn 1000 treff
-    Når administrator søker på "A"
-    Så skal administrator få se ingen resultater og en feilemelding som indikerer at søket må begrenses
+    @implemented
+    Scenario: Søk uten treff viser informativ melding
+      Når jeg søker etter "XyzFinnesIkke123"
+      Så skal jeg se ingen resultater

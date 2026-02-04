@@ -3,7 +3,7 @@ import { test, UserRole } from '../fixtures/user-context'
 
 const { Given, When, Then } = createBdd(test)
 
-const VALID_ROLES: UserRole[] = ['administrator', 'person']
+const VALID_ROLES: UserRole[] = ['administrator', 'person', 'personsok-administrator']
 
 function validateRole(role: string): UserRole {
   if (!VALID_ROLES.includes(role as UserRole)) {

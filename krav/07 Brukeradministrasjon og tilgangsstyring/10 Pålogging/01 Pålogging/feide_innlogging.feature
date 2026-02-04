@@ -15,6 +15,15 @@ Egenskap: Feide-innlogging
       Så skal administratoren være innlogget
       Og innloggingstilstanden skal lagres for adminflaten
 
+  Regel: Personsøk-administrator må kunne logge inn med egen overstyrt bruker
+
+    Scenario: Personsøk-administrator logger inn med Feide
+      Gitt at administratoren er på innloggingssiden til adminflaten
+      Når administratoren logger inn med Feide testbruker
+      Og personsøk-administratoren velger overstyrt bruker
+      Så skal administratoren være innlogget
+      Og innloggingstilstanden skal lagres for personsøk-adminflaten
+
   Regel: Person må kunne logge inn i MinKompetanse med Feide
 
     Scenario: Person logger inn med Feide og velger testsøker

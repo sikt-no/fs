@@ -8,6 +8,7 @@ const { Given, When, Then } = createBdd()
 
 const ADMIN_AUTH_FILE = 'playwright/.auth/fs-admin.json'
 const PERSON_AUTH_FILE = 'playwright/.auth/person.json'
+const PERSONSOK_ADMIN_AUTH_FILE = 'playwright/.auth/personsok-admin.json'
 
 // ============ Administrator steps ============
 
@@ -39,6 +40,18 @@ Then('skal administratoren være innlogget', async ({ page }) => {
 
 Then('innloggingstilstanden skal lagres for adminflaten', async ({ page }) => {
   await page.context().storageState({ path: ADMIN_AUTH_FILE })
+})
+
+// ============ Personsøk-administrator steps ============
+
+When('personsøk-administratoren velger overstyrt bruker', async ({ page }) => {
+  const loginPage = new FsAdminLoginPage(page)
+  await loginPage.overstyrtBrukerSelect.selectOption('07577790366:919477822')
+  await page.waitForLoadState('networkidle')
+})
+
+Then('innloggingstilstanden skal lagres for personsøk-adminflaten', async ({ page }) => {
+  await page.context().storageState({ path: PERSONSOK_ADMIN_AUTH_FILE })
 })
 
 // ============ Person steps ============
