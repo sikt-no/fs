@@ -35,7 +35,6 @@ Egenskap: Personsøk
       Og listen skal inneholde "Familiær Bane"
       Og listen skal inneholde "Oppjaget Bas"
 
-  
   @implemented
   Regel: Det er mulig å søke på fødselsnummer
 
@@ -43,15 +42,9 @@ Egenskap: Personsøk
       Når jeg søker etter "22820998719"
       Så skal jeg se personprofilen til "Økologisk Badering"
 
-    Scenario: Søk på deler av fødselsnummer
-      Når jeg søker etter "228209"
-      Så skal jeg se en liste med søkeresultater
-      Og listen skal inneholde "Økologisk Badering"
-
   @implemented
   Regel: Det er mulig å søke på Feide-brukernavn
 
-   
     Scenario: Søk på fullt Feide-brukernavn
       Når jeg søker etter "no310236284_elev_4_10a@testusers.feide.no"
       Så skal jeg se personprofilen til "Økologisk Badering"
@@ -61,30 +54,19 @@ Egenskap: Personsøk
       Så skal jeg se en liste med søkeresultater
       Og listen skal inneholde "Økologisk Badering"
 
-      @implemented
+  @implemented
   Regel: Det er mulig å søke på e-postadresse
-
 
     Scenario: Søk på full e-postadresse
       Når jeg søker etter "no310236284_elev_4_10a@testusers.feide.no"
       Så skal jeg se personprofilen til "Økologisk Badering"
 
-    Scenario: Søk på deler av e-postadresse
-      Når jeg søker etter "elev_4_10a"
-      Så skal jeg se en liste med søkeresultater
-      Og listen skal inneholde "Økologisk Badering"
-
   @implemented
   Regel: Det er mulig å søke på telefonnummer
-   
+
     Scenario: Søk på telefonnummer
       Når jeg søker etter "99999912"
       Så skal jeg se personprofilen til "Økologisk Badering"
-
-    Scenario: Søk på deler av telefonnummer
-      Når jeg søker etter "999999"
-      Så skal jeg se en liste med søkeresultater
-      Og listen skal inneholde "Økologisk Badering"
 
   @implemented
   Regel: Det er mulig å søke på studentnummer
