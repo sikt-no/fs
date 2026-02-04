@@ -46,7 +46,7 @@ Then('innloggingstilstanden skal lagres for adminflaten', async ({ page }) => {
 
 When('personsøk-administratoren velger overstyrt bruker', async ({ page }) => {
   const loginPage = new FsAdminLoginPage(page)
-  await loginPage.overstyrtBrukerSelect.selectOption('07577790366:919477822')
+  await loginPage.overstyrtBrukerSelect.selectOption(process.env.PERSONSOK_ADMIN_OVERSTYRT_BRUKER!)
   await page.waitForLoadState('networkidle')
 })
 
