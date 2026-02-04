@@ -5,6 +5,8 @@ import type {
   OpprettOpptakPayloadV2,
   OpptakFilterInput,
   AdmissioUtdanningsinstans,
+  PersonProfil,
+  QueryPersonProfilerFilterInput,
 } from './types';
 
 if (!process.env.FS_ADMIN_GRAPHQL) {
@@ -40,7 +42,7 @@ export async function opprettOpptak(
 ): Promise<OpprettOpptakPayloadV2> {
   const response = await graphqlRequest<{ opprettOpptakV2: OpprettOpptakPayloadV2 }>(
     request,
-    `
+    /* GraphQL */ `
       mutation OpprettOpptak($input: OpprettOpptakInput!) {
         opprettOpptakV2(input: $input) {
           errors {
@@ -101,7 +103,7 @@ export async function hentOpptak(
 ): Promise<Opptak[]> {
   const response = await graphqlRequest<{ opptak: Opptak[] }>(
     request,
-    `
+    /* GraphQL */ `
       query HentOpptak($filter: OpptakFilterInput) {
         opptak(filter: $filter) {
           id
@@ -159,7 +161,7 @@ export async function hentUtdanningsinstanser(
 ): Promise<AdmissioUtdanningsinstans[]> {
   const response = await graphqlRequest<{ admissioUtdanningsinstanser: AdmissioUtdanningsinstans[] }>(
     request,
-    `
+    /* GraphQL */ `
       query HentUtdanningsinstanser {
         admissioUtdanningsinstanser {
           id
@@ -184,4 +186,47 @@ export async function hentUtdanningsinstanser(
   }
 
   return response.data!.admissioUtdanningsinstanser;
+}
+
+// ============================================================
+// Person Search Queries
+// ============================================================
+
+export async function sokPersoner(
+  request: APIRequestContext,
+  filter: QueryPersonProfilerFilterInput
+): Promise<PersonProfil[]> {
+  const response = await graphqlRequest<{
+    personProfiler: { edges: Array<{ node: PersonProfil }> };
+  }>(
+    request,
+    /* GraphQL */ `
+      query SokPersoner($filter: QueryPersonProfilerFilterInput!) {
+        personProfiler(filter: $filter) {
+          edges {
+            node {
+              id
+              fodselsnummer
+              fodselsdato
+              navn {
+                fornavn
+                etternavn
+              }
+              feideBruker
+              student {
+                studentnummer
+              }
+            }
+          }
+        }
+      }
+    `,
+    { filter }
+  );
+
+  if (response.errors?.length) {
+    throw new Error(`GraphQL errors: ${response.errors.map(e => e.message).join(', ')}`);
+  }
+
+  return response.data!.personProfiler.edges.map(e => e.node);
 }
