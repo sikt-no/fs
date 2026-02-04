@@ -24,6 +24,7 @@ export FS_ADMIN_URL="https://test-fsadmin.sikt.no"
 export FS_ADMIN_GRAPHQL="https://test-fsadmin.sikt.no/api/graphql"
 export MIN_KOMPETANSE_URL="https://test.minkompetanse.no/nb"
 export GRAPHQL_ENDPOINT="https://supergraf-gateway-apollo-test.sokrates.edupaas.no/graphql"
+export PERSONSOK_ADMIN_OVERSTYRT_BRUKER="07577790366:919477822"
 ENVEOF
 else
   cat > /tmp/test-env.sh << 'ENVEOF'
@@ -31,6 +32,7 @@ export FS_ADMIN_URL="https://studieadm-fs-admin-functionaltest.sokrates.edupaas.
 export FS_ADMIN_GRAPHQL="https://studieadm-fs-admin-functionaltest.sokrates.edupaas.no/api/graphql"
 export MIN_KOMPETANSE_URL="https://minkompetanse-functionaltest.sokrates.edupaas.no/nb"
 export GRAPHQL_ENDPOINT="https://supergraf-gateway-apollo-functionaltest.sokrates.edupaas.no/graphql"
+export PERSONSOK_ADMIN_OVERSTYRT_BRUKER="07577790366:919477822"
 ENVEOF
 fi
 
