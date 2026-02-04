@@ -10,7 +10,7 @@ Egenskap: Personsøk
   Feide-brukernavn, e-post eller telefonnummer.
 
   Bakgrunn:
-    Gitt at jeg er logget inn som personsok-administrator
+    Gitt at jeg er logget inn med tilgang til å lese personopplysninger
     Og at jeg er på personsøksiden
 
   Regel: Eksakt treff gir direkte navigering til personprofil
