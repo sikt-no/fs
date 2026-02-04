@@ -66,6 +66,12 @@ When('personen logger inn med Feide testbruker', async ({ page }) => {
 })
 
 When('personen velger en testsøker', async ({ page }) => {
+  // Avvis informasjonskapsler hvis dialogen vises
+  const cookieButton = page.getByRole('button', { name: 'Avvis informasjonskapsler' })
+  if (await cookieButton.isVisible({ timeout: 2000 }).catch(() => false)) {
+    await cookieButton.click()
+  }
+
   const loginPage = new MinKompetanseLoginPage(page)
   await loginPage.menuButton.click()
   await loginPage.testsokerSelect.selectOption('YTo5NToiZTRjZTdiNGItZjU5NC00YmI0LWFkYjctMzI2OTUzMjE1ZTQwIg==')

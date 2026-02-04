@@ -120,11 +120,6 @@ When('jeg legger til alle studier i kurven', async ({ userContext }) => {
 })
 
 When('jeg går til studiekurven', async ({ userContext }) => {
-  // Lukk informasjonskapsler-dialog hvis den vises
-  const cookieButton = userContext.currentPage.getByRole('button', { name: 'Avvis informasjonskapsler' })
-  if (await cookieButton.isVisible({ timeout: 2000 }).catch(() => false)) {
-    await cookieButton.click()
-  }
   await userContext.currentPage.getByRole('link', { name: 'studier i kurv Til studiekurv' }).click()
 })
 
