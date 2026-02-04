@@ -6,7 +6,7 @@ import 'dotenv/config'
  * Tilgjengelige brukerroller i testsystemet.
  * Utvid denne typen når nye roller legges til.
  */
-export type UserRole = 'administrator' | 'person'
+export type UserRole = 'administrator' | 'person' | 'personsok-administrator'
 
 /**
  * Manager for å håndtere flere brukerkontekster i samme test.
@@ -24,11 +24,13 @@ export type UserContextManager = {
 const AUTH_FILES: Record<UserRole, string> = {
   administrator: 'playwright/.auth/fs-admin.json',
   person: 'playwright/.auth/person.json',
+  'personsok-administrator': 'playwright/.auth/personsok-admin.json',
 }
 
 const BASE_URLS: Record<UserRole, string> = {
   administrator: process.env.FS_ADMIN_URL!,
   person: process.env.MIN_KOMPETANSE_URL!,
+  'personsok-administrator': process.env.FS_ADMIN_URL!,
 }
 
 export const test = base.extend<{
@@ -49,6 +51,7 @@ export const test = base.extend<{
           })
           const page = await context.newPage()
           await page.goto(BASE_URLS[role])
+          await page.waitForLoadState('networkidle')
           contexts.set(role, context)
           pages.set(role, page)
         }
