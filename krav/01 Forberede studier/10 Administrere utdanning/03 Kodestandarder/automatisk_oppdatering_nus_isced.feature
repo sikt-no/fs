@@ -45,14 +45,13 @@ Egenskap: Automatisk oppdatering av nus- og isced-koder
 
     @must @planned
     Scenario: Oppdage og importere nye NUS-koder
-      Gitt SSB har publisert versjon "7" av NUS-klassifikasjonen
-      Og versjon 7 inneholder følgende endringer:
+      Når SSB publiserer versjon "7" av NUS-klassifikasjonen med følgende endringer:
         | endring_type | nuskode | navn                             |
         | NY           | 621105  | Barnehagelærerutdanning, 4-årig  |
         | NY           | 741203  | Master i kunstig intelligens     |
         | ENDRET       | 621101  | Barnehagelærerutdanning, 2-årig  |
         | UTGÅTT       | 621102  | Førskolelærerutdanning, 3-årig   |
-      Når scheduled job kjører kl "03:00"
+      Og scheduled job kjører kl "03:00"
       Så skal lokal database inneholde NUS-kode "621105" med navn "Barnehagelærerutdanning, 4-årig"
       Og lokal database skal inneholde NUS-kode "741203" med navn "Master i kunstig intelligens"
       Og NUS-kode "621101" skal ha oppdatert navn "Barnehagelærerutdanning, 2-årig"
@@ -67,8 +66,7 @@ Egenskap: Automatisk oppdatering av nus- og isced-koder
 
     @must @planned
     Scenario: NUS-navneendring påvirker kun aktive emner
-      Gitt NUS-kode "621101" har navn "Førskolelærer"
-      Og følgende emner bruker denne koden:
+      Gitt følgende emner bruker NUS-kode "621101" med navn "Førskolelærer":
         | emnekode | navn                  | status  | siste_versjon |
         | PED1000  | Pedagogikk grunnkurs  | AKTIV   | 2024-HØST     |
         | PED2000  | Pedagogikk fordypning | AKTIV   | 2024-HØST     |
@@ -89,8 +87,7 @@ Egenskap: Automatisk oppdatering av nus- og isced-koder
 
     @must @planned
     Scenario: Utgått NUS-kode beholdes for aktive studieprogrammer
-      Gitt NUS-kode "621102" har status "AKTIV"
-      Og koden brukes av følgende studieprogram:
+      Gitt NUS-kode "621102" brukes av følgende studieprogram:
         | programkode | navn                           | status | studenter |
         | BARN-BA     | Bachelor i barnehagepedagogikk | AKTIV  | 245       |
       Når SSB markerer NUS-kode "621102" som utgått
@@ -165,14 +162,11 @@ Egenskap: Automatisk oppdatering av nus- og isced-koder
 
     @must @planned
     Scenario: Systemadministratorer varsles om ISCED-mapping endringer i FS Admin
-      Gitt NUS-kode "621101" har ISCED-mapping:
-        | felt        | verdi |
-        | ISCED2011_P | 645   |
-        | ISCEDKODE   | 0112  |
-      Når SSB endrer ISCED-mapping til:
-        | felt        | verdi |
-        | ISCED2011_P | 655   |
-        | ISCEDKODE   | 0111  |
+      Gitt NUS-kode "621101" har ISCED-mapping "645" for ISCED2011_P og "0112" for ISCEDKODE
+      Når SSB endrer ISCED-mapping for NUS-kode "621101" til:
+        | felt        | ny_verdi |
+        | ISCED2011_P | 655      |
+        | ISCEDKODE   | 0111     |
       Og endringen prosesseres
       Så skal det opprettes et varsel i FS Admin med:
         | felt             | verdi                             |
@@ -191,9 +185,8 @@ Egenskap: Automatisk oppdatering av nus- og isced-koder
 
     @must @planned
     Scenario: Synkronisering logges med alle detaljer
-      Gitt lokal database har NUS-versjon "6"
-      Og SSB har NUS-versjon "7" med 20 endringer
-      Når scheduled job kjører kl "03:00"
+      Når SSB publiserer NUS-versjon "7" med 20 endringer
+      Og scheduled job kjører kl "03:00"
       Og synkroniseringen fullføres kl "03:02:35"
       Så skal INTEGRASJONS_LOGG inneholde en rad med:
         | felt                | verdi                            |
@@ -231,9 +224,8 @@ Egenskap: Automatisk oppdatering av nus- og isced-koder
   @e2e @should @planned
   Scenario: Komplett synkroniseringsflyt fra SSB til FS
     Gitt det er "2024-11-20 03:00"
-    Og lokal database har NUS-versjon "6"
-    Og SSB har publisert NUS-versjon "7" med 13 endringer
-    Når scheduled job starter synkronisering
+    Når SSB publiserer NUS-versjon "7" med 13 endringer
+    Og scheduled job starter synkronisering
     Og synkroniseringen fullføres
     Så skal lokal database ha NUS-versjon "7"
     Og alle 13 endringer skal være importert
