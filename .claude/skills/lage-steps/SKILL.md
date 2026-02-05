@@ -161,15 +161,18 @@ When('jeg fyller ut skjemaet:', async ({ userContext }, dataTable: DataTable) =>
 
 ---
 
-## Viktig Prinsipp: Scenariene er kravene
+## Viktig Prinsipp: Scenariene er krav
 
-**ALDRI endre scenariene for å få testene til å fungere.**
+Scenariene i feature-filer er kravspesifikasjoner, ikke bare tester. Hvis en test feiler, vurder først om feilen ligger i step-implementasjonen eller testdata.
 
-Scenariene i feature-filer er kravspesifikasjoner. Hvis en test feiler:
+**OK å endre scenario:**
+- Omformulere for å gjenbruke eksisterende steps (f.eks. "Når jeg lagrer opptaket" → "Når jeg lagrer")
+- Rette skrivefeil eller forbedre lesbarhet
 
-1. **Fiks step-implementasjonen** - Kanskje selektoren er feil
-2. **Fiks testdata** - Kanskje vi trenger andre/flere testpersoner
-3. **Spør brukeren** - Hvis scenarioet ikke kan implementeres med tilgjengelig testdata
+**Ikke OK å endre scenario:**
+- Endre forventet resultat for å få testen til å passere
+- Fjerne steg som beskriver viktig forretningslogikk
+- Endre logikken i kravet
 
 Hvis et scenario ikke kan testes med tilgjengelig testdata, merk det som `@planned` og dokumenter hva som mangler - ikke endre kravet.
 
