@@ -1,64 +1,74 @@
 import { Page } from '@playwright/test'
 
 interface ComboboxOptions {
-  /** Option som skal velges (valgfritt - hvis utelatt, åpnes bare combobox) */
-  select?: string | RegExp
-  /** Knappnavn for å åpne combobox (default: "Vis forslag"). Sett til null for å klikke på input direkte. */
-  buttonName?: string | null
-  /** Label på combobox-feltet (kreves når buttonName er null) */
+  /** Option som skal velges */
+  select: string | RegExp
+  /** Knapp inne i option som skal klikkes (f.eks. "Legg til"). Hvis utelatt, klikkes option direkte. */
+  actionButton?: string
+  /** Combobox label for å identifisere riktig combobox på siden */
   comboboxLabel?: string
+  /** Knappnavn for å åpne combobox (default: "Vis forslag"). Sett til null for å klikke på input. */
+  openButton?: string | null
   /** Timeout i millisekunder (default: 10000) */
   timeout?: number
 }
 
 /**
- * Åpner en SDS combobox og venter på at options lastes.
- * Kan også velge en spesifikk option hvis `select` er satt.
+ * Åpner en SDS combobox, finner riktig option og velger den.
  *
  * @example
- * // Åpne via "Vis forslag" knapp (default)
- * await openCombobox(page)
+ * // Velg option direkte (klikk på option)
+ * await selectFromCombobox(page, {
+ *   comboboxLabel: 'Kvoter',
+ *   openButton: null,
+ *   select: 'Ordinær kvote'
+ * })
  *
- * // Åpne ved å klikke på combobox-input direkte
- * await openCombobox(page, { comboboxLabel: 'Kvoter', buttonName: null, select: 'Ordinær kvote' })
+ * // Velg option med "Legg til" knapp inne i option
+ * await selectFromCombobox(page, {
+ *   select: /Mastergrad i jordmorfag/,
+ *   actionButton: 'Legg til'
+ * })
  *
- * // Åpne og velge en option
- * await openCombobox(page, { select: 'Ordinær kvote' })
+ * // Åpne via "Vis forslag" knapp (default) og velg
+ * await selectFromCombobox(page, { select: 'Alternativ 1' })
  */
-export async function openCombobox(
+export async function selectFromCombobox(
   page: Page,
-  options: ComboboxOptions = {}
+  options: ComboboxOptions
 ): Promise<void> {
-  const { select, buttonName = 'Vis forslag', comboboxLabel, timeout = 10000 } = options
-
-  // Vent på at GraphQL-data er lastet før vi åpner combobox
-  await page.waitForLoadState('networkidle')
-  await page.waitForTimeout(1000)
+  const { select, actionButton, openButton = 'Vis forslag', comboboxLabel, timeout = 10000 } = options
 
   // Åpne combobox
-  if (buttonName === null) {
+  if (openButton === null) {
     // Klikk direkte på combobox-input
     const combobox = page.getByRole('combobox', { name: comboboxLabel })
     await combobox.click()
   } else if (comboboxLabel) {
     // Klikk på knapp innenfor en spesifikk combobox
     const combobox = page.getByRole('combobox', { name: comboboxLabel })
-    await combobox.getByRole('button', { name: buttonName }).click()
+    await combobox.getByRole('button', { name: openButton }).click()
   } else {
     // Klikk på "Vis forslag" knapp (default)
-    await page.getByRole('button', { name: buttonName }).click()
+    await page.getByRole('button', { name: openButton }).click()
   }
 
   // Vent på at listbox har minst én option
-  await page
-    .locator('[role="listbox"] [role="option"]')
-    .first()
-    .waitFor({ state: 'visible', timeout })
+  const listbox = page.getByRole('listbox')
+  await listbox.getByRole('option').first().waitFor({ state: 'visible', timeout })
 
-  // Velg option hvis spesifisert
-  if (select) {
-    const option = page.getByRole('option', { name: select }).first()
-    await option.waitFor({ state: 'visible' })
+  // Finn og velg option
+  const option = listbox.getByRole('option', { name: select }).first()
+  await option.waitFor({ state: 'visible', timeout })
+
+  if (actionButton) {
+    // Klikk på knapp inne i option (f.eks. "Legg til")
+    await option.getByRole('button', { name: actionButton }).click()
+  } else {
+    // Klikk direkte på option
     await option.click()
   }
 }
+
+/** @deprecated Bruk selectFromCombobox i stedet */
+export const openCombobox = selectFromCombobox
