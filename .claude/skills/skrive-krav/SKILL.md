@@ -221,7 +221,10 @@ Format: `@DOM-SUB-KAP-NNN`
 `@implemented` / `@in-progress` / `@planned`
 
 ### Type
-`@e2e` / `@integration` / `@demo` / `@ci`
+`@e2e` / `@integration` / `@demo`
+
+### Automatisk kjøring
+`@smoke` / `@nightly`
 
 ---
 
