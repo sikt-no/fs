@@ -39,23 +39,37 @@ export async function selectFromCombobox(
 ): Promise<void> {
   const { select, actionButton, openButton = 'Vis forslag', comboboxLabel, timeout = 10000 } = options
 
-  // Åpne combobox
+  // Finn elementet som skal klikkes for å åpne combobox
+  let openTrigger
   if (openButton === null) {
-    // Klikk direkte på combobox-input
-    const combobox = page.getByRole('combobox', { name: comboboxLabel })
-    await combobox.click()
+    openTrigger = page.getByRole('combobox', { name: comboboxLabel })
   } else if (comboboxLabel) {
-    // Klikk på knapp innenfor en spesifikk combobox
     const combobox = page.getByRole('combobox', { name: comboboxLabel })
-    await combobox.getByRole('button', { name: openButton }).click()
+    openTrigger = combobox.getByRole('button', { name: openButton })
   } else {
-    // Klikk på "Vis forslag" knapp (default)
-    await page.getByRole('button', { name: openButton }).click()
+    openTrigger = page.getByRole('button', { name: openButton })
   }
 
-  // Vent på at listbox har minst én option
   const listbox = page.getByRole('listbox')
-  await listbox.getByRole('option').first().waitFor({ state: 'visible', timeout })
+  const firstOption = listbox.getByRole('option').first()
+
+  // Åpne combobox med retry - options kan laste lazy
+  const startTime = Date.now()
+  while (Date.now() - startTime < timeout) {
+    await openTrigger.click()
+
+    // Vent kort på at listbox skal åpne seg
+    try {
+      await firstOption.waitFor({ state: 'visible', timeout: 2000 })
+      break // Listbox åpnet, fortsett
+    } catch {
+      // Listbox åpnet ikke, prøv igjen
+      // Klikk kan ha lukket en allerede åpen listbox, så vi prøver på nytt
+    }
+  }
+
+  // Verifiser at listbox er åpen
+  await firstOption.waitFor({ state: 'visible', timeout: 2000 })
 
   // Finn og velg option
   const option = listbox.getByRole('option', { name: select }).first()
