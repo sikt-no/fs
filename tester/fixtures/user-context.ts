@@ -21,6 +21,15 @@ export type UserContextManager = {
   readonly currentRole: UserRole
 }
 
+/**
+ * Test-spesifikk data som deles mellom steps i samme scenario.
+ * Automatisk ryddet opp mellom tester.
+ */
+export type TestData = {
+  opptakNavn?: string
+  // Legg til flere felt etter behov
+}
+
 const AUTH_FILES: Record<UserRole, string> = {
   administrator: 'playwright/.auth/fs-admin.json',
   person: 'playwright/.auth/person.json',
@@ -35,7 +44,14 @@ const BASE_URLS: Record<UserRole, string> = {
 
 export const test = base.extend<{
   userContext: UserContextManager
+  testData: TestData
 }>({
+  testData: async ({}, use) => {
+    const data: TestData = {}
+    await use(data)
+    // Data ryddes automatisk opp mellom tester
+  },
+
   userContext: async ({ browser }, use) => {
     const contexts = new Map<UserRole, BrowserContext>()
     const pages = new Map<UserRole, Page>()

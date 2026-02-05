@@ -1,11 +1,10 @@
 import { createBdd } from 'playwright-bdd'
 import { test, expect } from '../fixtures/user-context'
 import { openCombobox } from '../helpers/combobox'
+import { opprettOpptak, opprettUtdanningstilbud, oppdaterUtdanningstilbud } from '../graphql/client'
+import type { OpprettOpptakInput, OpprettUtdanningstilbudInput, OppdaterUtdanningstilbudV2Input } from '../graphql/types'
 
 const { Given, When, Then } = createBdd(test)
-
-// Lagrer sist opprettede opptak-navn for bruk i assertions
-let sisteOpptakNavn: string
 
 Given('at jeg er på opptakssiden', async ({ userContext }) => {
   await userContext.currentPage.getByRole('link', { name: 'Opptak' }).click()
@@ -14,9 +13,100 @@ Given('at jeg er på opptakssiden', async ({ userContext }) => {
   await userContext.currentPage.getByRole('table').waitFor({ state: 'visible' })
 })
 
-Given('at opptaket {string} er publisert', async ({ userContext }, opptakNavn: string) => {
-  // TODO: Implementer sjekk eller opprett opptak
-  await userContext.currentPage.goto(`${process.env.FS_ADMIN_URL}/opptak`)
+Given('at opptaket {string} er publisert', async ({ userContext, testData }, opptakNavn: string) => {
+  testData.opptakNavn = `${opptakNavn} - ${Date.now()}`
+
+  // Datoer: idag (T+0) og 2 uker frem (T+14)
+  const idag = new Date()
+  idag.setHours(23, 0, 0, 0)
+  const toUkerFrem = new Date(idag)
+  toUkerFrem.setDate(toUkerFrem.getDate() + 14)
+
+  const input: OpprettOpptakInput = {
+    navn: testData.opptakNavn,
+    hendelser: [
+      {
+        opptakshendelsestypeKode: 'SOKING_APNER',
+        hendelseTidspunkt: idag.toISOString(),
+      },
+      {
+        opptakshendelsestypeKode: 'FRIST_OMPRIORITERING',
+        hendelseTidspunkt: toUkerFrem.toISOString(),
+      },
+      {
+        opptakshendelsestypeKode: 'FRIST_VURDERINGSGRUNNLAG',
+        hendelseTidspunkt: idag.toISOString(),
+      },
+      {
+        opptakshendelsestypeKode: 'FRIST_REALKOMPETANSE',
+        hendelseTidspunkt: idag.toISOString(),
+      },
+      {
+        opptakshendelsestypeKode: 'PUBLISERING_RESULTAT',
+        hendelseTidspunkt: idag.toISOString(),
+      },
+      {
+        opptakshendelsestypeKode: 'FRIST_ETTERSENDING',
+        hendelseTidspunkt: toUkerFrem.toISOString(),
+      },
+      {
+        opptakshendelsestypeKode: 'SOKNADSFRIST_ORDINAER',
+        hendelseTidspunkt: toUkerFrem.toISOString(),
+      },
+      {
+        opptakshendelsestypeKode: 'PUBLISERING_OPPTAK',
+        hendelseTidspunkt: idag.toISOString(),
+      },
+      {
+        opptakshendelsestypeKode: 'FRIST_ORDINAER_OPPLASTING',
+        hendelseTidspunkt: toUkerFrem.toISOString(),
+      },
+    ],
+    opptaksstatusKode: 'PUBLISERT',
+    opptakstypeKode: 'YTo1OiJMT0si',
+    runder: [],
+  }
+
+  // Opprett opptak via GraphQL API (med admin auth)
+  await userContext.switchTo('administrator')
+  const result = await opprettOpptak(userContext.currentPage.request, input)
+
+  // Legg til Jordmor utdanningstilbud
+  const utdanningstilbudInput: OpprettUtdanningstilbudInput = {
+    opptakId: result.opptak!.id,
+    utdanningsinstansId: 'YToxMDc6eyJvcmdhbmlzYXNqb25za29kZSI6IjE4NiIsInV0ZGFubmluZ3NtdWxpZ2hldEtvZGUiOiJNLUpPUkRNT1IiLCJwZXJpb2Rla29kZSI6IjIwMjUgVsOFUi4uMjAyNiBIw5hTVCJ9',
+    antallStudieplasser: 10,
+    erKansellert: false,
+    harTidligSoknadsfrist: false,
+    tilboedLedigeStudieplasserForrigeOpptaksrunde: false,
+    tilbyrLedigeStudieplasser: false,
+    tilbyrTidligOpptak: false,
+  }
+
+  const tilbudResult = await opprettUtdanningstilbud(userContext.currentPage.request, utdanningstilbudInput)
+
+  // Konfigurer utdanningstilbudet med kompetanseregelverk, rangeringsregelverk og kvoter
+  const oppdaterInput: OppdaterUtdanningstilbudV2Input = {
+    utdanningstilbudId: tilbudResult.utdanningstilbud!.id,
+    kompetanseregelverkId: 'YToxMTk6IktNMzEwMiI=', // KM3102
+    rangeringsregelverkKode: 'YToxNToiUk0zMTAyIg==', // RM3102
+    kvoter: [
+      {
+        kvotetypeId: 'YToyNjoiT1JEIg==', // ORD - Ordinær kvote
+        onsketAntallDeltakere: 10,
+        kvoteprioritet: 1,
+        erTilbudsgarantikvote: true,
+      },
+    ],
+    antallStudieplasser: 10,
+    visPoenggrenseForSoker: false,
+    visVentelistenummerForSoker: false,
+  }
+
+  await oppdaterUtdanningstilbud(userContext.currentPage.request, oppdaterInput)
+
+  // Bytt tilbake til person-kontekst for videre testing
+  await userContext.switchTo('person')
 })
 
 When('jeg oppretter et nytt lokalt opptak', async ({ userContext }) => {
@@ -25,10 +115,10 @@ When('jeg oppretter et nytt lokalt opptak', async ({ userContext }) => {
   await lokaltOpptakLink.click()
 })
 
-When('jeg setter navn til {string}', async ({ userContext }, navn: string) => {
-  sisteOpptakNavn = `${navn} - ${Date.now()}`
+When('jeg setter navn til {string}', async ({ userContext, testData }, navn: string) => {
+  testData.opptakNavn = `${navn} - ${Date.now()}`
   await userContext.currentPage.getByRole('textbox', { name: 'Navn på opptaket (bokmål)' }).click()
-  await userContext.currentPage.getByRole('textbox', { name: 'Navn på opptaket (bokmål)' }).fill(sisteOpptakNavn)
+  await userContext.currentPage.getByRole('textbox', { name: 'Navn på opptaket (bokmål)' }).fill(testData.opptakNavn)
 })
 
 When('jeg setter type til {string}', async ({ userContext }, type: string) => {
@@ -94,9 +184,9 @@ When('jeg tilknytter utdanningstilbudet {string} til opptaket', async ({ userCon
   // TODO: Implementer med spesifikt utdanningstilbud
 })
 
-Then('skal opptaket {string} være publisert', async ({ userContext }, _opptakNavn: string) => {
+Then('skal opptaket {string} være publisert', async ({ userContext, testData }, _opptakNavn: string) => {
   await userContext.currentPage.goto(`${process.env.FS_ADMIN_URL}/opptak`)
-  await expect(userContext.currentPage.getByRole('cell', { name: sisteOpptakNavn })).toBeVisible()
+  await expect(userContext.currentPage.getByRole('cell', { name: testData.opptakNavn })).toBeVisible()
 })
 
 Then('skal {string} være søkbart for søkere', async ({ userContext }, utdanning: string) => {
@@ -123,6 +213,6 @@ When('jeg går til studiekurven', async ({ userContext }) => {
   await userContext.currentPage.getByRole('link', { name: 'studier i kurv Til studiekurv' }).click()
 })
 
-Then('skal opptaket være synlig', async ({ userContext }) => {
-  await expect(userContext.currentPage.getByText(sisteOpptakNavn)).toBeVisible()
+Then('skal opptaket være synlig', async ({ userContext, testData }) => {
+  await expect(userContext.currentPage.getByText(testData.opptakNavn!)).toBeVisible()
 })
