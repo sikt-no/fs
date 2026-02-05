@@ -37,7 +37,7 @@ if [ -f "$RESULTS_FILE" ]; then
 
     # Find error message from first failed result
     export FIRST_FAILURE_MESSAGE
-    FIRST_FAILURE_MESSAGE=$(jq -r '.. | objects | select(.status? == "failed") | .error.message? // empty' "$RESULTS_FILE" | head -1 | head -c 300)
+    FIRST_FAILURE_MESSAGE=$(jq -r '.. | objects | select(.status? == "failed") | .error.message? // empty' "$RESULTS_FILE" | head -1 | sed 's/\x1b\[[0-9;]*m//g' | head -c 300)
 
     # Fallback if queries return empty
     if [ -z "$FIRST_FAILED_TEST" ]; then

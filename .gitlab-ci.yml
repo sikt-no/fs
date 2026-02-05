@@ -103,7 +103,7 @@ production:
   script:
     - deploy deployment.yaml
   after_script:
-    - 'curl -X POST -H "Content-type: application/json" -d @reports/slack-payload.json "$SLACK_WEBHOOK"'
+    - 'curl -sS -w "\nHTTP Status: %{http_code}\n" -X POST -H "Content-type: application/json" -d @reports/slack-payload.json "$SLACK_WEBHOOK"'
   when: on_success
   rules:
     - if: $CI_PIPELINE_SOURCE == "schedule"
