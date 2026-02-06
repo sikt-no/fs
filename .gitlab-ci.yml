@@ -25,6 +25,8 @@ stages:
 
 e2e_tests:
   stage: test
+  allow_failure:
+    exit_codes: [2]
   tags:
     - fs-plattform
   image: mcr.microsoft.com/playwright:v1.57.0-noble
@@ -41,8 +43,10 @@ e2e_tests:
     - ../scripts/fetch-allure-history.sh || true
   script:
     - source /tmp/test-env.sh
-    - npm test || true
+    - BDD_TAGS="$BDD_TAGS" npx bddgen || (curl -sS -X POST -H "Content-type:application/json" -d '{"text":"bddgen failed: Gherkin parse error in '${CI_PROJECT_NAME}' pipeline '${CI_PIPELINE_URL}'"}' "$SLACK_WEBHOOK" && exit 1)
+    - npx playwright test; TEST_EXIT=$?
     - npx allure awesome allure-results -o allure-report
+    - if [ $TEST_EXIT -ne 0 ]; then exit 2; fi
   after_script:
     - cd tester
     # Extract test metrics and generate Slack payload (nice-to-have - fail gracefully)
