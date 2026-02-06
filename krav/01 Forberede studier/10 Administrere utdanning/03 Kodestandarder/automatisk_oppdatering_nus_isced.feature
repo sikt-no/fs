@@ -164,9 +164,10 @@ Egenskap: Automatisk oppdatering av nus- og isced-koder
         | ped-plan@institusjon.no  | NUS-endring påvirker 2 program | BARN-BA, LÆRER-MA           |
         | spes-plan@institusjon.no | NUS-endring påvirker 1 program | SPES-PED                     |
       Og varselet skal inneholde:
-        - Gammel og ny verdi
-        - Antall berørte studenter
-        - Lenke til detaljert rapport
+        | innhold                |
+        | Gammel og ny verdi     |
+        | Antall berørte studenter |
+        | Lenke til detaljert rapport |
 
     @must @planned
     Scenario: Varsle systemadministratorer om ISCED-mapping endringer i FS Admin
@@ -235,8 +236,9 @@ Egenskap: Automatisk oppdatering av nus- og isced-koder
         | 3      | Prøve backup-endpoint      | Connection timeout    |
       Og logge feilen med detaljer
       Og opprette varsel i FS Admin for systemadministratorer hvis:
-        - API har vært nede > 48 timer
-        - Siste synk er > 7 dager gammel
+        | betingelse                       |
+        | API har vært nede > 48 timer     |
+        | Siste synk er > 7 dager gammel  |
       Og fortsette med eksisterende kodetabeller
 
   @e2e @should @planned
