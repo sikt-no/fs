@@ -106,4 +106,36 @@ Scenario: Se statistikk
   Så vises statistikkoversikt
 ```
 
-Begrens Background til Gitt-steps.
+Begrens Background til Gitt-steps. Hold den kort — leseren må huske
+alle forutsetningene når de leser hvert scenario.
+
+## Scenario-uavhengighet
+
+Kilde: https://cucumber.io/docs/guides/anti-patterns/
+
+Hvert scenario **må** være selvstendig og uavhengig. Det skal gi
+identisk resultat uansett rekkefølge, parallellkjøring, eller isolert kjøring.
+
+- Ikke lag avhengigheter mellom scenarios (scenario B forventer tilstand fra scenario A)
+- Ikke endre delt data som andre scenarios er avhengige av
+- Sett opp all nødvendig tilstand i Gitt-stegene eller Background
+
+```gherkin
+# FEIL - avhengig av at forrige scenario opprettet studenten
+Scenario: Rediger studentens adresse
+  Når saksbehandler endrer adressen til "Storgata 1"
+  Så er adressen oppdatert
+
+# RIKTIG - selvstendig scenario
+Scenario: Rediger studentens adresse
+  Gitt studenten "Ola Nordmann" finnes i systemet
+  Når saksbehandler endrer adressen til "Storgata 1"
+  Så er adressen oppdatert til "Storgata 1"
+```
+
+## Linting
+
+Kilde: https://github.com/andredesousa/gherkin-best-practices
+
+Bruk gherkin-lint eller lignende verktøy for å håndheve konsistent stil
+på tvers av forfattere. Automatiske sjekker fanger vanlige feil tidlig.

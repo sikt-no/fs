@@ -49,10 +49,37 @@ Så ser jeg dashboard
 
 Rekkefølgen Gitt-Når-Så er obligatorisk. Gitt kan ikke følge etter Når/Så.
 
+## BRIEF-rammeverket
+
+Kilde: https://cucumber.io/blog/bdd/keep-your-scenarios-brief/
+
+Hold scenarios **BRIEF**:
+
+- **B**usiness language — Bruk ord fra forretningsdomenet, ikke tekniske termer
+- **R**evelation of intent — Scenarioet skal avsløre *hensikten*, ikke mekanikken
+- **I**ntention-revealing name — Titler skal fortelle hva scenarioet handler om
+- **E**ssential — Fjern alt som ikke direkte bidrar til å illustrere regelen
+- **F**ew steps — Hold de fleste scenarios til fem linjer eller færre
+
 ## Begrens Antall Steps
 
 Hold scenarios under 10 steps. Lange scenarios er vanskelige å forstå
 og indikerer ofte dårlig praksis. Bruk Background for felles forutsetninger.
+
+## Unngå konjunktive steps
+
+Kilde: https://github.com/andredesousa/gherkin-best-practices
+
+Splitt sammensatte assertions i separate steps for bedre modularitet og gjenbruk:
+
+```gherkin
+# FEIL - to ting i ett step
+Så ser jeg feilmelding og tilbakeknapp
+
+# RIKTIG - ett step per assertion
+Så ser jeg feilmelding
+Og ser jeg tilbakeknapp
+```
 
 ## Formatering
 
@@ -95,3 +122,105 @@ Så varselet skal inneholde:
   Ny verdi
   """
 ```
+
+## Step-argumenter: Tabell vs Doc String vs Eksempler
+
+Kilde: https://cucumber.io/docs/gherkin/reference/
+Kilde: https://automationpanda.com/2017/01/27/bdd-101-gherkin-by-example/
+
+Det finnes tre måter å sende strukturert data til steps. De ser like ut men har
+helt forskjellige formål. Ikke forveksle dem.
+
+### Data-tabell (step-nivå)
+
+Sender en liste eller struktur til **ett enkelt step**. Brukes når et step
+trenger flere verdier som input eller verifikasjon.
+
+**Bruk når:** Et step trenger en liste av elementer, nøkkel-verdi-par, eller
+en tabell med flere kolonner.
+
+#### Én-kolonne (liste)
+```gherkin
+Så følgende filer skal vises:
+  | fil                |
+  | semesteroppgave    |
+  | intervjuspørsmål   |
+```
+
+#### To-kolonne (nøkkel-verdi)
+```gherkin
+Når brukeren oppretter en student med:
+  | fornavn    | Ola       |
+  | etternavn  | Nordmann  |
+  | epost      | ola@uio.no |
+```
+
+#### Fler-kolonne (med header)
+```gherkin
+Gitt følgende brukere finnes:
+  | navn   | epost             | rolle          |
+  | Kari   | kari@uio.no       | administrator  |
+  | Per    | per@uio.no        | saksbehandler  |
+```
+
+**Escape-tegn i tabeller:** `\n` (linjeskift), `\|` (pipe), `\\` (backslash).
+
+### Doc String (step-nivå)
+
+Sender en **større tekstblokk** til ett enkelt step. Brukes for fritekst,
+JSON, XML, markdown, e-post-innhold, eller lignende.
+
+**Bruk når:** Innholdet er ustrukturert tekst eller et dokument-format,
+ikke tabulære data.
+
+```gherkin
+Gitt et blogginnlegg med markdown-innhold:
+  """
+  Introduksjon til BDD
+  ====================
+  BDD handler om å beskrive atferd
+  gjennom konkrete eksempler.
+  """
+```
+
+Valgfri innholdstype kan angis etter åpnings-delimiter:
+```gherkin
+Gitt API-et mottar følgende JSON:
+  """json
+  {
+    "navn": "Ola Nordmann",
+    "rolle": "student"
+  }
+  """
+```
+
+### Eksempler-tabell (scenario-nivå)
+
+Brukes **kun med Scenariomal**. Kjører hele scenarioet én gang per rad.
+Hver rad representerer en unik kombinasjon av inputverdier.
+
+**Bruk når:** Samme atferd skal testes med forskjellige verdier.
+
+```gherkin
+Scenariomal: Søk med ulike termer
+  Når brukeren søker etter "<term>"
+  Så vises resultater for "<term>"
+
+  Eksempler:
+    | term          |
+    | informatikk   |
+    | pedagogikk    |
+    | sykepleie     |
+```
+
+### Oppsummering: Når bruke hva?
+
+| Type | Nivå | Formål | Eksempel |
+|------|------|--------|----------|
+| **Data-tabell** | Step | Sende strukturert data til ett step | Liste av brukere, nøkkel-verdi-par |
+| **Doc String** | Step | Sende stor tekstblokk til ett step | JSON-body, e-post-tekst, markdown |
+| **Eksempler** | Scenario | Parametrisere et helt scenariomal | Variasjoner av søkeord, input-typer |
+
+**Viktig:** Data-tabeller og Eksempler-tabeller ser like ut, men har helt
+forskjellige formål. Data-tabeller gir input til *ett step*. Eksempler-tabeller
+kjører *hele scenarioet* én gang per rad.

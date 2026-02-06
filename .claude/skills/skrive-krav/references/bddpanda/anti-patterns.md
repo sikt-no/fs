@@ -125,7 +125,85 @@ Scenariomal: Søk etter bruker
     | ola@example.com     |
 ```
 
-## Samarbeid-feil
+### Tilfeldige detaljer
+
+Kilde: https://cucumber.io/blog/bdd/cucumber-antipatterns-part-one/
+
+Fjern detaljer som ikke bidrar til å forstå atferden. Overflødige
+detaljer gjør at scenarioet leser som et testskript i stedet for
+forretningsdokumentasjon.
+
+```gherkin
+# FEIL - tilfeldige detaljer
+Gitt brukeren "Ola" med passord "Str0ngP@ss!" og epost "ola@uio.no"
+Og brukeren er på siden "https://app.uio.no/login"
+Når brukeren skriver "Ola" i brukernavn-feltet
+Og skriver "Str0ngP@ss!" i passord-feltet
+
+# RIKTIG - kun det som er relevant for atferden
+Gitt brukeren "Ola" er logget inn
+```
+
+### Vage og abstrakte scenarios
+
+Kilde: https://cucumber.io/blog/bdd/cucumber-anti-patterns-part-two/
+
+For abstrakte scenarios mangler konkrete verdier og er ikke testbare.
+Balanser mellom abstraksjon og konkrete eksempler.
+
+```gherkin
+# FEIL - for vagt
+Gitt jeg har en konto
+Når jeg tar ut penger
+Så oppdateres saldoen
+
+# RIKTIG - konkret og testbart
+Gitt kontoen min har saldo 5000 kr
+Når jeg tar ut 1000 kr
+Så skal saldoen være 4000 kr
+```
+
+### UI-nivå testing i Gherkin
+
+Kilde: https://cucumber.io/blog/bdd/cucumber-anti-patterns-part-two/
+
+Skriv scenarios på forretningsnivå, ikke UI-nivå. UI endres ofte,
+tester blir trege, og forretningsspråket forsvinner.
+
+```gherkin
+# FEIL - UI-nivå
+Når jeg klikker på "Søk"-knappen
+Og jeg venter på at tabellen lastes
+Og jeg klikker på rad 3 i resultatlisten
+
+# RIKTIG - forretningsnivå
+Når jeg søker etter studenter med etternavn "Nordmann"
+Så vises 3 matchende studenter
+```
+
+### Overflødige scenarios
+
+Kilde: https://cucumber.io/blog/bdd/cucumber-anti-patterns-part-two/
+
+Fjern scenarios som blir overflødige etter hvert som test-suiten vokser.
+"Opplagte" scenarios (f.eks. "tom liste viser ingenting") dekkes ofte
+av rikere scenarios som legges til senere.
+
+### Overbruk av Scenariomal
+
+Kilde: https://cucumber.io/blog/bdd/cucumber-anti-patterns-part-two/
+
+Unngå scenariomal med mange rader for trege tester (spesielt UI-tester).
+Hver rad kjører hele scenarioet. Bruk scenariomal kun med raske tester.
+
+## Prosess-feil
+
+### Skrive scenarios etter kode
+
+Kilde: https://cucumber.io/blog/bdd/cucumber-antipatterns-part-one/
+
+Scenarios bør skrives *før* implementasjon. Å skrive dem etterpå mister
+muligheten til å avdekke uenigheter og misforståelser tidlig.
 
 ### Skrive scenarios alene
 BDD er en samarbeidsprosess. Bruk "Three Amigos" (utvikler, tester,
