@@ -1,9 +1,11 @@
 ---
 name: skrive-krav
 description: >
-  Skriv BDD-krav i Gherkin-format. Veileder brukeren gjennom prosessen med å
-  definere krav, finner gjenbrukbare steps, og genererer feature-filer.
-  Bruk når brukeren vil skrive nye krav, lage feature-filer, eller jobbe med BDD.
+  This skill should be used when the user asks to "skrive krav", "lag feature-fil",
+  "skriv BDD-scenario", "definer krav", "lag Gherkin", "skriv en feature",
+  "nytt scenario", or wants to create BDD requirements in Gherkin format.
+  Guides the user through defining requirements, finding reusable steps, and
+  generating feature files.
 ---
 
 # Skrive Krav
@@ -55,7 +57,17 @@ For hvert scenario, avklar:
 
 **VIKTIG: ALDRI anta feilmeldinger, valideringsregler eller forretningslogikk - spør!**
 
-### 5. Generer feature-fil
+### 5. Les BDD beste praksis
+
+Før generering av feature-filen, les relevante referansefiler i `references/bddpanda/`:
+- **`writing-good-gherkin.md`** - Hovedregler: Golden Rule, deklarativ vs imperativ, gyldig syntaks
+- **`anti-patterns.md`** - Vanlige feil: punktlister, kondisjonell logikk, implementasjonsdetaljer
+- **`features-and-scenarios.md`** - Feature-struktur, one scenario one behavior, scenariomal
+- **`scenario-titles.md`** - Retningslinjer for gode scenariotitler
+- **`step-phrasing.md`** - Person, tempus og formulering av steps
+- **`test-data.md`** - Håndtering av testdata i BDD
+
+### 6. Generer feature-fil
 
 **Plassering:**
 ```
@@ -86,107 +98,11 @@ Egenskap: [Navn]
       Så [forventet resultat]
 ```
 
-### 6. Oppdater oversikt
+### 7. Oppdater oversikt
 
 Etter at feature-filen er lagret:
 ```bash
 cd krav-parser && npm run generate-overview
-```
-
----
-
-## Gherkin Beste Praksis
-
-### Ett Scenario = Én Atferd
-
-Hvert scenario skal teste én spesifikk atferd.
-
-```gherkin
-# FEIL - tester to ting
-Scenario: Bruker logger inn og ser dashboard
-  Når bruker logger inn
-  Så ser bruker velkommen-melding
-  Når bruker klikker dashboard
-  Så ser bruker statistikk
-
-# RIKTIG - ett scenario per atferd
-Scenario: Vellykket innlogging
-  Når bruker logger inn
-  Så ser bruker velkommen-melding
-
-Scenario: Navigere til dashboard
-  Gitt bruker er logget inn
-  Når bruker klikker dashboard
-  Så ser bruker statistikk
-```
-
-### Deklarativ vs Imperativ
-
-Skriv HVA som skal skje, ikke HVORDAN.
-
-```gherkin
-# FEIL - imperativ (hvordan)
-Når jeg klikker på brukernavn-feltet
-Og jeg skriver "test@example.com"
-Og jeg klikker på passord-feltet
-Og jeg skriver "password123"
-Og jeg klikker på logg-inn-knappen
-
-# RIKTIG - deklarativ (hva)
-Når jeg logger inn med "test@example.com"
-```
-
-### Bruk Scenariomal for Variasjoner
-
-```gherkin
-Scenariomal: Validering av input
-  Når bruker skriver "<input>"
-  Så ser bruker "<resultat>"
-
-  Eksempler:
-    | input    | resultat    |
-    | gyldig   | Suksess     |
-    | ugyldig  | Feilmelding |
-```
-
-### Bruk Regel-seksjoner
-
-Grupper relaterte scenarios under forretningsregler:
-
-```gherkin
-Regel: Kun aktive brukere kan logge inn
-
-  Scenario: Aktiv bruker logger inn
-    ...
-
-  Scenario: Deaktivert bruker nektes tilgang
-    ...
-```
-
-### Bakgrunn for Felles Setup
-
-```gherkin
-Bakgrunn:
-  Gitt bruker er logget inn
-  Og bruker er på dashboard
-
-Scenario: Se statistikk
-  Når bruker klikker statistikk
-  Så ...
-```
-
-### Konkrete Eksempler
-
-Bruk spesifikke, realistiske verdier:
-
-```gherkin
-# FEIL - generisk
-Gitt en bruker finnes
-Når bruker søker på noe
-
-# RIKTIG - konkret
-Gitt brukeren "Ola Nordmann" finnes
-Når bruker søker på "informatikk"
 ```
 
 ---
