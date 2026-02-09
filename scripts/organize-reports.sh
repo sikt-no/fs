@@ -6,9 +6,8 @@ set -e
 
 REPORTS_DIR="${1:-reports}"
 PLAYWRIGHT_SOURCE="${2:-tester/playwright-report}"
-ALLURE_SOURCE="${3:-tester/allure-report}"
-REPORT_TIMESTAMP="${4:-$(date +%Y-%m-%d_%H-%M-%S)}"
-TEST_ENV="${5:-functionaltest}"
+REPORT_TIMESTAMP="${3:-$(date +%Y-%m-%d_%H-%M-%S)}"
+TEST_ENV="${4:-functionaltest}"
 
 FOLDER_NAME="${REPORT_TIMESTAMP}_${TEST_ENV}"
 LATEST_FOLDER="latest_${TEST_ENV}"
@@ -20,20 +19,16 @@ echo "Folder name: $FOLDER_NAME"
 # Create reports directory
 mkdir -p "$REPORTS_DIR"
 
-# Copy new reports to timestamped folder with playwright/ and allure/ subdirs
+# Copy new reports to timestamped folder
 echo "Creating timestamped report: $FOLDER_NAME"
 mkdir -p "${REPORTS_DIR}/${FOLDER_NAME}/playwright"
 cp -r "${PLAYWRIGHT_SOURCE}"/* "${REPORTS_DIR}/${FOLDER_NAME}/playwright/"
-mkdir -p "${REPORTS_DIR}/${FOLDER_NAME}/allure"
-cp -r "${ALLURE_SOURCE}"/* "${REPORTS_DIR}/${FOLDER_NAME}/allure/"
 
 # Copy to latest_{env} (overwrite)
 echo "Updating ${LATEST_FOLDER}..."
 rm -rf "${REPORTS_DIR:?}/${LATEST_FOLDER:?}"
 mkdir -p "${REPORTS_DIR}/${LATEST_FOLDER}/playwright"
 cp -r "${PLAYWRIGHT_SOURCE}"/* "${REPORTS_DIR}/${LATEST_FOLDER}/playwright/"
-mkdir -p "${REPORTS_DIR}/${LATEST_FOLDER}/allure"
-cp -r "${ALLURE_SOURCE}"/* "${REPORTS_DIR}/${LATEST_FOLDER}/allure/"
 
 # Generate reports index (BusyBox-compatible find without -printf)
 find "$REPORTS_DIR" -maxdepth 1 -mindepth 1 -type d | sed 's|.*/||' | sort -r > "${REPORTS_DIR}/reports-index.json.tmp"

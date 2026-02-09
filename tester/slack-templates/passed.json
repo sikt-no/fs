@@ -45,15 +45,6 @@
           "type": "button",
           "text": {
             "type": "plain_text",
-            "text": "Allure Report",
-            "emoji": true
-          },
-          "url": "https://fs-funksjonelltesting.sokrates.edupaas.no/${REPORT_TIMESTAMP}_${TEST_ENV}/allure/"
-        },
-        {
-          "type": "button",
-          "text": {
-            "type": "plain_text",
             "text": "Pipeline #${CI_PIPELINE_ID}",
             "emoji": true
           },

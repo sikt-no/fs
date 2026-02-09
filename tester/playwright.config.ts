@@ -22,36 +22,6 @@ export default defineConfig({
     ['html'],
     ['json', { outputFile: 'test-results/results.json' }],
     ['junit', { outputFile: 'test-results/junit.xml' }],
-    ['allure-playwright', {
-      resultsDir: 'allure-results',
-      environmentInfo: {
-        Environment: process.env.CI ? 'CI' : 'Local',
-        BaseURL: process.env.FS_ADMIN_URL || 'not set',
-        NodeVersion: process.version,
-      },
-      categories: [
-        {
-          name: 'Authentication failures',
-          messageRegex: /auth|login|session|token/i,
-          matchedStatuses: ['failed', 'broken'],
-        },
-        {
-          name: 'Timeout issues',
-          messageRegex: /timeout|timed out/i,
-          matchedStatuses: ['failed', 'broken'],
-        },
-        {
-          name: 'Element not found',
-          messageRegex: /locator|element|selector|not found|no element/i,
-          matchedStatuses: ['failed'],
-        },
-        {
-          name: 'Network errors',
-          messageRegex: /network|fetch|request failed|ECONNREFUSED/i,
-          matchedStatuses: ['failed', 'broken'],
-        },
-      ],
-    }],
   ],
   use: {
     locale: 'nb-NO',

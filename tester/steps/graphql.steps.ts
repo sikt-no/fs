@@ -1,9 +1,9 @@
 import { createBdd } from 'playwright-bdd';
-import { test, expect } from '../fixtures/allure.fixture';
+import { expect } from '@playwright/test';
 import { hentUtdanningsinstanser } from '../graphql/client';
 import type { AdmissioUtdanningsinstans } from '../graphql/types';
 
-const { When, Then } = createBdd(test);
+const { When, Then } = createBdd();
 
 let utdanningsinstanser: AdmissioUtdanningsinstans[];
 let graphqlError: Error | undefined;

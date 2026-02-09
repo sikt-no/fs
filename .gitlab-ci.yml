@@ -32,15 +32,13 @@ e2e_tests:
   image: mcr.microsoft.com/playwright:v1.57.0-noble
   before_script:
     - cd tester
-    - apt-get update && apt-get install -y default-jre curl unzip gettext-base jq
+    - apt-get update && apt-get install -y curl gettext-base jq
     - npm ci
     # Generate report timestamp (used for Slack links and report organization)
     - export REPORT_TIMESTAMP=$(date +%Y-%m-%d_%H-%M-%S)
     - echo "$REPORT_TIMESTAMP" > report-timestamp.txt
     # Setup test environment URLs based on TEST_ENV (critical - must succeed)
     - source ../scripts/setup-test-env.sh
-    # Fetch Allure history from previous successful pipeline (nice-to-have - fail gracefully)
-    - ../scripts/fetch-allure-history.sh || true
   script:
     - source /tmp/test-env.sh
     - BDD_TAGS="$BDD_TAGS" npx bddgen || BDDGEN_FAILED=1
@@ -52,7 +50,6 @@ e2e_tests:
         exit 1;
         fi
     - npx playwright test || TEST_FAILED=1
-    - npx allure awesome allure-results -o allure-report
     - if [ "$TEST_FAILED" = "1" ]; then exit 2; fi
   after_script:
     - cd tester
@@ -62,7 +59,6 @@ e2e_tests:
   artifacts:
     paths:
       - tester/playwright-report/
-      - tester/allure-report/
       - tester/report-timestamp.txt
       - tester/slack-payload.json
     reports:
@@ -82,7 +78,7 @@ prepare-reports:
       artifacts: true
   script:
     - export REPORT_TIMESTAMP=$(cat tester/report-timestamp.txt)
-    - ./scripts/organize-reports.sh reports tester/playwright-report tester/allure-report "$REPORT_TIMESTAMP" "$TEST_ENV"
+    - ./scripts/organize-reports.sh reports tester/playwright-report "$REPORT_TIMESTAMP" "$TEST_ENV"
     - cp tester/slack-payload.json reports/
   artifacts:
     paths:
