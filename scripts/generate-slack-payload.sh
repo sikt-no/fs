@@ -22,7 +22,9 @@ if [ -f "$RESULTS_FILE" ]; then
   TEST_FAILED=$(jq -r '.stats.unexpected // 0' "$RESULTS_FILE")
   export TEST_SKIPPED
   TEST_SKIPPED=$(jq -r '.stats.skipped // 0' "$RESULTS_FILE")
-  export TEST_TOTAL=$((TEST_PASSED + TEST_FAILED + TEST_SKIPPED))
+  export TEST_FLAKY
+  TEST_FLAKY=$(jq -r '.stats.flaky // 0' "$RESULTS_FILE")
+  export TEST_TOTAL=$((TEST_PASSED + TEST_FAILED + TEST_SKIPPED + TEST_FLAKY))
 
   # Duration in seconds (convert from milliseconds)
   TEST_DURATION_MS=$(jq -r '.stats.duration // 0' "$RESULTS_FILE")
@@ -72,6 +74,7 @@ else
   export TEST_PASSED=0
   export TEST_FAILED=0
   export TEST_SKIPPED=0
+  export TEST_FLAKY=0
   export TEST_DURATION="0.0"
   export FIRST_FAILED_TEST="Ukjent"
   export FIRST_FAILURE_MESSAGE="Se testrapportene for detaljer"

@@ -12,7 +12,7 @@
       "type": "section",
       "text": {
         "type": "mrkdwn",
-        "text": ":x: *${TEST_TOTAL} tester • ${TEST_PASSED} bestått • ${TEST_FAILED} feilet • ${TEST_SKIPPED} hoppet over • ${TEST_DURATION}s • tags: ${BDD_TAGS}*"
+        "text": ":x: *${TEST_TOTAL} tester • ${TEST_PASSED} bestått • ${TEST_FAILED} feilet • ${TEST_FLAKY} flaky • ${TEST_SKIPPED} hoppet over • ${TEST_DURATION}s • tags: ${BDD_TAGS}*"
       }
     },
     {
