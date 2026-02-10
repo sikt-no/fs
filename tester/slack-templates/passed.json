@@ -12,7 +12,7 @@
       "type": "section",
       "text": {
         "type": "mrkdwn",
-        "text": ":white_check_mark: *${TEST_TOTAL} tester • ${TEST_PASSED} bestått • ${TEST_FLAKY} flaky • ${TEST_SKIPPED} hoppet over • ${TEST_DURATION}s • tags: ${BDD_TAGS}*"
+        "text": ":white_check_mark: *${TEST_TOTAL} tester • ${TEST_PASSED} bestått • :warning: ${TEST_FLAKY} flaky • :fast_forward: ${TEST_SKIPPED} hoppet over • ${TEST_DURATION}s • tags: ${BDD_TAGS}*"
       }
     },
     {
