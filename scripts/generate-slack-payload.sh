@@ -31,6 +31,17 @@ if [ -f "$RESULTS_FILE" ]; then
   export TEST_DURATION
   TEST_DURATION=$(awk "BEGIN {printf \"%.1f\", $TEST_DURATION_MS / 1000}")
 
+  # Build conditional status text for flaky and skipped tests
+  export TEST_FLAKY_TEXT=""
+  if [ "$TEST_FLAKY" -gt 0 ]; then
+    TEST_FLAKY_TEXT=" • :warning: ${TEST_FLAKY} flaky"
+  fi
+
+  export TEST_SKIPPED_TEXT=""
+  if [ "$TEST_SKIPPED" -gt 0 ]; then
+    TEST_SKIPPED_TEXT=" • :fast_forward: ${TEST_SKIPPED} hoppet over"
+  fi
+
   # Extract first failed test if any failures exist
   if [ "$TEST_FAILED" -gt 0 ]; then
     # Find spec title for first failed test (recursive search through nested structure)
@@ -76,6 +87,8 @@ else
   export TEST_SKIPPED=0
   export TEST_FLAKY=0
   export TEST_DURATION="0.0"
+  export TEST_FLAKY_TEXT=""
+  export TEST_SKIPPED_TEXT=""
   export FIRST_FAILED_TEST="Ukjent"
   export FIRST_FAILURE_MESSAGE="Se testrapportene for detaljer"
   export FAILURE_CATEGORY=""
