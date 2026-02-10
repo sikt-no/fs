@@ -45,9 +45,11 @@ Then('innloggingstilstanden skal lagres for adminflaten', async ({ page }) => {
 // ============ Personsøk-administrator steps ============
 
 When('personsøk-administratoren velger overstyrt bruker', async ({ page }) => {
-  const loginPage = new FsAdminLoginPage(page)
-  await loginPage.overstyrtBrukerSelect.selectOption(process.env.PERSONSOK_ADMIN_OVERSTYRT_BRUKER!)
-  await page.waitForLoadState('networkidle')
+  if (process.env.PERSONSOK_ADMIN_OVERSTYRT_BRUKER) {
+    const loginPage = new FsAdminLoginPage(page)
+    await loginPage.overstyrtBrukerSelect.selectOption(process.env.PERSONSOK_ADMIN_OVERSTYRT_BRUKER)
+    await page.waitForLoadState('networkidle')
+  }
 })
 
 Then('innloggingstilstanden skal lagres for personsøk-adminflaten', async ({ page }) => {
