@@ -4,6 +4,12 @@ on:
   issues:
     types: [closed]
 
+permissions:
+  issues: write
+  pull-requests: write
+  repository-projects: write
+  contents: read
+
 jobs:
   update-completion-date:
     runs-on: ubuntu-latest
@@ -138,31 +144,49 @@ jobs:
             const issueNumber = context.payload.issue.number;
             const today = new Date().toISOString().split('T')[0];
             
-            console.log(`Oppdaterer prosjekt-felter for issue #${issueNumber}`);
+            console.log(`=== STARTER PROSJEKT-OPPDATERING FOR ISSUE #${issueNumber} ===`);
+            console.log(`Dato som skal settes: ${today}`);
             
             try {
-              // Hent alle prosjekter knyttet til denne issuen
-              const query = `
+              // Query for å finne issue og dens prosjekt-tilknytninger
+              // Inkluderer både repository og organization projects
+              const findProjectsQuery = `
                 query($owner: String!, $repo: String!, $issue: Int!) {
                   repository(owner: $owner, name: $repo) {
                     issue(number: $issue) {
-                      projectsV2(first: 10) {
+                      id
+                      projectsV2(first: 20) {
                         nodes {
                           id
                           title
-                          items(first: 10) {
-                            nodes {
-                              id
+                          owner {
+                            ... on Organization {
+                              login
+                            }
+                            ... on Repository {
+                              name
                             }
                           }
                         }
                       }
-                      projectItems(first: 10) {
-                        nodes {
-                          id
-                          project {
+                    }
+                  }
+                  organization(login: $owner) {
+                    projectsV2(first: 20) {
+                      nodes {
+                        id
+                        title
+                        items(first: 100) {
+                          nodes {
                             id
-                            title
+                            content {
+                              ... on Issue {
+                                number
+                                repository {
+                                  name
+                                }
+                              }
+                            }
                           }
                         }
                       }
@@ -177,31 +201,34 @@ jobs:
                 issue: issueNumber
               };
               
-              console.log('Kjører GraphQL query for å finne prosjekter...');
-              const result = await github.graphql(query, variables);
+              console.log('Søker etter prosjekter...');
+              const projectsResult = await github.graphql(findProjectsQuery, variables);
               
-              console.log('GraphQL resultat:', JSON.stringify(result, null, 2));
-              
-              // Samle alle prosjekt-items
               const projectItems = [];
               
-              // Fra projectItems (gammel struktur)
-              if (result.repository.issue.projectItems && result.repository.issue.projectItems.nodes) {
-                for (const item of result.repository.issue.projectItems.nodes) {
-                  projectItems.push({
-                    itemId: item.id,
-                    projectId: item.project.id,
-                    projectTitle: item.project.title
-                  });
+              // Sjekk repository-linked projects
+              if (projectsResult.repository?.issue?.projectsV2?.nodes) {
+                console.log(`Fant ${projectsResult.repository.issue.projectsV2.nodes.length} repository-prosjekter`);
+                for (const project of projectsResult.repository.issue.projectsV2.nodes) {
+                  console.log(`- ${project.title} (ID: ${project.id})`);
                 }
               }
               
-              // Fra projectsV2 (ny struktur)
-              if (result.repository.issue.projectsV2 && result.repository.issue.projectsV2.nodes) {
-                for (const project of result.repository.issue.projectsV2.nodes) {
-                  if (project.items && project.items.nodes && project.items.nodes.length > 0) {
+              // Sjekk organization projects
+              if (projectsResult.organization?.projectsV2?.nodes) {
+                console.log(`\nSøker gjennom ${projectsResult.organization.projectsV2.nodes.length} organization-prosjekter...`);
+                
+                for (const project of projectsResult.organization.projectsV2.nodes) {
+                  // Finn items som matcher vår issue
+                  const matchingItem = project.items.nodes.find(item => 
+                    item.content?.number === issueNumber && 
+                    item.content?.repository?.name === context.repo.repo
+                  );
+                  
+                  if (matchingItem) {
+                    console.log(`✓ Fant issue i organization-prosjekt: ${project.title}`);
                     projectItems.push({
-                      itemId: project.items.nodes[0].id,
+                      itemId: matchingItem.id,
                       projectId: project.id,
                       projectTitle: project.title
                     });
@@ -209,32 +236,22 @@ jobs:
                 }
               }
               
-              console.log(`Fant ${projectItems.length} prosjekt(er) knyttet til issuen`);
+              console.log(`\n=== FANT TOTALT ${projectItems.length} PROSJEKT-TILKNYTNINGER ===`);
               
-              // For hvert prosjekt, hent felter og oppdater
-              for (const projectItem of projectItems) {
-                console.log(`\nBehandler prosjekt: ${projectItem.projectTitle}`);
+              if (projectItems.length === 0) {
+                console.log('⚠️ Ingen prosjekt-tilknytninger funnet for denne issuen');
                 
-                // Hent prosjektets felter
-                const fieldsQuery = `
-                  query($projectId: ID!) {
-                    node(id: $projectId) {
-                      ... on ProjectV2 {
-                        fields(first: 50) {
+                // Prøv alternativ metode for å finne project items
+                const alternativeQuery = `
+                  query($nodeId: ID!) {
+                    node(id: $nodeId) {
+                      ... on Issue {
+                        projectItems(first: 20) {
                           nodes {
-                            ... on ProjectV2Field {
+                            id
+                            project {
                               id
-                              name
-                              dataType
-                            }
-                            ... on ProjectV2SingleSelectField {
-                              id
-                              name
-                              dataType
-                              options {
-                                id
-                                name
-                              }
+                              title
                             }
                           }
                         }
@@ -243,42 +260,87 @@ jobs:
                   }
                 `;
                 
-                const fieldsResult = await github.graphql(fieldsQuery, {
-                  projectId: projectItem.projectId
-                });
+                const issueNodeId = context.payload.issue.node_id;
+                console.log(`Prøver alternativ metode med node_id: ${issueNodeId}`);
                 
-                if (!fieldsResult.node || !fieldsResult.node.fields) {
-                  console.log(`Kunne ikke hente felter for prosjekt ${projectItem.projectTitle}`);
-                  continue;
+                const altResult = await github.graphql(alternativeQuery, { nodeId: issueNodeId });
+                
+                if (altResult.node?.projectItems?.nodes) {
+                  for (const item of altResult.node.projectItems.nodes) {
+                    console.log(`✓ Fant via alternativ metode: ${item.project.title}`);
+                    projectItems.push({
+                      itemId: item.id,
+                      projectId: item.project.id,
+                      projectTitle: item.project.title
+                    });
+                  }
                 }
+              }
+              
+              // Oppdater hvert prosjekt
+              for (const projectItem of projectItems) {
+                console.log(`\n=== BEHANDLER PROSJEKT: ${projectItem.projectTitle} ===`);
                 
-                const fields = fieldsResult.node.fields.nodes;
-                console.log(`Felter i prosjektet: ${fields.map(f => `${f.name} (${f.dataType})`).join(', ')}`);
-                
-                // Finn og oppdater Status-felt
-                const statusField = fields.find(f => 
-                  f.name.toLowerCase() === 'status' && 
-                  f.dataType === 'SINGLE_SELECT'
-                );
-                
-                if (statusField && statusField.options) {
-                  const levertOption = statusField.options.find(opt => 
-                    opt.name.toLowerCase().includes('levert') ||
-                    opt.name.toLowerCase().includes('ferdig') ||
-                    opt.name.toLowerCase().includes('done') ||
-                    opt.name.toLowerCase().includes('complete')
+                try {
+                  // Hent prosjektets felter
+                  const fieldsQuery = `
+                    query($projectId: ID!) {
+                      node(id: $projectId) {
+                        ... on ProjectV2 {
+                          fields(first: 50) {
+                            nodes {
+                              ... on ProjectV2Field {
+                                id
+                                name
+                                dataType
+                              }
+                              ... on ProjectV2SingleSelectField {
+                                id
+                                name
+                                dataType
+                                options {
+                                  id
+                                  name
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  `;
+                  
+                  const fieldsResult = await github.graphql(fieldsQuery, {
+                    projectId: projectItem.projectId
+                  });
+                  
+                  const fields = fieldsResult.node.fields.nodes;
+                  console.log('Prosjektfelter:');
+                  fields.forEach(f => {
+                    console.log(`  - ${f.name} (${f.dataType})`);
+                  });
+                  
+                  // Finn Status-felt
+                  const statusField = fields.find(f => 
+                    f.name.toLowerCase() === 'status' && 
+                    f.dataType === 'SINGLE_SELECT'
                   );
                   
-                  if (levertOption) {
-                    try {
+                  if (statusField && statusField.options) {
+                    console.log('\nStatus-opsjoner funnet:');
+                    statusField.options.forEach(opt => console.log(`  - ${opt.name}`));
+                    
+                    const levertOption = statusField.options.find(opt => 
+                      opt.name.toLowerCase().includes('levert') ||
+                      opt.name.toLowerCase().includes('ferdig') ||
+                      opt.name.toLowerCase().includes('done') ||
+                      opt.name.toLowerCase().includes('complete')
+                    );
+                    
+                    if (levertOption) {
                       const statusMutation = `
-                        mutation($projectId: ID!, $itemId: ID!, $fieldId: ID!, $value: ProjectV2FieldValue!) {
-                          updateProjectV2ItemFieldValue(input: {
-                            projectId: $projectId,
-                            itemId: $itemId,
-                            fieldId: $fieldId,
-                            value: $value
-                          }) {
+                        mutation($input: UpdateProjectV2ItemFieldValueInput!) {
+                          updateProjectV2ItemFieldValue(input: $input) {
                             projectV2Item {
                               id
                             }
@@ -287,49 +349,54 @@ jobs:
                       `;
                       
                       await github.graphql(statusMutation, {
-                        projectId: projectItem.projectId,
-                        itemId: projectItem.itemId,
-                        fieldId: statusField.id,
-                        value: { 
-                          singleSelectOptionId: levertOption.id
+                        input: {
+                          projectId: projectItem.projectId,
+                          itemId: projectItem.itemId,
+                          fieldId: statusField.id,
+                          value: { 
+                            singleSelectOptionId: levertOption.id
+                          }
                         }
                       });
                       
-                      console.log(`✓ Oppdatert status til "${levertOption.name}"`);
-                    } catch (error) {
-                      console.error(`Feil ved oppdatering av status: ${error.message}`);
+                      console.log(`✓ Status oppdatert til: ${levertOption.name}`);
                     }
-                  } else {
-                    console.log(`Fant ingen "Levert" option i Status-feltet`);
                   }
-                } else {
-                  console.log(`Fant ingen Status-felt i prosjektet`);
-                }
-                
-                // Finn og oppdater Ferdigdato-felt
-                const ferdigdatoField = fields.find(f => 
-                  (f.name.toLowerCase().includes('ferdigdato') || 
-                   f.name.toLowerCase().includes('ferdig dato') ||
-                   f.name.toLowerCase() === 'completion date' ||
-                   f.name.toLowerCase() === 'end date' ||
-                   f.name.toLowerCase() === 'sluttdato' ||
-                   f.name.toLowerCase() === 'slutt dato' ||
-                   f.name === 'Ferdigdato') && 
-                  f.dataType === 'DATE'
-                );
-                
-                if (ferdigdatoField) {
-                  try {
-                    console.log(`Fant ferdigdato-felt: "${ferdigdatoField.name}" (ID: ${ferdigdatoField.id})`);
+                  
+                  // Finn Ferdigdato-felt - sjekk ALLE mulige navn
+                  console.log('\nSøker etter ferdigdato-felt...');
+                  const dateFields = fields.filter(f => f.dataType === 'DATE');
+                  console.log(`Dato-felter funnet: ${dateFields.map(f => f.name).join(', ')}`);
+                  
+                  const ferdigdatoField = fields.find(f => {
+                    if (f.dataType !== 'DATE') return false;
+                    
+                    const fieldNameLower = f.name.toLowerCase();
+                    const fieldNameNoSpace = fieldNameLower.replace(/\s+/g, '');
+                    
+                    // Sjekk mange varianter
+                    return fieldNameLower === 'ferdigdato' ||
+                           fieldNameLower === 'ferdig dato' ||
+                           fieldNameLower === 'ferdig-dato' ||
+                           fieldNameNoSpace === 'ferdigdato' ||
+                           fieldNameLower === 'sluttdato' ||
+                           fieldNameLower === 'slutt dato' ||
+                           fieldNameLower === 'slutt' ||
+                           fieldNameLower === 'end date' ||
+                           fieldNameLower === 'end' ||
+                           fieldNameLower === 'completion date' ||
+                           fieldNameLower === 'completed' ||
+                           fieldNameLower === 'completed date' ||
+                           f.name === 'Ferdigdato' ||
+                           f.name === 'Ferdig dato';
+                  });
+                  
+                  if (ferdigdatoField) {
+                    console.log(`✓ Ferdigdato-felt funnet: "${ferdigdatoField.name}"`);
                     
                     const dateMutation = `
-                      mutation($projectId: ID!, $itemId: ID!, $fieldId: ID!, $value: ProjectV2FieldValue!) {
-                        updateProjectV2ItemFieldValue(input: {
-                          projectId: $projectId,
-                          itemId: $itemId,
-                          fieldId: $fieldId,
-                          value: $value
-                        }) {
+                      mutation($input: UpdateProjectV2ItemFieldValueInput!) {
+                        updateProjectV2ItemFieldValue(input: $input) {
                           projectV2Item {
                             id
                           }
@@ -338,29 +405,36 @@ jobs:
                     `;
                     
                     await github.graphql(dateMutation, {
-                      projectId: projectItem.projectId,
-                      itemId: projectItem.itemId,
-                      fieldId: ferdigdatoField.id,
-                      value: {
-                        date: today
+                      input: {
+                        projectId: projectItem.projectId,
+                        itemId: projectItem.itemId,
+                        fieldId: ferdigdatoField.id,
+                        value: {
+                          date: today
+                        }
                       }
                     });
                     
-                    console.log(`✓ Satt ferdigdato til ${today}`);
-                  } catch (error) {
-                    console.error(`Feil ved setting av ferdigdato: ${error.message}`);
+                    console.log(`✓ Ferdigdato satt til: ${today}`);
+                  } else {
+                    console.log('⚠️ Ingen ferdigdato-felt funnet i dette prosjektet');
+                    console.log('Tips: Sjekk at prosjektet har et dato-felt med navn som "Ferdigdato" eller "Ferdig dato"');
                   }
-                } else {
-                  console.log(`Ingen ferdigdato-felt funnet. Tilgjengelige dato-felter: ${fields.filter(f => f.dataType === 'DATE').map(f => f.name).join(', ')}`);
+                  
+                } catch (projectError) {
+                  console.error(`Feil for prosjekt ${projectItem.projectTitle}:`, projectError.message);
                 }
               }
               
+              console.log('\n=== PROSJEKT-OPPDATERING FULLFØRT ===');
+              
             } catch (error) {
-              console.error('Feil ved oppdatering av prosjekt-felter:', error);
-              console.error('Detaljert feilmelding:', error.message);
+              console.error('=== FEIL I PROSJEKT-OPPDATERING ===');
+              console.error('Feilmelding:', error.message);
               if (error.errors) {
                 console.error('GraphQL errors:', JSON.stringify(error.errors, null, 2));
               }
+              console.error('Stack trace:', error.stack);
             }
 
       - name: Legg til ferdigstillingskommentar
