@@ -149,21 +149,17 @@ jobs:
             
             let commentBody;
             if (hasInternLabel) {
-              commentBody = `🤖 **Automatisk prosjekt-tilknytning**
-              
-Denne issue har automatisk blitt lagt til i følgende prosjekter:
-- 🔒 FS Saksoversikt (intern) - Kun intern sak
-
-_Issue markert som "intern" vises ikke i offentlig saksoversikt_
-_Generert av GitHub Actions workflow_`;
+              commentBody = '🤖 **Automatisk prosjekt-tilknytning**\n\n' +
+                'Denne issue har automatisk blitt lagt til i følgende prosjekter:\n' +
+                '- 🔒 FS Saksoversikt (intern) - Kun intern sak\n\n' +
+                '_Issue markert som "intern" vises ikke i offentlig saksoversikt_\n' +
+                '_Generert av GitHub Actions workflow_';
             } else {
-              commentBody = `🤖 **Automatisk prosjekt-tilknytning**
-              
-Denne issue har automatisk blitt lagt til i følgende prosjekter:
-- ✅ FS Offentlig saksoversikt  
-- ✅ FS Saksoversikt (intern)
-
-_Generert av GitHub Actions workflow_`;
+              commentBody = '🤖 **Automatisk prosjekt-tilknytning**\n\n' +
+                'Denne issue har automatisk blitt lagt til i følgende prosjekter:\n' +
+                '- ✅ FS Offentlig saksoversikt\n' +
+                '- ✅ FS Saksoversikt (intern)\n\n' +
+                '_Generert av GitHub Actions workflow_';
             }
             
             await github.rest.issues.createComment({
