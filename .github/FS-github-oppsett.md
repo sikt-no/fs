@@ -175,10 +175,13 @@ Vi har fire aktive workflows som automatiserer saksadministrasjon:
 ### Workflow-triggere
 
 **Kolonnenavn som aktiverer startdato-workflow:**
-- "under arbeid", "in progress"
+Når en sak settes til behovsanalyse, så settes startdato
+- "behovsanalyse"
 
 **Kolonnenavn som aktiverer ferdigdato-workflow:**
-- "ferdig", "done", "complete", "finished"
+Når en sak settes til fullført så settes ferdigdato 
+Closed issues that were completed: is:closed reason:completed is:issue
+- "levert",
 
 ---
 
