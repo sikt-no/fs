@@ -34,7 +34,7 @@ jobs:
             
             // Sjekk unntak for kritiske bugs
             if (hasBugType && hasCriticalPriority && isAssigned) {
-              targetStatus = "arbeidskø";
+              targetStatus = "behovsanalyse";
               console.log(`Kritisk bug med tilordning - setter status: ${targetStatus}`);
             } else {
               console.log(`Standard flyt - setter status: ${targetStatus}`);
@@ -74,7 +74,7 @@ jobs:
                 const targetColumn = columns.find(col => 
                   col.name.toLowerCase().includes(targetStatus.toLowerCase()) ||
                   (targetStatus === "til vurdering" && col.name.toLowerCase().includes('vurdering')) ||
-                  (targetStatus === "arbeidskø" && (col.name.toLowerCase().includes('arbeid') || col.name.toLowerCase().includes('kø')))
+                  (targetStatus === "behovsanalyse" && col.name.toLowerCase().includes('behovsanalyse'))
                 );
                 
                 if (targetColumn) {
@@ -117,14 +117,14 @@ jobs:
               await moveCardToColumn(internProject, "FS Saksoversikt (intern)");
               
               // Legg til kommentar hvis kritisk bug
-              if (targetStatus === "arbeidskø") {
+              if (targetStatus === "behovsanalyse") {
                 await github.rest.issues.createComment({
                   owner: context.repo.owner,
                   repo: context.repo.repo,
                   issue_number: issueNumber,
                   body: `🚨 **Kritisk bug oppdaget**
 
-Denne saken har automatisk blitt flyttet til arbeidskø på grunn av:
+Denne saken har automatisk blitt flyttet til behovsanalyse på grunn av:
 - ✅ Type: Bug  
 - ✅ Prioritet: Kritisk
 - ✅ Tilordnet seksjon

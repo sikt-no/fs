@@ -1,4 +1,4 @@
-name: Automatisk Startdato
+name: Automatisk Startdato ved Behovsanalyse
 
 on:
   project_card:
@@ -9,10 +9,10 @@ on:
 jobs:
   update-start-date:
     runs-on: ubuntu-latest
-    if: github.event.action == 'moved' || contains(github.event.issue.labels.*.name, 'under arbeid')
+    if: github.event.action == 'moved'
     
     steps:
-      - name: Sjekk om issue er flyttet til "Under arbeid"
+      - name: Sjekk om issue er flyttet til "Behovsanalyse"
         uses: actions/github-script@v6
         with:
           script: |
@@ -36,50 +36,30 @@ jobs:
               issue_number: issueNumber
             });
             
-            // Sjekk om kortet er flyttet til "Under arbeid" (ikke bare "arbeidskø")
-            let isMovedToWork = false;
-            let fromQueue = false;
+            // Sjekk om kortet er flyttet til "Behovsanalyse"
+            let isMovedToBehovsanalyse = false;
             
             if (context.eventName === 'project_card') {
               const { data: currentColumn } = await github.rest.projects.getColumn({
                 column_id: context.payload.project_card.column_id
               });
               
-              // Sjekk om målet er arbeidskolonne (ikke køkolonne)
-              isMovedToWork = currentColumn.name.toLowerCase().includes('under arbeid') || 
-                             currentColumn.name.toLowerCase().includes('in progress') ||
-                             currentColumn.name.toLowerCase().includes('doing');
+              // Sjekk om målet er behovsanalyse-kolonne
+              isMovedToBehovsanalyse = currentColumn.name.toLowerCase().includes('behovsanalyse') || 
+                                       currentColumn.name.toLowerCase().includes('behov') ||
+                                       currentColumn.name.toLowerCase().includes('analyse');
               
-              // Sjekk om kortet kommer fra arbeidskø (hvis previous_column_id finnes)
-              if (context.payload.project_card.previous_column_id) {
-                const { data: previousColumn } = await github.rest.projects.getColumn({
-                  column_id: context.payload.project_card.previous_column_id
-                });
-                fromQueue = previousColumn.name.toLowerCase().includes('arbeidskø') ||
-                           previousColumn.name.toLowerCase().includes('kø') ||
-                           previousColumn.name.toLowerCase().includes('queue');
-                           
-                console.log(`Flyttet fra: "${previousColumn.name}" til: "${currentColumn.name}"`);
-              }
+              console.log(`Flyttet til: "${currentColumn.name}"`);
             } else {
-              // For label-baserte triggere
-              isMovedToWork = issue.labels.some(label => 
-                label.name.toLowerCase().includes('under arbeid') ||
-                label.name.toLowerCase().includes('in progress')
-              );
-              fromQueue = true; // Anta gyldig flyt for label-triggere
+              // Vi bruker ikke label-baserte triggere for startdato
+              isMovedToBehovsanalyse = false;
             }
             
-            if (!isMovedToWork) {
-              console.log('Issue er ikke flyttet til arbeidskolonne');
+            if (!isMovedToBehovsanalyse) {
+              console.log('Issue er ikke flyttet til behovsanalyse-kolonne');
               return;
             }
             
-            // For korttriggere: Kun sett startdato hvis flyttet fra kø eller ukjent opprinnelse
-            if (context.eventName === 'project_card' && context.payload.project_card.previous_column_id && !fromQueue) {
-              console.log('Issue ikke flyttet fra arbeidskø - hopper over startdato');
-              return;
-            }
             
             // Sjekk om startdato allerede er satt
             const body = issue.body || '';
@@ -133,7 +113,7 @@ jobs:
             
             console.log(`Startdato ${today} lagt til i issue #${issueNumber}`);
 
-      - name: Legg til startdato label hvis ikke finnes
+      - name: Legg til behovsanalyse label hvis ikke finnes
         uses: actions/github-script@v6
         with:
           script: |
@@ -153,16 +133,16 @@ jobs:
               issue_number: issueNumber
             });
             
-            const hasStartedLabel = issue.labels.some(label => 
-              label.name.toLowerCase().includes('startet') || 
-              label.name.toLowerCase().includes('under arbeid')
+            const hasBehovsanalyseLabel = issue.labels.some(label => 
+              label.name.toLowerCase().includes('behovsanalyse') || 
+              label.name.toLowerCase().includes('analyse')
             );
             
-            if (!hasStartedLabel) {
+            if (!hasBehovsanalyseLabel) {
               await github.rest.issues.addLabels({
                 owner: context.repo.owner,
                 repo: context.repo.repo,
                 issue_number: issueNumber,
-                labels: ['under arbeid']
+                labels: ['behovsanalyse']
               });
             }

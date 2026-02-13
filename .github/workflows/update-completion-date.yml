@@ -1,86 +1,30 @@
-name: Automatisk Ferdigdato
+name: Automatisk Ferdigdato og Status
 
 on:
-  project_card:
-    types: [moved]
   issues:
-    types: [closed, edited, reopened]
+    types: [closed]
 
 jobs:
   update-completion-date:
     runs-on: ubuntu-latest
-    if: github.event.action == 'moved' || github.event.action == 'closed'
+    if: github.event.issue.state_reason == 'completed'
     
     steps:
-      - name: Sjekk om issue er flyttet til "Ferdig" eller lukket
+      - name: Sett ferdigdato og oppdater status til Levert
         uses: actions/github-script@v6
         with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
             const today = new Date().toISOString().split('T')[0];
+            const issueNumber = context.payload.issue.number;
+            const issue = context.payload.issue;
             
-            // Hent issue nummer
-            let issueNumber;
-            if (context.eventName === 'project_card') {
-              if (!context.payload.project_card.content_url) return;
-              const match = context.payload.project_card.content_url.match(/issues\/(\d+)$/);
-              if (!match) return;
-              issueNumber = parseInt(match[1]);
-            } else {
-              issueNumber = context.payload.issue.number;
-            }
+            console.log(`Issue #${issueNumber} lukket med reason: ${context.payload.issue.state_reason}`);
             
-            // Hent issue detaljer
-            const { data: issue } = await github.rest.issues.get({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              issue_number: issueNumber
-            });
-            
-            // Sjekk om kortet er flyttet til "Ferdig" eller issue er lukket
-            let isMovedToCompleted = false;
-            let fromWork = false;
-            
-            if (context.eventName === 'project_card') {
-              const { data: currentColumn } = await github.rest.projects.getColumn({
-                column_id: context.payload.project_card.column_id
-              });
-              
-              // Sjekk om målet er ferdigkolonne
-              isMovedToCompleted = currentColumn.name.toLowerCase().includes('ferdig') || 
-                                  currentColumn.name.toLowerCase().includes('done') ||
-                                  currentColumn.name.toLowerCase().includes('complete') ||
-                                  currentColumn.name.toLowerCase().includes('finished');
-              
-              // Sjekk om kortet kommer fra arbeidskolonne (hvis previous_column_id finnes)
-              if (context.payload.project_card.previous_column_id) {
-                const { data: previousColumn } = await github.rest.projects.getColumn({
-                  column_id: context.payload.project_card.previous_column_id
-                });
-                fromWork = previousColumn.name.toLowerCase().includes('under arbeid') ||
-                          previousColumn.name.toLowerCase().includes('in progress') ||
-                          previousColumn.name.toLowerCase().includes('doing');
-                          
-                console.log(`Flyttet fra: "${previousColumn.name}" til: "${currentColumn.name}"`);
-              }
-            } else {
-              // For issue lukking eller label-triggere
-              isMovedToCompleted = issue.state === 'closed' || 
-                                  issue.labels.some(label => 
-                                    label.name.toLowerCase().includes('ferdig') ||
-                                    label.name.toLowerCase().includes('done') ||
-                                    label.name.toLowerCase().includes('complete')
-                                  );
-              fromWork = true; // Anta gyldig flyt for lukking/label-triggere
-            }
-            
-            if (!isMovedToCompleted) {
-              console.log('Issue er ikke flyttet til ferdig-status eller lukket');
+            // Sjekk at issue faktisk er lukket som completed
+            if (context.payload.issue.state_reason !== 'completed') {
+              console.log('Issue ikke lukket som completed - avbryter');
               return;
-            }
-            
-            // Legg til advarsel hvis ikke flyttet fra arbeid (men ikke blokker)
-            if (context.eventName === 'project_card' && context.payload.project_card.previous_column_id && !fromWork) {
-              console.log('Advarsel: Issue ikke flyttet fra arbeidskolonne, men setter likevel ferdigdato');
             }
             
             // Sjekk om ferdigdato allerede er satt
@@ -88,59 +32,196 @@ jobs:
             const completionDatePattern = /Ferdig\s*dato:\s*(\d{4}-\d{2}-\d{2})/i;
             const existingCompletionDate = body.match(completionDatePattern);
             
-            if (existingCompletionDate) {
-              console.log('Ferdigdato er allerede satt til:', existingCompletionDate[1]);
-              return;
+            if (!existingCompletionDate) {
+              // Legg til ferdigdato i issue body
+              let newBody = body;
+              
+              // Hvis body er tom, opprett grunnleggende struktur
+              if (!body.trim()) {
+                newBody = `## Beskrivelse\n\n## Ferdigdato\n${today}\n\n## Akseptansekriterier\n- [x] Ferdigstilt`;
+              } else {
+                // Legg til ferdigdato etter startdato eller på slutten
+                if (newBody.includes('## Startdato') || newBody.includes('## Start dato')) {
+                  // Finn startdato seksjon og legg til ferdigdato etter den
+                  const lines = newBody.split('\n');
+                  let insertIndex = -1;
+                  
+                  for (let i = 0; i < lines.length; i++) {
+                    if (lines[i].toLowerCase().includes('startdato') || lines[i].toLowerCase().includes('start dato')) {
+                      insertIndex = i + 1;
+                      // Finn slutten av startdato seksjonen
+                      while (insertIndex < lines.length && 
+                             !lines[insertIndex].startsWith('## ') && 
+                             !lines[insertIndex].startsWith('# ') &&
+                             lines[insertIndex].trim() !== '') {
+                        insertIndex++;
+                      }
+                      break;
+                    }
+                  }
+                  
+                  if (insertIndex > -1) {
+                    lines.splice(insertIndex, 0, '', '## Ferdigdato', today, '');
+                  } else {
+                    lines.push('', '## Ferdigdato', today, '');
+                  }
+                  newBody = lines.join('\n');
+                } else if (newBody.includes('## ') || newBody.includes('# ')) {
+                  // Legg til ferdigdato på slutten av strukturert innhold
+                  newBody = `${newBody}\n\n## Ferdigdato\n${today}`;
+                } else {
+                  // Legg til på slutten
+                  newBody = `${newBody}\n\n## Ferdigdato\n${today}`;
+                }
+              }
+              
+              // Oppdater issue med ny body
+              await github.rest.issues.update({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: issueNumber,
+                body: newBody
+              });
+              
+              console.log(`Ferdigdato ${today} lagt til i issue #${issueNumber}`);
+            } else {
+              console.log('Ferdigdato allerede satt til:', existingCompletionDate[1]);
             }
             
-            // Legg til ferdigdato i issue body
-            let newBody = body;
+            // Legg til "levert" label
+            try {
+              await github.rest.issues.addLabels({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: issueNumber,
+                labels: ['levert']
+              });
+              console.log(`'levert' label lagt til på issue #${issueNumber}`);
+            } catch (error) {
+              console.log('Kunne ikke legge til levert label:', error.message);
+            }
+
+      - name: Flytt til Levert-kolonne i begge prosjekter
+        uses: actions/github-script@v6
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const issueNumber = context.payload.issue.number;
+            const issue = context.payload.issue;
             
-            // Hvis body er tom, opprett grunnleggende struktur
-            if (!body.trim()) {
-              newBody = `## Beskrivelse\n\n## Startdato\n\n## Ferdig dato\n${today}\n\n## Akseptansekriterier\n- [x] Ferdigstilt`;
-            } else {
-              // Legg til ferdigdato etter startdato eller på slutten
-              if (newBody.includes('## Startdato')) {
-                // Finn startdato seksjon og legg til ferdigdato etter den
-                const lines = newBody.split('\n');
-                let insertIndex = -1;
+            console.log(`Flytter issue #${issueNumber} til Levert-kolonne i prosjekter`);
+            
+            // Finn begge prosjekter
+            try {
+              const { data: projects } = await github.rest.projects.listForRepo({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                state: 'open'
+              });
+              
+              const offentligProject = projects.find(p => 
+                p.name.toLowerCase().includes('offentlig') && 
+                p.name.toLowerCase().includes('saksoversikt')
+              );
+              
+              const internProject = projects.find(p => 
+                p.name.toLowerCase().includes('saksoversikt') && 
+                p.name.toLowerCase().includes('intern')
+              );
+              
+              // Funksjon for å flytte kort til Levert-kolonne
+              const moveCardToLevert = async (project, projectName) => {
+                if (!project) {
+                  console.log(`${projectName} prosjekt ikke funnet`);
+                  return;
+                }
                 
-                for (let i = 0; i < lines.length; i++) {
-                  if (lines[i].toLowerCase().includes('startdato')) {
-                    insertIndex = i + 1;
-                    // Finn slutten av startdato seksjonen
-                    while (insertIndex < lines.length && 
-                           !lines[insertIndex].startsWith('## ') && 
-                           !lines[insertIndex].startsWith('# ') &&
-                           insertIndex < lines.length) {
-                      insertIndex++;
-                    }
+                // Hent kolonner
+                const { data: columns } = await github.rest.projects.listColumns({
+                  project_id: project.id
+                });
+                
+                // Finn Levert-kolonne
+                const levertColumn = columns.find(col => 
+                  col.name.toLowerCase().includes('levert') ||
+                  col.name.toLowerCase().includes('ferdig') ||
+                  col.name.toLowerCase().includes('done') ||
+                  col.name.toLowerCase().includes('complete')
+                );
+                
+                if (!levertColumn) {
+                  console.log(`Kunne ikke finne Levert-kolonne i ${projectName}`);
+                  console.log(`Tilgjengelige kolonner: ${columns.map(c => c.name).join(', ')}`);
+                  return;
+                }
+                
+                // Finn eksisterende kort for denne issue i alle kolonner
+                let existingCard = null;
+                for (const column of columns) {
+                  const { data: columnCards } = await github.rest.projects.listCards({
+                    column_id: column.id,
+                    archived_state: 'all'
+                  });
+                  
+                  existingCard = columnCards.find(card => 
+                    card.content_url && card.content_url.includes(`/issues/${issueNumber}`)
+                  );
+                  
+                  if (existingCard) {
+                    console.log(`Fant kort i kolonne "${column.name}" i ${projectName}`);
                     break;
                   }
                 }
                 
-                if (insertIndex > -1) {
-                  lines.splice(insertIndex, 0, '', '## Ferdig dato', today, '');
+                if (existingCard) {
+                  // Flytt eksisterende kort til Levert-kolonne
+                  await github.rest.projects.moveCard({
+                    card_id: existingCard.id,
+                    position: "top",
+                    column_id: levertColumn.id
+                  });
+                  console.log(`Flyttet kort til "${levertColumn.name}" i ${projectName}`);
                 } else {
-                  lines.push('', '## Ferdig dato', today, '');
+                  // Opprett nytt kort i Levert-kolonne hvis det ikke finnes
+                  await github.rest.projects.createCard({
+                    column_id: levertColumn.id,
+                    content_id: issue.id,
+                    content_type: 'Issue'
+                  });
+                  console.log(`Opprettet nytt kort i "${levertColumn.name}" i ${projectName}`);
                 }
-                newBody = lines.join('\n');
-              } else if (newBody.includes('## ') || newBody.includes('# ')) {
-                // Legg til ferdigdato på slutten av strukturert innhold
-                newBody = `${newBody}\n\n## Ferdig dato\n${today}`;
-              } else {
-                // Legg til på slutten
-                newBody = `${newBody}\n\n## Ferdig dato\n${today}`;
-              }
+              };
+              
+              // Flytt kort i begge prosjekter
+              await moveCardToLevert(offentligProject, "FS Offentlig saksoversikt");
+              await moveCardToLevert(internProject, "FS Saksoversikt (intern)");
+              
+              console.log(`Issue #${issueNumber} flyttet til Levert-status i begge prosjekter`);
+              
+            } catch (error) {
+              console.error('Feil ved flytting til Levert-kolonne:', error);
             }
+
+      - name: Legg til ferdigstillingskommentar
+        uses: actions/github-script@v6
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const issueNumber = context.payload.issue.number;
+            const today = new Date().toISOString().split('T')[0];
             
-            // Oppdater issue
-            await github.rest.issues.update({
+            await github.rest.issues.createComment({
               owner: context.repo.owner,
               repo: context.repo.repo,
               issue_number: issueNumber,
-              body: newBody
+              body: `✅ **Sak ferdigstilt**
+
+Denne saken har automatisk blitt oppdatert:
+- 📅 Ferdigdato satt til: ${today}
+- 🏷️ Status oppdatert til: Levert
+- 📊 Flyttet til Levert-kolonne i begge saksoversikter
+
+_Automatisk generert av GitHub Actions workflow_`
             });
             
-            console.log(`Ferdigdato ${today} lagt til i issue #${issueNumber}`);
+            console.log(`Ferdigstillingskommentar lagt til på issue #${issueNumber}`);
