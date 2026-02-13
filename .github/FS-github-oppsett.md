@@ -59,7 +59,7 @@ Ethvert issue (sak eller initiativ) i saksoversikten skal være:
 ### Saksflyt
 Happy path gjennom vår utviklingsmodell: https://fs.sikt.no/utviklerhandbok/utviklingsmodell/
 ```
-Ny sak → Til vurdering → Prioritert → Utforskning → Utvikling → Innføring → Ferdig
+Ny sak → Til vurdering → Prioritert → Behovsanalyse → Løsningsalternativer → Utvikling → Ferdig
 ```
 
 **Viktig**: Produksjonskritiske feil har alltid forrang og kan komme rett til under arbeid!
@@ -91,12 +91,13 @@ Brukes for å vise viktighetsgrad:
 
 ### Status på saker skal følge utviklingsmodellen vår
 https://fs.sikt.no/utviklerhandbok/utviklingsmodell/ 
-- `Til vurdering` - Sak er opprettet med grunnleggende beskrivelse, kan analyseres for prioritering
+- `Til vurdering` - Sak er opprettet med grunnleggende beskrivelse, kan analyseres for prioritering (sak ikke i utviklingsprosess ennå)
 - `Prioritert` - Sak er prioritert for arbeid og er klar nok til at et team kan begynne med behovsanalyse og kravspesifikasjon
-- `Utforskning` - Arbeid på sak er startet med behovsanalyse, kravspesifikasjon, eller utforskning av løsningsalternativer
-- `Utvikling` - Saken er under utvikling med 
+- `Behovsanalyse` - Arbeid på sak er startet med behovsanalyse, kravspesifikasjon, eller utforskning av løsningsalternativer
+- `Løsningsalternativ` - Arbeid på sak er startet med behovsanalyse, kravspesifikasjon, eller utforskning av løsningsalternativer
+- `Utvikling` - Saken er under utvikling med løpende planlegging og brukermedvirkning
 - `Innføring` - Sak er fullført mht utvikling, men vi har et overgangsløp hvor er i tettere kontakt med brukere/samarbeidspartnere og kan gjøre justeringer
-- `Ferdig` - Sak er enten fullført eller lukket (som duplikat, eller vi gjør ikke noe med den)
+- `Levert` - Sak er enten levert eller lukket (som duplikat, eller vi gjør ikke noe med den) (saken er ferdig i utviklingsprosessen)
   
 Standard status for innkomne saker er "til vurdering". Unntaket er bugs som blir markert med prioritetsnivå kritisk og en seksjon. Disse går rett til "Utforskning" og skal håndteres med en gang.
 Vi prøver å begrense antall saker i arbeidskø og under arbeid for å holde mengden arbeid i gang nede og heller ha fokus på å sluttføre sakerfør vi tar inn nye. Saker starter ofte som større entiteter og deles opp i mindre biter jo nærmere og mer inn i utviklingen vi kommer. 
@@ -138,15 +139,15 @@ Vi bruker standardiserte templates for å sikre kvalitet og fullstendighet:
 
 ---
 
-## ⚙️ Automatiske workflows
+## ⚙️ Automatiske workflows med triggere
 
-Vi har fire aktive workflows som automatiserer saksadministrasjon:
+Vi har fire aktive workflows som automatiserer saksadministrasjon i FS-repoet:
 
 ### 1. Automatisk prosjekt-tilknytning
 - **Fil**: `sync-issues-to-projects.yml`
 - **Trigger**: Nye issues opprettes
 - **Handling**: 
-  - Legger saken til både offentlig og intern saksoversikt
+  - Saken knyttes til både offentlig og intern saksoversikt for FS
   - Kommenterer på issue om prosjekt-tilknytning
 
 ### 2. Automatisk statustildeling ved opprettelse  
@@ -154,34 +155,21 @@ Vi har fire aktive workflows som automatiserer saksadministrasjon:
 - **Trigger**: Nye issues opprettes
 - **Handling**: 
   - **Standard**: Tildeler status "til vurdering"
-  - **Unntak**: Issues med `type:bug` + `priority:critical` + tilordnet seksjon → status "arbeidskø"
+  - **Unntak**: Issues med `type:bug` + `priority:critical` + tilordnet seksjon → status "behovsanalyse"
 
 ### 3. Automatisk startdato
 - **Fil**: `update-start-date.yml`
-- **Trigger**: Issue flyttes til kolonne med navn som inneholder arbeidsstatus
+- **Trigger**: Issue i  FS Saksoversikt (intern) flyttes til kolonne med navn som inneholder arbeidsstatus "Behovsanalyse"
 - **Handling**: 
-  - Legger til dagens dato som startdato i issue-beskrivelsen
-  - Setter label `under arbeid`
-  - Synkroniserer til begge saksoversikter
+  - Legger til dagens dato som startdato i issue-beskrivelsen for både  FS Saksoversikt (intern) og FS Offentlig saksoversikt
 
 ### 4. Automatisk ferdigdato
 - **Fil**: `update-completion-date.yml`  
-- **Trigger**: Issue flyttes til kolonne med ferdigstatus eller lukkes
+- **Trigger**: Issue lukkes fordi den er ferdig (issue closed reason completed)
 - **Handling**: 
-  - Legger til dagens dato som ferdigdato i issue-beskrivelsen
-  - Setter label `ferdig`
-  - Synkroniserer til begge saksoversikter
-
-### Workflow-triggere
-
-**Kolonnenavn som aktiverer startdato-workflow:**
-Når en sak settes til behovsanalyse, så settes startdato
-- "behovsanalyse"
-
-**Kolonnenavn som aktiverer ferdigdato-workflow:**
-Når en sak settes til fullført så settes ferdigdato 
-Closed issues that were completed: is:closed reason:completed is:issue
-- "levert",
+  - Legger til dagens dato som ferdigdato på saken
+  - Setter status `Levert`
+  - Synkroniserer til begge saksoversikter for både  FS Saksoversikt (intern) og FS Offentlig saksoversikt
 
 ---
 
