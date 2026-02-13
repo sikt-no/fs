@@ -239,12 +239,21 @@ jobs:
                           project {
                             id
                             title
-                            field(name: "Status") {
-                              ... on ProjectV2SingleSelectField {
-                                id
-                                options {
+                            fields(first: 20) {
+                              nodes {
+                                ... on ProjectV2Field {
                                   id
                                   name
+                                  dataType
+                                }
+                                ... on ProjectV2SingleSelectField {
+                                  id
+                                  name
+                                  dataType
+                                  options {
+                                    id
+                                    name
+                                  }
                                 }
                               }
                             }
@@ -266,11 +275,32 @@ jobs:
               
               if (result.repository.issue.projectItems.nodes.length > 0) {
                 console.log('Fant issue i nye Projects (beta)');
+                const today = new Date().toISOString().split('T')[0];
                 
                 for (const projectItem of result.repository.issue.projectItems.nodes) {
                   const project = projectItem.project;
-                  const statusField = project.field;
+                  const fields = project.fields.nodes;
                   
+                  console.log(`Behandler prosjekt: ${project.title}`);
+                  console.log(`Tilgjengelige felter: ${fields.map(f => `${f.name} (${f.dataType})`).join(', ')}`);
+                  
+                  // Finn Status-feltet
+                  const statusField = fields.find(f => 
+                    f.name.toLowerCase() === 'status' && 
+                    f.dataType === 'SINGLE_SELECT'
+                  );
+                  
+                  // Finn Ferdigdato-feltet
+                  const ferdigdatoField = fields.find(f => 
+                    (f.name.toLowerCase().includes('ferdigdato') || 
+                     f.name.toLowerCase().includes('ferdig dato') ||
+                     f.name.toLowerCase() === 'completion date' ||
+                     f.name.toLowerCase() === 'slutt' ||
+                     f.name.toLowerCase() === 'sluttdato') && 
+                    f.dataType === 'DATE'
+                  );
+                  
+                  // Oppdater Status hvis feltet finnes
                   if (statusField && statusField.options) {
                     const levertOption = statusField.options.find(opt => 
                       opt.name.toLowerCase().includes('levert') ||
@@ -280,7 +310,7 @@ jobs:
                     );
                     
                     if (levertOption) {
-                      const mutation = `
+                      const statusMutation = `
                         mutation($projectId: ID!, $itemId: ID!, $fieldId: ID!, $optionId: String!) {
                           updateProjectV2ItemFieldValue(input: {
                             projectId: $projectId,
@@ -295,7 +325,7 @@ jobs:
                         }
                       `;
                       
-                      await github.graphql(mutation, {
+                      await github.graphql(statusMutation, {
                         projectId: project.id,
                         itemId: projectItem.id,
                         fieldId: statusField.id,
@@ -304,6 +334,41 @@ jobs:
                       
                       console.log(`Oppdatert status til "${levertOption.name}" i prosjekt "${project.title}"`);
                     }
+                  }
+                  
+                  // Oppdater Ferdigdato hvis feltet finnes
+                  if (ferdigdatoField) {
+                    console.log(`Fant ferdigdato-felt: "${ferdigdatoField.name}" i prosjekt "${project.title}"`);
+                    
+                    const dateMutation = `
+                      mutation($projectId: ID!, $itemId: ID!, $fieldId: ID!, $date: Date!) {
+                        updateProjectV2ItemFieldValue(input: {
+                          projectId: $projectId,
+                          itemId: $itemId,
+                          fieldId: $fieldId,
+                          value: { date: $date }
+                        }) {
+                          projectV2Item {
+                            id
+                          }
+                        }
+                      }
+                    `;
+                    
+                    try {
+                      await github.graphql(dateMutation, {
+                        projectId: project.id,
+                        itemId: projectItem.id,
+                        fieldId: ferdigdatoField.id,
+                        date: today
+                      });
+                      
+                      console.log(`Satt ferdigdato til ${today} i prosjekt "${project.title}"`);
+                    } catch (dateError) {
+                      console.error(`Feil ved setting av ferdigdato i "${project.title}":`, dateError.message);
+                    }
+                  } else {
+                    console.log(`Ingen ferdigdato-felt funnet i prosjekt "${project.title}"`);
                   }
                 }
               }

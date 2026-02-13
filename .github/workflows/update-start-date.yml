@@ -146,3 +146,117 @@ jobs:
                 labels: ['behovsanalyse']
               });
             }
+
+      - name: Oppdater Startdato i prosjekt-feltene
+        uses: actions/github-script@v6
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            let issueNumber;
+            if (context.eventName === 'project_card') {
+              if (!context.payload.project_card.content_url) return;
+              const match = context.payload.project_card.content_url.match(/issues\/(\d+)$/);
+              if (!match) return;
+              issueNumber = parseInt(match[1]);
+            } else {
+              issueNumber = context.payload.issue.number;
+            }
+            
+            const today = new Date().toISOString().split('T')[0];
+            console.log(`Setter startdato ${today} i prosjekt-felt for issue #${issueNumber}`);
+            
+            try {
+              // Hent issue's prosjekt-informasjon via GraphQL
+              const query = `
+                query($owner: String!, $repo: String!, $issue: Int!) {
+                  repository(owner: $owner, name: $repo) {
+                    issue(number: $issue) {
+                      projectItems(first: 10) {
+                        nodes {
+                          id
+                          project {
+                            id
+                            title
+                            fields(first: 20) {
+                              nodes {
+                                ... on ProjectV2Field {
+                                  id
+                                  name
+                                  dataType
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              `;
+              
+              const variables = {
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue: issueNumber
+              };
+              
+              const result = await github.graphql(query, variables);
+              
+              if (result.repository.issue.projectItems.nodes.length > 0) {
+                console.log('Fant issue i Projects');
+                
+                for (const projectItem of result.repository.issue.projectItems.nodes) {
+                  const project = projectItem.project;
+                  const fields = project.fields.nodes;
+                  
+                  console.log(`Behandler prosjekt: ${project.title}`);
+                  
+                  // Finn Startdato-feltet
+                  const startdatoField = fields.find(f => 
+                    (f.name.toLowerCase().includes('startdato') || 
+                     f.name.toLowerCase().includes('start dato') ||
+                     f.name.toLowerCase() === 'start date' ||
+                     f.name.toLowerCase() === 'start') && 
+                    f.dataType === 'DATE'
+                  );
+                  
+                  if (startdatoField) {
+                    console.log(`Fant startdato-felt: "${startdatoField.name}" i prosjekt "${project.title}"`);
+                    
+                    const dateMutation = `
+                      mutation($projectId: ID!, $itemId: ID!, $fieldId: ID!, $date: Date!) {
+                        updateProjectV2ItemFieldValue(input: {
+                          projectId: $projectId,
+                          itemId: $itemId,
+                          fieldId: $fieldId,
+                          value: { date: $date }
+                        }) {
+                          projectV2Item {
+                            id
+                          }
+                        }
+                      }
+                    `;
+                    
+                    try {
+                      await github.graphql(dateMutation, {
+                        projectId: project.id,
+                        itemId: projectItem.id,
+                        fieldId: startdatoField.id,
+                        date: today
+                      });
+                      
+                      console.log(`Satt startdato til ${today} i prosjekt "${project.title}"`);
+                    } catch (dateError) {
+                      console.error(`Feil ved setting av startdato i "${project.title}":`, dateError.message);
+                    }
+                  } else {
+                    console.log(`Ingen startdato-felt funnet i prosjekt "${project.title}"`);
+                    console.log(`Tilgjengelige datofelter: ${fields.filter(f => f.dataType === 'DATE').map(f => f.name).join(', ')}`);
+                  }
+                }
+              }
+            } catch (error) {
+              console.error('Feil ved oppdatering av startdato i prosjekt-felt:', error);
+              console.error('Detaljer:', error.message);
+            }
