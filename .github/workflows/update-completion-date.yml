@@ -7,10 +7,44 @@ on:
 jobs:
   update-completion-date:
     runs-on: ubuntu-latest
-    if: github.event.issue.state_reason == 'completed'
     
     steps:
+      - name: Sjekk om issue skal få ferdigdato
+        id: check
+        uses: actions/github-script@v6
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const issueNumber = context.payload.issue.number;
+            const issue = context.payload.issue;
+            
+            console.log(`Issue #${issueNumber} lukket`);
+            console.log(`State reason: ${issue.state_reason}`);
+            
+            // Sjekk om issue er lukket som "not planned" - da skal vi IKKE sette ferdigdato
+            if (issue.state_reason === 'not_planned') {
+              console.log('Issue lukket som "not planned" - avbryter ferdigdato');
+              core.setOutput('should_continue', 'false');
+              return;
+            }
+            
+            // Sjekk om issue har label som indikerer at den ikke skal ha ferdigdato
+            const labels = issue.labels.map(label => label.name.toLowerCase());
+            const skipLabels = ['wontfix', 'invalid', 'duplicate', 'ikke-planlagt', 'avvist'];
+            const shouldSkip = labels.some(label => skipLabels.includes(label));
+            
+            if (shouldSkip) {
+              console.log('Issue har label som indikerer at den ikke skal ha ferdigdato');
+              core.setOutput('should_continue', 'false');
+              return;
+            }
+            
+            // For alle andre tilfeller (completed eller null), sett ferdigdato
+            console.log('Issue skal få ferdigdato');
+            core.setOutput('should_continue', 'true');
+
       - name: Sett ferdigdato og oppdater status til Levert
+        if: steps.check.outputs.should_continue == 'true'
         uses: actions/github-script@v6
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
@@ -19,13 +53,7 @@ jobs:
             const issueNumber = context.payload.issue.number;
             const issue = context.payload.issue;
             
-            console.log(`Issue #${issueNumber} lukket med reason: ${context.payload.issue.state_reason}`);
-            
-            // Sjekk at issue faktisk er lukket som completed
-            if (context.payload.issue.state_reason !== 'completed') {
-              console.log('Issue ikke lukket som completed - avbryter');
-              return;
-            }
+            console.log(`Setter ferdigdato for issue #${issueNumber}`);
             
             // Sjekk om ferdigdato allerede er satt
             const body = issue.body || '';
@@ -102,6 +130,7 @@ jobs:
             }
 
       - name: Flytt til Levert-kolonne i begge prosjekter
+        if: steps.check.outputs.should_continue == 'true'
         uses: actions/github-script@v6
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
@@ -111,8 +140,9 @@ jobs:
             
             console.log(`Flytter issue #${issueNumber} til Levert-kolonne i prosjekter`);
             
-            // Finn begge prosjekter
+            // Finn begge prosjekter - bruk GraphQL for Projects (beta)
             try {
+              // Først prøv classic projects API
               const { data: projects } = await github.rest.projects.listForRepo({
                 owner: context.repo.owner,
                 repo: context.repo.repo,
@@ -132,7 +162,7 @@ jobs:
               // Funksjon for å flytte kort til Levert-kolonne
               const moveCardToLevert = async (project, projectName) => {
                 if (!project) {
-                  console.log(`${projectName} prosjekt ikke funnet`);
+                  console.log(`${projectName} prosjekt ikke funnet i classic projects`);
                   return;
                 }
                 
@@ -192,17 +222,101 @@ jobs:
                 }
               };
               
-              // Flytt kort i begge prosjekter
-              await moveCardToLevert(offentligProject, "FS Offentlig saksoversikt");
-              await moveCardToLevert(internProject, "FS Saksoversikt (intern)");
+              // Flytt kort i begge prosjekter hvis de bruker classic projects
+              if (offentligProject || internProject) {
+                await moveCardToLevert(offentligProject, "FS Offentlig saksoversikt");
+                await moveCardToLevert(internProject, "FS Saksoversikt (intern)");
+              }
               
-              console.log(`Issue #${issueNumber} flyttet til Levert-status i begge prosjekter`);
+              // Prøv også GraphQL for nye Projects (beta)
+              const query = `
+                query($owner: String!, $repo: String!, $issue: Int!) {
+                  repository(owner: $owner, name: $repo) {
+                    issue(number: $issue) {
+                      projectItems(first: 10) {
+                        nodes {
+                          id
+                          project {
+                            id
+                            title
+                            field(name: "Status") {
+                              ... on ProjectV2SingleSelectField {
+                                id
+                                options {
+                                  id
+                                  name
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              `;
+              
+              const variables = {
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue: issueNumber
+              };
+              
+              const result = await github.graphql(query, variables);
+              
+              if (result.repository.issue.projectItems.nodes.length > 0) {
+                console.log('Fant issue i nye Projects (beta)');
+                
+                for (const projectItem of result.repository.issue.projectItems.nodes) {
+                  const project = projectItem.project;
+                  const statusField = project.field;
+                  
+                  if (statusField && statusField.options) {
+                    const levertOption = statusField.options.find(opt => 
+                      opt.name.toLowerCase().includes('levert') ||
+                      opt.name.toLowerCase().includes('ferdig') ||
+                      opt.name.toLowerCase().includes('done') ||
+                      opt.name.toLowerCase().includes('complete')
+                    );
+                    
+                    if (levertOption) {
+                      const mutation = `
+                        mutation($projectId: ID!, $itemId: ID!, $fieldId: ID!, $optionId: String!) {
+                          updateProjectV2ItemFieldValue(input: {
+                            projectId: $projectId,
+                            itemId: $itemId,
+                            fieldId: $fieldId,
+                            value: { singleSelectOptionId: $optionId }
+                          }) {
+                            projectV2Item {
+                              id
+                            }
+                          }
+                        }
+                      `;
+                      
+                      await github.graphql(mutation, {
+                        projectId: project.id,
+                        itemId: projectItem.id,
+                        fieldId: statusField.id,
+                        optionId: levertOption.id
+                      });
+                      
+                      console.log(`Oppdatert status til "${levertOption.name}" i prosjekt "${project.title}"`);
+                    }
+                  }
+                }
+              }
+              
+              console.log(`Issue #${issueNumber} prosessert for Levert-status`);
               
             } catch (error) {
               console.error('Feil ved flytting til Levert-kolonne:', error);
+              console.error('Detaljer:', error.message);
             }
 
       - name: Legg til ferdigstillingskommentar
+        if: steps.check.outputs.should_continue == 'true'
         uses: actions/github-script@v6
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
