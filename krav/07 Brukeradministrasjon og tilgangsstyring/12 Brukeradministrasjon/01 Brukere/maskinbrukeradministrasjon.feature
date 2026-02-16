@@ -13,11 +13,12 @@ Egenskap: Administrasjon av maskinbrukere
 
   Bakgrunn:
     Gitt følgende maskinbrukere finnes:
-      | maskinbruker       | beskrivelse             | kontaktperson | adm. org | benyttende org | tilgang            |
-      | LAANEKASSEN_BRUKER | Lånekassens integrasjon | Kari Hansen   | Sikt     | Lånekassen     | Alle org, alle API |
-      | SIO_BRUKER         | SiO studentsamskipnaden | Per Olsen     | Sikt     | SiO            | Studentdata SiO    |
-      | UIO_INTEGRASJON    | UiOs interne integrasjon| Erik Berg     | UiO      | UiO            | Egne data UiO      |
-      | FELLES_RAPPORT     | Rapportering på tvers   | Liv Dahl      | Sikt     | NTNU, UiO      | Rapportdata        |
+      | maskinbruker       | beskrivelse              | kontaktperson | adm. org | benyttende org | miljø      |
+      | LAANEKASSEN_BRUKER | Lånekassens integrasjon  | Kari Hansen   | Sikt     | Lånekassen     | produksjon |
+      | SIO_BRUKER         | SiO studentsamskipnaden  | Per Olsen     | Sikt     | SiO            | produksjon |
+      | UIO_INTEGRASJON    | UiOs interne integrasjon | Erik Berg     | UiO      | UiO            | produksjon |
+      | FELLES_RAPPORT     | Rapportering på tvers    | Liv Dahl      | Sikt     | NTNU, UiO      | produksjon |
+      | UIO_TEST           | UiOs testintegrasjon     | Erik Berg     | UiO      | UiO            | demo       |
 
   @must
   Regel: Aktører ser maskinbrukere innenfor sitt organisasjonsscope
@@ -32,6 +33,7 @@ Egenskap: Administrasjon av maskinbrukere
       Så ser aktøren følgende maskinbrukere:
         | maskinbruker    |
         | UIO_INTEGRASJON |
+        | UIO_TEST        |
         | FELLES_RAPPORT  |
 
     @must @planned
@@ -51,6 +53,8 @@ Egenskap: Administrasjon av maskinbrukere
         | Kontaktperson                |
         | Administrerende organisasjon |
         | Benyttende organisasjoner    |
+        | Miljø                        |
+        | Siste passordbytte           |
 
   @should
   Regel: Aktører kan søke og filtrere i maskinbrukerlisten
@@ -77,6 +81,18 @@ Egenskap: Administrasjon av maskinbrukere
       Så vises kun maskinbrukere med tilgang til "FS-GraphQL" i listen
 
     @should @planned
+    Scenariomal: Filtrere maskinbrukerlisten på miljø
+      Gitt aktøren har rollen "ADMIN_LES"
+      Og aktøren er på maskinbrukeroversikten
+      Når aktøren filtrerer listen på miljø "<miljø>"
+      Så vises kun maskinbrukere i "<miljø>" i listen
+
+      Eksempler:
+        | miljø      |
+        | produksjon |
+        | demo       |
+
+    @should @planned
     Scenario: Filtrere maskinbrukerlisten på administrerende organisasjon
       Gitt aktøren har rollen "ADMIN_LES"
       Og aktøren er på maskinbrukeroversikten
@@ -84,11 +100,44 @@ Egenskap: Administrasjon av maskinbrukere
       Så vises kun maskinbrukere administrert av "Sikt" i listen
 
   @must
+  Regel: Detaljvisning viser maskinbrukerens datatilganger
+
+    @must @planned
+    Scenario: Aktør åpner detaljvisning for en maskinbruker
+      Gitt aktøren har rollen "ADMIN_LES"
+      Og aktøren er på maskinbrukeroversikten
+      Når aktøren åpner detaljvisningen for "LAANEKASSEN_BRUKER"
+      Så vises maskinbrukerens datatilganger med følgende informasjon:
+        | felt         |
+        | API          |
+        | Rolle        |
+        | Organisasjon |
+
+    @must @planned
+    Scenario: Detaljvisning viser alle datatilganger for maskinbruker med tilgang til flere organisasjoner
+      Gitt aktøren har rollen "ADMIN_LES"
+      Når aktøren åpner detaljvisningen for "LAANEKASSEN_BRUKER"
+      Så vises datatilganger for alle organisasjoner maskinbrukeren har tilgang til
+
+    @must @planned
+    Scenario: Detaljvisning viser tidspunkt for siste passordbytte
+      Gitt aktøren har rollen "ADMIN_LES"
+      Når aktøren åpner detaljvisningen for "LAANEKASSEN_BRUKER"
+      Så vises tidspunkt for siste passordbytte
+
+  @must
   Regel: Kun aktører med skriverettigheter kan bytte passord, begrenset til administrerende organisasjon
 
     Passordbytte krever BRUKERADMIN_WSBRUKER_SKRIV eller ADMIN_FULL.
     Org-scopede aktører kan kun bytte passord der sin organisasjon
     er administrerende organisasjon for maskinbrukeren.
+
+    @must @planned
+    Scenario: Nytt passord vises kun én gang ved passordbytte
+      Gitt aktøren har rollen "BRUKERADMIN_WSBRUKER_SKRIV" for "UiO"
+      Når aktøren bytter passord for "UIO_INTEGRASJON"
+      Så vises det nye passordet én gang
+      Og passordet er ikke tilgjengelig etter at aktøren navigerer bort
 
     @must @planned
     Scenario: Organisasjonsadmin bytter passord for maskinbruker sin org administrerer
