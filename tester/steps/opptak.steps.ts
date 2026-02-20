@@ -122,8 +122,7 @@ When('jeg setter navn til {string}', async ({ userContext, testData }, navn: str
 })
 
 When('jeg setter type til {string}', async ({ userContext }, type: string) => {
-  // TODO: Map type-navn til value - nå hardkodet til "LOS"
-  await userContext.currentPage.getByLabel('Hvilken type lokalt opptak?').selectOption('YTo1OiJMT0si')
+  await userContext.currentPage.getByLabel('Hvilken type lokalt opptak?').selectOption({ label: type })
   // Vent på at Frister-seksjonen er lastet inn (h2 "Frister" og h3 kategori-overskrift)
   await userContext.currentPage.getByRole('heading', { name: 'Frister', level: 2 }).waitFor({ state: 'visible' })
   // Vent på at frist-kategoriene er lastet (h3 overskrift betyr at data er hentet)
@@ -163,8 +162,8 @@ When('jeg konfigurerer studiealternativet', async ({ userContext }) => {
   await visButton.waitFor({ state: 'visible' })
   await visButton.scrollIntoViewIfNeeded()
   await visButton.click()
-  await userContext.currentPage.getByLabel('Kompetanseregelverk (Kravkode').selectOption('YToxMTk6IktNMzEwMiI=')
-  await userContext.currentPage.getByLabel('RangeringsregelverkIkke valgt').selectOption('YToxNToiUk0zMTAyIg==')
+  await userContext.currentPage.getByLabel('Kompetanseregelverk (Kravkode').selectOption({ label: 'Jordmorfag' })
+  await userContext.currentPage.getByLabel('RangeringsregelverkIkke valgt').selectOption({ label: 'Jordmorfag' })
   await userContext.currentPage.waitForLoadState('networkidle')
   const kvoterText = userContext.currentPage.getByText('KvoterTabell over')
   await kvoterText.scrollIntoViewIfNeeded()

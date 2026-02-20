@@ -67,7 +67,6 @@ export const test = base.extend<{
           })
           const page = await context.newPage()
           await page.goto(BASE_URLS[role])
-          await page.waitForLoadState('networkidle')
           // Vent på at Sikt-logoen er synlig (siden er ferdig lastet)
           await expect(page.getByRole('link', { name: 'Sikt Kunnskapssektorens' })).toBeVisible()
           contexts.set(role, context)

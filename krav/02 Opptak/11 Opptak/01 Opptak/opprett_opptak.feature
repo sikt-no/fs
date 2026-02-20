@@ -15,7 +15,7 @@ Egenskap: Opprette et opptak
     Scenario: Opprette og publisere et opptak
       Når jeg oppretter et nytt lokalt opptak
       Og jeg setter navn til "Høstopptak 2025"
-      Og jeg setter type til "Lokalt opptak"
+      Og jeg setter type til "Lokale opptak"
       Og jeg lagrer opptaket
       Og jeg tilknytter utdanningstilbud til opptaket
       Og jeg konfigurerer studiealternativet
