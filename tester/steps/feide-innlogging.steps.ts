@@ -89,7 +89,7 @@ When('personen velger en testsøker', async ({ page }) => {
 
   const loginPage = new MinKompetanseLoginPage(page)
   await loginPage.menuButton.click()
-  await loginPage.testsokerSelect.selectOption('YTo5NToiZTRjZTdiNGItZjU5NC00YmI0LWFkYjctMzI2OTUzMjE1ZTQwIg==')
+  await loginPage.testsokerSelect.selectOption({ label: 'FIN SÅPE' })
   await page.waitForLoadState('networkidle')
 })
 
