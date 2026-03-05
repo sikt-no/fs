@@ -1,6 +1,6 @@
 include:
   - component: $CI_SERVER_FQDN/platon/ci-components/docker/docker@2
-  - component: $CI_SERVER_FQDN/platon/ci-components/deploy/deploy@1
+  - component: $CI_SERVER_FQDN/platon/ci-components/deploy/deploy@2
 
 variables:
   KUBE_PROD_DOMAIN: fs-funksjonelltesting.sokrates.edupaas.no
