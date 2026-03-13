@@ -1,6 +1,5 @@
 import { createBdd } from 'playwright-bdd'
 import { test, expect } from '../fixtures/user-context'
-import { selectFromCombobox } from '../helpers/combobox'
 import { opprettOpptak, opprettUtdanningstilbud, oppdaterUtdanningstilbud } from '../graphql/client'
 import type { OpprettOpptakInput, OpprettUtdanningstilbudInput, OppdaterUtdanningstilbudV2Input } from '../graphql/types'
 
@@ -147,10 +146,8 @@ When('jeg tilknytter utdanningstilbud til opptaket', async ({ userContext }) => 
   await userContext.currentPage.waitForLoadState('networkidle')
   await userContext.currentPage.getByRole('tab', { name: 'Legg til nytt studiealternativ' }).click()
   await userContext.currentPage.waitForLoadState('networkidle')
-  await selectFromCombobox(userContext.currentPage, {
-    select: /Mastergrad i jordmorfag/,
-    actionButton: 'Legg til',
-  })
+  await userContext.currentPage.getByRole('combobox', { name: 'Søk etter studieprogram' }).click()
+  await userContext.currentPage.getByRole('option', { name: /Mastergrad i jordmorfag/ }).first().click()
   await userContext.currentPage.getByText('Utdanningstilbud ble lagt til').waitFor({ state: 'visible' })
   await userContext.currentPage.keyboard.press('Escape')
   await userContext.currentPage.waitForLoadState('networkidle')
@@ -158,21 +155,17 @@ When('jeg tilknytter utdanningstilbud til opptaket', async ({ userContext }) => 
 
 When('jeg konfigurerer studiealternativet', async ({ userContext }) => {
   await userContext.currentPage.waitForLoadState('networkidle')
-  const visButton = userContext.currentPage.getByRole('button', { name: 'Vis', exact: true })
-  await visButton.waitFor({ state: 'visible' })
-  await visButton.scrollIntoViewIfNeeded()
-  await visButton.click()
-  await userContext.currentPage.getByLabel('Kompetanseregelverk (Kravkode').selectOption({ label: 'Jordmorfag' })
-  await userContext.currentPage.getByLabel('RangeringsregelverkIkke valgt').selectOption({ label: 'Jordmorfag' })
+  // Klikk "Vis" for å gå til detaljsiden for studiealternativet
+  await userContext.currentPage.getByRole('button', { name: 'Vis' }).click()
   await userContext.currentPage.waitForLoadState('networkidle')
-  const kvoterText = userContext.currentPage.getByText('KvoterTabell over')
-  await kvoterText.scrollIntoViewIfNeeded()
-  await expect(kvoterText).toBeVisible()
-  await selectFromCombobox(userContext.currentPage, {
-    comboboxLabel: 'Kvoter',
-    openButton: null,
-    select: 'Ordinær kvote',
-  })
+  // Sett kompetanseregelverk og rangeringsregelverk
+  await userContext.currentPage.getByRole('combobox', { name: 'Kompetanseregelverk' }).selectOption({ label: 'Jordmorfag' })
+  await userContext.currentPage.getByRole('combobox', { name: 'Rangeringsregelverk' }).selectOption({ label: 'Jordmorfag' })
+  await userContext.currentPage.waitForLoadState('networkidle')
+  // Scroll ned til kvoter og legg til
+  await userContext.currentPage.getByRole('heading', { name: 'Studieplasser og kvoter' }).scrollIntoViewIfNeeded()
+  await userContext.currentPage.getByRole('textbox', { name: 'Kvoter' }).click()
+  await userContext.currentPage.getByRole('option', { name: 'Ordinær kvote' }).click()
   await userContext.currentPage.waitForLoadState('networkidle')
   await userContext.currentPage.getByRole('button', { name: 'Lagre' }).click()
 })
