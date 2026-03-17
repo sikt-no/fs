@@ -17,5 +17,5 @@ Funksjonelle krav er en metode for å beskrive FS som produkt på en systematisk
 https://github.com/sikt-no/fs/tree/main/Krav
 
 ## Andre nettsteder
-- Mer informasjon og dokumentasjon for utviklere og brukere av FS: https://studieadministrasjon.sikt.no/
-- Mer informasjon om Sikt og Produktområde Studieadministrasjon: https://sikt.no/omrade/studieadministrasjon
+- Produkt- og domeneinformasjon for utviklere og brukere av FS: https://fs.sikt.no/
+- Mer informasjon om FS og samstyringsmodellen ligger på Sikts nettsider: https://sikt.no/omrade/studieadministrasjon
