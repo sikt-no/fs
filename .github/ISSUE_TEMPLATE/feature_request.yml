@@ -26,33 +26,20 @@ body:
       required: true
 
   - type: textarea
-    id: acceptance_criteria
+    id: feature_parts
     attributes:
-      label: Akseptansekriterier
-      description: Konkrete kriterier som må oppfylles for at funksjonaliteten er ferdig
+      label: Delleveranser
+      description: Nødvendige leveranser for at funksjonaliteten kan brukes
       placeholder: |
-        - [ ] Kriterium 1
-        - [ ] Kriterium 2  
-        - [ ] Kriterium 3
+        - [ ] del 1
+        - [ ] del 2  
+        - [ ] del 3
       value: |
         - [ ] 
         - [ ] 
         - [ ] 
     validations:
       required: true
-
-  - type: dropdown
-    id: priority
-    attributes:
-      label: Prioritet
-      description: Hvor viktig er denne featuren?
-      options:
-        - low
-        - medium
-        - high
-        - critical
-    validations:
-      required: false
 
   - type: textarea
     id: additional_context
@@ -66,17 +53,6 @@ body:
     validations:
       required: false
 
-  - type: textarea
-    id: technical_notes
-    attributes:
-      label: Tekniske notater
-      description: Eventuelle tekniske krav, betraktninger eller avhengigheter
-      placeholder: |
-        - Avhengigheter til andre systemer
-        - Tekniske utfordringer
-        - Foreslåtte løsningsmetoder
-    validations:
-      required: false
 
   - type: checkboxes
     id: definition_of_done
