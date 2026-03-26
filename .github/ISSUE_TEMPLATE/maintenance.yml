@@ -55,33 +55,6 @@ body:
     validations:
       required: true
 
-  - type: dropdown
-    id: priority
-    attributes:
-      label: Prioritet
-      description: Hvor viktig er dette vedlikeholdet?
-      options:
-        - low - Kan gjøres når det passer
-        - medium - Bør gjøres innen rimelig tid
-        - high - Viktig for systemkvalitet
-        - critical - Må gjøres snart (sikkerhet/stabilitet)
-    validations:
-      required: false
-
-  - type: textarea
-    id: testing_requirements
-    attributes:
-      label: Testkrav
-      description: Hva må testes når arbeidet er ferdig?
-      placeholder: |
-        Testingkrav:
-        - Automatiske tester som må oppdateres/lages
-        - Manuell testing som må utføres  
-        - Regresjonstesting som trengs
-        - Ytelsetesting (hvis aktuelt)
-    validations:
-      required: false
-
   - type: textarea
     id: additional_notes
     attributes:
