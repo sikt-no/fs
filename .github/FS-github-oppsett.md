@@ -71,8 +71,7 @@ Ny sak → Til vurdering → Prioritert → Behovsanalyse → Løsningsalternati
 ### Type-labels (obligatoriske)
 Hver issue må ha én av disse ved oppretting:
 
-- `type:feature` - Ny funksjonalitet
-- `type:enhancement` - Forbedringer av eksisterende funksjonalitet  
+- `type:feature` - Ny eller forbedret funksjonalitet 
 - `type:maintenance` - Vedlikehold, teknisk gjeld, refaktorering, oppgraderinger
 - `type:bug` - Feilrettinger
 - `type:task` - Annen type oppgave
@@ -89,7 +88,7 @@ Brukes for å vise viktighetsgrad:
 
 **Merk**: `priority:critical` brukes sjelden og kun for akutte situasjoner!
 
-### Status på saker skal følge utviklingsmodellen vår
+### Status på saker i intern backlog skal følge utviklingsmodellen vår
 https://fs.sikt.no/utviklerhandbok/utviklingsmodell/ 
 - `Til vurdering` - Sak er opprettet med grunnleggende beskrivelse, kan analyseres for prioritering (sak ikke i utviklingsprosess ennå)
 - `Prioritert` - Sak er prioritert for arbeid og er klar nok til at et team kan begynne med behovsanalyse og kravspesifikasjon
@@ -112,9 +111,6 @@ I denne kategorien har vi også
 ### Interne labels
 Vi har også labels på seksjon og team, som vi kun bruker i den interne saksoversikten. 
 
-### Label "initiativ"
-Settes på saker vi vil ha i veikart for å kommunisere til sektor hva vi planlegger å jobbe med tre tertialer framover i tid, og ev. temaer vi ikke planlegger å jobbe med de neste tre tertialene (senere)
-
 ### Milestones (milepæler)
 Vi bruker milestones til:
 - Årsmål for ÅR med startdato og sluttdato
@@ -129,9 +125,8 @@ Vi bruker standardiserte templates for å sikre kvalitet og fullstendighet:
 
 ### Tilgjengelige templates
 - **Issue Report** (`issue_form.yml`) - Strukturert skjema for nye saker
-  - Type-kategorisering (feature/bug/enhancement/maintenance)
-  - Detaljert beskrivelse
-  - Akseptansekriterier (valgfritt)
+  - Type-kategorisering (feature/bug/maintenance)
+  - Beskrivelse av sak se template
 
 ### Template-konfigurasjon
 - **Blank issues**: Deaktivert for å sikre strukturert rapportering
@@ -147,8 +142,8 @@ Vi har fire aktive workflows som automatiserer saksadministrasjon i FS-repoet:
 - **Fil**: `sync-issues-to-projects.yml`
 - **Trigger**: Nye issues opprettes
 - **Handling**: 
-  - Saken knyttes til både offentlig og intern saksoversikt for FS
-  - Kommenterer på issue om prosjekt-tilknytning
+  - Saken knyttes til intern saksoversikt for FS
+  - Når en sak er klar til å deles i ekstern oversikt, så må du foreta et aktivt valg om å legge den til.
 
 ### 2. Automatisk statustildeling ved opprettelse  
 - **Fil**: `auto-status-assignment.yml` *(ønsket workflow)*
