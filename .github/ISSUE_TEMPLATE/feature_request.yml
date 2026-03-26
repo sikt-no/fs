@@ -15,10 +15,10 @@ body:
   - type: textarea
     id: user_value
     attributes:
-      label: Brukerhistorie
-      description: Definer verdien for brukeren
+      label: Brukerhistorie (eller enkel kravspek EARS)
+      description: Definer verdien for brukeren, eller systemet skal realisere
       placeholder: |
-        Som [rolle] ønsker jeg [funksjonalitet] slik at [nytte]
+        Som [rolle/system] ønsker jeg [funksjonalitet] slik at [nytte]
         
         Eksempel:
         Som administrator ønsker jeg å kunne filtrere studenter etter studieprogram slik at jeg raskere kan finne relevante studentgrupper.
@@ -39,7 +39,7 @@ body:
         - [ ] 
         - [ ] 
     validations:
-      required: true
+      required: false
 
   - type: textarea
     id: additional_context
@@ -52,25 +52,3 @@ body:
         - Referanser til funksjonelle krav
     validations:
       required: false
-
-
-  - type: checkboxes
-    id: definition_of_done
-    attributes:
-      label: Definisjon av ferdig
-      description: Standard sjekkliste for når en feature regnes som ferdig
-      options:
-        - label: Brukertesting gjennomført
-          required: false
-        - label: Kode utviklet og testet
-          required: false
-        - label: Akseptansetester kjørt og godkjent
-          required: false
-        - label: Dokumentasjon og utgivelsesnotater oppdatert
-          required: false
-        - label: Tilgjengelig for brukere i produksjon
-          required: false
-        - label: Sikkerhetsvurdering gjennomført (hvis aktuelt)
-          required: false
-        - label: Tilgangsstyring konfigurert (hvis aktuelt)
-          required: false
