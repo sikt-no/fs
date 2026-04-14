@@ -18,25 +18,25 @@ Egenskap: Opprette organisasjon
       Når dataene hentes fra Brønnøysundregistrene
       Så skal organisasjonstype settes til verdien fra Brønnøysundregistrene
 
-  Regel: Institusjonsnummer tildeles automatisk
+  Regel: Organisasjonsid tildeles automatisk
 
-    Scenario: Nytt institusjonsnummer tildeles ved opprettelse
+    Scenario: Ny organisasjonsid tildeles ved opprettelse
       Når jeg oppretter en ny organisasjon
-      Så skal systemet automatisk tildele et unikt institusjonsnummer
+      Så skal systemet automatisk tildele en unik organisasjonsid
 
-    Scenario: Institusjonsnummerformat for norsk institusjon
+    Scenario: Organisasjonsidformat for norske læresteder
       Gitt at jeg oppretter en norsk organisasjon
-      Så skal institusjonsnummeret følge formatet for norske institusjoner
+      Så skal organisasjonsid følge formatet for norske læresteder
 
-    Scenario: Institusjonsnummerformat for utenlandsk institusjon
+    Scenario: Organisasjonsidformat for utenlandske organisasjoner
       Gitt at jeg oppretter en utenlandsk organisasjon
-      Så skal institusjonsnummeret følge formatet landnummer + løpenummer, f.eks. "444+12345" for India
+      Så skal organisasjonsid følge formatet landnummer + løpenummer, f.eks. "444+12345" for India
 
   Regel: Obligatoriske felter må fylles ut
 
     Scenario: Opprette organisasjon med obligatoriske felter
       Når jeg fyller ut navn, organisasjonstype og URL og lagrer
-      Så skal organisasjonen opprettes og tildeles institusjonsnummer
+      Så skal organisasjonen opprettes og tildeles organisasjonsid
 
   Regel: Valgfrie felter kan registreres
 
