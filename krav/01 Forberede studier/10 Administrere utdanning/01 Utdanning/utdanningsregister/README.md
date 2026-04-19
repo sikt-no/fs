@@ -13,7 +13,7 @@ Dette er krav for offentlig visning av utdanningsregisteret - en markedsførings
 - Potensielle søkere
 - Ledere og beslutningstakere
 - Forskere og analytikere
-- Partnere og samarbeidsinstitusjoner
+- Partnere og samarbeidsorganisasjoner
 - Allmennheten
 
 ## Kravfiler

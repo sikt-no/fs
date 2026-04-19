@@ -155,14 +155,14 @@ Egenskap: Automatisk oppdatering av nus- og isced-koder
     Scenario: Varsle studieplanleggere om NUS-endringer
       Gitt NUS-kode "621101" brukes av studieprogrammer:
         | programkode | fakultet    | studieplanlegger           |
-        | BARN-BA    | Pedagogikk  | ped-plan@institusjon.no   |
-        | LÆRER-MA   | Pedagogikk  | ped-plan@institusjon.no   |
-        | SPES-PED   | Spesialped  | spes-plan@institusjon.no  |
+        | BARN-BA    | Pedagogikk  | ped-plan@organisasjon.no   |
+        | LÆRER-MA   | Pedagogikk  | ped-plan@organisasjon.no   |
+        | SPES-PED   | Spesialped  | spes-plan@organisasjon.no  |
       Når koden endrer navn eller status
       Så skal følgende varsler sendes:
-        | mottaker                  | emne                           | innhold_inkluderer           |
-        | ped-plan@institusjon.no  | NUS-endring påvirker 2 program | BARN-BA, LÆRER-MA           |
-        | spes-plan@institusjon.no | NUS-endring påvirker 1 program | SPES-PED                     |
+        | mottaker                   | emne                           | innhold_inkluderer           |
+        | ped-plan@organisasjon.no  | NUS-endring påvirker 2 program | BARN-BA, LÆRER-MA           |
+        | spes-plan@organisasjon.no | NUS-endring påvirker 1 program | SPES-PED                     |
       Og varselet skal inneholde:
         | innhold                |
         | Gammel og ny verdi     |

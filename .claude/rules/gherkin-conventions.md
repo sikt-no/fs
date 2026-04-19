@@ -2,6 +2,7 @@
 paths:
   - "krav/**/*.feature"
   - "**/*.feature"
+  - "krav/**/*.md"
 ---
 
 # FS Gherkin Konvensjoner
@@ -121,3 +122,24 @@ Scenario: ...
 ## Aktører
 
 - administrator, søker, student, saksbehandler
+
+## Terminologi
+
+Disse reglene gjelder for alle kravfiler (`.feature` og `systemkrav.md`).
+Ved tvetydige ord **skal du spørre** brukeren om hva de mener før du skriver eller godkjenner teksten.
+
+### Ord som krever avklaring
+
+| Ord brukt | Spør om de mener… |
+|-----------|-------------------|
+| `institusjon` | **organisasjon** (generelt begrep for alle typer registrerte enheter) — eller — **lærested** (spesifikt: universitet, høyskole eller fagskole)? |
+| `institusjonsnummer` | **organisasjonsID** (systemets interne ID, erstatter institusjonsnummer) — eller — **organisasjonsnummer** (eksternt registreringsnummer, f.eks. fra Brønnøysundregistrene)? |
+
+### Foretrukne begreper
+
+| Bruk dette | Ikke dette |
+|------------|------------|
+| organisasjon | institusjon (med mindre du mener lærested spesifikt) |
+| lærested | institusjon (når du mener universitet, høyskole eller fagskole) |
+| organisasjonsID | institusjonsnummer |
+| organisasjonsnummer | (reservert for eksternt registreringsnummer — ikke bruk som synonym for organisasjonsID) |
