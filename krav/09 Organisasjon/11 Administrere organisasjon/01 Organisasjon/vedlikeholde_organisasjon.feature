@@ -66,7 +66,22 @@ Egenskap: Vedlikeholde organisasjon
     # Eksempel: USA var en periode utenfor Erasmus, men koden lå som aktiv i systemet
     # — dette ga et feilaktig bilde. Skal dette løses manuelt eller automatisk?
 
+  Regel: URL-en til organisasjonen bør være tilgjengelig
+
+    @could @planned
+    Scenario: Ugyldig URL markeres med advarsel
+      Gitt at en organisasjon har en registrert URL
+      Og URL-en ikke svarer
+      Så skal URL-feltet vises med en advarsel om at adressen ikke er tilgjengelig
+
+    @could @planned
+    Scenario: Gyldig URL vises uten advarsel
+      Gitt at en organisasjon har en registrert URL
+      Og URL-en svarer
+      Så skal URL-feltet vises uten advarsel
+
 # ÅPNE SPØRSMÅL:
 # - Har Europakommisjonen et API for å lytte på endringer i PIC-nummer og Erasmuskoder?
 # - Skal dato fra-til for Erasmuskode-gyldighet settes manuelt eller hentes fra HEI-registeret?
 # - Hvem varsles når en Erasmuskode nærmer seg utløp?
+# - URL-validering (nice to have): Skal sjekk skje ved lagring, periodisk, eller begge deler?

@@ -37,8 +37,26 @@ krav/
 - `05 Opplysninger om person` - Persondata
 - `07 Tilgangstyring` - Autentisering og autorisasjon
 - `08 Teknisk` - Tekniske funksjoner
+- `09 Organisasjon` - Organisasjonsforvaltning
 - `10 Felleskrav` - Tverrgående funksjonalitet
 - `99 Demo` - Demo og testing
+
+### Tverrgående kapabiliteter: hva vs. hvordan
+
+Noen kapabiliteter — som søk, filtrering og eksport — går igjen på tvers av domener.
+Skillet mellom **hva** og **hvordan** avgjør hvor kravet hører hjemme:
+
+| Spørsmål | Tilhører |
+|----------|----------|
+| *Hva* søkes det etter? (felter, regler, domene-spesifikke filtere) | Det aktuelle domenet |
+| *Hvordan* fungerer søk generelt? (fuzzy matching, paginering, UI-mønstre) | `10 Felleskrav` |
+
+**Eksempel — søk etter organisasjon:**
+- Regelen «søk på Erasmuskode gir direktetreff» er *hva* → `09 Organisasjon/10 Finn organisasjon/`
+- Generelle søkemønstre som gjelder alle domener → `10 Felleskrav/`
+
+Unngå å kalle sub-domener og kapabiliteter det samme (f.eks. `Søk/Søk`).
+Bruk heller et beskrivende navn som skiller nivåene, f.eks. `Finn organisasjon/Søk og identifikasjon`.
 
 ### Eksempel
 
