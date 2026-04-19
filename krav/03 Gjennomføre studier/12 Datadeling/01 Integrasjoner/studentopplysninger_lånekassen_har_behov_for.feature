@@ -123,7 +123,7 @@ Egenskap: Studentopplysninger til Lånekassen
     Så skal systemet hindre videre søknadsprosess
     Og studenten får informasjon om hvordan de kan registrere studierett
 
-  Scenario: Spore bytte av institusjon og studieprogram
+  Scenario: Spore bytte av lærested og studieprogram
     Gitt at en student bytter fra ett studieprogram til et annet
     Når endringen registreres i FS
     Så sendes varsel til Lånekassen om studieprogrambytte

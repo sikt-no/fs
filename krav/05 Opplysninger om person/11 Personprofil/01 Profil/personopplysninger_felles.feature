@@ -13,7 +13,7 @@ Egenskap: Se og endre egne personopplysninger
     Når "<person>" ser på sin profil
     Så ser personen "<navn>"
     Så ser personen "<bilde>"
-    Så ser personen "<institusjons e-post>"
+    Så ser personen "<lærestedets e-post>"
     Så ser personen "<studentnummer>"
     #Vurderes i senere versjoner
       #Så ser personen "<fødselsdato>"
@@ -22,7 +22,7 @@ Egenskap: Se og endre egne personopplysninger
       #Så ser personen "<Hjemstedsadresse>"
 
     Eksempler:
-      | person | navn | bilde | institusjons e-post | studentnummer | fødselsdato | statsborgerskap | Bankkonto | Hjemstedsadresse |
+      | person | navn | bilde | lærestedets e-post | studentnummer | fødselsdato | statsborgerskap | Bankkonto | Hjemstedsadresse |
 
   Scenariomal: administrator ser brukers personopplysninger
     Gitt at administrator er inne på FS-admin

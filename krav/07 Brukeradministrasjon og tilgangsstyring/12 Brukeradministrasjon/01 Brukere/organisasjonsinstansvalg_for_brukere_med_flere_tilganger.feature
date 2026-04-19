@@ -5,7 +5,7 @@ Egenskap: Organisasjonsinstansvalg for brukere med flere tilganger
 
   Bakgrunn:
     Gitt at FS krever organisasjonstilknytning for tilgang til data
-    Og at brukerflaten sender institusjonsnummer for å få tilgang
+    Og at brukerflaten sender organisasjonsID for å få tilgang
 
   Scenario: Skjule organisasjonsvalg for brukere med kun én tilgang
     Gitt at jeg har tilgang til kun én organisasjon
@@ -45,10 +45,10 @@ Egenskap: Organisasjonsinstansvalg for brukere med flere tilganger
     Og jeg skal få bekreftelse på at byttet er gjennomført
 
     ## lurer på om vi bør gå på orgnr, for å legge til rette for at dette kan brukes på tvers av subgrafer?
-  Scenario: Sende riktig institusjonsnummer til FS-SIS
-    Gitt at jeg har valgt en spesifikk institusjon
+  Scenario: Sende riktig organisasjonsID til FS-SIS
+    Gitt at jeg har valgt en spesifikk organisasjon
     Når FS Admin henter data fra FS-SIS
-    Så skal systemet sende institusjonsnummeret for den valgte organisasjonenen
+    Så skal systemet sende organisasjonsID for den valgte organisasjonen
     Og ikke automatisk velge den første i listen
     Og jeg skal få tilgang til data for riktig organisasjon
 
@@ -84,8 +84,8 @@ Egenskap: Organisasjonsinstansvalg for brukere med flere tilganger
     Og at denne organisasjonen ikke lenger er tilgjengelig for meg
     Når jeg logger inn
     Så skal systemet varsle meg om at forrige valg ikke er tilgjengelig
-    Og tilby meg alternative institusjoner å velge mellom
-    Og la meg velge en ny standard institusjon
+    Og tilby meg alternative organisasjoner å velge mellom
+    Og la meg velge en ny standard organisasjon
 
   @fremtidig
   Scenario: Bevare arbeidskonkekst ved organsisasjonbytte
