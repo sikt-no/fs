@@ -9,7 +9,7 @@ Egenskap: Slå sammen duplikate organisasjoner
   # ÅPNE SPØRSMÅL:
   # - Uavklart: Reglene rundt hva som skal slettes og hva som bare skal markeres som inaktivt
   # - Alternativ flyt: Ny organisasjon opprettes med felt fra begge duplikatene, begge duplikatene slettes
-  # - Kan norske utdanningsinstitusjoner markeres som inaktive (men ikke slettes) ved sammenslåing?
+  # - Kan norske læresteder markeres som inaktive (men ikke slettes) ved sammenslåing?
   # - Hvem har tilgang til å slå sammen organisasjoner?
   # - Bakgrunn: HK-dir legger inn duplikater fordi de ikke får treff ved søk på fullt navn
   # - Bakgrunn: Duplikater kan oppdages ved manuell gjennomgang, det kan finnes mer enn to
@@ -57,10 +57,10 @@ Egenskap: Slå sammen duplikate organisasjoner
       Så skal jeg velge hvilken av organisasjonene som beholdes som den gjeldende oppføringen
 
     @must @planned
-    Scenario: Norsk utdanningsinstitusjon kan ikke slettes ved sammenslåing
-      Gitt at én av duplikatene er en norsk utdanningsinstitusjon
+    Scenario: Norsk lærested kan ikke slettes ved sammenslåing
+      Gitt at én av duplikatene er et norsk lærested
       Når jeg slår dem sammen
-      Så skal den norske utdanningsinstitusjonen alltid beholdes
+      Så skal det norske lærestedet alltid beholdes
       Og den andre organisasjonen skal kun kunne markeres som inaktiv, ikke slettes
 
   Regel: Sammenslåing logges
