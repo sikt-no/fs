@@ -114,4 +114,4 @@ Egenskap: Opprette organisasjon
 # ÅPNE SPØRSMÅL:
 # - Hvem kan opprette organisasjoner — kun SIKT-ansatte, eller også lokale administratorer?
 # - Skal visningsnavn være et eget felt, eller kun brukes for utenlandske inst.?
-# - Eksakt format og regler for organisasjonsID per land?
+# - Eksakt format og regler for organisasjonskode per land?

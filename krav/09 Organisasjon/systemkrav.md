@@ -65,14 +65,14 @@ Kravene er utledet fra [Gherkin-spesifikasjonene](.) og er ment som lesbar dokum
 
 | ID | Akseptansekrav                                                                                     | Prioritet | Status | GitHub |
 |----|----------------------------------------------------------------------------------------------------|-----------|--------|--------|
-| ORG-SØK-SID-001-12 | Hvert resultat viser organisasjonsID, navn, akronym, organisasjonstype og Erasmuskode              | Må | Identifisert | |
+| ORG-SØK-SID-001-12 | Hvert resultat viser organisasjonskode, navn, akronym, organisasjonstype og Erasmuskode              | Må | Identifisert | |
 | ORG-SØK-SID-001-13 | Organisasjonstype vises slik den er registrert i Brønnøysundregistrene (for norske organisasjoner) | Må | Identifisert | |
 
 ### Åpne spørsmål
 
 - Hvilke felter skal inngå i fritekstsøket — navn, URL, andre?
 - Skal URL-søk støttes direkte eller kun som del av fritekst?
-- I hvilken rekkefølge skal treff sorteres (relevans, navn, organisasjonsID)?
+- I hvilken rekkefølge skal treff sorteres (relevans, navn, organisasjonskode)?
 
 ---
 
@@ -93,9 +93,9 @@ Kravene er utledet fra [Gherkin-spesifikasjonene](.) og er ment som lesbar dokum
 
 | ID | Akseptansekrav                                                                                             | Prioritet | Status | GitHub |
 |----|------------------------------------------------------------------------------------------------------------|-----------|--------|--------|
-| ORG-ADM-OPP-001-03 | Ny organisasjonsID tildeles automatisk ved opprettelse                                                     | Må | Identifisert | |
-| ORG-ADM-OPP-001-04 | Norsk organsisasjon får organisasjonsID i norsk format                                                     | Må | Identifisert | |
-| ORG-ADM-OPP-001-05 | Utenlandsk organsiasjonn får organisasjonsID i format landnummer + løpenummer (f.eks. 444+12345 for India) | Må | Identifisert | |
+| ORG-ADM-OPP-001-03 | Ny organisasjonskode tildeles automatisk ved opprettelse                                                     | Må | Identifisert | |
+| ORG-ADM-OPP-001-04 | Norsk organsisasjon får organisasjonskode i norsk format                                                     | Må | Identifisert | |
+| ORG-ADM-OPP-001-05 | Utenlandsk organsiasjonn får organisasjonskode i format landnummer + løpenummer (f.eks. 444+12345 for India) | Må | Identifisert | |
 
 ### Obligatoriske felter må fylles ut
 
@@ -151,7 +151,7 @@ Kravene er utledet fra [Gherkin-spesifikasjonene](.) og er ment som lesbar dokum
 
 - Hvem kan opprette organisasjoner — kun Sikt-ansatte, eller også lokale administratorer?
 - Skal visningsnavn være et eget felt, eller brukes det kun for utenlandske organisasjoner?
-- Eksakt format og regler for organisasjonsID per land?
+- Eksakt format og regler for organisasjonskode per land?
 
 ---
 

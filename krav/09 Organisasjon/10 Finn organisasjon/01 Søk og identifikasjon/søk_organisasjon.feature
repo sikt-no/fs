@@ -17,7 +17,7 @@ Egenskap: Søk organisasjon
 
       Eksempler:
         | søkeverdi | identifikator        |
-        | 1234      | organisasjonsID      |
+        | 1234      | organisasjonskode      |
         | 971035854 | organisasjonsnummer  |
         | N OSLO01  | Erasmuskode          |
         | 999885022 | PIC-nummer           |
@@ -75,7 +75,7 @@ Egenskap: Søk organisasjon
 
     Scenario: Søkeresultatlisten viser relevante felter
       Når jeg søker og får treff
-      Så skal hvert resultat vise organisasjonsID, navn, akronym, organisasjonstype og Erasmuskode
+      Så skal hvert resultat vise organisasjonskode, navn, akronym, organisasjonstype og Erasmuskode
 
     Scenario: Organisasjonstype er hentet fra Brønnøysundregistrene
       Gitt at organisasjonen er norsk og registrert i Brønnøysundregistrene
