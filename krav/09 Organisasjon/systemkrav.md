@@ -1,4 +1,4 @@
-# Organisasjon — Systemkrav
+# Organisasjon — FS Systemkrav
 
 Denne siden dokumenterer akseptansekriteriene for Organisasjon-modulen i FS.
 Kravene er utledet fra [Gherkin-spesifikasjonene](.) og er ment som lesbar dokumentasjon for alle som er involvert i utvikling, forvaltning og godkjenning av systemet.
@@ -10,12 +10,69 @@ Kravene er utledet fra [Gherkin-spesifikasjonene](.) og er ment som lesbar dokum
 
 ## Innhold
 
+- [Finn organisasjon](#finn-organisasjon)
 - [Opprette organisasjon](#opprette-organisasjon)
 - [Deaktivere organisasjon](#deaktivere-organisasjon)
 - [Vedlikeholde organisasjon](#vedlikeholde-organisasjon)
-- [Finn organisasjon](#finn-organisasjon)
 - [Slå sammen duplikate organisasjoner](#slå-sammen-duplikate-organisasjoner)
 - [Fusjonere organisasjoner](#fusjonere-organisasjoner)
+
+---
+
+## Finn organisasjon
+
+> Som en studieadministrator ønsker jeg å søke etter en organisasjon slik at jeg raskt finner den organisasjonen jeg trenger, eller finner ut at jeg må opprette en ny.
+
+**Feature-ID:** `ORG-SØK-SID-001` | **GitHub:** #XXX
+
+### Søk på unik identifikator gir direktetreff
+
+| ID | Akseptansekrav                                          | Prioritet | Status | GitHub |
+|----|---------------------------------------------------------|-----------|--------|--------|
+| ORG-SØK-SID-001-01 | Søk på organisasjonsID viser organisasjonen direkte     | Må | Identifisert | |
+| ORG-SØK-SID-001-02 | Søk på organisasjonsnummer viser organisasjonen direkte | Må | Identifisert | |
+| ORG-SØK-SID-001-03 | Søk på Erasmuskode viser organisasjonen direkte         | Må | Identifisert | |
+| ORG-SØK-SID-001-04 | Søk på PIC-nummer viser organisasjonen direkte          | Må | Identifisert | |
+
+### Søk på navn eller akronym gir liste med treff
+
+| ID | Akseptansekrav | Prioritet | Status | GitHub |
+|----|----------------|-----------|--------|--------|
+| ORG-SØK-SID-001-05 | Søk på fullt navn, akronym eller del av navn gir liste med matchende organisasjoner | Må | Identifisert | |
+| ORG-SØK-SID-001-06 | Søk på navn finner også treff i navnehistorikken, og det fremgår at treffet er basert på et historisk navn | Må | Identifisert | |
+
+### Fritekstsøk på tvers av felter
+
+| ID | Akseptansekrav | Prioritet | Status | GitHub |
+|----|----------------|-----------|--------|--------|
+| ORG-SØK-SID-001-07 | Søk på en verdi gir treff i navn og URL | Må | Identifisert | |
+| ORG-SØK-SID-001-08 | Søk på flere ord gir kun treff der alle ord er til stede | Må | Identifisert | |
+| ORG-SØK-SID-001-09 | Minustegn foran et ord ekskluderer det fra treff | Må | Identifisert | |
+
+### Søket tolererer skrivefeil
+
+| ID | Akseptansekrav | Prioritet | Status | GitHub |
+|----|----------------|-----------|--------|--------|
+| ORG-SØK-SID-001-10 | Søk på feilstavet navn gir likevel relevante treff | Må | Identifisert | |
+
+### Søk uten treff gir hjelp
+
+| ID | Akseptansekrav | Prioritet | Status | GitHub |
+|----|----------------|-----------|--------|--------|
+| ORG-SØK-SID-001-11 | Søk uten treff viser meldingen «Ingen organisasjoner funnet» og forslag til alternative søkeformuleringer | Må | Identifisert | |
+
+### Søkeresultatlisten viser nøkkelinformasjon
+
+| ID | Akseptansekrav                                                                                     | Prioritet | Status | GitHub |
+|----|----------------------------------------------------------------------------------------------------|-----------|--------|--------|
+| ORG-SØK-SID-001-12 | Hvert resultat viser organisasjonsID, navn, akronym, organisasjonstype og Erasmuskode              | Må | Identifisert | |
+| ORG-SØK-SID-001-13 | Organisasjonstype vises slik den er registrert i Brønnøysundregistrene (for norske organisasjoner) | Må | Identifisert | |
+
+### Åpne spørsmål
+
+- Hvilke felter skal inngå i fritekstsøket — navn, URL, andre?
+- Skal URL-søk støttes direkte eller kun som del av fritekst?
+- I hvilken rekkefølge skal treff sorteres (relevans, navn, organisasjonsID)?
 
 ---
 
@@ -176,63 +233,6 @@ Kravene er utledet fra [Gherkin-spesifikasjonene](.) og er ment som lesbar dokum
 - Skal dato fra-til for Erasmuskode-gyldighet settes manuelt eller hentes fra HEI-registeret?
 - Hvem varsles når en Erasmuskode nærmer seg utløp?
 - URL-validering: Skal sjekk skje ved lagring, periodisk, eller begge deler?
-
----
-
-## Finn organisasjon
-
-> Som en studieadministrator ønsker jeg å søke etter en organisasjon slik at jeg raskt finner den organisasjonen jeg trenger, eller finner ut at jeg må opprette en ny.
-
-**Feature-ID:** `ORG-SØK-SID-001` | **GitHub:** #XXX
-
-### Søk på unik identifikator gir direktetreff
-
-| ID | Akseptansekrav                                          | Prioritet | Status | GitHub |
-|----|---------------------------------------------------------|-----------|--------|--------|
-| ORG-SØK-SID-001-01 | Søk på organisasjonsID viser organisasjonen direkte     | Må | Identifisert | |
-| ORG-SØK-SID-001-02 | Søk på organisasjonsnummer viser organisasjonen direkte | Må | Identifisert | |
-| ORG-SØK-SID-001-03 | Søk på Erasmuskode viser organisasjonen direkte         | Må | Identifisert | |
-| ORG-SØK-SID-001-04 | Søk på PIC-nummer viser organisasjonen direkte          | Må | Identifisert | |
-
-### Søk på navn eller akronym gir liste med treff
-
-| ID | Akseptansekrav | Prioritet | Status | GitHub |
-|----|----------------|-----------|--------|--------|
-| ORG-SØK-SID-001-05 | Søk på fullt navn, akronym eller del av navn gir liste med matchende organisasjoner | Må | Identifisert | |
-| ORG-SØK-SID-001-06 | Søk på navn finner også treff i navnehistorikken, og det fremgår at treffet er basert på et historisk navn | Må | Identifisert | |
-
-### Fritekstsøk på tvers av felter
-
-| ID | Akseptansekrav | Prioritet | Status | GitHub |
-|----|----------------|-----------|--------|--------|
-| ORG-SØK-SID-001-07 | Søk på en verdi gir treff i navn og URL | Må | Identifisert | |
-| ORG-SØK-SID-001-08 | Søk på flere ord gir kun treff der alle ord er til stede | Må | Identifisert | |
-| ORG-SØK-SID-001-09 | Minustegn foran et ord ekskluderer det fra treff | Må | Identifisert | |
-
-### Søket tolererer skrivefeil
-
-| ID | Akseptansekrav | Prioritet | Status | GitHub |
-|----|----------------|-----------|--------|--------|
-| ORG-SØK-SID-001-10 | Søk på feilstavet navn gir likevel relevante treff | Må | Identifisert | |
-
-### Søk uten treff gir hjelp
-
-| ID | Akseptansekrav | Prioritet | Status | GitHub |
-|----|----------------|-----------|--------|--------|
-| ORG-SØK-SID-001-11 | Søk uten treff viser meldingen «Ingen organisasjoner funnet» og forslag til alternative søkeformuleringer | Må | Identifisert | |
-
-### Søkeresultatlisten viser nøkkelinformasjon
-
-| ID | Akseptansekrav                                                                                     | Prioritet | Status | GitHub |
-|----|----------------------------------------------------------------------------------------------------|-----------|--------|--------|
-| ORG-SØK-SID-001-12 | Hvert resultat viser organisasjonsID, navn, akronym, organisasjonstype og Erasmuskode              | Må | Identifisert | |
-| ORG-SØK-SID-001-13 | Organisasjonstype vises slik den er registrert i Brønnøysundregistrene (for norske organisasjoner) | Må | Identifisert | |
-
-### Åpne spørsmål
-
-- Hvilke felter skal inngå i fritekstsøket — navn, URL, andre?
-- Skal URL-søk støttes direkte eller kun som del av fritekst?
-- I hvilken rekkefølge skal treff sorteres (relevans, navn, organisasjonsID)?
 
 ---
 
