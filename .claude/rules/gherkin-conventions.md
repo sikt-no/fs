@@ -123,6 +123,16 @@ Scenario: ...
 
 - administrator, søker, student, saksbehandler
 
+## Systemkravsider (systemkrav.md)
+
+Hver kapabilitet i en systemkravside skal ha en Feature-ID som er en klikkbar lenke til den korresponderende `.feature`-filen. Lenken skal bruke relativ sti fra systemkrav.md.
+
+```markdown
+**Feature-ID:** [`ORG-ADM-OPP-001`](11%20Administrere%20organisasjon/01%20Organisasjon/opprette_organisasjon.feature) | **GitHub:** #XXX
+```
+
+Mellomrom i mappesti kodes som `%20`. Norske tegn kodes: `å` = `%C3%A5`, `ø` = `%C3%B8`, `æ` = `%C3%A6`.
+
 ## Terminologi
 
 Disse reglene gjelder for alle kravfiler (`.feature` og `systemkrav.md`).

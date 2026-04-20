@@ -23,7 +23,7 @@ Kravene er utledet fra [Gherkin-spesifikasjonene](.) og er ment som lesbar dokum
 
 > Som en studieadministrator ønsker jeg å søke etter en organisasjon slik at jeg raskt finner den organisasjonen jeg trenger, eller finner ut at jeg må opprette en ny.
 
-**Feature-ID:** `ORG-SØK-SID-001` | **GitHub:** #XXX
+**Feature-ID:** [`ORG-SØK-SID-001`](10%20Finn%20organisasjon/01%20Søk%20og%20identifikasjon/søk_organisasjon.feature) | **GitHub:** #XXX
 
 ### Søk på unik identifikator gir direktetreff
 
@@ -80,7 +80,7 @@ Kravene er utledet fra [Gherkin-spesifikasjonene](.) og er ment som lesbar dokum
 
 > Som en systemadministrator ønsker jeg å opprette en ny organisasjon slik at nye norske læresteder eller deres samarbeidsvirksomheter i Norge eller utlandet kan registreres i systemet.
 
-**Feature-ID:** `ORG-ADM-OPP-001` | **GitHub:** #XXX
+**Feature-ID:** [`ORG-ADM-OPP-001`](11%20Administrere%20organisasjon/01%20Organisasjon/opprette_organisasjon.feature) | **GitHub:** #XXX
 
 ### Norsk organisasjon henter data fra Brønnøysundregistrene
 
@@ -159,7 +159,7 @@ Kravene er utledet fra [Gherkin-spesifikasjonene](.) og er ment som lesbar dokum
 
 > Som en systemadministrator ønsker jeg å deaktivere en organisasjon som ikke lenger er aktiv slik at systemet gjenspeiler den faktiske tilstanden til organisasjonen.
 
-**Feature-ID:** `ORG-ADM-DEA-001` | **GitHub:** #XXX
+**Feature-ID:** [`ORG-ADM-DEA-001`](11%20Administrere%20organisasjon/01%20Organisasjon/deaktivere_organisasjon.feature) | **GitHub:** #XXX
 
 ### En nedlagt organisasjon skal deaktiveres
 
@@ -188,7 +188,7 @@ Kravene er utledet fra [Gherkin-spesifikasjonene](.) og er ment som lesbar dokum
 
 > Som en systemadministrator ønsker jeg å endre informasjon om en eksisterende organisasjon slik at dataene holdes oppdatert og korrekte.
 
-**Feature-ID:** `ORG-ADM-VED-001` | **GitHub:** #XXX
+**Feature-ID:** [`ORG-ADM-VED-001`](11%20Administrere%20organisasjon/01%20Organisasjon/vedlikeholde_organisasjon.feature) | **GitHub:** #XXX
 
 ### Navneendring registreres i historikk
 
@@ -240,7 +240,7 @@ Kravene er utledet fra [Gherkin-spesifikasjonene](.) og er ment som lesbar dokum
 
 > Som en systemadministrator ønsker jeg å identifisere og slå sammen duplikate organisasjoner slik at registeret ikke inneholder redundante oppføringer.
 
-**Feature-ID:** `ORG-ADM-DUP-001` | **GitHub:** #XXX
+**Feature-ID:** [`ORG-ADM-DUP-001`](11%20Administrere%20organisasjon/02%20Sl%C3%A5%20sammen%20duplikater/sammensl%C3%A5_duplikater.feature) | **GitHub:** #XXX
 
 ### Navnehistorikk må sjekkes ved duplikatkontroll
 
@@ -286,7 +286,7 @@ Kravene er utledet fra [Gherkin-spesifikasjonene](.) og er ment som lesbar dokum
 
 > Som en systemadministrator ønsker jeg å registrere at to eller flere organisasjoner fusjonerer slik at det historiske forholdet mellom organisasjoner bevares og den nye organisasjonen er korrekt registrert.
 
-**Feature-ID:** `ORG-ADM-FUS-001` | **GitHub:** #XXX
+**Feature-ID:** [`ORG-ADM-FUS-001`](11%20Administrere%20organisasjon/03%20Fusjonere%20organisasjoner/fusjonere_organisasjoner.feature) | **GitHub:** #XXX
 
 ### Norsk fusjonering oppretter en ny organisasjon
 
