@@ -133,7 +133,7 @@ Ved tvetydige ord **skal du spørre** brukeren om hva de mener før du skriver e
 | Ord brukt | Spør om de mener… |
 |-----------|-------------------|
 | `institusjon` | **organisasjon** (generelt begrep for alle typer registrerte enheter) — eller — **lærested** (spesifikt: universitet, høyskole eller fagskole)? |
-| `institusjonsnummer` | **organisasjonsID** (systemets interne ID, erstatter institusjonsnummer) — eller — **organisasjonsnummer** (eksternt registreringsnummer, f.eks. fra Brønnøysundregistrene)? |
+| `institusjonsnummer` | **organisasjonskode** (systemets interne kode, erstatter institusjonsnummer) — eller — **organisasjonsnummer** (eksternt registreringsnummer, f.eks. fra Brønnøysundregistrene)? |
 
 ### Foretrukne begreper
 
@@ -141,5 +141,5 @@ Ved tvetydige ord **skal du spørre** brukeren om hva de mener før du skriver e
 |------------|------------|
 | organisasjon | institusjon (med mindre du mener lærested spesifikt) |
 | lærested | institusjon (når du mener universitet, høyskole eller fagskole) |
-| organisasjonsID | institusjonsnummer |
-| organisasjonsnummer | (reservert for eksternt registreringsnummer — ikke bruk som synonym for organisasjonsID) |
+| organisasjonskode | institusjonsnummer |
+| organisasjonsnummer | (reservert for eksternt registreringsnummer — ikke bruk som synonym for organisasjonskode) |
