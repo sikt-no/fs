@@ -229,7 +229,7 @@ Kravene er utledet fra [Gherkin-spesifikasjonene](.) og er ment som lesbar dokum
 ### Åpne spørsmål
 
 - Har Europakommisjonen et API vi kan lytte på for å automatisk oppdage når land forlater eller gjenopptar Erasmus-avtalen?
-- Har Europakommisjonen et API for å lytte på endringer i PIC-nummer?
+- Har Europakommisjonen et API for å lytte på endringer i PIC-nummer? Se: https://ec.europa.eu/info/funding-tenders/opportunities/portal/screen/support/apis 
 - Skal dato fra-til for Erasmuskode-gyldighet settes manuelt eller hentes fra HEI-registeret?
 - Hvem varsles når en Erasmuskode nærmer seg utløp?
 - URL-validering: Skal sjekk skje ved lagring, periodisk, eller begge deler?
