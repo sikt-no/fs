@@ -29,7 +29,7 @@ Kravene er utledet fra [Gherkin-spesifikasjonene](.) og er ment som lesbar dokum
 
 | ID | Akseptansekrav                                          | Prioritet | Status | GitHub |
 |----|---------------------------------------------------------|-----------|--------|--------|
-| ORG-SØK-SID-001-01 | Søk på organisasjonsID viser organisasjonen direkte     | Må | Identifisert | |
+| ORG-SØK-SID-001-01 | Søk på organisasjonskode viser organisasjonen direkte     | Må | Identifisert | |
 | ORG-SØK-SID-001-02 | Søk på organisasjonsnummer viser organisasjonen direkte | Må | Identifisert | |
 | ORG-SØK-SID-001-03 | Søk på Erasmuskode viser organisasjonen direkte         | Må | Identifisert | |
 | ORG-SØK-SID-001-04 | Søk på PIC-nummer viser organisasjonen direkte          | Må | Identifisert | |
