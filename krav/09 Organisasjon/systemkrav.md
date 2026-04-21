@@ -10,7 +10,8 @@ Kravene er utledet fra [Gherkin-spesifikasjonene](.) og er ment som lesbar dokum
 
 ## Innhold
 
-- [Finn organisasjon](#finn-organisasjon)
+- [Finn med identifikator](#finn-med-identifikator)
+- [Søk etter organisasjon](#søk-etter-organisasjon)
 - [Opprette organisasjon](#opprette-organisasjon)
 - [Deaktivere organisasjon](#deaktivere-organisasjon)
 - [Vedlikeholde organisasjon](#vedlikeholde-organisasjon)
@@ -19,54 +20,69 @@ Kravene er utledet fra [Gherkin-spesifikasjonene](.) og er ment som lesbar dokum
 
 ---
 
-## Finn organisasjon
+## Finn med identifikator
 
-> Som en studieadministrator ønsker jeg å søke etter en organisasjon slik at jeg raskt finner den organisasjonen jeg trenger, eller finner ut at jeg må opprette en ny.
+> Som en studieadministrator som vet hvilken organisasjon jeg leter etter ønsker jeg å slå den opp med en presis identifikator slik at jeg kommer direkte til riktig organisasjonsprofil uten å måtte velge fra en liste.
 
-**Feature-ID:** [`ORG-SØK-SID-001`](10%20Finn%20organisasjon/01%20Søk%20og%20identifikasjon/søk_organisasjon.feature) | **GitHub:** #XXX
+**Feature-ID:** [`ORG-SØK-IDE-001`](10%20Finn%20organisasjon/01%20Identifikators%C3%B8k/finn_med_identifikator.feature) | **GitHub:** #XXX
 
 ### Søk på unik identifikator gir direktetreff
 
-| ID | Akseptansekrav                                          | Prioritet | Status | GitHub |
-|----|---------------------------------------------------------|-----------|--------|--------|
-| ORG-SØK-SID-001-01 | Søk på organisasjonskode viser organisasjonen direkte     | Må | Identifisert | |
-| ORG-SØK-SID-001-02 | Søk på organisasjonsnummer viser organisasjonen direkte | Må | Identifisert | |
-| ORG-SØK-SID-001-03 | Søk på Erasmuskode viser organisasjonen direkte         | Må | Identifisert | |
-| ORG-SØK-SID-001-04 | Søk på PIC-nummer viser organisasjonen direkte          | Må | Identifisert | |
+| ID | Akseptansekrav | Prioritet | Status | GitHub |
+|----|----------------|-----------|--------|--------|
+| ORG-SØK-IDE-001-01 | Søk på organisasjonskode viser organisasjonen direkte | Må | Identifisert | |
+| ORG-SØK-IDE-001-02 | Søk på organisasjonsnummer viser organisasjonen direkte | Må | Identifisert | |
+| ORG-SØK-IDE-001-03 | Søk på Erasmuskode viser organisasjonen direkte | Må | Identifisert | |
+| ORG-SØK-IDE-001-04 | Søk på PIC-nummer viser organisasjonen direkte | Må | Identifisert | |
+
+---
+
+## Søk etter organisasjon
+
+> Som en studieadministrator som ikke har en presis identifikator ønsker jeg å søke med navn, akronym eller nøkkelord slik at jeg finner riktig organisasjon — eller oppdager at jeg må opprette en ny.
+
+**Feature-ID:** [`ORG-SØK-SØK-001`](10%20Finn%20organisasjon/02%20Navne-%20og%20friteksts%C3%B8k/s%C3%B8k_organisasjon.feature) | **GitHub:** #XXX
 
 ### Søk på navn eller akronym gir liste med treff
 
 | ID | Akseptansekrav | Prioritet | Status | GitHub |
 |----|----------------|-----------|--------|--------|
-| ORG-SØK-SID-001-05 | Søk på fullt navn, akronym eller del av navn gir liste med matchende organisasjoner | Må | Identifisert | |
-| ORG-SØK-SID-001-06 | Søk på navn finner også treff i navnehistorikken, og det fremgår at treffet er basert på et historisk navn | Må | Identifisert | |
+| ORG-SØK-SØK-001-01 | Søk på fullt navn gir liste med matchende organisasjoner (eks: «Université Paris Cité») | Må | Identifisert | |
+| ORG-SØK-SØK-001-02 | Søk på akronym gir liste med matchende organisasjoner (eks: «NMBU») | Må | Identifisert | |
+| ORG-SØK-SØK-001-03 | Søk på del av navn gir liste med matchende organisasjoner | Må | Identifisert | |
+
+### Søket finner også treff i navnehistorikken
+
+| ID | Akseptansekrav | Prioritet | Status | GitHub |
+|----|----------------|-----------|--------|--------|
+| ORG-SØK-SØK-001-04 | Søk på historisk navn gir treff på nåværende organisasjon (eks: «Høgskolen i Oslo og Akershus» finner OsloMet), og det fremgår at treffet er basert på et historisk navn | Må | Identifisert | |
 
 ### Fritekstsøk på tvers av felter
 
 | ID | Akseptansekrav | Prioritet | Status | GitHub |
 |----|----------------|-----------|--------|--------|
-| ORG-SØK-SID-001-07 | Søk på en verdi gir treff i navn og URL | Må | Identifisert | |
-| ORG-SØK-SID-001-08 | Søk på flere ord gir kun treff der alle ord er til stede | Må | Identifisert | |
-| ORG-SØK-SID-001-09 | Minustegn foran et ord ekskluderer det fra treff | Må | Identifisert | |
+| ORG-SØK-SØK-001-05 | Søk på en verdi gir treff i navn og URL | Må | Identifisert | |
+| ORG-SØK-SØK-001-06 | Søk på flere ord gir kun treff der alle ord er til stede | Må | Identifisert | |
+| ORG-SØK-SØK-001-07 | Minustegn foran et ord ekskluderer det fra treff | Må | Identifisert | |
 
 ### Søket tolererer skrivefeil
 
 | ID | Akseptansekrav | Prioritet | Status | GitHub |
 |----|----------------|-----------|--------|--------|
-| ORG-SØK-SID-001-10 | Søk på feilstavet navn gir likevel relevante treff | Må | Identifisert | |
+| ORG-SØK-SØK-001-08 | Søk på feilstavet navn gir likevel relevante treff | Må | Identifisert | |
 
 ### Søk uten treff gir hjelp
 
 | ID | Akseptansekrav | Prioritet | Status | GitHub |
 |----|----------------|-----------|--------|--------|
-| ORG-SØK-SID-001-11 | Søk uten treff viser meldingen «Ingen organisasjoner funnet» og forslag til alternative søkeformuleringer | Må | Identifisert | |
+| ORG-SØK-SØK-001-09 | Søk uten treff viser meldingen «Ingen organisasjoner funnet» og forslag til alternative søkeformuleringer | Må | Identifisert | |
 
 ### Søkeresultatlisten viser nøkkelinformasjon
 
-| ID | Akseptansekrav                                                                                     | Prioritet | Status | GitHub |
-|----|----------------------------------------------------------------------------------------------------|-----------|--------|--------|
-| ORG-SØK-SID-001-12 | Hvert resultat viser organisasjonskode, navn, akronym, organisasjonstype og Erasmuskode              | Må | Identifisert | |
-| ORG-SØK-SID-001-13 | Organisasjonstype vises slik den er registrert i Brønnøysundregistrene (for norske organisasjoner) | Må | Identifisert | |
+| ID | Akseptansekrav | Prioritet | Status | GitHub |
+|----|----------------|-----------|--------|--------|
+| ORG-SØK-SØK-001-10 | Hvert resultat viser organisasjonskode, navn, akronym, organisasjonstype og Erasmuskode | Må | Identifisert | |
+| ORG-SØK-SØK-001-11 | Organisasjonstype vises slik den er registrert i Brønnøysundregistrene (for norske organisasjoner) | Må | Identifisert | |
 
 ### Åpne spørsmål
 
