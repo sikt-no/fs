@@ -10,7 +10,7 @@ Kravene er utledet fra [Gherkin-spesifikasjonene](.) og er ment som lesbar dokum
 
 ## Innhold
 
-- [Finn med identifikator](#finn-med-identifikator)
+- [Finn organisasjon med identifikator](#finn-organisasjon-med-identifikator)
 - [Søk etter organisasjon](#søk-etter-organisasjon)
 - [Opprette organisasjon](#opprette-organisasjon)
 - [Deaktivere organisasjon](#deaktivere-organisasjon)
@@ -20,7 +20,7 @@ Kravene er utledet fra [Gherkin-spesifikasjonene](.) og er ment som lesbar dokum
 
 ---
 
-## Finn med identifikator
+## Finn organisasjon med identifikator
 
 > Som en studieadministrator som vet hvilken organisasjon jeg leter etter ønsker jeg å slå den opp med en presis identifikator slik at jeg kommer direkte til riktig organisasjonsprofil uten å måtte velge fra en liste.
 
