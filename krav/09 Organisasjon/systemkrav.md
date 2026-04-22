@@ -6,6 +6,8 @@ Kravene er utledet fra [Gherkin-spesifikasjonene](.) og er ment som lesbar dokum
 **Prioritet:** Må = systemet skal ha dette · Bør = ønsket, men ikke blokkerende · Kan = fint å ha
 **Status:** Levert · Under arbeid · Planlagt · Identifisert (ikke planlagt for arbeid ennå)
 
+Vi burde ha en sesjon hvor vi går igjennom prioritering og estimering av kost/nytte. Nå står alle kravene som Må, men vi trenger å vurdere hvilken prioritet de faktisk skal ha. 
+
 ---
 
 ## Innhold
@@ -35,6 +37,10 @@ Kravene er utledet fra [Gherkin-spesifikasjonene](.) og er ment som lesbar dokum
 | ORG-SØK-IDE-001-03 | Søk på Erasmuskode viser organisasjonen direkte | Må | Identifisert |  |
 | ORG-SØK-IDE-001-04 | Søk på PIC-nummer viser organisasjonen direkte | Må | Identifisert |  |
 
+#### Åpne spørsmål/kommentarer
+- Er denne listen fullstendig? Finnes det flere identifikatorer man skal kunne søke på?
+- Er det ønsket oppførsel at man ikke skal velge fra en liste? Har vi eksmpler i databasen i dag på at det finnes duplikat av "Unik" identifikator? 
+
 ---
 
 ## Søk etter organisasjon
@@ -47,9 +53,17 @@ Kravene er utledet fra [Gherkin-spesifikasjonene](.) og er ment som lesbar dokum
 
 | ID | Akseptansekrav | Prioritet | Status | Kommentar |
 |----|----------------|-----------|--------|-----------|
-| ORG-SØK-SØK-001-01 | Søk på fullt navn gir liste med matchende organisasjoner (eks: «Université Paris Cité») | Må | Identifisert |  |
+| ORG-SØK-SØK-001-01 | Søk på fullt navn gir liste med matchende organisasjoner (eks: «Université Paris Cité») | Må | Identifisert |De første to  |
 | ORG-SØK-SØK-001-02 | Søk på akronym gir liste med matchende organisasjoner (eks: «NMBU») | Må | Identifisert |  |
 | ORG-SØK-SØK-001-03 | Søk på del av navn gir liste med matchende organisasjoner | Må | Identifisert |  |
+
+### Nytt krav 
+
+| ID | Akseptansekrav | Prioritet | Status | Kommentar |
+|----|----------------|-----------|--------|-----------|
+| Fyll inn etterpå | Feltet type organisasjon skal ikke lenger inneholde Utland.  | Må | Identifisert |  |
+| Fyll inn etterpå | Feltet type organisasjon skal fortsatt være obligatorisk| Må | Identifisert |  Eller skal den egentlig det? Hvis den skal være obligatorisk trenger vi en ny type "UKJENT" for organisasjoner hvor man ikke vet hva det er?|
+| Fyll inn etterpå | Landkode brukes til å hente ut utenlandske organisasjoner fromfor dagens "type organisasjon: UTLAND"  | Må | Identifisert |  |
 
 ### Søket finner også treff i navnehistorikken
 
@@ -63,7 +77,7 @@ Kravene er utledet fra [Gherkin-spesifikasjonene](.) og er ment som lesbar dokum
 |----|----------------|-----------|--------|-----------|
 | ORG-SØK-SØK-001-05 | Søk på en verdi gir treff i navn og URL | Må | Identifisert |  |
 | ORG-SØK-SØK-001-06 | Søk på flere ord gir kun treff der alle ord er til stede | Må | Identifisert |  |
-| ORG-SØK-SØK-001-07 | Minustegn foran et ord ekskluderer det fra treff | Må | Identifisert |  |
+| ORG-SØK-SØK-001-07 | Minustegn foran et ord ekskluderer det fra treff | Må | Identifisert | Dette  |
 
 ### Søket tolererer skrivefeil
 
@@ -89,6 +103,10 @@ Kravene er utledet fra [Gherkin-spesifikasjonene](.) og er ment som lesbar dokum
 - Hvilke felter skal inngå i fritekstsøket — navn, URL, andre?
 - Skal URL-søk støttes direkte eller kun som del av fritekst?
 - I hvilken rekkefølge skal treff sorteres (relevans, navn, organisasjonskode)?
+    - Skal brukeren kunne velge mellom ulike sorteringsparametre (designsystemet har komponenter som støtter dette)
+- Har vi noen akseptansekrav til hvor lang tid et fritekstsøk skal ha.
+- Hvorfor vil de ha fritekstsøk på tvers av felter, kan vi dekke behovet med et mer spisset søk.
+- Feltet "Type organisasjon" trenger mer avklaring. Hva betyr det egentlig når dette feltet er satt til UTLAND? Hvordan forholder vi oss til eksisterende date med koden UTLAND i dag, og hvordan ønsker vi at det skal fungere i den nye løsningen.
 
 ---
 
@@ -154,13 +172,13 @@ Kravene er utledet fra [Gherkin-spesifikasjonene](.) og er ment som lesbar dokum
 
 | ID | Akseptansekrav | Prioritet | Status | Kommentar |
 |----|----------------|-----------|--------|-----------|
-| ORG-ADM-OPP-001-18 | Akkrediteringsfeltet er skrivebeskyttet for systemadministratorer — det fremgår at NOKUT registrerer dette | Må | Identifisert |  |
+| ORG-ADM-OPP-001-18 | Akkrediteringsfeltet er skrivebeskyttet for systemadministratorer — det fremgår at NOKUT registrerer dette | Må | Identifisert | Trenger grensesnittet å vise akkrediterning? Spørsmålet er basert på antagelsen om at Føniks er brukere av grensesnittet og at hk-dir ønsker et API. Og antagelsen om at Føniks ikke trenger å forholde seg til akkreditering.|
 
 ### Organisasjonen må godkjennes før den er aktiv
 
 | ID | Akseptansekrav | Prioritet | Status | Kommentar |
 |----|----------------|-----------|--------|-----------|
-| ORG-ADM-OPP-001-19 | Ny organisasjon har status «Forslag» og er ikke søkbar før godkjenning | Må | Identifisert |  |
+| ORG-ADM-OPP-001-19 | Ny organisasjon har status «Forslag» og er ikke søkbar før godkjenning | Må | Identifisert | Er dette kravet knyttet til det åpne spørmålet "Hvem kan opprette organisasjoner?" - Hvis lokal adim skal kunne opprette trenger vi en slik funksjonalitet hvis de skal fortsette å bruke nettskjema slik de gjør i dag trenger de ikke det. |
 | ORG-ADM-OPP-001-20 | Godkjent organisasjon blir aktiv og søkbar | Må | Identifisert |  |
 
 ### Åpne spørsmål
@@ -222,6 +240,7 @@ Kravene er utledet fra [Gherkin-spesifikasjonene](.) og er ment som lesbar dokum
 | ORG-ADM-VED-001-05 | PIC-nummer som ikke finnes i API-et gir advarsel, men kan likevel lagres | Må | Identifisert |  |
 
 ### Erasmuskode har begrenset gyldighetsperiode
+> Kan vi berabeide disse kravene mer og skille ut som en egen oppgave, som løses senere? 
 
 | ID | Akseptansekrav | Prioritet | Status | Kommentar |
 |----|----------------|-----------|--------|-----------|
