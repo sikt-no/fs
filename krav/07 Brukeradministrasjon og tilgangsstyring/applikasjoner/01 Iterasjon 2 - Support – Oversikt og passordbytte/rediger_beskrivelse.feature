@@ -1,5 +1,6 @@
 # language: no
-@BRU-APP-API-006 @must @planned
+# GitHub: #443
+@BRU-APP-API-006 @must @draft
 Egenskap: Redigere beskrivelse for API-bruker
   Som bruker
   ønsker jeg å redigere beskrivelsen for en API-bruker

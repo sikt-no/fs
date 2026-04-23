@@ -1,5 +1,6 @@
 # language: no
-@BRU-APP-API-015 @could @planned
+# GitHub: #452
+@BRU-APP-API-015 @could @draft
 Egenskap: Sist brukt tidspunkt
   Som bruker
   ønsker jeg å se når API-brukeren ble brukt sist

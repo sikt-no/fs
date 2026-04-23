@@ -1,5 +1,6 @@
 # language: no
-@BRU-APP-API-005 @must @planned
+# GitHub: #442
+@BRU-APP-API-005 @must @draft
 Egenskap: Administrere ansvarlig for API-bruker
   Som bruker
   ønsker jeg å sette og endre ansvarlig for en API-bruker

@@ -96,10 +96,18 @@ Hver feature **må tagges** med en unik ID. ID-en legges inn manuelt som tag i f
 ### Prioritet (MoSCoW)
 - `@must` / `@should` / `@could` / `@wont`
 
-### Status
+### Kravstatus
+Sier noe om selve **kravteksten** — er den ferdig skrevet, avklart og klar til bruk?
+
+- `@draft` - Utkast. Kravteksten er ikke ferdig: åpne spørsmål, uavklart scope, eller mangler review. Skal ikke legges til grunn for implementasjon som den er.
+- (ingen tag) - Kravet er ferdig skrevet og avklart, klart til bruk.
+
+### Implementasjonsstatus
+Sier noe om **koden** — er funksjonaliteten bygget?
+
 - `@implemented` - Ferdig implementert
 - `@in-progress` - Under implementering
-- `@planned` - Planlagt
+- `@planned` - Planlagt for implementasjon (kravet er klart, men ikke kodet enda)
 
 ### Type
 - `@e2e` - End-to-end brukerreiser

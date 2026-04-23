@@ -1,5 +1,6 @@
 # language: no
-@BRU-APP-API-007 @must @planned
+# GitHub: #444
+@BRU-APP-API-007 @must @draft
 Egenskap: Tilordne rolle til API-bruker
   Som intern brukerstøtte
   ønsker jeg å tilordne en rolle til en API-bruker fra en liste over roller jeg har rettigheter til å tildele

@@ -1,5 +1,6 @@
 # language: no
-@BRU-APP-API-009 @must @planned
+# GitHub: #446
+@BRU-APP-API-009 @must @draft
 Egenskap: Opprette API-bruker
   Som bruker
   ønsker jeg å opprette en ny API-bruker

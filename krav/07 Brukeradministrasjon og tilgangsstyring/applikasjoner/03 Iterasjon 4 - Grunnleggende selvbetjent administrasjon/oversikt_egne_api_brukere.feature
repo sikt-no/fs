@@ -1,5 +1,6 @@
 # language: no
-@BRU-APP-API-011 @must @planned
+# GitHub: #448
+@BRU-APP-API-011 @must @draft
 Egenskap: Oversikt over egne API-brukere
   Som brukeradministrator på lærested
   ønsker jeg en oversikt over mine API-brukere

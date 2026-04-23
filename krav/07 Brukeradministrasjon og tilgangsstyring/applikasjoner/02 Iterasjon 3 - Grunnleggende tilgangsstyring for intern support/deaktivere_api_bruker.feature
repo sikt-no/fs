@@ -1,5 +1,6 @@
 # language: no
-@BRU-APP-API-010 @must @planned
+# GitHub: #447
+@BRU-APP-API-010 @must @draft
 Egenskap: Deaktivere API-bruker
   Som bruker
   ønsker jeg å deaktivere en API-bruker

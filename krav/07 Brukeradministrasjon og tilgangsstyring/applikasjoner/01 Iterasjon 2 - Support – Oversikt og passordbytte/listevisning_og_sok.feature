@@ -1,5 +1,6 @@
 # language: no
-@BRU-APP-API-001 @must @planned
+# GitHub: #438
+@BRU-APP-API-001 @must @draft
 Egenskap: Listevisning og søk i API-brukere
   Som intern brukerstøtte
   ønsker jeg en oversikt over alle API-brukere med mulighet for søk og filtrering

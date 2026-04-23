@@ -1,5 +1,6 @@
 # language: no
-@BRU-APP-API-016 @could @planned
+# GitHub: #453
+@BRU-APP-API-016 @could @draft
 Egenskap: Endringslogg for API-bruker
   Som bruker
   ønsker jeg å se endringslogg over hvem som har endret hva

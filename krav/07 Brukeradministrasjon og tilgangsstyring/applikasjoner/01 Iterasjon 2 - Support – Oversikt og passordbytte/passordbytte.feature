@@ -1,5 +1,6 @@
 # language: no
-@BRU-APP-API-004 @must @planned
+# GitHub: #441
+@BRU-APP-API-004 @must @draft
 Egenskap: Passordbytte for API-bruker
   Som bruker
   ønsker jeg å sette nytt passord på en API-bruker jeg har rettighet til å administrere

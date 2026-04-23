@@ -1,5 +1,6 @@
 # language: no
-@BRU-APP-API-017 @could @planned
+# GitHub: #454
+@BRU-APP-API-017 @could @draft
 Egenskap: Masseadministrasjon av roller
   Som bruker
   ønsker jeg å se en liste over roller for å tildele eller fjerne én eller flere roller

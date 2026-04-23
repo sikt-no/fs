@@ -1,11 +1,13 @@
 ---
 name: skrive-krav
 description: >
-  This skill should be used when the user asks to "skrive krav", "lag feature-fil",
-  "skriv BDD-scenario", "definer krav", "lag Gherkin", "skriv en feature",
-  "nytt scenario", or wants to create BDD requirements in Gherkin format.
-  Guides the user through defining requirements, finding reusable steps, and
-  generating feature files.
+  Lag en enkeltstående `.feature`-fil i Gherkin-format. Bruk når brukeren vil
+  "skrive krav", "lage feature-fil", "skrive BDD-scenario", "lage Gherkin",
+  "skrive en feature", eller "lage et nytt scenario" for én konkret funksjonalitet.
+  Fokuserer på gjenbruk av eksisterende steps, god Gherkin-stil (bddpanda-prinsipper)
+  og korrekt plassering i `krav/`-strukturen.
+  Ikke bruk for initiativ-nivå kravarbeid med flere features, systemkrav-dokument
+  eller brukerhistorier på tvers av kapabiliteter — bruk `bat-krav` til det.
 ---
 
 # Skrive Krav

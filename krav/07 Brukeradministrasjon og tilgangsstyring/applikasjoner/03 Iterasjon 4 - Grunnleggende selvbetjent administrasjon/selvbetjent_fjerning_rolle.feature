@@ -1,5 +1,6 @@
 # language: no
-@BRU-APP-API-014 @must @planned
+# GitHub: #451
+@BRU-APP-API-014 @must @draft
 Egenskap: Selvbetjent fjerning av rolle
   Som brukeradministrator
   ønsker jeg å fjerne en rolle fra en API-bruker

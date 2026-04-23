@@ -1,5 +1,6 @@
 # language: no
-@BRU-APP-API-013 @must @planned
+# GitHub: #450
+@BRU-APP-API-013 @must @draft
 Egenskap: Selvbetjent tilordning av rolle
   Som brukeradministrator på lærested
   ønsker jeg å tilordne en rolle til en API-bruker fra en liste over roller jeg har rettigheter til å tildele.

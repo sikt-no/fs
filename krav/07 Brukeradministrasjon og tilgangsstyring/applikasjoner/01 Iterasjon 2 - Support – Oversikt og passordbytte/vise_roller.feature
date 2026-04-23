@@ -1,5 +1,6 @@
 # language: no
-@BRU-APP-API-003 @must @planned
+# GitHub: #440
+@BRU-APP-API-003 @must @draft
 Egenskap: Vise roller for API-bruker
   Som bruker
   ønsker jeg å se hvilke roller en API-bruker har

@@ -1,5 +1,6 @@
 # language: no
-@BRU-APP-API-002 @must @planned
+# GitHub: #439
+@BRU-APP-API-002 @must @draft
 Egenskap: Se detaljer for API-bruker
   Som bruker
   ønsker jeg å se detaljer for en API-bruker, organisert i logiske datagrupper,

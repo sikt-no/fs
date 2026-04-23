@@ -1,5 +1,6 @@
 # language: no
-@BRU-APP-API-012 @must @planned
+# GitHub: #449
+@BRU-APP-API-012 @must @draft
 Egenskap: API-brukere med tilgang til lærestedets data
   Som brukeradministrator på lærested
   ønsker jeg å se hvilke API-brukere som har tilgang til mitt lærested sine data

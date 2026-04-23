@@ -1,5 +1,6 @@
 # language: no
-@BRU-APP-API-008 @must @planned
+# GitHub: #445
+@BRU-APP-API-008 @must @draft
 Egenskap: Fjerne rolle fra API-bruker
   Som intern brukerstøtte
   ønsker jeg å fjerne en rolle fra en API-bruker
