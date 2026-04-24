@@ -52,3 +52,17 @@ Egenskap: Administrere ansvarlig for API-bruker
       Gitt jeg velger å sette ansvarlig
       Når jeg søker etter en ansvarlig
       Så vises feide-grupper fra API-brukerens organisasjon i tillegg til feide-brukere
+
+  Regel: Administrasjon av ansvarlig krever rettighet over API-brukerens organisasjon
+
+    Scenario: Api-brukeradministrator kan administrere ansvarlig for API-brukere i egne organisasjoner
+      Gitt jeg har api-brukeradministrator-rollen for organisasjonen API-brukeren tilhører
+      Så har jeg mulighet til å sette, endre og fjerne ansvarlig
+
+    Scenario: Administrasjon av ansvarlig er ikke tilgjengelig for API-brukere fra andre organisasjoner
+      Gitt jeg har api-brukeradministrator-rollen, men ikke for organisasjonen API-brukeren tilhører
+      Så er muligheten til å sette, endre og fjerne ansvarlig ikke tilgjengelig
+
+    Scenario: Api-superbrukeradministrator kan administrere ansvarlig for alle API-brukere
+      Gitt jeg har api-superbrukeradministrator-rollen
+      Så har jeg mulighet til å sette, endre og fjerne ansvarlig uavhengig av organisasjon

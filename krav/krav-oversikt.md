@@ -81,6 +81,19 @@ Generert oversikt over alle BDD-krav i prosjektet.
 | TIL-TIL-TIL-005 | Tilgangsstyring - Oversikt over API-tilganger | 12 Brukeradministrasjon | 01 Brukere | @TIL-TIL-TIL-005 @skip @støtteprosesser @sikkerhet | [tilgangsstyring_api-tilganger_oversikt.feature](07%20Brukeradministrasjon%20og%20tilgangsstyring/12%20Brukeradministrasjon/01%20Brukere/tilgangsstyring_api-tilganger_oversikt.feature) |
 | TIL-TIL-TIL-006 | Tilgangsstyringsprosess | 12 Brukeradministrasjon | 01 Brukere | @TIL-TIL-TIL-006 @skip @støtteprosesser @sikkerhet | [tilgangsstyring_prosess.feature](07%20Brukeradministrasjon%20og%20tilgangsstyring/12%20Brukeradministrasjon/01%20Brukere/tilgangsstyring_prosess.feature) |
 | TIL-TIL-TIL-002 | Tilgangstyring av saksbehandler | 12 Brukeradministrasjon | 01 Brukere | @TIL-TIL-TIL-002 | [tilgangsstyring_saksbehandler.feature](07%20Brukeradministrasjon%20og%20tilgangsstyring/12%20Brukeradministrasjon/01%20Brukere/tilgangsstyring_saksbehandler.feature) |
+| BRU-APP-API-005 | Administrere ansvarlig for API-bruker | applikasjoner | 01 Iterasjon 2 - Support – Oversikt og passordbytte | @BRU-APP-API-005 @must @planned | [administrere_ansvarlig.feature](07%20Brukeradministrasjon%20og%20tilgangsstyring/applikasjoner/01%20Iterasjon%202%20-%20Support%20–%20Oversikt%20og%20passordbytte/administrere_ansvarlig.feature) |
+| BRU-APP-API-001 | Listevisning og søk i API-brukere | applikasjoner | 01 Iterasjon 2 - Support – Oversikt og passordbytte | @BRU-APP-API-001 @must @planned | [listevisning_og_sok.feature](07%20Brukeradministrasjon%20og%20tilgangsstyring/applikasjoner/01%20Iterasjon%202%20-%20Support%20–%20Oversikt%20og%20passordbytte/listevisning_og_sok.feature) |
+| BRU-APP-API-004 | Passordbytte for API-bruker | applikasjoner | 01 Iterasjon 2 - Support – Oversikt og passordbytte | @BRU-APP-API-004 @must @planned | [passordbytte.feature](07%20Brukeradministrasjon%20og%20tilgangsstyring/applikasjoner/01%20Iterasjon%202%20-%20Support%20–%20Oversikt%20og%20passordbytte/passordbytte.feature) |
+| BRU-APP-API-006 | Redigere beskrivelse for API-bruker | applikasjoner | 01 Iterasjon 2 - Support – Oversikt og passordbytte | @BRU-APP-API-006 @must @planned | [rediger_beskrivelse.feature](07%20Brukeradministrasjon%20og%20tilgangsstyring/applikasjoner/01%20Iterasjon%202%20-%20Support%20–%20Oversikt%20og%20passordbytte/rediger_beskrivelse.feature) |
+| BRU-APP-API-002 | Se detaljer for API-bruker | applikasjoner | 01 Iterasjon 2 - Support – Oversikt og passordbytte | @BRU-APP-API-002 @must @planned | [se_detaljer.feature](07%20Brukeradministrasjon%20og%20tilgangsstyring/applikasjoner/01%20Iterasjon%202%20-%20Support%20–%20Oversikt%20og%20passordbytte/se_detaljer.feature) |
+| BRU-APP-API-003 | Vise roller for API-bruker | applikasjoner | 01 Iterasjon 2 - Support – Oversikt og passordbytte | @BRU-APP-API-003 @must @planned | [vise_roller.feature](07%20Brukeradministrasjon%20og%20tilgangsstyring/applikasjoner/01%20Iterasjon%202%20-%20Support%20–%20Oversikt%20og%20passordbytte/vise_roller.feature) |
+| BRU-APP-API-010 | Deaktivere API-bruker | applikasjoner | 02 Iterasjon 3 - Grunnleggende tilgangsstyring for intern support | @BRU-APP-API-010 @must @planned | [deaktivere_api_bruker.feature](07%20Brukeradministrasjon%20og%20tilgangsstyring/applikasjoner/02%20Iterasjon%203%20-%20Grunnleggende%20tilgangsstyring%20for%20intern%20support/deaktivere_api_bruker.feature) |
+| BRU-APP-API-008 | Fjerne rolle fra API-bruker | applikasjoner | 02 Iterasjon 3 - Grunnleggende tilgangsstyring for intern support | @BRU-APP-API-008 @must @planned | [fjerne_rolle.feature](07%20Brukeradministrasjon%20og%20tilgangsstyring/applikasjoner/02%20Iterasjon%203%20-%20Grunnleggende%20tilgangsstyring%20for%20intern%20support/fjerne_rolle.feature) |
+| BRU-APP-API-009 | Opprette API-bruker | applikasjoner | 02 Iterasjon 3 - Grunnleggende tilgangsstyring for intern support | @BRU-APP-API-009 @must @planned | [opprette_api_bruker.feature](07%20Brukeradministrasjon%20og%20tilgangsstyring/applikasjoner/02%20Iterasjon%203%20-%20Grunnleggende%20tilgangsstyring%20for%20intern%20support/opprette_api_bruker.feature) |
+| BRU-APP-API-007 | Tilordne rolle til API-bruker | applikasjoner | 02 Iterasjon 3 - Grunnleggende tilgangsstyring for intern support | @BRU-APP-API-007 @must @planned | [tilordne_rolle.feature](07%20Brukeradministrasjon%20og%20tilgangsstyring/applikasjoner/02%20Iterasjon%203%20-%20Grunnleggende%20tilgangsstyring%20for%20intern%20support/tilordne_rolle.feature) |
+| BRU-APP-API-016 | Endringslogg for API-bruker | applikasjoner | 04 Nice to have - Tilleggsfunksjonalitet | @BRU-APP-API-016 @could @draft | [endringslogg.feature](07%20Brukeradministrasjon%20og%20tilgangsstyring/applikasjoner/04%20Nice%20to%20have%20-%20Tilleggsfunksjonalitet/endringslogg.feature) |
+| BRU-APP-API-017 | Masseadministrasjon av roller | applikasjoner | 04 Nice to have - Tilleggsfunksjonalitet | @BRU-APP-API-017 @could @draft | [masseadministrasjon_roller.feature](07%20Brukeradministrasjon%20og%20tilgangsstyring/applikasjoner/04%20Nice%20to%20have%20-%20Tilleggsfunksjonalitet/masseadministrasjon_roller.feature) |
+| BRU-APP-API-015 | Sist brukt tidspunkt | applikasjoner | 04 Nice to have - Tilleggsfunksjonalitet | @BRU-APP-API-015 @could @draft | [sist_brukt_tidspunkt.feature](07%20Brukeradministrasjon%20og%20tilgangsstyring/applikasjoner/04%20Nice%20to%20have%20-%20Tilleggsfunksjonalitet/sist_brukt_tidspunkt.feature) |
 
 ## 08 Teknisk
 
@@ -94,7 +107,7 @@ Generert oversikt over alle BDD-krav i prosjektet.
 
 | ID | Feature | Sub-domene | Kapabilitet | Tags | Fil |
 |----|---------|------------|-------------|------|-----|
-| ORG-SØK-SØK-001 | Søk organisasjon | 10 Søk | 01 Søk | @ORG-SØK-SØK-001 @must | [søk_organisasjon.feature](09%20Organisasjon/10%20Søk/01%20Søk/søk_organisasjon.feature) |
+| ORG-SØK-SØK-001 | Søk organisasjon | 10 Finn organisasjon | 01 Søk og identifikasjon | @ORG-SØK-SØK-001 @must | [søk_organisasjon.feature](09%20Organisasjon/10%20Finn%20organisasjon/01%20Søk%20og%20identifikasjon/søk_organisasjon.feature) |
 | ORG-ADM-DEA-001 | Deaktivere organisasjon | 11 Administrere organisasjon | 01 Organisasjon | @ORG-ADM-DEA-001 @must | [deaktivere_organisasjon.feature](09%20Organisasjon/11%20Administrere%20organisasjon/01%20Organisasjon/deaktivere_organisasjon.feature) |
 | ORG-ADM-OPP-001 | Opprette organisasjon | 11 Administrere organisasjon | 01 Organisasjon | @ORG-ADM-OPP-001 @must | [opprette_organisasjon.feature](09%20Organisasjon/11%20Administrere%20organisasjon/01%20Organisasjon/opprette_organisasjon.feature) |
 | ORG-ADM-VED-001 | Vedlikeholde organisasjon | 11 Administrere organisasjon | 01 Organisasjon | @ORG-ADM-VED-001 @must | [vedlikeholde_organisasjon.feature](09%20Organisasjon/11%20Administrere%20organisasjon/01%20Organisasjon/vedlikeholde_organisasjon.feature) |
@@ -123,6 +136,6 @@ Generert oversikt over alle BDD-krav i prosjektet.
 
 ## Statistikk
 
-- Totalt: 63
+- Totalt: 76
 - Levert: 2
 - Skip: 21

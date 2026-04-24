@@ -1,12 +1,12 @@
 # language: no
-# GitHub: #438
+# GitHub: #438, #448, #449
 @BRU-APP-API-001 @must @planned
 Egenskap: Listevisning og søk i API-brukere
   Som bruker
-  ønsker jeg en oversikt over alle API-brukere med mulighet for søk og filtrering
+  ønsker jeg en oversikt over API-brukere jeg har tilgang til, med mulighet for søk og filtrering
   slik at jeg raskt kan finne og følge opp riktig API-bruker.
 
-  # Krav fra Confluence: K1 Liste over alle API-brukere, K2 Søk og filtrering
+  # Krav fra Confluence: K1 Liste over alle API-brukere, K2 Søk og filtrering, K11 Oversikt over egne API-brukere, K12 Se API-brukere med tilgang til lærestedets data
 
   Bakgrunn:
     Gitt jeg er innlogget i løsningen
@@ -70,3 +70,23 @@ Egenskap: Listevisning og søk i API-brukere
       Gitt jeg ser listen over API-brukere
       Når jeg kombinerer fritekst-søk med ett eller flere filter
       Så vises kun API-brukere som matcher alle kriteriene
+
+  Regel: Synlighet styres av administrasjonsrettigheter (K11, K12)
+
+    Scenario: Api-brukeradministrator ser API-brukere fra egne organisasjoner
+      Gitt jeg har api-brukeradministrator-rollen for én eller flere organisasjoner
+      Når jeg åpner API-brukeroversikten
+      Så ser jeg API-brukere tilknyttet de organisasjonene jeg administrerer
+
+    Scenario: Api-brukeradministrator ser også API-brukere med roller i egne organisasjoner
+      Gitt jeg har api-brukeradministrator-rollen for én eller flere organisasjoner
+      Og en API-bruker tilhører en annen organisasjon, men har roller som gir tilgang til data i en av mine organisasjoner
+      Når jeg åpner API-brukeroversikten
+      Så ser jeg denne API-brukeren i listen
+      Og det fremgår hvilken organisasjon API-brukeren tilhører
+
+    Scenario: Api-superbrukeradministrator ser alle API-brukere
+      Gitt jeg har api-superbrukeradministrator-rollen
+      Når jeg åpner API-brukeroversikten
+      Så ser jeg alle API-brukere uavhengig av organisasjon
+      Og jeg ser også API-brukere som ikke er tilknyttet noen organisasjon
