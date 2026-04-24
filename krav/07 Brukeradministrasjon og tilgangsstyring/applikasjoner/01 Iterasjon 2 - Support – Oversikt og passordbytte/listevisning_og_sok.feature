@@ -1,17 +1,19 @@
 # language: no
 # GitHub: #438
-@BRU-APP-API-001 @must @draft
+@BRU-APP-API-001 @must @planned
 Egenskap: Listevisning og søk i API-brukere
-  Som intern brukerstøtte
+  Som bruker
   ønsker jeg en oversikt over alle API-brukere med mulighet for søk og filtrering
   slik at jeg raskt kan finne og følge opp riktig API-bruker.
 
   # Krav fra Confluence: K1 Liste over alle API-brukere, K2 Søk og filtrering
 
+  Bakgrunn:
+    Gitt jeg er innlogget i løsningen
+
   Regel: Liste over alle API-brukere (K1)
 
     Scenario: Se liste over API-brukere
-      Gitt jeg er innlogget som intern brukerstøtte
       Når jeg åpner API-brukeroversikten
       Så ser jeg en liste over alle API-brukere
       Og listen er sortert etter navn i stigende rekkefølge
@@ -21,13 +23,11 @@ Egenskap: Listevisning og søk i API-brukere
         | Beskrivelse         |
         | Miljøer             |
         | Ansvarlig           |
-        | Lærested            |
-        | Roller              |
+        | Organisasjon        |
         | Type API-bruker     |
         | Oppfølgningsstatus  |
 
     Scenario: Liste viser de 50 første API-brukerne
-      Gitt jeg er innlogget som intern brukerstøtte
       Når jeg åpner API-brukeroversikten
       Så ser jeg totalt antall treff og antall som er lastet
       Og listen viser de 50 første API-brukerne
@@ -50,9 +50,6 @@ Egenskap: Listevisning og søk i API-brukere
 
   Regel: Søk og filtrering av API-brukere (K2)
 
-    # ÅPNE SPØRSMÅL:
-    # - Filter på rolle er inkludert i MVP, men kan nedprioriteres dersom kompleksiteten er høy.
-
     Scenario: Fritekst-søk på navn
       Gitt jeg ser listen over API-brukere
       Når jeg søker med fritekst på navn
@@ -63,7 +60,13 @@ Egenskap: Listevisning og søk i API-brukere
       Når jeg velger en organisasjon som filter
       Så vises kun API-brukere tilknyttet valgt organisasjon
 
-    Scenario: Kombinere fritekst og organisasjonsfilter
+    @could
+    Scenario: Filtrere på rolle
       Gitt jeg ser listen over API-brukere
-      Når jeg kombinerer fritekst-søk med organisasjonsfilter
-      Så vises kun API-brukere som matcher begge kriteriene
+      Når jeg velger en rolle som filter
+      Så vises kun API-brukere som har den valgte rollen
+
+    Scenario: Kombinere filtre
+      Gitt jeg ser listen over API-brukere
+      Når jeg kombinerer fritekst-søk med ett eller flere filter
+      Så vises kun API-brukere som matcher alle kriteriene
