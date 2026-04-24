@@ -29,6 +29,7 @@ Skillen støtter også **iterativ fullføring** av allerede skisserte krav: Gå 
 - Kjente persona: administrator, søker, student, saksbehandler
 - **GitHub-saksnummer er påkrevd** når fila opprettes, slettes, `Egenskap:`-tittelen endres, eller `# GitHub:`-referansen byttes — se *Når må GitHub-issue synkroniseres?* under. Endringer i scenarios, regler eller brukerhistorie krever **ikke** GitHub-oppdatering.
 - `gh` CLI brukes for å verifisere og opprette issues. Repo utledes automatisk fra git remote (typisk `sikt-no/fs`), og kan overstyres med `--repo`.
+- **Confluence-bakgrunn er ofte tilgjengelig** via Atlassian-MCP (`mcp__claude_ai_Atlassian__*`). Draft-filer refererer gjerne til kilden med en kommentar som `# Krav fra Confluence: K6 ...`. Bruk MCP-en til å hente siden når brukeren oppgir en URL/ID — **ikke** søk bredt i Confluence av eget initiativ; spør først.
 
 ## Arbeidsmoduser
 
@@ -70,6 +71,7 @@ Hvis brukeren allerede har jobbet med et initiativ i denne samtalen, bruk det ut
 - Hvem er aktørene?
 - Hvilket domene hører dette til? (se `krav/` for eksisterende domener)
 - **Hvilket GitHub-saksnummer hører kravet til?** (f.eks. `#1234`)
+- **Finnes det bakgrunnsinformasjon i Confluence** som skal legges til grunn? (side-URL, tiny-link eller side-ID — f.eks. en kravspesifikasjon, en workshop-oppsummering, eller en K-nummerert kravliste). Hvis ja, hent innholdet via `mcp__claude_ai_Atlassian__getConfluencePage` før du begynner å skrive scenarios. Bruker sier "nei" eller "hopp over" → fortsett uten.
 
 ### 1a. Verifiser eller opprett GitHub-issue
 
@@ -286,6 +288,21 @@ Praktiske regler:
 
 Spør brukeren hvilken mappe som skal gjennomgås (eller bruk den de allerede har nevnt). Bekreft absolutt sti før du begynner. Alle `.feature`-filer i mappen og dens undermapper inngår i gjennomgangen.
 
+### F1.5. Spør om Confluence-bakgrunn
+
+Før du begynner å avklare draftene, still dette spørsmålet til brukeren:
+
+> *"Finnes det en Confluence-side med bakgrunnsinformasjon jeg skal legge til grunn når jeg fyller ut draftene? (side-URL, tiny-link eller side-ID). Hvis ikke: svar 'nei' eller 'hopp over'."*
+
+Mange draft-filer inneholder allerede en peker som `# Krav fra Confluence: K6 ...`. Disse peker vanligvis til en kilde brukeren kjenner, men skillen skal **ikke søke i Confluence av eget initiativ** — vent på at brukeren oppgir URL/ID eller bekrefter at det ikke er relevant.
+
+Når brukeren oppgir en kilde:
+- Hent siden med `mcp__claude_ai_Atlassian__getConfluencePage` (bruk `contentFormat: "markdown"` hvis du bare trenger tekst).
+- Les igjennom og noter hvilke K-nummer / seksjoner som korresponderer med hvilke filer i mappen.
+- Bruk Confluence-innholdet aktivt i F4 når du foreslår scenario-formuleringer og avklarer åpne spørsmål — men **ikke** finn på detaljer som ikke står i kilden; det skal fortsatt avklares med brukeren.
+
+Hvis brukeren svarer "nei" / "hopp over": fortsett uten, og støtt deg på eksisterende `.feature`-filer, step-definisjoner og brukerens svar i F4.
+
 ### F2. Kartlegg status
 
 Les hver `.feature`-fil og klassifiser hvert krav basert på tags på `Egenskap:`-nivå:
@@ -333,6 +350,7 @@ Ta ett draft-krav om gangen. For hvert:
    - Andre `.feature`-filer i samme kapabilitet for stil og gjenbruk
    - Eksisterende step-definisjoner i `tester/steps/**/*.ts` — gjenbruk formuleringer som allerede er implementert
    - Evt. `systemkrav.md` i samme område
+   - Confluence-siden fra F1.5 hvis brukeren oppga en — slå opp K-nummeret (eller tilsvarende seksjonsreferanse) som nevnes i filens `# Krav fra Confluence:`-kommentar, og bruk innholdet som grunnlag for forslag
 3. **Oppsummer for brukeren** hva som mangler eller er uavklart:
    - Åpne spørsmål som ikke er besvart
    - Skisse-pregede scenarios uten konkrete data / forventet resultat

@@ -115,6 +115,12 @@ Sier noe om **koden** — er funksjonaliteten bygget?
 - `@demo` - Demo/eksempeltester (kjøres lokalt som standard)
 - `@ci` - Tester som kjøres automatisk i CI-pipeline
 
+### Oppfølging
+
+Sier noe om at et **konkret scenario eller regel** har en uavklart detalj, selv om resten av kravet er klart til implementasjon.
+
+- `@openquestion` - Scenarioet/regelen har en uavklart detalj som må besvares før implementasjon kan begynne i akkurat den delen. Plasseres på scenario- eller regel-nivå (ikke på `Egenskap:` — bruk `@draft` hvis hele kravet er utkast). Skal **alltid** følges av en `# ÅPNE SPØRSMÅL:`-kommentar like under som beskriver spørsmålet. Taggen gjør det mulig å grep-e på tvers av krav-mappa (`grep -r @openquestion krav/`) for å finne gjenstående avklaringer. En `Egenskap:` kan være `@planned` selv om ett scenario er `@openquestion` — det markerer at hovedflyten er klar, men at en detalj må lukkes før delen kan implementeres.
+
 ## Åpne spørsmål
 
 Dokumenter uklarheter med kommentarer:
