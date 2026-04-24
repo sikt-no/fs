@@ -269,6 +269,19 @@ Bruk når brukeren peker på en mappe med eksisterende `.feature`-filer som skal
 
 Bakgrunnen: `@draft` markerer at *kravteksten* er utkast (kravstatus), og `@planned` markerer at *kravet er klart til implementasjon* (implementasjonsstatus). Når et draft er ferdigstilt, fjernes `@draft` og erstattes av `@planned` — vi beholder ikke begge samtidig, og vi lar ikke krav stå uten status. Se `gherkin-conventions.md` for den autoritative definisjonen.
 
+### Interaksjonsprinsipp: ett spørsmål om gangen
+
+**Ikke list opp alle åpne spørsmål i én stor blokk.** Still **ett spørsmål** og vent på svar før du går til neste. Dette er et ufravikelig prinsipp for modus B — brukeren har eksplisitt bedt om det, og en lang spørsmålsliste fører til at mange spørsmål blir hoppet over eller misforstått.
+
+Praktiske regler:
+
+- **Én fil om gangen, ett spørsmål om gangen.** Ikke bland spørsmål om flere filer i samme runde.
+- **Tilby flervalg** (a/b/c) med konkrete alternativer når det er naturlig. Brukeren svarer raskere på "a" eller "b" enn på et åpent spørsmål, og det reduserer feiltolking.
+- **Bruk `TodoWrite`** for å holde oversikt over gjenværende filer og spørsmål. Oppdater fortløpende slik at brukeren ser progresjon.
+- **Når du har nok informasjon til å foreslå en konkret fil-endring:** presenter forslaget (gjerne som diff eller full kodeblokk) og spør om brukeren vil **(a) skrive** eller **(b) justere**. Én beslutning om gangen.
+- **Tverrgående avklaringer først.** Hvis flere filer trenger samme avklaring (f.eks. aktør, terminologi), ta disse som separate overordnede spørsmål før du går ned i hver fil. Fortsatt ett spørsmål om gangen.
+- **Ikke dump oppsummeringer av alt som er uklart.** Pek på én ting, få svar, gå videre.
+
 ### F1. Identifiser mappen
 
 Spør brukeren hvilken mappe som skal gjennomgås (eller bruk den de allerede har nevnt). Bekreft absolutt sti før du begynner. Alle `.feature`-filer i mappen og dens undermapper inngår i gjennomgangen.
@@ -302,11 +315,11 @@ Vent på bekreftelse før du går videre.
 
 ### F3. Håndter krav uten status
 
-For hvert "uten status"-krav, still brukeren ett raskt spørsmål:
+Ta **én fil om gangen** (jf. interaksjonsprinsippet). Still dette spørsmålet per fil:
 
 > *"[tittel] mangler status. Er innholdet klart til implementasjon slik det står? (a) Ja → jeg legger til `@planned` direkte, (b) Nei, trenger avklaring først → jeg behandler det som et draft og går gjennom scenarios med deg."*
 
-Grupper gjerne flere krav i samme spørsmål.
+Vent på svar før du går til neste fil. Ikke list opp alle "uten status"-filene i samme spørsmålsblokk.
 
 - **(a) Direkte `@planned`:** Gjør en kjapp sanity-sjekk av filen (åpne spørsmål, skisse-pregede scenarios, terminologi) og flagg til bruker hvis noe ser uferdig ut *før* du legger til taggen. Ellers: legg `@planned` på `Egenskap:`-tag-linjen (typisk etter MoSCoW-tag: `@must @planned`) og gå videre.
 - **(b) Behandle som draft:** Legg `@draft` på tag-linjen, og inkluder kravet i F4-køen.
@@ -326,7 +339,7 @@ Ta ett draft-krav om gangen. For hvert:
    - Uklare feltlister, rolle-navn, feilmeldinger, forretningsregler
    - Terminologi-avvik (`institusjon`, `institusjonsnummer` — se `gherkin-conventions.md`)
    - Manglende `Bakgrunn:` der det ville redusert duplisering
-4. **Still konkrete spørsmål** for å lukke hull. Hovedregel: *aldri finn på valideringsregler, feilmeldinger eller forretningslogikk — spør brukeren*. Marker forslag tydelig som "forslag" hvis du presenterer dem for reaksjon.
+4. **Still konkrete spørsmål — ett om gangen.** Jf. interaksjonsprinsippet: ikke dump hele spørsmålslisten i én blokk. Still ett spørsmål, gi (a)/(b)/(c)-alternativer der det er naturlig, og vent på svar før du går til neste. Hovedregel: *aldri finn på valideringsregler, feilmeldinger eller forretningslogikk — spør brukeren*. Marker forslag tydelig som "forslag" hvis du presenterer dem for reaksjon.
 5. **Oppdater filen** basert på svarene: revider og konkretiser scenarios, legg til manglende scenarios, fjern besvarte `# ÅPNE SPØRSMÅL:`-kommentarer, stram opp språk, rett terminologi, og sørg for at Gherkin-konvensjonene følges (Scenariomal + Eksempler, deklarativ stil, én atferd per scenario).
 6. **Bytt `@draft` med `@planned`** på `Egenskap:`-tag-linjen når alle åpne spørsmål er besvart og scenarios er konkrete nok til implementasjon. Ikke behold begge. Eksempel: `@BRU-APP-API-001 @must @draft` → `@BRU-APP-API-001 @must @planned`.
 7. **Bekreft endringen med brukeren** før du skriver til disk hvis scenarios endres vesentlig. Mindre opprettinger (terminologi, formatering) kan skrives direkte.
