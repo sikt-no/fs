@@ -53,17 +53,10 @@ Egenskap: Tilordne rolle til applikasjon
       Når jeg åpner valglisten for organisasjon
       Så ser jeg kun organisasjoner jeg har applikasjonsadministrator-rollen for
 
-  @openquestion
-  Scenario: AVKLAR avgrensning av hvilke miljøer rollen kan tilordnes i
-    # ÅPNE SPØRSMÅL:
-    # - Arkitekturføring: kan en applikasjon autentisere seg til flere miljøer
-    #   samtidig, eller er en applikasjon knyttet til kun ett miljø (og kan
-    #   dermed bare ha roller i det ene miljøet)? Svaret her styrer de øvrige
-    #   spørsmålene under.
-    # - Hvis applikasjon kan ha roller i flere miljøer: begrenses miljøvalget
-    #   til miljøer applikasjonen allerede er aktiv i, eller kan applikasjonsadministratoren
-    #   tildele roller i nye miljøer (evt. begrenset til miljøer administratoren
-    #   selv har rettighet i)?
-    # - Hvis flere miljøer er mulig: skal en tilordning i et nytt miljø
-    #   automatisk gjøre applikasjonen aktiv i det miljøet?
-    Gitt spørsmålet er åpent
+  Regel: En applikasjon kan ha roller i flere miljøer
+
+    Scenario: Tildeling i nytt miljø gjør applikasjonen aktiv i miljøet
+      Gitt applikasjonen ikke har roller i et gitt miljø
+      Når jeg tildeler en rolle i det miljøet
+      Så er applikasjonen aktiv i miljøet
+      Og applikasjonen autentiserer seg i det miljøet med sin valgte autentiseringstype

@@ -29,7 +29,7 @@ Iterasjonen forutsetter at oversikt og detaljer fra Iterasjon 2 allerede er på 
 
 **Brukerhistorie:** Som bruker med applikasjonsadministrator-rollen ønsker jeg å opprette en ny applikasjon, slik at nye integrasjoner kan konfigureres.
 
-**Kort beskrivelse:** Krever navn og organisasjon. Hvis administrator har tilgang til kun én organisasjon, settes den implisitt; ellers velges en blant administratorens organisasjoner. Superadministrator kan opprette uten organisasjon. Nyopprettet applikasjon har ikke passord og ingen roller — den blir først aktiv i et miljø når første rolle tildeles der.
+**Kort beskrivelse:** En applikasjon har én autentiseringstype som velges ved opprettelse — FS, Feide eller Maskinporten — og typen kan ikke endres senere. FS krever et globalt unikt visningsnavn, og systemet genererer brukernavn. Feide og Maskinporten krever en ID som verifiseres mot kilden ved opprettelse; navnet hentes fra samme oppslag, og ID-en kan ikke registreres på nytt hvis applikasjonen allerede finnes. Alle administratorer må velge en organisasjon — vanlig administrator velger blant sine, super-applikasjonsadministrator blant alle. Nyopprettet applikasjon har ingen roller og er ikke aktiv i noen miljøer; FS-applikasjon mangler i tillegg passord og må klargjøres via passordbytte før bruk.
 
 ### K6, K13 — Tilordne rolle til applikasjon
 
@@ -39,7 +39,7 @@ Iterasjonen forutsetter at oversikt og detaljer fra Iterasjon 2 allerede er på 
 
 **Brukerhistorie:** Som bruker med applikasjonsadministrator-rollen ønsker jeg å tilordne en rolle til en applikasjon for et gitt miljø og en gitt organisasjon, slik at applikasjonen får tilgang til riktige data i riktig miljø.
 
-**Kort beskrivelse:** En tilordning gjelder én rolle i ett eksplisitt valgt miljø. Flere roller kan tilordnes samtidig i samme miljø. Allerede tildelte roller vises gråtonet og er ikke valgbare. Valgliste begrenset til roller administratoren selv har rettighet til å tildele. Organisasjon settes implisitt eller velges hvis administrator har tilgang til flere. Inneholder åpne spørsmål om miljø-avgrensning (kan applikasjon ha roller i flere miljøer samtidig?).
+**Kort beskrivelse:** En tilordning gjelder én rolle i ett eksplisitt valgt miljø. Flere roller kan tilordnes samtidig i samme miljø. Allerede tildelte roller vises gråtonet og er ikke valgbare. Valgliste begrenset til roller administratoren selv har rettighet til å tildele. Organisasjon settes implisitt eller velges hvis administrator har tilgang til flere. En applikasjon kan ha roller i flere miljøer; tildeling i et nytt miljø gjør applikasjonen aktiv i miljøet med sin valgte autentiseringstype.
 
 ### K7, K14 — Fjerne rolle fra applikasjon
 
@@ -60,11 +60,6 @@ Iterasjonen forutsetter at oversikt og detaljer fra Iterasjon 2 allerede er på 
 **Brukerhistorie:** Som bruker med applikasjonsadministrator-rollen ønsker jeg å deaktivere en applikasjon, slik at en applikasjon som ikke lenger er i bruk ikke kan benyttes.
 
 **Kort beskrivelse:** Deaktivering krever bekreftelse, hindrer autentisering og bevarer rollene (gir ikke tilgang så lenge brukeren er deaktivert). Reversibelt — reaktivering krever også bekreftelse og gir tilbake alle tidligere roller. Deaktivering er sluttilstanden i livssyklusen — det finnes ingen permanent sletting.
-
-## Åpne spørsmål
-
-- **Miljø-avgrensning ved rolletildeling (K6/K13):** Kan en applikasjon autentisere seg til flere miljøer samtidig, eller er den knyttet til kun ett miljø? Svaret styrer om miljøvalget begrenses til miljøer brukeren allerede er aktiv i, eller om administrator kan tildele i nye miljøer. Se `tilordne_rolle.feature`.
-- **Nyopprettet applikasjon uten passord/roller (K8):** Skal denne vises som «ikke aktiv» i lista og på detaljsiden inntil passord/rolle er på plass, og er det samme tilstand som «deaktivert» eller en distinkt tilstand? Se `opprette_applikasjon.feature`.
 
 ## Notater
 

@@ -457,20 +457,13 @@ Egenskap: Tilordne rolle til applikasjon
       Når jeg åpner valglisten for organisasjon
       Så ser jeg kun organisasjoner jeg har applikasjonsadministrator-rollen for
 
-  @openquestion
-  Scenario: AVKLAR avgrensning av hvilke miljøer rollen kan tilordnes i
-    # ÅPNE SPØRSMÅL:
-    # - Arkitekturføring: kan en applikasjon autentisere seg til flere miljøer
-    #   samtidig, eller er en applikasjon knyttet til kun ett miljø (og kan
-    #   dermed bare ha roller i det ene miljøet)? Svaret her styrer de øvrige
-    #   spørsmålene under.
-    # - Hvis applikasjon kan ha roller i flere miljøer: begrenses miljøvalget
-    #   til miljøer applikasjonen allerede er aktiv i, eller kan applikasjonsadministratoren
-    #   tildele roller i nye miljøer (evt. begrenset til miljøer administratoren
-    #   selv har rettighet i)?
-    # - Hvis flere miljøer er mulig: skal en tilordning i et nytt miljø
-    #   automatisk gjøre applikasjonen aktiv i det miljøet?
-    Gitt spørsmålet er åpent
+  Regel: En applikasjon kan ha roller i flere miljøer
+
+    Scenario: Tildeling i nytt miljø gjør applikasjonen aktiv i miljøet
+      Gitt applikasjonen ikke har roller i et gitt miljø
+      Når jeg tildeler en rolle i det miljøet
+      Så er applikasjonen aktiv i miljøet
+      Og applikasjonen autentiserer seg i det miljøet med sin valgte autentiseringstype
 ```
 
 ---
@@ -547,50 +540,101 @@ Egenskap: Opprette applikasjon
   ønsker jeg å opprette en ny applikasjon
   slik at nye integrasjoner kan konfigureres.
 
-  # Krav fra Confluence: K8 Opprette ny API-bruker
+  En applikasjon har én autentiseringstype som velges ved opprettelse —
+  FS, Feide eller Maskinporten. Typen kan ikke endres senere, men
+  applikasjonen kan tildeles roller i flere miljøer.
 
-  Regel: Opprettelse krever navn og organisasjon for en vanlig applikasjonsadministrator
+  # Krav fra Confluence: K8 Opprette ny API-bruker, Discovery: Registrer applikasjon (4612784227)
+
+  Regel: Opprettelse krever valg av autentiseringstype
+
+    Scenario: Velge autentiseringstype ved opprettelse
+      Når jeg starter opprettelse av en ny applikasjon
+      Så kan jeg velge én av autentiseringstypene FS, Feide og Maskinporten
+      Og typen settes på applikasjonen og kan ikke endres senere
+
+  Regel: Opprettelse krever en organisasjon
 
     Scenario: Opprette applikasjon når administrator har tilgang til kun én organisasjon
       Gitt jeg har tilgang til kun én organisasjon
-      Når jeg oppretter en ny applikasjon med et navn
-      Så er applikasjonen opprettet med det valgte navnet og min organisasjon
+      Når jeg oppretter en ny applikasjon
+      Så er applikasjonen opprettet på min organisasjon
 
     Scenario: Opprette applikasjon når administrator har tilgang til flere organisasjoner
       Gitt jeg har tilgang til flere organisasjoner
-      Når jeg oppretter en ny applikasjon med et navn og velger en av mine organisasjoner
-      Så er applikasjonen opprettet med det valgte navnet og den valgte organisasjonen
+      Når jeg oppretter en ny applikasjon og velger en av mine organisasjoner
+      Så er applikasjonen opprettet på den valgte organisasjonen
 
-  Regel: Super-applikasjonsadministrator kan opprette applikasjon uten organisasjon
-
-    Scenario: Opprette applikasjon uten organisasjon
+    Scenario: Super-applikasjonsadministrator velger blant alle organisasjoner
       Gitt jeg har super-applikasjonsadministrator-rollen
-      Når jeg oppretter en ny applikasjon med et navn og uten å velge en organisasjon
-      Så er applikasjonen opprettet uten organisasjon
-      Og applikasjonen kan kun administreres av andre super-applikasjonsadministratorer
+      Når jeg åpner valglisten for organisasjon ved opprettelse
+      Så omfatter valglisten alle organisasjoner i systemet
+      Og applikasjonen opprettes på den organisasjonen jeg velger
 
-  Regel: Nyopprettet applikasjon kan ikke brukes før passord er satt og rolle er tildelt
+  Regel: FS-applikasjon identifiseres av et globalt unikt visningsnavn
 
-    Scenario: Nyopprettet applikasjon har ikke passord
-      Gitt jeg har opprettet en ny applikasjon
-      Så har applikasjonen ikke satt passord
-      Og applikasjonen kan ikke benyttes til autentisering før passord settes via passordbytte
+    Scenario: Opprette FS-applikasjon med visningsnavn
+      Når jeg oppretter en ny applikasjon av typen FS med et visningsnavn
+      Så er applikasjonen opprettet med det valgte visningsnavnet
+      Og systemet har generert et brukernavn for applikasjonen
+
+    Scenario: Visningsnavn må være unikt på tvers av alle organisasjoner
+      Gitt en FS-applikasjon med et gitt visningsnavn allerede finnes
+      Når jeg forsøker å opprette en ny FS-applikasjon med samme visningsnavn
+      Så avvises opprettelsen
+      Og det fremgår at visningsnavnet allerede er i bruk
+
+  Regel: Feide- og Maskinporten-applikasjon identifiseres av en ID som verifiseres mot kilden
+
+    Scenariomal: Opprette applikasjon med ekstern identitet
+      Når jeg oppretter en ny applikasjon av typen <type> med en ID
+      Og ID-en finnes i <type>
+      Så er applikasjonen opprettet
+      Og navnet på applikasjonen er hentet fra <type>
+      Og applikasjonen identifiseres ved ID-en
+
+      Eksempler:
+        | type         |
+        | Feide        |
+        | Maskinporten |
+
+    Scenariomal: Opprettelse avvises når ID ikke finnes hos kilden
+      Når jeg forsøker å opprette en applikasjon av typen <type> med en ID som ikke finnes i <type>
+      Så avvises opprettelsen
+      Og det fremgår at ID-en ikke kunne verifiseres
+
+      Eksempler:
+        | type         |
+        | Feide        |
+        | Maskinporten |
+
+    Scenariomal: Opprettelse avvises når ID allerede er registrert
+      Gitt en applikasjon av typen <type> med en gitt ID allerede er registrert
+      Når jeg forsøker å opprette en ny applikasjon av samme type med samme ID
+      Så avvises opprettelsen
+      Og det fremgår at ID-en allerede er i bruk
+
+      Eksempler:
+        | type         |
+        | Feide        |
+        | Maskinporten |
+
+  Regel: Nyopprettet applikasjon har ingen roller og er ikke aktiv i noen miljøer
 
     Scenario: Nyopprettet applikasjon er ikke aktiv i noen miljøer
       Gitt jeg har opprettet en ny applikasjon
       Så er applikasjonen ikke aktiv i noen miljøer
       Og applikasjonen blir først aktiv i et miljø når den får tildelt sin første rolle i det miljøet
 
-  @openquestion
-  Scenario: AVKLAR status på nyopprettet applikasjon uten passord og roller
-    # ÅPNE SPØRSMÅL:
-    # - Skal en nyopprettet applikasjon vises som "ikke aktiv" (eller tilsvarende
-    #   status) i lista og på detaljsiden inntil den har fått passord og/eller
-    #   sin første rolle, eller må den aktiveres eksplisitt?
-    # - Hvordan forholder dette seg til "Deaktivere applikasjon" (K9)?
-    #   Er "nyopprettet uten passord/roller" og "deaktivert" samme tilstand,
-    #   eller to distinkte tilstander?
-    Gitt spørsmålet er åpent
+    Scenario: Nyopprettet FS-applikasjon mangler passord
+      Gitt jeg har opprettet en ny applikasjon av typen FS
+      Så har applikasjonen ikke satt passord
+      Og applikasjonen kan ikke benyttes til autentisering før passord settes via passordbytte
+
+    Scenario: Nyopprettet Feide- eller Maskinporten-applikasjon kan autentisere umiddelbart
+      Gitt jeg har opprettet en ny applikasjon av typen Feide eller Maskinporten
+      Så kan applikasjonen autentisere seg umiddelbart med sin eksterne identitet
+      Men applikasjonen får ikke tilgang til data før den har en rolle i et miljø
 ```
 
 ---
