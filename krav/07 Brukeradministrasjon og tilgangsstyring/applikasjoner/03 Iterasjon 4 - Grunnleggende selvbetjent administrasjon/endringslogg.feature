@@ -1,29 +1,29 @@
 # language: no
 # GitHub: #453
 @BRU-APP-API-016 @must @draft
-Egenskap: Endringslogg for API-bruker
-  Som bruker med administrasjonsrettigheter for en API-bruker
-  ønsker jeg å se en endringslogg over hvem som har gjort hva på API-brukeren
+Egenskap: Endringslogg for applikasjon
+  Som bruker med administrasjonsrettigheter for en applikasjon
+  ønsker jeg å se en endringslogg over hvem som har gjort hva på applikasjonen
   slik at jeg kan spore historikken og ha grunnlag for feilsøking og kontroll.
 
   # Krav fra Confluence: K16 Se endringslogg
 
   Bakgrunn:
-    Gitt jeg er på detaljsiden for en API-bruker
+    Gitt jeg er på detaljsiden for en applikasjon
 
   Regel: Endringsloggen er kun tilgjengelig for brukere med administrasjonsrettigheter
 
-    Scenario: Api-brukeradministrator ser endringslogg for API-brukere i egne organisasjoner
-      Gitt jeg har api-brukeradministrator-rollen for organisasjonen API-brukeren tilhører
+    Scenario: Applikasjonsadministrator ser endringslogg for applikasjoner i egne organisasjoner
+      Gitt jeg har applikasjonsadministrator-rollen for organisasjonen applikasjonen tilhører
       Når jeg åpner endringsloggen
-      Så ser jeg loggen over endringer på API-brukeren
+      Så ser jeg loggen over endringer på applikasjonen
 
     Scenario: Endringslogg er ikke tilgjengelig uten administrasjonsrettigheter
-      Gitt jeg ikke har administrasjonsrettigheter for API-brukeren
+      Gitt jeg ikke har administrasjonsrettigheter for applikasjonen
       Så er muligheten til å se endringsloggen ikke tilgjengelig
 
-    Scenario: Api-superbrukeradministrator ser endringslogg for alle API-brukere
-      Gitt jeg har api-superbrukeradministrator-rollen
+    Scenario: Super-applikasjonsadministrator ser endringslogg for alle applikasjoner
+      Gitt jeg har super-applikasjonsadministrator-rollen
       Når jeg åpner endringsloggen
       Så ser jeg loggen uavhengig av organisasjon
 
@@ -53,7 +53,7 @@ Egenskap: Endringslogg for API-bruker
     # ÅPNE SPØRSMÅL:
     # - Hvor lenge beholdes loggen? Evig, tidsbegrenset (1, 2, 5 år), eller
     #   styres av generell plattform-policy for audit-logg?
-    # - Hva skjer med loggen hvis API-brukeren slettes permanent?
+    # - Hva skjer med loggen hvis applikasjonen slettes permanent?
     Gitt spørsmålet er åpent
 
   @openquestion

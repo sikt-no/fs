@@ -1,31 +1,31 @@
 # language: no
 # GitHub: #441
 @BRU-APP-API-004 @must @planned
-Egenskap: Passordbytte for API-bruker
+Egenskap: Passordbytte for applikasjon
   Som bruker
-  ønsker jeg å sette nytt passord på en API-bruker jeg har rettighet til å administrere
+  ønsker jeg å sette nytt passord på en applikasjon jeg har rettighet til å administrere
   slik at jeg kan hjelpe med passordbytte.
 
-  API-brukeren autentiserer seg med basic auth og har alltid kun ett
+  applikasjonen autentiserer seg med basic auth og har alltid kun ett
   aktivt passord om gangen. Passordet genereres av systemet.
 
   # Krav fra Confluence: K5 Sette nytt passord på API-bruker
 
   Bakgrunn:
-    Gitt jeg er på detaljsiden for en API-bruker
+    Gitt jeg er på detaljsiden for en applikasjon
 
-  Regel: Bruker kan kun endre passord på API-brukere de har rettighet til å administrere
+  Regel: Bruker kan kun endre passord på applikasjoner de har rettighet til å administrere
 
     Scenario: Passordbytte ikke tilgjengelig uten rettighet
-      Gitt jeg ikke har rettighet til å endre passord på denne API-brukeren
+      Gitt jeg ikke har rettighet til å endre passord på denne applikasjonen
       Så er muligheten til å sette nytt passord ikke tilgjengelig
 
   Regel: Nytt passord genereres av systemet
 
     Scenario: Generere nytt passord
-      Gitt jeg har rettighet til å endre passord på denne API-brukeren
+      Gitt jeg har rettighet til å endre passord på denne applikasjonen
       Når jeg velger å generere et nytt passord
-      Så genererer systemet et nytt passord for API-brukeren
+      Så genererer systemet et nytt passord for applikasjonen
       Og det nye passordet er lagret
 
   Regel: Det genererte passordet vises én gang og kan kopieres
@@ -44,7 +44,7 @@ Egenskap: Passordbytte for API-bruker
   Regel: Kun ett passord er aktivt om gangen
 
     Scenario: Nytt passord erstatter det gamle umiddelbart
-      Gitt API-brukeren har et aktivt passord
+      Gitt applikasjonen har et aktivt passord
       Når et nytt passord genereres
       Så fungerer ikke det gamle passordet lenger
-      Og API-brukeren må autentisere seg med det nye passordet
+      Og applikasjonen må autentisere seg med det nye passordet
