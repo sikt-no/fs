@@ -1,6 +1,6 @@
 # Agent coordination layout
 
-Multi-agent coordination per `docs/INGEST/Agent Coordination Spec.md` (in the `admissio-soknadsbehandling` repo, to be canonicalized here later). Originally specified for two agents; generalized to N via the agent registry below.
+Multi-agent coordination per `docs/INGEST/Agent Coordination Spec.md` (in the `fs-admin` repo, to be canonicalized here later). Originally specified for two agents; generalized to N via the agent registry below.
 
 ## Write discipline (load-bearing)
 
@@ -35,7 +35,7 @@ The canonical registry is the union of `agents/*/AGENT.md` manifests. This table
 
 | Agent ID | Display name | What it does | Status | Joined |
 | --- | --- | --- | --- | --- |
-| [frontend](frontend/AGENT.md) | Frontend agent | Owns the React/Next.js UI work in admissio-soknadsbehandling. | active | 2026-05-02 |
+| [fs-admin](fs-admin/AGENT.md) | FS Admin agent | Owns the React/Next.js admin UI work in the `fs-admin` repo. | active | 2026-05-02 |
 
 Onboarding adds a row here. Removal/retirement updates the `Status` column to `retired` rather than deleting the row, so the registry preserves history.
 
