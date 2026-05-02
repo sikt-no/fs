@@ -22,3 +22,9 @@ Entry format:
 - worked on: /bat-analyze sak #31 (initiativ "Grunnleggende selvbetjent brukeradministrasjon for API-brukere via FS Admin"), scoped to sub-issues #434 (Iter 2) og #435 (Iter 3). Krav hentet fra `sikt-no/fs@fruitbat`. Lokal analyse i `admissio-soknadsbehandling/docs/ACTIVE/analysis-applikasjon-administrasjon-iter2-3.md`.
 - handed off: sikt-no/fs#455 til `backend` — schema-utvidelse (~5 nye felter på Maskinbruker/Applikasjon, ~7 mutations, autentiseringstype-enum, permissions-modell). Analyse: `agents/fs-admin/analyses/2026-05-02-supergraf-applikasjon-administrasjon-iter2-3.md`.
 - next: vente på backend sitt svar på #455 åpne spørsmål (renaming-strategi, kontaktperson vs ansvarlig, roller-modell, Maskinporten-eierskap). PO/UX-spørsmål forblir som "Open Questions" i lokal analyse til en PO-/UX-agent eventuelt registreres.
+
+## 2026-05-02T17:25Z — fs-admin
+- worked on: structural change in agent-coord layout — replaced per-type subfolders (`analyses/`, `graphql-suggestions/`, `plans/`) with **per-feature folders** (`<YYYY-MM-DD>-<feature-slug>/` containing `analysis.md`, `graphql-suggestions.md`, `plan.md`, etc.). Updated bat-analyze, bat-graphql-dev, bat-plan, agent-coord, AGENT.md, agents/README.md.
+- relocated: `agents/fs-admin/analyses/2026-05-02-supergraf-applikasjon-administrasjon-iter2-3.md` → `agents/fs-admin/2026-05-02-applikasjon-administrasjon-iter2-3/handoff-issue-455.md` (the prior reference in the entry above is stale; new path replaces it). Also published the **full** local analysis + graphql-suggestions docs into the same feature folder as `analysis.md` and `graphql-suggestions.md` (no longer summarized for hand-off; receiving agents read the full journey).
+- handed off: none this turn — just refactor.
+- next: when bat-plan runs for the same feature, it'll add `plan.md` to the existing folder. Hand-off to backend (#455) keeps its body as filed; backend can also browse the new feature folder for full context.

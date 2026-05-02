@@ -17,9 +17,12 @@ macOS — operator: mats.myhre@sikt.no.
 ## Owns / writes
 
 - Issues labelled `agent:fs-admin` (across whichever code repos this agent works in).
-- This subtree under `agents/fs-admin/` (memory journal, analyses, outbox).
-- Tasks files this agent creates under `tasks/`.
+- This subtree under `agents/fs-admin/`:
+  - `memory.md` — append-only journal.
+  - `outbox/` — drafts for other agents.
+  - `<YYYY-MM-DD>-<feature-slug>/` — one folder per feature, containing all artifacts (`analysis.md`, `graphql-suggestions.md`, `plan.md`, etc.) that the bat-* skills produce.
+- Task files this agent creates under `tasks/`.
 
 ## Hands off to
 
-Other agents in the registry — see `agents/README.md` for the current list. Hand-off issues go in the target repo with the `agent:<target>` label and a body referencing the analysis file in `agents/fs-admin/analyses/`.
+Other agents in the registry — see `agents/README.md` for the current list. Hand-off issues go in the target repo with the `agent:<target>` label and a body linking to the relevant feature folder under `agents/fs-admin/<feature-folder>/` so the receiving agent reads the full analysis + graphql + plan together, not a focused excerpt.

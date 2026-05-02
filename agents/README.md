@@ -15,19 +15,25 @@ This is enforced by convention here, but mechanical guarantees come from the per
 
 ```
 agents/
-  README.md           # this file — registry index
+  README.md                       # this file — registry index
   <agent_id>/
-    AGENT.md          # the agent's manifest (registry entry)
-    memory.md         # append-only journal, this agent writes only
-    analyses/         # one .md per topic, immutable from other agents' POV
-    outbox/           # drafts/notes intended for another agent
+    AGENT.md                      # the agent's manifest (registry entry)
+    memory.md                     # append-only journal, this agent writes only
+    outbox/                       # drafts intended for another agent
+    <YYYY-MM-DD>-<feature-slug>/  # one folder per feature, all artifacts inside
+      analysis.md                 # from bat-analyze
+      graphql-suggestions.md      # from bat-graphql-dev
+      plan.md                     # from bat-plan
+      ...                         # other artifacts as the feature evolves
   ...one directory per agent...
 shared/
   glossary.md
   architecture.md
 tasks/
-  {issue-number}.md   # richer spec when issue body isn't enough
+  {issue-number}.md               # richer spec when issue body isn't enough
 ```
+
+**Per-feature folders** are the unit of work. The bat-* skills write directly into them as part of their deliverables. Other agents reading a feature folder see the full journey (analysis → graphql → plan) together, not separate type-keyed silos. Files inside a feature folder are immutable from other agents' POV; updates go in a sibling file with a `-v2` suffix (`analysis-v2.md`).
 
 ## Registered agents
 
