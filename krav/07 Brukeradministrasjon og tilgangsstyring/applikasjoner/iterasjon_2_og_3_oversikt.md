@@ -9,6 +9,7 @@ sted for arbeid med Claude Code.
 ## Innhold
 
 **Iterasjon 2 — Support: Oversikt og passordbytte ([#434](https://github.com/sikt-no/fs/issues/434))**
+
 - [BRU-APP-API-001 — Listevisning og søk i applikasjoner](#bru-app-api-001--listevisning-og-søk-i-applikasjoner)
 - [BRU-APP-API-002 — Se detaljer for applikasjon](#bru-app-api-002--se-detaljer-for-applikasjon)
 - [BRU-APP-API-003 — Vise roller for applikasjon](#bru-app-api-003--vise-roller-for-applikasjon)
@@ -17,6 +18,7 @@ sted for arbeid med Claude Code.
 - [BRU-APP-API-006 — Redigere beskrivelse for applikasjon](#bru-app-api-006--redigere-beskrivelse-for-applikasjon)
 
 **Iterasjon 3 — Grunnleggende tilgangsstyring for intern support ([#435](https://github.com/sikt-no/fs/issues/435))**
+
 - [BRU-APP-API-007 — Tilordne rolle til applikasjon](#bru-app-api-007--tilordne-rolle-til-applikasjon)
 - [BRU-APP-API-008 — Fjerne rolle fra applikasjon](#bru-app-api-008--fjerne-rolle-fra-applikasjon)
 - [BRU-APP-API-009 — Opprette applikasjon](#bru-app-api-009--opprette-applikasjon)
@@ -60,7 +62,6 @@ Egenskap: Listevisning og søk i applikasjoner
         | Miljøer             |
         | Ansvarlig           |
         | Organisasjon        |
-        | Type applikasjon     |
         | Oppfølgningsstatus  |
 
     Scenario: Liste viser de 50 første applikasjonene
@@ -694,7 +695,7 @@ Egenskap: Deaktivere applikasjon
       Og rollene som var tildelt før deaktivering gir igjen tilgang
 
   Regel: Rettighet til å deaktivere og reaktivere følger administrasjonsrettighetene
-   
+
     Scenario: Applikasjonsadministrator kan deaktivere applikasjoner i egne organisasjoner
       Gitt jeg har applikasjonsadministrator-rollen for en organisasjon
       Og applikasjonen tilhører den organisasjonen

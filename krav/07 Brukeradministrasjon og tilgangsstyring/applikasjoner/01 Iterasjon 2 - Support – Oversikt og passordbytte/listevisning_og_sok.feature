@@ -24,7 +24,6 @@ Egenskap: Listevisning og søk i applikasjoner
         | Miljøer             |
         | Ansvarlig           |
         | Organisasjon        |
-        | Type applikasjon     |
         | Oppfølgningsstatus  |
 
     Scenario: Liste viser de 50 første applikasjonene
