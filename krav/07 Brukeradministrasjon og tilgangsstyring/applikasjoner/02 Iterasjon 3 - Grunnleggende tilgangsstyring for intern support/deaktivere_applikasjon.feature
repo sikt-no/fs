@@ -26,12 +26,12 @@ Egenskap: Deaktivere applikasjon
       Når jeg avbryter
       Så er applikasjonen fortsatt aktiv
 
-  Regel: Deaktivering er reversibel og bevarer rollene
+  Regel: Deaktivering er reversibel og bevarer tilgangene
 
-    Scenario: Deaktivert applikasjon beholder sine roller
+    Scenario: Deaktivert applikasjon beholder sine tilganger
       Gitt en applikasjon nettopp har blitt deaktivert
-      Så er rollene som var tildelt fortsatt knyttet til applikasjonen
-      Men rollene gir ikke tilgang så lenge applikasjonen er deaktivert
+      Så er tilgangene som var tildelt fortsatt knyttet til applikasjonen
+      Men tilgangene gir ikke faktisk tilgang så lenge applikasjonen er deaktivert
 
   Regel: Reaktivering krever bekreftelse og gjenoppretter applikasjonens tilganger
 
@@ -44,7 +44,7 @@ Egenskap: Deaktivere applikasjon
       Gitt jeg har åpnet bekreftelsesdialogen for å reaktivere en applikasjon
       Når jeg bekrefter reaktiveringen
       Så er applikasjonen aktiv igjen
-      Og rollene som var tildelt før deaktivering gir igjen tilgang
+      Og tilgangene som var tildelt før deaktivering gjelder igjen
 
   Regel: Rettighet til å deaktivere og reaktivere følger administrasjonsrettighetene
 

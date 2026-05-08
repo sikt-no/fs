@@ -8,7 +8,7 @@ Egenskap: Opprette applikasjon
 
   En applikasjon har én autentiseringstype som velges ved opprettelse —
   FS, Feide eller Maskinporten. Typen kan ikke endres senere, men
-  applikasjonen kan tildeles roller i flere miljøer.
+  applikasjonen kan tildeles tilganger i flere miljøer.
 
   # Krav fra Confluence: K8 Opprette ny API-bruker, Discovery: Registrer applikasjon (4612784227)
 
@@ -85,12 +85,12 @@ Egenskap: Opprette applikasjon
         | Feide        |
         | Maskinporten |
 
-  Regel: Nyopprettet applikasjon har ingen roller og er ikke aktiv i noen miljøer
+  Regel: Nyopprettet applikasjon har ingen tilganger og er ikke aktiv i noen miljøer
 
     Scenario: Nyopprettet applikasjon er ikke aktiv i noen miljøer
       Gitt jeg har opprettet en ny applikasjon
       Så er applikasjonen ikke aktiv i noen miljøer
-      Og applikasjonen blir først aktiv i et miljø når den får tildelt sin første rolle i det miljøet
+      Og applikasjonen blir først aktiv i et miljø når den får tildelt sin første tilgang i det miljøet
 
     Scenario: Nyopprettet FS-applikasjon mangler passord
       Gitt jeg har opprettet en ny applikasjon av typen FS
@@ -100,4 +100,4 @@ Egenskap: Opprette applikasjon
     Scenario: Nyopprettet Feide- eller Maskinporten-applikasjon kan autentisere umiddelbart
       Gitt jeg har opprettet en ny applikasjon av typen Feide eller Maskinporten
       Så kan applikasjonen autentisere seg umiddelbart med sin eksterne identitet
-      Men applikasjonen får ikke tilgang til data før den har en rolle i et miljø
+      Men applikasjonen får ikke tilgang til data før den har en tilgang i et miljø

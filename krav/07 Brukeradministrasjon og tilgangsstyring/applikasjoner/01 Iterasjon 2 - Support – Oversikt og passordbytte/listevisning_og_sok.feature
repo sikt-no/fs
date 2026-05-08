@@ -59,10 +59,10 @@ Egenskap: Listevisning og søk i applikasjoner
       Så vises kun applikasjoner tilknyttet valgt organisasjon
 
     @could
-    Scenario: Filtrere på rolle
+    Scenario: Filtrere på tilgang
       Gitt jeg ser listen over applikasjoner
-      Når jeg velger en rolle som filter
-      Så vises kun applikasjoner som har den valgte rollen
+      Når jeg velger en tilgang som filter
+      Så vises kun applikasjoner som har den valgte tilgangen
 
     Scenario: Kombinere filtre
       Gitt jeg ser listen over applikasjoner
@@ -76,9 +76,9 @@ Egenskap: Listevisning og søk i applikasjoner
       Når jeg åpner applikasjonsoversikten
       Så ser jeg applikasjoner tilknyttet de organisasjonene jeg administrerer
 
-    Scenario: Applikasjonsadministrator ser også applikasjoner med roller i egne organisasjoner
+    Scenario: Applikasjonsadministrator ser også applikasjoner med tilganger i egne organisasjoner
       Gitt jeg har applikasjonsadministrator-rollen for én eller flere organisasjoner
-      Og en applikasjon tilhører en annen organisasjon, men har roller som gir tilgang til data i en av mine organisasjoner
+      Og en applikasjon tilhører en annen organisasjon, men har tilganger som gir tilgang til data i en av mine organisasjoner
       Når jeg åpner applikasjonsoversikten
       Så ser jeg denne applikasjonen i listen
       Og det fremgår hvilken organisasjon applikasjonen tilhører

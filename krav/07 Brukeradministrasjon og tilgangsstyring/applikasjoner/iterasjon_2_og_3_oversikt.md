@@ -12,15 +12,15 @@ sted for arbeid med Claude Code.
 
 - [BRU-APP-API-001 — Listevisning og søk i applikasjoner](#bru-app-api-001--listevisning-og-søk-i-applikasjoner)
 - [BRU-APP-API-002 — Se detaljer for applikasjon](#bru-app-api-002--se-detaljer-for-applikasjon)
-- [BRU-APP-API-003 — Vise roller for applikasjon](#bru-app-api-003--vise-roller-for-applikasjon)
+- [BRU-APP-API-003 — Vise tilganger for applikasjon](#bru-app-api-003--vise-tilganger-for-applikasjon)
 - [BRU-APP-API-004 — Passordbytte for applikasjon](#bru-app-api-004--passordbytte-for-applikasjon)
 - [BRU-APP-API-005 — Administrere ansvarlig for applikasjon](#bru-app-api-005--administrere-ansvarlig-for-applikasjon)
 - [BRU-APP-API-006 — Redigere beskrivelse for applikasjon](#bru-app-api-006--redigere-beskrivelse-for-applikasjon)
 
 **Iterasjon 3 — Grunnleggende tilgangsstyring for intern support ([#435](https://github.com/sikt-no/fs/issues/435))**
 
-- [BRU-APP-API-007 — Tilordne rolle til applikasjon](#bru-app-api-007--tilordne-rolle-til-applikasjon)
-- [BRU-APP-API-008 — Fjerne rolle fra applikasjon](#bru-app-api-008--fjerne-rolle-fra-applikasjon)
+- [BRU-APP-API-007 — Tildele tilgang til applikasjon](#bru-app-api-007--tildele-tilgang-til-applikasjon)
+- [BRU-APP-API-008 — Fjerne tilgang fra applikasjon](#bru-app-api-008--fjerne-tilgang-fra-applikasjon)
 - [BRU-APP-API-009 — Opprette applikasjon](#bru-app-api-009--opprette-applikasjon)
 - [BRU-APP-API-010 — Deaktivere applikasjon](#bru-app-api-010--deaktivere-applikasjon)
 
@@ -97,10 +97,10 @@ Egenskap: Listevisning og søk i applikasjoner
       Så vises kun applikasjoner tilknyttet valgt organisasjon
 
     @could
-    Scenario: Filtrere på rolle
+    Scenario: Filtrere på tilgang
       Gitt jeg ser listen over applikasjoner
-      Når jeg velger en rolle som filter
-      Så vises kun applikasjoner som har den valgte rollen
+      Når jeg velger en tilgang som filter
+      Så vises kun applikasjoner som har den valgte tilgangen
 
     Scenario: Kombinere filtre
       Gitt jeg ser listen over applikasjoner
@@ -114,9 +114,9 @@ Egenskap: Listevisning og søk i applikasjoner
       Når jeg åpner applikasjonsoversikten
       Så ser jeg applikasjoner tilknyttet de organisasjonene jeg administrerer
 
-    Scenario: Applikasjonsadministrator ser også applikasjoner med roller i egne organisasjoner
+    Scenario: Applikasjonsadministrator ser også applikasjoner med tilganger i egne organisasjoner
       Gitt jeg har applikasjonsadministrator-rollen for én eller flere organisasjoner
-      Og en applikasjon tilhører en annen organisasjon, men har roller som gir tilgang til data i en av mine organisasjoner
+      Og en applikasjon tilhører en annen organisasjon, men har tilganger som gir tilgang til data i en av mine organisasjoner
       Når jeg åpner applikasjonsoversikten
       Så ser jeg denne applikasjonen i listen
       Og det fremgår hvilken organisasjon applikasjonen tilhører
@@ -166,49 +166,49 @@ Egenskap: Se detaljer for applikasjon
 
 ---
 
-### BRU-APP-API-003 — Vise roller for applikasjon
+### BRU-APP-API-003 — Vise tilganger for applikasjon
 
-**Fil:** [vise_roller.feature](01%20Iterasjon%202%20-%20Support%20%E2%80%93%20Oversikt%20og%20passordbytte/vise_roller.feature)
+**Fil:** [vise_tilganger.feature](01%20Iterasjon%202%20-%20Support%20%E2%80%93%20Oversikt%20og%20passordbytte/vise_tilganger.feature)
 **GitHub:** [#440](https://github.com/sikt-no/fs/issues/440)
 
 ```gherkin
 # language: no
 # GitHub: #440
 @BRU-APP-API-003 @must @planned
-Egenskap: Vise roller for applikasjon
+Egenskap: Vise tilganger for applikasjon
   Som bruker
-  ønsker jeg å se hvilke roller en applikasjon har
+  ønsker jeg å se hvilke tilganger en applikasjon har
   slik at jeg forstår hvilke rettigheter og miljøtilgang applikasjonen er tildelt.
 
   # Krav fra Confluence: K4 Se roller for API-bruker
 
   Bakgrunn:
     Gitt jeg er på detaljsiden for en applikasjon
-    Og jeg har åpnet tab-en for roller
+    Og jeg har åpnet tab-en for tilganger
 
-  Scenario: Se roller for en applikasjon
-    Så ser jeg en liste over alle roller tilknyttet applikasjonen
-    Og hvert innslag viser rollekode og miljøet rollen gjelder for
+  Scenario: Se tilganger for en applikasjon
+    Så ser jeg en liste over alle tilganger applikasjonen har
+    Og hvert innslag viser tilgangskode og miljøet tilgangen gjelder for
 
-  Scenario: Filtrere rolleliste på miljø
-    Når jeg filtrerer rollelisten på miljø
-    Så vises kun roller i de valgte miljøene
-    Og filtervalget er begrenset til miljøer applikasjonen har roller i
+  Scenario: Filtrere tilgangsliste på miljø
+    Når jeg filtrerer tilgangslisten på miljø
+    Så vises kun tilganger i de valgte miljøene
+    Og filtervalget er begrenset til miljøer applikasjonen har tilganger i
 
-  Scenario: Filtrere rolleliste på rolle
-    Når jeg filtrerer rollelisten på rolle
-    Så vises kun de valgte rollene
-    Og filtervalget er begrenset til roller applikasjonen er tildelt
+  Scenario: Filtrere tilgangsliste på tilgang
+    Når jeg filtrerer tilgangslisten på tilgang
+    Så vises kun de valgte tilgangene
+    Og filtervalget er begrenset til tilganger applikasjonen er tildelt
 
-  Scenario: Sortere rolleliste
-    Når jeg sorterer rollelisten på miljø eller rollekode
-    Så vises rollene i valgt sorteringsrekkefølge
+  Scenario: Sortere tilgangsliste
+    Når jeg sorterer tilgangslisten på miljø eller tilgangskode
+    Så vises tilgangene i valgt sorteringsrekkefølge
 
-  Scenario: Laste flere roller
-    Gitt applikasjonen har flere enn 50 roller
-    Og de 50 første rollene er lastet inn
+  Scenario: Laste flere tilganger
+    Gitt applikasjonen har flere enn 50 tilganger
+    Og de 50 første tilgangene er lastet inn
     Når jeg velger å laste inn flere
-    Så lastes de neste rollene inn i listen
+    Så lastes de neste tilgangene inn i listen
 ```
 
 ---
@@ -396,18 +396,18 @@ Egenskap: Redigere beskrivelse for applikasjon
 
 GitHub: [#435](https://github.com/sikt-no/fs/issues/435)
 
-### BRU-APP-API-007 — Tilordne rolle til applikasjon
+### BRU-APP-API-007 — Tildele tilgang til applikasjon
 
-**Fil:** [tilordne_rolle.feature](02%20Iterasjon%203%20-%20Grunnleggende%20tilgangsstyring%20for%20intern%20support/tilordne_rolle.feature)
+**Fil:** [tildele_tilgang.feature](02%20Iterasjon%203%20-%20Grunnleggende%20tilgangsstyring%20for%20intern%20support/tildele_tilgang.feature)
 **GitHub:** [#444](https://github.com/sikt-no/fs/issues/444), [#450](https://github.com/sikt-no/fs/issues/450)
 
 ```gherkin
 # language: no
 # GitHub: #444, #450
 @BRU-APP-API-007 @must @planned
-Egenskap: Tilordne rolle til applikasjon
+Egenskap: Tildele tilgang til applikasjon
   Som bruker med applikasjonsadministrator-rollen
-  ønsker jeg å tilordne en rolle til en applikasjon for et gitt miljø og en gitt organisasjon
+  ønsker jeg å tildele en tilgang til en applikasjon for et gitt miljø og en gitt organisasjon
   slik at applikasjonen får tilgang til de dataene den trenger i riktig miljø.
 
   # Krav fra Confluence: K6 Tilordne rolle til API-bruker, K13 Tilordne rolle til API-bruker (selvbetjening)
@@ -415,113 +415,113 @@ Egenskap: Tilordne rolle til applikasjon
   Bakgrunn:
     Gitt jeg er på detaljsiden for en applikasjon
 
-  Regel: En tilordning gjelder én rolle i ett eksplisitt valgt miljø
+  Regel: En tildeling gjelder én tilgang i ett eksplisitt valgt miljø
 
-    Scenario: Tilordne en rolle i et valgt miljø
-      Når jeg velger et miljø og en rolle jeg har rettighet til å tildele
-      Så har applikasjonen fått den valgte rollen i det valgte miljøet
-      Og det fremgår tydelig hvilket miljø og hvilken organisasjon tilordningen gjelder
+    Scenario: Tildele en tilgang i et valgt miljø
+      Når jeg velger et miljø og en tilgang jeg har rettighet til å tildele
+      Så har applikasjonen fått den valgte tilgangen i det valgte miljøet
+      Og det fremgår tydelig hvilket miljø og hvilken organisasjon tildelingen gjelder
 
-    Scenario: Tilordne flere roller samtidig i ett valgt miljø
-      Når jeg velger et miljø og flere roller jeg har rettighet til å tildele
-      Så har applikasjonen fått alle de valgte rollene i det valgte miljøet
+    Scenario: Tildele flere tilganger samtidig i ett valgt miljø
+      Når jeg velger et miljø og flere tilganger jeg har rettighet til å tildele
+      Så har applikasjonen fått alle de valgte tilgangene i det valgte miljøet
 
-  Regel: Bruker kan kun tildele roller de selv har rettighet til å tildele
+  Regel: Bruker kan kun tildele tilganger de selv har rettighet til å tildele
 
-    Scenario: Valglisten viser kun roller jeg har rettighet til å tildele
-      Når jeg åpner valglisten for å tilordne en rolle
-      Så ser jeg kun roller jeg har rettighet til å tildele
+    Scenario: Valglisten viser kun tilganger jeg har rettighet til å tildele
+      Når jeg åpner valglisten for å tildele en tilgang
+      Så ser jeg kun tilganger jeg har rettighet til å tildele
 
-  Regel: En rolle som allerede er tildelt i valgt miljø kan ikke tilordnes på nytt
+  Regel: En tilgang som allerede er tildelt i valgt miljø kan ikke tildeles på nytt
 
-    Scenario: Allerede tildelt rolle vises som ikke-valgbar
-      Gitt applikasjonen har en rolle tildelt i et miljø
-      Når jeg åpner valglisten for å tilordne roller i samme miljø
-      Så vises den allerede tildelte rollen gråtonet og ikke valgbar
-      Og det fremgår at rollen allerede er tildelt
+    Scenario: Allerede tildelt tilgang vises som ikke-valgbar
+      Gitt applikasjonen har en tilgang tildelt i et miljø
+      Når jeg åpner valglisten for å tildele tilganger i samme miljø
+      Så vises den allerede tildelte tilgangen gråtonet og ikke valgbar
+      Og det fremgår at tilgangen allerede er tildelt
 
-  Regel: Rolletildeling gjelder en organisasjon administratoren har rettighet for (K13)
+  Regel: Tilgangstildeling gjelder en organisasjon administratoren har rettighet for (K13)
 
     Scenario: Organisasjon er implisitt når administrator har tilgang til kun én organisasjon
       Gitt jeg har tilgang til kun én organisasjon
-      Når jeg velger et miljø og en rolle jeg har rettighet til å tildele
-      Så er rollen tildelt applikasjonen i det valgte miljøet for min organisasjon
+      Når jeg velger et miljø og en tilgang jeg har rettighet til å tildele
+      Så er tilgangen tildelt applikasjonen i det valgte miljøet for min organisasjon
 
     Scenario: Organisasjon velges når administrator har tilgang til flere organisasjoner
       Gitt jeg har tilgang til flere organisasjoner
-      Når jeg velger et miljø, en organisasjon og en rolle jeg har rettighet til å tildele
-      Så er rollen tildelt applikasjonen i det valgte miljøet for den valgte organisasjonen
+      Når jeg velger et miljø, en organisasjon og en tilgang jeg har rettighet til å tildele
+      Så er tilgangen tildelt applikasjonen i det valgte miljøet for den valgte organisasjonen
 
     Scenario: Valglisten for organisasjon er begrenset til organisasjoner jeg administrerer
       Gitt jeg har tilgang til flere organisasjoner
       Når jeg åpner valglisten for organisasjon
       Så ser jeg kun organisasjoner jeg har applikasjonsadministrator-rollen for
 
-  Regel: En applikasjon kan ha roller i flere miljøer
+  Regel: En applikasjon kan ha tilganger i flere miljøer
 
     Scenario: Tildeling i nytt miljø gjør applikasjonen aktiv i miljøet
-      Gitt applikasjonen ikke har roller i et gitt miljø
-      Når jeg tildeler en rolle i det miljøet
+      Gitt applikasjonen ikke har tilganger i et gitt miljø
+      Når jeg tildeler en tilgang i det miljøet
       Så er applikasjonen aktiv i miljøet
       Og applikasjonen autentiserer seg i det miljøet med sin valgte autentiseringstype
 ```
 
 ---
 
-### BRU-APP-API-008 — Fjerne rolle fra applikasjon
+### BRU-APP-API-008 — Fjerne tilgang fra applikasjon
 
-**Fil:** [fjerne_rolle.feature](02%20Iterasjon%203%20-%20Grunnleggende%20tilgangsstyring%20for%20intern%20support/fjerne_rolle.feature)
+**Fil:** [fjerne_tilgang.feature](02%20Iterasjon%203%20-%20Grunnleggende%20tilgangsstyring%20for%20intern%20support/fjerne_tilgang.feature)
 **GitHub:** [#445](https://github.com/sikt-no/fs/issues/445), [#451](https://github.com/sikt-no/fs/issues/451)
 
 ```gherkin
 # language: no
 # GitHub: #445, #451
 @BRU-APP-API-008 @must @planned
-Egenskap: Fjerne rolle fra applikasjon
+Egenskap: Fjerne tilgang fra applikasjon
   Som bruker med applikasjonsadministrator-rollen
-  ønsker jeg å fjerne en rolle fra en applikasjon
+  ønsker jeg å fjerne en tilgang fra en applikasjon
   slik at applikasjonen mister tilgang til data den ikke lenger skal ha.
 
   # Krav fra Confluence: K7 Fjerne rolle fra API-bruker, K14 Fjerne rolle fra API-bruker (selvbetjening)
 
   Bakgrunn:
     Gitt jeg er på detaljsiden for en applikasjon
-    Og jeg ser listen over roller applikasjonen har
+    Og jeg ser tilgangslisten applikasjonen har
 
   Regel: En fjerning krever en eksplisitt bekreftelse
 
-    Scenario: Bekreftelsesdialog vises før enkeltrolle fjernes
-      Gitt applikasjonen har en rolle jeg har rettighet til å fjerne
-      Når jeg velger å fjerne rollen
-      Så vises en bekreftelsesdialog som viser rolle og miljø som skal fjernes
+    Scenario: Bekreftelsesdialog vises før enkelt-tilgang fjernes
+      Gitt applikasjonen har en tilgang jeg har rettighet til å fjerne
+      Når jeg velger å fjerne tilgangen
+      Så vises en bekreftelsesdialog som viser tilgang og miljø som skal fjernes
 
-    Scenario: Bekrefte fjerning av en enkeltrolle
-      Gitt jeg har igangsatt fjerning av én rolle
+    Scenario: Bekrefte fjerning av en enkelt-tilgang
+      Gitt jeg har igangsatt fjerning av én tilgang
       Når jeg bekrefter fjerningen
-      Så har applikasjonen ikke lenger den rollen i det miljøet
+      Så har applikasjonen ikke lenger den tilgangen i det miljøet
 
     Scenario: Avbryte fjerning
-      Gitt jeg har igangsatt fjerning av én eller flere roller
+      Gitt jeg har igangsatt fjerning av én eller flere tilganger
       Når jeg avbryter
-      Så er ingen endringer gjort på applikasjonens roller
+      Så er ingen endringer gjort på applikasjonens tilganger
 
-  Regel: Flere roller i ett miljø kan fjernes samtidig
+  Regel: Flere tilganger i ett miljø kan fjernes samtidig
 
-    Scenario: Bekreftelsesdialog for bulk-fjerning lister alle valgte roller
-      Gitt applikasjonen har flere roller jeg har rettighet til å fjerne i et miljø
-      Når jeg velger flere av disse rollene innenfor det samme miljøet og velger å fjerne dem
-      Så vises en bekreftelsesdialog som lister alle valgte roller og miljøet
+    Scenario: Bekreftelsesdialog for bulk-fjerning lister alle valgte tilganger
+      Gitt applikasjonen har flere tilganger jeg har rettighet til å fjerne i et miljø
+      Når jeg velger flere av disse tilgangene innenfor det samme miljøet og velger å fjerne dem
+      Så vises en bekreftelsesdialog som lister alle valgte tilganger og miljøet
 
     Scenario: Bekrefte bulk-fjerning
-      Gitt jeg har igangsatt bulk-fjerning av roller i ett miljø
+      Gitt jeg har igangsatt bulk-fjerning av tilganger i ett miljø
       Når jeg bekrefter fjerningen
-      Så har applikasjonen ikke lenger noen av de valgte rollene i det valgte miljøet
+      Så har applikasjonen ikke lenger noen av de valgte tilgangene i det valgte miljøet
 
-  Regel: Bruker kan kun fjerne roller de har rettighet til å fjerne
+  Regel: Bruker kan kun fjerne tilganger de har rettighet til å fjerne
 
-    Scenario: Fjerning er ikke tilgjengelig for roller uten rettighet
-      Gitt applikasjonen har en rolle jeg ikke har rettighet til å fjerne
-      Så er muligheten til å fjerne den rollen ikke tilgjengelig
+    Scenario: Fjerning er ikke tilgjengelig for tilganger uten rettighet
+      Gitt applikasjonen har en tilgang jeg ikke har rettighet til å fjerne
+      Så er muligheten til å fjerne den tilgangen ikke tilgjengelig
 ```
 
 ---
@@ -542,7 +542,7 @@ Egenskap: Opprette applikasjon
 
   En applikasjon har én autentiseringstype som velges ved opprettelse —
   FS, Feide eller Maskinporten. Typen kan ikke endres senere, men
-  applikasjonen kan tildeles roller i flere miljøer.
+  applikasjonen kan tildeles tilganger i flere miljøer.
 
   # Krav fra Confluence: K8 Opprette ny API-bruker, Discovery: Registrer applikasjon (4612784227)
 
@@ -619,12 +619,12 @@ Egenskap: Opprette applikasjon
         | Feide        |
         | Maskinporten |
 
-  Regel: Nyopprettet applikasjon har ingen roller og er ikke aktiv i noen miljøer
+  Regel: Nyopprettet applikasjon har ingen tilganger og er ikke aktiv i noen miljøer
 
     Scenario: Nyopprettet applikasjon er ikke aktiv i noen miljøer
       Gitt jeg har opprettet en ny applikasjon
       Så er applikasjonen ikke aktiv i noen miljøer
-      Og applikasjonen blir først aktiv i et miljø når den får tildelt sin første rolle i det miljøet
+      Og applikasjonen blir først aktiv i et miljø når den får tildelt sin første tilgang i det miljøet
 
     Scenario: Nyopprettet FS-applikasjon mangler passord
       Gitt jeg har opprettet en ny applikasjon av typen FS
@@ -634,7 +634,7 @@ Egenskap: Opprette applikasjon
     Scenario: Nyopprettet Feide- eller Maskinporten-applikasjon kan autentisere umiddelbart
       Gitt jeg har opprettet en ny applikasjon av typen Feide eller Maskinporten
       Så kan applikasjonen autentisere seg umiddelbart med sin eksterne identitet
-      Men applikasjonen får ikke tilgang til data før den har en rolle i et miljø
+      Men applikasjonen får ikke tilgang til data før den har en tilgang i et miljø
 ```
 
 ---
@@ -673,12 +673,12 @@ Egenskap: Deaktivere applikasjon
       Når jeg avbryter
       Så er applikasjonen fortsatt aktiv
 
-  Regel: Deaktivering er reversibel og bevarer rollene
+  Regel: Deaktivering er reversibel og bevarer tilgangene
 
-    Scenario: Deaktivert applikasjon beholder sine roller
+    Scenario: Deaktivert applikasjon beholder sine tilganger
       Gitt en applikasjon nettopp har blitt deaktivert
-      Så er rollene som var tildelt fortsatt knyttet til applikasjonen
-      Men rollene gir ikke tilgang så lenge applikasjonen er deaktivert
+      Så er tilgangene som var tildelt fortsatt knyttet til applikasjonen
+      Men tilgangene gir ikke faktisk tilgang så lenge applikasjonen er deaktivert
 
   Regel: Reaktivering krever bekreftelse og gjenoppretter applikasjonens tilganger
 
@@ -691,7 +691,7 @@ Egenskap: Deaktivere applikasjon
       Gitt jeg har åpnet bekreftelsesdialogen for å reaktivere en applikasjon
       Når jeg bekrefter reaktiveringen
       Så er applikasjonen aktiv igjen
-      Og rollene som var tildelt før deaktivering gir igjen tilgang
+      Og tilgangene som var tildelt før deaktivering gjelder igjen
 
   Regel: Rettighet til å deaktivere og reaktivere følger administrasjonsrettighetene
 
@@ -704,3 +704,6 @@ Egenskap: Deaktivere applikasjon
       Gitt jeg har super-applikasjonsadministrator-rollen
       Så har jeg mulighet til å deaktivere og reaktivere enhver applikasjon uavhengig av organisasjon
 ```
+
+---
+

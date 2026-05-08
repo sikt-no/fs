@@ -8,17 +8,17 @@
 - Sikt support (super-applikasjonsadministrator eller applikasjonsadministrator for relevante organisasjoner)
 - Lokal administrator (kunde-side bruker med applikasjonsadministrator-rollen for egen organisasjon)
 
-**Formål:** Gi support og lokale administratorer en lesbar oversikt over applikasjoner, innsyn i detaljer og roller, og mulighet til å hjelpe med passordbytte. Iterasjonen dekker typiske support-oppgaver uten å åpne for opprettelse, deaktivering eller rolle-endringer — det kommer i Iterasjon 3.
+**Formål:** Gi support og lokale administratorer en lesbar oversikt over applikasjoner, innsyn i detaljer og tilganger, og mulighet til å hjelpe med passordbytte. Iterasjonen dekker typiske support-oppgaver uten å åpne for opprettelse, deaktivering eller endring av tilganger — det kommer i Iterasjon 3.
 
 ## Brukerreise
 
 1. En kunde melder en sak: «integrasjonen vår fungerer ikke» eller «vi trenger nytt passord».
 2. Support **finner riktig applikasjon** via listevisning og søk/filtrering — enten innen egen organisasjon (lokal admin) eller på tvers (Sikt support).
-3. På detaljsiden ser support **grunnleggende informasjon og roller** for å forstå tilgangen.
+3. På detaljsiden ser support **grunnleggende informasjon og tilganger** for å forstå hva applikasjonen kan.
 4. Ved behov **byttes passordet** (kun de med rettighet) og det nye passordet leveres til ansvarlig.
 5. Hvis informasjonen er utdatert: **ansvarlig oppdateres** og/eller **beskrivelsen redigeres**.
 
-Iterasjonen leverer altså en *lese- og lett-redigerings-løsning*. Endringer som påvirker selve tilgangen (roller, deaktivering) ligger i Iterasjon 3.
+Iterasjonen leverer altså en *lese- og lett-redigerings-løsning*. Endringer som påvirker selve tilgangen (tildeling/fjerning av tilganger, deaktivering) ligger i Iterasjon 3.
 
 ## Kapabiliteter
 
@@ -30,7 +30,7 @@ Iterasjonen leverer altså en *lese- og lett-redigerings-løsning*. Endringer so
 
 **Brukerhistorie:** Som bruker ønsker jeg en oversikt over applikasjoner jeg har tilgang til, med søk og filtrering, slik at jeg raskt finner riktig applikasjon.
 
-**Kort beskrivelse:** Liste med navn, beskrivelse, miljøer, ansvarlig og organisasjon. Paginering 50 om gangen. Fritekst-søk på navn og filter på organisasjon. Synligheten styres av administrasjonsrettigheter — superadministrator ser alle, lokale administratorer ser sine egne organisasjoner og applikasjoner som har roller i deres organisasjoner.
+**Kort beskrivelse:** Liste med navn, beskrivelse, miljøer, ansvarlig og organisasjon. Paginering 50 om gangen. Fritekst-søk på navn og filter på organisasjon. Synligheten styres av administrasjonsrettigheter — superadministrator ser alle, lokale administratorer ser sine egne organisasjoner og applikasjoner som har tilganger i deres organisasjoner.
 
 ### K3 — Se detaljer for applikasjon
 
@@ -42,15 +42,15 @@ Iterasjonen leverer altså en *lese- og lett-redigerings-løsning*. Endringer so
 
 **Kort beskrivelse:** Detaljside med grunnleggende info (navn, beskrivelse), sporingsinfo (opprettet/endret), miljøer og ansvarlig.
 
-### K4 — Vise roller for applikasjon
+### K4 — Vise tilganger for applikasjon
 
-**Feature-ID:** [`BRU-APP-API-003`](vise_roller.feature) | **GitHub:** [#440](https://github.com/sikt-no/fs/issues/440)
+**Feature-ID:** [`BRU-APP-API-003`](vise_tilganger.feature) | **GitHub:** [#440](https://github.com/sikt-no/fs/issues/440)
 
 **Prioritet:** Må ha · **Status:** Planlagt
 
-**Brukerhistorie:** Som bruker ønsker jeg å se hvilke roller en applikasjon har, slik at jeg forstår hvilke rettigheter og miljøtilgang den er tildelt.
+**Brukerhistorie:** Som bruker ønsker jeg å se hvilke tilganger en applikasjon har, slik at jeg forstår hvilke rettigheter og miljøtilgang den er tildelt.
 
-**Kort beskrivelse:** Egen tab med liste over alle roller, viser rollekode + miljø. Filtrering på miljø og rolle, sortering, paginering.
+**Kort beskrivelse:** Egen tab med liste over alle tilganger, viser tilgangskode + miljø. Filtrering på miljø og tilgang, sortering, paginering.
 
 ### K5 — Passordbytte for applikasjon
 
