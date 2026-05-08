@@ -29,7 +29,7 @@ Iterasjonen forutsetter at oversikt og detaljer fra Iterasjon 2 allerede er på 
 
 **Brukerhistorie:** Som bruker med applikasjonsadministrator-rollen ønsker jeg å opprette en ny applikasjon, slik at nye integrasjoner kan konfigureres.
 
-**Kort beskrivelse:** En applikasjon har én autentiseringstype som velges ved opprettelse — FS, Feide eller Maskinporten — og typen kan ikke endres senere. FS krever et globalt unikt visningsnavn, og systemet genererer brukernavn. Feide og Maskinporten krever en ID som verifiseres mot kilden ved opprettelse; navnet hentes fra samme oppslag, og ID-en kan ikke registreres på nytt hvis applikasjonen allerede finnes. Alle administratorer må velge en organisasjon — vanlig administrator velger blant sine, super-applikasjonsadministrator blant alle. Nyopprettet applikasjon har ingen tilganger og er ikke aktiv i noen miljøer; FS-applikasjon mangler i tillegg passord og må klargjøres via passordbytte før bruk.
+**Kort beskrivelse:** En applikasjon har én identitetsleverandør som velges ved opprettelse — FS, Feide eller Maskinporten — og identitetsleverandøren kan ikke endres senere. FS krever et globalt unikt visningsnavn, og systemet genererer brukernavn. Feide og Maskinporten krever en ID som verifiseres mot kilden ved opprettelse; navnet hentes fra samme oppslag, og ID-en kan ikke registreres på nytt hvis applikasjonen allerede finnes. Alle administratorer må velge en organisasjon — vanlig administrator velger blant sine, super-applikasjonsadministrator blant alle. Nyopprettet applikasjon har ingen tilganger og er ikke aktiv i noen miljøer; FS-applikasjon mangler i tillegg passord og må klargjøres via passordbytte før bruk.
 
 ### K6, K13 — Tildele tilgang til applikasjon
 
@@ -39,7 +39,7 @@ Iterasjonen forutsetter at oversikt og detaljer fra Iterasjon 2 allerede er på 
 
 **Brukerhistorie:** Som bruker med applikasjonsadministrator-rollen ønsker jeg å tildele en tilgang til en applikasjon for et gitt miljø og en gitt organisasjon, slik at applikasjonen får tilgang til riktige data i riktig miljø.
 
-**Kort beskrivelse:** En tildeling gjelder én tilgang i ett eksplisitt valgt miljø. Flere tilganger kan tildeles samtidig i samme miljø. Allerede tildelte tilganger vises gråtonet og er ikke valgbare. Valgliste begrenset til tilganger administratoren selv har rettighet til å tildele. Organisasjon settes implisitt eller velges hvis administrator har tilgang til flere. En applikasjon kan ha tilganger i flere miljøer; tildeling i et nytt miljø gjør applikasjonen aktiv i miljøet med sin valgte autentiseringstype.
+**Kort beskrivelse:** En tildeling gjelder én tilgang i ett eksplisitt valgt miljø. Flere tilganger kan tildeles samtidig i samme miljø. Allerede tildelte tilganger vises gråtonet og er ikke valgbare. Valgliste begrenset til tilganger administratoren selv har rettighet til å tildele. Organisasjon settes implisitt eller velges hvis administrator har tilgang til flere. En applikasjon kan ha tilganger i flere miljøer; tildeling i et nytt miljø gjør applikasjonen aktiv i miljøet med sin valgte identitetsleverandør.
 
 ### K7, K14 — Fjerne tilgang fra applikasjon
 

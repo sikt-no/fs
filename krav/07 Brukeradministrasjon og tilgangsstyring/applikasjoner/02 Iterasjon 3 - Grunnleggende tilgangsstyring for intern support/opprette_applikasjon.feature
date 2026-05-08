@@ -4,20 +4,20 @@
 Egenskap: Opprette applikasjon
   Som bruker med applikasjonsadministrator-rollen
   ønsker jeg å opprette en ny applikasjon
-  slik at nye integrasjoner kan konfigureres.
+  slik at tilganger kan tildeles.
 
-  En applikasjon har én autentiseringstype som velges ved opprettelse —
-  FS, Feide eller Maskinporten. Typen kan ikke endres senere, men
-  applikasjonen kan tildeles tilganger i flere miljøer.
+  En applikasjon har én identitetsleverandør som velges ved opprettelse —
+  FS, Feide eller Maskinporten. Identitetsleverandøren kan ikke endres
+  senere, men applikasjonen kan tildeles tilganger i flere miljøer.
 
   # Krav fra Confluence: K8 Opprette ny API-bruker, Discovery: Registrer applikasjon (4612784227)
 
-  Regel: Opprettelse krever valg av autentiseringstype
+  Regel: Opprettelse krever valg av identitetsleverandør
 
-    Scenario: Velge autentiseringstype ved opprettelse
+    Scenario: Velge identitetsleverandør ved opprettelse
       Når jeg starter opprettelse av en ny applikasjon
-      Så kan jeg velge én av autentiseringstypene FS, Feide og Maskinporten
-      Og typen settes på applikasjonen og kan ikke endres senere
+      Så kan jeg velge én av identitetsleverandørene FS, Feide og Maskinporten
+      Og identitetsleverandøren settes på applikasjonen og kan ikke endres senere
 
   Regel: Opprettelse krever en organisasjon
 
@@ -40,7 +40,7 @@ Egenskap: Opprette applikasjon
   Regel: FS-applikasjon identifiseres av et globalt unikt visningsnavn
 
     Scenario: Opprette FS-applikasjon med visningsnavn
-      Når jeg oppretter en ny applikasjon av typen FS med et visningsnavn
+      Når jeg oppretter en ny applikasjon med identitetsleverandør FS og et visningsnavn
       Så er applikasjonen opprettet med det valgte visningsnavnet
       Og systemet har generert et brukernavn for applikasjonen
 
@@ -53,37 +53,37 @@ Egenskap: Opprette applikasjon
   Regel: Feide- og Maskinporten-applikasjon identifiseres av en ID som verifiseres mot kilden
 
     Scenariomal: Opprette applikasjon med ekstern identitet
-      Når jeg oppretter en ny applikasjon av typen <type> med en ID
-      Og ID-en finnes i <type>
+      Når jeg oppretter en ny applikasjon med identitetsleverandør <identitetsleverandør> og en ID
+      Og ID-en finnes hos <identitetsleverandør>
       Så er applikasjonen opprettet
-      Og navnet på applikasjonen er hentet fra <type>
+      Og navnet på applikasjonen er hentet fra <identitetsleverandør>
       Og applikasjonen identifiseres ved ID-en
 
       Eksempler:
-        | type         |
-        | Feide        |
-        | Maskinporten |
+        | identitetsleverandør |
+        | Feide                |
+        | Maskinporten         |
 
     Scenariomal: Opprettelse avvises når ID ikke finnes hos kilden
-      Når jeg forsøker å opprette en applikasjon av typen <type> med en ID som ikke finnes i <type>
+      Når jeg forsøker å opprette en applikasjon med identitetsleverandør <identitetsleverandør> og en ID som ikke finnes hos <identitetsleverandør>
       Så avvises opprettelsen
       Og det fremgår at ID-en ikke kunne verifiseres
 
       Eksempler:
-        | type         |
-        | Feide        |
-        | Maskinporten |
+        | identitetsleverandør |
+        | Feide                |
+        | Maskinporten         |
 
     Scenariomal: Opprettelse avvises når ID allerede er registrert
-      Gitt en applikasjon av typen <type> med en gitt ID allerede er registrert
-      Når jeg forsøker å opprette en ny applikasjon av samme type med samme ID
+      Gitt en applikasjon med identitetsleverandør <identitetsleverandør> og en gitt ID allerede er registrert
+      Når jeg forsøker å opprette en ny applikasjon med samme identitetsleverandør og samme ID
       Så avvises opprettelsen
       Og det fremgår at ID-en allerede er i bruk
 
       Eksempler:
-        | type         |
-        | Feide        |
-        | Maskinporten |
+        | identitetsleverandør |
+        | Feide                |
+        | Maskinporten         |
 
   Regel: Nyopprettet applikasjon har ingen tilganger og er ikke aktiv i noen miljøer
 
@@ -93,11 +93,11 @@ Egenskap: Opprette applikasjon
       Og applikasjonen blir først aktiv i et miljø når den får tildelt sin første tilgang i det miljøet
 
     Scenario: Nyopprettet FS-applikasjon mangler passord
-      Gitt jeg har opprettet en ny applikasjon av typen FS
+      Gitt jeg har opprettet en ny applikasjon med identitetsleverandør FS
       Så har applikasjonen ikke satt passord
       Og applikasjonen kan ikke benyttes til autentisering før passord settes via passordbytte
 
     Scenario: Nyopprettet Feide- eller Maskinporten-applikasjon kan autentisere umiddelbart
-      Gitt jeg har opprettet en ny applikasjon av typen Feide eller Maskinporten
+      Gitt jeg har opprettet en ny applikasjon med identitetsleverandør Feide eller Maskinporten
       Så kan applikasjonen autentisere seg umiddelbart med sin eksterne identitet
       Men applikasjonen får ikke tilgang til data før den har en tilgang i et miljø

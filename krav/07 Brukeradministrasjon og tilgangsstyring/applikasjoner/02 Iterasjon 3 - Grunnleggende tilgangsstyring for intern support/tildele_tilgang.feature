@@ -59,4 +59,4 @@ Egenskap: Tildele tilgang til applikasjon
       Gitt applikasjonen ikke har tilganger i et gitt miljø
       Når jeg tildeler en tilgang i det miljøet
       Så er applikasjonen aktiv i miljøet
-      Og applikasjonen autentiserer seg i det miljøet med sin valgte autentiseringstype
+      Og applikasjonen autentiserer seg i det miljøet med sin valgte identitetsleverandør
