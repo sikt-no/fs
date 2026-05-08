@@ -30,7 +30,7 @@ Iterasjonen leverer altså en *lese- og lett-redigerings-løsning*. Endringer so
 
 **Brukerhistorie:** Som bruker ønsker jeg en oversikt over applikasjoner jeg har tilgang til, med søk og filtrering, slik at jeg raskt finner riktig applikasjon.
 
-**Kort beskrivelse:** Liste med navn, beskrivelse, miljøer, ansvarlig, organisasjon, type og oppfølgingsstatus. Paginering 50 om gangen. Fritekst-søk på navn og filter på organisasjon. Synligheten styres av administrasjonsrettigheter — superadministrator ser alle, lokale administratorer ser sine egne organisasjoner og applikasjoner som har roller i deres organisasjoner.
+**Kort beskrivelse:** Liste med navn, beskrivelse, miljøer, ansvarlig og organisasjon. Paginering 50 om gangen. Fritekst-søk på navn og filter på organisasjon. Synligheten styres av administrasjonsrettigheter — superadministrator ser alle, lokale administratorer ser sine egne organisasjoner og applikasjoner som har roller i deres organisasjoner.
 
 ### K3 — Se detaljer for applikasjon
 
@@ -89,5 +89,4 @@ Ingen åpne spørsmål på iterasjons-nivå. Detaljerte spørsmål (om noen) lig
 ## Notater
 
 - K10 (permanent sletting av applikasjon) er bevisst utelatt — deaktivering i Iterasjon 3 er sluttilstanden.
-- Iterasjon 2 har avhengighet til Iterasjon 3 for at "oppfølgingsstatus"-kolonnen skal kunne vise meningsfulle verdier (deaktivert/aktiv).
 - Generell søke- og filter-funksjonalitet kan med tiden flyttes til `10 Felleskrav` (jf. konvensjon om "hva vs hvordan").

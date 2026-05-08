@@ -56,13 +56,12 @@ Egenskap: Listevisning og søk i applikasjoner
       Så ser jeg en liste over alle applikasjoner
       Og listen er sortert etter navn i stigende rekkefølge
       Og hvert innslag viser følgende informasjon:
-        | felt                |
-        | Navn                |
-        | Beskrivelse         |
-        | Miljøer             |
-        | Ansvarlig           |
-        | Organisasjon        |
-        | Oppfølgningsstatus  |
+        | felt          |
+        | Navn          |
+        | Beskrivelse   |
+        | Miljøer       |
+        | Ansvarlig     |
+        | Organisasjon  |
 
     Scenario: Liste viser de 50 første applikasjonene
       Når jeg åpner applikasjonsoversikten
