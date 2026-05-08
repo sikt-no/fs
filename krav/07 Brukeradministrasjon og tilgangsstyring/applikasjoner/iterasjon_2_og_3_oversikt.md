@@ -107,7 +107,7 @@ Egenskap: Listevisning og søk i applikasjoner
       Når jeg kombinerer fritekst-søk med ett eller flere filter
       Så vises kun applikasjoner som matcher alle kriteriene
 
-  Regel: Synlighet styres av administrasjonsrettigheter (K11, K12)
+  Regel: Synlighet via administrasjonsrettigheter (K11, K12)
 
     Scenario: Applikasjonsadministrator ser applikasjoner fra egne organisasjoner
       Gitt jeg har applikasjonsadministrator-rollen for én eller flere organisasjoner
@@ -126,6 +126,23 @@ Egenskap: Listevisning og søk i applikasjoner
       Når jeg åpner applikasjonsoversikten
       Så ser jeg alle applikasjoner uavhengig av organisasjon
       Og jeg ser også applikasjoner som ikke er tilknyttet noen organisasjon
+
+  Regel: Synlighet via ansvarlig-relasjon
+
+    Scenario: Bruker som er registrert som ansvarlig ser applikasjonen
+      Gitt jeg er registrert som ansvarlig for en applikasjon
+      Og jeg har ikke applikasjonsadministrator-rollen for organisasjonen applikasjonen tilhører
+      Når jeg åpner applikasjonsoversikten
+      Så ser jeg applikasjonen i listen
+      Og det fremgår hvilken organisasjon applikasjonen tilhører
+
+    @could
+    Scenario: Bruker som er ansvarlig via feide-gruppe ser applikasjonen
+      Gitt jeg er medlem av en feide-gruppe som er registrert som ansvarlig for en applikasjon
+      Og jeg har ikke applikasjonsadministrator-rollen for organisasjonen applikasjonen tilhører
+      Når jeg åpner applikasjonsoversikten
+      Så ser jeg applikasjonen i listen
+      Og det fremgår hvilken organisasjon applikasjonen tilhører
 ```
 
 ---
