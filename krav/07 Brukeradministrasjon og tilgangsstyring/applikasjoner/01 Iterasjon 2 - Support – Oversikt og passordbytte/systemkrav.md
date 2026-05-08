@@ -30,7 +30,7 @@ Iterasjonen leverer altså en *lese- og lett-redigerings-løsning*. Endringer so
 
 **Brukerhistorie:** Som bruker ønsker jeg en oversikt over applikasjoner jeg har tilgang til, med søk og filtrering, slik at jeg raskt finner riktig applikasjon.
 
-**Kort beskrivelse:** Liste med navn, beskrivelse, miljøer, ansvarlig og organisasjon. Paginering 50 om gangen. Fritekst-søk på navn og filter på organisasjon. Synligheten styres av administrasjonsrettigheter — superadministrator ser alle, lokale administratorer ser sine egne organisasjoner og applikasjoner som har tilganger i deres organisasjoner.
+**Kort beskrivelse:** Liste med navn, beskrivelse, miljøer, ansvarlig, organisasjon og status. Paginering 50 om gangen. Fritekst-søk på navn og filter på organisasjon, tilgang og status. Synligheten styres av administrasjonsrettigheter eller ansvarlig-relasjon — superadministrator ser alle, lokale administratorer ser sine egne organisasjoner og applikasjoner som har tilganger i deres organisasjoner, og brukere som er ansvarlig (direkte eller via feide-gruppe) ser applikasjoner de er ansvarlig for.
 
 ### K3 — Se detaljer for applikasjon
 

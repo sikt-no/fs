@@ -24,6 +24,7 @@ Egenskap: Listevisning og søk i applikasjoner
         | Miljøer       |
         | Ansvarlig     |
         | Organisasjon  |
+        | Status        |
 
     Scenario: Liste viser de 50 første applikasjonene
       Når jeg åpner applikasjonsoversikten
@@ -63,6 +64,11 @@ Egenskap: Listevisning og søk i applikasjoner
       Gitt jeg ser listen over applikasjoner
       Når jeg velger en tilgang som filter
       Så vises kun applikasjoner som har den valgte tilgangen
+
+    Scenario: Filtrere på status
+      Gitt jeg ser listen over applikasjoner
+      Når jeg velger "Deaktivert" som status-filter
+      Så vises kun deaktiverte applikasjoner
 
     Scenario: Kombinere filtre
       Gitt jeg ser listen over applikasjoner
