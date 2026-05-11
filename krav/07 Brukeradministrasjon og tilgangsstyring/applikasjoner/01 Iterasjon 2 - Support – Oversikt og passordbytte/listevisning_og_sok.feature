@@ -26,6 +26,16 @@ Egenskap: Listevisning og søk i applikasjoner
         | Organisasjon  |
         | Status        |
 
+    Scenariomal: Velge sorteringsretning for navn
+      Gitt jeg ser listen over applikasjoner
+      Når jeg velger å sortere på navn i <retning> rekkefølge
+      Så vises applikasjonene sortert etter navn i <retning> rekkefølge
+
+      Eksempler:
+        | retning  |
+        | stigende |
+        | synkende |
+
     Scenario: Liste viser de 50 første applikasjonene
       Når jeg åpner applikasjonsoversikten
       Så ser jeg totalt antall treff og antall som er lastet
