@@ -67,8 +67,8 @@ Egenskap: Listevisning og søk i applikasjoner
 
     Scenario: Filtrere på status
       Gitt jeg ser listen over applikasjoner
-      Når jeg velger "Deaktivert" som status-filter
-      Så vises kun deaktiverte applikasjoner
+      Når jeg velger en status som filter
+      Så vises kun applikasjoner med valgt status
 
     Scenario: Kombinere filtre
       Gitt jeg ser listen over applikasjoner
