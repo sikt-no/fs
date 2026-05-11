@@ -29,7 +29,7 @@ Iterasjonen forutsetter at oversikt og detaljer fra Iterasjon 2 allerede er på 
 
 **Brukerhistorie:** Som bruker med applikasjonsadministrator-rollen ønsker jeg å opprette en ny applikasjon, slik at nye integrasjoner kan konfigureres.
 
-**Kort beskrivelse:** En applikasjon har én identitetsleverandør som velges ved opprettelse — FS, Feide eller Maskinporten — og identitetsleverandøren kan ikke endres senere. FS krever et globalt unikt visningsnavn, og systemet genererer brukernavn. Feide og Maskinporten krever en ID som verifiseres mot kilden ved opprettelse; navnet hentes fra samme oppslag, og ID-en kan ikke registreres på nytt hvis applikasjonen allerede finnes. Alle administratorer må velge en organisasjon — vanlig administrator velger blant sine, super-applikasjonsadministrator blant alle. Nyopprettet applikasjon har ingen tilganger og er ikke aktiv i noen miljøer; FS-applikasjon mangler i tillegg passord og må klargjøres via passordbytte før bruk.
+**Kort beskrivelse:** En applikasjon har én identitetsleverandør som velges ved opprettelse — Feide eller Maskinporten — og identitetsleverandøren kan ikke endres senere. FS er utfaset som identitetsleverandør for nye applikasjoner og kan ikke velges; eksisterende FS-applikasjoner består og administreres som før. Feide og Maskinporten krever en ID som verifiseres mot kilden ved opprettelse; navnet hentes fra samme oppslag, og ID-en kan ikke registreres på nytt hvis applikasjonen allerede finnes. Systemet tildeler i tillegg en intern unik ID til hver applikasjon, og visningsnavnet (hentet fra idP-en) må være globalt unikt på tvers av alle organisasjoner. Alle administratorer må velge en organisasjon — vanlig administrator velger blant sine, super-applikasjonsadministrator blant alle. Nyopprettet applikasjon har ingen tilganger og er ikke aktiv i noen miljøer, men kan autentisere seg umiddelbart med sin eksterne identitet.
 
 ### K6, K13 — Tildele tilgang til applikasjon
 
@@ -66,3 +66,4 @@ Iterasjonen forutsetter at oversikt og detaljer fra Iterasjon 2 allerede er på 
 - Iterasjonen forutsetter at Iterasjon 2 (oversikt, detaljer, tilganger, passordbytte, ansvarlig, beskrivelse) er på plass.
 - K10 er bevisst utelatt — deaktivering er sluttilstanden, ingen permanent sletting.
 - Selvbetjent administrasjon av tilganger (K13/K14) er allerede dekket av disse features via rettighetsregler — Iterasjon 4 fokuserer derfor på sporbarhet, ikke duplikater av denne funksjonaliteten.
+- FS som identitetsleverandør er utfaset for nye applikasjoner i tråd med rammeinnsikten (Confluence 4401102853). Eksisterende FS-applikasjoner behandles som legacy: passordbytte (K5, Iterasjon 2) og øvrige administrasjonshandlinger gjelder fortsatt for dem, men opprettelse av nye FS-applikasjoner er ikke mulig.
