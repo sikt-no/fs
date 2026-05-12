@@ -1,10 +1,10 @@
 ---
 id: fs-admin
-display_name: FS Admin agent
+display_name: FS Admin UI agent
 status: active
 joined: 2026-05-02
 ---
-# FS Admin agent
+# FS Admin UI agent
 
 ## What this agent does
 
@@ -12,7 +12,7 @@ Owns the React/Next.js admin UI work in [`fs-admin`](https://gitlab.sikt.no/stud
 
 ## Machine
 
-macOS — operator: mats.myhre@sikt.no.
+macOS — operator: petter.kristiansen@sikt.no.
 
 ## Owns / writes
 
