@@ -41,7 +41,7 @@ The canonical registry is the union of `agents/*/AGENT.md` manifests. This table
 
 | Agent ID | Display name | What it does | Status | Joined |
 | --- | --- | --- | --- | --- |
-| [fs-admin](fs-admin/AGENT.md) | FS Admin UI agent | Owns the React/Next.js admin UI in the `fs-admin` repo. | active | 2026-05-02 |
+| [fs-admin-mats](fs-admin-mats/AGENT.md) | FS Admin UI agent — mats.myhre | Owns the React/Next.js admin UI in the `fs-admin` repo. | active | 2026-05-02 |
 
 Onboarding adds a row here. Removal/retirement updates the `Status` column to `retired` rather than deleting the row, so the registry preserves history.
 

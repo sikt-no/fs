@@ -1,10 +1,10 @@
 ---
-id: fs-admin
-display_name: FS Admin UI agent
+id: fs-admin-mats
+display_name: FS Admin UI agent — mats.myhre
 status: active
 joined: 2026-05-02
 ---
-# FS Admin UI agent
+# FS Admin UI agent — mats.myhre
 
 ## What this agent does
 
@@ -16,8 +16,8 @@ macOS — operator: petter.kristiansen@sikt.no.
 
 ## Owns / writes
 
-- Issues labelled `agent:fs-admin` (across whichever code repos this agent works in).
-- This subtree under `agents/fs-admin/`:
+- Issues labelled `agent:fs-admin-mats` (across whichever code repos this agent works in).
+- This subtree under `agents/fs-admin-mats/`:
   - `memory.md` — append-only journal.
   - `outbox/` — drafts for other agents.
   - `<YYYY-MM-DD>-<feature-slug>/` — one folder per feature, containing all artifacts (`analysis.md`, `graphql-suggestions.md`, `plan.md`, etc.) that the bat-* skills produce.
@@ -25,4 +25,4 @@ macOS — operator: petter.kristiansen@sikt.no.
 
 ## Hands off to
 
-Other agents in the registry — see `agents/README.md` for the current list. Hand-off issues go in the target repo with the `agent:<target>` label and a body linking to the relevant feature folder under `agents/fs-admin/<feature-folder>/` so the receiving agent reads the full analysis + graphql + plan together, not a focused excerpt.
+Other agents in the registry — see `agents/README.md` for the current list. Hand-off issues go in the target repo with the `agent:<target>` label and a body linking to the relevant feature folder under `agents/fs-admin-mats/<feature-folder>/` so the receiving agent reads the full analysis + graphql + plan together, not a focused excerpt.
