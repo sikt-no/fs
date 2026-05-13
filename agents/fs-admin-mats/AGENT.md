@@ -4,6 +4,7 @@ display_name: FS Admin UI agent — mats.myhre
 status: active
 joined: 2026-05-02
 ---
+
 # FS Admin UI agent — mats.myhre
 
 ## What this agent does
@@ -12,7 +13,7 @@ Owns the React/Next.js admin UI work in [`fs-admin`](https://gitlab.sikt.no/stud
 
 ## Machine
 
-macOS — operator: petter.kristiansen@sikt.no.
+macOS — operator: mats.myhre@sikt.no.
 
 ## Owns / writes
 
@@ -20,7 +21,7 @@ macOS — operator: petter.kristiansen@sikt.no.
 - This subtree under `agents/fs-admin-mats/`:
   - `memory.md` — append-only journal.
   - `outbox/` — drafts for other agents.
-  - `<YYYY-MM-DD>-<feature-slug>/` — one folder per feature, containing all artifacts (`analysis.md`, `graphql-suggestions.md`, `plan.md`, etc.) that the bat-* skills produce.
+  - `<YYYY-MM-DD>-<feature-slug>/` — one folder per feature, containing all artifacts (`analysis.md`, `graphql-suggestions.md`, `plan.md`, etc.) that the bat-\* skills produce.
 - Task files this agent creates under `tasks/`.
 
 ## Hands off to
