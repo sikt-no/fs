@@ -61,3 +61,9 @@ Entry format:
   - **Q4**: Egen Unleash-flag `tilgangsstyring-applikasjoner` (eller tilsvarende) for ny UI; gammel `tilgangsstyring-meny` beholdes for parent-menu.
 - handed off: ingen (fortsatt bat-analyze read-only mot GitHub). Backend-hand-off i bat-plan blir nå rikere fordi Q5/Q6/Q7/Q8 gir konkret schema-form.
 - next: `bat-plan` på samme slug `applikasjon-tilgangsstyring` — plan.md lander i samme feature-folder. Cross-agent hand-off-issue mot backend kan henvise til hele folder-en (`analysis.md` + `analysis-v2.md` med besvarte spørsmål + `plan.md`).
+
+## 2026-05-13T10:41Z — fs-admin-mats
+- worked on: krav-re-sync etter at brukeren commit'et "tydeliggjort krav rundt fs-applikasjoner" (`b9f2e4e`) på `fruitbat`. 4 in-scope filer endret: `listevisning_og_sok.feature` (+ scenario "Listen inkluderer eksisterende FS-applikasjoner"), `tildele_tilgang.feature` (+ scenario "Tildele tilgang til en eksisterende FS-applikasjon" + språk-fix "valgte" → ""), `opprette_applikasjon.feature` (omformulert paragraf om FS-legacy), `02 Iter 3/systemkrav.md` (tilsvarende presisering). 5. fil `iterasjon_2_og_3_oversikt.md` (aggregert oversikt) er nå også med i snapshot — den var allerede på `f2832a2` men ble droppet av `.feature`/`systemkrav.md`-filteret mitt i første runde. Lokal snapshot under `docs/ACTIVE/krav-input/fruitbat/` overskrevet; `manifest.md` oppdatert med ny sha (`f2832a2` → `b9f2e4e`), endrings-tabell, change-markers per fil, og ny "Hentet"-tidsstempel.
+- analysis-status: ikke gjort om. Endringene i krav-tekstene er **eksakt Q1-avklaringen** ("Vi skal ikke kunne opprette FS-applikasjoner, men de skal vises i listen og kunne tilgangsstyres") som allerede er bakt inn i `analysis-v2.md` (Open Questions → Q1 Decision/Rationale/Impact). Analysen er fortsatt gyldig mot `b9f2e4e`.
+- handed off: ingen.
+- next: bat-plan kan kjøre på `applikasjon-tilgangsstyring`-slugen. Krav-input under `docs/ACTIVE/krav-input/fruitbat/` er nå alignet med `b9f2e4e`.
