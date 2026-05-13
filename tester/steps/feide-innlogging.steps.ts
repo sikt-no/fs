@@ -18,7 +18,7 @@ Given('at administratoren er på innloggingssiden til adminflaten', async ({ pag
 
 When('administratoren logger inn med Feide testbruker', async ({ page }) => {
   const loginPage = new FsAdminLoginPage(page)
-  await loginPage.loginWithFeideButton.click()
+  await loginPage.loginButton.click()
   await loginPage.feideTestUsersOption.click()
   await loginPage.usernameInput.fill(process.env.FS_ADMIN_USERNAME!)
   await loginPage.passwordInput.fill(process.env.FS_ADMIN_PASSWORD!)

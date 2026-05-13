@@ -100,13 +100,6 @@ Egenskap: [Navn]
       Så [forventet resultat]
 ```
 
-### 7. Oppdater oversikt
-
-Etter at feature-filen er lagret:
-```bash
-cd krav-parser && npm run generate-overview
-```
-
 ---
 
 ## Gherkin Nøkkelord
