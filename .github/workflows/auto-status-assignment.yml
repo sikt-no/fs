@@ -122,16 +122,7 @@ jobs:
                   owner: context.repo.owner,
                   repo: context.repo.repo,
                   issue_number: issueNumber,
-                  body: `🚨 **Kritisk bug oppdaget**
-
-Denne saken har automatisk blitt flyttet til behovsanalyse på grunn av:
-- ✅ Type: Bug  
-- ✅ Prioritet: Kritisk
-- ✅ Tilordnet seksjon
-
-Saken må håndteres umiddelbart og har forrang over planlagt arbeid.
-
-_Automatisk generert av GitHub Actions workflow_`
+                  body: `🚨 **Kritisk bug oppdaget**\n\nDenne saken har automatisk blitt flyttet til behovsanalyse på grunn av:\n- ✅ Type: Bug  \n- ✅ Prioritet: Kritisk\n- ✅ Tilordnet seksjon\n\nSaken må håndteres umiddelbart og har forrang over planlagt arbeid.\n\n_Automatisk generert av GitHub Actions workflow_`
                 });
                 
                 console.log(`Kritisk bug-kommentar lagt til på issue #${issueNumber}`);

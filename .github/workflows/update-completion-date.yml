@@ -450,14 +450,7 @@ jobs:
               owner: context.repo.owner,
               repo: context.repo.repo,
               issue_number: issueNumber,
-              body: `✅ **Sak ferdigstilt**
-
-Denne saken har automatisk blitt oppdatert:
-- 📅 Ferdigdato satt til: ${today}
-- 🏷️ Status oppdatert til: Levert
-- 📊 Prosjekt-felter oppdatert
-
-_Automatisk generert av GitHub Actions workflow_`
+              body: `✅ **Sak ferdigstilt**\n\nDenne saken har automatisk blitt oppdatert:\n- 📅 Ferdigdato satt til: ${today}\n- 🏷️ Status oppdatert til: Levert\n- 📊 Prosjekt-felter oppdatert\n\n_Automatisk generert av GitHub Actions workflow_`
             });
             
             console.log(`Ferdigstillingskommentar lagt til på issue #${issueNumber}`);
