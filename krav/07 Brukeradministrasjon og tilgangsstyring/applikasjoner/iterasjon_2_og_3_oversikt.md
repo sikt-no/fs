@@ -85,6 +85,11 @@ Egenskap: Listevisning og søk i applikasjoner
       Når jeg velger en applikasjon
       Så ser jeg detaljsiden for valgt applikasjon
 
+    Scenario: Listen inkluderer eksisterende FS-applikasjoner
+      Når jeg åpner applikasjonsoversikten
+      Så ser jeg også applikasjoner med FS som identitetsleverandør
+      Og disse vises på lik linje med Feide- og Maskinporten-applikasjoner
+
   Regel: Søk og filtrering av applikasjoner (K2)
 
     Scenario: Fritekst-søk på navn
@@ -449,6 +454,11 @@ Egenskap: Tildele tilgang til applikasjon
       Når jeg velger et miljø og flere tilganger jeg har rettighet til å tildele
       Så har applikasjonen fått alle de valgte tilgangene i det valgte miljøet
 
+    Scenario: Tildele tilgang til en eksisterende FS-applikasjon
+      Gitt applikasjonen har FS som identitetsleverandør
+      Når jeg velger et miljø og en tilgang jeg har rettighet til å tildele
+      Så har applikasjonen fått den valgte tilgangen i det valgte miljøet
+
   Regel: Bruker kan kun tildele tilganger de selv har rettighet til å tildele
 
     Scenario: Valglisten viser kun tilganger jeg har rettighet til å tildele
@@ -486,7 +496,7 @@ Egenskap: Tildele tilgang til applikasjon
       Gitt applikasjonen ikke har tilganger i et gitt miljø
       Når jeg tildeler en tilgang i det miljøet
       Så er applikasjonen aktiv i miljøet
-      Og applikasjonen autentiserer seg i det miljøet med sin valgte identitetsleverandør
+      Og applikasjonen autentiserer seg i det miljøet med sin identitetsleverandør
 ```
 
 ---
@@ -571,8 +581,12 @@ Egenskap: Opprette applikasjon
   må være globalt unikt på tvers av alle organisasjoner.
 
   FS som identitetsleverandør er utfaset for nye applikasjoner og kan
-  ikke velges ved opprettelse. Eksisterende FS-applikasjoner består og
-  administreres som før, men det opprettes ikke nye.
+  ikke velges ved opprettelse. Eksisterende FS-applikasjoner består
+  som data og forvaltes i den samme applikasjonsoversikten som Feide-
+  og Maskinporten-applikasjoner — alle administrasjonshandlinger
+  (listevisning, tilgangsstyring, passordbytte, ansvarlig, beskrivelse,
+  deaktivering) gjelder også for dem. Det er kun opprettelse som er
+  stengt.
 
   # Krav fra Confluence: K8 Opprette ny API-bruker, Discovery: Registrer applikasjon (4612784227), Rammeinnsikt: Grunnleggende selvbetjent administrasjon av API-brukere (4401102853)
 

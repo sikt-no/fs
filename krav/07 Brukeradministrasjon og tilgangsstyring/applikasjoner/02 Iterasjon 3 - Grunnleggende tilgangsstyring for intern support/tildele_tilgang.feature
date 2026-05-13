@@ -22,6 +22,11 @@ Egenskap: Tildele tilgang til applikasjon
       Når jeg velger et miljø og flere tilganger jeg har rettighet til å tildele
       Så har applikasjonen fått alle de valgte tilgangene i det valgte miljøet
 
+    Scenario: Tildele tilgang til en eksisterende FS-applikasjon
+      Gitt applikasjonen har FS som identitetsleverandør
+      Når jeg velger et miljø og en tilgang jeg har rettighet til å tildele
+      Så har applikasjonen fått den valgte tilgangen i det valgte miljøet
+
   Regel: Bruker kan kun tildele tilganger de selv har rettighet til å tildele
 
     Scenario: Valglisten viser kun tilganger jeg har rettighet til å tildele
@@ -59,4 +64,4 @@ Egenskap: Tildele tilgang til applikasjon
       Gitt applikasjonen ikke har tilganger i et gitt miljø
       Når jeg tildeler en tilgang i det miljøet
       Så er applikasjonen aktiv i miljøet
-      Og applikasjonen autentiserer seg i det miljøet med sin valgte identitetsleverandør
+      Og applikasjonen autentiserer seg i det miljøet med sin identitetsleverandør

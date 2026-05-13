@@ -14,8 +14,12 @@ Egenskap: Opprette applikasjon
   må være globalt unikt på tvers av alle organisasjoner.
 
   FS som identitetsleverandør er utfaset for nye applikasjoner og kan
-  ikke velges ved opprettelse. Eksisterende FS-applikasjoner består og
-  administreres som før, men det opprettes ikke nye.
+  ikke velges ved opprettelse. Eksisterende FS-applikasjoner består
+  som data og forvaltes i den samme applikasjonsoversikten som Feide-
+  og Maskinporten-applikasjoner — alle administrasjonshandlinger
+  (listevisning, tilgangsstyring, passordbytte, ansvarlig, beskrivelse,
+  deaktivering) gjelder også for dem. Det er kun opprettelse som er
+  stengt.
 
   # Krav fra Confluence: K8 Opprette ny API-bruker, Discovery: Registrer applikasjon (4612784227), Rammeinnsikt: Grunnleggende selvbetjent administrasjon av API-brukere (4401102853)
 

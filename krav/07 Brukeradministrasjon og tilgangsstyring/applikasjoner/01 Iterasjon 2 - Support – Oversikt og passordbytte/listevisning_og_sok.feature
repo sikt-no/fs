@@ -57,6 +57,11 @@ Egenskap: Listevisning og søk i applikasjoner
       Når jeg velger en applikasjon
       Så ser jeg detaljsiden for valgt applikasjon
 
+    Scenario: Listen inkluderer eksisterende FS-applikasjoner
+      Når jeg åpner applikasjonsoversikten
+      Så ser jeg også applikasjoner med FS som identitetsleverandør
+      Og disse vises på lik linje med Feide- og Maskinporten-applikasjoner
+
   Regel: Søk og filtrering av applikasjoner (K2)
 
     Scenario: Fritekst-søk på navn
