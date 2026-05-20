@@ -16,6 +16,12 @@ Egenskap: Se detaljer for applikasjon
     Scenario: Se grunnleggende informasjon
       Så ser jeg navn og beskrivelse
 
+    Scenario: Se identitetsleverandør
+      Så ser jeg applikasjonens identitetsleverandør
+
+    Scenario: Se organisasjon
+      Så ser jeg applikasjonens organisasjon
+
     Scenario: Se sporingsinfo
       Så ser jeg opprettet av, opprettet tidspunkt, endret av og endret tidspunkt
 
@@ -24,3 +30,9 @@ Egenskap: Se detaljer for applikasjon
 
     Scenario: Se ansvarlig
       Så ser jeg hvem som er ansvarlig for applikasjonen
+
+  Regel: Detaljer kan redigeres direkte fra detaljer-fanen
+
+    Scenario: Aktivere redigering av detaljer
+      Når jeg velger å redigere
+      Så blir alle redigerbare felter i detaljer-fanen omgjort til inputfelter

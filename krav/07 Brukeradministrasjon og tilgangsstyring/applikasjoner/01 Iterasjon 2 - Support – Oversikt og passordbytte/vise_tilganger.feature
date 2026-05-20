@@ -26,13 +26,12 @@ Egenskap: Vise tilganger for applikasjon
     Så vises kun tilganger knyttet til den valgte organisasjonen
     Og filtervalget er begrenset til organisasjoner applikasjonen har tilganger hos
 
-  Scenario: Filtrere tilgangsliste på tilgang
-    Når jeg filtrerer tilgangslisten på tilgang
-    Så vises kun de valgte tilgangene
-    Og filtervalget er begrenset til tilganger applikasjonen er tildelt
+  Scenario: Filtrere tilgangsliste på tilgangskode
+    Når jeg skriver inn tekst i tilgangskode-filteret
+    Så vises kun tilganger der tilgangskoden inneholder den innskrevne teksten
 
   Scenario: Sortere tilgangsliste
-    Når jeg sorterer tilgangslisten på miljø eller tilgangskode
+    Når jeg sorterer tilgangslisten på tilgangskode
     Så vises tilgangene i valgt sorteringsrekkefølge
 
   Scenario: Laste flere tilganger
@@ -46,7 +45,12 @@ Egenskap: Vise tilganger for applikasjon
     Scenario: Arvet tilgang er merket med opphav
       Gitt applikasjonen har en arvet tilgang
       Så er tilgangen merket som arvet
-      Og det fremgår hvilken tilgang arven stammer fra
+      Og det fremgår hvilke tilganger arven stammer fra
+
+    Scenario: Arvet tilgang med flere opphav listes kun én gang
+      Gitt applikasjonen har to direkte tilganger som begge gir den samme arvede tilgangen
+      Så vises den arvede tilgangen kun én gang i listen
+      Og det fremgår at den arvede tilgangen stammer fra begge de direkte tilgangene
 
     Scenario: Skjule arvede tilganger
       Gitt arvede tilganger vises
