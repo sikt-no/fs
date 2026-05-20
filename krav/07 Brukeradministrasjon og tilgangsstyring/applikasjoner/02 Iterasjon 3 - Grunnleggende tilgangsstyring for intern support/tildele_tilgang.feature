@@ -65,3 +65,10 @@ Egenskap: Tildele tilgang til applikasjon
       Når jeg tildeler en tilgang i det miljøet
       Så er applikasjonen aktiv i miljøet
       Og applikasjonen autentiserer seg i det miljøet med sin identitetsleverandør
+
+  Regel: Tilganger kan tildeles selv om applikasjonen er deaktivert
+
+    Scenario: Tildele tilgang til deaktivert applikasjon
+      Gitt applikasjonen er deaktivert
+      Når jeg tildeler en tilgang
+      Så er tilgangen registrert på applikasjonen

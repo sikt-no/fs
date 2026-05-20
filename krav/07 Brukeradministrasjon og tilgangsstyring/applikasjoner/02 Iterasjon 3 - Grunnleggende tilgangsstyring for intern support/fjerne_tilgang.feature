@@ -46,3 +46,17 @@ Egenskap: Fjerne tilgang fra applikasjon
     Scenario: Fjerning er ikke tilgjengelig for tilganger uten rettighet
       Gitt applikasjonen har en tilgang jeg ikke har rettighet til å fjerne
       Så er muligheten til å fjerne den tilgangen ikke tilgjengelig
+
+  Regel: Tilganger kan fjernes selv om applikasjonen er deaktivert
+
+    Scenario: Fjerne tilgang fra deaktivert applikasjon
+      Gitt applikasjonen er deaktivert
+      Og applikasjonen har en tilgang jeg har rettighet til å fjerne
+      Når jeg bekrefter fjerningen
+      Så har applikasjonen ikke lenger den tilgangen
+
+  Regel: Arvede tilganger kan ikke fjernes direkte
+
+    Scenario: Arvet tilgang kan ikke fjernes
+      Gitt applikasjonen har en arvet tilgang
+      Så er muligheten til å fjerne den arvede tilgangen ikke tilgjengelig
