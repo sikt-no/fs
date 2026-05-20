@@ -1,15 +1,34 @@
 # language: no
 # GitHub: #443
 @BRU-APP-API-006 @must @planned
-Egenskap: Redigere beskrivelse for applikasjon
+Egenskap: Redigere detaljer for applikasjon
   Som bruker
-  ønsker jeg å redigere beskrivelsen for en applikasjon
+  ønsker jeg å redigere detaljer for en applikasjon
   slik at informasjonen er oppdatert og korrekt.
 
   # Krav fra Confluence: K19 Redigere beskrivelse for API-bruker
 
   Bakgrunn:
     Gitt jeg er på detaljsiden for en applikasjon
+
+  Regel: Redigering av navn krever rettighet over applikasjonens organisasjon
+
+    Scenario: Oppdatere navn
+      Gitt jeg har rettighet til å administrere applikasjonen
+      Når jeg oppdaterer navnet
+      Så er det nye navnet lagret på applikasjonen
+
+    Scenario: Applikasjonsadministrator kan redigere navn for applikasjoner i egne organisasjoner
+      Gitt jeg har applikasjonsadministrator-rollen for organisasjonen applikasjonen tilhører
+      Så har jeg mulighet til å redigere navnet
+
+    Scenario: Redigering av navn er ikke tilgjengelig for applikasjoner fra andre organisasjoner
+      Gitt jeg har applikasjonsadministrator-rollen, men ikke for organisasjonen applikasjonen tilhører
+      Så er muligheten til å redigere navnet ikke tilgjengelig
+
+    Scenario: Super-applikasjonsadministrator kan redigere navn for alle applikasjoner
+      Gitt jeg har super-applikasjonsadministrator-rollen
+      Så har jeg mulighet til å redigere navnet uavhengig av organisasjon
 
   Regel: Redigering av beskrivelse krever rettighet over applikasjonens organisasjon
 
