@@ -70,6 +70,11 @@ Egenskap: Listevisning og søk i applikasjoner
       Når jeg søker med fritekst på navn
       Så filtreres listen til applikasjoner som matcher søket
 
+    Scenario: Filtrere på miljø
+      Gitt jeg ser listen over applikasjoner
+      Når jeg velger et miljø som filter
+      Så vises kun applikasjoner som er aktive i det valgte miljøet
+
     Scenario: Filtrere på organisasjon
       Gitt jeg ser listen over applikasjoner
       Når jeg velger en organisasjon som filter
