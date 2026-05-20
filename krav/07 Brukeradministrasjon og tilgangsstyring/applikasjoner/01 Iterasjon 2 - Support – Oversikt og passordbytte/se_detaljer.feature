@@ -31,6 +31,9 @@ Egenskap: Se detaljer for applikasjon
     Scenario: Se ansvarlig
       Så ser jeg hvem som er ansvarlig for applikasjonen
 
+    Scenario: Se status
+      Så ser jeg om applikasjonen er aktiv eller deaktivert
+
   Regel: Detaljer kan redigeres direkte fra detaljer-fanen
 
     Scenario: Aktivere redigering av detaljer

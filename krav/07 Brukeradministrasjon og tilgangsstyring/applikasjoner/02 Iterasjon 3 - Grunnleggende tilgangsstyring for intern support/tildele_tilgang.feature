@@ -13,32 +13,33 @@ Egenskap: Tildele tilgang til applikasjon
 
   Regel: En tildeling gjelder én tilgang i ett eksplisitt valgt miljø
 
-    Scenario: Tildele en tilgang i et valgt miljø
-      Når jeg velger et miljø og en tilgang jeg har rettighet til å tildele
-      Så har applikasjonen fått den valgte tilgangen i det valgte miljøet
-      Og det fremgår tydelig hvilket miljø og hvilken organisasjon tildelingen gjelder
+    Scenario: Tildele en tilgang i valgt organisasjon og miljø
+      Når jeg velger organisasjon, miljø og en tilgang jeg har rettighet til å tildele
+      Så har applikasjonen fått den valgte tilgangen for den valgte kombinasjonen av organisasjon og miljø
+      Og det fremgår tydelig hvilken organisasjon og hvilket miljø tildelingen gjelder
 
-    Scenario: Tildele flere tilganger samtidig i ett valgt miljø
-      Når jeg velger et miljø og flere tilganger jeg har rettighet til å tildele
-      Så har applikasjonen fått alle de valgte tilgangene i det valgte miljøet
+    Scenario: Tildele flere tilganger samtidig i valgt organisasjon og miljø
+      Når jeg velger organisasjon, miljø og flere tilganger jeg har rettighet til å tildele
+      Så har applikasjonen fått alle de valgte tilgangene for den valgte kombinasjonen av organisasjon og miljø
 
     Scenario: Tildele tilgang til en eksisterende FS-applikasjon
       Gitt applikasjonen har FS som identitetsleverandør
-      Når jeg velger et miljø og en tilgang jeg har rettighet til å tildele
-      Så har applikasjonen fått den valgte tilgangen i det valgte miljøet
+      Når jeg velger organisasjon, miljø og en tilgang jeg har rettighet til å tildele
+      Så har applikasjonen fått den valgte tilgangen for den valgte kombinasjonen av organisasjon og miljø
 
   Regel: Bruker kan kun tildele tilganger de selv har rettighet til å tildele
 
-    Scenario: Valglisten viser kun tilganger jeg har rettighet til å tildele
-      Når jeg åpner valglisten for å tildele en tilgang
-      Så ser jeg kun tilganger jeg har rettighet til å tildele
+    Scenario: Valglisten for tilgangskode avhenger av valgt organisasjon og miljø
+      Gitt jeg har valgt organisasjon og miljø
+      Når jeg åpner valglisten for tilgangskode
+      Så vises kun tilgangskoder jeg har rettighet til å tildele for den valgte kombinasjonen av organisasjon og miljø
 
-  Regel: En tilgang som allerede er tildelt i valgt miljø kan ikke tildeles på nytt
+  Regel: En tilgang som allerede er tildelt for valgt kombinasjon av organisasjon og miljø kan ikke tildeles på nytt
 
     Scenario: Allerede tildelt tilgang vises som ikke-valgbar
-      Gitt applikasjonen har en tilgang tildelt i et miljø
-      Når jeg åpner valglisten for å tildele tilganger i samme miljø
-      Så vises den allerede tildelte tilgangen gråtonet og ikke valgbar
+      Gitt applikasjonen har en tilgang tildelt for en kombinasjon av organisasjon og miljø
+      Når jeg åpner valglisten for å tildele tilganger for samme kombinasjon av organisasjon og miljø
+      Så vises den allerede tildelte tilgangen som ikke valgbar
       Og det fremgår at tilgangen allerede er tildelt
 
   Regel: Tilgangstildeling gjelder en organisasjon administratoren har rettighet for (K13)
@@ -50,8 +51,8 @@ Egenskap: Tildele tilgang til applikasjon
 
     Scenario: Organisasjon velges når administrator har tilgang til flere organisasjoner
       Gitt jeg har tilgang til flere organisasjoner
-      Når jeg velger et miljø, en organisasjon og en tilgang jeg har rettighet til å tildele
-      Så er tilgangen tildelt applikasjonen i det valgte miljøet for den valgte organisasjonen
+      Når jeg velger en organisasjon, et miljø og en tilgang jeg har rettighet til å tildele
+      Så er tilgangen tildelt applikasjonen for den valgte kombinasjonen av organisasjon og miljø
 
     Scenario: Valglisten for organisasjon er begrenset til organisasjoner jeg administrerer
       Gitt jeg har tilgang til flere organisasjoner

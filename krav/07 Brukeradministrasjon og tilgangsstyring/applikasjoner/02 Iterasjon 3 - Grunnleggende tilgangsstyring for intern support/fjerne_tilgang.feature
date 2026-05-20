@@ -12,34 +12,22 @@ Egenskap: Fjerne tilgang fra applikasjon
     Gitt jeg er på detaljsiden for en applikasjon
     Og jeg ser tilgangslisten applikasjonen har
 
-  Regel: En fjerning krever en eksplisitt bekreftelse
+  Regel: Fjerning av tilganger skjer via modal
 
-    Scenario: Bekreftelsesdialog vises før enkelt-tilgang fjernes
-      Gitt applikasjonen har en tilgang jeg har rettighet til å fjerne
-      Når jeg velger å fjerne tilgangen
-      Så vises en bekreftelsesdialog som viser tilgang og miljø som skal fjernes
+    Scenario: Velge tilganger å fjerne
+      Når jeg åpner modalen for å fjerne tilganger
+      Og velger organisasjon og miljø
+      Så ser jeg en liste over tilganger jeg har rettighet til å fjerne for den valgte kombinasjonen
 
-    Scenario: Bekrefte fjerning av en enkelt-tilgang
-      Gitt jeg har igangsatt fjerning av én tilgang
+    Scenario: Bekrefte fjerning av valgte tilganger
+      Gitt jeg har valgt organisasjon, miljø og én eller flere tilganger i fjerningsmodalen
       Når jeg bekrefter fjerningen
-      Så har applikasjonen ikke lenger den tilgangen i det miljøet
+      Så har applikasjonen ikke lenger de valgte tilgangene for den valgte kombinasjonen av organisasjon og miljø
 
     Scenario: Avbryte fjerning
-      Gitt jeg har igangsatt fjerning av én eller flere tilganger
+      Gitt jeg har åpnet fjerningsmodalen
       Når jeg avbryter
       Så er ingen endringer gjort på applikasjonens tilganger
-
-  Regel: Flere tilganger i ett miljø kan fjernes samtidig
-
-    Scenario: Bekreftelsesdialog for bulk-fjerning lister alle valgte tilganger
-      Gitt applikasjonen har flere tilganger jeg har rettighet til å fjerne i et miljø
-      Når jeg velger flere av disse tilgangene innenfor det samme miljøet og velger å fjerne dem
-      Så vises en bekreftelsesdialog som lister alle valgte tilganger og miljøet
-
-    Scenario: Bekrefte bulk-fjerning
-      Gitt jeg har igangsatt bulk-fjerning av tilganger i ett miljø
-      Når jeg bekrefter fjerningen
-      Så har applikasjonen ikke lenger noen av de valgte tilgangene i det valgte miljøet
 
   Regel: Bruker kan kun fjerne tilganger de har rettighet til å fjerne
 
