@@ -102,8 +102,7 @@ Kravene er utledet fra [Gherkin-spesifikasjonene](.) og er ment som lesbar dokum
 
 | ID | Akseptansekrav | Prioritet | Status |
 |----|----------------|-----------|--------|
-| ORG-ADM-OPP-001-01 | Organisasjonsnummer gir automatisk utfylling av navn, adresse og organisasjonstype | Må | Identifisert |
-| ORG-ADM-OPP-001-02 | Organisasjonstype settes til verdien fra Brønnøysundregistrene | Må | Identifisert |
+| ORG-ADM-OPP-001-01 | Organisasjonsnummer gir automatisk utfylling av navn, adresse og organisasjonstype | Bør | Identifisert |
 
 ### Organisasjonskode tildeles automatisk
 
@@ -117,18 +116,24 @@ Kravene er utledet fra [Gherkin-spesifikasjonene](.) og er ment som lesbar dokum
 
 | ID | Akseptansekrav | Prioritet | Status |
 |----|----------------|-----------|--------|
-| ORG-ADM-OPP-001-06 | Organisasjon kan ikke lagres uten navn, organisasjonstype og URL | Må | Identifisert |
+| ORG-ADM-OPP-001-06 | Organisasjon kan ikke lagres uten navn og organisasjonstype | Må | Identifisert |
+| ORG-ADM-OPP-001-12 | Landkode er obligatorisk å registrere | Må | Identifisert |
+| ORG-ADM-OPP-001-16 | Språkkode (ISO 639) for originalspråket er obligatorisk å registrere | Må | Identifisert |
+| ORG-ADM-OPP-001-23 | Originalnavn registreres på originalspråk i originaltegn | Må | Identifisert |
 
 ### Valgfrie felter kan registreres
 
 | ID | Akseptansekrav | Prioritet | Status |
 |----|----------------|-----------|--------|
-| ORG-ADM-OPP-001-07 | Akronym kan registreres og brukes i søk | Må | Identifisert |
+| ORG-ADM-OPP-001-07 | Kortnavn kan registreres og brukes i søk | Må | Identifisert |
 | ORG-ADM-OPP-001-08 | By kan registreres | Må | Identifisert |
 | ORG-ADM-OPP-001-09 | NSD-kode kan registreres | Må | Identifisert |
 | ORG-ADM-OPP-001-10 | PIC-nummer kan registreres | Må | Identifisert |
 | ORG-ADM-OPP-001-11 | Organisasjonen kan markeres som godkjent betalingsorganisasjon | Må | Identifisert |
-| ORG-ADM-OPP-001-12 | Landkode kan registreres | Må | Identifisert |
+| ORG-ADM-OPP-001-21 | URL kan registreres | Kan | Identifisert |
+| ORG-ADM-OPP-001-22 | SCHAC-kode kan registreres | Kan | Identifisert |
+| ORG-ADM-OPP-001-24 | Alternative navn på andre språk kan legges til som en liste | Kan | Identifisert |
+| ORG-ADM-OPP-001-25 | For organisasjoner med navn på ikke-norsk alfabet vises et engelsk navn under organisasjonsnavnet | Bør | Identifisert |
 
 ### Erasmuskode verifiseres mot HEI-registeret
 
@@ -137,24 +142,11 @@ Kravene er utledet fra [Gherkin-spesifikasjonene](.) og er ment som lesbar dokum
 | ORG-ADM-OPP-001-13 | Erasmuskode slås automatisk opp mot HEI-registeret ved registrering, og resultatet vises | Må | Identifisert |
 | ORG-ADM-OPP-001-14 | Ugyldig Erasmuskode gir advarsel, men kan likevel lagres | Må | Identifisert |
 
-### Språkkoder settes basert på nasjonalitet
+### Akkreditering registreres av NOKUT (norske læresteder)
 
 | ID | Akseptansekrav | Prioritet | Status |
 |----|----------------|-----------|--------|
-| ORG-ADM-OPP-001-15 | Norsk organisasjon får tilgjengelige språkkoder NO, NYNO, SAMISK og ENG | Må | Identifisert |
-| ORG-ADM-OPP-001-16 | Utenlandsk organisasjon får tilgjengelige språkkoder ORG og ENG | Må | Identifisert |
-
-### Utenlandske organisasjoner kan ha visningsnavn
-
-| ID | Akseptansekrav | Prioritet | Status |
-|----|----------------|-----------|--------|
-| ORG-ADM-OPP-001-17 | Utenlandsk organisasjon kan registreres med visningsnavn som brukes i grensesnittet | Må | Identifisert |
-
-### Akkreditering registreres av NOKUT
-
-| ID | Akseptansekrav | Prioritet | Status |
-|----|----------------|-----------|--------|
-| ORG-ADM-OPP-001-18 | Akkrediteringsfeltet er skrivebeskyttet for systemadministratorer — det fremgår at NOKUT registrerer dette | Må | Identifisert |
+| ORG-ADM-OPP-001-18 | For norske læresteder er akkrediteringsfeltet skrivebeskyttet for systemadministratorer — det fremgår at NOKUT registrerer dette | Må | Identifisert |
 
 ### Organisasjonen må godkjennes før den er aktiv
 
@@ -166,8 +158,8 @@ Kravene er utledet fra [Gherkin-spesifikasjonene](.) og er ment som lesbar dokum
 ### Åpne spørsmål
 
 - Hvem kan opprette organisasjoner — kun Sikt-ansatte, eller også lokale administratorer?
-- Skal visningsnavn være et eget felt, eller brukes det kun for utenlandske organisasjoner?
 - Eksakt format og regler for organisasjonskode per land?
+- Skal norske organisasjoner ha faste språkkoder (NO, NYNO, SAMISK, ENG) i tillegg til ISO 639, eller er ISO 639 tilstrekkelig for alle? Mulig konflikt med tidligere krav (-15, nå fjernet).
 
 ---
 
@@ -225,15 +217,15 @@ Kravene er utledet fra [Gherkin-spesifikasjonene](.) og er ment som lesbar dokum
 
 | ID | Akseptansekrav | Prioritet | Status |
 |----|----------------|-----------|--------|
-| ORG-ADM-VED-001-06 | Erasmuskode registreres med fra- og til-dato, og er gyldig i inntil 4 år | Må | Identifisert |
-| ORG-ADM-VED-001-07 | Utløpt Erasmuskode markeres automatisk som historisk, med advarsel om koden fortsatt er aktiv | Må | Identifisert |
-| ORG-ADM-VED-001-08 | Endringshistorikk for Erasmuskoder er tilgjengelig med oversikt over hvilken kode som var aktiv i hvilken periode | Må | Identifisert |
+| ORG-ADM-VED-001-06 | Erasmuskode registreres med fra- og til-dato, og er gyldig i inntil 4 år | Kan | Identifisert |
+| ORG-ADM-VED-001-07 | Utløpt Erasmuskode markeres automatisk som historisk, med advarsel om koden fortsatt er aktiv | Kan | Identifisert |
+| ORG-ADM-VED-001-08 | Endringshistorikk for Erasmuskoder er tilgjengelig med oversikt over hvilken kode som var aktiv i hvilken periode | Kan | Identifisert |
 
 ### Land som forlater Erasmus-avtalen håndteres korrekt
 
 | ID | Akseptansekrav | Prioritet | Status |
 |----|----------------|-----------|--------|
-| ORG-ADM-VED-001-09 | Erasmuskode for land utenfor avtalen kan settes inaktiv med sluttdato og vises med status «Historisk» | Må | Identifisert |
+| ORG-ADM-VED-001-09 | Erasmuskode for land utenfor avtalen kan settes inaktiv med sluttdato og vises med status «Historisk» | Kan | Identifisert |
 
 ### URL-en til organisasjonen bør være tilgjengelig
 
