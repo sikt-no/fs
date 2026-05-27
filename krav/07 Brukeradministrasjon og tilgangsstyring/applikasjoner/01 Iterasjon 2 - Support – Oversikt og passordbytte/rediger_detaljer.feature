@@ -38,6 +38,20 @@ Egenskap: Redigere detaljer for applikasjon
       Så avvises lagringen
       Og det fremgår at navn er obligatorisk
 
+  Regel: Ulagrede endringer forkastes når brukeren forlater redigeringsvisningen
+
+    Scenario: Forlate siden med ulagrede endringer
+      Gitt jeg har gjort endringer i redigeringsvisningen uten å lagre
+      Når jeg navigerer bort fra siden
+      Så nullstilles siden til sin forrige lagrede tilstand
+      Og endringene er ikke lagret
+
+    Scenario: Bytte fane med ulagrede endringer
+      Gitt jeg har gjort endringer i redigeringsvisningen uten å lagre
+      Når jeg bytter til en annen fane
+      Så nullstilles redigeringsvisningen til sin forrige lagrede tilstand
+      Og endringene er ikke lagret
+
   Regel: Redigering av beskrivelse krever rettighet over applikasjonens organisasjon
 
     Scenario: Oppdatere beskrivelse
