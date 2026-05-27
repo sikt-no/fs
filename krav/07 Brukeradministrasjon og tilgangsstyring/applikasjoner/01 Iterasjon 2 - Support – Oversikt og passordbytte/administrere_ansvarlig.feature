@@ -15,7 +15,7 @@ Egenskap: Administrere ansvarlig for applikasjon
   Bakgrunn:
     Gitt jeg er på detaljsiden for en applikasjon
 
-  Regel: Ansvarlig kan settes, endres og fjernes
+  Regel: Ansvarlig kan settes og endres, men ikke fjernes
 
     Scenario: Sette ansvarlig
       Gitt applikasjonen har ingen ansvarlig
@@ -27,10 +27,13 @@ Egenskap: Administrere ansvarlig for applikasjon
       Når jeg søker opp og velger en annen feide-bruker fra applikasjonens organisasjon
       Så er den nye feide-brukeren registrert som ansvarlig for applikasjonen
 
-    Scenario: Fjerne ansvarlig
+  Regel: Ansvarlig er obligatorisk og kan ikke fjernes
+
+    Scenario: Lagring avvises når ansvarlig ikke er valgt
       Gitt applikasjonen har en ansvarlig
-      Når jeg fjerner den ansvarlige
-      Så har applikasjonen ikke lenger en ansvarlig registrert
+      Når jeg forsøker å lagre applikasjonen uten ansvarlig
+      Så avvises lagringen
+      Og det fremgår at ansvarlig er obligatorisk
 
   Regel: Søk etter ansvarlig er avgrenset til applikasjonens organisasjon
 

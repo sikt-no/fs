@@ -30,6 +30,14 @@ Egenskap: Redigere detaljer for applikasjon
       Gitt jeg har super-applikasjonsadministrator-rollen
       Så har jeg mulighet til å redigere navnet uavhengig av organisasjon
 
+  Regel: Navn er obligatorisk og kan ikke lagres tomt
+
+    Scenario: Lagring avvises når navn er tomt
+      Gitt jeg har rettighet til å administrere applikasjonen
+      Når jeg forsøker å lagre et tomt navn
+      Så avvises lagringen
+      Og det fremgår at navn er obligatorisk
+
   Regel: Redigering av beskrivelse krever rettighet over applikasjonens organisasjon
 
     Scenario: Oppdatere beskrivelse

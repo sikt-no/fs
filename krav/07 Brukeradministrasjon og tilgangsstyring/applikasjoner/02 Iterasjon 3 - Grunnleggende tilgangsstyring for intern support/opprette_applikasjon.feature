@@ -52,6 +52,28 @@ Egenskap: Opprette applikasjon
       Så omfatter valglisten alle organisasjoner i systemet
       Og applikasjonen opprettes på den organisasjonen jeg velger
 
+  Regel: Opprettelse krever et navn
+
+    Scenario: Navn må fylles inn for å opprette applikasjon
+      Når jeg forsøker å opprette en ny applikasjon uten å fylle inn navn
+      Så avvises opprettelsen
+      Og det fremgår at navn er obligatorisk
+
+    Scenario: Navn lagres ved opprettelse
+      Når jeg oppretter en ny applikasjon med et navn
+      Så er det oppgitte navnet lagret på applikasjonen
+
+  Regel: Opprettelse krever en ansvarlig
+
+    Scenario: Ansvarlig må velges for å opprette applikasjon
+      Når jeg forsøker å opprette en ny applikasjon uten å velge ansvarlig
+      Så avvises opprettelsen
+      Og det fremgår at ansvarlig er obligatorisk
+
+    Scenario: Ansvarlig lagres ved opprettelse
+      Når jeg oppretter en ny applikasjon og velger en ansvarlig
+      Så er den valgte ansvarlige registrert på applikasjonen
+
   Regel: Applikasjonen identifiseres av en ekstern ID som verifiseres mot identitetsleverandøren
 
     Scenariomal: Opprette applikasjon med ekstern identitet
@@ -106,6 +128,12 @@ Egenskap: Opprette applikasjon
         | identitetsleverandør |
         | Feide                |
         | Maskinporten         |
+
+  Regel: Nyopprettet applikasjon har status Aktiv
+
+    Scenario: Nyopprettet applikasjon har status Aktiv som standard
+      Når jeg oppretter en ny applikasjon
+      Så har applikasjonen status «Aktiv»
 
   Regel: Nyopprettet applikasjon har ingen tilganger og er ikke aktiv i noen miljøer
 
