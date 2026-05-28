@@ -1,1077 +1,1050 @@
-# Plan (delta): Applikasjon-tilgangsstyring — Iteration 2
+# Plan: Applikasjon-tilgangsstyring — Iter 3 oppdateringer
 
-> **Scope:** Iter-2-runde av initiativ [#31](https://github.com/sikt-no/fs/issues/31). Denne planen beskriver **bare endringene** mot iter-1-planen ([`docs/ACTIVE-ITERATION-2/plan-applikasjon-tilgangsstyring.md`](../ACTIVE-ITERATION-2/plan-applikasjon-tilgangsstyring.md)). Iter-1-tasks (#1–#22) er ferdigstilt og fungerer som fundament. Punkter som er uendret er **ikke** gjentatt.
+> **Følger fra:** [`analysis-applikasjon-tilgangsstyring-iter3.md`](analysis-applikasjon-tilgangsstyring-iter3.md) — delta-analyse av de 7 commitene på `fruitbat`-branchen.
 >
-> **Analysegrunnlag:** [`analysis-iteration-2-applikasjon-tilgangsstyring.md`](analysis-iteration-2-applikasjon-tilgangsstyring.md) (alle 7 åpne spørsmål er avklart 2026-05-27). Krav på `fruitbat`-snapshot i [`krav-input/manifest.md`](krav-input/manifest.md).
+> **Scope:** Endringene i de 7 commitene (commits `e04d704`, `a7efc9f`, `ccaf83a`, `7ceb640`, `59eba3d`, `cee226d`, `4f2e9a4`) — listevisning, detaljer, vise/tildele/fjerne tilganger, oppretting, redigering. **Endringslogg (BRU-APP-API-016) er IKKE i scope** — det er Iterasjon 4 og fortsatt `@draft`.
+>
+> **Strategi:** Mock-API først, ekte schema parallelt. Frontend kan progressere uavhengig av backend; ekte schema-endringer fileres som hand-off-issues etter at planen er publisert.
+>
+> **Forutsetning:** Iter 2 er levert på branch `poc-skills-execute-result` (22 tasks fullført). Denne plan-en bygger oppå den.
 
 ## Proposed Solution
 
 ### Architecture Approach
 
-Iter 2 endrer **ikke** den overordnede arkitekturen fra iter 1: `ListPageLayout` for `/tilgangsstyring/applikasjoner`, `DetailPageLayout` for `/tilgangsstyring/applikasjoner/[id]`, `DomainIndexPattern` for `/tilgangsstyring`. Tre delta-områder ligger oppå:
+Planen er en **kombinasjon av strukturelle refactors og additive utvidelser** på den eksisterende Iter 2-implementasjonen:
 
-1. **In-place edit-modus på Detaljer-fanen.** Tre dialog-baserte edit-flyter (`RedigerBeskrivelseDialog`, `SettAnsvarligDialog`, og en hypotetisk `RedigerNavnDialog`) erstattes av én _in-place_ rediger-modus på selve Detaljer-fanen, drevet av eksisterende `ViewEditTextField` / `ViewEditTextArea` / `ViewEditSelect`-familien. Lokal `useState` på Detaljer-fane-komponenten eier `editMode`-flagget; lokal state dør med ruten, så krav-regelen "ulagrede endringer forkastes ved navigasjon / fane-bytte" oppfylles automatisk.
+1. **Structurelle endringer** (krever rework av eksisterende kode):
+   - Info-fanen på detaljsiden flytter fra "knapp pr. felt → dialog" til **inline rediger-modus** med én samlet rediger-toggle (BRU-APP-API-006, BRU-APP-API-002).
+   - `FjernTilgangerDialog` endres fra "hak av rader → bekreft" til **samlet modal med (org, miljø, tilganger)-valg inni** (BRU-APP-API-008).
+   - `TildelTilgangerDialog` får kaskaderende **organisasjon → miljø → tilgangskode**-state (BRU-APP-API-007).
+   - **`Fjern ansvarlig`-flyten fjernes** (knapp, dialog, mutation-bruk) — ansvarlig er nå obligatorisk (BRU-APP-API-005).
 
-2. **Bulk-fjern-modal speilet på `TildelTilgangerDialog`.** Iter-1 `FjernTilgangerDialog/` ble bygd som per-rad-fjerning + bekreftelsesdialog. Iter-2-krav omarbeider dette til en bulk-modal med `(organisasjon, miljø)`-velger + multi-select av kandidater. Filstruktur kopieres fra eksisterende `TildelTilgangerDialog/` (`Button.tsx`, `Dialog.tsx`, `query.ts`, `mutation.ts`).
+2. **Additive utvidelser** (utvidelser uten å bryte eksisterende kode):
+   - `ApplikasjonerFilter` får miljø-filter.
+   - `ApplikasjonerResultRow` får "Antall tilganger"-kolonne.
+   - `ApplikasjonInformation` får idP, organisasjon og status som synlige felter i info-fanen (i tillegg til at de finnes i topbar-en).
+   - `OpprettApplikasjonDialog` får navn og ansvarlig som obligatoriske felter.
+   - `ApplikasjonTilgangerFilter` får organisasjon-filter, fritekst-tilgangskode-filter, og "Vis arvede"-toggle.
+   - `ApplikasjonTilgangerResultRow` får beskrivelse, organisasjon, og "Arvet"-badge med opphav-tooltip.
 
-3. **Tredje fane "Endringslogg" på detaljsiden.** Mønster lånt fra `src/domains/soknadsbehandling/features/AuditLogCard/` — Relay-cursor-paginering med "Last inn flere 50", `Surface`-card med `AuditLogItem`-rader. UI-shell bygges nå; konkrete loggpost-felter ferdigstilles når åpne backend-spørsmål er besvart (Q6-decision: UI shell now, content later).
+3. **Tverrgående mekanikk** (ny mønster i fs-admin):
+   - **Discardable-changes-guard** ved navigering/tab-bytte under rediger-modus (BRU-APP-API-006 Regel: "Ulagrede endringer forkastes ved navigering"). Komponent-lokalt mønster basert på Next.js `useEffect` + `beforeunload` + `usePathname`-watch.
 
-Tre mindre tilleggs-områder:
-
-4. **Listevisning får `Antall tilganger`-kolonne** + ny `Miljø`-filter.
-5. **`Arvet`-merke + `Tilknytning`-filter** på Tilganger-fanen.
-6. **POC-fjerning** (var åpent spørsmål i iter-1) håndteres som egen "Fase X — POC-fjerning" når Unleash-flagget `tilgangsstyring-applikasjoner` er aktivert i prod og vi har minst én uke uten regresjon-meldinger. **Ikke i scope for denne planen.**
+Implementasjonen følger Iter 2's mønster: **mock-handlers i `src/mocks/handlers/applikasjoner/` oppgraderes først** med nye felter og typer, frontend bygger mot mock, og ekte schema-endringer (se `## GraphQL-endringer`) fileres som hand-off-issues til backend.
 
 ### Key Technical Decisions
 
-1. **Edit-modus eier state lokalt med `useState`, ikke `nuqs`-URL-state.**
-   - Hvorfor: krav-regelen "ulagrede endringer forkastes ved navigasjon / fane-bytte" tilsier at editMode ikke er delbart view-state. Lokal state lever én rute-mount.
-   - Alternativ vurdert: URL-state. Forkastet fordi en delbar URL i edit-modus ville bevart endringer ved tilbake-knapp/refresh — i strid med kravet.
-   - Implementasjons-mønster: `OpptakSettings.tsx` ([`src/domains/opptak/features/OpptakManagement/OpptakSettings/OpptakSettings.tsx`](../../src/domains/opptak/features/OpptakManagement/OpptakSettings/OpptakSettings.tsx)) tar `editMode: boolean` som prop, parent eier state.
+1. **Inline rediger-modus med toggle, ikke separate dialoger**
+   - **Hvorfor:** Krav BRU-APP-API-006 + skissen (`applikasjon-detaljevisning-aktiv-tab-detaljer-rediger-modus.png`) viser én "Rediger detaljer"-knapp som gjør alle redigerbare felter (navn, beskrivelse, ansvarlig) om til inputs samtidig. Dialog-mønsteret pr. felt fra Iter 2 skalerer ikke pent når antallet redigerbare felter øker.
+   - **Alternativ vurdert:** Beholde dialog-mønsteret og legge til en `RedigerNavnDialog`. Forkastet: bryter krav-en eksplisitt + dårlig UX når bruker vil endre flere felter samtidig.
 
-2. **Atomisk `redigerApplikasjonDetaljer`-mutasjon over tre separate.**
-   - Hvorfor: UI-en har én Lagre-knapp som lagrer navn + beskrivelse + ansvarlig samtidig. Tre serielle mutations ville krevd rollback ved delfeil.
-   - Alternativ vurdert: beholde `redigerApplikasjonBeskrivelse` + `settApplikasjonAnsvarlig` + ny `redigerApplikasjonNavn`. Forkastet — komplisert og semantisk skjev.
-   - `redigerApplikasjonBeskrivelse` deprecated med sluttdato 31. desember 2026.
+2. **Mock-API først, ekte schema parallelt**
+   - **Hvorfor:** Brukerens valg. Iter 2 brukte samme strategi; mock-handlers eksisterer allerede og kan utvides. Frontend kan ha alle Tasks klare og PR-merget før backend leverer.
+   - **Alternativ vurdert:** Vente på backend. Forkastet pga. kalender-avhengighet.
 
-3. **`FjernTilgangerDialog` rives og bygges på nytt etter `TildelTilgangerDialog`-malen.**
-   - Hvorfor: iter-1-implementasjonen er per-rad-fjerning + confirm; iter-2 er bulk-modal med org+miljø-velger først, så multi-select. Strukturelt ulikt nok at en in-place refactor er mer arbeid enn en rewrite.
-   - iter-1-koden under `src/domains/support/features/Applikasjon/components/FjernTilgangerDialog/` slettes; ny dialog speilet på `TildelTilgangerDialog/`.
-   - Alternativ vurdert: utvide eksisterende dialog. Forkastet — det meste av iter-1-koden er hooks og UI som ikke gjelder lenger.
+3. **Navn-feltet er bruker-overstyrt visningsnavn**
+   - **Hvorfor:** Brukerens valg. `rediger_detaljer.feature` er den autoritative tolkningen — navn settes initialt fra idP-en, men kan overstyres.
+   - **Alternativ vurdert:** Anta navn er låst etter oppretting. Forkastet — bryter rediger_detaljer-kravet.
+   - **Konsekvens:** Schema må utvides med `redigerApplikasjonNavn`-mutation og `kanRedigereNavn`-felt. Backend-bekreftelse av unikhets-håndheving er åpent spørsmål (se Open Question #1).
 
-4. **`Tilknytning`-filter rendret som `Select` med tre verdier (ALLE/DIREKTE/ARVET), ikke `ToggleSwitch`.**
-   - Hvorfor: Q5-decision (sketch wins). Skissens default "Alle tilknytninger" + to alternativer passer naturlig i en `Select`. Toggle dekker bare to verdier.
-   - URL-state via `useDataListState`/`nuqs` (gjelder de andre filterne på Tilganger-fanen også).
+4. **Arv-modellen mock-først, schema-form til avklaring**
+   - **Hvorfor:** Krav-en introduserer "arvet tilgang" som nytt vokabular. Den foreslåtte `ApplikasjonTilgangArv { opphavsTilgang, begrunnelse }`-formen er fs-admin-konsumentens beste gjetning. Mock-API kan bruke den foreslåtte formen for å låse opp UI-arbeid; ekte schema kan avvike og kreve schema-mapping-task senere.
+   - **Alternativ vurdert:** Vente på backend-form. Forkastet — blokkerer UI-arbeid i 2–4 uker.
 
-5. **Endringslogg-fanen bygger ny `ApplikasjonEndringsloggItem`-variant, ikke gjenbruker `AuditLogItem` direkte.**
-   - Hvorfor: `AuditLogItem` i soknadsbehandling er sterkt knyttet til `Sak`-domenet. Mønsteret gjenbrukes, ikke koden.
-   - UI-shell først; felt-utvalg utvides når åpne spørsmål om loggpost-innhold er besvart (Q6-decision).
+5. **`@V2`-mutation for `opprettApplikasjon`, `extend`-additive for resten**
+   - **Hvorfor:** `opprettApplikasjon` får obligatoriske felter — bakover-inkompatibel endring som krever `V2`-runde. Andre endringer er filter-utvidelser, nye felter, ny mutation — alle bakover-kompatible via `extend`.
+   - **Alternativ vurdert:** In-place-endring av `OpprettApplikasjonInput`. Forkastet — bryter eventuelle skript/CLI-konsumenter.
 
-6. **Legacy FS-applikasjoner med `ansvarlig = null`: Force-pick on first edit.**
-   - Hvorfor: Q4-decision. Ingen big-bang-backfill — UI viser advarsel + blokkerer save inntil ansvarlig settes.
-   - Backend tillater `Applikasjon.ansvarlig: Ansvarlig` (nullable) for legacy; nye applikasjoner krever ansvarlig i opprett-input.
+6. **Discardable-changes som komponent-lokalt mønster, ikke generisk router-guard**
+   - **Hvorfor:** Krav-en gjelder kun rediger-detaljer-fanen. Et generisk router-blocker-mønster (à la React Router `<Prompt>`) finnes ikke som førsteklasses støtte i Next.js App Router. Komponent-lokal `unmount`-cleanup + `beforeunload`-listener dekker scenariene "Forlate siden" og "Bytte fane" i krav-en.
+   - **Alternativ vurdert:** Generisk `useUnsavedChangesGuard`-hook. Kan introduseres senere når et annet rediger-flyt får samme behov — foreløpig ett kall-sted, ikke verdt abstraksjonen.
 
-7. **Visningsnavn + navn som to separate felter på `Applikasjon`.**
-   - Hvorfor: Q3-decision. `visningsnavn` er idP-autoritativt og globalt unikt (K8); `navn` er brukerredigerbart alias.
-   - Eksisterende `Applikasjon.navn` fortolkes som den brukerredigerbare verdien (uten endring av navngivning). Nytt `visningsnavn: String!` legges til.
+7. **Behold `tilgangskoder: [String!]`-filter, legg til `tilgangskodeContains` parallelt**
+   - **Hvorfor:** Backward-kompatibilitet. UI-en vil bruke `tilgangskodeContains` (fritekst) etter Iter 3, men ingen grunn til å bryte eksakt-match-konsumenter umiddelbart.
+   - **Alternativ vurdert:** Erstatt direkte. Forkastet — bryter konsumenter, krever `V2`-runde.
 
 ### File Changes Overview
 
-**Slettes (rives ned):**
-- `src/domains/support/features/Applikasjon/components/RedigerBeskrivelseDialog/` (iter-1 leveranse — erstattes av in-place edit-modus)
-- `src/domains/support/features/Applikasjon/components/SettAnsvarligDialog/` (samme — innabsorbert i Detaljer-fanens edit-modus)
-- `src/domains/support/features/Applikasjon/components/FjernTilgangerDialog/` (iter-1 per-rad-flyt — erstattes av bulk-modal)
+**Endrede filer:**
 
-**Endres:**
-- `src/domains/support/features/Applikasjon/features/ApplikasjonDetaljer/ApplikasjonDetaljer.tsx` (eller tilsvarende fil-sti fra iter-1) — får edit-modus, ViewEditX-felter, lokal `useState` for `editMode`, Lagre/Avbryt-knapper
-- `src/domains/support/features/Applikasjon/components/ApplikasjonInformation/ApplikasjonInformation.tsx` — TopBar utvides med `Antall tilganger` og `Deaktiver`-knapp
-- `src/domains/support/features/Applikasjoner/components/ApplikasjonerResultList/ApplikasjonerResultList.tsx` — ny `Antall tilganger`-kolonne
-- `src/domains/support/features/Applikasjoner/components/ApplikasjonerFilter/ApplikasjonerFilter.tsx` — nytt `Miljø`-filter
-- `src/domains/support/features/Applikasjon/features/ApplikasjonTilganger/ApplikasjonTilganger.tsx` — fjern multi-select på rader (flytt til bulk-modalen), legg til `Arvet`-badge-rendring, `Tilknytning`-filter, `Tilgangskode`-fritekst-filter, `Organisasjon`-filter
-- `src/domains/support/features/Applikasjon/components/TildelTilgangerDialog/tildelbareQuery.ts` — verifiser at den passerer `(applikasjonsId, organisasjonsId, miljo)`
-- `src/domains/support/features/Applikasjon/Applikasjon.tsx` (detaljside-host) — legg til tredje `DetailPageTabbedContentPanel` for Endringslogg
-- `src/common/messages/nb/support.json` — nye i18n-nøkler (se Task #-listen)
-- Apollo-cache: oppdatert `update`-funksjon i `redigerApplikasjonDetaljer` slik at `Applikasjon`-cachen oppdateres atomisk
+- `src/domains/support/features/Applikasjoner/components/ApplikasjonerResultRow.tsx` — utvid fragment med `antallTilganger`, legg til kolonne.
+- `src/domains/support/features/Applikasjoner/components/ApplikasjonerFilter.tsx` — legg til miljø-filter.
+- `src/domains/support/features/Applikasjoner/hooks/useGetApplikasjonerState.tsx` — utvid filter-state med `miljoer`.
+- `src/domains/support/features/Applikasjon/components/ApplikasjonInformation.tsx` — bygg om til inline rediger-modus, fjern dialog-knapper, legg til idP/org/status-visning, fjern `FjernAnsvarlig`-knapp + dialog-mount, utvid fragment med `kanRedigereNavn`.
+- `src/domains/support/features/Applikasjon/components/ApplikasjonTopBar.tsx` — utvid fragment med `antallTilganger`, vis i topbar.
+- `src/domains/support/features/Applikasjon/components/ApplikasjonTilgangerResultRow.tsx` — utvid fragment med `erArvet`, `arvetFra`, `organisasjon`, `tilgangsbeskrivelse`; render arv-badge.
+- `src/domains/support/features/Applikasjon/components/ApplikasjonTilgangerFilter.tsx` — utvid med organisasjon-filter, fritekst-tilgangskode, "Vis arvede"-toggle.
+- `src/domains/support/features/Applikasjon/hooks/useApplikasjonTilgangerState.tsx` — utvid filter-state.
+- `src/domains/support/features/Applikasjon/components/ApplikasjonTilgangerOrderBy.tsx` — fjern `Miljø` fra sort-valg.
+- `src/domains/support/features/Applikasjon/components/TildelTilgangerDialog/TildelTilgangerDialog.tsx` — restrukturer til kaskade (org → miljø → kode), re-utløs `tildelbareApplikasjonTilganger`-query ved (org, miljø)-endring, fjern "gråtonet"-implementasjon. Støtt tildeling til deaktivert applikasjon.
+- `src/domains/support/features/Applikasjon/components/FjernTilgangerDialog/FjernTilgangerDialog.tsx` — restrukturer til samlet modal hvor bruker velger (org, miljø, tilganger) inni modalen. Fjern bulk-selection fra raden. Filtrer ut arvede tilganger. Støtt fjerning fra deaktivert applikasjon.
+- `src/domains/support/features/Applikasjon/components/FjernTilgangerDialog/FjernValgteTilgangerButton.tsx` — antagelig erstattes av enkel "Åpne modal"-knapp; selection-state fjernes.
+- `src/domains/support/features/Applikasjoner/components/OpprettApplikasjonDialog/OpprettApplikasjonDialog.tsx` — utvid input med navn og ansvarlig (obligatoriske), bytt til `OpprettApplikasjonV2`-mutation.
+- `src/mocks/handlers/applikasjoner/queries.ts` + `mutations.ts` — utvid handlers med nye felter, mutations, filter-felter.
+- `src/mocks/fixtures/applikasjoner/applikasjoner.ts` + `tilganger.ts` — legg til arv-relasjoner, `antallTilganger`, `kanRedigereNavn` i fixture-data.
+- `src/common/messages/nb/support.json` — nye strenger for rediger-modus, arv-badge, navn-validering, obligatoriske felter, modal-headinger, "Vis arvede"-toggle.
 
-**Net-nye filer:**
-- `src/domains/support/features/Applikasjon/components/FjernTilgangerDialog/` (ny — speilet på TildelTilgangerDialog):
-  - `FjernTilgangerButton.tsx`
-  - `FjernTilgangerDialog.tsx`
-  - `FjernTilgangerDialog.module.css`
-  - `FjernTilgangerDialog.a11y.test.tsx`
-  - `fjernbareQuery.ts`
-  - `mutation.ts`
-- `src/domains/support/features/Applikasjon/features/ApplikasjonEndringslogg/`:
-  - `ApplikasjonEndringslogg.tsx`
-  - `ApplikasjonEndringslogg.module.css`
-  - `ApplikasjonEndringslogg.a11y.test.tsx`
-  - `query.ts`
-  - `components/ApplikasjonEndringsloggItem/ApplikasjonEndringsloggItem.tsx`
-- `src/domains/support/features/Applikasjon/components/ArvetTilgangBadge/` — liten `Tag`-wrapper med opphavs-tekst-tooltip
-- Codegen-artefakter regenereres automatisk når schema oppdateres.
+**Nye filer:**
 
-**Filer som forblir uendret (men leveres på av denne planen):**
-- `src/common/components/inputs/ViewEdit*` — gjenbrukes som-er
-- `src/domains/support/features/Applikasjon/components/TildelTilgangerDialog/` — mal for `FjernTilgangerDialog` (kopier-og-tilpass), ingen kode-endring i kilden
-- `src/domains/soknadsbehandling/features/AuditLogCard/` — referanse-mønster, ingen endring
+- `src/domains/support/features/Applikasjon/components/RedigerDetaljer/RedigerDetaljerForm.tsx` (+ `.a11y.test.tsx`) — inline rediger-form med navn, beskrivelse, ansvarlig.
+- `src/domains/support/features/Applikasjon/components/RedigerDetaljer/mutation.ts` — `REDIGER_APPLIKASJON_NAVN` + (gjenbruk eksisterende `redigerApplikasjonBeskrivelse`).
+- `src/domains/support/features/Applikasjon/components/RedigerDetaljer/useUnsavedChangesGuard.tsx` (+ test) — komponent-lokal hook for å nullstille ved navigering/tab-bytte.
+- `src/domains/support/features/Applikasjoner/components/filter/ApplikasjonerMiljoFilter.tsx` (+ `.a11y.test.tsx`).
+- `src/domains/support/features/Applikasjon/components/tilganger/ApplikasjonTilgangerOrganisasjonFilter.tsx` (+ test).
+- `src/domains/support/features/Applikasjon/components/tilganger/ApplikasjonTilgangerArvToggle.tsx` (+ test).
+- `src/domains/support/features/Applikasjon/components/ApplikasjonTilgangerArvBadge.tsx` (+ test) — gjenbrukbar "Arvet"-badge med tooltip/popover.
+
+**Slettede filer:**
+
+- `src/domains/support/features/Applikasjon/components/RedigerBeskrivelseDialog/` — hele mappa (komponent + test + mutation), erstattes av inline rediger-modus.
+- `src/domains/support/features/Applikasjon/components/SettAnsvarligDialog/FjernAnsvarligConfirmDialog.tsx` (+ test).
+- `src/domains/support/features/Applikasjon/components/SettAnsvarligDialog/fjernApplikasjonAnsvarligMutation.ts`.
+
+(`SettAnsvarligDialog.tsx` selv beholdes — settes inn som inline-modus i rediger-formen via en søke-popover.)
 
 ## GraphQL-endringer
 
-**Skopering:** delta vs iter-1-planen (`docs/ACTIVE-ITERATION-2/plan-applikasjon-tilgangsstyring.md` §GraphQL-endringer, Operasjon 1–12). Operasjon 1 (`applikasjoner`), 2 (`applikasjon`), 4 (`ansvarligKandidater`), 6 (`byttApplikasjonPassord`), 12 (`UserAction`-enum) er **uendret** og spesifiseres ikke på nytt. Operasjon 3 (`tilganger`), 5 (`opprettApplikasjon`), 7 (`settAnsvarlig`), 8 (`redigerBeskrivelse`), 9 (`tildelTilganger`), 10 (`fjernTilganger`), 11 (`deaktiver`/`reaktiver`) får endringer beskrevet under. Tre net-nye operasjoner: `Query.fjernbareTilganger`, `Applikasjon.endringslogg`, samt felt-tillegg på `Applikasjon` (`visningsnavn`, `antallTilganger`, `kanRedigereNavn`, `kanSeEndringslogg`) og `ApplikasjonTilgang` (`arvetFra`).
+> **Premiss:** konservativ — minst mulig schema-endring som dekker Iter 3-kravene; gjenbruker eksisterende `Applikasjon`-/`ApplikasjonTilgang`-typer og utvider med diskrete felt/input.
+> **Domeneterm:** `Applikasjon` (besluttet 2026-05-13; tidligere `Maskinbruker` i POC-en).
+> **Følger fra:** [`analysis-applikasjon-tilgangsstyring-iter3.md`](analysis-applikasjon-tilgangsstyring-iter3.md) — gap-listen i Key Findings (1–10) og Dependencies → Cross-agent.
+> **Mock-API først:** Plan-en bygger mot mock-handlers; ekte schema-endringer fileres som hand-off-issue til backend-agenten (`sikt-no/fs`). Frontend-koden kan kompileres mot oppdatert mock-schema før produsent-siden er levert.
 
-**Premiss:** konservativt. Ingen om-versjonering av eksisterende stabile felt; tillegg gjøres via nye felt og nye mutasjoner. `redigerApplikasjonBeskrivelse` fases ut til fordel for `redigerApplikasjonDetaljer` — det er et bakoverinkompatibelt løft som er nødvendig fordi UI-en ikke lenger har en isolert beskrivelse-redigering. Per `fs-sikt-no-producer-schema-design §Endringer i API bør ikke ødelegge for klienter` markeres det gamle feltet `@deprecated` heller enn å fjernes umiddelbart.
+### Sammendrag
 
-**Domeneterm:** `Applikasjon` (uendret fra iter-1). Bekreftet mot eksisterende `schema.graphql`: `type Applikasjon`, `type ApplikasjonTilgang`, `enum ApplikasjonStatus`, `union Ansvarlig = FeideBruker | FeideGruppe`, `enum AnsvarligType { FEIDE_BRUKER, FEIDE_GRUPPE }`.
+- 0 nye queries (eksisterende `applikasjoner`, `applikasjon`, `tildelbareApplikasjonTilganger` er allerede formet riktig; frontend må bruke dem rett).
+- 1 ny mutation (`redigerApplikasjonNavn`).
+- 1 endret mutation (`opprettApplikasjonV2`).
+- 1 deprecated mutation (`fjernApplikasjonAnsvarlig`).
+- 2 utvidede input-typer (`ApplikasjonerFilterInput`, `ApplikasjonTilgangerFilterInput`).
+- 4 nye/utvidede typer/felter (`Applikasjon.antallTilganger`, `Applikasjon.kanRedigereNavn`, `ApplikasjonTilgang.arvetFra` med nytt `ApplikasjonTilgangArv`-objekt, `ApplikasjonTilgang.erArvet`).
+- 4 nye error-medlemmer (`NavnAlleredeIBruk`, `AnsvarligPaakrevdVedOpprettelse`, `ArvetTilgangKanIkkeFjernes`, +unik error-form ved arv).
+- 5 åpne spørsmål (se nederst).
 
-**Error-konvensjon:** følg eksisterende mønster på Applikasjon-mutasjoner — `errors: [Error!]`-array i payload, error-medlemmer implementerer `interface Error { message, path }`. Schemaet har én `Errors`-union for Applikasjon (`ReaktiverApplikasjonError`) som per i dag ikke brukes — vi viderefører array-konvensjonen for konsistens med `OpprettApplikasjonPayload`, `TildelApplikasjonTilgangerPayload` osv. (verifisert ved `grep -A 5 "^type Tildel.*Payload" schema.graphql`).
+**Allerede dekket av eksisterende schema (ingen endring nødvendig):**
+
+- `tildelbareApplikasjonTilganger(applikasjonsId: ID!, miljo: Miljo!, organisasjonsId: ID!): [TildelbarApplikasjonTilgang!]!` — parameter-formen krav-en ber om (org → miljø → kode-kaskade) er **allerede på plass** ved `schema.graphql:37558`. Frontend må re-utløse queryen ved hver endring i (orgId, miljo) og oppdage skopet — det er en client-side bekymring, ikke en schema-bekymring.
+- `ApplikasjonTilgang.organisasjon` (`schema.graphql:1458`) — beskrivelsen + organisasjon pr. rad krav-en ber om er allerede tilgjengelig.
+- `Applikasjon.miljoer: [Miljo!]!` (`schema.graphql:1430`) — listevisningens miljø-chips er allerede dekket.
+
+### Operasjoner
+
+#### Op #1: `ApplikasjonerFilterInput.miljoer` — miljø-filter på applikasjonslisten
+
+**Dekker krav:** BRU-APP-API-001 (commit `ccaf83a`: *"legg til krav for filtrering på miljø i applikasjonslisten"*).
+**Implementeres av:** Task #1, #2
+
+##### Lag A — Schema-tillegg
+
+```graphql
+extend input ApplikasjonerFilterInput {
+  """
+  Filter på miljø: returner kun applikasjoner som er aktive i ett av de oppgitte miljøene.
+  Et tomt eller utelatt felt slår av filteret.
+  """
+  miljoer: [Miljo!]
+}
+```
+
+##### Lag B — fs-admin call-site
+
+```ts
+// src/domains/support/features/Applikasjoner/hooks/useGetApplikasjoner.tsx
+const { data } = useQuery(GET_APPLIKASJONER, {
+  variables: {
+    filter: {
+      navnContains: state.filter.navnContains || null,
+      organisasjonsIder: state.filter.organisasjonsIder.length ? state.filter.organisasjonsIder : null,
+      status: state.filter.status.length ? state.filter.status : null,
+      miljoer: state.filter.miljoer?.length ? state.filter.miljoer : null,  // ← ny
+    },
+  },
+})
+```
+
+##### Lag C — Begrunnelse
+
+- **Dekker krav:** BRU-APP-API-001 (commit `ccaf83a`).
+- **Form:** Reuser `Miljo`-enum; nullable `[Miljo!]` følger samme mønster som `organisasjonsIder` og `status`.
+- **Colocation-status:** Følger colocation — `ApplikasjonerResultRowFields` har allerede `miljoer`.
+- **Konvensjoner sitert:** Backward-compatible `extend input` per `fs-sikt-no-producer-schema-design §Endringer i API bør ikke ødelegge for klienter`. Nullable filter per `fs-sikt-no-producer-best-practice §Nullability`. Felt-navn per `fs-sikt-no-producer-naming`.
+- **Alternativer vurdert:** Egen `applikasjonerIMiljo`-query — forkastet: bryter filter-konvensjonen.
 
 ---
 
-### Operasjon A — `Applikasjon`-typen utvides
+#### Op #2: `Applikasjon.antallTilganger` — listefelt for antall tilganger
 
-#### Lag A — Schema-tillegg
+**Dekker krav:** BRU-APP-API-001 (commit `59eba3d`) + BRU-APP-API-002 (topbar-skisse).
+**Implementeres av:** Task #3, #11
+
+##### Lag A — Schema-tillegg
 
 ```graphql
 extend type Applikasjon {
   """
-  IdP-autoritativt visningsnavn hentet ved opprettelse. Globalt unikt (jf. K8). Låst i FS Admin.
-  """
-  visningsnavn: String!
-
-  """
-  Antall tilganger på applikasjonen. Brukes i listevisningens kolonne og i detalj-topbarens
-  "Antall tilganger"-nøkkel. Kan også leses som `tilganger.totalCount` — feltet er en read-shortcut
-  for listevisning-queryen som ikke fetcher hele connection-en.
+  Antall tilganger applikasjonen har tildelt totalt, på tvers av alle miljøer og organisasjoner.
+  Aggregat-felt for listevisning og topbar. Identisk med `tilganger.totalCount` uten filter,
+  men eksponert som direkte felt for å unngå at listevisningen må hente hele tilgangsliste-relasjonen.
   """
   antallTilganger: Int!
+}
+```
 
+##### Lag B — fs-admin call-site
+
+```ts
+// src/domains/support/features/Applikasjoner/components/ApplikasjonerResultRow.tsx
+export const APPLIKASJONER_RESULT_ROW_FRAGMENT = gql(/* GraphQL */ `
+  fragment ApplikasjonerResultRowFields on Applikasjon {
+    id
+    navn
+    beskrivelse
+    miljoer
+    status
+    antallTilganger          # ← ny
+    organisasjon { navn }
+    ansvarlig { __typename ... on FeideBruker { visningsnavn } ... on FeideGruppe { visningsnavn } }
+  }
+`)
+```
+
+```ts
+// src/domains/support/features/Applikasjon/components/ApplikasjonTopBar.tsx
+export const APPLIKASJON_TOP_BAR_FRAGMENT = gql(/* GraphQL */ `
+  fragment ApplikasjonTopBarFields on Applikasjon {
+    navn
+    status
+    identitetsleverandor
+    antallTilganger          # ← ny
+    organisasjon { navn }
+  }
+`)
+```
+
+##### Lag C — Begrunnelse
+
+- **Dekker krav:** BRU-APP-API-001 + BRU-APP-API-002.
+- **Form:** Direktefelt (`Int!`) i stedet for `tilganger.totalCount`-aggregering — listen rendrer 50 rader og må ikke utløse `tilganger`-resolvere pr. rad.
+- **Colocation-status:** Følger colocation — feltet legges i fragmentene som leser det.
+- **Konvensjoner sitert:** Norsk substantiv per `fs-sikt-no-producer-naming §Bruk norsk for domenebegreper`. Backward-compatible per `fs-sikt-no-producer-schema-design §Endringer i API bør ikke ødelegge for klienter`.
+- **Alternativer vurdert:** `tilganger(first: 0).totalCount` med tom selection — forkastet: over-fetching og pagination-resolver pr. rad.
+- **Tverrgående:** Cache-invalideres via mutation-payload (`applikasjon { id, antallTilganger }`) på `tildelApplikasjonTilganger`/`fjernApplikasjonTilganger`.
+
+---
+
+#### Op #3: `redigerApplikasjonNavn` — mutation for navn-redigering
+
+**Dekker krav:** BRU-APP-API-006 (commit `7ceb640` + `a7efc9f`).
+**Implementeres av:** Task #8, #9
+
+##### Lag A — Schema-tillegg
+
+```graphql
+extend type Applikasjon {
   """
-  Brukeren kan redigere applikasjonens `navn`-felt via `redigerApplikasjonDetaljer`. Speilet med
-  de eksisterende `kanRedigereBeskrivelse` / `kanAdministrereAnsvarlig`-flaggene.
+  Om innlogget bruker kan redigere applikasjonens visningsnavn.
+  Følger samme rettighetsmodell som `kanRedigereBeskrivelse`.
+  For Feide-/Maskinporten-applikasjoner setter idP-oppslaget et initielt visningsnavn ved
+  opprettelse, men brukere med rettighet kan overstyre det i fs-admin.
   """
   kanRedigereNavn: Boolean!
-
-  """
-  Brukeren har rettighet til å se endringsloggen for denne applikasjonen (Iter 4, K16).
-  """
-  kanSeEndringslogg: Boolean!
 }
-```
 
-Eksisterende `Applikasjon.navn: String!` beholdes — det er nå **brukerredigerbart alias** (mappes til skissens "Navn"-felt i Detaljer-fanen). `Applikasjon.ansvarlig: Ansvarlig` forblir nullable for å støtte legacy FS-applikasjoner uten ansvarlig (Q4-decision: force-pick on first edit).
-
-#### Lag B — fs-admin call-site
-
-Felt-tilleggene konsumeres som del av eksisterende Operasjon 1 (`GET_APPLIKASJONER` for listevisning) og Operasjon 2 (`GET_APPLIKASJON` for detaljside). Ingen ny query — bare flere felt i selection-set:
-
-```ts
-// Utvidelse av GET_APPLIKASJONER (Operasjon 1) for listevisningens nye kolonne
-export const GET_APPLIKASJONER = gql(/* GraphQL */ `
-  query GetApplikasjoner($filter: ApplikasjonFilter, $first: Int, $after: String) {
-    applikasjoner(filter: $filter, first: $first, after: $after) {
-      nodes {
-        id
-        navn
-        visningsnavn
-        beskrivelse
-        organisasjon { id navn }
-        ansvarlig { ... on FeideBruker { id navn } ... on FeideGruppe { id navn } }
-        miljoer
-        status
-        antallTilganger  # NY — drives Antall tilganger-kolonnen
-      }
-      pageInfo { hasNextPage endCursor }
-      totalCount
-    }
-  }
-`)
-```
-
-```ts
-// Utvidelse av GET_APPLIKASJON (Operasjon 2) for TopBar + Detaljer-fane + nye kan-flagg
-export const GET_APPLIKASJON = gql(/* GraphQL */ `
-  query GetApplikasjon($id: ID!) {
-    applikasjon(id: $id) {
-      id
-      navn
-      visningsnavn       # NY
-      beskrivelse
-      status
-      miljoer
-      organisasjon { id navn }
-      ansvarlig { ... on FeideBruker { id navn } ... on FeideGruppe { id navn } }
-      antallTilganger    # NY — TopBar
-      opprettetTidspunkt opprettetAv { id navn }
-      endretTidspunkt    endretAv    { id navn }
-      identitetsleverandor
-      kanRedigereNavn        # NY
-      kanRedigereBeskrivelse
-      kanAdministrereAnsvarlig
-      kanEndrePassord
-      kanTildeleTilganger
-      kanFjerneTilganger
-      kanDeaktivere
-      kanSeEndringslogg       # NY
-    }
-  }
-`)
-```
-
-#### Lag C — Begrunnelse
-
-- **Dekker krav:** BRU-APP-API-001 (`listevisning_og_sok.feature` rad `| Antall tilganger |`), BRU-APP-API-002 (`se_detaljer.feature` "Se identitetsleverandør", "Se organisasjon", "Se status"), BRU-APP-API-006 (`rediger_detaljer.feature` rettighetsregler for navn — krever `kanRedigereNavn`), BRU-APP-API-009 (`opprette_applikasjon.feature` to navne-konsepter, finding #7 i analyse).
-- **Visningsnavn vs navn:** to felter er valgt over alias-på-ett-felt fordi K8s globale unikhets-krav holder på idP-navnet, mens brukeren skal kunne redigere et lokalt navn fritt. Per `fs-sikt-no-producer-schema-design §Vi innfører gjerne egne felt og typer for semantisk nyttige data-uttrekk` er det riktigere å gi separate semantiske felt enn å bake to betydninger inn i ett `navn`.
-- **`antallTilganger` som read-shortcut:** alternativ var å la frontend hente `tilganger(first: 0).totalCount`. Forkastet fordi det betyr at hver applikasjon-rad i listevisningen må kjøre en sub-query (N+1) eller at gateway-en må magisk-aggregere. Et direkte felt er enklere både for konsument og produsent. Boolean-felt navngitt med verb-prefiks (`kanRedigereNavn`, `kanSeEndringslogg`) per `fs-sikt-no-producer-naming §Boolean-felt navngis med verb`.
-- **`ansvarlig` forblir nullable:** Q4-decision (force-pick on first edit). Per `fs-sikt-no-producer-best-practice §Nullability` er det riktige å la feltet være nullable når legacy-data faktisk har null, selv om nye applikasjoner alltid har en ansvarlig.
-- **Implementeres av:** Task #1 (queries-utvidelse), Task #2 (listevisning + TopBar-konsum), Task #4 (Detaljer-fane-konsum), Task #9 (Endringslogg-flagg-konsum).
-
----
-
-### Operasjon B — `Mutation.redigerApplikasjonDetaljer` (erstatter `redigerApplikasjonBeskrivelse`)
-
-#### Lag A — Schema-tillegg
-
-```graphql
 extend type Mutation {
   """
-  Atomisk redigering av brukerredigerbare detaljer på en applikasjon: navn, beskrivelse, ansvarlig.
-  Alle tre lagres som én operasjon fra Detaljer-fanens edit-modus.
+  Redigerer det bruker-overstyrte visningsnavnet på en applikasjon. Navnet må være
+  globalt unikt på tvers av alle organisasjoner.
   """
-  redigerApplikasjonDetaljer(input: RedigerApplikasjonDetaljerInput!): RedigerApplikasjonDetaljerPayload!
-
-  redigerApplikasjonBeskrivelse(input: RedigerApplikasjonBeskrivelseInput!): RedigerApplikasjonBeskrivelsePayload!
-    @deprecated(reason: "Erstattes av redigerApplikasjonDetaljer som dekker navn, beskrivelse og ansvarlig atomisk. Fjernes etter 31. desember 2026.")
+  redigerApplikasjonNavn(input: RedigerApplikasjonNavnInput!): RedigerApplikasjonNavnPayload!
 }
 
-input RedigerApplikasjonDetaljerInput {
+input RedigerApplikasjonNavnInput {
   applikasjonsId: ID!
-
-  """Nytt navn. Obligatorisk; kan ikke være tom streng."""
   navn: String!
-
-  """
-  Ny beskrivelse. Sett til `null` for å tømme. Sett til strengen som skal lagres ellers.
-  """
-  beskrivelse: String
-
-  """
-  Ny ansvarlig. Obligatorisk — ansvarlig kan ikke fjernes (jf. `administrere_ansvarlig.feature`
-  regel "Ansvarlig er obligatorisk og kan ikke fjernes"). For legacy-applikasjoner som starter
-  med `ansvarlig = null` må feltet settes ved første lagring.
-  """
-  ansvarligId: ID!
-  ansvarligType: AnsvarligType!
 }
 
-type RedigerApplikasjonDetaljerPayload {
+type RedigerApplikasjonNavnPayload {
   applikasjon: Applikasjon
-  errors: [Error!]
+  errors: [RedigerApplikasjonNavnErrors!]
 }
 
-"""
-Feilmedlem: lagring av tomt navn er avvist.
-"""
-type ApplikasjonNavnObligatorisk implements Error {
-  applikasjonsId: ID!
+union RedigerApplikasjonNavnErrors =
+    IngenRettighetTilApplikasjon
+  | NavnAlleredeIBruk
+  | UgyldigInput
+
+type NavnAlleredeIBruk implements Error {
   message: String!
   path: [String!]!
+  konfliktMedApplikasjonId: ID
 }
 ```
 
-#### Lag B — fs-admin call-site
+##### Lag B — fs-admin call-site
 
 ```ts
-export const REDIGER_APPLIKASJON_DETALJER = gql(/* GraphQL */ `
-  mutation RedigerApplikasjonDetaljer($input: RedigerApplikasjonDetaljerInput!) {
-    redigerApplikasjonDetaljer(input: $input) {
+// src/domains/support/features/Applikasjon/components/ApplikasjonInformation.tsx
+export const APPLIKASJON_INFORMATION_FRAGMENT = gql(/* GraphQL */ `
+  fragment ApplikasjonInformationFields on Applikasjon {
+    id
+    navn
+    beskrivelse
+    # ... eksisterende felter ...
+    kanRedigereBeskrivelse
+    kanRedigereNavn          # ← ny
+  }
+`)
+```
+
+```ts
+// src/domains/support/features/Applikasjon/components/RedigerDetaljer/mutation.ts
+export const REDIGER_APPLIKASJON_NAVN = gql(/* GraphQL */ `
+  mutation RedigerApplikasjonNavn($input: RedigerApplikasjonNavnInput!) {
+    redigerApplikasjonNavn(input: $input) {
       applikasjon {
         id
         navn
-        beskrivelse
-        ansvarlig {
-          ... on FeideBruker { id navn }
-          ... on FeideGruppe { id navn }
-        }
         endretTidspunkt
-        endretAv { id navn }
+        endretAv { id, navn }
       }
       errors {
-        message
-        path
-        ... on ApplikasjonNavnObligatorisk { applikasjonsId }
-        ... on AnsvarligIkkeIApplikasjonsOrganisasjon { ansvarligId applikasjonsOrganisasjonsId }
+        ... on Error { message, path }
+        ... on NavnAlleredeIBruk { konfliktMedApplikasjonId }
       }
     }
   }
 `)
 ```
 
-```ts
-// Sketch — i Detaljer-fanens edit-modus-host:
-const [redigerDetaljer, { loading, error }] = useMutation(REDIGER_APPLIKASJON_DETALJER)
-const onLagre = async (values: { navn: string; beskrivelse: string | null; ansvarligId: string; ansvarligType: AnsvarligType }) => {
-  const { data } = await redigerDetaljer({ variables: { input: { applikasjonsId, ...values } } })
-  if (data?.redigerApplikasjonDetaljer.errors?.length) { /* vis feil */ return }
-  exitEditMode() // lokal useState — krav: ulagrede endringer forkastes ved navigasjon
-}
-```
+##### Lag C — Begrunnelse
 
-#### Lag C — Begrunnelse
-
-- **Dekker krav:** BRU-APP-API-005 (`administrere_ansvarlig.feature` — obligatorisk ansvarlig), BRU-APP-API-006 (`rediger_detaljer.feature` — navn obligatorisk, beskrivelse + navn + ansvarlig lagres sammen).
-- **Atomisk i stedet for tre mutasjoner:** alternativet var å beholde `redigerApplikasjonBeskrivelse` + `settApplikasjonAnsvarlig` + en ny `redigerApplikasjonNavn`. Forkastet fordi (a) UI-en lagrer alltid alle tre samtidig fra én Lagre-knapp, (b) tre serielle kall ville krevd kompenserende rollback ved delfeil, (c) per `fs-sikt-no-producer-schema-design §Vi innfører gjerne egne felt og typer for semantisk nyttige data-uttrekk` er det riktig å speile forretnings-operasjonen ("redigere applikasjonens detaljer") i ett felt.
-- **`redigerApplikasjonBeskrivelse` deprecated, ikke fjernet:** følger `fs-sikt-no-producer-schema-design §Endringer i API bør ikke ødelegge for klienter` — bakoverkompatibel utfasing med `@deprecated` + sluttdato. Bør koordineres med backend-eier slik at fjerningsfristen samkjøres med fs-admin-utfasingen.
-- **`settApplikasjonAnsvarlig`-mutasjonen:** skal **ikke** dropp'es av denne planen. Backend kan beholde den som lavnivå-bygge-blokk; fs-admin slutter å bruke den. `fjernApplikasjonAnsvarlig` skal heller ikke eksistere — bekreft at den ikke har blitt opprettet i mellomtiden (verifisert via `grep fjernApplikasjonAnsvarlig schema.graphql` → 0 treff).
-- **Nullability:** `beskrivelse: String` er nullable per `fs-sikt-no-producer-best-practice §Nullability` — null betyr eksplisitt "ingen beskrivelse", som er en gyldig tilstand.
-- **Implementeres av:** Task #4 (Detaljer-fanen edit-modus med ViewEditX), Task #5 (mutation-integrasjon).
+- **Dekker krav:** BRU-APP-API-006.
+- **Form:** Egen mutation parallelt med `redigerApplikasjonBeskrivelse` — separate rettighetsregler (`kanRedigereNavn` vs `kanRedigereBeskrivelse`), separate feilmoduser.
+- **Colocation-status:** Følger colocation — `ApplikasjonInformationFields` utvides på komponenten som rendrer rediger-modus.
+- **Konvensjoner sitert:** Mutation toppnivå per `fs-sikt-no-producer-best-practice §Bare felt på Mutation-typen kan utføre endringer`. Error-envelope med plural `Errors`-union og `Error`-interface (verifisert mønster i `schema.graphql`). Nullable `applikasjon` per `fs-sikt-no-producer-best-practice §Nullability`. Prefiks speiler `redigerApplikasjonBeskrivelse`.
+- **Alternativer vurdert:** Utvid `RedigerApplikasjonBeskrivelseInput` til `RedigerApplikasjonDetaljerInput` — forkastet: bryter eksisterende mutation. Generisk patch-mutation — forkastet: bryter "én mutation, én intensjon".
+- **Open question:** Se Åpne spørsmål #1 (navn-feltets natur).
 
 ---
 
-### Operasjon C — `Mutation.opprettApplikasjon` utvides
+#### Op #4: `ApplikasjonTilgangerFilterInput` utvidet med organisasjon + fritekst + arv
 
-#### Lag A — Schema-tillegg
+**Dekker krav:** BRU-APP-API-003 (commit `cee226d` + `4f2e9a4`).
+**Implementeres av:** Task #12, #13
 
-```graphql
-extend input OpprettApplikasjonInput {
-  """
-  Navn på applikasjonen. Obligatorisk. Settes til samme verdi som idP-visningsnavnet ved
-  opprettelse om brukeren ikke oppgir noe avvikende — backend kan fylle inn default.
-  """
-  navn: String!
-
-  """Ansvarlig for applikasjonen. Obligatorisk ved opprettelse."""
-  ansvarligId: ID!
-  ansvarligType: AnsvarligType!
-}
-```
-
-Eksisterende felt (`eksternId`, `identitetsleverandor`, `organisasjonsId`) beholdes. Status settes server-side til `AKTIV` ved opprettelse — ikke et input-felt.
-
-#### Lag B — fs-admin call-site
-
-```ts
-export const OPPRETT_APPLIKASJON = gql(/* GraphQL */ `
-  mutation OpprettApplikasjon($input: OpprettApplikasjonInput!) {
-    opprettApplikasjon(input: $input) {
-      applikasjon {
-        id
-        navn
-        visningsnavn
-        status
-        organisasjon { id navn }
-      }
-      errors {
-        message
-        path
-        ... on ApplikasjonNavnObligatorisk { applikasjonsId }
-      }
-    }
-  }
-`)
-```
-
-#### Lag C — Begrunnelse
-
-- **Dekker krav:** BRU-APP-API-009 (`opprette_applikasjon.feature` regel "Opprettelse krever et navn", regel "Opprettelse krever en ansvarlig", regel "Nyopprettet applikasjon har status Aktiv").
-- **Status håndteres ikke i input:** alternativ var å eksponere `status: ApplikasjonStatus = AKTIV` i input. Forkastet — brukeren har ingen grunn til å opprette en INAKTIV applikasjon, og default-i-input er støy. Per `fs-sikt-no-producer-best-practice §Bare felt på Mutation-typen kan utføre endringer` er det helt rimelig at server setter side-effekt-verdier.
-- **Navn obligatorisk i input men kan defaultes til visningsnavn på backend:** alternativ var å la frontend duplisere logikken "fyll inn visningsnavn som default i opprettelses-dialogen". Forkastet fordi visningsnavnet ikke er kjent før idP-en har verifisert eksternId — så frontend kan ikke gjøre det. Backend må håndtere defaultingen post-idP-verifikasjon.
-- **Implementeres av:** Task #10 (OpprettApplikasjonDialog-utvidelse).
-
----
-
-### Operasjon D — `Mutation.fjernApplikasjonTilganger` utvides
-
-#### Lag A — Schema-tillegg
+##### Lag A — Schema-tillegg
 
 ```graphql
-extend input FjernApplikasjonTilgangerInput {
+extend input ApplikasjonTilgangerFilterInput {
   """
-  Organisasjon tilgangene gjelder for. Obligatorisk: en fjern-operasjon adresserer alltid
-  en bestemt (org, miljø)-kombinasjon (jf. `fjerne_tilgang.feature` regel "Fjerning av
-  tilganger skjer via modal").
+  Filter på organisasjon: returner kun tilganger knyttet til én av de oppgitte organisasjonene.
+  Filtervalget begrenses i UI til organisasjoner applikasjonen faktisk har tilganger hos.
   """
-  organisasjonsId: ID!
-}
+  organisasjonsIder: [ID!]
 
-"""
-Feilmedlem: bruker forsøkte å fjerne en arvet tilgang direkte. Arvede tilganger må fjernes
-gjennom opphavs-tilgangen — backend håndhever regelen fordi vi i tillegg dropper arvede
-tilganger fra `Query.fjernbareTilganger`-resultatet (defense in depth).
-"""
-type ArvetTilgangIkkeFjernbar implements Error {
-  tilgangsId: ID!
-  message: String!
-  path: [String!]!
+  """
+  Fritekstfilter på tilgangskode: returner kun tilganger der tilgangskoden inneholder
+  den oppgitte teksten (case-insensitive, substring).
+  """
+  tilgangskodeContains: String
+
+  """
+  Bestemmer om arvede tilganger skal inkluderes i resultatet.
+  Standard er `true` (arvede vises sammen med direkte tildelte).
+  """
+  inkluderArvede: Boolean
+
+  # NB: eksisterende `tilgangskoder: [String!]` beholdes for bakoverkompatibilitet.
 }
 ```
 
-Eksisterende felt (`applikasjonsId`, `miljo`, `tilgangIds`) beholdes uendret. Eksisterende `FjernApplikasjonTilgangerPayload` (`applikasjon`, `errors`, `fjernedeTilgangIds`) er fortsatt riktig form.
-
-#### Lag B — fs-admin call-site
+##### Lag B — fs-admin call-site
 
 ```ts
-export const FJERN_APPLIKASJON_TILGANGER = gql(/* GraphQL */ `
-  mutation FjernApplikasjonTilganger($input: FjernApplikasjonTilgangerInput!) {
-    fjernApplikasjonTilganger(input: $input) {
-      applikasjon { id antallTilganger }
-      fjernedeTilgangIds
-      errors {
-        message
-        path
-        ... on ArvetTilgangIkkeFjernbar { tilgangsId }
-      }
-    }
-  }
-`)
-```
-
-```ts
-// Sketch — i FjernTilgangerDialog (lokal useState for valgte ID-er):
-const [fjern, { loading }] = useMutation(FJERN_APPLIKASJON_TILGANGER)
-const onBekreft = async () => {
-  await fjern({ variables: { input: { applikasjonsId, organisasjonsId, miljo, tilgangIds: valgteTilgangIds } } })
-  closeDialog()
-}
-```
-
-#### Lag C — Begrunnelse
-
-- **Dekker krav:** BRU-APP-API-008 (`fjerne_tilgang.feature` — bulk-modal med org+miljø, INAKTIV-blokkerer-ikke, arvede-kan-ikke-fjernes).
-- **`organisasjonsId` er nytt obligatorisk felt:** bryter ikke eksisterende klienter fordi iter-1-implementasjonen ennå ikke er prod-deployet, og er en nødvendig konsekvens av at (org, miljø) nå er et eksplisitt par i UI-en. Per `fs-sikt-no-producer-schema-design §Endringer i API bør ikke ødelegge for klienter` er dette en bakoverinkompatibel endring, men siden mutasjonen er på _eksperimentelt_ stabilitetsnivå (POC) er det tillatt uten varsel.
-- **`ArvetTilgangIkkeFjernbar`-error som "defense in depth":** primær håndheving skjer ved at `Query.fjernbareTilganger` _ekskluderer_ arvede rader — så UI-en aldri tilbyr dem som valg. Errormedlemmet dekker race / direct-API-kall.
-- **Implementeres av:** Task #7 (FjernTilgangerDialog).
-
----
-
-### Operasjon E — `Query.fjernbareTilganger` (net-ny)
-
-#### Lag A — Schema-tillegg
-
-```graphql
-extend type Query {
-  """
-  Returnerer tilgangene som kan fjernes fra applikasjonen for en gitt (organisasjon, miljø)-kombinasjon.
-  Brukes som kildedata i FjernTilgangerDialog (multi-select-listen). Resultatet er **filtrert**:
-  - Bare tilganger den autentiserte brukeren har rettighet til å fjerne.
-  - Bare _direkte_ tilganger — arvede tilganger ekskluderes (jf. `fjerne_tilgang.feature`
-    regel "Arvede tilganger kan ikke fjernes direkte").
-  """
-  fjernbareTilganger(input: FjernbareTilgangerInput!): [ApplikasjonTilgang!]!
-}
-
-input FjernbareTilgangerInput {
-  applikasjonsId: ID!
-  organisasjonsId: ID!
-  miljo: Miljo!
-}
-```
-
-#### Lag B — fs-admin call-site
-
-```ts
-export const FJERNBARE_TILGANGER = gql(/* GraphQL */ `
-  query FjernbareTilganger($input: FjernbareTilgangerInput!) {
-    fjernbareTilganger(input: $input) {
-      id
-      tilgangskode
-      tilgangsbeskrivelse
-      miljo
-      organisasjon { id navn }
-    }
-  }
-`)
-```
-
-```ts
-// Sketch — i FjernTilgangerDialog, etter at (org, miljø) er valgt:
-const { data, loading } = useQuery(FJERNBARE_TILGANGER, {
-  variables: { input: { applikasjonsId, organisasjonsId, miljo } },
-  skip: !organisasjonsId || !miljo,
+// src/domains/support/features/Applikasjon/hooks/useApplikasjonTilganger.tsx
+const { data } = useQuery(GET_APPLIKASJON_TILGANGER, {
+  variables: {
+    applikasjonsId: id,
+    filter: {
+      miljoer: state.filter.miljoer?.length ? state.filter.miljoer : null,
+      organisasjonsIder: state.filter.organisasjonsIder?.length ? state.filter.organisasjonsIder : null,
+      tilgangskodeContains: state.filter.tilgangskodeContains || null,
+      inkluderArvede: state.filter.skjulArvede ? false : null,
+    },
+    first: 50,
+  },
 })
 ```
 
-#### Lag C — Begrunnelse
+##### Lag C — Begrunnelse
 
-- **Dekker krav:** BRU-APP-API-008 (`fjerne_tilgang.feature` scenario "Velge tilganger å fjerne — så ser jeg en liste over tilganger jeg har rettighet til å fjerne for den valgte kombinasjonen").
-- **Returnerer flat liste, ikke connection:** lista vil typisk være < 50 elementer (samme applikasjons tilganger i én org+miljø). Per `fs-sikt-no-producer-best-practice §Paginering` er paginering anbefalt over 10 — vi velger likevel flat liste fordi (a) listen er kontekst-bundet (per applikasjon, per org, per miljø) og forblir kort i praksis, (b) modal-UI-en er ikke designet for paginering, (c) `tildelbareTilganger` (iter-1) er allerede flat liste — konsistens. Hvis backend mener listen kan vokse stort må vi heller pagineres med Cursor Connections.
-- **Frontend stoler på filtreringen:** UI-en gjør ingen klient-side ekskludering av arvede rader — backend leverer ferdig filtrert liste. Per `fs-sikt-no-producer-schema-design §Vi innfører gjerne egne felt og typer for semantisk nyttige data-uttrekk` er "fjernbare" en semantisk forretnings-konsept (med tre filtre: rettighet + direkte + tilstede) som hører hjemme i schema-laget.
-- **Implementeres av:** Task #7 (FjernTilgangerDialog).
-
----
-
-### Operasjon F — `Mutation.tildelApplikasjonTilganger` (uendret schema, verifisering)
-
-#### Lag A — Schema-tillegg
-
-Ingen — eksisterende `TildelApplikasjonTilgangerInput { applikasjonsId, miljo, organisasjonsId, tilgangskoder }` har allerede den iter-2-formen krav-fila krever. Verifisert via `grep -A 5 "^input TildelApplikasjonTilgangerInput" schema.graphql`.
-
-#### Lag B — fs-admin call-site
-
-Ingen ny `gql`-skisse. iter-1 har `TildelTilgangerDialog/tildelbareQuery.ts` + `mutation.ts` som allerede bruker `(organisasjonsId, miljo, tilgangskoder)`-trippelen. Verifiser at koden faktisk passerer alle tre argumentene (Task #8 — refactor-pass for å bekrefte iter-2-konsistens).
-
-#### Lag C — Begrunnelse
-
-- **Dekker krav:** BRU-APP-API-007 (`tildele_tilgang.feature` — verifisering, ikke ny utvikling).
-- **Implementeres av:** Task #8 (TildelTilgangerDialog refactor-pass + INAKTIV-godkjenningstest).
+- **Dekker krav:** BRU-APP-API-003.
+- **Form:** `organisasjonsIder` speiler `ApplikasjonerFilterInput`. `tilgangskodeContains` følger `*Contains`-suffiks-mønster fra `navnContains` (27 forekomster av `Contains:` i `schema.graphql`).
+- **Colocation-status:** Følger colocation — filter-felter brukes i `useApplikasjonTilganger`-hook-en.
+- **Konvensjoner sitert:** `*Contains`-suffiks (implisitt mønster). Boolean med verb-prefiks per `fs-sikt-no-producer-naming §Boolean-felt navngis med verb`. Nullable per `fs-sikt-no-producer-best-practice §Nullability`. Backward-compatible per `fs-sikt-no-producer-schema-design`.
+- **Alternativer vurdert:** Erstatt `tilgangskoder` direkte — forkastet: bryter bakoverkompatibilitet. `inkluderArvede` default `true` non-null — forkastet: nullable gir enklere URL-state.
+- **Tverrgående:** `ApplikasjonTilgangerOrderByField.MILJO` beholdes i schema, men fjernes fra UI sort-valg.
 
 ---
 
-### Operasjon G — `Applikasjon.tilganger` utvides
+#### Op #5: Arv-modell på `ApplikasjonTilgang`
 
-#### Lag A — Schema-tillegg
+**Dekker krav:** BRU-APP-API-003 (commit `4f2e9a4`) + BRU-APP-API-008 (Regel: arvede kan ikke fjernes).
+**Implementeres av:** Task #14, #15, #18
+
+##### Lag A — Schema-tillegg
 
 ```graphql
 extend type ApplikasjonTilgang {
   """
-  Hvis denne tilgangen er **arvet** fra en eller flere andre tilganger, lister `arvetFra` opphavene.
-  Tom liste betyr direkte tildelt. Backend deduplifiserer: hvis samme arvede tilgang har flere
-  opphav, returneres én node med `arvetFra = [opphav1, opphav2, ...]` — ikke flere noder.
+  Liste over direkte-tildelte tilganger som har gitt opphav til denne arvede tilgangen.
+  Tom liste betyr at tilgangen er direkte tildelt (ikke arvet).
   """
-  arvetFra: [ApplikasjonTilgangOpphav!]!
+  arvetFra: [ApplikasjonTilgangArv!]!
+
+  """
+  Om denne tilgangen er arvet (avledet fra én eller flere direkte tilganger).
+  """
+  erArvet: Boolean!
 }
 
 """
-Lett-vekt-referanse til en opphavs-tilgang. Ikke en full `ApplikasjonTilgang` fordi opphavet
-kan høre til en annen applikasjon, og vi vil ikke åpne for utilsiktet rekursiv ekspansjon.
+Et opphav (parent) til en arvet tilgang. Refererer til en annen tilgang på samme
+applikasjon som er direkte tildelt og som gir denne tilgangen via en arv-regel.
 """
-type ApplikasjonTilgangOpphav {
-  applikasjon: ApplikasjonOpphavReferanse!
-  tilgangskode: String!
-  miljo: Miljo!
+type ApplikasjonTilgangArv {
+  opphavsTilgang: ApplikasjonTilgang!
+  begrunnelse: String!
 }
 
-type ApplikasjonOpphavReferanse {
-  id: ID!
-  navn: String!
-}
+extend union FjernApplikasjonTilgangerErrors = ArvetTilgangKanIkkeFjernes
 
-extend input ApplikasjonTilgangerFilter {
-  """
-  Begrenser resultatet til direkte, arvede eller alle tilganger. Default `ALLE`.
-  """
-  tilknytning: Tilknytning = ALLE
-
-  """
-  Fritekst-søk på tilgangskoden (contains-match, case-insensitive).
-  """
-  tilgangskode: String
-
-  """
-  Begrenser resultatet til tilganger som hører til den oppgitte organisasjonen.
-  """
-  organisasjonsId: ID
-}
-
-enum Tilknytning {
-  """Vis alle tilganger, både direkte og arvede."""
-  ALLE
-  """Vis kun direkte tildelte tilganger."""
-  DIREKTE
-  """Vis kun arvede tilganger."""
-  ARVET
+type ArvetTilgangKanIkkeFjernes implements Error {
+  message: String!
+  path: [String!]!
+  applikasjonsTilgangId: ID!
 }
 ```
 
-#### Lag B — fs-admin call-site
+##### Lag B — fs-admin call-site
 
 ```ts
-// Utvidelse av Operasjon 3 (Applikasjon.tilganger) fra iter-1
-export const GET_APPLIKASJON_TILGANGER = gql(/* GraphQL */ `
-  query GetApplikasjonTilganger(
-    $id: ID!
-    $filter: ApplikasjonTilgangerFilter
-    $orderBy: ApplikasjonTilgangerOrderBy
-    $first: Int
-    $after: String
-  ) {
-    applikasjon(id: $id) {
-      id
-      tilganger(filter: $filter, orderBy: $orderBy, first: $first, after: $after) {
-        nodes {
-          id
-          tilgangskode
-          tilgangsbeskrivelse
-          miljo
-          organisasjon { id navn }
-          arvetFra {
-            tilgangskode
-            miljo
-            applikasjon { id navn }
-          }
-        }
-        pageInfo { hasNextPage endCursor }
-        totalCount
-      }
+// src/domains/support/features/Applikasjon/components/ApplikasjonTilgangerResultRow.tsx
+export const APPLIKASJON_TILGANG_ROW_FRAGMENT = gql(/* GraphQL */ `
+  fragment ApplikasjonTilgangRowFields on ApplikasjonTilgang {
+    id
+    tilgangskode
+    tilgangsbeskrivelse
+    miljo
+    organisasjon { id, navn }
+    erArvet                  # ← ny
+    arvetFra {               # ← ny
+      opphavsTilgang { id, tilgangskode }
+      begrunnelse
     }
   }
 `)
 ```
 
-#### Lag C — Begrunnelse
+##### Lag C — Begrunnelse
 
-- **Dekker krav:** BRU-APP-API-003 (`vise_tilganger.feature` — fire filtre, `Arvet`-merke, dedup, skjul/vis arvede).
-- **`Tilknytning` enum over `skjulArvede: Boolean`:** Q5-decision (sketch wins). Tre-verdis tilstand passer ikke i en boolean. Per `fs-sikt-no-producer-naming §Boolean-felt navngis med verb` hadde et boolean uansett heter `skjulArvede` eller `visKunArvede` — begge er enaksede; enum er klarere.
-- **`ApplikasjonTilgangOpphav` separat type, ikke `ApplikasjonTilgang`-rekursjon:** unngår at en arvet rad blåser opp til en hel under-tilgang-graf. Per `fs-sikt-no-producer-schema-design §Vi innfører gjerne egne felt og typer for semantisk nyttige data-uttrekk` er "opphav" en distinkt semantisk form.
-- **Dedup er backend-ansvar:** krav-tekst eksplisitt: "Arvet tilgang med flere opphav listes kun én gang ... Og det fremgår at den arvede tilgangen stammer fra begge". Frontend gjør ingen dedup.
-- **Filter-tillegg (`tilgangskode`, `organisasjonsId`):** speiler de fire skisse-filterne (`Tilgangskode`-fritekst, `Miljø`, `Organisasjon`, `Tilknytning`). `Miljø` finnes allerede på filteret fra iter-1.
-- **Implementeres av:** Task #6 (vise_tilganger-utvidelse + ApplikasjonTilgangerFilter UI).
+- **Dekker krav:** BRU-APP-API-003 + BRU-APP-API-008.
+- **Form:** Self-referential many-to-one via egen `ApplikasjonTilgangArv`-type — gir plass til `begrunnelse`-feltet uten å forurense `ApplikasjonTilgang`.
+- **Dedup:** Backend-ansvar — resolveren for `applikasjon.tilganger(filter)` skal dedup'e på (organisasjon, miljø, tilgangskode) før paginering.
+- **Colocation-status:** Følger colocation — arv-feltene legges på rad-fragmentet.
+- **Konvensjoner sitert:** Boolean `erArvet` med verb-prefiks per `fs-sikt-no-producer-naming`. Norsk type-navn per `fs-sikt-no-producer-naming §Bruk norsk for domenebegreper`. Non-null lister (tom er meningsfull) per `fs-sikt-no-producer-best-practice §Nullability`. Error-medlem speiler `TilgangAlleredeTildelt` på `schema.graphql:60069`.
+- **Alternativer vurdert:** Flat `arvetFra: [ApplikasjonTilgang!]!` — forkastet: ingen plass til `begrunnelse`. Egen `ApplikasjonsArvRegel`-type — forkastet: krav-en er per-instans, ikke per-regel. Tag/string-felt — forkastet: mister referanse-integritet.
+- **Open question:** Se Åpne spørsmål #2 (arv-modellens form) + #3 (dedup-ansvar).
 
 ---
 
-### Operasjon H — `Applikasjon.endringslogg` (net-ny, Iter 4)
+#### Op #6: `opprettApplikasjonV2`-input utvidet med `navn` + `ansvarligId`
 
-#### Lag A — Schema-tillegg
+**Dekker krav:** BRU-APP-API-009 (commit `a7efc9f`).
+**Implementeres av:** Task #19
+
+##### Lag A — Schema-tillegg
 
 ```graphql
-extend type Applikasjon {
-  """
-  Endringslogg for applikasjonen. Tilgjengelig kun for brukere med `kanSeEndringslogg = true`
-  (jf. K16 / BRU-APP-API-016). Skjema-formen her er en **placeholder** — backend skal forfine
-  `handlingstype` til en enum og potensielt utvide loggposten med før/etter-verdier når
-  åpne spørsmål i kravarbeidet er avklart.
-  """
-  endringslogg(first: Int, after: String): ApplikasjonEndringsloggConnection!
+input OpprettApplikasjonInputV2 {
+  eksternId: String!
+  identitetsleverandor: IdentitetsleverandorType!
+  organisasjonsId: ID!
+  navn: String!
+  ansvarligId: ID!
 }
 
-type ApplikasjonEndringsloggConnection {
-  nodes: [ApplikasjonEndringsloggItem!]!
-  edges: [ApplikasjonEndringsloggEdge!]!
-  pageInfo: PageInfo!
-  totalCount: Int!
+extend type Mutation {
+  opprettApplikasjonV2(input: OpprettApplikasjonInputV2!): OpprettApplikasjonPayload!
+  # opprettApplikasjon @deprecated(reason: "Bruk opprettApplikasjonV2. Fjernes etter 2026-09-01.")
 }
 
-type ApplikasjonEndringsloggEdge {
-  cursor: String!
-  node: ApplikasjonEndringsloggItem!
-}
+extend union OpprettApplikasjonErrors =
+    NavnAlleredeIBruk
+  | AnsvarligPaakrevdVedOpprettelse
 
-type ApplikasjonEndringsloggItem implements Node {
-  id: ID!
-
-  """Tidspunktet endringen skjedde."""
-  tidspunkt: String!
-
-  """Bruker som utførte endringen."""
-  utfortAv: ApplikasjonPerson!
-
-  """
-  Maskinlesbar type-identifikator for endringen. **Placeholder** — backend definerer endelig enum
-  når åpent spørsmål 1 (hva som logges) er avklart.
-  """
-  handlingstype: String!
-
-  """Menneskelesbar beskrivelse av endringen."""
-  beskrivelse: String!
+type AnsvarligPaakrevdVedOpprettelse implements Error {
+  message: String!
+  path: [String!]!
 }
 ```
 
-#### Lag B — fs-admin call-site
+##### Lag B — fs-admin call-site
 
 ```ts
-export const GET_APPLIKASJON_ENDRINGSLOGG = gql(/* GraphQL */ `
-  query GetApplikasjonEndringslogg($id: ID!, $first: Int!, $after: String) {
-    applikasjon(id: $id) {
-      id
-      endringslogg(first: $first, after: $after) {
-        nodes {
-          id
-          tidspunkt
-          utfortAv { id navn }
-          handlingstype
-          beskrivelse
-        }
-        pageInfo { hasNextPage endCursor }
-        totalCount
+// src/domains/support/features/Applikasjoner/components/OpprettApplikasjonDialog/mutation.ts
+export const OPPRETT_APPLIKASJON_V2 = gql(/* GraphQL */ `
+  mutation OpprettApplikasjonV2($input: OpprettApplikasjonInputV2!) {
+    opprettApplikasjonV2(input: $input) {
+      applikasjon {
+        id
+        navn
+        identitetsleverandor
+        organisasjon { id, navn }
+        status
+      }
+      errors {
+        ... on Error { message, path }
+        ... on NavnAlleredeIBruk { konfliktMedApplikasjonId }
       }
     }
   }
 `)
 ```
 
-```ts
-// Sketch — i ApplikasjonEndringsloggTab (tredje fane):
-const { data, loading, fetchMore } = useQuery(GET_APPLIKASJON_ENDRINGSLOGG, {
-  variables: { id: applikasjonId, first: 50 },
-  notifyOnNetworkStatusChange: true,
-})
-```
+##### Lag C — Begrunnelse
 
-#### Lag C — Begrunnelse
-
-- **Dekker krav:** BRU-APP-API-016 (`endringslogg.feature` — tre rettighetsscenarier; fire `@openquestion`-scenarier dekkes UI-først per Q6-decision).
-- **Cursor Connection per `fs-sikt-no-producer-schema-design §Vi følger Cursor Connections Specification for paginering`:** logger kan vokse uten øvre grense, så cursor-paginering er obligatorisk. `first = 50` er konsistent med iter-1s "last inn flere"-mønster (Q9-decision iter-1).
-- **`handlingstype: String!` som placeholder, ikke en enum nå:** Q6-decision (UI shell now, content later). Backend skal definere enum når åpent spørsmål 1 er besvart. fs-admin viser feltet som-er inntil videre; når enumen kommer, oppdaterer vi til `enum ApplikasjonEndringsloggHandlingstype { ... }`. Per `fs-sikt-no-producer-schema-design §Endringer i API bør ikke ødelegge for klienter` er det en bakoverinkompatibel endring fra `String!` til enum — derfor flagger vi at backend bør **starte med enum direkte** hvis det er praktisk mulig, for å unngå deprecation-syklusen.
-- **`ApplikasjonEndringsloggItem implements Node`:** loggposter er entitets-aktige (de har stabil ID og kan refereres senere — f.eks. fra et eventuelt audit-detalj-popup). Per `fs-sikt-no-producer-schema-design §Vi følger Global Object Identification-spesifikasjonen`.
-- **`utfortAv: ApplikasjonPerson!`:** gjenbruker eksisterende `ApplikasjonPerson`-type. Konsistent med `opprettetAv`/`endretAv` på `Applikasjon` (verifisert i schema).
-- **Implementeres av:** Task #9 (Endringslogg-tab + ApplikasjonEndringsloggItem-komponent).
+- **Dekker krav:** BRU-APP-API-009.
+- **Form:** `V2`-mutation parallelt med `@deprecated` på eksisterende `opprettApplikasjon` per `fs-sikt-no-producer-schema-design §Hvordan gjøre bakoverkompatible endringer`. Direkte tilføyelse av non-null felter ville være bakoverinkompatibelt.
+- **Colocation-status:** Følger colocation — operasjonen lever i dialog-mappen.
+- **Konvensjoner sitert:** `V2`-versjonering per `fs-sikt-no-producer-schema-design`. Error-medlemmer per domain-noun-condition-mønsteret. `ansvarligId: ID!` single per krav-en ("en ansvarlig").
+- **Alternativer vurdert:** In-place strengere validering — forkastet: bryter konsumenter. Nullable + resolver-validering — forkastet: skjuler kontrakten i codegen-typen.
 
 ---
+
+#### Op #7: Deprecation av `fjernApplikasjonAnsvarlig`
+
+**Dekker krav:** BRU-APP-API-005 (commit `a7efc9f`).
+**Implementeres av:** Task #7
+
+##### Lag A — Schema-tillegg
+
+```graphql
+extend type Mutation {
+  fjernApplikasjonAnsvarlig(input: FjernApplikasjonAnsvarligInput!): FjernApplikasjonAnsvarligPayload!
+    @deprecated(reason: "Ansvarlig er obligatorisk i BRU-APP-API-005 (per 2026-05-27). Bruk settApplikasjonAnsvarlig for å endre ansvarlig. Mutation fjernes etter 2026-09-01.")
+}
+```
+
+##### Lag C — Begrunnelse
+
+- **Dekker krav:** BRU-APP-API-005.
+- **Form:** `@deprecated`-direktivet beholder mutationen tilgjengelig i deprecation-vinduet for eventuelle eksterne konsumenter, per `fs-sikt-no-producer-schema-design §Vær raus mot kollegaene dine`.
+- **Colocation-status:** N/A — sletting av konsument-kode (egen Task).
+- **Alternativer vurdert:** Slett umiddelbart — forkastet: bryter ev. ukjente konsumenter.
 
 ### Tverrgående schema-bekymringer
 
-**Permission-modell:** fortsetter iter-1-mønsteret — per-applikasjon-rettigheter eksponeres som `kanXxx: Boolean!`-flagg på `Applikasjon`. Iter-2 legger til `kanRedigereNavn` og `kanSeEndringslogg`. UI viser/skjuler Rediger-knapp og Endringslogg-fane basert på flaggene. Top-level `USER_ACTION.SE_APPLIKASJONER` (Operasjon 12 iter-1) er fortsatt nødvendig for menu-/route-gating. Per `fs-sikt-no-producer-best-practice §Nullability` er disse `Boolean!` (ikke nullable) fordi de er **alltid** evaluert — null ville ikke ha semantisk mening.
+#### Permission-modell
 
-**Error-konvensjon (presisering):** vi viderefører `errors: [Error!]`-array på alle Applikasjon-mutasjoner. Den eksisterende `union ReaktiverApplikasjonError`-flekken i schemaet (`= IngenRettighetTilApplikasjon`) brukes ikke av tilhørende payload — det er en utilsiktet rest. fs-admin-team bør be backend om å enten knytte unionen til payloaden (om de vil bryte konvensjonen) eller fjerne den. Følges opp via krav-eier eller backend-agent.
+Server-side `kan*`-felt på `Applikasjon` brukes konsekvent — `kanRedigereNavn` blir nytt felt parallelt med `kanRedigereBeskrivelse`. Mutations validerer på nytt resolver-side og returnerer `IngenRettighetTilApplikasjon` ved feil. Per `fs-sikt-no-producer-schema-design §Vi innfører gjerne egne felt og typer for semantisk nyttige data-uttrekk`.
 
-**Versjonering:** kun ett `@deprecated`-felt i denne runden — `redigerApplikasjonBeskrivelse`. Sluttdato `31. desember 2026` foreslås; bekreft med backend-eier at det matcher deres rytme. Per `fs-sikt-no-producer-schema-design §Endringer i API bør ikke ødelegge for klienter` skal sluttdato være med i deprecation-reason.
+#### Error-union-medlemmer
 
-**Sporings-felter:** ingen endring. `opprettetAv`/`endretAv`/`opprettetTidspunkt`/`endretTidspunkt` finnes allerede på `Applikasjon` (verifisert) og brukes som de er.
+| Mutation                    | Error-union (status)                  | Medlemmer (nye/endrede)                                                  |
+| --------------------------- | ------------------------------------- | ------------------------------------------------------------------------ |
+| `redigerApplikasjonNavn`    | `RedigerApplikasjonNavnErrors` (ny)   | `IngenRettighetTilApplikasjon`, `NavnAlleredeIBruk` (ny), `UgyldigInput` |
+| `opprettApplikasjonV2`      | `OpprettApplikasjonErrors` (utvidet)  | `+ NavnAlleredeIBruk`, `+ AnsvarligPaakrevdVedOpprettelse`               |
+| `fjernApplikasjonTilganger` | `FjernApplikasjonTilgangerErrors` (utvidet) | `+ ArvetTilgangKanIkkeFjernes`                                     |
 
----
+#### Sporings-felter
 
-### Åpne spørsmål til schema-eier
+`Applikasjon` har allerede `opprettetAv`, `opprettetTidspunkt`, `endretAv`, `endretTidspunkt` (`schema.graphql:1420–1433`). Alle nye mutations skal returnere disse i payload-en.
 
-- **`reaktiverApplikasjon`-error-union:** den ubrukte `union ReaktiverApplikasjonError = IngenRettighetTilApplikasjon` — skal den binde seg til payloaden (`errors: [ReaktiverApplikasjonError!]`), eller fjernes? Påvirker ikke iter-2-leveransen, men bør avklares for konsistens. *Eier:* backend-agent / schema-eier.
-- **`handlingstype: String!` vs enum:** kan backend starte med enum direkte, eller må vi gå String → enum via deprecation? *Eier:* backend-agent.
-- **`navn` defaulting i `opprettApplikasjon`:** backend må klargjøre om de defaulter `navn = visningsnavn` post-idP-verifikasjon, eller om frontend må fylle inn navn synkront. *Eier:* backend-agent.
-- **`Tilknytning`-enum-verdier:** `ALLE / DIREKTE / ARVET` er forslag fra fs-admin. Bekreft at backend kan implementere alle tre filtrene effektivt (særlig `ARVET`-modus krever join til opphavs-tabellen). *Eier:* backend-agent.
+#### Versjonering
+
+Én `V2`-mutation (`opprettApplikasjonV2`) — alle andre endringer er additive (`extend input`, `extend type`) og bakoverkompatible.
+
+#### Mock-API-strategi
+
+Plan-en bygger frontend mot mock-handlers i `src/mocks/handlers/applikasjoner/`. Mock-en speiler det foreslåtte ekte schema-et 1:1 så fragmenter, types og operasjoner er identiske. Codegen kjøres mot mock-schema-snapshotet inntil ekte schema er deployet.
+
+### Åpne spørsmål
+
+- [ ] **#1 Navn-feltets relasjon til idP-visningsnavn.** Krav-en for opprettelse sier navnet hentes fra idP; rediger-krav-en sier navnet kan endres. **Brukerens valg er bruker-overstyrt visningsnavn** — backend må bekrefte unikhets-håndheving på fs-admin-overstyringen. Hvis backend ikke kan støtte dette, må Op #3 droppes og UI-en justeres.
+- [ ] **#2 Arv-modellens form (Op #5).** `ApplikasjonTilgangArv { opphavsTilgang, begrunnelse }` er fs-admin-konsumentens beste gjetning. Backend-modellen kan se annerledes ut.
+- [ ] **#3 Dedup-ansvar for arvede tilganger.** Forslaget legger ansvar på backend-resolveren før paginering. Trenger bekreftelse.
+- [ ] **#4 Skal `OpprettApplikasjonInput` (V1) fjernes eller bare deprecateres?** Avhenger av om andre konsumenter enn fs-admin finnes.
+- [ ] **#5 Deprecation-vindu for `fjernApplikasjonAnsvarlig` (Op #7).** Foreslått 2026-09-01 (~3 mnd) — backend-agent kan ønske lengre vindu.
 
 ## Implementation Tasks
 
-> Task-nummerering starter på #1 lokalt for iter-2. iter-1-tasks (#1–#22 i forrige plan) refereres via prefix `iter1-#N` der relevant.
-
-### Fase A — Felt-konsum og listevisning
+Tasks er gruppert i 5 faser etter avhengighet og scope. Iter 2-mønstret følges: mock-API i fase 0, deretter UI parallelt.
 
-#### Task #1: Utvide `GET_APPLIKASJONER` + `GET_APPLIKASJON`-queries med nye felt
-
-**Priority**: High
-**Size**: S
-**Dependencies**: Backend må først ha lagt til `visningsnavn`, `antallTilganger`, `kanRedigereNavn`, `kanSeEndringslogg` på `Applikasjon`-typen (cross-agent — Task # below or hand-off).
-**Addresses Requirements**: BRU-APP-API-001 (Antall tilganger-kolonne), BRU-APP-API-002 (Se identitetsleverandør/organisasjon/status), BRU-APP-API-006 (kanRedigereNavn).
+### Fase 0 — Mock-API + i18n-grunnlag
 
-**Acceptance Criteria**:
-- [ ] Selection set i `GET_APPLIKASJONER`-queryen (iter1-#5 levering) utvides med `visningsnavn`, `antallTilganger`.
-- [ ] Selection set i `GET_APPLIKASJON`-queryen (iter1-#11 levering) utvides med `visningsnavn`, `antallTilganger`, `kanRedigereNavn`, `kanSeEndringslogg`.
-- [ ] Codegen regenererer typer (`npm run compile`) uten feil.
-- [ ] Alle a11y-tester for berørte komponenter passerer fortsatt.
+#### Task #1: Utvid mock-API med Iter 3 schema-tillegg
 
-**Implementation Notes**:
-- Hvis backend ikke har feltene klare, gjøres dette mot mock-API (Task iter1-#22). Når reelt schema kommer, kjøres codegen på nytt.
+**Priority:** High
+**Size:** L (5–8t)
+**Dependencies:** None
+**Addresses Requirements:** BRU-APP-API-001, -002, -003, -005, -006, -007, -008, -009
 
----
+**Acceptance Criteria:**
 
-#### Task #2: Legge til `Antall tilganger`-kolonne i `ApplikasjonerResultList`
+- [ ] `src/mocks/handlers/applikasjoner/queries.ts` håndterer nye filter-felter (`miljoer`, `organisasjonsIder`, `tilgangskodeContains`, `inkluderArvede`).
+- [ ] `Applikasjon`-fixturer i `src/mocks/fixtures/applikasjoner/applikasjoner.ts` inkluderer `antallTilganger`, `kanRedigereNavn`.
+- [ ] `ApplikasjonTilgang`-fixturer i `src/mocks/fixtures/applikasjoner/tilganger.ts` modellerer arv: minst 3 tilganger har `erArvet: true` med `arvetFra`-relasjoner pekende på direkte tildelte; minst 1 har flere opphav for å teste dedup.
+- [ ] Mock-handler dedup'er arvede tilganger på (org, miljø, tilgangskode) før den returnerer paginert resultat.
+- [ ] Mock-mutations registrert: `redigerApplikasjonNavn`, `opprettApplikasjonV2`. Mock-handler returnerer korrekte error-medlemmer (`NavnAlleredeIBruk`, `AnsvarligPaakrevdVedOpprettelse`, `ArvetTilgangKanIkkeFjernes`).
+- [ ] Codegen kjørt og `src/__generated__/graphql.ts` reflekterer nye typer/felter.
+- [ ] `npm test`, `npm run test:typecheck`, `npm run lint` består.
 
-**Priority**: High
-**Size**: S
-**Dependencies**: Task #1
-**Addresses Requirements**: BRU-APP-API-001
-
-**Acceptance Criteria**:
-- [ ] Ny kolonne `Antall tilganger` plasseres mellom `Organisasjon` og `Status` i `ApplikasjonerResultList`.
-- [ ] i18n-nøkkel `support.Applikasjoner.kolonner.antallTilganger` opprettes.
-- [ ] Verdien rendres som tall (formatering: ren `Intl.NumberFormat("nb-NO")` for konsistens med andre tall-kolonner).
-- [ ] `ScreenReaderPause` separasjon mellom kolonner verifisert.
-- [ ] `ApplikasjonerResultList.a11y.test.tsx` oppdateres med ny kolonne i mock-data.
-
-**Implementation Notes**:
-- Se [`src/common/components/lists/NavigationList/CLAUDE.md`](../../src/common/components/lists/NavigationList/CLAUDE.md) for celletyper.
-
----
+**Implementation Notes:**
 
-#### Task #3: Legge til `Miljø`-filter i `ApplikasjonerFilter`
-
-**Priority**: High
-**Size**: S
-**Dependencies**: Task #1
-**Addresses Requirements**: BRU-APP-API-001 (`listevisning_og_sok.feature` scenario "Filtrere på miljø")
-
-**Acceptance Criteria**:
-- [ ] Nytt `Select`-filter for `Miljø` i `ApplikasjonerFilter` med opsjoner basert på `Miljo`-enum (`DEMO`, `PROD`).
-- [ ] Default-verdi: "Alle miljøer" (filteret er ikke aktivt).
-- [ ] URL-state via `useGetApplikasjonerState`/`useDataListState` med nuqs.
-- [ ] Filter-chip vises over result-list når aktivt; rensing fjerner chip + URL-param.
-- [ ] `ApplikasjonerFilter.a11y.test.tsx` utvides.
-
-**Implementation Notes**:
-- Følg mønsteret fra eksisterende filter (`Organisasjon`, `Status`) i samme fil.
-
----
-
-### Fase B — Detaljer-fanen edit-modus
-
-#### Task #4: Konvertere `ApplikasjonInformation` til ny enkel-`Surface`-form (5-kolonners grid)
-
-**Priority**: High
-**Size**: M
-**Dependencies**: Task #1
-**Addresses Requirements**: BRU-APP-API-002
-
-**Acceptance Criteria**:
-- [ ] Detaljer-fanen rendres som **én** `Surface`-seksjon (ikke flere som iter-1) med felter i en 5-kolonners `Grid`.
-- [ ] Lese-modus viser: rad 1 (Navn, Beskrivelse, Organisasjon, Opprettet av, Sist endret av), rad 2 (Status, Ansvarlig, Tidspunkt for opprettelse), rad 3 (Miljø, Identitetsleverandør, Tidspunkt for sist endring) — per skissen [`skisser/applikasjon-detaljevisning-aktiv-tab-detaljer-lese-modus.png`](skisser/applikasjon-detaljevisning-aktiv-tab-detaljer-lese-modus.png).
-- [ ] Hver verdi rendres med `ReadOnlyTextField` eller passende lese-presentasjon (Tags for Status/Miljø).
-- [ ] Visningsnavn vises (read-only) i tillegg til Navn — separat felt eller som sekundær linje under Navn (skissen viser bare "Navn", men kravet om to felter krever begge skal vises et sted; bestem konkret plassering i task-utførelse).
-- [ ] Responsivt: ved smal skjerm reduseres grid til færre kolonner per `Grid`-CSS-modul.
-- [ ] `ApplikasjonInformation.a11y.test.tsx` oppdateres.
-
-**Implementation Notes**:
-- Referanse-impl for lese-modus: `OpptakSettings.tsx` (men der er det fieldset i edit-modus; her er det `ReadOnlyTextField` i lese-modus).
-- TopBar-info (Status, Miljø, Organisasjon, Ansvarlig, Antall tilganger, Deaktiver-knapp) ligger fortsatt **utenfor** Detaljer-fanen — i `DetailPageTopBar`. Ikke duplisere.
-
----
-
-#### Task #5: Implementere edit-modus-toggle på Detaljer-fanen + `redigerApplikasjonDetaljer`-mutasjon
-
-**Priority**: High
-**Size**: L
-**Dependencies**: Task #4, schema-tillegg `redigerApplikasjonDetaljer` fra backend.
-**Addresses Requirements**: BRU-APP-API-005 (administrere_ansvarlig), BRU-APP-API-006 (rediger_detaljer)
-
-**Acceptance Criteria**:
-- [ ] Lokal `useState` i `ApplikasjonInformation` (eller en `ApplikasjonInformationDetails`-komponent) for `editMode: boolean`.
-- [ ] Når `editMode = false`: "Rediger"-knapp synlig i Surface-seksjonshodet, kun hvis `kanRedigereNavn || kanRedigereBeskrivelse || kanAdministrereAnsvarlig`. Klikk → `editMode = true`.
-- [ ] Når `editMode = true`: knappen erstattes av "Avbryt" + "Lagre". Redigerbare felter (Navn, Beskrivelse, Ansvarlig) bytter til `ViewEditTextField` / `ViewEditTextArea` / `ViewEditSelect` (Ansvarlig søkbar via `ansvarligKandidater`-query fra iter-1, gjenbruk hook fra `SettAnsvarligDialog/` som så slettes).
-- [ ] Ikke-redigerbare felter (Status, Miljø, Organisasjon, Identitetsleverandør, alle "tidspunkt" og "av"-felter) forblir lese-felt i edit-modus.
-- [ ] "Avbryt" tilbakestiller form-state og setter `editMode = false`.
-- [ ] "Lagre" kaller `REDIGER_APPLIKASJON_DETALJER`-mutasjon. Ved suksess: `editMode = false`, Snackbar "Endringene er lagret". Ved feil: feilmelding ved riktig felt (Navn-tom = ved Navn; ansvarlig-feil = ved Ansvarlig).
-- [ ] Krav-regel "ulagrede endringer forkastes ved navigasjon / fane-bytte": når komponenten unmounter (router-navigasjon eller bytte til Tilganger-/Endringslogg-fane), trigger `DetailPageTabbedContentPanel` automatisk unmount → lokal state dør → ingen ekstra logikk nødvendig. **Verifiseres manuelt** i task-utførelse: kjør gjennom flyten og bekreft.
-- [ ] Validering: tomt navn-felt blokkerer Lagre-knappen + viser inline-feil "Navn er obligatorisk".
-- [ ] Legacy-applikasjoner med `ansvarlig = null`: Lagre-knappen er deaktivert i ALLE save-flyter inntil ansvarlig settes; en `LayoutMessage severity="warning"` vises på toppen av detaljsiden ("Mangler ansvarlig — må settes ved neste redigering").
-- [ ] `ApplikasjonInformation.a11y.test.tsx` dekker både lese- og rediger-modus.
-- [ ] Slett `RedigerBeskrivelseDialog/` (iter1-#16 leveranse) og `SettAnsvarligDialog/` (iter1-#15 leveranse) — referanser oppdateres.
-
-**Implementation Notes**:
-- Referanse: `src/domains/opptak/features/OpptakManagement/OpptakSettings/OpptakSettings.tsx` + `OpptakManagementPage.tsx`.
-- Hold form-state i `useState` (eller `useReducer` hvis det blir mer enn 3 felter), ikke `react-hook-form` — vi har ikke det biblioteket i prosjektet.
-- Apollo-cache: returner full `Applikasjon`-payload fra mutation; cache merger automatisk via `id`.
-
----
-
-### Fase C — Tilganger-fanen utvidelse
-
-#### Task #6: Utvide `ApplikasjonTilganger` med `Arvet`-badge, `Tilknytning`-filter, fritekst- og org-filter
-
-**Priority**: High
-**Size**: L
-**Dependencies**: Schema-tillegg `ApplikasjonTilgang.arvetFra`, `ApplikasjonTilgangerFilter`-utvidelser (cross-agent).
-**Addresses Requirements**: BRU-APP-API-003
-
-**Acceptance Criteria**:
-- [ ] `GET_APPLIKASJON_TILGANGER`-queryen utvides med `arvetFra { tilgangskode, miljo, applikasjon { id, navn } }` per rad.
-- [ ] Hver tilgang-rad rendrer en `ArvetTilgangBadge`-komponent når `arvetFra.length > 0`: en `@sikt/sds-tag` med tekst "Arvet" + `@sikt/sds-tooltip` som viser opphavs-listen ("Arvet fra: minapplikasjon (emne-les1), …").
-- [ ] `ApplikasjonTilgangerFilter` utvides med:
-  - **`Tilgangskode`** (`TextInput`-fritekst, contains-match) — URL-param `tilgangskode`.
-  - **`Organisasjon`** (`Select`, default "Alle organisasjoner") — URL-param `organisasjonsId`.
-  - **`Tilknytning`** (`Select` med 3 verdier: "Alle tilknytninger" / "Kun direkte" / "Kun arvede") — URL-param `tilknytning`, mappes til `Tilknytning`-enum.
-  - Eksisterende `Miljø`-filter beholdes.
-- [ ] `ApplikasjonTilgangerResultList`: kolonner = tilgangskode (med badges Demo/Prod + Arvet), beskrivelse, organisasjon.
-- [ ] Multi-select-checkboxer på rader (iter1-#19) **fjernes** — fjerning skjer nå via modal (Task #7). Sjekk at ingen andre features avhenger av checkbox-modusen før fjerning.
-- [ ] Sorter-dropdown forenkles til kun `Tilgangskode` (krav fjernet `miljø` som sort-alternativ).
-- [ ] i18n-nøkler: `support.ApplikasjonTilganger.filter.tilknytning.alle/direkte/arvede`, `support.ApplikasjonTilganger.arvet/arvetFraOpphav`.
-- [ ] `ApplikasjonTilganger.a11y.test.tsx` dekker badge + filter-kombinasjoner.
-
-**Implementation Notes**:
-- `ArvetTilgangBadge/`-komponenten er en liten wrapper; vurder å plassere den under `src/common/components/` hvis den potensielt kan gjenbrukes, ellers under `src/domains/support/features/Applikasjon/components/`.
-
----
-
-#### Task #7: Erstatte `FjernTilgangerDialog` med ny bulk-modal (org+miljø-velger + multi-select)
-
-**Priority**: High
-**Size**: L
-**Dependencies**: Schema-tillegg `Query.fjernbareTilganger`, `FjernApplikasjonTilgangerInput.organisasjonsId` (cross-agent). Task #6 (multi-select på rader må fjernes først).
-**Addresses Requirements**: BRU-APP-API-008
-
-**Acceptance Criteria**:
-- [ ] Slett iter1-#19-implementasjonen av `FjernTilgangerDialog/` (per-rad-flyt). Rebuild ny mappe speilet på `TildelTilgangerDialog/`:
-  - `FjernTilgangerButton.tsx` — knapp i top-right av Tilganger-fanen, kun synlig hvis `applikasjon.kanFjerneTilganger`.
-  - `FjernTilgangerDialog.tsx` — modal med (org, miljø)-velger først, deretter multi-select-liste over fjernbare kandidater.
-  - `FjernTilgangerDialog.module.css`
-  - `FjernTilgangerDialog.a11y.test.tsx`
-  - `fjernbareQuery.ts` — `FJERNBARE_TILGANGER`-queryen.
-  - `mutation.ts` — `FJERN_APPLIKASJON_TILGANGER`-mutasjonen.
-- [ ] Modal-flyt:
-  1. Bruker åpner modalen → ser to selects: `Organisasjon` (begrenset til orgs hvor bruker har fjern-rettighet for denne applikasjonen — backend filtrerer) og `Miljø`.
-  2. Velg org → miljø-listen oppdateres (bare miljøer der org har tilganger).
-  3. Velg miljø → `useQuery(FJERNBARE_TILGANGER, { variables, skip: !org || !miljo })` kjører → liste over kandidater rendres med checkboxer.
-  4. Multi-select: bruker huker av valgte rader. "Bekreft fjerning"-knapp deaktivert til minst én er valgt.
-  5. Klikk "Bekreft fjerning" → `FJERN_APPLIKASJON_TILGANGER`-mutasjon → ved suksess: lukk modal, Snackbar "N tilganger fjernet", invalider/refetch `GET_APPLIKASJON_TILGANGER`-queryen.
-  6. Klikk "Avbryt" eller esc → lukk uten endring.
-- [ ] Lokal `useState` for valgte ID-er (ikke URL-state — modalen er midlertidig).
-- [ ] Krav: "Tilganger kan fjernes selv om applikasjonen er deaktivert" — knapp/modal må fungere når `applikasjon.status === INAKTIV`. Verifiser med a11y-test/mock.
-- [ ] Krav: "Arvede tilganger kan ikke fjernes direkte" — kandidatene fra backend ekskluderer arvede; UI behøver ikke filtrere. Defense-in-depth: hvis backend returnerer en `ArvetTilgangIkkeFjernbar`-feil, vis den ved relevant rad.
-- [ ] i18n-nøkler: `support.ApplikasjonFjernTilgangerDialog.{tittel,velgOrg,velgMiljo,velgTilganger,bekreft,avbryt,ingenKandidater}`.
-
-**Implementation Notes**:
-- Kopier filstruktur fra `src/domains/support/features/Applikasjon/components/TildelTilgangerDialog/` og tilpass mutation + tekst.
-
----
-
-#### Task #8: Verifiser/refactor `TildelTilgangerDialog` til iter-2-kontrakt
-
-**Priority**: Medium
-**Size**: S
-**Dependencies**: Ingen (schemaet har allerede iter-2-form).
-**Addresses Requirements**: BRU-APP-API-007
-
-**Acceptance Criteria**:
-- [ ] Verifiser at `tildelbareQuery.ts` passerer `(applikasjonsId, organisasjonsId, miljo)` til `Query.tildelbareTilganger`.
-- [ ] Verifiser at `mutation.ts` passerer `(applikasjonsId, organisasjonsId, miljo, tilgangskoder)` til `Mutation.tildelApplikasjonTilganger`.
-- [ ] Hvis enten query eller mutation mangler `organisasjonsId`: legg det til, oppdater UI-flyten slik at bruker velger organisasjon før miljø (samme rekkefølge som `FjernTilgangerDialog` for konsistens).
-- [ ] Krav: "Tilganger kan tildeles selv om applikasjonen er deaktivert" — verifiser via test.
-- [ ] `TildelTilgangerDialog.a11y.test.tsx` oppdateres hvis flyten endres.
-
----
-
-### Fase D — Endringslogg-fanen (Iter 4)
-
-#### Task #9: Implementere `ApplikasjonEndringslogg`-fane som tredje `DetailPageTabbedContentPanel`
-
-**Priority**: Medium
-**Size**: M
-**Dependencies**: Schema-tillegg `Applikasjon.endringslogg`, `Applikasjon.kanSeEndringslogg` (cross-agent). Task #1 (kanSeEndringslogg i selection set).
-**Addresses Requirements**: BRU-APP-API-016 (K16)
-
-**Acceptance Criteria**:
-- [ ] Ny mappe `src/domains/support/features/Applikasjon/features/ApplikasjonEndringslogg/`:
-  - `ApplikasjonEndringslogg.tsx` (host).
-  - `query.ts` (`GET_APPLIKASJON_ENDRINGSLOGG`).
-  - `components/ApplikasjonEndringsloggItem/ApplikasjonEndringsloggItem.tsx` (rad-presentasjon: tidspunkt, utfortAv, handlingstype, beskrivelse).
-  - `ApplikasjonEndringslogg.a11y.test.tsx`.
-  - `ApplikasjonEndringslogg.module.css`.
-- [ ] Tredje fane "Endringslogg" lagt til i `Applikasjon.tsx` (detaljside-host):
-  ```tsx
-  <DetailPageTabbedContentPanel id="endringslogg" label={t("endringsloggLabel")} icon={<ClockIcon aria-hidden />}>
-    <ApplikasjonEndringslogg applikasjonId={id} />
-  </DetailPageTabbedContentPanel>
-  ```
-- [ ] Fanen er **gated på `applikasjon.kanSeEndringslogg`** — hvis false, render ikke panelet (bare to faner).
-- [ ] Bruk `Surface`-card som container med `ApplikasjonEndringsloggItem`-rader.
-- [ ] "Last inn flere" (50 ad gangen) via `fetchMore`, mønster fra `AuditLogCard.tsx`.
-- [ ] Tom-tilstand: "Ingen endringer registrert".
-- [ ] Loading-skeleton vises ved første hent.
-- [ ] i18n-nøkler: `support.ApplikasjonEndringslogg.{tittel,tomTilstand,lastInnFlere,handlingstype,utfortAv,tidspunkt}`.
-
-**Implementation Notes**:
-- Referanse: [`src/domains/soknadsbehandling/features/AuditLogCard/AuditLogCard.tsx`](../../src/domains/soknadsbehandling/features/AuditLogCard/AuditLogCard.tsx) og [`AuditLogItem/AuditLogItem.tsx`](../../src/domains/soknadsbehandling/features/AuditLogCard/AuditLogItem/AuditLogItem.tsx).
-- `INITIAL_ENTRIES = 50`, `ENTRIES_PER_PAGE = 50` (avvik fra referansen som har 3/10 — applikasjon-endringslogg antas å være rikere).
-- Placeholder-data-shape (Q6): bruk `handlingstype` som `String!` — når backend forfiner til enum, oppdateres komponenten.
-
----
-
-### Fase E — Opprett-flyt (iter-3-task fra iter-1, oppdatering)
-
-#### Task #10: Utvide `OpprettApplikasjonDialog` med navn- og ansvarlig-felter
-
-**Priority**: High
-**Size**: M
-**Dependencies**: Schema-tillegg `OpprettApplikasjonInput.navn`, `ansvarligId`, `ansvarligType` (cross-agent).
-**Addresses Requirements**: BRU-APP-API-009
-
-**Acceptance Criteria**:
-- [ ] `OpprettApplikasjonDialog` (iter1-#17 leveranse) får to nye felter mellom Identitetsleverandør og Opprett-knappen:
-  - **Navn** — `TextInput`, obligatorisk. Inline-feilmelding "Navn er obligatorisk" ved tom.
-  - **Ansvarlig** — `Select`/`Combobox` med søk via `ansvarligKandidater(organisasjonsId)`-queryen (iter1-#15 levering, gjenbrukes). Begrenset til valgt organisasjons feide-brukere/-grupper. Obligatorisk.
-- [ ] Mutation `OPPRETT_APPLIKASJON` får utvidet input med `navn`, `ansvarligId`, `ansvarligType`.
-- [ ] Ved suksess: navigerer fortsatt til detaljsiden + Snackbar.
-- [ ] Test: tom navn ELLER tom ansvarlig blokkerer Opprett-knappen.
-- [ ] `OpprettApplikasjonDialog.a11y.test.tsx` dekker validering av begge nye felter.
-- [ ] i18n-nøkler: `support.OpprettApplikasjon.{navnLabel,navnObligatorisk,ansvarligLabel,ansvarligObligatorisk}`.
-
-**Implementation Notes**:
-- Backend defaulter `navn = visningsnavn` post-idP-verifisering (per åpent spørsmål 3 over) — men UI-en sender alltid det brukeren har skrevet inn. Hvis backend overstyrer ved tom: ikke UI-ens problem.
-
----
-
-### Fase F — Sletting av deprecated kode
-
-#### Task #11: Slette ubrukte iter-1 dialog-komponenter
-
-**Priority**: Low
-**Size**: S
-**Dependencies**: Task #5 (ny edit-flow ferdig), Task #7 (ny FjernTilgangerDialog ferdig).
-**Addresses Requirements**: ikke direkte; oppryddings-arbeid.
-
-**Acceptance Criteria**:
-- [ ] Slett `src/domains/support/features/Applikasjon/components/RedigerBeskrivelseDialog/` (iter1-#16).
-- [ ] Slett `src/domains/support/features/Applikasjon/components/SettAnsvarligDialog/` (iter1-#15). MERK: hvis Task #5 ikke har klart å gjenbruke `ansvarligKandidater`-queryen direkte derfra, må den queryen flyttes til en delt fil før dialogen slettes — `src/domains/support/features/Applikasjon/queries/ansvarligKandidater.ts` foreslås.
-- [ ] Slett iter-1-versjonen av `FjernTilgangerDialog/` (iter1-#19) — gjort som del av Task #7, sjekk at intet henger igjen.
-- [ ] Søk i kodebasen etter ubrukte imports og knip-kjøring (`npm run unusedcheck`) for verifisering.
-- [ ] i18n-nøkler for de slettede dialogene fjernes fra `src/common/messages/nb/support.json`.
-
-**Implementation Notes**:
-- Sjekk at iter1-completion-filer (iter1-#15, iter1-#16, iter1-#19) ikke har "open follow-ups" som blokkerer sletting.
-
----
-
-### Fase G — Schema- og backend-koordinering
-
-#### Task #12: Backend-hand-off — iter-2 schema-tillegg
-
-**Priority**: Critical (blokkerer Fase A–E)
-**Size**: N/A (hand-off, ikke kode-task)
-**Dependencies**: Ingen
-**Addresses Requirements**: All iter-2 features
-
-**Acceptance Criteria**:
-- [ ] Cross-agent-issue åpnet i `sikt-no/fs` mot backend-agenten med lenke til `agents/fs-admin/2026-05-27-applikasjon-tilgangsstyring/plan.md`.
-- [ ] Hand-off-issuet refererer eksplisitt til `## GraphQL-endringer`-seksjonen og lister alle 8 operasjoner (A–H).
-- [ ] Backend bekrefter mottak og estimerer leveringstidspunkt for hver operasjon.
-- [ ] Iterasjonsplan justeres hvis backend ikke kan levere alle samtidig — Fase A–D kan delvis frigjøres bak mock-API (iter1-#22).
-
-**Implementation Notes**:
-- Filer via `agent-coord` etter at planen er publisert til coord-repo.
-
----
+- Speil schema-formen i `## GraphQL-endringer` 1:1 — frontend-fragmenter må kompilere mot mock og ekte uten endring.
+- Behold eksisterende `tilgangskoder: [String!]`-filter parallelt med nytt `tilgangskodeContains`.
+- For arv-fixtures: 5 direkte-tildelte tilganger + 3 arvede (én med flere opphav) er nok til å dekke alle scenarier.
+
+#### Task #2: Externalize i18n-strenger for Iter 3-utvidelser
+
+**Priority:** High
+**Size:** M (3–4t)
+**Dependencies:** None (kan kjøres parallelt med Task #1)
+
+**Acceptance Criteria:**
+
+- [ ] `src/common/messages/nb/support.json` har nye namespaces/nøkler for: rediger-modus-knapper og -labels, navn-validering, arv-badge, "Vis arvede"-toggle, modal-headinger for tildel/fjern, obligatorisk-felt-meldinger, idP-/org-/status-labels i info-fanen.
+- [ ] Nøkkel-konvensjon: `support.Applikasjon.*` for detalj-side, `support.Applikasjoner.*` for liste, `support.OpprettApplikasjon.*` for opprett-dialog, `support.RedigerDetaljer.*` for ny inline rediger-form, `support.TildelTilganger.*` og `support.FjernTilganger.*` for modaler.
+- [ ] Ingen hardkodede norske strenger igjen i de Iter 3-berørte komponentene (verifisert ved grep).
+- [ ] `npm run generate:translations` kjørt; type-sjekk består.
+
+**Implementation Notes:**
+
+- Bruk `/externalize-i18n`-kommandoen for å starte hver komponent.
+
+### Fase 1 — Listevisning-utvidelser
+
+#### Task #3: Legg til `antallTilganger`-kolonne i listevisningen
+
+**Priority:** Medium
+**Size:** S (1–2t)
+**Dependencies:** Task #1
+**Addresses Requirements:** BRU-APP-API-001 (felt-tabell-utvidelse)
+
+**Acceptance Criteria:**
+
+- [ ] `APPLIKASJONER_RESULT_ROW_FRAGMENT` i `ApplikasjonerResultRow.tsx` utvidet med `antallTilganger`.
+- [ ] Rad-grid får ny kolonne mellom "Organisasjon" og "Status" som viser tallet med oversettings-nøkkel (eks. *"12 tilganger"*).
+- [ ] `.a11y.test.tsx` oppdatert.
+
+**Implementation Notes:**
+
+- Bruk `ListItemCell` for kolonnen, jf. `fs-admin-list-results`-skill.
+- Skissen viser tallet med suffix "tilganger" — bruk pluralization-helper hvis det finnes, ellers en enkel i18n-mal.
+
+#### Task #4: Legg til miljø-filter i listevisningen
+
+**Priority:** Medium
+**Size:** M (3–4t)
+**Dependencies:** Task #1
+**Addresses Requirements:** BRU-APP-API-001 (`Filtrere på miljø`-scenario)
+
+**Acceptance Criteria:**
+
+- [ ] Ny fil `src/domains/support/features/Applikasjoner/components/filter/ApplikasjonerMiljoFilter.tsx` (+ `.a11y.test.tsx`) — bruker `FSFilterList` eller `Select`/`SiktCheckbox` som passer for "zero/one/many of N" valg, jf. `fs-admin-list-filters`-skill.
+- [ ] `useGetApplikasjonerState.tsx` utvidet med `miljoer: Miljo[]` i filter-shape, URL-synced.
+- [ ] `ApplikasjonerFilter.tsx` rendrer den nye komponenten med `renderAsChips`-støtte.
+- [ ] `useGetApplikasjoner.tsx` sender `miljoer` i `filter`-variabelen.
+- [ ] Reset-knapp resetter også miljø-filteret.
+
+#### Task #5: Verifiser listevisning end-to-end mot oppdaterte mock-fixtures
+
+**Priority:** Low
+**Size:** S (1–2t)
+**Dependencies:** Task #3, #4
+**Addresses Requirements:** BRU-APP-API-001
+
+**Acceptance Criteria:**
+
+- [ ] Manuell test i dev-server: åpne `/tilgangsstyring/applikasjoner`, verifiser at "Antall tilganger" rendres på alle rader, og at miljø-filter snevrer listen riktig.
+- [ ] Combine-filter-scenario: miljø + organisasjon + status returnerer riktig snitt.
+- [ ] Kombinasjon med fritekst-søk fungerer.
+
+### Fase 2 — Detalj-side: info-fanen til inline rediger
+
+#### Task #6: Bygg `useUnsavedChangesGuard`-hook for discardable-changes
+
+**Priority:** High
+**Size:** M (3–4t)
+**Dependencies:** None
+**Addresses Requirements:** BRU-APP-API-006 (Regel: "Ulagrede endringer forkastes ved navigering")
+
+**Acceptance Criteria:**
+
+- [ ] Ny fil `src/domains/support/features/Applikasjon/components/RedigerDetaljer/useUnsavedChangesGuard.tsx` (+ test).
+- [ ] Hook eksponerer `{ markDirty: () => void, markClean: () => void }`.
+- [ ] Når `dirty`-state: `beforeunload`-event setter `returnValue` (browser-native dialog).
+- [ ] Når `dirty`-state: navigering bort (router-change, tab-change) nullstiller form-state via callback uten å blokkere navigeringen (krav-en sier "forkastes", ikke "blokkeres med dialog").
+- [ ] Unit-test dekker mount/unmount-cleanup, dirty→clean-overganger.
+
+**Implementation Notes:**
+
+- Next.js App Router: bruk `usePathname()` + `useEffect` til å oppdage router-bytte. `unstable_useBlocker` finnes ikke, men passive cleanup via `useEffect`-return er nok for "forkastes uten dialog".
+- Tab-bytte i `DetailPageTabbedContent` er en lokal state-overgang i React-treet — unmount av rediger-formen rydder state automatisk.
+
+#### Task #7: Fjern `Fjern ansvarlig`-flyten
+
+**Priority:** High
+**Size:** S (1–2t)
+**Dependencies:** None
+**Addresses Requirements:** BRU-APP-API-005 (ny obligatorisk-regel)
+
+**Acceptance Criteria:**
+
+- [ ] Slett `src/domains/support/features/Applikasjon/components/SettAnsvarligDialog/FjernAnsvarligConfirmDialog.tsx` + `.a11y.test.tsx`.
+- [ ] Slett `src/domains/support/features/Applikasjon/components/SettAnsvarligDialog/fjernApplikasjonAnsvarligMutation.ts`.
+- [ ] Fjern "Fjern ansvarlig"-knappen og mount-state i `ApplikasjonInformation.tsx:282-289` (`fjernAnsvarligDialogOpen`-state også).
+- [ ] Knappene "Sett ansvarlig" og "Endre ansvarlig" beholdes, men kalles fra rediger-modus i Task #9 (se nedenfor).
+- [ ] i18n-nøkler for fjern-ansvarlig fjernes fra `support.json`.
+
+#### Task #8: Inline rediger-modus — utvid info-fragment + bygg `RedigerDetaljerForm`
+
+**Priority:** High
+**Size:** L (5–8t)
+**Dependencies:** Task #1, #2, #6, #7
+**Addresses Requirements:** BRU-APP-API-002 (rediger-modus), BRU-APP-API-006 (navn + beskrivelse rediger)
+
+**Acceptance Criteria:**
+
+- [ ] `APPLIKASJON_INFORMATION_FRAGMENT` i `ApplikasjonInformation.tsx` utvidet med `kanRedigereNavn`, `identitetsleverandor`.
+- [ ] Ny fil `RedigerDetaljer/RedigerDetaljerForm.tsx` (+ `.a11y.test.tsx`) som:
+  - Tar `applikasjon`-fragment-ref og rendrer inputs for navn, beskrivelse, ansvarlig.
+  - Gating pr. felt: `kanRedigereNavn` → navn-input enabled, ellers read-only; samme for beskrivelse og ansvarlig.
+  - Validering: tomt navn → "Navn er obligatorisk"-feilmelding, blokker lagring.
+  - Bruker `useUnsavedChangesGuard` for å nullstille ved navigering.
+  - Lagre-knapp sender `redigerApplikasjonNavn` + `redigerApplikasjonBeskrivelse` + (ved endret ansvarlig) `settApplikasjonAnsvarlig` parallelt; aggregerer feil i én melding.
+  - Avbryt-knapp nullstiller form-state.
+- [ ] `ApplikasjonInformation.tsx` bygges om: legger til "Rediger detaljer"-toggle som mounter `RedigerDetaljerForm`; lesemodus skjules samtidig.
+- [ ] Dialog-knapper for "Rediger beskrivelse", "Sett ansvarlig", "Endre ansvarlig" fjernes fra lesemodus.
+- [ ] `RedigerBeskrivelseDialog/` slettes (mappa, mutation, test).
+- [ ] `SettAnsvarligDialog/` beholdes — `RedigerDetaljerForm` bruker den som popover/inline-søk for ansvarlig-feltet, eller restruktureres til ren `<AnsvarligSelect>`-komponent (vurder under implementasjon).
+
+**Implementation Notes:**
+
+- Skissen viser navn + beskrivelse + ansvarlig som inputs i rediger-modus. idP, org, status, miljøer, sporing forblir read-only.
+- Behold `OutputField`-komponentet for read-only felter; bruk `TextInput`/`TextArea` for inputs (jf. `fs-admin-inputs`-skill).
+- Ny mutation `REDIGER_APPLIKASJON_NAVN` lagres i `RedigerDetaljer/mutation.ts`.
+
+#### Task #9: Vis idP, organisasjon, status i info-fanen
+
+**Priority:** Medium
+**Size:** S (1–2t)
+**Dependencies:** Task #8
+**Addresses Requirements:** BRU-APP-API-002 (commit `cee226d` + `59eba3d`)
+
+**Acceptance Criteria:**
+
+- [ ] Info-fanen viser idP-feltet (navn fra `IdentitetsleverandorType`-enum via i18n-mapping — gjenbruk `getIdentitetsleverandorKey` fra `ApplikasjonTopBar.tsx`).
+- [ ] Organisasjon-feltet vises eksplisitt i info-fanen (er der allerede via `applikasjon.organisasjon.navn` — verifiser).
+- [ ] Status-felt vises i info-fanen (kan dupliseres fra topbar — krav-en sier "Se status" som scenario).
+
+**Implementation Notes:**
+
+- Topbar viser disse fra før — info-fanen-visningen er for å gi en samlet detalj-oversikt og oppfylle "Se status"/"Se identitetsleverandør"-scenariene.
+
+### Fase 3 — Tilganger-fanen: filter, arv, og restrukturering
+
+#### Task #10: Utvid `Applikasjon`-info i topbar med `antallTilganger`
+
+**Priority:** Low
+**Size:** S (1–2t)
+**Dependencies:** Task #1
+**Addresses Requirements:** BRU-APP-API-002 (topbar-skisse viser "Antall tilganger: 14")
+
+**Acceptance Criteria:**
+
+- [ ] `APPLIKASJON_TOP_BAR_FRAGMENT` utvidet med `antallTilganger`.
+- [ ] `ApplikasjonTopBar.tsx` rendrer tallet som ekstra info-line eller chip.
+- [ ] `.a11y.test.tsx` oppdatert.
+
+#### Task #11: Sletter `Miljø` fra sort-valg i tilgangs-listen
+
+**Priority:** Low
+**Size:** S (1t)
+**Dependencies:** None
+**Addresses Requirements:** BRU-APP-API-003 (commit `cee226d`: *"fjern miljø-sortering"*)
+
+**Acceptance Criteria:**
+
+- [ ] `ApplikasjonTilgangerOrderBy.tsx` viser kun `Tilgangskode` som sort-valg.
+- [ ] Hvis nåværende URL-state har `orderByField=MILJO`, fall tilbake til `TILGANGSKODE`.
+
+#### Task #12: Utvid `useApplikasjonTilgangerState` med organisasjon + fritekst + arv-toggle
+
+**Priority:** High
+**Size:** M (3–4t)
+**Dependencies:** Task #1
+**Addresses Requirements:** BRU-APP-API-003 (commit `cee226d` + `4f2e9a4`)
+
+**Acceptance Criteria:**
+
+- [ ] State-shape utvidet med `organisasjonsIder: string[]`, `tilgangskodeContains: string`, `skjulArvede: boolean`.
+- [ ] URL-state-sync via samme mønster som listevisningen.
+- [ ] Reset-knapp nullstiller alle nye felter.
+
+#### Task #13: Bygg organisasjon-filter, fritekst-filter, arv-toggle for tilgangs-listen
+
+**Priority:** High
+**Size:** M (3–4t)
+**Dependencies:** Task #12
+**Addresses Requirements:** BRU-APP-API-003
+
+**Acceptance Criteria:**
+
+- [ ] Ny fil `ApplikasjonTilgangerOrganisasjonFilter.tsx` (+ test) — multi-select, valg begrenset til organisasjoner applikasjonen har tilganger hos.
+- [ ] Eksisterende `ApplikasjonTilgangerTilgangskodeFilter.tsx` endres fra `tilgangskoder: [String!]` til fritekst `tilgangskodeContains: string` (`TextInput` med debounce, jf. `fs-admin-inputs`-skill — ingen `type="search"`, ingen placeholder-som-label).
+- [ ] Ny fil `ApplikasjonTilgangerArvToggle.tsx` (+ test) — `SiktSwitch`/`SiktCheckbox` for "Vis arvede tilganger"-toggle (default på).
+- [ ] `ApplikasjonTilgangerFilter.tsx` rendrer alle 4 filtre i sidebar + chips-row med `renderAsChips`.
+
+#### Task #14: Utvid `ApplikasjonTilgangerResultRow` med beskrivelse, organisasjon, arv-badge
+
+**Priority:** High
+**Size:** M (3–4t)
+**Dependencies:** Task #1
+**Addresses Requirements:** BRU-APP-API-003 (commit `cee226d` + `4f2e9a4`)
+
+**Acceptance Criteria:**
+
+- [ ] `APPLIKASJON_TILGANG_ROW_FRAGMENT` utvidet med `tilgangsbeskrivelse`, `organisasjon { id, navn }`, `erArvet`, `arvetFra { opphavsTilgang { id, tilgangskode }, begrunnelse }`.
+- [ ] Rad-grid får kolonner i rekkefølge: tilgangskode + idP/arv-badges → beskrivelse → organisasjon (jf. skisse).
+- [ ] Ny komponent `ApplikasjonTilgangerArvBadge.tsx` (+ test) — viser "Arvet"-badge med tooltip/popover som lister `arvetFra[].opphavsTilgang.tilgangskode` og første `begrunnelse`.
+- [ ] `.a11y.test.tsx` oppdatert med arv-scenarier.
+
+#### Task #15: Verifiser tilgangs-listen end-to-end mot oppdaterte mock-fixtures
+
+**Priority:** Low
+**Size:** S (1–2t)
+**Dependencies:** Task #11, #12, #13, #14
+
+**Acceptance Criteria:**
+
+- [ ] Manuell test: filtrer på organisasjon → kun matchende tilganger vises.
+- [ ] Fritekst-filter "emne" matcher tilgangskoder som inneholder substringen.
+- [ ] Toggle av "Vis arvede" skjuler/viser arvede tilganger.
+- [ ] Arv-badge tooltip viser korrekte opphav.
+- [ ] Dedup-scenario: tilgang med flere opphav listes kun én gang.
+
+### Fase 4 — Tildel / fjern tilganger: kaskade + modal-restrukturering
+
+#### Task #16: Restrukturer `TildelTilgangerDialog` til kaskade (org → miljø → kode)
+
+**Priority:** High
+**Size:** L (5–8t)
+**Dependencies:** Task #1
+**Addresses Requirements:** BRU-APP-API-007 (commit `59eba3d`)
+
+**Acceptance Criteria:**
+
+- [ ] Dialog-flyt: bruker velger organisasjon først, deretter miljø, deretter (etter at begge er valgt) åpnes valglisten for tilgangskoder.
+- [ ] `tildelbareApplikasjonTilganger(applikasjonsId, miljo, organisasjonsId)`-query re-utløses ved hver endring i (org, miljø) — bruk `useQuery` med `skip`-flag inntil begge er valgt.
+- [ ] Allerede tildelte tilganger vises som ikke-valgbare (uten implementasjons-detalj om "gråtone" — bruker `disabled`-attribute + tilstands-tekst).
+- [ ] "Bekreft tildeling"-knapp sender `tildelApplikasjonTilganger`-mutation med valgte tilgangskoder.
+- [ ] Dialogen kan åpnes også når applikasjonen er deaktivert; suksess-melding viser status-kontekst.
+- [ ] Hvis bruker har kun én organisasjon: skip org-trinn (auto-velg).
+- [ ] `.a11y.test.tsx` dekker alle tre trinn.
+
+**Implementation Notes:**
+
+- Skissen `applikasjon-detaljevisning-aktiv-tab-tilganger.png` viser "+ Tildel tilganger"-knapp øverst — knapp finnes allerede.
+- Apollo-cache-oppdatering: mutation-payload returnerer `applikasjon { id, antallTilganger }` så listen og topbar oppdateres uten manuell refetch.
+
+#### Task #17: Restrukturer `FjernTilgangerDialog` til samlet modal med org/miljø/tilganger inni
+
+**Priority:** High
+**Size:** L (5–8t)
+**Dependencies:** Task #1, #14
+**Addresses Requirements:** BRU-APP-API-008 (commit `59eba3d` + `4f2e9a4`)
+
+**Acceptance Criteria:**
+
+- [ ] Modal-flyt: bruker åpner modal, velger organisasjon + miljø, ser deretter liste over tilganger applikasjonen har for den kombinasjonen (hentet via `applikasjon.tilganger(filter: { miljoer: [valgt], organisasjonsIder: [valgt] })`).
+- [ ] Bruker huker av tilganger som skal fjernes, bekrefter.
+- [ ] Arvede tilganger filtreres ut av valglisten på klient-siden (basert på `erArvet`); hvis listen blir tom, vis "Ingen direkte tildelte tilganger å fjerne".
+- [ ] "Avbryt" → ingen endring.
+- [ ] Modalen kan åpnes også når applikasjonen er deaktivert.
+- [ ] In-row select-checkboxes fjernes fra `ApplikasjonTilgangerResultList`; `FjernValgteTilgangerButton.tsx` erstattes/forenkles til en "Åpne fjernings-modal"-knapp.
+- [ ] `.a11y.test.tsx` dekker happy path, avbryt, arvet-filtrering, og deaktivert-applikasjon-tilfellet.
+
+**Implementation Notes:**
+
+- Skissen viser "Fjern tilganger"-knapp øverst (samme nivå som "+ Tildel tilganger").
+- Hvis backend returnerer `ArvetTilgangKanIkkeFjernes`-error: vis i UI som validerings-feilmelding (skal i prinsippet ikke skje pga. client-side-filtreringen, men trygd mot race conditions).
+
+#### Task #18: Oppdater `FjernTilgangerDialog`-error-handling for `ArvetTilgangKanIkkeFjernes`
+
+**Priority:** Medium
+**Size:** S (1–2t)
+**Dependencies:** Task #17
+
+**Acceptance Criteria:**
+
+- [ ] `FjernApplikasjonTilganger`-mutation utvidet med `... on ArvetTilgangKanIkkeFjernes { applikasjonsTilgangId }`.
+- [ ] Error mappes til norsk feilmelding via i18n.
+- [ ] Test simulerer at mock returnerer denne errorn.
+
+#### Task #19: Utvid `OpprettApplikasjonDialog` med navn og ansvarlig (V2-mutation)
+
+**Priority:** High
+**Size:** L (5–8t)
+**Dependencies:** Task #1
+**Addresses Requirements:** BRU-APP-API-009 (commit `a7efc9f`)
+
+**Acceptance Criteria:**
+
+- [ ] `OpprettApplikasjonDialog.tsx` har inputs for navn (`TextInput`, obligatorisk) og ansvarlig (`<AnsvarligSelect>` eller gjenbruk av `SettAnsvarligDialog`s søke-komponent, scopet til valgt organisasjon).
+- [ ] Validering: tomt navn → "Navn er obligatorisk", ingen ansvarlig → "Ansvarlig er obligatorisk".
+- [ ] Mutation oppgradert til `opprettApplikasjonV2` med `OPPRETT_APPLIKASJON_V2`-konstant.
+- [ ] Error-handling: `NavnAlleredeIBruk` → "Navnet er allerede i bruk" + lenke til konflikt-applikasjon, `AnsvarligPaakrevdVedOpprettelse` (server-side-fallback) → "Ansvarlig må velges".
+- [ ] Suksess: dialogen lukkes, listen oppdateres, naviger til detaljsiden.
+- [ ] `.a11y.test.tsx` dekker validering, suksess, error-states.
+
+**Implementation Notes:**
+
+- Ansvarlig-søk-feltet trenger samme org-skopering som `SettAnsvarligDialog` (begrenset til valgt `organisasjonsId`).
+
+### Fase 5 — Sluttfase: tilstandshåndtering for deaktivert applikasjon, codegen, verifisering
+
+#### Task #20: Verifiser at tildeling/fjerning fungerer på deaktivert applikasjon
+
+**Priority:** Medium
+**Size:** S (1–2t)
+**Dependencies:** Task #16, #17
+**Addresses Requirements:** BRU-APP-API-007 (Regel: tildele til deaktivert), BRU-APP-API-008 (Regel: fjerne fra deaktivert)
+
+**Acceptance Criteria:**
+
+- [ ] Tildel-knapp og Fjern-knapp i `ApplikasjonTilganger.tsx` er ikke disabled når `applikasjon.status === INAKTIV`.
+- [ ] Eksisterende `GuidePanel` om deaktivert-tilstand i `ApplikasjonTilganger.tsx` justeres til å si "tilganger kan endres", ikke "tilganger er låst".
+- [ ] Mock-fixture inkluderer minst én deaktivert applikasjon med tilganger for å teste flyten.
+
+#### Task #21: Sluttfør codegen og typecheck etter alle endringer
+
+**Priority:** High
+**Size:** S (1–2t)
+**Dependencies:** Tasks #1–#20
+
+**Acceptance Criteria:**
+
+- [ ] `npm run compile` (codegen) kjørt; `src/__generated__/graphql.ts` reflekterer alle nye typer.
+- [ ] `npm run test:typecheck` består uten feil eller advarsler.
+- [ ] `npm run lint` består.
+- [ ] `npm run formatcheck` består.
+- [ ] `npm test` består.
+- [ ] `npm run test:a11y` består — alle nye/endrede komponenter har gyldige a11y-tester.
+
+#### Task #22: Manuell verifisering mot Figma-skissene + kravene
+
+**Priority:** Medium
+**Size:** M (3–4t)
+**Dependencies:** Task #21
+
+**Acceptance Criteria:**
+
+- [ ] Sammenlign listevisningen i dev-server mot `applikasjoner-listevisning.png` (alle felter synlige, "Antall tilganger" på riktig plass, miljø-filter med riktig UI).
+- [ ] Sammenlign detaljside-tabben "Detaljer" (lesemodus) mot `applikasjon-detaljevisning-aktiv-tab-detaljer-lese-modus.png`.
+- [ ] Sammenlign rediger-modus mot `applikasjon-detaljevisning-aktiv-tab-detaljer-rediger-modus.png` — alle inputs synlige, lagre/avbryt-knapper, navigering bort nullstiller.
+- [ ] Sammenlign tilganger-tabben mot `applikasjon-detaljevisning-aktiv-tab-tilganger.png` — sidebar-filtre, arv-badges, "Vis arvede"-toggle, "+ Tildel tilganger" / "Fjern tilganger"-knapper.
+- [ ] Gå gjennom hvert `Scenario` i de 7 endrede `.feature`-filene og kryss av at det er dekket.
 
 ## Risk Assessment
 
 ### Technical Risks
 
-- **Risk:** `DetailPageTabbedContentPanel` re-monter ikke nødvendigvis ved fane-bytte; lokal `useState` for `editMode` overlever.
-  - **Mitigation:** Verifiser oppførselen ved å sjekke implementasjonen av `DetailPageTabbedContent` mot `nuqs`-state — hvis state vedvarer, må vi eksplisitt `cancel()` editMode på `useEffect`-rensing. Task #5 inkluderer manuell verifisering.
-- **Risk:** Apollo-cache merger ikke `redigerApplikasjonDetaljer`-payload-en med eksisterende `Applikasjon`-cache slik forventet (f.eks. hvis returtype mangler `__typename` eller `id`).
-  - **Mitigation:** Mutasjons-payload må alltid returnere `applikasjon { id ... }`; backend skal følge dette mønsteret. Skriv en Apollo-cache-integrasjonstest i Task #5.
-- **Risk:** `Antall tilganger`-tall kan komme out-of-sync etter en bulk-fjern (`fjernApplikasjonTilganger`-payload må returnere oppdatert `applikasjon.antallTilganger`).
-  - **Mitigation:** Task #7-mutation-payload inkluderer `applikasjon { id antallTilganger }`. Apollo merger automatisk.
-- **Risk:** Schema-utvidelser fra backend forsinkes; iter-2-utvikling blokkeres.
-  - **Mitigation:** Mock-API-laget (iter1-#22) kan utvides til å returnere iter-2-formen. Task #12 (backend hand-off) eskaleres tidlig.
+- **Risk:** Inline rediger-modus i info-fanen er en større refactor enn det først ser ut. Mye logikk flyttes fra 5 separate dialoger (`RedigerBeskrivelse`, `SettAnsvarlig`, `FjernAnsvarlig`) til én form.
+  - **Mitigation:** Task #8 er bevisst Large (5–8t). Hold `SettAnsvarligDialog` som indre komponent (popover/inline-søk) for å redusere scope.
 
-### Open Questions Still Hanging Over The Plan
+- **Risk:** Arv-modellen (Op #5) er fs-admins gjetning på schema-form. Når backend leverer kan formen avvike, og rad-fragmentet + arv-badge må refaktoreres.
+  - **Mitigation:** Mock-API speiler den foreslåtte formen 1:1 så frontend-koden er testbar. Når backend kommer: ett enkelt sted (rad-fragment + badge-komponent) tilpasses. Risikoen er konsentrert til ett mappenavn.
 
-Iter-1 åpne spørsmål gjelder fortsatt og er ikke gjentatt her (se [iter-1-plan §Open Questions Still Hanging Over The Plan](../ACTIVE-ITERATION-2/plan-applikasjon-tilgangsstyring.md)):
-- POC-rydde-PR-timing
-- `NyTilgangButton`-skjebne
-- USER_ACTION-enum-utvidelse-vs-Unleash-gating
-- Backend-agentens reelle aktivitet
+- **Risk:** Discardable-changes-mekanikken (Task #6) kan introdusere bugs ved router-overgang i Next.js App Router (ingen førsteklasses `useBlocker`).
+  - **Mitigation:** Hold mekanismen passiv (cleanup på unmount), ikke aktiv (blokker navigering). Krav-en sier "forkastes", ikke "spør bruker først". Browser-native `beforeunload` for window-close er den eneste aktive interaksjonen.
 
-Nye åpne spørsmål reist av iter-2-deltaen:
-- 4 schema-eier-spørsmål (se `## GraphQL-endringer §Åpne spørsmål til schema-eier`)
-- **GitHub-struktur:** #453 (endringslogg) har fortsatt `parent = #437` (Nice to have) — `bat-krav` må flytte den til et nytt iter-4-paraply-issue. Ikke en blokker for utvikling, men en før-deploy-konsistens-sjekk.
-- **`Tilknytning`-filter-scenarier:** krav-fila har "skjul/vis arvede"-toggle, ikke `Tilknytning`-select. Krav-eier må synkronisere skissen og krav-fila.
+- **Risk:** `TildelTilgangerDialog`-restruktureringen krever re-fetch av `tildelbareApplikasjonTilganger`-query ved hver (org, miljø)-endring. Dårlig UX hvis det ikke debounces/caches.
+  - **Mitigation:** Apollo-cachen normaliserer queries pr. (orgId, miljo)-kombinasjon, så re-fetch er gratis ved tilbake-bytte. Vurder `fetchPolicy: 'cache-and-network'` for å vise siste kjent verdi mens nytt resultat lastes.
+
+- **Risk:** `OpprettApplikasjonV2`-mutation er ikke tilgjengelig i ekte schema før backend leverer. Hvis fs-admin merges før det: produksjons-bygget vil få runtime-feil.
+  - **Mitigation:** Feature-flag `tilgangsstyring-meny` (eksisterende) holder hele tilgangsstyring-flyten av i prod. Aktivering planlegges sammen med backend-leveranse.
+
+- **Risk:** Dedup-ansvar for arvede tilganger (Open Question #3) er antatt backend. Hvis backend ikke gjør dette, må frontend gjøre det client-side — bryter paginering (`totalCount` blir feil).
+  - **Mitigation:** Mock-handler implementerer dedup på backend-siden så frontend kan utvikles mot forventet kontrakt. Flagges som blocker for ekte schema.
+
+- **Risk:** Externalize-i18n (Task #2) er bredt og lett å miste oversikt over.
+  - **Mitigation:** Bruk eksisterende `/externalize-i18n`-kommandoen pr. komponent. Verifiser med grep etter at hver komponent er ferdig.
 
 ### Testing Requirements
 
-- Unit-tester for nye komponenter: ikke obligatorisk (per CLAUDE.md), men anbefalt for `FjernTilgangerDialog` (modal-flyt) og edit-modus i `ApplikasjonInformation` (state-overganger).
-- A11y-tester (`ComponentName.a11y.test.tsx`): obligatorisk for hver ny komponent, oppdatert for hver endret komponent.
-- Manuell test: krav-regel om at fane-bytte forkaster ulagrede endringer (Task #5 acceptance).
-- Manuell test: legacy-applikasjon med `ansvarlig = null` blokkerer Lagre, viser warning (Task #5 acceptance).
-- Manuell test: bulk-fjern fungerer mens applikasjon er INAKTIV (Task #7 acceptance).
+- **Unit tests:** Hver ny hook (`useUnsavedChangesGuard`) og hver utvidede state-hook (`useGetApplikasjonerState`, `useApplikasjonTilgangerState`) har test-dekning for filter-mapping og state-overganger.
+- **A11y tests:** Hver ny eller endret komponent har `.a11y.test.tsx` (CLAUDE.md-krav). Estimat: ~10 nye a11y-test-filer + ~8 oppdaterte.
+- **Integration tests** (manuelt eller via mock-API-bekreftelser):
+  - Rediger-modus happy path: åpne → endre navn + beskrivelse + ansvarlig → lagre → alle tre lagres.
+  - Rediger-modus discardable: åpne → endre → bytt tab → returner → felter er nullstilt.
+  - Tildel kaskade: velg org → miljø → tilgangskoder → bekreft → tilgang vises i listen.
+  - Fjern via modal: åpne → velg org+miljø → huk av arvet (skjult fra listen) → bekreft → listen er kortere.
+  - Opprett med validering: tomt navn blokkerer lagring; navn-kollisjon viser feilmelding.
+  - Deaktivert-applikasjon: tildel/fjern fungerer; status-banner reflekterer riktig.
+- **Manuell verifikasjon:** Task #22 dekker.
 
 ## Success Criteria
 
-- [ ] Alle 12 iter-2-tasks ferdigstilt.
-- [ ] `npm run lint` + `npm run test:typecheck` + `npm run test:a11y` passerer på branch.
-- [ ] Krav fra `01 Iterasjon 2/*.feature` og `02 Iterasjon 3/*.feature` (iter-2-versjonene) er manuelt verifisert.
-- [ ] `03 Iterasjon 4/endringslogg.feature` rettighets-scenariene (1, 2, 3) er manuelt verifisert; `@openquestion`-scenarier (4, 5, 6, 7) er ikke i scope.
-- [ ] iter-1 `RedigerBeskrivelseDialog`, `SettAnsvarligDialog`, gamle `FjernTilgangerDialog` er slettet.
-- [ ] Apollo-cache opdaterer atomisk ved `redigerApplikasjonDetaljer` (no stale data observed manually).
-- [ ] Mock-API gir riktige iter-2-typer (hvis backend-schema ikke er klart, fallback dekker test-bruk).
-- [ ] Cross-agent-issue mot backend åpnet (Task #12) og status synlig i agents-readme.
+- [ ] Alle 22 Tasks fullført med Acceptance Criteria godkjent i PR-review.
+- [ ] Alle Iter 3-relaterte `@must @planned`-krav (BRU-APP-API-001..010) dekker de oppdaterte scenariene fra de 7 commitene.
+- [ ] `npm test`, `npm run test:a11y`, `npm run test:typecheck`, `npm run lint`, `npm run formatcheck` består.
+- [ ] Coverage-tersklene fra `jest.config.ts` (60% branches/functions/lines, 90% statements) er fortsatt oppfylt.
+- [ ] Manuell verifisering mot 5 skisser i `docs/skisser/` viser at UI matcher.
+- [ ] Feature-flag `tilgangsstyring-meny` fortsatt av i prod ved første merge.
+- [ ] Hand-off-issue mot backend-agent fileret med koblet til feature-folder i coord-repo (`agents/fs-admin/2026-05-27-applikasjon-tilgangsstyring/`).
+- [ ] Endringslogg (BRU-APP-API-016) **forblir urørt** — Iter 4, fortsatt `@draft`, ikke i scope.
 
 ## Requirements Traceability
 
-| Krav (Feature-ID) | Krav-fil                              | Iter | Tasks               | Status   |
-| ----------------- | ------------------------------------- | ---- | ------------------- | -------- |
-| BRU-APP-API-001   | `listevisning_og_sok.feature`         | 2    | #1, #2, #3          | Planned  |
-| BRU-APP-API-002   | `se_detaljer.feature`                 | 2    | #1, #4              | Planned  |
-| BRU-APP-API-003   | `vise_tilganger.feature`              | 2    | #6                  | Planned  |
-| BRU-APP-API-005   | `administrere_ansvarlig.feature`      | 2    | #5                  | Planned  |
-| BRU-APP-API-006   | `rediger_detaljer.feature`            | 2    | #5                  | Planned  |
-| BRU-APP-API-007   | `tildele_tilgang.feature`             | 3    | #8                  | Planned  |
-| BRU-APP-API-008   | `fjerne_tilgang.feature`              | 3    | #7                  | Planned  |
-| BRU-APP-API-009   | `opprette_applikasjon.feature`        | 3    | #10                 | Planned  |
-| BRU-APP-API-016   | `endringslogg.feature`                | 4    | #9                  | Planned  |
-| _(støtte-task)_   | Schema-hand-off                       | —    | #12                 | Planned  |
-| _(oppryddings)_   | Slette ubrukte iter-1-dialoger        | —    | #11                 | Planned  |
-| BRU-APP-API-004   | `passordbytte.feature`                | 2    | iter1-#14 (ferdig)  | Inherited|
-| BRU-APP-API-010   | `deaktivere_applikasjon.feature`      | 3    | iter1-#20 (ferdig)  | Inherited|
+| Requirement ID  | Summary                                  | Endring i Iter 3                      | Tasks                          | Status  |
+| --------------- | ---------------------------------------- | ------------------------------------- | ------------------------------ | ------- |
+| BRU-APP-API-001 | Listevisning og søk                      | + Antall tilganger, + miljø-filter    | #1, #2, #3, #4, #5             | Planned |
+| BRU-APP-API-002 | Se detaljer                              | + idP/org/status i info, + rediger-toggle | #1, #2, #8, #9, #10        | Planned |
+| BRU-APP-API-003 | Vise tilganger                           | + org-filter, fritekst, arv           | #1, #2, #11, #12, #13, #14, #15 | Planned |
+| BRU-APP-API-004 | Passordbytte                             | Ingen endring                         | —                              | Done    |
+| BRU-APP-API-005 | Administrere ansvarlig                   | Fjerne Fjern-flyten, obligatorisk     | #2, #7, #8                     | Planned |
+| BRU-APP-API-006 | Rediger detaljer                         | Navn-redigering, ulagrede forkastes   | #1, #2, #6, #8                 | Planned |
+| BRU-APP-API-007 | Tildele tilgang                          | Kaskade, deaktivert-applikasjon       | #1, #2, #16, #20               | Planned |
+| BRU-APP-API-008 | Fjerne tilgang                           | Samlet modal, arv-filter, deaktivert  | #1, #2, #17, #18, #20          | Planned |
+| BRU-APP-API-009 | Opprette applikasjon                     | Navn + ansvarlig obligatorisk (V2)    | #1, #2, #19                    | Planned |
+| BRU-APP-API-010 | Deaktivere                               | Ingen endring                         | —                              | Done    |
+| BRU-APP-API-015 | Sist brukt                               | Ingen endring                         | —                              | Done    |
+| BRU-APP-API-016 | Endringslogg                             | **Ikke i scope — Iter 4 @draft**      | —                              | Deferred |
+| BRU-APP-API-017 | Masseadministrasjon                      | Ikke i scope (`@could @draft`)        | —                              | Deferred |
 
-## Cross-Agent Hand-offs (candidates — NOT filed from this plan)
+## Cross-agent Hand-offs (kandidater — bekreftes etter plan-publisering)
 
-Konkrete kandidater identifisert ved planlegging:
+Per brukerens valg "Surface kandidater — du bekrefter per hand-off". Fileres med `agent-coord` etter at brukeren bekrefter hvilke som skal opprettes.
 
-1. **Backend / SuperGraf-schema-agent** (`sikt-no/fs` agents/backend/ — kanskje sammen med en utvidet "Applikasjon-schema-eier").
-   - **Hva trengs:** 8 schema-operasjoner spesifisert i `## GraphQL-endringer §Operasjon A–H` over.
-   - **Hvorfor blokkerer:** Fase A–D av denne planen avhenger av at backend leverer/utvider de nevnte typene og mutasjonene. Mock-API (iter1-#22) kan ta noe av trykket, men eksperimentell prod-kontrakt må stamme fra backend.
-   - **Følger med i hand-off-issuet:** lenke til hele feature-mappa `agents/fs-admin/2026-05-27-applikasjon-tilgangsstyring/`.
+1. **Backend / SuperGraf-schema-agent — Iter 3 schema-utvidelser:**
+   - `ApplikasjonerFilterInput.miljoer` (Op #1).
+   - `Applikasjon.antallTilganger` (Op #2).
+   - `Applikasjon.kanRedigereNavn` + `redigerApplikasjonNavn`-mutation + `NavnAlleredeIBruk`-error (Op #3).
+   - `ApplikasjonTilgangerFilterInput.organisasjonsIder` + `tilgangskodeContains` + `inkluderArvede` (Op #4).
+   - Arv-modell på `ApplikasjonTilgang` (`arvetFra`, `erArvet`, `ApplikasjonTilgangArv`-type) + dedup-ansvar i resolveren (Op #5).
+   - `opprettApplikasjonV2`-mutation med `navn` + `ansvarligId` + nye errors (Op #6).
+   - `@deprecated` på `fjernApplikasjonAnsvarlig` (Op #7).
+   - Bekreftelse av åpne spørsmål #1 (navn-unikhet), #2 (arv-form), #3 (dedup-ansvar), #5 (deprecation-vindu).
+   - **Hvorfor blokkerer:** Frontend bygger mot mock-API, men kan ikke aktiveres i prod uten ekte schema.
 
-2. **Krav-eier / `bat-krav`-bruker** — to follow-ups som ikke blokkerer utvikling:
-   - Flytte #453 (endringslogg) fra parent #437 til et nytt iter-4-paraply-issue, så GitHub-strukturen stemmer med krav-mappens "03 Iterasjon 4".
-   - Justere `vise_tilganger.feature` slik at scenariene refererer til `Tilknytning`-filter i stedet for "skjul arvede"-toggle.
+2. **Produkt-eier (krav-arbeid) — Åpent spørsmål #1:**
+   - Bekrefte at navn er bruker-overstyrt visningsnavn (ikke låst til idP).
+   - **Hvorfor blokkerer:** Hvis svaret er "låst til idP", droppes Op #3 og Task #8 må justeres.
 
-3. **Identitets-/Feide-/Maskinporten-koblings-eier** (uendret fra iter-1) — `navn`-defaulting post-idP-verifisering (åpent spørsmål 3).
+## Notater
 
-Disse er **kandidater**. Brukeren bekrefter hvilke som skal files som hand-off-issues før `agent-coord` invoke'es.
-
+- Plan-en gjenspeiler Iter 2's `mock-API først`-strategi og samme task-granularitet. 22 tasks er forventet ~3 ukers fokusert utvikling for én utvikler.
+- Endringslogg-fanen (BRU-APP-API-016) blir egen plan-runde når åpne spørsmål er besvart og krav-en flyttes fra `@draft` til `@planned`.
+- POC-fjernings-arbeidet (`docs/ACTIVE-ITERATION-2/` referer til "Maskinbruker-POC fortsatt funksjonell") ligger fortsatt utenfor scope; planlegges som separat oppfølgings-PR når feature-flag aktiveres i prod.

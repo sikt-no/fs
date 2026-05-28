@@ -1,244 +1,309 @@
-# Analysis (delta): Applikasjon-tilgangsstyring — Iteration 2
+# Analysis: Applikasjon-tilgangsstyring — krav-oppdateringer etter Iter 2-implementasjon
 
-> **Scope:** Iter-2-runde av initiativ [#31](https://github.com/sikt-no/fs/issues/31). Dette dokumentet beskriver **bare deltaen** mellom iteration 1 (snapshot i [`docs/ACTIVE-ITERATION-2/`](../ACTIVE-ITERATION-2/)) og det oppdaterte krav-/skisse-grunnlaget per 2026-05-27. Punkter som er uendret er **ikke** gjentatt — referer til [`analysis-applikasjon-tilgangsstyring.md`](../ACTIVE-ITERATION-2/analysis-applikasjon-tilgangsstyring.md) i ACTIVE-ITERATION-2 for full kontekst.
+> **Scope:** delta-analyse av de 7 commitene på `fruitbat`-branchen brukeren har listet, festet til SHA [`8f5e0bd`](https://github.com/sikt-no/fs/commit/8f5e0bddedf7c5731722c5fc80159a95db197909). Vurdert opp mot dagens fs-admin-implementasjon (Iter 2 er ferdig på branch `poc-skills-execute-result`, 22 tasks levert) og Figma-skissene i `docs/skisser/`.
 >
-> **Read-only:** løsning og task-bryting hører hjemme i `bat-plan`. Denne kjøringen bekrefter at iter-1-analysens hovedlinjer (POC-fjerning, `useDataListState`, `MigrerPassordDialog`-mønster, tre-akse permission-modell) fortsatt gjelder, og kartlegger **bare** det som er endret.
+> **Read-only:** denne analysen er bevisst løsnings-fri (`bat-analyze`). Løsningsdesign hører hjemme i `bat-plan`.
 >
-> **Sub-issues i scope (uendret som mengde, men #453 ny i kart):** [#434](https://github.com/sikt-no/fs/issues/434), [#435](https://github.com/sikt-no/fs/issues/435), [#437](https://github.com/sikt-no/fs/issues/437), [#453](https://github.com/sikt-no/fs/issues/453). Se [`krav-input/manifest.md`](krav-input/manifest.md) for full diff-tabell.
+> **Foregående analyse:** `docs/ACTIVE-ITERATION-2/analysis-applikasjon-tilgangsstyring.md` (samme initiativ, før Iter 2 ble implementert). Den la grunnlaget; denne analysen ser kun på hva som har endret seg siden.
 
-## Problem Statement (delta)
+## Problem Statement
 
-Iter-1-analysen tegnet applikasjons-administrasjon som en _rebuild_ av maskinbruker-POC-en med tre konkrete leveranser (Iter 2 / Iter 3 / Nice to have). Iter 2-runden endrer **ikke** dette bildet, men:
+Etter at Iter 2 ble levert (lese-/lett-redigerings-flyt på `/tilgangsstyring/applikasjoner`, samt en god del av Iter 3-mutasjonene), har kravarbeidet i `sikt-no/fs#31` gått videre i to retninger:
 
-1. **Krav-arkitekturen har fått en ny iterasjon 4** ("Grunnleggende selvbetjent administrasjon") med ett `@must @draft`-feature `BRU-APP-API-016 Endringslogg` — _ikke_ et tillegg under "Nice to have", men en egen `@must`-iterasjon. GitHub-strukturen henger etter: #453 har fortsatt `parent = #437` (Nice to have) selv om kravfilen ligger i `03 Iterasjon 4/`.
-2. **UX-detaljeringen for detaljsiden har skiftet fra en abstrakt "rediger beskrivelse"-flyt til en konkret lese↔rediger-toggle på Detaljer-fanen** — dokumentert i tre nye skisser ([`skisser/applikasjon-detaljevisning-aktiv-tab-detaljer-lese-modus.png`](skisser/applikasjon-detaljevisning-aktiv-tab-detaljer-lese-modus.png), [`skisser/applikasjon-detaljevisning-aktiv-tab-detaljer-rediger-modus.png`](skisser/applikasjon-detaljevisning-aktiv-tab-detaljer-rediger-modus.png), [`skisser/applikasjon-detaljevisning-aktiv-tab-tilganger.png`](skisser/applikasjon-detaljevisning-aktiv-tab-tilganger.png)). Det utløser også en omdøping av kravfila (`rediger_beskrivelse.feature` → `rediger_detaljer.feature`).
-3. **`fjerne_tilgang`-flyten er omarbeidet** fra per-rad-fjerning + bekreftelsesdialog til en **bulk-fjern-modal** (organisasjon + miljø + multi-select i modalen).
-4. **`tildele_tilgang`** krever nå alltid et eksplisitt `(organisasjon, miljø)`-par; tildelings-valglister filtreres per kombinasjon.
+1. **Gap-lukking mot Figma-skisser** — flere felter og scenarier er lagt til som ikke var med i Iter 2-kravene. Dette dekker fire av de syv commitene (`59eba3d`, `cee226d`, `4f2e9a4`, og deler av `7ceb640`).
+2. **Skarpere krav rundt redigering, opprettelse og obligatoriske felter** — tre commits (`e04d704`, `a7efc9f`, `ccaf83a`) presiserer hvordan redigering, opprettelse og listefiltrering skal oppføre seg. Plus omdøpningen `rediger_beskrivelse → rediger_detaljer` som utvider scopet for editerings-flyten i info-fanen.
+3. **Endringslogg som ny iterasjon** — `Iterasjon 4 / endringslogg.feature` (BRU-APP-API-016) er ny i scope og merket `@must @draft` med fire åpne spørsmål. Ble ikke flagget av brukeren som en av "de syv commitene", men ligger på branchen og hører til samme initiativ. Skal nevnes i analysen så `bat-plan` får tatt stilling.
 
-Alt øvrig — POC-fjerning, `MigrerPassordDialog`-mønsteret, tre-akse synlighetsmodell, identitetsleverandør-modell, paginering, side-om-side-utfasing — er bekreftet uendret.
+Til sammen betyr dette at fs-admin må:
 
-## Current State (delta)
+- Utvide listevisningen med ett ekstra felt og ett ekstra filter.
+- Bygge om detalj-fanen fra "klikk en knapp pr. felt" til en samlet rediger-modus med navn + beskrivelse.
+- Endre tilgangstildelings-rekkefølge (org → miljø → tilgangskode) og legge til org-filter + tilgangskode-filter + arv-håndtering i tilgangslisten.
+- Flytte fjerning av tilganger fra in-row til en samlet modal.
+- Forholde seg til at applikasjonen kan være deaktivert under tildeling/fjerning.
+- Vurdere endringslogg som ny fane på detaljsiden.
 
-### Skisser (nye)
+## Endrings­oversikt — commits og påvirkede features
 
-Iter 2 introduserer tre konkrete skisser av detaljsiden + beholder de to fra iter 1:
+| Commit | Dato | Påvirker | Type endring |
+| --- | --- | --- | --- |
+| `4f2e9a4` | 2026-05-20 | `vise_tilganger`, `tildele_tilgang`, `fjerne_tilgang` | Utvidet tilgangsliste: organisasjon + beskrivelse pr. tilgang, organisasjons-filter, arv-håndtering, deaktivert-tilstand |
+| `cee226d` | 2026-05-20 | `se_detaljer`, `vise_tilganger` | Detaljer-fanen: idP + organisasjon + inline rediger. Tilgangsliste: tilgangskode-fritekstfilter, fjern miljø-sortering, dedup arv |
+| `59eba3d` | 2026-05-20 | `listevisning_og_sok`, `se_detaljer`, `tildele_tilgang`, `fjerne_tilgang` | Gap-analyse mot Figma: "Antall tilganger"-kolonne, ny Se status-scenario, org→miljø→tilgangskode-rekkefølge, modal for fjerning |
+| `7ceb640` | 2026-05-20 | `rediger_beskrivelse` → `rediger_detaljer` | Omdøp + utvid med navn-redigering |
+| `ccaf83a` | 2026-05-20 | `listevisning_og_sok` | Miljø-filter på applikasjonslisten |
+| `a7efc9f` | 2026-05-27 | `administrere_ansvarlig`, `rediger_detaljer`, `opprette_applikasjon` | Obligatoriske felter (navn, ansvarlig) ved oppretting og redigering |
+| `e04d704` | 2026-05-27 | `rediger_detaljer` | Ulagrede endringer forkastes ved navigering |
 
-| Skisse                                                                                                                            | Innhold                                                                                                                                                                                                                                                                |
-| --------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| [`applikasjon-detaljevisning-aktiv-tab-detaljer-lese-modus.png`](skisser/applikasjon-detaljevisning-aktiv-tab-detaljer-lese-modus.png) | Detaljer-fanen, _lese-modus_. Single `Surface`-seksjon med felter i 5-kolonners rutenett: rad 1 (Navn, Beskrivelse, Organisasjon, Opprettet av, Sist endret av), rad 2 (Status-tag, Ansvarlig, Tidspunkt for opprettelse), rad 3 (Miljø-tags, Identitetsleverandør, Tidspunkt for sist endring). En enslig **Rediger**-knapp i seksjonshodet. |
-| [`applikasjon-detaljevisning-aktiv-tab-detaljer-rediger-modus.png`](skisser/applikasjon-detaljevisning-aktiv-tab-detaljer-rediger-modus.png) | Samme seksjon i _rediger-modus_. Navn → `TextInput`, Beskrivelse → `TextArea`, Ansvarlig → `Select/Combobox`. Status, Miljø, Organisasjon, Identitetsleverandør, Opprettet av/sist endret av og tidspunktene forblir lese-felter. **Avbryt + Lagre** i stedet for Rediger. |
-| [`applikasjon-detaljevisning-aktiv-tab-tilganger.png`](skisser/applikasjon-detaljevisning-aktiv-tab-tilganger.png)               | Tilganger-fanen, fullstendig. Filter-sidebar (`Tilgangskode`-fritekst, `Miljø`-select, `Organisasjon`-select, `Tilknytning`-select), resultatliste 14/14 tilganger, `+ Tildel tilganger` og `- Fjern tilganger` i top-right, sort-dropdown `Tilgangskode`. Rader viser tilgangskode + Demo/Prod-tags + evt. `Arvet`-merke, beskrivelse, og organisasjon. |
-| [`applikasjon-detaljevisning.png`](skisser/applikasjon-detaljevisning.png)                                                        | _Iter-1-skisse, beholdt._ Annotert utgave av tilgangs-tabben med UX-spørsmål. Erstattes effektivt av de tre nye, men beholdes for sporbarhet.                                                                                                                                            |
-| [`applikasjoner-listevisning.png`](skisser/applikasjoner-listevisning.png)                                                        | _Iter-1-skisse, beholdt._ Ingen endring i listevisningen — men selve krav-filen `listevisning_og_sok.feature` _har_ små endringer (Antall tilganger-kolonne + miljø-filter). Skissen er litt utdatert ift. krav-teksten, men strukturen stemmer.                                            |
+Eneste fil som *ikke* er rørt av disse commitene: `passordbytte.feature`, `deaktivere_applikasjon.feature`, og selve `systemkrav.md`-filene for Iter 2/3. (Iter 4 + endringslogg-filen er ny scope, men ikke en del av de listede commitene.)
 
-**TopBar-kontrakt fra skissene (uendret på tvers av alle tre detalj-skissene):**
+## Krav-delta pr. feature
 
+Sammenligningen er gjort mellom snapshot i `docs/ACTIVE-ITERATION-2/krav-input/` (versjonen Iter 2-implementasjonen var basert på) og den festede SHA-en på `fruitbat`.
+
+### `BRU-APP-API-001` — Listevisning og søk (`listevisning_og_sok.feature`)
+
+**Endringer:**
+
+- Felt-tabellen i "Se liste over applikasjoner" får én ny rad: `Antall tilganger` (commit `59eba3d`, gap-analyse mot Figma).
+- Ny scenario `Filtrere på miljø` (commit `ccaf83a`) — *"vises kun applikasjoner som er aktive i det valgte miljøet"*.
+
+**Konsekvens for fs-admin:** Filteret + det nye listefeltet eksisterer ikke i koden eller schema-en i dag (`ApplikasjonerFilterInput` har bare `navnContains`, `organisasjonsIder`, `status`, `tilgangskoder`). Skissen `applikasjoner-listevisning.png` viser miljø-chip pr. rad og "8 tilganger / 12 tilganger" i én av de senere kolonnene — `ApplikasjonerResultRow` viser miljø-chips og status, men ikke antall-tilganger.
+
+### `BRU-APP-API-002` — Se detaljer (`se_detaljer.feature`)
+
+**Endringer (commit `cee226d` + `59eba3d`):**
+
+- Tre nye `Scenario`-er: `Se identitetsleverandør`, `Se organisasjon`, `Se status` (siste tilført i `59eba3d` "Legg til Se status-scenario").
+- Ny regel: *"Detaljer kan redigeres direkte fra detaljer-fanen"* med scenario `Aktivere redigering av detaljer` (*"Når jeg velger å redigere, så blir alle redigerbare felter i detaljer-fanen omgjort til inputfelter"*).
+
+**Konsekvens for fs-admin:** Topbar-en (`ApplikasjonTopBar.tsx`) viser allerede idP-chip, organisasjon og status — men inni *info-fanen* (`ApplikasjonInformation.tsx`) finnes ikke idP-feltet, og redigering skjer i dag via tre separate dialog-knapper (`RedigerBeskrivelseDialog`, `SettAnsvarligDialog`, `PassordbytteDialog`). Skissen `applikasjon-detaljevisning-aktiv-tab-detaljer-rediger-modus.png` bekrefter at det skal være én rediger-toggle som åpner alle redigerbare felter som inputs samtidig — dette er en strukturell endring fra dialog-mønsteret til inline edit.
+
+### `BRU-APP-API-003` — Vise tilganger (`vise_tilganger.feature`)
+
+**Endringer (commit `cee226d` + `4f2e9a4`):**
+
+- Felt pr. innslag utvidet fra `tilgangskode + miljø` til `tilgangskode + beskrivelse + organisasjon + miljø`.
+- Nytt filter: `Filtrere tilgangsliste på organisasjon`.
+- Nytt filter: `Filtrere tilgangsliste på tilgangskode` (fritekst, erstatter det gamle multi-select-filteret som tidligere het "Filtrere tilgangsliste på tilgang").
+- Sortering: `på miljø eller tilgangskode` → `på tilgangskode` (miljø fjernet).
+- Ny regel: *"Arvede tilganger kan skjules fra listen"* med 4 scenarier:
+  - `Arvet tilgang er merket med opphav` (viser hvilken tilgang den arves fra).
+  - `Arvet tilgang med flere opphav listes kun én gang` (dedup).
+  - `Skjule arvede tilganger` / `Vise arvede tilganger` (toggle).
+
+**Konsekvens for fs-admin:** Tilgangs-fragmenten i `ApplikasjonTilgangRowFieldsFragment` har allerede `tilgangskode`, `tilgangsbeskrivelse`, `miljo` og `organisasjon` — så beskrivelse + organisasjon er bare et spørsmål om JSX. **Men:**
+
+1. Filter-input på client er `ApplikasjonTilgangerFilterInput { miljoer, tilgangskoder }`. **Mangler:** `organisasjonsIder`, og det er uklart om backend tilbyr fritekst-søk på `tilgangskoder` eller om det fortsatt er en eksakt match-array. Krav-en sier *"tilgangskoden inneholder den innskrevne teksten"* → fritekst, ikke array.
+2. `ApplikasjonTilgangerOrderByField` har både `MILJO` og `TILGANGSKODE` — `MILJO` skal nå fjernes fra UI-en (kan bli stående i schema).
+3. **Arv finnes ikke i schema-en i dag.** Krav-en introduserer "arvet tilgang", "opphav til arv", og dedup-logikk — dette er nye begreper både for backend og frontend. Skissen `applikasjon-detaljevisning-aktiv-tab-tilganger.png` viser "Arvet"-badge på enkelte rader + en "Vis arvede tilganger"-toggle i filter-sidebaren — det bekrefter UI-mønsteret.
+
+### `BRU-APP-API-005` — Administrere ansvarlig (`administrere_ansvarlig.feature`)
+
+**Endringer (commit `a7efc9f`):**
+
+- Ny regel: *"Ansvarlig er obligatorisk og kan ikke fjernes"* med scenario `Lagring avvises når ansvarlig ikke er valgt`.
+- Implisitt konsekvens: tidligere regel het *"Ansvarlig kan settes, endres og fjernes"* (med scenario `Fjerne ansvarlig`). Den er nå borte fra filen — fjerning er ikke lenger en støttet operasjon.
+
+**Konsekvens for fs-admin:** Koden har `FjernAnsvarligConfirmDialog.tsx` og `fjernApplikasjonAnsvarligMutation.ts`. Disse må **fjernes** (eller skjules) — UI-knappen "Fjern ansvarlig" i `ApplikasjonInformation.tsx:282-289` er nå et brudd på kravet. Sjekklisten må gjenspeile at obligatorisk-validering må flytte inn i Sett/Endre-flyten.
+
+### `BRU-APP-API-006` — Rediger detaljer (`rediger_detaljer.feature`)
+
+**Tidligere navn:** `rediger_beskrivelse.feature`. Omdøpt i `7ceb640`.
+
+**Endringer (commits `7ceb640`, `a7efc9f`, `e04d704`):**
+
+- Ny regel: *"Redigering av navn krever rettighet over applikasjonens organisasjon"* med 4 scenarier (Oppdatere navn, applikasjonsadministrator i egne org, ikke tilgjengelig i andres org, super-administrator).
+- Ny regel: *"Navn er obligatorisk og kan ikke lagres tomt"* med scenario `Lagring avvises når navn er tomt`.
+- Ny regel: *"Ulagrede endringer forkastes når brukeren forlater redigeringsvisningen"* med to scenarier:
+  - `Forlate siden med ulagrede endringer` (router-navigasjon nullstiller).
+  - `Bytte fane med ulagrede endringer` (tab-bytte nullstiller).
+- Beholdt regel: *"Redigering av beskrivelse krever rettighet over applikasjonens organisasjon"* (uendret).
+
+**Konsekvens for fs-admin:** Tre store ting:
+
+1. **Navn-redigering eksisterer ikke** — det er ingen mutation `redigerApplikasjonNavn` i schema, ingen `kanRedigereNavn`-felt på `Applikasjon`, ingen UI-knapp. Det er åpenbart at krav-arbeidet ser for seg navn som en redigerbar visningsverdi som ikke nødvendigvis kommer fra idP-en — men det er det ikke i schema-en (`OpprettApplikasjon` lar navnet "hentes fra idP-en" og "være globalt unikt"). Dette er en motsetning som må avklares.
+2. **`RedigerBeskrivelseDialog`-mønsteret er feil mønster.** Krav + skisse sier inline rediger-modus med ett samlet "Rediger"-toggle, ikke dialog pr. felt.
+3. **Reset-på-navigering** er en discardable-changes-mekanikk som fs-admin ikke håndterer i dag. Dette er en cross-cutting concern (router-event-lytting + tab-event-lytting) som må løses generisk eller komponenten-lokalt.
+
+### `BRU-APP-API-007` — Tildele tilgang (`tildele_tilgang.feature`)
+
+**Endringer (commits `59eba3d`, `4f2e9a4`):**
+
+- Rekkefølge endret: alle scenarier ber nå om at bruker velger **organisasjon → miljø → tilgangskode**, ikke miljø først. Tre scenarier omformulert:
+  - `Tildele en tilgang i et valgt miljø` → `Tildele en tilgang i valgt organisasjon og miljø`.
+  - `Tildele flere tilganger samtidig i ett valgt miljø` → `Tildele flere tilganger samtidig i valgt organisasjon og miljø`.
+  - `Tildele tilgang til en eksisterende FS-applikasjon` → bruker valgt organisasjon + miljø.
+- Ny regel: *"Bruker kan kun tildele tilganger de selv har rettighet til å tildele"* har ny scenario `Valglisten for tilgangskode avhenger av valgt organisasjon og miljø` — implementasjons-detaljen om "valglisten viser kun tilganger jeg har rettighet til å tildele" er borte til fordel for den eksplisitte kombinasjons-avhengigheten.
+- Endret scenario: `Allerede tildelt tilgang vises som ikke-valgbar` — implementasjonsdetaljen *"gråtonet"* er fjernet (commit-meldingen i `59eba3d`: *"fjern implementasjonsdetalj om gråtone"*).
+- Ny regel: *"Tilganger kan tildeles selv om applikasjonen er deaktivert"* (commit `4f2e9a4`).
+
+**Konsekvens for fs-admin:** `TildelTilgangerDialog.tsx` + `tildelbareQuery.ts` er bygget på det gamle mønsteret. To åpne implementerings-spørsmål:
+
+1. **Query for tildelbare tilganger må parametriseres på (orgId, miljø).** I dag tar `GetTildelbareApplikasjonTilganger`-query-en applikasjons-id og returnerer en flat liste. Hvis valglisten avhenger av valgt (org, miljø)-kombinasjon, må enten query-en re-kjøres ved hver org/miljø-endring, eller man henter en fullstendig dataset og filtrerer client-side. Det er en backend-avgjørelse.
+2. **Deaktivert-applikasjon-tilfellet** — UI-en må ikke disable tildelings-knappen, men topbar-en bør fortsatt vise status.
+
+### `BRU-APP-API-008` — Fjerne tilgang (`fjerne_tilgang.feature`)
+
+**Endringer (commit `59eba3d` + `4f2e9a4`):**
+
+- **Hele struktureringen er endret.** Tidligere mønster: bekreftelsesdialog pr. enkelt-tilgang (radio-rad-style) + bulk-mønster der man velger flere i listen og bekrefter. Nytt mønster: én samlet modal hvor bruker velger org + miljø + tilganger og bekrefter alle på én gang.
+- Ny regel: *"Fjerning av tilganger skjer via modal"* med 3 scenarier (Velge, Bekrefte, Avbryte).
+- Bevart: *"Bruker kan kun fjerne tilganger de har rettighet til å fjerne"*.
+- Ny regel: *"Tilganger kan fjernes selv om applikasjonen er deaktivert"* (commit `4f2e9a4`).
+- Ny regel: *"Arvede tilganger kan ikke fjernes direkte"* (commit `4f2e9a4`).
+
+**Konsekvens for fs-admin:** `FjernTilgangerDialog.tsx` + `FjernValgteTilgangerButton.tsx` er allerede en modal-flyt (Iter 2-tasken endte med bulk-modell), men:
+
+1. **Inngangen er nå "Åpne modal → velg org, miljø, tilganger"**, ikke "Hak av rader i tilgangslisten → bekreft". Skissen `applikasjon-detaljevisning-aktiv-tab-tilganger.png` viser begge knapper i toppen ("+ Tildel tilganger" og "Fjern tilganger") som åpner hver sin modal — det matcher det nye mønsteret.
+2. **Listen i tilgangs-fanen skal sannsynligvis ikke ha radio-/sjekkbokser pr. rad lenger** — selection-state forsvinner sammen med det gamle bulk-mønsteret.
+
+### `BRU-APP-API-009` — Opprette applikasjon (`opprette_applikasjon.feature`)
+
+**Endringer (commit `a7efc9f`):**
+
+- Ny regel: *"Opprettelse krever et navn"* (med to scenarier — avvist hvis tomt, lagret hvis fylt inn).
+- Ny regel: *"Opprettelse krever en ansvarlig"* (samme mønster).
+- Ny regel: *"Nyopprettet applikasjon har status Aktiv"* (eksplisitt — tidligere implisitt).
+
+**Konsekvens for fs-admin:** `OpprettApplikasjonDialog.tsx` må ta inn både navn og ansvarlig som obligatoriske felter. I dag har den `identitetsleverandor` + `eksternId` + `organisasjonsId`, ikke navn (navn hentes fra idP). Dette skaper en spenning med `opprette_applikasjon.feature` Regel: *"Applikasjonen identifiseres av en ekstern ID som verifiseres mot identitetsleverandøren"* der *"navnet på applikasjonen er hentet fra <identitetsleverandør>"*.
+
+**Tolkning som må avklares:** navn-feltet ved opprettelse kan være enten (a) det "globalt unike visningsnavnet" som hentes fra idP-en og som bruker bare ser i en preview-trinn, eller (b) et redigerbart felt som overstyrer idP-navnet. `BRU-APP-API-006`'s navn-redigering antyder (b) — at navn er noe bruker kan endre uavhengig av idP. Da må krav for opprettelse + redigering harmoniseres, og schema-en utvides.
+
+### `BRU-APP-API-010` — Deaktivere (`deaktivere_applikasjon.feature`)
+
+**Ingen endringer** i de listede commitene. Filen ble lagt til på branchen tidligere og er uendret siden Iter 2 ble snappet av.
+
+### Nye filer: Iterasjon 4 + endringslogg
+
+**`endringslogg.feature` (BRU-APP-API-016, `@must @draft`):**
+
+- En ny fane (eller modal?) på detaljsiden som viser hvem som har gjort hva.
+- Rettighet styres av administrasjonsrettigheter.
+- 4 `@openquestion`-scenarier: hva logges, hva inneholder en loggpost, retention, rekkefølge/paginering/filtrering.
+
+`Iterasjon 4 / systemkrav.md` understreker at iterasjonen *"handler primært om sporbarhet — selve den selvbetjente funksjonaliteten (oversikt over egne applikasjoner, tildele/fjerne tilganger på egne) er allerede dekket av features fra Iterasjon 2 og 3 gjennom rettighetsregler basert på applikasjonsadministrator-rollen."* Det vil si: lokale administratorer kan allerede gjøre alt — det som mangler er audit-loggen.
+
+**Konsekvens for fs-admin:** Et helt nytt domene. Verken schema (`getApplikasjonEndringer`, `ApplikasjonEndring`-type), UI (ny fane eller modal), eller mock-data eksisterer. På grunn av `@draft`-statusen og åpne spørsmål skal dette **ikke** scopes inn i Iter 3-implementasjonen — men det må adresseres som egen plan-runde.
+
+### Nice to have (uendret)
+
+- `BRU-APP-API-015` (sist-brukt) er allerede dekket av `sistBrukt`-feltet i Iter 2-implementasjonen, og rendres i info-fanen (`ApplikasjonInformation.tsx`).
+- `BRU-APP-API-017` (masseadministrasjon) er fortsatt `@could @draft` — utenfor scope.
+
+## Current State
+
+### fs-admin etter Iter 2
+
+`docs/ACTIVE-ITERATION-2/` viser 22 fullførte tasks. Live på branch `poc-skills-execute-result` (denne checkout-en). Sentrale komponenter:
+
+- **Routes:** `src/app/tilgangsstyring/applikasjoner/{layout.tsx, page.tsx, [applikasjonId]/{layout.tsx, page.tsx}}`.
+- **Listevisning:** `src/domains/support/features/Applikasjoner/{Applikasjoner.tsx, components/{ApplikasjonerFilter.tsx, ApplikasjonerResultList.tsx, ApplikasjonerResultRow.tsx, OpprettApplikasjonButton.tsx, OpprettApplikasjonDialog/, filter/{ApplikasjonerSearchFilter.tsx, ApplikasjonerOrganisasjonFilter.tsx, ApplikasjonerStatusFilter.tsx}}, hooks/{useGetApplikasjoner.tsx, useGetApplikasjonerState.tsx}}`.
+- **Detaljside:** `src/domains/support/features/Applikasjon/{Applikasjon.tsx, components/{ApplikasjonTopBar.tsx, ApplikasjonInformation.tsx, ApplikasjonTilganger.tsx, ApplikasjonTilgangerFilter.tsx, ApplikasjonTilgangerResultList.tsx, ApplikasjonTilgangerResultRow.tsx, ApplikasjonTilgangerOrderBy.tsx, tilganger/{ApplikasjonTilgangerMiljoFilter.tsx, ApplikasjonTilgangerTilgangskodeFilter.tsx}}, hooks/{useGetApplikasjon.tsx, useApplikasjonTilganger.tsx, useApplikasjonTilgangerState.tsx}}`.
+- **Dialoger (alle eksisterer):** `RedigerBeskrivelseDialog`, `PassordbytteDialog`, `SettAnsvarligDialog`, `FjernAnsvarligConfirmDialog`, `DeaktiverApplikasjonDialog`, `TildelTilgangerDialog`, `FjernTilgangerDialog`, `OpprettApplikasjonDialog`.
+- **A11y-tests:** Hver komponent har en `.a11y.test.tsx`. Verifisert via `find`.
+- **Mock-API:** `src/mocks/handlers/applikasjoner/{queries.ts, mutations.ts, applikasjoner.verify.ts}`, fixtures i `src/mocks/fixtures/applikasjoner/{applikasjoner.ts, tilganger.ts, organisasjoner.ts, ansvarlige.ts, store.ts}`.
+
+### Schema-typer i dag (`src/__generated__/graphql.ts`)
+
+```text
+ApplikasjonerFilterInput { navnContains, organisasjonsIder, status, tilgangskoder }
+ApplikasjonerOrderByField { Navn, Organisasjon, SistBrukt, Status }
+ApplikasjonTilgangerFilterInput { miljoer, tilgangskoder }
+ApplikasjonTilgangerOrderByField { Miljo, Tilgangskode }
+Applikasjon { id, navn, beskrivelse, status, miljoer: [Miljo], identitetsleverandor: IdentitetsleverandorType, organisasjon, ansvarlig, opprettet*, endret*, sistBrukt, kan{EndrePassord,AdministrereAnsvarlig,RedigereBeskrivelse,Deaktivere,TildeleTilganger,FjerneTilganger} }
+ApplikasjonTilgang { id, tilgangskode, tilgangsbeskrivelse, miljo, organisasjon }
 ```
-Status: <tag>   Miljø: <Demo> <Prod>   Organisasjon: <navn>   Ansvarlig: <navn>   Antall tilganger: <n>      [Deaktiver]
-```
 
-Det stadfester at TopBar er **felles for alle tabs** og at deaktiver-aksjonen ligger der (ikke inne i Detaljer-seksjonen). Iter-1-analysen hadde dette som hypotese; nå er det dokumentert.
+Mutations som finnes: `deaktiverApplikasjon`, `reaktiverApplikasjon`, `byttApplikasjonPassord`, `redigerApplikasjonBeskrivelse`, `settApplikasjonAnsvarlig`, `fjernApplikasjonAnsvarlig`, `tildelApplikasjonTilganger`, `fjernApplikasjonTilganger`, `opprettApplikasjon`.
 
-### Krav-endringer per feature
+### Skissene (`docs/skisser/`)
 
-Full diff-tabell ligger i [`krav-input/manifest.md`](krav-input/manifest.md). Hovedsubstansen:
+Verifisert under analysen:
 
-#### `rediger_detaljer.feature` (erstatter `rediger_beskrivelse.feature`)
+- `applikasjoner-listevisning.png` — filter-sidebar (Navn / Miljø / Organisasjon / Tilgang / Status), navn+badges+beskrivelse i venstre kolonne, organisasjon, antall-tilganger (eks. "8 tilganger"), status, "Opprett"-knapp øverst til høyre.
+- `applikasjon-detaljevisning.png` — `<navn>` som heading, statuschip + miljø-chips + "Organisasjon: NTNU / Ansvarlig: Eli Wold / Antall tilganger: 14" som under-info. "Detaljer"-tab åpen, men i listen vises tilganger (mock-illustrasjon — UI-tilstanden er åpenbart "Tilganger" i denne skissen). "Deaktiver"-knapp øverst til høyre.
+- `applikasjon-detaljevisning-aktiv-tab-detaljer-lese-modus.png` / `-rediger-modus.png` — bekrefter inline rediger-toggle for hele detaljer-fanen.
+- `applikasjon-detaljevisning-aktiv-tab-tilganger.png` — sidebar (Tilgangskode-fritekstfilter, Miljø, Organisasjon, Tilknytning, "Vis arvede tilganger"-toggle), 14-rads tilgangsliste hvor noen rader har "Arvet"-badge (med "Tilgangen er arvet fra «emne-skriv1»…" som beskrivelse). Topp-actions: "+ Tildel tilganger", "Fjern tilganger", "Tilgangskode" sort.
 
-- Samme feature-ID `BRU-APP-API-006`, samme GitHub-issue `#443`, samme Confluence-K `K19`.
-- Dekker nå **navn _og_ beskrivelse i ett feature** (i tråd med skissens combined edit-form).
-- Nye regler:
-  - "**Navn er obligatorisk og kan ikke lagres tomt**" — feilmelding "navn er obligatorisk".
-  - "**Ulagrede endringer forkastes når brukeren forlater redigeringsvisningen**" — to scenarier: (a) navigere bort fra siden, (b) bytte fane. _"Så nullstilles siden / redigeringsvisningen til sin forrige lagrede tilstand"_.
-- Rettighetsreglene er duplisert for `navn` og `beskrivelse` (samme tre-akse: applikasjonsadministrator over egen org / super-admin / annen org = ikke tilgang).
+## Key Findings
 
-#### `administrere_ansvarlig.feature`
+1. **Iter 2 + 3 ble levert mot tidligere krav, og 4 av 6 features er nå strukturelt endret.** Beskrivelse/redigering, tildeling, fjerning, og tilgangs-listing må bygges om — ikke bare utvides. Spesielt rediger-flyten skifter fra "knapp pr. felt → dialog" til "én rediger-toggle → inline inputs".
+2. **`rediger_beskrivelse.feature` er fjernet og erstattet av `rediger_detaljer.feature`** med utvidet scope (navn). Hvis det er en eksisterende symlink/referanse til den gamle filen i kodebasen eller i en åpen PR-beskrivelse, må den fanges opp.
+3. **`Fjern ansvarlig`-flyten er gone.** Eksisterende kode (`FjernAnsvarligConfirmDialog`, `fjernApplikasjonAnsvarlig`-mutation, knapp i `ApplikasjonInformation.tsx:282-289`) reflekterer ikke det nye kravet.
+4. **Arv av tilganger er nytt vokabular.** Verken backend-schema, frontend-modeller eller mock-data har dette. Behandlingen av arv (merking, dedup, vis/skjul-toggle) krever en samordnet endring på alle tre lag.
+5. **Org→miljø→tilgangskode-kaskaden i tildelings-flyten** krever enten en parametrisert query (`tildelbareApplikasjonTilganger(orgId, miljo)`) eller at hele datasettet hentes og filtreres client-side. Det er backend-avgjørelse.
+6. **"Antall tilganger" som listefelt** finnes ikke som felt på `Applikasjon`-typen i dag — backend må eksponere det (enten som `applikasjon.tilganger.totalCount` aggregert eller som et eget skalarfelt).
+7. **Miljø-filter på applikasjonslisten** mangler både i schema (`ApplikasjonerFilterInput` har ikke `miljoer`) og i UI (`ApplikasjonerFilter.tsx`).
+8. **Endringslogg (BRU-APP-API-016) er nytt domene.** Krav-en er `@draft` med åpne spørsmål — passer ikke for implementasjon ennå, men `bat-plan` skal gjøre eksplisitt avgjørelse om scoping.
+9. **Discardable-changes-mekanikk** (`e04d704`) er en cross-cutting concern fs-admin ikke har et mønster for i dag — verken router-blocker eller tab-change-guard er i bruk i andre rediger-flyter.
+10. **Navn-feltets natur er motstridende mellom features.** `opprette_applikasjon.feature` sier navnet hentes fra idP-en og må være globalt unikt; `rediger_detaljer.feature` sier brukere med rett rolle kan oppdatere navnet. Kombinasjonen krever (a) avklaring, og (b) sannsynligvis et schema-skille mellom *idP-navn/visningsnavn* og *bruker-overstyrt navn*.
 
-- Regel "Ansvarlig kan settes, endres og fjernes" → "**Ansvarlig kan settes og endres, men ikke fjernes**".
-- Scenariet "Fjerne ansvarlig" fjernet; erstattet av "**Lagring avvises når ansvarlig ikke er valgt**" som del av en ny regel "Ansvarlig er obligatorisk og kan ikke fjernes".
-- Søk-avgrensning og felde-bruker/-gruppe-valg er uendret.
+## Technical Constraints
 
-#### `listevisning_og_sok.feature`
+- **Backend-eierskap:** Schema-endringene under (miljø-filter, antallTilganger, arv-modell, organisasjons-filter i tilgangsliste, navn-redigerings-mutation, endringslogg-query) ligger hos backend-agent — se `Dependencies` under. Frontend kan parallellisere via mock-API (allerede gjort i Iter 2; samme mønster).
+- **CLAUDE.md-krav på testing:** Hver ny komponent eller endret komponent må fortsatt ha `.a11y.test.tsx`. Endringer i `ApplikasjonInformation`, `ApplikasjonTilganger` osv. krever sannsynligvis at testene oppdateres for ny edit-modus + arv-badges.
+- **`fs-admin-detail-pages`-skill:** Inline rediger-modus i info-fanen må følge `DetailPageLayout`-familien. Hvis arvede tilganger får skjul-/vis-toggle, plasser den i tilgangs-tabens filter-sidebar (jf. `fs-admin-list-filters`).
+- **`fs-admin-list-filters`-skill:** Miljø-filter og organisasjons-filter på henholdsvis listevisningen og tilgangslisten må følge `FilterWrapper` + `renderAsChips`-kontrakten.
+- **`graphql-consumer`-skill:** Nye fragments (rediger-modus-felter, arv-felter, antallTilganger) må colocaters med komponentene som leser dem. Ikke utvid eksisterende fragments med felter som bare brukes i rediger-modus.
+- **i18n:** Norsk-eneste; nye strenger må legges til `src/messages/nb/support.json` med eksisterende `support.Applikasjon*`-namespacing-konvensjon.
+- **Feature-flag:** `tilgangsstyring-meny`-flagget gating-modellen fra Iter 2 antas å gjelde fortsatt — verifiser i `src/features/Header/Menu/Menu.tsx` før plan-fasen.
 
-- Listeradene viser nå en **ny kolonne `Antall tilganger`** mellom Organisasjon og Status.
-- Nytt scenario "**Filtrere på miljø**" (var ikke i iter-1-versjonen).
-- Sortering, organisasjon-filter, tilgang-filter, status-filter, fritekst-søk: uendret.
+## Dependencies
 
-#### `se_detaljer.feature`
+### Internal
 
-- Nye scenarier:
-  - **Se identitetsleverandør** ("Så ser jeg applikasjonens identitetsleverandør").
-  - **Se organisasjon**.
-  - **Se status** ("aktiv eller deaktivert").
-- Ny regel "**Detaljer kan redigeres direkte fra detaljer-fanen**" med scenariet "Aktivere redigering av detaljer" — _"Når jeg velger å redigere / Så blir alle redigerbare felter i detaljer-fanen omgjort til inputfelter"_. Det er kontrakts-grunnlaget for in-place edit-mode.
+- **`ApplikasjonInformation`** (info-fanen): omskrives fra dialog-knapper til inline rediger-modus. Bidrar til `RedigerBeskrivelseDialog`-fjerning og ny `kanRedigereNavn`-gating.
+- **`ApplikasjonTilganger`** + alle underkomponenter: utvidet med organisasjons-filter, tilgangskode-fritekstfilter, arv-merking, dedup-håndtering, "vis/skjul arvede"-toggle.
+- **`ApplikasjonerFilter`** + `useGetApplikasjonerState`: miljø-filter lagt til.
+- **`ApplikasjonerResultRow`**: "Antall tilganger"-felt lagt til.
+- **`FjernTilgangerDialog`**: omstrukturert til "velg org + miljø + tilganger inni modalen", ikke "hak av rader → bekreft".
+- **`TildelTilgangerDialog`**: kaskaderende org→miljø→tilgangskode-state, valgliste avhengig av kombinasjon, deaktivert-applikasjon-tilfellet.
+- **`OpprettApplikasjonDialog`**: navn + ansvarlig som obligatoriske felter, validering.
+- **Mock-API**: alle fixtures + handlers oppdateres for nye felter (`antallTilganger`, `miljoer`-filter, `tilgangskode`-fritekst, arv-relasjoner). Aktivt teardown-friendly mønster siden Iter 2.
 
-#### `vise_tilganger.feature`
+### External
 
-- Listeradene viser nå **fire datapunkter** (tilgangskode + beskrivelse + organisasjon + miljø), ikke bare to (tilgangskode + miljø). Stemmer med skissens fire kolonner.
-- Filterne har skiftet: "filtrere på tilgang" → "**filtrere på organisasjon**" + "**filtrere på tilgangskode (fritekst)**". Stemmer med skissens fire filtre (`Tilgangskode`-fritekst, `Miljø`, `Organisasjon`, `Tilknytning`). _Merknad:_ `Tilknytning`-filteret i skissen har **ikke** et tilsvarende eksplisitt scenario i krav-teksten — kan være forhåndsvalg/tilstand for "Vis alle/Bare egne/Bare arvede" eller en utvidelse — flagget som åpent spørsmål.
-- Sortering simplifisert til kun `tilgangskode` (var `miljø eller tilgangskode`).
-- **Ny regel "Arvede tilganger kan skjules fra listen"** med fire scenarier:
-  - "Arvet tilgang er merket med opphav" — visuelt merke + opphavs-tekst.
-  - "Arvet tilgang med flere opphav listes kun én gang" — backend må deduplisere.
-  - "Skjule arvede tilganger".
-  - "Vise arvede tilganger".
+- **Backend / SuperGraf-agent (`sikt-no/fs`):** schema-endringer som krever koordinasjon. Ikke filed her — er candidates til `bat-plan` å løfte etter at planen er konkretisert. Se cross-agent-seksjonen.
+- **Sikt Design System:** ingen nye komponenter forventet — `TagStatus` med ny variant for "Arvet"-badge holder.
+- **Apollo Client 4:** ingen nye krav; eksisterende `useFragment` + `useQuery`-mønster fra Iter 2 dekker.
+- **`next-intl`:** norsk-oversettelser for nye strenger.
 
-#### `tildele_tilgang.feature` (Iter 3)
+### Cross-agent
 
-- **Tildeling krever nå alltid en eksplisitt `(organisasjon, miljø)`-kombinasjon**. Tidligere kunne org leses av kontekst; nå er det et krav i selve flyten.
-- Valglisten for tilgangskode er gjort avhengig av valgt org+miljø: _"Valglisten for tilgangskode avhenger av valgt organisasjon og miljø"_.
-- Allerede tildelte tilganger vises som **ikke valgbare** (var "gråtonet og ikke valgbar" — kosmetisk endring).
-- **Ny regel "Tilganger kan tildeles selv om applikasjonen er deaktivert"** — `ApplikasjonStatus = INAKTIV` blokkerer ikke tildeling.
+> Disse er *kandidater* per `bat-analyze`-konvensjonen — selve hand-off-issuene filer `bat-plan` etter at planen er på plass og det konkrete behovet er artikulert.
 
-#### `fjerne_tilgang.feature` (Iter 3) — **strukturelt omarbeidet**
+1. **Backend / SuperGraf-schema-agent — Iter 3+ schema-utvidelser:**
+   - `ApplikasjonerFilterInput.miljoer: [Miljo!]` (miljø-filter på listen).
+   - `Applikasjon.antallTilganger: Int!` eller `applikasjon.tilganger.totalCount` synlig på liste-rad (uten å hente full liste).
+   - `ApplikasjonTilgangerFilterInput.organisasjonsIder: [ID!]` + endret `tilgangskoder` til fritekst-match (eller separat `tilgangskodeContains: String`).
+   - Arv-modellen: `ApplikasjonTilgang.arvetFra: [ApplikasjonTilgang!]` (eller dual-felt med opphav + dedup-håndtering).
+   - `redigerApplikasjonNavn`-mutation eller utvidet `redigerApplikasjonBeskrivelse → redigerApplikasjonDetaljer` med både navn og beskrivelse.
+   - `kanRedigereNavn: Boolean!`-felt (eller utvide `kanRedigereBeskrivelse` til `kanRedigereDetaljer`).
+   - `TildelbareApplikasjonTilganger(orgId, miljo)`-parametrisering.
+   - Avklare *visningsnavn fra idP* vs *bruker-overstyrt navn* i `OpprettApplikasjon` + `Applikasjon`-typen.
+   - **`@must @draft` Endringslogg-domenet:** ny `ApplikasjonEndring`-type, `Applikasjon.endringer`-relasjon eller egen query, retention-modell. Trenger først at åpne spørsmål er besvart.
+2. **Backend / autentiserings-agent — `Fjern ansvarlig`-mutation deprecation:** mutation eksisterer fortsatt, må flagges som deprecated/fjernes når UI-koden er borte.
+3. **Krav-arbeid / produkt-eier:**
+   - Avklare navn-feltets natur (idP-navn vs. visningsnavn vs. bruker-overstyrt).
+   - Lukke 4 `@openquestion` på endringslogg.
+   - Bekrefte at iterasjon-4 endringslogg skal være en egen fane i `DetailPageTabbedContent` (eller en seksjon i info-fanen, eller en egen route).
 
-- Iter-1-formen var "per-rad-fjern → bekreftelsesdialog → confirm". Iter-2-formen er en **bulk-fjern-modal**:
-  - "**Velge tilganger å fjerne**": åpne modal → velge org + miljø → se liste over tilganger jeg har rettighet til å fjerne for kombinasjonen → multi-select i modalen.
-  - "**Bekrefte fjerning av valgte tilganger**": en confirm fjerner alle valgte i den valgte org+miljø-kombinasjonen samtidig.
-  - "**Avbryte fjerning**": lukke modalen uten endring.
-- Bekreftelsesdialog-konseptet (iter-1s "Regel: En fjerning krever en eksplisitt bekreftelse" + "Regel: Flere tilganger i ett miljø kan fjernes samtidig") er erstattet av modalens egen Bekreft-knapp.
-- **Ny regel "Tilganger kan fjernes selv om applikasjonen er deaktivert"**.
-- **Ny regel "Arvede tilganger kan ikke fjernes direkte"** — koblet til den nye `vise_tilganger.feature`-arv-modellen.
+## Requirements Impact
 
-#### `opprette_applikasjon.feature` (Iter 3)
-
-- **Ny regel "Opprettelse krever et navn"** (obligatorisk + scenariet "Navn lagres ved opprettelse"). Navnet er separat fra det globalt-unike `visningsnavn` som hentes fra idP-en — det vil si det finnes to navne-konsepter: idP-visningsnavn (autoritativt fra Feide/Maskinporten ved opprettelse) og applikasjons-navn (brukerredigerbart i `rediger_detaljer`). _Flagget som åpent spørsmål._
-- **Ny regel "Opprettelse krever en ansvarlig"** — obligatorisk ved opprettelse, og ansvarlig forblir obligatorisk gjennom livssyklusen (jf. `administrere_ansvarlig`-endringen). Det betyr at applikasjoner som ikke har ansvarlig i dag (eksisterende FS-applikasjoner?) må håndteres som migrasjons-edge-case. _Flagget som åpent spørsmål._
-- **Ny regel "Nyopprettet applikasjon har status Aktiv"** — `ApplikasjonStatus = AKTIV` som default.
-
-#### `03 Iterasjon 4/endringslogg.feature` + `systemkrav.md` (**net-ny**)
-
-- `BRU-APP-API-016 @must @draft` → GitHub-issue [#453](https://github.com/sikt-no/fs/issues/453).
-- **Tre konkrete scenarier (rettighet)**:
-  - Applikasjonsadministrator ser endringslogg for applikasjoner i egne organisasjoner.
-  - Endringslogg er ikke tilgjengelig uten administrasjonsrettigheter.
-  - Super-applikasjonsadministrator ser endringslogg for alle applikasjoner.
-- **Fire `@openquestion`-scenarier** (åpne for kravarbeidet):
-  - Hva som skal logges (alle administrative handlinger vs. kun sensitive; autentiseringshistorikk i samme logg eller separat).
-  - Hva en loggpost inneholder (hvem/tid/type vs. også før/etter-verdier; håndtering av sensitive felter som passord).
-  - Retention (evig / tidsbegrenset / plattform-policy).
-  - Rekkefølge, paginering, filtrering (50-paginering, filter på type/person).
-- `systemkrav.md` er eksplisitt på at iter 4 _ikke_ leverer egne K11-K14-features — disse er allerede dekket av rettighetsregler i `BRU-APP-API-001` / `-007` / `-008` (listevisning, tildele, fjerne). Iter-4-verdien er **sporbarhet**, ikke ny selvbetjent funksjonalitet.
-
-### GitHub-struktur vs krav-struktur (delta)
-
-- Sub-issues på #31: fortsatt #434, #435, #437 — **#453 er nytt issue, men `parent = #437`** (Nice to have). Krav-arkivet plasserer det derimot i "Iterasjon 4 — Grunnleggende selvbetjent administrasjon" med `@must`-prioritet.
-- Det er en strukturell uoverensstemmelse mellom GitHub og krav-arkivet. `bat-krav` (ikke denne skillen) er det rette stedet for å avklare om #453 skal flyttes til et nytt #--456-iterasjon-4-paraply-issue.
-- Iter-1-analysen forutså ikke #453. Den må legges til i scope eksplisitt.
-
-## Key Findings (delta)
-
-1. **Lese↔rediger-toggle på Detaljer-fanen er den sentrale UX-endringen.** Iter 1 modellerte navn-/beskrivelse-/ansvarlig-redigering som tre separate dialoger; iter 2 samler dem i én in-place edit-form på selve Detaljer-fanen med felles Avbryt/Lagre. **Reference-implementasjon i fs-admin er entydig**:
-   - `src/common/components/inputs/ViewEditTextField/`, `ViewEditTextArea/`, `ViewEditSelect/` — alle tar `edit: boolean` og rendrer enten input eller `ReadOnlyTextField`.
-   - `src/domains/opptak/features/OpptakManagement/OpptakSettings/OpptakSettings.tsx` — `editMode: boolean`-prop med samme fieldset, brukt av parent `OpptakManagementPage.tsx` som eier `editMode`-state og Rediger/Avbryt/Lagre-knappene.
-   - Krav-regelen "ulagrede endringer forkastes ved navigasjon/tab-bytte" faller ut gratis hvis `editMode` er **lokal `useState` på Detaljer-fane-komponenten** (ikke URL-state). Lokal state dør med ruten.
-
-2. **Bulk-fjern-modal har en eksisterende parallell i samme feature-mappe.** `src/domains/support/features/Applikasjon/components/TildelTilgangerDialog/` (fra tidligere POC-arbeid eller forberedt arbeid på `fruitbat`-branchen) implementerer allerede "modal opens → user picks org+miljø → candidate list narrows → multi-select → bulk mutate"-flyten. **Ny `FjernTilgangerDialog/` bygges parallelt** (samme filstruktur: `Button.tsx`, `Dialog.tsx`, `query.ts` for kandidater, `mutation.ts` for bulk-mutasjon). Ingen ny generell bulk-modal-abstraksjon trengs.
-
-3. **Endringslogg-mønsteret eksisterer allerede i fs-admin.** `src/domains/soknadsbehandling/features/AuditLogCard/AuditLogCard.tsx` har en `endringslogg(first, after)`-Relay-connection-viewer med `AuditLogItem`-rader, hostet som en `Surface`-card med load-more (`fetchMore`-paginering — `INITIAL_ENTRIES = 3`, `ENTRIES_PER_PAGE = 10`, justerbart til 50 om kravene konkluderer slik). Ny `Applikasjon`-endringslogg gjenbruker formen, ikke koden — det er et nytt domene, ny query, ny `AuditLogItem`-variant.
-
-4. **Arvede tilganger er datamodell + visuell dekorasjon, ikke en ny komponent.** Sketch + krav-tekst forutsetter at backend leverer arv-relasjoner og at hver tilgang-rad har en valgfri `Arvet`-`Tag` og opphavs-tekst. Skjul/vis-toggle er en `ToggleSwitch` over resultatlisten, URL-synket via `useDataListState`/`nuqs` som de andre filtrene. Backend må deduplisere (krav: "Arvet tilgang med flere opphav listes kun én gang").
-
-5. **Tildelings-/fjernings-mutasjonene må nå alltid ta `(organisasjon, miljø)` som tuple.** Iter-1-Q7 besluttet "én atomic bulk-mutasjon med `tilgangIds: [ID!]!`". Det er fortsatt riktig, men inputen blir `tildelApplikasjonTilganger(input: { applikasjonId, organisasjonsId, miljoId, tilgangskoder: [String!]! })` og `fjernApplikasjonTilganger(input: { applikasjonId, organisasjonsId, miljoId, tilgangIds: [ID!]! })`. Schema-skissen i [`api-spec-applikasjon-tilgangsstyring.md` (iter 1)](../ACTIVE-ITERATION-2/api-spec-applikasjon-tilgangsstyring.md) må oppdateres tilsvarende av backend-agenten.
-
-6. **Status `AKTIV/INAKTIV` blokkerer ikke tildeling/fjerning av tilganger.** Iter-1-analysens beslutning Q8 ("Deaktivering = `ApplikasjonStatus`-flagg, tilganger uberørte ved deaktivering") er bekreftet og utvidet: tilgangs-mutasjoner kan utføres mens applikasjonen er INAKTIV. Det betyr at deaktivert-tilstand kun stenger _autentisering_, ikke _administrasjon_.
-
-7. **To navne-konsepter på applikasjonen er nå eksplisitt.** `opprette_applikasjon` opererer fortsatt med _visningsnavn_ hentet fra idP-en (globalt unikt, ikke brukerredigerbart). `rediger_detaljer` introduserer et brukerredigerbart _navn_. Det er minst tre tolkninger:
-   - (a) Visningsnavn = idP-autoritativt, applikasjons-navn = en valgfri alias overstyrt i FS Admin.
-   - (b) Visningsnavn = initielt sourced fra idP, så brukerredigerbart deretter (vil bryte regel om global unikhet).
-   - (c) To separate felter (visningsnavn fra idP, navn for intern bruk).
-   - **Flagget som åpent spørsmål.** Backend må klargjøre — det er en datamodell-beslutning, ikke en UI-beslutning.
-
-8. **Ansvarlig er nå obligatorisk gjennom hele livssyklusen.** Iter-1-modellen tillot at en applikasjon kunne være "ansvarsløs". Iter-2-krav nekter dette (både ved opprettelse og i `administrere_ansvarlig`). For eksisterende FS-applikasjoner som per definisjon ikke har en ansvarlig registrert i FS-Admin-domenet, må migrasjon enten (a) tvangs-velge en ansvarlig som del av førstemøtet med ny UI, eller (b) backend leverer en initiell ansvarlig basert på legacy-data. **Flagget som åpent spørsmål.**
-
-9. **`Tilknytning`-filteret i tilgangs-skissen mangler krav-dekning.** Skissen viser et filter `Tilknytning` med default "Alle tilknytninger". `vise_tilganger.feature` har et "skjul arvede"-toggle men ingen "tilknytnings"-konsept som scenario. Antagelse: `Tilknytning` ≈ "direkte tildelt / arvet / begge", altså _samme_ konsept som "skjul arvede"-toggle representert som et select-filter. Det betyr én av sketch og krav er litt foran/bak den andre. **Avklares før implementering.**
-
-## Technical Constraints (delta)
-
-Iter-1-CLAUDE.md-beskrankningene gjelder uendret. Spesifikke ny-konsekvenser av iter-2-deltaen:
-
-- **Ingen URL-state for editMode på Detaljer-fanen.** Krav-regel "ulagrede endringer forkastes ved navigasjon" forutsetter at editMode lever i lokal `useState`, ikke `nuqs`. Det avviker fra det generelle prinsippet "filter/sort/paginering = URL-state" — men er korrekt fordi editMode er en _arbeidssesjon-modus_, ikke et delbart view-state. Kravet om at fane-bytte også forkaster endringer betyr at `DetailPageTabbedContent`-tab-switcher må trigge en unmount eller eksplisitt `cancelEdit`. _Verifisere oppførsel mot `DetailPageTabbedContentPanel`-implementasjonen i `bat-plan`._
-- **Bulk-modaler bør ikke gjenbruke `useDataListState`.** Kandidat-tilgangs-listen inne i `FjernTilgangerDialog` er midlertidig modal-state (multi-select-checkboxene) og forkastes når modalen lukkes. Bruk lokal `useState` for valgte ID-er.
-- **`Arvet`-rad-dedup er backend-ansvar.** Frontend skal ikke gjøre dedup-logikk på rader. Hvis backend ikke deduplifiserer, returneres et `inheritedFrom: [TilgangsRef!]!`-array per rad — UI viser "Arvet fra X, Y".
-- **`AuditLogCard`-referansen leser fra `saker.endringslogg(first, after)` — ikke direkte gjenbrukbar.** Ny query: `applikasjoner(...).endringslogg(first, after)` eller en topp-nivå `applikasjon(id).endringslogg`. Backend-agenten må føye til feltet.
-- **Skisset 5-kolonners rutenett på Detaljer-fanen mappes til `Grid`-komponenten i `@/common/components/Grid`.** Iter 1 brukte `Surface`-kort for ulike seksjoner; nå er det _én_ Surface med ett internt grid-oppsett. Responsivt skal denne falle til færre kolonner på smale skjermer — bør sjekkes mot `Grid`-CSS-modulen i `bat-plan`.
-
-## Dependencies (delta)
-
-Iter-1-tabellen er fortsatt gyldig. Tillegg fra iter-2-deltaen:
-
-| Avhengighet                                                                                              | Hva som påvirkes (iter-2)                                                                                                                                                            |
-| -------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `src/common/components/inputs/ViewEdit{TextField,TextArea,Select,NumberInput,ToggleSwitch}/`             | Eksisterer; gjenbrukes for Detaljer-fanens edit-mode. Ingen kode-endring her.                                                                                                        |
-| `src/domains/opptak/features/OpptakManagement/OpptakSettings/`                                           | Ny referanse-implementasjon for editMode-section. Ingen kode-endring her, kun lese-kilde.                                                                                            |
-| `src/domains/support/features/Applikasjon/components/TildelTilgangerDialog/`                             | Eksisterer som forarbeid (sannsynligvis fra `fruitbat`-branch-arbeid). Tjener som mal for ny `FjernTilgangerDialog/`. Kan måtte oppdateres til nytt `(org, miljø)`-input-skjema.       |
-| _Ny mappe_: `src/domains/support/features/Applikasjon/components/FjernTilgangerDialog/`                  | Net-ny komponent. Speiles på `TildelTilgangerDialog/`-strukturen.                                                                                                                     |
-| _Ny mappe_: `src/domains/support/features/Applikasjon/features/ApplikasjonEndringslogg/` (eller liknende) | Iter-4-feature. Mappestruktur og hosting (tredje tab vs. inline-card) er åpent — se Open Questions.                                                                                  |
-| `src/domains/soknadsbehandling/features/AuditLogCard/`                                                   | Ingen kode-endring; tjener som referanse-mønster for ny endringslogg.                                                                                                                |
-| GraphQL-schema (backend)                                                                                 | Tre nye/endrede mutation-input-typer: `tildelApplikasjonTilganger`, `fjernApplikasjonTilganger` (begge med `(applikasjonId, organisasjonsId, miljoId)`). Ny query `Applikasjon.endringslogg(first, after)`. Ny `Tilgang.arvetFra: [Tilgang!]!`-eller-tilsvarende relasjon. |
-| `src/common/messages/nb/support.json`                                                                    | Nye nøkler: `support.ApplikasjonDetaljer.rediger`/`avbryt`/`lagre`, `support.ApplikasjonFjernTilgangerDialog.*`, `support.ApplikasjonEndringslogg.*`, `support.ApplikasjonListe.antallTilganger`, `support.VisTilganger.tilknytning`/`arvetFra`/`skjulArvede`. |
-
-### Cross-agent (kandidat-handoffs — uendret + tillegg)
-
-Iter-1-kandidatene (backend GraphQL-overflate, idP-verifikasjon, autorisasjons-rettigheter) gjelder fortsatt. Tillegg:
-
-5. **Backend / SuperGraf-schema-agent — utvidelser for iter 2-deltaen:**
-   - `Tilgang`-typen må modellere `arvetFra: [Tilgang!]!` (eller equivalent) for "arvet"-merking + dedup.
-   - `Applikasjon.endringslogg(first, after): EndringsloggConnection!` (Relay) for iter-4-endringslogg.
-   - Mutation-input for `tildel`/`fjern` med eksplisitt `(organisasjon, miljø)`-tuple.
-   - Mutation `redigerApplikasjon(input: { id, navn?, beskrivelse?, ansvarligId? })` som tar alle tre felter samtidig (atomic save av Detaljer-redigeringsformen).
-   - Avklaring av navne-modell (visningsnavn vs. applikasjons-navn — finding #7).
-   - Default-ansvarlig for legacy FS-applikasjoner (finding #8).
-
-## Requirements Impact (delta)
-
-Tabellen fra iter-1 utvides med ett nytt feature:
-
-| Feature-ID      | Egenskap                      | Iter | Prioritet      | GitHub  | Status              |
-| --------------- | ----------------------------- | ---- | -------------- | ------- | ------------------- |
-| BRU-APP-API-006 | Redigere _detaljer_ (var: _beskrivelse_) | 2    | @must @planned | #443    | **Omarbeidet**      |
-| BRU-APP-API-016 | Endringslogg                  | **4**| @must @draft   | **#453**| **NY i iter 2**     |
-
-Alle øvrige features har samme `@must @planned`-status. `@could @draft` på BRU-APP-API-015 og -017 er uendret.
+| Requirement                                            | Status etter Iter 2-impl | Påvirkning fra ny krav-versjon                                                                                       |
+| ------------------------------------------------------ | ------------------------ | -------------------------------------------------------------------------------------------------------------------- |
+| BRU-APP-API-001 Listevisning og søk                    | Implementert             | Nytt listefelt (antallTilganger) + nytt filter (miljø)                                                               |
+| BRU-APP-API-002 Se detaljer                            | Implementert             | Inline rediger-toggle erstatter dialog-mønster; idP/org/status synlige felter i info-fanen                          |
+| BRU-APP-API-003 Vise tilganger                         | Implementert             | Tre nye filter (org, tilgangskode-fritekst), arv-håndtering (badge, dedup, toggle), beskrivelse + organisasjon i raden |
+| BRU-APP-API-004 Passordbytte                           | Implementert             | Ingen endring                                                                                                        |
+| BRU-APP-API-005 Administrere ansvarlig                 | Implementert             | Obligatorisk-validering + `Fjern ansvarlig`-flyten fjernes                                                           |
+| BRU-APP-API-006 Rediger detaljer                       | Delvis (kun beskrivelse) | Navn-redigering ny; ulagrede-endringer-reset ny; rediger-modus inline                                                |
+| BRU-APP-API-007 Tildele tilgang                        | Implementert             | Kaskade org→miljø→tilgangskode; tildele til deaktivert applikasjon                                                  |
+| BRU-APP-API-008 Fjerne tilgang                         | Implementert (bulk)      | Strukturelt endret — fjerning skjer via samlet modal; arvede tilganger ikke fjernbare; fjerne fra deaktivert applikasjon |
+| BRU-APP-API-009 Opprette applikasjon                   | Implementert             | Navn + ansvarlig obligatoriske; "status Aktiv" eksplisitt                                                            |
+| BRU-APP-API-010 Deaktivere                             | Implementert             | Ingen endring                                                                                                        |
+| BRU-APP-API-015 Sist brukt                             | Implementert (info-fane) | Ingen endring                                                                                                        |
+| BRU-APP-API-016 Endringslogg                           | **Ny — ikke startet**    | `@must @draft` med 4 åpne spørsmål. Iter 4-scope.                                                                    |
+| BRU-APP-API-017 Masseadministrasjon                    | Ikke startet             | Ingen endring (`@could @draft`)                                                                                      |
 
 ## Krav-input fra GitHub
 
-- **Kilde-issue(s):** [#31](https://github.com/sikt-no/fs/issues/31) (paraply), sub-issues [#434](https://github.com/sikt-no/fs/issues/434), [#435](https://github.com/sikt-no/fs/issues/435), [#437](https://github.com/sikt-no/fs/issues/437), [#453](https://github.com/sikt-no/fs/issues/453) (ny i scope; parent = #437 i GitHub, men plassert i krav-mappe `03 Iterasjon 4` med `@must`-prioritet).
-- **Repo / branch:** `sikt-no/fs` @ [`fruitbat`](https://github.com/sikt-no/fs/tree/fruitbat) — uendret fra iter-1.
-- **Hentede `.feature`-filer:** se [`krav-input/manifest.md`](krav-input/manifest.md) for full diff-tabell og lokale stier.
-- **Hentet:** 2026-05-27
+- **Kilde-issue:** [#31](https://github.com/sikt-no/fs/issues/31) (initiativ)
+- **Sub-issues i scope:** [#434](https://github.com/sikt-no/fs/issues/434) (Iter 2), [#435](https://github.com/sikt-no/fs/issues/435) (Iter 3), [#437](https://github.com/sikt-no/fs/issues/437) (Nice to have), pluss Iter 4 / [#453](https://github.com/sikt-no/fs/issues/453) (endringslogg) som er ny i scope.
+- **Repo / branch:** `sikt-no/fs` @ `fruitbat` (branch hentet fra initiativets `linkedBranches`).
+- **Branch-SHA ved henting:** [`8f5e0bddedf7c5731722c5fc80159a95db197909`](https://github.com/sikt-no/fs/commit/8f5e0bddedf7c5731722c5fc80159a95db197909)
+- **Main-SHA ved henting:** [`8b4bc23612666cb3460d02b8738915c65712e448`](https://github.com/sikt-no/fs/commit/8b4bc23612666cb3460d02b8738915c65712e448) (alle krav-filer er `status: added` mot main — diffingen er gjort mot snapshot i `docs/ACTIVE-ITERATION-2/krav-input/`)
+- **Hentede `.feature`-filer:** se [`krav-input/manifest.md`](krav-input/manifest.md) og [`krav-input/fruitbat/...`](krav-input/fruitbat/).
+- **Hentet:** 2026-05-28
 
 ## Open Questions
 
-Spørsmål reist av denne iter-2-analysen er avklart i samtale 2026-05-27. Beslutninger og rasjonale:
-
-- [x] **#453-parent-mismatch.** **Beslutning:** #453 (endringslogg) er i scope som iter-4 `@must`. Krav-arkivets `03 Iterasjon 4`-plassering er autoritativ over GitHub-hierarkiet. **Follow-up for `bat-krav`:** flytte #453 fra parent #437 (Nice to have) til et nytt iter-4-paraply-issue, så GitHub stemmer med krav-arkivet.
-- [x] **Endringslogg-plassering i UI.** **Beslutning:** Tredje fane `Endringslogg` på `DetailPageTabbedContent` — konsistent med eksisterende tab-mønster. URL blir `?tab=endringslogg`. `bat-plan` modellerer en tredje `DetailPageTabbedContentPanel` på applikasjon-detaljsiden.
-- [x] **Navne-modell (finding #7).** **Beslutning:** To separate felter på `Applikasjon`-typen:
-  - `visningsnavn` — hentet fra idP (Feide/Maskinporten) ved opprettelse, låst, globalt unik (håndhevet av backend, jf. K8).
-  - `navn` — brukerredigerbart i FS Admin (via `rediger_detaljer`-flyten), display-vennlig alias. Ikke globalt unikt.
-  - Begge vises på detaljsiden. `Navn`-feltet i skissen mapper til `navn`; `visningsnavn` får sitt eget read-only-felt (eller vises ved siden av `navn`).
-- [x] **Default-ansvarlig for legacy FS-applikasjoner (finding #8).** **Beslutning:** Force-pick on first edit. Backend tillater `ansvarlig = null` for legacy-applikasjoner. UI viser en advarsel på detaljsiden (_"Mangler ansvarlig — må settes ved neste redigering"_) og blokkerer alle save-operasjoner på applikasjonen inntil ansvarlig er fylt inn. Migrasjon skjer organisk — ingen big-bang-backfill nødvendig.
-- [x] **`Tilknytning`-filteret (finding #9).** **Beslutning:** Samme konsept som krav-filas "skjul/vis arvede"-toggle; skissen vinner på rendring. Implementeres som `Select` med tre opsjoner: _"Alle tilknytninger" / "Kun direkte" / "Kun arvede"_. **Follow-up for krav-eier:** justere `vise_tilganger.feature` så scenariene refererer til samme filter-navn (`Tilknytning`) i stedet for "skjul arvede"-toggle.
-- [x] **`AuditLogItem`-rad-innhold (de fire `@openquestion`-scenariene).** **Beslutning:** UI shell now, content later. `bat-plan` modellerer UI-rammen (tredje fane + `Surface` + `AuditLogItem`-rader + "Last inn flere"-paginering 50) med en placeholder data-shape. Backend må fortsatt avklare hva som logges, loggpost-innhold, retention og filter — men frontend kan starte implementasjonen parallelt.
-- [x] **Sketch-vs-krav-konsistens på listevisningen.** **Beslutning:** Krav-fila er autoritativ. `Antall tilganger`-kolonne legges til i listevisningen iht. `listevisning_og_sok.feature`. Skissen er litt utdatert, ikke en blokker.
-
-Decisions inherited (uendret siden iter-1; bekreftet gjeldende):
-
-- [x] Q1: Eksisterende FS-applikasjoner forvaltes i ny UI, kan ikke opprettes.
-- [x] Q2: Side-om-side under feature-flag-kontroll.
-- [x] Q3: POC-fjerning er trygt uten test-backfill.
-- [x] Q4: Ny Unleash-flag for sub-itemen.
-- [x] Q5: Backend eier all autorisasjon end-to-end.
-- [x] Q6: Cross-org-synlighet (K11/K12) er implisitt i backend-autorisasjon.
-- [x] Q7: Bulk-mutasjon for fjern + tildel — bekreftet og utvidet med `(org, miljø)`-tuple i iter 2.
-- [x] Q8: Deaktivering = `ApplikasjonStatus`-flagg — utvidet til at INAKTIV ikke blokkerer tilgangs-mutasjoner.
-- [x] Q9: "Last inn flere"-paginering for tilgangs-tab.
-- [x] Q10: All spec-detalj ligger i `.feature`-filene.
-
-## Notes
-
-- **Iter-1-spørsmålene som lå åpne** (#437-`@draft`-håndtering, POC-rydde-PR-timing, `NyTilgangButton`-skjebne, USER_ACTION-enum-utvidelse-eller-ikke, backend-agent-aktivitet) er **fortsatt åpne** — de er ikke gjentatt her, men `bat-plan` må fortsatt adressere dem.
-- **`opprette_applikasjon.design.md` har kun kosmetiske endringer** (markdown-formatering). Innholdet er substansielt uendret fra iter 1 — `bat-plan` kan referere til iter-1-versjonen direkte.
-- **`systemkrav.md`-filene har kun kosmetiske endringer** (blanke linjer, italic-stil). Kapabilitets-tabellene er uendret.
-- **Iter 4 introduserer ingen ny mappe i fs-admin-strukturen utover endringslogg-feature.** K11-K14 (selvbetjent oversikt, tildel, fjern på egne org) er bevisst implementert som rettighetsregler i Iter 2- og Iter 3-features — se `03/systemkrav.md` § "Funksjonalitet dekket av features fra tidligere iterasjoner".
+- [ ] **Navn-feltets natur:** er navnet på en applikasjon (a) hentet eksklusivt fra idP-en og uforanderlig fra fs-admin, (b) initialt hentet fra idP-en men kan overstyres av bruker, eller (c) helt uavhengig av idP-en? `opprette_applikasjon.feature` antyder (a); `rediger_detaljer.feature` antyder (b) eller (c). Krever produkt-eier-avklaring før `bat-plan` kan utforme rediger-flyten.
+- [ ] **`antallTilganger`-feltet:** er det fornuftig som direkte felt på `Applikasjon` (cache-effektivt på listen), eller skal man bruke `applikasjon.tilganger.totalCount` (consistency med pagination-konvensjonen)? Backend-avgjørelse, men har konsekvens for cache-invalidering ved tildel/fjern-mutasjoner.
+- [ ] **Tildelbare-tilganger-query: parametrisert eller pre-loaded?** Krav-en sier *"vises kun tilgangskoder jeg har rettighet til å tildele for den valgte kombinasjonen av organisasjon og miljø"* — backend må enten støtte `tildelbareApplikasjonTilganger(orgId, miljo)` eller eksponere full matrise og la client filtrere.
+- [ ] **Arv-modellen:** schema-formen for "arvet tilgang" må defineres — er det en `arvetFra: [ApplikasjonTilgang!]`-self-relasjon på `ApplikasjonTilgang`, eller en separat type? Krav-en antyder mange-til-én (én arvet kan ha flere opphav).
+- [ ] **Endringslogg-scope (BRU-APP-API-016):** skal Iter 3-planen inkludere stub for endringslogg-fanen, eller utsettes hele til en separat Iter 4-plan? `@draft` taler for å vente; tab-strukturen kan likevel forberedes.
+- [ ] **`Fjern ansvarlig`-mutation deprecation:** skal mutationen og dialogen fjernes umiddelbart, eller bevares som "skjult" inntil backend bekrefter at intet eksternt avhenger av mutationen?
+- [ ] **Endringslogg som fane vs. som side-modal:** `Iterasjon 4 / systemkrav.md` sier *"åpnes endringsloggen på detaljsiden"* — uavklart om dette er en fane (jf. eksisterende "Detaljer | Tilganger") eller en knapp som åpner modal/seksjon.
+- [ ] **Discardable-changes-mekanikk:** trenger fs-admin et generelt mønster (router-blocker + tab-bytte-guard) eller skal det implementeres komponent-lokalt for rediger-detaljer-fanen? Påvirker andre rediger-flyter på sikt.
