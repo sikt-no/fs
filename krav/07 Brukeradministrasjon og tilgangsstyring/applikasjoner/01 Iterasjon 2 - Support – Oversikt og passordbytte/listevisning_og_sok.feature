@@ -70,10 +70,26 @@ Egenskap: Listevisning og søk i applikasjoner
       Når jeg søker med fritekst på navn
       Så filtreres listen til applikasjoner som matcher søket
 
+    Scenario: Tilgjengelige miljøer i filter
+      Gitt jeg ser listen over applikasjoner
+      Når jeg åpner miljøfilteret
+      Så inneholder filteret alle miljøer som brukes av applikasjonene i listen
+      Og hvert miljø vises kun én gang
+      Og miljøene er sortert alfabetisk
+      Og "Alle miljøer" er valgt som standard
+
     Scenario: Filtrere på miljø
       Gitt jeg ser listen over applikasjoner
       Når jeg velger et miljø som filter
       Så vises kun applikasjoner som er aktive i det valgte miljøet
+
+    Scenario: Tilgjengelige organisasjoner i filter
+      Gitt jeg ser listen over applikasjoner
+      Når jeg åpner organisasjonsfilteret
+      Så inneholder filteret alle organisasjoner som applikasjonene i listen er tilknyttet
+      Og hver organisasjon vises kun én gang
+      Og organisasjonene er sortert alfabetisk
+      Og "Alle organisasjoner" er valgt som standard
 
     Scenario: Filtrere på organisasjon
       Gitt jeg ser listen over applikasjoner
@@ -85,6 +101,16 @@ Egenskap: Listevisning og søk i applikasjoner
       Gitt jeg ser listen over applikasjoner
       Når jeg velger en tilgang som filter
       Så vises kun applikasjoner som har den valgte tilgangen
+
+    Scenario: Tilgjengelige statuser i filter
+      Gitt jeg ser listen over applikasjoner
+      Når jeg åpner statusfilteret
+      Så kan jeg velge mellom følgende statuser:
+        | Status        |
+        | Alle statuser |
+        | Aktiv         |
+        | Deaktivert    |
+      Og "Alle statuser" er valgt som standard
 
     Scenario: Filtrere på status
       Gitt jeg ser listen over applikasjoner

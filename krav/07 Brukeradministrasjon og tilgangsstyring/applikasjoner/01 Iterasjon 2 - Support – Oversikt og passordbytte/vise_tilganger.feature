@@ -16,10 +16,24 @@ Egenskap: Vise tilganger for applikasjon
     Så ser jeg en liste over alle tilganger applikasjonen har
     Og hvert innslag viser tilgangskode, beskrivelse, organisasjon og miljøet tilgangen gjelder for
 
+  Scenario: Tilgjengelige miljøer i filter
+    Når jeg åpner miljøfilteret
+    Så inneholder filteret alle miljøer applikasjonen har tilganger i
+    Og hvert miljø vises kun én gang
+    Og miljøene er sortert alfabetisk
+    Og "Alle miljøer" er valgt som standard
+
   Scenario: Filtrere tilgangsliste på miljø
     Når jeg filtrerer tilgangslisten på miljø
     Så vises kun tilganger i de valgte miljøene
     Og filtervalget er begrenset til miljøer applikasjonen har tilganger i
+
+  Scenario: Tilgjengelige organisasjoner i filter
+    Når jeg åpner organisasjonsfilteret
+    Så inneholder filteret alle organisasjoner applikasjonen har tilganger hos
+    Og hver organisasjon vises kun én gang
+    Og organisasjonene er sortert alfabetisk
+    Og "Alle organisasjoner" er valgt som standard
 
   Scenario: Filtrere tilgangsliste på organisasjon
     Når jeg filtrerer tilgangslisten på organisasjon
@@ -40,7 +54,20 @@ Egenskap: Vise tilganger for applikasjon
     Når jeg velger å laste inn flere
     Så lastes de neste tilgangene inn i listen
 
-  Regel: Arvede tilganger kan skjules fra listen
+  Regel: Filtrering på tilknytning
+
+    Scenario: Tilgjengelige tilknytninger i filter
+      Når jeg åpner tilknytningsfilteret
+      Så kan jeg velge mellom følgende tilknytninger:
+        | Tilknytning        |
+        | Alle tilknytninger |
+        | Direkte            |
+        | Arvet              |
+      Og "Alle tilknytninger" er valgt som standard
+
+    Scenario: Filtrere tilgangsliste på tilknytning
+      Når jeg velger en tilknytning som filter
+      Så vises kun tilganger med valgt tilknytning
 
     Scenario: Arvet tilgang er merket med opphav
       Gitt applikasjonen har en arvet tilgang
@@ -51,13 +78,3 @@ Egenskap: Vise tilganger for applikasjon
       Gitt applikasjonen har to direkte tilganger som begge gir den samme arvede tilgangen
       Så vises den arvede tilgangen kun én gang i listen
       Og det fremgår at den arvede tilgangen stammer fra begge de direkte tilgangene
-
-    Scenario: Skjule arvede tilganger
-      Gitt arvede tilganger vises
-      Når jeg skjuler arvede tilganger
-      Så vises kun direkte tildelte tilganger i listen
-
-    Scenario: Vise arvede tilganger
-      Gitt arvede tilganger er skjult
-      Når jeg velger å vise arvede tilganger
-      Så vises alle tilganger i listen, inkludert arvede
