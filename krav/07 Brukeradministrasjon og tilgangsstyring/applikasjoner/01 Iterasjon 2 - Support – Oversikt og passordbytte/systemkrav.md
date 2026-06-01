@@ -15,8 +15,8 @@
 1. En kunde melder en sak: «integrasjonen vår fungerer ikke» eller «vi trenger nytt passord».
 2. Support **finner riktig applikasjon** via listevisning og søk/filtrering — enten innen egen organisasjon (lokal admin) eller på tvers (Sikt support).
 3. På detaljsiden ser support **grunnleggende informasjon og tilganger** for å forstå hva applikasjonen kan.
-4. Ved behov **byttes passordet** (kun de med rettighet) og det nye passordet leveres til ansvarlig.
-5. Hvis informasjonen er utdatert: **ansvarlig oppdateres** og/eller **beskrivelsen redigeres**.
+4. Ved behov **byttes passordet** (kun de med rettighet) og det nye passordet leveres til kunden.
+5. Hvis informasjonen er utdatert: **beskrivelsen redigeres**.
 
 Iterasjonen leverer altså en *lese- og lett-redigerings-løsning*. Endringer som påvirker selve tilgangen (tildeling/fjerning av tilganger, deaktivering) ligger i Iterasjon 3.
 
@@ -30,7 +30,7 @@ Iterasjonen leverer altså en *lese- og lett-redigerings-løsning*. Endringer so
 
 **Brukerhistorie:** Som bruker ønsker jeg en oversikt over applikasjoner jeg har tilgang til, med søk og filtrering, slik at jeg raskt finner riktig applikasjon.
 
-**Kort beskrivelse:** Liste med navn, beskrivelse, miljøer, ansvarlig, organisasjon og status. Paginering 50 om gangen. Fritekst-søk på navn og filter på organisasjon, tilgang og status. Synligheten styres av administrasjonsrettigheter eller ansvarlig-relasjon — superadministrator ser alle, lokale administratorer ser sine egne organisasjoner og applikasjoner som har tilganger i deres organisasjoner, og brukere som er ansvarlig (direkte eller via feide-gruppe) ser applikasjoner de er ansvarlig for.
+**Kort beskrivelse:** Liste med navn, beskrivelse, miljøer, organisasjon og status. Paginering 50 om gangen. Fritekst-søk på navn og filter på organisasjon, tilgang og status. Synligheten styres av administrasjonsrettigheter — superadministrator ser alle, lokale administratorer ser sine egne organisasjoner og applikasjoner som har tilganger i deres organisasjoner.
 
 ### K3 — Se detaljer for applikasjon
 
@@ -40,7 +40,7 @@ Iterasjonen leverer altså en *lese- og lett-redigerings-løsning*. Endringer so
 
 **Brukerhistorie:** Som bruker ønsker jeg å se detaljer for en applikasjon, organisert i logiske datagrupper, slik at jeg har oversikt.
 
-**Kort beskrivelse:** Detaljside med grunnleggende info (navn, beskrivelse), sporingsinfo (opprettet/endret), miljøer og ansvarlig.
+**Kort beskrivelse:** Detaljside med grunnleggende info (navn, beskrivelse), sporingsinfo (opprettet/endret) og miljøer.
 
 ### K4 — Vise tilganger for applikasjon
 
@@ -61,16 +61,6 @@ Iterasjonen leverer altså en *lese- og lett-redigerings-løsning*. Endringer so
 **Brukerhistorie:** Som bruker ønsker jeg å sette nytt passord på en applikasjon jeg administrerer, slik at jeg kan hjelpe med passordbytte.
 
 **Kort beskrivelse:** Systemet genererer passordet (basic auth, ett aktivt passord om gangen). Vises skjult med mulighet for å vise og kopiere; kan ikke hentes opp igjen etter at dialogen lukkes. Nytt passord erstatter det gamle umiddelbart.
-
-### K18 — Administrere ansvarlig for applikasjon
-
-**Feature-ID:** [`BRU-APP-API-005`](administrere_ansvarlig.feature) | **GitHub:** [#442](https://github.com/sikt-no/fs/issues/442)
-
-**Prioritet:** Må ha · **Status:** Planlagt
-
-**Brukerhistorie:** Som bruker ønsker jeg å sette og endre ansvarlig for en applikasjon, slik at det er klart hvem som har kontakten med tredjeparten.
-
-**Kort beskrivelse:** Ansvarlig er en feide-bruker (eller feide-gruppe som «kan ha») fra applikasjonens organisasjon. Ansvarlig arver passordbytte-rett. Søket etter ansvarlig er begrenset til applikasjonens organisasjon.
 
 ### K19 — Redigere beskrivelse for applikasjon
 

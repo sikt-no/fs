@@ -31,9 +31,8 @@ Egenskap: Endringslogg for applikasjon
   Scenario: AVKLAR hvilke handlinger som skal loggføres
     # ÅPNE SPØRSMÅL:
     # - Skal alle administrative handlinger logges (opprettelse, navn/beskrivelse,
-    #   ansvarlig, passordbytte, tildeling/fjerning av tilgang, deaktivering,
-    #   reaktivering, evt. sletting), eller kun de sensitive (passord, tilganger,
-    #   deaktivering)?
+    #   passordbytte, tildeling/fjerning av tilgang, deaktivering, reaktivering,
+    #   evt. sletting), eller kun de sensitive (passord, tilganger, deaktivering)?
     # - Skal autentiseringshistorikk (sist brukt, feilede forsøk) inngå i samme
     #   logg, eller holdes atskilt? (jf. punkt 4 — autentiseringshistorikk)
     Gitt spørsmålet er åpent

@@ -14,7 +14,6 @@ sted for arbeid med Claude Code.
 - [BRU-APP-API-002 — Se detaljer for applikasjon](#bru-app-api-002--se-detaljer-for-applikasjon)
 - [BRU-APP-API-003 — Vise tilganger for applikasjon](#bru-app-api-003--vise-tilganger-for-applikasjon)
 - [BRU-APP-API-004 — Passordbytte for applikasjon](#bru-app-api-004--passordbytte-for-applikasjon)
-- [BRU-APP-API-005 — Administrere ansvarlig for applikasjon](#bru-app-api-005--administrere-ansvarlig-for-applikasjon)
 - [BRU-APP-API-006 — Redigere beskrivelse for applikasjon](#bru-app-api-006--redigere-beskrivelse-for-applikasjon)
 
 **Iterasjon 3 — Grunnleggende tilgangsstyring for intern support ([#435](https://github.com/sikt-no/fs/issues/435))**
@@ -60,7 +59,6 @@ Egenskap: Listevisning og søk i applikasjoner
         | Navn          |
         | Beskrivelse   |
         | Miljøer       |
-        | Ansvarlig     |
         | Organisasjon  |
         | Status        |
 
@@ -137,23 +135,6 @@ Egenskap: Listevisning og søk i applikasjoner
       Når jeg åpner applikasjonsoversikten
       Så ser jeg alle applikasjoner uavhengig av organisasjon
       Og jeg ser også applikasjoner som ikke er tilknyttet noen organisasjon
-
-  Regel: Synlighet via ansvarlig-relasjon
-
-    Scenario: Bruker som er registrert som ansvarlig ser applikasjonen
-      Gitt jeg er registrert som ansvarlig for en applikasjon
-      Og jeg har ikke applikasjonsadministrator-rollen for organisasjonen applikasjonen tilhører
-      Når jeg åpner applikasjonsoversikten
-      Så ser jeg applikasjonen i listen
-      Og det fremgår hvilken organisasjon applikasjonen tilhører
-
-    @could
-    Scenario: Bruker som er ansvarlig via feide-gruppe ser applikasjonen
-      Gitt jeg er medlem av en feide-gruppe som er registrert som ansvarlig for en applikasjon
-      Og jeg har ikke applikasjonsadministrator-rollen for organisasjonen applikasjonen tilhører
-      Når jeg åpner applikasjonsoversikten
-      Så ser jeg applikasjonen i listen
-      Og det fremgår hvilken organisasjon applikasjonen tilhører
 ```
 
 ---
@@ -187,9 +168,6 @@ Egenskap: Se detaljer for applikasjon
 
     Scenario: Se miljøer
       Så ser jeg hvilke miljøer applikasjonen er aktiv i
-
-    Scenario: Se ansvarlig
-      Så ser jeg hvem som er ansvarlig for applikasjonen
 ```
 
 ---
@@ -297,84 +275,6 @@ Egenskap: Passordbytte for applikasjon
       Når et nytt passord genereres
       Så fungerer ikke det gamle passordet lenger
       Og applikasjonen må autentisere seg med det nye passordet
-```
-
----
-
-### BRU-APP-API-005 — Administrere ansvarlig for applikasjon
-
-**Fil:** [administrere_ansvarlig.feature](01%20Iterasjon%202%20-%20Support%20%E2%80%93%20Oversikt%20og%20passordbytte/administrere_ansvarlig.feature)
-**GitHub:** [#442](https://github.com/sikt-no/fs/issues/442)
-
-```gherkin
-# language: no
-# GitHub: #442
-@BRU-APP-API-005 @must @planned
-Egenskap: Administrere ansvarlig for applikasjon
-  Som bruker
-  ønsker jeg å sette og endre ansvarlig for en applikasjon
-  slik at det alltid er klart hvem som er ansvarlig for applikasjonen.
-
-  En ansvarlig er alltid en feide-bruker eller feide-gruppe, og er den
-  som eventuelt har kontakt med tredjeparten som benytter applikasjonen.
-  Ansvarlig arver muligheten til å endre passord på applikasjonen.
-
-  # Krav fra Confluence: K18 Administrere ansvarlig for API-bruker
-
-  Bakgrunn:
-    Gitt jeg er på detaljsiden for en applikasjon
-
-  Regel: Ansvarlig kan settes, endres og fjernes
-
-    Scenario: Sette ansvarlig
-      Gitt applikasjonen har ingen ansvarlig
-      Når jeg søker opp og velger en feide-bruker fra applikasjonens organisasjon
-      Så er den valgte feide-brukeren registrert som ansvarlig for applikasjonen
-
-    Scenario: Endre ansvarlig
-      Gitt applikasjonen har en ansvarlig
-      Når jeg søker opp og velger en annen feide-bruker fra applikasjonens organisasjon
-      Så er den nye feide-brukeren registrert som ansvarlig for applikasjonen
-
-    Scenario: Fjerne ansvarlig
-      Gitt applikasjonen har en ansvarlig
-      Når jeg fjerner den ansvarlige
-      Så har applikasjonen ikke lenger en ansvarlig registrert
-
-  Regel: Søk etter ansvarlig er avgrenset til applikasjonens organisasjon
-
-    Scenario: Kun treff fra applikasjonens egen organisasjon vises
-      Gitt jeg velger å sette ansvarlig
-      Når jeg søker etter en ansvarlig
-      Så vises kun treff fra applikasjonens organisasjon
-
-  Regel: En feide-gruppe kan settes som ansvarlig som alternativ til feide-bruker
-
-    @could
-    Scenario: Sette en feide-gruppe som ansvarlig
-      Gitt applikasjonen har ingen ansvarlig
-      Når jeg søker opp og velger en feide-gruppe fra applikasjonens organisasjon
-      Så er den valgte feide-gruppen registrert som ansvarlig for applikasjonen
-
-    @could
-    Scenario: Søkeresultat inkluderer feide-grupper
-      Gitt jeg velger å sette ansvarlig
-      Når jeg søker etter en ansvarlig
-      Så vises feide-grupper fra applikasjonens organisasjon i tillegg til feide-brukere
-
-  Regel: Administrasjon av ansvarlig krever rettighet over applikasjonens organisasjon
-
-    Scenario: Applikasjonsadministrator kan administrere ansvarlig for applikasjoner i egne organisasjoner
-      Gitt jeg har applikasjonsadministrator-rollen for organisasjonen applikasjonen tilhører
-      Så har jeg mulighet til å sette, endre og fjerne ansvarlig
-
-    Scenario: Administrasjon av ansvarlig er ikke tilgjengelig for applikasjoner fra andre organisasjoner
-      Gitt jeg har applikasjonsadministrator-rollen, men ikke for organisasjonen applikasjonen tilhører
-      Så er muligheten til å sette, endre og fjerne ansvarlig ikke tilgjengelig
-
-    Scenario: Super-applikasjonsadministrator kan administrere ansvarlig for alle applikasjoner
-      Gitt jeg har super-applikasjonsadministrator-rollen
-      Så har jeg mulighet til å sette, endre og fjerne ansvarlig uavhengig av organisasjon
 ```
 
 ---
@@ -584,7 +484,7 @@ Egenskap: Opprette applikasjon
   ikke velges ved opprettelse. Eksisterende FS-applikasjoner består
   som data og forvaltes i den samme applikasjonsoversikten som Feide-
   og Maskinporten-applikasjoner — alle administrasjonshandlinger
-  (listevisning, tilgangsstyring, passordbytte, ansvarlig, beskrivelse,
+  (listevisning, tilgangsstyring, passordbytte, beskrivelse,
   deaktivering) gjelder også for dem. Det er kun opprettelse som er
   stengt.
 

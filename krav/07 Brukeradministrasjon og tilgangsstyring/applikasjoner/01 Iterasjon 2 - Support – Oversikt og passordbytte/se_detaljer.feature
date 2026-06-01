@@ -28,9 +28,6 @@ Egenskap: Se detaljer for applikasjon
     Scenario: Se miljøer
       Så ser jeg hvilke miljøer applikasjonen er aktiv i
 
-    Scenario: Se ansvarlig
-      Så ser jeg hvem som er ansvarlig for applikasjonen
-
     Scenario: Se status
       Så ser jeg om applikasjonen er aktiv eller deaktivert
 

@@ -17,7 +17,7 @@ Egenskap: Opprette applikasjon
   ikke velges ved opprettelse. Eksisterende FS-applikasjoner består
   som data og forvaltes i den samme applikasjonsoversikten som Feide-
   og Maskinporten-applikasjoner — alle administrasjonshandlinger
-  (listevisning, tilgangsstyring, passordbytte, ansvarlig, beskrivelse,
+  (listevisning, tilgangsstyring, passordbytte, beskrivelse,
   deaktivering) gjelder også for dem. Det er kun opprettelse som er
   stengt.
 
@@ -62,17 +62,6 @@ Egenskap: Opprette applikasjon
     Scenario: Navn lagres ved opprettelse
       Når jeg oppretter en ny applikasjon med et navn
       Så er det oppgitte navnet lagret på applikasjonen
-
-  Regel: Opprettelse krever en ansvarlig
-
-    Scenario: Ansvarlig må velges for å opprette applikasjon
-      Når jeg forsøker å opprette en ny applikasjon uten å velge ansvarlig
-      Så avvises opprettelsen
-      Og det fremgår at ansvarlig er obligatorisk
-
-    Scenario: Ansvarlig lagres ved opprettelse
-      Når jeg oppretter en ny applikasjon og velger en ansvarlig
-      Så er den valgte ansvarlige registrert på applikasjonen
 
   Regel: Applikasjonen identifiseres av en ekstern ID som verifiseres mot identitetsleverandøren
 

@@ -22,7 +22,6 @@ Egenskap: Listevisning og søk i applikasjoner
         | Navn            |
         | Beskrivelse     |
         | Miljøer         |
-        | Ansvarlig       |
         | Organisasjon    |
         | Antall tilganger|
         | Status          |
@@ -142,19 +141,3 @@ Egenskap: Listevisning og søk i applikasjoner
       Så ser jeg alle applikasjoner uavhengig av organisasjon
       Og jeg ser også applikasjoner som ikke er tilknyttet noen organisasjon
 
-  Regel: Synlighet via ansvarlig-relasjon
-
-    Scenario: Bruker som er registrert som ansvarlig ser applikasjonen
-      Gitt jeg er registrert som ansvarlig for en applikasjon
-      Og jeg har ikke applikasjonsadministrator-rollen for organisasjonen applikasjonen tilhører
-      Når jeg åpner applikasjonsoversikten
-      Så ser jeg applikasjonen i listen
-      Og det fremgår hvilken organisasjon applikasjonen tilhører
-
-    @could
-    Scenario: Bruker som er ansvarlig via feide-gruppe ser applikasjonen
-      Gitt jeg er medlem av en feide-gruppe som er registrert som ansvarlig for en applikasjon
-      Og jeg har ikke applikasjonsadministrator-rollen for organisasjonen applikasjonen tilhører
-      Når jeg åpner applikasjonsoversikten
-      Så ser jeg applikasjonen i listen
-      Og det fremgår hvilken organisasjon applikasjonen tilhører
