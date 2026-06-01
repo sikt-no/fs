@@ -72,7 +72,7 @@ Egenskap: Listevisning og søk i applikasjoner
     Scenario: Tilgjengelige miljøer i filter
       Gitt jeg ser listen over applikasjoner
       Når jeg åpner miljøfilteret
-      Så inneholder filteret alle miljøer som brukes av applikasjonene i listen
+      Så inneholder filteret alle miljøer applikasjoner kan tilordnes tilganger i, på tvers av organisasjonene brukeren har rettighet til
       Og hvert miljø vises kun én gang
       Og miljøene er sortert alfabetisk
       Og "Alle miljøer" er valgt som standard
@@ -85,7 +85,7 @@ Egenskap: Listevisning og søk i applikasjoner
     Scenario: Tilgjengelige organisasjoner i filter
       Gitt jeg ser listen over applikasjoner
       Når jeg åpner organisasjonsfilteret
-      Så inneholder filteret alle organisasjoner som applikasjonene i listen er tilknyttet
+      Så inneholder filteret alle organisasjoner brukeren har rettighet til
       Og hver organisasjon vises kun én gang
       Og organisasjonene er sortert alfabetisk
       Og "Alle organisasjoner" er valgt som standard

@@ -18,7 +18,7 @@ Egenskap: Vise tilganger for applikasjon
 
   Scenario: Tilgjengelige miljøer i filter
     Når jeg åpner miljøfilteret
-    Så inneholder filteret alle miljøer applikasjonen har tilganger i
+    Så inneholder filteret alle miljøer applikasjonen kan tilordnes tilganger i
     Og hvert miljø vises kun én gang
     Og miljøene er sortert alfabetisk
     Og "Alle miljøer" er valgt som standard
@@ -30,7 +30,7 @@ Egenskap: Vise tilganger for applikasjon
 
   Scenario: Tilgjengelige organisasjoner i filter
     Når jeg åpner organisasjonsfilteret
-    Så inneholder filteret alle organisasjoner applikasjonen har tilganger hos
+    Så inneholder filteret alle organisasjoner som kan gi applikasjonen en tilgang
     Og hver organisasjon vises kun én gang
     Og organisasjonene er sortert alfabetisk
     Og "Alle organisasjoner" er valgt som standard
