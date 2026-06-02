@@ -25,8 +25,7 @@ Egenskap: Vise tilganger for applikasjon
 
   Scenario: Filtrere tilgangsliste på miljø
     Når jeg filtrerer tilgangslisten på miljø
-    Så vises kun tilganger i de valgte miljøene
-    Og filtervalget er begrenset til miljøer applikasjonen har tilganger i
+    Så vises kun tilganger i det valgte miljøet
 
   Scenario: Tilgjengelige organisasjoner i filter
     Når jeg åpner organisasjonsfilteret
@@ -38,7 +37,6 @@ Egenskap: Vise tilganger for applikasjon
   Scenario: Filtrere tilgangsliste på organisasjon
     Når jeg filtrerer tilgangslisten på organisasjon
     Så vises kun tilganger knyttet til den valgte organisasjonen
-    Og filtervalget er begrenset til organisasjoner applikasjonen har tilganger hos
 
   Scenario: Filtrere tilgangsliste på tilgangskode
     Når jeg skriver inn tekst i tilgangskode-filteret
