@@ -9,7 +9,7 @@ Egenskap: Se detaljer for applikasjon
   # Krav fra Confluence: K3 Se detaljer for API-bruker
 
   Bakgrunn:
-    Gitt jeg ser detaljer for en applikasjon
+    Gitt jeg er på detaljsiden for en applikasjon
 
   Regel: Detaljer organiseres i logiske datagrupper
 

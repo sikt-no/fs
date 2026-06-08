@@ -12,20 +12,20 @@ Egenskap: Fjerne tilgang fra applikasjon
     Gitt jeg er på detaljsiden for en applikasjon
     Og jeg ser tilgangslisten applikasjonen har
 
-  Regel: Fjerning av tilganger skjer via modal
+  Regel: Fjerning av tilganger skjer via dialog
 
     Scenario: Velge tilganger å fjerne
-      Når jeg åpner modalen for å fjerne tilganger
+      Når jeg åpner dialogen for å fjerne tilganger
       Og velger organisasjon og miljø
       Så ser jeg en liste over tilganger jeg har rettighet til å fjerne for den valgte kombinasjonen
 
     Scenario: Bekrefte fjerning av valgte tilganger
-      Gitt jeg har valgt organisasjon, miljø og én eller flere tilganger i fjerningsmodalen
+      Gitt jeg har valgt organisasjon, miljø og én eller flere tilganger i fjerningsdialogen
       Når jeg bekrefter fjerningen
       Så har applikasjonen ikke lenger de valgte tilgangene for den valgte kombinasjonen av organisasjon og miljø
 
     Scenario: Avbryte fjerning
-      Gitt jeg har åpnet fjerningsmodalen
+      Gitt jeg har åpnet fjerningsdialogen
       Når jeg avbryter
       Så er ingen endringer gjort på applikasjonens tilganger
 

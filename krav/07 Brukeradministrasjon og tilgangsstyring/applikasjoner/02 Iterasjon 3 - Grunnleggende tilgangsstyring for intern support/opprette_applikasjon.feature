@@ -122,7 +122,7 @@ Egenskap: Opprette applikasjon
 
     Scenario: Nyopprettet applikasjon har status Aktiv som standard
       Når jeg oppretter en ny applikasjon
-      Så har applikasjonen status «Aktiv»
+      Så har applikasjonen status "Aktiv"
 
   Regel: Nyopprettet applikasjon har ingen tilganger og er ikke aktiv i noen miljøer
 
