@@ -19,6 +19,13 @@ Egenskap: Se detaljer for applikasjon
     Scenario: Se identitetsleverandør
       Så ser jeg applikasjonens identitetsleverandør
 
+    Scenario: Se ekstern ID fra identitetsleverandør
+      Gitt applikasjonen har en ekstern ID fra identitetsleverandøren
+      Så ser jeg den eksterne ID-en
+
+    Scenario: Se intern ID
+      Så ser jeg applikasjonens interne ID
+
     Scenario: Se organisasjon
       Så ser jeg applikasjonens organisasjon
 
