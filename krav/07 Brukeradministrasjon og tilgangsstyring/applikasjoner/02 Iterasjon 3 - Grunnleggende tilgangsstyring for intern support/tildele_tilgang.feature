@@ -14,18 +14,18 @@ Egenskap: Tildele tilgang til applikasjon
   Regel: En tildeling gjelder én tilgang i ett eksplisitt valgt miljø
 
     Scenario: Tildele en tilgang i valgt organisasjon og miljø
-      Når jeg velger organisasjon, miljø og en tilgang jeg har rettighet til å tildele
-      Så har applikasjonen fått den valgte tilgangen for den valgte kombinasjonen av organisasjon og miljø
+      Når jeg velger en organisasjon, et miljø og en tilgang jeg har rettighet til å tildele
+      Så er tilgangen tildelt applikasjonen for den valgte kombinasjonen av organisasjon og miljø
       Og det fremgår tydelig hvilken organisasjon og hvilket miljø tildelingen gjelder
 
     Scenario: Tildele flere tilganger samtidig i valgt organisasjon og miljø
-      Når jeg velger organisasjon, miljø og flere tilganger jeg har rettighet til å tildele
-      Så har applikasjonen fått alle de valgte tilgangene for den valgte kombinasjonen av organisasjon og miljø
+      Når jeg velger en organisasjon, et miljø og flere tilganger jeg har rettighet til å tildele
+      Så er tilgangene tildelt applikasjonen for den valgte kombinasjonen av organisasjon og miljø
 
     Scenario: Tildele tilgang til en eksisterende FS-applikasjon
       Gitt applikasjonen har FS som identitetsleverandør
-      Når jeg velger organisasjon, miljø og en tilgang jeg har rettighet til å tildele
-      Så har applikasjonen fått den valgte tilgangen for den valgte kombinasjonen av organisasjon og miljø
+      Når jeg velger en organisasjon, et miljø og en tilgang jeg har rettighet til å tildele
+      Så er tilgangen tildelt applikasjonen for den valgte kombinasjonen av organisasjon og miljø
 
   Regel: Bruker kan kun tildele tilganger de selv har rettighet til å tildele
 
@@ -48,11 +48,6 @@ Egenskap: Tildele tilgang til applikasjon
       Gitt jeg har tilgang til kun én organisasjon
       Når jeg velger et miljø og en tilgang jeg har rettighet til å tildele
       Så er tilgangen tildelt applikasjonen i det valgte miljøet for min organisasjon
-
-    Scenario: Organisasjon velges når administrator har tilgang til flere organisasjoner
-      Gitt jeg har tilgang til flere organisasjoner
-      Når jeg velger en organisasjon, et miljø og en tilgang jeg har rettighet til å tildele
-      Så er tilgangen tildelt applikasjonen for den valgte kombinasjonen av organisasjon og miljø
 
     Scenario: Valglisten for organisasjon er begrenset til organisasjoner jeg administrerer
       Gitt jeg har tilgang til flere organisasjoner
