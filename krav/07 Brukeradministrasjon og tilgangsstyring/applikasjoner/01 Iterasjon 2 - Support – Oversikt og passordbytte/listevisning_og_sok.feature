@@ -93,7 +93,7 @@ Egenskap: Listevisning og søk i applikasjoner
     Scenario: Filtrere på organisasjon
       Gitt jeg ser listen over applikasjoner
       Når jeg velger en organisasjon som filter
-      Så vises kun applikasjoner tilknyttet valgt organisasjon
+      Så vises kun applikasjoner tilknyttet den valgte organisasjonen
 
     @could
     Scenario: Filtrere på tilgang
@@ -114,7 +114,7 @@ Egenskap: Listevisning og søk i applikasjoner
     Scenario: Filtrere på status
       Gitt jeg ser listen over applikasjoner
       Når jeg velger en status som filter
-      Så vises kun applikasjoner med valgt status
+      Så vises kun applikasjoner med den valgte statusen
 
     Scenario: Kombinere filtre
       Gitt jeg ser listen over applikasjoner

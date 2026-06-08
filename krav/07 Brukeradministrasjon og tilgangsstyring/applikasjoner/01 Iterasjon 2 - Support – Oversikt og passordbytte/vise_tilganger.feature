@@ -24,7 +24,7 @@ Egenskap: Vise tilganger for applikasjon
     Og "Alle miljøer" er valgt som standard
 
   Scenario: Filtrere tilgangsliste på miljø
-    Når jeg filtrerer tilgangslisten på miljø
+    Når jeg velger et miljø som filter
     Så vises kun tilganger i det valgte miljøet
 
   Scenario: Tilgjengelige organisasjoner i filter
@@ -35,7 +35,7 @@ Egenskap: Vise tilganger for applikasjon
     Og "Alle organisasjoner" er valgt som standard
 
   Scenario: Filtrere tilgangsliste på organisasjon
-    Når jeg filtrerer tilgangslisten på organisasjon
+    Når jeg velger en organisasjon som filter
     Så vises kun tilganger knyttet til den valgte organisasjonen
 
   Scenario: Filtrere tilgangsliste på tilgangskode
@@ -65,7 +65,7 @@ Egenskap: Vise tilganger for applikasjon
 
     Scenario: Filtrere tilgangsliste på tilknytning
       Når jeg velger en tilknytning som filter
-      Så vises kun tilganger med valgt tilknytning
+      Så vises kun tilganger med den valgte tilknytningen
 
     Scenario: Arvet tilgang er merket med opphav
       Gitt applikasjonen har en arvet tilgang

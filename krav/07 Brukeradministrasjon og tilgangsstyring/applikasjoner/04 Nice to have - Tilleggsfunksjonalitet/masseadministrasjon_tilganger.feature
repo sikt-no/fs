@@ -11,7 +11,7 @@ Egenskap: Masseadministrasjon av tilganger
   Scenario: Tildele tilgang til flere applikasjoner
     Gitt jeg er på oversiktssiden over tilganger
     Når jeg velger en tilgang og tildeler den til flere applikasjoner
-    Så har alle valgte applikasjoner fått tilgangen
+    Så er tilgangen tildelt alle valgte applikasjoner
 
   Scenario: Fjerne tilgang fra flere applikasjoner
     Gitt jeg er på oversiktssiden over tilganger
