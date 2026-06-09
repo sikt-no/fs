@@ -73,6 +73,6 @@ Egenskap: Vise tilganger for applikasjon
       Og det fremgår hvilke tilganger arven stammer fra
 
     Scenario: Arvet tilgang med flere opphav listes kun én gang
-      Gitt applikasjonen har to direkte tilganger som begge gir den samme arvede tilgangen
+      Gitt applikasjonen har to eller flere direkte tilganger som gir den samme arvede tilgangen
       Så vises den arvede tilgangen kun én gang i listen
-      Og det fremgår at den arvede tilgangen stammer fra begge de direkte tilgangene
+      Og det fremgår at den arvede tilgangen stammer fra alle de direkte tilgangene
