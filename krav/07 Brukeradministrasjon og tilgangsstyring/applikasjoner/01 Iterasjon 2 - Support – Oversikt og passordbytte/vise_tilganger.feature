@@ -13,12 +13,12 @@ Egenskap: Vise tilganger for applikasjon
     Og jeg har åpnet tab-en for tilganger
 
   Scenario: Se tilganger for en applikasjon
-    Så ser jeg en liste over alle tilganger applikasjonen har
+    Så ser jeg en liste over tilganger
     Og hvert innslag viser tilgangskode, beskrivelse, organisasjon og miljøet tilgangen gjelder for
 
   Scenario: Tilgjengelige miljøer i filter
     Når jeg åpner miljøfilteret
-    Så inneholder filteret alle miljøer applikasjonen kan tilordnes tilganger i
+    Så inneholder filteret alle miljøer som er representert i den ufiltrerte tilgangslisten
     Og hvert miljø vises kun én gang
     Og miljøene er sortert alfabetisk
     Og "Alle miljøer" er valgt som standard
@@ -29,7 +29,7 @@ Egenskap: Vise tilganger for applikasjon
 
   Scenario: Tilgjengelige organisasjoner i filter
     Når jeg åpner organisasjonsfilteret
-    Så inneholder filteret alle organisasjoner som kan gi applikasjonen en tilgang
+    Så inneholder filteret alle organisasjoner som er representert i den ufiltrerte tilgangslisten
     Og hver organisasjon vises kun én gang
     Og organisasjonene er sortert alfabetisk
     Og "Alle organisasjoner" er valgt som standard
@@ -51,6 +51,17 @@ Egenskap: Vise tilganger for applikasjon
     Og de 50 første tilgangene er lastet inn
     Når jeg velger å laste inn flere
     Så lastes de neste tilgangene inn i listen
+
+  Regel: Synlighet for tilganger
+
+    Scenario: Applikasjonsadministrator for organisasjonen som eier applikasjonen ser alle tilganger
+      Gitt jeg har applikasjonsadministrator-rollen for organisasjonen som eier applikasjonen
+      Så inneholder tilgangslisten alle tilganger applikasjonen har
+
+    Scenario: Applikasjonsadministrator i annen organisasjon ser kun tilganger til egne data
+      Gitt applikasjonen tilhører en annen organisasjon enn dem jeg administrerer
+      Og applikasjonen har tilganger til data i en eller flere av organisasjonene jeg administrerer
+      Så inneholder tilgangslisten kun tilgangene til data i organisasjonene jeg administrerer
 
   Regel: Filtrering på tilknytning
 
