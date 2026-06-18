@@ -96,16 +96,30 @@ Hver feature **må tagges** med en unik ID. ID-en legges inn manuelt som tag i f
 ### Prioritet (MoSCoW)
 - `@must` / `@should` / `@could` / `@wont`
 
-### Status
+### Kravstatus
+Sier noe om selve **kravteksten** — er den ferdig skrevet, avklart og klar til bruk?
+
+- `@draft` - Utkast. Kravteksten er ikke ferdig: åpne spørsmål, uavklart scope, eller mangler review. Skal ikke legges til grunn for implementasjon som den er.
+- (ingen tag) - Kravet er ferdig skrevet og avklart, klart til bruk.
+
+### Implementasjonsstatus
+Sier noe om **koden** — er funksjonaliteten bygget?
+
 - `@implemented` - Ferdig implementert
 - `@in-progress` - Under implementering
-- `@planned` - Planlagt
+- `@planned` - Planlagt for implementasjon (kravet er klart, men ikke kodet enda)
 
 ### Type
 - `@e2e` - End-to-end brukerreiser
 - `@integration` - API-integrasjonstester
 - `@demo` - Demo/eksempeltester (kjøres lokalt som standard)
 - `@ci` - Tester som kjøres automatisk i CI-pipeline
+
+### Oppfølging
+
+Sier noe om at et **konkret scenario eller regel** har en uavklart detalj, selv om resten av kravet er klart til implementasjon.
+
+- `@openquestion` - Scenarioet/regelen har en uavklart detalj som må besvares før implementasjon kan begynne i akkurat den delen. Plasseres på scenario- eller regel-nivå (ikke på `Egenskap:` — bruk `@draft` hvis hele kravet er utkast). Skal **alltid** følges av en `# ÅPNE SPØRSMÅL:`-kommentar like under som beskriver spørsmålet. Taggen gjør det mulig å grep-e på tvers av krav-mappa (`grep -r @openquestion krav/`) for å finne gjenstående avklaringer. En `Egenskap:` kan være `@planned` selv om ett scenario er `@openquestion` — det markerer at hovedflyten er klar, men at en detalj må lukkes før delen kan implementeres.
 
 ## Åpne spørsmål
 
@@ -132,6 +146,18 @@ Hver kapabilitet i en systemkravside skal ha en Feature-ID som er en klikkbar le
 ```
 
 Mellomrom i mappesti kodes som `%20`. Norske tegn kodes: `å` = `%C3%A5`, `ø` = `%C3%B8`, `æ` = `%C3%A6`.
+
+### Hold systemkrav.md i synk med .feature-filer
+
+Når du endrer en `.feature`-fil, sjekk om det finnes en `systemkrav.md` på samme nivå (eller på et overordnet nivå i samme domene/sub-domene) som refererer til featuren. Oppdater den ved behov i samme endring. Typiske triggere:
+
+- **Feature-ID endres, flyttes eller fjernes** → oppdater lenken (eller fjern raden).
+- **Ny feature legges til** under en kapabilitet som er beskrevet i systemkrav.md → legg til ny rad med Feature-ID og GitHub-lenke.
+- **Tittel/scope på `Egenskap:` endres** vesentlig slik at beskrivelsen i systemkrav.md ikke lenger stemmer → oppdater teksten.
+- **GitHub-issue endres** (nytt issue, lukket, splittet) → oppdater `#XXX`-referansen.
+- **Mappestruktur endres** (kapabilitet flyttes) → oppdater relativ sti i lenken.
+
+Endringer i ren formulering inne i scenarioer, eller tags som `@implemented`/`@in-progress`, trenger normalt ikke føre til oppdatering av systemkrav.md.
 
 ## Terminologi
 
