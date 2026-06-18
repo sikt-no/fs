@@ -40,3 +40,13 @@ npm-debug.log*
 
 # claude
 .claude/*.local.md
+.claude/skills/agent-coord
+.claude/skills/alfred
+.claude/skills/bat-analyze
+.claude/skills/bat-execute
+.claude/skills/bat-graphql-dev
+.claude/skills/bat-krav
+.claude/skills/bat-plan
+.claude/skills/bat-specify
+.claude/skills/bat-specify-delta
+.claude/skills/fs-github
