@@ -1,28 +1,56 @@
 # language: no
 # GitHub: #480
-# Kilde: Brukerhistorie BHGB1 (temp/brukerhistorier.md)
-@BRU-PER-GRU-002 @draft
-Egenskap: Se en brukers tilganger og roller
+@BRU-PER-GRU-002 @must @planned
+Egenskap: Se en personbrukers tilganger og roller
   Som brukeradministrator
-  ønsker jeg å se hvilke tilganger og roller en bruker har
+  ønsker jeg å se hvilke tilganger og roller en personbruker har
   slik at jeg har oversikt før jeg gjør endringer.
 
-  Scenario: Vise samlet oversikt over brukerens tilganger og roller
-    Gitt at brukeradministrator har funnet en bruker
-    Når brukeradministrator åpner brukerens detaljside
-    Så skal alle tildelte tilganger vises
-    Og alle tildelte roller vises
-    Og det skal være tydelig hvilke som er aktive og hvilke som er inaktive
+  Bakgrunn:
+    Gitt jeg er innlogget i løsningen
+    Og jeg ser detaljsiden for en personbruker
 
-  Scenario: Vise stedkoder og tidsbegrensning per tilgang
-    Gitt at en bruker har en tilgang med stedkoder og tidsbegrensning
-    Når brukeradministrator ser på brukerens tilganger
-    Så skal stedkodene være synlige for tilgangen
-    Og evt. start- og sluttidspunkt skal være synlige
+  Regel: Visning av tildelte roller og tilganger
+
+    Scenario: Se brukerens roller
+      Når jeg ser på personbrukerens detaljside
+      Så ser jeg en seksjon med personbrukerens tildelte roller
+      Og hver rolle viser følgende informasjon:
+        | felt          |
+        | Navn          |
+        | Status        |
+        | Organisasjon  |
+        | Tildelt av    |
+        | Tildelt dato  |
+
+    Scenario: Se brukerens tilganger
+      Når jeg ser på personbrukerens detaljside
+      Så ser jeg en seksjon med personbrukerens tildelte tilganger
+      Og hver tilgang viser følgende informasjon:
+        | felt          |
+        | Navn          |
+        | Status        |
+        | Organisasjon  |
+        | Tildelt av    |
+        | Tildelt dato  |
+
+    Scenario: Se tidsbegrensning på en tildeling
+      Gitt personbrukeren har en tilgang eller rolle med start- og/eller sluttidspunkt
+      Når jeg ser på personbrukerens detaljside
+      Så ser jeg gyldighetstidsrommet for tildelingen
+
+    Scenario: Se stedkoder på en tildeling
+      Gitt personbrukeren har en tilgang eller rolle som er begrenset til bestemte stedkoder
+      Når jeg ser på personbrukerens detaljside
+      Så ser jeg hvilke stedkoder tildelingen gjelder for
+
+    Scenario: Skille mellom aktive og inaktive tildelinger
+      Når jeg ser på personbrukerens detaljside
+      Så ser jeg tydelig hvilke tildelinger som er aktive og hvilke som er inaktive
 
 # ÅPNE SPØRSMÅL:
-# - Skal sammensatte roller foldes ut slik at man kan se hvilke tilganger rollen gir?
-# - Skal man kunne skille mellom direkte tildelte tilganger og tilganger som kommer via en rolle?
-# - Hvordan presenteres en tilgang som er "inaktiv på grunn av tidsbegrensning" vs. "deaktivert av administrator"?
-# - Skal listen være sorterbar/filtrerbar (per organisasjon, per type, per kilde)?
-# - Skal visning være rolle-først eller tilgang-først som default?
+# - Skal direkte tildelte tilganger skilles fra tilganger som kommer via en rolle, eller presenteres samlet med kilde-merking? Avklares i designfasen.
+# - Skal sammensatte roller kunne foldes ut for å vise hvilke tilganger rollen gir, eller henvises administrator til rolle-detaljsiden? Henger sammen med beslutningen over.
+# - Hvordan skal "inaktiv på grunn av tidsbegrensning" presenteres vs. "deaktivert av administrator" — to separate statuser, eller én felles "Inaktiv" med årsaks-tekst? Avklares i designfasen.
+# - Skal listen være sorterbar/filtrerbar (per organisasjon, status, kilde)? Hvis ja, bør den følge listevisning-mønsteret med eget krav.
+# - Skal stedkode-visningen folde ut hierarkiet, eller liste enkeltkoder?

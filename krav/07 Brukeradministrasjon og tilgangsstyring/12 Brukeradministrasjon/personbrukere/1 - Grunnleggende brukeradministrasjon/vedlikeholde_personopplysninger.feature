@@ -1,22 +1,27 @@
 # language: no
 # GitHub: #487
-# Kilde: Bullet fra #350-body — "Brukers nødvendige personopplysninger kan vedlikeholdes"
-@BRU-PER-GRU-009 @draft
-Egenskap: Vedlikeholde personopplysninger for bruker
+@BRU-PER-GRU-009 @must @draft
+Egenskap: Vedlikeholde personopplysninger for personbruker
   Som brukeradministrator
-  ønsker jeg å kunne oppdatere nødvendige personopplysninger om en bruker
+  ønsker jeg å kunne oppdatere de personopplysningene FS Admin selv eier om en personbruker
   slik at brukerregisteret er korrekt og brukbart for kommunikasjon og tilgangsstyring.
 
-  Scenario: Oppdatere kontaktopplysninger
-    Gitt at brukeradministrator er på en brukers detaljside
-    Når brukeradministrator endrer kontakt-feltet (f.eks. e-post eller telefonnummer)
-    Så skal endringen lagres
-    Og endringen skal være sporbar i historikk
+  Bakgrunn:
+    Gitt jeg er innlogget i løsningen
+    Og jeg ser detaljsiden for en personbruker
+
+  Regel: Endring av redigerbare felt sporbar i historikk
+
+    Scenario: Oppdatere et redigerbart felt
+      Gitt et felt på personbrukeren er redigerbart i FS Admin
+      Når jeg endrer feltets verdi
+      Så lagres den nye verdien
+      Og endringen er sporbar i historikk
 
 # ÅPNE SPØRSMÅL:
-# - Hvilke felt regnes som "nødvendige personopplysninger" — minimumsliste vs. utvidet liste?
-# - Hva kan brukeren selv vedlikeholde vs. hva er forbeholdt brukeradministrator?
-# - Skal noen felt være read-only fordi de hentes fra autoritative kilder (Feide, Folkeregister, HR)?
-# - Hvordan håndteres synkronisering hvis verdier endres i begge ender (i FS Admin og i kildesystemet)?
-# - Forholdet til eksisterende personopplysningsfeatures i `05 Opplysninger om person/`?
-# - Er det validering på enkelte felt (e-postformat, telefonformat)?
+# - Hvilke felt eier FS Admin (redigerbare), og hvilke kommer fra Feide / autoritativt kildesystem (read-only)? Avklares sammen med IAM-integrasjonsbeslutningene.
+# - Hva kan personbrukeren selv vedlikeholde (på egen profil — BRU-PER-GRU-008) vs. hva er forbeholdt brukeradministrator?
+# - Hvordan håndteres synkronisering hvis et felt endres både i FS Admin og i kildesystemet? Hvilken kilde vinner ved konflikt?
+# - Hvilke valideringer skal gjelde på redigerbare felt (f.eks. e-postformat, telefonformat)?
+# - Hva er forholdet til eksisterende personopplysningsfeatures i `05 Opplysninger om person/` — er noen av feltene allerede dekket der?
+# - Hvis FS Admin ikke eier noen redigerbare felt utover lokale notater, er det reelle scope for dette kravet veldig smalt og bør kanskje avvikles eller slås sammen med BRU-PER-GRU-002 (visning).
