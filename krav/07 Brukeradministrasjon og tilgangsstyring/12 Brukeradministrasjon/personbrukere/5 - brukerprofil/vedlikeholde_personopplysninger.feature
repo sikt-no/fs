@@ -1,6 +1,6 @@
 # language: no
 # GitHub: #487
-@BRU-PER-GRU-009 @must @draft
+@BRU-PER-BRP-002 @must @draft
 Egenskap: Vedlikeholde personopplysninger for personbruker
   Som brukeradministrator
   ønsker jeg å kunne oppdatere de personopplysningene FS Admin selv eier om en personbruker
@@ -20,7 +20,7 @@ Egenskap: Vedlikeholde personopplysninger for personbruker
 
 # ÅPNE SPØRSMÅL:
 # - Hvilke felt eier FS Admin (redigerbare), og hvilke kommer fra Feide / autoritativt kildesystem (read-only)? Avklares sammen med IAM-integrasjonsbeslutningene.
-# - Hva kan personbrukeren selv vedlikeholde (på egen profil — BRU-PER-GRU-008) vs. hva er forbeholdt brukeradministrator?
+# - Hva kan personbrukeren selv vedlikeholde (på egen profil — BRU-PER-BRP-001) vs. hva er forbeholdt brukeradministrator?
 # - Hvordan håndteres synkronisering hvis et felt endres både i FS Admin og i kildesystemet? Hvilken kilde vinner ved konflikt?
 # - Hvilke valideringer skal gjelde på redigerbare felt (f.eks. e-postformat, telefonformat)?
 # - Hva er forholdet til eksisterende personopplysningsfeatures i `05 Opplysninger om person/` — er noen av feltene allerede dekket der?

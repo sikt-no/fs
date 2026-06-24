@@ -25,4 +25,4 @@ Egenskap: Etterspørre egen tilgang
 # - Hvem er "ansvarlig brukeradministrator" når en bruker etterspør tilgang — leder, organisasjons-admin, eller systemet?
 # - Skal det være cooldown / rate limiting for å unngå spam-forespørsler?
 # - Skal brukeren kunne se status på egne forespørsler (ventende, godkjent, avslått, med begrunnelse)?
-# - Hva er forholdet til BRU-PER-GRU-008 (se egen brukerprofil) — kan forespørsler administreres derfra?
+# - Hva er forholdet til BRU-PER-BRP-001 (se egen brukerprofil) — kan forespørsler administreres derfra?

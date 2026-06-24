@@ -1,6 +1,6 @@
 # language: no
 # GitHub: #486
-@BRU-PER-GRU-008 @must @planned
+@BRU-PER-BRP-001 @must @planned
 Egenskap: Se egen brukerprofil og tilganger
   Som personbruker av FS Admin
   ønsker jeg å se min egen brukerprofil og hvilke tilganger og roller jeg har
