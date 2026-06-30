@@ -130,6 +130,12 @@ Egenskap: Listevisning og søk i applikasjoner
       Når jeg åpner applikasjonsoversikten
       Så ser jeg applikasjoner tilknyttet de organisasjonene jeg administrerer
 
+    Scenario: Applikasjonsadministrator-rollen gjelder på tvers av miljøer
+      Gitt jeg har applikasjonsadministrator-rollen for en organisasjon
+      Og rollen er tildelt i produksjonsmiljøet
+      Når jeg åpner applikasjonsoversikten
+      Så ser jeg organisasjonens applikasjoner i alle miljøene de er aktive i
+
     Scenario: Applikasjonsadministrator ser også applikasjoner med tilganger i egne organisasjoner
       Gitt jeg har applikasjonsadministrator-rollen for én eller flere organisasjoner
       Og en applikasjon tilhører en annen organisasjon, men har tilganger som gir tilgang til data i en av mine organisasjoner
