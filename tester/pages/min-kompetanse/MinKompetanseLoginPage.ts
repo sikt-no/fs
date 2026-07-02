@@ -22,6 +22,6 @@ export class MinKompetanseLoginPage {
     this.loginButton = page.getByRole('button', { name: 'Logg inn', exact: true })
     this.acceptConsentButton = page.getByRole('button', { name: 'Godta og fortsett' })
     this.menuButton = page.getByTestId('menu-button-desktop')
-    this.testsokerSelect = page.locator('[id="_R_b6lkmivb_"]')
+    this.testsokerSelect = page.getByRole('combobox', { name: 'Velg testsøker' })
   }
 }
