@@ -16,12 +16,11 @@ Egenskap: Listevisning og søk i personbrukere
       Så ser jeg en liste over alle personbrukere
       Og listen er sortert etter navn i stigende rekkefølge
       Og hvert innslag viser følgende informasjon:
-        | felt           |
-        | Navn           |
-        | Feide-ID       |
-        | Organisasjon   |
-        | Status         |
-        | Sist innlogget |
+        | felt         |
+        | Navn         |
+        | Feide-ID     |
+        | Organisasjon |
+        | Status       |
 
     Scenariomal: Velge sorteringsretning for navn
       Gitt jeg ser listen over personbrukere
@@ -53,6 +52,18 @@ Egenskap: Listevisning og søk i personbrukere
       Gitt jeg ser listen over personbrukere
       Når jeg velger en personbruker
       Så ser jeg detaljsiden for valgt personbruker
+
+  Regel: Tie-break ved sortering
+
+    Scenario: Navn er tie-break når to personbrukere har lik verdi i sorteringsfeltet
+      Gitt jeg sorterer listen over personbrukere på et felt som ikke er navn
+      Når to eller flere personbrukere har lik verdi i sorteringsfeltet
+      Så sorteres de innbyrdes alfabetisk på navn i stigende rekkefølge
+
+    Scenario: Feide-ID er tie-break når navn er likt
+      Gitt jeg sorterer listen over personbrukere
+      Når to eller flere personbrukere har likt navn
+      Så sorteres de innbyrdes alfabetisk på Feide-ID i stigende rekkefølge
 
   Regel: Søk og filtrering av personbrukere
 
@@ -125,6 +136,24 @@ Egenskap: Listevisning og søk i personbrukere
       Gitt jeg har super-personadministrator-rollen
       Når jeg åpner brukeroversikten
       Så ser jeg alle personbrukere uavhengig av organisasjon
+
+  @draft
+  Regel: Sist brukt-kolonne og sortering (planlagt etter v1)
+
+    Scenario: Kolonnen "Sist brukt" vises i listen
+      Gitt jeg ser listen over personbrukere
+      Så vises tidspunktet personbrukeren sist brukte løsningen i en egen kolonne "Sist brukt"
+
+    Scenariomal: Velge sorteringsretning for sist brukt
+      Gitt jeg ser listen over personbrukere
+      Når jeg velger å sortere på sist brukt i <retning> rekkefølge
+      Så vises personbrukerne sortert etter tidspunkt for sist brukt i <retning> rekkefølge
+      Og personbrukere som aldri har brukt løsningen behandles som om de sist brukte løsningen uendelig lenge siden
+
+      Eksempler:
+        | retning  |
+        | stigende |
+        | synkende |
 
 # ÅPNE SPØRSMÅL:
 # - Filnavn: bør "søke_opp_bruker.feature" omdøpes til "listevisning_og_sok.feature" for konsistens med mønsteret? Tittelendring på #479 må i så fall følges opp via fs-github.
