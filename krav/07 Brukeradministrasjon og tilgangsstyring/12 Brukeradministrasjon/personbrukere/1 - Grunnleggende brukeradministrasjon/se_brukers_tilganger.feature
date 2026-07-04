@@ -48,9 +48,44 @@ Egenskap: Se en personbrukers tilganger og roller
       Når jeg ser på personbrukerens detaljside
       Så ser jeg tydelig hvilke tildelinger som er aktive og hvilke som er inaktive
 
+  Regel: Filtrering av tildelte tilganger og roller
+
+    Scenario: Filtrere på navn
+      Når jeg skriver inn tekst i navne-filteret
+      Så vises kun tildelinger der navnet inneholder den innskrevne teksten
+
+    Scenario: Tilgjengelige statuser i filter
+      Når jeg åpner statusfilteret
+      Så kan jeg velge mellom følgende statuser:
+        | Status        |
+        | Alle statuser |
+        | Aktiv         |
+        | Inaktiv       |
+      Og "Alle statuser" er valgt som standard
+
+    Scenario: Filtrere på status
+      Når jeg velger en status som filter
+      Så vises kun tildelinger med den valgte statusen
+
+    Scenario: Tilgjengelige organisasjoner i filter
+      Når jeg åpner organisasjonsfilteret
+      Så inneholder filteret alle organisasjoner som er representert i den ufiltrerte listen
+      Og hver organisasjon vises kun én gang
+      Og organisasjonene er sortert alfabetisk
+      Og "Alle organisasjoner" er valgt som standard
+
+    Scenario: Filtrere på organisasjon
+      Når jeg velger en organisasjon som filter
+      Så vises kun tildelinger knyttet til den valgte organisasjonen
+
+    Scenario: Kombinere filtre
+      Når jeg kombinerer flere filtre
+      Så vises kun tildelinger som matcher alle kriteriene
+
 # ÅPNE SPØRSMÅL:
 # - Skal direkte tildelte tilganger skilles fra tilganger som kommer via en rolle, eller presenteres samlet med kilde-merking? Avklares i designfasen.
 # - Skal sammensatte roller kunne foldes ut for å vise hvilke tilganger rollen gir, eller henvises administrator til rolle-detaljsiden? Henger sammen med beslutningen over.
 # - Hvordan skal "inaktiv på grunn av tidsbegrensning" presenteres vs. "deaktivert av administrator" — to separate statuser, eller én felles "Inaktiv" med årsaks-tekst? Avklares i designfasen.
-# - Skal listen være sorterbar/filtrerbar (per organisasjon, status, kilde)? Hvis ja, bør den følge listevisning-mønsteret med eget krav.
+# - Skal filtrene virke separat på roller-seksjonen og tilganger-seksjonen (hvert sitt filtersett), eller samlet på begge?
+# - Skal listen være sorterbar (per organisasjon, status, navn, tildelt dato)?
 # - Skal stedkode-visningen folde ut hierarkiet, eller liste enkeltkoder?
