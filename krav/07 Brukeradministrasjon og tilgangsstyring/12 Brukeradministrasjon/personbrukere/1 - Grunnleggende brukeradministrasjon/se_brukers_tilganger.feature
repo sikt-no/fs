@@ -34,11 +34,13 @@ Egenskap: Se en personbrukers tilganger og roller
         | Tildelt av    |
         | Tildelt dato  |
 
+    @draft
     Scenario: Se tidsbegrensning på en tildeling
       Gitt personbrukeren har en tilgang eller rolle med start- og/eller sluttidspunkt
       Når jeg ser på personbrukerens detaljside
       Så ser jeg gyldighetstidsrommet for tildelingen
 
+    @draft
     Scenario: Se stedkoder på en tildeling
       Gitt personbrukeren har en tilgang eller rolle som er begrenset til bestemte stedkoder
       Når jeg ser på personbrukerens detaljside

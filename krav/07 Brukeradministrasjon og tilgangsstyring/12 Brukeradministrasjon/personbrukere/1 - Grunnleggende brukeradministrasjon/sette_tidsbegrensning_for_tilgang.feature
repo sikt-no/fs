@@ -1,6 +1,6 @@
 # language: no
 # GitHub: #484
-@BRU-PER-GRU-006 @must @planned
+@BRU-PER-GRU-006 @must @draft
 Egenskap: Sette start- og sluttidspunkt for tildelinger
   Som brukeradministrator
   ønsker jeg å sette valgfritt start- og/eller sluttidspunkt for én enkelt tildeling, eller for det totale settet av tildelinger hos en personbruker

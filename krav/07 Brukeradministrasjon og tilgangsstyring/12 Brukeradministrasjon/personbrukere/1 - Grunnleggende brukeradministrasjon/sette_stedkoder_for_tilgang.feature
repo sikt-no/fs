@@ -1,6 +1,6 @@
 # language: no
 # GitHub: #483
-@BRU-PER-GRU-005 @must @planned
+@BRU-PER-GRU-005 @must @draft
 Egenskap: Sette stedkoder for en tildeling
   Som brukeradministrator
   ønsker jeg å sette hvilke stedkoder en gitt tildeling skal gjelde for
