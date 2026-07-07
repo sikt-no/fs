@@ -67,10 +67,15 @@ Egenskap: Listevisning og søk i personbrukere
 
   Regel: Søk og filtrering av personbrukere
 
-    Scenario: Fritekst-søk på navn og Feide-ID
+    Scenario: Fritekst-søk på navn
       Gitt jeg ser listen over personbrukere
-      Når jeg søker med fritekst
-      Så filtreres listen til personbrukere der navn eller Feide-ID inneholder søketeksten
+      Når jeg søker med fritekst på navn
+      Så filtreres listen til personbrukere der navn inneholder søketeksten
+
+    Scenario: Fritekst-søk på Feide-ID
+      Gitt jeg ser listen over personbrukere
+      Når jeg søker med fritekst på Feide-ID
+      Så filtreres listen til personbrukere der Feide-ID inneholder søketeksten
 
     Scenario: Tilgjengelige statuser i filter
       Gitt jeg ser listen over personbrukere
@@ -113,9 +118,22 @@ Egenskap: Listevisning og søk i personbrukere
       Når jeg velger en rolle som filter
       Så vises kun personbrukere som har den valgte rollen
 
-    Scenario: Kombinere filtre
+    Scenario: Tilgjengelige miljøer i filter
       Gitt jeg ser listen over personbrukere
-      Når jeg kombinerer fritekst-søk med ett eller flere filter
+      Når jeg åpner miljøfilteret
+      Så inneholder filteret alle miljøer som er representert blant personbrukernes tilganger i listen
+      Og hvert miljø vises kun én gang
+      Og miljøene er sortert alfabetisk
+      Og "Alle miljøer" er valgt som standard
+
+    Scenario: Filtrere på miljø
+      Gitt jeg ser listen over personbrukere
+      Når jeg velger et miljø som filter
+      Så vises kun personbrukere som har minst én tilgang i det valgte miljøet
+
+    Scenario: Kombinere søk og filtre
+      Gitt jeg ser listen over personbrukere
+      Når jeg kombinerer søk i navn- og Feide-ID-feltene med ett eller flere filter
       Så vises kun personbrukere som matcher alle kriteriene
 
   Regel: Synlighet via administrasjonsrettigheter
