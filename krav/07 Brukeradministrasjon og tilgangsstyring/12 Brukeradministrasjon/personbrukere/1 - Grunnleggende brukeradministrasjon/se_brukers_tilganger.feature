@@ -18,7 +18,6 @@ Egenskap: Se en personbrukers tilganger og roller
       Og hver rolle viser følgende informasjon:
         | felt          |
         | Navn          |
-        | Status        |
         | Organisasjon  |
         | Tildelt av    |
         | Tildelt dato  |
@@ -29,7 +28,6 @@ Egenskap: Se en personbrukers tilganger og roller
       Og hver tilgang viser følgende informasjon:
         | felt          |
         | Navn          |
-        | Status        |
         | Organisasjon  |
         | Tildelt av    |
         | Tildelt dato  |
@@ -46,28 +44,11 @@ Egenskap: Se en personbrukers tilganger og roller
       Når jeg ser på personbrukerens detaljside
       Så ser jeg hvilke stedkoder tildelingen gjelder for
 
-    Scenario: Skille mellom aktive og inaktive tildelinger
-      Når jeg ser på personbrukerens detaljside
-      Så ser jeg tydelig hvilke tildelinger som er aktive og hvilke som er inaktive
-
   Regel: Filtrering av tildelte tilganger og roller
 
     Scenario: Filtrere på navn
       Når jeg skriver inn tekst i navne-filteret
       Så vises kun tildelinger der navnet inneholder den innskrevne teksten
-
-    Scenario: Tilgjengelige statuser i filter
-      Når jeg åpner statusfilteret
-      Så kan jeg velge mellom følgende statuser:
-        | Status        |
-        | Alle statuser |
-        | Aktiv         |
-        | Inaktiv       |
-      Og "Alle statuser" er valgt som standard
-
-    Scenario: Filtrere på status
-      Når jeg velger en status som filter
-      Så vises kun tildelinger med den valgte statusen
 
     Scenario: Tilgjengelige organisasjoner i filter
       Når jeg åpner organisasjonsfilteret
@@ -87,7 +68,6 @@ Egenskap: Se en personbrukers tilganger og roller
 # ÅPNE SPØRSMÅL:
 # - Skal direkte tildelte tilganger skilles fra tilganger som kommer via en rolle, eller presenteres samlet med kilde-merking? Avklares i designfasen.
 # - Skal sammensatte roller kunne foldes ut for å vise hvilke tilganger rollen gir, eller henvises administrator til rolle-detaljsiden? Henger sammen med beslutningen over.
-# - Hvordan skal "inaktiv på grunn av tidsbegrensning" presenteres vs. "deaktivert av administrator" — to separate statuser, eller én felles "Inaktiv" med årsaks-tekst? Avklares i designfasen.
 # - Skal filtrene virke separat på roller-seksjonen og tilganger-seksjonen (hvert sitt filtersett), eller samlet på begge?
-# - Skal listen være sorterbar (per organisasjon, status, navn, tildelt dato)?
+# - Skal listen være sorterbar (per organisasjon, navn, tildelt dato)?
 # - Skal stedkode-visningen folde ut hierarkiet, eller liste enkeltkoder?
