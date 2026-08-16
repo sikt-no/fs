@@ -19,6 +19,7 @@ Egenskap: Se en personbrukers tilganger og roller
         | felt          |
         | Navn          |
         | Organisasjon  |
+        | Miljø         |
         | Tildelt av    |
         | Tildelt dato  |
 
@@ -29,6 +30,7 @@ Egenskap: Se en personbrukers tilganger og roller
         | felt          |
         | Navn          |
         | Organisasjon  |
+        | Miljø         |
         | Tildelt av    |
         | Tildelt dato  |
 
@@ -60,6 +62,17 @@ Egenskap: Se en personbrukers tilganger og roller
     Scenario: Filtrere på organisasjon
       Når jeg velger en organisasjon som filter
       Så vises kun tildelinger knyttet til den valgte organisasjonen
+
+    Scenario: Tilgjengelige miljøer i filter
+      Når jeg åpner miljøfilteret
+      Så inneholder filteret alle miljøer som er representert i den ufiltrerte listen
+      Og hvert miljø vises kun én gang
+      Og miljøene er sortert alfabetisk
+      Og "Alle miljøer" er valgt som standard
+
+    Scenario: Filtrere på miljø
+      Når jeg velger et miljø som filter
+      Så vises kun tildelinger i det valgte miljøet
 
     Scenario: Kombinere filtre
       Når jeg kombinerer flere filtre
