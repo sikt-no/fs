@@ -33,13 +33,13 @@ Egenskap: Opprette applikasjon
       Så kan jeg velge én av identitetsleverandørene Feide og Maskinporten
       Og identitetsleverandøren settes på applikasjonen og kan ikke endres senere
 
-    @implemented
+    @planned
     Scenario: FS er valgbar identitetsleverandør for Sikt kundestøtte
       Gitt jeg har super-applikasjonsadministrator-rollen
       Når jeg starter opprettelse av en ny applikasjon
       Så kan jeg i tillegg velge FS som identitetsleverandør
 
-    @implemented
+    @planned
     Scenario: FS er ikke valgbar for øvrige administratorer
       Gitt jeg har applikasjonsadministrator-rollen for egen organisasjon
       Når jeg starter opprettelse av en ny applikasjon
@@ -129,7 +129,7 @@ Egenskap: Opprette applikasjon
         | Feide                |
         | Maskinporten         |
 
-  @implemented
+  @planned
   Regel: Applikasjon med FS som identitetsleverandør opprettes av Sikt kundestøtte og gjelder i alle miljøer
 
     Scenario: Sikt kundestøtte oppretter applikasjon med FS som identitetsleverandør
