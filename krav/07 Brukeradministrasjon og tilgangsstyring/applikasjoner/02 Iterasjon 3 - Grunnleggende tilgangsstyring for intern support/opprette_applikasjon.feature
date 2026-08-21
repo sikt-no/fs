@@ -98,6 +98,33 @@ Egenskap: Opprette applikasjon
         | Feide                |
         | Maskinporten         |
 
+    @openquestion
+    Scenario: AVKLAR håndtering når identitetsleverandøren ikke svarer
+      # ÅPNE SPØRSMÅL:
+      # - Kravene skiller i dag kun mellom at ID-en finnes og at den ikke finnes.
+      #   Hva skal skje når identitetsleverandøren er utilgjengelig eller svarer
+      #   for sent — skal opprettelsen avvises med en egen melding om teknisk feil,
+      #   eller skal oppslaget kunne forsøkes på nytt?
+      Gitt spørsmålet er åpent
+
+    @openquestion
+    Scenario: AVKLAR format og validering av ekstern ID
+      # ÅPNE SPØRSMÅL:
+      # - Hvilket format har den eksterne ID-en hos Feide, og hvilket hos
+      #   Maskinporten?
+      # - Skal formatet valideres i skjemaet før oppslaget sendes, eller sendes
+      #   alle verdier til identitetsleverandøren for verifisering?
+      Gitt spørsmålet er åpent
+
+    @openquestion
+    Scenario: AVKLAR om ekstern ID må tilhøre valgt organisasjon
+      # ÅPNE SPØRSMÅL:
+      # - Ingen regel knytter i dag den eksterne ID-en til organisasjonsvalget.
+      #   Må applikasjonen hos identitetsleverandøren tilhøre den organisasjonen
+      #   den opprettes på, eller kan en vilkårlig verifisert ID registreres på en
+      #   hvilken som helst organisasjon administratoren har tilgang til?
+      Gitt spørsmålet er åpent
+
   Regel: Systemet tildeler hver applikasjon en intern unik ID
 
     Scenario: Intern ID genereres ved opprettelse
@@ -117,6 +144,15 @@ Egenskap: Opprette applikasjon
         | identitetsleverandør |
         | Feide                |
         | Maskinporten         |
+
+    @openquestion
+    Scenario: AVKLAR om visningsnavnet vises før opprettelsen fullføres
+      # ÅPNE SPØRSMÅL:
+      # - Administratoren ser i dag visningsnavnet fra identitetsleverandøren først
+      #   etter at applikasjonen er opprettet, eller etter at opprettelsen er
+      #   avvist på navnekollisjon — og navnet kan ikke rettes i dialogen.
+      #   Skal navnet hentes og vises til bekreftelse før opprettelsen fullføres?
+      Gitt spørsmålet er åpent
 
   Regel: Nyopprettet applikasjon har status Aktiv
 

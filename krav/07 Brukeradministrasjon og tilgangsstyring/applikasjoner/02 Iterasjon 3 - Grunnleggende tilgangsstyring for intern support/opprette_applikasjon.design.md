@@ -94,4 +94,16 @@ Vurder en informasjonsboks på detaljsiden som forklarer at applikasjonen kan au
 
 ## Åpne designspørsmål
 
-Ingen utestående.
+Disse følger av `@openquestion`-scenarioene i [`opprette_applikasjon.feature`](./opprette_applikasjon.feature) og må avklares før dialogen kan bygges ferdig.
+
+### Feiltilstand når identitetsleverandøren ikke svarer
+
+Tilstandstabellen over dekker «ID ikke funnet» og «ID i bruk», men ikke at selve oppslaget feiler teknisk — idP utilgjengelig, timeout eller uventet svar. Skal dialogen vise en egen feilmelding som skiller teknisk feil fra en avvist ID, og la brukeren forsøke innsending på nytt uten å fylle ut skjemaet igjen?
+
+Jf. *Scenario: AVKLAR håndtering når identitetsleverandøren ikke svarer*.
+
+### Forhåndsvisning av visningsnavn
+
+Navnet hentes ved innsending og vises først på detaljsiden, slik at en navnekollisjon møter brukeren etter at skjemaet er sendt — på et navn brukeren ikke selv har fylt ut og ikke kan rette. Skal navnet i stedet hentes og vises til bekreftelse i dialogen før opprettelsen fullføres (to-trinns oppslag)? Det vil endre både layouten og primærhandlingen beskrevet over.
+
+Jf. *Scenario: AVKLAR om visningsnavnet vises før opprettelsen fullføres*.
