@@ -5,8 +5,9 @@
 [`endre_delegeringstak.feature`](./endre_delegeringstak.feature) (BRU-TIL-DEL-002).
 
 Notatet er skrevet som utgangspunkt for en designdiskusjon. Begge features står som `@could @draft`:
-kravene er ikke besluttet. Ett valg er likevel tatt på forhånd og presenteres som gitt — hvem som
-kan endre et tak. Det står i eget avsnitt under.
+kravene er ikke besluttet. To valg er likevel tatt på forhånd og presenteres som gitt — hvem som
+kan endre et tak, og hvem som kan publisere åpne data. Begge står i egne avsnitt under, og i
+«Avklarte valg».
 
 ## Hva et delegeringstak er
 
@@ -219,6 +220,35 @@ enn databaseforvaltningen. Det gir to utganger, og dagens tilstand er ingen av d
 Å la det stå som nå er den ene tilstanden som ikke bør bestå: en regel som peker på en tilgang som
 ikke finnes ser ut som en gate, men er en dør ingen kan åpne.
 
+**Besluttet 21. august 2026: utgang 1.** Publiseringsmyndigheten får en bærer, og formen er den
+samme som for de øvrige sammensatte rollene — én rolle å tildele, som utvider seg til det
+fingranede privilegiet på brukersiden:
+
+- **En egen forretningsrolle, `APENDATA_FORVALTER`,** innebærer publiseringsprivilegiet og
+  ingenting annet. Da er det én ting å tildele, og én ting å revidere.
+- **Den innebæres ikke av applikasjonsadministratorrollen.** Å publisere data — å gjøre en
+  organisasjons data tilgjengelige for alle kallere, utenfor delegeringstaket — og å administrere
+  applikasjoner — å forvalte applikasjoners innrammede tilgang — er ulike myndighetsakser. En
+  implikasjon ville gitt hver applikasjonsadministrator global publiseringsevne som bieffekt, uten
+  at noen hadde bedt om den, og nettopp den bieffekten er grunnen til at åpning har et eget
+  privilegium i det hele tatt.
+- **Rollen tildeles navngitte personer hos Sikt,** organisasjonsskopet til de organisasjonene hvis
+  data kan åpnes. For nasjonale datasett kan den tildeles mot en organisasjonssamling.
+- **Bredden avhenger av miljø.** I test og demo er bred tildeling uproblematisk — det finnes ingen
+  reelle data å åpne. I production holdes rollen knapp.
+
+Samlingsformen her gjelder **tildelingen av forvalterrollen**, ikke den åpne raden, og skillet er
+verdt å holde skarpt mot anbefalingen i avsnittet om samling-skop under: der er svaret nei for
+åpne roller, fordi en samlingsform på selve den åpne raden ville åpnet en nyinnmeldt organisasjons
+data i innmeldingsøyeblikket, uten noen ny handling. En samling-skopet forvalterrolle åpner
+ingenting av seg selv — hver publisering er fortsatt en egen, registrert handling per organisasjon
+og miljø. Konsekvensen består likevel i én retning: det er **kilden** som utvides, siden
+forvalteren får myndighet over en nyinnmeldt organisasjons egne data i det den blir medlem. Det bør
+derfor stå i tildelingsvedtaket at rollen er gitt mot en mengde som kan vokse.
+
+Rollen er besluttet, men ikke bygget: inntil den finnes i katalogen er åpning fortsatt en
+migreringsbeslutning i praksis.
+
 ### Nekt: tilbaketrekking som trumfer alt
 
 Nekt trekkes fra ytterst og slår alt annet, åpne roller inkludert. Det er mekanismen som setter en
@@ -414,6 +444,11 @@ sikkerhetsspørsmål, og svaret skal ikke avhenge av at ingen har ryddet.
 - Idempotens: å legge inn en delegering som allerede gjelder er ingen endring, og gir ingen ny
   historikkoppføring.
 - Miljø velges eksplisitt; «alle miljøer» er et sammendrag, ikke en mengde som finnes.
+- Publiseringsmyndigheten for åpne data pakkes i en egen forretningsrolle, `APENDATA_FORVALTER`,
+  som innebærer publiseringsprivilegiet og ingenting annet, og som IKKE innebæres av
+  applikasjonsadministratorrollen. Tildeles navngitte personer hos Sikt, organisasjonsskopet —
+  eller mot en organisasjonssamling for nasjonale datasett. Knapp i production, bred i test og
+  demo. Besluttet 21. august 2026.
 
 ## Åpne designspørsmål
 
