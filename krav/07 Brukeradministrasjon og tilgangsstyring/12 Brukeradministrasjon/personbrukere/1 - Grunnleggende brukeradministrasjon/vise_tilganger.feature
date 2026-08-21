@@ -1,57 +1,63 @@
 # language: no
 # GitHub: #480
 @BRU-PER-GRU-002 @must @planned
-Egenskap: Se en personbrukers roller og resulterende tilganger
+Egenskap: Se en personbrukers tilganger
   Som brukeradministrator
-  ønsker jeg å se hvilke roller en personbruker har, og hvilke tilganger rollene gir
+  ønsker jeg å se hvilke tilganger en personbruker har, og hvor tilgangene kommer fra
   slik at jeg har oversikt før jeg gjør endringer.
 
   Bakgrunn:
     Gitt jeg er innlogget i løsningen
     Og jeg ser detaljsiden for en personbruker
 
-  Regel: Visning av roller og resulterende tilganger
+  Regel: Visning av tilganger
 
-    Scenario: Se brukerens roller
-      Når jeg ser på personbrukerens detaljside
-      Så ser jeg en seksjon med personbrukerens tildelte roller
-      Og hver rolle viser følgende informasjon:
-        | felt          |
-        | Navn          |
-        | Organisasjon  |
-        | Miljø         |
-        | Tildelt av    |
-        | Tildelt dato  |
-
-    @draft
     Scenario: Se brukerens tilganger
       Når jeg ser på personbrukerens detaljside
-      Så ser jeg en seksjon med tilgangene personbrukeren har gjennom sine roller
+      Så ser jeg en seksjon med personbrukerens tilganger
+      Og seksjonen inneholder både tilganger som er tildelt direkte og tilganger som følger av personbrukerens roller
       Og hver tilgang viser følgende informasjon:
         | felt          |
         | Navn          |
         | Organisasjon  |
         | Miljø         |
+        | Fra rolle     |
         | Tildelt av    |
         | Tildelt dato  |
 
-    @draft
-    Scenario: Se tidsbegrensning på en tildeling
-      Gitt personbrukeren har en tilgang eller rolle med start- og/eller sluttidspunkt
+    Scenario: Se hvilken rolle en tilgang kommer fra
+      Gitt personbrukeren har en tilgang som følger av én eller flere roller
       Når jeg ser på personbrukerens detaljside
-      Så ser jeg gyldighetstidsrommet for tildelingen
+      Så ser jeg alle rollene tilgangen kommer fra
+
+    Scenario: Se at en tilgang er tildelt direkte
+      Gitt personbrukeren har en tilgang som er tildelt direkte
+      Når jeg ser på personbrukerens detaljside
+      Så ser jeg "Tildelt direkte" som rolle for tilgangen
+
+    Scenario: Se en tilgang som kommer fra flere kilder
+      Gitt personbrukeren har en tilgang som både er tildelt direkte og følger av én eller flere roller
+      Når jeg ser på personbrukerens detaljside
+      Så ser jeg tilgangen én gang
+      Og jeg ser alle rollene tilgangen kommer fra, etterfulgt av "Tildelt direkte"
 
     @draft
-    Scenario: Se stedkoder på en tildeling
-      Gitt personbrukeren har en tilgang eller rolle som er begrenset til bestemte stedkoder
+    Scenario: Se tidsbegrensning på en tilgang
+      Gitt personbrukeren har en tilgang med start- og/eller sluttidspunkt
       Når jeg ser på personbrukerens detaljside
-      Så ser jeg hvilke stedkoder tildelingen gjelder for
+      Så ser jeg gyldighetstidsrommet for tilgangen
 
-  Regel: Filtrering av roller og tilganger
+    @draft
+    Scenario: Se stedkoder på en tilgang
+      Gitt personbrukeren har en tilgang som er begrenset til bestemte stedkoder
+      Når jeg ser på personbrukerens detaljside
+      Så ser jeg hvilke stedkoder tilgangen gjelder for
+
+  Regel: Filtrering av tilganger
 
     Scenario: Filtrere på navn
       Når jeg skriver inn tekst i navne-filteret
-      Så vises kun tildelinger der navnet inneholder den innskrevne teksten
+      Så vises kun tilganger der navnet inneholder den innskrevne teksten
 
     Scenario: Tilgjengelige organisasjoner i filter
       Når jeg åpner organisasjonsfilteret
@@ -62,7 +68,7 @@ Egenskap: Se en personbrukers roller og resulterende tilganger
 
     Scenario: Filtrere på organisasjon
       Når jeg velger en organisasjon som filter
-      Så vises kun tildelinger knyttet til den valgte organisasjonen
+      Så vises kun tilganger knyttet til den valgte organisasjonen
 
     Scenario: Tilgjengelige miljøer i filter
       Når jeg åpner miljøfilteret
@@ -73,15 +79,14 @@ Egenskap: Se en personbrukers roller og resulterende tilganger
 
     Scenario: Filtrere på miljø
       Når jeg velger et miljø som filter
-      Så vises kun tildelinger i det valgte miljøet
+      Så vises kun tilganger i det valgte miljøet
 
     Scenario: Kombinere filtre
       Når jeg kombinerer flere filtre
-      Så vises kun tildelinger som matcher alle kriteriene
+      Så vises kun tilganger som matcher alle kriteriene
 
 # ÅPNE SPØRSMÅL:
-# - Feltlisten for en tilgang har "Tildelt av" og "Tildelt dato". Tilganger tildeles ikke direkte, de følger av en rolle — skal disse feltene erstattes av hvilken rolle tilgangen kommer fra?
-# - Skal sammensatte roller kunne foldes ut for å vise hvilke tilganger rollen gir, eller henvises administrator til rolle-detaljsiden?
-# - Skal filtrene virke separat på roller-seksjonen og tilganger-seksjonen (hvert sitt filtersett), eller samlet på begge?
-# - Skal listen være sorterbar (per organisasjon, navn, tildelt dato)?
+# - For en tilgang som følger av en rolle: er "Tildelt av" og "Tildelt dato" den som tildelte rollen og datoen rollen ble tildelt?
+# - Skal "Fra rolle" også være et filter, slik at man kan se alle tilganger som kommer fra én bestemt rolle?
+# - Skal listen være sorterbar (per navn, organisasjon, tildelt dato)?
 # - Skal stedkode-visningen folde ut hierarkiet, eller liste enkeltkoder?

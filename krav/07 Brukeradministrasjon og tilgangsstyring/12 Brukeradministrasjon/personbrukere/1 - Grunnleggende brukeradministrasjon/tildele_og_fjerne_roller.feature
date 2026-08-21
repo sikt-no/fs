@@ -43,13 +43,6 @@ Egenskap: Tildele og fjerne roller hos en personbruker
       Så fjernes alle de valgte rollene
       Og hver fjerning er sporbar individuelt i historikk
 
-  Regel: Tilganger følger av roller og administreres ikke direkte
-
-    Scenario: Tilganger kan verken tildeles eller fjernes
-      Når jeg ser på personbrukerens tildelinger
-      Så ser jeg ingen mulighet til å tildele en tilgang direkte
-      Og jeg ser ingen mulighet til å fjerne en enkelt tilgang
-
 # ÅPNE SPØRSMÅL:
 # - Autorisasjon: hvilken regel styrer hva en brukeradministrator kan tildele? Forslag: bare roller som (a) gjelder ved en organisasjon administratoren administrerer, og (b) administratoren selv har eller kan administrere. Henger sammen med rolledefinisjons-arbeidet i "4 - Opprette og administrere roller".
 # - UX ved fjerning: skal det være bekreftelsesdialog ved hver fjerning, eller en angre-mulighet etterpå? Avklares i designfasen.
