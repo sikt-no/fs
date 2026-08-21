@@ -144,6 +144,124 @@ nytt når (a) har vært i bruk en stund.
 De tre utelukker ikke hverandre helt: (a) og (c) kan kombineres, og (a) reduserer smerten ved å
 utsette (c).
 
+## Beslektede mekanismer med samme forvaltningshull
+
+Delegeringstaket er ikke alene. Samme migrering som utvidet håndhevelsen (0013) la til tre andre
+mekanismer, og alle tre har nøyaktig det samme hullet: modellen finnes og er i produksjon,
+forvaltningen finnes ikke, og endringer skjer bare gjennom migrering. Spørsmålet over —
+forvaltningsflate, migreringseid eller modellendring — er derfor ikke et spørsmål om taket alene.
+De tre får ingen egne features her; poenget er at diskusjonen bør tas for hele settet på én gang.
+
+Rekkefølgen i håndhevelsen er hele historien (0013, videreført i 0019 og 0033):
+
+```
+effektiv(bruker via applikasjon) = ( tak ∩ ( brukerroller ∪ gulv ) ∪ åpne roller ) MINUS nekt
+```
+
+Gulvet ligger **innenfor** taket, åpne roller **utenfor** det, og nekt trekkes fra **ytterst**.
+
+| Mekanisme | Plass i håndhevelsen | Hvem en endring treffer | Skriveregel i dag | Flate |
+|-----------|----------------------|--------------------------|-------------------|-------|
+| Delegeringstak | Snittets ene side | Brukere i én organisasjon, gjennom én applikasjon | Organisasjonsskopet skriverett | Ingen |
+| Gulv | Legges til brukersiden før snittet | Alle brukere, kjente og ukjente | Organisasjonsskopet skriverett — ingen ekstra gate | Ingen |
+| Åpne roller | Legges til etter snittet | Alle kallere, brukere og applikasjoner | Eget privilegium — som ikke finnes i katalogen | Ingen |
+| Nekt | Trekkes fra ytterst | Én bruker, i én organisasjon | Organisasjonsskopet skriverett — ingen ekstra gate | Ingen |
+
+### Gulvet: minste tilgang alle brukere har
+
+Gulvet er takets motpart. Det er et sett (organisasjon, tilgang, miljø) som gjelder **alle**
+brukere, uten noen henvisning til hvem brukeren er — det finnes ingen brukerkolonne. En bruker
+løsningen ikke kjenner ennå får gulvet ved første pålogging.
+
+To egenskaper gjør endringer her tyngre enn de ser ut:
+
+- **Gulvet er organisasjonsuavhengig.** En gulvrad ved én organisasjon gjelder alle brukere, ikke
+  bare organisasjonens egne. Det er tilsiktet — en student fra ett lærested kan levere ved et annet
+  hvis det andre lærestedet har lagt tilgangen i gulvet sitt — men det betyr at rekkevidden av en
+  gulvendring ikke er avgrenset av hvem som er «våre» brukere.
+- **Gulvet begrenses fortsatt av taket.** Det legges til på brukersiden *før* snittet, så en
+  gulvtilgang formidles bare der applikasjonen også er delegert den. Taket er altså en reell
+  bremsekloss på gulvet, i motsetning til på åpne roller.
+
+Skriving er i dag skopet til organisasjonen med den samme skriveretten som resten av
+brukeradministrasjonen (0013, strammet til (miljø, organisasjon) i 0019). Gulvet har altså **ingen
+ekstra gate**, selv om en gulvendring treffer alle brukere på én gang og taket — som treffer én
+applikasjon — nå foreslås gatet hos Sikt. Det er en asymmetri det er verdt å ta stilling til: hvis
+begrunnelsen for Sikt-gatingen er hvem endringen treffer, peker den enda sterkere mot gulvet.
+
+Ingenting i løsningen leser eller skriver gulvet utenfor databasemodulen.
+
+### Åpne roller: data som er offentlige
+
+En åpen rad legges til **alle** kalleres tilganger — både brukere og applikasjoner som opptrer som
+seg selv — og legges til *etter* snittet, altså utenfor takets kontroll. Den ekspanderes transitivt
+på samme måte som en tildeling, så å åpne en tilgang åpner også alt den impliserer. Bare nekt kan
+overstyre den for en enkeltbruker.
+
+En presisering, fordi formen inviterer til en feillesing: en åpen rad er **ikke** organisasjonsløs.
+Den bærer organisasjon og miljø, og organisasjonen angir *hvem sine data* som er åpne — ikke hvem
+som får lese dem. Åpenhet er derfor en beslutning hver organisasjon tar for seg, per miljø, men
+virkningen er global.
+
+Lesing er allerede global: hvem som har åpnet hva er synlig for alle innloggede, bevisst, fordi
+åpenhet skal kunne etterprøves. Skriving krever et **eget** privilegium
+(`REGISTRER_APEN_ROLLE`) framfor den ordinære skriveretten, nettopp fordi åpning omgår både taket og
+brukerdimensjonen.
+
+Men privilegiet har ingen operasjon å styre. Regelen har pekt på det siden 0013, mens katalograden
+for privilegiet bare opprettes i eksempeldata-changesettet i samme migrering — i en base uten
+eksempeldata finnes tilgangen ikke, og ingen kan ha den. Åpning er i praksis stengt for alle andre
+enn databaseforvaltningen. Det gir to utganger, og dagens tilstand er ingen av dem:
+
+1. **Bygg flaten.** Da er privilegiet tiltenkt bærer, og bør forfremmes til en ordentlig katalograd.
+2. **Rydd privilegiet bort**, og si eksplisitt at åpning er en migreringsbeslutning.
+
+Å la det stå som nå er den ene tilstanden som ikke bør bestå: en regel som peker på en tilgang som
+ikke finnes ser ut som en gate, men er en dør ingen kan åpne.
+
+### Nekt: tilbaketrekking som trumfer alt
+
+Nekt trekkes fra ytterst og slår alt annet, åpne roller inkludert. Det er mekanismen som setter en
+enkeltbruker **under** gulvet — for eksempel en bruker som ikke lenger skal kunne sende inn noe selv
+om gulvet sier at alle kan.
+
+Tre egenskaper hører med:
+
+- **Nekt ekspanderer oppover.** Å nekte en lesetilgang fjerner også skrive- og administrasjons-
+  tilgangene som impliserer den, så ingen sterkere tilgang kan gi tilbake det som er nektet. Motsatt
+  vei går det aldri: å nekte skriving fjerner ikke lesing, så «ta bort skriv, behold les» er mulig.
+- **Nekt gjelder bare brukere**, som en databasegaranti — samme mønster som at et tak bare kan
+  gjelde en Feide-applikasjon. En applikasjons tilgang trekkes tilbake ved å avslutte dens egne
+  tildelinger, ikke med nekt.
+- **Nekt er alltid per konkret organisasjon.** Skal en bruker fratas noe i flere organisasjoner, er
+  det én rad per organisasjon. Det finnes ingen «overalt»-form.
+
+Skriveregelen er den samme organisasjonsskopede skriveretten som resten av brukeradministrasjonen,
+uten ekstra gate. Hullene er to, og de peker i motsatte retninger:
+
+- **Ingen flate for å ilegge eller oppheve.** Et nekt er den handlingen som må kunne skje raskest av
+  alle fire — det er verktøyet når noe må stanses nå. I dag krever det databaseforvaltningen.
+- **Ingen synlighet, verken for den nektede eller for administratoren.** En bruker som er satt under
+  gulvet får ingen forklaring, og en administrator kan ikke se at det er et nekt som skjærer. Det er
+  samme feilklasse som det stille snittet, men med motsatt fortegn: her er det en bevisst beslutning
+  ingen kan se, framfor et hull ingen har tatt.
+
+### Hva dette betyr for diskusjonen
+
+Alle fire mekanismene har samme form — temporale perioder, miljødimensjon, sporet aktør — og samme
+hull. De er derimot ikke like ofte i bruk, og det er sannsynligvis den viktigste forskjellen:
+
+- **Taket** endres når en applikasjon eller tilgangskatalogen endres. Det er løpende drift, og det er
+  derfor det er dette som brekker først.
+- **Gulv og åpne roller** er sjeldne, tunge beslutninger med bred rekkevidde. De ligner mer på
+  modellendringer enn på drift.
+- **Nekt** er sjeldent, men når det trengs, trengs det med én gang. Det er den ene av de fire der
+  friksjon er en risiko i seg selv.
+
+Det taler for at svaret kan bli ulikt per mekanisme: (a) for taket, en formalisert (b) for gulv og
+åpne roller, og for nekt en flate nettopp fordi tempoet er poenget. Men det bør være et valg, ikke
+en følge av at ingen har spurt for de tre andre.
+
 ## Overordnet UI-mønster
 
 Delegeringstaket hører på **detaljsiden for applikasjonen**, som en egen fane ved siden av
@@ -259,3 +377,6 @@ sikkerhetsspørsmål, og svaret skal ikke avhenge av at ingen har ryddet.
 - [ ] Skal en organisasjon kunne be om en utvidelse den ikke selv kan utføre, som en forespørsel i
       løsningen, eller er forespørselen en supportoppgave utenfor? Gatingen gjør at noen må spørre
       noen andre, og det bør være et sted for det.
+- [ ] Bør de fire mekanismene — tak, gulv, åpne roller og nekt — få samme forvaltningsmodell, eller
+      er de forskjellige nok til å behandles ulikt? Gulv og nekt er sjeldne sikkerhetsbeslutninger,
+      taket er løpende drift, og nekt er den ene der friksjon er en risiko i seg selv.
