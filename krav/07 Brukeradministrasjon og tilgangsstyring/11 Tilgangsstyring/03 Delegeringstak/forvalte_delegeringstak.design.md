@@ -262,6 +262,60 @@ Det taler for at svaret kan bli ulikt per mekanisme: (a) for taket, en formalise
 åpne roller, og for nekt en flate nettopp fordi tempoet er poenget. Men det bør være et valg, ikke
 en følge av at ingen har spurt for de tre andre.
 
+### Samling-skop: bør tak, gulv og nekt også kunne peke på en mengde?
+
+Tildelinger har nettopp fått en form ingen av de fire mekanismene har: de kan uttrykkes mot en
+**organisasjonssamling** — en navngitt mengde organisasjoner — i stedet for mot én organisasjon.
+Semantikken eies av BRU-TIL-SAM-002 (#548): én rad virker i hver organisasjon som er aktivt medlem
+av samlingen i miljøet, og virkningen følger medlemslisten videre, slik at en organisasjon som
+meldes inn omfattes automatisk. Dynamikken er tilsiktet og besluttet — den er hele poenget med å
+tildele mot en mengde.
+
+Spørsmålet det reiser her er om de fire mekanismene bør få samme skop. Svaret er ikke likt for alle
+fire, og skillet følger **retningen** på det som utvides automatisk ved en innmelding: er det nye
+medlemmet **mottaker** av rekkevidde, eller er det **kilden** til det som blir tilgjengelig?
+
+**Taket bør kunne peke på en mengde.** Et tak som gjelder «alle FS-læresteder» er nettopp det taket
+til en applikasjon som betjener hele sektoren er. I dag må forvalteren utvide taket manuelt per
+applikasjon × tilgang × organisasjon hver gang en organisasjon kommer til, og det manuelle
+innslaget er en kjent kilde til feilklassen dette notatet handler om: brukere ved en ny
+organisasjon møter en tom flate, uten at noen får vite hvorfor. Risikoprofilen er mild, av to
+grunner. **Taket formidler ingen tilgang av seg selv** — organisasjonssiden må fortsatt ha tildelt
+brukeren noe før noe formidles — og takskriving er alt foreslått sentralforvaltet, så
+samlingsformen flytter ikke myndighet, bare arbeid. Én interaksjon bør likevel stå skrevet framfor
+å bli oppdaget: gulvrollene til en nyinnmeldt organisasjon vil formidles gjennom applikasjonen
+straks organisasjonen blir medlem, siden gulvet ligger innenfor taket. Det er samme dynamikk som
+alt er besluttet tilsiktet for tildelinger.
+
+**Nekt bør kunne peke på en mengde, og begrunnelsen er fail-safe.** I dag krever «steng brukeren ute
+overalt» én rad per organisasjon — tungvint akkurat i den situasjonen der tempoet er poenget. Et
+samling-skopet nekt utvides i **trygg retning** ved en innmelding: mer nektes, aldri mindre. Den
+automatiske utvidelsen, som er det krevende ved samlingsformen for de andre mekanismene, er her en
+sikkerhetsegenskap. Sammen med at nekt ekspanderer oppover gjennom rolleimplikasjon betyr det at én
+rad effektivt kan stenge en hel rollefamilie i alle medlemsorganisasjonene.
+
+**Gulvet bør ikke få samlingsform nå — og heller ikke åpne roller.** Her snur
+konsekvensretningen. En gulvrad åpner organisasjonens **egne** data for alle brukere. Et
+samling-skopet gulv ville derfor gulv-åpnet en nyinnmeldt organisasjons data i innmeldingsøyeblikket,
+på grunnlag av et vedtak fattet før organisasjonen ble medlem, om dens egne data. For tildelinger og
+tak er et nytt medlem **mottaker** av rekkevidde; for gulv og åpne roller er det **kilden**. Det er
+en kvalitativt skarpere konsekvens, de to mekanismene er alt de mest omfattende av de fire, og det
+finnes ikke noe påvist behov for formen. Organisasjonsskopet beholdes til et konkret behov er
+formulert.
+
+| Mekanisme | Hva et samling-skop ville gi | Retningen ved innmelding | Anbefaling |
+|-----------|------------------------------|--------------------------|------------|
+| Delegeringstak | Ett takinnslag for «alle læresteder», som følger medlemslisten | Nytt medlem er mottaker av rekkevidde | Ja |
+| Nekt | Én rad stenger brukeren i hele mengden | Mer nektes, aldri mindre — trygg retning | Ja |
+| Gulv | Én rad åpner mengdens egne data for alle brukere | Nytt medlem er kilden | Nei, ikke nå |
+| Åpne roller | Én rad gjør mengdens egne data offentlige | Nytt medlem er kilden | Nei, ikke nå |
+
+**Koblingen til forvaltningen av samlinger.** Rir også tak og nekt på samlinger, blir
+medlemskapsforvaltningen ytterligere sikkerhetsbærende: en innmelding utøver da ikke bare stående
+tildelinger, men flytter også tak og nekt for organisasjonen som meldes inn. Det skjerper
+spørsmålet som allerede ligger i kravdiskusjonen om forvaltning av organisasjonssamlinger (#546) —
+hvem som får endre en medlemsliste, og hva som må revalideres når den endres.
+
 ## Overordnet UI-mønster
 
 Delegeringstaket hører på **detaljsiden for applikasjonen**, som en egen fane ved siden av
@@ -380,3 +434,6 @@ sikkerhetsspørsmål, og svaret skal ikke avhenge av at ingen har ryddet.
 - [ ] Bør de fire mekanismene — tak, gulv, åpne roller og nekt — få samme forvaltningsmodell, eller
       er de forskjellige nok til å behandles ulikt? Gulv og nekt er sjeldne sikkerhetsbeslutninger,
       taket er løpende drift, og nekt er den ene der friksjon er en risiko i seg selv.
+- [ ] Skal tak og nekt kunne uttrykkes mot en organisasjonssamling, slik tildelinger nå kan
+      (BRU-TIL-SAM-002)? Retningsforskjellen taler for ja for tak og nekt, og nei for gulv og
+      åpne roller — se avsnittet om samling-skop.
