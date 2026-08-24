@@ -13,26 +13,86 @@ Egenskap: Opprette applikasjon
   ved en systemgenerert unik ID. Visningsnavnet, som hentes fra idP-en,
   må være globalt unikt på tvers av alle organisasjoner.
 
-  FS som identitetsleverandør er utfaset for nye applikasjoner og kan
-  ikke velges ved opprettelse. Eksisterende FS-applikasjoner består
-  som data og forvaltes i den samme applikasjonsoversikten som Feide-
-  og Maskinporten-applikasjoner — alle administrasjonshandlinger
-  (listevisning, tilgangsstyring, passordbytte, beskrivelse,
-  deaktivering) gjelder også for dem. Det er kun opprettelse som er
-  stengt.
+  FS som identitetsleverandør — en maskinbruker-applikasjon — er
+  utfaset for nye integrasjoner, og lærestedene kan ikke opprette dem
+  selv. Opprettelse er likevel ikke stengt: applikasjonsadministratorer
+  hos Sikt kan opprette maskinbruker-applikasjoner så lenge FS'
+  webtjenester lever. Opprettelsen provisjonerer en maskinbruker i de
+  webtjenestene, med replikering av passordet, og det er en flate Sikt
+  drifter — den skal kunne forvaltes fra applikasjonsoversikten framfor
+  av databaseforvaltningen.
+
+  Avgrensningen er viktig: det er bare opprettelsen som er gatet hos
+  Sikt. Den løpende forvaltningen av en maskinbruker-applikasjon som
+  finnes — navn og beskrivelse, deaktivering og reaktivering,
+  passordbytte — følger de ordinære reglene i BRU-APP-API-006,
+  BRU-APP-API-010 og BRU-APP-API-004, altså rettigheten hos
+  organisasjonen som eier applikasjonen. Eksisterende
+  maskinbruker-applikasjoner forvaltes i den samme
+  applikasjonsoversikten som Feide- og Maskinporten-applikasjoner, og
+  alle administrasjonshandlinger (listevisning, tilgangsstyring,
+  passordbytte, beskrivelse, deaktivering) gjelder også for dem.
 
   # Krav fra Confluence: K8 Opprette ny API-bruker, Discovery: Registrer applikasjon (4612784227), Rammeinnsikt: Grunnleggende selvbetjent administrasjon av API-brukere (4401102853)
 
   Regel: Opprettelse krever valg av identitetsleverandør
 
     Scenario: Velge identitetsleverandør ved opprettelse
+      Gitt jeg administrerer én eller flere organisasjoner som ikke er Sikt
       Når jeg starter opprettelse av en ny applikasjon
       Så kan jeg velge én av identitetsleverandørene Feide og Maskinporten
       Og identitetsleverandøren settes på applikasjonen og kan ikke endres senere
 
-    Scenario: FS er ikke en valgbar identitetsleverandør
+  Regel: Bare Sikt kan opprette en applikasjon med FS som identitetsleverandør
+
+    # FS er utfaset som identitetsleverandør for nye integrasjoner, men opprettelse er
+    # ikke stengt. En maskinbruker-applikasjon provisjonerer en maskinbruker i FS'
+    # webtjenester, med replikering av passordet, og det er en flate Sikt drifter. Så
+    # lenge de webtjenestene lever skal flaten kunne forvaltes fra
+    # applikasjonsoversikten framfor av databaseforvaltningen. Selvbetjent opprettelse
+    # hos lærestedene er stengt — det er ikke lærestedets eget valg å ta i bruk en
+    # utfaset integrasjonsform.
+
+    Scenario: Applikasjonsadministrator hos Sikt kan velge FS
+      Gitt jeg har applikasjonsadministrator-rollen for Sikt
+      Når jeg starter opprettelse av en ny applikasjon
+      Så kan jeg velge FS som identitetsleverandør
+
+    Scenario: FS er ikke en valgbar identitetsleverandør for en lokal administrator
+      Gitt jeg har applikasjonsadministrator-rollen for en organisasjon som ikke er Sikt
       Når jeg starter opprettelse av en ny applikasjon
       Så er FS ikke tilgjengelig som identitetsleverandør
+
+    Scenario: Forsøk på å opprette en maskinbruker-applikasjon uten rettigheten avvises
+      Gitt jeg ikke har applikasjonsadministrator-rollen for Sikt
+      Når jeg forsøker å opprette en applikasjon med FS som identitetsleverandør
+      Så avvises opprettelsen
+      Og det fremgår at opprettelse av maskinbruker-applikasjoner krever applikasjonsadministrator hos Sikt
+
+    Scenario: Opprettelsen provisjonerer en maskinbruker
+      Gitt jeg har applikasjonsadministrator-rollen for Sikt
+      Når jeg oppretter en applikasjon med FS som identitetsleverandør på en organisasjon
+      Så er applikasjonen opprettet på den organisasjonen
+      Og det er provisjonert en tilhørende maskinbruker i FS' webtjenester
+
+  Regel: Bare opprettelsen av en maskinbruker-applikasjon er gatet hos Sikt
+
+    # Gatingen gjelder handlingen «ta i bruk en utfaset integrasjonsform», ikke
+    # applikasjonen som sådan. Når den først finnes, er den organisasjonens applikasjon
+    # på linje med de øvrige.
+
+    Scenario: Løpende forvaltning følger organisasjonen som eier applikasjonen
+      Gitt det finnes en maskinbruker-applikasjon på en organisasjon
+      Og jeg har rettighet til å administrere applikasjoner i den organisasjonen
+      Så kan jeg endre navn og beskrivelse, deaktivere og reaktivere applikasjonen og bytte passord
+      Og ingen av de handlingene krever applikasjonsadministrator hos Sikt
+
+    Scenario: Manglende Sikt-rettighet skjuler ikke den løpende forvaltningen
+      Gitt det finnes en maskinbruker-applikasjon på en organisasjon jeg administrerer
+      Og jeg har ikke applikasjonsadministrator-rollen for Sikt
+      Når jeg åpner detaljsiden for applikasjonen
+      Så ser jeg de samme administrasjonshandlingene som for en Feide- eller Maskinporten-applikasjon
+      Men jeg ser ingen handling for å opprette en ny applikasjon med FS som identitetsleverandør
 
   Regel: Opprettelse krever en organisasjon
 
