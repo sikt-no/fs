@@ -12,7 +12,8 @@ Dialogboks med:
 
 - **Tittel:** "Opprett ny applikasjon"
 - **Felter** (alle obligatoriske):
-  - Identitetsleverandør — valg mellom *Feide* og *Maskinporten* (FS skal ikke være valgbar)
+  - Identitetsleverandør — valg mellom *Feide* og *Maskinporten*. *FS* er et tredje valg, og
+    vises bare for administratorer med applikasjonsadministrator-rollen for Sikt
   - Ekstern ID — ID hos valgt identitetsleverandør (verifiseres ved innsending)
   - Organisasjon — valgliste; antall valg avhenger av rollen:
     - Tilgang til kun én organisasjon: forhåndsvalgt og låst
@@ -51,8 +52,10 @@ Dialogboks med:
 ### Scenario: Velge identitetsleverandør ved opprettelse
 Valget mellom Feide og Maskinporten presenteres tydelig (radioknapper eller segmentert kontroll). Etter opprettelse vises identitetsleverandøren som låst/skrivebeskyttet på detaljsiden.
 
-### Scenario: FS er ikke en valgbar identitetsleverandør
-FS skal ikke vises som alternativ i dialogen i det hele tatt.
+### Scenario: FS som identitetsleverandør
+FS vises som alternativ **bare** for en administrator med applikasjonsadministrator-rollen for Sikt. For alle andre skal alternativet ikke vises i det hele tatt — ikke som et deaktivert valg, jf. prosjektmønsteret for manglende rettighet. Velges FS, provisjonerer opprettelsen en maskinbruker i FS' webtjenester, og dialogen bør si det: det opprettes noe utenfor applikasjonsoversikten, og handlingen er derfor tyngre enn de to andre valgene.
+
+Avgrensningen bør ikke lekke inn i detaljsiden: når applikasjonen først finnes, er den organisasjonens egen, og handlingene der (navn og beskrivelse, deaktivering og reaktivering, passordbytte) gates som for de øvrige applikasjonene.
 
 ### Scenario: Opprette applikasjon når administrator har tilgang til kun én organisasjon
 Organisasjonsfeltet er forhåndsvalgt med administratorens eneste organisasjon og kan ikke endres.
@@ -86,7 +89,8 @@ Vurder en informasjonsboks på detaljsiden som forklarer at applikasjonen kan au
 
 ## Avklarte valg
 
-- **IdP-velger:** Radioknapper med Feide og Maskinporten
+- **IdP-velger:** Radioknapper med Feide og Maskinporten — og FS som et tredje valg for
+  administratorer med applikasjonsadministrator-rollen for Sikt (besluttet 24. august 2026)
 - **Organisasjonsvelger:** Vanlig nedtrekksliste (uten søk), også for super-applikasjonsadministrator
 - **Plassering av "Opprett applikasjon"-knapp:** I `ActionButtons`-slot i `ListPageLayout` (etablert prosjektmønster for handlinger i listevisninger)
 - **Suksess-feedback:** Toast/snackbar på detaljsiden etter navigasjon ("Applikasjonen er opprettet")
