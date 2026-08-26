@@ -7,7 +7,8 @@
 Notatet er skrevet som utgangspunkt for en designdiskusjon. Begge features står som `@could @draft`:
 kravene er ikke besluttet. To valg er likevel tatt på forhånd og presenteres som gitt — hvem som
 kan endre et tak, og hvem som kan publisere åpne data. Begge står i egne avsnitt under, og i
-«Avklarte valg».
+«Avklarte valg». Beslutningene er datert, og en beslutning som senere er erstattet står igjen
+synlig sammen med den som erstattet den — revisjonssporet er en del av poenget med notatet.
 
 ## Hva et delegeringstak er
 
@@ -72,33 +73,49 @@ uten et sted å håndheve den.
 
 ## Besluttet: hvem kan endre et tak
 
-**Endring av et delegeringstak krever applikasjonsadministrator hos Sikt.** Dette er avgjort, og
-features er skrevet under den forutsetningen.
+**Besluttet 25. august 2026: endring av et delegeringstak er organisasjonsskopet, ikke
+Sikt-gatet.** Rettigheten er den ordinære applikasjonsadministratorrollen — den samme som forvalter
+applikasjoner ellers — og den gir rett til å endre taket for applikasjoner og tilganger i de
+organisasjonene man er applikasjonsadministrator for. Ingen ny rettighet innføres.
 
-Begrunnelsen er hvem endringen treffer. Et takinnslag navngir organisasjonen applikasjonen får
-opptre innenfor — ikke organisasjonen som eier applikasjonen. En utvidelse gir altså en
-applikasjon, ofte eid av en annen part, lov til å handle i en organisasjons navn. Resten av
-applikasjonsforvaltningen er skopet slik at en administrator forvalter det som hører til sine egne
-organisasjoner; her ville det samme skopet gjort utvidelsen til et valg for den som eier
-applikasjonen eller for den som blir berørt, og ingen av de to er riktig part alene.
+**Et takinnslag kan berøre to organisasjoner, og da kreves rollen i begge.** Innslaget navngir
+organisasjonen applikasjonen får opptre innenfor, som ikke nødvendigvis er organisasjonen som eier
+applikasjonen. Gjelder innslaget en annen organisasjon enn eierorganisasjonen, må man være
+applikasjonsadministrator for begge. Det er den formen som løser innvendingen mot et rent
+organisasjonsskop: hverken eieren av en applikasjon eller den berørte organisasjonen er riktig part
+alene, så begge må være det samtidig. Sammenfaller de to — taket utvides innenfor
+eierorganisasjonen selv — er det én rolle som kreves, i den ene organisasjonen.
 
-**Lesing forblir bredere.** Organisasjonen som har lånt ut myndighet skal kunne se det, uten å
-kunne endre det. Dagens modell har allerede en egen leseregel med organisasjonsskop ved siden av
-skriveregelen (migrering 0019), så beslutningen krever at skriveregelen strammes — ikke at lesingen
-gjøres om. Det er verdt å merke seg fordi den motsatte antakelsen ville fjernet lesesynet til
-organisasjonene i samme grep.
+Erstatter en tidligere beslutning om at endring skulle kreve applikasjonsadministrator **hos
+Sikt**. To ting flyttet den:
 
-Konsekvensen for kravene er at BRU-TIL-DEL-001 og BRU-TIL-DEL-002 har ulike aktører: den første er
-skrevet fra organisasjonens side, den andre fra Sikts.
+- **Tokrav-formen dekker det Sikt-gatingen skulle dekke.** Bekymringen var at en utvidelse gir en
+  applikasjon, ofte eid av en annen part, lov til å handle i en organisasjons navn. Kravet om
+  rollen i begge organisasjonene gjør nettopp den utvidelsen til en handling som forutsetter
+  myndighet på begge sider, uten å flytte all takforvaltning til Sikt.
+- **Gulv-eksponeringsargumentet er bortfalt.** Et tak virker som en øvre grense for brukerens egne
+  tilganger, og gulvet ligger innenfor taket — så en takutvidelse eksponerer også
+  gulv-tilgangene i organisasjonen gjennom applikasjonen, uten at noen bruker er tildelt noe. Det
+  var den skarpeste kanten ved å la en organisasjon utvide taket selv. Gulvet er nå avventet og
+  vurderes fjernet (se statusnotatet under gulvavsnittet), så argumentet bærer ikke lenger et
+  strengere skop.
+
+**Lesing forblir bredere enn endring.** Organisasjonen som har lånt ut myndighet skal kunne se det
+uten selv å kunne endre det, og modellen har allerede en egen leseregel med organisasjonsskop ved
+siden av skriveregelen (migrering 0019). Lesing er skopet til den berørte organisasjonen alene —
+endring er det som krever begge.
+
+Konsekvensen for kravene er at BRU-TIL-DEL-001 og BRU-TIL-DEL-002 nå er skrevet fra samme side,
+organisasjonens, men med ulik terskel: lesing krever den ene organisasjonen, endring begge.
 
 ## De tre alternativene
 
 ### (a) Forvaltningsflate — valgt retning
 
 Taket får en eier i løsningen: et API for å lese og endre, og senere en flate. Lesing er
-organisasjonsskopet, endring er gatet på applikasjonsadministrator hos Sikt. Endringer er
-temporale og sporbare, og idempotente — å legge inn en delegering som allerede gjelder er ingen
-endring.
+organisasjonsskopet til den berørte organisasjonen; endring krever applikasjonsadministrator i
+både eierorganisasjonen og organisasjonen innslaget gjelder. Endringer er temporale og
+sporbare, og idempotente — å legge inn en delegering som allerede gjelder er ingen endring.
 
 *Hvorfor:* det er den eneste av de tre som gir regelen et sted å bo. Taket er driftsdata som endres
 uavhengig av deployer, og et API gjør både utvidelsen og tilbaketrekkingen til en handling med
@@ -106,8 +123,9 @@ aktør, tidspunkt og bekreftelse i stedet for et manuelt innslag. Det gir dessut
 BRU-TIL-DEL-001-halvdelen gratis: når taket først er lesbart gjennom løsningen, kan flaten forklare
 et avskåret snitt i stedet for å vise en tom liste.
 
-*Kostnaden:* taket får en skriveflate, og skriveflater kan misbrukes. Det er derfor gatingen er
-strammere enn mønsteret ellers, og derfor tilbaketrekking må være like lett som utvidelse.
+*Kostnaden:* taket får en skriveflate, og skriveflater kan misbrukes. Det er derfor endring
+krever myndighet på begge sider av et kryssorganisatorisk innslag, og derfor tilbaketrekking må
+være like lett som utvidelse.
 
 ### (b) Migrerings- og driftseid — status quo formalisert
 
@@ -186,11 +204,20 @@ To egenskaper gjør endringer her tyngre enn de ser ut:
 
 Skriving er i dag skopet til organisasjonen med den samme skriveretten som resten av
 brukeradministrasjonen (0013, strammet til (miljø, organisasjon) i 0019). Gulvet har altså **ingen
-ekstra gate**, selv om en gulvendring treffer alle brukere på én gang og taket — som treffer én
-applikasjon — nå foreslås gatet hos Sikt. Det er en asymmetri det er verdt å ta stilling til: hvis
-begrunnelsen for Sikt-gatingen er hvem endringen treffer, peker den enda sterkere mot gulvet.
+ekstra gate** — én organisasjonsskopet rettighet er nok — selv om en gulvendring treffer alle
+brukere på én gang, kjente som ukjente. Taket, som treffer én applikasjon om gangen, krever til
+sammenligning myndighet i begge de berørte organisasjonene når innslaget krysser en
+organisasjonsgrense. Asymmetrien er verdt å merke seg hvis gulvet skal bestå: målt på hvem
+endringen treffer er gulvet den bredeste av de to, og den med lavest terskel.
 
 Ingenting i løsningen leser eller skriver gulvet utenfor databasemodulen.
+
+**Status 25. august 2026: gulvet er avventet, og funksjonaliteten vurderes fjernet.** Alt videre
+arbeid på gulvet står inntil den vurderingen er gjort, og det bygges ingen forvaltningsflate —
+heller ikke en lesevisning. Analysen over står med hensikt: det er den som skal brukes hvis
+mekanismen skal fjernes, siden en fjerning må vite hva gulvet faktisk gjør, hvem det treffer og
+hva som eventuelt må erstatte det. Konsekvensen for resten av notatet er at gulvet ikke lenger
+kan bære argumenter om hvor strengt noe annet skal gates.
 
 ### Åpne roller: data som er offentlige
 
@@ -220,34 +247,38 @@ enn databaseforvaltningen. Det gir to utganger, og dagens tilstand er ingen av d
 Å la det stå som nå er den ene tilstanden som ikke bør bestå: en regel som peker på en tilgang som
 ikke finnes ser ut som en gate, men er en dør ingen kan åpne.
 
-**Besluttet 21. august 2026: utgang 1.** Publiseringsmyndigheten får en bærer, og formen er den
-samme som for de øvrige sammensatte rollene — én rolle å tildele, som utvider seg til det
-fingranede privilegiet på brukersiden:
+**Besluttet 25. august 2026: utgang 2 — åpning forvaltes i kildekoden.** Åpne tilganger
+registreres og trekkes tilbake av Sikts utviklere gjennom Liquibase-migreringer, som en del av
+kildekoden. Det bygges ingen API-flate og ingen forvaltningsrolle, og publiseringsprivilegiet
+forfremmes ikke til en ordentlig katalograd.
 
-- **En egen forretningsrolle, `APENDATA_FORVALTER`,** innebærer publiseringsprivilegiet og
-  ingenting annet. Da er det én ting å tildele, og én ting å revidere.
-- **Den innebæres ikke av applikasjonsadministratorrollen.** Å publisere data — å gjøre en
-  organisasjons data tilgjengelige for alle kallere, utenfor delegeringstaket — og å administrere
-  applikasjoner — å forvalte applikasjoners innrammede tilgang — er ulike myndighetsakser. En
-  implikasjon ville gitt hver applikasjonsadministrator global publiseringsevne som bieffekt, uten
-  at noen hadde bedt om den, og nettopp den bieffekten er grunnen til at åpning har et eget
-  privilegium i det hele tatt.
-- **Rollen tildeles navngitte personer hos Sikt,** organisasjonsskopet til de organisasjonene hvis
-  data kan åpnes. For nasjonale datasett kan den tildeles mot en organisasjonssamling.
-- **Bredden avhenger av miljø.** I test og demo er bred tildeling uproblematisk — det finnes ingen
-  reelle data å åpne. I production holdes rollen knapp.
+Det er utgang 2 av de to over, og den lukker tilstanden notatet advarte mot: regelen peker ikke
+lenger på en gate ingen kan bruke, fordi åpning nå eksplisitt *er* en beslutning som fattes i
+kildekoden. Tre ting taler for formen:
 
-Samlingsformen her gjelder **tildelingen av forvalterrollen**, ikke den åpne raden, og skillet er
-verdt å holde skarpt mot anbefalingen i avsnittet om samling-skop under: der er svaret nei for
-åpne roller, fordi en samlingsform på selve den åpne raden ville åpnet en nyinnmeldt organisasjons
-data i innmeldingsøyeblikket, uten noen ny handling. En samling-skopet forvalterrolle åpner
-ingenting av seg selv — hver publisering er fortsatt en egen, registrert handling per organisasjon
-og miljø. Konsekvensen består likevel i én retning: det er **kilden** som utvides, siden
-forvalteren får myndighet over en nyinnmeldt organisasjons egne data i det den blir medlem. Det bør
-derfor stå i tildelingsvedtaket at rollen er gitt mot en mengde som kan vokse.
+- **Åpning er en sjelden, tung beslutning.** Å gjøre en organisasjons data tilgjengelige for alle
+  kallere er nærmere en modellendring enn en driftsoppgave — jf. avsnittet om at gulv og åpne
+  roller ligner mer på modellendringer enn på drift.
+- **En migrering gir review og reproduserbarhet.** Endringen går gjennom kodegjennomgang, den
+  følger med når en base bygges opp på nytt, og den er lik i alle miljøer med mindre noen
+  eksplisitt har begrunnet et avvik. En manuell eller API-basert last har ingen av de tre
+  egenskapene av seg selv.
+- **Ingen flate å misbruke.** Åpning omgår både taket og brukerdimensjonen, og er den ene
+  mekanismen der fravær av en skriveflate ikke er et hull, men en egenskap.
 
-Rollen er besluttet, men ikke bygget: inntil den finnes i katalogen er åpning fortsatt en
-migreringsbeslutning i praksis.
+Konsekvensen er at åpning ikke er selvbetjent for en organisasjon: en organisasjon som vil åpne et
+datasett må be om det, og forespørselen håndteres utenfor løsningen. Lesingen er uendret og
+fortsatt global — hvem som har åpnet hva skal kunne etterprøves av alle innloggede.
+
+> **Erstattet beslutning (21. august 2026):** ~~publiseringsmyndigheten pakkes i en egen
+> forretningsrolle, `APENDATA_FORVALTER`, som innebærer publiseringsprivilegiet og ingenting annet,
+> ikke innebæres av applikasjonsadministratorrollen, og tildeles navngitte personer hos Sikt —
+> organisasjonsskopet, eller mot en organisasjonssamling for nasjonale datasett, knapp i production
+> og bred i test og demo.~~ Beslutningen over erstatter denne. Den står igjen fordi den bærer to
+> vurderinger som fortsatt er gyldige hvis spørsmålet tas opp på nytt: at publisering og
+> applikasjonsadministrasjon er ulike myndighetsakser og derfor ikke bør henge sammen gjennom en
+> implikasjon, og at en samlingsform på *tildelingen* av en slik rolle ville utvidet **kilden** —
+> hvem sine data forvalteren kan åpne — hver gang en organisasjon meldes inn.
 
 ### Nekt: tilbaketrekking som trumfer alt
 
@@ -292,6 +323,12 @@ Det taler for at svaret kan bli ulikt per mekanisme: (a) for taket, en formalise
 åpne roller, og for nekt en flate nettopp fordi tempoet er poenget. Men det bør være et valg, ikke
 en følge av at ingen har spurt for de tre andre.
 
+To av de fire er avgjort siden dette ble skrevet, og begge landet der linjen over peker: **åpne
+tilganger** forvaltes i kildekoden gjennom migreringer, altså (b), og **gulvet** er avventet og
+vurderes fjernet — ingen flate bygges for noen av dem. Det som står igjen som åpent er taket,
+der retningen er (a) med organisasjonsskopet endring, og nekt, der spørsmålet om en flate ikke er
+tatt.
+
 ### Samling-skop: bør tak, gulv og nekt også kunne peke på en mengde?
 
 Tildelinger har nettopp fått en form ingen av de fire mekanismene har: de kan uttrykkes mot en
@@ -311,8 +348,9 @@ applikasjon × tilgang × organisasjon hver gang en organisasjon kommer til, og 
 innslaget er en kjent kilde til feilklassen dette notatet handler om: brukere ved en ny
 organisasjon møter en tom flate, uten at noen får vite hvorfor. Risikoprofilen er mild, av to
 grunner. **Taket formidler ingen tilgang av seg selv** — organisasjonssiden må fortsatt ha tildelt
-brukeren noe før noe formidles — og takskriving er alt foreslått sentralforvaltet, så
-samlingsformen flytter ikke myndighet, bare arbeid. Én interaksjon bør likevel stå skrevet framfor
+brukeren noe før noe formidles — og en samlingsform måtte gates som tildelingene, altså med
+rettigheten i hver aktive medlemsorganisasjon (og i eierorganisasjonen), så den flytter ikke
+myndighet, bare arbeid. Én interaksjon bør likevel stå skrevet framfor
 å bli oppdaget: gulvrollene til en nyinnmeldt organisasjon vil formidles gjennom applikasjonen
 straks organisasjonen blir medlem, siden gulvet ligger innenfor taket. Det er samme dynamikk som
 alt er besluttet tilsiktet for tildelinger.
@@ -361,7 +399,9 @@ miljøer» er derfor et sammendrag som må merkes som det.
 
 **Takvisning (fane på detaljsiden):** tabell med kolonnene Tilgangskode, Organisasjon, Miljø,
 Gyldig fra. Filtre på miljø og organisasjon, som i tilgangsfanen. Handlingene *Legg til delegering*
-og *Avslutt delegering* vises bare for applikasjonsadministrator hos Sikt.
+og *Avslutt delegering* vises bare når administratoren har rettigheten for det aktuelle
+innslaget — altså i eierorganisasjonen, og i organisasjonen innslaget gjelder når den er en annen.
+Det betyr at handlingene kan være tilgjengelige for noen rader i tabellen og ikke for andre.
 
 **Legg til delegering:** dialogboks med tilgang, organisasjon og miljø. Flere rader i samme
 endring bør være mulig — takrader kommer sjelden én om gangen, fordi en applikasjon typisk skal
@@ -378,7 +418,8 @@ taket?* Hvor den hører — på applikasjonen, i «mine tilganger», eller begge
 ## Interaksjonsmønstre
 
 ### Primærhandlinger
-*Legg til delegering* og *Avslutt delegering* (begge bare for applikasjonsadministrator hos Sikt).
+*Legg til delegering* og *Avslutt delegering* (begge bare der administratoren har rettigheten i
+både eierorganisasjonen og organisasjonen innslaget gjelder).
 
 ### Sekundære handlinger
 *Vis historikk*, *Vis taket på et gitt tidspunkt*, filtrering på miljø og organisasjon.
@@ -402,7 +443,7 @@ tilbaketrekking fordi den tar formidlingsevne fra brukere som er i arbeid.
 | Tak uten innslag i valgt miljø | «Ingen delegeringer i dette miljøet» — mengden er per miljø |
 | Avskåret snitt | Brukerens tilgang vises som ikke formidlet, med taket oppgitt som årsak |
 | Laster | Skjelett i tabellen; miljøvalget låst mens listen hentes |
-| Endring avvist av rettighet | Melding som sier at endring krever applikasjonsadministrator hos Sikt |
+| Endring avvist av rettighet | Melding som navngir organisasjonen rettigheten mangler i — eierorganisasjonen, den berørte, eller begge |
 | Endring uten virkning (idempotent) | Bekreftelse som sier at delegeringen allerede gjaldt, uten ny historikkoppføring |
 | Suksess | Toast, og listen oppdatert i valgt miljø |
 
@@ -436,7 +477,9 @@ sikkerhetsspørsmål, og svaret skal ikke avhenge av at ingen har ryddet.
 
 ## Avklarte valg
 
-- Endring gates på applikasjonsadministrator hos Sikt; lesing forblir organisasjonsskopet.
+- Endring krever applikasjonsadministrator i organisasjonene endringen berører: eierorganisasjonen,
+  og organisasjonen takinnslaget gjelder når den er en annen. Lesing er skopet til den berørte
+  organisasjonen alene. Besluttet 25. august 2026, og erstatter et tidligere Sikt-skopet valg.
 - Bare applikasjoner brukere logger inn i har et delegeringstak — for øvrige vises ingen visning.
 - Tilbaketrekking avslutter en periode; ingenting slettes.
 - Historikk vises som perioder, ikke som siste status.
@@ -444,11 +487,11 @@ sikkerhetsspørsmål, og svaret skal ikke avhenge av at ingen har ryddet.
 - Idempotens: å legge inn en delegering som allerede gjelder er ingen endring, og gir ingen ny
   historikkoppføring.
 - Miljø velges eksplisitt; «alle miljøer» er et sammendrag, ikke en mengde som finnes.
-- Publiseringsmyndigheten for åpne data pakkes i en egen forretningsrolle, `APENDATA_FORVALTER`,
-  som innebærer publiseringsprivilegiet og ingenting annet, og som IKKE innebæres av
-  applikasjonsadministratorrollen. Tildeles navngitte personer hos Sikt, organisasjonsskopet —
-  eller mot en organisasjonssamling for nasjonale datasett. Knapp i production, bred i test og
-  demo. Besluttet 21. august 2026.
+- Åpne tilganger forvaltes av Sikts utviklere gjennom Liquibase-migreringer i kildekoden: ingen
+  API-flate, ingen forvaltningsrolle, og publiseringsprivilegiet forfremmes ikke. Besluttet
+  25. august 2026, og erstatter den daterte beslutningen 21. august 2026 om en egen
+  forretningsrolle for publisering (står igjen i notatet med begrunnelsen for erstatningen).
+- Gulvet er avventet og vurderes fjernet; ingen forvaltningsflate bygges. Status 25. august 2026.
 
 ## Åpne designspørsmål
 

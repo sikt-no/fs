@@ -83,9 +83,10 @@ Egenskap: Se delegeringstaket for en applikasjon
       Når jeg åpner delegeringstaket for applikasjonen
       Så ser jeg innslagene som gjelder min organisasjon
 
-    Scenario: Lesing gir ingen handlinger for å endre taket
-      Gitt jeg administrerer en organisasjon
-      Når jeg åpner delegeringstaket for en applikasjon
+    Scenario: Lesing alene gir ingen handlinger for å endre taket
+      Gitt jeg kan lese applikasjonsbildet for en organisasjon jeg administrerer
+      Og jeg har ikke rettighet til å endre delegeringstaket for applikasjonen
+      Når jeg åpner delegeringstaket for applikasjonen
       Så ser jeg innslagene som gjelder min organisasjon
       Men jeg ser ingen handling for å legge til eller fjerne et innslag
 
