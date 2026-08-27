@@ -11,10 +11,13 @@ Opprettelse skjer i en **dialogboks (modal)** som åpnes fra listevisningen for 
 Dialogboks med:
 
 - **Tittel:** "Opprett ny applikasjon"
-- **Felter** (alle obligatoriske):
+- **Felter** (obligatoriske, men avhengig av valgt identitetsleverandør):
   - Identitetsleverandør — valg mellom *Feide* og *Maskinporten*. *FS* er et tredje valg, og
     vises bare for administratorer med applikasjonsadministrator-rollen for Sikt
-  - Ekstern ID — ID hos valgt identitetsleverandør (verifiseres ved innsending)
+  - Ekstern ID — ID hos valgt identitetsleverandør (verifiseres ved innsending); gjelder Feide
+    og Maskinporten
+  - Navn — fylles ut i dialogen når identitetsleverandøren er FS; for Feide og Maskinporten
+    hentes navnet i stedet fra idP-en og er ikke et felt i dialogen
   - Organisasjon — valgliste; antall valg avhenger av rollen:
     - Tilgang til kun én organisasjon: forhåndsvalgt og låst
     - Tilgang til flere organisasjoner: valgliste begrenset til disse
@@ -24,7 +27,7 @@ Dialogboks med:
 ## Interaksjonsmønstre
 
 ### Primærhandling
-*Opprett*-knappen sender skjemaet. Verifiserer ekstern ID mot identitetsleverandøren, sjekker unik visningsnavn og unik ID. Ved suksess lukkes dialogen og brukeren navigeres til detaljsiden for applikasjonen.
+*Opprett*-knappen sender skjemaet. Verifiserer ekstern ID mot identitetsleverandøren, sjekker unik visningsnavn og unik ID. Er identitetsleverandøren FS, verifiseres i stedet at organisasjonen har en registrert FS-datakilde i alle miljøer, før noe opprettes. Ved suksess lukkes dialogen og brukeren navigeres til detaljsiden for applikasjonen.
 
 ### Sekundære handlinger
 - *Avbryt* lukker dialogen uten å opprette
@@ -45,6 +48,7 @@ Dialogboks med:
 | Feil (ID ikke funnet) | Feilmelding ved ID-feltet: "ID-en kunne ikke verifiseres hos {identitetsleverandør}" |
 | Feil (ID i bruk) | Feilmelding ved ID-feltet: "ID-en er allerede registrert" |
 | Feil (visningsnavn i bruk) | Feilmelding på toppen av dialogen: "Visningsnavnet «{navn}» er allerede i bruk" — siden navnet hentes fra idP-en, kan brukeren ikke endre det her |
+| Feil (mangler FS-datakilde) | Feilmelding på toppen av dialogen: "Organisasjonen mangler FS-datakilde i {miljø} — applikasjonen ble ikke opprettet". Dialogen holdes åpen med utfylte verdier |
 | Suksess | Dialog lukkes, navigasjon til detaljside, eventuelt toast/banner "Applikasjonen er opprettet" på detaljsiden |
 
 ## Per-scenario detaljer
@@ -54,6 +58,8 @@ Valget mellom Feide og Maskinporten presenteres tydelig (radioknapper eller segm
 
 ### Scenario: FS som identitetsleverandør
 FS vises som alternativ **bare** for en administrator med applikasjonsadministrator-rollen for Sikt. For alle andre skal alternativet ikke vises i det hele tatt — ikke som et deaktivert valg, jf. prosjektmønsteret for manglende rettighet. Velges FS, provisjonerer opprettelsen en maskinbruker i FS' webtjenester, og dialogen bør si det: det opprettes noe utenfor applikasjonsoversikten, og handlingen er derfor tyngre enn de to andre valgene.
+
+Dialogen viser ikke miljøvalg for FS: applikasjonen er miljøløs, og identiteten gjelder i alle miljøer med én gang. I stedet for ekstern ID-oppslag fylles navnet ut manuelt (se Navn-feltet over), og innsending verifiserer i stedet at organisasjonen har registrert FS-datakilde i alle miljøer — mangler den i ett, avvises hele opprettelsen med en feilmelding som navngir miljøet, og ingenting opprettes delvis. Passord settes ikke i dialogen: detaljsiden blir inngangen til å sette ett passord per miljø, med den samme passordflyten som for øvrige applikasjoner.
 
 Avgrensningen bør ikke lekke inn i detaljsiden: når applikasjonen først finnes, er den organisasjonens egen, og handlingene der (navn og beskrivelse, deaktivering og reaktivering, passordbytte) gates som for de øvrige applikasjonene.
 

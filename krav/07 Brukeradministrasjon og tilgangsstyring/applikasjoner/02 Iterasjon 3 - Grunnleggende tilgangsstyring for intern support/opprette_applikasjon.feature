@@ -75,6 +75,35 @@ Egenskap: Opprette applikasjon
       Så er applikasjonen opprettet på den organisasjonen
       Og det er provisjonert en tilhørende maskinbruker i FS' webtjenester
 
+  Regel: Opprettelsen av en maskinbruker-applikasjon er miljøløs og alt-eller-ingenting
+
+    # Maskinbruker-applikasjonen selv har ingen miljødimensjon — det er provisjoneringen i
+    # FS' webtjenester som skjer per miljø. Mangler organisasjonen FS-datakilde i ett av
+    # miljøene, finnes det ingen delvis provisjonert tilstand: hele opprettelsen avvises.
+    # Passord er heller ikke satt av opprettelsen — det settes per miljø etterpå, med den
+    # samme passordflyten som for øvrige applikasjoner.
+
+    Scenario: Opprettelsen gjelder i alle miljøer uten miljøvalg
+      Gitt jeg har applikasjonsadministrator-rollen for Sikt
+      Når jeg oppretter en applikasjon med FS som identitetsleverandør
+      Så velger jeg ikke miljø i dialogen
+      Og applikasjonen får den samme identiteten i alle miljøer
+
+    Scenario: Opprettelsen avvises i sin helhet når organisasjonen mangler FS-datakilde i et miljø
+      Gitt jeg har applikasjonsadministrator-rollen for Sikt
+      Og organisasjonen mangler registrert FS-datakilde i minst ett miljø
+      Når jeg forsøker å opprette en applikasjon med FS som identitetsleverandør for organisasjonen
+      Så avvises opprettelsen i sin helhet
+      Og det fremgår hvilket miljø organisasjonen mangler FS-datakilde i
+      Og applikasjonen er ikke opprettet i noe miljø
+
+    Scenario: Passord settes per miljø etter opprettelsen
+      Gitt jeg har opprettet en applikasjon med FS som identitetsleverandør
+      Og applikasjonen har ennå ikke noe passord
+      Når applikasjonen skal autentisere seg i et miljø
+      Så må det først settes et passord for applikasjonen i det miljøet
+      Og passordet settes med den samme passordflyten som for øvrige applikasjoner
+
   Regel: Bare opprettelsen av en maskinbruker-applikasjon er gatet hos Sikt
 
     # Gatingen gjelder handlingen «ta i bruk en utfaset integrasjonsform», ikke
@@ -231,3 +260,4 @@ Egenskap: Opprette applikasjon
       Gitt jeg har opprettet en ny applikasjon
       Så kan applikasjonen autentisere seg umiddelbart med sin eksterne identitet
       Men applikasjonen får ikke tilgang til data før den har en tilgang i et miljø
+      Og en applikasjon med FS som identitetsleverandør venter på passord per miljø før den kan autentisere seg i det miljøet
