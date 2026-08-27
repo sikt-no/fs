@@ -99,6 +99,21 @@ Egenskap: Opprette applikasjon
       Og det er provisjonert en tilhørende maskinbruker i FS' webtjenester
 
   @planned
+  Regel: Opprettelsen av en maskinbruker-applikasjon er alt-eller-ingenting
+
+    # Maskinbruker-applikasjonen selv har ingen miljødimensjon — det er provisjoneringen i
+    # FS' webtjenester som skjer per miljø. Mangler applikasjonseieren FS-datakilde i ett
+    # av miljøene, finnes det ingen delvis provisjonert tilstand: hele opprettelsen avvises.
+
+    Scenario: Opprettelsen avvises i sin helhet når applikasjonseieren mangler FS-datakilde i et miljø
+      Gitt jeg har applikasjonsadministrator-rollen for Sikt
+      Og applikasjonseieren mangler registrert FS-datakilde i minst ett miljø
+      Når jeg forsøker å opprette en applikasjon med FS som identitetsleverandør for applikasjonseieren
+      Så avvises opprettelsen i sin helhet
+      Og det fremgår hvilket miljø applikasjonseieren mangler FS-datakilde i
+      Og applikasjonen er ikke opprettet i noe miljø
+
+  @planned
   Regel: Bare opprettelsen av en maskinbruker-applikasjon er gatet hos Sikt
 
     # Gatingen gjelder handlingen «ta i bruk en utfaset integrasjonsform», ikke
