@@ -1,7 +1,7 @@
 # language: no
 # GitHub: #445, #451
 @BRU-APP-API-008 @must @planned
-Egenskap: Fjerne tilgang fra applikasjon
+Egenskap: Fjerne tilganger fra en applikasjon
   Som bruker med applikasjonsadministrator-rollen
   ønsker jeg å fjerne en tilgang fra en applikasjon
   slik at applikasjonen mister tilgang til data den ikke lenger skal ha.
@@ -9,7 +9,8 @@ Egenskap: Fjerne tilgang fra applikasjon
   # Krav fra Confluence: K7 Fjerne rolle fra API-bruker, K14 Fjerne rolle fra API-bruker (selvbetjening)
 
   Bakgrunn:
-    Gitt jeg er på detaljsiden for en applikasjon
+    Gitt jeg er innlogget i løsningen
+    Og jeg ser detaljsiden for en applikasjon
     Og jeg ser tilgangslisten applikasjonen har
 
   Regel: Fjerning av tilganger skjer via dialog
@@ -35,6 +36,12 @@ Egenskap: Fjerne tilgang fra applikasjon
       Gitt applikasjonen har en tilgang jeg ikke har rettighet til å fjerne
       Så er muligheten til å fjerne den tilgangen ikke tilgjengelig
 
+  Regel: Arvede tilganger kan ikke fjernes direkte
+
+    Scenario: Arvet tilgang kan ikke fjernes
+      Gitt applikasjonen har en arvet tilgang
+      Så er muligheten til å fjerne den arvede tilgangen ikke tilgjengelig
+
   Regel: Tilganger kan fjernes selv om applikasjonen er deaktivert
 
     Scenario: Fjerne tilgang fra deaktivert applikasjon
@@ -43,8 +50,6 @@ Egenskap: Fjerne tilgang fra applikasjon
       Når jeg bekrefter fjerningen
       Så har applikasjonen ikke lenger den tilgangen
 
-  Regel: Arvede tilganger kan ikke fjernes direkte
-
-    Scenario: Arvet tilgang kan ikke fjernes
-      Gitt applikasjonen har en arvet tilgang
-      Så er muligheten til å fjerne den arvede tilgangen ikke tilgjengelig
+# ÅPNE SPØRSMÅL:
+# - Hvordan skal delvis suksess håndteres når flere tilganger fjernes i én operasjon og bare noen av dem lykkes? Skal de gyldige fjerningene gjennomføres, eller skal hele operasjonen avvises? Spørsmålet henger sammen med det tilsvarende spørsmålet i BRU-APP-API-007.
+# - Er fjerning av tilgang sporbar i endringsloggen? BRU-PER-GRU-011 slår fast at hver fjerning er sporbar i historikk, mens BRU-APP-API-016 fortsatt har det som åpent spørsmål hvilke handlinger som skal loggføres.
