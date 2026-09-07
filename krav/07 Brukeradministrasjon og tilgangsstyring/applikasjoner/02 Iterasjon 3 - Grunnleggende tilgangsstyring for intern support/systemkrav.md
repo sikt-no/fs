@@ -33,7 +33,7 @@ Iterasjonen forutsetter at oversikt og detaljer fra Iterasjon 2 allerede er på 
 
 ### K6, K13 — Tildele tilgang til applikasjon
 
-**Feature-ID:** [`BRU-APP-API-007`](tildele_tilgang.feature) | **GitHub:** [#444](https://github.com/sikt-no/fs/issues/444), [#450](https://github.com/sikt-no/fs/issues/450)
+**Feature-ID:** [`BRU-APP-API-007`](tildele_tilganger.feature) | **GitHub:** [#444](https://github.com/sikt-no/fs/issues/444), [#450](https://github.com/sikt-no/fs/issues/450)
 
 **Prioritet:** Må ha · **Status:** Planlagt
 
@@ -43,7 +43,7 @@ Iterasjonen forutsetter at oversikt og detaljer fra Iterasjon 2 allerede er på 
 
 ### K7, K14 — Fjerne tilgang fra applikasjon
 
-**Feature-ID:** [`BRU-APP-API-008`](fjerne_tilgang.feature) | **GitHub:** [#445](https://github.com/sikt-no/fs/issues/445), [#451](https://github.com/sikt-no/fs/issues/451)
+**Feature-ID:** [`BRU-APP-API-008`](fjerne_tilganger.feature) | **GitHub:** [#445](https://github.com/sikt-no/fs/issues/445), [#451](https://github.com/sikt-no/fs/issues/451)
 
 **Prioritet:** Må ha · **Status:** Planlagt
 
