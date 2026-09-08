@@ -14,7 +14,7 @@
 
 1. **Oppstart:** Et lærested skal koble til en ny integrasjon. Sikt support oppretter en ny applikasjon for organisasjonen og navngir den.
 2. **Tilgang:** Support tildeler riktig tilgang i riktig miljø — én eller flere tilganger om gangen, eksplisitt valgt miljø, og kun blant tilgangene support selv har rettighet til å tildele.
-3. **Vedlikehold over tid:** Når kunden trenger nye eller endrede tilganger, fjerner support tilganger som ikke lenger er nødvendige (med bekreftelsesdialog), og tildeler nye.
+3. **Vedlikehold over tid:** Når kunden trenger nye eller endrede tilganger, fjerner support tilganger som ikke lenger er nødvendige (med eksplisitt bekreftelse), og tildeler nye.
 4. **Avslutning:** Når integrasjonen ikke lenger skal være i bruk, deaktiverer support applikasjonen (reversibelt, beholder tilganger). Den kan reaktiveres senere om behovet kommer tilbake.
 
 Iterasjonen forutsetter at oversikt og detaljer fra Iterasjon 2 allerede er på plass.
