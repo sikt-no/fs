@@ -1,338 +1,339 @@
 # Plasstildeling
 
-Vi skal kunne fordele studieplasser i flere runder, med kontroll over naar soekeren ser resultatet, og med et resultat som kan forklares i etterkant. Det meste av dette virker i dag. Dette dokumentet beskriver hva loesningen gjoer, hva den ikke gjoer, og hvilke valg som gjenstaar.
+Vi skal kunne fordele studieplasser i flere runder, med kontroll over når søkeren ser resultatet, og med et resultat som kan forklares i etterkant. Det meste av dette virker i dag. Dette dokumentet beskriver hva løsningen gjør, hva den ikke gjør, og hvilke valg som gjenstår.
 
-Dokumentet er skrevet for tre lesergrupper. Del 1 og del 2 forutsetter ingen kjennskap til loesningen. Del 3 er for utviklere og kravarbeid.
+Dokumentet er skrevet for tre lesergrupper. Del 1 og del 2 forutsetter ingen kjennskap til løsningen. Del 3 er for utviklere og kravarbeid.
 
-**Status:** renskrevet raffinering, 2026-09-08. Bygger paa raffinering med HK-dir og gjennomgang av dagens loesning.
-
----
-
-**Tre beslutninger boer leses foer resten, fordi alt annet foelger av dem. To er tatt. Den tredje er ikke, og boer tas.**
-
-1. **Rundetypen styrer ikke lenger hvordan en runde oppfoerer seg.** Det gjoer arven: om runden bygger videre paa en tidligere publisert runde. Historisk var det rundetypen som avgjorde om et nei-svar frigjoerde plassen, om tidligere tilbud sto ved lag, og om det ble satt nye bortfall. I dagens loesning er dette flyttet — se *Hva en runde arver*.
-
-2. **Beregning og publisering er to separate steg.** En plasstildeling kan kjoeres og bevisst ikke publiseres. Det er dette som gjoer ubegrensede proevetildelinger mulig, og det er nettopp det laerestedene har bedt om.
-
-3. **En plasstildeling er i dag en kjoering man bestiller, ikke et resultat man kan rette.** Feiler den, er eneste utvei aa bestille en ny; ett enkelt manuelt tilbud krever full omkjoering av hele tildelingen. Nesten alt under *Funn paa tvers* foelger av denne ene egenskapen. Om det skal endres er en beslutning for produkteier — den boer tas bevisst, ikke oppdages under et opptak.
+**Status:** renskrevet raffinering, 2026-09-08. Bygger på raffinering med HK-dir og gjennomgang av dagens løsning.
 
 ---
 
-## Del 1: maal og retning
+**Tre beslutninger bør leses før resten, fordi alt annet følger av dem. To er tatt. Den tredje er ikke, og bør tas.**
+
+1. **Rundetypen styrer ikke lenger hvordan en runde oppfører seg.** Det gjør arven: om runden bygger videre på en tidligere publisert runde. Historisk var det rundetypen som avgjorde om et nei-svar frigjorde plassen, om tidligere tilbud sto ved lag, og om det ble satt nye bortfall. I dagens løsning er dette flyttet — se *Hva en runde arver*.
+
+2. **Beregning og publisering er to separate steg.** En plasstildeling kan kjøres og bevisst ikke publiseres. Det er dette som gjør ubegrensede prøvetildelinger mulig, og det er nettopp det lærestedene har bedt om.
+
+3. **En plasstildeling er i dag en kjøring man bestiller, ikke et resultat man kan rette.** Feiler den, er eneste utvei å bestille en ny; ett enkelt manuelt tilbud krever full omkjøring av hele tildelingen. Nesten alt under *Funn på tvers* følger av denne ene egenskapen. Om det skal endres er en beslutning for produkteier — den bør tas bevisst, ikke oppdages under et opptak.
+
+---
+
+## Del 1: mål og retning
 
 ### Hva dette er, og hva det ikke er
 
-Med plasstildeling mener vi beregningen som avgjoer hvem som faar plass, hvem som staar paa venteliste, og hvem som faar avslag — gjennomfoert for en runde i et opptak. Det er noe annet enn soknadsbehandlingen, som avgjoer om en soker er kvalifisert og hvor sterkt hun konkurrerer.
+Med plasstildeling mener vi beregningen som avgjør hvem som får plass, hvem som står på venteliste, og hvem som får avslag — gjennomført for én runde i et opptak. Det er noe annet enn søknadsbehandlingen, som avgjør om en søker er kvalifisert og hvor sterkt hun konkurrerer.
 
 Skillet er ikke en formalitet. De to har ulikt fangstpunkt, ulik eier og ulik livssyklus:
 
-|                  | Soknadsbehandling | Plasstildeling |
+|                  | Søknadsbehandling | Plasstildeling |
 |------------------|-------------------|----------------|
-| **Spoersmaalet** | er sokeren kvalifisert, og hvor staar hun i koeen? | hvem faar plassene som finnes? |
-| **Skjer**        | loepende, per soknad | som en kjoering, per runde |
+| **Spørsmålet** | er søkeren kvalifisert, og hvor står hun i køen? | hvem får plassene som finnes? |
+| **Skjer**        | løpende, per søknad | som en kjøring, per runde |
 | **Eier**         | saksbehandler | opptaksleder |
-| **Dekkes her**   | nei — vi abonnerer paa resultatet | ja |
+| **Dekkes her**   | nei — vi abonnerer på resultatet | ja |
 
-Rangeringen kommer altsaa fra soknadsbehandlingen. Plasstildelingen eier ikke poengberegningen; den eier fordelingen. Det er derfor oppgave 3 nedenfor handler om aa hente og holde seg oppdatert paa rangeringen, ikke om aa beregne den.
+Rangeringen kommer altså fra søknadsbehandlingen. Plasstildelingen eier ikke poengberegningen; den eier fordelingen. Det er derfor oppgave 3 nedenfor handler om å hente og holde seg oppdatert på rangeringen, ikke om å beregne den.
 
-**En runde er ikke det samme som en plasstildeling.** Runden er vinduet i opptaket der plasser fordeles og sokere faar svar. Plasstildelingen er beregningen som gjennomfoeres i runden. En runde kan ha mange plasstildelinger — proevetildelinger som ikke publiseres, og til slutt en som publiseres.
+**En runde er ikke det samme som en plasstildeling.** Runden er vinduet i opptaket der plasser fordeles og søkere får svar. Plasstildelingen er beregningen som gjennomføres i runden. Én runde kan ha mange plasstildelinger — prøvetildelinger som ikke publiseres, og til slutt én som publiseres.
 
-### Maal
+### Mål
 
-- Hver soker faar ett tydelig svar per soknad: tilbud, venteliste med nummer, eller avslag.
-- Laerestedet bestemmer hvor mange tilbud som skal gis per kvote per studietilbud, og kan la ledige plasser flyte til en annen kvote framfor aa gaa tapt.
-- En plasstildeling kan kjoeres, kvalitetssikres og forkastes uten at sokeren merker noe.
-- Resultatet skal kunne forklares i etterkant — hvorfor fikk denne sokeren tilbud, hvorfor fikk ikke den neste? Saerlig ved klage.
-- En ny runde skal kunne bygge videre paa en tidligere uten aa miste resultatene fra den.
+- Hver søker får ett tydelig svar per søknad: tilbud, venteliste med nummer, eller avslag.
+- Lærestedet bestemmer hvor mange tilbud som skal gis per utdanningskvote per studietilbud, og kan la ledige plasser flyte til en annen utdanningskvote framfor å gå tapt.
+- En plasstildeling kan kjøres, kvalitetssikres og forkastes uten at søkeren merker noe.
+- Resultatet skal kunne forklares i etterkant — hvorfor fikk denne søkeren tilbud, hvorfor fikk ikke den neste? Særlig ved klage.
+- En ny runde skal kunne bygge videre på en tidligere uten å miste resultatene fra den.
 
-### Ikke-maal
+### Ikke-mål
 
-- **Ikke kvalifiseringsvurdering.** Den hoerer i soknadsbehandlingen.
+- **Ikke kvalifiseringsvurdering.** Den hører i søknadsbehandlingen.
 - **Ikke poengberegning.** Samme sted. Plasstildelingen leser rangeringen.
 - **Ikke opptaksadministrasjon.** Oppretting av opptak og tilknytning av utdanningstilbud er dekket andre steder.
-- **Ikke automatisk frafallskompensasjon i denne runden.** Se avklaringspunkt 3 — dette er stroeket fra scope i notatene, men staar samtidig igjen som meldt behov, og det henger ikke sammen.
+- **Ikke automatisk frafallskompensasjon i denne runden.** Se avklaringspunkt 3 — dette er strøket fra scope i notatene, men står samtidig igjen som meldt behov, og det henger ikke sammen.
 
-### Fire prinsipper loesningen hviler paa
+### Fire prinsipper løsningen hviler på
 
-#### 1. Ingen soker skal forsvinne stille
+#### 1. Ingen søker skal forsvinne stille
 
-Hver soknad som er med i en plasstildeling skal komme ut med et svar. En soker som mister kvalifiseringen sin mellom to runder skal faa et tydelig avslag, ikke bare falle ut av resultatlisten.
+Hver søknad som er med i en plasstildeling skal komme ut med et svar. En søker som mister kvalifiseringen sin mellom to runder skal få et tydelig avslag, ikke bare falle ut av resultatlisten.
 
-Dette er prinsippet dagens loesning bryter mest merkbart, og det er verdt aa si hvorfor det er alvorlig: et stille bortfall er ikke bare daarlig service. Det gjoer at fravaeret av et resultat kan bety to helt ulike ting — at sokeren aldri var med, eller at hun ble tatt ut underveis — og da kan vi ikke svare sokeren paa hva som skjedde med soknaden hennes.
+Dette er prinsippet dagens løsning bryter mest merkbart, og det er verdt å si hvorfor det er alvorlig: et stille bortfall er ikke bare dårlig service. Det gjør at fraværet av et resultat kan bety to helt ulike ting — at søkeren aldri var med, eller at hun ble tatt ut underveis — og da kan vi ikke svare søkeren på hva som skjedde med søknaden hennes.
 
-#### 2. Sokeren skal kunne stole paa tilbudet sitt
+#### 2. Søkeren skal kunne stole på tilbudet sitt
 
-Fra det oeyeblikket en soker har faatt et tilbud, skal ikke en senere runde kunne ta det fra henne. Det er dette som skiller etterfylling fra et nytt opptak, og det er grunnen til at forrige rundes tilbud fryses og garanteres naar en runde bygger paa en tidligere publisert runde.
+Fra det øyeblikket en søker har fått et tilbud, skal ikke en senere runde kunne ta det fra henne. Det er dette som skiller etterfylling fra et nytt opptak, og det er grunnen til at forrige rundes tilbud fryses og garanteres når en runde bygger på en tidligere publisert runde.
 
-Prisen staar i prinsipp 3.
+Prisen står i prinsipp 3.
 
-#### 3. Ledige plasser skal ikke gaa tapt, men de flyter bare der noen har bestemt at de skal flyte
+#### 3. Ledige plasser skal ikke gå tapt, men de flyter bare der noen har bestemt at de skal flyte
 
-Er det oensket flere tilbud i en kvote enn det finnes kvalifiserte sokere i den, overfores de overskytende plassene til en annen kvote — men bare til den ene kvoten laerestedet har pekt paa, og bare innenfor samme studietilbud. Minst en kvote er sistekvote og sender ikke plasser videre, typisk ordinaer kvote.
+Er det ønsket flere tilbud i en utdanningskvote enn det finnes kvalifiserte søkere i den, overføres de overskytende plassene til en annen utdanningskvote — men bare til den ene utdanningskvoten lærestedet har pekt på, og bare innenfor samme studietilbud. Minst én utdanningskvote er siste utdanningskvote og sender ikke plasser videre, typisk ordinær kvote.
 
-At flyten er eksplisitt og retningsbestemt er et bevisst valg, ikke en begrensning vi ikke rakk aa loese: en plass som flyter dit ingen har bestemt, gir et resultat ingen kan forklare sokeren.
+At flyten er eksplisitt og retningsbestemt er et bevisst valg, ikke en begrensning vi ikke rakk å løse: en plass som flyter dit ingen har bestemt, gir et resultat ingen kan forklare søkeren.
 
 #### 4. Beregning og publisering er skilt
 
-En plasstildeling er beregnet naar den er beregnet. Den er synlig for sokeren foerst naar noen har publisert den. Kvalitetssikring skjer i mellomrommet.
+En plasstildeling er beregnet når den er beregnet. Den er synlig for søkeren først når noen har publisert den. Kvalitetssikring skjer i mellomrommet.
 
-Dette prinsippet er billig aa ha og dyrt aa miste: uten det maa hver kvalitetssikring skje i produksjon, med sokeren som testpublikum.
+Dette prinsippet er billig å ha og dyrt å miste: uten det må hver kvalitetssikring skje i produksjon, med søkeren som testpublikum.
 
 ### Slik henger det sammen
 
 ```
                       ┌──────────────────────────────────────────────┐
    OPPTAK ───────────►│   RUNDER I OPPTAKET        (oppgave 1)       │
-   navn, rundetype,   │   en eller flere per opptak                  │
+   navn, rundetype,   │   én eller flere per opptak                  │
    datoer             └───────────────────┬──────────────────────────┘
                                           │
-   SOKNADSBEHANDLING                      │     INNSTILLINGER PER KVOTE
-   kvalifisering                          │     maaltall, plassflyt,
-        │                                 │     tilbud til alle kvalifiserte,
-        ▼                                 │     kvote for tilbudsgaranti
-   kvotetilhoerighet, poeng, rangering    │     (oppgave 2)
-   (oppgave 3)                            │              │
+   SØKNADSBEHANDLING                      │     INNSTILLINGER PER UTDANNINGSKVOTE
+   kvalifisering                          │     antall tilbud som skal gis,
+        │                                 │     plassflyt,
+        ▼                                 │     tilbud til alle kvalifiserte,
+   kvotetilhørighet, poeng, rangering     │     utdanningskvote for tilbudsgaranti
+   (oppgave 3)                            │     (oppgave 2)
+                                          │              │
         └───────────────┐                 │              │
                         ▼                 ▼              ▼
                      ╔═════════════════════════════════════════════╗
    forrige           ║        PLASSTILDELING     (oppgave 4)       ║
-   publiserte  ─────►║  hvem faar plass — og hva ble poenggrensen? ║
+   publiserte  ─────►║  hvem får plass — og hva ble poenggrensen?  ║
    runde (arv)       ╚══════════════════════┬══════════════════════╝
                                             │
                                             ▼
-              resultat per soknad: tilbud / venteliste (nr) / avslag
-              poenggrense per kvote  ·  spor av plassflyt
+              resultat per søknad: tilbud / venteliste (nr) / avslag
+              poenggrense per utdanningskvote  ·  spor av plassflyt
                                             │
                      ┌──────────────────────┴──────────────────────┐
                      ▼                                             ▼
            SAKSBEHANDLER (oppgave 5)                  PUBLISERING (oppgave 6)
-           kvalitetssikring foer publisering          valgfri — en proeve-
+           kvalitetssikring før publisering            valgfri — en prøve-
                                                       tildeling publiseres ikke
                                                                    │
                                                                    ▼
-                                                     SVAR FRA SOKER (oppgave 7)
-                                                     ja / nei / staar paa venteliste
+                                                     SVAR FRA SØKER (oppgave 7)
+                                                     ja / nei / står på venteliste
                                                                    │
-                                             utloeser ny runde ────┘
+                                             utløser ny runde ─────┘
 ```
 
-Legg merke til pilen nederst til venstre: arven fra forrige publiserte runde er en inngang til beregningen paa linje med innstillingene og rangeringen. Det er den som gjoer etterfylling mulig, og det er den som avgjoer hvordan runden oppfoerer seg.
+Legg merke til pilen nederst til venstre: arven fra forrige publiserte runde er en inngang til beregningen på linje med innstillingene og rangeringen. Det er den som gjør etterfylling mulig, og det er den som avgjør hvordan runden oppfører seg.
 
 ### Hva en runde arver fra forrige
 
-Dette er den viktigste tabellen i dokumentet, fordi den erstatter det rundetypen gjorde foer:
+Dette er den viktigste tabellen i dokumentet, fordi den erstatter det rundetypen gjorde før:
 
-| Egenskap | Runde uten arv (foerste runde) | Runde med arv (etterfylling) |
+| Egenskap | Runde uten arv (første runde) | Runde med arv (etterfylling) |
 |----------|-------------------------------|------------------------------|
 | Tidligere tilbud | finnes ikke | fryses og garanteres |
-| Nytt tilbud fra venteliste | – | sokeren mister ikke det gamle automatisk |
-| Bortfall paa lavere prioriteter | settes | settes ikke |
-| Nei-svar | – | frigjoer plassen foerst naar svarfristen er ute |
+| Nytt tilbud fra venteliste | – | søkeren mister ikke det gamle automatisk |
+| Bortfall på lavere prioriteter | settes | settes ikke |
+| Nei-svar | – | frigjør plassen først når svarfristen er ute |
 
-Begrunnelsen for hoeyre kolonne er prinsipp 2: paa dette stadiet skal sokeren kunne stole paa tilbudet sitt. Men det gir ogsaa oppfoerselen en modus, og det er kilden til flere av de aapne spoersmaalene i del 2 — se avklaringspunkt 2.
+Begrunnelsen for høyre kolonne er prinsipp 2: på dette stadiet skal søkeren kunne stole på tilbudet sitt. Men det gir også oppførselen én modus, og det er kilden til flere av de åpne spørsmålene i del 2 — se avklaringspunkt 2.
 
 ### Status per oppgave
 
 | # | Oppgave | Status | Det som mangler |
 |---|---------|--------|-----------------|
-| 1 | Starte en ny plasstildeling | Stoettet | Feiler en tildeling, kan den ikke kjoeres om — bare erstattes av en ny |
-| 2 | Sette maaltall og plassflyt per kvote | Delvis | En mottakerkvote per kvote; ingen flyt mellom studietilbud; ingen flyt mellom tildelinger |
-| 3 | Hente rangering fra soknadsbehandlingen | Delvis | Endret soknad mellom runder fanges ikke opp; tapt kvalifisering gir stille bortfall |
-| 4 | Gjennomfoere tildelingen og finne poenggrensen | Delvis | Poenggrensen beregnes og lagres aldri, selv om det finnes en plass aa vise den |
-| 5 | Vise resultatet til saksbehandler | Delvis | Ventelistenummeret naar ikke fram til sokeren, selv om innstillingen finnes |
-| 6 | Publisere resultatet til soekerne | Stoettet | Ett hull, se oppgave 5 — det som publiseres mangler ventelistenummer |
-| 7 | Haandtere svar fra soker | Delvis | Trukket ja-svar frigjoer aldri plassen; ingen manuell overstyring av enkeltresultat |
+| 1 | Starte en ny plasstildeling | Støttet | Feiler en tildeling, kan den ikke kjøres om — bare erstattes av en ny |
+| 2 | Sette antall tilbud som skal gis og plassflyt per utdanningskvote | Delvis | Én mottakende utdanningskvote per utdanningskvote; ingen flyt mellom studietilbud; ingen flyt mellom tildelinger |
+| 3 | Hente rangering fra søknadsbehandlingen | Delvis | Endret søknad mellom runder fanges ikke opp; tapt kvalifisering gir stille bortfall |
+| 4 | Gjennomføre tildelingen og finne poenggrensen | Delvis | Poenggrensen beregnes og lagres aldri, selv om det finnes en plass å vise den |
+| 5 | Vise resultatet til saksbehandler | Delvis | Ventelistenummeret når ikke fram til søkeren, selv om innstillingen finnes |
+| 6 | Publisere resultatet til søkerne | Støttet | Ett hull, se oppgave 5 — det som publiseres mangler ventelistenummer |
+| 7 | Håndtere svar fra søker | Delvis | Trukket ja-svar frigjør aldri plassen; ingen manuell overstyring av enkeltresultat |
 | 8 | Frafallskompensasjon rett etter hovedopptaket | Avgrenset | Men se avklaringspunkt 3 |
 
-«Delvis» betyr her at kjernefunksjonen virker og at det som mangler er navngitt. Ingen av oppgavene er usikre paa om de virker.
+«Delvis» betyr her at kjernefunksjonen virker og at det som mangler er navngitt. Ingen av oppgavene er usikre på om de virker.
 
-### Funn paa tvers av oppgavene
+### Funn på tvers av oppgavene
 
-Tre funn tilhoerer ingen enkeltoppgave, og de er de tyngste i dokumentet:
+Tre funn tilhører ingen enkeltoppgave, og de er de tyngste i dokumentet:
 
-1. **Ingen plasstildeling kan avbrytes eller kjoeres om.** Dette er beslutning 3 fra innledningen, sett fra driftssiden. Konsekvensen er at enhver feilretting — en feil innstilling, ett manuelt tilbud, en avbrutt kjoering — koster en full omkjoering av hele tildelingen.
+1. **Ingen plasstildeling kan avbrytes eller kjøres om.** Dette er beslutning 3 fra innledningen, sett fra driftssiden. Konsekvensen er at enhver feilretting — en feil innstilling, ett manuelt tilbud, en avbrutt kjøring — koster en full omkjøring av hele tildelingen.
 
-2. **Tilgangsstyringen er alt-eller-ingenting.** En rolle ser alle sokernavn og alle resultater i hele opptaket, uten finere inndeling. Behovet er opptaksleder- og saksbehandlertilganger avgrenset til de organisasjonene brukeren har tilgang fra. Dette er ikke bare en manglende feature — det er et personvernfunn, og det hoerer derfor ogsaa i del 2.
+2. **Tilgangsstyringen er alt-eller-ingenting.** Én rolle ser alle søkernavn og alle resultater i hele opptaket, uten finere inndeling. Behovet er opptaksleder- og saksbehandlertilganger avgrenset til de organisasjonene brukeren har tilgang fra. Dette er ikke bare en manglende feature — det er et personvernfunn, og det hører derfor også i del 2.
 
-3. **Seks mistenkte feil i koden er identifisert.** De er ikke bevisste valg. To er beskrevet: bortfall kan beregnes mot feil tilbud naar en soker har flere tilbud samtidig, og ventelistenumre kan kollidere mellom runder. De fire oevrige er listet i del 4.
+3. **Seks mistenkte feil i koden er identifisert.** De er ikke bevisste valg. To er beskrevet: bortfall kan beregnes mot feil tilbud når en søker har flere tilbud samtidig, og ventelistenumre kan kollidere mellom runder. De fire øvrige er listet i del 4.
 
 ### Blindsoner
 
-Dette er hva loesningen ikke svarer paa, og som ikke lukkes med mer arbeid paa samme sted:
+Dette er hva løsningen ikke svarer på, og som ikke lukkes med mer arbeid på samme sted:
 
 | Blindsone | Hva det betyr |
 |-----------|---------------|
-| Plassflyt mellom studietilbud | Plasser flyter mellom kvoter innenfor ett studietilbud. Ledig kapasitet paa ett tilbud kan ikke brukes paa et annet |
-| Flere mottakerkvoter | En kvote kan sende overskytende plasser til en kvote, ikke fordele dem paa flere. Flerledds-kjeder virker, forgrening gjoer ikke |
-| Poenggrense som historikk | Poenggrensen sokeren eventuelt ser i dag kommer fra en annen kilde enn tildelingen. Fjoraarets median, som er viktig for tidlig tilbud, settes i saksbehandlingen |
-| Manuell overstyring | Det finnes ingen vei til aa endre ett enkelt resultat. Alt gaar gjennom en ny tildeling |
-| Negative opptaksparametere | Den historiske muligheten for aa redusere antall aktive tilbud i et suppleringsopptak er ikke verifisert mot dagens loesning |
+| Plassflyt mellom studietilbud | Plasser flyter mellom utdanningskvoter innenfor ett studietilbud. Ledig kapasitet på ett tilbud kan ikke brukes på et annet |
+| Flere mottakende utdanningskvoter | En utdanningskvote kan sende overskytende plasser til én utdanningskvote, ikke fordele dem på flere. Flerledds-kjeder virker, forgrening gjør ikke |
+| Poenggrense som historikk | Poenggrensen søkeren eventuelt ser i dag kommer fra en annen kilde enn tildelingen. Fjorårets median, som er viktig for tidlig tilbud, settes i søknadsbehandlingen |
+| Manuell overstyring | Det finnes ingen vei til å endre ett enkelt resultat. Alt går gjennom en ny tildeling |
+| Negative opptaksparametere | Den historiske muligheten for å redusere antall aktive tilbud i et suppleringsopptak er ikke verifisert mot dagens løsning |
 
 ---
 
 ## Del 2: regelverk, roller og personvern
 
-Denne delen setter loesningen opp mot regelverket og mot HK-dirs meldte behov. Den er skrevet for aa bli motsagt: der vi har tatt et standpunkt staar det som vaar paastand, og der vi ikke har konkludert staar det i *Hva vi trenger avklart*. Vi er ikke jurister — dette er funksjonelle beskrivelser med et forslag til innramming.
+Denne delen setter løsningen opp mot regelverket og mot HK-dirs meldte behov. Den er skrevet for å bli motsagt: der vi har tatt et standpunkt står det som vår påstand, og der vi ikke har konkludert står det i *Hva vi trenger avklart*. Vi er ikke jurister — dette er funksjonelle beskrivelser med et forslag til innramming.
 
 ### Poenglikhet er delvis forskriftsfestet
 
-At eldste soker gaar foran yngre ved poenglikhet foelger av opptaksforskriften § 7-1 fjerde ledd. Det er ikke et aapent spoersmaal, og notatene behandlet det som ett. Dagens kode er riktig.
+At eldste søker går foran yngre ved poenglikhet følger av opptaksforskriften § 7-1 fjerde ledd. Det er ikke et åpent spørsmål, og notatene behandlet det som ett. Dagens kode er riktig.
 
-Vaar paastand: dette hoerer i dokumentasjonen, ikke i diskusjonen. Det vi trenger er at regelen er synlig som forskriftsfestet, slik at den ikke blir tatt opp paa nytt hver gang noen leser at det finnes flere poenglikhetsregler.
+Vår påstand: dette hører i dokumentasjonen, ikke i diskusjonen. Det vi trenger er at regelen er synlig som forskriftsfestet, slik at den ikke blir tatt opp på nytt hver gang noen leser at det finnes flere poenglikhetsregler.
 
-Loesningen skal likevel kunne haandtere flere regler, koblet til opptaket:
+Løsningen skal likevel kunne håndtere flere regler, koblet til opptaket:
 
 | Regel | Merknad |
 |-------|---------|
-| Alder — eldste eller yngste foerst | Eldste foerst er forskriftsfestet i det ordinaere tilfellet |
+| Alder — eldste eller yngste først | Eldste først er forskriftsfestet i det ordinære tilfellet |
 | Loddtrekning | |
-| Alle med samme sum faar tilbud | Kan settes som unntak per utdanningstilbud |
-| Tidspunkt for levert soknad — tidligste vinner | Egen regel for runden «ledige studieplasser» |
+| Alle med samme sum får tilbud | Kan settes som unntak per utdanningstilbud |
+| Tidspunkt for levert søknad — tidligste vinner | Egen regel for runden «ledige studieplasser» |
 
-### Valgfriheten ved poenglikhet kan vaere tapt
+### Valgfriheten ved poenglikhet kan være tapt
 
-Laerestedene kunne tidligere velge mellom en strengere avgrensning og «alle med samme poengsum faar tilbud», per studium. I dag ser det ut til at hele likhetsgruppen alltid faar tilbud, uten alternativ.
+Lærestedene kunne tidligere velge mellom en strengere avgrensning og «alle med samme poengsum får tilbud», per studium. I dag ser det ut til at hele likhetsgruppen alltid får tilbud, uten alternativ.
 
-Vaar paastand: laerestedet skal kunne legge unntakskrav paa et utdanningstilbud, men bare i en retning — «alle med samme sum faar tilbud». En strengere avgrensning enn forskriftens er ikke lov. Om dagens oppfoersel dermed er riktig eller for grov, avhenger av om valgfriheten var mellom to lovlige alternativer eller mellom et lovlig og et ulovlig.
+Vår påstand: lærestedet skal kunne legge unntakskrav på et utdanningstilbud, men bare i én retning — «alle med samme sum får tilbud». En strengere avgrensning enn forskriftens er ikke lov. Om dagens oppførsel dermed er riktig eller for grov, avhenger av om valgfriheten var mellom to lovlige alternativer eller mellom et lovlig og et ulovlig.
 
-### Tilbudsgaranti tas fra en bestemt kvote
+### Tilbudsgaranti tas fra en bestemt utdanningskvote
 
-En tilbudsgaranti er en kode paa en soknad som gir tilbud uavhengig av poengsum og kvalifiseringsstatus. Den brukes til aa rette opp feil, men ogsaa til aa gi tilbud til spesielle sokergrupper, til tilsagn i et tidligopptak, og til sokere med reservert plass.
+En tilbudsgaranti er en kode på en søknad som gir tilbud uavhengig av poengsum og kvalifiseringsstatus. Den brukes til å rette opp feil, men også til å gi tilbud til spesielle søkergrupper, til tilsagn i et tidligopptak, og til søkere med reservert plass.
 
-For hvert studium kan laerestedet eller HK-dir sette om tilbudsgarantier skal tas fra en bestemt kvote, og i saa fall hvilken. Plasstildelingen skal ta garantiplassene fra den kvoten som er markert for det.
+For hvert studium kan lærestedet eller HK-dir sette om tilbudsgarantier skal tas fra en bestemt utdanningskvote, og i så fall hvilken. Plasstildelingen skal ta garantiplassene fra den utdanningskvoten som er markert for det.
 
-Dette er verdt aa merke seg fordi en tilbudsgaranti forbruker en plass: den er ikke gratis, den flytter belastningen til en kvote noen har pekt paa.
+Dette er verdt å merke seg fordi en tilbudsgaranti forbruker en plass: den er ikke gratis, den flytter belastningen til en utdanningskvote noen har pekt på.
 
-### Tilgangsstyring er et personvernspoersmaal, ikke bare en feature
+### Tilgangsstyring er et personvernspørsmål, ikke bare en feature
 
-At en rolle ser alle sokernavn og alle resultater i hele opptaket, uten inndeling per organisasjon, betyr at en saksbehandler ved ett laerested i praksis har innsyn i sokere som ikke angaar hennes institusjon.
+At én rolle ser alle søkernavn og alle resultater i hele opptaket, uten inndeling per organisasjon, betyr at en saksbehandler ved ett lærested i praksis har innsyn i søkere som ikke angår hennes institusjon.
 
-Vaar paastand: dette er en for bred tilgang til personopplysninger, og inndeling per organisasjon er et krav og ikke en forbedring. Vi bringer det inn her framfor bare i funn-listen, fordi konsekvensen ikke er daarlig ergonomi — den er at behandlingen kan vaere mer omfattende enn den trenger aa vaere.
+Vår påstand: dette er en for bred tilgang til personopplysninger, og inndeling per organisasjon er et krav og ikke en forbedring. Vi bringer det inn her framfor bare i funn-listen, fordi konsekvensen ikke er dårlig ergonomi — den er at behandlingen kan være mer omfattende enn den trenger å være.
 
-### Sokeren skal kunne forstaa svaret sitt
+### Søkeren skal kunne forstå svaret sitt
 
-Sokeren skal se tilbud, avslag eller venteliste, og et vedtak med begrunnelse: kvalifisering, rangering, poenggrense.
+Søkeren skal se tilbud, avslag eller venteliste, og et vedtak med begrunnelse: kvalifisering, rangering, poenggrense.
 
-To hull er verdt aa nevne her og ikke bare i statustabellen, fordi de rammer nettopp forklarbarheten:
+To hull er verdt å nevne her og ikke bare i statustabellen, fordi de rammer nettopp forklarbarheten:
 
-- **Ventelistenummeret naar ikke fram til sokeren i dag**, selv om innstillingen for aa vise det finnes. En venteliste uten nummer er ikke en venteliste for sokeren; det er en beskjed om at hun ikke fikk plass.
-- **Poenggrensen beregnes og lagres ikke av tildelingen.** Den poenggrensen sokeren eventuelt ser, kommer fra en annen kilde. Vedtaket begrunnes altsaa med et tall loesningen selv ikke har regnet ut.
+- **Ventelistenummeret når ikke fram til søkeren i dag**, selv om innstillingen for å vise det finnes. En venteliste uten nummer er ikke en venteliste for søkeren; det er en beskjed om at hun ikke fikk plass.
+- **Poenggrensen beregnes og lagres ikke av tildelingen.** Den poenggrensen søkeren eventuelt ser, kommer fra en annen kilde. Vedtaket begrunnes altså med et tall løsningen selv ikke har regnet ut.
 
-Ved klage maa det i tillegg kunne spores at en plass kom via plassflyt fra en annen kvote. Det virker i dag.
+Ved klage må det i tillegg kunne spores at en plass kom via plassflyt fra en annen utdanningskvote. Det virker i dag.
 
 ### Hva vi trenger avklart
 
-Ordnet etter hvor mye svaret endrer loesningen.
+Ordnet etter hvor mye svaret endrer løsningen.
 
-1. **Skal en plasstildeling kunne kjoeres om, avbrytes, eller korrigeres i enkeltresultater?** Dette er hovedspoersmaalet. Et ja betyr at plasstildelingen ikke bare er en kjoering, men et resultat med livssyklus — det er en annen loesning, ikke en justering av denne.
-2. **Er en runde alltid etterfylling, eller skal den kunne vaere supplering?** Svaret avgjoer fire andre spoersmaal samtidig.
-3. **Er frafallskompensasjon rett etter hovedopptaket i scope?** Notatene stryker den som oppgave 8 og lister den samtidig som sannsynlig mangel mot meldt behov. Begge kan ikke staa.
-4. **Skal et nei-svar frigjore plassen foer svarfristen er ute?** I dag staar plassen «reservert» til fristen. Er det for lenge?
-5. **Skal en soker som godtar og senere trekker seg, frigjore plassen til ventelisten?** I dag frigjoeres den aldri.
-6. **Skal ventelistenumre staa uroert etter opprykk, eller nummereres paa nytt?** Gjenkjennbarhet mot korrekthet.
-7. **Skal sokere med lik rangering paa venteliste dele nummer, eller faa vilkaarlige unike numre?** I dag: vilkaarlige unike.
-8. **Boer maaltallet kunne oekes automatisk ved opprykk**, slik at en frigjoert plass ikke gaar tapt?
-9. **Skal det finnes en «topp opp til oensket nivaa»-funksjon de foerste ukene**, framfor manuell overvaaking og etterfylling? Laerestedene har bedt om det.
-10. **Naar en soker har flere poengsummer i samme kvotetype:** er det riktig at hoeyeste poengsum vinner, og at laveste grunnlagskode avgjoer ved likhet?
-11. **Naar en soker har baade et tilbud og et kansellert resultat paa samme studietilbud** — skal det kansellerte vises til sokeren i stedet for tilbudet?
-12. **Hva er funksjonalitetsforskjellen mellom rundetypene, utover arven?** Notatene sier dette maa gaas opp med HK-dir. Hvis svaret er «ingen», er rundetypen et navn og ikke en regel, og det boer staa.
-13. **Hva skal rollen «opptaksforvalter» kunne gjore?** Notatene sier «faar lov aa sette plasstildelingslister i liste». Formuleringen er uklar og maa skrives om av den som eide den.
+1. **Skal en plasstildeling kunne kjøres om, avbrytes, eller korrigeres i enkeltresultater?** Dette er hovedspørsmålet. Et ja betyr at plasstildelingen ikke bare er en kjøring, men et resultat med livssyklus — det er en annen løsning, ikke en justering av denne.
+2. **Er en runde alltid etterfylling, eller skal den kunne være supplering?** Svaret avgjør fire andre spørsmål samtidig.
+3. **Er frafallskompensasjon rett etter hovedopptaket i scope?** Notatene stryker den som oppgave 8 og lister den samtidig som sannsynlig mangel mot meldt behov. Begge kan ikke stå.
+4. **Skal et nei-svar frigjøre plassen før svarfristen er ute?** I dag står plassen «reservert» til fristen. Er det for lenge?
+5. **Skal en søker som godtar og senere trekker seg, frigjøre plassen til ventelisten?** I dag frigjøres den aldri.
+6. **Skal ventelistenumre stå urørt etter opprykk, eller nummereres på nytt?** Gjenkjennbarhet mot korrekthet.
+7. **Skal søkere med lik rangering på venteliste dele nummer, eller få vilkårlige unike numre?** I dag: vilkårlige unike.
+8. **Bør antall tilbud som skal gis kunne økes automatisk ved opprykk**, slik at en frigjort plass ikke går tapt?
+9. **Skal det finnes en «topp opp til ønsket nivå»-funksjon de første ukene**, framfor manuell overvåking og etterfylling? Lærestedene har bedt om det.
+10. **Når en søker har flere poengsummer i samme kvotetype:** er det riktig at høyeste poengsum vinner, og at laveste grunnlagskode avgjør ved likhet?
+11. **Når en søker har både et tilbud og et kansellert resultat på samme studietilbud** — skal det kansellerte vises til søkeren i stedet for tilbudet?
+12. **Hva er funksjonalitetsforskjellen mellom rundetypene, utover arven?** Notatene sier dette må gås opp med HK-dir. Hvis svaret er «ingen», er rundetypen et navn og ikke en regel, og det bør stå.
+13. **Hva skal rollen «opptaksforvalter» kunne gjøre?** Notatene sier «får lov å sette plasstildelingslister i liste». Formuleringen er uklar og må skrives om av den som eide den.
 
-Spoersmaal 4–11 er produkteier- og HK-dir-spoersmaal. Spoersmaal 1–3 endrer omfanget. Spoersmaal 12–13 er hull i notatene, ikke i loesningen.
+Spørsmål 4–11 er produkteier- og HK-dir-spørsmål. Spørsmål 1–3 endrer omfanget. Spørsmål 12–13 er hull i notatene, ikke i løsningen.
 
 ---
 
-## Del 3: funksjonell loesning per oppgave
+## Del 3: funksjonell løsning per oppgave
 
 ### Oppgave 1 — runder og oppstart av en plasstildeling
 
 Opptaksrunder opprettes sammen med opptaket og knyttes til ett opptak. Grunnlagsdata er navn og rundetype.
 
-Man bestiller en plasstildeling, og den kjoeres automatisk i bakgrunnen. Den bygger riktig videre paa forrige publiserte runde.
+Man bestiller en plasstildeling, og den kjøres automatisk i bakgrunnen. Den bygger riktig videre på forrige publiserte runde.
 
-**Aapent:** i hvilken grad utledes starten paa en runde fra datoene som er satt i opptaket? Setter man dato for rundene og lar systemet starte tildelingen, eller er det en startknapp noen maa trykke paa? Svaret avgjoer om «start» er en handling eller en tilstand.
+**Åpent:** i hvilken grad utledes starten på en runde fra datoene som er satt i opptaket? Setter man dato for rundene og lar systemet starte tildelingen, eller er det en startknapp noen må trykke på? Svaret avgjør om «start» er en handling eller en tilstand.
 
-**Svakhet:** feiler en plasstildeling, er eneste mulighet aa starte en helt ny. Det finnes ingen maate aa rette opp eller kjoere den samme paa nytt.
+**Svakhet:** feiler en plasstildeling, er eneste mulighet å starte en helt ny. Det finnes ingen måte å rette opp eller kjøre den samme på nytt.
 
 **Issue:** [#108](https://github.com/sikt-no/fs/issues/108) (lukket), [#107](https://github.com/sikt-no/fs/issues/107) (lukket)
 
-### Oppgave 2 — maaltall og plassflyt per kvote
+### Oppgave 2 — antall tilbud som skal gis og plassflyt per utdanningskvote
 
-For hvert utdanningstilbud maa det defineres hvor mange plasser som er ledige i hver kvote i denne plasstildelingen. Saksbehandler ser en liste over utdanningstilbud med kvoter, aksepterte tilbud, gitte tilbud og antall planlagte studieplasser (kapasitet). Tallet settes per kvote; totaltallet vises.
+For hvert utdanningstilbud må det defineres hvor mange tilbud som skal gis i hver utdanningskvote i denne plasstildelingen. Saksbehandler ser en liste over utdanningstilbud med utdanningskvoter, aksepterte tilbud, gitte tilbud og antall planlagte studieplasser (kapasitet). Tallet settes per utdanningskvote; totaltallet vises.
 
-Maaltall per kvote virker. Plassflyt mellom kvoter paa samme studietilbud virker, inkludert flere ledd etter hverandre.
+Antall tilbud som skal gis per utdanningskvote virker. Plassflyt mellom utdanningskvoter på samme studietilbud virker, inkludert flere ledd etter hverandre.
 
-Det som ikke er mulig: en kvote kan bare sende ledige plasser videre til en mottakerkvote, plasser kan ikke flyte mellom ulike studietilbud, og de kan ikke flyte fra en plasstildeling til en senere.
+Det som ikke er mulig: en utdanningskvote kan bare sende ledige plasser videre til én mottakende utdanningskvote, plasser kan ikke flyte mellom ulike studietilbud, og de kan ikke flyte fra én plasstildeling til en senere.
 
-**Begrepsendring:** feltnavnet «overbooking» skal endres. Historisk betydde overbooking at laerestedet ga flere tilbud enn antall studieplasser, som buffer mot frafall. I dagens felt er verdien i praksis rundens absolutte maaltall, ikke et tillegg paa toppen. Dette er avklart — se *Begrepsendringer*.
+**Begrepsendring:** feltnavnet «overbooking» skal endres. Historisk betydde overbooking at lærestedet ga flere tilbud enn antall studieplasser, som buffer mot frafall. I dagens felt er verdien i praksis rundens absolutte antall tilbud som skal gis, ikke et tillegg på toppen. Dette er avklart — se *Begrepsendringer*.
 
-**Utgaatt fra tidligere utkast:** oensket antall ja-svar totalt, med utledet overbookingsrate og forrige aars tilbud er ikke med.
+**Utgått fra tidligere utkast:** ønsket antall ja-svar totalt, med utledet overbookingsrate og forrige års tilbud er ikke med.
 
-### Oppgave 3 — rangering fra soknadsbehandlingen
+### Oppgave 3 — rangering fra søknadsbehandlingen
 
-Hver soker som er kvalifisert til en kvote faar beregnet poengsum og rangering i soknadsbehandlingen, slik at det er tydelig hvem som staar foerst i koeen. Plasstildelingen abonnerer paa endringer i rangeringen og skal kunne beregne paa nytt hvis grunnlaget endres.
+Hver søker som er kvalifisert til en utdanningskvote får beregnet poengsum og rangering i søknadsbehandlingen, slik at det er tydelig hvem som står først i køen. Plasstildelingen abonnerer på endringer i rangeringen og skal kunne beregne på nytt hvis grunnlaget endres.
 
 Selve rangeringen og poengberegningen virker.
 
 To svakheter:
 
-- Systemet fanger ikke opp at en soker har endret soknaden sin mellom runder.
-- En soker som mister kvalifiseringen mellom to runder forsvinner stille fra resultatet i stedet for aa faa et tydelig avslag. Dette bryter prinsipp 1.
+- Systemet fanger ikke opp at en søker har endret søknaden sin mellom runder.
+- En søker som mister kvalifiseringen mellom to runder forsvinner stille fra resultatet i stedet for å få et tydelig avslag. Dette bryter prinsipp 1.
 
 **Issue:** [#71](https://github.com/sikt-no/fs/issues/71) (lukket), [#92](https://github.com/sikt-no/fs/issues/92) (lukket)
 
-### Oppgave 4 — gjennomfoere tildelingen og finne poenggrensen
+### Oppgave 4 — gjennomføre tildelingen og finne poenggrensen
 
-Tildelingen avgjoer hvor mange sokere som faar plass i hver kvote, og hva poenggrensen for aa komme inn ble. Den maa ta hensyn til plassflyt mellom kvoter, og til at noen kvoter kan gi tilbud til alle kvalifiserte uten poenggrense. Tilbudsgarantier tas fra den kvoten laerestedet eller HK-dir har markert.
+Tildelingen avgjør hvor mange søkere som får plass i hver utdanningskvote, og hva poenggrensen for å komme inn ble. Den må ta hensyn til plassflyt mellom utdanningskvoter, og til at noen utdanningskvoter kan gi tilbud til alle kvalifiserte uten poenggrense. Tilbudsgarantier tas fra den utdanningskvoten lærestedet eller HK-dir har markert.
 
-Sokeren proeves i kvotene etter kvoteprioritet — normalt den mest spesielle kvoten foerst, den minst spesielle sist.
+Søkeren prøves i utdanningskvotene etter kvoteprioritet — normalt den mest spesielle utdanningskvoten først, den minst spesielle sist.
 
-Selve tildelingen virker, inkludert kvoter uten poenggrense.
+Selve tildelingen virker, inkludert utdanningskvoter uten poenggrense.
 
-**Poenggrensen per kvote beregnes og lagres aldri**, selv om det finnes en plass aa vise den. Fjoraarets medianverdi, som er viktig for hvem som faar tidlig tilbud, settes i forbindelse med saksbehandlingen og er en annen kilde.
+**Poenggrensen per utdanningskvote beregnes og lagres aldri**, selv om det finnes en plass å vise den. Fjorårets medianverdi, som er viktig for hvem som får tidlig tilbud, settes i forbindelse med søknadsbehandlingen og er en annen kilde.
 
-**Aapne spoersmaal:** se del 2, punkt 10 (flere poengsummer i samme kvotetype) og punkt 7 (delte ventelistenumre).
+**Åpne spørsmål:** se del 2, punkt 10 (flere poengsummer i samme kvotetype) og punkt 7 (delte ventelistenumre).
 
 ### Oppgave 5 — vise resultatet til saksbehandler
 
-Hver soker skal ha ett tydelig svar per soknad: tilbud, venteliste med nummer, eller avslag. Fikk sokeren plass gjennom plassflyt fra en annen kvote, skal det kunne spores i etterkant, for eksempel ved klage.
+Hver søker skal ha ett tydelig svar per søknad: tilbud, venteliste med nummer, eller avslag. Fikk søkeren plass gjennom plassflyt fra en annen utdanningskvote, skal det kunne spores i etterkant, for eksempel ved klage.
 
-Begge deler virker. **Ventelistenummeret naar aldri fram til sokeren**, selv om innstillingen for aa vise det finnes.
+Begge deler virker. **Ventelistenummeret når aldri fram til søkeren**, selv om innstillingen for å vise det finnes.
 
 **Issue:** [#109](https://github.com/sikt-no/fs/issues/109) (lukket)
 
-### Oppgave 6 — publisere resultatet til soekerne
+### Oppgave 6 — publisere resultatet til søkerne
 
-Soekerne skal se resultatet sitt i Min kompetanse paa et bestemt, kontrollert tidspunkt. Det maa vaere mulig aa beregne tildelingen foer den gjoeres synlig, og aa velge aa ikke publisere den i det hele tatt (proevetildeling).
+Søkerne skal se resultatet sitt i Min kompetanse på et bestemt, kontrollert tidspunkt. Det må være mulig å beregne tildelingen før den gjøres synlig, og å velge å ikke publisere den i det hele tatt (prøvetildeling).
 
-Publisering virker og gir kontroll over naar sokeren ser resultatet. Ubegrensede proeveopptakk paa alle rundetyper er dermed godt loest, fordi beregning og publisering er separate steg — nettopp slik laerestedene har bedt om.
+Publisering virker og gir kontroll over når søkeren ser resultatet. Ubegrensede prøveopptak på alle rundetyper er dermed godt løst, fordi beregning og publisering er separate steg — nettopp slik lærestedene har bedt om.
 
-Sokeren skal se tilbud, avslag eller venteliste, og vedtaket med begrunnelse: kvalifisering, rangering, poenggrense. Hullet er ventelistenummeret fra oppgave 5.
+Søkeren skal se tilbud, avslag eller venteliste, og vedtaket med begrunnelse: kvalifisering, rangering, poenggrense. Hullet er ventelistenummeret fra oppgave 5.
 
 **Issue:** [#111](https://github.com/sikt-no/fs/issues/111), [#72](https://github.com/sikt-no/fs/issues/72), [#221](https://github.com/sikt-no/fs/issues/221)
 
-### Oppgave 7 — haandtere svar fra soker
+### Oppgave 7 — håndtere svar fra søker
 
-Sokeren skal kunne akseptere eller avslaa tilbudet, eller staa paa venteliste, innenfor en svarfrist. Svarene skal kunne utloese en etterfylling som bygger videre paa forrige plasstildeling.
+Søkeren skal kunne akseptere eller avslå tilbudet, eller stå på venteliste, innenfor en svarfrist. Svarene skal kunne utløse en etterfylling som bygger videre på forrige plasstildeling.
 
-Grunnfunksjonen virker: sokeren kan takke ja eller nei, og forrige rundes tilbud beholdes automatisk til neste runde.
+Grunnfunksjonen virker: søkeren kan takke ja eller nei, og forrige rundes tilbud beholdes automatisk til neste runde.
 
-Fire sider er verdt en faglig diskusjon, og alle fire staar som avklaringspunkter i del 2:
+Fire sider er verdt en faglig diskusjon, og alle fire står som avklaringspunkter i del 2:
 
-- Et nei-svar frigjoer ikke plassen foer svarfristen er ute. Blir plassen staaende reservert for lenge?
-- En soker som godtar og senere trekker seg, frigjoer aldri plassen igjen.
-- Naar en soker har baade et tilbud og et kansellert resultat paa samme studietilbud — hva skal vises?
-- Det finnes ingen mulighet for saksbehandler aa overstyre et enkelt resultat manuelt. Alt krever full omkjoering.
+- Et nei-svar frigjør ikke plassen før svarfristen er ute. Blir plassen stående reservert for lenge?
+- En søker som godtar og senere trekker seg, frigjør aldri plassen igjen.
+- Når en søker har både et tilbud og et kansellert resultat på samme studietilbud — hva skal vises?
+- Det finnes ingen mulighet for saksbehandler å overstyre et enkelt resultat manuelt. Alt krever full omkjøring.
 
 **Issue:** [#170](https://github.com/sikt-no/fs/issues/170), [#264](https://github.com/sikt-no/fs/issues/264), [#512](https://github.com/sikt-no/fs/issues/512)
 
 ### Oppgave 8 — kompensere automatisk for frafall rett etter hovedopptaket
 
-Stroeket fra scope i raffineringen. Systemet skulle automatisk gi nye tilbud fra venteliste naar noen faller fra, og fylle paa opp mot grensen for antall tilbud, uten manuell overvaaking. Nivaaet skulle kunne justeres opp eller ned, inkludert aa aktivt dempe tilstroemningen dersom laerestedet har faatt for mange ja-svar.
+Strøket fra scope i raffineringen. Systemet skulle automatisk gi nye tilbud fra venteliste når noen faller fra, og fylle på opp mot grensen for antall tilbud som skal gis, uten manuell overvåking. Nivået skulle kunne justeres opp eller ned, inkludert å aktivt dempe tilstrømningen dersom lærestedet har fått for mange ja-svar.
 
-Men behovet staar igjen som sannsynlig mangel mot HK-dirs meldte behov: laerestedene har bedt om en mekanisme som raskt kompenserer for sokere som takker nei fordi de fikk tilbud hoeyere opp, uten aa vente paa neste runde. I dagens loesning fryses og garanteres forrige rundes tilbud i alle runder med arv, og det er etterfyllings-oppfoersel, ikke supplerings-oppfoersel.
+Men behovet står igjen som sannsynlig mangel mot HK-dirs meldte behov: lærestedene har bedt om en mekanisme som raskt kompenserer for søkere som takker nei fordi de fikk tilbud høyere opp, uten å vente på neste runde. I dagens løsning fryses og garanteres forrige rundes tilbud i alle runder med arv, og det er etterfyllings-oppførsel, ikke supplerings-oppførsel.
 
-Enten er oppgaven ute av scope og boer ut av mangel-listen, eller den er en mangel og hoerer i veikartet. Se avklaringspunkt 3.
+Enten er oppgaven ute av scope og bør ut av mangel-listen, eller den er en mangel og hører i veikartet. Se avklaringspunkt 3.
 
 ---
 
@@ -342,14 +343,14 @@ Seks mistenkte feil er identifisert, og de er ikke bevisste valg:
 
 | Feil | Konsekvens | Issue |
 |------|------------|-------|
-| Bortfall beregnes mot feil tilbud naar en soker har flere tilbud samtidig | Sokeren kan miste et studieonske hun skulle beholdt | |
-| Ventelistenumre kan kollidere mellom runder | To sokere kan ha samme nummer, eller samme soker ulike | |
-| Fristsjekk bruker applikasjonsklokke i stedet for databaseklokke | Fristsjekken kan vaere upaalitelig ved klokkedrift | |
-| Historiske resultater leses tilbake med feil resultattype (kollaps til IKKE_GYLDIG) | Soker som mistet kvalifisering forsvinner stille — bryter prinsipp 1 | |
-| Harde tallgrenser (9999/99) feller hele kjoeringen | En plasstildeling med for mange sokere krasjer | |
-| Sokers svar knyttes til runde paa loepenummer alene, uten rundetype | Svar kan havne paa feil runde naar det finnes flere rundetyper | |
+| Bortfall beregnes mot feil tilbud når en søker har flere tilbud samtidig | Søkeren kan miste et studieønske hun skulle beholdt | |
+| Ventelistenumre kan kollidere mellom runder | To søkere kan ha samme nummer, eller samme søker ulike | |
+| Fristsjekk bruker applikasjonsklokke i stedet for databaseklokke | Fristsjekken kan være upålitelig ved klokkedrift | |
+| Historiske resultater leses tilbake med feil resultattype (kollaps til IKKE_GYLDIG) | Søker som mistet kvalifisering forsvinner stille — bryter prinsipp 1 | |
+| Harde tallgrenser (9999/99) feller hele kjøringen | En plasstildeling med for mange søkere krasjer | |
+| Søkers svar knyttes til runde på løpenummer alene, uten rundetype | Svar kan havne på feil runde når det finnes flere rundetyper | |
 
-Vaar paastand: disse hoerer ikke i «Hva vi trenger avklart» — de er issues, og boer registreres som det. Aa behandle en feil som et aapent spoersmaal gjoer at den venter paa et moete i stedet for paa en rettelse.
+Vår påstand: disse hører ikke i «Hva vi trenger avklart» — de er issues, og bør registreres som det. Å behandle en feil som et åpent spørsmål gjør at den venter på et møte i stedet for på en rettelse.
 
 ---
 
@@ -357,133 +358,133 @@ Vaar paastand: disse hoerer ikke i «Hva vi trenger avklart» — de er issues, 
 
 | Gammelt begrep | Nytt begrep | Begrunnelse |
 |----------------|-------------|-------------|
-| Opptakskjoering | Plasstildeling | Ikke lenger offisielt begrep |
+| Opptakskjøring | Plasstildeling | Ikke lenger offisielt begrep |
 | Kvoteflyt | Plassflyt | Det er plassene som flyter, ikke kvoten |
-| Overbooking | Maaltall for runden | Verdien er rundens absolutte maaltall, ikke en buffer paa toppen — se oppgave 2 |
+| Overbooking | Antall tilbud som skal gis | Verdien er rundens absolutte antall tilbud, ikke en buffer på toppen — se oppgave 2 |
 
 ---
 
 ## Begrepsforklaringer
 
-**Plasstildeling** — beregningen som avgjoer hvem som faar plass, staar paa venteliste, eller faar avslag, gjennomfoert for en runde i et opptak. Tidligere term: opptakskjoering, ikke lenger offisielt begrep.
+**Plasstildeling** — beregningen som avgjør hvem som får plass, står på venteliste, eller får avslag, gjennomført for én runde i et opptak. Tidligere term: opptakskjøring, ikke lenger offisielt begrep.
 
-**Runde i plasstildelingen** — et definert vindu i et opptak der plasser fordeles og sokere faar svar. Ett opptak kan ha flere runder, f.eks. hovedrunde og etterfyllingsrunde. Historisk styrte rundetypen hvilke regler som gjaldt. I dagens loesning er det ikke rundetypen, men om runden bygger videre paa en tidligere publisert runde, som avgjoer oppfoerselen.
+**Runde i plasstildelingen** — et definert vindu i et opptak der plasser fordeles og søkere får svar. Ett opptak kan ha flere runder, f.eks. hovedrunde og etterfyllingsrunde. Historisk styrte rundetypen hvilke regler som gjaldt. I dagens løsning er det ikke rundetypen, men om runden bygger videre på en tidligere publisert runde, som avgjør oppførselen.
 
-**Utdanningskvote** — en koeordning. Kvalifiserte sokere plasseres i minst en kvote ut fra et regelverk (lov, forskrift eller studieplan), og faar plass i koeen etter poengsum i den aktuelle kvoten. Eksempler: foerstegangsvitnemaal, nordnorsk. Paa kvoten angis hvor mange plasser den har til disposisjon i denne konkrete plasstildelingen paa konkrete utdanningstilbud, og hvilken metode som brukes for aa fylle dem.
+**Utdanningskvote** — en køordning. Kvalifiserte søkere plasseres i minst én utdanningskvote ut fra et regelverk (lov, forskrift eller studieplan), og får plass i køen etter poengsum i den aktuelle utdanningskvoten. Eksempler: førstegangsvitnemål, nordnorsk. På utdanningskvoten angis hvor mange tilbud som skal gis i denne konkrete plasstildelingen på konkrete utdanningstilbud, og hvilken metode som brukes for å fylle dem. Kvotetyper settes i opptaket; utdanningskvote er kvotetypen anvendt på et utdanningstilbud.
 
-**Kvoteprioritet** — rekkefoelgen en soker proeves i de ulike kvotene et studietilbud har. Normalt proeves den mest spesielle kvoten foerst og den minst spesielle sist.
+**Kvoteprioritet** — rekkefølgen en søker prøves i de ulike utdanningskvotene et studietilbud har. Normalt prøves den mest spesielle utdanningskvoten først og den minst spesielle sist.
 
-**Plassflyt** — innstilling som utloeses naar det er oensket flere tilbud i en kvote enn det er kvalifiserte sokere i kvoten. Plassflyt angir hvilken en annen kvote de overskytende plassene overfores til, innenfor samme studietilbud. Flyten kan gaa i flere ledd etter hverandre, og kan endres ved behov. Minst en kvote er sistekvote og kan ikke sende plasser videre, typisk ordinaer kvote. Tidligere term: kvoteflyt.
+**Plassflyt** — innstilling som utløses når det er ønsket flere tilbud i en utdanningskvote enn det er kvalifiserte søkere i utdanningskvoten. Plassflyt angir hvilken én annen utdanningskvote de overskytende plassene overføres til, innenfor samme studietilbud. Flyten kan gå i flere ledd etter hverandre, og kan endres ved behov. Minst én utdanningskvote er siste utdanningskvote og kan ikke sende plasser videre, typisk ordinær kvote. Tidligere term: kvoteflyt.
 
-**Arv fra forrige runde** — at en plasstildeling bygger videre paa forrige publiserte runde: tidligere tilbud fryses og garanteres, og det settes ikke nye bortfall. Dette er noe annet enn plassflyt, som gjelder mellom kvoter i samme tildeling.
+**Arv fra forrige runde** — at en plasstildeling bygger videre på forrige publiserte runde: tidligere tilbud fryses og garanteres, og det settes ikke nye bortfall. Dette er noe annet enn plassflyt, som gjelder mellom utdanningskvoter i samme tildeling.
 
-**Maaltall for runden** — hvor mange tilbud som skal gis i en kvote i denne plasstildelingen. Settes per kvote; totaltall vises. Tidligere feltnavn: overbooking.
+**Antall tilbud som skal gis** — hvor mange tilbud som skal gis i en utdanningskvote i denne plasstildelingen. Settes per utdanningskvote; totaltall vises. Tidligere feltnavn: overbooking.
 
-**Poenggrense** — den laveste poengsummen som gav plass i en gitt kvote. Brukes til aa informere sokere om hvor «hoeytt» det var aa komme inn.
+**Poenggrense** — den laveste poengsummen som gav plass i en gitt utdanningskvote. Brukes til å informere søkere om hvor «høyt» det var å komme inn.
 
-**Poenglikhetsregel** — hvordan sokere med lik poengsum behandles. Eldste soker foerst er forskriftsfestet i det ordinaere tilfellet; «alle med samme poengsum faar tilbud» kan settes som unntak per utdanningstilbud; loddtrekning og tidligste soknadstidspunkt finnes som regler.
+**Poenglikhetsregel** — hvordan søkere med lik poengsum behandles. Eldste søker først er forskriftsfestet i det ordinære tilfellet; «alle med samme poengsum får tilbud» kan settes som unntak per utdanningstilbud; loddtrekning og tidligste søknadstidspunkt finnes som regler.
 
-**Tilbud til alle kvalifiserte** — en kvote kan settes opp uten poenggrense, slik at alle kvalifiserte faar plass uansett poengsum. Typisk ved lav soekning.
+**Tilbud til alle kvalifiserte** — en utdanningskvote kan settes opp uten poenggrense, slik at alle kvalifiserte får plass uansett poengsum. Typisk ved lav søkning.
 
-**Tilbudsgaranti** — en kode paa en soknad som gir tilbud om studieplass uavhengig av poengsum og kvalifiseringsstatus. Brukes til aa rette opp feil, gi tilbud til spesielle sokergrupper, gi tilsagn i et tidligopptak, eller til sokere med reservert plass. Per studium settes om garantier skal tas fra en bestemt kvote, og hvilken.
+**Tilbudsgaranti** — en kode på en søknad som gir tilbud om studieplass uavhengig av poengsum og kvalifiseringsstatus. Brukes til å rette opp feil, gi tilbud til spesielle søkergrupper, gi tilsagn i et tidligopptak, eller til søkere med reservert plass. Per studium settes om garantier skal tas fra en bestemt utdanningskvote, og hvilken.
 
-**Svar** — resultatet sokeren faar per soknad: tilbud om plass, plass paa venteliste med ventelistenummer, eller avslag.
+**Svar** — resultatet søkeren får per søknad: tilbud om plass, plass på venteliste med ventelistenummer, eller avslag.
 
-**Etterfylling** — en ny runde som fyller opp plasser som ble ledige etter at sokere svarte nei eller ikke svarte i tide. Kjennetegnet ved at sokeren ikke mister et tilbud automatisk ved nytt tilbud fra venteliste, og at det ikke settes nye bortfall paa lavere prioriterte studieoensker — fordi sokeren paa dette stadiet skal kunne stole paa tilbudet sitt.
+**Etterfylling** — en ny runde som fyller opp plasser som ble ledige etter at søkere svarte nei eller ikke svarte i tide. Kjennetegnet ved at søkeren ikke mister et tilbud automatisk ved nytt tilbud fra venteliste, og at det ikke settes nye bortfall på lavere prioriterte studieønsker — fordi søkeren på dette stadiet skal kunne stole på tilbudet sitt.
 
-**Supplering** — aa gi nye tilbud raskt for aa kompensere for frafall, uten aa vente paa neste runde. Ikke det samme som etterfylling. Se avklaringspunkt 2.
+**Supplering** — å gi nye tilbud raskt for å kompensere for frafall, uten å vente på neste runde. Ikke det samme som etterfylling. Se avklaringspunkt 2.
 
-**Roller** — opptaksleder starter runder og setter innstillinger. Saksbehandler kvalitetssikrer resultatet. Opptaksforvalter: rollebeskrivelsen i notatene er uklar og maa skrives om.
+**Roller** — opptaksleder starter runder og setter innstillinger. Saksbehandler kvalitetssikrer resultatet. Opptaksforvalter: rollebeskrivelsen i notatene er uklar og må skrives om.
 
 ---
 
 ## Oppgavenummerering
 
-Oppgavene er omstrukturert siden forrige runde. Kravnumrene foelger etter:
+Oppgavene er omstrukturert siden forrige runde. Kravnumrene følger etter:
 
-| Ny | Oppgave | Var foer |
-|----|---------|----------|
+| Ny | Oppgave | Var før |
+|----|---------|---------|
 | 1 | Legge til runder for plasstildeling i ett opptak | 1 |
-| 2 | Sette plasstildelingsinnstillinger (antall tilbud per utdanningskvote) | 2 (delt) |
+| 2 | Sette antall tilbud som skal gis per utdanningskvote | 2 (delt) |
 | 3 | Sette plassflyt mellom utdanningskvoter | 2 (delt) |
 | 4 | Starte en ny plasstildeling | 1b |
-| 5 | Gjennomfoere plasstildeling | 3 + 4 |
+| 5 | Gjennomføre plasstildeling | 3 + 4 |
 | 6 | Vise resultatet til saksbehandler | 5 |
-| 7 | Publisere resultatet til soekerne | 6 |
-| 8 | Haandtere svar fra soker | 7 |
+| 7 | Publisere resultatet til søkerne | 6 |
+| 8 | Håndtere svar fra søker | 7 |
 
 ---
 
 ## Gap-analyse per oppgave
 
-Evidensnivaa: **M** = verifisert i datamodellen, **S** = dokumentert i en sak, **V** = verifisert i koden
+Evidensnivå: **M** = verifisert i datamodellen, **S** = dokumentert i en sak, **V** = verifisert i koden
 
 ### Oppgave 1 — Legge til runder
 
 | Krav | Funn | Gap | Ev. |
 |------|------|-----|-----|
-| Navn paa runde | `opptak.opptaksrunde.navn` NOT NULL | Ingen | M |
-| Svarfrist for soker | `opptaksrunde.svarfrist` NOT NULL | Ingen | M |
-| Dato for naar plasstildelingen skal skje | **Ingen kolonne** | Feltet finnes ikke i modellen | M |
+| Navn på runde | `opptak.opptaksrunde.navn` NOT NULL | Ingen | M |
+| Svarfrist for søker | `opptaksrunde.svarfrist` NOT NULL | Ingen | M |
+| Dato for når plasstildelingen skal skje | **Ingen kolonne** | Feltet finnes ikke i modellen | M |
 | Rundetype (hoved/tillegg/supplerende) | `opptaksrundetype_kode` | Se strukturfunn under | M |
 | Publiseringstidspunkt | `opptaksrunde.publiseringstidspunkt` (nullable) | Automatisk publisering avgrenset bort | M |
-| Periode for aa endre parametere | `opptaksrunde.periode_endre_opptaksparametere` (tstzrange) | Finnes i modellen, ikke i krav | M |
+| Periode for å endre parametere | `opptaksrunde.periode_endre_opptaksparametere` (tstzrange) | Finnes i modellen, ikke i krav | M |
 
-**Strukturfunn:** `opptaksrundetype_kode` er del av **primaernoekkelen** til `opptak.opptaksrunde` og foelger med i hver fremmednoekkel ut derfra. En runde kan ikke bytte type etter oppretting, og loepenummer er unikt per rundetype, ikke per opptak.
+**Strukturfunn:** `opptaksrundetype_kode` er del av **primærnøkkelen** til `opptak.opptaksrunde` og følger med i hver fremmednøkkel ut derfra. En runde kan ikke bytte type etter oppretting, og løpenummer er unikt per rundetype, ikke per opptak.
 
 ### Oppgave 2 — Antall tilbud som skal gis
 
 Fire tall i fire tabeller:
 
-| Tabell | Kolonne | Nivaa | Brukes av algoritmen | Ev. |
-|--------|---------|-------|---------------------|-----|
+| Tabell | Kolonne | Nivå | Brukes av algoritmen | Ev. |
+|--------|---------|------|---------------------|-----|
 | `opptak.utdanningstilbud` | `antall_studieplasser` | Per utdanningstilbud (kapasitet) | Nei — kun visning | M+V |
-| `opptak.kvote` | `onsket_antall_deltakere` | Per kvote, per opptak | **Fallback** naar overbook mangler | M+V |
-| `opptak.opptaksparametere` | `overbook_antall_plasser` | Per kvote **per runde** | **Ja — dette er maaltallet** | M+V |
-| `plasstildeling.studiekvote` | `onsket_antall_tilbud` NOT NULL | Per kvote **per plasstildeling** | Nei — kun visning/snapshot | M+V |
+| `opptak.kvote` | `onsket_antall_deltakere` | Per kvotetype, per opptak | **Fallback** når overbook mangler | M+V |
+| `opptak.opptaksparametere` | `overbook_antall_plasser` | Per utdanningskvote **per runde** | **Ja — dette er antall tilbud som skal gis** | M+V |
+| `plasstildeling.studiekvote` | `onsket_antall_tilbud` NOT NULL | Per utdanningskvote **per plasstildeling** | Nei — kun visning/snapshot | M+V |
 
-**Verifisert i koden:** `KvoterService:98-104` er eksplisitt: `overbook_antall_plasser` er maaltallet, med fallback til `onsket_antall_deltakere`. Begrepet «overbook» er misvisende — kolonnen er det faktiske antall tilbud som skal gis, ikke et tillegg.
+**Verifisert i koden:** `KvoterService:98-104` er eksplisitt: `overbook_antall_plasser` er antall tilbud som skal gis, med fallback til `onsket_antall_deltakere`. Begrepet «overbook» er misvisende — kolonnen er det faktiske antallet tilbud som skal gis, ikke et tillegg.
 
 ### Oppgave 3 — Plassflyt
 
 | Krav | Funn | Ev. |
 |------|------|-----|
-| Flyt til en mottakerkvote | `studiekvote` har **ett** sett flyt-kolonner — bekreftet, en mottaker | M |
+| Flyt til én mottakende utdanningskvote | `studiekvote` har **ett** sett flyt-kolonner — bekreftet, én mottaker | M |
 | Kan ikke krysse utdanningstilbud | Flyt-FK-en gjenbruker kildens org/utdanning/periode — strukturelt umulig | M |
-| Flyt fra en tidligere plasstildeling | Modellen kan peke paa en annen runde/tildeling, men **koden bruker det ikke** | M+V |
-| Plassflyt opererer innenfor en tildeling | `Opptakskjoringsalgoritme` bygger flytkart og omfordeler innenfor en kjoering | V |
-| Mellom runder: `basert_pa`-kjeden | Resultater viderefores via `basert_pa`, ikke plassflyt | V |
-| Plassflyt kan endres per tildeling | Tre nivaaer: `regelverk.kvotetype` -> `opptak.kvote` -> `studiekvote` | M |
-| Sistekvote (stopper flyten) | NULL i flyt-kolonnene | M |
-| Sirkulaeritetsvern i koden | `findPaafyllingsStudiekvoter` og `finnKvoterSomFlyterTil` bruker visited-sett, logger `warnf("Cycle detected...")` | V |
-| Sirkulaeritetsvern i skjemaet | **Ingen CHECK-constraint eller trigger** | V |
-| Test for sirkularitet | `testCircularPlassflytDoesNotHang` bekrefter at algoritmen haandterer sykler | V |
+| Flyt fra en tidligere plasstildeling | Modellen kan peke på en annen runde/tildeling, men **koden bruker det ikke** | M+V |
+| Plassflyt opererer innenfor én tildeling | `Opptakskjoringsalgoritme` bygger flytkart og omfordeler innenfor én kjøring | V |
+| Mellom runder: `basert_pa`-kjeden | Resultater videreføres via `basert_pa`, ikke plassflyt | V |
+| Plassflyt kan endres per tildeling | Tre nivåer: `regelverk.kvotetype` → `opptak.kvote` → `studiekvote` | M |
+| Siste utdanningskvote (stopper flyten) | NULL i flyt-kolonnene | M |
+| Sirkularitetsvern i koden | `findPaafyllingsStudiekvoter` og `finnKvoterSomFlyterTil` bruker visited-sett, logger `warnf("Cycle detected...")` | V |
+| Sirkularitetsvern i skjemaet | **Ingen CHECK-constraint eller trigger** | V |
+| Test for sirkularitet | `testCircularPlassflytDoesNotHang` bekrefter at algoritmen håndterer sykler | V |
 
-Plassflyt opererer kun innenfor en plasstildeling. Kryss-tildeling-kolonnene i modellen brukes ikke av koden. Sirkularitetsvernet finnes i koden men ikke i databasen.
+Plassflyt opererer kun innenfor én plasstildeling. Kryss-tildeling-kolonnene i modellen brukes ikke av koden. Sirkularitetsvernet finnes i koden men ikke i databasen.
 
 ### Oppgave 4 — Starte en ny plasstildeling
 
 | Krav | Funn | Ev. |
 |------|------|-----|
-| Bygge paa forrige publiserte tildeling | `plasstildeling.*_basert_pa` — `OpprettPlasstildelingService` finner grunnlaget automatisk | M+V |
-| Kjoerer automatisk i bakgrunnen | `plasstildelingsstatus` med default `'KLAR'`, egen kodetabell | M |
+| Bygge på forrige publiserte tildeling | `plasstildeling.*_basert_pa` — `OpprettPlasstildelingService` finner grunnlaget automatisk | M+V |
+| Kjører automatisk i bakgrunnen | `plasstildelingsstatus` med default `'KLAR'`, egen kodetabell | M |
 | Beregning skilt fra publisering | `plasstildeling.publiseres` (boolean) | M |
-| Kjoere om / avbryte en feilet tildeling | Aktivt avvist som beslutning | S |
+| Kjøre om / avbryte en feilet tildeling | Aktivt avvist som beslutning | S |
 | Se at en tildeling feilet | Ikke eksponert i GraphQL | S |
 
-### Oppgave 5 — Gjennomfoere plasstildeling
+### Oppgave 5 — Gjennomføre plasstildeling
 
 | Krav | Funn | Gap | Ev. |
 |------|------|-----|-----|
-| Poenggrense per kvote lagres | `plasstildeling.poenggrense` tabell finnes | **Tabellen populeres ikke av koden.** Tre skriveoperasjoner (studiekvoter, kvotesoknader, resultater) — ingen for poenggrense | M+V |
-| Poenggrense vist til soker er riktig | Kjent feil, men tabellen er tom uansett | S+V |
-| Rangering hentes fra soknadsbehandlingen | `kvotesoknad` med `rangering`, `poengsum`, `prioritet`, `har_tilbudsgaranti`, `svartype_kode` | Ingen | M |
-| Endret soknad fanges opp mellom runder | Aapen avklaring | S |
-| Soker som mister kvalifisering faar avslag | Les/skriv-asymmetri i resultattype | S |
-| Tilbudsgaranti fra markert kvote | `opptak.tilbudsgaranti_kvote` | Ingen | M |
-| Kvoteprioritet | Tre nivaaer: `kvotetype` -> `kvote` -> `studiekvote` | Ingen | M |
-| Poenglikhetsregel koblet til opptaket | Regelen haenger paa **kvotetype**, ikke opptak | M |
-| Fire poenglikhetsregler | To av fire ser ut til aa vaere dekket | S |
+| Poenggrense per utdanningskvote lagres | `plasstildeling.poenggrense` tabell finnes | **Tabellen populeres ikke av koden.** Tre skriveoperasjoner (studiekvoter, kvotesøknader, resultater) — ingen for poenggrense | M+V |
+| Poenggrense vist til søker er riktig | Kjent feil, men tabellen er tom uansett | S+V |
+| Rangering hentes fra søknadsbehandlingen | `kvotesoknad` med `rangering`, `poengsum`, `prioritet`, `har_tilbudsgaranti`, `svartype_kode` | Ingen | M |
+| Endret søknad fanges opp mellom runder | Åpen avklaring | S |
+| Søker som mister kvalifisering får avslag | Les/skriv-asymmetri i resultattype | S |
+| Tilbudsgaranti fra markert utdanningskvote | `opptak.tilbudsgaranti_kvote` | Ingen | M |
+| Kvoteprioritet | Tre nivåer: `kvotetype` → `kvote` → `studiekvote` | Ingen | M |
+| Poenglikhetsregel koblet til opptaket | Regelen henger på **kvotetype**, ikke opptak | M |
+| Fire poenglikhetsregler | To av fire ser ut til å være dekket | S |
 
 Poenggrense-beregning er designet i skjemaet men **ikke implementert**. Hele tabellen er tom. Dette er en ny feature, ikke en feilretting.
 
@@ -494,28 +495,28 @@ Poenggrense-beregning er designet i skjemaet men **ikke implementert**. Hele tab
 | Tilbud / venteliste med nummer / avslag | `plasstildelingsresultat` med `svartype_kode`, `ventelistenummer`, `plasstildelingsresultat_type_kode` | M |
 | Spore plass via plassflyt | `plasstildelingsresultat.plass_fra_kvotetype_kode` med FK | M |
 | Ventelistenummer er entydig | **Ingen unikhetsskranke** | M |
-| Vis ventelistenummer til soker | `utdanningstilbud.vis_ventelistenummer_for_soker` (default false) | M |
-| Vis poenggrense til soker | `utdanningstilbud.vis_poenggrense_for_soker` (default false) | M |
+| Vis ventelistenummer til søker | `utdanningstilbud.vis_ventelistenummer_for_soker` (default false) | M |
+| Vis poenggrense til søker | `utdanningstilbud.vis_poenggrense_for_soker` (default false) | M |
 
-Resultatet finnes **to steder**: per tildeling i `plasstildeling.plasstildelingsresultat` og denormalisert paa `soknad.soknadsalternativ`. Mulig kilde til inkonsistens.
+Resultatet finnes **to steder**: per tildeling i `plasstildeling.plasstildelingsresultat` og denormalisert på `soknad.soknadsalternativ`. Mulig kilde til inkonsistens.
 
 ### Oppgave 7 — Publisere resultatet
 
 | Krav | Funn | Ev. |
 |------|------|-----|
 | Kontroll over publiseringstidspunkt | `plasstildeling.publiseres` + `opptaksrunde.publiseringstidspunkt` | M |
-| Vedtak med begrunnelse | Haenger paa poenggrense-gapet — tabellen er tom | M+V |
-| Melding om vedtak til soker | `soknad.sokermelding` med FK til `kommunikasjon.melding` og `opptaksrunde` — roeret finnes | M |
-| Arv av svartype ved publisering | Aapen avklaring | S |
+| Vedtak med begrunnelse | Henger på poenggrense-gapet — tabellen er tom | M+V |
+| Melding om vedtak til søker | `soknad.sokermelding` med FK til `kommunikasjon.melding` og `opptaksrunde` — røret finnes | M |
+| Arv av svartype ved publisering | Åpen avklaring | S |
 
-### Oppgave 8 — Haandtere svar fra soker
+### Oppgave 8 — Håndtere svar fra søker
 
 | Krav | Funn | Ev. |
 |------|------|-----|
-| Soker svarer ja/nei innen frist | `soknad.opptakssvar` per soker, alternativ og runde | M |
+| Søker svarer ja/nei innen frist | `soknad.opptakssvar` per søker, alternativ og runde | M |
 | Svar knyttes til riktig runde | PK uten `opptaksrundetype_kode` — rettet i skjema, ikke i kode | M+S |
 | Fristsjekk | Bruker applikasjonsklokke i stedet for databaseklokke | S |
-| Trukket ja frigjoer plassen | **Ingen kolonne** for trekk/frigjoering i `opptakssvar` | M |
+| Trukket ja frigjør plassen | **Ingen kolonne** for trekk/frigjøring i `opptakssvar` | M |
 | Manuell overstyring | `soknadsalternativ` har skrivbare resultattype-kolonner + `skal_spesialbehandles` | M |
 
 ---
@@ -526,21 +527,21 @@ Verifisert i `fs-plattform/opptak`:
 
 | Tjeneste | Ansvar |
 |----------|--------|
-| `KvoterService` | Leser kvotekonfigurasjon (kapasitet, prioritet, plassflytmaal). Maaltall: `overbook_antall_plasser` med fallback til `onsket_antall_deltakere` |
-| `KvotesumService` | Beregner beste poengscore per soker per kvotetype — input-forberedelse |
+| `KvoterService` | Leser utdanningskvotekonfigurasjon (kapasitet, prioritet, plassflytmål). Antall tilbud som skal gis: `overbook_antall_plasser` med fallback til `onsket_antall_deltakere` |
+| `KvotesumService` | Beregner beste poengscore per søker per kvotetype — input-forberedelse |
 | `OpprettPlasstildelingService` | Oppretter ny plasstildeling-rad med status KLAR, finner `basert_pa`-grunnlaget automatisk |
-| `Opptakskjoringsalgoritme` | Selve tildelingsalgoritmen. Bygger flytkart, omfordeler plasser innenfor en kjoering |
-| `PlasstildelingSkriveService` | Tre skriveoperasjoner: studiekvoter, kvotesoknader, resultater. **Ikke** poenggrense |
+| `Opptakskjoringsalgoritme` | Selve tildelingsalgoritmen. Bygger flytkart, omfordeler plasser innenfor én kjøring |
+| `PlasstildelingSkriveService` | Tre skriveoperasjoner: studiekvoter, kvotesøknader, resultater. **Ikke** poenggrense |
 
 ---
 
-## Arbeid som maa gjoeres
+## Arbeid som må gjøres
 
-1. Prosessbeskrivelse for plasstildeling paa fs.sikt.no. Plasstildeling har ingen egen side i dag; den vises kun som enkeltoppgaven «tildel plass» i opptaksprosessen. Diagrammet og oppgaveinndelingen i dette dokumentet er utgangspunktet.
-2. Eksempler per oppgave. En Gherkin-feature per oppgave, slik at hver oppgave har konkrete eksempler paa hva som skal kunne utfoeres. `krav/02 Opptak/14 Plasstildeling/` er ledig og foelger nummereringen etter 13 Soknadsbehandling.
-3. Oppdatere begrepene paa fs.sikt.no etter tabellen over og begrepslisten under.
+1. Prosessbeskrivelse for plasstildeling på fs.sikt.no. Plasstildeling har ingen egen side i dag; den vises kun som enkeltoppgaven «tildel plass» i opptaksprosessen. Diagrammet og oppgaveinndelingen i dette dokumentet er utgangspunktet.
+2. Eksempler per oppgave. Én Gherkin-feature per oppgave, slik at hver oppgave har konkrete eksempler på hva som skal kunne utføres. `krav/02 Opptak/14 Plasstildeling/` er ledig og følger nummereringen etter 13 Søknadsbehandling.
+3. Oppdatere begrepene på fs.sikt.no etter tabellen over og begrepslisten under.
 4. Registrere de seks mistenkte feilene som issues.
-5. Verifisere negative opptaksparametere mot dagens loesning.
+5. Verifisere negative opptaksparametere mot dagens løsning.
 6. Skrive om rollebeskrivelsen for opptaksforvalter — dagens formulering i notatene er uklar.
 
 ---
@@ -548,8 +549,8 @@ Verifisert i `fs-plattform/opptak`:
 ## Referanser
 
 - 2025-05-15 Raffinering med HK-dir. Plasstildeling
-- Plasstildelingsloepet i Opptak
+- Plasstildelingsløpet i Opptak
 - 2026-09-08 Raffinering plasstildeling
 - HK-dirs behovsnotat 2024
 - Opptaksforskriften § 7-1 fjerde ledd
-- Opptaksprosessen paa fs.sikt.no — mangler egen side for plasstildeling
+- Opptaksprosessen på fs.sikt.no — mangler egen side for plasstildeling
