@@ -426,7 +426,7 @@ Evidensnivå: **M** = verifisert i datamodellen, **V** = verifisert i koden
 |------|------|-----|-----|
 | Navn på runde | `opptak.opptaksrunde.navn` NOT NULL | Ingen | M |
 | Svarfrist for søker | `opptaksrunde.svarfrist` NOT NULL | Ingen | M |
-| Dato for når plasstildelingen skal skje | **Ingen kolonne** | Feltet finnes ikke i modellen | M |
+| Dato for når plasstildelingen skal publiseres til søkere | **Ingen kolonne** | Feltet finnes ikke i modellen | M |
 | Rundetype (hoved/tillegg/supplerende) | `opptaksrundetype_kode` | Se strukturfunn under | M |
 | Publiseringstidspunkt | `opptaksrunde.publiseringstidspunkt` (nullable) | Automatisk publisering avgrenset bort | M |
 | Periode for å endre parametere | `opptaksrunde.periode_endre_opptaksparametere` (tstzrange) | Finnes i modellen, ikke i krav | M |
