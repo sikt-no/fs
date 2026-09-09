@@ -3,20 +3,69 @@
 > Utgangsdokument for planlegging av ferdigstilling av plasstildeling i opptak.
 > Basert paa gap-analyse mellom krav (Confluence), datamodell (Admissio-skjema), Jira-saker (TAKE-prosjektet) og kildekoden (GitLab fs-plattform/opptak).
 
+## Kontekstdiagram
+
+```
+                      ┌──────────────────────────────────────────────┐
+   OPPTAK ───────────►│   RUNDER I OPPTAKET        (oppgave 1)       │
+   navn, rundetype,   │   en eller flere per opptak                  │
+   datoer             └───────────────────┬──────────────────────────┘
+                                          │
+   SOKNADSBEHANDLING                      │     INNSTILLINGER PER KVOTE
+   kvalifisering                          │     maaltall, plassflyt,
+        │                                 │     tilbud til alle kvalifiserte,
+        ▼                                 │     kvote for tilbudsgaranti
+   kvotetilhoerighet, poeng, rangering    │     (oppgave 2 og 3)
+                                          │              │
+        └───────────────┐                 │              │
+                        ▼                 ▼              ▼
+                     ╔═════════════════════════════════════════════╗
+   forrige           ║        PLASSTILDELING     (oppgave 4 og 5)  ║
+   publiserte  ─────►║  hvem faar plass — og hva ble poenggrensen? ║
+   runde (arv)       ╚══════════════════════┬══════════════════════╝
+                                            │
+                                            ▼
+              resultat per soknad: tilbud / venteliste (nr) / avslag
+              poenggrense per kvote  ·  spor av plassflyt
+                                            │
+                     ┌──────────────────────┴──────────────────────┐
+                     ▼                                             ▼
+           SAKSBEHANDLER (oppgave 6)                  PUBLISERING (oppgave 7)
+           kvalitetssikring foer publisering          valgfri — en proeve-
+                                                      tildeling publiseres ikke
+                                                                   │
+                                                                   ▼
+                                                     SVAR FRA SOKER (oppgave 8)
+                                                     ja / nei / staar paa venteliste
+                                                                   │
+                                             utloeser ny runde ────┘
+```
+
+## Avklaringer fra oppdatert Confluence-side
+
+Fire ting den oppdaterte Confluence-siden avgjorde:
+
+1. **Opptaksforvalter** er definert: tilgangsrollen som setter innstillinger i opptaket som paavirker plasstildelingen.
+2. **Poenglikhetsregler: fire, ikke tre.** Tidspunkt for levert soknad er med som egen rangeringsregel.
+3. **"Eldste soker foerst" er ikke stabilt.** Siden sier at dette endres fra neste aars forskrift — det er en regelendring som maa planlegges.
+4. **Melding om vedtak** er nytt og markert rodt: soker maa faa melding om at vedtaket foreligger, etter forvaltningsloven og eForvaltningsforskriften.
+
+Rundetypene er navngitt: **hovedrunde, tilleggsrunde, supplerende**. "Supplerende" finnes som rundetype, samtidig som suppleringsoppfoerselen (frafallskompensasjon) er avgrenset bort.
+
 ## Oppgaveoversikt
 
-Oppgavene foelger Confluence-sidens nummerering (oppdatert september 2026):
+Oppgavene foelger Confluence-sidens nummerering (oppdatert september 2026). Nummereringen er omstrukturert siden forrige runde:
 
-| # | Oppgave | Confluence-rad |
-|---|---------|---------------|
-| 1 | Legge til runder for plasstildeling i ett opptak | Opprette plasstildelingsrunde(r) |
-| 2 | Sette plasstildelingsinnstillinger (antall tilbud per utdanningskvote) | Sette opptaks-parametre |
-| 3 | Sette plassflyt mellom utdanningskvoter | Sette opptaks-parametre |
-| 4 | Starte en ny plasstildeling | Kjoere plasstildelingsrunde |
-| 5 | Gjennomfoere plasstildeling | Kjoere plasstildelingsrunde |
-| 6 | Vise resultatet til saksbehandler | Vise resultat av plasstildeling |
-| 7 | Publisere resultatet til soekerne | Publisere resultat til soker |
-| 8 | Haandtere svar fra soker | Soker kan akseptere eller avsla |
+| Ny | Oppgave | Var foer |
+|----|---------|----------|
+| 1 | Legge til runder for plasstildeling i ett opptak | 1 |
+| 2 | Sette plasstildelingsinnstillinger (antall tilbud per utdanningskvote) | 2 (delt) |
+| 3 | Sette plassflyt mellom utdanningskvoter | 2 (delt) |
+| 4 | Starte en ny plasstildeling | 1b |
+| 5 | Gjennomfoere plasstildeling | 3 + 4 |
+| 6 | Vise resultatet til saksbehandler | 5 |
+| 7 | Publisere resultatet til soekerne | 6 |
+| 8 | Haandtere svar fra soker | 7 |
 
 ## Evidensgrunnlag
 
@@ -195,6 +244,14 @@ Alle staar **To Do**, ingen har prioritet over Trivial.
 | Avgrensning: Frafallskompensasjon | Ingen | Ingen | **Hull** — boer registreres |
 | GitHub vs Jira status | #71, #92, #107-109 lukket | TAKE-3 To Do, TAKE-125 In progress | **Uoverensstemmelse** |
 | Duplikater | #170 / #175 | — | Boer ryddes |
+
+## Tre funn i saksbildet som er verdt en beslutning
+
+1. **GitHub og Jira er uenige om status.** Paa GitHub er #71, #92, #107, #108 og #109 alle **lukket**. I Jira er TAKE-3 (Epic) **To Do**, TAKE-125 **In progress**, og TAKE-74 **In progress**. GitHub-siden sier at plasstildeling er levert, Jira-siden at den ikke er det.
+
+2. **Initiativet paa GitHub har ingen undersaker.** [#216 "Ferdigstilling av plasstildeling i opptak"](https://github.com/sikt-no/fs/issues/216) er merket `initiativ`, ligger i milestone "2026 Fremtidens opptak" — og har **null sub-issues**. De aatte oppgavene i raffineringen er den naturlige undersaksstrukturen.
+
+3. **To duplikatpar boer ryddes:** #170 og #175 ("Soker svarer paa tilbud"), og #511 og #265 ("Koble spesielle opptakskrav til kvoter").
 
 ## Neste steg
 
