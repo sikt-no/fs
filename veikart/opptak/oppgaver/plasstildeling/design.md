@@ -4,7 +4,7 @@ Vi skal kunne fordele studieplasser i flere runder, med kontroll over når søke
 
 Dokumentet er skrevet for tre lesergrupper. Del 1 og del 2 forutsetter ingen kjennskap til løsningen. Del 3 er for utviklere og kravarbeid.
 
-**Status:** renskrevet raffinering, 2026-09-08. Bygger på raffinering med HK-dir og gjennomgang av dagens løsning.
+**Status:** renskrevet raffinering, 2026-09-09. Bygger på tidligere raffineringer og gjennomgang av koden. 
 
 ---
 
