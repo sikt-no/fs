@@ -14,7 +14,7 @@ Dokumentet er skrevet for tre lesergrupper. Del 1 og del 2 forutsetter ingen kje
 
 2. **Beregning og publisering er to separate steg.** En plasstildeling kan kjøres og bevisst ikke publiseres. Det er dette som gjør ubegrensede prøvetildelinger mulig, og det er nettopp det lærestedene har bedt om.
 
-3. **En plasstildeling er i dag en kjøring man bestiller, ikke et resultat man kan rette.** Feiler den, er eneste utvei å bestille en ny; ett enkelt manuelt tilbud krever full omkjøring av hele tildelingen. Nesten alt under *Funn på tvers* følger av denne ene egenskapen. Om det skal endres er en beslutning for produkteier — den bør tas bevisst, ikke oppdages under et opptak.
+3. **En plasstildeling er i dag en kjøring man bestiller, ikke et resultat man kan rette.** Feiler den, er eneste utvei å bestille en ny; ett enkelt manuelt tilbud krever full omkjøring av hele tildelingen. Vi trenger mao å åpne for at det går an å manuelt endre et tilbudsresultat for enkeltsøker etter plasstildeling er kjørt. Manuelt registrerte tilbud skal ikke overkjøres av ny plasstildeling. Har saksbehandler lov å gjøre dette, eller må opptaksforvalter inn? 
 
 ---
 
@@ -28,7 +28,7 @@ Skillet er ikke en formalitet. De to har ulikt fangstpunkt, ulik eier og ulik li
 
 |                  | Søknadsbehandling | Plasstildeling |
 |------------------|-------------------|----------------|
-| **Spørsmålet** | er søkeren kvalifisert, og hvor står hun i køen? | hvem får plassene som finnes? |
+| **Spørsmålet**   | er søkeren kvalifisert, og hvor står hun i køen? | hvem får plassene som finnes? |
 | **Skjer**        | løpende, per søknad | som en kjøring, per runde |
 | **Eier**         | saksbehandler | opptaksleder |
 | **Dekkes her**   | nei — vi abonnerer på resultatet | ja |
@@ -40,9 +40,9 @@ Rangeringen kommer altså fra søknadsbehandlingen. Plasstildelingen eier ikke p
 ### Mål
 
 - Hver søker får ett tydelig svar per søknad: tilbud, venteliste med nummer, eller avslag.
-- Lærestedet bestemmer hvor mange tilbud som skal gis per utdanningskvote per studietilbud, og kan la ledige plasser flyte til en annen utdanningskvote framfor å gå tapt.
+- Lærestedet bestemmer hvor mange tilbud som skal gis per utdanningskvote per utdanningstilbud, og kan la ledige plasser flyte til en annen utdanningskvote framfor at plassene blir stående ubrukt.
 - En plasstildeling kan kjøres, kvalitetssikres og forkastes uten at søkeren merker noe.
-- Resultatet skal kunne forklares i etterkant — hvorfor fikk denne søkeren tilbud, hvorfor fikk ikke den neste? Særlig ved klage.
+- Resultatet skal kunne forklares i etterkant — hvorfor fikk denne søkeren tilbud, hvorfor fikk ikke den neste? Særlig nødvendig ved klager på vedtak.
 - En ny runde skal kunne bygge videre på en tidligere uten å miste resultatene fra den.
 
 ### Ikke-mål
@@ -50,7 +50,7 @@ Rangeringen kommer altså fra søknadsbehandlingen. Plasstildelingen eier ikke p
 - **Ikke kvalifiseringsvurdering.** Den hører i søknadsbehandlingen.
 - **Ikke poengberegning.** Samme sted. Plasstildelingen leser rangeringen.
 - **Ikke opptaksadministrasjon.** Oppretting av opptak og tilknytning av utdanningstilbud er dekket andre steder.
-- **Ikke automatisk frafallskompensasjon i denne runden.** Se avklaringspunkt 3 — dette er strøket fra scope i notatene, men står samtidig igjen som meldt behov, og det henger ikke sammen.
+- **Ikke automatisk nye tilbud ved nei-svar på tilbud i 2027-opptaket.** Se avklaringspunkt 3
 
 ### Fire prinsipper løsningen hviler på
 
@@ -327,14 +327,6 @@ Fire sider er verdt en faglig diskusjon, og alle fire står som avklaringspunkte
 
 **Issue:** [#170](https://github.com/sikt-no/fs/issues/170), [#264](https://github.com/sikt-no/fs/issues/264), [#512](https://github.com/sikt-no/fs/issues/512)
 
-### Oppgave 8 — kompensere automatisk for frafall rett etter hovedopptaket
-
-Strøket fra scope i raffineringen. Systemet skulle automatisk gi nye tilbud fra venteliste når noen faller fra, og fylle på opp mot grensen for antall tilbud som skal gis, uten manuell overvåking. Nivået skulle kunne justeres opp eller ned, inkludert å aktivt dempe tilstrømningen dersom lærestedet har fått for mange ja-svar.
-
-Men behovet står igjen som sannsynlig mangel mot HK-dirs meldte behov: lærestedene har bedt om en mekanisme som raskt kompenserer for søkere som takker nei fordi de fikk tilbud høyere opp, uten å vente på neste runde. I dagens løsning fryses og garanteres forrige rundes tilbud i alle runder med arv, og det er etterfyllings-oppførsel, ikke supplerings-oppførsel.
-
-Enten er oppgaven ute av scope og bør ut av mangel-listen, eller den er en mangel og hører i veikartet. Se avklaringspunkt 3.
-
 ---
 
 ## Mistenkte feil
@@ -400,24 +392,23 @@ Vår påstand: disse hører ikke i «Hva vi trenger avklart» — de er issues, 
 
 ## Oppgavenummerering
 
-Oppgavene er omstrukturert siden forrige runde. Kravnumrene følger etter:
 
-| Ny | Oppgave | Var før |
+| Ny | Oppgave | Github-issue|
 |----|---------|---------|
-| 1 | Legge til runder for plasstildeling i ett opptak | 1 |
-| 2 | Sette antall tilbud som skal gis per utdanningskvote | 2 (delt) |
-| 3 | Sette plassflyt mellom utdanningskvoter | 2 (delt) |
-| 4 | Starte en ny plasstildeling | 1b |
-| 5 | Gjennomføre plasstildeling | 3 + 4 |
-| 6 | Vise resultatet til saksbehandler | 5 |
-| 7 | Publisere resultatet til søkerne | 6 |
-| 8 | Håndtere svar fra søker | 7 |
+| 1 | Legge til runder for plasstildeling i ett opptak | 
+| 2 | Sette antall tilbud som skal gis per utdanningskvote | 
+| 3 | Sette plassflyt mellom utdanningskvoter | 
+| 4 | Starte en ny plasstildeling | 
+| 5 | Gjennomføre plasstildeling |
+| 6 | Vise resultatet til saksbehandler | 
+| 7 | Publisere resultatet til søkerne |
+| 8 | Håndtere svar fra søker | 
 
 ---
 
 ## Gap-analyse per oppgave
 
-Evidensnivå: **M** = verifisert i datamodellen, **S** = dokumentert i en sak, **V** = verifisert i koden
+Evidensnivå: **M** = verifisert i datamodellen, **V** = verifisert i koden
 
 ### Oppgave 1 — Legge til runder
 
