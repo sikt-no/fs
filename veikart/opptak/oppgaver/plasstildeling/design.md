@@ -179,12 +179,12 @@ Vår påstand: dette må dokumenteres slik at regelen er synlig som forskriftsfe
 
 Løsningen skal kunne håndtere flere regler, koblet til opptaket:
 
-| Regel | Merknad |
-|-------|---------|
-| Alder — eldste eller yngste først | Eldste først er forskriftsfestet i det ordinære tilfellet |
-| Loddtrekning | |
-| Alle med samme sum får tilbud | Kan settes som unntak per utdanningstilbud |
-| Tidspunkt for levert søknad — tidligste vinner | Egen regel for runden «ledige studieplasser» |
+| Regel | Merknad                                                        |
+|-------|----------------------------------------------------------------|
+| Alder — eldste eller yngste først | Eldste først er forskriftsfestet for 2026, blir omvendt i 2027 |
+| Loddtrekning |                                                                |
+| Alle med samme sum får tilbud | Kan settes som unntak per utdanningstilbud                     |
+| Tidspunkt for levert søknad — tidligste vinner | Egen regel for runden «ledige studieplasser»                   |
 
 ### Valgfriheten ved poenglikhet er redusert
 
