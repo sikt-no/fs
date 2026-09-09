@@ -68,7 +68,7 @@ Prisen står i prinsipp 3.
 
 #### 3. Ledige plasser skal ikke gå tapt, men de flyter bare der noen har bestemt at de skal flyte
 
-Er det ønsket flere tilbud i en utdanningskvote enn det finnes kvalifiserte søkere i den, overføres de overskytende plassene til en annen utdanningskvote — men bare til den ene utdanningskvoten lærestedet har pekt på, og bare innenfor samme studietilbud. Minst én utdanningskvote er siste utdanningskvote og sender ikke plasser videre, typisk ordinær kvote.
+Er det ønsket flere tilbud i en utdanningskvote enn det finnes kvalifiserte søkere i den, overføres de overskytende plassene til en annen utdanningskvote — men bare til den ene utdanningskvoten lærestedet har pekt på, og bare innenfor samme utdanningstilbud. Minst én utdanningskvote er siste utdanningskvote og sender ikke plasser videre, typisk ordinær kvote.
 
 At flyten er eksplisitt og retningsbestemt er et bevisst valg, ikke en begrensning vi ikke rakk å løse: en plass som flyter dit ingen har bestemt, gir et resultat ingen kan forklare søkeren.
 
@@ -91,12 +91,12 @@ Dette prinsippet er billig å ha og dyrt å miste: uten det må hver kvalitetssi
         │                                 │     plassflyt,
         ▼                                 │     tilbud til alle kvalifiserte,
    kvotetilhørighet, poeng, rangering     │     utdanningskvote for tilbudsgaranti
-   (oppgave 3)                            │     (oppgave 2)
+                                          │     (oppgave 2 og 3)
                                           │              │
         └───────────────┐                 │              │
                         ▼                 ▼              ▼
                      ╔═════════════════════════════════════════════╗
-   forrige           ║        PLASSTILDELING     (oppgave 4)       ║
+   forrige           ║   PLASSTILDELING     (oppgave 4 og 5)       ║
    publiserte  ─────►║  hvem får plass — og hva ble poenggrensen?  ║
    runde (arv)       ╚══════════════════════┬══════════════════════╝
                                             │
@@ -106,12 +106,12 @@ Dette prinsippet er billig å ha og dyrt å miste: uten det må hver kvalitetssi
                                             │
                      ┌──────────────────────┴──────────────────────┐
                      ▼                                             ▼
-           SAKSBEHANDLER (oppgave 5)                  PUBLISERING (oppgave 6)
+           SAKSBEHANDLER (oppgave 6)                  PUBLISERING (oppgave 7)
            kvalitetssikring før publisering            valgfri — en prøve-
                                                       tildeling publiseres ikke
                                                                    │
                                                                    ▼
-                                                     SVAR FRA SØKER (oppgave 7)
+                                                     SVAR FRA SØKER (oppgave 8)
                                                      ja / nei / står på venteliste
                                                                    │
                                              utløser ny runde ─────┘
@@ -124,7 +124,7 @@ Legg merke til pilen nederst til venstre: arven fra forrige publiserte runde er 
 Dette er den viktigste tabellen i dokumentet, fordi den erstatter det rundetypen gjorde før:
 
 | Egenskap | Runde uten arv (første runde) | Runde med arv (etterfylling) |
-|----------|-------------------------------|------------------------------|
+|----------|-------------------------------|------------------------------| 
 | Tidligere tilbud | finnes ikke | fryses og garanteres |
 | Nytt tilbud fra venteliste | – | søkeren mister ikke det gamle automatisk |
 | Bortfall på lavere prioriteter | settes | settes ikke |
@@ -136,14 +136,15 @@ Begrunnelsen for høyre kolonne er prinsipp 2: på dette stadiet skal søkeren k
 
 | # | Oppgave | Status | Det som mangler |
 |---|---------|--------|-----------------|
-| 1 | Starte en ny plasstildeling | Støttet | Feiler en tildeling, kan den ikke kjøres om — bare erstattes av en ny |
-| 2 | Sette antall tilbud som skal gis og plassflyt per utdanningskvote | Delvis | Én mottakende utdanningskvote per utdanningskvote; ingen flyt mellom studietilbud; ingen flyt mellom tildelinger |
-| 3 | Hente rangering fra søknadsbehandlingen | Delvis | Endret søknad mellom runder fanges ikke opp; tapt kvalifisering gir stille bortfall |
-| 4 | Gjennomføre tildelingen og finne poenggrensen | Delvis | Poenggrensen beregnes og lagres aldri, selv om det finnes en plass å vise den |
-| 5 | Vise resultatet til saksbehandler | Delvis | Ventelistenummeret når ikke fram til søkeren, selv om innstillingen finnes |
-| 6 | Publisere resultatet til søkerne | Støttet | Ett hull, se oppgave 5 — det som publiseres mangler ventelistenummer |
-| 7 | Håndtere svar fra søker | Delvis | Trukket ja-svar frigjør aldri plassen; ingen manuell overstyring av enkeltresultat |
-| 8 | Frafallskompensasjon rett etter hovedopptaket | Avgrenset | Men se avklaringspunkt 3 |
+| 1 | Legge til runder for plasstildeling i ett opptak | Støttet | Dato for når plasstildelingen skal skje finnes ikke i modellen |
+| 2 | Sette antall tilbud som skal gis per utdanningskvote | Delvis | Fire tall i fire tabeller er uavklart; begrepsrengjøring ugjort |
+| 3 | Sette plassflyt mellom utdanningskvoter | Delvis | Én mottakende utdanningskvote; ingen flyt mellom utdanningstilbud; ingen flyt mellom tildelinger |
+| 4 | Starte en ny plasstildeling | Støttet | Feiler en tildeling, kan den ikke kjøres om — bare erstattes av en ny |
+| 5 | Gjennomføre plasstildeling | Delvis | Poenggrensen beregnes og lagres aldri; endret søknad mellom runder fanges ikke opp; tapt kvalifisering gir stille bortfall |
+| 6 | Vise resultatet til saksbehandler | Delvis | Ventelistenummeret når ikke fram til søkeren, selv om innstillingen finnes |
+| 7 | Publisere resultatet til søkerne | Støttet | Ett hull, se oppgave 6 — det som publiseres mangler ventelistenummer |
+| 8 | Håndtere svar fra søker | Delvis | Trukket ja-svar frigjør aldri plassen; ingen manuell overstyring av enkeltresultat |
+| 9 | Systemet gir automatisk nye tilbud ved nei-svar på tilbud | Utenfor scope | Se avklaringspunkt 3 |
 
 «Delvis» betyr her at kjernefunksjonen virker og at det som mangler er navngitt. Ingen av oppgavene er usikre på om de virker.
 
@@ -163,7 +164,7 @@ Dette er hva løsningen ikke svarer på, og som ikke lukkes med mer arbeid på s
 
 | Blindsone | Hva det betyr |
 |-----------|---------------|
-| Plassflyt mellom studietilbud | Plasser flyter mellom utdanningskvoter innenfor ett studietilbud. Ledig kapasitet på ett tilbud kan ikke brukes på et annet |
+| Plassflyt mellom utdanningstilbud | Plasser flyter mellom utdanningskvoter innenfor ett utdanningstilbud. Ledig kapasitet på ett tilbud kan ikke brukes på et annet |
 | Flere mottakende utdanningskvoter | En utdanningskvote kan sende overskytende plasser til én utdanningskvote, ikke fordele dem på flere. Flerledds-kjeder virker, forgrening gjør ikke |
 | Poenggrense som historikk | Poenggrensen søkeren eventuelt ser i dag kommer fra en annen kilde enn tildelingen. Fjorårets median, som er viktig for tidlig tilbud, settes i søknadsbehandlingen |
 | Manuell overstyring | Det finnes ingen vei til å endre ett enkelt resultat. Alt går gjennom en ny tildeling |
@@ -227,7 +228,7 @@ Ordnet etter hvor mye svaret endrer løsningen.
 
 1. **Skal en plasstildeling kunne kjøres om, avbrytes, eller korrigeres i enkeltresultater?** Dette er hovedspørsmålet. Et ja betyr at plasstildelingen ikke bare er en kjøring, men et resultat med livssyklus — det er en annen løsning, ikke en justering av denne.
 2. **Er en runde alltid etterfylling, eller skal den kunne være supplering?** Svaret avgjør fire andre spørsmål samtidig.
-3. **Er frafallskompensasjon rett etter hovedopptaket i scope?** Notatene stryker den som oppgave 8 og lister den samtidig som sannsynlig mangel mot meldt behov. Begge kan ikke stå.
+3. **Skal det gis automatisk nye tilbud ved nei-svar på tilbud i 2027-opptaket?** Notatene stryker dette fra scope, men det står samtidig igjen som sannsynlig mangel mot meldt behov. Begge kan ikke stå.
 4. **Skal et nei-svar frigjøre plassen før svarfristen er ute?** I dag står plassen «reservert» til fristen. Er det for lenge?
 5. **Skal en søker som godtar og senere trekker seg, frigjøre plassen til ventelisten?** I dag frigjøres den aldri.
 6. **Skal ventelistenumre stå urørt etter opprykk, eller nummereres på nytt?** Gjenkjennbarhet mot korrekthet.
@@ -235,9 +236,9 @@ Ordnet etter hvor mye svaret endrer løsningen.
 8. **Bør antall tilbud som skal gis kunne økes automatisk ved opprykk**, slik at en frigjort plass ikke går tapt?
 9. **Skal det finnes en «topp opp til ønsket nivå»-funksjon de første ukene**, framfor manuell overvåking og etterfylling? Lærestedene har bedt om det.
 10. **Når en søker har flere poengsummer i samme kvotetype:** er det riktig at høyeste poengsum vinner, og at laveste grunnlagskode avgjør ved likhet?
-11. **Når en søker har både et tilbud og et kansellert resultat på samme studietilbud** — skal det kansellerte vises til søkeren i stedet for tilbudet?
-12. **Hva er funksjonalitetsforskjellen mellom rundetypene, utover arven?** Notatene sier dette må gås opp med HK-dir. Hvis svaret er «ingen», er rundetypen et navn og ikke en regel, og det bør stå.
-13. **Hva skal rollen «opptaksforvalter» kunne gjøre?** Notatene sier «får lov å sette plasstildelingslister i liste». Formuleringen er uklar og må skrives om av den som eide den.
+11. **Når en søker har både et tilbud og et kansellert resultat på samme utdanningstilbud** — skal det kansellerte vises til søkeren i stedet for tilbudet?
+12. **Er det funksjonelle forskjeller mellom rundetypene, utover arven?** Dette må gås opp med domeneeksperter og avklares med prosjektleder. Hvis svaret er «ingen», er rundetypen et navn og ikke en regel, og det bør stå.
+13. **Opptaksforvalter skal utføre alle oppgaver knyttet til plasstildeling.** Dette er avklart: opptaksforvalter er rollen som har tilgang til å legge til runder, sette innstillinger, starte tildelinger, publisere og håndtere resultater.
 
 Spørsmål 4–11 er produkteier- og HK-dir-spørsmål. Spørsmål 1–3 endrer omfanget. Spørsmål 12–13 er hull i notatene, ikke i løsningen.
 
@@ -245,9 +246,33 @@ Spørsmål 4–11 er produkteier- og HK-dir-spørsmål. Spørsmål 1–3 endrer 
 
 ## Del 3: funksjonell løsning per oppgave
 
-### Oppgave 1 — runder og oppstart av en plasstildeling
+### Oppgave 1 — legge til runder for plasstildeling i ett opptak
 
-Opptaksrunder opprettes sammen med opptaket og knyttes til ett opptak. Grunnlagsdata er navn og rundetype.
+Opptaksrunder opprettes sammen med opptaket og knyttes til ett opptak. Grunnlagsdata er navn, rundetype og svarfrist.
+
+**Figma-prototype:** https://twins-gave-22504012.figma.site/
+
+**Issue:** [#107](https://github.com/sikt-no/fs/issues/107) (lukket)
+
+### Oppgave 2 — sette antall tilbud som skal gis per utdanningskvote
+
+For hvert utdanningstilbud må det defineres hvor mange tilbud som skal gis i hver utdanningskvote i denne plasstildelingen. Saksbehandler ser en liste over utdanningstilbud med utdanningskvoter, aksepterte tilbud, gitte tilbud og antall planlagte studieplasser (kapasitet). Tallet settes per utdanningskvote; totaltallet vises.
+
+Antall tilbud som skal gis per utdanningskvote virker.
+
+**Begrepsendring:** feltnavnet «overbooking» skal endres. Historisk betydde overbooking at lærestedet ga flere tilbud enn antall studieplasser, som buffer mot frafall. I dagens felt er verdien i praksis rundens absolutte antall tilbud som skal gis, ikke et tillegg på toppen. Dette er avklart — se *Begrepsendringer*.
+
+**Utgått fra tidligere utkast:** ønsket antall ja-svar totalt, med utledet overbookingsrate og forrige års tilbud er ikke med.
+
+**Figma-prototype:** https://undo-aloft-06472321.figma.site/
+
+### Oppgave 3 — sette plassflyt mellom utdanningskvoter
+
+Plassflyt mellom utdanningskvoter på samme utdanningstilbud virker, inkludert flere ledd etter hverandre.
+
+Det som ikke er mulig: en utdanningskvote kan bare sende ledige plasser videre til én mottakende utdanningskvote, plasser kan ikke flyte mellom ulike utdanningstilbud, og de kan ikke flyte fra én plasstildeling til en senere.
+
+### Oppgave 4 — starte en ny plasstildeling
 
 Man bestiller en plasstildeling, og den kjøres automatisk i bakgrunnen. Den bygger riktig videre på forrige publiserte runde.
 
@@ -255,38 +280,15 @@ Man bestiller en plasstildeling, og den kjøres automatisk i bakgrunnen. Den byg
 
 **Svakhet:** feiler en plasstildeling, er eneste mulighet å starte en helt ny. Det finnes ingen måte å rette opp eller kjøre den samme på nytt.
 
-**Issue:** [#108](https://github.com/sikt-no/fs/issues/108) (lukket), [#107](https://github.com/sikt-no/fs/issues/107) (lukket)
+**Issue:** [#108](https://github.com/sikt-no/fs/issues/108) (lukket)
 
-### Oppgave 2 — antall tilbud som skal gis og plassflyt per utdanningskvote
-
-For hvert utdanningstilbud må det defineres hvor mange tilbud som skal gis i hver utdanningskvote i denne plasstildelingen. Saksbehandler ser en liste over utdanningstilbud med utdanningskvoter, aksepterte tilbud, gitte tilbud og antall planlagte studieplasser (kapasitet). Tallet settes per utdanningskvote; totaltallet vises.
-
-Antall tilbud som skal gis per utdanningskvote virker. Plassflyt mellom utdanningskvoter på samme studietilbud virker, inkludert flere ledd etter hverandre.
-
-Det som ikke er mulig: en utdanningskvote kan bare sende ledige plasser videre til én mottakende utdanningskvote, plasser kan ikke flyte mellom ulike studietilbud, og de kan ikke flyte fra én plasstildeling til en senere.
-
-**Begrepsendring:** feltnavnet «overbooking» skal endres. Historisk betydde overbooking at lærestedet ga flere tilbud enn antall studieplasser, som buffer mot frafall. I dagens felt er verdien i praksis rundens absolutte antall tilbud som skal gis, ikke et tillegg på toppen. Dette er avklart — se *Begrepsendringer*.
-
-**Utgått fra tidligere utkast:** ønsket antall ja-svar totalt, med utledet overbookingsrate og forrige års tilbud er ikke med.
-
-### Oppgave 3 — rangering fra søknadsbehandlingen
-
-Hver søker som er kvalifisert til en utdanningskvote får beregnet poengsum og rangering i søknadsbehandlingen, slik at det er tydelig hvem som står først i køen. Plasstildelingen abonnerer på endringer i rangeringen og skal kunne beregne på nytt hvis grunnlaget endres.
-
-Selve rangeringen og poengberegningen virker.
-
-To svakheter:
-
-- Systemet fanger ikke opp at en søker har endret søknaden sin mellom runder.
-- En søker som mister kvalifiseringen mellom to runder forsvinner stille fra resultatet i stedet for å få et tydelig avslag. Dette bryter prinsipp 1.
-
-**Issue:** [#71](https://github.com/sikt-no/fs/issues/71) (lukket), [#92](https://github.com/sikt-no/fs/issues/92) (lukket)
-
-### Oppgave 4 — gjennomføre tildelingen og finne poenggrensen
+### Oppgave 5 — gjennomføre plasstildeling
 
 Tildelingen avgjør hvor mange søkere som får plass i hver utdanningskvote, og hva poenggrensen for å komme inn ble. Den må ta hensyn til plassflyt mellom utdanningskvoter, og til at noen utdanningskvoter kan gi tilbud til alle kvalifiserte uten poenggrense. Tilbudsgarantier tas fra den utdanningskvoten lærestedet eller HK-dir har markert.
 
 Søkeren prøves i utdanningskvotene etter kvoteprioritet — normalt den mest spesielle utdanningskvoten først, den minst spesielle sist.
+
+Rangeringen hentes fra søknadsbehandlingen. Hver søker som er kvalifisert til en utdanningskvote får beregnet poengsum og rangering der, slik at det er tydelig hvem som står først i køen. Selve rangeringen og poengberegningen virker, men systemet fanger ikke opp at en søker har endret søknaden sin mellom runder, og en søker som mister kvalifiseringen forsvinner stille fra resultatet i stedet for å få et tydelig avslag (bryter prinsipp 1).
 
 Selve tildelingen virker, inkludert utdanningskvoter uten poenggrense.
 
@@ -294,7 +296,9 @@ Selve tildelingen virker, inkludert utdanningskvoter uten poenggrense.
 
 **Åpne spørsmål:** se del 2, punkt 10 (flere poengsummer i samme kvotetype) og punkt 7 (delte ventelistenumre).
 
-### Oppgave 5 — vise resultatet til saksbehandler
+**Issue:** [#71](https://github.com/sikt-no/fs/issues/71) (lukket), [#92](https://github.com/sikt-no/fs/issues/92) (lukket)
+
+### Oppgave 6 — vise resultatet til saksbehandler
 
 Hver søker skal ha ett tydelig svar per søknad: tilbud, venteliste med nummer, eller avslag. Fikk søkeren plass gjennom plassflyt fra en annen utdanningskvote, skal det kunne spores i etterkant, for eksempel ved klage.
 
@@ -302,17 +306,17 @@ Begge deler virker. **Ventelistenummeret når aldri fram til søkeren**, selv om
 
 **Issue:** [#109](https://github.com/sikt-no/fs/issues/109) (lukket)
 
-### Oppgave 6 — publisere resultatet til søkerne
+### Oppgave 7 — publisere resultatet til søkerne
 
 Søkerne skal se resultatet sitt i Min kompetanse på et bestemt, kontrollert tidspunkt. Det må være mulig å beregne tildelingen før den gjøres synlig, og å velge å ikke publisere den i det hele tatt (prøvetildeling).
 
 Publisering virker og gir kontroll over når søkeren ser resultatet. Ubegrensede prøveopptak på alle rundetyper er dermed godt løst, fordi beregning og publisering er separate steg — nettopp slik lærestedene har bedt om.
 
-Søkeren skal se tilbud, avslag eller venteliste, og vedtaket med begrunnelse: kvalifisering, rangering, poenggrense. Hullet er ventelistenummeret fra oppgave 5.
+Søkeren skal se tilbud, avslag eller venteliste, og vedtaket med begrunnelse: kvalifisering, rangering, poenggrense. Hullet er ventelistenummeret fra oppgave 6.
 
 **Issue:** [#111](https://github.com/sikt-no/fs/issues/111), [#72](https://github.com/sikt-no/fs/issues/72), [#221](https://github.com/sikt-no/fs/issues/221)
 
-### Oppgave 7 — håndtere svar fra søker
+### Oppgave 8 — håndtere svar fra søker
 
 Søkeren skal kunne akseptere eller avslå tilbudet, eller stå på venteliste, innenfor en svarfrist. Svarene skal kunne utløse en etterfylling som bygger videre på forrige plasstildeling.
 
@@ -322,10 +326,16 @@ Fire sider er verdt en faglig diskusjon, og alle fire står som avklaringspunkte
 
 - Et nei-svar frigjør ikke plassen før svarfristen er ute. Blir plassen stående reservert for lenge?
 - En søker som godtar og senere trekker seg, frigjør aldri plassen igjen.
-- Når en søker har både et tilbud og et kansellert resultat på samme studietilbud — hva skal vises?
+- Når en søker har både et tilbud og et kansellert resultat på samme utdanningstilbud — hva skal vises?
 - Det finnes ingen mulighet for saksbehandler å overstyre et enkelt resultat manuelt. Alt krever full omkjøring.
 
 **Issue:** [#170](https://github.com/sikt-no/fs/issues/170), [#264](https://github.com/sikt-no/fs/issues/264), [#512](https://github.com/sikt-no/fs/issues/512)
+
+### Oppgave 9 — systemet gir automatisk nye tilbud ved nei-svar på tilbud (utenfor scope)
+
+Utenfor scope for 2027-opptaket. Systemet skulle automatisk gi nye tilbud fra venteliste når noen faller fra, og fylle på opp mot grensen for antall tilbud som skal gis, uten manuell overvåking.
+
+Behovet står igjen som sannsynlig mangel mot HK-dirs meldte behov: lærestedene har bedt om en mekanisme som raskt kompenserer for søkere som takker nei fordi de fikk tilbud høyere opp, uten å vente på neste runde. Se avklaringspunkt 3.
 
 ---
 
@@ -364,9 +374,9 @@ Vår påstand: disse hører ikke i «Hva vi trenger avklart» — de er issues, 
 
 **Utdanningskvote** — en køordning. Kvalifiserte søkere plasseres i minst én utdanningskvote ut fra et regelverk (lov, forskrift eller studieplan), og får plass i køen etter poengsum i den aktuelle utdanningskvoten. Eksempler: førstegangsvitnemål, nordnorsk. På utdanningskvoten angis hvor mange tilbud som skal gis i denne konkrete plasstildelingen på konkrete utdanningstilbud, og hvilken metode som brukes for å fylle dem. Kvotetyper settes i opptaket; utdanningskvote er kvotetypen anvendt på et utdanningstilbud.
 
-**Kvoteprioritet** — rekkefølgen en søker prøves i de ulike utdanningskvotene et studietilbud har. Normalt prøves den mest spesielle utdanningskvoten først og den minst spesielle sist.
+**Kvoteprioritet** — rekkefølgen en søker prøves i de ulike utdanningskvotene et utdanningstilbud har. Normalt prøves den mest spesielle utdanningskvoten først og den minst spesielle sist.
 
-**Plassflyt** — innstilling som utløses når det er ønsket flere tilbud i en utdanningskvote enn det er kvalifiserte søkere i utdanningskvoten. Plassflyt angir hvilken én annen utdanningskvote de overskytende plassene overføres til, innenfor samme studietilbud. Flyten kan gå i flere ledd etter hverandre, og kan endres ved behov. Minst én utdanningskvote er siste utdanningskvote og kan ikke sende plasser videre, typisk ordinær kvote. Tidligere term: kvoteflyt.
+**Plassflyt** — innstilling som utløses når det er ønsket flere tilbud i en utdanningskvote enn det er kvalifiserte søkere i utdanningskvoten. Plassflyt angir hvilken én annen utdanningskvote de overskytende plassene overføres til, innenfor samme utdanningstilbud. Flyten kan gå i flere ledd etter hverandre, og kan endres ved behov. Minst én utdanningskvote er siste utdanningskvote og kan ikke sende plasser videre, typisk ordinær kvote. Tidligere term: kvoteflyt.
 
 **Arv fra forrige runde** — at en plasstildeling bygger videre på forrige publiserte runde: tidligere tilbud fryses og garanteres, og det settes ikke nye bortfall. Dette er noe annet enn plassflyt, som gjelder mellom utdanningskvoter i samme tildeling.
 
@@ -386,7 +396,7 @@ Vår påstand: disse hører ikke i «Hva vi trenger avklart» — de er issues, 
 
 **Supplering** — å gi nye tilbud raskt for å kompensere for frafall, uten å vente på neste runde. Ikke det samme som etterfylling. Se avklaringspunkt 2.
 
-**Roller** — opptaksleder starter runder og setter innstillinger. Saksbehandler kvalitetssikrer resultatet. Opptaksforvalter: rollebeskrivelsen i notatene er uklar og må skrives om.
+**Roller** — opptaksforvalter utfører alle oppgaver knyttet til plasstildeling: legger til runder, setter innstillinger, starter tildelinger, publiserer og håndterer resultater. Saksbehandler kvalitetssikrer resultatet.
 
 ---
 
@@ -533,7 +543,7 @@ Verifisert i `fs-plattform/opptak`:
 3. Oppdatere begrepene på fs.sikt.no etter tabellen over og begrepslisten under.
 4. Registrere de seks mistenkte feilene som issues.
 5. Verifisere negative opptaksparametere mot dagens løsning.
-6. Skrive om rollebeskrivelsen for opptaksforvalter — dagens formulering i notatene er uklar.
+6. ~~Skrive om rollebeskrivelsen for opptaksforvalter~~ — avklart: opptaksforvalter utfører alle oppgaver knyttet til plasstildeling.
 
 ---
 
