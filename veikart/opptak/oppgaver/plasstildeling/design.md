@@ -14,7 +14,7 @@ Dokumentet er skrevet for tre lesergrupper. Del 1 og del 2 forutsetter ingen kje
 
 2. **Beregning og publisering er to separate steg.** En plasstildeling kan kjøres og bevisst ikke publiseres. Det er dette som gjør ubegrensede prøvetildelinger mulig, og det er nettopp det lærestedene har bedt om.
 
-3. **En plasstildeling er i dag en kjøring man bestiller, ikke et resultat man kan rette.** Feiler den, er eneste utvei å bestille en ny; ett enkelt manuelt tilbud krever full omkjøring av hele tildelingen. Vi trenger mao å åpne for at det går an å manuelt endre et tilbudsresultat for enkeltsøker etter plasstildeling er kjørt. Manuelt registrerte tilbud skal ikke overkjøres av ny plasstildeling. Har saksbehandler lov å gjøre dette, eller må opptaksforvalter inn? 
+3. **Plasstildelingen hviler på korrekt saksbehandling. Plasstildeling utføres som bestilling, og gir ikke et resultat man kan rette.** Hvis plasstildelingen feiler, er eneste utvei å rette saksbehandlingsfeil og bestille en ny. For å endre fra ikke-tilbud til tilbud, kan man bruke tilbudsgaranti.
 
 ---
 
@@ -33,7 +33,7 @@ Skillet er ikke en formalitet. De to har ulikt fangstpunkt, ulik eier og ulik li
 | **Eier**         | saksbehandler | opptaksleder |
 | **Dekkes her**   | nei — vi abonnerer på resultatet | ja |
 
-Rangeringen kommer altså fra søknadsbehandlingen. Plasstildelingen eier ikke poengberegningen; den eier fordelingen. Det er derfor oppgave 3 nedenfor handler om å hente og holde seg oppdatert på rangeringen, ikke om å beregne den.
+Rangeringen kommer altså fra søknadsbehandlingen. Plasstildelingen eier ikke poengberegningen; den eier fordelingen. Det er derfor oppgave 3 nedenfor handler om å hente og holde seg oppdatert på rangeringen, ikke om å beregne den. 
 
 **En runde er ikke det samme som en plasstildeling.** Runden er vinduet i opptaket der plasser fordeles og søkere får svar. Plasstildelingen er beregningen som gjennomføres i runden. Én runde kan ha mange plasstildelinger — prøvetildelinger som ikke publiseres, og til slutt én som publiseres.
 
@@ -58,19 +58,17 @@ Rangeringen kommer altså fra søknadsbehandlingen. Plasstildelingen eier ikke p
 
 Hver søknad som er med i en plasstildeling skal komme ut med et svar. En søker som mister kvalifiseringen sin mellom to runder skal få et tydelig avslag, ikke bare falle ut av resultatlisten.
 
-Dette er prinsippet dagens løsning bryter mest merkbart, og det er verdt å si hvorfor det er alvorlig: et stille bortfall er ikke bare dårlig service. Det gjør at fraværet av et resultat kan bety to helt ulike ting — at søkeren aldri var med, eller at hun ble tatt ut underveis — og da kan vi ikke svare søkeren på hva som skjedde med søknaden hennes.
+Dette er prinsippet dagens løsning bryter mest merkbart, og det er verdt å si hvorfor det er alvorlig: et stille bortfall gjør at fraværet av et resultat kan bety to helt ulike ting — at søkeren aldri var med, eller at hun ble tatt ut underveis — og da kan vi ikke svare søkeren på hva som skjedde med søknaden hennes.
 
 #### 2. Søkeren skal kunne stole på tilbudet sitt
 
 Fra det øyeblikket en søker har fått et tilbud, skal ikke en senere runde kunne ta det fra henne. Det er dette som skiller etterfylling fra et nytt opptak, og det er grunnen til at forrige rundes tilbud fryses og garanteres når en runde bygger på en tidligere publisert runde.
 
-Prisen står i prinsipp 3.
-
 #### 3. Ledige plasser skal ikke gå tapt, men de flyter bare der noen har bestemt at de skal flyte
 
 Er det ønsket flere tilbud i en utdanningskvote enn det finnes kvalifiserte søkere i den, overføres de overskytende plassene til en annen utdanningskvote — men bare til den ene utdanningskvoten lærestedet har pekt på, og bare innenfor samme utdanningstilbud. Minst én utdanningskvote er siste utdanningskvote og sender ikke plasser videre, typisk ordinær kvote.
 
-At flyten er eksplisitt og retningsbestemt er et bevisst valg, ikke en begrensning vi ikke rakk å løse: en plass som flyter dit ingen har bestemt, gir et resultat ingen kan forklare søkeren.
+At flyten er eksplisitt og retningsbestemt er et bevisst valg, ikke en begrensning: en plass som flyter dit ingen har bestemt, gir et resultat ingen kan forklare søkeren.
 
 #### 4. Beregning og publisering er skilt
 
@@ -89,9 +87,9 @@ Dette prinsippet er billig å ha og dyrt å miste: uten det må hver kvalitetssi
    SØKNADSBEHANDLING                      │     INNSTILLINGER PER UTDANNINGSKVOTE
    kvalifisering                          │     antall tilbud som skal gis,
         │                                 │     plassflyt,
-        ▼                                 │     tilbud til alle kvalifiserte,
-   kvotetilhørighet, poeng, rangering     │     utdanningskvote for tilbudsgaranti
-                                          │     (oppgave 2 og 3)
+        ▼                                 │     utdanningskvote for tilbudsgaranti,
+   kvotetilhørighet, poeng, rangering     │     (oppgave 2 og 3)
+                                          │              |
                                           │              │
         └───────────────┐                 │              │
                         ▼                 ▼              ▼
@@ -148,11 +146,9 @@ Begrunnelsen for høyre kolonne er prinsipp 2: på dette stadiet skal søkeren k
 
 «Delvis» betyr her at kjernefunksjonen virker og at det som mangler er navngitt. Ingen av oppgavene er usikre på om de virker.
 
-### Funn på tvers av oppgavene
+### Funn å undersøke på tvers av oppgavene
 
-Tre funn tilhører ingen enkeltoppgave, og de er de tyngste i dokumentet:
-
-1. **Ingen plasstildeling kan avbrytes eller kjøres om.** Dette er beslutning 3 fra innledningen, sett fra driftssiden. Konsekvensen er at enhver feilretting — en feil innstilling, ett manuelt tilbud, en avbrutt kjøring — koster en full omkjøring av hele tildelingen.
+To funn tilhører ingen enkeltoppgave, og de er de tyngste i dokumentet:
 
 2. **Tilgangsstyringen er alt-eller-ingenting.** Én rolle ser alle søkernavn og alle resultater i hele opptaket, uten finere inndeling. Behovet er opptaksleder- og saksbehandlertilganger avgrenset til de organisasjonene brukeren har tilgang fra. Dette er ikke bare en manglende feature — det er et personvernfunn, og det hører derfor også i del 2.
 
@@ -162,27 +158,26 @@ Tre funn tilhører ingen enkeltoppgave, og de er de tyngste i dokumentet:
 
 Dette er hva løsningen ikke svarer på, og som ikke lukkes med mer arbeid på samme sted:
 
-| Blindsone | Hva det betyr |
+| Blindsoner | Hva det betyr |
 |-----------|---------------|
 | Plassflyt mellom utdanningstilbud | Plasser flyter mellom utdanningskvoter innenfor ett utdanningstilbud. Ledig kapasitet på ett tilbud kan ikke brukes på et annet |
 | Flere mottakende utdanningskvoter | En utdanningskvote kan sende overskytende plasser til én utdanningskvote, ikke fordele dem på flere. Flerledds-kjeder virker, forgrening gjør ikke |
-| Poenggrense som historikk | Poenggrensen søkeren eventuelt ser i dag kommer fra en annen kilde enn tildelingen. Fjorårets median, som er viktig for tidlig tilbud, settes i søknadsbehandlingen |
-| Manuell overstyring | Det finnes ingen vei til å endre ett enkelt resultat. Alt går gjennom en ny tildeling |
+| Poenggrense som historikk | Poenggrensen søkeren eventuelt ser i dag kommer fra en annen kilde enn tildelingen. Fjorårets median, som er viktig for tidlig tilbud, settes i søknadsbehandlingen 
 | Negative opptaksparametere | Den historiske muligheten for å redusere antall aktive tilbud i et suppleringsopptak er ikke verifisert mot dagens løsning |
 
 ---
 
 ## Del 2: regelverk, roller og personvern
 
-Denne delen setter løsningen opp mot regelverket og mot HK-dirs meldte behov. Den er skrevet for å bli motsagt: der vi har tatt et standpunkt står det som vår påstand, og der vi ikke har konkludert står det i *Hva vi trenger avklart*. Vi er ikke jurister — dette er funksjonelle beskrivelser med et forslag til innramming.
+Denne delen setter løsningen opp mot regelverket og mot HK-dirs meldte behov. Den er skrevet for å bli motsagt: der vi har tatt et standpunkt står det som vår påstand, og der vi ikke har konkludert står det i *Hva vi trenger avklart*. Dette er funksjonelle beskrivelser med et forslag til innramming.
 
-### Poenglikhet er delvis forskriftsfestet
+### Poenglikhetsregler er forskriftsfestet nasjonalt eller lokalt
 
-At eldste søker går foran yngre ved poenglikhet følger av opptaksforskriften § 7-1 fjerde ledd. Det er ikke et åpent spørsmål, og notatene behandlet det som ett. Dagens kode er riktig.
+At eldste søker går foran yngre ved poenglikhet følger av opptaksforskriften § 7-1 fjerde ledd. Forskriften vil endres til neste år, og yngre søkere skal gå foran eldre i UHG. Dagens løser ikke det.
 
-Vår påstand: dette hører i dokumentasjonen, ikke i diskusjonen. Det vi trenger er at regelen er synlig som forskriftsfestet, slik at den ikke blir tatt opp på nytt hver gang noen leser at det finnes flere poenglikhetsregler.
+Vår påstand: dette må dokumenteres slik at regelen er synlig som forskriftsfestet. Ellers vil vi får spørsmål om det.
 
-Løsningen skal likevel kunne håndtere flere regler, koblet til opptaket:
+Løsningen skal kunne håndtere flere regler, koblet til opptaket:
 
 | Regel | Merknad |
 |-------|---------|
@@ -191,9 +186,9 @@ Løsningen skal likevel kunne håndtere flere regler, koblet til opptaket:
 | Alle med samme sum får tilbud | Kan settes som unntak per utdanningstilbud |
 | Tidspunkt for levert søknad — tidligste vinner | Egen regel for runden «ledige studieplasser» |
 
-### Valgfriheten ved poenglikhet kan være tapt
+### Valgfriheten ved poenglikhet er redusert
 
-Lærestedene kunne tidligere velge mellom en strengere avgrensning og «alle med samme poengsum får tilbud», per studium. I dag ser det ut til at hele likhetsgruppen alltid får tilbud, uten alternativ.
+Lærestedene kunne i 2020 velge mellom en strengere avgrensning og «alle med samme poengsum får tilbud», per utdanningstilbud. Enkelte har ønsket tilbake dette.
 
 Vår påstand: lærestedet skal kunne legge unntakskrav på et utdanningstilbud, men bare i én retning — «alle med samme sum får tilbud». En strengere avgrensning enn forskriftens er ikke lov. Om dagens oppførsel dermed er riktig eller for grov, avhenger av om valgfriheten var mellom to lovlige alternativer eller mellom et lovlig og et ulovlig.
 
@@ -201,7 +196,7 @@ Vår påstand: lærestedet skal kunne legge unntakskrav på et utdanningstilbud,
 
 En tilbudsgaranti er en kode på en søknad som gir tilbud uavhengig av poengsum og kvalifiseringsstatus. Den brukes til å rette opp feil, men også til å gi tilbud til spesielle søkergrupper, til tilsagn i et tidligopptak, og til søkere med reservert plass.
 
-For hvert studium kan lærestedet eller HK-dir sette om tilbudsgarantier skal tas fra en bestemt utdanningskvote, og i så fall hvilken. Plasstildelingen skal ta garantiplassene fra den utdanningskvoten som er markert for det.
+For hvert utdanningstilbud kan opptaksforvalter ved lærestedet eller HK-dir sette om tilbudsgarantier skal tas fra en bestemt utdanningskvote, og i så fall hvilken. Plasstildelingen skal ta garantiplassene fra den utdanningskvoten som er markert for det.
 
 Dette er verdt å merke seg fordi en tilbudsgaranti forbruker en plass: den er ikke gratis, den flytter belastningen til en utdanningskvote noen har pekt på.
 
@@ -209,16 +204,16 @@ Dette er verdt å merke seg fordi en tilbudsgaranti forbruker en plass: den er i
 
 At én rolle ser alle søkernavn og alle resultater i hele opptaket, uten inndeling per organisasjon, betyr at en saksbehandler ved ett lærested i praksis har innsyn i søkere som ikke angår hennes institusjon.
 
-Vår påstand: dette er en for bred tilgang til personopplysninger, og inndeling per organisasjon er et krav og ikke en forbedring. Vi bringer det inn her framfor bare i funn-listen, fordi konsekvensen ikke er dårlig ergonomi — den er at behandlingen kan være mer omfattende enn den trenger å være.
+Vår påstand: dette er en for bred tilgang til personopplysninger, og inndeling per organisasjon er et krav og ikke en forbedring. Vi bringer det inn her framfor bare i funn-listen, fordi konsekvensen av å ikke rette dette kan ha personvernkonsekvenser.
 
 ### Søkeren skal kunne forstå svaret sitt
 
-Søkeren skal se tilbud, avslag eller venteliste, og et vedtak med begrunnelse: kvalifisering, rangering, poenggrense.
+Søkeren skal se tilbud, avslag eller venteliste, og et vedtak med begrunnelse: kvalifisering, rangering, poenggrense, samt hvilken organisasjon som har behandlet søknaden. Slik ivaretar vi søkers innsynsrett og klagerett. 
 
 To hull er verdt å nevne her og ikke bare i statustabellen, fordi de rammer nettopp forklarbarheten:
 
 - **Ventelistenummeret når ikke fram til søkeren i dag**, selv om innstillingen for å vise det finnes. En venteliste uten nummer er ikke en venteliste for søkeren; det er en beskjed om at hun ikke fikk plass.
-- **Poenggrensen beregnes og lagres ikke av tildelingen.** Den poenggrensen søkeren eventuelt ser, kommer fra en annen kilde. Vedtaket begrunnes altså med et tall løsningen selv ikke har regnet ut.
+- **Poenggrensen lagres ikke av tildelingen.** Den poenggrensen søkeren eventuelt ser, kommer fra en annen kilde. Vedtaket begrunnes altså med et tall plasstildelingen selv ikke har.
 
 Ved klage må det i tillegg kunne spores at en plass kom via plassflyt fra en annen utdanningskvote. Det virker i dag.
 
@@ -240,7 +235,7 @@ Ordnet etter hvor mye svaret endrer løsningen.
 12. **Er det funksjonelle forskjeller mellom rundetypene, utover arven?** Dette må gås opp med domeneeksperter og avklares med prosjektleder. Hvis svaret er «ingen», er rundetypen et navn og ikke en regel, og det bør stå.
 13. **Opptaksforvalter skal utføre alle oppgaver knyttet til plasstildeling.** Dette er avklart: opptaksforvalter er rollen som har tilgang til å legge til runder, sette innstillinger, starte tildelinger, publisere og håndtere resultater.
 
-Spørsmål 4–11 er produkteier- og HK-dir-spørsmål. Spørsmål 1–3 endrer omfanget. Spørsmål 12–13 er hull i notatene, ikke i løsningen.
+Spørsmål 4–11 er prosjektleder- og HK-dir-spørsmål. Spørsmål 1–3 endrer omfanget. Spørsmål 12–13 er hull i notatene, ikke i løsningen.
 
 ---
 
