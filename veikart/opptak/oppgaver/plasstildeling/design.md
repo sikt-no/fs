@@ -1,7 +1,7 @@
 # Plasstildeling — Raffineringsnotat
 
 > Utgangsdokument for planlegging av ferdigstilling av plasstildeling i opptak.
-> Basert paa gap-analyse mellom krav (Confluence), datamodell (Admissio-skjema), Jira-saker (TAKE-prosjektet) og kildekoden (GitLab fs-plattform/opptak).
+> Basert paa gap-analyse mellom krav (Confluence), datamodell (opptak-databasen), Jira-saker (TAKE-prosjektet) og kildekoden (GitLab fs-plattform/opptak).
 
 ## Kontekstdiagram
 
@@ -71,7 +71,7 @@ Oppgavene foelger Confluence-sidens nummerering (oppdatert september 2026). Numm
 
 | Kilde | Tilgang | Kommentar |
 |-------|---------|-----------|
-| Datamodell (Admissio-skjema via FS-MCP) | Verifisert | Tabeller i `plasstildeling`, `opptak`, `soknad`, `regelverk` |
+| Datamodell (opptak-databasen via FS-MCP) | Verifisert | Tabeller i `plasstildeling`, `opptak`, `soknad`, `regelverk` |
 | Jira TAKE-prosjektet | Verifisert | 56 saker gjennomgaatt |
 | GitHub sikt-no/fs | Verifisert | Issues og initiativ #216 |
 | GitLab fs-plattform/opptak | **Verifisert** | Kjernetjenester og algoritme gjennomgaatt |
