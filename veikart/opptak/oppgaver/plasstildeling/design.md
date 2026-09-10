@@ -8,7 +8,7 @@ Dokumentet er skrevet for alle som trenger å forstå hva plasstildeling er, hvi
 
 ---
 
-**Tre beslutninger bør leses før resten, fordi alt annet følger av dem. To er tatt. Den tredje er ikke, og bør tas.**
+**Tre beslutninger bør leses før resten, fordi alt annet følger av dem. To er tatt. Nummer 1 skal gjenvisiteres nå.**
 
 1. **Rundetypen styrer ikke lenger hvordan en runde oppfører seg.** Det gjør arven: om runden bygger videre på en tidligere publisert runde. Historisk var det rundetypen som avgjorde om et nei-svar frigjorde plassen, om tidligere tilbud sto ved lag, og om det ble satt nye bortfall. I dagens løsning er dette flyttet — se *Hva en runde arver*.
 
