@@ -20,7 +20,7 @@
 
 ## Kort beskrivelse
 
-Ferdigstille plasstildeling i opptak slik at opptaksforvalter kan opprette runder, kjøre plasstildelinger, publisere resultat til søker, og håndtere svar — klar for første samordna fagskoleopptak 2027.
+Ferdigstille plasstildeling i opptak slik at opptaksforvalter kan opprette runder, kjøre plasstildelinger, publisere resultat til søker, og håndtere svar — klar for første samordna opptak 2027.
 
 ## Oppgaver
 
@@ -34,7 +34,7 @@ Ferdigstille plasstildeling i opptak slik at opptaksforvalter kan opprette runde
 | 6 | Vise resultatet til saksbehandler | |
 | 7 | Publisere resultatet til søkerne | |
 | 8 | Håndtere svar fra søker | |
-| 9 | Systemet gir automatisk nye tilbud ved nei-svar (utenfor scope) | |
+| 9 | Systemet gir automatisk nye tilbud ved nei-svar (utenfor scope) | NA|
 
 ## Statuslogg
 
