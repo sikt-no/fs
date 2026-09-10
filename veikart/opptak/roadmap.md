@@ -1,6 +1,6 @@
 # Veikart — Opptak
 
-Siste oppdatering: 2026-09-09
+Siste oppdatering: 2026-09-10
 
 Dette veikartet viser oppgaver teamet aktivt jobber med eller har levert. For overordnet prioritering paa tvers av FS, se [FS Offentlig saksoversikt](https://github.com/orgs/sikt-no/projects/4/views/3).
 
@@ -15,6 +15,7 @@ Dette veikartet viser oppgaver teamet aktivt jobber med eller har levert. For ov
 | Issue | Oppgave | Initiativ | Fase | Prioritet | Eier | Reviewere | Mappe |
 |-------|---------|-----------|------|-----------|------|-----------|-------|
 | [#216](https://github.com/sikt-no/fs/issues/216) | Plasstildeling | #216 | design | high | – | – | [plasstildeling](oppgaver/plasstildeling/) |
+| – | Regelverk | #216 | design | high | – | – | [regelverk](oppgaver/regelverk/) |
 
 ## Ferdig
 
