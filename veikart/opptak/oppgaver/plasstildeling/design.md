@@ -236,7 +236,7 @@ Vår påstand: lærestedet skal kunne legge unntakskrav på et utdanningstilbud,
 
 ### Tilbudsgaranti tas fra en bestemt utdanningskvote
 
-En tilbudsgaranti er en kode på en søknad som gir tilbud uavhengig av poengsum og kvalifiseringsstatus. Den brukes til å rette opp feil, men også til å gi tilbud til spesielle søkergrupper, til tilsagn i et tidligopptak, og til søkere med reservert plass.
+En tilbudsgaranti er en kode på en søknad som gir tilbud uavhengig av poengsum og kvalifiseringsstatus. Den brukes til å rette opp feil, men også til å gi tilbud til spesielle søkergrupper, til tilsagn ved tidlig behandling og tilbud, og til søkere med reservert plass.
 
 For hvert utdanningstilbud kan opptaksforvalter ved lærestedet eller HK-dir sette om tilbudsgarantier skal tas fra en bestemt utdanningskvote, og i så fall hvilken. Plasstildelingen skal ta garantiplassene fra den utdanningskvoten som er markert for det.
 
@@ -244,7 +244,7 @@ Dette er verdt å merke seg fordi en tilbudsgaranti forbruker en plass: den er i
 
 ### Tilgangsstyring er et personvernspørsmål, ikke bare en feature
 
-At én rolle ser alle søkernavn og alle resultater i hele opptaket, uten inndeling per organisasjon, betyr at en saksbehandler ved ett lærested i praksis har innsyn i søkere som ikke angår hennes institusjon.
+At én rolle ser alle søkernavn og alle resultater i hele opptaket, uten inndeling per organisasjon, betyr at en saksbehandler ved ett lærested i praksis har innsyn i søkere som ikke angår hennes lærested.
 
 Vår påstand: dette er en for bred tilgang til personopplysninger, og inndeling per organisasjon er et krav og ikke en forbedring. Vi bringer det inn her framfor bare i funn-listen, fordi konsekvensen av å ikke rette dette kan ha personvernkonsekvenser.
 
@@ -317,7 +317,7 @@ Spørsmål 4–7, 9–11 er prosjektleder- og HK-dir-spørsmål. Spørsmål 1 en
 
 **Tilbud til alle kvalifiserte** — en utdanningskvote kan settes opp uten poenggrense, slik at alle kvalifiserte får plass uansett poengsum. Typisk ved lav søkning.
 
-**Tilbudsgaranti** — en kode på en søknad som gir tilbud om studieplass uavhengig av poengsum og kvalifiseringsstatus. Brukes til å rette opp feil, gi tilbud til spesielle søkergrupper, gi tilsagn i et tidligopptak, eller til søkere med reservert plass. Per studium settes om garantier skal tas fra en bestemt utdanningskvote, og hvilken.
+**Tilbudsgaranti** — en kode på en søknad som gir tilbud om studieplass uavhengig av poengsum og kvalifiseringsstatus. Brukes til å rette opp feil, gi tilbud til spesielle søkergrupper, gi tilsagn ved tidlig behandling og tilbud, eller til søkere med reservert plass. Per studium settes om garantier skal tas fra en bestemt utdanningskvote, og hvilken.
 
 **Opprykk** — når en søker får tilbud på en høyere prioritet, og den opprinnelige plassen fristilles.
 

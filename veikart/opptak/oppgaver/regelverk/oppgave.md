@@ -32,7 +32,7 @@ Ferdigstille regelverksforvaltningen i opptak slik at Samordna opptak og enkeltl
 | 3 | Definere hvordan søkere rangeres (poengberegning) | |
 | 4 | Definere kvoter | |
 | 5 | Koble spesielle opptakskrav til kvoter | |
-| 6 | Koble regelverket til det konkrete studietilbudet og opptaket | |
+| 6 | Koble regelverket til det konkrete utdanningstilbudet og opptaket | |
 
 ## Statuslogg
 
