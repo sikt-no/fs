@@ -38,16 +38,19 @@ Egenskap: Vedlikeholde organisasjon
 
   Regel: Erasmuskode har begrenset gyldighetsperiode
 
+    @could
     Scenario: Erasmuskode registreres med gyldighetsperiode
       Når jeg registrerer eller endrer en Erasmuskode
       Så skal jeg kunne angi fra- og til-dato for koden
       Og koden er gyldig i inntil 4 år
 
+    @could
     Scenario: Utløpt Erasmuskode markeres som historisk
       Gitt at en Erasmuskodes gyldighetsperiode er utløpt
       Så skal koden markeres som historisk
       Og en advarsel vises hvis koden fortsatt er satt som aktiv
 
+    @could
     Scenario: Historikk over Erasmuskodeendringer er tilgjengelig
       Gitt at en organisasjon har hatt flere Erasmuskoder over tid
       Så skal endringshistorikken for Erasmuskoder være tilgjengelig
@@ -55,6 +58,7 @@ Egenskap: Vedlikeholde organisasjon
 
   Regel: Land som forlater Erasmus-avtalen håndteres korrekt
 
+    @could
     Scenario: Erasmuskode deaktiveres for land utenfor avtalen
       Gitt at et land har forlatt Erasmus-avtalen
       Når Erasmuskoden settes til inaktiv med sluttdato

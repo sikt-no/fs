@@ -8,15 +8,11 @@ Egenskap: Opprette organisasjon
 
   Regel: Norsk organisasjon henter data fra Brønnøysundregistrene
 
+    @should
     Scenario: Organisasjonsnummer gir automatisk utfylling fra Brønnøysund
       Gitt at jeg oppretter en ny norsk organisasjon
       Når jeg oppgir organisasjonsnummer
       Så skal systemet hente navn, adresse og organisasjonstype fra Brønnøysundregistrene automatisk
-
-    Scenario: Organisasjonstype settes fra Brønnøysundregistrene
-      Gitt at jeg oppretter en norsk organisasjon med gyldig organisasjonsnummer
-      Når dataene hentes fra Brønnøysundregistrene
-      Så skal organisasjonstype settes til verdien fra Brønnøysundregistrene
 
   Regel: Organisasjonsid tildeles automatisk
 
@@ -35,14 +31,24 @@ Egenskap: Opprette organisasjon
   Regel: Obligatoriske felter må fylles ut
 
     Scenario: Opprette organisasjon med obligatoriske felter
-      Når jeg fyller ut navn, organisasjonstype og URL og lagrer
+      Når jeg fyller ut navn, organisasjonstype, landkode og originalspråkkode og lagrer
       Så skal organisasjonen opprettes og tildeles organisasjonsid
+
+    Scenario: Landkode er obligatorisk
+      Gitt at jeg oppretter en organisasjon
+      Når jeg forsøker å lagre uten å ha valgt landkode
+      Så skal systemet hindre lagring og be meg fylle ut landkode
+
+    Scenario: Originalspråkkode er obligatorisk
+      Gitt at jeg oppretter en organisasjon
+      Når jeg forsøker å lagre uten å ha valgt originalspråkkode
+      Så skal systemet hindre lagring og be meg velge en ISO 639-språkkode
 
   Regel: Valgfrie felter kan registreres
 
-    Scenario: Registrere akronym
-      Når jeg fyller ut akronym for organisasjonen
-      Så skal akronymet lagres og brukes i søk
+    Scenario: Registrere kortnavn
+      Når jeg fyller ut kortnavn for organisasjonen
+      Så skal kortnavnet lagres og brukes i søk
 
     Scenario: Registrere by
       Når jeg fyller ut by for organisasjonen
@@ -60,9 +66,13 @@ Egenskap: Opprette organisasjon
       Når jeg markerer organisasjonen som godkjent betalingsinstitusjon
       Så skal dette lagres på organisasjonen
 
-    Scenario: Registrere landkode
-      Når jeg velger registrert landkode for organisasjonen
-      Så skal landkoden lagres på organisasjonen
+    Scenario: Registrere URL
+      Når jeg fyller ut URL for organisasjonen
+      Så skal URL-en lagres på organisasjonen
+
+    Scenario: Registrere SCHAC-kode
+      Når jeg fyller ut SCHAC-kode for organisasjonen
+      Så skal SCHAC-koden lagres på organisasjonen
 
   Regel: Erasmuskode verifiseres mot HEI-registeret
 
@@ -76,28 +86,39 @@ Egenskap: Opprette organisasjon
       Så skal jeg se en advarsel om at koden ikke ble funnet
       Og kunne velge om jeg likevel ønsker å lagre den
 
-  Regel: Språkkoder settes basert på nasjonalitet
+  Regel: Navn og originalspråk registreres
 
-    Scenario: Norsk organisasjon får norske språkkoder
-      Gitt at organisasjonen er norsk
-      Så skal språkkodene NO, NYNO, SAMISK og ENG være tilgjengelige
-
-    Scenario: Utenlandsk organisasjon får internasjonale språkkoder
-      Gitt at organisasjonen er utenlandsk
-      Så skal språkkodene ORG og ENG være tilgjengelige
-
-  Regel: Utenlandske organisasjoner kan ha visningsnavn
-
-    Scenario: Visningsnavn for utenlandsk organisasjon
-      Gitt at jeg oppretter en utenlandsk organisasjon
-      Når jeg fyller ut visningsnavn
-      Så skal visningsnavnet brukes der organisasjonens navn vises for brukere
-
-  Regel: Akkreditering registreres av NOKUT
-
-    Scenario: Akkreditering kan ikke settes av systemadministrator
+    Scenario: Originalnavn registreres på originalspråk i originaltegn
       Gitt at jeg oppretter en organisasjon
-      Så skal akkrediteringsfeltet være skrivebeskyttet for systemadministratorer
+      Når jeg registrerer organisasjonsnavnet
+      Så skal navnet lagres på originalspråket i originaltegn
+
+    Scenario: Originalspråk velges fra ISO 639-standard
+      Gitt at jeg registrerer et originalnavn
+      Når jeg velger språkkode for originalspråket
+      Så skal jeg kunne velge fra ISO 639-språkkoder
+
+    Scenario: Alternative navn kan legges til på andre språk
+      Gitt at jeg oppretter en organisasjon med originalnavn
+      Når jeg ønsker å legge til et alternativt navn
+      Så skal jeg kunne registrere et navn på et annet språk
+      Og knytte det til en ISO 639-språkkode
+
+    Scenario: Engelsk navn vises under for organisasjoner med ikke-norsk alfabet
+      Gitt at en organisasjon har navn på ikke-norsk alfabet
+      Og har et alternativt navn på engelsk
+      Så skal det engelske navnet vises under organisasjonsnavnet
+
+    Scenario: Oppfordring om engelsk navn dersom dette mangler
+      Gitt at en organisasjon har navn på ikke-norsk alfabet
+      Og ingen alternative navn er registrert
+      Så skal systemet vise en oppfordring om å registrere et engelsk navn
+
+  Regel: Akkreditering registreres av NOKUT for norske læresteder
+
+    Scenario: Akkrediteringsfelt vises kun for norske læresteder
+      Gitt at jeg oppretter et norsk lærested
+      Så skal akkrediteringsfeltet vises og være skrivebeskyttet
       Og det skal fremgå at akkreditering registreres av NOKUT
 
   Regel: Organisasjonen må godkjennes før den er aktiv
@@ -113,5 +134,6 @@ Egenskap: Opprette organisasjon
 
 # ÅPNE SPØRSMÅL:
 # - Hvem kan opprette organisasjoner — kun SIKT-ansatte, eller også lokale administratorer?
-# - Skal visningsnavn være et eget felt, eller kun brukes for utenlandske inst.?
 # - Eksakt format og regler for organisasjonskode per land?
+# - Skal norske organisasjoner ha faste språkkoder (NO, NYNO, SAMISK, ENG) i tillegg til ISO 639,
+#   eller er ISO 639 tilstrekkelig for alle? Mulig konflikt med tidligere krav om faste koder.
