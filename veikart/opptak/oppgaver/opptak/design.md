@@ -4,7 +4,7 @@ Opptaksforvalter skal kunne opprette og forvalte opptak med alle innstillinger s
 
 Dokumentet er skrevet for alle som trenger å forstå hva det vil si å opprette et opptak, hvordan samordning fungerer, og hvilke innstillinger som må settes. Funksjonell løsning per oppgave og tekniske detaljer ligger i [oppgave.md](oppgave.md).
 
-**Status:** første utkast, 2026-09-11. Bygger på gjennomgang av databasen i fs-plattform/opptak (PostgreSQL), FS-databasen (Oracle, OPPTAK-tabellen), og domenedokumentasjon fra fs.sikt.no.
+**Status:** første utkast, 2026-09-11. Bygger på gjennomgang av databasen i fs-plattform/opptak (PostgreSQL), FS-SIS (Oracle, OPPTAK-tabellen), og domenedokumentasjon fra fs.sikt.no.
 
 ---
 
@@ -177,7 +177,7 @@ Fellestekster er tekster som vises til søkere i forbindelse med opptaket. Alle 
 | **Kvitteringstekst** | Tekst som vises etter at søker har sendt inn søknad. Typisk: bekreftelse på mottak, informasjon om videre prosess, kontaktinformasjon. | Etter innsending av søknad |
 | **Kvitteringstekst etter avsluttet søknadsperiode** | Tekst som vises hvis søker forsøker å nå opptaket etter at søknadsfristen er utløpt. | Etter søknadsfristens utløp |
 
-I FS er disse modellert som `INTROTEKST`, `BESKRIVELSE`, `TEKST_KVITTERING` og `TEKST_KVITTERING_AVSL` med suffiks for språk (`_NYNORSK`, `_ENGELSK`).
+I FS-SIS er disse modellert som `INTROTEKST`, `BESKRIVELSE`, `TEKST_KVITTERING` og `TEKST_KVITTERING_AVSL` med suffiks for språk (`_NYNORSK`, `_ENGELSK`).
 
 ### Utdanningstilbud i opptaket
 
@@ -210,11 +210,11 @@ Detaljert design for utdanningstilbud — inkludert konfigurasjon av kapasitet, 
 | Gap | Beskrivelse |
 |-----|-------------|
 | **Innstillinger på opptaket selv** | I dag ligger mange innstillinger (regelverkssamling, tidlig behandling og tilbud, særskilt vurdering, søkergrupper) på opptakstype. Disse må flyttes til eller dupliseres på opptaksnivå. |
-| **Frister** | I fs-plattform/opptak finnes svarfrist og publiseringstidspunkt på opptaksrunde, men de generelle fristene (søknadsfrist, ettersendingsfrist, omprioriteringsfrist, frist tidlig tilbud, frist realkompetanse, frist endring svar) er ikke modellert. I FS ligger disse direkte på OPPTAK-tabellen. |
-| **Fellestekster** | Ikke modellert i fs-plattform/opptak. I FS er det fire teksttyper med trespråklig støtte på OPPTAK-tabellen. |
+| **Frister** | I fs-plattform/opptak finnes svarfrist og publiseringstidspunkt på opptaksrunde, men de generelle fristene (søknadsfrist, ettersendingsfrist, omprioriteringsfrist, frist tidlig tilbud, frist realkompetanse, frist endring svar) er ikke modellert. I FS-SIS ligger disse direkte på OPPTAK-tabellen. |
+| **Fellestekster** | Ikke modellert i fs-plattform/opptak. I FS-SIS er det fire teksttyper med trespråklig støtte på OPPTAK-tabellen. |
 | **Søknadsnummerserie** | Ikke modellert i fs-plattform/opptak. |
 | **Maks søknadsalternativer** | Ikke modellert i fs-plattform/opptak |
-| **Opptaksperiode (fra/til)** | Ikke eksplisitt modellert i fs-plattform/opptak. I FS er dette `DATO_FRA` / `DATO_TIL`. |
+| **Opptaksperiode (fra/til)** | Ikke eksplisitt modellert i fs-plattform/opptak. I FS-SIS er dette `DATO_FRA` / `DATO_TIL`. |
 | **Kopiering fra tidligere opptak** | Ikke implementert. |
 | **Dokumenttyper på opptaksnivå** | I dag knyttet til opptakstype, må flyttes til opptak. |
 
@@ -224,7 +224,7 @@ Detaljert design for utdanningstilbud — inkludert konfigurasjon av kapasitet, 
 
 1. **Skal søkergrupper modelleres som flervalg eller som én forhåndsdefinert profil?** I FS-dokumentasjonen beskrives søkergrupper som diskrete grupper (nordisk, EU/EØS, hele verden). I ny løsning kan det være enklere med en kombinasjon av egenskaper (geografi + studentstatus + invitasjon). Må avklares - ikke nødvendig nå, fordi alle skal kunne søke i samordna opptak.
 
-2. **Skal frister ha klokkeslett?** I FS er frister datoer uten klokkeslett (implisitt 23:59). I ny løsning kan det være behov for eksplisitt klokkeslett, f.eks. for å publisere tilbud klokken 09:00.
+2. **Skal frister ha klokkeslett?** I FS-SIS er frister datoer uten klokkeslett (implisitt 23:59). I ny løsning kan det være behov for eksplisitt klokkeslett, f.eks. for å publisere tilbud klokken 09:00.
 
 3. **Hva skjer med løpende opptak?** Opptak uten fast sluttdato (søknader behandles fortløpende) er relevant for emneopptak og kurs, men er utsatt (se beslutning 4). Skal opptaksperioden likevel støtte «ingen til-dato»?
 
@@ -232,4 +232,4 @@ Detaljert design for utdanningstilbud — inkludert konfigurasjon av kapasitet, 
 
 5. **Validering ved publisering: hva skal kreves?** Forslag: et opptak må ha navn, opptaksperiode, minst ett utdanningstilbud og søknadsfrist for å kunne publiseres. Andre krav?
 
-6. **Fellestekster: er fire teksttyper tilstrekkelig?** FS har fire (intro, beskrivelse, kvittering, kvittering-avsluttet). Er det behov for flere i ny løsning, f.eks. tekst for venteliste, tekst for avslag, eller tekst for tidlig tilbud?
+6. **Fellestekster: er fire teksttyper tilstrekkelig?** FS-SIS har fire (intro, beskrivelse, kvittering, kvittering-avsluttet). Er det behov for flere i ny løsning, f.eks. tekst for venteliste, tekst for avslag, eller tekst for tidlig tilbud?
