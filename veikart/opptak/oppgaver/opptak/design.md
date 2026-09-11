@@ -10,7 +10,7 @@ Dokumentet er skrevet for alle som trenger å forstå hva det vil si å opprette
 
 **Fire beslutninger bør leses før resten, fordi alt annet følger av dem. To er tatt. To er åpne.**
 
-1. **Opptakstype som eget konsept utgår.** I dag arver et opptak innstillinger fra en opptakstype (UHG, FSU, lokalt osv.). I ny løsning oppretter man bare et opptak. Om opptaket er samordnet eller lokalt fremgår av om flere læresteder deltar. Innstillinger som i dag ligger på opptakstype flyttes til opptaket selv. Dette er tatt: vi forenkler modellen og fjerner et mellomnivå som skaper forvirring.
+1. **Opptakstype som konfigurasjonsnivå utgår, men bevares som fast kodeverk for matching.** I dag arver et opptak innstillinger fra en opptakstype (UHG, FSU, lokalt osv.). I ny løsning oppretter man bare et opptak — innstillinger som i dag ligger på opptakstype flyttes til opptaket selv, og brukere skal ikke kunne opprette egne opptakstyper. Men opptakstype bevares som et lite, sentralt forvaltet kodeverk (f.eks. UHG, HYU, master, emne/kurs) for å løse matchingproblemet mellom utdanningsmulighet og opptak: lærestedet markerer på utdanningsmuligheten hvilken opptakstype utdanningen skal tilbys gjennom, og opptak med samme opptakstype kan automatisk plukke opp tilknyttede utdanningstilbud. Uten dette kodesettet må tilknytningen registreres manuelt hvert år. Denne nyansen bør diskuteres med prosjektleder.
 
 2. **Samordning er en egenskap ved opptaket, ikke en type.** Et opptak blir samordnet ved at opptakseier inviterer andre læresteder til å delta med utdanningstilbud og saksbehandlere. Et opptak uten inviterte læresteder er lokalt. Det finnes ikke en separat «samordnet»-bryter — samordning fremgår av deltakerne. Dette er tatt.
 
