@@ -179,6 +179,58 @@ Fellestekster er tekster som vises til søkere i forbindelse med opptaket. Alle 
 
 I FS-SIS er disse modellert som `INTROTEKST`, `BESKRIVELSE`, `TEKST_KVITTERING` og `TEKST_KVITTERING_AVSL` med suffiks for språk (`_NYNORSK`, `_ENGELSK`).
 
+### Svarmeldingsmal
+
+Når plasstildelingen publiseres, får søkeren en melding om at opptaksvedtaket foreligger i Min kompetanse. Meldingsteksten er ikke en fritekst — den er en **mal med juridisk kjerne** som settes på opptaket.
+
+#### Struktur: fast kjerne + parametere + valgfritt tillegg
+
+Malen består av tre lag:
+
+**1. Juridisk kjerne (låst — kan ikke redigeres av lærested eller SO):**
+
+Formuleringer som oppfyller kravene i forvaltningsloven § 27 og eForvaltningsforskriften § 8:
+
+| Krav | Formulering i malen |
+|------|---------------------|
+| Varsel om enkeltvedtak | «Svaret er et enkeltvedtak etter forvaltningsloven» |
+| Begrunnelse tilgjengelig | «med begrunnelse ved å logge deg på Min kompetanse» |
+| Klageadgang + hjemmel | «klagerett etter forvaltningslova § 28» |
+| Klagefrist | «3 uker fra du fikk tilgang til vedtaket i Min kompetanse» |
+| Klageinstans | «det stedet som har behandlet søknaden din» med henvisning til Min kompetanse |
+| Fremgangsmåte for klage | Henvisning til nettsidene til saksbehandlingsstedet |
+
+Endring i den juridiske kjernen krever versjonskontroll og godkjenning av jurist. Et lærested skal ikke kunne overskrive denne delen.
+
+**2. Parametere fra opptaket (settes automatisk):**
+
+| Parameter | Kilde |
+|-----------|-------|
+| Opptaksnavn | Opptakets navn (f.eks. «Samordna opptak 2027») |
+| Svarfrist | Svarfrist fra opptaksrunden |
+
+Disse er rene datafelt — ikke redigerbar tekst, bare verdier fra opptaket og opptaksrunden.
+
+**3. Tilleggsinformasjon fra lærested/SO (valgfritt):**
+
+Et avgrenset tilleggsfelt som legges etter den juridiske kjernen. Lærestedet eller SO kan legge til ekstra informasjon som gjelder alle søkere i opptaket. Feltet kan ikke overskrive kjerneteksten.
+
+Det er uklart om det finnes et behov for tilleggsinformasjon i samordna opptak for 2027. Informasjon som gjelder enkelte utdanningstilbud må løses et annet sted.
+
+#### Eksempel på komplett melding
+
+> Du har fått svar på din søknad om studieplass i **[Samordna opptak 2027]**. Svaret er et enkeltvedtak etter forvaltningsloven. Du finner svaret på din søknad med begrunnelse ved å logge deg på Min kompetanse, og gå til din søknad.
+>
+> Frist for å svare på tilbud om studieplass eller ventelisteplass er **[DATO]**.
+>
+> Hvis du mener det er gjort feil i behandlingen av søknaden din, så har du klagerett etter forvaltningslova § 28. Klagefristen er 3 uker fra du fikk tilgang til vedtaket i Min kompetanse.
+>
+> Du må rette klagen til det stedet som har behandlet søknaden din. Se mer informasjon om hvem som har behandlet søknaden i Min kompetanse og hvordan du klager på nettsidene til Samordna opptak.
+
+#### Forholdet til varsling og vedtaksformidling
+
+Svarmeldingsmalen definerer *hva* som sendes. *Hvordan* meldingen sendes (kanaler, påminnelser, hendelseslogg) er en egen oppgave — se [vedtaksformidling/design.md](../vedtaksformidling/design.md).
+
 ### Utdanningstilbud i opptaket
 
 Et opptak må ha minst ett utdanningstilbud for å gi søkere mulighet til å legge søknadsalternativer i søknaden sin. Oppretting, konfigurasjon og tilknytning av utdanningstilbud er en egen oppgave med eget designdokument — se [utdanningstilbud/design.md](../utdanningstilbud/design.md).

@@ -35,6 +35,8 @@ Opptaksforvalter skal kunne opprette et opptak — samordnet eller lokalt — me
 | 6 | Sette frister og tidsperioder | |
 | 7 | Sette fellestekster for søkere | [#214](https://github.com/sikt-no/fs/issues/214) |
 | 8 | Utdanningstilbud i opptak (egen oppgave) | Se [utdanningstilbud](../utdanningstilbud/) |
+| 9 | Svarmeldingsmal (juridisk kjerne + parametere) | [#214](https://github.com/sikt-no/fs/issues/214) |
+| 10 | Vedtaksformidling (egen oppgave) | Se [vedtaksformidling](../vedtaksformidling/) |
 
 ## Statuslogg
 
