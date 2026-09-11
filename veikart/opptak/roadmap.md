@@ -17,6 +17,7 @@ Dette veikartet viser oppgaver teamet aktivt jobber med eller har levert. For ov
 | [#216](https://github.com/sikt-no/fs/issues/216) | Plasstildeling | #216 | design | high | – | – | [plasstildeling](oppgaver/plasstildeling/) |
 | – | Regelverk | #216 | design | high | – | – | [regelverk](oppgaver/regelverk/) |
 | [#211](https://github.com/sikt-no/fs/issues/211) | Opprette og vedlikeholde opptak | #216 | design | high | – | – | [opptak](oppgaver/opptak/) |
+| [#398](https://github.com/sikt-no/fs/issues/398) | Utdanningstilbud i opptak | #216 | design | high | – | – | [utdanningstilbud](oppgaver/utdanningstilbud/) |
 
 ## Ferdig
 

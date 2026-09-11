@@ -164,6 +164,63 @@ kvotetype
 
 **Grunnlag og aldersgrenser:** HK-dir har meldt uklarhet om forskjellen mellom aldersgrense på kvotetype og aldersgrense på grunnlag, og om «automatisk valg av grunnlag» setter synlighet i saksbehandling eller velger automatisk. Spørsmålet om alder over 23 inkluderer de som fyller 23 samme år er også åpent ([TAKE-236](https://sikt.atlassian.net/browse/TAKE-236)).
 
+### Forslag: relativ fordeling på kvotetypenivå
+
+> **Status:** forslag, ikke besluttet. Må forankres med prosjektleder.
+
+I dag settes antall tilbud absolutt per utdanningskvote per utdanningstilbud. For UHG med hundrevis av utdanningstilbud betyr det hundrevis av manuelle konfigurasjoner per opptak. Forslaget er å flytte til **relativ fordeling** på kvotetypenivå i regelverkssamlingen, med mulighet for **absolutte unntak** for spesielle kvoter.
+
+#### Slik fungerer det
+
+Regelverkssamlingen definerer prosentvis fordeling mellom kvotetyper:
+
+```
+Regelverkssamling «UHG 2027»:
+  ORDF (førstegangsvitnemål): 50 %
+  ORD  (ordinær):             50 %
+```
+
+Et utdanningstilbud setter bare totaltall og eventuelle absolutte kvoter:
+
+```
+Utdanningstilbud «Sykepleie Nord»:
+  Antall tilbud som skal gis: 278
+  Samisk kvote: 2 (absolutt)
+```
+
+Plasstildelingen regner:
+
+```
+278 totalt − 2 samisk = 276 til relativ fordeling
+ORDF: 276 × 50 % = 138
+ORD:  276 × 50 % = 138
+Plassflyt: samisk → ORD
+```
+
+#### Hva dette løser
+
+- **Massivt redusert manuelt arbeid.** Fordelingen settes én gang på regelverkssamlingen, ikke per utdanningstilbud.
+- **Konsistens.** Alle utdanningstilbud som bruker samme regelverkssamling får automatisk riktig fordeling.
+- **Separasjon av ansvar.** Samordna opptak eier fordelingen (forskriftsfestet), lærestedet eier bare unntakene (spesielle kvoter).
+
+#### Åpne spørsmål
+
+1. **Overstyring per utdanningstilbud.** Trenger noen utdanningstilbud en annen fordeling enn den regelverkssamlingen angir? Forslag: overstyring er tillatt men sjelden, og flagges synlig.
+
+2. **Avrunding.** 277 totalt − 2 samisk = 275 → 137,5 / 137,5. Hvem får den ekstra plassen? Forslag: én kvotetype er «resten» (typisk ORD) og tar eventuelle avrundingsdifferanser.
+
+3. **Flere spesielle kvoter.** Et utdanningstilbud kan ha samisk kvote (2) + nordnorsk kvote (5). Beregning: 278 − 2 − 5 = 271, fordelt 50/50. Hva hvis de spesielle kvotene til sammen overstiger totaltallet? Svar: ikke lov — saksbehandler får varsel om feil.
+
+4. **Forholdet til «antall tilbud som skal gis».** I dag er dette et absolutt tall per utdanningskvote. Med denne endringen blir det et beregnet tall — utledet fra relativ fordeling, totaltall og spesielle kvoter. Lærestedet setter bare totaltallet per utdanningstilbud.
+
+5. **Forholdet til «antall ønsket ja-svar» i supplering.** Er dette også relativt? Svar: nei, dette er et absolutt tall (tak) på utdanningstilbudet som ikke skal overstiges i supplerings- og etterfyllingsrunder.
+
+6. **Fagskole og lokale opptak.** Gjelder 50/50-fordelingen bare UHG? Fagskole kan ha en helt annen kvotestruktur. Regelverkssamlingen må kunne definere ulike fordelinger per opptakskontekst.
+
+#### Konsekvenser
+
+Beregningslogikken i plasstildelingen blir noe mer kompleks (relativ fordeling → absolutte tall før tildeling), men det er en engangsberegning per plasstildelingskjøring. Se også [plasstildeling/design.md](../plasstildeling/design.md) for hvordan dette påvirker algoritmen.
+
 ### Kobling til utdanningstilbud og opptak
 
 Et utdanningstilbud kobles til regelverket via tre felter:

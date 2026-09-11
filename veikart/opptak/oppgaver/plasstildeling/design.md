@@ -307,7 +307,7 @@ Spørsmål 4–7, 9–11 er prosjektleder- og HK-dir-spørsmål. Spørsmål 1 en
 
 **Informasjonsarv fra forrige runde** — at en plasstildeling bygger videre på forrige publiserte runde: oversikt over tidligere tilbud, ventelister og svar. Nødvendig i alle runder etter hovedtildelingen. Hva rundetypen gjør med den arvede informasjonen varierer — se *Rundetyper og oppførsel*. Dette er noe annet enn plassflyt, som gjelder mellom utdanningskvoter i samme tildeling.
 
-**Antall tilbud som skal gis** — hvor mange tilbud som skal gis i en utdanningskvote i denne plasstildelingen. Settes per utdanningskvote; totaltall vises. Tidligere feltnavn: overbooking.
+**Antall tilbud som skal gis** — hvor mange tilbud som skal gis i en utdanningskvote i denne plasstildelingen. Settes per utdanningskvote; totaltall vises. Tidligere feltnavn: overbooking. **Merk:** det foreligger et forslag om å gå fra absolutt fordeling per utdanningskvote til relativ fordeling på kvotetypenivå i regelverkssamlingen, der plasstildelingen beregner absolutte tall fra prosentandel, totaltall og eventuelle absolutte unntak — se [regelverk/design.md, «Forslag: relativ fordeling på kvotetypenivå»](../regelverk/design.md#forslag-relativ-fordeling-på-kvotetypenivå).
 
 **Antall ønsket ja-svar** — måltall per utdanningstilbud som styrer kompensasjonstilbud i suppleringsrunder. Når en søker rykker opp og frigjør en plass, gis plassen automatisk til neste på ventelisten — opp til dette tallet er nådd.
 
