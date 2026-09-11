@@ -36,6 +36,7 @@ Generert oversikt over alle BDD-krav i prosjektet.
 | OPT-SØK-SØK-001 | Søke på opptak | 12 Registrere søknad | 01 Søknad | @OPT-SØK-SØK-001 @opptakspilot | [søke_på_opptak.feature](02%20Opptak/12%20Registrere%20søknad/01%20Søknad/søke_på_opptak.feature) |
 | OPT-BEH-BEH-001 | Saksbehandler behandler søknader | 13 Søknadsbehandling | 01 Behandling | @OPT-BEH-BEH-001 @skip @opptakspilot @focus | [behandle_søknad.feature](02%20Opptak/13%20Søknadsbehandling/01%20Behandling/behandle_søknad.feature) |
 | OPT-BEH-BEH-002 | Kort om søknad | 13 Søknadsbehandling | 01 Behandling | @OPT-BEH-BEH-002 @skip @søknad @opptak | [kort_om_søknad.feature](02%20Opptak/13%20Søknadsbehandling/01%20Behandling/kort_om_søknad.feature) |
+| OPT-BEH-BEH-003 | Registrere og beregne praksis for søker | 13 Søknadsbehandling | 01 Behandling | @OPT-BEH-BEH-003 @must @draft | [registrere_praksis.feature](02%20Opptak/13%20Søknadsbehandling/01%20Behandling/registrere_praksis.feature) |
 
 ## 03 Gjennomføre studier
 
