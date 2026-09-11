@@ -28,6 +28,7 @@ Det er utdanningstilbudet som forteller at det skal være med i et opptak, ikke 
 | **Kompetanseregelverk** | Arves fra regelverkssamling eller settes eksplisitt |
 | **Rangeringsregelverk** | Arves fra regelverkssamling eller settes eksplisitt |
 | **Utdanningskvoter** | Standard (default) kvotetyper arves fra regelverkssamling, og vises. Lærestedet kan legge til eventuelle andre tilgjengelige kvoter som ikke er standard. Standard- og tilgjengelige kvotetyper med fordeling og plassflyt settes i regelverkssamling, se også [plasstildeling/design.md](../plasstildeling/design.md) |
+| **Tidlig søknadsfrist** (valgfritt) | Tidligere søknadsfrist enn opptakets generelle frist. Aktuelt for utdanninger som krever opptaksprøver eller annen tilleggsvurdering, f.eks. Politihøyskolen. |
 | **Tidlig behandling og tilbud** | Om dette tilbudet støtter tidlig behandling og tilbud (arves fra opptak) |
 
 **Merk:** det foreligger et forslag om å endre kvotefordelingen fra absolutt per utdanningskvote til relativ fordeling på kvotetypenivå i regelverkssamlingen. Med denne endringen setter lærestedet bare totaltall og eventuelle absolutte spesialkvoter per utdanningstilbud — den relative fordelingen mellom ordinære kvoter beregnes automatisk. Se [regelverk/design.md, «Forslag: relativ fordeling på kvotetypenivå»](../regelverk/design.md#forslag-relativ-fordeling-på-kvotetypenivå).

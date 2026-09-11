@@ -14,7 +14,7 @@ Dokumentet er skrevet for alle som trenger å forstå hva det vil si å opprette
 
 2. **Samordning er en egenskap ved opptaket, ikke en type.** Et opptak blir samordnet ved at opptakseier inviterer andre læresteder til å delta med utdanningstilbud og saksbehandlere. Et opptak uten inviterte læresteder er lokalt. Det finnes ikke en separat «samordnet»-bryter — samordning fremgår av deltakerne. Dette er tatt.
 
-3. **Skal frister kunne overstyres per utdanningstilbud?** I FS kan utdanningstilbud ha egne frister som overkjører opptakets generelle frister (styrt av opptakstype). I ny løsning må vi avklare om denne fleksibiliteten videreføres, og i så fall hvilke frister som kan overstyres. Forslag: søknadsfrist og ettersendingsfrist kan overstyres per utdanningstilbud; andre frister gjelder alltid for hele opptaket.
+3. **Enkelte utdanningstilbud trenger strengere søknadsfrist enn opptakets generelle frist.** Noen utdanninger (f.eks. Politihøyskolen) har tidlig søknadsfrist fordi de krever opptaksprøver eller annen tilleggsvurdering som tar tid. I ny løsning må det være mulig å sette en tidligere søknadsfrist per utdanningstilbud. Forslag: søknadsperiode (med tidligere til-dato) og ettersendingsfrist kan overstyres per utdanningstilbud; andre frister gjelder alltid for hele opptaket.
 
 4. **Skal innstillinger for emneopptak, kurs og undervisningsopptak dekkes nå?** Disse opptakstypene har spesielle behov (løpende opptak, tilgang kun for egne studenter, ingen rangering). De er ikke hovedfokus og bør utsettes til egne oppgaver. Forslag: design for disse legges i egne dokumenter når behovet oppstår.
 
@@ -132,13 +132,11 @@ Opptaksforvalter setter startnummer for søknadsnummerserien. Alle søknader i o
 | **Startnummer** | Første søknadsnummer i serien |
 | **Sluttnummer** (valgfritt) | Tak for serien — hindrer at nummerserier fra ulike opptak overlapper |
 
-I FS er dette modellert som `REGNR_FRA` og `REGNR_TIL`. I ny løsning er søknadsnummereringen trolig unik per opptak for å hindre at det blir uklart hvilke søknader man snakker om — må verifiseres.
+I ny løsning er søknadsnummereringen trolig unik per opptak for å hindre at det blir uklart hvilke søknader man snakker om — må verifiseres.
 
 #### Maks antall søknadsalternativer
 
-Opptaksforvalter setter hvor mange søknadsalternativer (studieønsker) en søker kan prioritere i søknaden sin. Default er 12, men dette kan justeres per opptak.
-
-I FS er dette `TALL_MAKS_STUDIEONSKER`.
+Opptaksforvalter setter hvor mange søknadsalternativer (studieønsker) en søker kan prioritere i søknaden sin. Default er 10, men dette kan justeres per opptak.
 
 ### Frister og tidsperioder
 
@@ -146,7 +144,7 @@ Frister styrer tidsrammene for opptaket. Alle frister angis som dato (og eventue
 
 | Frist | Beskrivelse | Nivå |
 |-------|-------------|------|
-| **Søknadsperiode** | Perioden opptaket er åpent for søknader — fra-dato (når søkere kan begynne å søke) og til-dato (siste tidspunkt for å sende inn søknad). | Opptak (kan overstyres per utdanningstilbud) |
+| **Søknadsperiode** | Perioden opptaket er åpent for søknader — fra-dato (når søkere kan begynne å søke) og til-dato (siste tidspunkt for å sende inn søknad). Enkelte utdanningstilbud kan ha en tidligere til-dato enn opptakets generelle frist, f.eks. utdanninger som krever opptaksprøver (Politihøyskolen). | Opptak (til-dato kan overstyres per utdanningstilbud) |
 | **Ettersendingsfrist** | Siste tidspunkt søker kan ettersende dokumentasjon. Dokumentasjon mottatt etter fristen er ikke garantert hensyntatt. | Opptak (kan overstyres per utdanningstilbud) |
 | **Omprioriteringsfrist** | Siste tidspunkt søker kan endre prioritering av søknadsalternativer. Hvis ikke satt, brukes søknadsfristen. | Opptak |
 | **Frist for tidlig tilbud** | Siste tidspunkt søker kan søke om tidlig behandling og tilbud. Kun relevant når tidlig behandling og tilbud er aktivert. | Opptak |
