@@ -60,7 +60,7 @@ Iterasjonen leverer altså en *lese- og lett-redigerings-løsning*. Endringer so
 
 **Brukerhistorie:** Som bruker ønsker jeg å sette nytt passord på en applikasjon jeg administrerer, slik at jeg kan hjelpe med passordbytte.
 
-**Kort beskrivelse:** Systemet genererer passordet (basic auth, ett aktivt passord om gangen). Vises skjult med mulighet for å vise og kopiere; kan ikke hentes opp igjen etter at dialogen lukkes. Nytt passord erstatter det gamle umiddelbart.
+**Kort beskrivelse:** Systemet genererer passordet (basic auth, ett aktivt passord om gangen). Vises skjult med mulighet for å vise og kopiere; kan ikke hentes opp igjen etter at visningen lukkes. Nytt passord erstatter det gamle umiddelbart.
 
 ### K19 — Redigere beskrivelse for applikasjon
 

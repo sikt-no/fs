@@ -35,9 +35,9 @@ Egenskap: Passordbytte for applikasjon
       Så vises passordet skjult med mulighet for å velge å vise det
       Og passordet kan kopieres
 
-    Scenario: Passordet kan ikke hentes opp igjen etter at dialogen er lukket
+    Scenario: Passordet kan ikke hentes opp igjen etter at visningen er lukket
       Gitt systemet har generert et nytt passord som jeg har sett
-      Når jeg lukker dialogen
+      Når jeg lukker visningen av passordet
       Så er passordet ikke lenger tilgjengelig
       Og jeg må generere et nytt passord dersom jeg trenger å se det på nytt
 
