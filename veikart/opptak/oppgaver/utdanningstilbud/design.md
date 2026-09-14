@@ -2,15 +2,17 @@
 
 Et utdanningstilbud er en utdanning som er gjort søkbar i et opptak. Utdanningstilbudet opprettes ikke fra bunnen av — det bygger på autoritative data fra utdanningsregisteret og berikes med opptaksspesifikke innstillinger. Dette dokumentet beskriver hvordan utdanningstilbud hentes fra utdanningsregisteret, hva som arves og hva som settes av opptaksforvalter.
 
-**Status:** første utkast, 2026-09-11. Bygger på gjennomgang av fs-plattform/opptak-databasen, logisk replikering fra utdanningsregisteret, og domenedokumentasjon fra fs.sikt.no.
+**Status:** oppdatert 2026-09-14. Bygger på gjennomgang av fs-plattform/opptak-databasen, domenedokumentasjon fra fs.sikt.no, og arkitekturbeslutningen [«Denormalisering av data fra Utdanningsregisteret»](https://sikt.atlassian.net/wiki/spaces/PFS/pages/4271898626).
 
 ---
 
-**To beslutninger bør leses før resten. Den første er tatt. Nummer to må avklares.**
+**Tre beslutninger er tatt og skal leses før resten.**
 
 1. **Utdanningstilbudet bygger på autoritativ kilde.** Grunnlagsdata (navn, studiepoeng, varighet, studienivå, campus, undervisningsspråk) hentes fra utdanningsregisteret og skal ikke registreres på nytt i opptaket. Opptaksforvalteren setter bare opptaksspesifikke egenskaper (kapasitet, tilbud som skal gis, tak for ja-svar og eventuelle lovlige unntak fra standardinnstillinger i opptaket).
 
 2. **Det er utdanningstilbudet som melder seg inn i et opptak, ikke opptaket som henter inn utdanningstilbud.** Lærestedet knytter sine utdanningstilbud til et opptak fra utdanningstilbudsiden. Fra opptakssiden skal det være mulig å se hvilke utdanningstilbud som er med, og det bør også være mulig å legge til utdanningstilbud derfra som en snarvei.
+
+3. **Federation er normalmodellen — denormalisering er kun for søk.** Opptak holder bare graf-IDen til tilhørende entiteter i utdanningsregisteret (ureg). Når en frontend spør etter data som eies av ulike subgrafer (f.eks. rangeringsregelverk fra opptak og navn fra ureg), splitter supergrafen spørringen automatisk og matcher på nøkkel. Denormalisering — å kopiere felter fra ureg inn i opptaks-databasen — gjøres **kun** for felter som trengs i søk, filtrering og sortering. Alt annet hentes via federation ved visning. Se [arkitekturbeslutningen i Confluence](https://sikt.atlassian.net/wiki/spaces/PFS/pages/4271898626).
 
 ---
 
@@ -62,17 +64,33 @@ Utdanningsspesifikasjon          «Hva tilbys?»
 
 **Opptak kobler seg til utdanningsinstansnivået** — det mest konkrete nivået. En person søker seg opp til en utdanning som tilbys av et lærested ett gitt sted til en gitt studiestart.
 
-### Dataflyt fra utdanningsregisteret til opptak
+### Dataflyt og federation
 
-Data flyter via **logisk replikering** i PostgreSQL (publish/subscribe). Utdanningsregisteret publiserer, opptak abonnerer. Replikerte data er skrivebeskyttet i opptaksdatabasen.
+Opptak og utdanningsregisteret (ureg) er to separate subgrafer i en GraphQL federation. Supergrafen (routeren) sitter mellom klienten og subgrafene og ruter spørringer til riktig subgraf:
 
-Flyten for å opprette et utdanningstilbud:
+```
+┌─────────────┐     ┌─────────────┐     ┌─────────────┐
+│   Klient    │────▶│   Router    │────▶│   Opptak    │
+└─────────────┘     └──────┬──────┘     └─────────────┘
+                           │
+                           ▼
+                    ┌─────────────┐
+                    │    Ureg     │
+                    └─────────────┘
+```
+
+Opptak eier `Utdanningstilbud`-typen og holder en referanse (graf-ID) til `Utdanningsinstans` i ureg. Når en klient spør etter felter fra begge subgrafene, splitter routeren spørringen automatisk. Opptak trenger ikke kjenne til ureg-feltene — kun nøkkelen.
+
+**Denormalisering for søk:** Unntaket er søk og filtrering. For å kunne tilby et effektivt søk i utdanningstilbud uten å sende en ekstra spørring til ureg for hvert tilbud, kopierer opptak et begrenset sett felter fra ureg inn i sin søkeindeks. Disse denormaliserte feltene brukes **kun** til søk, filtrering og sortering — de returneres ikke til klienten. Søket returnerer IDer, og klienten henter visningsdata via federation.
+
+Denormaliserte data holdes i synk via hendelser fra ureg og fs-batch-infrastrukturen.
+
+**Flyten for å opprette et utdanningstilbud:**
 
 1. Lærestedet registrerer utdanningen i utdanningsregisteret (via SIS-integrasjon eller eget grensesnitt i FS Admin).
-2. Utdanningsregisteret publiserer utdanningsinstansen.
-3. Opptak abonnerer og får referansedata.
-4. Lærestedet knytter utdanningsinstansen til et opptak — et utdanningstilbud opprettes.
-5. Lærestedet setter opptaksspesifikke innstillinger (kapasitet, tilbud som skal gis, tak for ja-svar og eventuelle lovlige unntak fra standardinnstillinger i opptaket).
+2. Opptak mottar graf-IDen til utdanningsinstansen (via synkronisering/hendelser).
+3. Lærestedet knytter utdanningsinstansen til et opptak — et utdanningstilbud opprettes.
+4. Lærestedet setter opptaksspesifikke innstillinger (kapasitet, tilbud som skal gis, tak for ja-svar og eventuelle lovlige unntak fra standardinnstillinger i opptaket).
 
 ### Registrering av utdanninger — 2027
 
@@ -88,20 +106,23 @@ For samordna opptak 2027 er det to ulike situasjoner:
 
 ### Autoritative data fra utdanningsregisteret (arves, kan ikke overstyres)
 
-Disse feltene hentes fra utdanningsregisteret via utdanningsinstans-referansen:
+Alle disse feltene eies av utdanningsregisteret. Opptak lagrer dem **ikke** — de hentes via federation når klienten ber om dem. Unntaket er felter som trengs i søkeindeksen (merket med «denormalisert»), som kopieres inn i opptaks-databasen utelukkende for søk/filtrering/sortering.
 
-| Felt                      | Kilde i utdanningsregisteret |
-|---------------------------|------------------------------|
-| Navn                      | Utdanningsspesifikasjon |
-| Studiepoeng / omfang      | Utdanningsspesifikasjon |
-| Varighet                  | Utdanningsmulighet |
-| Studienivå (NKR)          | Utdanningsspesifikasjon |
-| Fagområde (NUS)           | Utdanningsspesifikasjon |
-| Undervisningsspråk        | Utdanningsmulighet |
-| Prosent av fulltid        | Utdanningsmulighet |
-| Campus / studiested       | Utdanningsinstans |
-| Oppstartstermin/tidspunkt | Utdanningsinstans |
-| Lærested (organisasjon)   | Utdanningsmulighet |
+| Felt                      | Kilde i utdanningsregisteret | Denormalisert for søk |
+|---------------------------|------------------------------|----------------------|
+| Navn                      | Utdanningsspesifikasjon | ja (`studieprogram_navn`) |
+| Studiepoeng / omfang      | Utdanningsspesifikasjon | nei |
+| Varighet                  | Utdanningsmulighet | nei |
+| Studienivå (NKR)          | Utdanningsspesifikasjon | ja (`utdanningsmulighet_niva_koder`) |
+| Fagområde (NUS)           | Utdanningsspesifikasjon | ja (`fagomrade_koder`) |
+| Undervisningsspråk        | Utdanningsmulighet | nei |
+| Prosent av fulltid        | Utdanningsmulighet | ja (`prosentandel_av_fulltid`) |
+| Undervisningstype         | Utdanningsmulighet | ja (`undervisningstyper`) |
+| Campus / studiested       | Utdanningsinstans | ja (`campus_ekstern_id`) |
+| Oppstartstermin/tidspunkt | Utdanningsinstans | ja (`terminkode_fra`) |
+| Lærested (organisasjon)   | Utdanningsmulighet | ja (`organisasjon_ekstern_id`) |
+
+**Tommelfingerregel:** denormaliser kun felter som brukes til søk, filtrering eller sortering. Alt annet hentes via federation. Søket returnerer kun IDer — visningsdata løses av routeren.
 
 ### Opptaksspesifikke innstillinger (settes av lærestedet)
 
@@ -130,31 +151,26 @@ Disse feltene hentes fra utdanningsregisteret via utdanningsinstans-referansen:
 
 | Konsept | Status | Merknad |
 |---------|--------|---------|
-| Utdanningstilbud med referanse til utdanningsinstans | Finnes (v1 + v2) | v1: fremmednøkkel til `utdanning.utdanningsinstans`. v2: ekstern ID uten fremmednøkkel. |
-| Logisk replikering fra utdanningsregisteret | Under innføring | Kun primærnøkler og navn replikeres foreløpig |
+| Utdanningstilbud med denormalisert søkeindeks | Finnes | Ekstern ID til utdanningsinstans + denormaliserte felter for søk/filter (NKR, fagområde, undervisningstyper, campus m.fl.) |
 | Kobling utdanningsmulighet → opptakstype | Finnes | `opptak.utdanningsmulighet_opptakstype`. Brukes for å uttrykke varig intensjon: «denne utdanningen skal tilbys gjennom denne opptakstypen». Se beslutning 1 i [opptak/design.md](../opptak/design.md) — opptakstype bevares som fast kodeverk for matching, selv om konfigurasjonsnivået utgår. |
 | Opptaksspesifikke innstillinger per tilbud | Finnes | Kapasitet, regelverk, kvoter, kjønnspoeng, visningsvalg |
-| Denormaliserte utdanningsdata (v2) | Finnes | NKR, fagområde, undervisningstyper, campus — kopiert inn i v2-tabellen |
+| Federation-oppsett med ureg | Finnes | `Utdanningsinstans` er en entity stub i opptak-subgrafen (`@key(fields: "id", resolvable: false)`). Routeren løser visningsdata fra ureg. |
+| Synkronisering via hendelser | Under innføring | fs-batch-infrastrukturen brukes for å holde denormaliserte felter i synk med ureg |
 
 ### Hva gjenstår
 
 | Gap | Beskrivelse |
 |-----|-------------|
-| **Replikering av fullstendig metadata** | Foreløpig replikeres kun primærnøkler og navn. Studiepoeng, varighet, nivå og andre grunnlagsdata er ikke med. v2 løser dette ved denormalisering, men det er en duplikering som kan gå ut av synk. |
-| **v1/v2-sameksistens** | Begge tabellene finnes. v2 mangler fremmednøkler til utdanningsregisteret — et steg tilbake fra v1-prinsippet om referanseintegritet. Må avklares hvilken modell som gjelder fremover. |
 | **Grensesnitt for fagskoler** | Fagskolene trenger et eget grensesnitt for å registrere utdanninger direkte i utdanningsregisteret. Under utvikling. |
 | **Antall ja-svar** | Feltet er ikke på utdanningstilbud-tabellen i dag. Må legges til. |
+| **Fullstendig hendelsesdekning fra ureg** | Det må foreligge hendelser fra ureg for alle denormaliserte felter, slik at opptak kan holde søkeindeksen oppdatert. |
 
 ---
 
 ## Del 5: åpne spørsmål
 
-1. **v1 eller v2 — hvilken modell gjelder?** v1 har referanseintegritet, v2 har denormalisering og fleksibilitet. Må avklares.
+1. **Hva skjer med et utdanningstilbud hvis utdanningsinstansen endres eller deaktiveres i utdanningsregisteret etter at opptaket er åpent?** Søkere som allerede har søkt på tilbudet må håndteres.
 
-2. **Skal denormaliserte data i v2 oppdateres automatisk ved endringer i utdanningsregisteret?** Hvis ikke, kan data gå ut av synk.
-
-3. **Hva skjer med et utdanningstilbud hvis utdanningsinstansen endres eller deaktiveres i utdanningsregisteret etter at opptaket er åpent?** Søkere som allerede har søkt på tilbudet må håndteres.
-
-4. **Frekvens for utdanningstilbud.** Koblingen `utdanningsmulighet → opptakstype` uttrykker at en utdanning skal tilbys i en gitt opptakstype, men sier ikke noe om frekvens (hvert år, annethvert år). Vi klarer oss uten frekvens i 2026, men dette må løses i 2027 for å unngå at læresteder må registrere tilknytningen manuelt hvert år.
+2. **Frekvens for utdanningstilbud.** Koblingen `utdanningsmulighet → opptakstype` uttrykker at en utdanning skal tilbys i en gitt opptakstype, men sier ikke noe om frekvens (hvert år, annethvert år). Vi klarer oss uten frekvens i 2026, men dette må løses i 2027 for å unngå at læresteder må registrere tilknytningen manuelt hvert år.
 
 Se også [plasstildeling/design.md](../plasstildeling/design.md) og [regelverk/design.md](../regelverk/design.md).
