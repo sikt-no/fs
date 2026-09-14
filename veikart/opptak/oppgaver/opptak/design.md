@@ -1,5 +1,7 @@
 # Opprette og vedlikeholde opptak
 
+*Designfilen gir en teknisk-funksjonell beskrivelse av et konsept: hvordan det er ment å fungere, hvilke beslutninger som er tatt, hvor data kommer fra og hva som gjenstår. Den er skrevet for å skape forståelse på tvers av roller. Den svarer på hva og hvorfor — ikke på hvordan noe skal implementeres eller se ut.*
+
 Opptaksforvalter skal kunne opprette og forvalte opptak med alle innstillinger som styrer hvem som kan søke, hvilke frister som gjelder, og hva søkeren ser. Mye av dette finnes allerede i fs-plattform/opptak, men innstillingene er i dag spredt mellom opptakstype og opptak. Dette dokumentet beskriver hva løsningen skal gjøre, hvilke valg som er tatt, og hvilke spørsmål som gjenstår.
 
 Dokumentet er skrevet for alle som trenger å forstå hva det vil si å opprette et opptak, hvordan samordning fungerer, og hvilke innstillinger som må settes. Funksjonell løsning per oppgave og tekniske detaljer ligger i [oppgave.md](oppgave.md).

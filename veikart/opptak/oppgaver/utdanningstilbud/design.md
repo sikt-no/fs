@@ -1,5 +1,7 @@
 # Utdanningstilbud i opptak
 
+*Designfilen gir en teknisk-funksjonell beskrivelse av et konsept: hvordan det er ment å fungere, hvilke beslutninger som er tatt, hvor data kommer fra og hva som gjenstår. Den er skrevet for å skape forståelse på tvers av roller. Den svarer på hva og hvorfor — ikke på hvordan noe skal implementeres eller se ut.*
+
 Et utdanningstilbud er en utdanning som er gjort søkbar i et opptak. Utdanningstilbudet opprettes ikke fra bunnen av — det bygger på autoritative data fra utdanningsregisteret og berikes med opptaksspesifikke innstillinger. Dette dokumentet beskriver hvordan utdanningstilbud hentes fra utdanningsregisteret, hva som arves og hva som settes av opptaksforvalter.
 
 **Status:** oppdatert 2026-09-14. Bygger på gjennomgang av fs-plattform/opptak-databasen, domenedokumentasjon fra fs.sikt.no, og arkitekturbeslutningen [«Denormalisering av data fra Utdanningsregisteret»](https://sikt.atlassian.net/wiki/spaces/PFS/pages/4271898626).
@@ -10,9 +12,9 @@ Et utdanningstilbud er en utdanning som er gjort søkbar i et opptak. Utdannings
 
 1. **Utdanningstilbudet bygger på autoritativ kilde.** Grunnlagsdata (navn, studiepoeng, varighet, studienivå, campus, undervisningsspråk) hentes fra utdanningsregisteret og skal ikke registreres på nytt i opptaket. Opptaksforvalteren setter bare opptaksspesifikke egenskaper (kapasitet, tilbud som skal gis, tak for ja-svar og eventuelle lovlige unntak fra standardinnstillinger i opptaket).
 
-2. **Det er utdanningstilbudet som melder seg inn i et opptak, ikke opptaket som henter inn utdanningstilbud.** Lærestedet knytter sine utdanningstilbud til et opptak fra utdanningstilbudsiden. Fra opptakssiden skal det være mulig å se hvilke utdanningstilbud som er med, og det bør også være mulig å legge til utdanningstilbud derfra som en snarvei.
+2. **Opptak legger til utdanningstilbud.** Opptaksforvalter knytter utdanningstilbud til et opptak fra opptakssiden. På sikt kan det også bli mulig å melde inn utdanninger fra utdanningssiden, men i første omgang er det opptaket som styrer hvilke utdanningstilbud som er med.
 
-3. **Federation er normalmodellen — denormalisering er kun for søk.** Opptak holder bare graf-IDen til tilhørende entiteter i utdanningsregisteret (ureg). Når en frontend spør etter data som eies av ulike subgrafer (f.eks. rangeringsregelverk fra opptak og navn fra ureg), splitter supergrafen spørringen automatisk og matcher på nøkkel. Denormalisering — å kopiere felter fra ureg inn i opptaks-databasen — gjøres **kun** for felter som trengs i søk, filtrering og sortering. Alt annet hentes via federation ved visning. Se [arkitekturbeslutningen i Confluence](https://sikt.atlassian.net/wiki/spaces/PFS/pages/4271898626).
+3. **Federation er normalmodellen — denormalisering er kun for søk.** Opptak holder bare en referanse-ID til tilhørende entiteter i utdanningsregisteret (ureg). Når en bruker åpner en side som trenger data fra begge systemene (f.eks. rangeringsregelverk fra opptak og navn fra ureg), henter supergrafen automatisk riktig del fra riktig system og setter det sammen. Denormalisering — det vil si å ta en kopi av utvalgte felter fra ureg og lagre dem i opptaks-databasen — gjøres **kun** for felter som trengs i søk, filtrering og sortering. Grunnen er ytelse: uten en lokal kopi måtte opptaket spørre ureg for hvert eneste utdanningstilbud ved hvert søk. Alt som bare skal *vises* (ikke søkes i) hentes direkte fra ureg når brukeren trenger det. Se [arkitekturbeslutningen i Confluence](https://sikt.atlassian.net/wiki/spaces/PFS/pages/4271898626).
 
 ---
 
@@ -131,12 +133,11 @@ Alle disse feltene eies av utdanningsregisteret. Opptak lagrer dem **ikke** — 
 | **Antall studieplasser** (kapasitet)                                     | Faktisk antall plasser |
 | **Antall tilbud som skal gis**                                           | Det absolutte antallet tilbud som skal gis for dette utdanningstilbudet |
 | **Antall ja-svar**                                                       | Nødvendig for utdanningstilbud som skal være med i plasstildelingsrunder etter hovedrunden |
-| **Regelverkssamling** (valgfritt, er det valgfritt???)                   | Overstyrer opptakets regelverkssamling for dette tilbudet |
-| **Kompetanseregelverk**                                                  | Arves fra regelverkssamling eller settes eksplisitt |
-| **Rangeringsregelverk**                                                  | Arves fra regelverkssamling eller settes eksplisitt |
-| **Utdanningskvoter**                                                     | Standard (default) kvotetyper arves fra regelverkssamling. Lærestedet kan legge til andre tilgjengelige kvoter. Se [plasstildeling/design.md](../plasstildeling/design.md) |
+| **Kompetanseregelverk**                                                  | Må velges blant regelverkene i opptakets regelverkssamling. Får default-verdi fra samlingen — gjelder for alle utdanningstilbud uten unntak. |
+| **Rangeringsregelverk**                                                  | Må velges blant regelverkene i opptakets regelverkssamling. Får default-verdi fra samlingen — gjelder for alle utdanningstilbud uten unntak. |
+| **Utdanningskvoter**                                                     | Standard (default) kvotetyper følger av regelverkssamlingen. Lærestedet kan legge til andre tilgjengelige kvoter fra samlingen. Se [plasstildeling/design.md](../plasstildeling/design.md) |
 | **Tidlig søknadsfrist** (valgfritt)                                      | Tidligere søknadsfrist enn opptakets generelle frist. Aktuelt for utdanninger som krever opptaksprøver, f.eks. Politihøyskolen. |
-| **Tidlig behandling og tilbud**                                          | Om dette tilbudet støtter tidlig behandling og tilbud (arves fra opptak) |
+| **Tidlig behandling og tilbud**                                          | Om dette tilbudet støtter tidlig behandling og tilbud. Styres av opptakets innstilling — gjelder for alle utdanningstilbud uten unntak. |
 | **Kjønnspoeng**  (skal ikke dette være en kvotetype?)                    | Tilleggspoeng basert på kjønn (hvis aktuelt) |
 | **Vis poenggrense for søker**  (Må ikke søker få det?)                   | Om søker skal se poenggrensen |
 | **Vis ventelistenummer for søker**  (hvorfor skal dette være valgfritt?) | Om søker skal se sitt ventelistenummer |

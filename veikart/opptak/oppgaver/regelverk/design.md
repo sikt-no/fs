@@ -1,5 +1,7 @@
 # Regelverk
 
+*Designfilen gir en teknisk-funksjonell beskrivelse av et konsept: hvordan det er ment å fungere, hvilke beslutninger som er tatt, hvor data kommer fra og hva som gjenstår. Den er skrevet for å skape forståelse på tvers av roller. Den svarer på hva og hvorfor — ikke på hvordan noe skal implementeres eller se ut.*
+
 Opptaksforvalter skal kunne opprette og forvalte regelverkssamlinger som styrer hvem som er kvalifisert, hvordan søkere rangeres, og hvordan plasser fordeles mellom kvoter. Det meste av dette finnes i dag. Dette dokumentet beskriver hva løsningen gjør, hva den ikke gjør, og hvilke valg som gjenstår.
 
 Dokumentet er skrevet for alle som trenger å forstå hva opptaksregelverk er, hvilke prinsipper det hviler på, og hvilke spørsmål som gjenstår. Funksjonell løsning per oppgave, gap-analyse og tekniske detaljer ligger i [oppgave.md](oppgave.md).

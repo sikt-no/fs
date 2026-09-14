@@ -1,5 +1,7 @@
 # Plasstildeling
 
+*Designfilen gir en teknisk-funksjonell beskrivelse av et konsept: hvordan det er ment å fungere, hvilke beslutninger som er tatt, hvor data kommer fra og hva som gjenstår. Den er skrevet for å skape forståelse på tvers av roller. Den svarer på hva og hvorfor — ikke på hvordan noe skal implementeres eller se ut.*
+
 Vi skal kunne fordele studieplasser i flere runder, med kontroll over når søkeren ser resultatet, og med et resultat som kan forklares i etterkant. Det meste av dette virker i dag. Dette dokumentet beskriver hva løsningen gjør, hva den ikke gjør, og hvilke valg som gjenstår.
 
 Dokumentet er skrevet for alle som trenger å forstå hva plasstildeling er, hvilke prinsipper den hviler på, og hvilke spørsmål som gjenstår. Funksjonell løsning per oppgave, gap-analyse og tekniske detaljer ligger i [oppgave.md](oppgave.md).

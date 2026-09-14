@@ -1,5 +1,7 @@
 # Vedtaksformidling
 
+*Designfilen gir en teknisk-funksjonell beskrivelse av et konsept: hvordan det er ment å fungere, hvilke beslutninger som er tatt, hvor data kommer fra og hva som gjenstår. Den er skrevet for å skape forståelse på tvers av roller. Den svarer på hva og hvorfor — ikke på hvordan noe skal implementeres eller se ut.*
+
 Når plasstildelingen publiseres, skal søker varsles om at opptaksvedtaket foreligger i Min kompetanse. Denne oppgaven handler om *hvordan* meldingen sendes, ikke *hva* den inneholder — svarmeldingsmalen defineres på opptaket (se [opptak/design.md](../opptak/design.md)).
 
 **Status:** første utkast, 2026-09-11. Bygger på notat «Vedtaksbrev og svar på opptaket» av Karen Skadsheim Sikkeland.

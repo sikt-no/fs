@@ -1,5 +1,7 @@
 # Opprette og vedlikeholde studieprogram
 
+*Designfilen gir en teknisk-funksjonell beskrivelse av et konsept: hvordan det er ment å fungere, hvilke beslutninger som er tatt, hvor data kommer fra og hva som gjenstår. Den er skrevet for å skape forståelse på tvers av roller. Den svarer på hva og hvorfor — ikke på hvordan noe skal implementeres eller se ut.*
+
 Utdanningsregisteret er autoritativ kilde for all utdanningsdata i FS. Studieprogrammer, utdanningsmuligheter og utdanningsinstanser registreres her og konsumeres av nedstrøms systemer — først og fremst opptak, men også Finn studier (studiekatalogen), vitnemålsportalen og andre.
 
 Dette dokumentet beskriver tre-nivå-modellen, hvordan studieprogrammer opprettes og vedlikeholdes, og hvilke grensesnitt som finnes for ulike typer læresteder.
