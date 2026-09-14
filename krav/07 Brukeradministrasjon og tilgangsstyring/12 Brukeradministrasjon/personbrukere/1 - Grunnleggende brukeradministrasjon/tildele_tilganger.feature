@@ -1,7 +1,7 @@
 # language: no
 # GitHub: #481
-@BRU-PER-GRU-009 @must @planned
-Egenskap: Tildele tilganger til en personbruker
+@BRU-PER-GRU-009 @must @draft
+Egenskap: Tildele tilganger til en personbruker (planlagt etter v1)
   Som brukeradministrator
   ønsker jeg å tildele enkelttilganger til en personbruker
   slik at personbrukeren har det riktige settet av tilganger til enhver tid.

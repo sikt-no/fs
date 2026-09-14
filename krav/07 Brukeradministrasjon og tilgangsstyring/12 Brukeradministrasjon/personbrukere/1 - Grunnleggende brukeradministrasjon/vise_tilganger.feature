@@ -1,7 +1,7 @@
 # language: no
 # GitHub: #480
-@BRU-PER-GRU-002 @must @planned
-Egenskap: Se en personbrukers tilganger
+@BRU-PER-GRU-002 @must @draft
+Egenskap: Se en personbrukers tilganger (planlagt etter v1)
   Som brukeradministrator
   ønsker jeg å se hvilke tilganger en personbruker har, og hvor tilgangene kommer fra
   slik at jeg har oversikt før jeg gjør endringer.
