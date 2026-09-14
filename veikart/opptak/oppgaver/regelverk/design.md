@@ -135,8 +135,6 @@ HK-dir melder at dette er feil plassering ([TAKE-236](https://sikt.atlassian.net
 
 Siden poenglikhetsregel (eller regler) i utgangspunktet enten er obligatorisk eller default for alle utdanningstilbud i opptaket, så er regelverkssamlingsnivå er foreslått som mulig plassering.
 
-**Bulk-kobling grunnlag ↔ poengtyper:** HK-dir melder at å koble ett og ett tar lang tid ([TAKE-235](https://sikt.atlassian.net/browse/TAKE-235)), og ønsker å kunne koble flere grunnlag til flere poengtyper i én operasjon, ikke gjøre det én etter én. 
-
 **Språkstøtte:** Rangeringsregelverk har `beskrivelse` per språk. Poengklasser og poengvarianter har `navn`/`beskrivelse` per språk.
 
 ### Kvotetype
