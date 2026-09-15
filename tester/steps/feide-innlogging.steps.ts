@@ -29,7 +29,7 @@ When('administratoren logger inn med Feide testbruker', async ({ page }) => {
 When('administratoren velger overstyrt bruker', async ({ page }) => {
   if (process.env.FS_ADMIN_OVERSTYRT_BRUKER) {
     const loginPage = new FsAdminLoginPage(page)
-    await loginPage.overstyrtBrukerSelect.selectOption(process.env.FS_ADMIN_OVERSTYRT_BRUKER)
+    await loginPage.velgOverstyrtBruker(process.env.FS_ADMIN_OVERSTYRT_BRUKER)
     await page.waitForLoadState('networkidle')
   }
 })
@@ -47,7 +47,7 @@ Then('innloggingstilstanden skal lagres for adminflaten', async ({ page }) => {
 When('personsøk-administratoren velger overstyrt bruker', async ({ page }) => {
   if (process.env.PERSONSOK_ADMIN_OVERSTYRT_BRUKER) {
     const loginPage = new FsAdminLoginPage(page)
-    await loginPage.overstyrtBrukerSelect.selectOption(process.env.PERSONSOK_ADMIN_OVERSTYRT_BRUKER)
+    await loginPage.velgOverstyrtBruker(process.env.PERSONSOK_ADMIN_OVERSTYRT_BRUKER)
     await page.waitForLoadState('networkidle')
   }
 })
@@ -89,7 +89,7 @@ When('personen velger en testsøker', async ({ page }) => {
 
   const loginPage = new MinKompetanseLoginPage(page)
   await loginPage.menuButton.click()
-  await loginPage.testsokerSelect.selectOption({ label: 'FIN SÅPE' })
+  await loginPage.velgTestsoker('FIN SÅPE')
   await page.waitForLoadState('networkidle')
 })
 
