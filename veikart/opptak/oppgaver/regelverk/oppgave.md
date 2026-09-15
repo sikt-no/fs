@@ -25,14 +25,16 @@ Ferdigstille regelverksforvaltningen i opptak slik at Samordna opptak og enkeltl
 
 ## Oppgaver
 
-| # | Oppgave | Github-issue | Jira |
-|---|---------|-------------|------|
-| 1 | Etablere og forvalte en regelverkssamling | | |
-| 2 | Definere kompetansekrav | | |
-| 3 | Definere hvordan søkere rangeres (poengberegning) | | |
-| 4 | Definere kvoter | | |
-| 5 | Koble spesielle opptakskrav til kvoter | | |
-| 6 | Koble regelverket til det konkrete utdanningstilbudet og opptaket | | |
+| # | Oppgave | Status | Github-issue | Jira |
+|---|---------|--------|-------------|------|
+| 1 | Etablere og forvalte en regelverkssamling | Løst | | |
+| 2 | Definere kompetansekrav | Løst | | |
+| 3 | Definere hvordan søkere rangeres (poengberegning) | Løst (poenglikhetsregel flyttes til opptak) | | |
+| 4 | Definere kvotetyper, grunnlag og mangelkoder | Løst | | |
+| 5 | Koble spesielle opptakskrav til kvoter | Ikke prioritert 2027 | | |
+| 6 | Koble regelverket til opptak og utdanningstilbud | Løst | | |
+| 7 | Varsling ved sletting av regelverk | Gjenstår — regelverk som ikke er knyttet til et opptak kan slettes av opptaksforvalter, men de skal få et varsel | | |
+| 8 | Varsling ved endring av regelverk under behandling | Til senere — blir først viktig når opptaket åpner og saksbehandling er i gang | | |
 
 ## Workshop 2026-09-14: oppgavedeling og status
 

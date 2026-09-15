@@ -25,18 +25,17 @@ Opptaksforvalter skal kunne opprette et opptak — samordnet eller lokalt — me
 
 ## Oppgaver
 
-| # | Oppgave | Github-issue | Jira |
-|---|---------|-------------|------|
-| 1 | Opprette et opptak (samordnet eller lokalt) | | |
-| 2 | Invitere læresteder til samordnet opptak | | |
-| 3 | Sette grunnleggende innstillinger (navn, periode, regelverkssamling) | | |
-| 4 | Konfigurere søkergrupper og dokumentasjonskrav | | |
-| 5 | Konfigurere søknad (nummerserie, maks alternativer, tidlig behandling) | | |
-| 6 | Sette frister og tidsperioder | | |
-| 7 | Sette fellestekster for søkere | [#214](https://github.com/sikt-no/fs/issues/214) | |
-| 8 | Utdanningstilbud i opptak (egen oppgave) | Se [utdanningstilbud](../utdanningstilbud/) | |
-| 9 | Svarmeldingsmal (juridisk kjerne + parametere) | [#214](https://github.com/sikt-no/fs/issues/214) | |
-| 10 | Vedtaksformidling (egen oppgave) | Se [vedtaksformidling](../vedtaksformidling/) | |
+| # | Oppgave | Status | Github-issue | Jira |
+|---|---------|--------|-------------|------|
+| 1 | Opprette et opptak (samordnet eller lokalt) | Løst | | |
+| 2 | Invitere læresteder til samordnet opptak | Løst | | |
+| 3 | Sette grunnleggende innstillinger (navn, periode, regelverkssamling) | Delvis — navn og regelverkssamling løst, opptaksperiode gjenstår | | |
+| 4 | Konfigurere dokumentasjonskrav | Løst | | |
+| 5 | Konfigurere søknad (nummerserie, maks alternativer) | Løst (tidlig behandling gjenstår) | | |
+| 6 | Sette frister og tidsperioder | | | |
+| 7 | Sette fellestekster for søkere | | [#214](https://github.com/sikt-no/fs/issues/214) | |
+| 8 | Utdanningstilbud i opptak (egen oppgave) | | Se [utdanningstilbud](../utdanningstilbud/) | |
+| 9 | Svarmeldingsmal (juridisk kjerne + parametere + valgfritt tillegg) | | [#214](https://github.com/sikt-no/fs/issues/214) | |
 
 ## Workshop 2026-09-14: oppgavedeling og status
 

@@ -2,7 +2,7 @@
 
 *Designfilen gir en teknisk-funksjonell beskrivelse av et konsept: hvordan det er ment å fungere, hvilke beslutninger som er tatt, hvor data kommer fra og hva som gjenstår. Den er skrevet for å skape forståelse på tvers av roller. Den svarer på hva og hvorfor — ikke på hvordan noe skal implementeres eller se ut.*
 
-Opptaksforvalter skal kunne opprette og forvalte regelverkssamlinger som styrer hvem som er kvalifisert, hvordan søkere rangeres, og hvordan plasser fordeles mellom kvoter. Det meste av dette finnes i dag. Dette dokumentet beskriver hva løsningen gjør, hva den ikke gjør, og hvilke valg som gjenstår.
+Opptaksforvalter skal kunne opprette og forvalte regelverkssamlinger med kompetansekrav, rangeringsregelverk, kvotetyper, grunnlag og mangelkoder. Det meste av dette er løst. Dette dokumentet beskriver hva løsningen gjør, hva den ikke gjør, og hvilke restanser som gjenstår.
 
 Dokumentet er skrevet for alle som trenger å forstå hva opptaksregelverk er, hvilke prinsipper det hviler på, og hvilke spørsmål som gjenstår. Funksjonell løsning per oppgave, gap-analyse og tekniske detaljer ligger i [oppgave.md](oppgave.md).
 
@@ -24,16 +24,19 @@ Dokumentet er skrevet for alle som trenger å forstå hva opptaksregelverk er, h
 
 ### Hva dette er, og hva det ikke er
 
-Med opptaksregelverk mener vi reglene som avgjør om en søker er kvalifisert, og hvordan søkere rangeres mot hverandre når det er flere søkere enn plasser. Regelverket består av tre deler:
+Med opptaksregelverk mener vi reglene som avgjør om en søker er kvalifisert, og hvordan søkere rangeres mot hverandre når det er flere søkere enn plasser. En regelverkssamling inneholder:
 
-| Del | Spørsmålet den svarer på |
-|-----|--------------------------|
-| Kompetansekrav | Er søkeren kvalifisert? |
-| Rangeringsregelverk med poengberegning | Hvor står søkeren i køen? |
-|Poenglikhetsregel | Hva skal rangeringen gjøre med søkere som har fått lik poengsum?|
-| Kvotetype med plassflyt | Hvilken køordning gjelder, og hvor går ledige plasser? |
+| Del | Spørsmålet den svarer på                             |
+|-----|------------------------------------------------------|
+| Kompetansekrav | Er søkeren kvalifisert?                              |
+| Rangeringsregelverk med poengberegning | Hvor står søkeren i køen?                            |
+| Kvotetype | Hvilke køordningstyper gjelder?                      |
+| Grunnlag | Hvilket dokumentasjonsgrunnlag vurderes søkeren mot? |
+| Mangelkoder | Hva mangler søkeren for å oppfylle kravene?          |
 
-Regelverket eies av en organisasjon (lærested eller sentralt opptaksorgan), pakkes i en regelverkssamling, og kobles til et utdanningstilbud i et opptak. Det er noe annet enn plasstildelingen, som bruker regelverket for å fordele plasser — se [plasstildeling/design.md](../plasstildeling/design.md).
+Regelverket eies av en organisasjon (lærested eller sentralt opptaksorgan), pakkes i en regelverkssamling, og kobles til et opptak. Utdanningstilbud i opptaket kan kun benytte seg av regelverk og kvotetyper som inngår i opptakets regelverkssamling.
+
+**Merk:** Poenglikhetsregel (hva som skjer ved lik poengsum) settes på opptaket, ikke i regelverkssamlingen. Se [opptak/design.md](../opptak/design.md). Det er noe annet enn plasstildelingen, som bruker regelverket for å fordele plasser — se [plasstildeling/design.md](../plasstildeling/design.md).
 
 | | Regelverk                                                     | Plasstildeling |
 |---|---------------------------------------------------------------|----------------|
@@ -63,7 +66,7 @@ Regelverket eies av en organisasjon (lærested eller sentralt opptaksorgan), pak
 
 ### Regelverkssamling
 
-En regelverkssamling er en pakke med opptaksregelverk — kompetansekrav, rangeringsregler, kvoter, poengberegning — som kan tas i bruk av ett eller flere utdanningstilbud.
+En regelverkssamling er en pakke med opptaksregelverk — kompetansekrav, rangeringsregler, kvotetyper, grunnlag og mangelkoder — som kobles til et opptak. Opptaksforvalter setter tilgjengelige kompetanseregelverk, rangeringsregelverk, kvotetyper, grunnlag og mangelkoder for utdanningstilbud i opptak som er koblet på regelverkssamlingen.
 
 **Eierskap:** Regelverkssamlingen eies av én organisasjon (`regelverksamling_kode` + `organisasjonskode`). Flere organisasjoner kan ha samlingen med samme kode — de får da hver sin kopi av innholdet.
 
@@ -101,9 +104,9 @@ Et kompetanseregelverk kan knyttes til flere grunnlag (f.eks. generell studiekom
 
 **Kravlogikk:** Både kompetansekrav og tilleggskrav har et `krever_alle`-flagg som styrer om alle underkrav må være oppfylt (AND) eller om ett er nok (OR). Kravlister har i tillegg `karakterkrav_snitt` for snittberegning.
 
-**GSK for fagskole:** Fagskole kan valgfritt legge til GSK som kravelement i kompetanseregelverket, men HK-dir har meldt at dette ikke fungerer i praksis ([TAKE-236](https://sikt.atlassian.net/browse/TAKE-236)). Det må avklares om modellen egner seg når fagskole velger å bruke GSK, eller om fagskolens kvalifiseringsstruktur trenger en annen tilnærming.
+**GSK for fagskole:** Noen fagskolestudier har GSK-krav, og fagskolene skal ha muligheten til å opprette slike krav i kompetanseregelverket.
 
-**Vitnemålskravkode:** Kravelementer har `vitnemalskrav_kode1` og `vitnemalskrav_kode2`, men HK-dir melder at det er uklart hvor kodene kommer fra, og at listen må være uttømmende før byggjobben starter. Kun to koder finnes i dag (KL og R94). Var tekstfelt, nå nedtrekksliste ([TAKE-236](https://sikt.atlassian.net/browse/TAKE-236)).
+**Vitnemålskravkode:** Kravelementer har `vitnemalskrav_kode1` og `vitnemalskrav_kode2`. HK-dir har etterspurt vitnemålskravkoder som gjelder for elever som har fullført VGS med fagbrev eller svennebrev. Kun to koder finnes i dag (KL og R94). Internt oppfølgingsmøte 17. sept — se [oppgave.md](oppgave.md).
 
 ### Rangeringsregelverk og poengberegning
 
@@ -113,7 +116,6 @@ Rangeringsregelverket bestemmer hvordan kvalifiserte søkere rangeres mot hveran
 
 ```
 rangeringsregelverk
-  ├── poenglikhetsregel — hva skjer ved lik poengsum (SKAL FLYTTES, se beslutning 2)
   └── rangeringsgrunnlag_poengtype (1..n) — kobler grunnlag til poengtyper
         ├── grunnlag — dokumentasjonsgrunnlaget
         └── poengtype = poengklasse + poengvariant
@@ -123,21 +125,7 @@ rangeringsregelverk
 
 **Poengberegning:** En poengtype er unikt identifisert av kombinasjonen poengklasse + poengvariant. Poengtypen har `minimum`, `maksimum`, `antall_desimaler`, `antall_sifre`, `poengtrinn` og en `poengalgoritme_kode`. Poengformler (`poengformel`) definerer uttrykk som summerer poengklasser.
 
-**Poenglikhetsregler — nåværende modell og meldt endring:**
-
-Dagens modell: Globale regler (PK: `poenglikhetsregel_kode`) med rekkefølge-kolonner for alder, loddtrekning, prioritet, søknadstidspunkt og underrepresentert kjønn. Regelen settes på rangeringsregelverket.
-
-HK-dir melder at dette er feil plassering ([TAKE-236](https://sikt.atlassian.net/browse/TAKE-236)): regelen hører til per utdanningstilbud i opptak, ikke per rangeringsregelverk. Begrunnelsen er at forskriften er ulik per opptakstype og rundetype:
-
-| Opptakstype/rundetype            | Forskriftsfestet regel | Valgfrihet for lærested |
-|----------------------------------|----------------------|------------------------|
-| UHG (universiteter og høgskoler) | Loddtrekning (endres fra alder i 2027) | Kan velge «alle med lik sum får tilbud» |
-| Fagskole                         | Rangering etter alder | Ingen (forskriftsfestet), men det kan bli aktuelt å tillate «alle med lik sum får tilbud» |
-| Ledige studieplasser             | Tidspunkt for levert søknad | — |
-
-Siden poenglikhetsregel (eller regler) i utgangspunktet enten er obligatorisk eller default for alle utdanningstilbud i opptaket, så er regelverkssamlingsnivå er foreslått som mulig plassering.
-
-**Bulk-kobling grunnlag ↔ poengtyper:** HK-dir melder at å koble ett og ett tar lang tid ([TAKE-235](https://sikt.atlassian.net/browse/TAKE-235)), og ønsker å kunne koble flere grunnlag til flere poengtyper i én operasjon, ikke gjøre det én etter én. 
+**Poenglikhetsregel:** Poenglikhetsregel settes ikke lenger på rangeringsregelverket — den er flyttet til opptaket. Feltet på rangeringsregelverk skal fjernes. Se [opptak/design.md](../opptak/design.md).
 
 **Språkstøtte:** Rangeringsregelverk har `beskrivelse` per språk. Poengklasser og poengvarianter har `navn`/`beskrivelse` per språk.
 
@@ -151,65 +139,25 @@ En kvotetype definerer en køordning — en avsatt andel plasser for en bestemt 
 kvotetype
   ├── kvoterangering — metode for rangering (KP, SP, SPEV, IH)
   ├── poengformel — default poengformel
-  ├── kvotetype_plassflyt — self-ref: ledige plasser går hit
   ├── kvoteprioritet_default — rekkefølge kvoter prøves i
   ├── kvotetype_grunnlag (1..n) — gyldige grunnlag med aldersgrenser
   └── kvotespørsmål (0..n) — spørsmål som avgjør kvotetilhørighet
         └── kvotespørsmål_preutfylling — JA, NEI, SAKSBEHANDLER, AUTOMATISK
 ```
 
-**Plassflyt:** Definert på kvotetypen som en self-referanse (`kvotetype_kode_plassflyt`). Kan overstyres per utdanningstilbud på `kvote`-tabellen (`kvotetype_kode_overstyrer_plassflyt`). Se [plasstildeling/design.md](../plasstildeling/design.md) for hvordan plassflyt brukes i algoritmen.
+**Plassflyt:** Plassflyt settes ikke på kvotetypen i regelverkssamlingen, men per utdanningskvote på utdanningstilbudet. Hvor ledige plasser går bestemmes altså per utdanningskvote, ikke på kvotetypenivå. Se [utdanningstilbud/design.md](../utdanningstilbud/design.md) og [plasstildeling/design.md](../plasstildeling/design.md).
 
 **Kvotespørsmål:** Spørsmål som avgjør om en søker tilhører en kvote. Kan preutfylles automatisk eller av saksbehandler. Har en valgfri `kvotesporsmal_algoritme` for automatisk besvarelse.
 
 **Språkstøtte:** Kvotetyper har `navn` per språk. Kvotespørsmål har `navn` og `kvotesporsmaltekst` per språk.
 
-**Grunnlag og aldersgrenser:** HK-dir har meldt uklarhet om forskjellen mellom aldersgrense på kvotetype og aldersgrense på grunnlag, og om «automatisk valg av grunnlag» setter synlighet i saksbehandling eller velger automatisk. Spørsmålet om alder over 23 inkluderer de som fyller 23 samme år er også åpent ([TAKE-236](https://sikt.atlassian.net/browse/TAKE-236)).
+**Grunnlag og aldersgrenser:** Uklarheter om forskjellen mellom aldersgrense på kvotetype og aldersgrense på grunnlag, og om «automatisk valg av grunnlag». Internt oppfølgingsmøte 17. sept — se [oppgave.md](oppgave.md).
 
-### Relativ kvotefordeling på utdanningstilbudet
+### Kvotefordeling
 
-> **Status:** besluttet etter workshop 2026-09-14.
+Regelverkssamlingen definerer hvilke kvotetyper som er tilgjengelige (f.eks. ORD, ORDF, samisk, nordnorsk). Relativ fordeling mellom kvotetyper settes på utdanningstilbudet, og beregning av absolutte tall gjøres av plasstildelingen. Se [utdanningstilbud/design.md](../utdanningstilbud/design.md) for hvordan fordeling settes, og [plasstildeling/design.md](../plasstildeling/design.md) for hvordan den beregnes.
 
-I dag settes antall tilbud absolutt per utdanningskvote per utdanningstilbud. For UHG med hundrevis av utdanningstilbud betyr det hundrevis av manuelle konfigurasjoner per opptak. Løsningen er **relativ fordeling** på utdanningstilbudet, med **absolutte unntak** for spesielle kvoter.
-
-**Regelverkssamlingen** definerer hvilke kvotetyper som er tilgjengelige (f.eks. ORD, ORDF, samisk, nordnorsk). Den definerer også default relativ fordeling mellom kvotetyper (f.eks. 50/50 ORD+ORDF).
-
-**Utdanningstilbudet** setter:
-- Totalt antall tilbud som skal gis
-- Relativ fordeling mellom utdanningskvoter (f.eks. 50 % / 50 %) — med default fra regelverkssamlingen
-- Eventuelle absolutte spesialkvoter (f.eks. samisk kvote: 2)
-
-**Plasstildelingen** beregner antall tilbud per utdanningskvote:
-
-```
-Utdanningstilbud «Sykepleie Nord»:
-  Totalt antall tilbud: 278
-  Samisk kvote: 2 (absolutt)
-  278 − 2 = 276 til relativ fordeling
-  ORDF: 276 × 50 % = 138
-  ORD:  276 × 50 % = 138
-  Plassflyt: samisk → ORDF → ORD
-```
-
-#### Hva dette løser
-
-- **Massivt redusert manuelt arbeid.** Lærestedet setter totaltall og eventuelt relative andeler — ikke absolutte tall per utdanningskvote.
-- **Konsistens.** Default-fordelingen fra regelverkssamlingen gjelder for alle utdanningstilbud med mindre lærestedet overstyrer.
-- **Separasjon av ansvar.** Tilgjengelige kvotetyper og default-fordeling eies av regelverkssamlingen (forskriftsfestet). Lærestedet legger til eventuelle spesialkvoter og justerer fordelingen ved behov.
-
-#### Åpne spørsmål
-
-1. **Avrunding.** 277 totalt − 2 samisk = 275 → 137,5 / 137,5. Hvem får den ekstra plassen? Forslag: én kvotetype er «resten» (typisk ORD) og tar eventuelle avrundingsdifferanser.
-
-2. **Flere spesielle kvoter.** Et utdanningstilbud kan ha samisk kvote (2) + nordnorsk kvote (5). Beregning: 278 − 2 − 5 = 271, fordelt 50/50. Hva hvis de spesielle kvotene til sammen overstiger totaltallet? Svar: ikke lov — saksbehandler får varsel om feil.
-
-3. **Forholdet til «antall ønsket ja-svar» i supplering.** Er dette også relativt? Svar: nei, dette er et absolutt tall (tak) på utdanningstilbudet som ikke skal overstiges i supplerings- og etterfyllingsrunder.
-
-4. **Fagskole og lokale opptak.** Gjelder 50/50-fordelingen bare UHG? Fagskole kan ha en helt annen kvotestruktur. Regelverkssamlingen må kunne definere ulike fordelinger per opptakskontekst.
-
-#### Konsekvenser
-
-Beregningslogikken i plasstildelingen blir noe mer kompleks (relativ fordeling → absolutte tall før tildeling), men det er en engangsberegning per plasstildelingskjøring. Se også [plasstildeling/design.md](../plasstildeling/design.md) for hvordan dette påvirker algoritmen.
+Alle kvoter — inkludert spesialkvoter som samisk og nordnorsk — settes som relative andeler. Det finnes ingen absolutte spesialkvoter.
 
 ### Kobling til utdanningstilbud og opptak
 
@@ -222,8 +170,6 @@ Et utdanningstilbud kobles til regelverket via tre felter:
 | `rangeringsregelverk_kode` | Hvilket rangeringsregelverk innenfor samlingen |
 
 Kvoter opprettes per utdanningstilbud i `opptak_v2.kvote`, med FK til `regelverk.kvotetype` i den regelverkssamlingen utdanningstilbudet bruker.
-
-**Filtrering og søk:** HK-dir melder at det er kritisk å kunne filtrere regelverk på tilknyttede utdanningstilbud og læresteder ([TAKE-236](https://sikt.atlassian.net/browse/TAKE-236)). Fagskole omgår i dag dette med fritekst i navn, men det fungerer ikke for UHG. Dette er beskrevet som erstatning for basisdatarapportene.
 
 ---
 
@@ -272,26 +218,20 @@ Evidensnivå: **M** = verifisert i datamodellen, **V** = verifisert i koden, **H
 | Støtte flere delberegninger | Poengtyper (poengklasse + poengvariant) med min/maks/desimaler | Ingen | M |
 | Definere poengformel | `poengformel` med `uttrykk` og kobling til poengklasser | Ingen | M |
 | Poengalgoritme | `poengalgoritme`-tabell med `algoritme`-kolonne; `AlderspoengAlgoritme`, `KjonnspoengAlgoritme` i kode | Ingen | M+V |
-| Poenglikhetsregel på riktig nivå | Settes i dag på rangeringsregelverk | **Feil plassering.** HK-dir: skal gjelde per opptak, ikke per regelverk. Feltet på rangeringsregelverk skal fjernes | M+H |
-| Ulike regler per opptakstype | Globale regler, ingen kobling til opptakstype | **Forskriften krever ulike defaults.** UHG: loddtrekning (2027); fagskole: alder (ikke valgfri) | H |
-| Lærested velger «alle med lik sum får tilbud» | Regelen finnes i den globale tabellen | **Valgfriheten er ikke kanalisert.** Intet hindrer feil valg | M |
-| Bulk-kobling grunnlag ↔ poengtyper | Kobles én og én i dag | **HK-dir: «laaang tid».** Trenger designet bulk-interaksjon | H |
+| Bulk-kobling grunnlag ↔ poengtyper | Kobles én og én i dag | Ikke prioritert nå | H |
 | Kobling mellom rangeringsregelverk og grunnlag | `rangeringsgrunnlag_poengtype` junction-tabell | Ingen | M |
 | Språkstøtte | Rangeringsregelverk, poengklasse, poengvariant, poengtype har alle _sprak-tabeller | Ingen | M |
-
-**Hovedfunn — poenglikhetsregel:** Dagens modell plasserer poenglikhetsregelen på rangeringsregelverket. HK-dir og domeneeksperter er enige om at dette er feil: regelen skal gjelde per regelverkssamling (eller opptak), uavhengig av hvilket rangeringsregelverk som brukes. I UHG er loddtrekning default fra 2027, med mulighet for lærestedet å velge «alle med lik sum». I fagskole er alder forskriftsfestet og ikke valgfri, men det kan bli aktuelt å tillate loddtrekning eller «alle med lik sum» i tillegg. Foreslått plassering: regelverkssamlingsnivå. Tidspunkt for levert søknad gjelder kun for runden «ledige studieplasser».
 
 ### Oppgave 4 — Definere kvoter
 
 | Krav | Funn | Gap | Ev. |
 |------|------|-----|-----|
 | Reservere plasser til bestemte grupper | `kvotetype` med `kvoterangering` (KP, SP, SPEV, IH) | Ingen | M |
-| Plassflyt ved ufylte kvoter | `kvotetype_kode_plassflyt` self-referanse | Ingen | M |
-| Overstyring av plassflyt per utdanningstilbud | `kvote.kvotetype_kode_overstyrer_plassflyt` | Ingen | M |
+| Plassflyt mellom utdanningskvoter | Settes per utdanningskvote på utdanningstilbudet, ikke på kvotetypen | Hører til [utdanningstilbud/design.md](../utdanningstilbud/design.md) | — |
 | Kvoteprioritet | `kvoteprioritet_default` på kvotetype; `kvoteprioritet_overstyring` på kvote | Ingen | M |
 | Kvotespørsmål for kvotetilhørighet | `kvotesporsmal` med preutfylling og algoritme | Ingen | M |
 | Grunnlag med aldersgrenser per kvote | `kvotetype_grunnlag` med `aldersgrense_default` og `aldersgrense_operator_default` | Ingen | M |
-| Sirkularitetsvern for plassflyt i skjema | **Ingen CHECK-constraint eller trigger** | Sykler kan oppstå i konfigurasjonen; fanges kun i algoritmen ved kjøring | M+V |
+| Sirkularitetsvern for plassflyt | Fanges kun i algoritmen ved kjøring, ingen CHECK-constraint | Hører til [plasstildeling/design.md](../plasstildeling/design.md) | M+V |
 | Språkstøtte | `kvotetype_sprak`, `kvotesporsmal_sprak` | Ingen | M |
 
 ### Oppgave 5 — Koble spesielle opptakskrav til kvoter
@@ -343,9 +283,9 @@ Toppnivået (kompetanseregelverk) og bunnnivået (kravelement) har flerspråklig
 
 «Krever generell studiekompetanse» er meningsfylt for UHG, men ikke for HYU. Det må avklares om GSK skal være kravelement i fagskolens kompetanseregelverk, eller om fagskolens kvalifiseringsstruktur trenger en annen inngang.
 
-### 7. Filtrering på tilknyttede utdanningstilbud er kritisk
+### 7. Hvilke utdanningstilbud bruker dette regelverket
 
-HK-dir beskriver dette som erstatning for basisdatarapportene. I dag finnes fritekst-søk på kode og navn, men ikke filtrering på hvilke utdanningstilbud som bruker et gitt regelverk.
+HK-dir beskriver dette som erstatning for basisdatarapportene. I dag finnes fritekst-søk på kode og navn, men ikke mulighet til å se hvilke utdanningstilbud som bruker et gitt regelverk.
 
 ---
 
@@ -408,35 +348,40 @@ Lukkede: kvalifisering/rangering/GSK på grunnlag, kjernefag, algoritme (→ TAK
 
 **Kvotespørsmål** — spørsmål som avgjør om en søker tilhører en bestemt kvote. Kan besvares automatisk, av saksbehandler, eller preutfylles.
 
-**Ledige studieplasser** — en rundetype i plasstildelingen der rangeringen styres av søknadstidspunkt i stedet for poeng. Relevant for regelverket fordi poenglikhetsregelen «tidspunkt for levert søknad» kun gjelder denne rundetypen. Se [plasstildeling/design.md](../plasstildeling/design.md) for fullstendig definisjon av rundetyper.
-
 ---
 
 ## Oppgavenummerering
 
-| # | Oppgave | Github-issue |
-|---|---------|-------------|
-| 1 | Etablere og forvalte en regelverkssamling | |
-| 2 | Definere kompetansekrav | |
-| 3 | Definere hvordan søkere rangeres (poengberegning) | |
-| 4 | Definere kvoter | |
-| 5 | Koble spesielle opptakskrav til kvoter | |
-| 6 | Koble regelverket til det konkrete utdanningstilbudet og opptaket | |
+| # | Oppgave | Status | Github-issue | Jira |
+|---|---------|--------|-------------|------|
+| 1 | Etablere og forvalte en regelverkssamling | Løst | | |
+| 2 | Definere kompetansekrav | Løst | | |
+| 3 | Definere hvordan søkere rangeres (poengberegning) | Løst (poenglikhetsregel flyttes til opptak) | | |
+| 4 | Definere kvotetyper, grunnlag og mangelkoder | Løst | | |
+| 5 | Koble spesielle opptakskrav til kvoter | Ikke prioritert 2027 | | |
+| 6 | Koble regelverket til opptak og utdanningstilbud | Løst | | |
+| 7 | Varsling ved sletting av regelverk | Gjenstår — varsel når opptaksforvalter sletter regelverk som ikke er knyttet til et opptak | | |
+| 8 | Varsling ved endring av regelverk under behandling | Til senere — blir viktig når saksbehandling er i gang (se beslutning 3) | | |
 
 ---
 
-## Neste steg
+## Gjenstående arbeid
 
-1. ~~**Flytt poenglikhetsregel.**~~ **Avklart.** Poenglikhetsregel flyttes til opptaket. Feltet på rangeringsregelverk skal fjernes. Poenglikhetsregeltypene defineres i regelverkssamlingen. Se [opptak/design.md](../opptak/design.md).
-2. **Ta beslutning 3:** Hva skjer med regelverket når søknader er under behandling? Låsing, versjonering, varsel, eller «på eget ansvar»?
-3. **Avklar oppgave 5:** Spesielle opptakskrav på kvoter. Skal modellen utvides med FK fra kvotetype til kompetanseregelverk, eller løses dette via et annet mønster?
-4. **Avklar GSK for fagskole.** Trenger fagskolens kvalifiseringsstruktur en annen inngang enn «kreves generell studiekompetanse»?
-5. **Avklar vitnemålskravkoder.** Kodekilde og uttømmende liste må på plass før bygging.
-6. **Avklar «automatisk valg av grunnlag».** Hva gjør det, og hva *bør* det gjøre?
-7. **Design tilgangsmodell for synlighet.** Skal lærsteder kunne se SOs samlinger? Tilgangsmodell-beslutning.
-8. **Design bulk-kobling grunnlag ↔ poengtyper.** Meldt som tidstyv av HK-dir.
-9. **Bygg filtrering på tilknyttede studier.** Kritisk for kontrollarbeidet.
-10. **Skriv eksempler.** Én Gherkin-feature per oppgave i `krav/02 Opptak/`.
+### Må gjøres for 2027
+
+1. **Fjern poenglikhetsregel fra rangeringsregelverk.** Feltet skal fjernes. Poenglikhetsregel settes nå på opptaket. Se [opptak/design.md](../opptak/design.md).
+2. **Avklar vitnemålskravkoder.** Kodekilde og uttømmende liste uavklart — oppfølgingsmøte 17. sept.
+3. **Varsling ved sletting av regelverk.** Opptaksforvalter skal få varsel når de sletter et regelverk som ikke er knyttet til et opptak. Varsling ved endring av regelverk under saksbehandling kan vente til senere (se beslutning 3).
+
+### Ikke prioritert nå
+
+4. UX-justeringer: filtreringer på GSK i kompetanseregelverk, fjerne unødvendig språkstøtte
+5. Bulk-kobling grunnlag ↔ poengtyper
+6. Spesielle opptakskrav på kvoter ([#511](https://github.com/sikt-no/fs/issues/511), [#265](https://github.com/sikt-no/fs/issues/265))
+7. Filtrering på tilknyttede utdanningstilbud og læresteder (meldt som kritisk av HK-dir, men ikke prioritert til 2027)
+8. Tilgangsmodell for synlighet — skal læresteder kunne se SOs samlinger?
+9. GSK for fagskole — trenger fagskolens kvalifiseringsstruktur en annen inngang?
+10. «Automatisk valg av grunnlag» — hva gjør det, og hva bør det gjøre?
 
 ---
 
@@ -454,7 +399,7 @@ Verifisert i `fs-plattform/opptak`:
 | `PoengklasseService`, `PoengvariantService`, `PoengtypeService` | CRUD for poengberegningens byggeklosser |
 | `PoengformelService` | CRUD for poengformler med uttrykk |
 | `PoenglikhetService` | CRUD for globale poenglikhetsregler |
-| `KvotetypeMutations` | CRUD for kvotetyper med grunnlag og plassflyt |
+| `KvotetypeMutations` | CRUD for kvotetyper med grunnlag |
 | `KvotesporsmalService` | CRUD for kvotespørsmål med preutfylling og algoritme |
 | `RegelverkBrukService` | Bruksstatistikk og in-bruk-sjekker for sletting |
 | `AutomatiskPoengberegningService` | Automatisk poengberegning med alderspoeng- og kjønnspoeng-algoritmer |

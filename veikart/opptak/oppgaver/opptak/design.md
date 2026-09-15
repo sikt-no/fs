@@ -10,7 +10,7 @@ Dokumentet er skrevet for alle som trenger å forstå hva det vil si å opprette
 
 ---
 
-**Fire beslutninger bør leses før resten, fordi alt annet følger av dem. To er tatt. To er åpne.**
+**Fire beslutninger bør leses før resten, fordi alt annet følger av dem. Tre er tatt. En er åpen.**
 
 1. **Opptakstype som konfigurasjonsnivå utgår, men bevares som fast kodeverk for matching.** I gammel løsning arvet et opptak innstillinger fra en opptakstype (UHG, FSU, lokalt osv.). I ny løsning oppretter man bare et opptak — innstillinger som i dag ligger på opptakstype flyttes til opptaket selv, og brukere skal ikke kunne opprette egne opptakstyper. Men opptakstype bevares som et lite, sentralt forvaltet kodeverk (f.eks. UHG, HYU, master, emne/kurs) for å kategorisere opptak. 
 
@@ -18,7 +18,7 @@ Dokumentet er skrevet for alle som trenger å forstå hva det vil si å opprette
 
 3. **Enkelte utdanningstilbud trenger strengere søknadsfrist enn opptakets generelle frist.** Noen utdanninger (f.eks. Politihøyskolen) har tidlig søknadsfrist fordi de krever opptaksprøver eller annen tilleggsvurdering som tar tid. I ny løsning må det være mulig å sette en tidligere søknadsfrist per utdanningstilbud. Forslag: søknadsperiode (med tidligere til-dato) og ettersendingsfrist kan overstyres per utdanningstilbud; andre frister gjelder alltid for hele opptaket.
 
-4. **Skal innstillinger for emneopptak, kurs og undervisningsopptak dekkes nå?** Disse opptakstypene har spesielle behov (løpende opptak, tilgang kun for egne studenter, ingen rangering). De er ikke hovedfokus og bør utsettes til egne oppgaver. Forslag: design for disse legges i egne dokumenter når behovet oppstår.
+4. **Innstillinger for emneopptak, kurs og undervisningsopptak skal ikke dekkes nå.** Disse opptakstypene har spesielle behov (løpende opptak, tilgang kun for egne studenter, ingen rangering). De er ikke hovedfokus og bør utsettes til egne oppgaver. Design for disse legges i egne dokumenter når behovet oppstår.
 
 ---
 
@@ -40,9 +40,9 @@ Med «opprette og vedlikeholde opptak» mener vi arbeidet opptaksforvalter gjør
 - Opptaksforvalter skal kunne opprette et opptak, samordnet eller lokalt.
 - Et samordnet opptak skal støtte at opptakseier inviterer læresteder til å delta med utdanningstilbud og saksbehandlere.
 - Alle nødvendige innstillinger, frister og tekster skal kunne settes på opptaket.
-- Utdanningstilbud skal kunne knyttes til opptaket, med mulighet for å arve eller overstyre innstillinger.
+- Utdanningstilbud skal kunne knyttes til opptaket, med mulighet for å arve eller overstyre innstillinger. (løses som del av utdanningstilbud)
 - Opptaket skal kunne publiseres og gjøres søkbart for søkere.
-- Plasstildelingsrunder skal kunne registreres etter at opptaket er publisert (løses som del av plasstildeling)
+- Plasstildelingsrunder skal kunne registreres etter at opptaket er publisert. 
 
 ### Ikke-mål
 
@@ -50,7 +50,7 @@ Med «opprette og vedlikeholde opptak» mener vi arbeidet opptaksforvalter gjør
 - **Ikke plasstildeling.** Fordeling av plasser er dekket i [plasstildeling/design.md](../plasstildeling/design.md).
 - **Ikke regelverksforvaltning.** Oppretting og vedlikehold av regelverkssamlinger er dekket i [regelverk/design.md](../regelverk/design.md). Her kobles en eksisterende samling til opptaket.
 - **Ikke emneopptak, kurs eller undervisningsopptak.** Disse har spesielle behov som utsettes (se beslutning 4).
-- **Ikke søkerens opplevelse.** Hvordan søkeren ser opptaket og søker er et eget domene.
+- **Ikke søkerens opplevelse.** Hvordan søkeren ser utdanningstilbud og kan søke, er en del av søknad- og saksbehandling.
 
 ---
 
@@ -66,7 +66,7 @@ Et opptak opprettes av en opptaksforvalter ved å velge om det skal være samord
 
 I begge tilfeller er resultatet et opptak med de samme egenskapene — forskjellen er bare antall deltakende organisasjoner.
 
-**Kopiering fra tidligere opptak:** Det skal være mulig å opprette et nytt opptak basert på et tidligere opptak, slik at innstillinger, frister og fellestekster kopieres som utgangspunkt.
+**Kopiering fra tidligere opptak:** Det skal være mulig å opprette et nytt opptak basert på et tidligere opptak, slik at innstillinger, frister og fellestekster kopieres som utgangspunkt. Kopiering av opptak er ikke viktig for 2027.
 
 ### Invitere læresteder til samordnet opptak
 
@@ -87,7 +87,7 @@ I fs-plattform/opptak-databasen er dette modellert i `opptak.opptak_samordna_org
 | **Navn** | Opptakets navn, vises for saksbehandlere og søkere. Flerspråklig (bokmål, nynorsk, engelsk, samisk). | Ja |
 | **Opptaksperiode** | Fra-dato og til-dato som angir når opptaket er aktivt og tilgjengelig for arbeid. | Ja |
 
-Opptaksperioden styrer når opptaket er synlig og tilgjengelig — ikke når søkere kan sende inn søknader (det styres av søknadsfristen).
+Opptaksperioden styrer når opptaket er synlig og tilgjengelig for arbeid — ikke når søkere kan sende inn søknader (det styres av søknadsfristen).
 
 ### Innstillinger
 
@@ -130,6 +130,7 @@ Opptaksforvalter bestemmer hvilke søkergrupper som kan søke på opptaket. Søk
 | Søkere med særskilt vurderingsgrunnlag | Søkere som trenger særskilt vurdering for opptak                    |
 
 Flere søkergrupper kan kombineres. Valget styrer synlighet for søkere og tilgjengelige søknadsskjemafelt. ()
+Siden de samordna opptakene er åpne for alle søkergrupper, så er det ikke prioritert å løse begrensninger av søkergrupper før 2027.
 
 #### Dokumentasjonsopplasting
 
@@ -146,7 +147,7 @@ Opptaksforvalter setter startnummer for søknadsnummerserien. Alle søknader i o
 | **Startnummer** | Første søknadsnummer i serien |
 | **Sluttnummer** (valgfritt) | Tak for serien — hindrer at nummerserier fra ulike opptak overlapper |
 
-I ny løsning er søknadsnummereringen trolig unik per opptak for å hindre at det blir uklart hvilke søknader man snakker om — må verifiseres.
+I ny løsning er søknadsnummereringen unik per opptak for å hindre at det blir uklart hvilke søknader man snakker om, og det er ikke lenger nødvendig å passe på at man som opptaksforvalter bruker riktig søkernummerserie.
 
 #### Maks antall søknadsalternativer
 
@@ -198,7 +199,7 @@ I FS-SIS er disse modellert som `INTROTEKST`, `BESKRIVELSE`, `TEKST_KVITTERING` 
 
 Når plasstildelingen publiseres, får søkeren en melding om at opptaksvedtaket foreligger i Min kompetanse. Meldingsteksten er ikke en fritekst — den er en **mal med juridisk kjerne** som settes på opptaket.
 
-#### Struktur: fast kjerne + parametere + valgfritt tillegg
+#### Struktur: fast kjerne + innstillinger fra opptaket + valgfritt tillegg
 
 Malen består av tre lag:
 
@@ -217,7 +218,7 @@ Formuleringer som oppfyller kravene i forvaltningsloven § 27 og eForvaltningsfo
 
 Endring i den juridiske kjernen krever versjonskontroll og godkjenning av jurist. Et lærested skal ikke kunne overskrive denne delen.
 
-**2. Parametere fra opptaket (settes automatisk):**
+**2. Innstillinger fra opptaket (settes automatisk):**
 
 | Parameter | Kilde |
 |-----------|-------|
@@ -230,7 +231,7 @@ Disse er rene datafelt — ikke redigerbar tekst, bare verdier fra opptaket og o
 
 Et avgrenset tilleggsfelt som legges etter den juridiske kjernen. Lærestedet eller SO kan legge til ekstra informasjon som gjelder alle søkere i opptaket. Feltet kan ikke overskrive kjerneteksten.
 
-Det er uklart om det finnes et behov for tilleggsinformasjon i samordna opptak for 2027. Informasjon som gjelder enkelte utdanningstilbud må løses et annet sted.
+Det er uklart om det finnes et behov for tilleggsinformasjon i samordna opptak for 2027. Informasjon som gjelder enkelte utdanningstilbud må løses et annet sted. Brev til nye studenter kan feks sendes når studierett er tildelt.
 
 #### Eksempel på komplett melding
 
@@ -260,17 +261,17 @@ Detaljert design for utdanningstilbud — inkludert konfigurasjon av kapasitet, 
 
 ### fs-plattform/opptak — hva som finnes
 
-| Konsept | Status | Merknad |
-|---------|--------|---------|
-| Opptak med navn og status | Finnes | `opptak.opptak` |
-| Opptakstype som mal | Finnes, skal utgå | `opptak.opptakstype` — innstillinger flyttes til opptak |
-| Samordnet opptak (inviterte organisasjoner) | Finnes | `opptak.opptak_samordna_organisasjon` |
-| Flerspråklig navn | Finnes | `opptak.opptak_sprak` |
-| Opptaksrunder med svarfrist | Finnes | `opptak.opptaksrunde` |
-| Utdanningstilbud | Finnes (v1 + v2) | `opptak.utdanningstilbud_v2` |
-| Dokumenttyper | Finnes, knyttet til opptakstype | `opptak.opptakstype_dokumenttype` |
-| Tidlig behandling og tilbud med begrunnelsestyper | Finnes | `opptak.tidligopptak_begrunnelsetype` |
-| Opptakshendelser | Finnes | `opptak.opptakshendelse` |
+| Konsept                                           | Status                                                 | Merknad |
+|---------------------------------------------------|--------------------------------------------------------|---------|
+| Opptak med navn og status                         | Finnes                                                 | `opptak.opptak` |
+| Opptakstype som mal                               | Finnes, skal utgå                                      | `opptak.opptakstype` — innstillinger flyttes til opptak |
+| Samordnet opptak (inviterte organisasjoner)       | Finnes                                                 | `opptak.opptak_samordna_organisasjon` |
+| Flerspråklig navn                                 | Finnes                                                 | `opptak.opptak_sprak` |
+| Plasstildelingsrunder med svarfrist               | Finnes, men må justeres mht rundetyper med ulik logikk | `opptak.opptaksrunde` |
+| Utdanningstilbud                                  | Finnes (v1 + v2)                                       | `opptak.utdanningstilbud_v2` |
+| Dokumenttyper                                     | Finnes, knyttet til opptakstype                        | `opptak.opptakstype_dokumenttype` |
+| Tidlig behandling og tilbud med begrunnelsestyper | Finnes                                                 | `opptak.tidligopptak_begrunnelsetype` |
+| Opptakshendelser                                  | Finnes                                                 | `opptak.opptakshendelse` |
 
 ### Hva gjenstår
 
@@ -291,14 +292,20 @@ Detaljert design for utdanningstilbud — inkludert konfigurasjon av kapasitet, 
 
 ## Del 4: åpne spørsmål
 
-1. **Skal søkergrupper modelleres som flervalg eller som én forhåndsdefinert profil?** I FS-dokumentasjonen beskrives søkergrupper som diskrete grupper (nordisk, EU/EØS, hele verden). I ny løsning kan det være enklere med en kombinasjon av egenskaper (geografi + studentstatus + invitasjon). Må avklares - ikke nødvendig nå, fordi alle skal kunne søke i samordna opptak.
+### Må avklares før publisering
 
-2. **Skal frister ha klokkeslett?** I FS-SIS er frister datoer uten klokkeslett (implisitt 23:59). I ny løsning kan det være behov for eksplisitt klokkeslett, f.eks. for å publisere tilbud klokken 09:00.
+1. **Validering ved publisering: hva skal kreves?** Forslag: et opptak må ha navn, opptaksperiode, minst ett utdanningstilbud og søknadsfrist for å kunne publiseres. Andre krav?
 
-3. **Hva skjer med løpende opptak?** Opptak uten fast sluttdato (søknader behandles fortløpende) er relevant for emneopptak og kurs, men er utsatt (se beslutning 4). Skal opptaksperioden likevel støtte «ingen til-dato»?
+2. **Fellestekster: er fire teksttyper tilstrekkelig?** FS-SIS har fire (intro, beskrivelse, kvittering, kvittering-avsluttet). Er det behov for flere i ny løsning, f.eks. tekst for venteliste, tekst for avslag, eller tekst for tidlig tilbud?
 
-4. **Kopiering: hva kopieres og hva kopieres ikke?** Forslag: innstillinger, frister og fellestekster kopieres. Utdanningstilbud, inviterte læresteder og opptaksrunder kopieres ikke. Må avklares.
+### Kan ligge til senere
 
-5. **Validering ved publisering: hva skal kreves?** Forslag: et opptak må ha navn, opptaksperiode, minst ett utdanningstilbud og søknadsfrist for å kunne publiseres. Andre krav?
+3. **Skal søkergrupper modelleres som flervalg eller som én forhåndsdefinert profil?** I FS-dokumentasjonen beskrives søkergrupper som diskrete grupper (nordisk, EU/EØS, hele verden). I ny løsning kan det være enklere med en kombinasjon av egenskaper (geografi + studentstatus + invitasjon). Ikke nødvendig nå, fordi alle skal kunne søke i samordna opptak.
 
-6. **Fellestekster: er fire teksttyper tilstrekkelig?** FS-SIS har fire (intro, beskrivelse, kvittering, kvittering-avsluttet). Er det behov for flere i ny løsning, f.eks. tekst for venteliste, tekst for avslag, eller tekst for tidlig tilbud?
+4. **Hva skjer med løpende opptak?** Opptak uten fast sluttdato (søknader behandles fortløpende) er relevant for emneopptak og kurs, men er utsatt (se beslutning 4). Skal opptaksperioden likevel støtte «ingen til-dato»?
+
+5. **Kopiering: hva kopieres og hva kopieres ikke?** Forslag: innstillinger, frister og fellestekster kopieres. Utdanningstilbud, inviterte læresteder og opptaksrunder kopieres ikke.
+
+### Avklart
+
+- ~~**Skal frister ha klokkeslett?**~~ Ja. Frister i fs-plattform/opptak lagres som full timestamp med tidssone (f.eks. `SØKNADSFRIST_ORDINÆR`, `SØKNADSFRIST_TIDLIG_OPPTAK`). Klokkeslett er eksplisitt.
