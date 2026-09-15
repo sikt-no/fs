@@ -24,13 +24,13 @@ Opprette, konfigurere og knytte utdanningstilbud til et opptak — inkludert kap
 
 ## Oppgaver
 
-| # | Oppgave | Github-issue |
-|---|---------|-------------|
-| 1 | Knytte utdanningstilbud til et opptak | |
-| 2 | Sette kapasitet, antall tilbud og antall ja-svar per utdanningstilbud | |
-| 3 | Koble regelverkssamling og regelverk per utdanningstilbud | |
-| 4 | Konfigurere utdanningskvoter per utdanningstilbud | |
-| 5 | Se utdanningstilbud fra opptakssiden | |
+| # | Oppgave | Github-issue | Jira |
+|---|---------|-------------|------|
+| 1 | Knytte utdanningstilbud til et opptak | | |
+| 2 | Sette kapasitet, antall tilbud og antall ja-svar per utdanningstilbud | | |
+| 3 | Koble regelverkssamling og regelverk per utdanningstilbud | | |
+| 4 | Konfigurere utdanningskvoter per utdanningstilbud | | |
+| 5 | Se utdanningstilbud fra opptakssiden | | |
 
 ## Workshop 2026-09-14: oppgavedeling og status
 

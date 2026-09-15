@@ -25,14 +25,14 @@ Ferdigstille regelverksforvaltningen i opptak slik at Samordna opptak og enkeltl
 
 ## Oppgaver
 
-| # | Oppgave | Github-issue |
-|---|---------|-------------|
-| 1 | Etablere og forvalte en regelverkssamling | |
-| 2 | Definere kompetansekrav | |
-| 3 | Definere hvordan søkere rangeres (poengberegning) | |
-| 4 | Definere kvoter | |
-| 5 | Koble spesielle opptakskrav til kvoter | |
-| 6 | Koble regelverket til det konkrete utdanningstilbudet og opptaket | |
+| # | Oppgave | Github-issue | Jira |
+|---|---------|-------------|------|
+| 1 | Etablere og forvalte en regelverkssamling | | |
+| 2 | Definere kompetansekrav | | |
+| 3 | Definere hvordan søkere rangeres (poengberegning) | | |
+| 4 | Definere kvoter | | |
+| 5 | Koble spesielle opptakskrav til kvoter | | |
+| 6 | Koble regelverket til det konkrete utdanningstilbudet og opptaket | | |
 
 ## Workshop 2026-09-14: oppgavedeling og status
 

@@ -24,17 +24,17 @@ Ferdigstille plasstildeling i opptak slik at opptaksforvalter kan opprette runde
 
 ## Oppgaver
 
-| # | Oppgave | Github-issue |
-|---|---------|-------------|
-| 1 | Legge til runder for plasstildeling i ett opptak | |
-| 2 | Sette antall tilbud som skal gis per utdanningskvote | |
-| 3 | Sette plassflyt mellom utdanningskvoter | |
-| 4 | Starte en ny plasstildeling | |
-| 5 | Gjennomføre plasstildeling | |
-| 6 | Vise resultatet til saksbehandler | |
-| 7 | Publisere resultatet til søkerne | |
-| 8 | Håndtere svar fra søker | |
-| 9 | Systemet gir automatisk nye tilbud ved nei-svar (utenfor scope) | NA|
+| # | Oppgave | Github-issue | Jira |
+|---|---------|-------------|------|
+| 1 | Legge til runder for plasstildeling i ett opptak | | |
+| 2 | Sette antall tilbud som skal gis per utdanningskvote | | |
+| 3 | Sette plassflyt mellom utdanningskvoter | | |
+| 4 | Starte en ny plasstildeling | | |
+| 5 | Gjennomføre plasstildeling | | |
+| 6 | Vise resultatet til saksbehandler | | |
+| 7 | Publisere resultatet til søkerne | | |
+| 8 | Håndtere svar fra søker | | |
+| 9 | Systemet gir automatisk nye tilbud ved nei-svar (utenfor scope) | NA | |
 
 ## Workshop 2026-09-14: oppgavedeling og status
 

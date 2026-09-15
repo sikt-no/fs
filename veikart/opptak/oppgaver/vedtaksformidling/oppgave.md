@@ -24,13 +24,13 @@ Når plasstildelingen publiseres, skal søker varsles om at opptaksvedtaket fore
 
 ## Oppgaver
 
-| # | Oppgave | Github-issue |
-|---|---------|-------------|
-| 1 | Sende svarmelding til søker (SMS/e-post) ved publisering | |
-| 2 | Registrere at søker har åpnet vedtaket i Min kompetanse | |
-| 3 | Sende påminnelse til søkere som ikke har åpnet vedtaket innen én uke | |
-| 4 | Avklare behov og policy for DPI-PDF til digital postkasse | |
-| 5 | Bygge hendelseslogg for varsling og vedtaksformidling | |
+| # | Oppgave | Github-issue | Jira |
+|---|---------|-------------|------|
+| 1 | Sende svarmelding til søker (SMS/e-post) ved publisering | | |
+| 2 | Registrere at søker har åpnet vedtaket i Min kompetanse | | |
+| 3 | Sende påminnelse til søkere som ikke har åpnet vedtaket innen én uke | | |
+| 4 | Avklare behov og policy for DPI-PDF til digital postkasse | | |
+| 5 | Bygge hendelseslogg for varsling og vedtaksformidling | | |
 
 ## Statuslogg
 
