@@ -34,10 +34,24 @@ Ferdigstille regelverksforvaltningen i opptak slik at Samordna opptak og enkeltl
 | 5 | Koble spesielle opptakskrav til kvoter | |
 | 6 | Koble regelverket til det konkrete utdanningstilbudet og opptaket | |
 
+## Workshop 2026-09-14: oppgavedeling og status
+
+**Team:** Shiitake (restanser) | **Produksjonsfrist:** 1. nov 2026 (mindre rettelser til 15. nov)
+
+**Løst:**
+- Opprette kompetanseregler, rangeringsregler, kvotetyper, grunnlag og mangelkoder
+- HK-dir akseptansetest regelverk 2026-09-14
+
+**Gjenstår:**
+- Fjerne poenglikhetsregel fra rangeringsreglene (skal settes på opptaket i stedet)
+- Avklare vitnemålskravkoder på grunnlag og poengtype — oppfølgingsmøte 17. sept
+- Ikke prioritert nå: UX-justeringer (filtreringer på GSK i kompetanseregelverk, fjerne unødvendig språkstøtte)
+
 ## Statuslogg
 
 | Dato       | Hendelse                          | Av            | Lenke til review        |
 |------------|-----------------------------------|---------------|-------------------------|
+| 2026-09-15 | Workshop: oppgavedeling avklart   | @karensikt    | –                       |
 | 2026-09-10 | Tatt inn i veikart (design)       | @karensikt    | –                       |
 | 2026-09-10 | Gap-analyse verifisert mot kode   | –             | design.md               |
 | 2026-09-10 | HK-dir-feedback innarbeidet       | –             | TAKE-221/235/236        |

@@ -4,7 +4,7 @@
 
 Et utdanningstilbud er en utdanning som er gjort søkbar i et opptak. Utdanningstilbudet opprettes ikke fra bunnen av — det bygger på autoritative data fra utdanningsregisteret og berikes med opptaksspesifikke innstillinger. Dette dokumentet beskriver hvordan utdanningstilbud hentes fra utdanningsregisteret, hva som arves og hva som settes av opptaksforvalter.
 
-**Status:** oppdatert 2026-09-14. Bygger på gjennomgang av fs-plattform/opptak-databasen, domenedokumentasjon fra fs.sikt.no, og arkitekturbeslutningen [«Denormalisering av data fra Utdanningsregisteret»](https://sikt.atlassian.net/wiki/spaces/PFS/pages/4271898626).
+**Status:** oppdatert 2026-09-15 etter workshop med Shiitake og Shinkansen. Bygger på gjennomgang av fs-plattform/opptak-databasen, domenedokumentasjon fra fs.sikt.no, og arkitekturbeslutningen [«Denormalisering av data fra Utdanningsregisteret»](https://sikt.atlassian.net/wiki/spaces/PFS/pages/4271898626).
 
 ---
 
@@ -131,18 +131,17 @@ Alle disse feltene eies av utdanningsregisteret. Opptak lagrer dem **ikke** — 
 | Egenskap                                                                 | Beskrivelse |
 |--------------------------------------------------------------------------|-------------|
 | **Antall studieplasser** (kapasitet)                                     | Faktisk antall plasser |
-| **Antall tilbud som skal gis**                                           | Det absolutte antallet tilbud som skal gis for dette utdanningstilbudet |
+| **Antall tilbud som skal gis** (totalt)                                  | Totalt antall tilbud som skal gis for dette utdanningstilbudet. Fordelingen mellom utdanningskvoter beregnes fra relativ fordeling — se utdanningskvoter nedenfor. |
 | **Antall ja-svar**                                                       | Nødvendig for utdanningstilbud som skal være med i plasstildelingsrunder etter hovedrunden |
 | **Kompetanseregelverk**                                                  | Må velges blant regelverkene i opptakets regelverkssamling. Får default-verdi fra samlingen — gjelder for alle utdanningstilbud uten unntak. |
 | **Rangeringsregelverk**                                                  | Må velges blant regelverkene i opptakets regelverkssamling. Får default-verdi fra samlingen — gjelder for alle utdanningstilbud uten unntak. |
-| **Utdanningskvoter**                                                     | Standard (default) kvotetyper følger av regelverkssamlingen. Lærestedet kan legge til andre tilgjengelige kvoter fra samlingen. Se [plasstildeling/design.md](../plasstildeling/design.md) |
+| **Utdanningskvoter med relativ fordeling**                               | Standard (default) kvotetyper følger av regelverkssamlingen (f.eks. ORD 50 % + ORDF 50 %). Lærestedet kan legge til andre tilgjengelige kvoter fra samlingen og sette andre fordelinger. Lærestedet setter **relative tall** (prosent) per utdanningskvote — antall tilbud per utdanningskvote beregnes automatisk fra totalt antall tilbud. Eventuelle spesialkvoter (f.eks. samisk kvote) settes som absolutte tall og trekkes fra før relativ fordeling beregnes. Se [plasstildeling/design.md](../plasstildeling/design.md) |
+| **Plassflyt mellom utdanningskvoter**                                    | Standard plassflyt er ORDF → ORD: ledige plasser i førstegangsvitnemålskvoten flyter til ordinær kvote. Utdanningstilbud med andre kvotetyper kan sette andre regler. Kun én utdanningskvote kan være siste mottaker. Se [plasstildeling/design.md](../plasstildeling/design.md) |
 | **Tidlig søknadsfrist** (valgfritt)                                      | Tidligere søknadsfrist enn opptakets generelle frist. Aktuelt for utdanninger som krever opptaksprøver, f.eks. Politihøyskolen. |
 | **Tidlig behandling og tilbud**                                          | Om dette tilbudet støtter tidlig behandling og tilbud. Styres av opptakets innstilling — gjelder for alle utdanningstilbud uten unntak. |
 | **Kjønnspoeng**  (skal ikke dette være en kvotetype?)                    | Tilleggspoeng basert på kjønn (hvis aktuelt) |
 | **Vis poenggrense for søker**  (Må ikke søker få det?)                   | Om søker skal se poenggrensen |
 | **Vis ventelistenummer for søker**  (hvorfor skal dette være valgfritt?) | Om søker skal se sitt ventelistenummer |
-
-**Merk:** det foreligger et forslag om å endre kvotefordelingen fra absolutt per utdanningskvote til relativ fordeling på kvotetypenivå i regelverkssamlingen. Med denne endringen setter lærestedet bare totaltall og eventuelle absolutte spesialkvoter per utdanningstilbud — den relative fordelingen mellom ordinære kvoter beregnes automatisk. Se [regelverk/design.md, «Forslag: relativ fordeling på kvotetypenivå»](../regelverk/design.md#forslag-relativ-fordeling-på-kvotetypenivå).
 
 ---
 

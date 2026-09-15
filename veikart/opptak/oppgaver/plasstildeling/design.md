@@ -6,7 +6,7 @@ Vi skal kunne fordele studieplasser i flere runder, med kontroll over når søke
 
 Dokumentet er skrevet for alle som trenger å forstå hva plasstildeling er, hvilke prinsipper den hviler på, og hvilke spørsmål som gjenstår. Funksjonell løsning per oppgave, gap-analyse og tekniske detaljer ligger i [oppgave.md](oppgave.md).
 
-**Status:** oppdatert etter raffinering av rundetyper, 2026-09-10. Bygger på tidligere raffineringer og gjennomgang av koden.
+**Status:** oppdatert 2026-09-15 etter workshop med Shiitake og Shinkansen. Plasstildeling har utsatt produksjonsfrist til 8. desember 2026 (godkjent av Tina). Bygger på tidligere raffineringer og gjennomgang av koden.
 
 ---
 

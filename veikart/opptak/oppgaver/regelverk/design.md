@@ -6,17 +6,17 @@ Opptaksforvalter skal kunne opprette og forvalte regelverkssamlinger som styrer 
 
 Dokumentet er skrevet for alle som trenger å forstå hva opptaksregelverk er, hvilke prinsipper det hviler på, og hvilke spørsmål som gjenstår. Funksjonell løsning per oppgave, gap-analyse og tekniske detaljer ligger i [oppgave.md](oppgave.md).
 
-**Status:** første utkast, 2026-09-10. Bygger på prosessbeskrivelse fra behovskartlegging, gjennomgang av koden i `fs-plattform/opptak`, og HK-dir-feedback fra august 2026 ([TAKE-221](https://sikt.atlassian.net/browse/TAKE-221), [TAKE-235](https://sikt.atlassian.net/browse/TAKE-235), [TAKE-236](https://sikt.atlassian.net/browse/TAKE-236)).
+**Status:** oppdatert 2026-09-15 etter workshop med Shiitake og Shinkansen. Bygger på prosessbeskrivelse fra behovskartlegging, gjennomgang av koden i `fs-plattform/opptak`, og HK-dir-feedback fra august 2026 ([TAKE-221](https://sikt.atlassian.net/browse/TAKE-221), [TAKE-235](https://sikt.atlassian.net/browse/TAKE-235), [TAKE-236](https://sikt.atlassian.net/browse/TAKE-236)).
 
 ---
 
-**Tre beslutninger bør leses før resten, fordi alt annet følger av dem. To er tatt. Den tredje er ikke, og bør tas.**
+**Tre beslutninger bør leses før resten, fordi alt annet følger av dem. To er tatt. Den tredje er åpen og bør tas.**
 
 1. **En regelverkssamling er bundet til én organisasjon.** Samlingen eies av den organisasjonen som opprettet den, og den kan kopieres til andre organisasjoner. Endringer i originalen påvirker ikke kopien. Dette er tatt: koden og modellen virker slik.
 
-2. **Poenglikhetsregelen hører ikke hjemme på de ulike rangeringsregelverket, men er en selvstendig regeltype.** HK-dir har meldt eksplisitt at poenglikhetsregel ikke skal settes på rangeringsregelverk, fordi regelen er default for alle utdanningstilbud i ett gitt opptak som bruker samme regelverkssamling. Forskriften er ulik mellom UHG og fagskole: i UHG er loddtrekning default med mulighet for lærestedet å velge «alle med lik sum får tilbud»; for HYU er rangering etter alder forskriftsfestet og kan ikke velges bort. Poenglikhetsregel skal knyttes til regelverkssamlingen som selvstendig regeltype. 
+2. **Poenglikhetsregelen settes på opptaket, ikke på rangeringsregelverket.** Poenglikhetsregel er besluttet å flyttes fra rangeringsregelverk til opptaket. Regelen gjelder som default for alle utdanningstilbud i opptaket. Poenglikhetsregeltypene defineres i regelverkssamlingen, men det er opptaksforvalter som velger hvilken som er standard for opptaket. Se [opptak/design.md](../opptak/design.md) for hvordan dette settes.
 
-3. **Hva skjer med regelverket når søknader allerede er under behandling?** Det finnes ingen låseregel eller varslingsmekanisme som fanger opp at noen endrer et kompetansekrav eller en rangeringsregel mens søknader vurderes mot det. Konsekvensen av å endre regelverket etter at søknadsbehandling har startet er udefinert. Forslag om å innføre varslingsmekanisme, myk skranke, fordi det kan være behov for å rette feil i regelverk etter at søknader er behandlet. 
+3. **Hva skjer med regelverket når søknader allerede er under behandling?** Det finnes ingen låseregel eller varslingsmekanisme som fanger opp at noen endrer et kompetansekrav eller en rangeringsregel mens søknader vurderes mot det. Konsekvensen av å endre regelverket etter at søknadsbehandling har startet er udefinert. Forslag om å innføre varslingsmekanisme, myk skranke, fordi det kan være behov for å rette feil i regelverk etter at søknader er behandlet.
 
 ---
 
@@ -166,58 +166,46 @@ kvotetype
 
 **Grunnlag og aldersgrenser:** HK-dir har meldt uklarhet om forskjellen mellom aldersgrense på kvotetype og aldersgrense på grunnlag, og om «automatisk valg av grunnlag» setter synlighet i saksbehandling eller velger automatisk. Spørsmålet om alder over 23 inkluderer de som fyller 23 samme år er også åpent ([TAKE-236](https://sikt.atlassian.net/browse/TAKE-236)).
 
-### Forslag: relativ fordeling på kvotetypenivå
+### Relativ kvotefordeling på utdanningstilbudet
 
-> **Status:** forslag, ikke besluttet. Må forankres med prosjektleder.
+> **Status:** besluttet etter workshop 2026-09-14.
 
-I dag settes antall tilbud absolutt per utdanningskvote per utdanningstilbud. For UHG med hundrevis av utdanningstilbud betyr det hundrevis av manuelle konfigurasjoner per opptak. Forslaget er å flytte til **relativ fordeling** på kvotetypenivå i regelverkssamlingen, med mulighet for **absolutte unntak** for spesielle kvoter.
+I dag settes antall tilbud absolutt per utdanningskvote per utdanningstilbud. For UHG med hundrevis av utdanningstilbud betyr det hundrevis av manuelle konfigurasjoner per opptak. Løsningen er **relativ fordeling** på utdanningstilbudet, med **absolutte unntak** for spesielle kvoter.
 
-#### Slik fungerer det
+**Regelverkssamlingen** definerer hvilke kvotetyper som er tilgjengelige (f.eks. ORD, ORDF, samisk, nordnorsk). Den definerer også default relativ fordeling mellom kvotetyper (f.eks. 50/50 ORD+ORDF).
 
-Regelverkssamlingen definerer prosentvis fordeling mellom kvotetyper:
+**Utdanningstilbudet** setter:
+- Totalt antall tilbud som skal gis
+- Relativ fordeling mellom utdanningskvoter (f.eks. 50 % / 50 %) — med default fra regelverkssamlingen
+- Eventuelle absolutte spesialkvoter (f.eks. samisk kvote: 2)
 
-```
-Regelverkssamling «UHG 2027»:
-  ORDF (førstegangsvitnemål): 50 %
-  ORD  (ordinær):             50 %
-```
-
-Et utdanningstilbud setter bare totaltall og eventuelle absolutte kvoter:
+**Plasstildelingen** beregner antall tilbud per utdanningskvote:
 
 ```
 Utdanningstilbud «Sykepleie Nord»:
-  Antall tilbud som skal gis: 278
+  Totalt antall tilbud: 278
   Samisk kvote: 2 (absolutt)
-```
-
-Plasstildelingen regner:
-
-```
-278 totalt − 2 samisk = 276 til relativ fordeling
-ORDF: 276 × 50 % = 138
-ORD:  276 × 50 % = 138
-Plassflyt: samisk → ORD
+  278 − 2 = 276 til relativ fordeling
+  ORDF: 276 × 50 % = 138
+  ORD:  276 × 50 % = 138
+  Plassflyt: samisk → ORDF → ORD
 ```
 
 #### Hva dette løser
 
-- **Massivt redusert manuelt arbeid.** Fordelingen settes én gang på regelverkssamlingen, ikke per utdanningstilbud.
-- **Konsistens.** Alle utdanningstilbud som bruker samme regelverkssamling får automatisk riktig fordeling.
-- **Separasjon av ansvar.** Samordna opptak eier fordelingen (forskriftsfestet), lærestedet eier bare unntakene (spesielle kvoter).
+- **Massivt redusert manuelt arbeid.** Lærestedet setter totaltall og eventuelt relative andeler — ikke absolutte tall per utdanningskvote.
+- **Konsistens.** Default-fordelingen fra regelverkssamlingen gjelder for alle utdanningstilbud med mindre lærestedet overstyrer.
+- **Separasjon av ansvar.** Tilgjengelige kvotetyper og default-fordeling eies av regelverkssamlingen (forskriftsfestet). Lærestedet legger til eventuelle spesialkvoter og justerer fordelingen ved behov.
 
 #### Åpne spørsmål
 
-1. **Overstyring per utdanningstilbud.** Trenger noen utdanningstilbud en annen fordeling enn den regelverkssamlingen angir? Forslag: overstyring er tillatt men sjelden, og flagges synlig.
+1. **Avrunding.** 277 totalt − 2 samisk = 275 → 137,5 / 137,5. Hvem får den ekstra plassen? Forslag: én kvotetype er «resten» (typisk ORD) og tar eventuelle avrundingsdifferanser.
 
-2. **Avrunding.** 277 totalt − 2 samisk = 275 → 137,5 / 137,5. Hvem får den ekstra plassen? Forslag: én kvotetype er «resten» (typisk ORD) og tar eventuelle avrundingsdifferanser.
+2. **Flere spesielle kvoter.** Et utdanningstilbud kan ha samisk kvote (2) + nordnorsk kvote (5). Beregning: 278 − 2 − 5 = 271, fordelt 50/50. Hva hvis de spesielle kvotene til sammen overstiger totaltallet? Svar: ikke lov — saksbehandler får varsel om feil.
 
-3. **Flere spesielle kvoter.** Et utdanningstilbud kan ha samisk kvote (2) + nordnorsk kvote (5). Beregning: 278 − 2 − 5 = 271, fordelt 50/50. Hva hvis de spesielle kvotene til sammen overstiger totaltallet? Svar: ikke lov — saksbehandler får varsel om feil.
+3. **Forholdet til «antall ønsket ja-svar» i supplering.** Er dette også relativt? Svar: nei, dette er et absolutt tall (tak) på utdanningstilbudet som ikke skal overstiges i supplerings- og etterfyllingsrunder.
 
-4. **Forholdet til «antall tilbud som skal gis».** I dag er dette et absolutt tall per utdanningskvote. Med denne endringen blir det et beregnet tall — utledet fra relativ fordeling, totaltall og spesielle kvoter. Lærestedet setter bare totaltallet per utdanningstilbud.
-
-5. **Forholdet til «antall ønsket ja-svar» i supplering.** Er dette også relativt? Svar: nei, dette er et absolutt tall (tak) på utdanningstilbudet som ikke skal overstiges i supplerings- og etterfyllingsrunder.
-
-6. **Fagskole og lokale opptak.** Gjelder 50/50-fordelingen bare UHG? Fagskole kan ha en helt annen kvotestruktur. Regelverkssamlingen må kunne definere ulike fordelinger per opptakskontekst.
+4. **Fagskole og lokale opptak.** Gjelder 50/50-fordelingen bare UHG? Fagskole kan ha en helt annen kvotestruktur. Regelverkssamlingen må kunne definere ulike fordelinger per opptakskontekst.
 
 #### Konsekvenser
 
@@ -331,9 +319,9 @@ Evidensnivå: **M** = verifisert i datamodellen, **V** = verifisert i koden, **H
 
 ## Funn på tvers av oppgavene
 
-### 1. Poenglikhetsregel er feil plassert
+### 1. Poenglikhetsregel flyttes til opptaket (besluttet)
 
-HK-dir sier eksplisitt at poenglikhetsregel «skal ikke settes her» (på rangeringsregelverk). Regelen skal gjelde per opptak, ikke per regelverk. Forskriften er ulik mellom UHG og fagskole. Foreslått ny plassering: regelverkssamlingsnivå eller opptaksnivå. Feltet på rangeringsregelverk skal fjernes. Avklaringsspørsmål: skal fagskole også kunne velge «alle med lik sum»?
+Poenglikhetsregel er besluttet flyttet fra rangeringsregelverk til opptaket. Poenglikhetsregeltypene defineres i regelverkssamlingen, men standard poenglikhetsregel for opptaket settes av opptaksforvalter på opptaket. Se [opptak/design.md](../opptak/design.md). Feltet på rangeringsregelverk skal fjernes.
 
 ### 2. Kopiering er ikke deling
 
@@ -439,7 +427,7 @@ Lukkede: kvalifisering/rangering/GSK på grunnlag, kjernefag, algoritme (→ TAK
 
 ## Neste steg
 
-1. **Flytt poenglikhetsregel.** Feltet på rangeringsregelverk skal fjernes. Avklar plassering: regelverkssamling eller opptak? Avklar om fagskole skal kunne velge «alle med lik sum».
+1. ~~**Flytt poenglikhetsregel.**~~ **Avklart.** Poenglikhetsregel flyttes til opptaket. Feltet på rangeringsregelverk skal fjernes. Poenglikhetsregeltypene defineres i regelverkssamlingen. Se [opptak/design.md](../opptak/design.md).
 2. **Ta beslutning 3:** Hva skjer med regelverket når søknader er under behandling? Låsing, versjonering, varsel, eller «på eget ansvar»?
 3. **Avklar oppgave 5:** Spesielle opptakskrav på kvoter. Skal modellen utvides med FK fra kvotetype til kompetanseregelverk, eller løses dette via et annet mønster?
 4. **Avklar GSK for fagskole.** Trenger fagskolens kvalifiseringsstruktur en annen inngang enn «kreves generell studiekompetanse»?

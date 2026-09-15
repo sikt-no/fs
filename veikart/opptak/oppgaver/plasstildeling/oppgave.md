@@ -36,10 +36,32 @@ Ferdigstille plasstildeling i opptak slik at opptaksforvalter kan opprette runde
 | 8 | Håndtere svar fra søker | |
 | 9 | Systemet gir automatisk nye tilbud ved nei-svar (utenfor scope) | NA|
 
+## Workshop 2026-09-14: oppgavedeling og status
+
+**Produksjonsfrist:** 8. des 2026 (utsatt, godkjent av Tina)
+
+Plasstildeling utsettes fordi opptak, regelverk og utdanningstilbud har prioritet til 1. november.
+
+**Løst:**
+- Beregne plassflyt ved ledige plasser per utdanningskvote
+- Starte plasstildeling
+- Gjennomføre plasstildeling
+
+**Gjenstår:**
+- Innføre kompensasjonstilbud ved opprykk (suppleringsrunder)
+- Regresjonstest av plasstildelingen
+- Vise resultat til saksbehandler
+- Publisere svar til søker / sende svarmelding
+- Motta og behandle svar fra søker (svar behandles i neste plasstildelingsrunde)
+
+**Avhengigheter:**
+- Endringer i søknadsbehandling kan påvirke plasstildelingen — tett dialog nødvendig
+
 ## Statuslogg
 
 | Dato       | Hendelse                          | Av            | Lenke til review        |
 |------------|-----------------------------------|---------------|-------------------------|
+| 2026-09-15 | Workshop: utsatt til 8. des       | @karensikt    | –                       |
 | 2026-09-09 | Tatt inn i veikart (design)       | @karensikt    | –                       |
 | 2026-09-09 | Gap-analyse verifisert mot kode   | –             | design.md               |
 | 2026-09-09 | Del 1 og 2 renskrevet             | @karensikt    | design.md               |

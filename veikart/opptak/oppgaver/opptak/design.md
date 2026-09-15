@@ -6,7 +6,7 @@ Opptaksforvalter skal kunne opprette og forvalte opptak med alle innstillinger s
 
 Dokumentet er skrevet for alle som trenger å forstå hva det vil si å opprette et opptak, hvordan samordning fungerer, og hvilke innstillinger som må settes. Funksjonell løsning per oppgave og tekniske detaljer ligger i [oppgave.md](oppgave.md).
 
-**Status:** første utkast, 2026-09-11. Bygger på gjennomgang av databasen i fs-plattform/opptak (PostgreSQL), FS-SIS (Oracle, OPPTAK-tabellen), og domenedokumentasjon fra fs.sikt.no.
+**Status:** oppdatert 2026-09-15 etter workshop med Shiitake og Shinkansen. Bygger på gjennomgang av databasen i fs-plattform/opptak (PostgreSQL), FS-SIS (Oracle, OPPTAK-tabellen), og domenedokumentasjon fra fs.sikt.no.
 
 ---
 
@@ -93,9 +93,21 @@ Opptaksperioden styrer når opptaket er synlig og tilgjengelig — ikke når sø
 
 #### Regelverkssamling
 
-Opptaket kobles til en regelverkssamling som bestemmer kompetansekrav, rangeringsregelverk, kvotetyper og poenglikhetsregel. Regelverkssamlingen forvaltes separat (se [regelverk/design.md](../regelverk/design.md)) og kobles til opptaket ved oppretting.
+Opptaket kobles til en regelverkssamling som bestemmer kompetansekrav, rangeringsregelverk og kvotetyper. Regelverkssamlingen forvaltes separat (se [regelverk/design.md](../regelverk/design.md)) og kobles til opptaket ved oppretting.
 
-Et utdanningstilbud i opptaket arver regelverkssamlingen fra opptaket, men kan overstyre med en annen samling dersom det har avvikende regler.
+Utdanningstilbud i opptaket kan kun benytte seg av regelverk og kvotetyper som inngår i opptakets regelverkssamling.
+
+#### Standard poenglikhetsregel
+
+Opptaksforvalter setter standard poenglikhetsregel for opptaket. Denne gjelder for alle utdanningstilbud i opptaket som default. Poenglikhetsreglene som er tilgjengelige er koblet til regelverkssamlingen. Forskriften er ulik mellom opptakstyper:
+
+| Opptakstype | Forskriftsfestet regel | Valgfrihet for lærested |
+|-------------|----------------------|------------------------|
+| UHG (universiteter og høgskoler) | Loddtrekning (fra 2027) | Kan velge «alle med lik sum får tilbud» per utdanningstilbud |
+| Fagskole (HYU) | Rangering etter alder | Ingen (forskriftsfestet) |
+| Ledige studieplasser | Tidspunkt for levert søknad | — |
+
+Poenglikhetsregelen er flyttet fra rangeringsregelverket til opptaket fordi den gjelder per opptak, ikke per regelverk.
 
 #### Tidlig behandling og tilbud
 
@@ -153,6 +165,7 @@ Frister styrer tidsrammene for opptaket. Alle frister angis som dato (og eventue
 | **Frist for realkompetansesøknad** | Siste tidspunkt for å søke med realkompetanse. Kan ha tidligere frist enn ordinær søknadsfrist fordi realkompetansevurdering krever mer saksbehandlingstid. | Opptak |
 | **Svarfrist** | Frist for søker til å svare på tilbud om plass eller venteliste. Når svarfrist utløper uten svar, mister søker tilbudet. Settes per opptaksrunde. | Opptaksrunde |
 | **Frist for endring av svar** | Siste tidspunkt søker kan endre et allerede avgitt svar. | Opptak |
+| **Trekkfrist for utdanningstilbud** | Siste tidspunkt et lærested kan trekke et utdanningstilbud fra opptaket. Settes av opptakseier (f.eks. HK-dir). | Opptak |
 | **Publiseringstidspunkt for tilbud** | Dato og klokkeslett når resultat fra plasstildeling gjøres synlig for søkere. Settes per opptaksrunde. | Opptaksrunde |
 
 #### Interne saksbehandlingsfrister
@@ -237,7 +250,7 @@ Svarmeldingsmalen definerer *hva* som sendes. *Hvordan* meldingen sendes (kanale
 
 Et opptak må ha minst ett utdanningstilbud for å gi søkere mulighet til å legge søknadsalternativer i søknaden sin. Oppretting, konfigurasjon og tilknytning av utdanningstilbud er en egen oppgave med eget designdokument — se [utdanningstilbud/design.md](../utdanningstilbud/design.md).
 
-**Hypotese om eierskap:** Det er utdanningstilbudet som forteller at det skal være med i et opptak, ikke opptaket som «henter inn» utdanningstilbud. Lærestedet knytter sine utdanningstilbud til et opptak fra utdanningstilbudsiden. Fra opptakssiden skal det være mulig å se hvilke utdanningstilbud som er med, og det bør også være mulig å legge til utdanningstilbud derfra som en snarvei.
+**Eierskap:** Opptaksforvalter knytter utdanningstilbud til et opptak fra opptakssiden. På sikt kan det også bli mulig å melde inn utdanninger fra utdanningssiden, men i første omgang er det opptaket som styrer hvilke utdanningstilbud som er med. Opptaksforvalter kan også trekke utdanningstilbud fra opptaket (trekkfrist settes av opptakseier — se frister).
 
 Detaljert design for utdanningstilbud — inkludert konfigurasjon av kapasitet, antall tilbud, antall ja-svar, regelverk, kvoter og andre innstillinger — dekkes i [utdanningstilbud/design.md](../utdanningstilbud/design.md). Se også [plasstildeling/design.md](../plasstildeling/design.md) og [regelverk/design.md](../regelverk/design.md).
 
@@ -271,6 +284,8 @@ Detaljert design for utdanningstilbud — inkludert konfigurasjon av kapasitet, 
 | **Opptaksperiode (fra/til)** | Ikke eksplisitt modellert i fs-plattform/opptak. I FS-SIS er dette `DATO_FRA` / `DATO_TIL`. |
 | **Kopiering fra tidligere opptak** | Ikke implementert. |
 | **Dokumenttyper på opptaksnivå** | I dag knyttet til opptakstype, må flyttes til opptak. |
+| **Standard poenglikhetsregel på opptak** | Poenglikhetsregel finnes i dag på rangeringsregelverk. Skal flyttes til opptaket. |
+| **Trekkfrist for utdanningstilbud** | Ikke modellert i fs-plattform/opptak. Ny frist. |
 
 ---
 

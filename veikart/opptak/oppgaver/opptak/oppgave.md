@@ -38,8 +38,31 @@ Opptaksforvalter skal kunne opprette et opptak — samordnet eller lokalt — me
 | 9 | Svarmeldingsmal (juridisk kjerne + parametere) | [#214](https://github.com/sikt-no/fs/issues/214) |
 | 10 | Vedtaksformidling (egen oppgave) | Se [vedtaksformidling](../vedtaksformidling/) |
 
+## Workshop 2026-09-14: oppgavedeling og status
+
+**Team:** Shiitake | **Produksjonsfrist:** 1. nov 2026 (mindre rettelser til 15. nov)
+
+**Løst:**
+- Gi navn, legge til organisasjoner for samordning, legge til regelverkssamling
+
+**Gjenstår:**
+- Gjennomgå om alle nødvendige innstillinger for samordna opptak finnes
+- Sette standard poenglikhetsregel for opptaket (flyttes fra rangeringsregelverk)
+- Sette rundetyper (delvis løst, trenger logikk for de ulike rundetypene)
+- Lage fellestekster (må avklare behov med HK-dir — søkere har generelt ikke et forhold til hvilket opptak de deltar i)
+
+### Harde tidsrammer
+
+| Dato | Hendelse |
+|------|----------|
+| 6. okt 2026 | Simulering av opptak |
+| 19. nov 2026 | Simulering av opptak (mer funksjonalitet) |
+| 16. nov 2026 | Infomøte med fagskoler om registrering |
+| 5. des 2026 | Registreringsfrist for utdanninger i samordna opptak 2027 |
+
 ## Statuslogg
 
 | Dato       | Hendelse                          | Av            | Lenke til review        |
 |------------|-----------------------------------|---------------|-------------------------|
+| 2026-09-15 | Workshop: oppgavedeling avklart   | @karensikt    | –                       |
 | 2026-09-11 | Tatt inn i veikart (design)       | @karensikt    | –                       |
