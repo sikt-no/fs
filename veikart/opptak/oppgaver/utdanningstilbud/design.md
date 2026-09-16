@@ -147,14 +147,14 @@ Hendelsene genereres av Oracle-triggers i SIS-databasen som fanger opp endringer
 | Navneendringer flyter fra SIS til ureg | Fungerer via fulloverføring | Hendelsesjobber er deaktivert i prod. Med fulloverføring hvert 30. minutt fanges navneendringer opp, men med opptil 30 min forsinkelse. |
 | Navneendringer flyter fra ureg til opptak | Under innføring | Opptak denormaliserer `studieprogram_navn` for søk. Synkronisering fra ureg til opptak via fs-batch-infrastruktur er under innføring. |
 | Deaktivering/reaktivering flyter fra SIS til ureg | Fungerer via fulloverføring | Hendelsestyper finnes (AKTIVERES, DEAKTIVERES) men er deaktivert i prod. Fulloverføring fanger opp `erAktiv`-flagg. |
-| Deaktivering/reaktivering flyter fra ureg til opptak | Åpent spørsmål | Hva skjer med et utdanningstilbud i opptak hvis utdanningsinstansen deaktiveres i ureg? Ikke definert. |
+| Deaktivering/reaktivering flyter fra ureg til opptak | Gjenstår | Når en utdanningsinstans blir inaktiv i ureg, skal opptak få beskjed slik at utdanningstilbudet kan trekkes fra opptaket. |
 | Fagskoler kan registrere studieprogram og studieprogramkull direkte i ureg | Snart i produksjon | Eget grensesnitt under utvikling. Fagskoler går ikke via SIS/batchjobber. |
 | Studieretninger som skal ha opptak | Fungerer teknisk | Studieretninger overføres som nestede barn av studieprogram. Men det mangler veiledning til UH-læresteder om hvordan de skal registrere studieretninger som skal ha opptak. |
 
 **Hovedfunn:** Den tekniske overføringen fra SIS til ureg fungerer for det vi trenger i 2027. Fulloverføring hvert 30. minutt dekker studieprogram, studieprogramkull med campus, og studieretninger. Det som gjenstår er:
 1. Synkronisering fra ureg til opptak (navneendringer, deaktivering) — under innføring
 2. Veiledning til UH om studieretninger som skal ha opptak
-3. Avklare hva som skjer i opptak når en utdanningsinstans deaktiveres i ureg
+3. Opptak må få beskjed når en utdanningsinstans blir inaktiv, slik at utdanningstilbudet kan trekkes
 
 ---
 
@@ -221,7 +221,7 @@ Alle disse feltene eies av utdanningsregisteret. Opptak lagrer dem **ikke** — 
 
 ## Del 5: åpne spørsmål
 
-1. **Hva skjer med et utdanningstilbud hvis utdanningsinstansen endres eller deaktiveres i utdanningsregisteret etter at opptaket er åpent?** Søkere som allerede har søkt på tilbudet må håndteres.
+1. **Hva skjer med søkere som allerede har søkt på et utdanningstilbud som trekkes?** Når en utdanningsinstans blir inaktiv og utdanningstilbudet trekkes fra opptaket, må eksisterende søknader håndteres.
 
 2. **Frekvens for utdanningstilbud.** Koblingen `utdanningsmulighet → opptakstype` uttrykker at en utdanning skal tilbys i en gitt opptakstype, men sier ikke noe om frekvens (hvert år, annethvert år). Vi klarer oss uten frekvens i 2026, men dette må løses i 2027 for å unngå at læresteder må registrere tilknytningen manuelt hvert år.
 
