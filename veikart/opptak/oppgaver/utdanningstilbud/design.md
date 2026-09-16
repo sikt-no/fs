@@ -2,9 +2,9 @@
 
 *Designfilen gir en teknisk-funksjonell beskrivelse av et konsept: hvordan det er ment å fungere, hvilke beslutninger som er tatt, hvor data kommer fra og hva som gjenstår. Den er skrevet for å skape forståelse på tvers av roller. Den svarer på hva og hvorfor — ikke på hvordan noe skal implementeres eller se ut.*
 
-Et utdanningstilbud er en utdanning som er gjort søkbar i et opptak. Utdanningstilbudet opprettes ikke fra bunnen av — det bygger på autoritative data fra utdanningsregisteret og berikes med opptaksspesifikke innstillinger. Dette dokumentet beskriver hvordan utdanningstilbud hentes fra utdanningsregisteret, hva som arves og hva som settes av opptaksforvalter.
+Et utdanningstilbud er en utdanning som er gjort søkbar i et opptak. Utdanningstilbudet opprettes ikke fra bunnen av — det bygger på autoritative data fra utdanningsregisteret og berikes med opptaksspesifikke innstillinger. Dette dokumentet beskriver hele kjeden: hvordan utdanninger kommer inn i utdanningsregisteret, hvordan endringer flyter til opptak, og hvordan utdanningstilbud opprettes og konfigureres.
 
-**Status:** oppdatert 2026-09-15 etter workshop med Shiitake og Shinkansen. Bygger på gjennomgang av fs-plattform/opptak-databasen, domenedokumentasjon fra fs.sikt.no, og arkitekturbeslutningen [«Denormalisering av data fra Utdanningsregisteret»](https://sikt.atlassian.net/wiki/spaces/PFS/pages/4271898626).
+**Status:** oppdatert 2026-09-16. Bygger på gjennomgang av fs-plattform/opptak-databasen, domenedokumentasjon fra fs.sikt.no, og arkitekturbeslutningen [«Denormalisering av data fra Utdanningsregisteret»](https://sikt.atlassian.net/wiki/spaces/PFS/pages/4271898626).
 
 ---
 
@@ -22,25 +22,25 @@ Et utdanningstilbud er en utdanning som er gjort søkbar i et opptak. Utdannings
 
 ### Hva dette er, og hva det ikke er
 
-Med utdanningstilbud mener vi koblingen mellom en konkret utdanning (fra utdanningsregisteret) og et opptak, beriket med opptaksspesifikke innstillinger. Det er noe annet enn selve utdanningen (som eies av utdanningsregisteret) og noe annet enn opptaket (som er rammen rundt).
+Denne oppgaven dekker hele kjeden fra utdanning til utdanningstilbud i kontekst av samordna opptak 2027:
 
-| | Utdanningsregisteret                         | Utdanningstilbud i opptak | Opptak |
-|---|----------------------------------------------|---|---|
-| **Spørsmålet** | hva tilbys, hvor og når?                     | hva er opptaksbetingelsene for denne utdanningen? | hva er rammene for opptaket? |
-| **Eier** | lærested (via FS-SIS eller eget grensesnitt) | lærested (opptaksspesifikke innstillinger) | opptaksforvalter |
-| **Dekkes her** | nei                                          | ja | nei — se [opptak/design.md](../opptak/design.md) |
+| | Lærested (SIS) | Utdanningsregisteret | Opptak |
+|---|---|---|---|
+| **Spørsmålet** | Hva tilbyr vi? | Hva tilbys, hvor og når? | Hva er opptaksbetingelsene? |
+| **Hva skjer** | Registrerer studieprogram og studieprogramkull | Mottar og publiserer utdanningsdata | Kobler utdanning til opptak som utdanningstilbud med innstillinger |
+| **Dekkes her** | Ja (som forutsetning) | Ja (som forutsetning) | Ja |
 
 ### Mål
 
-- Utdanningstilbud skal opprettes med utgangspunkt i utdanninger som finnes og er aktive i utdanningsregisteret.
-- Grunnlagsdata (navn, studiepoeng, varighet, nivå, campus...) skal hentes fra utdanningsregisteret og ikke kunne overstyres i opptaket.
+- Utdanninger som skal med i samordna opptak 2027 finnes i utdanningsregisteret — registrert av UH via FS-SIS eller av fagskoler direkte.
+- Utdanningstilbud opprettes med utgangspunkt i utdanninger som er aktive i utdanningsregisteret.
+- Grunnlagsdata (navn, studiepoeng, varighet, nivå, campus...) hentes fra utdanningsregisteret og kan ikke overstyres i opptaket.
+- Endringer på utdanninger (navneendringer, deaktivering/reaktivering) flyter fra SIS til utdanningsregisteret og videre til opptak.
 - Opptaksspesifikke innstillinger (kapasitet, tilbud som skal gis, tak for ja-svar og eventuelle lovlige unntak fra standardinnstillinger i opptaket) settes av lærestedet per utdanningstilbud.
 - Det skal være mulig å se alle utdanningstilbud i et opptak fra opptakssiden.
-- Opptak må få med seg nødvendige endringer som skjer på utdanningene. 
 
 ### Ikke-mål
 
-- **Ikke forvaltning av selve utdanningen.** Endringer i navn, studiepoeng, varighet osv. gjøres i utdanningsregisteret, ikke i opptaket.
 - **Ikke oppretting av opptak.** Dekket i [opptak/design.md](../opptak/design.md).
 - **Ikke plasstildeling.** Dekket i [plasstildeling/design.md](../plasstildeling/design.md).
 

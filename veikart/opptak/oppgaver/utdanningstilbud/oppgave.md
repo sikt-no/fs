@@ -20,42 +20,41 @@
 
 ## Kort beskrivelse
 
-Opprette, konfigurere og knytte utdanningstilbud til et opptak — inkludert kapasitet, antall tilbud, antall ja-svar, regelverk, kvoter og andre innstillinger per utdanningstilbud.
+Sørge for at utdanninger som skal med i samordna opptak 2027 finnes i utdanningsregisteret, at endringer flyter til opptak, og at opptaksforvalter kan opprette og konfigurere utdanningstilbud med alle nødvendige innstillinger.
 
 ## Oppgaver
 
+### Del 1: Utdanninger inn i utdanningsregisteret
+
 | # | Oppgave | MoSCoW | Status | Github-issue | Jira |
 |---|---------|--------|--------|-------------|------|
-| 1 | Knytte utdanningstilbud til et opptak | Must | | | |
-| 2 | Sette kapasitet, antall tilbud og antall ja-svar per utdanningstilbud | Must | | | |
-| 3 | Koble regelverk per utdanningstilbud | Must | | | |
-| 4 | Konfigurere utdanningskvoter med relativ fordeling per utdanningstilbud | Must | | | |
-| 5 | Sette plassflyt mellom utdanningskvoter | Must | | | |
-| 6 | Se utdanningstilbud fra opptakssiden | Must | | | |
+| 1a | UH-ansatte registrerer studieprogram og studieprogramkull i FS-SIS med overføring til utdanningsregisteret | Must | Delvis løst | | |
+| 1b | Fagskoleansatte kan registrere studieprogram og studieprogramkull direkte i utdanningsregisteret | Must | Snart i produksjon | | |
+| 1c | Utdanningsregisteret får utdanninger som skal med i de samordna opptakene fra universiteter, høyskoler og fagskoler (studieprogram og studieprogramkull med campus) | Must | Pågår | | |
+
+### Del 2: Endringer flyter fra SIS → ureg → opptak
+
+| # | Oppgave | MoSCoW | Status | Github-issue | Jira |
+|---|---------|--------|--------|-------------|------|
+| 2a | Fange opp navneendringer på utdanninger fra SIS til ureg og videre til opptak | Must | | | |
+| 2b | Fange opp deaktivering og reaktivering av utdanninger fra SIS til ureg og videre til opptak | Must | | | |
+
+### Del 3: Utdanningstilbud i opptak
+
+| # | Oppgave | MoSCoW | Status | Github-issue | Jira |
+|---|---------|--------|--------|-------------|------|
+| 3a | Opptak får tak i relevante utdanninger og instanser fra utdanningsregisteret | Must | | | |
+| 3b | Opptaksforvalter kan legge til utdanningstilbud i opptaket | Must | | | |
+| 3c | Opptaksforvalter kan trekke utdanningstilbud fra opptak (trekkfrist settes av opptakseier) | Must | | | |
+| 3d | Sette kapasitet, antall tilbud og antall ja-svar per utdanningstilbud | Must | | | |
+| 3e | Koble regelverk per utdanningstilbud | Must | | | |
+| 3f | Konfigurere utdanningskvoter med relativ fordeling per utdanningstilbud | Must | | | |
+| 3g | Sette plassflyt mellom utdanningskvoter | Must | | | |
+| 3h | Se utdanningstilbud fra opptakssiden | Must | | | |
 
 ## Workshop 2026-09-14: oppgavedeling og status
 
 **Team:** Shinkansen | **Produksjonsfrist:** 1. nov 2026 (mindre rettelser til 15. nov)
-
-**Pågår/snart i produksjon:**
-- Lage utdanningsinstanser for samordna opptak 2027
-- Fagskoleansatte kan registrere HYU-studieprogram i utdanningsregisteret (snart i produksjon)
-- UH-ansatte registrerer i FS-SIS med overføring til utdanningsregisteret (delvis løst)
-
-**Gjenstår:**
-- Opptak får tak i relevante utdanninger og instanser fra utdanningsregisteret
-- Hvilke utdanningstyper (studieprogram) og utdanningsnivåer (NKR-nivå) skal tilbys i opptaket
-- Opptaksforvalter kan legge til utdanningstilbud i opptaket
-- Opptaksforvalter kan trekke utdanningstilbud fra opptak (trekkfrist settes av opptakseier)
-- Fange opp endringer på utdanninger i opptak (navneendringer, deaktivering/reaktivering m.m.)
-- Sette opptaksspesifikke innstillinger per utdanningstilbud:
-  - Kompetanseregler og rangeringsregler
-  - Antall studieplasser
-  - Totalt antall tilbud som skal gis
-  - Antall ja-svar
-  - Utdanningskvoter med relativ fordeling (standard 50/50 ORD+ORDF)
-  - Plassflyt mellom utdanningskvoter (standard ORDF→ORD)
-  - Unntak fra standardinnstillinger i opptak (søknadsfrist, plassflyt)
 
 ## Statuslogg
 
