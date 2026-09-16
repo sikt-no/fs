@@ -26,19 +26,21 @@ Sørge for at utdanninger som skal med i samordna opptak 2027 finnes i utdanning
 
 ### Del 1: Utdanninger inn i utdanningsregisteret
 
+Overordnet: utdanningsregisteret får utdanninger som skal med i de samordna opptakene fra universiteter, høyskoler og fagskoler (studieprogram og studieprogramkull med campus).
+
 | # | Oppgave | MoSCoW | Status | Github-issue | Jira |
 |---|---------|--------|--------|-------------|------|
-| 1a | UH-ansatte registrerer studieprogram og studieprogramkull i FS-SIS med overføring til utdanningsregisteret | Must | Delvis løst | | |
+| 1a | UH-ansatte kan registrere studieprogram, studieretninger og studieprogramkull i FS-SIS og få dem overført til utdanningsregisteret | Must | Delvis løst — overføring via batchjobber fungerer (fulloverføring hvert 30. min) | | |
 | 1b | Fagskoleansatte kan registrere studieprogram og studieprogramkull direkte i utdanningsregisteret | Must | Snart i produksjon | | |
-| 1c | Utdanningsregisteret får utdanninger som skal med i de samordna opptakene fra universiteter, høyskoler og fagskoler (studieprogram og studieprogramkull med campus) | Must | Pågår | | |
-| 1d | Håndtere studieprogram med studieretninger | Must | Teknisk løst — trenger veiledning og informasjon til UH | | |
+| 1c | UH-læresteder har tilgang til veiledning i hvordan opprette utdanninger som skal med i samordna opptak 2027 (inkl. studieretninger som skal ha opptak) | Must | | | |
+| 1d | Fagskoler har tilgang til veiledning i hvordan opprette utdanninger som skal med i samordna opptak 2027 | Must | | | |
 
 ### Del 2: Endringer flyter fra SIS → ureg → opptak
 
 | # | Oppgave | MoSCoW | Status | Github-issue | Jira |
 |---|---------|--------|--------|-------------|------|
-| 2a | Fange opp navneendringer på utdanninger fra SIS til ureg og videre til opptak | Must | | | |
-| 2b | Fange opp deaktivering og reaktivering av utdanninger fra SIS til ureg og videre til opptak | Must | | | |
+| 2a | Fange opp navneendringer på utdanninger fra SIS til ureg og videre til opptak | Must | SIS → ureg fungerer via fulloverføring. ureg → opptak under innføring | | |
+| 2b | Fange opp deaktivering og reaktivering av utdanninger fra SIS til ureg og videre til opptak | Must | SIS → ureg fungerer via fulloverføring. ureg → opptak gjenstår — opptak skal få beskjed når instans blir inaktiv | | |
 
 ### Del 3: Utdanningstilbud i opptak
 
