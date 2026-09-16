@@ -31,6 +31,7 @@ Sørge for at utdanninger som skal med i samordna opptak 2027 finnes i utdanning
 | 1a | UH-ansatte registrerer studieprogram og studieprogramkull i FS-SIS med overføring til utdanningsregisteret | Must | Delvis løst | | |
 | 1b | Fagskoleansatte kan registrere studieprogram og studieprogramkull direkte i utdanningsregisteret | Must | Snart i produksjon | | |
 | 1c | Utdanningsregisteret får utdanninger som skal med i de samordna opptakene fra universiteter, høyskoler og fagskoler (studieprogram og studieprogramkull med campus) | Must | Pågår | | |
+| 1d | Håndtere studieprogram med studieretninger | Must | Teknisk løst — trenger veiledning og informasjon til UH | | |
 
 ### Del 2: Endringer flyter fra SIS → ureg → opptak
 
@@ -44,13 +45,14 @@ Sørge for at utdanninger som skal med i samordna opptak 2027 finnes i utdanning
 | # | Oppgave | MoSCoW | Status | Github-issue | Jira |
 |---|---------|--------|--------|-------------|------|
 | 3a | Opptak får tak i relevante utdanninger og instanser fra utdanningsregisteret | Must | | | |
-| 3b | Opptaksforvalter kan legge til utdanningstilbud i opptaket | Must | | | |
+| 3b | Opptaksforvalter kan legge til utdanningstilbud i opptaket (inkl. legge til flere av gangen) | Must | | | |
 | 3c | Opptaksforvalter kan trekke utdanningstilbud fra opptak (trekkfrist settes av opptakseier) | Must | | | |
-| 3d | Sette kapasitet, antall tilbud og antall ja-svar per utdanningstilbud | Must | | | |
-| 3e | Koble regelverk per utdanningstilbud | Must | | | |
-| 3f | Konfigurere utdanningskvoter med relativ fordeling per utdanningstilbud | Must | | | |
-| 3g | Sette plassflyt mellom utdanningskvoter | Must | | | |
-| 3h | Se utdanningstilbud fra opptakssiden | Must | | | |
+| 3d | Sette antall studieplasser og antall tilbud som skal gis per utdanningstilbud | Must | | | |
+| 3e | Koble regelverk per utdanningstilbud | Must | Løst | | |
+| 3f | Konfigurere utdanningskvoter med relativ fordeling per utdanningstilbud | Must | Delvis — absolutte kvoter finnes, relativ fordeling gjenstår | | |
+| 3g | Sette plassflyt mellom utdanningskvoter | Must | Delvis — fungerer, men mangler sirkularitetsvern (ORDF→ORD→ORDF…) | | |
+| 3h | Sette default-innstillinger for flere utdanningstilbud | Should | | | |
+| 3i | Hvilke utdanningstilbud mangler regelverk | Must | Løst | | |
 
 ## Workshop 2026-09-14: oppgavedeling og status
 

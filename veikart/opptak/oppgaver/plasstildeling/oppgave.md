@@ -85,7 +85,9 @@ Opptaksrunder opprettes sammen med opptaket og knyttes til ett opptak. Grunnlags
 
 **Besluttet ny løsning:** Lærestedet setter totalt antall tilbud og relativ fordeling (prosent) per utdanningskvote på utdanningstilbudet. Plasstildelingen beregner absolutte tall fra den relative fordelingen. Se [utdanningstilbud/design.md](../utdanningstilbud/design.md).
 
-**Begrepsendring:** feltnavnet «overbooking» skal endres til «antall tilbud som skal gis».
+I tillegg kan lærestedet ved hver plasstildelingsrunde sette antall ønskede tilbud for runden, samt antall ønskede ja-svar (overbooking) for suppleringsrunder. Disse settes per plasstildelingsrunde, ikke på utdanningstilbudet.
+
+**Begrepsendring:** feltnavnet «overbooking» skal endres til «antall ønskede ja-svar».
 
 **Figma-prototype:** https://undo-aloft-06472321.figma.site/
 

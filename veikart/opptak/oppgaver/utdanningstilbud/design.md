@@ -132,7 +132,6 @@ Alle disse feltene eies av utdanningsregisteret. Opptak lagrer dem **ikke** — 
 |--------------------------------------------------------------------------|-------------|
 | **Antall studieplasser** (kapasitet)                                     | Faktisk antall plasser |
 | **Antall tilbud som skal gis** (totalt)                                  | Totalt antall tilbud som skal gis for dette utdanningstilbudet. Fordelingen mellom utdanningskvoter beregnes fra relativ fordeling — se utdanningskvoter nedenfor. |
-| **Antall ja-svar** (finnes ikke i databasen ennå)                        | Nødvendig for utdanningstilbud som skal være med i plasstildelingsrunder etter hovedrunden. Må legges til — se gap i del 4. |
 | **Kompetanseregelverk**                                                  | Må velges blant regelverkene i opptakets regelverkssamling. Får default-verdi fra samlingen — gjelder for alle utdanningstilbud uten unntak. |
 | **Rangeringsregelverk**                                                  | Må velges blant regelverkene i opptakets regelverkssamling. Får default-verdi fra samlingen — gjelder for alle utdanningstilbud uten unntak. |
 | **Utdanningskvoter med relativ fordeling**                               | Standard (default) kvotetyper følger av regelverkssamlingen (f.eks. ORD 50 % + ORDF 50 %). Lærestedet kan legge til andre tilgjengelige kvoter fra samlingen og sette andre fordelinger. Alle kvoter — inkludert spesialkvoter som samisk og nordnorsk — settes som **relative tall** (prosent). Antall tilbud per utdanningskvote beregnes automatisk av plasstildelingen fra totalt antall tilbud og den relative fordelingen. Se [plasstildeling/design.md](../plasstildeling/design.md) |
@@ -162,7 +161,6 @@ Alle disse feltene eies av utdanningsregisteret. Opptak lagrer dem **ikke** — 
 | Gap | Beskrivelse |
 |-----|-------------|
 | **Grensesnitt for fagskoler** | Fagskolene trenger et eget grensesnitt for å registrere utdanninger direkte i utdanningsregisteret. Under utvikling. |
-| **Antall ja-svar** | Feltet er ikke på utdanningstilbud-tabellen i dag. Må legges til. |
 | **Fullstendig hendelsesdekning fra ureg** | Det må foreligge hendelser fra ureg for alle denormaliserte felter, slik at opptak kan holde søkeindeksen oppdatert. |
 
 ---
