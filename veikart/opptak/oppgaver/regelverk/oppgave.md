@@ -25,16 +25,16 @@ Ferdigstille regelverksforvaltningen i opptak slik at Samordna opptak og enkeltl
 
 ## Oppgaver
 
-| # | Oppgave | Status | Github-issue | Jira |
-|---|---------|--------|-------------|------|
-| 1 | Etablere og forvalte en regelverkssamling | Løst | | |
-| 2 | Definere kompetansekrav | Løst | | |
-| 3 | Definere hvordan søkere rangeres (poengberegning) | Løst (poenglikhetsregel flyttes til opptak) | | |
-| 4 | Definere kvotetyper, grunnlag og mangelkoder | Løst | | |
-| 5 | Koble spesielle opptakskrav til kvoter | Ikke prioritert 2027 | | |
-| 6 | Koble regelverket til opptak og utdanningstilbud | Løst | | |
-| 7 | Varsling ved sletting av regelverk | Gjenstår — regelverk som ikke er knyttet til et opptak kan slettes av opptaksforvalter, men de skal få et varsel | | |
-| 8 | Varsling ved endring av regelverk under behandling | Til senere — blir først viktig når opptaket åpner og saksbehandling er i gang | | |
+| # | Oppgave                                                                       | MoSCoW | Status                                                                                                                                                                                             | Github-issue | Jira |
+|---|-------------------------------------------------------------------------------|--------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-------------|------|
+| 1 | Etablere og forvalte en regelverkssamling                                     | Must   | Løst                                                                                                                                                                                               | | |
+| 2 | Definere kompetansekrav                                                       | Must   | Løst                                                                                                                                                                                               | | |
+| 3 | Definere hvordan søkere rangeres (poengberegning)                             | Must   | Løst — poengberegning fungerer. Restanse: fjerne poenglikhetsregel-feltet fra rangeringsregelverk (besluttet flyttet til opptak, men feltet er ikke fjernet ennå) | | |
+| 4 | Definere kvotetyper, grunnlag og mangelkoder                                  | Must   | Løst                                                                                                                                                                                               | | |
+| 5 | Koble spesielle opptakskrav til kvoter                                        | Won't  | Ikke prioritert 2027                                                                                                                                                                               | | |
+| 6 | Koble regelverket til opptak og utdanningstilbud                              | Must   | Løst                                                                                                                                                                                               | | |
+| 7 | Regelverkssamling kan endres, deaktiveres og slettes                          | Must   | Løst — regelverk kan endres, deaktiveres og slettes.                                                                                                                                               | | |
+| 8 | Varsling og begrensning ved endring, deaktivering eller sletting av regelverk | Should | Gjenstår - UX/UI er foreslått for sletting og deaktivering, regler for når endringer er lov å ikke er ikke gått opp, utover at sletting kun er lov når regelverkssamling ikke er koblet til opptak | | |
 
 ## Workshop 2026-09-14: oppgavedeling og status
 

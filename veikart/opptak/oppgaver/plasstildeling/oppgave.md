@@ -24,17 +24,18 @@ Ferdigstille plasstildeling i opptak slik at opptaksforvalter kan opprette runde
 
 ## Oppgaver
 
-| # | Oppgave | Github-issue | Jira |
-|---|---------|-------------|------|
-| 1 | Legge til runder for plasstildeling i ett opptak | | |
-| 2 | Sette antall tilbud som skal gis per utdanningskvote | | |
-| 3 | Sette plassflyt mellom utdanningskvoter | | |
-| 4 | Starte en ny plasstildeling | | |
-| 5 | Gjennomføre plasstildeling | | |
-| 6 | Vise resultatet til saksbehandler | | |
-| 7 | Publisere resultatet til søkerne | | |
-| 8 | Håndtere svar fra søker | | |
-| 9 | Systemet gir automatisk nye tilbud ved nei-svar (utenfor scope) | NA | |
+| # | Oppgave | MoSCoW | Status | Github-issue | Jira |
+|---|---------|--------|--------|-------------|------|
+| 1 | Legge til runder for plasstildeling i ett opptak | Must | Løst | | |
+| 2 | Beregne antall tilbud per utdanningskvote fra relativ fordeling | Must | Gjenstår | | |
+| 3 | Beregne plassflyt ved ledige plasser per utdanningskvote | Must | Løst | | |
+| 4 | Starte en ny plasstildeling | Must | Løst | | |
+| 5 | Gjennomføre plasstildeling | Must | Løst | | |
+| 6 | Innføre kompensasjonstilbud ved opprykk (supplering) | Must | Gjenstår | | |
+| 7 | Vise resultatet til saksbehandler | Must | Gjenstår | | |
+| 8 | Publisere resultatet til søkerne | Must | Delvis | | |
+| 9 | Håndtere svar fra søker | Must | Delvis | | |
+| 10 | Systemet gir automatisk nye tilbud ved nei-svar | Won't | Utenfor scope 2027 | | |
 
 ## Workshop 2026-09-14: oppgavedeling og status
 
@@ -78,15 +79,13 @@ Opptaksrunder opprettes sammen med opptaket og knyttes til ett opptak. Grunnlags
 
 **Issue:** [#107](https://github.com/sikt-no/fs/issues/107) (lukket)
 
-### Oppgave 2 — sette antall tilbud som skal gis per utdanningskvote
+### Oppgave 2 — beregne antall tilbud per utdanningskvote fra relativ fordeling
 
-For hvert utdanningstilbud må det defineres hvor mange tilbud som skal gis i hver utdanningskvote i denne plasstildelingen. Saksbehandler ser en liste over utdanningstilbud med utdanningskvoter, aksepterte tilbud, gitte tilbud og antall planlagte studieplasser (kapasitet). Tallet settes per utdanningskvote; totaltallet vises.
+**Dagens kode:** Antall tilbud settes absolutt per utdanningskvote (`overbook_antall_plasser`). Saksbehandler setter tallet manuelt for hver utdanningskvote.
 
-Antall tilbud som skal gis per utdanningskvote virker.
+**Besluttet ny løsning:** Lærestedet setter totalt antall tilbud og relativ fordeling (prosent) per utdanningskvote på utdanningstilbudet. Plasstildelingen beregner absolutte tall fra den relative fordelingen. Se [utdanningstilbud/design.md](../utdanningstilbud/design.md).
 
-**Begrepsendring:** feltnavnet «overbooking» skal endres. Historisk betydde overbooking at lærestedet ga flere tilbud enn antall studieplasser, som buffer mot frafall. I dagens felt er verdien i praksis rundens absolutte antall tilbud som skal gis, ikke et tillegg på toppen.
-
-**Utgått fra tidligere utkast:** ønsket antall ja-svar totalt, med utledet overbookingsrate og forrige års tilbud er ikke med.
+**Begrepsendring:** feltnavnet «overbooking» skal endres til «antall tilbud som skal gis».
 
 **Figma-prototype:** https://undo-aloft-06472321.figma.site/
 
@@ -248,8 +247,8 @@ Plassflyt opererer kun innenfor én plasstildeling. Kryss-tildeling-kolonnene i 
 | Søker som mister kvalifisering får avslag | Les/skriv-asymmetri i resultattype | S |
 | Tilbudsgaranti fra markert utdanningskvote | `opptak.tilbudsgaranti_kvote` | Ingen | M |
 | Kvoteprioritet | Tre nivåer: `kvotetype` → `kvote` → `studiekvote` | Ingen | M |
-| Poenglikhetsregel koblet til opptaket | Regelen henger på **kvotetype**, ikke opptak | M |
-| Fire poenglikhetsregler | To av fire ser ut til å være dekket | S |
+| Poenglikhetsregel koblet til opptaket | **Dagens kode:** regelen henger på kvotetype. **Besluttet ny løsning:** settes på opptaket. Feltet på rangeringsregelverk skal fjernes. Se [opptak/design.md](../opptak/design.md) | M |
+| Fire poenglikhetsregler | To av fire ser ut til å være dekket i dagens kode | S |
 
 Poenggrense-beregning er designet i skjemaet men **ikke implementert**. Hele tabellen er tom. Dette er en ny feature, ikke en feilretting.
 
@@ -306,4 +305,4 @@ Verifisert i `fs-plattform/opptak`:
 2. Eksempler per oppgave. Én Gherkin-feature per oppgave, slik at hver oppgave har konkrete eksempler på hva som skal kunne utføres. `krav/02 Opptak/14 Plasstildeling/` er ledig.
 3. Oppdatere begrepene på fs.sikt.no etter begrepsendringene i [design.md](design.md).
 4. Registrere de seks mistenkte feilene som issues.
-5. Verifisere negative opptaksparametere mot dagens løsning.
+5. Verifisere negative plasstildelingsinnstillinger mot dagens løsning.
