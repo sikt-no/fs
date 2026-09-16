@@ -5,7 +5,7 @@
 - **Issue**: –
 - **Initiativ**: #216 Ferdigstilling av plasstildeling i opptak
 - **Fase**: design
-- **Prioritet**: high
+- **Prioritet**: Should
 - **Type**: feature
 - **Eier**: –
 - **Reviewers som har sett oppgaven**: (ingen enda)
