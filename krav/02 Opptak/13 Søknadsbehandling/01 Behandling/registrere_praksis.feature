@@ -12,6 +12,15 @@
 # øvrig er beholdt som den ble godkjent — tilføyelsene er regneregler og
 # avklaringer, ikke omskriving.
 #
+# VIKTIG OM BRUKEN AV FS-KLIENTEN SOM KILDE: den er kilde til *regler* —
+# hvordan praksis faktisk regnes ut i dag — og ikke en mal for hvordan dette
+# skal bygges. Ny funksjonalitet hører i brukerflaten FS Admin, ikke i
+# FS-klienten. Referanser til tabeller, kolonner og Oracle-funksjoner står
+# her for at påstandene skal kunne etterprøves, aldri som føring for
+# datamodell eller teknologi. Der dagens løsning gjør noe fordi teknologien
+# tilfeldigvis gjør det slik, er det flagget som et åpent spørsmål framfor å
+# bli arvet.
+#
 @OPT-BEH-BEH-003 @must @draft
 Egenskap: Registrere og beregne praksis for søker
   Som saksbehandler i opptak
@@ -101,6 +110,13 @@ Egenskap: Registrere og beregne praksis for søker
       #   relevansmarkeringen må erstattes av noe annet.
       # - Anbefaling: relevans filtrerer først, overlapp beregnes på det som
       #   står igjen. Da forblir det to summer å velge mellom.
+      # - Merk at det er avklart at samme praksis kan knyttes til flere ulike
+      #   kravelementer, og at ulike kravelementer kan ha ulike krav til hva
+      #   som er relevant praksis. Det betyr at relevans sannsynligvis ikke
+      #   kan være ett flagg per periode, slik det er i FS i dag, men må
+      #   gjelde per kombinasjon av periode og kravelement. Se «AVKLAR om et
+      #   utvalg av praksisperiodene kan knyttes per kravelement» — de to
+      #   spørsmålene er samme datamodellvalg sett fra to sider.
 
     Scenario: Praksistype og startdato er obligatorisk
       Når jeg registrerer en praksisperiode
@@ -125,33 +141,62 @@ Egenskap: Registrere og beregne praksis for søker
       # den praksisen regnet med i det hele tatt. Om det er ønsket adferd
       # eller en mangel ved dagens løsning, bør produkteier ta stilling til.
 
+    Scenario: Sluttdato før startdato kan ikke lagres
+      Gitt jeg registrerer en praksisperiode
+      Når jeg oppgir en sluttdato som er før startdatoen
+      Så får jeg en feilmelding om at sluttdatoen ikke kan være før startdatoen
+      Og praksisperioden kan ikke lagres
+
+    Scenario: Ugyldig dato kan ikke lagres
+      Gitt jeg registrerer en praksisperiode
+      Når jeg oppgir en dato som ikke finnes
+      Så får jeg en feilmelding om at datoen er ugyldig
+      Og praksisperioden kan ikke lagres
+      # AVKLART 16.09.2026: ugyldige datoer og sluttdato før startdato skal
+      # varsles med feilmelding, og registreringen skal ikke kunne lagres.
+      #
+      # Dette er en endring fra dagens løsning. Verifisert i FS-klienten
+      # valideres bare at de obligatoriske feltene *finnes* — ikke at datoene
+      # er i rekkefølge. Negativ varighet er altså mulig i FS i dag.
+      #
+      # Merk at startdato lik sluttdato fortsatt er gyldig; det gir én dag
+      # praksis. Det er bare sluttdato *før* startdato som avvises.
+
     @openquestion
-    Scenario: AVKLAR validering av ugyldige og framtidige datoer
+    Scenario: AVKLAR om praksis fram i tid kan registreres
       # ÅPNE SPØRSMÅL:
-      # - Skal registreringen avvises når sluttdatoen er før startdatoen, og
-      #   hva skal i så fall fremgå for saksbehandleren? Verifisert i
-      #   FS-klienten: den validerer bare at feltene *finnes*, ikke at
-      #   datoene er i rekkefølge. Negativ varighet er altså mulig i dag.
       # - Skal perioder som strekker seg inn i framtiden kunne registreres?
-      #   FS-klienten hindrer det ikke.
-      # - Dette er de to delene av det opprinnelige datospørsmålet som
-      #   FS-klienten ikke gir svar på, fordi den ikke gjør noen slik
-      #   validering. De må besluttes.
+      #   FS-klienten hindrer det ikke, og spørsmålet er ikke besluttet.
+      # - Tilfellet er reelt: en søker i fast stilling kan dokumentere et
+      #   arbeidsforhold som løper forbi søknadsfristen. Skal praksisen
+      #   regnes til søknadsfristen, til dagens dato, eller til den oppgitte
+      #   sluttdatoen selv om den er fram i tid?
+      # - Se også «Registrere praksisperiode uten sluttdato» over — der er
+      #   dagens svar at perioden ikke gir noen beregnet praksis i det hele
+      #   tatt. De to tilfellene bør besluttes sammen.
       Gitt spørsmålet er åpent
 
-    Scenario: Knytte et dokument til en praksisperiode
-      Gitt søkeren har dokumentert et arbeidsforhold
-      Når jeg knytter dokumentet til praksisperioden
-      Så ser jeg hvilket dokument praksisperioden bygger på
-      Og jeg kan åpne dokumentet fra praksisperioden
-      # AVKLART 16.09.2026: koblingen finnes i FS i dag og videreføres.
-      # Verifisert: PERSONPRAKSIS har dokumentnr mot DOKUMENTARKIV, og
-      # praksisbildet har en knapp som åpner dokumentet. Koblingen er
-      # valgfri — perioden kan registreres uten.
+    @openquestion
+    Scenario: Knytte praksisperioden til dokumentasjon på søknaden
+      Gitt søkeren har lagt ved dokumentasjon på et arbeidsforhold i søknaden
+      Når jeg knytter dokumentasjonen til praksisperioden
+      Så ser jeg hvilken dokumentasjon praksisperioden bygger på
+      Og jeg kan åpne dokumentasjonen fra praksisperioden
+      # ÅPENT SPØRSMÅL:
+      # - Er dette i scope for første leveranse?
       #
-      # Gjenstår å sjekke: Jira ADMI-45 «Koble dokumentasjon på yrkespraksis
-      # til praksiskalkulator» ber om samme kobling. Gjelder den
-      # søkeropplastet dokumentasjon, som er noe annet enn dokumentarkivet?
+      # Avklart 16.09.2026 om innholdet: dersom praksis skal kunne knyttes
+      # til dokumentasjon, er det dokumentasjon som er lagt ved *søknaden* —
+      # det søkeren selv har lastet opp. Koblingen er valgfri; en
+      # praksisperiode kan registreres uten. Jira ADMI-45 «Koble
+      # dokumentasjon på yrkespraksis til praksiskalkulator» ber om nettopp
+      # dette.
+      #
+      # Merk at FS-klienten har en tilsvarende kobling
+      # (PERSONPRAKSIS.dokumentnr mot DOKUMENTARKIV). Det er *ikke* et
+      # argument for hvordan dette skal løses — ny funksjonalitet bygges i
+      # brukerflaten FS Admin, ikke i FS-klienten, og dokumentmodellen der er
+      # søknadsdokumentasjon.
 
     Scenario: Se hvem som registrerte en praksisperiode
       Gitt jeg ser en registrert praksisperiode
@@ -282,18 +327,22 @@ Egenskap: Registrere og beregne praksis for søker
       Når jeg åpner praksisberegningen
       Så er hver praksisperiode beregnet med full presisjon
       Og avrundingen til to desimaler skjer først når summen vises
-      # AVKLART 16.09.2026, verifisert mot FS-klienten:
+      # AVKLART 16.09.2026:
       #
-      # Tidsenhet: kalendertiden regnes i måneder med Oracles
-      # MONTHS_BETWEEN(sluttdato + 1, startdato). Brøkdelen av en måned
-      # regnes som dager delt på 31. Månedslengde og skuddår håndteres altså
-      # av MONTHS_BETWEEN, ikke av egen logikk. Måneder deles på 12 for å få
-      # år. Formelen er:
-      #   år = MONTHS_BETWEEN(sluttdato + 1, startdato) / 12 * prosent / 100
-      # Eksemplene i Scenariomalen over stemmer med denne formelen.
+      # Tidsenhet: kalendertiden regnes som antall hele kalendermåneder
+      # mellom start- og sluttdato, pluss den gjenstående delen av en måned
+      # som en brøk. Månedene deles på 12 for å få år, og ganges med
+      # stillingsprosenten:
+      #   år = kalendermåneder / 12 * stillingsprosent / 100
       #
-      # Inklusive datoer: ja. «+ 1» på sluttdatoen gjør den inklusiv, slik at
-      # 01.01.2020–31.12.2020 gir presis 1,00 år.
+      # Inklusive datoer: ja. Sluttdatoen regnes med, slik at
+      # 01.01.2020–31.12.2020 gir presis 1,00 år og 01.01.2020–30.06.2020 gir
+      # presis 6 måneder. Eksemplene i Scenariomalen over stemmer med dette.
+      #
+      # Regelen er utledet fra FS-klienten, som bruker Oracles
+      # MONTHS_BETWEEN(sluttdato + 1, startdato). Det er kilden til regelen,
+      # ikke en føring for implementasjonen — ny funksjonalitet bygges i
+      # FS Admin og er ikke bundet til Oracle-funksjoner.
       #
       # Avrunding: FS-klienten avkorter hver periode for seg til én desimal
       # måned (truncate, altså alltid nedover). Det videreføres ikke. Det gir
@@ -306,6 +355,26 @@ Egenskap: Registrere og beregne praksis for søker
       # avrunding oppover i visningen kan vise «2,00 år» for en sum på 1,996
       # — om visningen skal avkorte nedover i stedet, bør besluttes sammen
       # med hvordan opptakskravet vurderes.
+
+    @openquestion
+    Scenario: AVKLAR hvordan en delvis måned regnes
+      # ÅPNE SPØRSMÅL:
+      # - Hele kalendermåneder er entydig. Restdagene er ikke. En periode fra
+      #   01.02.2020 til 15.02.2020 er 15 dager — men hvor stor brøkdel av en
+      #   måned er det?
+      # - FS-klienten deler alltid restdagene på 31, fordi det er slik Oracles
+      #   MONTHS_BETWEEN virker. Det er en teknisk konvensjon, ikke en
+      #   domenebeslutning: 15 dager i februar blir 0,484 måneder, mens de
+      #   samme 15 dagene er 0,536 av den faktiske måneden. Ingen av
+      #   eksemplene i Scenariomalen over treffer dette, fordi de alle gir
+      #   hele måneder.
+      # - Alternativene er å dele restdagene på 31 (som i dag), på den
+      #   faktiske månedens lengde, eller å regne hele perioden i dager mot
+      #   et fast antall dager per år. De gir ulike svar, og forskjellen kan
+      #   avgjøre et grensetilfelle.
+      # - Spørsmålet er nytt, oppdaget da regneregelen ble formulert
+      #   uavhengig av Oracle.
+      Gitt spørsmålet er åpent
 
   Regel: Overlappende praksisperioder varsles og vises med to summer
 
@@ -366,16 +435,31 @@ Egenskap: Registrere og beregne praksis for søker
       Når jeg åpner søknadsalternativene
       Så er ingen opptakskrav vurdert på grunnlag av praksisen
 
+    Scenario: Knytte samme praksis til flere ulike kravelementer
+      Gitt søknaden har søknadsalternativer med ulike opptakskrav som krever praksis
+      Når jeg knytter den registrerte praksisen til flere ulike kravelementer
+      Så er praksisen lagt til grunn for hvert av de valgte kravelementene
+      # AVKLART 16.09.2026: samme praksis kan knyttes til flere ulike
+      # kravelementer, ikke bare til samme kravelement på flere
+      # søknadsalternativer.
+
     @openquestion
-    Scenario: AVKLAR om praksis kan knyttes til flere ulike kravelementer
+    Scenario: AVKLAR om et utvalg av praksisperiodene kan knyttes per kravelement
       # ÅPNE SPØRSMÅL:
-      # - Praksisen knyttes til ett opptakskrav (kravelement) på ett eller
-      #   flere søknadsalternativer. Kan den samme praksisen knyttes til
-      #   flere ulike kravelementer, for eksempel når søknadsalternativene
-      #   har forskjellige praksiskrav?
-      # - Kan et utvalg av praksisperiodene knyttes til ett kravelement, og
-      #   et annet utvalg til et annet — eller gjelder knytningen alltid all
-      #   registrert praksis?
+      # - Gjelder knytningen alltid *all* registrert praksis, eller kan et
+      #   utvalg av periodene knyttes til ett kravelement og et annet utvalg
+      #   til et annet?
+      # - Avklaringen om at samme praksis kan knyttes til flere ulike
+      #   kravelementer gjør dette spørsmålet skarpere, ikke mindre viktig.
+      #   Løsningsforslaget sier at «vanlegaste forskjellen er vel kva
+      #   praksis som reknast for å vere relevant» — ulike kravelementer kan
+      #   altså ha ulike krav til hva som teller. Da kan relevans ikke være
+      #   ett flagg per praksisperiode, slik det er i FS i dag; den må være
+      #   per kombinasjon av periode og kravelement.
+      # - Henger derfor direkte sammen med «Markere om en praksisperiode er
+      #   relevant» tidligere i featuren. De to må besluttes sammen — svaret
+      #   avgjør datamodellen, og det er det siste store strukturelle
+      #   spørsmålet i featuren.
       Gitt spørsmålet er åpent
 
   # MERK 16.09.2026: reglene under er NY funksjonalitet, ikke videreføring.
@@ -436,6 +520,15 @@ Egenskap: Registrere og beregne praksis for søker
       #   av dem gjelder?
       Gitt spørsmålet er åpent
 
+  # AVKLART 16.09.2026: rollen heter **opptakssaksbehandler**. Det er det
+  # autoritative navnet, og featuren bruker det konsekvent.
+  #
+  # Konsekvens utenfor denne featuren: behandle_søknad.feature bruker
+  # «saksbehandler for opptak», og aktørlisten i
+  # .claude/rules/gherkin-conventions.md lister bare «saksbehandler». Begge
+  # bør rettes opp mot «opptakssaksbehandler», men det hører ikke i denne
+  # PR-en — se kommentaren nederst i filen.
+
   Regel: Kun brukere med opptakssaksbehandler-rollen kan registrere praksis
 
     Scenario: Opptakssaksbehandler kan registrere praksis
@@ -457,11 +550,13 @@ Egenskap: Registrere og beregne praksis for søker
       #   hele praksisseksjonen skjult?
       Gitt spørsmålet er åpent
 
-    @openquestion
-    Scenario: AVKLAR navnet på rollen
-      # ÅPNE SPØRSMÅL:
-      # - Rollen omtales som «opptakssaksbehandler» i omfanget, mens
-      #   behandle_søknad.feature bruker «saksbehandler for opptak» og
-      #   aktørlisten i konvensjonene bruker «saksbehandler». Hvilket navn
-      #   er det autoritative, og er det den samme rollen?
-      Gitt spørsmålet er åpent
+# OPPFØLGING UTENFOR DENNE FEATUREN
+# Rollenavnet «opptakssaksbehandler» er avklart som det autoritative. To
+# steder i repoet bruker andre navn på det som skal være samme rolle, og bør
+# rettes i en egen endring:
+# - behandle_søknad.feature (@OPT-BEH-BEH-001) bruker «saksbehandler for
+#   opptak».
+# - Aktørlisten i .claude/rules/gherkin-conventions.md lister «administrator,
+#   søker, student, saksbehandler» — «opptakssaksbehandler» mangler.
+# Det er ikke gjort her, fordi endringer i felles konvensjoner og i en annen
+# feature ville utvide denne PR-en utover praksisberegning.
