@@ -14,7 +14,7 @@
   - plan: –
   - review: –
   - PRs: –
-  - Jira Epic: [TAKE-3](https://sikt.atlassian.net/browse/TAKE-3)
+  - Jira Epic: [SHI-630](https://sikt.atlassian.net/browse/SHI-630) (utdanningstilbud), [SHI-629](https://sikt.atlassian.net/browse/SHI-629) (utdanninger inn i ureg)
   - Confluence: [T3 2026 Forberede opptak og etterbehandling](https://sikt.atlassian.net/wiki/spaces/STUDIEADM/pages/4981817377)
 - **Krav (Gherkin)**: `krav/02 Opptak/11 Opptak/` (skal utarbeides)
 
@@ -30,30 +30,30 @@ Overordnet: utdanningsregisteret får utdanninger som skal med i de samordna opp
 
 | # | Oppgave | MoSCoW | Status | Github-issue | Jira |
 |---|---------|--------|--------|-------------|------|
-| 1a | UH-ansatte kan registrere studieprogram, studieretninger og studieprogramkull i FS-SIS og få dem overført til utdanningsregisteret | Must | Delvis løst — overføring via batchjobber fungerer (fulloverføring hvert 30. min) | | |
-| 1b | Fagskoleansatte kan registrere studieprogram og studieprogramkull direkte i utdanningsregisteret | Must | Snart i produksjon | | |
-| 1c | UH-læresteder har tilgang til veiledning i hvordan opprette utdanninger som skal med i samordna opptak 2027 (inkl. studieretninger som skal ha opptak) | Must | | | |
-| 1d | Fagskoler har tilgang til veiledning i hvordan opprette utdanninger som skal med i samordna opptak 2027 | Must | | | |
+| 1a | UH-ansatte kan registrere studieprogram, studieretninger og studieprogramkull i FS-SIS og få dem overført til utdanningsregisteret | Must | Løst — overføring via batchjobber fungerer (fulloverføring hvert 30. min) | | |
+| 1b | Fagskoleansatte kan registrere studieprogram og studieprogramkull direkte i utdanningsregisteret | Must | Snart i produksjon | [#588](https://github.com/sikt-no/fs/issues/588) | [SHI-631](https://sikt.atlassian.net/browse/SHI-631) |
+| 1c | UH-læresteder har tilgang til veiledning i hvordan opprette utdanninger som skal med i samordna opptak 2027 (inkl. studieretninger som skal ha opptak) | Must | | [#589](https://github.com/sikt-no/fs/issues/589) | [SHI-632](https://sikt.atlassian.net/browse/SHI-632) |
+| 1d | Fagskoler har tilgang til veiledning i hvordan opprette utdanninger som skal med i samordna opptak 2027 | Must | | [#590](https://github.com/sikt-no/fs/issues/590) | [SHI-633](https://sikt.atlassian.net/browse/SHI-633) |
 
 ### Del 2: Endringer flyter fra SIS → ureg → opptak
 
 | # | Oppgave | MoSCoW | Status | Github-issue | Jira |
 |---|---------|--------|--------|-------------|------|
-| 2a | Fange opp navneendringer på utdanninger fra SIS til ureg og videre til opptak | Must | SIS → ureg fungerer via fulloverføring. ureg → opptak under innføring | | |
-| 2b | Fange opp deaktivering og reaktivering av utdanninger fra SIS til ureg og videre til opptak | Must | SIS → ureg fungerer via fulloverføring. ureg → opptak gjenstår — opptak skal få beskjed når instans blir inaktiv | | |
+| 2a | Fange opp navneendringer på utdanninger fra ureg til opptak | Should | SIS → ureg fungerer via fulloverføring. ureg → opptak under innføring | [#591](https://github.com/sikt-no/fs/issues/591) | [SHI-634](https://sikt.atlassian.net/browse/SHI-634) |
+| 2b | Fange opp deaktivering og reaktivering av utdanninger fra ureg til opptak | Should | SIS → ureg fungerer via fulloverføring. ureg → opptak gjenstår | [#592](https://github.com/sikt-no/fs/issues/592) | [SHI-635](https://sikt.atlassian.net/browse/SHI-635) |
 
 ### Del 3: Utdanningstilbud i opptak
 
 | # | Oppgave | MoSCoW | Status | Github-issue | Jira |
 |---|---------|--------|--------|-------------|------|
-| 3a | Opptak får tak i relevante utdanninger og instanser fra utdanningsregisteret | Must | | | |
-| 3b | Opptaksforvalter kan legge til utdanningstilbud i opptaket (inkl. legge til flere av gangen) | Must | | | |
-| 3c | Opptaksforvalter kan trekke utdanningstilbud fra opptak (trekkfrist settes av opptakseier) | Must | | | |
-| 3d | Sette antall studieplasser og antall tilbud som skal gis per utdanningstilbud | Must | | | |
+| 3a | Opptak får tak i relevante utdanninger og instanser fra utdanningsregisteret | Must | | [#593](https://github.com/sikt-no/fs/issues/593) | [SHI-636](https://sikt.atlassian.net/browse/SHI-636) |
+| 3b | Opptaksforvalter kan legge til utdanningstilbud i opptaket (inkl. legge til flere av gangen) | Must | | [#594](https://github.com/sikt-no/fs/issues/594) | [SHI-637](https://sikt.atlassian.net/browse/SHI-637) |
+| 3c | Opptaksforvalter kan trekke utdanningstilbud fra opptak (trekkfrist settes av opptakseier) | Must | | [#595](https://github.com/sikt-no/fs/issues/595) | [SHI-638](https://sikt.atlassian.net/browse/SHI-638) |
+| 3d | Sette antall studieplasser og antall tilbud som skal gis per utdanningstilbud | Must | | [#596](https://github.com/sikt-no/fs/issues/596) | [SHI-639](https://sikt.atlassian.net/browse/SHI-639) |
 | 3e | Koble regelverk per utdanningstilbud | Must | Løst | | |
-| 3f | Konfigurere utdanningskvoter med relativ fordeling per utdanningstilbud | Must | Delvis — absolutte kvoter finnes, relativ fordeling gjenstår | | |
-| 3g | Sette plassflyt mellom utdanningskvoter | Must | Delvis — fungerer, men mangler sirkularitetsvern (ORDF→ORD→ORDF…) | | |
-| 3h | Sette default-innstillinger for flere utdanningstilbud | Should | | | |
+| 3f | Konfigurere utdanningskvoter med relativ fordeling per utdanningstilbud | Must | Delvis — absolutte kvoter finnes, relativ fordeling gjenstår | [#597](https://github.com/sikt-no/fs/issues/597) | [SHI-640](https://sikt.atlassian.net/browse/SHI-640) |
+| 3g | Sette plassflyt mellom utdanningskvoter | Must | Delvis — fungerer, men mangler sirkularitetsvern (ORDF→ORD→ORDF…) | [#598](https://github.com/sikt-no/fs/issues/598) | [SHI-641](https://sikt.atlassian.net/browse/SHI-641) |
+| 3h | Sette default-innstillinger for flere utdanningstilbud | Should | | [#599](https://github.com/sikt-no/fs/issues/599) | [SHI-642](https://sikt.atlassian.net/browse/SHI-642) |
 | 3i | Hvilke utdanningstilbud mangler regelverk | Must | Løst | | |
 
 ## Workshop 2026-09-14: oppgavedeling og status
