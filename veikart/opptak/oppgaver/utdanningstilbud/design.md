@@ -102,6 +102,60 @@ For samordna opptak 2027 er det to ulike situasjoner:
 
 **Fagskoler:** Fagskolenes SIS-er integrerer ikke mot utdanningsregisteret. For 2027-opptaket vil fagskolene registrere sine utdanninger i et **eget grensesnitt direkte mot utdanningsregisteret**. Se [studieprogram/design.md](../../../utdanning/oppgaver/studieprogram/design.md) for design av dette grensesnittet.
 
+### Dataflyt fra FS-SIS til utdanningsregisteret
+
+Batchjobber i fs-batch overfører utdanningsdata fra FS-SIS (Oracle) til utdanningsregisteret (PostgreSQL) via GraphQL.
+
+**Fulloverføring (kjører hvert 30. minutt):**
+
+| Jobb | Hva den overfører |
+|------|-------------------|
+| `sisUregTransferStudieprogram` | Studieprogrammer (inkl. opptil 50 studieretninger per program) |
+| `sisUregTransferStudieprogramkull` | Studieprogramkull (inkl. studieretninger) |
+| `sisUregTransferEmne` | Emner |
+| `sisUregTransferEmnekull` | Emnekull |
+
+Jobbene leser fra SIS via GraphQL, prosesserer data per institusjon, og skriver til utdanningsregisteret via GraphQL-mutasjoner. Cursor-basert paginering (100 per chunk).
+
+**Hendelsesjobber (per nå deaktivert i produksjon):**
+
+| Jobb | Hendelsestyper |
+|------|---------------|
+| `sisUregTransferStudieprogramhendelser` | AKTIVERES, DEAKTIVERES, NAVN_ENDRET, SLETTET |
+| `sisUregTransferStudieprogramkullhendelser` | NAVN_ENDRET, AKTIVERES, DEAKTIVERES |
+| `sisUregTransferEmnehendelser` | NAVN_ENDRET, SISTE_TERMIN_ENDRET, SLETTET |
+
+Hendelsene genereres av Oracle-triggers i SIS-databasen som fanger opp endringer og skriver til `DML_HENDELSE`-tabellen. `ApiHendelseOppretter` prosesserer disse hvert 60. sekund.
+
+**Hvordan det fungerer for ansatte ved lærestedet:** Ansatte registrerer eller endrer studieprogram, studieprogramkull og emner i FS-klienten. Endringer fanges automatisk opp av databasetriggere — ansatte trenger ikke gjøre noe spesielt for å utløse overføring.
+
+### Mapping: FS-SIS → utdanningsregisteret → opptak
+
+| FS-SIS | Utdanningsregisteret | Opptak |
+|--------|---------------------|--------|
+| Studieprogram | Utdanningsspesifikasjon | — |
+| Studieprogram + lærested | Utdanningsmulighet | — |
+| Studieprogramkull + campus | Utdanningsinstans | Utdanningstilbud (referanse) |
+| Studieretning | Utdanningsmulighet (med referanse til overordnet) | Utdanningstilbud (separat per studieretning) |
+
+### Gap-analyse: SIS → ureg → opptak for samordna opptak 2027
+
+| Behov | Status | Gap |
+|-------|--------|-----|
+| Studieprogram med studieprogramkull og campus overføres fra SIS til ureg | Fungerer | Ingen — fulloverføring hvert 30. minutt |
+| Studieretninger overføres som del av studieprogram/kull | Fungerer | Studieretninger har ingen egne hendelsestyper. Endringer på studieretningen alene (f.eks. aktivering for opptak) genererer ikke en hendelse — de fanges opp først ved neste fulloverføring (maks 30 min forsinkelse). Akseptabelt for 2027, men bør vurderes om hendelsesdekning trengs. |
+| Navneendringer flyter fra SIS til ureg | Fungerer via fulloverføring | Hendelsesjobber er deaktivert i prod. Med fulloverføring hvert 30. minutt fanges navneendringer opp, men med opptil 30 min forsinkelse. |
+| Navneendringer flyter fra ureg til opptak | Under innføring | Opptak denormaliserer `studieprogram_navn` for søk. Synkronisering fra ureg til opptak via fs-batch-infrastruktur er under innføring. |
+| Deaktivering/reaktivering flyter fra SIS til ureg | Fungerer via fulloverføring | Hendelsestyper finnes (AKTIVERES, DEAKTIVERES) men er deaktivert i prod. Fulloverføring fanger opp `erAktiv`-flagg. |
+| Deaktivering/reaktivering flyter fra ureg til opptak | Åpent spørsmål | Hva skjer med et utdanningstilbud i opptak hvis utdanningsinstansen deaktiveres i ureg? Ikke definert. |
+| Fagskoler kan registrere studieprogram og studieprogramkull direkte i ureg | Snart i produksjon | Eget grensesnitt under utvikling. Fagskoler går ikke via SIS/batchjobber. |
+| Studieretninger som skal ha opptak | Fungerer teknisk | Studieretninger overføres som nestede barn av studieprogram. Men det mangler veiledning til UH-læresteder om hvordan de skal registrere studieretninger som skal ha opptak. |
+
+**Hovedfunn:** Den tekniske overføringen fra SIS til ureg fungerer for det vi trenger i 2027. Fulloverføring hvert 30. minutt dekker studieprogram, studieprogramkull med campus, og studieretninger. Det som gjenstår er:
+1. Synkronisering fra ureg til opptak (navneendringer, deaktivering) — under innføring
+2. Veiledning til UH om studieretninger som skal ha opptak
+3. Avklare hva som skjer i opptak når en utdanningsinstans deaktiveres i ureg
+
 ---
 
 ## Del 3: hva som arves og hva som settes
