@@ -2,7 +2,7 @@
 
 Siste oppdatering: 2026-09-16
 
-Dette veikartet viser oppgaver teamene aktivt jobber med eller har levert for samordna opptak 2027. For overordnet prioritering på tvers av FS, se [FS Offentlig saksoversikt](https://github.com/orgs/sikt-no/projects/4/views/3).
+Dette veikartet viser oppgaver teamene aktivt jobber med eller har levert for samordna opptak 2027. For overordnet prioritering på tvers av FS, se [Forberede opptak og etterbehandling](https://github.com/orgs/sikt-no/projects/10/views/24).
 
 ## Initiativer
 
