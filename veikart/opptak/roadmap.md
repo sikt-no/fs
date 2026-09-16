@@ -4,6 +4,16 @@ Siste oppdatering: 2026-09-16
 
 Dette veikartet viser oppgaver teamene aktivt jobber med eller har levert for samordna opptak 2027. For overordnet prioritering på tvers av FS, se [Forberede opptak og etterbehandling](https://github.com/orgs/sikt-no/projects/10/views/24).
 
+## Harde tidsrammer
+
+| Dato | Hendelse |
+|------|----------|
+| 6. okt 2026 | Simulering av opptak |
+| 15. nov 2026 | HK-dir starter oppretting av opptak |
+| 16. nov 2026 | Infomøte med fagskoler om registrering |
+| 19. nov 2026 | Simulering av opptak (mer funksjonalitet) |
+| 5. des 2026 | Registreringsfrist for utdanninger i samordna opptak 2027 |
+
 ## Initiativer
 
 | Issue | Tittel | Team | Produksjonsfrist | Jira Epic |
@@ -50,16 +60,6 @@ Se [oppgavefil](oppgaver/utdanningstilbud/oppgave.md) for detaljer.
 ### Vedtaksformidling — utforskning
 
 Se [oppgavefil](oppgaver/vedtaksformidling/oppgave.md) for detaljer.
-
-### Harde tidsrammer
-
-| Dato | Hendelse |
-|------|----------|
-| 6. okt 2026 | Simulering av opptak |
-| 15. nov 2026 | HK-dir starter oppretting av opptak |
-| 16. nov 2026 | Infomøte med fagskoler om registrering |
-| 19. nov 2026 | Simulering av opptak (mer funksjonalitet) |
-| 5. des 2026 | Registreringsfrist for utdanninger i samordna opptak 2027 |
 
 ## Levert
 
