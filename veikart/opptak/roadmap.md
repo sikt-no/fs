@@ -17,22 +17,48 @@ Dette veikartet viser oppgaver teamene aktivt jobber med eller har levert for sa
 
 | Issue | Oppgave | Initiativ | Team | Fase | Mappe |
 |-------|---------|-----------|------|------|-------|
-| [#211](https://github.com/sikt-no/fs/issues/211) | Opprette og vedlikeholde opptak | #211 | Shiitake | design | [opptak](oppgaver/opptak/) |
-| [#576](https://github.com/sikt-no/fs/issues/576) | Regelverk (restanser) | #576 | Shiitake | design | [regelverk](oppgaver/regelverk/) |
-| [#398](https://github.com/sikt-no/fs/issues/398) | Utdanningstilbud i opptak | #398 | Shinkansen | design | [utdanningstilbud](oppgaver/utdanningstilbud/) |
-| [#216](https://github.com/sikt-no/fs/issues/216) | Plasstildeling | #216 | – | design | [plasstildeling](oppgaver/plasstildeling/) |
-| – | Vedtaksformidling | #216 | – | design | [vedtaksformidling](oppgaver/vedtaksformidling/) |
+| [#211](https://github.com/sikt-no/fs/issues/211) | Opprette og vedlikeholde opptak | #211 | Shiitake | utforskning | [opptak](oppgaver/opptak/) |
+| [#576](https://github.com/sikt-no/fs/issues/576) | Regelverk (restanser) | #576 | Shiitake | utvikling | [regelverk](oppgaver/regelverk/) |
+| [#398](https://github.com/sikt-no/fs/issues/398) | Utdanningstilbud i opptak | #398 | Shinkansen | utforskning | [utdanningstilbud](oppgaver/utdanningstilbud/) |
+| [#216](https://github.com/sikt-no/fs/issues/216) | Plasstildeling | #216 | – | utforskning | [plasstildeling](oppgaver/plasstildeling/) |
+| – | Vedtaksformidling | #216 | – | utforskning | [vedtaksformidling](oppgaver/vedtaksformidling/) |
 
 ### Harde tidsrammer
 
 | Dato | Hendelse |
 |------|----------|
 | 6. okt 2026 | Simulering av opptak |
-| 19. nov 2026 | Simulering av opptak (mer funksjonalitet) |
 | 16. nov 2026 | Infomøte med fagskoler om registrering |
+| 19. nov 2026 | Simulering av opptak (mer funksjonalitet) |
 | 5. des 2026 | Registreringsfrist for utdanninger i samordna opptak 2027 |
 
-## Ferdig
+## Levert
 
-| Issue | Oppgave | Ferdig | Mappe |
-|-------|---------|--------|-------|
+### Opptak (#211)
+
+| Oppgave | Levert |
+|---------|--------|
+| Opprette et opptak (samordnet eller lokalt) | 2026-09-14 |
+| Invitere læresteder til samordnet opptak | 2026-09-14 |
+| Konfigurere dokumentasjonskrav | 2026-09-14 |
+| Konfigurere søknad (nummerserie, maks alternativer) | 2026-09-14 |
+
+### Regelverk (#576)
+
+| Oppgave | Levert |
+|---------|--------|
+| Etablere og forvalte en regelverkssamling | 2026-09-14 |
+| Definere kompetansekrav | 2026-09-14 |
+| Definere hvordan søkere rangeres (poengberegning) | 2026-09-14 |
+| Definere kvotetyper, grunnlag og mangelkoder | 2026-09-14 |
+| Koble regelverket til opptak og utdanningstilbud | 2026-09-14 |
+| Regelverkssamling kan endres, deaktiveres og slettes | 2026-09-14 |
+
+### Plasstildeling (#216)
+
+| Oppgave | Levert |
+|---------|--------|
+| Legge til runder for plasstildeling i ett opptak | 2026-09-14 |
+| Beregne plassflyt ved ledige plasser per utdanningskvote | 2026-09-14 |
+| Starte en ny plasstildeling | 2026-09-14 |
+| Gjennomføre plasstildeling | 2026-09-14 |

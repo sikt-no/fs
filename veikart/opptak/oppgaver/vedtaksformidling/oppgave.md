@@ -4,7 +4,7 @@
 
 - **Issue**: –
 - **Initiativ**: #216 Ferdigstilling av plasstildeling i opptak
-- **Fase**: design
+- **Fase**: utforskning
 - **Prioritet**: Should
 - **Type**: feature
 - **Eier**: –

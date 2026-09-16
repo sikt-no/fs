@@ -4,7 +4,7 @@
 
 - **Issue**: [sikt-no/fs#398](https://github.com/sikt-no/fs/issues/398)
 - **Initiativ**: #216 Ferdigstilling av plasstildeling i opptak
-- **Fase**: design
+- **Fase**: utforskning
 - **Prioritet**: Must
 - **Type**: feature
 - **Eier**: –
