@@ -2,8 +2,8 @@
 
 ## Metadata
 
-- **Issue**: –
-- **Initiativ**: #? lukket github-issue allerede?
+- **Issue**: [sikt-no/fs#576](https://github.com/sikt-no/fs/issues/576)
+- **Initiativ**: #216 Ferdigstilling av plasstildeling i opptak
 - **Fase**: design
 - **Prioritet**: high
 - **Type**: feature
@@ -14,7 +14,7 @@
   - plan: –
   - review: –
   - PRs: –
-  - Jira Epic: [TAKE-3](https://sikt.atlassian.net/browse/TAKE-3)
+  - Jira Epic: [TAKE-1](https://sikt.atlassian.net/browse/TAKE-1)
   - Confluence: [T3 2026 Forberede opptak og etterbehandling](https://sikt.atlassian.net/wiki/spaces/STUDIEADM/pages/4981817377)
   - HK-dir feedback: [TAKE-221](https://sikt.atlassian.net/browse/TAKE-221), [TAKE-235](https://sikt.atlassian.net/browse/TAKE-235), [TAKE-236](https://sikt.atlassian.net/browse/TAKE-236)
 - **Krav (Gherkin)**: `krav/02 Opptak/` (skal utarbeides)
@@ -29,12 +29,13 @@ Ferdigstille regelverksforvaltningen i opptak slik at Samordna opptak og enkeltl
 |---|-------------------------------------------------------------------------------|--------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-------------|------|
 | 1 | Etablere og forvalte en regelverkssamling                                     | Must   | Løst                                                                                                                                                                                               | | |
 | 2 | Definere kompetansekrav                                                       | Must   | Løst                                                                                                                                                                                               | | |
-| 3 | Definere hvordan søkere rangeres (poengberegning)                             | Must   | Løst — poengberegning fungerer. Restanse: fjerne poenglikhetsregel-feltet fra rangeringsregelverk (besluttet flyttet til opptak, men feltet er ikke fjernet ennå) | | |
+| 3 | Definere hvordan søkere rangeres (poengberegning)                             | Must   | Løst — poengberegning fungerer. Restanse: fjerne poenglikhetsregel-feltet fra rangeringsregelverk (besluttet flyttet til opptak, men feltet er ikke fjernet ennå) | [#580](https://github.com/sikt-no/fs/issues/580) | [TAKE-324](https://sikt.atlassian.net/browse/TAKE-324) |
 | 4 | Definere kvotetyper, grunnlag og mangelkoder                                  | Must   | Løst                                                                                                                                                                                               | | |
 | 5 | Koble spesielle opptakskrav til kvoter                                        | Won't  | Ikke prioritert 2027                                                                                                                                                                               | | |
 | 6 | Koble regelverket til opptak og utdanningstilbud                              | Must   | Løst                                                                                                                                                                                               | | |
 | 7 | Regelverkssamling kan endres, deaktiveres og slettes                          | Must   | Løst — regelverk kan endres, deaktiveres og slettes.                                                                                                                                               | | |
-| 8 | Varsling og begrensning ved endring, deaktivering eller sletting av regelverk | Should | Gjenstår - UX/UI er foreslått for sletting og deaktivering, regler for når endringer er lov å ikke er ikke gått opp, utover at sletting kun er lov når regelverkssamling ikke er koblet til opptak | | |
+| — | Avklare vitnemålskravkoder for fagbrev og svennebrev | Must | Gjenstår — oppfølgingsmøte 17. sept | [#581](https://github.com/sikt-no/fs/issues/581) | [TAKE-325](https://sikt.atlassian.net/browse/TAKE-325) |
+| 8 | Varsling og begrensning ved endring, deaktivering eller sletting av regelverk | Should | Gjenstår - UX/UI er foreslått for sletting og deaktivering, regler for når endringer er lov å ikke er ikke gått opp, utover at sletting kun er lov når regelverkssamling ikke er koblet til opptak | [#582](https://github.com/sikt-no/fs/issues/582) | [TAKE-326](https://sikt.atlassian.net/browse/TAKE-326) |
 
 ## Workshop 2026-09-14: oppgavedeling og status
 

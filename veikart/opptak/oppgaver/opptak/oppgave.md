@@ -14,7 +14,7 @@
   - plan: –
   - review: –
   - PRs: –
-  - Jira Epic: [TAKE-3](https://sikt.atlassian.net/browse/TAKE-3)
+  - Jira Epic: [TAKE-318](https://sikt.atlassian.net/browse/TAKE-318)
   - Confluence: [T3 2026 Forberede opptak og etterbehandling](https://sikt.atlassian.net/wiki/spaces/STUDIEADM/pages/4981817377)
   - Tekstredigering: [sikt-no/fs#214](https://github.com/sikt-no/fs/issues/214)
 - **Krav (Gherkin)**: `krav/02 Opptak/11 Opptak/` (skal utarbeides)
@@ -29,13 +29,13 @@ Opptaksforvalter skal kunne opprette et opptak — samordnet eller lokalt — me
 |---|----------------------------------------------------------------------|--------|--------|-------------|------|
 | 1 | Opprette et opptak (samordnet eller lokalt)                          | Must | Løst | | |
 | 2 | Invitere læresteder til samordnet opptak                             | Must | Løst | | |
-| 3 | Sette grunnleggende innstillinger (navn, periode, regelverkssamling) | Must | Delvis — navn og regelverkssamling løst, opptaksperiode gjenstår | | |
+| 3 | Sette grunnleggende innstillinger (navn, periode, regelverkssamling) | Must | Delvis — navn og regelverkssamling løst, opptaksperiode gjenstår | [#577](https://github.com/sikt-no/fs/issues/577) | [TAKE-319](https://sikt.atlassian.net/browse/TAKE-319) |
 | 4 | Konfigurere dokumentasjonskrav                                       | Must | Løst | | |
-| 5 | Konfigurere søknad (nummerserie, maks alternativer)                  | Must | Løst (tidlig behandling gjenstår) | | |
-| 6 | Sette frister og tidsperioder                                        | Must | | | |
-| 7 | Sette fellestekster for søkere                                       | Should | | [#214](https://github.com/sikt-no/fs/issues/214) | |
+| 5 | Konfigurere søknad (nummerserie, maks alternativer)                  | Must | Løst (tidlig behandling gjenstår) | [#578](https://github.com/sikt-no/fs/issues/578) | [TAKE-320](https://sikt.atlassian.net/browse/TAKE-320) |
+| 6 | Sette frister og tidsperioder                                        | Must | | [#579](https://github.com/sikt-no/fs/issues/579) | [TAKE-321](https://sikt.atlassian.net/browse/TAKE-321) |
+| 7 | Sette fellestekster for søkere                                       | Should | | [#214](https://github.com/sikt-no/fs/issues/214) | [TAKE-322](https://sikt.atlassian.net/browse/TAKE-322) |
 | 8 | Legge til utdanningstilbud i opptak (egen oppgave)                   | Must | | Se [utdanningstilbud](../utdanningstilbud/) | |
-| 9 | Svarmeldingsmal (juridisk kjerne + parametere + valgfritt tillegg)   | Should | | [#214](https://github.com/sikt-no/fs/issues/214) | |
+| 9 | Svarmeldingsmal (juridisk kjerne + parametere + valgfritt tillegg)   | Should | | [#214](https://github.com/sikt-no/fs/issues/214) | [TAKE-323](https://sikt.atlassian.net/browse/TAKE-323) |
 
 ## Workshop 2026-09-14: oppgavedeling og status
 

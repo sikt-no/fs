@@ -27,14 +27,14 @@ Ferdigstille plasstildeling i opptak slik at opptaksforvalter kan opprette runde
 | # | Oppgave | MoSCoW | Status | Github-issue | Jira |
 |---|---------|--------|--------|-------------|------|
 | 1 | Legge til runder for plasstildeling i ett opptak | Must | Løst | | |
-| 2 | Beregne antall tilbud per utdanningskvote fra relativ fordeling | Must | Gjenstår | | |
+| 2 | Beregne antall tilbud per utdanningskvote fra relativ fordeling | Must | Gjenstår | [#583](https://github.com/sikt-no/fs/issues/583) | [TAKE-327](https://sikt.atlassian.net/browse/TAKE-327) |
 | 3 | Beregne plassflyt ved ledige plasser per utdanningskvote | Must | Løst | | |
 | 4 | Starte en ny plasstildeling | Must | Løst | | |
 | 5 | Gjennomføre plasstildeling | Must | Løst | | |
-| 6 | Innføre kompensasjonstilbud ved opprykk (supplering) | Must | Gjenstår | | |
-| 7 | Vise resultatet til saksbehandler | Must | Gjenstår | | |
-| 8 | Publisere resultatet til søkerne | Must | Delvis | | |
-| 9 | Håndtere svar fra søker | Must | Delvis | | |
+| 6 | Innføre kompensasjonstilbud ved opprykk (supplering) | Must | Gjenstår | [#584](https://github.com/sikt-no/fs/issues/584) | [TAKE-328](https://sikt.atlassian.net/browse/TAKE-328) |
+| 7 | Vise resultatet til saksbehandler | Must | Gjenstår | [#585](https://github.com/sikt-no/fs/issues/585) | [TAKE-329](https://sikt.atlassian.net/browse/TAKE-329) |
+| 8 | Publisere resultatet til søkerne | Must | Delvis | [#586](https://github.com/sikt-no/fs/issues/586) | [TAKE-330](https://sikt.atlassian.net/browse/TAKE-330) |
+| 9 | Håndtere svar fra søker | Must | Delvis | [#587](https://github.com/sikt-no/fs/issues/587) | [TAKE-331](https://sikt.atlassian.net/browse/TAKE-331) |
 | 10 | Systemet gir automatisk nye tilbud ved nei-svar | Won't | Utenfor scope 2027 | | |
 
 ## Workshop 2026-09-14: oppgavedeling og status
