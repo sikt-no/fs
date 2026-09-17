@@ -35,6 +35,24 @@ Egenskap: Grunnleggende innstillinger for opptak
       Så brukes loddtrekning i rangeringen av søkere med lik poengsum
       Og regelen gjelder for alle utdanningstilbud i opptaket som default
 
+  # Løses av teamet som jobber med utdanningstilbud
+  Regel: Opptaksforvalter setter kriterier for hvilke typer og nivåer av utdanninger som kan delta i opptaket
+
+    Scenario: Begrense UHG-opptak til relevante utdanningsnivåer og -typer
+      Når jeg setter at opptaket kun skal ha studieprogram
+      Og jeg setter at NKR-nivåene bachelor, årsenheter og 5-6-årige integrerte master og profesjonsstudier er tillatt
+      Så er det kun studieprogram på disse nivåene som kan legges til som utdanningstilbud i opptaket
+
+    Scenario: Begrense HYU-opptak til fagskoleutdanninger
+      Når jeg setter at opptaket kun skal ha studieprogram
+      Og jeg setter at NKR-nivået for 1-2-årige fagskoleutdanninger er tillatt
+      Så er det kun fagskoleutdanninger av typen studieprogram som kan legges til som utdanningstilbud
+
+    Scenario: Utdanninger utenfor kriteriene er ikke tilgjengelige
+      Gitt at opptaket kun tillater studieprogram på bachelornivå
+      Så dukker ikke emner opp som mulige utdanningstilbud
+      Og studieprogram på masternivå dukker ikke opp som mulige utdanningstilbud
+
   @openquestion
   # ÅPNE SPØRSMÅL:
   # - Jobbes med av et annet team. Hvilke valgmuligheter finnes for fordeling
