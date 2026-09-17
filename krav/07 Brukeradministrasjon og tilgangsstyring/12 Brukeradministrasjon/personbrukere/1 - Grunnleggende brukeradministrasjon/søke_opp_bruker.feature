@@ -118,19 +118,6 @@ Egenskap: Listevisning og søk i personbrukere
       Når jeg velger en rolle som filter
       Så vises kun personbrukere som har den valgte rollen
 
-    Scenario: Tilgjengelige miljøer i filter
-      Gitt jeg ser listen over personbrukere
-      Når jeg åpner miljøfilteret
-      Så inneholder filteret alle miljøer som er representert blant personbrukernes tilganger i listen
-      Og hvert miljø vises kun én gang
-      Og miljøene er sortert alfabetisk
-      Og "Alle miljøer" er valgt som standard
-
-    Scenario: Filtrere på miljø
-      Gitt jeg ser listen over personbrukere
-      Når jeg velger et miljø som filter
-      Så vises kun personbrukere som har minst én tilgang i det valgte miljøet
-
     Scenario: Kombinere søk og filtre
       Gitt jeg ser listen over personbrukere
       Når jeg kombinerer søk i navn- og Feide-ID-feltene med ett eller flere filter
