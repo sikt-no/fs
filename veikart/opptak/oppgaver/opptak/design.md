@@ -145,7 +145,6 @@ Opptaksforvalter setter startnummer for søknadsnummerserien. Alle søknader i o
 | Egenskap | Beskrivelse |
 |----------|-------------|
 | **Startnummer** | Første søknadsnummer i serien |
-| **Sluttnummer** (valgfritt) | Tak for serien — hindrer at nummerserier fra ulike opptak overlapper |
 
 I ny løsning er søknadsnummereringen unik per opptak for å hindre at det blir uklart hvilke søknader man snakker om, og det er ikke lenger nødvendig å passe på at man som opptaksforvalter bruker riktig søkernummerserie.
 
