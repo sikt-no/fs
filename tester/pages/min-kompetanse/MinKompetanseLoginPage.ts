@@ -10,7 +10,7 @@ export class MinKompetanseLoginPage {
   readonly loginButton: Locator
   readonly acceptConsentButton: Locator
   readonly menuButton: Locator
-  readonly testsokerSelect: Locator
+  readonly testsokerInput: Locator
 
   constructor(page: Page) {
     this.page = page
@@ -22,6 +22,16 @@ export class MinKompetanseLoginPage {
     this.loginButton = page.getByRole('button', { name: 'Logg inn', exact: true })
     this.acceptConsentButton = page.getByRole('button', { name: 'Godta og fortsett' })
     this.menuButton = page.getByTestId('menu-button-desktop')
-    this.testsokerSelect = page.getByRole('combobox', { name: 'Velg testsøker' })
+    this.testsokerInput = page.getByRole('textbox', { name: 'Velg testsøker' })
+  }
+
+  async velgTestsoker(navn: string) {
+    await this.testsokerInput.waitFor({ state: 'visible' })
+    const inputId = await this.testsokerInput.getAttribute('id')
+    const input = this.page.locator(`#${inputId}`)
+    await input.click()
+    await input.pressSequentially(navn, { delay: 50 })
+    const option = this.page.locator('[role="option"]:visible').filter({ hasText: navn })
+    await option.first().click()
   }
 }
