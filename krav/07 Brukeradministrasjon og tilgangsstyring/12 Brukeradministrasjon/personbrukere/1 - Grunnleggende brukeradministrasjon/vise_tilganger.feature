@@ -19,6 +19,7 @@ Egenskap: Se en personbrukers tilganger (planlagt etter v1)
       Og hver tilgang viser følgende informasjon:
         | felt          |
         | Navn          |
+        | Beskrivelse   |
         | Organisasjon  |
         | Miljø         |
         | Fra rolle     |
