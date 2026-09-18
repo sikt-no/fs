@@ -130,11 +130,13 @@ Egenskap: Listevisning og søk i personbrukere
       Og en personbruker har hjemorganisasjon i en av dem
       Når jeg åpner brukeroversikten
       Så ser jeg personbrukeren i listen
+      Og jeg ser personbrukeren uavhengig av hvilket miljø administrasjonsrettigheten min gjelder for
 
     Scenario: Brukeradministrator ser personbrukere med datatilgang fra egne organisasjoner
       Gitt jeg har brukeradministrator-rollen for én eller flere organisasjoner
       Og en personbruker har hjemorganisasjon utenfor de organisasjonene jeg administrerer
-      Men personbrukeren har en tildeling som gir tilgang til data fra en av dem
+      Men personbrukeren har en aktiv tildeling som gir tilgang til data fra en av dem
+      Og tildelingen gjelder i et miljø jeg har brukeradministrator-rollen i
       Når jeg åpner brukeroversikten
       Så ser jeg personbrukeren i listen
       Og hjemorganisasjonen som vises er personbrukerens egen, ikke organisasjonen tildelingen gjelder for
@@ -143,6 +145,20 @@ Egenskap: Listevisning og søk i personbrukere
       Gitt jeg har brukeradministrator-rollen for én eller flere organisasjoner
       Og en personbruker har hjemorganisasjon utenfor de organisasjonene jeg administrerer
       Og personbrukeren har ingen tildelinger som gir tilgang til data fra dem
+      Når jeg åpner brukeroversikten
+      Så ser jeg ikke personbrukeren i listen
+
+    Scenario: Personbrukere med kun inaktiv datatilgang fra egne organisasjoner er ikke synlige
+      Gitt jeg har brukeradministrator-rollen for én eller flere organisasjoner
+      Og en personbruker har hjemorganisasjon utenfor de organisasjonene jeg administrerer
+      Og personbrukerens eneste tildeling som gir tilgang til data fra dem er inaktiv
+      Når jeg åpner brukeroversikten
+      Så ser jeg ikke personbrukeren i listen
+
+    Scenario: Personbrukere med datatilgang i et miljø jeg ikke administrerer er ikke synlige
+      Gitt jeg har brukeradministrator-rollen for en organisasjon i ett miljø
+      Og en personbruker har hjemorganisasjon utenfor de organisasjonene jeg administrerer
+      Og personbrukerens eneste aktive tildeling som gir tilgang til data fra dem gjelder i et annet miljø
       Når jeg åpner brukeroversikten
       Så ser jeg ikke personbrukeren i listen
 
