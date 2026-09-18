@@ -3,7 +3,7 @@
 @BRU-PER-GRU-001 @must @planned
 Egenskap: Listevisning og søk i personbrukere
   Som brukeradministrator
-  ønsker jeg en oversikt over personbrukere som har en rolle eller tilgang ved en organisasjon jeg er brukeradministrator for, med mulighet for søk og filtrering
+  ønsker jeg en oversikt over personbrukere jeg har tilgang til, med mulighet for søk og filtrering
   slik at jeg raskt kan finne og følge opp riktig bruker.
 
   Bakgrunn:
@@ -16,11 +16,11 @@ Egenskap: Listevisning og søk i personbrukere
       Så ser jeg en liste over alle personbrukere
       Og listen er sortert etter navn i stigende rekkefølge
       Og hvert innslag viser følgende informasjon:
-        | felt         |
-        | Navn         |
-        | Feide-ID     |
-        | Organisasjon |
-        | Status       |
+        | felt             |
+        | Navn             |
+        | Feide-ID         |
+        | Hjemorganisasjon |
+        | Status           |
 
     Scenariomal: Velge sorteringsretning for navn
       Gitt jeg ser listen over personbrukere
@@ -92,18 +92,18 @@ Egenskap: Listevisning og søk i personbrukere
       Når jeg velger en status som filter
       Så vises kun personbrukere med den valgte statusen
 
-    Scenario: Tilgjengelige organisasjoner i filter
+    Scenario: Tilgjengelige hjemorganisasjoner i filter
       Gitt jeg ser listen over personbrukere
-      Når jeg åpner organisasjonsfilteret
-      Så inneholder filteret alle organisasjoner jeg har brukeradministrator-rollen for
-      Og hver organisasjon vises kun én gang
-      Og organisasjonene er sortert alfabetisk
-      Og "Alle organisasjoner" er valgt som standard
+      Når jeg åpner hjemorganisasjonsfilteret
+      Så inneholder filteret alle hjemorganisasjoner som er representert i den ufiltrerte listen
+      Og hver hjemorganisasjon vises kun én gang
+      Og hjemorganisasjonene er sortert alfabetisk
+      Og "Alle hjemorganisasjoner" er valgt som standard
 
-    Scenario: Filtrere på organisasjon
+    Scenario: Filtrere på hjemorganisasjon
       Gitt jeg ser listen over personbrukere
-      Når jeg velger en organisasjon som filter
-      Så vises kun personbrukere som har minst én tilgang ved den valgte organisasjonen
+      Når jeg velger en hjemorganisasjon som filter
+      Så vises kun personbrukere med den valgte hjemorganisasjonen
 
     Scenario: Tilgjengelige roller i filter
       Gitt jeg ser listen over personbrukere
@@ -118,19 +118,6 @@ Egenskap: Listevisning og søk i personbrukere
       Når jeg velger en rolle som filter
       Så vises kun personbrukere som har den valgte rollen
 
-    Scenario: Tilgjengelige miljøer i filter
-      Gitt jeg ser listen over personbrukere
-      Når jeg åpner miljøfilteret
-      Så inneholder filteret alle miljøer som er representert blant personbrukernes tilganger i listen
-      Og hvert miljø vises kun én gang
-      Og miljøene er sortert alfabetisk
-      Og "Alle miljøer" er valgt som standard
-
-    Scenario: Filtrere på miljø
-      Gitt jeg ser listen over personbrukere
-      Når jeg velger et miljø som filter
-      Så vises kun personbrukere som har minst én tilgang i det valgte miljøet
-
     Scenario: Kombinere søk og filtre
       Gitt jeg ser listen over personbrukere
       Når jeg kombinerer søk i navn- og Feide-ID-feltene med ett eller flere filter
@@ -138,23 +125,31 @@ Egenskap: Listevisning og søk i personbrukere
 
   Regel: Synlighet via administrasjonsrettigheter
 
-    Scenario: Brukeradministrator ser personbrukere i organisasjoner jeg administrerer
+    Scenario: Brukeradministrator ser personbrukere med hjemorganisasjon i egne organisasjoner
       Gitt jeg har brukeradministrator-rollen for én eller flere organisasjoner
-      Når jeg åpner brukeroversikten
-      Så ser jeg personbrukere som har minst én tilgang ved en av de organisasjonene jeg administrerer
-
-    @draft
-    Scenario: Personbruker med tilganger i flere organisasjoner
-      Gitt jeg har brukeradministrator-rollen for organisasjon A
-      Og en personbruker har tilganger ved både organisasjon A og organisasjon C
+      Og en personbruker har hjemorganisasjon i en av dem
       Når jeg åpner brukeroversikten
       Så ser jeg personbrukeren i listen
-      Og det fremgår hvilke organisasjoner personbrukerens tilganger gjelder for
+
+    Scenario: Brukeradministrator ser personbrukere med datatilgang fra egne organisasjoner
+      Gitt jeg har brukeradministrator-rollen for én eller flere organisasjoner
+      Og en personbruker har hjemorganisasjon utenfor de organisasjonene jeg administrerer
+      Men personbrukeren har en tildeling som gir tilgang til data fra en av dem
+      Når jeg åpner brukeroversikten
+      Så ser jeg personbrukeren i listen
+      Og hjemorganisasjonen som vises er personbrukerens egen, ikke organisasjonen tildelingen gjelder for
+
+    Scenario: Personbrukere uten tilknytning til egne organisasjoner er ikke synlige
+      Gitt jeg har brukeradministrator-rollen for én eller flere organisasjoner
+      Og en personbruker har hjemorganisasjon utenfor de organisasjonene jeg administrerer
+      Og personbrukeren har ingen tildelinger som gir tilgang til data fra dem
+      Når jeg åpner brukeroversikten
+      Så ser jeg ikke personbrukeren i listen
 
     Scenario: Super-brukeradministrator ser alle personbrukere
       Gitt jeg har super-brukeradministrator-rollen
       Når jeg åpner brukeroversikten
-      Så ser jeg alle personbrukere uavhengig av organisasjon
+      Så ser jeg alle personbrukere uavhengig av hjemorganisasjon og tildelinger
 
   @draft
   Regel: Sist brukt-kolonne og sortering (planlagt etter v1)
@@ -177,4 +172,4 @@ Egenskap: Listevisning og søk i personbrukere
 # ÅPNE SPØRSMÅL:
 # - Filnavn: bør "søke_opp_bruker.feature" omdøpes til "listevisning_og_sok.feature" for konsistens med mønsteret? Tittelendring på #479 må i så fall følges opp via fs-github.
 # - Rolle-navn: "brukeradministrator" og "super-brukeradministrator" er valgt. Sjekk at rolledefinisjonene i "4 - Opprette og administrere roller" bruker samme navn.
-# - Skal kant-tilfeller som brukere uten Feide-ID, eller brukere med flere identiteter, modelleres her — eller hører de hjemme i et eget krav?
+# - Skal kant-tilfeller som brukere uten Feide-ID, eller brukere med flere identiteter, modelleres her — eller hører de hjemme i et eget krav? Spørsmålet omfatter nå også brukere uten hjemorganisasjon, siden kolonnen og filteret bygger på den.
