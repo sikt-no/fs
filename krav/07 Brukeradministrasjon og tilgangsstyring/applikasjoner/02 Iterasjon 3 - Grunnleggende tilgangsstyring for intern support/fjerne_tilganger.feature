@@ -13,20 +13,20 @@ Egenskap: Fjerne tilganger fra en applikasjon
     Og jeg ser detaljsiden for en applikasjon
     Og jeg ser tilgangslisten applikasjonen har
 
-  Regel: Fjerning av tilganger skjer via dialog
+  Regel: Fjerning gjennomføres først etter bekreftelse
 
     Scenario: Velge tilganger å fjerne
-      Når jeg åpner dialogen for å fjerne tilganger
+      Når jeg velger å fjerne tilganger
       Og velger organisasjon og miljø
       Så ser jeg en liste over tilganger jeg har rettighet til å fjerne for den valgte kombinasjonen
 
     Scenario: Bekrefte fjerning av valgte tilganger
-      Gitt jeg har valgt organisasjon, miljø og én eller flere tilganger i fjerningsdialogen
+      Gitt jeg har valgt organisasjon, miljø og én eller flere tilganger å fjerne
       Når jeg bekrefter fjerningen
       Så har applikasjonen ikke lenger de valgte tilgangene for den valgte kombinasjonen av organisasjon og miljø
 
     Scenario: Avbryte fjerning
-      Gitt jeg har åpnet fjerningsdialogen
+      Gitt jeg har valgt å fjerne tilganger
       Når jeg avbryter
       Så er ingen endringer gjort på applikasjonens tilganger
 
