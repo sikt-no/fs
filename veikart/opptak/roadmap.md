@@ -30,7 +30,7 @@ Dette veikartet viser oppgaver teamene aktivt jobber med eller har levert for sa
 | Issue | Oppgave | MoSCoW | Jira |
 |-------|---------|--------|------|
 | [#577](https://github.com/sikt-no/fs/issues/577) | Sette opptaksperiode | Must | [TAKE-319](https://sikt.atlassian.net/browse/TAKE-319) |
-| [#578](https://github.com/sikt-no/fs/issues/578) | Konfigurere tidlig behandling og tilbud | Must | [TAKE-320](https://sikt.atlassian.net/browse/TAKE-320) |
+| [#578](https://github.com/sikt-no/fs/issues/578) | Konfigurere tidlig opptak | Must | [TAKE-320](https://sikt.atlassian.net/browse/TAKE-320) |
 | [#579](https://github.com/sikt-no/fs/issues/579) | Sette frister og tidsperioder | Must | [TAKE-321](https://sikt.atlassian.net/browse/TAKE-321) |
 | [#214](https://github.com/sikt-no/fs/issues/214) | Sette fellestekster for søkere | Should | [TAKE-322](https://sikt.atlassian.net/browse/TAKE-322) |
 | [#214](https://github.com/sikt-no/fs/issues/214) | Svarmeldingsmal | Should | [TAKE-323](https://sikt.atlassian.net/browse/TAKE-323) |

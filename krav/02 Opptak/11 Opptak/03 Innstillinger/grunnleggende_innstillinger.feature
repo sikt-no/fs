@@ -9,25 +9,6 @@ Egenskap: Grunnleggende innstillinger for opptak
     Gitt at jeg er innlogget som opptaksforvalter
     Og at opptaket "Samordna opptak 2027" er opprettet
 
-  Regel: Opptaksforvalter må angi hvor lenge opptaket er tilgjengelig
-
-    Scenario: Sette opptaksperiode
-      Når jeg setter opptaksperioden fra "2027-01-01" til "2027-12-31"
-      Så vet søkere i hvilket tidsrom de kan søke
-      Og saksbehandlere vet i hvilket tidsrom de kan saksbehandle
-      Og opptaksforvalter vet hvor lenge opptaket kan endres
-
-  Regel: Opptaksforvalter må sette minst en plasstildelingsrunde
-
-    Scenario: Sette plasstildelingsrunde
-      Når jeg legger til en plasstildelingsrunde av typen "hovedtildeling"
-      Og jeg setter svarfrist og publiseringstidspunkt for runden
-      Så kan plasstildelingen kjøres for denne runden
-
-    Scenario: Opptak uten plasstildelingsrunde kan ikke kjøre plasstildeling
-      Gitt at opptaket ikke har noen plasstildelingsrunder
-      Så kan ikke en plasstildeling startes
-
   Regel: Opptaksforvalter setter standard poenglikhetsregel for opptaket
 
     Scenario: Sette standard poenglikhetsregel
@@ -57,8 +38,8 @@ Egenskap: Grunnleggende innstillinger for opptak
   # ÅPNE SPØRSMÅL:
   # - Jobbes med av et annet team. Hvilke valgmuligheter finnes for fordeling
   #   av saker til saksbehandlere/saksbehandlerorganisasjoner?
-  Regel: Opptaksforvalter kan sette innstillinger for fordeling av søknadssaker
+  Regel: Opptaksforvalter kan sette innstillinger for saksbehandlertildeling
 
-    Scenario: Sette fordeling av saker til saksbehandlerorganisasjoner
-      Når jeg setter innstillinger for fordeling av søknadssaker
+    Scenario: Sette innstillinger for saksbehandlertildeling
+      Når jeg setter innstillinger for saksbehandlertildeling
       Så fordeles sakene til riktige saksbehandlerorganisasjoner

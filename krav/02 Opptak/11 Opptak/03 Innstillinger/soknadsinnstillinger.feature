@@ -9,6 +9,8 @@ Egenskap: Søknadsinnstillinger for opptak
     Gitt at jeg er innlogget som opptaksforvalter
     Og at opptaket "Samordna opptak 2027" er opprettet
 
+  @wont
+  # Ikke viktig for samordna opptak 2027
   Regel: Opptaksforvalter kan styre om søkere kan laste opp dokumentasjon
 
     Scenario: Åpne for dokumentasjonsopplasting
@@ -32,21 +34,25 @@ Egenskap: Søknadsinnstillinger for opptak
       Når jeg setter maks antall søknadsalternativer til 10
       Så kan ikke en søker legge til flere enn 10 prioriterte søknadsalternativer i sin søknad
 
-  Regel: Opptaksforvalter kan åpne for tidlig behandling og tilbud
+  Regel: Opptaksforvalter kan åpne for tidlig opptak
 
-    Scenario: Aktivere tidlig behandling og tilbud
-      Når jeg aktiverer tidlig behandling og tilbud
-      Og jeg setter frist for tidlig tilbud
+    Scenario: Aktivere tidlig opptak
+      Når jeg aktiverer tidlig opptak
+      Og jeg setter frist for tidlig opptak
       Så kan søkere som oppfyller visse kriterier få svar før vanlig publiseringsfrist
 
-    Scenario: Tidlig behandling krever egen frist
-      Når jeg aktiverer tidlig behandling og tilbud
-      Men jeg setter ikke frist for tidlig tilbud
-      Så varsles jeg om at frist for tidlig tilbud må settes
+    Scenario: Tidlig opptak krever egen frist
+      Når jeg aktiverer tidlig opptak
+      Men jeg setter ikke frist for tidlig opptak
+      Så varsles jeg om at frist for tidlig opptak må settes
 
-  Regel: Opptaksforvalter kan begrense opptaket til enkelte søkergrupper
+  Regel: Opptaksforvalter kan sette hvilke utdanningsbakgrunner søkere kan bli vurdert på i opptaket
 
-    # Ikke prioritert for samordna opptak 2027 — alle søkergrupper skal kunne søke
-    Scenario: Begrense opptak til søkergrupper
-      Når jeg begrenser opptaket til søkergruppen "EU/EØS-borgere"
-      Så er utdanningstilbud i opptaket kun tilgjengelige for EU/EØS-borgere
+    Scenario: Sette utdanningsbakgrunner for opptaket
+      Når jeg setter at søkere kan bli vurdert på utdanningsbakgrunnene
+        | Utdanningsbakgrunn        |
+        | Norsk videregående skole  |
+        | Realkompetanse            |
+        | Utenlandsk utdanning      |
+        | Steinerskole              |
+      Så kan søkere med disse utdanningsbakgrunnene bli vurdert i opptaket

@@ -63,11 +63,12 @@ Egenskap: Opprette et opptak
       Når jeg oppretter et nytt opptak basert på "Samordna opptak 2026"
       Så kopieres innstillinger fra det tidligere opptaket som utgangspunkt
 
-  @should
+  @wont
   Regel: Endringer på innstillinger i opptaket skal loggføres
 
     # Bygger på en generell revisjonsmekanisme som gjelder på tvers av FS.
     # Opptaket definerer hva som skal logges, mekanismen definerer hvordan.
+    # Nedprioritert inntil videre.
     Scenario: Endring på opptak loggføres
       Gitt at opptaket "Samordna opptak 2027" finnes
       Når jeg endrer en innstilling i opptaket

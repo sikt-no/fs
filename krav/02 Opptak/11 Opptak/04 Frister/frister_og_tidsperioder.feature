@@ -9,56 +9,84 @@ Egenskap: Frister og tidsperioder for opptak
     Gitt at jeg er innlogget som opptaksforvalter
     Og at opptaket "Samordna opptak 2027" er opprettet
 
-  Regel: Opptaksforvalter setter søknadsperiode for opptaket
+  Regel: Opptaksforvalter må kunne åpne for søkning
 
-    Scenario: Sette søknadsperiode
-      Når jeg setter søknadsperioden fra "2027-02-01 00:00" til "2027-04-15 23:59"
-      Så kan søkere sende inn søknader i denne perioden
+    Scenario: Åpne opptaket for søkning
+      Når jeg åpner opptaket for søkning
+      Så kan søkere begynne å sende inn søknader
 
-  Regel: Trekkfrist bestemmer siste tidspunkt for å trekke utdanningstilbud
+  Regel: Opptaksforvalter må kunne sette dato for når søker kan forvente svar på søknad i opptaket
 
-    Scenario: Sette trekkfrist for utdanningstilbud
-      Når jeg setter trekkfrist for utdanningstilbud til "2027-06-15"
-      Så kan læresteder ikke trekke utdanningstilbud etter denne datoen
+    Scenario: Sette informasjonsfrist
+      Når jeg setter dato for når søker kan forvente svar til "2027-07-15"
+      Så kan søkere se når de kan forvente svar på søknaden
 
-  Regel: Ettersendingsfrist styrer når dokumentasjon kan ettersendes
+  Regel: Opptaksforvalter må kunne sette generell søknadsfrist for opptaket
+
+    Scenario: Sette generell søknadsfrist
+      Når jeg setter generell søknadsfrist til "2027-04-15 23:59"
+      Så gjelder fristen for alle utdanningstilbud i opptaket
+
+    Scenario: Utdanningstilbud med unntaksfrist
+      Gitt at den generelle søknadsfristen er "2027-04-15 23:59"
+      Og at utdanningstilbudet "Politihøyskolen, høst 2027" har en tidligere søknadsfrist
+      Så gjelder unntaksfristen for det utdanningstilbudet
+      Og den generelle fristen gjelder for alle andre utdanningstilbud
+
+  Regel: Opptaksforvalter må kunne sette spesielle søknadsfrister for søkere med gitte utdanningsbakgrunner
+
+    Scenario: Sette frist for realkompetansesøkere
+      Når jeg setter søknadsfrist for utdanningsbakgrunnen "Realkompetanse" til "2027-03-01 23:59"
+      Så gjelder denne fristen for søkere som søker med realkompetanse
+      Og fristen kan være tidligere enn den generelle søknadsfristen fordi vurderingen krever mer saksbehandlingstid
+
+    Scenario: Sette frist for søkere med utenlandsk utdanning
+      Når jeg setter søknadsfrist for utdanningsbakgrunnen "Utenlandsk utdanning" til "2027-03-01 23:59"
+      Så gjelder denne fristen for søkere som søker med utenlandsk utdanning
+
+  Regel: Opptaksforvalter må kunne sette frist for ettersending av dokumentasjon
 
     Scenario: Sette ettersendingsfrist
       Når jeg setter ettersendingsfrist til "2027-07-01 23:59"
       Så kan søkere ettersende dokumentasjon fram til denne fristen
       Og dokumentasjon mottatt etter fristen er ikke garantert hensyntatt
 
-  Regel: Omprioriteringsfrist styrer når søker kan endre prioriteringer
+  Regel: Opptaksforvalter må kunne sette frist for omprioritering av søknad
 
     Scenario: Sette omprioriteringsfrist
       Når jeg setter omprioriteringsfrist til "2027-04-15 23:59"
       Så kan søkere endre prioritering av søknadsalternativer fram til denne fristen
 
-    Scenario: Omprioriteringsfrist ikke satt bruker søknadsfristen
-      Gitt at omprioriteringsfrist ikke er satt
-      Så brukes søknadsfristens til-dato som omprioriteringsfrist
+  Regel: Opptaksforvalter må kunne sette frist for å svare på tilbud
 
-  Regel: Frist for realkompetansesøknad kan settes tidligere enn ordinær frist
-
-    Scenario: Sette frist for realkompetansesøknad
-      Når jeg setter frist for realkompetansesøknad til "2027-03-01 23:59"
-      Så kan søkere med realkompetanse søke fram til denne fristen
-      Og fristen er tidligere enn ordinær søknadsfrist fordi realkompetansevurdering krever mer saksbehandlingstid
-
-  Regel: Svarfrist og publiseringstidspunkt settes per plasstildelingsrunde
-
-    Scenario: Sette svarfrist for en runde
-      Gitt at opptaket har en plasstildelingsrunde av typen "hovedtildeling"
-      Når jeg setter svarfrist for runden til "2027-07-20 23:59"
+    Scenario: Sette svarfrist
+      Når jeg setter svarfrist for søkere til "2027-07-20 23:59"
       Så mister søkere som ikke har svart innen fristen tilbudet sitt
 
-    Scenario: Sette publiseringstidspunkt for en runde
-      Gitt at opptaket har en plasstildelingsrunde av typen "hovedtildeling"
-      Når jeg setter publiseringstidspunkt til "2027-07-15 09:00"
-      Så blir resultatet synlig for søkere på dette tidspunktet
-
-  Regel: Frist for endring av svar settes for hele opptaket
+  Regel: Opptaksforvalter må kunne sette frist for endring av svar
 
     Scenario: Sette frist for endring av svar
       Når jeg setter frist for endring av svar til "2027-08-01 23:59"
       Så kan søkere endre et allerede avgitt svar fram til denne fristen
+
+  @openquestion
+  # ÅPNE SPØRSMÅL:
+  # - I dag kan læresteder trekke egne utdanningstilbud fram til en satt dato
+  #   (f.eks. 6. juni for samordna opptak). Etter denne datoen kan kun opptakseier trekke.
+  #   Skal vi videreføre denne begrensningen, eller skal det være åpent for at
+  #   lærestedene håndterer det selv?
+  # - Bør trekkfristen være en informasjonsfrist (forvaltningsfrist uten faktisk
+  #   stengeeffekt) i stedet for en hard sperre?
+  Regel: Opptaksforvalter kan sette trekkfrist for utdanningstilbud
+
+    Scenario: Sette trekkfrist for utdanningstilbud
+      Når jeg setter trekkfrist for utdanningstilbud til "2027-06-06"
+      Så kan læresteder trekke egne utdanningstilbud fram til denne datoen
+      Og etter denne datoen kan kun opptakseier trekke utdanningstilbud
+
+  Regel: Opptaksforvalter må kunne avslutte et opptak
+
+    Scenario: Avslutte opptak
+      Når jeg avslutter opptaket
+      Så er det ikke lenger mulig å gjøre endringer på opptaket
+      Og det er ikke lenger mulig å utføre behandling på opptaket

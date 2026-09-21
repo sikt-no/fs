@@ -6,7 +6,7 @@ Opptaksforvalter skal kunne opprette og forvalte opptak med alle innstillinger s
 
 Dokumentet er skrevet for alle som trenger å forstå hva det vil si å opprette et opptak, hvordan samordning fungerer, og hvilke innstillinger som må settes. Funksjonell løsning per oppgave og tekniske detaljer ligger i [oppgave.md](oppgave.md).
 
-**Status:** oppdatert 2026-09-15 etter workshop med Shiitake og Shinkansen. Bygger på gjennomgang av databasen i fs-plattform/opptak (PostgreSQL), FS-SIS (Oracle, OPPTAK-tabellen), og domenedokumentasjon fra fs.sikt.no.
+**Status:** oppdatert 2026-09-21. Bygger på gjennomgang av databasen i fs-plattform/opptak (PostgreSQL), FS-SIS (Oracle, OPPTAK-tabellen), domenedokumentasjon fra fs.sikt.no, og arkitekturbeslutningen [«Referensiell integritet på tvers av subgrafer»](https://fs.sikt.no/utviklerhandbok/produsent/referensiell-integritet/).
 
 ---
 
@@ -78,7 +78,9 @@ Når opptakseier velger samordning, skal hen kunne invitere læresteder til å d
 
 Inviterte læresteder kan ikke endre opptakets fellesinnstillinger (frister, regelverk, søkergrupper) — dette eies av opptakseier, men de skal kunne se denne informasjonen.
 
-I fs-plattform/opptak-databasen er dette modellert i `opptak.opptak_samordna_organisasjon`.
+**Organisasjoner fra utdanningsregisteret:** Organisasjonsdata eies av utdanningsregisteret (ureg). Opptak abonnerer på organisasjons-entitetstabellen via Postgres logisk replikering — kun primærnøkler. `opptak.opptak_samordna_organisasjon` har fremmednøkkel mot den replikerte tabellen, noe som gir en databasegaranti for at opptak kun kan referere til organisasjoner som faktisk finnes i ureg. Visningsdata (navn, organisasjonskode m.m.) hentes via federation når brukeren trenger dem — opptak lagrer ikke disse feltene. Se [«Referensiell integritet på tvers av subgrafer»](https://fs.sikt.no/utviklerhandbok/produsent/referensiell-integritet/).
+
+Samme mønster gjelder for utdanningstilbud — se [utdanningstilbud/design.md](../utdanningstilbud/design.md) beslutning 4.
 
 ### Navn og periode
 
@@ -109,10 +111,9 @@ Opptaksforvalter setter standard poenglikhetsregel for opptaket. Denne gjelder f
 
 Poenglikhetsregelen er flyttet fra rangeringsregelverket til opptaket fordi den gjelder per opptak, ikke per regelverk.
 
-#### Tidlig behandling og tilbud
+#### Tidlig opptak
 
-Opptaksforvalter velger om opptaket skal støtte tidlig behandling og tilbud. Når dette er aktivert, kan søkere som oppfyller visse kriterier få svar før hovedfristen. Tidlig tilbud krever en egen frist (se frister nedenfor). Merk at dette tidligere er kalt "tidlig opptak", 
-men siden søker kun blir gitt tidlig tilbud, ikke tidlig opptak i betydningen at de faktisk blir tatt opp, får studierett og blir studenter, så er begrepet endret.
+Opptaksforvalter velger om opptaket skal støtte tidlig opptak. Når dette er aktivert, kan søkere som oppfyller visse kriterier få svar før hovedfristen. Tidlig opptak krever en egen frist (se frister nedenfor).
 
 #### Søkergrupper
 
@@ -161,7 +162,7 @@ Frister styrer tidsrammene for opptaket. Alle frister angis som dato (og eventue
 | **Søknadsperiode** | Perioden opptaket er åpent for søknader — fra-dato (når søkere kan begynne å søke) og til-dato (siste tidspunkt for å sende inn søknad). Enkelte utdanningstilbud kan ha en tidligere til-dato enn opptakets generelle frist, f.eks. utdanninger som krever opptaksprøver (Politihøyskolen). | Opptak (til-dato kan overstyres per utdanningstilbud) |
 | **Ettersendingsfrist** | Siste tidspunkt søker kan ettersende dokumentasjon. Dokumentasjon mottatt etter fristen er ikke garantert hensyntatt. | Opptak (kan overstyres per utdanningstilbud) |
 | **Omprioriteringsfrist** | Siste tidspunkt søker kan endre prioritering av søknadsalternativer. Hvis ikke satt, brukes søknadsfristen. | Opptak |
-| **Frist for tidlig tilbud** | Siste tidspunkt søker kan søke om tidlig behandling og tilbud. Kun relevant når tidlig behandling og tilbud er aktivert. | Opptak |
+| **Frist for tidlig opptak** | Siste tidspunkt søker kan søke om tidlig opptak. Kun relevant når tidlig opptak er aktivert. | Opptak |
 | **Frist for realkompetansesøknad** | Siste tidspunkt for å søke med realkompetanse. Kan ha tidligere frist enn ordinær søknadsfrist fordi realkompetansevurdering krever mer saksbehandlingstid. | Opptak |
 | **Svarfrist** | Frist for søker til å svare på tilbud om plass eller venteliste. Når svarfrist utløper uten svar, mister søker tilbudet. Settes per opptaksrunde. | Opptaksrunde |
 | **Frist for endring av svar** | Siste tidspunkt søker kan endre et allerede avgitt svar. | Opptak |
@@ -265,6 +266,7 @@ Detaljert design for utdanningstilbud — inkludert konfigurasjon av kapasitet, 
 | Opptak med navn og status                         | Finnes                                                 | `opptak.opptak` |
 | Opptakstype som mal                               | Finnes, skal utgå                                      | `opptak.opptakstype` — innstillinger flyttes til opptak |
 | Samordnet opptak (inviterte organisasjoner)       | Finnes                                                 | `opptak.opptak_samordna_organisasjon` |
+| Logisk replikering av organisasjons-entitetstabell | Finnes                                                 | Opptak abonnerer på organisasjonstabellen fra ureg (kun primærnøkkel). Fremmednøkkel fra `opptak.opptak_samordna_organisasjon` sikrer referanseintegritet i databaselaget. |
 | Flerspråklig navn                                 | Finnes                                                 | `opptak.opptak_sprak` |
 | Plasstildelingsrunder med svarfrist               | Finnes, men må justeres mht rundetyper med ulik logikk | `opptak.opptaksrunde` |
 | Utdanningstilbud                                  | Finnes (v1 + v2)                                       | `opptak.utdanningstilbud_v2` |
@@ -276,8 +278,8 @@ Detaljert design for utdanningstilbud — inkludert konfigurasjon av kapasitet, 
 
 | Gap | Beskrivelse |
 |-----|-------------|
-| **Innstillinger på opptaket selv** | I dag ligger mange innstillinger (regelverkssamling, tidlig behandling og tilbud, særskilt vurdering, søkergrupper) på opptakstype. Disse må flyttes til eller dupliseres på opptaksnivå. |
-| **Frister** | I fs-plattform/opptak finnes svarfrist og publiseringstidspunkt på opptaksrunde, men de generelle fristene (søknadsfrist, ettersendingsfrist, omprioriteringsfrist, frist tidlig tilbud, frist realkompetanse, frist endring svar) er ikke modellert. I FS-SIS ligger disse direkte på OPPTAK-tabellen. |
+| **Innstillinger på opptaket selv** | I dag ligger mange innstillinger (regelverkssamling, tidlig opptak, særskilt vurdering, søkergrupper) på opptakstype. Disse må flyttes til eller dupliseres på opptaksnivå. |
+| **Frister** | I fs-plattform/opptak finnes svarfrist og publiseringstidspunkt på opptaksrunde, men de generelle fristene (søknadsfrist, ettersendingsfrist, omprioriteringsfrist, frist tidlig opptak, frist realkompetanse, frist endring svar) er ikke modellert. I FS-SIS ligger disse direkte på OPPTAK-tabellen. |
 | **Fellestekster** | Ikke modellert i fs-plattform/opptak. I FS-SIS er det fire teksttyper med trespråklig støtte på OPPTAK-tabellen. |
 | **Søknadsnummerserie** | Ikke modellert i fs-plattform/opptak. |
 | **Maks søknadsalternativer** | Ikke modellert i fs-plattform/opptak |
@@ -295,7 +297,7 @@ Detaljert design for utdanningstilbud — inkludert konfigurasjon av kapasitet, 
 
 1. **Validering ved publisering: hva skal kreves?** Forslag: et opptak må ha navn, opptaksperiode, minst ett utdanningstilbud og søknadsfrist for å kunne publiseres. Andre krav?
 
-2. **Fellestekster: er fire teksttyper tilstrekkelig?** FS-SIS har fire (intro, beskrivelse, kvittering, kvittering-avsluttet). Er det behov for flere i ny løsning, f.eks. tekst for venteliste, tekst for avslag, eller tekst for tidlig tilbud?
+2. **Fellestekster: er fire teksttyper tilstrekkelig?** FS-SIS har fire (intro, beskrivelse, kvittering, kvittering-avsluttet). Er det behov for flere i ny løsning, f.eks. tekst for venteliste, tekst for avslag, eller tekst for tidlig opptak?
 
 ### Kan ligge til senere
 

@@ -17,13 +17,13 @@ Egenskap: Samordnet opptak
       Og Universitetet i Oslo kan tildele egne saksbehandlere til søknadsbehandling
       Og Universitetet i Oslo kan se og følge opp søknader til egne utdanningstilbud
 
-  Regel: Deltakende organisasjoner kan ikke endre opptakets fellesinnstillinger
+  Regel: Deltakende organisasjoner kan ikke endre opptakets innstillinger
 
     Scenario: Deltakende organisasjon kan se men ikke endre innstillinger
       Gitt at organisasjonen "Universitetet i Oslo" er lagt til som deltaker
       Når en opptaksforvalter ved Universitetet i Oslo åpner opptaket
-      Så kan hen se opptakets fellesinnstillinger
-      Men hen kan ikke endre frister, regelverk eller søkergrupper
+      Så kan hen se opptakets innstillinger
+      Men hen kan ikke endre frister, regelverk eller andre innstillinger
 
   Regel: I et lokalt opptak kan ikke andre organisasjoner legges til
 

@@ -31,7 +31,7 @@ Opptaksforvalter skal kunne opprette et opptak — samordnet eller lokalt — me
 | 2 | Invitere læresteder til samordnet opptak                             | Must | Løst | | |
 | 3 | Sette grunnleggende innstillinger (navn, periode, regelverkssamling) | Must | Delvis — navn og regelverkssamling løst, opptaksperiode gjenstår | [#577](https://github.com/sikt-no/fs/issues/577) | [TAKE-319](https://sikt.atlassian.net/browse/TAKE-319) |
 | 4 | Konfigurere dokumentasjonskrav                                       | Must | Løst | | |
-| 5 | Konfigurere søknad (nummerserie, maks alternativer)                  | Must | Løst (tidlig behandling gjenstår) | [#578](https://github.com/sikt-no/fs/issues/578) | [TAKE-320](https://sikt.atlassian.net/browse/TAKE-320) |
+| 5 | Konfigurere søknad (nummerserie, maks alternativer)                  | Must | Løst (tidlig opptak gjenstår) | [#578](https://github.com/sikt-no/fs/issues/578) | [TAKE-320](https://sikt.atlassian.net/browse/TAKE-320) |
 | 6 | Sette frister og tidsperioder                                        | Must | | [#579](https://github.com/sikt-no/fs/issues/579) | [TAKE-321](https://sikt.atlassian.net/browse/TAKE-321) |
 | 7 | Sette fellestekster for søkere                                       | Should | | [#214](https://github.com/sikt-no/fs/issues/214) | [TAKE-322](https://sikt.atlassian.net/browse/TAKE-322) |
 | 8 | Legge til utdanningstilbud i opptak (egen oppgave)                   | Must | | Se [utdanningstilbud](../utdanningstilbud/) | |
