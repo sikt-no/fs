@@ -249,6 +249,7 @@ Egenskap: Listevisning og søk i personbrukere
 # ÅPNE SPØRSMÅL:
 # - Filnavn: bør "søke_opp_bruker.feature" omdøpes til "listevisning_og_sok.feature" for konsistens med mønsteret? Tittelendring på #479 må i så fall følges opp via fs-github.
 # - Rolle-navn: "brukeradministrator" er valgt. Sjekk at rolledefinisjonene i "4 - Opprette og administrere roller" bruker samme navn.
-# - Skal kant-tilfeller som brukere uten Feide-ID, eller brukere med flere identiteter, modelleres her — eller hører de hjemme i et eget krav? Spørsmålet omfatter nå også brukere uten hjemorganisasjon, siden kolonnen og filteret bygger på den.
 # - Søk på Feide-ID: skal søket finne en personbruker når søketeksten finnes i en av Feide-ID-ene til Feide-brukerne som er koblet til personbrukeren?
 # - Hva skjer med Feide-brukere som ikke er koblet til en person: skal de vises i brukeroversikten?
+# - Brukere uten Feide-ID er nå modellert i egne krav: BRU-PER-GRU-013 (registrere en personbruker uten Feide-konto) og BRU-PER-GRU-014 (forvalte en personbruker uten Feide-konto). De har alltid en hjemorganisasjon, satt eksplisitt ved registrering, og følger synlighetsreglene over uendret.
+# - Gjenstår: skal brukere med flere identiteter modelleres her, eller i et eget krav?
