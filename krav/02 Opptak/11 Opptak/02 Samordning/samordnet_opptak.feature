@@ -3,7 +3,7 @@
 Egenskap: Samordnet opptak
   Som opptaksforvalter for et samordnet opptak
   ønsker jeg å invitere læresteder til å delta
-  slik at de kan bidra med utdanningstilbud og saksbehandlere.
+  slik at de kan bidra med utdanningstilbud og behandle søknader.
 
   Bakgrunn:
     Gitt at jeg er innlogget som opptaksforvalter
@@ -14,10 +14,15 @@ Egenskap: Samordnet opptak
     Scenario: Legge til lærested i samordnet opptak
       Når jeg legger til organisasjonen "Universitetet i Oslo" som deltaker i opptaket
       Så kan Universitetet i Oslo knytte egne utdanningstilbud til opptaket
-      Og Universitetet i Oslo kan tildele egne saksbehandlere til søknadsbehandling
-      Og Universitetet i Oslo kan se og følge opp søknader til egne utdanningstilbud
+      Og Universitetet i Oslo kan få søknader som de har behandlerrolle for
+      Og Universitetet i Oslo kan se og følge opp egne utdanningstilbud
 
-  Regel: Deltakende organisasjoner kan ikke endre opptakets innstillinger
+  Regel: Det er kun organisasjonen som forvalter opptaket som kan endre innstillinger
+
+    Scenario: Opptaksforvalter hos opptakseier kan endre innstillinger
+      Gitt at HK-dir har opprettet og forvalter opptaket "Samordna opptak 2027"
+      Når en opptaksforvalter ved HK-dir åpner opptaket
+      Så kan hen endre innstillinger, frister og regelverk
 
     Scenario: Deltakende organisasjon kan se men ikke endre innstillinger
       Gitt at organisasjonen "Universitetet i Oslo" er lagt til som deltaker

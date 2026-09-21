@@ -5,69 +5,74 @@ Egenskap: Frister og tidsperioder for opptak
   ønsker jeg å sette frister som styrer tidsrammene for opptaket
   slik at søkere, saksbehandlere og læresteder vet hva som gjelder når.
 
+  # Disse fristene gjelder for alle utdanningstilbud og alle søkere i opptaket,
+  # med mindre det er satt avvikende frister på utdanningstilbud eller utdanningsbakgrunn.
+
   Bakgrunn:
     Gitt at jeg er innlogget som opptaksforvalter
     Og at opptaket "Samordna opptak 2027" er opprettet
 
+  Regel: Opptaksforvalter må kunne åpne og stenge for redigering av utdanningstilbud
+
+    Scenario: Sette periode for redigering av utdanningstilbud
+      Når jeg setter at redigering av utdanningstilbud åpner "2026-10-01" og stenger "2027-06-06"
+      Så kan deltakende organisasjoner redigere sine utdanningstilbud i denne perioden
+
   Regel: Opptaksforvalter må kunne åpne for søkning
 
-    Scenario: Åpne opptaket for søkning
-      Når jeg åpner opptaket for søkning
-      Så kan søkere begynne å sende inn søknader
-
-  Regel: Opptaksforvalter må kunne sette dato for når søker kan forvente svar på søknad i opptaket
-
-    Scenario: Sette informasjonsfrist
-      Når jeg setter dato for når søker kan forvente svar til "2027-07-15"
-      Så kan søkere se når de kan forvente svar på søknaden
+    Scenario: Sette søknadsdato
+      Når jeg setter at søknaden åpner "2027-02-01"
+      Så blir utdanningstilbudene i opptaket tilgjengelige for søkere fra denne datoen
 
   Regel: Opptaksforvalter må kunne sette generell søknadsfrist for opptaket
 
-    Scenario: Sette generell søknadsfrist
-      Når jeg setter generell søknadsfrist til "2027-04-15 23:59"
-      Så gjelder fristen for alle utdanningstilbud i opptaket
+    Scenario: Sette ordinær søknadsfrist
+      Når jeg setter ordinær søknadsfrist til "2027-04-15 23:59"
+      Så gjelder fristen for alle utdanningstilbud og alle søkere i opptaket
 
-    Scenario: Utdanningstilbud med unntaksfrist
-      Gitt at den generelle søknadsfristen er "2027-04-15 23:59"
-      Og at utdanningstilbudet "Politihøyskolen, høst 2027" har en tidligere søknadsfrist
-      Så gjelder unntaksfristen for det utdanningstilbudet
-      Og den generelle fristen gjelder for alle andre utdanningstilbud
+  Regel: Opptaksforvalter må kunne sette omprioriteringsfrist
 
-  Regel: Opptaksforvalter må kunne sette spesielle søknadsfrister for søkere med gitte utdanningsbakgrunner
+    Scenario: Sette omprioriteringsfrist
+      Når jeg setter omprioriteringsfrist til "2027-04-15 23:59"
+      Så kan søkere endre prioritering av søknadsalternativer fram til denne fristen
 
-    Scenario: Sette frist for realkompetansesøkere
-      Når jeg setter søknadsfrist for utdanningsbakgrunnen "Realkompetanse" til "2027-03-01 23:59"
-      Så gjelder denne fristen for søkere som søker med realkompetanse
-      Og fristen kan være tidligere enn den generelle søknadsfristen fordi vurderingen krever mer saksbehandlingstid
+  Regel: Opptaksforvalter må kunne sette dokumentasjonsfrister
 
-    Scenario: Sette frist for søkere med utenlandsk utdanning
-      Når jeg setter søknadsfrist for utdanningsbakgrunnen "Utenlandsk utdanning" til "2027-03-01 23:59"
-      Så gjelder denne fristen for søkere som søker med utenlandsk utdanning
+    Scenario: Sette ordinær dokumentasjonsfrist
+      Når jeg setter ordinær dokumentasjonsfrist til "2027-04-15 23:59"
+      Så må søkere laste opp dokumentasjon innen denne fristen
 
-  Regel: Opptaksforvalter må kunne sette frist for ettersending av dokumentasjon
+    Scenario: Sette tidlig dokumentasjonsfrist for søkere med tidlig søknadsfrist
+      Når jeg setter tidlig dokumentasjonsfrist til "2027-03-01 23:59"
+      Så gjelder denne fristen for søkere som har tidlig søknadsfrist
 
     Scenario: Sette ettersendingsfrist
       Når jeg setter ettersendingsfrist til "2027-07-01 23:59"
       Så kan søkere ettersende dokumentasjon fram til denne fristen
       Og dokumentasjon mottatt etter fristen er ikke garantert hensyntatt
 
-  Regel: Opptaksforvalter må kunne sette frist for omprioritering av søknad
+  Regel: Opptaksforvalter må kunne sette informasjonsdatoer for ledige studieplasser
 
-    Scenario: Sette omprioriteringsfrist
-      Når jeg setter omprioriteringsfrist til "2027-04-15 23:59"
-      Så kan søkere endre prioritering av søknadsalternativer fram til denne fristen
+    Scenario: Sette informasjonsfrist for ledige studieplasser
+      Gitt at opptaket tilbyr søknad på ledige studieplasser
+      Når jeg setter informasjonsfrist for ledige studieplasser til "2027-07-20"
+      Så kan søkere se når restplasser legges ut i Min kompetanse
 
-  Regel: Opptaksforvalter må kunne sette frist for å svare på tilbud
+    Scenario: Sette dato for når ledige studieplasser kan søkes
+      Gitt at opptaket tilbyr søknad på ledige studieplasser
+      Når jeg setter at ledige studieplasser kan søkes fra "2027-07-25"
+      Så kan søkere søke på ledige studieplasser fra denne datoen
 
-    Scenario: Sette svarfrist
-      Når jeg setter svarfrist for søkere til "2027-07-20 23:59"
-      Så mister søkere som ikke har svart innen fristen tilbudet sitt
+  Regel: Opptaksforvalter må kunne sette informasjonsdatoer for resultat
 
-  Regel: Opptaksforvalter må kunne sette frist for endring av svar
+    Scenario: Sette dato for når søker kan forvente svar
+      Når jeg setter dato for når søker kan forvente svar til "2027-07-15"
+      Så kan søkere se når de kan forvente svar på søknaden
 
-    Scenario: Sette frist for endring av svar
-      Når jeg setter frist for endring av svar til "2027-08-01 23:59"
-      Så kan søkere endre et allerede avgitt svar fram til denne fristen
+    # Faktiske svarfrister og publiseringstidspunkter settes per plasstildelingsrunde
+    Scenario: Sette første svarfrist som informasjon til søkere
+      Når jeg setter første svarfrist til "2027-07-20 23:59"
+      Så kan søkere se når de senest må svare på et eventuelt tilbud
 
   @openquestion
   # ÅPNE SPØRSMÅL:

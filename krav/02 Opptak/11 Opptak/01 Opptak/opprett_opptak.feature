@@ -8,32 +8,50 @@ Egenskap: Opprette et opptak
   Bakgrunn:
     Gitt at jeg er innlogget som opptaksforvalter
 
-  Regel: Opptaksforvalter kan opprette et samordnet eller lokalt opptak
+  Regel: Opptaksforvalter kan opprette et opptak
 
     Scenario: Opprette et samordnet opptak
       Når jeg oppretter et nytt opptak
       Og jeg velger at opptaket skal være samordnet
       Og jeg gir opptaket navnet "Samordna opptak 2027"
       Og jeg knytter til regelverkssamlingen "UHG 2027"
+      Og jeg setter opptakstype
+      Og jeg legger til minst en organisasjon til samordningen
       Og jeg lagrer opptaket
       Så er opptaket opprettet
-      Og organisasjonen min eier opptaket
+      Og organisasjonen min forvalter opptaket
 
     Scenario: Opprette et lokalt opptak
       Når jeg oppretter et nytt opptak
       Og jeg velger at opptaket skal være lokalt
       Og jeg gir opptaket navnet "Lokalt opptak høst 2027"
       Og jeg knytter til regelverkssamlingen "Lokalt regelverk"
+      Og jeg setter opptakstype
       Og jeg lagrer opptaket
       Så er opptaket opprettet
-      Og organisasjonen min eier opptaket
+      Og organisasjonen min forvalter opptaket
 
-  Regel: Navn er obligatorisk for å lagre et opptak
+  Regel: Navn, regelverkssamling og opptakstype er obligatorisk for å lagre et opptak
 
     Scenario: Lagre opptak uten navn
       Når jeg oppretter et nytt opptak
       Og jeg knytter til regelverkssamlingen "UHG 2027"
+      Og jeg setter opptakstype
       Men jeg gir ikke opptaket et navn
+      Så kan jeg ikke lagre opptaket
+
+    Scenario: Lagre opptak uten regelverkssamling
+      Når jeg oppretter et nytt opptak
+      Og jeg gir opptaket navnet "Samordna opptak 2027"
+      Og jeg setter opptakstype
+      Men jeg knytter ikke til en regelverkssamling
+      Så kan jeg ikke lagre opptaket
+
+    Scenario: Lagre opptak uten opptakstype
+      Når jeg oppretter et nytt opptak
+      Og jeg gir opptaket navnet "Samordna opptak 2027"
+      Og jeg knytter til regelverkssamlingen "UHG 2027"
+      Men jeg setter ikke opptakstype
       Så kan jeg ikke lagre opptaket
 
   Regel: Navn som eksponeres til søkere må kunne angis på flere språk
@@ -42,13 +60,6 @@ Egenskap: Opprette et opptak
       Gitt at jeg har opprettet opptaket "Samordna opptak 2027"
       Når jeg angir navn på bokmål, nynorsk, engelsk og samisk
       Så er navnene lagret på alle fire språk
-
-  Regel: Et opptak må ha en regelverkssamling
-
-    Scenario: Knytte regelverkssamling til opptak
-      Gitt at jeg har opprettet opptaket "Samordna opptak 2027"
-      Når jeg knytter til regelverkssamlingen "UHG 2027"
-      Så er reglene i regelverkssamlingen tilgjengelige for utdanningstilbud i opptaket
 
   @should
   Regel: Det skal være mulig å gjenbruke innstillinger fra et tidligere opptak
