@@ -83,13 +83,13 @@ Opptak og utdanningsregisteret (ureg) er to separate subgrafer i en GraphQL fede
                     └─────────────┘
 ```
 
-Opptak eier `Utdanningstilbud`-typen og holder en referanse (graf-ID) til `Utdanningsinstans` i ureg. Når en klient spør etter felter fra begge subgrafene, splitter routeren spørringen automatisk. Opptak trenger ikke kjenne til ureg-feltene — kun nøkkelen.
+Opptak eier `Utdanningstilbud`-typen. Denne refererer til `Utdanningsinstans` fra ureg. Når en klient spør etter felter fra begge subgrafene, splitter routeren spørringen automatisk. Opptak trenger ikke kjenne til ureg-feltene — kun nøkkelen.
 
 **Referanseintegritet via logisk replikering:** Opptak abonnerer på entitetstabeller fra ureg via Postgres logisk replikering. Ureg publiserer en minimal entitetstabell med kun primærnøkler (f.eks. `utdanningsinstansnr`), og opptak definerer fremmednøkler fra `opptak.utdanningstilbud` mot den replikerte tabellen. Den replikerte kolonnen er nøyaktig det samme feltet som brukes som `@key` i Apollo Federation — det skaper en gjennomgående linje: replikert kolonne = fremmednøkkel = `@key`-felt. Fremmednøkler sikrer gyldige referanser; føderering henter innholdet fra eier.
 
-**Denormalisering for søk (separat mekanisme):** For å kunne tilby et effektivt søk i utdanningstilbud uten å sende en ekstra spørring til ureg for hvert tilbud, kopierer opptak et begrenset sett felter fra ureg inn i sin søkeindeks. Dette er en *separat* replikering fra entitetstabellene — her replikeres utvalgte kolonner og rader, ikke bare nøkler. Disse denormaliserte feltene brukes **kun** til søk, filtrering og sortering — de returneres ikke til klienten. Søket returnerer IDer, og klienten henter visningsdata via federation.
+**Denormalisering for søk (separat mekanisme):** For å kunne tilby et effektivt søk i utdanningstilbud uten å sende en ekstra spørring til ureg for hvert tilbud, kopierer opptak et begrenset sett felter fra ureg inn i sin søkeindeks. Dette er en *separat* replikering fra entitetstabellene — her replikeres utvalgte kolonner og rader, ikke bare nøkler. Disse denormaliserte feltene brukes **kun** til søk, filtrering og sortering — de returneres ikke til klienten. Søket returnerer nøkler, og klienten henter visningsdata via federation.
 
-Denormaliserte data holdes i synk via logisk replikering fra ureg.
+Denormaliserte data holdes i synk ved hjelp av logisk replikering mellom databasene våre. Se [referensiell integritet](https://fs.sikt.no/utviklerhandbok/produsent/referensiell-integritet/) for mer informasjon.
 
 **Viktig om asynkron replikering:** Logisk replikering er asynkron — forsinkelsen er normalt under ett sekund, men kan være større ved høyt volum. Opprettelse av et utdanningstilbud forutsetter at utdanningsinstansen allerede er replikert (fremmednøkkelen blokkerer innsettingen ellers). I praksis skjer replikeringen nesten umiddelbart, men det er en edge case å være klar over.
 
