@@ -81,16 +81,16 @@ Opptak og utdanningsregisteret (ureg) er to separate subgrafer i en GraphQL fede
                     └─────────────┘
 ```
 
-Opptak eier `Utdanningstilbud`-typen og holder en referanse (graf-ID) til `Utdanningsinstans` i ureg. Når en klient spør etter felter fra begge subgrafene, splitter routeren spørringen automatisk. Opptak trenger ikke kjenne til ureg-feltene — kun nøkkelen.
+Opptak eier `Utdanningstilbud`-typen. Denne refererer til `Utdanningsinstans` fra ureg. Når en klient spør etter felter fra begge subgrafene, splitter routeren spørringen automatisk. Opptak trenger ikke kjenne til ureg-feltene — kun nøkkelen.
 
-**Denormalisering for søk:** Unntaket er søk og filtrering. For å kunne tilby et effektivt søk i utdanningstilbud uten å sende en ekstra spørring til ureg for hvert tilbud, kopierer opptak et begrenset sett felter fra ureg inn i sin søkeindeks. Disse denormaliserte feltene brukes **kun** til søk, filtrering og sortering — de returneres ikke til klienten. Søket returnerer IDer, og klienten henter visningsdata via federation.
+**Denormalisering for søk:** Unntaket er søk og filtrering. For å kunne tilby et effektivt søk i utdanningstilbud uten å sende en ekstra spørring til ureg for hvert tilbud, kopierer opptak et begrenset sett felter fra ureg inn i sin søkeindeks. Disse denormaliserte feltene brukes **kun** til søk, filtrering og sortering — de returneres ikke til klienten. Søket returnerer nøkler, og klienten henter visningsdata via federation.
 
-Denormaliserte data holdes i synk via hendelser fra ureg og fs-batch-infrastrukturen.
+Denormaliserte data holdes i synk ved hjelp av logisk replikering mellom databasene våre. Se [referensiell integritet](https://fs.sikt.no/utviklerhandbok/produsent/referensiell-integritet/) for mer informasjon.
 
 **Flyten for å opprette et utdanningstilbud:**
 
 1. Lærestedet registrerer utdanningen i utdanningsregisteret (via SIS-integrasjon eller eget grensesnitt i FS Admin).
-2. Opptak mottar graf-IDen til utdanningsinstansen (via synkronisering/hendelser).
+2. Opptak mottar utdanningen fra utdanningsinstansen (via synkronisering).
 3. Lærestedet knytter utdanningsinstansen til et opptak — et utdanningstilbud opprettes.
 4. Lærestedet setter opptaksspesifikke innstillinger (kapasitet, tilbud som skal gis, tak for ja-svar og eventuelle lovlige unntak fra standardinnstillinger i opptaket).
 
