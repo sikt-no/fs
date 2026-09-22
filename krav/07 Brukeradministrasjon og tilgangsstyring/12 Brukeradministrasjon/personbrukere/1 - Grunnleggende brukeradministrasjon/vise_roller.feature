@@ -18,6 +18,7 @@ Egenskap: Se en personbrukers roller
       Og hver rolle viser følgende informasjon:
         | felt          |
         | Navn          |
+        | Beskrivelse   |
         | Organisasjon  |
         | Miljø         |
         | Tildelt av    |

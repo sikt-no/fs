@@ -21,7 +21,7 @@ Egenskap: Bestille tilganger for ansatte
     Og alle skal være sporbare som et felles batch-bestilling
 
 # ÅPNE SPØRSMÅL:
-# - Hvem regnes som "mine ansatte" — basert på organisasjonsstruktur, leder-relasjon, eller manuell konfigurasjon?
+# - Hvem regnes som "mine ansatte" — basert på organisasjonsstruktur, leder-relasjon, eller manuell konfigurasjon? Hjemorganisasjonen i BRU-PER-GRU-007 bærer ansettelsesrelasjonen, så de aktuelle brukerne har samme hjemorganisasjon som bestilleren.
 # - Skal tilgangsbestiller-rollen være en egen rolle som tildeles, eller utledes automatisk fra leder-status?
 # - Skal det være begrensninger på hvilke tilganger en tilgangsbestiller kan bestille (whitelist)?
 # - Hva med tilganger som krever taushetserklæring — skal bestillingen aktivere flyt for det også?

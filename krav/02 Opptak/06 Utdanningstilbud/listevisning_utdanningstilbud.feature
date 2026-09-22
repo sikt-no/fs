@@ -1,0 +1,82 @@
+# language: no
+@OPT-OPT-UTD-001 @must @draft
+Egenskap: Listevisning og filtrering av utdanningstilbud i opptak
+  Som opptaksforvalter
+  ønsker jeg en oversikt over relevante utdanningstilbud i opptaket, med mulighet for filtrering
+  slik at jeg raskt kan finne og følge opp riktig utdanningstilbud.
+
+  Bakgrunn:
+    Gitt at jeg er innlogget som opptaksforvalter
+    Og at opptaket "Samordna opptak 2027" er opprettet med kriterier for utdanningstyper og -nivåer
+
+  Regel: Opptaksforvalter ser kun utdanningstilbud som matcher opptakets kriterier
+
+    Scenario: Se relevante utdanningstilbud
+      Gitt at opptaket tillater studieprogram på bachelornivå
+      Når jeg åpner oversikten over tilgjengelige utdanningstilbud
+      Så ser jeg kun studieprogram på bachelornivå fra deltakende organisasjoner
+
+  Regel: Grunndata fra utdanningsregisteret vises tydelig
+
+    Scenario: Se grunndata om utdanning
+      Gitt at utdanningstilbudet "Sykepleie, UiO, høst 2027" er lagt til i opptaket
+      Når jeg åpner utdanningstilbudet
+      Så ser jeg grunndata fra utdanningsregisteret (navn, studiepoeng, nivå, campus)
+      Og det er tydelig for meg hvilke data som kommer fra utdanningsregisteret
+
+  Regel: Opptaksforvalter ved eierorganisasjon kan filtrere på organisasjon
+
+    Scenario: Filtrere på organisasjon som opptakseier
+      Gitt at jeg er opptaksforvalter ved eierorganisasjonen
+      Når jeg filtrerer på organisasjonen "Universitetet i Oslo"
+      Så ser jeg kun utdanningstilbud fra Universitetet i Oslo
+
+  Regel: Opptaksforvalter ved deltakende organisasjon ser kun egne utdanningstilbud
+
+    Scenario: Deltakende organisasjon ser kun sine egne
+      Gitt at jeg er opptaksforvalter ved en deltakende organisasjon
+      Når jeg åpner oversikten over utdanningstilbud
+      Så ser jeg kun utdanningstilbud fra min organisasjon
+
+  Regel: Opptaksforvalter kan filtrere på starttermin og startår
+
+    Scenario: Filtrere på starttermin og startår
+      Når jeg filtrerer på starttermin "høst" og startår "2027"
+      Så ser jeg kun utdanningstilbud med oppstart høst 2027
+
+  Regel: Opptaksforvalter kan filtrere på navn på studieprogram
+
+    Scenario: Søke på studieprogramnavn
+      Når jeg søker på "sykepleie"
+      Så filtreres listen til utdanningstilbud som matcher søket
+
+  Regel: Opptaksforvalter kan filtrere på utdanningstilbud med ufullstendige opplysninger
+
+    Scenario: Filtrere på utdanningstilbud som mangler kompetanseregelverk
+      Når jeg filtrerer på utdanningstilbud med ufullstendige opplysninger
+      Så ser jeg utdanningstilbud som mangler kompetanseregelverk
+
+    Scenario: Filtrere på utdanningstilbud som mangler rangeringsregelverk
+      Når jeg filtrerer på utdanningstilbud med ufullstendige opplysninger
+      Så ser jeg utdanningstilbud som mangler rangeringsregelverk
+
+    Scenario: Filtrere på utdanningstilbud som mangler kvoter eller kvoteprioritering
+      Når jeg filtrerer på utdanningstilbud med ufullstendige opplysninger
+      Så ser jeg utdanningstilbud som mangler kvoter, kvoteprioritering eller plassflyt
+
+    Scenario: Filtrere på utdanningstilbud som mangler saksbehandlertildelingsregel
+      Når jeg filtrerer på utdanningstilbud med ufullstendige opplysninger
+      Så ser jeg utdanningstilbud som mangler saksbehandlertildelingsregel
+
+    Scenario: Filtrere på utdanningstilbud som mangler opplysninger om tilbudsgaranti
+      Når jeg filtrerer på utdanningstilbud med ufullstendige opplysninger
+      Så ser jeg utdanningstilbud som mangler opplysninger om hvor tilbudsgarantier skal tas fra
+
+    @openquestion
+    # ÅPNE SPØRSMÅL:
+    # - Er det fellesfrister eller helt frie frister for tidlig søknadsfrist
+    #   og tidlig tilbud i samordna opptak?
+    Scenario: Filtrere på utdanningstilbud som mangler dato for tidlig søknadsfrist eller tidlig tilbud
+      Gitt at utdanningstilbudet er markert med tidlig søknadsfrist eller tidlig tilbud
+      Når jeg filtrerer på utdanningstilbud med ufullstendige opplysninger
+      Så ser jeg utdanningstilbud der dato for tidlig søknadsfrist eller tidlig tilbud ikke er satt

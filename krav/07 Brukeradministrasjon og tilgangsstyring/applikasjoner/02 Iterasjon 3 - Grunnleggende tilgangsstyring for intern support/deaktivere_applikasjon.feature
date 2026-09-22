@@ -10,19 +10,19 @@ Egenskap: Deaktivere applikasjon
 
   Regel: Deaktivering krever bekreftelse og hindrer autentisering
 
-    Scenario: Bekreftelsesdialog vises før deaktivering
+    Scenario: Deaktivering gjennomføres først etter bekreftelse
       Gitt jeg er på detaljsiden for en aktiv applikasjon jeg kan administrere
       Når jeg velger å deaktivere applikasjonen
-      Så vises en bekreftelsesdialog før deaktiveringen gjennomføres
+      Så deaktiveres applikasjonen først etter at jeg har bekreftet
 
     Scenario: Bekrefte deaktivering
-      Gitt jeg har åpnet bekreftelsesdialogen for å deaktivere en applikasjon
+      Gitt jeg har valgt å deaktivere en applikasjon
       Når jeg bekrefter deaktiveringen
       Så er applikasjonen ikke lenger aktiv
       Og applikasjonen kan ikke benyttes til autentisering
 
     Scenario: Avbryte deaktivering
-      Gitt jeg har åpnet bekreftelsesdialogen for å deaktivere en applikasjon
+      Gitt jeg har valgt å deaktivere en applikasjon
       Når jeg avbryter
       Så er applikasjonen fortsatt aktiv
 
@@ -35,13 +35,13 @@ Egenskap: Deaktivere applikasjon
 
   Regel: Reaktivering krever bekreftelse og gjenoppretter applikasjonens tilganger
 
-    Scenario: Bekreftelsesdialog vises før reaktivering
+    Scenario: Reaktivering gjennomføres først etter bekreftelse
       Gitt jeg er på detaljsiden for en deaktivert applikasjon jeg kan administrere
       Når jeg velger å reaktivere applikasjonen
-      Så vises en bekreftelsesdialog før reaktiveringen gjennomføres
+      Så reaktiveres applikasjonen først etter at jeg har bekreftet
 
     Scenario: Bekrefte reaktivering
-      Gitt jeg har åpnet bekreftelsesdialogen for å reaktivere en applikasjon
+      Gitt jeg har valgt å reaktivere en applikasjon
       Når jeg bekrefter reaktiveringen
       Så er applikasjonen aktiv igjen
       Og tilgangene som var tildelt før deaktivering gjelder igjen

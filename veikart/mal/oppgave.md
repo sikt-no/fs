@@ -9,8 +9,8 @@ og fyll ut.
 
 - **Issue**: [sikt-no/fs#NNNN](https://github.com/sikt-no/fs/issues/NNNN)
 - **Initiativ**: #NNN (hvis aktuelt)
-- **Fase**: todo
-- **Prioritet**: medium
+- **Fase**: prioritert | utforskning | utvikling | innføring | levert
+- **Prioritet**: Must | Should | Could | Won't
 - **Type**: feature
 - **Eier**: @brukernavn
 - **Reviewers som har sett oppgaven**: (ingen enda)

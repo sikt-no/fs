@@ -1,26 +1,86 @@
 # language: no
-@DEM-OPT-OPT-001 @demo @implemented @must @nightly
+@OPT-OPT-OPT-001 @must @draft
 Egenskap: Opprette et opptak
-  Som administrator ønsker jeg å kunne opprette et opptak og publisere det
-  slik at det blir tilgjengelig for personer som ønsker å søke.
+  Som opptaksforvalter
+  ønsker jeg å opprette et opptak for min organisasjon
+  slik at utdanningstilbud kan knyttes til det og søkere kan søke.
 
   Bakgrunn:
-    Gitt at jeg er logget inn som administrator
-    Og at jeg er på opptakssiden
+    Gitt at jeg er innlogget som opptaksforvalter
 
-  @implemented @must
-  Regel: Et opptak må være publisert og ha utdanningstilbud for å være søkbart
+  Regel: Opptaksforvalter kan opprette et opptak
 
-    @e2e @implemented
-    Scenario: Opprette og publisere et opptak
-      Når jeg oppretter et nytt lokalt opptak
-      Og jeg setter navn til "Høstopptak 2025"
-      Og jeg setter type til "Lokale opptak"
+    Scenario: Opprette et samordnet opptak
+      Når jeg oppretter et nytt opptak
+      Og jeg velger at opptaket skal være samordnet
+      Og jeg gir opptaket navnet "Samordna opptak 2027"
+      Og jeg knytter til regelverkssamlingen "UHG 2027"
+      Og jeg setter opptakstype
+      Og jeg legger til minst en organisasjon til samordningen
       Og jeg lagrer opptaket
-      Og jeg tilknytter utdanningstilbud til opptaket
-      Og jeg konfigurerer studiealternativet
-      Så hvis jeg logger inn som person
-      Og jeg søker etter "Jordmor" på finn studier
-      Og jeg legger til alle studier i kurven
-      Og jeg går til studiekurven
-      Så skal opptaket være synlig
+      Så er opptaket opprettet
+      Og organisasjonen min forvalter opptaket
+
+    Scenario: Opprette et lokalt opptak
+      Når jeg oppretter et nytt opptak
+      Og jeg velger at opptaket skal være lokalt
+      Og jeg gir opptaket navnet "Lokalt opptak høst 2027"
+      Og jeg knytter til regelverkssamlingen "Lokalt regelverk"
+      Og jeg setter opptakstype
+      Og jeg lagrer opptaket
+      Så er opptaket opprettet
+      Og organisasjonen min forvalter opptaket
+
+  Regel: Navn, regelverkssamling og opptakstype er obligatorisk for å lagre et opptak
+
+    Scenario: Lagre opptak uten navn
+      Når jeg oppretter et nytt opptak
+      Og jeg knytter til regelverkssamlingen "UHG 2027"
+      Og jeg setter opptakstype
+      Men jeg gir ikke opptaket et navn
+      Så kan jeg ikke lagre opptaket
+
+    Scenario: Lagre opptak uten regelverkssamling
+      Når jeg oppretter et nytt opptak
+      Og jeg gir opptaket navnet "Samordna opptak 2027"
+      Og jeg setter opptakstype
+      Men jeg knytter ikke til en regelverkssamling
+      Så kan jeg ikke lagre opptaket
+
+    Scenario: Lagre opptak uten opptakstype
+      Når jeg oppretter et nytt opptak
+      Og jeg gir opptaket navnet "Samordna opptak 2027"
+      Og jeg knytter til regelverkssamlingen "UHG 2027"
+      Men jeg setter ikke opptakstype
+      Så kan jeg ikke lagre opptaket
+
+  Regel: Navn som eksponeres til søkere må kunne angis på flere språk
+
+    Scenario: Angi opptaksnavn på flere språk
+      Gitt at jeg har opprettet opptaket "Samordna opptak 2027"
+      Når jeg angir navn på bokmål, nynorsk, engelsk og samisk
+      Så er navnene lagret på alle fire språk
+
+  @should
+  Regel: Det skal være mulig å gjenbruke innstillinger fra et tidligere opptak
+
+    @openquestion
+    # ÅPNE SPØRSMÅL:
+    # - Hva kopieres og hva kopieres ikke?
+    # - Forslag: innstillinger, frister og fellestekster kopieres.
+    #   Utdanningstilbud, inviterte læresteder og opptaksrunder kopieres ikke.
+    Scenario: Opprette opptak basert på tidligere opptak
+      Gitt at opptaket "Samordna opptak 2026" finnes med innstillinger, frister og fellestekster
+      Når jeg oppretter et nytt opptak basert på "Samordna opptak 2026"
+      Så kopieres innstillinger fra det tidligere opptaket som utgangspunkt
+
+  @wont
+  Regel: Endringer på innstillinger i opptaket skal loggføres
+
+    # Bygger på en generell revisjonsmekanisme som gjelder på tvers av FS.
+    # Opptaket definerer hva som skal logges, mekanismen definerer hvordan.
+    # Nedprioritert inntil videre.
+    Scenario: Endring på opptak loggføres
+      Gitt at opptaket "Samordna opptak 2027" finnes
+      Når jeg endrer en innstilling i opptaket
+      Så loggføres endringen med hvem som utførte den, fra hvilken organisasjon og når
