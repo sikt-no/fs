@@ -1,12 +1,14 @@
 # language: no
 @OPT-OPT-INN-001 @must @draft
 Egenskap: Innstillinger for opptak
-  Som opptaksforvalter
+  Som opptaksforvalter ved forvaltende organisasjon
   ønsker jeg å sette innstillinger for opptaket
   slik at opptaket har riktige rammer for søknad, saksbehandling og plasstildeling.
 
+  # I samordna opptak kan kun opptaksforvalter ved forvaltende organisasjon endre innstillinger.
+  # I lokale opptak er forvaltende organisasjon den eneste organisasjonen.
   Bakgrunn:
-    Gitt at jeg er innlogget som opptaksforvalter
+    Gitt at opptaksforvalter ved forvaltende organisasjon er innlogget
     Og at opptaket "Samordna opptak 2027" er opprettet
 
   Regel: Opptaksforvalter kan endre opptakstype

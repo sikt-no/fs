@@ -6,28 +6,28 @@ Egenskap: Legge til utdanningstilbud i opptak
   slik at søkere kan søke på utdanningene.
 
   Bakgrunn:
-    Gitt at jeg er innlogget som opptaksforvalter
+    Gitt at opptaksforvalter er innlogget
     Og at opptaket "Samordna opptak 2027" er opprettet med deltakende organisasjoner
 
   Regel: Opptaksforvalter ved deltakende organisasjon kan legge til alle sine utdanningstilbud
 
-    Scenario: Legge til alle utdanningstilbud fra min organisasjon
-      Gitt at jeg er opptaksforvalter ved en deltakende organisasjon
-      Når jeg velger å legge til alle utdanningstilbud fra min organisasjon som matcher opptakets kriterier
-      Så legges alle relevante utdanningstilbud fra min organisasjon til i opptaket
+    Scenario: Legge til alle utdanningstilbud fra egen organisasjon
+      Gitt at opptaksforvalter er ved en deltakende organisasjon
+      Når opptaksforvalter velger å legge til alle utdanningstilbud fra egen organisasjon som matcher opptakets kriterier
+      Så legges alle relevante utdanningstilbud fra organisasjonen til i opptaket
 
   Regel: Opptaksforvalter ved deltakende organisasjon kan legge til enkelttilbud
 
-    Scenario: Legge til enkelttilbud fra min organisasjon
-      Gitt at jeg er opptaksforvalter ved en deltakende organisasjon
-      Når jeg velger å legge til utdanningstilbudet "Sykepleie, høst 2027" fra min organisasjon
+    Scenario: Legge til enkelttilbud fra egen organisasjon
+      Gitt at opptaksforvalter er ved en deltakende organisasjon
+      Når opptaksforvalter velger å legge til utdanningstilbudet "Sykepleie, høst 2027" fra egen organisasjon
       Så legges utdanningstilbudet til i opptaket
 
-  Regel: Opptakseier kan legge til utdanningstilbud for alle deltakende organisasjoner
+  Regel: Opptaksforvalter ved forvaltende organisasjon kan legge til utdanningstilbud for alle deltakende organisasjoner
 
-    Scenario: Opptakseier legger til utdanningstilbud for en annen organisasjon
-      Gitt at jeg er opptaksforvalter ved eierorganisasjonen
-      Når jeg velger å legge til utdanningstilbud fra organisasjonen "Universitetet i Oslo"
+    Scenario: Opptaksforvalter ved forvaltende organisasjon legger til utdanningstilbud for en annen organisasjon
+      Gitt at opptaksforvalter er ved forvaltende organisasjon
+      Når opptaksforvalter velger å legge til utdanningstilbud fra organisasjonen "Universitetet i Oslo"
       Så legges utdanningstilbudene fra Universitetet i Oslo til i opptaket
 
   Regel: Kun utdanningstilbud fra deltakende organisasjoner kan legges til

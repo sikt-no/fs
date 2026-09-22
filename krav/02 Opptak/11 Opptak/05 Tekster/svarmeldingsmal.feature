@@ -1,19 +1,20 @@
 # language: no
-@OPT-OPT-TEK-002 @won´t @draft
-  ## Denne blir liggene til etter T3 2027, innholdet skal verifiseres og veivalg for den funksjonelle arkitekturen må besluttes
+@OPT-OPT-TEK-002 @wont @draft
+  ## Denne blir liggende til etter T3 2027, innholdet skal verifiseres og veivalg for den funksjonelle arkitekturen må besluttes
 Egenskap: Svarmeldingsmal for opptak
-  Som opptaksforvalter
+  Som opptaksforvalter ved forvaltende organisasjon
   ønsker jeg å aktivere svarmelding med juridisk kjerne
   slik at søkere automatisk varsles når det foreligger et vedtak.
 
+  # I samordna opptak kan kun opptaksforvalter ved forvaltende organisasjon endre svarmeldingsmalen.
   Bakgrunn:
-    Gitt at jeg er innlogget som opptaksforvalter
+    Gitt at opptaksforvalter ved forvaltende organisasjon er innlogget
     Og at opptaket "Samordna opptak 2027" er opprettet
 
-  Regel: Opptaksforvalter kan aktivere svarmelding for opptaket
+  Regel: Opptaksforvalter ved forvaltende organisasjon kan aktivere svarmelding for opptaket
 
     Scenario: Aktivere svarmelding
-      Når jeg aktiverer svarmelding for opptaket
+      Når opptaksforvalter aktiverer svarmelding for opptaket
       Så får søkere automatisk varsel hver gang det foreligger et vedtak til dem i opptaket
 
   Regel: Svarmeldingen har en juridisk kjerne som ikke kan endres
@@ -36,7 +37,7 @@ Egenskap: Svarmeldingsmal for opptak
 
     Scenario: Legge til tilleggsinformasjon i svarmeldingen
       Gitt at svarmelding er aktivert
-      Når jeg legger til tilleggsinformasjon i svarmeldingen
+      Når opptaksforvalter legger til tilleggsinformasjon i svarmeldingen
       Så vises tilleggsinformasjonen etter den juridiske kjernen
       Men tilleggsinformasjonen overskriver ikke kjerneteksten
 
@@ -44,5 +45,5 @@ Egenskap: Svarmeldingsmal for opptak
 
     Scenario: Svarmelding på flere språk
       Gitt at svarmelding er aktivert
-      Når jeg angir tilleggsinformasjon på bokmål, nynorsk, engelsk og samisk
+      Når opptaksforvalter angir tilleggsinformasjon på bokmål, nynorsk, engelsk og samisk
       Så er svarmeldingen tilgjengelig på alle fire språk

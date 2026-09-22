@@ -1,33 +1,33 @@
 # language: no
 @OPT-OPT-SAM-001 @must @draft
 Egenskap: Samordnet opptak
-  Som opptaksforvalter for et samordnet opptak
+  Som opptaksforvalter ved forvaltende organisasjon
   ønsker jeg å invitere læresteder til å delta
   slik at de kan bidra med utdanningstilbud og behandle søknader.
 
   Bakgrunn:
-    Gitt at jeg er innlogget som opptaksforvalter
+    Gitt at opptaksforvalter ved forvaltende organisasjon er innlogget
     Og at opptaket "Samordna opptak 2027" er opprettet som samordnet
 
-  Regel: Opptaksforvalter kan legge til organisasjoner i et samordnet opptak
+  Regel: Opptaksforvalter ved forvaltende organisasjon kan legge til organisasjoner i et samordnet opptak
 
     Scenario: Legge til lærested i samordnet opptak
-      Når jeg legger til organisasjonen "Universitetet i Oslo" som deltaker i opptaket
+      Når opptaksforvalter ved forvaltende organisasjon legger til organisasjonen "Universitetet i Oslo" som deltaker i opptaket
       Så kan opptaksforvalter ved Universitetet i Oslo knytte egne utdanningstilbud til opptaket
       Og Universitetet i Oslo kan få søknader som de har behandlerrolle for
-      Og opptaksforvalter ved Universitetet i Oslo kan vedlilkeholde informasjon på egne utdanningstilbud
-      Og saksbehandlere og opptaksforvaltere kan se informasjon om egne utdanningstilbud
+      Og opptaksforvalter ved Universitetet i Oslo kan vedlikeholde informasjon på egne utdanningstilbud
+      Og saksbehandlere og opptaksforvaltere ved Universitetet i Oslo kan se informasjon om egne utdanningstilbud
 
-  Regel: Det er kun organisasjonen som forvalter opptaket som kan endre innstillinger
+  Regel: Det er kun opptaksforvalter ved forvaltende organisasjon som kan endre innstillinger i opptaket
 
-    Scenario: Opptaksforvalter hos forvalter av opptaket kan endre innstillinger
+    Scenario: Opptaksforvalter ved forvaltende organisasjon kan endre innstillinger
       Gitt at HK-dir har opprettet og dermed er forvalter av opptaket "Samordna opptak 2027"
-      Når en opptaksforvalter ved HK-dir åpner opptaket
+      Når opptaksforvalter ved HK-dir åpner opptaket
       Så kan hen endre innstillinger, frister og regelverk
 
-    Scenario: Deltakende organisasjon kan se, men ikke endre innstillinger
+    Scenario: Opptaksforvalter ved deltakende organisasjon kan se, men ikke endre innstillinger
       Gitt at organisasjonen "Universitetet i Oslo" er lagt til som deltaker
-      Når en opptaksforvalter ved Universitetet i Oslo åpner opptaket
+      Når opptaksforvalter ved Universitetet i Oslo åpner opptaket
       Så kan hen se opptakets innstillinger
       Men hen kan ikke endre frister, regelverk eller andre innstillinger
 
@@ -40,7 +40,7 @@ Egenskap: Samordnet opptak
   Regel: Kun organisasjoner som finnes i utdanningsregisteret kan legges til som deltakere
 
     Scenario: Legge til organisasjon som finnes i utdanningsregisteret
-      Når jeg legger til organisasjonen "Universitetet i Oslo" som deltaker
+      Når opptaksforvalter ved forvaltende organisasjon legger til organisasjonen "Universitetet i Oslo" som deltaker
       Så legges organisasjonen til fordi den finnes i utdanningsregisteret
 
     Scenario: Organisasjon som ikke finnes i utdanningsregisteret kan ikke legges til

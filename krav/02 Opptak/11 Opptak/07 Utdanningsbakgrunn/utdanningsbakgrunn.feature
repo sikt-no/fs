@@ -1,41 +1,42 @@
 # language: no
 @OPT-OPT-UBG-001 @must @draft
 Egenskap: Utdanningsbakgrunn i opptak
-  Som opptaksforvalter
+  Som opptaksforvalter ved forvaltende organisasjon
   ønsker jeg å opprette utdanningsbakgrunner med avvikende frister i opptaket
   slik at søkere med spesielle utdanningsbakgrunner får riktige søknads- og dokumentasjonsfrister.
 
+  # I samordna opptak kan kun opptaksforvalter ved forvaltende organisasjon opprette utdanningsbakgrunner.
   Bakgrunn:
-    Gitt at jeg er innlogget som opptaksforvalter
+    Gitt at opptaksforvalter ved forvaltende organisasjon er innlogget
     Og at opptaket "Samordna opptak 2027" er opprettet
     Og at opptaket tillater avvikende søknadsfrister per utdanningsbakgrunn
 
-  Regel: Opptaksforvalter kan opprette utdanningsbakgrunner i opptaket
+  Regel: Opptaksforvalter ved forvaltende organisasjon kan opprette utdanningsbakgrunner i opptaket
 
     Scenario: Opprette utdanningsbakgrunn med avvikende frister
-      Når jeg oppretter utdanningsbakgrunnen "Realkompetanse" i opptaket
-      Og jeg setter søknadsfrist til "2027-03-01 23:59"
-      Og jeg setter dokumentasjonsfrist til "2027-03-01 23:59"
+      Når opptaksforvalter oppretter utdanningsbakgrunnen "Realkompetanse" i opptaket
+      Og opptaksforvalter setter søknadsfrist til "2027-03-01 23:59"
+      Og opptaksforvalter setter dokumentasjonsfrist til "2027-03-01 23:59"
       Så finnes utdanningsbakgrunnen "Realkompetanse" i opptaket
       Og søkere med denne utdanningsbakgrunnen har egne frister
 
     Scenario: Opprette utdanningsbakgrunn for utenlandsk utdanning
-      Når jeg oppretter utdanningsbakgrunnen "Utenlandsk utdanning" i opptaket
-      Og jeg setter søknadsfrist til "2027-03-01 23:59"
-      Og jeg setter dokumentasjonsfrist til "2027-03-15 23:59"
+      Når opptaksforvalter oppretter utdanningsbakgrunnen "Utenlandsk utdanning" i opptaket
+      Og opptaksforvalter setter søknadsfrist til "2027-03-01 23:59"
+      Og opptaksforvalter setter dokumentasjonsfrist til "2027-03-15 23:59"
       Så finnes utdanningsbakgrunnen "Utenlandsk utdanning" i opptaket
 
     Scenario: Opprette utdanningsbakgrunn for steinerskole
-      Når jeg oppretter utdanningsbakgrunnen "Steinerskole" i opptaket
-      Og jeg setter søknadsfrist til "2027-03-01 23:59"
-      Og jeg setter dokumentasjonsfrist til "2027-03-01 23:59"
+      Når opptaksforvalter oppretter utdanningsbakgrunnen "Steinerskole" i opptaket
+      Og opptaksforvalter setter søknadsfrist til "2027-03-01 23:59"
+      Og opptaksforvalter setter dokumentasjonsfrist til "2027-03-01 23:59"
       Så finnes utdanningsbakgrunnen "Steinerskole" i opptaket
 
-  Regel: Utdanningsbakgrunn er ikke hardkodet — opptaksforvalter kan opprette nye
+  Regel: Utdanningsbakgrunn er ikke hardkodet — opptaksforvalter ved forvaltende organisasjon kan opprette nye
 
     Scenario: Opprette en ny utdanningsbakgrunn
-      Når jeg oppretter en ny utdanningsbakgrunn med navn "23/5-regelen"
-      Og jeg setter søknadsfrist og dokumentasjonsfrist
+      Når opptaksforvalter oppretter en ny utdanningsbakgrunn med navn "23/5-regelen"
+      Og opptaksforvalter setter søknadsfrist og dokumentasjonsfrist
       Så finnes den nye utdanningsbakgrunnen i opptaket
 
   Regel: Søkere med utdanningsbakgrunn som har avvikende frister vurderes etter bakgrunnens frister
