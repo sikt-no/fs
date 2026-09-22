@@ -47,9 +47,12 @@ Egenskap: Innstillinger for opptak
 
     Scenario: Standard poenglikhetsregel med mulighet for unntak per utdanningstilbud
       Når opptaksforvalter setter standard poenglikhetsregel til "loddtrekning"
-      Og opptaksforvalter angir at utdanningstilbud kan velge en annen tilgjengelig regel
+      Og opptaksforvalter angir at utdanningstilbud kan velge blant andre tilgjengelige regler
+        | Poenglikhetsregel                          |
+        | Alle søkere med samme poengsum får tilbud  |
+        | Alder, eldre foran yngre                   |
       Så brukes loddtrekning som default for alle utdanningstilbud i opptaket
-      Men det enkelte utdanningstilbud kan overstyre med en annen tilgjengelig regel
+      Men det enkelte utdanningstilbud kan overstyre med en av de tilgjengelige reglene
 
     Scenario: Standard poenglikhetsregel uten mulighet for unntak
       Når opptaksforvalter kun setter standard poenglikhetsregel til "rangering etter alder"
