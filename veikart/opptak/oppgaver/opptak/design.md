@@ -6,7 +6,7 @@ Opptaksforvalter skal kunne opprette og forvalte opptak med alle innstillinger s
 
 Dokumentet er skrevet for alle som trenger å forstå hva det vil si å opprette et opptak, hvordan samordning fungerer, og hvilke innstillinger som må settes. Funksjonell løsning per oppgave og tekniske detaljer ligger i [oppgave.md](oppgave.md).
 
-**Status:** oppdatert 2026-09-21. Bygger på gjennomgang av databasen i fs-plattform/opptak (PostgreSQL), FS-SIS (Oracle, OPPTAK-tabellen), domenedokumentasjon fra fs.sikt.no, og arkitekturbeslutningen [«Referensiell integritet på tvers av subgrafer»](https://fs.sikt.no/utviklerhandbok/produsent/referensiell-integritet/).
+**Status:** oppdatert 2026-09-22. Bygger på gjennomgang av databasen i fs-plattform/opptak (PostgreSQL), FS-SIS (Oracle, OPPTAK-tabellen), domenedokumentasjon fra fs.sikt.no, arkitekturbeslutningen [«Referensiell integritet på tvers av subgrafer»](https://fs.sikt.no/utviklerhandbok/produsent/referensiell-integritet/), og veiledningen [«Replikering utdanningsregisteret til opptak»](https://fs.sikt.no/utviklerhandbok/produsent/veiledninger/kom-i-gang-med-logisk-replikering/replikering-utdanningsregisteret-til-opptak/).
 
 ---
 
@@ -70,26 +70,26 @@ I begge tilfeller er resultatet et opptak med de samme egenskapene — forskjell
 
 ### Invitere læresteder til samordnet opptak
 
-Når opptakseier velger samordning, skal hen kunne invitere læresteder til å delta. Invitasjonen innebærer at lærestedet kan:
+Kun organisasjoner som finnes i utdanningsregisteret kan legges til som deltakere i et samordnet opptak. Når opptaksforvalter ved forvaltende organisasjon legger til et lærested, innebærer det at lærestedet kan:
 
 - Knytte egne utdanningstilbud til opptaket.
-- Tildele egne saksbehandlere til søknadsbehandling.
-- Se og følge opp søknader til egne utdanningstilbud.
+- Få søknader som de har behandlerrolle for.
+- Vedlikeholde informasjon på egne utdanningstilbud.
+- Se informasjon om egne utdanningstilbud (saksbehandlere og opptaksforvaltere).
 
-Inviterte læresteder kan ikke endre opptakets fellesinnstillinger (frister, regelverk, søkergrupper) — dette eies av opptakseier, men de skal kunne se denne informasjonen.
+Det er kun organisasjonen som forvalter opptaket som kan endre innstillinger — deltakende organisasjoner kan se, men ikke endre frister, regelverk eller andre innstillinger.
 
-**Organisasjoner fra utdanningsregisteret:** Organisasjonsdata eies av utdanningsregisteret (ureg). Opptak abonnerer på organisasjons-entitetstabellen via Postgres logisk replikering — kun primærnøkler. `opptak.opptak_samordna_organisasjon` har fremmednøkkel mot den replikerte tabellen, noe som gir en databasegaranti for at opptak kun kan referere til organisasjoner som faktisk finnes i ureg. Visningsdata (navn, organisasjonskode m.m.) hentes via federation når brukeren trenger dem — opptak lagrer ikke disse feltene. Se [«Referensiell integritet på tvers av subgrafer»](https://fs.sikt.no/utviklerhandbok/produsent/referensiell-integritet/).
+**Organisasjoner fra utdanningsregisteret:** Organisasjonsdata eies av utdanningsregisteret (ureg). Opptak abonnerer på organisasjonstabellen via Postgres logisk replikering. Replikerte kolonner er `organisasjonskode` og `navn_original` fra `organisasjon.organisasjon`, samt campus- og termindata. `opptak.opptak_samordna_organisasjon` har fremmednøkkel mot den replikerte tabellen, noe som gir en databasegaranti for at opptak kun kan referere til organisasjoner som faktisk finnes i ureg. Se [«Referensiell integritet på tvers av subgrafer»](https://fs.sikt.no/utviklerhandbok/produsent/referensiell-integritet/) og [veiledning for replikering fra ureg til opptak](https://fs.sikt.no/utviklerhandbok/produsent/veiledninger/kom-i-gang-med-logisk-replikering/replikering-utdanningsregisteret-til-opptak/).
 
 Samme mønster gjelder for utdanningstilbud — se [utdanningstilbud/design.md](../utdanningstilbud/design.md) beslutning 4.
 
-### Navn og periode
+### Obligatoriske felter ved oppretting
 
 | Egenskap | Beskrivelse | Påkrevd |
 |----------|-------------|---------|
 | **Navn** | Opptakets navn, vises for saksbehandlere og søkere. Flerspråklig (bokmål, nynorsk, engelsk, samisk). | Ja |
-| **Opptaksperiode** | Fra-dato og til-dato som angir når opptaket er aktivt og tilgjengelig for arbeid. | Ja |
-
-Opptaksperioden styrer når opptaket er synlig og tilgjengelig for arbeid — ikke når søkere kan sende inn søknader (det styres av søknadsfristen).
+| **Regelverkssamling** | Regelverket som styrer kompetansekrav, rangering og kvotetyper i opptaket. | Ja |
+| **Opptakstype** | Kategoriserer opptaket (f.eks. UHG, HYU, master, emne/kurs). Fast kodeverk, ikke opprettet av bruker. | Ja |
 
 ### Innstillinger
 
@@ -103,35 +103,39 @@ Utdanningstilbud i opptaket kan kun benytte seg av regelverk og kvotetyper som i
 
 Opptaksforvalter setter standard poenglikhetsregel for opptaket. Denne gjelder for alle utdanningstilbud i opptaket som default. Poenglikhetsreglene som er tilgjengelige er koblet til regelverkssamlingen. Forskriften er ulik mellom opptakstyper:
 
-| Opptakstype | Forskriftsfestet regel | Valgfrihet for lærested |
-|-------------|----------------------|------------------------|
+| Opptakstype                      | Forskriftsfestet regel | Valgfrihet for lærested |
+|----------------------------------|----------------------|------------------------|
 | UHG (universiteter og høgskoler) | Loddtrekning (fra 2027) | Kan velge «alle med lik sum får tilbud» per utdanningstilbud |
-| Fagskole (HYU) | Rangering etter alder | Ingen (forskriftsfestet) |
-| Ledige studieplasser | Tidspunkt for levert søknad | — |
+| Fagskole (HYU)                   | Rangering etter alder | Ingen (forskriftsfestet) |
+| Ledige studieplasser (rundetype) | Tidspunkt for levert søknad | — |
 
-Poenglikhetsregelen er flyttet fra rangeringsregelverket til opptaket fordi den gjelder per opptak, ikke per regelverk.
+Poenglikhetsregelen er flyttet fra rangeringsregelverket til opptaket fordi den gjelder per opptak, ikke per regelverk. Opptaksforvalter kan angi om utdanningstilbud kan velge en annen tilgjengelig regel (UHG) eller om standarden er låst (HYU).
 
 #### Tidlig opptak
 
 Opptaksforvalter velger om opptaket skal støtte tidlig opptak. Når dette er aktivert, kan søkere som oppfyller visse kriterier få svar før hovedfristen. Tidlig opptak krever en egen frist (se frister nedenfor).
 
-#### Søkergrupper
+#### Utdanningsbakgrunn
 
-Opptaksforvalter bestemmer hvilke søkergrupper som kan søke på opptaket. Søkergruppene angir hvem som ser opptaket og kan sende inn søknad:
+Opptaksforvalter kan opprette utdanningsbakgrunner med avvikende frister i opptaket. Utdanningsbakgrunner er ikke hardkodet — opptaksforvalter kan opprette nye etter behov. Eksempler: realkompetanse, utenlandsk utdanning, steinerskole.
 
-| Søkergruppe                            | Beskrivelse                                                         |
-|----------------------------------------|---------------------------------------------------------------------|
-| Alle (hele verden)                     | Ingen begrensning på hvem som kan søke                              |
-| EU/EØS-borgere                         | Begrenset til borgere fra EU/EØS-land                               |
-| Nordiske borgere                       | Begrenset til borgere fra nordiske land                             |
-| Personer med norsk fødselsnummer       | Begrenset til personer registrert med norsk fødselsnummer           |
-| Kun inviterte søkere                   | Opptaket krever invitasjon — søkere må være nominert eller invitert |
-| Egne studenter                         | Kun studenter med studierett ved lærestedet                         |
-| Realkompetansesøkere                   | Søkere som søker med realkompetanse                                 |
-| Søkere med særskilt vurderingsgrunnlag | Søkere som trenger særskilt vurdering for opptak                    |
+Per utdanningsbakgrunn kan man sette avvikende søknads- og dokumentasjonsfrister. Søkere med en utdanningsbakgrunn som har avvikende frister vurderes etter bakgrunnens frister. Utdanningsbakgrunner uten avvikende frister (f.eks. norsk videregående skole) trenger ikke registreres — de følger opptakets generelle frister.
 
-Flere søkergrupper kan kombineres. Valget styrer synlighet for søkere og tilgjengelige søknadsskjemafelt. ()
-Siden de samordna opptakene er åpne for alle søkergrupper, så er det ikke prioritert å løse begrensninger av søkergrupper før 2027.
+Opptaksforvalter må angi i innstillingene om det er lov å sette avvikende søknadsfrister per utdanningsbakgrunn. Se krav [OPT-OPT-UBG-001](https://github.com/sikt-no/fs/blob/main/krav/02%20Opptak/11%20Opptak/07%20Utdanningsbakgrunn/utdanningsbakgrunn.feature).
+
+#### Ledige studieplasser
+
+Opptaksforvalter kan angi om opptaket tilbyr søknad på ledige studieplasser. Når dette er aktivert, kan restplasser legges ut til søkere for ny søknad etter ordinær plasstildeling. Informasjonsdatoer for når restplasser legges ut og når ledige studieplasser kan søkes settes under frister.
+
+#### Avvikende søknadsfrister
+
+Opptaksforvalter kan angi om det er lov å sette avvikende søknadsfrister per utdanningstilbud og per utdanningsbakgrunn. Når dette er aktivert:
+- Opptaksforvalter ved deltakende organisasjon kan sette egne søknadsfrister på sine utdanningstilbud.
+- Opptaksforvalter kan opprette utdanningsbakgrunner med egne søknads- og dokumentasjonsfrister.
+
+#### Studierettskrav
+
+Opptaksforvalter kan angi om det kreves studierett for å søke. Ikke relevant for samordna opptak.
 
 #### Dokumentasjonsopplasting
 
@@ -153,21 +157,32 @@ I ny løsning er søknadsnummereringen unik per opptak for å hindre at det blir
 
 Opptaksforvalter setter hvor mange søknadsalternativer (studieønsker) en søker kan prioritere i søknaden sin. Default er 10, men dette kan justeres per opptak.
 
-### Frister og tidsperioder
+#### Tak for antall tilbud per tildelingsrunde
 
-Frister styrer tidsrammene for opptaket. Alle frister angis som dato (og eventuelt klokkeslett). Noen frister gjelder hele opptaket, andre kan potensielt overstyres per utdanningstilbud (se beslutning 3).
+Opptaksforvalter kan sette et tak for hvor mange tilbud som kan gis i en enkelt tildelingsrunde.
 
-| Frist | Beskrivelse | Nivå |
-|-------|-------------|------|
-| **Søknadsperiode** | Perioden opptaket er åpent for søknader — fra-dato (når søkere kan begynne å søke) og til-dato (siste tidspunkt for å sende inn søknad). Enkelte utdanningstilbud kan ha en tidligere til-dato enn opptakets generelle frist, f.eks. utdanninger som krever opptaksprøver (Politihøyskolen). | Opptak (til-dato kan overstyres per utdanningstilbud) |
-| **Ettersendingsfrist** | Siste tidspunkt søker kan ettersende dokumentasjon. Dokumentasjon mottatt etter fristen er ikke garantert hensyntatt. | Opptak (kan overstyres per utdanningstilbud) |
-| **Omprioriteringsfrist** | Siste tidspunkt søker kan endre prioritering av søknadsalternativer. Hvis ikke satt, brukes søknadsfristen. | Opptak |
-| **Frist for tidlig opptak** | Siste tidspunkt søker kan søke om tidlig opptak. Kun relevant når tidlig opptak er aktivert. | Opptak |
-| **Frist for realkompetansesøknad** | Siste tidspunkt for å søke med realkompetanse. Kan ha tidligere frist enn ordinær søknadsfrist fordi realkompetansevurdering krever mer saksbehandlingstid. | Opptak |
-| **Svarfrist** | Frist for søker til å svare på tilbud om plass eller venteliste. Når svarfrist utløper uten svar, mister søker tilbudet. Settes per opptaksrunde. | Opptaksrunde |
-| **Frist for endring av svar** | Siste tidspunkt søker kan endre et allerede avgitt svar. | Opptak |
-| **Trekkfrist for utdanningstilbud** | Siste tidspunkt et lærested kan trekke et utdanningstilbud fra opptaket. Settes av opptakseier (f.eks. HK-dir). | Opptak |
-| **Publiseringstidspunkt for tilbud** | Dato og klokkeslett når resultat fra plasstildeling gjøres synlig for søkere. Settes per opptaksrunde. | Opptaksrunde |
+### Frister og hendelser
+
+Frister styrer tidsrammene for opptaket. Alle frister angis som dato (og eventuelt klokkeslett). Generelle frister gjelder for alle utdanningstilbud og alle søkere, med mindre det er satt avvikende frister på utdanningstilbud eller utdanningsbakgrunn.
+
+| Kategori | Frist | Beskrivelse | Nivå |
+|----------|-------|-------------|------|
+| **Redigering** | Åpne for redigering av utdanningstilbud | Dato for når deltakende organisasjoner kan knytte, redigere og trekke utdanningstilbud | Opptak |
+| **Redigering** | Stenge for redigering av utdanningstilbud | Etter denne datoen kan deltakende organisasjoner ikke lenger redigere, knytte eller trekke utdanningstilbud. Unntak: antall studieplasser kan redigeres fram til første plasstildelingsrunde. Kun forvalter kan trekke etter stengingsdato. | Opptak |
+| **Søknad** | Søknadsdato åpner | Når utdanningstilbud blir tilgjengelige for søkere | Opptak |
+| **Søknad** | Generell søknadsfrist | Gjelder for alle utdanningstilbud og søkere, med mindre unntaksfrist er satt per utdanningstilbud eller utdanningsbakgrunn | Opptak |
+| **Søknad** | Omprioriteringsfrist | Siste tidspunkt søker kan endre prioritering av søknadsalternativer | Opptak |
+| **Dokumentasjon** | Ordinær dokumentasjonsfrist | Frist for å laste opp dokumentasjon | Opptak |
+| **Dokumentasjon** | Tidlig dokumentasjonsfrist | Gjelder for søkere med tidlig søknadsfrist | Opptak |
+| **Dokumentasjon** | Ettersendingsfrist | Siste tidspunkt for ettersending. Dokumentasjon mottatt etter fristen er ikke garantert hensyntatt. | Opptak |
+| **Ledige studieplasser** | Informasjonsfrist | Når søkere informeres om at restplasser legges ut | Opptak |
+| **Ledige studieplasser** | Åpner for søkning | Når søkere kan søke på ledige studieplasser | Opptak |
+| **Resultat** | Forventet svardato | Informasjonsdato — når søker kan forvente svar | Opptak |
+| **Resultat** | Første svarfrist | Informasjonsdato — når søker senest må svare. Faktisk svarfrist settes per plasstildelingsrunde. | Opptak |
+| **Trekkfrist** | Trekkfrist for utdanningstilbud | Etter denne datoen kan kun forvalter trekke utdanningstilbud. Åpent spørsmål: hard sperre eller informasjonsfrist? | Opptak |
+| **Avslutte** | Avslutte opptak | Opptaket stenges for alle endringer og behandling | Opptak |
+
+Avvikende frister per utdanningstilbud og utdanningsbakgrunn settes kun når innstillingen for avvikende søknadsfrister er aktivert.
 
 #### Interne saksbehandlingsfrister
 
@@ -184,16 +199,15 @@ I fs-plattform/opptak er dette modellert via opptakshendelser (`opptak.opptakshe
 
 ### Fellestekster
 
-Fellestekster er tekster som vises til søkere i forbindelse med opptaket. Alle tekster lagres på flere språk (bokmål, nynorsk, engelsk — og samisk der det er relevant).
+Fellestekster er tekster som vises til søkere i forbindelse med opptaket. Alle tekster lagres på flere språk (bokmål, nynorsk, engelsk og samisk).
 
-| Tekst | Beskrivelse | Når vises den |
-|-------|-------------|---------------|
-| **Introtekst** | Innledende informasjon om opptaket som vises på opptakets søknadsside. Typisk: hva opptaket gjelder, viktige datoer, lenker til mer informasjon. | Når søker åpner opptaket for å søke |
-| **Beskrivelse** | Utfyllende beskrivelse av opptaket. | I opptaksoversikten og søknadsskjema |
-| **Kvitteringstekst** | Tekst som vises etter at søker har sendt inn søknad. Typisk: bekreftelse på mottak, informasjon om videre prosess, kontaktinformasjon. | Etter innsending av søknad |
-| **Kvitteringstekst etter avsluttet søknadsperiode** | Tekst som vises hvis søker forsøker å nå opptaket etter at søknadsfristen er utløpt. | Etter søknadsfristens utløp |
-
-I FS-SIS er disse modellert som `INTROTEKST`, `BESKRIVELSE`, `TEKST_KVITTERING` og `TEKST_KVITTERING_AVSL` med suffiks for språk (`_NYNORSK`, `_ENGELSK`).
+| Tekst | Beskrivelse |
+|-------|-------------|
+| **Prioritering av søknadsalternativer** | Informasjon om hvordan søker prioriterer og hva det betyr |
+| **Utdanningsbakgrunn** | Informasjon om hva utdanningsbakgrunn innebærer |
+| **Påkrevd dokumentasjon** | Informasjon om hva søker må laste opp |
+| **Oppsummeringstekst** | Oppsummering av søknaden for søker |
+| **Kvitteringstekst** | Vises etter at søker har sendt inn søknad |
 
 ### Svarmeldingsmal
 
@@ -271,7 +285,7 @@ Detaljert design for utdanningstilbud — inkludert konfigurasjon av kapasitet, 
 | Plasstildelingsrunder med svarfrist               | Finnes, men må justeres mht rundetyper med ulik logikk | `opptak.opptaksrunde` |
 | Utdanningstilbud                                  | Finnes (v1 + v2)                                       | `opptak.utdanningstilbud_v2` |
 | Dokumenttyper                                     | Finnes, knyttet til opptakstype                        | `opptak.opptakstype_dokumenttype` |
-| Tidlig behandling og tilbud med begrunnelsestyper | Finnes                                                 | `opptak.tidligopptak_begrunnelsetype` |
+| Tidlig opptak med begrunnelsestyper               | Finnes                                                 | `opptak.tidligopptak_begrunnelsetype` |
 | Opptakshendelser                                  | Finnes                                                 | `opptak.opptakshendelse` |
 
 ### Hva gjenstår
@@ -295,18 +309,18 @@ Detaljert design for utdanningstilbud — inkludert konfigurasjon av kapasitet, 
 
 ### Må avklares før publisering
 
-1. **Validering ved publisering: hva skal kreves?** Forslag: et opptak må ha navn, opptaksperiode, minst ett utdanningstilbud og søknadsfrist for å kunne publiseres. Andre krav?
-
-2. **Fellestekster: er fire teksttyper tilstrekkelig?** FS-SIS har fire (intro, beskrivelse, kvittering, kvittering-avsluttet). Er det behov for flere i ny løsning, f.eks. tekst for venteliste, tekst for avslag, eller tekst for tidlig opptak?
+1. **Validering ved publisering: hva skal kreves?** Forslag: et opptak må ha navn, minst ett utdanningstilbud og søknadsfrist for å kunne publiseres. Andre krav?
 
 ### Kan ligge til senere
 
-3. **Skal søkergrupper modelleres som flervalg eller som én forhåndsdefinert profil?** I FS-dokumentasjonen beskrives søkergrupper som diskrete grupper (nordisk, EU/EØS, hele verden). I ny løsning kan det være enklere med en kombinasjon av egenskaper (geografi + studentstatus + invitasjon). Ikke nødvendig nå, fordi alle skal kunne søke i samordna opptak.
+2. **Hva skjer med løpende opptak?** Opptak uten fast sluttdato (søknader behandles fortløpende) er relevant for emneopptak og kurs, men er utsatt (se beslutning 4).
 
-4. **Hva skjer med løpende opptak?** Opptak uten fast sluttdato (søknader behandles fortløpende) er relevant for emneopptak og kurs, men er utsatt (se beslutning 4). Skal opptaksperioden likevel støtte «ingen til-dato»?
+3. **Kopiering: hva kopieres og hva kopieres ikke?** Forslag: innstillinger, frister og fellestekster kopieres. Utdanningstilbud, inviterte læresteder og opptaksrunder kopieres ikke.
 
-5. **Kopiering: hva kopieres og hva kopieres ikke?** Forslag: innstillinger, frister og fellestekster kopieres. Utdanningstilbud, inviterte læresteder og opptaksrunder kopieres ikke.
+4. **Trekkfrist for utdanningstilbud: hard sperre eller informasjonsfrist?** I dag kan læresteder trekke egne utdanningstilbud fram til en satt dato. Etter denne datoen kan kun forvalter trekke. Skal vi videreføre denne begrensningen, eller bør det være en forvaltningsfrist uten faktisk stengeeffekt?
 
 ### Avklart
 
-- ~~**Skal frister ha klokkeslett?**~~ Ja. Frister i fs-plattform/opptak lagres som full timestamp med tidssone (f.eks. `SØKNADSFRIST_ORDINÆR`, `SØKNADSFRIST_TIDLIG_OPPTAK`). Klokkeslett er eksplisitt.
+- ~~**Skal frister ha klokkeslett?**~~ Ja. Frister i fs-plattform/opptak lagres som full timestamp med tidssone. Klokkeslett er eksplisitt.
+- ~~**Fellestekster: er fire teksttyper tilstrekkelig?**~~ Nei. Nye teksttyper: prioritering, utdanningsbakgrunn, dokumentasjon, oppsummering, kvittering.
+- ~~**Søkergrupper**~~ Erstattet av utdanningsbakgrunn. Alle kan søke i samordna opptak — begrensning på søkergrupper er ikke nødvendig. Utdanningsbakgrunn styrer avvikende frister, ikke hvem som kan søke.
