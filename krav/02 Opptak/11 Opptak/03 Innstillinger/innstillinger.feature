@@ -52,8 +52,7 @@ Egenskap: Innstillinger for opptak
       Men det enkelte utdanningstilbud kan overstyre med en annen tilgjengelig regel
 
     Scenario: Standard poenglikhetsregel uten mulighet for unntak
-      Når opptaksforvalter setter standard poenglikhetsregel til "rangering etter alder"
-      Og opptaksforvalter angir at utdanningstilbud ikke kan velge en annen regel
+      Når opptaksforvalter kun setter standard poenglikhetsregel til "rangering etter alder"
       Så brukes rangering etter alder for alle utdanningstilbud i opptaket
       Og det er ikke mulig å overstyre regelen per utdanningstilbud
 
