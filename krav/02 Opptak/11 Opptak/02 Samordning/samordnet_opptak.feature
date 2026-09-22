@@ -37,6 +37,16 @@ Egenskap: Samordnet opptak
       Gitt at opptaket "Lokalt opptak høst 2027" er opprettet som lokalt
       Så er det ikke mulig å legge til andre organisasjoner som deltakere
 
+  Regel: Kun organisasjoner som finnes i utdanningsregisteret kan legges til som deltakere
+
+    Scenario: Legge til organisasjon som finnes i utdanningsregisteret
+      Når jeg legger til organisasjonen "Universitetet i Oslo" som deltaker
+      Så legges organisasjonen til fordi den finnes i utdanningsregisteret
+
+    Scenario: Organisasjon som ikke finnes i utdanningsregisteret kan ikke legges til
+      Gitt at organisasjonen "Ukjent organisasjon" ikke finnes i utdanningsregisteret
+      Så kan den ikke legges til som deltaker i opptaket
+
   Regel: Kun organisasjoner som deltar i opptaket kan legge til utdanningstilbud
 
     Scenario: Organisasjon som ikke deltar kan ikke legge til utdanningstilbud

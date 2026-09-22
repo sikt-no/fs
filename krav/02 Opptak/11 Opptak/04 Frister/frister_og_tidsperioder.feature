@@ -21,10 +21,12 @@ Egenskap: Frister og hendelser for opptak
       Og deltakende organisasjoner kan trekke sine utdanningstilbud fra opptak
 
     Scenario: Opptaksforvalter må kunne stenge for tilknytning og redigering av utdanningstilbud
-      Når jeg setter at redigering av utdanningstilbud stenger "2027-06-06"
+      Når opptaksforvalter setter at redigering av utdanningstilbud stenger "2027-06-06"
       Så kan deltakende organisasjoner ikke lenger redigere sine utdanningstilbud
-      Og ved deltakende organisasjoner kan ikke lenger knytte sine utdanningstilbud til opptak
-      Og oved deltakende organisasjoner kan ikke lenger trekke sine utdanningstilbud fra opptak
+      Og deltakende organisasjoner kan ikke lenger knytte sine utdanningstilbud til opptaket
+      Og deltakende organisasjoner kan ikke lenger trekke sine utdanningstilbud fra opptaket
+      Men antall studieplasser kan fortsatt redigeres fram til første plasstildelingsrunde kjøres
+      Og kun opptaksforvalter ved forvaltende organisasjon kan trekke utdanningstilbud etter stengingsdato
 
   Regel: Opptaksforvalter må kunne åpne for søkning
 

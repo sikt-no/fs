@@ -6,7 +6,7 @@ description: >
   "skrive en feature", eller "lage et nytt scenario" for én konkret funksjonalitet.
   Fokuserer på gjenbruk av eksisterende steps, god Gherkin-stil (bddpanda-prinsipper)
   og korrekt plassering i `krav/`-strukturen.
-  Ikke bruk for initiativ-nivå kravarbeid med flere features, systemkrav-dokument
+  Ikke bruk for initiativ-nivå kravarbeid med flere features
   eller brukerhistorier på tvers av kapabiliteter — bruk `bat-krav` til det.
 ---
 

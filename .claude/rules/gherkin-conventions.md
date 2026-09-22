@@ -137,31 +137,9 @@ Scenario: ...
 
 - administrator, søker, student, saksbehandler
 
-## Systemkravsider (systemkrav.md)
-
-Hver kapabilitet i en systemkravside skal ha en Feature-ID som er en klikkbar lenke til den korresponderende `.feature`-filen. Lenken skal bruke relativ sti fra systemkrav.md.
-
-```markdown
-**Feature-ID:** [`ORG-ADM-OPP-001`](11%20Administrere%20organisasjon/01%20Organisasjon/opprette_organisasjon.feature) | **GitHub:** #XXX
-```
-
-Mellomrom i mappesti kodes som `%20`. Norske tegn kodes: `å` = `%C3%A5`, `ø` = `%C3%B8`, `æ` = `%C3%A6`.
-
-### Hold systemkrav.md i synk med .feature-filer
-
-Når du endrer en `.feature`-fil, sjekk om det finnes en `systemkrav.md` på samme nivå (eller på et overordnet nivå i samme domene/sub-domene) som refererer til featuren. Oppdater den ved behov i samme endring. Typiske triggere:
-
-- **Feature-ID endres, flyttes eller fjernes** → oppdater lenken (eller fjern raden).
-- **Ny feature legges til** under en kapabilitet som er beskrevet i systemkrav.md → legg til ny rad med Feature-ID og GitHub-lenke.
-- **Tittel/scope på `Egenskap:` endres** vesentlig slik at beskrivelsen i systemkrav.md ikke lenger stemmer → oppdater teksten.
-- **GitHub-issue endres** (nytt issue, lukket, splittet) → oppdater `#XXX`-referansen.
-- **Mappestruktur endres** (kapabilitet flyttes) → oppdater relativ sti i lenken.
-
-Endringer i ren formulering inne i scenarioer, eller tags som `@implemented`/`@in-progress`, trenger normalt ikke føre til oppdatering av systemkrav.md.
-
 ## Terminologi
 
-Disse reglene gjelder for alle kravfiler (`.feature` og `systemkrav.md`).
+Disse reglene gjelder for alle kravfiler (`.feature`).
 Ved tvetydige ord **skal du spørre** brukeren om hva de mener før du skriver eller godkjenner teksten.
 
 ### Ord som krever avklaring
