@@ -13,18 +13,19 @@ Egenskap: Samordnet opptak
 
     Scenario: Legge til lærested i samordnet opptak
       Når jeg legger til organisasjonen "Universitetet i Oslo" som deltaker i opptaket
-      Så kan Universitetet i Oslo knytte egne utdanningstilbud til opptaket
+      Så kan opptaksforvalter ved Universitetet i Oslo knytte egne utdanningstilbud til opptaket
       Og Universitetet i Oslo kan få søknader som de har behandlerrolle for
-      Og Universitetet i Oslo kan se og følge opp egne utdanningstilbud
+      Og opptaksforvalter ved Universitetet i Oslo kan vedlilkeholde informasjon på egne utdanningstilbud
+      Og saksbehandlere og opptaksforvaltere kan se informasjon om egne utdanningstilbud
 
   Regel: Det er kun organisasjonen som forvalter opptaket som kan endre innstillinger
 
-    Scenario: Opptaksforvalter hos opptakseier kan endre innstillinger
-      Gitt at HK-dir har opprettet og forvalter opptaket "Samordna opptak 2027"
+    Scenario: Opptaksforvalter hos forvalter av opptaket kan endre innstillinger
+      Gitt at HK-dir har opprettet og dermed er forvalter av opptaket "Samordna opptak 2027"
       Når en opptaksforvalter ved HK-dir åpner opptaket
       Så kan hen endre innstillinger, frister og regelverk
 
-    Scenario: Deltakende organisasjon kan se men ikke endre innstillinger
+    Scenario: Deltakende organisasjon kan se, men ikke endre innstillinger
       Gitt at organisasjonen "Universitetet i Oslo" er lagt til som deltaker
       Når en opptaksforvalter ved Universitetet i Oslo åpner opptaket
       Så kan hen se opptakets innstillinger

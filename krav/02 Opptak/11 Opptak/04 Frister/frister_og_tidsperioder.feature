@@ -1,6 +1,6 @@
 # language: no
 @OPT-OPT-FRI-001 @must @draft
-Egenskap: Frister og tidsperioder for opptak
+Egenskap: Frister og hendelser for opptak
   Som opptaksforvalter
   ønsker jeg å sette frister som styrer tidsrammene for opptaket
   slik at søkere, saksbehandlere og læresteder vet hva som gjelder når.
@@ -12,11 +12,19 @@ Egenskap: Frister og tidsperioder for opptak
     Gitt at jeg er innlogget som opptaksforvalter
     Og at opptaket "Samordna opptak 2027" er opprettet
 
-  Regel: Opptaksforvalter må kunne åpne og stenge for redigering av utdanningstilbud
+  Regel: Opptaksforvalter ved forvaltende organisasjon må kunne åpne og stenge for redigering av utdanningstilbud
 
-    Scenario: Sette periode for redigering av utdanningstilbud
-      Når jeg setter at redigering av utdanningstilbud åpner "2026-10-01" og stenger "2027-06-06"
-      Så kan deltakende organisasjoner redigere sine utdanningstilbud i denne perioden
+    Scenario: Opptaksforvalter må kunne åpne for tilknytning og redigering av utdanningstilbud
+      Når jeg setter at redigering av utdanningstilbud åpner "2026-10-01"
+      Så kan deltakende organisasjoner redigere sine utdanningstilbud
+      Og deltakende organisasjoner kan knytte sine utdanningstilbud til opptak
+      Og deltakende organisasjoner kan trekke sine utdanningstilbud fra opptak
+
+    Scenario: Opptaksforvalter må kunne stenge for tilknytning og redigering av utdanningstilbud
+      Når jeg setter at redigering av utdanningstilbud stenger "2027-06-06"
+      Så kan deltakende organisasjoner ikke lenger redigere sine utdanningstilbud
+      Og ved deltakende organisasjoner kan ikke lenger knytte sine utdanningstilbud til opptak
+      Og oved deltakende organisasjoner kan ikke lenger trekke sine utdanningstilbud fra opptak
 
   Regel: Opptaksforvalter må kunne åpne for søkning
 
@@ -56,14 +64,14 @@ Egenskap: Frister og tidsperioder for opptak
     Scenario: Sette informasjonsfrist for ledige studieplasser
       Gitt at opptaket tilbyr søknad på ledige studieplasser
       Når jeg setter informasjonsfrist for ledige studieplasser til "2027-07-20"
-      Så kan søkere se når restplasser legges ut i Min kompetanse
+      Så kan søkere se når restplasser legges ut
 
     Scenario: Sette dato for når ledige studieplasser kan søkes
       Gitt at opptaket tilbyr søknad på ledige studieplasser
       Når jeg setter at ledige studieplasser kan søkes fra "2027-07-25"
       Så kan søkere søke på ledige studieplasser fra denne datoen
 
-  Regel: Opptaksforvalter må kunne sette informasjonsdatoer for resultat
+  Regel: Opptaksforvalter må kunne sette informasjonsdatoer for opptaksresultat
 
     Scenario: Sette dato for når søker kan forvente svar
       Når jeg setter dato for når søker kan forvente svar til "2027-07-15"

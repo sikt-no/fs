@@ -30,32 +30,33 @@ Egenskap: Innstillinger for opptak
 
     Scenario: Sette NKR-nivåer for UHG-opptak
       Når jeg setter at opptaket kun skal ha studieprogram
-      Og jeg setter at NKR-nivåene bachelor, årsenheter og 5-6-årige integrerte master og profesjonsstudier er tillatt
+      Og jeg setter at NKR-nivåene 6.1 Høgskolekandidat, 6.2 Bachelor, 7 Master
       Så er det kun studieprogram på disse nivåene som kan legges til som utdanningstilbud i opptaket
 
     Scenario: Sette NKR-nivåer for HYU-opptak
       Når jeg setter at opptaket kun skal ha studieprogram
-      Og jeg setter at NKR-nivået for 1-2-årige fagskoleutdanninger er tillatt
+      Og jeg setter at NKR-nivåene 5.1 fagskole og 5.2 fagskole
       Så er det kun fagskoleutdanninger av typen studieprogram som kan legges til som utdanningstilbud
 
     Scenario: Utdanninger utenfor kriteriene er ikke tilgjengelige
-      Gitt at opptaket kun tillater studieprogram på bachelornivå
+      Gitt at opptaket kun tillater studieprogram på 6.2 bachelornivå
       Så dukker ikke emner opp som mulige utdanningstilbud
-      Og studieprogram på masternivå dukker ikke opp som mulige utdanningstilbud
+      Og studieprogram på 7 masternivå dukker ikke opp som mulige utdanningstilbud
 
   Regel: Opptaksforvalter setter standard poenglikhetsregel for opptaket
 
     Scenario: Sette standard poenglikhetsregel
       Når jeg setter standard poenglikhetsregel til "loddtrekning"
       Så brukes loddtrekning i rangeringen av søkere med lik poengsum
-      Og regelen gjelder for alle utdanningstilbud i opptaket som default
+      Og regelen gjelder for alle utdanningstilbud i opptaket med mindre det enkelte utdanningstilbud har eksplisitt satt annen tilgjengelig regel
 
-  Regel: Opptaksforvalter kan sette startnummer for søknadsnummerserien
+  Regel: Opptaksforvalter kan sette startnummer for søknadsserien
 
-    Scenario: Sette nummerserie for opptak
-      Når jeg setter søknadsnummerserie med startnummer 100000
-      Så får søknader i opptaket løpende nummer fra 100000
-      Og søknadsnumrene er unike for dette opptaket
+    Scenario: Sette startnummer for opptak
+      Når jeg setter søknadsnummer med startnummer 1001 for opptaket "UHG 2027"
+      Så får søknader i opptaket løpende nummer fra 1001
+      Og søknadsnummeret får navnet til opptaket "UHG 2027" som tillegg i søknadsnummeret som ikke er synlig for søker eller saksbehandler
+      Og søknadsnumrene er dermed unike for dette opptaket, selv om det ikke ser slik ut for søker eller saksbehandler
 
   Regel: Opptaksforvalter kan sette tak for antall søknadsalternativer
 
@@ -79,7 +80,7 @@ Egenskap: Innstillinger for opptak
 
     Scenario: Aktivere ledige studieplasser
       Når jeg angir at opptaket tilbyr søknad på ledige studieplasser
-      Så kan restplasser legges ut til søkere etter ordinær plasstildeling
+      Så kan restplasser legges ut til søkere for ny søknad etter ordinær plasstildeling
 
   Regel: Opptaksforvalter kan angi om det er lov å sette avvikende søknadsfrister
 
@@ -91,7 +92,6 @@ Egenskap: Innstillinger for opptak
       Når jeg angir at det er lov å sette avvikende søknadsfrister per utdanningsbakgrunn
       Så kan opptaksforvalter opprette utdanningsbakgrunner med egne søknads- og dokumentasjonsfrister
 
-  @wont
   # Ikke viktig for samordna opptak 2027
   Regel: Opptaksforvalter kan styre om søkere kan laste opp dokumentasjon
 
