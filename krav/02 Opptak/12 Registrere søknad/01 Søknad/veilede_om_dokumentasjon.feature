@@ -40,13 +40,15 @@ Egenskap: Veilede søker om hvilken dokumentasjon som skal lastes opp
         | Politiattest                    |
         | Annen dokumentasjon             |
 
-  Regel: Dokumentasjon som hentes fra autoritative kilder skal ikke lastes opp
+  Regel: Personopplysninger fra autoritative kilder skal ikke dokumenteres
 
-    Scenario: Søker slipper å laste opp norsk vitnemål
-      Gitt vitnemålet mitt er tilgjengelig fra Nasjonal vitnemålsdatabase
-      Når jeg skal laste opp dokumentasjon på søknaden
-      Så ser jeg at vitnemålet mitt allerede er hentet inn
-      Og jeg blir ikke bedt om å laste det opp
+    # Resultater søkeren allerede har registrert — fra videregående skole og
+    # fra høyere utdanning — eies av @OPT-SØK-SØK-004
+    # (se_digitale_resultater_i_søknad.feature, #604). Snittet mellom kravene:
+    # dette kravet dekker hva søkeren må laste opp, #604 dekker hva søkeren
+    # slipper å laste opp.
+    # TODO: Personopplysninger fra folkeregisteret er en annen datakilde enn
+    # resultatene i #604 og bør på sikt skilles ut som eget krav.
 
     Scenario: Søker slipper å dokumentere personopplysninger
       Gitt personopplysningene mine er hentet fra folkeregisteret
