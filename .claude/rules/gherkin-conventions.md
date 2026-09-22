@@ -106,8 +106,14 @@ Sier noe om selve **kravteksten** — er den ferdig skrevet, avklart og klar til
 Sier noe om **koden** — er funksjonaliteten bygget?
 
 - `@implemented` - Ferdig implementert
-- `@in-progress` - Under implementering
-- `@planned` - Planlagt for implementasjon (kravet er klart, men ikke kodet enda)
+- `@in-progress` - Under arbeid. Kravet er plukket inn i en aktiv flyt (settes av `bat-specify` / `bat-specify-delta` når de henter kravet inn i en spec), og er ikke ferdig implementert enda
+- `@planned` - Planlagt for implementasjon (kravet er klart, men ingen har begynt på det)
+
+Implementasjonsstatusen beveger seg langs én akse, og hvert steg har én eier:
+
+`@draft` →(`bat-krav`)→ `@planned` →(`bat-specify` / `bat-specify-delta`)→ `@in-progress` →(`bat-verify`)→ `@implemented`
+
+Et krav skal ha nøyaktig én av disse på `Egenskap:`-tag-linja. Ikke sett to samtidig, og ikke la et krav stå uten status.
 
 ### Type
 - `@e2e` - End-to-end brukerreiser
