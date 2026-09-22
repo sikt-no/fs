@@ -56,7 +56,7 @@ Egenskap: Innstillinger for opptak
       Så brukes rangering etter alder for alle utdanningstilbud i opptaket
       Og det er ikke mulig å overstyre regelen per utdanningstilbud
 
-  Regel: Opptaksforvalter kan sette startnummer for søknadsserien
+  Regel: Opptaksforvalter kan sette startnummer for søknadene
 
     Scenario: Sette startnummer for opptak
       Når opptaksforvalter setter søknadsnummer med startnummer 1001 for opptaket "UHG 2027"

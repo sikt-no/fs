@@ -1,5 +1,6 @@
 # language: no
-@OPT-OPT-TEK-002 @should @draft
+@OPT-OPT-TEK-002 @won´t @draft
+  ## Denne blir liggene til etter T3 2027, innholdet skal verifiseres og veivalg for den funksjonelle arkitekturen må besluttes
 Egenskap: Svarmeldingsmal for opptak
   Som opptaksforvalter
   ønsker jeg å aktivere svarmelding med juridisk kjerne
