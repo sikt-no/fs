@@ -46,6 +46,12 @@ Egenskap: Frister og hendelser for opptak
       Når jeg setter omprioriteringsfrist til "2027-04-15 23:59"
       Så kan søkere endre prioritering av søknadsalternativer fram til denne fristen
 
+  Regel: Opptaksforvalter må kunne sette frist for sletting av søknadsalternativer
+
+    Scenario: Sette frist for sletting av søknadsalternativer
+      Når jeg setter frist for sletting av søknadsalternativer til "2027-04-15 23:59"
+      Så kan søkere slette søknadsalternativer fra søknaden sin fram til denne fristen
+
   Regel: Opptaksforvalter må kunne sette dokumentasjonsfrister
 
     Scenario: Sette ordinær dokumentasjonsfrist
@@ -73,6 +79,27 @@ Egenskap: Frister og hendelser for opptak
       Når jeg setter at ledige studieplasser kan søkes fra "2027-07-25"
       Så kan søkere søke på ledige studieplasser fra denne datoen
 
+    Scenario: Sette dato for når ledige studieplasser stenger for søkning
+      Gitt at opptaket tilbyr søknad på ledige studieplasser
+      Når jeg setter at ledige studieplasser stenger for søkning "2027-09-01"
+      Så kan søkere ikke lenger søke på ledige studieplasser etter denne datoen
+
+  @openquestion
+  # ÅPNE SPØRSMÅL:
+  # - Er frister for tidlig opptak generelle frister på opptaksnivå,
+  #   eller er de unntak per utdanningstilbud/utdanningsbakgrunn?
+  Regel: Opptaksforvalter må kunne sette frister for tidlig opptak
+
+    Scenario: Sette søknadsfrist for tidlig opptak
+      Gitt at opptaket har aktivert tidlig opptak
+      Når jeg setter søknadsfrist for tidlig opptak til "2027-03-01 23:59"
+      Så gjelder denne fristen for søkere som vil være med i tidlig opptak
+
+    Scenario: Sette dokumentasjonsfrist for tidlig opptak
+      Gitt at opptaket har aktivert tidlig opptak
+      Når jeg setter dokumentasjonsfrist for tidlig opptak til "2027-03-01 23:59"
+      Så gjelder denne fristen for dokumentasjon knyttet til tidlig opptak
+
   Regel: Opptaksforvalter må kunne sette informasjonsdatoer for opptaksresultat
 
     Scenario: Sette dato for når søker kan forvente svar
@@ -83,6 +110,16 @@ Egenskap: Frister og hendelser for opptak
     Scenario: Sette første svarfrist som informasjon til søkere
       Når jeg setter første svarfrist til "2027-07-20 23:59"
       Så kan søkere se når de senest må svare på et eventuelt tilbud
+
+  @openquestion
+  # ÅPNE SPØRSMÅL:
+  # - Gjelder selvbetjent endring av utdanningsbakgrunn for søker (student)
+  #   eller for saksbehandler? Eller begge?
+  Regel: Opptaksforvalter må kunne sette frist for endring av utdanningsbakgrunn
+
+    Scenario: Sette frist for selvbetjent endring av utdanningsbakgrunn
+      Når jeg setter frist for endring av utdanningsbakgrunn til "2027-05-01 23:59"
+      Så kan utdanningsbakgrunn endres selvbetjent fram til denne fristen
 
   @openquestion
   # ÅPNE SPØRSMÅL:
