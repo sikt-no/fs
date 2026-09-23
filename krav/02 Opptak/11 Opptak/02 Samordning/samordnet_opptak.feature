@@ -47,6 +47,15 @@ Egenskap: Samordnet opptak
       Gitt at organisasjonen "Ukjent organisasjon" ikke finnes i utdanningsregisteret
       Så kan den ikke legges til som deltaker i opptaket
 
+  Regel: Opptaksforvalter skal kunne begrense hvilke lærestedstyper som får delta i opptak
+
+    Scenario: I UHG-opptaket er det bare aktuelt med norske universiteter og høyskoler
+      Når opptaksforvalter ved forvaltende organisasjon legger til organisasjonen "Universitetet i Oslo" som deltaker
+      Så legges organisasjonen til fordi den finnes i utdanningsregisteret
+
+     Scenario: I HYU-opptaket er det bare aktuelt med norske fagskoler  
+    
+
   Regel: Kun organisasjoner som deltar i opptaket kan legge til utdanningstilbud
 
     Scenario: Organisasjon som ikke deltar kan ikke legge til utdanningstilbud
