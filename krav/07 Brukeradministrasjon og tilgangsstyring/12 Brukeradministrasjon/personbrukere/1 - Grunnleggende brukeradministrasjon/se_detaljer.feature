@@ -36,4 +36,4 @@ Egenskap: Se detaljer for personbruker
       Så ser jeg tidspunktet personbrukeren sist brukte løsningen
 
 # ÅPNE SPØRSMÅL:
-# - Hva vises når personbrukeren ikke har en hjemorganisasjon i Feide, eller når hjemorganisasjonen ikke finnes som organisasjon i FS? Spørsmålet er skarpere nå som hjemorganisasjon bærer ansettelsesrelasjonen: en bruker uten hjemorganisasjon har heller ingen stilling som kan opphøre. Personbrukere uten Feide-konto er ikke berørt — de får alltid en eksplisitt hjemorganisasjon ved registrering, se BRU-PER-GRU-013.
+# - Hva vises når personbrukeren ikke har en hjemorganisasjon i Feide, eller når hjemorganisasjonen ikke finnes som organisasjon i FS? Spørsmålet er skarpere nå som hjemorganisasjon bærer ansettelsesrelasjonen: en bruker uten hjemorganisasjon har heller ingen stilling som kan opphøre. Personbrukere uten Feide-konto har ingen hjemorganisasjon, og hva som eventuelt skal vises som deres organisasjon på detaljsiden, er ikke avklart — se det åpne spørsmålet i BRU-PER-GRU-014.

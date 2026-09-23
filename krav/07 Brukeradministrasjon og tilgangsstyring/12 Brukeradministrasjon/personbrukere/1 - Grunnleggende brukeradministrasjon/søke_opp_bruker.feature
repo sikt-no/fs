@@ -188,5 +188,5 @@ Egenskap: Listevisning og søk i personbrukere
 # ÅPNE SPØRSMÅL:
 # - Filnavn: bør "søke_opp_bruker.feature" omdøpes til "listevisning_og_sok.feature" for konsistens med mønsteret? Tittelendring på #479 må i så fall følges opp via fs-github.
 # - Rolle-navn: "brukeradministrator" og "super-brukeradministrator" er valgt. Sjekk at rolledefinisjonene i "4 - Opprette og administrere roller" bruker samme navn.
-# - Brukere uten Feide-ID er nå modellert i egne krav: BRU-PER-GRU-013 (registrere en personbruker uten Feide-konto) og BRU-PER-GRU-014 (forvalte en personbruker uten Feide-konto). De har alltid en hjemorganisasjon, satt eksplisitt ved registrering, og følger synlighetsreglene over uendret.
+# - Brukere uten Feide-ID er nå modellert i egne krav: BRU-PER-GRU-013 (registrere en personbruker uten Feide-konto) og BRU-PER-GRU-014 (forvalte en personbruker uten Feide-konto). De har ingen hjemorganisasjon, identifiseres med fødselsnummer ved registrering, og er synlige gjennom sine aktive tildelinger. Hjemorganisasjonsfilteret over gjelder derfor ikke for dem.
 # - Gjenstår: skal brukere med flere identiteter modelleres her, eller i et eget krav?
