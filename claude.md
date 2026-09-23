@@ -212,6 +212,14 @@ Then('skal {string} vises', async ({ page }, tekst: string) => {
 - `@integration` tester: Bruker `request` fixture for API-kall
 - `@e2e` tester: Bruker `page` fixture for browser-interaksjon
 
+### Skills for kravarbeid (`.claude/skills/`)
+- `fs-krav` — kravarbeid: nye `.feature`-filer (enkeltstående eller for et initiativ), og ferdigstilling av en mappe (`@draft` → `@planned`)
+- `fs-specify` — henter `@planned`-krav inn i en oppgave: `tasks/<domene>/<slug>/spec/` (`@planned` → `@in-progress`)
+- `fs-specify-delta` — det samme, men for en endring (commit, branch, test-fil eller markdown)
+- `lage-steps` — step definitions i `tester/steps/` for kravene
+
+Typisk flyt: `fs-krav` → `fs-specify` / `fs-specify-delta` → `lage-steps`. Se [`tasks/README.md`](tasks/README.md) for oppgavestrukturen.
+
 ## CI/CD
 
 - **GitHub Actions**: Bygger Docker-image med testmiljø
