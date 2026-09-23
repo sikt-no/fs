@@ -9,7 +9,8 @@ Egenskap: Registrere en personbruker uten Feide-konto
   En personbruker uten Feide-konto logger inn med ID-porten i stedet for Feide. Hen har
   ingen Feide-ID, og dermed heller ingen Feide-tilhørighet som identifiserer hen eller
   knytter hen til en organisasjon. Administratoren identifiserer derfor personen med
-  fødselsnummer ved registrering, og gir hen minst én tildeling i den samme operasjonen.
+  fødselsnummer eller D-nummer ved registrering, og gir hen minst én tildeling i den samme
+  operasjonen.
   Personbrukeren har ingen hjemorganisasjon; det er tildelingene som knytter hen til
   organisasjoner, og hver tildeling gjelder for en organisasjon og et miljø på samme måte
   som for øvrige personbrukere (BRU-PER-GRU-003).
@@ -26,7 +27,7 @@ Egenskap: Registrere en personbruker uten Feide-konto
     Scenario: Registrere en ansatt som ikke har Feide-konto
       Gitt personen ikke har en Feide-konto
       Og personen har aldri logget inn i løsningen
-      Når jeg registrerer personen som personbruker med fødselsnummeret hens og minst én tildeling
+      Når jeg registrerer personen som personbruker med fødselsnummeret eller D-nummeret hens og minst én tildeling
       Så finnes personbrukeren i løsningen
       Og personbrukerens status er «Aktiv»
       Og det fremgår at personbrukeren ikke har logget inn ennå
@@ -58,14 +59,14 @@ Egenskap: Registrere en personbruker uten Feide-konto
 
     Scenario: Registrering uten tildeling er ikke mulig
       Gitt jeg holder på å registrere en personbruker
-      Og jeg har oppgitt fødselsnummeret hens
+      Og jeg har oppgitt fødselsnummeret eller D-nummeret hens
       Og jeg har ikke gitt personbrukeren noen tildeling
       Når jeg forsøker å fullføre registreringen
       Så blir personbrukeren ikke registrert
       Og jeg får beskjed om at personbrukeren må ha minst én tildeling
 
     Scenario: Registrering og første tildeling hører sammen
-      Gitt jeg registrerer en person som personbruker med fødselsnummeret hens
+      Gitt jeg registrerer en person som personbruker med fødselsnummeret eller D-nummeret hens
       Og jeg gir personbrukeren en tildeling i den samme operasjonen
       Når jeg fullfører registreringen
       Så finnes personbrukeren med tildelingen
@@ -105,13 +106,13 @@ Egenskap: Registrere en personbruker uten Feide-konto
       Og det fremgår fortsatt at personbrukeren jeg registrerte ikke har logget inn ennå
       Og tilstanden består så lenge opplysningene ikke rettes
 
-  Regel: En registrert personbruker som ennå ikke har roller
+  Regel: En registrert personbruker som ikke lenger har roller
 
     @openquestion
-    Scenario: Personbrukeren logger inn før hen har fått roller
-      Gitt jeg har registrert en personbruker som ikke er tildelt noen roller
-      Når personen logger inn for første gang
-      Så får personbrukeren beskjed om at hen ennå ikke har tilganger i FS
+    Scenario: Personbrukeren logger inn etter at den siste tildelingen er fjernet
+      Gitt en personbruker uten Feide-konto har fått sin siste aktive tildeling fjernet
+      Når personen logger inn
+      Så får personbrukeren beskjed om at hen ikke har tilganger i FS
       Og personbrukeren møter ikke en feilmelding
 
     # ÅPNE SPØRSMÅL: Hva en innlogget personbruker uten tilganger skal møte, er ikke bestemt.
@@ -124,4 +125,9 @@ Egenskap: Registrere en personbruker uten Feide-konto
 #   men ikke hvor ofte det leses.
 # - Skal en personbruker uten Feide-konto kunne slettes, eller er deaktivering (BRU-PER-GRU-014)
 #   eneste utvei når hen ikke lenger skal ha tilgang?
+# - Scenariet «Registrering av en person som allerede har Feide-konto» forutsetter at
+#   fødselsnummeret eller D-nummeret til personbrukere med Feide-ID er kjent. Det lagres først
+#   ved personens neste pålogging etter at løsningen begynner å hente det, så en Feide-bruker som
+#   ikke har logget inn siden da, kan ikke oppdages. Om det gapet er akseptabelt, eller om det
+#   trengs en engangs etterfylling, er ikke avklart.
 # - Registreringen skal ha eget GitHub-issue som sub-issue under initiativet #514.
