@@ -112,23 +112,6 @@ Egenskap: Registrere en personbruker uten Feide-konto
       Og det fremgår fortsatt at personbrukeren jeg registrerte ikke har logget inn ennå
       Og tilstanden består så lenge opplysningene ikke rettes
 
-  Regel: En registrering må gi personbrukeren minst én tildeling
-
-    Scenario: Registrering uten tildeling er ikke mulig
-      Gitt jeg holder på å registrere en personbruker
-      Og jeg har ikke gitt personbrukeren noen tildeling
-      Når jeg forsøker å fullføre registreringen
-      Så blir personbrukeren ikke registrert
-      Og jeg får beskjed om at personbrukeren må ha minst én tildeling
-
-    Scenario: Registrering og første tildeling hører sammen
-      Gitt jeg registrerer en person som personbruker
-      Og jeg gir personbrukeren en tildeling i den samme operasjonen
-      Når jeg fullfører registreringen
-      Så finnes personbrukeren med tildelingen
-      Og jeg finner personbrukeren igjen i brukeroversikten
-      Og tildelingen gir tilgang fra personbrukeren logger inn første gang
-
   Regel: En registrert personbruker som ennå ikke har roller
 
     @openquestion
