@@ -41,6 +41,10 @@
 # besluttet før kravet kan legges til grunn for planlegging. Se
 # LEVERANSEFORSLAG nederst i filen.
 #
+# L1 er unntaket. Den leveransen er besluttet 23.09.2026 og skilt ut til
+# vise_elektroniske_vitnemål.feature (@OPT-BEH-BEH-005, @planned). Denne fila
+# dekker nå L2–L6.
+#
 @OPT-BEH-BEH-004 @must @draft
 Egenskap: Vitnemålsbehandling
   Som saksbehandler i opptak
@@ -51,9 +55,9 @@ Egenskap: Vitnemålsbehandling
   Vitnemålsbehandling er ikke nødvendig for alle søknader. Har søkeren ett
   elektronisk vitnemål uten forbedringer, klarer automatikken seg selv.
   Behovet oppstår når søkeren har flere vitnemål, har forbedret fag, eller har
-  dokumentert fag som ikke finnes elektronisk. Seksjonen er derfor lukket som
-  standard, med en teller som viser hvor mange elektroniske vitnemål søkeren
-  har.
+  dokumentert fag som ikke finnes elektronisk. Visningen av vitnemålene, og
+  hvem som får innsyn i dem, er skilt ut i vise_elektroniske_vitnemål.feature
+  (@OPT-BEH-BEH-005) som leveranse L1.
 
   Saksbehandlingen består av tre valg som henger sammen: hvilket vitnemål som
   legges til grunn, hvilke fag på det vitnemålet som skal telle, og hvilke fag
@@ -70,79 +74,9 @@ Egenskap: Vitnemålsbehandling
     Og jeg kan se og endre søknadsbehandling for organisasjonen som behandler saken
     Og jeg er inne på søknaden til en søker
 
-  Regel: Søkerens elektroniske vitnemål vises
-
-    Scenario: Se at søkeren har elektroniske vitnemål
-      Gitt søkeren har elektroniske vitnemål
-      Når jeg åpner grunnlaget på søknaden
-      Så ser jeg hvor mange elektroniske vitnemål søkeren har
-      Men vitnemålsbehandlingen er ikke åpnet
-
-    Scenario: Åpne vitnemålsbehandlingen
-      Gitt søkeren har to elektroniske vitnemål
-      Når jeg åpner vitnemålsbehandlingen
-      Så ser jeg hvert vitnemål med følgende opplysninger
-        | felt                |
-        | Utstedelsesdato     |
-        | Dokumenttype        |
-        | Status              |
-        | Førstegangsvitnemål |
-        | Reform              |
-        | Dispensasjon        |
-        | Påstand om GSK      |
-      # AVKLART 21.09.2026: dispensasjon og påstand om GSK vises som del av
-      # vitnemålets opplysninger, selv om selve GSK-vurderingen er avgrenset
-      # ut av featuren. Begrunnelse: de er kontekst for hvilket vitnemål som
-      # bør legges til grunn, og saksbehandleren skal slippe å bytte skjermbilde
-      # for å se dem.
-      #
-      # Feltene er verifisert mot NVB_VGDOK og mot KREG-spørringen
-      # hentKompetansebevis: datoUtstedt, vgdoktypekode, status, foerstegangsvm,
-      # reformkode, dispensasjonskode og paastandOmGsk.
-
-    Scenario: Søker uten elektroniske vitnemål
-      Gitt søkeren ikke har elektroniske vitnemål
-      Når jeg åpner grunnlaget på søknaden
-      Så vises ikke oversikten over elektroniske vitnemål
-      Og skjemaet for å legge inn fag manuelt er åpent
-      # AVKLART: fra Confluence — «Dersom det ikke finnes tilgjengelige
-      # elektroniske vitnemål skal ikke modul for vitnemål vises. MEN, da skal
-      # også skjemaet for manuell utfylling alltid vises.»
-
-    Scenario: Åpne et vitnemål i eget vindu
-      Gitt søkeren har elektroniske vitnemål
-      Når jeg velger å åpne et vitnemål i eget vindu
-      Så vises vitnemålet i et eget vindu ved siden av saksbehandlingen
-      # Formålet er å kunne lese vitnemålet mens saksbehandlingen står åpen,
-      # eventuelt på en ekstern skjerm.
-
-    Scenario: Annullert vitnemål som er brukt i en beregning vises
-      Gitt søkeren har et annullert vitnemål
-      Og det annullerte vitnemålet er brukt i en beregning på dette opptaket
-      Når jeg åpner vitnemålsbehandlingen
-      Så ser jeg det annullerte vitnemålet tydelig markert som annullert
-      Men jeg kan ikke legge det til grunn for en ny beregning
-
-    Scenario: Vitnemål uten relevans for opptaket vises ikke
-      Gitt søkeren har et annullert vitnemål
-      Og det annullerte vitnemålet er ikke brukt i en beregning på dette opptaket
-      Når jeg åpner vitnemålsbehandlingen
-      Så vises ikke det annullerte vitnemålet
-      # AVKLART 21.09.2026: relevans avgjøres av om vitnemålet har vært brukt i
-      # en beregning på opptaket saksbehandleren jobber på. Et annullert
-      # vitnemål som ligger til grunn for et tall saksbehandleren ser, må
-      # være synlig — ellers kan ikke tallet forstås eller etterprøves. Gamle
-      # vitnemål som aldri har vært i bruk i dette opptaket er bare støy.
-      #
-      # Verifisert i FS-klienten: dm_person_v_vitnemaal2 beregner
-      # «godkjentbehandling = decode(vgdokstatuskode,'A',0,1)». Status A er
-      # ikke til behandling, men FS-klienten skjuler ikke raden. Regelen over
-      # er strammere: den skjuler også raden når den ikke har vært i bruk.
-      #
-      # Merk at GskAnnulleringUtenAnnullertVitnemaalError i gsk.graphqls
-      # forutsetter at saksbehandleren kan se at et vitnemål er annullert.
-      # Regelen over holder det synlig i nettopp de tilfellene feilen kan
-      # oppstå.
+  # Regelen «Søkerens elektroniske vitnemål vises» er skilt ut til
+  # vise_elektroniske_vitnemål.feature (@OPT-BEH-BEH-005) som leveranse L1
+  # (#613). Reglene under forutsetter den visningen.
 
   Regel: Saksbehandleren velger hvilket vitnemål som legges til grunn
 
@@ -525,7 +459,13 @@ Egenskap: Vitnemålsbehandling
       #
       # Utformingen av varselet hører i vitnemålsbehandling.design.md.
 
-  Regel: Tilgang styres av rettighet, ikke av hvem som har tatt saken
+  Regel: Muligheten til å endre styres av rettighet, ikke av hvem som har tatt saken
+
+    # Innsyn er skilt ut til vise_elektroniske_vitnemål.feature
+    # (@OPT-BEH-BEH-005): hvem som ser vitnemålene, hvem som ikke gjør det, og
+    # at tilordning ikke er en innsynsgrense. Den fila har også den fulle
+    # begrunnelsen med kildereferanser. Regelen her dekker det som først kan
+    # etterprøves når det finnes noe å endre.
 
     Scenario: Saksbehandler med endringsrettighet kan behandle vitnemål
       Gitt jeg kan endre søknadsbehandling for organisasjonen som behandler saken
@@ -537,36 +477,18 @@ Egenskap: Vitnemålsbehandling
       Når jeg åpner søknaden til en søker
       Så ser jeg søkerens vitnemål, det valgte grunnlaget og de beregnede poengene
       Men jeg ser ikke muligheten til å endre dem
+      # At lesetilgang gir innsyn uten endringsmulighet er i tråd med
+      # design-patterns-for-krav.md: det er *muligheten til å endre* som
+      # skjules, ikke opplysningene. En saksbehandler som ser et poeng må
+      # kunne se hva det bygger på.
 
-    Scenario: Bruker uten lesetilgang ser ikke vitnemålsbehandlingen
-      Gitt jeg ikke kan se søknadsbehandling for organisasjonen som behandler saken
-      Når jeg åpner søknaden til en søker
-      Så ser jeg ikke vitnemålsbehandlingen
-
-    Scenario: Saken er tilordnet en annen saksbehandler
+    Scenario: Tilordning hindrer ikke at jeg behandler saken
       Gitt saken er tilordnet en annen saksbehandler
       Og jeg kan endre søknadsbehandling for organisasjonen som behandler saken
       Når jeg åpner søknaden til en søker
       Så kan jeg behandle vitnemålet
       # AVKLART 21.09.2026: tilgang styres av rettighet og organisasjon, ikke
-      # av tilordning.
-      #
-      # Verifisert i ny stack: autorisasjon er SE_SØKNADSBEHANDLING og
-      # MODIFISERE_SØKNADSBEHANDLING (Handling.java), håndhevet via
-      # auth.har_tilgang og RLS. Tilordning er en egen mekanisme
-      # (tilordneSaksbehandlerV3, fjernTilordnetSaksbehandler) for
-      # arbeidsfordeling. Ingen tjeneste i opptak-service sjekker tilordnet
-      # bruker før en endring — søk over hele tjenestelaget finner ingen slik
-      # sjekk utenfor TilordningService selv.
-      #
-      # Kravet innfører derfor ikke tilordning som tilgangsgrense. Skulle det
-      # bli ønsket senere, er det en utvidelse av autorisasjonsmodellen og
-      # hører i et eget krav.
-      #
-      # At lesetilgang gir innsyn uten endringsmulighet er i tråd med
-      # design-patterns-for-krav.md: det er *muligheten til å endre* som
-      # skjules, ikke opplysningene. En saksbehandler som ser et poeng må
-      # kunne se hva det bygger på.
+      # av tilordning. Full begrunnelse i vise_elektroniske_vitnemål.feature.
 
 # AVGRENSNINGER — BEVISST UTENFOR DETTE KRAVET
 #
@@ -650,10 +572,19 @@ Egenskap: Vitnemålsbehandling
 # det. Resten av featuren er forbedringer rundt den kjernen.
 #
 #   L1  Vise vitnemålene                 #613     —        liten
-#       Regel «Søkerens elektroniske vitnemål vises» og hele tilgangsregelen.
-#       Ingen valg, ingen beregning. Saksbehandleren ser hva søkeren har, og
-#       slipper å slå opp i FS-klienten. KREG-integrasjonen finnes allerede
-#       (hentKompetansebevis), så dette er i hovedsak presentasjon.
+#       SKILT UT 23.09.2026 til vise_elektroniske_vitnemål.feature
+#       (@OPT-BEH-BEH-005). Regel «Søkerens elektroniske vitnemål vises», og
+#       innsynsdelen av tilgangsregelen. Ingen valg, ingen beregning.
+#       KREG-integrasjonen finnes allerede (hentKompetansebevis), så dette er
+#       i hovedsak presentasjon.
+#
+#       Merk at kuttet ble strammet inn under utskillingen: tre scenarioer
+#       lovet funksjonalitet fra senere leveranser, og kunne derfor ikke
+#       verifiseres i L1. «Søker uten elektroniske vitnemål» lovet at skjemaet
+#       for manuell utfylling er åpent (L4). «Annullert vitnemål som er brukt
+#       i en beregning vises» lovet at det ikke kan legges til grunn (L2). Og
+#       to av tilgangsregelens fire scenarioer handler om *endring*, ikke
+#       innsyn (L2 og senere) — de står fortsatt i denne fila.
 #
 #   L2  Velge ett vitnemål for hele saken #608    L1       middels
 #       Regel «Saksbehandleren velger hvilket vitnemål som legges til grunn»,
@@ -707,6 +638,8 @@ Egenskap: Vitnemålsbehandling
 # KONSEKVENS FOR KRAVDOKUMENTET
 #
 # Forslaget deler leveransen, ikke kravet. Filen holdes samlet til en
-# leveranse faktisk planlegges; da kan den regelen som inngår skilles ut i en
-# egen fil med egen Feature-ID hvis det er nyttig. Å splitte nå ville låst et
-# kutt som ikke er besluttet.
+# leveranse faktisk planlegges; da skilles den regelen som inngår ut i en egen
+# fil med egen Feature-ID. Det er gjort for L1 (#613), fordi statustaggen
+# ligger på Egenskap-linja: én fil kan ikke ha L1 som @planned og resten som
+# @draft samtidig. Samme utskilling gjøres for L2–L6 når de planlegges — ikke
+# før, siden det ville låst et kutt som ikke er besluttet.
