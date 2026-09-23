@@ -94,6 +94,41 @@ Egenskap: Registrere en personbruker uten Feide-konto
       Så ser jeg personbrukerens navn slik påloggingen oppga det
       Og personbrukeren kan søkes opp på navn
 
+  Regel: Registrert, men ikke logget inn, er en varig tilstand
+
+    Scenario: Tilstanden fremgår av detaljene og av brukeroversikten
+      Gitt jeg har registrert en personbruker som aldri har logget inn
+      Når jeg ser personbrukerens detaljside
+      Så fremgår det at personbrukeren ikke har logget inn ennå
+      Og jeg ser tildelingene personbrukeren har fått
+      Og det fremgår at tildelingene gjelder fra første pålogging
+      Og den samme tilstanden fremgår av brukeroversikten
+
+    Scenario: Feil identifikasjon viser seg som en personbruker som aldri logger inn
+      Gitt jeg har registrert en personbruker med feil opplysninger om hvem personen er
+      Når personen logger inn
+      Så gjenkjennes hen ikke som den registrerte personbrukeren
+      Og det opprettes ingen personbruker for hen
+      Og det fremgår fortsatt at personbrukeren jeg registrerte ikke har logget inn ennå
+      Og tilstanden består så lenge opplysningene ikke rettes
+
+  Regel: En registrering må gi personbrukeren minst én tildeling
+
+    Scenario: Registrering uten tildeling er ikke mulig
+      Gitt jeg holder på å registrere en personbruker
+      Og jeg har ikke gitt personbrukeren noen tildeling
+      Når jeg forsøker å fullføre registreringen
+      Så blir personbrukeren ikke registrert
+      Og jeg får beskjed om at personbrukeren må ha minst én tildeling
+
+    Scenario: Registrering og første tildeling hører sammen
+      Gitt jeg registrerer en person som personbruker
+      Og jeg gir personbrukeren en tildeling i den samme operasjonen
+      Når jeg fullfører registreringen
+      Så finnes personbrukeren med tildelingen
+      Og jeg finner personbrukeren igjen i brukeroversikten
+      Og tildelingen gir tilgang fra personbrukeren logger inn første gang
+
   Regel: En registrert personbruker som ennå ikke har roller
 
     @openquestion
