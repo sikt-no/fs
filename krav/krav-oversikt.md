@@ -39,6 +39,7 @@ Generert oversikt over alle BDD-krav i prosjektet.
 | OPT-BEH-BEH-001 | Saksbehandler behandler søknader | 13 Søknadsbehandling | 01 Behandling | @OPT-BEH-BEH-001 @skip @opptakspilot @focus | [behandle_søknad.feature](02%20Opptak/13%20Søknadsbehandling/01%20Behandling/behandle_søknad.feature) |
 | OPT-BEH-BEH-002 | Kort om søknad | 13 Søknadsbehandling | 01 Behandling | @OPT-BEH-BEH-002 @skip @søknad @opptak | [kort_om_søknad.feature](02%20Opptak/13%20Søknadsbehandling/01%20Behandling/kort_om_søknad.feature) |
 | OPT-BEH-BEH-003 | Registrere og beregne praksis for søker | 13 Søknadsbehandling | 01 Behandling | @OPT-BEH-BEH-003 @must @draft | [registrere_praksis.feature](02%20Opptak/13%20Søknadsbehandling/01%20Behandling/registrere_praksis.feature) |
+| OPT-BEH-BEH-004 | Vitnemålsbehandling | 13 Søknad og saksbehandling | 02 Behandling | @OPT-BEH-BEH-004 @must @draft | [vitnemålsbehandling.feature](02%20Opptak/13%20Søknad%20og%20saksbehandling/02%20Behandling/vitnemålsbehandling.feature) |
 
 ## 03 Gjennomføre studier
 
