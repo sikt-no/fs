@@ -14,9 +14,14 @@ Egenskap: Samordnet opptak
     Scenario: Legge til lærested i samordnet opptak
       Når opptaksforvalter ved forvaltende organisasjon legger til organisasjonen "Universitetet i Oslo" som deltaker i opptaket
       Så kan opptaksforvalter ved Universitetet i Oslo knytte egne utdanningstilbud til opptaket
-      Og Universitetet i Oslo kan få søknader som de har behandlerrolle for
-      Og opptaksforvalter ved Universitetet i Oslo kan vedlikeholde informasjon på egne utdanningstilbud
-      Og saksbehandlere og opptaksforvaltere ved Universitetet i Oslo kan se informasjon om egne utdanningstilbud
+  # Følgevirkninger: Deltagende organisasjoner kan få søknader de har behandlerrolle for etter saksbehandlertildelingen
+  # Deltagende organisasjoners opptaksforvaltere kan se og vedlikeholde info på egne utdanningstilbud, og saksbehandlere kan se info om egne utdanningstilbud
+
+  Regel: Kun organisasjoner som deltar i opptaket kan legge til utdanningstilbud
+
+    Scenario: Organisasjon som ikke deltar kan ikke legge til utdanningstilbud
+      Gitt at organisasjonen "NTNU" ikke er lagt til som deltaker i opptaket
+      Så kan ikke NTNU knytte utdanningstilbud til opptaket
 
   Regel: Det er kun opptaksforvalter ved forvaltende organisasjon som kan endre innstillinger i opptaket
 
@@ -47,12 +52,29 @@ Egenskap: Samordnet opptak
       Gitt at organisasjonen "Ukjent organisasjon" ikke finnes i utdanningsregisteret
       Så kan den ikke legges til som deltaker i opptaket
 
-  Regel: Opptaksforvalter skal kunne filtrere på hvilke lærestedstyper som får delta i opptak
+  Regel: Opptaksforvalter kan begrense hvilke lærestedstyper som får delta i opptaket
 
-    Scenario: I UHG-opptaket er det bare aktuelt med norske universiteter og høyskoler og i HYU-opptaket er det bare aktuelt med norske fagskoler  
+    Scenario: Kun universiteter og høyskoler kan delta i UHG-opptak
+      Gitt at opptaket "Samordna opptak 2027" har opptakstype "UHG"
+      Når opptaksforvalter ved forvaltende organisasjon legger til deltakere
+      Så er kun norske universiteter og høyskoler tilgjengelige
 
-  Regel: Kun organisasjoner som deltar i opptaket kan legge til utdanningstilbud
+    Scenario: Kun fagskoler kan delta i HYU-opptak
+      Gitt at opptaket "Samordna fagskoleopptak 2027" har opptakstype "HYU"
+      Når opptaksforvalter ved forvaltende organisasjon legger til deltakere
+      Så er kun norske fagskoler tilgjengelige
 
-    Scenario: Organisasjon som ikke deltar kan ikke legge til utdanningstilbud
-      Gitt at organisasjonen "NTNU" ikke er lagt til som deltaker i opptaket
-      Så kan ikke NTNU knytte utdanningstilbud til opptaket
+  @openquestion
+  # ÅPNE SPØRSMÅL:
+  # - Jobbes med av et annet team. Hvilke valgmuligheter finnes for fordeling
+  #   av saker til saksbehandlere/saksbehandlerorganisasjoner?
+  Regel: Opptaksforvalter ved forvaltende organisasjon knytter regler for saksbehandlertildeling i samordnet opptak
+
+    Scenario: Sette regler for fordeling av søknader til saksbehandlerorganisasjoner
+      Når opptaksforvalter ved forvaltende organisasjon knytter saksbehandlertildelingsregler for opptaket
+      Så fordeles søknader til deltakende organisasjoner etter de angitte reglene
+
+    Scenario: Saksbehandlertildeling er ikke relevant for lokale opptak
+      Gitt at opptaket "Lokalt opptak høst 2027" er opprettet som lokalt
+      Så er innstillinger for saksbehandlertildeling ikke tilgjengelige
+

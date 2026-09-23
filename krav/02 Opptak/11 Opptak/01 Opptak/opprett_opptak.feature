@@ -63,10 +63,10 @@ Egenskap: Opprette et opptak
 
  Regel: Obligatorisk med både bokmål og nynorsk navn på opptak
 
-    Scenario: Angi opptaksnavn på obligatoriske spårk
+    Scenario: Angi opptaksnavn på obligatoriske språk
       Gitt at opptaksforvalter har opprettet opptaket "Samordna opptak 2027"
       Når opptaksforvalter angir navn på bokmål og nynorsk
-      Så er er obligatoriske navn fyllt ut
+      Så er obligatoriske navn fylt ut
       
 
   @should
@@ -75,8 +75,8 @@ Egenskap: Opprette et opptak
     @openquestion
     # ÅPNE SPØRSMÅL:
     # - Hva kopieres og hva kopieres ikke?
-    # - Forslag: innstillinger, frister og fellestekster kopieres.
-    #   Utdanningstilbud, inviterte læresteder og opptaksrunder kopieres ikke.
+    # - Forslag: innstillinger, frister, eventuelle inviterte læresteder, opptakstype og fellestekster kopieres.
+    #   Utdanningstilbud og regelverkssamling kopieres ikke, men legges til eksplisitt
     Scenario: Opprette opptak basert på tidligere opptak
       Gitt at opptaket "Samordna opptak 2026" finnes med innstillinger, frister og fellestekster
       Når opptaksforvalter oppretter et nytt opptak basert på "Samordna opptak 2026"
@@ -84,10 +84,10 @@ Egenskap: Opprette et opptak
 
   @wont
   Regel: Endringer på innstillinger i opptaket skal loggføres
-
     # Bygger på en generell revisjonsmekanisme som gjelder på tvers av FS.
     # Opptaket definerer hva som skal logges, mekanismen definerer hvordan.
     # Nedprioritert inntil videre.
+   # Hvilke endringer som er viktige å få med må vi gå opp
     Scenario: Endring på opptak loggføres
       Gitt at opptaket "Samordna opptak 2027" finnes
       Når opptaksforvalter endrer en innstilling i opptaket

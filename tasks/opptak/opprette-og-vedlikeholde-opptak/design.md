@@ -172,15 +172,18 @@ Frister styrer tidsrammene for opptaket. Alle frister angis som dato (og eventue
 | **Søknad** | Søknadsdato åpner | Når utdanningstilbud blir tilgjengelige for søkere | Opptak |
 | **Søknad** | Generell søknadsfrist | Gjelder for alle utdanningstilbud og søkere, med mindre unntaksfrist er satt per utdanningstilbud eller utdanningsbakgrunn | Opptak |
 | **Søknad** | Omprioriteringsfrist | Siste tidspunkt søker kan endre prioritering av søknadsalternativer | Opptak |
+| **Søknad** | Frist for sletting av søknadsalternativer | Siste tidspunkt søker kan slette søknadsalternativer fra søknaden | Opptak |
 | **Dokumentasjon** | Ordinær dokumentasjonsfrist | Frist for å laste opp dokumentasjon | Opptak |
 | **Dokumentasjon** | Tidlig dokumentasjonsfrist | Gjelder for søkere med tidlig søknadsfrist | Opptak |
 | **Dokumentasjon** | Ettersendingsfrist | Siste tidspunkt for ettersending. Dokumentasjon mottatt etter fristen er ikke garantert hensyntatt. | Opptak |
 | **Ledige studieplasser** | Informasjonsfrist | Når søkere informeres om at restplasser legges ut | Opptak |
 | **Ledige studieplasser** | Åpner for søkning | Når søkere kan søke på ledige studieplasser | Opptak |
+| **Ledige studieplasser** | Stenger for søkning | Etter denne datoen kan ikke søkere lenger søke på ledige studieplasser | Opptak |
+| **Resultat** | Hovedopptaket kjøres | Informasjonsdato — når tilbud og ventelisteplasser tildeles | Opptak |
 | **Resultat** | Forventet svardato | Informasjonsdato — når søker kan forvente svar | Opptak |
 | **Resultat** | Første svarfrist | Informasjonsdato — når søker senest må svare. Faktisk svarfrist settes per plasstildelingsrunde. | Opptak |
 | **Trekkfrist** | Trekkfrist for utdanningstilbud | Etter denne datoen kan kun forvalter trekke utdanningstilbud. Åpent spørsmål: hard sperre eller informasjonsfrist? | Opptak |
-| **Avslutte** | Avslutte opptak | Opptaket stenges for alle endringer og behandling | Opptak |
+| **Deaktivere** | Deaktivere opptak | Opptaket settes til utløpt. Ingen endringer eller behandling er mulig, men opptaket kan brukes som grunnlag for kopiering. | Opptak |
 
 Avvikende frister per utdanningstilbud og utdanningsbakgrunn settes kun når innstillingen for avvikende søknadsfrister er aktivert.
 

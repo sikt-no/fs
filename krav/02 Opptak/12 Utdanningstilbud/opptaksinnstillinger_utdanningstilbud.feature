@@ -17,12 +17,13 @@ Egenskap: Opptaksinnstillinger per utdanningstilbud
       Når opptaksforvalter velger utdanningstilbudet "Sykepleie, høst 2027"
       Og opptaksforvalter setter kompetanseregelverk til "GSK"
       Og opptaksforvalter setter rangeringsregelverk til "Ordinær rangering"
-      Så er regelverket satt for dette utdanningstilbudet
+      Så vurderes søkere til dette utdanningstilbudet etter GSK-kravene
+      Og søkere rangeres etter reglene i "Ordinær rangering"
 
     Scenario: Sette regelverk på flere utdanningstilbud av gangen
       Når opptaksforvalter velger flere utdanningstilbud
       Og opptaksforvalter setter kompetanseregelverk og rangeringsregelverk for alle valgte
-      Så er regelverket satt for alle de valgte utdanningstilbudene
+      Så bruker alle de valgte utdanningstilbudene det angitte regelverket i søknadsbehandling og rangering
 
     Scenario: Kun regelverk fra opptakets regelverkssamling kan velges
       Når opptaksforvalter setter regelverk for et utdanningstilbud
@@ -43,32 +44,32 @@ Egenskap: Opptaksinnstillinger per utdanningstilbud
     Scenario: Sette prosentfordeling mellom utdanningskvoter
       Når opptaksforvalter velger utdanningstilbudet "Sykepleie, høst 2027"
       Og opptaksforvalter setter kvotefordelingen til 50 % ordinær og 50 % førstegangsvitnemål
-      Så er den relative fordelingen satt for utdanningstilbudet
+      Så fordeler plasstildelingen tilbudene mellom kvotene etter denne prosentfordelingen
 
     Scenario: Sette prosentfordeling på flere utdanningstilbud av gangen
       Når opptaksforvalter velger flere utdanningstilbud
       Og opptaksforvalter setter kvotefordelingen til 50 % ordinær og 50 % førstegangsvitnemål for alle valgte
-      Så er den relative fordelingen satt for alle de valgte utdanningstilbudene
+      Så bruker alle de valgte utdanningstilbudene denne prosentfordelingen i plasstildelingen
 
     Scenario: Sette spesiell prosentfordeling på enkelttilbud
       Gitt at opptaksforvalter har satt standard kvotefordeling på flere utdanningstilbud
       Når opptaksforvalter velger utdanningstilbudet "Sykepleie, høst 2027"
       Og opptaksforvalter endrer kvotefordelingen til 40 % ordinær, 50 % førstegangsvitnemål og 10 % samisk kvote
-      Så har dette utdanningstilbudet en spesiell fordeling
+      Så bruker dette utdanningstilbudet den spesielle fordelingen i stedet for standardfordelingen
 
   Regel: Opptaksforvalter kan sette plassflyt mellom utdanningskvoter
 
     Scenario: Sette plassflyt
       Når opptaksforvalter setter plassflyt for utdanningstilbudet "Sykepleie, høst 2027"
       Og opptaksforvalter setter at ledige plasser i førstegangsvitnemålskvoten flyter til ordinær kvote
-      Så er plassflyt satt for utdanningstilbudet
+      Så omfordeler plasstildelingen ubrukte plasser fra førstegangsvitnemålskvoten til ordinær kvote
 
   Regel: Opptaksforvalter må sette antall tilbud som skal gis totalt
 
     Scenario: Sette antall tilbud
       Når opptaksforvalter setter antall tilbud som skal gis til 278 for utdanningstilbudet "Sykepleie, høst 2027"
-      Så er totalt antall tilbud satt
-      Og fordelingen mellom utdanningskvoter beregnes fra den relative fordelingen
+      Så gir plasstildelingen inntil 278 tilbud totalt for dette utdanningstilbudet
+      Og antall tilbud per utdanningskvote beregnes fra den relative prosentfordelingen
 
   Regel: Opptaksforvalter kan markere utdanningstilbud for tidlig tilbud
 
@@ -105,7 +106,7 @@ Egenskap: Opptaksinnstillinger per utdanningstilbud
 
     Scenario: Sette saksbehandlertildelingsregel
       Når opptaksforvalter setter saksbehandlertildelingsregel for utdanningstilbudet "Sykepleie, høst 2027"
-      Så styrer regelen hvordan søknadssaker for dette utdanningstilbudet fordeles
+      Så fordeles søknadssaker for dette utdanningstilbudet til saksbehandlerorganisasjoner etter den angitte regelen
 
   @openquestion
   # ÅPNE SPØRSMÅL:
@@ -125,13 +126,11 @@ Egenskap: Opptaksinnstillinger per utdanningstilbud
 
     Scenario: Sette tags på utdanningstilbud
       Når opptaksforvalter setter tags "medisin, lege" på utdanningstilbudet "Profesjonsstudiet i medisin, høst 2027"
-      Så er taggene lagret
-      Og søkere kan finne utdanningstilbudet ved å søke på "lege"
+      Så kan søkere finne utdanningstilbudet ved å søke på "lege"
 
     Scenario: Sette tags for rettsvitenskap
       Når opptaksforvalter setter tags "advokat, jus, jurist" på utdanningstilbudet "Masterstudiet i rettsvitenskap, høst 2027"
-      Så er taggene lagret
-      Og søkere kan finne utdanningstilbudet ved å søke på "advokat"
+      Så kan søkere finne utdanningstilbudet ved å søke på "advokat"
 
   Regel: Opptaksforvalter kan sette opplysninger om tilbudsgaranti
 

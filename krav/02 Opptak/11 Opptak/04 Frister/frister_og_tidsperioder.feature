@@ -7,7 +7,7 @@ Egenskap: Frister og hendelser for opptak
 
   # Disse fristene gjelder for alle utdanningstilbud og alle søkere i opptaket,
   # med mindre det er satt avvikende frister på utdanningstilbud eller utdanningsbakgrunn.
-  # I samordna opptak kan kun opptaksforvalter ved forvaltende organisasjon endre frister.
+  # I samordna opptak kan kun opptaksforvalter ved forvaltende organisasjon endre frister for opptaket.
 
   Bakgrunn:
     Gitt at opptaksforvalter ved forvaltende organisasjon er innlogget
@@ -17,9 +17,9 @@ Egenskap: Frister og hendelser for opptak
 
     Scenario: Opptaksforvalter må kunne åpne for tilknytning og redigering av utdanningstilbud
       Når opptaksforvalter setter at redigering av utdanningstilbud åpner "2026-10-01"
-      Så kan deltakende organisasjoner redigere sine utdanningstilbud
-      Og deltakende organisasjoner kan knytte sine utdanningstilbud til opptak
-      Og deltakende organisasjoner kan trekke sine utdanningstilbud fra opptak
+      Så kan deltakende organisasjoner redigere sine utdanningstilbud fra denne dagen
+      Og deltakende organisasjoner kan knytte sine utdanningstilbud til opptak fra denne dagen
+      Og deltakende organisasjoner kan trekke sine utdanningstilbud fra opptak fra denne dagen
 
     Scenario: Opptaksforvalter må kunne stenge for tilknytning og redigering av utdanningstilbud
       Når opptaksforvalter setter at redigering av utdanningstilbud stenger "2027-06-06"
@@ -33,40 +33,46 @@ Egenskap: Frister og hendelser for opptak
 
     Scenario: Sette søknadsdato
       Når opptaksforvalter setter at søknaden åpner "2027-02-01"
-      Så blir utdanningstilbudene i opptaket tilgjengelige for søkere fra denne datoen
+      Så kan søkere opprette og sende inn søknader fra denne datoen
+      Og utdanningstilbudene i opptaket er synlige for søkere
 
   Regel: Opptaksforvalter ved forvaltende organisasjon må kunne sette generell søknadsfrist for opptaket
 
     Scenario: Sette ordinær søknadsfrist
       Når opptaksforvalter setter ordinær søknadsfrist til "2027-04-15 23:59"
-      Så gjelder fristen for alle utdanningstilbud og alle søkere i opptaket
+      Så kan søkere sende inn nye søknader fram til denne fristen
+      Og etter fristen er det ikke lenger mulig å sende inn nye søknader
 
   Regel: Opptaksforvalter ved forvaltende organisasjon må kunne sette omprioriteringsfrist
 
     Scenario: Sette omprioriteringsfrist
       Når opptaksforvalter setter omprioriteringsfrist til "2027-04-15 23:59"
       Så kan søkere endre prioritering av søknadsalternativer fram til denne fristen
+      Og etter fristen er rekkefølgen på søknadsalternativene låst
 
   Regel: Opptaksforvalter ved forvaltende organisasjon må kunne sette frist for sletting av søknadsalternativer
 
     Scenario: Sette frist for sletting av søknadsalternativer
       Når opptaksforvalter setter frist for sletting av søknadsalternativer til "2027-04-15 23:59"
       Så kan søkere slette søknadsalternativer fra søknaden sin fram til denne fristen
+      Og etter fristen kan ikke søkere slette søknadsalternativer
 
   Regel: Opptaksforvalter ved forvaltende organisasjon må kunne sette dokumentasjonsfrister
 
     Scenario: Sette ordinær dokumentasjonsfrist
       Når opptaksforvalter setter ordinær dokumentasjonsfrist til "2027-04-15 23:59"
-      Så må søkere laste opp dokumentasjon innen denne fristen
+      Så kan søkere laste opp dokumentasjon fram til denne fristen
+      Og etter fristen kan ikke søkere laste opp ny dokumentasjon
 
     Scenario: Sette tidlig dokumentasjonsfrist for søkere med tidlig søknadsfrist
       Når opptaksforvalter setter tidlig dokumentasjonsfrist til "2027-03-01 23:59"
-      Så gjelder denne fristen for søkere som har tidlig søknadsfrist
+      Så kan søkere med tidlig søknadsfrist laste opp dokumentasjon fram til denne fristen
+      Og etter fristen kan ikke disse søkerne laste opp ny dokumentasjon
 
     Scenario: Sette ettersendingsfrist
       Når opptaksforvalter setter ettersendingsfrist til "2027-07-01 23:59"
       Så kan søkere ettersende dokumentasjon fram til denne fristen
-      Og dokumentasjon mottatt etter fristen er ikke garantert hensyntatt
+      Og etter fristen kan ikke søkere ettersende dokumentasjon
 
   Regel: Opptaksforvalter ved forvaltende organisasjon må kunne sette informasjonsdatoer for ledige studieplasser
 
@@ -94,14 +100,20 @@ Egenskap: Frister og hendelser for opptak
     Scenario: Sette søknadsfrist for tidlig opptak
       Gitt at opptaket har aktivert tidlig opptak
       Når opptaksforvalter setter søknadsfrist for tidlig opptak til "2027-03-01 23:59"
-      Så gjelder denne fristen for søkere som vil være med i tidlig opptak
+      Så kan søkere søke om tidlig opptak fram til denne fristen
+      Og etter fristen behandles søknaden i det ordinære opptaket
 
     Scenario: Sette dokumentasjonsfrist for tidlig opptak
       Gitt at opptaket har aktivert tidlig opptak
       Når opptaksforvalter setter dokumentasjonsfrist for tidlig opptak til "2027-03-01 23:59"
-      Så gjelder denne fristen for dokumentasjon knyttet til tidlig opptak
+      Så må søkere som søker tidlig opptak laste opp dokumentasjon innen denne fristen
+      Og etter fristen kan ikke disse søkerne laste opp ny dokumentasjon for tidlig opptak
 
   Regel: Opptaksforvalter ved forvaltende organisasjon må kunne sette informasjonsdatoer for opptaksresultat
+
+    Scenario: Sette dato for når hovedopptaket kjøres
+      Når opptaksforvalter setter dato for når hovedopptaket kjøres til "2027-07-15"
+      Så informeres søkere om når tilbud og ventelisteplasser tildeles
 
     Scenario: Sette dato for når søker kan forvente svar
       Når opptaksforvalter setter dato for når søker kan forvente svar til "2027-07-15"
@@ -120,7 +132,8 @@ Egenskap: Frister og hendelser for opptak
 
     Scenario: Sette frist for selvbetjent endring av utdanningsbakgrunn
       Når opptaksforvalter setter frist for endring av utdanningsbakgrunn til "2027-05-01 23:59"
-      Så kan utdanningsbakgrunn endres selvbetjent fram til denne fristen
+      Så kan søkere endre sin utdanningsbakgrunn selv fram til denne fristen
+      Og etter fristen kan ikke søkere endre utdanningsbakgrunn selv
 
   @openquestion
   # ÅPNE SPØRSMÅL:
@@ -137,9 +150,24 @@ Egenskap: Frister og hendelser for opptak
       Så kan læresteder trekke egne utdanningstilbud fram til denne datoen
       Og etter denne datoen kan kun opptaksforvalter ved forvaltende organisasjon trekke utdanningstilbud
 
-  Regel: Opptaksforvalter ved forvaltende organisasjon må kunne avslutte et opptak
+  Regel: Opptaksforvalter ved forvaltende organisasjon må kunne deaktivere et opptak
 
-    Scenario: Avslutte opptak
-      Når opptaksforvalter avslutter opptaket
-      Så er det ikke lenger mulig å gjøre endringer på opptaket
-      Og det er ikke lenger mulig å utføre behandling på opptaket
+    Scenario: Deaktivere opptak
+      Når opptaksforvalter deaktiverer opptaket
+      Så settes opptaket til utløpt
+      Og det er ikke lenger mulig å gjøre endringer på opptaket
+      Og det er ikke lenger mulig å utføre søknadsbehandling eller plasstildeling i opptaket
+      Men opptaket kan brukes som grunnlag for å opprette et nytt opptak
+
+  @openquestion
+  # ÅPNE SPØRSMÅL:
+  # - Design.md beskriver interne saksbehandlingsfrister som ikke er dekket her:
+  #   opptakskomite, opptaksprøver, utenlandsk utdanning, generell saksbehandlingsfrist.
+  #   Skal disse settes som generelle frister i opptaket, eller hører de hjemme
+  #   i saksbehandlingsdomenet?
+  # - Mangler det andre frister som bør settes på opptaksnivå?
+  Regel: Opptaksforvalter ved forvaltende organisasjon kan sette interne saksbehandlingsfrister
+
+    Scenario: Sette generell saksbehandlingsfrist
+      Når opptaksforvalter setter generell saksbehandlingsfrist for opptaket
+      Så kan ikke saksbehandlere gjøre endringer på søknader etter denne fristen

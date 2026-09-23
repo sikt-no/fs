@@ -4,9 +4,9 @@ Egenskap: Innstillinger for opptak
   Som opptaksforvalter ved forvaltende organisasjon
   ønsker jeg å sette innstillinger for opptaket
   slik at opptaket har riktige rammer for søknad, saksbehandling og plasstildeling.
-
   # I samordna opptak kan kun opptaksforvalter ved forvaltende organisasjon endre innstillinger.
   # I lokale opptak er forvaltende organisasjon den eneste organisasjonen.
+
   Bakgrunn:
     Gitt at opptaksforvalter ved forvaltende organisasjon er innlogget
     Og at opptaket "Samordna opptak 2027" er opprettet
@@ -17,15 +17,18 @@ Egenskap: Innstillinger for opptak
       Når opptaksforvalter endrer opptakstype for opptaket
       Så er opptakstypen oppdatert
 
-  Regel: Opptaksforvalter kan endre regelverkssamling på opptaket så lenge den ikke er knyttet til utdanningstilbud
-  # OBS: Påvirker kopieringsmulighet 
-    Scenario: Endre regelverkssamling
+  Regel: Opptaksforvalter kan endre regelverkssamling så lenge ingen utdanningstilbud er knyttet til opptaket
+
+    Scenario: Endre regelverkssamling når ingen utdanningstilbud er knyttet til opptaket
+      Gitt at opptaket ikke har noen utdanningstilbud
       Når opptaksforvalter endrer regelverkssamlingen til "UHG 2027 v2"
       Så er reglene i den nye regelverkssamlingen tilgjengelige for utdanningstilbud i opptaket
 
- Regel: Opptaksforvalter kan ikke endre regelverkssamling når regelverkssamlingen er tilknyttet utdanningstilbud     
+    Scenario: Kan ikke endre regelverkssamling når utdanningstilbud er knyttet til opptaket
+      Gitt at opptaket har utdanningstilbud som bruker regler fra gjeldende regelverkssamling
+      Så kan ikke opptaksforvalter endre regelverkssamlingen
 
-  # Løses av teamet som jobber med utdanningstilbud
+  # Løses av teamet som jobber med utdanningstilbud?
   Regel: Opptaksforvalter setter kriterier for hvilke typer og nivåer av utdanninger som kan delta i opptaket
 
     Scenario: Sette utdanningstype
@@ -47,6 +50,8 @@ Egenskap: Innstillinger for opptak
       Så dukker ikke emner opp som mulige utdanningstilbud
       Og studieprogram på 7 masternivå dukker ikke opp som mulige utdanningstilbud
 
+  # Poenglikhetsregel for ledige studieplasser styres av rundetypen i plasstildelingen,
+  # ikke av opptakets standard poenglikhetsregel. Se krav/02 Opptak/14 Plasstildeling/.
   Regel: Opptaksforvalter setter standard poenglikhetsregel for opptaket
 
     Scenario: Standard poenglikhetsregel med mulighet for unntak per utdanningstilbud
@@ -105,10 +110,18 @@ Egenskap: Innstillinger for opptak
       Når opptaksforvalter angir at det er lov å sette tidligere søknadsfrister per utdanningstilbud
       Så kan opptaksforvalter ved deltakende organisasjon sette egne søknadsfrister på sine utdanningstilbud
 
-  Regel: opptaksforvalter kan angi en siste frist for at saksbehandlere kan endre søkers utdanningsbakgrunn 
-  
+  Regel: Opptaksforvalter kan angi en siste frist for å endre søkers utdanningsbakgrunn
 
-    Scenario: Tillate avvikende søknadsfrister per utdanningsbakgrunn @openquestion 
+    Scenario: Sette frist for endring av utdanningsbakgrunn
+      Når opptaksforvalter angir en frist for å endre søkers utdanningsbakgrunn
+      Så kan ikke saksbehandlere endre søkers utdanningsbakgrunn etter denne fristen
+
+    Scenario: Generell saksbehandlingsfrist gjelder når egen frist for endring av utdanningsbakgrunn ikke er satt
+      Gitt at opptaksforvalter ikke har angitt en egen frist for å endre søkers utdanningsbakgrunn
+      Så kan saksbehandlere endre søkers utdanningsbakgrunn frem til den generelle saksbehandlingsfristen
+
+    Scenario: Tillate avvikende søknadsfrister per utdanningsbakgrunn @openquestion
+      #jobbes denne med at et annet team?
       Når opptaksforvalter angir at det er lov å sette avvikende søknadsfrister per utdanningsbakgrunn
       |nordisk|
       |eu/eøs|
@@ -117,7 +130,7 @@ Egenskap: Innstillinger for opptak
       |steinerskolen|
       Så kan opptaksforvalter opprette utdanningsbakgrunner med egne søknads- og dokumentasjonsfrister
 
-  # Ikke viktig for samordna opptak 2027
+  # Ikke relevant for samordna opptak 2027
   Regel: Opptaksforvalter kan styre om søkere kan laste opp dokumentasjon
 
     Scenario: Åpne for dokumentasjonsopplasting
@@ -132,12 +145,4 @@ Egenskap: Innstillinger for opptak
       Når opptaksforvalter angir at det kreves studierett for å søke
       Så kan kun studenter med studierett ved lærestedet søke
 
-  @openquestion
-  # ÅPNE SPØRSMÅL:
-  # - Jobbes med av et annet team. Hvilke valgmuligheter finnes for fordeling
-  #   av saker til saksbehandlere/saksbehandlerorganisasjoner?
-  Regel: Opptaksforvalter kan sette innstillinger for saksbehandlertildeling
-
-    Scenario: Sette innstillinger for saksbehandlertildeling
-      Når opptaksforvalter setter innstillinger for saksbehandlertildeling
-      Så fordeles sakene til riktige saksbehandlerorganisasjoner
+  # Saksbehandlertildeling er flyttet til samordnet_opptak.feature — kun relevant for samordnede opptak
