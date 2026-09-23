@@ -17,11 +17,13 @@ Egenskap: Innstillinger for opptak
       Når opptaksforvalter endrer opptakstype for opptaket
       Så er opptakstypen oppdatert
 
-  Regel: Opptaksforvalter kan endre regelverkssamling
-
+  Regel: Opptaksforvalter kan endre regelverkssamling på opptaket så lenge den ikke er knyttet til utdanningstilbud
+  # OBS: Påvirker kopieringsmulighet 
     Scenario: Endre regelverkssamling
       Når opptaksforvalter endrer regelverkssamlingen til "UHG 2027 v2"
       Så er reglene i den nye regelverkssamlingen tilgjengelige for utdanningstilbud i opptaket
+
+ Regel: Opptaksforvalter kan ikke endre regelverkssamling når regelverkssamlingen er tilknyttet utdanningstilbud     
 
   # Løses av teamet som jobber med utdanningstilbud
   Regel: Opptaksforvalter setter kriterier for hvilke typer og nivåer av utdanninger som kan delta i opptaket
@@ -49,7 +51,7 @@ Egenskap: Innstillinger for opptak
 
     Scenario: Standard poenglikhetsregel med mulighet for unntak per utdanningstilbud
       Når opptaksforvalter setter standard poenglikhetsregel til "loddtrekning"
-      Og opptaksforvalter angir at utdanningstilbud kan velge blant andre tilgjengelige regler
+      Og opptaksforvalter angir at utdanningstilbud kan velges blant andre tilgjengelige regler
         | Poenglikhetsregel                          |
         | Alle søkere med samme poengsum får tilbud  |
         | Alder, eldre foran yngre                   |
@@ -77,21 +79,25 @@ Egenskap: Innstillinger for opptak
 
   Regel: Opptaksforvalter kan sette tak for antall tilbud per tildelingsrunde
 
-    Scenario: Sette tak for antall tilbud per runde
-      Når opptaksforvalter setter tak for antall tilbud per tildelingsrunde til 500
-      Så kan ikke plasstildelingen gi flere enn 500 tilbud i en enkelt runde
+    Scenario: Sette tak for antall tilbud en søker kan få per runde
+      Når opptaksforvalter setter tak for antall tilbud per tildelingsrunde til 1
+      Så kan ikke plasstildelingen gi flere enn 1 tilbud i en enkelt runde til en søker
 
   Regel: Opptaksforvalter kan åpne for tidlig opptak
 
     Scenario: Aktivere tidlig opptak
       Når opptaksforvalter aktiverer tidlig opptak
-      Så kan søkere som oppfyller visse kriterier få svar før vanlig publiseringsfrist
+      Så kan opptaksforvalter sette frist for tidlig opptak
+      Og muligheten for tidlig opptak og frist for tidlig opptak blir tilgjengelig for søknad og saksbehandling
+      # Følgevirkninger i søknad og saksbehandling: det blir informert om tidlig opptaksfrist til søkere, det blir mulig for søkere å søke om tidlig opptak, det blir mulig for saksbehandlere å behandle søknader om tidlig opptak
 
   Regel: Opptaksforvalter kan åpne for søknad på ledige studieplasser
 
     Scenario: Aktivere ledige studieplasser
       Når opptaksforvalter angir at opptaket tilbyr søknad på ledige studieplasser
-      Så kan restplasser legges ut til søkere for ny søknad etter ordinær plasstildeling
+      Så kan opptaksforvalter sette dato for når ledige studieplasser legges ut
+      Og informasjon om muligheten for ledige studieplasser blir tilgjengelig for søknad og saksbehandling
+      # Følgevirkninger i søknad og saksbehandling: restplasser kan legges ut til søkere for ny søknad etter ordinær plasstildeling, merk at for å få gjort plasstildeling på ledige studieplasser, så må utdanningstilbud åpnes for det, og runde for ledige studieplasser må gjennomføres. 
 
   Regel: Opptaksforvalter kan angi om det er lov å sette avvikende søknadsfrister
 
@@ -99,8 +105,16 @@ Egenskap: Innstillinger for opptak
       Når opptaksforvalter angir at det er lov å sette tidligere søknadsfrister per utdanningstilbud
       Så kan opptaksforvalter ved deltakende organisasjon sette egne søknadsfrister på sine utdanningstilbud
 
-    Scenario: Tillate avvikende søknadsfrister per utdanningsbakgrunn
+  Regel: opptaksforvalter kan angi en siste frist for at saksbehandlere kan endre søkers utdanningsbakgrunn 
+  
+
+    Scenario: Tillate avvikende søknadsfrister per utdanningsbakgrunn @openquestion 
       Når opptaksforvalter angir at det er lov å sette avvikende søknadsfrister per utdanningsbakgrunn
+      |nordisk|
+      |eu/eøs|
+      |utenfor eu/eøs|
+      |realkompetanse|
+      |steinerskolen|
       Så kan opptaksforvalter opprette utdanningsbakgrunner med egne søknads- og dokumentasjonsfrister
 
   # Ikke viktig for samordna opptak 2027
