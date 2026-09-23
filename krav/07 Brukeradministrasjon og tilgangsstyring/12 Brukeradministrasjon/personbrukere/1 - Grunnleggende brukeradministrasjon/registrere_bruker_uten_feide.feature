@@ -7,11 +7,12 @@ Egenskap: Registrere en personbruker uten Feide-konto
   slik at ansatte ved læresteder uten Feide — blant annet fagskolene — kan få tilganger i FS.
 
   En personbruker uten Feide-konto logger inn med ID-porten i stedet for Feide. Hen har
-  ingen Feide-ID, og dermed heller ingen Feide-tilhørighet å utlede hjemorganisasjon fra.
-  Hjemorganisasjonen settes derfor eksplisitt av administratoren som registrerer
-  personbrukeren, og er organisasjonen som forvalter hen. Den er noe annet enn
-  organisasjonen en tildeling gjelder for, på samme måte som for øvrige personbrukere
-  (BRU-PER-GRU-007).
+  ingen Feide-ID, og dermed heller ingen Feide-tilhørighet som identifiserer hen eller
+  knytter hen til en organisasjon. Administratoren identifiserer derfor personen med
+  fødselsnummer ved registrering, og gir hen minst én tildeling i den samme operasjonen.
+  Personbrukeren har ingen hjemorganisasjon; det er tildelingene som knytter hen til
+  organisasjoner, og hver tildeling gjelder for en organisasjon og et miljø på samme måte
+  som for øvrige personbrukere (BRU-PER-GRU-003).
 
   Registrering er nødvendig fordi personbrukeren må kunne få roller før hen logger inn
   første gang. Selve påloggingen med ID-porten er dekket av TIL-PÅL-PÅL-002.
@@ -25,11 +26,11 @@ Egenskap: Registrere en personbruker uten Feide-konto
     Scenario: Registrere en ansatt som ikke har Feide-konto
       Gitt personen ikke har en Feide-konto
       Og personen har aldri logget inn i løsningen
-      Når jeg registrerer personen som personbruker med opplysningene som identifiserer hen entydig
+      Når jeg registrerer personen som personbruker med fødselsnummeret hens og minst én tildeling
       Så finnes personbrukeren i løsningen
       Og personbrukerens status er «Aktiv»
       Og det fremgår at personbrukeren ikke har logget inn ennå
-      Og jeg kan tildele personbrukeren roller før hen logger inn første gang
+      Og jeg kan tildele personbrukeren flere roller før hen logger inn første gang
       Og endringen er sporbar i historikk
 
     Scenario: Personbrukeren gjenkjennes ved første pålogging
@@ -45,7 +46,7 @@ Egenskap: Registrere en personbruker uten Feide-konto
       Når jeg registrerer den samme personen på nytt
       Så får jeg beskjed om at personen allerede er registrert
       Og det opprettes ikke en ny personbruker
-      Og jeg får ikke vite hvilken organisasjon den eksisterende personbrukeren hører til
+      Og jeg får ikke vite hvilke organisasjoner den eksisterende personbrukeren har tildelinger for
 
     Scenario: Registrering av en person som allerede har Feide-konto
       Gitt personen allerede finnes som personbruker med Feide-ID
@@ -53,31 +54,23 @@ Egenskap: Registrere en personbruker uten Feide-konto
       Så får jeg beskjed om at personen allerede er registrert
       Og det opprettes ikke en ny personbruker
 
-  Regel: Hjemorganisasjonen er organisasjonen som registrerer personbrukeren
+  Regel: En registrering må gi personbrukeren minst én tildeling
 
-    Scenario: Hjemorganisasjon settes ved registrering
-      Gitt jeg administrerer kun én organisasjon
-      Når jeg registrerer en personbruker
-      Så er personbrukerens hjemorganisasjon organisasjonen jeg administrerer
-      Og hjemorganisasjonen vises på personbrukerens detaljside
-
-    Scenario: Administrator for flere organisasjoner velger hjemorganisasjon
-      Gitt jeg administrerer flere organisasjoner
-      Når jeg åpner registreringen av en personbruker
-      Så må jeg velge hvilken organisasjon som skal være hjemorganisasjon
-      Og valglisten inneholder kun organisasjoner jeg har brukeradministrator-rollen for
-
-    Scenario: Hjemorganisasjonen utledes ikke fra påloggingen
-      Gitt jeg har registrert en personbruker med en valgt hjemorganisasjon
-      Når personen logger inn
-      Så har personbrukeren fortsatt hjemorganisasjonen jeg satte ved registrering
-      Og hjemorganisasjonen påvirkes ikke av e-postadresse eller andre opplysninger fra påloggingen
-
-    Scenario: Registrering krever brukeradministrator-rollen i hjemorganisasjonen
-      Gitt jeg ikke har brukeradministrator-rollen for en bestemt organisasjon
-      Når jeg forsøker å registrere en personbruker med den organisasjonen som hjemorganisasjon
+    Scenario: Registrering uten tildeling er ikke mulig
+      Gitt jeg holder på å registrere en personbruker
+      Og jeg har oppgitt fødselsnummeret hens
+      Og jeg har ikke gitt personbrukeren noen tildeling
+      Når jeg forsøker å fullføre registreringen
       Så blir personbrukeren ikke registrert
-      Og jeg får beskjed om at jeg mangler rettighet til å registrere personbrukere for organisasjonen
+      Og jeg får beskjed om at personbrukeren må ha minst én tildeling
+
+    Scenario: Registrering og første tildeling hører sammen
+      Gitt jeg registrerer en person som personbruker med fødselsnummeret hens
+      Og jeg gir personbrukeren en tildeling i den samme operasjonen
+      Når jeg fullfører registreringen
+      Så finnes personbrukeren med tildelingen
+      Og jeg finner personbrukeren igjen i brukeroversikten
+      Og tildelingen gir tilgang fra personbrukeren logger inn første gang
 
   Regel: Navnet hentes fra påloggingen
 
@@ -126,16 +119,9 @@ Egenskap: Registrere en personbruker uten Feide-konto
     # innlogging med tomt tilgangssett, og ordlyden i beskjeden er ikke avklart.
 
 # ÅPNE SPØRSMÅL:
-# - Hvilken opplysning administratoren taster for å identifisere personen entydig ved
-#   registrering, er ikke avklart. Kravet sier bare at identifiseringen må være entydig og at
-#   den samme personen må gjenkjennes ved første pålogging. Valget er ikke tatt, og det er et personvernspørsmål like mye som et teknisk et.
 # - Oppdateres navnet ved senere pålogginger hvis personen bytter navn, eller står navnet slik
 #   det var ved første pålogging? Juristen godkjente 21.09 at navnet hentes fra påloggingen,
 #   men ikke hvor ofte det leses.
-# - Kan hjemorganisasjonen endres senere? For personbrukere med Feide-ID løses arbeidsstedsbytte
-#   ved at personbrukeren slettes og opprettes på nytt med ny Feide-ID (BRU-PER-GRU-007). En
-#   personbruker uten Feide-konto beholder den samme identiteten på tvers av arbeidssted, så den
-#   utveien finnes ikke her.
 # - Skal en personbruker uten Feide-konto kunne slettes, eller er deaktivering (BRU-PER-GRU-014)
 #   eneste utvei når hen ikke lenger skal ha tilgang?
 # - Registreringen skal ha eget GitHub-issue som sub-issue under initiativet #514.
