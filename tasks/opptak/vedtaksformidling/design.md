@@ -2,7 +2,7 @@
 
 *Designfilen gir en teknisk-funksjonell beskrivelse av et konsept: hvordan det er ment å fungere, hvilke beslutninger som er tatt, hvor data kommer fra og hva som gjenstår. Den er skrevet for å skape forståelse på tvers av roller. Den svarer på hva og hvorfor — ikke på hvordan noe skal implementeres eller se ut.*
 
-Når plasstildelingen publiseres, skal søker varsles om at opptaksvedtaket foreligger i Min kompetanse. Denne oppgaven handler om *hvordan* meldingen sendes, ikke *hva* den inneholder — svarmeldingsmalen defineres på opptaket (se [opptak/design.md](../opptak/design.md)).
+Når plasstildelingen publiseres, skal søker varsles om at opptaksvedtaket foreligger i Min kompetanse. Denne oppgaven handler om *hvordan* meldingen sendes, ikke *hva* den inneholder — svarmeldingsmalen defineres på opptaket (se [opptak/design.md](../opprette-og-vedlikeholde-opptak/design.md)).
 
 **Status:** første utkast, 2026-09-11. Bygger på notat «Vedtaksbrev og svar på opptaket» av Karen Skadsheim Sikkeland.
 
@@ -29,7 +29,7 @@ Med vedtaksformidling mener vi prosessen fra plasstildelingen publiseres til sø
 | **Spørsmålet** | hva skal stå i meldingen? | hvordan når meldingen søkeren? | hvem får plassene? |
 | **Skjer** | settes ved oppretting av opptak | trigges av publisering | som en kjøring, per runde |
 | **Eier** | opptaksforvalter + jurist | systemet | opptaksleder |
-| **Dekkes her** | nei — se [opptak/design.md](../opptak/design.md) | ja | nei — se [plasstildeling/design.md](../plasstildeling/design.md) |
+| **Dekkes her** | nei — se [opptak/design.md](../opprette-og-vedlikeholde-opptak/design.md) | ja | nei — se [plasstildeling/design.md](../plasstildeling/design.md) |
 
 ### Mål
 
@@ -40,7 +40,7 @@ Med vedtaksformidling mener vi prosessen fra plasstildelingen publiseres til sø
 
 ### Ikke-mål
 
-- **Ikke svarmeldingsmalens innhold.** Det er dekket i [opptak/design.md](../opptak/design.md).
+- **Ikke svarmeldingsmalens innhold.** Det er dekket i [opptak/design.md](../opprette-og-vedlikeholde-opptak/design.md).
 - **Ikke digital postkasse i 2027.** Avklares separat (se beslutning 2).
 - **Ikke informasjon per utdanningstilbud.** Meldingen gjelder hele søknaden, ikke enkeltutdanninger.
 

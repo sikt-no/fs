@@ -4,11 +4,14 @@
 
 - **Issue**: –
 - **Initiativ**: #216 Ferdigstilling av plasstildeling i opptak
+- **Domene**: opptak
+- **Slug**: vedtaksformidling
 - **Fase**: utforskning
 - **Prioritet**: Should
 - **Type**: feature
 - **Eier**: –
 - **Reviewers som har sett oppgaven**: (ingen enda)
+- **Lag/roller i bruk**: –
 - **Lenker**:
   - design: [design.md](design.md) — varsling, kanaler, hendelseslogg og juridiske krav
   - plan: –

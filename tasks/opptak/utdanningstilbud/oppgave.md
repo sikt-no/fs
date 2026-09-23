@@ -4,11 +4,14 @@
 
 - **Issue**: [sikt-no/fs#398](https://github.com/sikt-no/fs/issues/398)
 - **Initiativ**: #216 Ferdigstilling av plasstildeling i opptak
+- **Domene**: opptak
+- **Slug**: utdanningstilbud
 - **Fase**: utforskning
 - **Prioritet**: Must
 - **Type**: feature
 - **Eier**: –
 - **Reviewers som har sett oppgaven**: (ingen enda)
+- **Lag/roller i bruk**: –
 - **Lenker**:
   - design: [design.md](design.md) — mål, retning, konfigurasjon og åpne spørsmål
   - plan: –

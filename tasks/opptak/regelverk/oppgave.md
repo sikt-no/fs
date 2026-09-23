@@ -4,11 +4,14 @@
 
 - **Issue**: [sikt-no/fs#576](https://github.com/sikt-no/fs/issues/576)
 - **Initiativ**: #216 Ferdigstilling av plasstildeling i opptak
+- **Domene**: opptak
+- **Slug**: regelverk
 - **Fase**: utvikling
 - **Prioritet**: Must
 - **Type**: feature
 - **Eier**: –
 - **Reviewers som har sett oppgaven**: (ingen enda)
+- **Lag/roller i bruk**: –
 - **Lenker**:
   - design: [design.md](design.md) — begreper, oppgaver, gap-analyse mot kode
   - plan: –

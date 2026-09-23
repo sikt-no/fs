@@ -38,7 +38,7 @@ Domenet er kebab-slug av toppnivået i [`krav/`](../krav/), uten tallprefiks og 
 
 | Domene | Tilsvarer `krav/` |
 |--------|-------------------|
-| `forberede-studier` | `01 Forberede studier` |
+| `utdanning` | `01 Utdanning` |
 | `opptak` | `02 Opptak` |
 | `gjennomfore-studier` | `03 Gjennomføre studier` |
 | `kompetanse` | `04 Kompetanse` |

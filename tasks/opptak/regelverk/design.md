@@ -14,7 +14,7 @@ Dokumentet er skrevet for alle som trenger å forstå hva opptaksregelverk er, h
 
 1. **En regelverkssamling er bundet til én organisasjon.** Samlingen eies av den organisasjonen som opprettet den, og den kan kopieres til andre organisasjoner. Endringer i originalen påvirker ikke kopien. Dette er tatt: koden og modellen virker slik.
 
-2. **Poenglikhetsregelen settes på opptaket, ikke på rangeringsregelverket.** Poenglikhetsregel er besluttet å flyttes fra rangeringsregelverk til opptaket. Regelen gjelder som default for alle utdanningstilbud i opptaket. Poenglikhetsregeltypene defineres i regelverkssamlingen, men det er opptaksforvalter som velger hvilken som er standard for opptaket. Se [opptak/design.md](../opptak/design.md) for hvordan dette settes.
+2. **Poenglikhetsregelen settes på opptaket, ikke på rangeringsregelverket.** Poenglikhetsregel er besluttet å flyttes fra rangeringsregelverk til opptaket. Regelen gjelder som default for alle utdanningstilbud i opptaket. Poenglikhetsregeltypene defineres i regelverkssamlingen, men det er opptaksforvalter som velger hvilken som er standard for opptaket. Se [opptak/design.md](../opprette-og-vedlikeholde-opptak/design.md) for hvordan dette settes.
 
 3. **Hva skjer med regelverket når søknader allerede er under behandling?** Det finnes ingen låseregel eller varslingsmekanisme som fanger opp at noen endrer et kompetansekrav eller en rangeringsregel mens søknader vurderes mot det. Konsekvensen av å endre regelverket etter at søknadsbehandling har startet er udefinert. Forslag om å innføre varslingsmekanisme, myk skranke, fordi det kan være behov for å rette feil i regelverk etter at søknader er behandlet.
 
@@ -36,7 +36,7 @@ Med opptaksregelverk mener vi reglene som avgjør om en søker er kvalifisert, o
 
 Regelverket eies av en organisasjon (lærested eller sentralt opptaksorgan), pakkes i en regelverkssamling, og kobles til et opptak. Utdanningstilbud i opptaket kan kun benytte seg av regelverk og kvotetyper som inngår i opptakets regelverkssamling.
 
-**Merk:** Poenglikhetsregel (hva som skjer ved lik poengsum) settes på opptaket, ikke i regelverkssamlingen. Se [opptak/design.md](../opptak/design.md). Det er noe annet enn plasstildelingen, som bruker regelverket for å fordele plasser — se [plasstildeling/design.md](../plasstildeling/design.md).
+**Merk:** Poenglikhetsregel (hva som skjer ved lik poengsum) settes på opptaket, ikke i regelverkssamlingen. Se [opptak/design.md](../opprette-og-vedlikeholde-opptak/design.md). Det er noe annet enn plasstildelingen, som bruker regelverket for å fordele plasser — se [plasstildeling/design.md](../plasstildeling/design.md).
 
 | | Regelverk                                                     | Plasstildeling |
 |---|---------------------------------------------------------------|----------------|
@@ -125,7 +125,7 @@ rangeringsregelverk
 
 **Poengberegning:** En poengtype er unikt identifisert av kombinasjonen poengklasse + poengvariant. Poengtypen har `minimum`, `maksimum`, `antall_desimaler`, `antall_sifre`, `poengtrinn` og en `poengalgoritme_kode`. Poengformler (`poengformel`) definerer uttrykk som summerer poengklasser.
 
-**Poenglikhetsregel:** Poenglikhetsregel settes ikke lenger på rangeringsregelverket — den er flyttet til opptaket. Feltet på rangeringsregelverk skal fjernes. Se [opptak/design.md](../opptak/design.md).
+**Poenglikhetsregel:** Poenglikhetsregel settes ikke lenger på rangeringsregelverket — den er flyttet til opptaket. Feltet på rangeringsregelverk skal fjernes. Se [opptak/design.md](../opprette-og-vedlikeholde-opptak/design.md).
 
 **Språkstøtte:** Rangeringsregelverk har `beskrivelse` per språk. Poengklasser og poengvarianter har `navn`/`beskrivelse` per språk.
 
@@ -261,7 +261,7 @@ Evidensnivå: **M** = verifisert i datamodellen, **V** = verifisert i koden, **H
 
 ### 1. Poenglikhetsregel flyttes til opptaket (besluttet)
 
-Poenglikhetsregel er besluttet flyttet fra rangeringsregelverk til opptaket. Poenglikhetsregeltypene defineres i regelverkssamlingen, men standard poenglikhetsregel for opptaket settes av opptaksforvalter på opptaket. Se [opptak/design.md](../opptak/design.md). Feltet på rangeringsregelverk skal fjernes.
+Poenglikhetsregel er besluttet flyttet fra rangeringsregelverk til opptaket. Poenglikhetsregeltypene defineres i regelverkssamlingen, men standard poenglikhetsregel for opptaket settes av opptaksforvalter på opptaket. Se [opptak/design.md](../opprette-og-vedlikeholde-opptak/design.md). Feltet på rangeringsregelverk skal fjernes.
 
 ### 2. Kopiering er ikke deling
 
@@ -369,7 +369,7 @@ Lukkede: kvalifisering/rangering/GSK på grunnlag, kjernefag, algoritme (→ TAK
 
 ### Må gjøres for 2027
 
-1. **Fjern poenglikhetsregel fra rangeringsregelverk.** Feltet skal fjernes. Poenglikhetsregel settes nå på opptaket. Se [opptak/design.md](../opptak/design.md).
+1. **Fjern poenglikhetsregel fra rangeringsregelverk.** Feltet skal fjernes. Poenglikhetsregel settes nå på opptaket. Se [opptak/design.md](../opprette-og-vedlikeholde-opptak/design.md).
 2. **Avklar vitnemålskravkoder.** Kodekilde og uttømmende liste uavklart — oppfølgingsmøte 17. sept.
 3. **Varsling ved sletting av regelverk.** Opptaksforvalter skal få varsel når de sletter et regelverk som ikke er knyttet til et opptak. Varsling ved endring av regelverk under saksbehandling kan vente til senere (se beslutning 3).
 

@@ -4,11 +4,14 @@
 
 - **Issue**: [sikt-no/fs#216](https://github.com/sikt-no/fs/issues/216)
 - **Initiativ**: #216 Ferdigstilling av plasstildeling i opptak
+- **Domene**: opptak
+- **Slug**: plasstildeling
 - **Fase**: utforskning
 - **Prioritet**: Must
 - **Type**: feature
 - **Eier**: –
 - **Reviewers som har sett oppgaven**: (ingen enda)
+- **Lag/roller i bruk**: –
 - **Lenker**:
   - design: [design.md](design.md) — mål, retning, prinsipper, regelverk og åpne spørsmål
   - plan: –
@@ -249,7 +252,7 @@ Plassflyt opererer kun innenfor én plasstildeling. Kryss-tildeling-kolonnene i 
 | Søker som mister kvalifisering får avslag | Les/skriv-asymmetri i resultattype | S |
 | Tilbudsgaranti fra markert utdanningskvote | `opptak.tilbudsgaranti_kvote` | Ingen | M |
 | Kvoteprioritet | Tre nivåer: `kvotetype` → `kvote` → `studiekvote` | Ingen | M |
-| Poenglikhetsregel koblet til opptaket | **Dagens kode:** regelen henger på kvotetype. **Besluttet ny løsning:** settes på opptaket. Feltet på rangeringsregelverk skal fjernes. Se [opptak/design.md](../opptak/design.md) | M |
+| Poenglikhetsregel koblet til opptaket | **Dagens kode:** regelen henger på kvotetype. **Besluttet ny løsning:** settes på opptaket. Feltet på rangeringsregelverk skal fjernes. Se [opptak/design.md](../opprette-og-vedlikeholde-opptak/design.md) | M |
 | Fire poenglikhetsregler | To av fire ser ut til å være dekket i dagens kode | S |
 
 Poenggrense-beregning er designet i skjemaet men **ikke implementert**. Hele tabellen er tom. Dette er en ny feature, ikke en feilretting.

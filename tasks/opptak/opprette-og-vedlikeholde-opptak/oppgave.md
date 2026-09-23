@@ -4,11 +4,14 @@
 
 - **Issue**: [sikt-no/fs#211](https://github.com/sikt-no/fs/issues/211)
 - **Initiativ**: #216 Ferdigstilling av plasstildeling i opptak
+- **Domene**: opptak
+- **Slug**: opprette-og-vedlikeholde-opptak
 - **Fase**: utforskning
 - **Prioritet**: Must
 - **Type**: feature
 - **Eier**: –
 - **Reviewers som har sett oppgaven**: (ingen enda)
+- **Lag/roller i bruk**: –
 - **Lenker**:
   - design: [design.md](design.md) — mål, retning, innstillinger, frister, tekster og åpne spørsmål
   - plan: –

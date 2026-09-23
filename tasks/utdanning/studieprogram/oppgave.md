@@ -4,11 +4,14 @@
 
 - **Issue**: –
 - **Initiativ**: –
-- **Fase**: design
-- **Prioritet**: high
+- **Domene**: utdanning
+- **Slug**: studieprogram
+- **Fase**: utforskning
+- **Prioritet**: Must
 - **Type**: feature
 - **Eier**: –
 - **Reviewers som har sett oppgaven**: (ingen enda)
+- **Lag/roller i bruk**: –
 - **Lenker**:
   - design: [design.md](design.md) — mål, retning, tre-nivå-modellen og åpne spørsmål
   - plan: –

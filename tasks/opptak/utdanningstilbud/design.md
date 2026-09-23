@@ -43,7 +43,7 @@ Denne oppgaven dekker hele kjeden fra utdanning til utdanningstilbud i kontekst 
 
 ### Ikke-mål
 
-- **Ikke oppretting av opptak.** Dekket i [opptak/design.md](../opptak/design.md).
+- **Ikke oppretting av opptak.** Dekket i [opptak/design.md](../opprette-og-vedlikeholde-opptak/design.md).
 - **Ikke plasstildeling.** Dekket i [plasstildeling/design.md](../plasstildeling/design.md).
 
 ---
@@ -106,7 +106,7 @@ For samordna opptak 2027 er det to ulike situasjoner:
 
 **Universiteter og høyskoler:** Alle UH-læresteder som er med i samordna opptak bruker FS-SIS, som har integrasjon mot utdanningsregisteret. Utdanninger opprettes i FS-SIS og overføres automatisk til utdanningsregisteret.
 
-**Fagskoler:** Fagskolenes SIS-er integrerer ikke mot utdanningsregisteret. For 2027-opptaket vil fagskolene registrere sine utdanninger i et **eget grensesnitt direkte mot utdanningsregisteret**. Se [studieprogram/design.md](../../../utdanning/oppgaver/studieprogram/design.md) for design av dette grensesnittet.
+**Fagskoler:** Fagskolenes SIS-er integrerer ikke mot utdanningsregisteret. For 2027-opptaket vil fagskolene registrere sine utdanninger i et **eget grensesnitt direkte mot utdanningsregisteret**. Se [studieprogram/design.md](../../utdanning/studieprogram/design.md) for design av dette grensesnittet.
 
 ### Dataflyt fra FS-SIS til utdanningsregisteret
 
@@ -211,7 +211,7 @@ Alle disse feltene eies av utdanningsregisteret. Opptak lagrer dem **ikke** — 
 | Konsept | Status | Merknad |
 |---------|--------|---------|
 | Utdanningstilbud med denormalisert søkeindeks | Finnes | Ekstern ID til utdanningsinstans + denormaliserte felter for søk/filter (NKR, fagområde, undervisningstyper, campus m.fl.) |
-| Kobling utdanningsmulighet → opptakstype | Finnes | `opptak.utdanningsmulighet_opptakstype`. Brukes for å uttrykke varig intensjon: «denne utdanningen skal tilbys gjennom denne opptakstypen». Se beslutning 1 i [opptak/design.md](../opptak/design.md) — opptakstype bevares som fast kodeverk for matching, selv om konfigurasjonsnivået utgår. |
+| Kobling utdanningsmulighet → opptakstype | Finnes | `opptak.utdanningsmulighet_opptakstype`. Brukes for å uttrykke varig intensjon: «denne utdanningen skal tilbys gjennom denne opptakstypen». Se beslutning 1 i [opptak/design.md](../opprette-og-vedlikeholde-opptak/design.md) — opptakstype bevares som fast kodeverk for matching, selv om konfigurasjonsnivået utgår. |
 | Opptaksspesifikke innstillinger per tilbud | Finnes | Kapasitet, regelverk, kvoter, kjønnspoeng, visningsvalg |
 | Federation-oppsett med ureg | Finnes | `Utdanningsinstans` er en entity stub i opptak-subgrafen (`@key(fields: "id", resolvable: false)`). Routeren løser visningsdata fra ureg. |
 | Logisk replikering av entitetstabeller | Finnes | Opptak abonnerer på `utdanning.utdanningsinstans` (kun primærnøkkel) fra ureg. Fremmednøkkel fra `opptak.utdanningstilbud` sikrer referanseintegritet i databaselaget. |

@@ -1,6 +1,6 @@
 # Veikart — Utdanning
 
-Siste oppdatering: 2026-09-11
+Siste oppdatering: 2026-09-23
 
 Dette veikartet viser oppgaver teamet aktivt jobber med eller har levert.
 
@@ -8,7 +8,7 @@ Dette veikartet viser oppgaver teamet aktivt jobber med eller har levert.
 
 | Issue | Oppgave | Initiativ | Fase | Prioritet | Eier | Reviewere | Mappe |
 |-------|---------|-----------|------|-----------|------|-----------|-------|
-| – | Opprette og vedlikeholde studieprogram | – | design | high | – | – | [studieprogram](oppgaver/studieprogram/) |
+| – | Opprette og vedlikeholde studieprogram | – | utforskning | Must | – | – | [studieprogram](studieprogram/) |
 
 ## Ferdig
 
