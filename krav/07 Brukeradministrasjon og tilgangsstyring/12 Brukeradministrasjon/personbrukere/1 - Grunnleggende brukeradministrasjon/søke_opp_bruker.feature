@@ -251,5 +251,5 @@ Egenskap: Listevisning og søk i personbrukere
 # - Rolle-navn: "brukeradministrator" er valgt. Sjekk at rolledefinisjonene i "4 - Opprette og administrere roller" bruker samme navn.
 # - Søk på Feide-ID: skal søket finne en personbruker når søketeksten finnes i en av Feide-ID-ene til Feide-brukerne som er koblet til personbrukeren?
 # - Hva skjer med Feide-brukere som ikke er koblet til en person: skal de vises i brukeroversikten?
-# - Brukere uten Feide-ID er nå modellert i egne krav: BRU-PER-GRU-013 (registrere en personbruker uten Feide-konto) og BRU-PER-GRU-014 (forvalte en personbruker uten Feide-konto). De har alltid en hjemorganisasjon, satt eksplisitt ved registrering, og følger synlighetsreglene over uendret.
+# - Brukere uten Feide-ID er nå modellert i egne krav: BRU-PER-GRU-013 (registrere en personbruker uten Feide-konto) og BRU-PER-GRU-014 (forvalte en personbruker uten Feide-konto). De har ingen hjemorganisasjon, identifiseres med fødselsnummer ved registrering, og er synlige gjennom sine aktive tildelinger. Hjemorganisasjonsfilteret over gjelder derfor ikke for dem.
 # - Gjenstår: skal brukere med flere identiteter modelleres her, eller i et eget krav?
