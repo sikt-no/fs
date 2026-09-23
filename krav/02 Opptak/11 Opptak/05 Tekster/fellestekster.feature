@@ -1,5 +1,6 @@
 # language: no
-@OPT-OPT-TEK-001 @should @draft
+@OPT-OPT-TEK-001 @won´t @draft
+# Dette kan vente til senere, ikke viktig for 2027-opptak. Tekstene trenger ikke kunne redigeres, bare vises studenten. 
 Egenskap: Fellestekster for opptak
   Som opptaksforvalter ved forvaltende organisasjon
   ønsker jeg å sette tekster som vises til søkere
