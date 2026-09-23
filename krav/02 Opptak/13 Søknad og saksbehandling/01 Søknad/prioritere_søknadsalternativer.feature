@@ -35,9 +35,14 @@ Egenskap: Prioritere søknadsalternativer
 
   Regel: Prioriteringen kan endres på en levert søknad
 
+    @openquestion
     Scenario: Søkeren endrer prioritering på en levert søknad
+      # ÅPNE SPØRSMÅL:
+      # - Kvitteringstekstene i Confluence opererer med to ulike frister: studieønsker kan
+      #   legges til og fjernes fram til søknadsfristen, mens rekkefølgen kan endres et stykke
+      #   lenger. Er dette to separate frister i modellen, og hva heter i så fall den siste?
       Gitt at søkeren har levert en søknad i et opptak
-      Og søknadsfristen for opptaket ikke har gått ut
+      Og fristen for å endre prioritering ikke har gått ut
       Når søkeren endrer prioriteringen og lagrer den
       Så har søknaden den nye prioriteringen
 

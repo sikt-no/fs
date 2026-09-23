@@ -82,3 +82,32 @@ Egenskap: Se meldinger om egne søknader
       Gitt at søkeren har mottatt en melding av typen KVITTERING for en levert søknad
       Når søkeren åpner meldingen
       Så vises hvilket opptak og hvilke utdanningstilbud kvitteringen gjelder
+
+  Regel: Søkeren får kvittering for endringer på søknaden
+
+    Scenariomal: Kvittering for hendelsen <hendelse>
+      Gitt at søkeren har en søknad i et opptak
+      Når <hendelse>
+      Så mottar søkeren en melding av typen KVITTERING om hendelsen
+
+      Eksempler:
+        | hendelse                                  |
+        | søkeren leverer søknaden                  |
+        | søkeren trekker søknaden                  |
+        | søkeren endrer rekkefølgen på studieønsker|
+        | søkeren endrer studieønskene              |
+        | søkeren laster opp nye dokumenter         |
+        | søkeren svarer på søknaden                |
+
+    Scenariomal: Kvittering når saksbehandleren gjør endringen <hendelse>
+      Gitt at søkeren har en søknad i et opptak
+      Når <hendelse>
+      Så mottar søkeren en melding av typen KVITTERING som opplyser at saksbehandleren gjorde endringen
+
+      Eksempler:
+        | hendelse                                             |
+        | saksbehandleren leverer søknaden på søkerens vegne   |
+        | saksbehandleren endrer rekkefølgen på studieønskene  |
+        | saksbehandleren endrer studieønskene                 |
+        | saksbehandleren laster opp dokumentasjon             |
+        | saksbehandleren trekker søknaden                     |

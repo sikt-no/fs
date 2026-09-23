@@ -27,15 +27,26 @@ Egenskap: Trekke egen søknad
       Når søkeren velger å trekke søknaden
       Så opplyses søkeren om søknadsfristen i bekreftelsen
 
-  Regel: En søknad kan ikke trekkes etter at opptaket har kjørt
+  Regel: En ferdigbehandlet søknad kan ikke trekkes
 
+    Scenario: Søknaden er ferdigbehandlet
+      Gitt at søknaden har status BEHANDLET
+      Når søkeren åpner søknaden
+      Så tilbys ikke søkeren å trekke søknaden
+
+    @openquestion
     Scenario: Opptaket har kjørt plasstildeling
+      # ÅPNE SPØRSMÅL:
+      # - Opptak-subgrafen avviser trekkSoknadV2 med SoknadFeilOpptaketHarKjort når opptaket
+      #   har kjørt plasstildeling, mens flaten skjuler trekk-valget først når søknaden har
+      #   status BEHANDLET. Er disse ment å være samme tilstand, eller finnes det et vindu der
+      #   søkeren tilbys å trekke en søknad som ikke lar seg trekke?
       Gitt at opptaket har kjørt plasstildeling
+      Og søknaden ikke har status BEHANDLET
       Når søkeren forsøker å trekke søknaden
-      Så avvises trekkingen fordi opptaket har kjørt
-      Og søkeren henvises til å svare nei på tilbudet i stedet
+      Så tilbys ikke søkeren å trekke søknaden
 
-    Scenario: Søknadsfristen har gått ut, men opptaket har ikke kjørt
+    Scenario: Trekke etter søknadsfrist før plasstildeling
       Gitt at søknadsfristen for opptaket har gått ut
       Og opptaket ikke har kjørt plasstildeling
       Når søkeren trekker søknaden

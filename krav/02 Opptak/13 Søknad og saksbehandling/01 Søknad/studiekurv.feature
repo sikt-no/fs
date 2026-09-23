@@ -48,16 +48,26 @@ Egenskap: Samle utdanningstilbud i studiekurven
       Så vises søknadsfristen for opptaket i seksjonen
 
     Scenariomal: Seksjonen viser hva søkeren kan gjøre videre i opptaket
-      Gitt at søkeren har utdanningstilbud i studiekurven for et opptak
+      Gitt at søkeren har utdanningstilbud i studiekurven for et opptak med åpen søknadsfrist
       Og søknadskladden for opptaket har tilstand <tilstand>
       Når søkeren åpner studiekurven
       Så tilbys søkeren å <handling> for opptaket
 
       Eksempler:
-        | tilstand  | handling            |
-        | OPPRETTET | starte søknaden     |
-        | STARTET   | fortsette søknaden  |
-        | ENDRET    | endre søknaden      |
+        | tilstand  | handling           |
+        | OPPRETTET | starte søknaden    |
+        | STARTET   | fortsette søknaden |
+        | ENDRET    | endre søknaden     |
+
+    Scenario: Leverte søknadskladder vises ikke i studiekurven
+      Gitt at søknadskladden for et opptak har tilstand LEVERT
+      Når søkeren åpner studiekurven
+      Så vises ikke opptaket i studiekurven
+
+    Scenario: Tomme søknadskladder vises ikke i studiekurven
+      Gitt at søknadskladden for et opptak har tilstand OPPRETTET uten søknadsalternativer
+      Når søkeren åpner studiekurven
+      Så vises ikke opptaket i studiekurven
 
   Regel: Utdanningstilbud i utløpte opptak kan ikke søkes på
 
@@ -66,6 +76,16 @@ Egenskap: Samle utdanningstilbud i studiekurven
       Når søkeren åpner studiekurven
       Så vises utdanningstilbudene i en egen seksjon for utløpte opptak
       Og søkeren tilbys ikke å starte søknad for opptaket
+
+    @openquestion
+    Scenario: Søkeren åpner et utdanningstilbud i et opptak med utløpt søknadsfrist
+      # ÅPNE SPØRSMÅL:
+      # - Meldt i #rt-opptak 2026-08-10: søkere kommer inn på utdanningstilbud via direktelenke
+      #   etter at søknadsfristen har gått ut, og får tilbudt "legg til" selv om det ikke virker.
+      #   Skal muligheten skjules når fristen har gått ut? Ikke besluttet.
+      Gitt at søknadsfristen for opptaket har gått ut
+      Når søkeren åpner utdanningstilbudet
+      Så tilbys ikke søkeren å legge utdanningstilbudet i studiekurven
 
     Scenario: Søkeren rydder bort alle utløpte utdanningstilbud
       Gitt at søkeren har utdanningstilbud i studiekurven for flere opptak der søknadsfristen har gått ut
