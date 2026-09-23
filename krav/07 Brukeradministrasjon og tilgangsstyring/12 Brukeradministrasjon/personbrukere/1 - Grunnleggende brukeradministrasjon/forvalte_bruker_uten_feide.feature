@@ -152,7 +152,8 @@ Egenskap: Forvalte en personbruker uten Feide-konto
 # - Skal listen kunne filtreres på påloggingsmåte (Feide / ID-porten)?
 # - Gjelder nekt og inndragning av roller og tilganger (BRU-PER-GRU-011, BRU-PER-GRU-012)
 #   uendret for denne typen personbruker? Antatt ja, men ikke bekreftet.
-# - En personbruker uten Feide-konto har ingen hjemmedomene-tilhørighet å falle tilbake på i
-#   synlighetsreglene; en aktiv tildeling er det eneste som holder hen synlig. Hva som skal skje
-#   når den siste aktive tildelingen fjernes, er ikke avklart, og kravet sier med hensikt ingenting om det.
+# - For en administrator i en annen organisasjon enn personbrukerens hjemorganisasjon er det en
+#   aktiv tildeling som gir synlighet. Hva som skal skje med den administratorens bilde når den
+#   siste slike tildelingen fjernes, er ikke avklart. For hjemorganisasjonen er personbrukeren
+#   synlig uansett.
 # - Forvaltningen skal ha eget GitHub-issue som sub-issue under initiativet #514.
