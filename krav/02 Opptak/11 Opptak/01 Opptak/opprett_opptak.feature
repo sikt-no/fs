@@ -61,6 +61,14 @@ Egenskap: Opprette et opptak
       Når opptaksforvalter angir navn på bokmål, nynorsk, engelsk og samisk
       Så er navnene lagret på alle fire språk
 
+ Regel: Obligatorisk med både bokmål og nynorsk navn på opptak
+
+    Scenario: Angi opptaksnavn på obligatoriske spårk
+      Gitt at opptaksforvalter har opprettet opptaket "Samordna opptak 2027"
+      Når opptaksforvalter angir navn på bokmål og nynorsk
+      Så er er obligatoriske navn fyllt ut
+      
+
   @should
   Regel: Det skal være mulig å gjenbruke innstillinger fra et tidligere opptak
 
