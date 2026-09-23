@@ -9,8 +9,8 @@ Egenskap: Forvalte en personbruker uten Feide-konto
   En personbruker uten Feide-konto er en fullverdig personbruker: hen kan ha roller,
   vises i oversikten, søkes opp, ses i detalj, og deaktiveres og reaktiveres. Forskjellen
   fra en personbruker med Feide-ID er at hen ikke har en Feide-ID og ingen hjemorganisasjon:
-  hen er identifisert med fødselsnummer ved registrering (BRU-PER-GRU-013), og det er
-  tildelingene alene som knytter hen til organisasjoner.
+  hen er identifisert med fødselsnummer eller D-nummer ved registrering (BRU-PER-GRU-013), og
+  det er tildelingene alene som knytter hen til organisasjoner.
 
   Kravet utdyper BRU-PER-GRU-001 (listevisning og søk), BRU-PER-GRU-007 (detaljer),
   BRU-PER-GRU-003 (tildele roller), BRU-PER-GRU-012 (fjerne roller) og BRU-PER-GRU-004
@@ -75,6 +75,15 @@ Egenskap: Forvalte en personbruker uten Feide-konto
       Og personbrukeren har ingen aktive tildelinger som gir tilgang til data fra mine
       Når jeg åpner brukeroversikten
       Så ser jeg ikke personbrukeren i listen
+
+    Scenario: Fjerning av den siste aktive tildelingen gjør personbrukeren usynlig
+      Gitt jeg ser detaljsiden for en personbruker uten Feide-konto med én aktiv tildeling
+      Når jeg fjerner tildelingen
+      Så er tildelingen fjernet
+      Og endringen er sporbar i historikk
+      Og personbrukeren vises ikke lenger i brukeroversikten min
+      Og personbrukeren dukker ikke opp når jeg søker
+      Og personbrukeren blir synlig igjen når hen får en ny aktiv tildeling for en organisasjon jeg administrerer
 
   Regel: Roller tildeles og fjernes som for øvrige personbrukere
 
@@ -148,10 +157,12 @@ Egenskap: Forvalte en personbruker uten Feide-konto
 # - Skal listen kunne filtreres på påloggingsmåte (Feide / ID-porten)?
 # - Gjelder nekt og inndragning av roller og tilganger (BRU-PER-GRU-011, BRU-PER-GRU-012)
 #   uendret for denne typen personbruker? Antatt ja, men ikke bekreftet.
-# - Uten hjemorganisasjon avhenger synligheten til en personbruker uten Feide-konto helt av aktive
-#   tildelinger. Designet forutsetter at hen aldri er uten rolle: registreringen krever minst én
-#   tildeling (BRU-PER-GRU-013). Hva som skal skje når en administrator forsøker å fjerne den
-#   siste aktive tildelingen, er ikke avklart.
+# - Når den siste aktive tildelingen er fjernet, er personbrukeren ikke synlig i noen liste, og
+#   det er bestemt at neste tildeling gjør hen synlig igjen. Hvordan administratoren gir den
+#   tildelingen til en personbruker hen ikke kan finne, er ikke avklart. Å registrere det samme
+#   fødselsnummeret eller D-nummeret på nytt er den nærliggende kandidaten, men det ville endre
+#   scenariet «Personen er allerede registrert» i BRU-PER-GRU-013, som i dag avviser en gjentatt
+#   registrering.
 # - Deaktivering gjør alle tildelingene inaktive. Hvordan en deaktivert personbruker uten
 #   Feide-konto da forblir synlig for administratoren som skal kunne reaktivere hen, er ikke
 #   avklart; for øvrige personbrukere er det hjemorganisasjonen som gir den synligheten.
