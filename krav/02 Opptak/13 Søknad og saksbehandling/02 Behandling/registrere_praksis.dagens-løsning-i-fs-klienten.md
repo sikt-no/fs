@@ -164,7 +164,7 @@ To feil i den setningen:
    saksbehandleren.
 
 Automatisk godkjenning av kravelement er derfor **ny funksjonalitet**, ikke en
-videreføring. Det flytter `@OPT-BEH-PRA-002` fra «erstatte det som finnes» til
+videreføring. Det flytter `@OPT-BEH-BEH-004` fra «erstatte det som finnes» til
 «bygge noe nytt», med tilhørende behov for avklaring.
 
 ## Hva som ikke er undersøkt
