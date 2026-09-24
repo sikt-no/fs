@@ -126,8 +126,6 @@ Egenskap: Søke på opptak
 
   Scenario: Person kan trekke søknaden
 
-  Scenario: Søker oppgir om de søker på grunnlag av realkompetanse
-
   Scenario: Person kan svare på tilbud om studieplass
   Scenario: Person kan endre svar på søknad mellom ja og nei før en gitt frist
   Scenario: Saksbehandler kan svare på tilbud manuelt på vegne av søker

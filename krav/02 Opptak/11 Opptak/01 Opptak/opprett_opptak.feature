@@ -75,7 +75,8 @@ Egenskap: Opprette et opptak
     @openquestion
     # ÅPNE SPØRSMÅL:
     # - Hva kopieres og hva kopieres ikke?
-    # - Forslag: innstillinger, frister, eventuelle inviterte læresteder, opptakstype og fellestekster kopieres.
+    # - Forslag: innstillinger, frister, eventuelle inviterte læresteder, opptakstype, fellestekster
+    #   og utdanningsbakgrunner (med tilhørende konfigurasjon) kopieres.
     #   Utdanningstilbud og regelverkssamling kopieres ikke, men legges til eksplisitt
     Scenario: Opprette opptak basert på tidligere opptak
       Gitt at opptaket "Samordna opptak 2026" finnes med innstillinger, frister og fellestekster
