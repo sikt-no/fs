@@ -20,6 +20,14 @@ Spør brukeren:
 
 Les feature-filen og list opp steps som trenger implementasjon.
 
+**Bare validerte krav implementeres.** Sjekk tag-linja på `Egenskap:` og på hver `Regel:`/`Scenario:`:
+
+- `Egenskap:` er `@draft` eller mangler status → ikke lag steps. Henvis til `fs-krav` for validering først.
+- `Regel:` eller `Scenario:`/`Scenariomal:` er `@draft` (typisk `@draft @openquestion`) → hopp over delen. `@draft` på en regel gjelder alle scenarioene under den. List delene du hopper over for brukeren, med spørsmålene fra `# ÅPNE SPØRSMÅL:`.
+- Ønsker brukeren likevel steps for en `@draft`-del, henvis til `fs-krav` — ikke fjern `@draft` selv.
+
+Steps som *deles* mellom et validert scenario og et `@draft`-scenario lages som vanlig — det er scenarioet, ikke steget, som er utkast.
+
 ### 2. Finn eksisterende steps
 
 Søk etter gjenbrukbare steps i `tester/steps/**/*.ts`:
@@ -174,7 +182,7 @@ Scenariene i feature-filer er kravspesifikasjoner, ikke bare tester. Hvis en tes
 - Fjerne steg som beskriver viktig forretningslogikk
 - Endre logikken i kravet
 
-Hvis et scenario ikke kan testes med tilgjengelig testdata, merk det som `@planned` og dokumenter hva som mangler - ikke endre kravet.
+Hvis et scenario ikke kan testes med tilgjengelig testdata, ikke endre kravet eller statustaggene. Dokumenter hva som mangler i en `# TODO:`-kommentar under scenarioet (f.eks. `# TODO: mangler testdata for søker med trukket søknad`), og rapporter det til brukeren. Statustaggene (`@draft`, `@planned`, …) eies av `fs-krav` og `fs-specify`.
 
 ---
 
