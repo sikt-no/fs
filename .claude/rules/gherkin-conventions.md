@@ -99,8 +99,12 @@ Hver feature **må tagges** med en unik ID. ID-en legges inn manuelt som tag i f
 ### Kravstatus
 Sier noe om selve **kravteksten** — er den ferdig skrevet, avklart og klar til bruk?
 
-- `@draft` - Utkast. Kravteksten er ikke ferdig: åpne spørsmål, uavklart scope, eller mangler review. Skal ikke legges til grunn for implementasjon som den er.
-- (ingen tag) - Kravet er ferdig skrevet og avklart, klart til bruk.
+- `@draft` - Utkast. Kravteksten er ikke ferdig: åpne spørsmål, uavklart scope, eller mangler review. Skal ikke legges til grunn for implementasjon som den er. **Alle nye krav starter som `@draft`**, og blir stående slik til de er validert. `@planned` settes bare på validerte krav — validert i en gjennomgang (`fs-krav`, modus B), eller når det eksplisitt er sagt at kravet skal ha `@planned`. Et krav uten status regnes som ikke validert.
+
+`@draft` kan stå på to nivåer:
+
+- **På `Egenskap:`** — hele kravet er utkast.
+- **På `Regel:` eller `Scenario:`/`Scenariomal:`** — bare denne delen er utkast, mens resten av egenskapen er `@planned` (eller `@in-progress`). Se *Delvis utkast* under.
 
 ### Implementasjonsstatus
 Sier noe om **koden** — er funksjonaliteten bygget?
@@ -113,7 +117,37 @@ Implementasjonsstatusen beveger seg langs én akse, og hvert steg har én eier:
 
 `@draft` →(`fs-krav`)→ `@planned` →(`fs-specify` / `fs-specify-delta`)→ `@in-progress` →(verifisering)→ `@implemented`
 
-Et krav skal ha nøyaktig én av disse på `Egenskap:`-tag-linja. Ikke sett to samtidig, og ikke la et krav stå uten status.
+Et krav skal ha nøyaktig én av disse på `Egenskap:`-tag-linja. Ikke sett to samtidig, og ikke la et krav stå uten status. `@planned`, `@in-progress` og `@implemented` hører bare hjemme på `Egenskap:` — på `Regel:`/`Scenario:` er `@draft` den eneste statustaggen.
+
+### Delvis utkast
+
+En `Egenskap:` kan være `@planned` selv om enkelte regler eller scenarioer fortsatt er utkast, **når det er en bevisst beslutning**: hovedflyten er avklart og kan implementeres, mens en avgrenset del venter på avklaring.
+
+- Delen tagges `@draft @openquestion` på `Regel:`- eller `Scenario:`-linja, og følges av en `# ÅPNE SPØRSMÅL:`-kommentar som beskriver hva som mangler.
+- `@draft` på en `Regel:` gjelder alle scenarioene under den.
+- En `@draft`-del skal ikke implementeres før den er avklart. Når den er avklart, fjernes `@draft`, `@openquestion` og den besvarte kommentaren. `Egenskap:`-taggen endres ikke av det.
+- Under en `Egenskap:` som selv er `@draft` skal deler **ikke** tagges `@draft` (det er dekket av egenskapen). `@openquestion` kan fortsatt brukes for å peke ut konkrete spørsmål.
+
+Forskjellen på `@openquestion` alene og `@draft @openquestion`:
+
+| Tagging på `Regel:`/`Scenario:` | Betyr |
+|---|---|
+| `@openquestion` | Delen er klar til implementasjon, men en detalj må lukkes før akkurat den detaljen bygges. |
+| `@draft @openquestion` | Delen som helhet er ikke klar, og skal holdes utenfor implementasjonen til den er avklart. |
+
+```gherkin
+@BRU-APP-API-001 @must @planned
+Egenskap: ...
+
+  Regel: Hovedflyt som er avklart
+    Scenario: ...
+
+  @draft @openquestion
+  Regel: Varsling ved utløpt passord
+    # ÅPNE SPØRSMÅL:
+    # - Skal varselet gå på e-post, i løsningen, eller begge deler?
+    Scenario: ...
+```
 
 ### Type
 - `@e2e` - End-to-end brukerreiser
@@ -125,7 +159,7 @@ Et krav skal ha nøyaktig én av disse på `Egenskap:`-tag-linja. Ikke sett to s
 
 Sier noe om at et **konkret scenario eller regel** har en uavklart detalj, selv om resten av kravet er klart til implementasjon.
 
-- `@openquestion` - Scenarioet/regelen har en uavklart detalj som må besvares før implementasjon kan begynne i akkurat den delen. Plasseres på scenario- eller regel-nivå (ikke på `Egenskap:` — bruk `@draft` hvis hele kravet er utkast). Skal **alltid** følges av en `# ÅPNE SPØRSMÅL:`-kommentar like under som beskriver spørsmålet. Taggen gjør det mulig å grep-e på tvers av krav-mappa (`grep -r @openquestion krav/`) for å finne gjenstående avklaringer. En `Egenskap:` kan være `@planned` selv om ett scenario er `@openquestion` — det markerer at hovedflyten er klar, men at en detalj må lukkes før delen kan implementeres.
+- `@openquestion` - Scenarioet/regelen har en uavklart detalj som må besvares før implementasjon kan begynne i akkurat den delen. Plasseres på scenario- eller regel-nivå (ikke på `Egenskap:` — bruk `@draft` hvis hele kravet er utkast, og `@draft @openquestion` hvis hele regelen/scenarioet er utkast, se *Delvis utkast*). Skal **alltid** følges av en `# ÅPNE SPØRSMÅL:`-kommentar like under som beskriver spørsmålet. Taggen gjør det mulig å grep-e på tvers av krav-mappa (`grep -r @openquestion krav/`) for å finne gjenstående avklaringer. En `Egenskap:` kan være `@planned` selv om ett scenario er `@openquestion` — det markerer at hovedflyten er klar, men at en detalj må lukkes før delen kan implementeres.
 
 ## Åpne spørsmål
 

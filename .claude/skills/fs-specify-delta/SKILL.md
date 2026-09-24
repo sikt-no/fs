@@ -122,6 +122,12 @@ Hvilken tilstand som styrer per diff-status:
 
 Test-fil-kilde (uten diff): tag-en på fila slik den er.
 
+**`@draft`-deler** (`Regel:`/`Scenario:` tagget `@draft` inne i et krav som passerer) håndteres som i [`fs-specify` → _`@draft`-deler_](../fs-specify/SKILL.md#draft-deler-i-krav-som-passerer): råkopiene lagres komplette, men delene holdes utenfor scope og listes under `### Utenfor scope (@draft)`. Er alle delene `@draft`, faller fila utenfor. For diff-kilder gjelder **etter**-tilstanden per del:
+
+- En del som går fra `@draft` til uten `@draft` er validert, og regnes som «Endret» (eller «Lagt til» hvis den er ny).
+- En del som får `@draft` (fra uten) er tatt ut av scope — list den under _Utenfor scope_, ikke under «Endret» eller «Fjernet».
+- En ny del som legges til med `@draft`, listes bare under _Utenfor scope_.
+
 Bare filer som passerer lagres og nevnes i manifestet. **Ingen `.feature`-filer passerer** (og det finnes ingen markdown/kode-test å falle tilbake på): rapporter hvilke filer som ble vurdert og hvilken tag de hadde, logg `ended (aborted)`, og foreslå `fs-krav`.
 
 ## Retagg krav til `@in-progress`
@@ -185,6 +191,12 @@ Ved **Ja**: følg [`fs-specify` → _Skisser — kobling og validering_](../fs-s
 
 - **`<fil eller scenario>`** — kravet. ([<sti>](krav-input/changes/<YYYY-MM-DD>-<ref>/<sti>))
 
+### Utenfor scope (`@draft`)
+
+[Regler/scenarioer tagget `@draft` i etter-tilstanden. Ikke validert — avklares i `fs-krav`. Utelat hvis tom.]
+
+- **`<feature-fil>` — regel/scenario `<tittel>`** — venter på: <spørsmål fra `# ÅPNE SPØRSMÅL:`>
+
 ## Skisser
 
 [Én underseksjon per skisse, samme felter som i `fs-specify`, eller «Ingen skisser registrert».]
@@ -221,7 +233,7 @@ Minn brukeren på at endringene i `tasks/` og `krav/` ikke er committet.
 - Leser eller sammenligner ikke tidligere `spec-*.md`.
 - Oppretter, endrer eller lukker ikke GitHub-issues — det er `fs-krav`.
 - Kjører aldri git-kommandoer som endrer tilstand (`add`, `commit`, `push`, `checkout`, `fetch`, `stash`).
-- Skriver ikke utenfor `<spec>/` og `Egenskap:`-tag-linjene under `krav/`.
+- Skriver ikke utenfor `<spec>/` og `Egenskap:`-tag-linjene under `krav/`. Fjerner aldri `@draft` fra en `Regel:`/`Scenario:`.
 
 ## Retningslinjer
 
