@@ -21,7 +21,7 @@
 # tilfeldigvis gjør det slik, er det flagget som et åpent spørsmål framfor å
 # bli arvet.
 #
-@OPT-BEH-BEH-003 @must @in-progress
+@OPT-BEH-BEH-003 @must @planned
 Egenskap: Registrere og beregne praksis for søker
   Som saksbehandler i opptak
   ønsker jeg å registrere søkerens praksisperioder og få dem summert
