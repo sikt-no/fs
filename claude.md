@@ -98,6 +98,7 @@ npm run dev
 - `server/parse.ts` parser med `@cucumber/gherkin` til modellen i `shared/model.ts`
 - `server/git.ts` leser endringer under `krav/` (ucommitted mot HEAD, og committet siden merge-base med `main`). Pluginen eksponerer dem som `virtual:krav-git`, pusher `krav:git` ved endringer i krav-filer eller i `.git` (HEAD, index, reflog), og sidebaren viser dem i «Endringer»-modus
 - `src/` er Preact-komponentene, portet fra designet «Gherkin Viewer» (Claude Design)
+- `src/search.ts` bygger en Fuse.js-indeks over filer og scenarioer for søket i treet; scenariotreff hopper til scenarioet via samme `focus`-state som VS Code-utvidelsen bruker
 - `vscode/` er en liten VS Code-utvidelse (ren JS, uten bygg) som poster aktiv fil og markørlinje til `POST /__krav/focus`; pluginen videresender det som `krav:focus`, og vieweren bytter fil og scroller til scenarioet. Installeres med `npm run vscode:install` (symlink til `~/.vscode/extensions`), og adressen settes med `kravViewer.url`
 
 ## Teknologier

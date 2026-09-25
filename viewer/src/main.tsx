@@ -238,9 +238,11 @@ function App() {
     };
   }, []);
 
-  const select = (path: string) => {
+  const select = (path: string, line?: number) => {
     setCurrent(path);
     history.pushState(null, '', '#/' + encodeURI(path));
+    // Scenariotreff fra søket: gjenbruk fokus fra VS Code for å scrolle til og åpne scenarioet
+    if (line) setFocus({ path, line, to: line, seq: Date.now() });
   };
   const jump = (key: string) => {
     const main = mainRef.current;

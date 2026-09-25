@@ -1,6 +1,8 @@
 import type { JSX } from 'preact';
-import { useState } from 'preact/hooks';
+import { useMemo, useState } from 'preact/hooks';
+import type { RangeTuple } from 'fuse.js';
 import { STATUSES, type Entry, type GitChange, type GitCode, type GitInfo, type Snapshot } from '../shared/model';
+import { baseName, makeIndex, parentName, search } from './search';
 
 export type TreeMode = 'files' | 'changes';
 
@@ -13,8 +15,20 @@ interface Dir {
 }
 
 const collator = new Intl.Collator('nb', { numeric: true, sensitivity: 'base' });
-const baseName = (p: string) => p.slice(p.lastIndexOf('/') + 1);
-const parentName = (p: string) => (p.includes('/') ? baseName(p.slice(0, p.lastIndexOf('/'))) : '');
+
+/** Uthever tegnområdene Fuse fant */
+function highlight(text: string, ranges: readonly RangeTuple[]) {
+  if (!ranges.length) return text;
+  const out: (string | JSX.Element)[] = [];
+  let at = 0;
+  for (const [from, to] of ranges) {
+    if (from > at) out.push(text.slice(at, from));
+    out.push(<mark key={from}>{text.slice(from, to + 1)}</mark>);
+    at = to + 1;
+  }
+  if (at < text.length) out.push(text.slice(at));
+  return out;
+}
 
 export function buildTree(entries: Snapshot): Dir {
   const root: Dir = { name: 'krav', path: 'krav', dirs: [], files: [], counts: [0, 0, 0, 0] };
@@ -90,7 +104,7 @@ interface Props {
   query: string;
   onQuery: (q: string) => void;
   onToggle: (dirPath: string) => void;
-  onSelect: (path: string) => void;
+  onSelect: (path: string, line?: number) => void;
   mode: TreeMode;
   onMode: (mode: TreeMode) => void;
   git: GitInfo | null;
@@ -99,10 +113,11 @@ interface Props {
 export function Sidebar({ entries, tree, current, open, query, onQuery, onToggle, onSelect, mode, onMode, git }: Props) {
   // Lukkede mapper i endringstreet; alle er åpne som standard
   const [closed, setClosed] = useState<Record<string, boolean>>({});
+  const index = useMemo(() => makeIndex(entries), [entries]);
   const rows: JSX.Element[] = [];
   const pad = (depth: number) => ({ paddingLeft: `${8 + depth * 14}px` });
 
-  const fileRow = (e: Entry, depth: number, sub?: string) => (
+  const fileRow = (e: Entry, depth: number, sub?: string, label?: string | JSX.Element[]) => (
     <div
       key={e.path}
       class={'row' + (e.path === current ? ' sel' : '')}
@@ -120,7 +135,7 @@ export function Sidebar({ entries, tree, current, open, query, onQuery, onToggle
       ) : (
         <span class="md">md</span>
       )}
-      <span class="name">{baseName(e.path)}</span>
+      <span class="name">{label ?? baseName(e.path)}</span>
       {sub && <span class="sub">{sub}</span>}
       {e.error ? <span class="err">feil</span> : e.lint ? <span class="warn" title={`${e.lint} avvik fra konvensjoner`}>!</span> : null}
     </div>
@@ -196,10 +211,19 @@ export function Sidebar({ entries, tree, current, open, query, onQuery, onToggle
       rows.push(<div key="none" class="row dim" style={pad(0)}>{msg}</div>);
     }
   } else if (q) {
-    const hits = Object.values(entries)
-      .filter(e => baseName(e.path).toLowerCase().includes(q) || e.model?.title.toLowerCase().includes(q))
-      .sort((a, b) => collator.compare(baseName(a.path), baseName(b.path)));
-    hits.forEach(e => rows.push(fileRow(e, 0, parentName(e.path))));
+    const hits = search(index, entries, query.trim());
+    for (const { entry: e, nameRanges, scens } of hits) {
+      rows.push(fileRow(e, 0, parentName(e.path), highlight(baseName(e.path), nameRanges) as JSX.Element[]));
+      for (const s of scens) {
+        rows.push(
+          <div key={e.path + ':' + s.ln} class="row scen" style={pad(1)} onClick={() => onSelect(e.path, s.ln)} title={s.name}>
+            <span class="chev" />
+            <span class="md">§</span>
+            <span class="name">{highlight(s.name, s.ranges)}</span>
+          </div>,
+        );
+      }
+    }
     if (!hits.length) rows.push(<div key="none" class="row dim" style={pad(0)}>Ingen treff</div>);
   } else {
     const walk = (d: Dir, depth: number) => {
@@ -253,8 +277,8 @@ export function Sidebar({ entries, tree, current, open, query, onQuery, onToggle
           type="search"
           value={query}
           onInput={e => onQuery((e.target as HTMLInputElement).value)}
-          placeholder="Filtrer filnavn og Egenskap…"
-          aria-label="Filtrer filnavn og Egenskap"
+          placeholder="Søk i filer, Egenskap og scenarioer…"
+          aria-label="Søk i filer, Egenskap og scenarioer"
         />
       </div>
       <div class="tree">{rows}</div>

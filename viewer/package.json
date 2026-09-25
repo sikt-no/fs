@@ -15,6 +15,7 @@
   "dependencies": {
     "@cucumber/gherkin": "^42.0.1",
     "@cucumber/messages": "^34.2.1",
+    "fuse.js": "^7.5.0",
     "preact": "^10.29.8"
   },
   "devDependencies": {
