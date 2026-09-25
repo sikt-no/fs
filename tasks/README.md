@@ -91,7 +91,7 @@ Oppgaver tas inn først når issuet er Prioritert. Oppgaver i `levert` blir ligg
 
 `@draft` →(`fs-krav`)→ `@planned` →(`fs-specify` / `fs-specify-delta`)→ `@in-progress` →(verifisering)→ `@implemented`
 
-Se [`.claude/rules/gherkin-conventions.md`](../.claude/rules/gherkin-conventions.md) for den autoritative definisjonen av taggene.
+Se [`krav/README.md`](../krav/README.md) for den autoritative definisjonen av taggene.
 
 BAT-stegene er valgfrie. En oppgave kan kjøres helt for hånd — da er `flow.md`, `spec/` og `<lag>/`-artefaktene noe teamet skriver selv, og fasene betyr det samme.
 

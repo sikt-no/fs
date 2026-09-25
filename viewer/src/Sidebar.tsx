@@ -30,6 +30,9 @@ function highlight(text: string, ranges: readonly RangeTuple[]) {
   return out;
 }
 
+/** Forsiden (slik jobber vi med krav) */
+const FRONT = 'krav/README.md';
+
 export function buildTree(entries: Snapshot): Dir {
   const root: Dir = { name: 'krav', path: 'krav', dirs: [], files: [], counts: [0, 0, 0, 0] };
   const index = new Map<string, Dir>([['krav', root]]);
@@ -44,7 +47,7 @@ export function buildTree(entries: Snapshot): Dir {
     return d;
   };
   for (const e of Object.values(entries)) {
-    if (!e.path.startsWith('krav/')) continue; // README.md i repo-roten vises over treet
+    if (!e.path.startsWith('krav/') || e.path === FRONT) continue; // forsiden vises over treet
     const parentPath = e.path.slice(0, e.path.lastIndexOf('/'));
     dirFor(parentPath).files.push(e);
     const si = e.status ? STATUSES.indexOf(e.status) : -1;
@@ -248,7 +251,7 @@ export function Sidebar({ entries, tree, current, open, query, onQuery, onToggle
         d.files.forEach(f => rows.push(fileRow(f, depth + 1)));
       }
     };
-    if (entries['README.md']) rows.push(fileRow(entries['README.md'], 0));
+    if (entries[FRONT]) rows.push(fileRow(entries[FRONT], 0));
     walk(tree, 0);
   }
 

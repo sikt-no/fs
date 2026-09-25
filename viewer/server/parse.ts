@@ -4,6 +4,11 @@ import type { Background, Scenario, Step as GStep, Tag } from '@cucumber/message
 import { STATUSES, statusOf, type Entry, type FeatureModel, type Lint, type Note, type Question, type Rule, type Scen, type Step } from '../shared/model.ts';
 
 const isStatus = (t: string) => (STATUSES as readonly string[]).includes(t.slice(1));
+const PRIORITIES = ['@must', '@should', '@could', '@wont'];
+// Tre bokstaver per ledd, men README tillater unntak for lesbarhet (f.eks. @TEK-BRU-UI-001)
+const FEATURE_ID = /^@[A-ZÆØÅ]{2,4}-[A-ZÆØÅ]{2,4}-[A-ZÆØÅ]{2,4}-\d{3}$/;
+const SNAKE_CASE = /^[a-zæøå0-9]+(_[a-zæøå0-9]+)*\.feature$/;
+const STEP_RANK: Record<string, number> = { Context: 0, Action: 1, Outcome: 2 };
 
 const desc = (d: string | undefined) =>
   (d ?? '')
@@ -153,8 +158,10 @@ function attach(blocks: Block[], els: El[], lines: string[]) {
   }
 }
 
-export function parseFeature(source: string): FeatureModel {
-  const parser = new Parser(new AstBuilder(IdGenerator.incrementing()), new GherkinClassicTokenMatcher());
+/** `path` er relativ til repo-roten (f.eks. «krav/02 Opptak/…»), og brukes til sjekkene av filnavn og mappenivå. */
+export function parseFeature(source: string, path?: string): FeatureModel {
+  // Norsk som standard, som i playwright-bdd: en fil uten «# language: no» parses likevel, og får et avvik
+  const parser = new Parser(new AstBuilder(IdGenerator.incrementing()), new GherkinClassicTokenMatcher('no'));
   const doc = parser.parse(source);
   const f = doc.feature;
   if (!f) throw new Error('Filen mangler Egenskap:');
@@ -166,6 +173,7 @@ export function parseFeature(source: string): FeatureModel {
   const els: El[] = [{ start: headerStart(f.location.line, f.tags), kw: f.location.line, col: f.location.column ?? 1, end: nLines, notes: fnotes, depth: 0 }];
   const lint: Lint[] = [];
   const rawKw = new Map<Scen, { keyword: string; ln: number }>();
+  const rawSteps = new Map<Scen, readonly GStep[]>();
 
   const rules: Rule[] = [];
   let loose: Rule | null = null;
@@ -182,7 +190,10 @@ export function parseFeature(source: string): FeatureModel {
     const el: El = { start: headerStart(node.location.line, tags), kw: node.location.line, col: node.location.column ?? 1, end: nLines, notes: sc.notes, scen: sc, depth };
     els.push(el);
     siblings[siblings.length - 1].push(el);
-    if ('examples' in node) rawKw.set(sc, { keyword: node.keyword.trim(), ln: node.location.line });
+    if ('examples' in node) {
+      rawKw.set(sc, { keyword: node.keyword.trim(), ln: node.location.line });
+      rawSteps.set(sc, node.steps);
+    }
   };
 
   for (const child of f.children) {
@@ -236,8 +247,21 @@ export function parseFeature(source: string): FeatureModel {
   }
   attach(commentBlocks(comments, lines), els, lines);
 
-  // Konvensjonsavvik (.claude/rules/gherkin-conventions.md)
+  // Konvensjonsavvik: holdes i synk med krav/README.md (importert i .claude/rules/gherkin-conventions.md).
+  // Reglene som sjekkes er merket «(sjekkes i vieweren)» der, og testet i parse.test.ts.
+  const firstLine = lines.find(l => l.trim() !== '') ?? '';
+  if (!/^\s*#\s*language:\s*no\s*$/.test(firstLine)) lint.push({ msg: 'Fila starter ikke med «# language: no»', ln: 1 });
+  if (path?.startsWith('krav/')) {
+    const seg = path.split('/');
+    if (seg.length !== 5) lint.push({ msg: 'Fila ligger ikke på kapabilitetsnivå (krav/Domene/Sub-domene/Kapabilitet/)', ln: 1 });
+    if (!SNAKE_CASE.test(seg[seg.length - 1])) lint.push({ msg: `Filnavnet «${seg[seg.length - 1]}» er ikke i snake_case`, ln: 1 });
+  }
   const ftags = f.tags.map(t => t.name);
+  const ids = ftags.filter(t => FEATURE_ID.test(t));
+  if (ids.length === 0) lint.push({ msg: 'Egenskap mangler feature-ID (@DOM-SUB-KAP-NNN)', ln: f.location.line });
+  if (ids.length > 1) lint.push({ msg: `Egenskap har flere feature-IDer: ${ids.join(' ')}`, ln: f.location.line });
+  const prio = ftags.filter(t => PRIORITIES.includes(t));
+  if (prio.length > 1) lint.push({ msg: `Egenskap har flere prioritetstagger: ${prio.join(' ')}`, ln: f.location.line });
   const fstat = ftags.filter(t => isStatus(t));
   if (fstat.length === 0) lint.push({ msg: 'Egenskap mangler statustag (@draft, @planned, @in-progress eller @implemented)', ln: f.location.line });
   if (fstat.length > 1) lint.push({ msg: `Egenskap har flere statustagger: ${fstat.join(' ')}`, ln: f.location.line });
@@ -259,6 +283,17 @@ export function parseFeature(source: string): FeatureModel {
     for (const sc of r.scenarios) {
       if (sc.kind === 'Bakgrunn') continue;
       checkPart(sc.kind, sc.tags, sc.ln, scenQ(sc));
+      // Og/Men arver typen til steget før, og teller ikke
+      let rank = -1;
+      for (const st of rawSteps.get(sc) ?? []) {
+        const r = STEP_RANK[st.keywordType ?? ''];
+        if (r === undefined) continue;
+        if (r < rank) {
+          lint.push({ msg: `«${st.keyword.trim()}» etter ${rank === 2 ? '«Så»' : '«Når»'} — stegene skal gå Gitt → Når → Så`, ln: st.location.line });
+          break;
+        }
+        rank = r;
+      }
       const raw = rawKw.get(sc);
       if (raw && sc.examples.length && !/^(Scenariomal|Abstrakt Scenario)$/.test(raw.keyword))
         lint.push({ msg: `«${raw.keyword}:» med Eksempler — bruk Scenariomal:`, ln: raw.ln });
@@ -305,7 +340,7 @@ export function parseFeature(source: string): FeatureModel {
 export function buildEntry(path: string, source: string, savedAt: number, prev?: Entry): Entry {
   if (path.endsWith('.md')) return { path, kind: 'md', status: null, source, savedAt };
   try {
-    const model = parseFeature(source);
+    const model = parseFeature(source, path);
     return { path, kind: 'feature', status: statusOf(model.tags), partialDraft: model.partialDraft, lint: model.lint.length, model, savedAt };
   } catch (e) {
     const error = e instanceof Error ? e.message : String(e);

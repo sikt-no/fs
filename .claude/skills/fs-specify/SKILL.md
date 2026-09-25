@@ -81,7 +81,7 @@ En `.feature`-fil passerer hvis `Egenskap:`-tag-linja har **`@planned` eller `@i
 
 ### `@draft`-deler i krav som passerer
 
-Et `@planned`/`@in-progress` krav kan bevisst ha enkelte `Regel:`- eller `Scenario:`/`Scenariomal:`-blokker tagget `@draft @openquestion` (se *Delvis utkast* i `.claude/rules/gherkin-conventions.md`). Disse delene er **ikke validert** og holdes utenfor spec-ens scope:
+Et `@planned`/`@in-progress` krav kan bevisst ha enkelte `Regel:`- eller `Scenario:`/`Scenariomal:`-blokker tagget `@draft @openquestion` (se *Delvis utkast* i `krav/README.md`). Disse delene er **ikke validert** og holdes utenfor spec-ens scope:
 
 - `@draft` på en `Regel:` gjelder alle scenarioene under den. `@draft` på et scenario gjelder bare det scenarioet.
 - Råkopien under `krav-input/local/` lagres fortsatt **uendret og komplett** — filtreringen skjer i spec-dokumentet, ikke i råkopien.
@@ -91,7 +91,7 @@ Et `@planned`/`@in-progress` krav kan bevisst ha enkelte `Regel:`- eller `Scenar
 
 ## Retagg krav til `@in-progress`
 
-Når et krav hentes inn i en spec, retagges den **autoritative** fila under `krav/` fra `@planned` til `@in-progress` på `Egenskap:`-tag-linja (se tag-aksen i `.claude/rules/gherkin-conventions.md`).
+Når et krav hentes inn i en spec, retagges den **autoritative** fila under `krav/` fra `@planned` til `@in-progress` på `Egenskap:`-tag-linja (se tag-aksen i `krav/README.md`).
 
 **Når:** etter at scope er låst og råkopiene er lagret under `krav-input/`, men **før** spec-dokumentet skrives.
 
@@ -252,5 +252,5 @@ Minn brukeren på at endringene i `tasks/` og `krav/` ikke er committet — det 
 
 - **[`references/askuserquestion-logging.md`](references/askuserquestion-logging.md)** — format for `questions-<skill>-<dato>.md`. Brukes også av `fs-specify-delta`.
 - **[`tasks/README.md`](../../../tasks/README.md)** — oppgavestrukturen, domenelista og reglene for `spec/`.
-- **`.claude/rules/gherkin-conventions.md`** — tag-aksen og Feature-ID-formatet.
+- **`krav/README.md`** — tag-aksen og Feature-ID-formatet.
 - **`fs-krav`** — ferdigstiller krav (`@draft` → `@planned`) og eier GitHub-issues.
