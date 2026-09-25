@@ -14,7 +14,7 @@ interface Dir {
 
 const collator = new Intl.Collator('nb', { numeric: true, sensitivity: 'base' });
 const baseName = (p: string) => p.slice(p.lastIndexOf('/') + 1);
-const parentName = (p: string) => baseName(p.slice(0, p.lastIndexOf('/')));
+const parentName = (p: string) => (p.includes('/') ? baseName(p.slice(0, p.lastIndexOf('/'))) : '');
 
 export function buildTree(entries: Snapshot): Dir {
   const root: Dir = { name: 'krav', path: 'krav', dirs: [], files: [], counts: [0, 0, 0, 0] };
@@ -30,6 +30,7 @@ export function buildTree(entries: Snapshot): Dir {
     return d;
   };
   for (const e of Object.values(entries)) {
+    if (!e.path.startsWith('krav/')) continue; // README.md i repo-roten vises over treet
     const parentPath = e.path.slice(0, e.path.lastIndexOf('/'));
     dirFor(parentPath).files.push(e);
     const si = e.status ? STATUSES.indexOf(e.status) : -1;
@@ -223,6 +224,7 @@ export function Sidebar({ entries, tree, current, open, query, onQuery, onToggle
         d.files.forEach(f => rows.push(fileRow(f, depth + 1)));
       }
     };
+    if (entries['README.md']) rows.push(fileRow(entries['README.md'], 0));
     walk(tree, 0);
   }
 

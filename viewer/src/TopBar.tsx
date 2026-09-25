@@ -7,9 +7,10 @@ interface Props {
   onTheme: (t: Theme) => void;
   treeHidden: boolean;
   onToggleTree: () => void;
+  onHome: () => void;
 }
 
-export function TopBar({ path, connected, theme, onTheme, treeHidden, onToggleTree }: Props) {
+export function TopBar({ path, connected, theme, onTheme, treeHidden, onToggleTree, onHome }: Props) {
   const parts = path ? path.split('/') : [];
   return (
     <header class="topbar">
@@ -22,7 +23,9 @@ export function TopBar({ path, connected, theme, onTheme, treeHidden, onToggleTr
       >
         <span class="treeicon"><span /></span>
       </button>
-      <div class="brand"><span class="brand-mark" /><span>krav</span><span class="brand-sub">viewer</span></div>
+      <button class="brand" title="Til forsiden" onClick={onHome}>
+        <span class="brand-mark" /><span>krav</span><span class="brand-sub">viewer</span>
+      </button>
       <nav class="crumbs" aria-label="Sti">
         {parts.map((p, i) => (
           <span key={i} style={{ display: 'flex', gap: '6px' }}>

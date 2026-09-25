@@ -93,7 +93,8 @@ npm run dev
 
 `npm run build` lager et statisk bygg i `viewer/dist/` med hele `krav/`-snapshotet bakt inn (relative stier, hash-routing). `.github/workflows/deploy-viewer.yml` publiserer det til GitHub Pages (<https://sikt-no.github.io/fs/>) ved push til `main`. I statisk bygg er git-data `null`, så «Endringer»-modusen skjules.
 
-- `server/kravPlugin.ts` leser og overvåker `krav/`, og sender `krav:update` over Vites websocket
+- `server/kravPlugin.ts` leser og overvåker `krav/` og `README.md` i repo-roten (forsiden), og sender `krav:update` over Vites websocket
+- `src/markdown.ts` + `src/MarkdownView.tsx` viser `.md`-filer formatert (overskrifter, lister, kodeblokker med «Kopier», tabeller, lenkekort), med bryter til rå markdown. Relative lenker til filer i vieweren åpnes internt
 - `server/parse.ts` parser med `@cucumber/gherkin` til modellen i `shared/model.ts`
 - `server/git.ts` leser endringer under `krav/` (ucommitted mot HEAD, og committet siden merge-base med `main`). Pluginen eksponerer dem som `virtual:krav-git`, pusher `krav:git` ved endringer i krav-filer eller i `.git` (HEAD, index, reflog), og sidebaren viser dem i «Endringer»-modus
 - `src/` er Preact-komponentene, portet fra designet «Gherkin Viewer» (Claude Design)
