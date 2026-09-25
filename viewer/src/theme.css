@@ -69,7 +69,7 @@ button { font: inherit; color: inherit; }
 .live { display: flex; align-items: center; gap: 6px; font-family: var(--mono); font-size: 11.5px; color: var(--ink2); }
 .dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
 .seg { display: flex; border: 1px solid var(--line2); border-radius: 5px; overflow: hidden; font-size: 12px; }
-.seg button { border: 0; padding: 4px 10px; cursor: pointer; background: transparent; color: var(--ink); }
+.seg button { border: 0; padding: 4px 10px; cursor: pointer; font: inherit; background: transparent; color: var(--ink); }
 .seg button + button { border-left: 1px solid var(--line2); }
 .seg button[aria-pressed="true"] { background: var(--surface); }
 
@@ -80,11 +80,11 @@ button { font: inherit; color: inherit; }
 /* Sidepanel */
 .sidebar { display: flex; flex-direction: column; min-height: 0; border-right: 1px solid var(--line); background: var(--panel); }
 .treehead { padding: 10px 10px 0; display: flex; flex-direction: column; gap: 8px; }
-.seg { display: grid; grid-template-columns: 1fr 1fr; border: 1px solid var(--line2); border-radius: 5px; overflow: hidden; font-size: 12px; }
-.seg button { border: 0; padding: 5px 0; cursor: pointer; font: inherit; background: transparent; color: var(--ink2); display: flex; align-items: center; justify-content: center; gap: 6px; }
-.seg button + button { border-left: 1px solid var(--line2); }
-.seg button[aria-pressed="true"] { background: var(--surface); color: var(--ink); }
-.seg .badge { font-family: var(--mono); font-size: 10.5px; padding: 0 5px; border-radius: 8px; background: var(--line); color: var(--ink2); }
+.treehead .seg { display: grid; grid-template-columns: 1fr 1fr; border: 1px solid var(--line2); border-radius: 5px; overflow: hidden; font-size: 12px; }
+.treehead .seg button { border: 0; padding: 5px 0; cursor: pointer; font: inherit; background: transparent; color: var(--ink2); display: flex; align-items: center; justify-content: center; gap: 6px; }
+.treehead .seg button + button { border-left: 1px solid var(--line2); }
+.treehead .seg button[aria-pressed="true"] { background: var(--surface); color: var(--ink); }
+.treehead .seg .badge { font-family: var(--mono); font-size: 10.5px; padding: 0 5px; border-radius: 8px; background: var(--line); color: var(--ink2); }
 .gitmeta { display: flex; flex-wrap: wrap; align-items: baseline; gap: 2px 6px; font-family: var(--mono); font-size: 11.5px; color: var(--muted); min-width: 0; }
 .gitmeta .branch { color: var(--ink); word-break: break-all; }
 .filter { padding: 8px 10px 10px; }
@@ -224,7 +224,6 @@ pre.docstring { margin: 4px 0 6px; padding: 8px 12px; background: var(--sunken);
 .md-meta { display: flex; align-items: center; gap: 10px; font-family: var(--mono); font-size: 12px; color: var(--muted); }
 .md-meta .file { color: var(--ink); }
 .md-meta .seg { margin-left: auto; font-family: var(--sans); }
-.md-meta .seg button { padding: 4px 10px; }
 .md-body { display: flex; flex-direction: column; gap: 14px; font-size: 15px; line-height: 1.65; color: var(--ink2); }
 .md-h1 { margin-bottom: 4px; }
 .md-h1 h1 { font-size: 28px; }
