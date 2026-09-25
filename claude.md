@@ -125,52 +125,9 @@ Andre vanlige tags:
 - `@fsadmin` - Tester for admin-grensesnittet
 - Domene-spesifikke tags (f.eks. `@opptakspilot`)
 
-## Gherkin-språk (Norsk)
+## Gherkin-språk og konvensjoner
 
-Alle feature-filer skrives på **norsk**. Hver fil må starte med:
-
-```gherkin
-# language: no
-```
-
-### Norske nøkkelord
-
-| Norsk | Engelsk |
-|-------|---------|
-| `Egenskap:` | Feature |
-| `Bakgrunn:` | Background |
-| `Scenario:` | Scenario |
-| `Scenariomal:` | Scenario Outline |
-| `Eksempler:` | Examples |
-| `Gitt` | Given |
-| `Når` | When |
-| `Så` | Then |
-| `Og` | And |
-| `Men` | But |
-
-### Gherkin-syntaksregler
-
-**Datatabeller** - brukes for å sende data til et steg:
-```gherkin
-Gitt at tabellen har følgende kolonner
-  | Kolonne       |
-  | Navn          |
-  | Fødselsdato   |
-```
-
-**Scenariomal med Eksempler** - for parameteriserte tester:
-```gherkin
-Scenariomal: Velge antall per side
-  Når brukeren velger <antall> visninger per side
-  Så skal brukeren se <antall> rader
-
-  Eksempler:
-    | antall |
-    | 50     |
-    | 100    |
-```
-
-**Viktig**: `Eksempler:` skal KUN brukes med `Scenariomal:`, ikke med vanlig `Scenario:`.
+Feature-filene skrives på norsk Gherkin. Nøkkelord, gode scenarioer, filnavn, mappestruktur, tags og terminologi står i [`krav/README.md`](krav/README.md).
 
 ## playwright-bdd konfigurasjon
 
@@ -199,11 +156,8 @@ Se trace i HTML-rapporten: `npx playwright show-report`
 ## Konvensjoner for Claude
 
 ### Når du jobber med feature-filer
-- Bruk alltid `# language: no` på toppen
-- Følg eksisterende mappestruktur basert på domene
+- Følg konvensjonene i [`krav/README.md`](krav/README.md)
 - Bruk beskrivende scenario-navn på norsk
-- Inkluder relevante tags for testtype og domene
-- Bruk `Scenariomal:` (ikke `Scenario:`) når du bruker `Eksempler:`
 
 ### Når du jobber med step definitions
 - Skriv i TypeScript
