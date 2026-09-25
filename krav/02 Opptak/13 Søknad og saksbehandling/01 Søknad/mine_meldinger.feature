@@ -8,17 +8,12 @@ Egenskap: Se meldinger om egne søknader
   Bakgrunn:
     Gitt at søkeren er innlogget i Min kompetanse
 
-  Regel: Meldingslisten viser søkerens egne, ikke-arkiverte meldinger
+  Regel: Meldingslisten viser søkerens egne meldinger
 
     Scenario: Søkeren ser meldingene sine
       Gitt at søkeren har mottatt meldinger
       Når søkeren åpner meldingsoversikten
       Så vises søkerens meldinger i en liste
-
-    Scenario: Arkiverte meldinger vises ikke
-      Gitt at søkeren har både arkiverte og ikke-arkiverte meldinger
-      Når søkeren åpner meldingsoversikten
-      Så vises kun de ikke-arkiverte meldingene
 
     Scenario: Søkeren har ingen meldinger
       Gitt at søkeren ikke har mottatt meldinger
