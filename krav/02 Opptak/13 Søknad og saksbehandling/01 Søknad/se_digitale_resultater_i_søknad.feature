@@ -54,22 +54,22 @@ Egenskap: Se digitale resultater i søknaden
   skisse, og må fylles ut under #559 før dette kravet kan leveres.
 
   Bakgrunn:
-    Gitt jeg er innlogget på personflaten
-    Og jeg har startet en søknad på et opptak
+    Gitt at søkeren er innlogget på personflaten
+    Og søkeren har startet en søknad på et opptak
 
   Regel: Søker ser om systemet har digitale resultater
 
     Scenario: Systemet har registrerte resultater om søkeren
-      Gitt jeg har registrerte resultater
-      Når jeg kommer til dokumentasjonssteget i søknaden
-      Så ser jeg at systemet har registrerte resultater om meg
-      Og jeg blir ikke bedt om å laste dem opp
+      Gitt at søkeren har registrerte resultater
+      Når søkeren kommer til dokumentasjonssteget i søknaden
+      Så ser søkeren at systemet har registrerte resultater om hen
+      Og søkeren blir ikke bedt om å laste dem opp
 
     Scenario: Systemet har ingen registrerte resultater om søkeren
-      Gitt jeg har ingen registrerte resultater
-      Når jeg kommer til dokumentasjonssteget i søknaden
-      Så ser jeg at systemet ikke har registrerte resultater om meg
-      Og jeg får vite at all dokumentasjon må lastes opp manuelt
+      Gitt at søkeren ikke har registrerte resultater
+      Når søkeren kommer til dokumentasjonssteget i søknaden
+      Så ser søkeren at systemet ikke har registrerte resultater om hen
+      Og søkeren får vite at all dokumentasjon må lastes opp manuelt
 
   @openquestion
   Regel: Søker kommer til resultatvisningen for å se detaljene
@@ -80,29 +80,29 @@ Egenskap: Se digitale resultater i søknaden
     # utgår regelen og erstattes av innhold i @could-regelen under.
 
     Scenario: Søker går fra søknaden til sine registrerte resultater
-      Gitt jeg er i dokumentasjonssteget i søknaden
-      Når jeg velger å se mine registrerte resultater
-      Så kommer jeg til visningen av egne resultater i personflaten
+      Gitt at søkeren er i dokumentasjonssteget i søknaden
+      Når søkeren velger å se sine registrerte resultater
+      Så kommer søkeren til visningen av egne resultater i personflaten
       # Innholdet i resultatvisningen er beskrevet i @KOM-RES-RES-001
 
     Scenario: Søker kommer tilbake til kladden etter å ha sett resultatene
-      Gitt jeg har lastet opp dokumentasjon i søknadskladden
-      Og jeg har gått til visningen av egne resultater
-      Når jeg går tilbake til kladden
-      Så er opplysningene og dokumentene jeg har lagt inn fortsatt der
+      Gitt at søkeren har lastet opp dokumentasjon i søknadskladden
+      Og søkeren har gått til visningen av egne resultater
+      Når søkeren går tilbake til kladden
+      Så er opplysningene og dokumentene søkeren har lagt inn fortsatt der
 
   @could
   Regel: Søker ser resultatene oppsummert i søknaden
 
     Scenario: Søker ser hvor mange resultater systemet har
-      Gitt jeg har registrerte resultater
-      Når jeg kommer til dokumentasjonssteget i søknaden
-      Så ser jeg hvor mange registrerte resultater systemet har om meg
+      Gitt at søkeren har registrerte resultater
+      Når søkeren kommer til dokumentasjonssteget i søknaden
+      Så ser søkeren hvor mange registrerte resultater systemet har om hen
 
     Scenario: Søker utvider oppsummeringen for å se de enkelte resultatene
-      Gitt jeg ser resultatene oppsummert i søknaden
-      Når jeg utvider oppsummeringen
-      Så ser jeg de enkelte resultatene
+      Gitt at søkeren ser resultatene oppsummert i søknaden
+      Når søkeren utvider oppsummeringen
+      Så ser søkeren de enkelte resultatene
 
 # ÅPNE SPØRSMÅL:
 # - Får søkeren all informasjonen inne på siden, eller må hen navigere ut til
