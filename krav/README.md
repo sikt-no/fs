@@ -209,15 +209,25 @@ Sier noe om at et **konkret scenario eller regel** har en uavklart detalj, selv 
 
 ## Åpne spørsmål
 
-Dokumenter uklarheter med kommentarer:
+Uklarheter dokumenteres med en `# ÅPNE SPØRSMÅL:`-kommentar, med ett spørsmål per `- `-linje. På en `Regel:` eller et `Scenario:` tagges delen med `@openquestion` (eller `@draft @openquestion`), se *Oppfølging* og *Delvis utkast*.
+
+Kommentaren står enten mellom taggen og nøkkelordlinja, eller rett under nøkkelordlinja:
 
 ```gherkin
+@openquestion
 # ÅPNE SPØRSMÅL:
 # - Spørsmål her
-
 Scenario: ...
-  # TODO: Avklar med produkteier
+
+@openquestion
+Scenario: ...
+  # ÅPNE SPØRSMÅL:
+  # - Spørsmål her
 ```
+
+I en `Egenskap:` som selv er `@draft` kan spørsmål som gjelder hele kravet stå under beskrivelsen, uten `@openquestion`.
+
+Bruk ikke `# TODO:` for åpne spørsmål. Vieweren viser bare `# ÅPNE SPØRSMÅL:` som spørsmål, og `@openquestion` er det `grep -r @openquestion krav/` finner.
 
 ## Aktører
 
