@@ -1,7 +1,7 @@
 import type { JSX } from 'preact';
 import { useMemo, useState } from 'preact/hooks';
 import type { RangeTuple } from 'fuse.js';
-import { STATUSES, type Entry, type GitChange, type GitCode, type GitInfo, type Snapshot } from '../shared/model';
+import { DISPLAY_STATUSES, STATUS_LABEL, displayStatus, type DisplayStatus, type Entry, type GitChange, type GitCode, type GitInfo, type Snapshot } from '../shared/model';
 import { baseName, makeIndex, parentName, search } from './search';
 
 export type TreeMode = 'files' | 'changes';
@@ -11,7 +11,7 @@ interface Dir {
   path: string;
   dirs: Dir[];
   files: Entry[];
-  counts: number[]; // antall per status, i STATUSES-rekkefølge
+  counts: number[]; // antall features per visningsstatus, i DISPLAY_STATUSES-rekkefølge
 }
 
 const collator = new Intl.Collator('nb', { numeric: true, sensitivity: 'base' });
@@ -34,13 +34,13 @@ function highlight(text: string, ranges: readonly RangeTuple[]) {
 const FRONT = 'krav/README.md';
 
 export function buildTree(entries: Snapshot): Dir {
-  const root: Dir = { name: 'krav', path: 'krav', dirs: [], files: [], counts: [0, 0, 0, 0] };
+  const root: Dir = { name: 'krav', path: 'krav', dirs: [], files: [], counts: DISPLAY_STATUSES.map(() => 0) };
   const index = new Map<string, Dir>([['krav', root]]);
   const dirFor = (path: string): Dir => {
     let d = index.get(path);
     if (!d) {
       const parent = dirFor(path.slice(0, path.lastIndexOf('/')));
-      d = { name: baseName(path), path, dirs: [], files: [], counts: [0, 0, 0, 0] };
+      d = { name: baseName(path), path, dirs: [], files: [], counts: DISPLAY_STATUSES.map(() => 0) };
       parent.dirs.push(d);
       index.set(path, d);
     }
@@ -50,8 +50,8 @@ export function buildTree(entries: Snapshot): Dir {
     if (!e.path.startsWith('krav/') || e.path === FRONT) continue; // forsiden vises over treet
     const parentPath = e.path.slice(0, e.path.lastIndexOf('/'));
     dirFor(parentPath).files.push(e);
-    const si = e.status ? STATUSES.indexOf(e.status) : -1;
-    if (si >= 0) {
+    if (e.kind === 'feature') {
+      const si = DISPLAY_STATUSES.indexOf(displayStatus(e));
       // Tell opp status for alle foreldremapper
       for (let p = parentPath; p; p = p.includes('/') ? p.slice(0, p.lastIndexOf('/')) : '') {
         const d = index.get(p);
@@ -69,6 +69,11 @@ export function buildTree(entries: Snapshot): Dir {
 }
 
 export const statusColor = (s: string | null) => (s ? `var(--st-${s})` : 'var(--st-none)');
+
+/** Statusikon; formen skiller statusene, også uten farge */
+export const StatusIcon = ({ s, lg }: { s: DisplayStatus; lg?: boolean }) => (
+  <span class={'st st--' + s + (lg ? ' st--lg' : '')} aria-hidden="true" />
+);
 
 const gitColor: Record<GitCode, string> = {
   M: 'var(--st-in-progress)',
@@ -120,43 +125,45 @@ export function Sidebar({ entries, tree, current, open, query, onQuery, onToggle
   const rows: JSX.Element[] = [];
   const pad = (depth: number) => ({ paddingLeft: `${8 + depth * 14}px` });
 
-  const fileRow = (e: Entry, depth: number, sub?: string, label?: string | JSX.Element[]) => (
-    <div
-      key={e.path}
-      class={'row' + (e.path === current ? ' sel' : '')}
-      style={pad(depth)}
-      onClick={() => onSelect(e.path)}
-      title={e.path}
-    >
-      <span class="chev" />
-      {e.kind === 'feature' ? (
-        <span
-          class={'dot' + (e.partialDraft ? ' partial' : '')}
-          style={{ background: statusColor(e.status) }}
-          title={(e.status ?? 'ingen status') + (e.partialDraft ? ' · delvis utkast' : '')}
-        />
-      ) : (
-        <span class="md">md</span>
-      )}
-      <span class="name">{label ?? baseName(e.path)}</span>
-      {sub && <span class="sub">{sub}</span>}
-      {e.error ? <span class="err">feil</span> : e.lint ? <span class="warn" title={`${e.lint} avvik fra konvensjoner`}>!</span> : null}
-    </div>
-  );
+  const fileRow = (e: Entry, depth: number, sub?: string, label?: string | JSX.Element[]) => {
+    const st = e.kind === 'feature' ? displayStatus(e) : null;
+    return (
+      <div
+        key={e.path}
+        class={'row' + (e.path === current ? ' sel' : '')}
+        style={pad(depth)}
+        onClick={() => onSelect(e.path)}
+        title={st ? `${e.path} · ${STATUS_LABEL[st]}` : e.path}
+        aria-label={st ? `${baseName(e.path)}, ${STATUS_LABEL[st]}` : undefined}
+      >
+        <span class="chev" />
+        {st ? (
+          <StatusIcon s={st} />
+        ) : (
+          <span class="md">md</span>
+        )}
+        <span class="name">{label ?? baseName(e.path)}</span>
+        {sub && <span class="sub">{sub}</span>}
+        {e.error ? <span class="err">feil</span> : e.lint ? <span class="warn" title={`${e.lint} avvik fra konvensjoner`}>!</span> : null}
+      </div>
+    );
+  };
 
   const changeRow = (c: GitChange, depth: number, key: string) => {
     const e = entries[c.path];
+    const st = c.path.endsWith('.feature') ? displayStatus(e ?? { status: null }) : null;
     return (
       <div
         key={key}
         class={'row' + (c.path === current ? ' sel' : '') + (c.code === 'D' ? ' del' : '') + (e ? '' : ' gone')}
         style={pad(depth)}
         onClick={e ? () => onSelect(c.path) : undefined}
-        title={c.path}
+        title={st ? `${c.path} · ${STATUS_LABEL[st]}` : c.path}
+        aria-label={st ? `${baseName(c.path)}, ${STATUS_LABEL[st]}` : undefined}
       >
         <span class="chev" />
-        {c.path.endsWith('.feature') ? (
-          <span class={'dot' + (e?.partialDraft ? ' partial' : '')} style={{ background: statusColor(e?.status ?? null) }} />
+        {st ? (
+          <StatusIcon s={st} />
         ) : (
           <span class="md">md</span>
         )}
@@ -239,7 +246,7 @@ export function Sidebar({ entries, tree, current, open, query, onQuery, onToggle
           <span class="dirstat">
             <span class="bar">
               {d.counts.map((n, i) => (
-                <span key={i} style={{ width: `${total ? (n / total) * 100 : 0}%`, background: statusColor(STATUSES[i]) }} />
+                <span key={i} style={{ width: `${total ? (n / total) * 100 : 0}%`, background: `var(--st-${DISPLAY_STATUSES[i]})` }} />
               ))}
             </span>
             <span class="count">{total || ''}</span>
@@ -286,23 +293,13 @@ export function Sidebar({ entries, tree, current, open, query, onQuery, onToggle
       </div>
       <div class="tree">{rows}</div>
       <div class="legend">
-        {STATUSES.map((s, i) => (
+        {DISPLAY_STATUSES.map((s, i) => (
           <div key={s}>
-            <span class="dot" style={{ background: statusColor(s) }} />
-            <span>{s}</span>
+            <StatusIcon s={s} />
+            <span>{STATUS_LABEL[s]}</span>
             <span class="n">{tree.counts[i]}</span>
           </div>
         ))}
-        <div>
-          <span class="dot" style={{ background: statusColor(null) }} />
-          <span>ingen status</span>
-          <span class="n">{Object.values(entries).filter(e => e.kind === 'feature' && !e.status).length}</span>
-        </div>
-        <div>
-          <span class="dot partial" style={{ background: statusColor('planned') }} />
-          <span>delvis utkast</span>
-          <span class="n">{Object.values(entries).filter(e => e.partialDraft).length}</span>
-        </div>
       </div>
     </aside>
   );

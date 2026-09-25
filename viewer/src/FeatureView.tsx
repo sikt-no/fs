@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'preact/hooks';
 import { Fragment, type RefObject } from 'preact';
-import { STATUSES, type Entry, type Note, type Step } from '../shared/model';
-import { statusColor } from './Sidebar';
+import { STATUSES, type Entry, type Status, type Note, type Step } from '../shared/model';
+import { StatusIcon, statusColor } from './Sidebar';
 
 export const scenKey = (ri: number, si: number) => `${ri}-${si}`;
 export const stepKey = (ri: number, si: number, ti: number) => `${ri}-${si}-${ti}`;
@@ -193,7 +193,7 @@ export function FeatureView({ entry, collapsed, flash, lineNumbers, mark, mainRe
                 {f.tags.map(t =>
                   isStatus(t) ? (
                     <span key={t} class="tag status" style={{ '--tc': statusColor(t.slice(1)) }}>
-                      <span class="dot" />{t}
+                      <StatusIcon s={t.slice(1) as Status} lg />{t}
                     </span>
                   ) : (
                     <span key={t} class={'tag' + (MOSCOW.includes(t) ? ' moscow' : '')}>{t}</span>

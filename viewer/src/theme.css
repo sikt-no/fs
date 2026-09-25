@@ -6,7 +6,7 @@
   --err: oklch(0.52 0.17 27); --err-soft: #fbeceb; --sel: #d1cdff;
   --st-draft: #8b8b88; --st-planned: oklch(0.56 0.13 262);
   --st-in-progress: oklch(0.66 0.14 70); --st-implemented: oklch(0.56 0.12 150);
-  --st-none: var(--line2);
+  --st-none: #b3b3b0; --st-partial: oklch(0.56 0.13 262);
   /* Gherkin-nøkkelord (2b «Fargeblokker», Sikt-farger) */
   --k-feat: #7351fb; --on-k: #ffffff; --k-rule: #7351fb; --k-rule-soft: #d1cdff;
   --k-sc: #595959; --k-sc-soft: #ededed; --k-sm: #643ffa; --k-sm-soft: #e8e6ff;
@@ -23,6 +23,7 @@
     --err: oklch(0.72 0.15 27); --err-soft: #361f1d; --sel: #351aad;
     --st-draft: #8b8b88; --st-planned: oklch(0.7 0.12 262);
     --st-in-progress: oklch(0.76 0.13 70); --st-implemented: oklch(0.7 0.12 150);
+    --st-none: #6a6a6d; --st-partial: oklch(0.7 0.12 262);
     --k-feat: #7351fb; --on-k: #ffffff; --k-rule: #7351fb; --k-rule-soft: #260d92;
     --k-sc: #767676; --k-sc-soft: #404040; --k-sm: #7351fb; --k-sm-soft: #351aad;
     --k-bg: #767676; --k-bg-soft: #4f4f4f; --k-gitt: #cccccc; --k-naar: #b4aeff; --k-saa: #d1cdff;
@@ -36,6 +37,7 @@
   --err: oklch(0.72 0.15 27); --err-soft: #361f1d; --sel: #351aad;
   --st-draft: #8b8b88; --st-planned: oklch(0.7 0.12 262);
   --st-in-progress: oklch(0.76 0.13 70); --st-implemented: oklch(0.7 0.12 150);
+  --st-none: #6a6a6d; --st-partial: oklch(0.7 0.12 262);
   --k-feat: #7351fb; --on-k: #ffffff; --k-rule: #7351fb; --k-rule-soft: #260d92;
   --k-sc: #767676; --k-sc-soft: #404040; --k-sm: #7351fb; --k-sm-soft: #351aad;
   --k-bg: #767676; --k-bg-soft: #4f4f4f; --k-gitt: #cccccc; --k-naar: #b4aeff; --k-saa: #d1cdff;
@@ -68,6 +70,18 @@ button { font: inherit; color: inherit; }
 .topbar-right { margin-left: auto; display: flex; align-items: center; gap: 12px; }
 .live { display: flex; align-items: center; gap: 6px; font-family: var(--mono); font-size: 11.5px; color: var(--ink2); }
 .dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+
+/* Statusikoner: formen bærer statusen, fargen er bare støtte */
+.st { width: 9px; height: 9px; border-radius: 50%; box-sizing: border-box; flex-shrink: 0; }
+.st--lg { width: 10px; height: 10px; }
+.st--draft       { border: 1.5px dashed var(--st-draft); }
+.st--planned     { border: 1.5px solid  var(--st-planned); }
+.st--partial     { border: 1.5px dashed var(--st-partial);
+                   background: linear-gradient(90deg, var(--st-partial) 50%, transparent 50%); }
+.st--in-progress { border: 1.5px solid  var(--st-in-progress);
+                   background: linear-gradient(90deg, var(--st-in-progress) 50%, transparent 50%); }
+.st--implemented { background: var(--st-implemented); }
+.st--none        { width: 8px; height: 1.5px; border-radius: 1px; background: var(--st-none); }
 .seg { display: flex; border: 1px solid var(--line2); border-radius: 5px; overflow: hidden; font-size: 12px; }
 .seg button { border: 0; padding: 4px 10px; cursor: pointer; font: inherit; background: transparent; color: var(--ink); }
 .seg button + button { border-left: 1px solid var(--line2); }
@@ -146,7 +160,6 @@ button { font: inherit; color: inherit; }
 .tags { display: flex; flex-wrap: wrap; gap: 6px; }
 .tag { display: flex; align-items: center; gap: 6px; font-family: var(--mono); font-size: 12.5px; padding: 4px 10px; border-radius: 4px; background: var(--surface); border: 1.5px solid var(--line2); color: var(--ink); transition: background-color .28s, border-color .28s, color .28s, font-size .28s, padding .28s; }
 .tag.status { border-color: var(--tc); background: color-mix(in srgb, var(--tc) 14%, transparent); }
-.tag.status .dot { width: 7px; height: 7px; background: var(--tc); }
 .tag.moscow { text-transform: uppercase; font-weight: 700; background: var(--ink); border-color: var(--ink); color: var(--bg); }
 .fhead.compact .tag { font-size: 11.5px; padding: 2px 8px; background: transparent; border-color: rgb(255 255 255 / .7); color: #fff; }
 .fhead.compact .tag.status { background: #fff; border-color: #fff; color: #1c1c1e; }
@@ -215,7 +228,6 @@ pre.docstring { margin: 4px 0 6px; padding: 8px 12px; background: var(--sunken);
 .lint summary { display: flex; align-items: center; gap: 8px; padding: 7px 12px; cursor: pointer; font-weight: 600; color: var(--err); }
 .lint summary .mono { font-size: 11.5px; color: var(--muted); font-weight: 400; }
 .lint ul { margin: 0; padding: 0 14px 10px 34px; display: flex; flex-direction: column; gap: 3px; color: var(--ink2); }
-.dot.partial { box-shadow: 0 0 0 1.5px var(--panel), 0 0 0 3px var(--st-draft); }
 .row .warn { font-family: var(--mono); font-size: 10.5px; font-weight: 700; color: var(--st-in-progress); margin-left: auto; }
 .orow.draft .txt > span:first-child { color: var(--muted); font-style: italic; }
 .oq { color: var(--st-in-progress); }

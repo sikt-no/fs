@@ -1,6 +1,25 @@
 export const STATUSES = ['draft', 'planned', 'in-progress', 'implemented'] as const;
 export type Status = (typeof STATUSES)[number];
 
+/** Statusene slik vieweren viser dem: statustaggen, pluss ingen status og delvis utkast. Rekkefølgen er legendens. */
+export const DISPLAY_STATUSES = ['draft', 'planned', 'in-progress', 'implemented', 'none', 'partial'] as const;
+export type DisplayStatus = (typeof DISPLAY_STATUSES)[number];
+
+export const STATUS_LABEL: Record<DisplayStatus, string> = {
+  draft: 'draft',
+  planned: 'planned',
+  'in-progress': 'in-progress',
+  implemented: 'implemented',
+  none: 'ingen status',
+  partial: 'delvis utkast',
+};
+
+export function displayStatus(e: { status: Status | null; partialDraft?: boolean }): DisplayStatus {
+  if (!e.status) return 'none';
+  if (e.partialDraft && e.status !== 'draft') return 'partial';
+  return e.status;
+}
+
 export interface Step {
   kw: string;
   text: string;
