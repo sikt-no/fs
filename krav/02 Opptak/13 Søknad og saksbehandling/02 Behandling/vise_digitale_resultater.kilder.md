@@ -1,6 +1,6 @@
-# Kilder for elektroniske resultater
+# Kilder for digitale resultater
 
-Sidecar til [`vise_elektroniske_resultater.feature`](vise_elektroniske_resultater.feature) (`@OPT-BEH-BEH-005`, #613).
+Sidecar til [`vise_digitale_resultater.feature`](vise_digitale_resultater.feature) (`@OPT-BEH-BEH-005`, #613).
 
 Kravet er skrevet kildeuavhengig: det sier hva saksbehandleren skal se, ikke hvor opplysningene hentes fra. Dette dokumentet holder kartleggingen av kilder, slik at kravet ikke binder et implementasjonsvalg som ikke er tatt.
 

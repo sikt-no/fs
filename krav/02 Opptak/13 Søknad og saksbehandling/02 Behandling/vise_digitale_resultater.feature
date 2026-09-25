@@ -8,7 +8,7 @@
 # beholder L2–L6 og står fortsatt som @draft, fordi leveransekuttet for dem
 # ikke er besluttet.
 #
-# Kravet dekker visning av de elektroniske resultatene saksbehandleren møter i
+# Kravet dekker visning av de digitale resultatene saksbehandleren møter i
 # FS Admin, steg 2 «Grunnlag». Det erstatter oversiktsdelen av
 # vitnemålsbehandlingen i FS-klienten (bilde FS143.001 Vg.dokument).
 #
@@ -24,12 +24,12 @@
 # tilgjengelig i én kilde i dag.
 #
 # Kartleggingen av hvilke kilder som kan levere hvilke felter, og hva som er
-# verifisert tilgjengelig, står i vise_elektroniske_resultater.kilder.md. Den
+# verifisert tilgjengelig, står i vise_digitale_resultater.kilder.md. Den
 # skal oppdateres når kildevalget tas — kravet skal ikke.
 #
 # AVHENGIGHET — INNGANGSPUNKTET FINNES IKKE ENNÅ
 #
-# Kravet forutsetter at løsningen kan hente de elektroniske resultatene for en
+# Kravet forutsetter at løsningen kan hente de digitale resultatene for en
 # oppgitt søker. Ingen slik inngang finnes i dag: de eksisterende er scopet til
 # den innloggede personen selv. Autorisasjonsregelen er på plass — innsyn
 # krever rettighet til å se søknadsbehandling for organisasjonen som behandler
@@ -65,7 +65,7 @@
 # «Enkeltemne» er et emne uten et vitnemål over seg. Kravet sa
 # «enkeltresultat» før 24.09.2026.
 #
-# «Øvrig dokumentasjon» er det søkeren har registrert elektronisk som verken er
+# «Øvrig dokumentasjon» er det søkeren har registrert digitalt som verken er
 # et vitnemål eller et emneresultat.
 #
 # Seksjonen som viser vitnemål og enkeltemner heter «resultatoversikten», fordi
@@ -77,13 +77,13 @@
 # dokumentet er og hvilken grad det gir.
 #
 # UI-detaljer. Plassering, accordion-oppførsel, kolonnebredder og
-# vindushåndtering hører i vise_elektroniske_resultater.design.md, jf.
+# vindushåndtering hører i vise_digitale_resultater.design.md, jf.
 # utdype-implementasjon-skillen.
 #
 @OPT-BEH-BEH-005 @must @draft
-Egenskap: Se søkerens elektroniske resultater
+Egenskap: Se søkerens digitale resultater
   Som saksbehandler i opptak
-  ønsker jeg å se hvilke elektroniske resultater søkeren har
+  ønsker jeg å se hvilke digitale resultater søkeren har
   slik at jeg kan vurdere grunnlaget uten å slå opp i FS-klienten.
 
   De fleste søknader trenger ingen nærmere vurdering: har søkeren ett vitnemål
@@ -99,7 +99,7 @@ Egenskap: Se søkerens elektroniske resultater
   Regel: Søkerens resultater vises gruppert på nivå og studiested
 
     Scenario: Se at søkeren har resultater
-      Gitt søkeren har elektroniske resultater
+      Gitt søkeren har digitale resultater
       Når saksbehandleren åpner grunnlaget på søknaden
       Så ser saksbehandleren hvor mange resultater oversikten inneholder
       Men resultatoversikten er ikke åpnet
@@ -203,12 +203,12 @@ Egenskap: Se søkerens elektroniske resultater
       # tostegsskala er ulike opplysninger, og saksbehandleren må kunne skille
       # dem uten å åpne emnet.
 
-    Scenario: Søker uten elektroniske resultater
-      Gitt søkeren ikke har elektroniske resultater
+    Scenario: Søker uten digitale resultater
+      Gitt søkeren ikke har digitale resultater
       Når saksbehandleren åpner grunnlaget på søknaden
       Så vises ikke resultatoversikten
       # PRESISERT 25.09.2026: dette scenarioet gjelder når det er bekreftet at
-      # søkeren ikke har elektroniske resultater. Når opplysningene ikke kunne
+      # søkeren ikke har digitale resultater. Når opplysningene ikke kunne
       # hentes, eller det er ukjent om søkeren har noe, gjelder regelen «Det
       # fremgår når grunnlaget er ufullstendig» — de tilstandene skal aldri se
       # ut som denne.
@@ -269,7 +269,7 @@ Egenskap: Se søkerens elektroniske resultater
       # med, og et grunnlag som er blitt utdatert kan ikke friskes opp.
       #
       # Kravet forutsetter at en ny innhenting faktisk oppdaterer et resultat
-      # som er endret hos utstederen. Se vise_elektroniske_resultater.kilder.md
+      # som er endret hos utstederen. Se vise_digitale_resultater.kilder.md
       # for hvorfor det ikke er gitt med dagens lagring.
 
   Regel: Det fremgår når grunnlaget er ufullstendig
@@ -288,7 +288,7 @@ Egenskap: Se søkerens elektroniske resultater
       # opplysning som feltet Utsteder bærer på resultatene som ble hentet.
 
     Scenario: Ingen av søkerens resultater kunne hentes
-      Gitt søkeren har elektroniske resultater
+      Gitt søkeren har digitale resultater
       Og ingen av dem kunne hentes
       Når saksbehandleren åpner grunnlaget på søknaden
       Så ser saksbehandleren at søkeren har resultater som ikke kunne hentes
@@ -298,9 +298,9 @@ Egenskap: Se søkerens elektroniske resultater
       # en direkte vei til feilvedtak.
 
     Scenario: Det er ukjent om søkeren har resultater
-      Gitt det ikke lar seg avgjøre om søkeren har elektroniske resultater
+      Gitt det ikke lar seg avgjøre om søkeren har digitale resultater
       Når saksbehandleren åpner grunnlaget på søknaden
-      Så ser saksbehandleren at det ikke er avklart om søkeren har elektroniske resultater
+      Så ser saksbehandleren at det ikke er avklart om søkeren har digitale resultater
       # AVKLART 25.09.2026: dette er en egen tilstand, ikke det samme som at
       # hentingen feilet. Vet løsningen at søkeren har resultater den ikke fikk
       # tak i, kan saksbehandleren handle på det. Vet den ikke engang om det
@@ -398,18 +398,18 @@ Egenskap: Se søkerens elektroniske resultater
       Så vises ikke resultatoversikten
       # AVKLART 23.09.2026: telleren følger lista. Når filtreringen tømmer
       # lista, er situasjonen for saksbehandleren den samme som om søkeren
-      # ikke hadde elektroniske resultater i det hele tatt.
+      # ikke hadde digitale resultater i det hele tatt.
 
   Regel: Øvrig dokumentasjon vises for seg
 
     Scenario: Se at søkeren har øvrig dokumentasjon
-      Gitt søkeren har øvrig elektronisk dokumentasjon
+      Gitt søkeren har øvrig digital dokumentasjon
       Når saksbehandleren åpner grunnlaget på søknaden
       Så ser saksbehandleren hvor mange innslag øvrig dokumentasjon inneholder
       Men øvrig dokumentasjon er ikke åpnet
 
     Scenario: Åpne øvrig dokumentasjon
-      Gitt søkeren har øvrig elektronisk dokumentasjon
+      Gitt søkeren har øvrig digital dokumentasjon
       Når saksbehandleren åpner øvrig dokumentasjon
       Så ser saksbehandleren hvert innslag med følgende opplysninger
         | felt      |
@@ -417,13 +417,13 @@ Egenskap: Se søkerens elektroniske resultater
         | Tittel    |
         | Utsteder  |
         | Tidspunkt |
-      # Øvrig dokumentasjon er det søkeren har registrert elektronisk som
+      # Øvrig dokumentasjon er det søkeren har registrert digitalt som
       # verken er et vitnemål eller et emneresultat. Den er holdt som egen
       # seksjon fordi saksbehandleren vurderer den mot andre kravelementer enn
       # resultatene, og fordi den ikke har et utdanningsnivå å grupperes på.
 
     Scenariomal: Se <dokumentasjonstype> i øvrig dokumentasjon
-      Gitt søkeren har <dokumentasjonstype> registrert elektronisk
+      Gitt søkeren har <dokumentasjonstype> registrert digitalt
       Når saksbehandleren åpner øvrig dokumentasjon
       Så ser saksbehandleren <dokumentasjonstype> i oversikten
 
@@ -433,7 +433,7 @@ Egenskap: Se søkerens elektroniske resultater
         | godkjenning av utenlandsk utdanning |
 
     Scenario: Søker uten øvrig dokumentasjon
-      Gitt søkeren ikke har øvrig elektronisk dokumentasjon
+      Gitt søkeren ikke har øvrig digital dokumentasjon
       Når saksbehandleren åpner grunnlaget på søknaden
       Så vises ikke øvrig dokumentasjon
 
@@ -442,7 +442,7 @@ Egenskap: Se søkerens elektroniske resultater
     Scenario: Saksbehandler med leserettighet ser søkerens resultater
       Gitt at saksbehandleren kan se søknadsbehandling for organisasjonen som behandler saken
       Når saksbehandleren åpner søknaden til en søker
-      Så ser saksbehandleren søkerens elektroniske resultater
+      Så ser saksbehandleren søkerens digitale resultater
 
     Scenario: Bruker uten lesetilgang ser ikke resultatene
       Gitt at brukeren ikke kan se søknadsbehandling for organisasjonen som behandler saken
@@ -454,7 +454,7 @@ Egenskap: Se søkerens elektroniske resultater
       Gitt saken er tilordnet en annen saksbehandler
       Og saksbehandleren kan se søknadsbehandling for organisasjonen som behandler saken
       Når saksbehandleren åpner søknaden til en søker
-      Så ser saksbehandleren søkerens elektroniske resultater
+      Så ser saksbehandleren søkerens digitale resultater
       # AVKLART 21.09.2026: tilgang styres av rettighet og organisasjon, ikke
       # av tilordning. Tilordning er en mekanisme for arbeidsfordeling, ikke en
       # tilgangsgrense — verifisert i tjenestelaget, der ingen tjeneste sjekker
