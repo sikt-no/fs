@@ -25,7 +25,7 @@ Egenskap: Se meldinger om egne søknader
     Scenario: Tilgjengelige meldingstyper i filter
       Når søkeren åpner meldingstypefilteret
       Så inneholder filteret meldingstypene søkeren har mottatt meldinger av
-      Og "Alle typer" er valgt som standard
+      Og "Alle" er valgt som standard
 
     Scenariomal: Filtrere på meldingstype <type>
       Gitt at søkeren har meldinger av flere meldingstyper
@@ -42,7 +42,7 @@ Egenskap: Se meldinger om egne søknader
     Scenario: Tilgjengelige år i filter
       Når søkeren åpner årsfilteret
       Så inneholder filteret årene søkeren har mottatt meldinger i
-      Og "Alle år" er valgt som standard
+      Og "Alle" er valgt som standard
 
     Scenario: Filtrere på år
       Gitt at søkeren har meldinger fra flere år
@@ -57,6 +57,12 @@ Egenskap: Se meldinger om egne søknader
     Scenario: Kombinere filtre
       Når søkeren kombinerer meldingstype, år og uleste
       Så vises kun meldinger som matcher alle kriteriene
+
+    Scenario: Ingen meldinger matcher filteret
+      Gitt at søkeren har meldinger
+      Når søkeren velger et filter ingen av meldingene matcher
+      Så får søkeren beskjed om at ingen meldinger samsvarer med valgt filter
+      Og beskjeden skiller seg fra beskjeden om at søkeren ikke har meldinger
 
   Regel: Meldinger merkes som lest når de åpnes
 

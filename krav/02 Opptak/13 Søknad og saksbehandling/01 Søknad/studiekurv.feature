@@ -100,4 +100,4 @@ Egenskap: Samle utdanningstilbud i studiekurven
       Og søkeren har lagt til et nytt utdanningstilbud i samme opptak
       Når søkeren åpner studiekurven
       Så er utdanningstilbudene i den leverte søknaden merket som søkt på
-      Og det nye utdanningstilbudet er merket som nytt
+      Og det nye utdanningstilbudet er merket som ikke lagret

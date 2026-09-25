@@ -58,3 +58,8 @@ Egenskap: Trekke egen søknad
       Gitt at søkeren har trukket en søknad
       Når søkeren åpner oversikten over egne søknader
       Så vises søknaden som trukket
+
+    Scenario: En trukket søknad kan ikke åpnes
+      Gitt at søkeren har trukket en søknad
+      Når søkeren åpner oversikten over egne søknader
+      Så tilbys ikke søkeren å åpne den trukne søknaden
