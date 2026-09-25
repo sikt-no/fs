@@ -59,29 +59,29 @@ Egenskap: Se digitale resultater i søknaden
 
   Regel: Søker ser om systemet har digitale resultater
 
-    Scenario: Systemet har registrerte resultater om søkeren
-      Gitt at søkeren har registrerte resultater
+    Scenario: Systemet har digitale resultater om søkeren
+      Gitt at søkeren har digitale resultater
       Når søkeren kommer til dokumentasjonssteget i søknaden
-      Så ser søkeren at systemet har registrerte resultater om hen
+      Så ser søkeren at systemet har digitale resultater om hen
       Og søkeren blir ikke bedt om å laste dem opp
 
-    Scenario: Systemet har ingen registrerte resultater om søkeren
-      Gitt at søkeren ikke har registrerte resultater
+    Scenario: Systemet har ingen digitale resultater om søkeren
+      Gitt at søkeren ikke har digitale resultater
       Når søkeren kommer til dokumentasjonssteget i søknaden
-      Så ser søkeren at systemet ikke har registrerte resultater om hen
+      Så ser søkeren at systemet ikke har digitale resultater om hen
       Og søkeren får vite at all dokumentasjon må lastes opp manuelt
 
   @openquestion
   Regel: Søker kommer til resultatvisningen for å se detaljene
 
-    # ÅPNE SPØRSMÅL: Skal søkeren se detaljene om sine registrerte resultater
+    # ÅPNE SPØRSMÅL: Skal søkeren se detaljene om sine digitale resultater
     # inne i søknaden, eller navigere ut til resultatvisningen i personflaten?
     # Hele denne regelen forutsetter det siste. Blir svaret «inne i søknaden»,
     # utgår regelen og erstattes av innhold i @could-regelen under.
 
-    Scenario: Søker går fra søknaden til sine registrerte resultater
+    Scenario: Søker går fra søknaden til sine digitale resultater
       Gitt at søkeren er i dokumentasjonssteget i søknaden
-      Når søkeren velger å se sine registrerte resultater
+      Når søkeren velger å se sine digitale resultater
       Så kommer søkeren til visningen av egne resultater i personflaten
       # Innholdet i resultatvisningen er beskrevet i @KOM-RES-RES-001
 
@@ -95,9 +95,9 @@ Egenskap: Se digitale resultater i søknaden
   Regel: Søker ser resultatene oppsummert i søknaden
 
     Scenario: Søker ser hvor mange resultater systemet har
-      Gitt at søkeren har registrerte resultater
+      Gitt at søkeren har digitale resultater
       Når søkeren kommer til dokumentasjonssteget i søknaden
-      Så ser søkeren hvor mange registrerte resultater systemet har om hen
+      Så ser søkeren hvor mange digitale resultater systemet har om hen
 
     Scenario: Søker utvider oppsummeringen for å se de enkelte resultatene
       Gitt at søkeren ser resultatene oppsummert i søknaden
