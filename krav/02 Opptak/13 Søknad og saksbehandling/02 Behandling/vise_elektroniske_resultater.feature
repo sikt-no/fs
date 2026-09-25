@@ -93,20 +93,20 @@ Egenskap: Se søkerens elektroniske resultater
   av dem som krever et nærmere blikk.
 
   Bakgrunn:
-    Gitt jeg er innlogget i løsningen
-    Og jeg er inne på søknaden til en søker
+    Gitt at saksbehandleren er innlogget i løsningen
+    Og saksbehandleren er inne på søknaden til en søker
 
   Regel: Søkerens resultater vises gruppert på nivå og studiested
 
     Scenario: Se at søkeren har resultater
       Gitt søkeren har elektroniske resultater
-      Når jeg åpner grunnlaget på søknaden
-      Så ser jeg hvor mange resultater oversikten inneholder
+      Når saksbehandleren åpner grunnlaget på søknaden
+      Så ser saksbehandleren hvor mange resultater oversikten inneholder
       Men resultatoversikten er ikke åpnet
 
     Scenario: Nivåene vises i fast rekkefølge
       Gitt søkeren har resultater fra flere nivåer
-      Når jeg åpner resultatoversikten
+      Når saksbehandleren åpner resultatoversikten
       Så vises nivåene i rekkefølgen videregående, fagskole, høyere utdanning
       # AVKLART 24.09.2026: videregående øverst, fordi det er der
       # opptaksvurderingen ligger — generell studiekompetanse,
@@ -115,9 +115,9 @@ Egenskap: Se søkerens elektroniske resultater
 
     Scenario: Resultater fra samme studiested vises sammen
       Gitt søkeren har resultater fra to studiesteder på samme nivå
-      Når jeg åpner resultatoversikten
-      Så ser jeg én gruppe per studiested innenfor nivået
-      Og jeg ser hvilket studiested hver gruppe gjelder
+      Når saksbehandleren åpner resultatoversikten
+      Så ser saksbehandleren én gruppe per studiested innenfor nivået
+      Og saksbehandleren ser hvilket studiested hver gruppe gjelder
       # AVKLART 24.09.2026, lukker et åpent spørsmål fra 23.09: resultatene
       # grupperes på studiested innenfor hvert nivå.
       #
@@ -128,7 +128,7 @@ Egenskap: Se søkerens elektroniske resultater
 
     Scenario: Vitnemål vises før enkeltemner
       Gitt søkeren har både et vitnemål og enkeltemner fra samme studiested
-      Når jeg åpner resultatoversikten
+      Når saksbehandleren åpner resultatoversikten
       Så vises vitnemålet før enkeltemnene i gruppen
       Og resultatene sorteres etter tidspunkt med eldste først
       # Et vitnemål er et samlet grunnlag, et enkeltemne et supplement.
@@ -137,8 +137,8 @@ Egenskap: Se søkerens elektroniske resultater
 
     Scenario: Se opplysninger om et vitnemål
       Gitt søkeren har et vitnemål
-      Når jeg åpner resultatoversikten
-      Så ser jeg vitnemålet med følgende opplysninger
+      Når saksbehandleren åpner resultatoversikten
+      Så ser saksbehandleren vitnemålet med følgende opplysninger
         | felt            |
         | Tittel          |
         | Omfang          |
@@ -156,8 +156,8 @@ Egenskap: Se søkerens elektroniske resultater
 
     Scenariomal: Se tilleggsopplysninger for et vitnemål fra <nivå>
       Gitt søkeren har et vitnemål fra <nivå>
-      Når jeg åpner resultatoversikten
-      Så ser jeg i tillegg studieprogrammet vitnemålet er tatt innenfor
+      Når saksbehandleren åpner resultatoversikten
+      Så ser saksbehandleren i tillegg studieprogrammet vitnemålet er tatt innenfor
 
       Eksempler:
         | nivå             |
@@ -166,8 +166,8 @@ Egenskap: Se søkerens elektroniske resultater
 
     Scenario: Se tilleggsopplysninger for et vitnemål fra videregående skole
       Gitt søkeren har et vitnemål fra videregående skole
-      Når jeg åpner resultatoversikten
-      Så ser jeg i tillegg til opplysningene om vitnemålet
+      Når saksbehandleren åpner resultatoversikten
+      Så ser saksbehandleren i tillegg til opplysningene om vitnemålet
         | felt                    |
         | Vitnemålsnummer         |
         | Førstegangsvitnemål     |
@@ -188,8 +188,8 @@ Egenskap: Se søkerens elektroniske resultater
 
     Scenario: Se opplysninger om et enkeltemne
       Gitt søkeren har et enkeltemne
-      Når jeg åpner resultatoversikten
-      Så ser jeg enkeltemnet med følgende opplysninger
+      Når saksbehandleren åpner resultatoversikten
+      Så ser saksbehandleren enkeltemnet med følgende opplysninger
         | felt          |
         | Emnekode      |
         | Tittel        |
@@ -205,7 +205,7 @@ Egenskap: Se søkerens elektroniske resultater
 
     Scenario: Søker uten elektroniske resultater
       Gitt søkeren ikke har elektroniske resultater
-      Når jeg åpner grunnlaget på søknaden
+      Når saksbehandleren åpner grunnlaget på søknaden
       Så vises ikke resultatoversikten
       # PRESISERT 25.09.2026: dette scenarioet gjelder når det er bekreftet at
       # søkeren ikke har elektroniske resultater. Når opplysningene ikke kunne
@@ -225,8 +225,8 @@ Egenskap: Se søkerens elektroniske resultater
     @openquestion
     Scenario: Åpne et vitnemål i eget vindu
       Gitt søkeren har et vitnemål
-      Når jeg velger å åpne vitnemålet i eget vindu
-      Så kan jeg lese vitnemålet mens saksbehandlingen står åpen
+      Når saksbehandleren velger å åpne vitnemålet i eget vindu
+      Så kan saksbehandleren lese vitnemålet mens saksbehandlingen står åpen
       # ÅPNE SPØRSMÅL:
       # - Et resultat kan ha flere underliggende dokumenter — en oppnådd grad
       #   og en godkjenning av utenlandsk utdanning kommer ofte med to hver.
@@ -239,8 +239,8 @@ Egenskap: Se søkerens elektroniske resultater
 
     Scenario: Se alle enkeltemner samlet
       Gitt søkeren har enkeltemner
-      Når jeg velger å se enkeltemnene samlet
-      Så kan jeg lese alle enkeltemnene mens saksbehandlingen står åpen
+      Når saksbehandleren velger å se enkeltemnene samlet
+      Så kan saksbehandleren lese alle enkeltemnene mens saksbehandlingen står åpen
       # AVKLART 24.09.2026: et enkeltemne åpnes ikke for seg. De vises samlet
       # på én side, slik at saksbehandleren leser dem under ett.
 
@@ -248,8 +248,8 @@ Egenskap: Se søkerens elektroniske resultater
 
     Scenario: Se når opplysningene sist ble hentet
       Gitt søkeren har resultater fra flere studiesteder
-      Når jeg åpner resultatoversikten
-      Så ser jeg for hver gruppe når opplysningene sist ble hentet
+      Når saksbehandleren åpner resultatoversikten
+      Så ser saksbehandleren for hver gruppe når opplysningene sist ble hentet
       # AVKLART 25.09.2026: tidspunktet vises per gruppe, ikke per rad og ikke
       # som én verdi for hele oversikten. Variasjonen i ferskhet oppstår mellom
       # grupper, ikke mellom rader i samme gruppe — og én samlet verdi ville
@@ -259,10 +259,10 @@ Egenskap: Se søkerens elektroniske resultater
       # står bak resultatet dekkes allerede av feltet Utsteder.
 
     Scenario: Be om ny innhenting
-      Gitt jeg ser resultatoversikten
-      Når jeg ber om at resultatene hentes på nytt
+      Gitt at saksbehandleren ser resultatoversikten
+      Når saksbehandleren ber om at resultatene hentes på nytt
       Så hentes resultatene på nytt
-      Og jeg ser det oppdaterte tidspunktet for når opplysningene ble hentet
+      Og saksbehandleren ser det oppdaterte tidspunktet for når opplysningene ble hentet
       # AVKLART 25.09.2026: saksbehandleren skal kunne be om ny innhenting når
       # som helst, ikke bare etter en feilet henting. Uten det står
       # saksbehandleren maktesløs foran et tidsstempel hen ikke kan gjøre noe
@@ -277,9 +277,9 @@ Egenskap: Se søkerens elektroniske resultater
     Scenario: Resultater fra en utsteder kunne ikke hentes
       Gitt søkeren har resultater fra flere utstedere
       Og resultatene fra én av utstederne kunne ikke hentes
-      Når jeg åpner resultatoversikten
-      Så ser jeg resultatene som ble hentet
-      Og jeg ser hvilken utsteder det finnes resultater fra som ikke kunne hentes
+      Når saksbehandleren åpner resultatoversikten
+      Så ser saksbehandleren resultatene som ble hentet
+      Og saksbehandleren ser hvilken utsteder det finnes resultater fra som ikke kunne hentes
       # AVKLART 25.09.2026: utstederen navngis. Et anonymt «noe mangler» kan
       # saksbehandleren ikke handle på; med utstederen navngitt kan hen be
       # søkeren dokumentere akkurat det, eller forsøke igjen senere.
@@ -290,17 +290,17 @@ Egenskap: Se søkerens elektroniske resultater
     Scenario: Ingen av søkerens resultater kunne hentes
       Gitt søkeren har elektroniske resultater
       Og ingen av dem kunne hentes
-      Når jeg åpner grunnlaget på søknaden
-      Så ser jeg at søkeren har resultater som ikke kunne hentes
-      Men jeg ser ingen resultater
+      Når saksbehandleren åpner grunnlaget på søknaden
+      Så ser saksbehandleren at søkeren har resultater som ikke kunne hentes
+      Men saksbehandleren ser ingen resultater
       # AVKLART 25.09.2026: dette må skille seg tydelig fra en søker uten
       # resultater. En tom oversikt som egentlig betyr at hentingen feilet er
       # en direkte vei til feilvedtak.
 
     Scenario: Det er ukjent om søkeren har resultater
       Gitt det ikke lar seg avgjøre om søkeren har elektroniske resultater
-      Når jeg åpner grunnlaget på søknaden
-      Så ser jeg at det ikke er avklart om søkeren har elektroniske resultater
+      Når saksbehandleren åpner grunnlaget på søknaden
+      Så ser saksbehandleren at det ikke er avklart om søkeren har elektroniske resultater
       # AVKLART 25.09.2026: dette er en egen tilstand, ikke det samme som at
       # hentingen feilet. Vet løsningen at søkeren har resultater den ikke fikk
       # tak i, kan saksbehandleren handle på det. Vet den ikke engang om det
@@ -315,8 +315,8 @@ Egenskap: Se søkerens elektroniske resultater
 
     Scenario: Se fagene på vitnemålet
       Gitt søkeren har et vitnemål fra videregående skole
-      Når jeg ser fagene på vitnemålet
-      Så ser jeg hvert fag med følgende opplysninger
+      Når saksbehandleren ser fagene på vitnemålet
+      Så ser saksbehandleren hvert fag med følgende opplysninger
         | felt               |
         | Fagkode            |
         | Fagnavn            |
@@ -335,8 +335,8 @@ Egenskap: Se søkerens elektroniske resultater
 
     Scenario: Se opprinnelig og forbedret karakter samtidig
       Gitt vitnemålet har et fag søkeren har forbedret
-      Når jeg ser fagene på vitnemålet
-      Så ser jeg både den opprinnelige og den forbedrede karakteren for faget
+      Når saksbehandleren ser fagene på vitnemålet
+      Så ser saksbehandleren både den opprinnelige og den forbedrede karakteren for faget
       # Verifisert i FS-klienten: de to radene vises som kolonneparet
       # «Opprinnelig / Forbedret». Designskissen i Confluence har samme
       # kolonnepar.
@@ -347,8 +347,8 @@ Egenskap: Se søkerens elektroniske resultater
 
     Scenario: Se merknader på et fag
       Gitt et fag på vitnemålet har en merknad
-      Når jeg ser fagene på vitnemålet
-      Så ser jeg merknaden på faget
+      Når saksbehandleren ser fagene på vitnemålet
+      Så ser saksbehandleren merknaden på faget
       # Merknader forklarer f.eks. fritak eller særskilt vurderingsform, og er
       # nødvendige for at saksbehandleren skal forstå hvorfor et fag ser ut
       # som det gjør.
@@ -358,8 +358,8 @@ Egenskap: Se søkerens elektroniske resultater
     Scenario: Gyldig resultat vises selv om det ikke er brukt
       Gitt søkeren har et gyldig resultat
       Og det gyldige resultatet er ikke brukt i en beregning på dette opptaket
-      Når jeg åpner resultatoversikten
-      Så ser jeg det gyldige resultatet
+      Når saksbehandleren åpner resultatoversikten
+      Så ser saksbehandleren det gyldige resultatet
       # AVKLART 23.09.2026: filtreringen gjelder kun annullerte resultater. Et
       # gyldig resultat kan når som helst bli grunnlaget saksbehandleren
       # velger (L2), og skjules derfor aldri.
@@ -367,8 +367,8 @@ Egenskap: Se søkerens elektroniske resultater
     Scenario: Annullert resultat som er brukt i en beregning vises
       Gitt søkeren har et annullert resultat
       Og det annullerte resultatet er brukt i en beregning på dette opptaket
-      Når jeg åpner resultatoversikten
-      Så ser jeg det annullerte resultatet tydelig markert som annullert
+      Når saksbehandleren åpner resultatoversikten
+      Så ser saksbehandleren det annullerte resultatet tydelig markert som annullert
       # At et annullert vitnemål ikke kan legges til grunn for en ny beregning
       # er en konsekvens av valget, og hører derfor i L2 (#608). Den
       # begrensningen står fortsatt i vitnemålsbehandling.feature.
@@ -376,7 +376,7 @@ Egenskap: Se søkerens elektroniske resultater
     Scenario: Annullert resultat uten bruk i opptaket vises ikke
       Gitt søkeren har et annullert resultat
       Og det annullerte resultatet er ikke brukt i en beregning på dette opptaket
-      Når jeg åpner resultatoversikten
+      Når saksbehandleren åpner resultatoversikten
       Så vises ikke det annullerte resultatet
       # AVKLART 21.09.2026, presisert 23.09.2026: et annullert resultat som
       # ligger til grunn for et tall saksbehandleren ser, må være synlig —
@@ -394,7 +394,7 @@ Egenskap: Se søkerens elektroniske resultater
     Scenario: Søkeren har bare annullerte resultater uten bruk
       Gitt søkeren har annullerte resultater
       Og ingen av dem er brukt i en beregning på dette opptaket
-      Når jeg åpner grunnlaget på søknaden
+      Når saksbehandleren åpner grunnlaget på søknaden
       Så vises ikke resultatoversikten
       # AVKLART 23.09.2026: telleren følger lista. Når filtreringen tømmer
       # lista, er situasjonen for saksbehandleren den samme som om søkeren
@@ -404,14 +404,14 @@ Egenskap: Se søkerens elektroniske resultater
 
     Scenario: Se at søkeren har øvrig dokumentasjon
       Gitt søkeren har øvrig elektronisk dokumentasjon
-      Når jeg åpner grunnlaget på søknaden
-      Så ser jeg hvor mange innslag øvrig dokumentasjon inneholder
+      Når saksbehandleren åpner grunnlaget på søknaden
+      Så ser saksbehandleren hvor mange innslag øvrig dokumentasjon inneholder
       Men øvrig dokumentasjon er ikke åpnet
 
     Scenario: Åpne øvrig dokumentasjon
       Gitt søkeren har øvrig elektronisk dokumentasjon
-      Når jeg åpner øvrig dokumentasjon
-      Så ser jeg hvert innslag med følgende opplysninger
+      Når saksbehandleren åpner øvrig dokumentasjon
+      Så ser saksbehandleren hvert innslag med følgende opplysninger
         | felt      |
         | Type      |
         | Tittel    |
@@ -424,8 +424,8 @@ Egenskap: Se søkerens elektroniske resultater
 
     Scenariomal: Se <dokumentasjonstype> i øvrig dokumentasjon
       Gitt søkeren har <dokumentasjonstype> registrert elektronisk
-      Når jeg åpner øvrig dokumentasjon
-      Så ser jeg <dokumentasjonstype> i oversikten
+      Når saksbehandleren åpner øvrig dokumentasjon
+      Så ser saksbehandleren <dokumentasjonstype> i oversikten
 
       Eksempler:
         | dokumentasjonstype                  |
@@ -434,27 +434,27 @@ Egenskap: Se søkerens elektroniske resultater
 
     Scenario: Søker uten øvrig dokumentasjon
       Gitt søkeren ikke har øvrig elektronisk dokumentasjon
-      Når jeg åpner grunnlaget på søknaden
+      Når saksbehandleren åpner grunnlaget på søknaden
       Så vises ikke øvrig dokumentasjon
 
   Regel: Innsyn styres av rettighet, ikke av hvem som har tatt saken
 
     Scenario: Saksbehandler med leserettighet ser søkerens resultater
-      Gitt jeg kan se søknadsbehandling for organisasjonen som behandler saken
-      Når jeg åpner søknaden til en søker
-      Så ser jeg søkerens elektroniske resultater
+      Gitt at saksbehandleren kan se søknadsbehandling for organisasjonen som behandler saken
+      Når saksbehandleren åpner søknaden til en søker
+      Så ser saksbehandleren søkerens elektroniske resultater
 
     Scenario: Bruker uten lesetilgang ser ikke resultatene
-      Gitt jeg ikke kan se søknadsbehandling for organisasjonen som behandler saken
-      Når jeg åpner søknaden til en søker
-      Så ser jeg ikke resultatoversikten
-      Og jeg ser ikke øvrig dokumentasjon
+      Gitt at brukeren ikke kan se søknadsbehandling for organisasjonen som behandler saken
+      Når brukeren åpner søknaden til en søker
+      Så ser ikke brukeren resultatoversikten
+      Og brukeren ser ikke øvrig dokumentasjon
 
     Scenario: Saken er tilordnet en annen saksbehandler
       Gitt saken er tilordnet en annen saksbehandler
-      Og jeg kan se søknadsbehandling for organisasjonen som behandler saken
-      Når jeg åpner søknaden til en søker
-      Så ser jeg søkerens elektroniske resultater
+      Og saksbehandleren kan se søknadsbehandling for organisasjonen som behandler saken
+      Når saksbehandleren åpner søknaden til en søker
+      Så ser saksbehandleren søkerens elektroniske resultater
       # AVKLART 21.09.2026: tilgang styres av rettighet og organisasjon, ikke
       # av tilordning. Tilordning er en mekanisme for arbeidsfordeling, ikke en
       # tilgangsgrense — verifisert i tjenestelaget, der ingen tjeneste sjekker
