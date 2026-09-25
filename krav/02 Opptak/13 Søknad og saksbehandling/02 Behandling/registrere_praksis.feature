@@ -28,9 +28,10 @@ Egenskap: Registrere og beregne praksis for søker
   slik at jeg kan avgjøre om søkeren oppfyller opptakskrav som krever praksis.
 
   Praksisberegningen er relevant når et utdanningstilbud har relevant praksis
-  som opptakskrav. Master i anestesisykepleie krever for eksempel
-  bachelorgrad i sykepleie, autorisasjon som sykepleier og minimum to års
-  arbeidserfaring som sykepleier. Dokumentasjonen som kreves er typisk
+  som opptakskrav, eller i vurdering av realkompetanse. Master i
+  anestesisykepleie krever for eksempel bachelorgrad i sykepleie,
+  autorisasjon som sykepleier og minimum to års arbeidserfaring som
+  sykepleier. Dokumentasjonen som kreves er typisk
   bekreftelse fra arbeidsgiver.
 
   Utregningen er knotete å gjøre manuelt fordi søkeren ofte har dokumentert
@@ -38,7 +39,9 @@ Egenskap: Registrere og beregne praksis for søker
   dokumenterer omfanget enten som stillingsprosent eller som et antall timer.
   Saksbehandleren registrerer derfor hvert dokumenterte arbeidsforhold med
   periode og omfang, og systemet regner ut hvor mange års praksis det
-  tilsvarer til sammen og om søkeren oppfyller opptakskravet.
+  tilsvarer til sammen. Om søkeren oppfyller opptakskravet, vurderer
+  saksbehandleren. Kobling til opptakskrav er beskrevet i
+  knytte_praksis_til_opptakskrav.feature (@OPT-BEH-BEH-004).
 
   Praksis beregnes proporsjonalt: periodens kalendertid ganget med
   stillingsprosenten. To år i 50 % stilling gir ett år praksis. Perioder
@@ -47,17 +50,44 @@ Egenskap: Registrere og beregne praksis for søker
   Bakgrunn:
     Gitt jeg er innlogget i løsningen
     Og jeg har rollen opptakssaksbehandler
-    Og jeg er inne på søknaden til en søker
+    Og jeg behandler en sak på søknaden til en søker
 
-  Regel: Praksisperioder registreres manuelt på søkeren
+  Regel: Praksisperioder registreres manuelt på saken
 
     Scenario: Registrere en praksisperiode
       Når jeg registrerer en praksisperiode med type, startdato og sluttdato
-      Så er praksisperioden lagret på søkeren
+      Så er praksisperioden lagret på saken
       Og praksisperioden inngår i den samlede praksisberegningen
 
+    Scenario: Praksisperioder hører til saken de er registrert på
+      Gitt søknaden til søkeren har to saker
+      Og jeg har registrert en praksisperiode på den ene saken
+      Når jeg åpner praksisberegningen på den andre saken
+      Så inngår ikke praksisperioden i praksisberegningen på den saken
+      # AVKLART 23.09.2026: praksisperioder registreres på saken, ikke på
+      # personen eller søknaden, jf. innspill i løsningsforslaget (Confluence
+      # PFS 4996071435): «hugs at ein søknad kan ha fleire saker med ulike
+      # saksbehandlarar». Dette er en endring fra FS-klienten, der
+      # PERSONPRAKSIS er nøklet på person.
+
+    @openquestion
+    Scenario: AVKLAR om praksis kan kopieres eller vises på tvers av saker
+      # ÅPNE SPØRSMÅL:
+      # - Praksisperioder hører til saken de er registrert på. Skal
+      #   saksbehandleren likevel kunne kopiere praksisperioder fra en annen
+      #   sak — på samme søknad eller på en tidligere søknad fra samme
+      #   søker — i stedet for å registrere dem på nytt?
+      # - Skal praksis som er registrert på andre saker for samme søker
+      #   kunne vises (lesbart) i praksisberegningen, for eksempel som
+      #   referanse når samme dokumentasjon vurderes på nytt?
+      # - Hvis praksis kopieres: er kopien uavhengig av originalen, slik at
+      #   endringer på den ene saken ikke påvirker den andre?
+      # - Svaret kan endre scenarioet «Praksisperioder hører til saken de er
+      #   registrert på» over.
+      Gitt spørsmålet er åpent
+
     Scenario: Se registrerte praksisperioder
-      Gitt søkeren har registrerte praksisperioder
+      Gitt saken har registrerte praksisperioder
       Når jeg åpner praksisberegningen
       Så ser jeg hver praksisperiode med følgende opplysninger
         | felt             |
@@ -110,13 +140,17 @@ Egenskap: Registrere og beregne praksis for søker
       #   relevansmarkeringen må erstattes av noe annet.
       # - Anbefaling: relevans filtrerer først, overlapp beregnes på det som
       #   står igjen. Da forblir det to summer å velge mellom.
-      # - Merk at det er avklart at samme praksis kan knyttes til flere ulike
-      #   kravelementer, og at ulike kravelementer kan ha ulike krav til hva
-      #   som er relevant praksis. Det betyr at relevans sannsynligvis ikke
-      #   kan være ett flagg per periode, slik det er i FS i dag, men må
-      #   gjelde per kombinasjon av periode og kravelement. Se «AVKLAR om et
-      #   utvalg av praksisperiodene kan knyttes per kravelement» — de to
-      #   spørsmålene er samme datamodellvalg sett fra to sider.
+      # - Alternativer vurdert 23.09.2026, ingen besluttet: (1) ett
+      #   relevansflagg per periode som filtrerer før overlappsberegningen,
+      #   (2) ingen relevansmarkering — saksbehandleren registrerer bare
+      #   relevante perioder, (3) flagg uten filtrering, med relevant og
+      #   total sum i tillegg til overlappssummene.
+      # - Kalkulatoren står uavhengig av opptakskrav (kobling til kravelement
+      #   er skilt ut i knytte_praksis_til_opptakskrav.feature). Relevans per
+      #   kravelement — at ulike kravelementer kan ha ulike krav til hva som
+      #   er relevant praksis — hører derfor hjemme der, ikke her. Her gjelder
+      #   spørsmålet bare om og hvordan saksbehandleren skiller relevant
+      #   praksis fra resten i selve beregningen.
 
     Scenario: Praksistype og startdato er obligatorisk
       Når jeg registrerer en praksisperiode
@@ -129,7 +163,7 @@ Egenskap: Registrere og beregne praksis for søker
     Scenario: Registrere praksisperiode uten sluttdato
       Gitt søkeren har et løpende arbeidsforhold
       Når jeg registrerer en praksisperiode uten sluttdato
-      Så er praksisperioden lagret på søkeren
+      Så er praksisperioden lagret på saken
       Men praksisperioden får ingen beregnet praksis
       # AVKLART 16.09.2026: perioden kan lagres uten sluttdato, men
       # beregningen krever begge datoer og kjører derfor ikke. Perioden
@@ -137,9 +171,17 @@ Egenskap: Registrere og beregne praksis for søker
       # ingen verdi før saksbehandleren fyller inn sluttdato. Verifisert i
       # FS-klienten.
       #
-      # Merk konsekvensen: en søker med et løpende arbeidsforhold får ikke
-      # den praksisen regnet med i det hele tatt. Om det er ønsket adferd
-      # eller en mangel ved dagens løsning, bør produkteier ta stilling til.
+      #
+      # AVKLART 23.09.2026: dagens adferd videreføres. En søker med et
+      # løpende arbeidsforhold får ikke den praksisen regnet med før
+      # saksbehandleren har fylt inn en sluttdato. For at det ikke skal skje
+      # ubemerket, varsles saksbehandleren — se scenarioet under.
+
+    Scenario: Varsel når praksisperioden lagres uten sluttdato
+      Når jeg registrerer en praksisperiode uten sluttdato
+      Så får jeg et varsel om at praksisperioden er lagret uten sluttdato og derfor ikke telles med
+      Men varselet hindrer ikke at praksisperioden lagres
+      # AVKLART 23.09.2026: varselet er ikke-blokkerende.
 
     Scenario: Sluttdato før startdato kan ikke lagres
       Gitt jeg registrerer en praksisperiode
@@ -162,28 +204,25 @@ Egenskap: Registrere og beregne praksis for søker
       # Merk at startdato lik sluttdato fortsatt er gyldig; det gir én dag
       # praksis. Det er bare sluttdato *før* startdato som avvises.
 
-    @openquestion
-    Scenario: AVKLAR om praksis fram i tid kan registreres
-      # ÅPNE SPØRSMÅL:
-      # - Skal perioder som strekker seg inn i framtiden kunne registreres?
-      #   FS-klienten hindrer det ikke, og spørsmålet er ikke besluttet.
-      # - Tilfellet er reelt: en søker i fast stilling kan dokumentere et
-      #   arbeidsforhold som løper forbi søknadsfristen. Skal praksisen
-      #   regnes til søknadsfristen, til dagens dato, eller til den oppgitte
-      #   sluttdatoen selv om den er fram i tid?
-      # - Se også «Registrere praksisperiode uten sluttdato» over — der er
-      #   dagens svar at perioden ikke gir noen beregnet praksis i det hele
-      #   tatt. De to tilfellene bør besluttes sammen.
-      Gitt spørsmålet er åpent
+    Scenario: Sluttdato fram i tid regnes som oppgitt
+      Gitt dagens dato er 23.09.2026
+      Når jeg registrerer en praksisperiode fra 01.01.2026 til 31.12.2026
+      Og jeg oppgir omfanget som stillingsprosent 100 %
+      Så beregnes praksisperioden til 1,00 år
+      # AVKLART 23.09.2026: dagens adferd videreføres. En sluttdato fram i
+      # tid avvises ikke, og perioden regnes fram til den oppgitte
+      # sluttdatoen — ikke til dagens dato eller til søknadsfristen. Det er
+      # saksbehandlerens ansvar å vurdere om framtidig praksis skal legges
+      # til grunn. Besluttet sammen med «Registrere praksisperiode uten
+      # sluttdato» over.
 
-    @openquestion
     Scenario: Knytte praksisperioden til dokumentasjon på søknaden
       Gitt søkeren har lagt ved dokumentasjon på et arbeidsforhold i søknaden
       Når jeg knytter dokumentasjonen til praksisperioden
       Så ser jeg hvilken dokumentasjon praksisperioden bygger på
       Og jeg kan åpne dokumentasjonen fra praksisperioden
-      # ÅPENT SPØRSMÅL:
-      # - Er dette i scope for første leveranse?
+      # UTSATT 23.09.2026: ikke med i første leveranse. Scenarioet beholdes
+      # her som krav med lavere prioritet, og tas med i en senere leveranse.
       #
       # Avklart 16.09.2026 om innholdet: dersom praksis skal kunne knyttes
       # til dokumentasjon, er det dokumentasjon som er lagt ved *søknaden* —
@@ -226,14 +265,20 @@ Egenskap: Registrere og beregne praksis for søker
 
       Eksempler:
         | timer | årsverk | praksis |
-        | 1 700 | 1 700   | 1,00 år |
-        | 850   | 1 700   | 0,50 år |
+        | 1 650 | 1 650   | 1,00 år |
+        | 825   | 1 650   | 0,50 år |
         | 600   | 1 500   | 0,40 år |
 
     Scenario: Antall timer per årsverk har en standardverdi
       Gitt jeg registrerer en praksisperiode med omfang oppgitt i timer
       Når jeg ikke oppgir antall timer per årsverk
-      Så brukes standardverdien på 1 700 timer
+      Så brukes standardverdien på 1 650 timer
+
+    Scenario: Saksbehandleren kan justere antall timer per årsverk
+      Gitt jeg registrerer en praksisperiode med omfang oppgitt i timer
+      Og standardverdien på 1 650 timer per årsverk er forhåndsutfylt
+      Når jeg endrer antall timer per årsverk til 1 700
+      Så beregnes praksisperioden mot 1 700 timer per årsverk
 
     Scenario: Antall timer per årsverk oppgis per praksisperiode
       Gitt søkeren har to arbeidsforhold med ulik arbeidstidsnorm
@@ -253,12 +298,11 @@ Egenskap: Registrere og beregne praksis for søker
       # ha ulik arbeidstidsnorm; lagring på perioden gjør beregningen
       # etterprøvbar.
       #
-      # Standardverdien 1 700 timer er den som brukes i eksemplene over.
-      # Gjenstår å bekrefte mot sektoren: 1 750 timer er en vanlig norm for
-      # nettoårsverk i Norge, og valget mellom 1 700 og 1 750 flytter
-      # grensen for hvem som oppfyller et krav. Nord universitets
-      # Excel-regneark for realkompetanse (Confluence PFS 4885217297) kan
-      # vise hva som faktisk er i bruk.
+      # AVKLART 23.09.2026: standardverdien er 1 650 timer per årsverk.
+      # Det er standarden som hittil er brukt i UHG-opptaket, i
+      # praksisberegningen for 23/5-regelen (som nå utgår). Timer per
+      # årsverk kan variere, og saksbehandleren kan justere verdien på den
+      # enkelte praksisperioden.
 
     Scenario: Omfanget oppgis på én av måtene per praksisperiode
       Gitt jeg registrerer en praksisperiode
@@ -283,36 +327,36 @@ Egenskap: Registrere og beregne praksis for søker
   Regel: Praksisperioder kan oppdateres og slettes
 
     Scenario: Oppdatere en praksisperiode
-      Gitt søkeren har en registrert praksisperiode
+      Gitt saken har en registrert praksisperiode
       Når jeg endrer type, datoer eller omfang på praksisperioden
       Så er endringen lagret på praksisperioden
       Og den samlede praksisberegningen er oppdatert
 
     Scenario: Slette en praksisperiode
-      Gitt søkeren har en registrert praksisperiode
+      Gitt saken har en registrert praksisperiode
       Når jeg sletter praksisperioden
-      Så er praksisperioden ikke lenger registrert på søkeren
+      Så er praksisperioden ikke lenger registrert på saken
       Og praksisperioden inngår ikke i den samlede praksisberegningen
 
   Regel: Systemet summerer praksisperiodene automatisk
 
     Scenario: Samlet praksis summeres på tvers av perioder
-      Gitt et årsverk er 1 700 timer
-      Og søkeren har følgende praksisperioder
+      Gitt et årsverk er 1 650 timer
+      Og saken har følgende praksisperioder
         | startdato  | sluttdato  | omfang    | beregnet praksis |
         | 01.01.2020 | 31.12.2021 | 100 %     | 2,00 år          |
         | 01.01.2022 | 31.12.2023 | 50 %      | 1,00 år          |
-        | 01.01.2024 | 30.06.2024 | 850 timer | 0,50 år          |
+        | 01.01.2024 | 30.06.2024 | 825 timer | 0,50 år          |
       Når jeg åpner praksisberegningen
       Så er samlet praksis 3,50 år
 
     Scenario: Samlet praksis justeres når en praksisperiode legges til
-      Gitt samlet praksis for søkeren er 3,50 år
+      Gitt samlet praksis på saken er 3,50 år
       Når jeg registrerer en praksisperiode som beregnes til 0,50 år
       Så er samlet praksis 4,00 år
 
     Scenario: Samlet praksis justeres når en praksisperiode slettes
-      Gitt samlet praksis for søkeren er 3,50 år
+      Gitt samlet praksis på saken er 3,50 år
       Og en av praksisperiodene er beregnet til 1,00 år
       Når jeg sletter den praksisperioden
       Så er samlet praksis 2,50 år
@@ -322,11 +366,16 @@ Egenskap: Registrere og beregne praksis for søker
       Når jeg oppgir omfanget som stillingsprosent 100 %
       Så beregnes praksisperioden til 1,00 år
 
-    Scenario: Praksis beregnes med full presisjon og avrundes bare i visningen
-      Gitt søkeren har flere praksisperioder som hver gir en brøkdel av et år
+    Scenario: Summen avkortes til to desimaler i visningen
+      Gitt sakens praksisperioder gir til sammen 1,996 år
+      Når jeg åpner praksisberegningen
+      Så vises samlet praksis som 1,99 år
+
+    Scenario: Praksis beregnes med full presisjon
+      Gitt saken har flere praksisperioder som hver gir en brøkdel av et år
       Når jeg åpner praksisberegningen
       Så er hver praksisperiode beregnet med full presisjon
-      Og avrundingen til to desimaler skjer først når summen vises
+      Og avkortingen til to desimaler skjer først når summen vises
       # AVKLART 16.09.2026:
       #
       # Tidsenhet: kalendertiden regnes som antall hele kalendermåneder
@@ -351,10 +400,10 @@ Egenskap: Registrere og beregne praksis for søker
       # og nær et toårskrav kan det avgjøre utfallet. Full presisjon internt
       # koster ingenting å bygge.
       #
-      # Visningen avrundes til to desimaler, som i eksemplene. Merk at
-      # avrunding oppover i visningen kan vise «2,00 år» for en sum på 1,996
-      # — om visningen skal avkorte nedover i stedet, bør besluttes sammen
-      # med hvordan opptakskravet vurderes.
+      # AVKLART 23.09.2026: visningen avkorter nedover til to desimaler, slik
+      # at 1,996 år vises som 1,99 år og ikke «2,00 år». Visningen skal aldri
+      # vise mer praksis enn søkeren faktisk har. Avkortingen gjelder bare
+      # visningen — beregningen skjer med full presisjon.
 
     @openquestion
     Scenario: AVKLAR hvordan en delvis måned regnes
@@ -365,13 +414,17 @@ Egenskap: Registrere og beregne praksis for søker
       # - FS-klienten deler alltid restdagene på 31, fordi det er slik Oracles
       #   MONTHS_BETWEEN virker. Det er en teknisk konvensjon, ikke en
       #   domenebeslutning: 15 dager i februar blir 0,484 måneder, mens de
-      #   samme 15 dagene er 0,536 av den faktiske måneden. Ingen av
-      #   eksemplene i Scenariomalen over treffer dette, fordi de alle gir
-      #   hele måneder.
-      # - Alternativene er å dele restdagene på 31 (som i dag), på den
-      #   faktiske månedens lengde, eller å regne hele perioden i dager mot
-      #   et fast antall dager per år. De gir ulike svar, og forskjellen kan
-      #   avgjøre et grensetilfelle.
+      #   samme 15 dagene er 0,517 av den faktiske måneden (februar 2020 har
+      #   29 dager). Ingen av eksemplene i Scenariomalen over treffer dette,
+      #   fordi de alle gir hele måneder.
+      # - Alternativene, med 01.02.2020–15.02.2020 i 100 % som eksempel:
+      #   Restdager / 31 (som i dag):        0,484 mnd ≈ 0,0403 år
+      #   Restdager / månedens lengde:       0,517 mnd ≈ 0,0431 år
+      #   Hele perioden i dager / 365:                   ≈ 0,0411 år
+      #   De gir ulike svar, og forskjellen kan avgjøre et grensetilfelle.
+      #   Det siste alternativet gir i tillegg små avvik for hele måneder
+      #   (01.02–28.02 blir ikke nøyaktig 1/12 år). Vurdert 23.09.2026,
+      #   ikke besluttet.
       # - Spørsmålet er nytt, oppdaget da regneregelen ble formulert
       #   uavhengig av Oracle.
       Gitt spørsmålet er åpent
@@ -379,7 +432,7 @@ Egenskap: Registrere og beregne praksis for søker
   Regel: Overlappende praksisperioder varsles og vises med to summer
 
     Scenario: Overlappende praksisperioder varsles
-      Gitt søkeren har følgende praksisperioder
+      Gitt saken har følgende praksisperioder
         | startdato  | sluttdato  | omfang |
         | 01.01.2020 | 31.12.2020 | 50 %   |
         | 01.01.2020 | 31.12.2020 | 60 %   |
@@ -388,7 +441,7 @@ Egenskap: Registrere og beregne praksis for søker
       Og det fremgår hvilken periode overlappet gjelder
 
     Scenario: Både oppgitt og justert sum vises ved overlapp
-      Gitt søkeren har følgende praksisperioder
+      Gitt saken har følgende praksisperioder
         | startdato  | sluttdato  | omfang |
         | 01.01.2020 | 31.12.2020 | 50 %   |
         | 01.01.2020 | 31.12.2020 | 60 %   |
@@ -397,128 +450,14 @@ Egenskap: Registrere og beregne praksis for søker
       Og sum justert for overlapp er 1,00 år
 
     Scenario: Justert sum kan ikke overstige kalendertiden i perioden
-      Gitt søkeren har flere samtidige praksisperioder som til sammen overstiger 100 % stilling
+      Gitt saken har flere samtidige praksisperioder som til sammen overstiger 100 % stilling
       Når jeg åpner praksisberegningen
       Så er den justerte summen begrenset til kalendertiden i den overlappende perioden
 
-    Scenario: Saksbehandleren velger hvilken sum som legges til grunn
-      Gitt søkeren har overlappende praksisperioder
-      Og både sum av oppgitte perioder og sum justert for overlapp er vist
-      Når jeg velger hvilken av summene som skal legges til grunn
-      Så er den valgte summen lagt til grunn for vurderingen av opptakskravet
-
-    @openquestion
-    Scenario: AVKLAR hvilken sum som gjelder når saksbehandleren ikke velger
-      # ÅPNE SPØRSMÅL:
-      # - Saksbehandleren velger hvilken sum som legges til grunn ved
-      #   overlapp. Hva gjelder når det ikke er gjort et aktivt valg — er
-      #   den justerte summen forhåndsvalgt, eller kan opptakskravet ikke
-      #   vurderes før valget er tatt?
-      # - Skal valget og begrunnelsen kunne etterprøves i ettertid?
-      Gitt spørsmålet er åpent
-
-  Regel: Praksis knyttes til opptakskrav på ett eller flere søknadsalternativer
-
-    Scenario: Knytte praksis til et opptakskrav på et søknadsalternativ
-      Gitt søknaden har et søknadsalternativ med et opptakskrav som krever praksis
-      Når jeg knytter den registrerte praksisen til opptakskravet
-      Så er praksisen lagt til grunn for det opptakskravet på søknadsalternativet
-
-    Scenario: Knytte samme praksis til flere søknadsalternativer
-      Gitt søknaden har flere søknadsalternativer med opptakskrav som krever praksis
-      Når jeg knytter den registrerte praksisen til opptakskravet på flere av søknadsalternativene
-      Så er praksisen lagt til grunn for opptakskravet på hvert av de valgte søknadsalternativene
-
-    Scenario: Praksis uten knytning påvirker ikke opptakskrav
-      Gitt søkeren har registrerte praksisperioder
-      Og praksisen ikke er knyttet til et opptakskrav
-      Når jeg åpner søknadsalternativene
-      Så er ingen opptakskrav vurdert på grunnlag av praksisen
-
-    Scenario: Knytte samme praksis til flere ulike kravelementer
-      Gitt søknaden har søknadsalternativer med ulike opptakskrav som krever praksis
-      Når jeg knytter den registrerte praksisen til flere ulike kravelementer
-      Så er praksisen lagt til grunn for hvert av de valgte kravelementene
-      # AVKLART 16.09.2026: samme praksis kan knyttes til flere ulike
-      # kravelementer, ikke bare til samme kravelement på flere
-      # søknadsalternativer.
-
-    @openquestion
-    Scenario: AVKLAR om et utvalg av praksisperiodene kan knyttes per kravelement
-      # ÅPNE SPØRSMÅL:
-      # - Gjelder knytningen alltid *all* registrert praksis, eller kan et
-      #   utvalg av periodene knyttes til ett kravelement og et annet utvalg
-      #   til et annet?
-      # - Avklaringen om at samme praksis kan knyttes til flere ulike
-      #   kravelementer gjør dette spørsmålet skarpere, ikke mindre viktig.
-      #   Løsningsforslaget sier at «vanlegaste forskjellen er vel kva
-      #   praksis som reknast for å vere relevant» — ulike kravelementer kan
-      #   altså ha ulike krav til hva som teller. Da kan relevans ikke være
-      #   ett flagg per praksisperiode, slik det er i FS i dag; den må være
-      #   per kombinasjon av periode og kravelement.
-      # - Henger derfor direkte sammen med «Markere om en praksisperiode er
-      #   relevant» tidligere i featuren. De to må besluttes sammen — svaret
-      #   avgjør datamodellen, og det er det siste store strukturelle
-      #   spørsmålet i featuren.
-      Gitt spørsmålet er åpent
-
-  # MERK 16.09.2026: reglene under er NY funksjonalitet, ikke videreføring.
-  # Verifisert i FS-klienten finnes det ingen kobling mellom praksisperioder
-  # og kravelement. Praksis og fagprofil (kravelementkode + status_bestatt)
-  # ligger som uavhengige faner i samme vindu, og saksbehandleren leser
-  # summen og setter status manuelt. Løsningsforslaget beskriver dagens FS som
-  # at systemet «sjekkar om søkar oppfyller opptakskravet» — det stemmer ikke.
-  # Se registrere_praksis.dagens-løsning-i-fs-klienten.md, avsnittet «Kobling
-  # til kravelement: finnes ikke». Det betyr at reglene under trenger mer
-  # avklaring enn resten av featuren, og at sporbarhet for en automatisk satt
-  # status må designes fra bunnen.
-
-  Regel: Opptakskravet registreres automatisk som oppfylt når praksiskravet er nådd
-
-    Scenario: Opptakskravet registreres som oppfylt
-      Gitt et søknadsalternativ har et opptakskrav som krever 2 år praksis
-      Og praksisen er knyttet til det opptakskravet
-      Når samlet praksis som legges til grunn er 2,00 år
-      Så registreres opptakskravet som oppfylt
-
-    Scenario: Opptakskravet registreres ikke som oppfylt når praksisen er for kort
-      Gitt et søknadsalternativ har et opptakskrav som krever 2 år praksis
-      Og praksisen er knyttet til det opptakskravet
-      Når samlet praksis som legges til grunn er 1,50 år
-      Så registreres opptakskravet ikke som oppfylt
-
-    @openquestion
-    Scenario: AVKLAR hvor praksiskravet hentes fra
-      # ÅPNE SPØRSMÅL:
-      # - Opptakskravet vurderes mot et krav om antall år praksis. Hentes
-      #   dette fra minimumskravet på kravelementet i kompetanseregelverket,
-      #   eller oppgis det et annet sted?
-      # - Kompetanseregelverket uttrykker minimumskrav som karakter og
-      #   bestått/ikke bestått. Skal praksiskrav uttrykkes i samme
-      #   minimumskrav-felt som antall år, eller trenger kravelementet et
-      #   eget felt for praksisomfang?
-      Gitt spørsmålet er åpent
-
-    @openquestion
-    Scenario: AVKLAR om oppfylt opptakskrav reverseres
-      # ÅPNE SPØRSMÅL:
-      # - Praksisberegningen justeres automatisk når en praksisperiode legges
-      #   til eller slettes. Skal et opptakskrav som er registrert som
-      #   oppfylt settes tilbake til ikke oppfylt når samlet praksis faller
-      #   under kravet, eller består statusen til saksbehandleren endrer den
-      #   manuelt?
-      # - Skal saksbehandleren varsles når en endring i praksisperiodene
-      #   endrer statusen på et opptakskrav?
-      Gitt spørsmålet er åpent
-
-    @openquestion
-    Scenario: AVKLAR forholdet til manuell kvalifisering
-      # ÅPNE SPØRSMÅL:
-      # - Saksbehandleren kan i dag manuelt angi at en søker er kvalifisert
-      #   for kravelementene i et opptak. Hva skjer når den automatiske
-      #   praksisberegningen og den manuelle angivelsen er uenige — hvilken
-      #   av dem gjelder?
-      Gitt spørsmålet er åpent
+    # FLYTTET 23.09.2026: valg av hvilken sum som legges til grunn for et
+    # opptakskrav, og hva som gjelder uten aktivt valg, er flyttet til
+    # knytte_praksis_til_opptakskrav.feature. Kalkulatoren viser begge
+    # summene; saksbehandleren vurderer selv hvilken som gjelder.
 
   # AVKLART 16.09.2026: rollen heter **opptakssaksbehandler**. Det er det
   # autoritative navnet, og featuren bruker det konsekvent.
@@ -533,12 +472,12 @@ Egenskap: Registrere og beregne praksis for søker
 
     Scenario: Opptakssaksbehandler kan registrere praksis
       Gitt jeg har rollen opptakssaksbehandler
-      Når jeg åpner søknaden til en søker
+      Når jeg åpner en sak på søknaden til en søker
       Så kan jeg registrere, oppdatere og slette praksisperioder
 
     Scenario: Bruker uten opptakssaksbehandler-rollen ser ikke praksisregistreringen
       Gitt en bruker uten rollen opptakssaksbehandler er innlogget
-      Når brukeren åpner søknaden til en søker
+      Når brukeren åpner en sak på søknaden til en søker
       Så ser brukeren ikke muligheten til å registrere praksis
 
     @openquestion
