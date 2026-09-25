@@ -10,7 +10,7 @@
   "scripts": {
     "dev": "vite --open",
     "build": "tsc --noEmit && vite build",
-    "test": "node --test server/*.test.ts",
+    "test": "node --test server/*.test.ts src/*.test.ts",
     "vscode:install": "mkdir -p ~/.vscode/extensions && ln -sfn \"$PWD/vscode\" ~/.vscode/extensions/sikt.krav-viewer-sync-1.0.0"
   },
   "dependencies": {

@@ -1,6 +1,7 @@
 import { AstBuilder, GherkinClassicTokenMatcher, Parser } from '@cucumber/gherkin';
 import { IdGenerator } from '@cucumber/messages';
 import type { Background, Scenario, Step as GStep, Tag } from '@cucumber/messages';
+import { RULE } from '../shared/rules.ts';
 import { STATUSES, statusOf, type Entry, type FeatureModel, type Lint, type Note, type Question, type Rule, type Scen, type Step } from '../shared/model.ts';
 
 const isStatus = (t: string) => (STATUSES as readonly string[]).includes(t.slice(1));
@@ -248,34 +249,58 @@ export function parseFeature(source: string, path?: string): FeatureModel {
   attach(commentBlocks(comments, lines), els, lines);
 
   // Konvensjonsavvik: holdes i synk med krav/README.md (importert i .claude/rules/gherkin-conventions.md).
-  // Reglene som sjekkes er merket «(sjekkes i vieweren)» der, og testet i parse.test.ts.
+  // Reglene som sjekkes er merket «(sjekkes i vieweren)» der, beskrevet i shared/rules.ts, og testet i parse.test.ts.
+  const push = (rule: string, msg: string, ln: number) => lint.push({ rule, sev: RULE[rule].sev, msg, ln });
   const firstLine = lines.find(l => l.trim() !== '') ?? '';
-  if (!/^\s*#\s*language:\s*no\s*$/.test(firstLine)) lint.push({ msg: 'Fila starter ikke med «# language: no»', ln: 1 });
+  if (!/^\s*#\s*language:\s*no\s*$/.test(firstLine)) push('missing-language', 'Fila starter ikke med «# language: no»', 1);
   if (path?.startsWith('krav/')) {
     const seg = path.split('/');
-    if (seg.length !== 5) lint.push({ msg: 'Fila ligger ikke på kapabilitetsnivå (krav/Domene/Sub-domene/Kapabilitet/)', ln: 1 });
-    if (!SNAKE_CASE.test(seg[seg.length - 1])) lint.push({ msg: `Filnavnet «${seg[seg.length - 1]}» er ikke i snake_case`, ln: 1 });
+    if (seg.length !== 5) push('wrong-level', 'Fila ligger ikke på kapabilitetsnivå (krav/Domene/Sub-domene/Kapabilitet/)', 1);
+    if (!SNAKE_CASE.test(seg[seg.length - 1])) push('not-snake-case', `Filnavnet «${seg[seg.length - 1]}» er ikke i snake_case`, 1);
+    // _Interne prosesser og 99 Demo følger ikke nummereringen
+    if (seg.length === 5 && !/^(_|99 )/.test(seg[1])) {
+      const [sub, kap] = [seg[2], seg[3]];
+      const n = sub.match(/^(\d+) /);
+      if (!n) push('folder-numbering', `Sub-domenet «${sub}» mangler nummer (fra 10)`, 1);
+      else if (+n[1] < 10) push('folder-numbering', `Sub-domenet «${sub}» er nummerert under 10`, 1);
+      if (!/^\d+ /.test(kap)) push('folder-numbering', `Kapabiliteten «${kap}» mangler nummer (fra 01)`, 1);
+      const bare = (s: string) => s.replace(/^\d+ /, '').trim().toLowerCase();
+      if (bare(sub) === bare(kap)) push('same-name', `Sub-domene og kapabilitet heter begge «${kap.replace(/^\d+ /, '')}»`, 1);
+    }
   }
   const ftags = f.tags.map(t => t.name);
   const ids = ftags.filter(t => FEATURE_ID.test(t));
-  if (ids.length === 0) lint.push({ msg: 'Egenskap mangler feature-ID (@DOM-SUB-KAP-NNN)', ln: f.location.line });
-  if (ids.length > 1) lint.push({ msg: `Egenskap har flere feature-IDer: ${ids.join(' ')}`, ln: f.location.line });
+  if (ids.length === 0) push('missing-id', 'Egenskap mangler feature-ID (@DOM-SUB-KAP-NNN)', f.location.line);
+  if (ids.length > 1) push('multiple-ids', `Egenskap har flere feature-IDer: ${ids.join(' ')}`, f.location.line);
   const prio = ftags.filter(t => PRIORITIES.includes(t));
-  if (prio.length > 1) lint.push({ msg: `Egenskap har flere prioritetstagger: ${prio.join(' ')}`, ln: f.location.line });
+  if (prio.length > 1) push('multiple-priorities', `Egenskap har flere prioritetstagger: ${prio.join(' ')}`, f.location.line);
   const fstat = ftags.filter(t => isStatus(t));
-  if (fstat.length === 0) lint.push({ msg: 'Egenskap mangler statustag (@draft, @planned, @in-progress eller @implemented)', ln: f.location.line });
-  if (fstat.length > 1) lint.push({ msg: `Egenskap har flere statustagger: ${fstat.join(' ')}`, ln: f.location.line });
-  if (ftags.includes('@openquestion')) lint.push({ msg: '@openquestion hører hjemme på Regel/Scenario, ikke på Egenskap', ln: f.location.line });
+  if (fstat.length === 0) push('missing-status', 'Egenskap mangler statustag (@draft, @planned, @in-progress eller @implemented)', f.location.line);
+  if (fstat.length > 1) push('multiple-statuses', `Egenskap har flere statustagger: ${fstat.join(' ')}`, f.location.line);
+  if (ftags.includes('@openquestion')) push('openquestion-on-feature', '@openquestion hører hjemme på Regel/Scenario, ikke på Egenskap', f.location.line);
+  if (!desc(f.description)) push('missing-description', 'Egenskap mangler beskrivelse (Som … ønsker jeg … slik at …)', f.location.line);
+  // Tagger som ikke skal stå noe sted i fila
+  lines.forEach((l, i) => {
+    if (!l.trim().startsWith('@')) return;
+    const tags = l.trim().split(/\s+/);
+    if (tags.includes('@levert')) push('retired-levert', '@levert er erstattet av @implemented', i + 1);
+    if (tags.includes('@only')) push('focus-tag', '@only gjør scenarioet om til test.only — resten av testene hoppes over', i + 1);
+    if (tags.includes('@focus')) push('focus-tag', '@focus har ingen virkning i playwright-bdd og skal ikke stå i en kravfil', i + 1);
+  });
+  for (const c of comments) if (/^\s*#\s*TODO\b/i.test(c.text)) push('todo-comment', '«# TODO:» brukt for åpent spørsmål — bruk «# ÅPNE SPØRSMÅL:» og @openquestion', c.line);
   const fdraft = statusOf(ftags) === 'draft';
   let partialDraft = false;
   const hasQ = (notes: Note[]) => notes.some(n => n.kind === 'question');
   const checkPart = (what: string, tags: string[], ln: number, questions: boolean) => {
-    for (const t of tags.filter(t => isStatus(t) && t !== '@draft')) lint.push({ msg: `${t} på ${what} — bare @draft er lov under Egenskap`, ln });
+    for (const t of tags.filter(t => isStatus(t) && t !== '@draft')) push('status-on-part', `${t} på ${what} — bare @draft er lov under Egenskap`, ln);
     if (tags.includes('@draft')) {
-      if (fdraft) lint.push({ msg: `@draft på ${what} er overflødig når hele egenskapen er @draft`, ln });
-      else partialDraft = true;
+      if (fdraft) push('redundant-draft', `@draft på ${what} er overflødig når hele egenskapen er @draft`, ln);
+      else {
+        partialDraft = true;
+        if (!tags.includes('@openquestion')) push('draft-without-openquestion', `@draft på ${what} uten @openquestion — delen er ikke gjennomgått`, ln);
+      }
     }
-    if (tags.includes('@openquestion') && !questions) lint.push({ msg: `@openquestion på ${what} uten «# ÅPNE SPØRSMÅL:»-kommentar`, ln });
+    if (tags.includes('@openquestion') && !questions) push('openquestion-without-comment', `@openquestion på ${what} uten «# ÅPNE SPØRSMÅL:»-kommentar`, ln);
   };
   const scenQ = (sc: Scen) => hasQ(sc.notes) || sc.steps.some(st => hasQ(st.notes ?? []));
   for (const r of rules) {
@@ -289,14 +314,14 @@ export function parseFeature(source: string, path?: string): FeatureModel {
         const r = STEP_RANK[st.keywordType ?? ''];
         if (r === undefined) continue;
         if (r < rank) {
-          lint.push({ msg: `«${st.keyword.trim()}» etter ${rank === 2 ? '«Så»' : '«Når»'} — stegene skal gå Gitt → Når → Så`, ln: st.location.line });
+          push('step-order', `«${st.keyword.trim()}» etter ${rank === 2 ? '«Så»' : '«Når»'} — stegene skal gå Gitt → Når → Så`, st.location.line);
           break;
         }
         rank = r;
       }
       const raw = rawKw.get(sc);
       if (raw && sc.examples.length && !/^(Scenariomal|Abstrakt Scenario)$/.test(raw.keyword))
-        lint.push({ msg: `«${raw.keyword}:» med Eksempler — bruk Scenariomal:`, ln: raw.ln });
+        push('examples-without-outline', `«${raw.keyword}:» med Eksempler — bruk Scenariomal:`, raw.ln);
     }
   }
   lint.sort((a, b) => a.ln - b.ln);

@@ -6,11 +6,27 @@ interface Props {
   updated: boolean;
   lineNumbers: boolean;
   onLineNumbers: () => void;
+  avvik: boolean;
+  /** Varsel om avvik som ble rettet ved siste lagring */
+  fixMsg: string | null;
 }
 
 const time = (ms: number) => new Date(ms).toTimeString().slice(0, 8);
 
-export function StatusBar({ connected, live, fileName, savedAt, updated, lineNumbers, onLineNumbers }: Props) {
+export function StatusBar({ connected, live, fileName, savedAt, updated, lineNumbers, onLineNumbers, avvik, fixMsg }: Props) {
+  if (avvik)
+    return (
+      <footer class="statusbar">
+        {live && (
+          <span style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+            <span class="dot" style={{ width: '6px', height: '6px', background: connected ? 'var(--st-implemented)' : 'var(--err)' }} />
+            {connected ? 'ws tilkoblet' : 'ws frakoblet'}
+          </span>
+        )}
+        <span class="muted">{live ? `vite · ${location.host}` : 'GitHub Pages · statisk bygg fra main'}</span>
+        {fixMsg && <span class="updated">↻ {fixMsg}</span>}
+      </footer>
+    );
   return (
     <footer class="statusbar">
       <span style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>

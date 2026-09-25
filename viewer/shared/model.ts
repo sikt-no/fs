@@ -39,6 +39,8 @@ export interface Note {
 }
 
 export interface Lint {
+  rule: string; // id i shared/rules.ts
+  sev: 'error' | 'warning';
   msg: string;
   ln: number;
 }

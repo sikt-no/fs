@@ -3,13 +3,16 @@ import { useEffect, useMemo, useRef, useState } from 'preact/hooks';
 import initial from 'virtual:krav';
 import initialGit from 'virtual:krav-git';
 import type { FeatureModel, FocusEvent, GitInfo, Scen, Snapshot, Step, UpdateEvent } from '../shared/model';
+import { RULE } from '../shared/rules';
+import { Avvik } from './Avvik';
+import { fixed, NO_FILTER, type Filter } from './health';
 import { FeatureView, scenKey, stepKey } from './FeatureView';
 import { headings, parseMd } from './markdown';
 import { MarkdownView, type MdMode } from './MarkdownView';
 import { Outline } from './Outline';
 import { buildTree, Sidebar, type TreeMode } from './Sidebar';
 import { StatusBar } from './StatusBar';
-import { TopBar, type Theme } from './TopBar';
+import { TopBar, type Mode, type Theme } from './TopBar';
 import './theme.css';
 
 // localStorage kan være utilgjengelig (privat vindu, blokkert lagring)
@@ -55,6 +58,8 @@ function asCompact<T>(main: HTMLElement, fn: (offset: number) => T): T {
 }
 
 /** Forsiden: krav/README.md */
+const README = 'krav/README.md';
+
 function defaultPath(entries: Snapshot) {
   if (entries['krav/README.md']) return 'krav/README.md';
   return Object.keys(entries).sort()[0] ?? '';
@@ -82,6 +87,12 @@ function changedSteps(prev: FeatureModel | undefined, next: FeatureModel | undef
 function App() {
   const [entries, setEntries] = useState<Snapshot>(initial);
   const [current, setCurrent] = useState(() => (initial[fromHash()] ? fromHash() : defaultPath(initial)));
+  // #/avvik er avviksdashbordet; alle andre hasher er en fil
+  const [mode, setMode] = useState<Mode>(() => (fromHash() === 'avvik' ? 'avvik' : 'krav'));
+  const [avvikFilter, setAvvikFilter] = useState<Filter>(NO_FILTER);
+  const [fixMsg, setFixMsg] = useState<string | null>(null);
+  // Overskriften i README-en som «Les regelen» skal hoppe til når forsiden er vist
+  const [pendingSection, setPendingSection] = useState<string | null>(null);
   const [theme, setTheme] = useState<Theme>(() =>
     load<Theme | null>('theme', null) ?? (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'),
   );
@@ -99,12 +110,13 @@ function App() {
   const [focus, setFocus] = useState<(FocusEvent & { seq: number }) | null>(null);
   const focusedKey = useRef<string | null>(null);
   const mainRef = useRef<HTMLElement>(null);
-  const state = useRef({ entries, current });
-  state.current = { entries, current };
+  const state = useRef({ entries, current, mode });
+  state.current = { entries, current, mode };
 
   const entry = entries[current];
   const tree = useMemo(() => buildTree(entries), [entries]);
   const md = useMemo(() => (entry?.kind === 'md' ? parseMd(entry.source ?? '') : null), [entry]);
+  const nBad = useMemo(() => Object.values(entries).filter(e => e.kind === 'feature' && e.path.startsWith('krav/') && e.lint).length, [entries]);
 
   useEffect(() => {
     document.documentElement.dataset.theme = theme;
@@ -117,7 +129,7 @@ function App() {
 
   // Hash-ruting: #/krav/…/fil.feature
   useEffect(() => {
-    if (fromHash() !== current) history.replaceState(null, '', '#/' + encodeURI(current));
+    if (state.current.mode === 'krav' && fromHash() !== current) history.replaceState(null, '', '#/' + encodeURI(current));
     setOpenDirs(o => (ancestors(current).every(a => o[a]) ? o : { ...o, ...Object.fromEntries(ancestors(current).map(a => [a, true])) }));
     mainRef.current?.scrollTo({ top: 0 });
     focusedKey.current = null;
@@ -171,7 +183,11 @@ function App() {
   useEffect(() => {
     const onHash = () => {
       const p = fromHash();
-      if (state.current.entries[p]) setCurrent(p);
+      if (p === 'avvik') setMode('avvik');
+      else if (state.current.entries[p]) {
+        setMode('krav');
+        setCurrent(p);
+      }
     };
     addEventListener('hashchange', onHash);
     return () => removeEventListener('hashchange', onHash);
@@ -182,8 +198,17 @@ function App() {
     const hot = import.meta.hot;
     if (!hot) return;
     let timer: ReturnType<typeof setTimeout> | undefined;
+    let fixTimer: ReturnType<typeof setTimeout> | undefined;
     const onUpdate = ({ path, entry: next }: UpdateEvent) => {
       const prev = state.current.entries[path];
+      // Avvik som forsvant ved lagringen: «↻ Mangler status rettet i fil.feature»
+      const gone = prev?.model && next?.model && !next.error ? fixed(prev.model.lint, next.model.lint) : [];
+      if (gone.length) {
+        const what = gone.length === 1 ? RULE[gone[0]]?.label ?? gone[0] : `${gone.length} avvik`;
+        setFixMsg(`${what} rettet i ${path.slice(path.lastIndexOf('/') + 1)}`);
+        clearTimeout(fixTimer);
+        fixTimer = setTimeout(() => setFixMsg(null), 2600);
+      }
       setEntries(e => {
         const copy = { ...e };
         if (next) copy[path] = next;
@@ -210,7 +235,8 @@ function App() {
     };
     let seq = 0;
     const onFocus = (f: FocusEvent) => {
-      if (!state.current.entries[f.path]) return;
+      // Avviksdashbordet følger ikke markøren i VS Code
+      if (!state.current.entries[f.path] || state.current.mode === 'avvik') return;
       if (f.path !== state.current.current) {
         setCurrent(f.path);
         history.pushState(null, '', '#/' + encodeURI(f.path));
@@ -228,6 +254,7 @@ function App() {
     hot.on('vite:ws:disconnect', onDisconnect);
     return () => {
       clearTimeout(timer);
+      clearTimeout(fixTimer);
       hot.off('krav:update', onUpdate);
       hot.off('krav:git', setGit);
       hot.off('krav:focus', onFocus);
@@ -238,6 +265,7 @@ function App() {
   }, []);
 
   const select = (path: string, line?: number) => {
+    setMode('krav');
     setCurrent(path);
     history.pushState(null, '', '#/' + encodeURI(path));
     // Scenariotreff fra søket: gjenbruk fokus fra VS Code for å scrolle til og åpne scenarioet
@@ -268,6 +296,28 @@ function App() {
       }
     });
   };
+  // «Les regelen»: hopp til overskriften når README-en er vist
+  useEffect(() => {
+    if (!pendingSection || mode !== 'krav' || current !== README || !md) return;
+    const i = md.findIndex(b => (b.type === 'h2' || b.type === 'h3') && b.text === pendingSection);
+    setPendingSection(null);
+    if (i >= 0) jump('md-' + i);
+  }, [pendingSection, mode, current, md]);
+  const readRule = (section: string) => {
+    if (current !== README || mode !== 'krav') select(README);
+    setPendingSection(section);
+  };
+  const changeMode = (m: Mode) => {
+    if (m === mode) return;
+    if (m === 'avvik') {
+      setMode('avvik');
+      history.pushState(null, '', '#/avvik');
+    } else if (avvikFilter.file && entries[avvikFilter.file]) select(avvikFilter.file); // fila som er valgt i dashbordet
+    else {
+      setMode('krav');
+      history.pushState(null, '', '#/' + encodeURI(current));
+    }
+  };
   const allScenKeys = () => entry?.model?.rules.flatMap((r, ri) => r.scenarios.map((_, si) => scenKey(ri, si))) ?? [];
   const fileName = current.slice(current.lastIndexOf('/') + 1);
 
@@ -285,68 +335,75 @@ function App() {
         onToggleTree={() => setTreeHidden(v => !v)}
         onHome={() => {
           const home = defaultPath(entries);
-          if (home === current) mainRef.current?.scrollTo({ top: 0, behavior: 'smooth' });
+          if (home === current && mode === 'krav') mainRef.current?.scrollTo({ top: 0, behavior: 'smooth' });
           else select(home);
         }}
+        mode={mode}
+        onMode={changeMode}
+        nBad={nBad}
       />
-      <div class={'grid' + (treeHidden ? ' notree' : '')}>
-        {!treeHidden && (
-          <Sidebar
-            entries={entries}
-            tree={tree}
-            current={current}
-            open={openDirs}
-            query={query}
-            onQuery={setQuery}
-            onToggle={p => setOpenDirs(o => ({ ...o, [p]: !o[p] }))}
-            onSelect={select}
-            mode={git ? treeMode : 'files'}
-            onMode={setTreeMode}
-            git={git}
-          />
-        )}
-        <main
-          class="main"
-          ref={mainRef}
-          // Klikk utenfor et kort fjerner markeringen fra VS Code
-          onClick={e => {
-            if (focus && !(e.target as Element).closest('.card')) setFocus(null);
-          }}
-        >
-          {!entry ? (
-            <div class="empty">
-              <div class="mono" style={{ color: 'var(--ink)' }}>{fileName || 'krav'}</div>
-              <div>{fileName ? 'Filen finnes ikke lenger.' : 'Velg en fil i treet.'}</div>
-            </div>
-          ) : md ? (
-            <MarkdownView
-              entry={entry}
-              blocks={md}
-              mode={mdMode}
-              onMode={setMdMode}
-              has={p => !!entries[p]}
-              onNavigate={select}
-            />
-          ) : (
-            <FeatureView
-              entry={entry}
-              collapsed={collapsed[current] ?? {}}
-              flash={flash}
-              lineNumbers={lineNumbers}
-              mark={mark}
-              mainRef={mainRef}
-              onToggle={k => setCollapsed(c => ({ ...c, [current]: { ...c[current], [k]: !c[current]?.[k] } }))}
+      {mode === 'avvik' ? (
+        <Avvik entries={entries} filter={avvikFilter} onFilter={setAvvikFilter} onOpen={select} onReadRule={readRule} />
+      ) : (
+        <div class={'grid' + (treeHidden ? ' notree' : '')}>
+          {!treeHidden && (
+            <Sidebar
+              entries={entries}
+              tree={tree}
+              current={current}
+              open={openDirs}
+              query={query}
+              onQuery={setQuery}
+              onToggle={p => setOpenDirs(o => ({ ...o, [p]: !o[p] }))}
+              onSelect={select}
+              mode={git ? treeMode : 'files'}
+              onMode={setTreeMode}
+              git={git}
             />
           )}
-        </main>
-        <Outline
-          model={entry?.model}
-          headings={md ? headings(md) : undefined}
-          onJump={jump}
-          onFoldAll={() => setCollapsed(c => ({ ...c, [current]: Object.fromEntries(allScenKeys().map(k => [k, true])) }))}
-          onOpenAll={() => setCollapsed(c => ({ ...c, [current]: {} }))}
-        />
-      </div>
+          <main
+            class="main"
+            ref={mainRef}
+            // Klikk utenfor et kort fjerner markeringen fra VS Code
+            onClick={e => {
+              if (focus && !(e.target as Element).closest('.card')) setFocus(null);
+            }}
+          >
+            {!entry ? (
+              <div class="empty">
+                <div class="mono" style={{ color: 'var(--ink)' }}>{fileName || 'krav'}</div>
+                <div>{fileName ? 'Filen finnes ikke lenger.' : 'Velg en fil i treet.'}</div>
+              </div>
+            ) : md ? (
+              <MarkdownView
+                entry={entry}
+                blocks={md}
+                mode={mdMode}
+                onMode={setMdMode}
+                has={p => !!entries[p]}
+                onNavigate={select}
+              />
+            ) : (
+              <FeatureView
+                entry={entry}
+                collapsed={collapsed[current] ?? {}}
+                flash={flash}
+                lineNumbers={lineNumbers}
+                mark={mark}
+                mainRef={mainRef}
+                onToggle={k => setCollapsed(c => ({ ...c, [current]: { ...c[current], [k]: !c[current]?.[k] } }))}
+              />
+            )}
+          </main>
+          <Outline
+            model={entry?.model}
+            headings={md ? headings(md) : undefined}
+            onJump={jump}
+            onFoldAll={() => setCollapsed(c => ({ ...c, [current]: Object.fromEntries(allScenKeys().map(k => [k, true])) }))}
+            onOpenAll={() => setCollapsed(c => ({ ...c, [current]: {} }))}
+          />
+        </div>
+      )}
       <StatusBar
         connected={connected}
         live={!!import.meta.hot}
@@ -355,6 +412,8 @@ function App() {
         updated={updated}
         lineNumbers={lineNumbers}
         onLineNumbers={() => setLineNumbers(v => !v)}
+        avvik={mode === 'avvik'}
+        fixMsg={fixMsg}
       />
     </div>
   );
