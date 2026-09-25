@@ -38,6 +38,7 @@ fs/
 │   ├── steps/                     # Step definitions
 │   ├── fixtures/                  # Test fixtures og hjelpefunksjoner
 │   └── .features-gen/             # Genererte testfiler (gitignored)
+├── viewer/                        # Live-visning av krav i nettleser (Vite + Preact)
 ├── README.md
 └── claude.md
 ```
@@ -79,6 +80,24 @@ cd tester
 | `npm run test:headed` | Kjør med synlig browser |
 | `npm run test:integration` | Kun @integration tester |
 | `npm run test:e2e` | Kun @e2e tester |
+
+## Live-visning av krav
+
+`viewer/` er en Vite-dev-server som viser hele `krav/`-treet og oppdaterer visningen straks en `.feature`-fil lagres (parse-feil vises som banner over sist gyldige versjon):
+
+```bash
+cd viewer
+npm install
+npm run dev
+```
+
+`npm run build` lager et statisk bygg i `viewer/dist/` med hele `krav/`-snapshotet bakt inn (relative stier, hash-routing). `.github/workflows/deploy-viewer.yml` publiserer det til GitHub Pages (<https://sikt-no.github.io/fs/>) ved push til `main`. I statisk bygg er git-data `null`, så «Endringer»-modusen skjules.
+
+- `server/kravPlugin.ts` leser og overvåker `krav/`, og sender `krav:update` over Vites websocket
+- `server/parse.ts` parser med `@cucumber/gherkin` til modellen i `shared/model.ts`
+- `server/git.ts` leser endringer under `krav/` (ucommitted mot HEAD, og committet siden merge-base med `main`). Pluginen eksponerer dem som `virtual:krav-git`, pusher `krav:git` ved endringer i krav-filer eller i `.git` (HEAD, index, reflog), og sidebaren viser dem i «Endringer»-modus
+- `src/` er Preact-komponentene, portet fra designet «Gherkin Viewer» (Claude Design)
+- `vscode/` er en liten VS Code-utvidelse (ren JS, uten bygg) som poster aktiv fil og markørlinje til `POST /__krav/focus`; pluginen videresender det som `krav:focus`, og vieweren bytter fil og scroller til scenarioet. Installeres med `npm run vscode:install` (symlink til `~/.vscode/extensions`), og adressen settes med `kravViewer.url`
 
 ## Teknologier
 
