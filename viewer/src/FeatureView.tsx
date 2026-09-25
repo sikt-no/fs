@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'preact/hooks';
 import { Fragment, type RefObject } from 'preact';
-import { STATUSES, type Entry, type Status, type Note, type Step } from '../shared/model';
+import { STATUSES, type Entry, type Lint, type Status, type Note, type Step } from '../shared/model';
+import { RULE } from '../shared/rules';
 import { StatusIcon, statusColor } from './Sidebar';
 
 export const scenKey = (ri: number, si: number) => `${ri}-${si}`;
@@ -120,6 +121,40 @@ function StepRow({ step, color, flash, marked, lineNumbers }: { step: Step; colo
   );
 }
 
+/** Statusbånd over avvik fra konvensjonene: feil før advarsler, deretter etter linje. */
+function LintBand({ lint, hit, onLine }: { lint: Lint[]; hit: (from: number) => string; onLine: (ln: number) => void }) {
+  if (!lint.length) return null;
+  const sorted = [...lint].sort((a, b) => (a.sev === b.sev ? a.ln - b.ln : a.sev === 'error' ? -1 : 1));
+  const ne = lint.filter(l => l.sev === 'error').length;
+  const nw = lint.length - ne;
+  const count = [ne && `${ne} feil`, nw && `${nw} ${nw === 1 ? 'advarsel' : 'advarsler'}`].filter(Boolean).join(' · ');
+  return (
+    <div class="lintband" role="status">
+      <div class="top"><b>Fila følger ikke konvensjonene</b><span class="mono">{count}</span></div>
+      {sorted.map((l, i) => (
+        <div key={i} class={'lrow' + hit(l.ln)}>
+          <span class={'mk ' + l.sev} title={l.sev === 'error' ? 'Feil' : 'Advarsel'} />
+          <div>
+            <span class="t">{l.msg}</span>
+            {RULE[l.rule] && <span class="h">{RULE[l.rule].desc}</span>}
+          </div>
+          <button
+            class="ln mono"
+            title="Gå til linja"
+            onClick={e => {
+              // <main> fjerner fokus ved klikk utenfor et kort
+              e.stopPropagation();
+              onLine(l.ln);
+            }}
+          >
+            L{l.ln}
+          </button>
+        </div>
+      ))}
+    </div>
+  );
+}
+
 interface Props {
   entry: Entry;
   collapsed: Record<string, boolean>;
@@ -129,9 +164,11 @@ interface Props {
   mark: { from: number; to: number } | null;
   mainRef: RefObject<HTMLElement>;
   onToggle: (key: string) => void;
+  /** Gå til en linje i fila (fra statusbåndet) */
+  onLine: (ln: number) => void;
 }
 
-export function FeatureView({ entry, collapsed, flash, lineNumbers, mark, mainRef, onToggle }: Props) {
+export function FeatureView({ entry, collapsed, flash, lineNumbers, mark, mainRef, onToggle, onLine }: Props) {
   const f = entry.model;
   const hit = (from: number, to = from) => (mark && from <= mark.to && to >= mark.from ? ' cursor' : '');
   const fileName = entry.path.slice(entry.path.lastIndexOf('/') + 1);
@@ -211,24 +248,12 @@ export function FeatureView({ entry, collapsed, flash, lineNumbers, mark, mainRe
           <span>{f.nLines} linjer</span>
         </div>
 
+        <LintBand lint={f.lint} hit={hit} onLine={onLine} />
+
         {f.desc.length > 0 && (
           <div class="story">
             {f.desc.map((d, i) => <div key={i}>{d.lead && <b>{d.lead}</b>} {d.rest}</div>)}
           </div>
-        )}
-
-        {f.lint.length > 0 && (
-          <details class="lint">
-            <summary>
-              <span class="diamond" style={{ background: 'var(--err)' }} />
-              Avvik fra konvensjoner <span class="mono">{f.lint.length}</span>
-            </summary>
-            <ul>
-              {f.lint.map((l, i) => (
-                <li key={i} class={hit(l.ln) || undefined}>{l.msg}{lineNumbers && <span class="qln">L{l.ln}</span>}</li>
-              ))}
-            </ul>
-          </details>
         )}
 
         {f.notes.map((n, i) => <NoteBlock key={i} note={n} hit={hit} lineNumbers={lineNumbers} />)}

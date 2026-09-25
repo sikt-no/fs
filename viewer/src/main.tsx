@@ -391,6 +391,7 @@ function App() {
                 lineNumbers={lineNumbers}
                 mark={mark}
                 mainRef={mainRef}
+                onLine={ln => select(current, ln)}
                 onToggle={k => setCollapsed(c => ({ ...c, [current]: { ...c[current], [k]: !c[current]?.[k] } }))}
               />
             )}

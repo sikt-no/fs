@@ -3,7 +3,7 @@
   --bg: #f7f7f6; --panel: #f0f0ee; --surface: #ffffff; --sunken: #f2f2f0;
   --line: #e3e3e0; --line2: #d2d2ce; --ink: #1c1c1e; --ink2: #46464a; --muted: #747477;
   --acc: #643ffa; --acc-soft: #ece9ff; --acc-ink: #4324c8; --flash: #fff1bf;
-  --err: oklch(0.52 0.17 27); --err-soft: #fbeceb; --warn: oklch(0.62 0.14 65); --sel: #d1cdff;
+  --err: oklch(0.52 0.17 27); --err-soft: #fbeceb; --on-err: #ffffff; --warn: oklch(0.62 0.14 65); --sel: #d1cdff;
   --st-draft: #8b8b88; --st-planned: oklch(0.56 0.13 262);
   --st-in-progress: oklch(0.66 0.14 70); --st-implemented: oklch(0.56 0.12 150);
   --st-none: #b3b3b0; --st-partial: oklch(0.56 0.13 262);
@@ -20,7 +20,7 @@
     --bg: #141415; --panel: #1a1a1c; --surface: #1f1f21; --sunken: #19191b;
     --line: #2c2c2f; --line2: #3b3b3f; --ink: #e8e8e6; --ink2: #bcbcb9; --muted: #8b8b88;
     --acc: #b4aeff; --acc-soft: #351aad; --acc-ink: #d1cdff; --flash: #3f3716;
-    --err: oklch(0.72 0.15 27); --err-soft: #361f1d; --warn: oklch(0.76 0.13 65); --sel: #351aad;
+    --err: oklch(0.72 0.15 27); --err-soft: #361f1d; --on-err: #1a0f0e; --warn: oklch(0.76 0.13 65); --sel: #351aad;
     --st-draft: #8b8b88; --st-planned: oklch(0.7 0.12 262);
     --st-in-progress: oklch(0.76 0.13 70); --st-implemented: oklch(0.7 0.12 150);
     --st-none: #6a6a6d; --st-partial: oklch(0.7 0.12 262);
@@ -34,7 +34,7 @@
   --bg: #141415; --panel: #1a1a1c; --surface: #1f1f21; --sunken: #19191b;
   --line: #2c2c2f; --line2: #3b3b3f; --ink: #e8e8e6; --ink2: #bcbcb9; --muted: #8b8b88;
   --acc: #b4aeff; --acc-soft: #351aad; --acc-ink: #d1cdff; --flash: #3f3716;
-  --err: oklch(0.72 0.15 27); --err-soft: #361f1d; --warn: oklch(0.76 0.13 65); --sel: #351aad;
+  --err: oklch(0.72 0.15 27); --err-soft: #361f1d; --on-err: #1a0f0e; --warn: oklch(0.76 0.13 65); --sel: #351aad;
   --st-draft: #8b8b88; --st-planned: oklch(0.7 0.12 262);
   --st-in-progress: oklch(0.76 0.13 70); --st-implemented: oklch(0.7 0.12 150);
   --st-none: #6a6a6d; --st-partial: oklch(0.7 0.12 262);
@@ -224,10 +224,19 @@ pre.docstring { margin: 4px 0 6px; padding: 8px 12px; background: var(--sunken);
 .note .nhead { font-weight: 600; color: var(--ink2); flex-shrink: 0; }
 .note .ntext { white-space: pre-wrap; min-width: 0; flex: 1; text-wrap: pretty; }
 .stepnote .note { padding: 2px 14px 2px 0; }
-.lint { border: 1px solid var(--line2); border-left: 3px solid var(--err); border-radius: 5px; background: var(--surface); font-size: 13px; }
-.lint summary { display: flex; align-items: center; gap: 8px; padding: 7px 12px; cursor: pointer; font-weight: 600; color: var(--err); }
-.lint summary .mono { font-size: 11.5px; color: var(--muted); font-weight: 400; }
-.lint ul { margin: 0; padding: 0 14px 10px 34px; display: flex; flex-direction: column; gap: 3px; color: var(--ink2); }
+.lintband { border: 1px solid var(--err); border-radius: 8px; background: var(--err-soft); overflow: hidden; }
+.lintband .top { display: flex; align-items: center; gap: 10px; padding: 10px 14px; background: var(--err); color: var(--on-err); }
+.lintband .top b { font-size: 14px; font-weight: 600; }
+.lintband .top .mono { margin-left: auto; font-size: 12px; }
+.lintband .lrow { display: grid; grid-template-columns: 16px minmax(0, 1fr) auto; gap: 10px; padding: 10px 14px; align-items: baseline; }
+.lintband .lrow + .lrow { border-top: 1px solid color-mix(in oklch, var(--err) 18%, transparent); }
+.lintband .mk { display: block; align-self: start; margin-top: 6px; }
+.lintband .mk.error { width: 9px; height: 9px; background: var(--err); transform: rotate(45deg); }
+.lintband .mk.warning { width: 0; height: 0; border: 5px solid transparent; border-top: 0; border-bottom: 9px solid var(--warn); }
+.lintband .t { display: block; font-size: 14px; font-weight: 500; color: var(--ink); text-wrap: pretty; }
+.lintband .h { display: block; font-size: 13px; color: var(--ink2); margin-top: 2px; text-wrap: pretty; }
+.lintband .ln { font-size: 12px; color: var(--acc); background: none; border: 0; padding: 0; cursor: pointer; }
+.lintband .ln:hover { text-decoration: underline; }
 .row .warn { font-family: var(--mono); font-size: 10.5px; font-weight: 700; color: var(--st-in-progress); margin-left: auto; }
 .orow.draft .txt > span:first-child { color: var(--muted); font-style: italic; }
 .oq { color: var(--st-in-progress); }
@@ -298,7 +307,7 @@ pre.docstring { margin: 4px 0 6px; padding: 8px 12px; background: var(--sunken);
 .modeseg { flex-shrink: 0; }
 .modeseg button { padding: 4px 12px; color: var(--ink2); display: flex; align-items: center; gap: 6px; }
 .modeseg button[aria-pressed="true"] { color: var(--ink); }
-.modeseg .badge { font-family: var(--mono); font-size: 10.5px; padding: 0 5px; border-radius: 8px; background: var(--err); color: #fff; }
+.modeseg .badge { font-family: var(--mono); font-size: 10.5px; padding: 0 5px; border-radius: 8px; background: var(--err); color: var(--on-err); }
 
 /* Avviksdashbordet (designet «Gherkin Viewer v2», Avvik-modus) */
 .sev { display: inline-block; flex-shrink: 0; box-sizing: border-box; transform: rotate(45deg); }
@@ -470,6 +479,6 @@ pre.docstring { margin: 4px 0 6px; padding: 8px 12px; background: var(--sunken);
 }
 
 /* Linjene som er markert i VS Code (viewer/vscode/) */
-.step.cursor, .cardhead.cursor, .rulehead.cursor, .qblock.cursor, .qblock li.cursor, .note.cursor, .lint li.cursor { background: var(--acc-soft); box-shadow: inset 3px 0 0 var(--acc); }
+.step.cursor, .cardhead.cursor, .rulehead.cursor, .qblock.cursor, .qblock li.cursor, .note.cursor, .lintband .lrow.cursor { background: var(--acc-soft); box-shadow: inset 3px 0 0 var(--acc); }
 /* Kortet med markert linje får 2px ramme; box-shadow legger på den ekstra pikselen uten å flytte innholdet */
 .card:has(.cursor) { border-color: var(--acc); box-shadow: 0 0 0 1px var(--acc); }
