@@ -54,9 +54,8 @@ function asCompact<T>(main: HTMLElement, fn: (offset: number) => T): T {
   return out;
 }
 
-/** Forsiden: README.md i repo-roten, ellers krav/README.md */
+/** Forsiden: krav/README.md */
 function defaultPath(entries: Snapshot) {
-  if (entries['README.md']) return 'README.md';
   if (entries['krav/README.md']) return 'krav/README.md';
   return Object.keys(entries).sort()[0] ?? '';
 }

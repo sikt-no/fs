@@ -1,6 +1,6 @@
 # Gherkin-syntaks (norsk)
 
-Denne fila beskriver **kun formen** — hvordan Gherkin ser ut. Den sier ingenting om hvilke domener, aktører, tags eller Feature-ID-er et prosjekt bruker. Det er prosjektkonvensjoner, og de eies av repoets egen `.claude/rules/gherkin-conventions.md`.
+Denne fila beskriver **kun formen** — hvordan Gherkin ser ut. Den sier ingenting om hvilke domener, aktører, tags eller Feature-ID-er et prosjekt bruker. Det er prosjektkonvensjoner, og de eies av repoets egen `krav/README.md`.
 
 ## Språk og nøkkelord
 

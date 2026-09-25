@@ -1,4 +1,4 @@
-import { existsSync, readdirSync, readFileSync, statSync, watch } from 'node:fs';
+import { readdirSync, readFileSync, statSync, watch } from 'node:fs';
 import { join, relative, sep } from 'node:path';
 import type { Plugin } from 'vite';
 import type { FocusEvent, GitInfo, Snapshot, UpdateEvent } from '../shared/model.ts';
@@ -12,13 +12,12 @@ const RESOLVED_GIT = '\0' + VIRTUAL_GIT;
 const isKravFile = (p: string) => p.endsWith('.feature') || p.endsWith('.md');
 
 /**
- * Leser alle .feature- og .md-filer under krav/, pluss README.md i repo-roten (forsiden), parser dem
+ * Leser alle .feature- og .md-filer under krav/ (krav/README.md er forsiden), parser dem
  * og eksponerer dem som `virtual:krav`. I dev-server pushes endringer som `krav:update`-hendelser over websocket.
  * Git-endringer under krav/ eksponeres som `virtual:krav-git` og pushes som `krav:git`.
  */
 export function kravPlugin(repoRoot: string): Plugin {
   const kravDir = join(repoRoot, 'krav');
-  const readme = join(repoRoot, 'README.md');
   const entries: Snapshot = {};
   let git: GitInfo | null = null;
   let serve = false;
@@ -43,7 +42,6 @@ export function kravPlugin(repoRoot: string): Plugin {
       for (const f of readdirSync(kravDir, { recursive: true, encoding: 'utf8' })) {
         if (isKravFile(f)) load(join(kravDir, f));
       }
-      if (existsSync(readme)) load(readme);
     },
 
     resolveId(id) {
@@ -57,7 +55,7 @@ export function kravPlugin(repoRoot: string): Plugin {
     },
 
     configureServer(server) {
-      server.watcher.add([kravDir, readme]);
+      server.watcher.add(kravDir);
 
       // Les git-status på nytt når krav-filer eller git (commit, stage, checkout) endres
       let gitTimer: ReturnType<typeof setTimeout> | undefined;
@@ -91,7 +89,7 @@ export function kravPlugin(repoRoot: string): Plugin {
       });
 
       const onFs = (event: 'add' | 'change' | 'unlink') => (abs: string) => {
-        if (abs !== readme && (!abs.startsWith(kravDir) || !isKravFile(abs))) return;
+        if (!abs.startsWith(kravDir) || !isKravFile(abs)) return;
         let data: UpdateEvent;
         if (event === 'unlink') {
           delete entries[rel(abs)];
