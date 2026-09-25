@@ -150,15 +150,6 @@ Egenskap: Frister og hendelser for opptak
       Så kan læresteder trekke egne utdanningstilbud fram til denne datoen
       Og etter denne datoen kan kun opptaksforvalter ved forvaltende organisasjon trekke utdanningstilbud
 
-  Regel: Opptaksforvalter ved forvaltende organisasjon må kunne deaktivere et opptak
-
-    Scenario: Deaktivere opptak
-      Når opptaksforvalter deaktiverer opptaket
-      Så settes opptaket til utløpt
-      Og det er ikke lenger mulig å gjøre endringer på opptaket
-      Og det er ikke lenger mulig å utføre søknadsbehandling eller plasstildeling i opptaket
-      Men opptaket kan brukes som grunnlag for å opprette et nytt opptak
-
   @openquestion
   # ÅPNE SPØRSMÅL:
   # - Design.md beskriver interne saksbehandlingsfrister som ikke er dekket her:

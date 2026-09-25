@@ -61,15 +61,15 @@ Egenskap: Opprette et opptak
       Når opptaksforvalter angir navn på bokmål, nynorsk, engelsk og samisk
       Så er navnene lagret på alle fire språk
 
- Regel: Obligatorisk med både bokmål og nynorsk navn på opptak
+  Regel: Obligatorisk med både bokmål og nynorsk navn på opptak
 
     Scenario: Angi opptaksnavn på obligatoriske språk
       Gitt at opptaksforvalter har opprettet opptaket "Samordna opptak 2027"
       Når opptaksforvalter angir navn på bokmål og nynorsk
       Så er obligatoriske navn fylt ut
-      
 
-  @should
+
+  @could
   Regel: Det skal være mulig å gjenbruke innstillinger fra et tidligere opptak
 
     @openquestion
@@ -82,13 +82,15 @@ Egenskap: Opprette et opptak
       Når opptaksforvalter oppretter et nytt opptak basert på "Samordna opptak 2026"
       Så kopieres innstillinger fra det tidligere opptaket som utgangspunkt
 
-  @wont
-  Regel: Endringer på innstillinger i opptaket skal loggføres
-    # Bygger på en generell revisjonsmekanisme som gjelder på tvers av FS.
-    # Opptaket definerer hva som skal logges, mekanismen definerer hvordan.
-    # Nedprioritert inntil videre.
-   # Hvilke endringer som er viktige å få med må vi gå opp
-    Scenario: Endring på opptak loggføres
+  @could
+  Regel: Opptaksforvalter kan deaktivere et opptak
+
+    Scenario: Deaktivere opptak
       Gitt at opptaket "Samordna opptak 2027" finnes
-      Når opptaksforvalter endrer en innstilling i opptaket
-      Så loggføres endringen med hvem som utførte den, fra hvilken organisasjon og når
+      Når opptaksforvalter deaktiverer opptaket
+      Så settes opptaket til utløpt
+      Og det er ikke lenger mulig å gjøre endringer på opptaket
+      Og det er ikke lenger mulig å utføre søknadsbehandling eller plasstildeling i opptaket
+      Men opptaket kan brukes som grunnlag for å opprette et nytt opptak
+
+  # Hendelseslogg er flyttet til 06 Hendelseslogg/hendelseslogg.feature
