@@ -19,16 +19,17 @@ Repositoriet bruker Behavior-Driven Development (BDD) for å oppnå to mål:
 ```
 fs/
 ├── krav/                          # Gherkin feature-filer (lesbart for alle)
-│   ├── 00 Personas/               # Persona-definisjoner
-│   ├── 01 Forberede studier/      # Domene: Studieforberedelse
-│   ├── 02 Opptak/                 # Domene: Opptak
+│   ├── README.md                  # Slik jobber vi med krav (konvensjonene, forsiden i vieweren)
+│   ├── 01 Utdanning/
+│   ├── 02 Opptak/
 │   ├── 03 Gjennomføre studier/
 │   ├── 04 Kompetanse/
 │   ├── 05 Opplysninger om person/
-│   ├── 07 Tilgangstyring/
+│   ├── 07 Brukeradministrasjon og tilgangsstyring/
 │   ├── 08 Teknisk/
-│   ├── 09 Kommunikasjon/
+│   ├── 09 Organisasjon/
 │   ├── 10 Felleskrav/
+│   ├── _Interne prosesser/
 │   └── 99 Demo/                   # Demo/test features
 ├── tester/                        # All testkode og konfigurasjon (for utviklere)
 │   ├── .mise.toml                 # Mise: Node.js versjon (lts)
@@ -38,6 +39,7 @@ fs/
 │   ├── steps/                     # Step definitions
 │   ├── fixtures/                  # Test fixtures og hjelpefunksjoner
 │   └── .features-gen/             # Genererte testfiler (gitignored)
+├── viewer/                        # Live-visning av krav i nettleser (Vite + Preact)
 ├── README.md
 └── claude.md
 ```
@@ -45,6 +47,7 @@ fs/
 ### Separasjon av krav og kode
 
 - **`krav/`**: Kun `.feature`-filer som kan leses av alle. Ingen kode.
+  Konvensjonene for kravfilene (språk, filnavn, mappestruktur, tags, terminologi) står i [`krav/README.md`](krav/README.md). `.claude/rules/gherkin-conventions.md` importerer den med `@../../krav/README.md` (bare når Claude jobber med `.feature`-filer eller `krav/**/*.md`), så det finnes bare én versjon. Bruk import, ikke symlenke: Git for Windows sjekker ut symlenker som tekstfiler med bare målstien.
 - **`tester/`**: All teknisk konfigurasjon og kode. Utviklere jobber her.
 
 ## Kjøre tester
@@ -80,6 +83,26 @@ cd tester
 | `npm run test:integration` | Kun @integration tester |
 | `npm run test:e2e` | Kun @e2e tester |
 
+## Live-visning av krav
+
+`viewer/` er en Vite-dev-server som viser hele `krav/`-treet og oppdaterer visningen straks en `.feature`-fil lagres (parse-feil vises som banner over sist gyldige versjon):
+
+```bash
+cd viewer
+npm install
+npm run dev
+```
+
+`npm run build` lager et statisk bygg i `viewer/dist/` med hele `krav/`-snapshotet bakt inn (relative stier, hash-routing). `.github/workflows/deploy-viewer.yml` publiserer det til GitHub Pages (<https://sikt-no.github.io/fs/>) ved push til `main`. I statisk bygg er git-data `null`, så «Endringer»-modusen skjules.
+
+- `server/kravPlugin.ts` leser og overvåker `krav/` (med `krav/README.md` som forside), og sender `krav:update` over Vites websocket
+- `src/markdown.ts` + `src/MarkdownView.tsx` viser `.md`-filer formatert (overskrifter, lister, kodeblokker med «Kopier», tabeller, lenkekort), med bryter til rå markdown. Relative lenker til filer i vieweren åpnes internt
+- `server/parse.ts` parser med `@cucumber/gherkin` til modellen i `shared/model.ts`, og sjekker konvensjonene i `krav/README.md` (importert i `.claude/rules/gherkin-conventions.md`). Reglene som sjekkes er merket *(sjekkes i vieweren)* i README-en, og testes i `server/parse.test.ts` (`npm test`). Bruddene vises som «Avvik fra konvensjoner» i feature-visningen og som `!` i treet. **Hold dem i synk:** endres en merket regel, eller kommer det en ny regel som kan sjekkes, skal `parse.ts`, testene og merkingen i README-en oppdateres i samme endring, og omvendt. Framgangsmåten står i `.claude/rules/krav-readme-parser-sync.md`, som lastes når Claude jobber med README-en eller parseren
+- `server/git.ts` leser endringer under `krav/` (ucommitted mot HEAD, og committet siden merge-base med `main`). Pluginen eksponerer dem som `virtual:krav-git`, pusher `krav:git` ved endringer i krav-filer eller i `.git` (HEAD, index, reflog), og sidebaren viser dem i «Endringer»-modus
+- `src/` er Preact-komponentene, portet fra designet «Gherkin Viewer» (Claude Design)
+- `src/search.ts` bygger en Fuse.js-indeks over filer og scenarioer for søket i treet; scenariotreff hopper til scenarioet via samme `focus`-state som VS Code-utvidelsen bruker
+- `vscode/` er en liten VS Code-utvidelse (ren JS, uten bygg) som poster aktiv fil og markørlinje til `POST /__krav/focus`; pluginen videresender det som `krav:focus`, og vieweren bytter fil og scroller til scenarioet. Installeres med `npm run vscode:install` (symlink til `~/.vscode/extensions`), og adressen settes med `kravViewer.url`
+
 ## Teknologier
 
 | Verktøy | Formål |
@@ -102,52 +125,9 @@ Andre vanlige tags:
 - `@fsadmin` - Tester for admin-grensesnittet
 - Domene-spesifikke tags (f.eks. `@opptakspilot`)
 
-## Gherkin-språk (Norsk)
+## Gherkin-språk og konvensjoner
 
-Alle feature-filer skrives på **norsk**. Hver fil må starte med:
-
-```gherkin
-# language: no
-```
-
-### Norske nøkkelord
-
-| Norsk | Engelsk |
-|-------|---------|
-| `Egenskap:` | Feature |
-| `Bakgrunn:` | Background |
-| `Scenario:` | Scenario |
-| `Scenariomal:` | Scenario Outline |
-| `Eksempler:` | Examples |
-| `Gitt` | Given |
-| `Når` | When |
-| `Så` | Then |
-| `Og` | And |
-| `Men` | But |
-
-### Gherkin-syntaksregler
-
-**Datatabeller** - brukes for å sende data til et steg:
-```gherkin
-Gitt at tabellen har følgende kolonner
-  | Kolonne       |
-  | Navn          |
-  | Fødselsdato   |
-```
-
-**Scenariomal med Eksempler** - for parameteriserte tester:
-```gherkin
-Scenariomal: Velge antall per side
-  Når brukeren velger <antall> visninger per side
-  Så skal brukeren se <antall> rader
-
-  Eksempler:
-    | antall |
-    | 50     |
-    | 100    |
-```
-
-**Viktig**: `Eksempler:` skal KUN brukes med `Scenariomal:`, ikke med vanlig `Scenario:`.
+Feature-filene skrives på norsk Gherkin. Nøkkelord, gode scenarioer, filnavn, mappestruktur, tags og terminologi står i [`krav/README.md`](krav/README.md).
 
 ## playwright-bdd konfigurasjon
 
@@ -176,11 +156,8 @@ Se trace i HTML-rapporten: `npx playwright show-report`
 ## Konvensjoner for Claude
 
 ### Når du jobber med feature-filer
-- Bruk alltid `# language: no` på toppen
-- Følg eksisterende mappestruktur basert på domene
+- Følg konvensjonene i [`krav/README.md`](krav/README.md)
 - Bruk beskrivende scenario-navn på norsk
-- Inkluder relevante tags for testtype og domene
-- Bruk `Scenariomal:` (ikke `Scenario:`) når du bruker `Eksempler:`
 
 ### Når du jobber med step definitions
 - Skriv i TypeScript

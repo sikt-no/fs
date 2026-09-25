@@ -16,7 +16,7 @@ Du samler krav. Du henter kravene fra `.feature`-filene under `krav/`, kobler de
 
 **Ikke analyser kodebaser, ikke foreslå løsninger, ikke skriv kode.** Spec-en beskriver *hva*, ikke *hvordan*.
 
-**Bare `@planned`/`@in-progress`-krav skal med.** `@draft` og utaggede `Egenskap:`-blokker er fortsatt under arbeid og må gjennom `fs-krav` først. Se _Filter_ nedenfor.
+**Bare `@planned`/`@in-progress`-krav skal med.** `@draft` og utaggede `Egenskap:`-blokker er fortsatt under arbeid og må gjennom `fs-krav` først. Det samme gjelder `@draft`-deler (`Regel:`/`Scenario:`) inne i et `@planned` krav — de holdes utenfor scope. Se _Filter_ nedenfor.
 
 ## Finn oppgavemappa (gjør dette FØRST)
 
@@ -71,7 +71,7 @@ Hvert `AskUserQuestion`-kall i kjøringen appendes til `<spec>/questions-fs-spec
 
 ## Filter: bare krav klare til arbeid (`@planned` / `@in-progress`)
 
-En `.feature`-fil passerer hvis `Egenskap:`-tag-linja har **`@planned` eller `@in-progress`**. Tags på enkelt-`Scenario:` teller ikke.
+En `.feature`-fil passerer hvis `Egenskap:`-tag-linja har **`@planned` eller `@in-progress`**. Andre tags på enkelt-`Regel:`/`Scenario:` påvirker ikke om fila passerer — med unntak av `@draft`, se _`@draft`-deler_ under.
 
 - `@in-progress` må passere fordi skillen selv setter den (se _Retagg_). Ellers ville en ny kjøring mot samme krav filtrert bort alt.
 - `@implemented` passerer **ikke** — kravet er levert; en ny iterasjon går via `fs-krav`.
@@ -79,9 +79,19 @@ En `.feature`-fil passerer hvis `Egenskap:`-tag-linja har **`@planned` eller `@i
 
 **Ingen filer passerer:** rapporter hvilke filer som ble vurdert og hvilken tag de hadde, logg `ended (aborted)`, og foreslå `fs-krav` for å ferdigstille kravene først.
 
+### `@draft`-deler i krav som passerer
+
+Et `@planned`/`@in-progress` krav kan bevisst ha enkelte `Regel:`- eller `Scenario:`/`Scenariomal:`-blokker tagget `@draft @openquestion` (se *Delvis utkast* i `krav/README.md`). Disse delene er **ikke validert** og holdes utenfor spec-ens scope:
+
+- `@draft` på en `Regel:` gjelder alle scenarioene under den. `@draft` på et scenario gjelder bare det scenarioet.
+- Råkopien under `krav-input/local/` lagres fortsatt **uendret og komplett** — filtreringen skjer i spec-dokumentet, ikke i råkopien.
+- Delene listes under `### Utenfor scope (@draft)` i spec-ens `## Krav`, med tittel og spørsmålene fra `# ÅPNE SPØRSMÅL:` under delen. De legges **ikke** under spec-ens `## Åpne spørsmål` — de avklares i `fs-krav`, ikke her.
+- Retaggingen til `@in-progress` gjelder `Egenskap:` som vanlig. `@draft`-taggene på delene står urørt.
+- Er **alle** regler/scenarioer i fila `@draft`, er det ingenting igjen i scope: behandle fila som om den ikke passerte (ingen råkopi, ingen retagging), og nevn den i rapporten med forslag om `fs-krav`.
+
 ## Retagg krav til `@in-progress`
 
-Når et krav hentes inn i en spec, retagges den **autoritative** fila under `krav/` fra `@planned` til `@in-progress` på `Egenskap:`-tag-linja (se tag-aksen i `.claude/rules/gherkin-conventions.md`).
+Når et krav hentes inn i en spec, retagges den **autoritative** fila under `krav/` fra `@planned` til `@in-progress` på `Egenskap:`-tag-linja (se tag-aksen i `krav/README.md`).
 
 **Når:** etter at scope er låst og råkopiene er lagret under `krav-input/`, men **før** spec-dokumentet skrives.
 
@@ -180,6 +190,12 @@ Bevisste unntak: **`spec.log.md`** er append-only, og **`questions-fs-specify-<d
 
 - **`<feature-fil>`** (`@DOM-SUB-KAP-NNN`) — én linje om hva den dekker. ([krav-input/local/<sti>.feature](krav-input/local/<sti>.feature))
 
+### Utenfor scope (`@draft`)
+
+[Regler/scenarioer tagget `@draft` inne i kravene over. Ikke validert — skal ikke implementeres før de er avklart i `fs-krav`. Utelat seksjonen hvis det ikke finnes noen.]
+
+- **`<feature-fil>` — regel/scenario `<tittel>`** — venter på: <spørsmål fra `# ÅPNE SPØRSMÅL:`>
+
 ## Skisser
 
 [Én underseksjon per skisse, eller «Ingen skisser registrert».]
@@ -221,7 +237,7 @@ Minn brukeren på at endringene i `tasks/` og `krav/` ikke er committet — det 
 
 - Analyserer ikke kode, foreslår ikke løsninger og skriver ikke kode.
 - Oppretter, endrer eller lukker ikke GitHub-issues — det er `fs-krav`.
-- Endrer ikke kravinnhold — bare implementasjonsstatus-taggen `@planned` → `@in-progress`.
+- Endrer ikke kravinnhold — bare implementasjonsstatus-taggen `@planned` → `@in-progress`. Fjerner aldri `@draft` fra en `Regel:`/`Scenario:`.
 - Skriver ikke utenfor `<spec>/` og `Egenskap:`-tag-linjene under `krav/`. Skriver ikke `oppgave.md`, `roadmap.md` eller andre oppgaveartefakter.
 - Kjører aldri `git add`, `commit`, `push` eller andre git-mutasjoner.
 
@@ -230,11 +246,11 @@ Minn brukeren på at endringene i `tasks/` og `krav/` ikke er committet — det 
 - Hver krav-bullet peker til en konkret råkopi under `krav-input/`.
 - Vær ærlig om validering: kan du ikke lese en Figma-ramme, skriv `Uavklart` — ikke gjett.
 - Ett spørsmål om gangen ved oppfølging. Aldri batch beslutninger om skisseavvik.
-- Forventer brukeren at `@draft`-krav skal med, henvis til `fs-krav` — ikke omgå filteret.
+- Forventer brukeren at `@draft`-krav eller `@draft`-deler skal med, henvis til `fs-krav` — ikke omgå filteret.
 
 ## Referanser
 
 - **[`references/askuserquestion-logging.md`](references/askuserquestion-logging.md)** — format for `questions-<skill>-<dato>.md`. Brukes også av `fs-specify-delta`.
 - **[`tasks/README.md`](../../../tasks/README.md)** — oppgavestrukturen, domenelista og reglene for `spec/`.
-- **`.claude/rules/gherkin-conventions.md`** — tag-aksen og Feature-ID-formatet.
+- **`krav/README.md`** — tag-aksen og Feature-ID-formatet.
 - **`fs-krav`** — ferdigstiller krav (`@draft` → `@planned`) og eier GitHub-issues.

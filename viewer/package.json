@@ -1,0 +1,28 @@
+{
+  "name": "krav-viewer",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Live-visning av Gherkin-kravene i krav/",
+  "type": "module",
+  "engines": {
+    "node": ">=20.19"
+  },
+  "scripts": {
+    "dev": "vite --open",
+    "build": "tsc --noEmit && vite build",
+    "test": "node --test server/*.test.ts",
+    "vscode:install": "mkdir -p ~/.vscode/extensions && ln -sfn \"$PWD/vscode\" ~/.vscode/extensions/sikt.krav-viewer-sync-1.0.0"
+  },
+  "dependencies": {
+    "@cucumber/gherkin": "^42.0.1",
+    "@cucumber/messages": "^34.2.1",
+    "fuse.js": "^7.5.0",
+    "preact": "^10.29.8"
+  },
+  "devDependencies": {
+    "@preact/preset-vite": "^2.10.6",
+    "@types/node": "^26.6.2",
+    "typescript": "^7.0.2",
+    "vite": "^8.3.1"
+  }
+}
