@@ -50,8 +50,8 @@ Opptaksforvalter skal kunne opprette et opptak — samordnet eller lokalt — me
 | 9 | Svarmeldingsmal (juridisk kjerne + parametere + valgfritt tillegg)   | Won't | Utsatt til etter T3 2027 | [#214](https://github.com/sikt-no/fs/issues/214) | [TAKE-323](https://sikt.atlassian.net/browse/TAKE-323) |
 | 10 | Legge til utdanningsbakgrunner fra regelverk og sette frister       | Must | | | |
 | 11 | Saksbehandlertildelingsregler for samordnet opptak                  | Must | @openquestion — jobbes med av annet team | | |
-| 12 | Gjenbruke innstillinger fra tidligere opptak                        | Could | @openquestion — hva kopieres og hva kopieres ikke? | | |
-| 13 | Deaktivere opptak                                                   | Could | | | |
+| 12 | Gjenbruke innstillinger fra tidligere opptak                        | Must | @draft @openquestion — hva kopieres og hva kopieres ikke? | | |
+| 13 | Deaktivere opptak                                                   | Must | @draft — utsatt til senere iterasjon | | |
 | 14 | Interne saksbehandlingsfrister                                      | Should | @openquestion — hører de hjemme i opptaket eller saksbehandlingsdomenet? | | |
 
 ## Workshop 2026-09-14: oppgavedeling og status

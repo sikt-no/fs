@@ -1,5 +1,5 @@
 # language: no
-@OPT-OPT-OPT-001 @must @draft
+@OPT-OPT-OPT-001 @must @planned
 Egenskap: Opprette et opptak
   Som opptaksforvalter
   ønsker jeg å opprette et opptak for min organisasjon
@@ -68,21 +68,20 @@ Egenskap: Opprette et opptak
       Når opptaksforvalter angir navn på bokmål og nynorsk
       Så er obligatoriske navn fylt ut
 
-
-  @could
+  @draft
   Regel: Det skal være mulig å gjenbruke innstillinger fra et tidligere opptak
 
     @openquestion
     # ÅPNE SPØRSMÅL:
     # - Hva kopieres og hva kopieres ikke?
-    # - Forslag: innstillinger, frister, eventuelle inviterte læresteder, opptakstype og fellestekster kopieres.
-    #   Utdanningstilbud og regelverkssamling kopieres ikke, men legges til eksplisitt
+    # - Forslag: innstillinger, eventuelle inviterte læresteder, opptakstype og fellestekster kopieres.
+    #   Frister kopieres ikke, Utdanningstilbud og regelverkssamling kopieres ikke, men legges til eksplisitt
     Scenario: Opprette opptak basert på tidligere opptak
       Gitt at opptaket "Samordna opptak 2026" finnes med innstillinger, frister og fellestekster
       Når opptaksforvalter oppretter et nytt opptak basert på "Samordna opptak 2026"
       Så kopieres innstillinger fra det tidligere opptaket som utgangspunkt
 
-  @could
+  @draft
   Regel: Opptaksforvalter kan deaktivere et opptak
 
     Scenario: Deaktivere opptak
