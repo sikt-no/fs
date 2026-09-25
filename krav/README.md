@@ -35,7 +35,7 @@ Vi skriver Gherkin på norsk. Start hver feature-fil med: *(sjekkes i vieweren)*
 Gherkin er et språk som alle andre, og må skrives godt for å være nyttig og forståelig. <https://automationpanda.com/bdd/> er en god guide til å skrive gode scenarioer og features, og <https://cucumber.io/docs/gherkin/reference/> er en god introduksjon.
 
 - Features skal deles etter **prosesser**, ikke etter komponenter.
-- Hver feature-fil skal tydelig beskrive hva featuren gjør og hvilken verdi den gir. Skriv en god beskrivelse under `Egenskap:`-linja.
+- Hver feature-fil skal tydelig beskrive hva featuren gjør og hvilken verdi den gir. Skriv en god beskrivelse under `Egenskap:`-linja. *(at beskrivelsen finnes, sjekkes i vieweren)*
 - Unngå for store scenarioer. Test helst bare én funksjonalitet per scenario. Noen scenarioer blir naturlig lengre fordi arbeidsflyten krever det.
 - Alle scenarioer følger rekkefølgen Gitt → Når → Så:
   - **Gitt**: forutsetningene som må være på plass før handlingen skjer
@@ -54,7 +54,7 @@ Gherkin er et språk som alle andre, og må skrives godt for å være nyttig og 
 
 Tre nivåer: **Domene → Sub-domene → Kapabilitet**
 
-Feature-filer skal **kun** ligge på kapabilitetsnivå (nivå 3). *(sjekkes i vieweren)* Sub-domener nummereres fra `10`, kapabiliteter fra `01`.
+Feature-filer skal **kun** ligge på kapabilitetsnivå (nivå 3). *(sjekkes i vieweren)* Sub-domener nummereres fra `10`, kapabiliteter fra `01`. `_Interne prosesser` og `99 Demo` følger ikke nummereringen. *(sjekkes i vieweren)*
 
 ```
 krav/
@@ -102,7 +102,7 @@ Noen kapabiliteter – som søk, filtrering og eksport – går igjen på tvers 
 - Regelen «søk på Erasmuskode gir direktetreff» er *hva* → `09 Organisasjon/10 Finn organisasjon/`
 - Generelle søkemønstre som gjelder alle domener → `10 Felleskrav/`
 
-Unngå å kalle sub-domener og kapabiliteter det samme (f.eks. `Søk/Søk`). Bruk heller et beskrivende navn som skiller nivåene, f.eks. `Finn organisasjon/Søk og identifikasjon`.
+Unngå å kalle sub-domener og kapabiliteter det samme (f.eks. `Søk/Søk`). Bruk heller et beskrivende navn som skiller nivåene, f.eks. `Finn organisasjon/Søk og identifikasjon`. *(sjekkes i vieweren)*
 
 ## Tags
 
@@ -159,7 +159,7 @@ Implementasjonsstatusen beveger seg langs én akse, og hvert steg har én eier:
 
 Et krav skal ha nøyaktig én av disse på `Egenskap:`-tag-linja. Ikke sett to samtidig, og ikke la et krav stå uten status. `@planned`, `@in-progress` og `@implemented` hører bare hjemme på `Egenskap:` – på `Regel:`/`Scenario:` er `@draft` den eneste statustaggen. *(sjekkes i vieweren)*
 
-Den tidligere taggen `@levert` er erstattet av `@implemented`.
+Den tidligere taggen `@levert` er erstattet av `@implemented`. *(sjekkes i vieweren)*
 
 ### Delvis utkast
 
@@ -169,7 +169,7 @@ Det samme gjelder `@in-progress` og `@implemented`. En `@implemented` egenskap m
 
 - Delen tagges `@draft @openquestion` på `Regel:`- eller `Scenario:`-linja, og følges av en `# ÅPNE SPØRSMÅL:`-kommentar som beskriver hva som mangler.
 - `@draft` på en `Regel:` gjelder alle scenarioene under den.
-- `# ÅPNE SPØRSMÅL:` er påkrevd sammen med `@openquestion`. *(sjekkes i vieweren)* En `@draft`-del uten `@openquestion` er et utkast som ikke er gjennomgått enda.
+- `# ÅPNE SPØRSMÅL:` er påkrevd sammen med `@openquestion`. *(sjekkes i vieweren)* En `@draft`-del uten `@openquestion` er et utkast som ikke er gjennomgått enda. *(sjekkes i vieweren)*
 - En `@draft`-del skal ikke implementeres før den er avklart. Når den er avklart, fjernes `@draft`, `@openquestion` og den besvarte kommentaren. `Egenskap:`-taggen endres ikke av det.
 - Under en `Egenskap:` som selv er `@draft` skal deler **ikke** tagges `@draft` (det er dekket av egenskapen). *(sjekkes i vieweren)* `@openquestion` kan fortsatt brukes for å peke ut konkrete spørsmål.
 
@@ -201,6 +201,8 @@ Egenskap: ...
 - `@demo` – demo/eksempeltester (kjøres lokalt som standard)
 - `@ci` – tester som kjøres automatisk i CI-pipeline
 
+`@only` og `@focus` skal ikke sjekkes inn i en kravfil. playwright-bdd gjør `@only` om til `test.only`, så resten av testene hoppes over. `@focus` har ingen virkning i playwright-bdd, og er en rest fra andre verktøy. *(sjekkes i vieweren)*
+
 ### Oppfølging
 
 Sier noe om at et **konkret scenario eller regel** har en uavklart detalj, selv om resten av kravet er klart til implementasjon.
@@ -227,7 +229,7 @@ Scenario: ...
 
 I en `Egenskap:` som selv er `@draft` kan spørsmål som gjelder hele kravet stå under beskrivelsen, uten `@openquestion`.
 
-Bruk ikke `# TODO:` for åpne spørsmål. Vieweren viser bare `# ÅPNE SPØRSMÅL:` som spørsmål, og `@openquestion` er det `grep -r @openquestion krav/` finner.
+Bruk ikke `# TODO:` for åpne spørsmål. *(sjekkes i vieweren)* Vieweren viser bare `# ÅPNE SPØRSMÅL:` som spørsmål, og `@openquestion` er det `grep -r @openquestion krav/` finner.
 
 ## Aktører
 
