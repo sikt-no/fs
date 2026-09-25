@@ -41,6 +41,9 @@ Generert oversikt over alle BDD-krav i prosjektet.
 | OPT-BEH-BEH-003 | Registrere og beregne praksis for søker | 13 Søknadsbehandling | 01 Behandling | @OPT-BEH-BEH-003 @must @draft | [registrere_praksis.feature](02%20Opptak/13%20Søknadsbehandling/01%20Behandling/registrere_praksis.feature) |
 | OPT-BEH-BEH-005 | Se søkerens elektroniske vitnemål | 13 Søknad og saksbehandling | 02 Behandling | @OPT-BEH-BEH-005 @must @planned | [vise_elektroniske_vitnemål.feature](02%20Opptak/13%20Søknad%20og%20saksbehandling/02%20Behandling/vise_elektroniske_vitnemål.feature) |
 | OPT-BEH-BEH-004 | Vitnemålsbehandling | 13 Søknad og saksbehandling | 02 Behandling | @OPT-BEH-BEH-004 @must @draft | [vitnemålsbehandling.feature](02%20Opptak/13%20Søknad%20og%20saksbehandling/02%20Behandling/vitnemålsbehandling.feature) |
+| OPT-BEH-BEH-006 | Tildele saksbehandlende organisasjon etter utdanningsbakgrunn | 13 Søknad og saksbehandling | 02 Behandling | @OPT-BEH-BEH-006 @must @draft | [tildele_saksbehandlende_organisasjon.feature](02%20Opptak/13%20Søknad%20og%20saksbehandling/02%20Behandling/tildele_saksbehandlende_organisasjon.feature) |
+| OPT-SØK-SØK-005 | Velge utdanningsbakgrunn i søknad | 13 Søknad og saksbehandling | 01 Søknad | @OPT-SØK-SØK-005 @must @draft | [velge_utdanningsbakgrunn.feature](02%20Opptak/13%20Søknad%20og%20saksbehandling/01%20Søknad/velge_utdanningsbakgrunn.feature) |
+| OPT-OPT-UBG-001 | Utdanningsbakgrunn i opptak | 11 Opptak | 07 Utdanningsbakgrunn | @OPT-OPT-UBG-001 @must @draft | [utdanningsbakgrunn.feature](02%20Opptak/11%20Opptak/07%20Utdanningsbakgrunn/utdanningsbakgrunn.feature) |
 
 ## 03 Gjennomføre studier
 

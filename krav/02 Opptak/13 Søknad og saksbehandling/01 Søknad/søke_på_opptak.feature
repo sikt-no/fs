@@ -138,9 +138,6 @@ Egenskap: Søke på opptak
   Scenario: Person kan trekke søknaden
 
   @draft
-  Scenario: Søker oppgir om de søker på grunnlag av realkompetanse
-
-  @draft
   Scenario: Person kan svare på tilbud om studieplass
   @draft
   Scenario: Person kan endre svar på søknad mellom ja og nei før en gitt frist
