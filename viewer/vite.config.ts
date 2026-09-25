@@ -7,6 +7,8 @@ const repoRoot = fileURLToPath(new URL('..', import.meta.url));
 
 export default defineConfig({
   plugins: [preact(), kravPlugin(repoRoot)],
+  // Relative stier, så bygget fungerer under en understi (GitHub Pages: /fs/)
+  base: './',
   // Hele krav/-snapshotet bygges inn i bundelen ved statisk bygg
   build: { chunkSizeWarningLimit: 2000 },
   server: {

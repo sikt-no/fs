@@ -25,6 +25,8 @@ npm install
 npm run dev   # åpner http://localhost:5173
 ```
 
+En statisk versjon publiseres til GitHub Pages på <https://sikt-no.github.io/fs/> hver gang `krav/` eller `viewer/` endres på `main` (`.github/workflows/deploy-viewer.yml`). Den viser kravene slik de ligger på `main`, uten live-oppdatering og uten «Endringer». Bygg og se den lokalt med `npm run build && npx vite preview`.
+
 Bryteren «Endringer» over treet viser bare filene i `krav/` som er endret, både det som ikke er committet og det som er committet på branchen siden den gikk ut fra `main`.
 
 Vil du at vieweren skal følge filen og scenarioet du står i i VS Code? Installer den lille utvidelsen i `viewer/vscode/` én gang, og start VS Code på nytt:

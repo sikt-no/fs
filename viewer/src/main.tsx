@@ -286,7 +286,7 @@ function App() {
             onQuery={setQuery}
             onToggle={p => setOpenDirs(o => ({ ...o, [p]: !o[p] }))}
             onSelect={select}
-            mode={treeMode}
+            mode={git ? treeMode : 'files'}
             onMode={setTreeMode}
             git={git}
           />

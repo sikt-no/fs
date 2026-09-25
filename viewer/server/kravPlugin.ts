@@ -20,6 +20,7 @@ export function kravPlugin(repoRoot: string): Plugin {
   const kravDir = join(repoRoot, 'krav');
   const entries: Snapshot = {};
   let git: GitInfo | null = null;
+  let serve = false;
   const rel = (abs: string) => relative(repoRoot, abs).split(sep).join('/');
 
   const load = (abs: string) => {
@@ -31,8 +32,13 @@ export function kravPlugin(repoRoot: string): Plugin {
   return {
     name: 'krav',
 
+    configResolved(config) {
+      serve = config.command === 'serve';
+    },
+
     async buildStart() {
-      git = await readGit(repoRoot);
+      // Git-endringer gir bare mening lokalt; i et statisk bygg (CI, grunn klone av main) utelates de
+      git = serve ? await readGit(repoRoot) : null;
       for (const f of readdirSync(kravDir, { recursive: true, encoding: 'utf8' })) {
         if (isKravFile(f)) load(join(kravDir, f));
       }

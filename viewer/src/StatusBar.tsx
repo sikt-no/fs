@@ -14,12 +14,12 @@ export function StatusBar({ connected, live, fileName, savedAt, updated, lineNum
   return (
     <footer class="statusbar">
       <span style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-        <span class="dot" style={{ width: '6px', height: '6px', background: connected ? 'var(--st-implemented)' : 'var(--err)' }} />
+        <span class="dot" style={{ width: '6px', height: '6px', background: !live ? 'var(--muted)' : connected ? 'var(--st-implemented)' : 'var(--err)' }} />
         {!live ? 'statisk bygg' : connected ? 'ws tilkoblet' : 'ws frakoblet'}
       </span>
-      <span class="muted">vite · {location.host}</span>
+      {live && <span class="muted">vite · {location.host}</span>}
       <span>{fileName}</span>
-      {savedAt && <span class="muted">lagret {time(savedAt)}</span>}
+      {live && savedAt && <span class="muted">lagret {time(savedAt)}</span>}
       {updated && <span class="updated">↻ oppdatert</span>}
       <div style={{ marginLeft: 'auto' }}>
         <button class="smallbtn mono" style={{ fontSize: '11px' }} onClick={onLineNumbers} aria-pressed={lineNumbers}>

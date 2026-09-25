@@ -233,9 +233,11 @@ export function Sidebar({ entries, tree, current, open, query, onQuery, onToggle
           <button aria-pressed={mode === 'files'} onClick={() => onMode('files')}>
             Filer
           </button>
-          <button aria-pressed={mode === 'changes'} onClick={() => onMode('changes')}>
-            Endringer<span class="badge">{nChanges}</span>
-          </button>
+          {git && (
+            <button aria-pressed={mode === 'changes'} onClick={() => onMode('changes')}>
+              Endringer<span class="badge">{nChanges}</span>
+            </button>
+          )}
         </div>
         {mode === 'changes' && git && (
           <div class="gitmeta">
