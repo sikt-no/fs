@@ -4,6 +4,8 @@ import initial from 'virtual:krav';
 import initialGit from 'virtual:krav-git';
 import type { FeatureModel, FocusEvent, GitInfo, Scen, Snapshot, Step, UpdateEvent } from '../shared/model';
 import { FeatureView, scenKey, stepKey } from './FeatureView';
+import { headings, parseMd } from './markdown';
+import { MarkdownView, type MdMode } from './MarkdownView';
 import { Outline } from './Outline';
 import { buildTree, Sidebar, type TreeMode } from './Sidebar';
 import { StatusBar } from './StatusBar';
@@ -52,7 +54,9 @@ function asCompact<T>(main: HTMLElement, fn: (offset: number) => T): T {
   return out;
 }
 
+/** Forsiden: README.md i repo-roten, ellers krav/README.md */
 function defaultPath(entries: Snapshot) {
+  if (entries['README.md']) return 'README.md';
   if (entries['krav/README.md']) return 'krav/README.md';
   return Object.keys(entries).sort()[0] ?? '';
 }
@@ -90,6 +94,7 @@ function App() {
   const [lineNumbers, setLineNumbers] = useState(() => load('lineNumbers', true));
   const [treeHidden, setTreeHidden] = useState(() => load('treeHidden', false));
   const [treeMode, setTreeMode] = useState<TreeMode>(() => load('treeMode', 'files'));
+  const [mdMode, setMdMode] = useState<MdMode>(() => load('mdMode', 'pretty'));
   const [git, setGit] = useState<GitInfo | null>(initialGit);
   const [connected, setConnected] = useState(!!import.meta.hot);
   const [focus, setFocus] = useState<(FocusEvent & { seq: number }) | null>(null);
@@ -100,6 +105,7 @@ function App() {
 
   const entry = entries[current];
   const tree = useMemo(() => buildTree(entries), [entries]);
+  const md = useMemo(() => (entry?.kind === 'md' ? parseMd(entry.source ?? '') : null), [entry]);
 
   useEffect(() => {
     document.documentElement.dataset.theme = theme;
@@ -108,6 +114,7 @@ function App() {
   useEffect(() => save('lineNumbers', lineNumbers), [lineNumbers]);
   useEffect(() => save('treeHidden', treeHidden), [treeHidden]);
   useEffect(() => save('treeMode', treeMode), [treeMode]);
+  useEffect(() => save('mdMode', mdMode), [mdMode]);
 
   // Hash-ruting: #/krav/…/fil.feature
   useEffect(() => {
@@ -231,9 +238,11 @@ function App() {
     };
   }, []);
 
-  const select = (path: string) => {
+  const select = (path: string, line?: number) => {
     setCurrent(path);
     history.pushState(null, '', '#/' + encodeURI(path));
+    // Scenariotreff fra søket: gjenbruk fokus fra VS Code for å scrolle til og åpne scenarioet
+    if (line) setFocus({ path, line, to: line, seq: Date.now() });
   };
   const jump = (key: string) => {
     const main = mainRef.current;
@@ -251,6 +260,7 @@ function App() {
         );
       }
     }
+    if (key.startsWith('md-')) setMdMode('pretty');
     requestAnimationFrame(() => {
       const el = main?.querySelector<HTMLElement>(key === 'q' ? '[data-q]' : `[data-rule="${key}"]`);
       if (main && el) {
@@ -274,6 +284,11 @@ function App() {
         }}
         treeHidden={treeHidden}
         onToggleTree={() => setTreeHidden(v => !v)}
+        onHome={() => {
+          const home = defaultPath(entries);
+          if (home === current) mainRef.current?.scrollTo({ top: 0, behavior: 'smooth' });
+          else select(home);
+        }}
       />
       <div class={'grid' + (treeHidden ? ' notree' : '')}>
         {!treeHidden && (
@@ -304,8 +319,15 @@ function App() {
               <div class="mono" style={{ color: 'var(--ink)' }}>{fileName || 'krav'}</div>
               <div>{fileName ? 'Filen finnes ikke lenger.' : 'Velg en fil i treet.'}</div>
             </div>
-          ) : entry.kind === 'md' ? (
-            <pre class="markdown">{entry.source}</pre>
+          ) : md ? (
+            <MarkdownView
+              entry={entry}
+              blocks={md}
+              mode={mdMode}
+              onMode={setMdMode}
+              has={p => !!entries[p]}
+              onNavigate={select}
+            />
           ) : (
             <FeatureView
               entry={entry}
@@ -320,6 +342,7 @@ function App() {
         </main>
         <Outline
           model={entry?.model}
+          headings={md ? headings(md) : undefined}
           onJump={jump}
           onFoldAll={() => setCollapsed(c => ({ ...c, [current]: Object.fromEntries(allScenKeys().map(k => [k, true])) }))}
           onOpenAll={() => setCollapsed(c => ({ ...c, [current]: {} }))}
