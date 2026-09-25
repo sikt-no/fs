@@ -87,6 +87,7 @@ Egenskap: Innstillinger for opptak
     Scenario: Sette tak for antall tilbud en søker kan få per runde
       Når opptaksforvalter setter tak for antall tilbud per tildelingsrunde til 1
       Så kan ikke plasstildelingen gi flere enn 1 tilbud i en enkelt runde til en søker
+      Og søker får se denne informasjonen
 
   Regel: Opptaksforvalter kan åpne for tidlig opptak
 
@@ -129,6 +130,7 @@ Egenskap: Innstillinger for opptak
       |realkompetanse|
       |steinerskolen|
       Så kan opptaksforvalter opprette utdanningsbakgrunner med egne søknads- og dokumentasjonsfrister
+      Og søker kan se disse fristene
 
   # Ikke relevant for samordna opptak 2027
   Regel: Opptaksforvalter kan styre om søkere kan laste opp dokumentasjon
