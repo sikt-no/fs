@@ -1,42 +1,49 @@
 # language: no
 # GitHub: #604
 #
-# STATUS 22.09.2026: utkastet fra 18.09 er omarbeidet. Beslutningene under er
-# tatt og skal ikke gjenåpnes uten grunn — det som gjenstår står som ÅPNE
-# SPØRSMÅL nederst. Alle avklaringer er lukket, og kravet er satt @planned.
-#
 # Avklart 18.09.2026:
 # - Aktør er søkeren selv i personflaten, ikke saksbehandler. Saksbehandlerens
 #   tilsvarende behov ligger som et skisse-scenario i behandle_søknad.feature
 #   (@OPT-BEH-BEH-001) og er ikke rørt her.
 # - Kravet plasseres under 12 Registrere søknad, ikke under 04 Kompetanse,
-#   fordi det beskriver hva søkeren ser i søknadskonteksten. Innholdet i selve
-#   resultatvisningen eies av @KOM-RES-RES-001.
-# - Den rikere varianten — oppsummering inne i søknaden — er tatt med som en
-#   @could-regel så ambisjonen er dokumentert uten å binde leveransen.
-#   MERK: utkastet forutsatte at første leveranse er en lenke ut til
-#   resultatvisningen. Det er IKKE besluttet — se åpent spørsmål nederst.
+#   fordi det beskriver hva søkeren ser i søknadskonteksten.
 #
 # Avklart 22.09.2026:
-# - Resultatene deles ikke opp etter kilde. Videregående skole og høyere
-#   utdanning kommer fra samme endepunkt, og de ekte kildene er mange. Hvor
-#   resultatene stammer fra er håndtert i arkitekturen og er ikke dette
-#   kravets sak. All ordbruk om «kilder» er derfor fjernet.
-# - Kravet beskriver resultatene samlet, uten oppdeling per type. Dette
-#   erstatter beslutningen fra 18.09 om finkornet melding per resultattype.
+# - Resultatene deles ikke opp etter kilde. Hvor resultatene stammer fra er
+#   håndtert i arkitekturen og er ikke dette kravets sak. All ordbruk om
+#   «kilder» er derfor fjernet.
 # - Ingen filtrering og ingen utelatelser. Søkeren ser alt systemet har
 #   registrert om hen — ikke bare det som er relevant for dette opptaket, og
-#   ikke en utvalgt delmengde. Avgrensningen i utkastet fra 18.09 («kun
-#   videregående skole og høyere utdanning; ikke fagskole, godkjenning av
-#   utenlandsk utdanning eller språkprøver») utgår derfor: å utelate deler av
-#   det systemet allerede vet er mer arbeid enn å vise alt.
+#   ikke en utvalgt delmengde.
 # - Snittet mot @OPT-SØK-SØK-003 (veilede_om_dokumentasjon.feature, #572):
 #   #572 dekker hva søkeren må laste opp, dette kravet hva søkeren slipper.
 #   Personopplysninger fra folkeregisteret hører til #572 og er ikke med her.
-# - Søknaden ligger som kladd inntil den sendes inn, og kladden bevares når
-#   søkeren navigerer til resultatvisningen. Søkeren skal ikke måtte lagre
-#   først, og skal ikke varsles om at noe kan gå tapt. Kladd-funksjonaliteten
-#   finnes allerede i løsningen.
+#
+# Avklart 25.09.2026 — designet for dokumentasjonssteget:
+# - Søkeren ser resultatene INNE i søknaden, ikke ved å navigere ut til
+#   resultatvisningen. Det lukker det åpne spørsmålet som har stått siden
+#   18.09. Regelen om navigering til @KOM-RES-RES-001 utgår, og den betingede
+#   avhengigheten til #559 faller bort. Den rikere varianten som sto som
+#   @could er nå hovedflyten.
+# - Kladd-scenarioet utgår med navigeringen. Kladd-bevaring er en generell
+#   egenskap ved søknaden, ikke noe dette kravet eier.
+# - Resultatene grupperes på utdanningsnivå, videregående først. Samme
+#   struktur og rekkefølge som @OPT-BEH-BEH-005 på saksbehandlersiden — de to
+#   ble besluttet uavhengig og landet likt.
+#
+# BEGREPSBRUK
+#
+# «Digitale resultater» brukes gjennomgående, også i @OPT-BEH-BEH-005.
+# Sub-domenet hadde tidligere fire ord for overlappende ting.
+#
+# «Andre resultater» er alt som ikke er et vitnemål eller en grad —
+# enkeltemner og øvrig dokumentasjon samlet. Det avviker bevisst fra
+# @OPT-BEH-BEH-005, der saksbehandleren får enkeltemner i resultatoversikten
+# og øvrig dokumentasjon som egen seksjon. Søkeren trenger mindre finkorning.
+# Avviket skal ikke «harmoniseres» bort uten en ny beslutning.
+#
+# UI-detaljer. Ordlyd, plassering, ikoner og hvordan seksjoner utvides hører i
+# se_digitale_resultater_i_søknad.design.md, jf. utdype-implementasjon.
 #
 @OPT-SØK-SØK-004 @must @planned
 Egenskap: Se digitale resultater i søknaden
@@ -47,68 +54,101 @@ Egenskap: Se digitale resultater i søknaden
   Resultatene systemet allerede har, er hentet fra autoritative kilder og skal
   ikke lastes opp på nytt.
 
-  AVHENGIGHET (betinget, se åpent spørsmål nederst): Hvis søkeren må navigere
-  ut, sender kravet søkeren videre til visningen av egne resultater
-  i @KOM-RES-RES-001, se_egne_resultater.feature under
-  04 Kompetanse/10 Resultater/01 Resultater. Den er i dag en tre-linjers
-  skisse, og må fylles ut under #559 før dette kravet kan leveres.
-
   Bakgrunn:
     Gitt at søkeren er innlogget på personflaten
     Og søkeren har startet en søknad på et opptak
 
-  Regel: Søker ser om systemet har digitale resultater
+  Regel: Søkeren ser de digitale resultatene i søknaden
 
-    Scenario: Systemet har digitale resultater om søkeren
+    Scenario: Se at dokumentasjonen er hentet automatisk
       Gitt at søkeren har digitale resultater
       Når søkeren kommer til dokumentasjonssteget i søknaden
-      Så ser søkeren at systemet har digitale resultater om hen
-      Og søkeren blir ikke bedt om å laste dem opp
+      Så ser søkeren at systemet har hentet dokumentasjon automatisk
+      Og søkeren blir ikke bedt om å laste den opp
+      Og søkeren får vite at saksbehandleren ser dokumentasjonen når søknaden behandles
+      # AVKLART 25.09.2026: siste ledd er nytt. Søkeren skal vite at det hen
+      # ser her er det samme saksbehandleren får se — det er en opplysning om
+      # innsyn, ikke en UI-detalj. Speiler @OPT-BEH-BEH-005.
 
-    Scenario: Systemet har ingen digitale resultater om søkeren
+    Scenario: Resultatene vises gruppert på nivå
+      Gitt at søkeren har resultater fra flere utdanningsnivåer
+      Når søkeren kommer til dokumentasjonssteget i søknaden
+      Så ser søkeren resultatene gruppert på utdanningsnivå
+      Og videregående opplæring vises før høyere utdanning
+
+    Scenario: Se opplysninger om et resultat
+      Gitt at søkeren har et vitnemål
+      Når søkeren kommer til dokumentasjonssteget i søknaden
+      Så ser søkeren vitnemålet med følgende opplysninger
+        | felt            |
+        | Tittel          |
+        | Utsteder        |
+        | Utstedelsesdato |
+
+    Scenariomal: Se tilleggsopplysning for et resultat fra <nivå>
+      Gitt at søkeren har et vitnemål fra <nivå>
+      Når søkeren kommer til dokumentasjonssteget i søknaden
+      Så ser søkeren i tillegg <tilleggsopplysning>
+
+      Eksempler:
+        | nivå                   | tilleggsopplysning         |
+        | videregående opplæring | om vitnemålet gir generell studiekompetanse |
+        | høyere utdanning       | hvilken grad vitnemålet gir |
+
+    Scenario: Se at et resultat er hentet automatisk
+      Gitt at søkeren har et digitalt resultat
+      Når søkeren kommer til dokumentasjonssteget i søknaden
+      Så ser søkeren at resultatet er hentet automatisk
+      # Merkelappen sier hvordan resultatet kom inn, ikke hvor det kom fra.
+      # Søkeren trenger å vite at hen ikke må laste det opp selv; hvilken
+      # kilde det stammer fra er ikke søkerens sak.
+
+    Scenario: Se andre resultater
+      Gitt at søkeren har resultater som verken er vitnemål eller grad
+      Når søkeren velger å se andre resultater
+      Så ser søkeren de øvrige resultatene
+      # «Andre resultater» samler enkeltemner og øvrig dokumentasjon, og er
+      # lukket som standard fordi de sjelden er avgjørende for søkeren.
+
+    Scenario: Søker uten digitale resultater
       Gitt at søkeren ikke har digitale resultater
       Når søkeren kommer til dokumentasjonssteget i søknaden
       Så ser søkeren at systemet ikke har digitale resultater om hen
       Og søkeren får vite at all dokumentasjon må lastes opp manuelt
+      # PRESISERT 25.09.2026: gjelder bare når det er bekreftet at søkeren
+      # ikke har noe. Kunne ikke opplysningene hentes, gjelder regelen under —
+      # instruksen om manuell opplasting skal ikke gis på usikkert grunnlag.
 
-  @openquestion
-  Regel: Søker kommer til resultatvisningen for å se detaljene
+  @draft @openquestion
+  Regel: Det fremgår når grunnlaget er ufullstendig
 
-    # ÅPNE SPØRSMÅL: Skal søkeren se detaljene om sine digitale resultater
-    # inne i søknaden, eller navigere ut til resultatvisningen i personflaten?
-    # Hele denne regelen forutsetter det siste. Blir svaret «inne i søknaden»,
-    # utgår regelen og erstattes av innhold i @could-regelen under.
+    # ÅPNE SPØRSMÅL:
+    # - Hva skal søkeren gjøre når opplysningene ikke kunne hentes? Vente og
+    #   prøve igjen, laste opp manuelt i mellomtiden, eller begge deler? Det
+    #   henger sammen med dokumentasjonsfristen: en søker som venter på en
+    #   kilde som er nede kan gå glipp av fristen. Reist 25.09.2026.
+    # - Designet dekker ikke disse tilstandene. De må utformes før de kan
+    #   implementeres.
+    #
+    # Regelen speiler @OPT-BEH-BEH-005. Konsekvensen er ulik: der er risikoen
+    # et feilvedtak, her er det at søkeren laster opp noe hen ikke trengte —
+    # eller konkluderer med at vitnemålet ikke er registrert.
 
-    Scenario: Søker går fra søknaden til sine digitale resultater
-      Gitt at søkeren er i dokumentasjonssteget i søknaden
-      Når søkeren velger å se sine digitale resultater
-      Så kommer søkeren til visningen av egne resultater i personflaten
-      # Innholdet i resultatvisningen er beskrevet i @KOM-RES-RES-001
-
-    Scenario: Søker kommer tilbake til kladden etter å ha sett resultatene
-      Gitt at søkeren har lastet opp dokumentasjon i søknadskladden
-      Og søkeren har gått til visningen av egne resultater
-      Når søkeren går tilbake til kladden
-      Så er opplysningene og dokumentene søkeren har lagt inn fortsatt der
-
-  @could
-  Regel: Søker ser resultatene oppsummert i søknaden
-
-    Scenario: Søker ser hvor mange resultater systemet har
-      Gitt at søkeren har digitale resultater
+    Scenario: Resultater fra en utsteder kunne ikke hentes
+      Gitt at søkeren har resultater fra flere utstedere
+      Og resultatene fra én av utstederne ikke kunne hentes
       Når søkeren kommer til dokumentasjonssteget i søknaden
-      Så ser søkeren hvor mange digitale resultater systemet har om hen
+      Så ser søkeren resultatene som ble hentet
+      Og søkeren ser hvilken utsteder det finnes resultater fra som ikke kunne hentes
 
-    Scenario: Søker utvider oppsummeringen for å se de enkelte resultatene
-      Gitt at søkeren ser resultatene oppsummert i søknaden
-      Når søkeren utvider oppsummeringen
-      Så ser søkeren de enkelte resultatene
+    Scenario: Ingen av resultatene kunne hentes
+      Gitt at søkeren har digitale resultater
+      Og ingen av dem kunne hentes
+      Når søkeren kommer til dokumentasjonssteget i søknaden
+      Så ser søkeren at hen har resultater som ikke kunne hentes
+      Men søkeren får ikke beskjed om at all dokumentasjon må lastes opp manuelt
 
-# ÅPNE SPØRSMÅL:
-# - Får søkeren all informasjonen inne på siden, eller må hen navigere ut til
-#   resultatvisningen for å se detaljene? Ikke besluttet. Valget avgjør om
-#   @openquestion-regelen «Søker kommer til resultatvisningen» består, og om
-#   avhengigheten til @KOM-RES-RES-001 / #559 i det hele tatt gjelder.
-#   Avklares som en del av designarbeidet, ikke i kravteksten.
-# - Ordlyd og utforming av meldingene er ikke beskrevet her. De hører hjemme i
-#   se_digitale_resultater_i_søknad.design.md (skillen utdype-implementasjon).
+    Scenario: Det er ukjent om søkeren har resultater
+      Gitt at det ikke lar seg avgjøre om søkeren har digitale resultater
+      Når søkeren kommer til dokumentasjonssteget i søknaden
+      Så ser søkeren at det ikke er avklart hvilke resultater systemet har om hen
