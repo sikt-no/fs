@@ -15,6 +15,8 @@ interface Props {
   onMode: (m: Mode) => void;
   /** Antall filer med avvik, vist på Avvik-knappen */
   nBad: number;
+  /** Vis Oppgaver-knappen (dev-serveren er startet med `--mode oppgaver`) */
+  oppgaver: boolean;
   /** Antall oppgaver som ikke er levert, vist på Oppgaver-knappen */
   nActive: number;
   oView: OView;
@@ -23,7 +25,7 @@ interface Props {
   oCrumbs: string[];
 }
 
-export function TopBar({ path, connected, theme, onTheme, treeHidden, onToggleTree, onHome, mode, onMode, nBad, nActive, oView, onOView, oCrumbs }: Props) {
+export function TopBar({ path, connected, theme, onTheme, treeHidden, onToggleTree, onHome, mode, onMode, nBad, oppgaver, nActive, oView, onOView, oCrumbs }: Props) {
   const parts = mode === 'avvik' ? ['krav', '#/avvik'] : mode === 'oppgaver' ? oCrumbs : path ? path.split('/') : [];
   return (
     <header class="topbar">
@@ -46,9 +48,11 @@ export function TopBar({ path, connected, theme, onTheme, treeHidden, onToggleTr
         <button aria-pressed={mode === 'avvik'} onClick={() => onMode('avvik')} title={`${nBad} filer med avvik fra konvensjonene`}>
           Avvik{nBad > 0 && <span class="badge">{nBad}</span>}
         </button>
-        <button aria-pressed={mode === 'oppgaver'} onClick={() => onMode('oppgaver')} title={`${nActive} aktive oppgaver i tasks/`}>
-          Oppgaver<span class="badge neutral">{nActive}</span>
-        </button>
+        {oppgaver && (
+          <button aria-pressed={mode === 'oppgaver'} onClick={() => onMode('oppgaver')} title={`${nActive} aktive oppgaver i tasks/`}>
+            Oppgaver<span class="badge neutral">{nActive}</span>
+          </button>
+        )}
       </div>
       {mode === 'oppgaver' && (
         <div class="seg oviewseg" role="group" aria-label="Oppgavevisning">

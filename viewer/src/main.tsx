@@ -66,7 +66,10 @@ interface OState {
   sel: string | null;
   panel: boolean;
 }
+/** Oppgaver-modusen finnes bare når dev-serveren er startet med `--mode oppgaver` (eller `OPPGAVER=1`) */
+const OPPGAVER = initialTasks !== null;
 function parseOppgaverHash(h: string): OState | null {
+  if (!OPPGAVER) return null;
   if (h !== 'oppgaver' && !h.startsWith('oppgaver/')) return null;
   const rest = h.split('/').slice(1).filter(Boolean);
   if (rest[0] === 'tavle') return rest.length >= 3 ? { view: 'tavle', sel: rest.slice(1, 3).join('/'), panel: true } : { view: 'tavle', sel: null, panel: false };
@@ -111,7 +114,7 @@ function App() {
   const [current, setCurrent] = useState(() => (initial[fromHash()] ? fromHash() : defaultPath(initial)));
   // #/avvik er avviksdashbordet, #/oppgaver… er oppgavene; alle andre hasher er en fil
   const [mode, setMode] = useState<Mode>(() => (fromHash() === 'avvik' ? 'avvik' : parseOppgaverHash(fromHash()) ? 'oppgaver' : 'krav'));
-  const [tasksSnap, setTasksSnap] = useState<TasksSnapshot>(initialTasks);
+  const [tasksSnap, setTasksSnap] = useState<TasksSnapshot>(initialTasks ?? { domains: {}, tasks: [] });
   const [oState, setOState] = useState<OState>(() => parseOppgaverHash(fromHash()) ?? { view: 'tavle', sel: null, panel: false });
   const [avvikFilter, setAvvikFilter] = useState<Filter>(NO_FILTER);
   const [fixMsg, setFixMsg] = useState<string | null>(null);
@@ -383,6 +386,7 @@ function App() {
         mode={mode}
         onMode={changeMode}
         nBad={nBad}
+        oppgaver={OPPGAVER}
         nActive={nActive}
         oView={oState.view}
         onOView={view => setOppgaver({ ...oState, view, sel: oState.sel ?? (shownTask ? taskKey(shownTask) : null) })}

@@ -12,6 +12,7 @@ declare module 'virtual:krav-git' {
 
 declare module 'virtual:krav-tasks' {
   import type { TasksSnapshot } from '../shared/tasks';
-  const tasks: TasksSnapshot;
+  /** null når Oppgaver-modusen ikke er slått på (`--mode oppgaver`) */
+  const tasks: TasksSnapshot | null;
   export default tasks;
 }
