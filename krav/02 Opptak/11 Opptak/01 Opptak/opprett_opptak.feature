@@ -92,4 +92,4 @@ Egenskap: Opprette et opptak
       Og det er ikke lenger mulig å utføre søknadsbehandling eller plasstildeling i opptaket
       Men opptaket kan brukes som grunnlag for å opprette et nytt opptak
 
-  # Hendelseslogg er flyttet til 06 Hendelseslogg/hendelseslogg.feature
+  # Hendelseslogg er flyttet til 06 Hendelseslogg/hendelseslogg.feature fordi den venter på generell løsning. Må gjennomgås mht hva som logges.
