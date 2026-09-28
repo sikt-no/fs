@@ -1,10 +1,11 @@
 // Avviksdashbordet: Avvik-modusen fra designet «Gherkin Viewer v2».
 import type { JSX } from 'preact';
-import { useEffect, useMemo, useRef, useState } from 'preact/hooks';
+import { useMemo, useState } from 'preact/hooks';
 import { STATUS_LABEL, type Snapshot } from '../shared/model';
 import { RULE, type Severity } from '../shared/rules';
 import { agentPrompt, dirStat, files, health, NO_FILTER, tree, type Filter, type Node, type PrioKey, type StatusKey } from './health';
 import { StatusIcon } from './Sidebar';
+import { useCopy } from './useCopy';
 
 interface Props {
   entries: Snapshot;
@@ -39,9 +40,7 @@ export function Avvik({ entries, filter: flt, onFilter, onOpen, onReadRule }: Pr
   const [open, setOpen] = useState<Record<string, boolean>>({});
   const [more, setMore] = useState(false);
   const [dashManual, setDashManual] = useState<boolean | null>(null);
-  const [copied, setCopied] = useState(false);
-  const timer = useRef<ReturnType<typeof setTimeout>>();
-  useEffect(() => () => clearTimeout(timer.current), []);
+  const [copied, copyText] = useCopy();
 
   const set = (patch: Partial<Filter>) => {
     setMore(false);
@@ -62,34 +61,7 @@ export function Avvik({ entries, filter: flt, onFilter, onOpen, onReadRule }: Pr
   const R = flt.rule ? RULE[flt.rule] : null;
   const F = flt.file && !flt.rule ? all.find(f => f.path === flt.file) : null;
 
-  const copy = () => {
-    const text = agentPrompt(h, flt);
-    const done = () => {
-      setCopied(true);
-      clearTimeout(timer.current);
-      timer.current = setTimeout(() => setCopied(false), 1800);
-    };
-    const fallback = () => {
-      const t = document.createElement('textarea');
-      t.value = text;
-      t.style.position = 'fixed';
-      t.style.opacity = '0';
-      document.body.appendChild(t);
-      t.select();
-      try {
-        document.execCommand('copy');
-      } catch {
-        /* utilgjengelig utklippstavle */
-      }
-      t.remove();
-      done();
-    };
-    try {
-      navigator.clipboard.writeText(text).then(done, fallback);
-    } catch {
-      fallback();
-    }
-  };
+  const copy = () => copyText(agentPrompt(h, flt));
   const agentBtn = (
     <button class={'agentbtn' + (copied ? ' on' : '')} onClick={copy} title="Kopierer en prompt med filer, linjer og regel som kan limes inn til en kodeagent">
       <span class="agentmark" />

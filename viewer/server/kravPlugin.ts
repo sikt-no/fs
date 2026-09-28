@@ -4,20 +4,28 @@ import type { Plugin } from 'vite';
 import type { FocusEvent, GitInfo, Snapshot, UpdateEvent } from '../shared/model.ts';
 import { gitDir, readGit } from './git.ts';
 import { buildEntry } from './parse.ts';
+import { readTasks } from './tasks.ts';
+import type { TasksSnapshot } from '../shared/tasks.ts';
 
 const VIRTUAL = 'virtual:krav';
 const RESOLVED = '\0' + VIRTUAL;
 const VIRTUAL_GIT = 'virtual:krav-git';
 const RESOLVED_GIT = '\0' + VIRTUAL_GIT;
+const VIRTUAL_TASKS = 'virtual:krav-tasks';
+const RESOLVED_TASKS = '\0' + VIRTUAL_TASKS;
 const isKravFile = (p: string) => p.endsWith('.feature') || p.endsWith('.md');
 
 /**
  * Leser alle .feature- og .md-filer under krav/ (krav/README.md er forsiden), parser dem
  * og eksponerer dem som `virtual:krav`. I dev-server pushes endringer som `krav:update`-hendelser over websocket.
  * Git-endringer under krav/ eksponeres som `virtual:krav-git` og pushes som `krav:git`.
+ * Oppgavemappene i tasks/ eksponeres som `virtual:krav-tasks` og pushes som `krav:tasks`, men bare med `oppgaver: true`;
+ * ellers er modulen `null`, og vieweren skjuler Oppgaver-modusen.
  */
-export function kravPlugin(repoRoot: string): Plugin {
+export function kravPlugin(repoRoot: string, opts: { oppgaver?: boolean } = {}): Plugin {
   const kravDir = join(repoRoot, 'krav');
+  const tasksDir = join(repoRoot, 'tasks');
+  let tasks: TasksSnapshot | null = null;
   const entries: Snapshot = {};
   let git: GitInfo | null = null;
   let serve = false;
@@ -42,20 +50,40 @@ export function kravPlugin(repoRoot: string): Plugin {
       for (const f of readdirSync(kravDir, { recursive: true, encoding: 'utf8' })) {
         if (isKravFile(f)) load(join(kravDir, f));
       }
+      if (opts.oppgaver) tasks = readTasks(repoRoot);
     },
 
     resolveId(id) {
       if (id === VIRTUAL) return RESOLVED;
       if (id === VIRTUAL_GIT) return RESOLVED_GIT;
+      if (id === VIRTUAL_TASKS) return RESOLVED_TASKS;
     },
 
     load(id) {
       if (id === RESOLVED) return `export default ${JSON.stringify(entries)};`;
       if (id === RESOLVED_GIT) return `export default ${JSON.stringify(git)};`;
+      if (id === RESOLVED_TASKS) return `export default ${JSON.stringify(tasks)};`;
     },
 
     configureServer(server) {
       server.watcher.add(kravDir);
+      if (opts.oppgaver) server.watcher.add(tasksDir);
+
+      // Oppgavemappene er små, så hele tasks/ leses på nytt ved hver endring
+      let tasksTimer: ReturnType<typeof setTimeout> | undefined;
+      const refreshTasks = () => {
+        clearTimeout(tasksTimer);
+        tasksTimer = setTimeout(() => {
+          try {
+            tasks = readTasks(repoRoot);
+          } catch {
+            return; // en fil forsvant mens mappa ble lest; neste hendelse leser på nytt
+          }
+          const mod = server.moduleGraph.getModuleById(RESOLVED_TASKS);
+          if (mod) server.moduleGraph.invalidateModule(mod);
+          server.ws.send({ type: 'custom', event: 'krav:tasks', data: tasks });
+        }, 300);
+      };
 
       // Les git-status på nytt når krav-filer eller git (commit, stage, checkout) endres
       let gitTimer: ReturnType<typeof setTimeout> | undefined;
@@ -89,6 +117,7 @@ export function kravPlugin(repoRoot: string): Plugin {
       });
 
       const onFs = (event: 'add' | 'change' | 'unlink') => (abs: string) => {
+        if (abs.startsWith(tasksDir + sep)) return opts.oppgaver ? refreshTasks() : undefined;
         if (!abs.startsWith(kravDir) || !isKravFile(abs)) return;
         let data: UpdateEvent;
         if (event === 'unlink') {
@@ -110,6 +139,10 @@ export function kravPlugin(repoRoot: string): Plugin {
       server.watcher.on('add', onFs('add'));
       server.watcher.on('change', onFs('change'));
       server.watcher.on('unlink', onFs('unlink'));
+      if (opts.oppgaver) {
+        server.watcher.on('addDir', abs => abs.startsWith(tasksDir + sep) && refreshTasks());
+        server.watcher.on('unlinkDir', abs => abs.startsWith(tasksDir + sep) && refreshTasks());
+      }
 
       // VS Code-utvidelsen (viewer/vscode/) melder hvilken fil og linje som er aktiv i editoren
       server.middlewares.use('/__krav/focus', (req, res) => {

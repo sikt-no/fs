@@ -20,7 +20,7 @@ Brukeren har en **endring** — en commit, to commits, en branch, en test-fil el
 
 ## Finn oppgavemappa (gjør dette FØRST)
 
-Samme prosedyre som [`fs-specify` → _Finn oppgavemappa_](../fs-specify/SKILL.md#finn-oppgavemappa-gjør-dette-først): resultatet er **`<spec>/` = `tasks/<domene>/<slug>/spec/`**, og reglene i `tasks/README.md` gjelder (ingen `spec-*.md` i oppgave-rota, `spec/` er reservert for krav, ikke skriv `oppgave.md`).
+Samme prosedyre som [`fs-specify` → _Finn oppgavemappa_](../fs-specify/SKILL.md#finn-oppgavemappa-gjør-dette-først): resultatet er **`<spec>/` = `tasks/<domene>/<slug>/spec/`**, og reglene i `tasks/README.md` gjelder (ingen `spec-*.md` i oppgave-rota, `spec/` er reservert for krav, ikke skriv `oppgave.md` — det gjør `fs-oppgave`).
 
 En delta hører normalt til en oppgave som finnes fra før. Foreslå derfor eksisterende oppgaver først; «Ny oppgave» er fortsatt et gyldig valg.
 

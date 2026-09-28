@@ -91,15 +91,17 @@ cd tester
 cd viewer
 npm install
 npm run dev
+npm run dev:oppgaver   # med Oppgaver-modusen (tasks/)
 ```
 
-`npm run build` lager et statisk bygg i `viewer/dist/` med hele `krav/`-snapshotet bakt inn (relative stier, hash-routing). `.github/workflows/deploy-viewer.yml` publiserer det til GitHub Pages (<https://sikt-no.github.io/fs/>) ved push til `main`. I statisk bygg er git-data `null`, så «Endringer»-modusen skjules.
+`npm run build` lager et statisk bygg i `viewer/dist/` med hele `krav/`-snapshotet bakt inn (relative stier, hash-routing). `.github/workflows/deploy-viewer.yml` publiserer det til GitHub Pages (<https://sikt-no.github.io/fs/>) ved push til `main`. I statisk bygg er git-data `null`, så «Endringer»-modusen skjules. Oppgaver-modusen er av som standard, både i dev og i bygget, og slås på med `--mode oppgaver` (`npm run dev:oppgaver`, `npm run build -- --mode oppgaver`) eller `OPPGAVER=1`. Uten den leses ikke `tasks/`, `virtual:krav-tasks` er `null`, og knappen og `#/oppgaver`-rutene skjules.
 
 - `server/kravPlugin.ts` leser og overvåker `krav/` (med `krav/README.md` som forside), og sender `krav:update` over Vites websocket
 - `src/markdown.ts` + `src/MarkdownView.tsx` viser `.md`-filer formatert (overskrifter, lister, kodeblokker med «Kopier», tabeller, lenkekort), med bryter til rå markdown. Relative lenker til filer i vieweren åpnes internt
 - `server/parse.ts` parser med `@cucumber/gherkin` til modellen i `shared/model.ts`, og sjekker konvensjonene i `krav/README.md` (importert i `.claude/rules/gherkin-conventions.md`). Reglene som sjekkes er merket *(sjekkes i vieweren)* i README-en, og testes i `server/parse.test.ts` (`npm test`). Bruddene vises som et statusbånd («Fila følger ikke konvensjonene») under metalinja i feature-visningen, og som `!` i treet. **Hold dem i synk:** endres en merket regel, eller kommer det en ny regel som kan sjekkes, skal `parse.ts`, testene og merkingen i README-en oppdateres i samme endring, og omvendt. Framgangsmåten står i `.claude/rules/krav-readme-parser-sync.md`, som lastes når Claude jobber med README-en eller parseren
 - `shared/rules.ts` har ID, alvorlighetsgrad (feil/advarsel), README-seksjon og forklaring for hver regel parseren sjekker. Hvert avvik (`Lint`) har `rule` og `sev` derfra
 - **Avvik**-modusen (`#/avvik`, bryteren «Krav | Avvik» i toppfeltet) er et dashbord over avvikene i hele `krav/`, portet fra designet «Gherkin Viewer v2» (Claude Design): nøkkeltall, avvik per regel, status og prioritet, «Regel × mappe» med drill-down, fil- og regeldetaljer med «Kopier agent-prompt», og lista over filer med avvik. Klikk på et avvik åpner fila på linja, og «Les regelen» hopper til seksjonen i README-en. Aggregeringen er rene funksjoner i `src/health.ts` (testet i `src/health.test.ts`), visningen i `src/Avvik.tsx`. Rettes et avvik i editoren, viser statuslinja «↻ … rettet i …»
+- **Oppgaver**-modusen (`#/oppgaver`, tredje knapp i «Krav | Avvik | Oppgaver») viser oppgavemappene i `tasks/`, portet fra designet «Oppgaver» (Claude Design, runde 2). «Mappe / Tavle» bytter mellom oppgavemappa (fasespor, gate før neste fase med «Neste steg» og «Kopier prompt til agent», lag, krav, reviews, statuslogg og filtre) og en tavle med én kolonne per fase. Valgt oppgave følger med (`#/oppgaver/<domene>/<slug>`, `#/oppgaver/tavle/<domene>/<slug>`). `server/tasks.ts` leser rådataene (`virtual:krav-tasks`, pushes som `krav:tasks`), `shared/tasks.ts` tolker `oppgave.md`, planbokser og reviews og sjekker reglene i `tasks/README.md` (merket *(sjekkes i vieweren)*, testet i `shared/tasks.test.ts`), og `src/oppgaveflyt.ts` har gate, neste steg, krav-kobling og agent-prompt (testet i `src/oppgaveflyt.test.ts`). Hold `tasks/README.md` og `shared/tasks.ts` i synk på samme måte som krav-README-en og parseren
 - `server/git.ts` leser endringer under `krav/` (ucommitted mot HEAD, og committet siden merge-base med `main`). Pluginen eksponerer dem som `virtual:krav-git`, pusher `krav:git` ved endringer i krav-filer eller i `.git` (HEAD, index, reflog), og sidebaren viser dem i «Endringer»-modus
 - `src/` er Preact-komponentene, portet fra designet «Gherkin Viewer» (Claude Design)
 - `src/search.ts` bygger en Fuse.js-indeks over filer og scenarioer for søket i treet; scenariotreff hopper til scenarioet via samme `focus`-state som VS Code-utvidelsen bruker
@@ -196,8 +198,9 @@ Then('skal {string} vises', async ({ page }, tekst: string) => {
 - `fs-specify` — henter `@planned`-krav inn i en oppgave: `tasks/<domene>/<slug>/spec/` (`@planned` → `@in-progress`)
 - `fs-specify-delta` — det samme, men for en endring (commit, branch, test-fil eller markdown)
 - `lage-steps` — step definitions i `tester/steps/` for kravene
+- `fs-oppgave` — oppgavemappa `tasks/<domene>/<slug>/` ut fra malene i `tasks/mal/`: ny oppgave (`oppgave.md` og rad i `roadmap.md`), faseoverganger (`design.md`, `<lag>/plan-<slug>.md`) og review-filer
 
-Typisk flyt: `fs-krav` → `fs-specify` / `fs-specify-delta` → `lage-steps`. Se [`tasks/README.md`](tasks/README.md) for oppgavestrukturen.
+Typisk flyt: `fs-krav` → `fs-oppgave` (ny oppgave) → `fs-specify` / `fs-specify-delta` → `lage-steps`, med `fs-oppgave` for hver faseovergang og review. Se [`tasks/README.md`](tasks/README.md) for oppgavestrukturen. `.claude/rules/tasks-conventions.md` importerer den med `@../../tasks/README.md` når Claude jobber i `tasks/**`.
 
 ## CI/CD
 

@@ -9,3 +9,10 @@ declare module 'virtual:krav-git' {
   const git: GitInfo | null;
   export default git;
 }
+
+declare module 'virtual:krav-tasks' {
+  import type { TasksSnapshot } from '../shared/tasks';
+  /** null når Oppgaver-modusen ikke er slått på (`--mode oppgaver`) */
+  const tasks: TasksSnapshot | null;
+  export default tasks;
+}

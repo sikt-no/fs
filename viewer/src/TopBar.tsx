@@ -1,5 +1,7 @@
+import type { OView } from './Oppgaver';
+
 export type Theme = 'light' | 'dark';
-export type Mode = 'krav' | 'avvik';
+export type Mode = 'krav' | 'avvik' | 'oppgaver';
 
 interface Props {
   path: string;
@@ -13,10 +15,18 @@ interface Props {
   onMode: (m: Mode) => void;
   /** Antall filer med avvik, vist på Avvik-knappen */
   nBad: number;
+  /** Vis Oppgaver-knappen (dev-serveren er startet med `--mode oppgaver`) */
+  oppgaver: boolean;
+  /** Antall oppgaver som ikke er levert, vist på Oppgaver-knappen */
+  nActive: number;
+  oView: OView;
+  onOView: (v: OView) => void;
+  /** Brødsmulen i Oppgaver-modus */
+  oCrumbs: string[];
 }
 
-export function TopBar({ path, connected, theme, onTheme, treeHidden, onToggleTree, onHome, mode, onMode, nBad }: Props) {
-  const parts = mode === 'avvik' ? ['krav', '#/avvik'] : path ? path.split('/') : [];
+export function TopBar({ path, connected, theme, onTheme, treeHidden, onToggleTree, onHome, mode, onMode, nBad, oppgaver, nActive, oView, onOView, oCrumbs }: Props) {
+  const parts = mode === 'avvik' ? ['krav', '#/avvik'] : mode === 'oppgaver' ? oCrumbs : path ? path.split('/') : [];
   return (
     <header class="topbar">
       {mode === 'krav' && (
@@ -38,7 +48,22 @@ export function TopBar({ path, connected, theme, onTheme, treeHidden, onToggleTr
         <button aria-pressed={mode === 'avvik'} onClick={() => onMode('avvik')} title={`${nBad} filer med avvik fra konvensjonene`}>
           Avvik{nBad > 0 && <span class="badge">{nBad}</span>}
         </button>
+        {oppgaver && (
+          <button aria-pressed={mode === 'oppgaver'} onClick={() => onMode('oppgaver')} title={`${nActive} aktive oppgaver i tasks/`}>
+            Oppgaver<span class="badge neutral">{nActive}</span>
+          </button>
+        )}
       </div>
+      {mode === 'oppgaver' && (
+        <div class="seg oviewseg" role="group" aria-label="Oppgavevisning">
+          <button aria-pressed={oView === 'mappe'} onClick={() => onOView('mappe')}>
+            <span class="oic-mappe" aria-hidden="true"><span /><span /><span /></span>Mappe
+          </button>
+          <button aria-pressed={oView === 'tavle'} onClick={() => onOView('tavle')}>
+            <span class="oic-tavle" aria-hidden="true"><span /><span /><span /></span>Tavle
+          </button>
+        </div>
+      )}
       <nav class="crumbs" aria-label="Sti">
         {parts.map((p, i) => (
           <span key={i} style={{ display: 'flex', gap: '6px' }}>
