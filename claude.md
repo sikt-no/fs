@@ -197,8 +197,9 @@ Then('skal {string} vises', async ({ page }, tekst: string) => {
 - `fs-specify` — henter `@planned`-krav inn i en oppgave: `tasks/<domene>/<slug>/spec/` (`@planned` → `@in-progress`)
 - `fs-specify-delta` — det samme, men for en endring (commit, branch, test-fil eller markdown)
 - `lage-steps` — step definitions i `tester/steps/` for kravene
+- `fs-oppgave` — oppgavemappa `tasks/<domene>/<slug>/` ut fra malene i `tasks/mal/`: ny oppgave (`oppgave.md` og rad i `roadmap.md`), faseoverganger (`design.md`, `<lag>/plan-<slug>.md`) og review-filer
 
-Typisk flyt: `fs-krav` → `fs-specify` / `fs-specify-delta` → `lage-steps`. Se [`tasks/README.md`](tasks/README.md) for oppgavestrukturen.
+Typisk flyt: `fs-krav` → `fs-oppgave` (ny oppgave) → `fs-specify` / `fs-specify-delta` → `lage-steps`, med `fs-oppgave` for hver faseovergang og review. Se [`tasks/README.md`](tasks/README.md) for oppgavestrukturen. `.claude/rules/tasks-conventions.md` importerer den med `@../../tasks/README.md` når Claude jobber i `tasks/**`.
 
 ## CI/CD
 

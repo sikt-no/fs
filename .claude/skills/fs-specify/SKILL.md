@@ -24,7 +24,7 @@ Alt denne skillen skriver havner i krav-undermappa til én oppgave: **`<spec>/` 
 
 1. **Oppga brukeren en sti eller slug** i invokasjonen (`tasks/opptak/registrere-praksis`, `registrere-praksis`, eller en full sti til `.../spec/`), bruk den. En slug slås opp med `Glob` `tasks/*/<slug>/`; gir den mer enn ett treff, spør hvilken.
 2. **Ellers:** list oppgavemappene `tasks/<domene>/<slug>/` (alle mapper på det nivået, unntatt `mal/`; de fleste har `oppgave.md`) og vis oppgavene som finnes via `AskUserQuestion` (de mest relevante, gjerne filtrert på domenet brukeren nevner), pluss **«Ny oppgave»**.
-3. **Ny oppgave:** spør om `domene` — bare verdier fra domenetabellen i `tasks/README.md` er gyldige — og en kebab-case `slug` (lesbar beskrivelse, ikke issue-nummer; unik innenfor domenet). Opprett bare `tasks/<domene>/<slug>/spec/`. **Skriv ikke `oppgave.md`** — si til brukeren at den lages fra [`tasks/mal/oppgave.md`](../../../tasks/mal/oppgave.md).
+3. **Ny oppgave:** spør om `domene` — bare verdier fra domenetabellen i `tasks/README.md` er gyldige — og en kebab-case `slug` (lesbar beskrivelse, ikke issue-nummer; unik innenfor domenet). Opprett bare `tasks/<domene>/<slug>/spec/`. **Skriv ikke `oppgave.md`** — si til brukeren at den lages med `fs-oppgave` (fra [`tasks/mal/oppgave.md`](../../../tasks/mal/oppgave.md)).
 4. **Opprett `<spec>/`** hvis den ikke finnes.
 
 Regler fra `tasks/README.md` som denne skillen må følge:

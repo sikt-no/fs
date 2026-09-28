@@ -2,7 +2,7 @@
 
 Dette er arbeidsflaten for team i FS som kjører trunk-based utvikling med artefakter versjonert i git. Én mappe per oppgave, delt av alle som jobber på den — mennesker og agenter, på tvers av repoer og maskiner.
 
-Mappa erstatter den gamle `veikart/<team>/oppgaver/`-strukturen. `veikart/opptak/` og `veikart/utdanning/` har fortsatt gammel form inntil de teamene migrerer selv.
+Mappa erstatter den gamle `veikart/<team>/oppgaver/`-strukturen. Alle team er migrert, og `veikart/` er fjernet.
 
 ## Struktur
 
@@ -127,4 +127,4 @@ Et domene kan eies av ett team, og et team kan eie flere domener. Skriv hvilket 
 
 ## Maler
 
-[`mal/`](mal/) inneholder `oppgave.md`, `design.md`, `plan.md` og `review.md`. Kopier dem inn i oppgavemappa og fyll ut. Team som vil avvike, kan legge egne maler i sitt domene — men mapping til issue-status og faseoverganger skal være forutsigbar på tvers.
+[`mal/`](mal/) inneholder `oppgave.md`, `design.md`, `plan.md` og `review.md`. Kopier dem inn i oppgavemappa og fyll ut, eller bruk skillen `fs-oppgave`, som kopierer malene, fyller inn metadata og holder `oppgave.md` og `roadmap.md` i synk ved hver faseovergang. Team som vil avvike, kan legge egne maler i sitt domene — men mapping til issue-status og faseoverganger skal være forutsigbar på tvers.
