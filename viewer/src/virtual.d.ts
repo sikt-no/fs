@@ -9,3 +9,9 @@ declare module 'virtual:krav-git' {
   const git: GitInfo | null;
   export default git;
 }
+
+declare module 'virtual:krav-tasks' {
+  import type { TasksSnapshot } from '../shared/tasks';
+  const tasks: TasksSnapshot;
+  export default tasks;
+}

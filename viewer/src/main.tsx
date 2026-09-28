@@ -2,13 +2,16 @@ import { render } from 'preact';
 import { useEffect, useMemo, useRef, useState } from 'preact/hooks';
 import initial from 'virtual:krav';
 import initialGit from 'virtual:krav-git';
+import initialTasks from 'virtual:krav-tasks';
 import type { FeatureModel, FocusEvent, GitInfo, Scen, Snapshot, Step, UpdateEvent } from '../shared/model';
 import { RULE } from '../shared/rules';
+import { buildTasks, type TasksSnapshot } from '../shared/tasks';
 import { Avvik } from './Avvik';
 import { fixed, NO_FILTER, type Filter } from './health';
 import { FeatureView, scenKey, stepKey } from './FeatureView';
 import { headings, parseMd } from './markdown';
 import { MarkdownView, type MdMode } from './MarkdownView';
+import { Oppgaver, taskKey, type OView } from './Oppgaver';
 import { Outline } from './Outline';
 import { buildTree, Sidebar, type TreeMode } from './Sidebar';
 import { StatusBar } from './StatusBar';
@@ -57,6 +60,25 @@ function asCompact<T>(main: HTMLElement, fn: (offset: number) => T): T {
   return out;
 }
 
+/** Oppgaver-modusen i hashen: `#/oppgaver` (tavle), `#/oppgaver/<dom>/<slug>` (mappe), `#/oppgaver/tavle/<dom>/<slug>` (tavle med panel) */
+interface OState {
+  view: OView;
+  sel: string | null;
+  panel: boolean;
+}
+function parseOppgaverHash(h: string): OState | null {
+  if (h !== 'oppgaver' && !h.startsWith('oppgaver/')) return null;
+  const rest = h.split('/').slice(1).filter(Boolean);
+  if (rest[0] === 'tavle') return rest.length >= 3 ? { view: 'tavle', sel: rest.slice(1, 3).join('/'), panel: true } : { view: 'tavle', sel: null, panel: false };
+  if (rest[0] === 'mappe' && rest.length === 1) return { view: 'mappe', sel: null, panel: false };
+  if (rest.length >= 2) return { view: 'mappe', sel: rest.slice(0, 2).join('/'), panel: false };
+  return { view: 'tavle', sel: null, panel: false };
+}
+function oppgaverHash(o: OState) {
+  if (o.view === 'tavle') return '#/oppgaver' + (o.panel && o.sel ? '/tavle/' + encodeURI(o.sel) : '');
+  return '#/oppgaver/' + (o.sel ? encodeURI(o.sel) : 'mappe');
+}
+
 /** Forsiden: krav/README.md */
 const README = 'krav/README.md';
 
@@ -87,8 +109,10 @@ function changedSteps(prev: FeatureModel | undefined, next: FeatureModel | undef
 function App() {
   const [entries, setEntries] = useState<Snapshot>(initial);
   const [current, setCurrent] = useState(() => (initial[fromHash()] ? fromHash() : defaultPath(initial)));
-  // #/avvik er avviksdashbordet; alle andre hasher er en fil
-  const [mode, setMode] = useState<Mode>(() => (fromHash() === 'avvik' ? 'avvik' : 'krav'));
+  // #/avvik er avviksdashbordet, #/oppgaver… er oppgavene; alle andre hasher er en fil
+  const [mode, setMode] = useState<Mode>(() => (fromHash() === 'avvik' ? 'avvik' : parseOppgaverHash(fromHash()) ? 'oppgaver' : 'krav'));
+  const [tasksSnap, setTasksSnap] = useState<TasksSnapshot>(initialTasks);
+  const [oState, setOState] = useState<OState>(() => parseOppgaverHash(fromHash()) ?? { view: 'tavle', sel: null, panel: false });
   const [avvikFilter, setAvvikFilter] = useState<Filter>(NO_FILTER);
   const [fixMsg, setFixMsg] = useState<string | null>(null);
   // Overskriften i README-en som «Les regelen» skal hoppe til når forsiden er vist
@@ -117,6 +141,8 @@ function App() {
   const tree = useMemo(() => buildTree(entries), [entries]);
   const md = useMemo(() => (entry?.kind === 'md' ? parseMd(entry.source ?? '') : null), [entry]);
   const nBad = useMemo(() => Object.values(entries).filter(e => e.kind === 'feature' && e.path.startsWith('krav/') && e.lint).length, [entries]);
+  const tasks = useMemo(() => buildTasks(tasksSnap), [tasksSnap]);
+  const nActive = tasks.filter(t => t.p < 4).length;
 
   useEffect(() => {
     document.documentElement.dataset.theme = theme;
@@ -183,8 +209,12 @@ function App() {
   useEffect(() => {
     const onHash = () => {
       const p = fromHash();
+      const o = parseOppgaverHash(p);
       if (p === 'avvik') setMode('avvik');
-      else if (state.current.entries[p]) {
+      else if (o) {
+        setMode('oppgaver');
+        setOState(o);
+      } else if (state.current.entries[p]) {
         setMode('krav');
         setCurrent(p);
       }
@@ -235,8 +265,8 @@ function App() {
     };
     let seq = 0;
     const onFocus = (f: FocusEvent) => {
-      // Avviksdashbordet følger ikke markøren i VS Code
-      if (!state.current.entries[f.path] || state.current.mode === 'avvik') return;
+      // Avviksdashbordet og oppgavene følger ikke markøren i VS Code
+      if (!state.current.entries[f.path] || state.current.mode !== 'krav') return;
       if (f.path !== state.current.current) {
         setCurrent(f.path);
         history.pushState(null, '', '#/' + encodeURI(f.path));
@@ -248,6 +278,7 @@ function App() {
     const onDisconnect = () => setConnected(false);
     hot.on('krav:update', onUpdate);
     hot.on('krav:git', setGit);
+    hot.on('krav:tasks', setTasksSnap);
     hot.on('krav:focus', onFocus);
     hot.on('krav:blur', onBlur);
     hot.on('vite:ws:connect', onConnect);
@@ -257,6 +288,7 @@ function App() {
       clearTimeout(fixTimer);
       hot.off('krav:update', onUpdate);
       hot.off('krav:git', setGit);
+      hot.off('krav:tasks', setTasksSnap);
       hot.off('krav:focus', onFocus);
       hot.off('krav:blur', onBlur);
       hot.off('vite:ws:connect', onConnect);
@@ -312,12 +344,22 @@ function App() {
     if (m === 'avvik') {
       setMode('avvik');
       history.pushState(null, '', '#/avvik');
-    } else if (avvikFilter.file && entries[avvikFilter.file]) select(avvikFilter.file); // fila som er valgt i dashbordet
+    } else if (m === 'oppgaver') {
+      setMode('oppgaver');
+      history.pushState(null, '', oppgaverHash(oState));
+    } else if (mode === 'avvik' && avvikFilter.file && entries[avvikFilter.file]) select(avvikFilter.file); // fila som er valgt i dashbordet
     else {
       setMode('krav');
       history.pushState(null, '', '#/' + encodeURI(current));
     }
   };
+  const setOppgaver = (o: OState) => {
+    setOState(o);
+    history.pushState(null, '', oppgaverHash(o));
+  };
+  // Oppgaven Mappe viser: den valgte, ellers den første som ikke er levert
+  const shownTask = tasks.find(t => taskKey(t) === oState.sel) ?? tasks.find(t => t.p < 4) ?? tasks[0];
+  const oCrumbs = oState.view === 'tavle' ? ['tasks', '*/roadmap.md'] : shownTask ? ['tasks', shownTask.dom, shownTask.slug] : ['tasks'];
   const allScenKeys = () => entry?.model?.rules.flatMap((r, ri) => r.scenarios.map((_, si) => scenKey(ri, si))) ?? [];
   const fileName = current.slice(current.lastIndexOf('/') + 1);
 
@@ -341,8 +383,23 @@ function App() {
         mode={mode}
         onMode={changeMode}
         nBad={nBad}
+        nActive={nActive}
+        oView={oState.view}
+        onOView={view => setOppgaver({ ...oState, view, sel: oState.sel ?? (shownTask ? taskKey(shownTask) : null) })}
+        oCrumbs={oCrumbs}
       />
-      {mode === 'avvik' ? (
+      {mode === 'oppgaver' ? (
+        <Oppgaver
+          tasks={tasks}
+          entries={entries}
+          view={oState.view}
+          sel={oState.sel}
+          panel={oState.panel}
+          onSel={(sel, view, panel) => setOppgaver({ sel, view, panel })}
+          onClosePanel={() => setOppgaver({ ...oState, panel: false })}
+          onOpenKrav={path => select(path)}
+        />
+      ) : mode === 'avvik' ? (
         <Avvik entries={entries} filter={avvikFilter} onFilter={setAvvikFilter} onOpen={select} onReadRule={readRule} />
       ) : (
         <div class={'grid' + (treeHidden ? ' notree' : '')}>
@@ -413,7 +470,7 @@ function App() {
         updated={updated}
         lineNumbers={lineNumbers}
         onLineNumbers={() => setLineNumbers(v => !v)}
-        avvik={mode === 'avvik'}
+        avvik={mode !== 'krav'}
         fixMsg={fixMsg}
       />
     </div>

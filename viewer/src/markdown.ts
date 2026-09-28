@@ -155,7 +155,7 @@ export function headings(blocks: Block[]): Heading[] {
   return out;
 }
 
-const GITHUB = 'https://github.com/sikt-no/fs/blob/main/';
+export const GITHUB = 'https://github.com/sikt-no/fs/blob/main/';
 
 /**
  * Relative lenker løses mot mappen til md-filen. Finnes målet i vieweren, blir det en intern lenke

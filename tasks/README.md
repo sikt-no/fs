@@ -54,12 +54,14 @@ Slug-en må være unik innenfor domenet, ikke globalt. Den er en lesbar kebab-ca
 
 ## Fire regler
 
-1. **Aldri `spec-*.md`, `analysis-*.md`, `plan-*.md` eller `verification-*.md` i oppgave-rota.** Dette er ikke stil, det er mekanikk: BAT-verktøyene globber nøyaktig disse mønstrene for å avgjøre hvilket steg som er ferdig. En håndskrevet `plan-krav.md` i rota blir lest som et fullført plansteg og hopper over resten av flyten.
-2. **Lag = rolle.** En plan for et lag hører hjemme i lagets egen undermappe: `<lag>/plan-<slug>.md`, ikke `plan-<lag>.md` i rota. Typiske lag: `spec` (krav), `frontend`, `backend`, `subgraph`, `tester`, `db`, `dokumentasjon`. Bruk bare de lagene oppgaven faktisk rører.
-3. **`spec/` er reservert** for kravene. Det er dit `fs-specify` og `fs-specify-delta` alltid skriver, slik at hvem som helst kan peke på `tasks/<domene>/<slug>/spec/` uten å vite hvilken rolle som produserte resten.
-4. **`mal/` er reservert på domene-nivå** — det er ikke et domene. Malfilene heter `plan.md`, ikke `plan-lag.md`, nettopp for ikke å treffe globbene i regel 1.
+1. **Aldri `spec-*.md`, `analysis-*.md`, `plan-*.md` eller `verification-*.md` i oppgave-rota.** Dette er ikke stil, det er mekanikk: BAT-verktøyene globber nøyaktig disse mønstrene for å avgjøre hvilket steg som er ferdig. En håndskrevet `plan-krav.md` i rota blir lest som et fullført plansteg og hopper over resten av flyten. *(sjekkes i vieweren)*
+2. **Lag = rolle.** En plan for et lag hører hjemme i lagets egen undermappe: `<lag>/plan-<slug>.md`, ikke `plan-<lag>.md` i rota. Typiske lag: `spec` (krav), `frontend`, `backend`, `subgraph`, `tester`, `db`, `dokumentasjon`. Bruk bare de lagene oppgaven faktisk rører. *(`plan-<lag>.md` i rota sjekkes i vieweren)*
+3. **`spec/` er reservert** for kravene. Det er dit `fs-specify` og `fs-specify-delta` alltid skriver, slik at hvem som helst kan peke på `tasks/<domene>/<slug>/spec/` uten å vite hvilken rolle som produserte resten. *(`spec-*.md` og `krav-input/` utenfor `spec/` sjekkes i vieweren)*
+4. **`mal/` er reservert på domene-nivå** — det er ikke et domene. Malfilene heter `plan.md`, ikke `plan-lag.md`, nettopp for ikke å treffe globbene i regel 1. *(sjekkes i vieweren, sammen med domener som ikke står i domenetabellen)*
 
 `oppgave.md`, `design.md`, `memory.md` og `reviews/` treffer ingen glob og hører hjemme i oppgave-rota.
+
+Kravvieweren (`viewer/`, modusen «Oppgaver») sjekker reglene som er merket *(sjekkes i vieweren)*, og viser brudd som avvik på oppgaven. Den sjekker også at `oppgave.md` finnes og har en gyldig `Fase`, at `Slug` og `Domene` i metadataene stemmer med mappa, og at fasen i domenets `roadmap.md` er den samme som i `oppgave.md`. Sjekkene står i `viewer/shared/tasks.ts` og er testet i `viewer/shared/tasks.test.ts`. Endrer du en merket regel, eller legger du til en regel som kan sjekkes, må koden og testene oppdateres i samme endring.
 
 ## Forholdet til GitHub issues og projects
 

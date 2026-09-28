@@ -3,6 +3,9 @@ paths:
   - "krav/README.md"
   - "viewer/server/parse.ts"
   - "viewer/server/parse.test.ts"
+  - "tasks/README.md"
+  - "viewer/shared/tasks.ts"
+  - "viewer/shared/tasks.test.ts"
 ---
 
 # Hold krav/README.md og viewer-parseren i synk
@@ -26,3 +29,7 @@ Endres bare formuleringen, og ikke innholdet i regelen, trenger ikke koden å en
 ## Når du endrer `parse.ts` eller `parse.test.ts`
 
 Det samme gjelder motsatt vei: endrer du en konvensjonssjekk, skal regelen og merket i `krav/README.md` oppdateres i samme endring, slik at README-en fortsatt beskriver det vieweren sjekker.
+
+## Det samme gjelder tasks/README.md
+
+Reglene for oppgavemappene i `tasks/README.md` («Fire regler», domenetabellen og fasene) sjekkes av Oppgaver-modusen i vieweren, i `taskLint` i `viewer/shared/tasks.ts`, og testes i `viewer/shared/tasks.test.ts`. Framgangsmåten over gjelder på samme måte: endres en regel eller domenetabellen i README-en, oppdateres `tasks.ts` (også `DOMAINS` og `KNOWN_LAG`), testene og merket *(sjekkes i vieweren)* i samme endring, og omvendt. Kjør `cd viewer && npm test`, og si fra hvilke oppgavemapper som får nye avvik.
