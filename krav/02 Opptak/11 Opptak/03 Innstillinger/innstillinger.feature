@@ -1,5 +1,5 @@
 # language: no
-@OPT-OPT-INN-001 @must @draft
+@OPT-OPT-INN-001 @must @planned
 Egenskap: Innstillinger for opptak
   Som opptaksforvalter ved forvaltende organisasjon
   ønsker jeg å sette innstillinger for opptaket
@@ -93,17 +93,17 @@ Egenskap: Innstillinger for opptak
 
     Scenario: Aktivere tidlig opptak
       Når opptaksforvalter aktiverer tidlig opptak
-      Så kan opptaksforvalter sette frist for tidlig opptak
-      Og muligheten for tidlig opptak og frist for tidlig opptak blir tilgjengelig for søknad og saksbehandling
-      # Følgevirkninger i søknad og saksbehandling: det blir informert om tidlig opptaksfrist til søkere, det blir mulig for søkere å søke om tidlig opptak, det blir mulig for saksbehandlere å behandle søknader om tidlig opptak
+      Så er tidlig opptak aktivert for opptaket
+      Og muligheten for tidlig opptak blir tilgjengelig for søknad og saksbehandling
+      # Frister for tidlig opptak settes i 04 Frister/frister_og_hendelser.feature
 
   Regel: Opptaksforvalter kan åpne for søknad på ledige studieplasser
 
     Scenario: Aktivere ledige studieplasser
       Når opptaksforvalter angir at opptaket tilbyr søknad på ledige studieplasser
-      Så kan opptaksforvalter sette dato for når ledige studieplasser legges ut
-      Og informasjon om muligheten for ledige studieplasser blir tilgjengelig for søknad og saksbehandling
-      # Følgevirkninger i søknad og saksbehandling: restplasser kan legges ut til søkere for ny søknad etter ordinær plasstildeling, merk at for å få gjort plasstildeling på ledige studieplasser, så må utdanningstilbud åpnes for det, og runde for ledige studieplasser må gjennomføres. 
+      Så er ledige studieplasser aktivert for opptaket
+      Og muligheten for ledige studieplasser blir tilgjengelig for søknad og saksbehandling
+      # Datoer for ledige studieplasser settes i 04 Frister/frister_og_hendelser.feature
 
   Regel: Opptaksforvalter kan angi om det er lov å sette avvikende søknadsfrister
 
@@ -111,18 +111,12 @@ Egenskap: Innstillinger for opptak
       Når opptaksforvalter angir at det er lov å sette tidligere søknadsfrister per utdanningstilbud
       Så kan opptaksforvalter ved deltakende organisasjon sette egne søknadsfrister på sine utdanningstilbud
 
-  Regel: Opptaksforvalter kan angi en siste frist for å endre søkers utdanningsbakgrunn
+  # Frist for endring av utdanningsbakgrunn settes i 04 Frister/frister_og_hendelser.feature
 
-    Scenario: Sette frist for endring av utdanningsbakgrunn
-      Når opptaksforvalter angir en frist for å endre søkers utdanningsbakgrunn
-      Så kan ikke saksbehandlere endre søkers utdanningsbakgrunn etter denne fristen
+  Regel: Opptaksforvalter kan åpne for avvikende søknadsfrister per utdanningsbakgrunn
 
-    Scenario: Generell saksbehandlingsfrist gjelder når egen frist for endring av utdanningsbakgrunn ikke er satt
-      Gitt at opptaksforvalter ikke har angitt en egen frist for å endre søkers utdanningsbakgrunn
-      Så kan saksbehandlere endre søkers utdanningsbakgrunn frem til den generelle saksbehandlingsfristen
-
-    Scenario: Tillate avvikende søknadsfrister per utdanningsbakgrunn @openquestion
-      #jobbes denne med at et annet team?
+    Scenario: Tillate avvikende søknadsfrister per utdanningsbakgrunn
+      Gitt at opptaksforvalter har lagt inn lovlige utdanningsbakgrunner i regelverkssamlingen
       Når opptaksforvalter angir at det er lov å sette avvikende søknadsfrister per utdanningsbakgrunn
       |nordisk|
       |eu/eøs|
@@ -132,12 +126,16 @@ Egenskap: Innstillinger for opptak
       Så kan opptaksforvalter opprette utdanningsbakgrunner med egne søknads- og dokumentasjonsfrister
       Og søker kan se disse fristene
 
-  # Ikke relevant for samordna opptak 2027
+  # Ikke relevant for samordna opptak 2027, men antatt løst allerede
   Regel: Opptaksforvalter kan styre om søkere kan laste opp dokumentasjon
 
     Scenario: Åpne for dokumentasjonsopplasting
       Når opptaksforvalter angir at søkere kan laste opp dokumentasjon
       Så kan søkere laste opp dokumentasjon som del av søknaden
+
+    Scenario: Stenge for dokumentasjonsopplasting
+      Når opptaksforvalter angir at søkere ikke kan laste opp dokumentasjon
+      Så får søkere ikke laste opp dokumentasjon som del av søknaden
 
   @wont
   # Ikke relevant for samordna opptak
