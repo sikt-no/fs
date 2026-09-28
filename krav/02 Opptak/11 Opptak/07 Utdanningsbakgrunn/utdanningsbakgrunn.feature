@@ -31,6 +31,18 @@ Egenskap: Utdanningsbakgrunn i opptak
       Og opptaksforvalter setter dokumentasjonsfrist til "2027-03-15 23:59"
       Så finnes utdanningsbakgrunnen "Utenlandsk utdanning" i opptaket
 
+  Regel: Opptaksforvalter kan sette tidlig søknadsfrist og tidlig dokumentasjonsfrist per utdanningsbakgrunn
+
+    Scenario: Sette tidlig søknadsfrist for utdanningsbakgrunn
+      Gitt at utdanningsbakgrunnen "Realkompetanse" er lagt til i opptaket
+      Når opptaksforvalter setter tidlig søknadsfrist til "2027-03-01 23:59" for utdanningsbakgrunnen "Realkompetanse"
+      Så har søkere med denne utdanningsbakgrunnen en tidligere søknadsfrist enn opptakets generelle frist
+
+    Scenario: Sette tidlig dokumentasjonsfrist for utdanningsbakgrunn
+      Gitt at utdanningsbakgrunnen "Realkompetanse" er lagt til i opptaket
+      Når opptaksforvalter setter tidlig dokumentasjonsfrist til "2027-03-01 23:59" for utdanningsbakgrunnen "Realkompetanse"
+      Så må søkere med denne utdanningsbakgrunnen laste opp dokumentasjon innen denne fristen
+
   Regel: Søkere med utdanningsbakgrunn som har avvikende frister vurderes etter bakgrunnens frister
 
     Scenario: Søker med realkompetanse får avvikende frist
