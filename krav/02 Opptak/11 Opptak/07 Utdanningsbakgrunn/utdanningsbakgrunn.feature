@@ -7,8 +7,8 @@ Egenskap: Utdanningsbakgrunn i opptak
 
   # Utdanningsbakgrunnstyper defineres i regelverket (se 10 Regelverk/06 Utdanningsbakgrunn).
   # Her velger opptaksforvalter hvilke som gjelder for dette opptaket og setter frister.
-
   # I samordna opptak kan kun opptaksforvalter ved forvaltende organisasjon legge til utdanningsbakgrunner.
+
   Bakgrunn:
     Gitt at opptaksforvalter ved forvaltende organisasjon er innlogget
     Og at opptaket "Samordna opptak 2027" er opprettet
