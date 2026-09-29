@@ -14,6 +14,7 @@
     "test": "node --test core/*.test.ts server/*.test.ts shared/*.test.ts src/*.test.ts",
     "vscode:install": "mkdir -p ~/.vscode/extensions && ln -sfn \"$PWD/vscode\" ~/.vscode/extensions/sikt.krav-viewer-sync-1.0.0",
     "app:dev": "electron-vite dev",
+    "app:dev:oppgaver": "electron-vite dev --mode oppgaver",
     "app:build": "electron-vite build",
     "app:dist": "electron-vite build && electron-builder"
   },
