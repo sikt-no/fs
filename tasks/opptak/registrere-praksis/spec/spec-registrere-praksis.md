@@ -55,20 +55,44 @@
 
 ## Åpne spørsmål
 
+Besluttet i avklaringsmøte og ført inn i beslutningssiden «Registrere og beregne praksis: åpne spørsmål» 25.–29.09.2026, med innspill fra Jøran. Kravfila er oppdatert med `fs-krav` 29.09.2026.
+
 Fra kravfila (`@openquestion`):
 
-- [ ] Kan praksisperioder kopieres eller vises (lesbart) på tvers av saker på samme søknad, eller fra tidligere søknader? Er en kopi i så fall uavhengig av originalen?
-- [ ] Skal saksbehandleren kunne markere en praksisperiode som relevant, og hvordan kombineres det med de to overlappssummene? Skissen viser alternativ (1): et relevansflagg som filtrerer summen (avvik 3).
-- [ ] Hvordan regnes en delvis måned: restdager delt på 31, restdager delt på månedens lengde, eller hele perioden i dager delt på 365?
-- [ ] Er registrert praksis og samlet beregning synlig for saksbehandlere uten rollen opptakssaksbehandler, eller er hele praksisseksjonen skjult?
+- [x] Kan praksisperioder kopieres eller vises (lesbart) på tvers av saker på samme søknad, eller fra tidligere søknader? Er en kopi i så fall uavhengig av originalen?
+  - **Beslutning (situasjon C):** Alternativ (a) i denne leveransen, altså en tom kalkulator uten tegn til praksis i andre saker. Å hente inn perioder som egen kopi (c) er ønskelig og flyttes ut i en egen sak, eventuelt begrenset til saker saksbehandleren har lesetilgang til.
+- [x] Skal saksbehandleren kunne markere en praksisperiode som relevant, og hvordan kombineres det med de to overlappssummene? Skissen viser alternativ (1): et relevansflagg som filtrerer summen (avvik 3).
+  - **Beslutning (spørsmål 4):** Alternativ (1). Relevansflagget filtrerer først, og overlapp beregnes bare mellom de relevante periodene. Kalkulatoren knyttes ikke til opptakskrav i denne omgangen (situasjon D).
+- [x] Hvordan regnes en delvis måned: restdager delt på 31, restdager delt på månedens lengde, eller hele perioden i dager delt på 365?
+  - **Beslutning (spørsmål 5):** En måned er alltid 30 dager. Hele kalendermåneder telles, og restdagene deles på 30.
+- [x] Er registrert praksis og samlet beregning synlig for saksbehandlere uten rollen opptakssaksbehandler, eller er hele praksisseksjonen skjult?
+  - **Beslutning (situasjon E):** Nei. Ingen i andre opptak skal kunne se praksisen, og hele praksisdelen er skjult for brukere uten rollen.
 
 Fra skissevalideringen (krav som må endres av `fs-krav`):
 
-- [ ] Praksistype skal være valgfri. Scenarioet «Praksistype og startdato er obligatorisk» må endres (avvik 1).
-- [ ] Arbeidsgiver skal være med som valgfritt felt på praksisperioden og vises i listen (avvik 2).
+- [x] Praksistype skal være valgfri. Scenarioet «Praksistype og startdato er obligatorisk» må endres (avvik 1). **Ført inn.**
+- [x] Arbeidsgiver skal være med som valgfritt felt på praksisperioden og vises i listen (avvik 2). **Ført inn.**
 
 Fra skissevalideringen (uavklart):
 
-- [ ] Skal kalkulatoren vise samlet praksis i timer i tillegg til i år (avvik 5)?
-- [ ] Skal historikk (opprettet og endret av), varselet ved manglende sluttdato og feilmeldingene for datoer skisseres, eller dekkes de bare av kravene (avvik 8)?
-- [ ] Skissen bør oppdateres med overlappsvarsel og to summer, og med riktige eksempeltall (avvik 4 og 7). Hvem eier oppdateringen?
+- [x] Skal kalkulatoren vise samlet praksis i timer i tillegg til i år (avvik 5)?
+  - **Beslutning (spørsmål 7):** Nei. Samlet praksis vises bare i år.
+- [x] Skal historikk (opprettet og endret av), varselet ved manglende sluttdato og feilmeldingene for datoer skisseres, eller dekkes de bare av kravene (avvik 8)?
+  - **Beslutning (spørsmål 8):** Historikk håndteres globalt av en sporingslogg, og scenarioet er tatt ut av kravet. Sluttdato er nå obligatorisk, så varselet ved manglende sluttdato faller bort. Feilmeldingene skisseres av Julia.
+- [x] Skissen bør oppdateres med overlappsvarsel og to summer, og med riktige eksempeltall (avvik 4 og 7). Hvem eier oppdateringen?
+  - **Beslutning (spørsmål 9):** Julia. Et utkast finnes som kopi av seksjonen i Figma («Skisse til claude – oppdatert mot krav (24.09.2026)», node `20770:105097`), men er ikke visuelt kontrollert.
+
+Nye beslutninger fra møtet, ført inn i kravfila:
+
+- **Situasjon A:** Registrert praksis, omfang, relevansmarkering og sum ligger fast på saken.
+- **Situasjon B:** Ved klage vises utregningen slik den var da vedtaket ble fattet. Perioder kan endres etter vedtak når søkeren har klaget, og det vedtaket bygde på skal fortsatt kunne ses.
+- **Situasjon F:** I overlapp regnes det aldri mer enn 100 % stilling, men saksbehandleren får et varsel.
+
+Nye konsekvenser for skissen:
+
+- [ ] Dialogen har «Sluttdato (valgfri)». Sluttdato er nå obligatorisk (spørsmål 8).
+- [ ] Oversikten viser «Relevant»-avkrysning. Det stemmer med beslutningen, men summene må regnes bare av de relevante periodene.
+
+Nytt åpent spørsmål i kravfila:
+
+- [ ] Er en ny praksisperiode markert som relevant som standard, eller må saksbehandleren markere den selv? Kom fram da spørsmål 4 ble ført inn.
