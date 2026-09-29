@@ -28,28 +28,6 @@ Egenskap: Innstillinger for opptak
       Gitt at opptaket har utdanningstilbud som bruker regler fra gjeldende regelverkssamling
       Så kan ikke opptaksforvalter endre regelverkssamlingen
 
-  # Løses av teamet som jobber med utdanningstilbud?
-  Regel: Opptaksforvalter setter kriterier for hvilke typer og nivåer av utdanninger som kan delta i opptaket
-
-    Scenario: Sette utdanningstype
-      Når opptaksforvalter setter at opptaket kun skal ha studieprogram
-      Så er det kun studieprogram som kan legges til som utdanningstilbud
-
-    Scenario: Sette NKR-nivåer for UHG-opptak
-      Når opptaksforvalter setter at opptaket kun skal ha studieprogram
-      Og opptaksforvalter setter at NKR-nivåene 6.1 Høgskolekandidat, 6.2 Bachelor, 7 Master
-      Så er det kun studieprogram på disse nivåene som kan legges til som utdanningstilbud i opptaket
-
-    Scenario: Sette NKR-nivåer for HYU-opptak
-      Når opptaksforvalter setter at opptaket kun skal ha studieprogram
-      Og opptaksforvalter setter at NKR-nivåene 5.1 fagskole og 5.2 fagskole
-      Så er det kun fagskoleutdanninger av typen studieprogram som kan legges til som utdanningstilbud
-
-    Scenario: Utdanninger utenfor kriteriene er ikke tilgjengelige
-      Gitt at opptaket kun tillater studieprogram på 6.2 bachelornivå
-      Så dukker ikke emner opp som mulige utdanningstilbud
-      Og studieprogram på 7 masternivå dukker ikke opp som mulige utdanningstilbud
-
   # Poenglikhetsregel for ledige studieplasser styres av rundetypen i plasstildelingen,
   # ikke av opptakets standard poenglikhetsregel. Se krav/02 Opptak/14 Plasstildeling/.
   Regel: Opptaksforvalter setter standard poenglikhetsregel for opptaket
@@ -104,27 +82,6 @@ Egenskap: Innstillinger for opptak
       Så er ledige studieplasser aktivert for opptaket
       Og muligheten for ledige studieplasser blir tilgjengelig for søknad og saksbehandling
       # Datoer for ledige studieplasser settes i 04 Frister/frister_og_hendelser.feature
-
-  Regel: Opptaksforvalter kan angi om det er lov å sette avvikende søknadsfrister
-
-    Scenario: Tillate avvikende søknadsfrister per utdanningstilbud
-      Når opptaksforvalter angir at det er lov å sette tidligere søknadsfrister per utdanningstilbud
-      Så kan opptaksforvalter ved deltakende organisasjon sette egne søknadsfrister på sine utdanningstilbud
-
-  # Frist for endring av utdanningsbakgrunn settes i 04 Frister/frister_og_hendelser.feature
-
-  Regel: Opptaksforvalter kan åpne for avvikende søknadsfrister per utdanningsbakgrunn
-
-    Scenario: Tillate avvikende søknadsfrister per utdanningsbakgrunn
-      Gitt at opptaksforvalter har lagt inn lovlige utdanningsbakgrunner i regelverkssamlingen
-      Når opptaksforvalter angir at det er lov å sette avvikende søknadsfrister per utdanningsbakgrunn
-      |nordisk|
-      |eu/eøs|
-      |utenfor eu/eøs|
-      |realkompetanse|
-      |steinerskolen|
-      Så kan opptaksforvalter opprette utdanningsbakgrunner med egne søknads- og dokumentasjonsfrister
-      Og søker kan se disse fristene
 
   # Ikke relevant for samordna opptak 2027, men antatt løst allerede
   Regel: Opptaksforvalter kan styre om søkere kan laste opp dokumentasjon
