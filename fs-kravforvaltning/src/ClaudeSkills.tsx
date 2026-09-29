@@ -4,9 +4,9 @@ import { transport } from './transport';
 
 // Skillene Claude har utenom de som kan velges (plugins, personlige). Lista huskes, så de kan avvises
 // også før Claude har startet og meldt dem i denne økta. Oppdateres hver gang Claude starter.
-const OTHER = 'krav-viewer:claudeSkillsOther';
+const OTHER = 'kravforvaltning:claudeSkillsOther';
 /** Skillen en ny samtale starter med: den som sist ble valgt */
-const LAST = 'krav-viewer:claudeSkill';
+const LAST = 'kravforvaltning:claudeSkill';
 const read = <T,>(key: string, fallback: T): T => {
   try {
     return (JSON.parse(localStorage.getItem(key) ?? 'null') as T) ?? fallback;

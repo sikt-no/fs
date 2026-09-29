@@ -40,7 +40,7 @@ const EDITABLE = boot.editable;
 // localStorage kan være utilgjengelig (privat vindu, blokkert lagring)
 function load<T>(key: string, fallback: T): T {
   try {
-    const v = localStorage.getItem('krav-viewer:' + key);
+    const v = localStorage.getItem('kravforvaltning:' + key);
     return v === null ? fallback : (JSON.parse(v) as T);
   } catch {
     return fallback;
@@ -48,7 +48,7 @@ function load<T>(key: string, fallback: T): T {
 }
 function save(key: string, value: unknown) {
   try {
-    localStorage.setItem('krav-viewer:' + key, JSON.stringify(value));
+    localStorage.setItem('kravforvaltning:' + key, JSON.stringify(value));
   } catch {
     /* ignorer */
   }

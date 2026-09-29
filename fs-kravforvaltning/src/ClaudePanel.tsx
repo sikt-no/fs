@@ -24,7 +24,7 @@ import { transport } from './transport';
 
 // Samtalene lever utenfor komponenten og lagres i localStorage, så de blir stående når panelet lukkes,
 // visningen byttes eller vieweren lastes inn på nytt. Claude Code husker selve samtalene (`--resume`).
-const KEY = 'krav-viewer:claudeChats';
+const KEY = 'kravforvaltning:claudeChats';
 const read = (): unknown => {
   try {
     return JSON.parse(localStorage.getItem(KEY) ?? 'null');

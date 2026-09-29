@@ -14,7 +14,9 @@ export default defineConfig(({ mode }) => ({
   // Hele krav/-snapshotet bygges inn i bundelen ved statisk bygg
   build: { chunkSizeWarningLimit: 2000 },
   server: {
+    // Fast port: localStorage (samtaler, sist viste fil) lagres per origin
     port: 5173,
+    strictPort: true,
     fs: { allow: [repoRoot] },
   },
 }));

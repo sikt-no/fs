@@ -32,6 +32,9 @@ export default defineConfig({
         load: id => (id.startsWith('\0virtual:krav') ? 'export default null;' : undefined),
       },
     ],
+    // Fast port: localStorage (samtaler, sist viste fil) lagres per origin, så en ny port gir tom viewer.
+    // Egen port, så appen kan kjøre samtidig med `npm run dev` (5173)
+    server: { port: 5273, strictPort: true },
     build: {
       outDir: 'out/renderer',
       rolldownOptions: { input: 'index.html' },
