@@ -143,10 +143,9 @@ Egenskap: Legge til runder for plasstildeling i et opptak
       Så kan opptaksforvalter ikke sette antall tilbud som skal gis på utdanningstilbudene i opptaket
 
 # ÅPNE SPØRSMÅL:
-# - Tidligopptak (UHG): skal det være en egen rundetype? Nevnt i Confluence «Samordnet plasstildeling»,
-#   men ikke blant de fire rundetypene som ble besluttet i design.md 2026-09-15. Vi er usikre.
-#   Merk at opptaket allerede kan åpne for tidlig opptak (11 Opptak/03 Innstillinger/innstillinger.feature),
-#   og utdanningstilbud kan markeres for tidlig tilbud (12 Utdanningstilbud/opptaksinnstillinger_utdanningstilbud.feature).
+# - AVKLART: Tidligopptak er ikke en rundetype. Søker søker om tidlig opptak, vurderes individuelt, og
+#   kan gis tilbudsgaranti. Forutsetter at lærestedet har satt minimum rangeringspoeng for tidlig tilbud.
+#   Tilbudsgarantien gir tilbud i hovedtildelingen (se gjennomføre_plasstildeling.feature).
 # - design.md kaller ledige studieplasser både en egen rundetype og «en egenskap ved en etterfyllingsrunde».
 #   Hvilken av dem gjelder?
 # - Kan en runde fjernes? Siden rundetypen ikke kan endres, er fjerning eneste måte å rette feil rundetype.

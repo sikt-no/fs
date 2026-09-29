@@ -79,6 +79,9 @@ Egenskap: Vise resultatet av plasstildelingen
       Og lærestedets status «ikke godkjent» står uendret
 
 # ÅPNE SPØRSMÅL:
+# - Tilgangsstyring for opptaksforvalter i samordna opptak: skal opptaksforvalter ved ett lærested
+#   se resultater for alle utdanningstilbud i opptaket, eller bare egne? design.md kaller dette et
+#   personvernfunn (del 2). Inndeling per organisasjon gjelder også opptaksforvalter, ikke bare saksbehandler.
 # - Når en søker har både et tilbud og et kansellert resultat på samme utdanningstilbud, hva skal vises?
 # - Resultatet lagres i dag to steder (per plasstildeling og på søknadsalternativet). Hvilket er fasit
 #   for visningen i saksbehandlingen?

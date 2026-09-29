@@ -83,6 +83,26 @@ Egenskap: Innstillinger for opptak
       Og muligheten for ledige studieplasser blir tilgjengelig for søknad og saksbehandling
       # Datoer for ledige studieplasser settes i 04 Frister/frister_og_hendelser.feature
 
+  Regel: Opptaksforvalter kan legge til utdanningsbakgrunner som gjelder for opptaket
+
+    # Opptaksforvalter velger blant godkjente utdanningsbakgrunner fra utdanningsbakgrunn-tabellen.
+    # Avvikende søknads- og dokumentasjonsfrister per utdanningsbakgrunn settes i
+    # 04 Frister/frister_og_hendelser.feature.
+
+    Scenario: Legge til utdanningsbakgrunner fra godkjent liste
+      Når opptaksforvalter legger til utdanningsbakgrunner i opptaket
+      Så kan opptaksforvalter velge blant utdanningsbakgrunner som er registrert i tabellen for godkjente utdanningsbakgrunner
+
+    Scenario: Legge til flere utdanningsbakgrunner
+      Når opptaksforvalter legger til utdanningsbakgrunnene "Realkompetanse", "Utenlandsk utdanning" og "Steinerskole" i opptaket
+      Så finnes disse utdanningsbakgrunnene i opptaket
+      Og søkere kan velge blant dem når de angir sin utdanningsbakgrunn
+
+    Scenario: Fjerne en utdanningsbakgrunn fra opptaket
+      Gitt at utdanningsbakgrunnen "Steinerskole" er lagt til i opptaket
+      Når opptaksforvalter fjerner "Steinerskole" fra opptaket
+      Så er "Steinerskole" ikke lenger tilgjengelig som utdanningsbakgrunn i opptaket
+
   # Ikke relevant for samordna opptak 2027, men antatt løst allerede
   Regel: Opptaksforvalter kan styre om søkere kan laste opp dokumentasjon
 
@@ -103,3 +123,6 @@ Egenskap: Innstillinger for opptak
       Så kan kun studenter med studierett ved lærestedet søke
 
   # Saksbehandlertildeling er flyttet til samordnet_opptak.feature — kun relevant for samordnede opptak
+  # Mulighet til å åpne for at utdanningstilbud skal kunne sette avvikende frister fra opptaket, gjelder foreløbig globalt
+  # fordi det ikke har vært et problem at læresteder setter alternative frister uten avklaring med hk-dir før. Fristen settes på utdanningstilbudet.
+
