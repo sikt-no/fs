@@ -58,8 +58,9 @@ Egenskap: Tildele saksbehandlende organisasjon etter utdanningsbakgrunn
       Når en søker sender inn en søknad med utdanningsbakgrunnen "Utenlandsk videregående" og utdanningslandet "Sverige"
       Så tildeles søknaden en saksbehandlende organisasjon etter standard tildeling
 
-  @implemented
   Regel: Saksbehandler kan filtrere søknader på utdanningsbakgrunn
+
+    # Filtrering på utdanningsbakgrunn finnes i dagens løsning.
 
     Scenario: Filtrere på utdanningsbakgrunn
       Gitt at saksbehandleren ser søknadsoversikten for "Samordna opptak 2027"
