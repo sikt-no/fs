@@ -25,7 +25,7 @@
 # - Dokumentasjonen knyttes ikke til de enkelte dokumentasjonskravene. Den
 #   ligger på søknaden, og saksbehandleren ser krav og dokumenter hver for seg.
 # - Saksbehandleren kan vurdere når som helst, også før dokumentasjonsfristen.
-#   Dokumentasjon etter fristen er ikke mulig, se frister_og_tidsperioder.feature.
+#   Dokumentasjon etter fristen er ikke mulig, se frister_og_hendelser.feature.
 # - Kvalifisering vurderes mot det ordinære kompetanseregelverket for
 #   utdanningstilbudene. Tidlig opptak har ikke eget regelverk.
 # - Kvalifiseringen registreres ikke i denne featuren. Den kommer fra den

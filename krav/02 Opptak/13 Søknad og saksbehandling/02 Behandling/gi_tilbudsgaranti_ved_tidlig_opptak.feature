@@ -13,9 +13,13 @@
 # Confluence PFS 3885400152 «Tilbudsgaranti».
 #
 # Vurderingene konklusjonen bygger på står i vurdere_søknad_om_tidlig_opptak.feature.
-# Publiseringsdatoen for tidlig opptak settes på opptaket, se
-# frister_og_tidsperioder.feature. Poenggrensen for tidlig tilbud settes per
-# utdanningstilbud, se opptaksinnstillinger_utdanningstilbud.feature.
+# Poenggrensen for tidlig tilbud settes per utdanningstilbud, se
+# opptaksinnstillinger_utdanningstilbud.feature.
+#
+# Featuren slutter når tilbudsgarantiene er tildelt. Publiseringsdatoen og
+# meldingen til søkerne står i publisere_svar_på_tidlig_opptak.feature
+# (OPT-OPT-TID-001), og hva søkeren ser, i se_svar_på_tidlig_opptak.feature
+# (OPT-SØK-SØK-005). Begge kommer med #642.
 #
 # AVKLART 25.09.2026
 #
@@ -40,9 +44,14 @@
 #   søknadsalternativet på samme prioritet.
 # - Garantien er et minimum. Når søkeren når opp på et høyere prioritert
 #   søknadsalternativ, gjelder ordinær plasstildeling.
-# - Når søkeren ikke får tilbudsgaranti, forklarer svaret årsaken.
-# - Språket i svaret følger den generelle regelen for meldinger til søkere.
-#   Featuren har ingen egen språkregel.
+#
+# BEGREPSBRUK
+#
+# - «Innvilget tidlig opptak» (brukt i #642) betyr at søkeren har fått
+#   tilbudsgaranti gjennom tidligopptaket.
+# - «Gjennomføre tidligopptaket» er det samme som tildelingsrutinen i #642.
+# - Behandler med T-rolle er tilbyder. Manuell tilbudsgaranti fra T-rolle er
+#   det #642 kaller tilbudsgaranti gitt av tilbyder.
 #
 @OPT-BEH-BEH-007 @must @draft
 Egenskap: Gi tilbudsgaranti ved tidlig opptak
@@ -110,7 +119,9 @@ Egenskap: Gi tilbudsgaranti ved tidlig opptak
   # ÅPNE SPØRSMÅL:
   # - Gir poeng lik poenggrensen tilbudsgaranti? STEK-188 sier «over».
   # - Må gjennomføringen skje før publiseringsdatoen, og kan den kjøres
-  #   flere ganger?
+  #   flere ganger? Prosesshypotesen i notatet «2026-09-23 tidligopptaks-svar
+  #   til søker» (se #642) sier før, som prosessrekkefølge og ikke systemregel,
+  #   og nevner omkjøringer.
   Regel: Opptaksforvalter gjennomfører tidligopptaket
 
     Scenariomal: Tilbudsgaranti ut fra poenggrensen
@@ -174,47 +185,8 @@ Egenskap: Gi tilbudsgaranti ved tidlig opptak
       Når søkeren flytter "Sykepleie, høst 2027" til prioritet 2
       Så har søkeren ikke lenger tilbudsgaranti på "Sykepleie, høst 2027"
 
-  @openquestion
-  # ÅPNE SPØRSMÅL:
-  # - Hva skjer med søknader som konkluderes etter at tidligopptaket er
-  #   gjennomført? Tidligere avklart at svaret da publiseres straks, men det
-  #   var før modellen med gjennomføring og poenggrense. Må avklares på nytt.
-  Regel: Svar publiseres på opptakets publiseringsdato for tidlig opptak
-
-    Scenario: Svar publiseres ikke før publiseringsdatoen
-      Gitt publiseringsdatoen for tidlig opptak i opptaket er "2027-04-15"
-      Og opptaksforvalter har gjennomført tidligopptaket "2027-04-10"
-      Så har søkeren ikke fått svar på søknaden om tidlig opptak før "2027-04-15"
-
-    Scenario: Svar publiseres på publiseringsdatoen
-      Gitt publiseringsdatoen for tidlig opptak i opptaket er "2027-04-15"
-      Og opptaksforvalter har gjennomført tidligopptaket
-      Når publiseringsdatoen "2027-04-15" er nådd
-      Så får søkeren svar på søknaden om tidlig opptak
-
-  @openquestion
-  # ÅPNE SPØRSMÅL:
-  # - Hvilke kanaler brukes? Confluence nevner e-post og SMS, #525 nevner
-  #   innboksen i Min kompetanse. Avklares mot 09 Kommunikasjon.
-  Regel: Svaret til søkeren tilpasses utfallet
-
-    Scenario: Svar når søkeren har fått tilbudsgaranti
-      Gitt søkeren har tilbudsgaranti på "Sykepleie, høst 2027"
-      Når søkeren får svar på søknaden om tidlig opptak
-      Så får søkeren beskjed om at søkeren har tilbudsgaranti på "Sykepleie, høst 2027"
-
-    Scenariomal: Svaret forklarer hvorfor søkeren ikke fikk tilbudsgaranti
-      Gitt søkeren fikk ikke tilbudsgaranti fordi <årsak>
-      Når søkeren får svar på søknaden om tidlig opptak
-      Så får søkeren beskjed om at søkeren ikke fikk tilbudsgaranti
-      Og søkeren får beskjed om at <forklaring>
-      Og søkeren får beskjed om at søknaden behandles videre i ordinært opptak
-
-      Eksempler:
-        | årsak                                | forklaring                                                             |
-        | begrunnelsen ikke er dokumentert     | begrunnelsen for tidlig opptak ikke er dokumentert                     |
-        | søkeren ikke er kvalifisert          | søkeren ikke er kvalifisert til søknadsalternativene med tidlig tilbud |
-        | søkeren har poeng under poenggrensen | søkeren har poeng under poenggrensen for tidlig tilbud                 |
-
 # ÅPNE SPØRSMÅL:
 # - Hva skjer med søknader om tidlig opptak som ikke blir konkludert?
+# - Hva skjer med søknader som konkluderes etter at tidligopptaket er
+#   gjennomført? Tidligere avklart at svaret da publiseres straks, men det
+#   var før modellen med gjennomføring og poenggrense. Må avklares på nytt.
