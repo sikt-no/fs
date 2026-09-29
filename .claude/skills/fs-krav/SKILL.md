@@ -13,7 +13,11 @@ description: >
   `@draft` med åpne spørsmål dokumentert. Brukes også for enkeltstående
   feature-filer ("skrive krav", "lage feature-fil", "skrive BDD-scenario").
   Fjerner også krav: ikke-leverte krav slettes, leverte krav (`@implemented`)
-  tagges `@deprecated` til `fs-verify` har vist at koden er borte.
+  tagges `@deprecated` til `fs-verify` har vist at koden er borte. Endrer
+  leverte krav ("endre krav", "oppdatere levert krav", "ny versjon av regel"):
+  egenskapen blir stående `@implemented`, den nye delen legges ved siden av som
+  `@draft` og får `@planned` når den er validert, og delen den erstatter får
+  `@deprecated`.
 ---
 
 # Definere krav
@@ -36,13 +40,14 @@ Skillen fasiliterer derfor også **validering** av skisserte krav (modus B): Gå
 
 ## Arbeidsmoduser
 
-Skillen har tre moduser. Velg modus basert på hva brukeren ber om. Hvis det er uklart, spør.
+Skillen har fire moduser. Velg modus basert på hva brukeren ber om. Hvis det er uklart, spør.
 
 | Modus | Når | Følg |
 |-------|-----|------|
 | **A. Nytt kravarbeid** | Bruker starter på et nytt initiativ / skal lage nye krav fra bunnen | *Prosess: Nytt kravarbeid* (steg 1–7) |
 | **B. Fullføre krav i mappe** | Bruker peker på en eksisterende mappe og vil gå gjennom og validere kravene, slik at de validerte kan få `@planned`. Trigge-ord: "fullføre krav i [mappe]", "få kravene klare", "tagge med planned", "ferdigstille iterasjon N" | *Prosess: Fullføre krav i mappe* (steg F1–F5) |
 | **C. Fjerne krav** | Bruker vil slette et krav, eller en regel/et scenario i et krav. Trigge-ord: "fjerne krav", "slette krav", "avvikle", "dette skal ikke lenger gjelde" | *Prosess: Fjerne krav* (steg D1–D4) |
+| **D. Endre levert krav** | Bruker vil endre eller utvide et krav som er `@implemented`. Trigge-ord: "endre krav", "oppdatere levert krav", "ny versjon av regel", "kravet skal nå være" | *Prosess: Endre levert krav* (steg E1–E4) |
 
 Modusene kan kjedes: fullføring avdekker ofte behov for nye scenarios eller nye features, som da følger modus A videre.
 
@@ -139,7 +144,7 @@ Bekreft samlet innhold med brukeren før du skriver til disk.
 
 Feature-ID settes som tag på filen: `@DOM-SUB-KAP-NNN` (3-bokstavs forkortelser for domene/sub-domene/kapabilitet, utledet fra mappenavn, pluss neste ledige løpenummer). Tag-linja er alltid `@DOM-SUB-KAP-NNN @<moscow> @draft`.
 
-Når du legger til en ny `Regel:` eller et nytt scenario i en fil som allerede er `@planned`/`@in-progress`, tagges den nye delen `@draft @openquestion` til den er validert, med mindre brukeren eksplisitt sier at den er klar.
+Når du legger til en ny `Regel:` eller et nytt scenario i en fil som allerede er `@planned`/`@in-progress`, tagges den nye delen `@draft @openquestion` til den er validert, med mindre brukeren eksplisitt sier at den er klar. Er fila `@implemented`, følg modus D (*Endre levert krav*): leverte deler endres ikke på stedet.
 
 Format:
 
@@ -215,11 +220,11 @@ Skillen foreslår aldri `@planned` ut fra egen vurdering av at innholdet «ser f
 |-------------|------------|
 | `@draft` | Gå gjennom kravet (F4). Validert → bytt `@draft` med `@planned` på `Egenskap:`. Deler som bevisst skal vente kan stå igjen som `@draft @openquestion`. Ikke validert → behold `@draft` og dokumenter hva som mangler. |
 | Ingen status — gjelder eldre filer | Regnes som ikke validert. Legg til `@draft` og ta kravet med i gjennomgangen (F3). |
-| Allerede `@planned` / `@in-progress` / `@implemented` / `@deprecated` | Ingen endring. |
+| Allerede `@planned` / `@in-progress` / `@implemented` / `@deprecated` | Ingen endring. Unntak: `@draft`-deler under en `@implemented` egenskap valideres som i modus D (steg E3). |
 
 Bakgrunnen: `@draft` markerer at *kravteksten* er utkast (kravstatus), og `@planned` markerer at *kravet er klart til implementasjon* (implementasjonsstatus). Når et draft er ferdigstilt, fjernes `@draft` og erstattes av `@planned` på `Egenskap:` — vi beholder ikke begge samtidig på samme linje, og vi lar ikke krav stå uten status. `@draft` kan likevel stå igjen på enkelt-`Regel:`/`Scenario:` under en `@planned` egenskap når det er en bevisst beslutning. Se `krav/README.md` (*Kravstatus* og *Delvis utkast*) for den autoritative definisjonen.
 
-**Denne skillen eier overgangene `@draft` → `@planned` og `@implemented` → `@deprecated` (modus C).** Resten av implementasjonsaksen (`@in-progress`, `@implemented`, og slettingen av `@deprecated`-krav) er beskrevet i `krav/README.md` og settes ikke her. Et krav du finner som `@in-progress` er plukket inn i en oppgave, og skal stå urørt.
+**Denne skillen eier overgangene `@draft` → `@planned` og `@implemented` → `@deprecated` (modus C), på egenskaper og, når et levert krav endres, på deler (modus D).** Resten av implementasjonsaksen (`@in-progress`, `@implemented`, og slettingen av `@deprecated`-krav) er beskrevet i `krav/README.md` og settes ikke her. Et krav du finner som `@in-progress` er plukket inn i en oppgave, og skal stå urørt.
 
 ### Interaksjonsprinsipp: ett spørsmål om gangen
 
@@ -262,7 +267,7 @@ Les hver `.feature`-fil og klassifiser hvert krav basert på tags på `Egenskap:
 | **Draft** | `@draft` finnes | F4: gjennomgang. `@planned` bare hvis validert |
 | **Uten status** | Verken `@draft` eller `@planned` (heller ikke `@in-progress`/`@implemented`) | F3: legg til `@draft`, deretter gjennomgang i F4 |
 | **Avviklet** | `@deprecated` finnes | Ingen endring — rapporter som avviklet. Slettes av `fs-verify` når koden er borte |
-| **Allerede klar** | `@planned`, `@in-progress` eller `@implemented` finnes, og `@draft` finnes ikke | Ingen endring — rapporter som klar. Har fila `@draft`-deler på `Regel:`/`Scenario:`, list dem og spør om noen skal avklares nå (F4, trinn 5–6 for den delen) |
+| **Allerede klar** | `@planned`, `@in-progress` eller `@implemented` finnes, og `@draft` finnes ikke | Ingen endring — rapporter som klar. Har fila `@draft`-deler på `Regel:`/`Scenario:`, list dem og spør om noen skal avklares nå (F4, trinn 5–6 for den delen). Under `@implemented`: bruk modus D, steg E3 (delen får `@planned`, og delen den erstatter, `@deprecated`) |
 
 Vis brukeren en oversikt før du gjør endringer, med klikkbare lenker:
 
@@ -340,7 +345,7 @@ Finn fila, og eventuelt regelen eller scenarioet, som skal bort. Er det uklart, 
 | Hele kravet | `@in-progress` | Spør om noe av kravet allerede er levert (fra en tidligere iterasjon). Ja → som `@implemented`. Nei → slett fila, og si fra at oppgaven som har hentet kravet inn, må oppdateres. |
 | Hele kravet | `@deprecated` | Allerede avviklet. Ingen endring. |
 | En regel/et scenario | `@draft` eller `@planned` | Ikke levert. Slett blokken (med tagger og kommentarer). |
-| En regel/et scenario | `@implemented` eller `@in-progress` | Er delen `@draft`, er den ikke levert: slett blokken. Ellers: legg `@deprecated` på `Regel:`-/`Scenario:`-linja. `Egenskap:`-taggen endres ikke. |
+| En regel/et scenario | `@implemented` eller `@in-progress` | Er delen `@draft`, `@planned` eller `@in-progress`, er den ikke levert: slett blokken (erstatter den en `@deprecated`-del, spør om den gamle delen skal gjelde igjen, og fjern i så fall `@deprecated` fra den). Ellers: legg `@deprecated` på `Regel:`-/`Scenario:`-linja. `Egenskap:`-taggen endres ikke. |
 
 **Mekanikk:** én `Edit` på tag-linja. Bare statustaggen byttes; feature-ID, MoSCoW og andre tagger står urørt: `@BRU-APP-API-001 @must @implemented` → `@BRU-APP-API-001 @must @deprecated`. Mangler delen en tag-linje, legg en ny linje med `@deprecated` rett over `Regel:`/`Scenario:`, med samme innrykk.
 
@@ -353,6 +358,60 @@ Vis brukeren hva som skal skje (fil, del, `@deprecated` eller sletting), og vent
 - Hvilke krav/deler som ble slettet, og hvilke som fikk `@deprecated`
 - Step definitions i `tester/steps/` som hørte til slettede scenarioer (listes, slettes ikke)
 - Neste steg for `@deprecated`: fjern koden, og kjør `fs-verify` for å slette kravet når koden er borte
+
+## Prosess: Endre levert krav
+
+Et levert krav endres ikke på stedet. Den leverte teksten beskriver koden som finnes, og den nye teksten beskriver det som skal bygges. Begge står i fila til koden er endret. Se *Endring av levert krav* i `krav/README.md` for den autoritative regelen.
+
+Endringen spores på delen, ikke på egenskapen:
+
+- Egenskapen blir stående som `@implemented`.
+- Den nye eller endrede delen går `@draft` →(validering)→ `@planned`. Deretter tar `fs-specify` / `fs-specify-delta` og `fs-verify` over.
+- Delen den erstatter, får `@deprecated` når den nye blir `@planned`.
+
+### E1. Finn kravet og delen
+
+Finn fila og regelen eller scenarioet som skal endres. Er det uklart, spør. Les `Egenskap:`-tag-linja:
+
+| Status på `Egenskap:` | Håndtering |
+|------------------------|------------|
+| `@implemented` | Fortsett med E2. |
+| `@draft` eller `@planned` | Ingenting er levert. Endre delen på stedet (modus A/B). |
+| `@in-progress` | Spør om delen som endres, allerede er levert (fra en tidligere iterasjon). Nei → endre på stedet, og si fra at oppgaven som har hentet kravet inn, må oppdateres. Ja → si at dette ikke støttes: vent til egenskapen er `@implemented`, eller avklar med brukeren. |
+| `@deprecated` | Kravet er avviklet. Skal det gjelde igjen, er det et nytt krav (modus A). |
+
+Hvilke deler endringen gjelder, avklares med brukeren, én om gangen: endres, fjernes eller legges til?
+
+### E2. Skriv den nye delen som `@draft`
+
+- **Endring:** legg den nye versjonen som en egen blokk rett etter delen den erstatter, tagget `@draft` (og `@openquestion` med `# ÅPNE SPØRSMÅL:` når noe er uklart). Den gamle blokken står urørt. Gi den nye blokken en tittel som skiller den fra den gamle.
+- **Tillegg:** legg den nye blokken der den hører hjemme, tagget `@draft`. Det finnes ingen gammel del.
+- **Fjerning:** følg modus C (D2): den leverte delen får `@deprecated`.
+
+Endres hele kravet, gjelder det samme for hver regel som endres. Uendrede regler står urørt. Er kravet så endret at det ikke lenger henger sammen, foreslå et nytt krav (modus A), og at det gamle avvikles (modus C).
+
+Samme regler som i modus A: ikke finn på forretningslogikk, spør. Bekreft innholdet med brukeren før du skriver til disk.
+
+### E3. Valider
+
+Gå gjennom den nye delen som i F4 (ett spørsmål om gangen). Når hovedflyten er avklart, spør: *"Er [tittel] validert slik det står nå? (a) Ja → `@planned` (og [gammel del] får `@deprecated`), (b) Nei → beholder `@draft`."* Ta med parentesen bare når delen erstatter en gammel del.
+
+Ved (a), i samme endring:
+
+- Den nye delen: bytt `@draft` med `@planned` på `Regel:`-/`Scenario:`-linja, og fjern `@openquestion` og besvarte `# ÅPNE SPØRSMÅL:`.
+- Delen den erstatter (ikke ved et rent tillegg): legg `@deprecated` på `Regel:`-/`Scenario:`-linja (ny linje med samme innrykk hvis den mangler tagger).
+- `Egenskap:`-tag-linja endres ikke.
+
+En del har høyst én statustag. `@planned` står aldri sammen med `@draft` eller `@deprecated`.
+
+Setter brukeren eksplisitt at delen skal ha `@planned`, gjelder det samme unntaket som i F3.
+
+### E4. Oppsummer
+
+- Hvilke deler som er `@planned`, og hvilke som fortsatt er `@draft` (med åpne spørsmål)
+- Hvilke deler som fikk `@deprecated`, og hvilken ny del de erstattes av
+- Step definitions i `tester/steps/` som hører til `@deprecated`-delene (listes, slettes ikke)
+- Neste steg: `fs-specify` / `fs-specify-delta` henter `@planned`-delene inn i en oppgave (`@planned` → `@in-progress` på delen), og `fs-verify` fjerner `@in-progress` når koden er på plass og sletter `@deprecated`-delene når den gamle koden er borte
 
 ## Feilhåndtering
 
@@ -369,4 +428,4 @@ Vis brukeren hva som skal skje (fil, del, `@deprecated` eller sletting), og vent
 - **`references/eksempel-feature.feature`** — gullstandard-eksempel på en ferdigstilt (`@planned`) `.feature`-fil med `# GitHub:` (valgfri), MoSCoW-tag, `Bakgrunn`, flere `Regel`-blokker, `Scenariomal` med `Eksempler`, `@openquestion`-tag på ett scenario, en `Regel` som bevisst står som `@draft @openquestion`, og `# ÅPNE SPØRSMÅL:`-kommentarer. Et nytt krav fra modus A ser likt ut, men med `@draft` i stedet for `@planned` og uten `@draft` på enkeltdeler
 - **`krav/krav-oversikt.md`** — generert oversikt over alle eksisterende features
 - **`lage-steps`** — søsken-skill i dette repoet. Implementerer step-definitions i `tester/steps/` for `@planned`-krav (ikke for `@draft`-deler)
-- **`fs-specify`** / **`fs-specify-delta`** — søsken-skills i dette repoet. Henter `@planned`-krav inn i en oppgavemappe under `tasks/`
+- **`fs-specify`** / **`fs-specify-delta`** — søsken-skills i dette repoet. Henter `@planned`-krav, og `@planned`-deler i leverte krav, inn i en oppgavemappe under `tasks/`

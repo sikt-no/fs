@@ -66,7 +66,7 @@ test('nøyaktig én statustag på Egenskap', () => {
   assert.ok(has(feature({ tags: '@OPT-REG-KRA-001 @must @draft @planned' }), 'flere statustagger'));
 });
 
-test('bare @draft som statustag under Egenskap', () => {
+test('@planned på del under en @planned egenskap', () => {
   const body = `  @planned
   Scenario: Opprette et opptak
     Gitt jeg er innlogget`;
@@ -294,6 +294,58 @@ test('en del er ikke både @draft og @deprecated', () => {
     Gitt jeg er innlogget`;
   assert.ok(hasRule(feature({ tags: '@OPT-REG-KRA-001 @must @implemented', body: both }), 'deprecated-and-draft'));
   assert.ok(!hasRule(feature({ tags: '@OPT-REG-KRA-001 @must @implemented', body: only }), 'deprecated-and-draft'));
+});
+
+test('@planned og @in-progress på del er bare lov under en @implemented egenskap', () => {
+  const change = (st: string) => `  Regel: Uendret
+    Scenario: Opprette et opptak
+      Gitt jeg er innlogget
+
+  @deprecated
+  Regel: Gammel eksport
+    Scenario: Eksportere til CSV
+      Gitt jeg er innlogget
+
+  ${st}
+  Regel: Ny eksport
+    Scenario: Eksportere til Excel
+      Gitt jeg er innlogget`;
+  for (const st of ['@planned', '@in-progress']) {
+    const src = feature({ tags: '@OPT-REG-KRA-001 @must @implemented', body: change(st) });
+    assert.deepEqual(rules(src), [], st);
+    const m = parseFeature(src, PATH);
+    assert.equal(m.partialChange, true);
+    assert.equal(displayStatus({ status: 'implemented', partialChange: m.partialChange }), 'changing');
+    for (const fst of ['@planned', '@in-progress', '@draft']) {
+      const body = `  ${st}
+  Regel: Ny eksport
+    Scenario: Eksportere til Excel
+      Gitt jeg er innlogget`;
+      assert.ok(hasRule(feature({ tags: `@OPT-REG-KRA-001 @must ${fst}`, body }), 'status-on-part'), `${st} under ${fst}`);
+    }
+  }
+  assert.equal(parseFeature(feature({ tags: '@OPT-REG-KRA-001 @must @implemented' }), PATH).partialChange, false);
+});
+
+test('@implemented settes aldri på en del', () => {
+  const body = `  @implemented
+  Scenario: Opprette et opptak
+    Gitt jeg er innlogget`;
+  assert.ok(hasRule(feature({ tags: '@OPT-REG-KRA-001 @must @implemented', body }), 'status-on-part'));
+});
+
+test('en del har høyst én statustag', () => {
+  const part = (tags: string) => `  ${tags}
+  Scenario: Opprette et opptak
+    # ÅPNE SPØRSMÅL:
+    # - Hvem kan opprette opptak?
+    Gitt jeg er innlogget`;
+  const impl = '@OPT-REG-KRA-001 @must @implemented';
+  for (const t of ['@planned @in-progress', '@planned @draft @openquestion', '@in-progress @deprecated'])
+    assert.ok(hasRule(feature({ tags: impl, body: part(t) }), 'part-multiple-statuses'), t);
+  assert.ok(!hasRule(feature({ tags: impl, body: part('@planned @openquestion') }), 'part-multiple-statuses'));
+  // @draft + @deprecated har sin egen regel
+  assert.ok(!hasRule(feature({ tags: impl, body: part('@draft @deprecated @openquestion') }), 'part-multiple-statuses'));
 });
 
 test('hver regel peker på en overskrift som finnes i krav/README.md («Les regelen»)', () => {

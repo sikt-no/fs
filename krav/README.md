@@ -162,7 +162,7 @@ Implementasjonsstatusen beveger seg langs én akse, og hvert steg har én eier:
 
 `@draft` →(`fs-krav`)→ `@planned` →(`fs-specify` / `fs-specify-delta`)→ `@in-progress` →(`fs-verify`)→ `@implemented` →(`fs-krav`)→ `@deprecated` →(`fs-verify`)→ slettet
 
-Et krav skal ha nøyaktig én av disse på `Egenskap:`-tag-linja. Ikke sett to samtidig, og ikke la et krav stå uten status. `@planned`, `@in-progress` og `@implemented` hører bare hjemme på `Egenskap:` – på `Regel:`/`Scenario:` er `@draft` og `@deprecated` de eneste statustaggene. *(sjekkes automatisk)*
+Et krav skal ha nøyaktig én av disse på `Egenskap:`-tag-linja. Ikke sett to samtidig, og ikke la et krav stå uten status. På `Regel:`/`Scenario:` brukes `@draft` og `@deprecated`. `@planned` og `@in-progress` er bare lov på en del under en `@implemented` egenskap, når et levert krav endres (se *Endring av levert krav*). `@implemented` settes aldri på en del: en levert del har ingen egen statustag. *(sjekkes automatisk)*
 
 Den tidligere taggen `@levert` er erstattet av `@implemented`. *(sjekkes automatisk)*
 
@@ -176,6 +176,7 @@ Det samme gjelder `@in-progress` og `@implemented`. En `@implemented` egenskap m
 - `@draft` på en `Regel:` gjelder alle scenarioene under den.
 - `# ÅPNE SPØRSMÅL:` er påkrevd sammen med `@openquestion`. *(sjekkes automatisk)* En `@draft`-del uten `@openquestion` er et utkast som ikke er gjennomgått enda. *(sjekkes automatisk)*
 - En `@draft`-del skal ikke implementeres før den er avklart. Når den er avklart, fjernes `@draft`, `@openquestion` og den besvarte kommentaren. `Egenskap:`-taggen endres ikke av det.
+- Under en `@implemented` egenskap fjernes ikke `@draft` uten videre, for da ser delen levert ut. En avklart del får `@planned` i stedet, og delen den erstatter, får `@deprecated`. Se *Endring av levert krav*.
 - Under en `Egenskap:` som selv er `@draft` skal deler **ikke** tagges `@draft` (det er dekket av egenskapen). *(sjekkes automatisk)* `@openquestion` kan fortsatt brukes for å peke ut konkrete spørsmål.
 
 Forskjellen på `@openquestion` alene og `@draft @openquestion`:
@@ -221,6 +222,35 @@ Egenskap: ...
 
   @deprecated
   Regel: Eksport til CSV
+    Scenario: ...
+```
+
+### Endring av levert krav
+
+Et krav som er levert (`@implemented`), endres ikke på stedet. Den leverte teksten beskriver koden som finnes, og den nye teksten beskriver det som skal bygges. Begge står i fila til koden er endret.
+
+- Egenskapen blir stående som `@implemented`. Statusen for endringen står på delen (`Regel:` eller `Scenario:`/`Scenariomal:`).
+- Den nye eller endrede delen legges som en egen blokk, rett etter delen den erstatter. Den starter som `@draft` (med `@openquestion` og `# ÅPNE SPØRSMÅL:` ved uklarheter), som alle nye krav. Den gamle delen står urørt så lenge den nye er utkast.
+- Når den nye delen er validert (`fs-krav`), byttes `@draft` med `@planned`, og delen den erstatter, får `@deprecated` i samme endring. En del som bare fjernes, får `@deprecated` (se *Avvikling*). Et rent tillegg har ingen gammel del.
+- Delen går deretter langs samme akse som en egenskap: `@planned` →(`fs-specify` / `fs-specify-delta`)→ `@in-progress` →(`fs-verify`)→ levert. Når `fs-verify` har funnet koden, fjernes `@in-progress` fra delen, og delen arver `@implemented` fra egenskapen. `@deprecated`-delen slettes av `fs-verify` når koden er borte.
+- `@planned` og `@in-progress` på en del er bare lov under en `@implemented` egenskap. Under `@draft`, `@planned` eller `@in-progress` er ingenting levert, så delen endres på stedet. *(sjekkes automatisk)*
+- En del har høyst én statustag. `@planned` og `@in-progress` kombineres ikke med hverandre, med `@draft` eller med `@deprecated`. *(sjekkes automatisk)*
+
+FS Kravforvaltning viser et levert krav med `@planned`- eller `@in-progress`-deler med statusen «endres».
+
+```gherkin
+@BRU-APP-API-001 @must @implemented
+Egenskap: ...
+
+  Regel: Hovedflyt som ikke endres
+    Scenario: ...
+
+  @deprecated
+  Regel: Eksport til CSV
+    Scenario: ...
+
+  @planned
+  Regel: Eksport til Excel
     Scenario: ...
 ```
 

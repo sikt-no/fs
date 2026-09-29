@@ -59,6 +59,9 @@ export function Outline({ model, headings, onJump, onFoldAll, onOpenAll }: Props
                 <span class="mono">
                   {n} {n === 1 ? 'scenario' : 'scenarioer'}
                   {draft && ' · utkast'}
+                  {r.tags.includes('@planned') && ' · planlagt'}
+                  {r.tags.includes('@in-progress') && ' · under arbeid'}
+                  {r.tags.includes('@deprecated') && ' · avviklet'}
                   {q > 0 && <span class="oq"> · ? {q}</span>}
                 </span>
               </span>

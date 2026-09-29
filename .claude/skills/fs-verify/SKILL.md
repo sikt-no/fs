@@ -1,6 +1,6 @@
 ---
 name: fs-verify
-description: Verifiserer krav mot koden i dette repoet. Tar en `krav/`-sti eller en oppgave (`tasks/<domene>/<slug>`) og lokale kloner av kode-repoene. For hvert `@in-progress`-krav leter skillen etter implementasjonen av hvert scenario i koden, viser bevis (`fil:linje`), og retagger `@in-progress` → `@implemented` på `Egenskap:`-linja når alt er funnet og brukeren bekrefter. For hvert `@deprecated`-krav (egenskap eller `Regel:`/`Scenario:`) leter skillen etter spor i koden. Er koden borte og brukeren bekrefter, slettes fila eller blokken; finnes den fortsatt, listes stedene. Skriver rapport i chat, og i `tasks/<domene>/<slug>/spec/verify-<YYYY-MM-DD>.md` når en oppgave er gitt. Kjører aldri git add/commit/push. Trigges av "verifiser kravene", "er kravene implementert", "tagg kravene som implementert", "sjekk om deprecated-krav kan slettes", "rydd i deprecated", "finnes koden fortsatt", "fs-verify".
+description: Verifiserer krav mot koden i dette repoet. Tar en `krav/`-sti eller en oppgave (`tasks/<domene>/<slug>`) og lokale kloner av kode-repoene. For hvert `@in-progress`-krav leter skillen etter implementasjonen av hvert scenario i koden, viser bevis (`fil:linje`), og retagger `@in-progress` → `@implemented` på `Egenskap:`-linja når alt er funnet og brukeren bekrefter. En `@in-progress`-del (`Regel:`/`Scenario:`) i et levert krav som endres, verifiseres på samme måte, og da fjernes `@in-progress` fra delen. For hvert `@deprecated`-krav (egenskap eller `Regel:`/`Scenario:`) leter skillen etter spor i koden. Er koden borte og brukeren bekrefter, slettes fila eller blokken; finnes den fortsatt, listes stedene. Skriver rapport i chat, og i `tasks/<domene>/<slug>/spec/verify-<YYYY-MM-DD>.md` når en oppgave er gitt. Kjører aldri git add/commit/push. Trigges av "verifiser kravene", "er kravene implementert", "tagg kravene som implementert", "sjekk om deprecated-krav kan slettes", "rydd i deprecated", "finnes koden fortsatt", "fs-verify".
 allowed-tools: Read, Write, Edit, Grep, Glob, Bash, AskUserQuestion
 ---
 
@@ -17,7 +17,7 @@ Du sammenligner kravene med koden, og lukker løkka tilbake til kravene. Du eier
 `@in-progress` →(**`fs-verify`**)→ `@implemented` →(`fs-krav`)→ `@deprecated` →(**`fs-verify`**)→ slettet
 
 - **Ikke skriv eller rett applikasjonskode.** Mangler noe, rapporterer du det.
-- **Ikke endre kravinnhold.** Du bytter bare statustaggen på `Egenskap:`-linja, og sletter filer eller blokker som er `@deprecated`.
+- **Ikke endre kravinnhold.** Du bytter bare statustaggen på `Egenskap:`-linja, fjerner `@in-progress` fra deler i leverte krav som endres, og sletter filer eller blokker som er `@deprecated`.
 - **Påstå aldri mer enn du har sett.** Bevis er et konkret sted i koden (`fil:linje`) som du har lest. Et søk uten treff er ikke bevis for at koden er borte, bare at du ikke fant den. Derfor bekrefter brukeren alle retagginger og slettinger.
 
 ## I FS Kravforvaltning
@@ -55,7 +55,9 @@ Les hver `.feature`-fil i scope og sorter:
 | `@in-progress` på `Egenskap:` | *Verifisere implementasjon* |
 | `@deprecated` på `Egenskap:` | *Verifisere at koden er borte* (hele fila) |
 | `@deprecated` på `Regel:`/`Scenario:` (under `@implemented` eller `@in-progress`) | *Verifisere at koden er borte* (blokken) |
-| `@implemented` uten `@deprecated`-deler | Allerede levert — rapporter, ingen endring |
+| `@in-progress` på `Regel:`/`Scenario:` (under `@implemented`) | *Verifisere implementasjon* (delen), se *Deler i leverte krav som endres* |
+| `@planned` på `Regel:`/`Scenario:` (under `@implemented`) | Ikke hentet inn i en oppgave — rapporter, og henvis til `fs-specify` |
+| `@implemented` uten `@in-progress`-, `@planned`- eller `@deprecated`-deler | Allerede levert — rapporter, ingen endring |
 | `@draft`, `@planned`, ingen status | Ikke klar for verifisering — rapporter, og henvis til `fs-krav` / `fs-specify` |
 | To statustagger på `Egenskap:` | Stopp for denne fila og rapporter |
 
@@ -78,6 +80,15 @@ Ett krav om gangen:
 5. **Retagg `@in-progress` → `@implemented`** bare når gating-settet ikke er tomt, **alle** gating-scenarioer er `funnet`, brukeren svarte **Stemmer**, og ingen `@openquestion` står igjen i fila. Én `Edit` på `Egenskap:`-tag-linja; bare statustaggen byttes: `@OPT-SOK-VIS-001 @must @in-progress` → `@OPT-SOK-VIS-001 @must @implemented`. `@draft`- og `@deprecated`-deler står urørt.
 
 Ellers står kravet som `@in-progress`, og det som mangler, kommer i rapporten.
+
+### Deler i leverte krav som endres
+
+Når et levert krav endres, står egenskapen som `@implemented`, og statusen på delen (se *Endring av levert krav* i `krav/README.md`). En `@in-progress`-del verifiseres som et krav, med disse forskjellene:
+
+- **Gating-sett** = scenarioene i delen (for en `Regel:`: alle scenarioene under den), minus de som er tagget `@openquestion` eller `@demo`.
+- Spørsmålet i steg 4 gjelder delen: «Stemmer vurderingen for `<feature-ID> — <tittel på delen>`?»
+- **Når alt er funnet og brukeren svarte Stemmer:** fjern `@in-progress` fra `Regel:`-/`Scenario:`-linja med én `Edit`. Andre tagger på linja står urørt. Blir linja tom, fjern hele linja. Delen arver da `@implemented` fra egenskapen. `Egenskap:`-linja endres ikke.
+- Erstatter delen en `@deprecated`-del, verifiser den `@deprecated`-delen i samme kjøring (*Verifisere at koden er borte*). Den nye koden kan være på plass selv om den gamle ikke er fjernet enda, og da blir den `@deprecated`-delen stående.
 
 ## Verifisere at koden er borte (`@deprecated`)
 
@@ -109,6 +120,7 @@ Skriv rapporten i chat. Når en oppgave er gitt, skriv den også til `<oppgave>/
 ## Oppsummering
 
 - Retagget `@in-progress` → `@implemented`: N
+- Deler i leverte krav som er levert (`@in-progress` fjernet): N
 - Fortsatt `@in-progress`: N
 - Slettet (`@deprecated`): N filer, N regler/scenarioer
 - `@deprecated` som fortsatt finnes i koden: N
@@ -116,6 +128,11 @@ Skriv rapporten i chat. Når en oppgave er gitt, skriv den også til `<oppgave>/
 ## Retagget til @implemented
 
 | Feature-ID | Egenskap | Fil | Gating funnet |
+| --- | --- | --- | --- |
+
+## Deler levert
+
+| Feature-ID | Del | Fil | Gating funnet |
 | --- | --- | --- | --- |
 
 ## Fortsatt @in-progress
@@ -147,4 +164,4 @@ Ikke `git add`, `commit`, `push`, `checkout` eller `stash` i noe repo. Lesende g
 - **`krav/README.md`** — statusaksen, *Delvis utkast* og *Avvikling*.
 - **[`tasks/README.md`](../../../tasks/README.md)** — oppgavestrukturen og reglene for `spec/`.
 - **`fs-krav`** — setter `@deprecated` når et levert krav skal fjernes.
-- **`fs-specify` / `fs-specify-delta`** — setter `@in-progress`.
+- **`fs-specify` / `fs-specify-delta`** — setter `@in-progress`, på egenskaper og på deler i leverte krav som endres.

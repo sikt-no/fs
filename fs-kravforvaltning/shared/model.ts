@@ -1,8 +1,8 @@
 export const STATUSES = ['draft', 'planned', 'in-progress', 'implemented', 'deprecated'] as const;
 export type Status = (typeof STATUSES)[number];
 
-/** Statusene slik vieweren viser dem: statustaggen, pluss ingen status og delvis utkast. Rekkefølgen er legendens. */
-export const DISPLAY_STATUSES = ['draft', 'planned', 'in-progress', 'implemented', 'deprecated', 'none', 'partial'] as const;
+/** Statusene slik vieweren viser dem: statustaggen, pluss ingen status, delvis utkast og levert krav som endres. Rekkefølgen er legendens. */
+export const DISPLAY_STATUSES = ['draft', 'planned', 'in-progress', 'implemented', 'deprecated', 'none', 'partial', 'changing'] as const;
 export type DisplayStatus = (typeof DISPLAY_STATUSES)[number];
 
 export const STATUS_LABEL: Record<DisplayStatus, string> = {
@@ -13,10 +13,12 @@ export const STATUS_LABEL: Record<DisplayStatus, string> = {
   deprecated: 'deprecated',
   none: 'ingen status',
   partial: 'delvis utkast',
+  changing: 'endres',
 };
 
-export function displayStatus(e: { status: Status | null; partialDraft?: boolean }): DisplayStatus {
+export function displayStatus(e: { status: Status | null; partialDraft?: boolean; partialChange?: boolean }): DisplayStatus {
   if (!e.status) return 'none';
+  if (e.partialChange && e.status === 'implemented') return 'changing';
   if (e.partialDraft && e.status !== 'draft' && e.status !== 'deprecated') return 'partial';
   return e.status;
 }
@@ -90,6 +92,7 @@ export interface FeatureModel {
   questions: Question[]; // alle åpne spørsmål i filen, flatt
   lint: Lint[]; // avvik fra gherkin-konvensjonene
   partialDraft: boolean; // egenskapen er ikke @draft, men har @draft-deler
+  partialChange: boolean; // egenskapen er @implemented, og har @planned- eller @in-progress-deler (en endring av levert krav)
   nLines: number;
   nRules: number;
   nScen: number;
@@ -100,6 +103,7 @@ export interface Entry {
   kind: 'feature' | 'md';
   status: Status | null;
   partialDraft?: boolean;
+  partialChange?: boolean;
   lint?: number; // antall konvensjonsavvik
   model?: FeatureModel; // sist gyldige versjon
   error?: string;
