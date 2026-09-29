@@ -29,8 +29,7 @@ Skillen fasiliterer derfor også **validering** av skisserte krav (modus B): Gå
 - Arbeidet skjer i `krav/`-mappen i dette repoet. Skillen leser og skriver kun `krav/`-treet — ikke `tasks/`.
 - Konvensjoner er definert i `krav/README.md` — følg dem, den er autoritativ. Ren Gherkin-syntaks står i `references/gherkin-syntax.md`.
 - Kjente persona: administrator, søker, student, saksbehandler
-- **GitHub-saksnummer er påkrevd** når fila opprettes, slettes, `Egenskap:`-tittelen endres, eller `# GitHub:`-referansen byttes — se *Når må GitHub-issue synkroniseres?* under. Endringer i scenarios, regler eller brukerhistorie krever **ikke** GitHub-oppdatering.
-- GitHub-operasjonene (verifisering, opprettelse, sub-issue-linking, tittel-oppdatering, lukking) kan delegeres til `fs-github`-skillen når den er tilgjengelig. Er den ikke det, kjører denne skillen `gh`-kommandoene selv — se *GitHub-operasjoner* under steg 1a. Denne skillen avgjør uansett *når* en operasjon skal kjøres.
+- **GitHub-issue er valgfritt.** Oppgir brukeren et issue når kravet opprettes, skrives det som `# GitHub: #NNNN` over tag-linja (se steg 6). Skillen oppretter, endrer, linker eller lukker ikke GitHub-issues, og kjører ikke `gh`.
 - **Confluence-bakgrunn er ofte tilgjengelig** via Atlassian-MCP (`mcp__claude_ai_Atlassian_Rovo__*`). Draft-filer refererer gjerne til kilden med en kommentar som `# Krav fra Confluence: K6 ...`. Bruk MCP-en til å hente siden når brukeren oppgir en URL/ID — **ikke** søk bredt i Confluence av eget initiativ; spør først.
 
 ## Arbeidsmoduser
@@ -44,25 +43,6 @@ Skillen har to moduser. Velg modus basert på hva brukeren ber om. Hvis det er u
 
 Modusene kan kjedes: fullføring avdekker ofte behov for nye scenarios eller nye features, som da følger modus A videre.
 
-## Når må GitHub-issue synkroniseres?
-
-GitHub sporer *kravets eksistens og identitet* — ikke kravets innhold. Innholdet eies av `.feature`-fila, og git-historikken gir sporbarhet.
-
-| Endring i `.feature` | Oppdater GitHub? |
-|----------------------|------------------|
-| Ny fil opprettes | **Ja** — opprett issue (linket som sub-issue), sett `# GitHub: #NNN` |
-| Fil slettes | **Ja** — lukk tilhørende issue med forklaring |
-| Tittel på `Egenskap:` endres | **Ja** — oppdater issue-tittel så de er i synk |
-| `# GitHub:`-referanse byttes (nytt saksnr) | **Ja** — verifiser nytt issue, oppdater fila |
-| Scenarios legges til / endres / fjernes | Nei |
-| `Regel:`-seksjoner endres | Nei |
-| Brukerhistorien justeres (`Som en... / ønsker... / slik at...`) | Nei |
-| Tags (`@must`, `@implemented`, ...) endres | Nei |
-| Åpne spørsmål legges til / fjernes | Nei |
-| Filen flyttes eller omdøpes | Nei — `# GitHub:`-referansen følger med |
-
-Praktisk konsekvens: når brukeren ber om å legge til et scenario eller rette en `Regel:`, er `gh`-flyten i steg 1a ikke relevant. Hopp direkte til filendringen.
-
 ## Prosess: Nytt kravarbeid
 
 ### 1. Forstå initiativet
@@ -72,61 +52,8 @@ Hvis brukeren allerede har jobbet med et initiativ i denne samtalen, bruk det ut
 - Hva heter initiativet / hvilken funksjonalitet skal spesifiseres?
 - Hvem er aktørene?
 - Hvilket domene hører dette til? (se `krav/` for eksisterende domener)
-- **Hvilket GitHub-saksnummer hører kravet til?** (f.eks. `#1234`)
+- **Hører kravet til et GitHub-issue?** (f.eks. `#1234`). Valgfritt: svarer brukeren "nei" eller "hopp over", skrives fila uten `# GitHub:`-linje.
 - **Finnes det bakgrunnsinformasjon i Confluence** som skal legges til grunn? (side-URL, tiny-link eller side-ID — f.eks. en kravspesifikasjon, en workshop-oppsummering, eller en K-nummerert kravliste). Hvis ja, hent innholdet via `mcp__claude_ai_Atlassian_Rovo__getConfluencePage` før du begynner å skrive scenarios. Bruker sier "nei" eller "hopp over" → fortsett uten.
-
-### 1a. Verifiser eller opprett GitHub-issue
-
-Dette steget eier *hva* som skal avklares med brukeren. Selve `gh`-kallene er beskrevet under *GitHub-operasjoner* nedenfor.
-
-**Hvis brukeren oppgir et eksisterende saksnummer:** verifiser issuet, og vis tittelen tilbake til brukeren for bekreftelse. Stopp og avklar hvis issuet er lukket eller tittelen ikke matcher.
-
-**Hvis brukeren ikke har et issue:** tilby å opprette et. Avklar disse to tingene først:
-
-1. **Parent-issue (initiativ/epic)** — alle nye krav-issues skal linkes som sub-issue. Spør: *"Hvilket parent-issue (initiativ/epic) skal dette nye issuet linkes under?"* og ikke fortsett uten svar. Verifiser parent-issuet og bekreft med brukeren at det er riktig.
-2. **Tittel og kort beskrivelse** for det nye issuet (inkludér gjerne en `Parent: #<PARENT>`-linje i body som backup hvis sub-issue-koblingen feiler).
-
-Opprett deretter issuet og link det som sub-issue til parent. Bruk det returnerte issue-nummeret videre i `# GitHub: #<NNNN>`-linjen i `.feature`-fila.
-
-**Ved oppdatering av eksisterende krav:** steg 1a gjelder kun når selve identiteten endres (fila opprettes/slettes, `Egenskap:`-tittelen endres, eller saksnummeret skal byttes). Ved ren innholdsredigering — nye/endrede scenarios, justerte regler, nye åpne spørsmål — trenger du ikke verifisere eller oppdatere GitHub. Se tabellen i *Når må GitHub-issue synkroniseres?*.
-
-Hvis tittelen på `Egenskap:` endres, oppdater tittelen på det linkede issuet så de er i synk.
-
-#### GitHub-operasjoner
-
-**Er `fs-github`-skillen tilgjengelig, deleger dit** — den eier disse operasjonene og holder dem oppdatert. Er den ikke det, kjør kommandoene under direkte. Begge veier gir samme resultat.
-
-Forutsetter at `gh` er installert og autentisert. Repo utledes fra git remote (`sikt-no/fs`); overstyr med `--repo <owner>/<repo>` ved behov.
-
-```bash
-# Verifisere et issue — returner tittel og state til brukeren for bekreftelse
-gh issue view <NNN> --json number,title,state,url
-
-# Opprette nytt issue — plukk ut issue-nummeret fra outputen
-gh issue create --title "<TITTEL>" --body "<BODY>"
-
-# Oppdatere tittel / lukke
-gh issue edit <NNN> --title "<NY TITTEL>"
-gh issue close <NNN> --comment "<KORT BEGRUNNELSE>"
-```
-
-**Linke det nye issuet som sub-issue under parent** — to fallgruver, begge nødvendige:
-
-```bash
-# 1. Sub-issue-API-et bruker intern ID, ikke issue-nummer
-NEW_ID=$(gh api repos/{owner}/{repo}/issues/<NEW_NUMBER> --jq .id)
-
-# 2. Bruk -F (stor F). -f sender streng, og API-et krever integer → 422 Invalid property
-gh api repos/{owner}/{repo}/issues/<PARENT_NUMBER>/sub_issues \
-  -X POST \
-  -F sub_issue_id="$NEW_ID"
-
-# Verifiser at koblingen er på plass
-gh api repos/{owner}/{repo}/issues/<PARENT_NUMBER>/sub_issues \
-  --jq '[.[] | {number, title, state}]'
-```
-
-Feiler sub-issue-kallet (404/403 forekommer på repo der API-et ikke er tilgjengelig): issuet er allerede opprettet, så ikke opprett det på nytt. Rapportér at koblingen manglet, og støtt deg på `Parent: #<PARENT>`-linja i body.
 
 ### 2. Plasser kravet riktig i mappestrukturen
 
@@ -248,9 +175,9 @@ Egenskap: {EGENSKAP_NAVN}
 
 `Scenariomal` brukes når samme atferd skal verifiseres med flere konkrete dataverdier — `Eksempler:` skal aldri brukes uten en `Scenariomal:` over seg. For et fullt utfylt eksempel med realistiske scenarios, se `references/eksempel-feature.feature`.
 
-**GitHub-saksnummer er påkrevd** og plasseres som en Gherkin-kommentar `# GitHub: #NNNN` på **linjen rett over tag-linjen** for `Egenskap`-en (mellom `# language: no` og `@DOM-SUB-KAP-NNN`-taggen). Referansen tilhører egenskapen konseptuelt, men skrives utenfor `Egenskap`-blokken slik at den er synlig uten å scrolle gjennom brukerhistorien.
+**`# GitHub:`-linja er valgfri.** Den skrives bare når brukeren har oppgitt et issue, som en Gherkin-kommentar `# GitHub: #NNNN` på **linjen rett over tag-linjen** for `Egenskap`-en (mellom `# language: no` og `@DOM-SUB-KAP-NNN`-taggen). Referansen tilhører egenskapen konseptuelt, men skrives utenfor `Egenskap`-blokken slik at den er synlig uten å scrolle gjennom brukerhistorien.
 
-Ved oppdatering: hvis eksisterende fil mangler `# GitHub:`-linjen, legg den til rett over tag-linjen. Hvis en egenskap dekker flere issues, list alle: `# GitHub: #1234, #1250`.
+Dekker en egenskap flere issues, list alle: `# GitHub: #1234, #1250`. En eksisterende `# GitHub:`-linje blir stående når fila endres, flyttes eller omdøpes.
 
 Hvis en fil noen gang inneholder flere `Egenskap:`-blokker, plasseres én `# GitHub:`-kommentar over hver sine tag-linje — slik at referansen alltid er direkte knyttet til egenskapen like under.
 
@@ -262,7 +189,7 @@ Vis brukeren:
 
 - Sti til opprettet/oppdatert `.feature`-fil (som klikkbar markdown-lenke)
 - Feature-ID som ble tildelt
-- **GitHub-saksnummer som er linket** (`#NNNN`), og parent-issue hvis nyopprettet (`↳ under #<PARENT>`)
+- GitHub-issue (`#NNNN`), hvis brukeren oppga et
 - Antall scenarios og prioritet
 - Åpne spørsmål som gjenstår
 - At kravet står som `@draft`
@@ -381,8 +308,6 @@ Ta ett draft-krav om gangen. For hvert:
 
 **Hvis et draft ikke lar seg fullføre i denne sesjonen** (venter på ekstern input, produktavklaring, design-beslutning) og delvis utkast ikke er aktuelt: behold `@draft`, dokumenter gjenværende usikkerhet som oppdatert `# ÅPNE SPØRSMÅL:`, og rapporter tydelig i F5 at kravet fortsatt er draft.
 
-**GitHub-synk:** Typisk fullføring endrer *innhold* — ikke identitet — så GitHub-operasjonene i steg 1a er ikke relevante. Se tabellen i *Når må GitHub-issue synkroniseres?*. Oppdater bare hvis `Egenskap:`-tittelen endres eller fila flyttes/omdøpes.
-
 ### F5. Oppsummer arbeidet
 
 Når hele mappen er gjennomgått, rapportér til brukeren:
@@ -406,8 +331,7 @@ Når hele mappen er gjennomgått, rapportér til brukeren:
 
 - **`krav/README.md`** — autoritative prosjektkonvensjoner for mappestruktur, Feature-ID, tags, terminologi
 - **`references/gherkin-syntax.md`** — ren Gherkin-syntaks (norske nøkkelord, blokkstruktur, tag-plassering). Sier ingenting om prosjektets konvensjoner — det eier konvensjonsfila over
-- **`references/eksempel-feature.feature`** — gullstandard-eksempel på en ferdigstilt (`@planned`) `.feature`-fil med `# GitHub:`, MoSCoW-tag, `Bakgrunn`, flere `Regel`-blokker, `Scenariomal` med `Eksempler`, `@openquestion`-tag på ett scenario, en `Regel` som bevisst står som `@draft @openquestion`, og `# ÅPNE SPØRSMÅL:`-kommentarer. Et nytt krav fra modus A ser likt ut, men med `@draft` i stedet for `@planned` og uten `@draft` på enkeltdeler
+- **`references/eksempel-feature.feature`** — gullstandard-eksempel på en ferdigstilt (`@planned`) `.feature`-fil med `# GitHub:` (valgfri), MoSCoW-tag, `Bakgrunn`, flere `Regel`-blokker, `Scenariomal` med `Eksempler`, `@openquestion`-tag på ett scenario, en `Regel` som bevisst står som `@draft @openquestion`, og `# ÅPNE SPØRSMÅL:`-kommentarer. Et nytt krav fra modus A ser likt ut, men med `@draft` i stedet for `@planned` og uten `@draft` på enkeltdeler
 - **`krav/krav-oversikt.md`** — generert oversikt over alle eksisterende features
-- **`fs-github`-skillen** — *valgfri*. Samme `gh`-operasjoner som steg 1a beskriver. Deleger dit når den er tilgjengelig
 - **`lage-steps`** — søsken-skill i dette repoet. Implementerer step-definitions i `tester/steps/` for `@planned`-krav (ikke for `@draft`-deler)
 - **`fs-specify`** / **`fs-specify-delta`** — søsken-skills i dette repoet. Henter `@planned`-krav inn i en oppgavemappe under `tasks/`

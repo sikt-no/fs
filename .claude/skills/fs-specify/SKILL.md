@@ -181,7 +181,7 @@ Bevisste unntak: **`spec.log.md`** er append-only, og **`questions-fs-specify-<d
 
 - **Oppgave:** `tasks/<domene>/<slug>/`
 - **Kilde-mappe:** `krav/<…>`
-- **GitHub:** `#NNNN` (fra `# GitHub:`-linjene i kravfilene, klikkbare lenker til `sikt-no/fs`)
+- **GitHub:** `#NNNN` (fra `# GitHub:`-linjene i kravfilene, klikkbare lenker til `sikt-no/fs`. Utelat linja hvis ingen kravfil har en)
 - **Hentet:** `<YYYY-MM-DD HH:MM>`
 
 ## Krav
@@ -236,7 +236,7 @@ Minn brukeren på at endringene i `tasks/` og `krav/` ikke er committet — det 
 ## Gjør ikke
 
 - Analyserer ikke kode, foreslår ikke løsninger og skriver ikke kode.
-- Oppretter, endrer eller lukker ikke GitHub-issues — det er `fs-krav`.
+- Oppretter, endrer eller lukker ikke GitHub-issues.
 - Endrer ikke kravinnhold — bare implementasjonsstatus-taggen `@planned` → `@in-progress`. Fjerner aldri `@draft` fra en `Regel:`/`Scenario:`.
 - Skriver ikke utenfor `<spec>/` og `Egenskap:`-tag-linjene under `krav/`. Skriver ikke `oppgave.md`, `roadmap.md` eller andre oppgaveartefakter.
 - Kjører aldri `git add`, `commit`, `push` eller andre git-mutasjoner.
@@ -253,4 +253,4 @@ Minn brukeren på at endringene i `tasks/` og `krav/` ikke er committet — det 
 - **[`references/askuserquestion-logging.md`](references/askuserquestion-logging.md)** — format for `questions-<skill>-<dato>.md`. Brukes også av `fs-specify-delta`.
 - **[`tasks/README.md`](../../../tasks/README.md)** — oppgavestrukturen, domenelista og reglene for `spec/`.
 - **`krav/README.md`** — tag-aksen og Feature-ID-formatet.
-- **`fs-krav`** — ferdigstiller krav (`@draft` → `@planned`) og eier GitHub-issues.
+- **`fs-krav`** — ferdigstiller krav (`@draft` → `@planned`).

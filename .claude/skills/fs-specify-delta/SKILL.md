@@ -231,7 +231,7 @@ Minn brukeren på at endringene i `tasks/` og `krav/` ikke er committet.
 
 - Analyserer ikke kode, foreslår ikke løsninger og skriver ikke kode.
 - Leser eller sammenligner ikke tidligere `spec-*.md`.
-- Oppretter, endrer eller lukker ikke GitHub-issues — det er `fs-krav`.
+- Oppretter, endrer eller lukker ikke GitHub-issues.
 - Kjører aldri git-kommandoer som endrer tilstand (`add`, `commit`, `push`, `checkout`, `fetch`, `stash`).
 - Skriver ikke utenfor `<spec>/` og `Egenskap:`-tag-linjene under `krav/`. Fjerner aldri `@draft` fra en `Regel:`/`Scenario:`.
 
