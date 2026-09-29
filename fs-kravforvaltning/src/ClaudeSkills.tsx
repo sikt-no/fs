@@ -5,8 +5,6 @@ import { transport } from './transport';
 // Skillene Claude har utenom de som kan velges (plugins, personlige). Lista huskes, så de kan avvises
 // også før Claude har startet og meldt dem i denne økta. Oppdateres hver gang Claude starter.
 const OTHER = 'kravforvaltning:claudeSkillsOther';
-/** Skillen en ny samtale starter med: den som sist ble valgt */
-const LAST = 'kravforvaltning:claudeSkill';
 const read = <T,>(key: string, fallback: T): T => {
   try {
     return (JSON.parse(localStorage.getItem(key) ?? 'null') as T) ?? fallback;
@@ -42,7 +40,7 @@ const load = () => {
   transport.call('claudeSkills').then(
     s => {
       remember(s.other);
-      // Bare de tre som kan velges, i fast rekkefølge, og bare de som finnes i repoet
+      // Bare de som kan velges (CLAUDE_SKILLS), i fast rekkefølge, og bare de som finnes i repoet
       choices = CLAUDE_SKILLS.flatMap(n => s.project.filter(p => p.name === n));
       changed();
     },
@@ -52,26 +50,25 @@ const load = () => {
 
 /** Skills vieweren kjenner fra før, til `claudeRun`, så backenden kan avvise dem */
 export const knownSkills = () => known;
-export const lastSkill = (): string | null => {
-  const s = read<string | null>(LAST, null);
-  return s && CLAUDE_SKILLS.includes(s) ? s : null;
-};
 
 interface Props {
   value: string | null;
-  onChange: (skill: string) => void;
+  onChange: (skill: string | null) => void;
   /** Skillene som kan velges her; de andre vises, men er deaktivert */
   allowed: string[];
-  /** Hvorfor de andre ikke kan velges */
-  hint: string;
+  /** Hvorfor en skill ikke kan velges her */
+  hint: (skill: string) => string;
+  /** Én skill er alltid valgt (Krav, Avvik). Uten: «Ingen» kan velges, og da kan Claude bruke alle de tillatte (Oppgaver) */
+  preselect: boolean;
   disabled?: boolean;
 }
 
 /**
- * Hvilken skill samtalen bruker, rett over inputfeltet: fs-krav, fs-specify eller fs-specify-delta.
- * Det er alltid én, og bare én, valgt. Den lastes med neste melding (`/<skill>`), og alle andre skills avvises.
+ * Hvilken skill samtalen bruker, rett over inputfeltet (en av `CLAUDE_SKILLS`). Den valgte lastes med
+ * neste melding (`/<skill>`), og alle andre skills avvises. Med `preselect` er det alltid én valgt;
+ * uten kan brukeren velge «Ingen», og Claude kan bruke alle skillene som er tillatt her.
  */
-export function SkillPicker({ value, onChange, allowed, hint, disabled }: Props) {
+export function SkillPicker({ value, onChange, allowed, hint, preselect, disabled }: Props) {
   const [, force] = useState(0);
   useEffect(() => {
     const l = () => force(n => n + 1);
@@ -81,13 +78,21 @@ export function SkillPicker({ value, onChange, allowed, hint, disabled }: Props)
   }, []);
   if (!choices.length) return null;
 
-  const pick = (s: string) => {
-    write(LAST, s);
-    onChange(s);
-  };
   return (
     <div class="cskills" role="radiogroup" aria-label="Skill for samtalen">
       <span class="cskills-label">Skill</span>
+      {!preselect && (
+        <button
+          class="cskill"
+          role="radio"
+          aria-checked={value === null}
+          disabled={disabled}
+          title={`Ingen valgt: Claude kan bruke ${allowed.join(', ')} når det passer`}
+          onClick={() => onChange(null)}
+        >
+          Ingen
+        </button>
+      )}
       {choices.map(c => {
         const ok = allowed.includes(c.name);
         return (
@@ -97,8 +102,8 @@ export function SkillPicker({ value, onChange, allowed, hint, disabled }: Props)
             role="radio"
             aria-checked={value === c.name}
             disabled={disabled || !ok}
-            title={ok ? c.description : `${c.name}: ${hint}`}
-            onClick={() => pick(c.name)}
+            title={ok ? c.description : `${c.name}: ${hint(c.name)}`}
+            onClick={() => onChange(!preselect && value === c.name ? null : c.name)}
           >
             {c.name}
           </button>

@@ -46,16 +46,30 @@ export interface ClaudeRunRequest {
   sessionId?: string | null;
   /** Fila brukeren ser på, som kontekst */
   path?: string | null;
-  /** Skillen som er valgt (fs-krav, fs-specify eller fs-specify-delta); alle andre avvises */
+  /** Skillen som er valgt (en av `CLAUDE_SKILLS`); alle andre avvises */
   skill?: string | null;
+  /** Skillene som er lov der brukeren er, når ingen er valgt (Oppgaver); Claude kan bruke dem fritt */
+  skills?: string[];
+  /** Kodemappene Claude kan lese (fs-admin, fs-plattform), som absolutte stier; de får `--add-dir`, men kan ikke endres */
+  dirs?: string[];
   /** Start meldingen med `/<skill>`, så skillen lastes (første melding etter at den er valgt) */
   invoke?: boolean;
   /** Andre skills vieweren kjenner fra før (plugins, personlige), så de kan avvises også før Claude har meldt dem */
   knownSkills?: string[];
 }
 
-/** Skillene som kan velges i Claude-panelet; det er én om gangen */
-export const CLAUDE_SKILLS = ['fs-krav', 'fs-specify', 'fs-specify-delta'];
+/** Skillene som kan velges i Claude-panelet; høyst én om gangen */
+export const CLAUDE_SKILLS = ['fs-krav', 'fs-specify', 'fs-specify-delta', 'fs-verify'];
+
+/** Kodeklonene fs-verify leter i, med standardstien backenden fant */
+export const CODE_DIRS = ['fs-admin', 'fs-plattform'] as const;
+export interface CodeDir {
+  name: (typeof CODE_DIRS)[number];
+  /** Stien: overstyringen, ellers `KRAV_FS_ADMIN` / `KRAV_FS_PLATTFORM`, ellers mappa ved siden av repoet (ikke i desktop-appen). Tom: ingen valgt */
+  path: string;
+  /** Finnes mappa */
+  exists: boolean;
+}
 
 export interface ClaudeSkill {
   name: string;
@@ -100,6 +114,8 @@ export interface Api {
   authLogout(): Promise<AuthStatus>;
   /** Desktop-appen: hent siste main fra GitHub til den lokale klonen */
   pull(): Promise<void>;
+  /** Desktop-appen: finnes det en nyere main på GitHub? `null` når det ikke kan sjekkes (dev-serveren, uten nett) */
+  mainStatus(): Promise<{ behind: boolean } | null>;
   claudeStatus(): Promise<ClaudeStatus>;
   /** Starter en kjøring; hendelsene kommer som `krav:claude` med `{ runId, event }` */
   claudeRun(req: ClaudeRunRequest): Promise<{ runId: string }>;
@@ -107,6 +123,10 @@ export interface Api {
   /** Kjøringene som pågår */
   claudeActive(): Promise<string[]>;
   claudeSkills(): Promise<ClaudeSkills>;
+  /** Standardstiene til kodeklonene; `paths` sjekker om overstyrte stier finnes */
+  claudeDirs(paths?: Record<string, string>): Promise<CodeDir[]>;
+  /** Desktop-appen: velg en mappe med mappevelgeren; `null` når brukeren avbryter */
+  pickDir(): Promise<string | null>;
 }
 export type ApiMethod = keyof Api;
-export const API_METHODS: ApiMethod[] = ['read', 'save', 'publish', 'authStatus', 'authStart', 'authPoll', 'authLogout', 'pull', 'claudeStatus', 'claudeRun', 'claudeCancel', 'claudeActive', 'claudeSkills'];
+export const API_METHODS: ApiMethod[] = ['read', 'save', 'publish', 'authStatus', 'authStart', 'authPoll', 'authLogout', 'pull', 'mainStatus', 'claudeStatus', 'claudeRun', 'claudeCancel', 'claudeActive', 'claudeSkills', 'claudeDirs', 'pickDir'];

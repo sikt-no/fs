@@ -782,6 +782,11 @@ a.otf:hover { background: var(--sunken); text-decoration: none; }
 .claude-mark { width: 9px; height: 9px; border-radius: 50%; background: #d97757; flex-shrink: 0; }
 .claudebtn { display: flex; align-items: center; gap: 6px; border: 1px solid var(--line2); border-radius: 5px; background: transparent; padding: 3px 10px; font-size: 12px; cursor: pointer; color: var(--ink2); }
 .claudebtn:hover, .claudebtn[aria-pressed="true"] { background: var(--surface); color: var(--ink); }
+/* Desktop-appen: nyere main på GitHub */
+.updatebtn { display: flex; align-items: center; gap: 6px; border: 1px solid var(--acc); border-radius: 5px; background: var(--acc-soft); padding: 3px 10px; font-size: 12px; cursor: pointer; color: var(--acc-ink); white-space: nowrap; }
+.updatebtn:hover { background: var(--surface); }
+.updatebtn:focus-visible { outline: 2px solid var(--acc); outline-offset: 1px; }
+.updatebtn .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--acc); }
 .claude { border-left: 1px solid var(--line); display: flex; flex-direction: column; min-height: 0; background: var(--panel); }
 .claude .muted { color: var(--muted); }
 .claude-head { display: flex; align-items: center; gap: 8px; padding: 10px 12px; border-bottom: 1px solid var(--line); font-size: 13px; }
@@ -872,6 +877,18 @@ body.resizing iframe, body.resizing .main { pointer-events: none; }
 .cskill[aria-checked="true"] { background: var(--acc); border-color: var(--acc); color: var(--surface); }
 .cskill:disabled { opacity: .55; cursor: default; }
 .cctx { display: flex; gap: 6px; align-items: center; }
+/* Kodemappene Claude kan lese (fs-admin, fs-plattform), sammenfoldet over inputfeltet */
+.cdirs { font-size: 11px; }
+.cdirs summary { cursor: pointer; font: 10.5px var(--mono); color: var(--muted); }
+.cdirs summary:focus-visible { outline: 2px solid var(--acc); outline-offset: 1px; }
+.cdirs-miss { color: var(--warn); }
+.cdir { display: grid; grid-template-columns: 88px minmax(0, 1fr) auto; gap: 6px; align-items: center; margin-top: 4px; }
+.cdir input { min-width: 0; font-size: 11px; color: var(--ink); background: var(--surface); border: 1px solid var(--line2); border-radius: 6px; padding: 2px 6px; }
+.cdir input:focus-visible { outline: 2px solid var(--acc); outline-offset: -1px; }
+.cdir-path { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; direction: rtl; text-align: left; }
+.cdir-btns { display: flex; gap: 4px; }
+.cdir-full { grid-column: 2 / -1; }
+.cdirs-note { margin-top: 4px; }
 .cctx-skill { color: var(--acc-ink); border: 1px solid var(--acc); border-radius: 8px; padding: 0 5px; }
 .cbar.high > span { background: var(--warn); }
 .cmore { display: block; padding: 4px 0 0; font-size: 11.5px; }

@@ -100,6 +100,10 @@ test('effectiveSkill: bare tillatte skills gjelder, ellers den første tillatte'
   assert.equal(effectiveSkill(null, ['fs-krav']), 'fs-krav');
   assert.equal(effectiveSkill('fs-specify', ['fs-krav', 'fs-specify']), 'fs-specify');
   assert.equal(effectiveSkill('fs-krav', []), null);
+  // Oppgaver: ingen forhåndsvalgt
+  assert.equal(effectiveSkill(null, ['fs-krav', 'fs-verify'], false), null);
+  assert.equal(effectiveSkill('fs-specify', ['fs-krav'], false), null);
+  assert.equal(effectiveSkill('fs-verify', ['fs-krav', 'fs-verify'], false), 'fs-verify');
 });
 
 test('kontekstbruk og lastede skills følges gjennom samtalen', () => {

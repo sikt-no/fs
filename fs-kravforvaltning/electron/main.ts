@@ -2,7 +2,7 @@ import { existsSync } from 'node:fs';
 import { mkdir, readFile, rm, writeFile } from 'node:fs/promises';
 import { join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { app, BrowserWindow, ipcMain, safeStorage, shell } from 'electron';
+import { app, BrowserWindow, dialog, ipcMain, safeStorage, shell } from 'electron';
 import type { Boot } from '../shared/api.ts';
 import { createApi, dispatch } from '../core/api.ts';
 import { createAuth, type TokenStore } from '../core/auth.ts';
@@ -69,13 +69,20 @@ const ready = (async () => {
   await ws.readAll();
   for (const event of ['krav:update', 'krav:git', 'krav:tasks'] as WorkspaceEvent[]) ws.on(event, data => send(event, data));
   ws.watch();
-  const claude = new ClaudeRunner(dir);
+  // Repoet er appens egen klone, så kodeklonene ligger ikke ved siden av; brukeren velger dem under «Kodemapper»
+  const claude = new ClaudeRunner(dir, { siblingDirs: false });
   claude.on(data => send('krav:claude', data));
   app.on('before-quit', () => {
     ws.close();
     claude.close();
   });
-  return createApi(ws, createAuth({ clientId: CLIENT_ID, store }), claude);
+  const api = createApi(ws, createAuth({ clientId: CLIENT_ID, store }), claude);
+  api.pickDir = async () => {
+    const opts = { title: 'Velg kodemappe', properties: ['openDirectory' as const] };
+    const r = await (win ? dialog.showOpenDialog(win, opts) : dialog.showOpenDialog(opts));
+    return r.canceled ? null : (r.filePaths[0] ?? null);
+  };
+  return api;
 })();
 
 ipcMain.handle('krav:boot', async (): Promise<Boot | { error: string }> => {

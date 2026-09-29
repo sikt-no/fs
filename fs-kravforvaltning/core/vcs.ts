@@ -15,6 +15,8 @@ export interface Vcs {
   publish(req: PublishRequest, token: string | null): Promise<PublishResult>;
   /** Hent siste main fra origin (bare desktop-appen, som eier klonen) */
   pull?(token: string | null): Promise<void>;
+  /** Finnes det en nyere main på origin enn den klonen har hentet? Leser bare refs, laster ikke ned noe. */
+  behind?(token: string | null): Promise<boolean>;
 }
 
 /** `krav/<slug>`: små bokstaver, a–z, 0–9 og bindestrek; æøå skrives som ae/o/a */

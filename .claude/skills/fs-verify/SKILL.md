@@ -20,6 +20,15 @@ Du sammenligner kravene med koden, og lukker løkka tilbake til kravene. Du eier
 - **Ikke endre kravinnhold.** Du bytter bare statustaggen på `Egenskap:`-linja, og sletter filer eller blokker som er `@deprecated`.
 - **Påstå aldri mer enn du har sett.** Bevis er et konkret sted i koden (`fil:linje`) som du har lest. Et søk uten treff er ikke bevis for at koden er borte, bare at du ikke fant den. Derfor bekrefter brukeren alle retagginger og slettinger.
 
+## I FS Kravforvaltning
+
+I Claude-panelet i FS Kravforvaltning har du ikke Bash eller AskUserQuestion:
+
+- Kodeklonene (fs-admin, fs-plattform) står i systemprompten. Bruk dem i stedet for å spørre, og spør bare hvis de mangler.
+- Still spørsmålene i svaret, og vent på brukeren.
+- Du kan ikke slette filer. Skal en `@deprecated`-fil slettes, si hvilken, så sletter brukeren den selv. Blokker fjernes med `Edit`.
+- Lesende git går ikke. Bruk `Grep` og `Glob` i klonene.
+
 ## Finn scope og kode (gjør dette FØRST)
 
 1. **Krav.** Oppga brukeren en `krav/`-sti (fil eller mappe), bruk den. Oppga brukeren en oppgave (`tasks/<domene>/<slug>`, eller bare slug — slå opp med `Glob` `tasks/*/<slug>/`), les kravene fra `<oppgave>/spec/krav-input/**/*.feature`, og finn de autoritative filene under `krav/` på feature-ID (`@DOM-SUB-KAP-NNN`), ikke filnavn. 0 treff → «ikke funnet under krav/», mer enn 1 → «duplisert feature-ID». Mangler begge, spør.

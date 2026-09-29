@@ -44,11 +44,12 @@ export function send(chat: Chat, text: string, path: string | null): { chat: Cha
 }
 
 /**
- * Skillen som gjelder der brukeren er i vieweren: den valgte hvis den er tillatt der, ellers den første
- * tillatte. I Krav-visningen er bare fs-krav tillatt, så den gjelder alltid der.
+ * Skillen som gjelder der brukeren er i vieweren: den valgte hvis den er tillatt der. Ellers den første
+ * tillatte (Krav og Avvik, `preselect`), eller ingen (Oppgaver, der Claude da kan bruke alle de tillatte).
  */
-export function effectiveSkill(chosen: string | null, allowed: string[]): string | null {
-  return chosen && allowed.includes(chosen) ? chosen : (allowed[0] ?? null);
+export function effectiveSkill(chosen: string | null, allowed: string[], preselect = true): string | null {
+  if (chosen && allowed.includes(chosen)) return chosen;
+  return preselect ? (allowed[0] ?? null) : null;
 }
 
 export function chooseSkill(chat: Chat, skill: string | null): Chat {

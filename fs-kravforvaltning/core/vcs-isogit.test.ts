@@ -143,7 +143,9 @@ test('klone, se endringer, publisere som branch og hente main', { skip: !hasGit 
   git(other, '-c', 'user.name=A', '-c', 'user.email=a@example.com', 'commit', '-q', '-am', 'readme');
   git(other, 'push', '-q', 'origin', 'main');
 
+  assert.equal(await vcs.behind!(null), true, 'main på GitHub er nyere');
   await vcs.pull!(null);
+  assert.equal(await vcs.behind!(null), false, 'hentet');
   assert.match(readFileSync(join(dir, 'krav/README.md'), 'utf8'), /Oppdatert/);
   const afterPull = await vcs.info();
   assert.deepEqual(afterPull?.uncommitted, [], 'endringene er nå på main');

@@ -19,7 +19,8 @@ import {
 } from './claudeChat';
 import { ChatMarkdown } from './ChatMarkdown';
 import { registerClaude, setClaudeBusy } from './claudeBridge';
-import { knownSkills, lastSkill, SkillPicker } from './ClaudeSkills';
+import { CodeDirs, codeDirPaths, useCodeDirs } from './CodeDirs';
+import { knownSkills, SkillPicker } from './ClaudeSkills';
 import { transport } from './transport';
 
 // Samtalene lever utenfor komponenten og lagres i localStorage, så de blir stående når panelet lukkes,
@@ -176,10 +177,14 @@ interface Props {
   onWidth: (w: number) => void;
   /** Fila brukeren ser på; sendes med som kontekst */
   path: string | null;
-  /** Skillene som kan velges der brukeren er (i Krav-visningen bare fs-krav) */
+  /** Skillene som kan velges der brukeren er (i Avvik bare fs-krav) */
   allowedSkills: string[];
-  /** Hvorfor de andre skillene ikke kan velges her */
-  skillHint: string;
+  /** Hvorfor en skill ikke kan velges her */
+  skillHint: (skill: string) => string;
+  /** Én skill er alltid valgt (Krav, Avvik); uten kan Claude bruke alle de tillatte når ingen er valgt (Oppgaver) */
+  preselect: boolean;
+  /** Claude kan lese kodeklonene (fs-admin, fs-plattform) her */
+  codeDirs: boolean;
   /** Finnes fila i vieweren? Lenker til krav-filer i svarene åpner fila */
   has: (path: string) => boolean;
   onOpen: (path: string) => void;
@@ -191,7 +196,13 @@ interface Props {
  * Claude kan lese og endre filer, men ikke kjøre kommandoer. Endringene vises i vieweren med én gang,
  * og sendes som PR med «Lag PR» som vanlig.
  */
-export function ClaudePanel({ status, width, onWidth, allowedSkills, skillHint, path, has, onOpen, onClose }: Props) {
+export function ClaudePanel({ status, width, onWidth, allowedSkills: modeSkills, skillHint: modeHint, preselect, codeDirs, path, has, onOpen, onClose }: Props) {
+  // Desktop-appen: uten valgte kodemapper finnes det ingen kode å verifisere mot, så fs-verify gråtones
+  const dirs = useCodeDirs();
+  const noCode = transport.kind === 'electron' && codeDirs && !!dirs && !dirs.some(d => d.exists);
+  const allowedSkills = noCode ? modeSkills.filter(s => s !== 'fs-verify') : modeSkills;
+  const skillHint = (s: string) =>
+    noCode && s === 'fs-verify' && modeSkills.includes(s) ? 'krever lokale kopier av fs-admin eller fs-plattform. Velg dem under «Kodemapper».' : modeHint(s);
   const cs = useConversations();
   const conv = currentChat(cs);
   const c = conv?.chat ?? EMPTY_CHAT;
@@ -201,9 +212,9 @@ export function ClaudePanel({ status, width, onWidth, allowedSkills, skillHint, 
   const list = useRef<HTMLDivElement>(null);
   const running = c.runId !== null;
   // Skillen før den første samtalen finnes; ellers den samtalen har valgt. Er den ikke tillatt her,
-  // gjelder den første tillatte (fs-krav i Krav-visningen), og den lastes med neste melding.
-  const [pending, setPending] = useState(lastSkill);
-  const skill = effectiveSkill(conv ? c.skill : pending, allowedSkills);
+  // gjelder den første tillatte i Krav og Avvik (fs-krav), og ingen i Oppgaver. Den lastes med neste melding.
+  const [pending, setPending] = useState<string | null>(null);
+  const skill = effectiveSkill(conv ? c.skill : pending, allowedSkills, preselect);
   // Fila brukeren ser på, sendes med som kontekst. ✕ holder den utenfor til brukeren åpner en annen fil.
   const [excluded, setExcluded] = useState<string | null>(null);
   const context = path !== null && path !== excluded;
@@ -235,8 +246,10 @@ export function ClaudePanel({ status, width, onWidth, allowedSkills, skillHint, 
         sessionId: before.sessionId,
         path: sentPath,
         skill: after.skill,
+        skills: allowedSkills,
         invoke,
         knownSkills: knownSkills(),
+        dirs: codeDirs ? await codeDirPaths() : [],
       });
       set(updateConversation(convs, target, ch => started(ch, runId), Date.now()));
       for (const ev of early.get(runId) ?? []) {
@@ -291,7 +304,7 @@ export function ClaudePanel({ status, width, onWidth, allowedSkills, skillHint, 
           <button
             class="smallbtn"
             onClick={() => {
-              set(createConversation(convs, newId(), Date.now(), effectiveSkill(lastSkill(), allowedSkills)));
+              set(createConversation(convs, newId(), Date.now(), effectiveSkill(null, allowedSkills, preselect)));
               setShowList(false);
             }}
             title="Start en ny samtale"
@@ -410,9 +423,11 @@ export function ClaudePanel({ status, width, onWidth, allowedSkills, skillHint, 
               value={skill}
               allowed={allowedSkills}
               hint={skillHint}
+              preselect={preselect}
               disabled={running}
               onChange={s => (conv ? set(updateConversation(convs, conv.id, ch => chooseSkill(ch, s), Date.now())) : setPending(s))}
             />
+            {codeDirs && <CodeDirs />}
             <div class="cinbox">
               <textarea
                 rows={3}

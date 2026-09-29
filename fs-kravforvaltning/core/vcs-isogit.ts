@@ -193,6 +193,12 @@ export function isoVcs(dir: string, opts: { openPr?: OpenPr } = {}): Vcs {
       return { url: await openPr(url, token, { head: branch, base: 'main', title: req.title, body: req.body }), branch };
     },
 
+    async behind(token: string | null) {
+      const refs = await git.listServerRefs({ http, url: await originUrl(), prefix: 'refs/heads/main', onAuth: auth(token) });
+      const remote = refs.find(r => r.ref === 'refs/heads/main')?.oid;
+      return !!remote && remote !== (await git.resolveRef({ fs, dir, ref: 'refs/heads/main' }));
+    },
+
     /**
      * Henter siste main og oppdaterer filene som ikke er endret lokalt. Lokale endringer (f.eks. i en PR som
      * ikke er merget ennå) blir stående; blir de like som på main, er de ikke lenger en endring.

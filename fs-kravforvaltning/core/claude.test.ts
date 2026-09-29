@@ -5,7 +5,7 @@ import { join } from 'node:path';
 import { after, test } from 'node:test';
 import type { ClaudeEvent } from '../shared/api.ts';
 import { mkdirSync } from 'node:fs';
-import { ClaudeRunner, contextPrompt, findClaude, parseStreamLine, projectSkills, skillArgs, skillMeta, toolSummary } from './claude.ts';
+import { ClaudeRunner, codeDirs, contextPrompt, dirArgs, findClaude, parseStreamLine, projectSkills, skillArgs, skillMeta, toolSummary } from './claude.ts';
 
 const tmp = mkdtempSync(join(tmpdir(), 'krav-claude-'));
 after(() => rmSync(tmp, { recursive: true, force: true }));
@@ -51,6 +51,52 @@ test('toolSummary viser fil, mønster eller skill', () => {
 test('contextPrompt tar med fila brukeren ser på', () => {
   assert.match(contextPrompt('krav/a.feature'), /ser nå på fila krav\/a\.feature/);
   assert.doesNotMatch(contextPrompt(null), /ser nå på/);
+});
+
+test('contextPrompt: uten valgt skill listes de tilgjengelige, og fs-verify får beskjed om kodeklonene', () => {
+  assert.match(contextPrompt(null, null, ['fs-krav', 'fs-verify']), /ikke valgt noen skill\. Du kan bruke disse .*: fs-krav, fs-verify/);
+  assert.match(contextPrompt(null, null, []), /ingen skills er tilgjengelige/);
+  const verify = contextPrompt(null, 'fs-verify', [], ['/kode/fs-admin']);
+  assert.match(verify, /lese kodeklonene \/kode\/fs-admin, men ikke endre dem/);
+  assert.match(verify, /kan ikke slette filer/);
+  assert.doesNotMatch(verify, /Ingen kodekloner/);
+  assert.match(contextPrompt(null, 'fs-verify'), /Ingen kodekloner er tilgjengelige/);
+  assert.doesNotMatch(contextPrompt(null, 'fs-krav'), /slette filer/);
+});
+
+test('codeDirs: overstyring, så env, så mappa ved siden av repoet', () => {
+  const repo = join(tmp, 'kodedir', 'fs');
+  mkdirSync(repo, { recursive: true });
+  mkdirSync(join(tmp, 'kodedir', 'fs-admin'));
+  const annen = join(tmp, 'kodedir', 'annen');
+  mkdirSync(annen);
+  assert.deepEqual(codeDirs(repo, {}), [
+    { name: 'fs-admin', path: join(tmp, 'kodedir', 'fs-admin'), exists: true },
+    { name: 'fs-plattform', path: join(tmp, 'kodedir', 'fs-plattform'), exists: false },
+  ]);
+  assert.equal(codeDirs(repo, { KRAV_FS_PLATTFORM: annen })[1].path, annen);
+  assert.deepEqual(codeDirs(repo, {}, {}, false), [
+    { name: 'fs-admin', path: '', exists: false },
+    { name: 'fs-plattform', path: '', exists: false },
+  ], 'desktop-appen: ingen standardsti ved siden av repoet');
+  assert.equal(codeDirs(repo, { KRAV_FS_PLATTFORM: annen }, {}, false)[1].exists, true, 'env gjelder fortsatt');
+  assert.deepEqual(codeDirs(repo, { KRAV_FS_PLATTFORM: annen }, { 'fs-plattform': ' relativ ', 'fs-admin': 7 }), [
+    { name: 'fs-admin', path: join(tmp, 'kodedir', 'fs-admin'), exists: true },
+    { name: 'fs-plattform', path: 'relativ', exists: false },
+  ], 'en relativ sti godtas ikke, og ugyldige verdier ignoreres');
+});
+
+test('dirArgs: --add-dir og Edit-avvisning for absolutte mapper som finnes', () => {
+  const d = join(tmp, 'kodedir2');
+  mkdirSync(d, { recursive: true });
+  writeFileSync(join(tmp, 'enfil'), '');
+  const posix = d.replace(/\\/g, '/').replace(/^([A-Za-z]):/, (_, x: string) => '/' + x.toLowerCase());
+  assert.deepEqual(dirArgs([d, d + '/', 'relativ', join(tmp, 'finnes-ikke'), join(tmp, 'enfil'), 3]), {
+    paths: [d],
+    add: ['--add-dir', d],
+    deny: [`Edit(/${posix}/**)`],
+  });
+  assert.deepEqual(dirArgs(undefined), { paths: [], add: [], deny: [] });
 });
 
 // En falsk claude: skriver argumentene og stdin tilbake som tekst, og avslutter som stream-json gjør
@@ -122,7 +168,17 @@ test('ClaudeRunner sender meldingen på stdin, med verktøy, kontekst og resume'
   const invoked = await collect(runner, { prompt: 'lag krav', skill: 'fs-krav', invoke: true });
   assert.equal(JSON.parse((invoked[1] as { text: string }).text).input, '/fs-krav lag krav');
   const ukjent = await collect(runner, { prompt: 'x', skill: 'lage-steps', invoke: true });
-  assert.equal(JSON.parse((ukjent[1] as { text: string }).text).input, 'x', 'bare de tre skillene kan velges');
+  assert.equal(JSON.parse((ukjent[1] as { text: string }).text).input, 'x', 'bare CLAUDE_SKILLS kan velges');
+  // Uten valgt skill: poolen er tillatt, og kodeklonene kan leses, men ikke endres
+  const kode = join(tmp, 'kode');
+  mkdirSync(kode, { recursive: true });
+  const fri = await collect(runner, { prompt: 'verifiser', skills: ['fs-verify', 'fs-krav'], dirs: [kode, join(tmp, 'borte')], invoke: true });
+  const fecho = JSON.parse((fri[1] as { text: string }).text);
+  assert.equal(fecho.input, 'verifiser', 'ingen skill å laste');
+  const fargs: string[] = fecho.args;
+  assert.ok(fargs.includes('Skill(fs-krav)') && fargs.includes('Skill(fs-verify)'));
+  assert.deepEqual(fargs.slice(fargs.indexOf('--add-dir'), fargs.indexOf('--add-dir') + 3), ['--add-dir', kode, '--append-system-prompt']);
+  assert.ok(fargs.at(-1)!.startsWith('Edit(//') && fargs.at(-1)!.endsWith('/kode/**)'));
   assert.equal(events.at(-1)!.kind, 'done');
   // Etter kjøringen kjenner runneren skillene Claude meldte om; prosjektets egne er skilt ut
   assert.deepEqual(runner.skills(), { project: [{ name: 'fs-krav', description: 'Krav for initiativ og mapper.' }], other: ['plugin:annen'] });
@@ -140,7 +196,13 @@ test('skillArgs tillater bare den valgte skillen og avviser alle andre', () => {
     deny: ['Skill(fs-specify)', 'Skill(plugin:b)'],
   });
   assert.deepEqual(skillArgs(null, ['fs-krav']), { allow: [], deny: ['Skill(fs-krav)'] });
-  assert.deepEqual(skillArgs('lage-steps', ['lage-steps']), { allow: [], deny: ['Skill(lage-steps)'] }, 'bare de tre kan velges');
+  assert.deepEqual(skillArgs('lage-steps', ['lage-steps']), { allow: [], deny: ['Skill(lage-steps)'] }, 'bare CLAUDE_SKILLS kan velges');
+  // Uten valgt skill (Oppgaver): alle i poolen som kan velges, er tillatt
+  assert.deepEqual(skillArgs(null, ['fs-krav', 'fs-verify', 'lage-steps'], ['fs-verify', 'lage-steps', 'fs-krav']), {
+    allow: ['Skill(fs-krav)', 'Skill(fs-verify)'],
+    deny: ['Skill(lage-steps)'],
+  });
+  assert.deepEqual(skillArgs('fs-verify', ['fs-krav', 'fs-verify'], ['fs-krav']), { allow: ['Skill(fs-verify)'], deny: ['Skill(fs-krav)'] }, 'en valgt skill går foran poolen');
   assert.deepEqual(projectSkills(join(tmp, 'finnes-ikke')), []);
 });
 

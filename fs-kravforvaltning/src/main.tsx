@@ -26,13 +26,20 @@ const initial = boot.entries;
 const initialGit = boot.git;
 const initialTasks = boot.tasks;
 /**
- * Skillene Claude kan bruke i hver visning. Kravarbeid (Krav, Avvik): bare fs-krav. I Oppgaver hentes krav
- * inn i en oppgave med fs-specify og fs-specify-delta; den første er standard.
+ * Skillene Claude kan bruke i hver visning. Krav: fs-krav (standard) og fs-verify. Avvik: bare fs-krav.
+ * I Oppgaver er ingen valgt på forhånd, og uten valg kan Claude bruke alle de fire. `codeDirs`: Claude
+ * kan lese kodeklonene (fs-admin, fs-plattform), som fs-verify trenger.
  */
-const CLAUDE_SKILLS_BY_MODE: Record<Mode, { allowed: string[]; hint: string }> = {
-  krav: { allowed: ['fs-krav'], hint: 'brukes i Oppgaver-visningen, ikke i Krav' },
-  avvik: { allowed: ['fs-krav'], hint: 'brukes i Oppgaver-visningen, ikke i Avvik' },
-  oppgaver: { allowed: ['fs-specify', 'fs-specify-delta', 'fs-krav'], hint: '' },
+const CLAUDE_SKILLS_BY_MODE: Record<Mode, { allowed: string[]; preselect: boolean; codeDirs: boolean }> = {
+  krav: { allowed: ['fs-krav', 'fs-verify'], preselect: true, codeDirs: true },
+  avvik: { allowed: ['fs-krav'], preselect: true, codeDirs: false },
+  oppgaver: { allowed: ['fs-krav', 'fs-specify', 'fs-specify-delta', 'fs-verify'], preselect: false, codeDirs: true },
+};
+const MODE_LABEL: Record<Mode, string> = { krav: 'Krav', avvik: 'Avvik', oppgaver: 'Oppgaver' };
+/** Hvorfor en skill ikke kan velges i `mode`: «brukes i Krav og Oppgaver, ikke i Avvik» */
+const skillHint = (mode: Mode) => (skill: string) => {
+  const where = (Object.keys(CLAUDE_SKILLS_BY_MODE) as Mode[]).filter(m => CLAUDE_SKILLS_BY_MODE[m].allowed.includes(skill)).map(m => MODE_LABEL[m]);
+  return `brukes i ${where.join(' og ') || 'ingen visninger'}, ikke i ${MODE_LABEL[mode]}`;
 };
 /** Krav kan redigeres og sendes som PR (dev-serveren og desktop-appen) */
 const EDITABLE = boot.editable;
@@ -349,6 +356,25 @@ function App() {
     editorDirty.current = false;
     return true;
   };
+  // Desktop-appen: sjekk om main på GitHub er nyere enn klonen, ved oppstart, hvert tiende minutt og når
+  // vinduet får fokus (høyst hvert andre minutt). Toppfeltet viser da «Ny versjon av main».
+  const [mainBehind, setMainBehind] = useState(false);
+  useEffect(() => {
+    if (transport.kind !== 'electron') return;
+    let last = 0;
+    const check = () => {
+      last = Date.now();
+      transport.call('mainStatus').then(s => setMainBehind(!!s?.behind), () => {});
+    };
+    const onFocus = () => Date.now() - last > 2 * 60_000 && check();
+    check();
+    const timer = setInterval(check, 10 * 60_000);
+    addEventListener('focus', onFocus);
+    return () => {
+      clearInterval(timer);
+      removeEventListener('focus', onFocus);
+    };
+  }, []);
   // Desktop-appen: hent siste main, og last visningen på nytt med de nye filene
   const pull = async () => {
     if (!leaveEditor()) return;
@@ -463,6 +489,7 @@ function App() {
         oCrumbs={oCrumbs}
         claude={claude ? claudeOpen : null}
         onClaude={() => setClaudeOpen(o => !o)}
+        onUpdate={mainBehind ? pull : null}
       />
       <div
         class="workspace"
@@ -558,7 +585,9 @@ function App() {
             width={claudeWidth}
             onWidth={setClaudeWidth}
             allowedSkills={claudeSkills.allowed}
-            skillHint={claudeSkills.hint}
+            skillHint={skillHint(mode)}
+            preselect={claudeSkills.preselect}
+            codeDirs={claudeSkills.codeDirs}
             path={claudePath}
             has={p => !!entries[p]}
             onOpen={p => select(p)}

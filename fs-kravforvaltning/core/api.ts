@@ -34,11 +34,24 @@ export function createApi(ws: Workspace, auth: Auth, claude: ClaudeRunner): Api 
       await v.pull(await auth.token());
       await ws.readAll();
     },
+    async mainStatus() {
+      const v = ws.vcs;
+      if (!v?.behind) return null;
+      try {
+        return { behind: await v.behind(await auth.token()) };
+      } catch {
+        return null; // uten nett eller tilgang: ikke noe å melde
+      }
+    },
     claudeStatus: () => claude.status(),
     claudeRun: req => claude.run(req),
     claudeCancel: runId => claude.cancel(runId),
     claudeActive: async () => claude.active(),
     claudeSkills: async () => claude.skills(),
+    claudeDirs: async paths => claude.dirs(paths),
+    pickDir: async () => {
+      throw new Error('Mappevelgeren finnes bare i desktop-appen');
+    },
   };
 }
 
