@@ -25,7 +25,8 @@
 # (beslutningssiden «Registrere og beregne praksis: åpne spørsmål», med
 # innspill fra Jøran). Situasjonene A–F og spørsmål 1–8 der er ført inn her
 # som AVKLART-kommentarer ved scenarioet de gjelder. Ett nytt spørsmål kom fram
-# under innføringen og står som @openquestion (standardverdi for relevans).
+# under innføringen (standardverdi for relevans), og er avklart samme dag:
+# en ny praksisperiode er relevant som standard.
 #
 @OPT-BEH-BEH-003 @must @in-progress
 Egenskap: Registrere og beregne praksis for søker
@@ -47,7 +48,7 @@ Egenskap: Registrere og beregne praksis for søker
   periode og omfang, og systemet regner ut hvor mange års praksis det
   tilsvarer til sammen. Om søkeren oppfyller opptakskravet, vurderer
   saksbehandleren. Kobling til opptakskrav er beskrevet i
-  knytte_praksis_til_opptakskrav.feature (@OPT-BEH-BEH-004).
+  knytte_praksis_til_opptakskrav.feature (@OPT-BEH-BEH-006).
 
   Praksis beregnes proporsjonalt: periodens kalendertid ganget med
   stillingsprosenten. To år i 50 % stilling gir ett år praksis. Perioder
@@ -171,18 +172,13 @@ Egenskap: Registrere og beregne praksis for søker
       Så er sum av oppgitte perioder 0,50 år
       Og sum justert for overlapp er 0,50 år
 
-    @openquestion
-    Scenario: AVKLAR om en ny praksisperiode er relevant som standard
-      # ÅPNE SPØRSMÅL — NYTT 29.09.2026, oppdaget da spørsmål 4 ble ført inn:
-      # - Er en ny praksisperiode markert som relevant når den registreres,
-      #   eller må saksbehandleren markere den selv?
-      # - Konsekvens: er standarden «ikke relevant», telles en periode ikke med
-      #   før den er markert, og en glemt markering gir for lav sum. Er
-      #   standarden «relevant», må saksbehandleren aktivt fjerne markeringen
-      #   for perioder som ikke skal telle.
-      # - Eksemplene i regelen «Systemet summerer praksisperiodene
-      #   automatisk» forutsetter at alle periodene er markert relevante.
-      Gitt spørsmålet er åpent
+    Scenario: En ny praksisperiode er relevant som standard
+      Når jeg registrerer en praksisperiode
+      Så er praksisperioden markert som relevant
+      Og den inngår i den samlede praksisberegningen
+      # AVKLART 29.09.2026: en ny praksisperiode er markert som relevant når
+      # den registreres. Saksbehandleren fjerner markeringen for perioder
+      # som ikke skal telle. Da gir en glemt markering aldri for lav sum.
 
     Scenario: Startdato og sluttdato er obligatorisk
       Når jeg registrerer en praksisperiode
@@ -304,6 +300,7 @@ Egenskap: Registrere og beregne praksis for søker
         | 01.01.2020 | 31.12.2021 | 100 %            | 2,00 år |
         | 01.01.2020 | 31.12.2021 | 50 %             | 1,00 år |
         | 01.01.2020 | 30.06.2020 | 80 %             | 0,40 år |
+        | 01.01.2020 | 31.12.2021 | 0 %              | 0,00 år |
 
     Scenariomal: Timebasert praksis beregnes mot oppgitt årsverk
       Gitt jeg registrerer en praksisperiode
@@ -357,6 +354,24 @@ Egenskap: Registrere og beregne praksis for søker
       Når jeg velger å oppgi omfanget som stillingsprosent
       Så kan jeg ikke samtidig oppgi omfanget som antall timer
 
+    Scenariomal: Stillingsprosent utenfor 0–100 % kan ikke lagres
+      Gitt jeg registrerer en praksisperiode
+      Når jeg oppgir omfanget som stillingsprosent <stillingsprosent>
+      Så får jeg en feilmelding om at stillingsprosenten må være mellom 0 og 100 %
+      Og praksisperioden kan ikke lagres
+
+      Eksempler:
+        | stillingsprosent |
+        | -10 %            |
+        | 101 %            |
+      # AVKLART 29.09.2026: stillingsprosenten må være fra og med 0 % til og
+      # med 100 %. Begge grensene er gyldige; 0 % gir 0,00 år praksis, se
+      # «Praksis beregnes proporsjonalt med stillingsprosenten».
+      #
+      # Gjennomgangen av FS-klienten (registrere_praksis.dagens-løsning-i-fs-
+      # klienten.md) viser ingen grenseverdier for stillingsprosenten; bare at
+      # en tom stillingsprosent settes til 100.
+
     Scenario: Timebasert omfang overskrives ikke når datoene endres
       Gitt en praksisperiode har omfanget oppgitt i timer
       Når jeg endrer sluttdatoen på praksisperioden
@@ -389,7 +404,8 @@ Egenskap: Registrere og beregne praksis for søker
   Regel: Systemet summerer praksisperiodene automatisk
 
     # Eksemplene i denne regelen forutsetter at alle praksisperiodene er
-    # markert som relevante. Se «Markere om en praksisperiode er relevant».
+    # markert som relevante, slik nye perioder er som standard. Se
+    # «En ny praksisperiode er relevant som standard».
     #
     # AVKLART 29.09.2026 (spørsmål 7): samlet praksis vises bare i år, ikke i
     # timer. Timer brukes bare som omfang på den enkelte praksisperioden.
@@ -513,41 +529,6 @@ Egenskap: Registrere og beregne praksis for søker
     # opptakskrav, og hva som gjelder uten aktivt valg, er flyttet til
     # knytte_praksis_til_opptakskrav.feature. Kalkulatoren viser begge
     # summene; saksbehandleren vurderer selv hvilken som gjelder.
-
-  Regel: Utregningen et vedtak bygde på kan etterprøves
-
-    Scenario: Se praksisberegningen slik den var da vedtaket ble fattet
-      Gitt det er fattet vedtak i saken
-      Og praksisberegningen er endret etter at vedtaket ble fattet
-      Når jeg åpner praksisberegningen
-      Så kan jeg se praksisberegningen slik den var da vedtaket ble fattet
-
-    Scenario: Praksisperioder kan endres etter vedtak når søkeren har klaget
-      Gitt det er fattet vedtak i saken
-      Og søkeren har klaget på vedtaket
-      Når jeg endrer en praksisperiode
-      Så er endringen lagret på praksisperioden
-      Og praksisberegningen som vedtaket bygde på, kan fortsatt ses
-
-    Scenario: Praksisperioder kan ikke endres etter vedtak uten klage
-      Gitt det er fattet vedtak i saken
-      Og søkeren har ikke klaget på vedtaket
-      Når jeg åpner praksisberegningen
-      Så ser jeg ikke muligheten til å endre praksisperiodene
-      # AVKLART 29.09.2026 (situasjon B), innspill fra Jøran:
-      # - Ved klage ser saksbehandleren utregningen slik den var da vedtaket
-      #   ble fattet, ikke slik den er nå.
-      # - Perioder kan endres etter at vedtaket er fattet, hvis det er kommet
-      #   inn en klage. Da skal det fortsatt være mulig å se hva vedtaket
-      #   bygde på.
-      #
-      # Scenarioet over, at perioder ikke kan endres uten klage, er utledet
-      # av svaret «Ja, hvis det er kommet inn en klage». At muligheten skjules
-      # i stedet for å deaktiveres, følger design-patterns-for-krav.md.
-      #
-      # Fagskolene har ikke hatt en praksiskalkulator før. For dem er
-      # verdien nettopp at utregningen blir liggende i saken og kan
-      # etterprøves ved klage.
 
   # AVKLART 16.09.2026: rollen heter **opptakssaksbehandler**. Det er det
   # autoritative navnet, og featuren bruker det konsekvent.

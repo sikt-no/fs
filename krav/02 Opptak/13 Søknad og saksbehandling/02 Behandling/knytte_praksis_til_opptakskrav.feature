@@ -12,7 +12,7 @@
 # Regnereglene for praksis, og dagens løsning i FS-klienten, er beskrevet i
 # registrere_praksis.feature og registrere_praksis.dagens-løsning-i-fs-klienten.md.
 #
-@OPT-BEH-BEH-004 @could @draft
+@OPT-BEH-BEH-006 @could @draft
 Egenskap: Knytte praksis til opptakskrav
   Som opptakssaksbehandler
   ønsker jeg å knytte søkerens beregnede praksis til opptakskrav som krever praksis
