@@ -1,0 +1,19 @@
+# Pakking av desktop-appen: `npm run app:dist` → release/
+appId: no.sikt.krav-viewer
+productName: FS Kravforvaltning
+directories:
+  output: release
+  buildResources: build
+# Alt appen trenger er bundlet inn i out/ av electron-vite; node_modules skal ikke med
+files:
+  - out/**
+  - package.json
+  - "!node_modules/**"
+asar: true
+mac:
+  target: dmg
+  category: public.app-category.developer-tools
+win:
+  target: nsis
+linux:
+  target: AppImage

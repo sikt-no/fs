@@ -52,7 +52,7 @@ Som opptaksleder har jeg også behov for å kunne søke opp utdanningstilbud som
     Når administrator begynner å skrive  "jor" i studieprogramfeltet
     Så skal saksbehandler få opp autocomplete forslag "JORDMOR Jordmor"
 
-   Scenariomal: Søk og filtrering på utdanning
+  Scenariomal: Søk og filtrering på utdanning
     Når administrator søker og filtrerer på "<input>"
     Så ser administrator "<resultater>"
     

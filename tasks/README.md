@@ -2,7 +2,7 @@
 
 Dette er arbeidsflaten for team i FS som kjører trunk-based utvikling med artefakter versjonert i git. Én mappe per oppgave, delt av alle som jobber på den — mennesker og agenter, på tvers av repoer og maskiner.
 
-Mappa erstatter den gamle `veikart/<team>/oppgaver/`-strukturen. `veikart/opptak/` og `veikart/utdanning/` har fortsatt gammel form inntil de teamene migrerer selv.
+Mappa erstatter den gamle `veikart/<team>/oppgaver/`-strukturen. Alle team er migrert, og `veikart/` er fjernet.
 
 ## Struktur
 
@@ -54,12 +54,14 @@ Slug-en må være unik innenfor domenet, ikke globalt. Den er en lesbar kebab-ca
 
 ## Fire regler
 
-1. **Aldri `spec-*.md`, `analysis-*.md`, `plan-*.md` eller `verification-*.md` i oppgave-rota.** Dette er ikke stil, det er mekanikk: BAT-verktøyene globber nøyaktig disse mønstrene for å avgjøre hvilket steg som er ferdig. En håndskrevet `plan-krav.md` i rota blir lest som et fullført plansteg og hopper over resten av flyten.
-2. **Lag = rolle.** En plan for et lag hører hjemme i lagets egen undermappe: `<lag>/plan-<slug>.md`, ikke `plan-<lag>.md` i rota. Typiske lag: `spec` (krav), `frontend`, `backend`, `subgraph`, `tester`, `db`, `dokumentasjon`. Bruk bare de lagene oppgaven faktisk rører.
-3. **`spec/` er reservert** for kravene. Det er dit `fs-specify` og `fs-specify-delta` alltid skriver, slik at hvem som helst kan peke på `tasks/<domene>/<slug>/spec/` uten å vite hvilken rolle som produserte resten.
-4. **`mal/` er reservert på domene-nivå** — det er ikke et domene. Malfilene heter `plan.md`, ikke `plan-lag.md`, nettopp for ikke å treffe globbene i regel 1.
+1. **Aldri `spec-*.md`, `analysis-*.md`, `plan-*.md` eller `verification-*.md` i oppgave-rota.** Dette er ikke stil, det er mekanikk: BAT-verktøyene globber nøyaktig disse mønstrene for å avgjøre hvilket steg som er ferdig. En håndskrevet `plan-krav.md` i rota blir lest som et fullført plansteg og hopper over resten av flyten. *(sjekkes automatisk)*
+2. **Lag = rolle.** En plan for et lag hører hjemme i lagets egen undermappe: `<lag>/plan-<slug>.md`, ikke `plan-<lag>.md` i rota. Typiske lag: `spec` (krav), `frontend`, `backend`, `subgraph`, `tester`, `db`, `dokumentasjon`. Bruk bare de lagene oppgaven faktisk rører. *(`plan-<lag>.md` i rota sjekkes automatisk)*
+3. **`spec/` er reservert** for kravene. Det er dit `fs-specify` og `fs-specify-delta` alltid skriver, slik at hvem som helst kan peke på `tasks/<domene>/<slug>/spec/` uten å vite hvilken rolle som produserte resten. *(`spec-*.md` og `krav-input/` utenfor `spec/` sjekkes automatisk)*
+4. **`mal/` er reservert på domene-nivå** — det er ikke et domene. Malfilene heter `plan.md`, ikke `plan-lag.md`, nettopp for ikke å treffe globbene i regel 1. *(sjekkes automatisk, sammen med domener som ikke står i domenetabellen)*
 
 `oppgave.md`, `design.md`, `memory.md` og `reviews/` treffer ingen glob og hører hjemme i oppgave-rota.
+
+FS Kravforvaltning (`fs-kravforvaltning/`, modusen «Oppgaver») sjekker reglene som er merket *(sjekkes automatisk)*, og viser brudd som avvik på oppgaven. Den sjekker også at `oppgave.md` finnes og har en gyldig `Fase`, at `Slug` og `Domene` i metadataene stemmer med mappa, og at fasen i domenets `roadmap.md` er den samme som i `oppgave.md`. Sjekkene står i `fs-kravforvaltning/shared/tasks.ts` og er testet i `fs-kravforvaltning/shared/tasks.test.ts`. Endrer du en merket regel, eller legger du til en regel som kan sjekkes, må koden og testene oppdateres i samme endring.
 
 ## Forholdet til GitHub issues og projects
 
@@ -82,16 +84,16 @@ En oppgave går gjennom: **prioritert → utforskning → utvikling → innføri
 | prioritert | Prioritert | `oppgave.md` | – | `@planned` |
 | utforskning | Behovsanalyse → Løsningsalternativ | `design.md`, `spec/`, `<lag>/analysis-*.md`, `<lag>/plan-*.md` | `fs-specify` / `fs-specify-delta`, `bat-analyze`, `bat-plan` | `@in-progress` |
 | utvikling | Utvikling | `<lag>/task-N-completion.md` | `bat-execute` | `@in-progress` |
-| innføring | Innføring | `<lag>/verification-*.md` | `bat-verify` | `@implemented` |
+| innføring | Innføring | `<lag>/verification-*.md` | `bat-verify`, `fs-verify` | `@implemented` |
 | levert | Levert | – | – | `@implemented` |
 
 Oppgaver tas inn først når issuet er Prioritert. Oppgaver i `levert` blir liggende i roadmap-arkivet.
 
 **Krav-tag-kolonnen** viser hvor `Egenskap:`-taggen i `.feature`-fila står gjennom løpet. Hvert steg på aksen har én eier:
 
-`@draft` →(`fs-krav`)→ `@planned` →(`fs-specify` / `fs-specify-delta`)→ `@in-progress` →(verifisering)→ `@implemented`
+`@draft` →(`fs-krav`)→ `@planned` →(`fs-specify` / `fs-specify-delta`)→ `@in-progress` →(`fs-verify`)→ `@implemented` →(`fs-krav`)→ `@deprecated` →(`fs-verify`)→ slettet
 
-Se [`.claude/rules/gherkin-conventions.md`](../.claude/rules/gherkin-conventions.md) for den autoritative definisjonen av taggene.
+Se [`krav/README.md`](../krav/README.md) for den autoritative definisjonen av taggene.
 
 BAT-stegene er valgfrie. En oppgave kan kjøres helt for hånd — da er `flow.md`, `spec/` og `<lag>/`-artefaktene noe teamet skriver selv, og fasene betyr det samme.
 
@@ -125,4 +127,4 @@ Et domene kan eies av ett team, og et team kan eie flere domener. Skriv hvilket 
 
 ## Maler
 
-[`mal/`](mal/) inneholder `oppgave.md`, `design.md`, `plan.md` og `review.md`. Kopier dem inn i oppgavemappa og fyll ut. Team som vil avvike, kan legge egne maler i sitt domene — men mapping til issue-status og faseoverganger skal være forutsigbar på tvers.
+[`mal/`](mal/) inneholder `oppgave.md`, `design.md`, `plan.md` og `review.md`. Kopier dem inn i oppgavemappa og fyll ut, eller bruk skillen `fs-oppgave`, som kopierer malene, fyller inn metadata og holder `oppgave.md` og `roadmap.md` i synk ved hver faseovergang. Team som vil avvike, kan legge egne maler i sitt domene — men mapping til issue-status og faseoverganger skal være forutsigbar på tvers.

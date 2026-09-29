@@ -90,4 +90,4 @@ Mal:
 - **Bruk relative lenker** til feature-filen.
 - **Hold det kort.** Notatene skal være lesbare, ikke uttømmende.
 - **Marker uavklarte ting** under "Åpne designspørsmål" — ikke gjett.
-- **Følg terminologi-reglene** i `.claude/rules/gherkin-conventions.md` (organisasjon vs. lærested, osv.)
+- **Følg terminologi-reglene** i `krav/README.md` (organisasjon vs. lærested, osv.)

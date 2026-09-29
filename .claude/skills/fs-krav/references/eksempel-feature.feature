@@ -50,5 +50,16 @@ Egenskap: Se status på egen søknad
       Når søkeren åpner søknadsoversikten
       Så vises kun den aktive søknaden i hovedlisten
 
+  @draft @openquestion
+  Regel: Søkeren varsles når statusen endres
+    # ÅPNE SPØRSMÅL:
+    # - Skal varselet gå på e-post, SMS eller begge deler?
+    # - Skal søkeren kunne reservere seg mot varsler?
+
+    Scenario: Søkeren får varsel når søknaden er innvilget
+      Gitt at søknaden har status "Under vurdering"
+      Når søknaden får status "Innvilget"
+      Så får søkeren et varsel om at statusen er endret
+
 # ÅPNE SPØRSMÅL:
 # - Hvilken tekst skal vises hvis søkeren har flere søknader med ulik status?
