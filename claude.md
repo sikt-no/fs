@@ -93,12 +93,13 @@ npm install
 npm run dev
 npm run dev:oppgaver   # med Oppgaver-modusen (tasks/)
 npm run app:dev        # desktop-appen (electron-vite)
+npm run app:dev:oppgaver  # desktop-appen med Oppgaver-modusen
 npm run app:dist       # pakket desktop-app i fs-kravforvaltning/release/
 ```
 
 Vieweren husker hvor brukeren var (`krav-viewer:hash` i localStorage), og går tilbake dit når den åpnes uten hash. Det gjelder alltid når desktop-appen starter, og i en ny fane. En fil som er borte, gir forsiden.
 
-`npm run build` lager et statisk bygg i `fs-kravforvaltning/dist/` med hele `krav/`-snapshotet bakt inn (relative stier, hash-routing). `.github/workflows/deploy-viewer.yml` publiserer det til GitHub Pages (<https://sikt-no.github.io/fs/>) ved push til `main`. I statisk bygg er git-data `null`, så «Endringer»-modusen skjules. Oppgaver-modusen er av som standard, både i dev og i bygget, og slås på med `--mode oppgaver` (`npm run dev:oppgaver`, `npm run build -- --mode oppgaver`) eller `OPPGAVER=1`. Uten den leses ikke `tasks/`, `virtual:krav-tasks` er `null`, og knappen og `#/oppgaver`-rutene skjules.
+`npm run build` lager et statisk bygg i `fs-kravforvaltning/dist/` med hele `krav/`-snapshotet bakt inn (relative stier, hash-routing). `.github/workflows/deploy-viewer.yml` publiserer det til GitHub Pages (<https://sikt-no.github.io/fs/>) ved push til `main`. I statisk bygg er git-data `null`, så «Endringer»-modusen skjules. Oppgaver-modusen er av som standard, både i dev og i bygget, og slås på med `--mode oppgaver` (`npm run dev:oppgaver`, `npm run app:dev:oppgaver`, `npm run build -- --mode oppgaver`) eller `OPPGAVER=1`. Uten den leses ikke `tasks/`, `virtual:krav-tasks` er `null`, og knappen og `#/oppgaver`-rutene skjules.
 
 - `core/` er serverlogikken i ren Node, felles for dev-serveren og desktop-appen: `workspace.ts` (leser, parser og overvåker `krav/` og `tasks/`, og sender `krav:update`/`krav:git`/`krav:tasks`), `api.ts` (kallene rendereren kan gjøre, typene i `shared/api.ts`), `save.ts` (skriver krav-filer, bare `.feature`/`.md` under `krav/`), `auth.ts` (GitHub-innlogging med device flow, eller `gh auth token` i dev) og `vcs.ts` med to git-backender: `vcs-cli.ts` (git og gh på maskinen) og `vcs-isogit.ts` (isomorphic-git, uten git-installasjon). Testet i `core/*.test.ts`, isomorphic-git mot en lokal `git http-backend`
 - `server/kravPlugin.ts` kobler `core/` til Vite: `virtual:krav*`-modulene, Vites watcher og websocket, og middlewares for `POST /__krav/focus` og `POST /__krav/api/<kall>` (bare fra vieweren selv, sjekket med `Origin`). `VCS=isogit` bytter til isomorphic-git-backenden

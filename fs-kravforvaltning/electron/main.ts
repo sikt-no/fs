@@ -22,7 +22,7 @@ import { Workspace, type WorkspaceEvent } from '../core/workspace.ts';
  * - `KRAV_REPO`: bruk en eksisterende klone i stedet for appens egen (f.eks. dette repoet under utvikling)
  * - `KRAV_REPO_URL`: repoet som klones (standard https://github.com/sikt-no/fs.git)
  * - `KRAV_GITHUB_CLIENT_ID`: OAuth-appen for device flow (kan også bakes inn ved bygg med MAIN_VITE_KRAV_GITHUB_CLIENT_ID)
- * - `OPPGAVER=1`: vis Oppgaver-modusen
+ * - `OPPGAVER=1`: vis Oppgaver-modusen (eller bygg/start med `--mode oppgaver`, f.eks. `npm run app:dev:oppgaver`)
  * - `KRAV_CLAUDE_PATH`: stien til `claude`, hvis den ikke finnes på vanlige steder
  */
 
@@ -65,7 +65,7 @@ const ready = (async () => {
     send('krav:progress', 'Henter kravene fra GitHub …');
     await ensureClone(dir, REPO_URL, await store.get(), msg => send('krav:progress', `Henter kravene fra GitHub: ${msg}`));
   }
-  const ws = new Workspace(dir, isoVcs(dir), { oppgaver: process.env.OPPGAVER === '1' });
+  const ws = new Workspace(dir, isoVcs(dir), { oppgaver: import.meta.env.MODE === 'oppgaver' || process.env.OPPGAVER === '1' });
   await ws.readAll();
   for (const event of ['krav:update', 'krav:git', 'krav:tasks'] as WorkspaceEvent[]) ws.on(event, data => send(event, data));
   ws.watch();
