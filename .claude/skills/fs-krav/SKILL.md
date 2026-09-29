@@ -6,12 +6,18 @@ description: >
   sammen under én brukerhistorie. Trigges av: "definere krav for initiativ",
   "kravspesifikasjon", "starte kravarbeid", "lage kravdokument",
   "fullføre krav i mappe", "få krav klare til planning", "tagge med planned",
-  "ferdigstille drafts". Produserer nye `.feature`-filer fra bunnen (alltid som
+  "ferdigstille drafts", "fjerne krav", "slette krav", "avvikle krav". Produserer nye `.feature`-filer fra bunnen (alltid som
   `@draft`), ELLER fasiliterer en valideringsgjennomgang av kravene i en
   eksisterende mappe. Bare krav som valideres i gjennomgangen, eller som brukeren
   eksplisitt sier er klare, får `@planned` på `Egenskap:`. Resten forblir
   `@draft` med åpne spørsmål dokumentert. Brukes også for enkeltstående
   feature-filer ("skrive krav", "lage feature-fil", "skrive BDD-scenario").
+  Fjerner også krav: ikke-leverte krav slettes, leverte krav (`@implemented`)
+  tagges `@deprecated` til `fs-verify` har vist at koden er borte. Endrer
+  leverte krav ("endre krav", "oppdatere levert krav", "ny versjon av regel"):
+  egenskapen blir stående `@implemented`, den nye delen legges ved siden av som
+  `@draft` og får `@planned` når den er validert, og delen den erstatter får
+  `@deprecated`.
 ---
 
 # Definere krav
@@ -29,39 +35,21 @@ Skillen fasiliterer derfor også **validering** av skisserte krav (modus B): Gå
 - Arbeidet skjer i `krav/`-mappen i dette repoet. Skillen leser og skriver kun `krav/`-treet — ikke `tasks/`.
 - Konvensjoner er definert i `krav/README.md` — følg dem, den er autoritativ. Ren Gherkin-syntaks står i `references/gherkin-syntax.md`.
 - Kjente persona: administrator, søker, student, saksbehandler
-- **GitHub-saksnummer er påkrevd** når fila opprettes, slettes, `Egenskap:`-tittelen endres, eller `# GitHub:`-referansen byttes — se *Når må GitHub-issue synkroniseres?* under. Endringer i scenarios, regler eller brukerhistorie krever **ikke** GitHub-oppdatering.
-- GitHub-operasjonene (verifisering, opprettelse, sub-issue-linking, tittel-oppdatering, lukking) kan delegeres til `fs-github`-skillen når den er tilgjengelig. Er den ikke det, kjører denne skillen `gh`-kommandoene selv — se *GitHub-operasjoner* under steg 1a. Denne skillen avgjør uansett *når* en operasjon skal kjøres.
+- **GitHub-issue er valgfritt.** Oppgir brukeren et issue når kravet opprettes, skrives det som `# GitHub: #NNNN` over tag-linja (se steg 6). Skillen oppretter, endrer, linker eller lukker ikke GitHub-issues, og kjører ikke `gh`.
 - **Confluence-bakgrunn er ofte tilgjengelig** via Atlassian-MCP (`mcp__claude_ai_Atlassian_Rovo__*`). Draft-filer refererer gjerne til kilden med en kommentar som `# Krav fra Confluence: K6 ...`. Bruk MCP-en til å hente siden når brukeren oppgir en URL/ID — **ikke** søk bredt i Confluence av eget initiativ; spør først.
 
 ## Arbeidsmoduser
 
-Skillen har to moduser. Velg modus basert på hva brukeren ber om. Hvis det er uklart, spør.
+Skillen har fire moduser. Velg modus basert på hva brukeren ber om. Hvis det er uklart, spør.
 
 | Modus | Når | Følg |
 |-------|-----|------|
 | **A. Nytt kravarbeid** | Bruker starter på et nytt initiativ / skal lage nye krav fra bunnen | *Prosess: Nytt kravarbeid* (steg 1–7) |
 | **B. Fullføre krav i mappe** | Bruker peker på en eksisterende mappe og vil gå gjennom og validere kravene, slik at de validerte kan få `@planned`. Trigge-ord: "fullføre krav i [mappe]", "få kravene klare", "tagge med planned", "ferdigstille iterasjon N" | *Prosess: Fullføre krav i mappe* (steg F1–F5) |
+| **C. Fjerne krav** | Bruker vil slette et krav, eller en regel/et scenario i et krav. Trigge-ord: "fjerne krav", "slette krav", "avvikle", "dette skal ikke lenger gjelde" | *Prosess: Fjerne krav* (steg D1–D4) |
+| **D. Endre levert krav** | Bruker vil endre eller utvide et krav som er `@implemented`. Trigge-ord: "endre krav", "oppdatere levert krav", "ny versjon av regel", "kravet skal nå være" | *Prosess: Endre levert krav* (steg E1–E4) |
 
 Modusene kan kjedes: fullføring avdekker ofte behov for nye scenarios eller nye features, som da følger modus A videre.
-
-## Når må GitHub-issue synkroniseres?
-
-GitHub sporer *kravets eksistens og identitet* — ikke kravets innhold. Innholdet eies av `.feature`-fila, og git-historikken gir sporbarhet.
-
-| Endring i `.feature` | Oppdater GitHub? |
-|----------------------|------------------|
-| Ny fil opprettes | **Ja** — opprett issue (linket som sub-issue), sett `# GitHub: #NNN` |
-| Fil slettes | **Ja** — lukk tilhørende issue med forklaring |
-| Tittel på `Egenskap:` endres | **Ja** — oppdater issue-tittel så de er i synk |
-| `# GitHub:`-referanse byttes (nytt saksnr) | **Ja** — verifiser nytt issue, oppdater fila |
-| Scenarios legges til / endres / fjernes | Nei |
-| `Regel:`-seksjoner endres | Nei |
-| Brukerhistorien justeres (`Som en... / ønsker... / slik at...`) | Nei |
-| Tags (`@must`, `@implemented`, ...) endres | Nei |
-| Åpne spørsmål legges til / fjernes | Nei |
-| Filen flyttes eller omdøpes | Nei — `# GitHub:`-referansen følger med |
-
-Praktisk konsekvens: når brukeren ber om å legge til et scenario eller rette en `Regel:`, er `gh`-flyten i steg 1a ikke relevant. Hopp direkte til filendringen.
 
 ## Prosess: Nytt kravarbeid
 
@@ -72,61 +60,8 @@ Hvis brukeren allerede har jobbet med et initiativ i denne samtalen, bruk det ut
 - Hva heter initiativet / hvilken funksjonalitet skal spesifiseres?
 - Hvem er aktørene?
 - Hvilket domene hører dette til? (se `krav/` for eksisterende domener)
-- **Hvilket GitHub-saksnummer hører kravet til?** (f.eks. `#1234`)
+- **Hører kravet til et GitHub-issue?** (f.eks. `#1234`). Valgfritt: svarer brukeren "nei" eller "hopp over", skrives fila uten `# GitHub:`-linje.
 - **Finnes det bakgrunnsinformasjon i Confluence** som skal legges til grunn? (side-URL, tiny-link eller side-ID — f.eks. en kravspesifikasjon, en workshop-oppsummering, eller en K-nummerert kravliste). Hvis ja, hent innholdet via `mcp__claude_ai_Atlassian_Rovo__getConfluencePage` før du begynner å skrive scenarios. Bruker sier "nei" eller "hopp over" → fortsett uten.
-
-### 1a. Verifiser eller opprett GitHub-issue
-
-Dette steget eier *hva* som skal avklares med brukeren. Selve `gh`-kallene er beskrevet under *GitHub-operasjoner* nedenfor.
-
-**Hvis brukeren oppgir et eksisterende saksnummer:** verifiser issuet, og vis tittelen tilbake til brukeren for bekreftelse. Stopp og avklar hvis issuet er lukket eller tittelen ikke matcher.
-
-**Hvis brukeren ikke har et issue:** tilby å opprette et. Avklar disse to tingene først:
-
-1. **Parent-issue (initiativ/epic)** — alle nye krav-issues skal linkes som sub-issue. Spør: *"Hvilket parent-issue (initiativ/epic) skal dette nye issuet linkes under?"* og ikke fortsett uten svar. Verifiser parent-issuet og bekreft med brukeren at det er riktig.
-2. **Tittel og kort beskrivelse** for det nye issuet (inkludér gjerne en `Parent: #<PARENT>`-linje i body som backup hvis sub-issue-koblingen feiler).
-
-Opprett deretter issuet og link det som sub-issue til parent. Bruk det returnerte issue-nummeret videre i `# GitHub: #<NNNN>`-linjen i `.feature`-fila.
-
-**Ved oppdatering av eksisterende krav:** steg 1a gjelder kun når selve identiteten endres (fila opprettes/slettes, `Egenskap:`-tittelen endres, eller saksnummeret skal byttes). Ved ren innholdsredigering — nye/endrede scenarios, justerte regler, nye åpne spørsmål — trenger du ikke verifisere eller oppdatere GitHub. Se tabellen i *Når må GitHub-issue synkroniseres?*.
-
-Hvis tittelen på `Egenskap:` endres, oppdater tittelen på det linkede issuet så de er i synk.
-
-#### GitHub-operasjoner
-
-**Er `fs-github`-skillen tilgjengelig, deleger dit** — den eier disse operasjonene og holder dem oppdatert. Er den ikke det, kjør kommandoene under direkte. Begge veier gir samme resultat.
-
-Forutsetter at `gh` er installert og autentisert. Repo utledes fra git remote (`sikt-no/fs`); overstyr med `--repo <owner>/<repo>` ved behov.
-
-```bash
-# Verifisere et issue — returner tittel og state til brukeren for bekreftelse
-gh issue view <NNN> --json number,title,state,url
-
-# Opprette nytt issue — plukk ut issue-nummeret fra outputen
-gh issue create --title "<TITTEL>" --body "<BODY>"
-
-# Oppdatere tittel / lukke
-gh issue edit <NNN> --title "<NY TITTEL>"
-gh issue close <NNN> --comment "<KORT BEGRUNNELSE>"
-```
-
-**Linke det nye issuet som sub-issue under parent** — to fallgruver, begge nødvendige:
-
-```bash
-# 1. Sub-issue-API-et bruker intern ID, ikke issue-nummer
-NEW_ID=$(gh api repos/{owner}/{repo}/issues/<NEW_NUMBER> --jq .id)
-
-# 2. Bruk -F (stor F). -f sender streng, og API-et krever integer → 422 Invalid property
-gh api repos/{owner}/{repo}/issues/<PARENT_NUMBER>/sub_issues \
-  -X POST \
-  -F sub_issue_id="$NEW_ID"
-
-# Verifiser at koblingen er på plass
-gh api repos/{owner}/{repo}/issues/<PARENT_NUMBER>/sub_issues \
-  --jq '[.[] | {number, title, state}]'
-```
-
-Feiler sub-issue-kallet (404/403 forekommer på repo der API-et ikke er tilgjengelig): issuet er allerede opprettet, så ikke opprett det på nytt. Rapportér at koblingen manglet, og støtt deg på `Parent: #<PARENT>`-linja i body.
 
 ### 2. Plasser kravet riktig i mappestrukturen
 
@@ -209,7 +144,7 @@ Bekreft samlet innhold med brukeren før du skriver til disk.
 
 Feature-ID settes som tag på filen: `@DOM-SUB-KAP-NNN` (3-bokstavs forkortelser for domene/sub-domene/kapabilitet, utledet fra mappenavn, pluss neste ledige løpenummer). Tag-linja er alltid `@DOM-SUB-KAP-NNN @<moscow> @draft`.
 
-Når du legger til en ny `Regel:` eller et nytt scenario i en fil som allerede er `@planned`/`@in-progress`, tagges den nye delen `@draft @openquestion` til den er validert, med mindre brukeren eksplisitt sier at den er klar.
+Når du legger til en ny `Regel:` eller et nytt scenario i en fil som allerede er `@planned`/`@in-progress`, tagges den nye delen `@draft @openquestion` til den er validert, med mindre brukeren eksplisitt sier at den er klar. Er fila `@implemented`, følg modus D (*Endre levert krav*): leverte deler endres ikke på stedet.
 
 Format:
 
@@ -248,9 +183,9 @@ Egenskap: {EGENSKAP_NAVN}
 
 `Scenariomal` brukes når samme atferd skal verifiseres med flere konkrete dataverdier — `Eksempler:` skal aldri brukes uten en `Scenariomal:` over seg. For et fullt utfylt eksempel med realistiske scenarios, se `references/eksempel-feature.feature`.
 
-**GitHub-saksnummer er påkrevd** og plasseres som en Gherkin-kommentar `# GitHub: #NNNN` på **linjen rett over tag-linjen** for `Egenskap`-en (mellom `# language: no` og `@DOM-SUB-KAP-NNN`-taggen). Referansen tilhører egenskapen konseptuelt, men skrives utenfor `Egenskap`-blokken slik at den er synlig uten å scrolle gjennom brukerhistorien.
+**`# GitHub:`-linja er valgfri.** Den skrives bare når brukeren har oppgitt et issue, som en Gherkin-kommentar `# GitHub: #NNNN` på **linjen rett over tag-linjen** for `Egenskap`-en (mellom `# language: no` og `@DOM-SUB-KAP-NNN`-taggen). Referansen tilhører egenskapen konseptuelt, men skrives utenfor `Egenskap`-blokken slik at den er synlig uten å scrolle gjennom brukerhistorien.
 
-Ved oppdatering: hvis eksisterende fil mangler `# GitHub:`-linjen, legg den til rett over tag-linjen. Hvis en egenskap dekker flere issues, list alle: `# GitHub: #1234, #1250`.
+Dekker en egenskap flere issues, list alle: `# GitHub: #1234, #1250`. En eksisterende `# GitHub:`-linje blir stående når fila endres, flyttes eller omdøpes.
 
 Hvis en fil noen gang inneholder flere `Egenskap:`-blokker, plasseres én `# GitHub:`-kommentar over hver sine tag-linje — slik at referansen alltid er direkte knyttet til egenskapen like under.
 
@@ -262,7 +197,7 @@ Vis brukeren:
 
 - Sti til opprettet/oppdatert `.feature`-fil (som klikkbar markdown-lenke)
 - Feature-ID som ble tildelt
-- **GitHub-saksnummer som er linket** (`#NNNN`), og parent-issue hvis nyopprettet (`↳ under #<PARENT>`)
+- GitHub-issue (`#NNNN`), hvis brukeren oppga et
 - Antall scenarios og prioritet
 - Åpne spørsmål som gjenstår
 - At kravet står som `@draft`
@@ -285,11 +220,11 @@ Skillen foreslår aldri `@planned` ut fra egen vurdering av at innholdet «ser f
 |-------------|------------|
 | `@draft` | Gå gjennom kravet (F4). Validert → bytt `@draft` med `@planned` på `Egenskap:`. Deler som bevisst skal vente kan stå igjen som `@draft @openquestion`. Ikke validert → behold `@draft` og dokumenter hva som mangler. |
 | Ingen status — gjelder eldre filer | Regnes som ikke validert. Legg til `@draft` og ta kravet med i gjennomgangen (F3). |
-| Allerede `@planned` / `@in-progress` / `@implemented` | Ingen endring. |
+| Allerede `@planned` / `@in-progress` / `@implemented` / `@deprecated` | Ingen endring. Unntak: `@draft`-deler under en `@implemented` egenskap valideres som i modus D (steg E3). |
 
 Bakgrunnen: `@draft` markerer at *kravteksten* er utkast (kravstatus), og `@planned` markerer at *kravet er klart til implementasjon* (implementasjonsstatus). Når et draft er ferdigstilt, fjernes `@draft` og erstattes av `@planned` på `Egenskap:` — vi beholder ikke begge samtidig på samme linje, og vi lar ikke krav stå uten status. `@draft` kan likevel stå igjen på enkelt-`Regel:`/`Scenario:` under en `@planned` egenskap når det er en bevisst beslutning. Se `krav/README.md` (*Kravstatus* og *Delvis utkast*) for den autoritative definisjonen.
 
-**Denne skillen eier bare overgangen `@draft` → `@planned`.** Resten av implementasjonsaksen (`@in-progress`, `@implemented`) er beskrevet i `krav/README.md` og settes ikke her. Et krav du finner som `@in-progress` er plukket inn i en oppgave, og skal stå urørt.
+**Denne skillen eier overgangene `@draft` → `@planned` og `@implemented` → `@deprecated` (modus C), på egenskaper og, når et levert krav endres, på deler (modus D).** Resten av implementasjonsaksen (`@in-progress`, `@implemented`, og slettingen av `@deprecated`-krav) er beskrevet i `krav/README.md` og settes ikke her. Et krav du finner som `@in-progress` er plukket inn i en oppgave, og skal stå urørt.
 
 ### Interaksjonsprinsipp: ett spørsmål om gangen
 
@@ -331,7 +266,8 @@ Les hver `.feature`-fil og klassifiser hvert krav basert på tags på `Egenskap:
 |----------|-----------------|--------|
 | **Draft** | `@draft` finnes | F4: gjennomgang. `@planned` bare hvis validert |
 | **Uten status** | Verken `@draft` eller `@planned` (heller ikke `@in-progress`/`@implemented`) | F3: legg til `@draft`, deretter gjennomgang i F4 |
-| **Allerede klar** | `@planned`, `@in-progress` eller `@implemented` finnes, og `@draft` finnes ikke | Ingen endring — rapporter som klar. Har fila `@draft`-deler på `Regel:`/`Scenario:`, list dem og spør om noen skal avklares nå (F4, trinn 5–6 for den delen) |
+| **Avviklet** | `@deprecated` finnes | Ingen endring — rapporter som avviklet. Slettes av `fs-verify` når koden er borte |
+| **Allerede klar** | `@planned`, `@in-progress` eller `@implemented` finnes, og `@draft` finnes ikke | Ingen endring — rapporter som klar. Har fila `@draft`-deler på `Regel:`/`Scenario:`, list dem og spør om noen skal avklares nå (F4, trinn 5–6 for den delen). Under `@implemented`: bruk modus D, steg E3 (delen får `@planned`, og delen den erstatter, `@deprecated`) |
 
 Vis brukeren en oversikt før du gjør endringer, med klikkbare lenker:
 
@@ -381,8 +317,6 @@ Ta ett draft-krav om gangen. For hvert:
 
 **Hvis et draft ikke lar seg fullføre i denne sesjonen** (venter på ekstern input, produktavklaring, design-beslutning) og delvis utkast ikke er aktuelt: behold `@draft`, dokumenter gjenværende usikkerhet som oppdatert `# ÅPNE SPØRSMÅL:`, og rapporter tydelig i F5 at kravet fortsatt er draft.
 
-**GitHub-synk:** Typisk fullføring endrer *innhold* — ikke identitet — så GitHub-operasjonene i steg 1a er ikke relevante. Se tabellen i *Når må GitHub-issue synkroniseres?*. Oppdater bare hvis `Egenskap:`-tittelen endres eller fila flyttes/omdøpes.
-
 ### F5. Oppsummer arbeidet
 
 Når hele mappen er gjennomgått, rapportér til brukeren:
@@ -390,9 +324,94 @@ Når hele mappen er gjennomgått, rapportér til brukeren:
 - Antall krav som nå er tagget `@planned` (fordelt på "validert i gjennomgangen" vs. "satt etter eksplisitt beskjed fra bruker")
 - Antall krav som fortsatt er `@draft` (inkludert eldre krav uten status som fikk `@draft`), med grunn (venter på ekstern avklaring, produktinput, etc.)
 - `@planned`-krav med `@draft`-deler: hvilke regler/scenarioer som venter, og hvorfor
-- Antall krav som var `@planned`/`@in-progress`/`@implemented` fra før og ikke ble endret
+- Antall krav som var `@planned`/`@in-progress`/`@implemented`/`@deprecated` fra før og ikke ble endret
 - Samlet liste over gjenstående `# ÅPNE SPØRSMÅL:` på tvers av filer — som en enkelt punktliste brukeren kan ta med inn i neste avklaringsrunde
 - Forslag til neste steg: `lage-steps` for `@planned`-krav, eller `fs-specify` for å hente dem inn i en oppgavemappe
+
+## Prosess: Fjerne krav
+
+Et krav som er levert, slettes ikke med en gang. Koden finnes fortsatt, og kravet er påminnelsen om at den må bort. Se *Avvikling* i `krav/README.md` for den autoritative regelen.
+
+### D1. Finn kravet
+
+Finn fila, og eventuelt regelen eller scenarioet, som skal bort. Er det uklart, spør. Les `Egenskap:`-tag-linja, og taggene på delen.
+
+### D2. Velg håndtering ut fra status
+
+| Hva skal bort | Status på `Egenskap:` | Håndtering |
+|---------------|------------------------|------------|
+| Hele kravet | `@draft`, `@planned` eller ingen status | Ikke levert. Slett fila. |
+| Hele kravet | `@implemented` | Bytt `@implemented` med `@deprecated` på `Egenskap:`-tag-linja. Fjern eventuelle `@deprecated` på deler (de er dekket av egenskapen). |
+| Hele kravet | `@in-progress` | Spør om noe av kravet allerede er levert (fra en tidligere iterasjon). Ja → som `@implemented`. Nei → slett fila, og si fra at oppgaven som har hentet kravet inn, må oppdateres. |
+| Hele kravet | `@deprecated` | Allerede avviklet. Ingen endring. |
+| En regel/et scenario | `@draft` eller `@planned` | Ikke levert. Slett blokken (med tagger og kommentarer). |
+| En regel/et scenario | `@implemented` eller `@in-progress` | Er delen `@draft`, `@planned` eller `@in-progress`, er den ikke levert: slett blokken (erstatter den en `@deprecated`-del, spør om den gamle delen skal gjelde igjen, og fjern i så fall `@deprecated` fra den). Ellers: legg `@deprecated` på `Regel:`-/`Scenario:`-linja. `Egenskap:`-taggen endres ikke. |
+
+**Mekanikk:** én `Edit` på tag-linja. Bare statustaggen byttes; feature-ID, MoSCoW og andre tagger står urørt: `@BRU-APP-API-001 @must @implemented` → `@BRU-APP-API-001 @must @deprecated`. Mangler delen en tag-linje, legg en ny linje med `@deprecated` rett over `Regel:`/`Scenario:`, med samme innrykk.
+
+### D3. Bekreft før du sletter
+
+Vis brukeren hva som skal skje (fil, del, `@deprecated` eller sletting), og vent på bekreftelse. Slett aldri en fil eller blokk uten bekreftelse. Hele filer slettes med `rm "<sti>"`. Kjører skillen uten Bash (for eksempel i Claude-panelet i FS Kravforvaltning), kan den ikke slette filer: si da hvilken fil brukeren må slette selv.
+
+### D4. Oppsummer
+
+- Hvilke krav/deler som ble slettet, og hvilke som fikk `@deprecated`
+- Step definitions i `tester/steps/` som hørte til slettede scenarioer (listes, slettes ikke)
+- Neste steg for `@deprecated`: fjern koden, og kjør `fs-verify` for å slette kravet når koden er borte
+
+## Prosess: Endre levert krav
+
+Et levert krav endres ikke på stedet. Den leverte teksten beskriver koden som finnes, og den nye teksten beskriver det som skal bygges. Begge står i fila til koden er endret. Se *Endring av levert krav* i `krav/README.md` for den autoritative regelen.
+
+Endringen spores på delen, ikke på egenskapen:
+
+- Egenskapen blir stående som `@implemented`.
+- Den nye eller endrede delen går `@draft` →(validering)→ `@planned`. Deretter tar `fs-specify` / `fs-specify-delta` og `fs-verify` over.
+- Delen den erstatter, får `@deprecated` når den nye blir `@planned`.
+
+### E1. Finn kravet og delen
+
+Finn fila og regelen eller scenarioet som skal endres. Er det uklart, spør. Les `Egenskap:`-tag-linja:
+
+| Status på `Egenskap:` | Håndtering |
+|------------------------|------------|
+| `@implemented` | Fortsett med E2. |
+| `@draft` eller `@planned` | Ingenting er levert. Endre delen på stedet (modus A/B). |
+| `@in-progress` | Spør om delen som endres, allerede er levert (fra en tidligere iterasjon). Nei → endre på stedet, og si fra at oppgaven som har hentet kravet inn, må oppdateres. Ja → si at dette ikke støttes: vent til egenskapen er `@implemented`, eller avklar med brukeren. |
+| `@deprecated` | Kravet er avviklet. Skal det gjelde igjen, er det et nytt krav (modus A). |
+
+Hvilke deler endringen gjelder, avklares med brukeren, én om gangen: endres, fjernes eller legges til?
+
+### E2. Skriv den nye delen som `@draft`
+
+- **Endring:** legg den nye versjonen som en egen blokk rett etter delen den erstatter, tagget `@draft` (og `@openquestion` med `# ÅPNE SPØRSMÅL:` når noe er uklart). Den gamle blokken står urørt. Gi den nye blokken en tittel som skiller den fra den gamle.
+- **Tillegg:** legg den nye blokken der den hører hjemme, tagget `@draft`. Det finnes ingen gammel del.
+- **Fjerning:** følg modus C (D2): den leverte delen får `@deprecated`.
+
+Endres hele kravet, gjelder det samme for hver regel som endres. Uendrede regler står urørt. Er kravet så endret at det ikke lenger henger sammen, foreslå et nytt krav (modus A), og at det gamle avvikles (modus C).
+
+Samme regler som i modus A: ikke finn på forretningslogikk, spør. Bekreft innholdet med brukeren før du skriver til disk.
+
+### E3. Valider
+
+Gå gjennom den nye delen som i F4 (ett spørsmål om gangen). Når hovedflyten er avklart, spør: *"Er [tittel] validert slik det står nå? (a) Ja → `@planned` (og [gammel del] får `@deprecated`), (b) Nei → beholder `@draft`."* Ta med parentesen bare når delen erstatter en gammel del.
+
+Ved (a), i samme endring:
+
+- Den nye delen: bytt `@draft` med `@planned` på `Regel:`-/`Scenario:`-linja, og fjern `@openquestion` og besvarte `# ÅPNE SPØRSMÅL:`.
+- Delen den erstatter (ikke ved et rent tillegg): legg `@deprecated` på `Regel:`-/`Scenario:`-linja (ny linje med samme innrykk hvis den mangler tagger).
+- `Egenskap:`-tag-linja endres ikke.
+
+En del har høyst én statustag. `@planned` står aldri sammen med `@draft` eller `@deprecated`.
+
+Setter brukeren eksplisitt at delen skal ha `@planned`, gjelder det samme unntaket som i F3.
+
+### E4. Oppsummer
+
+- Hvilke deler som er `@planned`, og hvilke som fortsatt er `@draft` (med åpne spørsmål)
+- Hvilke deler som fikk `@deprecated`, og hvilken ny del de erstattes av
+- Step definitions i `tester/steps/` som hører til `@deprecated`-delene (listes, slettes ikke)
+- Neste steg: `fs-specify` / `fs-specify-delta` henter `@planned`-delene inn i en oppgave (`@planned` → `@in-progress` på delen), og `fs-verify` fjerner `@in-progress` når koden er på plass og sletter `@deprecated`-delene når den gamle koden er borte
 
 ## Feilhåndtering
 
@@ -406,8 +425,7 @@ Når hele mappen er gjennomgått, rapportér til brukeren:
 
 - **`krav/README.md`** — autoritative prosjektkonvensjoner for mappestruktur, Feature-ID, tags, terminologi
 - **`references/gherkin-syntax.md`** — ren Gherkin-syntaks (norske nøkkelord, blokkstruktur, tag-plassering). Sier ingenting om prosjektets konvensjoner — det eier konvensjonsfila over
-- **`references/eksempel-feature.feature`** — gullstandard-eksempel på en ferdigstilt (`@planned`) `.feature`-fil med `# GitHub:`, MoSCoW-tag, `Bakgrunn`, flere `Regel`-blokker, `Scenariomal` med `Eksempler`, `@openquestion`-tag på ett scenario, en `Regel` som bevisst står som `@draft @openquestion`, og `# ÅPNE SPØRSMÅL:`-kommentarer. Et nytt krav fra modus A ser likt ut, men med `@draft` i stedet for `@planned` og uten `@draft` på enkeltdeler
+- **`references/eksempel-feature.feature`** — gullstandard-eksempel på en ferdigstilt (`@planned`) `.feature`-fil med `# GitHub:` (valgfri), MoSCoW-tag, `Bakgrunn`, flere `Regel`-blokker, `Scenariomal` med `Eksempler`, `@openquestion`-tag på ett scenario, en `Regel` som bevisst står som `@draft @openquestion`, og `# ÅPNE SPØRSMÅL:`-kommentarer. Et nytt krav fra modus A ser likt ut, men med `@draft` i stedet for `@planned` og uten `@draft` på enkeltdeler
 - **`krav/krav-oversikt.md`** — generert oversikt over alle eksisterende features
-- **`fs-github`-skillen** — *valgfri*. Samme `gh`-operasjoner som steg 1a beskriver. Deleger dit når den er tilgjengelig
 - **`lage-steps`** — søsken-skill i dette repoet. Implementerer step-definitions i `tester/steps/` for `@planned`-krav (ikke for `@draft`-deler)
-- **`fs-specify`** / **`fs-specify-delta`** — søsken-skills i dette repoet. Henter `@planned`-krav inn i en oppgavemappe under `tasks/`
+- **`fs-specify`** / **`fs-specify-delta`** — søsken-skills i dette repoet. Henter `@planned`-krav, og `@planned`-deler i leverte krav, inn i en oppgavemappe under `tasks/`

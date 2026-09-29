@@ -86,6 +86,11 @@ Egenskap: Opptaksinnstillinger per utdanningstilbud
       Når opptaksforvalter setter tidlig søknadsfrist for utdanningstilbudet "Politihøyskolen, høst 2027"
       Så har dette utdanningstilbudet en tidligere søknadsfrist enn opptakets generelle frist
 
+    Scenario: Sette tidlig dokumentasjonsfrist
+      Gitt at opptaket åpner for at tidlig søknadsfrist kan angis per utdanningstilbud
+      Når opptaksforvalter setter tidlig dokumentasjonsfrist til "2027-03-01 23:59" for utdanningstilbudet "Politihøyskolen, høst 2027"
+      Så må søkere til dette utdanningstilbudet laste opp dokumentasjon innen denne fristen
+
   Regel: Opptaksforvalter kan velge hvilke plasstildelingsrunder utdanningstilbudet deltar i
 
     Scenario: Ekskludere utdanningstilbud fra etterfylling

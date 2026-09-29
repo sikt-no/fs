@@ -4,11 +4,11 @@ Denne mappa inneholder akseptansekravene for løsningene som lages av studieadmi
 
 Dette dokumentet er de gjeldende konvensjonene for alle kravfiler. Claude leser den samme fila (via `.claude/rules/gherkin-conventions.md`), så det finnes bare én versjon av reglene.
 
-Kravvieweren sjekker noen av reglene i dette dokumentet automatisk, og viser brudd som «Avvik fra konvensjoner». Reglene som sjekkes er merket med *(sjekkes i vieweren)*. Sjekkene står i `viewer/server/parse.ts` og er testet i `viewer/server/parse.test.ts`. Endrer du en merket regel, eller legger du til en regel som kan sjekkes, må `parse.ts` og testene oppdateres i samme endring.
+FS Kravforvaltning sjekker noen av reglene i dette dokumentet automatisk, og viser brudd som «Avvik fra konvensjoner». Reglene som sjekkes er merket med *(sjekkes automatisk)*. Sjekkene står i `fs-kravforvaltning/server/parse.ts` og er testet i `fs-kravforvaltning/server/parse.test.ts`. Endrer du en merket regel, eller legger du til en regel som kan sjekkes, må `parse.ts` og testene oppdateres i samme endring.
 
 ## Språk
 
-Vi skriver Gherkin på norsk. Start hver feature-fil med: *(sjekkes i vieweren)*
+Vi skriver Gherkin på norsk. Start hver feature-fil med: *(sjekkes automatisk)*
 
 ```gherkin
 # language: no
@@ -28,33 +28,37 @@ Vi skriver Gherkin på norsk. Start hver feature-fil med: *(sjekkes i vieweren)*
 | And             | Og          |
 | But             | Men         |
 
-`Eksempler:` brukes bare sammen med `Scenariomal:`, ikke med vanlig `Scenario:`. *(sjekkes i vieweren)*
+`Eksempler:` brukes bare sammen med `Scenariomal:`, ikke med vanlig `Scenario:`. *(sjekkes automatisk)*
+
+Nøkkelordene skrives nøyaktig som i tabellen, med stor forbokstav og kolon etter. En linje som ligner et nøkkelord uten å være det (`Scenarioz:`, `scenario:`, `Feature:`), leses som beskrivelse, og scenarioet under forsvinner uten feilmelding. *(sjekkes automatisk)*
+
+Fila må kunne leses som Gherkin. Kan den ikke det, viser FS Kravforvaltning sist gyldige versjon med feilen over, og fila får avviket «Parse-feil» på linja der feilen står. *(sjekkes automatisk)*
 
 ## Gode scenarioer
 
 Gherkin er et språk som alle andre, og må skrives godt for å være nyttig og forståelig. <https://automationpanda.com/bdd/> er en god guide til å skrive gode scenarioer og features, og <https://cucumber.io/docs/gherkin/reference/> er en god introduksjon.
 
 - Features skal deles etter **prosesser**, ikke etter komponenter.
-- Hver feature-fil skal tydelig beskrive hva featuren gjør og hvilken verdi den gir. Skriv en god beskrivelse under `Egenskap:`-linja.
+- Hver feature-fil skal tydelig beskrive hva featuren gjør og hvilken verdi den gir. Skriv en god beskrivelse under `Egenskap:`-linja. *(at beskrivelsen finnes, sjekkes automatisk)*
 - Unngå for store scenarioer. Test helst bare én funksjonalitet per scenario. Noen scenarioer blir naturlig lengre fordi arbeidsflyten krever det.
 - Alle scenarioer følger rekkefølgen Gitt → Når → Så:
   - **Gitt**: forutsetningene som må være på plass før handlingen skjer
   - **Når**: hovedhandlingen som testes
   - **Så**: forventet resultat
-- Det er lov med flere av hvert nøkkelord etter hverandre (med `Og`/`Men`), men aldri i en annen rekkefølge. *(sjekkes i vieweren)*
+- Det er lov med flere av hvert nøkkelord etter hverandre (med `Og`/`Men`), men aldri i en annen rekkefølge. *(sjekkes automatisk)*
 - Bruk datatabeller og `Scenariomal:` med `Eksempler:` for datadrevne scenarioer.
 - Bruk for det meste bestemt form på roller når handlinger utføres: «personen», «administratoren».
 
 ## Filnavn
 
-- Filnavn skrives i snake_case: `se_søknad.feature`, `lage_opptak.feature`. *(sjekkes i vieweren)*
+- Filnavn skrives i snake_case: `se_søknad.feature`, `lage_opptak.feature`. *(sjekkes automatisk)*
 - Navnet beskriver funksjonaliteten eller prosessen med et verb og et substantiv.
 
 ## Mappestruktur
 
 Tre nivåer: **Domene → Sub-domene → Kapabilitet**
 
-Feature-filer skal **kun** ligge på kapabilitetsnivå (nivå 3). *(sjekkes i vieweren)* Sub-domener nummereres fra `10`, kapabiliteter fra `01`.
+Feature-filer skal **kun** ligge på kapabilitetsnivå (nivå 3). *(sjekkes automatisk)* Sub-domener nummereres fra `10`, kapabiliteter fra `01`. `_Interne prosesser` og `99 Demo` følger ikke nummereringen. *(sjekkes automatisk)*
 
 ```
 krav/
@@ -102,13 +106,13 @@ Noen kapabiliteter – som søk, filtrering og eksport – går igjen på tvers 
 - Regelen «søk på Erasmuskode gir direktetreff» er *hva* → `09 Organisasjon/10 Finn organisasjon/`
 - Generelle søkemønstre som gjelder alle domener → `10 Felleskrav/`
 
-Unngå å kalle sub-domener og kapabiliteter det samme (f.eks. `Søk/Søk`). Bruk heller et beskrivende navn som skiller nivåene, f.eks. `Finn organisasjon/Søk og identifikasjon`.
+Unngå å kalle sub-domener og kapabiliteter det samme (f.eks. `Søk/Søk`). Bruk heller et beskrivende navn som skiller nivåene, f.eks. `Finn organisasjon/Søk og identifikasjon`. *(sjekkes automatisk)*
 
 ## Tags
 
 ### Feature-ID
 
-Hver feature **må tagges** med en unik ID. ID-en legges inn manuelt som tag i feature-filen. *(sjekkes i vieweren)*
+Hver feature **må tagges** med en unik ID. ID-en legges inn manuelt som tag i feature-filen. *(sjekkes automatisk)*
 
 ```
 @DOM-SUB-KAP-NNN
@@ -132,7 +136,7 @@ Ved ny feature: sjekk eksisterende features i samme mappe for å finne neste led
 
 - `@must` / `@should` / `@could` / `@wont`
 
-En feature har høyst én prioritet. *(sjekkes i vieweren)*
+En feature har høyst én prioritet. *(sjekkes automatisk)*
 
 ### Kravstatus
 
@@ -149,17 +153,18 @@ Sier noe om selve **kravteksten** – er den ferdig skrevet, avklart og klar til
 
 Sier noe om **koden** – er funksjonaliteten bygget?
 
-- `@implemented` – Ferdig implementert og levert
+- `@deprecated` – Avviklet. Kravet var levert, men skal fjernes. Koden finnes kanskje fortsatt, og kravfila blir stående til det er vist at koden er borte. Se *Avvikling* under
+- `@implemented` – Ferdig implementert og levert (settes av `fs-verify` når koden er verifisert)
 - `@in-progress` – Under arbeid. Kravet er plukket inn i en aktiv flyt (settes av `fs-specify` / `fs-specify-delta` når de henter kravet inn i en spec), og er ikke ferdig implementert enda
 - `@planned` – Planlagt for implementasjon (kravet er klart, men ingen har begynt på det)
 
 Implementasjonsstatusen beveger seg langs én akse, og hvert steg har én eier:
 
-`@draft` →(`fs-krav`)→ `@planned` →(`fs-specify` / `fs-specify-delta`)→ `@in-progress` →(verifisering)→ `@implemented`
+`@draft` →(`fs-krav`)→ `@planned` →(`fs-specify` / `fs-specify-delta`)→ `@in-progress` →(`fs-verify`)→ `@implemented` →(`fs-krav`)→ `@deprecated` →(`fs-verify`)→ slettet
 
-Et krav skal ha nøyaktig én av disse på `Egenskap:`-tag-linja. Ikke sett to samtidig, og ikke la et krav stå uten status. `@planned`, `@in-progress` og `@implemented` hører bare hjemme på `Egenskap:` – på `Regel:`/`Scenario:` er `@draft` den eneste statustaggen. *(sjekkes i vieweren)*
+Et krav skal ha nøyaktig én av disse på `Egenskap:`-tag-linja. Ikke sett to samtidig, og ikke la et krav stå uten status. På `Regel:`/`Scenario:` brukes `@draft` og `@deprecated`. `@planned` og `@in-progress` er bare lov på en del under en `@implemented` egenskap, når et levert krav endres (se *Endring av levert krav*). `@implemented` settes aldri på en del: en levert del har ingen egen statustag. *(sjekkes automatisk)*
 
-Den tidligere taggen `@levert` er erstattet av `@implemented`.
+Den tidligere taggen `@levert` er erstattet av `@implemented`. *(sjekkes automatisk)*
 
 ### Delvis utkast
 
@@ -169,9 +174,10 @@ Det samme gjelder `@in-progress` og `@implemented`. En `@implemented` egenskap m
 
 - Delen tagges `@draft @openquestion` på `Regel:`- eller `Scenario:`-linja, og følges av en `# ÅPNE SPØRSMÅL:`-kommentar som beskriver hva som mangler.
 - `@draft` på en `Regel:` gjelder alle scenarioene under den.
-- `# ÅPNE SPØRSMÅL:` er påkrevd sammen med `@openquestion`. *(sjekkes i vieweren)* En `@draft`-del uten `@openquestion` er et utkast som ikke er gjennomgått enda.
+- `# ÅPNE SPØRSMÅL:` er påkrevd sammen med `@openquestion`. *(sjekkes automatisk)* En `@draft`-del uten `@openquestion` er et utkast som ikke er gjennomgått enda. *(sjekkes automatisk)*
 - En `@draft`-del skal ikke implementeres før den er avklart. Når den er avklart, fjernes `@draft`, `@openquestion` og den besvarte kommentaren. `Egenskap:`-taggen endres ikke av det.
-- Under en `Egenskap:` som selv er `@draft` skal deler **ikke** tagges `@draft` (det er dekket av egenskapen). *(sjekkes i vieweren)* `@openquestion` kan fortsatt brukes for å peke ut konkrete spørsmål.
+- Under en `@implemented` egenskap fjernes ikke `@draft` uten videre, for da ser delen levert ut. En avklart del får `@planned` i stedet, og delen den erstatter, får `@deprecated`. Se *Endring av levert krav*.
+- Under en `Egenskap:` som selv er `@draft` skal deler **ikke** tagges `@draft` (det er dekket av egenskapen). *(sjekkes automatisk)* `@openquestion` kan fortsatt brukes for å peke ut konkrete spørsmål.
 
 Forskjellen på `@openquestion` alene og `@draft @openquestion`:
 
@@ -194,6 +200,60 @@ Egenskap: ...
     Scenario: ...
 ```
 
+### Avvikling
+
+Et krav som skal fjernes, slettes ikke med en gang hvis det er levert. Koden finnes fortsatt, og kravet er påminnelsen om at den må bort.
+
+- Et krav som ikke er levert (`@draft` eller `@planned`), slettes direkte.
+- Et levert krav (`@implemented`) får `@deprecated` i stedet for `@implemented` på `Egenskap:`-tag-linja. Det settes av `fs-krav` når kravet fjernes.
+- Skal bare en del av et levert krav bort, tagges delen `@deprecated` på `Regel:`- eller `Scenario:`-linja. `@deprecated` på en `Regel:` gjelder alle scenarioene under den. `Egenskap:`-taggen endres ikke.
+- `@deprecated` på en del er bare lov under en `Egenskap:` som er `@implemented` eller `@in-progress`. Under `@draft` eller `@planned` er ingenting levert, så delen slettes direkte. *(sjekkes automatisk)*
+- Under en `Egenskap:` som selv er `@deprecated`, skal deler **ikke** tagges `@deprecated`. *(sjekkes automatisk)*
+- En del kan ikke være både `@draft` og `@deprecated`. *(sjekkes automatisk)*
+- Det som er `@deprecated`, skal ikke implementeres videre. `fs-specify` og `fs-specify-delta` tar det inn i en spec for å fjerne koden, sammen med annet arbeid. Taggen blir stående til koden er borte.
+- `fs-verify` sjekker om koden fortsatt finnes. Er den borte, slettes fila (for en `@deprecated` egenskap) eller blokken (for en `@deprecated` del). Finnes den fortsatt, blir kravet stående, og `fs-verify` viser hvor i koden den er.
+
+```gherkin
+@BRU-APP-API-001 @must @implemented
+Egenskap: ...
+
+  Regel: Hovedflyt som fortsatt gjelder
+    Scenario: ...
+
+  @deprecated
+  Regel: Eksport til CSV
+    Scenario: ...
+```
+
+### Endring av levert krav
+
+Et krav som er levert (`@implemented`), endres ikke på stedet. Den leverte teksten beskriver koden som finnes, og den nye teksten beskriver det som skal bygges. Begge står i fila til koden er endret.
+
+- Egenskapen blir stående som `@implemented`. Statusen for endringen står på delen (`Regel:` eller `Scenario:`/`Scenariomal:`).
+- Den nye eller endrede delen legges som en egen blokk, rett etter delen den erstatter. Den starter som `@draft` (med `@openquestion` og `# ÅPNE SPØRSMÅL:` ved uklarheter), som alle nye krav. Den gamle delen står urørt så lenge den nye er utkast.
+- Når den nye delen er validert (`fs-krav`), byttes `@draft` med `@planned`, og delen den erstatter, får `@deprecated` i samme endring. En del som bare fjernes, får `@deprecated` (se *Avvikling*). Et rent tillegg har ingen gammel del.
+- Delen går deretter langs samme akse som en egenskap: `@planned` →(`fs-specify` / `fs-specify-delta`)→ `@in-progress` →(`fs-verify`)→ levert. Når `fs-verify` har funnet koden, fjernes `@in-progress` fra delen, og delen arver `@implemented` fra egenskapen. `@deprecated`-delen slettes av `fs-verify` når koden er borte.
+- `@planned` og `@in-progress` på en del er bare lov under en `@implemented` egenskap. Under `@draft`, `@planned` eller `@in-progress` er ingenting levert, så delen endres på stedet. *(sjekkes automatisk)*
+- En del har høyst én statustag. `@planned` og `@in-progress` kombineres ikke med hverandre, med `@draft` eller med `@deprecated`. *(sjekkes automatisk)*
+
+FS Kravforvaltning viser et levert krav med `@planned`- eller `@in-progress`-deler med statusen «endres».
+
+```gherkin
+@BRU-APP-API-001 @must @implemented
+Egenskap: ...
+
+  Regel: Hovedflyt som ikke endres
+    Scenario: ...
+
+  @deprecated
+  Regel: Eksport til CSV
+    Scenario: ...
+
+  @planned
+  Regel: Eksport til Excel
+    Scenario: ...
+```
+
 ### Type
 
 - `@e2e` – ende-til-ende brukerreiser
@@ -201,11 +261,13 @@ Egenskap: ...
 - `@demo` – demo/eksempeltester (kjøres lokalt som standard)
 - `@ci` – tester som kjøres automatisk i CI-pipeline
 
+`@only` og `@focus` skal ikke sjekkes inn i en kravfil. playwright-bdd gjør `@only` om til `test.only`, så resten av testene hoppes over. `@focus` har ingen virkning i playwright-bdd, og er en rest fra andre verktøy. *(sjekkes automatisk)*
+
 ### Oppfølging
 
 Sier noe om at et **konkret scenario eller regel** har en uavklart detalj, selv om resten av kravet er klart til implementasjon.
 
-- `@openquestion` – Scenarioet/regelen har en uavklart detalj som må besvares før implementasjon kan begynne i akkurat den delen. Plasseres på scenario- eller regel-nivå (ikke på `Egenskap:` – bruk `@draft` hvis hele kravet er utkast, og `@draft @openquestion` hvis hele regelen/scenarioet er utkast, se *Delvis utkast*). *(sjekkes i vieweren)* Skal **alltid** følges av en `# ÅPNE SPØRSMÅL:`-kommentar like under som beskriver spørsmålet. *(sjekkes i vieweren)* Taggen gjør det mulig å søke på tvers av krav-mappa (`grep -r @openquestion krav/`) for å finne gjenstående avklaringer. En `Egenskap:` kan være `@planned` selv om ett scenario er `@openquestion` – det markerer at hovedflyten er klar, men at en detalj må lukkes før delen kan implementeres.
+- `@openquestion` – Scenarioet/regelen har en uavklart detalj som må besvares før implementasjon kan begynne i akkurat den delen. Plasseres på scenario- eller regel-nivå (ikke på `Egenskap:` – bruk `@draft` hvis hele kravet er utkast, og `@draft @openquestion` hvis hele regelen/scenarioet er utkast, se *Delvis utkast*). *(sjekkes automatisk)* Skal **alltid** følges av en `# ÅPNE SPØRSMÅL:`-kommentar like under som beskriver spørsmålet. *(sjekkes automatisk)* Taggen gjør det mulig å søke på tvers av krav-mappa (`grep -r @openquestion krav/`) for å finne gjenstående avklaringer. En `Egenskap:` kan være `@planned` selv om ett scenario er `@openquestion` – det markerer at hovedflyten er klar, men at en detalj må lukkes før delen kan implementeres.
 
 ## Åpne spørsmål
 
@@ -227,7 +289,7 @@ Scenario: ...
 
 I en `Egenskap:` som selv er `@draft` kan spørsmål som gjelder hele kravet stå under beskrivelsen, uten `@openquestion`.
 
-Bruk ikke `# TODO:` for åpne spørsmål. Vieweren viser bare `# ÅPNE SPØRSMÅL:` som spørsmål, og `@openquestion` er det `grep -r @openquestion krav/` finner.
+Bruk ikke `# TODO:` for åpne spørsmål. *(sjekkes automatisk)* FS Kravforvaltning viser bare `# ÅPNE SPØRSMÅL:` som spørsmål, og `@openquestion` er det `grep -r @openquestion krav/` finner.
 
 ## Aktører
 

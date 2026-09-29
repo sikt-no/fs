@@ -8,7 +8,7 @@
 #
 # Hvilke utdanningsbakgrunner som finnes og hvordan de er satt opp, står i
 # utdanningsbakgrunn.feature (@OPT-OPT-UBG-001). Frist for å endre
-# utdanningsbakgrunn står i frister_og_tidsperioder.feature.
+# utdanningsbakgrunn står i frister_og_hendelser.feature.
 #
 @OPT-SØK-SØK-005 @must @draft
 Egenskap: Velge utdanningsbakgrunn i søknad

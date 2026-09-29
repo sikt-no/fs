@@ -8,7 +8,8 @@
 # Søkerens valg: velge_utdanningsbakgrunn.feature (@OPT-SØK-SØK-005).
 # Tildeling av saksbehandlende organisasjon:
 # tildele_saksbehandlende_organisasjon.feature (@OPT-BEH-BEH-006).
-# Frist for å endre utdanningsbakgrunn: frister_og_tidsperioder.feature.
+# Avvikende frister per utdanningsbakgrunn og frist for å endre utdanningsbakgrunn:
+# frister_og_hendelser.feature (@OPT-OPT-FRI-001).
 #
 # Utdanningsbakgrunner følger med når et opptak opprettes basert på et
 # tidligere opptak, se opprett_opptak.feature (@OPT-OPT-OPT-001).
@@ -89,28 +90,8 @@ Egenskap: Utdanningsbakgrunn i opptak
       Når opptaksforvalter kobler vitnemålstypen "Studieforberedende" til utdanningsbakgrunnen "Norsk videregående"
       Så preutfylles "Norsk videregående" for søkere med et studieforberedende vitnemål i kompetanseregisteret
 
-  Regel: Utdanningsbakgrunn kan ha avvikende frister når opptaket tillater det
-
-    Scenariomal: Sette avvikende frister for utdanningsbakgrunn
-      Gitt at opptaket tillater avvikende søknadsfrister per utdanningsbakgrunn
-      Når opptaksforvalter setter søknadsfrist "<søknadsfrist>" og dokumentasjonsfrist "<dokumentasjonsfrist>" for utdanningsbakgrunnen "<utdanningsbakgrunn>"
-      Så gjelder disse fristene for søkere med utdanningsbakgrunnen "<utdanningsbakgrunn>"
-
-      Eksempler:
-        | utdanningsbakgrunn      | søknadsfrist     | dokumentasjonsfrist |
-        | Realkompetanse          | 2027-03-01 23:59 | 2027-03-01 23:59    |
-        | Utenlandsk videregående | 2027-03-01 23:59 | 2027-03-15 23:59    |
-
-    Scenario: Søker med realkompetanse får avvikende frist
-      Gitt at utdanningsbakgrunnen "Realkompetanse" har søknadsfrist "2027-03-01 23:59"
-      Og at den generelle søknadsfristen er "2027-04-15 23:59"
-      Når en søker søker med utdanningsbakgrunnen "Realkompetanse"
-      Så gjelder søknadsfristen "2027-03-01 23:59" for denne søkeren
-
-    Scenario: Utdanningsbakgrunn uten egne frister følger opptakets frister
-      Gitt at utdanningsbakgrunnen "Norsk videregående" ikke har egne frister
-      Når en søker søker med utdanningsbakgrunnen "Norsk videregående"
-      Så gjelder de generelle fristene i opptaket
-
 # ÅPNE SPØRSMÅL:
 # - Trenger lærestedene valideringsregler for utdanningsbakgrunn? (fra Confluence)
+# - frister_og_hendelser.feature sier at utdanningsbakgrunner uten avvikende frister
+#   ikke trenger registreres i opptaket. Stemmer det når opptaket bruker utdanningsbakgrunn,
+#   og søkerne velger blant utdanningsbakgrunnene i opptaket?

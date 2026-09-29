@@ -1,5 +1,5 @@
 # language: no
-@OPT-OPT-SAM-001 @must @draft
+@OPT-OPT-SAM-001 @must @planned
 Egenskap: Samordnet opptak
   Som opptaksforvalter ved forvaltende organisasjon
   ønsker jeg å invitere læresteder til å delta
@@ -46,7 +46,7 @@ Egenskap: Samordnet opptak
 
     Scenario: Legge til organisasjon som finnes i utdanningsregisteret
       Når opptaksforvalter ved forvaltende organisasjon legger til organisasjonen "Universitetet i Oslo" som deltaker
-      Så legges organisasjonen til fordi den finnes i utdanningsregisteret
+      Så legges organisasjonen til som deltaker i opptaket
 
     Scenario: Organisasjon som ikke finnes i utdanningsregisteret kan ikke legges til
       Gitt at organisasjonen "Ukjent organisasjon" ikke finnes i utdanningsregisteret
@@ -54,20 +54,14 @@ Egenskap: Samordnet opptak
 
   Regel: Opptaksforvalter kan begrense hvilke lærestedstyper som får delta i opptaket
 
-    Scenario: Kun universiteter og høyskoler kan delta i UHG-opptak
-      Gitt at opptaket "Samordna opptak 2027" har opptakstype "UHG"
-      Når opptaksforvalter ved forvaltende organisasjon legger til deltakere
-      Så er kun norske universiteter og høyskoler tilgjengelige
+    Scenario: Filtrere på universiteter og høyskoler
+      Når opptaksforvalter filtrerer på lærestedstype universitet og høyskole
+      Så er kun norske universiteter og høyskoler tilgjengelige som deltakere
 
-    Scenario: Kun fagskoler kan delta i HYU-opptak
-      Gitt at opptaket "Samordna fagskoleopptak 2027" har opptakstype "HYU"
-      Når opptaksforvalter ved forvaltende organisasjon legger til deltakere
-      Så er kun norske fagskoler tilgjengelige
+    Scenario: Filtrere på fagskoler
+      Når opptaksforvalter filtrerer på lærestedstype fagskole
+      Så er kun norske fagskoler tilgjengelige som deltakere
 
-  @openquestion
-  # ÅPNE SPØRSMÅL:
-  # - Jobbes med av et annet team. Hvilke valgmuligheter finnes for fordeling
-  #   av saker til saksbehandlere/saksbehandlerorganisasjoner?
   Regel: Opptaksforvalter ved forvaltende organisasjon knytter regler for saksbehandlertildeling i samordnet opptak
 
     Scenario: Sette regler for fordeling av søknader til saksbehandlerorganisasjoner
