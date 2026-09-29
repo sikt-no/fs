@@ -398,7 +398,7 @@ export function Avvik({ entries, filter: flt, onFilter, onOpen, onReadRule, pane
             <div class="acard detail">
               <div class="dhead">
                 <StatusIcon s={F.icon} lg />
-                <span class="mono dst">{F.icon === 'partial' ? `${F.st} · delvis utkast` : stLabel(F.st)}</span>
+                <span class="mono dst">{F.icon === 'partial' ? `${F.st} · delvis utkast` : F.icon === 'changing' ? `${F.st} · endres` : stLabel(F.st)}</span>
                 {agentBtn}
                 <button class="smallbtn" onClick={() => set({ file: null })}>
                   Fjern filter ×

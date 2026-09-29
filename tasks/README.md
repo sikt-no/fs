@@ -93,6 +93,8 @@ Oppgaver tas inn først når issuet er Prioritert. Oppgaver i `levert` blir ligg
 
 `@draft` →(`fs-krav`)→ `@planned` →(`fs-specify` / `fs-specify-delta`)→ `@in-progress` →(`fs-verify`)→ `@implemented` →(`fs-krav`)→ `@deprecated` →(`fs-verify`)→ slettet
 
+Endres et krav som er levert, blir `Egenskap:` stående som `@implemented`, og den samme aksen går på delen (`Regel:`/`Scenario:`) som endres: den nye delen går `@draft` → `@planned` → `@in-progress` → levert, og delen den erstatter, får `@deprecated`. Se *Endring av levert krav* i `krav/README.md`.
+
 Se [`krav/README.md`](../krav/README.md) for den autoritative definisjonen av taggene.
 
 BAT-stegene er valgfrie. En oppgave kan kjøres helt for hånd — da er `flow.md`, `spec/` og `<lag>/`-artefaktene noe teamet skriver selv, og fasene betyr det samme.

@@ -1,6 +1,6 @@
 ---
 name: fs-specify
-description: Spec / kravarbeid for én konkret feature i dette repoet. Henter `@planned`-krav fra lokale `.feature`-filer under `krav/`, retagger dem `@planned` → `@in-progress` på `Egenskap:`-linja, og plukker også opp `@deprecated`-krav (egenskaper og `Regel:`/`Scenario:`) for å fjerne koden (de beholder `@deprecated`), spør via AskUserQuestion om det finnes skisser (Figma, bilder, PDF), kobler skisser til krav, persisterer Figma-artefakter via Figma MCP, validerer skisser mot krav og spør brukeren ved avvik. Skriver `spec-<feature>.md`, `krav-input/` og `spec.log.md` i oppgavemappas krav-undermappe `tasks/<domene>/<slug>/spec/` (se `tasks/README.md`). Idempotent — spec-dokumentet skrives over på plass. Trigges av "spesifiser feature X", "hent krav fra lokale .feature-filer", "lag spec for oppgave Y", "koble skisser til krav", "hent krav inn i tasks", "fjerne deprecated krav", "spec for å fjerne avviklede krav".
+description: Spec / kravarbeid for én konkret feature i dette repoet. Henter `@planned`-krav fra lokale `.feature`-filer under `krav/`, retagger dem `@planned` → `@in-progress` på `Egenskap:`-linja (og på `Regel:`/`Scenario:`-linja for `@planned`-deler i leverte krav som endres), og plukker også opp `@deprecated`-krav (egenskaper og `Regel:`/`Scenario:`) for å fjerne koden (de beholder `@deprecated`), spør via AskUserQuestion om det finnes skisser (Figma, bilder, PDF), kobler skisser til krav, persisterer Figma-artefakter via Figma MCP, validerer skisser mot krav og spør brukeren ved avvik. Skriver `spec-<feature>.md`, `krav-input/` og `spec.log.md` i oppgavemappas krav-undermappe `tasks/<domene>/<slug>/spec/` (se `tasks/README.md`). Idempotent — spec-dokumentet skrives over på plass. Trigges av "spesifiser feature X", "hent krav fra lokale .feature-filer", "lag spec for oppgave Y", "koble skisser til krav", "hent krav inn i tasks", "fjerne deprecated krav", "spec for å fjerne avviklede krav".
 allowed-tools: Read, Write, Edit, Grep, Glob, Bash, WebFetch, AskUserQuestion, Skill
 ---
 
@@ -16,7 +16,7 @@ Du samler krav. Du henter kravene fra `.feature`-filene under `krav/`, kobler de
 
 **Ikke analyser kodebaser, ikke foreslå løsninger, ikke skriv kode.** Spec-en beskriver *hva*, ikke *hvordan*.
 
-**Bare `@planned`/`@in-progress`-krav skal med.** `@draft` og utaggede `Egenskap:`-blokker er fortsatt under arbeid og må gjennom `fs-krav` først. Det samme gjelder `@draft`-deler (`Regel:`/`Scenario:`) inne i et `@planned` krav — de holdes utenfor scope. `@deprecated`-krav og -deler tas med, men som noe som skal **fjernes**, ikke bygges. Se _Filter_ nedenfor.
+**Bare `@planned`/`@in-progress`-krav skal med.** `@draft` og utaggede `Egenskap:`-blokker er fortsatt under arbeid og må gjennom `fs-krav` først. Det samme gjelder `@draft`-deler (`Regel:`/`Scenario:`) inne i et `@planned` krav — de holdes utenfor scope. `@deprecated`-krav og -deler tas med, men som noe som skal **fjernes**, ikke bygges. I et `@implemented` krav som endres, er det `@planned`/`@in-progress`-delene som skal bygges. Se _Filter_ nedenfor.
 
 **Input er en mappe eller et sett med krav.** Er input en endring (branch, commit, test-fil eller markdown), eller skal spec-en vise hva som er endret i et krav, bruk `fs-specify-delta`. Tag-reglene er de samme i begge.
 
@@ -76,7 +76,7 @@ Hvert `AskUserQuestion`-kall i kjøringen appendes til `<spec>/questions-fs-spec
 En `.feature`-fil passerer hvis `Egenskap:`-tag-linja har **`@planned` eller `@in-progress`**, eller hvis kravet er avviklet (se _`@deprecated`-krav og -deler_ under). Andre tags på enkelt-`Regel:`/`Scenario:` påvirker ikke om fila passerer — med unntak av `@draft` og `@deprecated`, se _`@draft`-deler_ og _`@deprecated`-deler_ under.
 
 - `@in-progress` må passere fordi skillen selv setter den (se _Retagg_). Ellers ville en ny kjøring mot samme krav filtrert bort alt.
-- `@implemented` passerer **ikke** — kravet er levert; en ny iterasjon går via `fs-krav`. Unntak: har fila `@deprecated`-deler, passerer den med bare de delene.
+- `@implemented` passerer **ikke** — kravet er levert; en ny iterasjon går via `fs-krav` (modus D). Unntak: har fila `@planned`-, `@in-progress`- eller `@deprecated`-deler, passerer den med bare de delene (se _Deler i leverte krav som endres_ under).
 - `@deprecated` passerer — kravet er avviklet, og spec-en er en bestilling om å fjerne koden (se *Avvikling* i `krav/README.md`).
 - `@draft` og utaggede passerer ikke.
 
@@ -101,15 +101,27 @@ Et krav som er `@deprecated` på `Egenskap:`, eller en `Regel:`/`Scenario:`/`Sce
 - **Retagges aldri.** `@deprecated` blir stående til `fs-verify` har vist at koden er borte, og sletter kravet eller delen. En `@implemented` egenskap som bare er med på grunn av `@deprecated`-deler, blir også stående som `@implemented`.
 - Er alle delene i et `@planned`/`@in-progress` krav `@draft` eller `@deprecated`, er det ingenting å bygge: ingen retagging til `@in-progress`, men `@deprecated`-delene er med under _Skal fjernes_.
 
+### Deler i leverte krav som endres
+
+Når et levert krav endres, blir egenskapen stående som `@implemented`, og statusen står på delen (se *Endring av levert krav* i `krav/README.md`):
+
+- `@planned`- og `@in-progress`-deler skal **bygges**. De listes under `## Krav` med fil og tittel på delen. Resten av fila er levert og er ikke med i scope.
+- `@deprecated`-deler skal **fjernes**, som over. Erstatter en ny del en `@deprecated`-del, nevn det på begge linjene («erstatter …» / «erstattes av …»), så det er tydelig at de hører sammen.
+- `@draft`-deler holdes utenfor scope, som i et `@planned` krav.
+- `@planned`-delene retagges til `@in-progress` (se _Retagg_). `Egenskap:`-taggen står urørt.
+
 ## Retagg krav til `@in-progress`
 
 Når et krav hentes inn i en spec, retagges den **autoritative** fila under `krav/` fra `@planned` til `@in-progress` på `Egenskap:`-tag-linja (se tag-aksen i `krav/README.md`).
+
+For `@planned`-deler i et `@implemented` krav retagges `Regel:`-/`Scenario:`-linja i stedet (se under).
 
 **Når:** etter at scope er låst og råkopiene er lagret under `krav-input/`, men **før** spec-dokumentet skrives.
 
 **Regler:**
 
 - **Bare `Egenskap:`-tag-linja endres**, med én `Edit`. `@planned` byttes med `@in-progress`; Feature-ID, MoSCoW-tag og øvrige tags står urørt. Eksempel: `@BRU-ADM-OPP-001 @must @planned` → `@BRU-ADM-OPP-001 @must @in-progress`.
+- **Deler i leverte krav:** `@planned` byttes med `@in-progress` på `Regel:`-/`Scenario:`/`Scenariomal:`-linja, med én `Edit` per del. Andre tags på linja står urørt, og `Egenskap:`-linja endres ikke. Eksempel: `  @planned` → `  @in-progress` over `Regel: Eksport til Excel`.
 - **`krav-input/`-kopiene retagges aldri.** De viser kravet slik det var ved henting.
 - **Idempotent.** En fil som allerede er `@in-progress` hoppes over og telles som «allerede i arbeid».
 - **Ingen rollback** ved senere avbrudd — kravet *er* plukket opp. Si det i `ended`-linja.
@@ -198,9 +210,10 @@ Bevisste unntak: **`spec.log.md`** er append-only, og **`questions-fs-specify-<d
 
 ## Krav
 
-[`@planned`/`@in-progress`-krav som skal bygges. Én bullet per `.feature`-fil eller scenario, med lenke til råkopien. Ikke kopier feature-innhold inn her.]
+[`@planned`/`@in-progress`-krav som skal bygges, og `@planned`/`@in-progress`-deler i leverte krav som endres. Én bullet per `.feature`-fil eller scenario, med lenke til råkopien. Ikke kopier feature-innhold inn her.]
 
 - **`<feature-fil>`** (`@DOM-SUB-KAP-NNN`) — én linje om hva den dekker. ([krav-input/local/<sti>.feature](krav-input/local/<sti>.feature))
+- **`<feature-fil>` — regel/scenario `<tittel>`** (`@DOM-SUB-KAP-NNN`, endring av levert krav) — én linje om hva den dekker. Erstatter `<tittel på @deprecated-del>`. ([krav-input/local/<sti>.feature](krav-input/local/<sti>.feature))
 
 ### Utenfor scope (`@draft`)
 
@@ -213,7 +226,7 @@ Bevisste unntak: **`spec.log.md`** er append-only, og **`questions-fs-specify-<d
 [Krav og regler/scenarioer tagget `@deprecated`. De var levert, og koden skal fjernes. `fs-verify` sletter dem når koden er borte. Utelat seksjonen hvis det ikke finnes noen.]
 
 - **`<feature-fil>`** (`@DOM-SUB-KAP-NNN`) — hele kravet. ([krav-input/local/<sti>.feature](krav-input/local/<sti>.feature))
-- **`<feature-fil>` — regel/scenario `<tittel>`** ([krav-input/local/<sti>.feature](krav-input/local/<sti>.feature))
+- **`<feature-fil>` — regel/scenario `<tittel>`** ([krav-input/local/<sti>.feature](krav-input/local/<sti>.feature)). Erstattes av `<tittel på ny del>` (utelat hvis delen bare fjernes).
 
 ## Skisser
 
@@ -235,6 +248,7 @@ Bevisste unntak: **`spec.log.md`** er append-only, og **`questions-fs-specify-<d
 | Fil | Før | Etter |
 |---|---|---|
 | `krav/07 …/opprette_bruker.feature` | `@BRU-ADM-OPP-001 @must @planned` | `@BRU-ADM-OPP-001 @must @in-progress` |
+| `krav/07 …/eksportere.feature` — Regel: Eksport til Excel | `@planned` | `@in-progress` |
 
 ## Åpne spørsmål
 
@@ -256,8 +270,8 @@ Minn brukeren på at endringene i `tasks/` og `krav/` ikke er committet — det 
 
 - Analyserer ikke kode, foreslår ikke løsninger og skriver ikke kode.
 - Oppretter, endrer eller lukker ikke GitHub-issues.
-- Endrer ikke kravinnhold — bare implementasjonsstatus-taggen `@planned` → `@in-progress`. Fjerner aldri `@draft` fra en `Regel:`/`Scenario:`.
-- Skriver ikke utenfor `<spec>/` og `Egenskap:`-tag-linjene under `krav/`. Skriver ikke `oppgave.md`, `roadmap.md` eller andre oppgaveartefakter.
+- Endrer ikke kravinnhold — bare implementasjonsstatus-taggen `@planned` → `@in-progress` (på `Egenskap:`, eller på delen i et levert krav som endres). Fjerner aldri `@draft` fra en `Regel:`/`Scenario:`.
+- Skriver ikke utenfor `<spec>/` og statustaggene under `krav/`. Skriver ikke `oppgave.md`, `roadmap.md` eller andre oppgaveartefakter.
 - Kjører aldri `git add`, `commit`, `push` eller andre git-mutasjoner.
 
 ## Retningslinjer

@@ -1,6 +1,6 @@
 ---
 name: fs-specify-delta
-description: Spec / kravarbeid der inputen er en endring, ikke greenfield krav. Tar inn én av fire kildetyper — test-fil(er) (typisk `.feature`), markdown-dokument(er), én commit eller to (`A...B`), eller en branch (diffet mot main) — og henter diff og filinnhold med lokal `git`. For commit/branch utledes `Lagt til` / `Endret` / `Fjernet` direkte fra diff-status. Tar med `@planned`/`@in-progress`-krav og retagger `@planned` → `@in-progress` i `krav/` der fila ligger på disk. Tar også med `@deprecated`-krav og -deler i endringen, under «Skal fjernes», uten å bytte taggen, så spec-en kan brukes til å fjerne avviklede krav fra koden sammen med endringene rundt. Samme tag-regler som `fs-specify`; forskjellen er inputen (en endring i stedet for en mappe) og at spec-en viser før og etter. Spør om skisser og persisterer Figma-artefakter via Figma MCP. Skriver `spec-changes-<YYYY-MM-DD>-<ref>.md` og `krav-input/changes/<YYYY-MM-DD>-<ref>/` i oppgavemappas krav-undermappe `tasks/<domene>/<slug>/spec/` (én fil per kjøring, ingen overskriving). Leser ingen tidligere spec — kilden er autoritativ; eksisterende krav som ikke nevnes i delta-en forblir gjeldende. Trigges av "kravendring fra commit <sha>", "krav fra A...B", "fang endringene på branch <navn>", "krav fra denne markdown", "krav fra denne test-fila", "delta-spec for <noe>", "fjern avviklede krav på branch <navn>".
+description: Spec / kravarbeid der inputen er en endring, ikke greenfield krav. Tar inn én av fire kildetyper — test-fil(er) (typisk `.feature`), markdown-dokument(er), én commit eller to (`A...B`), eller en branch (diffet mot main) — og henter diff og filinnhold med lokal `git`. For commit/branch utledes `Lagt til` / `Endret` / `Fjernet` direkte fra diff-status. Tar med `@planned`/`@in-progress`-krav og retagger `@planned` → `@in-progress` i `krav/` der fila ligger på disk, også `@planned`-deler (`Regel:`/`Scenario:`) i leverte krav som endres. Tar også med `@deprecated`-krav og -deler i endringen, under «Skal fjernes», uten å bytte taggen, så spec-en kan brukes til å fjerne avviklede krav fra koden sammen med endringene rundt. Samme tag-regler som `fs-specify`; forskjellen er inputen (en endring i stedet for en mappe) og at spec-en viser før og etter. Spør om skisser og persisterer Figma-artefakter via Figma MCP. Skriver `spec-changes-<YYYY-MM-DD>-<ref>.md` og `krav-input/changes/<YYYY-MM-DD>-<ref>/` i oppgavemappas krav-undermappe `tasks/<domene>/<slug>/spec/` (én fil per kjøring, ingen overskriving). Leser ingen tidligere spec — kilden er autoritativ; eksisterende krav som ikke nevnes i delta-en forblir gjeldende. Trigges av "kravendring fra commit <sha>", "krav fra A...B", "fang endringene på branch <navn>", "krav fra denne markdown", "krav fra denne test-fila", "delta-spec for <noe>", "fjern avviklede krav på branch <navn>".
 allowed-tools: Read, Write, Edit, Grep, Glob, Bash, WebFetch, AskUserQuestion, Skill
 ---
 
@@ -113,7 +113,7 @@ Skriv `<spec>/krav-input/changes/<YYYY-MM-DD>-<ref>/manifest.md`:
 
 ## Filter: bare krav klare til arbeid (`@planned` / `@in-progress`)
 
-Samme regel som [`fs-specify` → _Filter_](../fs-specify/SKILL.md#filter-bare-krav-klare-til-arbeid-planned--in-progress): `Egenskap:`-tag-linja må ha `@planned` eller `@in-progress`, eller kravet er `@deprecated` (se _`@deprecated`-krav og -deler_ under). `@draft`, utaggede og `@implemented` uten `@deprecated`-deler faller utenfor. Filteret gjelder bare `.feature`-filer.
+Samme regel som [`fs-specify` → _Filter_](../fs-specify/SKILL.md#filter-bare-krav-klare-til-arbeid-planned--in-progress): `Egenskap:`-tag-linja må ha `@planned` eller `@in-progress`, eller kravet er `@deprecated` (se _`@deprecated`-krav og -deler_ under). `@draft`, utaggede og `@implemented` uten `@planned`-, `@in-progress`- eller `@deprecated`-deler faller utenfor. Filteret gjelder bare `.feature`-filer.
 
 Endringen avgjør hvilke filer som vurderes. `@deprecated`-krav som ikke er med i endringen, kommer ikke med. Skal de tas inn uten en endring, bruk `fs-specify` på mappa.
 
@@ -130,18 +130,25 @@ Test-fil-kilde (uten diff): tag-en på fila slik den er.
 - En del som går fra `@draft` til uten `@draft` er validert, og regnes som «Endret» (eller «Lagt til» hvis den er ny).
 - En del som får `@draft` (fra uten) er tatt ut av scope — list den under _Utenfor scope_, ikke under «Endret» eller «Fjernet».
 - En ny del som legges til med `@draft`, listes bare under _Utenfor scope_.
+- Under en `@implemented` egenskap er en del validert når den går fra `@draft` til `@planned` (se under).
 
 **`@deprecated`-krav og -deler** håndteres som i [`fs-specify` → _`@deprecated`-krav og -deler_](../fs-specify/SKILL.md#deprecated-krav-og--deler): de listes under `### Skal fjernes (@deprecated)`, retagges aldri, og `fs-verify` sletter dem når koden er borte. Råkopiene lagres komplette. For diff-kilder gjelder **etter**-tilstanden:
 
 - Et krav eller en del som *blir* `@deprecated` i endringen, listes med lenke til før-tilstanden, så det er tydelig hva som var levert.
 - Et krav eller en del som allerede var `@deprecated`, og ligger i en fil som er med i endringen, listes også. Da trengs ingen før-lenke.
-- En `@implemented` fil i endringen passerer bare med sine `@deprecated`-deler.
+- En `@implemented` fil i endringen passerer bare med sine `@deprecated`-deler, og med `@planned`-/`@in-progress`-deler (se under).
+
+**Deler i leverte krav som endres** håndteres som i [`fs-specify` → _Deler i leverte krav som endres_](../fs-specify/SKILL.md#deler-i-leverte-krav-som-endres): egenskapen står som `@implemented`, `@planned`/`@in-progress`-deler skal bygges, og `@deprecated`-delen de erstatter, skal fjernes. For diff-kilder gjelder **etter**-tilstanden per del:
+
+- En del som *blir* `@planned` i endringen (ny, eller fra `@draft`), listes under «Lagt til» (ny blokk) med «erstatter `<tittel>`» når en del samtidig blir `@deprecated`. Den `@deprecated`-delen listes under _Skal fjernes_ med «erstattes av `<tittel>`», og med før-lenke.
+- En del som allerede var `@planned`/`@in-progress`, og ligger i en fil som er med i endringen, listes også.
+- Resten av fila er levert, og er ikke med i scope selv om fila er med i endringen.
 
 Bare filer som passerer lagres og nevnes i manifestet. **Ingen `.feature`-filer passerer** (og det finnes ingen markdown/kode-test å falle tilbake på): rapporter hvilke filer som ble vurdert og hvilken tag de hadde, logg `ended (aborted)`, og foreslå `fs-krav`.
 
 ## Retagg krav til `@in-progress`
 
-Samme regler som [`fs-specify` → _Retagg_](../fs-specify/SKILL.md#retagg-krav-til-in-progress): bare `Egenskap:`-tag-linja, én `Edit`, `@planned` → `@in-progress`, idempotent, ingen rollback. Råkopiene under `krav-input/changes/…` — også `before/` — retagges aldri. `@deprecated`-krav og -deler retagges heller aldri.
+Samme regler som [`fs-specify` → _Retagg_](../fs-specify/SKILL.md#retagg-krav-til-in-progress): bare `Egenskap:`-tag-linja (eller `Regel:`-/`Scenario:`-linja for `@planned`-deler i et `@implemented` krav), én `Edit`, `@planned` → `@in-progress`, idempotent, ingen rollback. Råkopiene under `krav-input/changes/…` — også `before/` — retagges aldri. `@deprecated`-krav og -deler retagges heller aldri.
 
 **Når:** etter at scope er låst og råkopiene er lagret, før delta-dokumentet skrives.
 
@@ -224,6 +231,7 @@ Ved **Ja**: følg [`fs-specify` → _Skisser — kobling og validering_](../fs-s
 | Fil | Før | Etter |
 |---|---|---|
 | `krav/07 …/opprette_bruker.feature` | `@BRU-ADM-OPP-001 @must @planned` | `@BRU-ADM-OPP-001 @must @in-progress` |
+| `krav/07 …/eksportere.feature` — Regel: Eksport til Excel | `@planned` | `@in-progress` |
 
 ### Retagging utestående
 

@@ -358,9 +358,17 @@ export function parseFeature(source: string, path?: string): FeatureModel {
   const fstatus = statusOf(ftags);
   const fdraft = fstatus === 'draft';
   let partialDraft = false;
+  let partialChange = false;
   const hasQ = (notes: Note[]) => notes.some(n => n.kind === 'question');
   const checkPart = (what: string, tags: string[], ln: number, questions: boolean) => {
-    for (const t of tags.filter(t => isStatus(t) && t !== '@draft' && t !== '@deprecated')) push('status-on-part', `${t} på ${what} — bare @draft og @deprecated er lov under Egenskap`, ln);
+    for (const t of tags.filter(t => isStatus(t) && t !== '@draft' && t !== '@deprecated')) {
+      if (t === '@implemented') push('status-on-part', `@implemented på ${what} — en levert del har ingen egen status, den arver @implemented fra Egenskap`, ln);
+      else if (fstatus !== 'implemented') push('status-on-part', `${t} på ${what} — @planned og @in-progress er bare lov på deler under en @implemented egenskap`, ln);
+      else partialChange = true;
+    }
+    const pst = tags.filter(t => isStatus(t) && t !== '@implemented');
+    if (pst.length > 1 && !(pst.length === 2 && pst.includes('@draft') && pst.includes('@deprecated')))
+      push('part-multiple-statuses', `${what} har flere statustagger: ${pst.join(' ')}`, ln);
     if (tags.includes('@deprecated')) {
       if (tags.includes('@draft')) push('deprecated-and-draft', `@deprecated og @draft på ${what} — en del kan ikke være både utkast og avviklet`, ln);
       if (fstatus === 'deprecated') push('redundant-deprecated', `@deprecated på ${what} er overflødig når hele egenskapen er @deprecated`, ln);
@@ -428,6 +436,7 @@ export function parseFeature(source: string, path?: string): FeatureModel {
     questions,
     lint,
     partialDraft,
+    partialChange,
     nLines,
     nRules: rules.filter(r => r.name !== null).length,
     nScen: rules.reduce((n, r) => n + r.scenarios.filter(s => s.kind !== 'Bakgrunn').length, 0),
@@ -439,10 +448,10 @@ export function buildEntry(path: string, source: string, savedAt: number, prev?:
   if (path.endsWith('.md')) return { path, kind: 'md', status: null, source, savedAt };
   try {
     const model = parseFeature(source, path);
-    return { path, kind: 'feature', status: statusOf(model.tags), partialDraft: model.partialDraft, lint: model.lint.length, model, savedAt };
+    return { path, kind: 'feature', status: statusOf(model.tags), partialDraft: model.partialDraft, partialChange: model.partialChange, lint: model.lint.length, model, savedAt };
   } catch (e) {
     const error = e instanceof Error ? e.message : String(e);
     const parseLint = parseErrorLints(error);
-    return { path, kind: 'feature', status: prev?.status ?? null, partialDraft: prev?.partialDraft, lint: (prev?.lint ?? 0) + parseLint.length, model: prev?.model, error, parseLint, savedAt };
+    return { path, kind: 'feature', status: prev?.status ?? null, partialDraft: prev?.partialDraft, partialChange: prev?.partialChange, lint: (prev?.lint ?? 0) + parseLint.length, model: prev?.model, error, parseLint, savedAt };
   }
 }
