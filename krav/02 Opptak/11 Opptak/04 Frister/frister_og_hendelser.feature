@@ -21,7 +21,7 @@ Egenskap: Frister og hendelser for opptak
       Og deltakende organisasjoner kan knytte sine utdanningstilbud til opptak fra denne dagen
       Og deltakende organisasjoner kan trekke sine utdanningstilbud fra opptak fra denne dagen
 
-    Scenario: Opptaksforvalter må kunne stenge for tilknytning og redigering av utdanningstilbud
+    Scenario: Opptaksforvalter må kunne stenge for tilknytning, redigering og trekking av utdanningstilbud
       Når opptaksforvalter setter at redigering av utdanningstilbud stenger "2027-06-06"
       Så kan deltakende organisasjoner ikke lenger redigere sine utdanningstilbud
       Og deltakende organisasjoner kan ikke lenger knytte sine utdanningstilbud til opptaket
@@ -64,11 +64,6 @@ Egenskap: Frister og hendelser for opptak
       Så kan søkere laste opp dokumentasjon fram til denne fristen
       Og etter fristen kan ikke søkere laste opp ny dokumentasjon
 
-    Scenario: Sette tidlig dokumentasjonsfrist for søkere med tidlig søknadsfrist
-      Når opptaksforvalter setter tidlig dokumentasjonsfrist til "2027-03-01 23:59"
-      Så kan søkere med tidlig søknadsfrist laste opp dokumentasjon fram til denne fristen
-      Og etter fristen kan ikke disse søkerne laste opp ny dokumentasjon
-
     Scenario: Sette ettersendingsfrist
       Når opptaksforvalter setter ettersendingsfrist til "2027-07-01 23:59"
       Så kan søkere ettersende dokumentasjon fram til denne fristen
@@ -91,10 +86,6 @@ Egenskap: Frister og hendelser for opptak
       Når opptaksforvalter setter at ledige studieplasser stenger for søkning "2027-09-01"
       Så kan søkere ikke lenger søke på ledige studieplasser etter denne datoen
 
-  @openquestion
-  # ÅPNE SPØRSMÅL:
-  # - Er frister for tidlig opptak generelle frister på opptaksnivå,
-  #   eller er de unntak per utdanningstilbud/utdanningsbakgrunn?
   Regel: Opptaksforvalter ved forvaltende organisasjon må kunne sette frister for tidlig opptak
 
     Scenario: Sette søknadsfrist for tidlig opptak
@@ -110,80 +101,37 @@ Egenskap: Frister og hendelser for opptak
       Og etter fristen kan ikke disse søkerne laste opp ny dokumentasjon for tidlig opptak
 
   Regel: Opptaksforvalter ved forvaltende organisasjon må kunne sette informasjonsdatoer for opptaksresultat
-
-    Scenario: Sette dato for når hovedopptaket kjøres
-      Når opptaksforvalter setter dato for når hovedopptaket kjøres til "2027-07-15"
-      Så informeres søkere om når tilbud og ventelisteplasser tildeles
-
-    Scenario: Sette dato for når søker kan forvente svar
-      Når opptaksforvalter setter dato for når søker kan forvente svar til "2027-07-15"
-      Så kan søkere se når de kan forvente svar på søknaden
-
     # Faktiske svarfrister og publiseringstidspunkter settes per plasstildelingsrunde
+
+    Scenario: Sette dato for når hovedopptaket publiseres og søker kan forvente svar
+      Når opptaksforvalter setter dato for når hovedopptaket publiseres til "2027-07-15"
+      Så informeres søkere om når de kan forvente svar på søknaden fra første opptaksrunde
+
     Scenario: Sette første svarfrist som informasjon til søkere
       Når opptaksforvalter setter første svarfrist til "2027-07-20 23:59"
       Så kan søkere se når de senest må svare på et eventuelt tilbud
 
-  @openquestion
-  # ÅPNE SPØRSMÅL:
-  # - Gjelder selvbetjent endring av utdanningsbakgrunn for søker (student)
-  #   eller for saksbehandler? Eller begge?
   Regel: Opptaksforvalter ved forvaltende organisasjon må kunne sette frist for endring av utdanningsbakgrunn
 
-    Scenario: Sette frist for selvbetjent endring av utdanningsbakgrunn
+    Scenario: Sette frist for at saksbehandler kan endre søkers utdanningsbakgrunn
       Når opptaksforvalter setter frist for endring av utdanningsbakgrunn til "2027-05-01 23:59"
-      Så kan søkere endre sin utdanningsbakgrunn selv fram til denne fristen
-      Og etter fristen kan ikke søkere endre utdanningsbakgrunn selv
+      Så kan saksbehandlere endre søkers utdanningsbakgrunn fram til denne fristen
+      Og etter fristen kan saksbehandler ikke endre søkers utdanningsbakgrunn
 
   Regel: Opptaksforvalter kan legge til utdanningsbakgrunner med avvikende frister
-
     # Opptaksforvalter legger eksplisitt til utdanningsbakgrunner som skal ha
     # egne søknads- og dokumentasjonsfrister. Utdanningsbakgrunner uten avvikende
     # frister trenger ikke registreres — søkere følger da opptakets generelle frister.
+    # At søker faktisk får riktig frist basert på utdanningsbakgrunn er et krav
+    # til søknad og saksbehandling (se 13 Søknad og saksbehandling/).
 
     Scenario: Legge til utdanningsbakgrunn med avvikende frister
       Når opptaksforvalter legger til utdanningsbakgrunnen "Realkompetanse" i opptaket
       Og opptaksforvalter setter søknadsfrist til "2027-03-01 23:59"
       Og opptaksforvalter setter dokumentasjonsfrist til "2027-03-01 23:59"
-      Så finnes utdanningsbakgrunnen "Realkompetanse" i opptaket
-      Og søkere med denne utdanningsbakgrunnen har egne frister
-      Og søker kan se disse fristene
-
-    Scenario: Søker med utdanningsbakgrunn får avvikende frist
-      Gitt at utdanningsbakgrunnen "Realkompetanse" har søknadsfrist "2027-03-01 23:59"
-      Og at den generelle søknadsfristen er "2027-04-15 23:59"
-      Når en søker søker med utdanningsbakgrunn "Realkompetanse"
-      Så gjelder søknadsfristen "2027-03-01 23:59" for denne søkeren
+      Så får søkere med utdanningsbakgrunnen "Realkompetanse" egne frister i opptaket
 
     Scenario: Søker uten registrert utdanningsbakgrunn følger ordinære frister
       Gitt at det ikke er lagt til utdanningsbakgrunn for norsk videregående skole i opptaket
       Når en søker søker med norsk videregående skole som utdanningsbakgrunn
       Så gjelder de generelle fristene i opptaket
-
-  @openquestion
-  # ÅPNE SPØRSMÅL:
-  # - I dag kan læresteder trekke egne utdanningstilbud fram til en satt dato
-  #   (f.eks. 6. juni for samordna opptak). Etter denne datoen kan kun opptakseier trekke.
-  #   Skal vi videreføre denne begrensningen, eller skal det være åpent for at
-  #   lærestedene håndterer det selv?
-  # - Bør trekkfristen være en informasjonsfrist (forvaltningsfrist uten faktisk
-  #   stengeeffekt) i stedet for en hard sperre?
-  Regel: Opptaksforvalter ved forvaltende organisasjon kan sette trekkfrist for utdanningstilbud
-
-    Scenario: Sette trekkfrist for utdanningstilbud
-      Når opptaksforvalter setter trekkfrist for utdanningstilbud til "2027-06-06"
-      Så kan læresteder trekke egne utdanningstilbud fram til denne datoen
-      Og etter denne datoen kan kun opptaksforvalter ved forvaltende organisasjon trekke utdanningstilbud
-
-  @openquestion
-  # ÅPNE SPØRSMÅL:
-  # - Design.md beskriver interne saksbehandlingsfrister som ikke er dekket her:
-  #   opptakskomite, opptaksprøver, utenlandsk utdanning, generell saksbehandlingsfrist.
-  #   Skal disse settes som generelle frister i opptaket, eller hører de hjemme
-  #   i saksbehandlingsdomenet?
-  # - Mangler det andre frister som bør settes på opptaksnivå?
-  Regel: Opptaksforvalter ved forvaltende organisasjon kan sette interne saksbehandlingsfrister
-
-    Scenario: Sette generell saksbehandlingsfrist
-      Når opptaksforvalter setter generell saksbehandlingsfrist for opptaket
-      Så kan ikke saksbehandlere gjøre endringer på søknader etter denne fristen
