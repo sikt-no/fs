@@ -153,15 +153,16 @@ Sier noe om selve **kravteksten** – er den ferdig skrevet, avklart og klar til
 
 Sier noe om **koden** – er funksjonaliteten bygget?
 
-- `@implemented` – Ferdig implementert og levert
+- `@deprecated` – Avviklet. Kravet var levert, men skal fjernes. Koden finnes kanskje fortsatt, og kravfila blir stående til det er vist at koden er borte. Se *Avvikling* under
+- `@implemented` – Ferdig implementert og levert (settes av `fs-verify` når koden er verifisert)
 - `@in-progress` – Under arbeid. Kravet er plukket inn i en aktiv flyt (settes av `fs-specify` / `fs-specify-delta` når de henter kravet inn i en spec), og er ikke ferdig implementert enda
 - `@planned` – Planlagt for implementasjon (kravet er klart, men ingen har begynt på det)
 
 Implementasjonsstatusen beveger seg langs én akse, og hvert steg har én eier:
 
-`@draft` →(`fs-krav`)→ `@planned` →(`fs-specify` / `fs-specify-delta`)→ `@in-progress` →(verifisering)→ `@implemented`
+`@draft` →(`fs-krav`)→ `@planned` →(`fs-specify` / `fs-specify-delta`)→ `@in-progress` →(`fs-verify`)→ `@implemented` →(`fs-krav`)→ `@deprecated` →(`fs-verify`)→ slettet
 
-Et krav skal ha nøyaktig én av disse på `Egenskap:`-tag-linja. Ikke sett to samtidig, og ikke la et krav stå uten status. `@planned`, `@in-progress` og `@implemented` hører bare hjemme på `Egenskap:` – på `Regel:`/`Scenario:` er `@draft` den eneste statustaggen. *(sjekkes automatisk)*
+Et krav skal ha nøyaktig én av disse på `Egenskap:`-tag-linja. Ikke sett to samtidig, og ikke la et krav stå uten status. `@planned`, `@in-progress` og `@implemented` hører bare hjemme på `Egenskap:` – på `Regel:`/`Scenario:` er `@draft` og `@deprecated` de eneste statustaggene. *(sjekkes automatisk)*
 
 Den tidligere taggen `@levert` er erstattet av `@implemented`. *(sjekkes automatisk)*
 
@@ -195,6 +196,31 @@ Egenskap: ...
   Regel: Varsling ved utløpt passord
     # ÅPNE SPØRSMÅL:
     # - Skal varselet gå på e-post, i løsningen, eller begge deler?
+    Scenario: ...
+```
+
+### Avvikling
+
+Et krav som skal fjernes, slettes ikke med en gang hvis det er levert. Koden finnes fortsatt, og kravet er påminnelsen om at den må bort.
+
+- Et krav som ikke er levert (`@draft` eller `@planned`), slettes direkte.
+- Et levert krav (`@implemented`) får `@deprecated` i stedet for `@implemented` på `Egenskap:`-tag-linja. Det settes av `fs-krav` når kravet fjernes.
+- Skal bare en del av et levert krav bort, tagges delen `@deprecated` på `Regel:`- eller `Scenario:`-linja. `@deprecated` på en `Regel:` gjelder alle scenarioene under den. `Egenskap:`-taggen endres ikke.
+- `@deprecated` på en del er bare lov under en `Egenskap:` som er `@implemented` eller `@in-progress`. Under `@draft` eller `@planned` er ingenting levert, så delen slettes direkte. *(sjekkes automatisk)*
+- Under en `Egenskap:` som selv er `@deprecated`, skal deler **ikke** tagges `@deprecated`. *(sjekkes automatisk)*
+- En del kan ikke være både `@draft` og `@deprecated`. *(sjekkes automatisk)*
+- Det som er `@deprecated`, skal ikke implementeres videre. `fs-specify` og `fs-specify-delta` tar det inn i en spec for å fjerne koden, sammen med annet arbeid. Taggen blir stående til koden er borte.
+- `fs-verify` sjekker om koden fortsatt finnes. Er den borte, slettes fila (for en `@deprecated` egenskap) eller blokken (for en `@deprecated` del). Finnes den fortsatt, blir kravet stående, og `fs-verify` viser hvor i koden den er.
+
+```gherkin
+@BRU-APP-API-001 @must @implemented
+Egenskap: ...
+
+  Regel: Hovedflyt som fortsatt gjelder
+    Scenario: ...
+
+  @deprecated
+  Regel: Eksport til CSV
     Scenario: ...
 ```
 

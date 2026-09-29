@@ -203,13 +203,14 @@ Then('skal {string} vises', async ({ page }, tekst: string) => {
 - `@e2e` tester: Bruker `page` fixture for browser-interaksjon
 
 ### Skills for kravarbeid (`.claude/skills/`)
-- `fs-krav` — kravarbeid: nye `.feature`-filer (enkeltstående eller for et initiativ), og ferdigstilling av en mappe (`@draft` → `@planned`)
-- `fs-specify` — henter `@planned`-krav inn i en oppgave: `tasks/<domene>/<slug>/spec/` (`@planned` → `@in-progress`)
-- `fs-specify-delta` — det samme, men for en endring (commit, branch, test-fil eller markdown)
+- `fs-krav` — kravarbeid: nye `.feature`-filer (enkeltstående eller for et initiativ), ferdigstilling av en mappe (`@draft` → `@planned`), og fjerning av krav (leverte krav får `@deprecated`, resten slettes)
+- `fs-specify` — henter `@planned`-krav inn i en oppgave: `tasks/<domene>/<slug>/spec/` (`@planned` → `@in-progress`). Plukker også opp `@deprecated`-krav, og lager en spec for å fjerne koden
+- `fs-specify-delta` — det samme, men for en endring (commit, branch, test-fil eller markdown), med samme tag-regler, også for `@deprecated`
+- `fs-verify` — verifiserer kravene mot koden i lokale kloner av kode-repoene: `@in-progress` → `@implemented`, og sletter `@deprecated`-krav når koden er borte (ellers lister den hvor koden fortsatt finnes)
 - `lage-steps` — step definitions i `tester/steps/` for kravene
 - `fs-oppgave` — oppgavemappa `tasks/<domene>/<slug>/` ut fra malene i `tasks/mal/`: ny oppgave (`oppgave.md` og rad i `roadmap.md`), faseoverganger (`design.md`, `<lag>/plan-<slug>.md`) og review-filer
 
-Typisk flyt: `fs-krav` → `fs-oppgave` (ny oppgave) → `fs-specify` / `fs-specify-delta` → `lage-steps`, med `fs-oppgave` for hver faseovergang og review. Se [`tasks/README.md`](tasks/README.md) for oppgavestrukturen. `.claude/rules/tasks-conventions.md` importerer den med `@../../tasks/README.md` når Claude jobber i `tasks/**`.
+Typisk flyt: `fs-krav` → `fs-oppgave` (ny oppgave) → `fs-specify` / `fs-specify-delta` → `lage-steps` → `fs-verify`, med `fs-oppgave` for hver faseovergang og review. Se [`tasks/README.md`](tasks/README.md) for oppgavestrukturen. `.claude/rules/tasks-conventions.md` importerer den med `@../../tasks/README.md` når Claude jobber i `tasks/**`.
 
 ## CI/CD
 

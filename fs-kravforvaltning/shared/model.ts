@@ -1,8 +1,8 @@
-export const STATUSES = ['draft', 'planned', 'in-progress', 'implemented'] as const;
+export const STATUSES = ['draft', 'planned', 'in-progress', 'implemented', 'deprecated'] as const;
 export type Status = (typeof STATUSES)[number];
 
 /** Statusene slik vieweren viser dem: statustaggen, pluss ingen status og delvis utkast. Rekkefølgen er legendens. */
-export const DISPLAY_STATUSES = ['draft', 'planned', 'in-progress', 'implemented', 'none', 'partial'] as const;
+export const DISPLAY_STATUSES = ['draft', 'planned', 'in-progress', 'implemented', 'deprecated', 'none', 'partial'] as const;
 export type DisplayStatus = (typeof DISPLAY_STATUSES)[number];
 
 export const STATUS_LABEL: Record<DisplayStatus, string> = {
@@ -10,13 +10,14 @@ export const STATUS_LABEL: Record<DisplayStatus, string> = {
   planned: 'planned',
   'in-progress': 'in-progress',
   implemented: 'implemented',
+  deprecated: 'deprecated',
   none: 'ingen status',
   partial: 'delvis utkast',
 };
 
 export function displayStatus(e: { status: Status | null; partialDraft?: boolean }): DisplayStatus {
   if (!e.status) return 'none';
-  if (e.partialDraft && e.status !== 'draft') return 'partial';
+  if (e.partialDraft && e.status !== 'draft' && e.status !== 'deprecated') return 'partial';
   return e.status;
 }
 

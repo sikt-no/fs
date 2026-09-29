@@ -328,7 +328,7 @@ export function parseFeature(source: string, path?: string): FeatureModel {
   const prio = ftags.filter(t => PRIORITIES.includes(t));
   if (prio.length > 1) push('multiple-priorities', `Egenskap har flere prioritetstagger: ${prio.join(' ')}`, f.location.line);
   const fstat = ftags.filter(t => isStatus(t));
-  if (fstat.length === 0) push('missing-status', 'Egenskap mangler statustag (@draft, @planned, @in-progress eller @implemented)', f.location.line);
+  if (fstat.length === 0) push('missing-status', 'Egenskap mangler statustag (@draft, @planned, @in-progress, @implemented eller @deprecated)', f.location.line);
   if (fstat.length > 1) push('multiple-statuses', `Egenskap har flere statustagger: ${fstat.join(' ')}`, f.location.line);
   if (ftags.includes('@openquestion')) push('openquestion-on-feature', '@openquestion hører hjemme på Regel/Scenario, ikke på Egenskap', f.location.line);
   if (!desc(f.description)) push('missing-description', 'Egenskap mangler beskrivelse (Som … ønsker jeg … slik at …)', f.location.line);
@@ -355,11 +355,17 @@ export function parseFeature(source: string, path?: string): FeatureModel {
     if (kw) push('unknown-keyword', `«${m[1]}:» er ikke et nøkkelord, og linja leses som beskrivelse — mente du «${kw}:»?`, i + 1);
   });
   for (const c of comments) if (/^\s*#\s*TODO\b/i.test(c.text)) push('todo-comment', '«# TODO:» brukt for åpent spørsmål — bruk «# ÅPNE SPØRSMÅL:» og @openquestion', c.line);
-  const fdraft = statusOf(ftags) === 'draft';
+  const fstatus = statusOf(ftags);
+  const fdraft = fstatus === 'draft';
   let partialDraft = false;
   const hasQ = (notes: Note[]) => notes.some(n => n.kind === 'question');
   const checkPart = (what: string, tags: string[], ln: number, questions: boolean) => {
-    for (const t of tags.filter(t => isStatus(t) && t !== '@draft')) push('status-on-part', `${t} på ${what} — bare @draft er lov under Egenskap`, ln);
+    for (const t of tags.filter(t => isStatus(t) && t !== '@draft' && t !== '@deprecated')) push('status-on-part', `${t} på ${what} — bare @draft og @deprecated er lov under Egenskap`, ln);
+    if (tags.includes('@deprecated')) {
+      if (tags.includes('@draft')) push('deprecated-and-draft', `@deprecated og @draft på ${what} — en del kan ikke være både utkast og avviklet`, ln);
+      if (fstatus === 'deprecated') push('redundant-deprecated', `@deprecated på ${what} er overflødig når hele egenskapen er @deprecated`, ln);
+      else if (fstatus === 'draft' || fstatus === 'planned') push('deprecated-not-delivered', `@deprecated på ${what} under en @${fstatus} egenskap — ingenting er levert, så slett delen`, ln);
+    }
     if (tags.includes('@draft')) {
       if (fdraft) push('redundant-draft', `@draft på ${what} er overflødig når hele egenskapen er @draft`, ln);
       else {

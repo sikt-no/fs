@@ -5,7 +5,7 @@ import { RULE, RULES, type RuleDef, type Severity } from '../shared/rules.ts';
 
 export type StatusKey = Status | 'none';
 export type PrioKey = 'must' | 'should' | 'could' | 'wont' | 'none';
-export const STATUS_KEYS: StatusKey[] = ['draft', 'planned', 'in-progress', 'implemented', 'none'];
+export const STATUS_KEYS: StatusKey[] = ['draft', 'planned', 'in-progress', 'implemented', 'deprecated', 'none'];
 export const PRIO_KEYS: PrioKey[] = ['must', 'should', 'could', 'wont', 'none'];
 
 export interface Filter {

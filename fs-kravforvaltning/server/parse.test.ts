@@ -5,6 +5,7 @@ import { test } from 'node:test';
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { RULE, RULES } from '../shared/rules.ts';
+import { displayStatus } from '../shared/model.ts';
 import { buildEntry, parseErrorLints, parseFeature } from './parse.ts';
 
 const PATH = 'krav/02 Opptak/10 Regelverk/02 Krav/lage_opptak.feature';
@@ -247,6 +248,52 @@ test('@draft-del tagges @draft @openquestion', () => {
   assert.ok(!hasRule(feature({ body: reviewed }), 'draft-without-openquestion'));
   // Under en egenskap som selv er @draft gjelder regelen om overflødig @draft i stedet
   assert.ok(!hasRule(feature({ tags: '@OPT-REG-KRA-001 @must @draft', body: draft }), 'draft-without-openquestion'));
+});
+
+test('@deprecated er en statustag på Egenskap, og vises ikke som delvis utkast', () => {
+  const draftPart = `  @draft @openquestion
+  Scenario: Opprette et opptak
+    # ÅPNE SPØRSMÅL:
+    # - Hvem kan opprette opptak?
+    Gitt jeg er innlogget`;
+  const src = feature({ tags: '@OPT-REG-KRA-001 @must @deprecated', body: draftPart });
+  assert.ok(!hasRule(src, 'missing-status'));
+  assert.equal(displayStatus({ status: 'deprecated', partialDraft: parseFeature(src, PATH).partialDraft }), 'deprecated');
+  assert.ok(has(feature({ tags: '@OPT-REG-KRA-001 @must @implemented @deprecated' }), 'flere statustagger'));
+});
+
+test('@deprecated på del er lov under en levert egenskap', () => {
+  const body = `  @deprecated
+  Regel: Eksport
+    Scenario: Eksportere opptak
+      Gitt jeg er innlogget`;
+  for (const st of ['@implemented', '@in-progress']) {
+    const src = feature({ tags: `@OPT-REG-KRA-001 @must ${st}`, body });
+    assert.deepEqual(rules(src), [], st);
+  }
+  assert.ok(hasRule(feature({ tags: '@OPT-REG-KRA-001 @must @planned', body }), 'deprecated-not-delivered'));
+  assert.ok(hasRule(feature({ tags: '@OPT-REG-KRA-001 @must @draft', body }), 'deprecated-not-delivered'));
+});
+
+test('@deprecated på del er overflødig når Egenskap er @deprecated', () => {
+  const body = `  @deprecated
+  Scenario: Opprette et opptak
+    Gitt jeg er innlogget`;
+  assert.ok(hasRule(feature({ tags: '@OPT-REG-KRA-001 @must @deprecated', body }), 'redundant-deprecated'));
+  assert.ok(!hasRule(feature({ tags: '@OPT-REG-KRA-001 @must @implemented', body }), 'redundant-deprecated'));
+});
+
+test('en del er ikke både @draft og @deprecated', () => {
+  const both = `  @draft @deprecated @openquestion
+  Scenario: Opprette et opptak
+    # ÅPNE SPØRSMÅL:
+    # - Hvem kan opprette opptak?
+    Gitt jeg er innlogget`;
+  const only = `  @deprecated
+  Scenario: Opprette et opptak
+    Gitt jeg er innlogget`;
+  assert.ok(hasRule(feature({ tags: '@OPT-REG-KRA-001 @must @implemented', body: both }), 'deprecated-and-draft'));
+  assert.ok(!hasRule(feature({ tags: '@OPT-REG-KRA-001 @must @implemented', body: only }), 'deprecated-and-draft'));
 });
 
 test('hver regel peker på en overskrift som finnes i krav/README.md («Les regelen»)', () => {

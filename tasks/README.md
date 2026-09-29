@@ -84,14 +84,14 @@ En oppgave går gjennom: **prioritert → utforskning → utvikling → innføri
 | prioritert | Prioritert | `oppgave.md` | – | `@planned` |
 | utforskning | Behovsanalyse → Løsningsalternativ | `design.md`, `spec/`, `<lag>/analysis-*.md`, `<lag>/plan-*.md` | `fs-specify` / `fs-specify-delta`, `bat-analyze`, `bat-plan` | `@in-progress` |
 | utvikling | Utvikling | `<lag>/task-N-completion.md` | `bat-execute` | `@in-progress` |
-| innføring | Innføring | `<lag>/verification-*.md` | `bat-verify` | `@implemented` |
+| innføring | Innføring | `<lag>/verification-*.md` | `bat-verify`, `fs-verify` | `@implemented` |
 | levert | Levert | – | – | `@implemented` |
 
 Oppgaver tas inn først når issuet er Prioritert. Oppgaver i `levert` blir liggende i roadmap-arkivet.
 
 **Krav-tag-kolonnen** viser hvor `Egenskap:`-taggen i `.feature`-fila står gjennom løpet. Hvert steg på aksen har én eier:
 
-`@draft` →(`fs-krav`)→ `@planned` →(`fs-specify` / `fs-specify-delta`)→ `@in-progress` →(verifisering)→ `@implemented`
+`@draft` →(`fs-krav`)→ `@planned` →(`fs-specify` / `fs-specify-delta`)→ `@in-progress` →(`fs-verify`)→ `@implemented` →(`fs-krav`)→ `@deprecated` →(`fs-verify`)→ slettet
 
 Se [`krav/README.md`](../krav/README.md) for den autoritative definisjonen av taggene.
 
