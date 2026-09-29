@@ -1,0 +1,28 @@
+{
+  "name": "krav-viewer-sync",
+  "displayName": "FS Kravforvaltning – synk med editoren",
+  "description": "Lar krav-vieweren (fs-kravforvaltning/) følge aktiv fil og markør i VS Code",
+  "version": "1.0.0",
+  "publisher": "sikt",
+  "private": true,
+  "engines": { "vscode": "^1.80.0" },
+  "activationEvents": ["onStartupFinished"],
+  "main": "extension.js",
+  "contributes": {
+    "configuration": {
+      "title": "FS Kravforvaltning",
+      "properties": {
+        "kravViewer.enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Send aktiv krav-fil og linje til vieweren."
+        },
+        "kravViewer.url": {
+          "type": "string",
+          "default": "http://localhost:5173",
+          "description": "Adressen til viewer-dev-serveren."
+        }
+      }
+    }
+  }
+}

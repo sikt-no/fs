@@ -40,3 +40,7 @@ npm-debug.log*
 
 # claude
 .claude/*.local.md
+
+# FS Kravforvaltning, desktop-appen (electron-vite / electron-builder)
+fs-kravforvaltning/out/
+fs-kravforvaltning/release/

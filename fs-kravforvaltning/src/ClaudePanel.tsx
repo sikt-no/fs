@@ -1,0 +1,460 @@
+import { useEffect, useRef, useState } from 'preact/hooks';
+import type { ClaudeEvent, ClaudeStatus } from '../shared/api';
+import {
+  applyEvent,
+  contextLabel,
+  chooseSkill,
+  effectiveSkill,
+  createConversation,
+  currentChat,
+  EMPTY_CHAT,
+  removeConversation,
+  restoreConversations,
+  selectConversation,
+  send,
+  started,
+  TOOL_LABEL,
+  updateConversation,
+  type Conversations,
+} from './claudeChat';
+import { ChatMarkdown } from './ChatMarkdown';
+import { registerClaude, setClaudeBusy } from './claudeBridge';
+import { knownSkills, lastSkill, SkillPicker } from './ClaudeSkills';
+import { transport } from './transport';
+
+// Samtalene lever utenfor komponenten og lagres i localStorage, så de blir stående når panelet lukkes,
+// visningen byttes eller vieweren lastes inn på nytt. Claude Code husker selve samtalene (`--resume`).
+const KEY = 'krav-viewer:claudeChats';
+const read = (): unknown => {
+  try {
+    return JSON.parse(localStorage.getItem(KEY) ?? 'null');
+  } catch {
+    return null;
+  }
+};
+let saveTimer: ReturnType<typeof setTimeout> | undefined;
+const persist = () => {
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(() => {
+    try {
+      localStorage.setItem(KEY, JSON.stringify(convs));
+    } catch {
+      /* full eller utilgjengelig lagring: samtalene lever videre i minnet */
+    }
+  }, 300);
+};
+
+// Til backenden har svart på hvilke kjøringer som pågår, regnes alle lagrede kjøringer som i gang
+const stored = read();
+const storedRuns = ((stored as Conversations | null)?.list ?? []).map(c => c?.chat?.runId).filter((r): r is string => !!r);
+let convs: Conversations = restoreConversations(stored, storedRuns);
+const listeners = new Set<() => void>();
+const set = (next: Conversations) => {
+  if (next === convs) return;
+  convs = next;
+  persist();
+  listeners.forEach(l => l());
+};
+if (transport.kind !== 'static') {
+  transport.call('claudeActive').then(active => set(restoreConversations(convs, active)), () => {});
+}
+addEventListener('beforeunload', () => {
+  clearTimeout(saveTimer);
+  try {
+    localStorage.setItem(KEY, JSON.stringify(convs));
+  } catch {
+    /* ignorer */
+  }
+});
+
+// Hendelser som kommer før svaret på `claudeRun` (med runId) er framme, spilles av når det kommer
+const early = new Map<string, ClaudeEvent[]>();
+transport.on('krav:claude', ({ runId, event }: { runId: string; event: ClaudeEvent }) => {
+  const next = applyEvent(convs, runId, event, Date.now());
+  if (next) set(next);
+  else early.set(runId, [...(early.get(runId) ?? []), event]);
+});
+
+function useConversations() {
+  const [, force] = useState(0);
+  useEffect(() => {
+    const l = () => force(n => n + 1);
+    listeners.add(l);
+    return () => void listeners.delete(l);
+  }, []);
+  return convs;
+}
+
+const newId = () => Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
+
+/** «i dag 14:05», «i går 09:12» eller «3. okt.» */
+function when(ms: number) {
+  const d = new Date(ms);
+  const day = (x: Date) => x.toDateString();
+  const time = d.toLocaleTimeString('nb', { hour: '2-digit', minute: '2-digit' });
+  if (day(d) === day(new Date())) return `i dag ${time}`;
+  if (day(d) === day(new Date(Date.now() - 864e5))) return `i går ${time}`;
+  return d.toLocaleDateString('nb', { day: 'numeric', month: 'short' });
+}
+
+/** Standardbredden på panelet, og grensene når det dras */
+export const CLAUDE_WIDTH = 380;
+const MIN_WIDTH = 280;
+const maxWidth = () => Math.max(MIN_WIDTH, Math.round(innerWidth * 0.7));
+const clamp = (w: number) => Math.min(maxWidth(), Math.max(MIN_WIDTH, Math.round(w)));
+
+/**
+ * Håndtaket på venstre kant: dra for å endre bredden, piltastene flytter 20 px (Shift: 80 px),
+ * og dobbeltklikk går tilbake til standardbredden.
+ */
+function ResizeHandle({ width, onWidth }: { width: number; onWidth: (w: number) => void }) {
+  const onPointerDown = (e: PointerEvent) => {
+    if (e.button !== 0) return;
+    e.preventDefault();
+    const el = e.currentTarget as HTMLElement;
+    // Panelet ligger helt til høyre, så bredden er avstanden fra pekeren til høyre kant av arbeidsflaten
+    const right = el.closest('.workspace')?.getBoundingClientRect().right ?? innerWidth;
+    el.setPointerCapture(e.pointerId);
+    document.body.classList.add('resizing');
+    const move = (ev: PointerEvent) => onWidth(clamp(right - ev.clientX));
+    const up = () => {
+      el.removeEventListener('pointermove', move);
+      el.removeEventListener('pointerup', up);
+      el.removeEventListener('pointercancel', up);
+      document.body.classList.remove('resizing');
+    };
+    el.addEventListener('pointermove', move);
+    el.addEventListener('pointerup', up);
+    el.addEventListener('pointercancel', up);
+  };
+  const onKeyDown = (e: KeyboardEvent) => {
+    const step = e.shiftKey ? 80 : 20;
+    if (e.key === 'ArrowLeft') onWidth(clamp(width + step));
+    else if (e.key === 'ArrowRight') onWidth(clamp(width - step));
+    else if (e.key === 'Home') onWidth(maxWidth());
+    else if (e.key === 'End') onWidth(MIN_WIDTH);
+    else return;
+    e.preventDefault();
+  };
+  return (
+    <div
+      class="claude-resize"
+      role="separator"
+      aria-orientation="vertical"
+      aria-label="Endre bredden på Claude-panelet"
+      aria-valuenow={width}
+      aria-valuemin={MIN_WIDTH}
+      aria-valuemax={maxWidth()}
+      tabIndex={0}
+      title="Dra for å endre bredden · dobbeltklikk for standard"
+      onPointerDown={onPointerDown}
+      onKeyDown={onKeyDown}
+      onDblClick={() => onWidth(CLAUDE_WIDTH)}
+    />
+  );
+}
+
+/** Lange meldinger (f.eks. en prompt fra Avvik) foldes sammen til de første linjene */
+function LongText({ text }: { text: string }) {
+  const [open, setOpen] = useState(false);
+  const lines = text.split('\n');
+  const long = text.length > 500 || lines.length > 8;
+  if (!long || open) return <>{text}{long && <button class="linkbtn cmore" onClick={() => setOpen(false)}>Vis mindre</button>}</>;
+  const head = lines.slice(0, 6).join('\n');
+  return (
+    <>
+      {head.length > 500 ? head.slice(0, 480).trimEnd() : head} …
+      <button class="linkbtn cmore" onClick={() => setOpen(true)}>Vis hele ({text.length.toLocaleString('nb')} tegn)</button>
+    </>
+  );
+}
+
+interface Props {
+  status: ClaudeStatus;
+  /** Bredden i piksler, styrt av App og husket mellom øktene */
+  width: number;
+  onWidth: (w: number) => void;
+  /** Fila brukeren ser på; sendes med som kontekst */
+  path: string | null;
+  /** Skillene som kan velges der brukeren er (i Krav-visningen bare fs-krav) */
+  allowedSkills: string[];
+  /** Hvorfor de andre skillene ikke kan velges her */
+  skillHint: string;
+  /** Finnes fila i vieweren? Lenker til krav-filer i svarene åpner fila */
+  has: (path: string) => boolean;
+  onOpen: (path: string) => void;
+  onClose: () => void;
+}
+
+/**
+ * Samtale med den lokale Claude Code-en (`claude -p --output-format stream-json`), med repoet som arbeidsmappe.
+ * Claude kan lese og endre filer, men ikke kjøre kommandoer. Endringene vises i vieweren med én gang,
+ * og sendes som PR med «Lag PR» som vanlig.
+ */
+export function ClaudePanel({ status, width, onWidth, allowedSkills, skillHint, path, has, onOpen, onClose }: Props) {
+  const cs = useConversations();
+  const conv = currentChat(cs);
+  const c = conv?.chat ?? EMPTY_CHAT;
+  const [input, setInput] = useState('');
+  const [error, setError] = useState<string | null>(null);
+  const [showList, setShowList] = useState(false);
+  const list = useRef<HTMLDivElement>(null);
+  const running = c.runId !== null;
+  // Skillen før den første samtalen finnes; ellers den samtalen har valgt. Er den ikke tillatt her,
+  // gjelder den første tillatte (fs-krav i Krav-visningen), og den lastes med neste melding.
+  const [pending, setPending] = useState(lastSkill);
+  const skill = effectiveSkill(conv ? c.skill : pending, allowedSkills);
+  // Fila brukeren ser på, sendes med som kontekst. ✕ holder den utenfor til brukeren åpner en annen fil.
+  const [excluded, setExcluded] = useState<string | null>(null);
+  const context = path !== null && path !== excluded;
+  const sentPath = context ? path : null;
+  useEffect(() => setExcluded(null), [path]);
+
+  useEffect(() => {
+    const el = list.current;
+    if (el) el.scrollTop = el.scrollHeight;
+  }, [c.items.length, conv?.id, showList]);
+
+  /** Sender `text` som ny melding i samtalen som er åpen (eller en ny). Brukes av inputfeltet og av «Send til Claude Code». */
+  const sendText = async (text: string) => {
+    if (!text || running) return;
+    setError(null);
+    setShowList(false);
+    let id = conv?.id;
+    if (!id) {
+      id = newId();
+      set(createConversation(convs, id, Date.now(), skill));
+    }
+    const target = id;
+    const before = chooseSkill(convs.list.find(x => x.id === target)!.chat, skill);
+    const { chat: after, invoke } = send(before, text, sentPath);
+    set(updateConversation(convs, target, () => after, Date.now()));
+    try {
+      const { runId } = await transport.call('claudeRun', {
+        prompt: text,
+        sessionId: before.sessionId,
+        path: sentPath,
+        skill: after.skill,
+        invoke,
+        knownSkills: knownSkills(),
+      });
+      set(updateConversation(convs, target, ch => started(ch, runId), Date.now()));
+      for (const ev of early.get(runId) ?? []) {
+        const next = applyEvent(convs, runId, ev, Date.now());
+        if (next) set(next);
+      }
+      early.delete(runId);
+    } catch (e) {
+      setError((e as Error).message);
+    }
+  };
+  const submit = async () => {
+    const text = input.trim();
+    if (!text || running) return;
+    setInput('');
+    await sendText(text);
+  };
+
+  // Mens panelet er åpent kan andre visninger sende en prompt hit («Send til Claude Code»)
+  const sendRef = useRef(sendText);
+  sendRef.current = sendText;
+  useEffect(() => {
+    if (!status.available) return;
+    registerClaude(t => sendRef.current(t));
+    return () => {
+      registerClaude(null);
+      setClaudeBusy(false);
+    };
+  }, [status.available]);
+  useEffect(() => setClaudeBusy(running), [running]);
+
+  const remove = (id: string, title: string) => {
+    if (!confirm(`Slette samtalen «${title}»?`)) return;
+    const runId = convs.list.find(v => v.id === id)?.chat.runId;
+    if (runId) void transport.call('claudeCancel', runId);
+    set(removeConversation(convs, id));
+  };
+
+  const fileName = (p: string) => p.slice(p.lastIndexOf('/') + 1);
+
+  return (
+    <aside class="claude">
+      <ResizeHandle width={width} onWidth={onWidth} />
+      <div class="claude-head">
+        <span class="claude-mark" />
+        <b>Claude</b>
+        <span class="mono muted" title={status.path ?? ''}>{status.version?.split(' ')[0] ?? ''}</span>
+        <div class="claude-btns">
+          <button class="smallbtn" aria-pressed={showList} onClick={() => setShowList(v => !v)} title="Vis alle samtalene">
+            Samtaler{cs.list.length > 0 && ` (${cs.list.length})`}
+          </button>
+          <button
+            class="smallbtn"
+            onClick={() => {
+              set(createConversation(convs, newId(), Date.now(), effectiveSkill(lastSkill(), allowedSkills)));
+              setShowList(false);
+            }}
+            title="Start en ny samtale"
+          >
+            Ny
+          </button>
+          <button class="smallbtn" onClick={onClose} aria-label="Lukk Claude-panelet">Lukk</button>
+        </div>
+      </div>
+      {conv && !showList && conv.chat.items.length > 0 && (
+        <div class="claude-info">
+          <div class="claude-title" title={conv.title}>{conv.title}</div>
+          <div class="claude-meta">
+            {c.context && (
+              <span
+                class="cctxmeter"
+                title={`Tokens i konteksten ved siste svar (${c.context.used.toLocaleString('nb')}${c.context.window ? ` av ${c.context.window.toLocaleString('nb')}` : ''}). Claude Code komprimerer samtalen selv når vinduet blir fullt.`}
+              >
+                <span class={'cbar' + (c.context.window && c.context.used / c.context.window > 0.8 ? ' high' : '')} aria-hidden="true">
+                  <span style={{ width: `${c.context.window ? Math.min(100, (c.context.used / c.context.window) * 100) : 0}%` }} />
+                </span>
+                Kontekst {contextLabel(c.context)}
+              </span>
+            )}
+            <span class="cloaded" title="Skills som er lastet inn i samtalen">
+              Lastet: {c.loadedSkills.length ? c.loadedSkills.map(n => <span key={n} class="cctx-skill">{n}</span>) : <span class="muted">ingen skills</span>}
+            </span>
+          </div>
+        </div>
+      )}
+
+      {!status.available ? (
+        <div class="claude-empty">
+          Fant ikke Claude Code på maskinen. Installer det (se <a href="https://code.claude.com/docs" target="_blank" rel="noreferrer">code.claude.com/docs ↗</a>) og logg inn med{' '}
+          <span class="mono">claude</span> i en terminal. Ligger det et uvanlig sted, start appen med <span class="mono">KRAV_CLAUDE_PATH</span> satt.
+        </div>
+      ) : showList ? (
+        <div class="claude-list">
+          {!cs.list.length && <div class="claude-empty">Ingen samtaler ennå.</div>}
+          {cs.list.map(x => (
+            <div key={x.id} class={'cconv' + (x.id === cs.current ? ' cur' : '')}>
+              <button
+                class="cconv-open"
+                onClick={() => {
+                  set(selectConversation(convs, x.id));
+                  setShowList(false);
+                }}
+              >
+                <span class="cconv-title">
+                  {x.chat.runId && <span class="cdot" title="Claude jobber" />}
+                  {x.title}
+                </span>
+                <span class="mono muted">{when(x.updatedAt)} · {x.chat.items.filter(i => i.kind === 'user').length} meldinger</span>
+              </button>
+              <button class="smallbtn cconv-del" onClick={() => remove(x.id, x.title)} aria-label={`Slett samtalen ${x.title}`} title="Slett samtalen">
+                Slett
+              </button>
+            </div>
+          ))}
+        </div>
+      ) : (
+        <>
+          <div class="claude-list" ref={list}>
+            {!c.items.length && (
+              <div class="claude-empty">
+                Spør om kravene, eller be Claude endre dem. Claude kan lese og redigere filene, men ikke kjøre kommandoer eller lage PR.
+                <br />
+                <br />
+                For eksempel: <i>«Gå gjennom denne fila mot konvensjonene og rett avvikene»</i>.
+              </div>
+            )}
+            {c.items.map((i, n) =>
+              i.kind === 'user' ? (
+                <div key={n} class="cmsg user">
+                  <LongText text={i.text} />
+                  {(i.path || i.skill) && (
+                    <div class="cctx mono">
+                      {i.skill && <span class="cctx-skill">{i.skill}</span>}
+                      {i.path && fileName(i.path)}
+                    </div>
+                  )}
+                </div>
+              ) : i.kind === 'assistant' ? (
+                <div key={n} class="cmsg assistant">
+                  <ChatMarkdown text={i.text} has={has} onOpen={onOpen} />
+                </div>
+              ) : i.kind === 'tool' ? (
+                <div key={n} class={'ctool ' + i.state}>
+                  <span class="cdot" />
+                  <span>{TOOL_LABEL[i.name] ?? i.name}</span>
+                  {i.summary.startsWith('krav/') && (i.name === 'Read' || i.name === 'Edit' || i.name === 'Write') ? (
+                    <button class="linkbtn mono" onClick={() => onOpen(i.summary)} title={i.summary}>{fileName(i.summary)}</button>
+                  ) : (
+                    <span class="mono muted" title={i.summary}>{i.summary}</span>
+                  )}
+                </div>
+              ) : (
+                <div key={n} class={'cdone' + (i.ok ? '' : ' err')}>{i.text}</div>
+              ),
+            )}
+            {running && <div class="cdone muted">Claude jobber …</div>}
+          </div>
+
+          {c.touched.length > 0 && (
+            <div class="ctouched">
+              <span class="muted">Endret i samtalen:</span>
+              {c.touched.map(p => (
+                <button key={p} class="linkbtn mono" onClick={() => onOpen(p)} title={p}>{fileName(p)}</button>
+              ))}
+            </div>
+          )}
+          {error && <div class="edwarn err" role="alert">{error}</div>}
+
+          <div class="claude-input">
+            <SkillPicker
+              value={skill}
+              allowed={allowedSkills}
+              hint={skillHint}
+              disabled={running}
+              onChange={s => (conv ? set(updateConversation(convs, conv.id, ch => chooseSkill(ch, s), Date.now())) : setPending(s))}
+            />
+            <div class="cinbox">
+              <textarea
+                rows={3}
+                value={input}
+                placeholder="Spør Claude …"
+                onInput={e => setInput((e.target as HTMLTextAreaElement).value)}
+                onKeyDown={e => {
+                  if (e.key === 'Enter' && !e.shiftKey) {
+                    e.preventDefault();
+                    void submit();
+                  }
+                }}
+                aria-label="Melding til Claude"
+              />
+              <div class="cinbox-foot">
+                {path &&
+                  (context ? (
+                    <span class="cfile" title={`Sendes med som kontekst: ${path}`}>
+                      <span class="cfile-icon" aria-hidden="true" />
+                      <span class="cfile-name">{fileName(path)}</span>
+                      <button class="cfile-x" onClick={() => setExcluded(path)} aria-label={`Ikke send med ${fileName(path)}`} title="Ikke send med fila">
+                        ✕
+                      </button>
+                    </span>
+                  ) : (
+                    <button class="cfile off" onClick={() => setExcluded(null)} title={`Send med ${path} som kontekst`}>
+                      + {fileName(path)}
+                    </button>
+                  ))}
+                {running ? (
+                  <button class="smallbtn" onClick={() => void transport.call('claudeCancel', c.runId!)}>Avbryt</button>
+                ) : (
+                  <button class="primbtn" disabled={!input.trim()} onClick={() => void submit()}>Send</button>
+                )}
+              </div>
+            </div>
+            <div class="claude-send">
+              <span class="muted">Enter sender · Shift+Enter ny linje</span>
+            </div>
+          </div>
+        </>
+      )}
+    </aside>
+  );
+}
