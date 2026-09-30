@@ -126,7 +126,10 @@ jobs:
       MAIN_VITE_KRAV_GITHUB_CLIENT_ID: ${{ vars.KRAV_GITHUB_CLIENT_ID }}
       CSC_IDENTITY_AUTO_DISCOVERY: 'false'
     steps:
+      # Bare appen: stiene i tasks/ og krav/ er for lange for Windows (MAX_PATH), og bygget bruker dem ikke
       - uses: actions/checkout@v7
+        with:
+          sparse-checkout: fs-kravforvaltning
       - uses: actions/setup-node@v7
         with:
           node-version: lts/*
