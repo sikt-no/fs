@@ -190,7 +190,10 @@ export function PrDialog({ git, entries, preselect, onClose }: Props) {
                 <span class="muted"> · venter på godkjenning…</span>
               </span>
             ) : auth.canLogin ? (
-              <button class="smallbtn" onClick={login}>Logg inn med GitHub</button>
+              <span>
+                {auth.expired && <span class="muted">GitHub godtar ikke lenger innloggingen din. </span>}
+                <button class="smallbtn" onClick={login}>Logg inn med GitHub</button>
+              </span>
             ) : transport.kind === 'electron' ? (
               <span class="muted">Innlogging mot GitHub er ikke satt opp i denne versjonen av appen (mangler OAuth-klient).</span>
             ) : (
