@@ -10,6 +10,9 @@ interface Props {
   onTheme: (t: Theme) => void;
   treeHidden: boolean;
   onToggleTree: () => void;
+  /** Innholdspanelet til høyre i Krav (innhold og søk i fila) */
+  tocHidden: boolean;
+  onToggleToc: () => void;
   onHome: () => void;
   mode: Mode;
   onMode: (m: Mode) => void;
@@ -32,7 +35,7 @@ interface Props {
   pulling: boolean;
 }
 
-export function TopBar({ path, connected, theme, onTheme, treeHidden, onToggleTree, onHome, mode, onMode, nBad, oppgaver, nActive, oView, onOView, oCrumbs, claude, onClaude, onUpdate, pulling }: Props) {
+export function TopBar({ path, connected, theme, onTheme, treeHidden, onToggleTree, tocHidden, onToggleToc, onHome, mode, onMode, nBad, oppgaver, nActive, oView, onOView, oCrumbs, claude, onClaude, onUpdate, pulling }: Props) {
   const parts = mode === 'avvik' ? ['krav', '#/avvik'] : mode === 'oppgaver' ? oCrumbs : path ? path.split('/') : [];
   return (
     <header class="topbar">
@@ -102,9 +105,25 @@ export function TopBar({ path, connected, theme, onTheme, treeHidden, onToggleTr
             )}
           </button>
         )}
+        {mode === 'krav' && (
+          <button
+            class="tocbtn"
+            title={tocHidden ? 'Vis innhold' : 'Skjul innhold'}
+            aria-label={tocHidden ? 'Vis innhold' : 'Skjul innhold'}
+            aria-pressed={!tocHidden}
+            onClick={onToggleToc}
+          >
+            <span class="tocicon"><span><span /><span /><span /></span></span>
+          </button>
+        )}
         {claude !== null && (
-          <button class="claudebtn" aria-pressed={claude} onClick={onClaude} title="Spør den lokale Claude Code-en om kravene">
-            <span class="claude-mark" />Claude
+          <button
+            class="claudebtn"
+            aria-pressed={claude}
+            onClick={onClaude}
+            title={claude ? 'Skjul Claude' : 'Vis Claude'}
+          >
+            <span class="claudeicon"><span /></span>Claude
           </button>
         )}
         <div class="live">

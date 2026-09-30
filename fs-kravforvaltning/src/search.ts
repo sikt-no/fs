@@ -48,7 +48,7 @@ function buildDocs(entries: Snapshot): Doc[] {
 }
 
 /** Felles for søket i treet og @-omtalen i Claude-feltet, så de treffer det samme */
-const FUSE_OPTS = {
+export const FUSE_OPTS = {
   includeMatches: true,
   includeScore: true,
   ignoreLocation: true, // treff langt ut i lange scenarionavn skal ikke straffes

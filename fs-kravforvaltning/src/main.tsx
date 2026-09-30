@@ -8,6 +8,7 @@ import { Avvik } from './Avvik';
 import { Editor } from './Editor';
 import { fixed, NO_FILTER, type Filter } from './health';
 import { FeatureView, scenKey, stepKey } from './FeatureView';
+import { findGroups, findHits } from './find';
 import { headings, parseMd } from './markdown';
 import { MainBanner } from './MainBanner';
 import { bannerShown } from './mainStatus';
@@ -165,6 +166,9 @@ function App() {
   const [updated, setUpdated] = useState(false);
   const [lineNumbers, setLineNumbers] = useState(() => load('lineNumbers', true));
   const [treeHidden, setTreeHidden] = useState(() => load('treeHidden', false));
+  const [tocHidden, setTocHidden] = useState(() => load('tocHidden', false));
+  // Søket i fila (Cmd/Ctrl+F): søketeksten, gjeldende treff, og scenarioer brukeren har lukket mens søket står
+  const [find, setFind] = useState<{ q: string; cur: number; closed: Record<string, boolean> }>({ q: '', cur: 0, closed: {} });
   // Claude-panelet: den lokale Claude Code-en, når den finnes (dev-serveren og desktop-appen)
   const [claude, setClaude] = useState<ClaudeStatus | null>(null);
   const [claudeOpen, setClaudeOpen] = useState(() => load('claudeOpen', false));
@@ -201,6 +205,7 @@ function App() {
   useEffect(() => save('open', openDirs), [openDirs]);
   useEffect(() => save('lineNumbers', lineNumbers), [lineNumbers]);
   useEffect(() => save('treeHidden', treeHidden), [treeHidden]);
+  useEffect(() => save('tocHidden', tocHidden), [tocHidden]);
   useEffect(() => save('treeMode', treeMode), [treeMode]);
   useEffect(() => save('mdMode', mdMode), [mdMode]);
   useEffect(() => {
@@ -217,6 +222,7 @@ function App() {
     setOpenDirs(o => (ancestors(current).every(a => o[a]) ? o : { ...o, ...Object.fromEntries(ancestors(current).map(a => [a, true])) }));
     mainRef.current?.scrollTo({ top: 0 });
     focusedKey.current = null;
+    setFind({ q: '', cur: 0, closed: {} });
   }, [current]);
   // Husk hvor brukeren er, til neste gang vieweren åpnes uten hash
   useEffect(() => save('hash', location.hash), [current, mode, oState]);
@@ -266,6 +272,67 @@ function App() {
   }, [focus, entry, current]);
   const mark =
     focus && focus.path === current && focus.line !== null ? { from: focus.line, to: focus.to ?? focus.line } : null;
+
+  // Søket i fila: treffene i modellen, så også lukkede scenarioer telles og åpnes
+  const findModel = entry?.kind === 'feature' ? entry.model : undefined;
+  const findResult = useMemo(() => (findModel && find.q.trim() ? findHits(findModel, find.q) : null), [findModel, find.q]);
+  const findTotal = findResult?.hits.length ?? 0;
+  const findCur = Math.min(find.cur, Math.max(0, findTotal - 1));
+  const groups = useMemo(() => findGroups(findResult?.hits ?? []), [findResult]);
+  // Går til et treff; et scenario brukeren har lukket under søket, åpnes igjen når treffet står der
+  const findGo = (next: (cur: number) => number) =>
+    setFind(f => {
+      const cur = next(Math.min(f.cur, findTotal - 1));
+      const scen = findResult?.hits[cur]?.scen;
+      if (!scen || !f.closed[scen]) return { ...f, cur };
+      const { [scen]: _, ...closed } = f.closed;
+      return { ...f, cur, closed };
+    });
+  const findStep = (d: 1 | -1) => findTotal && findGo(c => (c + d + findTotal) % findTotal);
+  const findRef = useRef({ can: false, active: false, step: findStep });
+  findRef.current = { can: mode === 'krav' && !editing && !!findModel, active: findTotal > 0, step: findStep };
+  // Cmd/Ctrl+F åpner innholdspanelet og søkefeltet; Cmd/Ctrl+G går til neste treff (med Shift: forrige)
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      const k = e.key.toLowerCase();
+      if (!(e.metaKey || e.ctrlKey) || e.altKey || (k !== 'f' && k !== 'g')) return;
+      if (!findRef.current.can || (e.target as Element | null)?.tagName === 'TEXTAREA') return;
+      if (k === 'f') {
+        e.preventDefault();
+        const focus = () => {
+          const input = document.querySelector<HTMLInputElement>('input[data-find]');
+          input?.focus();
+          input?.select();
+          return !!input;
+        };
+        // Panelet er skjult: vis det først, og fokuser når feltet er tegnet
+        if (!focus()) {
+          setTocHidden(false);
+          setTimeout(focus, 30);
+        }
+      } else if (findRef.current.active) {
+        e.preventDefault();
+        findRef.current.step(e.shiftKey ? -1 : 1);
+      }
+    };
+    addEventListener('keydown', onKey);
+    return () => removeEventListener('keydown', onKey);
+  }, []);
+  // Hopp til gjeldende treff når det ikke er synlig: 30 % ned under egenskapshodet
+  useEffect(() => {
+    if (!findTotal) return;
+    requestAnimationFrame(() => {
+      const main = mainRef.current;
+      const el = main?.querySelector<HTMLElement>(`[data-hit="f-${findCur}"]`);
+      if (!main || !el) return;
+      const top = asCompact(main, offset => {
+        const y = main.scrollTop + el.getBoundingClientRect().top - main.getBoundingClientRect().top;
+        const shown = y >= main.scrollTop + offset && y + el.offsetHeight <= main.scrollTop + main.clientHeight - 48;
+        return shown ? null : Math.max(0, y - offset - (main.clientHeight - offset) * 0.3);
+      });
+      if (top !== null) main.scrollTo({ top, behavior: 'smooth' });
+    });
+  }, [find.q, findCur, current, findTotal > 0]);
   useEffect(() => {
     const onHash = () => {
       const p = fromHash();
@@ -498,6 +565,8 @@ function App() {
         }}
         treeHidden={treeHidden}
         onToggleTree={() => setTreeHidden(v => !v)}
+        tocHidden={tocHidden}
+        onToggleToc={() => setTocHidden(v => !v)}
         onHome={() => {
           const home = defaultPath(entries);
           if (home === current && mode === 'krav') mainRef.current?.scrollTo({ top: 0, behavior: 'smooth' });
@@ -536,7 +605,7 @@ function App() {
         ) : mode === 'avvik' ? (
           <Avvik entries={entries} filter={avvikFilter} onFilter={setAvvikFilter} onOpen={select} onReadRule={readRule} panelHidden={treeHidden} />
         ) : (
-          <div class={'grid' + (treeHidden ? ' notree' : '') + (claudeShown ? ' withclaude' : '')}>
+          <div class={'grid' + (treeHidden ? ' notree' : '') + (tocHidden ? ' notoc' : '')}>
             {!treeHidden && (
               <Sidebar
                 entries={entries}
@@ -590,17 +659,34 @@ function App() {
                   mainRef={mainRef}
                   onLine={ln => select(current, ln)}
                   onToggle={k => setCollapsed(c => ({ ...c, [current]: { ...c[current], [k]: !c[current]?.[k] } }))}
+                  find={findResult && { result: findResult, cur: findCur }}
+                  findClosed={find.closed}
+                  onFindClose={k => setFind(f => ({ ...f, closed: { ...f.closed, [k]: true } }))}
                   onEdit={EDITABLE ? () => setEditing(true) : undefined}
                 />
               )}
             </main>
-            {!claudeShown && (
+            {!tocHidden && (
               <Outline
                 model={entry?.model}
                 headings={md ? headings(md) : undefined}
                 onJump={jump}
                 onFoldAll={() => setCollapsed(c => ({ ...c, [current]: Object.fromEntries(allScenKeys().map(k => [k, true])) }))}
                 onOpenAll={() => setCollapsed(c => ({ ...c, [current]: {} }))}
+                find={
+                  findModel && !editing
+                    ? {
+                        q: find.q,
+                        onQ: q => setFind({ q, cur: 0, closed: {} }),
+                        groups,
+                        total: findTotal,
+                        cur: findCur,
+                        onCur: cur => findGo(() => cur),
+                        onStep: findStep,
+                        onClear: () => setFind({ q: '', cur: 0, closed: {} }),
+                      }
+                    : undefined
+                }
               />
             )}
           </div>

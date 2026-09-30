@@ -12,6 +12,8 @@
   --k-sc: #595959; --k-sc-soft: #ededed; --k-sm: #643ffa; --k-sm-soft: #e8e6ff;
   --k-bg: #767676; --k-bg-soft: #dedede; --k-gitt: #595959; --k-naar: #643ffa; --k-saa: #260d92;
   --banner-bg: var(--acc); --banner-btn-ink: var(--acc-ink);
+  /* Søketreff i fila (Gherkin Viewer v2) */
+  --hl: oklch(0.93 0.1 95); --hl-ink: #1c1c1e; --hl-cur: oklch(0.78 0.15 65); --hl-cur-ink: #1c1c1e;
   --mono: 'IBM Plex Mono', ui-monospace, monospace;
   --sans: 'IBM Plex Sans', system-ui, sans-serif;
   color-scheme: light;
@@ -22,6 +24,7 @@
     --line: #2c2c2f; --line2: #3b3b3f; --ink: #e8e8e6; --ink2: #bcbcb9; --muted: #8b8b88;
     --acc: #b4aeff; --acc-soft: #351aad; --acc-ink: #d1cdff; --flash: #3f3716;
     --banner-bg: var(--acc-soft); --banner-btn-ink: var(--acc-soft);
+    --hl: oklch(0.5 0.1 90); --hl-ink: #f2f2f0; --hl-cur: oklch(0.78 0.15 65); --hl-cur-ink: #1c1c1e;
     --err: oklch(0.72 0.15 27); --err-soft: #361f1d; --on-err: #1a0f0e; --warn: oklch(0.76 0.13 65); --sel: #351aad;
     --st-draft: #8b8b88; --st-planned: oklch(0.7 0.12 262);
     --st-in-progress: oklch(0.76 0.13 70); --st-implemented: oklch(0.7 0.12 150);
@@ -37,6 +40,7 @@
   --line: #2c2c2f; --line2: #3b3b3f; --ink: #e8e8e6; --ink2: #bcbcb9; --muted: #8b8b88;
   --acc: #b4aeff; --acc-soft: #351aad; --acc-ink: #d1cdff; --flash: #3f3716;
   --banner-bg: var(--acc-soft); --banner-btn-ink: var(--acc-soft);
+  --hl: oklch(0.5 0.1 90); --hl-ink: #f2f2f0; --hl-cur: oklch(0.78 0.15 65); --hl-cur-ink: #1c1c1e;
   --err: oklch(0.72 0.15 27); --err-soft: #361f1d; --on-err: #1a0f0e; --warn: oklch(0.76 0.13 65); --sel: #351aad;
   --st-draft: #8b8b88; --st-planned: oklch(0.7 0.12 262);
   --st-in-progress: oklch(0.76 0.13 70); --st-implemented: oklch(0.7 0.12 150);
@@ -97,6 +101,8 @@ button { font: inherit; color: inherit; }
 /* Hovedgrid */
 .grid { flex: 1; min-height: 0; display: grid; grid-template-columns: 300px minmax(0, 1fr) 248px; }
 .grid.notree { grid-template-columns: minmax(0, 1fr) 248px; }
+.grid.notoc { grid-template-columns: 300px minmax(0, 1fr); }
+.grid.notree.notoc { grid-template-columns: minmax(0, 1fr); }
 
 /* Sidepanel */
 .sidebar { display: flex; flex-direction: column; min-height: 0; border-right: 1px solid var(--line); background: var(--panel); }
@@ -192,6 +198,10 @@ h2 { margin: 0; font-size: 16.5px; font-weight: 600; line-height: 1.35; text-wra
 .cardhead:hover { filter: brightness(.97); }
 .cardhead .chev { width: 10px; font-size: 9px; color: var(--muted); flex-shrink: 0; }
 .scname { font-weight: 600; font-size: 14.5px; text-wrap: pretty; }
+.findbadge { font-family: var(--mono); font-size: 10.5px; padding: 1px 6px; border-radius: 3px; color: var(--hl-ink); background: var(--hl); flex-shrink: 0; margin-left: auto; }
+.findbadge.forced { color: var(--acc-ink); background: var(--acc-soft); }
+.findbadge + .findbadge { margin-left: -2px; }
+.findbadge ~ .scmeta { margin-left: 0; }
 .scmeta { margin-left: auto; font-family: var(--mono); font-size: 11px; color: var(--muted); flex-shrink: 0; }
 .steps { border-top: 1px solid var(--line); padding: 6px 0 8px; display: flex; flex-direction: column; }
 .step { display: grid; grid-template-columns: 44px 58px minmax(0, 1fr); transition: background .8s; }
@@ -205,7 +215,7 @@ h2 { margin: 0; font-size: 16.5px; font-weight: 600; line-height: 1.35; text-wra
 .kw.and { font-weight: 500; }
 .param { font-family: var(--mono); font-size: 12.5px; color: var(--acc-ink); background: var(--acc-soft); padding: 1px 4px; border-radius: 3px; }
 .table { display: inline-grid; border: 1px solid var(--line); border-radius: 4px; font-family: var(--mono); font-size: 12.5px; line-height: 1.5; margin: 4px 0 6px; }
-.table span { padding: 3px 12px; border-bottom: 1px solid var(--line); }
+.table > span { padding: 3px 12px; border-bottom: 1px solid var(--line); }
 .table .th { background: var(--sunken); color: var(--muted); font-weight: 500; }
 .table.ex .th { background: var(--kc-soft); color: var(--ink); font-weight: 600; }
 pre.docstring { margin: 4px 0 6px; padding: 8px 12px; background: var(--sunken); border: 1px solid var(--line); border-radius: 4px; font: 12.5px/1.5 var(--mono); white-space: pre-wrap; }
@@ -309,6 +319,40 @@ pre.docstring { margin: 4px 0 6px; padding: 8px 12px; background: var(--sunken);
 
 /* Innholdsfortegnelse */
 .outline { border-left: 1px solid var(--line); padding: 16px 14px; display: flex; flex-direction: column; gap: 14px; overflow: auto; min-height: 0; }
+/* Søk i fila, øverst i innholdspanelet */
+.outline.withfind { padding: 0; gap: 0; overflow: hidden; }
+.outline.withfind .outline-body { flex: 1; min-height: 0; overflow: auto; padding: 12px 14px 16px; display: flex; flex-direction: column; gap: 14px; }
+.outline.withfind.finding .outline-body { padding: 0 6px 10px; }
+.find { padding: 12px 12px 4px; display: flex; flex-direction: column; gap: 8px; flex-shrink: 0; }
+.findbox { height: 32px; display: flex; align-items: center; gap: 6px; padding: 0 6px 0 10px; border: 1px solid var(--line2); border-radius: 6px; background: var(--surface); }
+.findbox:focus-within { border-color: var(--acc); box-shadow: 0 0 0 1px var(--acc); }
+.findbox input { flex: 1; min-width: 0; border: 0; outline: none; background: transparent; color: var(--ink); font: 13px var(--sans); padding: 0; }
+.findbox input::placeholder { color: var(--muted); }
+.findbox .kbd { font-family: var(--mono); font-size: 10.5px; color: var(--muted); border: 1px solid var(--line); border-radius: 3px; padding: 0 4px; }
+.findclear { width: 22px; height: 22px; border: 0; border-radius: 4px; background: transparent; color: var(--muted); cursor: pointer; font-size: 11px; padding: 0; }
+.findclear:hover { background: var(--sunken); color: var(--ink); }
+.findsum { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--muted); }
+.findsum .none { color: var(--err); }
+.findnav { margin-left: auto; display: flex; border: 1px solid var(--line2); border-radius: 5px; overflow: hidden; flex-shrink: 0; }
+.findnav button { width: 26px; height: 24px; border: 0; background: var(--surface); color: var(--ink2); cursor: pointer; font-size: 11px; padding: 0; }
+.findnav button + button { border-left: 1px solid var(--line2); }
+.findnav button:hover:not(:disabled) { background: var(--sunken); color: var(--ink); }
+.findnav button:disabled { color: var(--line2); cursor: default; }
+.fgroup { display: flex; flex-direction: column; gap: 1px; padding: 6px 0 4px; }
+.fghead { display: flex; flex-direction: column; gap: 1px; padding: 4px 8px 2px; }
+.fghead .mono { font-size: 10.5px; letter-spacing: .05em; color: var(--muted); }
+.fghead span:last-child { font-size: 12.5px; font-weight: 600; color: var(--ink); line-height: 1.35; text-wrap: pretty; }
+.fitem { display: grid; grid-template-columns: 34px minmax(0, 1fr); gap: 6px; padding: 5px 8px; border: 0; border-radius: 5px; background: transparent; cursor: pointer; font-size: 12.5px; line-height: 1.45; color: var(--ink2); text-align: left; width: 100%; }
+.fitem:hover { background: var(--sunken); }
+.fitem.cur { background: var(--sel); }
+.fitem .mono { font-size: 10.5px; line-height: 18px; color: var(--muted); overflow: hidden; text-overflow: ellipsis; }
+.fitem > span:last-child { text-wrap: pretty; overflow-wrap: anywhere; }
+.fitem mark { background: var(--hl); color: var(--hl-ink); border-radius: 2px; padding: 0 1px; }
+.fitem.cur mark { background: var(--hl-cur); color: var(--hl-cur-ink); }
+.findkeys { flex-shrink: 0; border-top: 1px solid var(--line); padding: 7px 12px; font-size: 10.5px; color: var(--muted); }
+/* Treffene i fila; ringen gjør markeringen litt større enn teksten uten å flytte den */
+.hit { background: var(--hl); color: var(--hl-ink); border-radius: 2px; box-shadow: 0 0 0 1px var(--hl); }
+.hit.cur { background: var(--hl-cur); color: var(--hl-cur-ink); box-shadow: 0 0 0 2px var(--hl-cur); }
 .outline-head { display: flex; align-items: center; justify-content: space-between; }
 .outline-head .mono { font-size: 11px; color: var(--muted); letter-spacing: .04em; }
 .outline-head div { display: flex; gap: 4px; }
@@ -487,7 +531,11 @@ pre.docstring { margin: 4px 0 6px; padding: 8px 12px; background: var(--sunken);
 }
 
 /* Smale skjermer: skjul innholdsfortegnelsen, deretter treet */
-@media (max-width: 1100px) { .grid { grid-template-columns: 260px minmax(0, 1fr); } .grid.notree { grid-template-columns: minmax(0, 1fr); } .outline { display: none; } }
+@media (max-width: 1100px) {
+  .grid { grid-template-columns: 260px minmax(0, 1fr); position: relative; } .grid.notree { grid-template-columns: minmax(0, 1fr); } .outline { display: none; }
+  /* Søket i fila vises over innholdet til høyre mens det er i bruk */
+  .outline.withfind:is(.finding, :focus-within) { display: flex; position: absolute; top: 0; right: 0; bottom: 0; width: min(300px, 90%); background: var(--bg); box-shadow: -8px 0 24px rgba(0,0,0,.12); z-index: 6; }
+}
 @media (max-width: 700px) {
   .grid { grid-template-columns: minmax(0, 1fr); grid-template-rows: 40vh minmax(0, 1fr); }
   .grid.notree { grid-template-rows: minmax(0, 1fr); }
@@ -797,11 +845,19 @@ a.otf:hover { background: var(--sunken); text-decoration: none; }
 .workspace { flex: 1; min-height: 0; display: flex; }
 .workspace > * { flex: 1; min-width: 0; }
 .workspace > .claude { flex: none; width: var(--claude-w, 380px); }
-.grid.withclaude { grid-template-columns: 300px minmax(0, 1fr); }
-.grid.notree.withclaude { grid-template-columns: minmax(0, 1fr); }
 .claude-mark { width: 9px; height: 9px; border-radius: 50%; background: #d97757; flex-shrink: 0; }
 .claudebtn { display: flex; align-items: center; gap: 6px; border: 1px solid var(--line2); border-radius: 5px; background: transparent; padding: 3px 10px; font-size: 12px; cursor: pointer; color: var(--ink2); }
 .claudebtn:hover, .claudebtn[aria-pressed="true"] { background: var(--surface); color: var(--ink); }
+/* Panelikonene i toppfeltet: stripa til høyre er Claude-panelet, linjene er innholdspanelet */
+.claudeicon, .tocicon { display: flex; justify-content: flex-end; width: 14px; height: 11px; border: 1.5px solid var(--ink2); border-radius: 2px; overflow: hidden; box-sizing: content-box; flex-shrink: 0; }
+.claudeicon span { width: 4px; border-left: 1.5px solid var(--ink2); box-sizing: content-box; }
+.claudebtn[aria-pressed="true"] .claudeicon span { background: oklch(0.64 0.15 40); }
+.tocbtn { display: flex; align-items: center; justify-content: center; width: 28px; height: 26px; padding: 0; border: 1px solid var(--line2); border-radius: 5px; background: transparent; cursor: pointer; flex-shrink: 0; }
+.tocbtn:hover, .tocbtn[aria-pressed="true"] { background: var(--surface); }
+.tocicon > span { width: 5px; border-left: 1.5px solid var(--ink2); display: flex; flex-direction: column; justify-content: center; gap: 1.5px; padding: 0 1px; }
+.tocicon > span > span { height: 1px; background: var(--ink2); }
+.tocbtn[aria-pressed="true"] .tocicon > span { background: var(--ink2); }
+.tocbtn[aria-pressed="true"] .tocicon > span > span { background: var(--panel); }
 /* Desktop-appen: nyere main på GitHub */
 .updatebtn { display: flex; align-items: center; gap: 6px; border: 1px solid var(--acc); border-radius: 5px; background: var(--acc-soft); padding: 3px 10px; font-size: 12px; cursor: pointer; color: var(--acc-ink); white-space: nowrap; }
 .updatebtn:hover { background: var(--surface); }
@@ -872,7 +928,6 @@ a.otf:hover { background: var(--sunken); text-decoration: none; }
 button.cfile.off { background: transparent; border-style: dashed; color: var(--muted); cursor: pointer; padding: 1px 7px; }
 button.cfile.off:hover { color: var(--ink); border-color: var(--acc); }
 .claude-send { font-size: 11px; }
-@media (max-width: 1100px) { .grid.withclaude { grid-template-columns: 260px minmax(0, 1fr); } }
 /* Dra-håndtaket på venstre kant av panelet */
 .claude { position: relative; }
 .claude-resize { position: absolute; top: 0; bottom: 0; left: -4px; width: 8px; cursor: col-resize; z-index: 3; touch-action: none; }

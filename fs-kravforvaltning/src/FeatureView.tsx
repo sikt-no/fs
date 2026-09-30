@@ -1,7 +1,8 @@
-import { useEffect, useRef, useState } from 'preact/hooks';
-import { Fragment, type RefObject } from 'preact';
+import { useContext, useEffect, useRef, useState } from 'preact/hooks';
+import { createContext, Fragment, type RefObject } from 'preact';
 import { STATUSES, type Entry, type Lint, type Status, type Note, type Step } from '../shared/model';
 import { RULE } from '../shared/rules';
+import { segments, type FindResult } from './find';
 import { StatusIcon, statusColor } from './Sidebar';
 import { useCopy } from './useCopy';
 
@@ -15,18 +16,37 @@ const MOSCOW = ['@must', '@should', '@could', '@wont'];
 const COMPACT_AT = 60;
 const EXPAND_AT = 12;
 
-/** Deler tekst i vanlige biter og treff på `re` (må ha én fangegruppe). */
-const split = (text: string, re: RegExp) =>
-  text.split(re).filter(Boolean).map((t, i) => ({ t, hit: re.test(t), i }));
 const PARAM = /(<[^>]+>)/;
 const REF = /([A-ZÆØÅ]{2,4}(?:-[A-ZÆØÅ]{2,4}){2}-\d{3}|#\d+|"[^"]+\.feature")/;
 
-const Params = ({ text }: { text: string }) => (
-  <>{split(text, PARAM).map(g => (g.hit ? <span key={g.i} class="param">{g.t}</span> : <span key={g.i}>{g.t}</span>))}</>
-);
-const Refs = ({ text }: { text: string }) => (
-  <>{split(text, REF).map(g => (g.hit ? <span key={g.i} class="ref">{g.t}</span> : <span key={g.i}>{g.t}</span>))}</>
-);
+/** Søket i fila: treffene og hvilket som er gjeldende */
+export interface FindState {
+  result: FindResult;
+  cur: number;
+}
+const FindCtx = createContext<FindState | null>(null);
+
+/**
+ * Tekst med parametere/referanser (`re`) og søketreff markert. `loc` er tekstbiten i `findHits`;
+ * treffene får `data-hit`, som hoppet til gjeldende treff bruker.
+ */
+function Txt({ text, loc, re = null, cls = '' }: { text: string; loc: string; re?: RegExp | null; cls?: string }) {
+  const find = useContext(FindCtx);
+  return (
+    <>
+      {segments(text, re, find?.result.at.get(loc)).map((g, i) => {
+        const c = [g.mark && cls, g.hit !== undefined && 'hit', g.hit !== undefined && g.hit === find?.cur && 'cur'].filter(Boolean).join(' ');
+        return (
+          <span key={i} class={c || undefined} data-hit={g.hit !== undefined ? `f-${g.hit}` : undefined}>
+            {g.t}
+          </span>
+        );
+      })}
+    </>
+  );
+}
+const Params = ({ text, loc }: { text: string; loc: string }) => <Txt text={text} loc={loc} re={PARAM} cls="param" />;
+const Refs = ({ text, loc }: { text: string; loc: string }) => <Txt text={text} loc={loc} re={REF} cls="ref" />;
 
 const tagColor = (t: string) =>
   isStatus(t) ? statusColor(t.slice(1)) : t === '@openquestion' ? 'var(--st-in-progress)' : undefined;
@@ -79,7 +99,7 @@ function CopyTitle({ text }: { text: string }) {
 }
 
 /** Åpne spørsmål og vanlige kommentarer, vist rett under elementet de hører til. */
-function NoteBlock({ note, hit, lineNumbers }: { note: Note; hit: (from: number, to?: number) => string; lineNumbers: boolean }) {
+function NoteBlock({ note, loc, hit, lineNumbers }: { note: Note; loc: string; hit: (from: number, to?: number) => string; lineNumbers: boolean }) {
   const last = note.items[note.items.length - 1]?.ln ?? note.ln;
   if (note.kind === 'question') {
     return (
@@ -91,7 +111,7 @@ function NoteBlock({ note, hit, lineNumbers }: { note: Note; hit: (from: number,
         <ol>
           {note.items.map((q, i) => (
             <li key={i} class={hit(q.ln) || undefined}>
-              <Refs text={q.text} />
+              <Refs text={q.text} loc={`${loc}:${i}`} />
               {lineNumbers && <span class="qln">L{q.ln}</span>}
             </li>
           ))}
@@ -102,17 +122,17 @@ function NoteBlock({ note, hit, lineNumbers }: { note: Note; hit: (from: number,
   return (
     <div class={'note' + hit(note.ln, last)}>
       {note.head && <span class="nhead">{note.head}</span>}
-      {note.items.length > 0 && <div class="ntext"><Refs text={note.items.map(i => i.text).join('\n')} /></div>}
+      {note.items.length > 0 && <div class="ntext"><Refs text={note.items.map(i => i.text).join('\n')} loc={loc} /></div>}
       {lineNumbers && <span class="qln">L{note.ln}</span>}
     </div>
   );
 }
 
-function Table({ rows, ex, params }: { rows: string[][]; ex?: boolean; params?: boolean }) {
+function Table({ rows, loc, ex, params }: { rows: string[][]; loc: string; ex?: boolean; params?: boolean }) {
   return (
     <div>
       <div class={'table' + (ex ? ' ex' : '')} style={{ gridTemplateColumns: `repeat(${rows[0]?.length ?? 1}, auto)` }}>
-        {rows.flatMap((r, ri) => r.map((c, ci) => <span key={`${ri}-${ci}`} class={ri === 0 ? 'th' : ''}>{params ? <Params text={c} /> : c}</span>))}
+        {rows.flatMap((r, ri) => r.map((c, ci) => <span key={`${ri}-${ci}`} class={ri === 0 ? 'th' : ''}>{params ? <Params text={c} loc={`${loc}:${ri}:${ci}`} /> : <Txt text={c} loc={`${loc}:${ri}:${ci}`} />}</span>))}
       </div>
     </div>
   );
@@ -121,13 +141,13 @@ function Table({ rows, ex, params }: { rows: string[][]; ex?: boolean; params?: 
 /** Siste linje steget dekker i filen, inkludert tabell eller docstring. */
 const stepEnd = (st: Step) => st.ln + (st.table?.length ?? 0) + (st.doc !== undefined ? st.doc.split('\n').length + 1 : 0);
 
-function StepNotes({ step, hit, lineNumbers }: { step: Step; hit: (from: number, to?: number) => string; lineNumbers: boolean }) {
+function StepNotes({ step, loc, hit, lineNumbers }: { step: Step; loc: string; hit: (from: number, to?: number) => string; lineNumbers: boolean }) {
   return (
     <>
       {step.notes?.map((n, i) => (
         <div key={i} class="step stepnote">
           <span class="ln">{lineNumbers ? n.ln : ''}</span>
-          <NoteBlock note={n} hit={hit} lineNumbers={false} />
+          <NoteBlock note={n} loc={`${loc}n${i}`} hit={hit} lineNumbers={false} />
         </div>
       ))}
     </>
@@ -144,15 +164,15 @@ function kwColors(steps: Step[]) {
   return steps.map(st => (last = KW_COLOR[st.kw] ?? last));
 }
 
-function StepRow({ step, color, flash, marked, lineNumbers }: { step: Step; color: string; flash: boolean; marked: boolean; lineNumbers: boolean }) {
+function StepRow({ step, loc, color, flash, marked, lineNumbers }: { step: Step; loc: string; color: string; flash: boolean; marked: boolean; lineNumbers: boolean }) {
   return (
     <div class={'step' + (flash ? ' flash' : '') + (marked ? ' cursor' : '')}>
       <span class="ln">{lineNumbers ? step.ln : ''}</span>
       <span class={'kw' + (isAnd(step.kw) ? ' and' : '')} style={{ color }}>{step.kw}</span>
       <div class="steptext">
-        <Params text={step.text} />
-        {step.table && <Table rows={step.table} params />}
-        {step.doc !== undefined && <pre class="docstring">{step.doc}</pre>}
+        <Params text={step.text} loc={loc} />
+        {step.table && <Table rows={step.table} loc={loc} params />}
+        {step.doc !== undefined && <pre class="docstring"><Txt text={step.doc} loc={`${loc}:doc`} /></pre>}
       </div>
     </div>
   );
@@ -201,13 +221,19 @@ interface Props {
   mark: { from: number; to: number } | null;
   mainRef: RefObject<HTMLElement>;
   onToggle: (key: string) => void;
+  /** Søket i fila, når det står et søk */
+  find: FindState | null;
+  /** Scenarioer brukeren har lukket mens søket står; de åpnes ikke av søket igjen */
+  findClosed: Record<string, boolean>;
+  /** Brukeren lukker et scenario mens søket står */
+  onFindClose: (key: string) => void;
   /** Gå til en linje i fila (fra statusbåndet) */
   onLine: (ln: number) => void;
   /** Åpne fila i editoren; utelatt der redigering ikke er tilgjengelig */
   onEdit?: () => void;
 }
 
-export function FeatureView({ entry, collapsed, flash, lineNumbers, mark, mainRef, onToggle, onLine, onEdit }: Props) {
+export function FeatureView({ entry, collapsed, flash, lineNumbers, mark, mainRef, onToggle, find, findClosed, onFindClose, onLine, onEdit }: Props) {
   const f = entry.model;
   const hit = (from: number, to = from) => (mark && from <= mark.to && to >= mark.from ? ' cursor' : '');
   const fileName = entry.path.slice(entry.path.lastIndexOf('/') + 1);
@@ -259,7 +285,7 @@ export function FeatureView({ entry, collapsed, flash, lineNumbers, mark, mainRe
 
   let num = 0;
   return (
-    <>
+    <FindCtx.Provider value={find}>
       {banner}
       <div class={'doc' + (entry.error ? ' stale' : '')}>
         <div class={'fhead' + (compact ? ' compact' : '')} style={{ top: bannerH }}>
@@ -277,7 +303,7 @@ export function FeatureView({ entry, collapsed, flash, lineNumbers, mark, mainRe
                 )}
               </div>
             )}
-            <div class="fbanner"><span class="kbadge inv">Egenskap</span><h1>{f.title}{f.title && <CopyTitle text={f.title} />}</h1></div>
+            <div class="fbanner"><span class="kbadge inv">Egenskap</span><h1><Txt text={f.title} loc="title" />{f.title && <CopyTitle text={f.title} />}</h1></div>
           </div>
         </div>
         <div class="meta">
@@ -292,11 +318,11 @@ export function FeatureView({ entry, collapsed, flash, lineNumbers, mark, mainRe
 
         {f.desc.length > 0 && (
           <div class="story">
-            {f.desc.map((d, i) => <div key={i}>{d.lead && <b>{d.lead}</b>} {d.rest}</div>)}
+            {f.desc.map((d, i) => <div key={i}>{d.lead && <b>{d.lead}</b>} <Txt text={d.rest} loc={`desc:${i}`} /></div>)}
           </div>
         )}
 
-        {f.notes.map((n, i) => <NoteBlock key={i} note={n} hit={hit} lineNumbers={lineNumbers} />)}
+        {f.notes.map((n, i) => <NoteBlock key={i} note={n} loc={`fn${i}`} hit={hit} lineNumbers={lineNumbers} />)}
 
         {f.rules.map((r, ri) => {
           if (r.name !== null) num++;
@@ -306,53 +332,65 @@ export function FeatureView({ entry, collapsed, flash, lineNumbers, mark, mainRe
               {r.name !== null && (
                 <div class={'rulehead' + hit(r.ln)}>
                   <span class="kbadge rule">Regel {num}</span>
-                  <h2>{r.name}{r.name && <CopyTitle text={r.name} />}</h2>
+                  <h2><Txt text={r.name} loc={`r${ri}`} />{r.name && <CopyTitle text={r.name} />}</h2>
                   <Tags tags={r.tags} />
                 </div>
               )}
-              {r.desc && <div class="desc">{r.desc}</div>}
-              {r.notes.map((n, i) => <NoteBlock key={i} note={n} hit={hit} lineNumbers={lineNumbers} />)}
+              {r.desc && <div class="desc"><Txt text={r.desc} loc={`r${ri}:desc`} /></div>}
+              {r.notes.map((n, i) => <NoteBlock key={i} note={n} loc={`r${ri}n${i}`} hit={hit} lineNumbers={lineNumbers} />)}
               {r.scenarios.map((s, si) => {
                 const key = scenKey(ri, si);
-                const open = !collapsed[key];
+                // Søket åpner lukkede scenarioer med treff, til brukeren lukker dem igjen
+                const nHits = find?.result.perScen.get(key) ?? 0;
+                const forced = nHits > 0 && !!collapsed[key] && !findClosed[key];
+                const open = !collapsed[key] || forced;
                 const exCount = s.examples.reduce((n, e) => n + e.rows.length - 1, 0);
                 const draft = ruleDraft || s.tags.includes('@draft');
                 const nq = s.notes.filter(n => n.kind === 'question').reduce((n, q) => n + q.items.length, 0);
                 const colors = kwColors(s.steps);
                 return (
                   <div key={key} class={'card' + (KIND_CLASS[s.kind] ?? ' k-sm') + (draft ? ' draft' : '')} data-scen={key}>
-                    <button class={'cardhead' + hit(s.ln)} onClick={() => onToggle(key)} aria-expanded={open}>
+                    <button
+                      class={'cardhead' + hit(s.ln)}
+                      onClick={() => {
+                        if (open && find) onFindClose(key);
+                        if (!forced) onToggle(key);
+                      }}
+                      aria-expanded={open}
+                    >
                       <span class="chev">{open ? '▼' : '▶'}</span>
                       <span class="kbadge">{s.kind}</span>
                       <span class="scname">
-                        {s.name || (s.kind === 'Bakgrunn' ? 'Felles forutsetninger' : '')}
+                        <Txt text={s.name || (s.kind === 'Bakgrunn' ? 'Felles forutsetninger' : '')} loc={`s${key}`} />
                         {s.name && <CopyTitle text={s.name} />}
                       </span>
                       <Tags tags={s.tags} />
                       {nq > 0 && <span class="qbadge" title="Åpne spørsmål">? {nq}</span>}
+                      {forced && <span class="findbadge forced">åpnet av søk</span>}
+                      {nHits > 0 && <span class="findbadge">{nHits} treff</span>}
                       <span class="scmeta">{s.steps.length} steg{exCount ? ` · ${exCount} eksempler` : ''} · L{s.ln}</span>
                     </button>
                     {open && (
                       <div class={'steps' + (lineNumbers ? '' : ' nolines')}>
                         {(s.desc || s.notes.length > 0) && (
                           <div class="cardnotes">
-                            {s.desc && <div class="desc">{s.desc}</div>}
-                            {s.notes.map((n, i) => <NoteBlock key={i} note={n} hit={hit} lineNumbers={lineNumbers} />)}
+                            {s.desc && <div class="desc"><Txt text={s.desc} loc={`s${key}:desc`} /></div>}
+                            {s.notes.map((n, i) => <NoteBlock key={i} note={n} loc={`s${key}n${i}`} hit={hit} lineNumbers={lineNumbers} />)}
                           </div>
                         )}
                         {s.steps.map((st, ti) => (
                           <Fragment key={ti}>
-                            <StepNotes step={st} hit={hit} lineNumbers={lineNumbers} />
-                            <StepRow step={st} color={colors[ti]} lineNumbers={lineNumbers} flash={flash.has(stepKey(ri, si, ti))} marked={!!hit(st.ln, stepEnd(st))} />
+                            <StepNotes step={st} loc={`t${key}-${ti}`} hit={hit} lineNumbers={lineNumbers} />
+                            <StepRow step={st} loc={`t${key}-${ti}`} color={colors[ti]} lineNumbers={lineNumbers} flash={flash.has(stepKey(ri, si, ti))} marked={!!hit(st.ln, stepEnd(st))} />
                           </Fragment>
                         ))}
                         {s.examples.map((ex, ei) => (
                           <div key={ei} class="examples">
                             <span />
                             <div>
-                              <span class="label"><span class="kbadge">Eksempler</span>{ex.name && <span>{ex.name}<CopyTitle text={ex.name} /></span>}<Tags tags={ex.tags} /></span>
+                              <span class="label"><span class="kbadge">Eksempler</span>{ex.name && <span><Txt text={ex.name} loc={`x${key}-${ei}:name`} /><CopyTitle text={ex.name} /></span>}<Tags tags={ex.tags} /></span>
                               {ex.desc && <div class="desc">{ex.desc}</div>}
-                              <Table rows={ex.rows} ex />
+                              <Table rows={ex.rows} loc={`x${key}-${ei}`} ex />
                             </div>
                           </div>
                         ))}
@@ -366,6 +404,6 @@ export function FeatureView({ entry, collapsed, flash, lineNumbers, mark, mainRe
         })}
 
       </div>
-    </>
+    </FindCtx.Provider>
   );
 }
