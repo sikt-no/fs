@@ -24,6 +24,7 @@ Egenskap: Samordnet opptak
       Så kan ikke NTNU knytte utdanningstilbud til opptaket
 
   Regel: Det er kun opptaksforvalter ved forvaltende organisasjon som kan endre innstillinger i opptaket
+    # forvaltende organisasjon = eierorganisasjon for det samordna opptaket. Vurder om ordlyden som den er, er utvetydig nok mht tilgangstyring og roller.
 
     Scenario: Opptaksforvalter ved forvaltende organisasjon kan endre innstillinger
       Gitt at HK-dir har opprettet og dermed er forvalter av opptaket "Samordna opptak 2027"
@@ -66,9 +67,8 @@ Egenskap: Samordnet opptak
 
     Scenario: Sette regler for fordeling av søknader til saksbehandlerorganisasjoner
       Når opptaksforvalter ved forvaltende organisasjon knytter saksbehandlertildelingsregler for opptaket
-      Så fordeles søknader til deltakende organisasjoner etter de angitte reglene
+      Så gjelder saksbehandlertildelingsreglene for opptaket, så søknader kan fordeles til deltakende organisasjoner etter de angitte reglene
 
     Scenario: Saksbehandlertildeling er ikke relevant for lokale opptak
       Gitt at opptaket "Lokalt opptak høst 2027" er opprettet som lokalt
       Så er innstillinger for saksbehandlertildeling ikke tilgjengelige
-

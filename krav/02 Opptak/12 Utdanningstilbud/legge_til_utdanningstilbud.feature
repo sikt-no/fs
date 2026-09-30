@@ -36,9 +36,23 @@ Egenskap: Legge til utdanningstilbud i opptak
       Gitt at organisasjonen "NTNU" ikke er lagt til som deltaker i opptaket
       Så kan ikke utdanningstilbud fra NTNU legges til i opptaket
 
-  Regel: Kun utdanningstilbud som matcher opptakets kriterier kan legges til
+  Regel: Opptaksforvalter kan filtrere på utdanningstype og studienivå når utdanningstilbud legges til
 
-    Scenario: Utdanning som ikke matcher kriteriene kan ikke legges til
-      Gitt at opptaket kun tillater studieprogram på bachelornivå
-      Så kan ikke et emne legges til som utdanningstilbud
-      Og et studieprogram på masternivå kan ikke legges til
+    Scenario: Filtrere på utdanningstype
+      Når opptaksforvalter filtrerer på utdanningstype studieprogram
+      Så vises kun studieprogram som mulige utdanningstilbud
+
+    Scenario: Filtrere på NKR-nivå for UHG-opptak
+      Når opptaksforvalter filtrerer på utdanningstype studieprogram
+      Og opptaksforvalter filtrerer på NKR-nivåene 6.1 Høgskolekandidat, 6.2 Bachelor, 7 Master
+      Så vises kun studieprogram på disse nivåene som mulige utdanningstilbud
+
+    Scenario: Filtrere på NKR-nivå for HYU-opptak
+      Når opptaksforvalter filtrerer på utdanningstype studieprogram
+      Og opptaksforvalter filtrerer på NKR-nivåene 5.1 fagskole og 5.2 fagskole
+      Så vises kun fagskoleutdanninger av typen studieprogram som mulige utdanningstilbud
+
+    Scenario: Utdanninger utenfor filteret vises ikke
+      Gitt at opptaksforvalter har filtrert på studieprogram på 6.2 bachelornivå
+      Så vises ikke emner som mulige utdanningstilbud
+      Og studieprogram på 7 masternivå vises ikke som mulige utdanningstilbud
