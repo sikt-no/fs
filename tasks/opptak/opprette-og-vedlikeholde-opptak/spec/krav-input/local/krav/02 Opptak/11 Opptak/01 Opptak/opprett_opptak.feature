@@ -1,5 +1,5 @@
 # language: no
-@OPT-OPT-OPT-001 @must @in-progress
+@OPT-OPT-OPT-001 @must @planned
 Egenskap: Opprette et opptak
   Som opptaksforvalter
   ønsker jeg å opprette et opptak for min organisasjon

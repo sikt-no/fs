@@ -1,5 +1,5 @@
 # language: no
-@OPT-OPT-FRI-001 @must @planned
+@OPT-OPT-FRI-001 @must @in-progress
 Egenskap: Frister og hendelser for opptak
   Som opptaksforvalter ved forvaltende organisasjon
   ønsker jeg å sette frister som styrer tidsrammene for opptaket

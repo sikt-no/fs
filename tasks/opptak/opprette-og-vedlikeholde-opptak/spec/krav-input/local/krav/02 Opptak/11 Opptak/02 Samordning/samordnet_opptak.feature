@@ -1,5 +1,5 @@
 # language: no
-@OPT-OPT-SAM-001 @must @in-progress
+@OPT-OPT-SAM-001 @must @planned
 Egenskap: Samordnet opptak
   Som opptaksforvalter ved forvaltende organisasjon
   ønsker jeg å invitere læresteder til å delta
