@@ -26,10 +26,10 @@ const saveRecent = (paths: string[]) => {
  * Tilstanden til @-omtalen i Claude-feltet: hva som er lagt ved, søket etter `@`, og tastene i popoveren.
  * Søket er det samme som i treet (Fuse, `src/search.ts`), over både filer og mapper.
  */
-export function useMentions(entries: Snapshot, current: string | null, input: string, setInput: (v: string) => void) {
+export function useMentions(entries: Snapshot, current: string | null, input: string, setInput: (v: string) => void, initial: string[] = []) {
   const items = useMemo(() => mentionItems(entries), [entries]);
   const index = useMemo(() => makeMentionIndex(items), [items]);
-  const [mentions, setMentions] = useState<string[]>([]);
+  const [mentions, setMentions] = useState<string[]>(initial);
   const [open, setOpen] = useState(false);
   const [active, setActive] = useState(0);
   const [marked, setMarked] = useState<string[]>([]);

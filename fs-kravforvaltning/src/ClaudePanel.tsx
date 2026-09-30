@@ -23,6 +23,7 @@ import { ChatMarkdown } from './ChatMarkdown';
 import { registerClaude, setClaudeBusy } from './claudeBridge';
 import { CodeDirs, codeDirPaths, useCodeDirs } from './CodeDirs';
 import { knownSkills, SkillPicker } from './ClaudeSkills';
+import { readDraft, saveDraft } from './claudeDraft';
 import { covered } from './mention';
 import { MENTION_LIST_ID, MentionPicker, useMentions } from './MentionPicker';
 import { transport } from './transport';
@@ -218,22 +219,29 @@ export function ClaudePanel({ status, width, onWidth, allowedSkills: modeSkills,
   const cs = useConversations();
   const conv = currentChat(cs);
   const c = conv?.chat ?? EMPTY_CHAT;
-  const [input, setInput] = useState('');
+  // Utkastet i feltet overlever «Hent siste» (omlasting) og at panelet lukkes
+  const [draft] = useState(readDraft);
+  const [input, setInput] = useState(draft.text);
   const [error, setError] = useState<string | null>(null);
   const [showList, setShowList] = useState(false);
   const list = useRef<HTMLDivElement>(null);
   const running = c.runId !== null;
   // Skillen før den første samtalen finnes; ellers den samtalen har valgt. Er den ikke tillatt her,
   // gjelder den første tillatte i Krav og Avvik (fs-krav), og ingen i Oppgaver. Den lastes med neste melding.
-  const [pending, setPending] = useState<string | null>(null);
+  const [pending, setPending] = useState<string | null>(draft.pending);
   const skill = effectiveSkill(conv ? c.skill : pending, allowedSkills, preselect);
   // Fila brukeren ser på, sendes med som kontekst. ✕ holder den utenfor til brukeren åpner en annen fil.
-  const [excluded, setExcluded] = useState<string | null>(null);
+  // Etter omlasting er det samme fil, så ✕ blir stående.
+  const [excluded, setExcluded] = useState<string | null>(draft.excluded);
   const context = path !== null && path !== excluded;
   const sentPath = context ? path : null;
-  useEffect(() => setExcluded(null), [path]);
+  useEffect(() => {
+    if (path !== excluded) setExcluded(null);
+  }, [path]);
   // Filer og mapper lagt ved med @; de gjelder bare neste melding
-  const mention = useMentions(entries, path, input, setInput);
+  const mention = useMentions(entries, path, input, setInput, draft.mentions);
+  const mentionKey = mention.mentions.join('\n');
+  useEffect(() => saveDraft({ text: input, mentions: mention.mentions, excluded, pending }), [input, mentionKey, excluded, pending]);
 
   useEffect(() => {
     const el = list.current;
