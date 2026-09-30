@@ -97,8 +97,12 @@ Egenskap: Frister og hendelser for opptak
     Scenario: Sette dokumentasjonsfrist for tidlig opptak
       Gitt at opptaket har aktivert tidlig opptak
       Når opptaksforvalter setter dokumentasjonsfrist for tidlig opptak til "2027-03-01 23:59"
-      Så må søkere som søker tidlig opptak laste opp dokumentasjon innen denne fristen
-      Og etter fristen kan ikke disse søkerne laste opp ny dokumentasjon for tidlig opptak
+      Så informeres søkere om at de skal laste opp dokumentasjon innen denne fristen
+
+    Scenario: Sette frist for poenggrenser for tidlig opptak
+      Gitt at opptaket har aktivert tidlig opptak
+      Når opptaksforvalter setter frist for å sette poenggrenser for tidlig opptak til "2027-02-15 23:59"
+      Så må deltagende organisasjoner sette poenggrenser for tidlig opptak innen denne fristen
 
   Regel: Opptaksforvalter ved forvaltende organisasjon må kunne sette informasjonsdatoer for opptaksresultat
     # Faktiske svarfrister og publiseringstidspunkter settes per plasstildelingsrunde
@@ -129,7 +133,7 @@ Egenskap: Frister og hendelser for opptak
       Når opptaksforvalter legger til utdanningsbakgrunnen "Realkompetanse" i opptaket
       Og opptaksforvalter setter søknadsfrist til "2027-03-01 23:59"
       Og opptaksforvalter setter dokumentasjonsfrist til "2027-03-01 23:59"
-      Så får søkere med utdanningsbakgrunnen "Realkompetanse" egne frister i opptaket
+      Så får søkere med utdanningsbakgrunnen "Realkompetanse" egne søknads- og dokumentasjonsfrister i opptaket
 
     Scenario: Søker uten registrert utdanningsbakgrunn følger ordinære frister
       Gitt at det ikke er lagt til utdanningsbakgrunn for norsk videregående skole i opptaket
