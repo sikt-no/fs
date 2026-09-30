@@ -219,7 +219,7 @@ export function ClaudePanel({ status, width, onWidth, allowedSkills: modeSkills,
   const cs = useConversations();
   const conv = currentChat(cs);
   const c = conv?.chat ?? EMPTY_CHAT;
-  // Utkastet i feltet overlever «Hent siste» (omlasting) og at panelet lukkes
+  // Utkastet i feltet overlever omlasting og at panelet lukkes
   const [draft] = useState(readDraft);
   const [input, setInput] = useState(draft.text);
   const [error, setError] = useState<string | null>(null);

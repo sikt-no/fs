@@ -33,6 +33,7 @@ export function createApi(ws: Workspace, auth: Auth, claude: ClaudeRunner): Api 
       if (!v.pull) throw new Error('Henting gjøres med git i dev-serveren');
       await v.pull(await auth.token());
       await ws.readAll();
+      return { entries: ws.entries, git: ws.git, tasks: ws.tasks };
     },
     async mainStatus() {
       const v = ws.vcs;
