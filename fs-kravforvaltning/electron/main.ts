@@ -2,7 +2,7 @@ import { existsSync } from 'node:fs';
 import { mkdir, readFile, rm, writeFile } from 'node:fs/promises';
 import { join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { app, BrowserWindow, dialog, ipcMain, safeStorage, shell } from 'electron';
+import { app, BrowserWindow, dialog, ipcMain, nativeTheme, safeStorage, shell } from 'electron';
 import type { Boot } from '../shared/api.ts';
 import { createApi, dispatch } from '../core/api.ts';
 import { createAuth, type TokenStore } from '../core/auth.ts';
@@ -106,6 +106,8 @@ function createWindow() {
     width: 1400,
     height: 900,
     title: 'FS Kravforvaltning',
+    // Samme bakgrunn som vieweren (--bg i theme.css), så vinduet ikke er hvitt før siden er tegnet
+    backgroundColor: nativeTheme.shouldUseDarkColors ? '#141415' : '#f7f7f6',
     webPreferences: { preload: join(here, '../preload/index.cjs'), contextIsolation: true, sandbox: true },
   });
   // Lenker (GitHub, PR-er, innlogging) åpnes i nettleseren, ikke i appen

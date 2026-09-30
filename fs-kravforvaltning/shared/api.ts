@@ -134,8 +134,8 @@ export interface Api {
   authStart(): Promise<AuthStatus>;
   authPoll(): Promise<AuthStatus>;
   authLogout(): Promise<AuthStatus>;
-  /** Desktop-appen: hent siste main fra GitHub til den lokale klonen */
-  pull(): Promise<void>;
+  /** Desktop-appen: hent siste main fra GitHub til den lokale klonen. Gir filene slik de er etterpå. */
+  pull(): Promise<Omit<Boot, 'editable'>>;
   /** Desktop-appen: finnes det en nyere main på GitHub? `null` når det ikke kan sjekkes (dev-serveren, uten nett) */
   mainStatus(): Promise<MainStatus | null>;
   claudeStatus(): Promise<ClaudeStatus>;

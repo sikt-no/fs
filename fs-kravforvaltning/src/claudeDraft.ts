@@ -1,5 +1,5 @@
 // Utkastet i Claude-feltet: teksten, @-vedleggene, fila som er tatt ut med ✕, og skillvalget før første samtale.
-// Det lagres i localStorage, så det overlever «Hent siste» (som laster vieweren på nytt) og at panelet lukkes.
+// Det lagres i localStorage, så det overlever omlasting og at panelet lukkes.
 // Rene funksjoner, så de kan testes med node --test. Lagringen står nederst.
 
 export interface ClaudeDraft {

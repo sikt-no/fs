@@ -1,7 +1,7 @@
 import { render } from 'preact';
 import { useEffect, useMemo, useRef, useState } from 'preact/hooks';
 import type { ClaudeStatus, MainStatus } from '../shared/api';
-import type { FeatureModel, FocusEvent, GitInfo, Scen, Snapshot, Step, UpdateEvent } from '../shared/model';
+import type { Entry, FeatureModel, FocusEvent, GitInfo, Scen, Snapshot, Step, UpdateEvent } from '../shared/model';
 import { RULE } from '../shared/rules';
 import { buildTasks, type TasksSnapshot } from '../shared/tasks';
 import { Avvik } from './Avvik';
@@ -66,6 +66,9 @@ function save(key: string, value: unknown) {
   }
 }
 
+// Temaet settes før første tegning, så vieweren ikke starter i feil tema
+document.documentElement.dataset.theme = load<Theme | null>('theme', null) ?? (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+
 const fromHash = () => decodeURIComponent(location.hash.replace(/^#\/?/, ''));
 
 // Uten hash (desktop-appen starter alltid slik, og en ny fane i nettleseren) går vieweren tilbake dit
@@ -126,6 +129,13 @@ const README = 'krav/README.md';
 function defaultPath(entries: Snapshot) {
   if (entries['krav/README.md']) return 'krav/README.md';
   return Object.keys(entries).sort()[0] ?? '';
+}
+
+/** Samme innhold i fila som før (bare lagret eller skrevet på nytt) */
+function sameContent(prev: Entry | undefined, next: Entry) {
+  if (!prev) return false;
+  if (next.kind === 'md') return prev.source === next.source;
+  return prev.error === next.error && JSON.stringify(prev.model) === JSON.stringify(next.model);
 }
 
 /** Nøkler for steg som er nye eller endret siden forrige versjon. */
@@ -376,7 +386,8 @@ function App() {
         else delete copy[path];
         return copy;
       });
-      if (path !== state.current.current || !next) return;
+      // Samme innhold som vi har (f.eks. watcheren etter «Hent siste», som allerede har byttet inn filene): ingen markering
+      if (path !== state.current.current || !next || sameContent(prev, next)) return;
       const keys = next.error ? [] : changedSteps(prev?.model, next.model);
       if (keys.length) {
         // Åpne scenarioene som inneholder endringer
@@ -455,16 +466,23 @@ function App() {
       removeEventListener('focus', onFocus);
     };
   }, []);
-  // Desktop-appen: hent siste main, og last visningen på nytt med de nye filene
+  // Desktop-appen: hent siste main, og bytt inn de nye filene uten å laste vieweren på nytt (det blinker,
+  // og folding, scroll og søket i fila går tapt)
   const pull = async () => {
     if (pulling || !(await leaveEditor())) return;
     setPulling(true);
     try {
-      await transport.call('pull');
-      location.reload();
+      const res = await transport.call('pull');
+      setEntries(res.entries);
+      setGit(res.git);
+      if (res.tasks) setTasksSnap(res.tasks);
+      if (!res.entries[state.current.current]) setCurrent(defaultPath(res.entries));
+      setMainStatus({ behind: false });
+      transport.call('mainStatus').then(setMainStatus, () => {});
     } catch (e) {
-      setPulling(false);
       alert((e as Error).message);
+    } finally {
+      setPulling(false);
     }
   };
   const later = () => {
