@@ -218,6 +218,15 @@ pre.docstring { margin: 4px 0 6px; padding: 8px 12px; background: var(--sunken);
 .desc { font-size: 13.5px; line-height: 1.55; color: var(--ink2); white-space: pre-wrap; text-wrap: pretty; }
 .qbadge { font-family: var(--mono); font-size: 11px; padding: 1px 6px; border-radius: 3px; color: var(--st-in-progress); border: 1px solid var(--st-in-progress); flex-shrink: 0; }
 .cardhead .minitag { flex-shrink: 0; }
+/* Kopier-ikon til høyre for titler (Egenskap, Regel, Scenario, Eksempler); dempet til overskriften holdes over */
+.copytitle { display: inline-flex; align-items: center; justify-content: center; vertical-align: middle; width: 22px; height: 22px; margin: -2px 0 0 6px; border-radius: 4px; color: inherit; opacity: .35; cursor: pointer; transition: opacity .15s, background .15s; }
+.fbanner:hover .copytitle, .rulehead:hover .copytitle, .cardhead:hover .copytitle, .examples .label:hover .copytitle, .copytitle:focus-visible, .copytitle.done { opacity: .9; }
+.copytitle:hover { opacity: 1; background: rgb(127 127 127 / .16); }
+.copytitle:focus-visible { outline: 2px solid currentColor; outline-offset: 1px; }
+.copytitle.done { color: var(--st-implemented); }
+.fbanner .copytitle.done { color: inherit; }
+/* Mer luft mellom tittelen (med kopier-ikonet) og taggene etter */
+.rulehead h2 + .minitag, .cardhead .scname + .minitag { margin-left: 6px; }
 .cardnotes { display: flex; flex-direction: column; gap: 8px; padding: 4px 14px 8px 44px; }
 .steps.nolines .cardnotes { padding-left: 14px; }
 /* Åpne spørsmål — kortet fra designet «Gherkin Viewer», vist under elementet det hører til */

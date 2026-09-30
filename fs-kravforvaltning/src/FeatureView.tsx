@@ -3,6 +3,7 @@ import { Fragment, type RefObject } from 'preact';
 import { STATUSES, type Entry, type Lint, type Status, type Note, type Step } from '../shared/model';
 import { RULE } from '../shared/rules';
 import { StatusIcon, statusColor } from './Sidebar';
+import { useCopy } from './useCopy';
 
 export const scenKey = (ri: number, si: number) => `${ri}-${si}`;
 export const stepKey = (ri: number, si: number, ti: number) => `${ri}-${si}-${ti}`;
@@ -38,6 +39,42 @@ function Tags({ tags }: { tags: string[] }) {
         return <span key={t} class="minitag" style={c ? { borderColor: c, color: c } : undefined}>{t}</span>;
       })}
     </>
+  );
+}
+
+/**
+ * Kopierer en tittel til utklippstavla. Ligger inni tittelen, så ikonet følger siste ord når tittelen brytes.
+ * Er et `span`, fordi scenariohodet selv er en knapp; klikket stoppes så kortet ikke foldes.
+ */
+function CopyTitle({ text }: { text: string }) {
+  const [copied, copy] = useCopy();
+  const run = (e: Event) => {
+    e.preventDefault();
+    e.stopPropagation();
+    copy(text);
+  };
+  const label = copied ? 'Kopiert' : 'Kopier tittelen';
+  return (
+    <span
+      class={'copytitle' + (copied ? ' done' : '')}
+      role="button"
+      tabIndex={0}
+      title={label}
+      aria-label={label}
+      onClick={run}
+      onKeyDown={e => (e.key === 'Enter' || e.key === ' ') && run(e)}
+    >
+      <svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        {copied ? (
+          <path d="M3.5 8.5l3 3 6-7" />
+        ) : (
+          <>
+            <rect x="5.25" y="5.25" width="8" height="8.5" rx="1.5" />
+            <path d="M10.75 5.25V3.5a1.25 1.25 0 0 0-1.25-1.25h-5.5A1.25 1.25 0 0 0 2.75 3.5v6.5a1.25 1.25 0 0 0 1.25 1.25h1.25" />
+          </>
+        )}
+      </svg>
+    </span>
   );
 }
 
@@ -240,7 +277,7 @@ export function FeatureView({ entry, collapsed, flash, lineNumbers, mark, mainRe
                 )}
               </div>
             )}
-            <div class="fbanner"><span class="kbadge inv">Egenskap</span><h1>{f.title}</h1></div>
+            <div class="fbanner"><span class="kbadge inv">Egenskap</span><h1>{f.title}{f.title && <CopyTitle text={f.title} />}</h1></div>
           </div>
         </div>
         <div class="meta">
@@ -269,7 +306,7 @@ export function FeatureView({ entry, collapsed, flash, lineNumbers, mark, mainRe
               {r.name !== null && (
                 <div class={'rulehead' + hit(r.ln)}>
                   <span class="kbadge rule">Regel {num}</span>
-                  <h2>{r.name}</h2>
+                  <h2>{r.name}{r.name && <CopyTitle text={r.name} />}</h2>
                   <Tags tags={r.tags} />
                 </div>
               )}
@@ -287,7 +324,10 @@ export function FeatureView({ entry, collapsed, flash, lineNumbers, mark, mainRe
                     <button class={'cardhead' + hit(s.ln)} onClick={() => onToggle(key)} aria-expanded={open}>
                       <span class="chev">{open ? '▼' : '▶'}</span>
                       <span class="kbadge">{s.kind}</span>
-                      <span class="scname">{s.name || (s.kind === 'Bakgrunn' ? 'Felles forutsetninger' : '')}</span>
+                      <span class="scname">
+                        {s.name || (s.kind === 'Bakgrunn' ? 'Felles forutsetninger' : '')}
+                        {s.name && <CopyTitle text={s.name} />}
+                      </span>
                       <Tags tags={s.tags} />
                       {nq > 0 && <span class="qbadge" title="Åpne spørsmål">? {nq}</span>}
                       <span class="scmeta">{s.steps.length} steg{exCount ? ` · ${exCount} eksempler` : ''} · L{s.ln}</span>
@@ -310,7 +350,7 @@ export function FeatureView({ entry, collapsed, flash, lineNumbers, mark, mainRe
                           <div key={ei} class="examples">
                             <span />
                             <div>
-                              <span class="label"><span class="kbadge">Eksempler</span>{ex.name && <span>{ex.name}</span>}<Tags tags={ex.tags} /></span>
+                              <span class="label"><span class="kbadge">Eksempler</span>{ex.name && <span>{ex.name}<CopyTitle text={ex.name} /></span>}<Tags tags={ex.tags} /></span>
                               {ex.desc && <div class="desc">{ex.desc}</div>}
                               <Table rows={ex.rows} ex />
                             </div>
