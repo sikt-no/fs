@@ -46,6 +46,8 @@ export interface ClaudeRunRequest {
   sessionId?: string | null;
   /** Fila brukeren ser på, som kontekst */
   path?: string | null;
+  /** Filer og mapper under krav/ som brukeren har lagt ved meldingen med @ */
+  mentions?: string[];
   /** Skillen som er valgt (en av `CLAUDE_SKILLS`); alle andre avvises */
   skill?: string | null;
   /** Skillene som er lov der brukeren er; Claude kan bruke dem fritt, også når en skill er valgt */

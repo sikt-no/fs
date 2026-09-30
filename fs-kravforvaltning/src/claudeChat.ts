@@ -2,7 +2,7 @@
 import type { ClaudeEvent } from '../shared/api.ts';
 
 export type ChatItem =
-  | { kind: 'user'; text: string; path: string | null; skill?: string | null }
+  | { kind: 'user'; text: string; path: string | null; skill?: string | null; mentions?: string[] }
   | { kind: 'assistant'; text: string }
   | { kind: 'tool'; id: string; name: string; summary: string; state: 'running' | 'ok' | 'error' }
   | { kind: 'done'; ok: boolean; text: string };
@@ -29,15 +29,15 @@ export const EMPTY_CHAT: Chat = { items: [], sessionId: null, runId: null, touch
 
 const addSkill = (list: string[], s: string) => (list.includes(s) ? list : [...list, s]);
 
-/** Neste melding i samtalen. `invoke`: meldingen skal laste den valgte skillen (`/<skill>`) */
-export function send(chat: Chat, text: string, path: string | null): { chat: Chat; invoke: boolean } {
+/** Neste melding i samtalen, med filene og mappene lagt ved med @. `invoke`: meldingen skal laste den valgte skillen (`/<skill>`) */
+export function send(chat: Chat, text: string, path: string | null, mentions: string[] = []): { chat: Chat; invoke: boolean } {
   const invoke = !!chat.skill && chat.skill !== chat.skillLoaded;
   return {
     chat: {
       ...chat,
       skillLoaded: invoke ? chat.skill : chat.skillLoaded,
       loadedSkills: invoke && chat.skill ? addSkill(chat.loadedSkills, chat.skill) : chat.loadedSkills,
-      items: [...chat.items, { kind: 'user', text, path, skill: chat.skill }],
+      items: [...chat.items, { kind: 'user', text, path, skill: chat.skill, ...(mentions.length ? { mentions } : {}) }],
     },
     invoke,
   };

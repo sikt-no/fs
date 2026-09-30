@@ -220,8 +220,21 @@ export function skillArgs(skill: string | null, known: Iterable<unknown>, pool: 
   return { allow: allowed.map(n => `Skill(${n})`), deny: [...others].sort().map(n => `Skill(${n})`) };
 }
 
+/** Stiene brukeren har lagt ved med @: bare under krav/, uten `..`, og høyst 50 */
+export function mentionPaths(raw: unknown): string[] {
+  if (!Array.isArray(raw)) return [];
+  const ok = raw.filter((p): p is string => typeof p === 'string' && p.startsWith('krav/') && !p.split('/').includes('..') && !/[\n\r]/.test(p));
+  return [...new Set(ok)].slice(0, 50);
+}
+
 /** Systemteksten som forteller Claude hvor den er, og hva brukeren ser på */
-export function contextPrompt(path: string | null | undefined, skill: string | null = null, pool: string[] = [], dirs: string[] = []): string {
+export function contextPrompt(
+  path: string | null | undefined,
+  skill: string | null = null,
+  pool: string[] = [],
+  dirs: string[] = [],
+  mentions: string[] = [],
+): string {
   const skills = CLAUDE_SKILLS.filter(s => s === skill || pool.includes(s));
   const others = skills.filter(s => s !== skill);
   return [
@@ -243,6 +256,9 @@ export function contextPrompt(path: string | null | undefined, skill: string | n
         (dirs.length ? '' : ' Ingen kodekloner er tilgjengelige; brukeren setter dem under «Kodemapper» i panelet.')
       : '',
     path ? `Brukeren ser nå på fila ${path}.` : '',
+    mentions.length
+      ? `Brukeren har lagt ved disse filene og mappene med @: ${mentions.join(', ')}. Les dem (mappene med Glob og Read) før du svarer.`
+      : '',
   ]
     .filter(Boolean)
     .join('\n');
@@ -319,7 +335,7 @@ export class ClaudeRunner {
       '--permission-mode', 'dontAsk',
       '--allowedTools', ...CLAUDE_TOOLS, ...allow,
       ...dirs.add,
-      '--append-system-prompt', contextPrompt(req.path, skill, pool, dirs.paths),
+      '--append-system-prompt', contextPrompt(req.path, skill, pool, dirs.paths, mentionPaths(req.mentions)),
       ...(req.sessionId ? ['--resume', req.sessionId] : []),
       ...(deny.length || dirs.deny.length ? ['--disallowedTools', ...deny, ...dirs.deny] : []),
     ];

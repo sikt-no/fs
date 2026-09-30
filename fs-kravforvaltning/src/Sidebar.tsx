@@ -17,7 +17,7 @@ interface Dir {
 const collator = new Intl.Collator('nb', { numeric: true, sensitivity: 'base' });
 
 /** Uthever tegnområdene Fuse fant */
-function highlight(text: string, ranges: readonly RangeTuple[]) {
+export function highlight(text: string, ranges: readonly RangeTuple[]) {
   if (!ranges.length) return text;
   const out: (string | JSX.Element)[] = [];
   let at = 0;

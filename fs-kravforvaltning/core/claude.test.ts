@@ -5,7 +5,7 @@ import { join } from 'node:path';
 import { after, test } from 'node:test';
 import type { ClaudeEvent } from '../shared/api.ts';
 import { mkdirSync } from 'node:fs';
-import { ClaudeRunner, codeDirs, contextPrompt, dirArgs, findClaude, parseStreamLine, projectSkills, skillArgs, skillMeta, toolSummary } from './claude.ts';
+import { ClaudeRunner, codeDirs, contextPrompt, dirArgs, mentionPaths, findClaude, parseStreamLine, projectSkills, skillArgs, skillMeta, toolSummary } from './claude.ts';
 
 const tmp = mkdtempSync(join(tmpdir(), 'krav-claude-'));
 after(() => rmSync(tmp, { recursive: true, force: true }));
@@ -51,6 +51,13 @@ test('toolSummary viser fil, mønster eller skill', () => {
 test('contextPrompt tar med fila brukeren ser på', () => {
   assert.match(contextPrompt('krav/a.feature'), /ser nå på fila krav\/a\.feature/);
   assert.doesNotMatch(contextPrompt(null), /ser nå på/);
+});
+
+test('contextPrompt tar med filene og mappene lagt ved med @, og bare stier under krav/', () => {
+  assert.match(contextPrompt(null, null, [], [], ['krav/02 Opptak', 'krav/a.feature']), /lagt ved .*: krav\/02 Opptak, krav\/a\.feature/);
+  assert.doesNotMatch(contextPrompt(null), /lagt ved/);
+  assert.deepEqual(mentionPaths(['krav/a', 'krav/a', '/etc/passwd', 'krav/../x', 'krav/b\nc', 3]), ['krav/a']);
+  assert.deepEqual(mentionPaths('krav/a'), []);
 });
 
 test('contextPrompt: uten valgt skill listes de tilgjengelige, og fs-verify får beskjed om kodeklonene', () => {

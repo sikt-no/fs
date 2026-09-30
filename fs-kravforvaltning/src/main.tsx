@@ -393,6 +393,18 @@ function App() {
     // Scenariotreff fra søket: gjenbruk fokus fra VS Code for å scrolle til og åpne scenarioet
     if (line) setFocus({ path, line, to: line, seq: Date.now() });
   };
+  /** Viser mappa i treet: Krav-modus, filtreet uten søk, og mappa og alle over den åpne */
+  const reveal = (dir: string) => {
+    setMode('krav');
+    setTreeHidden(false);
+    setTreeMode('files');
+    setQuery('');
+    setOpenDirs(o => {
+      const next = { ...o };
+      for (let p = dir; p.includes('/'); p = p.slice(0, p.lastIndexOf('/'))) next[p] = true;
+      return { ...next, krav: true };
+    });
+  };
   const jump = (key: string) => {
     const main = mainRef.current;
     // «q» = første blokk med åpne spørsmål; åpne kortet den ligger i hvis det er foldet sammen
@@ -589,8 +601,10 @@ function App() {
             preselect={claudeSkills.preselect}
             codeDirs={claudeSkills.codeDirs}
             path={claudePath}
+            entries={entries}
             has={p => !!entries[p]}
             onOpen={p => select(p)}
+            onReveal={reveal}
             onClose={() => setClaudeOpen(false)}
           />
         )}

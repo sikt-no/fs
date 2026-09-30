@@ -817,10 +817,19 @@ a.otf:hover { background: var(--sunken); text-decoration: none; }
 .cinbox-foot { display: flex; align-items: center; gap: 8px; padding: 4px 6px 6px 8px; min-width: 0; }
 .cinbox-foot > button:last-child { margin-left: auto; flex-shrink: 0; }
 .cfile { display: inline-flex; align-items: center; gap: 5px; min-width: 0; max-width: 75%; border: 1px solid var(--line2); border-radius: 6px; background: var(--sunken); padding: 1px 3px 1px 6px; font: 11px var(--mono); color: var(--ink); }
-.cfile-name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.cfile-name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0; }
+/* Kortet (utenom ✕) åpner fila, eller viser mappa i treet */
+.cfile-open { display: inline-flex; align-items: center; gap: 5px; min-width: 0; border: 0; background: none; padding: 0; font: inherit; color: inherit; cursor: pointer; text-align: left; }
+.cfile-open:hover .cfile-name, .cfile-open:focus-visible .cfile-name { text-decoration: underline; text-underline-offset: 2px; }
+.cfile-open:focus-visible { outline: 2px solid var(--acc); outline-offset: 1px; border-radius: 2px; }
+.cfile:has(.cfile-open:hover) { border-color: var(--acc); }
 .cfile-icon { width: 8px; height: 10px; flex-shrink: 0; border: 1.3px solid var(--acc); border-radius: 1.5px; }
 .cfile-x { border: 0; background: none; padding: 0 3px; font-size: 10px; color: var(--muted); cursor: pointer; line-height: 1; }
 .cfile-x:hover { color: var(--ink); }
+/* ✕ fjerner badgen: navnet strykes over mens pekeren (eller fokus) er på den */
+.cfile:has(.cfile-x:hover, .cfile-x:focus-visible) { border-style: dashed; }
+.cfile:has(.cfile-x:hover, .cfile-x:focus-visible) .cfile-name { text-decoration: line-through; color: var(--muted); }
+.cfile:has(.cfile-x:hover, .cfile-x:focus-visible) :is(.cfile-icon, .cfile-dir) { opacity: .4; }
 button.cfile.off { background: transparent; border-style: dashed; color: var(--muted); cursor: pointer; padding: 1px 7px; }
 button.cfile.off:hover { color: var(--ink); border-color: var(--acc); }
 .claude-send { font-size: 11px; }
@@ -896,3 +905,34 @@ body.resizing iframe, body.resizing .main { pointer-events: none; }
 .cmore { display: block; padding: 4px 0 0; font-size: 11.5px; }
 /* Avvik uten venstrepanelet (knappen for filtreet i toppfeltet) */
 .agrid.nopanel { grid-template-columns: minmax(0, 1fr); grid-template-rows: minmax(0, 1fr); }
+/* @-omtale i Claude-feltet: popover over feltet, og badges for det som er lagt ved */
+.cinbox { position: relative; }
+.cbadges { display: flex; flex-wrap: wrap; gap: 4px 6px; flex: 1; min-width: 0; }
+.cbadges .cfile { max-width: 220px; }
+.cfile-dir { width: 11px; height: 8px; flex-shrink: 0; box-sizing: border-box; border: 1.2px solid var(--acc); border-top-width: 2.4px; border-radius: 1.5px; }
+.cctx-file + .cctx-file::before { content: ' · '; }
+.cmention { position: absolute; left: 0; right: 0; bottom: calc(100% + 6px); z-index: 5; display: flex; flex-direction: column; overflow: hidden; background: var(--surface); border: 1px solid var(--line2); border-radius: 8px; box-shadow: 0 10px 30px rgba(0, 0, 0, .12); }
+.cmhead { display: flex; align-items: center; gap: 8px; padding: 6px 8px 6px 10px; border-bottom: 1px solid var(--line); font-size: 11.5px; }
+.cmhead > .mono { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0; }
+.cmfilter { margin-left: auto; display: flex; flex-shrink: 0; border: 1px solid var(--line2); border-radius: 5px; overflow: hidden; }
+.cmfilter button { border: 0; padding: 3px 9px; font: 11.5px var(--sans); background: var(--surface); color: var(--ink2); cursor: pointer; }
+.cmfilter button[aria-pressed="true"] { background: var(--ink); color: var(--surface); }
+.cmlist { max-height: min(380px, 50vh); overflow: auto; padding: 4px 0; }
+.cmsec { padding: 8px 12px 4px; font-size: 10.5px; letter-spacing: .05em; text-transform: uppercase; color: var(--muted); }
+.cmrow { display: flex; align-items: center; gap: 8px; height: 30px; padding: 0 12px; cursor: pointer; font-size: 13px; }
+.cmrow.act { background: var(--sel); }
+.cmrow mark { background: none; color: var(--acc-ink); font-weight: 600; }
+.cmrow .md { width: 12px; flex-shrink: 0; font: 9px var(--mono); color: var(--muted); }
+.cmchk { width: 14px; height: 14px; flex-shrink: 0; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 1px solid var(--line2); border-radius: 3px; background: var(--surface); color: #fff; font-size: 10px; opacity: .5; }
+.cmrow.act .cmchk, .cmchk.on { opacity: 1; }
+.cmchk.on { background: var(--acc); border-color: var(--acc); }
+.cm-dir { width: 12px; height: 9px; flex-shrink: 0; box-sizing: border-box; border: 1.3px solid var(--muted); border-top-width: 2.6px; border-radius: 2px; }
+.cmname { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0; flex-shrink: 1; }
+.cmsub { flex: 1; min-width: 0; font-size: 10.5px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.cmmeta { flex-shrink: 0; font-size: 10.5px; color: var(--muted); }
+.cmmore { padding: 3px 12px 6px 34px; font-size: 11.5px; color: var(--muted); }
+.cmempty { padding: 18px 12px; font-size: 13px; color: var(--muted); }
+.cmfoot { display: flex; align-items: center; gap: 10px; padding: 7px 12px; border-top: 1px solid var(--line); background: var(--sunken); font-size: 11px; color: var(--muted); }
+.cmfoot > span:first-child { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.cmfoot .acc { color: var(--acc-ink); }
+.cmfoot .mono { margin-left: auto; white-space: nowrap; }

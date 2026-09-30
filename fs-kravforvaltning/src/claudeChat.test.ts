@@ -122,3 +122,9 @@ test('kontekstbruk og lastede skills følges gjennom samtalen', () => {
   assert.equal(contextLabel({ used: 150000, window: 200000 }), '150k av 200k · 75 %');
   assert.equal(contextLabel({ used: 800, window: null }), '800');
 });
+
+test('filene og mappene lagt ved med @ lagres på meldingen', () => {
+  const c = send(EMPTY_CHAT, 'Sammenlign', 'krav/a.feature', ['krav/02 Opptak']).chat;
+  assert.deepEqual(c.items.at(-1), { kind: 'user', text: 'Sammenlign', path: 'krav/a.feature', skill: null, mentions: ['krav/02 Opptak'] });
+  assert.ok(!('mentions' in send(EMPTY_CHAT, 'x', null).chat.items[0]), 'uten omtaler er feltet borte');
+});

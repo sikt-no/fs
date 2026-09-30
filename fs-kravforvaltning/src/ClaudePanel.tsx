@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'preact/hooks';
 import type { ClaudeEvent, ClaudeStatus } from '../shared/api';
+import type { Snapshot } from '../shared/model';
 import {
   applyEvent,
   contextLabel,
@@ -21,6 +22,8 @@ import { ChatMarkdown } from './ChatMarkdown';
 import { registerClaude, setClaudeBusy } from './claudeBridge';
 import { CodeDirs, codeDirPaths, useCodeDirs } from './CodeDirs';
 import { knownSkills, SkillPicker } from './ClaudeSkills';
+import { covered } from './mention';
+import { MENTION_LIST_ID, MentionPicker, useMentions } from './MentionPicker';
 import { transport } from './transport';
 
 // Samtalene lever utenfor komponenten og lagres i localStorage, så de blir stående når panelet lukkes,
@@ -177,6 +180,8 @@ interface Props {
   onWidth: (w: number) => void;
   /** Fila brukeren ser på; sendes med som kontekst */
   path: string | null;
+  /** Krav-treet, for @-omtale av filer og mapper */
+  entries: Snapshot;
   /** Skillene som kan velges der brukeren er (i Avvik bare fs-krav) */
   allowedSkills: string[];
   /** Hvorfor en skill ikke kan velges her */
@@ -188,6 +193,8 @@ interface Props {
   /** Finnes fila i vieweren? Lenker til krav-filer i svarene åpner fila */
   has: (path: string) => boolean;
   onOpen: (path: string) => void;
+  /** Viser mappa i treet */
+  onReveal: (dir: string) => void;
   onClose: () => void;
 }
 
@@ -196,7 +203,7 @@ interface Props {
  * Claude kan lese og endre filer, men ikke kjøre kommandoer. Endringene vises i vieweren med én gang,
  * og sendes som PR med «Lag PR» som vanlig.
  */
-export function ClaudePanel({ status, width, onWidth, allowedSkills: modeSkills, skillHint: modeHint, preselect, codeDirs, path, has, onOpen, onClose }: Props) {
+export function ClaudePanel({ status, width, onWidth, allowedSkills: modeSkills, skillHint: modeHint, preselect, codeDirs, path, entries, has, onOpen, onReveal, onClose }: Props) {
   // Desktop-appen: uten valgte kodemapper finnes det ingen kode å verifisere mot, så fs-verify gråtones
   const dirs = useCodeDirs();
   const noCode = transport.kind === 'electron' && codeDirs && !!dirs && !dirs.some(d => d.exists);
@@ -220,6 +227,8 @@ export function ClaudePanel({ status, width, onWidth, allowedSkills: modeSkills,
   const context = path !== null && path !== excluded;
   const sentPath = context ? path : null;
   useEffect(() => setExcluded(null), [path]);
+  // Filer og mapper lagt ved med @; de gjelder bare neste melding
+  const mention = useMentions(entries, path, input, setInput);
 
   useEffect(() => {
     const el = list.current;
@@ -227,7 +236,7 @@ export function ClaudePanel({ status, width, onWidth, allowedSkills: modeSkills,
   }, [c.items.length, conv?.id, showList]);
 
   /** Sender `text` som ny melding i samtalen som er åpen (eller en ny). Brukes av inputfeltet og av «Send til Claude Code». */
-  const sendText = async (text: string) => {
+  const sendText = async (text: string, mentions: string[] = []) => {
     if (!text || running) return;
     setError(null);
     setShowList(false);
@@ -238,13 +247,14 @@ export function ClaudePanel({ status, width, onWidth, allowedSkills: modeSkills,
     }
     const target = id;
     const before = chooseSkill(convs.list.find(x => x.id === target)!.chat, skill);
-    const { chat: after, invoke } = send(before, text, sentPath);
+    const { chat: after, invoke } = send(before, text, sentPath, mentions);
     set(updateConversation(convs, target, () => after, Date.now()));
     try {
       const { runId } = await transport.call('claudeRun', {
         prompt: text,
         sessionId: before.sessionId,
         path: sentPath,
+        mentions,
         skill: after.skill,
         skills: allowedSkills,
         invoke,
@@ -264,8 +274,10 @@ export function ClaudePanel({ status, width, onWidth, allowedSkills: modeSkills,
   const submit = async () => {
     const text = input.trim();
     if (!text || running) return;
+    const mentions = mention.mentions;
     setInput('');
-    await sendText(text);
+    mention.clear();
+    await sendText(text, mentions);
   };
 
   // Mens panelet er åpent kan andre visninger sende en prompt hit («Send til Claude Code»)
@@ -380,10 +392,14 @@ export function ClaudePanel({ status, width, onWidth, allowedSkills: modeSkills,
               i.kind === 'user' ? (
                 <div key={n} class="cmsg user">
                   <LongText text={i.text} />
-                  {(i.path || i.skill) && (
+                  {(i.path || i.skill || i.mentions?.length) && (
                     <div class="cctx mono">
                       {i.skill && <span class="cctx-skill">{i.skill}</span>}
-                      {i.path && fileName(i.path)}
+                      {[i.path, ...(i.mentions ?? [])]
+                        .filter((p): p is string => !!p)
+                        .map(p => (
+                          <span key={p} class="cctx-file" title={p}>{fileName(p)}{entries[p] ? '' : '/'}</span>
+                        ))}
                     </div>
                   )}
                 </div>
@@ -429,12 +445,32 @@ export function ClaudePanel({ status, width, onWidth, allowedSkills: modeSkills,
             />
             {codeDirs && <CodeDirs />}
             <div class="cinbox">
+              {mention.picker && (
+                <MentionPicker
+                  {...mention.picker}
+                  onActive={mention.setActive}
+                  onFilter={mention.setFilter}
+                  onToggle={mention.toggle}
+                  onCommit={mention.commit}
+                />
+              )}
               <textarea
                 rows={3}
                 value={input}
                 placeholder="Spør Claude …"
-                onInput={e => setInput((e.target as HTMLTextAreaElement).value)}
+                role="combobox"
+                aria-expanded={!!mention.picker}
+                aria-controls={mention.picker ? MENTION_LIST_ID : undefined}
+                aria-activedescendant={mention.picker?.list.flat.length ? `${MENTION_LIST_ID}-${mention.picker.active}` : undefined}
+                aria-autocomplete="list"
+                onInput={e => {
+                  const v = (e.target as HTMLTextAreaElement).value;
+                  setInput(v);
+                  mention.onInput(v);
+                }}
+                onBlur={mention.close}
                 onKeyDown={e => {
+                  if (mention.onKeyDown(e)) return;
                   if (e.key === 'Enter' && !e.shiftKey) {
                     e.preventDefault();
                     void submit();
@@ -443,20 +479,43 @@ export function ClaudePanel({ status, width, onWidth, allowedSkills: modeSkills,
                 aria-label="Melding til Claude"
               />
               <div class="cinbox-foot">
-                {path &&
-                  (context ? (
-                    <span class="cfile" title={`Sendes med som kontekst: ${path}`}>
-                      <span class="cfile-icon" aria-hidden="true" />
-                      <span class="cfile-name">{fileName(path)}</span>
-                      <button class="cfile-x" onClick={() => setExcluded(path)} aria-label={`Ikke send med ${fileName(path)}`} title="Ikke send med fila">
-                        ✕
+                <div class="cbadges">
+                  {/* Er fila alt lagt ved med @ (selv eller via en mappe), holder den badgen */}
+                  {path &&
+                    !covered(mention.mentions, path) &&
+                    (context ? (
+                      <span class="cfile">
+                        <button class="cfile-open" onClick={() => onOpen(path)} title={`${path} · sendes med som kontekst`}>
+                          <span class="cfile-icon" aria-hidden="true" />
+                          <span class="cfile-name">{fileName(path)}</span>
+                        </button>
+                        <button class="cfile-x" onClick={() => setExcluded(path)} aria-label={`Ikke send med ${fileName(path)}`} title="Ikke send med fila">
+                          ✕
+                        </button>
+                      </span>
+                    ) : (
+                      <button class="cfile off" onClick={() => setExcluded(null)} title={`Send med ${path} som kontekst`}>
+                        + {fileName(path)}
                       </button>
-                    </span>
-                  ) : (
-                    <button class="cfile off" onClick={() => setExcluded(null)} title={`Send med ${path} som kontekst`}>
-                      + {fileName(path)}
-                    </button>
-                  ))}
+                    ))}
+                  {mention.mentions.map(p => {
+                    const dir = !mention.items.get(p)?.entry;
+                    return (
+                      <span key={p} class="cfile">
+                        <button class="cfile-open" onClick={() => (dir ? onReveal(p) : onOpen(p))} title={dir ? `Vis ${p} i treet` : `Åpne ${p}`}>
+                          <span class={dir ? 'cfile-dir' : 'cfile-icon'} aria-hidden="true" />
+                          <span class="cfile-name">
+                            {fileName(p)}
+                            {dir && '/'}
+                          </span>
+                        </button>
+                        <button class="cfile-x" onClick={() => mention.remove(p)} aria-label={`Fjern ${fileName(p)}`} title="Fjern">
+                          ✕
+                        </button>
+                      </span>
+                    );
+                  })}
+                </div>
                 {running ? (
                   <button class="smallbtn" onClick={() => void transport.call('claudeCancel', c.runId!)}>Avbryt</button>
                 ) : (
@@ -465,7 +524,7 @@ export function ClaudePanel({ status, width, onWidth, allowedSkills: modeSkills,
               </div>
             </div>
             <div class="claude-send">
-              <span class="muted">Enter sender · Shift+Enter ny linje</span>
+              <span class="muted">Enter sender · Shift+Enter ny linje · @ legger til filer og mapper</span>
             </div>
           </div>
         </>
