@@ -41,6 +41,10 @@ cd fs-kravforvaltning
 MAIN_VITE_KRAV_GITHUB_CLIENT_ID=Ov23li... npm run app:dist
 ```
 
+Eller kopier `.env.example` til `.env` og fyll inn ID-en. electron-vite leser `.env` ved `app:dev` og `app:dist`. `.env` sjekkes ikke inn.
+
+Appene som publiseres som GitHub-release, bygges av GitHub Actions med repo-variabelen `KRAV_GITHUB_CLIENT_ID`. Se [release.md](release.md).
+
 **Settes når appen startes** (overstyrer den innebygde):
 
 ```bash
