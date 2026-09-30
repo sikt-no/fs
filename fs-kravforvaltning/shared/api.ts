@@ -104,6 +104,25 @@ export type ClaudeEvent =
       contextWindow?: number | null;
     };
 
+/** Hva som er nytt på main på GitHub, fra sammenligningen med klonen */
+export interface MainInfo {
+  commits: number;
+  /** Endrede .feature-filer under krav/ */
+  features: number;
+  /** Forfatteren av siste commit: `@login` på GitHub, ellers navnet i committen */
+  author: string | null;
+  /** Tidspunktet for siste commit (ISO) */
+  date: string | null;
+}
+
+export interface MainStatus {
+  behind: boolean;
+  /** Commiten main peker på på GitHub, når den er nyere enn klonen */
+  remote?: string;
+  /** Mangler når GitHub ikke kunne spørres (uten nett, rate limit) */
+  info?: MainInfo;
+}
+
 /** Kallene rendereren kan gjøre mot backenden. Navnene brukes både som `POST /__krav/api/<navn>` og som IPC-kall. */
 export interface Api {
   /** Teksten i en krav-fil, slik den er på disk */
@@ -117,7 +136,7 @@ export interface Api {
   /** Desktop-appen: hent siste main fra GitHub til den lokale klonen */
   pull(): Promise<void>;
   /** Desktop-appen: finnes det en nyere main på GitHub? `null` når det ikke kan sjekkes (dev-serveren, uten nett) */
-  mainStatus(): Promise<{ behind: boolean } | null>;
+  mainStatus(): Promise<MainStatus | null>;
   claudeStatus(): Promise<ClaudeStatus>;
   /** Starter en kjøring; hendelsene kommer som `krav:claude` med `{ runId, event }` */
   claudeRun(req: ClaudeRunRequest): Promise<{ runId: string }>;

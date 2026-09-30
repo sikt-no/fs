@@ -94,7 +94,16 @@ test('klone, se endringer, publisere som branch og hente main', { skip: !hasGit 
   git(dir, 'config', 'user.email', 'r@example.com');
 
   const prs: { head: string; title: string }[] = [];
-  const vcs = isoVcs(dir, { openPr: async (_u, _t, pr) => (prs.push(pr), 'https://example.com/pr/1') });
+  const compared: [string, string][] = [];
+  let compareFails = false;
+  const vcs = isoVcs(dir, {
+    openPr: async (_u, _t, pr) => (prs.push(pr), 'https://example.com/pr/1'),
+    compare: async (_u, base, head) => {
+      if (compareFails) throw new Error('rate limit');
+      compared.push([base, head]);
+      return { commits: 2, features: 1, author: '@kari', date: '2026-09-30T10:00:00Z' };
+    },
+  });
 
   const feature = 'krav/01 A/10 B/01 C/se_ting.feature';
   const fresh = 'krav/01 A/10 B/01 C/ny_ting.feature';
@@ -143,9 +152,16 @@ test('klone, se endringer, publisere som branch og hente main', { skip: !hasGit 
   git(other, '-c', 'user.name=A', '-c', 'user.email=a@example.com', 'commit', '-q', '-am', 'readme');
   git(other, 'push', '-q', 'origin', 'main');
 
-  assert.equal(await vcs.behind!(null), true, 'main på GitHub er nyere');
+  const remote = git(origin, 'rev-parse', 'main');
+  const status = await vcs.mainStatus!(null);
+  assert.equal(status.behind, true, 'main på GitHub er nyere');
+  assert.equal(status.remote, remote);
+  assert.deepEqual(status.info, { commits: 2, features: 1, author: '@kari', date: '2026-09-30T10:00:00Z' });
+  assert.deepEqual(compared, [[git(dir, 'rev-parse', 'main'), remote]], 'sammenligner klonen med main på GitHub');
+  compareFails = true;
+  assert.deepEqual(await vcs.mainStatus!(null), { behind: true, remote }, 'uten svar fra GitHub: status uten info');
   await vcs.pull!(null);
-  assert.equal(await vcs.behind!(null), false, 'hentet');
+  assert.deepEqual(await vcs.mainStatus!(null), { behind: false }, 'hentet');
   assert.match(readFileSync(join(dir, 'krav/README.md'), 'utf8'), /Oppdatert/);
   const afterPull = await vcs.info();
   assert.deepEqual(afterPull?.uncommitted, [], 'endringene er nå på main');

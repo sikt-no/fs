@@ -1,6 +1,6 @@
 import { render } from 'preact';
 import { useEffect, useMemo, useRef, useState } from 'preact/hooks';
-import type { ClaudeStatus } from '../shared/api';
+import type { ClaudeStatus, MainStatus } from '../shared/api';
 import type { FeatureModel, FocusEvent, GitInfo, Scen, Snapshot, Step, UpdateEvent } from '../shared/model';
 import { RULE } from '../shared/rules';
 import { buildTasks, type TasksSnapshot } from '../shared/tasks';
@@ -9,6 +9,8 @@ import { Editor } from './Editor';
 import { fixed, NO_FILTER, type Filter } from './health';
 import { FeatureView, scenKey, stepKey } from './FeatureView';
 import { headings, parseMd } from './markdown';
+import { MainBanner } from './MainBanner';
+import { bannerShown } from './mainStatus';
 import { MarkdownView, type MdMode } from './MarkdownView';
 import { Oppgaver, taskKey, type OView } from './Oppgaver';
 import { Outline } from './Outline';
@@ -357,14 +359,17 @@ function App() {
     return true;
   };
   // Desktop-appen: sjekk om main på GitHub er nyere enn klonen, ved oppstart, hvert tiende minutt og når
-  // vinduet får fokus (høyst hvert andre minutt). Toppfeltet viser da «Ny versjon av main».
-  const [mainBehind, setMainBehind] = useState(false);
+  // vinduet får fokus (høyst hvert andre minutt). Da vises banneret «Det finnes en ny versjon av main» og knappen
+  // i toppfeltet. «Senere» skjuler banneret til main får en ny commit (`mainLater` er commiten det gjaldt).
+  const [mainStatus, setMainStatus] = useState<MainStatus | null>(null);
+  const [mainLater, setMainLater] = useState<string | null>(() => load('mainLater', null));
+  const [pulling, setPulling] = useState(false);
   useEffect(() => {
     if (transport.kind !== 'electron') return;
     let last = 0;
     const check = () => {
       last = Date.now();
-      transport.call('mainStatus').then(s => setMainBehind(!!s?.behind), () => {});
+      transport.call('mainStatus').then(setMainStatus, () => {});
     };
     const onFocus = () => Date.now() - last > 2 * 60_000 && check();
     check();
@@ -377,13 +382,20 @@ function App() {
   }, []);
   // Desktop-appen: hent siste main, og last visningen på nytt med de nye filene
   const pull = async () => {
-    if (!leaveEditor()) return;
+    if (pulling || !leaveEditor()) return;
+    setPulling(true);
     try {
       await transport.call('pull');
       location.reload();
     } catch (e) {
+      setPulling(false);
       alert((e as Error).message);
     }
+  };
+  const later = () => {
+    const sha = mainStatus?.remote ?? null;
+    setMainLater(sha);
+    save('mainLater', sha);
   };
   const select = (path: string, line?: number) => {
     if (path !== state.current.current && !leaveEditor()) return;
@@ -501,8 +513,10 @@ function App() {
         oCrumbs={oCrumbs}
         claude={claude ? claudeOpen : null}
         onClaude={() => setClaudeOpen(o => !o)}
-        onUpdate={mainBehind ? pull : null}
+        onUpdate={mainStatus?.behind ? pull : null}
+        pulling={pulling}
       />
+      {bannerShown(mainStatus, mainLater) && <MainBanner info={mainStatus?.info} pulling={pulling} onLater={later} onPull={pull} />}
       <div
         class="workspace"
         // Et smalere vindu enn sist: panelet tar aldri mer enn 70 % av bredden
@@ -538,6 +552,7 @@ function App() {
                 git={git}
                 onPr={EDITABLE && git ? () => setPrOpen(true) : undefined}
                 onPull={transport.kind === 'electron' ? pull : undefined}
+                pulling={pulling}
               />
             )}
             <main

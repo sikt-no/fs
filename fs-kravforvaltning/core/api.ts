@@ -36,9 +36,9 @@ export function createApi(ws: Workspace, auth: Auth, claude: ClaudeRunner): Api 
     },
     async mainStatus() {
       const v = ws.vcs;
-      if (!v?.behind) return null;
+      if (!v?.mainStatus) return null;
       try {
-        return { behind: await v.behind(await auth.token()) };
+        return await v.mainStatus(await auth.token());
       } catch {
         return null; // uten nett eller tilgang: ikke noe å melde
       }

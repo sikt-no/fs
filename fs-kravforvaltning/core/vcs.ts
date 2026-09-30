@@ -1,5 +1,5 @@
 import type { GitInfo } from '../shared/model.ts';
-import type { PublishRequest, PublishResult } from '../shared/api.ts';
+import type { MainInfo, MainStatus, PublishRequest, PublishResult } from '../shared/api.ts';
 
 /**
  * Git-operasjonene vieweren trenger. `vcs-cli.ts` bruker git og gh på maskinen (utviklere),
@@ -15,8 +15,11 @@ export interface Vcs {
   publish(req: PublishRequest, token: string | null): Promise<PublishResult>;
   /** Hent siste main fra origin (bare desktop-appen, som eier klonen) */
   pull?(token: string | null): Promise<void>;
-  /** Finnes det en nyere main på origin enn den klonen har hentet? Leser bare refs, laster ikke ned noe. */
-  behind?(token: string | null): Promise<boolean>;
+  /**
+   * Finnes det en nyere main på origin enn den klonen har hentet? Leser bare refs, laster ikke ned noe.
+   * Er main nyere, hentes antall commits og endrede krav fra GitHub (uten `info` hvis det feiler).
+   */
+  mainStatus?(token: string | null): Promise<MainStatus>;
 }
 
 /** `krav/<slug>`: små bokstaver, a–z, 0–9 og bindestrek; æøå skrives som ae/o/a */
@@ -70,6 +73,45 @@ export async function createPullRequest(
   }
   return data.html_url;
 }
+
+/** Hva som er nytt på main mellom to commits; byttes ut i tester */
+export type CompareMain = (originUrl: string, base: string, head: string, token: string | null) => Promise<MainInfo>;
+
+/** Sammenligner to commits via GitHub REST: antall commits, endrede .feature-filer under krav/, og siste commit */
+export async function compareCommits(
+  token: string | null,
+  repo: { owner: string; repo: string },
+  base: string,
+  head: string,
+): Promise<MainInfo> {
+  const res = await fetch(`https://api.github.com/repos/${repo.owner}/${repo.repo}/compare/${base}...${head}`, {
+    headers: {
+      ...(token ? { authorization: `Bearer ${token}` } : {}),
+      accept: 'application/vnd.github+json',
+      'x-github-api-version': '2022-11-28',
+    },
+  });
+  if (!res.ok) throw new Error(`GitHub svarte ${res.status}`);
+  const data = (await res.json()) as {
+    ahead_by: number;
+    files?: { filename: string }[];
+    commits?: { author?: { login?: string } | null; commit: { author?: { name?: string }; committer?: { date?: string } } }[];
+  };
+  const last = data.commits?.at(-1);
+  return {
+    commits: data.ahead_by,
+    features: (data.files ?? []).filter(f => f.filename.startsWith('krav/') && f.filename.endsWith('.feature')).length,
+    author: last?.author?.login ? '@' + last.author.login : (last?.commit.author?.name ?? null),
+    date: last?.commit.committer?.date ?? null,
+  };
+}
+
+/** Sammenligning på GitHub-repoet origin peker på */
+export const githubCompare: CompareMain = async (url, base, head, token) => {
+  const repo = githubRepo(url);
+  if (!repo) throw new Error('origin peker ikke på et GitHub-repo');
+  return compareCommits(token, repo, base, head);
+};
 
 /** PR på GitHub-repoet origin peker på */
 export const githubPr: OpenPr = async (url, token, pr) => {

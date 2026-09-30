@@ -11,6 +11,7 @@
   --k-feat: #7351fb; --on-k: #ffffff; --k-rule: #7351fb; --k-rule-soft: #d1cdff;
   --k-sc: #595959; --k-sc-soft: #ededed; --k-sm: #643ffa; --k-sm-soft: #e8e6ff;
   --k-bg: #767676; --k-bg-soft: #dedede; --k-gitt: #595959; --k-naar: #643ffa; --k-saa: #260d92;
+  --banner-bg: var(--acc); --banner-btn-ink: var(--acc-ink);
   --mono: 'IBM Plex Mono', ui-monospace, monospace;
   --sans: 'IBM Plex Sans', system-ui, sans-serif;
   color-scheme: light;
@@ -20,6 +21,7 @@
     --bg: #141415; --panel: #1a1a1c; --surface: #1f1f21; --sunken: #19191b;
     --line: #2c2c2f; --line2: #3b3b3f; --ink: #e8e8e6; --ink2: #bcbcb9; --muted: #8b8b88;
     --acc: #b4aeff; --acc-soft: #351aad; --acc-ink: #d1cdff; --flash: #3f3716;
+    --banner-bg: var(--acc-soft); --banner-btn-ink: var(--acc-soft);
     --err: oklch(0.72 0.15 27); --err-soft: #361f1d; --on-err: #1a0f0e; --warn: oklch(0.76 0.13 65); --sel: #351aad;
     --st-draft: #8b8b88; --st-planned: oklch(0.7 0.12 262);
     --st-in-progress: oklch(0.76 0.13 70); --st-implemented: oklch(0.7 0.12 150);
@@ -34,6 +36,7 @@
   --bg: #141415; --panel: #1a1a1c; --surface: #1f1f21; --sunken: #19191b;
   --line: #2c2c2f; --line2: #3b3b3f; --ink: #e8e8e6; --ink2: #bcbcb9; --muted: #8b8b88;
   --acc: #b4aeff; --acc-soft: #351aad; --acc-ink: #d1cdff; --flash: #3f3716;
+  --banner-bg: var(--acc-soft); --banner-btn-ink: var(--acc-soft);
   --err: oklch(0.72 0.15 27); --err-soft: #361f1d; --on-err: #1a0f0e; --warn: oklch(0.76 0.13 65); --sel: #351aad;
   --st-draft: #8b8b88; --st-planned: oklch(0.7 0.12 262);
   --st-in-progress: oklch(0.76 0.13 70); --st-implemented: oklch(0.7 0.12 150);
@@ -789,6 +792,27 @@ a.otf:hover { background: var(--sunken); text-decoration: none; }
 .updatebtn:hover { background: var(--surface); }
 .updatebtn:focus-visible { outline: 2px solid var(--acc); outline-offset: 1px; }
 .updatebtn .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--acc); }
+.updatebtn:disabled, .gitactions .smallbtn:disabled { cursor: progress; }
+.updatebtn:disabled:hover { background: var(--acc-soft); }
+/* Banner under toppfeltet (designet «Gherkin Viewer v2») */
+.mainbanner { flex-shrink: 0; display: flex; align-items: center; gap: 14px; padding: 9px 14px; background: var(--banner-bg); color: #fff; font-size: 13px; }
+.mainbanner .dot { width: 8px; height: 8px; flex-shrink: 0; border-radius: 50%; background: #fff; box-shadow: 0 0 0 4px rgba(255, 255, 255, .25); }
+.mainbanner .title { font-weight: 600; white-space: nowrap; }
+.mainbanner .info { font-family: var(--mono); font-size: 12px; opacity: .9; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.mainbanner .btns { margin-left: auto; display: flex; gap: 8px; flex-shrink: 0; }
+.mainbanner button { border-radius: 5px; font: 12px var(--sans); cursor: pointer; }
+.mainbanner button:focus-visible { outline: 2px solid #fff; outline-offset: 2px; }
+.mainbanner button:disabled { cursor: progress; }
+.mainbanner .later { border: 1px solid rgba(255, 255, 255, .5); background: transparent; color: #fff; padding: 4px 12px; }
+.mainbanner .later:hover:not(:disabled) { background: rgba(255, 255, 255, .12); }
+.mainbanner .later:disabled { opacity: .6; }
+.mainbanner .pull { display: flex; align-items: center; gap: 6px; border: 0; background: #fff; color: var(--banner-btn-ink); padding: 4px 14px; font-weight: 600; }
+.mainbanner .pull:hover:not(:disabled) { background: #ece9ff; }
+/* Spinner mens «Hent siste» pågår */
+.spinner { display: inline-block; width: 10px; height: 10px; flex-shrink: 0; box-sizing: border-box; border: 1.5px solid currentColor; border-right-color: transparent; border-radius: 50%; animation: spin .7s linear infinite; vertical-align: -1px; }
+.smallbtn .spinner { margin-right: 5px; }
+@keyframes spin { to { transform: rotate(360deg); } }
+@media (prefers-reduced-motion: reduce) { .spinner { animation-duration: 2s; } }
 .claude { border-left: 1px solid var(--line); display: flex; flex-direction: column; min-height: 0; background: var(--panel); }
 .claude .muted { color: var(--muted); }
 .claude-head { display: flex; align-items: center; gap: 8px; padding: 10px 12px; border-bottom: 1px solid var(--line); font-size: 13px; }
