@@ -5,7 +5,8 @@ import type { FeatureModel, FocusEvent, GitInfo, Scen, Snapshot, Step, UpdateEve
 import { RULE } from '../shared/rules';
 import { buildTasks, type TasksSnapshot } from '../shared/tasks';
 import { Avvik } from './Avvik';
-import { Editor } from './Editor';
+import { changedFile } from './edit';
+import { Editor, type EditorFlush } from './Editor';
 import { fixed, NO_FILTER, type Filter } from './health';
 import { FeatureView, scenKey, stepKey } from './FeatureView';
 import { findGroups, findHits } from './find';
@@ -183,9 +184,10 @@ function App() {
   const [git, setGit] = useState<GitInfo | null>(initialGit);
   const [connected, setConnected] = useState(transport.live);
   const [editing, setEditing] = useState(false);
-  const [prOpen, setPrOpen] = useState(false);
-  // Ulagrede endringer i editoren; spør før fila byttes
-  const editorDirty = useRef(false);
+  // «Lag PR» i detaljvinduet: `false` er lukket, `null` åpnet fra sidebaren, en sti åpnet fra fila (som da er valgt)
+  const [prFor, setPrFor] = useState<string | null | false>(false);
+  // Editoren lagrer ulagrede endringer før brukeren går til en annen fil eller visning
+  const editorFlush = useRef<EditorFlush | null>(null);
   const [focus, setFocus] = useState<(FocusEvent & { seq: number }) | null>(null);
   const focusedKey = useRef<string | null>(null);
   const mainRef = useRef<HTMLElement>(null);
@@ -210,7 +212,7 @@ function App() {
   useEffect(() => save('mdMode', mdMode), [mdMode]);
   useEffect(() => {
     const onUnload = (e: BeforeUnloadEvent) => {
-      if (editorDirty.current) e.preventDefault();
+      if (editorFlush.current?.dirty()) e.preventDefault();
     };
     addEventListener('beforeunload', onUnload);
     return () => removeEventListener('beforeunload', onUnload);
@@ -290,7 +292,7 @@ function App() {
     });
   const findStep = (d: 1 | -1) => findTotal && findGo(c => (c + d + findTotal) % findTotal);
   const findRef = useRef({ can: false, active: false, step: findStep });
-  findRef.current = { can: mode === 'krav' && !editing && !!findModel, active: findTotal > 0, step: findStep };
+  findRef.current = { can: mode === 'krav' && !editing && prFor === false && !!findModel, active: findTotal > 0, step: findStep };
   // Cmd/Ctrl+F åpner innholdspanelet og søkefeltet; Cmd/Ctrl+G går til neste treff (med Shift: forrige)
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
@@ -418,12 +420,15 @@ function App() {
     };
   }, []);
 
-  /** Spør før ulagrede endringer i editoren forkastes. `false`: bli der. */
-  const leaveEditor = () => {
-    if (!editorDirty.current) return true;
-    if (!confirm('Du har endringer som ikke er lagret. Vil du forkaste dem?')) return false;
-    editorDirty.current = false;
-    return true;
+  /** Lagrer ulagrede endringer i editoren før brukeren går videre. `false`: lagringen feilet, bli der. */
+  const leaveEditor = async () => {
+    try {
+      await editorFlush.current?.flush();
+      return true;
+    } catch (e) {
+      alert(`Kunne ikke lagre endringene: ${(e as Error).message}`);
+      return false;
+    }
   };
   // Desktop-appen: sjekk om main på GitHub er nyere enn klonen, ved oppstart, hvert tiende minutt og når
   // vinduet får fokus (høyst hvert andre minutt). Da vises banneret «Det finnes en ny versjon av main» og knappen
@@ -449,7 +454,7 @@ function App() {
   }, []);
   // Desktop-appen: hent siste main, og last visningen på nytt med de nye filene
   const pull = async () => {
-    if (pulling || !leaveEditor()) return;
+    if (pulling || !(await leaveEditor())) return;
     setPulling(true);
     try {
       await transport.call('pull');
@@ -464,8 +469,9 @@ function App() {
     setMainLater(sha);
     save('mainLater', sha);
   };
-  const select = (path: string, line?: number) => {
-    if (path !== state.current.current && !leaveEditor()) return;
+  const select = async (path: string, line?: number) => {
+    if (path !== state.current.current && !(await leaveEditor())) return;
+    setPrFor(false);
     setMode('krav');
     setCurrent(path);
     history.pushState(null, '', '#/' + encodeURI(path));
@@ -520,8 +526,8 @@ function App() {
     if (current !== README || mode !== 'krav') select(README);
     setPendingSection(section);
   };
-  const changeMode = (m: Mode) => {
-    if (m === mode || !leaveEditor()) return;
+  const changeMode = async (m: Mode) => {
+    if (m === mode || !(await leaveEditor())) return;
     if (m === 'avvik') {
       setMode('avvik');
       history.pushState(null, '', '#/avvik');
@@ -543,6 +549,8 @@ function App() {
   const oCrumbs = oState.view === 'tavle' ? ['tasks', '*/roadmap.md'] : shownTask ? ['tasks', shownTask.dom, shownTask.slug] : ['tasks'];
   const allScenKeys = () => entry?.model?.rules.flatMap((r, ri) => r.scenarios.map((_, si) => scenKey(ri, si))) ?? [];
   const fileName = current.slice(current.lastIndexOf('/') + 1);
+  // «Lag PR» i filvisningen: bare for en fil med endringer
+  const filePr = EDITABLE && changedFile(git, current) ? () => setPrFor(current) : undefined;
   // Claude-panelet: samme samtale i alle visningene, med skills og fil-kontekst for visningen man er i
   const claudeShown = !!claude && claudeOpen;
   const claudeSkills = CLAUDE_SKILLS_BY_MODE[mode];
@@ -619,7 +627,7 @@ function App() {
                 mode={git ? treeMode : 'files'}
                 onMode={setTreeMode}
                 git={git}
-                onPr={EDITABLE && git ? () => setPrOpen(true) : undefined}
+                onPr={EDITABLE && git ? () => setPrFor(null) : undefined}
                 onPull={transport.kind === 'electron' ? pull : undefined}
                 pulling={pulling}
               />
@@ -632,8 +640,17 @@ function App() {
                 if (focus && !(e.target as Element).closest('.card')) setFocus(null);
               }}
             >
-              {editing && current ? (
-                <Editor path={current} entry={entry} onClose={() => setEditing(false)} onDirty={d => (editorDirty.current = d)} />
+              {prFor !== false && git ? (
+                <PrDialog git={git} entries={entries} preselect={prFor ?? undefined} onClose={() => setPrFor(false)} />
+              ) : editing && current ? (
+                <Editor
+                  path={current}
+                  entry={entry}
+                  onClose={() => setEditing(false)}
+                  onFlush={f => (editorFlush.current = f)}
+                  changed={changedFile(git, current)}
+                  onPr={EDITABLE && git ? () => setPrFor(current) : undefined}
+                />
               ) : !entry ? (
                 <div class="empty">
                   <div class="mono" style={{ color: 'var(--ink)' }}>{fileName || 'krav'}</div>
@@ -648,6 +665,7 @@ function App() {
                   has={p => !!entries[p]}
                   onNavigate={select}
                   onEdit={EDITABLE ? () => setEditing(true) : undefined}
+                  onPr={filePr}
                 />
               ) : (
                 <FeatureView
@@ -663,6 +681,7 @@ function App() {
                   findClosed={find.closed}
                   onFindClose={k => setFind(f => ({ ...f, closed: { ...f.closed, [k]: true } }))}
                   onEdit={EDITABLE ? () => setEditing(true) : undefined}
+                  onPr={filePr}
                 />
               )}
             </main>
@@ -674,7 +693,7 @@ function App() {
                 onFoldAll={() => setCollapsed(c => ({ ...c, [current]: Object.fromEntries(allScenKeys().map(k => [k, true])) }))}
                 onOpenAll={() => setCollapsed(c => ({ ...c, [current]: {} }))}
                 find={
-                  findModel && !editing
+                  findModel && !editing && prFor === false
                     ? {
                         q: find.q,
                         onQ: q => setFind({ q, cur: 0, closed: {} }),
@@ -710,7 +729,6 @@ function App() {
           />
         )}
       </div>
-      {prOpen && git && <PrDialog git={git} entries={entries} onClose={() => setPrOpen(false)} />}
       <StatusBar
         connected={connected}
         live={transport.live}
