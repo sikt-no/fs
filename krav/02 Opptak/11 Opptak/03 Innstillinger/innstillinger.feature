@@ -48,7 +48,7 @@ Egenskap: Innstillinger for opptak
 
   Regel: Opptaksforvalter kan sette startnummer for søknadene
 
-    Scenario: Sette startnummer for opptak
+    Scenario: Sette startnummer for søknader i opptaket
       Når opptaksforvalter setter søknadsnummer med startnummer 1001 for opptaket "UHG 2027"
       Så får søknader i opptaket løpende nummer fra 1001
       Og søknadsnummeret får navnet til opptaket "UHG 2027" som tillegg i søknadsnummeret som ikke er synlig for søker eller saksbehandler

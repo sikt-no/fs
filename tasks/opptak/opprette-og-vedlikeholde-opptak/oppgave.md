@@ -30,29 +30,19 @@ Opptaksforvalter skal kunne opprette et opptak — samordnet eller lokalt — me
 
 | # | Oppgave                                                              | MoSCoW | Status | Github-issue | Jira |
 |---|----------------------------------------------------------------------|--------|--------|-------------|------|
-| 1 | Opprette et opptak (samordnet eller lokalt)                          | Must | Løst | | |
+| 1 | Opprette et opptak med navn, regelverkssamling og opptakstype        | Must | Løst | [#577](https://github.com/sikt-no/fs/issues/577) | |
 | 2 | Invitere læresteder til samordnet opptak                             | Must | Pågår — synk og replika mot ureg må fikses, nytt design, begrense til hhv. fagskoler og UH | | |
-| 3 | Sette grunnleggende innstillinger (navn, regelverkssamling, opptakstype) | Must | Løst | [#577](https://github.com/sikt-no/fs/issues/577) | [TAKE-319](https://sikt.atlassian.net/browse/TAKE-319) |
-| 4 | Sette innstillinger i opptaket                                       | Must | Løst | | |
-| 5 | Konfigurere søknad (nummerserie, maks alternativer)                  | Must | Løst (tidlig opptak gjenstår) | [#578](https://github.com/sikt-no/fs/issues/578) | [TAKE-320](https://sikt.atlassian.net/browse/TAKE-320) |
+| 4 | Sette innstillinger i opptaket (inkl. startnummer, maks alternativer) | Must | Løst (tidlig opptak gjenstår) | [#578](https://github.com/sikt-no/fs/issues/578) | [TAKE-320](https://sikt.atlassian.net/browse/TAKE-320) |
 | 6 | Sette frister og hendelser for opptaket                              | Must | | [#579](https://github.com/sikt-no/fs/issues/579) | [TAKE-321](https://sikt.atlassian.net/browse/TAKE-321) |
-| 6-1 | Åpne og stenge for redigering og trekking av utdanningstilbud      | Must | | | |
-| 6-2 | Søkeperiode og søknadsfrister                                      | Must | | | |
-| 6-3 | Omprioriteringsfrist og frist for sletting av søknadsalternativer  | Must | | | |
-| 6-4 | Dokumentasjonsfrister (ordinær, tidlig, ettersending)               | Must | | | |
-| 6-5 | Frister for tidlig opptak                                          | Must | | | |
-| 6-6 | Frister for ledige studieplasser                                   | Must | | | |
-| 6-7 | Opptaksresultat (hovedopptak kjøres, forventet svar, første svarfrist) | Must | | | |
-| 6-8 | Frist for endring av utdanningsbakgrunn                            | Must | | | |
-| 6-9 | ~~Trekkfrist for utdanningstilbud~~                                | ~~Must~~ | Slått sammen med 6-1 (stengefrist dekker trekking) | | |
 | 7 | Sette fellestekster for opptaket som blir synlig for søkere          | Won't | Informasjon utledes fra innstillinger, tekster forvaltes i repo | [#214](https://github.com/sikt-no/fs/issues/214) | [TAKE-322](https://sikt.atlassian.net/browse/TAKE-322) |
 | 8 | Legge til utdanningstilbud i opptak (egen oppgave)                   | Must | | Se [utdanningstilbud](../utdanningstilbud/) | |
 | 9 | Svarmeldingsmal (juridisk kjerne + parametere + valgfritt tillegg)   | Won't | Utsatt til etter T3 2027 | [#214](https://github.com/sikt-no/fs/issues/214) | [TAKE-323](https://sikt.atlassian.net/browse/TAKE-323) |
-| 10 | Legge til utdanningsbakgrunner med avvikende frister                | Must | Dekket i frister_og_hendelser.feature | | |
+| 10 | Velge utdanningsbakgrunner for opptaket og sette avvikende frister  | Must | Velge: innstillinger.feature, frister: frister_og_hendelser.feature | | |
 | 11 | Saksbehandlertildelingsregler for samordnet opptak                  | Must | @openquestion — jobbes med av annet team | | |
 | 12 | Gjenbruke innstillinger fra tidligere opptak                        | Must | @draft @openquestion — hva kopieres og hva kopieres ikke? | | |
 | 13 | Deaktivere opptak                                                   | Must | @draft — utsatt til senere iterasjon | | |
 | 14 | ~~Interne saksbehandlingsfrister~~                                  | ~~Should~~ | Fjernet — saksbehandling styres av publiseringsdatoer per opptaksrunde | | |
+| 15 | Hendelseslogg for opptak                                            | Should | @draft — venter på generell løsning | | |
 
 ## Workshop 2026-09-14: oppgavedeling og status
 
