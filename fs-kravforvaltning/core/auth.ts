@@ -35,7 +35,9 @@ export function createAuth(opts: { clientId?: string | null; store: TokenStore; 
   const f = opts.fetch ?? fetch;
   const clientId = opts.clientId || null;
   let pending: Pending | null = null;
+  // Brukernavnet til tokenene GitHub har godtatt
   const logins = new Map<string, string | null>();
+  let expired = false;
 
   const ghToken = async () => {
     if (!opts.useGh) return null;
@@ -46,13 +48,34 @@ export function createAuth(opts: { clientId?: string | null; store: TokenStore; 
     }
   };
 
-  const login = async (token: string) => {
-    if (!logins.has(token)) {
-      const res = await f('https://api.github.com/user', { headers: { authorization: `Bearer ${token}`, accept: 'application/vnd.github+json' } }).catch(() => null);
-      const user = res?.ok ? ((await res.json()) as { login?: string }) : null;
-      logins.set(token, user?.login ?? null);
-    }
-    return logins.get(token)!;
+  /**
+   * Brukernavnet til tokenet, eller `null` når GitHub ikke svarte (f.eks. uten nett).
+   * `false`: GitHub avviste tokenet (401), fordi det er trukket tilbake eller erstattet av en nyere innlogging.
+   */
+  const login = async (token: string): Promise<string | null | false> => {
+    if (logins.has(token)) return logins.get(token)!;
+    const res = await f('https://api.github.com/user', { headers: { authorization: `Bearer ${token}`, accept: 'application/vnd.github+json' } }).catch(() => null);
+    if (res?.status === 401) return false;
+    if (!res?.ok) return null; // prøv igjen neste gang
+    const user = (await res.json()) as { login?: string };
+    logins.set(token, user.login ?? null);
+    return user.login ?? null;
+  };
+
+  /** Det lagrede tokenet, så lenge GitHub godtar det. Et avvist token slettes, så brukeren kan logge inn på nytt. */
+  const stored = async () => {
+    const token = await opts.store.get();
+    if (!token) return null;
+    const who = await login(token);
+    if (who !== false) return { token, login: who };
+    await opts.store.set(null);
+    expired = true;
+    return null;
+  };
+  const gh = async () => {
+    const token = await ghToken();
+    const who = token && (await login(token));
+    return token && who !== false ? { token, login: who || null } : null;
   };
 
   const postForm = async (url: string, body: Record<string, string>) => {
@@ -65,16 +88,16 @@ export function createAuth(opts: { clientId?: string | null; store: TokenStore; 
   const auth = {
     /** Tokenet som skal brukes til push og PR, eller `null` */
     async token(): Promise<string | null> {
-      return (await opts.store.get()) ?? (await ghToken());
+      return (await stored())?.token ?? (await gh())?.token ?? null;
     },
 
     async status(): Promise<AuthStatus> {
-      const stored = await opts.store.get();
-      if (stored) return { state: 'ok', login: await login(stored), source: 'device' };
-      const gh = await ghToken();
-      if (gh) return { state: 'ok', login: await login(gh), source: 'gh' };
+      const s = await stored();
+      if (s) return { state: 'ok', login: s.login, source: 'device' };
+      const g = await gh();
+      if (g) return { state: 'ok', login: g.login, source: 'gh' };
       if (pending && pending.expiresAt > Date.now()) return pendingStatus(pending);
-      return { state: 'none', canLogin: !!clientId };
+      return { state: 'none', canLogin: !!clientId, ...(expired ? { expired } : {}) };
     },
 
     async start(): Promise<AuthStatus> {
@@ -110,6 +133,7 @@ export function createAuth(opts: { clientId?: string | null; store: TokenStore; 
       });
       if (typeof r.access_token === 'string') {
         pending = null;
+        expired = false;
         await opts.store.set(r.access_token);
         return auth.status();
       }
@@ -124,6 +148,7 @@ export function createAuth(opts: { clientId?: string | null; store: TokenStore; 
 
     async logout(): Promise<AuthStatus> {
       pending = null;
+      expired = false;
       await opts.store.set(null);
       return auth.status();
     },

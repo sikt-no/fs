@@ -3,20 +3,31 @@ import { STATUSES, type Entry, type Status } from '../shared/model';
 import { PRIORITIES, readHead, setPriority, setStatus, setTitle, type Priority } from './edit';
 import { transport } from './transport';
 
+export interface EditorFlush {
+  /** Lagrer ulagrede endringer; kaster hvis lagringen feiler */
+  flush: () => Promise<void>;
+  dirty: () => boolean;
+}
+
 interface Props {
   path: string;
   /** Sist parsede versjon av fila; oppdateres etter hver lagring */
   entry: Entry | undefined;
   onClose: () => void;
-  /** Meldes når det finnes (eller ikke lenger finnes) ulagrede endringer */
-  onDirty: (dirty: boolean) => void;
+  /** Registrerer lagringen av ulagrede endringer, som kalles før brukeren navigerer bort */
+  onFlush: (f: EditorFlush | null) => void;
+  /** Fila har endringer mot main (vises «Lag PR» også uten ulagret tekst) */
+  changed?: boolean;
+  /** «Lag PR» med denne fila; lagrer først */
+  onPr?: () => void;
 }
 
 /**
  * Redigering av en krav-fil: felt for status, prioritet og tittel på `Egenskap:`, og hele teksten.
  * Lagring skriver fila til disk; parseren og avvikssjekken kjører som når fila lagres i en editor.
+ * Ulagrede endringer lagres når brukeren går til en annen fil eller visning.
  */
-export function Editor({ path, entry, onClose, onDirty }: Props) {
+export function Editor({ path, entry, onClose, onFlush, changed, onPr }: Props) {
   const [text, setText] = useState<string | null>(null);
   const [saved, setSaved] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -27,8 +38,29 @@ export function Editor({ path, entry, onClose, onDirty }: Props) {
   const dirty = text !== null && text !== saved;
   const isFeature = path.endsWith('.feature');
   const head = isFeature && text !== null ? readHead(text) : null;
-  useEffect(() => onDirty(dirty), [dirty]);
-  useEffect(() => () => onDirty(false), []);
+  // Siste tekst og fila den hører til, så lagringen ved navigering virker også etter at fila eller visningen
+  // er byttet. Rendringen med ny `path` har fortsatt teksten til den forrige fila, så den oppdaterer ikke refen.
+  const latest = useRef({ path, text, saved });
+  if (latest.current.path === path) latest.current = { path, text, saved };
+  const flush = async () => {
+    const cur = latest.current;
+    const { path: p, text: t, saved: s } = cur;
+    if (t === null || t === s) return;
+    cur.saved = t; // lagringen er i gang; ikke lagre det samme to ganger
+    ownSave.current = true;
+    try {
+      await transport.call('save', { path: p, text: t });
+    } catch (e) {
+      cur.saved = s;
+      ownSave.current = false;
+      throw e;
+    }
+    if (latest.current.path === p) setSaved(t);
+  };
+  useEffect(() => {
+    onFlush({ flush, dirty: () => latest.current.text !== null && latest.current.text !== latest.current.saved });
+    return () => onFlush(null);
+  }, []);
 
   const load = () =>
     transport.call('read', path).then(
@@ -40,10 +72,13 @@ export function Editor({ path, entry, onClose, onDirty }: Props) {
       e => setError(e.message),
     );
   useEffect(() => {
+    latest.current = { path, text: null, saved: null };
     setText(null);
     setSaved(null);
     setError(null);
     void load();
+    // Byttes fila eller lukkes editoren uten at main har lagret (f.eks. tilbake-knappen): lagre det som står
+    return () => void flush().catch(e => alert(`Kunne ikke lagre ${latest.current.path}: ${(e as Error).message}`));
   }, [path]);
 
   // Fila er endret på disk utenfor vieweren: last inn på nytt, eller varsle hvis det finnes ulagrede endringer
@@ -86,10 +121,25 @@ export function Editor({ path, entry, onClose, onDirty }: Props) {
     return () => removeEventListener('keydown', onKey);
   });
 
-  const close = () => {
-    if (dirty && !confirm('Du har endringer som ikke er lagret. Vil du forkaste dem?')) return;
-    onDirty(false);
+  /** «Lukk» lagrer og lukker */
+  const close = async () => {
+    try {
+      await flush();
+    } catch (e) {
+      return setError((e as Error).message);
+    }
     onClose();
+  };
+  const discard = () => {
+    if (confirm('Vil du forkaste endringene som ikke er lagret?')) void load();
+  };
+  const pr = async () => {
+    try {
+      await flush();
+    } catch (e) {
+      return setError((e as Error).message);
+    }
+    onPr?.();
   };
 
   /** Markerer linja i tekstfeltet (1-basert) */
@@ -122,7 +172,9 @@ export function Editor({ path, entry, onClose, onDirty }: Props) {
         <span class="mono edpath">{path.slice(path.lastIndexOf('/') + 1)}</span>
         {dirty ? <span class="eddirty">ulagret</span> : text !== null && <span class="muted">lagret</span>}
         <div class="edbtns">
-          <button class="smallbtn" onClick={close}>Lukk</button>
+          {dirty && <button class="smallbtn" onClick={discard}>Forkast</button>}
+          <button class="smallbtn" onClick={close} title="Lagrer og lukker">Lukk</button>
+          {onPr && (changed || dirty) && <button class="smallbtn" onClick={pr} title="Lagrer, og lager PR med fila">Lag PR</button>}
           <button class="primbtn" onClick={save} disabled={!dirty || saving} title="Lagre (⌘S / Ctrl+S)">
             {saving ? 'Lagrer…' : 'Lagre'}
           </button>

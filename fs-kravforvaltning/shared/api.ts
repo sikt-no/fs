@@ -30,7 +30,8 @@ export interface PublishResult {
 /** Innlogging mot GitHub (device flow) */
 export type AuthStatus =
   | { state: 'ok'; login: string | null; source: 'gh' | 'device' }
-  | { state: 'none'; canLogin: boolean } // canLogin: false når ingen OAuth-klient er satt opp
+  // canLogin: false når ingen OAuth-klient er satt opp. expired: GitHub avviste det lagrede tokenet, som er slettet
+  | { state: 'none'; canLogin: boolean; expired?: boolean }
   | { state: 'pending'; userCode: string; verificationUri: string; expiresAt: number };
 
 /** Den lokale Claude Code-installasjonen */

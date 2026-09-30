@@ -231,9 +231,11 @@ interface Props {
   onLine: (ln: number) => void;
   /** Åpne fila i editoren; utelatt der redigering ikke er tilgjengelig */
   onEdit?: () => void;
+  /** «Lag PR» med fila; bare når fila har endringer og redigering er tilgjengelig */
+  onPr?: () => void;
 }
 
-export function FeatureView({ entry, collapsed, flash, lineNumbers, mark, mainRef, onToggle, find, findClosed, onFindClose, onLine, onEdit }: Props) {
+export function FeatureView({ entry, collapsed, flash, lineNumbers, mark, mainRef, onToggle, find, findClosed, onFindClose, onLine, onEdit, onPr }: Props) {
   const f = entry.model;
   const hit = (from: number, to = from) => (mark && from <= mark.to && to >= mark.from ? ' cursor' : '');
   const fileName = entry.path.slice(entry.path.lastIndexOf('/') + 1);
@@ -312,6 +314,7 @@ export function FeatureView({ entry, collapsed, flash, lineNumbers, mark, mainRe
           <span>{f.nRules} regler · {f.nScen} scenarioer</span>
           <span>{f.nLines} linjer</span>
           {onEdit && <button class="smallbtn editbtn" onClick={onEdit}>Rediger</button>}
+          {onPr && <button class="smallbtn editbtn" onClick={onPr}>Lag PR</button>}
         </div>
 
         <LintBand lint={f.lint} hit={hit} onLine={onLine} />

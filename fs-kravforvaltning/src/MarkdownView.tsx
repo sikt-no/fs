@@ -14,9 +14,11 @@ interface Props {
   onNavigate: (path: string) => void;
   /** Åpne fila i editoren; utelatt der redigering ikke er tilgjengelig */
   onEdit?: () => void;
+  /** «Lag PR» med fila; bare når fila har endringer og redigering er tilgjengelig */
+  onPr?: () => void;
 }
 
-export function MarkdownView({ entry, blocks, mode, onMode, has, onNavigate, onEdit }: Props) {
+export function MarkdownView({ entry, blocks, mode, onMode, has, onNavigate, onEdit, onPr }: Props) {
   const [copied, setCopied] = useState<number | null>(null);
   const timer = useRef<ReturnType<typeof setTimeout>>();
   useEffect(() => () => clearTimeout(timer.current), []);
@@ -171,6 +173,7 @@ export function MarkdownView({ entry, blocks, mode, onMode, has, onNavigate, onE
         <span class="file">{name}</span>
         <span>{lines.length} linjer</span>
         {onEdit && <button class="smallbtn editbtn" onClick={onEdit}>Rediger</button>}
+        {onPr && <button class="smallbtn editbtn" onClick={onPr}>Lag PR</button>}
         <div class="seg" role="group" aria-label="Visning av markdown">
           <button aria-pressed={mode === 'pretty'} onClick={() => onMode('pretty')}>Visning</button>
           <button aria-pressed={mode === 'raw'} onClick={() => onMode('raw')}>Markdown</button>
