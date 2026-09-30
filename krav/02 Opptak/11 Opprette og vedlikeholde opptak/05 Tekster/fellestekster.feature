@@ -1,5 +1,5 @@
 # language: no
-@OPT-OPT-TEK-001 @wont @draft
+@OPT-OVO-TEK-001 @wont @draft
 Egenskap: Informasjon til søker i søknadsprosessen
   Som søker
   ønsker jeg relevant informasjon underveis i søknadsprosessen

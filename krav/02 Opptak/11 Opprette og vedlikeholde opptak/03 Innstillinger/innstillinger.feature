@@ -1,5 +1,5 @@
 # language: no
-@OPT-OPT-INN-001 @must @in-progress
+@OPT-OVO-INN-001 @must @in-progress
 Egenskap: Innstillinger for opptak
   Som opptaksforvalter ved forvaltende organisasjon
   ønsker jeg å sette innstillinger for opptaket

@@ -20,7 +20,7 @@
   - Jira Epic: [TAKE-318](https://sikt.atlassian.net/browse/TAKE-318)
   - Confluence: [T3 2026 Forberede opptak og etterbehandling](https://sikt.atlassian.net/wiki/spaces/STUDIEADM/pages/4981817377)
   - Tekstredigering: [sikt-no/fs#214](https://github.com/sikt-no/fs/issues/214)
-- **Krav (Gherkin)**: `krav/02 Opptak/11 Opptak/` utarbeidet
+- **Krav (Gherkin)**: `krav/02 Opptak/11 Opprette og vedlikeholde opptak/` utarbeidet
 
 ## Kort beskrivelse
 

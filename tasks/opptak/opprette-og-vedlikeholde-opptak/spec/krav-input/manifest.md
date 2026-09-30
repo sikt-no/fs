@@ -2,25 +2,25 @@
 
 ## Kilde
 
-- **Kilde-mappe:** `krav/02 Opptak/11 Opptak/`
+- **Kilde-mappe:** `krav/02 Opptak/11 Opprette og vedlikeholde opptak/`
 - **Hentet:** 2026-09-30 14:14
 
 ## Feature-filer (4 stk, alle `@planned` → retagget `@in-progress`)
 
 | Fil | Feature-ID | Status ved henting |
 |-----|------------|--------------------|
-| `krav/02 Opptak/11 Opptak/01 Opptak/opprett_opptak.feature` | `@OPT-OPT-OPT-001` | `@planned` |
-| `krav/02 Opptak/11 Opptak/02 Samordning/samordnet_opptak.feature` | `@OPT-OPT-SAM-001` | `@planned` |
-| `krav/02 Opptak/11 Opptak/03 Innstillinger/innstillinger.feature` | `@OPT-OPT-INN-001` | `@planned` |
-| `krav/02 Opptak/11 Opptak/04 Frister/frister_og_hendelser.feature` | `@OPT-OPT-FRI-001` | `@planned` |
+| `krav/02 Opptak/11 Opprette og vedlikeholde opptak/01 Grunnoppsett/opprett_opptak.feature` | `@OPT-OVO-GRU-001` | `@planned` |
+| `krav/02 Opptak/11 Opprette og vedlikeholde opptak/02 Samordning/samordnet_opptak.feature` | `@OPT-OVO-SAM-001` | `@planned` |
+| `krav/02 Opptak/11 Opprette og vedlikeholde opptak/03 Innstillinger/innstillinger.feature` | `@OPT-OVO-INN-001` | `@planned` |
+| `krav/02 Opptak/11 Opprette og vedlikeholde opptak/04 Frister/frister_og_hendelser.feature` | `@OPT-OVO-FRI-001` | `@planned` |
 
 ## Filtrert bort (3 stk, `@draft`)
 
 | Fil | Feature-ID | Grunn |
 |-----|------------|-------|
-| `krav/02 Opptak/11 Opptak/05 Tekster/fellestekster.feature` | `@OPT-OPT-TEK-001` | `@wont @draft` |
-| `krav/02 Opptak/11 Opptak/05 Tekster/svarmeldingsmal.feature` | `@OPT-OPT-TEK-002` | `@wont @draft` |
-| `krav/02 Opptak/11 Opptak/06 Hendelseslogg/hendelseslogg.feature` | `@OPT-OPT-LOG-001` | `@should @draft` |
+| `krav/02 Opptak/11 Opprette og vedlikeholde opptak/05 Tekster/fellestekster.feature` | `@OPT-OVO-TEK-001` | `@wont @draft` |
+| `krav/02 Opptak/11 Opprette og vedlikeholde opptak/05 Tekster/svarmeldingsmal.feature` | `@OPT-OVO-TEK-002` | `@wont @draft` |
+| `krav/02 Opptak/11 Opprette og vedlikeholde opptak/06 Hendelseslogg/hendelseslogg.feature` | `@OPT-OVO-LOG-001` | `@should @draft` |
 
 ## Figma-skisser
 
