@@ -53,6 +53,12 @@ test('contextPrompt tar med fila brukeren ser på', () => {
   assert.doesNotMatch(contextPrompt(null), /ser nå på/);
 });
 
+test('contextPrompt ber Claude foreslå PR med en krav-pr-blokk i stedet for å lage den', () => {
+  assert.match(contextPrompt(null), /kan ikke committe, pushe eller lage PR selv/);
+  assert.match(contextPrompt(null), /Ber brukeren om en PR.*kodeblokk med språket krav-pr/);
+  assert.match(contextPrompt(null), /Si ikke at du ikke kan lage PR/);
+});
+
 test('contextPrompt tar med filene og mappene lagt ved med @, og bare stier under krav/', () => {
   assert.match(contextPrompt(null, null, [], [], ['krav/02 Opptak', 'krav/a.feature']), /lagt ved .*: krav\/02 Opptak, krav\/a\.feature/);
   assert.doesNotMatch(contextPrompt(null), /lagt ved/);

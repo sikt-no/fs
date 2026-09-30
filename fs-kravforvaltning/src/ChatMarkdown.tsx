@@ -1,6 +1,8 @@
 import type { ComponentChildren, JSX } from 'preact';
 import { useMemo, useState } from 'preact/hooks';
 import { parseMd, resolveLink, type Block, type List, type Seg } from './markdown';
+import type { GitChange } from '../shared/model';
+import { parsePrProposal, PR_LANG, splitGenerated, type PrProposal } from './prProposal';
 import { useCopy } from './useCopy';
 
 interface Props {
@@ -8,6 +10,10 @@ interface Props {
   /** Finnes fila i vieweren? */
   has: (path: string) => boolean;
   onOpen: (path: string) => void;
+  /** Åpner «Lag PR» utfylt med forslaget; mangler der PR ikke kan lages (statisk bygg) */
+  onPr?: (p: PrProposal) => void;
+  /** Endringen i git for en fil (fra «Endringer»); filer uten endring kommer ikke med i PR-en */
+  change?: (path: string) => GitChange | undefined;
 }
 
 /** Stier Claude skriver er relative til repoet, eller absolutte inn i klonen: `/…/repo/krav/x.feature` → `krav/x.feature` */
@@ -18,7 +24,7 @@ const repoPath = (p: string) => p.replace(/^.*?\/(krav\/)/, '$1').replace(/^\.?\
  * men vises kompakt: overskriftene er små, og lenkekort blir vanlige lenker. Lenker og `kode` som peker
  * på en fil i vieweren, åpner fila.
  */
-export function ChatMarkdown({ text, has, onOpen }: Props) {
+export function ChatMarkdown({ text, has, onOpen, onPr, change }: Props) {
   const blocks = useMemo(() => parseMd(text), [text]);
   const [copied, copy] = useCopy();
   const [copiedBlock, setCopiedBlock] = useState<number | null>(null);
@@ -86,7 +92,65 @@ export function ChatMarkdown({ text, has, onOpen }: Props) {
         return <hr key={i} class="cmd-hr" />;
       case 'card':
         return <p key={i}><a href={b.href} target="_blank" rel="noreferrer">{b.host}{b.path} ↗</a></p>;
-      case 'code':
+      case 'code': {
+        const pr = b.lang === PR_LANG ? parsePrProposal(b.body.join('\n')) : null;
+        if (pr) {
+          const desc = splitGenerated(pr.body);
+          const n = pr.paths.length;
+          return (
+            <div key={i} class="cmd-pr">
+              <div class="cmd-pr-head">
+                <span class="cmd-pr-label">Forslag til PR</span>
+                <span class="cmd-pr-count">{n} {n === 1 ? 'fil' : 'filer'}</span>
+              </div>
+              <div class="cmd-pr-main">
+                <div class="cmd-pr-title">{pr.title}</div>
+                {pr.branch && (
+                  <div class="cmd-pr-branch">
+                    <span>Gren</span>
+                    <span class="mono" title={'krav/' + pr.branch}>krav/{pr.branch}</span>
+                  </div>
+                )}
+                {desc.text && <div class="cmd-pr-body">{desc.text}</div>}
+                <div class="cmd-pr-files">
+                  <div class="cmd-pr-sub">Endrede filer</div>
+                  {pr.paths.map((p, j) => {
+                    const c = change?.(p);
+                    const name = p.slice(p.lastIndexOf('/') + 1);
+                    return (
+                      <div key={j} class="cmd-pr-file">
+                        <span class={'cmd-pr-dot ' + (c?.code ?? 'none')} />
+                        {has(p) ? internal(p, name, j, true) : <code title={p}>{name}</code>}
+                        <span class={'cmd-pr-stat ' + (c?.code ?? 'none')}>
+                          {!c ? 'ingen endring' : c.code === 'D' ? 'slettet' : `+${c.plus} −${c.minus}`}
+                        </span>
+                      </div>
+                    );
+                  })}
+                  {pr.skipped.length > 0 && (
+                    <div class="cmd-pr-skipped">
+                      Kan ikke tas med i PR-en herfra (bare .feature- og .md-filer under krav/): {pr.skipped.map((p, j) => <code key={j}>{p}</code>)}
+                    </div>
+                  )}
+                </div>
+              </div>
+              <div class="cmd-pr-foot">
+                <span>
+                  {desc.generated && (
+                    <>
+                      Generert med <a href="https://claude.com/claude-code" target="_blank" rel="noreferrer">Claude Code</a>
+                    </>
+                  )}
+                </span>
+                {onPr && (
+                  <button class="primbtn" onClick={() => onPr(pr)}>
+                    Åpne i «Lag PR»
+                  </button>
+                )}
+              </div>
+            </div>
+          );
+        }
         return (
           <div key={i} class="cmd-code">
             <div class="cmd-code-head">
@@ -104,6 +168,7 @@ export function ChatMarkdown({ text, has, onOpen }: Props) {
             <pre>{b.body.join('\n')}</pre>
           </div>
         );
+      }
       case 'table':
         return (
           <div key={i} class="md-table">
