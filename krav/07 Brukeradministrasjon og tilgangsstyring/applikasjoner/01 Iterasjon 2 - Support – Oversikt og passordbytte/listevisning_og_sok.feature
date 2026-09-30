@@ -1,6 +1,6 @@
 # language: no
 # GitHub: #438, #448, #449
-@BRU-APP-API-001 @must @planned
+@BRU-APP-API-001 @must @implemented
 Egenskap: Listevisning og søk i applikasjoner
   Som bruker
   ønsker jeg en oversikt over applikasjoner jeg har tilgang til, med mulighet for søk og filtrering
@@ -13,6 +13,7 @@ Egenskap: Listevisning og søk i applikasjoner
 
   Regel: Liste over alle applikasjoner (K1)
 
+    @deprecated
     Scenario: Se liste over applikasjoner
       Når jeg åpner applikasjonsoversikten
       Så ser jeg en liste over alle applikasjoner
@@ -25,6 +26,21 @@ Egenskap: Listevisning og søk i applikasjoner
         | Organisasjon    |
         | Antall tilganger|
         | Status          |
+
+    @planned
+    Scenario: Se liste over applikasjoner
+      Når jeg åpner applikasjonsoversikten
+      Så ser jeg en liste over alle applikasjoner
+      Og listen er sortert etter navn i stigende rekkefølge
+      Og hvert innslag viser følgende informasjon:
+        | felt                 |
+        | Navn                 |
+        | Beskrivelse          |
+        | Miljøer              |
+        | Applikasjonseier     |
+        | Identitetsleverandør |
+        | Antall tilganger     |
+        | Status               |
 
     Scenariomal: Velge sorteringsretning for navn
       Gitt jeg ser listen over applikasjoner
@@ -57,6 +73,7 @@ Egenskap: Listevisning og søk i applikasjoner
       Når jeg velger en applikasjon
       Så ser jeg detaljsiden for valgt applikasjon
 
+    @deprecated
     Scenario: Listen inkluderer eksisterende FS-applikasjoner
       Når jeg åpner applikasjonsoversikten
       Så ser jeg også applikasjoner med FS som identitetsleverandør
@@ -83,19 +100,37 @@ Egenskap: Listevisning og søk i applikasjoner
       Når jeg velger et miljø som filter
       Så vises kun applikasjoner som er aktive i det valgte miljøet
 
-    Scenario: Tilgjengelige organisasjoner i filter
+    Scenario: Tilgjengelige applikasjonseiere i filter
       Gitt jeg ser listen over applikasjoner
-      Når jeg åpner organisasjonsfilteret
+      Når jeg åpner applikasjonseier-filteret
       Så inneholder filteret alle organisasjoner jeg har applikasjonsadministrator-rollen for
       Og filteret inneholder også organisasjoner som eier applikasjoner med tilganger til data i organisasjonene jeg administrerer
       Og hver organisasjon vises kun én gang
       Og organisasjonene er sortert alfabetisk
-      Og "Alle organisasjoner" er valgt som standard
+      Og "Alle applikasjonseiere" er valgt som standard
 
-    Scenario: Filtrere på organisasjon
+    Scenario: Filtrere på applikasjonseier
       Gitt jeg ser listen over applikasjoner
-      Når jeg velger en organisasjon som filter
-      Så vises kun applikasjoner tilknyttet den valgte organisasjonen
+      Når jeg velger en applikasjonseier som filter
+      Så vises kun applikasjoner som eies av den valgte organisasjonen
+
+    @planned
+    Scenario: Tilgjengelige identitetsleverandører i filter
+      Gitt jeg ser listen over applikasjoner
+      Når jeg åpner identitetsleverandørfilteret
+      Så kan jeg velge mellom følgende identitetsleverandører:
+        | Identitetsleverandør        |
+        | Alle identitetsleverandører |
+        | Feide                       |
+        | Maskinporten                |
+        | FS                          |
+      Og "Alle identitetsleverandører" er valgt som standard
+
+    @planned
+    Scenario: Filtrere på identitetsleverandør
+      Gitt jeg ser listen over applikasjoner
+      Når jeg velger en identitetsleverandør som filter
+      Så vises kun applikasjoner med den valgte identitetsleverandøren
 
     @could
     Scenario: Filtrere på tilgang

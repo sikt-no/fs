@@ -314,3 +314,5 @@ Disse reglene gjelder for alle kravfiler. Tvetydige ord skal **avklares** før t
 | lærested | institusjon (når du mener universitet, høyskole eller fagskole) |
 | organisasjonskode | institusjonsnummer |
 | organisasjonsnummer | (reservert for eksternt registreringsnummer – ikke bruk som synonym for organisasjonskode) |
+| identitetsleverandør | idP (forkortelsen er innarbeidet blant utviklere, men ikke blant dem som administrerer applikasjoner) |
+| applikasjonseier | organisasjon (kun i applikasjonskrav, der organisasjonen opptrer i to roller: den som eier applikasjonen, og den hvis data en tilgang «gjelder for») |
