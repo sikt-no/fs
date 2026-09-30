@@ -16,7 +16,8 @@
     "app:dev": "electron-vite dev",
     "app:dev:oppgaver": "electron-vite dev --mode oppgaver",
     "app:build": "electron-vite build",
-    "app:dist": "electron-vite build && electron-builder"
+    "app:dist": "electron-vite build && electron-builder",
+    "changeset:version": "changeset version && npm install --package-lock-only"
   },
   "dependencies": {
     "@cucumber/gherkin": "^42.0.1",
@@ -26,6 +27,7 @@
     "preact": "^10.29.8"
   },
   "devDependencies": {
+    "@changesets/cli": "^3.0.3",
     "@preact/preset-vite": "^2.10.6",
     "@types/node": "^26.6.2",
     "electron": "^44.4.5",

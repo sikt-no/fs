@@ -1,0 +1,157 @@
+name: Release FS Kravforvaltning
+
+# Changesets holder en «Version Packages»-PR oppdatert mens det finnes changesets i fs-kravforvaltning/.changeset/.
+# Når PR-en er merget (ingen changesets igjen, og versjonen i package.json har ingen release), bygges desktop-appen
+# for macOS, Windows og Linux og legges ved en GitHub-release med tag `fs-kravforvaltning-v<versjon>`.
+# Se fs-kravforvaltning/docs/release.md.
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'fs-kravforvaltning/**'
+      - '.github/workflows/kravforvaltning-release.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: kravforvaltning-release
+  cancel-in-progress: false
+
+defaults:
+  run:
+    shell: bash
+    working-directory: fs-kravforvaltning
+
+jobs:
+  version:
+    runs-on: ubuntu-latest
+    outputs:
+      release: ${{ steps.check.outputs.release }}
+      version: ${{ steps.check.outputs.version }}
+      tag: ${{ steps.check.outputs.tag }}
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: lts/*
+          cache: npm
+          cache-dependency-path: fs-kravforvaltning/package-lock.json
+      - run: npm ci
+
+      - name: Oppdater Version Packages-PR
+        id: changesets
+        uses: changesets/action@v2
+        with:
+          cwd: fs-kravforvaltning
+          version-script: npm run changeset:version
+          commit-message: 'fs-kravforvaltning: ny versjon'
+          pr-title: 'fs-kravforvaltning: ny versjon'
+
+      - name: Finnes releasen for denne versjonen?
+        id: check
+        if: steps.changesets.outputs.has-changesets == 'false'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          version=$(node -p "require('./package.json').version")
+          tag="fs-kravforvaltning-v$version"
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+          echo "tag=$tag" >> "$GITHUB_OUTPUT"
+          # En draft fra en kjøring som feilet, bygges på nytt. En publisert release røres ikke.
+          if [ "$(gh release view "$tag" --json isDraft --jq .isDraft 2>/dev/null)" = "false" ]; then
+            echo "$tag er allerede publisert"
+            echo "release=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "release=true" >> "$GITHUB_OUTPUT"
+          fi
+
+  release:
+    needs: version
+    if: needs.version.outputs.release == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Sjekk at Client ID er satt
+        working-directory: .
+        env:
+          CLIENT_ID: ${{ vars.KRAV_GITHUB_CLIENT_ID }}
+        run: |
+          if [ -z "$CLIENT_ID" ]; then
+            echo "::error::Repo-variabelen KRAV_GITHUB_CLIENT_ID mangler. Uten den kan ikke brukerne logge inn på GitHub i appen (se fs-kravforvaltning/docs/github-oauth.md)."
+            exit 1
+          fi
+      - uses: actions/checkout@v7
+      - name: Lag draft-release med endringene fra CHANGELOG.md
+        env:
+          GH_TOKEN: ${{ github.token }}
+          VERSION: ${{ needs.version.outputs.version }}
+          TAG: ${{ needs.version.outputs.tag }}
+        run: |
+          if gh release view "$TAG" >/dev/null 2>&1; then
+            echo "Draft for $TAG finnes fra før"
+            exit 0
+          fi
+          [ -f CHANGELOG.md ] && awk -v v="$VERSION" '/^## /{ if (p) exit; if ($2 == v) p = 1; next } p' CHANGELOG.md > notes.md
+          [ -s notes.md ] || echo "FS Kravforvaltning $VERSION" > notes.md
+          cat >> notes.md <<'EOF'
+
+          ### Installasjon
+
+          - **macOS**: `.dmg` (`arm64` for Apple Silicon, `x64` for Intel). Appen er ikke signert: høyreklikk og velg **Åpne** første gang, eller kjør `xattr -cr "/Applications/FS Kravforvaltning.app"`.
+          - **Windows**: `.exe`. Appen er ikke signert: velg **Mer informasjon → Kjør likevel** hvis SmartScreen stopper den.
+          - **Linux**: `.AppImage`. Gjør fila kjørbar med `chmod +x`.
+          EOF
+          gh release create "$TAG" --draft --target "$GITHUB_SHA" --title "FS Kravforvaltning $VERSION" --notes-file notes.md
+
+  build:
+    needs: [version, release]
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: macos-latest
+            args: --mac --arm64 --x64
+            files: release/*.dmg
+          - os: windows-latest
+            args: --win --x64
+            files: release/*.exe
+          - os: ubuntu-latest
+            args: --linux --x64
+            files: release/*.AppImage
+    runs-on: ${{ matrix.os }}
+    env:
+      MAIN_VITE_KRAV_GITHUB_CLIENT_ID: ${{ vars.KRAV_GITHUB_CLIENT_ID }}
+      CSC_IDENTITY_AUTO_DISCOVERY: 'false'
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: lts/*
+          cache: npm
+          cache-dependency-path: fs-kravforvaltning/package-lock.json
+      - name: Sjekk at Client ID er satt
+        run: |
+          if [ -z "$MAIN_VITE_KRAV_GITHUB_CLIENT_ID" ]; then
+            echo "::error::Repo-variabelen KRAV_GITHUB_CLIENT_ID mangler. Uten den kan ikke brukerne logge inn på GitHub i appen (se docs/github-oauth.md)."
+            exit 1
+          fi
+      - run: npm ci
+      - run: npx electron-vite build
+      - run: npx electron-builder --publish never ${{ matrix.args }}
+      - name: Last opp til releasen
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh release upload "${{ needs.version.outputs.tag }}" ${{ matrix.files }} --clobber
+
+  publish:
+    needs: [version, build]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Publiser releasen
+        working-directory: .
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh release edit "${{ needs.version.outputs.tag }}" --repo "$GITHUB_REPOSITORY" --draft=false --latest

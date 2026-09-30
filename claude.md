@@ -95,7 +95,10 @@ npm run dev:oppgaver   # med Oppgaver-modusen (tasks/)
 npm run app:dev        # desktop-appen (electron-vite)
 npm run app:dev:oppgaver  # desktop-appen med Oppgaver-modusen
 npm run app:dist       # pakket desktop-app i fs-kravforvaltning/release/
+npx changeset          # changeset for en endring i appen (versjon og endringslogg)
 ```
+
+Versjonen styres med Changesets (`fs-kravforvaltning/.changeset/`). `.github/workflows/kravforvaltning-release.yml` holder en versjons-PR oppdatert mens det finnes changesets. Når den er merget, bygges desktop-appen for macOS, Windows og Linux og publiseres som GitHub-release `fs-kravforvaltning-v<versjon>` med endringene fra `CHANGELOG.md`. Client ID kommer fra repo-variabelen `KRAV_GITHUB_CLIENT_ID`. En endring i appen som brukerne merker, skal ha en changeset i samme PR. Se `fs-kravforvaltning/docs/release.md`.
 
 Vieweren husker hvor brukeren var (`kravforvaltning:hash` i localStorage), og går tilbake dit når den åpnes uten hash. Det gjelder alltid når desktop-appen starter, og i en ny fane. En fil som er borte, gir forsiden.
 
