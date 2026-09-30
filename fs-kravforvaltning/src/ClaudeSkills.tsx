@@ -65,8 +65,9 @@ interface Props {
 
 /**
  * Hvilken skill samtalen bruker, rett over inputfeltet (en av `CLAUDE_SKILLS`). Den valgte lastes med
- * neste melding (`/<skill>`), og alle andre skills avvises. Med `preselect` er det alltid én valgt;
- * uten kan brukeren velge «Ingen», og Claude kan bruke alle skillene som er tillatt her.
+ * neste melding (`/<skill>`), men er bare et forslag: Claude kan også bruke de andre skillene som er
+ * tillatt her, når oppgaven krever det. Alle andre skills avvises. Med `preselect` er det alltid én valgt;
+ * uten kan brukeren velge «Ingen», og da lastes ingen på forhånd.
  */
 export function SkillPicker({ value, onChange, allowed, hint, preselect, disabled }: Props) {
   const [, force] = useState(0);

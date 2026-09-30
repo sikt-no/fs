@@ -48,7 +48,7 @@ export interface ClaudeRunRequest {
   path?: string | null;
   /** Skillen som er valgt (en av `CLAUDE_SKILLS`); alle andre avvises */
   skill?: string | null;
-  /** Skillene som er lov der brukeren er, når ingen er valgt (Oppgaver); Claude kan bruke dem fritt */
+  /** Skillene som er lov der brukeren er; Claude kan bruke dem fritt, også når en skill er valgt */
   skills?: string[];
   /** Kodemappene Claude kan lese (fs-admin, fs-plattform), som absolutte stier; de får `--add-dir`, men kan ikke endres */
   dirs?: string[];

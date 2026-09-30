@@ -12,7 +12,7 @@ const isWin = process.platform === 'win32';
 /**
  * Verktøyene Claude får bruke. `-p` kan ikke spørre brukeren om lov, så med `--permission-mode dontAsk`
  * avvises alt som ikke står her (også Bash og nettverk). Endringer i filene plukkes opp av watcheren
- * og vises i vieweren som når de lagres i en editor. Skill-verktøyet tillates bare for skillen som er valgt.
+ * og vises i vieweren som når de lagres i en editor. Skill-verktøyet tillates bare for skillene som er tillatt i visningen.
  */
 export const CLAUDE_TOOLS = ['Read', 'Glob', 'Grep', 'Edit', 'Write', 'TodoWrite'];
 
@@ -205,14 +205,16 @@ export function skillPool(pool: unknown): string[] {
 }
 
 /**
- * Argumentene som bestemmer hvilke skills Claude kan bruke: den valgte, eller skillene i `pool` når ingen
- * er valgt (Oppgaver). De får `Skill(<navn>)` i `--allowedTools`, og alle andre kjente skills får
+ * Argumentene som bestemmer hvilke skills Claude kan bruke: den valgte og skillene i `pool` (de som er
+ * tillatt i visningen). Den valgte er bare et forslag som lastes med meldingen; Claude kan bytte til en
+ * annen i `pool` når oppgaven krever det. De får `Skill(<navn>)` i `--allowedTools`, og alle andre kjente skills får
  * `Skill(<navn>)` i `--disallowedTools`. Allowlisten alene holder ikke: `dontAsk` slipper gjennom enkelte
  * skills som ikke står der, så de andre må avvises eksplisitt.
  */
 export function skillArgs(skill: string | null, known: Iterable<unknown>, pool: unknown = []): { allow: string[]; deny: string[] } {
   const chosen = skill && CLAUDE_SKILLS.includes(skill) ? skill : null;
-  const allowed = chosen ? [chosen] : skillPool(pool);
+  const inPool = skillPool(pool);
+  const allowed = CLAUDE_SKILLS.filter(s => s === chosen || inPool.includes(s));
   const others = new Set<string>();
   for (const n of known) if (typeof n === 'string' && SKILL_NAME.test(n) && !allowed.includes(n)) others.add(n);
   return { allow: allowed.map(n => `Skill(${n})`), deny: [...others].sort().map(n => `Skill(${n})`) };
@@ -220,13 +222,16 @@ export function skillArgs(skill: string | null, known: Iterable<unknown>, pool: 
 
 /** Systemteksten som forteller Claude hvor den er, og hva brukeren ser på */
 export function contextPrompt(path: string | null | undefined, skill: string | null = null, pool: string[] = [], dirs: string[] = []): string {
-  const skills = skill ? [skill] : pool;
+  const skills = CLAUDE_SKILLS.filter(s => s === skill || pool.includes(s));
+  const others = skills.filter(s => s !== skill);
   return [
     'Du kjører inne i FS Kravforvaltning (desktop-appen eller dev-serveren) for FS-kravene i dette repoet.',
     'Brukeren er typisk en domeneekspert. Svar kort og på norsk.',
     'Følg konvensjonene i krav/README.md når du skriver eller endrer .feature-filer.',
     skill
-      ? `Brukeren har valgt skillen ${skill} for denne samtalen. Følg den; andre skills er ikke tilgjengelige.`
+      ? `Brukeren har valgt skillen ${skill} for denne samtalen, og den er lastet. ` +
+        (others.length ? `Trenger oppgaven en annen skill, kan du bruke den med Skill-verktøyet: ${others.join(', ')}. ` : '') +
+        'Andre skills er ikke tilgjengelige.'
       : pool.length
         ? `Brukeren har ikke valgt noen skill. Du kan bruke disse med Skill-verktøyet når oppgaven passer: ${pool.join(', ')}. Andre skills er ikke tilgjengelige.`
         : 'Brukeren har ikke valgt noen skill, og ingen skills er tilgjengelige.',
@@ -304,7 +309,7 @@ export class ClaudeRunner {
     const skill = req.skill && CLAUDE_SKILLS.includes(req.skill) ? req.skill : null;
     // Alle skills vi kjenner: prosjektets fra disk, de Claude meldte sist, og de vieweren husker fra før
     const known = [...projectSkills(this.cwd).map(s => s.name), ...(this.lastSkills ?? []), ...(Array.isArray(req.knownSkills) ? req.knownSkills : [])];
-    const pool = skill ? [] : skillPool(req.skills);
+    const pool = skillPool(req.skills);
     const { allow, deny } = skillArgs(skill, known, pool);
     const dirs = dirArgs(req.dirs);
     const args = [

@@ -62,6 +62,10 @@ test('contextPrompt: uten valgt skill listes de tilgjengelige, og fs-verify får
   assert.doesNotMatch(verify, /Ingen kodekloner/);
   assert.match(contextPrompt(null, 'fs-verify'), /Ingen kodekloner er tilgjengelige/);
   assert.doesNotMatch(contextPrompt(null, 'fs-krav'), /slette filer/);
+  const valgt = contextPrompt(null, 'fs-verify', ['fs-krav', 'fs-verify']);
+  assert.match(valgt, /valgt skillen fs-verify .*lastet\. Trenger oppgaven en annen skill, .*Skill-verktøyet: fs-krav\./);
+  assert.doesNotMatch(contextPrompt(null, 'fs-krav'), /Trenger oppgaven en annen skill/);
+  assert.match(contextPrompt(null, 'fs-krav', ['fs-krav', 'fs-verify']), /kan ikke slette filer/, 'fs-verify kan brukes, så beskjeden kommer med');
 });
 
 test('codeDirs: overstyring, så env, så mappa ved siden av repoet', () => {
@@ -190,7 +194,7 @@ test('skillMeta leser navn og beskrivelse, også foldet YAML', () => {
   assert.deepEqual(skillMeta('ingen frontmatter'), { name: null, description: '' });
 });
 
-test('skillArgs tillater bare den valgte skillen og avviser alle andre', () => {
+test('skillArgs tillater den valgte skillen og poolen, og avviser alle andre', () => {
   assert.deepEqual(skillArgs('fs-krav', ['fs-krav', 'fs-specify', 'plugin:b', 'x) Bash(', 7, 'plugin:b']), {
     allow: ['Skill(fs-krav)'],
     deny: ['Skill(fs-specify)', 'Skill(plugin:b)'],
@@ -202,7 +206,11 @@ test('skillArgs tillater bare den valgte skillen og avviser alle andre', () => {
     allow: ['Skill(fs-krav)', 'Skill(fs-verify)'],
     deny: ['Skill(lage-steps)'],
   });
-  assert.deepEqual(skillArgs('fs-verify', ['fs-krav', 'fs-verify'], ['fs-krav']), { allow: ['Skill(fs-verify)'], deny: ['Skill(fs-krav)'] }, 'en valgt skill går foran poolen');
+  assert.deepEqual(
+    skillArgs('fs-verify', ['fs-krav', 'fs-verify', 'fs-specify'], ['fs-krav']),
+    { allow: ['Skill(fs-krav)', 'Skill(fs-verify)'], deny: ['Skill(fs-specify)'] },
+    'en valgt skill er et forslag: poolen er fortsatt tillatt',
+  );
   assert.deepEqual(projectSkills(join(tmp, 'finnes-ikke')), []);
 });
 
