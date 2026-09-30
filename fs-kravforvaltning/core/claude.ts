@@ -248,7 +248,11 @@ export function contextPrompt(
       : pool.length
         ? `Brukeren har ikke valgt noen skill. Du kan bruke disse med Skill-verktøyet når oppgaven passer: ${pool.join(', ')}. Andre skills er ikke tilgjengelige.`
         : 'Brukeren har ikke valgt noen skill, og ingen skills er tilgjengelige.',
-    'Endringer du gjør i filene vises straks i FS Kravforvaltning, og brukeren sender dem som PR selv med «Lag PR». Ikke commit, push eller lag PR.',
+    'Endringer du gjør i filene vises straks i FS Kravforvaltning. Du kan ikke committe, pushe eller lage PR selv, men du kan foreslå en PR, som brukeren sender med ett klikk.',
+    'Ber brukeren om en PR, eller har du endret filer under krav/ som brukeren sannsynligvis vil sende, avslutter du svaret med PR-forslaget i en kodeblokk med språket krav-pr og JSON: ' +
+      '{"title": "Krav: …", "branch": "kort-slug-uten-prefiks", "body": "Kort beskrivelse på norsk av hva som er endret og hvorfor", "paths": ["krav/…"]}. ' +
+      'Blokken er slik PR lages her: brukeren får et kort med «Åpne i «Lag PR»», som åpner «Lag PR» ferdig utfylt. Si ikke at du ikke kan lage PR, og be ikke brukeren fylle ut «Lag PR» for hånd. ' +
+      'paths er .feature- og .md-filene under krav/ som er endret i samtalen. Filer utenfor krav/ (f.eks. tasks/) kan ikke sendes fra FS Kravforvaltning: ta dem ikke med i paths, men si fra om dem i teksten.',
     'Du har ikke shell-tilgang; bruk Read, Glob, Grep, Edit og Write. AskUserQuestion finnes ikke her: still spørsmålene i svaret, og vent på brukeren.',
     dirs.length ? `Du kan lese kodeklonene ${dirs.join(', ')}, men ikke endre dem.` : '',
     skills.includes('fs-verify')

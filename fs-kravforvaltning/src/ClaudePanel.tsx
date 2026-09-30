@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'preact/hooks';
 import type { ClaudeEvent, ClaudeStatus } from '../shared/api';
-import type { Snapshot } from '../shared/model';
+import type { GitChange, Snapshot } from '../shared/model';
 import {
   applyEvent,
   contextLabel,
@@ -18,6 +18,7 @@ import {
   updateConversation,
   type Conversations,
 } from './claudeChat';
+import type { PrProposal } from './prProposal';
 import { ChatMarkdown } from './ChatMarkdown';
 import { registerClaude, setClaudeBusy } from './claudeBridge';
 import { CodeDirs, codeDirPaths, useCodeDirs } from './CodeDirs';
@@ -195,15 +196,19 @@ interface Props {
   onOpen: (path: string) => void;
   /** Viser mappa i treet */
   onReveal: (dir: string) => void;
+  /** Åpner «Lag PR» utfylt med Claudes forslag; mangler der PR ikke kan lages */
+  onPr?: (p: PrProposal) => void;
+  /** Endringen i git for en krav-fil, til filene på PR-kortet */
+  change?: (path: string) => GitChange | undefined;
   onClose: () => void;
 }
 
 /**
  * Samtale med den lokale Claude Code-en (`claude -p --output-format stream-json`), med repoet som arbeidsmappe.
  * Claude kan lese og endre filer, men ikke kjøre kommandoer. Endringene vises i vieweren med én gang,
- * og sendes som PR med «Lag PR» som vanlig.
+ * og sendes som PR med «Lag PR» som vanlig. Foreslår Claude en PR (`krav-pr`-blokk), åpner kortet «Lag PR» utfylt.
  */
-export function ClaudePanel({ status, width, onWidth, allowedSkills: modeSkills, skillHint: modeHint, preselect, codeDirs, path, entries, has, onOpen, onReveal, onClose }: Props) {
+export function ClaudePanel({ status, width, onWidth, allowedSkills: modeSkills, skillHint: modeHint, preselect, codeDirs, path, entries, has, onOpen, onReveal, onPr, change, onClose }: Props) {
   // Desktop-appen: uten valgte kodemapper finnes det ingen kode å verifisere mot, så fs-verify gråtones
   const dirs = useCodeDirs();
   const noCode = transport.kind === 'electron' && codeDirs && !!dirs && !dirs.some(d => d.exists);
@@ -405,7 +410,7 @@ export function ClaudePanel({ status, width, onWidth, allowedSkills: modeSkills,
                 </div>
               ) : i.kind === 'assistant' ? (
                 <div key={n} class="cmsg assistant">
-                  <ChatMarkdown text={i.text} has={has} onOpen={onOpen} />
+                  <ChatMarkdown text={i.text} has={has} onOpen={onOpen} onPr={onPr} change={change} />
                 </div>
               ) : i.kind === 'tool' ? (
                 <div key={n} class={'ctool ' + i.state}>

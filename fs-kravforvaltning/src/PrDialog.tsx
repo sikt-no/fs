@@ -2,6 +2,7 @@ import { useEffect, useMemo, useRef, useState } from 'preact/hooks';
 import type { AuthStatus, PublishResult } from '../shared/api';
 import type { GitInfo, Snapshot } from '../shared/model';
 import { draftPicked, prTitle } from './edit';
+import type { PrProposal } from './prProposal';
 import { transport } from './transport';
 
 interface Props {
@@ -34,6 +35,11 @@ function writeDraft(d: Draft | null) {
   } catch {
     /* ignorer */
   }
+}
+
+/** Et PR-forslag fra Claude blir utkastet (og erstatter det som var der), så «Lag PR» åpnes utfylt */
+export function proposeDraft(p: PrProposal) {
+  writeDraft({ picked: p.paths, title: p.title, branch: p.branch, body: p.body });
 }
 
 const CODE_LABEL = { M: 'endret', A: 'ny', U: 'ny', D: 'slettet' } as const;

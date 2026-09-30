@@ -16,7 +16,8 @@ import { bannerShown } from './mainStatus';
 import { MarkdownView, type MdMode } from './MarkdownView';
 import { Oppgaver, taskKey, type OView } from './Oppgaver';
 import { Outline } from './Outline';
-import { PrDialog } from './PrDialog';
+import { PrDialog, proposeDraft } from './PrDialog';
+import type { PrProposal } from './prProposal';
 import { CLAUDE_WIDTH, ClaudePanel } from './ClaudePanel';
 import { buildTree, Sidebar, type TreeMode } from './Sidebar';
 import { StatusBar } from './StatusBar';
@@ -186,6 +187,8 @@ function App() {
   const [editing, setEditing] = useState(false);
   // «Lag PR» i detaljvinduet: `false` er lukket, `null` åpnet fra sidebaren, en sti åpnet fra fila (som da er valgt)
   const [prFor, setPrFor] = useState<string | null | false>(false);
+  // Øker for hvert PR-forslag fra Claude, så «Lag PR» monteres på nytt og leser det nye utkastet
+  const [prSeq, setPrSeq] = useState(0);
   // Editoren lagrer ulagrede endringer før brukeren går til en annen fil eller visning
   const editorFlush = useRef<EditorFlush | null>(null);
   const [focus, setFocus] = useState<(FocusEvent & { seq: number }) | null>(null);
@@ -540,6 +543,22 @@ function App() {
       history.pushState(null, '', '#/' + encodeURI(current));
     }
   };
+  // Endringen i git for en fil, til filene på PR-kortet i Claude-panelet (ucommittet først, som i «Lag PR»)
+  const gitChange = useMemo(() => {
+    const m = new Map((git ? [...git.committed, ...git.uncommitted] : []).map(c => [c.path, c]));
+    return (p: string) => m.get(p);
+  }, [git]);
+  // «Åpne i «Lag PR»» på et forslag fra Claude: forslaget blir utkastet, og «Lag PR» åpnes i Krav
+  const proposePr = async (p: PrProposal) => {
+    if (!(await leaveEditor())) return;
+    proposeDraft(p);
+    if (mode !== 'krav') {
+      setMode('krav');
+      history.pushState(null, '', '#/' + encodeURI(current));
+    }
+    setPrSeq(n => n + 1);
+    setPrFor(null);
+  };
   const setOppgaver = (o: OState) => {
     setOState(o);
     history.pushState(null, '', oppgaverHash(o));
@@ -641,7 +660,7 @@ function App() {
               }}
             >
               {prFor !== false && git ? (
-                <PrDialog git={git} entries={entries} preselect={prFor ?? undefined} onClose={() => setPrFor(false)} />
+                <PrDialog key={prSeq} git={git} entries={entries} preselect={prFor ?? undefined} onClose={() => setPrFor(false)} />
               ) : editing && current ? (
                 <Editor
                   path={current}
@@ -725,6 +744,8 @@ function App() {
             has={p => !!entries[p]}
             onOpen={p => select(p)}
             onReveal={reveal}
+            onPr={EDITABLE && git ? proposePr : undefined}
+            change={gitChange}
             onClose={() => setClaudeOpen(false)}
           />
         )}
