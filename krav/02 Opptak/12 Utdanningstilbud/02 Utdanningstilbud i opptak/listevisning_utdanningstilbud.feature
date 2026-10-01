@@ -1,4 +1,5 @@
 # language: no
+# GitHub: #398
 @OPT-OPT-UTD-001 @must @draft
 Egenskap: Listevisning og filtrering av utdanningstilbud i opptak
   Som opptaksforvalter

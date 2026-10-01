@@ -1,5 +1,5 @@
 # language: no
-# GitHub: #216
+# GitHub: #216, #598
 @OPT-PLA-INN-002 @must @draft
 Egenskap: Plassflyt mellom utdanningskvoter
   Som opptaksforvalter
@@ -7,8 +7,9 @@ Egenskap: Plassflyt mellom utdanningskvoter
   slik at studieplasser ikke går tapt når det er for få kvalifiserte søkere i en utdanningskvote.
 
   # Kilde: tasks/opptak/plasstildeling/design.md (prinsipp 3, oppgave 3) og oppgave.md (gap-analyse oppgave 3).
+  # Vernet mot sirkulær plassflyt kommer fra GitHub #598.
   # Selve innstillingen (hvilken utdanningskvote plassene flyter til) settes på utdanningstilbudet, se
-  # 12 Utdanningstilbud/opptaksinnstillinger_utdanningstilbud.feature. Denne fila beskriver hva
+  # 12 Utdanningstilbud/03 Opptaksinnstillinger/opptaksinnstillinger_utdanningstilbud.feature. Denne fila beskriver hva
   # plasstildelingen gjør med plassflyten.
   # Status i kode: løst (oppgave.md). Kandidat for @implemented etter verifisering.
   # Begrep: «kvoteflyt» heter nå «plassflyt».
@@ -77,3 +78,5 @@ Egenskap: Plassflyt mellom utdanningskvoter
 # - Plassflyt finnes på tre nivåer (kvotetype i regelverket, utdanningskvote i opptaket, og per plasstildeling).
 #   Skal opptaksforvalter kunne endre plassflyten per runde?
 # - Forgrening (sende ledige plasser til flere utdanningskvoter) er ikke støttet. Bekrefte at det ikke trengs?
+# - #598 sier at «kun én utdanningskvote kan være siste mottaker». Scenarioet «Utdanningstilbud uten siste
+#   utdanningskvote» krever minst én. Skal det være nøyaktig én siste utdanningskvote per utdanningstilbud?
