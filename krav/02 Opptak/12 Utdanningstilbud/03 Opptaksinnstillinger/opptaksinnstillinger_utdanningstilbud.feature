@@ -1,4 +1,5 @@
 # language: no
+# GitHub: #597
 @OPT-OPT-UTD-004 @must @draft
 Egenskap: Opptaksinnstillinger per utdanningstilbud
   Som opptaksforvalter
@@ -7,6 +8,8 @@ Egenskap: Opptaksinnstillinger per utdanningstilbud
 
   # Opptaksforvalter ved deltakende organisasjon kan sette innstillinger på egne utdanningstilbud.
   # Opptaksforvalter ved forvaltende organisasjon kan sette innstillinger på alle utdanningstilbud.
+  # Innstillinger for flere utdanningstilbud av gangen står i sette_standardinnstillinger.feature (#599).
+  # Antall studieplasser og antall tilbud står i sette_studieplasser_og_antall_tilbud.feature (#596).
   Bakgrunn:
     Gitt at opptaksforvalter er innlogget
     Og at opptaket "Samordna opptak 2027" har utdanningstilbud
@@ -19,11 +22,6 @@ Egenskap: Opptaksinnstillinger per utdanningstilbud
       Og opptaksforvalter setter rangeringsregelverk til "Ordinær rangering"
       Så vurderes søkere til dette utdanningstilbudet etter GSK-kravene
       Og søkere rangeres etter reglene i "Ordinær rangering"
-
-    Scenario: Sette regelverk på flere utdanningstilbud av gangen
-      Når opptaksforvalter velger flere utdanningstilbud
-      Og opptaksforvalter setter kompetanseregelverk og rangeringsregelverk for alle valgte
-      Så bruker alle de valgte utdanningstilbudene det angitte regelverket i søknadsbehandling og rangering
 
     Scenario: Kun regelverk fra opptakets regelverkssamling kan velges
       Når opptaksforvalter setter regelverk for et utdanningstilbud
@@ -39,37 +37,35 @@ Egenskap: Opptaksinnstillinger per utdanningstilbud
       Når opptaksforvalter skal sette regelverk for et utdanningstilbud
       Så kan opptaksforvalter velge blant eksisterende regelverk i regelverkssamlingen
 
+  # Kilde for kvoteregelen: GitHub #597. Absolutte kvoter finnes i dag. Relativ fordeling gjenstår.
   Regel: Opptaksforvalter kan sette utdanningskvoter med relativ fordeling
+
+    Scenario: Utdanningskvotene følger av regelverkssamlingen
+      Gitt at regelverkssamlingen "UHG 2027" har kvotetypene "Ordinær" og "Førstegangsvitnemål"
+      Når opptaksforvalter velger utdanningstilbudet "Sykepleie, høst 2027"
+      Så har utdanningstilbudet utdanningskvotene "Ordinær" og "Førstegangsvitnemål"
 
     Scenario: Sette prosentfordeling mellom utdanningskvoter
       Når opptaksforvalter velger utdanningstilbudet "Sykepleie, høst 2027"
       Og opptaksforvalter setter kvotefordelingen til 50 % ordinær og 50 % førstegangsvitnemål
       Så fordeler plasstildelingen tilbudene mellom kvotene etter denne prosentfordelingen
 
-    Scenario: Sette prosentfordeling på flere utdanningstilbud av gangen
-      Når opptaksforvalter velger flere utdanningstilbud
-      Og opptaksforvalter setter kvotefordelingen til 50 % ordinær og 50 % førstegangsvitnemål for alle valgte
-      Så bruker alle de valgte utdanningstilbudene denne prosentfordelingen i plasstildelingen
+    @openquestion
+    # ÅPNE SPØRSMÅL:
+    # - Må summen av prosentfordelingen være 100 %? Hva skjer hvis den ikke er det?
+    # - Kan opptaksforvalter legge til eller fjerne utdanningskvoter som ikke følger av regelverkssamlingen?
+    Scenario: Alle utdanningskvoter settes som prosent
+      Når opptaksforvalter setter kvotefordelingen for utdanningstilbudet "Sykepleie, høst 2027"
+      Så angis hver utdanningskvote som en prosentandel av antall tilbud som skal gis
 
-    Scenario: Sette spesiell prosentfordeling på enkelttilbud
-      Gitt at opptaksforvalter har satt standard kvotefordeling på flere utdanningstilbud
-      Når opptaksforvalter velger utdanningstilbudet "Sykepleie, høst 2027"
-      Og opptaksforvalter endrer kvotefordelingen til 40 % ordinær, 50 % førstegangsvitnemål og 10 % samisk kvote
-      Så bruker dette utdanningstilbudet den spesielle fordelingen i stedet for standardfordelingen
-
+  # Hva plasstildelingen gjør med plassflyten, og vernet mot sirkulær plassflyt (#598), står i
+  # 14 Plasstildeling/02 Tildelingsinnstillinger/plassflyt.feature.
   Regel: Opptaksforvalter kan sette plassflyt mellom utdanningskvoter
 
     Scenario: Sette plassflyt
       Når opptaksforvalter setter plassflyt for utdanningstilbudet "Sykepleie, høst 2027"
       Og opptaksforvalter setter at ledige plasser i førstegangsvitnemålskvoten flyter til ordinær kvote
       Så omfordeler plasstildelingen ubrukte plasser fra førstegangsvitnemålskvoten til ordinær kvote
-
-  Regel: Opptaksforvalter må sette antall tilbud som skal gis totalt
-
-    Scenario: Sette antall tilbud
-      Når opptaksforvalter setter antall tilbud som skal gis til 278 for utdanningstilbudet "Sykepleie, høst 2027"
-      Så gir plasstildelingen inntil 278 tilbud totalt for dette utdanningstilbudet
-      Og antall tilbud per utdanningskvote beregnes fra den relative prosentfordelingen
 
   Regel: Opptaksforvalter kan markere utdanningstilbud for tidlig tilbud
 
