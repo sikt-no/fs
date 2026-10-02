@@ -31,13 +31,14 @@ const initial = boot.entries;
 const initialGit = boot.git;
 const initialTasks = boot.tasks;
 /**
- * Skillene Claude kan bruke i hver visning. Krav: fs-krav (standard) og fs-verify. Avvik: bare fs-krav.
+ * Skillene Claude kan bruke i hver visning. Krav: fs-krav (standard), fs-krav-avvik og fs-verify. Avvik: fs-krav
+ * (standard) og fs-krav-avvik.
  * I Oppgaver er ingen valgt på forhånd, og uten valg kan Claude bruke alle de fire. `codeDirs`: Claude
  * kan lese kodeklonene (fs-admin, fs-plattform), som fs-verify trenger.
  */
 const CLAUDE_SKILLS_BY_MODE: Record<Mode, { allowed: string[]; preselect: boolean; codeDirs: boolean }> = {
-  krav: { allowed: ['fs-krav', 'fs-verify'], preselect: true, codeDirs: true },
-  avvik: { allowed: ['fs-krav'], preselect: true, codeDirs: false },
+  krav: { allowed: ['fs-krav', 'fs-krav-avvik', 'fs-verify'], preselect: true, codeDirs: true },
+  avvik: { allowed: ['fs-krav', 'fs-krav-avvik'], preselect: true, codeDirs: false },
   oppgaver: { allowed: ['fs-krav', 'fs-specify', 'fs-specify-delta', 'fs-verify'], preselect: false, codeDirs: true },
 };
 const MODE_LABEL: Record<Mode, string> = { krav: 'Krav', avvik: 'Avvik', oppgaver: 'Oppgaver' };

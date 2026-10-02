@@ -314,3 +314,22 @@ Disse reglene gjelder for alle kravfiler. Tvetydige ord skal **avklares** før t
 | lærested | institusjon (når du mener universitet, høyskole eller fagskole) |
 | organisasjonskode | institusjonsnummer |
 | organisasjonsnummer | (reservert for eksternt registreringsnummer – ikke bruk som synonym for organisasjonskode) |
+
+### Konkrete henvisninger
+
+Steg og titler skal si konkret hvem eller hva de gjelder. Ord som «egne», «mine», «dem» og «denne» lar leseren gjette. Hvert steg skal også kunne leses alene, fordi det blir en egen step definition og kan gjenbrukes i andre scenarioer.
+
+- **«egne», «egen», «eget»** er greit når eieren står i samme setning og eierskapet er bokstavelig: `søkerens egne søknader`, `min egen profil`. Det er også greit når ordet betyr *separat*: `i eget vindu`, `i en egen kolonne`. Gjelder det hva en rolle har tilgang til eller er knyttet til, skriv relasjonen: `organisasjonene jeg administrerer`, ikke `egne organisasjoner`.
+- **«min», «mine», «mitt»** følger samme regel som «egne»: greit når eierskapet er bokstavelig (`min profil`, `mine søknader`), ikke når det gjelder en rolles tilknytning. Skriv `organisasjonen jeg administrerer`, ikke `min organisasjon`.
+- **«dem», «de», «disse», «en av dem»** skal ikke peke til et annet steg eller en tittel. Skriv det det gjelder på nytt. Står ordet det peker på i samme steg, er det greit: `Når jeg velger flere roller og fjerner dem i én operasjon`.
+- **«den», «denne», «dette»** som peker til et annet steg, følger samme regel: `Så ser jeg denne applikasjonen` blir `Så ser jeg applikasjonen`, og `den organisasjonen` blir `organisasjonen applikasjonen tilhører`. Bruk bestemt form, og legg til det som skiller når det er flere av samme slag. Det er greit når ordet det peker på, står i samme steg (`endrer prioriteringen og lagrer den`), når «den» er artikkel foran et adjektiv (`den valgte organisasjonen`, `den nye beskrivelsen`), og når «det» er formelt subjekt (`det finnes`).
+- **«sin», «sine», «sitt»** er greit, fordi det alltid peker på subjektet i samme setning: `Så ser søkerne resultatet sitt`.
+
+| Ikke skriv | Skriv |
+|------------|-------|
+| `Scenario: Brukeradministrator ser personbrukere fra egne organisasjoner` | `Scenario: Brukeradministrator ser personbrukere fra organisasjonene jeg administrerer` |
+| `Og en personbruker har hjemorganisasjon i en av dem` | `Og en personbruker har hjemorganisasjon i en av organisasjonene jeg administrerer` |
+| `Men jeg ser ikke muligheten til å endre dem` (etter et steg om vitnemål, grunnlag og poeng) | `Men jeg ser ikke muligheten til å endre grunnlaget` (eller det «dem» faktisk gjelder) |
+| `Scenario: Deltakende organisasjon ser kun sine egne` | `Scenario: Deltakende organisasjon ser kun utdanningstilbudene sine` |
+| `Så er applikasjonen opprettet på min organisasjon` | `Så er applikasjonen opprettet på organisasjonen jeg administrerer` |
+| `Så ser jeg denne applikasjonen i listen` | `Så ser jeg applikasjonen i listen` |
