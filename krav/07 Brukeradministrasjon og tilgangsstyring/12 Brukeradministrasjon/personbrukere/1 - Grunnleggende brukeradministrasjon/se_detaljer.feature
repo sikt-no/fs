@@ -1,6 +1,6 @@
 # language: no
 # GitHub: TBD
-@BRU-PER-GRU-007 @must @planned
+@BRU-PER-GRU-007 @must @in-progress
 Egenskap: Se detaljer for personbruker
   Som brukeradministrator
   ønsker jeg å se detaljer for en personbruker, organisert i logiske datagrupper,
@@ -26,6 +26,11 @@ Egenskap: Se detaljer for personbruker
     Scenario: Se hjemorganisasjon
       Så ser jeg personbrukerens hjemorganisasjon
 
+    Scenario: Hjemorganisasjonen er ukjent
+      Gitt domenet i personbrukerens Feide-ID ikke er registrert på noen organisasjon
+      Så ser jeg at personbrukeren ikke har en hjemorganisasjon
+      Men organisasjonene personbrukerens tildelinger gjelder for, vises ikke som hjemorganisasjon
+
     Scenario: Se status
       Så ser jeg om personbrukeren er aktiv eller deaktivert
 
@@ -34,6 +39,3 @@ Egenskap: Se detaljer for personbruker
 
     Scenario: Se sist brukt
       Så ser jeg tidspunktet personbrukeren sist brukte løsningen
-
-# ÅPNE SPØRSMÅL:
-# - Hva vises når personbrukeren ikke har en hjemorganisasjon i Feide, eller når hjemorganisasjonen ikke finnes som organisasjon i FS? Henger sammen med det åpne spørsmålet i BRU-PER-GRU-001 om brukere uten Feide-ID eller med flere identiteter. Spørsmålet er skarpere nå som hjemorganisasjon bærer ansettelsesrelasjonen: en bruker uten hjemorganisasjon har heller ingen stilling som kan opphøre.
