@@ -31,7 +31,6 @@ Egenskap: Listevisning og søk i applikasjoner
     Scenario: Se liste over applikasjoner
       Når jeg åpner applikasjonsoversikten
       Så ser jeg en liste over alle applikasjoner
-      Og listen er sortert etter navn i stigende rekkefølge
       Og hvert innslag viser følgende informasjon:
         | felt                 |
         | Navn                 |
@@ -42,7 +41,17 @@ Egenskap: Listevisning og søk i applikasjoner
         | Antall tilganger     |
         | Status               |
 
+    @could @draft @openquestion
+    Scenario: Liste er sortert etter navn som standard
+      # ÅPNE SPØRSMÅL:
+      # - Når kan fs-plattform sortere applikasjonene på navn på tvers av Feide-, Maskinporten- og FS-applikasjoner? (Jira: BAT-268)
+      Når jeg åpner applikasjonsoversikten
+      Så vises applikasjonene sortert etter navn i stigende rekkefølge
+
+    @could @draft @openquestion
     Scenariomal: Velge sorteringsretning for navn
+      # ÅPNE SPØRSMÅL:
+      # - Når kan fs-plattform sortere applikasjonene på navn på tvers av Feide-, Maskinporten- og FS-applikasjoner? (Jira: BAT-268)
       Gitt jeg ser listen over applikasjoner
       Når jeg velger å sortere på navn i <retning> rekkefølge
       Så vises applikasjonene sortert etter navn i <retning> rekkefølge
