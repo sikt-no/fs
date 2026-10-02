@@ -12,6 +12,7 @@ import {
   removeConversation,
   restoreConversations,
   selectConversation,
+  editedFiles,
   send,
   staleSkills,
   started,
@@ -325,13 +326,13 @@ export function ClaudePanel({ status, width, onWidth, allowedSkills: modeSkills,
    * Ny samtale som fortsetter fra den som er åpen, med samme skill. Med en oppsummering legges den i inputfeltet,
    * og filene legges ved med @. Brukeren leser og sender selv; første melding laster den nye versjonen av skillen.
    */
-  const continueIn = (summary?: ChatSummary) => {
+  const continueIn = (summary?: ChatSummary, files: string[] = []) => {
     const skillNow = effectiveSkill(c.skill, allowedSkills, preselect);
     set(createConversation(convs, newId(), Date.now(), skillNow, conv?.id ?? null));
     setShowList(false);
     if (!summary) return;
     setInput(summaryDraft(summary));
-    mention.replace(summaryMentions(summary));
+    mention.replace(summaryMentions(files));
     setTimeout(() => inputRef.current?.focus());
   };
 
@@ -487,7 +488,7 @@ export function ClaudePanel({ status, width, onWidth, allowedSkills: modeSkills,
                 </div>
               ) : i.kind === 'assistant' ? (
                 <div key={n} class="cmsg assistant">
-                  <ChatMarkdown text={i.text} has={has} onOpen={onOpen} onPr={onPr} change={change} onSummary={continueIn} skill={c.skill} />
+                  <ChatMarkdown text={i.text} has={has} onOpen={onOpen} onPr={onPr} change={change} onSummary={continueIn} skill={c.skill} edited={editedFiles(c)} />
                 </div>
               ) : i.kind === 'tool' ? (
                 <div key={n} class={'ctool ' + i.state}>

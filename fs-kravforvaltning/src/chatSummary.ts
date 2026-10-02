@@ -57,8 +57,16 @@ export function summaryDraft(s: ChatSummary): string {
   return ['Fortsetter fra en tidligere samtale:', ...parts].join('\n\n');
 }
 
-/** Filene som kan legges ved med @ i den nye samtalen (bare under krav/, som `mentionPaths` i core/claude.ts) */
-export const summaryMentions = (s: ChatSummary) => s.paths.filter(p => p.startsWith('krav/') && !p.split('/').includes('..'));
+/**
+ * Filene på kortet under «Filer i samtalen»: de i oppsummeringen som er endret, i samtalen (`edited`) eller i git
+ * (`changed`). Filer Claude bare har lest, tas ikke med.
+ */
+export function summaryFiles(s: ChatSummary, edited: string[] = [], changed: (path: string) => boolean = () => false): string[] {
+  return s.paths.filter(p => edited.includes(p) || changed(p));
+}
+
+/** De endrede filene som kan legges ved med @ i den nye samtalen (bare under krav/, som `mentionPaths` i core/claude.ts) */
+export const summaryMentions = (files: string[]) => files.filter(p => p.startsWith('krav/') && !p.split('/').includes('..'));
 
 const BLOCK = new RegExp('^```' + SUMMARY_LANG + '[ \\t]*\\r?\\n([\\s\\S]*?)^```', 'm');
 

@@ -111,6 +111,23 @@ export function started(chat: Chat, runId: string): Chat {
 
 const EDIT_TOOLS = ['Edit', 'Write', 'MultiEdit', 'NotebookEdit'];
 
+/** En sti fra et verktøykall, relativ til repoet: `/…/repo/tasks/x.md` → `tasks/x.md` */
+const repoRelative = (p: string) => p.replace(/^.*?\/((?:krav|tasks)\/)/, '$1').replace(/^\.?\//, '');
+
+/**
+ * Filene Claude har endret i samtalen (Edit/Write som gikk bra), relative til repoet. Også utenfor krav/,
+ * f.eks. en rapport i tasks/, som `touched` ikke tar med.
+ */
+export function editedFiles(chat: Chat): string[] {
+  const out: string[] = [];
+  for (const i of chat.items) {
+    if (i.kind !== 'tool' || !EDIT_TOOLS.includes(i.name) || i.state !== 'ok' || !i.summary) continue;
+    const p = repoRelative(i.summary);
+    if (!out.includes(p)) out.push(p);
+  }
+  return out;
+}
+
 /**
  * Legger en hendelse fra kjøringen `runId` inn i samtalen; hendelser fra andre kjøringer ignoreres.
  * `hashes`: versjonen av skillene nå, som lagres når Claude laster en med Skill-verktøyet.

@@ -4,7 +4,7 @@ import { parseMd, resolveLink, type Block, type List, type Seg } from './markdow
 import type { GitChange } from '../shared/model';
 import { parsePrProposal, PR_LANG, splitGenerated, type PrProposal } from './prProposal';
 import { useCopy } from './useCopy';
-import { parseSummary, SUMMARY_LANG, SUMMARY_SECTIONS, summaryDraft, type ChatSummary } from './chatSummary';
+import { parseSummary, SUMMARY_LANG, SUMMARY_SECTIONS, summaryDraft, summaryFiles, type ChatSummary } from './chatSummary';
 
 interface Props {
   text: string;
@@ -16,9 +16,11 @@ interface Props {
   /** Endringen i git for en fil (fra «Endringer»); filer uten endring kommer ikke med i PR-en */
   change?: (path: string) => GitChange | undefined;
   /** Starter en ny samtale med oppsummeringen i utkastet; uten den har kortet bare «Kopier» */
-  onSummary?: (s: ChatSummary) => void;
+  onSummary?: (s: ChatSummary, files: string[]) => void;
   /** Skillen i samtalen, vist på oppsummeringskortet */
   skill?: string | null;
+  /** Filene Claude har endret i samtalen (`editedFiles`); oppsummeringskortet viser bare endrede filer */
+  edited?: string[];
 }
 
 /** Stier Claude skriver er relative til repoet, eller absolutte inn i klonen: `/…/repo/krav/x.feature` → `krav/x.feature` */
@@ -29,7 +31,7 @@ const repoPath = (p: string) => p.replace(/^.*?\/(krav\/)/, '$1').replace(/^\.?\
  * men vises kompakt: overskriftene er små, og lenkekort blir vanlige lenker. Lenker og `kode` som peker
  * på en fil i vieweren, åpner fila.
  */
-export function ChatMarkdown({ text, has, onOpen, onPr, change, onSummary, skill }: Props) {
+export function ChatMarkdown({ text, has, onOpen, onPr, change, onSummary, skill, edited }: Props) {
   const blocks = useMemo(() => parseMd(text), [text]);
   const [copied, copy] = useCopy();
   const [copiedBlock, setCopiedBlock] = useState<number | null>(null);
@@ -100,7 +102,8 @@ export function ChatMarkdown({ text, has, onOpen, onPr, change, onSummary, skill
       case 'code': {
         const sum = b.lang === SUMMARY_LANG ? parseSummary(b.body.join('\n')) : null;
         if (sum) {
-          const n = sum.paths.length;
+          const files = summaryFiles(sum, edited, p => !!change?.(p));
+          const n = files.length;
           return (
             <div key={i} class="cmd-pr cmd-sum">
               <div class="cmd-pr-head">
@@ -119,14 +122,15 @@ export function ChatMarkdown({ text, has, onOpen, onPr, change, onSummary, skill
                 {n > 0 && (
                   <div class="cmd-pr-files">
                     <div class="cmd-pr-sub">Filer i samtalen</div>
-                    {sum.paths.map((p, j) => {
-                      const c = change?.(p);
+                    {files.map((p, j) => {
+                      // Endret i samtalen, men ikke med i git-dataene (f.eks. under tasks/): vises som endret
+                      const code = change?.(p)?.code ?? 'edited';
                       const name = p.slice(p.lastIndexOf('/') + 1);
                       return (
                         <div key={j} class="cmd-pr-file">
-                          <span class={'cmd-pr-dot ' + (c?.code ?? 'none')} />
+                          <span class={'cmd-pr-dot ' + code} />
                           {has(p) ? internal(p, name, j, true) : <code title={p}>{name}</code>}
-                          {c && <span class={'cmd-pr-stat ' + c.code}>{c.code === 'A' || c.code === 'U' ? 'ny' : c.code === 'D' ? 'slettet' : 'endret'}</span>}
+                          <span class={'cmd-pr-stat ' + code}>{code === 'A' || code === 'U' ? 'ny' : code === 'D' ? 'slettet' : 'endret'}</span>
                         </div>
                       );
                     })}
@@ -145,7 +149,7 @@ export function ChatMarkdown({ text, has, onOpen, onPr, change, onSummary, skill
                 </button>
                 <span />
                 {onSummary && (
-                  <button class="primbtn" onClick={() => onSummary(sum)}>
+                  <button class="primbtn" onClick={() => onSummary(sum, files)}>
                     Start ny samtale med oppsummeringen
                   </button>
                 )}
@@ -179,9 +183,9 @@ export function ChatMarkdown({ text, has, onOpen, onPr, change, onSummary, skill
                     const name = p.slice(p.lastIndexOf('/') + 1);
                     return (
                       <div key={j} class="cmd-pr-file">
-                        <span class={'cmd-pr-dot ' + (c?.code ?? 'none')} />
+                        <span class={'cmd-pr-dot ' + (c?.code ?? 'nochange')} />
                         {has(p) ? internal(p, name, j, true) : <code title={p}>{name}</code>}
-                        <span class={'cmd-pr-stat ' + (c?.code ?? 'none')}>
+                        <span class={'cmd-pr-stat ' + (c?.code ?? 'nochange')}>
                           {!c ? 'ingen endring' : c.code === 'D' ? 'slettet' : `+${c.plus} −${c.minus}`}
                         </span>
                       </div>

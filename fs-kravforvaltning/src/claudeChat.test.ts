@@ -193,3 +193,19 @@ test('ny samtale som fortsetter fra en annen, også når en tom gjenbrukes, og o
   assert.deepEqual(legacy.list[0].chat.loadedVersions, {});
   assert.equal(legacy.list[0].chat.continuesFrom, null);
 });
+
+import { editedFiles } from './claudeChat.ts';
+
+test('editedFiles: filene Claude har endret, relative til repoet, også under tasks/', () => {
+  let c = started(EMPTY_CHAT, 'r');
+  const tool = (id: string, name: string, summary: string, isError = false) => {
+    c = apply(c, 'r', { kind: 'tool', id, name, summary });
+    c = apply(c, 'r', { kind: 'toolResult', id, isError });
+  };
+  tool('1', 'Read', 'krav/a.feature');
+  tool('2', 'Write', '/Users/x/repo/tasks/brukere/spec/verify-2026-09-29.md');
+  tool('3', 'Edit', 'krav/b.feature');
+  tool('4', 'Edit', 'krav/c.feature', true);
+  tool('5', 'Edit', 'krav/b.feature');
+  assert.deepEqual(editedFiles(c), ['tasks/brukere/spec/verify-2026-09-29.md', 'krav/b.feature']);
+});
