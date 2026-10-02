@@ -28,6 +28,7 @@ import { CodeDirs, codeDirPaths, useCodeDirs } from './CodeDirs';
 import { knownSkills, refreshSkills, skillChangedAt, SkillPicker, skillHashes, useSkillHashes } from './ClaudeSkills';
 import { SUMMARY_PROMPT, SUMMARY_PROMPT_SHORT, summaryDraft, summaryIn, summaryMentions, type ChatSummary } from './chatSummary';
 import { readDraft, saveDraft } from './claudeDraft';
+import { appendQuote } from './selection';
 import { covered } from './mention';
 import { MENTION_LIST_ID, MentionPicker, useMentions } from './MentionPicker';
 import { transport } from './transport';
@@ -316,12 +317,33 @@ export function ClaudePanel({ status, width, onWidth, allowedSkills: modeSkills,
     await sendText(text, mentions);
   };
 
-  // Mens panelet er åpent kan andre visninger sende en prompt hit («Send til Claude Code»)
+  // Markert tekst fra feature-visningen legges i inputfeltet som sitat. Feltet lyser opp et øyeblikk.
+  const [inputFlash, setInputFlash] = useState(false);
+  const flashTimer = useRef<ReturnType<typeof setTimeout>>();
+  useEffect(() => () => clearTimeout(flashTimer.current), []);
+  const insertText = (quote: string) => {
+    const next = appendQuote(inputRef.current?.value ?? input, quote);
+    setInput(next);
+    setInputFlash(true);
+    clearTimeout(flashTimer.current);
+    flashTimer.current = setTimeout(() => setInputFlash(false), 1200);
+    setTimeout(() => {
+      const ta = inputRef.current;
+      if (!ta) return;
+      ta.focus();
+      ta.setSelectionRange(next.length, next.length);
+      ta.scrollTop = ta.scrollHeight;
+    }, 30);
+  };
+
+  // Mens panelet er åpent kan andre visninger sende en prompt hit («Send til Claude Code»), eller legge tekst i inputfeltet
   const sendRef = useRef(sendText);
   sendRef.current = sendText;
+  const insertRef = useRef(insertText);
+  insertRef.current = insertText;
   useEffect(() => {
     if (!status.available) return;
-    registerClaude(t => sendRef.current(t));
+    registerClaude({ send: t => sendRef.current(t), insert: t => insertRef.current(t) });
     return () => {
       registerClaude(null);
       setClaudeBusy(false);
@@ -566,7 +588,7 @@ export function ClaudePanel({ status, width, onWidth, allowedSkills: modeSkills,
               onChange={s => (conv ? set(updateConversation(convs, conv.id, ch => chooseSkill(ch, s), Date.now())) : setPending(s))}
             />
             {codeDirs && <CodeDirs />}
-            <div class="cinbox">
+            <div class={'cinbox' + (inputFlash ? ' flash' : '')}>
               {mention.picker && (
                 <MentionPicker
                   {...mention.picker}

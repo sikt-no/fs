@@ -5,6 +5,7 @@ import { RULE } from '../shared/rules';
 import { segments, type FindResult } from './find';
 import { StatusIcon, statusColor } from './Sidebar';
 import { useCopy } from './useCopy';
+import { SelectionMenu } from './SelectionMenu';
 
 export const scenKey = (ri: number, si: number) => `${ri}-${si}`;
 export const stepKey = (ri: number, si: number, ti: number) => `${ri}-${si}-${ti}`;
@@ -110,7 +111,7 @@ function NoteBlock({ note, loc, hit, lineNumbers }: { note: Note; loc: string; h
         </div>
         <ol>
           {note.items.map((q, i) => (
-            <li key={i} class={hit(q.ln) || undefined}>
+            <li key={i} class={hit(q.ln) || undefined} data-ln={q.ln}>
               <Refs text={q.text} loc={`${loc}:${i}`} />
               {lineNumbers && <span class="qln">L{q.ln}</span>}
             </li>
@@ -120,7 +121,7 @@ function NoteBlock({ note, loc, hit, lineNumbers }: { note: Note; loc: string; h
     );
   }
   return (
-    <div class={'note' + hit(note.ln, last)}>
+    <div class={'note' + hit(note.ln, last)} data-ln={note.ln}>
       {note.head && <span class="nhead">{note.head}</span>}
       {note.items.length > 0 && <div class="ntext"><Refs text={note.items.map(i => i.text).join('\n')} loc={loc} /></div>}
       {lineNumbers && <span class="qln">L{note.ln}</span>}
@@ -128,11 +129,12 @@ function NoteBlock({ note, loc, hit, lineNumbers }: { note: Note; loc: string; h
   );
 }
 
-function Table({ rows, loc, ex, params }: { rows: string[][]; loc: string; ex?: boolean; params?: boolean }) {
+/** `lns` er linja til hver rad, så markert tekst får riktig linjeområde */
+function Table({ rows, lns, loc, ex, params }: { rows: string[][]; lns: number[]; loc: string; ex?: boolean; params?: boolean }) {
   return (
     <div>
       <div class={'table' + (ex ? ' ex' : '')} style={{ gridTemplateColumns: `repeat(${rows[0]?.length ?? 1}, auto)` }}>
-        {rows.flatMap((r, ri) => r.map((c, ci) => <span key={`${ri}-${ci}`} class={ri === 0 ? 'th' : ''}>{params ? <Params text={c} loc={`${loc}:${ri}:${ci}`} /> : <Txt text={c} loc={`${loc}:${ri}:${ci}`} />}</span>))}
+        {rows.flatMap((r, ri) => r.map((c, ci) => <span key={`${ri}-${ci}`} class={ri === 0 ? 'th' : ''} data-ln={lns[ri]}>{params ? <Params text={c} loc={`${loc}:${ri}:${ci}`} /> : <Txt text={c} loc={`${loc}:${ri}:${ci}`} />}</span>))}
       </div>
     </div>
   );
@@ -166,13 +168,13 @@ function kwColors(steps: Step[]) {
 
 function StepRow({ step, loc, color, flash, marked, lineNumbers }: { step: Step; loc: string; color: string; flash: boolean; marked: boolean; lineNumbers: boolean }) {
   return (
-    <div class={'step' + (flash ? ' flash' : '') + (marked ? ' cursor' : '')}>
+    <div class={'step' + (flash ? ' flash' : '') + (marked ? ' cursor' : '')} data-ln={step.ln}>
       <span class="ln">{lineNumbers ? step.ln : ''}</span>
       <span class={'kw' + (isAnd(step.kw) ? ' and' : '')} style={{ color }}>{step.kw}</span>
       <div class="steptext">
         <Params text={step.text} loc={loc} />
-        {step.table && <Table rows={step.table} loc={loc} params />}
-        {step.doc !== undefined && <pre class="docstring"><Txt text={step.doc} loc={`${loc}:doc`} /></pre>}
+        {step.table && <Table rows={step.table} lns={step.table.map((_, i) => step.ln + 1 + i)} loc={loc} params />}
+        {step.doc !== undefined && <pre class="docstring" data-ln={step.ln + 1}><Txt text={step.doc} loc={`${loc}:doc`} /></pre>}
       </div>
     </div>
   );
@@ -189,11 +191,11 @@ function LintBand({ lint, hit, onLine }: { lint: Lint[]; hit: (from: number) => 
     <div class="lintband" role="status">
       <div class="top"><b>Fila følger ikke konvensjonene</b><span class="mono">{count}</span></div>
       {sorted.map((l, i) => (
-        <div key={i} class={'lrow' + hit(l.ln)}>
+        <div key={i} class={'lrow' + hit(l.ln)} data-ln={l.ln}>
           <span class={'mk ' + l.sev} title={l.sev === 'error' ? 'Feil' : 'Advarsel'} />
           <div>
-            <span class="t">{l.msg}</span>
-            {RULE[l.rule] && <span class="h">{RULE[l.rule].desc}</span>}
+            <span class="t" data-sep={'\n'}>{l.msg}</span>
+            {RULE[l.rule] && <span class="h" data-sep={'\n'}>{RULE[l.rule].desc}</span>}
           </div>
           <button
             class="ln mono"
@@ -251,6 +253,9 @@ export function FeatureView({ entry, collapsed, flash, lineNumbers, mark, mainRe
     return () => main.removeEventListener('scroll', onScroll);
   }, []);
 
+  // Dokumentet, der markert tekst får menyen «Kopier / Legg i samtalen»
+  const docRef = useRef<HTMLDivElement>(null);
+
   // Hodet legger seg under feilbanneret, som også er sticky
   const bannerRef = useRef<HTMLDivElement>(null);
   const [bannerH, setBannerH] = useState(0);
@@ -289,30 +294,31 @@ export function FeatureView({ entry, collapsed, flash, lineNumbers, mark, mainRe
   return (
     <FindCtx.Provider value={find}>
       {banner}
-      <div class={'doc' + (entry.error ? ' stale' : '')}>
+      <div class={'doc' + (entry.error ? ' stale' : '')} ref={docRef}>
+        <SelectionMenu docRef={docRef} path={entry.path} />
         <div class={'fhead' + (compact ? ' compact' : '')} style={{ top: bannerH }}>
           <div class="fcard">
             {f.tags.length > 0 && (
-              <div class="tags">
+              <div class="tags" data-ln={f.tagLn ?? f.ln}>
                 {f.tags.map(t =>
                   isStatus(t) ? (
-                    <span key={t} class="tag status" style={{ '--tc': statusColor(t.slice(1)) }}>
+                    <span key={t} class="tag status" style={{ '--tc': statusColor(t.slice(1)) }} data-sep=" ">
                       <StatusIcon s={t.slice(1) as Status} lg />{t}
                     </span>
                   ) : (
-                    <span key={t} class={'tag' + (MOSCOW.includes(t) ? ' moscow' : '')}>{t}</span>
+                    <span key={t} class={'tag' + (MOSCOW.includes(t) ? ' moscow' : '')} data-sep=" ">{t}</span>
                   ),
                 )}
               </div>
             )}
-            <div class="fbanner"><span class="kbadge inv">Egenskap</span><h1><Txt text={f.title} loc="title" />{f.title && <CopyTitle text={f.title} />}</h1></div>
+            <div class="fbanner" data-ln={f.ln}><span class="kbadge inv">Egenskap</span><h1><Txt text={f.title} loc="title" />{f.title && <CopyTitle text={f.title} />}</h1></div>
           </div>
         </div>
         <div class="meta">
-          {f.issue && <a href={GITHUB + f.issue} target="_blank" rel="noreferrer">GitHub #{f.issue} ↗</a>}
-          <span>språk: {f.lang}</span>
-          <span>{f.nRules} regler · {f.nScen} scenarioer</span>
-          <span>{f.nLines} linjer</span>
+          {f.issue && <a href={GITHUB + f.issue} target="_blank" rel="noreferrer" data-ln={f.issueLn ?? f.ln} data-sep=" · ">GitHub #{f.issue} ↗</a>}
+          <span data-ln={f.langLn ?? f.ln} data-sep=" · ">språk: {f.lang}</span>
+          <span data-ln={f.ln} data-sep=" · ">{f.nRules} regler · {f.nScen} scenarioer</span>
+          <span data-ln={f.ln} data-sep=" · ">{f.nLines} linjer</span>
           {onEdit && <button class="smallbtn editbtn" onClick={onEdit}>Rediger</button>}
           {onDelete && <button class="smallbtn editbtn" onClick={onDelete}>Slett kravfil</button>}
         </div>
@@ -321,7 +327,7 @@ export function FeatureView({ entry, collapsed, flash, lineNumbers, mark, mainRe
 
         {f.desc.length > 0 && (
           <div class="story">
-            {f.desc.map((d, i) => <div key={i}>{d.lead && <b>{d.lead}</b>} <Txt text={d.rest} loc={`desc:${i}`} /></div>)}
+            {f.desc.map((d, i) => <div key={i} data-ln={d.ln}>{d.lead && <b>{d.lead}</b>} <Txt text={d.rest} loc={`desc:${i}`} /></div>)}
           </div>
         )}
 
@@ -333,7 +339,7 @@ export function FeatureView({ entry, collapsed, flash, lineNumbers, mark, mainRe
           return (
             <div key={ri} class={'rule' + (ruleDraft ? ' draft' : '')} data-rule={ri}>
               {r.name !== null && (
-                <div class={'rulehead' + hit(r.ln)}>
+                <div class={'rulehead' + hit(r.ln)} data-ln={r.ln}>
                   <span class="kbadge rule">Regel {num}</span>
                   <h2><Txt text={r.name} loc={`r${ri}`} />{r.name && <CopyTitle text={r.name} />}</h2>
                   <Tags tags={r.tags} />
@@ -355,6 +361,7 @@ export function FeatureView({ entry, collapsed, flash, lineNumbers, mark, mainRe
                   <div key={key} class={'card' + (KIND_CLASS[s.kind] ?? ' k-sm') + (draft ? ' draft' : '')} data-scen={key}>
                     <button
                       class={'cardhead' + hit(s.ln)}
+                      data-ln={s.ln}
                       onClick={() => {
                         if (open && find) onFindClose(key);
                         if (!forced) onToggle(key);
@@ -393,7 +400,7 @@ export function FeatureView({ entry, collapsed, flash, lineNumbers, mark, mainRe
                             <div>
                               <span class="label"><span class="kbadge">Eksempler</span>{ex.name && <span><Txt text={ex.name} loc={`x${key}-${ei}:name`} /><CopyTitle text={ex.name} /></span>}<Tags tags={ex.tags} /></span>
                               {ex.desc && <div class="desc">{ex.desc}</div>}
-                              <Table rows={ex.rows} loc={`x${key}-${ei}`} ex />
+                              <Table rows={ex.rows} lns={ex.lns ?? []} loc={`x${key}-${ei}`} ex />
                             </div>
                           </div>
                         ))}

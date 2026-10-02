@@ -1095,3 +1095,23 @@ body.resizing iframe, body.resizing .main { pointer-events: none; }
 .cmd-sum-sec .cmd-pr-sub { margin-bottom: 0; }
 .cmd-sum-text { font-size: 13px; line-height: 1.5; color: var(--ink2); white-space: pre-wrap; text-wrap: pretty; }
 .cmd-pr-foot .smallbtn { flex-shrink: 0; }
+
+/* Markert tekst i feature-visningen: menyen «Kopier / Legg i samtalen» (designet «Marker tekst», variant c) */
+.doc { position: relative; }
+.doc ::selection { background: var(--sel); }
+.doc .ln, .doc .qln, .doc .copytitle, .doc .scmeta, .doc .kbadge, .doc .chev, .doc .qbadge, .doc .findbadge, .doc .meta button, .doc .lintband .mk, .doc .qhead, .doc .diamond { user-select: none; }
+.selmenu { position: absolute; z-index: 20; transform: translateX(-50%); display: flex; align-items: center; gap: 4px; padding: 4px; background: var(--surface); border: 1px solid var(--line2); border-radius: 7px; box-shadow: 0 8px 22px rgba(0, 0, 0, .12); white-space: nowrap; user-select: none; }
+.selmenu-ln { font-size: 11px; color: var(--acc-ink); background: var(--acc-soft); padding: 3px 6px; border-radius: 4px; }
+.selmenu button { border: 0; font: 500 12.5px var(--sans); border-radius: 5px; cursor: pointer; }
+.selmenu-copy { background: transparent; color: var(--ink); padding: 5px 9px; }
+.selmenu-copy:hover { background: var(--sunken); }
+.selmenu-insert { background: var(--acc); color: #fff; padding: 5px 11px; }
+.selmenu-insert:disabled { background: var(--sunken); color: var(--muted); cursor: not-allowed; }
+/* Linjene som blir med i sitatet */
+.step.insel, .lintband .lrow.insel, .story > .insel, .qblock li.insel, .note.insel, .table > span.insel, pre.docstring.insel { background: var(--acc-soft); }
+.step.insel > .ln { color: var(--acc); opacity: 1; }
+.fbanner.insel, .rulehead.insel { box-shadow: 0 0 0 2px var(--acc); }
+.cardhead.insel { box-shadow: inset 0 0 0 2px var(--acc); }
+/* Inputfeltet i Claude-panelet lyser opp når et sitat legges i det */
+.cinbox { transition: border-color .3s, box-shadow .3s; }
+.cinbox.flash { border-color: var(--acc); box-shadow: 0 0 0 3px var(--acc-soft); }

@@ -46,7 +46,8 @@ Filene i denne appen, som referanse:
 | Panelet | `src/ClaudePanel.tsx` |
 | Markdown i svarene | `src/ChatMarkdown.tsx` |
 | PR-forslag fra Claude (strukturert handling) | `src/prProposal.ts` |
-| Andre visninger sender prompt til panelet | `src/claudeBridge.ts` |
+| Andre visninger sender prompt til panelet, eller legger tekst i inputfeltet | `src/claudeBridge.ts` |
+| Markert tekst i feature-visningen: «Kopier» / «Legg i samtalen» | `src/SelectionMenu.tsx`, `src/selection.ts` |
 
 ## 1. Kommandolinja
 
