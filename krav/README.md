@@ -230,7 +230,8 @@ Egenskap: ...
 Et krav som er levert (`@implemented`), endres ikke på stedet. Den leverte teksten beskriver koden som finnes, og den nye teksten beskriver det som skal bygges. Begge står i fila til koden er endret.
 
 - Egenskapen blir stående som `@implemented`. Statusen for endringen står på delen (`Regel:` eller `Scenario:`/`Scenariomal:`).
-- Den nye eller endrede delen legges som en egen blokk, rett etter delen den erstatter. Den starter som `@draft` (med `@openquestion` og `# ÅPNE SPØRSMÅL:` ved uklarheter), som alle nye krav. Den gamle delen står urørt så lenge den nye er utkast.
+- Den nye eller endrede delen legges som en egen blokk, rett etter delen den erstatter. Den starter som `@draft` (med `@openquestion` og `# ÅPNE SPØRSMÅL:` ved uklarheter), som alle nye krav.
+- Den nye delen får den tittelen kravet skal ha, ikke en tittel som beskriver endringen. Blir den lik tittelen på den gamle delen, får den gamle ` (avvikles)` bak tittelen, så titlene er unike: `Scenario: Se brukerens roller (avvikles)`. Ellers står den gamle delen urørt så lenge den nye er utkast. Forkastes den nye delen, fjernes ` (avvikles)` igjen.
 - Når den nye delen er validert (`fs-krav`), byttes `@draft` med `@planned`, og delen den erstatter, får `@deprecated` i samme endring. En del som bare fjernes, får `@deprecated` (se *Avvikling*). Et rent tillegg har ingen gammel del.
 - Delen går deretter langs samme akse som en egenskap: `@planned` →(`fs-specify` / `fs-specify-delta`)→ `@in-progress` →(`fs-verify`)→ levert. Når `fs-verify` har funnet koden, fjernes `@in-progress` fra delen, og delen arver `@implemented` fra egenskapen. `@deprecated`-delen slettes av `fs-verify` når koden er borte.
 - `@planned` og `@in-progress` på en del er bare lov under en `@implemented` egenskap. Under `@draft`, `@planned` eller `@in-progress` er ingenting levert, så delen endres på stedet. *(sjekkes automatisk)*
@@ -252,6 +253,16 @@ Egenskap: ...
   @planned
   Regel: Eksport til Excel
     Scenario: ...
+
+  Regel: Visning av roller
+
+    @deprecated
+    Scenario: Se brukerens roller (avvikles)
+      ...
+
+    @planned
+    Scenario: Se brukerens roller
+      ...
 ```
 
 ### Type
