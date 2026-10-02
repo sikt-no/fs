@@ -4,6 +4,7 @@ import { parseMd, resolveLink, type Block, type List, type Seg } from './markdow
 import type { GitChange } from '../shared/model';
 import { parsePrProposal, PR_LANG, splitGenerated, type PrProposal } from './prProposal';
 import { useCopy } from './useCopy';
+import { parseSummary, SUMMARY_LANG, SUMMARY_SECTIONS, summaryDraft, type ChatSummary } from './chatSummary';
 
 interface Props {
   text: string;
@@ -14,6 +15,10 @@ interface Props {
   onPr?: (p: PrProposal) => void;
   /** Endringen i git for en fil (fra «Endringer»); filer uten endring kommer ikke med i PR-en */
   change?: (path: string) => GitChange | undefined;
+  /** Starter en ny samtale med oppsummeringen i utkastet; uten den har kortet bare «Kopier» */
+  onSummary?: (s: ChatSummary) => void;
+  /** Skillen i samtalen, vist på oppsummeringskortet */
+  skill?: string | null;
 }
 
 /** Stier Claude skriver er relative til repoet, eller absolutte inn i klonen: `/…/repo/krav/x.feature` → `krav/x.feature` */
@@ -24,7 +29,7 @@ const repoPath = (p: string) => p.replace(/^.*?\/(krav\/)/, '$1').replace(/^\.?\
  * men vises kompakt: overskriftene er små, og lenkekort blir vanlige lenker. Lenker og `kode` som peker
  * på en fil i vieweren, åpner fila.
  */
-export function ChatMarkdown({ text, has, onOpen, onPr, change }: Props) {
+export function ChatMarkdown({ text, has, onOpen, onPr, change, onSummary, skill }: Props) {
   const blocks = useMemo(() => parseMd(text), [text]);
   const [copied, copy] = useCopy();
   const [copiedBlock, setCopiedBlock] = useState<number | null>(null);
@@ -93,6 +98,61 @@ export function ChatMarkdown({ text, has, onOpen, onPr, change }: Props) {
       case 'card':
         return <p key={i}><a href={b.href} target="_blank" rel="noreferrer">{b.host}{b.path} ↗</a></p>;
       case 'code': {
+        const sum = b.lang === SUMMARY_LANG ? parseSummary(b.body.join('\n')) : null;
+        if (sum) {
+          const n = sum.paths.length;
+          return (
+            <div key={i} class="cmd-pr cmd-sum">
+              <div class="cmd-pr-head">
+                <span class="cmd-pr-label">Oppsummering</span>
+                <span class="cmd-pr-count">
+                  {[skill, n ? `${n} ${n === 1 ? 'fil' : 'filer'}` : ''].filter(Boolean).join(' · ')}
+                </span>
+              </div>
+              <div class="cmd-pr-main">
+                {SUMMARY_SECTIONS.filter(([k]) => sum[k]).map(([k, label]) => (
+                  <div key={k} class="cmd-sum-sec">
+                    <div class="cmd-pr-sub">{label}</div>
+                    <div class="cmd-sum-text">{sum[k]}</div>
+                  </div>
+                ))}
+                {n > 0 && (
+                  <div class="cmd-pr-files">
+                    <div class="cmd-pr-sub">Filer i samtalen</div>
+                    {sum.paths.map((p, j) => {
+                      const c = change?.(p);
+                      const name = p.slice(p.lastIndexOf('/') + 1);
+                      return (
+                        <div key={j} class="cmd-pr-file">
+                          <span class={'cmd-pr-dot ' + (c?.code ?? 'none')} />
+                          {has(p) ? internal(p, name, j, true) : <code title={p}>{name}</code>}
+                          {c && <span class={'cmd-pr-stat ' + c.code}>{c.code === 'A' || c.code === 'U' ? 'ny' : c.code === 'D' ? 'slettet' : 'endret'}</span>}
+                        </div>
+                      );
+                    })}
+                  </div>
+                )}
+              </div>
+              <div class="cmd-pr-foot">
+                <button
+                  class="smallbtn"
+                  onClick={() => {
+                    copy(summaryDraft(sum));
+                    setCopiedBlock(i);
+                  }}
+                >
+                  {copied && copiedBlock === i ? 'Kopiert' : 'Kopier'}
+                </button>
+                <span />
+                {onSummary && (
+                  <button class="primbtn" onClick={() => onSummary(sum)}>
+                    Start ny samtale med oppsummeringen
+                  </button>
+                )}
+              </div>
+            </div>
+          );
+        }
         const pr = b.lang === PR_LANG ? parsePrProposal(b.body.join('\n')) : null;
         if (pr) {
           const desc = splitGenerated(pr.body);

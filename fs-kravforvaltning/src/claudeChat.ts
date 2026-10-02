@@ -2,7 +2,8 @@
 import type { ClaudeEvent } from '../shared/api.ts';
 
 export type ChatItem =
-  | { kind: 'user'; text: string; path: string | null; skill?: string | null; mentions?: string[] }
+  /** `preset: 'summary'`: den faste meldingen bak «Oppsummer samtalen», som vises kort */
+  | { kind: 'user'; text: string; path: string | null; skill?: string | null; mentions?: string[]; preset?: 'summary' }
   | { kind: 'assistant'; text: string }
   | { kind: 'tool'; id: string; name: string; summary: string; state: 'running' | 'ok' | 'error' }
   | { kind: 'done'; ok: boolean; text: string };
@@ -23,25 +24,72 @@ export interface Chat {
   loadedSkills: string[];
   /** Tokens brukt av konteksten i siste svar, og kontekstvinduet til modellen */
   context: { used: number; window: number | null } | null;
+  /** Versjonen (hash) av hver skill da den ble lastet i samtalen; er den endret siden, er skillen utdatert her */
+  skillVersions: Record<string, string>;
+  /** Samtalen denne fortsetter fra (startet fra en oppsummering, eller fordi en skill var oppdatert) */
+  continuesFrom: string | null;
 }
 
-export const EMPTY_CHAT: Chat = { items: [], sessionId: null, runId: null, touched: [], skill: null, skillLoaded: null, loadedSkills: [], context: null };
+export const EMPTY_CHAT: Chat = {
+  items: [],
+  sessionId: null,
+  runId: null,
+  touched: [],
+  skill: null,
+  skillLoaded: null,
+  loadedSkills: [],
+  context: null,
+  skillVersions: {},
+  continuesFrom: null,
+};
+
+/** Versjonen av hver skill på disk, fra `claudeSkills` */
+export type SkillHashes = Record<string, string>;
 
 const addSkill = (list: string[], s: string) => (list.includes(s) ? list : [...list, s]);
+const withVersion = (v: Record<string, string>, s: string, hashes: SkillHashes) => (hashes[s] ? { ...v, [s]: hashes[s] } : v);
 
-/** Neste melding i samtalen, med filene og mappene lagt ved med @. `invoke`: meldingen skal laste den valgte skillen (`/<skill>`) */
-export function send(chat: Chat, text: string, path: string | null, mentions: string[] = []): { chat: Chat; invoke: boolean } {
-  const invoke = !!chat.skill && chat.skill !== chat.skillLoaded;
+/**
+ * Neste melding i samtalen, med filene og mappene lagt ved med @. `invoke`: meldingen skal laste den valgte skillen
+ * (`/<skill>`), og versjonen den har nå (`hashes`), lagres.
+ */
+export function send(
+  chat: Chat,
+  text: string,
+  path: string | null,
+  mentions: string[] = [],
+  hashes: SkillHashes = {},
+  preset?: 'summary',
+): { chat: Chat; invoke: boolean } {
+  // Oppsummeringen skal ikke laste en ny versjon av skillen inn i samtalen
+  const invoke = !preset && !!chat.skill && chat.skill !== chat.skillLoaded;
   return {
     chat: {
       ...chat,
       skillLoaded: invoke ? chat.skill : chat.skillLoaded,
       loadedSkills: invoke && chat.skill ? addSkill(chat.loadedSkills, chat.skill) : chat.loadedSkills,
-      items: [...chat.items, { kind: 'user', text, path, skill: chat.skill, ...(mentions.length ? { mentions } : {}) }],
+      skillVersions: invoke && chat.skill ? withVersion(chat.skillVersions, chat.skill, hashes) : chat.skillVersions,
+      items: [...chat.items, { kind: 'user', text, path, skill: chat.skill, ...(mentions.length ? { mentions } : {}), ...(preset ? { preset } : {}) }],
     },
     invoke,
   };
 }
+
+/** Skillene som er lastet i samtalen, men endret på disk siden (en annen hash enn den som ble lagret) */
+export function staleSkills(chat: Chat, hashes: SkillHashes): string[] {
+  return chat.loadedSkills.filter(s => hashes[s] && chat.skillVersions[s] && chat.skillVersions[s] !== hashes[s]);
+}
+
+/**
+ * Samtaler fra før versjonene ble lagret, har lastede skills uten versjon. De får versjonen som gjelder nå,
+ * så neste endring blir sett. Samme objekt tilbake når ingenting mangler.
+ */
+export function backfillVersions(chat: Chat, hashes: SkillHashes): Chat {
+  const missing = chat.loadedSkills.filter(s => hashes[s] && !chat.skillVersions[s]);
+  if (!missing.length) return chat;
+  return { ...chat, skillVersions: missing.reduce((v, s) => withVersion(v, s, hashes), chat.skillVersions) };
+}
+
 
 /**
  * Skillen som gjelder der brukeren er i vieweren: den valgte hvis den er tillatt der. Ellers den første
@@ -62,8 +110,11 @@ export function started(chat: Chat, runId: string): Chat {
 
 const EDIT_TOOLS = ['Edit', 'Write', 'MultiEdit', 'NotebookEdit'];
 
-/** Legger en hendelse fra kjøringen `runId` inn i samtalen; hendelser fra andre kjøringer ignoreres */
-export function apply(chat: Chat, runId: string, ev: ClaudeEvent): Chat {
+/**
+ * Legger en hendelse fra kjøringen `runId` inn i samtalen; hendelser fra andre kjøringer ignoreres.
+ * `hashes`: versjonen av skillene nå, som lagres når Claude laster en med Skill-verktøyet.
+ */
+export function apply(chat: Chat, runId: string, ev: ClaudeEvent, hashes: SkillHashes = {}): Chat {
   if (runId !== chat.runId) return chat;
   switch (ev.kind) {
     case 'init':
@@ -76,10 +127,12 @@ export function apply(chat: Chat, runId: string, ev: ClaudeEvent): Chat {
     }
     case 'toolResult': {
       const tool = chat.items.find((i): i is Extract<ChatItem, { kind: 'tool' }> => i.kind === 'tool' && i.id === ev.id);
-      const loadedSkills = tool?.name === 'Skill' && !ev.isError ? addSkill(chat.loadedSkills, tool.summary) : chat.loadedSkills;
+      const skill = tool?.name === 'Skill' && !ev.isError ? tool.summary : null;
       return {
         ...chat,
-        loadedSkills,
+        loadedSkills: skill ? addSkill(chat.loadedSkills, skill) : chat.loadedSkills,
+        // Lastes en skill på nytt med Skill-verktøyet, får den versjonen som gjelder nå
+        skillVersions: skill ? withVersion(chat.skillVersions, skill, hashes) : chat.skillVersions,
         items: chat.items.map(i => (i.kind === 'tool' && i.id === ev.id ? { ...i, state: ev.isError ? 'error' : 'ok' } : i)),
       };
     }
@@ -135,11 +188,18 @@ export function currentChat(cs: Conversations): Conversation | null {
   return cs.list.find(c => c.id === cs.current) ?? null;
 }
 
-/** Ny, tom samtale øverst, og åpen, med `skill` valgt. En tom samtale som allerede finnes, gjenbrukes. */
-export function createConversation(cs: Conversations, id: string, now: number, skill: string | null = null): Conversations {
+/**
+ * Ny, tom samtale øverst, og åpen, med `skill` valgt. En tom samtale som allerede finnes, gjenbrukes.
+ * `continuesFrom`: samtalen den nye fortsetter fra (vises i den tomme samtalen).
+ */
+export function createConversation(cs: Conversations, id: string, now: number, skill: string | null = null, continuesFrom: string | null = null): Conversations {
   const empty = cs.list.find(c => !c.chat.items.length && !c.chat.runId);
-  if (empty) return { ...cs, current: empty.id };
-  return { list: [{ id, title: UNTITLED, createdAt: now, updatedAt: now, chat: { ...EMPTY_CHAT, skill } }, ...cs.list], current: id };
+  if (empty) {
+    if (!continuesFrom) return { ...cs, current: empty.id };
+    const chat = { ...empty.chat, skill, continuesFrom };
+    return { list: cs.list.map(c => (c.id === empty.id ? { ...c, chat } : c)), current: empty.id };
+  }
+  return { list: [{ id, title: UNTITLED, createdAt: now, updatedAt: now, chat: { ...EMPTY_CHAT, skill, continuesFrom } }, ...cs.list], current: id };
 }
 
 /** Sletter samtalen; er den åpen, åpnes den neste i lista */
@@ -173,9 +233,21 @@ export function updateConversation(cs: Conversations, id: string, fn: (chat: Cha
 }
 
 /** Sender en hendelse til samtalen som eier kjøringen. `false` når ingen samtale venter på den. */
-export function applyEvent(cs: Conversations, runId: string, ev: ClaudeEvent, now: number): Conversations | false {
+export function applyEvent(cs: Conversations, runId: string, ev: ClaudeEvent, now: number, hashes: SkillHashes = {}): Conversations | false {
   const conv = cs.list.find(c => c.chat.runId === runId);
-  return conv ? updateConversation(cs, conv.id, chat => apply(chat, runId, ev), now) : false;
+  return conv ? updateConversation(cs, conv.id, chat => apply(chat, runId, ev, hashes), now) : false;
+}
+
+/** `backfillVersions` over alle samtalene, uten å endre `updatedAt` eller rekkefølgen. Samme objekt tilbake når ingenting mangler. */
+export function backfillConversations(cs: Conversations, hashes: SkillHashes): Conversations {
+  let changed = false;
+  const list = cs.list.map(c => {
+    const chat = backfillVersions(c.chat, hashes);
+    if (chat === c.chat) return c;
+    changed = true;
+    return { ...c, chat };
+  });
+  return changed ? { ...cs, list } : cs;
 }
 
 /**

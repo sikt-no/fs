@@ -5,7 +5,7 @@ import { join } from 'node:path';
 import { after, test } from 'node:test';
 import type { ClaudeEvent } from '../shared/api.ts';
 import { mkdirSync } from 'node:fs';
-import { ClaudeRunner, codeDirs, contextPrompt, dirArgs, mentionPaths, findClaude, parseStreamLine, projectSkills, skillArgs, skillMeta, toolSummary } from './claude.ts';
+import { ClaudeRunner, codeDirs, contextPrompt, dirArgs, mentionPaths, findClaude, parseStreamLine, projectSkills, skillArgs, skillHash, skillMeta, toolSummary } from './claude.ts';
 
 const tmp = mkdtempSync(join(tmpdir(), 'krav-claude-'));
 after(() => rmSync(tmp, { recursive: true, force: true }));
@@ -198,7 +198,10 @@ test('ClaudeRunner sender meldingen på stdin, med verktøy, kontekst og resume'
   assert.ok(fargs.at(-1)!.startsWith('Edit(//') && fargs.at(-1)!.endsWith('/kode/**)'));
   assert.equal(events.at(-1)!.kind, 'done');
   // Etter kjøringen kjenner runneren skillene Claude meldte om; prosjektets egne er skilt ut
-  assert.deepEqual(runner.skills(), { project: [{ name: 'fs-krav', description: 'Krav for initiativ og mapper.' }], other: ['plugin:annen'] });
+  const { project, other } = runner.skills();
+  assert.deepEqual(project.map(({ name, description }) => ({ name, description })), [{ name: 'fs-krav', description: 'Krav for initiativ og mapper.' }]);
+  assert.match(project[0].hash, /^[0-9a-f]{40}$/);
+  assert.deepEqual(other, ['plugin:annen']);
 });
 
 test('skillMeta leser navn og beskrivelse, også foldet YAML', () => {
@@ -237,4 +240,18 @@ test('ClaudeRunner melder feil fra stderr og kan avbrytes', { skip: process.plat
   });
   assert.deepEqual(runner.active(), []);
   assert.equal((hang.at(-1) as { error: string }).error, 'Avbrutt');
+});
+
+test('skillHash endres når en fil i skillmappa endres, også i undermapper', () => {
+  const dir = join(tmp, 'repo-hash', '.claude', 'skills', 'fs-krav');
+  mkdirSync(join(dir, 'references'), { recursive: true });
+  writeFileSync(join(dir, 'SKILL.md'), '---\nname: fs-krav\ndescription: Krav\n---\n');
+  writeFileSync(join(dir, 'references', 'a.md'), 'A');
+  const h1 = skillHash(dir);
+  assert.match(h1, /^[0-9a-f]{40}$/);
+  assert.equal(skillHash(dir), h1, 'samme filer gir samme hash');
+  writeFileSync(join(dir, 'references', 'a.md'), 'B');
+  const h2 = skillHash(dir);
+  assert.notEqual(h2, h1);
+  assert.deepEqual(projectSkills(join(tmp, 'repo-hash')), [{ name: 'fs-krav', description: 'Krav', hash: h2 }]);
 });

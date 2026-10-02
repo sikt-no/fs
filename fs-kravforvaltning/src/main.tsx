@@ -19,6 +19,7 @@ import { Outline } from './Outline';
 import { PrDialog, proposeDraft } from './PrDialog';
 import type { PrProposal } from './prProposal';
 import { CLAUDE_WIDTH, ClaudePanel } from './ClaudePanel';
+import { refreshSkills } from './ClaudeSkills';
 import { buildTree, Sidebar, type TreeMode } from './Sidebar';
 import { StatusBar } from './StatusBar';
 import { TopBar, type Mode, type Theme } from './TopBar';
@@ -480,6 +481,8 @@ function App() {
       if (!res.entries[state.current.current]) setCurrent(defaultPath(res.entries));
       setMainStatus({ behind: false });
       transport.call('mainStatus').then(setMainStatus, () => {});
+      // «Hent siste» kan ha endret skillene: samtaler som lastet en eldre versjon, får varsel
+      void refreshSkills();
     } catch (e) {
       alert((e as Error).message);
     } finally {
