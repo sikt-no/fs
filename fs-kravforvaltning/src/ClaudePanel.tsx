@@ -3,7 +3,6 @@ import type { ClaudeEvent, ClaudeStatus } from '../shared/api';
 import type { GitChange, Snapshot } from '../shared/model';
 import {
   applyEvent,
-  backfillConversations,
   contextLabel,
   chooseSkill,
   effectiveSkill,
@@ -24,7 +23,7 @@ import type { PrProposal } from './prProposal';
 import { ChatMarkdown } from './ChatMarkdown';
 import { registerClaude, setClaudeBusy } from './claudeBridge';
 import { CodeDirs, codeDirPaths, useCodeDirs } from './CodeDirs';
-import { knownSkills, refreshSkills, SkillPicker, skillHashes, useSkillHashes } from './ClaudeSkills';
+import { knownSkills, refreshSkills, skillChangedAt, SkillPicker, skillHashes, useSkillHashes } from './ClaudeSkills';
 import { SUMMARY_PROMPT, SUMMARY_PROMPT_SHORT, summaryDraft, summaryIn, summaryMentions, type ChatSummary } from './chatSummary';
 import { readDraft, saveDraft } from './claudeDraft';
 import { covered } from './mention';
@@ -224,8 +223,9 @@ export function ClaudePanel({ status, width, onWidth, allowedSkills: modeSkills,
   const c = conv?.chat ?? EMPTY_CHAT;
   // Skills som er endret på disk siden de ble lastet i samtalen: den må fortsette i en ny samtale
   const hashes = useSkillHashes();
-  useEffect(() => set(backfillConversations(convs, hashes)), [hashes]);
-  const stale = staleSkills(c, hashes);
+  const changedAt = skillChangedAt();
+  const staleIn = (x: { chat: typeof c; createdAt: number }) => staleSkills(x.chat, hashes, changedAt, x.createdAt);
+  const stale = conv ? staleIn(conv) : [];
   const summarized = c.items.some(i => i.kind === 'assistant' && !!summaryIn(i.text));
   const from = c.continuesFrom ? cs.list.find(x => x.id === c.continuesFrom) ?? null : null;
   const inputRef = useRef<HTMLTextAreaElement>(null);
@@ -431,8 +431,8 @@ export function ClaudePanel({ status, width, onWidth, allowedSkills: modeSkills,
                 </span>
                 <span class="cconv-meta mono muted">
                   {x.chat.skill && <span>{x.chat.skill}</span>}
-                  {staleSkills(x.chat, hashes).length > 0 && (
-                    <span class="cconv-stale" title={`Oppdatert siden den ble lastet: ${staleSkills(x.chat, hashes).join(', ')}`}>
+                  {staleIn(x).length > 0 && (
+                    <span class="cconv-stale" title={`Oppdatert siden den ble lastet: ${staleIn(x).join(', ')}`}>
                       <span class="cstale-tri" aria-hidden="true" />
                       utdatert skill
                     </span>

@@ -35,6 +35,8 @@ transport.on('krav:claude', ({ event }: { event: ClaudeEvent }) => {
 });
 // Versjonen av hver skill i repoet (hash over filene). Endres den, er skillen utdatert i samtaler som lastet den før.
 let hashes: Record<string, string> = {};
+// Når hver skill sist ble endret på disk, for samtaler som lastet skillen før versjonen ble lagret
+let changedAt: Record<string, number> = {};
 let loading: Promise<void> | null = null;
 
 /**
@@ -50,9 +52,12 @@ export const refreshSkills = (): Promise<void> => {
       // Bare de som kan velges (CLAUDE_SKILLS), i fast rekkefølge, og bare de som finnes i repoet
       const next = CLAUDE_SKILLS.flatMap(n => s.project.filter(p => p.name === n));
       const nextHashes = Object.fromEntries(s.project.map(p => [p.name, p.hash]));
-      if (JSON.stringify(next) === JSON.stringify(choices) && JSON.stringify(nextHashes) === JSON.stringify(hashes)) return;
+      const nextChanged = Object.fromEntries(s.project.map(p => [p.name, p.changedAt]));
+      const same = (a: unknown, b: unknown) => JSON.stringify(a) === JSON.stringify(b);
+      if (same(next, choices) && same(nextHashes, hashes) && same(nextChanged, changedAt)) return;
       choices = next;
       hashes = nextHashes;
+      changedAt = nextChanged;
       changed();
     },
     () => {
@@ -69,7 +74,10 @@ export const knownSkills = () => known;
 /** Versjonen av skillene på disk, sist de ble hentet */
 export const skillHashes = () => hashes;
 
-/** Versjonen av skillene, og tegner på nytt når de endres */
+/** Når skillene sist ble endret på disk */
+export const skillChangedAt = () => changedAt;
+
+/** Versjonen av skillene, og tegner på nytt når de endres (`skillChangedAt` endres samtidig) */
 export function useSkillHashes(): Record<string, string> {
   const [, force] = useState(0);
   useEffect(() => {

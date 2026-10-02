@@ -1,11 +1,11 @@
 import assert from 'node:assert/strict';
-import { chmodSync, mkdtempSync, realpathSync, rmSync, writeFileSync } from 'node:fs';
+import { chmodSync, mkdtempSync, realpathSync, rmSync, utimesSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { after, test } from 'node:test';
 import type { ClaudeEvent } from '../shared/api.ts';
 import { mkdirSync } from 'node:fs';
-import { ClaudeRunner, codeDirs, contextPrompt, dirArgs, mentionPaths, findClaude, parseStreamLine, projectSkills, skillArgs, skillHash, skillMeta, toolSummary } from './claude.ts';
+import { ClaudeRunner, codeDirs, contextPrompt, dirArgs, mentionPaths, findClaude, parseStreamLine, projectSkills, skillArgs, skillChangedAt, skillHash, skillMeta, toolSummary } from './claude.ts';
 
 const tmp = mkdtempSync(join(tmpdir(), 'krav-claude-'));
 after(() => rmSync(tmp, { recursive: true, force: true }));
@@ -253,5 +253,10 @@ test('skillHash endres når en fil i skillmappa endres, også i undermapper', ()
   writeFileSync(join(dir, 'references', 'a.md'), 'B');
   const h2 = skillHash(dir);
   assert.notEqual(h2, h1);
-  assert.deepEqual(projectSkills(join(tmp, 'repo-hash')), [{ name: 'fs-krav', description: 'Krav', hash: h2 }]);
+  const [skill] = projectSkills(join(tmp, 'repo-hash'));
+  assert.deepEqual({ ...skill, changedAt: 0 }, { name: 'fs-krav', description: 'Krav', hash: h2, changedAt: 0 });
+  // Endringstiden er den nyeste filen i mappa
+  const t = new Date(Date.now() + 60_000);
+  utimesSync(join(dir, 'references', 'a.md'), t, t);
+  assert.ok(Math.abs(skillChangedAt(dir) - t.getTime()) < 1000, 'filsystemet kan runde av tidspunktet');
 });

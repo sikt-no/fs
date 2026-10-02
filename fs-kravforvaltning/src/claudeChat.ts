@@ -24,8 +24,11 @@ export interface Chat {
   loadedSkills: string[];
   /** Tokens brukt av konteksten i siste svar, og kontekstvinduet til modellen */
   context: { used: number; window: number | null } | null;
-  /** Versjonen (hash) av hver skill da den ble lastet i samtalen; er den endret siden, er skillen utdatert her */
-  skillVersions: Record<string, string>;
+  /**
+   * Versjonen (hash) av hver skill da den ble lastet i samtalen; er den endret siden, er skillen utdatert her.
+   * Heter ikke `skillVersions`: den første utgaven fylte inn versjonen på disk i gamle samtaler, og de verdiene stemmer ikke.
+   */
+  loadedVersions: Record<string, string>;
   /** Samtalen denne fortsetter fra (startet fra en oppsummering, eller fordi en skill var oppdatert) */
   continuesFrom: string | null;
 }
@@ -39,7 +42,7 @@ export const EMPTY_CHAT: Chat = {
   skillLoaded: null,
   loadedSkills: [],
   context: null,
-  skillVersions: {},
+  loadedVersions: {},
   continuesFrom: null,
 };
 
@@ -68,26 +71,24 @@ export function send(
       ...chat,
       skillLoaded: invoke ? chat.skill : chat.skillLoaded,
       loadedSkills: invoke && chat.skill ? addSkill(chat.loadedSkills, chat.skill) : chat.loadedSkills,
-      skillVersions: invoke && chat.skill ? withVersion(chat.skillVersions, chat.skill, hashes) : chat.skillVersions,
+      loadedVersions: invoke && chat.skill ? withVersion(chat.loadedVersions, chat.skill, hashes) : chat.loadedVersions,
       items: [...chat.items, { kind: 'user', text, path, skill: chat.skill, ...(mentions.length ? { mentions } : {}), ...(preset ? { preset } : {}) }],
     },
     invoke,
   };
 }
 
-/** Skillene som er lastet i samtalen, men endret på disk siden (en annen hash enn den som ble lagret) */
-export function staleSkills(chat: Chat, hashes: SkillHashes): string[] {
-  return chat.loadedSkills.filter(s => hashes[s] && chat.skillVersions[s] && chat.skillVersions[s] !== hashes[s]);
-}
-
 /**
- * Samtaler fra før versjonene ble lagret, har lastede skills uten versjon. De får versjonen som gjelder nå,
- * så neste endring blir sett. Samme objekt tilbake når ingenting mangler.
+ * Skillene som er lastet i samtalen, men endret på disk siden. Med lagret versjon: en annen hash enn den som ble lagret.
+ * Uten (samtaler fra før versjonene ble lagret): skillen er endret på disk (`changedAt`) etter at samtalen ble
+ * startet (`since`, ms), så den lastet en eldre versjon.
  */
-export function backfillVersions(chat: Chat, hashes: SkillHashes): Chat {
-  const missing = chat.loadedSkills.filter(s => hashes[s] && !chat.skillVersions[s]);
-  if (!missing.length) return chat;
-  return { ...chat, skillVersions: missing.reduce((v, s) => withVersion(v, s, hashes), chat.skillVersions) };
+export function staleSkills(chat: Chat, hashes: SkillHashes, changedAt: Record<string, number> = {}, since?: number): string[] {
+  return chat.loadedSkills.filter(s => {
+    const v = chat.loadedVersions[s];
+    if (v) return !!hashes[s] && v !== hashes[s];
+    return since != null && !!changedAt[s] && changedAt[s] > since;
+  });
 }
 
 
@@ -132,7 +133,7 @@ export function apply(chat: Chat, runId: string, ev: ClaudeEvent, hashes: SkillH
         ...chat,
         loadedSkills: skill ? addSkill(chat.loadedSkills, skill) : chat.loadedSkills,
         // Lastes en skill på nytt med Skill-verktøyet, får den versjonen som gjelder nå
-        skillVersions: skill ? withVersion(chat.skillVersions, skill, hashes) : chat.skillVersions,
+        loadedVersions: skill ? withVersion(chat.loadedVersions, skill, hashes) : chat.loadedVersions,
         items: chat.items.map(i => (i.kind === 'tool' && i.id === ev.id ? { ...i, state: ev.isError ? 'error' : 'ok' } : i)),
       };
     }
@@ -238,17 +239,6 @@ export function applyEvent(cs: Conversations, runId: string, ev: ClaudeEvent, no
   return conv ? updateConversation(cs, conv.id, chat => apply(chat, runId, ev, hashes), now) : false;
 }
 
-/** `backfillVersions` over alle samtalene, uten å endre `updatedAt` eller rekkefølgen. Samme objekt tilbake når ingenting mangler. */
-export function backfillConversations(cs: Conversations, hashes: SkillHashes): Conversations {
-  let changed = false;
-  const list = cs.list.map(c => {
-    const chat = backfillVersions(c.chat, hashes);
-    if (chat === c.chat) return c;
-    changed = true;
-    return { ...c, chat };
-  });
-  return changed ? { ...cs, list } : cs;
-}
 
 /**
  * Leser samtalene tilbake fra lagringen. Kjøringer som ikke lenger pågår i backenden (`active`),
@@ -260,7 +250,9 @@ export function restoreConversations(raw: unknown, active: string[]): Conversati
   const list = r.list
     .filter((c): c is Conversation => !!c && typeof c.id === 'string' && !!c.chat && Array.isArray(c.chat.items))
     .map(c => {
-      const chat = { ...EMPTY_CHAT, ...c.chat };
+      // `skillVersions` fra den første utgaven er versjonen på disk, ikke den som ble lastet (se `loadedVersions`)
+      const { skillVersions: _old, ...rest } = c.chat as Chat & { skillVersions?: unknown };
+      const chat: Chat = { ...EMPTY_CHAT, ...rest };
       if (!chat.runId || active.includes(chat.runId)) return { ...c, chat };
       const items = chat.items.map(i => (i.kind === 'tool' && i.state === 'running' ? ({ ...i, state: 'ok' } as ChatItem) : i));
       return {

@@ -117,7 +117,17 @@ export function skillMeta(src: string): { name: string | null; description: stri
  * `references/` også teller. Vieweren sammenligner den med versjonen som var lastet i samtalen.
  */
 export function skillHash(dir: string): string {
+  return skillFiles(dir).hash;
+}
+
+/** Når en fil i skillmappa sist ble endret på disk (ms). «Hent siste» og `git pull` skriver bare om filene som er endret. */
+export function skillChangedAt(dir: string): number {
+  return skillFiles(dir).changedAt;
+}
+
+function skillFiles(dir: string): { hash: string; changedAt: number } {
   const h = createHash('sha1');
+  let changedAt = 0;
   const walk = (rel: string) => {
     let list;
     try {
@@ -132,6 +142,7 @@ export function skillHash(dir: string): string {
         try {
           const body = readFileSync(join(dir, r));
           h.update(r).update('\0').update(body).update('\0');
+          changedAt = Math.max(changedAt, statSync(join(dir, r)).mtimeMs);
         } catch {
           /* fila forsvant underveis */
         }
@@ -139,10 +150,10 @@ export function skillHash(dir: string): string {
     }
   };
   walk('');
-  return h.digest('hex');
+  return { hash: h.digest('hex'), changedAt: Math.round(changedAt) };
 }
 
-/** Skillene i repoets `.claude/skills/<navn>/SKILL.md`, med versjonen (`skillHash`) */
+/** Skillene i repoets `.claude/skills/<navn>/SKILL.md`, med versjonen (`skillHash`) og når de sist ble endret */
 export function projectSkills(cwd: string): ClaudeSkill[] {
   const dir = join(cwd, '.claude', 'skills');
   let names: string[];
@@ -155,7 +166,8 @@ export function projectSkills(cwd: string): ClaudeSkill[] {
     .flatMap(n => {
       try {
         const meta = skillMeta(readFileSync(join(dir, n, 'SKILL.md'), 'utf8'));
-        return [{ name: meta.name ?? n, description: meta.description, hash: skillHash(join(dir, n)) }];
+        const { hash, changedAt } = skillFiles(join(dir, n));
+        return [{ name: meta.name ?? n, description: meta.description, hash, changedAt }];
       } catch {
         return [];
       }

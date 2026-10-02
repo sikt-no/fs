@@ -129,7 +129,7 @@ test('filene og mappene lagt ved med @ lagres på meldingen', () => {
   assert.ok(!('mentions' in send(EMPTY_CHAT, 'x', null).chat.items[0]), 'uten omtaler er feltet borte');
 });
 
-import { backfillConversations, backfillVersions, staleSkills } from './claudeChat.ts';
+import { staleSkills } from './claudeChat.ts';
 
 test('versjonen av skillen lagres når den lastes, og en endring på disk gjør den utdatert', () => {
   const v1 = { 'fs-krav': 'a1', 'fs-verify': 'b1' };
@@ -137,37 +137,44 @@ test('versjonen av skillen lagres når den lastes, og en endring på disk gjør 
   const first = send(c, 'Hei', null, [], v1);
   assert.equal(first.invoke, true);
   c = started(first.chat, 'r1');
-  assert.deepEqual(c.skillVersions, { 'fs-krav': 'a1' });
+  assert.deepEqual(c.loadedVersions, { 'fs-krav': 'a1' });
   // Claude laster fs-verify med Skill-verktøyet
   c = apply(c, 'r1', { kind: 'tool', id: 's', name: 'Skill', summary: 'fs-verify' }, v1);
   c = apply(c, 'r1', { kind: 'toolResult', id: 's', isError: false }, v1);
-  assert.deepEqual(c.skillVersions, { 'fs-krav': 'a1', 'fs-verify': 'b1' });
+  assert.deepEqual(c.loadedVersions, { 'fs-krav': 'a1', 'fs-verify': 'b1' });
   assert.deepEqual(staleSkills(c, v1), []);
   assert.deepEqual(staleSkills(c, { 'fs-krav': 'a2', 'fs-verify': 'b1' }), ['fs-krav']);
   assert.deepEqual(staleSkills(c, {}), [], 'ukjent versjon (ikke hentet ennå) er ikke utdatert');
   // Neste melding laster ikke skillen på nytt, og versjonen blir stående
-  assert.deepEqual(send(c, 'Mer', null, [], { 'fs-krav': 'a2' }).chat.skillVersions['fs-krav'], 'a1');
+  assert.deepEqual(send(c, 'Mer', null, [], { 'fs-krav': 'a2' }).chat.loadedVersions['fs-krav'], 'a1');
 });
 
 test('oppsummeringen laster ikke skillen og merkes som preset', () => {
   const c = chooseSkill(EMPTY_CHAT, 'fs-krav');
   const r = send(c, 'Oppsummer', null, [], { 'fs-krav': 'a1' }, 'summary');
   assert.equal(r.invoke, false);
-  assert.deepEqual(r.chat.skillVersions, {});
+  assert.deepEqual(r.chat.loadedVersions, {});
   assert.equal((r.chat.items[0] as { preset?: string }).preset, 'summary');
 });
 
-test('gamle samtaler uten versjon får versjonen som gjelder nå', () => {
-  const old = { ...EMPTY_CHAT, loadedSkills: ['fs-krav'] };
-  const c = backfillVersions(old, { 'fs-krav': 'a1' });
-  assert.deepEqual(c.skillVersions, { 'fs-krav': 'a1' });
-  assert.equal(backfillVersions(c, { 'fs-krav': 'a2' }), c, 'en lagret versjon overskrives ikke');
-  assert.deepEqual(staleSkills(c, { 'fs-krav': 'a2' }), ['fs-krav']);
-  const cs = { list: [{ id: 'x', title: 't', createdAt: 1, updatedAt: 1, chat: old }], current: 'x' };
-  const next = backfillConversations(cs, { 'fs-krav': 'a1' });
-  assert.equal(next.list[0].updatedAt, 1);
-  assert.deepEqual(next.list[0].chat.skillVersions, { 'fs-krav': 'a1' });
-  assert.equal(backfillConversations(next, { 'fs-krav': 'a1' }), next);
+test('gamle samtaler uten lagret versjon er utdatert når skillen er endret på disk etter at de ble startet', () => {
+  const old = { ...EMPTY_CHAT, loadedSkills: ['fs-krav', 'fs-verify'] };
+  const hashes = { 'fs-krav': 'a2', 'fs-verify': 'b1' };
+  const changedAt = { 'fs-krav': 2000, 'fs-verify': 500 };
+  assert.deepEqual(staleSkills(old, hashes, changedAt, 1000), ['fs-krav'], 'fs-krav endret etter at samtalen startet, fs-verify før');
+  assert.deepEqual(staleSkills(old, hashes, changedAt), [], 'uten tidspunkt for samtalen');
+  assert.deepEqual(staleSkills(old, hashes, {}, 1000), [], 'ukjent endringstid');
+  // En lagret versjon går foran tidspunktet: lastet etter endringen, så den er ikke utdatert
+  assert.deepEqual(staleSkills({ ...old, loadedVersions: { 'fs-krav': 'a2' } }, hashes, changedAt, 1000), []);
+});
+
+test('skillVersions fra den første utgaven (versjonen på disk, ikke den som ble lastet) brukes ikke', () => {
+  const chat = { ...EMPTY_CHAT, loadedSkills: ['fs-krav'], skillVersions: { 'fs-krav': 'a2' } };
+  const cs = restoreConversations({ list: [{ id: 'x', title: 't', createdAt: 1000, updatedAt: 1000, chat }], current: 'x' }, []);
+  const c = cs.list[0].chat;
+  assert.equal('skillVersions' in c, false);
+  assert.deepEqual(c.loadedVersions, {});
+  assert.deepEqual(staleSkills(c, { 'fs-krav': 'a2' }, { 'fs-krav': 2000 }, cs.list[0].createdAt), ['fs-krav']);
 });
 
 test('ny samtale som fortsetter fra en annen, også når en tom gjenbrukes, og overlever restore', () => {
@@ -183,6 +190,6 @@ test('ny samtale som fortsetter fra en annen, også når en tom gjenbrukes, og o
   const restored = restoreConversations(JSON.parse(JSON.stringify(cs)), []);
   assert.equal(restored.list.find(c => c.id === 'b')!.chat.continuesFrom, 'a');
   const legacy = restoreConversations({ list: [{ id: 'z', title: 't', createdAt: 1, updatedAt: 1, chat: { items: [] } }], current: 'z' }, []);
-  assert.deepEqual(legacy.list[0].chat.skillVersions, {});
+  assert.deepEqual(legacy.list[0].chat.loadedVersions, {});
   assert.equal(legacy.list[0].chat.continuesFrom, null);
 });

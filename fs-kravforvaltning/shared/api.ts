@@ -79,6 +79,8 @@ export interface ClaudeSkill {
   description: string;
   /** Versjonen av skillen: hash over filene i mappa. Endres når skillen er endret på disk */
   hash: string;
+  /** Når en fil i skillmappa sist ble endret på disk (ms), for samtaler som lastet skillen før versjonen ble lagret */
+  changedAt: number;
 }
 
 export interface ClaudeSkills {
