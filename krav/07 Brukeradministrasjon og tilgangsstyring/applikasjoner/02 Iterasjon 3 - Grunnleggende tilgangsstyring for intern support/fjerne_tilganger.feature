@@ -1,6 +1,6 @@
 # language: no
 # GitHub: #445, #451
-@BRU-APP-API-008 @must @planned
+@BRU-APP-API-008 @must @implemented
 Egenskap: Fjerne tilganger fra en applikasjon
   Som bruker med applikasjonsadministrator-rollen
   ønsker jeg å fjerne en tilgang fra en applikasjon

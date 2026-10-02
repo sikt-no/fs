@@ -1,56 +1,68 @@
 # language: no
 # GitHub: #446
-@BRU-APP-API-009 @must @planned
+@BRU-APP-API-009 @must @implemented
 Egenskap: Opprette applikasjon
   Som bruker med applikasjonsadministrator-rollen
   ønsker jeg å opprette en ny applikasjon
   slik at tilganger kan tildeles.
 
   En applikasjon har én identitetsleverandør som velges ved opprettelse —
-  Feide eller Maskinporten. Identitetsleverandøren kan ikke endres
+  Feide, Maskinporten eller FS. Identitetsleverandøren kan ikke endres
   senere, men applikasjonen kan tildeles tilganger i flere miljøer.
-  Applikasjonen identifiseres eksternt ved ID-en fra idP-en og internt
-  ved en systemgenerert unik ID. Visningsnavnet, som hentes fra idP-en,
-  må være globalt unikt på tvers av alle organisasjoner.
+  Applikasjonen identifiseres eksternt ved identifikatoren fra
+  identitetsleverandøren og internt ved en systemgenerert unik ID.
+  Visningsnavnet oppgis ved opprettelse, og må være globalt unikt på
+  tvers av alle organisasjoner.
 
-  FS som identitetsleverandør er utfaset for nye applikasjoner og kan
-  ikke velges ved opprettelse. Eksisterende FS-applikasjoner består
-  som data og forvaltes i den samme applikasjonsoversikten som Feide-
-  og Maskinporten-applikasjoner — alle administrasjonshandlinger
-  (listevisning, tilgangsstyring, passordbytte, beskrivelse,
-  deaktivering) gjelder også for dem. Det er kun opprettelse som er
-  stengt.
+  Feide og Maskinporten identifiserer applikasjonen med en ekstern ID
+  som verifiseres mot identitetsleverandøren ved opprettelse. FS
+  identifiserer applikasjonen med et brukernavn som oppgis direkte, og
+  en FS-applikasjon har samme identitet i alle miljøer.
+
+  Applikasjonseier er organisasjonen applikasjonen tilhører. Begrepet
+  brukes i stedet for organisasjon i applikasjonskravene, fordi en
+  organisasjon opptrer i to roller på de samme flatene: den som eier
+  applikasjonen, og den hvis data en tilgang gjelder. Den siste omtales
+  som «gjelder for».
 
   # Krav fra Confluence: K8 Opprette ny API-bruker, Discovery: Registrer applikasjon (4612784227), Rammeinnsikt: Grunnleggende selvbetjent administrasjon av API-brukere (4401102853)
 
   Regel: Opprettelse krever valg av identitetsleverandør
 
+    @deprecated
     Scenario: Velge identitetsleverandør ved opprettelse
       Når jeg starter opprettelse av en ny applikasjon
       Så kan jeg velge én av identitetsleverandørene Feide og Maskinporten
       Og identitetsleverandøren settes på applikasjonen og kan ikke endres senere
 
+    @planned
+    Scenario: Velge identitetsleverandør ved opprettelse, inkludert FS
+      Når jeg starter opprettelse av en ny applikasjon
+      Så kan jeg velge én av identitetsleverandørene Feide, Maskinporten og FS
+      Og identitetsleverandøren settes på applikasjonen og kan ikke endres senere
+
+    @deprecated
     Scenario: FS er ikke en valgbar identitetsleverandør
       Når jeg starter opprettelse av en ny applikasjon
       Så er FS ikke tilgjengelig som identitetsleverandør
 
-  Regel: Opprettelse krever en organisasjon
+  Regel: Opprettelse krever en applikasjonseier
 
     Scenario: Opprette applikasjon når administrator har tilgang til kun én organisasjon
       Gitt jeg har tilgang til kun én organisasjon
       Når jeg oppretter en ny applikasjon
-      Så er applikasjonen opprettet på min organisasjon
+      Så er min organisasjon satt som applikasjonseier
 
     Scenario: Opprette applikasjon når administrator har tilgang til flere organisasjoner
       Gitt jeg har tilgang til flere organisasjoner
       Når jeg oppretter en ny applikasjon og velger en av mine organisasjoner
-      Så er applikasjonen opprettet på den valgte organisasjonen
+      Så er den valgte organisasjonen satt som applikasjonseier
 
     Scenario: Super-applikasjonsadministrator velger blant alle organisasjoner
       Gitt jeg har super-applikasjonsadministrator-rollen
-      Når jeg åpner valglisten for organisasjon ved opprettelse
+      Når jeg åpner valglisten for applikasjonseier ved opprettelse
       Så omfatter valglisten alle organisasjoner i systemet
-      Og applikasjonen opprettes på den organisasjonen jeg velger
+      Og den organisasjonen jeg velger settes som applikasjonseier
 
   Regel: Opprettelse krever et navn
 
@@ -63,13 +75,26 @@ Egenskap: Opprette applikasjon
       Når jeg oppretter en ny applikasjon med et navn
       Så er det oppgitte navnet lagret på applikasjonen
 
-  Regel: Applikasjonen identifiseres av en ekstern ID som verifiseres mot identitetsleverandøren
+  Regel: Feide- og Maskinporten-applikasjoner identifiseres av en ekstern ID som verifiseres mot identitetsleverandøren
 
+    @deprecated
     Scenariomal: Opprette applikasjon med ekstern identitet
       Når jeg oppretter en ny applikasjon med identitetsleverandør <identitetsleverandør> og en ID
       Og ID-en finnes hos <identitetsleverandør>
       Så er applikasjonen opprettet
       Og navnet på applikasjonen er hentet fra <identitetsleverandør>
+      Og applikasjonen identifiseres eksternt ved ID-en
+
+      Eksempler:
+        | identitetsleverandør |
+        | Feide                |
+        | Maskinporten         |
+
+    @planned
+    Scenariomal: Opprette applikasjon med ekstern identitet og oppgitt navn
+      Når jeg oppretter en ny applikasjon med identitetsleverandør <identitetsleverandør>, et navn og en ID
+      Og ID-en finnes hos <identitetsleverandør>
+      Så er applikasjonen opprettet
       Og applikasjonen identifiseres eksternt ved ID-en
 
       Eksempler:
@@ -107,23 +132,63 @@ Egenskap: Opprette applikasjon
       #   eller skal oppslaget kunne forsøkes på nytt?
       Gitt spørsmålet er åpent
 
-    @openquestion
-    Scenario: AVKLAR format og validering av ekstern ID
-      # ÅPNE SPØRSMÅL:
-      # - Hvilket format har den eksterne ID-en hos Feide, og hvilket hos
-      #   Maskinporten?
-      # - Skal formatet valideres i skjemaet før oppslaget sendes, eller sendes
-      #   alle verdier til identitetsleverandøren for verifisering?
-      Gitt spørsmålet er åpent
+    Scenario: Ekstern ID trenger ikke tilhøre applikasjonseier
+      Gitt jeg oppretter en ny applikasjon med en valgt applikasjonseier
+      Når ID-en hos identitetsleverandøren tilhører en annen organisasjon
+      Så er applikasjonen likevel opprettet på den valgte applikasjonseieren
 
-    @openquestion
-    Scenario: AVKLAR om ekstern ID må tilhøre valgt organisasjon
-      # ÅPNE SPØRSMÅL:
-      # - Ingen regel knytter i dag den eksterne ID-en til organisasjonsvalget.
-      #   Må applikasjonen hos identitetsleverandøren tilhøre den organisasjonen
-      #   den opprettes på, eller kan en vilkårlig verifisert ID registreres på en
-      #   hvilken som helst organisasjon administratoren har tilgang til?
-      Gitt spørsmålet er åpent
+  @draft @openquestion
+  Regel: Maskinporten-applikasjoner har i tillegg en konsument-ID
+    # ÅPNE SPØRSMÅL:
+    # - Skal konsument-ID-en valideres — mot ISO 6523-formatet, mot et
+    #   organisasjonsregister, eller ikke i det hele tatt?
+    # - Hva er forholdet mellom konsument-ID og applikasjonseier når de peker på
+    #   ulike organisasjoner? En Maskinporten-applikasjon har nå to
+    #   organisasjonsangivelser, og det er ikke avklart om de kan avvike.
+
+    Scenario: Angi konsument-ID ved opprettelse
+      Gitt jeg oppretter en ny applikasjon med Maskinporten som identitetsleverandør
+      Når jeg oppgir konsumentens organisasjons-ID
+      Så er konsument-ID-en lagret på applikasjonen
+
+    Scenario: Konsument-ID gjelder kun Maskinporten
+      Når jeg oppretter en ny applikasjon med Feide eller FS som identitetsleverandør
+      Så er konsument-ID ikke en del av opprettelsen
+
+  @draft @openquestion
+  Regel: FS-applikasjoner identifiseres av et brukernavn som ikke verifiseres mot en ekstern kilde
+    # ÅPNE SPØRSMÅL:
+    # - Finnes det et oppslag mot FS som kan verifisere at brukernavnet
+    #   eksisterer, slik Feide og Maskinporten verifiserer ekstern ID? Regelen
+    #   forutsetter i dag at unikhetssjekken i FS Admin er tilstrekkelig.
+
+    Scenario: Opprette applikasjon med FS-brukernavn
+      Når jeg oppretter en ny applikasjon med FS som identitetsleverandør og et brukernavn
+      Så er applikasjonen opprettet
+      Og applikasjonen identifiseres ved brukernavnet
+
+    Scenario: Opprettelse avvises når FS-brukernavnet allerede er i bruk
+      Gitt en applikasjon med FS som identitetsleverandør og et gitt brukernavn allerede finnes
+      Når jeg forsøker å opprette en ny applikasjon med FS og samme brukernavn
+      Så avvises opprettelsen
+      Og det fremgår at brukernavnet allerede er i bruk
+
+    Scenario: FS-applikasjonen har samme identitet i alle miljøer
+      Når jeg oppretter en ny applikasjon med FS som identitetsleverandør
+      Så er miljø ikke en del av opprettelsen
+      Og applikasjonen har samme identitet i alle miljøer
+
+  @planned
+  Regel: Beskrivelse kan angis ved opprettelse
+
+    Scenario: Angi beskrivelse ved opprettelse
+      Når jeg oppretter en ny applikasjon med en beskrivelse
+      Så er den oppgitte beskrivelsen lagret på applikasjonen
+
+    Scenario: Opprette applikasjon uten beskrivelse
+      Når jeg oppretter en ny applikasjon uten å fylle inn beskrivelse
+      Så er applikasjonen opprettet
+      Og applikasjonen har ingen beskrivelse
 
   Regel: Systemet tildeler hver applikasjon en intern unik ID
 
@@ -134,6 +199,7 @@ Egenskap: Opprette applikasjon
 
   Regel: Visningsnavn må være globalt unikt på tvers av alle organisasjoner
 
+    @deprecated
     Scenariomal: Opprettelse avvises når visningsnavn allerede er i bruk
       Gitt en applikasjon med et gitt visningsnavn allerede finnes
       Når jeg forsøker å opprette en ny applikasjon med identitetsleverandør <identitetsleverandør> og en ID hvis navn hos <identitetsleverandør> er det samme visningsnavnet
@@ -145,14 +211,19 @@ Egenskap: Opprette applikasjon
         | Feide                |
         | Maskinporten         |
 
-    @openquestion
-    Scenario: AVKLAR om visningsnavnet vises før opprettelsen fullføres
-      # ÅPNE SPØRSMÅL:
-      # - Administratoren ser i dag visningsnavnet fra identitetsleverandøren først
-      #   etter at applikasjonen er opprettet, eller etter at opprettelsen er
-      #   avvist på navnekollisjon — og navnet kan ikke rettes i dialogen.
-      #   Skal navnet hentes og vises til bekreftelse før opprettelsen fullføres?
-      Gitt spørsmålet er åpent
+    @planned
+    Scenario: Opprettelse avvises når visningsnavnet er i bruk hos samme identitetsleverandør
+      Gitt en applikasjon med identitetsleverandør Feide og et gitt visningsnavn allerede finnes
+      Når jeg forsøker å opprette en ny applikasjon med identitetsleverandør Feide og samme visningsnavn
+      Så avvises opprettelsen
+      Og det fremgår at visningsnavnet allerede er i bruk
+
+    @planned
+    Scenario: Opprettelse avvises når visningsnavnet er i bruk hos en annen identitetsleverandør
+      Gitt en applikasjon med identitetsleverandør Feide og et gitt visningsnavn allerede finnes
+      Når jeg forsøker å opprette en ny applikasjon med identitetsleverandør Maskinporten og samme visningsnavn
+      Så avvises opprettelsen
+      Og det fremgår at visningsnavnet allerede er i bruk
 
   Regel: Nyopprettet applikasjon har status Aktiv
 
@@ -167,7 +238,20 @@ Egenskap: Opprette applikasjon
       Så er applikasjonen ikke aktiv i noen miljøer
       Og applikasjonen blir først aktiv i et miljø når den får tildelt sin første tilgang i det miljøet
 
+    @deprecated
     Scenario: Nyopprettet applikasjon kan autentisere umiddelbart
       Gitt jeg har opprettet en ny applikasjon
       Så kan applikasjonen autentisere seg umiddelbart med sin eksterne identitet
       Men applikasjonen får ikke tilgang til data før den har en tilgang i et miljø
+
+    @planned
+    Scenario: Nyopprettet Feide- eller Maskinporten-applikasjon kan autentisere umiddelbart
+      Gitt jeg har opprettet en ny applikasjon med Feide eller Maskinporten som identitetsleverandør
+      Så kan applikasjonen autentisere seg umiddelbart med sin eksterne identitet
+      Men applikasjonen får ikke tilgang til data før den har en tilgang i et miljø
+
+    @planned
+    Scenario: Nyopprettet FS-applikasjon kan først autentisere når passord er satt
+      Gitt jeg har opprettet en ny applikasjon med FS som identitetsleverandør
+      Så kan applikasjonen først autentisere seg i et miljø når det er satt passord for det miljøet
+      Men applikasjonen får ikke tilgang til data før den har en tilgang i miljøet

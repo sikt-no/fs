@@ -1,6 +1,6 @@
 # language: no
 # GitHub: #440
-@BRU-APP-API-003 @must @planned
+@BRU-APP-API-003 @must @implemented
 Egenskap: Vise tilganger for applikasjon
   Som bruker
   ønsker jeg å se hvilke tilganger en applikasjon har
@@ -12,9 +12,20 @@ Egenskap: Vise tilganger for applikasjon
     Gitt jeg er på detaljsiden for en applikasjon
     Og jeg har åpnet tab-en for tilganger
 
+  @deprecated
   Scenario: Se tilganger for en applikasjon
     Så ser jeg en liste over tilganger
     Og hvert innslag viser tilgangskode, beskrivelse, organisasjon og miljøet tilgangen gjelder for
+
+  @planned
+  Scenario: Se tilganger for en applikasjon
+    Så ser jeg en liste over tilganger
+    Og hvert innslag viser følgende informasjon:
+      | felt         |
+      | Tilgangskode |
+      | Beskrivelse  |
+      | Gjelder for  |
+      | Miljø        |
 
   Scenario: Tilgjengelige miljøer i filter
     Når jeg åpner miljøfilteret
@@ -27,6 +38,7 @@ Egenskap: Vise tilganger for applikasjon
     Når jeg velger et miljø som filter
     Så vises kun tilganger i det valgte miljøet
 
+  @deprecated
   Scenario: Tilgjengelige organisasjoner i filter
     Når jeg åpner organisasjonsfilteret
     Så inneholder filteret alle organisasjoner som er representert i den ufiltrerte tilgangslisten
@@ -34,9 +46,23 @@ Egenskap: Vise tilganger for applikasjon
     Og organisasjonene er sortert alfabetisk
     Og "Alle organisasjoner" er valgt som standard
 
+  @planned
+  Scenario: Tilgjengelige verdier i gjelder for-filter
+    Når jeg åpner gjelder for-filteret
+    Så inneholder filteret alle organisasjoner som er representert i den ufiltrerte tilgangslisten
+    Og hver organisasjon vises kun én gang
+    Og organisasjonene er sortert alfabetisk
+    Og "Alle organisasjoner" er valgt som standard
+
+  @deprecated
   Scenario: Filtrere tilgangsliste på organisasjon
     Når jeg velger en organisasjon som filter
     Så vises kun tilganger knyttet til den valgte organisasjonen
+
+  @planned
+  Scenario: Filtrere tilgangsliste på gjelder for
+    Når jeg velger en organisasjon i gjelder for-filteret
+    Så vises kun tilganger som gjelder data i den valgte organisasjonen
 
   Scenario: Filtrere tilgangsliste på tilgangskode
     Når jeg skriver inn tekst i tilgangskode-filteret
