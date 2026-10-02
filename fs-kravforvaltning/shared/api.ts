@@ -77,6 +77,8 @@ export interface CodeDir {
 export interface ClaudeSkill {
   name: string;
   description: string;
+  /** Versjonen av skillen: hash over filene i mappa. Endres når skillen er endret på disk */
+  hash: string;
 }
 
 export interface ClaudeSkills {

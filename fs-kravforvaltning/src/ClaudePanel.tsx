@@ -3,6 +3,7 @@ import type { ClaudeEvent, ClaudeStatus } from '../shared/api';
 import type { GitChange, Snapshot } from '../shared/model';
 import {
   applyEvent,
+  backfillConversations,
   contextLabel,
   chooseSkill,
   effectiveSkill,
@@ -13,6 +14,7 @@ import {
   restoreConversations,
   selectConversation,
   send,
+  staleSkills,
   started,
   TOOL_LABEL,
   updateConversation,
@@ -22,7 +24,8 @@ import type { PrProposal } from './prProposal';
 import { ChatMarkdown } from './ChatMarkdown';
 import { registerClaude, setClaudeBusy } from './claudeBridge';
 import { CodeDirs, codeDirPaths, useCodeDirs } from './CodeDirs';
-import { knownSkills, SkillPicker } from './ClaudeSkills';
+import { knownSkills, refreshSkills, SkillPicker, skillHashes, useSkillHashes } from './ClaudeSkills';
+import { SUMMARY_PROMPT, SUMMARY_PROMPT_SHORT, summaryDraft, summaryIn, summaryMentions, type ChatSummary } from './chatSummary';
 import { readDraft, saveDraft } from './claudeDraft';
 import { covered } from './mention';
 import { MENTION_LIST_ID, MentionPicker, useMentions } from './MentionPicker';
@@ -76,7 +79,7 @@ addEventListener('beforeunload', () => {
 // Hendelser som kommer før svaret på `claudeRun` (med runId) er framme, spilles av når det kommer
 const early = new Map<string, ClaudeEvent[]>();
 transport.on('krav:claude', ({ runId, event }: { runId: string; event: ClaudeEvent }) => {
-  const next = applyEvent(convs, runId, event, Date.now());
+  const next = applyEvent(convs, runId, event, Date.now(), skillHashes());
   if (next) set(next);
   else early.set(runId, [...(early.get(runId) ?? []), event]);
 });
@@ -219,6 +222,13 @@ export function ClaudePanel({ status, width, onWidth, allowedSkills: modeSkills,
   const cs = useConversations();
   const conv = currentChat(cs);
   const c = conv?.chat ?? EMPTY_CHAT;
+  // Skills som er endret på disk siden de ble lastet i samtalen: den må fortsette i en ny samtale
+  const hashes = useSkillHashes();
+  useEffect(() => set(backfillConversations(convs, hashes)), [hashes]);
+  const stale = staleSkills(c, hashes);
+  const summarized = c.items.some(i => i.kind === 'assistant' && !!summaryIn(i.text));
+  const from = c.continuesFrom ? cs.list.find(x => x.id === c.continuesFrom) ?? null : null;
+  const inputRef = useRef<HTMLTextAreaElement>(null);
   // Utkastet i feltet overlever omlasting og at panelet lukkes
   const [draft] = useState(readDraft);
   const [input, setInput] = useState(draft.text);
@@ -248,11 +258,16 @@ export function ClaudePanel({ status, width, onWidth, allowedSkills: modeSkills,
     if (el) el.scrollTop = el.scrollHeight;
   }, [c.items.length, conv?.id, showList]);
 
-  /** Sender `text` som ny melding i samtalen som er åpen (eller en ny). Brukes av inputfeltet og av «Send til Claude Code». */
-  const sendText = async (text: string, mentions: string[] = []) => {
+  /**
+   * Sender `text` som ny melding i samtalen som er åpen (eller en ny). Brukes av inputfeltet, av «Send til Claude Code»
+   * og av «Oppsummer samtalen» (`preset`).
+   */
+  const sendText = async (text: string, mentions: string[] = [], preset?: 'summary') => {
     if (!text || running) return;
     setError(null);
     setShowList(false);
+    // Versjonen av skillen som lastes med meldingen, skal være den som er på disk nå
+    await refreshSkills();
     let id = conv?.id;
     if (!id) {
       id = newId();
@@ -260,7 +275,7 @@ export function ClaudePanel({ status, width, onWidth, allowedSkills: modeSkills,
     }
     const target = id;
     const before = chooseSkill(convs.list.find(x => x.id === target)!.chat, skill);
-    const { chat: after, invoke } = send(before, text, sentPath, mentions);
+    const { chat: after, invoke } = send(before, text, sentPath, mentions, skillHashes(), preset);
     set(updateConversation(convs, target, () => after, Date.now()));
     try {
       const { runId } = await transport.call('claudeRun', {
@@ -276,7 +291,7 @@ export function ClaudePanel({ status, width, onWidth, allowedSkills: modeSkills,
       });
       set(updateConversation(convs, target, ch => started(ch, runId), Date.now()));
       for (const ev of early.get(runId) ?? []) {
-        const next = applyEvent(convs, runId, ev, Date.now());
+        const next = applyEvent(convs, runId, ev, Date.now(), skillHashes());
         if (next) set(next);
       }
       early.delete(runId);
@@ -305,6 +320,20 @@ export function ClaudePanel({ status, width, onWidth, allowedSkills: modeSkills,
     };
   }, [status.available]);
   useEffect(() => setClaudeBusy(running), [running]);
+
+  /**
+   * Ny samtale som fortsetter fra den som er åpen, med samme skill. Med en oppsummering legges den i inputfeltet,
+   * og filene legges ved med @. Brukeren leser og sender selv; første melding laster den nye versjonen av skillen.
+   */
+  const continueIn = (summary?: ChatSummary) => {
+    const skillNow = effectiveSkill(c.skill, allowedSkills, preselect);
+    set(createConversation(convs, newId(), Date.now(), skillNow, conv?.id ?? null));
+    setShowList(false);
+    if (!summary) return;
+    setInput(summaryDraft(summary));
+    mention.replace(summaryMentions(summary));
+    setTimeout(() => inputRef.current?.focus());
+  };
 
   const remove = (id: string, title: string) => {
     if (!confirm(`Slette samtalen «${title}»?`)) return;
@@ -339,6 +368,11 @@ export function ClaudePanel({ status, width, onWidth, allowedSkills: modeSkills,
           <button class="smallbtn" onClick={onClose} aria-label="Lukk Claude-panelet">Lukk</button>
         </div>
       </div>
+      {conv && !showList && !conv.chat.items.length && from && (
+        <div class="claude-info">
+          <div class="claude-title muted">{conv.title}</div>
+        </div>
+      )}
       {conv && !showList && conv.chat.items.length > 0 && (
         <div class="claude-info">
           <div class="claude-title" title={conv.title}>{conv.title}</div>
@@ -355,7 +389,20 @@ export function ClaudePanel({ status, width, onWidth, allowedSkills: modeSkills,
               </span>
             )}
             <span class="cloaded" title="Skills som er lastet inn i samtalen">
-              Lastet: {c.loadedSkills.length ? c.loadedSkills.map(n => <span key={n} class="cctx-skill">{n}</span>) : <span class="muted">ingen skills</span>}
+              Lastet:{' '}
+              {c.loadedSkills.length ? (
+                c.loadedSkills.map(n =>
+                  stale.includes(n) ? (
+                    <span key={n} class="cctx-skill stale" title="Endret siden den ble lastet i samtalen">
+                      {n} <b aria-hidden="true">↻</b>
+                    </span>
+                  ) : (
+                    <span key={n} class="cctx-skill">{n}</span>
+                  ),
+                )
+              ) : (
+                <span class="muted">ingen skills</span>
+              )}
             </span>
           </div>
         </div>
@@ -382,7 +429,16 @@ export function ClaudePanel({ status, width, onWidth, allowedSkills: modeSkills,
                   {x.chat.runId && <span class="cdot" title="Claude jobber" />}
                   {x.title}
                 </span>
-                <span class="mono muted">{when(x.updatedAt)} · {x.chat.items.filter(i => i.kind === 'user').length} meldinger</span>
+                <span class="cconv-meta mono muted">
+                  {x.chat.skill && <span>{x.chat.skill}</span>}
+                  {staleSkills(x.chat, hashes).length > 0 && (
+                    <span class="cconv-stale" title={`Oppdatert siden den ble lastet: ${staleSkills(x.chat, hashes).join(', ')}`}>
+                      <span class="cstale-tri" aria-hidden="true" />
+                      utdatert skill
+                    </span>
+                  )}
+                  <span>{when(x.updatedAt)}</span>
+                </span>
               </button>
               <button class="smallbtn cconv-del" onClick={() => remove(x.id, x.title)} aria-label={`Slett samtalen ${x.title}`} title="Slett samtalen">
                 Slett
@@ -393,7 +449,15 @@ export function ClaudePanel({ status, width, onWidth, allowedSkills: modeSkills,
       ) : (
         <>
           <div class="claude-list" ref={list}>
-            {!c.items.length && (
+            {!c.items.length && from && (
+              <div class="claude-empty ccontinue">
+                Fortsetter fra «{from.title}».{' '}
+                <button class="linkbtn" onClick={() => set(selectConversation(convs, from.id))}>
+                  Åpne den gamle samtalen
+                </button>
+              </div>
+            )}
+            {!c.items.length && !from && (
               <div class="claude-empty">
                 Spør om kravene, eller be Claude endre dem. Claude kan lese og redigere filene, men ikke kjøre kommandoer eller lage PR.
                 <br />
@@ -402,7 +466,12 @@ export function ClaudePanel({ status, width, onWidth, allowedSkills: modeSkills,
               </div>
             )}
             {c.items.map((i, n) =>
-              i.kind === 'user' ? (
+              i.kind === 'user' && i.preset === 'summary' ? (
+                <div key={n} class="cmsg user cpreset" title={i.text}>
+                  <span class="cpreset-label mono">Oppsummer samtalen</span>
+                  <span class="cpreset-text">{SUMMARY_PROMPT_SHORT}</span>
+                </div>
+              ) : i.kind === 'user' ? (
                 <div key={n} class="cmsg user">
                   <LongText text={i.text} />
                   {(i.path || i.skill || i.mentions?.length) && (
@@ -418,7 +487,7 @@ export function ClaudePanel({ status, width, onWidth, allowedSkills: modeSkills,
                 </div>
               ) : i.kind === 'assistant' ? (
                 <div key={n} class="cmsg assistant">
-                  <ChatMarkdown text={i.text} has={has} onOpen={onOpen} onPr={onPr} change={change} />
+                  <ChatMarkdown text={i.text} has={has} onOpen={onOpen} onPr={onPr} change={change} onSummary={continueIn} skill={c.skill} />
                 </div>
               ) : i.kind === 'tool' ? (
                 <div key={n} class={'ctool ' + i.state}>
@@ -445,6 +514,32 @@ export function ClaudePanel({ status, width, onWidth, allowedSkills: modeSkills,
               ))}
             </div>
           )}
+          {stale.length > 0 && !running && (
+            <div class={'cstale' + (summarized ? ' compact' : '')} role="status">
+              <span class="cstale-tri" aria-hidden="true" />
+              <div class="cstale-text">
+                {stale.map((n, j) => (
+                  <span key={n}>
+                    {j > 0 && ', '}
+                    <b class="mono">{n}</b>
+                  </span>
+                ))}{' '}
+                {summarized
+                  ? `er oppdatert siden ${stale.length === 1 ? 'den' : 'de'} ble lastet.`
+                  : `er oppdatert siden ${stale.length === 1 ? 'den' : 'de'} ble lastet i denne samtalen. Start en ny samtale for å bruke den nye versjonen.`}
+              </div>
+              <div class="cstale-btns">
+                {!summarized && (
+                  <button class="primbtn" onClick={() => void sendText(SUMMARY_PROMPT, [], 'summary')}>
+                    Oppsummer samtalen
+                  </button>
+                )}
+                <button class="smallbtn" onClick={() => continueIn()}>
+                  Ny samtale
+                </button>
+              </div>
+            </div>
+          )}
           {error && <div class="edwarn err" role="alert">{error}</div>}
 
           <div class="claude-input">
@@ -454,6 +549,7 @@ export function ClaudePanel({ status, width, onWidth, allowedSkills: modeSkills,
               hint={skillHint}
               preselect={preselect}
               disabled={running}
+              locked={stale.length > 0}
               onChange={s => (conv ? set(updateConversation(convs, conv.id, ch => chooseSkill(ch, s), Date.now())) : setPending(s))}
             />
             {codeDirs && <CodeDirs />}
@@ -468,6 +564,7 @@ export function ClaudePanel({ status, width, onWidth, allowedSkills: modeSkills,
                 />
               )}
               <textarea
+                ref={inputRef}
                 rows={3}
                 value={input}
                 placeholder="Spør Claude …"

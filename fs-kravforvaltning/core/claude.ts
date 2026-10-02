@@ -1,4 +1,5 @@
 import { spawn, execFile, type ChildProcess } from 'node:child_process';
+import { createHash } from 'node:crypto';
 import { EventEmitter } from 'node:events';
 import { accessSync, constants, readdirSync, readFileSync, statSync } from 'node:fs';
 import { homedir } from 'node:os';
@@ -111,7 +112,37 @@ export function skillMeta(src: string): { name: string | null; description: stri
   return { name: value('name') || null, description: value('description') };
 }
 
-/** Skillene i repoets `.claude/skills/<navn>/SKILL.md` */
+/**
+ * Versjonen av en skill: sha1 over alle filene i mappa (relativ sti og innhold, sortert), så en endring i
+ * `references/` også teller. Vieweren sammenligner den med versjonen som var lastet i samtalen.
+ */
+export function skillHash(dir: string): string {
+  const h = createHash('sha1');
+  const walk = (rel: string) => {
+    let list;
+    try {
+      list = readdirSync(join(dir, rel), { withFileTypes: true }).sort((a, b) => (a.name < b.name ? -1 : a.name > b.name ? 1 : 0));
+    } catch {
+      return;
+    }
+    for (const d of list) {
+      const r = rel ? `${rel}/${d.name}` : d.name;
+      if (d.isDirectory()) walk(r);
+      else if (d.isFile()) {
+        try {
+          const body = readFileSync(join(dir, r));
+          h.update(r).update('\0').update(body).update('\0');
+        } catch {
+          /* fila forsvant underveis */
+        }
+      }
+    }
+  };
+  walk('');
+  return h.digest('hex');
+}
+
+/** Skillene i repoets `.claude/skills/<navn>/SKILL.md`, med versjonen (`skillHash`) */
 export function projectSkills(cwd: string): ClaudeSkill[] {
   const dir = join(cwd, '.claude', 'skills');
   let names: string[];
@@ -124,7 +155,7 @@ export function projectSkills(cwd: string): ClaudeSkill[] {
     .flatMap(n => {
       try {
         const meta = skillMeta(readFileSync(join(dir, n, 'SKILL.md'), 'utf8'));
-        return [{ name: meta.name ?? n, description: meta.description }];
+        return [{ name: meta.name ?? n, description: meta.description, hash: skillHash(join(dir, n)) }];
       } catch {
         return [];
       }
@@ -253,6 +284,10 @@ export function contextPrompt(
       '{"title": "Krav: …", "branch": "kort-slug-uten-prefiks", "body": "Kort beskrivelse på norsk av hva som er endret og hvorfor", "paths": ["krav/…"]}. ' +
       'Blokken er slik PR lages her: brukeren får et kort med «Åpne i «Lag PR»», som åpner «Lag PR» ferdig utfylt. Si ikke at du ikke kan lage PR, og be ikke brukeren fylle ut «Lag PR» for hånd. ' +
       'paths er .feature- og .md-filene under krav/ som er endret i samtalen. Filer utenfor krav/ (f.eks. tasks/) kan ikke sendes fra FS Kravforvaltning: ta dem ikke med i paths, men si fra om dem i teksten.',
+    'Ber brukeren om en oppsummering av samtalen, så den kan brukes i en ny samtale, svarer du med en kodeblokk med språket krav-oppsummering og JSON: ' +
+      '{"mal": "…", "gjort": "…", "beslutninger": "…", "apneSporsmal": "…", "nesteSteg": "…", "paths": ["…"]}. ' +
+      'Feltene er korte setninger på norsk; la et felt være tomt når det ikke er noe å si. paths er filene som er lest eller endret i samtalen og er viktige for å fortsette, relative til repoet. ' +
+      'Brukeren får et kort med «Start ny samtale med oppsummeringen».',
     'Du har ikke shell-tilgang; bruk Read, Glob, Grep, Edit og Write. AskUserQuestion finnes ikke her: still spørsmålene i svaret, og vent på brukeren.',
     dirs.length ? `Du kan lese kodeklonene ${dirs.join(', ')}, men ikke endre dem.` : '',
     skills.includes('fs-verify')

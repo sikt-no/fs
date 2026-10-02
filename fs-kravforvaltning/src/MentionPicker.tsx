@@ -58,6 +58,8 @@ export function useMentions(entries: Snapshot, current: string | null, input: st
     mentions: mentions.filter(p => items.has(p)),
     remove: (path: string) => setMentions(m => m.filter(x => x !== path)),
     clear: () => setMentions([]),
+    /** Bytter ut det som er lagt ved (utkastet fra en oppsummering) */
+    replace: (paths: string[]) => setMentions([...new Set(paths)]),
     picker: shown ? { query, list, active, marked, filter, mentions } : null,
     onInput: (text: string) => {
       setOpen(parseMention(text) !== null);
