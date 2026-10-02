@@ -120,6 +120,7 @@ export function TopBar({ path, connected, theme, onTheme, treeHidden, onToggleTr
           <button
             class="claudebtn"
             aria-pressed={claude}
+            onMouseDown={e => e.preventDefault()}
             onClick={onClaude}
             title={claude ? 'Skjul Claude' : 'Vis Claude'}
           >
