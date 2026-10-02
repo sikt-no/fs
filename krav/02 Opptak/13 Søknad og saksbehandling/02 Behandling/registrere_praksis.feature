@@ -532,6 +532,18 @@ Egenskap: Registrere og beregne praksis for søker
       # praksisperioder til sammen overstiger 100 % stilling, regnes det
       # ikke mer enn 100 %. Saksbehandleren skal likevel få et varsel om det.
 
+    Scenario: Overlappssummene beregnes kun på inkluderte praksisperioder
+      Når jeg legger inn følgende praksisperioder
+        | startdato  | sluttdato  | omfang | inkludert |
+        | 01.01.2020 | 31.12.2020 | 50 %   | Ja        |
+        | 01.01.2020 | 31.12.2020 | 60 %   | Ja        |
+        | 01.01.2020 | 31.12.2020 | 40 %   | Nei       |
+      Så er sum av oppgitte perioder 1,10 år
+      Og sum justert for overlapp er 1,00 år
+      #  AVKLART 29.09.2026: perioder som ikke er inkludert
+      # (40 %) filtreres bort før overlappsberegningen, og påvirker derfor
+      # ingen av summene.
+
     # FLYTTET 23.09.2026: valg av hvilken sum som legges til grunn for et
     # opptakskrav, og hva som gjelder uten aktivt valg, er flyttet til
     # knytte_praksis_til_opptakskrav.feature. Kalkulatoren viser begge
