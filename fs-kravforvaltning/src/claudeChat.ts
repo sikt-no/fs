@@ -1,9 +1,11 @@
 // Samtalen i Claude-panelet. Rene funksjoner over hendelsene fra core/claude.ts, så de kan testes med node --test.
 import type { ClaudeEvent } from '../shared/api.ts';
 
+export type ChatPreset = 'summary' | 'pr';
+
 export type ChatItem =
-  /** `preset: 'summary'`: den faste meldingen bak «Oppsummer samtalen», som vises kort */
-  | { kind: 'user'; text: string; path: string | null; skill?: string | null; mentions?: string[]; preset?: 'summary' }
+  /** `preset`: den faste meldingen bak «Oppsummer samtalen» (`summary`) eller «Lag forslag til PR» (`pr`), som vises kort */
+  | { kind: 'user'; text: string; path: string | null; skill?: string | null; mentions?: string[]; preset?: ChatPreset }
   | { kind: 'assistant'; text: string }
   | { kind: 'tool'; id: string; name: string; summary: string; state: 'running' | 'ok' | 'error' }
   | { kind: 'done'; ok: boolean; text: string };
@@ -62,9 +64,9 @@ export function send(
   path: string | null,
   mentions: string[] = [],
   hashes: SkillHashes = {},
-  preset?: 'summary',
+  preset?: ChatPreset,
 ): { chat: Chat; invoke: boolean } {
-  // Oppsummeringen skal ikke laste en ny versjon av skillen inn i samtalen
+  // De faste meldingene (oppsummering, PR-forslag) skal ikke laste en ny versjon av skillen inn i samtalen
   const invoke = !preset && !!chat.skill && chat.skill !== chat.skillLoaded;
   return {
     chat: {

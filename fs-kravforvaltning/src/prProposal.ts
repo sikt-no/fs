@@ -11,6 +11,13 @@ export interface PrProposal {
 /** Språket på kodeblokken Claude skriver forslaget i */
 export const PR_LANG = 'krav-pr';
 
+/** Den faste meldingen bak «Lag forslag til PR» */
+export const PR_PROMPT =
+  'Lag et forslag til PR for endringene under krav/ i denne samtalen. Svar kort, og avslutt med PR-forslaget i en kodeblokk med språket krav-pr.';
+
+/** Det brukeren ser i stedet for `PR_PROMPT` i samtalen */
+export const PR_PROMPT_SHORT = 'PR-forslag for filene som er endret i samtalen.';
+
 const str = (v: unknown) => (typeof v === 'string' ? v.trim() : '');
 
 /** Samme krav til stiene som `publish` (`checkPaths` i `core/vcs.ts`): .feature eller .md under krav/, uten `..` */

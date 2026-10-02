@@ -18,9 +18,10 @@ import {
   started,
   TOOL_LABEL,
   updateConversation,
+  type ChatPreset,
   type Conversations,
 } from './claudeChat';
-import type { PrProposal } from './prProposal';
+import { PR_PROMPT, PR_PROMPT_SHORT, type PrProposal } from './prProposal';
 import { ChatMarkdown } from './ChatMarkdown';
 import { registerClaude, setClaudeBusy } from './claudeBridge';
 import { CodeDirs, codeDirPaths, useCodeDirs } from './CodeDirs';
@@ -30,6 +31,12 @@ import { readDraft, saveDraft } from './claudeDraft';
 import { covered } from './mention';
 import { MENTION_LIST_ID, MentionPicker, useMentions } from './MentionPicker';
 import { transport } from './transport';
+
+/** Slik vises de faste meldingene i samtalen */
+const PRESET: Record<ChatPreset, { label: string; text: string }> = {
+  summary: { label: 'Oppsummer samtalen', text: SUMMARY_PROMPT_SHORT },
+  pr: { label: 'Lag forslag til PR', text: PR_PROMPT_SHORT },
+};
 
 // Samtalene lever utenfor komponenten og lagres i localStorage, så de blir stående når panelet lukkes,
 // visningen byttes eller vieweren lastes inn på nytt. Claude Code husker selve samtalene (`--resume`).
@@ -261,9 +268,9 @@ export function ClaudePanel({ status, width, onWidth, allowedSkills: modeSkills,
 
   /**
    * Sender `text` som ny melding i samtalen som er åpen (eller en ny). Brukes av inputfeltet, av «Send til Claude Code»
-   * og av «Oppsummer samtalen» (`preset`).
+   * og av «Oppsummer samtalen» og «Lag forslag til PR» (`preset`).
    */
-  const sendText = async (text: string, mentions: string[] = [], preset?: 'summary') => {
+  const sendText = async (text: string, mentions: string[] = [], preset?: ChatPreset) => {
     if (!text || running) return;
     setError(null);
     setShowList(false);
@@ -467,10 +474,10 @@ export function ClaudePanel({ status, width, onWidth, allowedSkills: modeSkills,
               </div>
             )}
             {c.items.map((i, n) =>
-              i.kind === 'user' && i.preset === 'summary' ? (
+              i.kind === 'user' && i.preset ? (
                 <div key={n} class="cmsg user cpreset" title={i.text}>
-                  <span class="cpreset-label mono">Oppsummer samtalen</span>
-                  <span class="cpreset-text">{SUMMARY_PROMPT_SHORT}</span>
+                  <span class="cpreset-label mono">{PRESET[i.preset].label}</span>
+                  <span class="cpreset-text">{PRESET[i.preset].text}</span>
                 </div>
               ) : i.kind === 'user' ? (
                 <div key={n} class="cmsg user">
@@ -513,6 +520,11 @@ export function ClaudePanel({ status, width, onWidth, allowedSkills: modeSkills,
               {c.touched.map(p => (
                 <button key={p} class="linkbtn mono" onClick={() => onOpen(p)} title={p}>{fileName(p)}</button>
               ))}
+              {onPr && (
+                <button class="smallbtn ctouched-pr" disabled={running} onClick={() => void sendText(PR_PROMPT, [], 'pr')}>
+                  Lag forslag til PR
+                </button>
+              )}
             </div>
           )}
           {stale.length > 0 && !running && (

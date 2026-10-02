@@ -157,6 +157,13 @@ test('oppsummeringen laster ikke skillen og merkes som preset', () => {
   assert.equal((r.chat.items[0] as { preset?: string }).preset, 'summary');
 });
 
+test('«Lag forslag til PR» laster ikke skillen og merkes som preset', () => {
+  const c = chooseSkill(EMPTY_CHAT, 'fs-krav');
+  const r = send(c, 'Lag PR', null, [], { 'fs-krav': 'a1' }, 'pr');
+  assert.equal(r.invoke, false);
+  assert.equal((r.chat.items[0] as { preset?: string }).preset, 'pr');
+});
+
 test('gamle samtaler uten lagret versjon er utdatert når skillen er endret på disk etter at de ble startet', () => {
   const old = { ...EMPTY_CHAT, loadedSkills: ['fs-krav', 'fs-verify'] };
   const hashes = { 'fs-krav': 'a2', 'fs-verify': 'b1' };
