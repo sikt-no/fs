@@ -28,6 +28,13 @@
 # under innføringen (standardverdi for relevans), og er avklart samme dag:
 # en ny praksisperiode er relevant som standard.
 #
+# ENDRET 02.10.2026 etter tilbakemeldinger på kravet: praksiskalkulatoren har
+# ingen tilknytning til dokumentasjon (scenarioet er @wont), praksistype er
+# flyttet til knytte_praksis_til_opptakskrav.feature (@OPT-BEH-BEH-006),
+# antall timer er påkrevd når omfanget oppgis i timer, og relevansmarkeringen
+# heter nå «Inkluder». AVKLART-kommentarer fra før 02.10.2026 bruker det gamle
+# ordet «relevant» om det samme valget.
+#
 @OPT-BEH-BEH-003 @must @in-progress
 Egenskap: Registrere og beregne praksis for søker
   Som saksbehandler i opptak
@@ -62,7 +69,7 @@ Egenskap: Registrere og beregne praksis for søker
   Regel: Praksisperioder registreres manuelt på saken
 
     Scenario: Registrere en praksisperiode
-      Når jeg registrerer en praksisperiode med type, startdato og sluttdato
+      Når jeg registrerer en praksisperiode med startdato og sluttdato
       Så er praksisperioden lagret på saken
       Og praksisperioden inngår i den samlede praksisberegningen
 
@@ -96,9 +103,9 @@ Egenskap: Registrere og beregne praksis for søker
 
     Scenario: Registrert praksis ligger fast på saken
       Gitt jeg har registrert praksisperioder på saken
-      Og jeg har markert hvilke praksisperioder som er relevante
+      Og jeg har valgt hvilke praksisperioder som er inkludert
       Når jeg åpner praksisberegningen på den samme saken senere
-      Så ser jeg de samme praksisperiodene med samme omfang og relevansmarkering
+      Så ser jeg de samme praksisperiodene med samme omfang og samme valg av hvilke som er inkludert
       Og samlet praksis er den samme som da jeg forlot saken
       # AVKLART 29.09.2026 (situasjon A): bekreftet.
 
@@ -108,38 +115,26 @@ Egenskap: Registrere og beregne praksis for søker
       Så ser jeg hver praksisperiode med følgende opplysninger
         | felt             |
         | Arbeidsgiver     |
-        | Type             |
         | Startdato        |
         | Sluttdato        |
         | Omfang           |
         | Beregnet praksis |
 
-    Scenario: Velge praksistype for en praksisperiode
-      Når jeg registrerer en praksisperiode
-      Så kan jeg velge blant alle praksistyper som gjelder for søkere
-      # AVKLART 16.09.2026: typene er en fast kodeliste — det felles
-      # praksistypekodeverket. Valglisten er alle typer med
-      # status_gjelder_soker = J, uten ytterligere filtrering. Det inkluderer
-      # typer som beskriver studiepraksis i et utdanningsløp
-      # («Grunnskolepraksis 1-7», «Praksis i psykiatri - medisinstudiet») og
-      # ikke arbeidserfaring.
-      #
-      # Begrunnelse: løsningen skal være generell. Kalkulatoren skal kunne
-      # brukes til ulike beregninger — både spesielle opptakskrav og
-      # realkompetanse — og hva som er *relevant* praksis for det enkelte
-      # kravet er saksbehandlerens vurdering, ikke systemets.
-      #
-      # Typen har ingen betydning for beregningen; den dokumenterer hva
-      # praksisen besto i. Verifisert i FS-klienten: beregningen bruker bare
-      # datoer, stillingsprosent og timer.
-      #
-      # Merk at status_valgbar_sokere = N for samtlige typer i kodeverket, så
-      # det er saksbehandleren og ikke søkeren som velger type.
+    # FLYTTET 02.10.2026: scenarioet «Velge praksistype for en
+    # praksisperiode» er flyttet til knytte_praksis_til_opptakskrav.feature
+    # (@OPT-BEH-BEH-006). Praksistype er ikke med i første leveranse
+    # (tilbakemelding på kravet). Avklaringene om kodeverket fulgte med.
 
-    Scenario: Markere om en praksisperiode er relevant
+    Scenario: Inkludere en praksisperiode i praksisberegningen
       Gitt jeg har registrert en praksisperiode
-      Når jeg markerer praksisperioden som relevant
-      Så inngår den i den samlede praksisberegningen
+      Når jeg inkluderer praksisperioden
+      Så inngår praksisperioden i den samlede praksisberegningen
+      # ENDRET 02.10.2026: markeringen heter «Inkluder», ikke «relevant»
+      # (tilbakemelding på kravet). Det er det samme valget som
+      # relevansflagget i avklaringene under: ett valg per periode, som
+      # filtrerer før overlappsberegningen. Om praksisen er relevant for et
+      # bestemt opptakskrav, hører til knytte_praksis_til_opptakskrav.feature.
+      #
       # AVKLART 29.09.2026 (spørsmål 4): alternativ (1) — ett relevansflagg
       # per periode, som filtrerer *før* overlappsberegningen. Da blir det to
       # summer, oppgitt og justert for overlapp, og begge regnes bare av de
@@ -155,27 +150,27 @@ Egenskap: Registrere og beregne praksis for søker
       # ikke én per opptakskrav. Relevans for et bestemt opptakskrav hører til
       # knytte_praksis_til_opptakskrav.feature.
 
-    Scenario: Praksisperioder som ikke er markert relevante telles ikke med
+    Scenario: Praksisperioder som ikke er inkludert, telles ikke med
       Gitt saken har følgende praksisperioder
-        | startdato  | sluttdato  | omfang | relevant |
-        | 01.01.2020 | 31.12.2020 | 100 %  | ja       |
-        | 01.01.2021 | 31.12.2021 | 100 %  | nei      |
+        | startdato  | sluttdato  | omfang | inkludert |
+        | 01.01.2020 | 31.12.2020 | 100 %  | ja        |
+        | 01.01.2021 | 31.12.2021 | 100 %  | nei       |
       Når jeg åpner praksisberegningen
       Så er samlet praksis 1,00 år
 
-    Scenario: Overlapp beregnes bare mellom relevante praksisperioder
+    Scenario: Overlapp beregnes bare mellom inkluderte praksisperioder
       Gitt saken har følgende praksisperioder
-        | startdato  | sluttdato  | omfang | relevant |
-        | 01.01.2020 | 31.12.2020 | 50 %   | ja       |
-        | 01.01.2020 | 31.12.2020 | 60 %   | nei      |
+        | startdato  | sluttdato  | omfang | inkludert |
+        | 01.01.2020 | 31.12.2020 | 50 %   | ja        |
+        | 01.01.2020 | 31.12.2020 | 60 %   | nei       |
       Når jeg åpner praksisberegningen
       Så er sum av oppgitte perioder 0,50 år
       Og sum justert for overlapp er 0,50 år
 
-    Scenario: En ny praksisperiode er relevant som standard
+    Scenario: En ny praksisperiode er inkludert som standard
       Når jeg registrerer en praksisperiode
-      Så er praksisperioden markert som relevant
-      Og den inngår i den samlede praksisberegningen
+      Så er praksisperioden inkludert
+      Og praksisperioden inngår i den samlede praksisberegningen
       # AVKLART 29.09.2026: en ny praksisperiode er markert som relevant når
       # den registreres. Saksbehandleren fjerner markeringen for perioder
       # som ikke skal telle. Da gir en glemt markering aldri for lav sum.
@@ -184,15 +179,12 @@ Egenskap: Registrere og beregne praksis for søker
       Når jeg registrerer en praksisperiode
       Så må jeg oppgi startdato
       Og jeg må oppgi sluttdato
-      Men praksistype er valgfri
       # AVKLART 16.09.2026: verifisert i FS-klienten — kun praksistypekode og
       # dato_fra er obligatoriske felt. Sluttdato, stillingsprosent og
       # omfang kan alle stå tomme.
       #
-      # ENDRET 29.09.2026: praksistype er valgfri, besluttet ved validering
-      # av skissen «Skisse til claude» (spec-registrere-praksis.md, avvik 1,
-      # og beslutningspunkt 1). Dette er en endring fra FS-klienten, der
-      # praksistype er obligatorisk.
+      # ENDRET 02.10.2026: praksistype er ikke med i første leveranse, og er
+      # flyttet til knytte_praksis_til_opptakskrav.feature (@OPT-BEH-BEH-006).
       #
       # ENDRET 29.09.2026: sluttdato er obligatorisk (spørsmål 8). Se
       # «Praksisperiode uten sluttdato kan ikke lagres».
@@ -259,12 +251,17 @@ Egenskap: Registrere og beregne praksis for søker
       # arbeidsforhold er en sluttdato fram i tid måten å registrere perioden
       # på.
 
-    @could
+    @wont
     Scenario: Knytte praksisperioden til dokumentasjon på søknaden
       Gitt søkeren har lagt ved dokumentasjon på et arbeidsforhold i søknaden
       Når jeg knytter dokumentasjonen til praksisperioden
       Så ser jeg hvilken dokumentasjon praksisperioden bygger på
       Og jeg kan åpne dokumentasjonen fra praksisperioden
+      # ENDRET 02.10.2026: praksiskalkulatoren skal ikke ha noen tilknytning
+      # til dokumentasjon (tilbakemelding på kravet). Prioriteten er endret
+      # fra @could til @wont. Scenarioet beholdes som dokumentert ønske, men
+      # skal ikke implementeres.
+      #
       # UTSATT 23.09.2026: ikke med i første leveranse. Scenarioet beholdes
       # her som krav med lavere prioritet, og tas med i en senere leveranse.
       #
@@ -354,6 +351,16 @@ Egenskap: Registrere og beregne praksis for søker
       Når jeg velger å oppgi omfanget som stillingsprosent
       Så kan jeg ikke samtidig oppgi omfanget som antall timer
 
+    Scenario: Praksisperiode med omfang i timer kan ikke lagres uten antall timer
+      Gitt jeg registrerer en praksisperiode
+      Og jeg velger å oppgi omfanget som antall timer
+      Når jeg ikke oppgir antall timer i perioden
+      Så får jeg en feilmelding om at antall timer i perioden må oppgis
+      Og praksisperioden kan ikke lagres
+      # AVKLART 02.10.2026: når omfanget oppgis i timer, er antall timer i
+      # perioden påkrevd (tilbakemelding på kravet). Dette er en endring fra
+      # FS-klienten, der omfang kan stå tomt.
+
     Scenariomal: Stillingsprosent utenfor 0–100 % kan ikke lagres
       Gitt jeg registrerer en praksisperiode
       Når jeg oppgir omfanget som stillingsprosent <stillingsprosent>
@@ -391,7 +398,7 @@ Egenskap: Registrere og beregne praksis for søker
 
     Scenario: Oppdatere en praksisperiode
       Gitt saken har en registrert praksisperiode
-      Når jeg endrer arbeidsgiver, type, datoer eller omfang på praksisperioden
+      Når jeg endrer arbeidsgiver, datoer eller omfang på praksisperioden
       Så er endringen lagret på praksisperioden
       Og den samlede praksisberegningen er oppdatert
 
@@ -404,8 +411,8 @@ Egenskap: Registrere og beregne praksis for søker
   Regel: Systemet summerer praksisperiodene automatisk
 
     # Eksemplene i denne regelen forutsetter at alle praksisperiodene er
-    # markert som relevante, slik nye perioder er som standard. Se
-    # «En ny praksisperiode er relevant som standard».
+    # inkludert, slik nye perioder er som standard. Se
+    # «En ny praksisperiode er inkludert som standard».
     #
     # AVKLART 29.09.2026 (spørsmål 7): samlet praksis vises bare i år, ikke i
     # timer. Timer brukes bare som omfang på den enkelte praksisperioden.

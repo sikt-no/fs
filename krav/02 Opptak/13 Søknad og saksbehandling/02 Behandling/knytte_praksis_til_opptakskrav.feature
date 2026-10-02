@@ -62,8 +62,9 @@ Egenskap: Knytte praksis til opptakskrav
       #   altså ha ulike krav til hva som teller. Da kan relevans ikke være
       #   ett flagg per praksisperiode, slik det er i FS i dag; den må være
       #   per kombinasjon av periode og kravelement.
-      # - Henger derfor direkte sammen med «Markere om en praksisperiode er
-      #   relevant» i registrere_praksis.feature. De to må besluttes sammen — svaret
+      # - Henger derfor direkte sammen med «Inkludere en praksisperiode i
+      #   praksisberegningen» i registrere_praksis.feature (før 02.10.2026:
+      #   «Markere om en praksisperiode er relevant»). De to må besluttes sammen — svaret
       #   avgjør datamodellen, og det er det siste store strukturelle
       #   spørsmålet i featuren.
       Gitt spørsmålet er åpent
@@ -145,3 +146,39 @@ Egenskap: Knytte praksis til opptakskrav
       #   praksisberegningen og den manuelle angivelsen er uenige — hvilken
       #   av dem gjelder?
       Gitt spørsmålet er åpent
+
+  # FLYTTET 02.10.2026 fra registrere_praksis.feature (@OPT-BEH-BEH-003).
+  # Praksistype er ikke med i første leveranse av praksiskalkulatoren
+  # (tilbakemelding på kravet), og hører hit. Avklaringene datert 16.09.2026
+  # og 29.09.2026 ble gjort mens scenarioet lå i registrere_praksis.feature.
+
+  Regel: Praksisperioder kan få en praksistype
+
+    Scenario: Velge praksistype for en praksisperiode
+      Gitt søkeren har en registrert praksisperiode
+      Når jeg velger praksistype for praksisperioden
+      Så kan jeg velge blant alle praksistyper som gjelder for søkere
+      Men praksistype er valgfri
+      # AVKLART 16.09.2026: typene er en fast kodeliste — det felles
+      # praksistypekodeverket. Valglisten er alle typer med
+      # status_gjelder_soker = J, uten ytterligere filtrering. Det inkluderer
+      # typer som beskriver studiepraksis i et utdanningsløp
+      # («Grunnskolepraksis 1-7», «Praksis i psykiatri - medisinstudiet») og
+      # ikke arbeidserfaring.
+      #
+      # Begrunnelse: løsningen skal være generell. Kalkulatoren skal kunne
+      # brukes til ulike beregninger — både spesielle opptakskrav og
+      # realkompetanse — og hva som er *relevant* praksis for det enkelte
+      # kravet er saksbehandlerens vurdering, ikke systemets.
+      #
+      # Typen har ingen betydning for beregningen; den dokumenterer hva
+      # praksisen besto i. Verifisert i FS-klienten: beregningen bruker bare
+      # datoer, stillingsprosent og timer.
+      #
+      # Merk at status_valgbar_sokere = N for samtlige typer i kodeverket, så
+      # det er saksbehandleren og ikke søkeren som velger type.
+      #
+      # ENDRET 29.09.2026: praksistype er valgfri, besluttet ved validering
+      # av skissen «Skisse til claude» (spec-registrere-praksis.md, avvik 1,
+      # og beslutningspunkt 1). Dette er en endring fra FS-klienten, der
+      # praksistype er obligatorisk.
