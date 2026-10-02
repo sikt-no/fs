@@ -1,4 +1,4 @@
-import { mkdir, writeFile } from 'node:fs/promises';
+import { mkdir, unlink, writeFile } from 'node:fs/promises';
 import { dirname, isAbsolute, join, resolve, sep } from 'node:path';
 
 /**
@@ -22,4 +22,9 @@ export async function saveFile(repoRoot: string, path: string, text: string) {
   const abs = kravPath(repoRoot, path);
   await mkdir(dirname(abs), { recursive: true });
   await writeFile(abs, text, 'utf8');
+}
+
+/** Sletter fila. Watcheren sender `krav:update` uten entry, og slettingen kommer med i «Lag PR» som andre endringer. */
+export async function deleteFile(repoRoot: string, path: string) {
+  await unlink(kravPath(repoRoot, path));
 }

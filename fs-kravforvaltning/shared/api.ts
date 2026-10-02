@@ -133,6 +133,8 @@ export interface Api {
   /** Teksten i en krav-fil, slik den er på disk */
   read(path: string): Promise<string>;
   save(req: SaveRequest): Promise<void>;
+  /** Sletter en krav-fil fra disk */
+  remove(path: string): Promise<void>;
   publish(req: PublishRequest): Promise<PublishResult>;
   authStatus(): Promise<AuthStatus>;
   authStart(): Promise<AuthStatus>;
@@ -155,4 +157,4 @@ export interface Api {
   pickDir(): Promise<string | null>;
 }
 export type ApiMethod = keyof Api;
-export const API_METHODS: ApiMethod[] = ['read', 'save', 'publish', 'authStatus', 'authStart', 'authPoll', 'authLogout', 'pull', 'mainStatus', 'claudeStatus', 'claudeRun', 'claudeCancel', 'claudeActive', 'claudeSkills', 'claudeDirs', 'pickDir'];
+export const API_METHODS: ApiMethod[] = ['read', 'save', 'remove', 'publish', 'authStatus', 'authStart', 'authPoll', 'authLogout', 'pull', 'mainStatus', 'claudeStatus', 'claudeRun', 'claudeCancel', 'claudeActive', 'claudeSkills', 'claudeDirs', 'pickDir'];

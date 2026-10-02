@@ -3,7 +3,7 @@ import type { Api, ApiMethod, Boot } from '../shared/api.ts';
 import { API_METHODS } from '../shared/api.ts';
 import type { Auth } from './auth.ts';
 import type { ClaudeRunner } from './claude.ts';
-import { kravPath, saveFile } from './save.ts';
+import { deleteFile, kravPath, saveFile } from './save.ts';
 import type { Workspace } from './workspace.ts';
 
 /**
@@ -19,6 +19,7 @@ export function createApi(ws: Workspace, auth: Auth, claude: ClaudeRunner): Api 
     boot: () => ({ entries: ws.entries, git: ws.git, tasks: ws.tasks, editable: true }),
     read: path => readFile(kravPath(ws.repoRoot, path), 'utf8'),
     save: req => saveFile(ws.repoRoot, req.path, req.text),
+    remove: path => deleteFile(ws.repoRoot, path),
     async publish(req) {
       const res = await vcs().publish(req, await auth.token());
       ws.refreshGit();

@@ -592,6 +592,20 @@ function App() {
   const fileName = current.slice(current.lastIndexOf('/') + 1);
   // «Lag PR» i filvisningen: bare for en fil med endringer
   const filePr = EDITABLE && changedFile(git, current) ? () => setPrFor(current) : undefined;
+  // «Slett kravfil» i feature-visningen: fila slettes fra disk, og forsiden vises. Slettingen sendes med «Lag PR» som andre endringer
+  const deleteCurrent = async () => {
+    const path = current;
+    if (!confirm(`Slette kravfila «${fileName}»?\n\nFila slettes fra disk. Slettingen sendes med «Lag PR» i «Endringer».`)) return;
+    try {
+      await transport.call('remove', path);
+    } catch (e) {
+      return alert((e as Error).message);
+    }
+    const rest = { ...state.current.entries };
+    delete rest[path];
+    setEntries(rest);
+    select(defaultPath(rest));
+  };
   // Claude-panelet: samme samtale i alle visningene, med skills og fil-kontekst for visningen man er i
   const claudeShown = !!claude && claudeOpen;
   const claudeSkills = CLAUDE_SKILLS_BY_MODE[mode];
@@ -722,7 +736,7 @@ function App() {
                   findClosed={find.closed}
                   onFindClose={k => setFind(f => ({ ...f, closed: { ...f.closed, [k]: true } }))}
                   onEdit={EDITABLE ? () => setEditing(true) : undefined}
-                  onPr={filePr}
+                  onDelete={EDITABLE ? deleteCurrent : undefined}
                 />
               )}
             </main>

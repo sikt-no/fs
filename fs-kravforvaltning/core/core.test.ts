@@ -1,10 +1,10 @@
 import assert from 'node:assert/strict';
 import { execFileSync } from 'node:child_process';
-import { mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
+import { existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { after, test } from 'node:test';
-import { kravPath, saveFile } from './save.ts';
+import { deleteFile, kravPath, saveFile } from './save.ts';
 import { cliVcs } from './vcs-cli.ts';
 import { branchName, checkPaths, githubRepo } from './vcs.ts';
 
@@ -45,6 +45,15 @@ test('saveFile skriver fila og lager mapper', async () => {
   await saveFile(root, 'krav/01 A/10 B/ny.feature', 'Egenskap: Ny\n');
   assert.equal(readFileSync(join(root, 'krav/01 A/10 B/ny.feature'), 'utf8'), 'Egenskap: Ny\n');
   await assert.rejects(saveFile(root, 'krav/x.feature', undefined as unknown as string), /tekst/);
+});
+
+test('deleteFile sletter fila, og bare krav-filer under krav/', async () => {
+  const root = join(tmp, 'delete');
+  await saveFile(root, 'krav/01 A/10 B/borte.feature', 'Egenskap: Borte\n');
+  await deleteFile(root, 'krav/01 A/10 B/borte.feature');
+  assert.equal(existsSync(join(root, 'krav/01 A/10 B/borte.feature')), false);
+  await assert.rejects(deleteFile(root, 'krav/01 A/10 B/borte.feature'), /ENOENT/);
+  await assert.rejects(deleteFile(root, 'krav/../package.json'), /Ugyldig/);
 });
 
 test('cliVcs.publish lager branch fra origin/main i en worktree og lar arbeidskatalogen være', async () => {
