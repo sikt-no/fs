@@ -1,16 +1,22 @@
 // Forbindelsen mellom Claude-panelet og resten av vieweren. Panelet melder seg på når det er åpent,
-// og andre visninger (Avvik, Oppgaver) kan da sende en prompt rett inn i samtalen som er åpen.
+// og andre visninger kan da sende en prompt rett inn i samtalen som er åpen (Avvik, Oppgaver),
+// eller legge tekst i inputfeltet (markert tekst i feature-visningen).
 import { useEffect, useState } from 'preact/hooks';
 
-type Sender = (text: string) => Promise<void>;
+interface Target {
+  /** Sender teksten som ny melding i samtalen som er åpen */
+  send: (text: string) => Promise<void>;
+  /** Legger teksten til i inputfeltet; brukeren sender selv */
+  insert: (text: string) => void;
+}
 
-let sender: Sender | null = null;
+let sender: Target | null = null;
 let busy = false;
 const listeners = new Set<() => void>();
 const changed = () => listeners.forEach(l => l());
 
 /** Panelet melder seg på (og av med `null`) */
-export function registerClaude(s: Sender | null) {
+export function registerClaude(s: Target | null) {
   sender = s;
   changed();
 }
@@ -22,7 +28,7 @@ export function setClaudeBusy(b: boolean) {
   changed();
 }
 
-/** Er panelet åpent (`ready`), jobber Claude (`busy`), og send en prompt som ny melding i samtalen */
+/** Er panelet åpent (`ready`), jobber Claude (`busy`), send en prompt som ny melding i samtalen, eller legg tekst i inputfeltet */
 export function useClaudeTarget() {
   const [, force] = useState(0);
   useEffect(() => {
@@ -30,5 +36,10 @@ export function useClaudeTarget() {
     listeners.add(l);
     return () => void listeners.delete(l);
   }, []);
-  return { ready: sender !== null, busy, send: (text: string) => (sender ? sender(text) : Promise.resolve()) };
+  return {
+    ready: sender !== null,
+    busy,
+    send: (text: string) => (sender ? sender.send(text) : Promise.resolve()),
+    insert: (text: string) => sender?.insert(text),
+  };
 }

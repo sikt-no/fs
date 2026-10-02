@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'preact/hooks';
 import type { ClaudeEvent, ClaudeStatus } from '../shared/api';
+import type { GitChange, Snapshot } from '../shared/model';
 import {
   applyEvent,
   contextLabel,
@@ -11,17 +12,32 @@ import {
   removeConversation,
   restoreConversations,
   selectConversation,
+  editedFiles,
   send,
+  staleSkills,
   started,
   TOOL_LABEL,
   updateConversation,
+  type ChatPreset,
   type Conversations,
 } from './claudeChat';
+import { PR_PROMPT, PR_PROMPT_SHORT, type PrProposal } from './prProposal';
 import { ChatMarkdown } from './ChatMarkdown';
 import { registerClaude, setClaudeBusy } from './claudeBridge';
 import { CodeDirs, codeDirPaths, useCodeDirs } from './CodeDirs';
-import { knownSkills, SkillPicker } from './ClaudeSkills';
+import { knownSkills, refreshSkills, skillChangedAt, SkillPicker, skillHashes, useSkillHashes } from './ClaudeSkills';
+import { SUMMARY_PROMPT, SUMMARY_PROMPT_SHORT, summaryDraft, summaryIn, summaryMentions, type ChatSummary } from './chatSummary';
+import { readDraft, saveDraft } from './claudeDraft';
+import { appendQuote } from './selection';
+import { covered } from './mention';
+import { MENTION_LIST_ID, MentionPicker, useMentions } from './MentionPicker';
 import { transport } from './transport';
+
+/** Slik vises de faste meldingene i samtalen */
+const PRESET: Record<ChatPreset, { label: string; text: string }> = {
+  summary: { label: 'Oppsummer samtalen', text: SUMMARY_PROMPT_SHORT },
+  pr: { label: 'Lag forslag til PR', text: PR_PROMPT_SHORT },
+};
 
 // Samtalene lever utenfor komponenten og lagres i localStorage, så de blir stående når panelet lukkes,
 // visningen byttes eller vieweren lastes inn på nytt. Claude Code husker selve samtalene (`--resume`).
@@ -71,7 +87,7 @@ addEventListener('beforeunload', () => {
 // Hendelser som kommer før svaret på `claudeRun` (med runId) er framme, spilles av når det kommer
 const early = new Map<string, ClaudeEvent[]>();
 transport.on('krav:claude', ({ runId, event }: { runId: string; event: ClaudeEvent }) => {
-  const next = applyEvent(convs, runId, event, Date.now());
+  const next = applyEvent(convs, runId, event, Date.now(), skillHashes());
   if (next) set(next);
   else early.set(runId, [...(early.get(runId) ?? []), event]);
 });
@@ -177,6 +193,8 @@ interface Props {
   onWidth: (w: number) => void;
   /** Fila brukeren ser på; sendes med som kontekst */
   path: string | null;
+  /** Krav-treet, for @-omtale av filer og mapper */
+  entries: Snapshot;
   /** Skillene som kan velges der brukeren er (i Avvik bare fs-krav) */
   allowedSkills: string[];
   /** Hvorfor en skill ikke kan velges her */
@@ -188,15 +206,21 @@ interface Props {
   /** Finnes fila i vieweren? Lenker til krav-filer i svarene åpner fila */
   has: (path: string) => boolean;
   onOpen: (path: string) => void;
+  /** Viser mappa i treet */
+  onReveal: (dir: string) => void;
+  /** Åpner «Lag PR» utfylt med Claudes forslag; mangler der PR ikke kan lages */
+  onPr?: (p: PrProposal) => void;
+  /** Endringen i git for en krav-fil, til filene på PR-kortet */
+  change?: (path: string) => GitChange | undefined;
   onClose: () => void;
 }
 
 /**
  * Samtale med den lokale Claude Code-en (`claude -p --output-format stream-json`), med repoet som arbeidsmappe.
  * Claude kan lese og endre filer, men ikke kjøre kommandoer. Endringene vises i vieweren med én gang,
- * og sendes som PR med «Lag PR» som vanlig.
+ * og sendes som PR med «Lag PR» som vanlig. Foreslår Claude en PR (`krav-pr`-blokk), åpner kortet «Lag PR» utfylt.
  */
-export function ClaudePanel({ status, width, onWidth, allowedSkills: modeSkills, skillHint: modeHint, preselect, codeDirs, path, has, onOpen, onClose }: Props) {
+export function ClaudePanel({ status, width, onWidth, allowedSkills: modeSkills, skillHint: modeHint, preselect, codeDirs, path, entries, has, onOpen, onReveal, onPr, change, onClose }: Props) {
   // Desktop-appen: uten valgte kodemapper finnes det ingen kode å verifisere mot, så fs-verify gråtones
   const dirs = useCodeDirs();
   const noCode = transport.kind === 'electron' && codeDirs && !!dirs && !dirs.some(d => d.exists);
@@ -206,31 +230,53 @@ export function ClaudePanel({ status, width, onWidth, allowedSkills: modeSkills,
   const cs = useConversations();
   const conv = currentChat(cs);
   const c = conv?.chat ?? EMPTY_CHAT;
-  const [input, setInput] = useState('');
+  // Skills som er endret på disk siden de ble lastet i samtalen: den må fortsette i en ny samtale
+  const hashes = useSkillHashes();
+  const changedAt = skillChangedAt();
+  const staleIn = (x: { chat: typeof c; createdAt: number }) => staleSkills(x.chat, hashes, changedAt, x.createdAt);
+  const stale = conv ? staleIn(conv) : [];
+  const summarized = c.items.some(i => i.kind === 'assistant' && !!summaryIn(i.text));
+  const from = c.continuesFrom ? cs.list.find(x => x.id === c.continuesFrom) ?? null : null;
+  const inputRef = useRef<HTMLTextAreaElement>(null);
+  // Utkastet i feltet overlever omlasting og at panelet lukkes
+  const [draft] = useState(readDraft);
+  const [input, setInput] = useState(draft.text);
   const [error, setError] = useState<string | null>(null);
   const [showList, setShowList] = useState(false);
   const list = useRef<HTMLDivElement>(null);
   const running = c.runId !== null;
   // Skillen før den første samtalen finnes; ellers den samtalen har valgt. Er den ikke tillatt her,
   // gjelder den første tillatte i Krav og Avvik (fs-krav), og ingen i Oppgaver. Den lastes med neste melding.
-  const [pending, setPending] = useState<string | null>(null);
+  const [pending, setPending] = useState<string | null>(draft.pending);
   const skill = effectiveSkill(conv ? c.skill : pending, allowedSkills, preselect);
   // Fila brukeren ser på, sendes med som kontekst. ✕ holder den utenfor til brukeren åpner en annen fil.
-  const [excluded, setExcluded] = useState<string | null>(null);
+  // Etter omlasting er det samme fil, så ✕ blir stående.
+  const [excluded, setExcluded] = useState<string | null>(draft.excluded);
   const context = path !== null && path !== excluded;
   const sentPath = context ? path : null;
-  useEffect(() => setExcluded(null), [path]);
+  useEffect(() => {
+    if (path !== excluded) setExcluded(null);
+  }, [path]);
+  // Filer og mapper lagt ved med @; de gjelder bare neste melding
+  const mention = useMentions(entries, path, input, setInput, draft.mentions);
+  const mentionKey = mention.mentions.join('\n');
+  useEffect(() => saveDraft({ text: input, mentions: mention.mentions, excluded, pending }), [input, mentionKey, excluded, pending]);
 
   useEffect(() => {
     const el = list.current;
     if (el) el.scrollTop = el.scrollHeight;
   }, [c.items.length, conv?.id, showList]);
 
-  /** Sender `text` som ny melding i samtalen som er åpen (eller en ny). Brukes av inputfeltet og av «Send til Claude Code». */
-  const sendText = async (text: string) => {
+  /**
+   * Sender `text` som ny melding i samtalen som er åpen (eller en ny). Brukes av inputfeltet, av «Send til Claude Code»
+   * og av «Oppsummer samtalen» og «Lag forslag til PR» (`preset`).
+   */
+  const sendText = async (text: string, mentions: string[] = [], preset?: ChatPreset) => {
     if (!text || running) return;
     setError(null);
     setShowList(false);
+    // Versjonen av skillen som lastes med meldingen, skal være den som er på disk nå
+    await refreshSkills();
     let id = conv?.id;
     if (!id) {
       id = newId();
@@ -238,13 +284,14 @@ export function ClaudePanel({ status, width, onWidth, allowedSkills: modeSkills,
     }
     const target = id;
     const before = chooseSkill(convs.list.find(x => x.id === target)!.chat, skill);
-    const { chat: after, invoke } = send(before, text, sentPath);
+    const { chat: after, invoke } = send(before, text, sentPath, mentions, skillHashes(), preset);
     set(updateConversation(convs, target, () => after, Date.now()));
     try {
       const { runId } = await transport.call('claudeRun', {
         prompt: text,
         sessionId: before.sessionId,
         path: sentPath,
+        mentions,
         skill: after.skill,
         skills: allowedSkills,
         invoke,
@@ -253,7 +300,7 @@ export function ClaudePanel({ status, width, onWidth, allowedSkills: modeSkills,
       });
       set(updateConversation(convs, target, ch => started(ch, runId), Date.now()));
       for (const ev of early.get(runId) ?? []) {
-        const next = applyEvent(convs, runId, ev, Date.now());
+        const next = applyEvent(convs, runId, ev, Date.now(), skillHashes());
         if (next) set(next);
       }
       early.delete(runId);
@@ -264,22 +311,59 @@ export function ClaudePanel({ status, width, onWidth, allowedSkills: modeSkills,
   const submit = async () => {
     const text = input.trim();
     if (!text || running) return;
+    const mentions = mention.mentions;
     setInput('');
-    await sendText(text);
+    mention.clear();
+    await sendText(text, mentions);
   };
 
-  // Mens panelet er åpent kan andre visninger sende en prompt hit («Send til Claude Code»)
+  // Markert tekst fra feature-visningen legges i inputfeltet som sitat. Feltet lyser opp et øyeblikk.
+  const [inputFlash, setInputFlash] = useState(false);
+  const flashTimer = useRef<ReturnType<typeof setTimeout>>();
+  useEffect(() => () => clearTimeout(flashTimer.current), []);
+  const insertText = (quote: string) => {
+    const next = appendQuote(inputRef.current?.value ?? input, quote);
+    setInput(next);
+    setInputFlash(true);
+    clearTimeout(flashTimer.current);
+    flashTimer.current = setTimeout(() => setInputFlash(false), 1200);
+    setTimeout(() => {
+      const ta = inputRef.current;
+      if (!ta) return;
+      ta.focus();
+      ta.setSelectionRange(next.length, next.length);
+      ta.scrollTop = ta.scrollHeight;
+    }, 30);
+  };
+
+  // Mens panelet er åpent kan andre visninger sende en prompt hit («Send til Claude Code»), eller legge tekst i inputfeltet
   const sendRef = useRef(sendText);
   sendRef.current = sendText;
+  const insertRef = useRef(insertText);
+  insertRef.current = insertText;
   useEffect(() => {
     if (!status.available) return;
-    registerClaude(t => sendRef.current(t));
+    registerClaude({ send: t => sendRef.current(t), insert: t => insertRef.current(t) });
     return () => {
       registerClaude(null);
       setClaudeBusy(false);
     };
   }, [status.available]);
   useEffect(() => setClaudeBusy(running), [running]);
+
+  /**
+   * Ny samtale som fortsetter fra den som er åpen, med samme skill. Med en oppsummering legges den i inputfeltet,
+   * og filene legges ved med @. Brukeren leser og sender selv; første melding laster den nye versjonen av skillen.
+   */
+  const continueIn = (summary?: ChatSummary, files: string[] = []) => {
+    const skillNow = effectiveSkill(c.skill, allowedSkills, preselect);
+    set(createConversation(convs, newId(), Date.now(), skillNow, conv?.id ?? null));
+    setShowList(false);
+    if (!summary) return;
+    setInput(summaryDraft(summary));
+    mention.replace(summaryMentions(files));
+    setTimeout(() => inputRef.current?.focus());
+  };
 
   const remove = (id: string, title: string) => {
     if (!confirm(`Slette samtalen «${title}»?`)) return;
@@ -314,6 +398,11 @@ export function ClaudePanel({ status, width, onWidth, allowedSkills: modeSkills,
           <button class="smallbtn" onClick={onClose} aria-label="Lukk Claude-panelet">Lukk</button>
         </div>
       </div>
+      {conv && !showList && !conv.chat.items.length && from && (
+        <div class="claude-info">
+          <div class="claude-title muted">{conv.title}</div>
+        </div>
+      )}
       {conv && !showList && conv.chat.items.length > 0 && (
         <div class="claude-info">
           <div class="claude-title" title={conv.title}>{conv.title}</div>
@@ -330,7 +419,20 @@ export function ClaudePanel({ status, width, onWidth, allowedSkills: modeSkills,
               </span>
             )}
             <span class="cloaded" title="Skills som er lastet inn i samtalen">
-              Lastet: {c.loadedSkills.length ? c.loadedSkills.map(n => <span key={n} class="cctx-skill">{n}</span>) : <span class="muted">ingen skills</span>}
+              Lastet:{' '}
+              {c.loadedSkills.length ? (
+                c.loadedSkills.map(n =>
+                  stale.includes(n) ? (
+                    <span key={n} class="cctx-skill stale" title="Endret siden den ble lastet i samtalen">
+                      {n} <b aria-hidden="true">↻</b>
+                    </span>
+                  ) : (
+                    <span key={n} class="cctx-skill">{n}</span>
+                  ),
+                )
+              ) : (
+                <span class="muted">ingen skills</span>
+              )}
             </span>
           </div>
         </div>
@@ -357,7 +459,16 @@ export function ClaudePanel({ status, width, onWidth, allowedSkills: modeSkills,
                   {x.chat.runId && <span class="cdot" title="Claude jobber" />}
                   {x.title}
                 </span>
-                <span class="mono muted">{when(x.updatedAt)} · {x.chat.items.filter(i => i.kind === 'user').length} meldinger</span>
+                <span class="cconv-meta mono muted">
+                  {x.chat.skill && <span>{x.chat.skill}</span>}
+                  {staleIn(x).length > 0 && (
+                    <span class="cconv-stale" title={`Oppdatert siden den ble lastet: ${staleIn(x).join(', ')}`}>
+                      <span class="cstale-tri" aria-hidden="true" />
+                      utdatert skill
+                    </span>
+                  )}
+                  <span>{when(x.updatedAt)}</span>
+                </span>
               </button>
               <button class="smallbtn cconv-del" onClick={() => remove(x.id, x.title)} aria-label={`Slett samtalen ${x.title}`} title="Slett samtalen">
                 Slett
@@ -368,7 +479,15 @@ export function ClaudePanel({ status, width, onWidth, allowedSkills: modeSkills,
       ) : (
         <>
           <div class="claude-list" ref={list}>
-            {!c.items.length && (
+            {!c.items.length && from && (
+              <div class="claude-empty ccontinue">
+                Fortsetter fra «{from.title}».{' '}
+                <button class="linkbtn" onClick={() => set(selectConversation(convs, from.id))}>
+                  Åpne den gamle samtalen
+                </button>
+              </div>
+            )}
+            {!c.items.length && !from && (
               <div class="claude-empty">
                 Spør om kravene, eller be Claude endre dem. Claude kan lese og redigere filene, men ikke kjøre kommandoer eller lage PR.
                 <br />
@@ -377,19 +496,28 @@ export function ClaudePanel({ status, width, onWidth, allowedSkills: modeSkills,
               </div>
             )}
             {c.items.map((i, n) =>
-              i.kind === 'user' ? (
+              i.kind === 'user' && i.preset ? (
+                <div key={n} class="cmsg user cpreset" title={i.text}>
+                  <span class="cpreset-label mono">{PRESET[i.preset].label}</span>
+                  <span class="cpreset-text">{PRESET[i.preset].text}</span>
+                </div>
+              ) : i.kind === 'user' ? (
                 <div key={n} class="cmsg user">
                   <LongText text={i.text} />
-                  {(i.path || i.skill) && (
+                  {(i.path || i.skill || i.mentions?.length) && (
                     <div class="cctx mono">
                       {i.skill && <span class="cctx-skill">{i.skill}</span>}
-                      {i.path && fileName(i.path)}
+                      {[i.path, ...(i.mentions ?? [])]
+                        .filter((p): p is string => !!p)
+                        .map(p => (
+                          <span key={p} class="cctx-file" title={p}>{fileName(p)}{entries[p] ? '' : '/'}</span>
+                        ))}
                     </div>
                   )}
                 </div>
               ) : i.kind === 'assistant' ? (
                 <div key={n} class="cmsg assistant">
-                  <ChatMarkdown text={i.text} has={has} onOpen={onOpen} />
+                  <ChatMarkdown text={i.text} has={has} onOpen={onOpen} onPr={onPr} change={change} onSummary={continueIn} skill={c.skill} edited={editedFiles(c)} />
                 </div>
               ) : i.kind === 'tool' ? (
                 <div key={n} class={'ctool ' + i.state}>
@@ -414,6 +542,37 @@ export function ClaudePanel({ status, width, onWidth, allowedSkills: modeSkills,
               {c.touched.map(p => (
                 <button key={p} class="linkbtn mono" onClick={() => onOpen(p)} title={p}>{fileName(p)}</button>
               ))}
+              {onPr && (
+                <button class="smallbtn ctouched-pr" disabled={running} onClick={() => void sendText(PR_PROMPT, [], 'pr')}>
+                  Lag forslag til PR
+                </button>
+              )}
+            </div>
+          )}
+          {stale.length > 0 && !running && (
+            <div class={'cstale' + (summarized ? ' compact' : '')} role="status">
+              <span class="cstale-tri" aria-hidden="true" />
+              <div class="cstale-text">
+                {stale.map((n, j) => (
+                  <span key={n}>
+                    {j > 0 && ', '}
+                    <b class="mono">{n}</b>
+                  </span>
+                ))}{' '}
+                {summarized
+                  ? `er oppdatert siden ${stale.length === 1 ? 'den' : 'de'} ble lastet.`
+                  : `er oppdatert siden ${stale.length === 1 ? 'den' : 'de'} ble lastet i denne samtalen. Start en ny samtale for å bruke den nye versjonen.`}
+              </div>
+              <div class="cstale-btns">
+                {!summarized && (
+                  <button class="primbtn" onClick={() => void sendText(SUMMARY_PROMPT, [], 'summary')}>
+                    Oppsummer samtalen
+                  </button>
+                )}
+                <button class="smallbtn" onClick={() => continueIn()}>
+                  Ny samtale
+                </button>
+              </div>
             </div>
           )}
           {error && <div class="edwarn err" role="alert">{error}</div>}
@@ -425,16 +584,38 @@ export function ClaudePanel({ status, width, onWidth, allowedSkills: modeSkills,
               hint={skillHint}
               preselect={preselect}
               disabled={running}
+              locked={stale.length > 0}
               onChange={s => (conv ? set(updateConversation(convs, conv.id, ch => chooseSkill(ch, s), Date.now())) : setPending(s))}
             />
             {codeDirs && <CodeDirs />}
-            <div class="cinbox">
+            <div class={'cinbox' + (inputFlash ? ' flash' : '')}>
+              {mention.picker && (
+                <MentionPicker
+                  {...mention.picker}
+                  onActive={mention.setActive}
+                  onFilter={mention.setFilter}
+                  onToggle={mention.toggle}
+                  onCommit={mention.commit}
+                />
+              )}
               <textarea
+                ref={inputRef}
                 rows={3}
                 value={input}
                 placeholder="Spør Claude …"
-                onInput={e => setInput((e.target as HTMLTextAreaElement).value)}
+                role="combobox"
+                aria-expanded={!!mention.picker}
+                aria-controls={mention.picker ? MENTION_LIST_ID : undefined}
+                aria-activedescendant={mention.picker?.list.flat.length ? `${MENTION_LIST_ID}-${mention.picker.active}` : undefined}
+                aria-autocomplete="list"
+                onInput={e => {
+                  const v = (e.target as HTMLTextAreaElement).value;
+                  setInput(v);
+                  mention.onInput(v);
+                }}
+                onBlur={mention.close}
                 onKeyDown={e => {
+                  if (mention.onKeyDown(e)) return;
                   if (e.key === 'Enter' && !e.shiftKey) {
                     e.preventDefault();
                     void submit();
@@ -443,20 +624,43 @@ export function ClaudePanel({ status, width, onWidth, allowedSkills: modeSkills,
                 aria-label="Melding til Claude"
               />
               <div class="cinbox-foot">
-                {path &&
-                  (context ? (
-                    <span class="cfile" title={`Sendes med som kontekst: ${path}`}>
-                      <span class="cfile-icon" aria-hidden="true" />
-                      <span class="cfile-name">{fileName(path)}</span>
-                      <button class="cfile-x" onClick={() => setExcluded(path)} aria-label={`Ikke send med ${fileName(path)}`} title="Ikke send med fila">
-                        ✕
+                <div class="cbadges">
+                  {/* Er fila alt lagt ved med @ (selv eller via en mappe), holder den badgen */}
+                  {path &&
+                    !covered(mention.mentions, path) &&
+                    (context ? (
+                      <span class="cfile">
+                        <button class="cfile-open" onClick={() => onOpen(path)} title={`${path} · sendes med som kontekst`}>
+                          <span class="cfile-icon" aria-hidden="true" />
+                          <span class="cfile-name">{fileName(path)}</span>
+                        </button>
+                        <button class="cfile-x" onClick={() => setExcluded(path)} aria-label={`Ikke send med ${fileName(path)}`} title="Ikke send med fila">
+                          ✕
+                        </button>
+                      </span>
+                    ) : (
+                      <button class="cfile off" onClick={() => setExcluded(null)} title={`Send med ${path} som kontekst`}>
+                        + {fileName(path)}
                       </button>
-                    </span>
-                  ) : (
-                    <button class="cfile off" onClick={() => setExcluded(null)} title={`Send med ${path} som kontekst`}>
-                      + {fileName(path)}
-                    </button>
-                  ))}
+                    ))}
+                  {mention.mentions.map(p => {
+                    const dir = !mention.items.get(p)?.entry;
+                    return (
+                      <span key={p} class="cfile">
+                        <button class="cfile-open" onClick={() => (dir ? onReveal(p) : onOpen(p))} title={dir ? `Vis ${p} i treet` : `Åpne ${p}`}>
+                          <span class={dir ? 'cfile-dir' : 'cfile-icon'} aria-hidden="true" />
+                          <span class="cfile-name">
+                            {fileName(p)}
+                            {dir && '/'}
+                          </span>
+                        </button>
+                        <button class="cfile-x" onClick={() => mention.remove(p)} aria-label={`Fjern ${fileName(p)}`} title="Fjern">
+                          ✕
+                        </button>
+                      </span>
+                    );
+                  })}
+                </div>
                 {running ? (
                   <button class="smallbtn" onClick={() => void transport.call('claudeCancel', c.runId!)}>Avbryt</button>
                 ) : (
@@ -465,7 +669,7 @@ export function ClaudePanel({ status, width, onWidth, allowedSkills: modeSkills,
               </div>
             </div>
             <div class="claude-send">
-              <span class="muted">Enter sender · Shift+Enter ny linje</span>
+              <span class="muted">Enter sender · Shift+Enter ny linje · @ legger til filer og mapper</span>
             </div>
           </div>
         </>

@@ -1,11 +1,11 @@
 import assert from 'node:assert/strict';
-import { chmodSync, mkdtempSync, realpathSync, rmSync, writeFileSync } from 'node:fs';
+import { chmodSync, mkdtempSync, realpathSync, rmSync, utimesSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { after, test } from 'node:test';
 import type { ClaudeEvent } from '../shared/api.ts';
 import { mkdirSync } from 'node:fs';
-import { ClaudeRunner, codeDirs, contextPrompt, dirArgs, findClaude, parseStreamLine, projectSkills, skillArgs, skillMeta, toolSummary } from './claude.ts';
+import { ClaudeRunner, codeDirs, contextPrompt, dirArgs, mentionPaths, findClaude, parseStreamLine, projectSkills, skillArgs, skillChangedAt, skillHash, skillMeta, toolSummary } from './claude.ts';
 
 const tmp = mkdtempSync(join(tmpdir(), 'krav-claude-'));
 after(() => rmSync(tmp, { recursive: true, force: true }));
@@ -53,6 +53,19 @@ test('contextPrompt tar med fila brukeren ser på', () => {
   assert.doesNotMatch(contextPrompt(null), /ser nå på/);
 });
 
+test('contextPrompt ber Claude foreslå PR med en krav-pr-blokk i stedet for å lage den', () => {
+  assert.match(contextPrompt(null), /kan ikke committe, pushe eller lage PR selv/);
+  assert.match(contextPrompt(null), /Ber brukeren om en PR.*kodeblokk med språket krav-pr/);
+  assert.match(contextPrompt(null), /Si ikke at du ikke kan lage PR/);
+});
+
+test('contextPrompt tar med filene og mappene lagt ved med @, og bare stier under krav/', () => {
+  assert.match(contextPrompt(null, null, [], [], ['krav/02 Opptak', 'krav/a.feature']), /lagt ved .*: krav\/02 Opptak, krav\/a\.feature/);
+  assert.doesNotMatch(contextPrompt(null), /lagt ved/);
+  assert.deepEqual(mentionPaths(['krav/a', 'krav/a', '/etc/passwd', 'krav/../x', 'krav/b\nc', 3]), ['krav/a']);
+  assert.deepEqual(mentionPaths('krav/a'), []);
+});
+
 test('contextPrompt: uten valgt skill listes de tilgjengelige, og fs-verify får beskjed om kodeklonene', () => {
   assert.match(contextPrompt(null, null, ['fs-krav', 'fs-verify']), /ikke valgt noen skill\. Du kan bruke disse .*: fs-krav, fs-verify/);
   assert.match(contextPrompt(null, null, []), /ingen skills er tilgjengelige/);
@@ -62,6 +75,10 @@ test('contextPrompt: uten valgt skill listes de tilgjengelige, og fs-verify får
   assert.doesNotMatch(verify, /Ingen kodekloner/);
   assert.match(contextPrompt(null, 'fs-verify'), /Ingen kodekloner er tilgjengelige/);
   assert.doesNotMatch(contextPrompt(null, 'fs-krav'), /slette filer/);
+  const valgt = contextPrompt(null, 'fs-verify', ['fs-krav', 'fs-verify']);
+  assert.match(valgt, /valgt skillen fs-verify .*lastet\. Trenger oppgaven en annen skill, .*Skill-verktøyet: fs-krav\./);
+  assert.doesNotMatch(contextPrompt(null, 'fs-krav'), /Trenger oppgaven en annen skill/);
+  assert.match(contextPrompt(null, 'fs-krav', ['fs-krav', 'fs-verify']), /kan ikke slette filer/, 'fs-verify kan brukes, så beskjeden kommer med');
 });
 
 test('codeDirs: overstyring, så env, så mappa ved siden av repoet', () => {
@@ -181,7 +198,10 @@ test('ClaudeRunner sender meldingen på stdin, med verktøy, kontekst og resume'
   assert.ok(fargs.at(-1)!.startsWith('Edit(//') && fargs.at(-1)!.endsWith('/kode/**)'));
   assert.equal(events.at(-1)!.kind, 'done');
   // Etter kjøringen kjenner runneren skillene Claude meldte om; prosjektets egne er skilt ut
-  assert.deepEqual(runner.skills(), { project: [{ name: 'fs-krav', description: 'Krav for initiativ og mapper.' }], other: ['plugin:annen'] });
+  const { project, other } = runner.skills();
+  assert.deepEqual(project.map(({ name, description }) => ({ name, description })), [{ name: 'fs-krav', description: 'Krav for initiativ og mapper.' }]);
+  assert.match(project[0].hash, /^[0-9a-f]{40}$/);
+  assert.deepEqual(other, ['plugin:annen']);
 });
 
 test('skillMeta leser navn og beskrivelse, også foldet YAML', () => {
@@ -190,7 +210,7 @@ test('skillMeta leser navn og beskrivelse, også foldet YAML', () => {
   assert.deepEqual(skillMeta('ingen frontmatter'), { name: null, description: '' });
 });
 
-test('skillArgs tillater bare den valgte skillen og avviser alle andre', () => {
+test('skillArgs tillater den valgte skillen og poolen, og avviser alle andre', () => {
   assert.deepEqual(skillArgs('fs-krav', ['fs-krav', 'fs-specify', 'plugin:b', 'x) Bash(', 7, 'plugin:b']), {
     allow: ['Skill(fs-krav)'],
     deny: ['Skill(fs-specify)', 'Skill(plugin:b)'],
@@ -202,7 +222,11 @@ test('skillArgs tillater bare den valgte skillen og avviser alle andre', () => {
     allow: ['Skill(fs-krav)', 'Skill(fs-verify)'],
     deny: ['Skill(lage-steps)'],
   });
-  assert.deepEqual(skillArgs('fs-verify', ['fs-krav', 'fs-verify'], ['fs-krav']), { allow: ['Skill(fs-verify)'], deny: ['Skill(fs-krav)'] }, 'en valgt skill går foran poolen');
+  assert.deepEqual(
+    skillArgs('fs-verify', ['fs-krav', 'fs-verify', 'fs-specify'], ['fs-krav']),
+    { allow: ['Skill(fs-krav)', 'Skill(fs-verify)'], deny: ['Skill(fs-specify)'] },
+    'en valgt skill er et forslag: poolen er fortsatt tillatt',
+  );
   assert.deepEqual(projectSkills(join(tmp, 'finnes-ikke')), []);
 });
 
@@ -216,4 +240,23 @@ test('ClaudeRunner melder feil fra stderr og kan avbrytes', { skip: process.plat
   });
   assert.deepEqual(runner.active(), []);
   assert.equal((hang.at(-1) as { error: string }).error, 'Avbrutt');
+});
+
+test('skillHash endres når en fil i skillmappa endres, også i undermapper', () => {
+  const dir = join(tmp, 'repo-hash', '.claude', 'skills', 'fs-krav');
+  mkdirSync(join(dir, 'references'), { recursive: true });
+  writeFileSync(join(dir, 'SKILL.md'), '---\nname: fs-krav\ndescription: Krav\n---\n');
+  writeFileSync(join(dir, 'references', 'a.md'), 'A');
+  const h1 = skillHash(dir);
+  assert.match(h1, /^[0-9a-f]{40}$/);
+  assert.equal(skillHash(dir), h1, 'samme filer gir samme hash');
+  writeFileSync(join(dir, 'references', 'a.md'), 'B');
+  const h2 = skillHash(dir);
+  assert.notEqual(h2, h1);
+  const [skill] = projectSkills(join(tmp, 'repo-hash'));
+  assert.deepEqual({ ...skill, changedAt: 0 }, { name: 'fs-krav', description: 'Krav', hash: h2, changedAt: 0 });
+  // Endringstiden er den nyeste filen i mappa
+  const t = new Date(Date.now() + 60_000);
+  utimesSync(join(dir, 'references', 'a.md'), t, t);
+  assert.ok(Math.abs(skillChangedAt(dir) - t.getTime()) < 1000, 'filsystemet kan runde av tidspunktet');
 });

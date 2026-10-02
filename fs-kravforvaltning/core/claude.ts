@@ -1,4 +1,5 @@
 import { spawn, execFile, type ChildProcess } from 'node:child_process';
+import { createHash } from 'node:crypto';
 import { EventEmitter } from 'node:events';
 import { accessSync, constants, readdirSync, readFileSync, statSync } from 'node:fs';
 import { homedir } from 'node:os';
@@ -12,7 +13,7 @@ const isWin = process.platform === 'win32';
 /**
  * Verktøyene Claude får bruke. `-p` kan ikke spørre brukeren om lov, så med `--permission-mode dontAsk`
  * avvises alt som ikke står her (også Bash og nettverk). Endringer i filene plukkes opp av watcheren
- * og vises i vieweren som når de lagres i en editor. Skill-verktøyet tillates bare for skillen som er valgt.
+ * og vises i vieweren som når de lagres i en editor. Skill-verktøyet tillates bare for skillene som er tillatt i visningen.
  */
 export const CLAUDE_TOOLS = ['Read', 'Glob', 'Grep', 'Edit', 'Write', 'TodoWrite'];
 
@@ -111,7 +112,48 @@ export function skillMeta(src: string): { name: string | null; description: stri
   return { name: value('name') || null, description: value('description') };
 }
 
-/** Skillene i repoets `.claude/skills/<navn>/SKILL.md` */
+/**
+ * Versjonen av en skill: sha1 over alle filene i mappa (relativ sti og innhold, sortert), så en endring i
+ * `references/` også teller. Vieweren sammenligner den med versjonen som var lastet i samtalen.
+ */
+export function skillHash(dir: string): string {
+  return skillFiles(dir).hash;
+}
+
+/** Når en fil i skillmappa sist ble endret på disk (ms). «Hent siste» og `git pull` skriver bare om filene som er endret. */
+export function skillChangedAt(dir: string): number {
+  return skillFiles(dir).changedAt;
+}
+
+function skillFiles(dir: string): { hash: string; changedAt: number } {
+  const h = createHash('sha1');
+  let changedAt = 0;
+  const walk = (rel: string) => {
+    let list;
+    try {
+      list = readdirSync(join(dir, rel), { withFileTypes: true }).sort((a, b) => (a.name < b.name ? -1 : a.name > b.name ? 1 : 0));
+    } catch {
+      return;
+    }
+    for (const d of list) {
+      const r = rel ? `${rel}/${d.name}` : d.name;
+      if (d.isDirectory()) walk(r);
+      else if (d.isFile()) {
+        try {
+          const body = readFileSync(join(dir, r));
+          h.update(r).update('\0').update(body).update('\0');
+          changedAt = Math.max(changedAt, statSync(join(dir, r)).mtimeMs);
+        } catch {
+          /* fila forsvant underveis */
+        }
+      }
+    }
+  };
+  walk('');
+  return { hash: h.digest('hex'), changedAt: Math.round(changedAt) };
+}
+
+/** Skillene i repoets `.claude/skills/<navn>/SKILL.md`, med versjonen (`skillHash`) og når de sist ble endret */
 export function projectSkills(cwd: string): ClaudeSkill[] {
   const dir = join(cwd, '.claude', 'skills');
   let names: string[];
@@ -124,7 +166,8 @@ export function projectSkills(cwd: string): ClaudeSkill[] {
     .flatMap(n => {
       try {
         const meta = skillMeta(readFileSync(join(dir, n, 'SKILL.md'), 'utf8'));
-        return [{ name: meta.name ?? n, description: meta.description }];
+        const { hash, changedAt } = skillFiles(join(dir, n));
+        return [{ name: meta.name ?? n, description: meta.description, hash, changedAt }];
       } catch {
         return [];
       }
@@ -205,32 +248,59 @@ export function skillPool(pool: unknown): string[] {
 }
 
 /**
- * Argumentene som bestemmer hvilke skills Claude kan bruke: den valgte, eller skillene i `pool` når ingen
- * er valgt (Oppgaver). De får `Skill(<navn>)` i `--allowedTools`, og alle andre kjente skills får
+ * Argumentene som bestemmer hvilke skills Claude kan bruke: den valgte og skillene i `pool` (de som er
+ * tillatt i visningen). Den valgte er bare et forslag som lastes med meldingen; Claude kan bytte til en
+ * annen i `pool` når oppgaven krever det. De får `Skill(<navn>)` i `--allowedTools`, og alle andre kjente skills får
  * `Skill(<navn>)` i `--disallowedTools`. Allowlisten alene holder ikke: `dontAsk` slipper gjennom enkelte
  * skills som ikke står der, så de andre må avvises eksplisitt.
  */
 export function skillArgs(skill: string | null, known: Iterable<unknown>, pool: unknown = []): { allow: string[]; deny: string[] } {
   const chosen = skill && CLAUDE_SKILLS.includes(skill) ? skill : null;
-  const allowed = chosen ? [chosen] : skillPool(pool);
+  const inPool = skillPool(pool);
+  const allowed = CLAUDE_SKILLS.filter(s => s === chosen || inPool.includes(s));
   const others = new Set<string>();
   for (const n of known) if (typeof n === 'string' && SKILL_NAME.test(n) && !allowed.includes(n)) others.add(n);
   return { allow: allowed.map(n => `Skill(${n})`), deny: [...others].sort().map(n => `Skill(${n})`) };
 }
 
+/** Stiene brukeren har lagt ved med @: bare under krav/, uten `..`, og høyst 50 */
+export function mentionPaths(raw: unknown): string[] {
+  if (!Array.isArray(raw)) return [];
+  const ok = raw.filter((p): p is string => typeof p === 'string' && p.startsWith('krav/') && !p.split('/').includes('..') && !/[\n\r]/.test(p));
+  return [...new Set(ok)].slice(0, 50);
+}
+
 /** Systemteksten som forteller Claude hvor den er, og hva brukeren ser på */
-export function contextPrompt(path: string | null | undefined, skill: string | null = null, pool: string[] = [], dirs: string[] = []): string {
-  const skills = skill ? [skill] : pool;
+export function contextPrompt(
+  path: string | null | undefined,
+  skill: string | null = null,
+  pool: string[] = [],
+  dirs: string[] = [],
+  mentions: string[] = [],
+): string {
+  const skills = CLAUDE_SKILLS.filter(s => s === skill || pool.includes(s));
+  const others = skills.filter(s => s !== skill);
   return [
     'Du kjører inne i FS Kravforvaltning (desktop-appen eller dev-serveren) for FS-kravene i dette repoet.',
     'Brukeren er typisk en domeneekspert. Svar kort og på norsk.',
     'Følg konvensjonene i krav/README.md når du skriver eller endrer .feature-filer.',
     skill
-      ? `Brukeren har valgt skillen ${skill} for denne samtalen. Følg den; andre skills er ikke tilgjengelige.`
+      ? `Brukeren har valgt skillen ${skill} for denne samtalen, og den er lastet. ` +
+        (others.length ? `Trenger oppgaven en annen skill, kan du bruke den med Skill-verktøyet: ${others.join(', ')}. ` : '') +
+        'Andre skills er ikke tilgjengelige.'
       : pool.length
         ? `Brukeren har ikke valgt noen skill. Du kan bruke disse med Skill-verktøyet når oppgaven passer: ${pool.join(', ')}. Andre skills er ikke tilgjengelige.`
         : 'Brukeren har ikke valgt noen skill, og ingen skills er tilgjengelige.',
-    'Endringer du gjør i filene vises straks i FS Kravforvaltning, og brukeren sender dem som PR selv med «Lag PR». Ikke commit, push eller lag PR.',
+    'Endringer du gjør i filene vises straks i FS Kravforvaltning. Du kan ikke committe, pushe eller lage PR selv, men du kan foreslå en PR, som brukeren sender med ett klikk.',
+    'Ber brukeren om en PR, avslutter du svaret med PR-forslaget i en kodeblokk med språket krav-pr og JSON: ' +
+      '{"title": "Krav: …", "branch": "kort-slug-uten-prefiks", "body": "Kort beskrivelse på norsk av hva som er endret og hvorfor", "paths": ["krav/…"]}. ' +
+      'Blokken er slik PR lages her: brukeren får et kort med «Åpne i «Lag PR»», som åpner «Lag PR» ferdig utfylt. Si ikke at du ikke kan lage PR, og be ikke brukeren fylle ut «Lag PR» for hånd. ' +
+      'Foreslå ikke PR på eget initiativ når du har endret filer: brukeren har knappen «Lag forslag til PR» i panelet. ' +
+      'paths er .feature- og .md-filene under krav/ som er endret i samtalen. Filer utenfor krav/ (f.eks. tasks/) kan ikke sendes fra FS Kravforvaltning: ta dem ikke med i paths, men si fra om dem i teksten.',
+    'Ber brukeren om en oppsummering av samtalen, så den kan brukes i en ny samtale, svarer du med en kodeblokk med språket krav-oppsummering og JSON: ' +
+      '{"mal": "…", "gjort": "…", "beslutninger": "…", "apneSporsmal": "…", "nesteSteg": "…", "paths": ["…"]}. ' +
+      'Feltene er korte setninger på norsk; la et felt være tomt når det ikke er noe å si. paths er filene som er lest eller endret i samtalen og er viktige for å fortsette, relative til repoet. ' +
+      'Brukeren får et kort med «Start ny samtale med oppsummeringen».',
     'Du har ikke shell-tilgang; bruk Read, Glob, Grep, Edit og Write. AskUserQuestion finnes ikke her: still spørsmålene i svaret, og vent på brukeren.',
     dirs.length ? `Du kan lese kodeklonene ${dirs.join(', ')}, men ikke endre dem.` : '',
     skills.includes('fs-verify')
@@ -238,6 +308,9 @@ export function contextPrompt(path: string | null | undefined, skill: string | n
         (dirs.length ? '' : ' Ingen kodekloner er tilgjengelige; brukeren setter dem under «Kodemapper» i panelet.')
       : '',
     path ? `Brukeren ser nå på fila ${path}.` : '',
+    mentions.length
+      ? `Brukeren har lagt ved disse filene og mappene med @: ${mentions.join(', ')}. Les dem (mappene med Glob og Read) før du svarer.`
+      : '',
   ]
     .filter(Boolean)
     .join('\n');
@@ -304,7 +377,7 @@ export class ClaudeRunner {
     const skill = req.skill && CLAUDE_SKILLS.includes(req.skill) ? req.skill : null;
     // Alle skills vi kjenner: prosjektets fra disk, de Claude meldte sist, og de vieweren husker fra før
     const known = [...projectSkills(this.cwd).map(s => s.name), ...(this.lastSkills ?? []), ...(Array.isArray(req.knownSkills) ? req.knownSkills : [])];
-    const pool = skill ? [] : skillPool(req.skills);
+    const pool = skillPool(req.skills);
     const { allow, deny } = skillArgs(skill, known, pool);
     const dirs = dirArgs(req.dirs);
     const args = [
@@ -314,7 +387,7 @@ export class ClaudeRunner {
       '--permission-mode', 'dontAsk',
       '--allowedTools', ...CLAUDE_TOOLS, ...allow,
       ...dirs.add,
-      '--append-system-prompt', contextPrompt(req.path, skill, pool, dirs.paths),
+      '--append-system-prompt', contextPrompt(req.path, skill, pool, dirs.paths, mentionPaths(req.mentions)),
       ...(req.sessionId ? ['--resume', req.sessionId] : []),
       ...(deny.length || dirs.deny.length ? ['--disallowedTools', ...deny, ...dirs.deny] : []),
     ];

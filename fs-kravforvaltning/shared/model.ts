@@ -53,6 +53,8 @@ export interface Examples {
   tags: string[];
   desc: string;
   rows: string[][];
+  /** Linja til hver rad i `rows` */
+  lns: number[];
 }
 
 export interface Scen {
@@ -84,7 +86,13 @@ export interface Question {
 export interface FeatureModel {
   tags: string[];
   title: string;
-  desc: { lead: string; rest: string }[];
+  /** Linja med `Egenskap:` */
+  ln: number;
+  /** Linjene til taggene på egenskapen, `# GitHub: #N` og `# language:` (`null` når de mangler) */
+  tagLn: number | null;
+  issueLn: number | null;
+  langLn: number | null;
+  desc: { lead: string; rest: string; ln: number }[];
   issue: string | null;
   lang: string;
   rules: Rule[];

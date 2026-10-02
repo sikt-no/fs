@@ -1,6 +1,7 @@
+import type { ComponentChildren, JSX } from 'preact';
 import { useEffect, useRef, useState } from 'preact/hooks';
 import type { Entry } from '../shared/model';
-import { resolveLink, type Block, type Seg } from './markdown';
+import { resolveLink, type Block, type List, type Seg } from './markdown';
 
 export type MdMode = 'pretty' | 'raw';
 
@@ -13,9 +14,11 @@ interface Props {
   onNavigate: (path: string) => void;
   /** Åpne fila i editoren; utelatt der redigering ikke er tilgjengelig */
   onEdit?: () => void;
+  /** «Lag PR» med fila; bare når fila har endringer og redigering er tilgjengelig */
+  onPr?: () => void;
 }
 
-export function MarkdownView({ entry, blocks, mode, onMode, has, onNavigate, onEdit }: Props) {
+export function MarkdownView({ entry, blocks, mode, onMode, has, onNavigate, onEdit, onPr }: Props) {
   const [copied, setCopied] = useState<number | null>(null);
   const timer = useRef<ReturnType<typeof setTimeout>>();
   useEffect(() => () => clearTimeout(timer.current), []);
@@ -36,10 +39,12 @@ export function MarkdownView({ entry, blocks, mode, onMode, has, onNavigate, onE
     timer.current = setTimeout(() => setCopied(null), 1500);
   };
 
-  const segs = (ss: Seg[]) =>
+  const segs = (ss: Seg[]): ComponentChildren[] =>
     ss.map((g, i) => {
       if (g.kind === 'code') return <code key={i}>{g.t}</code>;
-      if (g.kind === 'bold') return <strong key={i}>{g.t}</strong>;
+      if (g.kind === 'bold') return <strong key={i}>{segs(g.c)}</strong>;
+      if (g.kind === 'em') return <em key={i}>{segs(g.c)}</em>;
+      if (g.kind === 'strike') return <del key={i}>{segs(g.c)}</del>;
       if (g.kind === 'link') {
         const r = resolveLink(g.href, entry.path, has);
         return r.path ? (
@@ -62,35 +67,53 @@ export function MarkdownView({ entry, blocks, mode, onMode, has, onNavigate, onE
       return g.t;
     });
 
-  const block = (b: Block, i: number) => {
-    const key = 'md-' + i;
+  const list = (b: List, key: number) => {
+    const L = b.type;
+    return (
+      <L key={key} start={b.start} style={b.start ? { counterReset: `md ${b.start - 1}` } : undefined}>
+        {b.items.map((it, j) => (
+          <li key={j} class={it.task !== undefined ? 'task' : undefined}>
+            {it.task !== undefined && <input type="checkbox" checked={it.task} disabled />}
+            <span>
+              {segs(it.segs)}
+              {it.sub && list(it.sub, 0)}
+            </span>
+          </li>
+        ))}
+      </L>
+    );
+  };
+
+  // Blokkene inne i et sitat får ikke data-rule, så innholdsfortegnelsen bare treffer toppnivået
+  const block = (b: Block, i: number, top = true): JSX.Element => {
+    const key = top ? 'md-' + i : undefined;
     switch (b.type) {
       case 'h1':
-        return (
+        return top ? (
           <div key={i} class="fbanner md-h1" data-rule={key}>
             <span class="kbadge inv">{label}</span>
-            <h1>{b.text}</h1>
+            <h1>{segs(b.segs)}</h1>
           </div>
+        ) : (
+          <h2 key={i}>{segs(b.segs)}</h2>
         );
       case 'h2':
-        return <h2 key={i} data-rule={key}>{b.text}</h2>;
+        return <h2 key={i} data-rule={key}>{segs(b.segs)}</h2>;
       case 'h3':
-        return <h3 key={i} data-rule={key}>{b.text}</h3>;
+        return <h3 key={i} data-rule={key}>{segs(b.segs)}</h3>;
       case 'p':
         return <p key={i}>{segs(b.segs)}</p>;
       case 'ul':
-      case 'ol': {
-        const L = b.type;
+      case 'ol':
+        return list(b, i);
+      case 'quote':
         return (
-          <L key={i}>
-            {b.items.map((it, j) => (
-              <li key={j}>
-                <span>{segs(it)}</span>
-              </li>
-            ))}
-          </L>
+          <blockquote key={i} class="md-quote">
+            {b.blocks.map((x, j) => block(x, j, false))}
+          </blockquote>
         );
-      }
+      case 'hr':
+        return <hr key={i} class="md-hr" />;
       case 'card':
         return (
           <a key={i} class="md-card" href={b.href} target="_blank" rel="noreferrer">
@@ -138,6 +161,8 @@ export function MarkdownView({ entry, blocks, mode, onMode, has, onNavigate, onE
             </table>
           </div>
         );
+      default:
+        return b satisfies never;
     }
   };
 
@@ -148,13 +173,14 @@ export function MarkdownView({ entry, blocks, mode, onMode, has, onNavigate, onE
         <span class="file">{name}</span>
         <span>{lines.length} linjer</span>
         {onEdit && <button class="smallbtn editbtn" onClick={onEdit}>Rediger</button>}
+        {onPr && <button class="smallbtn editbtn" onClick={onPr}>Lag PR</button>}
         <div class="seg" role="group" aria-label="Visning av markdown">
           <button aria-pressed={mode === 'pretty'} onClick={() => onMode('pretty')}>Visning</button>
           <button aria-pressed={mode === 'raw'} onClick={() => onMode('raw')}>Markdown</button>
         </div>
       </div>
       {mode === 'pretty' ? (
-        <div class="md-body">{blocks.map(block)}</div>
+        <div class="md-body">{blocks.map((b, i) => block(b, i))}</div>
       ) : (
         <div class="md-raw">
           {lines.map((t, i) => {

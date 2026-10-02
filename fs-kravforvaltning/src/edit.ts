@@ -1,4 +1,4 @@
-import { STATUSES, type Status } from '../shared/model.ts';
+import { STATUSES, type GitInfo, type Status } from '../shared/model.ts';
 
 export const PRIORITIES = ['must', 'should', 'could', 'wont'] as const;
 export type Priority = (typeof PRIORITIES)[number];
@@ -94,4 +94,17 @@ export function prTitle(paths: string[], titles: Record<string, string | undefin
   }
   const dirs = new Set(paths.map(p => p.split('/').slice(0, -1).pop()));
   return dirs.size === 1 ? `Krav: ${[...dirs][0]!.replace(/^\d+\s+/, '')} (${paths.length} filer)` : `Krav: ${paths.length} filer`;
+}
+
+/** Fila har endringer under krav/: ucommittet, eller committet i branchen siden main */
+export const changedFile = (git: GitInfo | null, path: string) =>
+  !!git && [...git.uncommitted, ...git.committed].some(c => c.path === path);
+
+/**
+ * Filene som er valgt når «Lag PR» åpnes. Uten utkast: fila dialogen åpnes fra, ellers alle ucommittede.
+ * Med utkast: filene i utkastet, og fila dialogen åpnes fra hvis den ikke er med.
+ */
+export function draftPicked(draft: string[] | null, preselect: string | undefined, uncommitted: string[]): string[] {
+  if (!draft) return preselect ? [preselect] : uncommitted;
+  return preselect && !draft.includes(preselect) ? [...draft, preselect] : draft;
 }

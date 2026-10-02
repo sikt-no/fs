@@ -353,3 +353,24 @@ test('hver regel peker på en overskrift som finnes i krav/README.md («Les rege
   const heads = new Set(readme.split('\n').filter(l => /^#{2,3} /.test(l)).map(l => l.replace(/^#+ /, '').trim()));
   for (const r of RULES) assert.ok(heads.has(r.section), `${r.id}: fant ikke overskriften «${r.section}»`);
 });
+
+test('linjene til egenskapen, beskrivelsen og eksempelradene', () => {
+  const m = parseFeature(
+    feature({
+      body: `  Scenariomal: Opprette <type>
+    Gitt jeg er innlogget
+    Så finnes et <type>
+
+    Eksempler:
+      | type   |
+      | opptak |`,
+    }),
+    PATH,
+  );
+  assert.equal(m.ln, 3);
+  assert.equal(m.tagLn, 2);
+  assert.equal(m.langLn, 1);
+  assert.equal(m.issueLn, null);
+  assert.deepEqual(m.desc.map(d => d.ln), [4, 5, 6]);
+  assert.deepEqual(m.rules[0].scenarios[0].examples[0].lns, [13, 14]);
+});

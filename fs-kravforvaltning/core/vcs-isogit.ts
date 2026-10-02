@@ -5,7 +5,7 @@ import git, { TREE, type TreeEntry } from 'isomorphic-git';
 import http from 'isomorphic-git/http/node';
 import type { PublishRequest, PublishResult } from '../shared/api.ts';
 import type { GitChange, GitCode, GitInfo } from '../shared/model.ts';
-import { branchName, checkPaths, githubPr, type OpenPr, type Vcs } from './vcs.ts';
+import { branchName, checkPaths, githubCompare, githubPr, type CompareMain, type OpenPr, type Vcs } from './vcs.ts';
 
 const isKravFile = (p: string) => p.startsWith('krav/') && (p.endsWith('.feature') || p.endsWith('.md'));
 const byPath = (a: GitChange, b: GitChange) => a.path.localeCompare(b.path, 'nb');
@@ -34,7 +34,7 @@ export function lineStats(before: string, after: string): [number, number] {
  * `publish` bygger committen direkte i objektdatabasen, på toppen av origin/main, og pusher den som en ny branch.
  * Arbeidskatalogen, index og HEAD røres ikke, så brukerens lokale endringer står som før.
  */
-export function isoVcs(dir: string, opts: { openPr?: OpenPr } = {}): Vcs {
+export function isoVcs(dir: string, opts: { openPr?: OpenPr; compare?: CompareMain } = {}): Vcs {
   const cache = {};
   const blobText = async (oid: string) => new TextDecoder().decode((await git.readBlob({ fs, dir, oid, cache })).blob);
 
@@ -103,6 +103,7 @@ export function isoVcs(dir: string, opts: { openPr?: OpenPr } = {}): Vcs {
     return url;
   };
   const openPr = opts.openPr ?? githubPr;
+  const compare = opts.compare ?? githubCompare;
 
   /** Forfatter fra git-konfigurasjonen, ellers GitHub-brukeren med noreply-adresse */
   const author = async (token: string) => {
@@ -193,10 +194,15 @@ export function isoVcs(dir: string, opts: { openPr?: OpenPr } = {}): Vcs {
       return { url: await openPr(url, token, { head: branch, base: 'main', title: req.title, body: req.body }), branch };
     },
 
-    async behind(token: string | null) {
-      const refs = await git.listServerRefs({ http, url: await originUrl(), prefix: 'refs/heads/main', onAuth: auth(token) });
+    async mainStatus(token: string | null) {
+      const url = await originUrl();
+      const refs = await git.listServerRefs({ http, url, prefix: 'refs/heads/main', onAuth: auth(token) });
       const remote = refs.find(r => r.ref === 'refs/heads/main')?.oid;
-      return !!remote && remote !== (await git.resolveRef({ fs, dir, ref: 'refs/heads/main' }));
+      const local = await git.resolveRef({ fs, dir, ref: 'refs/heads/main' });
+      if (!remote || remote === local) return { behind: false };
+      // Antall commits og endrede krav er bare pynt: uten dem vises banneret likevel
+      const info = await compare(url, local, remote, token).catch(() => undefined);
+      return { behind: true, remote, ...(info ? { info } : {}) };
     },
 
     /**

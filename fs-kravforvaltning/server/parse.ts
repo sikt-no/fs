@@ -71,6 +71,18 @@ const desc = (d: string | undefined) =>
     .join('\n')
     .trim();
 
+/** De ikke-tomme linjene i en beskrivelse, med linja hver står på i fila (beskrivelsen står etter nøkkelordlinja `after`) */
+function descLines(d: string | undefined, lines: string[], after: number) {
+  const out: { text: string; ln: number }[] = [];
+  let i = after; // indeks i `lines` for linja etter nøkkelordet
+  for (const text of (d ?? '').split('\n').map(l => l.trim()).filter(Boolean)) {
+    while (i < lines.length && lines[i].trim() !== text) i++;
+    out.push({ text, ln: i < lines.length ? i + 1 : after });
+    if (i < lines.length) i++;
+  }
+  return out;
+}
+
 function step(s: GStep): Step {
   return {
     kw: s.keyword.trim(),
@@ -102,6 +114,7 @@ function scenario(s: Scenario): Scen {
         tags: e.tags.map(t => t.name),
         desc: desc(e.description),
         rows: [e.tableHeader!, ...e.tableBody].map(r => r.cells.map(c => c.value)),
+        lns: [e.tableHeader!, ...e.tableBody].map(r => r.location.line),
       })),
   };
 }
@@ -416,19 +429,22 @@ export function parseFeature(source: string, path?: string): FeatureModel {
     .flatMap(n => n.items)
     .sort((a, b) => a.ln - b.ln);
 
-  const issue = comments.map(c => c.text.match(/^\s*#\s*GitHub:\s*#(\d+)/)).find(Boolean)?.[1] ?? null;
+  const issueC = comments.find(c => /^\s*#\s*GitHub:\s*#\d+/.test(c.text));
+  const issue = issueC?.text.match(/#(\d+)/)?.[1] ?? null;
+  // «# language:» er ikke en kommentar for parseren, så den finnes i teksten
+  const langIdx = lines.findIndex(l => /^\s*#\s*language:/.test(l));
 
   return {
     tags: ftags,
     title: f.name,
-    desc: f.description
-      .split('\n')
-      .map(l => l.trim())
-      .filter(Boolean)
-      .map(l => {
-        const m = l.match(/^(Som|ønsker jeg|slik at)\s+(.*)$/i);
-        return m ? { lead: m[1], rest: m[2] } : { lead: '', rest: l };
-      }),
+    ln: f.location.line,
+    tagLn: f.tags[0]?.location.line ?? null,
+    issueLn: issueC?.line ?? null,
+    langLn: langIdx >= 0 ? langIdx + 1 : null,
+    desc: descLines(f.description, lines, f.location.line).map(({ text: l, ln }) => {
+      const m = l.match(/^(Som|ønsker jeg|slik at)\s+(.*)$/i);
+      return m ? { lead: m[1], rest: m[2], ln } : { lead: '', rest: l, ln };
+    }),
     issue,
     lang: f.language,
     rules,

@@ -1,24 +1,47 @@
 # Manifest — krav-input
 
-- **Kildemappe:** `krav/02 Opptak/11 Opptak/04 Frister`
-- **Hentet:** 2026-09-28 14:50 (råkopien er oppdatert etter at «hovedopptaket kjøres» ble «hovedopptaket publiseres»)
+## Kilde
 
-## Filer
+- **Kilde-mappe:** `krav/02 Opptak/11 Opprette og vedlikeholde opptak/`
+- **Hentet:** 2026-09-30 14:14
 
-- `krav/02 Opptak/11 Opptak/04 Frister/frister_og_hendelser.feature` → [local/krav/02 Opptak/11 Opptak/04 Frister/frister_og_hendelser.feature](local/krav/02%20Opptak/11%20Opptak/04%20Frister/frister_og_hendelser.feature) (hentet mens den var `@in-progress`)
+## Feature-filer (4 stk, alle `@planned` → retagget `@in-progress`)
 
-## Skisser
+| Fil | Feature-ID | Status ved henting |
+|-----|------------|--------------------|
+| `krav/02 Opptak/11 Opprette og vedlikeholde opptak/01 Grunnoppsett/opprett_opptak.feature` | `@OPT-OVO-GRU-001` | `@planned` |
+| `krav/02 Opptak/11 Opprette og vedlikeholde opptak/02 Samordning/samordnet_opptak.feature` | `@OPT-OVO-SAM-001` | `@planned` |
+| `krav/02 Opptak/11 Opprette og vedlikeholde opptak/03 Innstillinger/innstillinger.feature` | `@OPT-OVO-INN-001` | `@planned` |
+| `krav/02 Opptak/11 Opprette og vedlikeholde opptak/04 Frister/frister_og_hendelser.feature` | `@OPT-OVO-FRI-001` | `@planned` |
 
-### Opprett opptak — frister og hendelser (Figma)
+## Filtrert bort (3 stk, `@draft`)
+
+| Fil | Feature-ID | Grunn |
+|-----|------------|-------|
+| `krav/02 Opptak/11 Opprette og vedlikeholde opptak/05 Tekster/fellestekster.feature` | `@OPT-OVO-TEK-001` | `@wont @draft` |
+| `krav/02 Opptak/11 Opprette og vedlikeholde opptak/05 Tekster/svarmeldingsmal.feature` | `@OPT-OVO-TEK-002` | `@wont @draft` |
+| `krav/02 Opptak/11 Opprette og vedlikeholde opptak/06 Hendelseslogg/hendelseslogg.feature` | `@OPT-OVO-LOG-001` | `@should @draft` |
+
+## Figma-skisser
+
+### Opprett opptak — hele siden
 
 - **URL:** <https://www.figma.com/design/LmoNQlmAuE2FlE0fUo5GoO/FS-Admin---Seksjon-Opptak?node-id=20606-117530&m=dev>
 - **fileKey:** `LmoNQlmAuE2FlE0fUo5GoO`
-- **nodeId:** `20606:117530` («Opprett opptak NY», hele siden «Opprett nytt Samordna opptak»). Dette er den nyeste versjonen av siden. Den erstatter `18929:96690`, som ble brukt i kjøringene før.
-- **Hentet via:** Figma Dev Mode MCP (lokal server `127.0.0.1:3845`), 2026-09-28 14:50
-- **Lagret under** `sketches/figma/opprett-opptak-frister-og-hendelser/` (overskrevet med den nye versjonen):
-  - `screenshot.png` — hele siden
-  - `sub-frames/01-informasjon-section.png` … `06-tekstforvaltning-section.png` — seksjonene på siden (nodene `20606:117537`, `117565`, `117589`, `117632`, `117679`, `117719`). Root har bare én meningsbærende child («Samordna Opptak- Opprett opptak info»), så seksjonene i «Info Schema» ble hentet i stedet. Seksjonen som dekker kravet er `04-frister-section.png` (node `20606:117632`).
-  - `design-context.md` — metadata for hele siden, og teksten i Frister section skrevet av fra skjermbildet
-  - `variables.md` — variabler for Frister section
-  - `assets/` — 3 SVG-er fra forrige versjon av Frister section. De ble ikke hentet på nytt, fordi ikonene (kalender, feil, AI) ser like ut i den nye versjonen.
-- **Hoppet over:** `get_design_context` (reference code) for den nye versjonen. Metadata og skjermbilder er nok for å validere mot kravene.
+- **nodeId:** `20606:117530`
+- **Slug:** `opprett-opptak-frister-og-hendelser`
+
+**Lagrede artefakter:**
+
+| Artefakt | Sti |
+|----------|-----|
+| Screenshot (hele siden) | `sketches/figma/opprett-opptak-frister-og-hendelser/screenshot.png` |
+| 01 Informasjon (Navn) | `sketches/figma/opprett-opptak-frister-og-hendelser/sub-frames/01-informasjon-section.png` |
+| 02 Samordning | `sketches/figma/opprett-opptak-frister-og-hendelser/sub-frames/02-samordning-section.png` |
+| 03 Innstillinger | `sketches/figma/opprett-opptak-frister-og-hendelser/sub-frames/03-innstillinger-section.png` |
+| 04 Generelle frister | `sketches/figma/opprett-opptak-frister-og-hendelser/sub-frames/04-frister-section.png` |
+| 05 Utdanningsbakgrunner med avvikende frister | `sketches/figma/opprett-opptak-frister-og-hendelser/sub-frames/05-utdanningsbakgrunner-avvikende-frister.png` |
+| Design context | `sketches/figma/opprett-opptak-frister-og-hendelser/design-context.md` |
+| Variables | `sketches/figma/opprett-opptak-frister-og-hendelser/variables.md` |
+
+**Hoppet over:** `download_assets` (SVG-assets fra forrige kjøring beholdt).

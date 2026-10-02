@@ -1,6 +1,6 @@
 # language: no
 # GitHub: #479
-@BRU-PER-GRU-001 @must @planned
+@BRU-PER-GRU-001 @must @implemented
 Egenskap: Listevisning og søk i personbrukere
   Som brukeradministrator
   ønsker jeg en oversikt over personbrukere jeg har tilgang til, med mulighet for søk og filtrering
@@ -11,6 +11,7 @@ Egenskap: Listevisning og søk i personbrukere
 
   Regel: Liste over alle personbrukere
 
+    @in-progress
     Scenario: Se liste over personbrukere
       Når jeg åpner brukeroversikten
       Så ser jeg en liste over alle personbrukere
@@ -22,6 +23,7 @@ Egenskap: Listevisning og søk i personbrukere
         | Hjemorganisasjon |
         | Status           |
 
+    @in-progress
     Scenariomal: Velge sorteringsretning for navn
       Gitt jeg ser listen over personbrukere
       Når jeg velger å sortere på navn i <retning> rekkefølge
@@ -53,20 +55,9 @@ Egenskap: Listevisning og søk i personbrukere
       Når jeg velger en personbruker
       Så ser jeg detaljsiden for valgt personbruker
 
-  Regel: Tie-break ved sortering
-
-    Scenario: Navn er tie-break når to personbrukere har lik verdi i sorteringsfeltet
-      Gitt jeg sorterer listen over personbrukere på et felt som ikke er navn
-      Når to eller flere personbrukere har lik verdi i sorteringsfeltet
-      Så sorteres de innbyrdes alfabetisk på navn i stigende rekkefølge
-
-    Scenario: Feide-ID er tie-break når navn er likt
-      Gitt jeg sorterer listen over personbrukere
-      Når to eller flere personbrukere har likt navn
-      Så sorteres de innbyrdes alfabetisk på Feide-ID i stigende rekkefølge
-
   Regel: Søk og filtrering av personbrukere
 
+    @in-progress
     Scenario: Fritekst-søk på navn
       Gitt jeg ser listen over personbrukere
       Når jeg søker med fritekst på navn
@@ -92,6 +83,7 @@ Egenskap: Listevisning og søk i personbrukere
       Når jeg velger en status som filter
       Så vises kun personbrukere med den valgte statusen
 
+    @in-progress
     Scenario: Tilgjengelige hjemorganisasjoner i filter
       Gitt jeg ser listen over personbrukere
       Når jeg åpner hjemorganisasjonsfilteret
@@ -100,6 +92,7 @@ Egenskap: Listevisning og søk i personbrukere
       Og hjemorganisasjonene er sortert alfabetisk
       Og "Alle hjemorganisasjoner" er valgt som standard
 
+    @in-progress
     Scenario: Filtrere på hjemorganisasjon
       Gitt jeg ser listen over personbrukere
       Når jeg velger en hjemorganisasjon som filter
@@ -118,6 +111,7 @@ Egenskap: Listevisning og søk i personbrukere
       Når jeg velger en rolle som filter
       Så vises kun personbrukere som har den valgte rollen
 
+    @in-progress
     Scenario: Kombinere søk og filtre
       Gitt jeg ser listen over personbrukere
       Når jeg kombinerer søk i navn- og Feide-ID-feltene med ett eller flere filter
@@ -125,13 +119,14 @@ Egenskap: Listevisning og søk i personbrukere
 
   Regel: Synlighet via administrasjonsrettigheter
 
-    Scenario: Brukeradministrator ser personbrukere med hjemorganisasjon i egne organisasjoner
+    Scenario: Brukeradministrator ser personbrukere med hjemorganisasjon i organisasjonene jeg administrerer
       Gitt jeg har brukeradministrator-rollen for én eller flere organisasjoner
-      Og en personbruker har hjemorganisasjon i en av dem
+      Og en personbruker har hjemorganisasjon i en av organisasjonene jeg administrerer
       Når jeg åpner brukeroversikten
       Så ser jeg personbrukeren i listen
       Og jeg ser personbrukeren uavhengig av hvilket miljø administrasjonsrettigheten min gjelder for
 
+    @deprecated
     Scenario: Brukeradministrator ser personbrukere med datatilgang fra egne organisasjoner
       Gitt jeg har brukeradministrator-rollen for én eller flere organisasjoner
       Og en personbruker har hjemorganisasjon utenfor de organisasjonene jeg administrerer
@@ -141,6 +136,16 @@ Egenskap: Listevisning og søk i personbrukere
       Så ser jeg personbrukeren i listen
       Og hjemorganisasjonen som vises er personbrukerens egen, ikke organisasjonen tildelingen gjelder for
 
+    @planned
+    Scenario: Brukeradministrator ser personbrukere fra andre organisasjoner med aktiv rolle i organisasjonene jeg administrerer
+      Gitt jeg har brukeradministrator-rollen for én eller flere organisasjoner
+      Og en personbruker har hjemorganisasjon utenfor organisasjonene jeg administrerer
+      Men personbrukeren har en aktiv rolle i en av organisasjonene jeg administrerer, i et miljø jeg administrerer
+      Når jeg åpner brukeroversikten
+      Så ser jeg personbrukeren i listen
+      Og hjemorganisasjonen som vises er personbrukerens egen
+
+    @deprecated
     Scenario: Personbrukere uten tilknytning til egne organisasjoner er ikke synlige
       Gitt jeg har brukeradministrator-rollen for én eller flere organisasjoner
       Og en personbruker har hjemorganisasjon utenfor de organisasjonene jeg administrerer
@@ -148,6 +153,7 @@ Egenskap: Listevisning og søk i personbrukere
       Når jeg åpner brukeroversikten
       Så ser jeg ikke personbrukeren i listen
 
+    @deprecated
     Scenario: Personbrukere med kun inaktiv datatilgang fra egne organisasjoner er ikke synlige
       Gitt jeg har brukeradministrator-rollen for én eller flere organisasjoner
       Og en personbruker har hjemorganisasjon utenfor de organisasjonene jeg administrerer
@@ -155,6 +161,15 @@ Egenskap: Listevisning og søk i personbrukere
       Når jeg åpner brukeroversikten
       Så ser jeg ikke personbrukeren i listen
 
+    @planned
+    Scenario: Personbrukere med annen hjemorganisasjon er ikke synlige uten aktiv rolle i organisasjonene jeg administrerer
+      Gitt jeg har brukeradministrator-rollen for én eller flere organisasjoner
+      Og en personbruker har hjemorganisasjon utenfor organisasjonene jeg administrerer
+      Og personbrukeren har ingen aktive roller i organisasjonene jeg administrerer
+      Når jeg åpner brukeroversikten
+      Så ser jeg ikke personbrukeren i listen
+
+    @deprecated
     Scenario: Personbrukere med datatilgang i et miljø jeg ikke administrerer er ikke synlige
       Gitt jeg har brukeradministrator-rollen for en organisasjon i ett miljø
       Og en personbruker har hjemorganisasjon utenfor de organisasjonene jeg administrerer
@@ -162,10 +177,13 @@ Egenskap: Listevisning og søk i personbrukere
       Når jeg åpner brukeroversikten
       Så ser jeg ikke personbrukeren i listen
 
-    Scenario: Super-brukeradministrator ser alle personbrukere
-      Gitt jeg har super-brukeradministrator-rollen
+    @planned
+    Scenario: Personbrukere med annen hjemorganisasjon er ikke synlige når rollen gjelder i et miljø jeg ikke administrerer
+      Gitt jeg har brukeradministrator-rollen for en organisasjon i ett miljø
+      Og en personbruker har hjemorganisasjon utenfor organisasjonen jeg administrerer
+      Og personbrukerens eneste aktive rolle i organisasjonen jeg administrerer gjelder i et annet miljø
       Når jeg åpner brukeroversikten
-      Så ser jeg alle personbrukere uavhengig av hjemorganisasjon og tildelinger
+      Så ser jeg ikke personbrukeren i listen
 
   @draft
   Regel: Sist brukt-kolonne og sortering (planlagt etter v1)
@@ -187,5 +205,5 @@ Egenskap: Listevisning og søk i personbrukere
 
 # ÅPNE SPØRSMÅL:
 # - Filnavn: bør "søke_opp_bruker.feature" omdøpes til "listevisning_og_sok.feature" for konsistens med mønsteret? Tittelendring på #479 må i så fall følges opp via fs-github.
-# - Rolle-navn: "brukeradministrator" og "super-brukeradministrator" er valgt. Sjekk at rolledefinisjonene i "4 - Opprette og administrere roller" bruker samme navn.
+# - Rolle-navn: "brukeradministrator" er valgt. Sjekk at rolledefinisjonene i "4 - Opprette og administrere roller" bruker samme navn.
 # - Skal kant-tilfeller som brukere uten Feide-ID, eller brukere med flere identiteter, modelleres her — eller hører de hjemme i et eget krav? Spørsmålet omfatter nå også brukere uten hjemorganisasjon, siden kolonnen og filteret bygger på den.

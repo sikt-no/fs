@@ -230,7 +230,8 @@ Egenskap: ...
 Et krav som er levert (`@implemented`), endres ikke på stedet. Den leverte teksten beskriver koden som finnes, og den nye teksten beskriver det som skal bygges. Begge står i fila til koden er endret.
 
 - Egenskapen blir stående som `@implemented`. Statusen for endringen står på delen (`Regel:` eller `Scenario:`/`Scenariomal:`).
-- Den nye eller endrede delen legges som en egen blokk, rett etter delen den erstatter. Den starter som `@draft` (med `@openquestion` og `# ÅPNE SPØRSMÅL:` ved uklarheter), som alle nye krav. Den gamle delen står urørt så lenge den nye er utkast.
+- Den nye eller endrede delen legges som en egen blokk, rett etter delen den erstatter. Den starter som `@draft` (med `@openquestion` og `# ÅPNE SPØRSMÅL:` ved uklarheter), som alle nye krav.
+- Den nye delen får den tittelen kravet skal ha, ikke en tittel som beskriver endringen. Blir den lik tittelen på den gamle delen, får den gamle ` (avvikles)` bak tittelen, så titlene er unike: `Scenario: Se brukerens roller (avvikles)`. Ellers står den gamle delen urørt så lenge den nye er utkast. Forkastes den nye delen, fjernes ` (avvikles)` igjen.
 - Når den nye delen er validert (`fs-krav`), byttes `@draft` med `@planned`, og delen den erstatter, får `@deprecated` i samme endring. En del som bare fjernes, får `@deprecated` (se *Avvikling*). Et rent tillegg har ingen gammel del.
 - Delen går deretter langs samme akse som en egenskap: `@planned` →(`fs-specify` / `fs-specify-delta`)→ `@in-progress` →(`fs-verify`)→ levert. Når `fs-verify` har funnet koden, fjernes `@in-progress` fra delen, og delen arver `@implemented` fra egenskapen. `@deprecated`-delen slettes av `fs-verify` når koden er borte.
 - `@planned` og `@in-progress` på en del er bare lov under en `@implemented` egenskap. Under `@draft`, `@planned` eller `@in-progress` er ingenting levert, så delen endres på stedet. *(sjekkes automatisk)*
@@ -252,6 +253,16 @@ Egenskap: ...
   @planned
   Regel: Eksport til Excel
     Scenario: ...
+
+  Regel: Visning av roller
+
+    @deprecated
+    Scenario: Se brukerens roller (avvikles)
+      ...
+
+    @planned
+    Scenario: Se brukerens roller
+      ...
 ```
 
 ### Type
@@ -316,3 +327,22 @@ Disse reglene gjelder for alle kravfiler. Tvetydige ord skal **avklares** før t
 | organisasjonsnummer | (reservert for eksternt registreringsnummer – ikke bruk som synonym for organisasjonskode) |
 | identitetsleverandør | idP (forkortelsen er innarbeidet blant utviklere, men ikke blant dem som administrerer applikasjoner) |
 | applikasjonseier | organisasjon (kun i applikasjonskrav, der organisasjonen opptrer i to roller: den som eier applikasjonen, og den hvis data en tilgang «gjelder for») |
+
+### Konkrete henvisninger
+
+Steg og titler skal si konkret hvem eller hva de gjelder. Ord som «egne», «mine», «dem» og «denne» lar leseren gjette. Hvert steg skal også kunne leses alene, fordi det blir en egen step definition og kan gjenbrukes i andre scenarioer.
+
+- **«egne», «egen», «eget»** er greit når eieren står i samme setning og eierskapet er bokstavelig: `søkerens egne søknader`, `min egen profil`. Det er også greit når ordet betyr *separat*: `i eget vindu`, `i en egen kolonne`. Gjelder det hva en rolle har tilgang til eller er knyttet til, skriv relasjonen: `organisasjonene jeg administrerer`, ikke `egne organisasjoner`.
+- **«min», «mine», «mitt»** følger samme regel som «egne»: greit når eierskapet er bokstavelig (`min profil`, `mine søknader`), ikke når det gjelder en rolles tilknytning. Skriv `organisasjonen jeg administrerer`, ikke `min organisasjon`.
+- **«dem», «de», «disse», «en av dem»** skal ikke peke til et annet steg eller en tittel. Skriv det det gjelder på nytt. Står ordet det peker på i samme steg, er det greit: `Når jeg velger flere roller og fjerner dem i én operasjon`.
+- **«den», «denne», «dette»** som peker til et annet steg, følger samme regel: `Så ser jeg denne applikasjonen` blir `Så ser jeg applikasjonen`, og `den organisasjonen` blir `organisasjonen applikasjonen tilhører`. Bruk bestemt form, og legg til det som skiller når det er flere av samme slag. Det er greit når ordet det peker på, står i samme steg (`endrer prioriteringen og lagrer den`), når «den» er artikkel foran et adjektiv (`den valgte organisasjonen`, `den nye beskrivelsen`), og når «det» er formelt subjekt (`det finnes`).
+- **«sin», «sine», «sitt»** er greit, fordi det alltid peker på subjektet i samme setning: `Så ser søkerne resultatet sitt`.
+
+| Ikke skriv | Skriv |
+|------------|-------|
+| `Scenario: Brukeradministrator ser personbrukere fra egne organisasjoner` | `Scenario: Brukeradministrator ser personbrukere fra organisasjonene jeg administrerer` |
+| `Og en personbruker har hjemorganisasjon i en av dem` | `Og en personbruker har hjemorganisasjon i en av organisasjonene jeg administrerer` |
+| `Men jeg ser ikke muligheten til å endre dem` (etter et steg om vitnemål, grunnlag og poeng) | `Men jeg ser ikke muligheten til å endre grunnlaget` (eller det «dem» faktisk gjelder) |
+| `Scenario: Deltakende organisasjon ser kun sine egne` | `Scenario: Deltakende organisasjon ser kun utdanningstilbudene sine` |
+| `Så er applikasjonen opprettet på min organisasjon` | `Så er applikasjonen opprettet på organisasjonen jeg administrerer` |
+| `Så ser jeg denne applikasjonen i listen` | `Så ser jeg applikasjonen i listen` |

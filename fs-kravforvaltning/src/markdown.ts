@@ -1,19 +1,36 @@
 /**
  * Enkel markdown-parser for .md-filene i vieweren (README.md og filene i krav/), portet fra designet
- * «Gherkin Viewer» (1a, forside). Støtter overskrifter, avsnitt, lister, kodeblokker, tabeller,
- * lenker, `kode` og **fet** tekst. Resultatet rendres som JSX, så ingenting tolkes som HTML.
+ * «Gherkin Viewer» (1a, forside). Støtter overskrifter, avsnitt, lister (nestede og sjekklister),
+ * sitater, skillelinjer, kodeblokker, tabeller, frontmatter, lenker, `kode`, **fet**, *kursiv* og
+ * ~~gjennomstreket~~ tekst. Resultatet rendres som JSX, så ingenting tolkes som HTML.
  */
 
 export type Seg =
   | { kind: 'plain'; t: string }
   | { kind: 'code'; t: string }
-  | { kind: 'bold'; t: string }
+  /** Fet, kursiv og gjennomstreket tekst kan inneholde `kode` og annen formatering (`c`); `t` er teksten uten tegn */
+  | { kind: 'bold' | 'em' | 'strike'; t: string; c: Seg[] }
   | { kind: 'link'; t: string; href: string };
 
+/** `task` er satt for sjekklistepunkter (`- [ ]` / `- [x]`), `sub` er en nestet liste */
+export interface ListItem {
+  segs: Seg[];
+  task?: boolean;
+  sub?: List;
+}
+export interface List {
+  type: 'ul' | 'ol';
+  /** Første nummer i en nummerert liste, når det ikke er 1 */
+  start?: number;
+  items: ListItem[];
+}
+
 export type Block =
-  | { type: 'h1' | 'h2' | 'h3'; text: string }
+  | { type: 'h1' | 'h2' | 'h3'; text: string; segs: Seg[] }
   | { type: 'p'; segs: Seg[] }
-  | { type: 'ul' | 'ol'; items: Seg[][] }
+  | List
+  | { type: 'quote'; blocks: Block[] }
+  | { type: 'hr' }
   | { type: 'code'; lang: string; body: string[] }
   | { type: 'card'; href: string; host: string; path: string }
   | { type: 'table'; head: Seg[][]; rows: Seg[][][] };
@@ -27,7 +44,16 @@ export interface Heading {
 
 export const prettyUrl = (h: string) => h.replace(/^https?:\/\//, '').replace(/\/$/, '');
 
-const INLINE = /(`[^`]+`|\*\*[^*]+\*\*|\[[^\]]+\]\([^)\s]+\)|<https?:\/\/[^>\s]+>|https?:\/\/[^\s<>)]+)/;
+// Innholdet i fet/kursiv/gjennomstreket er tegn uten markøren, eller et `kodespenn` (som kan inneholde markøren)
+const INLINE = /(`[^`]+`|\*\*(?:[^*`]|`[^`]+`)+\*\*|~~(?:[^~`]|`[^`]+`)+~~|\*(?![\s*])(?:[^*`]|`[^`]+`)+?(?<!\s)\*|(?<!\w)_(?![\s_])(?:[^_`]|`[^`]+`)+?(?<!\s)_(?!\w)|\[[^\]]+\]\([^)\s]+\)|<https?:\/\/[^>\s]+>|https?:\/\/[^\s<>)]+)/;
+
+/** Teksten uten markdown-tegn, til innholdsfortegnelsen */
+const plain = (segs: Seg[]) => segs.map(g => g.t).join('');
+
+const nested = (kind: 'bold' | 'em' | 'strike', inner: string): Seg => {
+  const c = inline(inner);
+  return { kind, t: plain(c), c };
+};
 
 export function inline(t: string): Seg[] {
   return t
@@ -35,7 +61,9 @@ export function inline(t: string): Seg[] {
     .filter(Boolean)
     .map((s): Seg => {
       if (/^`.+`$/.test(s)) return { kind: 'code', t: s.slice(1, -1) };
-      if (/^\*\*.+\*\*$/.test(s)) return { kind: 'bold', t: s.slice(2, -2) };
+      if (/^\*\*.+\*\*$/.test(s)) return nested('bold', s.slice(2, -2));
+      if (/^~~.+~~$/.test(s)) return nested('strike', s.slice(2, -2));
+      if (/^(\*.+\*|_.+_)$/s.test(s)) return nested('em', s.slice(1, -1));
       const md = s.match(/^\[([^\]]+)\]\(([^)\s]+)\)$/);
       if (md) return { kind: 'link', t: md[1], href: md[2] };
       const u = s.match(/^<?(https?:\/\/[^>\s]+?)>?$/);
@@ -43,6 +71,30 @@ export function inline(t: string): Seg[] {
       return { kind: 'plain', t: s };
     });
 }
+
+interface RawItem {
+  text: string;
+  task?: boolean;
+  sub?: RawList;
+}
+interface RawList {
+  type: 'ul' | 'ol';
+  start?: number;
+  items: RawItem[];
+}
+const toList = (l: RawList): List => ({
+  type: l.type,
+  ...(l.start !== undefined && { start: l.start }),
+  items: l.items.map(it => ({
+    segs: inline(it.text),
+    ...(it.task !== undefined && { task: it.task }),
+    ...(it.sub && { sub: toList(it.sub) }),
+  })),
+});
+
+const LIST_ITEM = /^(\s*)([-*+]|(\d+)[.)])\s+(.*)$/;
+const indent = (l: string) => l.match(/^\s*/)![0].replace(/\t/g, '    ').length;
+const isHr = (l: string) => /^(-{3,}|\*{3,}|_{3,})$/.test(l.replace(/\s+/g, ''));
 
 const cells = (l: string) =>
   l
@@ -57,7 +109,8 @@ export function parseMd(src: string): Block[] {
   const out: Block[] = [];
   let i = 0;
   let para: string[] | null = null;
-  let list: { type: 'ul' | 'ol'; items: string[] } | null = null;
+  // Listene som er åpne, ytterst først, med innrykket til punktene i hver
+  let stack: { indent: number; list: RawList }[] = [];
   const flushPara = () => {
     if (!para) return;
     const t = para.join(' ');
@@ -70,13 +123,25 @@ export function parseMd(src: string): Block[] {
     para = null;
   };
   const flushList = () => {
-    if (list) out.push({ type: list.type, items: list.items.map(inline) });
-    list = null;
+    if (stack.length) out.push(toList(stack[0].list));
+    stack = [];
+  };
+  const lastItem = () => {
+    const items = stack[stack.length - 1].list.items;
+    return items[items.length - 1];
   };
   const flush = () => {
     flushPara();
     flushList();
   };
+  // Frontmatter (YAML mellom --- øverst i fila) vises som en kodeblokk
+  if (L[0]?.trim() === '---') {
+    const end = L.findIndex((x, k) => k > 0 && x.trim() === '---');
+    if (end > 0) {
+      out.push({ type: 'code', lang: 'frontmatter', body: L.slice(1, end) });
+      i = end + 1;
+    }
+  }
   while (i < L.length) {
     const l = L[i].trim();
     let m: RegExpMatchArray | null;
@@ -101,27 +166,56 @@ export function parseMd(src: string): Block[] {
     }
     if ((m = l.match(/^(#{1,6})\s+(.*)$/))) {
       flush();
-      out.push({ type: ('h' + Math.min(m[1].length, 3)) as 'h1' | 'h2' | 'h3', text: m[2].replace(/\s+#+\s*$/, '') });
+      const segs = inline(m[2].replace(/\s+#+\s*$/, ''));
+      out.push({ type: ('h' + Math.min(m[1].length, 3)) as 'h1' | 'h2' | 'h3', text: plain(segs), segs });
       i++;
       continue;
     }
-    const li = l.match(/^[-*+]\s+(.*)$/) ?? l.match(/^\d+[.)]\s+(.*)$/);
+    if (isHr(l)) {
+      flush();
+      out.push({ type: 'hr' });
+      i++;
+      continue;
+    }
+    if (l.startsWith('>')) {
+      flush();
+      const body: string[] = [];
+      while (i < L.length && L[i].trim().startsWith('>')) body.push(L[i++].trim().replace(/^>\s?/, ''));
+      out.push({ type: 'quote', blocks: parseMd(body.join('\n')) });
+      continue;
+    }
+    const li = L[i].match(LIST_ITEM);
     if (li) {
       flushPara();
-      const type = /^\d/.test(l) ? 'ol' : 'ul';
-      if (list && list.type !== type) flushList();
-      (list ??= { type, items: [] }).items.push(li[1]);
+      const n = indent(li[1]);
+      const type = li[3] ? 'ol' : 'ul';
+      while (stack.length > 1 && stack[stack.length - 1].indent > n) stack.pop();
+      if (stack.length && n > stack[stack.length - 1].indent) {
+        // Nestet liste under forrige punkt
+        const sub: RawList = { type, items: [] };
+        lastItem().sub = sub;
+        stack.push({ indent: n, list: sub });
+      } else if (stack.length === 1 && stack[0].list.type !== type) flushList();
+      if (!stack.length) stack = [{ indent: n, list: { type, items: [] } }];
+      const top = stack[stack.length - 1].list;
+      if (!top.items.length && li[3] && li[3] !== '1') top.start = Number(li[3]);
+      const t = li[4].match(/^\[([ xX])\]\s+(.*)$/);
+      top.items.push(t ? { text: t[2], task: t[1] !== ' ' } : { text: li[4] });
       i++;
       continue;
     }
     if (!l) {
-      flush();
+      flushPara();
+      // En blank linje avslutter ikke lista hvis den fortsetter under (løs liste)
+      let k = i + 1;
+      while (k < L.length && !L[k].trim()) k++;
+      if (!stack.length || k >= L.length || !(LIST_ITEM.test(L[k]) || /^\s/.test(L[k]))) flushList();
       i++;
       continue;
     }
     // Innrykket fortsettelse av et listepunkt
-    if (list && /^\s/.test(L[i])) {
-      list.items[list.items.length - 1] += ' ' + l;
+    if (stack.length && /^\s/.test(L[i])) {
+      lastItem().text += ' ' + l;
       i++;
       continue;
     }

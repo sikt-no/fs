@@ -1,45 +1,98 @@
 import { useEffect, useMemo, useRef, useState } from 'preact/hooks';
 import type { AuthStatus, PublishResult } from '../shared/api';
 import type { GitInfo, Snapshot } from '../shared/model';
-import { prTitle } from './edit';
+import { draftPicked, prTitle } from './edit';
+import type { PrProposal } from './prProposal';
 import { transport } from './transport';
 
 interface Props {
   git: GitInfo;
   entries: Snapshot;
+  /** Fila «Lag PR» ble åpnet fra; krysses av i tillegg til det som er valgt i utkastet */
+  preselect?: string;
   onClose: () => void;
+}
+
+/** PR-en brukeren holder på med: valgte filer, tittel, branch og beskrivelse, til PR-en er opprettet */
+interface Draft {
+  picked: string[];
+  title: string | null;
+  branch: string | null;
+  body: string;
+}
+const DRAFT_KEY = 'kravforvaltning:prDraft';
+function readDraft(): Draft | null {
+  try {
+    return JSON.parse(localStorage.getItem(DRAFT_KEY) ?? 'null');
+  } catch {
+    return null;
+  }
+}
+function writeDraft(d: Draft | null) {
+  try {
+    if (d) localStorage.setItem(DRAFT_KEY, JSON.stringify(d));
+    else localStorage.removeItem(DRAFT_KEY);
+  } catch {
+    /* ignorer */
+  }
+}
+
+/** Et PR-forslag fra Claude blir utkastet (og erstatter det som var der), så «Lag PR» åpnes utfylt */
+export function proposeDraft(p: PrProposal) {
+  writeDraft({ picked: p.paths, title: p.title, branch: p.branch, body: p.body });
 }
 
 const CODE_LABEL = { M: 'endret', A: 'ny', U: 'ny', D: 'slettet' } as const;
 
 /**
- * «Lag PR»: velg krav-filer med endringer, gi PR-en tittel og beskrivelse, og send den.
+ * «Lag PR», vist i detaljvinduet: velg krav-filer med endringer, gi PR-en tittel og beskrivelse, og send den.
  * Backenden lager en ny branch fra origin/main med filene slik de er på disk, pusher og oppretter PR-en.
  * Mangler innlogging, logges brukeren inn mot GitHub her (device flow), eller får beskjed om `gh auth login`.
+ * Valgene og tekstene lagres som utkast, så brukeren kan lukke visningen, gå andre steder og fortsette senere.
  */
-export function PrDialog({ git, entries, onClose }: Props) {
+export function PrDialog({ git, entries, preselect, onClose }: Props) {
   // Ucommittede endringer først; filer som bare er committet i branchen kan også tas med
   const changes = useMemo(() => {
     const seen = new Set<string>();
     return [...git.uncommitted, ...git.committed].filter(c => !seen.has(c.path) && seen.add(c.path));
   }, [git]);
-  const [picked, setPicked] = useState<Set<string>>(() => new Set(git.uncommitted.map(c => c.path)));
+  const [draft] = useState(readDraft);
+  const [hasDraft, setHasDraft] = useState(!!draft);
+  const [picked, setPicked] = useState<Set<string>>(() => new Set(draftPicked(draft?.picked ?? null, preselect, git.uncommitted.map(c => c.path))));
   const titles = useMemo(() => Object.fromEntries(Object.values(entries).map(e => [e.path, e.model?.title])), [entries]);
   const paths = changes.map(c => c.path).filter(p => picked.has(p));
   const suggested = prTitle(paths.length ? paths : changes.map(c => c.path), titles);
-  const [title, setTitle] = useState<string | null>(null);
-  const [branch, setBranch] = useState<string | null>(null);
-  const [body, setBody] = useState('');
+  const [title, setTitle] = useState<string | null>(draft?.title ?? null);
+  const [branch, setBranch] = useState<string | null>(draft?.branch ?? null);
+  const [body, setBody] = useState(draft?.body ?? '');
   const [auth, setAuth] = useState<AuthStatus | null>(null);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [done, setDone] = useState<PublishResult | null>(null);
-  const dialog = useRef<HTMLDialogElement>(null);
   const shownTitle = title ?? suggested;
   const shownBranch = branch ?? shownTitle.replace(/^Krav:\s*/, '');
 
+  // Lagre utkastet når brukeren endrer noe (ikke bare ved å åpne visningen)
+  const touched = useRef(false);
   useEffect(() => {
-    dialog.current?.showModal();
+    if (!touched.current) return void (touched.current = true);
+    if (done) return;
+    writeDraft({ picked: [...picked], title, branch, body });
+    setHasDraft(true);
+  }, [picked, title, branch, body]);
+  const clearDraft = () => {
+    writeDraft(null);
+    setHasDraft(false);
+    touched.current = false;
+    setPicked(new Set(draftPicked(null, preselect, git.uncommitted.map(c => c.path))));
+    setTitle(null);
+    setBranch(null);
+    setBody('');
+  };
+
+  useEffect(() => {
+    // Åpnet fra en fil som ikke er med i utkastet: fila er lagt til, og blir stående i utkastet
+    if (draft && preselect && !draft.picked.includes(preselect)) writeDraft({ ...draft, picked: [...picked] });
     transport.call('authStatus').then(setAuth, e => setError(e.message));
   }, []);
 
@@ -65,6 +118,7 @@ export function PrDialog({ git, entries, onClose }: Props) {
     setError(null);
     try {
       setDone(await transport.call('publish', { paths, branch: shownBranch, title: shownTitle, body }));
+      writeDraft(null);
     } catch (e) {
       setError((e as Error).message);
     } finally {
@@ -81,10 +135,10 @@ export function PrDialog({ git, entries, onClose }: Props) {
     });
 
   return (
-    <dialog class="prdialog" ref={dialog} onClose={onClose} onCancel={onClose}>
+    <div class="prdialog">
       <div class="prhead">
         <h2>Lag PR</h2>
-        <button class="smallbtn" onClick={() => dialog.current?.close()} aria-label="Lukk">Lukk</button>
+        <button class="smallbtn" onClick={onClose} title="Utkastet blir stående">Lukk</button>
       </div>
 
       {done ? (
@@ -142,7 +196,10 @@ export function PrDialog({ git, entries, onClose }: Props) {
                 <span class="muted"> · venter på godkjenning…</span>
               </span>
             ) : auth.canLogin ? (
-              <button class="smallbtn" onClick={login}>Logg inn med GitHub</button>
+              <span>
+                {auth.expired && <span class="muted">GitHub godtar ikke lenger innloggingen din. </span>}
+                <button class="smallbtn" onClick={login}>Logg inn med GitHub</button>
+              </span>
             ) : transport.kind === 'electron' ? (
               <span class="muted">Innlogging mot GitHub er ikke satt opp i denne versjonen av appen (mangler OAuth-klient).</span>
             ) : (
@@ -156,13 +213,21 @@ export function PrDialog({ git, entries, onClose }: Props) {
           {error && <div class="edwarn err" role="alert">{error}</div>}
 
           <div class="prfoot">
-            <span class="muted">Ny branch fra origin/main med filene slik de er på disk. Lokale filer og branch endres ikke.</span>
+            <span class="muted">
+              Ny branch fra origin/main med filene slik de er på disk. Lokale filer og branch endres ikke.
+              {hasDraft && (
+                <>
+                  {' '}Utkastet er lagret.{' '}
+                  <button class="linkbtn" onClick={clearDraft}>Tøm utkast</button>
+                </>
+              )}
+            </span>
             <button class="primbtn" disabled={busy || !paths.length || auth?.state !== 'ok' || !shownTitle.trim()} onClick={publish}>
               {busy ? 'Lager PR…' : 'Lag PR'}
             </button>
           </div>
         </>
       )}
-    </dialog>
+    </div>
   );
 }
