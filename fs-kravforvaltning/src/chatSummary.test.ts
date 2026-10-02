@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
-import { parseSummary, summaryDraft, summaryIn, summaryMentions } from './chatSummary.ts';
+import { parseSummary, summaryDraft, summaryFiles, summaryIn, summaryMentions } from './chatSummary.ts';
 
 const json = JSON.stringify({
   mal: 'Verifisere kravene.',
@@ -21,13 +21,22 @@ test('parseSummary tolker JSON-en, rydder stiene og godtar ikke tomme eller ugyl
   assert.equal(parseSummary('[]'), null);
 });
 
-test('summaryDraft utelater tomme felt, og bare krav-filer legges ved med @', () => {
+test('summaryDraft utelater tomme felt', () => {
   const s = parseSummary(json)!;
   assert.equal(
     summaryDraft(s),
     'Fortsetter fra en tidligere samtale:\n\nMål: Verifisere kravene.\n\nGjort: Gått gjennom 8 egenskaper.\n\nÅpne spørsmål: Holder det for GRU-008?\n\nNeste steg: Avklare GRU-008.',
   );
-  assert.deepEqual(summaryMentions(s), ['krav/07 B/a.feature']);
+});
+
+test('summaryFiles tar bare med endrede filer, og bare endrede krav-filer legges ved med @', () => {
+  const s = parseSummary(json)!;
+  assert.deepEqual(summaryFiles(s), [], 'filer Claude bare har lest, vises ikke');
+  assert.deepEqual(summaryFiles(s, ['tasks/b/spec/verify.md']), ['tasks/b/spec/verify.md'], 'endret i samtalen');
+  assert.deepEqual(summaryFiles(s, [], p => p === 'krav/07 B/a.feature'), ['krav/07 B/a.feature'], 'endret i git');
+  const files = summaryFiles(s, ['tasks/b/spec/verify.md'], p => p === 'krav/07 B/a.feature');
+  assert.deepEqual(files, ['krav/07 B/a.feature', 'tasks/b/spec/verify.md']);
+  assert.deepEqual(summaryMentions(files), ['krav/07 B/a.feature']);
 });
 
 test('summaryIn finner blokken i et svar', () => {
