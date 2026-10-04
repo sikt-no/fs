@@ -947,6 +947,7 @@ body.resizing iframe, body.resizing .main { pointer-events: none; }
 .cctxmeter { display: inline-flex; align-items: center; gap: 6px; }
 .cbar { width: 56px; height: 5px; border-radius: 3px; background: var(--line); overflow: hidden; display: inline-block; }
 .cbar > span { display: block; height: 100%; background: var(--acc); border-radius: 3px; }
+.cmodel { color: var(--ink2); }
 .cloaded { display: inline-flex; align-items: center; gap: 4px; flex-wrap: wrap; }
 .claude-btns .smallbtn[aria-pressed="true"] { background: var(--acc-soft); color: var(--acc-ink); border-color: var(--acc); }
 .cconv { display: flex; align-items: stretch; gap: 6px; border: 1px solid var(--line); border-radius: 8px; background: var(--surface); }

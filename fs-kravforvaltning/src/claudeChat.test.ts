@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
-import { apply, chooseSkill, contextLabel, effectiveSkill, EMPTY_CHAT, send, started } from './claudeChat.ts';
+import { apply, chooseSkill, contextLabel, effectiveSkill, EMPTY_CHAT, modelLabel, send, started } from './claudeChat.ts';
 
 test('en kjøring bygger samtalen: melding, verktøy, svar og ferdig', () => {
   let c = started(send(EMPTY_CHAT, 'Sett status', 'krav/a.feature').chat, 'r1');
@@ -215,4 +215,18 @@ test('editedFiles: filene Claude har endret, relative til repoet, også under ta
   tool('4', 'Edit', 'krav/c.feature', true);
   tool('5', 'Edit', 'krav/b.feature');
   assert.deepEqual(editedFiles(c), ['tasks/brukere/spec/verify-2026-09-29.md', 'krav/b.feature']);
+});
+
+test('modellen fra init-meldingen lagres på samtalen, og vises med kort navn', () => {
+  let c = started(send(EMPTY_CHAT, 'Hei', null).chat, 'r1');
+  c = apply(c, 'r1', { kind: 'init', sessionId: 's1', model: 'claude-opus-5-5[1m]', skills: [] });
+  assert.equal(c.model, 'claude-opus-5-5[1m]');
+  c = started(c, 'r2');
+  c = apply(c, 'r2', { kind: 'init', sessionId: 's1', model: null, skills: [] });
+  assert.equal(c.model, 'claude-opus-5-5[1m]', 'uten modell i init beholdes den forrige');
+  assert.equal(modelLabel('claude-opus-5-5[1m]'), 'Opus 5.5 (1M)');
+  assert.equal(modelLabel('claude-sonnet-5-5'), 'Sonnet 5.5');
+  assert.equal(modelLabel('claude-haiku-4-5-20251001'), 'Haiku 4.5');
+  assert.equal(modelLabel('claude-fable-5-1'), 'Fable 5.1');
+  assert.equal(modelLabel('noe-annet'), 'noe-annet');
 });

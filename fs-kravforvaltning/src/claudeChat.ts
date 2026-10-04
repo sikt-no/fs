@@ -26,6 +26,8 @@ export interface Chat {
   loadedSkills: string[];
   /** Tokens brukt av konteksten i siste svar, og kontekstvinduet til modellen */
   context: { used: number; window: number | null } | null;
+  /** Modellen Claude Code brukte i siste kjøring (fra init-meldingen), f.eks. `claude-opus-5-5[1m]` */
+  model: string | null;
   /**
    * Versjonen (hash) av hver skill da den ble lastet i samtalen; er den endret siden, er skillen utdatert her.
    * Heter ikke `skillVersions`: den første utgaven fylte inn versjonen på disk i gamle samtaler, og de verdiene stemmer ikke.
@@ -44,6 +46,7 @@ export const EMPTY_CHAT: Chat = {
   skillLoaded: null,
   loadedSkills: [],
   context: null,
+  model: null,
   loadedVersions: {},
   continuesFrom: null,
 };
@@ -138,7 +141,7 @@ export function apply(chat: Chat, runId: string, ev: ClaudeEvent, hashes: SkillH
   if (runId !== chat.runId) return chat;
   switch (ev.kind) {
     case 'init':
-      return { ...chat, sessionId: ev.sessionId };
+      return { ...chat, sessionId: ev.sessionId, model: ev.model ?? chat.model };
     case 'text':
       return { ...chat, items: [...chat.items, { kind: 'assistant', text: ev.text }] };
     case 'tool': {
@@ -288,4 +291,12 @@ export function contextLabel(ctx: { used: number; window: number | null }): stri
   const k = (n: number) => (n >= 1e6 ? `${+(n / 1e6).toFixed(n % 1e6 ? 1 : 0)}M` : n >= 1000 ? `${Math.round(n / 1000)}k` : String(n));
   if (!ctx.window) return k(ctx.used);
   return `${k(ctx.used)} av ${k(ctx.window)} · ${Math.min(100, Math.round((ctx.used / ctx.window) * 100))} %`;
+}
+
+/** «Opus 5.5 (1M)» fra `claude-opus-5-5[1m]`; ukjente navn vises som de er */
+export function modelLabel(model: string): string {
+  const m = /^claude-([a-z]+)-(\d+)(?:-(\d{1,2}))?(?:-\d{8})?(\[1m\])?$/i.exec(model);
+  if (!m) return model;
+  const [, family, major, minor, long] = m;
+  return `${family[0].toUpperCase()}${family.slice(1)} ${major}${minor ? `.${minor}` : ''}${long ? ' (1M)' : ''}`;
 }

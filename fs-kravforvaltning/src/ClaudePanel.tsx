@@ -4,6 +4,7 @@ import type { GitChange, Snapshot } from '../shared/model';
 import {
   applyEvent,
   contextLabel,
+  modelLabel,
   chooseSkill,
   effectiveSkill,
   createConversation,
@@ -407,6 +408,11 @@ export function ClaudePanel({ status, width, onWidth, allowedSkills: modeSkills,
         <div class="claude-info">
           <div class="claude-title" title={conv.title}>{conv.title}</div>
           <div class="claude-meta">
+            {c.model && (
+              <span class="cmodel" title={`Modellen Claude Code brukte i siste svar (${c.model}). Den styres av innstillingene i Claude Code, ikke her.`}>
+                {modelLabel(c.model)}
+              </span>
+            )}
             {c.context && (
               <span
                 class="cctxmeter"
