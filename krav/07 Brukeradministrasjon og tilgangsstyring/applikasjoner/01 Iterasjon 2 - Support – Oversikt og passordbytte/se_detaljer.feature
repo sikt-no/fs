@@ -43,11 +43,6 @@ Egenskap: Se detaljer for applikasjon
       Så ser jeg applikasjonens Client-ID
 
     @in-progress
-    Scenario: Se konsument sin virksomhetsidentifikator for Maskinporten-applikasjon
-      Gitt applikasjonen har Maskinporten som identitetsleverandør
-      Så ser jeg konsument sin virksomhetsidentifikator
-
-    @in-progress
     Scenario: Se brukernavn for FS-applikasjon
       Gitt applikasjonen har FS som identitetsleverandør
       Så ser jeg applikasjonens brukernavn

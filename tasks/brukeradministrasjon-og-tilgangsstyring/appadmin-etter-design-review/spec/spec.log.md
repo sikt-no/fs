@@ -9,3 +9,4 @@ History of skill invocations for this spec. Append-only — never edit past entr
 - 2026-10-05 — `fs-krav` ended (success) — skisseavvik 1–3 avklart: Service-ID → Tjeneste-ID, FS vises som «FS (Maskinbruker)», regelen om FS-brukernavn avklart og satt @draft → @in-progress etter beskjed fra brukeren
 - 2026-10-05 — `fs-krav` ended (success) — nytt scenario «FS-brukernavnet skiller mellom store og små bokstaver» under @in-progress-regelen for FS-brukernavn; skisseavvik 4 avklart: sortering på navn forblir @draft
 - 2026-10-05 — `fs-specify` ended (success) — uavklart skisse for passord per miljø avklart (skisseres ikke); alle åpne spørsmål i spec-en er lukket
+- 2026-10-05 — `fs-krav` ended (success) — konsument sin virksomhetsidentifikator oppgis ikke ved opprettelse og settes til «ukjent» (BAT-270); regelen i opprette_applikasjon endret på stedet (@in-progress), scenarioet i se_detaljer slettet

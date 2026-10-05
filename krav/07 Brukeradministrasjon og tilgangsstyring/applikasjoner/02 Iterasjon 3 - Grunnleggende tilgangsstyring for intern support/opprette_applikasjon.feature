@@ -140,32 +140,15 @@ Egenskap: Opprette applikasjon
       Så er applikasjonen likevel opprettet på den valgte applikasjonseieren
 
   @in-progress
-  Regel: Maskinporten-applikasjoner har i tillegg konsument sin virksomhetsidentifikator
+  Regel: Konsument sin virksomhetsidentifikator oppgis ikke ved opprettelse
 
-    Scenario: Angi konsument sin virksomhetsidentifikator ved opprettelse
-      Gitt jeg oppretter en ny applikasjon med Maskinporten som identitetsleverandør
-      Når jeg oppgir konsument sin virksomhetsidentifikator
-      Så er virksomhetsidentifikatoren lagret på applikasjonen
-
-    Scenario: Opprettelse avvises når virksomhetsidentifikatoren ikke følger ISO 6523-formatet
-      Gitt jeg oppretter en ny applikasjon med Maskinporten som identitetsleverandør
-      Når jeg oppgir en virksomhetsidentifikator som ikke følger ISO 6523-formatet
-      Så avvises opprettelsen
-      Og det fremgår at virksomhetsidentifikatoren har ugyldig format
-
-    Scenario: Virksomhetsidentifikatoren verifiseres ikke mot et organisasjonsregister
-      Gitt jeg oppretter en ny applikasjon med Maskinporten som identitetsleverandør
-      Når jeg oppgir en virksomhetsidentifikator med gyldig format som ikke tilhører en registrert organisasjon
-      Så er applikasjonen likevel opprettet
-
-    Scenario: Virksomhetsidentifikatoren trenger ikke tilhøre applikasjonseier
-      Gitt jeg oppretter en ny applikasjon med Maskinporten som identitetsleverandør og en valgt applikasjonseier
-      Når virksomhetsidentifikatoren peker på en annen organisasjon enn applikasjonseier
-      Så er applikasjonen likevel opprettet på den valgte applikasjonseieren
-
-    Scenario: Konsument sin virksomhetsidentifikator gjelder kun Maskinporten
-      Når jeg oppretter en ny applikasjon med Feide eller FS som identitetsleverandør
+    Scenario: Konsument sin virksomhetsidentifikator er ikke en del av opprettelsen
+      Når jeg oppretter en ny applikasjon
       Så er konsument sin virksomhetsidentifikator ikke en del av opprettelsen
+
+    Scenario: Maskinporten-applikasjon får ukjent virksomhetsidentifikator
+      Når jeg oppretter en ny applikasjon med Maskinporten som identitetsleverandør
+      Så er konsument sin virksomhetsidentifikator registrert som "ukjent" på applikasjonen
 
   @in-progress
   Regel: FS-applikasjoner identifiseres av et brukernavn som ikke verifiseres mot en ekstern kilde
