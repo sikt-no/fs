@@ -137,23 +137,33 @@ Egenskap: Opprette applikasjon
       Når ID-en hos identitetsleverandøren tilhører en annen organisasjon
       Så er applikasjonen likevel opprettet på den valgte applikasjonseieren
 
-  @draft @openquestion
-  Regel: Maskinporten-applikasjoner har i tillegg en konsument-ID
-    # ÅPNE SPØRSMÅL:
-    # - Skal konsument-ID-en valideres — mot ISO 6523-formatet, mot et
-    #   organisasjonsregister, eller ikke i det hele tatt?
-    # - Hva er forholdet mellom konsument-ID og applikasjonseier når de peker på
-    #   ulike organisasjoner? En Maskinporten-applikasjon har nå to
-    #   organisasjonsangivelser, og det er ikke avklart om de kan avvike.
+  @planned
+  Regel: Maskinporten-applikasjoner har i tillegg konsument sin virksomhetsidentifikator
 
-    Scenario: Angi konsument-ID ved opprettelse
+    Scenario: Angi konsument sin virksomhetsidentifikator ved opprettelse
       Gitt jeg oppretter en ny applikasjon med Maskinporten som identitetsleverandør
-      Når jeg oppgir konsumentens organisasjons-ID
-      Så er konsument-ID-en lagret på applikasjonen
+      Når jeg oppgir konsument sin virksomhetsidentifikator
+      Så er virksomhetsidentifikatoren lagret på applikasjonen
 
-    Scenario: Konsument-ID gjelder kun Maskinporten
+    Scenario: Opprettelse avvises når virksomhetsidentifikatoren ikke følger ISO 6523-formatet
+      Gitt jeg oppretter en ny applikasjon med Maskinporten som identitetsleverandør
+      Når jeg oppgir en virksomhetsidentifikator som ikke følger ISO 6523-formatet
+      Så avvises opprettelsen
+      Og det fremgår at virksomhetsidentifikatoren har ugyldig format
+
+    Scenario: Virksomhetsidentifikatoren verifiseres ikke mot et organisasjonsregister
+      Gitt jeg oppretter en ny applikasjon med Maskinporten som identitetsleverandør
+      Når jeg oppgir en virksomhetsidentifikator med gyldig format som ikke tilhører en registrert organisasjon
+      Så er applikasjonen likevel opprettet
+
+    Scenario: Virksomhetsidentifikatoren trenger ikke tilhøre applikasjonseier
+      Gitt jeg oppretter en ny applikasjon med Maskinporten som identitetsleverandør og en valgt applikasjonseier
+      Når virksomhetsidentifikatoren peker på en annen organisasjon enn applikasjonseier
+      Så er applikasjonen likevel opprettet på den valgte applikasjonseieren
+
+    Scenario: Konsument sin virksomhetsidentifikator gjelder kun Maskinporten
       Når jeg oppretter en ny applikasjon med Feide eller FS som identitetsleverandør
-      Så er konsument-ID ikke en del av opprettelsen
+      Så er konsument sin virksomhetsidentifikator ikke en del av opprettelsen
 
   @draft @openquestion
   Regel: FS-applikasjoner identifiseres av et brukernavn som ikke verifiseres mot en ekstern kilde
