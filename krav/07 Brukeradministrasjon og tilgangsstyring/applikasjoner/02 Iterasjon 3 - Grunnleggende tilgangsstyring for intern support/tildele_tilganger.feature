@@ -1,6 +1,6 @@
 # language: no
 # GitHub: #444, #450
-@BRU-APP-API-007 @must @planned
+@BRU-APP-API-007 @must @implemented
 Egenskap: Tildele tilganger til en applikasjon
   Som bruker med applikasjonsadministrator-rollen
   ønsker jeg å tildele en tilgang til en applikasjon for et gitt miljø og en gitt organisasjon

@@ -1,21 +1,30 @@
 import { render } from 'preact';
 import { useEffect, useMemo, useRef, useState } from 'preact/hooks';
 import type { ClaudeStatus, MainStatus } from '../shared/api';
-import type { FeatureModel, FocusEvent, GitInfo, Scen, Snapshot, Step, UpdateEvent } from '../shared/model';
+import type { Entry, FeatureModel, FocusEvent, GitInfo, Scen, Snapshot, Step, UpdateEvent } from '../shared/model';
 import { RULE } from '../shared/rules';
 import { buildTasks, type TasksSnapshot } from '../shared/tasks';
 import { Avvik } from './Avvik';
-import { Editor } from './Editor';
+import { changedFile } from './edit';
+import { Editor, type EditorFlush } from './Editor';
 import { fixed, NO_FILTER, type Filter } from './health';
 import { FeatureView, scenKey, stepKey } from './FeatureView';
+import { findGroups, findHits } from './find';
 import { headings, parseMd } from './markdown';
 import { MainBanner } from './MainBanner';
 import { bannerShown } from './mainStatus';
 import { MarkdownView, type MdMode } from './MarkdownView';
 import { Oppgaver, taskKey, type OView } from './Oppgaver';
+import { NEW_KEY, Spesifikasjoner } from './Spesifikasjoner';
+import { buildCards, colOf, handoffPrompt, type Card } from './specboard';
+import { whenClaudeReady } from './claudeBridge';
+import { useCodeDirs } from './CodeDirs';
+import { isSpecPath } from '../shared/paths';
 import { Outline } from './Outline';
-import { PrDialog } from './PrDialog';
+import { PrDialog, proposeDraft } from './PrDialog';
+import type { PrProposal } from './prProposal';
 import { CLAUDE_WIDTH, ClaudePanel } from './ClaudePanel';
+import { refreshSkills } from './ClaudeSkills';
 import { buildTree, Sidebar, type TreeMode } from './Sidebar';
 import { StatusBar } from './StatusBar';
 import { TopBar, type Mode, type Theme } from './TopBar';
@@ -28,16 +37,18 @@ const initial = boot.entries;
 const initialGit = boot.git;
 const initialTasks = boot.tasks;
 /**
- * Skillene Claude kan bruke i hver visning. Krav: fs-krav (standard) og fs-verify. Avvik: bare fs-krav.
- * I Oppgaver er ingen valgt på forhånd, og uten valg kan Claude bruke alle de fire. `codeDirs`: Claude
+ * Skillene Claude kan bruke i hver visning. Krav: fs-krav (standard), fs-krav-avvik og fs-verify. Avvik: fs-krav
+ * (standard) og fs-krav-avvik.
+ * I Spesifikasjoner og Oppgaver er ingen valgt på forhånd, og uten valg kan Claude bruke alle som er tillatt der. `codeDirs`: Claude
  * kan lese kodeklonene (fs-admin, fs-plattform), som fs-verify trenger.
  */
 const CLAUDE_SKILLS_BY_MODE: Record<Mode, { allowed: string[]; preselect: boolean; codeDirs: boolean }> = {
-  krav: { allowed: ['fs-krav', 'fs-verify'], preselect: true, codeDirs: true },
-  avvik: { allowed: ['fs-krav'], preselect: true, codeDirs: false },
+  krav: { allowed: ['fs-krav', 'fs-krav-avvik', 'fs-verify'], preselect: true, codeDirs: true },
+  avvik: { allowed: ['fs-krav', 'fs-krav-avvik'], preselect: true, codeDirs: false },
+  spesifikasjoner: { allowed: ['fs-specify', 'fs-specify-delta', 'fs-verify'], preselect: false, codeDirs: true },
   oppgaver: { allowed: ['fs-krav', 'fs-specify', 'fs-specify-delta', 'fs-verify'], preselect: false, codeDirs: true },
 };
-const MODE_LABEL: Record<Mode, string> = { krav: 'Krav', avvik: 'Avvik', oppgaver: 'Oppgaver' };
+const MODE_LABEL: Record<Mode, string> = { krav: 'Krav', avvik: 'Avvik', spesifikasjoner: 'Spesifikasjoner', oppgaver: 'Oppgaver' };
 /** Hvorfor en skill ikke kan velges i `mode`: «brukes i Krav og Oppgaver, ikke i Avvik» */
 const skillHint = (mode: Mode) => (skill: string) => {
   const where = (Object.keys(CLAUDE_SKILLS_BY_MODE) as Mode[]).filter(m => CLAUDE_SKILLS_BY_MODE[m].allowed.includes(skill)).map(m => MODE_LABEL[m]);
@@ -62,6 +73,9 @@ function save(key: string, value: unknown) {
     /* ignorer */
   }
 }
+
+// Temaet settes før første tegning, så vieweren ikke starter i feil tema
+document.documentElement.dataset.theme = load<Theme | null>('theme', null) ?? (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
 
 const fromHash = () => decodeURIComponent(location.hash.replace(/^#\/?/, ''));
 
@@ -102,7 +116,17 @@ interface OState {
   panel: boolean;
 }
 /** Oppgaver-modusen finnes bare når dev-serveren er startet med `--mode oppgaver` (eller `OPPGAVER=1`) */
-const OPPGAVER = initialTasks !== null;
+const OPPGAVER = !!initialTasks?.oppgaver;
+/** Spesifikasjoner finnes bare når dev-serveren er startet med `--mode spesifikasjoner` (eller `SPESIFIKASJONER=1`) */
+const SPESIFIKASJONER = !!initialTasks?.spesifikasjoner;
+/** Spesifikasjoner i hashen: `#/spesifikasjoner`, `#/spesifikasjoner/<dom>/<slug>/<fil>` (valgt kort), `#/spesifikasjoner/ny` */
+function parseSpecHash(h: string): { sel: string | null } | null {
+  if (!SPESIFIKASJONER) return null;
+  if (h !== 'spesifikasjoner' && !h.startsWith('spesifikasjoner/')) return null;
+  const rest = h.split('/').slice(1).filter(Boolean);
+  return { sel: rest.length >= 3 ? rest.slice(0, 3).join('/') : rest[0] === NEW_KEY ? NEW_KEY : null };
+}
+const specHash = (sel: string | null) => '#/spesifikasjoner' + (sel ? '/' + encodeURI(sel) : '');
 function parseOppgaverHash(h: string): OState | null {
   if (!OPPGAVER) return null;
   if (h !== 'oppgaver' && !h.startsWith('oppgaver/')) return null;
@@ -123,6 +147,13 @@ const README = 'krav/README.md';
 function defaultPath(entries: Snapshot) {
   if (entries['krav/README.md']) return 'krav/README.md';
   return Object.keys(entries).sort()[0] ?? '';
+}
+
+/** Samme innhold i fila som før (bare lagret eller skrevet på nytt) */
+function sameContent(prev: Entry | undefined, next: Entry) {
+  if (!prev) return false;
+  if (next.kind === 'md') return prev.source === next.source;
+  return prev.error === next.error && JSON.stringify(prev.model) === JSON.stringify(next.model);
 }
 
 /** Nøkler for steg som er nye eller endret siden forrige versjon. */
@@ -148,7 +179,10 @@ function App() {
   const [entries, setEntries] = useState<Snapshot>(initial);
   const [current, setCurrent] = useState(() => (initial[fromHash()] ? fromHash() : defaultPath(initial)));
   // #/avvik er avviksdashbordet, #/oppgaver… er oppgavene; alle andre hasher er en fil
-  const [mode, setMode] = useState<Mode>(() => (fromHash() === 'avvik' ? 'avvik' : parseOppgaverHash(fromHash()) ? 'oppgaver' : 'krav'));
+  const [mode, setMode] = useState<Mode>(() =>
+    fromHash() === 'avvik' ? 'avvik' : parseOppgaverHash(fromHash()) ? 'oppgaver' : parseSpecHash(fromHash()) ? 'spesifikasjoner' : 'krav',
+  );
+  const [specSel, setSpecSel] = useState<string | null>(() => parseSpecHash(fromHash())?.sel ?? null);
   const [tasksSnap, setTasksSnap] = useState<TasksSnapshot>(initialTasks ?? { domains: {}, tasks: [] });
   const [oState, setOState] = useState<OState>(() => parseOppgaverHash(fromHash()) ?? { view: 'tavle', sel: null, panel: false });
   const [avvikFilter, setAvvikFilter] = useState<Filter>(NO_FILTER);
@@ -165,6 +199,9 @@ function App() {
   const [updated, setUpdated] = useState(false);
   const [lineNumbers, setLineNumbers] = useState(() => load('lineNumbers', true));
   const [treeHidden, setTreeHidden] = useState(() => load('treeHidden', false));
+  const [tocHidden, setTocHidden] = useState(() => load('tocHidden', false));
+  // Søket i fila (Cmd/Ctrl+F): søketeksten, gjeldende treff, og scenarioer brukeren har lukket mens søket står
+  const [find, setFind] = useState<{ q: string; cur: number; closed: Record<string, boolean> }>({ q: '', cur: 0, closed: {} });
   // Claude-panelet: den lokale Claude Code-en, når den finnes (dev-serveren og desktop-appen)
   const [claude, setClaude] = useState<ClaudeStatus | null>(null);
   const [claudeOpen, setClaudeOpen] = useState(() => load('claudeOpen', false));
@@ -179,9 +216,13 @@ function App() {
   const [git, setGit] = useState<GitInfo | null>(initialGit);
   const [connected, setConnected] = useState(transport.live);
   const [editing, setEditing] = useState(false);
-  const [prOpen, setPrOpen] = useState(false);
-  // Ulagrede endringer i editoren; spør før fila byttes
-  const editorDirty = useRef(false);
+  // «Lag PR» i detaljvinduet: `false` er lukket, `null` åpnet fra sidebaren, en sti åpnet fra fila (som da er valgt),
+  // eller filene under tasks/ som er endret i Spesifikasjoner
+  const [prFor, setPrFor] = useState<string | string[] | null | false>(false);
+  // Øker for hvert PR-forslag fra Claude, så «Lag PR» monteres på nytt og leser det nye utkastet
+  const [prSeq, setPrSeq] = useState(0);
+  // Editoren lagrer ulagrede endringer før brukeren går til en annen fil eller visning
+  const editorFlush = useRef<EditorFlush | null>(null);
   const [focus, setFocus] = useState<(FocusEvent & { seq: number }) | null>(null);
   const focusedKey = useRef<string | null>(null);
   const mainRef = useRef<HTMLElement>(null);
@@ -194,6 +235,13 @@ function App() {
   const nBad = useMemo(() => Object.values(entries).filter(e => e.kind === 'feature' && e.path.startsWith('krav/') && e.lint).length, [entries]);
   const tasks = useMemo(() => buildTasks(tasksSnap), [tasksSnap]);
   const nActive = tasks.filter(t => t.p < 4).length;
+  const specCards = useMemo(() => (SPESIFIKASJONER ? buildCards(tasksSnap, entries) : []), [tasksSnap, entries]);
+  const nSpecs = specCards.filter(c => colOf(c) !== 'verifisert').length;
+  // Hvem som står i loggen i utforing.md: GitHub-brukeren når den er kjent
+  const [me, setMe] = useState('vieweren');
+  useEffect(() => {
+    if (EDITABLE) transport.call('authStatus').then(a => a.state === 'ok' && a.login && setMe('@' + a.login), () => {});
+  }, []);
 
   useEffect(() => {
     document.documentElement.dataset.theme = theme;
@@ -201,11 +249,12 @@ function App() {
   useEffect(() => save('open', openDirs), [openDirs]);
   useEffect(() => save('lineNumbers', lineNumbers), [lineNumbers]);
   useEffect(() => save('treeHidden', treeHidden), [treeHidden]);
+  useEffect(() => save('tocHidden', tocHidden), [tocHidden]);
   useEffect(() => save('treeMode', treeMode), [treeMode]);
   useEffect(() => save('mdMode', mdMode), [mdMode]);
   useEffect(() => {
     const onUnload = (e: BeforeUnloadEvent) => {
-      if (editorDirty.current) e.preventDefault();
+      if (editorFlush.current?.dirty()) e.preventDefault();
     };
     addEventListener('beforeunload', onUnload);
     return () => removeEventListener('beforeunload', onUnload);
@@ -217,9 +266,10 @@ function App() {
     setOpenDirs(o => (ancestors(current).every(a => o[a]) ? o : { ...o, ...Object.fromEntries(ancestors(current).map(a => [a, true])) }));
     mainRef.current?.scrollTo({ top: 0 });
     focusedKey.current = null;
+    setFind({ q: '', cur: 0, closed: {} });
   }, [current]);
   // Husk hvor brukeren er, til neste gang vieweren åpnes uten hash
-  useEffect(() => save('hash', location.hash), [current, mode, oState]);
+  useEffect(() => save('hash', location.hash), [current, mode, oState, specSel]);
 
   // Følg markøren i VS Code: scroll til regelen/scenarioet som inneholder linjen
   useEffect(() => {
@@ -266,11 +316,77 @@ function App() {
   }, [focus, entry, current]);
   const mark =
     focus && focus.path === current && focus.line !== null ? { from: focus.line, to: focus.to ?? focus.line } : null;
+
+  // Søket i fila: treffene i modellen, så også lukkede scenarioer telles og åpnes
+  const findModel = entry?.kind === 'feature' ? entry.model : undefined;
+  const findResult = useMemo(() => (findModel && find.q.trim() ? findHits(findModel, find.q) : null), [findModel, find.q]);
+  const findTotal = findResult?.hits.length ?? 0;
+  const findCur = Math.min(find.cur, Math.max(0, findTotal - 1));
+  const groups = useMemo(() => findGroups(findResult?.hits ?? []), [findResult]);
+  // Går til et treff; et scenario brukeren har lukket under søket, åpnes igjen når treffet står der
+  const findGo = (next: (cur: number) => number) =>
+    setFind(f => {
+      const cur = next(Math.min(f.cur, findTotal - 1));
+      const scen = findResult?.hits[cur]?.scen;
+      if (!scen || !f.closed[scen]) return { ...f, cur };
+      const { [scen]: _, ...closed } = f.closed;
+      return { ...f, cur, closed };
+    });
+  const findStep = (d: 1 | -1) => findTotal && findGo(c => (c + d + findTotal) % findTotal);
+  const findRef = useRef({ can: false, active: false, step: findStep });
+  findRef.current = { can: mode === 'krav' && !editing && prFor === false && !!findModel, active: findTotal > 0, step: findStep };
+  // Cmd/Ctrl+F åpner innholdspanelet og søkefeltet; Cmd/Ctrl+G går til neste treff (med Shift: forrige)
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      const k = e.key.toLowerCase();
+      if (!(e.metaKey || e.ctrlKey) || e.altKey || (k !== 'f' && k !== 'g')) return;
+      if (!findRef.current.can || (e.target as Element | null)?.tagName === 'TEXTAREA') return;
+      if (k === 'f') {
+        e.preventDefault();
+        const focus = () => {
+          const input = document.querySelector<HTMLInputElement>('input[data-find]');
+          input?.focus();
+          input?.select();
+          return !!input;
+        };
+        // Panelet er skjult: vis det først, og fokuser når feltet er tegnet
+        if (!focus()) {
+          setTocHidden(false);
+          setTimeout(focus, 30);
+        }
+      } else if (findRef.current.active) {
+        e.preventDefault();
+        findRef.current.step(e.shiftKey ? -1 : 1);
+      }
+    };
+    addEventListener('keydown', onKey);
+    return () => removeEventListener('keydown', onKey);
+  }, []);
+  // Hopp til gjeldende treff når det ikke er synlig: 30 % ned under egenskapshodet
+  useEffect(() => {
+    if (!findTotal) return;
+    requestAnimationFrame(() => {
+      const main = mainRef.current;
+      const el = main?.querySelector<HTMLElement>(`[data-hit="f-${findCur}"]`);
+      if (!main || !el) return;
+      const top = asCompact(main, offset => {
+        const y = main.scrollTop + el.getBoundingClientRect().top - main.getBoundingClientRect().top;
+        const shown = y >= main.scrollTop + offset && y + el.offsetHeight <= main.scrollTop + main.clientHeight - 48;
+        return shown ? null : Math.max(0, y - offset - (main.clientHeight - offset) * 0.3);
+      });
+      if (top !== null) main.scrollTo({ top, behavior: 'smooth' });
+    });
+  }, [find.q, findCur, current, findTotal > 0]);
   useEffect(() => {
     const onHash = () => {
       const p = fromHash();
       const o = parseOppgaverHash(p);
+      const sp = parseSpecHash(p);
       if (p === 'avvik') setMode('avvik');
+      else if (sp) {
+        setMode('spesifikasjoner');
+        setSpecSel(sp.sel);
+      }
       else if (o) {
         setMode('oppgaver');
         setOState(o);
@@ -304,7 +420,8 @@ function App() {
         else delete copy[path];
         return copy;
       });
-      if (path !== state.current.current || !next) return;
+      // Samme innhold som vi har (f.eks. watcheren etter «Hent siste», som allerede har byttet inn filene): ingen markering
+      if (path !== state.current.current || !next || sameContent(prev, next)) return;
       const keys = next.error ? [] : changedSteps(prev?.model, next.model);
       if (keys.length) {
         // Åpne scenarioene som inneholder endringer
@@ -351,12 +468,15 @@ function App() {
     };
   }, []);
 
-  /** Spør før ulagrede endringer i editoren forkastes. `false`: bli der. */
-  const leaveEditor = () => {
-    if (!editorDirty.current) return true;
-    if (!confirm('Du har endringer som ikke er lagret. Vil du forkaste dem?')) return false;
-    editorDirty.current = false;
-    return true;
+  /** Lagrer ulagrede endringer i editoren før brukeren går videre. `false`: lagringen feilet, bli der. */
+  const leaveEditor = async () => {
+    try {
+      await editorFlush.current?.flush();
+      return true;
+    } catch (e) {
+      alert(`Kunne ikke lagre endringene: ${(e as Error).message}`);
+      return false;
+    }
   };
   // Desktop-appen: sjekk om main på GitHub er nyere enn klonen, ved oppstart, hvert tiende minutt og når
   // vinduet får fokus (høyst hvert andre minutt). Da vises banneret «Det finnes en ny versjon av main» og knappen
@@ -380,16 +500,25 @@ function App() {
       removeEventListener('focus', onFocus);
     };
   }, []);
-  // Desktop-appen: hent siste main, og last visningen på nytt med de nye filene
+  // Desktop-appen: hent siste main, og bytt inn de nye filene uten å laste vieweren på nytt (det blinker,
+  // og folding, scroll og søket i fila går tapt)
   const pull = async () => {
-    if (pulling || !leaveEditor()) return;
+    if (pulling || !(await leaveEditor())) return;
     setPulling(true);
     try {
-      await transport.call('pull');
-      location.reload();
+      const res = await transport.call('pull');
+      setEntries(res.entries);
+      setGit(res.git);
+      if (res.tasks) setTasksSnap(res.tasks);
+      if (!res.entries[state.current.current]) setCurrent(defaultPath(res.entries));
+      setMainStatus({ behind: false });
+      transport.call('mainStatus').then(setMainStatus, () => {});
+      // «Hent siste» kan ha endret skillene: samtaler som lastet en eldre versjon, får varsel
+      void refreshSkills();
     } catch (e) {
-      setPulling(false);
       alert((e as Error).message);
+    } finally {
+      setPulling(false);
     }
   };
   const later = () => {
@@ -397,8 +526,9 @@ function App() {
     setMainLater(sha);
     save('mainLater', sha);
   };
-  const select = (path: string, line?: number) => {
-    if (path !== state.current.current && !leaveEditor()) return;
+  const select = async (path: string, line?: number) => {
+    if (path !== state.current.current && !(await leaveEditor())) return;
+    setPrFor(false);
     setMode('krav');
     setCurrent(path);
     history.pushState(null, '', '#/' + encodeURI(path));
@@ -453,19 +583,64 @@ function App() {
     if (current !== README || mode !== 'krav') select(README);
     setPendingSection(section);
   };
-  const changeMode = (m: Mode) => {
-    if (m === mode || !leaveEditor()) return;
+  const changeMode = async (m: Mode) => {
+    if (m === mode || !(await leaveEditor())) return;
     if (m === 'avvik') {
       setMode('avvik');
       history.pushState(null, '', '#/avvik');
     } else if (m === 'oppgaver') {
       setMode('oppgaver');
       history.pushState(null, '', oppgaverHash(oState));
+    } else if (m === 'spesifikasjoner') {
+      setMode('spesifikasjoner');
+      history.pushState(null, '', specHash(specSel));
     } else if (mode === 'avvik' && avvikFilter.file && entries[avvikFilter.file]) select(avvikFilter.file); // fila som er valgt i dashbordet
     else {
       setMode('krav');
       history.pushState(null, '', '#/' + encodeURI(current));
     }
+  };
+  // Endringen i git for en fil, til filene på PR-kortet i Claude-panelet (ucommittet først, som i «Lag PR»)
+  const gitChange = useMemo(() => {
+    const m = new Map((git ? [...git.committed, ...git.uncommitted] : []).map(c => [c.path, c]));
+    return (p: string) => m.get(p);
+  }, [git]);
+  // «Åpne i «Lag PR»» på et forslag fra Claude: forslaget blir utkastet, og «Lag PR» åpnes i Krav
+  const proposePr = async (p: PrProposal) => {
+    if (!(await leaveEditor())) return;
+    proposeDraft(p);
+    if (mode !== 'krav') {
+      setMode('krav');
+      history.pushState(null, '', '#/' + encodeURI(current));
+    }
+    setPrSeq(n => n + 1);
+    setPrFor(null);
+  };
+  const selectSpec = (sel: string | null) => {
+    setSpecSel(sel);
+    history.pushState(null, '', specHash(sel));
+  };
+  // Filene under tasks/ som er endret (spesifikasjonene og utforing.md), til «N endret · ikke merget» og «Lag PR»
+  const specDirty = git ? [...new Set([...git.uncommitted, ...git.committed].map(c => c.path).filter(isSpecPath))] : [];
+  // «Utfør i <repo>»: utførekjøring i Claude-panelet, i den lokale klonen av repoet (Kodemapper i panelet)
+  const codeDirList = useCodeDirs();
+  const repoDir = (repo: string) => codeDirList?.find(d => d.name === repo && d.exists)?.path ?? null;
+  const execute = async (c: Card, repo: string) => {
+    const dir = repoDir(repo);
+    if (!dir) return;
+    setClaudeOpen(true);
+    const target = await whenClaudeReady();
+    if (!target) return alert('Claude-panelet svarte ikke. Åpne det og prøv igjen.');
+    await target.execute(handoffPrompt(c, repo), { repo, dir, spec: c.path }, `Utfør: ${c.doc.title || c.file} i ${repo}`);
+  };
+  const executeWhy = !claude?.available
+    ? 'Fant ikke Claude Code på maskinen: kopier prompten til en økt i repoet'
+    : 'Velg den lokale klonen av repoet under «Kodemapper» i Claude-panelet, eller kopier prompten';
+  const specPr = async () => {
+    if (!git || !specDirty.length) return;
+    setMode('krav');
+    history.pushState(null, '', '#/' + encodeURI(current));
+    setPrFor(specDirty);
   };
   const setOppgaver = (o: OState) => {
     setOState(o);
@@ -476,14 +651,32 @@ function App() {
   const oCrumbs = oState.view === 'tavle' ? ['tasks', '*/roadmap.md'] : shownTask ? ['tasks', shownTask.dom, shownTask.slug] : ['tasks'];
   const allScenKeys = () => entry?.model?.rules.flatMap((r, ri) => r.scenarios.map((_, si) => scenKey(ri, si))) ?? [];
   const fileName = current.slice(current.lastIndexOf('/') + 1);
+  // «Lag PR» i filvisningen: bare for en fil med endringer
+  const filePr = EDITABLE && changedFile(git, current) ? () => setPrFor(current) : undefined;
+  // «Slett kravfil» i feature-visningen: fila slettes fra disk, og forsiden vises. Slettingen sendes med «Lag PR» som andre endringer
+  const deleteCurrent = async () => {
+    const path = current;
+    if (!confirm(`Slette kravfila «${fileName}»?\n\nFila slettes fra disk. Slettingen sendes med «Lag PR» i «Endringer».`)) return;
+    try {
+      await transport.call('remove', path);
+    } catch (e) {
+      return alert((e as Error).message);
+    }
+    const rest = { ...state.current.entries };
+    delete rest[path];
+    setEntries(rest);
+    select(defaultPath(rest));
+  };
   // Claude-panelet: samme samtale i alle visningene, med skills og fil-kontekst for visningen man er i
   const claudeShown = !!claude && claudeOpen;
   const claudeSkills = CLAUDE_SKILLS_BY_MODE[mode];
   // I Oppgaver: oppgaven som er valgt (mappa, eller panelet i tavla), ikke en tilfeldig i tavla
   const claudeTask = oState.view === 'mappe' || oState.panel ? shownTask : undefined;
+  const specCard = mode === 'spesifikasjoner' ? specCards.find(c => c.key === specSel) : undefined;
   const claudePath =
     mode === 'krav' ? (entry ? current : null)
     : mode === 'avvik' ? (avvikFilter.file ?? null)
+    : mode === 'spesifikasjoner' ? (specCard?.path ?? null)
     : claudeTask ? `tasks/${claudeTask.dom}/${claudeTask.slug}` : null;
 
   return (
@@ -498,6 +691,8 @@ function App() {
         }}
         treeHidden={treeHidden}
         onToggleTree={() => setTreeHidden(v => !v)}
+        tocHidden={tocHidden}
+        onToggleToc={() => setTocHidden(v => !v)}
         onHome={() => {
           const home = defaultPath(entries);
           if (home === current && mode === 'krav') mainRef.current?.scrollTo({ top: 0, behavior: 'smooth' });
@@ -511,6 +706,9 @@ function App() {
         oView={oState.view}
         onOView={view => setOppgaver({ ...oState, view, sel: oState.sel ?? (shownTask ? taskKey(shownTask) : null) })}
         oCrumbs={oCrumbs}
+        spesifikasjoner={SPESIFIKASJONER}
+        nSpecs={nSpecs}
+        specState={{ ro: !EDITABLE, dirty: specDirty.length, onPr: EDITABLE && git ? specPr : null }}
         claude={claude ? claudeOpen : null}
         onClaude={() => setClaudeOpen(o => !o)}
         onUpdate={mainStatus?.behind ? pull : null}
@@ -522,7 +720,19 @@ function App() {
         // Et smalere vindu enn sist: panelet tar aldri mer enn 70 % av bredden
         style={claudeShown ? { '--claude-w': `min(${claudeWidth}px, 70vw)` } : undefined}
       >
-        {mode === 'oppgaver' ? (
+        {mode === 'spesifikasjoner' ? (
+          <Spesifikasjoner
+            snap={tasksSnap}
+            entries={entries}
+            git={git}
+            editable={EDITABLE}
+            sel={specSel}
+            onSel={selectSpec}
+            onOpenKrav={path => select(path)}
+            me={me}
+            actions={{ execute: claude?.available ? execute : null, executeWhy, canExecute: repo => !!claude?.available && !!repoDir(repo) }}
+          />
+        ) : mode === 'oppgaver' ? (
           <Oppgaver
             tasks={tasks}
             entries={entries}
@@ -536,7 +746,7 @@ function App() {
         ) : mode === 'avvik' ? (
           <Avvik entries={entries} filter={avvikFilter} onFilter={setAvvikFilter} onOpen={select} onReadRule={readRule} panelHidden={treeHidden} />
         ) : (
-          <div class={'grid' + (treeHidden ? ' notree' : '') + (claudeShown ? ' withclaude' : '')}>
+          <div class={'grid' + (treeHidden ? ' notree' : '') + (tocHidden ? ' notoc' : '')}>
             {!treeHidden && (
               <Sidebar
                 entries={entries}
@@ -550,7 +760,7 @@ function App() {
                 mode={git ? treeMode : 'files'}
                 onMode={setTreeMode}
                 git={git}
-                onPr={EDITABLE && git ? () => setPrOpen(true) : undefined}
+                onPr={EDITABLE && git ? () => setPrFor(null) : undefined}
                 onPull={transport.kind === 'electron' ? pull : undefined}
                 pulling={pulling}
               />
@@ -563,8 +773,17 @@ function App() {
                 if (focus && !(e.target as Element).closest('.card')) setFocus(null);
               }}
             >
-              {editing && current ? (
-                <Editor path={current} entry={entry} onClose={() => setEditing(false)} onDirty={d => (editorDirty.current = d)} />
+              {prFor !== false && git ? (
+                <PrDialog key={prSeq} git={git} entries={entries} preselect={prFor ?? undefined} onClose={() => setPrFor(false)} />
+              ) : editing && current ? (
+                <Editor
+                  path={current}
+                  entry={entry}
+                  onClose={() => setEditing(false)}
+                  onFlush={f => (editorFlush.current = f)}
+                  changed={changedFile(git, current)}
+                  onPr={EDITABLE && git ? () => setPrFor(current) : undefined}
+                />
               ) : !entry ? (
                 <div class="empty">
                   <div class="mono" style={{ color: 'var(--ink)' }}>{fileName || 'krav'}</div>
@@ -579,6 +798,7 @@ function App() {
                   has={p => !!entries[p]}
                   onNavigate={select}
                   onEdit={EDITABLE ? () => setEditing(true) : undefined}
+                  onPr={filePr}
                 />
               ) : (
                 <FeatureView
@@ -590,17 +810,35 @@ function App() {
                   mainRef={mainRef}
                   onLine={ln => select(current, ln)}
                   onToggle={k => setCollapsed(c => ({ ...c, [current]: { ...c[current], [k]: !c[current]?.[k] } }))}
+                  find={findResult && { result: findResult, cur: findCur }}
+                  findClosed={find.closed}
+                  onFindClose={k => setFind(f => ({ ...f, closed: { ...f.closed, [k]: true } }))}
                   onEdit={EDITABLE ? () => setEditing(true) : undefined}
+                  onDelete={EDITABLE ? deleteCurrent : undefined}
                 />
               )}
             </main>
-            {!claudeShown && (
+            {!tocHidden && (
               <Outline
                 model={entry?.model}
                 headings={md ? headings(md) : undefined}
                 onJump={jump}
                 onFoldAll={() => setCollapsed(c => ({ ...c, [current]: Object.fromEntries(allScenKeys().map(k => [k, true])) }))}
                 onOpenAll={() => setCollapsed(c => ({ ...c, [current]: {} }))}
+                find={
+                  findModel && !editing && prFor === false
+                    ? {
+                        q: find.q,
+                        onQ: q => setFind({ q, cur: 0, closed: {} }),
+                        groups,
+                        total: findTotal,
+                        cur: findCur,
+                        onCur: cur => findGo(() => cur),
+                        onStep: findStep,
+                        onClear: () => setFind({ q: '', cur: 0, closed: {} }),
+                      }
+                    : undefined
+                }
               />
             )}
           </div>
@@ -620,11 +858,12 @@ function App() {
             has={p => !!entries[p]}
             onOpen={p => select(p)}
             onReveal={reveal}
+            onPr={EDITABLE && git ? proposePr : undefined}
+            change={gitChange}
             onClose={() => setClaudeOpen(false)}
           />
         )}
       </div>
-      {prOpen && git && <PrDialog git={git} entries={entries} onClose={() => setPrOpen(false)} />}
       <StatusBar
         connected={connected}
         live={transport.live}

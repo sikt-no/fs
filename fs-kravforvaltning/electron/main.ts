@@ -2,13 +2,13 @@ import { existsSync } from 'node:fs';
 import { mkdir, readFile, rm, writeFile } from 'node:fs/promises';
 import { join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { app, BrowserWindow, dialog, ipcMain, safeStorage, shell } from 'electron';
+import { app, BrowserWindow, dialog, ipcMain, nativeTheme, safeStorage, shell } from 'electron';
 import type { Boot } from '../shared/api.ts';
 import { createApi, dispatch } from '../core/api.ts';
 import { createAuth, type TokenStore } from '../core/auth.ts';
 import { ClaudeRunner } from '../core/claude.ts';
 import { ensureClone, isoVcs } from '../core/vcs-isogit.ts';
-import { Workspace, type WorkspaceEvent } from '../core/workspace.ts';
+import { modeOn, Workspace, type WorkspaceEvent } from '../core/workspace.ts';
 
 /**
  * Desktop-appen (FS Kravforvaltning): vieweren med redigering og PR, uten at git må være installert.
@@ -23,6 +23,7 @@ import { Workspace, type WorkspaceEvent } from '../core/workspace.ts';
  * - `KRAV_REPO_URL`: repoet som klones (standard https://github.com/sikt-no/fs.git)
  * - `KRAV_GITHUB_CLIENT_ID`: OAuth-appen for device flow (kan også bakes inn ved bygg med MAIN_VITE_KRAV_GITHUB_CLIENT_ID)
  * - `OPPGAVER=1`: vis Oppgaver-modusen (eller bygg/start med `--mode oppgaver`, f.eks. `npm run app:dev:oppgaver`)
+ * - `SPESIFIKASJONER=1`: vis Spesifikasjoner (eller `--mode spesifikasjoner`, f.eks. `npm run app:dev:spesifikasjoner`; begge: `--mode oppgaver+spesifikasjoner`)
  * - `KRAV_CLAUDE_PATH`: stien til `claude`, hvis den ikke finnes på vanlige steder
  */
 
@@ -65,12 +66,13 @@ const ready = (async () => {
     send('krav:progress', 'Henter kravene fra GitHub …');
     await ensureClone(dir, REPO_URL, await store.get(), msg => send('krav:progress', `Henter kravene fra GitHub: ${msg}`));
   }
-  const ws = new Workspace(dir, isoVcs(dir), { oppgaver: import.meta.env.MODE === 'oppgaver' || process.env.OPPGAVER === '1' });
+  const mode = import.meta.env.MODE;
+  const ws = new Workspace(dir, isoVcs(dir), { oppgaver: modeOn(mode, 'oppgaver'), spesifikasjoner: modeOn(mode, 'spesifikasjoner') });
   await ws.readAll();
   for (const event of ['krav:update', 'krav:git', 'krav:tasks'] as WorkspaceEvent[]) ws.on(event, data => send(event, data));
   ws.watch();
   // Repoet er appens egen klone, så kodeklonene ligger ikke ved siden av; brukeren velger dem under «Kodemapper»
-  const claude = new ClaudeRunner(dir, { siblingDirs: false });
+  const claude = new ClaudeRunner(dir, { siblingDirs: false, onSaved: () => ws.refreshGit(), onDone: () => ws.refreshGit() });
   claude.on(data => send('krav:claude', data));
   app.on('before-quit', () => {
     ws.close();
@@ -106,6 +108,8 @@ function createWindow() {
     width: 1400,
     height: 900,
     title: 'FS Kravforvaltning',
+    // Samme bakgrunn som vieweren (--bg i theme.css), så vinduet ikke er hvitt før siden er tegnet
+    backgroundColor: nativeTheme.shouldUseDarkColors ? '#141415' : '#f7f7f6',
     webPreferences: { preload: join(here, '../preload/index.cjs'), contextIsolation: true, sandbox: true },
   });
   // Lenker (GitHub, PR-er, innlogging) åpnes i nettleseren, ikke i appen

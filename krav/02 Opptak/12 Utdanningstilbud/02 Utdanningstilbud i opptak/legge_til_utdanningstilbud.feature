@@ -1,4 +1,5 @@
 # language: no
+# GitHub: #594
 @OPT-OPT-UTD-002 @must @draft
 Egenskap: Legge til utdanningstilbud i opptak
   Som opptaksforvalter
@@ -22,6 +23,13 @@ Egenskap: Legge til utdanningstilbud i opptak
       Gitt at opptaksforvalter er ved en deltakende organisasjon
       Når opptaksforvalter velger å legge til utdanningstilbudet "Sykepleie, høst 2027" fra egen organisasjon
       Så legges utdanningstilbudet til i opptaket
+
+  Regel: Opptaksforvalter kan legge til flere utdanningstilbud av gangen
+
+    Scenario: Legge til flere utdanningstilbud av gangen
+      Gitt at opptaksforvalter er ved en deltakende organisasjon
+      Når opptaksforvalter velger å legge til utdanningstilbudene "Sykepleie, høst 2027" og "Vernepleie, høst 2027"
+      Så legges begge utdanningstilbudene til i opptaket
 
   Regel: Opptaksforvalter ved forvaltende organisasjon kan legge til utdanningstilbud for alle deltakende organisasjoner
 

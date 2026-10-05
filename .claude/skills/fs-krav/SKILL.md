@@ -345,7 +345,7 @@ Finn fila, og eventuelt regelen eller scenarioet, som skal bort. Er det uklart, 
 | Hele kravet | `@in-progress` | Spør om noe av kravet allerede er levert (fra en tidligere iterasjon). Ja → som `@implemented`. Nei → slett fila, og si fra at oppgaven som har hentet kravet inn, må oppdateres. |
 | Hele kravet | `@deprecated` | Allerede avviklet. Ingen endring. |
 | En regel/et scenario | `@draft` eller `@planned` | Ikke levert. Slett blokken (med tagger og kommentarer). |
-| En regel/et scenario | `@implemented` eller `@in-progress` | Er delen `@draft`, `@planned` eller `@in-progress`, er den ikke levert: slett blokken (erstatter den en `@deprecated`-del, spør om den gamle delen skal gjelde igjen, og fjern i så fall `@deprecated` fra den). Ellers: legg `@deprecated` på `Regel:`-/`Scenario:`-linja. `Egenskap:`-taggen endres ikke. |
+| En regel/et scenario | `@implemented` eller `@in-progress` | Er delen `@draft`, `@planned` eller `@in-progress`, er den ikke levert: slett blokken (erstatter den en `@deprecated`-del, spør om den gamle delen skal gjelde igjen, og fjern i så fall `@deprecated` og ` (avvikles)` i tittelen fra den). Ellers: legg `@deprecated` på `Regel:`-/`Scenario:`-linja. `Egenskap:`-taggen endres ikke. |
 
 **Mekanikk:** én `Edit` på tag-linja. Bare statustaggen byttes; feature-ID, MoSCoW og andre tagger står urørt: `@BRU-APP-API-001 @must @implemented` → `@BRU-APP-API-001 @must @deprecated`. Mangler delen en tag-linje, legg en ny linje med `@deprecated` rett over `Regel:`/`Scenario:`, med samme innrykk.
 
@@ -384,7 +384,7 @@ Hvilke deler endringen gjelder, avklares med brukeren, én om gangen: endres, fj
 
 ### E2. Skriv den nye delen som `@draft`
 
-- **Endring:** legg den nye versjonen som en egen blokk rett etter delen den erstatter, tagget `@draft` (og `@openquestion` med `# ÅPNE SPØRSMÅL:` når noe er uklart). Den gamle blokken står urørt. Gi den nye blokken en tittel som skiller den fra den gamle.
+- **Endring:** legg den nye versjonen som en egen blokk rett etter delen den erstatter, tagget `@draft` (og `@openquestion` med `# ÅPNE SPØRSMÅL:` når noe er uklart). Den nye blokken får den tittelen kravet skal ha, som regel den samme som den gamle. Ikke legg inn detaljer om hva som er endret for å skille dem: tittelen blir stående når den gamle delen er slettet. Blir titlene like, legg ` (avvikles)` bak tittelen på den gamle blokken (`Scenario: Se brukerens roller (avvikles)`), så titlene er unike (playwright-bdd lager én test per scenario). Ellers står den gamle blokken urørt. Forkaster brukeren den nye delen, fjern ` (avvikles)` igjen.
 - **Tillegg:** legg den nye blokken der den hører hjemme, tagget `@draft`. Det finnes ingen gammel del.
 - **Fjerning:** følg modus C (D2): den leverte delen får `@deprecated`.
 
@@ -399,7 +399,7 @@ Gå gjennom den nye delen som i F4 (ett spørsmål om gangen). Når hovedflyten 
 Ved (a), i samme endring:
 
 - Den nye delen: bytt `@draft` med `@planned` på `Regel:`-/`Scenario:`-linja, og fjern `@openquestion` og besvarte `# ÅPNE SPØRSMÅL:`.
-- Delen den erstatter (ikke ved et rent tillegg): legg `@deprecated` på `Regel:`-/`Scenario:`-linja (ny linje med samme innrykk hvis den mangler tagger).
+- Delen den erstatter (ikke ved et rent tillegg): legg `@deprecated` på `Regel:`-/`Scenario:`-linja (ny linje med samme innrykk hvis den mangler tagger). ` (avvikles)` i tittelen blir stående, og tittelen på den nye delen endres ikke.
 - `Egenskap:`-tag-linja endres ikke.
 
 En del har høyst én statustag. `@planned` står aldri sammen med `@draft` eller `@deprecated`.

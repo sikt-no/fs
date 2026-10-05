@@ -1,9 +1,14 @@
 # language: no
+# GitHub: #595
 @OPT-OPT-UTD-003 @must @draft
 Egenskap: Trekke utdanningstilbud fra opptak
   Som opptaksforvalter
   ønsker jeg å kunne trekke utdanningstilbud fra opptaket
   slik at utdanninger som ikke lenger skal ha opptak blir håndtert riktig.
+
+  # Trekkfristen settes av opptakseier (#595).
+  # Når en utdanningsinstans deaktiveres i utdanningsregisteret, får opptaksforvalter beskjed om at
+  # utdanningstilbudet kan trekkes, se 01 Hente fra utdanningsregisteret/fange_opp_endringer_fra_utdanningsregisteret.feature.
 
   Bakgrunn:
     Gitt at opptaksforvalter er innlogget

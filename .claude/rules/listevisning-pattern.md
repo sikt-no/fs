@@ -75,7 +75,7 @@ Bruk disse titlene direkte, kun bytt ut `<elementer>`/`<element>`/`<X>`:
 
 **Synlighet:**
 
-- `Scenario: <Rolle> ser <elementer> fra <scope>` — f.eks. `Applikasjonsadministrator ser applikasjoner fra egne organisasjoner`.
+- `Scenario: <Rolle> ser <elementer> fra <scope>` — f.eks. `Applikasjonsadministrator ser applikasjoner fra organisasjonene jeg administrerer`.
 - `Scenario: Super-<rolle> ser alle <elementer>`
 
 ### Stegformuleringer

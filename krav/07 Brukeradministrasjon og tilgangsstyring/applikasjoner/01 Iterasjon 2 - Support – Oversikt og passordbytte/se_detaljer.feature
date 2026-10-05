@@ -1,6 +1,6 @@
 # language: no
 # GitHub: #439
-@BRU-APP-API-002 @must @planned
+@BRU-APP-API-002 @must @implemented
 Egenskap: Se detaljer for applikasjon
   Som bruker
   ønsker jeg å se detaljer for en applikasjon, organisert i logiske datagrupper,
@@ -13,30 +13,48 @@ Egenskap: Se detaljer for applikasjon
 
   Regel: Detaljer organiseres i logiske datagrupper
 
-    Scenario: Se grunnleggende informasjon
-      Så ser jeg navn og beskrivelse
+    Scenario: Se felter som vises for alle applikasjoner
+      Så ser jeg følgende informasjon:
+        | felt                       |
+        | Navn                       |
+        | Beskrivelse                |
+        | Identitetsleverandør       |
+        | Applikasjonseier           |
+        | Miljøer                    |
+        | Status                     |
+        | Opprettet av               |
+        | Tidspunkt for opprettelse  |
+        | Sist endret av             |
+        | Tidspunkt for sist endring |
 
-    Scenario: Se identitetsleverandør
-      Så ser jeg applikasjonens identitetsleverandør
-
+    @deprecated
     Scenario: Se ekstern ID fra identitetsleverandør
       Gitt applikasjonen har en ekstern ID fra identitetsleverandøren
       Så ser jeg den eksterne ID-en
 
+    @in-progress
+    Scenario: Se Tjeneste-ID for Feide-applikasjon
+      Gitt applikasjonen har Feide som identitetsleverandør
+      Så ser jeg applikasjonens Tjeneste-ID
+
+    @in-progress
+    Scenario: Se Client-ID for Maskinporten-applikasjon
+      Gitt applikasjonen har Maskinporten som identitetsleverandør
+      Så ser jeg applikasjonens Client-ID
+
+    @in-progress
+    Scenario: Se konsument sin virksomhetsidentifikator for Maskinporten-applikasjon
+      Gitt applikasjonen har Maskinporten som identitetsleverandør
+      Så ser jeg konsument sin virksomhetsidentifikator
+
+    @in-progress
+    Scenario: Se brukernavn for FS-applikasjon
+      Gitt applikasjonen har FS som identitetsleverandør
+      Så ser jeg applikasjonens brukernavn
+
+    @deprecated
     Scenario: Se intern ID
       Så ser jeg applikasjonens interne ID
-
-    Scenario: Se organisasjon
-      Så ser jeg applikasjonens organisasjon
-
-    Scenario: Se sporingsinfo
-      Så ser jeg opprettet av, opprettet tidspunkt, endret av og endret tidspunkt
-
-    Scenario: Se miljøer
-      Så ser jeg hvilke miljøer applikasjonen er aktiv i
-
-    Scenario: Se status
-      Så ser jeg om applikasjonen er aktiv eller deaktivert
 
   Regel: Detaljer kan redigeres direkte fra detaljer-fanen
 

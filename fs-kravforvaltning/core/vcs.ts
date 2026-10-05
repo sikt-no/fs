@@ -1,5 +1,6 @@
 import type { GitInfo } from '../shared/model.ts';
 import type { MainInfo, MainStatus, PublishRequest, PublishResult } from '../shared/api.ts';
+import { isEditablePath } from '../shared/paths.ts';
 
 /**
  * Git-operasjonene vieweren trenger. `vcs-cli.ts` bruker git og gh på maskinen (utviklere),
@@ -7,7 +8,7 @@ import type { MainInfo, MainStatus, PublishRequest, PublishResult } from '../sha
  */
 export interface Vcs {
   readonly kind: 'cli' | 'isogit';
-  /** Endringer under krav/ (for «Endringer»-modusen). `null` utenfor et git-repo. */
+  /** Endringer under krav/, og i spesifikasjonene og utforing.md under tasks/ (for «Endringer»-modusen). `null` utenfor et git-repo. */
   info(): Promise<GitInfo | null>;
   /** Mappen der git holder HEAD og index, for overvåking */
   gitDir(): Promise<string | null>;
@@ -120,12 +121,10 @@ export const githubPr: OpenPr = async (url, token, pr) => {
   return createPullRequest(token, repo, pr);
 };
 
-/** Stiene i en PR må være krav-filer under krav/, uten `..` */
+/** Stiene i en PR må være krav-filer under krav/, eller spesifikasjoner og utforing.md under tasks/, uten `..` */
 export function checkPaths(paths: string[]) {
   if (!paths.length) throw new Error('Velg minst én fil');
   for (const p of paths) {
-    if (!p.startsWith('krav/') || p.split('/').some(s => s === '..' || s === '') || !(p.endsWith('.feature') || p.endsWith('.md'))) {
-      throw new Error(`Ugyldig sti: ${p}`);
-    }
+    if (!isEditablePath(p)) throw new Error(`Ugyldig sti: ${p}`);
   }
 }

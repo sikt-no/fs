@@ -164,6 +164,8 @@ For sjekklista: skriv ref-relativ sti og eksakt tag-linje før → etter, så br
 
 Spør: «Finnes det skisser (mockups, wireframes, Figma, bilder, PDF) knyttet til denne endringen?» — **Ja** / **Nei**.
 
+Ved **Nei**: spør hvorfor (kort), og skriv `Ingen skisse: <grunn>` under `## Skisser`. Uten skisse eller «Ingen skisse» står delta-spec-en som utkast i FS Kravforvaltning (Spesifikasjoner).
+
 Ved **Ja**: følg [`fs-specify` → _Skisser — kobling og validering_](../fs-specify/SKILL.md#skisser--kobling-og-validering), inkludert Figma-henting med sub-frames og avviksspørsmålene, men koble skissene til kravene i *denne* delta-en. Lagre under `<spec>/krav-input/changes/<YYYY-MM-DD>-<ref>/sketches/` (Figma under `sketches/figma/<sketch-slug>/`), og registrer dem i delta-manifestet.
 
 ## Deliverable: `<spec>/spec-changes-<YYYY-MM-DD>-<ref>.md`
@@ -184,6 +186,10 @@ Ved **Ja**: følg [`fs-specify` → _Skisser — kobling og validering_](../fs-s
 - **Commits:** A-SHA og B-SHA
 - **Branch:** navn, branch-SHA, main-SHA
 - **Hentet:** `<YYYY-MM-DD HH:MM>`
+
+## Omfang
+
+[2–5 setninger om hva endringen dekker og ikke dekker. Vises på kortet i FS Kravforvaltning og i handoff-prompten til kode-repoene.]
 
 ## Krav
 
@@ -222,7 +228,7 @@ Ved **Ja**: følg [`fs-specify` → _Skisser — kobling og validering_](../fs-s
 
 ## Skisser
 
-[Én underseksjon per skisse, samme felter som i `fs-specify`, eller «Ingen skisser registrert».]
+[Én underseksjon per skisse, samme felter som i `fs-specify`, eller linja `Ingen skisse: <grunn>`.]
 
 ## Retagging
 
@@ -240,6 +246,10 @@ Ved **Ja**: følg [`fs-specify` → _Skisser — kobling og validering_](../fs-s
 ## Åpne spørsmål
 
 - [ ] Spørsmål 1
+
+## Rute
+
+[Valgfri. Forslag til rekkefølgen på kode-repoene, som i `fs-specify`. Se *Utføring* i `tasks/README.md`.]
 ```
 
 ## Etter delta-spec-en

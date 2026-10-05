@@ -6,6 +6,62 @@ Dette dokumentet er de gjeldende konvensjonene for alle kravfiler. Claude leser 
 
 FS Kravforvaltning sjekker noen av reglene i dette dokumentet automatisk, og viser brudd som «Avvik fra konvensjoner». Reglene som sjekkes er merket med *(sjekkes automatisk)*. Sjekkene står i `fs-kravforvaltning/server/parse.ts` og er testet i `fs-kravforvaltning/server/parse.test.ts`. Endrer du en merket regel, eller legger du til en regel som kan sjekkes, må `parse.ts` og testene oppdateres i samme endring.
 
+## Kort fortalt
+
+### Hvor kravene ligger
+
+Mappene har tre nivåer: **Domene → Sub-domene → Kapabilitet**, og feature-filene ligger bare på kapabilitetsnivå, for eksempel:
+
+```
+krav/02 Opptak/10 Regelverk/01 Regelverkssamling/regelverkssamling.feature
+```
+
+`02 Opptak` er domenet, `10 Regelverk` sub-domenet og `01 Regelverkssamling` kapabiliteten. Se *Mappestruktur*.
+
+### Hvordan en kravfil ser ut
+
+```gherkin
+# language: no
+# GitHub: #1234
+@OPT-REG-SAM-001 @must @draft
+Egenskap: Regelverkssamling
+  Som opptaksforvalter
+  ønsker jeg å opprette og forvalte regelverkssamlinger
+  slik at …
+
+  Regel: …
+    Scenario: …
+      Gitt …
+      Når …
+      Så …
+```
+
+- `# GitHub:` er valgfri, og peker på issuet kravet hører til. Den står rett over tag-linja.
+- Taggene er en unik ID (`@DOM-SUB-KAP-NNN`), prioritet (`@must`, `@should`, `@could` eller `@wont`) og status. Se *Tags*.
+- **Gitt** er forutsetningene, **Når** er handlingen, og **Så** er det forventede resultatet. Se *Gode scenarioer*.
+- Uklarheter gjettes ikke. De skrives i en `# ÅPNE SPØRSMÅL:`-kommentar, og en `Regel:` eller et `Scenario:` med spørsmål tagges `@openquestion`. Se *Åpne spørsmål*.
+
+### Livsløpet til et krav
+
+| Status | Betyr | Settes av |
+|---|---|---|
+| `@draft` | Utkast, ikke validert. Alle nye krav starter her | `fs-krav` |
+| `@planned` | Validert og klart til å bygges | `fs-krav`, etter en gjennomgang, eller når det er sagt at kravet skal ha `@planned` |
+| `@in-progress` | Hentet inn i en oppgave | `fs-specify` / `fs-specify-delta` |
+| `@implemented` | Bygget, og verifisert mot koden | `fs-verify` |
+| `@deprecated` | Levert, men skal fjernes | `fs-krav`. `fs-verify` sletter fila (eller blokken, for en del) når koden er borte |
+
+Se *Kravstatus* og *Implementasjonsstatus*.
+
+### Skills for kravarbeid
+
+`fs-krav` brukes til:
+
+- **Nye krav:** aktør, brukerhistorie, regler og scenarioer avklares, og fila skrives som `@draft`.
+- **Validering av en mappe:** utkastene gås gjennom ett spørsmål om gangen, de åpne spørsmålene lukkes, og det som er bekreftet, får `@planned`.
+- **Fjerning av krav:** krav som ikke er levert, slettes. Leverte krav får `@deprecated`. Se *Avvikling*.
+- **Endring av leverte krav:** den nye delen legges ved siden av den gamle som `@draft`. Når den er validert, får den `@planned`, og den gamle delen får `@deprecated`. Se *Endring av levert krav*.
+
 ## Språk
 
 Vi skriver Gherkin på norsk. Start hver feature-fil med: *(sjekkes automatisk)*
@@ -230,7 +286,8 @@ Egenskap: ...
 Et krav som er levert (`@implemented`), endres ikke på stedet. Den leverte teksten beskriver koden som finnes, og den nye teksten beskriver det som skal bygges. Begge står i fila til koden er endret.
 
 - Egenskapen blir stående som `@implemented`. Statusen for endringen står på delen (`Regel:` eller `Scenario:`/`Scenariomal:`).
-- Den nye eller endrede delen legges som en egen blokk, rett etter delen den erstatter. Den starter som `@draft` (med `@openquestion` og `# ÅPNE SPØRSMÅL:` ved uklarheter), som alle nye krav. Den gamle delen står urørt så lenge den nye er utkast.
+- Den nye eller endrede delen legges som en egen blokk, rett etter delen den erstatter. Den starter som `@draft` (med `@openquestion` og `# ÅPNE SPØRSMÅL:` ved uklarheter), som alle nye krav.
+- Den nye delen får den tittelen kravet skal ha, ikke en tittel som beskriver endringen. Blir den lik tittelen på den gamle delen, får den gamle ` (avvikles)` bak tittelen, så titlene er unike: `Scenario: Se brukerens roller (avvikles)`. Ellers står den gamle delen urørt så lenge den nye er utkast. Forkastes den nye delen, fjernes ` (avvikles)` igjen.
 - Når den nye delen er validert (`fs-krav`), byttes `@draft` med `@planned`, og delen den erstatter, får `@deprecated` i samme endring. En del som bare fjernes, får `@deprecated` (se *Avvikling*). Et rent tillegg har ingen gammel del.
 - Delen går deretter langs samme akse som en egenskap: `@planned` →(`fs-specify` / `fs-specify-delta`)→ `@in-progress` →(`fs-verify`)→ levert. Når `fs-verify` har funnet koden, fjernes `@in-progress` fra delen, og delen arver `@implemented` fra egenskapen. `@deprecated`-delen slettes av `fs-verify` når koden er borte.
 - `@planned` og `@in-progress` på en del er bare lov under en `@implemented` egenskap. Under `@draft`, `@planned` eller `@in-progress` er ingenting levert, så delen endres på stedet. *(sjekkes automatisk)*
@@ -252,6 +309,16 @@ Egenskap: ...
   @planned
   Regel: Eksport til Excel
     Scenario: ...
+
+  Regel: Visning av roller
+
+    @deprecated
+    Scenario: Se brukerens roller (avvikles)
+      ...
+
+    @planned
+    Scenario: Se brukerens roller
+      ...
 ```
 
 ### Type
@@ -314,3 +381,24 @@ Disse reglene gjelder for alle kravfiler. Tvetydige ord skal **avklares** før t
 | lærested | institusjon (når du mener universitet, høyskole eller fagskole) |
 | organisasjonskode | institusjonsnummer |
 | organisasjonsnummer | (reservert for eksternt registreringsnummer – ikke bruk som synonym for organisasjonskode) |
+| identitetsleverandør | idP (forkortelsen er innarbeidet blant utviklere, men ikke blant dem som administrerer applikasjoner) |
+| applikasjonseier | organisasjon (kun i applikasjonskrav, der organisasjonen opptrer i to roller: den som eier applikasjonen, og den hvis data en tilgang «gjelder for») |
+
+### Konkrete henvisninger
+
+Steg og titler skal si konkret hvem eller hva de gjelder. Ord som «egne», «mine», «dem» og «denne» lar leseren gjette. Hvert steg skal også kunne leses alene, fordi det blir en egen step definition og kan gjenbrukes i andre scenarioer.
+
+- **«egne», «egen», «eget»** er greit når eieren står i samme setning og eierskapet er bokstavelig: `søkerens egne søknader`, `min egen profil`. Det er også greit når ordet betyr *separat*: `i eget vindu`, `i en egen kolonne`. Gjelder det hva en rolle har tilgang til eller er knyttet til, skriv relasjonen: `organisasjonene jeg administrerer`, ikke `egne organisasjoner`.
+- **«min», «mine», «mitt»** følger samme regel som «egne»: greit når eierskapet er bokstavelig (`min profil`, `mine søknader`), ikke når det gjelder en rolles tilknytning. Skriv `organisasjonen jeg administrerer`, ikke `min organisasjon`.
+- **«dem», «de», «disse», «en av dem»** skal ikke peke til et annet steg eller en tittel. Skriv det det gjelder på nytt. Står ordet det peker på i samme steg, er det greit: `Når jeg velger flere roller og fjerner dem i én operasjon`.
+- **«den», «denne», «dette»** som peker til et annet steg, følger samme regel: `Så ser jeg denne applikasjonen` blir `Så ser jeg applikasjonen`, og `den organisasjonen` blir `organisasjonen applikasjonen tilhører`. Bruk bestemt form, og legg til det som skiller når det er flere av samme slag. Det er greit når ordet det peker på, står i samme steg (`endrer prioriteringen og lagrer den`), når «den» er artikkel foran et adjektiv (`den valgte organisasjonen`, `den nye beskrivelsen`), og når «det» er formelt subjekt (`det finnes`).
+- **«sin», «sine», «sitt»** er greit, fordi det alltid peker på subjektet i samme setning: `Så ser søkerne resultatet sitt`.
+
+| Ikke skriv | Skriv |
+|------------|-------|
+| `Scenario: Brukeradministrator ser personbrukere fra egne organisasjoner` | `Scenario: Brukeradministrator ser personbrukere fra organisasjonene jeg administrerer` |
+| `Og en personbruker har hjemorganisasjon i en av dem` | `Og en personbruker har hjemorganisasjon i en av organisasjonene jeg administrerer` |
+| `Men jeg ser ikke muligheten til å endre dem` (etter et steg om vitnemål, grunnlag og poeng) | `Men jeg ser ikke muligheten til å endre grunnlaget` (eller det «dem» faktisk gjelder) |
+| `Scenario: Deltakende organisasjon ser kun sine egne` | `Scenario: Deltakende organisasjon ser kun utdanningstilbudene sine` |
+| `Så er applikasjonen opprettet på min organisasjon` | `Så er applikasjonen opprettet på organisasjonen jeg administrerer` |
+| `Så ser jeg denne applikasjonen i listen` | `Så ser jeg applikasjonen i listen` |

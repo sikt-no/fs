@@ -1,6 +1,6 @@
 # language: no
 # GitHub: #480
-@BRU-PER-GRU-008 @must @planned
+@BRU-PER-GRU-008 @must @implemented
 Egenskap: Se en personbrukers roller
   Som brukeradministrator
   ønsker jeg å se hvilke roller en personbruker har
@@ -12,6 +12,7 @@ Egenskap: Se en personbrukers roller
 
   Regel: Visning av roller
 
+    @deprecated
     Scenario: Se brukerens roller
       Når jeg ser på personbrukerens detaljside
       Så ser jeg en seksjon med personbrukerens tildelte roller
@@ -24,14 +25,32 @@ Egenskap: Se en personbrukers roller
         | Tildelt av    |
         | Tildelt dato  |
 
-    @draft
+    @planned
+    Scenario: Se brukerens roller med «Gjelder for»
+      Når jeg ser på personbrukerens detaljside
+      Så ser jeg en seksjon med personbrukerens tildelte roller
+      Og hver rolle viser følgende informasjon:
+        | felt          |
+        | Navn          |
+        | Beskrivelse   |
+        | Gjelder for   |
+        | Miljø         |
+        | Tildelt av    |
+        | Tildelt dato  |
+
+    @draft @openquestion
     Scenario: Se tidsbegrensning på en rolle
+      # ÅPNE SPØRSMÅL:
+      # - Kravspesifiseringen er utsatt. Når skal tidsbegrensning på roller spesifiseres?
       Gitt personbrukeren har en rolle med start- og/eller sluttidspunkt
       Når jeg ser på personbrukerens detaljside
       Så ser jeg gyldighetstidsrommet for rollen
 
-    @draft
+    @draft @openquestion
     Scenario: Se stedkoder på en rolle
+      # ÅPNE SPØRSMÅL:
+      # - Kravspesifiseringen er utsatt. Når skal stedkoder på roller spesifiseres?
+      # - Skal stedkode-visningen folde ut hierarkiet, eller liste enkeltkoder?
       Gitt personbrukeren har en rolle som er begrenset til bestemte stedkoder
       Når jeg ser på personbrukerens detaljside
       Så ser jeg hvilke stedkoder rollen gjelder for
@@ -71,4 +90,3 @@ Egenskap: Se en personbrukers roller
 # ÅPNE SPØRSMÅL:
 # - Skal sammensatte roller kunne foldes ut for å vise hvilke tilganger rollen gir, eller henvises administrator til rolle-detaljsiden?
 # - Skal listen være sorterbar (per navn, organisasjon, tildelt dato)?
-# - Skal stedkode-visningen folde ut hierarkiet, eller liste enkeltkoder?

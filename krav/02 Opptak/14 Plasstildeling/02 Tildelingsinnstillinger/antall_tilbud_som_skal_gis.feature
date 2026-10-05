@@ -9,7 +9,8 @@ Egenskap: Antall tilbud som skal gis per utdanningskvote
   # Kilde: tasks/opptak/plasstildeling/oppgave.md (oppgave 2), design.md (begrepsforklaringer) og
   # Confluence «2026-09-08 Raffinering plasstildeling» (oppgave 2).
   # Totalt antall tilbud og relativ fordeling per utdanningskvote settes på utdanningstilbudet, se
-  # 12 Utdanningstilbud/opptaksinnstillinger_utdanningstilbud.feature. Denne fila beskriver hvordan
+  # 12 Utdanningstilbud/03 Opptaksinnstillinger/sette_studieplasser_og_antall_tilbud.feature og
+  # 12 Utdanningstilbud/03 Opptaksinnstillinger/opptaksinnstillinger_utdanningstilbud.feature. Denne fila beskriver hvordan
   # plasstildelingen bruker tallene, og hva som settes per runde.
   # Opptaksforvalter ved lærestedet setter tallene for egne utdanningstilbud innenfor perioden
   # som er satt på runden (se 01 Runder/legge_til_runde.feature).

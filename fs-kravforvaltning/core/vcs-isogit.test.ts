@@ -110,6 +110,11 @@ test('klone, se endringer, publisere som branch og hente main', { skip: !hasGit 
   writeFileSync(join(dir, feature), '# language: no\n@draft\nEgenskap: Se ting\n');
   writeFileSync(join(dir, fresh), '# language: no\nEgenskap: Ny\n');
   writeFileSync(join(dir, 'annet.txt'), 'endret, men ikke krav\n');
+  // En skisse (binærfil) fra save_sketch kan også sendes med
+  const sketch = 'tasks/opptak/x/spec/krav-input/sketches/s.png';
+  const png = Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a, 0x00, 0xff, 0x0a]);
+  mkdirSync(join(dir, 'tasks/opptak/x/spec/krav-input/sketches'), { recursive: true });
+  writeFileSync(join(dir, sketch), png);
 
   const info = await vcs.info();
   assert.equal(info?.branch, 'main');
@@ -118,13 +123,14 @@ test('klone, se endringer, publisere som branch og hente main', { skip: !hasGit 
     [
       [fresh, 'U', 2, 0],
       [feature, 'M', 1, 0],
+      [sketch, 'U', 0, 0],
     ],
   );
 
   await assert.rejects(vcs.publish({ paths: [feature], branch: 'x', title: 't', body: '' }, null), /innlogget/);
   await assert.rejects(vcs.publish({ paths: ['annet.txt'], branch: 'x', title: 't', body: '' }, 'tok'), /Ugyldig sti/);
 
-  const res = await vcs.publish({ paths: [feature, fresh], branch: 'Status på «Se ting»', title: 'Sett Se ting til draft', body: 'Fra vieweren' }, 'tok');
+  const res = await vcs.publish({ paths: [feature, fresh, sketch], branch: 'Status på «Se ting»', title: 'Sett Se ting til draft', body: 'Fra vieweren' }, 'tok');
   assert.equal(res.branch, 'krav/status-pa-se-ting');
   assert.equal(res.url, 'https://example.com/pr/1');
   assert.deepEqual(prs, [{ head: 'krav/status-pa-se-ting', base: 'main', title: 'Sett Se ting til draft', body: 'Fra vieweren' }]);
@@ -135,6 +141,7 @@ test('klone, se endringer, publisere som branch og hente main', { skip: !hasGit 
   assert.match(show(feature), /@draft/);
   assert.match(show(fresh), /Egenskap: Ny/);
   assert.equal(show('annet.txt'), 'ikke krav');
+  assert.deepEqual(execFileSync('git', ['-C', origin, 'show', `krav/status-pa-se-ting:${sketch}`]), png, 'bildet er byte for byte det samme');
   assert.equal(git(origin, 'log', '-1', '--format=%an|%s', 'krav/status-pa-se-ting'), 'Redaktør|Sett Se ting til draft');
 
   // Arbeidskatalogen og HEAD er urørt, og den lokale branchen er ryddet bort
