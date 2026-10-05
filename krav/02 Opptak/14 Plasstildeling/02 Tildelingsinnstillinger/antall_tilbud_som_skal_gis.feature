@@ -33,11 +33,15 @@ Egenskap: Antall tilbud som skal gis per utdanningskvote
     Scenario: Prosentfordeling som ikke gir hele tall
       # ÅPNE SPØRSMÅL:
       # - Hvordan avrundes antall tilbud når prosentandelen ikke gir hele tall?
-      #   Hvilken utdanningskvote får restplassen?
+      #   Forslag: restplassen går til kvoten som ikke kan viderefordele plasser til andre kvoter.
+      #   I UHG-opptak er dette normalt ordinær kvote, fordi førstegangsvitnemålskvoten kan
+      #   viderefordele ubrukte plasser til ordinær, men ikke omvendt.
+      #   Stemmer dette som hovedregel? Finnes det unntak?
       Gitt at utdanningstilbudet skal gi 277 tilbud totalt
       Og at kvotefordelingen er 50 % førstegangsvitnemål og 50 % ordinær
       Når plasstildelingen beregner antall tilbud som skal gis
-      Så er summen av tilbud i utdanningskvotene 277
+      Så skal det gis 138 tilbud i utdanningskvoten "Førstegangsvitnemål"
+      Og det skal gis 139 tilbud i utdanningskvoten "Ordinær"
 
   @openquestion
   Regel: Opptaksforvalter kan justere antall tilbud per utdanningskvote for runden
@@ -65,16 +69,12 @@ Egenskap: Antall tilbud som skal gis per utdanningskvote
         | Antall tilbud som skal gis per utdanningskvote |
         | Totalt antall tilbud som skal gis              |
 
-  @openquestion
-  Regel: En utdanningskvote kan gi tilbud til alle kvalifiserte
+  Regel: Et utdanningstilbud kan gi tilbud til alle kvalifiserte
 
-    # ÅPNE SPØRSMÅL:
-    # - Settes «tilbud til alle kvalifiserte» per utdanningskvote (design.md) eller for hele
-    #   utdanningstilbudet (Confluence, raffinering 2026-09-08)?
-    Scenario: Tilbud til alle kvalifiserte i en utdanningskvote
-      Når opptaksforvalter angir at utdanningskvoten "Ordinær" skal gi tilbud til alle kvalifiserte
-      Så får alle kvalifiserte søkere i utdanningskvoten "Ordinær" tilbud uavhengig av poengsum
-      Og utdanningskvoten "Ordinær" har ingen poenggrense
+    Scenario: Tilbud til alle kvalifiserte på utdanningstilbudet
+      Når opptaksforvalter angir at utdanningstilbudet "Sykepleie, høst 2027" skal gi tilbud til alle kvalifiserte
+      Så får alle kvalifiserte søkere tilbud uavhengig av poengsum
+      Og utdanningstilbudet har ingen poenggrense
 
   Regel: I suppleringsrunder settes antall ønsket ja-svar
 

@@ -17,12 +17,20 @@ Egenskap: Legge til runder for plasstildeling i et opptak
     Gitt at opptaksforvalter ved forvaltende organisasjon er innlogget
     Og at opptaket "Samordna opptak 2027" er opprettet
 
+  Regel: Første runde arver publiseringsdato og svarfrist fra opptakets frister
+
+    # Første runde er hovedtildelingen. Datoene for publisering og svarfrist er
+    # satt blant fristene i opptaket (se 11 Opptak/04 Frister/frister_og_hendelser.feature),
+    # fordi de er kommunisert til søker. Runden arver dem, og de endres bare i opptakets frister.
+    # Etterfølgende runder har egne datoer (se regelen under).
+
   Regel: Opptaksforvalter legger til en runde med navn, rundetype og svarfrist
 
-    Scenario: Legge til hovedrunde
-      Når opptaksforvalter legger til runden "Hovedrunde" med rundetype "Hovedtildeling" og svarfrist "2027-07-20 23:59"
-      Så har opptaket runden "Hovedrunde"
-      Og søkere som får tilbud i runden må svare innen "2027-07-20 23:59"
+    Scenario: Legge til en etterfølgende runde
+      Gitt at opptaket har runden "Hovedrunde" med rundetype "Hovedtildeling"
+      Når opptaksforvalter legger til runden "Suppleringsrunde" med rundetype "Supplering" og svarfrist "2027-08-10 23:59"
+      Så har opptaket runden "Suppleringsrunde"
+      Og søkere som får tilbud i runden må svare innen "2027-08-10 23:59"
 
     Scenariomal: Runde mangler obligatorisk opplysning
       Når opptaksforvalter legger til en runde uten <opplysning>
@@ -40,7 +48,29 @@ Egenskap: Legge til runder for plasstildeling i et opptak
       Når opptaksforvalter setter påminnelse om svarfrist til "2027-07-18"
       Så får søkere med ubesvart tilbud i runden en påminnelse "2027-07-18"
 
-  Regel: Et opptak har én runde per rundetype
+    Scenario: Legge til første runde
+      Gitt at opptaksforvalter har satt dato for når hovedopptaket publiseres til "2027-07-15"
+      Og at opptaksforvalter har satt første svarfrist til "2027-07-20 23:59"
+      Når opptaksforvalter legger til runden "Hovedrunde" med rundetype "Hovedtildeling"
+      Så har opptaket runden "Hovedrunde"
+      Og runden publiseres for søkere "2027-07-15"
+      Og runden har svarfrist "2027-07-20 23:59"
+
+    Scenario: Publiseringsdato og svarfrist for første runde kan ikke endres i runden
+      Gitt at opptaket har runden "Hovedrunde" med rundetype "Hovedtildeling"
+      Når opptaksforvalter ser på runden "Hovedrunde"
+      Så kan ikke publiseringsdato og svarfrist endres i runden
+      Og datoene kan bare endres blant fristene for opptaket
+
+    Scenario: Første runde følger endrede datoer i opptaket
+      Gitt at opptaket har runden "Hovedrunde" med rundetype "Hovedtildeling"
+      Og at runden ikke er publisert
+      Når opptaksforvalter endrer dato for når hovedopptaket publiseres til "2027-07-16"
+      Og opptaksforvalter endrer første svarfrist til "2027-07-21 23:59"
+      Så publiseres runden for søkere "2027-07-16"
+      Og runden har svarfrist "2027-07-21 23:59"
+
+  Regel: Et opptak har én hovedtildeling, men kan ha flere runder av andre typer
 
     Scenario: Tilgjengelige rundetyper
       Når opptaksforvalter legger til en runde
@@ -51,16 +81,17 @@ Egenskap: Legge til runder for plasstildeling i et opptak
         | Etterfylling          |
         | Ledige studieplasser  |
 
-    @openquestion
-    Scenario: Rundetype som allerede finnes i opptaket
-      # ÅPNE SPØRSMÅL:
-      # - Gjelder én runde per rundetype for alle rundetyper, eller bare for hovedtildeling?
-      #   Datamodellen har løpenummer per rundetype, og Confluence «Samordnet plasstildeling»
-      #   nevner opptil 9 etterfyllingsrunder. Begge tyder på at flere runder av samme type har vært ment.
-      Gitt at opptaket har runden "Suppleringsrunde" med rundetype "Supplering"
-      Når opptaksforvalter legger til en ny runde med rundetype "Supplering"
+    Scenario: Hovedtildeling kan bare finnes én gang
+      Gitt at opptaket har runden "Hovedrunde" med rundetype "Hovedtildeling"
+      Når opptaksforvalter legger til en ny runde med rundetype "Hovedtildeling"
       Så blir runden ikke lagt til
-      Og opptaksforvalter får beskjed om at opptaket allerede har en runde med rundetype "Supplering"
+      Og opptaksforvalter får beskjed om at opptaket allerede har en hovedtildeling
+
+    Scenario: Flere runder av samme type etter hovedtildelingen
+      Gitt at opptaket har runden "Hovedrunde" med rundetype "Hovedtildeling"
+      Og at opptaket har runden "Suppleringsrunde 1" med rundetype "Supplering"
+      Når opptaksforvalter legger til runden "Suppleringsrunde 2" med rundetype "Supplering" og svarfrist "2027-09-01 23:59"
+      Så har opptaket to runder med rundetype "Supplering"
 
     Scenario: Kjøre plasstildeling flere ganger i samme runde
       Gitt at runden "Hovedrunde" har en plasstildeling som ikke er publisert
@@ -79,9 +110,9 @@ Egenskap: Legge til runder for plasstildeling i et opptak
       Så kan etterfyllingsrunden komme før en eventuell suppleringsrunde
 
   Regel: Rundetypen kan ikke endres etter at runden er lagt til
-
     # Rundetypen er en del av det som identifiserer runden. Feil rundetype rettes ved å
     # fjerne runden og legge den til på nytt (se åpne spørsmål nederst).
+
     Scenario: Endre rundetype på eksisterende runde
       Gitt at opptaket har runden "Hovedrunde" med rundetype "Hovedtildeling"
       Når opptaksforvalter endrer runden "Hovedrunde"
@@ -89,8 +120,8 @@ Egenskap: Legge til runder for plasstildeling i et opptak
       Men rundetypen kan ikke endres
 
   Regel: Rundetypen styrer hvordan plasstildelingen i runden oppfører seg
+      # Selve oppførselen beskrives i 03 Tildeling. Her beskrives bare hva rundetypen innebærer.
 
-    # Selve oppførselen beskrives i 03 Tildeling. Her beskrives bare hva rundetypen innebærer.
     Scenariomal: Regler som følger av rundetypen
       Gitt at runden har rundetype "<rundetype>"
       Så gjelder disse reglene for plasstildelingen i runden
@@ -110,15 +141,18 @@ Egenskap: Legge til runder for plasstildeling i et opptak
         | Ledige studieplasser | nei      | nei          | ja, må velge ett | ja  | ja           | søknadstidspunkt    |
 
   @openquestion
-  Regel: Runden har datoer for publisering og for når lærestedene kan endre antall tilbud
-
+  Regel: Etterfølgende runder har egne datoer for publisering og for når lærestedene kan endre antall tilbud
     # ÅPNE SPØRSMÅL:
     # - Er publiseringsdato og periode for å endre antall tilbud obligatoriske når runden legges til,
     #   eller kan de settes senere? Automatisk publisering på dato er avgrenset bort for 2027,
     #   så publiseringsdatoen er foreløpig informasjon og planlegging, ikke en utløser.
-    Scenario: Sette publiseringsdato
-      Når opptaksforvalter setter publiseringsdato for runden "Hovedrunde" til "2027-07-15 08:00"
-      Så vises "2027-07-15 08:00" som planlagt tidspunkt for når søkerne får svar i runden
+
+    # Første runde arver datoene fra opptakets frister (se regelen over).
+    # Etterfølgende runder (supplering, etterfylling, ledige studieplasser) har egne datoer.
+    Scenario: Sette publiseringsdato på etterfølgende runde
+      Gitt at opptaket har runden "Hovedrunde" med rundetype "Hovedtildeling"
+      Når opptaksforvalter setter publiseringsdato for runden "Suppleringsrunde" til "2027-08-01 08:00"
+      Så vises "2027-08-01 08:00" som planlagt tidspunkt for når søkerne får svar i runden
 
     Scenario: Sette periode for når lærestedene kan endre antall tilbud som skal gis
       Når opptaksforvalter setter perioden for å endre antall tilbud som skal gis i runden "Hovedrunde" til "2027-06-01" – "2027-07-10"

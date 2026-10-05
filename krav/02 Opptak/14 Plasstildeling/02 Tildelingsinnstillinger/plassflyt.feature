@@ -6,10 +6,18 @@ Egenskap: Plassflyt mellom utdanningskvoter
   ønsker jeg at ledige plasser i en utdanningskvote flyter til en utdanningskvote jeg har pekt på
   slik at studieplasser ikke går tapt når det er for få kvalifiserte søkere i en utdanningskvote.
 
+  # ÅPNE SPØRSMÅL:
+  # - Hvor bestemmes plassflyten mellom ulike kvotetyper — på opptaket eller på utdanningstilbudet?
+  #   Dagens fil antar utdanningstilbudet, men det er ikke avklart.
+  # - Confluence (raffinering 2026-09-08) har krav om at plasser skal kunne flyte fra en tidligere
+  #   plasstildeling til en senere. design.md beskriver dette som en blindsone. Er det utenfor scope for 2027?
+  # - Sirkulær plassflyt håndteres i koden, men ikke i databasen. Skal den avvises når den settes
+  #   (slik scenarioet under sier), eller bare håndteres i plasstildelingen?
+  # - Plassflyt finnes på tre nivåer (kvotetype i regelverket, utdanningskvote i opptaket, og per plasstildeling).
+  #   Skal opptaksforvalter kunne endre plassflyten per runde?
+  # - Forgrening (sende ledige plasser til flere utdanningskvoter) er ikke støttet. Bekrefte at det ikke trengs?
+  #
   # Kilde: tasks/opptak/plasstildeling/design.md (prinsipp 3, oppgave 3) og oppgave.md (gap-analyse oppgave 3).
-  # Selve innstillingen (hvilken utdanningskvote plassene flyter til) settes på utdanningstilbudet, se
-  # 12 Utdanningstilbud/opptaksinnstillinger_utdanningstilbud.feature. Denne fila beskriver hva
-  # plasstildelingen gjør med plassflyten.
   # Status i kode: løst (oppgave.md). Kandidat for @implemented etter verifisering.
   # Begrep: «kvoteflyt» heter nå «plassflyt».
 
@@ -68,12 +76,3 @@ Egenskap: Plassflyt mellom utdanningskvoter
     Scenario: Tilbud gitt via plassflyt
       Gitt at søkeren "Kari Nordmann" fikk tilbud i "Ordinær" på en plass som fløt fra "Førstegangsvitnemål"
       Så er det lagret at plassen kom fra utdanningskvoten "Førstegangsvitnemål"
-
-# ÅPNE SPØRSMÅL:
-# - Confluence (raffinering 2026-09-08) har krav om at plasser skal kunne flyte fra en tidligere
-#   plasstildeling til en senere. design.md beskriver dette som en blindsone. Er det utenfor scope for 2027?
-# - Sirkulær plassflyt håndteres i koden, men ikke i databasen. Skal den avvises når den settes
-#   (slik scenarioet over sier), eller bare håndteres i plasstildelingen?
-# - Plassflyt finnes på tre nivåer (kvotetype i regelverket, utdanningskvote i opptaket, og per plasstildeling).
-#   Skal opptaksforvalter kunne endre plassflyten per runde?
-# - Forgrening (sende ledige plasser til flere utdanningskvoter) er ikke støttet. Bekrefte at det ikke trengs?
