@@ -43,9 +43,9 @@ Egenskap: Se detaljer for applikasjon
       Så ser jeg applikasjonens Client-ID
 
     @planned
-    Scenario: Se konsument-ID for Maskinporten-applikasjon
+    Scenario: Se konsument sin virksomhetsidentifikator for Maskinporten-applikasjon
       Gitt applikasjonen har Maskinporten som identitetsleverandør
-      Så ser jeg applikasjonens konsument-ID
+      Så ser jeg konsument sin virksomhetsidentifikator
 
     @planned
     Scenario: Se brukernavn for FS-applikasjon
