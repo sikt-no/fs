@@ -10,17 +10,23 @@ FS Kravforvaltning sjekker noen av reglene i dette dokumentet automatisk, og vis
 
 ### Hvor kravene ligger
 
-Mappene har tre nivåer: **Domene → Sub-domene → Kapabilitet**, for eksempel `02 Opptak/10 Regelverk/02 Krav/`. Feature-filer ligger bare på kapabilitetsnivå. Se *Mappestruktur*.
+Mappene har tre nivåer: **Domene → Sub-domene → Kapabilitet**, og feature-filene ligger bare på kapabilitetsnivå, for eksempel:
+
+```
+krav/02 Opptak/10 Regelverk/01 Regelverkssamling/regelverkssamling.feature
+```
+
+`02 Opptak` er domenet, `10 Regelverk` sub-domenet og `01 Regelverkssamling` kapabiliteten. Se *Mappestruktur*.
 
 ### Hvordan en kravfil ser ut
 
 ```gherkin
 # language: no
 # GitHub: #1234
-@OPT-REG-KRA-002 @must @draft
-Egenskap: Vurdere kompetanse etter regelverket
-  Som saksbehandler
-  ønsker jeg …
+@OPT-REG-SAM-001 @must @draft
+Egenskap: Regelverkssamling
+  Som opptaksforvalter
+  ønsker jeg å opprette og forvalte regelverkssamlinger
   slik at …
 
   Regel: …
