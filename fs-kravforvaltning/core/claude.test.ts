@@ -5,14 +5,15 @@ import { join } from 'node:path';
 import { after, test } from 'node:test';
 import type { ClaudeEvent } from '../shared/api.ts';
 import { mkdirSync } from 'node:fs';
-import { ClaudeRunner, codeDirs, contextPrompt, dirArgs, executeArgs, implementPrompt, mentionPaths, findClaude, parseStreamLine, projectSkills, skillArgs, skillChangedAt, skillHash, skillMeta, toolSummary } from './claude.ts';
+import { allowedAlways, ClaudeRunner, codeDirs, contextPrompt, dirArgs, executeArgs, implementPrompt, mentionPaths, findClaude, PANEL_DENY, parseStreamLine, projectSkills, skillArgs, skillChangedAt, skillHash, skillMeta, streamImages, toolSummary } from './claude.ts';
+import { existsSync, readFileSync } from 'node:fs';
 
 const tmp = mkdtempSync(join(tmpdir(), 'krav-claude-'));
 after(() => rmSync(tmp, { recursive: true, force: true }));
 
 test('parseStreamLine plukker ut init, tekst, verktøy og resultat', () => {
   assert.deepEqual(parseStreamLine('{"type":"system","subtype":"init","session_id":"s1","model":"m","skills":["fs-krav","x:y",3]}'), [
-    { kind: 'init', sessionId: 's1', model: 'm', skills: ['fs-krav', 'x:y'] },
+    { kind: 'init', sessionId: 's1', model: 'm', skills: ['fs-krav', 'x:y'], mcp: [] },
   ]);
   assert.deepEqual(parseStreamLine('{"type":"system","subtype":"hook_started"}'), []);
   assert.deepEqual(
@@ -124,19 +125,50 @@ writeFileSync(
 if (process.argv[2] === '--version') { console.log('9.9.9 (Claude Code)'); process.exit(0); }
 let input = '';
 process.stdin.on('data', d => (input += d));
-process.stdin.on('end', () => {
+process.stdin.on('end', async () => {
   const args = process.argv.slice(2);
   const out = o => process.stdout.write(JSON.stringify(o) + '\\n');
-  out({ type: 'system', subtype: 'init', session_id: 'sess', model: 'm', skills: ['fs-krav', 'plugin:annen'] });
+  const mcpFile = args[args.indexOf('--mcp-config') + 1];
+  const mcp = JSON.parse(require('node:fs').readFileSync(mcpFile, 'utf8')).mcpServers;
+  out({ type: 'system', subtype: 'init', session_id: 'sess', model: 'm', skills: ['fs-krav', 'plugin:annen'],
+    mcp_servers: [{ name: 'kravforvaltning', status: 'connected' }, { name: 'figma', status: 'needs-auth', source: 'dynamic' }, { name: 'planchain', status: 'needs-auth', source: 'local' }, { name: 'claude.ai Gmail', status: 'needs-auth', source: 'claudeai' }] });
   if (input === 'heng') return setTimeout(() => {}, 60000);
   if (input === 'krasj') { process.stderr.write('noe gikk galt\\n'); process.exit(3); }
-  out({ type: 'assistant', message: { content: [{ type: 'text', text: JSON.stringify({ input, args, cwd: process.cwd() }) }] } });
+  const own = mcp.kravforvaltning;
+  const call = async (name, args) => {
+    const r = await fetch(own.url, { method: 'POST', headers: { ...own.headers, 'content-type': 'application/json' }, body: JSON.stringify({ jsonrpc: '2.0', id: 1, method: 'tools/call', params: { name, arguments: args } }) });
+    return (await r.json()).result.content[0].text;
+  };
+  let answers = [];
+  if (input.startsWith('spør')) answers.push(await call('approve', { tool_name: 'mcp__figma__use_figma', input: { fileKey: 'F', nodeId: '1:2' }, tool_use_id: 't1' }));
+  if (input === 'spør to ganger') answers.push(await call('approve', { tool_name: 'mcp__figma__use_figma', input: { fileKey: 'G' }, tool_use_id: 't2' }));
+  if (input === 'skisse') {
+    out({ type: 'user', message: { content: [{ type: 'tool_result', tool_use_id: 'img1', content: [{ type: 'image', source: { type: 'base64', media_type: 'image/png', data: Buffer.from('PNGDATA').toString('base64') } }] }] } });
+    answers.push(await call('save_sketch', { tool_use_id: 'img1', path: 'tasks/opptak/x/spec/krav-input/sketches/figma/a/screenshot.png' }));
+    answers.push(await call('save_sketch', { tool_use_id: 'img1', path: 'krav/a.png' }));
+    answers.push(await call('save_sketch', { tool_use_id: 'ukjent', path: 'tasks/opptak/x/spec/krav-input/sketches/b.png' }));
+    // Uten tool_use_id: det siste bildet, her et skjermbilde fra fs-verify
+    out({ type: 'user', message: { content: [{ type: 'tool_result', tool_use_id: 'img2', content: [{ type: 'image', source: { type: 'base64', media_type: 'image/png', data: Buffer.from('SISTE').toString('base64') } }] }] } });
+    answers.push(await call('save_sketch', { path: 'tasks/opptak/x/spec/verify-2026-10-05/01-se-liste.png' }));
+  }
+  out({ type: 'assistant', message: { content: [{ type: 'text', text: JSON.stringify({ input, args, cwd: process.cwd(), mcp, answers, toolTimeout: process.env.MCP_TOOL_TIMEOUT }) }] } });
   out({ type: 'result', subtype: 'success', is_error: false, session_id: 'sess', duration_ms: 1, num_turns: 1 });
 });
 `,
 );
 chmodSync(fake, 0o755);
 const env = { ...process.env, KRAV_CLAUDE_PATH: fake };
+// Hjemmemappa med ~/.claude.json: en server for brukeren og én for en annen mappe
+const home = join(tmp, 'home');
+mkdirSync(home, { recursive: true });
+writeFileSync(
+  join(home, '.claude.json'),
+  JSON.stringify({
+    mcpServers: { 'chrome-devtools': { type: 'http', url: 'https://atl/mcp', headers: { Authorization: 'Bearer hemmelig' } }, neon: { type: 'http', url: 'https://neon' } },
+    projects: { '/annen/mappe': { mcpServers: { figma: { type: 'http', url: 'https://mcp.figma.com/mcp' }, 'chrome-devtools': { type: 'http', url: 'https://feil' } } } },
+  }),
+);
+const ro = { env, home };
 mkdirSync(join(tmp, '.claude', 'skills', 'fs-krav'), { recursive: true });
 writeFileSync(join(tmp, '.claude', 'skills', 'fs-krav', 'SKILL.md'), '---\nname: fs-krav\ndescription: >\n  Krav for initiativ\n  og mapper.\n---\n');
 
@@ -160,26 +192,41 @@ async function collect(runner: ClaudeRunner, req: Parameters<ClaudeRunner['run']
 test('findClaude bruker KRAV_CLAUDE_PATH, og status viser versjonen', { skip: process.platform === 'win32' }, async () => {
   assert.equal(await findClaude(env), fake);
   assert.equal(await findClaude({ KRAV_CLAUDE_PATH: join(tmp, 'finnes-ikke') }), null);
-  assert.deepEqual(await new ClaudeRunner(tmp, { env }).status(), { available: true, path: fake, version: '9.9.9 (Claude Code)' });
+  assert.deepEqual(await new ClaudeRunner(tmp, ro).status(), { available: true, path: fake, version: '9.9.9 (Claude Code)' });
 });
 
 test('ClaudeRunner sender meldingen på stdin, med verktøy, kontekst og resume', { skip: process.platform === 'win32' }, async () => {
-  const runner = new ClaudeRunner(tmp, { env });
+  const runner = new ClaudeRunner(tmp, ro);
   await assert.rejects(runner.run({ prompt: '  ' }), /melding/);
   assert.deepEqual(runner.skills().other, null, 'ingen liste før første kjøring');
   const events = await collect(runner, { prompt: '--ikke-et-flagg', sessionId: 'forrige', path: 'krav/a.feature', skill: 'fs-specify', knownSkills: ['plugin:husket', 'bad name'] });
-  assert.deepEqual(events[0], { kind: 'init', sessionId: 'sess', model: 'm', skills: ['fs-krav', 'plugin:annen'] });
+  // Bare serverne i MCP_SERVERS vises i MCP-statusen (ikke appens egen, andre servere eller claude.ai-koblingene)
+  assert.deepEqual(events[0], { kind: 'init', sessionId: 'sess', model: 'm', skills: ['fs-krav', 'plugin:annen'], mcp: [{ name: 'figma', status: 'needs-auth' }] });
   const echo = JSON.parse((events[1] as { text: string }).text);
   assert.equal(echo.input, '--ikke-et-flagg');
   assert.equal(realpathSync(echo.cwd), realpathSync(tmp));
   const args: string[] = echo.args;
-  assert.deepEqual(args.slice(0, 6), ['-p', '--output-format', 'stream-json', '--verbose', '--permission-mode', 'dontAsk']);
-  assert.ok(args.includes('Edit') && !args.includes('Bash') && !args.includes('Skill'));
+  assert.deepEqual(args.slice(0, 8), ['-p', '--output-format', 'stream-json', '--verbose', '--permission-mode', 'default', '--permission-prompt-tool', 'mcp__kravforvaltning__approve']);
+  assert.ok(args.includes('Edit') && !args.includes('Skill') && args.includes('mcp__kravforvaltning__save_sketch'));
+  assert.ok(args.indexOf('Bash') > args.indexOf('--disallowedTools'), 'Bash avvises hardt');
+  // MCP-verktøy som bare leser, tillates uten spørsmål; de som endrer noe, gjør ikke det
+  const allowed = args.slice(args.indexOf('--allowedTools'), args.indexOf('--disallowedTools'));
+  assert.ok(allowed.includes('mcp__figma__get_metadata') && allowed.includes('mcp__chrome-devtools__take_screenshot') && allowed.includes('mcp__claude_ai_Atlassian_Rovo__getJiraIssue'));
+  assert.ok(!allowed.includes('mcp__figma__use_figma') && !allowed.includes('mcp__chrome-devtools__navigate_page'));
+  // MCP-serverne i MCP_SERVERS fra ~/.claude.json (user vinner ved like navn) og appens egen, i en fil bare brukeren kan lese
+  assert.deepEqual(Object.keys(echo.mcp).sort(), ['chrome-devtools', 'figma', 'kravforvaltning']);
+  assert.equal(echo.mcp['chrome-devtools'].url, 'https://atl/mcp');
+  assert.match(echo.mcp.kravforvaltning.url, /^http:\/\/127\.0\.0\.1:\d+\/mcp\//);
+  assert.ok(!args.some(a => a.includes('hemmelig')), 'hemmeligheter står ikke på kommandolinja');
+  assert.equal(echo.toolTimeout, String(5 * 60_000 + 60_000), 'claude venter på spørsmålet om lov');
+  // `done` kommer fra stdout før prosessen er avsluttet; fila slettes når den er det
+  for (let i = 0; i < 50 && runner.active().length; i++) await new Promise(r => setTimeout(r, 20));
+  assert.ok(!existsSync(args[args.indexOf('--mcp-config') + 1]), 'konfigfila slettes etter kjøringen');
   assert.ok(args.includes('Skill(fs-specify)'), 'den valgte skillen er tillatt');
   assert.equal(args[args.indexOf('--resume') + 1], 'forrige');
   assert.match(args[args.indexOf('--append-system-prompt') + 1], /krav\/a\.feature/);
   // Prosjektets andre skill (fra disk) og den vieweren husker, avvises; ugyldige navn hoppes over
-  assert.deepEqual(args.slice(args.indexOf('--disallowedTools')), ['--disallowedTools', 'Skill(fs-krav)', 'Skill(plugin:husket)']);
+  assert.deepEqual(args.slice(args.indexOf('--disallowedTools')), ['--disallowedTools', ...PANEL_DENY, 'Skill(fs-krav)', 'Skill(plugin:husket)']);
   assert.match(args[args.indexOf('--append-system-prompt') + 1], /valgt skillen fs-specify/);
   assert.equal(echo.input, '--ikke-et-flagg', 'uten invoke lastes ikke skillen på nytt');
   const invoked = await collect(runner, { prompt: 'lag krav', skill: 'fs-krav', invoke: true });
@@ -229,7 +276,7 @@ test('executeArgs: cwd i kode-repoet, Edit bare der og i utforing.md, kravrepoet
 test('ClaudeRunner: utførekjøring kjører i kode-repoet med egne argumenter', { skip: process.platform === 'win32' }, async () => {
   const code = join(tmp, 'fs-admin-utfor');
   mkdirSync(code, { recursive: true });
-  const runner = new ClaudeRunner(tmp, { env });
+  const runner = new ClaudeRunner(tmp, ro);
   const ev = await collect(runner, { prompt: 'implementer', skill: 'fs-krav', invoke: true, target: { repo: 'fs-admin', dir: code, spec: 'tasks/opptak/x/spec/spec-x.md' } });
   const echo = JSON.parse((ev[1] as { text: string }).text);
   assert.equal(realpathSync(echo.cwd), realpathSync(code));
@@ -239,6 +286,14 @@ test('ClaudeRunner: utførekjøring kjører i kode-repoet med egne argumenter', 
   assert.equal(args[args.indexOf('--add-dir') + 1], tmp);
   assert.ok(args.includes('Skill(fs-krav)') && args.indexOf('Skill(fs-krav)') > args.indexOf('--disallowedTools'), 'kravrepoets skill avvises');
   assert.equal(runner.skills().other, null, 'skillene fra kode-repoet blandes ikke med kravrepoets');
+  assert.deepEqual(args.slice(4, 8), ['--permission-mode', 'default', '--permission-prompt-tool', 'mcp__kravforvaltning__approve']);
+  assert.ok(args.includes('--mcp-config') && 'figma' in echo.mcp && 'kravforvaltning' in echo.mcp);
+  // Deny-lista er den samme som før: kravrepoets skills, git push og gh
+  assert.deepEqual(args.slice(args.indexOf('--disallowedTools') + 1), ['Skill(fs-krav)', 'Bash(git push:*)', 'Bash(gh:*)']);
+  const alltid = await collect(runner, { prompt: 'x', target: { repo: 'fs-admin', dir: code, spec: 'tasks/opptak/x/spec/spec-x.md' }, allowTools: ['mcp__figma__use_figma', 'Bash', 'mcp__kravforvaltning__approve'] });
+  const aargs: string[] = JSON.parse((alltid[1] as { text: string }).text).args;
+  assert.ok(aargs.includes('mcp__figma__use_figma') && aargs.indexOf('mcp__figma__use_figma') < aargs.indexOf('--disallowedTools'));
+  assert.ok(!aargs.slice(0, aargs.indexOf('--disallowedTools')).includes('Bash'), 'allowTools tar bare mcp__* og WebFetch');
 });
 
 test('skillMeta leser navn og beskrivelse, også foldet YAML', () => {
@@ -268,7 +323,7 @@ test('skillArgs tillater den valgte skillen og poolen, og avviser alle andre', (
 });
 
 test('ClaudeRunner melder feil fra stderr og kan avbrytes', { skip: process.platform === 'win32' }, async () => {
-  const runner = new ClaudeRunner(tmp, { env });
+  const runner = new ClaudeRunner(tmp, ro);
   const crash = await collect(runner, { prompt: 'krasj' });
   assert.deepEqual(crash.at(-1), { kind: 'done', ok: false, sessionId: null, durationMs: null, turns: null, error: 'noe gikk galt' });
   const hang = await collect(runner, { prompt: 'heng' }, id => {
@@ -296,4 +351,84 @@ test('skillHash endres når en fil i skillmappa endres, også i undermapper', ()
   const t = new Date(Date.now() + 60_000);
   utimesSync(join(dir, 'references', 'a.md'), t, t);
   assert.ok(Math.abs(skillChangedAt(dir) - t.getTime()) < 1000, 'filsystemet kan runde av tidspunktet');
+});
+
+test('allowedAlways tar bare WebFetch og verktøyene til serverne i MCP_SERVERS', () => {
+  assert.deepEqual(allowedAlways(['mcp__figma__get_screenshot', 'WebFetch', 'Bash', 'mcp__kravforvaltning__approve', 'mcp__neon__run_sql', 'mcp__x', 3, 'WebFetch']), ['WebFetch', 'mcp__figma__get_screenshot']);
+  assert.deepEqual(allowedAlways(null), []);
+});
+
+test('toolSummary for MCP-verktøy og WebFetch', () => {
+  assert.equal(toolSummary('mcp__figma__get_screenshot', { fileKey: 'F', nodeId: '1:2', token: 'x' }), 'figma · get_screenshot (fileKey F, nodeId 1:2)');
+  assert.equal(toolSummary('mcp__figma__whoami', {}), 'figma · whoami');
+  assert.equal(toolSummary('mcp__kravforvaltning__save_sketch', { path: 'tasks/a/b/spec/krav-input/sketches/x.png' }), 'tasks/a/b/spec/krav-input/sketches/x.png', 'stien, så fila kommer med i «Endret i samtalen»');
+  assert.equal(toolSummary('mcp__claude_ai_Atlassian_Rovo__getJiraIssue', { issueIdOrKey: 'FS-1' }), 'Atlassian Rovo · getJiraIssue (issueIdOrKey FS-1)');
+  assert.equal(toolSummary('WebFetch', { url: 'https://a.no/x?token=1', prompt: 'p' }), 'https://a.no/x');
+});
+
+test('streamImages plukker ut bildene fra verktøyresultatene', () => {
+  const line = JSON.stringify({ type: 'user', message: { content: [{ type: 'tool_result', tool_use_id: 't', content: [{ type: 'text', text: 'x' }, { type: 'image', source: { type: 'base64', media_type: 'image/png', data: 'QQ==' } }] }] } });
+  assert.deepEqual(streamImages(line), [{ toolUseId: 't', mediaType: 'image/png', data: 'QQ==' }]);
+  assert.deepEqual(streamImages('{"type":"assistant"}'), []);
+  assert.deepEqual(streamImages('ikke json "image"'), []);
+});
+
+const echoOf = (events: ClaudeEvent[]) => JSON.parse((events.find(e => e.kind === 'text') as { text: string }).text);
+
+test('ClaudeRunner: spørsmål om lov går til vieweren, og «tillat alltid» gjelder resten av kjøringen', { skip: process.platform === 'win32' }, async () => {
+  const runner = new ClaudeRunner(tmp, ro);
+  const asked: ClaudeEvent[] = [];
+  runner.on(({ event }) => {
+    if (event.kind !== 'permission') return;
+    asked.push(event);
+    assert.deepEqual(runner.pending().map(p => p.event.id), [event.id]);
+    void runner.approve({ id: event.id, behavior: 'allow', always: true });
+  });
+  const events = await collect(runner, { prompt: 'spør to ganger' });
+  assert.equal(asked.length, 1, 'det andre kallet til samme verktøy spørres ikke om');
+  assert.deepEqual({ ...asked[0], id: '' }, { kind: 'permission', id: '', tool: 'mcp__figma__use_figma', input: { fileKey: 'F', nodeId: '1:2' }, toolUseId: 't1' });
+  assert.deepEqual(echoOf(events).answers.map((a: string) => JSON.parse(a)), [
+    { behavior: 'allow', updatedInput: { fileKey: 'F', nodeId: '1:2' } },
+    { behavior: 'allow', updatedInput: { fileKey: 'G' } },
+  ]);
+  assert.ok(events.some(e => e.kind === 'permissionDone' && e.behavior === 'allow'));
+  assert.deepEqual(runner.pending(), []);
+  runner.close();
+});
+
+test('ClaudeRunner: avvist kall og tidsavbrudd gir deny med en melding Claude kan videreformidle', { skip: process.platform === 'win32' }, async () => {
+  const runner = new ClaudeRunner(tmp, ro);
+  runner.on(({ event }) => event.kind === 'permission' && void runner.approve({ id: event.id, behavior: 'deny' }));
+  const denied = await collect(runner, { prompt: 'spør' });
+  const [d] = echoOf(denied).answers.map((a: string) => JSON.parse(a));
+  assert.equal(d.behavior, 'deny');
+  assert.match(d.message, /avviste kallet/);
+  assert.ok(denied.some(e => e.kind === 'permissionDone' && e.behavior === 'deny' && e.reason === 'user'));
+  runner.close();
+
+  const slow = new ClaudeRunner(tmp, { ...ro, approveTimeoutMs: 100 });
+  const timeout = await collect(slow, { prompt: 'spør' });
+  const [t] = echoOf(timeout).answers.map((a: string) => JSON.parse(a));
+  assert.equal(t.behavior, 'deny');
+  assert.match(t.message, /svarte ikke innen/);
+  assert.ok(timeout.some(e => e.kind === 'permissionDone' && e.reason === 'timeout'));
+  slow.close();
+});
+
+test('ClaudeRunner: save_sketch skriver bildet fra verktøyresultatet (eller det siste), bare under sketches/ og verify-<dato>/', { skip: process.platform === 'win32' }, async () => {
+  const saved: string[] = [];
+  let done = 0;
+  const runner = new ClaudeRunner(tmp, { ...ro, onSaved: p => saved.push(p), onDone: () => done++ });
+  const events = await collect(runner, { prompt: 'skisse' });
+  for (let i = 0; i < 50 && !done; i++) await new Promise(r => setTimeout(r, 20));
+  assert.equal(done, 1, 'onDone når kjøringen er ferdig, så «Endringer» leses på nytt');
+  const [ok, utenfor, ukjent, siste] = echoOf(events).answers;
+  assert.equal(ok, 'Lagret tasks/opptak/x/spec/krav-input/sketches/figma/a/screenshot.png');
+  assert.equal(readFileSync(join(tmp, 'tasks/opptak/x/spec/krav-input/sketches/figma/a/screenshot.png'), 'utf8'), 'PNGDATA');
+  assert.match(utenfor, /Bilder lagres under tasks/);
+  assert.match(ukjent, /Fant ikke noe bilde/);
+  assert.equal(siste, 'Lagret tasks/opptak/x/spec/verify-2026-10-05/01-se-liste.png');
+  assert.equal(readFileSync(join(tmp, 'tasks/opptak/x/spec/verify-2026-10-05/01-se-liste.png'), 'utf8'), 'SISTE');
+  assert.deepEqual(saved, ['tasks/opptak/x/spec/krav-input/sketches/figma/a/screenshot.png', 'tasks/opptak/x/spec/verify-2026-10-05/01-se-liste.png']);
+  runner.close();
 });

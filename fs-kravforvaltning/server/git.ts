@@ -3,7 +3,7 @@ import { readFile } from 'node:fs/promises';
 import { join } from 'node:path';
 import { promisify } from 'node:util';
 import type { GitChange, GitCode, GitInfo } from '../shared/model.ts';
-import { isEditablePath } from '../shared/paths.ts';
+import { isEditablePath, isSketchPath } from '../shared/paths.ts';
 
 const exec = promisify(execFile);
 
@@ -45,7 +45,8 @@ export async function readGit(repoRoot: string): Promise<GitInfo | null> {
     const paths = (await git('ls-files', '-z', '--others', '--exclude-standard', '--', 'krav', 'tasks')).split('\0').filter(isEditablePath);
     return Promise.all(
       paths.map(async path => {
-        const text = await readFile(join(repoRoot, path), 'utf8').catch(() => '');
+        // Skisser er bilder: ingen linjer å telle
+        const text = isSketchPath(path) ? '' : await readFile(join(repoRoot, path), 'utf8').catch(() => '');
         const plus = text ? text.split('\n').length - (text.endsWith('\n') ? 1 : 0) : 0;
         return { path, code: 'U' as const, plus, minus: 0 };
       }),

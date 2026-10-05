@@ -25,7 +25,7 @@ tasks/
         ├── flow.md               # valgfri: BAT-pipeline (eies av alfred)
         ├── memory.md             # valgfri: agent-journal
         ├── utforing.md           # valgfri: spesifikasjonene på veien gjennom kode-repoene (se Utføring)
-        ├── spec/                 # krav: spec-*.md, krav-input/, spec.log.md, verify-*.md
+        ├── spec/                 # krav: spec-*.md, krav-input/, spec.log.md, verify-*.md, verify-<dato>/ (skjermbilder)
         └── <lag>/                # ett per lag/rolle: frontend, backend, subgraph, tester …
             ├── analysis-<slug>.md
             ├── plan-<slug>.md

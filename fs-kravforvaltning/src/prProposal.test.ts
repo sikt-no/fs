@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
 import { parseMd } from './markdown.ts';
-import { parsePrProposal, PR_LANG, splitGenerated } from './prProposal.ts';
+import { parsePrProposal, PR_LANG, splitGenerated, withTaskState } from './prProposal.ts';
 
 test('parsePrProposal tolker et gyldig forslag', () => {
   const p = parsePrProposal('{"title": " Krav: ny regel ", "branch": "ny-regel", "body": "Hvorfor", "paths": ["krav/a.feature", "./krav/b.feature", "krav/a.feature"]}');
@@ -27,6 +27,12 @@ test('parsePrProposal: filer som ikke kan sendes med «Lag PR», legges i skippe
 
 test('parsePrProposal avviser forslag uten filer som kan sendes', () => {
   assert.equal(parsePrProposal('{"title": "T", "paths": ["tasks/x.md"]}'), null);
+  // Det fs-specify skriver i oppgavemappa, kan sendes; oppgave.md kan ikke
+  const spec = parsePrProposal(
+    '{"title": "T", "paths": ["tasks/opptak/x/spec/spec-x.md", "tasks/opptak/x/spec/spec.log.md", "tasks/opptak/x/spec/krav-input/local/krav/a.feature", "tasks/opptak/x/spec/krav-input/sketches/figma/a/screenshot.png", "tasks/opptak/x/oppgave.md"]}',
+  );
+  assert.deepEqual(spec?.paths, ['tasks/opptak/x/spec/spec-x.md', 'tasks/opptak/x/spec/spec.log.md', 'tasks/opptak/x/spec/krav-input/local/krav/a.feature', 'tasks/opptak/x/spec/krav-input/sketches/figma/a/screenshot.png']);
+  assert.deepEqual(spec?.skipped, ['tasks/opptak/x/oppgave.md']);
   assert.equal(parsePrProposal('{"title": "T", "paths": ["krav/../package.json"]}'), null);
   assert.equal(parsePrProposal('{"title": "T", "paths": [3]}'), null);
 });
@@ -48,4 +54,15 @@ test('splitGenerated tar «Generated with Claude Code»-linja ut av beskrivelsen
   assert.deepEqual(splitGenerated('Legger til to scenarioer.\n\n🤖 Generated with [Claude Code](https://claude.com/claude-code)'), { text: 'Legger til to scenarioer.', generated: true });
   assert.deepEqual(splitGenerated('Generert med Claude Code\nTekst'), { text: 'Tekst', generated: true });
   assert.deepEqual(splitGenerated('Bare tekst om Claude Code.'), { text: 'Bare tekst om Claude Code.', generated: false });
+});
+
+test('withTaskState legger til utforing.md for oppgavemappene i forslaget når den er endret', () => {
+  const pr = parsePrProposal('{"title": "T", "paths": ["krav/a.feature", "tasks/opptak/x/spec/spec-x.md", "tasks/opptak/x/spec/spec.log.md"]}')!;
+  const changed = (p: string) => p === 'tasks/opptak/x/utforing.md' || p === 'tasks/opptak/y/utforing.md';
+  assert.deepEqual(withTaskState(pr, changed).paths, ['krav/a.feature', 'tasks/opptak/x/spec/spec-x.md', 'tasks/opptak/x/spec/spec.log.md', 'tasks/opptak/x/utforing.md']);
+  assert.equal(withTaskState(pr, () => false), pr, 'uten endring: ingenting legges til');
+  const med = parsePrProposal('{"title": "T", "paths": ["tasks/opptak/x/utforing.md", "tasks/opptak/x/spec/spec-x.md"]}')!;
+  assert.deepEqual(withTaskState(med, changed).paths, ['tasks/opptak/x/utforing.md', 'tasks/opptak/x/spec/spec-x.md'], 'ikke to ganger');
+  const krav = parsePrProposal('{"title": "T", "paths": ["krav/a.feature"]}')!;
+  assert.equal(withTaskState(krav, changed), krav, 'bare oppgavemapper forslaget har filer fra');
 });

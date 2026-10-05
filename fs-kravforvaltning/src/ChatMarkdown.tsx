@@ -2,7 +2,7 @@ import type { ComponentChildren, JSX } from 'preact';
 import { useMemo, useState } from 'preact/hooks';
 import { parseMd, resolveLink, type Block, type List, type Seg } from './markdown';
 import type { GitChange } from '../shared/model';
-import { parsePrProposal, PR_LANG, splitGenerated, type PrProposal } from './prProposal';
+import { parsePrProposal, PR_LANG, splitGenerated, withTaskState, type PrProposal } from './prProposal';
 import { useCopy } from './useCopy';
 import { parseSummary, SUMMARY_LANG, SUMMARY_SECTIONS, summaryDraft, summaryFiles, type ChatSummary } from './chatSummary';
 
@@ -23,8 +23,8 @@ interface Props {
   edited?: string[];
 }
 
-/** Stier Claude skriver er relative til repoet, eller absolutte inn i klonen: `/…/repo/krav/x.feature` → `krav/x.feature` */
-const repoPath = (p: string) => p.replace(/^.*?\/(krav\/)/, '$1').replace(/^\.?\//, '');
+/** Stier Claude skriver er relative til repoet, eller absolutte inn i klonen: `/…/repo/krav/x.feature` → `krav/x.feature` (også tasks/) */
+const repoPath = (p: string) => p.replace(/^.*?\/((?:krav|tasks)\/)/, '$1').replace(/^\.?\//, '');
 
 /**
  * Svarene fra Claude er markdown. De tolkes med den samme parseren som .md-filene i vieweren (`parseMd`),
@@ -157,7 +157,9 @@ export function ChatMarkdown({ text, has, onOpen, onPr, change, onSummary, skill
             </div>
           );
         }
-        const pr = b.lang === PR_LANG ? parsePrProposal(b.body.join('\n')) : null;
+        // utforing.md i oppgavemappa kommer med når den er endret (Spesifikasjoner skriver den, ikke Claude)
+        const parsed = b.lang === PR_LANG ? parsePrProposal(b.body.join('\n')) : null;
+        const pr = parsed && withTaskState(parsed, p => !!change?.(p));
         if (pr) {
           const desc = splitGenerated(pr.body);
           const n = pr.paths.length;
@@ -193,7 +195,7 @@ export function ChatMarkdown({ text, has, onOpen, onPr, change, onSummary, skill
                   })}
                   {pr.skipped.length > 0 && (
                     <div class="cmd-pr-skipped">
-                      Kan ikke tas med i PR-en herfra (bare .feature- og .md-filer under krav/): {pr.skipped.map((p, j) => <code key={j}>{p}</code>)}
+                      Kan ikke tas med i PR-en herfra (bare krav/, og spec/ og utforing.md i en oppgavemappe): {pr.skipped.map((p, j) => <code key={j}>{p}</code>)}
                     </div>
                   )}
                 </div>

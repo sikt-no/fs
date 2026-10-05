@@ -161,7 +161,7 @@ Lokale skissefiler kopieres til `<spec>/krav-input/sketches/<filnavn>` (`cp` via
 
 Er en Figma-MCP-server koblet til, persisteres artefaktene under `<spec>/krav-input/sketches/figma/<sketch-slug>/` så spec-en er reproduserbar uten Figma-tilgang.
 
-**Ikke hardkod servernavnet.** Bruk serverens kapabiliteter (verktøy som `get_screenshot`, `get_design_context` / `get_metadata`, `get_variable_defs`, `download_assets`). Kallene står ikke i `allowed-tools`, så forvent en tillatelses-prompt første gang.
+**Ikke hardkod servernavnet.** Bruk serverens kapabiliteter (verktøy som `get_screenshot`, `get_design_context` / `get_metadata`, `get_variable_defs`, `download_assets`). Kallene står ikke i `allowed-tools`, så forvent en tillatelses-prompt første gang. I FS Kravforvaltning er det et kort i Claude-panelet («Tillat», «Tillat alltid i denne samtalen», «Avvis»). Avviser brukeren et kall, prøv ikke igjen uten å spørre.
 
 1. **Parse URL-en** til `fileKey` og `nodeId` (`node-id`-parameteren med `-` byttet til `:`). Mangler `node-id`, hent på fil-/side-nivå.
 2. **`<sketch-slug>`** = skissens tittel i kebab-case.
@@ -171,8 +171,14 @@ Er en Figma-MCP-server koblet til, persisteres artefaktene under `<spec>/krav-in
    - **Sub-frames:** hver direkte child av root med type `FRAME`, `COMPONENT`, `COMPONENT_SET` eller `INSTANCE` og et meningsbærende navn (ikke `Frame 12`) hentes med `get_screenshot` til `sub-frames/<NN>-<node-navn-kebab>.png` (`NN` = to-sifret rekkefølge). Bare ett nivå dypt. Er root selv én enkelt frame uten meningsbærende children, hopp over sub-frames.
    - `get_variable_defs` → `variables.md` (eller `tokens.json`)
    - `download_assets` → `assets/`
+   - **Bilder i FS Kravforvaltning:** finnes `mcp__kravforvaltning__save_sketch`, lagres hver PNG med den, med `tool_use_id` fra `get_screenshot`-kallet og stien over (relativ til repoet). Write kan ikke skrive binærdata. Uten den lagres bildene som før.
 4. **Registrer** alt i `krav-input/manifest.md`.
-5. **Ingen Figma-MCP tilkoblet:** prøv `WebFetch` på URL-en, ellers be brukeren beskrive innholdet. Noter i spec-en at artefaktene ikke kunne persisteres.
+5. **Ingen Figma-MCP tilkoblet** (ingen `mcp__*`-verktøy med `get_screenshot` eller `get_design_context`): stopp skissehentingen, og si til brukeren at Figma-MCP må legges til og logges inn én gang med den lokale Claude Code-CLI-en, i terminalen:
+   1. `claude mcp add --transport http --scope user figma https://mcp.figma.com/mcp`
+   2. `claude`, så `/mcp` → `figma` → logg inn i nettleseren.
+
+   Bruk navnet `figma`: innloggingen er knyttet til navnet. Med `--scope user` gjelder den i alle mapper. FS Kravforvaltning tar den med av seg selv, også når den er lagt til i en annen mappe (uten `--scope user`). Spør så om brukeren vil gjøre det nå og kjøre skissesteget på nytt, eller fortsette uten: prøv da `WebFetch` på URL-en, ellers be brukeren beskrive innholdet, og noter i spec-en at artefaktene ikke kunne persisteres.
+6. **Figma-MCP finnes, men er ikke logget inn** (kallet feiler med en feil om innlogging, eller FS Kravforvaltning viser at serveren må logges inn): si at brukeren må kjøre `claude` i terminalen og `/mcp` → `figma` → logg inn, én gang. Innlogging kan ikke startes fra FS Kravforvaltning eller fra `claude -p`. Gå så videre som i punkt 5.
 
 ### Validering — skisse vs. krav
 

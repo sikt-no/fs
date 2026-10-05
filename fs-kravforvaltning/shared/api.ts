@@ -65,6 +65,34 @@ export interface ClaudeRunRequest {
    * bare utforing.md kan endres i det. `skill`, `skills` og `dirs` brukes ikke da.
    */
   target?: ExecuteTarget | null;
+  /** Verktøyene brukeren har tillatt alltid i samtalen (`mcp__*`, WebFetch); de får `--allowedTools` */
+  allowTools?: string[];
+}
+
+/** Brukerens svar på et spørsmål om lov (`permission`) */
+export interface ClaudeApproveRequest {
+  id: string;
+  behavior: 'allow' | 'deny';
+  /** «Tillat alltid i denne samtalen»: resten av kjøringen spørres det ikke om verktøyet */
+  always?: boolean;
+  /** `closed`: panelet ble lukket mens spørsmålet ventet */
+  reason?: 'user' | 'closed';
+}
+
+/** Claude vil bruke et verktøy som må godkjennes (`mcp__*`, WebFetch) */
+export interface ClaudePermission {
+  kind: 'permission';
+  id: string;
+  tool: string;
+  /** Parametrene, forkortet og uten hemmeligheter */
+  input: Record<string, string>;
+  toolUseId: string | null;
+}
+
+/** En MCP-server Claude startet med, og om den er koblet til (`needs-auth`: brukeren må logge inn med `/mcp` i terminalen) */
+export interface ClaudeMcpServer {
+  name: string;
+  status: string;
 }
 
 export interface ExecuteTarget {
@@ -107,10 +135,13 @@ export interface ClaudeSkills {
 
 /** Hendelsene fra en Claude-kjøring, forenklet fra `--output-format stream-json` */
 export type ClaudeEvent =
-  | { kind: 'init'; sessionId: string; model: string | null; skills: string[] }
+  | { kind: 'init'; sessionId: string; model: string | null; skills: string[]; mcp?: ClaudeMcpServer[] }
   | { kind: 'text'; text: string }
   | { kind: 'tool'; id: string; name: string; summary: string }
   | { kind: 'toolResult'; id: string; isError: boolean }
+  | ClaudePermission
+  /** Spørsmålet er besvart: av brukeren, eller avvist fordi tiden gikk ut, panelet ble lukket eller kjøringen sluttet */
+  | { kind: 'permissionDone'; id: string; behavior: 'allow' | 'deny'; reason: 'user' | 'timeout' | 'closed' | 'ended' }
   /** Hvor mye av konteksten siste svar brukte: input, cache-lesing og cache-skriving, pluss svaret */
   | { kind: 'usage'; tokens: number }
   | {
@@ -165,6 +196,10 @@ export interface Api {
   claudeCancel(runId: string): Promise<void>;
   /** Kjøringene som pågår */
   claudeActive(): Promise<string[]>;
+  /** Svarer på et spørsmål om lov; `false` når det ikke venter lenger */
+  claudeApprove(req: ClaudeApproveRequest): Promise<boolean>;
+  /** Spørsmålene om lov som venter, så kortene kommer tilbake etter en omlasting */
+  claudePending(): Promise<{ runId: string; event: ClaudePermission }[]>;
   claudeSkills(): Promise<ClaudeSkills>;
   /** Standardstiene til kodeklonene; `paths` sjekker om overstyrte stier finnes */
   claudeDirs(paths?: Record<string, string>): Promise<CodeDir[]>;
@@ -172,4 +207,4 @@ export interface Api {
   pickDir(): Promise<string | null>;
 }
 export type ApiMethod = keyof Api;
-export const API_METHODS: ApiMethod[] = ['read', 'save', 'remove', 'publish', 'authStatus', 'authStart', 'authPoll', 'authLogout', 'pull', 'mainStatus', 'claudeStatus', 'claudeRun', 'claudeCancel', 'claudeActive', 'claudeSkills', 'claudeDirs', 'pickDir'];
+export const API_METHODS: ApiMethod[] = ['read', 'save', 'remove', 'publish', 'authStatus', 'authStart', 'authPoll', 'authLogout', 'pull', 'mainStatus', 'claudeStatus', 'claudeRun', 'claudeCancel', 'claudeActive', 'claudeApprove', 'claudePending', 'claudeSkills', 'claudeDirs', 'pickDir'];
