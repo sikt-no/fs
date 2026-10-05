@@ -27,7 +27,7 @@ Egenskap: Listevisning og søk i applikasjoner
         | Antall tilganger|
         | Status          |
 
-    @planned
+    @in-progress
     Scenario: Se liste over applikasjoner
       Når jeg åpner applikasjonsoversikten
       Så ser jeg en liste over alle applikasjoner
@@ -123,7 +123,7 @@ Egenskap: Listevisning og søk i applikasjoner
       Når jeg velger en applikasjonseier som filter
       Så vises kun applikasjoner som eies av den valgte organisasjonen
 
-    @planned
+    @in-progress
     Scenario: Tilgjengelige identitetsleverandører i filter
       Gitt jeg ser listen over applikasjoner
       Når jeg åpner identitetsleverandørfilteret
@@ -132,10 +132,10 @@ Egenskap: Listevisning og søk i applikasjoner
         | Alle identitetsleverandører |
         | Feide                       |
         | Maskinporten                |
-        | FS                          |
+        | FS (Maskinbruker)           |
       Og "Alle identitetsleverandører" er valgt som standard
 
-    @planned
+    @in-progress
     Scenario: Filtrere på identitetsleverandør
       Gitt jeg ser listen over applikasjoner
       Når jeg velger en identitetsleverandør som filter

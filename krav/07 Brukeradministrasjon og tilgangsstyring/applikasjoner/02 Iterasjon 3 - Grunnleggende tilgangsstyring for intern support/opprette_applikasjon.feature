@@ -7,7 +7,7 @@ Egenskap: Opprette applikasjon
   slik at tilganger kan tildeles.
 
   En applikasjon har én identitetsleverandør som velges ved opprettelse —
-  Feide, Maskinporten eller FS. Identitetsleverandøren kan ikke endres
+  Feide, Maskinporten eller FS (Maskinbruker). Identitetsleverandøren kan ikke endres
   senere, men applikasjonen kan tildeles tilganger i flere miljøer.
   Applikasjonen identifiseres eksternt ved identifikatoren fra
   identitetsleverandøren og internt ved en systemgenerert unik ID.
@@ -17,7 +17,9 @@ Egenskap: Opprette applikasjon
   Feide og Maskinporten identifiserer applikasjonen med en ekstern ID
   som verifiseres mot identitetsleverandøren ved opprettelse. FS
   identifiserer applikasjonen med et brukernavn som oppgis direkte, og
-  en FS-applikasjon har samme identitet i alle miljøer.
+  en FS-applikasjon har samme identitet i alle miljøer. I løsningen
+  vises identitetsleverandøren FS som «FS (Maskinbruker)». I stegene
+  står den som FS.
 
   Applikasjonseier er organisasjonen applikasjonen tilhører. Begrepet
   brukes i stedet for organisasjon i applikasjonskravene, fordi en
@@ -35,10 +37,10 @@ Egenskap: Opprette applikasjon
       Så kan jeg velge én av identitetsleverandørene Feide og Maskinporten
       Og identitetsleverandøren settes på applikasjonen og kan ikke endres senere
 
-    @planned
+    @in-progress
     Scenario: Velge identitetsleverandør ved opprettelse, inkludert FS
       Når jeg starter opprettelse av en ny applikasjon
-      Så kan jeg velge én av identitetsleverandørene Feide, Maskinporten og FS
+      Så kan jeg velge én av identitetsleverandørene Feide, Maskinporten og FS (Maskinbruker)
       Og identitetsleverandøren settes på applikasjonen og kan ikke endres senere
 
     @deprecated
@@ -90,7 +92,7 @@ Egenskap: Opprette applikasjon
         | Feide                |
         | Maskinporten         |
 
-    @planned
+    @in-progress
     Scenariomal: Opprette applikasjon med ekstern identitet og oppgitt navn
       Når jeg oppretter en ny applikasjon med identitetsleverandør <identitetsleverandør>, et navn og en ID
       Og ID-en finnes hos <identitetsleverandør>
@@ -137,7 +139,7 @@ Egenskap: Opprette applikasjon
       Når ID-en hos identitetsleverandøren tilhører en annen organisasjon
       Så er applikasjonen likevel opprettet på den valgte applikasjonseieren
 
-  @planned
+  @in-progress
   Regel: Maskinporten-applikasjoner har i tillegg konsument sin virksomhetsidentifikator
 
     Scenario: Angi konsument sin virksomhetsidentifikator ved opprettelse
@@ -165,12 +167,8 @@ Egenskap: Opprette applikasjon
       Når jeg oppretter en ny applikasjon med Feide eller FS som identitetsleverandør
       Så er konsument sin virksomhetsidentifikator ikke en del av opprettelsen
 
-  @draft @openquestion
+  @in-progress
   Regel: FS-applikasjoner identifiseres av et brukernavn som ikke verifiseres mot en ekstern kilde
-    # ÅPNE SPØRSMÅL:
-    # - Finnes det et oppslag mot FS som kan verifisere at brukernavnet
-    #   eksisterer, slik Feide og Maskinporten verifiserer ekstern ID? Regelen
-    #   forutsetter i dag at unikhetssjekken i FS Admin er tilstrekkelig.
 
     Scenario: Opprette applikasjon med FS-brukernavn
       Når jeg oppretter en ny applikasjon med FS som identitetsleverandør og et brukernavn
@@ -183,12 +181,18 @@ Egenskap: Opprette applikasjon
       Så avvises opprettelsen
       Og det fremgår at brukernavnet allerede er i bruk
 
+    Scenario: FS-brukernavnet skiller mellom store og små bokstaver
+      Gitt en applikasjon med FS som identitetsleverandør og brukernavnet "app1" allerede finnes
+      Når jeg oppretter en ny applikasjon med FS som identitetsleverandør og brukernavnet "App1"
+      Så er applikasjonen opprettet
+      Og applikasjonen identifiseres ved brukernavnet "App1"
+
     Scenario: FS-applikasjonen har samme identitet i alle miljøer
       Når jeg oppretter en ny applikasjon med FS som identitetsleverandør
       Så er miljø ikke en del av opprettelsen
       Og applikasjonen har samme identitet i alle miljøer
 
-  @planned
+  @in-progress
   Regel: Beskrivelse kan angis ved opprettelse
 
     Scenario: Angi beskrivelse ved opprettelse
@@ -221,14 +225,14 @@ Egenskap: Opprette applikasjon
         | Feide                |
         | Maskinporten         |
 
-    @planned
+    @in-progress
     Scenario: Opprettelse avvises når visningsnavnet er i bruk hos samme identitetsleverandør
       Gitt en applikasjon med identitetsleverandør Feide og et gitt visningsnavn allerede finnes
       Når jeg forsøker å opprette en ny applikasjon med identitetsleverandør Feide og samme visningsnavn
       Så avvises opprettelsen
       Og det fremgår at visningsnavnet allerede er i bruk
 
-    @planned
+    @in-progress
     Scenario: Opprettelse avvises når visningsnavnet er i bruk hos en annen identitetsleverandør
       Gitt en applikasjon med identitetsleverandør Feide og et gitt visningsnavn allerede finnes
       Når jeg forsøker å opprette en ny applikasjon med identitetsleverandør Maskinporten og samme visningsnavn
@@ -254,13 +258,13 @@ Egenskap: Opprette applikasjon
       Så kan applikasjonen autentisere seg umiddelbart med sin eksterne identitet
       Men applikasjonen får ikke tilgang til data før den har en tilgang i et miljø
 
-    @planned
+    @in-progress
     Scenario: Nyopprettet Feide- eller Maskinporten-applikasjon kan autentisere umiddelbart
       Gitt jeg har opprettet en ny applikasjon med Feide eller Maskinporten som identitetsleverandør
       Så kan applikasjonen autentisere seg umiddelbart med sin eksterne identitet
       Men applikasjonen får ikke tilgang til data før den har en tilgang i et miljø
 
-    @planned
+    @in-progress
     Scenario: Nyopprettet FS-applikasjon kan først autentisere når passord er satt
       Gitt jeg har opprettet en ny applikasjon med FS som identitetsleverandør
       Så kan applikasjonen først autentisere seg i et miljø når det er satt passord for det miljøet

@@ -17,7 +17,7 @@ Egenskap: Vise tilganger for applikasjon
     Så ser jeg en liste over tilganger
     Og hvert innslag viser tilgangskode, beskrivelse, organisasjon og miljøet tilgangen gjelder for
 
-  @planned
+  @in-progress
   Scenario: Se tilganger for en applikasjon
     Så ser jeg en liste over tilganger
     Og hvert innslag viser følgende informasjon:
@@ -46,7 +46,7 @@ Egenskap: Vise tilganger for applikasjon
     Og organisasjonene er sortert alfabetisk
     Og "Alle organisasjoner" er valgt som standard
 
-  @planned
+  @in-progress
   Scenario: Tilgjengelige verdier i gjelder for-filter
     Når jeg åpner gjelder for-filteret
     Så inneholder filteret alle organisasjoner som er representert i den ufiltrerte tilgangslisten
@@ -59,7 +59,7 @@ Egenskap: Vise tilganger for applikasjon
     Når jeg velger en organisasjon som filter
     Så vises kun tilganger knyttet til den valgte organisasjonen
 
-  @planned
+  @in-progress
   Scenario: Filtrere tilgangsliste på gjelder for
     Når jeg velger en organisasjon i gjelder for-filteret
     Så vises kun tilganger som gjelder data i den valgte organisasjonen

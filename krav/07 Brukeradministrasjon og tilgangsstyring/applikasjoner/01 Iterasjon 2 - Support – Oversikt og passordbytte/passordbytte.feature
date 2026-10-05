@@ -48,7 +48,7 @@ Egenskap: Passordbytte for applikasjon
       Så genererer systemet et nytt passord for applikasjonen
       Og det nye passordet er lagret
 
-  @planned
+  @in-progress
   Regel: Nytt passord genereres av systemet for ett valgt miljø
 
     Scenario: Generere nytt passord for et miljø
@@ -89,7 +89,7 @@ Egenskap: Passordbytte for applikasjon
       Så fungerer ikke det gamle passordet lenger
       Og applikasjonen må autentisere seg med det nye passordet
 
-  @planned
+  @in-progress
   Regel: Kun ett passord er aktivt per miljø om gangen
 
     Scenario: Nytt passord erstatter det gamle i samme miljø
