@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'preact/hooks';
-import type { ClaudeEvent, ClaudeStatus } from '../shared/api';
+import type { ClaudeEvent, ClaudeStatus, ExecuteTarget } from '../shared/api';
 import type { GitChange, Snapshot } from '../shared/model';
 import {
   applyEvent,
@@ -7,6 +7,7 @@ import {
   chooseSkill,
   effectiveSkill,
   createConversation,
+  createExecuteConversation,
   currentChat,
   EMPTY_CHAT,
   removeConversation,
@@ -271,33 +272,40 @@ export function ClaudePanel({ status, width, onWidth, allowedSkills: modeSkills,
    * Sender `text` som ny melding i samtalen som er åpen (eller en ny). Brukes av inputfeltet, av «Send til Claude Code»
    * og av «Oppsummer samtalen» og «Lag forslag til PR» (`preset`).
    */
-  const sendText = async (text: string, mentions: string[] = [], preset?: ChatPreset) => {
-    if (!text || running) return;
+  const sendText = async (text: string, mentions: string[] = [], preset?: ChatPreset, inConv?: string) => {
+    if (!text || (running && !inConv)) return;
     setError(null);
     setShowList(false);
     // Versjonen av skillen som lastes med meldingen, skal være den som er på disk nå
     await refreshSkills();
-    let id = conv?.id;
+    let id = inConv ?? conv?.id;
     if (!id) {
       id = newId();
       set(createConversation(convs, id, Date.now(), skill));
     }
     const target = id;
-    const before = chooseSkill(convs.list.find(x => x.id === target)!.chat, skill);
+    const cur = convs.list.find(x => x.id === target)!.chat;
+    // En utførekjøring har ingen krav-skill: skillene er kode-repoets
+    const before = cur.target ? cur : chooseSkill(cur, skill);
     const { chat: after, invoke } = send(before, text, sentPath, mentions, skillHashes(), preset);
     set(updateConversation(convs, target, () => after, Date.now()));
     try {
-      const { runId } = await transport.call('claudeRun', {
-        prompt: text,
-        sessionId: before.sessionId,
-        path: sentPath,
-        mentions,
-        skill: after.skill,
-        skills: allowedSkills,
-        invoke,
-        knownSkills: knownSkills(),
-        dirs: codeDirs ? await codeDirPaths() : [],
-      });
+      const { runId } = await transport.call(
+        'claudeRun',
+        before.target
+          ? { prompt: text, sessionId: before.sessionId, path: sentPath, mentions, target: before.target }
+          : {
+              prompt: text,
+              sessionId: before.sessionId,
+              path: sentPath,
+              mentions,
+              skill: after.skill,
+              skills: allowedSkills,
+              invoke,
+              knownSkills: knownSkills(),
+              dirs: codeDirs ? await codeDirPaths() : [],
+            },
+      );
       set(updateConversation(convs, target, ch => started(ch, runId), Date.now()));
       for (const ev of early.get(runId) ?? []) {
         const next = applyEvent(convs, runId, ev, Date.now(), skillHashes());
@@ -339,11 +347,17 @@ export function ClaudePanel({ status, width, onWidth, allowedSkills: modeSkills,
   // Mens panelet er åpent kan andre visninger sende en prompt hit («Send til Claude Code»), eller legge tekst i inputfeltet
   const sendRef = useRef(sendText);
   sendRef.current = sendText;
+  // «Utfør i <repo>» fra Spesifikasjoner: ny samtale som kjører i kode-repoet
+  const executeText = async (text: string, target: ExecuteTarget, title: string) => {
+    const id = newId();
+    set(createExecuteConversation(convs, id, Date.now(), target, title));
+    await sendRef.current(text, [], undefined, id);
+  };
   const insertRef = useRef(insertText);
   insertRef.current = insertText;
   useEffect(() => {
     if (!status.available) return;
-    registerClaude({ send: t => sendRef.current(t), insert: t => insertRef.current(t) });
+    registerClaude({ send: t => sendRef.current(t), execute: (t, target, title) => executeText(t, target, title), insert: t => insertRef.current(t) });
     return () => {
       registerClaude(null);
       setClaudeBusy(false);
@@ -406,6 +420,13 @@ export function ClaudePanel({ status, width, onWidth, allowedSkills: modeSkills,
       {conv && !showList && conv.chat.items.length > 0 && (
         <div class="claude-info">
           <div class="claude-title" title={conv.title}>{conv.title}</div>
+          {c.target && (
+            <div class="claude-exec" title={`Claude kjører i ${c.target.dir}, med repoets skills og CLAUDE.md. Kan endre koden der og bygge, teste og committe lokalt, men ikke pushe. I kravrepoet kan bare utforing.md endres.`}>
+              <span class="sp-ic sp-ic--repo" />
+              Utførekjøring i <b>{c.target.repo}</b>
+              <span class="mono muted">· {c.target.spec.split('/').pop()}</span>
+            </div>
+          )}
           <div class="claude-meta">
             {c.context && (
               <span
@@ -578,16 +599,21 @@ export function ClaudePanel({ status, width, onWidth, allowedSkills: modeSkills,
           {error && <div class="edwarn err" role="alert">{error}</div>}
 
           <div class="claude-input">
-            <SkillPicker
-              value={skill}
-              allowed={allowedSkills}
-              hint={skillHint}
-              preselect={preselect}
-              disabled={running}
-              locked={stale.length > 0}
-              onChange={s => (conv ? set(updateConversation(convs, conv.id, ch => chooseSkill(ch, s), Date.now())) : setPending(s))}
-            />
-            {codeDirs && <CodeDirs />}
+            {/* I en utførekjøring er skillene kode-repoets, og kodemappa er arbeidsmappa */}
+            {!c.target && (
+              <>
+                <SkillPicker
+                  value={skill}
+                  allowed={allowedSkills}
+                  hint={skillHint}
+                  preselect={preselect}
+                  disabled={running}
+                  locked={stale.length > 0}
+                  onChange={s => (conv ? set(updateConversation(convs, conv.id, ch => chooseSkill(ch, s), Date.now())) : setPending(s))}
+                />
+                {codeDirs && <CodeDirs />}
+              </>
+            )}
             <div class={'cinbox' + (inputFlash ? ' flash' : '')}>
               {mention.picker && (
                 <MentionPicker

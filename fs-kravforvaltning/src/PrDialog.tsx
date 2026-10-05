@@ -8,8 +8,8 @@ import { transport } from './transport';
 interface Props {
   git: GitInfo;
   entries: Snapshot;
-  /** Fila «Lag PR» ble åpnet fra; krysses av i tillegg til det som er valgt i utkastet */
-  preselect?: string;
+  /** Fila «Lag PR» ble åpnet fra (eller filene, fra Spesifikasjoner); krysses av i tillegg til det som er valgt i utkastet */
+  preselect?: string | string[];
   onClose: () => void;
 }
 
@@ -91,8 +91,9 @@ export function PrDialog({ git, entries, preselect, onClose }: Props) {
   };
 
   useEffect(() => {
-    // Åpnet fra en fil som ikke er med i utkastet: fila er lagt til, og blir stående i utkastet
-    if (draft && preselect && !draft.picked.includes(preselect)) writeDraft({ ...draft, picked: [...picked] });
+    // Åpnet fra en fil (eller filer) som ikke er med i utkastet: de er lagt til, og blir stående i utkastet
+    const pre = preselect === undefined ? [] : Array.isArray(preselect) ? preselect : [preselect];
+    if (draft && pre.some(p => !draft.picked.includes(p))) writeDraft({ ...draft, picked: [...picked] });
     transport.call('authStatus').then(setAuth, e => setError(e.message));
   }, []);
 

@@ -17,6 +17,26 @@ const isWin = process.platform === 'win32';
  */
 export const CLAUDE_TOOLS = ['Read', 'Glob', 'Grep', 'Edit', 'Write', 'TodoWrite'];
 
+/**
+ * Kommandoene en utførekjøring kan kjøre i kode-repoet: bygge, teste og committe lokalt. Ikke push eller gh:
+ * brukeren pusher og lager PR selv.
+ */
+export const EXECUTE_BASH = [
+  'Bash(npm test:*)',
+  'Bash(npm run:*)',
+  'Bash(npx tsc:*)',
+  'Bash(npx vitest:*)',
+  'Bash(./gradlew:*)',
+  'Bash(mvn:*)',
+  'Bash(git status:*)',
+  'Bash(git diff:*)',
+  'Bash(git log:*)',
+  'Bash(git switch -c:*)',
+  'Bash(git add:*)',
+  'Bash(git commit:*)',
+];
+export const EXECUTE_DENY_BASH = ['Bash(git push:*)', 'Bash(gh:*)'];
+
 const isDir = (p: string) => {
   try {
     return statSync(p).isDirectory();
@@ -51,6 +71,45 @@ const posix = (p: string) => resolve(p).replace(/\\/g, '/').replace(/^([A-Za-z])
 export function dirArgs(dirs: unknown): { paths: string[]; add: string[]; deny: string[] } {
   const ok = [...new Set((Array.isArray(dirs) ? dirs : []).filter((d): d is string => typeof d === 'string' && isAbsolute(d) && isDir(d)).map(d => resolve(d)))];
   return { paths: ok, add: ok.flatMap(d => ['--add-dir', d]), deny: ok.map(d => `Edit(/${posix(d)}/**)`) };
+}
+
+/**
+ * Argumentene til en utførekjøring: cwd er kode-repoet (så repoets CLAUDE.md, innstillinger og skills gjelder),
+ * kravrepoet får `--add-dir`. Edit tillates bare i kode-repoet og i `tasks/<d>/<s>/utforing.md` i kravrepoet
+ * (med `dontAsk` avvises alt som ikke er tillatt). Skills tillates, unntatt kravrepoets egne (fs-krav, fs-specify …),
+ * som skal brukes fra FS Kravforvaltning, ikke i en kjøring som endrer kode.
+ */
+export function executeArgs(repoRoot: string, target: unknown, kravSkills: string[]): { cwd: string; allow: string[]; deny: string[]; add: string[] } {
+  const t = target && typeof target === 'object' ? (target as Record<string, unknown>) : {};
+  const dir = typeof t.dir === 'string' ? t.dir : '';
+  if (!dir || !isAbsolute(dir) || !isDir(dir)) throw new Error(`Fant ikke kodemappa ${typeof t.repo === 'string' ? t.repo : ''}: ${dir || '(ingen sti)'}`);
+  const code = resolve(dir);
+  if (code === resolve(repoRoot)) throw new Error('Kodemappa kan ikke være kravrepoet');
+  return {
+    cwd: code,
+    allow: ['Read', 'Glob', 'Grep', 'TodoWrite', 'Skill', `Edit(/${posix(code)}/**)`, `Edit(/${posix(repoRoot)}/tasks/*/*/utforing.md)`, ...EXECUTE_BASH],
+    deny: [...kravSkills.filter(n => SKILL_NAME.test(n)).sort().map(n => `Skill(${n})`), ...EXECUTE_DENY_BASH],
+    add: ['--add-dir', resolve(repoRoot)],
+  };
+}
+
+/** Systemteksten i en utførekjøring: hvilket repo, hvilken spesifikasjon, og protokollen for utforing.md */
+export function implementPrompt(target: { repo: string; spec: string }, repoRoot: string): string {
+  const spec = typeof target.spec === 'string' && /^tasks\/[^/]+\/[^/]+\/spec\/spec-[^/]+\.md$/.test(target.spec) ? target.spec : null;
+  const dir = spec ? spec.replace(/\/spec\/[^/]+$/, '') : null;
+  return [
+    `Du kjører en utførekjøring fra FS Kravforvaltning i repoet ${target.repo} (arbeidsmappa). Svar kort og på norsk.`,
+    `Kravrepoet sikt-no/fs ligger i ${resolve(repoRoot)} (lagt til med --add-dir). Der kan du lese alt, men bare endre utforing.md i oppgavemappa.`,
+    spec ? `Spesifikasjonen som skal implementeres: ${join(resolve(repoRoot), spec)}. Les den og feature-filene den peker på før du begynner.` : '',
+    'Bruk repoets egne skills og konvensjoner (CLAUDE.md) når du implementerer.',
+    `Du kan bygge, teste og committe lokalt (${EXECUTE_BASH.map(b => b.slice(5, -1).replace(/:\*$/, '')).join(', ')}), men ikke pushe eller lage PR: det gjør brukeren.`,
+    dir
+      ? `Protokoll: sett «Status: pågår» og «Tatt av» under «### ${target.repo}» i ${join(resolve(repoRoot), dir, 'utforing.md')} når du begynner. Når du er ferdig, skriv «Overlevering» (det neste repo trenger å vite: nye felt, queries og mutations, endepunkter, kjente avvik), og si fra til brukeren at steget kan settes til levert når PR-en finnes. Er du blokkert, sett «Blokkert» med grunn.`
+      : '',
+    'AskUserQuestion finnes ikke her: still spørsmålene i svaret, og vent på brukeren.',
+  ]
+    .filter(Boolean)
+    .join('\n');
 }
 
 const canRun = (p: string) => {
@@ -374,27 +433,47 @@ export class ClaudeRunner {
     if (!bin) throw new Error('Fant ikke Claude Code (claude) på maskinen');
     // Unik også på tvers av omstarter, siden vieweren husker kjøringen som pågår i samtalen
     const runId = `${Date.now().toString(36)}-${++this.seq}`;
-    const skill = req.skill && CLAUDE_SKILLS.includes(req.skill) ? req.skill : null;
-    // Alle skills vi kjenner: prosjektets fra disk, de Claude meldte sist, og de vieweren husker fra før
-    const known = [...projectSkills(this.cwd).map(s => s.name), ...(this.lastSkills ?? []), ...(Array.isArray(req.knownSkills) ? req.knownSkills : [])];
-    const pool = skillPool(req.skills);
-    const { allow, deny } = skillArgs(skill, known, pool);
-    const dirs = dirArgs(req.dirs);
-    const args = [
-      '-p',
-      '--output-format', 'stream-json',
-      '--verbose',
-      '--permission-mode', 'dontAsk',
-      '--allowedTools', ...CLAUDE_TOOLS, ...allow,
-      ...dirs.add,
-      '--append-system-prompt', contextPrompt(req.path, skill, pool, dirs.paths, mentionPaths(req.mentions)),
-      ...(req.sessionId ? ['--resume', req.sessionId] : []),
-      ...(deny.length || dirs.deny.length ? ['--disallowedTools', ...deny, ...dirs.deny] : []),
-    ];
+    const skill = !req.target && req.skill && CLAUDE_SKILLS.includes(req.skill) ? req.skill : null;
+    let cwd = this.cwd;
+    let args: string[];
+    if (req.target) {
+      // Utførekjøring: kode-repoet er arbeidsmappa, med repoets skills og CLAUDE.md
+      const x = executeArgs(this.cwd, req.target, projectSkills(this.cwd).map(s => s.name));
+      cwd = x.cwd;
+      args = [
+        '-p',
+        '--output-format', 'stream-json',
+        '--verbose',
+        '--permission-mode', 'dontAsk',
+        '--setting-sources', 'user,project,local',
+        '--allowedTools', ...x.allow,
+        ...x.add,
+        '--append-system-prompt', implementPrompt(req.target, this.cwd),
+        ...(req.sessionId ? ['--resume', req.sessionId] : []),
+        '--disallowedTools', ...x.deny,
+      ];
+    } else {
+      // Alle skills vi kjenner: prosjektets fra disk, de Claude meldte sist, og de vieweren husker fra før
+      const known = [...projectSkills(this.cwd).map(s => s.name), ...(this.lastSkills ?? []), ...(Array.isArray(req.knownSkills) ? req.knownSkills : [])];
+      const pool = skillPool(req.skills);
+      const { allow, deny } = skillArgs(skill, known, pool);
+      const dirs = dirArgs(req.dirs);
+      args = [
+        '-p',
+        '--output-format', 'stream-json',
+        '--verbose',
+        '--permission-mode', 'dontAsk',
+        '--allowedTools', ...CLAUDE_TOOLS, ...allow,
+        ...dirs.add,
+        '--append-system-prompt', contextPrompt(req.path, skill, pool, dirs.paths, mentionPaths(req.mentions)),
+        ...(req.sessionId ? ['--resume', req.sessionId] : []),
+        ...(deny.length || dirs.deny.length ? ['--disallowedTools', ...deny, ...dirs.deny] : []),
+      ];
+    }
     const env = { ...(this.opts.env ?? process.env) };
     // Den korte PATH-en fra Finder: ta med mappa claude ligger i (npm-installasjoner trenger node derfra)
     env.PATH = [dirname(bin), env.PATH].filter(Boolean).join(delimiter);
-    const proc = (this.opts.spawn ?? spawn)(bin, args, { cwd: this.cwd, env, shell: bin.endsWith('.cmd'), stdio: ['pipe', 'pipe', 'pipe'] });
+    const proc = (this.opts.spawn ?? spawn)(bin, args, { cwd, env, shell: bin.endsWith('.cmd'), stdio: ['pipe', 'pipe', 'pipe'] });
     const run: Run = { proc, cancelled: false };
     this.runs.set(runId, run);
 
@@ -410,7 +489,8 @@ export class ClaudeRunner {
         buf = buf.slice(nl + 1);
         for (const ev of line ? parseStreamLine(line) : []) {
           if (ev.kind === 'done') done = true;
-          if (ev.kind === 'init' && ev.skills.length) this.lastSkills = ev.skills;
+          // Skillene fra en utførekjøring er kode-repoets; de skal ikke blandes med kravrepoets
+          if (ev.kind === 'init' && ev.skills.length && !req.target) this.lastSkills = ev.skills;
           this.emit(runId, ev);
         }
       }

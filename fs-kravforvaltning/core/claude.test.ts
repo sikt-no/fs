@@ -5,7 +5,7 @@ import { join } from 'node:path';
 import { after, test } from 'node:test';
 import type { ClaudeEvent } from '../shared/api.ts';
 import { mkdirSync } from 'node:fs';
-import { ClaudeRunner, codeDirs, contextPrompt, dirArgs, mentionPaths, findClaude, parseStreamLine, projectSkills, skillArgs, skillChangedAt, skillHash, skillMeta, toolSummary } from './claude.ts';
+import { ClaudeRunner, codeDirs, contextPrompt, dirArgs, executeArgs, implementPrompt, mentionPaths, findClaude, parseStreamLine, projectSkills, skillArgs, skillChangedAt, skillHash, skillMeta, toolSummary } from './claude.ts';
 
 const tmp = mkdtempSync(join(tmpdir(), 'krav-claude-'));
 after(() => rmSync(tmp, { recursive: true, force: true }));
@@ -202,6 +202,43 @@ test('ClaudeRunner sender meldingen på stdin, med verktøy, kontekst og resume'
   assert.deepEqual(project.map(({ name, description }) => ({ name, description })), [{ name: 'fs-krav', description: 'Krav for initiativ og mapper.' }]);
   assert.match(project[0].hash, /^[0-9a-f]{40}$/);
   assert.deepEqual(other, ['plugin:annen']);
+});
+
+test('executeArgs: cwd i kode-repoet, Edit bare der og i utforing.md, kravrepoets skills og push avvist', () => {
+  const code = join(tmp, 'fs-plattform');
+  mkdirSync(code, { recursive: true });
+  const px = (d: string) => d.replace(/\\/g, '/').replace(/^([A-Za-z]):/, (_, x: string) => '/' + x.toLowerCase());
+  const x = executeArgs(tmp, { repo: 'fs-plattform', dir: code }, ['fs-specify', 'fs-krav', 'bad name']);
+  assert.equal(x.cwd, code);
+  assert.deepEqual(x.add, ['--add-dir', tmp]);
+  assert.ok(x.allow.includes('Skill') && !x.allow.includes('Edit') && !x.allow.includes('Bash'));
+  assert.ok(x.allow.includes(`Edit(/${px(code)}/**)`));
+  assert.ok(x.allow.includes(`Edit(/${px(tmp)}/tasks/*/*/utforing.md)`));
+  assert.ok(x.allow.includes('Bash(git commit:*)') && x.allow.includes('Bash(npm test:*)'));
+  assert.deepEqual(x.deny, ['Skill(fs-krav)', 'Skill(fs-specify)', 'Bash(git push:*)', 'Bash(gh:*)']);
+  assert.throws(() => executeArgs(tmp, { repo: 'fs-admin', dir: join(tmp, 'borte') }, []), /Fant ikke kodemappa fs-admin/);
+  assert.throws(() => executeArgs(tmp, { repo: 'x', dir: 'relativ' }, []), /Fant ikke/);
+  assert.throws(() => executeArgs(tmp, { repo: 'x', dir: tmp }, []), /kravrepoet/);
+  const p = implementPrompt({ repo: 'fs-plattform', spec: 'tasks/opptak/x/spec/spec-x.md' }, tmp);
+  assert.match(p, /utførekjøring fra FS Kravforvaltning i repoet fs-plattform/);
+  assert.ok(p.includes(join(tmp, 'tasks/opptak/x/spec/spec-x.md')));
+  assert.ok(p.includes('«### fs-plattform»') && p.includes(join(tmp, 'tasks/opptak/x', 'utforing.md')));
+  assert.ok(!implementPrompt({ repo: 'fs-plattform', spec: '../hemmelig.md' }, tmp).includes('hemmelig'));
+});
+
+test('ClaudeRunner: utførekjøring kjører i kode-repoet med egne argumenter', { skip: process.platform === 'win32' }, async () => {
+  const code = join(tmp, 'fs-admin-utfor');
+  mkdirSync(code, { recursive: true });
+  const runner = new ClaudeRunner(tmp, { env });
+  const ev = await collect(runner, { prompt: 'implementer', skill: 'fs-krav', invoke: true, target: { repo: 'fs-admin', dir: code, spec: 'tasks/opptak/x/spec/spec-x.md' } });
+  const echo = JSON.parse((ev[1] as { text: string }).text);
+  assert.equal(realpathSync(echo.cwd), realpathSync(code));
+  assert.equal(echo.input, 'implementer', 'ingen krav-skill lastes i en utførekjøring');
+  const args: string[] = echo.args;
+  assert.equal(args[args.indexOf('--setting-sources') + 1], 'user,project,local');
+  assert.equal(args[args.indexOf('--add-dir') + 1], tmp);
+  assert.ok(args.includes('Skill(fs-krav)') && args.indexOf('Skill(fs-krav)') > args.indexOf('--disallowedTools'), 'kravrepoets skill avvises');
+  assert.equal(runner.skills().other, null, 'skillene fra kode-repoet blandes ikke med kravrepoets');
 });
 
 test('skillMeta leser navn og beskrivelse, også foldet YAML', () => {

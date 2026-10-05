@@ -1,5 +1,5 @@
 // Samtalen i Claude-panelet. Rene funksjoner over hendelsene fra core/claude.ts, så de kan testes med node --test.
-import type { ClaudeEvent } from '../shared/api.ts';
+import type { ClaudeEvent, ExecuteTarget } from '../shared/api.ts';
 
 export type ChatPreset = 'summary' | 'pr';
 
@@ -33,6 +33,8 @@ export interface Chat {
   loadedVersions: Record<string, string>;
   /** Samtalen denne fortsetter fra (startet fra en oppsummering, eller fordi en skill var oppdatert) */
   continuesFrom: string | null;
+  /** Utførekjøring fra Spesifikasjoner («Utfør i <repo>»): Claude kjører i kode-repoet. Mangler i eldre samtaler. */
+  target?: ExecuteTarget | null;
 }
 
 export const EMPTY_CHAT: Chat = {
@@ -220,6 +222,11 @@ export function createConversation(cs: Conversations, id: string, now: number, s
     return { list: cs.list.map(c => (c.id === empty.id ? { ...c, chat } : c)), current: empty.id };
   }
   return { list: [{ id, title: UNTITLED, createdAt: now, updatedAt: now, chat: { ...EMPTY_CHAT, skill, continuesFrom } }, ...cs.list], current: id };
+}
+
+/** Ny samtale for en utførekjøring i kode-repoet, med fast tittel (ikke første melding, som er handoff-prompten) */
+export function createExecuteConversation(cs: Conversations, id: string, now: number, target: ExecuteTarget, title: string): Conversations {
+  return { list: [{ id, title, createdAt: now, updatedAt: now, chat: { ...EMPTY_CHAT, target } }, ...cs.list], current: id };
 }
 
 /** Sletter samtalen; er den åpen, åpnes den neste i lista */

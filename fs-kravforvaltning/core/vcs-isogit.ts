@@ -5,9 +5,10 @@ import git, { TREE, type TreeEntry } from 'isomorphic-git';
 import http from 'isomorphic-git/http/node';
 import type { PublishRequest, PublishResult } from '../shared/api.ts';
 import type { GitChange, GitCode, GitInfo } from '../shared/model.ts';
+import { isEditablePath } from '../shared/paths.ts';
 import { branchName, checkPaths, githubCompare, githubPr, type CompareMain, type OpenPr, type Vcs } from './vcs.ts';
 
-const isKravFile = (p: string) => p.startsWith('krav/') && (p.endsWith('.feature') || p.endsWith('.md'));
+const isKravFile = isEditablePath;
 const byPath = (a: GitChange, b: GitChange) => a.path.localeCompare(b.path, 'nb');
 const auth = (token: string | null) => (token ? () => ({ username: 'x-access-token', password: token }) : undefined);
 
@@ -48,7 +49,7 @@ export function isoVcs(dir: string, opts: { openPr?: OpenPr; compare?: CompareMa
       trees: [TREE({ ref: from }), TREE({ ref: to })],
       map: async (path, [a, b]) => {
         if (path === '.') return true;
-        if (!(path === 'krav' || path.startsWith('krav/'))) return null; // hopp over alt utenfor krav/
+        if (!['krav', 'tasks'].some(t => path === t || path.startsWith(t + '/'))) return null; // hopp over alt utenfor krav/ og tasks/
         const [ta, tb] = [await a?.type(), await b?.type()];
         if (ta === 'tree' || tb === 'tree') return true;
         if (!isKravFile(path)) return null;
@@ -65,7 +66,7 @@ export function isoVcs(dir: string, opts: { openPr?: OpenPr; compare?: CompareMa
 
   /** Ucommittede endringer under krav/ mot HEAD (staget, ustaget og nye filer) */
   const uncommitted = async (): Promise<GitChange[]> => {
-    const rows = await git.statusMatrix({ fs, dir, cache, filepaths: ['krav'], filter: isKravFile });
+    const rows = await git.statusMatrix({ fs, dir, cache, filepaths: ['krav', 'tasks'], filter: isKravFile });
     const head = await git.resolveRef({ fs, dir, ref: 'HEAD' });
     const out: GitChange[] = [];
     for (const [path, h, w, s] of rows) {

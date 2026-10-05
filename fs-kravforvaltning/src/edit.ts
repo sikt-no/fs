@@ -101,10 +101,11 @@ export const changedFile = (git: GitInfo | null, path: string) =>
   !!git && [...git.uncommitted, ...git.committed].some(c => c.path === path);
 
 /**
- * Filene som er valgt når «Lag PR» åpnes. Uten utkast: fila dialogen åpnes fra, ellers alle ucommittede.
- * Med utkast: filene i utkastet, og fila dialogen åpnes fra hvis den ikke er med.
+ * Filene som er valgt når «Lag PR» åpnes. Uten utkast: fila (eller filene, fra Spesifikasjoner) dialogen åpnes fra,
+ * ellers alle ucommittede. Med utkast: filene i utkastet, og filene dialogen åpnes fra som ikke er med.
  */
-export function draftPicked(draft: string[] | null, preselect: string | undefined, uncommitted: string[]): string[] {
-  if (!draft) return preselect ? [preselect] : uncommitted;
-  return preselect && !draft.includes(preselect) ? [...draft, preselect] : draft;
+export function draftPicked(draft: string[] | null, preselect: string | string[] | undefined, uncommitted: string[]): string[] {
+  const pre = preselect === undefined ? [] : Array.isArray(preselect) ? preselect : [preselect];
+  if (!draft) return pre.length ? pre : uncommitted;
+  return [...draft, ...pre.filter(p => !draft.includes(p))];
 }
