@@ -20,6 +20,14 @@ Du samler krav. Du henter kravene fra `.feature`-filene under `krav/`, kobler de
 
 **Input er en mappe eller et sett med krav.** Er input en endring (branch, commit, test-fil eller markdown), eller skal spec-en vise hva som er endret i et krav, bruk `fs-specify-delta`. Tag-reglene er de samme i begge.
 
+**Spesifikasjon laget i FS Kravforvaltning.** I visningen «Spesifikasjoner» plukker brukeren hele krav og skriver omfang og skisser selv, og vieweren skriver `tasks/<domene>/<slug>/spec/spec-<slug>.md`. Peker invokasjonen på en slik fil (eller gir en liste med feature-filer):
+
+- Oppgavemappa er mappa fila ligger i, og spec-filnavnet beholdes.
+- Kravene er feature-filene under `## Krav` (slått opp på Feature-ID). Ta med alt som er `@planned` eller `@deprecated` i hver fil, etter filteret under. Spør ikke etter mappe eller filer.
+- Skissene og «Ingen skisse» står under `## Skisser`. Spør ikke om det finnes skisser; hent Figma-artefakter og valider skissene mot kravene som vanlig.
+- `## Omfang`, `## Rute` og skissene brukeren har skrevet, beholdes når spec-en skrives over.
+- I Claude-panelet i FS Kravforvaltning finnes ikke `AskUserQuestion`: still spørsmålene i svaret, og vent på brukeren.
+
 ## Finn oppgavemappa (gjør dette FØRST)
 
 Alt denne skillen skriver havner i krav-undermappa til én oppgave: **`<spec>/` = `tasks/<domene>/<slug>/spec/`**. Strukturen og reglene er beskrevet i [`tasks/README.md`](../../../tasks/README.md) — den er autoritativ.
@@ -65,8 +73,8 @@ Hvert `AskUserQuestion`-kall i kjøringen appendes til `<spec>/questions-fs-spec
 
 ## Krav-input fra lokale filer
 
-1. **Bekreft mappen/filen** med brukeren før du leser — vis foreslått sti under `krav/` og spør hvis den ikke er entydig. Mangler sti helt, spør om den (bruk `krav/krav-oversikt.md` for å hjelpe brukeren å finne riktig kapabilitet).
-2. **List filene** under stien som matcher `**/*.feature`.
+1. **Bekreft mappen/filen** med brukeren før du leser — vis foreslått sti under `krav/` og spør hvis den ikke er entydig. Mangler sti helt, spør om den (bruk `krav/krav-oversikt.md` for å hjelpe brukeren å finne riktig kapabilitet). Er input en liste med feature-filer eller en spesifikasjon fra FS Kravforvaltning, er filene gitt: hopp over dette.
+2. **List filene** under stien som matcher `**/*.feature` (eller bruk lista).
 3. **Filtrer** — se _Filter_ nedenfor.
 4. **Lagre råkopier** av filene som passerte under `<spec>/krav-input/local/<repo-relativ-sti>.feature` (samme stistruktur som i `krav/`), slik at spec-en er reproduserbar selv om kildefilene endres senere.
 5. **Skriv `<spec>/krav-input/manifest.md`**: kildemappe (repo-relativ), liste over filer som er med, hentet-tidspunkt, og — hvis Figma-skisser hentes — Figma-URL, `fileKey`/`nodeId`, hvilke artefakter som ble lagret og hvilke som ble hoppet over (med grunn). Manifestet speiler **gjeldende** scope; filer som ble filtrert bort nevnes ikke.
@@ -128,11 +136,13 @@ For `@planned`-deler i et `@implemented` krav retagges `Regel:`-/`Scenario:`-lin
 
 ## Skisser — kobling og validering
 
-Etter at kravene er hentet, spør (`AskUserQuestion`):
+En spesifikasjon skal ha minst én skisse, eller `Ingen skisse: <grunn>` under `## Skisser` (f.eks. «bare API», «batchjobb»). Uten det står den som utkast i FS Kravforvaltning. Står skissene allerede i spesifikasjonen (laget i vieweren), spør ikke på nytt: gå rett til henting og validering.
+
+Ellers, etter at kravene er hentet, spør (`AskUserQuestion`):
 
 > "Finnes det skisser (mockups, wireframes, Figma, bilder, PDF) for kravene i denne spec-en?"
 
-Options: **Ja** / **Nei**. `multiSelect: false`. "Other" som "vet ikke — sjekk Figma-prosjektet vårt" behandles som ja med oppfølgingsspørsmål.
+Options: **Ja** / **Nei**. `multiSelect: false`. "Other" som "vet ikke — sjekk Figma-prosjektet vårt" behandles som ja med oppfølgingsspørsmål. Ved **Nei**, spør hvorfor (kort), og skriv `Ingen skisse: <grunn>`.
 
 ### Hvis «Ja»
 
@@ -189,7 +199,7 @@ Les hver skisse (lokale filer og persisterte Figma-artefakter via `Read`) og sam
 
 Å kjøre skillen på nytt mot samme `<spec>/` er normalt. Resultatet er én stabil sti per artefakt:
 
-- **`spec-<feature>.md` skrives over på plass** — aldri `-v2`. Andre kan alltid peke på `tasks/<domene>/<slug>/spec/spec-<feature>.md` for gjeldende krav.
+- **`spec-<feature>.md` skrives over på plass** — aldri `-v2`. Andre kan alltid peke på `tasks/<domene>/<slug>/spec/spec-<feature>.md` for gjeldende krav. `## Omfang` og `## Rute` som finnes, beholdes (de kan være skrevet i FS Kravforvaltning). Skrives `## Omfang` for første gang, foreslå en tekst ut fra kravene og la brukeren bekrefte den.
 - **`krav-input/manifest.md` og `krav-input/local/…` overskrives** så de beskriver gjeldende scope.
 - **Figma-artefakter** på samme `<sketch-slug>` overskrives.
 - **Retaggen** er idempotent.
@@ -207,6 +217,10 @@ Bevisste unntak: **`spec.log.md`** er append-only, og **`questions-fs-specify-<d
 - **Kilde-mappe:** `krav/<…>`
 - **GitHub:** `#NNNN` (fra `# GitHub:`-linjene i kravfilene, klikkbare lenker til `sikt-no/fs`. Utelat linja hvis ingen kravfil har en)
 - **Hentet:** `<YYYY-MM-DD HH:MM>`
+
+## Omfang
+
+[2–5 setninger om hva spesifikasjonen dekker og ikke dekker. Vises på kortet i FS Kravforvaltning og i handoff-prompten til kode-repoene.]
 
 ## Krav
 
@@ -230,14 +244,14 @@ Bevisste unntak: **`spec.log.md`** er append-only, og **`questions-fs-specify-<d
 
 ## Skisser
 
-[Én underseksjon per skisse, eller «Ingen skisser registrert».]
+[Én underseksjon per skisse, eller linja `Ingen skisse: <grunn>`.]
 
 ### Skisse: `<tittel>`
 
 - **Type:** `figma` / `lokal-bilde` / `lokal-pdf` / `annet`
 - **Referanse:** [URL eller sti]
 - **Lagrede artefakter:** lenker til `screenshot.png`, `sub-frames/`, `design-context.md`, `variables.md`, `assets/` (utelat det som ikke ble hentet)
-- **Dekker krav:** `<feature-fil>` (scenario: `<scenario>` hvis spesifikt)
+- **Dekker krav:** `<feature-fil>` (scenario: `<scenario>` hvis spesifikt). Flere filer skilles med komma på samme linje; detaljer om hvilke deler av skissen som dekker hvilken fil, kan stå som underpunkter.
 - **Valideringsstatus:** `OK` / `Avvik: <beskrivelse>` / `Uavklart: <grunn>`
 - **Beslutning ved avvik:** `<valgt alternativ>` — `<begrunnelse>`
 
@@ -255,6 +269,12 @@ Bevisste unntak: **`spec.log.md`** er append-only, og **`questions-fs-specify-<d
 [Skisseavvik markert «vet ikke», uavklarte koblinger og andre kravmessige uklarheter. Kravspørsmål, ikke tekniske spørsmål.]
 
 - [ ] Spørsmål 1
+
+## Rute
+
+[Valgfri. Forslag til rekkefølgen på kode-repoene, f.eks. `fs-plattform → fs-admin` når kravene trenger API før skjermbilder, eller bare `fs-admin`. Brukeren endrer og sender i FS Kravforvaltning; ruta står da i `utforing.md` (se *Utføring* i `tasks/README.md`), og seksjonen fjernes.]
+
+fs-plattform → fs-admin
 ```
 
 ## Etter spec-en

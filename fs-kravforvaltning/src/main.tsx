@@ -15,6 +15,11 @@ import { MainBanner } from './MainBanner';
 import { bannerShown } from './mainStatus';
 import { MarkdownView, type MdMode } from './MarkdownView';
 import { Oppgaver, taskKey, type OView } from './Oppgaver';
+import { NEW_KEY, Spesifikasjoner } from './Spesifikasjoner';
+import { buildCards, colOf, handoffPrompt, type Card } from './specboard';
+import { whenClaudeReady } from './claudeBridge';
+import { useCodeDirs } from './CodeDirs';
+import { isSpecPath } from '../shared/paths';
 import { Outline } from './Outline';
 import { PrDialog, proposeDraft } from './PrDialog';
 import type { PrProposal } from './prProposal';
@@ -34,15 +39,16 @@ const initialTasks = boot.tasks;
 /**
  * Skillene Claude kan bruke i hver visning. Krav: fs-krav (standard), fs-krav-avvik og fs-verify. Avvik: fs-krav
  * (standard) og fs-krav-avvik.
- * I Oppgaver er ingen valgt på forhånd, og uten valg kan Claude bruke alle de fire. `codeDirs`: Claude
+ * I Spesifikasjoner og Oppgaver er ingen valgt på forhånd, og uten valg kan Claude bruke alle som er tillatt der. `codeDirs`: Claude
  * kan lese kodeklonene (fs-admin, fs-plattform), som fs-verify trenger.
  */
 const CLAUDE_SKILLS_BY_MODE: Record<Mode, { allowed: string[]; preselect: boolean; codeDirs: boolean }> = {
   krav: { allowed: ['fs-krav', 'fs-krav-avvik', 'fs-verify'], preselect: true, codeDirs: true },
   avvik: { allowed: ['fs-krav', 'fs-krav-avvik'], preselect: true, codeDirs: false },
+  spesifikasjoner: { allowed: ['fs-specify', 'fs-specify-delta', 'fs-verify'], preselect: false, codeDirs: true },
   oppgaver: { allowed: ['fs-krav', 'fs-specify', 'fs-specify-delta', 'fs-verify'], preselect: false, codeDirs: true },
 };
-const MODE_LABEL: Record<Mode, string> = { krav: 'Krav', avvik: 'Avvik', oppgaver: 'Oppgaver' };
+const MODE_LABEL: Record<Mode, string> = { krav: 'Krav', avvik: 'Avvik', spesifikasjoner: 'Spesifikasjoner', oppgaver: 'Oppgaver' };
 /** Hvorfor en skill ikke kan velges i `mode`: «brukes i Krav og Oppgaver, ikke i Avvik» */
 const skillHint = (mode: Mode) => (skill: string) => {
   const where = (Object.keys(CLAUDE_SKILLS_BY_MODE) as Mode[]).filter(m => CLAUDE_SKILLS_BY_MODE[m].allowed.includes(skill)).map(m => MODE_LABEL[m]);
@@ -110,7 +116,17 @@ interface OState {
   panel: boolean;
 }
 /** Oppgaver-modusen finnes bare når dev-serveren er startet med `--mode oppgaver` (eller `OPPGAVER=1`) */
-const OPPGAVER = initialTasks !== null;
+const OPPGAVER = !!initialTasks?.oppgaver;
+/** Spesifikasjoner finnes bare når dev-serveren er startet med `--mode spesifikasjoner` (eller `SPESIFIKASJONER=1`) */
+const SPESIFIKASJONER = !!initialTasks?.spesifikasjoner;
+/** Spesifikasjoner i hashen: `#/spesifikasjoner`, `#/spesifikasjoner/<dom>/<slug>/<fil>` (valgt kort), `#/spesifikasjoner/ny` */
+function parseSpecHash(h: string): { sel: string | null } | null {
+  if (!SPESIFIKASJONER) return null;
+  if (h !== 'spesifikasjoner' && !h.startsWith('spesifikasjoner/')) return null;
+  const rest = h.split('/').slice(1).filter(Boolean);
+  return { sel: rest.length >= 3 ? rest.slice(0, 3).join('/') : rest[0] === NEW_KEY ? NEW_KEY : null };
+}
+const specHash = (sel: string | null) => '#/spesifikasjoner' + (sel ? '/' + encodeURI(sel) : '');
 function parseOppgaverHash(h: string): OState | null {
   if (!OPPGAVER) return null;
   if (h !== 'oppgaver' && !h.startsWith('oppgaver/')) return null;
@@ -163,7 +179,10 @@ function App() {
   const [entries, setEntries] = useState<Snapshot>(initial);
   const [current, setCurrent] = useState(() => (initial[fromHash()] ? fromHash() : defaultPath(initial)));
   // #/avvik er avviksdashbordet, #/oppgaver… er oppgavene; alle andre hasher er en fil
-  const [mode, setMode] = useState<Mode>(() => (fromHash() === 'avvik' ? 'avvik' : parseOppgaverHash(fromHash()) ? 'oppgaver' : 'krav'));
+  const [mode, setMode] = useState<Mode>(() =>
+    fromHash() === 'avvik' ? 'avvik' : parseOppgaverHash(fromHash()) ? 'oppgaver' : parseSpecHash(fromHash()) ? 'spesifikasjoner' : 'krav',
+  );
+  const [specSel, setSpecSel] = useState<string | null>(() => parseSpecHash(fromHash())?.sel ?? null);
   const [tasksSnap, setTasksSnap] = useState<TasksSnapshot>(initialTasks ?? { domains: {}, tasks: [] });
   const [oState, setOState] = useState<OState>(() => parseOppgaverHash(fromHash()) ?? { view: 'tavle', sel: null, panel: false });
   const [avvikFilter, setAvvikFilter] = useState<Filter>(NO_FILTER);
@@ -197,8 +216,9 @@ function App() {
   const [git, setGit] = useState<GitInfo | null>(initialGit);
   const [connected, setConnected] = useState(transport.live);
   const [editing, setEditing] = useState(false);
-  // «Lag PR» i detaljvinduet: `false` er lukket, `null` åpnet fra sidebaren, en sti åpnet fra fila (som da er valgt)
-  const [prFor, setPrFor] = useState<string | null | false>(false);
+  // «Lag PR» i detaljvinduet: `false` er lukket, `null` åpnet fra sidebaren, en sti åpnet fra fila (som da er valgt),
+  // eller filene under tasks/ som er endret i Spesifikasjoner
+  const [prFor, setPrFor] = useState<string | string[] | null | false>(false);
   // Øker for hvert PR-forslag fra Claude, så «Lag PR» monteres på nytt og leser det nye utkastet
   const [prSeq, setPrSeq] = useState(0);
   // Editoren lagrer ulagrede endringer før brukeren går til en annen fil eller visning
@@ -215,6 +235,13 @@ function App() {
   const nBad = useMemo(() => Object.values(entries).filter(e => e.kind === 'feature' && e.path.startsWith('krav/') && e.lint).length, [entries]);
   const tasks = useMemo(() => buildTasks(tasksSnap), [tasksSnap]);
   const nActive = tasks.filter(t => t.p < 4).length;
+  const specCards = useMemo(() => (SPESIFIKASJONER ? buildCards(tasksSnap, entries) : []), [tasksSnap, entries]);
+  const nSpecs = specCards.filter(c => colOf(c) !== 'verifisert').length;
+  // Hvem som står i loggen i utforing.md: GitHub-brukeren når den er kjent
+  const [me, setMe] = useState('vieweren');
+  useEffect(() => {
+    if (EDITABLE) transport.call('authStatus').then(a => a.state === 'ok' && a.login && setMe('@' + a.login), () => {});
+  }, []);
 
   useEffect(() => {
     document.documentElement.dataset.theme = theme;
@@ -242,7 +269,7 @@ function App() {
     setFind({ q: '', cur: 0, closed: {} });
   }, [current]);
   // Husk hvor brukeren er, til neste gang vieweren åpnes uten hash
-  useEffect(() => save('hash', location.hash), [current, mode, oState]);
+  useEffect(() => save('hash', location.hash), [current, mode, oState, specSel]);
 
   // Følg markøren i VS Code: scroll til regelen/scenarioet som inneholder linjen
   useEffect(() => {
@@ -354,7 +381,12 @@ function App() {
     const onHash = () => {
       const p = fromHash();
       const o = parseOppgaverHash(p);
+      const sp = parseSpecHash(p);
       if (p === 'avvik') setMode('avvik');
+      else if (sp) {
+        setMode('spesifikasjoner');
+        setSpecSel(sp.sel);
+      }
       else if (o) {
         setMode('oppgaver');
         setOState(o);
@@ -559,6 +591,9 @@ function App() {
     } else if (m === 'oppgaver') {
       setMode('oppgaver');
       history.pushState(null, '', oppgaverHash(oState));
+    } else if (m === 'spesifikasjoner') {
+      setMode('spesifikasjoner');
+      history.pushState(null, '', specHash(specSel));
     } else if (mode === 'avvik' && avvikFilter.file && entries[avvikFilter.file]) select(avvikFilter.file); // fila som er valgt i dashbordet
     else {
       setMode('krav');
@@ -580,6 +615,32 @@ function App() {
     }
     setPrSeq(n => n + 1);
     setPrFor(null);
+  };
+  const selectSpec = (sel: string | null) => {
+    setSpecSel(sel);
+    history.pushState(null, '', specHash(sel));
+  };
+  // Filene under tasks/ som er endret (spesifikasjonene og utforing.md), til «N endret · ikke merget» og «Lag PR»
+  const specDirty = git ? [...new Set([...git.uncommitted, ...git.committed].map(c => c.path).filter(isSpecPath))] : [];
+  // «Utfør i <repo>»: utførekjøring i Claude-panelet, i den lokale klonen av repoet (Kodemapper i panelet)
+  const codeDirList = useCodeDirs();
+  const repoDir = (repo: string) => codeDirList?.find(d => d.name === repo && d.exists)?.path ?? null;
+  const execute = async (c: Card, repo: string) => {
+    const dir = repoDir(repo);
+    if (!dir) return;
+    setClaudeOpen(true);
+    const target = await whenClaudeReady();
+    if (!target) return alert('Claude-panelet svarte ikke. Åpne det og prøv igjen.');
+    await target.execute(handoffPrompt(c, repo), { repo, dir, spec: c.path }, `Utfør: ${c.doc.title || c.file} i ${repo}`);
+  };
+  const executeWhy = !claude?.available
+    ? 'Fant ikke Claude Code på maskinen: kopier prompten til en økt i repoet'
+    : 'Velg den lokale klonen av repoet under «Kodemapper» i Claude-panelet, eller kopier prompten';
+  const specPr = async () => {
+    if (!git || !specDirty.length) return;
+    setMode('krav');
+    history.pushState(null, '', '#/' + encodeURI(current));
+    setPrFor(specDirty);
   };
   const setOppgaver = (o: OState) => {
     setOState(o);
@@ -611,9 +672,11 @@ function App() {
   const claudeSkills = CLAUDE_SKILLS_BY_MODE[mode];
   // I Oppgaver: oppgaven som er valgt (mappa, eller panelet i tavla), ikke en tilfeldig i tavla
   const claudeTask = oState.view === 'mappe' || oState.panel ? shownTask : undefined;
+  const specCard = mode === 'spesifikasjoner' ? specCards.find(c => c.key === specSel) : undefined;
   const claudePath =
     mode === 'krav' ? (entry ? current : null)
     : mode === 'avvik' ? (avvikFilter.file ?? null)
+    : mode === 'spesifikasjoner' ? (specCard?.path ?? null)
     : claudeTask ? `tasks/${claudeTask.dom}/${claudeTask.slug}` : null;
 
   return (
@@ -643,6 +706,9 @@ function App() {
         oView={oState.view}
         onOView={view => setOppgaver({ ...oState, view, sel: oState.sel ?? (shownTask ? taskKey(shownTask) : null) })}
         oCrumbs={oCrumbs}
+        spesifikasjoner={SPESIFIKASJONER}
+        nSpecs={nSpecs}
+        specState={{ ro: !EDITABLE, dirty: specDirty.length, onPr: EDITABLE && git ? specPr : null }}
         claude={claude ? claudeOpen : null}
         onClaude={() => setClaudeOpen(o => !o)}
         onUpdate={mainStatus?.behind ? pull : null}
@@ -654,7 +720,19 @@ function App() {
         // Et smalere vindu enn sist: panelet tar aldri mer enn 70 % av bredden
         style={claudeShown ? { '--claude-w': `min(${claudeWidth}px, 70vw)` } : undefined}
       >
-        {mode === 'oppgaver' ? (
+        {mode === 'spesifikasjoner' ? (
+          <Spesifikasjoner
+            snap={tasksSnap}
+            entries={entries}
+            git={git}
+            editable={EDITABLE}
+            sel={specSel}
+            onSel={selectSpec}
+            onOpenKrav={path => select(path)}
+            me={me}
+            actions={{ execute: claude?.available ? execute : null, executeWhy, canExecute: repo => !!claude?.available && !!repoDir(repo) }}
+          />
+        ) : mode === 'oppgaver' ? (
           <Oppgaver
             tasks={tasks}
             entries={entries}

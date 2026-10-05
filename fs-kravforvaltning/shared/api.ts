@@ -59,6 +59,21 @@ export interface ClaudeRunRequest {
   invoke?: boolean;
   /** Andre skills vieweren kjenner fra før (plugins, personlige), så de kan avvises også før Claude har meldt dem */
   knownSkills?: string[];
+  /**
+   * Utførekjøring (Spesifikasjoner, «Utfør i <repo>»): Claude kjører med kode-repoet som arbeidsmappe, med repoets
+   * skills og CLAUDE.md, kan endre koden der og kjøre en avgrenset liste kommandoer. Kravrepoet får `--add-dir`, og
+   * bare utforing.md kan endres i det. `skill`, `skills` og `dirs` brukes ikke da.
+   */
+  target?: ExecuteTarget | null;
+}
+
+export interface ExecuteTarget {
+  /** Navnet på repoet: `fs-plattform` */
+  repo: string;
+  /** Absolutt sti til den lokale klonen */
+  dir: string;
+  /** Spesifikasjonen som utføres, relativt til kravrepoet */
+  spec: string;
 }
 
 /** Skillene som kan velges i Claude-panelet; høyst én om gangen */

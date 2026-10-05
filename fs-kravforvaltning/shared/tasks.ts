@@ -7,14 +7,23 @@ export interface RawTask {
   slug: string;
   /** Alle filer i mappa, relativt til mappa (`frontend/plan-x.md`) */
   files: string[];
-  /** Innholdet i `oppgave.md` og `reviews/*.md`, og boks-linjene i `<lag>/plan-*.md`, nøklet på relativ sti */
+  /**
+   * Innholdet i `oppgave.md`, `reviews/*.md`, `utforing.md` og `spec/spec-*.md` / `spec/verify-*.md`,
+   * og boks-linjene i `<lag>/plan-*.md`, nøklet på relativ sti
+   */
   sources: Record<string, string>;
+  /** Endringstidspunkt (ms) for spesifikasjonene, til «spec endret etter at den ble sendt» */
+  mtimes?: Record<string, number>;
 }
 
 export interface TasksSnapshot {
   /** Domenemappene under tasks/, med innholdet i roadmap.md (null hvis den mangler) */
   domains: Record<string, string | null>;
   tasks: RawTask[];
+  /** Oppgaver-modusen er slått på (`--mode oppgaver` eller `OPPGAVER=1`) */
+  oppgaver?: boolean;
+  /** Spesifikasjoner-modusen er slått på (`--mode spesifikasjoner` eller `SPESIFIKASJONER=1`) */
+  spesifikasjoner?: boolean;
 }
 
 export const PHASES = ['prioritert', 'utforskning', 'utvikling', 'innføring', 'levert'] as const;

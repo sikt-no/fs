@@ -8,7 +8,7 @@ import { createApi, dispatch } from '../core/api.ts';
 import { createAuth, type TokenStore } from '../core/auth.ts';
 import { ClaudeRunner } from '../core/claude.ts';
 import { ensureClone, isoVcs } from '../core/vcs-isogit.ts';
-import { Workspace, type WorkspaceEvent } from '../core/workspace.ts';
+import { modeOn, Workspace, type WorkspaceEvent } from '../core/workspace.ts';
 
 /**
  * Desktop-appen (FS Kravforvaltning): vieweren med redigering og PR, uten at git må være installert.
@@ -23,6 +23,7 @@ import { Workspace, type WorkspaceEvent } from '../core/workspace.ts';
  * - `KRAV_REPO_URL`: repoet som klones (standard https://github.com/sikt-no/fs.git)
  * - `KRAV_GITHUB_CLIENT_ID`: OAuth-appen for device flow (kan også bakes inn ved bygg med MAIN_VITE_KRAV_GITHUB_CLIENT_ID)
  * - `OPPGAVER=1`: vis Oppgaver-modusen (eller bygg/start med `--mode oppgaver`, f.eks. `npm run app:dev:oppgaver`)
+ * - `SPESIFIKASJONER=1`: vis Spesifikasjoner (eller `--mode spesifikasjoner`, f.eks. `npm run app:dev:spesifikasjoner`; begge: `--mode oppgaver+spesifikasjoner`)
  * - `KRAV_CLAUDE_PATH`: stien til `claude`, hvis den ikke finnes på vanlige steder
  */
 
@@ -65,7 +66,8 @@ const ready = (async () => {
     send('krav:progress', 'Henter kravene fra GitHub …');
     await ensureClone(dir, REPO_URL, await store.get(), msg => send('krav:progress', `Henter kravene fra GitHub: ${msg}`));
   }
-  const ws = new Workspace(dir, isoVcs(dir), { oppgaver: import.meta.env.MODE === 'oppgaver' || process.env.OPPGAVER === '1' });
+  const mode = import.meta.env.MODE;
+  const ws = new Workspace(dir, isoVcs(dir), { oppgaver: modeOn(mode, 'oppgaver'), spesifikasjoner: modeOn(mode, 'spesifikasjoner') });
   await ws.readAll();
   for (const event of ['krav:update', 'krav:git', 'krav:tasks'] as WorkspaceEvent[]) ws.on(event, data => send(event, data));
   ws.watch();

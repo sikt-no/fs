@@ -2,10 +2,13 @@
 // og andre visninger kan da sende en prompt rett inn i samtalen som er åpen (Avvik, Oppgaver),
 // eller legge tekst i inputfeltet (markert tekst i feature-visningen).
 import { useEffect, useState } from 'preact/hooks';
+import type { ExecuteTarget } from '../shared/api';
 
 interface Target {
   /** Sender teksten som ny melding i samtalen som er åpen */
   send: (text: string) => Promise<void>;
+  /** Starter en ny samtale som utførekjøring i kode-repoet, med teksten som første melding */
+  execute: (text: string, target: ExecuteTarget, title: string) => Promise<void>;
   /** Legger teksten til i inputfeltet; brukeren sender selv */
   insert: (text: string) => void;
 }
@@ -19,6 +22,24 @@ const changed = () => listeners.forEach(l => l());
 export function registerClaude(s: Target | null) {
   sender = s;
   changed();
+}
+
+/** Venter (høyst `ms`) på at panelet har meldt seg på, f.eks. rett etter at det er åpnet */
+export function whenClaudeReady(ms = 3000): Promise<Target | null> {
+  if (sender) return Promise.resolve(sender);
+  return new Promise(ok => {
+    const l = () => {
+      if (!sender) return;
+      listeners.delete(l);
+      clearTimeout(t);
+      ok(sender);
+    };
+    const t = setTimeout(() => {
+      listeners.delete(l);
+      ok(null);
+    }, ms);
+    listeners.add(l);
+  });
 }
 
 /** Panelet melder om Claude jobber i samtalen som er åpen */
@@ -40,6 +61,7 @@ export function useClaudeTarget() {
     ready: sender !== null,
     busy,
     send: (text: string) => (sender ? sender.send(text) : Promise.resolve()),
+    execute: (text: string, target: ExecuteTarget, title: string) => (sender ? sender.execute(text, target, title) : Promise.resolve()),
     insert: (text: string) => sender?.insert(text),
   };
 }
