@@ -32,22 +32,22 @@ Egenskap: Se detaljer for applikasjon
       Gitt applikasjonen har en ekstern ID fra identitetsleverandøren
       Så ser jeg den eksterne ID-en
 
-    @planned
-    Scenario: Se Service-ID for Feide-applikasjon
+    @in-progress
+    Scenario: Se Tjeneste-ID for Feide-applikasjon
       Gitt applikasjonen har Feide som identitetsleverandør
-      Så ser jeg applikasjonens Service-ID
+      Så ser jeg applikasjonens Tjeneste-ID
 
-    @planned
+    @in-progress
     Scenario: Se Client-ID for Maskinporten-applikasjon
       Gitt applikasjonen har Maskinporten som identitetsleverandør
       Så ser jeg applikasjonens Client-ID
 
-    @planned
+    @in-progress
     Scenario: Se konsument sin virksomhetsidentifikator for Maskinporten-applikasjon
       Gitt applikasjonen har Maskinporten som identitetsleverandør
       Så ser jeg konsument sin virksomhetsidentifikator
 
-    @planned
+    @in-progress
     Scenario: Se brukernavn for FS-applikasjon
       Gitt applikasjonen har FS som identitetsleverandør
       Så ser jeg applikasjonens brukernavn
