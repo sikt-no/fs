@@ -5,7 +5,7 @@ import git, { TREE, type TreeEntry } from 'isomorphic-git';
 import http from 'isomorphic-git/http/node';
 import type { PublishRequest, PublishResult } from '../shared/api.ts';
 import type { GitChange, GitCode, GitInfo } from '../shared/model.ts';
-import { isEditablePath } from '../shared/paths.ts';
+import { isEditablePath, isSketchPath } from '../shared/paths.ts';
 import { branchName, checkPaths, githubCompare, githubPr, type CompareMain, type OpenPr, type Vcs } from './vcs.ts';
 
 const isKravFile = isEditablePath;
@@ -56,7 +56,8 @@ export function isoVcs(dir: string, opts: { openPr?: OpenPr; compare?: CompareMa
         const [oa, ob] = [await a?.oid(), await b?.oid()];
         if (oa === ob) return null;
         const code: GitCode = !oa ? 'A' : !ob ? 'D' : 'M';
-        const [plus, minus] = lineStats(oa ? await blobText(oa) : '', ob ? await blobText(ob) : '');
+        // Skisser er bilder: ingen linjer å telle
+        const [plus, minus] = isSketchPath(path) ? [0, 0] : lineStats(oa ? await blobText(oa) : '', ob ? await blobText(ob) : '');
         out.push({ path, code, plus, minus });
         return null;
       },
@@ -72,6 +73,10 @@ export function isoVcs(dir: string, opts: { openPr?: OpenPr; compare?: CompareMa
     for (const [path, h, w, s] of rows) {
       if (h === 1 && w === 1 && s === 1) continue; // uendret
       const code: GitCode = h === 0 ? (s === 0 ? 'U' : 'A') : w === 0 ? 'D' : 'M';
+      if (isSketchPath(path)) {
+        out.push({ path, code, plus: 0, minus: 0 }); // et bilde: statusMatrix har alt sammenlignet innholdet
+        continue;
+      }
       const before = h ? await git.readBlob({ fs, dir, oid: head, filepath: path, cache }).then(r => new TextDecoder().decode(r.blob)) : '';
       const after = w ? await readFile(join(dir, path), 'utf8').catch(() => '') : '';
       const [plus, minus] = lineStats(before, after);

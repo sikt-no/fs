@@ -28,6 +28,7 @@ I Claude-panelet i FS Kravforvaltning har du ikke Bash eller AskUserQuestion:
 - Still spørsmålene i svaret, og vent på brukeren.
 - Du kan ikke slette filer. Skal en `@deprecated`-fil slettes, si hvilken, så sletter brukeren den selv. Blokker fjernes med `Edit`.
 - Lesende git går ikke. Bruk `Grep` og `Glob` i klonene.
+- Skjermbilder tas med chrome-devtools-MCP, og hvert kall må godkjennes i panelet (se *Skjermbilder*).
 
 ## Finn scope og kode (gjør dette FØRST)
 
@@ -80,6 +81,20 @@ Ett krav om gangen:
 5. **Retagg `@in-progress` → `@implemented`** bare når gating-settet ikke er tomt, **alle** gating-scenarioer er `funnet`, brukeren svarte **Stemmer**, og ingen `@openquestion` står igjen i fila. Én `Edit` på `Egenskap:`-tag-linja; bare statustaggen byttes: `@OPT-SOK-VIS-001 @must @in-progress` → `@OPT-SOK-VIS-001 @must @implemented`. `@draft`- og `@deprecated`-deler står urørt.
 
 Ellers står kravet som `@in-progress`, og det som mangler, kommer i rapporten.
+
+### Skjermbilder
+
+Skjermbilder av appen som kjører, er ekstra bevis for scenarioer som har en skjerm (lister, skjemaer, detaljsider). De erstatter ikke `fil:linje`: et scenario er fortsatt `funnet` bare når du har lest koden.
+
+1. **Spør om adressen** til appen som kjører (f.eks. fs-admin lokalt eller i et testmiljø), én gang per kjøring. Oppgir brukeren ingen, hopp over skjermbildene og si det i rapporten.
+2. **Bruk chrome-devtools-MCP** (verktøy som `new_page`/`navigate_page` og `take_screenshot`). Finnes den ikke, si at brukeren må legge den til og starte den én gang med den lokale Claude Code-CLI-en i terminalen: `claude mcp add --scope user chrome-devtools -- npx chrome-devtools-mcp@latest`. Bruk navnet `chrome-devtools`, for det er navnet FS Kravforvaltning tar med. Gå videre uten skjermbilder. Avviser brukeren et kall, prøv ikke igjen uten å spørre. Krever appen innlogging, be brukeren logge inn i nettleservinduet chrome-devtools åpner, og vent.
+3. **Ta ett skjermbilde per scenario** som har en skjerm. Gjør det som står i `Gitt`/`Når` så langt det går uten å endre data, og ta bildet av det `Så` beskriver. Endrer et scenario data (opprette, endre, slette), ta bare bildet av skjemaet eller siden før handlingen, og si det.
+4. **Lagre bildet** når en oppgave er gitt, som `<oppgave>/spec/verify-<YYYY-MM-DD>/<NN>-<scenario-kebab>.png` (`NN` = to sifre, samme dato og `-2`-suffiks som rapporten):
+   - I FS Kravforvaltning: `take_screenshot` uten `filePath`, og rett etter `mcp__kravforvaltning__save_sketch` med `path` (uten `tool_use_id` lagres det siste bildet).
+   - I terminalen: `take_screenshot` med `filePath` satt til stien.
+
+   Uten oppgave lagres ingenting. Vis bildet i chat og si hva det viser.
+5. **Lenk bildet** fra `Bevis`-kolonnen i `## Scenarioer`, etter `fil:linje`: `` `<repo>/<fil>:<linje>` · [skjermbilde](verify-<YYYY-MM-DD>/<NN>-<scenario-kebab>.png) ``. Viser skjermbildet noe annet enn scenarioet sier, er scenarioet `usikker`, og avviket står i beviset.
 
 ### Deler i leverte krav som endres
 

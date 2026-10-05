@@ -55,7 +55,8 @@ export function kravPlugin(repoRoot: string, opts: WorkspaceOpts = {}): Plugin {
     },
 
     configureServer(server) {
-      const claude = new ClaudeRunner(repoRoot);
+      // Filene Claude skriver under tasks/ (spec/, skisser) skal vises i «Endringer» også uten Oppgaver og Spesifikasjoner
+      const claude = new ClaudeRunner(repoRoot, { onSaved: () => ws.refreshGit(), onDone: () => ws.refreshGit() });
       const api = createApi(ws, createAuth({ clientId: process.env.KRAV_GITHUB_CLIENT_ID, store: memoryStore(), useGh: true }), claude);
       claude.on(data => server.ws.send({ type: 'custom', event: 'krav:claude', data }));
       server.watcher.add(ws.kravDir);

@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'preact/hooks';
 import type { ClaudeEvent, ClaudeStatus, ExecuteTarget } from '../shared/api';
 import type { GitChange, Snapshot } from '../shared/model';
+import { isEditablePath } from '../shared/paths';
 import {
   applyEvent,
   contextLabel,
@@ -17,8 +18,12 @@ import {
   send,
   staleSkills,
   started,
-  TOOL_LABEL,
+  toolLabel,
+  allowAlways,
+  needsAuth,
+  pendingPermissions,
   updateConversation,
+  type ChatItem,
   type ChatPreset,
   type Conversations,
 } from './claudeChat';
@@ -74,7 +79,71 @@ const set = (next: Conversations) => {
   listeners.forEach(l => l());
 };
 if (transport.kind !== 'static') {
-  transport.call('claudeActive').then(active => set(restoreConversations(convs, active)), () => {});
+  transport
+    .call('claudeActive')
+    .then(active => {
+      set(restoreConversations(convs, active));
+      // Spørsmål om lov som venter i backenden, får kortet tilbake etter en omlasting
+      return transport.call('claudePending');
+    })
+    .then(list => {
+      for (const { runId, event } of list) {
+        const next = applyEvent(convs, runId, event, Date.now(), skillHashes());
+        if (next) set(next);
+      }
+    }, () => {});
+}
+
+/** Svarer på et spørsmål om lov. «Tillat alltid» lagres på samtalen, så verktøyet tillates også i de neste meldingene. */
+function answerPermission(convId: string, item: Extract<ChatItem, { kind: 'permission' }>, behavior: 'allow' | 'deny', always = false, reason: 'user' | 'closed' = 'user') {
+  if (always) set(updateConversation(convs, convId, ch => allowAlways(ch, item.tool), Date.now()));
+  return transport.call('claudeApprove', { id: item.id, behavior, always, reason }).catch(() => false);
+}
+
+/** Panelet lukkes: spørsmålene som venter, avvises, så Claude ikke venter til tiden går ut */
+function denyAllPending() {
+  for (const conv of convs.list) for (const p of pendingPermissions(conv.chat)) void answerPermission(conv.id, p, 'deny', false, 'closed');
+}
+
+const PERMISSION_STATE: Record<Exclude<Extract<ChatItem, { kind: 'permission' }>['state'], 'pending'>, string> = {
+  allowed: 'Tillatt',
+  denied: 'Avvist',
+  timeout: 'Avvist: ingen svar innen 5 minutter',
+  closed: 'Avvist: panelet ble lukket',
+  ended: 'Avvist: kjøringen ble avsluttet',
+};
+
+/** Kortet «Claude vil bruke <verktøy>», med parametrene og «Tillat», «Tillat alltid i denne samtalen» og «Avvis» */
+function PermissionCard({ convId, item }: { convId: string; item: Extract<ChatItem, { kind: 'permission' }> }) {
+  const params = Object.entries(item.input);
+  const pending = item.state === 'pending';
+  return (
+    <div class={'cperm' + (pending ? '' : ' answered ' + item.state)} role={pending ? 'alertdialog' : undefined} aria-label={`Claude vil bruke ${toolLabel(item.tool)}`}>
+      <div class="cperm-head">
+        Claude vil bruke <b>{toolLabel(item.tool)}</b>
+        <span class="mono muted cperm-tool">{item.tool}</span>
+      </div>
+      {params.length > 0 && (
+        <dl class="cperm-params mono">
+          {params.map(([k, v]) => (
+            <div key={k}>
+              <dt>{k}</dt>
+              <dd title={v}>{v}</dd>
+            </div>
+          ))}
+        </dl>
+      )}
+      {pending ? (
+        <div class="cperm-btns">
+          <button class="primbtn" onClick={() => void answerPermission(convId, item, 'allow')}>Tillat</button>
+          <button class="smallbtn" onClick={() => void answerPermission(convId, item, 'allow', true)}>Tillat alltid i denne samtalen</button>
+          <button class="smallbtn" onClick={() => void answerPermission(convId, item, 'deny')}>Avvis</button>
+        </div>
+      ) : (
+        <div class="cperm-state muted">{item.state !== 'pending' && PERMISSION_STATE[item.state]}</div>
+      )}
+    </div>
+  );
 }
 addEventListener('beforeunload', () => {
   clearTimeout(saveTimer);
@@ -263,6 +332,11 @@ export function ClaudePanel({ status, width, onWidth, allowedSkills: modeSkills,
   const mentionKey = mention.mentions.join('\n');
   useEffect(() => saveDraft({ text: input, mentions: mention.mentions, excluded, pending }), [input, mentionKey, excluded, pending]);
 
+  // Lukkes panelet, avvises spørsmålene som venter
+  useEffect(() => denyAllPending, []);
+  const auth = needsAuth(c);
+  const edited = editedFiles(c).filter(isEditablePath);
+
   useEffect(() => {
     const el = list.current;
     if (el) el.scrollTop = el.scrollHeight;
@@ -293,7 +367,7 @@ export function ClaudePanel({ status, width, onWidth, allowedSkills: modeSkills,
       const { runId } = await transport.call(
         'claudeRun',
         before.target
-          ? { prompt: text, sessionId: before.sessionId, path: sentPath, mentions, target: before.target }
+          ? { prompt: text, sessionId: before.sessionId, path: sentPath, mentions, target: before.target, allowTools: before.alwaysAllowed }
           : {
               prompt: text,
               sessionId: before.sessionId,
@@ -304,6 +378,7 @@ export function ClaudePanel({ status, width, onWidth, allowedSkills: modeSkills,
               invoke,
               knownSkills: knownSkills(),
               dirs: codeDirs ? await codeDirPaths() : [],
+              allowTools: before.alwaysAllowed,
             },
       );
       set(updateConversation(convs, target, ch => started(ch, runId), Date.now()));
@@ -543,13 +618,15 @@ export function ClaudePanel({ status, width, onWidth, allowedSkills: modeSkills,
               ) : i.kind === 'tool' ? (
                 <div key={n} class={'ctool ' + i.state}>
                   <span class="cdot" />
-                  <span>{TOOL_LABEL[i.name] ?? i.name}</span>
+                  <span>{toolLabel(i.name)}</span>
                   {i.summary.startsWith('krav/') && (i.name === 'Read' || i.name === 'Edit' || i.name === 'Write') ? (
                     <button class="linkbtn mono" onClick={() => onOpen(i.summary)} title={i.summary}>{fileName(i.summary)}</button>
                   ) : (
                     <span class="mono muted" title={i.summary}>{i.summary}</span>
                   )}
                 </div>
+              ) : i.kind === 'permission' ? (
+                <PermissionCard key={i.id} convId={conv!.id} item={i} />
               ) : (
                 <div key={n} class={'cdone' + (i.ok ? '' : ' err')}>{i.text}</div>
               ),
@@ -557,12 +634,17 @@ export function ClaudePanel({ status, width, onWidth, allowedSkills: modeSkills,
             {running && <div class="cdone muted">Claude jobber …</div>}
           </div>
 
-          {c.touched.length > 0 && (
+          {/* Kravene, og det fs-specify og fs-verify skriver i oppgavemappa (spec/, utforing.md), kan sendes med «Lag PR» */}
+          {edited.length > 0 && (
             <div class="ctouched">
               <span class="muted">Endret i samtalen:</span>
-              {c.touched.map(p => (
-                <button key={p} class="linkbtn mono" onClick={() => onOpen(p)} title={p}>{fileName(p)}</button>
-              ))}
+              {edited.map(p =>
+                has(p) ? (
+                  <button key={p} class="linkbtn mono" onClick={() => onOpen(p)} title={p}>{fileName(p)}</button>
+                ) : (
+                  <span key={p} class="mono muted" title={p}>{fileName(p)}</span>
+                ),
+              )}
               {onPr && (
                 <button class="smallbtn ctouched-pr" disabled={running} onClick={() => void sendText(PR_PROMPT, [], 'pr')}>
                   Lag forslag til PR
@@ -593,6 +675,20 @@ export function ClaudePanel({ status, width, onWidth, allowedSkills: modeSkills,
                 <button class="smallbtn" onClick={() => continueIn()}>
                   Ny samtale
                 </button>
+              </div>
+            </div>
+          )}
+          {auth.length > 0 && (
+            <div class="cstale compact" role="status">
+              <span class="cstale-tri" aria-hidden="true" />
+              <div class="cstale-text">
+                {auth.map((n, j) => (
+                  <span key={n}>
+                    {j > 0 && ', '}
+                    <b class="mono">{n}</b>
+                  </span>
+                ))}{' '}
+                er ikke logget inn. Kjør <code>claude</code> i terminalen og <code>/mcp</code> én gang for å logge inn; det kan ikke gjøres herfra.
               </div>
             </div>
           )}

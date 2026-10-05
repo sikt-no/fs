@@ -1,5 +1,5 @@
 // Samtalen i Claude-panelet. Rene funksjoner over hendelsene fra core/claude.ts, så de kan testes med node --test.
-import type { ClaudeEvent, ExecuteTarget } from '../shared/api.ts';
+import type { ClaudeEvent, ClaudeMcpServer, ExecuteTarget } from '../shared/api.ts';
 
 export type ChatPreset = 'summary' | 'pr';
 
@@ -8,7 +8,12 @@ export type ChatItem =
   | { kind: 'user'; text: string; path: string | null; skill?: string | null; mentions?: string[]; preset?: ChatPreset }
   | { kind: 'assistant'; text: string }
   | { kind: 'tool'; id: string; name: string; summary: string; state: 'running' | 'ok' | 'error' }
-  | { kind: 'done'; ok: boolean; text: string };
+  | { kind: 'done'; ok: boolean; text: string }
+  /** Claude vil bruke et verktøy som må godkjennes (`mcp__*`, WebFetch): kortet med «Tillat», «Tillat alltid» og «Avvis» */
+  | { kind: 'permission'; id: string; tool: string; input: Record<string, string>; state: PermissionState };
+
+/** `pending`: venter på brukeren. `timeout`, `closed`, `ended`: avvist fordi tiden gikk ut, panelet ble lukket eller kjøringen sluttet */
+export type PermissionState = 'pending' | 'allowed' | 'denied' | 'timeout' | 'closed' | 'ended';
 
 export interface Chat {
   items: ChatItem[];
@@ -35,6 +40,10 @@ export interface Chat {
   continuesFrom: string | null;
   /** Utførekjøring fra Spesifikasjoner («Utfør i <repo>»): Claude kjører i kode-repoet. Mangler i eldre samtaler. */
   target?: ExecuteTarget | null;
+  /** «Tillat alltid i denne samtalen»: verktøyene som sendes som `allowTools` og ikke spørres om igjen */
+  alwaysAllowed: string[];
+  /** MCP-serverne fra siste init, og om de er koblet til */
+  mcp: ClaudeMcpServer[];
 }
 
 export const EMPTY_CHAT: Chat = {
@@ -48,6 +57,8 @@ export const EMPTY_CHAT: Chat = {
   context: null,
   loadedVersions: {},
   continuesFrom: null,
+  alwaysAllowed: [],
+  mcp: [],
 };
 
 /** Versjonen av hver skill på disk, fra `claudeSkills` */
@@ -113,7 +124,7 @@ export function started(chat: Chat, runId: string): Chat {
   return { ...chat, runId };
 }
 
-const EDIT_TOOLS = ['Edit', 'Write', 'MultiEdit', 'NotebookEdit'];
+const EDIT_TOOLS = ['Edit', 'Write', 'MultiEdit', 'NotebookEdit', 'mcp__kravforvaltning__save_sketch'];
 
 /** En sti fra et verktøykall, relativ til repoet: `/…/repo/tasks/x.md` → `tasks/x.md` */
 const repoRelative = (p: string) => p.replace(/^.*?\/((?:krav|tasks)\/)/, '$1').replace(/^\.?\//, '');
@@ -140,7 +151,14 @@ export function apply(chat: Chat, runId: string, ev: ClaudeEvent, hashes: SkillH
   if (runId !== chat.runId) return chat;
   switch (ev.kind) {
     case 'init':
-      return { ...chat, sessionId: ev.sessionId };
+      return { ...chat, sessionId: ev.sessionId, mcp: ev.mcp ?? chat.mcp };
+    case 'permission':
+      if (chat.items.some(i => i.kind === 'permission' && i.id === ev.id)) return chat;
+      return { ...chat, items: [...chat.items, { kind: 'permission', id: ev.id, tool: ev.tool, input: ev.input, state: 'pending' }] };
+    case 'permissionDone': {
+      const state: PermissionState = ev.behavior === 'allow' ? 'allowed' : ev.reason === 'user' ? 'denied' : ev.reason;
+      return { ...chat, items: chat.items.map(i => (i.kind === 'permission' && i.id === ev.id ? { ...i, state } : i)) };
+    }
     case 'text':
       return { ...chat, items: [...chat.items, { kind: 'assistant', text: ev.text }] };
     case 'tool': {
@@ -164,11 +182,29 @@ export function apply(chat: Chat, runId: string, ev: ClaudeEvent, hashes: SkillH
       const secs = ev.durationMs != null ? ` · ${(ev.durationMs / 1000).toFixed(1)} s` : '';
       const text = ev.ok ? `Ferdig${ev.turns != null ? ` · ${ev.turns} steg` : ''}${secs}` : ev.error ?? 'Feil';
       // Verktøy som aldri fikk svar (avbrutt eller feil) er ikke lenger i gang
-      const items = chat.items.map(i => (i.kind === 'tool' && i.state === 'running' ? { ...i, state: ev.ok ? 'ok' : 'error' } as ChatItem : i));
+      const items = endPending(chat.items.map(i => (i.kind === 'tool' && i.state === 'running' ? { ...i, state: ev.ok ? 'ok' : 'error' } as ChatItem : i)));
       const context = chat.context && ev.contextWindow ? { ...chat.context, window: ev.contextWindow } : chat.context;
       return { ...chat, runId: null, context, sessionId: ev.sessionId ?? chat.sessionId, items: [...items, { kind: 'done', ok: ev.ok, text }] };
     }
   }
+}
+
+/** Spørsmål om lov som fortsatt venter, når kjøringen er over, er avvist av backenden */
+const endPending = (items: ChatItem[]) => items.map(i => (i.kind === 'permission' && i.state === 'pending' ? ({ ...i, state: 'ended' } as ChatItem) : i));
+
+/** Spørsmålene om lov i samtalen som venter på brukeren */
+export function pendingPermissions(chat: Chat): Extract<ChatItem, { kind: 'permission' }>[] {
+  return chat.items.filter((i): i is Extract<ChatItem, { kind: 'permission' }> => i.kind === 'permission' && i.state === 'pending');
+}
+
+/** «Tillat alltid i denne samtalen»: verktøyet sendes som `allowTools` med de neste meldingene */
+export function allowAlways(chat: Chat, tool: string): Chat {
+  return chat.alwaysAllowed.includes(tool) ? chat : { ...chat, alwaysAllowed: [...chat.alwaysAllowed, tool] };
+}
+
+/** MCP-serverne som må logges inn med `/mcp` i terminalen */
+export function needsAuth(chat: Chat): string[] {
+  return chat.mcp.filter(m => m.status === 'needs-auth').map(m => m.name);
 }
 
 /** Visningsnavn for verktøyene */
@@ -180,7 +216,19 @@ export const TOOL_LABEL: Record<string, string> = {
   Write: 'Skriver',
   Skill: 'Bruker skill',
   TodoWrite: 'Planlegger',
+  WebFetch: 'Henter fra nettet',
 };
+
+/** Visningsnavnet til et verktøy: `TOOL_LABEL`, eller «Figma: get_screenshot» for `mcp__figma__get_screenshot` */
+export function toolLabel(name: string): string {
+  if (TOOL_LABEL[name]) return TOOL_LABEL[name];
+  const m = name.match(/^mcp__([\w.-]+?)__([\w.-]+)$/);
+  if (!m) return name;
+  if (m[1] === 'kravforvaltning' && m[2] === 'save_sketch') return 'Lagrer skisse';
+  // claude.ai-koblinger: `claude_ai_Atlassian_Rovo` → «Atlassian Rovo»
+  const server = m[1].replace(/^claude_ai_/, '').replace(/_/g, ' ');
+  return `${server.charAt(0).toUpperCase()}${server.slice(1)}: ${m[2]}`;
+}
 
 /** En lagret samtale i panelet. Claude Code husker selve samtalen (`sessionId`); her ligger det vieweren viser. */
 export interface Conversation {
@@ -280,7 +328,7 @@ export function restoreConversations(raw: unknown, active: string[]): Conversati
       const { skillVersions: _old, ...rest } = c.chat as Chat & { skillVersions?: unknown };
       const chat: Chat = { ...EMPTY_CHAT, ...rest };
       if (!chat.runId || active.includes(chat.runId)) return { ...c, chat };
-      const items = chat.items.map(i => (i.kind === 'tool' && i.state === 'running' ? ({ ...i, state: 'ok' } as ChatItem) : i));
+      const items = endPending(chat.items.map(i => (i.kind === 'tool' && i.state === 'running' ? ({ ...i, state: 'ok' } as ChatItem) : i)));
       return {
         ...c,
         chat: { ...chat, runId: null, items: [...items, { kind: 'done', ok: false, text: 'Avsluttet mens siden lastet inn på nytt. Claude husker svaret; spør videre for å se det.' } as ChatItem] },

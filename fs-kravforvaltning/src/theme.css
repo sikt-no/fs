@@ -903,6 +903,17 @@ a.otf:hover { background: var(--sunken); text-decoration: none; }
 .cdot { width: 6px; height: 6px; border-radius: 50%; background: var(--st-in-progress); flex-shrink: 0; }
 .ctool.ok .cdot { background: var(--st-implemented); }
 .ctool.error .cdot { background: var(--err); }
+.cperm { border: 1px solid var(--stale-line); background: var(--stale-bg); border-radius: 8px; padding: 10px 12px; display: flex; flex-direction: column; gap: 8px; font-size: 13px; color: var(--ink2); min-width: 0; }
+.cperm b { color: var(--ink); font-weight: 600; }
+.cperm-tool { display: block; font-size: 11px; margin-top: 2px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.cperm-params { margin: 0; display: grid; gap: 2px; font-size: 11px; }
+.cperm-params div { display: grid; grid-template-columns: minmax(60px, auto) 1fr; gap: 8px; min-width: 0; }
+.cperm-params dt { color: var(--muted); }
+.cperm-params dd { margin: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: var(--ink); }
+.cperm-btns { display: flex; flex-wrap: wrap; gap: 6px; }
+.cperm-btns .primbtn { padding: 5px 11px; }
+.cperm.answered { background: transparent; border-color: var(--line); padding: 8px 12px; }
+.cperm-state { font-size: 12px; }
 .cdone { font-size: 11px; font-family: var(--mono); color: var(--muted); padding: 0 4px; }
 .cdone.err { color: var(--err); white-space: pre-wrap; }
 .ctouched { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 10px; font-size: 11.5px; padding: 8px 12px; border-top: 1px solid var(--line); }
