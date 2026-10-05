@@ -6,6 +6,56 @@ Dette dokumentet er de gjeldende konvensjonene for alle kravfiler. Claude leser 
 
 FS Kravforvaltning sjekker noen av reglene i dette dokumentet automatisk, og viser brudd som «Avvik fra konvensjoner». Reglene som sjekkes er merket med *(sjekkes automatisk)*. Sjekkene står i `fs-kravforvaltning/server/parse.ts` og er testet i `fs-kravforvaltning/server/parse.test.ts`. Endrer du en merket regel, eller legger du til en regel som kan sjekkes, må `parse.ts` og testene oppdateres i samme endring.
 
+## Kort fortalt
+
+### Hvor kravene ligger
+
+Mappene har tre nivåer: **Domene → Sub-domene → Kapabilitet**, for eksempel `02 Opptak/10 Regelverk/02 Krav/`. Feature-filer ligger bare på kapabilitetsnivå. Se *Mappestruktur*.
+
+### Hvordan en kravfil ser ut
+
+```gherkin
+# language: no
+# GitHub: #1234
+@OPT-REG-KRA-002 @must @draft
+Egenskap: Vurdere kompetanse etter regelverket
+  Som saksbehandler
+  ønsker jeg …
+  slik at …
+
+  Regel: …
+    Scenario: …
+      Gitt …
+      Når …
+      Så …
+```
+
+- `# GitHub:` er valgfri, og peker på issuet kravet hører til. Den står rett over tag-linja.
+- Taggene er en unik ID (`@DOM-SUB-KAP-NNN`), prioritet (`@must`, `@should`, `@could` eller `@wont`) og status. Se *Tags*.
+- **Gitt** er forutsetningene, **Når** er handlingen, og **Så** er det forventede resultatet. Se *Gode scenarioer*.
+- Uklarheter gjettes ikke. De skrives i en `# ÅPNE SPØRSMÅL:`-kommentar, og en `Regel:` eller et `Scenario:` med spørsmål tagges `@openquestion`. Se *Åpne spørsmål*.
+
+### Livsløpet til et krav
+
+| Status | Betyr | Settes av |
+|---|---|---|
+| `@draft` | Utkast, ikke validert. Alle nye krav starter her | `fs-krav` |
+| `@planned` | Validert og klart til å bygges | `fs-krav`, etter en gjennomgang, eller når det er sagt at kravet skal ha `@planned` |
+| `@in-progress` | Hentet inn i en oppgave | `fs-specify` / `fs-specify-delta` |
+| `@implemented` | Bygget, og verifisert mot koden | `fs-verify` |
+| `@deprecated` | Levert, men skal fjernes | `fs-krav`. `fs-verify` sletter fila (eller blokken, for en del) når koden er borte |
+
+Se *Kravstatus* og *Implementasjonsstatus*.
+
+### Skills for kravarbeid
+
+`fs-krav` brukes til:
+
+- **Nye krav:** aktør, brukerhistorie, regler og scenarioer avklares, og fila skrives som `@draft`.
+- **Validering av en mappe:** utkastene gås gjennom ett spørsmål om gangen, de åpne spørsmålene lukkes, og det som er bekreftet, får `@planned`.
+- **Fjerning av krav:** krav som ikke er levert, slettes. Leverte krav får `@deprecated`. Se *Avvikling*.
+- **Endring av leverte krav:** den nye delen legges ved siden av den gamle som `@draft`. Når den er validert, får den `@planned`, og den gamle delen får `@deprecated`. Se *Endring av levert krav*.
+
 ## Språk
 
 Vi skriver Gherkin på norsk. Start hver feature-fil med: *(sjekkes automatisk)*
