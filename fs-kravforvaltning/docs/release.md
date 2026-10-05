@@ -40,12 +40,30 @@ Gjør dette **før** workflowen kommer på `main`. `package.json` har versjon `1
 
 ## Signering
 
-Appene er ikke signert. En `.dmg` lastet ned fra GitHub blir stoppet av Gatekeeper (høyreklikk og **Åpne**, eller `xattr -cr "/Applications/FS Kravforvaltning.app"`), og Windows SmartScreen advarer mot `.exe`-en. Dette står i release-notatene.
+### macOS
 
-Signering krever sertifikater som secrets i repoet:
+macOS-appen signeres med et Developer ID-sertifikat og notariseres hos Apple når secrets-ene under finnes i repoet (*Settings → Secrets and variables → Actions → Secrets*). Mangler `MAC_CSC_LINK`, bygges den usignert, og release-notatene forklarer hvordan karantenen fjernes med `xattr`. Er `MAC_CSC_LINK` satt, men en av de andre mangler, stopper bygget.
 
-- macOS: Apple Developer ID-sertifikat (`CSC_LINK`, `CSC_KEY_PASSWORD`) og notarisering (`APPLE_ID`, `APPLE_APP_SPECIFIC_PASSWORD`, `APPLE_TEAM_ID`). Da fjernes `CSC_IDENTITY_AUTO_DISCOVERY: 'false'` fra workflowen
-- Windows: kodesigneringssertifikat, for eksempel Azure Trusted Signing
+| Secret | Verdi |
+|---|---|
+| `MAC_CSC_LINK` | Developer ID Application-sertifikatet med privat nøkkel, som `.p12` i base64 på én linje: `base64 -i sikt-developer-id.p12 \| tr -d '\n' \| pbcopy` |
+| `MAC_CSC_KEY_PASSWORD` | Passordet til `.p12`-fila |
+| `APPLE_API_KEY_P8` | Innholdet i `AuthKey_<id>.p8` fra App Store Connect (hele fila, med `BEGIN`/`END`-linjene) |
+| `APPLE_API_KEY_ID` | Key ID til API-nøkkelen |
+| `APPLE_API_ISSUER` | Issuer ID (står over lista med nøkler i App Store Connect) |
+
+Slik lages de:
+
+1. **Sertifikatet** (bare kontoinnehaveren, *Account Holder*, kan lage Developer ID-sertifikater): I Nøkkelringtilgang, *Sertifikatassistent → Be om et sertifikat fra en sertifiseringsinstans…*, lagret på disk. Last opp CSR-fila under *developer.apple.com → Certificates → + → Developer ID Application* (G2 Sub-CA), last ned `.cer` og dobbeltklikk den. Eksporter så sertifikatet med den private nøkkelen fra *Mine sertifikater* som `.p12` med passord.
+2. **API-nøkkelen for notarisering**: *App Store Connect → Users and Access → Integrations → App Store Connect API → Team Keys → +*, med rollen **Developer**. `.p8`-fila kan bare lastes ned én gang.
+
+Workflowen gir secrets-ene til electron-builder bare i macOS-jobben (som `CSC_LINK`, `CSC_KEY_PASSWORD` og `APPLE_API_*`), og skriver `.p8`-fila til disk, fordi notariseringen vil ha en sti. Hardened runtime er på som standard, og electron-builders standard-entitlements (JIT og library validation) er det Electron trenger. Etter bygget sjekker workflowen signaturen, Gatekeeper og notariseringen (`codesign`, `spctl`, `stapler`).
+
+Sertifikatet varer i fem år. Ta vare på `.p12`-fila og passordet utenfor GitHub (for eksempel i Vault), og trekk ikke tilbake et sertifikat som er brukt uten grunn: apper som er signert med det, kan slutte å starte.
+
+### Windows
+
+Windows-appen er ikke signert, og SmartScreen advarer mot `.exe`-en (**Mer informasjon → Kjør likevel**). Det står i release-notatene. Signering krever et kodesigneringssertifikat, for eksempel Azure Trusted Signing (`win.azureSignOptions` i `electron-builder.yml`).
 
 ## Bygge lokalt
 

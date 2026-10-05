@@ -87,6 +87,7 @@ jobs:
       - name: Lag draft-release med endringene fra CHANGELOG.md
         env:
           GH_TOKEN: ${{ github.token }}
+          MAC_SIGNED: ${{ secrets.MAC_CSC_LINK != '' }}
           VERSION: ${{ needs.version.outputs.version }}
           TAG: ${{ needs.version.outputs.tag }}
         run: |
@@ -100,7 +101,13 @@ jobs:
 
           ### Installasjon
 
-          - **macOS**: `.dmg` (`arm64` for Apple Silicon, `x64` for Intel). Appen er ikke signert: høyreklikk og velg **Åpne** første gang, eller kjør `xattr -cr "/Applications/FS Kravforvaltning.app"`.
+          EOF
+          if [ "$MAC_SIGNED" = "true" ]; then
+            echo '- **macOS**: `.dmg` (`arm64` for Apple Silicon, `x64` for Intel). Åpne fila og dra appen til Programmer.' >> notes.md
+          else
+            echo '- **macOS**: `.dmg` (`arm64` for Apple Silicon, `x64` for Intel). Appen er ikke signert, så macOS stopper den. Dra appen til Programmer, og kjør én gang i Terminal: `xattr -dr com.apple.quarantine "/Applications/FS Kravforvaltning.app"`' >> notes.md
+          fi
+          cat >> notes.md <<'EOF'
           - **Windows**: `.exe`. Appen er ikke signert: velg **Mer informasjon → Kjør likevel** hvis SmartScreen stopper den.
           - **Linux**: `.AppImage`. Gjør fila kjørbar med `chmod +x`.
           EOF
@@ -124,7 +131,6 @@ jobs:
     runs-on: ${{ matrix.os }}
     env:
       MAIN_VITE_KRAV_GITHUB_CLIENT_ID: ${{ vars.KRAV_GITHUB_CLIENT_ID }}
-      CSC_IDENTITY_AUTO_DISCOVERY: 'false'
     steps:
       # Bare appen: stiene i tasks/ og krav/ er for lange for Windows (MAX_PATH), og bygget bruker dem ikke
       - uses: actions/checkout@v7
@@ -141,9 +147,48 @@ jobs:
             echo "::error::Repo-variabelen KRAV_GITHUB_CLIENT_ID mangler. Uten den kan ikke brukerne logge inn på GitHub i appen (se docs/github-oauth.md)."
             exit 1
           fi
+      # Signering og notarisering på macOS (docs/release.md). Secrets-ene settes bare i dette steget, så
+      # Windows-bygget ikke prøver å signere med Apple-sertifikatet (electron-builder leser CSC_LINK der også).
+      # Uten MAC_CSC_LINK bygges appen usignert, som før.
+      - name: Klargjør signering (macOS)
+        if: runner.os == 'macOS'
+        env:
+          MAC_CSC_LINK: ${{ secrets.MAC_CSC_LINK }}
+          MAC_CSC_KEY_PASSWORD: ${{ secrets.MAC_CSC_KEY_PASSWORD }}
+          APPLE_API_KEY_P8: ${{ secrets.APPLE_API_KEY_P8 }}
+          APPLE_API_KEY_ID: ${{ secrets.APPLE_API_KEY_ID }}
+          APPLE_API_ISSUER: ${{ secrets.APPLE_API_ISSUER }}
+        run: |
+          if [ -z "$MAC_CSC_LINK" ]; then
+            echo "::warning::MAC_CSC_LINK mangler, så macOS-appen bygges usignert."
+            echo "CSC_IDENTITY_AUTO_DISCOVERY=false" >> "$GITHUB_ENV"
+            exit 0
+          fi
+          if [ -z "$MAC_CSC_KEY_PASSWORD" ] || [ -z "$APPLE_API_KEY_P8" ] || [ -z "$APPLE_API_KEY_ID" ] || [ -z "$APPLE_API_ISSUER" ]; then
+            echo "::error::MAC_CSC_LINK er satt, men MAC_CSC_KEY_PASSWORD, APPLE_API_KEY_P8, APPLE_API_KEY_ID eller APPLE_API_ISSUER mangler (se docs/release.md)."
+            exit 1
+          fi
+          # electron-builder (@electron/notarize) vil ha en sti til .p8-fila, ikke innholdet
+          key="$RUNNER_TEMP/AuthKey_$APPLE_API_KEY_ID.p8"
+          printf '%s\n' "$APPLE_API_KEY_P8" > "$key"
+          {
+            echo "CSC_LINK=$MAC_CSC_LINK"
+            echo "CSC_KEY_PASSWORD=$MAC_CSC_KEY_PASSWORD"
+            echo "APPLE_API_KEY=$key"
+            echo "APPLE_API_KEY_ID=$APPLE_API_KEY_ID"
+            echo "APPLE_API_ISSUER=$APPLE_API_ISSUER"
+          } >> "$GITHUB_ENV"
       - run: npm ci
       - run: npx electron-vite build
       - run: npx electron-builder --publish never ${{ matrix.args }}
+      - name: Sjekk signatur og notarisering (macOS)
+        if: runner.os == 'macOS' && env.CSC_LINK != ''
+        run: |
+          for app in release/mac*/*.app; do
+            codesign --verify --deep --strict --verbose=2 "$app"
+            spctl --assess --type execute --verbose "$app"
+            xcrun stapler validate "$app"
+          done
       - name: Last opp til releasen
         env:
           GH_TOKEN: ${{ github.token }}
