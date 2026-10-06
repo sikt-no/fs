@@ -2,6 +2,8 @@
 
 Denne mappa inneholder akseptansekravene for løsningene som lages av studieadministrasjon i Sikt. Kravene skrives som Gherkin-scenarioer i `.feature`-filer. De er lesbare kravspesifikasjoner for domeneeksperter, og driver de automatiserte testene i `tester/`.
 
+Er du ny? [Kom i gang med krav i FS](../kom-i-gang.html) er en kort innføring i hvor kravene ligger, hvordan en kravfil ser ut, og hvordan du bidrar.
+
 Dette dokumentet er de gjeldende konvensjonene for alle kravfiler. Claude leser den samme fila (via `.claude/rules/gherkin-conventions.md`), så det finnes bare én versjon av reglene.
 
 FS Kravforvaltning sjekker noen av reglene i dette dokumentet automatisk, og viser brudd som «Avvik fra konvensjoner». Reglene som sjekkes er merket med *(sjekkes automatisk)*. Sjekkene står i `fs-kravforvaltning/server/parse.ts` og er testet i `fs-kravforvaltning/server/parse.test.ts`. Endrer du en merket regel, eller legger du til en regel som kan sjekkes, må `parse.ts` og testene oppdateres i samme endring.

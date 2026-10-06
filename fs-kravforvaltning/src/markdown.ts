@@ -251,11 +251,23 @@ export function headings(blocks: Block[]): Heading[] {
 
 export const GITHUB = 'https://github.com/sikt-no/fs/blob/main/';
 
+/** Den statiske versjonen på GitHub Pages */
+export const PAGES = 'https://sikt-no.github.io/fs/';
+
+/** HTML-sider i rota av repoet som publiseres ved siden av vieweren (`staticPages` i vite.config.ts) */
+export const STATIC_PAGES = ['kom-i-gang.html'];
+
 /**
  * Relative lenker løses mot mappen til md-filen. Finnes målet i vieweren, blir det en intern lenke
- * (`path`), ellers pekes det til filen på GitHub.
+ * (`path`). En side i `STATIC_PAGES` åpnes fra `pageBase`, der den publiseres sammen med vieweren.
+ * Ellers pekes det til filen på GitHub.
  */
-export function resolveLink(href: string, from: string, has: (path: string) => boolean): { href: string; path?: string } {
+export function resolveLink(
+  href: string,
+  from: string,
+  has: (path: string) => boolean,
+  pageBase = './',
+): { href: string; path?: string } {
   if (/^([a-z]+:|#)/i.test(href)) return { href };
   let target: string;
   try {
@@ -270,5 +282,6 @@ export function resolveLink(href: string, from: string, has: (path: string) => b
   }
   const path = parts.join('/');
   if (has(path)) return { href: '#/' + encodeURI(path), path };
+  if (STATIC_PAGES.includes(path)) return { href: pageBase + encodeURI(path) };
   return { href: GITHUB + encodeURI(path) };
 }

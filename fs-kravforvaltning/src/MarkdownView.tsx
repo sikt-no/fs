@@ -1,7 +1,11 @@
 import type { ComponentChildren, JSX } from 'preact';
 import { useEffect, useRef, useState } from 'preact/hooks';
 import type { Entry } from '../shared/model';
-import { resolveLink, type Block, type List, type Seg } from './markdown';
+import { PAGES, resolveLink, type Block, type List, type Seg } from './markdown';
+import { transport } from './transport';
+
+// Desktop-appen har ingen server for sidene ved siden av vieweren, så de åpnes på GitHub Pages
+const pageBase = transport.kind === 'electron' ? PAGES : './';
 
 export type MdMode = 'pretty' | 'raw';
 
@@ -46,7 +50,7 @@ export function MarkdownView({ entry, blocks, mode, onMode, has, onNavigate, onE
       if (g.kind === 'em') return <em key={i}>{segs(g.c)}</em>;
       if (g.kind === 'strike') return <del key={i}>{segs(g.c)}</del>;
       if (g.kind === 'link') {
-        const r = resolveLink(g.href, entry.path, has);
+        const r = resolveLink(g.href, entry.path, has, pageBase);
         return r.path ? (
           <a
             key={i}
