@@ -151,7 +151,7 @@ Når listen er rolle-/rettighetsstyrt:
 
 ## Hva regelen *ikke* sier
 
-- Ingen UI-detaljer (knapp vs. lenke, plassering, ikoner) — det hører hjemme i `<feature>.design.md` via `utdype-implementasjon`.
+- Ingen UI-detaljer (knapp vs. lenke, plassering, ikoner) — det hører hjemme i `<feature>.design.md` via `fs-implementasjonsdetaljer`.
 - Ingen ytelsestall utover sidestørrelsen.
 - Ingen krav om uendelig scroll vs. eksplisitt «last inn flere»-knapp — beskriv brukerens intensjon («velger å laste inn flere»), ikke interaksjonen.
 

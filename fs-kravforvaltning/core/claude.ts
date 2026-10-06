@@ -118,7 +118,7 @@ export function implementPrompt(target: { repo: string; spec: string }, repoRoot
   return [
     `Du kjører en utførekjøring fra FS Kravforvaltning i repoet ${target.repo} (arbeidsmappa). Svar kort og på norsk.`,
     `Kravrepoet sikt-no/fs ligger i ${resolve(repoRoot)} (lagt til med --add-dir). Der kan du lese alt, men bare endre utforing.md i oppgavemappa.`,
-    spec ? `Spesifikasjonen som skal implementeres: ${join(resolve(repoRoot), spec)}. Les den og feature-filene den peker på før du begynner.` : '',
+    spec ? `Spesifikasjonen som skal implementeres: ${join(resolve(repoRoot), spec)}. Les den, feature-filene den peker på og implementasjonsdetaljene (<feature>.design.md ved siden av feature-fila, når den finnes) før du begynner. Tekstene i implementasjonsdetaljene er fasiten, også når en skisse viser noe annet.` : '',
     'Bruk repoets egne skills og konvensjoner (CLAUDE.md) når du implementerer.',
     `Du kan bygge, teste og committe lokalt (${EXECUTE_BASH.map(b => b.slice(5, -1).replace(/:\*$/, '')).join(', ')}), men ikke pushe eller lage PR: det gjør brukeren.`,
     dir
