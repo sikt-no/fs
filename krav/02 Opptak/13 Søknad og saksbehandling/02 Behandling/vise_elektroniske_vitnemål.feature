@@ -50,7 +50,7 @@
 #
 # UI-detaljer. Plassering, accordion-oppførsel, kolonnebredder og
 # vindushåndtering hører i vise_elektroniske_vitnemål.design.md, jf.
-# utdype-implementasjon-skillen.
+# fs-implementasjonsdetaljer-skillen.
 #
 @OPT-BEH-BEH-005 @must @planned
 Egenskap: Se søkerens elektroniske vitnemål

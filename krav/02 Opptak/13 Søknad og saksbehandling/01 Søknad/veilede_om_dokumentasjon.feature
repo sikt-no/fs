@@ -58,7 +58,7 @@ Egenskap: Veilede søker om hvilken dokumentasjon som skal lastes opp
 # ÅPNE SPØRSMÅL:
 # - Ordlyden i veiledningen er ikke fastsatt her. Konkret tekst, plassering og
 #   utforming hører i en <feature>.design.md ved siden av denne fila, jf.
-#   utdype-implementasjon-skillen. Steffen Andre Marstein har en åpen oppgave
+#   fs-implementasjonsdetaljer-skillen. Steffen Andre Marstein har en åpen oppgave
 #   om UX for dokumentopplasting fra møtet 28.08.2026.
 # - Løsningen begrenser ikke hva søkeren kan laste opp — det er en bevisst
 #   beslutning. Juristens tiltak om å begrense dokumentkategorier er derfor

@@ -43,7 +43,7 @@
 # Avviket skal ikke «harmoniseres» bort uten en ny beslutning.
 #
 # UI-detaljer. Ordlyd, plassering, ikoner og hvordan seksjoner utvides hører i
-# se_digitale_resultater_i_søknad.design.md, jf. utdype-implementasjon.
+# se_digitale_resultater_i_søknad.design.md, jf. fs-implementasjonsdetaljer.
 #
 @OPT-SØK-SØK-004 @must @planned
 Egenskap: Se digitale resultater i søknaden
