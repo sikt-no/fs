@@ -99,15 +99,36 @@ Egenskap: Opptaksinnstillinger per utdanningstilbud
       Når opptaksforvalter angir at utdanningstilbudet "Sykepleie, høst 2027" ikke skal delta i ledige studieplasser
       Så deltar utdanningstilbudet ikke i runder for ledige studieplasser
 
-  @openquestion
-  # ÅPNE SPØRSMÅL:
-  # - Hva er saksbehandlertildelingsregel i kontekst av utdanningstilbud?
-  # - Hvordan velger opptaksforvalter blant reglene som er satt på opptaket?
-  Regel: Opptaksforvalter kan sette saksbehandlertildelingsregel per utdanningstilbud
+  # Hvordan søknadsalternativene fordeles etter regelen, står i tildele_saksbehandlende_organisasjon.feature (@OPT-BEH-BEH-007).
+  Regel: Opptaksforvalter kan velge saksbehandlertildelingsregel per utdanningstilbud
 
-    Scenario: Sette saksbehandlertildelingsregel
-      Når opptaksforvalter setter saksbehandlertildelingsregel for utdanningstilbudet "Sykepleie, høst 2027"
-      Så fordeles søknadssaker for dette utdanningstilbudet til saksbehandlerorganisasjoner etter den angitte regelen
+    Scenario: Velge saksbehandlertildelingsregel for et utdanningstilbud
+      Når opptaksforvalter velger saksbehandlertildelingsregelen "SPE" for utdanningstilbudet "Sykepleie, høst 2027"
+      Så fordeles søknadsalternativene til "Sykepleie, høst 2027" etter "SPE"
+
+    Scenario: Utdanningstilbud uten egen saksbehandlertildelingsregel følger opptakets standardregel
+      Gitt at utdanningstilbudet "Sykepleie, høst 2027" har "Ingen saksbehandlertildelingsregel"
+      Så fordeles søknadsalternativene til "Sykepleie, høst 2027" etter opptakets standard tildelingsregel
+
+    Scenario: Kun aktive saksbehandlertildelingsregler i opptaket kan velges
+      Gitt at saksbehandlertildelingsregelen "TRA" er inaktiv
+      Når opptaksforvalter velger saksbehandlertildelingsregel for utdanningstilbudet "Sykepleie, høst 2027"
+      Så kan opptaksforvalter kun velge blant de aktive saksbehandlertildelingsreglene i opptaket
+      Og ser ikke opptaksforvalter "TRA" blant valgene
+
+    @openquestion
+    # ÅPNE SPØRSMÅL:
+    # - Avklares med domeneekspert: Må opptaksforvalter velge saksbehandlertildelingsregel for
+    #   utdanningstilbudet? Designet merker feltet «Saksbehandlertildelingsregel» med «Må fylles ut»,
+    #   men «Ingen saksbehandlertildelingsregel» er også et valg. Koden bruker standardregelen når
+    #   utdanningstilbudet ikke har egen regel, og listevisning_utdanningstilbud.feature har et
+    #   filter for utdanningstilbud som mangler saksbehandlertildelingsregel. Alternativer:
+    #   (a) ikke påkrevd, «Ingen» betyr standardregelen; (b) påkrevd, standardregelen er
+    #   forhåndsvalgt og «Ingen» finnes ikke; (c) påkrevd, «Ingen» er et bevisst valg som betyr
+    #   standardregelen.
+    Scenario: Opptaksforvalter må ta stilling til saksbehandlertildelingsregel for utdanningstilbudet
+      Når opptaksforvalter lagrer utdanningstilbudet "Sykepleie, høst 2027" uten å velge saksbehandlertildelingsregel
+      Så har "Sykepleie, høst 2027" "Ingen saksbehandlertildelingsregel"
 
   @openquestion
   # ÅPNE SPØRSMÅL:
