@@ -1,6 +1,6 @@
 ---
 name: fs-specify
-description: Spec / kravarbeid for én konkret feature i dette repoet. Henter `@planned`-krav fra lokale `.feature`-filer under `krav/`, retagger dem `@planned` → `@in-progress` på `Egenskap:`-linja (og på `Regel:`/`Scenario:`-linja for `@planned`-deler i leverte krav som endres), og plukker også opp `@deprecated`-krav (egenskaper og `Regel:`/`Scenario:`) for å fjerne koden (de beholder `@deprecated`), spør via AskUserQuestion om det finnes skisser (Figma, bilder, PDF), kobler skisser til krav, persisterer Figma-artefakter via Figma MCP, validerer skisser mot krav og spør brukeren ved avvik, og kjører `fs-implementasjonsdetaljer` når implementasjonsdetaljene (`<feature>.design.md`) mangler eller ikke har tekstene fra skissene. Skriver `spec-<feature>.md`, `krav-input/` (manifest og skisser) og `spec.log.md` i oppgavemappas krav-undermappe `tasks/<domene>/<slug>/spec/` (se `tasks/README.md`). Idempotent — spec-dokumentet skrives over på plass. Trigges av "spesifiser feature X", "hent krav fra lokale .feature-filer", "lag spec for oppgave Y", "koble skisser til krav", "hent krav inn i tasks", "fjerne deprecated krav", "spec for å fjerne avviklede krav".
+description: Spec / kravarbeid for én konkret feature i dette repoet. Henter `@planned`-krav fra lokale `.feature`-filer under `krav/`, retagger dem `@planned` → `@in-progress` på `Egenskap:`-linja (og på `Regel:`/`Scenario:`-linja for `@planned`-deler i leverte krav som endres), og plukker også opp `@deprecated`-krav (egenskaper og `Regel:`/`Scenario:`) for å fjerne koden (de beholder `@deprecated`), spør via AskUserQuestion om det finnes skisser (Figma, bilder, PDF), kobler skisser til krav, persisterer Figma-artefakter via Figma MCP, validerer skisser mot krav og spør brukeren ved avvik, sjekker kravene mot koden i kodeklonene før retaggingen (og holder tilbake krav som må endres), og kjører `fs-implementasjonsdetaljer` når implementasjonsdetaljene (`<feature>.design.md`) mangler eller ikke har tekstene fra skissene. Skriver `spec-<feature>.md`, `krav-input/` (manifest og skisser) og `spec.log.md` i oppgavemappas krav-undermappe `tasks/<domene>/<slug>/spec/` (se `tasks/README.md`). Idempotent — spec-dokumentet skrives over på plass. Trigges av "spesifiser feature X", "hent krav fra lokale .feature-filer", "lag spec for oppgave Y", "koble skisser til krav", "hent krav inn i tasks", "fjerne deprecated krav", "spec for å fjerne avviklede krav".
 allowed-tools: Read, Write, Edit, Grep, Glob, Bash, WebFetch, AskUserQuestion, Skill
 ---
 
@@ -14,7 +14,7 @@ $ARGUMENTS
 
 Du samler krav. Du henter kravene fra `.feature`-filene under `krav/`, kobler dem til eventuelle skisser, validerer at skisser og krav stemmer overens, og skriver et kort spec-dokument som kan brukes som fasit for hva som skal bygges.
 
-**Ikke analyser kodebaser, ikke foreslå løsninger, ikke skriv kode.** Spec-en beskriver *hva*, ikke *hvordan*.
+**Ikke analyser kodebaser, ikke foreslå løsninger, ikke skriv kode.** Spec-en beskriver *hva*, ikke *hvordan*. Unntaket er den korte sjekken av kravene mot koden før retaggingen (se _Sjekk mot koden_), som fanger opp det `fs-krav` ikke fikk sjekket fordi den som validerte, ikke hadde kodeklonene.
 
 **Bare `@planned`/`@in-progress`-krav skal med.** `@draft` og utaggede `Egenskap:`-blokker er fortsatt under arbeid og må gjennom `fs-krav` først. Det samme gjelder `@draft`-deler (`Regel:`/`Scenario:`) inne i et `@planned` krav — de holdes utenfor scope. `@deprecated`-krav og -deler tas med, men som noe som skal **fjernes**, ikke bygges. I et `@implemented` krav som endres, er det `@planned`/`@in-progress`-delene som skal bygges. Se _Filter_ nedenfor.
 
@@ -118,13 +118,33 @@ Når et levert krav endres, blir egenskapen stående som `@implemented`, og stat
 - `@draft`-deler holdes utenfor scope, som i et `@planned` krav.
 - `@planned`-delene retagges til `@in-progress` (se _Retagg_). `Egenskap:`-taggen står urørt.
 
+## Sjekk mot koden
+
+`fs-krav` sjekker kravet mot koden under valideringen (B5, trinn 3), men bare når den som validerer, har kodeklonene. Mange som skriver krav har ikke det. Derfor sjekkes kravene igjen her, før de blir `@in-progress`.
+
+**Når:** når kravet bygger på noe som finnes fra før (begreper, identifikatorer, roller, data), og alltid for `@planned`-deler i leverte krav. Ikke for `@deprecated`-krav og -deler, som `fs-verify` tar seg av. Sjekken gjøres selv om `fs-krav` har gjort den: koden kan ha endret seg, og sjekken er rask.
+
+**Hvordan:** som i [`fs-krav`, B5, trinn 3](../fs-krav/SKILL.md#b5-gjennomgå-draft-krav-og-valider). Bruk kodeklonene (fs-admin, fs-plattform) som står i systemprompten, og spør om stien bare hvis de mangler. Søk med `Grep` og `Glob` etter det kravet nevner (navn, identifikatorer og format, regler som finnes fra før, roller og verdier), og vis hvert funn med `<repo>/<fil>:<linje>`. Det er ikke en analyse av hvordan noe skal bygges, det er jobben til `bat-analyze`.
+
+**Ved avvik:** ett om gangen, via `AskUserQuestion`:
+
+> «Kravet `<Feature-ID>` sier X, koden har Y (`<repo>/<fil>:<linje>`). Hva skal vi gjøre?»
+
+1. **Kravet er riktig, koden skal endres** → kravet retagges som vanlig, og avviket står under `## Kodesjekk` som noe kode-repoene må vite.
+2. **Kravet må endres** → kravet (eller delen) retagges **ikke**, og står som `@planned`. Avviket blir et åpent spørsmål for `fs-krav`. Kravet kan endres på stedet, fordi det ikke er hentet inn. Kjør `fs-specify` på nytt når det er gjort.
+3. **Vet ikke** → som 2.
+
+Spesifikasjonen er ikke klar til utvikling før alle kravene er hentet inn, så et krav som holdes tilbake, stopper spesifikasjonen til avviket er avklart.
+
+**Uten kodekloner:** spør én gang om stien. Har brukeren ingen klone, gå videre, og skriv `Ikke sjekket: ingen kodekloner` under `## Kodesjekk`.
+
 ## Retagg krav til `@in-progress`
 
 Når et krav hentes inn i en spec, retagges den **autoritative** fila under `krav/` fra `@planned` til `@in-progress` på `Egenskap:`-tag-linja (se tag-aksen i `krav/README.md`).
 
 For `@planned`-deler i et `@implemented` krav retagges `Regel:`-/`Scenario:`-linja i stedet (se under).
 
-**Når:** etter at scope er låst (kravene er hentet, skissene sjekket og spørsmålene avklart), men **før** spec-dokumentet skrives.
+**Når:** etter at scope er låst (kravene er hentet, skissene og koden sjekket og spørsmålene avklart), men **før** spec-dokumentet skrives. Krav som holdes tilbake etter kodesjekken, retagges ikke.
 
 **Regler:**
 
@@ -282,9 +302,16 @@ Bevisste unntak: **`spec.log.md`** er append-only, og **`questions-fs-specify-<d
 
 - **`<feature-fil>`** — [<feature-navn>.design.md](../../../../krav/<sti>.design.md) (<N> åpne designspørsmål, utelat når det er 0)
 
+## Kodesjekk
+
+[Repoene som ble sjekket, eller linja `Ikke sjekket: <grunn>`. Én bullet per avvik, med Feature-ID, hva kravet sier, hva koden har (`<repo>/<fil>:<linje>`) og beslutningen. Ingen avvik → `Ingen avvik.`]
+
+- **Sjekket:** fs-admin, fs-plattform
+- `<Feature-ID>`: kravet sier X, koden har Y (`<repo>/<fil>:<linje>`). Koden skal endres.
+
 ## Retagging
 
-[Minst én linje om hva som skjedde. Tabell for filene som ble retagget.]
+[Minst én linje om hva som skjedde. Tabell for filene som ble retagget. Krav som ble holdt tilbake etter kodesjekken, listes under tabellen.]
 
 | Fil | Før | Etter |
 |---|---|---|
@@ -315,7 +342,7 @@ Minn brukeren på at endringene i `tasks/` og `krav/` ikke er committet — det 
 
 ## Gjør ikke
 
-- Analyserer ikke kode, foreslår ikke løsninger og skriver ikke kode.
+- Analyserer ikke kode, foreslår ikke løsninger og skriver ikke kode. Leser koden bare i kodesjekken (se _Sjekk mot koden_).
 - Oppretter, endrer eller lukker ikke GitHub-issues.
 - Endrer ikke kravinnhold — bare implementasjonsstatus-taggen `@planned` → `@in-progress` (på `Egenskap:`, eller på delen i et levert krav som endres). Fjerner aldri `@draft` fra en `Regel:`/`Scenario:`.
 - Skriver ikke utenfor `<spec>/` og statustaggene under `krav/`, bortsett fra implementasjonsdetaljene (`<feature-navn>.design.md`), som `fs-implementasjonsdetaljer` skriver. Skriver ikke `oppgave.md`, `roadmap.md` eller andre oppgaveartefakter.
