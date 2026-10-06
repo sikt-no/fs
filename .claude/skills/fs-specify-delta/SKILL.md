@@ -1,6 +1,6 @@
 ---
 name: fs-specify-delta
-description: Spec / kravarbeid der inputen er en endring, ikke greenfield krav. Tar inn én av fire kildetyper — test-fil(er) (typisk `.feature`), markdown-dokument(er), én commit eller to (`A...B`), eller en branch (diffet mot main) — og henter diff og filinnhold med lokal `git`. For commit/branch utledes `Lagt til` / `Endret` / `Fjernet` direkte fra diff-status. Tar med `@planned`/`@in-progress`-krav og retagger `@planned` → `@in-progress` i `krav/` der fila ligger på disk, også `@planned`-deler (`Regel:`/`Scenario:`) i leverte krav som endres. Tar også med `@deprecated`-krav og -deler i endringen, under «Skal fjernes», uten å bytte taggen, så spec-en kan brukes til å fjerne avviklede krav fra koden sammen med endringene rundt. Samme tag-regler som `fs-specify`; forskjellen er inputen (en endring i stedet for en mappe) og at spec-en viser før og etter. Spør om skisser og persisterer Figma-artefakter via Figma MCP. Skriver `spec-changes-<YYYY-MM-DD>-<ref>.md` og `krav-input/changes/<YYYY-MM-DD>-<ref>/` i oppgavemappas krav-undermappe `tasks/<domene>/<slug>/spec/` (én fil per kjøring, ingen overskriving). Leser ingen tidligere spec — kilden er autoritativ; eksisterende krav som ikke nevnes i delta-en forblir gjeldende. Trigges av "kravendring fra commit <sha>", "krav fra A...B", "fang endringene på branch <navn>", "krav fra denne markdown", "krav fra denne test-fila", "delta-spec for <noe>", "fjern avviklede krav på branch <navn>".
+description: Spec / kravarbeid der inputen er en endring, ikke greenfield krav. Tar inn én av fire kildetyper — test-fil(er) (typisk `.feature`), markdown-dokument(er), én commit eller to (`A...B`), eller en branch (diffet mot main) — og henter diff og filinnhold med lokal `git`. For commit/branch utledes `Lagt til` / `Endret` / `Fjernet` direkte fra diff-status. Tar med `@planned`/`@in-progress`-krav og retagger `@planned` → `@in-progress` i `krav/` der fila ligger på disk, også `@planned`-deler (`Regel:`/`Scenario:`) i leverte krav som endres. Tar også med `@deprecated`-krav og -deler i endringen, under «Skal fjernes», uten å bytte taggen, så spec-en kan brukes til å fjerne avviklede krav fra koden sammen med endringene rundt. Samme tag-regler som `fs-specify`; forskjellen er inputen (en endring i stedet for en mappe) og at spec-en viser før og etter. Spør om skisser og persisterer Figma-artefakter via Figma MCP. Kopierer ikke kravene: før og etter er git-referanser (festede SHA-er) med lenker til GitHub. Skriver `spec-changes-<YYYY-MM-DD>-<ref>.md` og `krav-input/changes/<YYYY-MM-DD>-<ref>/` (manifest og skisser) i oppgavemappas krav-undermappe `tasks/<domene>/<slug>/spec/` (én fil per kjøring, ingen overskriving). Leser ingen tidligere spec — kilden er autoritativ; eksisterende krav som ikke nevnes i delta-en forblir gjeldende. Trigges av "kravendring fra commit <sha>", "krav fra A...B", "fang endringene på branch <navn>", "krav fra denne markdown", "krav fra denne test-fila", "delta-spec for <noe>", "fjern avviklede krav på branch <navn>".
 allowed-tools: Read, Write, Edit, Grep, Glob, Bash, WebFetch, AskUserQuestion, Skill
 ---
 
@@ -51,11 +51,19 @@ Spør via `AskUserQuestion` hvis invokasjonen ikke allerede sier det:
 
 Alle git-kall er **lesende** og kjøres mot dette repoet (`git rev-parse`, `git show`, `git diff`, `git log`). Finnes ikke en ref lokalt, be brukeren kjøre `git fetch` selv — skillen kjører ikke `fetch`, `checkout` eller andre kommandoer som endrer git-tilstand.
 
+## Git-referanser i stedet for kopier
+
+Skillen kopierer ikke filer som ligger i git. Før og etter er festede SHA-er, og innholdet leses med `git show <sha>:<sti>`. Spec-en lenker til fila på GitHub på den SHA-en, `https://github.com/sikt-no/fs/blob/<sha>/<sti>` (stien URL-kodet, mellomrom blir `%20`), og viser hvordan endringen hentes lokalt: `git diff <før-sha>...<etter-sha> -- "<sti>"`. Kopier blir utdaterte og gir leseren feil krav; en SHA endres ikke.
+
+Hver krav-bullet har Feature-ID, og slutter med lenken til fila under `krav/` i working tree, relativ fra `spec/` (`../../../../krav/<sti>`). Det er Feature-ID-en `fs-verify` og FS Kravforvaltning slår opp på. For en fil som er fjernet, er før-lenken den siste.
+
+Bare filer som ikke ligger i dette repoet (markdown eller kode-tester fra et annet sted), kopieres til `<spec>/krav-input/changes/<YYYY-MM-DD>-<ref>/<filnavn>`, fordi de ikke har noen git-referanse.
+
 ## Endrings-input fra test-fil(er)
 
 1. **Bekreft filene** med brukeren.
 2. **`<ref>`-slug:** for én fil, filnavnet uten extension i kebab-case. For flere, spør om en kort beskrivelse. Reserve: `tests`.
-3. **Les og lagre** hver fil under `<spec>/krav-input/changes/<YYYY-MM-DD>-<ref>/<repo-relativ-sti>`.
+3. **Fest HEAD:** `git rev-parse HEAD`. Sjekk om fila har endringer som ikke er committet (`git status --porcelain -- "<sti>"`); i så fall står det i `## Kilde` at kravet slik det er på disk, kommer med i samme PR som spec-en. Filer utenfor repoet kopieres (se over).
 4. **`.feature`-filer:** filtrer (se _Filter_). Kravene listes som **Krav**, uten lagt-til/endret-skille.
 5. **Kode-tester:** marker som `test-kode`. Hver test er et indirekte krav — beskriv oppførselen.
 
@@ -63,7 +71,7 @@ Alle git-kall er **lesende** og kjøres mot dette repoet (`git rev-parse`, `git 
 
 1. **Bekreft filene.**
 2. **`<ref>`-slug** fra filnavnet eller brukerens beskrivelse.
-3. **Les og lagre** under `<spec>/krav-input/changes/<YYYY-MM-DD>-<ref>/<repo-relativ-sti>`.
+3. **Fest HEAD** for filer i repoet, som for test-filer. Filer utenfor repoet kopieres (se over).
 4. **Trekk ut konkrete krav** — overskrifter, punktlister, før/etter-tabeller. Er dokumentet for fritt formulert, be brukeren peke ut punktene.
 
 ## Endrings-input fra commit(s)
@@ -75,13 +83,13 @@ Spør: **«Én commit»** / **«To commits (A...B)»**.
 1. **Fest SHA:** `git rev-parse <sha>` → full 40-tegns SHA. `<ref>` = de første 7 tegnene.
 2. **Endringsliste:** `git show --name-status --format= <sha>`.
 3. **Avgrens** til relevante filer (typisk `krav/**/*.feature` og test-filer). Er lista lang, vis den og spør om noe skal ut.
-4. **Innhold:** etter = `git show <sha>:<sti>`; før (bare `M`/`D`) = `git show <sha>^:<sti>`.
-5. **Filtrer** (se _Filter_).
-6. **Lagre:** etter under `<spec>/krav-input/changes/<YYYY-MM-DD>-<ref>/<sti>`, før under `…/before/<sti>`.
+4. **Fest parent:** `git rev-parse <sha>^` → før-SHA.
+5. **Innhold:** etter = `git show <sha>:<sti>`; før (bare `M`/`D`) = `git show <før-sha>:<sti>`. Innholdet leses, ikke lagres.
+6. **Filtrer** (se _Filter_).
 
 ### To commits (A...B)
 
-Som over, men: fest begge SHA-er, `<ref>` = `<A-kort>..<B-kort>`, endringsliste med `git diff --name-status <A>...<B>`, etter hentes på `<B>` og før på `<A>`.
+Som over, men: fest begge SHA-er, `<ref>` = `<A-kort>..<B-kort>`, endringsliste med `git diff --name-status <A>...<B>`, etter leses på `<B>` og før på `<A>`.
 
 ## Endrings-input fra branch
 
@@ -90,7 +98,7 @@ Som over, men: fest begge SHA-er, `<ref>` = `<A-kort>..<B-kort>`, endringsliste 
 3. **`<ref>`** = sanert branch-navn (fjern `<bruker>/`-prefiks, erstatt ikke-alfanumeriske tegn med `-`, slå sammen gjentakelser, trim).
 4. **Endringsliste:** `git diff --name-status <main-sha>...<branch-sha>`.
 5. **Innhold:** etter på branch-SHA, før (`M`/`D`) på main-SHA.
-6. **Filtrer** og **lagre** som for commit. Noter begge SHA-er i manifest og dokument.
+6. **Filtrer** som for commit. Noter begge SHA-er i manifest og dokument.
 
 ## Manifest
 
@@ -101,12 +109,13 @@ Skriv `<spec>/krav-input/changes/<YYYY-MM-DD>-<ref>/manifest.md`:
 
 - **Type:** `test` / `markdown` / `commit` / `commits` / `branch`
 - **Kilde:**
-  - test/markdown: kildefiler (repo-relative stier)
+  - test/markdown: kildefiler (repo-relative stier), HEAD-SHA, og om filene har endringer som ikke er committet
   - commit: full SHA, parent-SHA
   - commits: A-SHA, B-SHA
   - branch: branch-navn, branch-SHA, main-SHA
-- **Hentede filer:**
-  - `<sti>` — `<added/modified/removed>`
+- **Filer:**
+  - `<sti>` (`@DOM-SUB-KAP-NNN`) — `<added/modified/removed>`
+  - `<filnavn>` — kopiert hit (bare filer utenfor repoet)
 - **Skisser:** (hvis noen) URL, `fileKey`/`nodeId`, lagrede artefakter inkl. sub-frame-filnavn, hoppet over (med grunn)
 - **Hentet:** `<YYYY-MM-DD HH:MM>`
 ```
@@ -125,14 +134,14 @@ Hvilken tilstand som styrer per diff-status:
 
 Test-fil-kilde (uten diff): tag-en på fila slik den er.
 
-**`@draft`-deler** (`Regel:`/`Scenario:` tagget `@draft` inne i et krav som passerer) håndteres som i [`fs-specify` → _`@draft`-deler_](../fs-specify/SKILL.md#draft-deler-i-krav-som-passerer): råkopiene lagres komplette, men delene holdes utenfor scope og listes under `### Utenfor scope (@draft)`. Er alle delene `@draft`, faller fila utenfor. For diff-kilder gjelder **etter**-tilstanden per del:
+**`@draft`-deler** (`Regel:`/`Scenario:` tagget `@draft` inne i et krav som passerer) håndteres som i [`fs-specify` → _`@draft`-deler_](../fs-specify/SKILL.md#draft-deler-i-krav-som-passerer): delene holdes utenfor scope og listes under `### Utenfor scope (@draft)`. Er alle delene `@draft`, faller fila utenfor. For diff-kilder gjelder **etter**-tilstanden per del:
 
 - En del som går fra `@draft` til uten `@draft` er validert, og regnes som «Endret» (eller «Lagt til» hvis den er ny).
 - En del som får `@draft` (fra uten) er tatt ut av scope — list den under _Utenfor scope_, ikke under «Endret» eller «Fjernet».
 - En ny del som legges til med `@draft`, listes bare under _Utenfor scope_.
 - Under en `@implemented` egenskap er en del validert når den går fra `@draft` til `@planned` (se under).
 
-**`@deprecated`-krav og -deler** håndteres som i [`fs-specify` → _`@deprecated`-krav og -deler_](../fs-specify/SKILL.md#deprecated-krav-og--deler): de listes under `### Skal fjernes (@deprecated)`, retagges aldri, og `fs-verify` sletter dem når koden er borte. Råkopiene lagres komplette. For diff-kilder gjelder **etter**-tilstanden:
+**`@deprecated`-krav og -deler** håndteres som i [`fs-specify` → _`@deprecated`-krav og -deler_](../fs-specify/SKILL.md#deprecated-krav-og--deler): de listes under `### Skal fjernes (@deprecated)`, retagges aldri, og `fs-verify` sletter dem når koden er borte. For diff-kilder gjelder **etter**-tilstanden:
 
 - Et krav eller en del som *blir* `@deprecated` i endringen, listes med lenke til før-tilstanden, så det er tydelig hva som var levert.
 - Et krav eller en del som allerede var `@deprecated`, og ligger i en fil som er med i endringen, listes også. Da trengs ingen før-lenke.
@@ -144,19 +153,19 @@ Test-fil-kilde (uten diff): tag-en på fila slik den er.
 - En del som allerede var `@planned`/`@in-progress`, og ligger i en fil som er med i endringen, listes også.
 - Resten av fila er levert, og er ikke med i scope selv om fila er med i endringen.
 
-Bare filer som passerer lagres og nevnes i manifestet. **Ingen `.feature`-filer passerer** (og det finnes ingen markdown/kode-test å falle tilbake på): rapporter hvilke filer som ble vurdert og hvilken tag de hadde, logg `ended (aborted)`, og foreslå `fs-krav`.
+Bare filer som passerer, nevnes i manifestet og spec-en. **Ingen `.feature`-filer passerer** (og det finnes ingen markdown/kode-test å falle tilbake på): rapporter hvilke filer som ble vurdert og hvilken tag de hadde, logg `ended (aborted)`, og foreslå `fs-krav`.
 
 ## Retagg krav til `@in-progress`
 
-Samme regler som [`fs-specify` → _Retagg_](../fs-specify/SKILL.md#retagg-krav-til-in-progress): bare `Egenskap:`-tag-linja (eller `Regel:`-/`Scenario:`-linja for `@planned`-deler i et `@implemented` krav), én `Edit`, `@planned` → `@in-progress`, idempotent, ingen rollback. Råkopiene under `krav-input/changes/…` — også `before/` — retagges aldri. `@deprecated`-krav og -deler retagges heller aldri.
+Samme regler som [`fs-specify` → _Retagg_](../fs-specify/SKILL.md#retagg-krav-til-in-progress): bare `Egenskap:`-tag-linja (eller `Regel:`-/`Scenario:`-linja for `@planned`-deler i et `@implemented` krav), én `Edit`, `@planned` → `@in-progress`, idempotent, ingen rollback. `@deprecated`-krav og -deler retagges aldri.
 
-**Når:** etter at scope er låst og råkopiene er lagret, før delta-dokumentet skrives.
+**Når:** etter at scope er låst, før delta-dokumentet skrives.
 
 | Kilde | Hva skjer |
 |---|---|
 | Test-fil(er) | Retagg fila direkte |
 | Markdown / kode-test | Ingen tag — ingen retagg |
-| Commit / commits / branch | Retagg fila i working tree **bare hvis** den finnes der og innholdet matcher det som ble hentet på den festede SHA-en (typisk når HEAD er den commiten/branchen). Ellers: sjekkliste under *Retagging utestående* |
+| Commit / commits / branch | Retagg fila i working tree **bare hvis** den finnes der og innholdet er det samme som `git show <etter-sha>:<sti>` (typisk når HEAD er den commiten/branchen). Ellers: sjekkliste under *Retagging utestående* |
 
 For sjekklista: skriv ref-relativ sti og eksakt tag-linje før → etter, så brukeren kan gjøre endringen der branchen er sjekket ut. Skillen sjekker aldri ut branchen selv.
 
@@ -181,10 +190,11 @@ Ved **Ja**: følg [`fs-specify` → _Skisser — kobling og validering_](../fs-s
 
 - **Oppgave:** `tasks/<domene>/<slug>/`
 - **Type:** `test` / `markdown` / `commit` / `commits` / `branch`
-- **Test/markdown:** kildefiler (lenker til `krav-input/changes/<YYYY-MM-DD>-<ref>/…`)
+- **Test/markdown:** kildefiler (lenker til fila i repoet, eller til kopien under `krav-input/changes/<YYYY-MM-DD>-<ref>/` for filer utenfor repoet), HEAD-SHA, og om filene har endringer som ikke er committet
 - **Commit:** full SHA (lenke til `https://github.com/sikt-no/fs/commit/<sha>`), parent-SHA
-- **Commits:** A-SHA og B-SHA
-- **Branch:** navn, branch-SHA, main-SHA
+- **Commits:** A-SHA og B-SHA (lenke til `https://github.com/sikt-no/fs/compare/<A>...<B>`)
+- **Branch:** navn, branch-SHA, main-SHA (lenke til `https://github.com/sikt-no/fs/compare/<main-sha>...<branch-sha>`)
+- **Lokalt:** `git diff <før-sha>...<etter-sha> -- krav/` (bare commit/commits/branch)
 - **Hentet:** `<YYYY-MM-DD HH:MM>`
 
 ## Omfang
@@ -193,32 +203,30 @@ Ved **Ja**: følg [`fs-specify` → _Skisser — kobling og validering_](../fs-s
 
 ## Krav
 
-[Commit/commits/branch: underseksjonene under, basert på diff-status; utelat tomme. Test/markdown: én flat `### Krav`-liste.]
+[Commit/commits/branch: underseksjonene under, basert på diff-status; utelat tomme. Test/markdown: én flat `### Krav`-liste. Før- og etter-lenkene går til GitHub på festet SHA; den siste lenken i hver bullet går til fila under `krav/` i working tree (for `removed`: før-lenken). `<sti>` er URL-kodet i lenkene.]
 
 ### Lagt til _(diff-status: `added`)_
 
-- **`<feature-fil>`** (`@DOM-SUB-KAP-NNN`) — hva kravet dekker. ([etter](krav-input/changes/<YYYY-MM-DD>-<ref>/<sti>))
+- **`<feature-fil>`** (`@DOM-SUB-KAP-NNN`) — hva kravet dekker. ([etter](https://github.com/sikt-no/fs/blob/<etter-sha>/<sti>)) ([<sti>](../../../../<sti>))
 
 ### Endret _(diff-status: `modified`)_
 
-- **`<feature-fil>` — scenario `<scenario>`** — hva som er endret.
-  - Før: ([before/<sti>](krav-input/changes/<YYYY-MM-DD>-<ref>/before/<sti>))
-  - Etter: ([<sti>](krav-input/changes/<YYYY-MM-DD>-<ref>/<sti>))
+- **`<feature-fil>` — scenario `<scenario>`** (`@DOM-SUB-KAP-NNN`) — hva som er endret. ([før](https://github.com/sikt-no/fs/blob/<før-sha>/<sti>)) · ([etter](https://github.com/sikt-no/fs/blob/<etter-sha>/<sti>)) ([<sti>](../../../../<sti>))
 
 ### Fjernet _(diff-status: `removed`)_
 
-- **`<feature-fil>`** — hva som er fjernet, og hva som var spesifisert. ([before/<sti>](krav-input/changes/<YYYY-MM-DD>-<ref>/before/<sti>))
+- **`<feature-fil>`** (`@DOM-SUB-KAP-NNN`) — hva som er fjernet, og hva som var spesifisert. ([før](https://github.com/sikt-no/fs/blob/<før-sha>/<sti>))
 
 ### Skal fjernes (`@deprecated`)
 
 [Krav og regler/scenarioer som er `@deprecated` i etter-tilstanden (eller i test-fila). De var levert, og koden skal fjernes. `fs-verify` sletter dem når koden er borte. Utelat hvis tom.]
 
-- **`<feature-fil>`** (`@DOM-SUB-KAP-NNN`) — hele kravet. ([<sti>](krav-input/changes/<YYYY-MM-DD>-<ref>/<sti>)) — ble avviklet i endringen: ([before/<sti>](krav-input/changes/<YYYY-MM-DD>-<ref>/before/<sti>))
-- **`<feature-fil>` — regel/scenario `<tittel>`** ([<sti>](krav-input/changes/<YYYY-MM-DD>-<ref>/<sti>))
+- **`<feature-fil>`** (`@DOM-SUB-KAP-NNN`) — hele kravet. Ble avviklet i endringen: ([før](https://github.com/sikt-no/fs/blob/<før-sha>/<sti>)) ([<sti>](../../../../<sti>))
+- **`<feature-fil>` — regel/scenario `<tittel>`** (`@DOM-SUB-KAP-NNN`) ([<sti>](../../../../<sti>))
 
 ### Krav _(test/markdown-kilde)_
 
-- **`<fil eller scenario>`** — kravet. ([<sti>](krav-input/changes/<YYYY-MM-DD>-<ref>/<sti>))
+- **`<fil eller scenario>`** (`@DOM-SUB-KAP-NNN` for `.feature`) — kravet. ([<sti>](../../../../<sti>), eller kopien under `krav-input/changes/<YYYY-MM-DD>-<ref>/` for filer utenfor repoet)
 
 ### Utenfor scope (`@draft`)
 
@@ -274,6 +282,6 @@ Minn brukeren på at endringene i `tasks/` og `krav/` ikke er committet.
 - **Kilden er autoritativ.** Ikke gjett mot kode, ikke sammenlign med tidligere spec.
 - **Klassifikasjon kommer fra diff-status** (`A` → Lagt til, `M` → Endret, `D` → Fjernet). Ikke regn den ut manuelt.
 - Test/markdown: ikke klassifiser, bare list kravene.
-- Hver bullet peker til en konkret fil under `krav-input/changes/<YYYY-MM-DD>-<ref>/`.
+- Hver krav-bullet har Feature-ID, før/etter som GitHub-lenker på festet SHA, og lenke til fila under `krav/`. Kopier bare filer utenfor repoet.
 - Vær ærlig om validering: kan du ikke lese en Figma-ramme, skriv `Uavklart`.
 - Ett spørsmål om gangen ved skisseavvik.

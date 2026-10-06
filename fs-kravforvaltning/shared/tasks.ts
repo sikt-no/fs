@@ -1,5 +1,6 @@
 // Oppgavemappene i tasks/<domene>/<slug>/ (se tasks/README.md). Serveren leser rådata (server/tasks.ts),
 // og her tolkes de til en modell og sjekkes mot reglene i README-en. Rene funksjoner, testet i tasks.test.ts.
+import { parseSpec, type KravRef } from './spec.ts';
 
 /** Rådata for én oppgavemappe, slik serveren leser den */
 export interface RawTask {
@@ -117,6 +118,8 @@ export interface Task {
   metaSlug: string | null;
   /** Sti under krav/ fra «Krav (Gherkin)», uten skråstrek til slutt */
   kravLink: string | null;
+  /** Kravene under `## Krav` i spesifikasjonene (`spec/spec-*.md`), uten det som er utenfor scope */
+  specKrav: KravRef[];
   prs: number;
   design: boolean;
   spec: boolean;
@@ -258,6 +261,11 @@ export function parseTask(raw: RawTask): Task {
   const log = tableAfter(src ?? '', /Statuslogg/).map(r => ({ d: clean(r[0] ?? ''), t: clean(r[1] ?? ''), who: none(r[2]) ?? '' }));
   const dates = log.map(r => r.d).filter(d => /^\d{4}-\d{2}-\d{2}$/.test(d)).sort();
 
+  const specKrav: KravRef[] = [];
+  for (const f of raw.files.filter(f => /^spec\/spec-[^/]+\.md$/.test(f) && raw.sources[f] !== undefined))
+    for (const k of parseSpec(raw.sources[f], f.slice(5)).krav)
+      if (!specKrav.some(o => (k.id ? o.id === k.id : o.file === k.file))) specKrav.push(k);
+
   return {
     dom: raw.dom,
     slug: raw.slug,
@@ -274,6 +282,7 @@ export function parseTask(raw: RawTask): Task {
     metaDom: firstWord('Domene'),
     metaSlug: firstWord('Slug'),
     kravLink: kravPath(meta['Krav (Gherkin)'], dir),
+    specKrav,
     prs,
     design: raw.files.includes('design.md'),
     spec: raw.files.some(f => /^spec\/spec-.+\.md$/.test(f)),

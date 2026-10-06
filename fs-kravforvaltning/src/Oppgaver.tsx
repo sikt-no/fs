@@ -61,7 +61,7 @@ function KravList({ t, entries, onOpenKrav }: { t: Task; entries: Snapshot; onOp
   const missing = k.missing.length > 0 && (
     <span class="okrav-miss" title={k.missing.join('\n')}>
       <Diamond />
-      {k.missing.length === 1 ? `${k.missing[0]} i spec/krav-input finnes ikke i krav/ lenger` : `${k.missing.length} filer i spec/krav-input finnes ikke i krav/ lenger`}
+      {k.missing.length === 1 ? `${k.missing[0]} i spesifikasjonen finnes ikke i krav/ lenger` : `${k.missing.length} filer i spesifikasjonene finnes ikke i krav/ lenger`}
     </span>
   );
   if (!k.items.length)
@@ -91,7 +91,7 @@ function KravList({ t, entries, onOpenKrav }: { t: Task; entries: Snapshot; onOp
       ))}
       {k.more > 0 && <span class="omuted mono">+ {k.more} flere under {t.kravLink}</span>}
       {missing}
-      <span class="omuted okrav-from">{k.from === 'spec' ? 'Fra spec/krav-input/' : 'Fra «Krav (Gherkin)» i oppgave.md'}</span>
+      <span class="omuted okrav-from">{k.from === 'spec' ? 'Fra spesifikasjonen' : 'Fra «Krav (Gherkin)» i oppgave.md'}</span>
     </>
   );
 }

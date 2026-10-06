@@ -92,7 +92,7 @@ const trimBlank = (ls: string[]) => {
   return ls.slice(a, b);
 };
 
-/** `krav-input/local/krav/…` eller en relativ lenke til krav/ → stien under krav/ */
+/** En relativ lenke til krav/, en GitHub-lenke på en SHA, eller `krav-input/local/krav/…` i eldre spesifikasjoner → stien under krav/ */
 function kravPathOf(link: string): string | null {
   let p: string;
   try {
@@ -243,7 +243,7 @@ export function setTitle(text: string, title: string, delta: boolean): string {
   return ls.join('\n');
 }
 
-/** Punktet et krav får når det legges til i vieweren. fs-specify lager råkopien i krav-input/ når den kjøres. */
+/** Punktet et krav får når det legges til i vieweren. Lenken går til fila under krav/, som fs-specify og fs-specify-delta også skriver. */
 export function kravLine(k: KravRef, title: string, specDir: string): string {
   const rel = k.path ? relativeTo(specDir, k.path) : '';
   const link = k.path ? ` ([${k.path}](${encodeURI(rel)}))` : '';

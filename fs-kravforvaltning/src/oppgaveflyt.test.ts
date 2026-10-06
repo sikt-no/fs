@@ -21,6 +21,7 @@ const task = (o: Partial<Task> = {}): Task => ({
   metaDom: null,
   metaSlug: null,
   kravLink: null,
+  specKrav: [],
   prs: 0,
   design: false,
   spec: false,
@@ -114,9 +115,11 @@ const feature = (tag: string) => `# language: no\n@BRU-BRU-PER-001 @must @${tag}
 const snap = (paths: string[]): Snapshot => Object.fromEntries(paths.map(p => [p, buildEntry(p, feature('in-progress'), 0)]));
 const DIR = 'krav/07 Brukeradministrasjon og tilgangsstyring/12 Brukeradministrasjon/personbrukere';
 
-test('kravFor: filene i spec/krav-input vinner over lenken', () => {
+const ref = (file: string, id = '', path: string | null = null) => ({ file, id, path, remove: false });
+
+test('kravFor: kravene i spesifikasjonen vinner over lenken', () => {
   const entries = snap([`${DIR}/søke_opp_bruker.feature`, `${DIR}/se_detaljer.feature`, 'krav/02 Opptak/10 Regelverk/01 Krav/søke_opp_bruker.feature']);
-  const t = task({ kravLink: DIR, files: ['oppgave.md', 'spec/krav-input/local/søke_opp_bruker.feature', 'spec/krav-input/local/omdøpt.feature'] });
+  const t = task({ kravLink: DIR, specKrav: [ref('søke_opp_bruker.feature'), ref('omdøpt.feature')] });
   const k = kravFor(t, entries);
   assert.equal(k.from, 'spec');
   assert.deepEqual(
@@ -129,11 +132,16 @@ test('kravFor: filene i spec/krav-input vinner over lenken', () => {
   assert.deepEqual(k.missing, ['omdøpt.feature']);
 });
 
-test('kravFor: full sti fra krav-input/changes, og before/ hoppes over', () => {
+test('kravFor: Feature-ID først, så stien i lenken', () => {
   const p = 'krav/07 Brukeradministrasjon og tilgangsstyring/applikasjoner/01 It/vise_tilganger.feature';
-  const t = task({ files: [`spec/krav-input/changes/2026-06-16-b0e8de5/${p}`, `spec/krav-input/changes/2026-06-16-b0e8de5/before/${p}`] });
+  const flyttet = `${DIR}/flyttet.feature`;
   assert.deepEqual(
-    kravFor(t, snap([p])).items.map(i => i.path),
+    kravFor(task({ specKrav: [ref('gammelt_navn.feature', '@BRU-BRU-PER-001', 'krav/borte/gammelt_navn.feature')] }), snap([flyttet])).items.map(i => i.path),
+    [flyttet],
+    'omdøpt fil finnes på Feature-ID',
+  );
+  assert.deepEqual(
+    kravFor(task({ specKrav: [ref('vise_tilganger.feature', '@UKJENT-001', p)] }), snap([p])).items.map(i => i.path),
     [p],
   );
 });
