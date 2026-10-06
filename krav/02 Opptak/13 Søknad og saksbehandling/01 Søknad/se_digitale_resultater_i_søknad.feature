@@ -31,6 +31,13 @@
 #   struktur og rekkefølge som @OPT-BEH-BEH-005 på saksbehandlersiden — de to
 #   ble besluttet uavhengig og landet likt.
 #
+# Avklart 2026-01-10 — raffinering med utviklere (se Confluence):
+# - Regelen «Det fremgår når grunnlaget er ufullstendig» utgår. Kompetanse-
+#   subgrafen har en rad som viser hvilke resultater som finnes, uavhengig av
+#   om kilden kan nås der og da. Søkeren varsles derfor aldri om delvis eller
+#   mislykket henting — mangler et resultat, forblir det tomt, og søkeren får
+#   en generell forklaring (se .design.md). Scenarioene under utgår med den.
+#
 # BEGREPSBRUK
 #
 # «Digitale resultater» brukes gjennomgående, også i @OPT-BEH-BEH-005.
@@ -115,40 +122,6 @@ Egenskap: Se digitale resultater i søknaden
       Når søkeren kommer til dokumentasjonssteget i søknaden
       Så ser søkeren at systemet ikke har digitale resultater om hen
       Og søkeren får vite at all dokumentasjon må lastes opp manuelt
-      # PRESISERT 25.09.2026: gjelder bare når det er bekreftet at søkeren
-      # ikke har noe. Kunne ikke opplysningene hentes, gjelder regelen under —
-      # instruksen om manuell opplasting skal ikke gis på usikkert grunnlag.
-
-  @draft @openquestion
-  Regel: Det fremgår når grunnlaget er ufullstendig
-
-    # ÅPNE SPØRSMÅL:
-    # - Hva skal søkeren gjøre når opplysningene ikke kunne hentes? Vente og
-    #   prøve igjen, laste opp manuelt i mellomtiden, eller begge deler? Det
-    #   henger sammen med dokumentasjonsfristen: en søker som venter på en
-    #   kilde som er nede kan gå glipp av fristen. Reist 25.09.2026.
-    # - Designet dekker ikke disse tilstandene. De må utformes før de kan
-    #   implementeres.
-    #
-    # Regelen speiler @OPT-BEH-BEH-005. Konsekvensen er ulik: der er risikoen
-    # et feilvedtak, her er det at søkeren laster opp noe hen ikke trengte —
-    # eller konkluderer med at vitnemålet ikke er registrert.
-
-    Scenario: Resultater fra en utsteder kunne ikke hentes
-      Gitt at søkeren har resultater fra flere utstedere
-      Og resultatene fra én av utstederne ikke kunne hentes
-      Når søkeren kommer til dokumentasjonssteget i søknaden
-      Så ser søkeren resultatene som ble hentet
-      Og søkeren ser hvilken utsteder det finnes resultater fra som ikke kunne hentes
-
-    Scenario: Ingen av resultatene kunne hentes
-      Gitt at søkeren har digitale resultater
-      Og ingen av dem kunne hentes
-      Når søkeren kommer til dokumentasjonssteget i søknaden
-      Så ser søkeren at hen har resultater som ikke kunne hentes
-      Men søkeren får ikke beskjed om at all dokumentasjon må lastes opp manuelt
-
-    Scenario: Det er ukjent om søkeren har resultater
-      Gitt at det ikke lar seg avgjøre om søkeren har digitale resultater
-      Når søkeren kommer til dokumentasjonssteget i søknaden
-      Så ser søkeren at det ikke er avklart hvilke resultater systemet har om hen
+      # AVKLART 2026-01-10: gjelder uansett årsak til at systemet ikke har
+      # resultater — også om henting fra en kilde har feilet. Søkeren ser én
+      # samlet forklaring, ikke en egen tilstand for mislykket henting.
