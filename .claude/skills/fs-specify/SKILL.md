@@ -14,7 +14,7 @@ $ARGUMENTS
 
 Du samler krav. Du henter kravene fra `.feature`-filene under `krav/`, kobler dem til eventuelle skisser, validerer at skisser og krav stemmer overens, og skriver et kort spec-dokument som kan brukes som fasit for hva som skal bygges.
 
-**Ikke analyser kodebaser, ikke foreslå løsninger, ikke skriv kode.** Spec-en beskriver *hva*, ikke *hvordan*. Unntaket er den korte sjekken av kravene mot koden før retaggingen (se _Sjekk mot koden_), som fanger opp det `fs-krav` ikke fikk sjekket fordi den som validerte, ikke hadde kodeklonene.
+**Ikke analyser kodebaser, ikke foreslå løsninger, ikke skriv kode.** Spec-en beskriver *hva*, ikke *hvordan*. Unntaket er den korte sjekken av kravene mot koden før retaggingen (se _Sjekk mot koden_).
 
 **Bare `@planned`/`@in-progress`-krav skal med.** `@draft` og utaggede `Egenskap:`-blokker er fortsatt under arbeid og må gjennom `fs-krav` først. Det samme gjelder `@draft`-deler (`Regel:`/`Scenario:`) inne i et `@planned` krav — de holdes utenfor scope. `@deprecated`-krav og -deler tas med, men som noe som skal **fjernes**, ikke bygges. I et `@implemented` krav som endres, er det `@planned`/`@in-progress`-delene som skal bygges. Se _Filter_ nedenfor.
 
@@ -120,11 +120,18 @@ Når et levert krav endres, blir egenskapen stående som `@implemented`, og stat
 
 ## Sjekk mot koden
 
-`fs-krav` sjekker kravet mot koden under valideringen (B5, trinn 3), men bare når den som validerer, har kodeklonene. Mange som skriver krav har ikke det. Derfor sjekkes kravene igjen her, før de blir `@in-progress`.
+Kravene sjekkes mot koden her, før de blir `@in-progress`. Den som kjører `fs-specify`, har som regel kodeklonene, og et krav som må endres, er fortsatt `@planned` og kan endres på stedet.
 
-**Når:** når kravet bygger på noe som finnes fra før (begreper, identifikatorer, roller, data), og alltid for `@planned`-deler i leverte krav. Ikke for `@deprecated`-krav og -deler, som `fs-verify` tar seg av. Sjekken gjøres selv om `fs-krav` har gjort den: koden kan ha endret seg, og sjekken er rask.
+**Når:** når kravet bygger på noe som finnes fra før (begreper, identifikatorer, roller, data), og alltid for `@planned`-deler i leverte krav. Ikke for `@deprecated`-krav og -deler, som `fs-verify` tar seg av.
 
-**Hvordan:** som i [`fs-krav`, B5, trinn 3](../fs-krav/SKILL.md#b5-gjennomgå-draft-krav-og-valider). Bruk kodeklonene (fs-admin, fs-plattform) som står i systemprompten, og spør om stien bare hvis de mangler. Søk med `Grep` og `Glob` etter det kravet nevner (navn, identifikatorer og format, regler som finnes fra før, roller og verdier), og vis hvert funn med `<repo>/<fil>:<linje>`. Det er ikke en analyse av hvordan noe skal bygges, det er jobben til `bat-analyze`.
+**Hvordan:** bruk kodeklonene (fs-admin, fs-plattform) som står i systemprompten, og spør om stien bare hvis de mangler. Søk med `Grep` og `Glob` etter begrepene, feltene og reglene kravet nevner, og se etter:
+
+- **Navn:** heter begrepet noe annet i koden?
+- **Identifikatorer og format:** finnes ID-en fra før, hvem lager den, og hvilket format har den?
+- **Regler som finnes fra før:** unikhet, store og små bokstaver, påkrevde felt, lengde. For eksempel en unikhetsregel i databasen som kravet ikke nevner, eller bryter.
+- **Roller og verdier:** finnes rollene og verdiene kravet bruker, og heter de det samme?
+
+Vis hvert funn med `<repo>/<fil>:<linje>`. Søk bare etter det kravet nevner, og stopp når hvert begrep er funnet, eller du har sett at det ikke finnes. Det er ikke en analyse av hvordan noe skal bygges, det er jobben til `bat-analyze`.
 
 **Ved avvik:** ett om gangen, via `AskUserQuestion`:
 

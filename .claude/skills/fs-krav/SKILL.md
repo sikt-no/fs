@@ -32,7 +32,7 @@ Skillen fasiliterer derfor også **validering** av skisserte krav (modus B): Gå
 
 ## Forutsetninger
 
-- Arbeidet skjer i `krav/`-mappen i dette repoet. Skillen skriver bare i `krav/`-treet, ikke i `tasks/`. Den leser kodeklonene for å sjekke kravene mot koden (B5, trinn 3), men endrer dem ikke.
+- Arbeidet skjer i `krav/`-mappen i dette repoet. Skillen skriver bare i `krav/`-treet, ikke i `tasks/`. Den leser kodeklonene når et levert krav endres (D1), men endrer dem ikke. Ellers sjekkes kravene mot koden i `fs-specify`.
 - Konvensjoner er definert i `krav/README.md` — følg dem, den er autoritativ. Ren Gherkin-syntaks står i `references/gherkin-syntax.md`.
 - Kjente persona: administrator, søker, student, saksbehandler
 - **GitHub-issue er valgfritt.** Oppgir brukeren et issue når kravet opprettes, skrives det som `# GitHub: #NNNN` over tag-linja (se steg A6). Skillen oppretter, endrer, linker eller lukker ikke GitHub-issues, og kjører ikke `gh`.
@@ -267,7 +267,7 @@ Les hver `.feature`-fil og klassifiser hvert krav basert på tags på `Egenskap:
 | **Draft** | `@draft` finnes | B5: gjennomgang. `@planned` bare hvis validert |
 | **Uten status** | Verken `@draft` eller `@planned` (heller ikke `@in-progress`/`@implemented`) | B4: legg til `@draft`, deretter gjennomgang i B5 |
 | **Avviklet** | `@deprecated` finnes | Ingen endring — rapporter som avviklet. Slettes av `fs-verify` når koden er borte |
-| **Allerede klar** | `@planned`, `@in-progress` eller `@implemented` finnes, og `@draft` finnes ikke | Ingen endring — rapporter som klar. Har fila `@draft`-deler på `Regel:`/`Scenario:`, list dem og spør om noen skal avklares nå (B5, trinn 6–7 for den delen). Under `@implemented`: bruk modus D, steg D3 (delen får `@planned`, og delen den erstatter, `@deprecated`) |
+| **Allerede klar** | `@planned`, `@in-progress` eller `@implemented` finnes, og `@draft` finnes ikke | Ingen endring — rapporter som klar. Har fila `@draft`-deler på `Regel:`/`Scenario:`, list dem og spør om noen skal avklares nå (B5, trinn 5–6 for den delen). Under `@implemented`: bruk modus D, steg D3 (delen får `@planned`, og delen den erstatter, `@deprecated`) |
 
 Vis brukeren en oversikt før du gjør endringer, med klikkbare lenker:
 
@@ -302,32 +302,18 @@ Ta ett draft-krav om gangen. For hvert:
    - Andre `.feature`-filer i samme kapabilitet for stil og gjenbruk
    - Eksisterende step-definisjoner i `tester/steps/**/*.ts` — gjenbruk formuleringer som allerede er implementert
    - Confluence-siden fra B2 hvis brukeren oppga en — slå opp K-nummeret (eller tilsvarende seksjonsreferanse) som nevnes i filens `# Krav fra Confluence:`-kommentar, og bruk innholdet som grunnlag for forslag
-3. **Sjekk mot koden.** Bruk kodeklonene (fs-admin, fs-plattform) som står i systemprompten, og spør bare om stien hvis de mangler. Søk med `Grep` og `Glob` etter begrepene, feltene og reglene kravet nevner, og se etter:
-   - **Navn:** heter begrepet noe annet i koden?
-   - **Identifikatorer og format:** finnes ID-en fra før, hvem lager den, og hvilket format har den?
-   - **Regler som finnes fra før:** unikhet, store og små bokstaver, påkrevde felt, lengde. For eksempel en unikhetsregel i databasen som kravet ikke nevner, eller bryter.
-   - **Roller og verdier:** finnes rollene og verdiene kravet bruker, og heter de det samme?
-
-   Vis hvert funn med `<repo>/<fil>:<linje>`. Et avvik er et spørsmål til brukeren, ikke en fasit: *«Kravet sier X, koden har Y. (a) Kravet følger koden, (b) koden skal endres, (c) vet ikke.»* Ved (b) skal kravteksten si det som skal gjelde, og ved (c) blir det et `# ÅPNE SPØRSMÅL:`. Ikke skriv tekniske detaljer inn i scenarioene.
-
-   Dette er ikke en analyse av hvordan noe skal bygges, det er jobben til `bat-analyze`. Søk bare etter det kravet nevner, og stopp når hvert begrep er funnet, eller du har sett at det ikke finnes.
-
-   **Når:** når kravet bygger på noe som finnes fra før (begreper, identifikatorer, roller, data), og alltid i modus D. Er kravet helt nytt og uten noe å bygge på, si det, og hopp over sjekken.
-
-   **Uten kodekloner:** spør én gang om stien. Har brukeren ingen klone, gå videre, og skriv «ikke sjekket mot koden» i B6. Sjekken gjøres da i `fs-specify` / `fs-specify-delta` før kravet blir `@in-progress`. Det koster mer å endre kravet da, så i modus D settes ikke `@planned` uten kodesjekk før brukeren har sagt uttrykkelig at det er greit.
-4. **Oppsummer for brukeren** hva som mangler eller er uavklart:
+3. **Oppsummer for brukeren** hva som mangler eller er uavklart:
    - Åpne spørsmål som ikke er besvart
    - Skisse-pregede scenarios uten konkrete data / forventet resultat
    - Uklare feltlister, rolle-navn, feilmeldinger, forretningsregler
    - Terminologi-avvik (`institusjon`, `institusjonsnummer` — se `krav/README.md`)
    - Manglende `Bakgrunn:` der det ville redusert duplisering
-   - Avvik fra koden (trinn 3)
-5. **Still konkrete spørsmål — ett om gangen.** Jf. interaksjonsprinsippet: ikke dump hele spørsmålslisten i én blokk. Still ett spørsmål, gi (a)/(b)/(c)-alternativer der det er naturlig, og vent på svar før du går til neste. Hovedregel: *aldri finn på valideringsregler, feilmeldinger eller forretningslogikk — spør brukeren*. Marker forslag tydelig som "forslag" hvis du presenterer dem for reaksjon.
-6. **Oppdater filen** basert på svarene: revider og konkretiser scenarios, legg til manglende scenarios, fjern besvarte `# ÅPNE SPØRSMÅL:`-kommentarer, stram opp språk, rett terminologi, og sørg for at Gherkin-konvensjonene følges (Scenariomal + Eksempler, deklarativ stil, én atferd per scenario).
-7. **Be brukeren om validering.** Når åpne spørsmål i hovedflyten er besvart og scenariene er konkrete nok til implementasjon, spør: *"Er [tittel] validert slik det står nå? (a) Ja → `@planned`, (b) Nei → beholder `@draft`."* Bytt `@draft` med `@planned` på `Egenskap:`-tag-linjen bare ved (a). Ikke behold begge. Eksempel: `@BRU-APP-API-001 @must @draft` → `@BRU-APP-API-001 @must @planned`.
+4. **Still konkrete spørsmål — ett om gangen.** Jf. interaksjonsprinsippet: ikke dump hele spørsmålslisten i én blokk. Still ett spørsmål, gi (a)/(b)/(c)-alternativer der det er naturlig, og vent på svar før du går til neste. Hovedregel: *aldri finn på valideringsregler, feilmeldinger eller forretningslogikk — spør brukeren*. Marker forslag tydelig som "forslag" hvis du presenterer dem for reaksjon.
+5. **Oppdater filen** basert på svarene: revider og konkretiser scenarios, legg til manglende scenarios, fjern besvarte `# ÅPNE SPØRSMÅL:`-kommentarer, stram opp språk, rett terminologi, og sørg for at Gherkin-konvensjonene følges (Scenariomal + Eksempler, deklarativ stil, én atferd per scenario).
+6. **Be brukeren om validering.** Når åpne spørsmål i hovedflyten er besvart og scenariene er konkrete nok til implementasjon, spør: *"Er [tittel] validert slik det står nå? (a) Ja → `@planned`, (b) Nei → beholder `@draft`."* Bytt `@draft` med `@planned` på `Egenskap:`-tag-linjen bare ved (a). Ikke behold begge. Eksempel: `@BRU-APP-API-001 @must @draft` → `@BRU-APP-API-001 @must @planned`.
 
    **Delvis utkast:** Gjenstår det spørsmål som bare gjelder en avgrenset `Regel:` eller et enkelt scenario, spør brukeren: *"(a) Vent med hele kravet — behold `@draft` på egenskapen, (b) Sett egenskapen til `@planned` og la [regel/scenario] stå som `@draft @openquestion`."* Velges (b): flytt `@draft` fra `Egenskap:` ned til den aktuelle delen sammen med `@openquestion`, og sørg for at `# ÅPNE SPØRSMÅL:` under delen beskriver hva som mangler. Velg aldri (b) på egen hånd — det skal være en bevisst beslutning.
-8. **Bekreft endringen med brukeren** før du skriver til disk hvis scenarios endres vesentlig. Mindre opprettinger (terminologi, formatering) kan skrives direkte.
+7. **Bekreft endringen med brukeren** før du skriver til disk hvis scenarios endres vesentlig. Mindre opprettinger (terminologi, formatering) kan skrives direkte.
 
 **Hvis et draft ikke lar seg fullføre i denne sesjonen** (venter på ekstern input, produktavklaring, design-beslutning) og delvis utkast ikke er aktuelt: behold `@draft`, dokumenter gjenværende usikkerhet som oppdatert `# ÅPNE SPØRSMÅL:`, og rapporter tydelig i B6 at kravet fortsatt er draft.
 
@@ -338,7 +324,6 @@ Når hele mappen er gjennomgått, rapportér til brukeren:
 - Antall krav som nå er tagget `@planned` (fordelt på "validert i gjennomgangen" vs. "satt etter eksplisitt beskjed fra bruker")
 - Antall krav som fortsatt er `@draft` (inkludert eldre krav uten status som fikk `@draft`), med grunn (venter på ekstern avklaring, produktinput, etc.)
 - `@planned`-krav med `@draft`-deler: hvilke regler/scenarioer som venter, og hvorfor
-- Krav som er sjekket mot koden, med repoene, og krav som ikke er sjekket, med grunn (helt nytt krav, eller ingen klone)
 - Antall krav som var `@planned`/`@in-progress`/`@implemented`/`@deprecated` fra før og ikke ble endret
 - Samlet liste over gjenstående `# ÅPNE SPØRSMÅL:` på tvers av filer — som en enkelt punktliste brukeren kan ta med inn i neste avklaringsrunde
 - Forslag til neste steg: `lage-steps` for `@planned`-krav, eller `fs-specify` for å hente dem inn i en oppgavemappe
@@ -397,7 +382,7 @@ Finn fila og regelen eller scenarioet som skal endres. Er det uklart, spør. Les
 
 Hvilke deler endringen gjelder, avklares med brukeren, én om gangen: endres, fjernes eller legges til?
 
-Finn koden for den leverte delen i kodeklonene (som i B5, trinn 3), og vis `fil:linje`. Den nye delen skrives (D2) ut fra hva koden gjør i dag, ikke bare ut fra den gamle teksten. Gjør koden noe annet enn den leverte teksten sier, spør før D2: *«Den leverte delen sier X, koden gjør Y. Hva skal den nye delen bygge på?»*
+Finn koden for den leverte delen i kodeklonene (fs-admin, fs-plattform), og vis `fil:linje`. Bruk klonene som står i systemprompten, og spør om stien bare hvis de mangler. Har brukeren ingen klone, gå videre: `fs-specify` sjekker kravet mot koden før det blir `@in-progress`. Den nye delen skrives (D2) ut fra hva koden gjør i dag, ikke bare ut fra den gamle teksten. Gjør koden noe annet enn den leverte teksten sier, spør før D2: *«Den leverte delen sier X, koden gjør Y. Hva skal den nye delen bygge på?»*
 
 ### D2. Skriv den nye delen som `@draft`
 
@@ -427,7 +412,7 @@ Setter brukeren eksplisitt at delen skal ha `@planned`, gjelder det samme unntak
 
 - Hvilke deler som er `@planned`, og hvilke som fortsatt er `@draft` (med åpne spørsmål)
 - Hvilke deler som fikk `@deprecated`, og hvilken ny del de erstattes av
-- Om delene er sjekket mot koden, med `fil:linje` for den leverte delen, eller at `@planned` ble satt uten kodesjekk etter beskjed fra brukeren
+- Koden for den leverte delen (`fil:linje`), eller at den ikke ble sjekket fordi brukeren ikke hadde kodeklonene
 - Step definitions i `tester/steps/` som hører til `@deprecated`-delene (listes, slettes ikke)
 - Neste steg: `fs-specify` / `fs-specify-delta` henter `@planned`-delene inn i en oppgave (`@planned` → `@in-progress` på delen), og `fs-verify` fjerner `@in-progress` når koden er på plass og sletter `@deprecated`-delene når den gamle koden er borte
 
