@@ -14,7 +14,7 @@ $ARGUMENTS
 
 Brukeren har en **endring** — en commit, to commits, en branch, en test-fil eller en markdown — og du lager et selvstendig spec-dokument som fanger kravene i endringen.
 
-- **Ikke analyser kode, ikke foreslå løsninger.**
+- **Ikke analyser kode, ikke foreslå løsninger.** Unntaket er den korte sjekken av kravene mot koden før retaggingen (se _Sjekk mot koden_).
 - **Ikke les eller sammenlign med tidligere `spec-*.md`.** Endringskilden er autoritativ alene. At eksisterende krav som ikke nevnes forblir gjeldende, er noe du *skriver* i dokumentet — ikke en sammenligning du gjør.
 - **Bare `@planned`/`@in-progress`-`.feature`-krav skal bygges, og `@deprecated`-krav og -deler skal fjernes.** Markdown og kode-tester har ingen Gherkin-tag og filtreres ikke. Se _Filter_.
 - **Samme tag-regler som `fs-specify`.** Skillene skiller seg på input: `fs-specify` tar en mappe eller et sett med krav, denne tar en endring og viser hva som er lagt til, endret og fjernet.
@@ -155,11 +155,15 @@ Test-fil-kilde (uten diff): tag-en på fila slik den er.
 
 Bare filer som passerer, nevnes i manifestet og spec-en. **Ingen `.feature`-filer passerer** (og det finnes ingen markdown/kode-test å falle tilbake på): rapporter hvilke filer som ble vurdert og hvilken tag de hadde, logg `ended (aborted)`, og foreslå `fs-krav`.
 
+## Sjekk mot koden
+
+Følg [`fs-specify` → _Sjekk mot koden_](../fs-specify/SKILL.md#sjekk-mot-koden) for kravene i delta-en som skal bygges (Lagt til, Endret og `@planned`-deler i leverte krav), ikke for dem som er Fjernet eller bare skal fjernes. Markdown- og kode-test-kilder har ingen Gherkin-krav, og sjekkes ikke. Krav som holdes tilbake, retagges ikke, og står under `## Kodesjekk`.
+
 ## Retagg krav til `@in-progress`
 
 Samme regler som [`fs-specify` → _Retagg_](../fs-specify/SKILL.md#retagg-krav-til-in-progress): bare `Egenskap:`-tag-linja (eller `Regel:`-/`Scenario:`-linja for `@planned`-deler i et `@implemented` krav), én `Edit`, `@planned` → `@in-progress`, idempotent, ingen rollback. `@deprecated`-krav og -deler retagges aldri.
 
-**Når:** etter at scope er låst, før delta-dokumentet skrives.
+**Når:** etter at scope er låst og koden er sjekket, før delta-dokumentet skrives. Krav som holdes tilbake etter kodesjekken, retagges ikke.
 
 | Kilde | Hva skjer |
 |---|---|
@@ -247,6 +251,10 @@ Følg [`fs-specify` → _Implementasjonsdetaljer_](../fs-specify/SKILL.md#implem
 [Som i `fs-specify`: én linje per feature-fil som har implementasjonsdetaljer. Utelat seksjonen hvis ingen har det.]
 
 - **`<feature-fil>`** — [<feature-navn>.design.md](../../../../krav/<sti>.design.md)
+
+## Kodesjekk
+
+[Som i `fs-specify`: repoene som ble sjekket, eller `Ikke sjekket: <grunn>`, og ett punkt per avvik med beslutningen.]
 
 ## Retagging
 

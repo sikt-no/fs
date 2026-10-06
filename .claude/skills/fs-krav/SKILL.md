@@ -314,7 +314,7 @@ Ta ett draft-krav om gangen. For hvert:
 
    **Når:** når kravet bygger på noe som finnes fra før (begreper, identifikatorer, roller, data), og alltid i modus D. Er kravet helt nytt og uten noe å bygge på, si det, og hopp over sjekken.
 
-   **Uten kodekloner:** spør én gang om stien. Har brukeren ingen klone, gå videre, og skriv «ikke sjekket mot koden» i B6. I modus D settes ikke `@planned` uten kodesjekk før brukeren har sagt uttrykkelig at det er greit.
+   **Uten kodekloner:** spør én gang om stien. Har brukeren ingen klone, gå videre, og skriv «ikke sjekket mot koden» i B6. Sjekken gjøres da i `fs-specify` / `fs-specify-delta` før kravet blir `@in-progress`. Det koster mer å endre kravet da, så i modus D settes ikke `@planned` uten kodesjekk før brukeren har sagt uttrykkelig at det er greit.
 4. **Oppsummer for brukeren** hva som mangler eller er uavklart:
    - Åpne spørsmål som ikke er besvart
    - Skisse-pregede scenarios uten konkrete data / forventet resultat

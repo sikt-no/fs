@@ -200,7 +200,7 @@ En feature har høyst én prioritet. *(sjekkes automatisk)*
 
 Sier noe om selve **kravteksten** – er den ferdig skrevet, avklart og klar til bruk?
 
-- `@draft` – Utkast. Kravteksten er ikke ferdig: åpne spørsmål, uavklart scope, eller mangler review. Skal ikke legges til grunn for implementasjon som den er. **Alle nye krav starter som `@draft`**, og blir stående slik til de er validert. `@planned` settes bare på validerte krav – validert i en gjennomgang (`fs-krav`, modus B), eller når det eksplisitt er sagt at kravet skal ha `@planned`. Et krav uten status regnes som ikke validert. Bygger kravet på noe som finnes fra før, eller endrer det noe som er levert, sjekkes det mot koden som en del av valideringen, så avvik blir avklart før `@planned` og ikke etter `@in-progress`.
+- `@draft` – Utkast. Kravteksten er ikke ferdig: åpne spørsmål, uavklart scope, eller mangler review. Skal ikke legges til grunn for implementasjon som den er. **Alle nye krav starter som `@draft`**, og blir stående slik til de er validert. `@planned` settes bare på validerte krav – validert i en gjennomgang (`fs-krav`, modus B), eller når det eksplisitt er sagt at kravet skal ha `@planned`. Et krav uten status regnes som ikke validert. Bygger kravet på noe som finnes fra før, eller endrer det noe som er levert, sjekkes det mot koden som en del av valideringen, så avvik blir avklart før `@planned` og ikke etter `@in-progress`. Har ikke den som validerer kodeklonene, gjøres sjekken i `fs-specify` / `fs-specify-delta`. Et krav som må endres etter sjekken, blir stående som `@planned`.
 
 `@draft` kan stå på to nivåer:
 
