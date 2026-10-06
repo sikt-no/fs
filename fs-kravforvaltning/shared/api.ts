@@ -8,6 +8,8 @@ export interface Boot {
   tasks: TasksSnapshot | null;
   /** Redigering og PR er tilgjengelig (dev-server og desktop-app, ikke statisk bygg) */
   editable: boolean;
+  /** Absolutt sti til repoet appen jobber i (for «Åpne i VS Code»). `null` i statisk bygg */
+  repoRoot: string | null;
 }
 
 export interface SaveRequest {
@@ -187,7 +189,7 @@ export interface Api {
   authPoll(): Promise<AuthStatus>;
   authLogout(): Promise<AuthStatus>;
   /** Desktop-appen: hent siste main fra GitHub til den lokale klonen. Gir filene slik de er etterpå. */
-  pull(): Promise<Omit<Boot, 'editable'>>;
+  pull(): Promise<Omit<Boot, 'editable' | 'repoRoot'>>;
   /** Desktop-appen: finnes det en nyere main på GitHub? `null` når det ikke kan sjekkes (dev-serveren, uten nett) */
   mainStatus(): Promise<MainStatus | null>;
   claudeStatus(): Promise<ClaudeStatus>;

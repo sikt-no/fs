@@ -1,4 +1,5 @@
 import type { OView } from './Oppgaver';
+import { vscodeUrl } from './vscode';
 
 export type Theme = 'light' | 'dark';
 export type Mode = 'krav' | 'avvik' | 'spesifikasjoner' | 'oppgaver';
@@ -39,9 +40,11 @@ interface Props {
   onUpdate: (() => void) | null;
   /** «Hent siste» pågår */
   pulling: boolean;
+  /** Absolutt sti til repoet, for «Åpne i VS Code». `null` i statisk bygg */
+  repoRoot: string | null;
 }
 
-export function TopBar({ path, connected, theme, onTheme, treeHidden, onToggleTree, tocHidden, onToggleToc, onHome, mode, onMode, nBad, oppgaver, nActive, oView, onOView, oCrumbs, spesifikasjoner, nSpecs, specState, claude, onClaude, onUpdate, pulling }: Props) {
+export function TopBar({ path, connected, theme, onTheme, treeHidden, onToggleTree, tocHidden, onToggleToc, onHome, mode, onMode, nBad, oppgaver, nActive, oView, onOView, oCrumbs, spesifikasjoner, nSpecs, specState, claude, onClaude, onUpdate, pulling, repoRoot }: Props) {
   const parts = mode === 'avvik' ? ['krav', '#/avvik'] : mode === 'oppgaver' ? oCrumbs : mode === 'spesifikasjoner' ? ['tasks', '*/*', 'utforing.md'] : path ? path.split('/') : [];
   return (
     <header class="topbar">
@@ -140,6 +143,11 @@ export function TopBar({ path, connected, theme, onTheme, treeHidden, onToggleTr
               </>
             )}
           </button>
+        )}
+        {repoRoot && (
+          <a class="codebtn" href={vscodeUrl(repoRoot, { newWindow: true })} title={`Åpne ${repoRoot} i et nytt VS Code-vindu`}>
+            VS Code
+          </a>
         )}
         {mode === 'krav' && (
           <button

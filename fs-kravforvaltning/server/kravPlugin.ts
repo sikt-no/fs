@@ -13,6 +13,8 @@ const VIRTUAL_GIT = 'virtual:krav-git';
 const RESOLVED_GIT = '\0' + VIRTUAL_GIT;
 const VIRTUAL_TASKS = 'virtual:krav-tasks';
 const RESOLVED_TASKS = '\0' + VIRTUAL_TASKS;
+const VIRTUAL_ROOT = 'virtual:krav-root';
+const RESOLVED_ROOT = '\0' + VIRTUAL_ROOT;
 
 /**
  * Leser alle .feature- og .md-filer under krav/ (krav/README.md er forsiden), parser dem
@@ -20,6 +22,7 @@ const RESOLVED_TASKS = '\0' + VIRTUAL_TASKS;
  * Git-endringer under krav/ eksponeres som `virtual:krav-git` og pushes som `krav:git`.
  * Oppgavemappene i tasks/ eksponeres som `virtual:krav-tasks` og pushes som `krav:tasks`, men bare med `oppgaver` eller
  * `spesifikasjoner`; ellers er modulen `null`. Flaggene i snapshotet sier hvilke av visningene vieweren viser.
+ * `virtual:krav-root` er den absolutte stien til repoet («Åpne i VS Code»), bare i dev-serveren; i et statisk bygg er den `null`.
  *
  * Logikken står i core/ (felles med desktop-appen); pluginen kobler den til Vites watcher, websocket og
  * middlewares. I dev-serveren kan krav redigeres (`POST /__krav/save`) og sendes som PR (`POST /__krav/publish`).
@@ -46,12 +49,14 @@ export function kravPlugin(repoRoot: string, opts: WorkspaceOpts = {}): Plugin {
       if (id === VIRTUAL) return RESOLVED;
       if (id === VIRTUAL_GIT) return RESOLVED_GIT;
       if (id === VIRTUAL_TASKS) return RESOLVED_TASKS;
+      if (id === VIRTUAL_ROOT) return RESOLVED_ROOT;
     },
 
     load(id) {
       if (id === RESOLVED) return `export default ${JSON.stringify(ws.entries)};`;
       if (id === RESOLVED_GIT) return `export default ${JSON.stringify(ws.git)};`;
       if (id === RESOLVED_TASKS) return `export default ${JSON.stringify(ws.tasks)};`;
+      if (id === RESOLVED_ROOT) return `export default ${JSON.stringify(serve ? ws.repoRoot : null)};`;
     },
 
     configureServer(server) {
