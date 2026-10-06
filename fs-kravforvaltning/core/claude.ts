@@ -428,7 +428,7 @@ export function contextPrompt(
       '{"title": "Krav: …", "branch": "kort-slug-uten-prefiks", "body": "Kort beskrivelse på norsk av hva som er endret og hvorfor", "paths": ["krav/…"]}. ' +
       'Blokken er slik PR lages her: brukeren får et kort med «Åpne i «Lag PR»», som åpner «Lag PR» ferdig utfylt. Si ikke at du ikke kan lage PR, og be ikke brukeren fylle ut «Lag PR» for hånd. ' +
       'Foreslå ikke PR på eget initiativ når du har endret filer: brukeren har knappen «Lag forslag til PR» i panelet. ' +
-      'paths er filene som er endret i samtalen: .feature- og .md-filene under krav/, og i oppgavemappa (tasks/<domene>/<slug>/) alt under spec/ (spesifikasjonen, spec.log.md, questions-*.md, verify-*.md, krav-input/ med råkopier, manifest, Figma-artefakter og skisser) og utforing.md. ' +
+      'paths er filene som er endret i samtalen: .feature- og .md-filene under krav/, og i oppgavemappa (tasks/<domene>/<slug>/) alt under spec/ (spesifikasjonen, spec.log.md, questions-*.md, verify-*.md, krav-input/ med manifest, Figma-artefakter og skisser) og utforing.md. ' +
       'Ta med alt fs-specify, fs-specify-delta og fs-verify har skrevet der. Andre filer (f.eks. oppgave.md, roadmap.md) kan ikke sendes fra FS Kravforvaltning: ta dem ikke med i paths, men si fra om dem i teksten.',
     'Ber brukeren om en oppsummering av samtalen, så den kan brukes i en ny samtale, svarer du med en kodeblokk med språket krav-oppsummering og JSON: ' +
       '{"mal": "…", "gjort": "…", "beslutninger": "…", "apneSporsmal": "…", "nesteSteg": "…", "paths": ["…"]}. ' +

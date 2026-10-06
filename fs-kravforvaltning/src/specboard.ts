@@ -421,7 +421,7 @@ export function verifyPrompt(c: Card): string {
 export function specifyPrompt(c: Card): string {
   return [
     `Kjør ${c.doc.delta ? 'fs-specify-delta' : 'fs-specify'} på spesifikasjonen ${c.path}.`,
-    'Feature-filene og skissene står i dokumentet. Ikke spør etter dem: ta med alt som er @planned eller @deprecated i hver fil, retagg og lag krav-input/.',
+    'Feature-filene og skissene står i dokumentet. Ikke spør etter dem: ta med alt som er @planned eller @deprecated i hver fil, og retagg.',
     '',
     'Krav:',
     ...c.feats.map(f => `- ${f.path ?? f.file} (${f.id})`),

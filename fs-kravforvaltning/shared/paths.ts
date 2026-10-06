@@ -18,7 +18,7 @@ export const isSketchPath = (p: string) =>
 
 /**
  * Det `fs-specify`, `fs-specify-delta` og `fs-verify` skriver i oppgavemappas `spec/`: spesifikasjonen, `spec.log.md`,
- * `questions-*.md`, `verify-*.md`, og `krav-input/` (råkopier av kravene, manifest, Figma-artefakter og skisser).
+ * `questions-*.md`, `verify-*.md`, og `krav-input/` (manifest, Figma-artefakter og skisser, og råkopier av kravene i eldre oppgaver).
  * Kan sendes med «Lag PR», men bare `isSpecPath` kan redigeres i vieweren.
  */
 export const isTaskSpecFile = (p: string) => /^tasks\/[^/]+\/[^/]+\/spec\/([^/]+\/)*[^/]+\.(md|feature|json|txt|png|jpe?g|webp)$/i.test(p);

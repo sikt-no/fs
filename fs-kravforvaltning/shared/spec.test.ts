@@ -77,6 +77,22 @@ test('parseSpec: delta, Omfang, Rute og «Ingen skisse»', () => {
   assert.deepEqual(d.rute, ['fs-plattform', 'fs-admin']);
 });
 
+test('parseSpec: delta med før og etter på GitHub og lenke til krav/ til slutt', () => {
+  const p = 'krav/07 Bru/11 Til/tildele_rolle.feature';
+  const gh = (sha: string) => `https://github.com/sikt-no/fs/blob/${sha}/${encodeURI(p)}`;
+  const d = parseSpec(
+    `# Delta-spec: Roller — 2026-10-06-abc1234\n\n## Krav\n\n### Endret _(diff-status: \`modified\`)_\n\n- **\`tildele_rolle.feature\`** (\`@BRU-TIL-ROL-001\`) — ny regel. ([før](${gh('a'.repeat(40))})) · ([etter](${gh('b'.repeat(40))})) ([${p}](../../../../${encodeURI(p)}))\n\n### Fjernet _(diff-status: \`removed\`)_\n\n- **\`fjerne_rolle.feature\`** (\`@BRU-TIL-ROL-002\`) — fjernet. ([før](${gh('a'.repeat(40)).replace('tildele', 'fjerne')}))\n`,
+    'spec-changes-2026-10-06-abc1234.md',
+  );
+  assert.deepEqual(
+    d.krav.map(k => [k.id, k.path]),
+    [
+      ['@BRU-TIL-ROL-001', p],
+      ['@BRU-TIL-ROL-002', 'krav/07 Bru/11 Til/fjerne_rolle.feature'],
+    ],
+  );
+});
+
 test('parseSpec leser spesifikasjonen til opptaksoppgaven', () => {
   const text = readFileSync(new URL('../../tasks/opptak/opprette-og-vedlikeholde-opptak/spec/spec-opprette-og-vedlikeholde-opptak.md', import.meta.url), 'utf8');
   const d = parseSpec(text, 'spec-opprette-og-vedlikeholde-opptak.md');
