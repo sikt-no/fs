@@ -55,24 +55,23 @@ Egenskap: Se saksbehandlende organisasjon for søknadsalternativene
         | Telefonnummer         |
         | Lenke til opptaksside |
 
-    @openquestion
     Scenario: Organisasjonen mangler en av kontaktopplysningene
-      # ÅPNE SPØRSMÅL: Hva ser søkeren når organisasjonen ikke har registrert
-      # f.eks. telefonnummer? Utelates feltet, eller vises det tomt?
+      # AVKLART 06.10.2026: hvordan et manglende felt vises, er en UI-detalj og
+      # ikke en del av kravet. Kravet er at søkeren ser det som er registrert.
       Gitt organisasjonen som behandler alternativet mangler en kontaktopplysning
       Når jeg ser nærmere på alternativet
       Så ser jeg de kontaktopplysningene organisasjonen har registrert
 
   Regel: Organisasjonen vedlikeholder kontaktinformasjonen som vises til søkere
 
+    # Rollen «opptaksforvalter» er foreløpig. Se første åpne spørsmål nederst.
     Scenario: Registrere kontaktinformasjon for opptak
-      Gitt jeg er opptaksforvalter
-      Når min organisasjon tilbyr utdanninger i et opptak
-      Så kan jeg registrere kontaktinformasjon for opptakssaker ved min organisasjon
-      Og opplysningene blir tilgjengelig for søkere med alternativer min organisasjon behandler
+      Gitt jeg er opptaksforvalter ved en organisasjon som tilbyr utdanninger i et opptak
+      Når jeg registrerer kontaktinformasjon for opptakssaker ved organisasjonen
+      Så er opplysningene tilgjengelige for søkere med alternativer organisasjonen behandler
 
     Scenario: Endre registrert kontaktinformasjon
-      Gitt min organisasjon har registrert kontaktinformasjon for opptakssaker
+      Gitt jeg er opptaksforvalter ved en organisasjon som har registrert kontaktinformasjon for opptakssaker
       Når jeg endrer opplysningene
       Så ser søkerne de oppdaterte opplysningene
 
@@ -81,6 +80,9 @@ Egenskap: Se saksbehandlende organisasjon for søknadsalternativene
 #   lar kun forvaltende organisasjon redigere, men her må hver deltakende
 #   organisasjon kunne sette sin egen — ellers kan ikke UiO oppgi sin adresse i
 #   et samordna opptak. Avklares med Sofie og Patrik.
+#   Rollenavnet henger på svaret: «opptaksforvalter» kan leses som den som
+#   forvalter hele opptaket, men her menes den som har ansvaret for
+#   organisasjonens del av opptaket (Patrik, PR #623).
 # - Når flere søknadsalternativer behandles av samme organisasjon: vises
 #   kontaktinformasjonen per alternativ, eller samlet én gang?
 # - Skal kontaktopplysningene kunne angis på flere språk, slik fellestekster
