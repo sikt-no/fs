@@ -67,8 +67,9 @@ Egenskap: Se saksbehandlende organisasjon for søknadsalternativene
 
     Scenario: Registrere kontaktinformasjon for opptak
       Gitt jeg er opptaksforvalter
-      Når jeg registrerer kontaktinformasjon for opptakssaker ved min organisasjon
-      Så er opplysningene tilgjengelige for søkere med alternativer min organisasjon behandler
+      Når min organisasjon tilbyr utdanninger i et opptak
+      Så kan jeg registrere kontaktinformasjon for opptakssaker ved min organisasjon
+      Og opplysningene blir tilgjengelig for søkere med alternativer min organisasjon behandler
 
     Scenario: Endre registrert kontaktinformasjon
       Gitt min organisasjon har registrert kontaktinformasjon for opptakssaker
