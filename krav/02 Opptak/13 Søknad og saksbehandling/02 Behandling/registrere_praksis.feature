@@ -29,11 +29,11 @@
 # en ny praksisperiode er relevant som standard.
 #
 # ENDRET 02.10.2026 etter tilbakemeldinger på kravet: praksiskalkulatoren har
-# ingen tilknytning til dokumentasjon (scenarioet er @wont), praksistype er
-# flyttet til knytte_praksis_til_opptakskrav.feature (@OPT-BEH-BEH-006),
-# antall timer er påkrevd når omfanget oppgis i timer, og relevansmarkeringen
-# heter nå «Inkluder». AVKLART-kommentarer fra før 02.10.2026 bruker det gamle
-# ordet «relevant» om det samme valget.
+# ingen tilknytning til dokumentasjon (scenarioet er @wont), antall timer er
+# påkrevd når omfanget oppgis i timer, og relevansmarkeringen heter nå
+# «Inkluder». AVKLART-kommentarer fra før 02.10.2026 bruker det gamle ordet
+# «relevant» om det samme valget. Praksistype er fortsatt en del av denne
+# kapabiliteten (besluttet i teamet 06.10.2026).
 #
 @OPT-BEH-BEH-003 @must @in-progress
 Egenskap: Registrere og beregne praksis for søker
@@ -69,7 +69,7 @@ Egenskap: Registrere og beregne praksis for søker
   Regel: Praksisperioder registreres manuelt på saken
 
     Scenario: Registrere en praksisperiode
-      Når jeg registrerer en praksisperiode med startdato og sluttdato
+      Når jeg registrerer en praksisperiode med type, startdato og sluttdato
       Så er praksisperioden lagret på saken
       Og praksisperioden inngår i den samlede praksisberegningen
 
@@ -115,15 +115,33 @@ Egenskap: Registrere og beregne praksis for søker
       Så ser jeg hver praksisperiode med følgende opplysninger
         | felt             |
         | Arbeidsgiver     |
+        | Type             |
         | Startdato        |
         | Sluttdato        |
         | Omfang           |
         | Beregnet praksis |
 
-    # FLYTTET 02.10.2026: scenarioet «Velge praksistype for en
-    # praksisperiode» er flyttet til knytte_praksis_til_opptakskrav.feature
-    # (@OPT-BEH-BEH-006). Praksistype er ikke med i første leveranse
-    # (tilbakemelding på kravet). Avklaringene om kodeverket fulgte med.
+    Scenario: Velge praksistype for en praksisperiode
+      Når jeg registrerer en praksisperiode
+      Så kan jeg velge blant alle praksistyper som gjelder for søkere
+      # AVKLART 16.09.2026: typene er en fast kodeliste — det felles
+      # praksistypekodeverket. Valglisten er alle typer med
+      # status_gjelder_soker = J, uten ytterligere filtrering. Det inkluderer
+      # typer som beskriver studiepraksis i et utdanningsløp
+      # («Grunnskolepraksis 1-7», «Praksis i psykiatri - medisinstudiet») og
+      # ikke arbeidserfaring.
+      #
+      # Begrunnelse: løsningen skal være generell. Kalkulatoren skal kunne
+      # brukes til ulike beregninger — både spesielle opptakskrav og
+      # realkompetanse — og hva som er *relevant* praksis for det enkelte
+      # kravet er saksbehandlerens vurdering, ikke systemets.
+      #
+      # Typen har ingen betydning for beregningen; den dokumenterer hva
+      # praksisen besto i. Verifisert i FS-klienten: beregningen bruker bare
+      # datoer, stillingsprosent og timer.
+      #
+      # Merk at status_valgbar_sokere = N for samtlige typer i kodeverket, så
+      # det er saksbehandleren og ikke søkeren som velger type.
 
     Scenario: Inkludere en praksisperiode i praksisberegningen
       Gitt jeg har registrert en praksisperiode
@@ -179,12 +197,15 @@ Egenskap: Registrere og beregne praksis for søker
       Når jeg registrerer en praksisperiode
       Så må jeg oppgi startdato
       Og jeg må oppgi sluttdato
+      Men praksistype er valgfri
       # AVKLART 16.09.2026: verifisert i FS-klienten — kun praksistypekode og
       # dato_fra er obligatoriske felt. Sluttdato, stillingsprosent og
       # omfang kan alle stå tomme.
       #
-      # ENDRET 02.10.2026: praksistype er ikke med i første leveranse, og er
-      # flyttet til knytte_praksis_til_opptakskrav.feature (@OPT-BEH-BEH-006).
+      # ENDRET 29.09.2026: praksistype er valgfri, besluttet ved validering
+      # av skissen «Skisse til claude» (spec-registrere-praksis.md, avvik 1,
+      # og beslutningspunkt 1). Dette er en endring fra FS-klienten, der
+      # praksistype er obligatorisk.
       #
       # ENDRET 29.09.2026: sluttdato er obligatorisk (spørsmål 8). Se
       # «Praksisperiode uten sluttdato kan ikke lagres».
@@ -379,6 +400,53 @@ Egenskap: Registrere og beregne praksis for søker
       # klienten.md) viser ingen grenseverdier for stillingsprosenten; bare at
       # en tom stillingsprosent settes til 100.
 
+    Scenariomal: Timer som gir mer praksis enn kalendertiden i perioden, kan ikke lagres
+      Gitt jeg registrerer en praksisperiode fra <startdato> til <sluttdato>
+      Og jeg oppgir at et årsverk er 1 650 timer
+      Når jeg oppgir omfanget som <timer> timer
+      Så får jeg en feilmelding om at antall timer ikke kan gi mer praksis enn kalendertiden i perioden
+      Og praksisperioden kan ikke lagres
+
+      Eksempler:
+        | startdato  | sluttdato  | timer |
+        | 01.01.2020 | 31.12.2020 | 1 651 |
+        | 01.01.2020 | 30.06.2020 | 826   |
+      # Grensen regnes ut som timer / timer per årsverk ≤ kalendertiden for
+      # perioden i år, der kalendertiden regnes på samme måte som i «Praksis
+      # beregnes med full presisjon» og «En delvis måned regnes med 30 dager».
+      #
+      # AVKLART 06.10.2026: grensen er inklusiv. Timer som gir nøyaktig
+      # kalendertiden, kan lagres: 1 650 timer for 01.01.2020–31.12.2020 gir
+      # 1,00 år. Det tilsvarer at 100 % er gyldig for stillingsprosent.
+
+    Scenariomal: Endring som gir mer praksis enn kalendertiden i perioden, kan ikke lagres
+      Gitt saken har en praksisperiode fra 01.01.2020 til 31.12.2020 med omfang 1 650 timer
+      Og et årsverk er 1 650 timer på praksisperioden
+      Når jeg endrer <felt> på praksisperioden til <verdi>
+      Så får jeg en feilmelding om at antall timer ikke kan gi mer praksis enn kalendertiden i perioden
+      Og endringen av praksisperioden kan ikke lagres
+
+      Eksempler:
+        | felt                     | verdi      |
+        | sluttdato                | 30.06.2020 |
+        | antall timer per årsverk | 1 500      |
+      # AVKLART 06.10.2026: grensen gjelder alltid, også når datoene eller
+      # antall timer per årsverk endres etter at timene er oppgitt. Endringen
+      # avvises med samme feilmelding; det holder ikke med et varsel.
+
+    Scenariomal: Antall timer på 0 eller mindre kan ikke lagres
+      Gitt jeg registrerer en praksisperiode
+      Når jeg oppgir omfanget som <timer> timer
+      Så får jeg en feilmelding om at antall timer må være mer enn 0
+      Og praksisperioden kan ikke lagres
+
+      Eksempler:
+        | timer |
+        | 0     |
+        | -10   |
+      # AVKLART 06.10.2026: antall timer må være mer enn 0. Det skiller seg
+      # fra stillingsprosent, der 0 % er gyldig.
+
     Scenario: Timebasert omfang overskrives ikke når datoene endres
       Gitt en praksisperiode har omfanget oppgitt i timer
       Når jeg endrer sluttdatoen på praksisperioden
@@ -398,7 +466,7 @@ Egenskap: Registrere og beregne praksis for søker
 
     Scenario: Oppdatere en praksisperiode
       Gitt saken har en registrert praksisperiode
-      Når jeg endrer arbeidsgiver, datoer eller omfang på praksisperioden
+      Når jeg endrer arbeidsgiver, type, datoer eller omfang på praksisperioden
       Så er endringen lagret på praksisperioden
       Og den samlede praksisberegningen er oppdatert
 
