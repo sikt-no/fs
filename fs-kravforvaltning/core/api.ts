@@ -16,7 +16,7 @@ export function createApi(ws: Workspace, auth: Auth, claude: ClaudeRunner): Api 
     return ws.vcs;
   };
   return {
-    boot: () => ({ entries: ws.entries, git: ws.git, tasks: ws.tasks, editable: true }),
+    boot: () => ({ entries: ws.entries, git: ws.git, tasks: ws.tasks, editable: true, repoRoot: ws.repoRoot }),
     read: path => readFile(kravPath(ws.repoRoot, path), 'utf8'),
     save: req => saveFile(ws.repoRoot, req.path, req.text),
     remove: path => deleteFile(ws.repoRoot, path),

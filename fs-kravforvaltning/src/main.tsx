@@ -714,6 +714,7 @@ function App() {
         onClaude={() => setClaudeOpen(o => !o)}
         onUpdate={mainStatus?.behind ? pull : null}
         pulling={pulling}
+        repoRoot={boot.repoRoot}
       />
       {bannerShown(mainStatus, mainLater) && <MainBanner info={mainStatus?.info} pulling={pulling} onLater={later} onPull={pull} />}
       <div

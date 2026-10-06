@@ -112,12 +112,17 @@ function createWindow() {
     backgroundColor: nativeTheme.shouldUseDarkColors ? '#141415' : '#f7f7f6',
     webPreferences: { preload: join(here, '../preload/index.cjs'), contextIsolation: true, sandbox: true },
   });
-  // Lenker (GitHub, PR-er, innlogging) åpnes i nettleseren, ikke i appen
+  // Lenker (GitHub, PR-er, innlogging) åpnes i nettleseren, ikke i appen, og vscode:-lenker i VS Code
   win.webContents.setWindowOpenHandler(({ url }) => {
-    if (/^https?:/.test(url)) void shell.openExternal(url);
+    if (/^(https?|vscode):/.test(url)) void shell.openExternal(url);
     return { action: 'deny' };
   });
   win.webContents.on('will-navigate', (e, url) => {
+    if (url.startsWith('vscode:')) {
+      e.preventDefault();
+      void shell.openExternal(url);
+      return;
+    }
     if (url.startsWith('http') && !url.startsWith(process.env.ELECTRON_RENDERER_URL ?? '\0')) {
       e.preventDefault();
       void shell.openExternal(url);
