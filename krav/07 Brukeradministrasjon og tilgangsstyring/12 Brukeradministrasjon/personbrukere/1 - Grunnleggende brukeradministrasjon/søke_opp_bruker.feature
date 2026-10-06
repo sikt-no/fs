@@ -11,7 +11,6 @@ Egenskap: Listevisning og søk i personbrukere
 
   Regel: Liste over alle personbrukere
 
-    @in-progress
     Scenario: Se liste over personbrukere
       Når jeg åpner brukeroversikten
       Så ser jeg en liste over alle personbrukere
@@ -23,7 +22,9 @@ Egenskap: Listevisning og søk i personbrukere
         | Hjemorganisasjon |
         | Status           |
 
-    @in-progress
+    @draft @openquestion
+    # ÅPNE SPØRSMÅL:
+    # - API-et støtter ikke sortering på navn ennå, og UI-kontrollen er derfor fjernet. Når skal dette komme på plass, og hvem følger opp på API-siden?
     Scenariomal: Velge sorteringsretning for navn
       Gitt jeg ser listen over personbrukere
       Når jeg velger å sortere på navn i <retning> rekkefølge
@@ -57,7 +58,6 @@ Egenskap: Listevisning og søk i personbrukere
 
   Regel: Søk og filtrering av personbrukere
 
-    @in-progress
     Scenario: Fritekst-søk på navn
       Gitt jeg ser listen over personbrukere
       Når jeg søker med fritekst på navn
@@ -111,7 +111,6 @@ Egenskap: Listevisning og søk i personbrukere
       Når jeg velger en rolle som filter
       Så vises kun personbrukere som har den valgte rollen
 
-    @in-progress
     Scenario: Kombinere søk og filtre
       Gitt jeg ser listen over personbrukere
       Når jeg kombinerer søk i navn- og Feide-ID-feltene med ett eller flere filter
