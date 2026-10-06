@@ -105,7 +105,7 @@ export interface ExecuteTarget {
 }
 
 /** Skillene som kan velges i Claude-panelet; høyst én om gangen */
-export const CLAUDE_SKILLS = ['fs-krav', 'fs-krav-avvik', 'fs-specify', 'fs-specify-delta', 'fs-verify'];
+export const CLAUDE_SKILLS = ['fs-krav', 'fs-krav-avvik', 'fs-specify', 'fs-specify-delta', 'fs-implementasjonsdetaljer', 'fs-verify'];
 
 /** Kodeklonene fs-verify leter i, med standardstien backenden fant */
 export const CODE_DIRS = ['fs-admin', 'fs-plattform'] as const;

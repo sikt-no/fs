@@ -37,16 +37,17 @@ const initial = boot.entries;
 const initialGit = boot.git;
 const initialTasks = boot.tasks;
 /**
- * Skillene Claude kan bruke i hver visning. Krav: fs-krav (standard), fs-krav-avvik og fs-verify. Avvik: fs-krav
- * (standard) og fs-krav-avvik.
+ * Skillene Claude kan bruke i hver visning. Krav: fs-krav (standard), fs-krav-avvik, fs-implementasjonsdetaljer og fs-verify.
+ * Avvik: fs-krav (standard) og fs-krav-avvik. fs-specify og fs-specify-delta kjører fs-implementasjonsdetaljer, så den er
+ * tillatt der de er.
  * I Spesifikasjoner og Oppgaver er ingen valgt på forhånd, og uten valg kan Claude bruke alle som er tillatt der. `codeDirs`: Claude
  * kan lese kodeklonene (fs-admin, fs-plattform), som fs-verify trenger.
  */
 const CLAUDE_SKILLS_BY_MODE: Record<Mode, { allowed: string[]; preselect: boolean; codeDirs: boolean }> = {
-  krav: { allowed: ['fs-krav', 'fs-krav-avvik', 'fs-verify'], preselect: true, codeDirs: true },
+  krav: { allowed: ['fs-krav', 'fs-krav-avvik', 'fs-implementasjonsdetaljer', 'fs-verify'], preselect: true, codeDirs: true },
   avvik: { allowed: ['fs-krav', 'fs-krav-avvik'], preselect: true, codeDirs: false },
-  spesifikasjoner: { allowed: ['fs-specify', 'fs-specify-delta', 'fs-verify'], preselect: false, codeDirs: true },
-  oppgaver: { allowed: ['fs-krav', 'fs-specify', 'fs-specify-delta', 'fs-verify'], preselect: false, codeDirs: true },
+  spesifikasjoner: { allowed: ['fs-specify', 'fs-specify-delta', 'fs-implementasjonsdetaljer', 'fs-verify'], preselect: false, codeDirs: true },
+  oppgaver: { allowed: ['fs-krav', 'fs-specify', 'fs-specify-delta', 'fs-implementasjonsdetaljer', 'fs-verify'], preselect: false, codeDirs: true },
 };
 const MODE_LABEL: Record<Mode, string> = { krav: 'Krav', avvik: 'Avvik', spesifikasjoner: 'Spesifikasjoner', oppgaver: 'Oppgaver' };
 /** Hvorfor en skill ikke kan velges i `mode`: «brukes i Krav og Oppgaver, ikke i Avvik» */

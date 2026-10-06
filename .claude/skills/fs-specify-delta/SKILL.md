@@ -1,6 +1,6 @@
 ---
 name: fs-specify-delta
-description: Spec / kravarbeid der inputen er en endring, ikke greenfield krav. Tar inn én av fire kildetyper — test-fil(er) (typisk `.feature`), markdown-dokument(er), én commit eller to (`A...B`), eller en branch (diffet mot main) — og henter diff og filinnhold med lokal `git`. For commit/branch utledes `Lagt til` / `Endret` / `Fjernet` direkte fra diff-status. Tar med `@planned`/`@in-progress`-krav og retagger `@planned` → `@in-progress` i `krav/` der fila ligger på disk, også `@planned`-deler (`Regel:`/`Scenario:`) i leverte krav som endres. Tar også med `@deprecated`-krav og -deler i endringen, under «Skal fjernes», uten å bytte taggen, så spec-en kan brukes til å fjerne avviklede krav fra koden sammen med endringene rundt. Samme tag-regler som `fs-specify`; forskjellen er inputen (en endring i stedet for en mappe) og at spec-en viser før og etter. Spør om skisser og persisterer Figma-artefakter via Figma MCP. Kopierer ikke kravene: før og etter er git-referanser (festede SHA-er) med lenker til GitHub. Skriver `spec-changes-<YYYY-MM-DD>-<ref>.md` og `krav-input/changes/<YYYY-MM-DD>-<ref>/` (manifest og skisser) i oppgavemappas krav-undermappe `tasks/<domene>/<slug>/spec/` (én fil per kjøring, ingen overskriving). Leser ingen tidligere spec — kilden er autoritativ; eksisterende krav som ikke nevnes i delta-en forblir gjeldende. Trigges av "kravendring fra commit <sha>", "krav fra A...B", "fang endringene på branch <navn>", "krav fra denne markdown", "krav fra denne test-fila", "delta-spec for <noe>", "fjern avviklede krav på branch <navn>".
+description: Spec / kravarbeid der inputen er en endring, ikke greenfield krav. Tar inn én av fire kildetyper — test-fil(er) (typisk `.feature`), markdown-dokument(er), én commit eller to (`A...B`), eller en branch (diffet mot main) — og henter diff og filinnhold med lokal `git`. For commit/branch utledes `Lagt til` / `Endret` / `Fjernet` direkte fra diff-status. Tar med `@planned`/`@in-progress`-krav og retagger `@planned` → `@in-progress` i `krav/` der fila ligger på disk, også `@planned`-deler (`Regel:`/`Scenario:`) i leverte krav som endres. Tar også med `@deprecated`-krav og -deler i endringen, under «Skal fjernes», uten å bytte taggen, så spec-en kan brukes til å fjerne avviklede krav fra koden sammen med endringene rundt. Samme tag-regler som `fs-specify`; forskjellen er inputen (en endring i stedet for en mappe) og at spec-en viser før og etter. Spør om skisser og persisterer Figma-artefakter via Figma MCP, og kjører `fs-implementasjonsdetaljer` når implementasjonsdetaljene (`<feature>.design.md`) mangler eller ikke har tekstene fra skissene. Kopierer ikke kravene: før og etter er git-referanser (festede SHA-er) med lenker til GitHub. Skriver `spec-changes-<YYYY-MM-DD>-<ref>.md` og `krav-input/changes/<YYYY-MM-DD>-<ref>/` (manifest og skisser) i oppgavemappas krav-undermappe `tasks/<domene>/<slug>/spec/` (én fil per kjøring, ingen overskriving). Leser ingen tidligere spec — kilden er autoritativ; eksisterende krav som ikke nevnes i delta-en forblir gjeldende. Trigges av "kravendring fra commit <sha>", "krav fra A...B", "fang endringene på branch <navn>", "krav fra denne markdown", "krav fra denne test-fila", "delta-spec for <noe>", "fjern avviklede krav på branch <navn>".
 allowed-tools: Read, Write, Edit, Grep, Glob, Bash, WebFetch, AskUserQuestion, Skill
 ---
 
@@ -177,6 +177,10 @@ Ved **Nei**: spør hvorfor (kort), og skriv `Ingen skisse: <grunn>` under `## Sk
 
 Ved **Ja**: følg [`fs-specify` → _Skisser — kobling og validering_](../fs-specify/SKILL.md#skisser--kobling-og-validering), inkludert Figma-henting med sub-frames og avviksspørsmålene, men koble skissene til kravene i *denne* delta-en. Lagre under `<spec>/krav-input/changes/<YYYY-MM-DD>-<ref>/sketches/` (Figma under `sketches/figma/<sketch-slug>/`), og registrer dem i delta-manifestet.
 
+## Implementasjonsdetaljer
+
+Følg [`fs-specify` → _Implementasjonsdetaljer_](../fs-specify/SKILL.md#implementasjonsdetaljer--kjør-fs-implementasjonsdetaljer) for feature-filene i delta-en som skal bygges (Lagt til, Endret og `@planned`-deler i leverte krav), ikke for dem som er Fjernet eller bare skal fjernes. Gi `fs-implementasjonsdetaljer` skissene under `<spec>/krav-input/changes/<YYYY-MM-DD>-<ref>/sketches/`. Kjøres etter skissene, før retaggingen og delta-spec-en.
+
 ## Deliverable: `<spec>/spec-changes-<YYYY-MM-DD>-<ref>.md`
 
 Én fil per kjøring — aldri overskriv eller rediger en tidligere delta-fil. Trenger du å kjøre på nytt mot samme kilde samme dag, bruk `-v2` på `<ref>`.
@@ -238,6 +242,12 @@ Ved **Ja**: følg [`fs-specify` → _Skisser — kobling og validering_](../fs-s
 
 [Én underseksjon per skisse, samme felter som i `fs-specify`, eller linja `Ingen skisse: <grunn>`.]
 
+## Implementasjonsdetaljer
+
+[Som i `fs-specify`: én linje per feature-fil som har implementasjonsdetaljer. Utelat seksjonen hvis ingen har det.]
+
+- **`<feature-fil>`** — [<feature-navn>.design.md](../../../../krav/<sti>.design.md)
+
 ## Retagging
 
 [Minst én linje om hva som skjedde. Markdown- og kode-test-kilder nevnes ikke.]
@@ -275,7 +285,7 @@ Minn brukeren på at endringene i `tasks/` og `krav/` ikke er committet.
 - Leser eller sammenligner ikke tidligere `spec-*.md`.
 - Oppretter, endrer eller lukker ikke GitHub-issues.
 - Kjører aldri git-kommandoer som endrer tilstand (`add`, `commit`, `push`, `checkout`, `fetch`, `stash`).
-- Skriver ikke utenfor `<spec>/` og `Egenskap:`-tag-linjene under `krav/`. Fjerner aldri `@draft` fra en `Regel:`/`Scenario:`.
+- Skriver ikke utenfor `<spec>/` og `Egenskap:`-tag-linjene under `krav/`, bortsett fra implementasjonsdetaljene (`<feature-navn>.design.md`), som `fs-implementasjonsdetaljer` skriver. Fjerner aldri `@draft` fra en `Regel:`/`Scenario:`.
 
 ## Retningslinjer
 

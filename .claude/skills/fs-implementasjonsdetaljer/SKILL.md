@@ -11,6 +11,7 @@ Skriv implementasjonsdetaljene for en eksisterende `.feature`-fil: UI/design-pat
 
 - Brukeren refererer til en konkret `.feature`-fil og vil utdype hvordan den skal se ut / oppføre seg i UI
 - Domeneeksperter har skrevet hva-et; nå trenger utviklere hvordan-et
+- `fs-specify` eller `fs-specify-delta` kjører den når implementasjonsdetaljene mangler, eller ikke har tekstene fra skissene
 
 ## Arbeidsflyt
 
@@ -32,7 +33,7 @@ For hvert scenario, vurder hva som mangler av UI-detaljer:
 Tekster med variasjoner hører hjemme i implementasjonsdetaljene, ikke i skissene. En skisse viser én tilstand, blir fort utdatert, og kan ikke søkes i eller endres i en PR. Implementasjonsdetaljene er fasiten for tekstene; skissen viser bare hvor de står.
 
 **Finn skissene** til feature-fila:
-- Skisser brukeren peker på (Figma-lenke, bilde, PDF).
+- Skisser brukeren peker på (Figma-lenke, bilde, PDF), eller som `fs-specify` / `fs-specify-delta` gir når de kjører skillen. Da er skissene allerede hentet og validert mot kravene: bruk dem, og let ikke etter flere.
 - Spesifikasjoner som har med feature-fila: `grep -l "<feature-navn>.feature" tasks/*/*/spec/spec-*.md`. Skissene står under `## Skisser`, og filene under `tasks/<domene>/<slug>/spec/krav-input/sketches/` (Figma-artefaktene i `figma/<sketch-slug>/`, med `design-context.md` og skjermbilder).
 - Figma-lenker som ikke er persistert, leses med Figma-MCP (`get_design_context`, `get_screenshot`) når den er koblet til. Er den ikke det, be brukeren om skjermbilde eller å beskrive tekstene.
 
@@ -65,7 +66,7 @@ Bruk `AskUserQuestion` for å avklare. Eksempler:
 - "Hvor utløses primærhandlingen — toppen av siden, ved hver rad, eller begge?"
 - "Hva skjer ved tom tilstand?"
 
-Spør om én ting av gangen. Ikke gjett — be om svar når noe er uklart.
+Spør om én ting av gangen. Ikke gjett — be om svar når noe er uklart. I Claude-panelet i FS Kravforvaltning finnes ikke `AskUserQuestion`: still spørsmålene i svaret, og vent på brukeren.
 
 ### 5. Skriv implementasjonsdetaljene
 Lagre som `<feature-navn>.design.md` i samme mappe som `.feature`-filen.

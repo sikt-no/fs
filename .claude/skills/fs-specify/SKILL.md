@@ -1,6 +1,6 @@
 ---
 name: fs-specify
-description: Spec / kravarbeid for én konkret feature i dette repoet. Henter `@planned`-krav fra lokale `.feature`-filer under `krav/`, retagger dem `@planned` → `@in-progress` på `Egenskap:`-linja (og på `Regel:`/`Scenario:`-linja for `@planned`-deler i leverte krav som endres), og plukker også opp `@deprecated`-krav (egenskaper og `Regel:`/`Scenario:`) for å fjerne koden (de beholder `@deprecated`), spør via AskUserQuestion om det finnes skisser (Figma, bilder, PDF), kobler skisser til krav, persisterer Figma-artefakter via Figma MCP, validerer skisser mot krav og spør brukeren ved avvik. Skriver `spec-<feature>.md`, `krav-input/` (manifest og skisser) og `spec.log.md` i oppgavemappas krav-undermappe `tasks/<domene>/<slug>/spec/` (se `tasks/README.md`). Idempotent — spec-dokumentet skrives over på plass. Trigges av "spesifiser feature X", "hent krav fra lokale .feature-filer", "lag spec for oppgave Y", "koble skisser til krav", "hent krav inn i tasks", "fjerne deprecated krav", "spec for å fjerne avviklede krav".
+description: Spec / kravarbeid for én konkret feature i dette repoet. Henter `@planned`-krav fra lokale `.feature`-filer under `krav/`, retagger dem `@planned` → `@in-progress` på `Egenskap:`-linja (og på `Regel:`/`Scenario:`-linja for `@planned`-deler i leverte krav som endres), og plukker også opp `@deprecated`-krav (egenskaper og `Regel:`/`Scenario:`) for å fjerne koden (de beholder `@deprecated`), spør via AskUserQuestion om det finnes skisser (Figma, bilder, PDF), kobler skisser til krav, persisterer Figma-artefakter via Figma MCP, validerer skisser mot krav og spør brukeren ved avvik, og kjører `fs-implementasjonsdetaljer` når implementasjonsdetaljene (`<feature>.design.md`) mangler eller ikke har tekstene fra skissene. Skriver `spec-<feature>.md`, `krav-input/` (manifest og skisser) og `spec.log.md` i oppgavemappas krav-undermappe `tasks/<domene>/<slug>/spec/` (se `tasks/README.md`). Idempotent — spec-dokumentet skrives over på plass. Trigges av "spesifiser feature X", "hent krav fra lokale .feature-filer", "lag spec for oppgave Y", "koble skisser til krav", "hent krav inn i tasks", "fjerne deprecated krav", "spec for å fjerne avviklede krav".
 allowed-tools: Read, Write, Edit, Grep, Glob, Bash, WebFetch, AskUserQuestion, Skill
 ---
 
@@ -200,6 +200,22 @@ Les hver skisse (lokale filer og persisterte Figma-artefakter via `Read`) og sam
 
 **Uavklart**-skisser registreres som åpne spørsmål uten å blokkere.
 
+## Implementasjonsdetaljer — kjør `fs-implementasjonsdetaljer`
+
+Hjelpetekster, feilmeldinger og andre tekster med variasjoner skal stå i implementasjonsdetaljene (`<feature-navn>.design.md`, i samme mappe som feature-fila), ikke bare i skissene. Utviklerne bygger fra kravene og implementasjonsdetaljene; skissene viser bare hvor tekstene står.
+
+**Når:** etter at skissene er validert og avvikene avklart, før retaggingen og spec-dokumentet.
+
+For hver feature-fil som skal bygges (ikke de som bare er med under _Skal fjernes_):
+
+1. **Er ingen skisse koblet til kravet**, og har kravet ikke UI (f.eks. `Ingen skisse: bare API`): hopp over.
+2. **Finnes `<feature-navn>.design.md`**, og står tekstene fra de koblede skissene i `## Tekster`: ingenting å gjøre.
+3. **Ellers** (fila mangler, eller skissene har tekster som ikke står der): kjør `fs-implementasjonsdetaljer` med Skill-verktøyet for feature-fila. Gi den skissene som er koblet til kravet (stiene under `<spec>/krav-input/sketches/`, eller Figma-lenkene), så den ikke spør etter dem på nytt. Én feature-fil om gangen.
+
+Sier brukeren at implementasjonsdetaljene skal vente, legg det under `## Åpne spørsmål` («Implementasjonsdetaljer mangler for `<feature-fil>`»), og gå videre.
+
+Åpne designspørsmål blir stående i implementasjonsdetaljene; de kopieres ikke inn i spec-en.
+
 ## Idempotens — re-kjøring mot samme oppgave
 
 Å kjøre skillen på nytt mot samme `<spec>/` er normalt. Resultatet er én stabil sti per artefakt:
@@ -260,6 +276,12 @@ Bevisste unntak: **`spec.log.md`** er append-only, og **`questions-fs-specify-<d
 - **Valideringsstatus:** `OK` / `Avvik: <beskrivelse>` / `Uavklart: <grunn>`
 - **Beslutning ved avvik:** `<valgt alternativ>` — `<begrunnelse>`
 
+## Implementasjonsdetaljer
+
+[Én linje per feature-fil som har implementasjonsdetaljer, med lenke relativ fra `spec/` og URL-kodet. Utelat seksjonen hvis ingen har det.]
+
+- **`<feature-fil>`** — [<feature-navn>.design.md](../../../../krav/<sti>.design.md) (<N> åpne designspørsmål, utelat når det er 0)
+
 ## Retagging
 
 [Minst én linje om hva som skjedde. Tabell for filene som ble retagget.]
@@ -296,7 +318,7 @@ Minn brukeren på at endringene i `tasks/` og `krav/` ikke er committet — det 
 - Analyserer ikke kode, foreslår ikke løsninger og skriver ikke kode.
 - Oppretter, endrer eller lukker ikke GitHub-issues.
 - Endrer ikke kravinnhold — bare implementasjonsstatus-taggen `@planned` → `@in-progress` (på `Egenskap:`, eller på delen i et levert krav som endres). Fjerner aldri `@draft` fra en `Regel:`/`Scenario:`.
-- Skriver ikke utenfor `<spec>/` og statustaggene under `krav/`. Skriver ikke `oppgave.md`, `roadmap.md` eller andre oppgaveartefakter.
+- Skriver ikke utenfor `<spec>/` og statustaggene under `krav/`, bortsett fra implementasjonsdetaljene (`<feature-navn>.design.md`), som `fs-implementasjonsdetaljer` skriver. Skriver ikke `oppgave.md`, `roadmap.md` eller andre oppgaveartefakter.
 - Kjører aldri `git add`, `commit`, `push` eller andre git-mutasjoner.
 
 ## Retningslinjer
@@ -312,4 +334,5 @@ Minn brukeren på at endringene i `tasks/` og `krav/` ikke er committet — det 
 - **[`tasks/README.md`](../../../tasks/README.md)** — oppgavestrukturen, domenelista og reglene for `spec/`.
 - **`krav/README.md`** — tag-aksen og Feature-ID-formatet.
 - **`fs-krav`** — ferdigstiller krav (`@draft` → `@planned`), og avvikler leverte krav (`@implemented` → `@deprecated`).
+- **`fs-implementasjonsdetaljer`** — skriver implementasjonsdetaljene (`<feature-navn>.design.md`), og sjekker at tekstene i skissene står der. Kjøres fra _Implementasjonsdetaljer_ over.
 - **`fs-verify`** — verifiserer koden: `@in-progress` → `@implemented`, og sletter `@deprecated`-krav når koden er borte.

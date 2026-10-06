@@ -396,6 +396,7 @@ export function handoffPrompt(c: Card, repo: string): string {
     'Skisser:',
     ...(c.doc.skisser.length ? c.doc.skisser.map(k => `- ${k.name}: ${k.url || '(uten lenke)'}`) : [`- ${c.doc.ingenSkisse !== null ? 'Ingen skisse: ' + c.doc.ingenSkisse : 'ingen'}`]),
     '',
+    'Implementasjonsdetaljer: <feature>.design.md ved siden av feature-fila, når den finnes. Tekstene der (hjelpetekster, feilmeldinger og andre tekster med variasjoner) er fasiten, også når en skisse viser noe annet.',
     `Gating-scenarioer: ${nGating(c)} (det er disse fs-verify sjekker).`,
     `Steg ${i + 1} av ${route.length}: ${repo}.`,
     prevStep ? `Overlevering fra ${prev}:\n${prevStep.handoff || '(ingen)'}` : 'Første steg på ruta.',
