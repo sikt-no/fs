@@ -117,11 +117,13 @@ Egenskap: Se digitale resultater i søknaden
       # «Andre resultater» samler enkeltemner og øvrig dokumentasjon, og er
       # lukket som standard fordi de sjelden er avgjørende for søkeren.
 
-    Scenario: Søker uten digitale resultater
-      Gitt at søkeren ikke har digitale resultater
+    Scenariomal: Samme forklaring vises uansett årsak til manglende resultater
+      Gitt at <årsak>
       Når søkeren kommer til dokumentasjonssteget i søknaden
-      Så ser søkeren at systemet ikke har digitale resultater om hen
+      Så ser søkeren én samlet forklaring på at systemet ikke har digitale resultater om hen
       Og søkeren får vite at all dokumentasjon må lastes opp manuelt
-      # AVKLART 2026-01-10: gjelder uansett årsak til at systemet ikke har
-      # resultater — også om henting fra en kilde har feilet. Søkeren ser én
-      # samlet forklaring, ikke en egen tilstand for mislykket henting.
+
+      Eksempler:
+        | årsak                                    |
+        | søkeren ikke har digitale resultater      |
+        | henting av søkerens resultater har feilet |
