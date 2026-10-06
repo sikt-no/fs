@@ -382,6 +382,8 @@ Finn fila og regelen eller scenarioet som skal endres. Er det uklart, spør. Les
 
 Hvilke deler endringen gjelder, avklares med brukeren, én om gangen: endres, fjernes eller legges til?
 
+Les så taggene på delen som endres. Er den `@draft`, `@planned` eller `@in-progress`, er den ikke levert. Endre den på stedet, uten ny blokk og uten `@deprecated`, og behold statustaggen. En `@draft`-del valideres som i D3, og en `@planned`-del som i modus B. Er delen `@in-progress`, si fra at spesifikasjonen i oppgaven som har hentet den inn, må oppdateres med endringen. Ny blokk (D2) lages bare for deler som er levert, det vil si deler uten egen statustag.
+
 Finn koden for den leverte delen i kodeklonene (fs-admin, fs-plattform), og vis `fil:linje`. Bruk klonene som står i systemprompten, og spør om stien bare hvis de mangler. Har brukeren ingen klone, gå videre: `fs-specify` sjekker kravet mot koden før det blir `@in-progress`. Den nye delen skrives (D2) ut fra hva koden gjør i dag, ikke bare ut fra den gamle teksten. Gjør koden noe annet enn den leverte teksten sier, spør før D2: *«Den leverte delen sier X, koden gjør Y. Hva skal den nye delen bygge på?»*
 
 ### D2. Skriv den nye delen som `@draft`
