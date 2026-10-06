@@ -1,6 +1,13 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
-import { inline, parseMd } from './markdown.ts';
+import { GITHUB, inline, PAGES, parseMd, resolveLink } from './markdown.ts';
+
+test('resolveLink: kom-i-gang.html åpnes ved siden av vieweren, ikke på GitHub', () => {
+  const none = () => false;
+  assert.deepEqual(resolveLink('../kom-i-gang.html', 'krav/README.md', none), { href: './kom-i-gang.html' });
+  assert.deepEqual(resolveLink('../kom-i-gang.html', 'krav/README.md', none, PAGES), { href: PAGES + 'kom-i-gang.html' });
+  assert.deepEqual(resolveLink('../annet.html', 'krav/README.md', none), { href: GITHUB + 'annet.html' });
+});
 
 test('inline: ~~tekst~~ blir gjennomstreket', () => {
   assert.deepEqual(inline('før ~~borte~~ etter'), [
