@@ -32,6 +32,8 @@ interface Props {
 export function TerminalView({ session, onExit }: Props) {
   const host = useRef<HTMLDivElement>(null);
   const [error, setError] = useState<string | null>(null);
+  // claude har ikke skrevet noe ennå: den starter og kobler til MCP-serverne
+  const [waiting, setWaiting] = useState(true);
   const { id, exited } = session;
   const exitRef = useRef(onExit);
   exitRef.current = onExit;
@@ -64,6 +66,7 @@ export function TerminalView({ session, onExit }: Props) {
     const off = transport.on('krav:pty', (ev: PtyEvent) => {
       if (ev.id !== id) return;
       if (ev.kind === 'exit') return exitRef.current(ev.code);
+      setWaiting(false);
       if (ready) term.write(ev.data);
       else queue.push(ev.data);
     });
@@ -76,6 +79,7 @@ export function TerminalView({ session, onExit }: Props) {
         const [buf, active] = await Promise.all([transport.call('ptyBuffer', id), transport.call('ptyActive')]);
         if (!alive) return;
         term.write(buf);
+        if (buf) setWaiting(false);
         for (const d of queue) if (!buf.endsWith(d)) term.write(d);
         ready = true;
         const info = active.find(a => a.id === id);
@@ -97,12 +101,16 @@ export function TerminalView({ session, onExit }: Props) {
     };
   }, [id]);
 
+  const starting = waiting && !exited;
+
   return (
     <div class="cterm">
       <div class="cterm-bar">
-        <span class={'cdot' + (exited ? (session.code === 0 ? ' ok' : ' off') : '')} />
+        {starting ? <span class="spinner" aria-hidden="true" /> : <span class={'cdot' + (exited ? (session.code === 0 ? ' ok' : ' off') : '')} />}
         <span>
-          {exited
+          {starting
+            ? 'Starter claude …'
+            : exited
             ? session.code === null || session.code === undefined
               ? 'Avsluttet (appen eller dev-serveren ble startet på nytt)'
               : `Avsluttet (kode ${session.code})`
@@ -116,7 +124,16 @@ export function TerminalView({ session, onExit }: Props) {
         )}
       </div>
       {error && <div class="edwarn err" role="alert">{error}</div>}
-      <div class="cterm-host" ref={host} />
+      {/* Laget ligger ved siden av cterm-host, der xterm legger sine egne elementer */}
+      <div class="cterm-body">
+        <div class="cterm-host" ref={host} />
+        {starting && (
+          <div class="cterm-wait" role="status">
+            <span class="spinner" aria-hidden="true" />
+            Starter Claude Code og kobler til MCP-serverne. Det kan ta litt tid første gang.
+          </div>
+        )}
+      </div>
       <div class="claude-send">
         <span class="muted">Svar på spørsmål og godkjenn verktøykall i terminalen. Endringene vises straks, og sendes med «Lag PR».</span>
       </div>

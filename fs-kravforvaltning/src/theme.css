@@ -980,6 +980,9 @@ button.cfile.off:hover { color: var(--ink); border-color: var(--acc); }
 .cterm-bar .cdot.off { background: var(--muted); }
 .cterm-mode { font-size: 11px; margin-right: auto; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0; }
 .cterm-host { flex: 1; min-height: 0; padding: 6px 0 6px 8px; background: var(--surface); overflow: hidden; }
+.cterm-body { flex: 1; min-height: 0; display: flex; flex-direction: column; position: relative; }
+.cterm-wait { position: absolute; inset: 0; z-index: 1; display: flex; align-items: center; justify-content: center; gap: 8px; padding: 24px; text-align: center; font-size: 12.5px; color: var(--muted); background: var(--surface); pointer-events: none; }
+.cstarting { display: flex; align-items: center; gap: 8px; }
 .cterm-host .xterm { height: 100%; }
 .cterm .claude-send { padding: 6px 12px 8px; border-top: 1px solid var(--line); }
 /* Dra-håndtaket på venstre kant av panelet */
