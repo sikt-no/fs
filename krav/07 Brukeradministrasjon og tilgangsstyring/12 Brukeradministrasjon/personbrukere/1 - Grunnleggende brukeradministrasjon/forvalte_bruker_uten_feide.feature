@@ -9,9 +9,12 @@ Egenskap: Forvalte en person i brukeradministrasjonen
   Personbrukeren er personen, identifisert med fødselsnummer, D-nummer eller SNR. Feide og
   ID-porten er påloggingsmåter, ikke ulike typer personbrukere. En person er en fullverdig
   personbruker: hen kan ha roller, vises i oversikten, søkes opp, ses i detalj, og deaktiveres
-  og reaktiveres. En person har ingen Feide-ID og ingen hjemorganisasjon. Det er tildelingene
-  alene som knytter hen til organisasjoner, og den første tildelingen gis med fødselsnummer,
-  D-nummer eller SNR (BRU-PER-GRU-013). Nummeret vises ikke i grensesnittet.
+  og reaktiveres. En person som logger inn med Feide, er koblet til Feide-brukeren sin og har
+  hjemorganisasjonen fra Feide. Brukeradministratoren ser personen gjennom den hjemorganisasjonen
+  eller gjennom en aktiv tildeling. En person som bare logger inn med ID-porten, har ingen
+  hjemorganisasjon, og da er det tildelingene alene som knytter hen til organisasjoner. Den
+  første tildelingen gis med fødselsnummer, D-nummer eller SNR (BRU-PER-GRU-013). Nummeret vises
+  ikke i grensesnittet.
 
   Kravet ble skrevet for «personbrukere uten Feide-konto». Scenarioene som fortsatt sier det,
   gjelder nå personer. Scenarioer som bygger på at personen er knyttet til en påloggingsmåte, er
@@ -62,9 +65,8 @@ Egenskap: Forvalte en person i brukeradministrasjonen
   @draft @openquestion
   Regel: Personen vises med navn, ikke med nummer
     # ÅPNE SPØRSMÅL:
-    # - Personen har ingen hjemorganisasjon. Skal listen og detaljsiden vise organisasjonene
-    #   tildelingene gjelder for i stedet, eller ingenting? API-et kan gi organisasjonene og
-    #   miljøene tildelingene gjelder for.
+    # - Hva vises som hjemorganisasjon for en person som ikke er koblet til en Feide-bruker? Og
+    #   hva vises for en person som er koblet til flere Feide-brukere med ulike hjemorganisasjoner?
     # - Hvordan merkes en testperson i listen og på detaljsiden: egen kolonne, en merkelapp ved
     #   navnet, eller et filter?
     # - Personen kan ikke deaktiveres i API-et ennå. Skal status vises for personer før
@@ -195,7 +197,8 @@ Egenskap: Forvalte en person i brukeradministrasjonen
 # - Gjelder nekt og inndragning av roller og tilganger (BRU-PER-GRU-011, BRU-PER-GRU-012)
 #   uendret for personer? Antatt ja, men ikke bekreftet.
 # - Deaktivering gjør alle tildelingene inaktive. Hvordan en deaktivert person da forblir synlig
-#   for administratoren som skal kunne reaktivere hen, er ikke avklart; for Feide-brukere er det
+#   for administratoren som skal kunne reaktivere hen, er ikke avklart for personer uten
+#   hjemorganisasjon. For Feide-brukere, og for personer koblet til en Feide-bruker, er det
 #   hjemorganisasjonen som gir den synligheten. API-et viser i dag en person som har en
 #   tildeling, aktiv eller ikke, i en organisasjon og et miljø administratoren har lesetilgang i.
 #   Kravene sier aktiv tildeling. Hva skal gjelde?
