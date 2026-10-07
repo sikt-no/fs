@@ -1,5 +1,6 @@
 // Samtalen i Claude-panelet. Rene funksjoner over hendelsene fra core/claude.ts, så de kan testes med node --test.
 import type { ClaudeEvent, ClaudeMcpServer, ExecuteTarget } from '../shared/api.ts';
+import type { Answers, Question } from '../shared/question.ts';
 
 export type ChatPreset = 'summary' | 'pr';
 
@@ -10,10 +11,14 @@ export type ChatItem =
   | { kind: 'tool'; id: string; name: string; summary: string; state: 'running' | 'ok' | 'error' }
   | { kind: 'done'; ok: boolean; text: string }
   /** Claude vil bruke et verktøy som må godkjennes (`mcp__*`, WebFetch): kortet med «Tillat», «Tillat alltid» og «Avvis» */
-  | { kind: 'permission'; id: string; tool: string; input: Record<string, string>; state: PermissionState };
+  | { kind: 'permission'; id: string; tool: string; input: Record<string, string>; state: PermissionState }
+  /** Claude spør med AskUserQuestion: kortet med valgene, «Send svar» og «Hopp over». `answers` når det er besvart */
+  | { kind: 'question'; id: string; questions: Question[]; state: QuestionState; answers: Answers | null };
 
 /** `pending`: venter på brukeren. `timeout`, `closed`, `ended`: avvist fordi tiden gikk ut, panelet ble lukket eller kjøringen sluttet */
 export type PermissionState = 'pending' | 'allowed' | 'denied' | 'timeout' | 'closed' | 'ended';
+/** `answered`: besvart. `skipped`: «Hopp over». Resten som for spørsmål om lov */
+export type QuestionState = 'pending' | 'answered' | 'skipped' | 'timeout' | 'closed' | 'ended';
 
 export interface Chat {
   items: ChatItem[];
@@ -159,6 +164,13 @@ export function apply(chat: Chat, runId: string, ev: ClaudeEvent, hashes: SkillH
       const state: PermissionState = ev.behavior === 'allow' ? 'allowed' : ev.reason === 'user' ? 'denied' : ev.reason;
       return { ...chat, items: chat.items.map(i => (i.kind === 'permission' && i.id === ev.id ? { ...i, state } : i)) };
     }
+    case 'question':
+      if (chat.items.some(i => i.kind === 'question' && i.id === ev.id)) return chat;
+      return { ...chat, items: [...chat.items, { kind: 'question', id: ev.id, questions: ev.questions, state: 'pending', answers: null }] };
+    case 'questionDone': {
+      const state: QuestionState = ev.answers ? 'answered' : ev.reason === 'user' ? 'skipped' : ev.reason;
+      return { ...chat, items: chat.items.map(i => (i.kind === 'question' && i.id === ev.id ? { ...i, state, answers: ev.answers } : i)) };
+    }
     case 'text':
       return { ...chat, items: [...chat.items, { kind: 'assistant', text: ev.text }] };
     case 'tool': {
@@ -190,11 +202,16 @@ export function apply(chat: Chat, runId: string, ev: ClaudeEvent, hashes: SkillH
 }
 
 /** Spørsmål om lov som fortsatt venter, når kjøringen er over, er avvist av backenden */
-const endPending = (items: ChatItem[]) => items.map(i => (i.kind === 'permission' && i.state === 'pending' ? ({ ...i, state: 'ended' } as ChatItem) : i));
+const endPending = (items: ChatItem[]) => items.map(i => ((i.kind === 'permission' || i.kind === 'question') && i.state === 'pending' ? ({ ...i, state: 'ended' } as ChatItem) : i));
 
 /** Spørsmålene om lov i samtalen som venter på brukeren */
 export function pendingPermissions(chat: Chat): Extract<ChatItem, { kind: 'permission' }>[] {
   return chat.items.filter((i): i is Extract<ChatItem, { kind: 'permission' }> => i.kind === 'permission' && i.state === 'pending');
+}
+
+/** Spørsmålene fra AskUserQuestion i samtalen som venter på brukeren */
+export function pendingQuestions(chat: Chat): Extract<ChatItem, { kind: 'question' }>[] {
+  return chat.items.filter((i): i is Extract<ChatItem, { kind: 'question' }> => i.kind === 'question' && i.state === 'pending');
 }
 
 /** «Tillat alltid i denne samtalen»: verktøyet sendes som `allowTools` med de neste meldingene */
@@ -217,6 +234,7 @@ export const TOOL_LABEL: Record<string, string> = {
   Skill: 'Bruker skill',
   TodoWrite: 'Planlegger',
   WebFetch: 'Henter fra nettet',
+  AskUserQuestion: 'Spør deg',
 };
 
 /** Visningsnavnet til et verktøy: `TOOL_LABEL`, eller «Figma: get_screenshot» for `mcp__figma__get_screenshot` */

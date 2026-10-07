@@ -5,8 +5,8 @@ import { accessSync, constants, readdirSync, readFileSync, rmSync, statSync, wri
 import { homedir, tmpdir } from 'node:os';
 import { delimiter, dirname, isAbsolute, join, resolve } from 'node:path';
 import { promisify } from 'node:util';
-import { CLAUDE_SKILLS, CODE_DIRS, type ClaudeApproveRequest, type ClaudeEvent, type ClaudeMcpServer, type CodeDir, type ClaudeRunRequest, type ClaudeSkill, type ClaudeSkills, type ClaudeStatus } from '../shared/api.ts';
-import { APPROVE_TIMEOUT_MS, APPROVE_TOOL, Approver, isAskable, SAVE_SKETCH_TOOL, SECRET_KEY } from './approve.ts';
+import { CLAUDE_SKILLS, CODE_DIRS, type ClaudeAnswerRequest, type ClaudeApproveRequest, type ClaudeEvent, type ClaudeMcpServer, type CodeDir, type ClaudeRunRequest, type ClaudeSkill, type ClaudeSkills, type ClaudeStatus } from '../shared/api.ts';
+import { APPROVE_TIMEOUT_MS, APPROVE_TOOL, Approver, QUESTION_TIMEOUT_MS, isAskable, SAVE_SKETCH_TOOL, SECRET_KEY } from './approve.ts';
 import { MCP_SERVERS, OWN_SERVER, readMcpServers, readonlyTools, type McpServers } from './mcp.ts';
 import { saveSketch } from './save.ts';
 
@@ -124,7 +124,7 @@ export function implementPrompt(target: { repo: string; spec: string }, repoRoot
     dir
       ? `Protokoll: sett «Status: pågår» og «Tatt av» under «### ${target.repo}» i ${join(resolve(repoRoot), dir, 'utforing.md')} når du begynner. Når du er ferdig, skriv «Overlevering» (det neste repo trenger å vite: nye felt, queries og mutations, endepunkter, kjente avvik), og si fra til brukeren at steget kan settes til levert når PR-en finnes. Er du blokkert, sett «Blokkert» med grunn.`
       : '',
-    'AskUserQuestion finnes ikke her: still spørsmålene i svaret, og vent på brukeren.',
+    'AskUserQuestion virker: brukeren får spørsmålene som et kort med valgene, og svarene kommer tilbake til deg. Bruk det når du trenger et valg fra brukeren. Hopper brukeren over, still spørsmålene i svaret, og vent på brukeren.',
     'MCP-verktøy (mcp__*) og WebFetch kan brukes, men brukeren må godkjenne hvert kall i FS Kravforvaltning. Blir et kall avvist, ikke prøv igjen uten å spørre brukeren.',
   ]
     .filter(Boolean)
@@ -272,6 +272,7 @@ export function toolSummary(name: string, input: Record<string, unknown> = {}): 
   if (typeof input.pattern === 'string') return input.pattern + (input.path ? ` i ${file(input.path)}` : '');
   if (typeof input.skill === 'string') return input.skill;
   if (Array.isArray(input.todos)) return `${input.todos.length} punkter`;
+  if (Array.isArray(input.questions)) return input.questions.map(q => (q as { header?: unknown })?.header).filter(h => typeof h === 'string').join(', ') || name;
   return name;
 }
 
@@ -434,7 +435,7 @@ export function contextPrompt(
       '{"mal": "…", "gjort": "…", "beslutninger": "…", "apneSporsmal": "…", "nesteSteg": "…", "paths": ["…"]}. ' +
       'Feltene er korte setninger på norsk; la et felt være tomt når det ikke er noe å si. paths er filene som er lest eller endret i samtalen og er viktige for å fortsette, relative til repoet. ' +
       'Brukeren får et kort med «Start ny samtale med oppsummeringen».',
-    'Du har ikke shell-tilgang; bruk Read, Glob, Grep, Edit og Write. AskUserQuestion finnes ikke her: still spørsmålene i svaret, og vent på brukeren.',
+    'Du har ikke shell-tilgang; bruk Read, Glob, Grep, Edit og Write. AskUserQuestion virker: brukeren får spørsmålene som et kort med valgene, og svarene kommer tilbake til deg. Bruk det når du trenger et valg fra brukeren. Hopper brukeren over, still spørsmålene i svaret, og vent på brukeren.',
     MCP_PROMPT,
     dirs.length ? `Du kan lese kodeklonene ${dirs.join(', ')}, men ikke endre dem.` : '',
     skills.includes('fs-verify')
@@ -474,6 +475,8 @@ export interface RunnerOpts {
   home?: string;
   /** Hvor lenge et spørsmål om lov venter (tester) */
   approveTimeoutMs?: number;
+  /** Hvor lenge spørsmål fra AskUserQuestion venter (tester) */
+  questionTimeoutMs?: number;
   /** En skisse er skrevet av `save_sketch`; git-endringene skal leses på nytt */
   onSaved?: (path: string) => void;
   /** En kjøring er ferdig; Claude kan ha skrevet filer, også under tasks/ (som ikke overvåkes uten Oppgaver og Spesifikasjoner) */
@@ -510,6 +513,7 @@ export class ClaudeRunner {
       emit: (runId, ev) => this.emit(runId, ev),
       saveSketch: (id, path) => this.saveSketch(id, path),
       timeoutMs: opts.approveTimeoutMs,
+      questionTimeoutMs: opts.questionTimeoutMs,
     });
   }
 
@@ -624,8 +628,9 @@ export class ClaudeRunner {
     // Den korte PATH-en fra Finder: ta med mappa claude ligger i (npm-installasjoner trenger node derfra)
     env.PATH = [dirname(bin), env.PATH].filter(Boolean).join(delimiter);
     // Claude Code gir opp et MCP-kall etter omtrent 60 s uten MCP_TOOL_TIMEOUT, også spørsmålet om lov. Den må vente
-    // til brukeren har fått tid til å svare, også når brukeren har satt en lavere verdi selv.
-    env.MCP_TOOL_TIMEOUT = String(Math.max(Number(env.MCP_TOOL_TIMEOUT) || 0, (this.opts.approveTimeoutMs ?? APPROVE_TIMEOUT_MS) + 60_000));
+    // til brukeren har fått tid til å svare (også på AskUserQuestion), selv når brukeren har satt en lavere verdi selv.
+    const wait = Math.max(this.opts.approveTimeoutMs ?? APPROVE_TIMEOUT_MS, this.opts.questionTimeoutMs ?? QUESTION_TIMEOUT_MS);
+    env.MCP_TOOL_TIMEOUT = String(Math.max(Number(env.MCP_TOOL_TIMEOUT) || 0, wait + 60_000));
     const cleanup = () => {
       this.approver.unregister(runId);
       rmSync(mcpFile, { force: true });
@@ -701,7 +706,12 @@ export class ClaudeRunner {
     return this.approver.answer(req);
   }
 
-  /** Spørsmålene om lov som venter */
+  /** Brukerens svar på spørsmålene fra AskUserQuestion */
+  async answer(req: ClaudeAnswerRequest): Promise<boolean> {
+    return this.approver.answerQuestion(req);
+  }
+
+  /** Spørsmålene som venter (om lov, og fra AskUserQuestion) */
   pending() {
     return this.approver.pending();
   }

@@ -22,6 +22,7 @@ import {
   allowAlways,
   needsAuth,
   pendingPermissions,
+  pendingQuestions,
   updateConversation,
   type ChatItem,
   type ChatPreset,
@@ -38,6 +39,7 @@ import { appendQuote } from './selection';
 import { covered } from './mention';
 import { MENTION_LIST_ID, MentionPicker, useMentions } from './MentionPicker';
 import { transport } from './transport';
+import { answerQuestion, QuestionCard } from './QuestionCard';
 
 /** Slik vises de faste meldingene i samtalen */
 const PRESET: Record<ChatPreset, { label: string; text: string }> = {
@@ -102,7 +104,10 @@ function answerPermission(convId: string, item: Extract<ChatItem, { kind: 'permi
 
 /** Panelet lukkes: spørsmålene som venter, avvises, så Claude ikke venter til tiden går ut */
 function denyAllPending() {
-  for (const conv of convs.list) for (const p of pendingPermissions(conv.chat)) void answerPermission(conv.id, p, 'deny', false, 'closed');
+  for (const conv of convs.list) {
+    for (const p of pendingPermissions(conv.chat)) void answerPermission(conv.id, p, 'deny', false, 'closed');
+    for (const q of pendingQuestions(conv.chat)) void answerQuestion(q, null, 'closed');
+  }
 }
 
 const PERMISSION_STATE: Record<Exclude<Extract<ChatItem, { kind: 'permission' }>['state'], 'pending'>, string> = {
@@ -617,7 +622,7 @@ export function ClaudePanel({ status, width, onWidth, allowedSkills: modeSkills,
                 <div key={n} class="cmsg assistant">
                   <ChatMarkdown text={i.text} has={has} onOpen={onOpen} onPr={onPr} change={change} onSummary={continueIn} skill={c.skill} edited={editedFiles(c)} />
                 </div>
-              ) : i.kind === 'tool' ? (
+              ) : i.kind === 'tool' && i.name === 'AskUserQuestion' ? null : i.kind === 'tool' ? (
                 <div key={n} class={'ctool ' + i.state}>
                   <span class="cdot" />
                   <span>{toolLabel(i.name)}</span>
@@ -629,6 +634,8 @@ export function ClaudePanel({ status, width, onWidth, allowedSkills: modeSkills,
                 </div>
               ) : i.kind === 'permission' ? (
                 <PermissionCard key={i.id} convId={conv!.id} item={i} />
+              ) : i.kind === 'question' ? (
+                <QuestionCard key={i.id} item={i} />
               ) : (
                 <div key={n} class={'cdone' + (i.ok ? '' : ' err')}>{i.text}</div>
               ),

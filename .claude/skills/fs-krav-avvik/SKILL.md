@@ -21,7 +21,7 @@ Du leser kravene og finner tekst som bryter konvensjonene, der det trengs skjøn
 
 ## I FS Kravforvaltning
 
-I Claude-panelet har du ikke AskUserQuestion. Still spørsmålene i svaret, og vent på brukeren.
+I Claude-panelet virker AskUserQuestion: brukeren får spørsmålet som et kort med valgene. Hopper brukeren over, still spørsmålene i svaret, og vent på brukeren.
 
 ## Kilder (les FØRST)
 

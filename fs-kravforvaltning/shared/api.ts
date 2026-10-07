@@ -1,5 +1,6 @@
 import type { GitInfo, Snapshot } from './model.ts';
 import type { TasksSnapshot } from './tasks.ts';
+import type { Answers, Question } from './question.ts';
 
 /** Det rendereren trenger ved oppstart, uansett transport */
 export interface Boot {
@@ -91,6 +92,21 @@ export interface ClaudePermission {
   toolUseId: string | null;
 }
 
+/** Claude spør brukeren med AskUserQuestion: kortet med valgene */
+export interface ClaudeQuestion {
+  kind: 'question';
+  id: string;
+  questions: Question[];
+  toolUseId: string | null;
+}
+
+/** Brukerens svar på spørsmålene, eller `null` for «Hopp over» (eller når panelet ble lukket: `reason: 'closed'`) */
+export interface ClaudeAnswerRequest {
+  id: string;
+  answers: Answers | null;
+  reason?: 'user' | 'closed';
+}
+
 /** En MCP-server Claude startet med, og om den er koblet til (`needs-auth`: brukeren må logge inn med `/mcp` i terminalen) */
 export interface ClaudeMcpServer {
   name: string;
@@ -150,6 +166,9 @@ export type ClaudeEvent =
   | ClaudePermission
   /** Spørsmålet er besvart: av brukeren, eller avvist fordi tiden gikk ut, panelet ble lukket eller kjøringen sluttet */
   | { kind: 'permissionDone'; id: string; behavior: 'allow' | 'deny'; reason: 'user' | 'timeout' | 'closed' | 'ended' }
+  | ClaudeQuestion
+  /** Spørsmålene er besvart (`answers`), eller ikke: hoppet over, tiden gikk ut, panelet ble lukket eller kjøringen sluttet */
+  | { kind: 'questionDone'; id: string; answers: Answers | null; reason: 'user' | 'timeout' | 'closed' | 'ended' }
   /** Hvor mye av konteksten siste svar brukte: input, cache-lesing og cache-skriving, pluss svaret */
   | { kind: 'usage'; tokens: number }
   | {
@@ -206,8 +225,10 @@ export interface Api {
   claudeActive(): Promise<string[]>;
   /** Svarer på et spørsmål om lov; `false` når det ikke venter lenger */
   claudeApprove(req: ClaudeApproveRequest): Promise<boolean>;
-  /** Spørsmålene om lov som venter, så kortene kommer tilbake etter en omlasting */
-  claudePending(): Promise<{ runId: string; event: ClaudePermission }[]>;
+  /** Brukerens svar på spørsmålene fra AskUserQuestion */
+  claudeAnswer(req: ClaudeAnswerRequest): Promise<boolean>;
+  /** Spørsmålene som venter (om lov, og fra AskUserQuestion), så kortene kommer tilbake etter en omlasting */
+  claudePending(): Promise<{ runId: string; event: ClaudePermission | ClaudeQuestion }[]>;
   claudeSkills(): Promise<ClaudeSkills>;
   /** Standardstiene til kodeklonene; `paths` sjekker om overstyrte stier finnes */
   claudeDirs(paths?: Record<string, string>): Promise<CodeDir[]>;
@@ -215,4 +236,4 @@ export interface Api {
   pickDir(): Promise<string | null>;
 }
 export type ApiMethod = keyof Api;
-export const API_METHODS: ApiMethod[] = ['read', 'save', 'remove', 'publish', 'authStatus', 'authStart', 'authPoll', 'authLogout', 'pull', 'mainStatus', 'claudeStatus', 'claudeRun', 'claudeCancel', 'claudeActive', 'claudeApprove', 'claudePending', 'claudeSkills', 'claudeDirs', 'pickDir'];
+export const API_METHODS: ApiMethod[] = ['read', 'save', 'remove', 'publish', 'authStatus', 'authStart', 'authPoll', 'authLogout', 'pull', 'mainStatus', 'claudeStatus', 'claudeRun', 'claudeCancel', 'claudeActive', 'claudeApprove', 'claudeAnswer', 'claudePending', 'claudeSkills', 'claudeDirs', 'pickDir'];

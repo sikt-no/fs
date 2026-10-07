@@ -19,7 +19,7 @@ function post(url: string, body: unknown, headers: Record<string, string>): Prom
 
 const call = (name: string, args: unknown, id = 1) => ({ jsonrpc: '2.0', id, method: 'tools/call', params: { name, arguments: args } });
 
-async function setup(opts: { timeoutMs?: number; always?: string[]; sketches?: boolean } = {}) {
+async function setup(opts: { timeoutMs?: number; questionTimeoutMs?: number; always?: string[]; sketches?: boolean } = {}) {
   const events: { runId: string; ev: ClaudeEvent }[] = [];
   const listeners: ((ev: ClaudeEvent) => void)[] = [];
   const a = new Approver({
@@ -32,6 +32,7 @@ async function setup(opts: { timeoutMs?: number; always?: string[]; sketches?: b
       return path;
     },
     timeoutMs: opts.timeoutMs,
+    questionTimeoutMs: opts.questionTimeoutMs,
   });
   const server = await a.register('r1', { always: opts.always, sketches: opts.sketches });
   const url = server.url as string;
@@ -57,6 +58,8 @@ test('decide og isAskable: appens egne tillates, MCP_SERVERS og WebFetch spørre
   assert.equal(decide('mcp__neon__run_sql', new Set(['mcp__neon__run_sql'])), 'deny', 'også når de står i «tillat alltid»');
   for (const t of ['Bash', 'WebSearch', 'Edit', 'mcp__figma', '']) assert.equal(decide(t, none), 'deny', t);
   assert.ok(!isAskable('mcp__kravforvaltning__approve'));
+  assert.equal(decide('AskUserQuestion', none), 'question');
+  assert.equal(decide('AskUserQuestion', new Set(['AskUserQuestion'])), 'question', '«tillat alltid» gjelder ikke spørsmål');
 });
 
 test('shownInput forkorter og skjuler hemmeligheter', () => {
@@ -147,4 +150,62 @@ test('save_sketch: svaret er stien eller en feilmelding; ikke i en utførekjøri
   assert.deepEqual((await exec.rpc({ jsonrpc: '2.0', id: 1, method: 'tools/list' })).result.tools.map((t: { name: string }) => t.name), ['approve']);
   assert.ok((await exec.rpc(call('save_sketch', { tool_use_id: 'img', path: 'x' }))).error);
   exec.a.close();
+});
+
+const QUESTIONS = {
+  questions: [
+    { question: 'Skal jeg ta skjermbilder?', header: 'Skjermbilder', multiSelect: false, options: [{ label: 'Ja', description: 'Fra test' }, { label: 'Nei', description: '' }] },
+    { question: 'Hvilke repoer?', header: 'Repo', multiSelect: true, options: [{ label: 'fs-admin', description: '' }, { label: 'fs-plattform', description: '', preview: 'x' }] },
+  ],
+};
+
+test('AskUserQuestion: kortet, svaret som updatedInput, og «Hopp over»', async () => {
+  const s = await setup();
+  s.onEvent(ev => {
+    if (ev.kind !== 'question') return;
+    assert.equal(ev.questions.length, 2);
+    assert.equal(ev.questions[1].options[1].preview, 'x');
+    assert.equal(ev.toolUseId, 't');
+    assert.equal(s.a.answer({ id: ev.id, behavior: 'allow' }), false, 'et spørsmål er ikke et spørsmål om lov');
+    assert.equal(s.a.answerQuestion({ id: ev.id, answers: { 'Skal jeg ta skjermbilder?': 'Ja' } }), false, 'alle spørsmålene må ha svar');
+    assert.deepEqual(s.a.pending().map(p => p.event.kind), ['question'], 'kortet kommer tilbake etter en omlasting');
+    s.a.answerQuestion({ id: ev.id, answers: { 'Skal jeg ta skjermbilder?': 'Ja', 'Hvilke repoer?': 'fs-admin, fs-plattform', ukjent: 'x' } });
+  });
+  const d = await s.approve('AskUserQuestion', QUESTIONS);
+  assert.equal(d.behavior, 'allow');
+  assert.deepEqual(d.updatedInput.answers, { 'Skal jeg ta skjermbilder?': 'Ja', 'Hvilke repoer?': 'fs-admin, fs-plattform' });
+  assert.equal(d.updatedInput.questions.length, 2);
+  const done = s.events.at(-1)!.ev;
+  assert.equal(done.kind, 'questionDone');
+  assert.equal(done.kind === 'questionDone' && done.reason, 'user');
+  assert.deepEqual(s.a.pending(), []);
+
+  const skip = await setup();
+  skip.onEvent(ev => ev.kind === 'question' && skip.a.answerQuestion({ id: ev.id, answers: null }));
+  assert.deepEqual(await skip.approve('AskUserQuestion', QUESTIONS), { behavior: 'deny', message: DENY_MESSAGES.skipped });
+  const sd = skip.events.at(-1)!.ev;
+  assert.ok(sd.kind === 'questionDone' && sd.answers === null && sd.reason === 'user');
+  s.a.close();
+  skip.a.close();
+});
+
+test('AskUserQuestion: ugyldige spørsmål, tidsavbrudd, lukket panel og avsluttet kjøring', async () => {
+  const s = await setup({ questionTimeoutMs: 50, timeoutMs: 10 });
+  assert.deepEqual(await s.approve('AskUserQuestion', { questions: [] }), { behavior: 'deny', message: DENY_MESSAGES.invalid });
+  assert.deepEqual(await s.approve('AskUserQuestion', { questions: [{ question: 'a', header: 'h', options: [{ label: 'x' }] }] }), { behavior: 'deny', message: DENY_MESSAGES.invalid });
+  // Spørsmål har sin egen frist, ikke den for spørsmål om lov
+  assert.deepEqual(await s.approve('AskUserQuestion', QUESTIONS), { behavior: 'deny', message: DENY_MESSAGES.questionTimeout });
+  const t = s.events.at(-1)!.ev;
+  assert.ok(t.kind === 'questionDone' && t.reason === 'timeout');
+  s.a.close();
+
+  const closed = await setup();
+  closed.onEvent(ev => ev.kind === 'question' && closed.a.answerQuestion({ id: ev.id, answers: null, reason: 'closed' }));
+  assert.deepEqual(await closed.approve('AskUserQuestion', QUESTIONS), { behavior: 'deny', message: DENY_MESSAGES.closed });
+  closed.a.close();
+
+  const ended = await setup();
+  ended.onEvent(ev => ev.kind === 'question' && setTimeout(() => ended.a.unregister('r1'), 10));
+  assert.deepEqual(await ended.approve('AskUserQuestion', QUESTIONS), { behavior: 'deny', message: DENY_MESSAGES.ended });
+  ended.a.close();
 });
