@@ -3,7 +3,7 @@ import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { after, test } from 'node:test';
-import { collectMcpServers, MCP_READONLY, MCP_SERVERS, readMcpServers, readonlyTools, redactServers } from './mcp.ts';
+import { collectMcpServers, MCP_READONLY, MCP_SERVERS, MCP_VERIFY, readMcpServers, readonlyTools, redactServers, verifyTools } from './mcp.ts';
 
 const tmp = mkdtempSync(join(tmpdir(), 'krav-mcp-'));
 after(() => rmSync(tmp, { recursive: true, force: true }));
@@ -77,4 +77,10 @@ test('readonlyTools: verktøyene som bare leser, for serverne i MCP_SERVERS', ()
   for (const t of ['mcp__figma__use_figma', 'mcp__figma__create_new_file', 'mcp__figma__upload_assets', 'mcp__chrome-devtools__click', 'mcp__chrome-devtools__evaluate_script', 'mcp__chrome-devtools__navigate_page', 'mcp__claude_ai_Atlassian_Rovo__createJiraIssue'])
     assert.ok(!tools.includes(t), t);
   assert.ok(Object.keys(MCP_READONLY).every(s => MCP_SERVERS.includes(s)));
+});
+
+test('verifyTools: navigering, klikk og taster i chrome-devtools, bare for fs-verify', () => {
+  assert.deepEqual(verifyTools(), ['mcp__chrome-devtools__navigate_page', 'mcp__chrome-devtools__click', 'mcp__chrome-devtools__press_key']);
+  assert.ok(!verifyTools().some(t => readonlyTools().includes(t)), 'står ikke i MCP_READONLY');
+  assert.ok(Object.keys(MCP_VERIFY).every(s => MCP_SERVERS.includes(s)));
 });

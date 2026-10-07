@@ -53,16 +53,16 @@ const RES_C: Record<string, string> = { funnet: 'var(--st-implemented)', 'ikke f
 const resMark = (r: string | null) => (r === 'funnet' ? 'omk omk--ok' : r === 'ikke funnet' ? 'omk omk--no' : r === 'usikker' ? 'omk sp-mk--us' : 'omk omk--na');
 const SKETCH_C: Record<SketchKind, string> = { OK: 'var(--st-implemented)', Avvik: 'var(--err)', Uavklart: 'var(--st-in-progress)' };
 
-/** En knapp som sender en prompt til Claude-panelet når det er åpent, og ellers kopierer den */
-function ClaudeAction({ label, prompt, solid }: { label: string; prompt: () => string; solid?: boolean }) {
+/** En knapp som sender en prompt til Claude-panelet når det er åpent, og ellers kopierer den. Med `skill` starter den en ny samtale med skillen */
+function ClaudeAction({ label, prompt, solid, skill }: { label: string; prompt: () => string; solid?: boolean; skill?: string }) {
   const claude = useClaudeTarget();
   const [copied, copy] = useCopy();
   return (
     <button
       class={'spbtn ' + (solid ? 'solid' : 'acc')}
       disabled={claude.ready && claude.busy}
-      title={claude.ready ? (claude.busy ? 'Claude jobber i samtalen; vent til svaret er ferdig' : 'Sender prompten til samtalen i Claude-panelet') : 'Claude-panelet er lukket: prompten kopieres'}
-      onClick={() => (claude.ready ? void claude.send(prompt()) : copy(prompt()))}
+      title={claude.ready ? (claude.busy ? 'Claude jobber i samtalen; vent til svaret er ferdig' : skill ? `Starter en ny samtale med ${skill} i Claude-panelet` : 'Sender prompten til samtalen i Claude-panelet') : 'Claude-panelet er lukket: prompten kopieres'}
+      onClick={() => (claude.ready ? void (skill ? claude.withSkill(prompt(), skill) : claude.send(prompt())) : copy(prompt()))}
     >
       <span class="sp-dia" />
       {claude.ready ? label : copied ? 'Kopiert' : `${label} (kopier prompt)`}
@@ -714,7 +714,7 @@ export function SpecDetail({ c, col, repos, repoName, cards, entries, ro, dirty,
               <input type="checkbox" checked={shots} onChange={e => setShots((e.currentTarget as HTMLInputElement).checked)} />
               Ta skjermbilder (test-fsadmin)
             </label>
-            <ClaudeAction label="Verifiser" prompt={() => verifyPrompt(c, shots)} solid />
+            <ClaudeAction label="Verifiser" prompt={() => verifyPrompt(c, shots)} skill="fs-verify" solid />
             {actions.verifyTeam && (
               <button class="spbtn acc" title="fs-verify-agent-teams i en terminal i Claude-panelet: én teammate per feature-fil" onClick={() => actions.verifyTeam?.(c, shots)}>
                 Verifiser i terminal med agent team

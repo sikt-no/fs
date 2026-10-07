@@ -61,6 +61,7 @@ test('terminalArgs: verify kjører i kravrepoet, kan lese kodemappene og bare br
   assert.ok(allow.includes('Skill(fs-verify)') && allow.includes('Skill(fs-verify-agent-teams)'));
   assert.ok(allow.includes(`Edit(/${px(tmp)}/krav/**)`) && allow.includes(`Edit(/${px(tmp)}/tasks/*/*/spec/**)`));
   assert.ok(allow.includes('Bash(git log:*)') && !allow.some(a => a.startsWith('Bash(rm')));
+  assert.ok(allow.includes('mcp__chrome-devtools__navigate_page') && allow.includes('mcp__chrome-devtools__press_key'), 'skjermbildene spørres ikke om');
   const deny = after(args, '--disallowedTools');
   assert.ok(deny.includes(`Edit(/${px(code)}/**)`), 'koden kan leses, ikke endres');
   assert.ok(deny.includes('Skill(fs-krav)') && deny.includes('Skill(fs-specify)') && !deny.includes('Skill(fs-verify)'));
