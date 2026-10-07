@@ -20,14 +20,17 @@ Egenskap: Se brukere som har en spesifikk rolle
     Når brukeradministrator velger en rolle
     Så åpnes rollens oversiktsside
 
-  @must @openquestion
+  @must
   Scenario: Vise brukere som har en aktiv rolle
-    # ÅPNE SPØRSMÅL:
-    # - Vises bare brukerne brukeradministratoren ellers kan se, det vil si brukere med en aktiv
-    #   tildeling av rollen i en organisasjon og et miljø brukeradministratoren administrerer?
     Gitt at en rolle er tildelt flere brukere
     Når brukeradministrator åpner rollens oversiktsside
-    Så skal alle brukere med rollen aktivt tildelt vises
+    Så vises brukerne med rollen aktivt tildelt som brukeradministratoren ellers kan se
+
+  @must
+  Scenario: Brukere brukeradministratoren ellers ikke kan se, vises ikke
+    Gitt at rollen er aktivt tildelt en bruker brukeradministratoren ikke kan se i brukeroversikten
+    Når brukeradministrator åpner rollens oversiktsside
+    Så vises ikke brukeren
 
   Scenario: Søke fram en rolle
     Gitt at brukeradministrator er i rolleoversikten
