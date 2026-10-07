@@ -37,13 +37,14 @@ Egenskap: Se Feide-brukere og personer i samme oversikt i overgangsperioden
       Så fremgår det for hver personbruker om det er en Feide-bruker eller en person
 
     @openquestion
-    Scenario: Feide-ID og hjemorganisasjon vises bare for Feide-brukere
+    Scenario: En person koblet til en Feide-bruker vises med hjemorganisasjonen fra Feide
       # ÅPNE SPØRSMÅL:
-      # - Hva står i kolonnene «Feide-ID» og «Hjemorganisasjon» for en person: «-» som for en
-      #   Feide-bruker uten kjent hjemorganisasjon i dag, eller noe annet?
+      # - Hva står i kolonnene «Feide-ID» og «Hjemorganisasjon» for en person uten Feide-bruker:
+      #   «-» som for en Feide-bruker uten kjent hjemorganisasjon i dag, eller noe annet?
+      # - Vises Feide-ID-en for en person som er koblet til en Feide-bruker?
+      Gitt en person er koblet til en Feide-bruker
       Når brukeradministratoren åpner brukeroversikten
-      Så vises Feide-ID og hjemorganisasjon for Feide-brukerne
-      Men en person har verken Feide-ID eller hjemorganisasjon i listen
+      Så vises personen med hjemorganisasjonen til Feide-brukeren
 
     Scenario: Søk på navn finner begge typer
       Gitt brukeradministratoren ser listen over personbrukere
@@ -81,9 +82,8 @@ Egenskap: Se Feide-brukere og personer i samme oversikt i overgangsperioden
     @openquestion
     Scenario: En Feide-bruker som er flyttet, har de samme tilgangene etterpå
       # ÅPNE SPØRSMÅL:
-      # - Vises Feide-brukeren fortsatt i listen etter flyttingen? Feide-brukeren beholdes, og
-      #   synligheten gjennom hjemorganisasjonen gjelder fortsatt, så den samme personen kan stå
-      #   to ganger.
+      # - Vises Feide-brukeren fortsatt i listen etter flyttingen? Feide-brukeren beholdes og er
+      #   koblet til personen. Skal listen da vise dem som én personbruker, eller begge?
       # - Følger «Tildelt av» og «Tildelt dato» med når tildelingen flyttes?
       Gitt en Feide-bruker har aktive tildelinger
       Og fødselsnummeret til Feide-brukeren er kjent
