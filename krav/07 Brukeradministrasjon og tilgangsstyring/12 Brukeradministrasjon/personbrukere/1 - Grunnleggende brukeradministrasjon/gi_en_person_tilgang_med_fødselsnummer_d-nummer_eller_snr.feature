@@ -15,6 +15,11 @@ Egenskap: Gi en person tilgang med fødselsnummer, D-nummer eller SNR
   operasjon, og personen blir synlig gjennom den nye tildelingen. Det gjøres fra rollesiden
   (BRU-PER-ROL-002), ikke fra brukeroversikten.
 
+  De fleste fagskolene har Feide-domene på fylkeskommunenivå. Hjemorganisasjonen til en
+  fagskoleansatt med Feide er da fylkeskommunen, ikke fagskolen, og gir ikke synlighet for
+  fagskolens brukeradministrator. Fagskoleansatte får derfor tilgang slik dette kravet beskriver,
+  uansett om de logger inn med Feide eller ID-porten.
+
   Svaret er det samme uansett om personen fantes fra før, og det avslører ikke hvilke
   tildelinger personen har i andre organisasjoner. Nummeret vises ikke i grensesnittet etterpå.
   Personen vises med navn.
