@@ -22,10 +22,10 @@ Du sammenligner kravene med koden, og lukker løkka tilbake til kravene. Du eier
 
 ## I FS Kravforvaltning
 
-I Claude-panelet i FS Kravforvaltning har du ikke Bash eller AskUserQuestion:
+I Claude-panelet i FS Kravforvaltning har du ikke Bash:
 
 - Kodeklonene (fs-admin, fs-plattform) står i systemprompten. Bruk dem i stedet for å spørre, og spør bare hvis de mangler.
-- Still spørsmålene i svaret, og vent på brukeren.
+- `AskUserQuestion` virker: brukeren får spørsmålet som et kort med valgene. Hopper brukeren over, still spørsmålet i svaret, og vent på brukeren.
 - Du kan ikke slette filer. Skal en `@deprecated`-fil slettes, si hvilken, så sletter brukeren den selv. Blokker fjernes med `Edit`.
 - Lesende git går ikke. Bruk `Grep` og `Glob` i klonene.
 - Skjermbilder tas med chrome-devtools-MCP, og hvert kall må godkjennes i panelet (se *Skjermbilder*).

@@ -26,7 +26,7 @@ Du samler krav. Du henter kravene fra `.feature`-filene under `krav/`, kobler de
 - Kravene er feature-filene under `## Krav` (slått opp på Feature-ID). Ta med alt som er `@planned` eller `@deprecated` i hver fil, etter filteret under. Spør ikke etter mappe eller filer.
 - Skissene og «Ingen skisse» står under `## Skisser`. Spør ikke om det finnes skisser; hent Figma-artefakter og valider skissene mot kravene som vanlig.
 - `## Omfang`, `## Rute` og skissene brukeren har skrevet, beholdes når spec-en skrives over.
-- I Claude-panelet i FS Kravforvaltning finnes ikke `AskUserQuestion`: still spørsmålene i svaret, og vent på brukeren.
+- I Claude-panelet i FS Kravforvaltning virker `AskUserQuestion`: brukeren får spørsmålet som et kort med valgene. Hopper brukeren over, still spørsmålene i svaret, og vent på brukeren.
 
 ## Finn oppgavemappa (gjør dette FØRST)
 

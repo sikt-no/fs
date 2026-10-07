@@ -50,6 +50,7 @@ export function createApi(ws: Workspace, auth: Auth, claude: ClaudeRunner): Api 
     claudeCancel: runId => claude.cancel(runId),
     claudeActive: async () => claude.active(),
     claudeApprove: req => claude.approve(req),
+    claudeAnswer: req => claude.answer(req),
     claudePending: async () => claude.pending(),
     claudeSkills: async () => claude.skills(),
     claudeDirs: async paths => claude.dirs(paths),

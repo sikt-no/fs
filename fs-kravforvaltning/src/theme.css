@@ -916,6 +916,25 @@ a.otf:hover { background: var(--sunken); text-decoration: none; }
 .cperm-btns .primbtn { padding: 5px 11px; }
 .cperm.answered { background: transparent; border-color: var(--line); padding: 8px 12px; }
 .cperm-state { font-size: 12px; }
+.cq { border-color: var(--acc); background: var(--surface); }
+.cq-q { border: 0; margin: 0; padding: 0; min-width: 0; display: flex; flex-direction: column; gap: 6px; }
+.cq-q + .cq-q { border-top: 1px solid var(--line); padding-top: 8px; }
+.cq-legend { padding: 0; display: flex; flex-direction: column; gap: 3px; float: left; width: 100%; }
+.cq-legend + .cq-body { clear: both; }
+.cq-header { align-self: flex-start; font-size: 10.5px; font-weight: 600; text-transform: uppercase; letter-spacing: .04em; color: var(--acc-ink); background: var(--acc-soft); border-radius: 4px; padding: 1px 6px; }
+.cq-text { color: var(--ink); font-weight: 600; }
+.cq-multi { font-size: 11px; }
+.cq-body { display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+.cq-opts { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+.cq-opt { display: flex; align-items: flex-start; gap: 7px; cursor: pointer; padding: 3px 0; }
+.cq-opt input { margin: 3px 0 0; accent-color: var(--acc); flex-shrink: 0; }
+.cq-label { color: var(--ink); }
+.cq-desc { display: block; font-size: 11.5px; }
+.cq-other { font: inherit; font-size: 12.5px; padding: 5px 8px; border: 1px solid var(--line2); border-radius: 6px; background: var(--bg); color: var(--ink); margin-left: 20px; }
+.cq-preview { margin: 0; font-size: 11px; padding: 8px; border: 1px solid var(--line); border-radius: 6px; background: var(--bg); color: var(--ink); white-space: pre-wrap; overflow: auto; max-height: 220px; }
+.cq-answer { color: var(--ink); font-size: 12.5px; }
+.cq-answer::before { content: '→ '; color: var(--muted); }
+.cq.answered .cq-text { font-weight: 500; color: var(--ink2); }
 .cdone { font-size: 11px; font-family: var(--mono); color: var(--muted); padding: 0 4px; }
 .cdone.err { color: var(--err); white-space: pre-wrap; }
 .ctouched { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 10px; font-size: 11.5px; padding: 8px 12px; border-top: 1px solid var(--line); }

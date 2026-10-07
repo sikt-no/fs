@@ -1,7 +1,8 @@
 import { randomBytes } from 'node:crypto';
 import { createServer, type IncomingMessage, type Server, type ServerResponse } from 'node:http';
 import type { AddressInfo } from 'node:net';
-import type { ClaudeApproveRequest, ClaudeEvent, ClaudePermission } from '../shared/api.ts';
+import type { ClaudeAnswerRequest, ClaudeApproveRequest, ClaudeEvent, ClaudePermission, ClaudeQuestion } from '../shared/api.ts';
+import { parseQuestions, validAnswers } from '../shared/question.ts';
 import { MCP_SERVERS, mcpServerOf, OWN_SERVER, readonlyTools, type McpServer } from './mcp.ts';
 
 /**
@@ -10,7 +11,8 @@ import { MCP_SERVERS, mcpServerOf, OWN_SERVER, readonlyTools, type McpServer } f
  * - `approve` er `--permission-prompt-tool`: Claude Code spør den om lov til alt som ikke står i `--allowedTools`
  *   eller `--disallowedTools`. `mcp__*`-verktøy (unntatt appens egne) og WebFetch går til brukeren som et kort i
  *   Claude-panelet (hendelsen `permission`), og alt annet avvises. Svaret er `{"behavior":"allow","updatedInput":…}`
- *   eller `{"behavior":"deny","message":…}`.
+ *   eller `{"behavior":"deny","message":…}`. AskUserQuestion kommer også hit (en allow-regel tillater det aldri), og
+ *   vises som et kort med valgene (hendelsen `question`). Svaret går tilbake som `updatedInput: { questions, answers }`.
  * - `save_sketch` skriver et bilde fra et tidligere verktøykall (f.eks. `get_screenshot` i Figma) som binærfil under
  *   `tasks/<d>/<s>/spec/krav-input/…/sketches/`, siden Write bare kan skrive tekst.
  *
@@ -23,6 +25,9 @@ export const APPROVE_TOOL = `mcp__${OWN_SERVER}__approve`;
 export const SAVE_SKETCH_TOOL = `mcp__${OWN_SERVER}__save_sketch`;
 /** Hvor lenge et spørsmål venter på brukeren før kallet avvises */
 export const APPROVE_TIMEOUT_MS = 5 * 60_000;
+/** Hvor lenge spørsmål fra AskUserQuestion venter på svar: brukeren kan trenge tid til å tenke */
+export const QUESTION_TIMEOUT_MS = 30 * 60_000;
+export const ASK_TOOL = 'AskUserQuestion';
 
 /** Verktøy brukeren kan godkjenne: WebFetch, og verktøyene til serverne i `MCP_SERVERS` */
 export const isAskable = (tool: unknown): tool is string => {
@@ -37,8 +42,9 @@ export const isAskable = (tool: unknown): tool is string => {
  * MCP-servere Claude Code laster selv, f.eks. fra user scope). Alt som er tillatt eller avvist med
  * `--allowedTools`/`--disallowedTools`, kommer aldri hit.
  */
-export function decide(tool: string, always: ReadonlySet<string>): 'allow' | 'ask' | 'deny' {
+export function decide(tool: string, always: ReadonlySet<string>): 'allow' | 'ask' | 'question' | 'deny' {
   if (tool.startsWith(`mcp__${OWN_SERVER}__`)) return 'allow';
+  if (tool === ASK_TOOL) return 'question';
   if (!isAskable(tool)) return 'deny';
   // Verktøy som bare leser, står i --allowedTools og kommer ikke hit; tillates også her, i tilfelle
   return always.has(tool) || readonlyTools().includes(tool) ? 'allow' : 'ask';
@@ -63,15 +69,18 @@ export function shownInput(input: unknown): Record<string, string> {
 export const DENY_MESSAGES = {
   user: 'Brukeren avviste kallet i FS Kravforvaltning. Ikke prøv igjen uten å spørre brukeren.',
   timeout: `Brukeren svarte ikke innen ${APPROVE_TIMEOUT_MS / 60_000} minutter, så kallet ble avvist. Spør brukeren om du skal prøve igjen.`,
+  skipped: 'Brukeren hoppet over spørsmålene i FS Kravforvaltning. Still dem som tekst i svaret hvis du trenger svar, og vent på brukeren.',
+  questionTimeout: `Brukeren svarte ikke på spørsmålene innen ${QUESTION_TIMEOUT_MS / 60_000} minutter. Still dem som tekst i svaret, og vent på brukeren.`,
+  invalid: 'Spørsmålene hadde ikke formen AskUserQuestion krever (1–4 spørsmål med unik tekst og 2–4 valg hvert). Rett dem, eller still dem som tekst.',
   closed: 'Brukeren lukket Claude-panelet, så kallet ble avvist. Spør brukeren om du skal prøve igjen.',
   ended: 'Kjøringen ble avsluttet før brukeren svarte, så kallet ble avvist.',
 } as const;
-type DenyReason = keyof typeof DENY_MESSAGES;
+type DenyReason = 'user' | 'timeout' | 'closed' | 'ended';
 
 type Decision = { behavior: 'allow'; updatedInput: unknown } | { behavior: 'deny'; message: string };
 
 interface Pending {
-  req: ClaudePermission;
+  req: ClaudePermission | ClaudeQuestion;
   runId: string;
   input: unknown;
   done: (d: Decision) => void;
@@ -90,6 +99,8 @@ export interface ApproverOpts {
   /** Skriver bildet fra verktøykallet `toolUseId` til `path`; kaster med en melding Claude kan videreformidle */
   saveSketch?: (toolUseId: string, path: string) => Promise<string>;
   timeoutMs?: number;
+  /** Fristen for spørsmål fra AskUserQuestion (`QUESTION_TIMEOUT_MS`) */
+  questionTimeoutMs?: number;
 }
 
 const TOOLS = {
@@ -162,19 +173,20 @@ export class Approver {
   }
 
   /** Spørsmålene som venter på brukeren, så kortene kommer tilbake etter en omlasting */
-  pending(): { runId: string; event: ClaudePermission }[] {
+  pending(): { runId: string; event: ClaudePermission | ClaudeQuestion }[] {
     return [...this.waiting.values()].map(p => ({ runId: p.runId, event: p.req }));
   }
 
   /** Brukerens svar fra kortet. `always`: verktøyet tillates resten av kjøringen, uten å spørre */
   answer(a: ClaudeApproveRequest) {
     const p = a && typeof a.id === 'string' ? this.waiting.get(a.id) : undefined;
-    if (!p) return false;
+    if (!p || p.req.kind !== 'permission') return false;
+    const tool = p.req.tool;
     if (a.behavior === 'allow') {
       if (a.always) {
-        this.runs.get(p.runId)?.always.add(p.req.tool);
+        this.runs.get(p.runId)?.always.add(tool);
         // Andre spørsmål om samme verktøy i kjøringen gjelder også
-        for (const o of [...this.waiting.values()]) if (o !== p && o.runId === p.runId && o.req.tool === p.req.tool) this.finish(o, { behavior: 'allow', updatedInput: o.input }, 'user');
+        for (const o of [...this.waiting.values()]) if (o !== p && o.runId === p.runId && o.req.kind === 'permission' && o.req.tool === tool) this.finish(o, { behavior: 'allow', updatedInput: o.input }, 'user');
       }
       this.finish(p, { behavior: 'allow', updatedInput: p.input }, 'user');
     } else {
@@ -184,29 +196,32 @@ export class Approver {
     return true;
   }
 
-  private finish(p: Pending, d: Decision, reason: DenyReason) {
-    if (!this.waiting.delete(p.req.id)) return;
-    p.done(d);
-    this.opts.emit(p.runId, { kind: 'permissionDone', id: p.req.id, behavior: d.behavior, reason: d.behavior === 'deny' ? reason : 'user' });
+  /** Brukerens svar på spørsmålene fra AskUserQuestion; `answers: null` er «Hopp over» */
+  answerQuestion(a: ClaudeAnswerRequest) {
+    const p = a && typeof a.id === 'string' ? this.waiting.get(a.id) : undefined;
+    if (!p || p.req.kind !== 'question') return false;
+    if (a.answers === null) {
+      const reason: DenyReason = a.reason === 'closed' ? 'closed' : 'user';
+      this.finish(p, { behavior: 'deny', message: reason === 'closed' ? DENY_MESSAGES.closed : DENY_MESSAGES.skipped }, reason);
+      return true;
+    }
+    const answers = validAnswers(p.req.questions, a.answers);
+    if (!answers) return false;
+    this.finish(p, { behavior: 'allow', updatedInput: { ...(p.input as object), questions: p.req.questions, answers } }, 'user', answers);
+    return true;
   }
 
-  /** Svaret på et kall til `approve` */
-  async approve(runId: string, args: Record<string, unknown>): Promise<Decision> {
-    const run = this.runs.get(runId);
-    const tool = typeof args.tool_name === 'string' ? args.tool_name : '';
-    const input = args.input ?? {};
-    const d = run ? decide(tool, run.always) : 'deny';
-    if (d === 'allow') return { behavior: 'allow', updatedInput: input };
-    if (d === 'deny') return { behavior: 'deny', message: `«${tool || 'ukjent verktøy'}» er ikke tillatt i FS Kravforvaltning.` };
-    const req: ClaudePermission = {
-      kind: 'permission',
-      id: `${runId}:${++this.seq}`,
-      tool,
-      input: shownInput(input),
-      toolUseId: typeof args.tool_use_id === 'string' ? args.tool_use_id : null,
-    };
+  private finish(p: Pending, d: Decision, reason: DenyReason, answers: Record<string, string> | null = null) {
+    if (!this.waiting.delete(p.req.id)) return;
+    p.done(d);
+    if (p.req.kind === 'question') this.opts.emit(p.runId, { kind: 'questionDone', id: p.req.id, answers, reason });
+    else this.opts.emit(p.runId, { kind: 'permissionDone', id: p.req.id, behavior: d.behavior, reason: d.behavior === 'deny' ? reason : 'user' });
+  }
+
+  /** Legger spørsmålet i køen, sender kortet til vieweren, og venter på svaret (eller på at tiden går ut) */
+  private wait(runId: string, req: ClaudePermission | ClaudeQuestion, input: unknown, ms: number, timeout: Decision): Promise<Decision> {
     return new Promise<Decision>(ok => {
-      const timer = setTimeout(() => this.finish(p, { behavior: 'deny', message: DENY_MESSAGES.timeout }, 'timeout'), this.opts.timeoutMs ?? APPROVE_TIMEOUT_MS);
+      const timer = setTimeout(() => this.finish(p, timeout, 'timeout'), ms);
       const p: Pending = {
         req,
         runId,
@@ -219,6 +234,26 @@ export class Approver {
       this.waiting.set(req.id, p);
       this.opts.emit(runId, req);
     });
+  }
+
+  /** Svaret på et kall til `approve` */
+  async approve(runId: string, args: Record<string, unknown>): Promise<Decision> {
+    const run = this.runs.get(runId);
+    const tool = typeof args.tool_name === 'string' ? args.tool_name : '';
+    const input = args.input ?? {};
+    const d = run ? decide(tool, run.always) : 'deny';
+    if (d === 'allow') return { behavior: 'allow', updatedInput: input };
+    if (d === 'deny') return { behavior: 'deny', message: `«${tool || 'ukjent verktøy'}» er ikke tillatt i FS Kravforvaltning.` };
+    const id = `${runId}:${++this.seq}`;
+    const toolUseId = typeof args.tool_use_id === 'string' ? args.tool_use_id : null;
+    if (d === 'question') {
+      const questions = parseQuestions(input);
+      if (!questions) return { behavior: 'deny', message: DENY_MESSAGES.invalid };
+      const ms = this.opts.questionTimeoutMs ?? QUESTION_TIMEOUT_MS;
+      return this.wait(runId, { kind: 'question', id, questions, toolUseId }, input, ms, { behavior: 'deny', message: DENY_MESSAGES.questionTimeout });
+    }
+    const req: ClaudePermission = { kind: 'permission', id, tool, input: shownInput(input), toolUseId };
+    return this.wait(runId, req, input, this.opts.timeoutMs ?? APPROVE_TIMEOUT_MS, { behavior: 'deny', message: DENY_MESSAGES.timeout });
   }
 
   private async call(runId: string, run: RunState, name: unknown, args: Record<string, unknown>) {
