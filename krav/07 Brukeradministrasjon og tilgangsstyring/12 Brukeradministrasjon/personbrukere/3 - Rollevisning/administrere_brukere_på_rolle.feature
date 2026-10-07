@@ -1,7 +1,7 @@
 # language: no
 # GitHub: #492
 # Kilde: Brukerhistorie BH6 (temp/brukerhistorier.md)
-@BRU-PER-ROL-002 @planned
+@BRU-PER-ROL-002 @in-progress
 Egenskap: Administrere brukere på en spesifikk rolle
   Som brukeradministrator
   ønsker jeg å finne fram én spesifikk rolle og kunne legge til eller fjerne brukere på rollen
