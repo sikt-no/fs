@@ -30,10 +30,10 @@ Egenskap: Gi en person tilgang med fødselsnummer, D-nummer eller SNR
   @draft @openquestion
   Regel: Den første tildelingen gis med fødselsnummer, D-nummer eller SNR
     # ÅPNE SPØRSMÅL:
-    # - En Feide-bruker som ennå ikke er flyttet over til personen, har rollene sine på
-    #   Feide-brukeren. Gir brukeradministratoren hen en rolle med fødselsnummeret, står hen i
-    #   overgangsperioden både som Feide-bruker og som person i brukeroversikten. Er det
-    #   akseptabelt? Se BRU-PER-GRU-015.
+    # - En Feide-bruker hvis tildelinger ennå ikke er flyttet til personen, har rollene sine på
+    #   Feide-brukeren. Gir brukeradministratoren hen en rolle med fødselsnummeret, får personen
+    #   rollen, mens de øvrige rollene ligger igjen på Feide-brukeren til de flyttes. Hvordan
+    #   vises de rollene på personens detaljside? Se regelen om flytting i BRU-PER-GRU-014.
 
     Scenario: Personen finnes ikke i løsningen
       Gitt det finnes ingen person med fødselsnummeret i løsningen

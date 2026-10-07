@@ -33,8 +33,8 @@ Egenskap: Listevisning og søk i personbrukere
       #   merket i listen».
       # - Personer kan ikke deaktiveres i API-et ennå. Skal status vises for personer før det er på
       #   plass?
-      # - I overgangsperioden vises også Feide-brukere med Feide-ID og hjemorganisasjon, se
-      #   BRU-PER-GRU-015.
+      # - Listen viser bare personer. Feide-brukerne som er koblet til personen, vises på
+      #   detaljsiden (BRU-PER-GRU-014).
       Når brukeradministratoren åpner brukeroversikten
       Så ser brukeradministratoren en liste over alle personbrukere
       Og listen er sortert etter navn i stigende rekkefølge
@@ -105,8 +105,8 @@ Egenskap: Listevisning og søk i personbrukere
       Så filtreres listen til personbrukere der navn inneholder søketeksten
 
     # FORSLAG TIL WORKSHOP: fjernes (får @deprecated når de nye delene er validert), fordi
-    # personbrukeren er personen og har ingen Feide-ID. I overgangsperioden kan søket fortsatt
-    # trengs for Feide-brukerne, se BRU-PER-GRU-015.
+    # personbrukeren er personen og listen viser bare personer. Feide-ID-en til en koblet
+    # Feide-bruker vises på detaljsiden.
     Scenario: Fritekst-søk på Feide-ID
       Gitt jeg ser listen over personbrukere
       Når jeg søker med fritekst på Feide-ID
@@ -174,8 +174,8 @@ Egenskap: Listevisning og søk i personbrukere
     @draft @openquestion
     Scenario: Kombinere søk og filtre
       # ÅPNE SPØRSMÅL:
-      # - Feide-ID-feltet foreslås fjernet. Gjelder det først når Feide-brukerne er flyttet over til
-      #   personer, eller allerede i overgangsperioden?
+      # - Feide-ID-feltet foreslås fjernet. Skal det likevel være mulig å finne en person på
+      #   Feide-ID-en til en Feide-bruker som er koblet til personen?
       Gitt brukeradministratoren ser listen over personbrukere
       Når brukeradministratoren kombinerer søk på navn med ett eller flere filter
       Så vises kun personbrukere som matcher alle kriteriene
