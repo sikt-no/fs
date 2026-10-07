@@ -31,7 +31,7 @@ Du er lead i et agent team, og gjør det samme som `fs-verify`, men lar teammate
 
 ## Finn scope og kode
 
-Som *Finn scope og kode* i `fs-verify`: kravene (spesifikasjon, `krav/`-sti eller oppgave, slått opp på feature-ID), kodeklonene (spør med `AskUserQuestion`, sjekk at stiene finnes) og hintene fra oppgaven (`design.md`, `<lag>/plan-*.md`, `<lag>/task-*-completion.md`).
+Som *Finn scope og kode* i `fs-verify`: kravene (spesifikasjon, `krav/`-sti eller oppgave, slått opp på feature-ID), kodeklonene (spør med `AskUserQuestion`, sjekk at stiene finnes), om det skal tas skjermbilder fra `https://test-fsadmin.sikt.no/` (spør med `AskUserQuestion` før teamet startes, når prompten ikke sier det) og hintene fra oppgaven (`design.md`, `<lag>/plan-*.md`, `<lag>/task-*-completion.md`).
 
 Klonene ligger utenfor repoet, og teammatene arver permission mode fra deg. Kan ikke du lese klonene uten å bli spurt, kan ikke teammatene det heller. Foreslå da at brukeren starter med `--add-dir <klone>`, eller legger klonene i `permissions.additionalDirectories`.
 
@@ -72,7 +72,7 @@ Teammatene svarer i formatet i `fs-verify-krav.md`. For hvert svar:
 
 ## Skjermbilder
 
-Valgfritt, og bare du tar dem, etter *Skjermbilder* i `fs-verify`. Det er én nettleser, så ikke la teammatene gjøre det. Ta dem etter at svarene er samlet, ett krav om gangen.
+Bare når brukeren har sagt ja (*Finn scope og kode*), og bare du tar dem, etter *Skjermbilder* i `fs-verify`. Det er én nettleser, så ikke la teammatene gjøre det. Ta dem etter at svarene er samlet, ett krav om gangen.
 
 ## Bekreft og endre
 
