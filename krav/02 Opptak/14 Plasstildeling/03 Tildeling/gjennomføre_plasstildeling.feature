@@ -187,6 +187,8 @@ Egenskap: Gjennomføre plasstildeling
       # AVKLART 2026-10-07: Ledige studieplasser er en egenskap ved etterfylling,
       # ikke en egen rundetype. En etterfyllingsrunde kan åpne for nye søknader
       # på ledige plasser, rangert etter søknadstidspunkt.
+      # Søknader samles opp, og opptaksforvalter kjører plasstildeling og publiserer
+      # resultatet — som i andre runder. Tilbud gis ikke fortløpende.
       Gitt at opptaket har runden "Etterfylling med ledige plasser" med rundetype "Etterfylling"
       Og at runden åpner for søknad på ledige studieplasser
       Og at "Sykepleie, høst 2027" har 3 ledige plasser
