@@ -19,6 +19,12 @@
 # lagreVitnemalUtregning. VGS-resultatene kommer fra KREG/NVB
 # (kompetansebevisByNasjonalId).
 #
+# Fra Team Puff 07.10.2026: når en sak opprettes, hentes vitnemålet fra KREG,
+# og vitnemålsnummeret og alle fagene lagres i tabellen vgs_dokument_fag i
+# Team Puffs database. Fagene sendes ett og ett til kontrollmotoren. En rad
+# har blant annet terminkode, aar, fagstatuskode, fordypningsfag, kilde_kode
+# (f.eks. KREG), tid_registrert og tid_oppdatert.
+#
 # HVORFOR KRAVET TRENGS
 #
 # Den automatiske saksbehandlingen stopper når søkeren har flere vitnemål.
@@ -66,8 +72,24 @@ Egenskap: Vitnemålsbehandling
 
   Både valget av vitnemål og valget av fag gjøres per poengvariant. Det er
   ikke ett valg som gjelder overalt: samme fag kan telle i én poengvariant og
-  ikke i en annen, og hele poenget med å behandle vitnemålet er å finne
-  kombinasjonen søkeren kommer best ut med.
+  ikke i en annen. Der reglene gir et valg, skal saksbehandleren velge det
+  som gir søkeren best uttelling. Saksbehandleren kan ikke sette sammen et
+  vitnemål søkeren ikke har.
+
+  # ÅPNE SPØRSMÅL (fra gjennomgangen 07.10.2026, tas senere):
+  # - Ulik poengsum per søknadsalternativ (VPL i FS): fag som dekker
+  #   spesielle opptakskrav fyller taket på 4 poeng først, så samme søker kan
+  #   få ulik poengsum til ulike søknadsalternativer. Dekkes det av
+  #   fagvalget per poengvariant, er det Team Puffs beregning som velger
+  #   fagene under taket, eller må saksbehandleren velge fag per
+  #   søknadsalternativ?
+  # - Søkere som kan poengberegnes til noen søknadsalternativer og må
+  #   vurderes individuelt (HUP) til andre: hva skal vitnemålsbehandleren
+  #   vise og tillate? I FS kan ikke HUP og VES registreres på samme søker.
+  # - Hvilken leveranse (L2–L6) hører regelen «Saksbehandleren kan bare
+  #   endre grunnlaget slik en regel tillater» til?
+  # - Hva skal skje når Team Puffs endepunkt for poengberegning feiler eller
+  #   ikke svarer?
 
   Bakgrunn:
     Gitt jeg er innlogget i løsningen
@@ -112,8 +134,8 @@ Egenskap: Vitnemålsbehandling
       Og det fremgår hvilket vitnemål hver poengvariant bygger på
       # AVKLART 21.09.2026: ulikt vitnemål per poengvariant er tillatt. Det er
       # den logiske konsekvensen av at fagvalget er per poengvariant, og
-      # formålet er det samme — å finne kombinasjonen søkeren kommer best ut
-      # med.
+      # formålet er det samme — der reglene gir et valg, å velge det som gir
+      # søkeren best uttelling.
       #
       # Verifisert i ny stack: Poeng er nøklet på blant annet poengklasse_kode
       # og poengvariant_kode, og har vitnemaalsnummer som eget felt.
@@ -236,35 +258,174 @@ Egenskap: Vitnemålsbehandling
       # dm_vitnemalbehandl_vmfag_tillegg bruker rå TVAR.status_valgt, altså
       # ikke med. Forskjellen ser ut som en tilfeldighet, og videreføres ikke.
 
+    Scenario: Tilleggsfag kan ikke velges i poengvarianten for førstegangsvitnemål
+      Gitt søkeren har et førstegangsvitnemål med et tilleggsfag
+      Når jeg behandler poengvarianten for kvoten for førstegangsvitnemål
+      Så ser jeg ikke muligheten til å velge tilleggsfaget
+      # AVKLART 07.10.2026: nye fag og forbedringer teller bare i ordinær
+      # kvote, aldri i kvoten for førstegangsvitnemål (Samordna opptaks wiki,
+      # sidene «Kvoter» og «Poengberegning norske søkere»). Søkeren konkurrerer
+      # i begge kvotene med hver sin poengsum, og mister ikke kvoten fordi et
+      # tilleggsfag velges i ordinær kvote. Dette erstatter begrunnelsen fra
+      # 21.09.2026, som sa at søkeren kunne slås ut av kvoten. Unntakene står
+      # i de to scenarioene under.
+      #
+      # Hvilken poengvariant som hører til hvilken kvote, står i regelverket.
+      #
+      # Verifisert i FS-klienten: f_forbedretvitnemal(vgdoknr, poengvariant)
+      # returnerer 1 når vitnemålet har et valgt tilleggsfag for akkurat den
+      # poengvarianten. Valget er altså per poengvariant, og det er derfor
+      # det kan hindres i én poengvariant og tillates i en annen.
+      #
+      # Et vitnemål med forbedringer kan ikke legges til grunn for
+      # poengvarianten for førstegangsvitnemål. Det dekkes av «Et vitnemål
+      # gjelder ikke alle poengvarianter».
+
+    Scenario: Tilleggsfag kan velges i ordinær kvote
+      Gitt søkeren har et førstegangsvitnemål med et tilleggsfag
+      Når jeg velger tilleggsfaget for poengvarianten i ordinær kvote
+      Så inngår tilleggsfaget i beregningen for den poengvarianten
+      Men poengene for kvoten for førstegangsvitnemål er uendret
+
+    Scenario: Matematikk R2 på kompetansebevis kan tas med i kvoten for førstegangsvitnemål
+      Gitt søkeren har et førstegangsvitnemål
+      Og søkeren har matematikk R2 på et kompetansebevis
+      Og jeg har vurdert at R2 er tatt innen normal tid
+      Når jeg behandler poengvarianten for kvoten for førstegangsvitnemål
+      Så kan jeg velge R2 fra kompetansebeviset
+      # AVKLART 07.10.2026: om et unntak gjelder, er saksbehandlerens
+      # vurdering, og det er vitnemålsbehandleren som håndhever unntakene.
+      #
+      # Unntaket finnes fordi R2 ikke kan føres på samme vitnemål som
+      # S-matematikk (Samordna opptaks wiki, «Kvoter»).
+      #
+      # Wikiens tredje unntak, nytt førstegangsvitnemål etter komprimert løp,
+      # er utelatt med vilje. Avklart 07.10.2026 at det ikke forekommer.
+
+    Scenario: Poenggivende fag på yrkesfagsløpet kan tas med i kvoten for førstegangsvitnemål
+      Gitt søkeren kvalifiserer til kvoten for førstegangsvitnemål med yrkesfaglig vitnemål og studiekompetansefagene
+      Og søkeren har et fag som gir språk- eller realfagspoeng
+      Og jeg har vurdert at faget er tatt senest det semesteret søkeren oppnådde generell studiekompetanse
+      Når jeg behandler poengvarianten for kvoten for førstegangsvitnemål
+      Så kan jeg velge faget
+      # Samordna opptaks wiki, «Kvoter»: fag som gir språk- eller
+      # realfagspoeng, tatt samtidig med studiekompetansefagene, kan tas med
+      # i kvoten for førstegangsvitnemål.
+
+  Regel: Saksbehandleren kan bare endre grunnlaget slik en regel tillater
+
+    # AVKLART 07.10.2026: vitnemålsbehandleren håndhever at grunnlaget bare
+    # endres etter faste regler. Det er de videregående skolene som utsteder
+    # vitnemål og avgjør hva som oppfyller vitnemålskravene. Saksbehandleren
+    # kan ikke sette sammen et grunnlag søkeren kunne hatt. Vil søkeren ha en
+    # annen fagsammensetning, må søkeren kontakte skolen.
+    #
+    # Der regelen krever en vurdering av dokumentasjonen, er det
+    # saksbehandleren som vurderer, og løsningen som håndhever utfallet.
+
     Scenario: Ikke alle fag kan velges bort
       Gitt jeg har lagt et vitnemål til grunn
       Når jeg ser fagene på vitnemålet
       Så kan jeg bare velge bort fag som er merket som valgbare
+      # Flyttet hit fra regelen om fagvalg 07.10.2026, fordi det er den samme
+      # grensen.
+      #
       # Verifisert i FS-klienten: TILLEGGVARIANT.status_valgbar styrer dette,
       # og defaulter til 'N'. Fag som inngår i selve vitnemålsgrunnlaget kan
       # altså ikke hukes bort — det er tilleggsfagene valget gjelder.
 
-    Scenario: Å velge et tilleggsfag kan gjøre vitnemålet forbedret
-      Gitt søkeren har et førstegangsvitnemål
-      Og vitnemålet har et tilleggsfag som ikke er valgt
-      Når jeg velger tilleggsfaget for en poengvariant
-      Så regnes vitnemålet som forbedret for den poengvarianten
-      Og det fremgår for meg at valget har denne konsekvensen
-      # Verifisert i FS-klienten: f_forbedretvitnemal(vgdoknr, poengvariant)
-      # returnerer 1 hvis vitnemålet har fag med status_forbedring = 'J',
-      # ELLER har et tilleggsfag der TILLEGGVARIANT.status_valgt = 'J' for
-      # akkurat den poengvarianten.
-      #
-      # Konsekvensen er alvorlig og lett å overse: et førstegangsvitnemål gir
-      # tilgang til førstegangsvitnemålskvoten. Saksbehandleren som huker av
-      # et tilleggsfag for å gi søkeren noen tideler realfagspoeng, kan dermed
-      # slå søkeren ut av kvoten. Dagens løsning sier ingenting om dette.
-      #
-      # At konsekvensen skal fremgå er besluttet 21.09.2026, som del av
-      # beslutningen om at tilleggsfag ikke teller før de aktivt velges — de
-      # to henger sammen: når valget er aktivt, skal følgen av det være synlig
-      # i valgøyeblikket. Hvordan det utformes er en designavklaring og hører
-      # i vitnemålsbehandling.design.md.
+    Scenario: Stryke et fag som overlapper med påbygging på kompetansebevis
+      Gitt søkeren har et yrkesfaglig vitnemål
+      Og søkeren har påbygging til generell studiekompetanse på et kompetansebevis
+      Og jeg har vurdert at et fag på vitnemålet overlapper med et fag på kompetansebeviset
+      Når jeg legger vitnemålet og kompetansebeviset til grunn
+      Så kan jeg stryke faget fra vitnemålet
+      # AVKLART 07.10.2026: hvilke fag som overlapper, er saksbehandlerens
+      # vurdering, fordi reglene har mange unntak. Hovedreglene: norsk
+      # strykes på vitnemålet og hentes fra kompetansebeviset. Matematikk og
+      # naturfag strykes fra vitnemålet bare når faget er ført med henholdsvis
+      # 224 og 140 timer samlet på kompetansebeviset.
+
+    Scenario: Legge til en forbedring fra et kompetansebevis
+      Gitt jeg har lagt et vitnemål til grunn
+      Og søkeren har forbedret et fag på et kompetansebevis
+      Når jeg legger forbedringen til grunnlaget
+      Så erstatter forbedringen den tidligere karakteren i faget
+
+    Scenario: Legge til et nytt fag fra et kompetansebevis
+      Gitt jeg har lagt et vitnemål til grunn
+      Og søkeren har et nytt fag på et kompetansebevis
+      Og faget dekker spesielle opptakskrav eller gir språk- eller realfagspoeng
+      Når jeg legger faget til grunnlaget
+      Så inngår faget i grunnlaget
+
+    Scenario: Nytt fag på kompetansebevis som ikke kan legges til
+      Gitt søkeren har et nytt fag på et kompetansebevis
+      Og faget verken dekker spesielle opptakskrav eller gir språk- eller realfagspoeng
+      Når jeg ser fagene på kompetansebeviset
+      Så ser jeg ikke muligheten til å legge faget til grunnlaget
+
+    Scenario: Privatisteksamen erstatter både standpunkt- og eksamenskarakter
+      Gitt søkeren har tatt et fag på nytt som privatist
+      Og jeg har vurdert at den nye karakteren lønner seg for søkeren
+      Når jeg legger den nye eksamenskarakteren til grunnlaget
+      Så erstatter den både den gamle standpunktkarakteren og den gamle eksamenskarakteren
+      # AVKLART 07.10.2026: om erstatningen lønner seg for søkeren, avgjør
+      # saksbehandleren. Bare ny, utsatt og særskilt prøve kan kombineres med
+      # den gamle standpunktkarakteren.
+
+    Scenario: Legge inn opprinnelig karakter på et fag fritatt etter tidligere reform
+      Gitt et fag på vitnemålet er ført som fritatt
+      Og jeg har vurdert at faget er tatt med karakter i norsk videregående skole i en tidligere reform
+      Når jeg legger inn den opprinnelige karakteren på faget
+      Så inngår faget med den opprinnelige karakteren i grunnlaget
+      # AVKLART 07.10.2026: saksbehandleren legger den opprinnelige
+      # karakteren inn på fritaksfaget, og vurderer selv hva fritaket bygger
+      # på. Den opprinnelige karakteren må være dokumentert (Samordna opptaks
+      # wiki, «Poengberegning norske søkere»).
+
+    Scenario: Fag fritatt på grunnlag av fag tatt i utlandet får ikke karakter
+      Gitt et fag på vitnemålet er ført som fritatt
+      Og jeg har vurdert at fritaket bygger på et fag tatt i utlandet
+      Når jeg ser faget i grunnlaget
+      Så ser jeg ikke muligheten til å legge inn karakter på faget
+      # Utenlandske karakterer konverteres ikke i disse tilfellene, og faget
+      # skal ikke være med i beregningen (samme kilde).
+
+    Scenario: Markere at et fag med forsøkskode gir realfagspoeng
+      Gitt vitnemålet har et R94-fag med fagkode som begynner på «FS»
+      Og jeg har vurdert at faget gir realfagspoeng
+      Når jeg markerer at faget gir realfagspoeng
+      Så sendes markeringen med grunnlaget til beregningen
+      # AVKLART 07.10.2026: kontrollmotoren gir ikke realfagspoeng for
+      # forsøkskoder i R94 automatisk (Samordna opptaks wiki,
+      # «Realfagspoeng»). Saksbehandleren retter det i vitnemålsbehandleren.
+
+    Scenario: Studiekompetansefag kan ikke fjernes etter 23/6-regelen
+      Gitt søkeren rangeres etter 23/6-regelen
+      Og søkeren har bestått studiekompetansefagene
+      Når jeg ser fagene i grunnlaget
+      Så ser jeg ikke muligheten til å fjerne studiekompetansefagene
+      # Studiekompetansefagene skal alltid være med i snittet, uansett
+      # karakter. Et fag på høyere nivå godtas bare som erstatning når
+      # søkeren mangler selve fagkravet (Samordna opptaks wiki,
+      # «Poengberegning norske søkere»). 23/5-regelen heter 23/6-regelen
+      # fra 1. januar 2027.
+
+    Scenario: Velge hvordan matematikk på Vg2-nivå dekkes etter 23/6-regelen
+      Gitt søkeren rangeres etter 23/6-regelen
+      Og søkeren har bestått 1P, 2P og R1
+      Når jeg velger hvilke matematikkfag som skal inngå
+      Så må 1P være med
+      Og jeg kan velge 2P, R1 eller begge i tillegg
+
+    Scenario: Hente studiekompetansefag fra flere dokumenter etter 23/6-regelen
+      Gitt søkeren rangeres etter 23/6-regelen
+      Og studiekompetansefagene er dokumentert på flere vitnemål og kompetansebevis
+      Når jeg setter sammen grunnlaget
+      Så kan jeg hente hvert studiekompetansefag fra det dokumentet det står på
+      # 23/6-regelen er det eneste stedet der fag kan hentes fritt fra
+      # ulike dokumenter.
 
   Regel: Fag som bare finnes i opplastet dokumentasjon legges inn manuelt
 
@@ -373,37 +534,37 @@ Egenskap: Vitnemålsbehandling
       #   håndhevingen droppes.
       # - Blokkerer ikke hovedflyten: uten håndheving virker registreringen,
       #   den er bare mindre robust.
+      # - Delsvar 07.10.2026: privatister får bare eksamenskarakterer
+      #   (Samordna opptaks wiki, «Poengberegning norske søkere»).
       Gitt spørsmålet er åpent
 
   Regel: Poeng beregnes fra det valgte grunnlaget
 
+    # Poengberegningen eies av Team Puff. Vitnemålsbehandleren kaller
+    # endepunktene deres med grunnlaget saksbehandleren har valgt, og viser
+    # resultatet. Hvordan poengene regnes ut (hvilke karakterer som teller,
+    # avrunding, satser og tak) hører ikke til dette kravet.
+
     Scenario: Poeng beregnes når grunnlaget endres
       Gitt jeg har lagt et vitnemål til grunn
-      Når jeg endrer fagvalget
-      Så er poengene for poengvarianten beregnet på nytt
+      Når jeg endrer vitnemål, fagvalg eller manuelt innlagte fag
+      Så er poengene for poengvarianten beregnet på nytt fra det endrede grunnlaget
 
-    Scenariomal: Poeng beregnes per poengklasse
+    Scenario: Se de beregnede poengene
       Gitt jeg har lagt et vitnemål til grunn
-      Når poengene beregnes
-      Så ser jeg beregnet <poengklasse> for poengvarianten
+      Når poengene er beregnet
+      Så ser jeg de beregnede poengene for hver poengvariant
 
-      Eksempler:
-        | poengklasse   |
-        | Karakterpoeng |
-        | Realfagspoeng |
-        | Språkpoeng    |
-      # KAR, REA og SPR er vitnemålskravkodene kontrollmotoren beregner fra
-      # vitnemålet, jf. beregnPoengAutomatisk i ny stack. Alderspoeng og
-      # kjønnspoeng beregnes av poengalgoritmen og påvirkes ikke av
-      # vitnemålsbehandlingen.
-
-    Scenario: Karakterpoeng beregnes fra snittet og en faktor
+    Scenario: Legge inn realfagspoeng på en poengvariant
       Gitt jeg har lagt et vitnemål til grunn
-      Når karakterpoengene beregnes
-      Så beregnes de som snittkarakteren ganget med faktoren for poengtypen
-      # Faktoren er en parameter, ikke en konstant i dette kravet:
-      # LagreVitnemalUtregningInput har feltet «faktor: Int!», beskrevet som
-      # «Faktoren snittkarakteren multipliseres med for å gi poenget».
+      Når jeg legger inn realfagspoeng selv på en poengvariant
+      Så er realfagspoengene jeg la inn, brukt for den poengvarianten
+      Og det fremgår at poengene er satt av en saksbehandler
+      Og poengene er låst mot automatisk reberegning
+      # AVKLART 07.10.2026: saksbehandleren kan legge inn realfagspoeng selv
+      # på poengvarianten, i tillegg til å markere fag med forsøkskode.
+      # Poengene låses på samme måte som ved fagvalg, og kan låses opp med
+      # «Låse opp et poeng».
 
     Scenario: Se hvilket vitnemål et poeng bygger på
       Gitt poengene er beregnet fra et vitnemål
@@ -491,6 +652,12 @@ Egenskap: Vitnemålsbehandling
       # av tilordning. Full begrunnelse i vise_elektroniske_vitnemål.feature.
 
 # AVGRENSNINGER — BEVISST UTENFOR DETTE KRAVET
+#
+# Poengberegningen. Avklart 07.10.2026: selve beregningen eies av Team Puff,
+# og vitnemålsbehandleren kaller endepunktene deres. Dette kravet dekker
+# grunnlaget saksbehandleren velger, legger til og endrer, og visningen av
+# resultatet. Regler for hvilke karakterer som teller, avrunding, satser for
+# realfags- og språkpoeng, tak og kvotetilhørighet hører hos Team Puff.
 #
 # Resultater fra høyere utdanning. Kravet dekker kun VGS-resultater fra
 # KREG/NVB. Resultater fra høyere utdanning finnes i dag bare som en
