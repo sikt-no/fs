@@ -88,11 +88,15 @@ svarer for én organisasjon og ett miljø om gangen. Rolleoversikten trenger rol
 organisasjonene og miljøene brukeradministratoren administrerer.
 
 ### Scenario: Vise brukere som har en aktiv rolle
-Listen viser bare tildelinger som er aktive nå. Det er de samme brukerne som
+Listen viser bare tildelinger som er aktive nå, både direkte tildelte og arvede roller. Det er de samme brukerne som
 brukeradministratoren ser i brukeroversikten.
 
 ### Scenario: Brukere brukeradministratoren ellers ikke kan se, vises ikke
 Utvalget gjøres av API-et. En bruker som ikke vises, nevnes ikke, heller ikke som et antall.
+
+### Scenario: Åpne brukersiden fra rollens oversiktsside
+Hele raden er klikkbar og åpner detaljsiden for brukeren, som i personbrukere-listen. Der
+tildeler brukeradministratoren flere roller med «Tildel roller».
 
 ## Åpne designspørsmål
 

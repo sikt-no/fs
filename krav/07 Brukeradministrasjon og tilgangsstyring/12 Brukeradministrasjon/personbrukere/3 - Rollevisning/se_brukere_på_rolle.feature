@@ -38,6 +38,13 @@ Egenskap: Se brukere som har en spesifikk rolle
     Når brukeradministrator åpner rollens oversiktsside
     Så vises ikke brukeren
 
+  @must
+  Scenario: Åpne brukersiden fra rollens oversiktsside
+    Gitt at brukeradministrator ser en bruker i listen på rollens oversiktsside
+    Når brukeradministrator velger brukeren
+    Så åpnes brukersiden for brukeren
+    Og brukeradministrator kan tildele brukeren flere roller der
+
   @draft
   Scenario: Søke fram en rolle
     Gitt at brukeradministrator er i rolleoversikten
