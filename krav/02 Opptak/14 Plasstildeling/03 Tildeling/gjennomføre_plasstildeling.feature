@@ -183,10 +183,14 @@ Egenskap: Gjennomføre plasstildeling
       Så får ingen søkere nye tilbud på "Sykepleie, høst 2027"
       Og søkere på venteliste får beskjed om at opptaksvedtaket er endelig
 
-    Scenario: Ledige studieplasser tildeles etter venteliste og søknadstidspunkt
-      Gitt at opptaket har runden "Ledige studieplasser" med rundetype "Ledige studieplasser"
+    Scenario: Ledige studieplasser i en etterfyllingsrunde
+      # AVKLART 2026-10-07: Ledige studieplasser er en egenskap ved etterfylling,
+      # ikke en egen rundetype. En etterfyllingsrunde kan åpne for nye søknader
+      # på ledige plasser, rangert etter søknadstidspunkt.
+      Gitt at opptaket har runden "Etterfylling med ledige plasser" med rundetype "Etterfylling"
+      Og at runden åpner for søknad på ledige studieplasser
       Og at "Sykepleie, høst 2027" har 3 ledige plasser
       Og at 2 søkere står på venteliste til "Sykepleie, høst 2027"
-      Når plasstildelingen i runden "Ledige studieplasser" gjennomføres
+      Når plasstildelingen i runden gjennomføres
       Så får de 2 søkerne på ventelisten tilbud først
       Og den siste plassen går til den kvalifiserte søkeren som søkte først på ledige studieplasser

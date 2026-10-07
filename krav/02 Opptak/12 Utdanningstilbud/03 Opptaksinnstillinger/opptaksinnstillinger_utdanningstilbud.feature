@@ -94,10 +94,8 @@ Egenskap: Opptaksinnstillinger per utdanningstilbud
       Når opptaksforvalter angir at utdanningstilbudet "Sykepleie, høst 2027" ikke skal delta i etterfylling
       Så deltar utdanningstilbudet ikke i etterfyllingsrunder
 
-    Scenario: Ekskludere utdanningstilbud fra ledige studieplasser
-      Gitt at opptaket har en runde for ledige studieplasser
-      Når opptaksforvalter angir at utdanningstilbudet "Sykepleie, høst 2027" ikke skal delta i ledige studieplasser
-      Så deltar utdanningstilbudet ikke i runder for ledige studieplasser
+    # AVKLART 2026-10-07: Ledige studieplasser er en egenskap ved etterfylling,
+    # ikke en egen rundetype. Ekskludering fra etterfylling dekker også ledige studieplasser.
 
   @openquestion
   # ÅPNE SPØRSMÅL:
