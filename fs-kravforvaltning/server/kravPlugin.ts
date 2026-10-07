@@ -3,6 +3,7 @@ import type { FocusEvent } from '../shared/model.ts';
 import { createApi, dispatch } from '../core/api.ts';
 import { createAuth, memoryStore } from '../core/auth.ts';
 import { ClaudeRunner } from '../core/claude.ts';
+import { PtyRunner } from '../core/pty.ts';
 import { cliVcs } from '../core/vcs-cli.ts';
 import { isoVcs } from '../core/vcs-isogit.ts';
 import { Workspace, type WorkspaceOpts } from '../core/workspace.ts';
@@ -62,8 +63,10 @@ export function kravPlugin(repoRoot: string, opts: WorkspaceOpts = {}): Plugin {
     configureServer(server) {
       // Filene Claude skriver under tasks/ (spec/, skisser) skal vises i «Endringer» også uten Oppgaver og Spesifikasjoner
       const claude = new ClaudeRunner(repoRoot, { onSaved: () => ws.refreshGit(), onDone: () => ws.refreshGit() });
-      const api = createApi(ws, createAuth({ clientId: process.env.KRAV_GITHUB_CLIENT_ID, store: memoryStore(), useGh: true }), claude);
+      const pty = new PtyRunner(repoRoot, { bin: () => claude.binary() });
+      const api = createApi(ws, createAuth({ clientId: process.env.KRAV_GITHUB_CLIENT_ID, store: memoryStore(), useGh: true }), claude, pty);
       claude.on(data => server.ws.send({ type: 'custom', event: 'krav:claude', data }));
+      pty.on(data => server.ws.send({ type: 'custom', event: 'krav:pty', data }));
       server.watcher.add(ws.kravDir);
       if (ws.withTasks) server.watcher.add(ws.tasksDir);
 
@@ -88,6 +91,7 @@ export function kravPlugin(repoRoot: string, opts: WorkspaceOpts = {}): Plugin {
       server.httpServer?.on('close', () => {
         ws.close();
         claude.close();
+        pty.close();
       });
 
       server.watcher.on('add', abs => ws.onFs('add', abs));

@@ -12,8 +12,10 @@ export default defineConfig({
     build: {
       outDir: 'out/main',
       lib: { entry: { index: 'electron/main.ts' } },
-      // isomorphic-git og @cucumber/* pakkes inn, så appen ikke trenger node_modules ved kjøring
+      // isomorphic-git og @cucumber/* pakkes inn, så appen ikke trenger node_modules ved kjøring. Unntaket er node-pty
+      // (terminalen), som har en binærfil; den tas med i node_modules av electron-builder.yml
       externalizeDeps: false,
+      rolldownOptions: { external: ['node-pty'] },
     },
   },
   preload: {

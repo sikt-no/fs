@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'preact/hooks';
-import { CLAUDE_SKILLS_SHOWN, type ClaudeEvent, type ClaudeStatus, type ExecuteTarget } from '../shared/api';
+import { CLAUDE_SKILLS_SHOWN, type ClaudeEvent, type ClaudeStatus, type ExecuteTarget, type PtyStartRequest } from '../shared/api';
 import type { GitChange, Snapshot } from '../shared/model';
 import { isEditablePath } from '../shared/paths';
 import {
@@ -23,6 +23,8 @@ import {
   needsAuth,
   pendingPermissions,
   pendingQuestions,
+  createTerminalConversation,
+  terminalExited,
   updateConversation,
   type ChatItem,
   type ChatPreset,
@@ -40,6 +42,7 @@ import { covered } from './mention';
 import { MENTION_LIST_ID, MentionPicker, useMentions } from './MentionPicker';
 import { transport } from './transport';
 import { answerQuestion, QuestionCard } from './QuestionCard';
+import { TerminalView } from './TerminalView';
 
 /** Slik vises de faste meldingene i samtalen */
 const PRESET: Record<ChatPreset, { label: string; text: string }> = {
@@ -441,11 +444,22 @@ export function ClaudePanel({ status, width, onWidth, allowedSkills: modeSkills,
     set(next);
     await sendRef.current(text, [], undefined, next.current ?? undefined, s);
   };
+  // «Utfør med team» og «Verifiser … i terminal med agent team»: interaktiv claude i en pseudo-terminal
+  const terminalText = async (text: string, req: Omit<PtyStartRequest, 'prompt'>, title: string) => {
+    setError(null);
+    setShowList(false);
+    try {
+      const { id } = await transport.call('ptyStart', { ...req, prompt: text, cols: 100, rows: 32 });
+      set(createTerminalConversation(convs, newId(), Date.now(), { id, mode: req.mode, repo: req.target?.repo }, title));
+    } catch (e) {
+      setError((e as Error).message);
+    }
+  };
   const insertRef = useRef(insertText);
   insertRef.current = insertText;
   useEffect(() => {
     if (!status.available) return;
-    registerClaude({ send: t => sendRef.current(t), execute: (t, target, title) => executeText(t, target, title), withSkill: (t, s) => withSkillText(t, s), insert: t => insertRef.current(t) });
+    registerClaude({ send: t => sendRef.current(t), execute: (t, target, title) => executeText(t, target, title), withSkill: (t, s) => withSkillText(t, s), terminal: (t, req, title) => terminalText(t, req, title), insert: t => insertRef.current(t) });
     return () => {
       registerClaude(null);
       setClaudeBusy(false);
@@ -503,6 +517,11 @@ export function ClaudePanel({ status, width, onWidth, allowedSkills: modeSkills,
       {conv && !showList && !conv.chat.items.length && from && (
         <div class="claude-info">
           <div class="claude-title muted">{conv.title}</div>
+        </div>
+      )}
+      {conv && !showList && c.terminal && (
+        <div class="claude-info">
+          <div class="claude-title" title={conv.title}>{conv.title}</div>
         </div>
       )}
       {conv && !showList && conv.chat.items.length > 0 && (
@@ -585,6 +604,11 @@ export function ClaudePanel({ status, width, onWidth, allowedSkills: modeSkills,
             </div>
           ))}
         </div>
+      ) : c.terminal ? (
+        <>
+          {error && <div class="edwarn err" role="alert">{error}</div>}
+          <TerminalView key={c.terminal.id} session={c.terminal} onExit={code => conv && set(updateConversation(convs, conv.id, ch => terminalExited(ch, code), Date.now()))} />
+        </>
       ) : (
         <>
           <div class="claude-list" ref={list}>

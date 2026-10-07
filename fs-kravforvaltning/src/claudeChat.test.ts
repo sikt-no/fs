@@ -290,3 +290,18 @@ test('editedFiles tar med filene under tasks/ og skissene fra save_sketch', () =
   assert.deepEqual(editedFiles(c), ['tasks/opptak/x/spec/spec-x.md', 'tasks/opptak/x/spec/krav-input/sketches/a.png', 'krav/a.feature']);
   assert.deepEqual(c.touched, ['krav/a.feature']);
 });
+
+import { createTerminalConversation, terminalExited } from './claudeChat.ts';
+
+test('terminal-samtale: lagres med økten, avsluttes én gang, og leses tilbake', () => {
+  const cs = createTerminalConversation(NO_CONVERSATIONS, 'k1', 5, { id: 't1', mode: 'execute', repo: 'fs-admin' }, 'Utfør med team: x i fs-admin');
+  assert.equal(cs.current, 'k1');
+  assert.equal(cs.list[0].title, 'Utfør med team: x i fs-admin');
+  assert.deepEqual(cs.list[0].chat.terminal, { id: 't1', mode: 'execute', repo: 'fs-admin' });
+  const done = terminalExited(cs.list[0].chat, 0);
+  assert.deepEqual(done.terminal, { id: 't1', mode: 'execute', repo: 'fs-admin', exited: true, code: 0 });
+  assert.equal(terminalExited(done, 1), done, 'bare første exit gjelder');
+  assert.equal(terminalExited(EMPTY_CHAT, 0), EMPTY_CHAT);
+  const back = restoreConversations(JSON.parse(JSON.stringify(cs)), []);
+  assert.deepEqual(back.list[0].chat.terminal, { id: 't1', mode: 'execute', repo: 'fs-admin' });
+});

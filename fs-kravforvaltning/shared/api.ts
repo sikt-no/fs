@@ -122,6 +122,32 @@ export interface ExecuteTarget {
   spec: string;
 }
 
+/**
+ * En terminaløkt: interaktiv `claude` i en pseudo-terminal, med agent teams slått på. `execute`: i kode-repoet
+ * («Utfør med team i <repo>»). `verify`: i kravrepoet, med kodemappene («Verifiser … i terminal med agent team»).
+ */
+export interface PtyStartRequest {
+  mode: 'execute' | 'verify';
+  /** Første melding; skal ikke begynne med `-` */
+  prompt: string;
+  /** `execute`: repoet, klonen og spesifikasjonen */
+  target?: ExecuteTarget;
+  /** `verify`: kodemappene Claude kan lese */
+  dirs?: string[];
+  cols?: number;
+  rows?: number;
+}
+
+/** Hendelsene fra en terminaløkt, som `krav:pty` */
+export type PtyEvent = { id: string; kind: 'data'; data: string } | { id: string; kind: 'exit'; code: number | null };
+
+/** En terminaløkt backenden kjenner: `code` er `null` mens den kjører */
+export interface PtyInfo {
+  id: string;
+  exited: boolean;
+  code: number | null;
+}
+
 /** Skillene som kan velges i Claude-panelet; høyst én om gangen */
 export const CLAUDE_SKILLS = ['fs-krav', 'fs-krav-avvik', 'fs-specify', 'fs-specify-delta', 'fs-implementasjonsdetaljer', 'fs-verify'];
 
@@ -232,8 +258,19 @@ export interface Api {
   claudeSkills(): Promise<ClaudeSkills>;
   /** Standardstiene til kodeklonene; `paths` sjekker om overstyrte stier finnes */
   claudeDirs(paths?: Record<string, string>): Promise<CodeDir[]>;
+  /** Starter en terminaløkt (`PtyStartRequest`) */
+  ptyStart(req: PtyStartRequest): Promise<{ id: string }>;
+  /** Tastetrykk fra xterm */
+  ptyWrite(req: { id: string; data: string }): Promise<boolean>;
+  ptyResize(req: { id: string; cols: number; rows: number }): Promise<boolean>;
+  /** «Stopp»: avslutter økten */
+  ptyKill(id: string): Promise<boolean>;
+  /** Øktene backenden kjenner, så vieweren kobler seg på igjen etter en omlasting */
+  ptyActive(): Promise<PtyInfo[]>;
+  /** Det siste økten skrev (høyst ~200 KB), som spilles av i xterm etter en omlasting */
+  ptyBuffer(id: string): Promise<string>;
   /** Desktop-appen: velg en mappe med mappevelgeren; `null` når brukeren avbryter */
   pickDir(): Promise<string | null>;
 }
 export type ApiMethod = keyof Api;
-export const API_METHODS: ApiMethod[] = ['read', 'save', 'remove', 'publish', 'authStatus', 'authStart', 'authPoll', 'authLogout', 'pull', 'mainStatus', 'claudeStatus', 'claudeRun', 'claudeCancel', 'claudeActive', 'claudeApprove', 'claudeAnswer', 'claudePending', 'claudeSkills', 'claudeDirs', 'pickDir'];
+export const API_METHODS: ApiMethod[] = ['read', 'save', 'remove', 'publish', 'authStatus', 'authStart', 'authPoll', 'authLogout', 'pull', 'mainStatus', 'claudeStatus', 'claudeRun', 'claudeCancel', 'claudeActive', 'claudeApprove', 'claudeAnswer', 'claudePending', 'claudeSkills', 'claudeDirs', 'ptyStart', 'ptyWrite', 'ptyResize', 'ptyKill', 'ptyActive', 'ptyBuffer', 'pickDir'];

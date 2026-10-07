@@ -6,13 +6,15 @@ interface Props {
   what: string;
   /** Starter verifiseringen i Claude-panelet, med valget «Ta skjermbilder» */
   onVerify: (screenshots: boolean) => void;
+  /** Starter fs-verify-agent-teams i terminalen; utelatt der det ikke gir mening (en regel) */
+  onTerminal?: (screenshots: boolean) => void;
 }
 
 /**
  * «Verifiser» på en egenskap eller en regel: en liten meny med «Ta skjermbilder (test-fsadmin)» og
  * «Verifiser i Claude-panelet». Verifiseringen går uansett status (fs-verify, *Verifisere uansett status*).
  */
-export function VerifyMenu({ what, onVerify }: Props) {
+export function VerifyMenu({ what, onVerify, onTerminal }: Props) {
   const [open, setOpen] = useState(false);
   const [shots, setShots] = useVerifyScreenshots();
   const ref = useRef<HTMLSpanElement>(null);
@@ -57,6 +59,18 @@ export function VerifyMenu({ what, onVerify }: Props) {
           >
             Verifiser i Claude-panelet
           </button>
+          {onTerminal && (
+            <button
+              class="smallbtn"
+              title="fs-verify-agent-teams: interaktiv Claude Code med agent teams i en terminal i Claude-panelet"
+              onClick={() => {
+                setOpen(false);
+                onTerminal(shots);
+              }}
+            >
+              I terminal med agent team
+            </button>
+          )}
         </div>
       )}
     </span>

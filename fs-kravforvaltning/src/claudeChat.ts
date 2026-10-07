@@ -47,8 +47,21 @@ export interface Chat {
   target?: ExecuteTarget | null;
   /** «Tillat alltid i denne samtalen»: verktøyene som sendes som `allowTools` og ikke spørres om igjen */
   alwaysAllowed: string[];
+  /** Terminaløkt (interaktiv claude med agent teams): panelet viser terminalen i stedet for meldingene. Mangler ellers */
+  terminal?: TerminalSession | null;
   /** MCP-serverne fra siste init, og om de er koblet til */
   mcp: ClaudeMcpServer[];
+}
+
+export interface TerminalSession {
+  /** ID-en til økten i backenden (`ptyStart`) */
+  id: string;
+  mode: 'execute' | 'verify';
+  /** `execute`: repoet det kjører i */
+  repo?: string;
+  /** Økten er avsluttet; `code` er exit-koden (`null` når backenden ikke kjenner økten lenger) */
+  exited?: boolean;
+  code?: number | null;
 }
 
 export const EMPTY_CHAT: Chat = {
@@ -293,6 +306,16 @@ export function createConversation(cs: Conversations, id: string, now: number, s
 /** Ny samtale for en utførekjøring i kode-repoet, med fast tittel (ikke første melding, som er handoff-prompten) */
 export function createExecuteConversation(cs: Conversations, id: string, now: number, target: ExecuteTarget, title: string): Conversations {
   return { list: [{ id, title, createdAt: now, updatedAt: now, chat: { ...EMPTY_CHAT, target } }, ...cs.list], current: id };
+}
+
+/** Ny samtale for en terminaløkt («Utfør med team», «Verifiser … i terminal med agent team»), øverst og åpen */
+export function createTerminalConversation(cs: Conversations, id: string, now: number, terminal: TerminalSession, title: string): Conversations {
+  return { list: [{ id, title, createdAt: now, updatedAt: now, chat: { ...EMPTY_CHAT, terminal } }, ...cs.list], current: id };
+}
+
+/** Terminaløkten er avsluttet */
+export function terminalExited(chat: Chat, code: number | null): Chat {
+  return chat.terminal && !chat.terminal.exited ? { ...chat, terminal: { ...chat.terminal, exited: true, code } } : chat;
 }
 
 /** Sletter samtalen; er den åpen, åpnes den neste i lista */

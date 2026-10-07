@@ -79,7 +79,7 @@ export function codeDirs(repo: string, env: NodeJS.ProcessEnv = process.env, ove
 }
 
 /** En absolutt sti som regel i `--disallowedTools`: `//sti` (POSIX-form, også på Windows: `//c/Users/…`) */
-const posix = (p: string) => resolve(p).replace(/\\/g, '/').replace(/^([A-Za-z]):/, (_, d: string) => '/' + d.toLowerCase());
+export const posix = (p: string) => resolve(p).replace(/\\/g, '/').replace(/^([A-Za-z]):/, (_, d: string) => '/' + d.toLowerCase());
 
 /**
  * Argumentene for kodemappene: `--add-dir` så Claude kan lese dem, og `Edit(//<sti>/**)` i
@@ -460,7 +460,7 @@ interface Run {
  * Skriver MCP-konfigen til en midlertidig fil som bare brukeren kan lese, så hemmeligheter i headers og env ikke
  * står på kommandolinja (`ps`). Fila slettes når kjøringen er ferdig.
  */
-function writeMcpConfig(runId: string, servers: McpServers): string {
+export function writeMcpConfig(runId: string, servers: McpServers): string {
   const file = join(tmpdir(), `krav-mcp-${process.pid}-${runId}.json`);
   writeFileSync(file, JSON.stringify({ mcpServers: servers }), { mode: 0o600 });
   return file;
@@ -556,6 +556,11 @@ export class ClaudeRunner {
 
   private emit(runId: string, event: ClaudeEvent) {
     this.emitter.emit('krav:claude', { runId, event });
+  }
+
+  /** Stien til `claude`, eller `null` (også for terminalen, `core/pty.ts`) */
+  binary(): Promise<string | null> {
+    return this.find();
   }
 
   private find() {
