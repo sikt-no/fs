@@ -6,10 +6,31 @@ Egenskap: Tildele saksbehandlende organisasjon
   ønsker jeg å bestemme hvilken organisasjon som saksbehandler hvert søknadsalternativ
   slik at søkeren får færrest mulig saksbehandlende organisasjoner og søknaden behandles i samsvar med regelverket.
 
+  I et samordnet opptak søker søkeren på utdanningstilbud ved flere læresteder i én søknad.
+  Hvert søknadsalternativ må saksbehandles av én organisasjon, som vurderer dokumentasjonen,
+  setter grunnlaget og regner ut poengene. Som hovedregel saksbehandler lærestedet søkeren har
+  prioritert høyest hele søknaden, også studiene ved de andre lærestedene. Da har søkeren én
+  organisasjon å forholde seg til. Noen studier må likevel saksbehandles av lærestedet som tilbyr
+  dem, for eksempel studier med opptaksprøve. Noen søkere må saksbehandles av HK-dir, for eksempel
+  søkere med utenlandsk utdanning.
+
+  Løsningen fordeler derfor hvert søknadsalternativ til en saksbehandlende organisasjon etter
+  tildelingsregler som opptaksforvalteren setter opp. Søknaden blir til én sak hos hver
+  saksbehandlende organisasjon. Det er organisasjonen som har ansvaret, ikke en enkelt
+  saksbehandler, og det er organisasjonen som får tilgang til saken.
+
+  Kravet har fire deler:
+  1. Oppsett – opptaksforvalteren setter opp tildelingsreglene for opptaket.
+  2. Fordeling – hvordan hver fordeling og hvert unntak avgjør hvem som saksbehandler.
+  3. Endring – når fordelingen ligger fast, og når søknadsalternativer flyttes.
+  4. Innsyn – hvem som ser sakene.
+
   Bakgrunn:
     Gitt at opptaket "Samordna opptak 2027" forvaltes av HK-dir
     Og at "Universitetet i Oslo", "UiT Norges arktiske universitet", "NTNU" og "Høgskulen på Vestlandet" deltar i opptaket
     Og at opptaket har en standard tildelingsregel med «Alle som deltar i opptaket»
+
+  # ── 1. Oppsett ───────────────────────────────────────────────
 
   Regel: Opptaksforvalteren ved forvaltende organisasjon setter opp tildelingsreglene for opptaket
 
@@ -71,6 +92,8 @@ Egenskap: Tildele saksbehandlende organisasjon
       Så ser ikke opptaksforvalteren muligheten til å opprette, endre eller slette tildelingsregler
 
   # Lærestedets valg av tildelingsregel per utdanningstilbud står i opptaksinnstillinger_utdanningstilbud.feature (@OPT-OPT-UTD-004).
+
+  # ── 2. Fordeling ─────────────────────────────────────────────
 
   Regel: Ved «Alle som deltar i opptaket» saksbehandler lærestedet søkeren har prioritert høyest
 
@@ -281,6 +304,8 @@ Egenskap: Tildele saksbehandlende organisasjon
       Når opptaksforvalteren ved HK-dir velger "OsloMet" til å saksbehandle på vegne av "Arkitektur- og designhøgskolen i Oslo"
       Så er "Arkitektur- og designhøgskolen i Oslo" fortsatt saksbehandlende organisasjon for "Arkitektur, AHO"
 
+  # ── 3. Endring ───────────────────────────────────────────────
+
   Regel: Søknadsalternativene fordeles når søknaden sendes inn eller endres, og fordelingen ligger fast
 
     Scenariomal: Søknadsalternativene fordeles når <hendelse>
@@ -412,6 +437,8 @@ Egenskap: Tildele saksbehandlende organisasjon
       Når "Informatikk, UiO" flyttes fra "Universitetet i Oslo" til "HK-dir"
       Så har saken hos "HK-dir" status «Overført»
       Og dokumentene i saken er merket som uleste hos "HK-dir"
+
+  # ── 4. Innsyn ────────────────────────────────────────────────
 
   Regel: Saksbehandlende organisasjon ser bare saker hos organisasjonen
 
