@@ -19,7 +19,7 @@
     "app:dev:spesifikasjoner": "electron-vite dev --mode spesifikasjoner",
     "app:build": "electron-vite build",
     "app:dist": "electron-vite build && electron-builder",
-    "postinstall": "node scripts/node-pty-helper.mjs",
+    "postinstall": "node scripts/node-pty-helper.mjs && node scripts/electron-install.mjs",
     "changeset:version": "changeset version && npm install --package-lock-only"
   },
   "dependencies": {
