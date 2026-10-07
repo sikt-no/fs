@@ -1,7 +1,7 @@
 # language: no
 # GitHub: #491
 # Kilde: Brukerhistorie BH5 (temp/brukerhistorier.md)
-@BRU-PER-ROL-001 @planned
+@BRU-PER-ROL-001 @in-progress
 Egenskap: Se brukere som har en spesifikk rolle
   Som brukeradministrator
   ønsker jeg å finne fram én spesifikk rolle og se hvilke brukere som har den

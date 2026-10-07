@@ -1,6 +1,6 @@
 # language: no
 # GitHub: #514
-@BRU-PER-GRU-013 @must @planned
+@BRU-PER-GRU-013 @must @in-progress
 Egenskap: Gi en person tilgang med fødselsnummer, D-nummer eller SNR
   Som brukeradministrator
   ønsker jeg å gi en person den første tildelingen i en organisasjon jeg administrerer, og identifisere personen med fødselsnummer, D-nummer eller SNR,
