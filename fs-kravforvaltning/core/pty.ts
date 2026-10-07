@@ -6,7 +6,7 @@ import { delimiter, dirname, join, resolve } from 'node:path';
 import { promisify } from 'node:util';
 import type { ExecuteTarget, PtyEvent, PtyInfo, PtyStartRequest } from '../shared/api.ts';
 import { dirArgs, EXECUTE_BASH, EXECUTE_DENY_BASH, executeArgs, posix, projectSkills, SKILL_NAME, writeMcpConfig } from './claude.ts';
-import { readMcpServers, readonlyTools } from './mcp.ts';
+import { readMcpServers, readonlyTools, verifyTools } from './mcp.ts';
 
 /**
  * Terminalen: interaktiv `claude` i en pseudo-terminal (node-pty), vist med xterm.js i Claude-panelet. Agent teams
@@ -132,6 +132,7 @@ export function terminalArgs(
       ...VERIFY_BASH,
       ...TEAM_TOOLS,
       ...readonlyTools(),
+      ...verifyTools(),
       '--disallowedTools', ...EXECUTE_DENY_BASH, ...dirs.deny, ...others.map(n => `Skill(${n})`),
     ],
   };

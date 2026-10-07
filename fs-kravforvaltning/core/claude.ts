@@ -7,7 +7,7 @@ import { delimiter, dirname, isAbsolute, join, resolve } from 'node:path';
 import { promisify } from 'node:util';
 import { CLAUDE_SKILLS, CODE_DIRS, type ClaudeAnswerRequest, type ClaudeApproveRequest, type ClaudeEvent, type ClaudeMcpServer, type CodeDir, type ClaudeRunRequest, type ClaudeSkill, type ClaudeSkills, type ClaudeStatus } from '../shared/api.ts';
 import { APPROVE_TIMEOUT_MS, APPROVE_TOOL, Approver, QUESTION_TIMEOUT_MS, isAskable, SAVE_SKETCH_TOOL, SECRET_KEY } from './approve.ts';
-import { MCP_SERVERS, OWN_SERVER, readMcpServers, readonlyTools, type McpServers } from './mcp.ts';
+import { MCP_SERVERS, OWN_SERVER, readMcpServers, readonlyTools, verifyTools, type McpServers } from './mcp.ts';
 import { saveSketch } from './save.ts';
 
 const exec = promisify(execFile);
@@ -614,15 +614,17 @@ export class ClaudeRunner {
       const pool = skillPool(req.skills);
       const { allow, deny } = skillArgs(skill, known, pool);
       const dirs = dirArgs(req.dirs);
+      // fs-verify navigerer i nettleseren for skjermbildene uten å spørre (MCP_VERIFY)
+      const verify = skill === 'fs-verify' ? verifyTools() : [];
       // MCP-serverne brukeren har satt opp et annet sted (andre mapper, .mcp.json i kodemappene), og appens egen
-      mcpFile = writeMcpConfig(runId, { ...readMcpServers(this.cwd, dirs.paths, this.home()), [OWN_SERVER]: await this.approver.register(runId, { always }) });
+      mcpFile = writeMcpConfig(runId, { ...readMcpServers(this.cwd, dirs.paths, this.home()), [OWN_SERVER]: await this.approver.register(runId, { always: [...always, ...verify] }) });
       args = [
         '-p',
         '--output-format', 'stream-json',
         '--verbose',
         ...PERMISSION_ARGS,
         '--mcp-config', mcpFile,
-        '--allowedTools', ...CLAUDE_TOOLS, ...allow, ...readonlyTools(), ...always,
+        '--allowedTools', ...CLAUDE_TOOLS, ...allow, ...readonlyTools(), ...verify, ...always,
         ...dirs.add,
         '--append-system-prompt', contextPrompt(req.path, skill, pool, dirs.paths, mentionPaths(req.mentions)),
         ...(req.sessionId ? ['--resume', req.sessionId] : []),
