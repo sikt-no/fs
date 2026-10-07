@@ -17,11 +17,8 @@
 #
 # AVKLART 25.09.2026
 #
-# - Saksbehandleren vurderer begrunnelsen for hele søknaden, ikke for hvert
-#   søknadsalternativ.
 # - Samme rettighet som for ordinær søknadsbehandling. Ingen egen rolle for
 #   tidlig opptak.
-# - Vurderingene kan endres fram til svaret er sendt til søkeren.
 # - Dokumentasjonen knyttes ikke til de enkelte dokumentasjonskravene. Den
 #   ligger på søknaden, og saksbehandleren ser krav og dokumenter hver for seg.
 # - Saksbehandleren kan vurdere når som helst, også før dokumentasjonsfristen.
@@ -30,6 +27,23 @@
 #   utdanningstilbudene. Tidlig opptak har ikke eget regelverk.
 # - Kvalifiseringen registreres ikke i denne featuren. Den kommer fra den
 #   ordinære søknadsbehandlingen, per søknadsalternativ.
+#
+# AVKLART 07.10.2026
+#
+# - Saksbehandleren vurderer begrunnelsen og konkluderer per organisasjon. En
+#   søknad med søknadsalternativer ved flere organisasjoner får en vurdering og
+#   en konklusjon fra hver av organisasjonene.
+# - Vurdering og konklusjon er to steg. Saksbehandleren vurderer først om
+#   begrunnelsen er dokumentert, og velger så om søkeren deltar i tidligopptaket.
+# - Er begrunnelsen ikke dokumentert, kan saksbehandleren bare konkludere med at
+#   søkeren ikke deltar. Er den dokumentert, er valget fritt.
+# - Konklusjonen krever ikke at kvalifiseringen er vurdert. Kvalifiseringen
+#   sjekkes per søknadsalternativ når tidligopptaket gjennomføres, se
+#   gi_tilbudsgaranti_ved_tidlig_opptak.feature.
+# - Vurderingen og konklusjonen låses når opptaksforvalteren har gjennomført
+#   tidligopptaket. Feil etter det rettes med manuell tilbudsgaranti fra T-rolle.
+# - En søknad som ikke er konkludert når tidligopptaket gjennomføres, er ikke
+#   med, og kan ikke konkluderes etterpå.
 #
 # BEGREPSBRUK
 #
@@ -40,8 +54,8 @@
 @OPT-BEH-BEH-006 @must @draft
 Egenskap: Vurdere søknad om tidlig opptak
   Som saksbehandler
-  ønsker jeg å vurdere om søkeren oppfyller kravene for tidlig opptak
-  slik at søknaden om tidlig opptak konkluderes på riktig grunnlag.
+  ønsker jeg å vurdere søkerens begrunnelse for tidlig opptak og konkludere om søkeren deltar i tidligopptaket
+  slik at søkere med dokumentert begrunnelse kan få tilbudsgaranti når tidligopptaket gjennomføres.
 
   Bakgrunn:
     Gitt saksbehandler er innlogget i løsningen
@@ -69,18 +83,56 @@ Egenskap: Vurdere søknad om tidlig opptak
 
     Scenariomal: Registrere om begrunnelsen er dokumentert
       Når saksbehandler registrerer at begrunnelsen <vurdering>
-      Så er det lagret på søknaden at begrunnelsen <vurdering>
+      Så er det lagret at begrunnelsen <vurdering>
 
       Eksempler:
-        | vurdering            |
-        | er dokumentert       |
-        | ikke er dokumentert  |
+        | vurdering           |
+        | er dokumentert      |
+        | ikke er dokumentert |
 
     Scenario: Vurdere før dokumentasjonsfristen har gått ut
       Gitt dokumentasjonsfristen for tidlig opptak er "2027-03-01 23:59"
       Og søkeren har lastet opp dokumentasjon "2027-02-10"
       Når saksbehandler vurderer søknaden "2027-02-12"
       Så kan saksbehandler registrere om begrunnelsen er dokumentert
+
+  Regel: Saksbehandler konkluderer om søkeren deltar i tidligopptaket
+
+    Scenariomal: Konkludere når begrunnelsen er dokumentert
+      Gitt saksbehandler har registrert at begrunnelsen er dokumentert
+      Når saksbehandler konkluderer med at søkeren <konklusjon> i tidligopptaket
+      Så er det lagret at søkeren <konklusjon> i tidligopptaket
+
+      Eksempler:
+        | konklusjon  |
+        | deltar      |
+        | ikke deltar |
+
+    Scenario: Konkludere når begrunnelsen ikke er dokumentert
+      Gitt saksbehandler har registrert at begrunnelsen ikke er dokumentert
+      Når saksbehandler skal konkludere
+      Så kan saksbehandler bare konkludere med at søkeren ikke deltar i tidligopptaket
+
+    Scenario: Kan ikke konkludere før begrunnelsen er vurdert
+      Gitt det er ikke registrert om begrunnelsen er dokumentert
+      Når saksbehandler skal konkludere
+      Så kan ikke saksbehandler konkludere
+
+    Scenario: Konkludere før kvalifiseringen er vurdert
+      Gitt saksbehandler har registrert at begrunnelsen er dokumentert
+      Og kvalifiseringen til "Sykepleie, høst 2027" er ikke vurdert i søknadsbehandlingen
+      Når saksbehandler konkluderer med at søkeren deltar i tidligopptaket
+      Så er det lagret at søkeren deltar i tidligopptaket
+
+    Scenario: Konklusjon per organisasjon
+      Gitt søknaden har følgende søknadsalternativer:
+        | søknadsalternativ     | organisasjon |
+        | Sykepleie, høst 2027  | OsloMet      |
+        | Vernepleie, høst 2027 | NTNU         |
+      Og saksbehandler ved OsloMet har konkludert med at søkeren deltar i tidligopptaket
+      Når saksbehandler ved NTNU konkluderer med at søkeren ikke deltar i tidligopptaket
+      Så deltar søkeren i tidligopptaket ved OsloMet
+      Og søkeren deltar ikke i tidligopptaket ved NTNU
 
   Regel: Kvalifisering hentes fra den ordinære søknadsbehandlingen
 
@@ -94,15 +146,28 @@ Egenskap: Vurdere søknad om tidlig opptak
       Så ser saksbehandler at søkeren er kvalifisert til "Sykepleie, høst 2027"
       Og saksbehandler ser at søkeren ikke er kvalifisert til "Vernepleie, høst 2027"
 
-  Regel: Vurderingene kan endres fram til svaret er sendt
+  Regel: Vurderingen og konklusjonen kan endres til tidligopptaket er gjennomført
 
-    Scenario: Endre vurdering før svaret er sendt
+    Scenario: Endre vurdering før tidligopptaket er gjennomført
       Gitt saksbehandler har registrert at begrunnelsen er dokumentert
-      Og søkeren har ikke fått svar på søknaden om tidlig opptak
+      Og tidligopptaket er ikke gjennomført
       Når saksbehandler registrerer at begrunnelsen ikke er dokumentert
-      Så er det lagret på søknaden at begrunnelsen ikke er dokumentert
+      Så er det lagret at begrunnelsen ikke er dokumentert
 
-    Scenario: Vurderingen kan ikke endres etter at svaret er sendt
-      Gitt søkeren har fått svar på søknaden om tidlig opptak
-      Når saksbehandler ser på vurderingene av søknaden
-      Så kan ikke saksbehandler endre vurderingene
+    Scenario: Endre konklusjon før tidligopptaket er gjennomført
+      Gitt saksbehandler har konkludert med at søkeren deltar i tidligopptaket
+      Og tidligopptaket er ikke gjennomført
+      Når saksbehandler konkluderer med at søkeren ikke deltar i tidligopptaket
+      Så er det lagret at søkeren ikke deltar i tidligopptaket
+
+    Scenario: Låst etter at tidligopptaket er gjennomført
+      Gitt opptaksforvalter har gjennomført tidligopptaket
+      Når saksbehandler ser på søknaden om tidlig opptak
+      Så kan ikke saksbehandler endre vurderingen av begrunnelsen
+      Og saksbehandler kan ikke endre konklusjonen
+
+    Scenario: Kan ikke konkludere etter at tidligopptaket er gjennomført
+      Gitt det er ikke konkludert om søkeren deltar i tidligopptaket
+      Og opptaksforvalter har gjennomført tidligopptaket
+      Når saksbehandler ser på søknaden om tidlig opptak
+      Så kan ikke saksbehandler konkludere

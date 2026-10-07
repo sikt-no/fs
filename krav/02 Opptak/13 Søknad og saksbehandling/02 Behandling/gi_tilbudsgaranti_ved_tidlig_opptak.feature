@@ -12,7 +12,7 @@
 # tilbudsgaranti hører til Jira STEK-241 «Tilbudsgaranti», se også
 # Confluence PFS 3885400152 «Tilbudsgaranti».
 #
-# Vurderingene konklusjonen bygger på står i vurdere_søknad_om_tidlig_opptak.feature.
+# Vurderingen og konklusjonen står i vurdere_søknad_om_tidlig_opptak.feature.
 # Poenggrensen for tidlig tilbud settes per utdanningstilbud, se
 # opptaksinnstillinger_utdanningstilbud.feature.
 #
@@ -23,27 +23,36 @@
 #
 # AVKLART 25.09.2026
 #
-# - Saksbehandleren konkluderer på hele søknaden. Konklusjonen kalles ikke
-#   et vedtak. Det endelige vedtaket er plasstildelingen i hovedopptaket.
-# - Konklusjonen gir ikke tilbudsgaranti. Den merker hvilke
-#   søknadsalternativer søkeren deltar i tidligopptaket på: de som er
-#   markert for tidlig tilbud, og der søkeren er kvalifisert i den ordinære
-#   søknadsbehandlingen.
-# - Opptaksforvalteren gjennomfører tidligopptaket. Da får søkere som deltar,
-#   og som har poeng over poenggrensen, tilbudsgaranti på søknadsalternativet.
-# - En behandler med T-rolle kan sette tilbudsgaranti manuelt, for eksempel
-#   når søknaden ikke kan poengberegnes.
+# - Konklusjonen kalles ikke et vedtak. Det endelige vedtaket er
+#   plasstildelingen i hovedopptaket.
+# - Konklusjonen gir ikke tilbudsgaranti. Opptaksforvalteren gjennomfører
+#   tidligopptaket, og da får søkere som deltar, og som er kvalifisert og har
+#   nok poeng, tilbudsgaranti på søknadsalternativet.
 # - Om søkeren ikke får tilbudsgaranti, gjelder det bare tidlig opptak.
 #   Søknadsalternativene behandles videre i det ordinære opptaket.
 # - Svar publiseres til alle søkerne samtidig på én publiseringsdato for
 #   tidlig opptak. Datoen knyttes til opptaket, ikke til utdanningstilbudet.
-# - Vurdering og konklusjon krever samme rettighet som ordinær
-#   søknadsbehandling.
-# - Konklusjonen kan endres fram til svaret er publisert. Etter det er den låst.
 # - Tilbudsgarantien holder bare så lenge søkeren beholder
 #   søknadsalternativet på samme prioritet.
 # - Garantien er et minimum. Når søkeren når opp på et høyere prioritert
 #   søknadsalternativ, gjelder ordinær plasstildeling.
+#
+# AVKLART 07.10.2026
+#
+# - Poeng lik poenggrensen gir tilbudsgaranti.
+# - Søkeren får tilbudsgaranti bare på søknadsalternativer der søkeren er
+#   kvalifisert. Er kvalifiseringen ikke vurdert, gis det ikke garanti, og
+#   opptaksforvalteren ser det i utfallet.
+# - Søkeren får tilbudsgaranti på høyst ett søknadsalternativ: det høyest
+#   prioriterte som oppfyller kravene (som i se_svar_på_tidlig_opptak.feature).
+# - En søknad som ikke er konkludert, er ikke med i tidligopptaket.
+# - Opptaksforvalteren kan prøvekjøre og gjennomføre tidligopptaket flere
+#   ganger. En ny gjennomføring fjerner ingen tilbudsgarantier. Systemet sjekker
+#   ikke mot publiseringsdatoen: å gjennomføre før den er opptaksforvalterens
+#   ansvar.
+# - En behandler med T-rolle kan sette tilbudsgaranti manuelt uten betingelser.
+#   Det gjelder også når søkeren ikke deltar i tidligopptaket, og det er slik
+#   feil rettes etter at tidligopptaket er gjennomført.
 #
 # BEGREPSBRUK
 #
@@ -55,77 +64,19 @@
 #
 @OPT-BEH-BEH-007 @must @draft
 Egenskap: Gi tilbudsgaranti ved tidlig opptak
-  Som saksbehandler
-  ønsker jeg å avgjøre hvilke søkere som deltar i tidligopptaket
-  slik at kvalifiserte søkere får tilbudsgaranti uten å vente på hovedopptaket.
+  Som opptaksforvalter
+  ønsker jeg å gjennomføre tidligopptaket
+  slik at søkere som deltar, og som har nok poeng, får tilbudsgaranti uten å vente på hovedopptaket.
 
   Bakgrunn:
-    Gitt saksbehandler er innlogget i løsningen
-    Og søkeren har søkt om tidlig opptak
+    Gitt søkeren har søkt om tidlig opptak
     Og "Sykepleie, høst 2027" er markert for tidlig tilbud med poenggrense 50
 
-  Regel: Konklusjonen avgjør hvilke søknadsalternativer søkeren deltar i tidligopptaket på
-
-    Scenariomal: Deltakelse ut fra vurderingene
-      Gitt saksbehandler har registrert at begrunnelsen <dokumentert>
-      Og søkeren <kvalifisert> til "Sykepleie, høst 2027"
-      Når saksbehandler konkluderer søknaden om tidlig opptak
-      Så <deltar> søkeren i tidligopptaket på "Sykepleie, høst 2027"
-
-      Eksempler:
-        | dokumentert          | kvalifisert          | deltar      |
-        | er dokumentert       | er kvalifisert       | deltar      |
-        | er dokumentert       | ikke er kvalifisert  | deltar ikke |
-        | ikke er dokumentert  | er kvalifisert       | deltar ikke |
-        | ikke er dokumentert  | ikke er kvalifisert  | deltar ikke |
-
-    Scenario: Deltakelse bare der søkeren er kvalifisert og tidlig tilbud gis
-      Gitt saksbehandler har registrert at begrunnelsen er dokumentert
-      Og søknaden har følgende søknadsalternativer:
-        | søknadsalternativ     | tidlig tilbud | kvalifisert |
-        | Sykepleie, høst 2027  | ja            | ja          |
-        | Vernepleie, høst 2027 | ja            | nei         |
-        | Historie, høst 2027   | nei           | ja          |
-      Når saksbehandler konkluderer søknaden om tidlig opptak
-      Så deltar søkeren i tidligopptaket på "Sykepleie, høst 2027"
-      Og søkeren deltar ikke i tidligopptaket på "Vernepleie, høst 2027"
-      Og søkeren deltar ikke i tidligopptaket på "Historie, høst 2027"
-
-    Scenario: Søknaden kan ikke konkluderes før begrunnelsen er vurdert
-      Gitt det er ikke registrert om begrunnelsen er dokumentert
-      Når saksbehandler skal konkludere søknaden om tidlig opptak
-      Så kan ikke søknaden konkluderes
-
-    Scenario: Søknaden kan ikke konkluderes før kvalifiseringen er vurdert
-      Gitt saksbehandler har registrert at begrunnelsen er dokumentert
-      Men kvalifiseringen til "Sykepleie, høst 2027" er ikke vurdert i søknadsbehandlingen
-      Når saksbehandler skal konkludere søknaden om tidlig opptak
-      Så kan ikke søknaden konkluderes
-
-  Regel: Konklusjonen kan endres fram til svaret er publisert
-
-    Scenario: Endre konklusjon før svaret er publisert
-      Gitt søkeren deltar i tidligopptaket på "Sykepleie, høst 2027"
-      Og søkeren har ikke fått svar på søknaden om tidlig opptak
-      Når saksbehandler endrer konklusjonen slik at begrunnelsen ikke er dokumentert
-      Så deltar ikke søkeren i tidligopptaket på "Sykepleie, høst 2027"
-
-    Scenario: Konklusjonen kan ikke endres etter at svaret er publisert
-      Gitt søkeren har fått svar på søknaden om tidlig opptak
-      Når saksbehandler ser på konklusjonen
-      Så kan ikke saksbehandler endre konklusjonen
-
-  @openquestion
-  # ÅPNE SPØRSMÅL:
-  # - Gir poeng lik poenggrensen tilbudsgaranti? STEK-188 sier «over».
-  # - Må gjennomføringen skje før publiseringsdatoen, og kan den kjøres
-  #   flere ganger? Prosesshypotesen i notatet «2026-09-23 tidligopptaks-svar
-  #   til søker» (se #642) sier før, som prosessrekkefølge og ikke systemregel,
-  #   og nevner omkjøringer.
   Regel: Opptaksforvalter gjennomfører tidligopptaket
 
     Scenariomal: Tilbudsgaranti ut fra poenggrensen
-      Gitt søkeren deltar i tidligopptaket på "Sykepleie, høst 2027"
+      Gitt saksbehandler har konkludert med at søkeren deltar i tidligopptaket
+      Og søkeren er kvalifisert til "Sykepleie, høst 2027"
       Og søkeren har <poeng> poeng til "Sykepleie, høst 2027"
       Når opptaksforvalter gjennomfører tidligopptaket
       Så <garanti> søkeren tilbudsgaranti på "Sykepleie, høst 2027"
@@ -133,31 +84,83 @@ Egenskap: Gi tilbudsgaranti ved tidlig opptak
       Eksempler:
         | poeng | garanti  |
         | 55    | får      |
+        | 50    | får      |
         | 45    | får ikke |
 
     Scenario: Søkere som ikke deltar får ikke tilbudsgaranti
-      Gitt søkeren deltar ikke i tidligopptaket på "Sykepleie, høst 2027"
+      Gitt saksbehandler har konkludert med at søkeren ikke deltar i tidligopptaket
+      Og søkeren er kvalifisert til "Sykepleie, høst 2027"
       Og søkeren har 55 poeng til "Sykepleie, høst 2027"
       Når opptaksforvalter gjennomfører tidligopptaket
       Så får ikke søkeren tilbudsgaranti på "Sykepleie, høst 2027"
+
+    Scenario: Søknader uten konklusjon er ikke med i tidligopptaket
+      Gitt det er ikke konkludert om søkeren deltar i tidligopptaket
+      Og søkeren har 55 poeng til "Sykepleie, høst 2027"
+      Når opptaksforvalter gjennomfører tidligopptaket
+      Så får ikke søkeren tilbudsgaranti på "Sykepleie, høst 2027"
+
+    Scenario: Søkere som ikke er kvalifisert får ikke tilbudsgaranti
+      Gitt saksbehandler har konkludert med at søkeren deltar i tidligopptaket
+      Og søkeren er ikke kvalifisert til "Sykepleie, høst 2027"
+      Og søkeren har 55 poeng til "Sykepleie, høst 2027"
+      Når opptaksforvalter gjennomfører tidligopptaket
+      Så får ikke søkeren tilbudsgaranti på "Sykepleie, høst 2027"
+
+    Scenario: Kvalifisering som ikke er vurdert gir ikke tilbudsgaranti
+      Gitt saksbehandler har konkludert med at søkeren deltar i tidligopptaket
+      Og kvalifiseringen til "Sykepleie, høst 2027" er ikke vurdert i søknadsbehandlingen
+      Og søkeren har 55 poeng til "Sykepleie, høst 2027"
+      Når opptaksforvalter gjennomfører tidligopptaket
+      Så får ikke søkeren tilbudsgaranti på "Sykepleie, høst 2027"
+      Og opptaksforvalter ser at kvalifiseringen ikke er vurdert for søkeren
+
+    Scenariomal: Tilbudsgaranti på det høyest prioriterte søknadsalternativet
+      Gitt saksbehandler har konkludert med at søkeren deltar i tidligopptaket
+      Og søknaden har følgende søknadsalternativer:
+        | prioritet | søknadsalternativ     | tidlig tilbud | poenggrense      | kvalifisert | poeng |
+        | 1         | Sykepleie, høst 2027  | ja            | <grense sykepl.> | ja          | 55    |
+        | 2         | Vernepleie, høst 2027 | ja            | 40               | ja          | 55    |
+      Når opptaksforvalter gjennomfører tidligopptaket
+      Så får søkeren tilbudsgaranti på <garanti>
+      Og søkeren får ikke tilbudsgaranti på <ikke garanti>
+
+      Eksempler:
+        | grense sykepl. | garanti                 | ikke garanti            |
+        | 50             | "Sykepleie, høst 2027"  | "Vernepleie, høst 2027" |
+        | 60             | "Vernepleie, høst 2027" | "Sykepleie, høst 2027"  |
+
+    Scenario: Prøvekjøre tidligopptaket
+      Gitt saksbehandler har konkludert med at søkeren deltar i tidligopptaket
+      Og søkeren er kvalifisert til "Sykepleie, høst 2027"
+      Og søkeren har 55 poeng til "Sykepleie, høst 2027"
+      Når opptaksforvalter prøvekjører tidligopptaket
+      Så ser opptaksforvalter at søkeren ville fått tilbudsgaranti på "Sykepleie, høst 2027"
+      Men søkeren har ikke tilbudsgaranti på "Sykepleie, høst 2027"
+
+    Scenario: Gjennomføre tidligopptaket på nytt
+      Gitt søkeren fikk tilbudsgaranti på "Sykepleie, høst 2027" da tidligopptaket ble gjennomført
+      Og søkeren har 55 poeng til "Sykepleie, høst 2027"
+      Og poenggrensen for "Sykepleie, høst 2027" er endret til 60
+      Når opptaksforvalter gjennomfører tidligopptaket på nytt
+      Så har søkeren fortsatt tilbudsgaranti på "Sykepleie, høst 2027"
 
     Scenario: Søknadsalternativ uten tilbudsgaranti går videre til ordinært opptak
       Gitt søkeren fikk ikke tilbudsgaranti på "Sykepleie, høst 2027" i tidligopptaket
       Når hovedopptaket kjøres
       Så behandles "Sykepleie, høst 2027" i det ordinære opptaket
 
-  @openquestion
-  # ÅPNE SPØRSMÅL:
-  # - Kan manuell tilbudsgaranti bare settes når søknaden ikke kan
-  #   poengberegnes, eller også i andre tilfeller? STEK-188 sier «feks.».
-  # - Må søkeren delta i tidligopptaket på søknadsalternativet for at
-  #   manuell tilbudsgaranti kan settes?
   Regel: Behandler med T-rolle kan sette tilbudsgaranti manuelt
 
     Scenario: Sette tilbudsgaranti når søknaden ikke kan poengberegnes
       Gitt behandleren har T-rolle
-      Og søkeren deltar i tidligopptaket på "Sykepleie, høst 2027"
       Og søknaden kan ikke poengberegnes
+      Når behandleren setter tilbudsgaranti på "Sykepleie, høst 2027"
+      Så har søkeren tilbudsgaranti på "Sykepleie, høst 2027"
+
+    Scenario: Sette tilbudsgaranti når søkeren ikke deltar i tidligopptaket
+      Gitt behandleren har T-rolle
+      Og det er ikke konkludert med at søkeren deltar i tidligopptaket
       Når behandleren setter tilbudsgaranti på "Sykepleie, høst 2027"
       Så har søkeren tilbudsgaranti på "Sykepleie, høst 2027"
 
@@ -184,9 +187,3 @@ Egenskap: Gi tilbudsgaranti ved tidlig opptak
       Gitt søkeren har tilbudsgaranti på "Sykepleie, høst 2027" som prioritet 1
       Når søkeren flytter "Sykepleie, høst 2027" til prioritet 2
       Så har søkeren ikke lenger tilbudsgaranti på "Sykepleie, høst 2027"
-
-# ÅPNE SPØRSMÅL:
-# - Hva skjer med søknader om tidlig opptak som ikke blir konkludert?
-# - Hva skjer med søknader som konkluderes etter at tidligopptaket er
-#   gjennomført? Tidligere avklart at svaret da publiseres straks, men det
-#   var før modellen med gjennomføring og poenggrense. Må avklares på nytt.
