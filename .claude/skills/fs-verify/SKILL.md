@@ -16,6 +16,8 @@ Du sammenligner kravene med koden, og lukker løkka tilbake til kravene. Du eier
 
 `@in-progress` →(**`fs-verify`**)→ `@implemented` →(`fs-krav`)→ `@deprecated` →(**`fs-verify`**)→ slettet
 
+Ber brukeren om å verifisere en egenskap eller en regel *uansett status* («Verifiser» i FS Kravforvaltning), kan du også gi `@draft` og `@planned` statusen `@implemented`. Se *Verifisere uansett status*.
+
 - **Ikke skriv eller rett applikasjonskode.** Mangler noe, rapporterer du det.
 - **Ikke endre kravinnhold.** Du bytter bare statustaggen på `Egenskap:`-linja, fjerner `@in-progress` fra deler i leverte krav som endres, og sletter filer eller blokker som er `@deprecated`.
 - **Påstå aldri mer enn du har sett.** Bevis er et konkret sted i koden (`fil:linje`) som du har lest. Et søk uten treff er ikke bevis for at koden er borte, bare at du ikke fant den. Derfor bekrefter brukeren alle retagginger og slettinger.
@@ -63,6 +65,8 @@ Les hver `.feature`-fil i scope og sorter:
 | `@draft`, `@planned`, ingen status | Ikke klar for verifisering — rapporter, og henvis til `fs-krav` / `fs-specify` |
 | To statustagger på `Egenskap:` | Stopp for denne fila og rapporter |
 
+Ber prompten om å verifisere *uansett status*, gjelder ikke tabellen for egenskapen eller regelen i scope: se *Verifisere uansett status*.
+
 Vis oversikten til brukeren før du gjør noe.
 
 ## Verifisere implementasjon (`@in-progress`)
@@ -105,6 +109,21 @@ Når et levert krav endres, står egenskapen som `@implemented`, og statusen på
 - Spørsmålet i steg 4 gjelder delen: «Stemmer vurderingen for `<feature-ID> — <tittel på delen>`?»
 - **Når alt er funnet og brukeren svarte Stemmer:** fjern `@in-progress` fra `Regel:`-/`Scenario:`-linja med én `Edit`. Andre tagger på linja står urørt. Blir linja tom, fjern hele linja. Delen arver da `@implemented` fra egenskapen. `Egenskap:`-linja endres ikke.
 - Erstatter delen en `@deprecated`-del, verifiser den `@deprecated`-delen i samme kjøring (*Verifisere at koden er borte*). Den nye koden kan være på plass selv om den gamle ikke er fjernet enda, og da blir den `@deprecated`-delen stående.
+
+### Verifisere uansett status
+
+«Verifiser» på en egenskap eller en regel i FS Kravforvaltning ber deg verifisere den *uansett status*. Prompten sier hvilken egenskap eller regel (med linja), og statusen på regelen og egenskapen. Kodeklonene og skjermbildene er som ellers (*Finn scope og kode*).
+
+- **Scope** er egenskapen eller regelen, ikke resten av fila.
+- **Gating-sett** = scenarioene i scope, også det som er `@draft` eller `@planned`, minus `@demo`. `@deprecated`-deler følger *Verifisere at koden er borte*.
+- Let, vis resultatet og spør som i *Verifisere implementasjon*, steg 1–4. Rapporten skrives som ellers (*Rapport*).
+- **Ny status tilbys** bare når hele gating-settet er `funnet`, ingen `@openquestion` står igjen i scope, og brukeren svarte **Stemmer**. Spør med `AskUserQuestion` før du endrer: «Alt er funnet. Skal `<feature-ID> — <tittel>` bli levert?» — **Ja** / **Nei**.
+  - **Egenskap** med `@draft`, `@planned` eller `@in-progress`: bytt statustaggen på `Egenskap:`-linja med `@implemented`. `@draft`-deler under den står urørt, og er fortsatt ikke levert.
+  - **Egenskap** som er `@implemented`: ingen endring. Har den `@draft`-, `@planned`- eller `@in-progress`-deler, si at de verifiseres hver for seg.
+  - **Regel** under en `@implemented` egenskap, med `@draft`, `@planned` eller `@in-progress`: fjern statustaggen fra `Regel:`-linja, som i *Deler i leverte krav som endres*. Regelen arver `@implemented`. Erstatter regelen en `@deprecated`-del, verifiser den også.
+  - **Regel** uten egen status under en `@implemented` egenskap: den er allerede levert, ingen endring.
+  - **Regel** under en egenskap som ikke er `@implemented`: ingen endring. En del kan ikke være levert når egenskapen ikke er det. Si at hele egenskapen må verifiseres.
+- Mangler noe, blir statusen stående, og det som mangler, står i rapporten. Bytt aldri en status nedover (f.eks. `@implemented` → `@planned`).
 
 ## Verifisere at koden er borte (`@deprecated`)
 

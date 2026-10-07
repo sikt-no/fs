@@ -6,6 +6,8 @@ import { segments, type FindResult } from './find';
 import { StatusIcon, statusColor } from './Sidebar';
 import { useCopy } from './useCopy';
 import { SelectionMenu } from './SelectionMenu';
+import type { VerifyScope } from './verifyPrompt';
+import { VerifyMenu } from './VerifyMenu';
 
 export const scenKey = (ri: number, si: number) => `${ri}-${si}`;
 export const stepKey = (ri: number, si: number, ti: number) => `${ri}-${si}-${ti}`;
@@ -235,9 +237,11 @@ interface Props {
   onEdit?: () => void;
   /** «Slett kravfil»; utelatt der redigering ikke er tilgjengelig */
   onDelete?: () => void;
+  /** «Verifiser» på egenskapen eller en regel; utelatt når Claude-panelet ikke er tilgjengelig */
+  onVerify?: (scope: VerifyScope, screenshots: boolean) => void;
 }
 
-export function FeatureView({ entry, collapsed, flash, lineNumbers, mark, mainRef, onToggle, find, findClosed, onFindClose, onLine, onEdit, onDelete }: Props) {
+export function FeatureView({ entry, collapsed, flash, lineNumbers, mark, mainRef, onToggle, find, findClosed, onFindClose, onLine, onEdit, onDelete, onVerify }: Props) {
   const f = entry.model;
   const hit = (from: number, to = from) => (mark && from <= mark.to && to >= mark.from ? ' cursor' : '');
   const fileName = entry.path.slice(entry.path.lastIndexOf('/') + 1);
@@ -321,6 +325,7 @@ export function FeatureView({ entry, collapsed, flash, lineNumbers, mark, mainRe
           <span data-ln={f.ln} data-sep=" · ">{f.nLines} linjer</span>
           {onEdit && <button class="smallbtn editbtn" onClick={onEdit}>Rediger</button>}
           {onDelete && <button class="smallbtn editbtn" onClick={onDelete}>Slett kravfil</button>}
+          {onVerify && <VerifyMenu what="egenskapen" onVerify={shots => onVerify({ kind: 'feature' }, shots)} />}
         </div>
 
         <LintBand lint={f.lint} hit={hit} onLine={onLine} />
@@ -343,6 +348,7 @@ export function FeatureView({ entry, collapsed, flash, lineNumbers, mark, mainRe
                   <span class="kbadge rule">Regel {num}</span>
                   <h2><Txt text={r.name} loc={`r${ri}`} />{r.name && <CopyTitle text={r.name} />}</h2>
                   <Tags tags={r.tags} />
+                  {onVerify && <VerifyMenu what="regelen" onVerify={shots => onVerify({ kind: 'rule', index: ri }, shots)} />}
                 </div>
               )}
               {r.desc && <div class="desc"><Txt text={r.desc} loc={`r${ri}:desc`} /></div>}

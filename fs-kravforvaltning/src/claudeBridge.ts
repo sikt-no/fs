@@ -9,6 +9,8 @@ interface Target {
   send: (text: string) => Promise<void>;
   /** Starter en ny samtale som utførekjøring i kode-repoet, med teksten som første melding */
   execute: (text: string, target: ExecuteTarget, title: string) => Promise<void>;
+  /** Starter en ny samtale med skillen `skill` (f.eks. fs-verify fra «Verifiser»), med teksten som første melding */
+  withSkill: (text: string, skill: string) => Promise<void>;
   /** Legger teksten til i inputfeltet; brukeren sender selv */
   insert: (text: string) => void;
 }
@@ -62,6 +64,7 @@ export function useClaudeTarget() {
     busy,
     send: (text: string) => (sender ? sender.send(text) : Promise.resolve()),
     execute: (text: string, target: ExecuteTarget, title: string) => (sender ? sender.execute(text, target, title) : Promise.resolve()),
+    withSkill: (text: string, skill: string) => (sender ? sender.withSkill(text, skill) : Promise.resolve()),
     insert: (text: string) => sender?.insert(text),
   };
 }

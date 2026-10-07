@@ -793,6 +793,14 @@ a.otf:hover { background: var(--sunken); text-decoration: none; }
 .primbtn:disabled { opacity: .45; cursor: default; }
 .linkbtn { border: 0; background: none; padding: 0 0 0 8px; font: inherit; color: var(--acc); cursor: pointer; }
 .linkbtn:hover { text-decoration: underline; }
+.vmenu { position: relative; display: inline-flex; }
+.rulehead .vmenu { margin-left: auto; }
+.rulehead .vmenu-btn { font-family: var(--sans); font-size: 12px; color: var(--ink); padding: 1px 10px; }
+.vmenu-btn.on { border-color: var(--acc); }
+.vmenu-pop { position: absolute; top: calc(100% + 6px); right: 0; z-index: 30; width: 270px; display: flex; flex-direction: column; align-items: flex-start; gap: 8px; padding: 12px; border: 1px solid var(--line2); border-radius: 8px; background: var(--surface); box-shadow: 0 8px 24px rgba(0, 0, 0, .14); font-family: var(--sans); font-size: 12.5px; color: var(--ink2); text-align: left; }
+.vmenu-h { color: var(--ink); font-weight: 600; font-size: 13px; }
+.vmenu-sub { font-size: 12px; text-wrap: pretty; }
+.vmenu-pop .primbtn { padding: 5px 11px; }
 .meta .editbtn, .md-meta .editbtn { font-family: var(--sans); font-size: 12px; color: var(--ink); padding: 1px 10px; }
 .gitactions { display: flex; gap: 6px; justify-content: flex-end; margin-top: 6px; }
 
