@@ -53,8 +53,8 @@ Egenskap: Se en personbrukers roller
     @draft @openquestion
     Scenario: Se rollene til en person
       # ÅPNE SPØRSMÅL:
-      # - I overgangsperioden kan den samme personen ha roller både som Feide-bruker og som person.
-      #   Skal detaljsiden vise begge? Se BRU-PER-GRU-015.
+      # - Før tildelingene er flyttet, kan en Feide-bruker som er koblet til personen, ha roller.
+      #   Skal personens detaljside vise de rollene også? Se regelen om flytting i BRU-PER-GRU-014.
       Gitt brukeradministratoren ser detaljsiden for en person
       Når brukeradministratoren ser på personens roller
       Så ser brukeradministratoren rollene personen er tildelt, med de samme feltene som for øvrige personbrukere

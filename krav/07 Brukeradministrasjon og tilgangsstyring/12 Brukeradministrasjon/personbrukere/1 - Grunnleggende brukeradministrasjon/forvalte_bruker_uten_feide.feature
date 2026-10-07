@@ -23,8 +23,10 @@ Egenskap: Forvalte en person i brukeradministrasjonen
   Kravet utdyper BRU-PER-GRU-001 (listevisning og søk), BRU-PER-GRU-007 (detaljer),
   BRU-PER-GRU-003 (tildele roller), BRU-PER-GRU-012 (fjerne roller) og BRU-PER-GRU-004
   (aktivere og deaktivere) for personer. Der kravet ikke sier noe annet, gjelder reglene i de
-  kravene uendret. Overgangsperioden, der Feide-brukere og personer vises sammen, er dekket av
-  BRU-PER-GRU-015.
+  kravene uendret.
+
+  Personbrukere-siden viser personer. Feide-brukerne som er koblet til en person, vises på
+  personens detaljside. Det er ingen overgangsvisning der Feide-brukere og personer vises sammen.
 
   Bakgrunn:
     Gitt jeg er innlogget i løsningen
@@ -94,7 +96,37 @@ Egenskap: Forvalte en person i brukeradministrasjonen
       Når brukeradministratoren søker med en persons fødselsnummer
       Så finner ikke søket personen på fødselsnummeret
 
+  @draft @openquestion
+  Regel: Detaljsiden viser Feide-brukerne som er koblet til personen
+    # ÅPNE SPØRSMÅL:
+    # - Hvilke opplysninger vises for hver Feide-bruker? Feide-ID og hjemorganisasjon er antatt,
+    #   men ikke bestemt.
+    # - Skal listen også vise Feide-brukerne, for eksempel Feide-ID-en, eller bare detaljsiden?
+
+    Scenario: Se Feide-brukerne til en person
+      Gitt en person er koblet til en Feide-bruker
+      Når brukeradministratoren ser detaljsiden for personen
+      Så ser brukeradministratoren Feide-brukeren som er koblet til personen
+      Og brukeradministratoren ser hjemorganisasjonen til Feide-brukeren
+
+    Scenario: En person med flere Feide-brukere
+      Gitt en person er koblet til to Feide-brukere med ulike hjemorganisasjoner
+      Når brukeradministratoren ser detaljsiden for personen
+      Så ser brukeradministratoren begge Feide-brukerne
+
+    Scenario: En person uten Feide-bruker
+      Gitt en person logger bare inn med ID-porten
+      Når brukeradministratoren ser detaljsiden for personen
+      Så fremgår det at personen ikke er koblet til noen Feide-bruker
+
   Regel: Synligheten følger av aktive tildelinger i organisasjoner jeg administrerer
+
+    @draft
+    Scenario: Hjemorganisasjonen til en koblet Feide-bruker gir synlighet
+      Gitt jeg har brukeradministrator-rollen for en organisasjon
+      Og en person er koblet til en Feide-bruker med hjemorganisasjon i organisasjonen
+      Når jeg åpner brukeroversikten
+      Så ser jeg personen i listen
 
     Scenario: En aktiv tildeling i mitt miljø gir synlighet
       Gitt jeg har brukeradministrator-rollen for en organisasjon i et miljø
@@ -189,6 +221,31 @@ Egenskap: Forvalte en person i brukeradministrasjonen
       Når en administrator åpner listen over mulige saksbehandlere
       Så inneholder listen de samme personbrukerne som før registreringen
 
+  @draft @openquestion
+  Regel: Tildelingene flyttes fra Feide-brukeren til personen
+    # ÅPNE SPØRSMÅL:
+    # - Personbrukere-siden viser bare personer. Må tildelingene være flyttet før siden tas i bruk,
+    #   så Feide-brukere med roller ikke forsvinner fra oversikten?
+    # - Følger «Tildelt av» og «Tildelt dato» med når tildelingen flyttes?
+
+    Scenario: En Feide-bruker som er flyttet, har de samme tilgangene etterpå
+      Gitt en Feide-bruker har aktive tildelinger
+      Og Feide-brukeren er koblet til en person
+      Når tildelingene flyttes til personen
+      Så har personen de samme tildelingene som Feide-brukeren hadde
+      Og personen har de samme tilgangene når hen logger inn med Feide
+
+    @openquestion
+    Scenario: En Feide-bruker som ikke er koblet til en person, beholder tildelingene
+      # ÅPNE SPØRSMÅL:
+      # - Koblingen opprettes når Feide-brukeren logger inn. Hva skjer med Feide-brukere som ikke
+      #   har logget inn før tildelingene flyttes: skal flyttingen kjøres på nytt senere, eller må
+      #   brukeradministratoren gi personen tilgang med fødselsnummer (BRU-PER-GRU-013)?
+      Gitt en Feide-bruker har aktive tildelinger
+      Og Feide-brukeren er ikke koblet til en person
+      Når tildelingene flyttes til personene
+      Så beholder Feide-brukeren tildelingene sine
+
 # ÅPNE SPØRSMÅL:
 # - Avgrensningen mot saksbehandler gjelder denne fasen, fordi saksbehandleridentiteten er
 #   Feide-brukernavnet. Skal personer senere kunne være saksbehandlere, og hva skal
@@ -208,10 +265,8 @@ Egenskap: Forvalte en person i brukeradministrasjonen
 # - Forvaltningen skal ha eget GitHub-issue som sub-issue under initiativet #514.
 
 # BESVART av beslutningene 25.09–07.10 (tidligere åpne spørsmål i kravet):
-# - Feide-ID-kolonnen: personen har ingen Feide-ID. Kolonnen foreslås fjernet i BRU-PER-GRU-001,
-#   og vises bare for Feide-brukerne i overgangsperioden (BRU-PER-GRU-015).
-# - Én liste eller to seksjoner: Feide-brukere og personer vises i samme liste i
-#   overgangsperioden (kravverkstedet 25.09).
+# - Én liste eller to seksjoner: personbrukere-siden viser bare personer. Feide-brukerne som er
+#   koblet til personen, vises på detaljsiden. Det er ingen overgangsvisning (07.10).
 # - Filter på påloggingsmåte: personen er ikke knyttet til en påloggingsmåte, så filteret
 #   bortfaller.
 # - Hvordan en person uten aktive tildelinger får en ny tildeling: med fødselsnummer, D-nummer
