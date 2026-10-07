@@ -323,6 +323,8 @@ export function ClaudePanel({ status, width, onWidth, allowedSkills: modeSkills,
   const [input, setInput] = useState(draft.text);
   const [error, setError] = useState<string | null>(null);
   const [showList, setShowList] = useState(false);
+  // Tittelen på terminaløkten som startes, til ptyStart har svart (claude finnes, PATH fra skallet, node-pty)
+  const [starting, setStarting] = useState<string | null>(null);
   const list = useRef<HTMLDivElement>(null);
   const running = c.runId !== null;
   // Skillen før den første samtalen finnes; ellers den samtalen har valgt. Er den ikke tillatt her,
@@ -448,11 +450,14 @@ export function ClaudePanel({ status, width, onWidth, allowedSkills: modeSkills,
   const terminalText = async (text: string, req: Omit<PtyStartRequest, 'prompt'>, title: string) => {
     setError(null);
     setShowList(false);
+    setStarting(title);
     try {
       const { id } = await transport.call('ptyStart', { ...req, prompt: text, cols: 100, rows: 32 });
       set(createTerminalConversation(convs, newId(), Date.now(), { id, mode: req.mode, repo: req.target?.repo }, title));
     } catch (e) {
       setError((e as Error).message);
+    } finally {
+      setStarting(null);
     }
   };
   const insertRef = useRef(insertText);
@@ -514,17 +519,17 @@ export function ClaudePanel({ status, width, onWidth, allowedSkills: modeSkills,
           <button class="smallbtn" onClick={onClose} aria-label="Lukk Claude-panelet">Lukk</button>
         </div>
       </div>
-      {conv && !showList && !conv.chat.items.length && from && (
+      {conv && !showList && !starting && !conv.chat.items.length && from && (
         <div class="claude-info">
           <div class="claude-title muted">{conv.title}</div>
         </div>
       )}
-      {conv && !showList && c.terminal && (
+      {conv && !showList && !starting && c.terminal && (
         <div class="claude-info">
           <div class="claude-title" title={conv.title}>{conv.title}</div>
         </div>
       )}
-      {conv && !showList && conv.chat.items.length > 0 && (
+      {conv && !showList && !starting && conv.chat.items.length > 0 && (
         <div class="claude-info">
           <div class="claude-title" title={conv.title}>{conv.title}</div>
           {c.target && (
@@ -604,6 +609,16 @@ export function ClaudePanel({ status, width, onWidth, allowedSkills: modeSkills,
             </div>
           ))}
         </div>
+      ) : starting ? (
+        <>
+          <div class="claude-info">
+            <div class="claude-title" title={starting}>{starting}</div>
+          </div>
+          <div class="claude-empty cstarting" role="status">
+            <span class="spinner" aria-hidden="true" />
+            Starter Claude Code i en terminal …
+          </div>
+        </>
       ) : c.terminal ? (
         <>
           {error && <div class="edwarn err" role="alert">{error}</div>}
