@@ -47,7 +47,7 @@ Egenskap: Administrere brukere på en spesifikk rolle
       Så har personen rollen for organisasjonen og miljøet
       Og brukeradministrator ser personen på rollens oversiktsside
       Og brukeradministrator ser personen i brukeroversikten
-      Og det opprettes ikke en ny person
+      Og det opprettes ikke en ny person i databasen
 
 # ÅPNE SPØRSMÅL:
 # - Skal det være mulig å legge til/fjerne flere brukere i én batch-operasjon?
