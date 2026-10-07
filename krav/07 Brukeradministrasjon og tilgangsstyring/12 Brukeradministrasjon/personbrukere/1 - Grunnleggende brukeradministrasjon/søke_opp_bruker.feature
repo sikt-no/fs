@@ -53,6 +53,46 @@ Egenskap: Listevisning og søk i personbrukere
       Og serveren avgjør hva som er en aktiv rolle
 
     @draft @openquestion
+    Scenario: Se liste over personbrukere
+      # ÅPNE SPØRSMÅL:
+      # - Personbrukeren er personen, som verken har Feide-ID eller hjemorganisasjon. Skal
+      #   kolonnen «Hjemorganisasjon» erstattes av organisasjonene tildelingene gjelder for, eller
+      #   fjernes? API-et for personer kan gi organisasjonene og miljøene tildelingene gjelder for.
+      # - Skal testpersoner merkes med en egen kolonne eller ved navnet? Se «En testperson er
+      #   merket i listen».
+      # - Personer kan ikke deaktiveres i API-et ennå. Skal status vises for personer før det er på
+      #   plass?
+      # - I overgangsperioden vises også Feide-brukere med Feide-ID og hjemorganisasjon, se
+      #   BRU-PER-GRU-015.
+      Når brukeradministratoren åpner brukeroversikten
+      Så ser brukeradministratoren en liste over alle personbrukere
+      Og listen er sortert etter navn i stigende rekkefølge
+      Og hvert innslag viser følgende informasjon:
+        | felt   |
+        | Navn   |
+        | Status |
+
+    @draft @openquestion
+    Scenario: Fødselsnummer vises ikke i listen
+      # ÅPNE SPØRSMÅL:
+      # - Er det riktig at brukeradministratoren ikke skal kunne finne en person i listen med
+      #   fødselsnummer, D-nummer eller SNR? Nummeret er ikke tilgjengelig i API-et, verken som
+      #   felt eller som filter. En person finnes med nummeret bare ved å gi hen tilgang
+      #   (BRU-PER-GRU-013).
+      Når brukeradministratoren åpner brukeroversikten
+      Så vises ikke personbrukernes fødselsnummer, D-nummer eller SNR
+      Og brukeradministratoren kan ikke søke på fødselsnummer, D-nummer eller SNR
+
+    @draft @openquestion
+    Scenario: En testperson er merket i listen
+      # ÅPNE SPØRSMÅL:
+      # - Hvordan merkes testpersonen: egen kolonne, merkelapp ved navnet, eller et filter?
+      # - Skal testpersoner vises i listen i et ekte miljø, der de ikke kan få tilgang?
+      Gitt en personbruker er en testperson
+      Når brukeradministratoren åpner brukeroversikten
+      Så fremgår det av listen at personbrukeren er en testperson
+
+    @draft @openquestion
     # ÅPNE SPØRSMÅL:
     # - API-et støtter ikke sortering på navn ennå, og UI-kontrollen er derfor fjernet. Når skal dette komme på plass, og hvem følger opp på API-siden?
     Scenariomal: Velge sorteringsretning for navn
@@ -93,6 +133,9 @@ Egenskap: Listevisning og søk i personbrukere
       Når jeg søker med fritekst på navn
       Så filtreres listen til personbrukere der navn inneholder søketeksten
 
+    # FORSLAG TIL WORKSHOP: fjernes (får @deprecated når de nye delene er validert), fordi
+    # personbrukeren er personen og har ingen Feide-ID. I overgangsperioden kan søket fortsatt
+    # trengs for Feide-brukerne, se BRU-PER-GRU-015.
     Scenario: Fritekst-søk på Feide-ID
       Gitt jeg ser listen over personbrukere
       Når jeg søker med fritekst på Feide-ID
@@ -142,6 +185,19 @@ Egenskap: Listevisning og søk i personbrukere
       Når jeg skriver inn tekst i hjemorganisasjonsfilteret
       Så viser hjemorganisasjonsfilteret bare hjemorganisasjonene der navnet eller akronymet inneholder den innskrevne teksten
 
+    @draft @openquestion
+    Scenario: Filtrere på organisasjon tildelingene gjelder for
+      # ÅPNE SPØRSMÅL:
+      # - Skal filteret erstatte hjemorganisasjonsfilteret, som er @in-progress? Personer har ingen
+      #   hjemorganisasjon. Endres hjemorganisasjonsfilteret, må oppgaven som har hentet det inn,
+      #   få beskjed.
+      # - Skal det også være et filter på miljø? API-et for personer har det.
+      # - Hvilke organisasjoner skal filteret tilby, når API-et ennå ikke har en liste over
+      #   organisasjonene blant de synlige personene?
+      Gitt brukeradministratoren ser listen over personbrukere
+      Når brukeradministratoren velger en organisasjon som filter
+      Så vises kun personbrukere med minst én aktiv tildeling i den valgte organisasjonen
+
     Scenario: Tilgjengelige roller i filter
       Gitt jeg ser listen over personbrukere
       Når jeg åpner rollefilteret
@@ -155,13 +211,26 @@ Egenskap: Listevisning og søk i personbrukere
       Når jeg velger en rolle som filter
       Så vises kun personbrukere som har den valgte rollen
 
-    Scenario: Kombinere søk og filtre
+    Scenario: Kombinere søk og filtre (avvikles)
       Gitt jeg ser listen over personbrukere
       Når jeg kombinerer søk i navn- og Feide-ID-feltene med ett eller flere filter
       Så vises kun personbrukere som matcher alle kriteriene
 
+    @draft @openquestion
+    Scenario: Kombinere søk og filtre
+      # ÅPNE SPØRSMÅL:
+      # - Feide-ID-feltet foreslås fjernet. Gjelder det først når Feide-brukerne er flyttet over til
+      #   personer, eller allerede i overgangsperioden?
+      Gitt brukeradministratoren ser listen over personbrukere
+      Når brukeradministratoren kombinerer søk på navn med ett eller flere filter
+      Så vises kun personbrukere som matcher alle kriteriene
+
   Regel: Synlighet via administrasjonsrettigheter
 
+    # FORSLAG TIL WORKSHOP: fjernes når Feide-brukerne er flyttet over til personer (får da
+    # @deprecated), fordi en person ikke har hjemorganisasjon og bare er synlig gjennom en aktiv
+    # tildeling. Gjelder fortsatt Feide-brukere i overgangsperioden. Se «Brukeradministrator ser
+    # personer med aktiv tildeling i organisasjonene jeg administrerer».
     Scenario: Brukeradministrator ser personbrukere med hjemorganisasjon i organisasjonene jeg administrerer
       Gitt jeg har brukeradministrator-rollen for én eller flere organisasjoner
       Og en personbruker har hjemorganisasjon i en av organisasjonene jeg administrerer
@@ -227,6 +296,33 @@ Egenskap: Listevisning og søk i personbrukere
       Så ser jeg ikke personbrukeren i listen
 
   @draft @openquestion
+  Regel: Synlighet for personer følger av aktive tildelinger
+    # ÅPNE SPØRSMÅL:
+    # - API-et viser i dag en person som har en tildeling, aktiv eller ikke, i en organisasjon og
+    #   et miljø brukeradministratoren har lesetilgang i. Beslutningen er aktiv tildeling. Hva skal
+    #   gjelde, og hvordan blir en deaktivert person synlig for den som skal reaktivere hen?
+    # - Grensesnittet skjuler i dag Feide-brukere fra andre organisasjoner som bare har inaktive
+    #   roller i organisasjonene brukeradministratoren administrerer. Skal det samme gjelde for
+    #   personer?
+
+    Scenario: Brukeradministrator ser personer med aktiv tildeling i organisasjonene jeg administrerer
+      Gitt brukeradministratoren har brukeradministrator-rollen for en organisasjon i et miljø
+      Og en person har en aktiv tildeling i organisasjonen i miljøet
+      Når brukeradministratoren åpner brukeroversikten
+      Så ser brukeradministratoren personen i listen
+
+    Scenario: Personer med tildeling bare i et miljø brukeradministratoren ikke administrerer er ikke synlige
+      Gitt brukeradministratoren har brukeradministrator-rollen for en organisasjon i ett miljø
+      Og personens eneste aktive tildeling i organisasjonen gjelder i et annet miljø
+      Når brukeradministratoren åpner brukeroversikten
+      Så ser ikke brukeradministratoren personen i listen
+
+    Scenario: Personer uten tildelinger er ikke synlige for noen
+      Gitt en person har ingen tildelinger
+      Når brukeradministratoren åpner brukeroversikten
+      Så ser ikke brukeradministratoren personen i listen
+
+  @draft @openquestion
   Regel: Sist brukt-kolonne og sortering (planlagt etter v1)
     # ÅPNE SPØRSMÅL:
     # - Backend har ikke støtte for dette: tidspunktet personbrukeren sist brukte løsningen lagres ikke. Hvordan og hvor skal det registreres?
@@ -251,5 +347,6 @@ Egenskap: Listevisning og søk i personbrukere
 # - Rolle-navn: "brukeradministrator" er valgt. Sjekk at rolledefinisjonene i "4 - Opprette og administrere roller" bruker samme navn.
 # - Søk på Feide-ID: skal søket finne en personbruker når søketeksten finnes i en av Feide-ID-ene til Feide-brukerne som er koblet til personbrukeren?
 # - Hva skjer med Feide-brukere som ikke er koblet til en person: skal de vises i brukeroversikten?
-# - Brukere uten Feide-ID er nå modellert i egne krav: BRU-PER-GRU-013 (registrere en personbruker uten Feide-konto) og BRU-PER-GRU-014 (forvalte en personbruker uten Feide-konto). De har ingen hjemorganisasjon, identifiseres med fødselsnummer eller D-nummer ved registrering, og er synlige gjennom sine aktive tildelinger. Hjemorganisasjonsfilteret over gjelder derfor ikke for dem.
-# - Gjenstår: skal brukere med flere identiteter modelleres her, eller i et eget krav?
+# - Brukere uten Feide-ID er nå modellert i egne krav: BRU-PER-GRU-013 (gi en person tilgang med fødselsnummer, D-nummer eller SNR) og BRU-PER-GRU-014 (forvalte en person i brukeradministrasjonen). Personer har ingen hjemorganisasjon, og er synlige gjennom de aktive tildelingene sine. Hjemorganisasjonsfilteret over gjelder derfor ikke for dem.
+# - Gjenstår: skal brukere med flere identiteter modelleres her, eller i et eget krav? Personbrukeren er nå personen, og Feide og ID-porten er påloggingsmåter, så spørsmålet kan være besvart.
+# - De nye @draft-delene er skrevet i tredjeperson, mens de leverte delene bruker «jeg». Skal fila skrives om til tredjeperson samlet?
