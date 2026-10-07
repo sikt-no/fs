@@ -22,7 +22,8 @@ Egenskap: Gi en person tilgang med fødselsnummer, D-nummer eller SNR
 
   Svaret er det samme uansett om personen fantes fra før, og det avslører ikke hvilke
   tildelinger personen har i andre organisasjoner. Nummeret vises ikke i grensesnittet etterpå.
-  Personen vises med navn.
+  Personen vises med navn. Navnet til en person som ikke fantes fra før, kommer fra personens
+  første pålogging.
 
   Kravet erstatter «Registrere en personbruker uten Feide-konto». Blokkene fra den modellen står
   nederst, merket med forslag til workshopen. Påloggingen med ID-porten er dekket av
@@ -32,7 +33,7 @@ Egenskap: Gi en person tilgang med fødselsnummer, D-nummer eller SNR
     Gitt brukeradministratoren er innlogget i løsningen
     Og brukeradministratoren har brukeradministrator-rollen for minst én organisasjon
 
-  @draft @openquestion
+  @openquestion
   Regel: Den første tildelingen gis med fødselsnummer, D-nummer eller SNR
     # ÅPNE SPØRSMÅL:
     # - En Feide-bruker hvis tildelinger ennå ikke er flyttet til personen, har rollene sine på
@@ -84,8 +85,16 @@ Egenskap: Gi en person tilgang med fødselsnummer, D-nummer eller SNR
         | D-nummer       |
         | SNR            |
 
-    Scenario: Flere roller gis i samme operasjon
+    @draft @openquestion
+    Scenario: Flere roller gis i samme operasjon der inngangen lar brukeradministratoren velge roller
+      # ÅPNE SPØRSMÅL:
+      # - Workshopen besluttet at flere roller kan gis i samme operasjon. Det gjelder operasjonen
+      #   generelt, ikke rollesiden: fra rollesiden gis bare rollen på siden, og flere roller gis
+      #   etterpå fra detaljsiden for personen (BRU-PER-ROL-002). Rollesiden er i dag den eneste
+      #   inngangen der tilgang gis med nummer. Hvilken inngang skal la brukeradministratoren velge
+      #   flere roller når nummeret oppgis?
       Gitt det finnes ingen person med fødselsnummeret i løsningen
+      Og inngangen lar brukeradministratoren velge roller
       Når brukeradministratoren gir personen flere roller for organisasjoner og miljøer brukeradministratoren administrerer og oppgir fødselsnummeret
       Så har personen alle rollene for organisasjonene og miljøene
       Og brukeradministratoren ser personen i brukeroversikten
@@ -120,13 +129,9 @@ Egenskap: Gi en person tilgang med fødselsnummer, D-nummer eller SNR
       Så har personen rollen for organisasjonen og miljøet
       Og brukeradministratoren har ikke oppgitt personens fødselsnummer, D-nummer eller SNR
 
-  @draft @openquestion
   Regel: Svaret avslører ikke om personen fantes fra før
-    # ÅPNE SPØRSMÅL:
-    # - Hva viser svaret om personen? Viser det navnet personen allerede er registrert med, avslører
-    #   svaret at personen fantes fra før. Henger sammen med spørsmålet om hvor navnet kommer fra
-    #   (regelen «Nummeret vises ikke etterpå»).
-    # - Hvilken beskjed får brukeradministratoren når tildelingen er gitt? Ordlyden er ikke bestemt.
+    Navnet er bare kjent for en person som har logget inn før. Beskjeden viser derfor ikke navnet,
+    for da ville den avsløre at personen fantes fra før.
 
     Scenariomal: Svaret er det samme uansett hva som fantes fra før
       Gitt personen <utgangspunkt>
@@ -149,26 +154,18 @@ Egenskap: Gi en person tilgang med fødselsnummer, D-nummer eller SNR
       Så ser brukeradministratoren rollen brukeradministratoren ga
       Men brukeradministratoren ser ikke tildelingen i organisasjonen brukeradministratoren ikke administrerer
 
-  @draft @openquestion
   Regel: Nummeret vises ikke etterpå
-    # ÅPNE SPØRSMÅL:
-    # - Hvor kommer navnet fra for en person som ikke fantes fra før? Alternativene er at
-    #   brukeradministratoren oppgir navnet sammen med nummeret (funksjonen som oppretter en
-    #   person i databasen i dag, tar fornavn og etternavn), at navnet hentes fra påloggingen
-    #   (regelen «Navnet hentes fra påloggingen» lenger ned), eller at det hentes fra
-    #   Folkeregisteret.
 
-    Scenario: Personen vises med navn i brukeroversikten
+    Scenariomal: Nummeret vises ikke etter at tilgangen er gitt
       Gitt brukeradministratoren har gitt personen en rolle og oppgitt fødselsnummeret
-      Når brukeradministratoren åpner brukeroversikten
-      Så ser brukeradministratoren personens navn
-      Men personens fødselsnummer vises ikke
+      Når brukeradministratoren ser personen på <sted>
+      Så vises ikke personens fødselsnummer
 
-    Scenario: Nummeret vises ikke på detaljsiden
-      Gitt brukeradministratoren har gitt personen en rolle og oppgitt fødselsnummeret
-      Når brukeradministratoren ser detaljsiden for personen
-      Så ser brukeradministratoren personens navn
-      Men personens fødselsnummer vises ikke
+      Eksempler:
+        | sted                       |
+        | brukeroversikten           |
+        | detaljsiden for personen   |
+        | rollens oversiktsside      |
 
   @draft @openquestion
   Regel: Personen gjenkjennes ved pålogging, uansett påloggingsmåte
@@ -193,13 +190,9 @@ Egenskap: Gi en person tilgang med fødselsnummer, D-nummer eller SNR
       Når personen logger inn
       Så finnes det fortsatt bare én person med fødselsnummeret
 
-  @draft @openquestion
   Regel: Nummeret må ha gyldige kontrollsifre
     SNR har en egen personnummerserie, atskilt fra de fiktive numrene FS' egen generator lager
     (måned +50 og personnummer fra 70000 og oppover). Løsningen kan derfor skille et SNR fra dem.
-
-    # ÅPNE SPØRSMÅL:
-    # - Hvilken beskjed får brukeradministratoren når nummeret er ugyldig? Ordlyden er ikke bestemt.
 
     Scenariomal: Nummer med ugyldige kontrollsifre avvises
       Gitt brukeradministratoren oppgir et <nummertype> med ugyldige kontrollsifre
@@ -214,10 +207,9 @@ Egenskap: Gi en person tilgang med fødselsnummer, D-nummer eller SNR
         | D-nummer       |
         | SNR            |
 
-  @draft @openquestion
+  @openquestion
   Regel: En testperson kan ikke få tilgang i et ekte miljø
     # ÅPNE SPØRSMÅL:
-    # - Hvilken beskjed får brukeradministratoren? Ordlyden er ikke bestemt.
     # - Kan en ekte person få tilgang i et testmiljø? Tilgangsstyringens regler sier at en ekte
     #   person ikke får tilganger i et testmiljø, men ikke om tildelingen skal avvises.
     # - Er et SNR, eller et fiktivt nummer fra FS' egen generator, en testperson eller en ekte
@@ -234,7 +226,6 @@ Egenskap: Gi en person tilgang med fødselsnummer, D-nummer eller SNR
       Når brukeradministratoren gir personen en rolle i et testmiljø og oppgir fødselsnummeret
       Så har personen rollen i testmiljøet
 
-  @draft
   Regel: Brukeradministratoren kan bare gi roller hen har rett til å tildele
     Alle med brukeradministrator-rollen kan gi tilgang med fødselsnummer, D-nummer eller SNR. Det
     kreves ingen egen rettighet.
@@ -254,7 +245,10 @@ Egenskap: Gi en person tilgang med fødselsnummer, D-nummer eller SNR
   # FORSLAG TIL WORKSHOP: fjernes, fordi alle scenarioene i regelen er erstattet av reglene over.
   # Personen identifiseres med nummeret uansett påloggingsmåte, så «uten Feide-konto» er ikke
   # lenger et eget tilfelle.
+  @draft @openquestion
   Regel: En personbruker kan registreres før hen har logget inn første gang
+    # ÅPNE SPØRSMÅL:
+    # - Regelen er foreslått fjernet (se forslaget over). Kan den slettes?
 
     # FORSLAG TIL WORKSHOP: fjernes, fordi det er erstattet av «Personen finnes ikke i løsningen».
     Scenario: Registrere en ansatt som ikke har Feide-konto
@@ -280,7 +274,10 @@ Egenskap: Gi en person tilgang med fødselsnummer, D-nummer eller SNR
   # FORSLAG TIL WORKSHOP: fjernes, fordi regelen er dekket av «Personen kan ikke legges til uten en
   # rolle» og «Personen finnes ikke i løsningen», og fordi tilgangen ved første pålogging er dekket
   # av regelen «Personen gjenkjennes ved pålogging, uansett påloggingsmåte».
+  @draft @openquestion
   Regel: En registrering må gi personbrukeren minst én tildeling
+    # ÅPNE SPØRSMÅL:
+    # - Regelen er foreslått fjernet (se forslaget over). Kan den slettes?
 
     Scenario: Registrering uten tildeling er ikke mulig
       Gitt jeg holder på å registrere en personbruker
@@ -298,22 +295,39 @@ Egenskap: Gi en person tilgang med fødselsnummer, D-nummer eller SNR
       Og jeg finner personbrukeren igjen i brukeroversikten
       Og tildelingen gir tilgang fra personbrukeren logger inn første gang
 
+  @draft @openquestion
   Regel: Navnet hentes fra påloggingen
+    Navnet til en person som ikke fantes fra før, kommer fra personens første pålogging.
+    Brukeradministratoren oppgir ikke navnet, og det hentes ikke fra Folkeregisteret. Feide
+    oppgir navnet ved pålogging.
+
+    # ÅPNE SPØRSMÅL:
+    # - ID-porten oppgir, så vidt vi vet, ikke navnet i tokenet. En person som bare logger inn med
+    #   ID-porten, kan derfor bli stående uten navn. Hva vises da?
+    # - En person som har logget inn før, vises med navn på rollens oversiktsside og i
+    #   brukeroversikten straks tildelingen er gitt. En person som ikke fantes fra før, vises uten
+    #   navn. Listen avslører dermed om personen har logget inn før, selv om beskjeden ikke gjør
+    #   det (regelen «Svaret avslører ikke om personen fantes fra før»). Er det akseptabelt?
 
     Scenario: Navnet er ikke kjent før første pålogging
-      Gitt jeg har registrert en personbruker som aldri har logget inn
-      Når jeg ser personbrukeren i brukeroversikten
+      Gitt brukeradministratoren har gitt en person som ikke fantes fra før, en rolle og oppgitt fødselsnummeret
+      Og personen har ikke logget inn
+      Når brukeradministratoren ser personen i brukeroversikten
       Så er navnet tomt
-      Og det fremgår at personbrukeren ikke har logget inn ennå
+      Og det fremgår at personen ikke har logget inn ennå
 
-    Scenario: Navnet vises etter første pålogging
-      Gitt jeg har registrert en personbruker som aldri har logget inn
-      Når personen har logget inn for første gang
-      Og jeg ser personbrukeren i brukeroversikten
-      Så ser jeg personbrukerens navn slik påloggingen oppga det
-      Og personbrukeren kan søkes opp på navn
+    Scenario: Navnet vises etter første pålogging med Feide
+      Gitt brukeradministratoren har gitt en person som ikke fantes fra før, en rolle og oppgitt fødselsnummeret
+      Når personen har logget inn med Feide for første gang
+      Og brukeradministratoren ser personen i brukeroversikten
+      Så ser brukeradministratoren personens navn slik påloggingen oppga det
+      Og personen kan søkes opp på navn
 
+  @draft @openquestion
   Regel: Registrert, men ikke logget inn, er en varig tilstand
+    # ÅPNE SPØRSMÅL:
+    # - Regelen er fra den gamle modellen og bruker ordene «registrere» og «personbruker uten
+    #   Feide-konto». Skal den skrives om til «gi tilgang» og «person», eller fjernes?
 
     Scenario: Tilstanden fremgår av detaljene og av brukeroversikten
       Gitt jeg har registrert en personbruker som aldri har logget inn
@@ -331,7 +345,11 @@ Egenskap: Gi en person tilgang med fødselsnummer, D-nummer eller SNR
       Og det fremgår fortsatt at personbrukeren jeg registrerte ikke har logget inn ennå
       Og tilstanden består så lenge opplysningene ikke rettes
 
+  @draft @openquestion
   Regel: En registrert personbruker som ikke lenger har roller
+    # ÅPNE SPØRSMÅL:
+    # - Regelen er fra den gamle modellen og bruker ordene «registrere» og «personbruker uten
+    #   Feide-konto». Skal den skrives om til «gi tilgang» og «person», eller fjernes?
 
     @openquestion
     Scenario: Personbrukeren logger inn etter at den siste tildelingen er fjernet
@@ -356,7 +374,3 @@ Egenskap: Gi en person tilgang med fødselsnummer, D-nummer eller SNR
 #   ikke har logget inn siden da, kan ikke oppdages. Om det gapet er akseptabelt, eller om det
 #   trengs en engangs etterfylling, er ikke avklart.
 # - Registreringen skal ha eget GitHub-issue som sub-issue under initiativet #514.
-# - Reglene som står igjen fra den gamle modellen («Navnet hentes fra påloggingen», «Registrert,
-#   men ikke logget inn, er en varig tilstand» og «En registrert personbruker som ikke lenger har
-#   roller»), bruker ordene «registrere» og «personbruker uten Feide-konto». Skal de skrives om til
-#   «gi tilgang» og «person» når navnespørsmålet er avklart?
