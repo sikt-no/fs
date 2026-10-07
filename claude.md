@@ -189,10 +189,11 @@ Then('skal {string} vises', async ({ page }, tekst: string) => {
 - `fs-specify-delta` — det samme, men for en endring (commit, branch, test-fil eller markdown), med samme tag-regler, også for `@deprecated`
 - `fs-implementasjonsdetaljer` — implementasjonsdetaljene for et krav i `<feature>.design.md` ved siden av feature-fila: UI-mønstre, tilstander og tekstene. Sjekker at hjelpetekster, feilmeldinger og andre tekster med variasjoner står der, ikke bare i skissene. `fs-specify` og `fs-specify-delta` kjører den når implementasjonsdetaljene mangler
 - `fs-verify` — verifiserer kravene mot koden i lokale kloner av kode-repoene: `@in-progress` → `@implemented` (på deler i leverte krav: `@in-progress` fjernes), og sletter `@deprecated`-krav når koden er borte (ellers lister den hvor koden fortsatt finnes). Med en spesifikasjon som scope skriver den `## Scenarioer` i `spec/verify-*.md` og sender steget tilbake i `utforing.md` når noe mangler
+- `fs-verify-agent-teams` — det samme som `fs-verify`, men med et agent team: én teammate (agenttypen `fs-verify-krav` i `.claude/agents/`) per feature-fil leter i koden parallelt, og lead-en kontrollerer bevisene, spør, retagger og skriver rapporten. Krever `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1`, og virker bare i terminalen, ikke i Claude-panelet i FS Kravforvaltning
 - `lage-steps` — step definitions i `tester/steps/` for kravene
 - `fs-oppgave` — oppgavemappa `tasks/<domene>/<slug>/` ut fra malene i `tasks/mal/`: ny oppgave (`oppgave.md` og rad i `roadmap.md`), faseoverganger (`design.md`, `<lag>/plan-<slug>.md`) og review-filer
 
-Typisk flyt: `fs-krav` → `fs-oppgave` (ny oppgave) → `fs-specify` / `fs-specify-delta` (med `fs-implementasjonsdetaljer`) → `lage-steps` → `fs-verify`, med `fs-oppgave` for hver faseovergang og review. Se [`tasks/README.md`](tasks/README.md) for oppgavestrukturen. `.claude/rules/tasks-conventions.md` importerer den med `@../../tasks/README.md` når Claude jobber i `tasks/**`.
+Typisk flyt: `fs-krav` → `fs-oppgave` (ny oppgave) → `fs-specify` / `fs-specify-delta` (med `fs-implementasjonsdetaljer`) → `lage-steps` → `fs-verify` (eller `fs-verify-agent-teams` når det er mange feature-filer), med `fs-oppgave` for hver faseovergang og review. Se [`tasks/README.md`](tasks/README.md) for oppgavestrukturen. `.claude/rules/tasks-conventions.md` importerer den med `@../../tasks/README.md` når Claude jobber i `tasks/**`.
 
 ## CI/CD
 
