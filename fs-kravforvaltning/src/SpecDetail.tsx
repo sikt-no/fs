@@ -9,6 +9,7 @@ import { makeMentionIndex, mentionItems, searchMentions, type MentionHit, type M
 import { highlight, StatusIcon } from './Sidebar';
 import { colOf, currentRepo, featureId, handoffPrompt, missing, pickable, prShort, specifyPrompt, stepIcon, verifyPrompt, type Card, type ColConf } from './specboard';
 import { useCopy } from './useCopy';
+import { useVerifyScreenshots } from './verifyScreenshots';
 
 /** Handlingene som går til Claude Code utenfor panelets vanlige samtale */
 export interface SpecActions {
@@ -73,6 +74,7 @@ export function SpecDetail({ c, col, repos, repoName, cards, entries, ro, dirty,
   const [openFeat, setOpenFeat] = useState<Record<string, boolean>>({});
   const [promptFor, setPromptFor] = useState<string | null>(null);
   const [copied, copy] = useCopy();
+  const [shots, setShots] = useVerifyScreenshots();
   const all = c.feats.flatMap(f => f.sc);
   const unsent = !c.run.route.length;
   const routeList = unsent ? c.doc.rute : c.run.route;
@@ -687,7 +689,11 @@ export function SpecDetail({ c, col, repos, repoName, cards, entries, ro, dirty,
         {colKey === 'verifisering' && canEdit && (
           <div class="spd-send">
             <span>Alle steg er levert. fs-verify kjøres avgrenset til denne spesifikasjonen, med de valgte kodemappene.</span>
-            <ClaudeAction label="Verifiser" prompt={() => verifyPrompt(c)} solid />
+            <label class="spd-check">
+              <input type="checkbox" checked={shots} onChange={e => setShots((e.currentTarget as HTMLInputElement).checked)} />
+              Ta skjermbilder (test-fsadmin)
+            </label>
+            <ClaudeAction label="Verifiser" prompt={() => verifyPrompt(c, shots)} solid />
           </div>
         )}
 

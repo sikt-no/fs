@@ -1300,6 +1300,8 @@ body.resizing iframe, body.resizing .main { pointer-events: none; }
 .sproute-pill button { border: 0; background: none; color: var(--muted); cursor: pointer; padding: 0 3px; }
 .sproute-pill button.del:hover { color: var(--err); }
 .spaddrepo { color: var(--acc-ink) !important; border: 1px dashed var(--acc) !important; cursor: pointer; }
+.spd-check { display: flex; align-items: center; gap: 6px; cursor: pointer; color: var(--ink); }
+.spd-check input { margin: 0; accent-color: var(--acc); }
 .spd-send { display: flex; flex-direction: column; align-items: flex-start; gap: 8px; padding: 10px 12px; border-radius: 6px; background: var(--sunken); font-size: 12.5px; color: var(--ink2); text-wrap: pretty; }
 .spstepbox { border: 1px solid var(--line); border-radius: 8px; display: flex; flex-direction: column; overflow: hidden; }
 .spstepbox.cur { border-color: var(--acc); box-shadow: 0 0 0 2px var(--sel); }
