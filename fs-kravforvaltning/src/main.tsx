@@ -17,6 +17,7 @@ import { MarkdownView, type MdMode } from './MarkdownView';
 import { Oppgaver, taskKey, type OView } from './Oppgaver';
 import { NEW_KEY, Spesifikasjoner } from './Spesifikasjoner';
 import { buildCards, colOf, handoffPrompt, type Card } from './specboard';
+import { verifyKravPrompt, type VerifyScope } from './verifyPrompt';
 import { whenClaudeReady } from './claudeBridge';
 import { useCodeDirs } from './CodeDirs';
 import { isSpecPath } from '../shared/paths';
@@ -635,6 +636,15 @@ function App() {
     if (!target) return alert('Claude-panelet svarte ikke. Åpne det og prøv igjen.');
     await target.execute(handoffPrompt(c, repo), { repo, dir, spec: c.path }, `Utfør: ${c.doc.title || c.file} i ${repo}`);
   };
+  // «Verifiser» på egenskapen eller en regel: ny samtale med fs-verify i Claude-panelet
+  const verify = async (e: Entry, scope: VerifyScope, screenshots: boolean) => {
+    const text = verifyKravPrompt(e, scope, screenshots);
+    if (!text) return;
+    setClaudeOpen(true);
+    const target = await whenClaudeReady();
+    if (!target) return alert('Claude-panelet svarte ikke. Åpne det og prøv igjen.');
+    await target.withSkill(text, 'fs-verify');
+  };
   const executeWhy = !claude?.available
     ? 'Fant ikke Claude Code på maskinen: kopier prompten til en økt i repoet'
     : 'Velg den lokale klonen av repoet under «Kodemapper» i Claude-panelet, eller kopier prompten';
@@ -818,6 +828,7 @@ function App() {
                   onFindClose={k => setFind(f => ({ ...f, closed: { ...f.closed, [k]: true } }))}
                   onEdit={EDITABLE ? () => setEditing(true) : undefined}
                   onDelete={EDITABLE ? deleteCurrent : undefined}
+                  onVerify={claude?.available ? (scope, shots) => void verify(entry, scope, shots) : undefined}
                 />
               )}
             </main>

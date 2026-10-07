@@ -50,7 +50,7 @@ Egenskap: Regelverkssamling
 | `@draft` | Utkast, ikke validert. Alle nye krav starter her | `fs-krav` |
 | `@planned` | Validert og klart til å bygges | `fs-krav`, etter en gjennomgang, eller når det er sagt at kravet skal ha `@planned` |
 | `@in-progress` | Hentet inn i en oppgave | `fs-specify` / `fs-specify-delta` |
-| `@implemented` | Bygget, og verifisert mot koden | `fs-verify` |
+| `@implemented` | Bygget, og verifisert mot koden | `fs-verify` (også direkte fra `@draft` eller `@planned`, med «Verifiser» uansett status) |
 | `@deprecated` | Levert, men skal fjernes | `fs-krav`. `fs-verify` sletter fila (eller blokken, for en del) når koden er borte |
 
 Se *Kravstatus* og *Implementasjonsstatus*.
@@ -220,6 +220,8 @@ Implementasjonsstatusen beveger seg langs én akse, og hvert steg har én eier:
 
 `@draft` →(`fs-krav`)→ `@planned` →(`fs-specify` / `fs-specify-delta`)→ `@in-progress` →(`fs-verify`)→ `@implemented` →(`fs-krav`)→ `@deprecated` →(`fs-verify`)→ slettet
 
+Unntaket er «Verifiser» på en egenskap eller en regel i FS Kravforvaltning: brukeren ber `fs-verify` verifisere *uansett status*. Finnes alt i koden, og brukeren bekrefter, kan `fs-verify` gi en `@draft`- eller `@planned`-egenskap statusen `@implemented` direkte, og fjerne `@draft`, `@planned` eller `@in-progress` fra en regel under en `@implemented` egenskap, så regelen er levert. Det gjelder bare det brukeren ba om, og aldri en regel under en egenskap som ikke er levert.
+
 Et krav skal ha nøyaktig én av disse på `Egenskap:`-tag-linja. Ikke sett to samtidig, og ikke la et krav stå uten status. På `Regel:`/`Scenario:` brukes `@draft` og `@deprecated`. `@planned` og `@in-progress` er bare lov på en del under en `@implemented` egenskap, når et levert krav endres (se *Endring av levert krav*). `@implemented` settes aldri på en del: en levert del har ingen egen statustag. *(sjekkes automatisk)*
 
 Den tidligere taggen `@levert` er erstattet av `@implemented`. *(sjekkes automatisk)*
@@ -234,7 +236,7 @@ Det samme gjelder `@in-progress` og `@implemented`. En `@implemented` egenskap m
 - `@draft` på en `Regel:` gjelder alle scenarioene under den.
 - `# ÅPNE SPØRSMÅL:` er påkrevd sammen med `@openquestion`. *(sjekkes automatisk)* En `@draft`-del uten `@openquestion` er et utkast som ikke er gjennomgått enda. *(sjekkes automatisk)*
 - En `@draft`-del skal ikke implementeres før den er avklart. Når den er avklart, fjernes `@draft`, `@openquestion` og den besvarte kommentaren. `Egenskap:`-taggen endres ikke av det.
-- Under en `@implemented` egenskap fjernes ikke `@draft` uten videre, for da ser delen levert ut. En avklart del får `@planned` i stedet, og delen den erstatter, får `@deprecated`. Se *Endring av levert krav*.
+- Under en `@implemented` egenskap fjernes ikke `@draft` uten videre, for da ser delen levert ut. En avklart del får `@planned` i stedet, og delen den erstatter, får `@deprecated`. Se *Endring av levert krav*. Unntaket er når `fs-verify` har funnet delen i koden og brukeren har bekreftet det (*Implementasjonsstatus*).
 - Under en `Egenskap:` som selv er `@draft` skal deler **ikke** tagges `@draft` (det er dekket av egenskapen). *(sjekkes automatisk)* `@openquestion` kan fortsatt brukes for å peke ut konkrete spørsmål.
 
 Forskjellen på `@openquestion` alene og `@draft @openquestion`:

@@ -33,6 +33,8 @@ Du er lead i et agent team, og gjør det samme som `fs-verify`, men lar teammate
 
 Som *Finn scope og kode* i `fs-verify`: kravene (spesifikasjon, `krav/`-sti eller oppgave, slått opp på feature-ID), kodeklonene (spør med `AskUserQuestion`, sjekk at stiene finnes), om det skal tas skjermbilder fra `https://test-fsadmin.sikt.no/` (spør med `AskUserQuestion` før teamet startes, når prompten ikke sier det) og hintene fra oppgaven (`design.md`, `<lag>/plan-*.md`, `<lag>/task-*-completion.md`).
 
+Ber prompten om å verifisere en egenskap eller en regel *uansett status*, gjelder *Verifisere uansett status* i `fs-verify`: scope, gating-settet og hvilken ny status du kan tilby.
+
 Klonene ligger utenfor repoet, og teammatene arver permission mode fra deg. Kan ikke du lese klonene uten å bli spurt, kan ikke teammatene det heller. Foreslå da at brukeren starter med `--add-dir <klone>`, eller legger klonene i `permissions.additionalDirectories`.
 
 ## Logg kjøringen

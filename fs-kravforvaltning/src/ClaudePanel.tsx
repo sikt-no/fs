@@ -353,7 +353,7 @@ export function ClaudePanel({ status, width, onWidth, allowedSkills: modeSkills,
    * Sender `text` som ny melding i samtalen som er åpen (eller en ny). Brukes av inputfeltet, av «Send til Claude Code»
    * og av «Oppsummer samtalen» og «Lag forslag til PR» (`preset`).
    */
-  const sendText = async (text: string, mentions: string[] = [], preset?: ChatPreset, inConv?: string) => {
+  const sendText = async (text: string, mentions: string[] = [], preset?: ChatPreset, inConv?: string, withSkill?: string) => {
     if (!text || (running && !inConv)) return;
     setError(null);
     setShowList(false);
@@ -367,7 +367,7 @@ export function ClaudePanel({ status, width, onWidth, allowedSkills: modeSkills,
     const target = id;
     const cur = convs.list.find(x => x.id === target)!.chat;
     // En utførekjøring har ingen krav-skill: skillene er kode-repoets
-    const before = cur.target ? cur : chooseSkill(cur, skill);
+    const before = cur.target ? cur : chooseSkill(cur, withSkill ?? skill);
     const { chat: after, invoke } = send(before, text, sentPath, mentions, skillHashes(), preset);
     set(updateConversation(convs, target, () => after, Date.now()));
     try {
@@ -435,11 +435,17 @@ export function ClaudePanel({ status, width, onWidth, allowedSkills: modeSkills,
     set(createExecuteConversation(convs, id, Date.now(), target, title));
     await sendRef.current(text, [], undefined, id);
   };
+  // «Verifiser» i feature-visningen: ny samtale med fs-verify (en tom samtale gjenbrukes)
+  const withSkillText = async (text: string, s: string) => {
+    const next = createConversation(convs, newId(), Date.now(), s);
+    set(next);
+    await sendRef.current(text, [], undefined, next.current ?? undefined, s);
+  };
   const insertRef = useRef(insertText);
   insertRef.current = insertText;
   useEffect(() => {
     if (!status.available) return;
-    registerClaude({ send: t => sendRef.current(t), execute: (t, target, title) => executeText(t, target, title), insert: t => insertRef.current(t) });
+    registerClaude({ send: t => sendRef.current(t), execute: (t, target, title) => executeText(t, target, title), withSkill: (t, s) => withSkillText(t, s), insert: t => insertRef.current(t) });
     return () => {
       registerClaude(null);
       setClaudeBusy(false);
