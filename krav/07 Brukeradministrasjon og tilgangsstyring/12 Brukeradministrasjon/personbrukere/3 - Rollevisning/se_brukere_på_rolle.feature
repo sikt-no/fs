@@ -10,6 +10,8 @@ Egenskap: Se brukere som har en spesifikk rolle
   Scenarioene merket @must er minimum for å kunne gi en person tilgang med fødselsnummer,
   D-nummer eller SNR fra rollesiden (BRU-PER-ROL-002), slik at personen blir synlig for
   brukeradministratoren.
+  «Aktivt tildelt» betyr at rollen er aktiv nå, enten den er tildelt direkte eller arvet gjennom en
+  annen rolle.
 
   @must
   Scenario: Åpne en rolle fra rolleoversikten
@@ -28,6 +30,7 @@ Egenskap: Se brukere som har en spesifikk rolle
     Gitt at en rolle er tildelt flere brukere
     Når brukeradministrator åpner rollens oversiktsside
     Så vises brukerne med rollen aktivt tildelt som brukeradministratoren ellers kan se
+    Og brukere som har rollen arvet gjennom en annen rolle, vises også
 
   @must
   Scenario: Brukere brukeradministratoren ellers ikke kan se, vises ikke
@@ -42,9 +45,8 @@ Egenskap: Se brukere som har en spesifikk rolle
     Så skal matchende roller vises i søkeresultatet
 
 # ÅPNE SPØRSMÅL:
-# Scenarioene merket @must viser brukere med rollen direkte og aktivt tildelt. Spørsmålene under
+# Scenarioene merket @must viser brukere som har rollen aktiv nå, direkte eller arvet. Spørsmålene under
 # gjelder utvidelser av listen.
-# - Skal man kunne se brukere som har rollen indirekte (via en sammensatt rolle), eller bare direkte tildelte?
 # - Skal listen være filtrerbar på organisasjon, stedkode, eller status (aktiv/inaktiv)?
 # - Skal man kunne se brukere som har hatt rollen historisk (ikke bare aktive)? Eller skal det gå via BRU-PER-HIS-002?
 # - Hvilke felt vises per bruker i listen — navn, Feide-ID, organisasjon, tildelt dato? Forslaget
