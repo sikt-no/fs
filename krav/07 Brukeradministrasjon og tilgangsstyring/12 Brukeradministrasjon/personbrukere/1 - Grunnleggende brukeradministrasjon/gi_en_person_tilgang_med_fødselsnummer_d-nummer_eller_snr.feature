@@ -47,20 +47,20 @@ Egenskap: Gi en person tilgang med fødselsnummer, D-nummer eller SNR
       Når brukeradministratoren gir personen en rolle for en organisasjon og et miljø og oppgir fødselsnummeret
       Så har personen rollen for organisasjonen og miljøet
       Og brukeradministratoren ser personen i brukeroversikten
-      Og det opprettes ikke en ny person
+      Og det opprettes ikke en ny person i databasen
 
     Scenario: Personen er allerede synlig for brukeradministratoren
       Gitt personen har en aktiv tildeling i en organisasjon og et miljø brukeradministratoren administrerer
       Når brukeradministratoren gir personen en ny rolle og oppgir fødselsnummeret
       Så har personen den nye rollen i tillegg til tildelingen personen hadde fra før
-      Og det opprettes ikke en ny person
+      Og det opprettes ikke en ny person i databasen
 
     Scenario: Personen har ingen aktive tildelinger lenger
       Gitt personen har hatt tildelinger, men har ingen aktive tildelinger nå
       Når brukeradministratoren gir personen en rolle for en organisasjon og et miljø og oppgir fødselsnummeret
       Så har personen rollen for organisasjonen og miljøet
       Og brukeradministratoren ser personen i brukeroversikten
-      Og det opprettes ikke en ny person
+      Og det opprettes ikke en ny person i databasen
 
     Scenario: Personen har logget inn med Feide tidligere
       Gitt personen har Feide-konto og har logget inn med Feide tidligere
@@ -84,14 +84,36 @@ Egenskap: Gi en person tilgang med fødselsnummer, D-nummer eller SNR
       Når brukeradministratoren gir personen flere roller for organisasjoner og miljøer brukeradministratoren administrerer og oppgir fødselsnummeret
       Så har personen alle rollene for organisasjonene og miljøene
       Og brukeradministratoren ser personen i brukeroversikten
-      Og det opprettes bare én person
+      Og det opprettes bare én person i databasen
 
     Scenario: Personen kan ikke legges til uten en rolle
       Gitt brukeradministratoren har oppgitt personens fødselsnummer
       Og brukeradministratoren har ikke valgt rolle, organisasjon og miljø
       Når brukeradministratoren forsøker å fullføre
       Så får personen ingen tildeling
-      Og det opprettes ingen person
+      Og det opprettes ingen person i databasen
+
+  @draft @openquestion
+  Regel: Personen kan søkes opp i FS-SIS i stedet for å oppgi nummeret
+    For institusjoner som bruker FS-SIS, kan brukeradministratoren finne personen med et
+    personsøk i SIS. Da må hen ikke alltid oppgi fødselsnummer, D-nummer eller SNR for en person
+    som ikke har tilganger fra før.
+
+    # ÅPNE SPØRSMÅL:
+    # - Prioriteten er ikke satt.
+    # - Hva kan brukeradministratoren søke på, og hvilke opplysninger vises i treffene? Nummeret
+    #   vises ellers ikke i grensesnittet.
+    # - Hvilke personer i SIS kan brukeradministratoren søke blant: bare personene ved egen
+    #   institusjon?
+    # - Kan et treff avsløre at personen har tildelinger i andre organisasjoner? Se regelen
+    #   «Svaret avslører ikke om personen fantes fra før».
+
+    Scenario: Finne personen med personsøk i SIS
+      Gitt institusjonen bruker FS-SIS
+      Og personen finnes i SIS
+      Når brukeradministratoren finner personen med personsøk i SIS og gir hen en rolle for en organisasjon og et miljø
+      Så har personen rollen for organisasjonen og miljøet
+      Og brukeradministratoren har ikke oppgitt personens fødselsnummer, D-nummer eller SNR
 
   @draft @openquestion
   Regel: Svaret avslører ikke om personen fantes fra før
@@ -178,7 +200,7 @@ Egenskap: Gi en person tilgang med fødselsnummer, D-nummer eller SNR
       Gitt brukeradministratoren oppgir et <nummertype> med ugyldige kontrollsifre
       Når brukeradministratoren gir personen en rolle for en organisasjon og et miljø
       Så får personen ingen tildeling
-      Og det opprettes ingen person
+      Og det opprettes ingen person i databasen
       Og brukeradministratoren får beskjed om at nummeret er ugyldig
 
       Eksempler:
@@ -222,7 +244,7 @@ Egenskap: Gi en person tilgang med fødselsnummer, D-nummer eller SNR
       Gitt brukeradministratoren har ikke rett til å tildele rollen for organisasjonen og miljøet
       Når brukeradministratoren forsøker å gi personen rollen og oppgir fødselsnummeret
       Så får personen ingen tildeling
-      Og det opprettes ingen person
+      Og det opprettes ingen person i databasen
 
   # FORSLAG TIL WORKSHOP: fjernes, fordi alle scenarioene i regelen er erstattet av reglene over.
   # Personen identifiseres med nummeret uansett påloggingsmåte, så «uten Feide-konto» er ikke
@@ -329,7 +351,6 @@ Egenskap: Gi en person tilgang med fødselsnummer, D-nummer eller SNR
 #   ikke har logget inn siden da, kan ikke oppdages. Om det gapet er akseptabelt, eller om det
 #   trengs en engangs etterfylling, er ikke avklart.
 # - Registreringen skal ha eget GitHub-issue som sub-issue under initiativet #514.
-# - Skal fila omdøpes til «gi_person_tilgang.feature», så filnavnet følger den nye tittelen?
 # - Reglene som står igjen fra den gamle modellen («Navnet hentes fra påloggingen», «Registrert,
 #   men ikke logget inn, er en varig tilstand» og «En registrert personbruker som ikke lenger har
 #   roller»), bruker ordene «registrere» og «personbruker uten Feide-konto». Skal de skrives om til
