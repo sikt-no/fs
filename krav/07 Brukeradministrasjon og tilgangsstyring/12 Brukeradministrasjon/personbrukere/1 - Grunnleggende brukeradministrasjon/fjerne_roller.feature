@@ -70,3 +70,19 @@ Egenskap: Fjerne roller fra en personbruker
       Gitt personbrukeren har en tilgang som både er tildelt direkte og følger av en rolle
       Når jeg fjerner rollen fra personbrukeren
       Så beholder personbrukeren tilgangen gjennom den direkte tildelingen
+
+  @draft @openquestion
+  Regel: Fjerning av den siste aktive tildelingen gjør personen usynlig
+    # ÅPNE SPØRSMÅL:
+    # - Skal brukeradministratoren advares før den siste aktive tildelingen fjernes, siden personen
+    #   da forsvinner fra brukeroversikten? Det er ikke bestemt.
+
+    Scenario: Personen forsvinner fra brukeroversikten
+      Gitt personbrukeren er en person med én aktiv tildeling i organisasjonene brukeradministratoren administrerer
+      Når brukeradministratoren fjerner rollen fra personen
+      Så ser ikke brukeradministratoren personen i brukeroversikten lenger
+
+    Scenario: Personen kan få en ny tildeling med fødselsnummer, D-nummer eller SNR
+      Gitt brukeradministratoren har fjernet den siste aktive tildelingen personen hadde i organisasjonene brukeradministratoren administrerer
+      Når brukeradministratoren gir personen en ny rolle og oppgir personens fødselsnummer
+      Så ser brukeradministratoren personen i brukeroversikten igjen
