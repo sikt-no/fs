@@ -182,8 +182,10 @@ Egenskap: Listevisning og søk i personbrukere
       Når jeg åpner brukeroversikten
       Så ser jeg ikke personbrukeren i listen
 
-  @draft
+  @draft @openquestion
   Regel: Sist brukt-kolonne og sortering (planlagt etter v1)
+    # ÅPNE SPØRSMÅL:
+    # - Backend har ikke støtte for dette: tidspunktet personbrukeren sist brukte løsningen lagres ikke. Hvordan og hvor skal det registreres?
 
     Scenario: Kolonnen "Sist brukt" vises i listen
       Gitt jeg ser listen over personbrukere
