@@ -85,20 +85,10 @@ Egenskap: Gi en person tilgang med fødselsnummer, D-nummer eller SNR
         | D-nummer       |
         | SNR            |
 
-    @draft @openquestion
-    Scenario: Flere roller gis i samme operasjon der inngangen lar brukeradministratoren velge roller
-      # ÅPNE SPØRSMÅL:
-      # - Workshopen besluttet at flere roller kan gis i samme operasjon. Det gjelder operasjonen
-      #   generelt, ikke rollesiden: fra rollesiden gis bare rollen på siden, og flere roller gis
-      #   etterpå fra detaljsiden for personen (BRU-PER-ROL-002). Rollesiden er i dag den eneste
-      #   inngangen der tilgang gis med nummer. Hvilken inngang skal la brukeradministratoren velge
-      #   flere roller når nummeret oppgis?
-      Gitt det finnes ingen person med fødselsnummeret i løsningen
-      Og inngangen lar brukeradministratoren velge roller
-      Når brukeradministratoren gir personen flere roller for organisasjoner og miljøer brukeradministratoren administrerer og oppgir fødselsnummeret
-      Så har personen alle rollene for organisasjonene og miljøene
-      Og brukeradministratoren ser personen i brukeroversikten
-      Og det opprettes bare én person i databasen
+    Scenario: Flere tilganger legges til fra brukersiden etter den første rollen
+      Gitt brukeradministratoren har gitt personen den første rollen og oppgitt fødselsnummeret
+      Når brukeradministratoren åpner personen i brukeroversikten
+      Så kan brukeradministratoren legge til flere tilganger for personen der
 
     Scenario: Personen kan ikke legges til uten en rolle
       Gitt brukeradministratoren har oppgitt personens fødselsnummer
