@@ -10,6 +10,19 @@ import type { Vcs } from './vcs.ts';
 export const isKravFile = (p: string) => p.endsWith('.feature') || p.endsWith('.md');
 
 /** Hendelsene en arbeidsflate sender. Navnene er de samme som over Vites websocket og Electrons IPC. */
+/** Visningene som leser tasks/; uten noen av dem leses ikke tasks/, og `tasks` er `null` */
+export interface WorkspaceOpts {
+  oppgaver?: boolean;
+  spesifikasjoner?: boolean;
+}
+
+/**
+ * Er en visning slått på? `--mode` kan ha flere, skilt med `+` (`--mode oppgaver+spesifikasjoner`),
+ * eller den slås på med miljøvariabelen (`OPPGAVER=1`, `SPESIFIKASJONER=1`).
+ */
+export const modeOn = (mode: string | undefined, name: string, env: NodeJS.ProcessEnv = process.env) =>
+  (mode ?? '').split(/[+,]/).includes(name) || env[name.toUpperCase()] === '1';
+
 export interface WorkspaceEvents {
   'krav:update': UpdateEvent;
   'krav:git': GitInfo | null;
@@ -18,7 +31,7 @@ export interface WorkspaceEvents {
 export type WorkspaceEvent = keyof WorkspaceEvents;
 
 /**
- * krav/ (og tasks/ i Oppgaver-modus) lest og parset i minnet, med git-status fra en `Vcs`.
+ * krav/ (og tasks/ når Oppgaver eller Spesifikasjoner er slått på) lest og parset i minnet, med git-status fra en `Vcs`.
  * Ren Node: Vite-pluginen og Electrons main-prosess mater filhendelser inn med `onFs`
  * (eller `watch()`), og videresender hendelsene til sin egen transport.
  */
@@ -35,9 +48,9 @@ export class Workspace {
 
   readonly repoRoot: string;
   readonly vcs: Vcs | null;
-  readonly opts: { oppgaver?: boolean };
+  readonly opts: WorkspaceOpts;
 
-  constructor(repoRoot: string, vcs: Vcs | null, opts: { oppgaver?: boolean } = {}) {
+  constructor(repoRoot: string, vcs: Vcs | null, opts: WorkspaceOpts = {}) {
     this.repoRoot = repoRoot;
     this.vcs = vcs;
     this.opts = opts;
@@ -72,13 +85,18 @@ export class Workspace {
         if (isKravFile(f)) this.load(join(this.kravDir, f));
       }
     }
-    this.tasks = this.opts.oppgaver ? readTasks(this.repoRoot) : null;
+    this.tasks = this.withTasks ? this.readTasks() : null;
     this.git = withGit && this.vcs ? await this.vcs.info() : null;
   }
 
   /** En fil under repoet er lagt til, endret eller slettet */
   onFs(event: 'add' | 'change' | 'unlink', abs: string) {
-    if (abs.startsWith(this.tasksDir + sep)) return this.opts.oppgaver ? this.refreshTasks() : undefined;
+    if (abs.startsWith(this.tasksDir + sep)) {
+      if (!this.withTasks) return;
+      this.refreshTasks();
+      // Spesifikasjonene og utforing.md vises i «Endringer» og kan sendes med «Lag PR»
+      return this.refreshGit();
+    }
     if (!abs.startsWith(this.kravDir + sep) || !isKravFile(abs)) return;
     let data: UpdateEvent;
     if (event === 'unlink') {
@@ -97,7 +115,17 @@ export class Workspace {
 
   /** En mappe under tasks/ er lagt til eller fjernet */
   onDir(abs: string) {
-    if (this.opts.oppgaver && abs.startsWith(this.tasksDir + sep)) this.refreshTasks();
+    if (this.withTasks && abs.startsWith(this.tasksDir + sep)) this.refreshTasks();
+  }
+
+  /** tasks/ leses når Oppgaver eller Spesifikasjoner er slått på */
+  get withTasks() {
+    return !!(this.opts.oppgaver || this.opts.spesifikasjoner);
+  }
+
+  /** Flaggene i snapshotet sier hvilke av visningene vieweren skal vise */
+  private readTasks(): TasksSnapshot {
+    return { ...readTasks(this.repoRoot), oppgaver: !!this.opts.oppgaver, spesifikasjoner: !!this.opts.spesifikasjoner };
   }
 
   /** Oppgavemappene er små, så hele tasks/ leses på nytt ved hver endring */
@@ -105,7 +133,7 @@ export class Workspace {
     clearTimeout(this.tasksTimer);
     this.tasksTimer = setTimeout(() => {
       try {
-        this.tasks = readTasks(this.repoRoot);
+        this.tasks = this.readTasks();
       } catch {
         return; // en fil forsvant mens mappa ble lest; neste hendelse leser på nytt
       }
@@ -147,7 +175,7 @@ export class Workspace {
 
   /** Egen filovervåking for når ingen Vite-server gjør det (Electron) */
   watch() {
-    const dirs = [this.kravDir, ...(this.opts.oppgaver ? [this.tasksDir] : [])];
+    const dirs = [this.kravDir, ...(this.withTasks ? [this.tasksDir] : [])];
     for (const dir of dirs) {
       if (!existsSync(dir)) continue;
       this.watchers.push(

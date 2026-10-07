@@ -17,7 +17,7 @@ interface Dir {
 const collator = new Intl.Collator('nb', { numeric: true, sensitivity: 'base' });
 
 /** Uthever tegnområdene Fuse fant */
-function highlight(text: string, ranges: readonly RangeTuple[]) {
+export function highlight(text: string, ranges: readonly RangeTuple[]) {
   if (!ranges.length) return text;
   const out: (string | JSX.Element)[] = [];
   let at = 0;
@@ -120,9 +120,11 @@ interface Props {
   onPr?: () => void;
   /** «Hent siste» fra main (desktop-appen) */
   onPull?: () => void;
+  /** «Hent siste» pågår */
+  pulling?: boolean;
 }
 
-export function Sidebar({ entries, tree, current, open, query, onQuery, onToggle, onSelect, mode, onMode, git, onPr, onPull }: Props) {
+export function Sidebar({ entries, tree, current, open, query, onQuery, onToggle, onSelect, mode, onMode, git, onPr, onPull, pulling }: Props) {
   // Lukkede mapper i endringstreet; alle er åpne som standard
   const [closed, setClosed] = useState<Record<string, boolean>>({});
   const index = useMemo(() => makeIndex(entries), [entries]);
@@ -287,7 +289,18 @@ export function Sidebar({ entries, tree, current, open, query, onQuery, onToggle
         )}
         {mode === 'changes' && git && (onPr || onPull) && (
           <div class="gitactions">
-            {onPull && <button class="smallbtn" onClick={onPull} title="Hent siste versjon av main fra GitHub">Hent siste</button>}
+            {onPull && (
+              <button class="smallbtn" onClick={onPull} disabled={pulling} aria-busy={pulling} title="Hent siste versjon av main fra GitHub">
+                {pulling ? (
+                  <>
+                    <span class="spinner" aria-hidden="true" />
+                    Henter…
+                  </>
+                ) : (
+                  'Hent siste'
+                )}
+              </button>
+            )}
             {onPr && <button class="primbtn" onClick={onPr} disabled={!nChanges}>Lag PR</button>}
           </div>
         )}

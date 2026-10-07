@@ -6,6 +6,40 @@ Egenskap: Gjennomføre plasstildeling
   ønsker jeg at plasstildelingen fordeler studieplassene etter rangering, kvoter og rundetype
   slik at hver søker får et riktig og forklarbart svar på hver søknad.
 
+  # ÅPNE SPØRSMÅL:
+  #
+  # Rundetype og utfall:
+  # - Hva betyr «bygger på forrige publiserte runde» i praksis? Er det at resultatet fra forrige
+  #   runde er utgangspunktet, og at bare endringer (opprykk, nye tilbud, bortfall) beregnes?
+  #   Eller kjøres hele fordelingen på nytt med oppdaterte tall?
+  # - Hvilke utfall (tilbud, venteliste, bortfall, avslag) er mulige i hvilken rundetype?
+  #   I etterfylling og ledige studieplasser finnes ikke bortfall — men det er ikke sagt eksplisitt.
+  # - Bortfall i supplering: fungerer det likt som i hovedtildeling (lavere prioriteter faller bort
+  #   ved tilbud), bortsett fra at opprykk gir kompensasjonstilbud?
+  # - Ledige studieplasser: søker kan ha tilbud fra før og må velge — gjelder det likt som i etterfylling?
+  #
+  # Poeng og rangering:
+  # - Når en søker har flere poengsummer i samme kvotetype: er det riktig at høyeste poengsum vinner,
+  #   og at laveste grunnlagskode avgjør ved likhet? Saksbehandlingsprinsippet tilsier det som slår best ut for søkeren.
+  # - Grunnlag uten poeng (HUP, REA): se Confluence «Hvordan løse HUP og andre grunnlag som ikke har poeng i plasstildeling».
+  # - Loddtrekning blir regelen for UHG fra 2027, men loddnummer har ingen kilde i dag.
+  #   Hvem eier trekningen, søknadsbehandlingen eller plasstildelingen? («Fra saksbehandling til plasstildeling», D7)
+  #
+  # Venteliste:
+  # - Skal søkere med lik rangering på venteliste dele ventelistenummer, eller få vilkårlige unike numre?
+  #   I dag: vilkårlige unike. Hypotese: avhenger av poenglikhetsregelen.
+  # - Skal ventelistenumre stå urørt etter opprykk, eller nummereres på nytt? Hypotese: nummereres på nytt.
+  # - Ventelistenumre kan i dag kollidere mellom runder (mistenkt feil i oppgave.md).
+  #
+  # Bortfall og avslag:
+  # - Er «bortfall» og «avslag» to ulike resultater i resultatlisten, eller er bortfall en type avslag?
+  #
+  # Innstillinger og grensetilfeller:
+  # - Innstillingen «maks antall tilbud per søker per runde» (innstillinger.feature) mot etterfylling,
+  #   der søkeren kan ha flere tilbud. Hvordan henger de sammen? Unntak for deltid under 60 stp?
+  # - Hvor kommer manuell tilbudsgaranti fra? I dag finnes ingen kilde i søknadsbehandlingen («Fra saksbehandling til plasstildeling», D4).
+  # - Tidligopptak: tilsagn som gir tilbudsgaranti i hovedtildelingen (Confluence «Samordnet plasstildeling»). Hører det med?
+  #
   # Kilde: tasks/opptak/plasstildeling/design.md (prinsipp 1–3, rundetyper, del 2), oppgave.md (oppgave 5),
   # Confluence «2026-09-08 Raffinering plasstildeling», «Fra saksbehandling til plasstildeling» og
   # «Samordnet plasstildeling» (akseptansekriterier for algoritme).
@@ -90,9 +124,7 @@ Egenskap: Gjennomføre plasstildeling
 
     @openquestion
     Scenario: Loddtrekning ved lik poengsum
-      # ÅPNE SPØRSMÅL:
-      # - Loddtrekning blir regelen for UHG fra 2027, men loddnummer har ingen kilde i dag.
-      #   Hvem eier trekningen, søknadsbehandlingen eller plasstildelingen? («Fra saksbehandling til plasstildeling», D7)
+      # ÅPNE SPØRSMÅL: se spørsmålene øverst i fila (Poeng og rangering).
       Gitt at to søkere har samme poengsum på siste plass
       Og at poenglikhetsregelen er "Loddtrekning"
       Når plasstildelingen gjennomføres
@@ -158,17 +190,3 @@ Egenskap: Gjennomføre plasstildeling
       Når plasstildelingen i runden "Ledige studieplasser" gjennomføres
       Så får de 2 søkerne på ventelisten tilbud først
       Og den siste plassen går til den kvalifiserte søkeren som søkte først på ledige studieplasser
-
-# ÅPNE SPØRSMÅL:
-# - Når en søker har flere poengsummer i samme kvotetype: er det riktig at høyeste poengsum vinner,
-#   og at laveste grunnlagskode avgjør ved likhet? Saksbehandlingsprinsippet tilsier det som slår best ut for søkeren.
-# - Skal søkere med lik rangering på venteliste dele ventelistenummer, eller få vilkårlige unike numre?
-#   I dag: vilkårlige unike. Hypotese: avhenger av poenglikhetsregelen.
-# - Skal ventelistenumre stå urørt etter opprykk, eller nummereres på nytt? Hypotese: nummereres på nytt.
-# - Ventelistenumre kan i dag kollidere mellom runder (mistenkt feil i oppgave.md).
-# - Innstillingen «maks antall tilbud per søker per runde» (innstillinger.feature) mot etterfylling,
-#   der søkeren kan ha flere tilbud. Hvordan henger de sammen? Unntak for deltid under 60 stp?
-# - Er «bortfall» og «avslag» to ulike resultater i resultatlisten, eller er bortfall en type avslag?
-# - Grunnlag uten poeng (HUP, REA): se Confluence «Hvordan løse HUP og andre grunnlag som ikke har poeng i plasstildeling».
-# - Hvor kommer manuell tilbudsgaranti fra? I dag finnes ingen kilde i søknadsbehandlingen («Fra saksbehandling til plasstildeling», D4).
-# - Tidligopptak: tilsagn som gir tilbudsgaranti i hovedtildelingen (Confluence «Samordnet plasstildeling»). Hører det med?

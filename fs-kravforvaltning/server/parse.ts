@@ -71,6 +71,18 @@ const desc = (d: string | undefined) =>
     .join('\n')
     .trim();
 
+/** De ikke-tomme linjene i en beskrivelse, med linja hver står på i fila (beskrivelsen står etter nøkkelordlinja `after`) */
+function descLines(d: string | undefined, lines: string[], after: number) {
+  const out: { text: string; ln: number }[] = [];
+  let i = after; // indeks i `lines` for linja etter nøkkelordet
+  for (const text of (d ?? '').split('\n').map(l => l.trim()).filter(Boolean)) {
+    while (i < lines.length && lines[i].trim() !== text) i++;
+    out.push({ text, ln: i < lines.length ? i + 1 : after });
+    if (i < lines.length) i++;
+  }
+  return out;
+}
+
 function step(s: GStep): Step {
   return {
     kw: s.keyword.trim(),
@@ -102,6 +114,7 @@ function scenario(s: Scenario): Scen {
         tags: e.tags.map(t => t.name),
         desc: desc(e.description),
         rows: [e.tableHeader!, ...e.tableBody].map(r => r.cells.map(c => c.value)),
+        lns: [e.tableHeader!, ...e.tableBody].map(r => r.location.line),
       })),
   };
 }
@@ -358,9 +371,17 @@ export function parseFeature(source: string, path?: string): FeatureModel {
   const fstatus = statusOf(ftags);
   const fdraft = fstatus === 'draft';
   let partialDraft = false;
+  let partialChange = false;
   const hasQ = (notes: Note[]) => notes.some(n => n.kind === 'question');
   const checkPart = (what: string, tags: string[], ln: number, questions: boolean) => {
-    for (const t of tags.filter(t => isStatus(t) && t !== '@draft' && t !== '@deprecated')) push('status-on-part', `${t} på ${what} — bare @draft og @deprecated er lov under Egenskap`, ln);
+    for (const t of tags.filter(t => isStatus(t) && t !== '@draft' && t !== '@deprecated')) {
+      if (t === '@implemented') push('status-on-part', `@implemented på ${what} — en levert del har ingen egen status, den arver @implemented fra Egenskap`, ln);
+      else if (fstatus !== 'implemented') push('status-on-part', `${t} på ${what} — @planned og @in-progress er bare lov på deler under en @implemented egenskap`, ln);
+      else partialChange = true;
+    }
+    const pst = tags.filter(t => isStatus(t) && t !== '@implemented');
+    if (pst.length > 1 && !(pst.length === 2 && pst.includes('@draft') && pst.includes('@deprecated')))
+      push('part-multiple-statuses', `${what} har flere statustagger: ${pst.join(' ')}`, ln);
     if (tags.includes('@deprecated')) {
       if (tags.includes('@draft')) push('deprecated-and-draft', `@deprecated og @draft på ${what} — en del kan ikke være både utkast og avviklet`, ln);
       if (fstatus === 'deprecated') push('redundant-deprecated', `@deprecated på ${what} er overflødig når hele egenskapen er @deprecated`, ln);
@@ -408,19 +429,22 @@ export function parseFeature(source: string, path?: string): FeatureModel {
     .flatMap(n => n.items)
     .sort((a, b) => a.ln - b.ln);
 
-  const issue = comments.map(c => c.text.match(/^\s*#\s*GitHub:\s*#(\d+)/)).find(Boolean)?.[1] ?? null;
+  const issueC = comments.find(c => /^\s*#\s*GitHub:\s*#\d+/.test(c.text));
+  const issue = issueC?.text.match(/#(\d+)/)?.[1] ?? null;
+  // «# language:» er ikke en kommentar for parseren, så den finnes i teksten
+  const langIdx = lines.findIndex(l => /^\s*#\s*language:/.test(l));
 
   return {
     tags: ftags,
     title: f.name,
-    desc: f.description
-      .split('\n')
-      .map(l => l.trim())
-      .filter(Boolean)
-      .map(l => {
-        const m = l.match(/^(Som|ønsker jeg|slik at)\s+(.*)$/i);
-        return m ? { lead: m[1], rest: m[2] } : { lead: '', rest: l };
-      }),
+    ln: f.location.line,
+    tagLn: f.tags[0]?.location.line ?? null,
+    issueLn: issueC?.line ?? null,
+    langLn: langIdx >= 0 ? langIdx + 1 : null,
+    desc: descLines(f.description, lines, f.location.line).map(({ text: l, ln }) => {
+      const m = l.match(/^(Som|ønsker jeg|slik at)\s+(.*)$/i);
+      return m ? { lead: m[1], rest: m[2], ln } : { lead: '', rest: l, ln };
+    }),
     issue,
     lang: f.language,
     rules,
@@ -428,6 +452,7 @@ export function parseFeature(source: string, path?: string): FeatureModel {
     questions,
     lint,
     partialDraft,
+    partialChange,
     nLines,
     nRules: rules.filter(r => r.name !== null).length,
     nScen: rules.reduce((n, r) => n + r.scenarios.filter(s => s.kind !== 'Bakgrunn').length, 0),
@@ -439,10 +464,10 @@ export function buildEntry(path: string, source: string, savedAt: number, prev?:
   if (path.endsWith('.md')) return { path, kind: 'md', status: null, source, savedAt };
   try {
     const model = parseFeature(source, path);
-    return { path, kind: 'feature', status: statusOf(model.tags), partialDraft: model.partialDraft, lint: model.lint.length, model, savedAt };
+    return { path, kind: 'feature', status: statusOf(model.tags), partialDraft: model.partialDraft, partialChange: model.partialChange, lint: model.lint.length, model, savedAt };
   } catch (e) {
     const error = e instanceof Error ? e.message : String(e);
     const parseLint = parseErrorLints(error);
-    return { path, kind: 'feature', status: prev?.status ?? null, partialDraft: prev?.partialDraft, lint: (prev?.lint ?? 0) + parseLint.length, model: prev?.model, error, parseLint, savedAt };
+    return { path, kind: 'feature', status: prev?.status ?? null, partialDraft: prev?.partialDraft, partialChange: prev?.partialChange, lint: (prev?.lint ?? 0) + parseLint.length, model: prev?.model, error, parseLint, savedAt };
   }
 }

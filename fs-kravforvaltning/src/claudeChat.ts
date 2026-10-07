@@ -1,11 +1,19 @@
 // Samtalen i Claude-panelet. Rene funksjoner over hendelsene fra core/claude.ts, så de kan testes med node --test.
-import type { ClaudeEvent } from '../shared/api.ts';
+import type { ClaudeEvent, ClaudeMcpServer, ExecuteTarget } from '../shared/api.ts';
+
+export type ChatPreset = 'summary' | 'pr';
 
 export type ChatItem =
-  | { kind: 'user'; text: string; path: string | null; skill?: string | null }
+  /** `preset`: den faste meldingen bak «Oppsummer samtalen» (`summary`) eller «Lag forslag til PR» (`pr`), som vises kort */
+  | { kind: 'user'; text: string; path: string | null; skill?: string | null; mentions?: string[]; preset?: ChatPreset }
   | { kind: 'assistant'; text: string }
   | { kind: 'tool'; id: string; name: string; summary: string; state: 'running' | 'ok' | 'error' }
-  | { kind: 'done'; ok: boolean; text: string };
+  | { kind: 'done'; ok: boolean; text: string }
+  /** Claude vil bruke et verktøy som må godkjennes (`mcp__*`, WebFetch): kortet med «Tillat», «Tillat alltid» og «Avvis» */
+  | { kind: 'permission'; id: string; tool: string; input: Record<string, string>; state: PermissionState };
+
+/** `pending`: venter på brukeren. `timeout`, `closed`, `ended`: avvist fordi tiden gikk ut, panelet ble lukket eller kjøringen sluttet */
+export type PermissionState = 'pending' | 'allowed' | 'denied' | 'timeout' | 'closed' | 'ended';
 
 export interface Chat {
   items: ChatItem[];
@@ -23,25 +31,81 @@ export interface Chat {
   loadedSkills: string[];
   /** Tokens brukt av konteksten i siste svar, og kontekstvinduet til modellen */
   context: { used: number; window: number | null } | null;
+  /**
+   * Versjonen (hash) av hver skill da den ble lastet i samtalen; er den endret siden, er skillen utdatert her.
+   * Heter ikke `skillVersions`: den første utgaven fylte inn versjonen på disk i gamle samtaler, og de verdiene stemmer ikke.
+   */
+  loadedVersions: Record<string, string>;
+  /** Samtalen denne fortsetter fra (startet fra en oppsummering, eller fordi en skill var oppdatert) */
+  continuesFrom: string | null;
+  /** Utførekjøring fra Spesifikasjoner («Utfør i <repo>»): Claude kjører i kode-repoet. Mangler i eldre samtaler. */
+  target?: ExecuteTarget | null;
+  /** «Tillat alltid i denne samtalen»: verktøyene som sendes som `allowTools` og ikke spørres om igjen */
+  alwaysAllowed: string[];
+  /** MCP-serverne fra siste init, og om de er koblet til */
+  mcp: ClaudeMcpServer[];
 }
 
-export const EMPTY_CHAT: Chat = { items: [], sessionId: null, runId: null, touched: [], skill: null, skillLoaded: null, loadedSkills: [], context: null };
+export const EMPTY_CHAT: Chat = {
+  items: [],
+  sessionId: null,
+  runId: null,
+  touched: [],
+  skill: null,
+  skillLoaded: null,
+  loadedSkills: [],
+  context: null,
+  loadedVersions: {},
+  continuesFrom: null,
+  alwaysAllowed: [],
+  mcp: [],
+};
+
+/** Versjonen av hver skill på disk, fra `claudeSkills` */
+export type SkillHashes = Record<string, string>;
 
 const addSkill = (list: string[], s: string) => (list.includes(s) ? list : [...list, s]);
+const withVersion = (v: Record<string, string>, s: string, hashes: SkillHashes) => (hashes[s] ? { ...v, [s]: hashes[s] } : v);
 
-/** Neste melding i samtalen. `invoke`: meldingen skal laste den valgte skillen (`/<skill>`) */
-export function send(chat: Chat, text: string, path: string | null): { chat: Chat; invoke: boolean } {
-  const invoke = !!chat.skill && chat.skill !== chat.skillLoaded;
+/**
+ * Neste melding i samtalen, med filene og mappene lagt ved med @. `invoke`: meldingen skal laste den valgte skillen
+ * (`/<skill>`), og versjonen den har nå (`hashes`), lagres.
+ */
+export function send(
+  chat: Chat,
+  text: string,
+  path: string | null,
+  mentions: string[] = [],
+  hashes: SkillHashes = {},
+  preset?: ChatPreset,
+): { chat: Chat; invoke: boolean } {
+  // De faste meldingene (oppsummering, PR-forslag) skal ikke laste en ny versjon av skillen inn i samtalen
+  const invoke = !preset && !!chat.skill && chat.skill !== chat.skillLoaded;
   return {
     chat: {
       ...chat,
       skillLoaded: invoke ? chat.skill : chat.skillLoaded,
       loadedSkills: invoke && chat.skill ? addSkill(chat.loadedSkills, chat.skill) : chat.loadedSkills,
-      items: [...chat.items, { kind: 'user', text, path, skill: chat.skill }],
+      loadedVersions: invoke && chat.skill ? withVersion(chat.loadedVersions, chat.skill, hashes) : chat.loadedVersions,
+      items: [...chat.items, { kind: 'user', text, path, skill: chat.skill, ...(mentions.length ? { mentions } : {}), ...(preset ? { preset } : {}) }],
     },
     invoke,
   };
 }
+
+/**
+ * Skillene som er lastet i samtalen, men endret på disk siden. Med lagret versjon: en annen hash enn den som ble lagret.
+ * Uten (samtaler fra før versjonene ble lagret): skillen er endret på disk (`changedAt`) etter at samtalen ble
+ * startet (`since`, ms), så den lastet en eldre versjon.
+ */
+export function staleSkills(chat: Chat, hashes: SkillHashes, changedAt: Record<string, number> = {}, since?: number): string[] {
+  return chat.loadedSkills.filter(s => {
+    const v = chat.loadedVersions[s];
+    if (v) return !!hashes[s] && v !== hashes[s];
+    return since != null && !!changedAt[s] && changedAt[s] > since;
+  });
+}
+
 
 /**
  * Skillen som gjelder der brukeren er i vieweren: den valgte hvis den er tillatt der. Ellers den første
@@ -60,14 +124,41 @@ export function started(chat: Chat, runId: string): Chat {
   return { ...chat, runId };
 }
 
-const EDIT_TOOLS = ['Edit', 'Write', 'MultiEdit', 'NotebookEdit'];
+const EDIT_TOOLS = ['Edit', 'Write', 'MultiEdit', 'NotebookEdit', 'mcp__kravforvaltning__save_sketch'];
 
-/** Legger en hendelse fra kjøringen `runId` inn i samtalen; hendelser fra andre kjøringer ignoreres */
-export function apply(chat: Chat, runId: string, ev: ClaudeEvent): Chat {
+/** En sti fra et verktøykall, relativ til repoet: `/…/repo/tasks/x.md` → `tasks/x.md` */
+const repoRelative = (p: string) => p.replace(/^.*?\/((?:krav|tasks)\/)/, '$1').replace(/^\.?\//, '');
+
+/**
+ * Filene Claude har endret i samtalen (Edit/Write som gikk bra), relative til repoet. Også utenfor krav/,
+ * f.eks. en rapport i tasks/, som `touched` ikke tar med.
+ */
+export function editedFiles(chat: Chat): string[] {
+  const out: string[] = [];
+  for (const i of chat.items) {
+    if (i.kind !== 'tool' || !EDIT_TOOLS.includes(i.name) || i.state !== 'ok' || !i.summary) continue;
+    const p = repoRelative(i.summary);
+    if (!out.includes(p)) out.push(p);
+  }
+  return out;
+}
+
+/**
+ * Legger en hendelse fra kjøringen `runId` inn i samtalen; hendelser fra andre kjøringer ignoreres.
+ * `hashes`: versjonen av skillene nå, som lagres når Claude laster en med Skill-verktøyet.
+ */
+export function apply(chat: Chat, runId: string, ev: ClaudeEvent, hashes: SkillHashes = {}): Chat {
   if (runId !== chat.runId) return chat;
   switch (ev.kind) {
     case 'init':
-      return { ...chat, sessionId: ev.sessionId };
+      return { ...chat, sessionId: ev.sessionId, mcp: ev.mcp ?? chat.mcp };
+    case 'permission':
+      if (chat.items.some(i => i.kind === 'permission' && i.id === ev.id)) return chat;
+      return { ...chat, items: [...chat.items, { kind: 'permission', id: ev.id, tool: ev.tool, input: ev.input, state: 'pending' }] };
+    case 'permissionDone': {
+      const state: PermissionState = ev.behavior === 'allow' ? 'allowed' : ev.reason === 'user' ? 'denied' : ev.reason;
+      return { ...chat, items: chat.items.map(i => (i.kind === 'permission' && i.id === ev.id ? { ...i, state } : i)) };
+    }
     case 'text':
       return { ...chat, items: [...chat.items, { kind: 'assistant', text: ev.text }] };
     case 'tool': {
@@ -76,10 +167,12 @@ export function apply(chat: Chat, runId: string, ev: ClaudeEvent): Chat {
     }
     case 'toolResult': {
       const tool = chat.items.find((i): i is Extract<ChatItem, { kind: 'tool' }> => i.kind === 'tool' && i.id === ev.id);
-      const loadedSkills = tool?.name === 'Skill' && !ev.isError ? addSkill(chat.loadedSkills, tool.summary) : chat.loadedSkills;
+      const skill = tool?.name === 'Skill' && !ev.isError ? tool.summary : null;
       return {
         ...chat,
-        loadedSkills,
+        loadedSkills: skill ? addSkill(chat.loadedSkills, skill) : chat.loadedSkills,
+        // Lastes en skill på nytt med Skill-verktøyet, får den versjonen som gjelder nå
+        loadedVersions: skill ? withVersion(chat.loadedVersions, skill, hashes) : chat.loadedVersions,
         items: chat.items.map(i => (i.kind === 'tool' && i.id === ev.id ? { ...i, state: ev.isError ? 'error' : 'ok' } : i)),
       };
     }
@@ -89,11 +182,29 @@ export function apply(chat: Chat, runId: string, ev: ClaudeEvent): Chat {
       const secs = ev.durationMs != null ? ` · ${(ev.durationMs / 1000).toFixed(1)} s` : '';
       const text = ev.ok ? `Ferdig${ev.turns != null ? ` · ${ev.turns} steg` : ''}${secs}` : ev.error ?? 'Feil';
       // Verktøy som aldri fikk svar (avbrutt eller feil) er ikke lenger i gang
-      const items = chat.items.map(i => (i.kind === 'tool' && i.state === 'running' ? { ...i, state: ev.ok ? 'ok' : 'error' } as ChatItem : i));
+      const items = endPending(chat.items.map(i => (i.kind === 'tool' && i.state === 'running' ? { ...i, state: ev.ok ? 'ok' : 'error' } as ChatItem : i)));
       const context = chat.context && ev.contextWindow ? { ...chat.context, window: ev.contextWindow } : chat.context;
       return { ...chat, runId: null, context, sessionId: ev.sessionId ?? chat.sessionId, items: [...items, { kind: 'done', ok: ev.ok, text }] };
     }
   }
+}
+
+/** Spørsmål om lov som fortsatt venter, når kjøringen er over, er avvist av backenden */
+const endPending = (items: ChatItem[]) => items.map(i => (i.kind === 'permission' && i.state === 'pending' ? ({ ...i, state: 'ended' } as ChatItem) : i));
+
+/** Spørsmålene om lov i samtalen som venter på brukeren */
+export function pendingPermissions(chat: Chat): Extract<ChatItem, { kind: 'permission' }>[] {
+  return chat.items.filter((i): i is Extract<ChatItem, { kind: 'permission' }> => i.kind === 'permission' && i.state === 'pending');
+}
+
+/** «Tillat alltid i denne samtalen»: verktøyet sendes som `allowTools` med de neste meldingene */
+export function allowAlways(chat: Chat, tool: string): Chat {
+  return chat.alwaysAllowed.includes(tool) ? chat : { ...chat, alwaysAllowed: [...chat.alwaysAllowed, tool] };
+}
+
+/** MCP-serverne som må logges inn med `/mcp` i terminalen */
+export function needsAuth(chat: Chat): string[] {
+  return chat.mcp.filter(m => m.status === 'needs-auth').map(m => m.name);
 }
 
 /** Visningsnavn for verktøyene */
@@ -105,7 +216,19 @@ export const TOOL_LABEL: Record<string, string> = {
   Write: 'Skriver',
   Skill: 'Bruker skill',
   TodoWrite: 'Planlegger',
+  WebFetch: 'Henter fra nettet',
 };
+
+/** Visningsnavnet til et verktøy: `TOOL_LABEL`, eller «Figma: get_screenshot» for `mcp__figma__get_screenshot` */
+export function toolLabel(name: string): string {
+  if (TOOL_LABEL[name]) return TOOL_LABEL[name];
+  const m = name.match(/^mcp__([\w.-]+?)__([\w.-]+)$/);
+  if (!m) return name;
+  if (m[1] === 'kravforvaltning' && m[2] === 'save_sketch') return 'Lagrer skisse';
+  // claude.ai-koblinger: `claude_ai_Atlassian_Rovo` → «Atlassian Rovo»
+  const server = m[1].replace(/^claude_ai_/, '').replace(/_/g, ' ');
+  return `${server.charAt(0).toUpperCase()}${server.slice(1)}: ${m[2]}`;
+}
 
 /** En lagret samtale i panelet. Claude Code husker selve samtalen (`sessionId`); her ligger det vieweren viser. */
 export interface Conversation {
@@ -135,11 +258,23 @@ export function currentChat(cs: Conversations): Conversation | null {
   return cs.list.find(c => c.id === cs.current) ?? null;
 }
 
-/** Ny, tom samtale øverst, og åpen, med `skill` valgt. En tom samtale som allerede finnes, gjenbrukes. */
-export function createConversation(cs: Conversations, id: string, now: number, skill: string | null = null): Conversations {
+/**
+ * Ny, tom samtale øverst, og åpen, med `skill` valgt. En tom samtale som allerede finnes, gjenbrukes.
+ * `continuesFrom`: samtalen den nye fortsetter fra (vises i den tomme samtalen).
+ */
+export function createConversation(cs: Conversations, id: string, now: number, skill: string | null = null, continuesFrom: string | null = null): Conversations {
   const empty = cs.list.find(c => !c.chat.items.length && !c.chat.runId);
-  if (empty) return { ...cs, current: empty.id };
-  return { list: [{ id, title: UNTITLED, createdAt: now, updatedAt: now, chat: { ...EMPTY_CHAT, skill } }, ...cs.list], current: id };
+  if (empty) {
+    if (!continuesFrom) return { ...cs, current: empty.id };
+    const chat = { ...empty.chat, skill, continuesFrom };
+    return { list: cs.list.map(c => (c.id === empty.id ? { ...c, chat } : c)), current: empty.id };
+  }
+  return { list: [{ id, title: UNTITLED, createdAt: now, updatedAt: now, chat: { ...EMPTY_CHAT, skill, continuesFrom } }, ...cs.list], current: id };
+}
+
+/** Ny samtale for en utførekjøring i kode-repoet, med fast tittel (ikke første melding, som er handoff-prompten) */
+export function createExecuteConversation(cs: Conversations, id: string, now: number, target: ExecuteTarget, title: string): Conversations {
+  return { list: [{ id, title, createdAt: now, updatedAt: now, chat: { ...EMPTY_CHAT, target } }, ...cs.list], current: id };
 }
 
 /** Sletter samtalen; er den åpen, åpnes den neste i lista */
@@ -173,10 +308,11 @@ export function updateConversation(cs: Conversations, id: string, fn: (chat: Cha
 }
 
 /** Sender en hendelse til samtalen som eier kjøringen. `false` når ingen samtale venter på den. */
-export function applyEvent(cs: Conversations, runId: string, ev: ClaudeEvent, now: number): Conversations | false {
+export function applyEvent(cs: Conversations, runId: string, ev: ClaudeEvent, now: number, hashes: SkillHashes = {}): Conversations | false {
   const conv = cs.list.find(c => c.chat.runId === runId);
-  return conv ? updateConversation(cs, conv.id, chat => apply(chat, runId, ev), now) : false;
+  return conv ? updateConversation(cs, conv.id, chat => apply(chat, runId, ev, hashes), now) : false;
 }
+
 
 /**
  * Leser samtalene tilbake fra lagringen. Kjøringer som ikke lenger pågår i backenden (`active`),
@@ -188,9 +324,11 @@ export function restoreConversations(raw: unknown, active: string[]): Conversati
   const list = r.list
     .filter((c): c is Conversation => !!c && typeof c.id === 'string' && !!c.chat && Array.isArray(c.chat.items))
     .map(c => {
-      const chat = { ...EMPTY_CHAT, ...c.chat };
+      // `skillVersions` fra den første utgaven er versjonen på disk, ikke den som ble lastet (se `loadedVersions`)
+      const { skillVersions: _old, ...rest } = c.chat as Chat & { skillVersions?: unknown };
+      const chat: Chat = { ...EMPTY_CHAT, ...rest };
       if (!chat.runId || active.includes(chat.runId)) return { ...c, chat };
-      const items = chat.items.map(i => (i.kind === 'tool' && i.state === 'running' ? ({ ...i, state: 'ok' } as ChatItem) : i));
+      const items = endPending(chat.items.map(i => (i.kind === 'tool' && i.state === 'running' ? ({ ...i, state: 'ok' } as ChatItem) : i)));
       return {
         ...c,
         chat: { ...chat, runId: null, items: [...items, { kind: 'done', ok: false, text: 'Avsluttet mens siden lastet inn på nytt. Claude husker svaret; spør videre for å se det.' } as ChatItem] },

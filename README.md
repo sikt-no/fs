@@ -16,6 +16,8 @@ https://github.com/sikt-no/fs/discussions
 Funksjonelle krav er en metode for å beskrive FS som produkt på en systematisk måte, som åpner for samarbeid og medvirkning med brukere som kjenner studieadministrativt arbeid godt.
 https://github.com/sikt-no/fs/tree/main/Krav
 
+Er du ny i kravarbeidet? Start med [Kom i gang med krav i FS](https://sikt-no.github.io/fs/kom-i-gang.html). Den viser hvor kravene ligger, hvordan en kravfil ser ut, og hvordan du bidrar. Konvensjonene står i [`krav/README.md`](krav/README.md).
+
 ### Live-visning av krav
 `fs-kravforvaltning/` er en lokal nettside som viser alle `.feature`-filene i `krav/` og oppdateres med én gang en fil lagres:
 

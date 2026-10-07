@@ -3,12 +3,12 @@ import { readFile } from 'node:fs/promises';
 import { join } from 'node:path';
 import { promisify } from 'node:util';
 import type { GitChange, GitCode, GitInfo } from '../shared/model.ts';
+import { isEditablePath, isSketchPath } from '../shared/paths.ts';
 
 const exec = promisify(execFile);
-const isKravFile = (p: string) => p.endsWith('.feature') || p.endsWith('.md');
 
 /**
- * Leser endringer under krav/ med git: ucommitted (staget, ustaget og nye filer) mot HEAD,
+ * Leser endringer under krav/ (og spesifikasjonene og utforing.md under tasks/) med git: ucommitted (staget, ustaget og nye filer) mot HEAD,
  * og committet siden merge-base med main. Gir `null` utenfor et git-repo.
  */
 export async function readGit(repoRoot: string): Promise<GitInfo | null> {
@@ -21,7 +21,7 @@ export async function readGit(repoRoot: string): Promise<GitInfo | null> {
 
   const diff = async (...range: string[]): Promise<GitChange[]> => {
     const args = ['diff', '--no-renames', '-z', ...range];
-    const [names, nums] = await Promise.all([git(...args, '--name-status', '--', 'krav'), git(...args, '--numstat', '--', 'krav')]);
+    const [names, nums] = await Promise.all([git(...args, '--name-status', '--', 'krav', 'tasks'), git(...args, '--numstat', '--', 'krav', 'tasks')]);
     const stats = new Map<string, [number, number]>();
     // numstat -z: «pluss\tminus\tsti\0»; binærfiler har «-»
     for (const rec of nums.split('\0')) {
@@ -33,7 +33,7 @@ export async function readGit(repoRoot: string): Promise<GitInfo | null> {
     const out: GitChange[] = [];
     for (let i = 0; i + 1 < parts.length; i += 2) {
       const path = parts[i + 1];
-      if (!isKravFile(path)) continue;
+      if (!isEditablePath(path)) continue;
       const code = (parts[i][0] === 'A' || parts[i][0] === 'D' ? parts[i][0] : 'M') as GitCode;
       const [plus, minus] = stats.get(path) ?? [0, 0];
       out.push({ path, code, plus, minus });
@@ -42,10 +42,11 @@ export async function readGit(repoRoot: string): Promise<GitInfo | null> {
   };
 
   const untracked = async (): Promise<GitChange[]> => {
-    const paths = (await git('ls-files', '-z', '--others', '--exclude-standard', '--', 'krav')).split('\0').filter(isKravFile);
+    const paths = (await git('ls-files', '-z', '--others', '--exclude-standard', '--', 'krav', 'tasks')).split('\0').filter(isEditablePath);
     return Promise.all(
       paths.map(async path => {
-        const text = await readFile(join(repoRoot, path), 'utf8').catch(() => '');
+        // Skisser er bilder: ingen linjer å telle
+        const text = isSketchPath(path) ? '' : await readFile(join(repoRoot, path), 'utf8').catch(() => '');
         const plus = text ? text.split('\n').length - (text.endsWith('\n') ? 1 : 0) : 0;
         return { path, code: 'U' as const, plus, minus: 0 };
       }),

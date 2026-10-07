@@ -90,6 +90,21 @@ test('lag får planbokser, completion-filer og verification', () => {
   assert.equal(t.spec, true);
 });
 
+test('specKrav: kravene under ## Krav i spesifikasjonene, også fra eldre lenker til krav-input', () => {
+  const ny = '# Spec: Søk\n\n## Krav\n\n- **`sok.feature`** (`@BRU-BRU-SOK-001`) — søk. ([krav/07 Bru/12 Bru/01 Søk/sok.feature](../../../../krav/07%20Bru/12%20Bru/01%20S%C3%B8k/sok.feature))\n\n### Utenfor scope (`@draft`)\n\n- **`sok.feature` — regel `Eksport`** — venter på: format\n';
+  const gammel = '# Spec: Søk\n\n## Krav\n\n- **`sok.feature`** (`@BRU-BRU-SOK-001`) — søk. ([lenke](krav-input/local/krav/07%20Bru/12%20Bru/01%20S%C3%B8k/sok.feature))\n- **`detaljer.feature`** (`@BRU-BRU-SOK-002`) — detaljer. ([lenke](krav-input/local/krav/07%20Bru/12%20Bru/01%20S%C3%B8k/detaljer.feature))\n';
+  const t = parseTask(raw(['spec/spec-sok.md', 'spec/spec-gammel.md'], { 'spec/spec-sok.md': ny, 'spec/spec-gammel.md': gammel }));
+  assert.deepEqual(
+    t.specKrav.map(k => [k.id, k.path]),
+    [
+      ['@BRU-BRU-SOK-001', 'krav/07 Bru/12 Bru/01 Søk/sok.feature'],
+      ['@BRU-BRU-SOK-002', 'krav/07 Bru/12 Bru/01 Søk/detaljer.feature'],
+    ],
+    'samme Feature-ID i to spesifikasjoner gir ett krav',
+  );
+  assert.deepEqual(parseTask(raw([])).specKrav, []);
+});
+
 test('review-utfallet leses fra avkrysset boks i Utfall', () => {
   const r = (utfall: string) =>
     parseTask(raw(['reviews/r01-prioritert-til-utforskning.md'], { 'reviews/r01-prioritert-til-utforskning.md': `# Review\n\n- **Reviewer**: @ola\n\n## Utfall\n\n${utfall}` })).reviews[0];

@@ -1,6 +1,6 @@
 # language: no
 # GitHub: #482
-@BRU-PER-GRU-004 @must @planned
+@BRU-PER-GRU-004 @must @in-progress
 Egenskap: Aktivere og deaktivere en personbrukers samlede tilganger
   Som brukeradministrator
   ønsker jeg å deaktivere og senere reaktivere en personbrukers samlede tilganger og roller
@@ -19,7 +19,7 @@ Egenskap: Aktivere og deaktivere en personbrukers samlede tilganger
       Og alle personbrukerens tildelinger blir inaktive
       Og tildelingene beholdes — de fjernes ikke
       Og personbrukeren kan ikke nå FS-data ved neste innloggingsforsøk
-      Og endringen er sporbar i historikk
+      Og det lagres når deaktiveringen skjedde og hvem som gjorde den
 
     Scenario: Reaktivere en deaktivert personbruker
       Gitt en personbruker er deaktivert
@@ -27,7 +27,8 @@ Egenskap: Aktivere og deaktivere en personbrukers samlede tilganger
       Så blir personbrukerens status «Aktiv»
       Og de tidligere tildelte tilgangene og rollene blir aktive igjen
       Og tildelinger som hadde utløpt på grunn av tidsbegrensning før deaktiveringen, blir ikke automatisk aktive
-      Og endringen er sporbar i historikk
+      Og det lagres når reaktiveringen skjedde og hvem som gjorde den
+      Og det som ble lagret om den tidligere deaktiveringen, beholdes
 
   Regel: Skille mellom deaktivering og fjerning
 

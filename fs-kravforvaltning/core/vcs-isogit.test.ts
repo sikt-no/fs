@@ -94,13 +94,27 @@ test('klone, se endringer, publisere som branch og hente main', { skip: !hasGit 
   git(dir, 'config', 'user.email', 'r@example.com');
 
   const prs: { head: string; title: string }[] = [];
-  const vcs = isoVcs(dir, { openPr: async (_u, _t, pr) => (prs.push(pr), 'https://example.com/pr/1') });
+  const compared: [string, string][] = [];
+  let compareFails = false;
+  const vcs = isoVcs(dir, {
+    openPr: async (_u, _t, pr) => (prs.push(pr), 'https://example.com/pr/1'),
+    compare: async (_u, base, head) => {
+      if (compareFails) throw new Error('rate limit');
+      compared.push([base, head]);
+      return { commits: 2, features: 1, author: '@kari', date: '2026-09-30T10:00:00Z' };
+    },
+  });
 
   const feature = 'krav/01 A/10 B/01 C/se_ting.feature';
   const fresh = 'krav/01 A/10 B/01 C/ny_ting.feature';
   writeFileSync(join(dir, feature), '# language: no\n@draft\nEgenskap: Se ting\n');
   writeFileSync(join(dir, fresh), '# language: no\nEgenskap: Ny\n');
   writeFileSync(join(dir, 'annet.txt'), 'endret, men ikke krav\n');
+  // En skisse (binærfil) fra save_sketch kan også sendes med
+  const sketch = 'tasks/opptak/x/spec/krav-input/sketches/s.png';
+  const png = Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a, 0x00, 0xff, 0x0a]);
+  mkdirSync(join(dir, 'tasks/opptak/x/spec/krav-input/sketches'), { recursive: true });
+  writeFileSync(join(dir, sketch), png);
 
   const info = await vcs.info();
   assert.equal(info?.branch, 'main');
@@ -109,13 +123,14 @@ test('klone, se endringer, publisere som branch og hente main', { skip: !hasGit 
     [
       [fresh, 'U', 2, 0],
       [feature, 'M', 1, 0],
+      [sketch, 'U', 0, 0],
     ],
   );
 
   await assert.rejects(vcs.publish({ paths: [feature], branch: 'x', title: 't', body: '' }, null), /innlogget/);
   await assert.rejects(vcs.publish({ paths: ['annet.txt'], branch: 'x', title: 't', body: '' }, 'tok'), /Ugyldig sti/);
 
-  const res = await vcs.publish({ paths: [feature, fresh], branch: 'Status på «Se ting»', title: 'Sett Se ting til draft', body: 'Fra vieweren' }, 'tok');
+  const res = await vcs.publish({ paths: [feature, fresh, sketch], branch: 'Status på «Se ting»', title: 'Sett Se ting til draft', body: 'Fra vieweren' }, 'tok');
   assert.equal(res.branch, 'krav/status-pa-se-ting');
   assert.equal(res.url, 'https://example.com/pr/1');
   assert.deepEqual(prs, [{ head: 'krav/status-pa-se-ting', base: 'main', title: 'Sett Se ting til draft', body: 'Fra vieweren' }]);
@@ -126,6 +141,7 @@ test('klone, se endringer, publisere som branch og hente main', { skip: !hasGit 
   assert.match(show(feature), /@draft/);
   assert.match(show(fresh), /Egenskap: Ny/);
   assert.equal(show('annet.txt'), 'ikke krav');
+  assert.deepEqual(execFileSync('git', ['-C', origin, 'show', `krav/status-pa-se-ting:${sketch}`]), png, 'bildet er byte for byte det samme');
   assert.equal(git(origin, 'log', '-1', '--format=%an|%s', 'krav/status-pa-se-ting'), 'Redaktør|Sett Se ting til draft');
 
   // Arbeidskatalogen og HEAD er urørt, og den lokale branchen er ryddet bort
@@ -143,9 +159,16 @@ test('klone, se endringer, publisere som branch og hente main', { skip: !hasGit 
   git(other, '-c', 'user.name=A', '-c', 'user.email=a@example.com', 'commit', '-q', '-am', 'readme');
   git(other, 'push', '-q', 'origin', 'main');
 
-  assert.equal(await vcs.behind!(null), true, 'main på GitHub er nyere');
+  const remote = git(origin, 'rev-parse', 'main');
+  const status = await vcs.mainStatus!(null);
+  assert.equal(status.behind, true, 'main på GitHub er nyere');
+  assert.equal(status.remote, remote);
+  assert.deepEqual(status.info, { commits: 2, features: 1, author: '@kari', date: '2026-09-30T10:00:00Z' });
+  assert.deepEqual(compared, [[git(dir, 'rev-parse', 'main'), remote]], 'sammenligner klonen med main på GitHub');
+  compareFails = true;
+  assert.deepEqual(await vcs.mainStatus!(null), { behind: true, remote }, 'uten svar fra GitHub: status uten info');
   await vcs.pull!(null);
-  assert.equal(await vcs.behind!(null), false, 'hentet');
+  assert.deepEqual(await vcs.mainStatus!(null), { behind: false }, 'hentet');
   assert.match(readFileSync(join(dir, 'krav/README.md'), 'utf8'), /Oppdatert/);
   const afterPull = await vcs.info();
   assert.deepEqual(afterPull?.uncommitted, [], 'endringene er nå på main');

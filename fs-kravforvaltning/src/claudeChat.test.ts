@@ -122,3 +122,152 @@ test('kontekstbruk og lastede skills følges gjennom samtalen', () => {
   assert.equal(contextLabel({ used: 150000, window: 200000 }), '150k av 200k · 75 %');
   assert.equal(contextLabel({ used: 800, window: null }), '800');
 });
+
+test('filene og mappene lagt ved med @ lagres på meldingen', () => {
+  const c = send(EMPTY_CHAT, 'Sammenlign', 'krav/a.feature', ['krav/02 Opptak']).chat;
+  assert.deepEqual(c.items.at(-1), { kind: 'user', text: 'Sammenlign', path: 'krav/a.feature', skill: null, mentions: ['krav/02 Opptak'] });
+  assert.ok(!('mentions' in send(EMPTY_CHAT, 'x', null).chat.items[0]), 'uten omtaler er feltet borte');
+});
+
+import { staleSkills } from './claudeChat.ts';
+
+test('versjonen av skillen lagres når den lastes, og en endring på disk gjør den utdatert', () => {
+  const v1 = { 'fs-krav': 'a1', 'fs-verify': 'b1' };
+  let c = chooseSkill(EMPTY_CHAT, 'fs-krav');
+  const first = send(c, 'Hei', null, [], v1);
+  assert.equal(first.invoke, true);
+  c = started(first.chat, 'r1');
+  assert.deepEqual(c.loadedVersions, { 'fs-krav': 'a1' });
+  // Claude laster fs-verify med Skill-verktøyet
+  c = apply(c, 'r1', { kind: 'tool', id: 's', name: 'Skill', summary: 'fs-verify' }, v1);
+  c = apply(c, 'r1', { kind: 'toolResult', id: 's', isError: false }, v1);
+  assert.deepEqual(c.loadedVersions, { 'fs-krav': 'a1', 'fs-verify': 'b1' });
+  assert.deepEqual(staleSkills(c, v1), []);
+  assert.deepEqual(staleSkills(c, { 'fs-krav': 'a2', 'fs-verify': 'b1' }), ['fs-krav']);
+  assert.deepEqual(staleSkills(c, {}), [], 'ukjent versjon (ikke hentet ennå) er ikke utdatert');
+  // Neste melding laster ikke skillen på nytt, og versjonen blir stående
+  assert.deepEqual(send(c, 'Mer', null, [], { 'fs-krav': 'a2' }).chat.loadedVersions['fs-krav'], 'a1');
+});
+
+test('oppsummeringen laster ikke skillen og merkes som preset', () => {
+  const c = chooseSkill(EMPTY_CHAT, 'fs-krav');
+  const r = send(c, 'Oppsummer', null, [], { 'fs-krav': 'a1' }, 'summary');
+  assert.equal(r.invoke, false);
+  assert.deepEqual(r.chat.loadedVersions, {});
+  assert.equal((r.chat.items[0] as { preset?: string }).preset, 'summary');
+});
+
+test('«Lag forslag til PR» laster ikke skillen og merkes som preset', () => {
+  const c = chooseSkill(EMPTY_CHAT, 'fs-krav');
+  const r = send(c, 'Lag PR', null, [], { 'fs-krav': 'a1' }, 'pr');
+  assert.equal(r.invoke, false);
+  assert.equal((r.chat.items[0] as { preset?: string }).preset, 'pr');
+});
+
+test('gamle samtaler uten lagret versjon er utdatert når skillen er endret på disk etter at de ble startet', () => {
+  const old = { ...EMPTY_CHAT, loadedSkills: ['fs-krav', 'fs-verify'] };
+  const hashes = { 'fs-krav': 'a2', 'fs-verify': 'b1' };
+  const changedAt = { 'fs-krav': 2000, 'fs-verify': 500 };
+  assert.deepEqual(staleSkills(old, hashes, changedAt, 1000), ['fs-krav'], 'fs-krav endret etter at samtalen startet, fs-verify før');
+  assert.deepEqual(staleSkills(old, hashes, changedAt), [], 'uten tidspunkt for samtalen');
+  assert.deepEqual(staleSkills(old, hashes, {}, 1000), [], 'ukjent endringstid');
+  // En lagret versjon går foran tidspunktet: lastet etter endringen, så den er ikke utdatert
+  assert.deepEqual(staleSkills({ ...old, loadedVersions: { 'fs-krav': 'a2' } }, hashes, changedAt, 1000), []);
+});
+
+test('skillVersions fra den første utgaven (versjonen på disk, ikke den som ble lastet) brukes ikke', () => {
+  const chat = { ...EMPTY_CHAT, loadedSkills: ['fs-krav'], skillVersions: { 'fs-krav': 'a2' } };
+  const cs = restoreConversations({ list: [{ id: 'x', title: 't', createdAt: 1000, updatedAt: 1000, chat }], current: 'x' }, []);
+  const c = cs.list[0].chat;
+  assert.equal('skillVersions' in c, false);
+  assert.deepEqual(c.loadedVersions, {});
+  assert.deepEqual(staleSkills(c, { 'fs-krav': 'a2' }, { 'fs-krav': 2000 }, cs.list[0].createdAt), ['fs-krav']);
+});
+
+test('ny samtale som fortsetter fra en annen, også når en tom gjenbrukes, og overlever restore', () => {
+  let cs = createConversation(NO_CONVERSATIONS, 'a', 1, 'fs-krav');
+  cs = updateConversation(cs, 'a', c => send(c, 'Hei', null).chat, 2);
+  cs = createConversation(cs, 'b', 3, 'fs-verify', 'a');
+  assert.equal(cs.current, 'b');
+  assert.equal(currentChat(cs)!.chat.continuesFrom, 'a');
+  assert.equal(currentChat(cs)!.chat.skill, 'fs-verify');
+  const again = createConversation(cs, 'c', 4, 'fs-krav', 'a');
+  assert.equal(again.list.length, 2, 'den tomme samtalen gjenbrukes');
+  assert.equal(currentChat(again)!.chat.skill, 'fs-krav');
+  const restored = restoreConversations(JSON.parse(JSON.stringify(cs)), []);
+  assert.equal(restored.list.find(c => c.id === 'b')!.chat.continuesFrom, 'a');
+  const legacy = restoreConversations({ list: [{ id: 'z', title: 't', createdAt: 1, updatedAt: 1, chat: { items: [] } }], current: 'z' }, []);
+  assert.deepEqual(legacy.list[0].chat.loadedVersions, {});
+  assert.equal(legacy.list[0].chat.continuesFrom, null);
+});
+
+import { editedFiles } from './claudeChat.ts';
+
+test('editedFiles: filene Claude har endret, relative til repoet, også under tasks/', () => {
+  let c = started(EMPTY_CHAT, 'r');
+  const tool = (id: string, name: string, summary: string, isError = false) => {
+    c = apply(c, 'r', { kind: 'tool', id, name, summary });
+    c = apply(c, 'r', { kind: 'toolResult', id, isError });
+  };
+  tool('1', 'Read', 'krav/a.feature');
+  tool('2', 'Write', '/Users/x/repo/tasks/brukere/spec/verify-2026-09-29.md');
+  tool('3', 'Edit', 'krav/b.feature');
+  tool('4', 'Edit', 'krav/c.feature', true);
+  tool('5', 'Edit', 'krav/b.feature');
+  assert.deepEqual(editedFiles(c), ['tasks/brukere/spec/verify-2026-09-29.md', 'krav/b.feature']);
+});
+
+import { allowAlways, needsAuth, pendingPermissions, toolLabel } from './claudeChat.ts';
+
+test('spørsmål om lov: kortet legges til én gang, og svaret oppdaterer det', () => {
+  let c = started(EMPTY_CHAT, 'r');
+  const perm = { kind: 'permission' as const, id: 'r:1', tool: 'mcp__figma__get_screenshot', input: { nodeId: '1:2' }, toolUseId: 't' };
+  c = apply(c, 'r', perm);
+  c = apply(c, 'r', perm); // igjen etter omlasting (claudePending)
+  assert.equal(c.items.filter(i => i.kind === 'permission').length, 1);
+  assert.deepEqual(pendingPermissions(c).map(p => p.id), ['r:1']);
+  c = apply(c, 'r', { kind: 'permissionDone', id: 'r:1', behavior: 'allow', reason: 'user' });
+  assert.deepEqual(pendingPermissions(c), []);
+  assert.equal((c.items.at(-1) as { state: string }).state, 'allowed');
+  for (const [reason, state] of [['user', 'denied'], ['timeout', 'timeout'], ['closed', 'closed'], ['ended', 'ended']] as const) {
+    const d = apply(apply(started(EMPTY_CHAT, 'r'), 'r', perm), 'r', { kind: 'permissionDone', id: 'r:1', behavior: 'deny', reason });
+    assert.equal((d.items.at(-1) as { state: string }).state, state);
+  }
+  // Et spørsmål som fortsatt venter når kjøringen er ferdig, er avvist
+  const done = apply(apply(started(EMPTY_CHAT, 'r'), 'r', perm), 'r', { kind: 'done', ok: true, sessionId: 's', durationMs: null, turns: null, error: null });
+  assert.equal((done.items.find(i => i.kind === 'permission') as { state: string }).state, 'ended');
+});
+
+test('tillat alltid lagres på samtalen, og MCP-servere som må logges inn', () => {
+  const c = allowAlways(allowAlways(EMPTY_CHAT, 'WebFetch'), 'WebFetch');
+  assert.deepEqual(c.alwaysAllowed, ['WebFetch']);
+  const i = apply(started(EMPTY_CHAT, 'r'), 'r', { kind: 'init', sessionId: 's', model: null, skills: [], mcp: [{ name: 'figma', status: 'needs-auth' }, { name: 'neon', status: 'connected' }] });
+  assert.deepEqual(needsAuth(i), ['figma']);
+  assert.deepEqual(needsAuth(apply(started(EMPTY_CHAT, 'r'), 'r', { kind: 'init', sessionId: 's', model: null, skills: [] })), []);
+});
+
+test('gamle samtaler uten alwaysAllowed og mcp kan leses, og ventende spørsmål avsluttes', () => {
+  const old = { list: [{ id: 'a', title: 't', createdAt: 1, updatedAt: 1, chat: { items: [{ kind: 'permission', id: 'x:1', tool: 'WebFetch', input: {}, state: 'pending' }], runId: 'x' } }], current: 'a' };
+  const cs = restoreConversations(old, []);
+  assert.deepEqual(cs.list[0].chat.alwaysAllowed, []);
+  assert.deepEqual(cs.list[0].chat.mcp, []);
+  assert.equal((cs.list[0].chat.items[0] as { state: string }).state, 'ended');
+});
+
+test('toolLabel for innebygde og MCP-verktøy', () => {
+  assert.equal(toolLabel('Read'), 'Leser');
+  assert.equal(toolLabel('mcp__figma__get_screenshot'), 'Figma: get_screenshot');
+  assert.equal(toolLabel('mcp__kravforvaltning__save_sketch'), 'Lagrer skisse');
+  assert.equal(toolLabel('mcp__claude_ai_Atlassian_Rovo__getJiraIssue'), 'Atlassian Rovo: getJiraIssue');
+  assert.equal(toolLabel('Ukjent'), 'Ukjent');
+});
+
+test('editedFiles tar med filene under tasks/ og skissene fra save_sketch', () => {
+  let c = started(EMPTY_CHAT, 'r');
+  c = apply(c, 'r', { kind: 'tool', id: 'a', name: 'Write', summary: '/repo/tasks/opptak/x/spec/spec-x.md' });
+  c = apply(c, 'r', { kind: 'tool', id: 'b', name: 'mcp__kravforvaltning__save_sketch', summary: 'tasks/opptak/x/spec/krav-input/sketches/a.png' });
+  c = apply(c, 'r', { kind: 'tool', id: 'c', name: 'Edit', summary: 'krav/a.feature' });
+  for (const id of ['a', 'b', 'c']) c = apply(c, 'r', { kind: 'toolResult', id, isError: false });
+  assert.deepEqual(editedFiles(c), ['tasks/opptak/x/spec/spec-x.md', 'tasks/opptak/x/spec/krav-input/sketches/a.png', 'krav/a.feature']);
+  assert.deepEqual(c.touched, ['krav/a.feature']);
+});

@@ -3,7 +3,7 @@
 ## Metadata
 
 - **Issue**: [sikt-no/fs#211](https://github.com/sikt-no/fs/issues/211)
-- **Initiativ**: #216 Ferdigstilling av plasstildeling i opptak
+- **Initiativ**: #211 Opprette og vedlikeholde opptak
 - **Domene**: opptak
 - **Slug**: opprette-og-vedlikeholde-opptak
 - **Fase**: utforskning
@@ -20,7 +20,7 @@
   - Jira Epic: [TAKE-318](https://sikt.atlassian.net/browse/TAKE-318)
   - Confluence: [T3 2026 Forberede opptak og etterbehandling](https://sikt.atlassian.net/wiki/spaces/STUDIEADM/pages/4981817377)
   - Tekstredigering: [sikt-no/fs#214](https://github.com/sikt-no/fs/issues/214)
-- **Krav (Gherkin)**: `krav/02 Opptak/11 Opptak/` (skal utarbeides)
+- **Krav (Gherkin)**: `krav/02 Opptak/11 Opprette og vedlikeholde opptak/` utarbeidet
 
 ## Kort beskrivelse
 
@@ -28,38 +28,29 @@ Opptaksforvalter skal kunne opprette et opptak — samordnet eller lokalt — me
 
 ## Oppgaver
 
-| # | Oppgave                                                              | MoSCoW | Status | Github-issue | Jira |
-|---|----------------------------------------------------------------------|--------|--------|-------------|------|
-| 1 | Opprette et opptak (samordnet eller lokalt)                          | Must | Løst | | |
-| 2 | Invitere læresteder til samordnet opptak                             | Must | Pågår — synk og replika mot ureg må fikses, nytt design, begrense til hhv. fagskoler og UH | | |
-| 3 | Sette grunnleggende innstillinger (navn, regelverkssamling, opptakstype) | Must | Løst | [#577](https://github.com/sikt-no/fs/issues/577) | [TAKE-319](https://sikt.atlassian.net/browse/TAKE-319) |
-| 4 | Sette innstillinger i opptaket                                       | Must | Løst | | |
-| 5 | Konfigurere søknad (nummerserie, maks alternativer)                  | Must | Løst (tidlig opptak gjenstår) | [#578](https://github.com/sikt-no/fs/issues/578) | [TAKE-320](https://sikt.atlassian.net/browse/TAKE-320) |
-| 6 | Sette frister og hendelser for opptaket                              | Must | | [#579](https://github.com/sikt-no/fs/issues/579) | [TAKE-321](https://sikt.atlassian.net/browse/TAKE-321) |
-| 6-1 | Åpne og stenge for redigering og trekking av utdanningstilbud      | Must | | | |
-| 6-2 | Søkeperiode og søknadsfrister                                      | Must | | | |
-| 6-3 | Omprioriteringsfrist og frist for sletting av søknadsalternativer  | Must | | | |
-| 6-4 | Dokumentasjonsfrister (ordinær, tidlig, ettersending)               | Must | | | |
-| 6-5 | Frister for tidlig opptak                                          | Must | | | |
-| 6-6 | Frister for ledige studieplasser                                   | Must | | | |
-| 6-7 | Opptaksresultat (hovedopptak kjøres, forventet svar, første svarfrist) | Must | | | |
-| 6-8 | Frist for endring av utdanningsbakgrunn                            | Must | | | |
-| 6-9 | ~~Trekkfrist for utdanningstilbud~~                                | ~~Must~~ | Slått sammen med 6-1 (stengefrist dekker trekking) | | |
-| 7 | Sette fellestekster for opptaket som blir synlig for søkere          | Won't | Informasjon utledes fra innstillinger, tekster forvaltes i repo | [#214](https://github.com/sikt-no/fs/issues/214) | [TAKE-322](https://sikt.atlassian.net/browse/TAKE-322) |
-| 8 | Legge til utdanningstilbud i opptak (egen oppgave)                   | Must | | Se [utdanningstilbud](../utdanningstilbud/) | |
-| 9 | Svarmeldingsmal (juridisk kjerne + parametere + valgfritt tillegg)   | Won't | Utsatt til etter T3 2027 | [#214](https://github.com/sikt-no/fs/issues/214) | [TAKE-323](https://sikt.atlassian.net/browse/TAKE-323) |
-| 10 | Legge til utdanningsbakgrunner med avvikende frister                | Must | Dekket i frister_og_hendelser.feature | | |
-| 11 | Saksbehandlertildelingsregler for samordnet opptak                  | Must | @openquestion — jobbes med av annet team | | |
-| 12 | Gjenbruke innstillinger fra tidligere opptak                        | Must | @draft @openquestion — hva kopieres og hva kopieres ikke? | | |
-| 13 | Deaktivere opptak                                                   | Must | @draft — utsatt til senere iterasjon | | |
-| 14 | ~~Interne saksbehandlingsfrister~~                                  | ~~Should~~ | Fjernet — saksbehandling styres av publiseringsdatoer per opptaksrunde | | |
+| #  | Oppgave                                                              | MoSCoW     | Status                                                                                     | Kommentar                                        | Jira |
+|----|----------------------------------------------------------------------|------------|--------------------------------------------------------------------------------------------|--------------------------------------------------|------|
+| 1  | Opprette et opptak med navn, regelverkssamling og opptakstype        | Must       | Pågår                                                                                      | [#577](https://github.com/sikt-no/fs/issues/577) | [TAKE-379](https://sikt.atlassian.net/browse/TAKE-379) |
+| 2  | Invitere læresteder til samordnet opptak                             | Must       | Pågår — synk og replika mot ureg må fikses, nytt design, begrense til hhv. fagskoler og UH |                                                  | [TAKE-380](https://sikt.atlassian.net/browse/TAKE-380) |
+| 4  | Sette innstillinger i opptaket (inkl. startnummer, maks alternativer) | Must       | Pågår                                                                                      | [#578](https://github.com/sikt-no/fs/issues/578) | [TAKE-320](https://sikt.atlassian.net/browse/TAKE-320) |
+| 6  | Sette frister og hendelser for opptaket                              | Must       | Pågår                                                                                      | [#579](https://github.com/sikt-no/fs/issues/579) | [TAKE-321](https://sikt.atlassian.net/browse/TAKE-321) |
+| 7  | Legg til utdanningsbakgrunner for opptaket og sette avvikende frister | Must       | Velge: innstillinger.feature, frister: frister_og_hendelser.feature                        |                                                  | [TAKE-381](https://sikt.atlassian.net/browse/TAKE-381) |
+| 8  | Legg til saksbehandlertildelingsregler for samordnet opptak          | Must       | En regeltype som legges til eksplisitt på samordnet opptak                                 | Løses av Puff                                    | [TAKE-382](https://sikt.atlassian.net/browse/TAKE-382) |
+| 9  | Legge til utdanningstilbud i opptak (egen oppgave)              | Must       | Løses fra legge utdanningstilbud til opptak                                                | Løses av Shinkansen, se [utdanningstilbud](../utdanningstilbud/)      | |
+| 10 | Hendelseslogg for opptak                                             | Should     | @draft — venter på generell løsning                                                        |                                                  | |
+| 11 | Sette fellestekster for opptaket som blir synlig for søkere | Won't      | Informasjon utledes fra innstillinger, tekster forvaltes i repo                            | [#214](https://github.com/sikt-no/fs/issues/214) | [TAKE-322](https://sikt.atlassian.net/browse/TAKE-322) |
+| 12 | Svarmeldingsmal (juridisk kjerne + parametere + valgfritt tillegg) | Won't      | Utsatt til senere iterasjon, se i sammenheng med tekstforvaltning?                         | [#214](https://github.com/sikt-no/fs/issues/214) | [TAKE-323](https://sikt.atlassian.net/browse/TAKE-323) |
+| 13 | Gjenbruke innstillinger fra tidligere opptak                         | Won't      | Utsatt til senere iterasjon @draft @openquestion — hva kopieres og hva kopieres ikke?      |                                                  | |
+| 14 | Deaktivere opptak                                                    | Won't      | @draft — utsatt til senere iterasjon                                                       |                                                  | |
+| 15 | ~~Interne saksbehandlingsfrister~~                                   | ~~Should~~ | Fjernet — saksbehandling styres av publiseringsdatoer per opptaksrunde                     |                                                  | |
+
 
 ## Workshop 2026-09-14: oppgavedeling og status
 
-**Team:** Shiitake | **Produksjonsfrist:** 1. nov 2026 (mindre rettelser til 15. nov)
+**Team:** Shiitake | **Produksjonsfrist:** 1. nov 2026 (mindre rettelser til 13. nov)
 
 **Løst:**
-- Gi navn, legge til organisasjoner for samordning, legge til regelverkssamling
+- Gi navn, legge til organisasjoner for samordning, legge til regelverkssamling (mangler språkstøtte og fungerende synk for organisasjoner)
 
 **Gjenstår:**
 - Gjennomgå om alle nødvendige innstillinger for samordna opptak finnes
@@ -72,8 +63,10 @@ Opptaksforvalter skal kunne opprette et opptak — samordnet eller lokalt — me
 | Dato | Hendelse |
 |------|----------|
 | 6. okt 2026 | Simulering av opptak |
-| 19. nov 2026 | Simulering av opptak (mer funksjonalitet) |
+|23. okt 2026| Akseptansetest|
+| 16. nov 2026| Hk-dir oppretter opptak|
 | 16. nov 2026 | Infomøte med fagskoler om registrering |
+| 19. nov 2026 | Simulering av opptak (mer funksjonalitet) |
 | 5. des 2026 | Registreringsfrist for utdanninger i samordna opptak 2027 |
 
 ## Statuslogg

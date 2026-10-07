@@ -8,6 +8,8 @@ export interface Boot {
   tasks: TasksSnapshot | null;
   /** Redigering og PR er tilgjengelig (dev-server og desktop-app, ikke statisk bygg) */
   editable: boolean;
+  /** Absolutt sti til repoet appen jobber i (for «Åpne i VS Code»). `null` i statisk bygg */
+  repoRoot: string | null;
 }
 
 export interface SaveRequest {
@@ -30,7 +32,8 @@ export interface PublishResult {
 /** Innlogging mot GitHub (device flow) */
 export type AuthStatus =
   | { state: 'ok'; login: string | null; source: 'gh' | 'device' }
-  | { state: 'none'; canLogin: boolean } // canLogin: false når ingen OAuth-klient er satt opp
+  // canLogin: false når ingen OAuth-klient er satt opp. expired: GitHub avviste det lagrede tokenet, som er slettet
+  | { state: 'none'; canLogin: boolean; expired?: boolean }
   | { state: 'pending'; userCode: string; verificationUri: string; expiresAt: number };
 
 /** Den lokale Claude Code-installasjonen */
@@ -46,9 +49,11 @@ export interface ClaudeRunRequest {
   sessionId?: string | null;
   /** Fila brukeren ser på, som kontekst */
   path?: string | null;
+  /** Filer og mapper under krav/ som brukeren har lagt ved meldingen med @ */
+  mentions?: string[];
   /** Skillen som er valgt (en av `CLAUDE_SKILLS`); alle andre avvises */
   skill?: string | null;
-  /** Skillene som er lov der brukeren er, når ingen er valgt (Oppgaver); Claude kan bruke dem fritt */
+  /** Skillene som er lov der brukeren er; Claude kan bruke dem fritt, også når en skill er valgt */
   skills?: string[];
   /** Kodemappene Claude kan lese (fs-admin, fs-plattform), som absolutte stier; de får `--add-dir`, men kan ikke endres */
   dirs?: string[];
@@ -56,10 +61,59 @@ export interface ClaudeRunRequest {
   invoke?: boolean;
   /** Andre skills vieweren kjenner fra før (plugins, personlige), så de kan avvises også før Claude har meldt dem */
   knownSkills?: string[];
+  /**
+   * Utførekjøring (Spesifikasjoner, «Utfør i <repo>»): Claude kjører med kode-repoet som arbeidsmappe, med repoets
+   * skills og CLAUDE.md, kan endre koden der og kjøre en avgrenset liste kommandoer. Kravrepoet får `--add-dir`, og
+   * bare utforing.md kan endres i det. `skill`, `skills` og `dirs` brukes ikke da.
+   */
+  target?: ExecuteTarget | null;
+  /** Verktøyene brukeren har tillatt alltid i samtalen (`mcp__*`, WebFetch); de får `--allowedTools` */
+  allowTools?: string[];
+}
+
+/** Brukerens svar på et spørsmål om lov (`permission`) */
+export interface ClaudeApproveRequest {
+  id: string;
+  behavior: 'allow' | 'deny';
+  /** «Tillat alltid i denne samtalen»: resten av kjøringen spørres det ikke om verktøyet */
+  always?: boolean;
+  /** `closed`: panelet ble lukket mens spørsmålet ventet */
+  reason?: 'user' | 'closed';
+}
+
+/** Claude vil bruke et verktøy som må godkjennes (`mcp__*`, WebFetch) */
+export interface ClaudePermission {
+  kind: 'permission';
+  id: string;
+  tool: string;
+  /** Parametrene, forkortet og uten hemmeligheter */
+  input: Record<string, string>;
+  toolUseId: string | null;
+}
+
+/** En MCP-server Claude startet med, og om den er koblet til (`needs-auth`: brukeren må logge inn med `/mcp` i terminalen) */
+export interface ClaudeMcpServer {
+  name: string;
+  status: string;
+}
+
+export interface ExecuteTarget {
+  /** Navnet på repoet: `fs-plattform` */
+  repo: string;
+  /** Absolutt sti til den lokale klonen */
+  dir: string;
+  /** Spesifikasjonen som utføres, relativt til kravrepoet */
+  spec: string;
 }
 
 /** Skillene som kan velges i Claude-panelet; høyst én om gangen */
-export const CLAUDE_SKILLS = ['fs-krav', 'fs-specify', 'fs-specify-delta', 'fs-verify'];
+export const CLAUDE_SKILLS = ['fs-krav', 'fs-krav-avvik', 'fs-specify', 'fs-specify-delta', 'fs-implementasjonsdetaljer', 'fs-verify'];
+
+/**
+ * Skillene som vises i skillvelgeren. De andre i `CLAUDE_SKILLS` (fs-krav-avvik, fs-specify, fs-specify-delta) velges
+ * ikke i panelet, men Claude kan bruke dem der de er tillatt, f.eks. med «Kjør fs-specify» i Spesifikasjoner.
+ */
+export const CLAUDE_SKILLS_SHOWN = ['fs-krav', 'fs-implementasjonsdetaljer', 'fs-verify'];
 
 /** Kodeklonene fs-verify leter i, med standardstien backenden fant */
 export const CODE_DIRS = ['fs-admin', 'fs-plattform'] as const;
@@ -74,6 +128,10 @@ export interface CodeDir {
 export interface ClaudeSkill {
   name: string;
   description: string;
+  /** Versjonen av skillen: hash over filene i mappa. Endres når skillen er endret på disk */
+  hash: string;
+  /** Når en fil i skillmappa sist ble endret på disk (ms), for samtaler som lastet skillen før versjonen ble lagret */
+  changedAt: number;
 }
 
 export interface ClaudeSkills {
@@ -85,10 +143,13 @@ export interface ClaudeSkills {
 
 /** Hendelsene fra en Claude-kjøring, forenklet fra `--output-format stream-json` */
 export type ClaudeEvent =
-  | { kind: 'init'; sessionId: string; model: string | null; skills: string[] }
+  | { kind: 'init'; sessionId: string; model: string | null; skills: string[]; mcp?: ClaudeMcpServer[] }
   | { kind: 'text'; text: string }
   | { kind: 'tool'; id: string; name: string; summary: string }
   | { kind: 'toolResult'; id: string; isError: boolean }
+  | ClaudePermission
+  /** Spørsmålet er besvart: av brukeren, eller avvist fordi tiden gikk ut, panelet ble lukket eller kjøringen sluttet */
+  | { kind: 'permissionDone'; id: string; behavior: 'allow' | 'deny'; reason: 'user' | 'timeout' | 'closed' | 'ended' }
   /** Hvor mye av konteksten siste svar brukte: input, cache-lesing og cache-skriving, pluss svaret */
   | { kind: 'usage'; tokens: number }
   | {
@@ -102,26 +163,51 @@ export type ClaudeEvent =
       contextWindow?: number | null;
     };
 
+/** Hva som er nytt på main på GitHub, fra sammenligningen med klonen */
+export interface MainInfo {
+  commits: number;
+  /** Endrede .feature-filer under krav/ */
+  features: number;
+  /** Forfatteren av siste commit: `@login` på GitHub, ellers navnet i committen */
+  author: string | null;
+  /** Tidspunktet for siste commit (ISO) */
+  date: string | null;
+}
+
+export interface MainStatus {
+  behind: boolean;
+  /** Commiten main peker på på GitHub, når den er nyere enn klonen */
+  remote?: string;
+  /** Mangler når GitHub ikke kunne spørres (uten nett, rate limit) */
+  info?: MainInfo;
+}
+
 /** Kallene rendereren kan gjøre mot backenden. Navnene brukes både som `POST /__krav/api/<navn>` og som IPC-kall. */
 export interface Api {
   /** Teksten i en krav-fil, slik den er på disk */
   read(path: string): Promise<string>;
   save(req: SaveRequest): Promise<void>;
+  /** Sletter en krav-fil fra disk */
+  remove(path: string): Promise<void>;
   publish(req: PublishRequest): Promise<PublishResult>;
   authStatus(): Promise<AuthStatus>;
   authStart(): Promise<AuthStatus>;
   authPoll(): Promise<AuthStatus>;
   authLogout(): Promise<AuthStatus>;
-  /** Desktop-appen: hent siste main fra GitHub til den lokale klonen */
-  pull(): Promise<void>;
+  /** Desktop-appen: hent siste main fra GitHub til den lokale klonen. Gir filene slik de er etterpå. */
+  pull(): Promise<Omit<Boot, 'editable' | 'repoRoot'>>;
   /** Desktop-appen: finnes det en nyere main på GitHub? `null` når det ikke kan sjekkes (dev-serveren, uten nett) */
-  mainStatus(): Promise<{ behind: boolean } | null>;
+  mainStatus(): Promise<MainStatus | null>;
   claudeStatus(): Promise<ClaudeStatus>;
   /** Starter en kjøring; hendelsene kommer som `krav:claude` med `{ runId, event }` */
   claudeRun(req: ClaudeRunRequest): Promise<{ runId: string }>;
   claudeCancel(runId: string): Promise<void>;
   /** Kjøringene som pågår */
   claudeActive(): Promise<string[]>;
+  /** Svarer på et spørsmål om lov; `false` når det ikke venter lenger */
+  claudeApprove(req: ClaudeApproveRequest): Promise<boolean>;
+  /** Spørsmålene om lov som venter, så kortene kommer tilbake etter en omlasting */
+  claudePending(): Promise<{ runId: string; event: ClaudePermission }[]>;
   claudeSkills(): Promise<ClaudeSkills>;
   /** Standardstiene til kodeklonene; `paths` sjekker om overstyrte stier finnes */
   claudeDirs(paths?: Record<string, string>): Promise<CodeDir[]>;
@@ -129,4 +215,4 @@ export interface Api {
   pickDir(): Promise<string | null>;
 }
 export type ApiMethod = keyof Api;
-export const API_METHODS: ApiMethod[] = ['read', 'save', 'publish', 'authStatus', 'authStart', 'authPoll', 'authLogout', 'pull', 'mainStatus', 'claudeStatus', 'claudeRun', 'claudeCancel', 'claudeActive', 'claudeSkills', 'claudeDirs', 'pickDir'];
+export const API_METHODS: ApiMethod[] = ['read', 'save', 'remove', 'publish', 'authStatus', 'authStart', 'authPoll', 'authLogout', 'pull', 'mainStatus', 'claudeStatus', 'claudeRun', 'claudeCancel', 'claudeActive', 'claudeApprove', 'claudePending', 'claudeSkills', 'claudeDirs', 'pickDir'];

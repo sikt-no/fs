@@ -1,0 +1,72 @@
+import { isEditablePath } from '../shared/paths.ts';
+
+/** En PR Claude foreslår i svaret, som en `krav-pr`-blokk med JSON. Brukeren sender den selv med «Lag PR». */
+export interface PrProposal {
+  title: string;
+  paths: string[];
+  /** Filer Claude tok med som ikke kan sendes med «Lag PR» (`isEditablePath` tar dem ikke) */
+  skipped: string[];
+  branch: string | null;
+  body: string;
+}
+
+/** Språket på kodeblokken Claude skriver forslaget i */
+export const PR_LANG = 'krav-pr';
+
+/** Den faste meldingen bak «Lag forslag til PR» */
+export const PR_PROMPT =
+  'Lag et forslag til PR for endringene i denne samtalen, under krav/ og i oppgavemappa under tasks/ (spec/ og utforing.md). Svar kort, og avslutt med PR-forslaget i en kodeblokk med språket krav-pr.';
+
+/** Det brukeren ser i stedet for `PR_PROMPT` i samtalen */
+export const PR_PROMPT_SHORT = 'PR-forslag for filene som er endret i samtalen.';
+
+const str = (v: unknown) => (typeof v === 'string' ? v.trim() : '');
+
+/**
+ * Samme krav til stiene som `publish` (`checkPaths` i `core/vcs.ts`): kravene under krav/, og spesifikasjonene,
+ * skissene og resten av `spec/` og `utforing.md` i en oppgavemappe under tasks/
+ */
+const sendable = isEditablePath;
+
+/**
+ * Tolker innholdet i en `krav-pr`-blokk. Filer som ikke kan sendes, legges i `skipped`.
+ * Mangler tittel, eller er det ingen filer som kan sendes, gir den `null`, og blokken vises som kode.
+ */
+export function parsePrProposal(text: string): PrProposal | null {
+  let v: unknown;
+  try {
+    v = JSON.parse(text);
+  } catch {
+    return null;
+  }
+  if (!v || typeof v !== 'object' || Array.isArray(v)) return null;
+  const o = v as Record<string, unknown>;
+  const title = str(o.title);
+  if (!title || !Array.isArray(o.paths) || !o.paths.length) return null;
+  const all = [...new Set(o.paths.map(p => str(p).replace(/^\.?\//, '')).filter(Boolean))];
+  const paths = all.filter(sendable);
+  if (!paths.length) return null;
+  return { title, paths, skipped: all.filter(p => !sendable(p)), branch: str(o.branch) || null, body: str(o.body) };
+}
+
+/**
+ * Legger `utforing.md` til i forslaget for hver oppgavemappe forslaget har filer fra, når fila har endringer (`changed`).
+ * Den skrives av Spesifikasjoner-visningen (rute og steg), ikke av Claude, så Claude vet ikke at den er endret.
+ */
+export function withTaskState(pr: PrProposal, changed: (path: string) => boolean): PrProposal {
+  const dirs = [...new Set(pr.paths.map(p => p.match(/^tasks\/[^/]+\/[^/]+\//)?.[0]).filter((d): d is string => !!d))];
+  const extra = dirs.map(d => d + 'utforing.md').filter(p => !pr.paths.includes(p) && changed(p));
+  return extra.length ? { ...pr, paths: [...pr.paths, ...extra] } : pr;
+}
+
+/** «🤖 Generated with [Claude Code](…)» (eller «Generert med …») i beskrivelsen */
+const GENERATED = /^\s*(?:🤖\s*)?(?:Generated with|Generert med)\s+\[?Claude Code\]?(?:\([^)]*\))?\s*$/gim;
+
+/**
+ * Beskrivelsen slik kortet viser den: uten «Generated with Claude Code»-linja, som vises som metadata i stedet.
+ * PR-en får hele beskrivelsen, med linja.
+ */
+export function splitGenerated(body: string): { text: string; generated: boolean } {
+  const text = body.replace(GENERATED, '');
+  return { text: text.replace(/\n{3,}/g, '\n\n').trim(), generated: text !== body };
+}
