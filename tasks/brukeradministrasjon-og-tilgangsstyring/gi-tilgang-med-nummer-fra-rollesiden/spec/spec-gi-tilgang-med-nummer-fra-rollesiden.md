@@ -70,8 +70,8 @@ Alle tekstene i implementasjonsdetaljene er forslag som Kjetil må godkjenne.
 - `BRU-PER-GRU-013`: ingenting hindrer at en testperson får en tildeling i et ekte miljø. Invarianten er «ikke håndhevet ennå» for tildelinger (fs-plattform `tilgangsstyring/docs/syntetiske-og-ekte-data.md:55-56`, `:81`). Koden skal bygges.
 - `BRU-PER-GRU-013`: SNR finnes ikke i koden. CHECK-en godtar også FS-genererte numre (`CL/0085-personsubjekt.sql:136-137`). Kravet om kontrollsifre er oppfylt for alle tre typene.
 - `BRU-PER-ROL-001`: ingen spørring gir rollene brukeradministratoren kan tildele på tvers av organisasjoner og miljøer. `tildelbareTilgangskoder(organisasjonId, miljoId)` svarer for ett par, gir hele katalogen eller ingenting, og teller ikke person-retten (`CL/0057-tildelinger-splittes-etter-subjekttype.sql:405-431`). Koden skal bygges.
-- `BRU-PER-ROL-001`: kravet sier «aktivt tildelt». Filteret `roller` treffer brukere som har rollen «aktivt, direkte eller arvet» (fs-plattform `…/experimental/schema_brukeradmin.graphqls:164`, !6015 `schema_personsubjekt.graphqls:105`). Rollens oversiktsside skal vise direkte tildelinger. Koden skal endres. **Forslag, må bekreftes av Kjetil.**
-- `BRU-PER-ROL-001`, `BRU-PER-GRU-013`: RLS gir synlighet også gjennom en lukket tildeling, med vilje (`CL/0085-personsubjekt.sql:200-201`). Som for Feide-brukere skal brukere med bare inaktive tildelinger skjules av et filter i API-et, ikke i RLS. **Forslag, må bekreftes av Kjetil.**
+- `BRU-PER-ROL-001`: kravet sier «aktivt tildelt». Filteret `roller` treffer brukere som har rollen «aktivt, direkte eller arvet» (fs-plattform `…/experimental/schema_brukeradmin.graphqls:164`, !6015 `schema_personsubjekt.graphqls:105`). Det er riktig: rollens oversiktsside viser direkte og arvede tildelinger, og kravet er presisert (Kjetil, 07.10.2026).
+- `BRU-PER-ROL-001`, `BRU-PER-GRU-013`: RLS gir synlighet også gjennom en lukket tildeling, med vilje (`CL/0085-personsubjekt.sql:200-201`). Som for Feide-brukere skjules brukere med bare inaktive tildelinger av et filter i GraphQL-spørringen. RLS står, fordi historikk senere trenger inaktive tildelinger (bekreftet av Kjetil, 07.10.2026).
 - fs-admin: rolleoversikten og rollens oversiktsside finnes ikke. Tilgangsstyring har bare rutene `src/app/tilgangsstyring/personbrukere/` og `src/app/tilgangsstyring/applikasjoner/`. Skal bygges.
 - fs-admin: ingen støtte for personsubjekter (ingen treff på `personsubjekt` i `src`). «Tildel roller» tildeler bare til Feide-brukere (`…/TildelRolleModal/hooks/useTildelFeideBrukerTilganger.tsx:61-77`), så «Flere roller gis etterpå fra detaljsiden for personen» trenger en person-variant. Skal bygges.
 - fs-admin: ingen sjekk av kontrollsifre i produksjonskoden; `src/domains/person/utils/formatFodselsnummer.ts:1` sjekker bare 11 siffer. Skal bygges.
@@ -94,8 +94,8 @@ Ingen krav ble holdt tilbake.
 
 ## Åpne spørsmål
 
-- [ ] Bekreft forslaget i kodesjekken: rollens oversiktsside viser bare direkte tildelinger, ikke arvede.
-- [ ] Bekreft forslaget i kodesjekken: brukere med bare inaktive tildelinger skjules av et filter i API-et, som for Feide-brukere.
+- [x] Rollens oversiktsside viser direkte og arvede tildelinger (Kjetil, 07.10.2026).
+- [x] Brukere med bare inaktive tildelinger skjules av et filter i GraphQL-spørringen, som for Feide-brukere (bekreftet av Kjetil, 07.10.2026).
 
 ## Rute
 
