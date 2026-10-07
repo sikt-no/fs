@@ -11,14 +11,17 @@ Egenskap: Se brukere som har en spesifikk rolle
   D-nummer eller SNR fra rollesiden (BRU-PER-ROL-002), slik at personen blir synlig for
   brukeradministratoren.
 
-  @must @openquestion
+  @must
   Scenario: Åpne en rolle fra rolleoversikten
-    # ÅPNE SPØRSMÅL:
-    # - Hvilke roller vises i rolleoversikten: alle roller, eller bare rollene brukeradministratoren
-    #   har rett til å tildele?
     Gitt at brukeradministrator er i rolleoversikten
     Når brukeradministrator velger en rolle
     Så åpnes rollens oversiktsside
+
+  @must
+  Scenario: Rolleoversikten viser bare roller brukeradministratoren har rett til å tildele
+    Gitt at brukeradministrator har rett til å tildele noen roller, men ikke alle
+    Når brukeradministrator åpner rolleoversikten
+    Så vises bare rollene brukeradministratoren har rett til å tildele
 
   @must
   Scenario: Vise brukere som har en aktiv rolle
