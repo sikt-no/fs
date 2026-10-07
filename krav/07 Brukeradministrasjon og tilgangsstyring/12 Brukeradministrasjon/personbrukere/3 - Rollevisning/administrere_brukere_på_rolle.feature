@@ -1,11 +1,16 @@
 # language: no
 # GitHub: #492
 # Kilde: Brukerhistorie BH6 (temp/brukerhistorier.md)
-@BRU-PER-ROL-002 @must @in-progress
+@BRU-PER-ROL-002 @draft
 Egenskap: Administrere brukere på en spesifikk rolle
   Som brukeradministrator
   ønsker jeg å finne fram én spesifikk rolle og kunne legge til eller fjerne brukere på rollen
   slik at jeg kan tildele eller trekke tilbake rollen effektivt fra rolle-siden istedenfor å gå via hver bruker.
+
+  Rollesiden er stedet der brukeradministratoren gir tilgang til en person som ikke finnes i
+  løsningen, eller som brukeradministratoren ikke kan se. Det skjer ikke fra brukeroversikten.
+  Reglene for selve tildelingen står i BRU-PER-GRU-013. Regelen merket @must er minimum for å
+  implementere det.
 
   Scenario: Legge til en bruker på en rolle
     Gitt at brukeradministrator er på rollens oversiktsside
@@ -20,25 +25,33 @@ Egenskap: Administrere brukere på en spesifikk rolle
     Så skal rollen ikke lenger være tildelt brukeren
     Og endringen skal være sporbar
 
-  @ref-BRU-PER-GRU-003 @openquestion
-  Regel: En utgått rolle kan ikke gis fra siden for rollen
-    # Det samme gjelder i valglisten på personbrukerens side (BRU-PER-GRU-003).
+  @must @openquestion
+  Regel: Gi rollen til en person med fødselsnummer, D-nummer eller SNR
     # ÅPNE SPØRSMÅL:
-    # - Skal API-et også avvise at en utgått rolle gis, eller gjelder regelen bare i skjermbildet? (fs-admin MR !3431 skjuler valget, og avvisningen i API-et er varslet i en senere MR)
+    # - Hvordan velger brukeradministratoren organisasjon og miljø for tildelingen på rollesiden?
+    # - Workshopen besluttet at flere roller kan gis i samme operasjon (BRU-PER-GRU-013). Gjelder
+    #   det også her, der operasjonen starter fra én rolle?
 
-    Scenario: Siden for en utgått rolle sier at rollen er utgått
-      Gitt en forretningsrolle er markert som utgått i rollekatalogen
-      Når brukeradministrator åpner rollens oversiktsside
-      Så ser brukeradministrator at rollen er utgått
-      Og brukeradministrator kan ikke gi rollen til en person
-
-    Scenario: Tildelingene en utgått rolle har, kan fjernes
+    Scenario: Personen finnes ikke i løsningen
       Gitt at brukeradministrator er på rollens oversiktsside
-      Og rollen er markert som utgått i rollekatalogen
-      Og brukeren har rollen aktivt tildelt
-      Når brukeradministrator fjerner brukeren fra rollen
-      Så skal rollen ikke lenger være tildelt brukeren
+      Og det finnes ingen person med fødselsnummeret i løsningen
+      Når brukeradministrator gir rollen til personen for en organisasjon og et miljø og oppgir fødselsnummeret
+      Så har personen rollen for organisasjonen og miljøet
+      Og brukeradministrator ser personen på rollens oversiktsside
+      Og brukeradministrator ser personen i brukeroversikten
 
-# AVKLART 13.11.2026:
-# - Brukere legges til og fjernes fra rollen én om gangen, ikke flere i én operasjon.
-# - Det kjøres ingen valideringer (organisasjonstilhørighet, taushetserklæring eller konfliktrolle) når en bruker legges til på rollen.
+    Scenario: Personen finnes, men brukeradministratoren ser hen ikke
+      Gitt at brukeradministrator er på rollens oversiktsside
+      Og personen har tildelinger bare i organisasjoner brukeradministratoren ikke administrerer
+      Når brukeradministrator gir rollen til personen for en organisasjon og et miljø og oppgir fødselsnummeret
+      Så har personen rollen for organisasjonen og miljøet
+      Og brukeradministrator ser personen på rollens oversiktsside
+      Og brukeradministrator ser personen i brukeroversikten
+      Og det opprettes ikke en ny person
+
+# ÅPNE SPØRSMÅL:
+# - Skal det være mulig å legge til/fjerne flere brukere i én batch-operasjon?
+# - Hvilke valideringer kjøres (organisasjonstilhørighet, taushetserklæring, eksisterende konfliktrolle)?
+# - Skal stedkoder og tidsbegrensning settes per bruker, eller arves fra rollen?
+# - Hva skjer hvis rollen er "delt" (BRU-PER-DEL-001) — kan vi legge til brukere fra andre organisasjoner?
+# - Forholdet til BRU-PER-GRU-003 — overlapper administrasjon fra rolle-siden med tildeling fra bruker-siden? Skal det være konsistent UX?
