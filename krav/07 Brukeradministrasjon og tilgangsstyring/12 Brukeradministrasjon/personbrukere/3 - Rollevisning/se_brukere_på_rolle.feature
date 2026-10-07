@@ -7,7 +7,24 @@ Egenskap: Se brukere som har en spesifikk rolle
   ønsker jeg å finne fram én spesifikk rolle og se hvilke brukere som har den
   slik at jeg får oversikt over rollens omfang og kan vurdere konsekvens av endringer.
 
+  Scenarioene merket @must er minimum for å kunne gi en person tilgang med fødselsnummer,
+  D-nummer eller SNR fra rollesiden (BRU-PER-ROL-002), slik at personen blir synlig for
+  brukeradministratoren.
+
+  @must @openquestion
+  Scenario: Åpne en rolle fra rolleoversikten
+    # ÅPNE SPØRSMÅL:
+    # - Hvilke roller vises i rolleoversikten: alle roller, eller bare rollene brukeradministratoren
+    #   har rett til å tildele?
+    Gitt at brukeradministrator er i rolleoversikten
+    Når brukeradministrator velger en rolle
+    Så åpnes rollens oversiktsside
+
+  @must @openquestion
   Scenario: Vise brukere som har en aktiv rolle
+    # ÅPNE SPØRSMÅL:
+    # - Vises bare brukerne brukeradministratoren ellers kan se, det vil si brukere med en aktiv
+    #   tildeling av rollen i en organisasjon og et miljø brukeradministratoren administrerer?
     Gitt at en rolle er tildelt flere brukere
     Når brukeradministrator åpner rollens oversiktsside
     Så skal alle brukere med rollen aktivt tildelt vises

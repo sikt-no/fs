@@ -8,10 +8,12 @@ Egenskap: Gi en person tilgang med fødselsnummer, D-nummer eller SNR
 
   Personbrukeren er personen, identifisert med fødselsnummer, D-nummer eller SNR. Feide og
   ID-porten er påloggingsmåter: når personen logger inn, finnes hen ut fra nummeret, uansett
-  hvilken påloggingsmåte hen bruker. En brukeradministrator ser en person bare gjennom en aktiv
-  tildeling i en organisasjon og et miljø brukeradministratoren har rett i, og en person uten
-  tildelinger er usynlig for alle. Brukeradministratoren gir derfor den første tildelingen og
-  oppgir nummeret i samme operasjon, og personen blir synlig gjennom den nye tildelingen.
+  hvilken påloggingsmåte hen bruker. En brukeradministrator ser en person gjennom en aktiv
+  tildeling i en organisasjon og et miljø brukeradministratoren har rett i, eller gjennom
+  hjemorganisasjonen til en Feide-bruker personen er koblet til. Andre personer er usynlige for
+  brukeradministratoren. Brukeradministratoren gir derfor tildelingen og oppgir nummeret i samme
+  operasjon, og personen blir synlig gjennom den nye tildelingen. Det gjøres fra rollesiden
+  (BRU-PER-ROL-002), ikke fra brukeroversikten.
 
   Svaret er det samme uansett om personen fantes fra før, og det avslører ikke hvilke
   tildelinger personen har i andre organisasjoner. Nummeret vises ikke i grensesnittet etterpå.

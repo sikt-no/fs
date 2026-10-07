@@ -7,6 +7,11 @@ Egenskap: Administrere brukere på en spesifikk rolle
   ønsker jeg å finne fram én spesifikk rolle og kunne legge til eller fjerne brukere på rollen
   slik at jeg kan tildele eller trekke tilbake rollen effektivt fra rolle-siden istedenfor å gå via hver bruker.
 
+  Rollesiden er stedet der brukeradministratoren gir tilgang til en person som ikke finnes i
+  løsningen, eller som brukeradministratoren ikke kan se. Det skjer ikke fra brukeroversikten.
+  Reglene for selve tildelingen står i BRU-PER-GRU-013. Regelen merket @must er minimum for å
+  implementere det.
+
   Scenario: Legge til en bruker på en rolle
     Gitt at brukeradministrator er på rollens oversiktsside
     Når brukeradministrator legger til en bruker
@@ -19,6 +24,30 @@ Egenskap: Administrere brukere på en spesifikk rolle
     Når brukeradministrator fjerner brukeren fra rollen
     Så skal rollen ikke lenger være tildelt brukeren
     Og endringen skal være sporbar
+
+  @must @openquestion
+  Regel: Gi rollen til en person med fødselsnummer, D-nummer eller SNR
+    # ÅPNE SPØRSMÅL:
+    # - Hvordan velger brukeradministratoren organisasjon og miljø for tildelingen på rollesiden?
+    # - Workshopen besluttet at flere roller kan gis i samme operasjon (BRU-PER-GRU-013). Gjelder
+    #   det også her, der operasjonen starter fra én rolle?
+
+    Scenario: Personen finnes ikke i løsningen
+      Gitt at brukeradministrator er på rollens oversiktsside
+      Og det finnes ingen person med fødselsnummeret i løsningen
+      Når brukeradministrator gir rollen til personen for en organisasjon og et miljø og oppgir fødselsnummeret
+      Så har personen rollen for organisasjonen og miljøet
+      Og brukeradministrator ser personen på rollens oversiktsside
+      Og brukeradministrator ser personen i brukeroversikten
+
+    Scenario: Personen finnes, men brukeradministratoren ser hen ikke
+      Gitt at brukeradministrator er på rollens oversiktsside
+      Og personen har tildelinger bare i organisasjoner brukeradministratoren ikke administrerer
+      Når brukeradministrator gir rollen til personen for en organisasjon og et miljø og oppgir fødselsnummeret
+      Så har personen rollen for organisasjonen og miljøet
+      Og brukeradministrator ser personen på rollens oversiktsside
+      Og brukeradministrator ser personen i brukeroversikten
+      Og det opprettes ikke en ny person
 
 # ÅPNE SPØRSMÅL:
 # - Skal det være mulig å legge til/fjerne flere brukere i én batch-operasjon?
