@@ -31,7 +31,7 @@ Kjetils svar gitt på forhånd, eller agentens forslag der det står det. Forsla
 - Kravet må endres — holdes tilbake
 - Vet ikke — holdes tilbake
 
-**Svar:** Kravet er riktig, koden skal endres (agentens forslag, må bekreftes av Kjetil)
+**Svar:** Koden er riktig: rollens oversiktsside viser direkte og arvede tildelinger. «Aktivt tildelt» betyr at rollen er aktiv nå, ikke at den er direkte tildelt. Kravet er presisert (Kjetil, 07.10.2026).
 
 ---
 
@@ -57,4 +57,4 @@ Kjetils svar gitt på forhånd, eller agentens forslag der det står det. Forsla
 - Kravet må endres — holdes tilbake
 - Vet ikke — holdes tilbake
 
-**Svar:** Kravet er riktig, koden skal endres (agentens forslag): som for Feide-brukere skjules brukere med bare inaktive tildelinger av et filter i API-et, ikke i RLS (beslutning 24.–25.09.2026). RLS står.
+**Svar:** Kravet er riktig og gjelder synlighet i applikasjonen. Det løses med et filter i GraphQL-spørringen. RLS står, fordi historikk senere trenger tilgang til inaktive tildelinger (Kjetil, 07.10.2026).
