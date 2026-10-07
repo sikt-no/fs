@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import { existsSync, mkdirSync, mkdtempSync, realpathSync, writeFileSync } from 'node:fs';
+import { existsSync, mkdirSync, mkdtempSync, readFileSync, realpathSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { test } from 'node:test';
@@ -15,7 +15,7 @@ const home = join(tmp, 'home');
 mkdirSync(home);
 const px = (d: string) => d.replace(/\\/g, '/').replace(/^([A-Za-z]):/, (_, x: string) => '/' + x.toLowerCase());
 const after = (args: string[], flag: string) => args.slice(args.indexOf(flag) + 1);
-const ctx = { repoRoot: tmp, mcpFile: '/tmp/mcp.json', kravSkills: ['fs-krav', 'fs-verify', 'fs-verify-agent-teams', 'fs-specify'] };
+const ctx = { repoRoot: tmp, mcpFile: '/tmp/mcp.json', settingsFile: '/tmp/settings.json', kravSkills: ['fs-krav', 'fs-verify', 'fs-verify-agent-teams', 'fs-specify'] };
 
 test('terminalArgs: interaktiv claude (ingen -p), prompten først, agent teams og push avvist', () => {
   for (const req of [
@@ -27,7 +27,7 @@ test('terminalArgs: interaktiv claude (ingen -p), prompten først, agent teams o
     assert.ok(!args.includes('-p') && !args.includes('--print') && !args.includes('--output-format'));
     assert.ok(!args.includes('--permission-prompt-tool'), 'tillatelser spørres om i terminalen');
     assert.deepEqual(after(args, '--permission-mode').slice(0, 1), ['default']);
-    assert.equal(after(args, '--settings')[0], TERMINAL_SETTINGS);
+    assert.equal(after(args, '--settings')[0], '/tmp/settings.json', 'en fil, ikke JSON på kommandolinja (cmd.exe på Windows)');
     assert.deepEqual(JSON.parse(TERMINAL_SETTINGS), { teammateMode: 'in-process', permissions: { deny: ['Bash(git push:*)', 'Bash(gh:*)'] } });
     assert.equal(after(args, '--mcp-config')[0], '/tmp/mcp.json');
     const allow = after(args, '--allowedTools');
@@ -111,7 +111,9 @@ test('PtyRunner: starter claude i pty med agent teams, sender utdata, skriv, st�
   assert.equal(c.opts.env.CLAUDE_CODE_USE_BEDROCK, '1', 'brukerens egne innstillinger beholdes');
   assert.ok(c.opts.env.PATH.startsWith('/usr/local/bin'), 'mappa claude ligger i, først på PATH');
   const mcp = after(c.args, '--mcp-config')[0];
+  const settings = after(c.args, '--settings')[0];
   assert.ok(existsSync(mcp), 'MCP-konfigen finnes mens økten kjører');
+  assert.equal(readFileSync(settings, 'utf8'), TERMINAL_SETTINGS);
 
   c.data!('hei ');
   c.data!('fra claude');
@@ -130,7 +132,7 @@ test('PtyRunner: starter claude i pty med agent teams, sender utdata, skriv, st�
   assert.ok(r.kill(id));
   assert.deepEqual(events.at(-1), { id, kind: 'exit', code: 143 });
   assert.deepEqual(r.active(), [{ id, exited: true, code: 143 }], 'avsluttede økter huskes for omlasting');
-  assert.ok(!existsSync(mcp), 'MCP-konfigen slettes når økten er ferdig');
+  assert.ok(!existsSync(mcp) && !existsSync(settings), 'MCP-konfigen og innstillingene slettes når økten er ferdig');
   assert.equal(r.write(id, 'x'), false);
   assert.equal(r.kill(id), false);
 });

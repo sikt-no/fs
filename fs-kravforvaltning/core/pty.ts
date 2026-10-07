@@ -1,7 +1,7 @@
 import { execFile } from 'node:child_process';
-import { accessSync, chmodSync, constants, rmSync, statSync } from 'node:fs';
+import { accessSync, chmodSync, constants, rmSync, statSync, writeFileSync } from 'node:fs';
 import { createRequire } from 'node:module';
-import { homedir } from 'node:os';
+import { homedir, tmpdir } from 'node:os';
 import { delimiter, dirname, join, resolve } from 'node:path';
 import { promisify } from 'node:util';
 import type { ExecuteTarget, PtyEvent, PtyInfo, PtyStartRequest } from '../shared/api.ts';
@@ -90,12 +90,13 @@ export function verifyTeamPrompt(dirs: string[]): string {
  */
 export function terminalArgs(
   req: PtyStartRequest,
-  ctx: { repoRoot: string; mcpFile: string; kravSkills: string[] },
+  ctx: { repoRoot: string; mcpFile: string; settingsFile: string; kravSkills: string[] },
 ): { cwd: string; args: string[] } {
   const prompt = typeof req?.prompt === 'string' ? req.prompt.trim() : '';
   if (!prompt) throw new Error('Skriv en melding først');
   if (prompt.startsWith('-')) throw new Error('Meldingen kan ikke begynne med «-»');
-  const common = ['--permission-mode', 'default', '--settings', TERMINAL_SETTINGS, '--mcp-config', ctx.mcpFile];
+  // --settings er en fil (TERMINAL_SETTINGS), ikke JSON på kommandolinja: cmd.exe /c på Windows ødelegger anførselstegnene
+  const common = ['--permission-mode', 'default', '--settings', ctx.settingsFile, '--mcp-config', ctx.mcpFile];
   if (req.mode === 'execute') {
     const x = executeArgs(ctx.repoRoot, req.target, ctx.kravSkills);
     return {
@@ -193,7 +194,8 @@ interface Session {
   buffer: string;
   exited: boolean;
   code: number | null;
-  mcpFile: string;
+  /** Sletter MCP-konfigen og innstillingene (midlertidige filer) */
+  cleanup: () => void;
 }
 
 export interface PtyRunnerOpts {
@@ -236,12 +238,16 @@ export class PtyRunner {
     const cwdFor = req?.mode === 'execute' ? executeArgs(this.repoRoot, req.target, []).cwd : this.repoRoot;
     const dirs = req?.mode === 'verify' ? dirArgs(req.dirs).paths : [];
     const mcpFile = writeMcpConfig(id, readMcpServers(cwdFor, dirs, this.opts.home ?? homedir()));
+    const settingsFile = join(tmpdir(), `krav-settings-${process.pid}-${id}.json`);
+    writeFileSync(settingsFile, TERMINAL_SETTINGS, { mode: 0o600 });
+    const files = [mcpFile, settingsFile];
+    const cleanup = () => files.forEach(f => rmSync(f, { force: true }));
     let cwd: string;
     let args: string[];
     try {
-      ({ cwd, args } = terminalArgs(req, { repoRoot: this.repoRoot, mcpFile, kravSkills: projectSkills(this.repoRoot).map(s => s.name) }));
+      ({ cwd, args } = terminalArgs(req, { repoRoot: this.repoRoot, mcpFile, settingsFile, kravSkills: projectSkills(this.repoRoot).map(s => s.name) }));
     } catch (e) {
-      rmSync(mcpFile, { force: true });
+      cleanup();
       throw e;
     }
     const env = { ...(this.opts.env ?? process.env) };
@@ -260,10 +266,10 @@ export class PtyRunner {
     try {
       proc = spawn(cmd.file, cmd.args, { name: 'xterm-256color', cols, rows, cwd, env: env as Record<string, string> });
     } catch (e) {
-      rmSync(mcpFile, { force: true });
+      cleanup();
       throw e;
     }
-    const s: Session = { proc, buffer: '', exited: false, code: null, mcpFile };
+    const s: Session = { proc, buffer: '', exited: false, code: null, cleanup };
     this.sessions.set(id, s);
     proc.onData(data => {
       s.buffer = (s.buffer + data).slice(-BUFFER_MAX);
@@ -272,7 +278,7 @@ export class PtyRunner {
     proc.onExit(({ exitCode }) => {
       s.exited = true;
       s.code = exitCode ?? null;
-      rmSync(mcpFile, { force: true });
+      cleanup();
       this.emit({ id, kind: 'exit', code: s.code });
       this.prune();
     });
@@ -318,7 +324,7 @@ export class PtyRunner {
   close() {
     for (const s of this.sessions.values()) {
       if (!s.exited) s.proc.kill();
-      rmSync(s.mcpFile, { force: true });
+      s.cleanup();
     }
     this.sessions.clear();
   }

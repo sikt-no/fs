@@ -142,10 +142,13 @@ jobs:
             exit 1
           fi
       - run: npm ci
-      # node-pty (terminalen) har ingen ferdigbygd binærfil for Linux: bygg den med node-gyp
+      # node-pty (terminalen) har ingen ferdigbygd binærfil for Linux: bygg den med node-gyp. Direkte, siden npm kan
+      # være satt opp til ikke å kjøre installasjonsskriptene til avhengighetene
       - name: Bygg node-pty
         if: runner.os == 'Linux'
-        run: npm rebuild node-pty --foreground-scripts
+        run: npx node-gyp rebuild --directory node_modules/node-pty
+      # spawn-helper må være kjørbar, også om postinstall ikke kjørte
+      - run: node scripts/node-pty-helper.mjs
       - run: npx electron-vite build
       - run: npx electron-builder --publish never ${{ matrix.args }}
       - name: Last opp til releasen
