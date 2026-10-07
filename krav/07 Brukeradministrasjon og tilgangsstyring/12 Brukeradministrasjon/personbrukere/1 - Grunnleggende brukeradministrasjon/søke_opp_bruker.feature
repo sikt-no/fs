@@ -83,7 +83,6 @@ Egenskap: Listevisning og søk i personbrukere
       Når jeg velger en status som filter
       Så vises kun personbrukere med den valgte statusen
 
-    @in-progress
     Scenario: Tilgjengelige hjemorganisasjoner i filter
       Gitt jeg ser listen over personbrukere
       Når jeg åpner hjemorganisasjonsfilteret
@@ -92,7 +91,6 @@ Egenskap: Listevisning og søk i personbrukere
       Og hjemorganisasjonene er sortert alfabetisk
       Og "Alle hjemorganisasjoner" er valgt som standard
 
-    @in-progress
     Scenario: Filtrere på hjemorganisasjon
       Gitt jeg ser listen over personbrukere
       Når jeg velger en hjemorganisasjon som filter
