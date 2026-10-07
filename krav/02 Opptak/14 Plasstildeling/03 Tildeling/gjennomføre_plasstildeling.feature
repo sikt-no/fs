@@ -153,7 +153,7 @@ Egenskap: Gjennomføre plasstildeling
 
   Regel: Rundetypen avgjør hva som skjer med lavere prioriteter og tidligere tilbud
 
-    Scenario: Bortfall på lavere prioriteter i hovedtildeling
+    Scenario: Søker som får tilbud mister lavere prioriteter i hovedtildeling
       Gitt at søkeren "Kari Nordmann" får tilbud på prioritet 1
       Når plasstildelingen i "Hovedrunde" gjennomføres
       Så får søkeren bortfall på alle lavere prioriteter

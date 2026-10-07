@@ -141,19 +141,19 @@ Egenskap: Legge til runder for plasstildeling i et opptak
     Scenariomal: Regler som følger av rundetypen
       Gitt at runden har rundetype "<rundetype>"
       Så gjelder disse reglene for plasstildelingen i runden
-        | Regel                                  | Verdi           |
-        | Bortfall på lavere prioriteter         | <bortfall>      |
-        | Kompensasjonstilbud ved opprykk        | <kompensasjon>  |
+        | Regel                                                    | Verdi           |
+        | Søker som får tilbud mister lavere prioriteter           | <bortfall>      |
+        | Frigjort plass ved opprykk gis til neste på ventelisten  | <kompensasjonstilbud>  |
         | Søker kan ha flere tilbud samtidig     | <flere_tilbud>  |
         | Bygger på forrige publiserte runde     | <arv>           |
         | Utdanningstilbud kan ekskluderes       | <ekskludering>  |
         | Rangering                              | <rangering>     |
 
       Eksempler:
-        | rundetype        | bortfall | kompensasjon | flere_tilbud     | arv | ekskludering | rangering          |
-        | Hovedtildeling   | ja       | nei          | nei              | nei | nei          | poeng og rangering |
-        | Supplering       | ja       | ja           | nei              | ja  | ja           | poeng og rangering |
-        | Etterfylling     | nei      | nei          | ja, må velge ett | ja  | ja           | poeng og rangering |
+        | rundetype        | bortfall | kompensasjonstilbud | flere_tilbud     | arv | ekskludering | rangering          |
+        | Hovedtildeling   | ja       | nei                 | nei              | nei | nei          | poeng og rangering |
+        | Supplering       | ja       | ja                  | nei              | ja  | ja           | poeng og rangering |
+        | Etterfylling     | nei      | nei                 | ja, må velge ett | ja  | ja           | poeng og rangering |
 
   Regel: Opptaksforvalter setter periode for når lærestedene kan endre antall tilbud som skal gis
 
