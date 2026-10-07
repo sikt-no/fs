@@ -919,7 +919,8 @@ a.otf:hover { background: var(--sunken); text-decoration: none; }
 .cq { border-color: var(--acc); background: var(--surface); }
 .cq-q { border: 0; margin: 0; padding: 0; min-width: 0; display: flex; flex-direction: column; gap: 6px; }
 .cq-q + .cq-q { border-top: 1px solid var(--line); padding-top: 8px; }
-.cq-legend { padding: 0; display: flex; flex-direction: column; gap: 3px; }
+.cq-legend { padding: 0; display: flex; flex-direction: column; gap: 3px; float: left; width: 100%; }
+.cq-legend + .cq-body { clear: both; }
 .cq-header { align-self: flex-start; font-size: 10.5px; font-weight: 600; text-transform: uppercase; letter-spacing: .04em; color: var(--acc-ink); background: var(--acc-soft); border-radius: 4px; padding: 1px 6px; }
 .cq-text { color: var(--ink); font-weight: 600; }
 .cq-multi { font-size: 11px; }
