@@ -197,13 +197,10 @@ Egenskap: Gi en person tilgang med fødselsnummer, D-nummer eller SNR
         | D-nummer       |
         | SNR            |
 
-  @openquestion
-  Regel: En testperson kan ikke få tilgang i et ekte miljø
-    # ÅPNE SPØRSMÅL:
-    # - Kan en ekte person få tilgang i et testmiljø? Tilgangsstyringens regler sier at en ekte
-    #   person ikke får tilganger i et testmiljø, men ikke om tildelingen skal avvises.
-    # - Er et SNR, eller et fiktivt nummer fra FS' egen generator, en testperson eller en ekte
-    #   person? I dag er en testperson en person med nummer i Skatteetatens syntetiske serie.
+  Regel: En testperson kan ikke få tilgang i et ekte miljø, og en ekte person ikke i et testmiljø
+    En testperson har nummer i Skatteetatens syntetiske serie. Et SNR tilhører en ekte person. Et
+    fiktivt nummer fra FS' egen generator avvises som ugyldig, fordi det ikke kan identifisere en
+    person.
 
     Scenario: Testperson får ikke tilgang i et ekte miljø
       Gitt fødselsnummeret tilhører en testperson
@@ -215,6 +212,12 @@ Egenskap: Gi en person tilgang med fødselsnummer, D-nummer eller SNR
       Gitt fødselsnummeret tilhører en testperson
       Når brukeradministratoren gir personen en rolle i et testmiljø og oppgir fødselsnummeret
       Så har personen rollen i testmiljøet
+
+    Scenario: Ekte person får ikke tilgang i et testmiljø
+      Gitt fødselsnummeret tilhører en ekte person
+      Når brukeradministratoren gir personen en rolle i et testmiljø og oppgir fødselsnummeret
+      Så får personen ingen tildeling
+      Og brukeradministratoren får beskjed om at en ekte person ikke kan få tilgang i et testmiljø
 
   Regel: Brukeradministratoren kan bare gi roller hen har rett til å tildele
     Alle med brukeradministrator-rollen kan gi tilgang med fødselsnummer, D-nummer eller SNR. Det
