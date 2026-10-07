@@ -41,7 +41,8 @@ const initialTasks = boot.tasks;
  * Avvik: fs-krav (standard) og fs-krav-avvik. fs-specify og fs-specify-delta kjører fs-implementasjonsdetaljer, så den er
  * tillatt der de er.
  * I Spesifikasjoner og Oppgaver er ingen valgt på forhånd, og uten valg kan Claude bruke alle som er tillatt der. `codeDirs`: Claude
- * kan lese kodeklonene (fs-admin, fs-plattform), som fs-verify trenger.
+ * kan lese kodeklonene (fs-admin, fs-plattform), som fs-verify trenger. fs-krav-avvik, fs-specify og fs-specify-delta vises
+ * ikke i skillvelgeren (`CLAUDE_SKILLS_SHOWN`), men Claude kan bruke dem der de er tillatt.
  */
 const CLAUDE_SKILLS_BY_MODE: Record<Mode, { allowed: string[]; preselect: boolean; codeDirs: boolean }> = {
   krav: { allowed: ['fs-krav', 'fs-krav-avvik', 'fs-implementasjonsdetaljer', 'fs-verify'], preselect: true, codeDirs: true },

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'preact/hooks';
-import { CLAUDE_SKILLS, type ClaudeEvent, type ClaudeSkill } from '../shared/api';
+import { CLAUDE_SKILLS_SHOWN, type ClaudeEvent, type ClaudeSkill } from '../shared/api';
 import { transport } from './transport';
 
 // Skillene Claude har utenom de som kan velges (plugins, personlige). Lista huskes, så de kan avvises
@@ -49,8 +49,8 @@ export const refreshSkills = (): Promise<void> => {
     s => {
       loading = null;
       remember(s.other);
-      // Bare de som kan velges (CLAUDE_SKILLS), i fast rekkefølge, og bare de som finnes i repoet
-      const next = CLAUDE_SKILLS.flatMap(n => s.project.filter(p => p.name === n));
+      // Bare de som vises i velgeren (CLAUDE_SKILLS_SHOWN), i fast rekkefølge, og bare de som finnes i repoet
+      const next = CLAUDE_SKILLS_SHOWN.flatMap(n => s.project.filter(p => p.name === n));
       const nextHashes = Object.fromEntries(s.project.map(p => [p.name, p.hash]));
       const nextChanged = Object.fromEntries(s.project.map(p => [p.name, p.changedAt]));
       const same = (a: unknown, b: unknown) => JSON.stringify(a) === JSON.stringify(b);
@@ -104,7 +104,7 @@ interface Props {
 }
 
 /**
- * Hvilken skill samtalen bruker, rett over inputfeltet (en av `CLAUDE_SKILLS`). Den valgte lastes med
+ * Hvilken skill samtalen bruker, rett over inputfeltet (en av `CLAUDE_SKILLS_SHOWN`). Den valgte lastes med
  * neste melding (`/<skill>`), men er bare et forslag: Claude kan også bruke de andre skillene som er
  * tillatt her, når oppgaven krever det. Alle andre skills avvises. Med `preselect` er det alltid én valgt;
  * uten kan brukeren velge «Ingen», og da lastes ingen på forhånd.

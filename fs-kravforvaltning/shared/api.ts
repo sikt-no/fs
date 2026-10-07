@@ -109,6 +109,12 @@ export interface ExecuteTarget {
 /** Skillene som kan velges i Claude-panelet; høyst én om gangen */
 export const CLAUDE_SKILLS = ['fs-krav', 'fs-krav-avvik', 'fs-specify', 'fs-specify-delta', 'fs-implementasjonsdetaljer', 'fs-verify'];
 
+/**
+ * Skillene som vises i skillvelgeren. De andre i `CLAUDE_SKILLS` (fs-krav-avvik, fs-specify, fs-specify-delta) velges
+ * ikke i panelet, men Claude kan bruke dem der de er tillatt, f.eks. med «Kjør fs-specify» i Spesifikasjoner.
+ */
+export const CLAUDE_SKILLS_SHOWN = ['fs-krav', 'fs-implementasjonsdetaljer', 'fs-verify'];
+
 /** Kodeklonene fs-verify leter i, med standardstien backenden fant */
 export const CODE_DIRS = ['fs-admin', 'fs-plattform'] as const;
 export interface CodeDir {

@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'preact/hooks';
-import type { ClaudeEvent, ClaudeStatus, ExecuteTarget } from '../shared/api';
+import { CLAUDE_SKILLS_SHOWN, type ClaudeEvent, type ClaudeStatus, type ExecuteTarget } from '../shared/api';
 import type { GitChange, Snapshot } from '../shared/model';
 import { isEditablePath } from '../shared/paths';
 import {
@@ -295,6 +295,8 @@ export function ClaudePanel({ status, width, onWidth, allowedSkills: modeSkills,
   const dirs = useCodeDirs();
   const noCode = transport.kind === 'electron' && codeDirs && !!dirs && !dirs.some(d => d.exists);
   const allowedSkills = noCode ? modeSkills.filter(s => s !== 'fs-verify') : modeSkills;
+  // Skillene som kan velges i velgeren; de andre tillatte kan Claude bruke selv
+  const choosable = allowedSkills.filter(s => CLAUDE_SKILLS_SHOWN.includes(s));
   const skillHint = (s: string) =>
     noCode && s === 'fs-verify' && modeSkills.includes(s) ? 'krever lokale kopier av fs-admin eller fs-plattform. Velg dem under «Kodemapper».' : modeHint(s);
   const cs = useConversations();
@@ -318,7 +320,7 @@ export function ClaudePanel({ status, width, onWidth, allowedSkills: modeSkills,
   // Skillen før den første samtalen finnes; ellers den samtalen har valgt. Er den ikke tillatt her,
   // gjelder den første tillatte i Krav og Avvik (fs-krav), og ingen i Oppgaver. Den lastes med neste melding.
   const [pending, setPending] = useState<string | null>(draft.pending);
-  const skill = effectiveSkill(conv ? c.skill : pending, allowedSkills, preselect);
+  const skill = effectiveSkill(conv ? c.skill : pending, choosable, preselect);
   // Fila brukeren ser på, sendes med som kontekst. ✕ holder den utenfor til brukeren åpner en annen fil.
   // Etter omlasting er det samme fil, så ✕ blir stående.
   const [excluded, setExcluded] = useState<string | null>(draft.excluded);
@@ -445,7 +447,7 @@ export function ClaudePanel({ status, width, onWidth, allowedSkills: modeSkills,
    * og filene legges ved med @. Brukeren leser og sender selv; første melding laster den nye versjonen av skillen.
    */
   const continueIn = (summary?: ChatSummary, files: string[] = []) => {
-    const skillNow = effectiveSkill(c.skill, allowedSkills, preselect);
+    const skillNow = effectiveSkill(c.skill, choosable, preselect);
     set(createConversation(convs, newId(), Date.now(), skillNow, conv?.id ?? null));
     setShowList(false);
     if (!summary) return;
@@ -477,7 +479,7 @@ export function ClaudePanel({ status, width, onWidth, allowedSkills: modeSkills,
           <button
             class="smallbtn"
             onClick={() => {
-              set(createConversation(convs, newId(), Date.now(), effectiveSkill(null, allowedSkills, preselect)));
+              set(createConversation(convs, newId(), Date.now(), effectiveSkill(null, choosable, preselect)));
               setShowList(false);
             }}
             title="Start en ny samtale"
