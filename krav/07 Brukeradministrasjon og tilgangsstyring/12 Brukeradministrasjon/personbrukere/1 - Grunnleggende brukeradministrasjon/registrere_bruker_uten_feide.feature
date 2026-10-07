@@ -28,9 +28,6 @@ Egenskap: Gi en person tilgang med fødselsnummer, D-nummer eller SNR
   @draft @openquestion
   Regel: Den første tildelingen gis med fødselsnummer, D-nummer eller SNR
     # ÅPNE SPØRSMÅL:
-    # - Gis én rolle i operasjonen, eller kan brukeradministratoren velge flere roller, organisasjoner
-    #   og miljøer på én gang? Operasjonen som er planlagt i iterasjon 4 tar én første rolle, mens
-    #   modalen er kalt «Opprett person med tilganger».
     # - En Feide-bruker som ennå ikke er flyttet over til personen, har rollene sine på
     #   Feide-brukeren. Gir brukeradministratoren hen en rolle med fødselsnummeret, står hen i
     #   overgangsperioden både som Feide-bruker og som person i brukeroversikten. Er det
@@ -79,6 +76,13 @@ Egenskap: Gi en person tilgang med fødselsnummer, D-nummer eller SNR
         | fødselsnummer  |
         | D-nummer       |
         | SNR            |
+
+    Scenario: Flere roller gis i samme operasjon
+      Gitt det finnes ingen person med fødselsnummeret i løsningen
+      Når brukeradministratoren gir personen flere roller for organisasjoner og miljøer brukeradministratoren administrerer og oppgir fødselsnummeret
+      Så har personen alle rollene for organisasjonene og miljøene
+      Og brukeradministratoren ser personen i brukeroversikten
+      Og det opprettes bare én person
 
     Scenario: Personen kan ikke legges til uten en rolle
       Gitt brukeradministratoren har oppgitt personens fødselsnummer
@@ -162,11 +166,11 @@ Egenskap: Gi en person tilgang med fødselsnummer, D-nummer eller SNR
 
   @draft @openquestion
   Regel: Nummeret må ha gyldige kontrollsifre
+    SNR har en egen personnummerserie, atskilt fra de fiktive numrene FS' egen generator lager
+    (måned +50 og personnummer fra 70000 og oppover). Løsningen kan derfor skille et SNR fra dem.
+
     # ÅPNE SPØRSMÅL:
     # - Hvilken beskjed får brukeradministratoren når nummeret er ugyldig? Ordlyden er ikke bestemt.
-    # - Har SNR en egen personnummerserie, og hvordan skilles et SNR fra andre numre der måneden
-    #   har +50? FS' egen generator lager også fiktive numre med måned +50 og personnummer fra
-    #   70000 og oppover. Overlapper seriene, kan løsningen ikke skille dem.
 
     Scenariomal: Nummer med ugyldige kontrollsifre avvises
       Gitt brukeradministratoren oppgir et <nummertype> med ugyldige kontrollsifre
@@ -201,12 +205,16 @@ Egenskap: Gi en person tilgang med fødselsnummer, D-nummer eller SNR
       Når brukeradministratoren gir personen en rolle i et testmiljø og oppgir fødselsnummeret
       Så har personen rollen i testmiljøet
 
-  @draft @openquestion
+  @draft
   Regel: Brukeradministratoren kan bare gi roller hen har rett til å tildele
-    # ÅPNE SPØRSMÅL:
-    # - Skal alle med brukeradministrator-rollen kunne gi tilgang med fødselsnummer, D-nummer eller
-    #   SNR, eller skal det kreve en egen rettighet? Tidligere ble et eget tak foreslått. I dag gir
-    #   brukeradministrator-rollen rett til å administrere personer.
+    Alle med brukeradministrator-rollen kan gi tilgang med fødselsnummer, D-nummer eller SNR. Det
+    kreves ingen egen rettighet.
+
+    Scenario: Brukeradministrator gir tilgang med nummer uten egen rettighet
+      Gitt brukeradministratoren har brukeradministrator-rollen for en organisasjon i et miljø
+      Og brukeradministratoren har ingen annen rettighet enn brukeradministrator-rollen
+      Når brukeradministratoren gir personen en rolle for organisasjonen og miljøet og oppgir fødselsnummeret
+      Så har personen rollen for organisasjonen og miljøet
 
     Scenario: Rolle brukeradministratoren ikke har rett til å tildele
       Gitt brukeradministratoren har ikke rett til å tildele rollen for organisasjonen og miljøet
@@ -239,24 +247,6 @@ Egenskap: Gi en person tilgang med fødselsnummer, D-nummer eller SNR
       Så er det den registrerte personbrukeren som er innlogget
       Og personbrukeren har tilgangene rollen gir
       Og det opprettes ikke en ny personbruker for samme person
-
-    # FORSLAG TIL WORKSHOP: fjernes, fordi en person som finnes fra før, nå skal få tildelingen,
-    # ikke avvises. Se «Personen er allerede synlig for brukeradministratoren» og regelen «Svaret
-    # avslører ikke om personen fantes fra før».
-    Scenario: Personen er allerede registrert
-      Gitt personen allerede er registrert som personbruker
-      Når jeg registrerer den samme personen på nytt
-      Så får jeg beskjed om at personen allerede er registrert
-      Og det opprettes ikke en ny personbruker
-      Og jeg får ikke vite hvilke organisasjoner den eksisterende personbrukeren har tildelinger for
-
-    # FORSLAG TIL WORKSHOP: fjernes, fordi en person med Feide-konto nå skal få tildelingen, ikke
-    # avvises. Se «Personen har logget inn med Feide tidligere».
-    Scenario: Registrering av en person som allerede har Feide-konto
-      Gitt personen allerede finnes som personbruker med Feide-ID
-      Når jeg registrerer den samme personen som personbruker uten Feide-konto
-      Så får jeg beskjed om at personen allerede er registrert
-      Og det opprettes ikke en ny personbruker
 
   # FORSLAG TIL WORKSHOP: fjernes, fordi regelen er dekket av «Personen kan ikke legges til uten en
   # rolle» og «Personen finnes ikke i løsningen», og fordi tilgangen ved første pålogging er dekket
@@ -331,7 +321,7 @@ Egenskap: Gi en person tilgang med fødselsnummer, D-nummer eller SNR
 #   men ikke hvor ofte det leses.
 # - Skal en personbruker uten Feide-konto kunne slettes, eller er deaktivering (BRU-PER-GRU-014)
 #   eneste utvei når hen ikke lenger skal ha tilgang?
-# - Scenariet «Registrering av en person som allerede har Feide-konto» forutsetter at
+# - Scenariet «Personen har logget inn med Feide tidligere» forutsetter at
 #   fødselsnummeret eller D-nummeret til personbrukere med Feide-ID er kjent. Det lagres først
 #   ved personens neste pålogging etter at løsningen begynner å hente det, så en Feide-bruker som
 #   ikke har logget inn siden da, kan ikke oppdages. Om det gapet er akseptabelt, eller om det
