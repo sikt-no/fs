@@ -1087,3 +1087,19 @@ Feide-spesifikt (brukernavn, status, deaktivering). Personen har ingen deaktiver
   må koordineres før push.
 - **Eieren av migreringsskriptet i !6014**: kjøringen per miljø må følge MR 3 (Task #11).
 - **Kjetil**: tekstene, Q1–Q6 og Jira-saken.
+
+## Beslutninger fra Kjetil 07.10.2026 (går foran «Valg tatt i stedet for spørsmål»)
+
+1. **Jira**: MR-ene viser til **BAT-257**, som !6014 og !6015. Blokkeren er løst.
+2. **Q1, FS-genererte numre**: bekreftet. De avvises med samme feil som et ugyldig nummer. SNR har egen serie.
+3. **Q2, ekte person i et testmiljø**: **avvises med beskjed**, speilvendt av sperren for testperson i ekte
+   miljø. Endrer valg 4 over. I Task #1 får `tildel_person_med_fodselsnummer` en sjekk rett etter TS204:
+   `NOT auth.er_tenor_serie(fnr) AND miljo.er_syntetisk` gir en egen feilkode (neste ledige i TS-serien, f.eks.
+   TS205), avgjort av nummeret og miljøet alene, før noe personoppslag, så den ikke blir et eksistens-orakel.
+   `tildel_brukertilgang` avviser tilsvarende et ekte personsubjekt i et syntetisk miljø. I Task #2 får
+   unionene typen `EktePersonISyntetiskMiljo`. pgTAP og graphql-testene dekker begge retninger. Foreslått tekst:
+   «En ekte person kan ikke få tilgang i et testmiljø. Velg et ekte miljø.» (står i GRU-013-design.md).
+4. **Start**: backend (MR A, Task #1–#4) starter nå. Frontend og MR B venter til backend er gjennomgått.
+5. **Migreringsnummer**: review av !6067 anbefaler at !6067 flytter fra 0089 til 0090. Sjekk ledige numre
+   (main + åpne MR-er: !6014 0086, !6015 0087, !6064 0089, !6067 0089/0090) rett før migreringen skrives, og ta
+   det første ledige.

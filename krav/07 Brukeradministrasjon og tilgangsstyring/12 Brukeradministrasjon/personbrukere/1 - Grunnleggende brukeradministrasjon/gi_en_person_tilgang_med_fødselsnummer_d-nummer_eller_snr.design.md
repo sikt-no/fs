@@ -49,6 +49,7 @@ Alle tekstene er forslag og må godkjennes av Kjetil. Dette er fasiten for tekst
 | Snackbar | Tildelingen er gitt | «Personen har fått rollen {rollekode}.» | `{rollekode}`. Teksten er den samme uansett om personen fantes fra før, og har ikke navnet | Svaret er det samme uansett hva som fantes fra før |
 | Feltfeil under nummerfeltet | Nummeret har ugyldige kontrollsifre | «Nummeret er ikke et gyldig fødselsnummer, D-nummer eller SNR. Sjekk at det er skrevet riktig.» | Den samme teksten for alle tre nummertypene, fordi et ugyldig nummer ikke kan plasseres i en type | Nummer med ugyldige kontrollsifre avvises |
 | Feltfeil under nummerfeltet | Nummeret tilhører en testperson, og miljøet er et ekte miljø | «En testperson kan ikke få tilgang i et ekte miljø. Velg et testmiljø.» | – | Testperson får ikke tilgang i et ekte miljø |
+| Feltfeil under nummerfeltet | Nummeret tilhører en ekte person, og miljøet er et testmiljø | «En ekte person kan ikke få tilgang i et testmiljø. Velg et ekte miljø.» (foreslått tekst) | – | Ekte person får ikke tilgang i et testmiljø |
 | Tilbakemeldingsflaten | Brukeradministratoren har ikke rett til å tildele rollen for organisasjonen og miljøet | «Du har ikke rettighet til å tildele i denne kombinasjonen av organisasjon og miljø.» (finnes i fs-admin) | – | Rolle brukeradministratoren ikke har rett til å tildele |
 | Tilbakemeldingsflaten | Annen feil | «Kunne ikke gi rollen. Prøv igjen senere.» | – | – |
 
