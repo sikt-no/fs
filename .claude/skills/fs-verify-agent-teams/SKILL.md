@@ -1,6 +1,6 @@
 ---
 name: fs-verify-agent-teams
-description: Kjører `fs-verify` med et agent team (Claude Code agent teams, `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1`), med én teammate per feature-fil. Tar det samme scopet som `fs-verify` (en spesifikasjon, en `krav/`-sti eller en oppgave `tasks/<domene>/<slug>`) og lokale kloner av kode-repoene. Teammatene (agenttypen `fs-verify-krav`) leter i koden og gir bevis (`fil:linje`) per scenario, parallelt. Lead-en kontrollerer bevisene, spør brukeren, retagger `@in-progress` → `@implemented`, fjerner `@in-progress` fra deler, sletter `@deprecated`-krav når koden er borte, og skriver rapporten i samme format som `fs-verify`. Bare i terminalen, ikke i Claude-panelet i FS Kravforvaltning. Kjører aldri git add/commit/push. Trigges av "verifiser kravene med agent team", "fs-verify med agent teams", "fs-verify parallelt", "verifiser mange krav samtidig", "fs-verify-agent-teams".
+description: Kjører `fs-verify` med et agent team (Claude Code agent teams, `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1`), med én teammate per feature-fil. Tar det samme scopet som `fs-verify` (en spesifikasjon, en `krav/`-sti eller en oppgave `tasks/<domene>/<slug>`) og lokale kloner av kode-repoene. Teammatene (agenttypen `fs-verify-krav`) leter i koden og gir bevis (`fil:linje`) per scenario, parallelt. Lead-en kontrollerer bevisene, spør brukeren, retagger `@in-progress` → `@implemented`, fjerner `@in-progress` fra deler, sletter `@deprecated`-krav når koden er borte, og skriver rapporten i samme format som `fs-verify`. Bare i en interaktiv økt (terminalen, også terminalen i FS Kravforvaltning), ikke i Claude-panelet. Kjører aldri git add/commit/push. Trigges av "verifiser kravene med agent team", "fs-verify med agent teams", "fs-verify parallelt", "verifiser mange krav samtidig", "fs-verify-agent-teams".
 allowed-tools: Read, Write, Edit, Grep, Glob, Bash, AskUserQuestion, Agent, SendMessage, TaskCreate, TaskList, TaskGet, TaskUpdate
 ---
 
@@ -27,7 +27,7 @@ Du er lead i et agent team, og gjør det samme som `fs-verify`, men lar teammate
    ```
 
    i `~/.claude/settings.json`, og at Claude Code må startes på nytt. Tilby å kjøre vanlig `fs-verify` i stedet, og stopp.
-2. **Ikke i Claude-panelet i FS Kravforvaltning.** Panelet kjører `claude -p` og avviser Agent, så teams virker ikke der. Henvis til `fs-verify`, og stopp.
+2. **Ikke i Claude-panelet i FS Kravforvaltning.** Panelet kjører `claude -p` og avviser Agent, så teams virker ikke der. Henvis til `fs-verify`, eller til «I terminal med agent team» ved «Verifiser» i FS Kravforvaltning, og stopp. Terminalen i FS Kravforvaltning er en interaktiv økt med agent teams slått på, og der virker skillen.
 
 ## Finn scope og kode
 

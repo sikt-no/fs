@@ -142,6 +142,10 @@ jobs:
             exit 1
           fi
       - run: npm ci
+      # node-pty (terminalen) har ingen ferdigbygd binærfil for Linux: bygg den med node-gyp
+      - name: Bygg node-pty
+        if: runner.os == 'Linux'
+        run: npm rebuild node-pty --foreground-scripts
       - run: npx electron-vite build
       - run: npx electron-builder --publish never ${{ matrix.args }}
       - name: Last opp til releasen

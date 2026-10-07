@@ -19,6 +19,10 @@ export interface SpecActions {
   executeWhy: string;
   /** Kan repoet utføres i (Claude Code finnes, og den lokale klonen er valgt)? */
   canExecute: (repo: string) => boolean;
+  /** «Utfør med team i <repo>»: terminalen med agent teams, i kode-repoet; `null` når den ikke er tilgjengelig */
+  executeTeam: ((c: Card, repo: string) => void) | null;
+  /** «Verifiser i terminal med agent team» (fs-verify-agent-teams); `null` når den ikke er tilgjengelig */
+  verifyTeam: ((c: Card, screenshots: boolean) => void) | null;
 }
 
 interface Props {
@@ -75,6 +79,14 @@ export function SpecDetail({ c, col, repos, repoName, cards, entries, ro, dirty,
   const [promptFor, setPromptFor] = useState<string | null>(null);
   const [copied, copy] = useCopy();
   const [shots, setShots] = useVerifyScreenshots();
+  /** Steget i repoet settes til «pågår», med agenten som har tatt det, og en linje i loggen */
+  const startStep = (r: string, what: string) =>
+    onRun(run => {
+      const st = run.steps.find(x => x.repo === r);
+      if (!st) return;
+      st.status = 'pågår';
+      if (!st.by) st.by = 'agent:' + (r === 'fs-admin' ? 'frontend' : r === 'fs-plattform' ? 'subgraph' : 'utvikler');
+    }, `startet ${what} i ${repoName(r)}`);
   const all = c.feats.flatMap(f => f.sc);
   const unsent = !c.run.route.length;
   const routeList = unsent ? c.doc.rute : c.run.route;
@@ -652,18 +664,27 @@ export function SpecDetail({ c, col, repos, repoName, cards, entries, ro, dirty,
                         title={s.blocked !== null ? 'Steget er blokkert' : actions.execute && actions.canExecute(r) ? `Utførekjøring i Claude-panelet, cwd = ${repoName(r)}` : actions.executeWhy}
                         onClick={() => {
                           if (!actions.execute || !actions.canExecute(r) || s.blocked !== null) return;
-                          onRun(run => {
-                            const st = run.steps.find(x => x.repo === r);
-                            if (!st) return;
-                            st.status = 'pågår';
-                            if (!st.by) st.by = 'agent:' + (r === 'fs-admin' ? 'frontend' : r === 'fs-plattform' ? 'subgraph' : 'utvikler');
-                          }, `startet utførekjøring i ${repoName(r)}`);
+                          startStep(r, 'utførekjøring');
                           actions.execute(c, r);
                         }}
                       >
                         <span class="sp-dia light" />
                         Utfør i {repoName(r)}
                       </button>
+                      {actions.executeTeam && (
+                        <button
+                          class="spbtn acc"
+                          disabled={s.blocked !== null || !actions.canExecute(r)}
+                          title={s.blocked !== null ? 'Steget er blokkert' : actions.canExecute(r) ? `Interaktiv Claude Code med agent teams i en terminal i Claude-panelet, cwd = ${repoName(r)}` : actions.executeWhy}
+                          onClick={() => {
+                            if (!actions.executeTeam || !actions.canExecute(r) || s.blocked !== null) return;
+                            startStep(r, 'utførekjøring med agent team');
+                            actions.executeTeam(c, r);
+                          }}
+                        >
+                          Utfør med team
+                        </button>
+                      )}
                       <button class="spbtn acc" onClick={() => setPromptFor(promptFor === pk ? null : pk)}>
                         {promptFor === pk ? 'Skjul prompt' : `Kopier prompt til ${repoName(r)}`}
                       </button>
@@ -694,6 +715,11 @@ export function SpecDetail({ c, col, repos, repoName, cards, entries, ro, dirty,
               Ta skjermbilder (test-fsadmin)
             </label>
             <ClaudeAction label="Verifiser" prompt={() => verifyPrompt(c, shots)} solid />
+            {actions.verifyTeam && (
+              <button class="spbtn acc" title="fs-verify-agent-teams i en terminal i Claude-panelet: én teammate per feature-fil" onClick={() => actions.verifyTeam?.(c, shots)}>
+                Verifiser i terminal med agent team
+              </button>
+            )}
           </div>
         )}
 

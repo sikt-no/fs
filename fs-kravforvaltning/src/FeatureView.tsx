@@ -239,9 +239,11 @@ interface Props {
   onDelete?: () => void;
   /** «Verifiser» på egenskapen eller en regel; utelatt når Claude-panelet ikke er tilgjengelig */
   onVerify?: (scope: VerifyScope, screenshots: boolean) => void;
+  /** «I terminal med agent team» på egenskapen (fs-verify-agent-teams) */
+  onVerifyTeam?: (screenshots: boolean) => void;
 }
 
-export function FeatureView({ entry, collapsed, flash, lineNumbers, mark, mainRef, onToggle, find, findClosed, onFindClose, onLine, onEdit, onDelete, onVerify }: Props) {
+export function FeatureView({ entry, collapsed, flash, lineNumbers, mark, mainRef, onToggle, find, findClosed, onFindClose, onLine, onEdit, onDelete, onVerify, onVerifyTeam }: Props) {
   const f = entry.model;
   const hit = (from: number, to = from) => (mark && from <= mark.to && to >= mark.from ? ' cursor' : '');
   const fileName = entry.path.slice(entry.path.lastIndexOf('/') + 1);
@@ -325,7 +327,7 @@ export function FeatureView({ entry, collapsed, flash, lineNumbers, mark, mainRe
           <span data-ln={f.ln} data-sep=" · ">{f.nLines} linjer</span>
           {onEdit && <button class="smallbtn editbtn" onClick={onEdit}>Rediger</button>}
           {onDelete && <button class="smallbtn editbtn" onClick={onDelete}>Slett kravfil</button>}
-          {onVerify && <VerifyMenu what="egenskapen" onVerify={shots => onVerify({ kind: 'feature' }, shots)} />}
+          {onVerify && <VerifyMenu what="egenskapen" onVerify={shots => onVerify({ kind: 'feature' }, shots)} onTerminal={onVerifyTeam} />}
         </div>
 
         <LintBand lint={f.lint} hit={hit} onLine={onLine} />

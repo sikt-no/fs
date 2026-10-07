@@ -973,6 +973,15 @@ a.otf:hover { background: var(--sunken); text-decoration: none; }
 button.cfile.off { background: transparent; border-style: dashed; color: var(--muted); cursor: pointer; padding: 1px 7px; }
 button.cfile.off:hover { color: var(--ink); border-color: var(--acc); }
 .claude-send { font-size: 11px; }
+.cterm { flex: 1; min-height: 0; display: flex; flex-direction: column; }
+.cterm-bar { display: flex; align-items: center; gap: 8px; padding: 6px 12px; border-bottom: 1px solid var(--line); font-size: 12px; color: var(--ink2); }
+.cterm-bar .cdot { background: var(--st-in-progress); }
+.cterm-bar .cdot.ok { background: var(--st-implemented); }
+.cterm-bar .cdot.off { background: var(--muted); }
+.cterm-mode { font-size: 11px; margin-right: auto; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0; }
+.cterm-host { flex: 1; min-height: 0; padding: 6px 0 6px 8px; background: var(--surface); overflow: hidden; }
+.cterm-host .xterm { height: 100%; }
+.cterm .claude-send { padding: 6px 12px 8px; border-top: 1px solid var(--line); }
 /* Dra-håndtaket på venstre kant av panelet */
 .claude { position: relative; }
 .claude-resize { position: absolute; top: 0; bottom: 0; left: -4px; width: 8px; cursor: col-resize; z-index: 3; touch-action: none; }

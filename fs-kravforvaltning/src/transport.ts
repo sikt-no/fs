@@ -5,7 +5,7 @@ import repoRoot from 'virtual:krav-root';
 import type { Api, ApiMethod, Boot } from '../shared/api';
 
 /** Hendelsene backenden sender til rendereren */
-export type KravEvent = 'krav:update' | 'krav:git' | 'krav:tasks' | 'krav:focus' | 'krav:blur' | 'krav:claude' | 'krav:connect' | 'krav:disconnect';
+export type KravEvent = 'krav:update' | 'krav:git' | 'krav:tasks' | 'krav:focus' | 'krav:blur' | 'krav:claude' | 'krav:pty' | 'krav:connect' | 'krav:disconnect';
 
 /** Broen preload-skriptet i desktop-appen legger på `window.krav` (se electron/preload.ts) */
 export interface KravBridge {
