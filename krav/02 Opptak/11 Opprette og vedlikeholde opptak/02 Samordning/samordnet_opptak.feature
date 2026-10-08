@@ -63,7 +63,7 @@ Egenskap: Samordnet opptak
       Når opptaksforvalter filtrerer på lærestedstype fagskole
       Så er kun norske fagskoler tilgjengelige som deltakere
 
-  # Erstattes av tildele_saksbehandlende_organisasjon.feature (@OPT-BEH-BEH-007).
+  # Erstattes av tildele_saksbehandlende_organisasjon.feature (@OPT-BEH-BEH-011).
   # Regelen er trolig levert (STEK-492), så den blir stående til egenskapen er @implemented,
   # og får da @deprecated.
   Regel: Opptaksforvalter ved forvaltende organisasjon knytter regler for saksbehandlertildeling i samordnet opptak

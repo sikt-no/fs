@@ -99,7 +99,7 @@ Egenskap: Opptaksinnstillinger per utdanningstilbud
       Når opptaksforvalter angir at utdanningstilbudet "Sykepleie, høst 2027" ikke skal delta i ledige studieplasser
       Så deltar utdanningstilbudet ikke i runder for ledige studieplasser
 
-  # Hvordan søknadsalternativene fordeles etter regelen, står i tildele_saksbehandlende_organisasjon.feature (@OPT-BEH-BEH-007).
+  # Hvordan søknadsalternativene fordeles etter regelen, står i tildele_saksbehandlende_organisasjon.feature (@OPT-BEH-BEH-011).
   Regel: Opptaksforvalter kan velge saksbehandlertildelingsregel per utdanningstilbud
 
     Scenario: Velge saksbehandlertildelingsregel for et utdanningstilbud
