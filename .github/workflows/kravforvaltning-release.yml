@@ -100,7 +100,7 @@ jobs:
 
           ### Installasjon
 
-          - **macOS**: `.dmg` (`arm64` for Apple Silicon, `x64` for Intel). Appen er ikke signert: høyreklikk og velg **Åpne** første gang, eller kjør `xattr -cr "/Applications/FS Kravforvaltning.app"`.
+          - **macOS**: `.dmg` (`arm64` for Apple Silicon, `x64` for Intel). Appen er signert og notarisert av Apple.
           - **Windows**: `.exe`. Appen er ikke signert: velg **Mer informasjon → Kjør likevel** hvis SmartScreen stopper den.
           - **Linux**: `.AppImage`. Gjør fila kjørbar med `chmod +x`.
           EOF
@@ -124,7 +124,6 @@ jobs:
     runs-on: ${{ matrix.os }}
     env:
       MAIN_VITE_KRAV_GITHUB_CLIENT_ID: ${{ vars.KRAV_GITHUB_CLIENT_ID }}
-      CSC_IDENTITY_AUTO_DISCOVERY: 'false'
     steps:
       # Bare appen: stiene i tasks/ og krav/ er for lange for Windows (MAX_PATH), og bygget bruker dem ikke
       - uses: actions/checkout@v7
@@ -141,6 +140,24 @@ jobs:
             echo "::error::Repo-variabelen KRAV_GITHUB_CLIENT_ID mangler. Uten den kan ikke brukerne logge inn på GitHub i appen (se docs/github-oauth.md)."
             exit 1
           fi
+      # Uten sertifikat og nøkkel til notariseringen publiseres ikke en usignert macOS-app (se docs/release.md)
+      - name: Sjekk at signeringen er satt opp
+        if: runner.os == 'macOS'
+        env:
+          MAC_CSC_LINK: ${{ secrets.MAC_CSC_LINK }}
+          MAC_CSC_KEY_PASSWORD: ${{ secrets.MAC_CSC_KEY_PASSWORD }}
+          APPLE_API_KEY: ${{ secrets.APPLE_API_KEY }}
+          APPLE_API_KEY_ID: ${{ secrets.APPLE_API_KEY_ID }}
+          APPLE_API_ISSUER: ${{ secrets.APPLE_API_ISSUER }}
+        run: |
+          missing=0
+          for name in MAC_CSC_LINK MAC_CSC_KEY_PASSWORD APPLE_API_KEY APPLE_API_KEY_ID APPLE_API_ISSUER; do
+            if [ -z "${!name}" ]; then
+              echo "::error::Secret $name mangler. Uten den kan ikke macOS-appen signeres og notariseres (se docs/release.md)."
+              missing=1
+            fi
+          done
+          exit $missing
       - run: npm ci
       # node-pty (terminalen) har ingen ferdigbygd binærfil for Linux: bygg den med node-gyp. Direkte, siden npm kan
       # være satt opp til ikke å kjøre installasjonsskriptene til avhengighetene
@@ -150,7 +167,35 @@ jobs:
       # spawn-helper må være kjørbar, også om postinstall ikke kjørte
       - run: node scripts/node-pty-helper.mjs
       - run: npx electron-vite build
-      - run: npx electron-builder --publish never ${{ matrix.args }}
+      # macOS: signeres med Developer ID-sertifikatet (CSC_LINK) og notariseres med App Store Connect-nøkkelen
+      # (APPLE_API_KEY er en sti, så nøkkelen skrives til en fil). CSC_LINK settes bare her, fordi electron-builder
+      # ellers prøver å signere Windows-bygget med det samme sertifikatet
+      - name: Pakk, signer og notariser
+        if: runner.os == 'macOS'
+        env:
+          CSC_LINK: ${{ secrets.MAC_CSC_LINK }}
+          CSC_KEY_PASSWORD: ${{ secrets.MAC_CSC_KEY_PASSWORD }}
+          APPLE_API_KEY_CONTENT: ${{ secrets.APPLE_API_KEY }}
+          APPLE_API_KEY_ID: ${{ secrets.APPLE_API_KEY_ID }}
+          APPLE_API_ISSUER: ${{ secrets.APPLE_API_ISSUER }}
+        run: |
+          export APPLE_API_KEY="$RUNNER_TEMP/AuthKey_$APPLE_API_KEY_ID.p8"
+          printf '%s\n' "$APPLE_API_KEY_CONTENT" > "$APPLE_API_KEY"
+          trap 'rm -f "$APPLE_API_KEY"' EXIT
+          npx electron-builder --publish never ${{ matrix.args }}
+      - name: Sjekk signaturen og notariseringen
+        if: runner.os == 'macOS'
+        run: |
+          for app in release/mac*/*.app; do
+            codesign --verify --deep --strict --verbose=2 "$app"
+            xcrun stapler validate "$app"
+            spctl --assess --type execute --verbose=2 "$app"
+          done
+      - name: Pakk
+        if: runner.os != 'macOS'
+        env:
+          CSC_IDENTITY_AUTO_DISCOVERY: 'false'
+        run: npx electron-builder --publish never ${{ matrix.args }}
       - name: Last opp til releasen
         env:
           GH_TOKEN: ${{ github.token }}
