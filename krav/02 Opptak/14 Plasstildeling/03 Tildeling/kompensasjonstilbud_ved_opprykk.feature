@@ -53,11 +53,12 @@ Egenskap: Kompensasjonstilbud ved opprykk i supplering
       Når plasstildelingen i runden gjennomføres
       Så gis det ikke automatisk nytt tilbud på plassen som ble frigjort
 
+      # AVKLART 2026-10-07: Ledige studieplasser er en egenskap ved etterfylling,
+      # ikke en egen rundetype.
       Eksempler:
-        | rundetype            |
-        | Hovedtildeling       |
-        | Etterfylling         |
-        | Ledige studieplasser |
+        | rundetype        |
+        | Hovedtildeling   |
+        | Etterfylling     |
 
 # ÅPNE SPØRSMÅL:
 # - Skal en søker som har takket ja og senere trekker seg frigjøre plassen til kompensasjonstilbud? I dag frigjøres den aldri.

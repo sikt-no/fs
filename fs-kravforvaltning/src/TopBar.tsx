@@ -1,7 +1,8 @@
 import type { OView } from './Oppgaver';
+import { vscodeUrl } from './vscode';
 
 export type Theme = 'light' | 'dark';
-export type Mode = 'krav' | 'avvik' | 'oppgaver';
+export type Mode = 'krav' | 'avvik' | 'spesifikasjoner' | 'oppgaver';
 
 interface Props {
   path: string;
@@ -10,6 +11,9 @@ interface Props {
   onTheme: (t: Theme) => void;
   treeHidden: boolean;
   onToggleTree: () => void;
+  /** Innholdspanelet til høyre i Krav (innhold og søk i fila) */
+  tocHidden: boolean;
+  onToggleToc: () => void;
   onHome: () => void;
   mode: Mode;
   onMode: (m: Mode) => void;
@@ -26,14 +30,22 @@ interface Props {
   /** Claude-panelet: `null` når Claude Code ikke er tilgjengelig, ellers om panelet er åpent */
   claude: boolean | null;
   onClaude: () => void;
+  /** Vis Spesifikasjoner-knappen (dev-serveren er startet med `--mode spesifikasjoner`) */
+  spesifikasjoner: boolean;
+  /** Antall spesifikasjoner som ikke er verifisert, vist på Spesifikasjoner-knappen */
+  nSpecs: number;
+  /** Spesifikasjoner: skrivebeskyttet (statisk bygg), antall endrede filer under tasks/, og «Lag PR» */
+  specState: { ro: boolean; dirty: number; onPr: (() => void) | null };
   /** Desktop-appen: main på GitHub er nyere enn klonen; knappen henter siste. `null`: ingenting å hente */
   onUpdate: (() => void) | null;
   /** «Hent siste» pågår */
   pulling: boolean;
+  /** Absolutt sti til repoet, for «Åpne i VS Code». `null` i statisk bygg */
+  repoRoot: string | null;
 }
 
-export function TopBar({ path, connected, theme, onTheme, treeHidden, onToggleTree, onHome, mode, onMode, nBad, oppgaver, nActive, oView, onOView, oCrumbs, claude, onClaude, onUpdate, pulling }: Props) {
-  const parts = mode === 'avvik' ? ['krav', '#/avvik'] : mode === 'oppgaver' ? oCrumbs : path ? path.split('/') : [];
+export function TopBar({ path, connected, theme, onTheme, treeHidden, onToggleTree, tocHidden, onToggleToc, onHome, mode, onMode, nBad, oppgaver, nActive, oView, onOView, oCrumbs, spesifikasjoner, nSpecs, specState, claude, onClaude, onUpdate, pulling, repoRoot }: Props) {
+  const parts = mode === 'avvik' ? ['krav', '#/avvik'] : mode === 'oppgaver' ? oCrumbs : mode === 'spesifikasjoner' ? ['tasks', '*/*', 'utforing.md'] : path ? path.split('/') : [];
   return (
     <header class="topbar">
       {/* Venstrepanelet: filtreet i Krav, mappene med avvik i Avvik */}
@@ -56,6 +68,11 @@ export function TopBar({ path, connected, theme, onTheme, treeHidden, onToggleTr
         <button aria-pressed={mode === 'avvik'} onClick={() => onMode('avvik')} title={`${nBad} filer med avvik fra konvensjonene`}>
           Avvik{nBad > 0 && <span class="badge">{nBad}</span>}
         </button>
+        {spesifikasjoner && (
+          <button aria-pressed={mode === 'spesifikasjoner'} onClick={() => onMode('spesifikasjoner')} title={`${nSpecs} spesifikasjoner som ikke er verifisert`}>
+            Spesifikasjoner<span class="badge neutral">{nSpecs}</span>
+          </button>
+        )}
         {oppgaver && (
           <button aria-pressed={mode === 'oppgaver'} onClick={() => onMode('oppgaver')} title={`${nActive} aktive oppgaver i tasks/`}>
             Oppgaver<span class="badge neutral">{nActive}</span>
@@ -81,6 +98,31 @@ export function TopBar({ path, connected, theme, onTheme, treeHidden, onToggleTr
         ))}
       </nav>
       <div class="topbar-right">
+        {mode === 'spesifikasjoner' && (
+          <span class="spstate mono">
+            {specState.ro ? (
+              <>
+                <span class="dot" style={{ background: 'var(--st-none)' }} />
+                statisk bygg · skrivebeskyttet
+              </>
+            ) : specState.dirty ? (
+              <>
+                <span class="dot" style={{ background: 'var(--st-in-progress)' }} />
+                {specState.dirty} endret · ikke merget
+                {specState.onPr && (
+                  <button class="spbtn solid small" onClick={specState.onPr}>
+                    Lag PR
+                  </button>
+                )}
+              </>
+            ) : (
+              <>
+                <span class="dot" style={{ background: 'var(--st-implemented)' }} />
+                som på main
+              </>
+            )}
+          </span>
+        )}
         {onUpdate && (
           <button
             class="updatebtn"
@@ -102,9 +144,31 @@ export function TopBar({ path, connected, theme, onTheme, treeHidden, onToggleTr
             )}
           </button>
         )}
+        {repoRoot && (
+          <a class="codebtn" href={vscodeUrl(repoRoot, { newWindow: true })} title={`Åpne ${repoRoot} i et nytt VS Code-vindu`}>
+            VS Code
+          </a>
+        )}
+        {mode === 'krav' && (
+          <button
+            class="tocbtn"
+            title={tocHidden ? 'Vis innhold' : 'Skjul innhold'}
+            aria-label={tocHidden ? 'Vis innhold' : 'Skjul innhold'}
+            aria-pressed={!tocHidden}
+            onClick={onToggleToc}
+          >
+            <span class="tocicon"><span><span /><span /><span /></span></span>
+          </button>
+        )}
         {claude !== null && (
-          <button class="claudebtn" aria-pressed={claude} onClick={onClaude} title="Spør den lokale Claude Code-en om kravene">
-            <span class="claude-mark" />Claude
+          <button
+            class="claudebtn"
+            aria-pressed={claude}
+            onMouseDown={e => e.preventDefault()}
+            onClick={onClaude}
+            title={claude ? 'Skjul Claude' : 'Vis Claude'}
+          >
+            <span class="claudeicon"><span /></span>Claude
           </button>
         )}
         <div class="live">

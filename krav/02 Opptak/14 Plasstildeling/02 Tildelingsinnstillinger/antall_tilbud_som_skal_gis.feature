@@ -6,52 +6,36 @@ Egenskap: Antall tilbud som skal gis per utdanningskvote
   ønsker jeg å bestemme hvor mange tilbud som skal gis i hver utdanningskvote i en runde
   slik at plasstildelingen fyller studieplassene uten å gi for mange eller for få tilbud.
 
-  # Kilde: tasks/opptak/plasstildeling/oppgave.md (oppgave 2), design.md (begrepsforklaringer) og
-  # Confluence «2026-09-08 Raffinering plasstildeling» (oppgave 2).
-  # Totalt antall tilbud og relativ fordeling per utdanningskvote settes på utdanningstilbudet, se
-  # 12 Utdanningstilbud/opptaksinnstillinger_utdanningstilbud.feature. Denne fila beskriver hvordan
-  # plasstildelingen bruker tallene, og hva som settes per runde.
+  # Kilde: tasks/opptak/plasstildeling/oppgave.md (oppgave 2), design.md (begrepsforklaringer),
+  # Confluence «2026-09-08 Raffinering plasstildeling» (oppgave 2) og raffinering 2026-10-07.
+  # Antall tilbud som skal gis settes per utdanningskvote for den enkelte runde.
   # Opptaksforvalter ved lærestedet setter tallene for egne utdanningstilbud innenfor perioden
   # som er satt på runden (se 01 Runder/legge_til_runde.feature).
-  # Begrep: «overbooking» og «måltall» erstattes av «antall tilbud som skal gis».
+  # Opptaksforvalter ved forvaltende organisasjon kan endre tallene også utenfor perioden.
+  # Begrep: «overbooking», «måltall» og «opptaksparametere» erstattes av «antall tilbud som skal gis».
 
   Bakgrunn:
     Gitt at opptaksforvalter ved lærestedet er innlogget
     Og at opptaket "Samordna opptak 2027" har runden "Hovedrunde" med rundetype "Hovedtildeling"
     Og at utdanningstilbudet "Sykepleie, høst 2027" har utdanningskvotene "Førstegangsvitnemål" og "Ordinær"
 
-  Regel: Antall tilbud per utdanningskvote beregnes fra relativ fordeling
+  Regel: Opptaksforvalter setter antall tilbud som skal gis per utdanningskvote for runden
 
-    Scenario: Beregne antall tilbud fra prosentfordeling
-      Gitt at utdanningstilbudet skal gi 278 tilbud totalt
-      Og at kvotefordelingen er 50 % førstegangsvitnemål og 50 % ordinær
-      Når plasstildelingen beregner antall tilbud som skal gis
-      Så skal det gis 139 tilbud i utdanningskvoten "Førstegangsvitnemål"
-      Og det skal gis 139 tilbud i utdanningskvoten "Ordinær"
+    # Opptaksforvalter slår opp siden for å sette antall tilbud som skal gis og ser
+    # en liste over utdanningstilbud med sine utdanningskvoter.
+    # Tallet settes direkte i utdanningskvoten. Totalt antall tilbud som skal gis
+    # for utdanningstilbudet beregnes automatisk som summen av utdanningskvotene.
 
-    @openquestion
-    Scenario: Prosentfordeling som ikke gir hele tall
-      # ÅPNE SPØRSMÅL:
-      # - Hvordan avrundes antall tilbud når prosentandelen ikke gir hele tall?
-      #   Hvilken utdanningskvote får restplassen?
-      Gitt at utdanningstilbudet skal gi 277 tilbud totalt
-      Og at kvotefordelingen er 50 % førstegangsvitnemål og 50 % ordinær
-      Når plasstildelingen beregner antall tilbud som skal gis
-      Så er summen av tilbud i utdanningskvotene 277
-
-  @openquestion
-  Regel: Opptaksforvalter kan justere antall tilbud per utdanningskvote for runden
-
-    # ÅPNE SPØRSMÅL:
-    # - Er tallet for runden en overstyring av det som er beregnet fra relativ fordeling,
-    #   eller er det det eneste tallet plasstildelingen bruker?
-    # - Confluence (raffinering 2026-09-08) sier at det bare er mulig å registrere antall per
-    #   utdanningskvote, og at totalen vises automatisk. Utdanningstilbud-kravet sier at totalen settes
-    #   og fordeles med prosent. Hvilken retning gjelder?
     Scenario: Sette antall tilbud i en utdanningskvote for runden
       Når opptaksforvalter setter antall tilbud som skal gis i utdanningskvoten "Ordinær" til 150 for runden "Hovedrunde"
+      Og opptaksforvalter setter antall tilbud som skal gis i utdanningskvoten "Førstegangsvitnemål" til 128 for runden "Hovedrunde"
       Så gir plasstildelingen i runden inntil 150 tilbud i utdanningskvoten "Ordinær"
-      Og totalt antall tilbud som skal gis for utdanningstilbudet vises automatisk
+      Og totalt antall tilbud som skal gis for utdanningstilbudet vises som 278
+
+    Scenario: Default er null
+      Gitt at opptaksforvalter ikke har satt antall tilbud som skal gis i utdanningskvotene for runden
+      Så er antall tilbud som skal gis i hver utdanningskvote 0
+      Og opptaksforvalter ser et tydelig varsel om at det ikke er lagt inn tall i utdanningskvoten
 
   Regel: Opptaksforvalter ser grunnlaget for å sette antall tilbud
 
@@ -59,22 +43,37 @@ Egenskap: Antall tilbud som skal gis per utdanningskvote
       Når opptaksforvalter ser antall tilbud som skal gis for utdanningstilbudet "Sykepleie, høst 2027"
       Så ser opptaksforvalter disse opplysningene
         | Opplysning                                     |
-        | Antall planlagte studieplasser                 |
-        | Antall tilbud gitt per utdanningskvote         |
-        | Antall tilbud akseptert per utdanningskvote    |
+        | Antall studieplasser                           |
         | Antall tilbud som skal gis per utdanningskvote |
         | Totalt antall tilbud som skal gis              |
+        | Antall tilbud gitt per utdanningskvote         |
+        | Antall tilbud akseptert per utdanningskvote    |
+        | Antall søkere på venteliste                    |
+
+    # Antall tilbud gitt, antall aksepterte og antall på venteliste oppdateres
+    # etterhvert som publisering av tilbud er gjort og svar begynner å komme inn fra søkere.
+
+  Regel: Et utdanningstilbud kan gi tilbud til alle kvalifiserte
+
+    # Opptaksforvalter kan velge dette i stedet for å sette tall i utdanningskvotene.
+    Scenario: Tilbud til alle kvalifiserte på utdanningstilbudet
+      Når opptaksforvalter angir at utdanningstilbudet "Sykepleie, høst 2027" skal gi tilbud til alle kvalifiserte
+      Så får alle kvalifiserte søkere tilbud uavhengig av poengsum
+      Og utdanningstilbudet har ingen poenggrense
 
   @openquestion
-  Regel: En utdanningskvote kan gi tilbud til alle kvalifiserte
-
+  Scenario: Prosentfordeling som ikke gir hele tall
     # ÅPNE SPØRSMÅL:
-    # - Settes «tilbud til alle kvalifiserte» per utdanningskvote (design.md) eller for hele
-    #   utdanningstilbudet (Confluence, raffinering 2026-09-08)?
-    Scenario: Tilbud til alle kvalifiserte i en utdanningskvote
-      Når opptaksforvalter angir at utdanningskvoten "Ordinær" skal gi tilbud til alle kvalifiserte
-      Så får alle kvalifiserte søkere i utdanningskvoten "Ordinær" tilbud uavhengig av poengsum
-      Og utdanningskvoten "Ordinær" har ingen poenggrense
+    # - Hvordan avrundes antall tilbud når prosentandelen ikke gir hele tall?
+    #   Forslag: restplassen går til kvoten som ikke kan viderefordele plasser til andre kvoter.
+    #   I UHG-opptak er dette normalt ordinær kvote, fordi førstegangsvitnemålskvoten kan
+    #   viderefordele ubrukte plasser til ordinær, men ikke omvendt.
+    #   Stemmer dette som hovedregel? Finnes det unntak?
+    Gitt at utdanningstilbudet skal gi 277 tilbud totalt
+    Og at kvotefordelingen er 50 % førstegangsvitnemål og 50 % ordinær
+    Når plasstildelingen beregner antall tilbud som skal gis
+    Så skal det gis 138 tilbud i utdanningskvoten "Førstegangsvitnemål"
+    Og det skal gis 139 tilbud i utdanningskvoten "Ordinær"
 
   Regel: I suppleringsrunder settes antall ønsket ja-svar
 
@@ -96,15 +95,21 @@ Egenskap: Antall tilbud som skal gis per utdanningskvote
       Så gir plasstildelingen 10 nye tilbud i utdanningskvoten "Ordinær"
       Og plasstildelingen kompenserer ikke for frafall
 
+# AVKLARTE SPØRSMÅL (raffinering 2026-10-07):
+# - Opptaksforvalter ved forvaltende organisasjon kan endre antall tilbud også utenfor
+#   lærestedenes periode. Se 01 Runder/legge_til_runde.feature.
+# - Siste lagrede tall er korrekt uavhengig av hvem som satte det.
+# - Standard plassflyt for opptaket er en opptaksinnstilling, men løses som del av
+#   arbeidet med å lage plasstildelingen.
+# - Antall tilbud som skal gis settes direkte per utdanningskvote.
+#   Totalt antall tilbud er utledet (summen av utdanningskvotene), ikke satt eksplisitt.
+# - Default i utdanningskvotene er null, med tydelig varsel.
+#
 # ÅPNE SPØRSMÅL:
 # - Supplering: er antall tilbud for runden et absolutt tall, eller et tillegg (delta) til det som
 #   allerede er gitt? Confluence «Samordnet plasstildeling» sier delta.
 # - Begrep: oppgave.md sier at «overbooking» skal hete «antall ønskede ja-svar», mens design.md sier
 #   at «overbooking» skal hete «antall tilbud som skal gis». Hvilken gjelder? Fila følger design.md.
-# - Fire tall i fire tabeller (antall studieplasser, ønsket antall deltakere, overbook, ønsket antall tilbud).
-#   Hvilket er fasit, og hvilke skal opptaksforvalter se?
 # - Negative tall: skal det være mulig å redusere antall aktive tilbud i en suppleringsrunde?
 #   Ikke verifisert mot dagens løsning.
-# - Kan opptaksforvalter ved forvaltende organisasjon endre tallene på vegne av lærestedet,
-#   også utenfor lærestedenes periode?
 # - Merbehov senere: nøkkeltall fra fjorårets opptak med forslag til antall ønsket ja-svar.

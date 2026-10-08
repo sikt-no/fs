@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
-import { prTitle, readHead, setPriority, setStatus, setTitle } from './edit.ts';
+import { changedFile, draftPicked, prTitle, readHead, setPriority, setStatus, setTitle } from './edit.ts';
 
 const FILE = `# language: no
 @BRU-APP-API-001 @must @planned
@@ -57,4 +57,28 @@ test('prTitle foreslår en tittel ut fra filene', () => {
   assert.equal(prTitle(['krav/a/x.feature'], { 'krav/a/x.feature': 'Se X' }), 'Krav: Se X');
   assert.equal(prTitle(['krav/a/01 Liste/x.feature', 'krav/a/01 Liste/y.feature'], {}), 'Krav: Liste (2 filer)');
   assert.equal(prTitle(['krav/a/x.feature', 'krav/b/y.feature'], {}), 'Krav: 2 filer');
+});
+
+test('changedFile finner fila blant ucommittede og committede endringer', () => {
+  const git = {
+    branch: 'b',
+    commits: 1,
+    uncommitted: [{ path: 'krav/a.feature', code: 'M' as const, plus: 1, minus: 0 }],
+    committed: [{ path: 'krav/b.feature', code: 'A' as const, plus: 3, minus: 0 }],
+  };
+  assert.equal(changedFile(git, 'krav/a.feature'), true);
+  assert.equal(changedFile(git, 'krav/b.feature'), true);
+  assert.equal(changedFile(git, 'krav/c.feature'), false);
+  assert.equal(changedFile(null, 'krav/a.feature'), false);
+});
+
+test('draftPicked: uten utkast fila dialogen åpnes fra, ellers de ucommittede', () => {
+  assert.deepEqual(draftPicked(null, 'krav/a.feature', ['krav/b.feature']), ['krav/a.feature']);
+  assert.deepEqual(draftPicked(null, undefined, ['krav/b.feature']), ['krav/b.feature']);
+});
+
+test('draftPicked: med utkast beholdes valgene, og fila dialogen åpnes fra legges til', () => {
+  assert.deepEqual(draftPicked([], undefined, ['krav/b.feature']), []);
+  assert.deepEqual(draftPicked(['krav/b.feature'], 'krav/a.feature', []), ['krav/b.feature', 'krav/a.feature']);
+  assert.deepEqual(draftPicked(['krav/a.feature'], 'krav/a.feature', []), ['krav/a.feature']);
 });

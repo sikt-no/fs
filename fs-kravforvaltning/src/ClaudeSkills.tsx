@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'preact/hooks';
-import { CLAUDE_SKILLS, type ClaudeEvent, type ClaudeSkill } from '../shared/api';
+import { CLAUDE_SKILLS_SHOWN, type ClaudeEvent, type ClaudeSkill } from '../shared/api';
 import { transport } from './transport';
 
 // Skillene Claude har utenom de som kan velges (plugins, personlige). Lista huskes, så de kan avvises
@@ -33,23 +33,61 @@ const remember = (names: string[] | null) => {
 transport.on('krav:claude', ({ event }: { event: ClaudeEvent }) => {
   if (event.kind === 'init') remember(event.skills);
 });
-let loaded = false;
-const load = () => {
-  if (loaded || transport.kind === 'static') return;
-  loaded = true;
-  transport.call('claudeSkills').then(
+// Versjonen av hver skill i repoet (hash over filene). Endres den, er skillen utdatert i samtaler som lastet den før.
+let hashes: Record<string, string> = {};
+// Når hver skill sist ble endret på disk, for samtaler som lastet skillen før versjonen ble lagret
+let changedAt: Record<string, number> = {};
+let loading: Promise<void> | null = null;
+
+/**
+ * Henter skillene fra backenden på nytt: ved første visning, etter «Hent siste», når vinduet får fokus
+ * og før hver melding, så en endret skill blir sett uten omlasting.
+ */
+export const refreshSkills = (): Promise<void> => {
+  if (transport.kind === 'static') return Promise.resolve();
+  loading ??= transport.call('claudeSkills').then(
     s => {
+      loading = null;
       remember(s.other);
-      // Bare de som kan velges (CLAUDE_SKILLS), i fast rekkefølge, og bare de som finnes i repoet
-      choices = CLAUDE_SKILLS.flatMap(n => s.project.filter(p => p.name === n));
+      // Bare de som vises i velgeren (CLAUDE_SKILLS_SHOWN), i fast rekkefølge, og bare de som finnes i repoet
+      const next = CLAUDE_SKILLS_SHOWN.flatMap(n => s.project.filter(p => p.name === n));
+      const nextHashes = Object.fromEntries(s.project.map(p => [p.name, p.hash]));
+      const nextChanged = Object.fromEntries(s.project.map(p => [p.name, p.changedAt]));
+      const same = (a: unknown, b: unknown) => JSON.stringify(a) === JSON.stringify(b);
+      if (same(next, choices) && same(nextHashes, hashes) && same(nextChanged, changedAt)) return;
+      choices = next;
+      hashes = nextHashes;
+      changedAt = nextChanged;
       changed();
     },
-    () => (loaded = false),
+    () => {
+      loading = null;
+    },
   );
+  return loading;
 };
+if (typeof addEventListener === 'function') addEventListener('focus', () => void refreshSkills());
 
 /** Skills vieweren kjenner fra før, til `claudeRun`, så backenden kan avvise dem */
 export const knownSkills = () => known;
+
+/** Versjonen av skillene på disk, sist de ble hentet */
+export const skillHashes = () => hashes;
+
+/** Når skillene sist ble endret på disk */
+export const skillChangedAt = () => changedAt;
+
+/** Versjonen av skillene, og tegner på nytt når de endres (`skillChangedAt` endres samtidig) */
+export function useSkillHashes(): Record<string, string> {
+  const [, force] = useState(0);
+  useEffect(() => {
+    const l = () => force(n => n + 1);
+    listeners.add(l);
+    void refreshSkills();
+    return () => void listeners.delete(l);
+  }, []);
+  return hashes;
+}
 
 interface Props {
   value: string | null;
@@ -61,33 +99,30 @@ interface Props {
   /** Én skill er alltid valgt (Krav, Avvik). Uten: «Ingen» kan velges, og da kan Claude bruke alle de tillatte (Oppgaver) */
   preselect: boolean;
   disabled?: boolean;
+  /** Skillen er oppdatert siden den ble lastet: et bytte ville lastet den nye versjonen inn i den gamle samtalen */
+  locked?: boolean;
 }
 
 /**
- * Hvilken skill samtalen bruker, rett over inputfeltet (en av `CLAUDE_SKILLS`). Den valgte lastes med
+ * Hvilken skill samtalen bruker, rett over inputfeltet (en av `CLAUDE_SKILLS_SHOWN`). Den valgte lastes med
  * neste melding (`/<skill>`), men er bare et forslag: Claude kan også bruke de andre skillene som er
  * tillatt her, når oppgaven krever det. Alle andre skills avvises. Med `preselect` er det alltid én valgt;
  * uten kan brukeren velge «Ingen», og da lastes ingen på forhånd.
  */
-export function SkillPicker({ value, onChange, allowed, hint, preselect, disabled }: Props) {
-  const [, force] = useState(0);
-  useEffect(() => {
-    const l = () => force(n => n + 1);
-    listeners.add(l);
-    load();
-    return () => void listeners.delete(l);
-  }, []);
+export function SkillPicker({ value, onChange, allowed, hint, preselect, disabled, locked }: Props) {
+  useSkillHashes();
   if (!choices.length) return null;
+  const off = disabled || locked;
 
   return (
-    <div class="cskills" role="radiogroup" aria-label="Skill for samtalen">
+    <div class={'cskills' + (locked ? ' locked' : '')} role="radiogroup" aria-label="Skill for samtalen">
       <span class="cskills-label">Skill</span>
       {!preselect && (
         <button
           class="cskill"
           role="radio"
           aria-checked={value === null}
-          disabled={disabled}
+          disabled={off}
           title={`Ingen valgt: Claude kan bruke ${allowed.join(', ')} når det passer`}
           onClick={() => onChange(null)}
         >
@@ -102,7 +137,7 @@ export function SkillPicker({ value, onChange, allowed, hint, preselect, disable
             class="cskill"
             role="radio"
             aria-checked={value === c.name}
-            disabled={disabled || !ok}
+            disabled={off || !ok}
             title={ok ? c.description : `${c.name}: ${hint(c.name)}`}
             onClick={() => onChange(!preselect && value === c.name ? null : c.name)}
           >
@@ -110,6 +145,7 @@ export function SkillPicker({ value, onChange, allowed, hint, preselect, disable
           </button>
         );
       })}
+      {locked && <span class="cskills-hint">Start en ny samtale for å bytte skill</span>}
     </div>
   );
 }

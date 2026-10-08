@@ -2,6 +2,7 @@
 // krav-kobling, filtre og agent-prompt. Rene funksjoner uten Preact, testet i oppgaveflyt.test.ts.
 import { displayStatus, type DisplayStatus, type Snapshot } from '../shared/model.ts';
 import { PHASES, type Task } from '../shared/tasks.ts';
+import { idIndex } from './specboard.ts';
 
 /** Status på issuet i project-boardet per fase (tabellen i tasks/README.md) */
 export const PH_ISSUE = ['Prioritert', 'Behovsanalyse → Løsningsalternativ', 'Utvikling', 'Innføring', 'Levert'];
@@ -132,9 +133,9 @@ export interface KravItem {
 export interface KravLinks {
   items: KravItem[];
   more: number;
-  /** Filer i spec/krav-input som ikke finnes i krav/ lenger (omdøpt eller slettet) */
+  /** Krav i spesifikasjonene som ikke finnes i krav/ lenger (omdøpt eller slettet) */
   missing: string[];
-  /** Hvor koblingen kom fra: filene i spec/krav-input, eller mappa i «Krav (Gherkin)» */
+  /** Hvor koblingen kom fra: `## Krav` i spesifikasjonene, eller mappa i «Krav (Gherkin)» */
   from: 'spec' | 'lenke' | null;
 }
 
@@ -150,17 +151,18 @@ export function kravFor(t: Task, entries: Snapshot): KravLinks {
   };
   const inLink = (p: string) => !!t.kravLink && (p === t.kravLink || p.startsWith(t.kravLink + '/'));
 
-  // 1. Kravene fs-specify hentet inn: spec/krav-input/local/*.feature og spec/krav-input/changes/<ref>/krav/**
+  // 1. Kravene under «## Krav» i spesifikasjonene, slått opp på Feature-ID, så stien i lenken, så filnavnet
+  const ids = idIndex(entries);
   const found = new Set<string>();
   const missing = new Set<string>();
-  for (const f of t.files.filter(f => f.startsWith('spec/krav-input/') && f.endsWith('.feature') && !f.includes('/before/'))) {
-    const full = /\/(krav\/.+)$/.exec(f)?.[1];
-    if (full && entries[full]) {
+  for (const k of t.specKrav) {
+    const full = (k.id && ids.get(k.id)?.path) || (k.path && entries[k.path] ? k.path : null);
+    if (full) {
       found.add(full);
       continue;
     }
-    const hits = feats.filter(e => base(e.path) === base(f)).map(e => e.path);
-    if (!hits.length) missing.add(base(f));
+    const hits = feats.filter(e => base(e.path) === k.file).map(e => e.path);
+    if (!hits.length) missing.add(k.file);
     const narrowed = hits.filter(inLink);
     (narrowed.length ? narrowed : hits).forEach(h => found.add(h));
   }

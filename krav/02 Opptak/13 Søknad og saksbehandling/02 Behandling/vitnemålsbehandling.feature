@@ -730,7 +730,7 @@ Egenskap: Vitnemålsbehandling
 #
 # UI-detaljer. Plassering, accordion-oppførsel, antall rader i skjemaet,
 # kolonnebredder, utforming av varsler og vindushåndtering hører i
-# vitnemålsbehandling.design.md, jf. utdype-implementasjon-skillen.
+# vitnemålsbehandling.design.md, jf. fs-implementasjonsdetaljer-skillen.
 #
 # OPPFØLGING UTENFOR DENNE FEATUREN
 #

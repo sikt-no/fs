@@ -75,7 +75,7 @@ Bruk disse titlene direkte, kun bytt ut `<elementer>`/`<element>`/`<X>`:
 
 **Synlighet:**
 
-- `Scenario: <Rolle> ser <elementer> fra <scope>` — f.eks. `Applikasjonsadministrator ser applikasjoner fra egne organisasjoner`.
+- `Scenario: <Rolle> ser <elementer> fra <scope>` — f.eks. `Applikasjonsadministrator ser applikasjoner fra organisasjonene jeg administrerer`.
 - `Scenario: Super-<rolle> ser alle <elementer>`
 
 ### Stegformuleringer
@@ -151,7 +151,7 @@ Når listen er rolle-/rettighetsstyrt:
 
 ## Hva regelen *ikke* sier
 
-- Ingen UI-detaljer (knapp vs. lenke, plassering, ikoner) — det hører hjemme i `<feature>.design.md` via `utdype-implementasjon`.
+- Ingen UI-detaljer (knapp vs. lenke, plassering, ikoner) — det hører hjemme i `<feature>.design.md` via `fs-implementasjonsdetaljer`.
 - Ingen ytelsestall utover sidestørrelsen.
 - Ingen krav om uendelig scroll vs. eksplisitt «last inn flere»-knapp — beskriv brukerens intensjon («velger å laste inn flere»), ikke interaksjonen.
 

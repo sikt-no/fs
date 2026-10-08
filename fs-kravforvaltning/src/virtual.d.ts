@@ -10,6 +10,12 @@ declare module 'virtual:krav-git' {
   export default git;
 }
 
+declare module 'virtual:krav-root' {
+  /** Absolutt sti til repoet i dev-serveren, null i statisk bygg */
+  const root: string | null;
+  export default root;
+}
+
 declare module 'virtual:krav-tasks' {
   import type { TasksSnapshot } from '../shared/tasks';
   /** null når Oppgaver-modusen ikke er slått på (`--mode oppgaver`) */

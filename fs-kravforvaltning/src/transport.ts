@@ -1,10 +1,11 @@
 import initial from 'virtual:krav';
 import initialGit from 'virtual:krav-git';
 import initialTasks from 'virtual:krav-tasks';
+import repoRoot from 'virtual:krav-root';
 import type { Api, ApiMethod, Boot } from '../shared/api';
 
 /** Hendelsene backenden sender til rendereren */
-export type KravEvent = 'krav:update' | 'krav:git' | 'krav:tasks' | 'krav:focus' | 'krav:blur' | 'krav:claude' | 'krav:connect' | 'krav:disconnect';
+export type KravEvent = 'krav:update' | 'krav:git' | 'krav:tasks' | 'krav:focus' | 'krav:blur' | 'krav:claude' | 'krav:pty' | 'krav:connect' | 'krav:disconnect';
 
 /** Broen preload-skriptet i desktop-appen legger på `window.krav` (se electron/preload.ts) */
 export interface KravBridge {
@@ -54,7 +55,7 @@ function vite(): Transport {
   return {
     kind: hot ? 'vite' : 'static',
     live: !!hot,
-    boot: async () => ({ entries: initial, git: initialGit, tasks: initialTasks, editable: !!hot }),
+    boot: async () => ({ entries: initial, git: initialGit, tasks: initialTasks, editable: !!hot, repoRoot: hot ? repoRoot : null }),
     on(event, fn) {
       if (!hot) return () => {};
       const name = alias[event] ?? event;

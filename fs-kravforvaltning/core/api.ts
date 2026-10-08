@@ -3,22 +3,24 @@ import type { Api, ApiMethod, Boot } from '../shared/api.ts';
 import { API_METHODS } from '../shared/api.ts';
 import type { Auth } from './auth.ts';
 import type { ClaudeRunner } from './claude.ts';
-import { kravPath, saveFile } from './save.ts';
+import type { PtyRunner } from './pty.ts';
+import { deleteFile, kravPath, saveFile } from './save.ts';
 import type { Workspace } from './workspace.ts';
 
 /**
  * Kallene rendereren kan gjøre, felles for dev-serveren (`POST /__krav/api/<navn>`) og Electron (IPC).
  * Transporten pakker bare inn og ut; all logikk står her og i modulene under.
  */
-export function createApi(ws: Workspace, auth: Auth, claude: ClaudeRunner): Api & { boot(): Boot } {
+export function createApi(ws: Workspace, auth: Auth, claude: ClaudeRunner, pty: PtyRunner): Api & { boot(): Boot } {
   const vcs = () => {
     if (!ws.vcs) throw new Error('Git er ikke tilgjengelig');
     return ws.vcs;
   };
   return {
-    boot: () => ({ entries: ws.entries, git: ws.git, tasks: ws.tasks, editable: true }),
+    boot: () => ({ entries: ws.entries, git: ws.git, tasks: ws.tasks, editable: true, repoRoot: ws.repoRoot }),
     read: path => readFile(kravPath(ws.repoRoot, path), 'utf8'),
     save: req => saveFile(ws.repoRoot, req.path, req.text),
+    remove: path => deleteFile(ws.repoRoot, path),
     async publish(req) {
       const res = await vcs().publish(req, await auth.token());
       ws.refreshGit();
@@ -33,6 +35,7 @@ export function createApi(ws: Workspace, auth: Auth, claude: ClaudeRunner): Api 
       if (!v.pull) throw new Error('Henting gjøres med git i dev-serveren');
       await v.pull(await auth.token());
       await ws.readAll();
+      return { entries: ws.entries, git: ws.git, tasks: ws.tasks };
     },
     async mainStatus() {
       const v = ws.vcs;
@@ -47,8 +50,17 @@ export function createApi(ws: Workspace, auth: Auth, claude: ClaudeRunner): Api 
     claudeRun: req => claude.run(req),
     claudeCancel: runId => claude.cancel(runId),
     claudeActive: async () => claude.active(),
+    claudeApprove: req => claude.approve(req),
+    claudeAnswer: req => claude.answer(req),
+    claudePending: async () => claude.pending(),
     claudeSkills: async () => claude.skills(),
     claudeDirs: async paths => claude.dirs(paths),
+    ptyStart: req => pty.start(req),
+    ptyWrite: async req => pty.write(req?.id, req?.data),
+    ptyResize: async req => pty.resize(req?.id, req?.cols, req?.rows),
+    ptyKill: async id => pty.kill(id),
+    ptyActive: async () => pty.active(),
+    ptyBuffer: async id => pty.buffer(id),
     pickDir: async () => {
       throw new Error('Mappevelgeren finnes bare i desktop-appen');
     },

@@ -24,7 +24,8 @@ tasks/
         │   └── rNN-<fra>-til-<til>.md
         ├── flow.md               # valgfri: BAT-pipeline (eies av alfred)
         ├── memory.md             # valgfri: agent-journal
-        ├── spec/                 # krav: spec-*.md, krav-input/, spec.log.md
+        ├── utforing.md           # valgfri: spesifikasjonene på veien gjennom kode-repoene (se Utføring)
+        ├── spec/                 # krav: spec-*.md, krav-input/, spec.log.md, verify-*.md, verify-<dato>/ (skjermbilder)
         └── <lag>/                # ett per lag/rolle: frontend, backend, subgraph, tester …
             ├── analysis-<slug>.md
             ├── plan-<slug>.md
@@ -59,9 +60,79 @@ Slug-en må være unik innenfor domenet, ikke globalt. Den er en lesbar kebab-ca
 3. **`spec/` er reservert** for kravene. Det er dit `fs-specify` og `fs-specify-delta` alltid skriver, slik at hvem som helst kan peke på `tasks/<domene>/<slug>/spec/` uten å vite hvilken rolle som produserte resten. *(`spec-*.md` og `krav-input/` utenfor `spec/` sjekkes automatisk)*
 4. **`mal/` er reservert på domene-nivå** — det er ikke et domene. Malfilene heter `plan.md`, ikke `plan-lag.md`, nettopp for ikke å treffe globbene i regel 1. *(sjekkes automatisk, sammen med domener som ikke står i domenetabellen)*
 
-`oppgave.md`, `design.md`, `memory.md` og `reviews/` treffer ingen glob og hører hjemme i oppgave-rota.
+`oppgave.md`, `design.md`, `memory.md`, `utforing.md` og `reviews/` treffer ingen glob og hører hjemme i oppgave-rota.
 
 FS Kravforvaltning (`fs-kravforvaltning/`, modusen «Oppgaver») sjekker reglene som er merket *(sjekkes automatisk)*, og viser brudd som avvik på oppgaven. Den sjekker også at `oppgave.md` finnes og har en gyldig `Fase`, at `Slug` og `Domene` i metadataene stemmer med mappa, og at fasen i domenets `roadmap.md` er den samme som i `oppgave.md`. Sjekkene står i `fs-kravforvaltning/shared/tasks.ts` og er testet i `fs-kravforvaltning/shared/tasks.test.ts`. Endrer du en merket regel, eller legger du til en regel som kan sjekkes, må koden og testene oppdateres i samme endring.
+
+## Utføring
+
+En spesifikasjon fra `fs-specify` eller `fs-specify-delta` (`spec/spec-*.md`) samler hele krav: én eller flere feature-filer, med alt som er `@planned` eller `@deprecated` i dem. Spesifikasjonen går så gjennom kode-repoene, typisk fs-plattform (subgraph og backend) og så fs-admin (frontend), før `fs-verify` bekrefter at kravene er implementert. FS Kravforvaltning viser dette i visningen «Spesifikasjoner», med én kolonne per repo. Oppgavefasene over påvirker ikke den.
+
+Spesifikasjonen har disse seksjonene i tillegg til dem `fs-specify` alltid skriver:
+
+- `## Omfang`: 2–5 setninger om hva spesifikasjonen dekker og ikke dekker.
+- `## Skisser`: minst én `### Skisse:`, eller linja `Ingen skisse: <grunn>`.
+- `## Rute` (valgfri): forslag til rekkefølgen på repoene, `fs-plattform → fs-admin`. Den fjernes når spesifikasjonen sendes, og ruta står da i `utforing.md`.
+
+En spesifikasjon er klar til utvikling når den har tittel, omfang, minst én feature-fil, skisse (eller «Ingen skisse»), ingen åpne spørsmål, og alle kravene er hentet inn (`@in-progress`, eller `@deprecated` som skal fjernes).
+
+### utforing.md
+
+Tilstanden står i `utforing.md` i oppgave-rota, med én `##`-seksjon per spesifikasjon og én `###` per repo på ruta. Fila merges til `main` med PR, som kravene. Det trengs ingen synk i sanntid: et steg regnes som tatt når endringen er på `main`.
+
+```markdown
+# Utføring
+
+## spec/spec-opprette-og-vedlikeholde-opptak.md
+
+- **Rute**: fs-plattform → fs-admin
+- **Logg**:
+  - 2026-09-28 — @mats — sendte til fs-plattform
+  - 2026-10-01 — agent:subgraph — levert i fs-plattform (#123)
+
+### fs-plattform
+
+- **Status**: levert
+- **Tatt av**: agent:subgraph
+- **PR**:
+  - https://github.com/sikt-no/fs-plattform/pull/123
+- **Overlevering**:
+  - Ny mutation `opprettOpptak(input: OpprettOpptakInput!)`
+- **Blokkert**: –
+
+### fs-admin
+
+- **Status**: pågår
+- **Tatt av**: agent:frontend
+- **PR**: –
+- **Overlevering**: –
+- **Blokkert**: –
+```
+
+- `Status` er `venter`, `pågår` eller `levert`. Kortet står i kolonnen til det første repoet som ikke er levert, og i «Til verifisering» når alle er levert.
+- `Tatt av` er `@person` eller `agent:<rolle>`.
+- `levert` krever minst én `PR`.
+- `Overlevering` er det neste repo trenger å vite: nye felt, queries og mutations, endepunkter, kjente avvik.
+- `Blokkert` har grunnen, eller `–`.
+- `Tilbake: <dato>` settes av `fs-verify` når den sender steget tilbake.
+- `Logg` er append-only.
+
+### Protokoll for den som utfører et steg
+
+Det kan være en person, en Claude Code-økt i repoet, eller en utførekjøring fra FS Kravforvaltning («Utfør i <repo>»).
+
+1. Hent siste `main` i `sikt-no/fs`-klonen.
+2. Finn et steg der ditt repo er det første som ikke er levert, og som står som `venter`.
+3. Sett `Status: pågår` og `Tatt av` under `### <repo>`, og legg til en linje i `Logg`.
+4. Implementer ut fra spesifikasjonen, feature-filene, skissene og overleveringen fra forrige steg, med repoets egne skills.
+5. Lever: `Status: levert`, `PR` og `Overlevering`. Er du blokkert, sett `Blokkert` med grunn i stedet.
+6. Lag PR med endringen i `utforing.md` (eller ta den med i en PR du lager uansett).
+
+Kommer to PR-er som tar samme steg, gir git en konflikt i seksjonen, og den siste løses for hånd.
+
+Når alle steg er levert, kjøres `fs-verify` avgrenset til spesifikasjonen. Den skriver `spec/verify-<dato>.md` med `- **Spec:** spec/spec-<x>.md` og tabellen `## Scenarioer` (`| Feature-ID | Scenario | Resultat | Bevis |`). Er alt funnet, blir kravene `@implemented`, og kortet står i «Verifisert». Mangler noe, settes steget i repoet der koden mangler, tilbake til `pågår` med `Tilbake: <dato>`.
+
+Scenarioene `fs-verify` sjekker (gating-settet), er alle `Scenario:`/`Scenariomal:` som ikke er tagget `@draft`, `@deprecated`, `@openquestion` eller `@demo`, selv eller via `Regel:`. I et levert krav som endres, er det bare `@planned`- og `@in-progress`-delene, og `@deprecated`-delene sjekkes for at koden er borte. Den samme definisjonen står i `fs-kravforvaltning/src/specboard.ts` (`gating`), og de to holdes i synk.
 
 ## Forholdet til GitHub issues og projects
 
