@@ -32,14 +32,26 @@ Egenskap: Finne søknader om tidlig opptak
     Og saksbehandler ser listen over saker i opptaket "Samordna opptak 2027"
 
   Regel: Søk og filtrering av saker på tidlig opptak
+    En søker er med i tidligopptaket bare når saksbehandleren har konkludert med
+    at søkeren deltar, og saken er ferdig behandlet. Filteret «Tidlig opptak ikke
+    ferdig behandlet» er arbeidslisten over sakene der noe av dette mangler, slik
+    at ingen søker faller ut av tidligopptaket uten at saksbehandleren har bestemt det.
+
     # Filteret er ett valg som er av eller på (avkrysningsboks), ikke en
     # nedtrekksliste. Det finnes ikke noe valg for «ikke søkt om tidlig opptak»
     # (avklart 08.10.2026).
     #
-    # «Ikke vurdert for tidlig opptak» er et eget valg av samme slag. Det viser
-    # sakene der søkeren har søkt om tidlig opptak, og saksbehandleren ikke har
-    # konkludert om søkeren deltar i tidligopptaket. Det er sakene som må
-    # vurderes før tidligopptaket gjennomføres (avklart 08.10.2026).
+    # «Tidlig opptak ikke ferdig behandlet» er et eget valg av samme slag. Det
+    # viser sakene der søkeren har søkt om tidlig opptak, og der saksbehandleren
+    # ikke har konkludert, eller har konkludert med at søkeren deltar, men saken
+    # ikke er ferdig behandlet. Saker med konklusjonen «deltar ikke» er ikke med,
+    # uansett om saken er ferdig behandlet: for dem er det tatt et valg, og
+    # statusen betyr ikke noe for tidligopptaket (avklart 08.10.2026). Valget het
+    # tidligere «Ikke vurdert for tidlig opptak», og så bare på konklusjonen. Men
+    # bare ferdig behandlede saker er med i tidligopptaket
+    # (gi_tilbudsgaranti_ved_tidlig_opptak.feature), og en sak med konklusjonen
+    # «deltar» som ikke er ferdig behandlet, ville falt ut uten å vises i filteret.
+    # En mangel i dokumentasjonen påvirker ikke filteret.
 
     Scenario: Filteret for tidlig opptak er ikke valgt som standard
       Gitt opptaket har følgende saker:
@@ -58,14 +70,17 @@ Egenskap: Finne søknader om tidlig opptak
       Når saksbehandler velger filteret "Søkt om tidlig opptak"
       Så vises kun saken til "Kari Nordmann"
 
-    Scenario: Filtrere på saker som ikke er vurdert for tidlig opptak
+    Scenario: Filtrere på saker der tidlig opptak ikke er ferdig behandlet
       Gitt opptaket har følgende saker:
-        | søker          | søkt om tidlig opptak | konklusjon for tidlig opptak |
-        | Kari Nordmann  | ja                    | deltar                       |
-        | Per Hansen     | ja                    | ingen                        |
-        | Ola Nordmann   | nei                   | ingen                        |
-      Når saksbehandler velger filteret "Ikke vurdert for tidlig opptak"
-      Så vises kun saken til "Per Hansen"
+        | søker          | søkt om tidlig opptak | konklusjon for tidlig opptak | ferdig behandlet |
+        | Kari Nordmann  | ja                    | deltar                       | ja               |
+        | Per Hansen     | ja                    | ingen                        | nei              |
+        | Lise Berg      | ja                    | ingen                        | ja               |
+        | Nils Dahl      | ja                    | deltar                       | nei              |
+        | Anne Lie       | ja                    | deltar ikke                  | nei              |
+        | Ola Nordmann   | nei                   | ingen                        | nei              |
+      Når saksbehandler velger filteret "Tidlig opptak ikke ferdig behandlet"
+      Så vises kun sakene til "Per Hansen", "Lise Berg" og "Nils Dahl"
 
     Scenario: Kombinere filteret for tidlig opptak med andre filtre
       Når saksbehandler kombinerer filteret for tidlig opptak med ett eller flere andre filtre

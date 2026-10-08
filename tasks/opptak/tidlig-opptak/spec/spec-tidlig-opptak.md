@@ -15,7 +15,7 @@ Hele prosessen for tidlig opptak: søkeren ber om tidlig opptak med en begrunnel
 ## Krav
 
 - **`søke_om_tidlig_opptak.feature`** (`@OPT-SØK-SØK-011`) — søkeren ber om tidlig opptak fra søknadsdetaljene etter at søknaden er sendt, velger begrunnelse, kan bytte og trekke fram til fristen, og ser lenke og tidspunkt. ([krav/…/søke_om_tidlig_opptak.feature](../../../../krav/02%20Opptak/13%20S%C3%B8knad%20og%20saksbehandling/01%20S%C3%B8knad/s%C3%B8ke_om_tidlig_opptak.feature))
-- **`finne_søknader_om_tidlig_opptak.feature`** (`@OPT-BEH-BEH-009`) — filtrene «Søkt om tidlig opptak» og «Ikke vurdert for tidlig opptak» i sakslisten. ([krav/…/finne_søknader_om_tidlig_opptak.feature](../../../../krav/02%20Opptak/13%20S%C3%B8knad%20og%20saksbehandling/02%20Behandling/finne_s%C3%B8knader_om_tidlig_opptak.feature))
+- **`finne_søknader_om_tidlig_opptak.feature`** (`@OPT-BEH-BEH-009`) — filtrene «Søkt om tidlig opptak» og «Tidlig opptak ikke ferdig behandlet» i sakslisten (endret etter innhentingen, se _Endringer etter innhenting_). ([krav/…/finne_søknader_om_tidlig_opptak.feature](../../../../krav/02%20Opptak/13%20S%C3%B8knad%20og%20saksbehandling/02%20Behandling/finne_s%C3%B8knader_om_tidlig_opptak.feature))
 - **`vurdere_søknad_om_tidlig_opptak.feature`** (`@OPT-BEH-BEH-008`) — saksbehandleren vurderer om begrunnelsen er dokumentert, registrerer mangel med beskjed til søkeren, og konkluderer per organisasjon. Låses når tidligopptaket er gjennomført. ([krav/…/vurdere_søknad_om_tidlig_opptak.feature](../../../../krav/02%20Opptak/13%20S%C3%B8knad%20og%20saksbehandling/02%20Behandling/vurdere_s%C3%B8knad_om_tidlig_opptak.feature))
 - **`gi_tilbudsgaranti_ved_tidlig_opptak.feature`** (`@OPT-BEH-BEH-007`) — opptaksforvalteren prøvekjører og gjennomfører tidligopptaket og ser utfallet. Manuell tilbudsgaranti fra B-, T- og F-rolle. Tilbudsgarantien gjelder i hovedopptaket. ([krav/…/gi_tilbudsgaranti_ved_tidlig_opptak.feature](../../../../krav/02%20Opptak/13%20S%C3%B8knad%20og%20saksbehandling/02%20Behandling/gi_tilbudsgaranti_ved_tidlig_opptak.feature))
 - **`publisere_svar_på_tidlig_opptak.feature`** (`@OPT-OPT-TID-001`) — publiseringsdato per opptak, publisering først når tidligopptaket er gjennomført, og én melding til søkerne med forhåndsvisning. ([krav/…/publisere_svar_på_tidlig_opptak.feature](../../../../krav/02%20Opptak/11%20Opptak/06%20Tidlig%20opptak/publisere_svar_p%C3%A5_tidlig_opptak.feature))
@@ -96,6 +96,14 @@ Alle seks kravene ble hentet inn. Ingen ble holdt tilbake.
 | `krav/02 Opptak/13 …/01 Søknad/se_svar_på_tidlig_opptak.feature` | `@OPT-SØK-SØK-012 @must @planned` | `@OPT-SØK-SØK-012 @must @in-progress` |
 
 `søke_om_tidlig_opptak.feature` og `vurdere_søknad_om_tidlig_opptak.feature` ble endret på stedet før retaggingen, etter skissevalideringen (se _Skisser_).
+
+## Endringer etter innhenting
+
+Kravene er `@in-progress`, og endres på stedet. Endringene står her, så den som implementerer, ser dem.
+
+- **2026-10-08, `@OPT-BEH-BEH-009`:** Filteret «Ikke vurdert for tidlig opptak» heter nå «Tidlig opptak ikke ferdig behandlet», og så før bare på konklusjonen. Nå viser det sakene der søkeren har søkt om tidlig opptak, og der saksbehandleren ikke har konkludert, eller har konkludert med «deltar», men saken ikke er ferdig behandlet. Saker med «deltar ikke» er ikke med. Grunnen er at bare ferdig behandlede saker er med i tidligopptaket (`@OPT-BEH-BEH-007`), så en sak med «deltar» som ikke er ferdig behandlet, ville falt ut uten å vises i filteret. Scenarioet «Filtrere på saker der tidlig opptak ikke er ferdig behandlet» har en tabell med alle kombinasjonene.
+  - Hint til fs-plattform: alt som trengs, finnes allerede. Søkt er `soknad.tidligopptak_begrunnelsetype_kode` (ikke null), konklusjonen er `sak.tidligopptak_konklusjon_kode`, og ferdig behandlet er `SakStatusKode.FERDIG_BEHANDLET`. Filteret kan legges i `SakFilterV2Input` som de andre, med en `@condition` i `SakService`.
+  - Forslag til tekst ved avkrysningsboksen (skal inn i implementasjonsdetaljene): «Søkeren har søkt om tidlig opptak, men er ikke med ennå. Saken mangler konklusjon, eller konklusjonen er «deltar», men saken er ikke ferdig behandlet.»
 
 ## Åpne spørsmål
 
