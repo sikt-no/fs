@@ -65,16 +65,6 @@ Egenskap: Listevisning og filtrering av utdanningstilbud i opptak
       Når opptaksforvalter filtrerer på utdanningstilbud med ufullstendige opplysninger
       Så ser opptaksforvalter utdanningstilbud som mangler kvoter, kvoteprioritering eller plassflyt
 
-    @openquestion
-    # ÅPNE SPØRSMÅL:
-    # - Avhenger av om opptaksforvalter må velge saksbehandlertildelingsregel for utdanningstilbudet
-    #   (åpent spørsmål i opptaksinnstillinger_utdanningstilbud.feature, @OPT-OPT-UTD-004). Gjelder
-    #   standardregelen når utdanningstilbudet ikke har egen regel, mangler ingen utdanningstilbud
-    #   saksbehandlertildelingsregel, og scenarioet bør fjernes.
-    Scenario: Filtrere på utdanningstilbud som mangler saksbehandlertildelingsregel
-      Når opptaksforvalter filtrerer på utdanningstilbud med ufullstendige opplysninger
-      Så ser opptaksforvalter utdanningstilbud som mangler saksbehandlertildelingsregel
-
     Scenario: Filtrere på utdanningstilbud som mangler opplysninger om tilbudsgaranti
       Når opptaksforvalter filtrerer på utdanningstilbud med ufullstendige opplysninger
       Så ser opptaksforvalter utdanningstilbud som mangler opplysninger om hvor tilbudsgarantier skal tas fra

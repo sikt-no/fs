@@ -165,30 +165,21 @@ Egenskap: Tildele saksbehandlende organisasjon
       Så er "NTNU" saksbehandlende organisasjon for "Paramedisin, NTNU" og "Informatikk, UiO"
       Og "Høgskulen på Vestlandet" er saksbehandlende organisasjon for "Journalistikk, HVL"
 
-    @openquestion
-    # ÅPNE SPØRSMÅL:
-    # - Avklares med domeneekspert: Skal en sektor være avgrenset til bestemte organisasjoner,
-    #   eller er sektoren bare utdanningstilbudene som har samme tildelingsregel (slik det er
-    #   bygget, og slik HK-dirs wiki beskriver det: «Alle T-rollene som tilbyr et slikt studium,
-    #   kan behandle for det samme»)?
-    Scenario: Sektoren består av utdanningstilbudene med samme tildelingsregel
+    Scenario: Sektoren er lærestedene som har utdanningstilbud med samme tildelingsregel
       Gitt at "Journalistikk, HVL" og "Journalistikk, UiT" har tildelingsregelen "JOU"
       Når opptaksforvalteren ved NTNU velger tildelingsregelen "JOU" for "Journalistikk, NTNU"
-      Så er "Journalistikk, NTNU" med i sektoren for "JOU"
+      Så er "NTNU" med i sektoren for "JOU"
 
-    @openquestion
-    # ÅPNE SPØRSMÅL:
-    # - Avklares med domeneekspert: Skal «Bare tilbyderen – også for studieønsker uten egen regel»
-    #   gå foran sektoren uansett søkerens prioritering (slik det er bygget), eller skal søkerens
-    #   prioritet avgjøre hvem som saksbehandler søknadsalternativene uten egen tildelingsregel?
-    #   HK-dirs wiki sier ikke hva som gjelder når søkeren har både SPE og JOU.
-    Scenario: Tildelingsregel der bare tilbyderen saksbehandler går foran sektoren
+    Scenario: Søkerens prioritering avgjør hvem som saksbehandler søknadsalternativene uten egen tildelingsregel
       Gitt at "Journalistikk, HVL" har tildelingsregelen "JOU"
       Og at "Utøvende musikk, NTNU" har tildelingsregelen "SPE"
       Og at søkeren har søkt "Journalistikk, HVL", "Utøvende musikk, NTNU" og "Informatikk, UiO" i den rekkefølgen
       Når søknadsalternativene fordeles
-      Så er "NTNU" saksbehandlende organisasjon for "Utøvende musikk, NTNU" og "Informatikk, UiO"
-      Og "Høgskulen på Vestlandet" er saksbehandlende organisasjon for "Journalistikk, HVL"
+      Så er "Høgskulen på Vestlandet" saksbehandlende organisasjon for "Journalistikk, HVL" og "Informatikk, UiO"
+      Og "NTNU" er saksbehandlende organisasjon for "Utøvende musikk, NTNU"
+      # AVKLART 08.10.2026 med domeneekspert: verken SPE eller JOU sier at tilbyderen bare skal
+      # saksbehandle sine egne søknadsalternativer, så søkerens prioritering avgjør. Koden gir i dag
+      # SPE forrang uansett prioritering.
 
     Scenariomal: Opptaksforvalteren kan velge <organisasjon> som organisasjon for sektoren
       Når opptaksforvalteren ved HK-dir velger "<organisasjon>" som organisasjon på "JOU"
@@ -209,7 +200,6 @@ Egenskap: Tildele saksbehandlende organisasjon
     Scenario: Legge til unntak for utdanningsbakgrunn
       Når opptaksforvalteren ved HK-dir legger til følgende unntak på tildelingsregelen "JOU"
         | utdanningsbakgrunn  | fordeles til |
-        | Realkompetanse      | Tilbyder     |
         | Utenlandsk          | HK-dir       |
         | Rudolf Steinerskole | HK-dir       |
       Så gjelder unntakene for søknadsalternativene med tildelingsregelen "JOU"
@@ -227,13 +217,14 @@ Egenskap: Tildele saksbehandlende organisasjon
         | Rudolf Steinerskole |
 
     Scenario: Hver tilbyder saksbehandler sitt eget søknadsalternativ når søkeren har realkompetanse
-      Gitt at tildelingsreglene har unntak som fordeler "Realkompetanse" til tilbyder
-      Og at søkeren har utdanningsbakgrunn "Realkompetanse"
+      Gitt at søkeren har utdanningsbakgrunn "Realkompetanse"
       Og at søkeren har søkt "Informatikk, UiO", "Historie, UiT" og "Sykepleie, NTNU" i den rekkefølgen
       Når søknadsalternativene fordeles
       Så er "Universitetet i Oslo" saksbehandlende organisasjon for "Informatikk, UiO"
       Og "UiT Norges arktiske universitet" er saksbehandlende organisasjon for "Historie, UiT"
       Og "NTNU" er saksbehandlende organisasjon for "Sykepleie, NTNU"
+      # AVKLART 07.10.2026 i PR #684: søkere med realkompetanse saksbehandles alltid av tilbyderen.
+      # Det er ikke et unntak opptaksforvalteren legger på tildelingsregelen.
 
     Scenario: Unntaket går foran tildelingsregel der bare tilbyderen saksbehandler
       Gitt at "Utøvende musikk, NTNU" har tildelingsregelen "SPE"
@@ -251,41 +242,41 @@ Egenskap: Tildele saksbehandlende organisasjon
       Så er "NTNU" saksbehandlende organisasjon for "Utøvende musikk, NTNU"
       Og "HK-dir" er saksbehandlende organisasjon for "Informatikk, UiO"
 
-    Scenario: Tilbyderen saksbehandler søknadsalternativ til ledig studieplass
-      Gitt at "Ledige studieplasser fordeles til tilbyder" er valgt på tildelingsregelen til "Informatikk, UiO"
-      Og at "Informatikk, UiO" tilbyr ledige studieplasser
-      Og at ledige studieplasser i opptaket har åpnet
-      Når søkeren søker ledig studieplass på "Informatikk, UiO"
-      Så er "Universitetet i Oslo" saksbehandlende organisasjon for "Informatikk, UiO"
-
-    Scenario: Ledig studieplass går foran unntak for utdanningsbakgrunn
-      Gitt at "Ledige studieplasser fordeles til tilbyder" er valgt på tildelingsregelen til "Informatikk, UiO"
-      Og at ledige studieplasser i opptaket har åpnet
-      Og at søkeren har utdanningsbakgrunn "Utenlandsk"
-      Når søkeren søker ledig studieplass på "Informatikk, UiO"
-      Så er "Universitetet i Oslo" saksbehandlende organisasjon for "Informatikk, UiO"
-
     @openquestion
     # ÅPNE SPØRSMÅL:
-    # - Avklares med domeneekspert: HK-dirs wiki sier at tilbyderen alltid saksbehandler søknad
-    #   om ledig studieplass (UHG og FSU). Designet og koden har likevel avkrysningen «Ledige
-    #   studieplasser fordeles til tilbyder» per tildelingsregel. Skal det være et valg, eller
-    #   alltid gjelde? Gjelder det alltid, erstatter dette scenarioet de to over.
-    # - Avklares med domeneekspert: Gjelder det fortsatt etter at perioden for ledige studieplasser
-    #   er stengt, for eksempel når saksbehandleren legger til søknadsalternativet på vegne av
-    #   søkeren? I dag: ja, koden ser bare på om ledige studieplasser har åpnet. Har opptaket
-    #   ingen dato for ledige studieplasser, gjelder det aldri.
+    # - Avklares med domeneekspert: Saksbehandler tilbyderen alltid søknad om ledig studieplass, eller
+    #   er det et valg per tildelingsregel? Trolig alltid (HK-dirs wiki sier det for UHG og FSU), men
+    #   designet og koden har avkrysningen «Ledige studieplasser fordeles til tilbyder» per tildelingsregel.
     Scenario: Tilbyderen saksbehandler alltid søknadsalternativ til ledig studieplass
       Gitt at "Informatikk, UiO" tilbyr ledige studieplasser
       Og at ledige studieplasser i opptaket har åpnet
       Når søkeren søker ledig studieplass på "Informatikk, UiO"
       Så er "Universitetet i Oslo" saksbehandlende organisasjon for "Informatikk, UiO"
 
-  @openquestion
-  # ÅPNE SPØRSMÅL:
-  # - Hvor i FS Admin velger opptaksforvalteren at et lærested saksbehandles av en annen
-  #   organisasjon? Valget finnes i API-et, men ikke i designet.
+    Scenario: Ledig studieplass går foran unntak for utdanningsbakgrunn
+      Gitt at ledige studieplasser i opptaket har åpnet
+      Og at søkeren har utdanningsbakgrunn "Utenlandsk"
+      Når søkeren søker ledig studieplass på "Informatikk, UiO"
+      Så er "Universitetet i Oslo" saksbehandlende organisasjon for "Informatikk, UiO"
+
+    @openquestion
+    # ÅPNE SPØRSMÅL:
+    # - Avklares med domeneekspert: Gjelder det også etter at perioden for ledige studieplasser er
+    #   stengt, for eksempel når saksbehandleren legger til søknadsalternativet på vegne av søkeren?
+    #   Trolig ja. Koden ser i dag bare på om ledige studieplasser har åpnet.
+    Scenario: Tilbyderen saksbehandler ledig studieplass også etter at perioden for ledige studieplasser er stengt
+      Gitt at perioden for ledige studieplasser i opptaket er stengt
+      Når saksbehandleren legger til ledig studieplass på "Informatikk, UiO" på vegne av søkeren
+      Så er "Universitetet i Oslo" saksbehandlende organisasjon for "Informatikk, UiO"
+
   Regel: Et lærested kan ha saksbehandlingen sin hos en annen organisasjon i opptaket
+
+    Scenario: Velge organisasjon som saksbehandler på vegne av lærestedet når lærestedet legges til i opptaket
+      Når opptaksforvalteren ved HK-dir legger til "Arkitektur- og designhøgskolen i Oslo" som deltaker i opptaket
+      Og opptaksforvalteren velger at "OsloMet" saksbehandler på vegne av "Arkitektur- og designhøgskolen i Oslo"
+      Så saksbehandler "OsloMet" på vegne av "Arkitektur- og designhøgskolen i Oslo" i opptaket "Samordna opptak 2027"
+      # AVKLART 07.10.2026 i PR #684: valget gjelder ett bestemt opptak, og gjøres når organisasjonene
+      # som deltar i opptaket settes opp (opptak.opptak_samordna_organisasjon).
 
     Scenario: Organisasjonen som saksbehandler på vegne av lærestedet får søknadsalternativene
       Gitt at "Arkitektur- og designhøgskolen i Oslo" og "OsloMet" deltar i opptaket
@@ -339,30 +330,20 @@ Egenskap: Tildele saksbehandlende organisasjon
       Når søkeren legger til "Sykepleie, NTNU" som første prioritet
       Så er "Universitetet i Oslo" saksbehandlende organisasjon for "Sykepleie, NTNU"
 
-    @openquestion
-    # ÅPNE SPØRSMÅL:
-    # - Avklares med domeneekspert: HK-dirs wiki sier at når søkeren legger til et studium med
-    #   SPE, JOU, TRA eller PAP, skal også søknadsalternativene som allerede er fordelt, få ny
-    #   saksbehandlende organisasjon. I dag får bare det nye søknadsalternativet ny organisasjon.
-    #   Prinsippene «færrest mulig saksbehandlende organisasjoner» og «færrest mulig endringer»
-    #   trekker hver sin vei. Hva skal gjelde?
     Scenario: Nytt søknadsalternativ der bare tilbyderen saksbehandler endrer ikke søknadsalternativene som er fordelt
       Gitt at søkeren har søkt "Informatikk, UiO", og søknadsalternativet er fordelt til "Universitetet i Oslo"
       Når søkeren legger til "Utøvende musikk, NTNU" med tildelingsregelen "SPE"
       Så er "NTNU" saksbehandlende organisasjon for "Utøvende musikk, NTNU"
       Og "Universitetet i Oslo" er fortsatt saksbehandlende organisasjon for "Informatikk, UiO"
 
-    @openquestion
-    # ÅPNE SPØRSMÅL:
-    # - Avklares med domeneekspert, sammen med spørsmålet over: HK-dirs wiki sier at når søkeren
-    #   sletter søknadsalternativet med SPE eller JOU som fordelingen bygget på, skal de andre
-    #   søknadsalternativene få ny saksbehandlende organisasjon. I dag beholder de organisasjonen,
-    #   også når søkeren ikke lenger har søkt noe hos den. Hva skal gjelde?
     Scenario: Sletting av søknadsalternativet fordelingen bygget på endrer ikke de andre søknadsalternativene
       Gitt at søkeren har søkt "Utøvende musikk, NTNU" med tildelingsregelen "SPE" og "Informatikk, UiO"
       Og at begge søknadsalternativene er fordelt til "NTNU"
       Når søkeren sletter "Utøvende musikk, NTNU"
       Så er "NTNU" fortsatt saksbehandlende organisasjon for "Informatikk, UiO"
+      # AVKLART 07.10.2026 i PR #684: saksbehandlende organisasjon bestemmes av søknaden søkeren
+      # sendte inn først. Som hovedregel endres den ikke når søkeren sender inn på nytt, endrer
+      # prioriteringen, sletter eller legger til søknadsalternativer.
 
   Regel: Søknadsalternativene flyttes når utdanningsbakgrunnen endres til en bakgrunn med unntak
 
@@ -378,18 +359,18 @@ Egenskap: Tildele saksbehandlende organisasjon
       Så er "Universitetet i Oslo" saksbehandlende organisasjon for "Informatikk, UiO"
       Og "UiT Norges arktiske universitet" er saksbehandlende organisasjon for "Historie, UiT"
 
-    @openquestion
-    # ÅPNE SPØRSMÅL:
-    # - Avklares med domeneekspert, sammen med de to spørsmålene om å legge til og slette
-    #   søknadsalternativer: HK-dirs wiki sier at bytte fra realkompetanse til norsk, nordisk,
-    #   utenlandsk, IB eller steinerskole skal fordele søknadsalternativene på nytt. I dag flytter
-    #   bare bytte til en bakgrunn med unntak. Det samme gjelder bytte fra utenlandsk til norsk:
-    #   HK-dir beholder saken. Hva skal gjelde?
-    Scenario: Bytte fra realkompetanse til norsk utdanningsbakgrunn flytter ingen søknadsalternativer
-      Gitt at søkeren har utdanningsbakgrunn "Realkompetanse"
-      Og at "Universitetet i Oslo" og "UiT Norges arktiske universitet" saksbehandler hvert sitt søknadsalternativ
+    Scenariomal: Bytte fra <utdanningsbakgrunn> til norsk utdanningsbakgrunn flytter ingen søknadsalternativer
+      Gitt at søkeren har utdanningsbakgrunn "<utdanningsbakgrunn>"
+      Og at søkerens søknadsalternativer er fordelt
       Når søkeren endrer utdanningsbakgrunn til "Norsk"
       Så er saksbehandlende organisasjon uendret for alle søknadsalternativene
+      # AVKLART 08.10.2026 med domeneekspert: søkeren skal bare oppleve å bytte saksbehandlende
+      # organisasjon når det er nødvendig.
+
+      Eksempler:
+        | utdanningsbakgrunn |
+        | Realkompetanse     |
+        | Utenlandsk         |
 
     Scenariomal: Saksbehandleren endrer utdanningsbakgrunnen til <utdanningsbakgrunn>
       Gitt at søkeren har søkt "Informatikk, UiO" og "Historie, UiT"
@@ -453,17 +434,37 @@ Egenskap: Tildele saksbehandlende organisasjon
       Så ser søkeren saksbehandlende organisasjon for hvert søknadsalternativ
       Men søkeren ser ikke sakene
 
-    @openquestion
-    # ÅPNE SPØRSMÅL:
-    # - Avklares med domeneekspert: Skal tilbyderen se søknadsalternativene til utdanningstilbudene
-    #   sine når en annen organisasjon saksbehandler dem, og i så fall hva skal tilbyderen se og
-    #   gjøre? Tilbyderen setter tilbudsgaranti (STEK-339), søkeren skal i noen tilfeller kontakte
-    #   tilbyderen (HK-dirs wiki), og samordnet_opptak.feature sier at saksbehandlere kan se info
-    #   om utdanningstilbudene sine.
-    # - Avklares med domeneekspert, sammen med tilgangsstyringen: Skal opptaksforvalteren ved
-    #   forvaltende organisasjon se alle sakene i opptaket? Forvalteren kan endre utdanningsbakgrunn
-    #   uten frist og uten egen sak, men ser i dag bare saker hos organisasjonen sin.
+    Scenario: Saksbehandleren ved forvaltende organisasjon ser bare sakene hos forvaltende organisasjon
+      Gitt at søknaden har saker hos "HK-dir" og "Universitetet i Oslo"
+      Når saksbehandleren ved HK-dir åpner søknaden
+      Så ser saksbehandleren bare saken hos "HK-dir"
+
+  Regel: Opptaksforvalteren ved forvaltende organisasjon ser alle sakene i opptaket
+
+    Scenario: Opptaksforvalteren ved HK-dir ser sakene hos alle saksbehandlende organisasjoner
+      Gitt at søknaden har saker hos "Universitetet i Oslo" og "UiT Norges arktiske universitet"
+      Når opptaksforvalteren ved HK-dir åpner søknaden
+      Så ser opptaksforvalteren sakene hos "Universitetet i Oslo" og "UiT Norges arktiske universitet"
+
+  Regel: Tilbyderen ser saksbehandlingen når en annen organisasjon saksbehandler utdanningstilbudet
+
     Scenario: Tilbyderen ser søknadsalternativ som en annen organisasjon saksbehandler
       Gitt at "Historie, UiT" er fordelt til "Universitetet i Oslo"
       Når saksbehandleren ved UiT Norges arktiske universitet ser søknadsalternativene til utdanningstilbudene ved UiT
       Så ser saksbehandleren "Historie, UiT"
+      Og saksbehandleren ser saksbehandlingen "Universitetet i Oslo" har gjort på "Historie, UiT"
+
+    Scenario: Tilbyderen setter tilbudsgaranti
+      Gitt at "Historie, UiT" er fordelt til "Universitetet i Oslo"
+      Når saksbehandleren ved UiT Norges arktiske universitet setter tilbudsgaranti på "Historie, UiT"
+      Så har "Historie, UiT" tilbudsgaranti
+
+    @openquestion
+    # ÅPNE SPØRSMÅL:
+    # - Avklares med domeneekspert: Hvilke opplysninger skal tilbyderen ikke se, utover interne
+    #   merknader? Og hva kan tilbyderen endre utover tilbudsgaranti?
+    Scenario: Tilbyderen kan ikke endre saksbehandlingen
+      Gitt at "Historie, UiT" er fordelt til "Universitetet i Oslo"
+      Når saksbehandleren ved UiT Norges arktiske universitet ser "Historie, UiT"
+      Så ser ikke saksbehandleren de interne merknadene til "Universitetet i Oslo"
+      Og saksbehandleren ser ikke muligheten til å endre grunnlaget eller poengene
