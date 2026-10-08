@@ -105,6 +105,8 @@ Kravene er `@in-progress`, og endres på stedet. Endringene står her, så den s
   - Hint til fs-plattform: alt som trengs, finnes allerede. Søkt er `soknad.tidligopptak_begrunnelsetype_kode` (ikke null), konklusjonen er `sak.tidligopptak_konklusjon_kode`, og ferdig behandlet er `SakStatusKode.FERDIG_BEHANDLET`. Filteret kan legges i `SakFilterV2Input` som de andre, med en `@condition` i `SakService`.
   - Forslag til tekst ved avkrysningsboksen (skal inn i implementasjonsdetaljene): «Søkeren har søkt om tidlig opptak, men er ikke med ennå. Saken mangler konklusjon, eller konklusjonen er «deltar», men saken er ikke ferdig behandlet.»
 
+- **2026-10-08, `@OPT-SØK-SØK-011`:** «trekke søknaden om tidlig opptak» heter nå «trekke ønsket om tidlig opptak», i regelen, scenarioene og stegene. Betydningen er den samme: søknaden blir en vanlig søknad, uten ønske om tidlig opptak. Ordet er byttet fordi «trekke søknaden» ellers betyr å trekke hele søknaden (`trekke_søknad.feature`, og `visTrukneSoknader` og `SoknadErTrukketService` i koden). Step definitions som bruker den gamle ordlyden, må oppdateres.
+
 ## Åpne spørsmål
 
 - [ ] Implementasjonsdetaljer mangler for `søke_om_tidlig_opptak.feature`, `vurdere_søknad_om_tidlig_opptak.feature`, `gi_tilbudsgaranti_ved_tidlig_opptak.feature`, `publisere_svar_på_tidlig_opptak.feature` og `se_svar_på_tidlig_opptak.feature`. Tekstene i skissene (statusmerker, «Hvem kan søke tidlig opptak?», meldingsteksten, samlet svar) må inn i `<feature>.design.md` med `fs-implementasjonsdetaljer`.

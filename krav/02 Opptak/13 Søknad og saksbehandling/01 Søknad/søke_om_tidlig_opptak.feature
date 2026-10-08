@@ -28,11 +28,11 @@
 #   minst ett av søknadsalternativene er markert for tidlig tilbud.
 # - Søkeren kan bytte begrunnelse fram til søknadsfristen for tidlig opptak.
 # - Søkeren får kvittering når begrunnelsen settes eller byttes (TOT-2384).
-# - Ønsket om tidlig opptak blir stående når søknaden endres eller trekkes.
+# - Ønsket om tidlig opptak blir stående når søknaden endres, eller når hele søknaden trekkes.
 #
 # AVKLART 08.10.2026
 #
-# - Søkeren kan trekke søknaden om tidlig opptak fram til søknadsfristen for
+# - Søkeren kan trekke ønsket om tidlig opptak fram til søknadsfristen for
 #   tidlig opptak, men ikke etter. Koden har i dag ingen måte å gjøre det på
 #   (sokTidligOpptak krever en begrunnelse), og må endres.
 # - Søkeren ser når søknaden om tidlig opptak sist ble endret. Ønske fra Min
@@ -150,20 +150,23 @@ Egenskap: Søke om tidlig opptak
       Så har ikke søkeren søkt om tidlig opptak
       Og søkeren ser at fristen for å søke om tidlig opptak er ute
 
-  Regel: Søkeren kan trekke søknaden om tidlig opptak innen fristen
+  Regel: Søkeren kan trekke ønsket om tidlig opptak innen fristen
+    # Søknaden blir da en vanlig søknad, uten ønske om tidlig opptak. Det er ikke
+    # det samme som å trekke hele søknaden (trekke_søknad.feature). Ordlyden er
+    # endret fra «trekke søknaden om tidlig opptak» for å skille de to (08.10.2026).
 
-    Scenario: Trekke søknaden om tidlig opptak før fristen
+    Scenario: Trekke ønsket om tidlig opptak før fristen
       Gitt søknadsfristen for tidlig opptak er "2027-03-01 23:59"
       Og søkeren har søkt om tidlig opptak med begrunnelsen "Fullført videregående opplæring"
-      Når søkeren trekker søknaden om tidlig opptak "2027-02-20"
+      Når søkeren trekker ønsket om tidlig opptak "2027-02-20"
       Så har ikke søkeren søkt om tidlig opptak
       Og søknaden til "Samordna opptak 2027" gjelder fortsatt
 
-    Scenario: Kan ikke trekke søknaden om tidlig opptak etter fristen
+    Scenario: Kan ikke trekke ønsket om tidlig opptak etter fristen
       Gitt søknadsfristen for tidlig opptak er "2027-03-01 23:59"
       Og søkeren har søkt om tidlig opptak med begrunnelsen "Fullført videregående opplæring"
       Når søkeren ser på søknaden "2027-03-02"
-      Så ser ikke søkeren muligheten til å trekke søknaden om tidlig opptak
+      Så ser ikke søkeren muligheten til å trekke ønsket om tidlig opptak
 
   Regel: Søknaden om tidlig opptak gjelder hele søknaden
 
