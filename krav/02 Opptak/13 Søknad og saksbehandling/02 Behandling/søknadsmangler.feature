@@ -1,6 +1,6 @@
 # language: no
 # GitHub: #413
-@OPT-BEH-BEH-008 @must @draft
+@OPT-BEH-BEH-008 @must @planned
 Egenskap: Søknadsmangler
   Som saksbehandler ved saksbehandlende organisasjon
   ønsker jeg å registrere mangler i saken og gi søkeren beskjed om manglene
@@ -39,12 +39,7 @@ Egenskap: Søknadsmangler
 
   # ── 1. Mangelkoder ───────────────────────────────────────────
 
-  @openquestion
   Regel: Opptaksforvalteren forvalter mangelkodene i regelverkssamlingen
-    # ÅPNE SPØRSMÅL:
-    # - Hvilke opplysninger har en mangelkode, og ligger mangelkodene i regelverkssamlingen?
-    #   Forslaget i «Opprette mangelkode» er satt sammen av Figma (FS-Admin, regelverkssamlingen
-    #   «UHG 2027», fanen Mangelkoder) og datamodellen i STEK-174 (Sperrer opptak, Aktiv).
 
     Scenario: Opprette mangelkode
       Når opptaksforvalteren ved HK-dir oppretter en mangelkode i regelverkssamlingen "UHG 2027" med følgende opplysninger
@@ -53,8 +48,7 @@ Egenskap: Søknadsmangler
         | Kategori                               | Spesielle krav                              |
         | Kort beskrivelse                       | Mangler karakter                            |
         | Informasjon til søker i Min kompetanse | Du mangler karakter i et fag som kreves.    |
-        | Tekst til vedtaksbrev                  | Søkeren mangler karakter i et fag som kreves. |
-        | Sperrer opptak                         | Nei                                         |
+        | Stopper for opptak                     | Nei                                         |
         | Aktiv                                  | Ja                                          |
       Så finnes mangelkoden "KAR" i regelverkssamlingen "UHG 2027"
 
@@ -67,9 +61,9 @@ Egenskap: Søknadsmangler
         | Poeng          |
         | Kvote          |
 
-    Scenariomal: Sperrer opptak kan <tillatt> settes på en mangelkode i kategorien <kategori>
+    Scenariomal: Stopper for opptak kan <tillatt> settes på en mangelkode i kategorien <kategori>
       Når opptaksforvalteren ved HK-dir oppretter en mangelkode i kategorien "<kategori>"
-      Så kan opptaksforvalteren <tillatt> velge at mangelkoden sperrer opptak
+      Så kan opptaksforvalteren <tillatt> velge at mangelkoden stopper for opptak
 
       Eksempler:
         | kategori       | tillatt |
@@ -90,11 +84,7 @@ Egenskap: Søknadsmangler
 
   # ── 2. Registrering ──────────────────────────────────────────
 
-  @openquestion
   Regel: Kategorien til mangelkoden avgjør hva mangelen hindrer
-    # ÅPNE SPØRSMÅL:
-    # - Hva skjer ellers med saken når en mangel hindrer saksbehandleren i å vurdere om søkeren er
-    #   kvalifisert? Påvirker det behandlingsstatusen eller vedtaket?
 
     Scenario: Mangel på generelle krav hindrer kvalifisering til alle søknadsalternativene i saken
       Gitt at saken hos "Universitetet i Oslo" har søknadsalternativene "Informatikk, UiO" og "Historie, UiO"
@@ -122,6 +112,11 @@ Egenskap: Søknadsmangler
         | kategori |
         | Poeng    |
         | Kvote    |
+
+    Scenario: Saken kan behandles ferdig selv om den har mangler
+      Gitt at saken hos "Universitetet i Oslo" har mangelen "KAR"
+      Når saksbehandleren ved Universitetet i Oslo har behandlet saken så langt dokumentasjonen rekker
+      Så kan saksbehandleren sette saken til "Ferdig behandlet"
 
     Scenario: Mangel som sperrer opptak holder søkeren utenfor tilbudskjøringen
       Gitt at saken hos "Universitetet i Oslo" har en mangel med en mangelkode som sperrer opptak
@@ -196,10 +191,7 @@ Egenskap: Søknadsmangler
         | sjekker ut en mangel  |
         | sletter en mangel     |
 
-  @openquestion
   Regel: Saksbehandleren sjekker ut mangelen når søkeren har dokumentert på nytt
-    # ÅPNE SPØRSMÅL:
-    # - Hva heter det at saksbehandleren har sjekket ut mangelen? «Sjekket ut» er et arbeidsnavn.
 
     Scenario: Saksbehandleren ser at søkeren har lastet opp ny dokumentasjon
       Gitt at saken hos "Universitetet i Oslo" har mangelen "KAR"
@@ -227,11 +219,15 @@ Egenskap: Søknadsmangler
 
   # ── 3. Publisering og melding ────────────────────────────────
 
-  @openquestion
+  @draft @openquestion
   Regel: Søkeren ser bare manglene saksbehandleren har publisert, og får melding om dem
     # ÅPNE SPØRSMÅL:
-    # - Sendes meldingen når manglene publiseres, eller er det et eget steg?
-    # - Sender hver saksbehandlende organisasjon sin egen melding?
+    # - Sendes meldingen når manglene publiseres, eller er det et eget steg? STEK-422 sier at
+    #   meldingen sendes ved publisering, mens Figma viser «Send melding» som eget steg.
+    # - Publiseres alle manglene automatisk når saken settes til «Ferdig behandlet»? Koden og
+    #   gjennomgangen i STEK-420 (2026-09-08) gjør det.
+    # - Får søkeren én melding per opptak, også når flere saksbehandlende organisasjoner har
+    #   registrert mangler? STEK-422 sier én melding per søker.
 
     Scenario: Registrering av mangel publiserer ikke mangelen
       Når saksbehandleren ved Universitetet i Oslo registrerer mangelen "KAR"
@@ -255,7 +251,7 @@ Egenskap: Søknadsmangler
       Og søkeren ser fristen for å laste opp dokumentasjon
       Og søkeren kan gå til dokumentasjonssiden
 
-  @openquestion
+  @draft @openquestion
   Regel: Fristen er dokumentasjonsfristen som gjelder søknadsalternativet
     # ÅPNE SPØRSMÅL:
     # - Hvilken frist vises når manglene gjelder søknadsalternativer med ulike frister?
@@ -340,13 +336,14 @@ Egenskap: Søknadsmangler
 
   # ── 6. Automatikk ────────────────────────────────────────────
 
-  @openquestion
+  @draft @openquestion
   Regel: Mangelen for vitnemål som kommer i år settes og sjekkes ut automatisk
     # ÅPNE SPØRSMÅL:
     # - Hvilken mangelkode og hvilket kompetanseregelverk får den automatiske mangelen, og gjelder
     #   den alle sakene i søknaden?
     # - Hva betyr det at automatisk behandling overskriver en mangel som er satt manuelt, og hvor
-    #   angis det at en mangelkode kan overskrives? Det står verken i Figma eller i STEK-174.
+    #   angis det at en mangelkode kan overskrives? Prinsippet står i Confluence (Forretningsregler -
+    #   mangelfunksjoner), men verken Figma, STEK-174 eller koden har et felt for det.
 
     Scenario: Saken får mangel når søkeren oppgir at vitnemålet kommer i år
       Når søkeren oppgir i søknaden at vitnemålet kommer i år
