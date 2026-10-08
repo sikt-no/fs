@@ -32,8 +32,8 @@
 #   Søknadsalternativene behandles videre i det ordinære opptaket.
 # - Svar publiseres til alle søkerne samtidig på én publiseringsdato for
 #   tidlig opptak. Datoen knyttes til opptaket, ikke til utdanningstilbudet.
-# - Tilbudsgarantien holder bare så lenge søkeren beholder
-#   søknadsalternativet på samme prioritet.
+# - (Endret 08.10.2026, se under.) Tilbudsgarantien holder bare så lenge
+#   søkeren beholder søknadsalternativet på samme prioritet.
 # - Garantien er et minimum. Når søkeren når opp på et høyere prioritert
 #   søknadsalternativ, gjelder ordinær plasstildeling.
 #
@@ -79,8 +79,17 @@
 #   gjennomføring ikke fjerner tilbudsgarantier. Koden lar i dag den gamle
 #   tilbudsgarantien stå (TidligopptakTilbudsgarantiService), og må endres.
 # - Tilbudsgarantien faller bort når søkeren fjerner søknadsalternativet eller
-#   trekker søknaden. Legger søkeren søknadsalternativet inn igjen på samme
-#   prioritet før søknadsfristen for opptaket, gjelder tilbudsgarantien igjen.
+#   trekker søknaden. Legger søkeren søknadsalternativet inn igjen før
+#   søknadsfristen for opptaket, gjelder tilbudsgarantien igjen, uansett
+#   prioritet (prioriteten er endret 08.10.2026, se under).
+# - Tilbudsgarantien følger søknadsalternativet, uansett prioritet. Den faller
+#   ikke bort når søkeren flytter søknadsalternativet ned, eller når et nytt
+#   søknadsalternativ legges over. Garantien betyr at søkeren aldri blir forbigått
+#   på søknadsalternativet: søkeren får tilbud der, uansett poeng, med mindre
+#   søkeren når opp på et søknadsalternativ med høyere prioritet. Prioriteten
+#   avgjør hvilket tilbud søkeren får, ikke om garantien gjelder. Det samme
+#   gjelder når søkeren legger søknadsalternativet inn igjen før søknadsfristen.
+#   Dette erstatter regelen fra 25.09 om samme prioritet, og stemmer med koden.
 # - Alle tre rollene (B-rolle, T-rolle og F-rolle) kan sette tilbudsgaranti manuelt,
 #   hver med sitt eget sett med tilbudsgarantityper (domeneekspert, med henvisning til
 #   Confluence OP «Tilbudsgaranti»). Det stemmer med STEK-270/262 og koden.
@@ -321,8 +330,7 @@ Egenskap: Gi tilbudsgaranti ved tidlig opptak
   Regel: Tilbudsgarantien gjelder i hovedopptaket
 
     Scenario: Tilbudsgarantien gir tilbud i hovedopptaket
-      Gitt søkeren har tilbudsgaranti på "Sykepleie, høst 2027"
-      Og søkeren har beholdt "Sykepleie, høst 2027" på samme prioritet
+      Gitt søkeren har tilbudsgaranti på "Sykepleie, høst 2027" som prioritet 1
       Når hovedopptaket kjøres
       Så får søkeren tilbud på "Sykepleie, høst 2027"
 
@@ -332,10 +340,23 @@ Egenskap: Gi tilbudsgaranti ved tidlig opptak
       Når hovedopptaket kjøres
       Så får søkeren tilbud på "Historie, høst 2027"
 
-    Scenario: Tilbudsgarantien faller bort når søknadsalternativet flyttes ned
-      Gitt søkeren har tilbudsgaranti på "Sykepleie, høst 2027" som prioritet 1
-      Når søkeren flytter "Sykepleie, høst 2027" til prioritet 2
-      Så har søkeren ikke lenger tilbudsgaranti på "Sykepleie, høst 2027"
+    Scenario: Søkeren blir ikke forbigått på søknadsalternativet med tilbudsgaranti
+      Gitt søkeren har tilbudsgaranti på "Sykepleie, høst 2027" som prioritet 2
+      Og søkeren når ikke opp til "Historie, høst 2027" som prioritet 1 i hovedopptaket
+      Og søkeren har færre poeng enn poenggrensen for "Sykepleie, høst 2027" i hovedopptaket
+      Når hovedopptaket kjøres
+      Så får søkeren tilbud på "Sykepleie, høst 2027"
+
+    Scenariomal: Tilbudsgarantien følger søknadsalternativet når prioriteten endres
+      Gitt søkeren har tilbudsgaranti på "Sykepleie, høst 2027" som prioritet 2
+      Når søkeren <endring>
+      Så har søkeren fortsatt tilbudsgaranti på "Sykepleie, høst 2027"
+
+      Eksempler:
+        | endring                                          |
+        | flytter "Sykepleie, høst 2027" til prioritet 1   |
+        | flytter "Sykepleie, høst 2027" til prioritet 3   |
+        | legger til "Historie, høst 2027" som prioritet 1 |
 
     Scenariomal: Tilbudsgarantien faller bort når søknadsalternativet fjernes
       Gitt søkeren har tilbudsgaranti på "Sykepleie, høst 2027" som prioritet 1
@@ -347,15 +368,14 @@ Egenskap: Gi tilbudsgaranti ved tidlig opptak
         | fjerner "Sykepleie, høst 2027" fra søknaden |
         | trekker søknaden                            |
 
-    Scenario: Tilbudsgarantien gjelder igjen når søknadsalternativet legges inn igjen før søknadsfristen
+    Scenariomal: Tilbudsgarantien gjelder igjen når søknadsalternativet legges inn igjen før søknadsfristen
       Gitt søknadsfristen for opptaket er "2027-04-15 23:59"
       Og søkeren hadde tilbudsgaranti på "Sykepleie, høst 2027" som prioritet 1
       Og søkeren fjernet "Sykepleie, høst 2027" fra søknaden "2027-04-01"
-      Når søkeren legger inn "Sykepleie, høst 2027" igjen som prioritet 1 "2027-04-08"
+      Når søkeren legger inn "Sykepleie, høst 2027" igjen som prioritet <prioritet> "2027-04-08"
       Så har søkeren tilbudsgaranti på "Sykepleie, høst 2027" igjen
 
-    Scenario: Tilbudsgarantien gjelder ikke når søknadsalternativet legges inn på en annen prioritet
-      Gitt søkeren hadde tilbudsgaranti på "Sykepleie, høst 2027" som prioritet 1
-      Og søkeren fjernet "Sykepleie, høst 2027" fra søknaden
-      Når søkeren legger inn "Sykepleie, høst 2027" igjen som prioritet 2 før søknadsfristen for opptaket
-      Så har ikke søkeren tilbudsgaranti på "Sykepleie, høst 2027"
+      Eksempler:
+        | prioritet |
+        | 1         |
+        | 2         |
