@@ -60,7 +60,6 @@ Egenskap: Gjennomføre plasstildeling
   # Innstillinger og grensetilfeller:
   # - Innstillingen «maks antall tilbud per søker per runde» (innstillinger.feature) mot etterfylling,
   #   der søkeren kan ha flere tilbud. Hvordan henger de sammen? Unntak for deltid under 60 stp?
-  # - Hvor kommer manuell tilbudsgaranti fra? I dag finnes ingen kilde i søknadsbehandlingen («Fra saksbehandling til plasstildeling», D4).
   # - Tidligopptak: tilsagn som gir tilbudsgaranti i hovedtildelingen (Confluence «Samordnet plasstildeling»). Hører det med?
   #
   # Kilde: tasks/opptak/plasstildeling/design.md (prinsipp 1–3, rundetyper, del 2), oppgave.md (oppgave 5),
@@ -166,6 +165,16 @@ Egenskap: Gjennomføre plasstildeling
       Når plasstildelingen gjennomføres
       Så får søkeren tilbud på "Sykepleie, høst 2027"
       Og tilbudet teller som ett av tilbudene i utdanningskvoten "Ordinær"
+
+    # AVKLART 2026-10-08: Saksbehandler setter tilbudsgaranti på søknaden. Søkeren får tilbud etter
+    # reglene for runden, og trenger ingen poengsum.
+    # Gap mot koden («Fra saksbehandling til plasstildeling», kap. 2–3 og D4): tilbudsgaranti fra
+    # saksbehandlingen når ikke plasstildelingen, og en søknad uten poengsum kommer ikke med i grunnlaget.
+    Scenario: Tilbudsgaranti uten poengsum
+      Gitt at saksbehandler har satt tilbudsgaranti på søknaden til "Ola Nordmann" på "Sykepleie, høst 2027"
+      Og at søknaden ikke har poengsum
+      Når plasstildelingen gjennomføres
+      Så får søkeren tilbud på "Sykepleie, høst 2027"
 
   Regel: Poenggrensen beregnes per utdanningskvote
 

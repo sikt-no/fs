@@ -29,6 +29,20 @@ Egenskap: Starte en plasstildeling
       Så bruker plasstildelingen rangeringen slik den var da plasstildelingen startet
       Og grunnlaget lagres sammen med plasstildelingen
 
+    # AVKLART 2026-10-08: Plasstildelingen henter søknadene i opptaket når opptaksforvalter starter den.
+    @openquestion
+    Scenario: Søknader som er med i plasstildelingen
+      # ÅPNE SPØRSMÅL:
+      # - Er det nok at søknaden er kvalifisert, eller må den ha status ferdigbehandlet?
+      #   Koden krever ikke ferdigbehandlet. En søknad er med når alt dette er oppfylt:
+      #   søknadsalternativet er ikke slettet og har en behandlersak, saken er kvalifisert mot
+      #   utdanningstilbudets kompetanseregelverk, saken har en aktiv kvote som skal kvoteplasseres
+      #   og som også er kvote på utdanningstilbudet, og saken har poengsum etter utdanningstilbudets
+      #   rangeringsregelverk. Søkeren må ha fødselsdato, ellers feiler hele plasstildelingen.
+      Gitt at søknaden til "Kari Nordmann" på "Sykepleie, høst 2027" er kvalifisert
+      Når opptaksforvalter starter en plasstildeling i runden "Hovedrunde"
+      Så er søknaden til "Kari Nordmann" på "Sykepleie, høst 2027" med i plasstildelingen
+
     Scenario: Ny plasstildeling i samme runde
       Gitt at runden "Hovedrunde" har en plasstildeling som ikke er publisert
       Når opptaksforvalter starter en ny plasstildeling i runden "Hovedrunde"
@@ -81,8 +95,6 @@ Egenskap: Starte en plasstildeling
       Og opptaksforvalter kan starte en ny plasstildeling i runden "Hovedrunde"
 
 # ÅPNE SPØRSMÅL:
-# - Startes plasstildelingen av opptaksforvalter, eller av systemet på en dato satt på runden?
-#   Svaret avgjør om «start» er en handling eller en tilstand. Fila antar en handling.
 # - Kan opptaksforvalter ved lærestedet starte plasstildeling, eller bare forvaltende organisasjon?
 #   I lokale opptak er det samme organisasjon.
 # - Skal det finnes en kontroll før start som viser søkere som faller ut av grunnlaget
@@ -101,3 +113,8 @@ Egenskap: Starte en plasstildeling
 #   Bør det valideres eller varsles? (D5)
 # - Et utdanningstilbud uten kompetanseregelverk eller rangeringsregelverk får ingen søkere i
 #   plasstildelingen. Skal starten avvises, eller skal opptaksforvalter få et varsel?
+# - Et opptak uten utdanningskvoter gir i dag en tom plasstildeling uten feil. Bare når det finnes
+#   utdanningskvoter, men ingen søknader, feiler plasstildelingen. Skal et opptak uten utdanningskvoter
+#   også avvises?
+#
+# AVKLART 2026-10-08: Opptaksforvalter starter plasstildelingen. Den startes ikke av systemet på en dato.

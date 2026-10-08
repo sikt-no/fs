@@ -102,7 +102,8 @@ Egenskap: Antall tilbud som skal gis per utdanningskvote
 #   lærestedenes periode. Se 01 Runder/legge_til_runde.feature.
 # - Siste lagrede tall er korrekt uavhengig av hvem som satte det.
 # - Standard plassflyt for opptaket er en opptaksinnstilling, men løses som del av
-#   arbeidet med å lage plasstildelingen.
+#   arbeidet med å lage plasstildelingen. Gjenåpnet 2026-10-08: om plassflyten settes på opptaket
+#   eller per utdanningstilbud er uavklart, se 02 Tildelingsinnstillinger/plassflyt.feature.
 # - Antall tilbud som skal gis settes direkte per utdanningskvote.
 #   Totalt antall tilbud er utledet (summen av utdanningskvotene), ikke satt eksplisitt.
 # - Default i utdanningskvotene er null, med tydelig varsel.

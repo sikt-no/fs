@@ -9,6 +9,10 @@ Egenskap: Plassflyt mellom utdanningskvoter
   # ÅPNE SPØRSMÅL:
   # - Hvor bestemmes plassflyten mellom ulike kvotetyper — på opptaket eller på utdanningstilbudet?
   #   Dagens fil antar utdanningstilbudet, men det er ikke avklart.
+  #   Kildene spriker: raffineringen 2026-10-07 sa at standard plassflyt er en opptaksinnstilling
+  #   (antall_tilbud_som_skal_gis.feature). Kvoterregelverket har standard plassflyt på kvotetypen.
+  #   Koden tar standarden fra kvotetypen og lar den overstyres per utdanningskvote, uten standard
+  #   på opptaket. Fortsatt uavklart 2026-10-08.
   # - Confluence (raffinering 2026-09-08) har krav om at plasser skal kunne flyte fra en tidligere
   #   plasstildeling til en senere. design.md beskriver dette som en blindsone. Er det utenfor scope for 2027?
   # - Sirkulær plassflyt håndteres i koden, men ikke i databasen. Skal den avvises når den settes
