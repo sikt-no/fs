@@ -256,6 +256,12 @@ Egenskap: Gi tilbudsgaranti ved tidlig opptak
       Når opptaksforvalter prøvekjører tidligopptaket
       Så ser opptaksforvalter at "Vernepleie, høst 2027" mangler poenggrense
 
+    # Varselet er et sikkerhetsnett (avklart 08.10.2026). Opptaksforvalter setter
+    # poenggrensen høyt nok til at tilbudsgarantiene ikke bruker opp kvoten, f.eks.
+    # som medianen av poengene som skulle til for å komme inn på utdanningstilbudet
+    # året før. Systemet beregner ikke grensen. Det er ingen sperre mot at
+    # tilbudsgarantiene overskrider kvoten, så plasstildelingen må likevel håndtere
+    # det (se gjennomføre_plasstildeling.feature).
     Scenario: Varsel når tilbudsgarantiene overskrider kvoten
       Gitt "Sykepleie, høst 2027" har 10 plasser i kvoten tilbudsgarantiene tas fra
       Og 12 søkere oppfyller kravene til tilbudsgaranti på "Sykepleie, høst 2027"
