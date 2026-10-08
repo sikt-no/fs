@@ -6,6 +6,8 @@
 
 Kartlegging av et krav som er `@draft`, ikke en retagging. Mye av funksjonaliteten er bygget før kravet ble skrevet (STEK-492), så kartleggingen viser hva som er bygget, hva som er bygget annerledes enn kravet, og hva som mangler. Den er grunnlaget for `fs-specify`. Ingen tagger er endret.
 
+Oppdatert samme dag etter avklaringene i PR #684 (commit `54e71cd`): ledige studieplasser og tilbyderens innsyn. Koden for saksbehandlertildeling er ikke endret siden kartleggingen.
+
 I tabellen er «bygget annerledes» ført som `ikke funnet`, med avviket i beviset.
 
 Forkortelser i bevisene:
@@ -24,10 +26,10 @@ I koden heter tildelingsregelen «behandlertildelingsregel». Fordelingene er `A
 
 - Retagget `@in-progress` → `@implemented`: 0 (kravet er `@draft`)
 - Scenarioer kartlagt: 60
-- Bygget som beskrevet: 41
+- Bygget som beskrevet: 42
 - Bygget annerledes: 15
 - Ikke bygget: 2
-- Usikker: 2 (søkerflaten ligger ikke i disse repoene, og tilbyderens tilgang er ikke lest fullt ut)
+- Usikker: 1 (søkerflaten ligger ikke i disse repoene)
 
 ## Scenarioer
 
@@ -64,9 +66,9 @@ I koden heter tildelingsregelen «behandlertildelingsregel». Fordelingene er `A
 | `@OPT-BEH-BEH-007` | Hver tilbyder saksbehandler sitt eget søknadsalternativ når søkeren har realkompetanse | ikke funnet | Bygget annerledes: virker bare når forvalteren har lagt unntaket på regelen (`ALG:169`). Nye opptak får ingen unntak (`OPPMUT:315-327`) |
 | `@OPT-BEH-BEH-007` | Unntaket går foran tildelingsregel der bare tilbyderen saksbehandler | funnet | `ALG:138-139,157-174,195-199` |
 | `@OPT-BEH-BEH-007` | Tildelingsregel uten unntak for søkerens utdanningsbakgrunn følges som vanlig | funnet | `ALG:164-167` |
-| `@OPT-BEH-BEH-007` | Tilbyderen saksbehandler alltid søknadsalternativ til ledig studieplass | ikke funnet | Bygget annerledes: krever avkrysningen `fordelTilbyderEtterFrist` på regelen (`ALG:146-155`). Har `@openquestion` |
+| `@OPT-BEH-BEH-007` | Tilbyderen saksbehandler alltid søknadsalternativ til ledig studieplass | ikke funnet | Bygget annerledes: krever avkrysningen `fordelTilbyderEtterFrist` på regelen (`ALG:146-155`), som er default av. Kravet sier nå at det alltid gjelder |
 | `@OPT-BEH-BEH-007` | Ledig studieplass går foran unntak for utdanningsbakgrunn | funnet | `ALG:137-139,159-163` (når avkrysningen er satt) |
-| `@OPT-BEH-BEH-007` | Tilbyderen saksbehandler ledig studieplass også etter at perioden for ledige studieplasser er stengt | ikke funnet | Bygget annerledes: stengt periode spiller ingen rolle (`BTS:228-239`), men avkrysningen på regelen er påkrevd. Har `@openquestion` |
+| `@OPT-BEH-BEH-007` | Tilbyderen saksbehandler ledig studieplass som legges til på vegne av søkeren | ikke funnet | Bygget annerledes: koden ser bare på om ledige studieplasser har åpnet (`BTS:228-239`), som kravet sier, men avkrysningen på regelen er påkrevd (`ALG:146-155`) |
 | `@OPT-BEH-BEH-007` | Velge organisasjon som saksbehandler på vegne av lærestedet når lærestedet legges til i opptaket | ikke funnet | Bygget annerledes: egen mutasjon i API-et (`OPPMUT:419-459`). Ikke i fs-admin |
 | `@OPT-BEH-BEH-007` | Organisasjonen som saksbehandler på vegne av lærestedet får søknadsalternativene | funnet | `BTS:125,137,275-283` |
 | `@OPT-BEH-BEH-007` | Organisasjonen som saksbehandler på vegne av lærestedet må delta i opptaket | funnet | `OPPMUT:438-452` (bare API-et) |
@@ -90,9 +92,9 @@ I koden heter tildelingsregelen «behandlertildelingsregel». Fordelingene er `A
 | `@OPT-BEH-BEH-007` | Søkeren ser saksbehandlende organisasjon, men ikke sakene | usikker | Søkeren har ingen tilgang til sakene (`V329`). Visningen for søkeren hører til `@OPT-SØK-SØK-005` (PR #623), og ligger ikke i disse repoene |
 | `@OPT-BEH-BEH-007` | Saksbehandleren ved forvaltende organisasjon ser bare sakene hos forvaltende organisasjon | ikke funnet | Bygget annerledes: SE_SØKNADSBEHANDLING for forvaltende organisasjon gir lesetilgang til alle sakene i opptaket (`MIG/V329__forvalter_leser_saker_i_eget_opptak.sql:8-9,65`, beskrevet som et bevisst personvernvalg) |
 | `@OPT-BEH-BEH-007` | Opptaksforvalteren ved HK-dir ser sakene hos alle saksbehandlende organisasjoner | funnet | `MIG/V329__forvalter_leser_saker_i_eget_opptak.sql:65,74` |
-| `@OPT-BEH-BEH-007` | Tilbyderen ser søknadsalternativ som en annen organisasjon saksbehandler | ikke funnet | Bygget annerledes: tilbyderen kan lese raden i `sak_soknadsalternativ` (`MIG/V346__kolonnevern_tilbudsgaranti.sql`), men ikke saken eller saksbehandlingen, og ingen side i fs-admin viser den |
+| `@OPT-BEH-BEH-007` | Tilbyderen ser søknadsalternativ som en annen organisasjon saksbehandler | ikke funnet | Bygget annerledes: tilbyderen kan lese raden i `sak_soknadsalternativ` (`MIG/V346__kolonnevern_tilbudsgaranti.sql`), men ikke saken, saksbehandlingen eller merknader som er synlige for alle, og ingen side i fs-admin viser den. Kravet sier nå at tilbyderen ser alt unntatt de interne merknadene |
 | `@OPT-BEH-BEH-007` | Tilbyderen setter tilbudsgaranti | funnet | `fs-plattform/opptak/opptak-service/src/main/java/no/sikt/fs/opptak/saksbehandling/SettTilbudsgarantitypeService.java`, `MIG/V346__kolonnevern_tilbudsgaranti.sql` |
-| `@OPT-BEH-BEH-007` | Tilbyderen kan ikke endre saksbehandlingen | usikker | Kolonnevern i `V346` og merknader i `MIG/V401__merknad_synlighet.sql` tyder på det, men ikke alle tabellpolicyer er lest. Har `@openquestion` |
+| `@OPT-BEH-BEH-007` | Tilbyderen kan ikke endre saksbehandlingen | funnet | Kolonnevernet lar tilbyderen bare endre `tilbudsgarantitype_kode_fra_tilbyder` (`MIG/V346__kolonnevern_tilbudsgaranti.sql:137-146,176`). Merknader krever en sak brukeren kan se (`MIG/V401__merknad_synlighet.sql:54-64`), og tilbyderen ser ingen sak. Se også «Tilbyderen ser søknadsalternativ …» |
 
 ## Avvik som må inn i spesifikasjonen
 
@@ -100,6 +102,8 @@ Koden må endres der kravet er avklart:
 
 - SPE og JOU: søkerens prioritering skal avgjøre, ikke rekkefølgen i algoritmen.
 - Realkompetanse skal alltid saksbehandles av tilbyderen, uten unntak på regelen.
+- Ledig studieplass skal alltid saksbehandles av tilbyderen. Avkrysningen «Ledige studieplasser fordeles til tilbyder» på regelen skal bort, i designet og i koden.
+- Tilbyderen skal se saksbehandlingen av søknadsalternativene til utdanningstilbudene sine, unntatt de interne merknadene. I dag ser tilbyderen bare resultatet og tilbudsgarantien.
 - Saksbehandleren ved HK-dir skal bare se sakene HK-dir saksbehandler. Det går imot et bevisst valg i `V329`, og må avklares med dem som tok det.
 - Tilbudsgaranti ved flytting: avklar om garantien fra organisasjonen saken flyttes fra skal følge med. Ellers må kravet presiseres.
 
@@ -113,5 +117,5 @@ UI som avviker fra mønsteret i `.claude/rules/design-patterns-for-krav.md`: sle
 
 - Funnet i koden, men ikke beskrevet i kravet: en deaktivert regel fordeler fortsatt (`er_aktiv` leses ikke av fordelingen). Fordelingen skjer i en bakgrunnsjobb (`SoknadshendelseJobb`), og mangler opptaket standardregel, venter søknadene.
 - UI-tekstene i fs-admin bruker «institusjon» (`fs-admin/src/common/messages/nb/opptak.json:436,442,467`), mot terminologien i `krav/README.md`.
-- Funksjonen ligger bak et feature flag i fs-admin (`fs-admin/.changeset/stek-492-behandlertildelingsregler.md`).
+- Opptak ligger bak et feature flag i fs-admin. Tildelingsreglene er satt i produksjon (changeset `stek-492-behandlertildelingsregler`, tatt med i release 08.10.2026).
 - Krav utenfor scope: `se_saksbehandlende_organisasjon.feature` (`@OPT-SØK-SØK-005`, `@draft`, PR #623).
