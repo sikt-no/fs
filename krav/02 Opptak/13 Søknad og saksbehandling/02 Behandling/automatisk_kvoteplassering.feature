@@ -3,8 +3,11 @@
 @OPT-BEH-BEH-007 @must @draft
 Egenskap: Automatisk kvoteplassering
   Som saksbehandler
-  ønsker jeg at søkere plasseres i kvoter ut fra grunnlag, alder og svar på kvotespørsmål
-  slik at jeg bare tar stilling til kvotespørsmålene som ikke kan besvares automatisk.
+  ønsker jeg at søkere plasseres i kvoter automatisk der det er mulig
+  slik at jeg bare trenger å ta stilling til kvotespørsmål som ikke kan besvares automatisk.
+
+  Automatisk plassering i kvoter er mulig dersom kvotespørsmålet lar seg besvare automatisk,
+  og dersom dokumentasjon eller data knyttet til søknaden kan leses av systemet.
 
   Regel: Søkeren plasseres automatisk i en kvote uten kvotespørsmål
 
@@ -77,7 +80,7 @@ Egenskap: Automatisk kvoteplassering
     @openquestion
     Scenario: Opptak med aldersregler mangler dato for aldersberegning
       # ÅPNE SPØRSMÅL:
-      # - Hva skal saksbehandleren og opptaksforvalteren se når datoen mangler? Varselet i fs-admin (STEK-533) er ikke levert.
+      # - Hvilken dato antas når publisering av resultat også mangler? Eventuelt: hvordan løses dette på en god måte?
       # - Datoen som ble brukt, vises ikke etter at søknaden er behandlet. Skal den vises, og i så fall hvor?
       Gitt at regelverket i opptaket har en aldersgrense eller gir alderspoeng
       Og at opptaket verken har dato for aldersberegning eller dato for publisering av resultat

@@ -52,9 +52,10 @@ Egenskap: Kvotespørsmål
       Når opptaksforvalteren knytter kvotespørsmålene "ER-KVINNE" og "FRA-HARDANGER" til kvotetypen "JENTER-HARDANGER"
       Så må begge kvotespørsmålene være besvart ja før søkeren plasseres i kvotetypen "JENTER-HARDANGER"
 
-    Scenario: Informasjon om kvotetype uten kvotespørsmål
-      Når opptaksforvalteren knytter kvotespørsmål og grunnlag til en kvotetype
-      Så informeres opptaksforvalteren om at en kvotetype uten kvotespørsmål plasserer søkere automatisk i kvoten når søkeren behandles på et grunnlag som er koblet til kvotetypen
+    Scenario: Informasjon om automatisk plassering
+      Gitt at kvotetypen "ORD" ikke har kvotespørsmål
+      Når opptaksforvalteren ser på kvotetypen "ORD"
+      Så ser opptaksforvalteren at søkere plasseres automatisk i kvotetypen "ORD"
 
   Regel: Et kvotespørsmål kan slettes
 
