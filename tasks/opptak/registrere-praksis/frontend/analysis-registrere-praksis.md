@@ -270,9 +270,10 @@ Two periods of 31 days each (28.01–27.02 and 29.01–28.02) give different cal
 
 So the discrepancies are not two different algorithms. They come from the following:
 
-**P1: Repeating decimals in full precision (backend).** Division by 12 happens per period before summing (`Praksisberegner.java:121-123`).
+**P1: Repeating decimals in full precision (backend).** Every period's praksis is rounded to 34 significant digits (DECIMAL128) before it is added up, so a value like 1/3 year is stored as `0.3333…3`. This happens in three places: the division by 12 for stillingsprosent periods (`Praksisberegner.java:121-123`), timer ÷ årsverk for timer periods (`:115`), and the excess subtracted per overlap segment (`:185-188`).
 - Three periods of 4 months (01.01–30.04, 01.05–31.08, 01.09–31.12.2020, all 100 %): each period is `0.3333…3`, and `sumOppgitt = sumJustert = 0.9999999999999999999999999999999999`. Truncated with BigDecimal → **0,99 år**. The same year as one period → **1,00 år**.
 - Twelve monthly periods for 2020: sum `0.99999…97` → 0,99.
+- Three timer periods of 550 t / 1650 in 2020: each `0.3333…3`, sum `0.9999…9` → 0,99, though the søker has worked exactly 1 650 t = 1 årsverk.
 - The year at 100 % plus a contained month at 100 %: `sumJustert = 0.99999…97` → 0,99, although the year alone is 1,00.
 - This works against the spec's own reason for full precision: "en søker med tolv korte arbeidsforhold kan tape … mot en søker med ett langt".
 
@@ -330,7 +331,7 @@ The verdict is still **not ready to merge**. Every open question is decided, so 
 | # | Change | Source |
 |---|---|---|
 | ~~B1~~ | ~~Calendar time = days ÷ 30~~. **Dropped** when Q-D2 was reopened: the krav's month rule is kept, with no change to the calendar calculation. | Q-D2 (reopened) |
-| B2 | Sums with no repeating-decimal error, e.g. add up in exact units (1/30 month × stillingsprosent) and divide once (P1) | Q-T1 |
+| B2 | All calculated values (per-period praksis, `sumOppgitt`, `sumJustert`) must be exact enough that a result that is mathematically a whole or round number does not come out just below it (e.g. `0.999…` instead of 1). This applies to stillingsprosent periods, timer periods and the overlap adjustment. Examples: 3 × 4 months at 100 %; 3 × 550 t/1650; a year at 100 % with a contained month at 100 % (Justert). Add tests that compare exactly, without tolerance. How is up to the backend. | P1 (Review 3) |
 | B3 | Calculated values sent as decimal strings, as a separate type, since the shared `BigDecimal` scalar can't simply change | Q-T1 |
 | B4 | Overlap reported per stretch, split where "over 100 %" changes, including ≤ 100 % (except 0 %) and one-day overlaps, with an "over 100 %" flag | Q-T2, Q-D4, Q-D8 |
 | B5 | Validation errors with field + code; no "Praksisperiode N:" prefix | Q-T3 |
@@ -498,7 +499,7 @@ Technical questions (backend ↔ frontend contract):
   - **Decision (2026-10-08): (b), a string scalar, and fs-admin truncates.** Calculated values (`beregnetPraksis`, `sumOppgitt`, `sumJustert`, and any preview value) go over the wire as decimal strings in full precision. fs-admin truncates to two decimals by cutting the string (no float conversion), then formats with a comma.
   - Consequences and follow-ups:
     - **The scalar is shared.** `BigDecimal` is `ExtendedScalars.GraphQLBigDecimal` for the whole opptak subgraph (`_shared.graphqls:1`), and `codegen.ts:43` maps `BigDecimal → number` for **all** fields in fs-admin. Changing the shared scalar affects other features. The praksis values probably need their own type: a separate scalar, or `String` fields. That is for `bat-plan` and the backend.
-    - **P1 must still be fixed in the backend.** A string truncates exactly what it receives. Today three 4-month periods at 100 % produce `"0.9999…9"`, which becomes **0,99**. The backend must avoid sums that land just below a whole number. With the month rule (Q-D2) this can be done by working in exact units, for example 1/30 month × stillingsprosent as an integer, adding up and dividing once at the end: 3 × 4 months = 12 months = exactly 1 år.
+    - **P1 must still be fixed in the backend.** A string truncates exactly what it receives. Today three 4-month periods at 100 % produce `"0.9999…9"`, which becomes **0,99**. The backend must make sure a result that is mathematically a whole or round number never comes out just below it. That applies to stillingsprosent periods, timer periods (3 × 550 t/1650 also gives `0.999…`) and the overlap adjustment (a year at 100 % with a contained month gives Justert `0.999…97`). This is B2. How it's done is up to the backend.
     - **fs-admin needs a new utility** for truncating decimal strings to two decimals. None exists today (see Current State, Formatting). It must also apply to "Beregnet varighet" in the form.
     - Input fields (`stillingsprosent`, `timer`, `timerPerArsverk`) can stay as numbers with at most two decimals. The question only concerns calculated values.
   - Confirmed again (2026-10-08) after going through what an edit does: truncation in fs-admin is safe for editing, because `endrePraksisperiode` only accepts input values and the backend recalculates from stored values after every save. The rules this depends on are under Technical Constraints → "Calculated values are display-only".
