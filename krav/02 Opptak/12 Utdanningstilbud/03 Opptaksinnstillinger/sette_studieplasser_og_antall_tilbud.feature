@@ -40,8 +40,8 @@ Egenskap: Sette antall studieplasser og antall tilbud per utdanningstilbud
 
   @openquestion
   # ÅPNE SPØRSMÅL:
-  # - Er «tak for ja-svar» (#398) det samme som «antall ønsket ja-svar» i
-  #   antall_tilbud_som_skal_gis.feature, eller et eget tall som gjelder hele opptaket?
+  # - Trengs «tak for ja-svar» (#398)? Begrepet «antall ønsket ja-svar» er tatt ut (2026-10-08),
+  #   og antall tilbud som skal gis settes per runde i 14 Plasstildeling.
   # - Hva skjer når taket er nådd: stopper plasstildelingen å gi nye tilbud?
   Regel: Opptaksforvalter kan sette tak for ja-svar
 

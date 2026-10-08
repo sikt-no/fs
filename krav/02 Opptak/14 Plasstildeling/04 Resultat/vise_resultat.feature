@@ -92,7 +92,7 @@ Egenskap: Vise resultatet av plasstildelingen
 #   i opptaket. Skal saksbehandler ha tilgang, slik brukerhistorien sier?
 # - Uten tilgang ser brukeren i dag en tom liste, ikke en feilmelding. Da kan ingen se forskjell på
 #   «ingen resultater» og «ingen tilgang». Hva skal brukeren se?
-# - Antall overbookinger krever i dag tilgangen til å se opptaket. Med bare tilgang til plasstildelingen
+# - Antall tilbud som skal gis krever i dag tilgangen til å se opptaket. Med bare tilgang til plasstildelingen
 #   vises 0. Skal tilgangen til plasstildelingen være nok?
 #
 # Kilde: også Confluence «Plasstildelingsløpet i Opptak» (kap. 8 og 10).

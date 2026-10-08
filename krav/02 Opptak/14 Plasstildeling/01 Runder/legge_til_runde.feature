@@ -57,9 +57,9 @@ Egenskap: Legge til runder for plasstildeling i et opptak
         | Supplering       |
         | Etterfylling     |
 
-    # AVKLART 2026-10-07: Ledige studieplasser er en egenskap ved etterfylling,
-    # ikke en egen rundetype. En etterfyllingsrunde kan åpne for nye søknader
-    # på ledige plasser (se 03 Tildeling/gjennomføre_plasstildeling.feature).
+    # AVKLART 2026-10-07, endret 2026-10-08: Ledige studieplasser er en egenskap ved runden,
+    # ikke en egen rundetype. Opptaksforvalter kan åpne en runde av alle rundetyper
+    # for nye søknader på ledige plasser (se 03 Tildeling/gjennomføre_plasstildeling.feature).
 
     Scenario: Hovedtildeling kan bare finnes én gang
       Gitt at opptaket har runden "Hovedrunde" med rundetype "Hovedtildeling"
@@ -146,19 +146,45 @@ Egenskap: Legge til runder for plasstildeling i et opptak
     Scenariomal: Regler som følger av rundetypen
       Gitt at runden har rundetype "<rundetype>"
       Så gjelder disse reglene for plasstildelingen i runden
-        | Regel                                                    | Verdi           |
-        | Søker som får tilbud mister lavere prioriteter           | <bortfall>      |
-        | Frigjort plass ved opprykk gis til neste på ventelisten  | <kompensasjonstilbud>  |
-        | Søker kan ha flere tilbud samtidig     | <flere_tilbud>  |
-        | Bygger på forrige publiserte runde     | <arv>           |
-        | Utdanningstilbud kan ekskluderes       | <ekskludering>  |
-        | Rangering                              | <rangering>     |
+        | Regel                                                   | Verdi                 |
+        | Søker som får tilbud mister lavere prioriteter          | <bortfall>            |
+        | Frigjort plass ved opprykk gis til neste på ventelisten | <kompensasjonstilbud> |
+        | Søker kan ha flere tilbud samtidig                      | <flere_tilbud>        |
+        | Bygger på forrige publiserte runde                      | <arv>                 |
+        | Rangering                                               | <rangering>           |
+
+      # AVKLART 2026-10-08: Rundetypen avgjør ikke om et utdanningstilbud kan ekskluderes.
+      # Et utdanningstilbud er ute av runden når det ikke er satt antall tilbud som skal gis,
+      # se 02 Tildelingsinnstillinger/antall_tilbud_som_skal_gis.feature.
+      Eksempler:
+        | rundetype      | bortfall | kompensasjonstilbud | flere_tilbud     | arv | rangering          |
+        | Hovedtildeling | ja       | nei                 | nei              | nei | poeng og rangering |
+        | Supplering     | ja       | ja                  | nei              | ja  | poeng og rangering |
+        | Etterfylling   | nei      | nei                 | ja, må velge ett | ja  | poeng og rangering |
+
+  Regel: Opptaksforvalter kan åpne en runde for ledige studieplasser
+
+    # AVKLART 2026-10-08: Egenskapen kan settes på alle rundetyper, også hovedtildelingen.
+    # Den kan bare settes når opptaket tilbyr søknad på ledige studieplasser
+    # (se 11 Opprette og vedlikeholde opptak/03 Innstillinger/innstillinger.feature).
+    # Hvordan plasstildelingen rangerer søkerne, står i 03 Tildeling/gjennomføre_plasstildeling.feature.
+    Scenariomal: Åpne runden for ledige studieplasser
+      Gitt at opptaket tilbyr søknad på ledige studieplasser
+      Og at opptaket har runden "<runde>" med rundetype "<rundetype>"
+      Når opptaksforvalter åpner runden "<runde>" for ledige studieplasser
+      Så er runden "<runde>" åpen for ledige studieplasser
 
       Eksempler:
-        | rundetype        | bortfall | kompensasjonstilbud | flere_tilbud     | arv | ekskludering | rangering          |
-        | Hovedtildeling   | ja       | nei                 | nei              | nei | nei          | poeng og rangering |
-        | Supplering       | ja       | ja                  | nei              | ja  | ja           | poeng og rangering |
-        | Etterfylling     | nei      | nei                 | ja, må velge ett | ja  | ja           | poeng og rangering |
+        | runde            | rundetype      |
+        | Hovedrunde       | Hovedtildeling |
+        | Suppleringsrunde | Supplering     |
+        | Etterfylling     | Etterfylling   |
+
+    Scenario: Opptaket tilbyr ikke søknad på ledige studieplasser
+      Gitt at opptaket ikke tilbyr søknad på ledige studieplasser
+      Og at opptaket har runden "Etterfylling" med rundetype "Etterfylling"
+      Når opptaksforvalter endrer runden "Etterfylling"
+      Så ser opptaksforvalter ikke muligheten til å åpne runden for ledige studieplasser
 
   Regel: Opptaksforvalter setter periode for når lærestedene kan endre antall tilbud som skal gis
 
@@ -206,6 +232,7 @@ Egenskap: Legge til runder for plasstildeling i et opptak
 
 # AVKLARTE SPØRSMÅL (raffinering 2026-10-07):
 # - Ledige studieplasser er en egenskap ved etterfylling, ikke en egen rundetype.
+#   Endret 2026-10-08: egenskapen kan settes på alle rundetyper, også hovedtildelingen.
 # - Runder kan slettes så lenge de ikke er publisert til søker.
 # - Navn og svarfrist kan alltid endres.
 # - Opptaksforvalter setter ingen eksplisitt publiseringsdato. Publisering skjer når den skjer.

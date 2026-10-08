@@ -13,10 +13,11 @@ Egenskap: Gjennomføre plasstildeling
   #   runde er utgangspunktet, og at bare endringer (opprykk, nye tilbud, bortfall) beregnes?
   #   Eller kjøres hele fordelingen på nytt med oppdaterte tall?
   # - Hvilke utfall (tilbud, venteliste, bortfall, avslag) er mulige i hvilken rundetype?
-  #   I etterfylling og ledige studieplasser finnes ikke bortfall — men det er ikke sagt eksplisitt.
+  #   I etterfylling finnes ikke bortfall — men det er ikke sagt eksplisitt.
+  #   Gjelder bortfall i en suppleringsrunde med ledige studieplasser, også for søkerne på ledige studieplasser?
   # - Bortfall i supplering: fungerer det likt som i hovedtildeling (lavere prioriteter faller bort
   #   ved tilbud), bortsett fra at opprykk gir kompensasjonstilbud?
-  # - Ledige studieplasser: søker kan ha tilbud fra før og må velge — gjelder det likt som i etterfylling?
+  # - Ledige studieplasser: søker kan ha tilbud fra før og må velge — gjelder det likt i alle rundetyper?
   # - Hvor mange tilbud på ledige studieplasser kan en søker ha samtidig? I koden inntil 10 i tillegg
   #   til ett ordinært, begge fast i koden. Skal det være fast, eller en innstilling på opptaket?
   #
@@ -214,26 +215,28 @@ Egenskap: Gjennomføre plasstildeling
       Så har søkeren tilbud på både prioritet 1 og prioritet 2
       Og søkeren må velge ett av tilbudene
 
-    Scenario: Utdanningstilbud som ikke deltar i runden
-      Gitt at "Sykepleie, høst 2027" ikke deltar i suppleringsrunder
-      Når plasstildelingen i "Suppleringsrunde" gjennomføres
-      Så får ingen søkere nye tilbud på "Sykepleie, høst 2027"
-      Og søkere på venteliste får beskjed om at opptaksvedtaket er endelig
-
-    Scenario: Ledige studieplasser i en etterfyllingsrunde
-      # AVKLART 2026-10-07: Ledige studieplasser er en egenskap ved etterfylling,
-      # ikke en egen rundetype. En etterfyllingsrunde kan åpne for nye søknader
-      # på ledige plasser, rangert etter søknadstidspunkt.
-      # Søknader samles opp, og opptaksforvalter kjører plasstildeling og publiserer
-      # resultatet — som i andre runder. Tilbud gis ikke fortløpende.
-      # AVKLART 2026-10-08: Både runden og utdanningstilbudet må åpne for ledige studieplasser.
-      # Gap mot koden («Plasstildelingsløpet i Opptak», kap. 9): i dag styres det bare av flagget
-      # «tilbyr ledige studieplasser» på utdanningstilbudet, uavhengig av runde.
-      Gitt at opptaket har runden "Etterfylling med ledige plasser" med rundetype "Etterfylling"
-      Og at runden åpner for søknad på ledige studieplasser
+    # AVKLART 2026-10-08: Ledige studieplasser er en egenskap opptaksforvalter kan sette på en runde
+    # av alle rundetyper, også hovedtildelingen. Det er ikke en egen rundetype. Kvalifiserte søkere som
+    # søkte innen ordinær søknadsfrist, rangeres etter poeng og får plass først. Deretter fylles de
+    # ledige plassene med kvalifiserte søkere som har søkt på ledige studieplasser, i rekkefølgen de
+    # leverte søknaden. Søknadene samles opp, og opptaksforvalter kjører plasstildeling og publiserer
+    # resultatet som i andre runder. Tilbud gis ikke fortløpende.
+    # Både runden og utdanningstilbudet må åpne for ledige studieplasser (avklart 2026-10-08).
+    # Gap mot koden («Plasstildelingsløpet i Opptak», kap. 9): i dag styres det bare av flagget
+    # «tilbyr ledige studieplasser» på utdanningstilbudet, uavhengig av runde.
+    Scenariomal: Ledige studieplasser i en runde
+      Gitt at opptaket har runden "<runde>" med rundetype "<rundetype>"
+      Og at opptaksforvalter har åpnet runden for ledige studieplasser
       Og at "Sykepleie, høst 2027" tilbyr ledige studieplasser
-      Og at "Sykepleie, høst 2027" har 3 ledige plasser
-      Og at 2 søkere står på venteliste til "Sykepleie, høst 2027"
-      Når plasstildelingen i runden gjennomføres
-      Så får de 2 søkerne på ventelisten tilbud først
-      Og den siste plassen går til den kvalifiserte søkeren som søkte først på ledige studieplasser
+      Og at det skal gis 30 tilbud på "Sykepleie, høst 2027" i runden
+      Og at 13 kvalifiserte søkere søkte på "Sykepleie, høst 2027" innen ordinær søknadsfrist
+      Og at 150 kvalifiserte søkere har søkt på "Sykepleie, høst 2027" på ledige studieplasser
+      Når plasstildelingen i "<runde>" gjennomføres
+      Så får de 13 søkerne som søkte innen ordinær søknadsfrist, tilbud etter poeng
+      Og de 17 neste tilbudene går til søkerne som leverte søknad på ledige studieplasser først
+
+      Eksempler:
+        | runde            | rundetype      |
+        | Hovedrunde       | Hovedtildeling |
+        | Suppleringsrunde | Supplering     |
+        | Etterfylling     | Etterfylling   |

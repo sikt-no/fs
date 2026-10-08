@@ -87,15 +87,9 @@ Egenskap: Opptaksinnstillinger per utdanningstilbud
       Når opptaksforvalter setter tidlig dokumentasjonsfrist til "2027-03-01 23:59" for utdanningstilbudet "Politihøyskolen, høst 2027"
       Så må søkere til dette utdanningstilbudet laste opp dokumentasjon innen denne fristen
 
-  Regel: Opptaksforvalter kan velge hvilke plasstildelingsrunder utdanningstilbudet deltar i
-
-    Scenario: Ekskludere utdanningstilbud fra etterfylling
-      Gitt at opptaket har runder for hovedtildeling, supplering og etterfylling
-      Når opptaksforvalter angir at utdanningstilbudet "Sykepleie, høst 2027" ikke skal delta i etterfylling
-      Så deltar utdanningstilbudet ikke i etterfyllingsrunder
-
-    # AVKLART 2026-10-07: Ledige studieplasser er en egenskap ved etterfylling,
-    # ikke en egen rundetype. Ekskludering fra etterfylling dekker også ledige studieplasser.
+  # AVKLART 2026-10-08: Det finnes ingen innstilling for hvilke runder utdanningstilbudet deltar i.
+  # Et utdanningstilbud er ute av en runde når det ikke er satt antall tilbud som skal gis for runden,
+  # se 14 Plasstildeling/02 Tildelingsinnstillinger/antall_tilbud_som_skal_gis.feature.
 
   @openquestion
   # ÅPNE SPØRSMÅL:
