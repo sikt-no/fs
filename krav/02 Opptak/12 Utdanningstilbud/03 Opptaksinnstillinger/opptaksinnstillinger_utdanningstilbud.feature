@@ -84,15 +84,22 @@ Egenskap: Opptaksinnstillinger per utdanningstilbud
   # Et utdanningstilbud er ute av en runde når det ikke er satt antall tilbud som skal gis for runden,
   # se 14 Plasstildeling/02 Tildelingsinnstillinger/antall_tilbud_som_skal_gis.feature.
 
-  @openquestion
-  # ÅPNE SPØRSMÅL:
-  # - Hva er saksbehandlertildelingsregel i kontekst av utdanningstilbud?
-  # - Hvordan velger opptaksforvalter blant reglene som er satt på opptaket?
-  Regel: Opptaksforvalter kan sette saksbehandlertildelingsregel per utdanningstilbud
+  # Hvordan søknadsalternativene fordeles etter regelen, står i tildele_saksbehandlende_organisasjon.feature (@OPT-BEH-BEH-011).
+  Regel: Opptaksforvalter kan velge saksbehandlertildelingsregel per utdanningstilbud
 
-    Scenario: Sette saksbehandlertildelingsregel
-      Når opptaksforvalter setter saksbehandlertildelingsregel for utdanningstilbudet "Sykepleie, høst 2027"
-      Så fordeles søknadssaker for dette utdanningstilbudet til saksbehandlerorganisasjoner etter den angitte regelen
+    Scenario: Velge saksbehandlertildelingsregel for et utdanningstilbud
+      Når opptaksforvalter velger saksbehandlertildelingsregelen "SPE" for utdanningstilbudet "Sykepleie, høst 2027"
+      Så fordeles søknadsalternativene til "Sykepleie, høst 2027" etter "SPE"
+
+    Scenario: Utdanningstilbud uten egen saksbehandlertildelingsregel følger opptakets standardregel
+      Når opptaksforvalter lagrer utdanningstilbudet "Sykepleie, høst 2027" uten å velge saksbehandlertildelingsregel
+      Så fordeles søknadsalternativene til "Sykepleie, høst 2027" etter opptakets standard tildelingsregel
+
+    Scenario: Kun aktive saksbehandlertildelingsregler i opptaket kan velges
+      Gitt at saksbehandlertildelingsregelen "TRA" er inaktiv
+      Når opptaksforvalter velger saksbehandlertildelingsregel for utdanningstilbudet "Sykepleie, høst 2027"
+      Så kan opptaksforvalter kun velge blant de aktive saksbehandlertildelingsreglene i opptaket
+      Og ser ikke opptaksforvalter "TRA" blant valgene
 
   @openquestion
   # ÅPNE SPØRSMÅL:
