@@ -1,6 +1,6 @@
 # language: no
 # GitHub: #207
-@OPT-BEH-BEH-011 @must @draft
+@OPT-BEH-BEH-011 @must @planned
 Egenskap: Tildele saksbehandlende organisasjon
   Som opptaksforvalter ved forvaltende organisasjon
   ønsker jeg å bestemme hvilken organisasjon som saksbehandler hvert søknadsalternativ
@@ -402,7 +402,7 @@ Egenskap: Tildele saksbehandlende organisasjon
       Så starter saksbehandlingen av "Informatikk, UiO" på nytt hos "HK-dir"
       Og "Informatikk, UiO" har fortsatt tilbudsgaranti
 
-    @openquestion
+    @draft @openquestion
     # ÅPNE SPØRSMÅL:
     # - Avklares med domeneekspert: Workshoprapporten (29.05.2026) foreslår at en flyttet sak får
     #   status «Overført», og at dokumentene merkes som uleste hos den nye organisasjonen.
