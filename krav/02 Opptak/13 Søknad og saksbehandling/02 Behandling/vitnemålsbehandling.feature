@@ -39,8 +39,18 @@
 #
 # Ti åpne spørsmål ble besluttet i gjennomgang med produkteier. Beslutningene
 # står som AVKLART-kommentarer ved det scenarioet de gjelder, med begrunnelse.
-# Ett nytt spørsmål ble oppdaget under omskrivingen og står som @openquestion
-# (karaktertyper for privatistfag) — det blokkerer ikke hovedflyten.
+# Ett nytt spørsmål ble oppdaget under omskrivingen (karaktertyper for
+# privatistfag). Det ble besluttet 08.10.2026.
+#
+# AVKLARINGSRUNDER 07.–08.10.2026
+#
+# Input fra Samordna opptaks wiki og Team Puff ble gått gjennom. Avklart:
+# poengberegningen eies av Team Puff; saksbehandleren kan bare endre
+# grunnlaget slik en regel tillater; tilleggsfag teller bare i ordinær kvote,
+# med unntak; ulik poengsum per søknadsalternativ; søkere med HUP; endringer
+# avvises når beregningen feiler; og plasseringen i leveransene. Beslutningene
+# står som AVKLART-kommentarer ved scenarioet de gjelder. Ingen spørsmål står
+# åpne.
 #
 # Kravet står fortsatt som @draft. Innholdet er avklart, men leveransekuttet
 # er det ikke: featuren er for stor til én leveranse, og oppdelingen må være
@@ -75,21 +85,6 @@ Egenskap: Vitnemålsbehandling
   ikke i en annen. Der reglene gir et valg, skal saksbehandleren velge det
   som gir søkeren best uttelling. Saksbehandleren kan ikke sette sammen et
   vitnemål søkeren ikke har.
-
-  # ÅPNE SPØRSMÅL (fra gjennomgangen 07.10.2026, tas senere):
-  # - Ulik poengsum per søknadsalternativ (VPL i FS): fag som dekker
-  #   spesielle opptakskrav fyller taket på 4 poeng først, så samme søker kan
-  #   få ulik poengsum til ulike søknadsalternativer. Dekkes det av
-  #   fagvalget per poengvariant, er det Team Puffs beregning som velger
-  #   fagene under taket, eller må saksbehandleren velge fag per
-  #   søknadsalternativ?
-  # - Søkere som kan poengberegnes til noen søknadsalternativer og må
-  #   vurderes individuelt (HUP) til andre: hva skal vitnemålsbehandleren
-  #   vise og tillate? I FS kan ikke HUP og VES registreres på samme søker.
-  # - Hvilken leveranse (L2–L6) hører regelen «Saksbehandleren kan bare
-  #   endre grunnlaget slik en regel tillater» til?
-  # - Hva skal skje når Team Puffs endepunkt for poengberegning feiler eller
-  #   ikke svarer?
 
   Bakgrunn:
     Gitt jeg er innlogget i løsningen
@@ -154,6 +149,16 @@ Egenskap: Vitnemålsbehandling
       # POENGVARIANTVITNEMAL på (vgdoknr, poengvariant) og returnerer 0 når
       # kombinasjonen ikke finnes. Et vitnemål er altså ikke universelt
       # gyldig.
+
+    Scenario: Søker med individuell vurdering har ingen poeng å behandle
+      Gitt søkeren har grunnlaget HUP
+      Når jeg åpner grunnlaget på søknaden
+      Så ser jeg ikke muligheten til å velge vitnemål eller fag som grunnlag for poengberegningen
+      # AVKLART 08.10.2026: en søker med HUP («helt uten poeng») skal ikke
+      # poengberegnes. Vitnemålene vises fortsatt, jf.
+      # vise_elektroniske_vitnemål.feature (@OPT-BEH-BEH-005). HUP og VES kan
+      # ikke gjelde samtidig, se avgrensningen om valg av grunnlag nederst i
+      # fila.
 
   Regel: Vitnemål kan sammenlignes
 
@@ -239,6 +244,22 @@ Egenskap: Vitnemålsbehandling
       # avkryssingskolonne, uten å si hvilken poengvariant den gjelder. Den
       # kolonnen må forstås som valget for den poengvarianten saksbehandleren
       # har åpen.
+
+    Scenario: Søkeren kan få ulik poengsum til ulike søknadsalternativer
+      Gitt søkeren har to søknadsalternativer med ulike spesielle opptakskrav
+      Og søknadsalternativene bruker hver sin poengvariant
+      Når jeg velger fag for hver av poengvariantene
+      Så beregnes hver poengvariant fra fagene jeg valgte for den
+      Og jeg ser hvilke søknadsalternativer hver poengsum gjelder for
+      # AVKLART 08.10.2026: ulik poengsum per søknadsalternativ (VPL i FS)
+      # håndteres med fagvalget per poengvariant. Hvilken poengvariant et
+      # søknadsalternativ bruker, står i regelverket.
+      #
+      # Bakgrunn (Samordna opptaks wiki, «Realfagspoeng»): fag som dekker
+      # spesielle opptakskrav, legges inn først og bruker av taket på 4
+      # poeng for realfags- og språkpoeng. Ulike opptakskrav gir derfor ulik
+      # plass til andre poenggivende fag. Når taket er nådd, kan ikke flere
+      # karakterer tas med.
 
     Scenario: Tilleggsfag teller ikke før det aktivt velges
       Gitt vitnemålet har et tilleggsfag
@@ -516,27 +537,16 @@ Egenskap: Vitnemålsbehandling
       Så inngår faget ikke lenger i beregningsgrunnlaget
       Og poengene er beregnet på nytt
 
-    @openquestion
-    Scenario: AVKLAR hvilke karaktertyper et manuelt innlagt fag kan ha
-      # ÅPENT SPØRSMÅL — NYTT, oppdaget da fagkodeverket ble gjennomgått:
-      # - NVB_FAG har har_standpunkt_elev og har_standpunkt_privatist som
-      #   separate felter, i tillegg til eksamenstypekode_elev og
-      #   eksamenstypekode_privatist. Kodeverket vet altså at et fag kan ha
-      #   standpunktkarakter som elev, men ikke som privatist.
-      # - Skal skjemaet håndheve dette — altså hindre at det legges inn en
-      #   standpunktkarakter på et fag søkeren har tatt som privatist?
-      # - Konsekvensen hvis det ikke håndheves: en karakter som ikke kan
-      #   finnes går inn i snittet, og karakterpoenget blir feil uten at noen
-      #   oppdager det.
-      # - Forutsetter at løsningen vet om faget er tatt som elev eller
-      #   privatist. For elektroniske fag ligger det i NVB_VGDOKFAG; for
-      #   manuelt innlagte må saksbehandleren oppgi det, eller så må
-      #   håndhevingen droppes.
-      # - Blokkerer ikke hovedflyten: uten håndheving virker registreringen,
-      #   den er bare mindre robust.
-      # - Delsvar 07.10.2026: privatister får bare eksamenskarakterer
-      #   (Samordna opptaks wiki, «Poengberegning norske søkere»).
-      Gitt spørsmålet er åpent
+    # AVKLART 08.10.2026: skjemaet for manuelt innlagte fag håndhever ikke
+    # hvilke karaktertyper faget kan ha. Saksbehandleren har ansvaret for at
+    # det ikke legges inn standpunktkarakter på et fag søkeren har tatt som
+    # privatist (privatister får bare eksamenskarakter, jf. Samordna opptaks
+    # wiki, «Poengberegning norske søkere»). Fagkodeverket (NVB_FAG) har
+    # opplysningene som skulle til (har_standpunkt_elev og
+    # har_standpunkt_privatist), men håndheving ville krevd at
+    # saksbehandleren oppgir om faget er tatt som elev eller privatist.
+    # Registreringen er dermed mindre robust: en karakter som ikke kan finnes,
+    # kan gå inn i snittet uten at løsningen oppdager det.
 
   Regel: Poeng beregnes fra det valgte grunnlaget
 
@@ -549,6 +559,19 @@ Egenskap: Vitnemålsbehandling
       Gitt jeg har lagt et vitnemål til grunn
       Når jeg endrer vitnemål, fagvalg eller manuelt innlagte fag
       Så er poengene for poengvarianten beregnet på nytt fra det endrede grunnlaget
+
+    Scenario: Endringen avvises når poengberegningen feiler
+      Gitt jeg har lagt et vitnemål til grunn
+      Og poengberegningen feiler eller ikke svarer
+      Når jeg endrer vitnemål, fagvalg eller manuelt innlagte fag
+      Så er grunnlaget uendret
+      Og jeg ser at endringen ikke ble gjennomført
+      # AVKLART 08.10.2026: grunnlaget lagres ikke når kallet til Team Puffs
+      # endepunkt feiler. Saksbehandleren må gjøre endringen på nytt senere.
+      # Grunnlag og poeng er dermed aldri ute av takt. Samme hensyn som
+      # KregUtilgjengeligFeil i ny stack, som stopper behandlingen «for å
+      # unngå behandling på mulig utdatert grunnlag». Utformingen av
+      # beskjeden hører i vitnemålsbehandling.design.md.
 
     Scenario: Se de beregnede poengene
       Gitt jeg har lagt et vitnemål til grunn
@@ -679,6 +702,12 @@ Egenskap: Vitnemålsbehandling
 # settGskKonklusjonFraVitnemaal). Denne featuren forutsetter grunnlaget som
 # gitt.
 #
+# Avklart 08.10.2026: HUP og VES kan ikke gjelde samtidig for samme søker,
+# heller ikke når søkeren kunne vært poengberegnet til noen
+# søknadsalternativer og vurdert individuelt til andre. Hvilket av dem som
+# gjelder, avgjøres i valget av grunnlag. Har søkeren HUP, er det ingen poeng
+# å behandle i vitnemålsbehandleren.
+#
 # Fagprofil og kravelementvurdering. Om søkeren oppfyller de spesielle
 # opptakskravene vurderes mot kompetanseregelverket, og styres av
 # vurderKravelementerAutomatisk. Vitnemålsbehandlingen leverer grunnlaget den
@@ -757,6 +786,9 @@ Egenskap: Vitnemålsbehandling
 #       Regel «Saksbehandleren velger hvilket vitnemål som legges til grunn»,
 #       men begrenset til ett vitnemål for hele saken — ikke per poengvariant.
 #       Pluss låsing og sporbarhet fra regelen om poengberegning.
+#       Lagt til 08.10.2026: «Søker med individuell vurdering har ingen poeng
+#       å behandle» og «Legge inn realfagspoeng på en poengvariant» (bruker
+#       den samme låsingen).
 #       Dette er leveransen som fjerner blokkeringen: etter L2 kan
 #       beregnPoengAutomatisk og vurderKravelementerAutomatisk kjøre på
 #       søkere med flere vitnemål. Mønsteret finnes å kopiere —
@@ -765,13 +797,24 @@ Egenskap: Vitnemålsbehandling
 #   L3  Fagvalg per poengvariant          #609    L2       middels
 #       Regel «Fagene på det valgte vitnemålet vises» og «Fagvalget gjøres
 #       per poengvariant», pluss utvidelsen fra L2 til ulikt vitnemål per
-#       poengvariant. Her ligger førstegangsvitnemål-konsekvensen, som er den
-#       vanskeligste enkeltbiten i hele featuren.
+#       poengvariant. Her ligger reglene for kvoten for førstegangsvitnemål
+#       (tilleggsfag bare i ordinær kvote, med unntak for R2 og poenggivende
+#       fag på yrkesfagsløpet), som er den vanskeligste enkeltbiten i hele
+#       featuren, og ulik poengsum per søknadsalternativ (VPL).
+#       Lagt til 08.10.2026: grensene for fagvalget fra regelen
+#       «Saksbehandleren kan bare endre grunnlaget slik en regel tillater»,
+#       altså «Ikke alle fag kan velges bort» og de tre scenarioene om
+#       23/6-regelen.
 #
 #   L4  Manuell inntasting med fagkode    #610    L2, L3   stor
 #       Regel «Fag som bare finnes i opplastet dokumentasjon legges inn
 #       manuelt». Ny datamodell — fagkode på karakterraden — og dermed den
 #       største og mest usikre leveransen.
+#       Lagt til 08.10.2026: tillegg og endringer i karakterer fra regelen
+#       «Saksbehandleren kan bare endre grunnlaget slik en regel tillater»,
+#       altså overlappende fag, forbedringer og nye fag fra kompetansebevis,
+#       privatisteksamen, fritak etter tidligere reform eller fag tatt i
+#       utlandet, og fag med forsøkskode.
 #       Må komme etter L3: bygges manuell inntasting før det finnes en
 #       mekanisme for fagvalg per poengvariant, må den aksen ettermonteres
 #       på manuelt innlagte fag.
