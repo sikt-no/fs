@@ -26,7 +26,7 @@ import { PrDialog, proposeDraft } from './PrDialog';
 import type { PrProposal } from './prProposal';
 import { CLAUDE_WIDTH, ClaudePanel } from './ClaudePanel';
 import { refreshSkills } from './ClaudeSkills';
-import { buildTree, Sidebar, type TreeMode } from './Sidebar';
+import { buildTree, Sidebar, TREE_WIDTH, type TreeMode } from './Sidebar';
 import { StatusBar } from './StatusBar';
 import { TopBar, type Mode, type Theme } from './TopBar';
 import { transport } from './transport';
@@ -211,6 +211,8 @@ function App() {
   useEffect(() => save('claudeOpen', claudeOpen), [claudeOpen]);
   const [claudeWidth, setClaudeWidth] = useState(() => load('claudeWidth', CLAUDE_WIDTH));
   useEffect(() => save('claudeWidth', claudeWidth), [claudeWidth]);
+  const [treeWidth, setTreeWidth] = useState(() => load('treeWidth', TREE_WIDTH));
+  useEffect(() => save('treeWidth', treeWidth), [treeWidth]);
   useEffect(() => {
     if (EDITABLE) transport.call('claudeStatus').then(setClaude, () => setClaude(null));
   }, []);
@@ -777,7 +779,11 @@ function App() {
         ) : mode === 'avvik' ? (
           <Avvik entries={entries} filter={avvikFilter} onFilter={setAvvikFilter} onOpen={select} onReadRule={readRule} panelHidden={treeHidden} />
         ) : (
-          <div class={'grid' + (treeHidden ? ' notree' : '') + (tocHidden ? ' notoc' : '')}>
+          <div
+            class={'grid' + (treeHidden ? ' notree' : '') + (tocHidden ? ' notoc' : '')}
+            // Et smalere vindu enn sist: treet tar aldri mer enn halve bredden
+            style={{ '--tree-w': `min(${treeWidth}px, 50vw)` }}
+          >
             {!treeHidden && (
               <Sidebar
                 entries={entries}
@@ -794,6 +800,8 @@ function App() {
                 onPr={EDITABLE && git ? () => setPrFor(null) : undefined}
                 onPull={transport.kind === 'electron' ? pull : undefined}
                 pulling={pulling}
+                width={treeWidth}
+                onWidth={setTreeWidth}
               />
             )}
             <main

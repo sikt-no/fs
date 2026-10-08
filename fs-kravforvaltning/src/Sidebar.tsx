@@ -3,6 +3,7 @@ import { useMemo, useState } from 'preact/hooks';
 import type { RangeTuple } from 'fuse.js';
 import { DISPLAY_STATUSES, STATUS_LABEL, displayStatus, type DisplayStatus, type Entry, type GitChange, type GitCode, type GitInfo, type Snapshot } from '../shared/model';
 import { baseName, makeIndex, parentName, search } from './search';
+import { ResizeHandle } from './ResizeHandle';
 
 export type TreeMode = 'files' | 'changes';
 
@@ -122,9 +123,17 @@ interface Props {
   onPull?: () => void;
   /** «Hent siste» pågår */
   pulling?: boolean;
+  /** Bredden på treet, som kan dras i høyre kant */
+  width: number;
+  onWidth: (w: number) => void;
 }
 
-export function Sidebar({ entries, tree, current, open, query, onQuery, onToggle, onSelect, mode, onMode, git, onPr, onPull, pulling }: Props) {
+/** Standardbredden på treet, og grensene når det dras */
+export const TREE_WIDTH = 300;
+const TREE_MIN = 200;
+const treeMax = () => Math.max(TREE_MIN, Math.min(640, Math.round(innerWidth * 0.5)));
+
+export function Sidebar({ entries, tree, current, open, query, onQuery, onToggle, onSelect, mode, onMode, git, onPr, onPull, pulling, width, onWidth }: Props) {
   // Lukkede mapper i endringstreet; alle er åpne som standard
   const [closed, setClosed] = useState<Record<string, boolean>>({});
   const index = useMemo(() => makeIndex(entries), [entries]);
@@ -270,6 +279,15 @@ export function Sidebar({ entries, tree, current, open, query, onQuery, onToggle
 
   return (
     <aside class="sidebar">
+      <ResizeHandle
+        width={width}
+        onWidth={onWidth}
+        edge="right"
+        min={TREE_MIN}
+        max={treeMax}
+        fallback={TREE_WIDTH}
+        label="Endre bredden på filtreet"
+      />
       <div class="treehead">
         <div class="seg" role="group" aria-label="Visning av treet">
           <button aria-pressed={mode === 'files'} onClick={() => onMode('files')}>

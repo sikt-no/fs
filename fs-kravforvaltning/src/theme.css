@@ -103,13 +103,13 @@ button { font: inherit; color: inherit; }
 .seg button[aria-pressed="true"] { background: var(--surface); }
 
 /* Hovedgrid */
-.grid { flex: 1; min-height: 0; display: grid; grid-template-columns: 300px minmax(0, 1fr) 248px; }
+.grid { flex: 1; min-height: 0; display: grid; grid-template-columns: var(--tree-w, 300px) minmax(0, 1fr) 248px; }
 .grid.notree { grid-template-columns: minmax(0, 1fr) 248px; }
-.grid.notoc { grid-template-columns: 300px minmax(0, 1fr); }
+.grid.notoc { grid-template-columns: var(--tree-w, 300px) minmax(0, 1fr); }
 .grid.notree.notoc { grid-template-columns: minmax(0, 1fr); }
 
 /* Sidepanel */
-.sidebar { display: flex; flex-direction: column; min-height: 0; border-right: 1px solid var(--line); background: var(--panel); }
+.sidebar { position: relative; display: flex; flex-direction: column; min-height: 0; border-right: 1px solid var(--line); background: var(--panel); }
 .treehead { padding: 10px 10px 0; display: flex; flex-direction: column; gap: 8px; }
 .treehead .seg { display: grid; grid-template-columns: 1fr 1fr; border: 1px solid var(--line2); border-radius: 5px; overflow: hidden; font-size: 12px; }
 .treehead .seg button { border: 0; padding: 5px 0; cursor: pointer; font: inherit; background: transparent; color: var(--ink2); display: flex; align-items: center; justify-content: center; gap: 6px; }
@@ -539,7 +539,7 @@ pre.docstring { margin: 4px 0 6px; padding: 8px 12px; background: var(--sunken);
 
 /* Smale skjermer: skjul innholdsfortegnelsen, deretter treet */
 @media (max-width: 1100px) {
-  .grid { grid-template-columns: 260px minmax(0, 1fr); position: relative; } .grid.notree { grid-template-columns: minmax(0, 1fr); } .outline { display: none; }
+  .grid { grid-template-columns: min(var(--tree-w, 260px), 40vw) minmax(0, 1fr); position: relative; } .grid.notree { grid-template-columns: minmax(0, 1fr); } .outline { display: none; }
   /* Søket i fila vises over innholdet til høyre mens det er i bruk */
   .outline.withfind:is(.finding, :focus-within) { display: flex; position: absolute; top: 0; right: 0; bottom: 0; width: min(300px, 90%); background: var(--bg); box-shadow: -8px 0 24px rgba(0,0,0,.12); z-index: 6; }
 }
@@ -547,6 +547,7 @@ pre.docstring { margin: 4px 0 6px; padding: 8px 12px; background: var(--sunken);
   .grid { grid-template-columns: minmax(0, 1fr); grid-template-rows: 40vh minmax(0, 1fr); }
   .grid.notree { grid-template-rows: minmax(0, 1fr); }
   .sidebar { border-right: 0; border-bottom: 1px solid var(--line); }
+  .sidebar .resize-handle { display: none; }
   .doc, .mdoc { padding: 20px 16px 48px; }
   .fhead { margin: -20px -16px -16px; padding: 20px 16px 8px; }
   .fhead.compact { margin-bottom: 0; padding-top: 8px; padding-bottom: 8px; }
@@ -988,12 +989,14 @@ button.cfile.off:hover { color: var(--ink); border-color: var(--acc); }
 .cstarting { display: flex; align-items: center; gap: 8px; }
 .cterm-host .xterm { height: 100%; }
 .cterm .claude-send { padding: 6px 12px 8px; border-top: 1px solid var(--line); }
-/* Dra-håndtaket på venstre kant av panelet */
+/* Dra-håndtaket på kanten av et panel (venstre på Claude-panelet, høyre på treet) */
 .claude { position: relative; }
-.claude-resize { position: absolute; top: 0; bottom: 0; left: -4px; width: 8px; cursor: col-resize; z-index: 3; touch-action: none; }
-.claude-resize::after { content: ''; position: absolute; top: 0; bottom: 0; left: 3px; width: 2px; background: transparent; transition: background .12s; }
-.claude-resize:hover::after, .claude-resize:focus-visible::after, body.resizing .claude-resize::after { background: var(--acc); }
-.claude-resize:focus-visible { outline: none; }
+.resize-handle { position: absolute; top: 0; bottom: 0; width: 8px; cursor: col-resize; z-index: 3; touch-action: none; }
+.resize-handle.left { left: -4px; }
+.resize-handle.right { right: -4px; }
+.resize-handle::after { content: ''; position: absolute; top: 0; bottom: 0; left: 3px; width: 2px; background: transparent; transition: background .12s; }
+.resize-handle:hover::after, .resize-handle:focus-visible::after, .resize-handle.dragging::after { background: var(--acc); }
+.resize-handle:focus-visible { outline: none; }
 body.resizing { cursor: col-resize; user-select: none; }
 body.resizing iframe, body.resizing .main { pointer-events: none; }
 .claude-info { padding: 8px 12px 6px; border-bottom: 1px solid var(--line); display: flex; flex-direction: column; gap: 5px; }
