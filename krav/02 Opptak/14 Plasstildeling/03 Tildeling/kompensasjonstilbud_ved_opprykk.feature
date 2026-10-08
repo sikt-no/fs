@@ -29,6 +29,7 @@ Egenskap: Kompensasjonstilbud ved opprykk i supplering
 
     Scenario: Nei-svar frigjør plass til kompensasjonstilbud
       Gitt at søkeren "Kari Nordmann" svarte nei på tilbudet på "Sykepleie, høst 2027" i "Hovedrunde"
+      Og at svarfristen i "Hovedrunde" er ute
       Og at søkeren "Ola Nordmann" står som nummer 1 på ventelisten
       Når plasstildelingen i "Suppleringsrunde" gjennomføres
       Så får "Ola Nordmann" tilbud på "Sykepleie, høst 2027"
@@ -67,3 +68,5 @@ Egenskap: Kompensasjonstilbud ved opprykk i supplering
 # - Automatiske nye tilbud ved nei-svar utenfor rundene er utenfor scope for 2027 (oppgave.md, oppgave 10).
 # - Kompensasjonstilbud innenfor samme kjøring: hvis to søkere rykker opp i samme plasstildeling,
 #   kan plassene deres gis videre i samme kjøring (flere ledd)?
+# - I koden gis en plass som frigjøres ved opprykk, videre bare når antall tilbud ikke allerede er nådd.
+#   Koden kan øke tallet ved opprykk, men det brukes aldri (A10 i «Plasstildelingsløpet i Opptak»).

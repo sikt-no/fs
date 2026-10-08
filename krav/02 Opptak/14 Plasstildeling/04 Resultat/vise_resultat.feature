@@ -88,3 +88,11 @@ Egenskap: Vise resultatet av plasstildelingen
 # - Skal saksbehandler kunne sammenligne to plasstildelinger i samme runde (prøvetildelinger)?
 # - Skal oppsummeringsbildet i saksbehandlingen vise status per søknadsalternativ fra plasstildelingen?
 #   (Confluence, raffinering 2026-09-08, oppgave 6)
+# - Tilgang til plasstildelingen er i dag gitt bare til rollen opptaksleder, og gir innsyn i alle søkere
+#   i opptaket. Skal saksbehandler ha tilgang, slik brukerhistorien sier?
+# - Uten tilgang ser brukeren i dag en tom liste, ikke en feilmelding. Da kan ingen se forskjell på
+#   «ingen resultater» og «ingen tilgang». Hva skal brukeren se?
+# - Antall overbookinger krever i dag tilgangen til å se opptaket. Med bare tilgang til plasstildelingen
+#   vises 0. Skal tilgangen til plasstildelingen være nok?
+#
+# Kilde: også Confluence «Plasstildelingsløpet i Opptak» (kap. 8 og 10).

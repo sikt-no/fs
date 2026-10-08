@@ -16,6 +16,9 @@ Egenskap: Plassflyt mellom utdanningskvoter
   # - Plassflyt finnes på tre nivåer (kvotetype i regelverket, utdanningskvote i opptaket, og per plasstildeling).
   #   Skal opptaksforvalter kunne endre plassflyten per runde?
   # - Forgrening (sende ledige plasser til flere utdanningskvoter) er ikke støttet. Bekrefte at det ikke trengs?
+  # - Å flytte bare noen av de ledige plassene («flytt N av M») er ikke støttet. Trengs det?
+  # - Flyter flere utdanningskvoter til samme mottaker, avgjør kvoteprioriteten rekkefølgen
+  #   («Plasstildelingsløpet i Opptak», kap. 4). Skal det stå som et scenario?
   # - #598 sier at «kun én utdanningskvote kan være siste mottaker». Scenarioet «Utdanningstilbud uten siste
   #   utdanningskvote» krever minst én. Skal det være nøyaktig én siste utdanningskvote per utdanningstilbud?
   #

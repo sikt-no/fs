@@ -138,6 +138,11 @@ Egenskap: Legge til runder for plasstildeling i et opptak
   Regel: Rundetypen styrer hvordan plasstildelingen i runden oppfører seg
 
     # Selve oppførselen beskrives i 03 Tildeling. Her beskrives bare hva rundetypen innebærer.
+    # AVKLART 2026-10-08: Kravet gjelder. Rundetypen skal styre oppførselen.
+    # Gap mot koden («Plasstildelingsløpet i Opptak», kap. 2): ingen logikk skiller på rundetype i dag.
+    # Om en kjøring bygger på en tidligere runde, avgjøres av om opptaket har en publisert runde fra før.
+    # Bortfall gis alltid, og en søker får høyst ett ordinært tilbud. Etterfylling må bygges.
+    # Kodeverket har rundetypene TIDLIG og LEDIGE_STUDIEPLASSER, som ikke er rundetyper i kravet.
     Scenariomal: Regler som følger av rundetypen
       Gitt at runden har rundetype "<rundetype>"
       Så gjelder disse reglene for plasstildelingen i runden

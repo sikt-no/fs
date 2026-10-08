@@ -17,6 +17,8 @@ Egenskap: Gjennomføre plasstildeling
   # - Bortfall i supplering: fungerer det likt som i hovedtildeling (lavere prioriteter faller bort
   #   ved tilbud), bortsett fra at opprykk gir kompensasjonstilbud?
   # - Ledige studieplasser: søker kan ha tilbud fra før og må velge — gjelder det likt som i etterfylling?
+  # - Hvor mange tilbud på ledige studieplasser kan en søker ha samtidig? I koden inntil 10 i tillegg
+  #   til ett ordinært, begge fast i koden. Skal det være fast, eller en innstilling på opptaket?
   #
   # Poeng og rangering:
   # - Når en søker har flere poengsummer i samme kvotetype: er det riktig at høyeste poengsum vinner,
@@ -24,15 +26,36 @@ Egenskap: Gjennomføre plasstildeling
   # - Grunnlag uten poeng (HUP, REA): se Confluence «Hvordan løse HUP og andre grunnlag som ikke har poeng i plasstildeling».
   # - Loddtrekning blir regelen for UHG fra 2027, men loddnummer har ingen kilde i dag.
   #   Hvem eier trekningen, søknadsbehandlingen eller plasstildelingen? («Fra saksbehandling til plasstildeling», D7)
+  # - Lik poengsum på grensen gir i koden alltid tilbud til hele gruppen, også ut over antall tilbud som
+  #   skal gis, og uten øvre grense (A4). Skal det gjelde for alle poenglikhetsregler, eller bare for
+  #   «Alle med samme sum får tilbud»?
+  # - Poenglikhetsregelen «Tidspunkt»: kodeverket sier «tidligste først, deretter alder», men koden har
+  #   ikke alder som andre kriterium (A6). Hvilken er riktig?
+  # - Poenglikhetsregelen «Prioritet» (søkerens prioritet, deretter alder) finnes i koden, men ikke i
+  #   eksemplene under. Skal den være med?
+  # - Underrepresentert kjønn som poenglikhetsregel finnes i kodeverket, men har ingen effekt i koden.
+  #   Skal den støttes?
+  #
+  # Utdanningskvoter:
+  # - En utdanningskvote uten kvoteprioritet prøves først i koden (videreført fra admissio). Er det riktig?
+  # - Får søkeren tilbud i én utdanningskvote, får de andre kvotesøknadene på samme utdanningstilbud
+  #   bortfall. Skal det stå som et eget scenario?
   #
   # Venteliste:
   # - Skal søkere med lik rangering på venteliste dele ventelistenummer, eller få vilkårlige unike numre?
   #   I dag: vilkårlige unike. Hypotese: avhenger av poenglikhetsregelen.
   # - Skal ventelistenumre stå urørt etter opprykk, eller nummereres på nytt? Hypotese: nummereres på nytt.
-  # - Ventelistenumre kan i dag kollidere mellom runder (mistenkt feil i oppgave.md).
+  # - Ventelistenumre kan i dag kollidere mellom runder (mistenkt feil, TAKE-280).
   #
   # Bortfall og avslag:
   # - Er «bortfall» og «avslag» to ulike resultater i resultatlisten, eller er bortfall en type avslag?
+  #   I koden lagres «kvalifisert uten tilbud» som bortfall, så de to kan ikke skilles i ettertid.
+  #
+  # Mistenkte feil fra kodegjennomgangen (TAKE-278, «Plasstildelingsløpet i Opptak», kap. 13):
+  # - TAKE-279: bortfall regnes mot feil tilbud når søkeren har flere tilbud.
+  # - TAKE-280: ventelistenumre kan kollidere mellom videreførte og nye rader.
+  # - TAKE-282: tidligere kansellert resultat leses som «ikke gyldig» i neste runde.
+  # - TAKE-283: ventelistenummer og rangering over 9 999, eller prioritet over 99, feller hele kjøringen.
   #
   # Innstillinger og grensetilfeller:
   # - Innstillingen «maks antall tilbud per søker per runde» (innstillinger.feature) mot etterfylling,
@@ -41,8 +64,8 @@ Egenskap: Gjennomføre plasstildeling
   # - Tidligopptak: tilsagn som gir tilbudsgaranti i hovedtildelingen (Confluence «Samordnet plasstildeling»). Hører det med?
   #
   # Kilde: tasks/opptak/plasstildeling/design.md (prinsipp 1–3, rundetyper, del 2), oppgave.md (oppgave 5),
-  # Confluence «2026-09-08 Raffinering plasstildeling», «Fra saksbehandling til plasstildeling» og
-  # «Samordnet plasstildeling» (akseptansekriterier for algoritme).
+  # Confluence «2026-09-08 Raffinering plasstildeling», «Fra saksbehandling til plasstildeling»,
+  # «Plasstildelingsløpet i Opptak» og «Samordnet plasstildeling» (akseptansekriterier for algoritme).
   # Plasstildelingen eier fordelingen, ikke poengberegningen. Rangering og kvalifisering kommer fra
   # søknadsbehandlingen (se 10 Regelverk/03 Rangering).
   # Hva rundetypen innebærer er oppsummert i 01 Runder/legge_til_runde.feature.
@@ -132,7 +155,12 @@ Egenskap: Gjennomføre plasstildeling
 
   Regel: Søker med tilbudsgaranti får tilbud uavhengig av poengsum
 
+    @openquestion
     Scenario: Tilbudsgaranti tas fra markert utdanningskvote
+      # ÅPNE SPØRSMÅL:
+      # - Hva skjer når utdanningskvoten er full? I koden gir tilbudsgaranti alltid tilbud, også ut over
+      #   antall tilbud som skal gis («Plasstildelingsløpet i Opptak», kap. 3). Skal det gis flere tilbud
+      #   enn tallet, skal garantien fortrenge den lavest rangerte, eller skal garantien komme i tillegg?
       Gitt at tilbudsgarantier for "Sykepleie, høst 2027" tas fra utdanningskvoten "Ordinær"
       Og at søkeren "Ola Nordmann" har tilbudsgaranti på "Sykepleie, høst 2027"
       Når plasstildelingen gjennomføres
@@ -189,8 +217,12 @@ Egenskap: Gjennomføre plasstildeling
       # på ledige plasser, rangert etter søknadstidspunkt.
       # Søknader samles opp, og opptaksforvalter kjører plasstildeling og publiserer
       # resultatet — som i andre runder. Tilbud gis ikke fortløpende.
+      # AVKLART 2026-10-08: Både runden og utdanningstilbudet må åpne for ledige studieplasser.
+      # Gap mot koden («Plasstildelingsløpet i Opptak», kap. 9): i dag styres det bare av flagget
+      # «tilbyr ledige studieplasser» på utdanningstilbudet, uavhengig av runde.
       Gitt at opptaket har runden "Etterfylling med ledige plasser" med rundetype "Etterfylling"
       Og at runden åpner for søknad på ledige studieplasser
+      Og at "Sykepleie, høst 2027" tilbyr ledige studieplasser
       Og at "Sykepleie, høst 2027" har 3 ledige plasser
       Og at 2 søkere står på venteliste til "Sykepleie, høst 2027"
       Når plasstildelingen i runden gjennomføres

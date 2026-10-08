@@ -32,6 +32,8 @@ Egenskap: Antall tilbud som skal gis per utdanningskvote
       Så gir plasstildelingen i runden inntil 150 tilbud i utdanningskvoten "Ordinær"
       Og totalt antall tilbud som skal gis for utdanningstilbudet vises som 278
 
+    # Gap mot koden («Plasstildelingsløpet i Opptak», kap. 1 og 3): mangler tallet, bruker koden
+    # kvotens «ønsket antall deltakere» i stedet for 0. Bekreftet 2026-10-08 at kravet gjelder.
     Scenario: Default er null
       Gitt at opptaksforvalter ikke har satt antall tilbud som skal gis i utdanningskvotene for runden
       Så er antall tilbud som skal gis i hver utdanningskvote 0
@@ -110,6 +112,7 @@ Egenskap: Antall tilbud som skal gis per utdanningskvote
 #   allerede er gitt? Confluence «Samordnet plasstildeling» sier delta.
 # - Begrep: oppgave.md sier at «overbooking» skal hete «antall ønskede ja-svar», mens design.md sier
 #   at «overbooking» skal hete «antall tilbud som skal gis». Hvilken gjelder? Fila følger design.md.
+#   I koden er «overbooking» det totale tallet for runden, ikke et tillegg (A11 i «Plasstildelingsløpet i Opptak»).
 # - Negative tall: skal det være mulig å redusere antall aktive tilbud i en suppleringsrunde?
 #   Ikke verifisert mot dagens løsning.
 # - Merbehov senere: nøkkeltall fra fjorårets opptak med forslag til antall ønsket ja-svar.

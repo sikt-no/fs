@@ -48,13 +48,14 @@ Egenskap: Starte en plasstildeling
       Så bygger plasstildelingen på den publiserte plasstildelingen i "Hovedrunde"
       Og tidligere tilbud, ventelister og svar er med i grunnlaget
 
-    @openquestion
+    # AVKLART 2026-10-08: starten avvises.
+    # Gap mot koden («Plasstildelingsløpet i Opptak», kap. 1–2): i dag kjøres en slik runde som en
+    # hovedtildeling. Runden det bygges på, utledes som opptakets sist publiserte runde.
     Scenario: Senere runde uten publisert forrige runde
-      # ÅPNE SPØRSMÅL:
-      # - Hva skjer hvis forrige runde ikke har en publisert plasstildeling? Skal starten avvises?
       Gitt at runden "Hovedrunde" ikke har en publisert plasstildeling
       Når opptaksforvalter starter en plasstildeling i runden "Suppleringsrunde"
       Så blir plasstildelingen ikke startet
+      Og opptaksforvalter får beskjed om at forrige runde må publiseres først
 
   Regel: Plasstildelingen starter ikke på et tomt grunnlag
 
@@ -88,3 +89,15 @@ Egenskap: Starte en plasstildeling
 #   (kvalifisert, men mangler poengsum, kvote eller grunnlag)? Se «Fra saksbehandling til plasstildeling», D6.
 # - Kan en plasstildeling startes mens perioden for å endre antall tilbud fortsatt er åpen?
 # - Hvordan fanges det opp at en søker har endret søknaden sin mellom runder?
+#   I koden vet kjøringen ikke hvilke studieønsker som er nye, så vernet «et nytt ønske skal ikke
+#   fortrenge et eksisterende tilbud» virker ikke.
+# - Svar leses i koden bare fra runden det bygges på, ikke fra alle tidligere runder. Et svar fra
+#   hovedrunden som ikke er gitt på nytt, er usynlig i den tredje runden. Skal alle tidligere svar telle?
+# - Rekkefølgen på rundene avgjøres i koden av når de ble publisert, ikke av løpenummeret.
+#   Er det riktig?
+# - Er «skal kvoteplasseres» på sakens kvote riktig tolket som «denne kvoten er med i plasstildelingen»?
+#   («Fra saksbehandling til plasstildeling», D2)
+# - Uten poengformel på kvotetypen beregnes ingen poengsum, og søkeren faller stille ut av grunnlaget.
+#   Bør det valideres eller varsles? (D5)
+# - Et utdanningstilbud uten kompetanseregelverk eller rangeringsregelverk får ingen søkere i
+#   plasstildelingen. Skal starten avvises, eller skal opptaksforvalter få et varsel?
