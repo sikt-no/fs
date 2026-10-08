@@ -63,4 +63,15 @@ Egenskap: Samordnet opptak
       Når opptaksforvalter filtrerer på lærestedstype fagskole
       Så er kun norske fagskoler tilgjengelige som deltakere
 
-  # Reglene for saksbehandlertildeling står i tildele_saksbehandlende_organisasjon.feature (@OPT-BEH-BEH-011).
+  # Saksbehandlertildelingen er beskrevet i detalj i tildele_saksbehandlende_organisasjon.feature
+  # (@OPT-BEH-BEH-011, PR #684). Om regelen skal stå her også, avgjøres i oppgaven
+  # opprette-og-vedlikeholde-opptak.
+  Regel: Opptaksforvalter ved forvaltende organisasjon knytter regler for saksbehandlertildeling i samordnet opptak
+
+    Scenario: Sette regler for fordeling av søknader til saksbehandlerorganisasjoner
+      Når opptaksforvalter ved forvaltende organisasjon knytter saksbehandlertildelingsregler for opptaket
+      Så gjelder saksbehandlertildelingsreglene for opptaket, så søknader kan fordeles til deltakende organisasjoner etter de angitte reglene
+
+    Scenario: Saksbehandlertildeling er ikke relevant for lokale opptak
+      Gitt at opptaket "Lokalt opptak høst 2027" er opprettet som lokalt
+      Så er innstillinger for saksbehandlertildeling ikke tilgjengelige
