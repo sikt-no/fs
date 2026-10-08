@@ -90,6 +90,16 @@
 #   avgjør hvilket tilbud søkeren får, ikke om garantien gjelder. Det samme
 #   gjelder når søkeren legger søknadsalternativet inn igjen før søknadsfristen.
 #   Dette erstatter regelen fra 25.09 om samme prioritet, og stemmer med koden.
+#
+# AVKLART 08.10.2026 (etter review fra fagperson i STEK-269)
+#
+# - Et tidligopptakstilbud fra tilbyder (FOP) teller i gjennomføringen. Søkeren
+#   får tidligopptakstilbud på det høyest prioriterte søknadsalternativet som
+#   enten har et tidligopptakstilbud fra før, eller oppfyller kravene. Ingen
+#   søknadsalternativer under får tilbudsgaranti. Et tidligopptakstilbud fra før
+#   gjelder uansett konklusjon, om saken er ferdig behandlet, og poengsum
+#   (fagperson i STEK-269, 30.09.2026). Implementert på fs-plattform-branchen
+#   STEK-503_sett_sammen_tidligopptak_konklusjoner_for_soker, ikke på main.
 # - Alle tre rollene (B-rolle, T-rolle og F-rolle) kan sette tilbudsgaranti manuelt,
 #   hver med sitt eget sett med tilbudsgarantityper (domeneekspert, med henvisning til
 #   Confluence OP «Tilbudsgaranti»). Det stemmer med STEK-270/262 og koden.
@@ -109,6 +119,9 @@
 # - «Gjennomføre tidligopptaket» er det samme som tildelingsrutinen i #642.
 # - Behandler med T-rolle er tilbyder. Manuell tilbudsgaranti fra T-rolle er
 #   det #642 kaller tilbudsgaranti gitt av tilbyder.
+# - «Tidligopptakstilbud» er en tilbudsgaranti av en type i kategorien for tidlig
+#   opptak som gir tilbud: den gjennomføringen setter (FOR), eller den tilbyder
+#   setter manuelt (FOP), f.eks. når søkeren ikke kan poengberegnes.
 #
 @OPT-BEH-BEH-007 @must @in-progress
 Egenskap: Gi tilbudsgaranti ved tidlig opptak
@@ -215,6 +228,24 @@ Egenskap: Gi tilbudsgaranti ved tidlig opptak
       Og søkeren har 55 poeng til "Sykepleie, høst 2027"
       Når opptaksforvalter gjennomfører tidligopptaket
       Så får ikke søkeren tilbudsgaranti på "Sykepleie, høst 2027"
+
+    Scenario: Tidligopptakstilbud fra tilbyder går foran poengsummen
+      Gitt saksbehandler har konkludert med at søkeren deltar i tidligopptaket
+      Og søknaden har følgende søknadsalternativer:
+        | prioritet | søknadsalternativ     | tidlig tilbud | poenggrense | kvalifisert | poeng | tilbudsgaranti fra tilbyder |
+        | 1         | Sykepleie, høst 2027  | ja            | 50          | ja          | ingen | tidligopptakstilbud         |
+        | 2         | Vernepleie, høst 2027 | ja            | 40          | ja          | 55    | ingen                       |
+      Når opptaksforvalter gjennomfører tidligopptaket
+      Så har søkeren tidligopptakstilbud på "Sykepleie, høst 2027"
+      Og søkeren får ikke tilbudsgaranti på "Vernepleie, høst 2027"
+
+    Scenario: Tidligopptakstilbud fra tilbyder gjelder uansett konklusjon og poengsum
+      Gitt det er ikke konkludert om søkeren deltar i tidligopptaket
+      Og søknaden kan ikke poengberegnes
+      Og tilbyder har gitt tidligopptakstilbud på "Sykepleie, høst 2027"
+      Når opptaksforvalter gjennomfører tidligopptaket
+      Så har søkeren fortsatt tidligopptakstilbud på "Sykepleie, høst 2027"
+      Og opptaksforvalter ser at søkeren har tidligopptakstilbud på "Sykepleie, høst 2027"
 
     Scenario: Prøvekjøre tidligopptaket
       Gitt saksbehandler har konkludert med at søkeren deltar i tidligopptaket

@@ -60,6 +60,7 @@ Hele prosessen for tidlig opptak: søkeren ber om tidlig opptak med en begrunnel
 ## Kodesjekk
 
 - **Sjekket:** fs-plattform `main` (`bd8091d49c`), modulen `opptak`. Brukergrensesnittet (fs-admin og Min kompetanse) er ikke sjekket.
+- **Obs:** den nyeste versjonen av gjennomføringen og svaret til søkeren ligger på branchen `STEK-503_sett_sammen_tidligopptak_konklusjoner_for_soker` (34 commits foran `main` 08.10.2026), som ikke er sjekket her. Avvikene under kan være løst der. Kjør kodesjekken mot den branchen, eller mot `main` når den er merget.
 - **Ingen av kravene er helt implementert**, så ingen kan få `@implemented` nå.
 
 | Krav | Scenarioer | Finnes | Delvis | Mangler |
@@ -107,6 +108,7 @@ Kravene er `@in-progress`, og endres på stedet. Endringene står her, så den s
 
 - **2026-10-08, `@OPT-SØK-SØK-011`:** «trekke søknaden om tidlig opptak» heter nå «trekke ønsket om tidlig opptak», i regelen, scenarioene og stegene. Betydningen er den samme: søknaden blir en vanlig søknad, uten ønske om tidlig opptak. Ordet er byttet fordi «trekke søknaden» ellers betyr å trekke hele søknaden (`trekke_søknad.feature`, og `visTrukneSoknader` og `SoknadErTrukketService` i koden). Step definitions som bruker den gamle ordlyden, må oppdateres.
 - **2026-10-08, `@OPT-BEH-BEH-007`:** Tilbudsgarantien følger søknadsalternativet, uansett prioritet. Den faller ikke lenger bort når søkeren flytter søknadsalternativet ned, eller når et nytt søknadsalternativ legges over. Garantien betyr at søkeren aldri blir forbigått på søknadsalternativet. Prioriteten avgjør bare hvilket tilbud søkeren får. Scenarioet «Tilbudsgarantien faller bort når søknadsalternativet flyttes ned» er erstattet av «Tilbudsgarantien følger søknadsalternativet når prioriteten endres», og «Søkeren blir ikke forbigått på søknadsalternativet med tilbudsgaranti» er lagt til. Legger søkeren søknadsalternativet inn igjen før søknadsfristen, gjelder garantien igjen uansett prioritet: scenarioet «Tilbudsgarantien gjelder ikke når søknadsalternativet legges inn på en annen prioritet» er fjernet, og «gjelder igjen» er en `Scenariomal:` med prioritet 1 og 2. Koden gjør allerede dette, så avviket om nedprioritering er borte.
+- **2026-10-08, `@OPT-BEH-BEH-007`:** Et tidligopptakstilbud fra tilbyder (FOP) teller i gjennomføringen, etter review fra fagperson i STEK-269 (30.09.2026). Søkeren får tidligopptakstilbud på det høyest prioriterte søknadsalternativet som har et tidligopptakstilbud fra før eller oppfyller kravene, og ingen søknadsalternativer under får tilbudsgaranti. Et tidligopptakstilbud fra før gjelder uansett konklusjon, status og poengsum. To nye scenarioer: «Tidligopptakstilbud fra tilbyder går foran poengsummen» og «Tidligopptakstilbud fra tilbyder gjelder uansett konklusjon og poengsum». `main` leser bare garantien fra forvalter, men branchen `STEK-503_sett_sammen_tidligopptak_konklusjoner_for_soker` har det (`c9b3690`, `TidligopptakTilbudsgarantiService.behandleSoker`).
 
 ## Åpne spørsmål
 
