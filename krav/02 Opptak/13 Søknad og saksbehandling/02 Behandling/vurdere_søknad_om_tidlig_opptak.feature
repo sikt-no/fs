@@ -35,8 +35,8 @@
 #   en konklusjon fra hver av organisasjonene.
 # - Vurdering og konklusjon er to steg. Saksbehandleren vurderer først om
 #   begrunnelsen er dokumentert, og velger så om søkeren deltar i tidligopptaket.
-# - Er begrunnelsen ikke dokumentert, kan saksbehandleren bare konkludere med at
-#   søkeren ikke deltar. Er den dokumentert, er valget fritt.
+# - (Endret 08.10.2026, se under.) Er begrunnelsen ikke dokumentert, kan
+#   saksbehandleren bare konkludere med at søkeren ikke deltar.
 # - Konklusjonen krever ikke at kvalifiseringen er vurdert. Kvalifiseringen
 #   sjekkes per søknadsalternativ når tidligopptaket gjennomføres, se
 #   gi_tilbudsgaranti_ved_tidlig_opptak.feature.
@@ -45,17 +45,33 @@
 # - En søknad som ikke er konkludert når tidligopptaket gjennomføres, er ikke
 #   med, og kan ikke konkluderes etterpå.
 #
+# AVKLART 08.10.2026
+#
+# - Saksbehandleren kan bare konkludere når søkeren selv har søkt om tidlig
+#   opptak. Tilbudsgaranti fra tidligopptaket får bare søkere som har søkt.
+#   Koden sjekker ikke dette i dag (SettTidligopptakKonklusjonService), og må
+#   endres.
+# - Er begrunnelsen ikke dokumentert, registreres det som en mangel på søknaden, og
+#   søkeren får beskjed om den. Etter det vurderer saksbehandleren fritt om søkeren
+#   skal delta i tidligopptaket. Dette erstatter regelen fra 07.10 om at «ikke
+#   dokumentert» bare kan gi «deltar ikke». Avklart med fs-specify mot skissen i
+#   FS-Admin, som har én konklusjon uten eget dokumentasjonssteg.
+#
 # BEGREPSBRUK
 #
 # «Begrunnelse» er grunnlaget søkeren har oppgitt for å søke tidlig opptak
 # (tidligopptak_begrunnelsetype). Saksbehandleren registrerer ikke en egen
 # begrunnelse, men vurderer om søkerens begrunnelse er dokumentert.
 #
-@OPT-BEH-BEH-006 @must @draft
+@OPT-BEH-BEH-008 @must @in-progress
 Egenskap: Vurdere søknad om tidlig opptak
   Som saksbehandler
   ønsker jeg å vurdere søkerens begrunnelse for tidlig opptak og konkludere om søkeren deltar i tidligopptaket
   slik at søkere med dokumentert begrunnelse kan få tilbudsgaranti når tidligopptaket gjennomføres.
+
+  # Konklusjonene saksbehandleren kan velge, legges inn i databasen per opptak, og
+  # vedlikeholdes ikke i løsningen nå (avklart 08.10.2026, se
+  # gi_tilbudsgaranti_ved_tidlig_opptak.feature).
 
   Bakgrunn:
     Gitt saksbehandler er innlogget i løsningen
@@ -108,15 +124,31 @@ Egenskap: Vurdere søknad om tidlig opptak
         | deltar      |
         | ikke deltar |
 
-    Scenario: Konkludere når begrunnelsen ikke er dokumentert
+    Scenario: Manglende dokumentasjon blir en mangel søkeren får beskjed om
+      Når saksbehandler registrerer at begrunnelsen ikke er dokumentert
+      Så er det registrert en mangel på søknaden for dokumentasjon av tidlig opptak
+      Og søkeren får beskjed om at dokumentasjonen for tidlig opptak mangler
+
+    Scenariomal: Konkludere når begrunnelsen ikke er dokumentert
       Gitt saksbehandler har registrert at begrunnelsen ikke er dokumentert
-      Når saksbehandler skal konkludere
-      Så kan saksbehandler bare konkludere med at søkeren ikke deltar i tidligopptaket
+      Og søkeren har fått beskjed om at dokumentasjonen for tidlig opptak mangler
+      Når saksbehandler konkluderer med at søkeren <konklusjon> i tidligopptaket
+      Så er det lagret at søkeren <konklusjon> i tidligopptaket
+
+      Eksempler:
+        | konklusjon  |
+        | deltar      |
+        | ikke deltar |
 
     Scenario: Kan ikke konkludere før begrunnelsen er vurdert
       Gitt det er ikke registrert om begrunnelsen er dokumentert
       Når saksbehandler skal konkludere
       Så kan ikke saksbehandler konkludere
+
+    Scenario: Kan ikke konkludere når søkeren ikke har søkt om tidlig opptak
+      Gitt saksbehandler er inne på en annen søknad der søkeren ikke har søkt om tidlig opptak
+      Når saksbehandler ser på søknaden
+      Så kan ikke saksbehandler konkludere om søkeren deltar i tidligopptaket
 
     Scenario: Konkludere før kvalifiseringen er vurdert
       Gitt saksbehandler har registrert at begrunnelsen er dokumentert

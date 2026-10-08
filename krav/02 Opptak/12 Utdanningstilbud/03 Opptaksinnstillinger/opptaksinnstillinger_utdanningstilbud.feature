@@ -72,8 +72,23 @@ Egenskap: Opptaksinnstillinger per utdanningstilbud
     Scenario: Markere utdanningstilbud for tidlig tilbud
       Gitt at opptaket åpner for tidlig opptak
       Når opptaksforvalter markerer utdanningstilbudet "Sykepleie, høst 2027" for tidlig tilbud
-      Og opptaksforvalter setter dato for når svar sendes til søkere
       Så kan søkere som oppfyller kriteriene få tidlig svar på dette utdanningstilbudet
+      # Publiseringsdatoen for svar på tidlig opptak settes per opptak, ikke per
+      # utdanningstilbud, se publisere_svar_på_tidlig_opptak.feature (avklart 25.09.2026).
+
+    Scenario: Sette poenggrense for tidlig tilbud
+      Gitt utdanningstilbudet "Sykepleie, høst 2027" er markert for tidlig tilbud
+      Når opptaksforvalter setter poenggrensen for tidlig tilbud til 50 for utdanningstilbudet "Sykepleie, høst 2027"
+      Så får søkere som deltar i tidligopptaket og har minst 50 poeng, tilbudsgaranti på "Sykepleie, høst 2027"
+      # Se gi_tilbudsgaranti_ved_tidlig_opptak.feature. En egen verdi beregnet fra fjorårets
+      # opptak kommer eventuelt senere (STEK-352).
+
+    Scenario: Sette lenke til informasjon om tidlig opptak
+      Gitt utdanningstilbudet "Sykepleie, høst 2027" er markert for tidlig tilbud
+      Når opptaksforvalter setter lenken "https://www.oslomet.no/studier/soknad-og-opptak/tidlig-opptak" til informasjon om tidlig opptak for utdanningstilbudet "Sykepleie, høst 2027"
+      Så ser søkere med "Sykepleie, høst 2027" i søknaden lenken til informasjon om tidlig opptak
+      # Avklart 08.10.2026: lenken settes per utdanningstilbud, ikke per opptak.
+      # Ønske fra Min kompetanse (STEK-267). Se søke_om_tidlig_opptak.feature.
 
   Regel: Opptaksforvalter kan sette tidlig søknadsfrist per utdanningstilbud
 

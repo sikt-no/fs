@@ -1,6 +1,6 @@
 # language: no
 # GitHub: #456
-@OPT-OPT-TID-001 @must @draft
+@OPT-OPT-TID-001 @must @in-progress
 Egenskap: Publisere svar på tidlig opptak
   Som opptaksforvalter ved forvaltende organisasjon
   ønsker jeg å styre når svaret på tidlig opptak blir synlig for søkerne, og sende dem melding om utfallet
@@ -18,9 +18,8 @@ Egenskap: Publisere svar på tidlig opptak
 
   # Publiseringsdatoen (T-day) ligger på opptaket, jf. prosesshypotesen i notatet
   # "2026-09-23 tidligopptaks-svar til søker".
-  # Merk avvik som må ryddes: krav/02 Opptak/12 Utdanningstilbud/opptaksinnstillinger_utdanningstilbud.feature
-  # legger i dag "dato for når svar sendes til søkere" på det enkelte utdanningstilbudet.
-  # Den datoen må fjernes eller omdefineres der, slik at det finnes én publiseringsdato per opptak.
+  # Datoen for når svar sendes til søkere er fjernet fra
+  # opptaksinnstillinger_utdanningstilbud.feature, så det finnes én publiseringsdato per opptak.
   Regel: Opptaksforvalter setter publiseringsdato for svar på tidlig opptak
 
     Scenario: Sette publiseringsdato
@@ -78,18 +77,23 @@ Egenskap: Publisere svar på tidlig opptak
       Når opptaksforvalter sender ut melding om svar på tidlig opptak
       Så mottar søkeren meldingen på engelsk
 
+    Scenario: Gjennomføring før publisering sender ingen melding
+      Gitt at svaret på tidlig opptak ikke er publisert
+      Når opptaksforvalter gjennomfører tidligopptaket på nytt
+      Så mottar ingen søkere melding om svar på tidlig opptak
+
+    Scenario: Meldingen om svar på tidlig opptak sendes bare én gang
+      Gitt at opptaksforvalter har sendt ut melding om svar på tidlig opptak
+      Når opptaksforvalter ser på utsendingen
+      Så ser ikke opptaksforvalter muligheten til å sende ut meldingen på nytt
+
   # Regelen over beskriver den fullførte utsendingen. Regelen under legger et
   # bekreftelsessteg foran den, og endrer ikke utfallet — søkerne mottar de samme meldingene.
-  @openquestion
-  # ÅPNE SPØRSMÅL:
-  # - Skal opptaksforvalter kunne kontrollere meldingsinnholdet før det når søkerne?
-  #   I dagens SO-løsning holdes brevene tilbake for en siste sjekk. Aktuelle varianter er
-  #   forhåndsvisning ved utløsning, en angrefrist der meldingene kan trekkes tilbake,
-  #   eller begge deler. Scenarioet under beskriver forhåndsvisning, og er et forslag.
-  #   Merk at prosesshypotesen i notatet "2026-09-23 tidligopptaks-svar til søker" skiller
-  #   kjøringen av automatikken (før publiseringsdatoen) fra meldingen (etter), slik at
-  #   embargoen fra SO-løsningen ikke lenger er den samme mekanismen. Se også det åpne
-  #   spørsmålet nederst om dry-run er tilstrekkelig kvalitetssikring.
+  #
+  # AVKLART 08.10.2026: Opptaksforvalter kontrollerer meldingen med en forhåndsvisning,
+  # og bekrefter før meldingene sendes. Det er ingen angrefrist etter utsendingen.
+  # Hvem som får tilbudsgaranti, er kontrollert i prøvekjøringen av tidligopptaket,
+  # se gi_tilbudsgaranti_ved_tidlig_opptak.feature.
   Regel: Opptaksforvalter kontrollerer meldingsinnholdet før utsending
 
     Scenario: Forhåndsvise meldingen før utsending
@@ -98,11 +102,6 @@ Egenskap: Publisere svar på tidlig opptak
       Så ser opptaksforvalter en forhåndsvisning av meldingen
       Og meldingene sendes først når opptaksforvalter bekrefter utsendingen
 
-# ÅPNE SPØRSMÅL:
-# - Kravet forutsetter at gjennomføringen gir hver søker tilbudsgaranti på høyst ett
-#   søknadsalternativ, jf. STEK-269. OPT-BEH-BEH-007 i #654 har ingen regel om det ennå.
-#   Må samkjøres med #654.
-# - Kan opptaksforvalter utløse utsendingen flere ganger, for eksempel etter en omkjøring
-#   av tildelingsrutinen? I så fall: får søkere som allerede har fått melding en ny melding?
-# - Skal opptaksforvalter se utfallet av tidlig opptak før publiseringsdatoen, eller er
-#   dry-run av tildelingsrutinen den eneste kvalitetssikringen før publisering?
+# AVKLART 08.10.2026: Søkerne får melding én gang, når svaret på tidlig opptak er
+# publisert. Opptaksforvalter kan prøvekjøre og gjennomføre tidligopptaket så mange
+# ganger som trengs før det, uten at søkerne får melding.

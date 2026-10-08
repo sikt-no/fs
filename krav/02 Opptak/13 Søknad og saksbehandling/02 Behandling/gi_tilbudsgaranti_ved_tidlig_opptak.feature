@@ -19,7 +19,7 @@
 # Featuren slutter når tilbudsgarantiene er tildelt. Publiseringsdatoen og
 # meldingen til søkerne står i publisere_svar_på_tidlig_opptak.feature
 # (OPT-OPT-TID-001), og hva søkeren ser, i se_svar_på_tidlig_opptak.feature
-# (OPT-SØK-SØK-005). Begge kommer med #642.
+# (OPT-SØK-SØK-012). Begge kommer med #642.
 #
 # AVKLART 25.09.2026
 #
@@ -51,8 +51,47 @@
 #   ikke mot publiseringsdatoen: å gjennomføre før den er opptaksforvalterens
 #   ansvar.
 # - En behandler med T-rolle kan sette tilbudsgaranti manuelt uten betingelser.
+#   (Utvidet 08.10.2026: også B-rolle og F-rolle kan sette tilbudsgaranti, se under.)
 #   Det gjelder også når søkeren ikke deltar i tidligopptaket, og det er slik
 #   feil rettes etter at tidligopptaket er gjennomført.
+#
+# AVKLART I JIRA (lagt inn 07.10.2026)
+#
+# - Bare saker som er ferdig behandlet, er med (STEK-425, 01.09.2026).
+# - Poengsummen er den høyeste søkeren har til søknadsalternativet, uansett kvote
+#   (STEK-269, 27.08.2026). I det gamle systemet var den hardkodet til ordinær kvote.
+# - Gjennomføringen gir tilbudsgarantien som opptaksforvalter. En tilbudsgaranti fra
+#   opptaksforvalter som ikke gir tilbud, erstattes. En som gir tilbud, røres ikke, og
+#   søkeren får da ingen ny tilbudsgaranti på lavere prioritet (STEK-269, 12.08.2026).
+# - Tilbudsgarantitypen for tidlig opptak hentes fra opptakets kodeverk, ikke hardkodet.
+#   Det må finnes nøyaktig én aktiv type i kategorien for tidlig opptak som gir tilbud
+#   og kan brukes av opptaksforvalter (STEK-269).
+# - Tilbudsgarantiene deles ut selv om de overskrider kvoten. Opptaksforvalter får et
+#   varsel, og fanger det i prøvekjøringen (STEK-269, STEK-426). Varselgrensen er en
+#   andel av kvoten som opptaksforvalter kan angi ved gjennomføringen.
+# - Opptaksforvalter får en rapport over utfallet (STEK-489).
+#
+# AVKLART 08.10.2026
+#
+# - Søkeren har aldri mer enn én tilbudsgaranti fra tidligopptaket. Når en ny
+#   gjennomføring gir tilbudsgaranti på et høyere prioritert søknadsalternativ,
+#   fjernes tilbudsgarantien på det lavere. Dette er unntaket fra at en ny
+#   gjennomføring ikke fjerner tilbudsgarantier. Koden lar i dag den gamle
+#   tilbudsgarantien stå (TidligopptakTilbudsgarantiService), og må endres.
+# - Tilbudsgarantien faller bort når søkeren fjerner søknadsalternativet eller
+#   trekker søknaden. Legger søkeren søknadsalternativet inn igjen på samme
+#   prioritet før søknadsfristen for opptaket, gjelder tilbudsgarantien igjen.
+# - Alle tre rollene (B-rolle, T-rolle og F-rolle) kan sette tilbudsgaranti manuelt,
+#   hver med sitt eget sett med tilbudsgarantityper (domeneekspert, med henvisning til
+#   Confluence OP «Tilbudsgaranti»). Det stemmer med STEK-270/262 og koden.
+# - Manuell tilbudsgaranti har ingen betingelser knyttet til tidlig opptak, heller
+#   ikke for typer som gjelder tidlig opptak. Tilbudsgaranti er generell, og gis av
+#   flere grunner enn tidlig opptak. Betingelsen fra dagens løsning (tidligsvar bare
+#   når søkeren har søkt om tidlig opptak) videreføres ikke.
+# - Kodeverkene tidlig opptak bygger på (begrunnelser, konklusjoner og
+#   tilbudsgarantityper) legges inn i databasen per opptak, og vedlikeholdes ikke i
+#   løsningen nå. At opptaksforvalter kan forvalte dem, kommer senere, bekreftet av
+#   produkteier (STEK-349). Det skrives ikke krav for det nå.
 #
 # BEGREPSBRUK
 #
@@ -62,7 +101,7 @@
 # - Behandler med T-rolle er tilbyder. Manuell tilbudsgaranti fra T-rolle er
 #   det #642 kaller tilbudsgaranti gitt av tilbyder.
 #
-@OPT-BEH-BEH-007 @must @draft
+@OPT-BEH-BEH-007 @must @in-progress
 Egenskap: Gi tilbudsgaranti ved tidlig opptak
   Som opptaksforvalter
   ønsker jeg å gjennomføre tidligopptaket
@@ -130,6 +169,44 @@ Egenskap: Gi tilbudsgaranti ved tidlig opptak
         | 50             | "Sykepleie, høst 2027"  | "Vernepleie, høst 2027" |
         | 60             | "Vernepleie, høst 2027" | "Sykepleie, høst 2027"  |
 
+    Scenario: Bare ferdig behandlede saker er med i tidligopptaket
+      Gitt saksbehandler har konkludert med at søkeren deltar i tidligopptaket
+      Og søkeren er kvalifisert til "Sykepleie, høst 2027"
+      Og søkeren har 55 poeng til "Sykepleie, høst 2027"
+      Og saken er ikke ferdig behandlet
+      Når opptaksforvalter gjennomfører tidligopptaket
+      Så får ikke søkeren tilbudsgaranti på "Sykepleie, høst 2027"
+      Og opptaksforvalter ser at saken ikke er ferdig behandlet
+
+    Scenario: Den høyeste poengsummen til søknadsalternativet gjelder
+      Gitt saksbehandler har konkludert med at søkeren deltar i tidligopptaket
+      Og søkeren er kvalifisert til "Sykepleie, høst 2027"
+      Og søkeren har følgende poeng til "Sykepleie, høst 2027":
+        | kvote                      | poeng |
+        | Ordinær kvote              | 48    |
+        | Førstegangsvitnemålskvoten | 52    |
+      Når opptaksforvalter gjennomfører tidligopptaket
+      Så får søkeren tilbudsgaranti på "Sykepleie, høst 2027"
+
+    Scenario: Tilbudsgaranti fra opptaksforvalter som ikke gir tilbud blir erstattet
+      Gitt saksbehandler har konkludert med at søkeren deltar i tidligopptaket
+      Og søkeren er kvalifisert til "Sykepleie, høst 2027"
+      Og søkeren har 55 poeng til "Sykepleie, høst 2027"
+      Og opptaksforvalter har satt en tilbudsgaranti som ikke gir tilbud på "Sykepleie, høst 2027"
+      Når opptaksforvalter gjennomfører tidligopptaket
+      Så får søkeren tilbudsgaranti for tidlig opptak på "Sykepleie, høst 2027"
+
+    Scenario: Tilbudsgaranti på et høyere prioritert søknadsalternativ gir ingen ny tilbudsgaranti
+      Gitt saksbehandler har konkludert med at søkeren deltar i tidligopptaket
+      Og søknaden har følgende søknadsalternativer:
+        | prioritet | søknadsalternativ     | tilbudsgaranti fra opptaksforvalter |
+        | 1         | Historie, høst 2027   | gir tilbud                          |
+        | 2         | Sykepleie, høst 2027  | ingen                               |
+      Og søkeren er kvalifisert til "Sykepleie, høst 2027"
+      Og søkeren har 55 poeng til "Sykepleie, høst 2027"
+      Når opptaksforvalter gjennomfører tidligopptaket
+      Så får ikke søkeren tilbudsgaranti på "Sykepleie, høst 2027"
+
     Scenario: Prøvekjøre tidligopptaket
       Gitt saksbehandler har konkludert med at søkeren deltar i tidligopptaket
       Og søkeren er kvalifisert til "Sykepleie, høst 2027"
@@ -145,12 +222,89 @@ Egenskap: Gi tilbudsgaranti ved tidlig opptak
       Når opptaksforvalter gjennomfører tidligopptaket på nytt
       Så har søkeren fortsatt tilbudsgaranti på "Sykepleie, høst 2027"
 
+    Scenario: Tilbudsgarantien flyttes til et høyere prioritert søknadsalternativ ved ny gjennomføring
+      Gitt saksbehandler har konkludert med at søkeren deltar i tidligopptaket
+      Og søkeren fikk tilbudsgaranti på "Vernepleie, høst 2027" som prioritet 2 da tidligopptaket ble gjennomført
+      Og søkeren når nå poenggrensen for "Sykepleie, høst 2027" som prioritet 1
+      Når opptaksforvalter gjennomfører tidligopptaket på nytt
+      Så får søkeren tilbudsgaranti på "Sykepleie, høst 2027"
+      Og søkeren har ikke lenger tilbudsgaranti på "Vernepleie, høst 2027"
+
     Scenario: Søknadsalternativ uten tilbudsgaranti går videre til ordinært opptak
       Gitt søkeren fikk ikke tilbudsgaranti på "Sykepleie, høst 2027" i tidligopptaket
       Når hovedopptaket kjøres
       Så behandles "Sykepleie, høst 2027" i det ordinære opptaket
 
-  Regel: Behandler med T-rolle kan sette tilbudsgaranti manuelt
+  Regel: Opptaksforvalter ser utfallet av tidligopptaket
+
+    Scenario: Se utfallet for hver søker
+      Når opptaksforvalter gjennomfører tidligopptaket
+      Så ser opptaksforvalter utfallet for hvert søknadsalternativ som er vurdert
+      Og opptaksforvalter ser antall søkere per utfall, per behandlende organisasjon og per utdanningstilbud
+
+    Scenario: Se utdanningstilbud med mangelfulle innstillinger
+      Gitt "Vernepleie, høst 2027" er markert for tidlig tilbud uten poenggrense
+      Når opptaksforvalter prøvekjører tidligopptaket
+      Så ser opptaksforvalter at "Vernepleie, høst 2027" mangler poenggrense
+
+    Scenario: Varsel når tilbudsgarantiene overskrider kvoten
+      Gitt "Sykepleie, høst 2027" har 10 plasser i kvoten tilbudsgarantiene tas fra
+      Og 12 søkere oppfyller kravene til tilbudsgaranti på "Sykepleie, høst 2027"
+      Når opptaksforvalter gjennomfører tidligopptaket
+      Så får de 12 søkerne tilbudsgaranti på "Sykepleie, høst 2027"
+      Og opptaksforvalter får varsel om at tilbudsgarantiene overskrider kvoten for "Sykepleie, høst 2027"
+
+    Scenario: Tidligopptaket stopper uten én tilbudsgarantitype for tidlig opptak
+      Gitt opptaket har ikke nøyaktig én aktiv tilbudsgarantitype for tidlig opptak som gir tilbud
+      Når opptaksforvalter gjennomfører tidligopptaket
+      Så får ingen søkere tilbudsgaranti
+      Og opptaksforvalter ser at tilbudsgarantitypen for tidlig opptak mangler eller er tvetydig
+
+  # Tre roller kan sette tilbudsgaranti manuelt, hver i sitt eget felt og med sitt eget
+  # sett med tilbudsgarantityper (avklart med domeneekspert 08.10.2026, se Confluence OP
+  # «Tilbudsgaranti»). Hvilke typer en rolle kan bruke, står på tilbudsgarantitypen i
+  # opptakets kodeverk.
+  #
+  # - B-rolle: saksbehandler ved organisasjonen som behandler saken.
+  #   Eksempler fra dagens løsning: etter klage, reservert plass.
+  # - T-rolle: tilbyder, organisasjonen som tilbyr utdanningstilbudet.
+  #   Eksempler: særskilt vurdering, tidligsvar (forhåndsopptak).
+  # - F-rolle: opptaksforvalter ved organisasjonen som eier opptaket.
+  #   Eksempler: etter telefonsamtale, forhåndsløfte.
+  Regel: Behandler, tilbyder og opptaksforvalter kan sette tilbudsgaranti manuelt
+
+    Scenariomal: Sette tilbudsgaranti i feltet for rollen
+      Gitt behandleren har <rolle>
+      Og tilbudsgarantitypen "<type>" kan brukes av <rolle>
+      Når behandleren setter tilbudsgarantien "<type>" på "Sykepleie, høst 2027"
+      Så har søkeren tilbudsgarantien "<type>" fra <rolle> på "Sykepleie, høst 2027"
+
+      Eksempler:
+        | rolle   | type                                     |
+        | B-rolle | Tilbudsgaranti innvilges etter klage     |
+        | T-rolle | Tilbudsgaranti, særskilt vurdering       |
+        | F-rolle | Tilbudsgaranti gitt etter telefonsamtale |
+
+    Scenario: Bare tilbudsgarantitypene for rollen kan velges
+      Gitt behandleren har B-rolle
+      Og tilbudsgarantitypen "Tilbudsgaranti, særskilt vurdering" kan bare brukes av T-rolle
+      Når behandleren skal sette tilbudsgaranti på "Sykepleie, høst 2027"
+      Så kan ikke behandleren velge "Tilbudsgaranti, særskilt vurdering"
+
+    Scenario: Behandler ser ikke muligheten til å sette tilbudsgaranti for en rolle behandleren ikke har
+      Gitt behandleren har B-rolle
+      Og behandleren har ikke T-rolle eller F-rolle
+      Når behandleren ser på "Sykepleie, høst 2027" i saken
+      Så ser behandleren muligheten til å sette tilbudsgaranti fra B-rolle
+      Men behandleren ser ikke muligheten til å sette tilbudsgaranti fra T-rolle eller F-rolle
+
+    Scenario: Se tilbudsgarantiene fra alle rollene
+      Gitt søkeren har følgende tilbudsgarantier på "Sykepleie, høst 2027":
+        | rolle   | type                                     |
+        | B-rolle | Tilbudsgaranti innvilges etter klage     |
+        | F-rolle | Tilbudsgaranti gitt etter telefonsamtale |
+      Når behandleren ser på "Sykepleie, høst 2027" i saken
+      Så ser behandleren begge tilbudsgarantiene og hvilken rolle som har satt dem
 
     Scenario: Sette tilbudsgaranti når søknaden ikke kan poengberegnes
       Gitt behandleren har T-rolle
@@ -163,11 +317,6 @@ Egenskap: Gi tilbudsgaranti ved tidlig opptak
       Og det er ikke konkludert med at søkeren deltar i tidligopptaket
       Når behandleren setter tilbudsgaranti på "Sykepleie, høst 2027"
       Så har søkeren tilbudsgaranti på "Sykepleie, høst 2027"
-
-    Scenario: Behandler uten T-rolle kan ikke sette tilbudsgaranti manuelt
-      Gitt behandleren har ikke T-rolle
-      Når behandleren ser på søknaden
-      Så ser ikke behandleren muligheten til å sette tilbudsgaranti
 
   Regel: Tilbudsgarantien gjelder i hovedopptaket
 
@@ -187,3 +336,26 @@ Egenskap: Gi tilbudsgaranti ved tidlig opptak
       Gitt søkeren har tilbudsgaranti på "Sykepleie, høst 2027" som prioritet 1
       Når søkeren flytter "Sykepleie, høst 2027" til prioritet 2
       Så har søkeren ikke lenger tilbudsgaranti på "Sykepleie, høst 2027"
+
+    Scenariomal: Tilbudsgarantien faller bort når søknadsalternativet fjernes
+      Gitt søkeren har tilbudsgaranti på "Sykepleie, høst 2027" som prioritet 1
+      Når søkeren <handling>
+      Så har søkeren ikke lenger tilbudsgaranti på "Sykepleie, høst 2027"
+
+      Eksempler:
+        | handling                                    |
+        | fjerner "Sykepleie, høst 2027" fra søknaden |
+        | trekker søknaden                            |
+
+    Scenario: Tilbudsgarantien gjelder igjen når søknadsalternativet legges inn igjen før søknadsfristen
+      Gitt søknadsfristen for opptaket er "2027-04-15 23:59"
+      Og søkeren hadde tilbudsgaranti på "Sykepleie, høst 2027" som prioritet 1
+      Og søkeren fjernet "Sykepleie, høst 2027" fra søknaden "2027-04-01"
+      Når søkeren legger inn "Sykepleie, høst 2027" igjen som prioritet 1 "2027-04-08"
+      Så har søkeren tilbudsgaranti på "Sykepleie, høst 2027" igjen
+
+    Scenario: Tilbudsgarantien gjelder ikke når søknadsalternativet legges inn på en annen prioritet
+      Gitt søkeren hadde tilbudsgaranti på "Sykepleie, høst 2027" som prioritet 1
+      Og søkeren fjernet "Sykepleie, høst 2027" fra søknaden
+      Når søkeren legger inn "Sykepleie, høst 2027" igjen som prioritet 2 før søknadsfristen for opptaket
+      Så har ikke søkeren tilbudsgaranti på "Sykepleie, høst 2027"

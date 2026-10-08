@@ -1,6 +1,6 @@
 # language: no
 # GitHub: #456
-@OPT-SØK-SØK-005 @must @draft
+@OPT-SØK-SØK-012 @must @in-progress
 Egenskap: Se svar på søknad om tidlig opptak
   Som søker
   ønsker jeg å se utfallet av tidlig opptak for hvert av søknadsalternativene mine
@@ -196,14 +196,25 @@ Egenskap: Se svar på søknad om tidlig opptak
       Når søkeren åpner søknaden sin
       Så ser søkeren det samlede svaret "Du har dokumentert grunner for tidlig opptak, men nådde ikke opp i konkurransen" for søknaden
 
-# ÅPNE SPØRSMÅL:
-# - Kravet forutsetter at tildelingen gir hver søker tilbudsgaranti på høyst ett
-#   søknadsalternativ — det høyest prioriterte — og at en tilbudsgaranti fra tilbyder der
-#   blir en tilbudsgaranti fra opptaksforvalter. STEK-269 avklarer det første: "gir
-#   automatikken kun garanti på høyeste relevante prioritet". Men
-#   gi_tilbudsgaranti_ved_tidlig_opptak.feature (OPT-BEH-BEH-007, #654) har ingen regel om
-#   det — der får alle som deltar og er over poenggrensen garanti. Må samkjøres med #654.
-# - Hva skjer med svaret når søkeren trekker søknaden, og hva skjer hvis søknadsalternativet
-#   gjenopprettes? Dette er et mer generelt spørsmål om trukne søknader og tilbudsgarantier,
-#   og hører sannsynligvis hjemme i et overordnet krav om søknadsbehandling enn her.
-# - Skal svaret vises på både norsk og engelsk, på linje med meldingen til søkeren?
+  Regel: Svaret vises på språket søkeren har valgt
+
+    Scenariomal: Se svaret på det valgte språket
+      Gitt søkeren har valgt <språk> i Min kompetanse
+      Og svaret på tidlig opptak er publisert
+      Når søkeren åpner søknaden sin
+      Så ser søkeren svaret på tidlig opptak på <språk>
+
+      Eksempler:
+        | språk      |
+        | bokmål     |
+        | nynorsk    |
+        | nordsamisk |
+        | engelsk    |
+
+# AVKLART 08.10.2026: Trekker søkeren søknaden eller fjerner søknadsalternativet,
+# faller tilbudsgarantien bort, og svaret viser ikke lenger innvilget. Legges
+# søknadsalternativet inn igjen på samme prioritet før søknadsfristen for opptaket,
+# gjelder tilbudsgarantien igjen. Se gi_tilbudsgaranti_ved_tidlig_opptak.feature.
+#
+# AVKLART 08.10.2026: Svaret vises på språket søkeren har valgt i Min kompetanse,
+# på samme måte som meldingen om svaret (publisere_svar_på_tidlig_opptak.feature).

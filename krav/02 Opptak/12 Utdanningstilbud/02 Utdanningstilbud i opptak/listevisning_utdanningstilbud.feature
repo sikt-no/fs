@@ -73,11 +73,18 @@ Egenskap: Listevisning og filtrering av utdanningstilbud i opptak
       Når opptaksforvalter filtrerer på utdanningstilbud med ufullstendige opplysninger
       Så ser opptaksforvalter utdanningstilbud som mangler opplysninger om hvor tilbudsgarantier skal tas fra
 
-    @openquestion
-    # ÅPNE SPØRSMÅL:
-    # - Er det fellesfrister eller helt frie frister for tidlig søknadsfrist
-    #   og tidlig tilbud i samordna opptak?
-    Scenario: Filtrere på utdanningstilbud som mangler dato for tidlig søknadsfrist eller tidlig tilbud
-      Gitt at utdanningstilbudet er markert med tidlig søknadsfrist eller tidlig tilbud
+    # AVKLART 08.10.2026: Fristene for tidlig opptak er felles for opptaket
+    # (frister_og_hendelser.feature), og publiseringsdatoen for svar på tidlig opptak
+    # settes per opptak (publisere_svar_på_tidlig_opptak.feature). Utdanningstilbudet har
+    # derfor ingen egen dato for tidlig tilbud. Det som kan mangle på et utdanningstilbud
+    # med tidlig tilbud, er poenggrensen. Tidlig søknadsfrist settes fritt per
+    # utdanningstilbud (opptaksinnstillinger_utdanningstilbud.feature).
+    Scenario: Filtrere på utdanningstilbud som mangler dato for tidlig søknadsfrist
+      Gitt at utdanningstilbudet er markert med tidlig søknadsfrist
       Når opptaksforvalter filtrerer på utdanningstilbud med ufullstendige opplysninger
-      Så ser opptaksforvalter utdanningstilbud der dato for tidlig søknadsfrist eller tidlig tilbud ikke er satt
+      Så ser opptaksforvalter utdanningstilbud der dato for tidlig søknadsfrist ikke er satt
+
+    Scenario: Filtrere på utdanningstilbud som mangler poenggrense for tidlig tilbud
+      Gitt at utdanningstilbudet er markert for tidlig tilbud
+      Når opptaksforvalter filtrerer på utdanningstilbud med ufullstendige opplysninger
+      Så ser opptaksforvalter utdanningstilbud der poenggrensen for tidlig tilbud ikke er satt

@@ -1,0 +1,108 @@
+# Spec: Tidlig opptak
+
+## Kilde
+
+- **Oppgave:** `tasks/opptak/tidlig-opptak/`
+- **Kilde-mappe:** `krav/02 Opptak/13 Søknad og saksbehandling/` og `krav/02 Opptak/11 Opptak/06 Tidlig opptak/`
+- **GitHub:** [#456](https://github.com/sikt-no/fs/issues/456), [#525](https://github.com/sikt-no/fs/issues/525)
+- **Jira:** STEK-188 «Forvalte og behandle tidligopptak», med underoppgaver
+- **Hentet:** 2026-10-08 13:30
+
+## Omfang
+
+Hele prosessen for tidlig opptak: søkeren ber om tidlig opptak med en begrunnelse, saksbehandleren finner og vurderer søknadene, opptaksforvalteren gjennomfører tidligopptaket og deler ut tilbudsgarantier, og svaret publiseres og sendes til søkeren. Spec-en dekker også manuell tilbudsgaranti fra behandler, tilbyder og opptaksforvalter, og at tilbudsgarantien gjelder i hovedopptaket. Den dekker ikke opptaksinnstillingene for tidlig opptak (aktivering, frister og poenggrense per utdanningstilbud), forvaltning av kodeverkene (begrunnelser, konklusjoner og tilbudsgarantityper, som legges inn i databasen per opptak), eller hvordan plasstildelingen leser tilbudsgarantiene (STEK-263).
+
+## Krav
+
+- **`søke_om_tidlig_opptak.feature`** (`@OPT-SØK-SØK-011`) — søkeren ber om tidlig opptak fra søknadsdetaljene etter at søknaden er sendt, velger begrunnelse, kan bytte og trekke fram til fristen, og ser lenke og tidspunkt. ([krav/…/søke_om_tidlig_opptak.feature](../../../../krav/02%20Opptak/13%20S%C3%B8knad%20og%20saksbehandling/01%20S%C3%B8knad/s%C3%B8ke_om_tidlig_opptak.feature))
+- **`finne_søknader_om_tidlig_opptak.feature`** (`@OPT-BEH-BEH-009`) — filtrene «Søkt om tidlig opptak» og «Ikke vurdert for tidlig opptak» i sakslisten. ([krav/…/finne_søknader_om_tidlig_opptak.feature](../../../../krav/02%20Opptak/13%20S%C3%B8knad%20og%20saksbehandling/02%20Behandling/finne_s%C3%B8knader_om_tidlig_opptak.feature))
+- **`vurdere_søknad_om_tidlig_opptak.feature`** (`@OPT-BEH-BEH-008`) — saksbehandleren vurderer om begrunnelsen er dokumentert, registrerer mangel med beskjed til søkeren, og konkluderer per organisasjon. Låses når tidligopptaket er gjennomført. ([krav/…/vurdere_søknad_om_tidlig_opptak.feature](../../../../krav/02%20Opptak/13%20S%C3%B8knad%20og%20saksbehandling/02%20Behandling/vurdere_s%C3%B8knad_om_tidlig_opptak.feature))
+- **`gi_tilbudsgaranti_ved_tidlig_opptak.feature`** (`@OPT-BEH-BEH-007`) — opptaksforvalteren prøvekjører og gjennomfører tidligopptaket og ser utfallet. Manuell tilbudsgaranti fra B-, T- og F-rolle. Tilbudsgarantien gjelder i hovedopptaket. ([krav/…/gi_tilbudsgaranti_ved_tidlig_opptak.feature](../../../../krav/02%20Opptak/13%20S%C3%B8knad%20og%20saksbehandling/02%20Behandling/gi_tilbudsgaranti_ved_tidlig_opptak.feature))
+- **`publisere_svar_på_tidlig_opptak.feature`** (`@OPT-OPT-TID-001`) — publiseringsdato per opptak, publisering først når tidligopptaket er gjennomført, og én melding til søkerne med forhåndsvisning. ([krav/…/publisere_svar_på_tidlig_opptak.feature](../../../../krav/02%20Opptak/11%20Opptak/06%20Tidlig%20opptak/publisere_svar_p%C3%A5_tidlig_opptak.feature))
+- **`se_svar_på_tidlig_opptak.feature`** (`@OPT-SØK-SØK-012`) — søkeren ser utfallet per søknadsalternativ og et samlet svar, på språket søkeren har valgt. ([krav/…/se_svar_på_tidlig_opptak.feature](../../../../krav/02%20Opptak/13%20S%C3%B8knad%20og%20saksbehandling/01%20S%C3%B8knad/se_svar_p%C3%A5_tidlig_opptak.feature))
+
+## Skisser
+
+### Skisse: Min kompetanse – tidlig opptak
+
+- **Type:** `figma`
+- **Referanse:** https://www.figma.com/design/zYzcXLwDsgoqAhvZ8X1ron/Min-Kompetanse-2026?node-id=2769-1614
+- **Lagrede artefakter:** [screenshot.png](krav-input/sketches/figma/min-kompetanse-tidlig-opptak/screenshot.png), [sub-frames/](krav-input/sketches/figma/min-kompetanse-tidlig-opptak/sub-frames/), [design-context.md](krav-input/sketches/figma/min-kompetanse-tidlig-opptak/design-context.md)
+- **Dekker krav:** `søke_om_tidlig_opptak.feature`, `publisere_svar_på_tidlig_opptak.feature`, `se_svar_på_tidlig_opptak.feature`
+  - «Egen flyt for tidlig opptak» og «Kvittering» dekker `søke_om_tidlig_opptak.feature`.
+  - «Svar på tidlig opptak» (meldingen i Mine meldinger) dekker `publisere_svar_på_tidlig_opptak.feature`.
+  - Variantene av søknadsdetaljene («Fikk tidlig opptak …», «avslag …», «Reservert») dekker `se_svar_på_tidlig_opptak.feature`.
+- **Valideringsstatus:** `Avvik: skissen mangler trekk av ønsket og lenken til lærestedets side, og viser at tidlig opptak søkes fra søknadsdetaljene etter at søknaden er sendt (ikke i kravet).`
+- **Beslutning ved avvik:** Kravet er riktig for trekk og lenke, og skissen må oppdateres. At tidlig opptak søkes etter at søknaden er sendt, er lagt til i kravet (regelen «Søkeren ber om tidlig opptak etter at søknaden er sendt»).
+
+### Skisse: Min kompetanse – svar på tidlig opptak
+
+- **Type:** `figma`
+- **Referanse:** https://www.figma.com/design/zYzcXLwDsgoqAhvZ8X1ron/Min-Kompetanse-2026?node-id=2777-5267
+- **Lagrede artefakter:** [screenshot.png](krav-input/sketches/figma/min-kompetanse-svar-pa-tidlig-opptak/screenshot.png)
+- **Dekker krav:** `se_svar_på_tidlig_opptak.feature`
+- **Valideringsstatus:** `Avvik: skissen viser poengberegning og poenggrense også på søknadsalternativet der søkeren er innvilget.`
+- **Beslutning ved avvik:** Kravene er riktige, og skissen er utdatert på dette punktet. Poengsum og poenggrense vises bare der søkeren deltok uten å nå opp.
+
+### Skisse: FS-Admin – tidlig opptak
+
+- **Type:** `figma`
+- **Referanse:** https://www.figma.com/design/LmoNQlmAuE2FlE0fUo5GoO/FS-Admin---Seksjon-Opptak?node-id=18561-132717
+- **Lagrede artefakter:** [screenshot.png](krav-input/sketches/figma/fs-admin-tidlig-opptak/screenshot.png), [sub-frames/](krav-input/sketches/figma/fs-admin-tidlig-opptak/sub-frames/), [design-context.md](krav-input/sketches/figma/fs-admin-tidlig-opptak/design-context.md)
+- **Dekker krav:** `vurdere_søknad_om_tidlig_opptak.feature`, `gi_tilbudsgaranti_ved_tidlig_opptak.feature`
+  - «Søknadsbehandling» og «Tidlig opptak behandling» dekker `vurdere_søknad_om_tidlig_opptak.feature` og den manuelle tilbudsgarantien i `gi_tilbudsgaranti_ved_tidlig_opptak.feature` (eget felt per rolle, de andre rollenes garanti vises som tekst).
+  - «Kjør tidligopptak?»-dialogen dekker gjennomføringen i `gi_tilbudsgaranti_ved_tidlig_opptak.feature`.
+  - Skissen dekker ikke `finne_søknader_om_tidlig_opptak.feature` (filtrene).
+  - «Tidlig opptak» (poenggrenser per studium) gjelder opptaksinnstillingene, som er utenfor denne spec-en.
+- **Valideringsstatus:** `Avvik: skissen har én konklusjon («KFF – Kan få tidlig opptak, har godkjent grunn»), uten eget steg for om begrunnelsen er dokumentert.`
+- **Beslutning ved avvik:** Kravet er endret før det ble hentet inn: «ikke dokumentert» registreres som en mangel som søkeren får beskjed om, og etter det konkluderer saksbehandleren fritt. Vurderingen er fortsatt et eget steg, så skissen må få det.
+
+## Kodesjekk
+
+- **Sjekket:** fs-plattform `main` (`bd8091d49c`), modulen `opptak`. Brukergrensesnittet (fs-admin og Min kompetanse) er ikke sjekket.
+- **Ingen av kravene er helt implementert**, så ingen kan få `@implemented` nå.
+
+| Krav | Scenarioer | Finnes | Delvis | Mangler |
+|---|---|---|---|---|
+| `@OPT-SØK-SØK-011` Søke om tidlig opptak | 15 | 8 | 2 | 3 (+2 ikke sjekket, UI) |
+| `@OPT-BEH-BEH-009` Finne søknader om tidlig opptak | 4 | 0 | 0 | 4 |
+| `@OPT-BEH-BEH-008` Vurdere søknad om tidlig opptak | 17 | 6 | 4 | 7 |
+| `@OPT-BEH-BEH-007` Gi tilbudsgaranti ved tidlig opptak | 30 | 20 | 4 | 6 |
+| `@OPT-OPT-TID-001` Publisere svar på tidlig opptak | 10 | 1 | 4 | 5 |
+| `@OPT-SØK-SØK-012` Se svar på tidlig opptak | 22 | 0 | 6 | 16 |
+
+Alle avvikene under er besluttet som **kravet er riktig, koden skal endres**. Mangler som bare er «ikke bygget ennå», står ikke her.
+
+- `@OPT-BEH-BEH-007`: kravet sier at søkeren må være kvalifisert, og at opptaksforvalteren ser når kvalifiseringen ikke er vurdert. Koden sjekker kvalifisering bare indirekte via poengsummen, og rapporterer `MANGLER_POENGSUM` («er poengberegningen kjørt?»). Utfallet `IKKE_KVALIFISERT` betyr «poengsum under grensen» (fs-plattform `opptak/opptak-service/…/saksbehandling/tidligopptak/TidligopptakTilbudsgarantiService.java:505-523`).
+- `@OPT-BEH-BEH-007`: kravet sier at tilbudsgarantien flyttes til det høyere prioriterte søknadsalternativet ved ny gjennomføring. Koden lar den gamle stå (`TidligopptakTilbudsgarantiService.java:396-399`).
+- `@OPT-BEH-BEH-007`: kravet sier at tilbudsgarantien gir tilbud i hovedopptaket, faller bort når søknadsalternativet flyttes ned, fjernes eller søknaden trekkes, og gjelder igjen på samme prioritet før søknadsfristen. Plasstildelingen leser ikke `tilbudsgarantitype_kode_fra_*`, og garantien er ikke knyttet til prioritet (`opptak/opptak-service/…/plasstildeling/service/RangeringService.java:267`, `OpptakskjoringService.java:263-268`, `V291__saksbehandling_skjema.sql:125-135`). Avhenger av STEK-263.
+- `@OPT-BEH-BEH-008`: kravet har vurdering av dokumentasjonen som eget steg, mangel med beskjed til søkeren, ingen konklusjon før vurdering eller når søkeren ikke har søkt, og låsing etter gjennomføring. Koden har bare én konklusjonskode, som kan settes og endres fritt (`opptak/opptak-service/…/saksbehandling/SettTidligopptakKonklusjonService.java:29-65`, `V291__saksbehandling_skjema.sql:76`).
+- `@OPT-SØK-SØK-011`: kravet sier at søkeren kan trekke ønsket. `sokTidligOpptak` krever begrunnelse (`opptak/opptak-subgraph/…/soknad/sok-tidligopptak.graphqls:18`), og det finnes ingen mutation for å trekke.
+- `@OPT-OPT-TID-001`: kravet sier at budskapet og språket i meldingen følger søkerens utfall og språk. Meldingstjenesten tar tittel og innhold som fri tekst fra kalleren (`opptak/opptak-service/…/kommunikasjon/TidligOpptakMeldingService.java:29-33`), og NKR-navn mangler nordsamisk (`V398__tidlig_opptak_melding.sql:75-77`).
+- `@OPT-SØK-SØK-012`: kravet skiller «innvilget», «ikke innvilget», «høyere prioritet», «deltar ikke» og «tilbyr ikke». Meldingssnapshotet har bare `TILBUD`/`AVSLAG` (`V398__tidlig_opptak_melding.sql:52,58`), og lagrer poeng for alle alternativer.
+- Sidefunn, utenfor kravene: `BehandlertildelingService.java:448-461` kopierer tilbudsgarantien fra tilbyder og opptaksforvalter, men ikke fra behandler, når søknadsalternativet flyttes til en annen behandler.
+
+## Retagging
+
+Alle seks kravene ble hentet inn. Ingen ble holdt tilbake.
+
+| Fil | Før | Etter |
+|---|---|---|
+| `krav/02 Opptak/13 …/01 Søknad/søke_om_tidlig_opptak.feature` | `@OPT-SØK-SØK-011 @must @planned` | `@OPT-SØK-SØK-011 @must @in-progress` |
+| `krav/02 Opptak/13 …/02 Behandling/finne_søknader_om_tidlig_opptak.feature` | `@OPT-BEH-BEH-009 @must @planned` | `@OPT-BEH-BEH-009 @must @in-progress` |
+| `krav/02 Opptak/13 …/02 Behandling/vurdere_søknad_om_tidlig_opptak.feature` | `@OPT-BEH-BEH-008 @must @planned` | `@OPT-BEH-BEH-008 @must @in-progress` |
+| `krav/02 Opptak/13 …/02 Behandling/gi_tilbudsgaranti_ved_tidlig_opptak.feature` | `@OPT-BEH-BEH-007 @must @planned` | `@OPT-BEH-BEH-007 @must @in-progress` |
+| `krav/02 Opptak/11 Opptak/06 Tidlig opptak/publisere_svar_på_tidlig_opptak.feature` | `@OPT-OPT-TID-001 @must @planned` | `@OPT-OPT-TID-001 @must @in-progress` |
+| `krav/02 Opptak/13 …/01 Søknad/se_svar_på_tidlig_opptak.feature` | `@OPT-SØK-SØK-012 @must @planned` | `@OPT-SØK-SØK-012 @must @in-progress` |
+
+`søke_om_tidlig_opptak.feature` og `vurdere_søknad_om_tidlig_opptak.feature` ble endret på stedet før retaggingen, etter skissevalideringen (se _Skisser_).
+
+## Åpne spørsmål
+
+- [ ] Implementasjonsdetaljer mangler for `søke_om_tidlig_opptak.feature`, `vurdere_søknad_om_tidlig_opptak.feature`, `gi_tilbudsgaranti_ved_tidlig_opptak.feature`, `publisere_svar_på_tidlig_opptak.feature` og `se_svar_på_tidlig_opptak.feature`. Tekstene i skissene (statusmerker, «Hvem kan søke tidlig opptak?», meldingsteksten, samlet svar) må inn i `<feature>.design.md` med `fs-implementasjonsdetaljer`.
+- [ ] Skissene må oppdateres: trekk av ønsket og lenke til lærestedets side (Min kompetanse), ingen poeng og grense når søkeren er innvilget (Min kompetanse), og eget steg for om begrunnelsen er dokumentert, med mangel (FS-Admin).
+- [ ] Det finnes ingen skisse for filtrene i sakslisten (`finne_søknader_om_tidlig_opptak.feature`).
+
+## Rute
+
+fs-plattform → fs-admin → Min kompetanse
