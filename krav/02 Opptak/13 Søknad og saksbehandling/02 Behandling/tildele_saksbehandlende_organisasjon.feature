@@ -242,16 +242,14 @@ Egenskap: Tildele saksbehandlende organisasjon
       Så er "NTNU" saksbehandlende organisasjon for "Utøvende musikk, NTNU"
       Og "HK-dir" er saksbehandlende organisasjon for "Informatikk, UiO"
 
-    @openquestion
-    # ÅPNE SPØRSMÅL:
-    # - Avklares med domeneekspert: Saksbehandler tilbyderen alltid søknad om ledig studieplass, eller
-    #   er det et valg per tildelingsregel? Trolig alltid (HK-dirs wiki sier det for UHG og FSU), men
-    #   designet og koden har avkrysningen «Ledige studieplasser fordeles til tilbyder» per tildelingsregel.
     Scenario: Tilbyderen saksbehandler alltid søknadsalternativ til ledig studieplass
       Gitt at "Informatikk, UiO" tilbyr ledige studieplasser
       Og at ledige studieplasser i opptaket har åpnet
       Når søkeren søker ledig studieplass på "Informatikk, UiO"
       Så er "Universitetet i Oslo" saksbehandlende organisasjon for "Informatikk, UiO"
+      # AVKLART 08.10.2026 i PR #684: tilbyderen saksbehandler alltid ledig studieplass. Det er ikke et
+      # valg per tildelingsregel, så avkrysningen «Ledige studieplasser fordeles til tilbyder» i designet
+      # og koden er et avvik.
 
     Scenario: Ledig studieplass går foran unntak for utdanningsbakgrunn
       Gitt at ledige studieplasser i opptaket har åpnet
@@ -259,15 +257,12 @@ Egenskap: Tildele saksbehandlende organisasjon
       Når søkeren søker ledig studieplass på "Informatikk, UiO"
       Så er "Universitetet i Oslo" saksbehandlende organisasjon for "Informatikk, UiO"
 
-    @openquestion
-    # ÅPNE SPØRSMÅL:
-    # - Avklares med domeneekspert: Gjelder det også etter at perioden for ledige studieplasser er
-    #   stengt, for eksempel når saksbehandleren legger til søknadsalternativet på vegne av søkeren?
-    #   Trolig ja. Koden ser i dag bare på om ledige studieplasser har åpnet.
-    Scenario: Tilbyderen saksbehandler ledig studieplass også etter at perioden for ledige studieplasser er stengt
-      Gitt at perioden for ledige studieplasser i opptaket er stengt
+    Scenario: Tilbyderen saksbehandler ledig studieplass som legges til på vegne av søkeren
+      Gitt at ledige studieplasser i opptaket har åpnet
       Når saksbehandleren legger til ledig studieplass på "Informatikk, UiO" på vegne av søkeren
       Så er "Universitetet i Oslo" saksbehandlende organisasjon for "Informatikk, UiO"
+      # AVKLART 08.10.2026 i PR #684: det som avgjør, er om ledige studieplasser har åpnet. Om perioden
+      # for ledige studieplasser er stengt, spiller ingen rolle.
 
   Regel: Et lærested kan ha saksbehandlingen sin hos en annen organisasjon i opptaket
 
@@ -459,12 +454,10 @@ Egenskap: Tildele saksbehandlende organisasjon
       Når saksbehandleren ved UiT Norges arktiske universitet setter tilbudsgaranti på "Historie, UiT"
       Så har "Historie, UiT" tilbudsgaranti
 
-    @openquestion
-    # ÅPNE SPØRSMÅL:
-    # - Avklares med domeneekspert: Hvilke opplysninger skal tilbyderen ikke se, utover interne
-    #   merknader? Og hva kan tilbyderen endre utover tilbudsgaranti?
     Scenario: Tilbyderen kan ikke endre saksbehandlingen
       Gitt at "Historie, UiT" er fordelt til "Universitetet i Oslo"
       Når saksbehandleren ved UiT Norges arktiske universitet ser "Historie, UiT"
       Så ser ikke saksbehandleren de interne merknadene til "Universitetet i Oslo"
       Og saksbehandleren ser ikke muligheten til å endre grunnlaget eller poengene
+      # AVKLART 08.10.2026 i PR #684: tilbyderen ser alt unntatt de interne merknadene, og kan bare
+      # sette tilbudsgaranti.
