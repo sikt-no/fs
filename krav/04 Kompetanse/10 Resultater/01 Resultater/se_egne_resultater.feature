@@ -182,3 +182,16 @@ Egenskap: Se egne resultater
     Scenario: Resultatene kan ikke endres
       Når brukeren åpner resultatene
       Så har brukeren ingen mulighet til å endre resultatene
+
+  @draft @openquestion
+  Regel: Brukeren ser ikke flere resultater enn saksbehandleren i opptak
+    # ÅPNE SPØRSMÅL:
+    # - Skal regelen gjelde resultatsiden, eller bare resultatene søkeren ser i søknadsflyten?
+    # - Saksbehandleren ser i dag bare vitnemål fra videregående (@OPT-BEH-BEH-005). Det er ønsket at saksbehandleren også skal se høyere utdanning, fagskole og andre resultater, men det er ikke skrevet krav for det. Skal det kravet skrives før denne regelen avklares?
+    # - Saksbehandleren ser resultatene for ett opptak om gangen. Hva er «det saksbehandleren ser» når resultatsiden ikke er knyttet til en søknad?
+
+    Scenario: Brukeren ser ikke resultater saksbehandleren ikke har tilgang til
+      Gitt brukeren har søkt om opptak
+      Og saksbehandleren i opptaket har ikke tilgang til et resultat brukeren har
+      Når brukeren åpner resultatene
+      Så vises ikke resultatet
