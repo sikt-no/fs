@@ -10,7 +10,7 @@ Egenskap: Antall tilbud som skal gis per utdanningskvote (sette opptaksparameter
   # Confluence «2026-09-08 Raffinering plasstildeling» (oppgave 2) og raffinering 2026-10-07.
   # Antall tilbud som skal gis settes per utdanningskvote for den enkelte runde.
   # Opptaksforvalter ved lærestedet setter tallene for egne utdanningstilbud innenfor perioden
-  # som er satt på runden (se 01 Runder/legge_til_runde.feature).
+  # som er satt på runden (se 01 Runder/forvalte_runder.feature).
   # Opptaksforvalter ved forvaltende organisasjon kan endre tallene også utenfor perioden.
   # Begrep (avklart 2026-10-08): «antall tilbud som skal gis». «Overbooking», «måltall» og
   # «antall ønsket ja-svar» brukes ikke.
@@ -102,6 +102,34 @@ Egenskap: Antall tilbud som skal gis per utdanningskvote (sette opptaksparameter
       Så får ingen søkere nye tilbud på "Sykepleie, høst 2027"
       Og søkere på venteliste får beskjed om at opptaksvedtaket er endelig
 
+  Regel: Lærestedene kan endre antall tilbud bare innenfor perioden som er satt på runden
+
+    # Flyttet hit fra 01 Runder 2026-10-09. Perioden settes på runden, se 01 Runder/forvalte_runder.feature.
+    # Gap mot koden (verifisert 2026-10-09): perioden håndheves ikke. Alle med tilgang til å endre
+    # opptaket kan endre antall tilbud når som helst.
+    Scenario: Lærested kan ikke endre antall tilbud utenfor perioden
+      Gitt at perioden for å endre antall tilbud som skal gis i runden "Hovedrunde" er "2027-06-01" – "2027-07-10"
+      Og dagens dato er "2027-07-11"
+      Så kan opptaksforvalter ved lærestedene ikke lenger endre antall tilbud som skal gis for runden
+
+    Scenario: Opptakseier kan endre antall tilbud utenfor perioden
+      Gitt at perioden for å endre antall tilbud som skal gis i runden "Hovedrunde" er "2027-06-01" – "2027-07-10"
+      Og dagens dato er "2027-07-11"
+      Så kan opptaksforvalter ved forvaltende organisasjon fortsatt endre antall tilbud som skal gis for runden
+
+    Scenario: Siste lagrede tall er korrekt uavhengig av hvem som satte det
+      Gitt at opptaksforvalter ved lærestedet satte antall tilbud som skal gis i utdanningskvoten "Ordinær" til 100
+      Når opptaksforvalter ved forvaltende organisasjon endrer antall tilbud til 120
+      Så er antall tilbud som skal gis i utdanningskvoten "Ordinær" 120
+
+  Regel: Minst én runde må finnes før antall tilbud kan settes
+
+    # Flyttet hit fra 01 Runder 2026-10-09.
+
+    Scenario: Opptak uten runder
+      Gitt at opptaket ikke har noen runder
+      Så kan opptaksforvalter ikke sette antall tilbud som skal gis på utdanningstilbudene i opptaket
+
   Regel: Opptaksforvalter ser grunnlaget for å sette antall tilbud
 
     # AVKLART 2026-10-08: Opptaksforvalter ser tallene gjennomgående, på tvers av rundene.
@@ -182,7 +210,7 @@ Egenskap: Antall tilbud som skal gis per utdanningskvote (sette opptaksparameter
 
 # AVKLARTE SPØRSMÅL (raffinering 2026-10-07):
 # - Opptaksforvalter ved forvaltende organisasjon kan endre antall tilbud også utenfor
-#   lærestedenes periode. Se 01 Runder/legge_til_runde.feature.
+#   lærestedenes periode. Se 01 Runder/forvalte_runder.feature.
 # - Siste lagrede tall er korrekt uavhengig av hvem som satte det.
 # - Standard plassflyt for opptaket er en opptaksinnstilling, men løses som del av
 #   arbeidet med å lage plasstildelingen. Gjenåpnet 2026-10-08: om plassflyten settes på opptaket

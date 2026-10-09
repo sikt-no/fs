@@ -68,7 +68,7 @@ Egenskap: Gjennomføre plasstildeling
   # «Plasstildelingsløpet i Opptak» og «Samordnet plasstildeling» (akseptansekriterier for algoritme).
   # Plasstildelingen eier fordelingen, ikke poengberegningen. Rangering og kvalifisering kommer fra
   # søknadsbehandlingen (se 10 Regelverk/03 Rangering).
-  # Hva rundetypen innebærer er oppsummert i 01 Runder/legge_til_runde.feature.
+  # Hva rundetypen innebærer, er oppsummert i regelen «Rundetypen styrer hvordan plasstildelingen i runden oppfører seg».
   # Status i kode: løst, men poenggrense lagres ikke og tapt kvalifisering gir stille bortfall (oppgave.md).
 
   Bakgrunn:
@@ -188,6 +188,34 @@ Egenskap: Gjennomføre plasstildeling
       Gitt at alle kvalifiserte søkere i utdanningskvoten "Ordinær" fikk tilbud
       Når plasstildelingen gjennomføres
       Så er poenggrensen for utdanningskvoten "Ordinær" «alle kvalifiserte har fått tilbud»
+
+  Regel: Rundetypen styrer hvordan plasstildelingen i runden oppfører seg
+
+    # Flyttet hit fra 01 Runder 2026-10-09. Tabellen oppsummerer hva rundetypen innebærer.
+    # Scenarioene under regelen «Rundetypen avgjør hva som skjer med lavere prioriteter og tidligere tilbud»
+    # viser hvordan.
+    # AVKLART 2026-10-08: Kravet gjelder. Rundetypen skal styre oppførselen.
+    # Gap mot koden («Plasstildelingsløpet i Opptak», kap. 2): ingen logikk skiller på rundetype i dag.
+    # Om en kjøring bygger på en tidligere runde, avgjøres av om opptaket har en publisert runde fra før.
+    # Bortfall gis alltid, og en søker får høyst ett ordinært tilbud. Etterfylling må bygges.
+    Scenariomal: Regler som følger av rundetypen
+      Gitt at runden har rundetype "<rundetype>"
+      Så gjelder disse reglene for plasstildelingen i runden
+        | Regel                                                   | Verdi                 |
+        | Søker som får tilbud mister lavere prioriteter          | <bortfall>            |
+        | Frigjort plass ved opprykk gis til neste på ventelisten | <kompensasjonstilbud> |
+        | Søker kan ha flere tilbud samtidig                      | <flere_tilbud>        |
+        | Bygger på forrige publiserte runde                      | <arv>                 |
+        | Rangering                                               | <rangering>           |
+
+      # AVKLART 2026-10-08: Rundetypen avgjør ikke om et utdanningstilbud kan ekskluderes.
+      # Et utdanningstilbud er ute av runden når det ikke er satt antall tilbud som skal gis,
+      # se 02 Tildelingsinnstillinger/antall_tilbud_som_skal_gis.feature.
+      Eksempler:
+        | rundetype      | bortfall | kompensasjonstilbud | flere_tilbud     | arv | rangering          |
+        | Hovedtildeling | ja       | nei                 | nei              | nei | poeng og rangering |
+        | Supplering     | ja       | ja                  | nei              | ja  | poeng og rangering |
+        | Etterfylling   | nei      | nei                 | ja, må velge ett | ja  | poeng og rangering |
 
   Regel: Rundetypen avgjør hva som skjer med lavere prioriteter og tidligere tilbud
 

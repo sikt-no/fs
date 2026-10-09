@@ -45,7 +45,7 @@ Egenskap: Hendelseslogg for opptak
 
     # Hendelsene om runder, antall tilbud som skal gis, plassflyt og plasstildeling er lagt til 2026-10-09.
     # Antall tilbud som skal gis kan endres av både lærestedet og forvaltende organisasjon,
-    # og siste lagrede tall gjelder (14 Plasstildeling/01 Runder/legge_til_runde.feature).
+    # og siste lagrede tall gjelder (14 Plasstildeling/01 Runder/forvalte_runder.feature).
     Scenariomal: Hendelser som logges
       Når opptaksforvalter <handling>
       Så logges en hendelse for <entitet>

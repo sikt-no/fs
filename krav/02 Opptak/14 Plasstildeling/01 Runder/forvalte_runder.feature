@@ -1,9 +1,9 @@
 # language: no
 # GitHub: #216
 @OPT-PLA-RUN-001 @must @draft
-Egenskap: Legge til runder for plasstildeling i et opptak
+Egenskap: Runder for plasstildeling i et opptak
   Som opptaksforvalter
-  ønsker jeg å legge til runder for plasstildeling i et opptak
+  ønsker jeg å legge til og forvalte runder for plasstildeling i et opptak
   slik at studieplasser kan fordeles i flere omganger med riktige regler for hver runde.
 
   # Kilde: tasks/opptak/plasstildeling/design.md (oppgave 1) og Confluence
@@ -31,6 +31,9 @@ Egenskap: Legge til runder for plasstildeling i et opptak
       Så har opptaket runden "Suppleringsrunde"
       Og søkere som får tilbud i runden må svare innen "2027-08-10 23:59"
 
+    # Gap mot koden (verifisert 2026-10-09): fs-admin gir melding når navn mangler. Mangler rundetype,
+    # er lagre-knappen deaktivert uten melding. Svarfrist får melding bare når feltet er rørt, og
+    # runden kan lagres uten svarfrist.
     Scenariomal: Runde mangler obligatorisk opplysning
       Når opptaksforvalter legger til en runde uten <opplysning>
       Så blir runden ikke lagt til
@@ -42,6 +45,7 @@ Egenskap: Legge til runder for plasstildeling i et opptak
         | rundetype  |
         | svarfrist  |
 
+    # Gap mot koden (verifisert 2026-10-09): påminnelse om svarfrist finnes ikke i fs-admin eller fs-plattform.
     Scenario: Sette påminnelse om svarfrist
       Gitt at runden "Hovedrunde" har svarfrist "2027-07-20 23:59"
       Når opptaksforvalter setter påminnelse om svarfrist til "2027-07-18"
@@ -49,6 +53,8 @@ Egenskap: Legge til runder for plasstildeling i et opptak
 
   Regel: Et opptak har én hovedtildeling, men kan ha flere runder av andre typer
 
+    # Kodeverket har også TIDLIG, LEDIGE_STUDIEPLASSER og TEST, som ikke er rundetyper i kravet,
+    # og fs-admin lar bare opptaksforvalter velge HOVED (verifisert 2026-10-09).
     Scenario: Tilgjengelige rundetyper
       Når opptaksforvalter legger til en runde
       Så kan opptaksforvalter velge mellom disse rundetypene
@@ -72,12 +78,6 @@ Egenskap: Legge til runder for plasstildeling i et opptak
       Og at opptaket har runden "Suppleringsrunde 1" med rundetype "Supplering"
       Når opptaksforvalter legger til runden "Suppleringsrunde 2" med rundetype "Supplering" og svarfrist "2027-09-01 23:59"
       Så har opptaket to runder med rundetype "Supplering"
-
-    Scenario: Kjøre plasstildeling flere ganger i samme runde
-      Gitt at runden "Hovedrunde" har en plasstildeling som ikke er publisert
-      Når opptaksforvalter starter en ny plasstildeling i runden "Hovedrunde"
-      Så har runden to plasstildelinger
-      Og opptaket har fortsatt bare én runde med rundetype "Hovedtildeling"
 
     Scenario: Hovedtildeling er første runde i opptaket
       Gitt at opptaket ikke har noen runder
@@ -116,12 +116,14 @@ Egenskap: Legge til runder for plasstildeling i et opptak
       Når opptaksforvalter sletter runden "Suppleringsrunde"
       Så har opptaket ikke lenger runden "Suppleringsrunde"
 
+    # AVKLART 2026-10-09: Valget skjules for en publisert runde (design-patterns-for-krav.md).
+    # Gap mot koden: fs-admin viser «Slett runde» også for publiserte runder, og backend avviser
+    # slettingen med en feilmelding.
     Scenario: Kan ikke slette en runde som er publisert til søker
       Gitt at opptaket har runden "Hovedrunde" med rundetype "Hovedtildeling"
       Og at runden er publisert til søker
-      Når opptaksforvalter forsøker å slette runden "Hovedrunde"
-      Så blir runden ikke slettet
-      Og opptaksforvalter får beskjed om at en publisert runde ikke kan slettes
+      Når opptaksforvalter ser runden "Hovedrunde"
+      Så ser opptaksforvalter ikke muligheten til å slette runden
 
   Regel: Opptaksforvalter ser status på runden
 
@@ -133,34 +135,7 @@ Egenskap: Legge til runder for plasstildeling i et opptak
     Scenario: Runde som er publisert
       Gitt at opptaket har runden "Hovedrunde" med rundetype "Hovedtildeling"
       Og at runden er publisert til søker
-      Så ser opptaksforvalter at runden har status "Publisert"
-
-  Regel: Rundetypen styrer hvordan plasstildelingen i runden oppfører seg
-
-    # Selve oppførselen beskrives i 03 Tildeling. Her beskrives bare hva rundetypen innebærer.
-    # AVKLART 2026-10-08: Kravet gjelder. Rundetypen skal styre oppførselen.
-    # Gap mot koden («Plasstildelingsløpet i Opptak», kap. 2): ingen logikk skiller på rundetype i dag.
-    # Om en kjøring bygger på en tidligere runde, avgjøres av om opptaket har en publisert runde fra før.
-    # Bortfall gis alltid, og en søker får høyst ett ordinært tilbud. Etterfylling må bygges.
-    # Kodeverket har rundetypene TIDLIG og LEDIGE_STUDIEPLASSER, som ikke er rundetyper i kravet.
-    Scenariomal: Regler som følger av rundetypen
-      Gitt at runden har rundetype "<rundetype>"
-      Så gjelder disse reglene for plasstildelingen i runden
-        | Regel                                                   | Verdi                 |
-        | Søker som får tilbud mister lavere prioriteter          | <bortfall>            |
-        | Frigjort plass ved opprykk gis til neste på ventelisten | <kompensasjonstilbud> |
-        | Søker kan ha flere tilbud samtidig                      | <flere_tilbud>        |
-        | Bygger på forrige publiserte runde                      | <arv>                 |
-        | Rangering                                               | <rangering>           |
-
-      # AVKLART 2026-10-08: Rundetypen avgjør ikke om et utdanningstilbud kan ekskluderes.
-      # Et utdanningstilbud er ute av runden når det ikke er satt antall tilbud som skal gis,
-      # se 02 Tildelingsinnstillinger/antall_tilbud_som_skal_gis.feature.
-      Eksempler:
-        | rundetype      | bortfall | kompensasjonstilbud | flere_tilbud     | arv | rangering          |
-        | Hovedtildeling | ja       | nei                 | nei              | nei | poeng og rangering |
-        | Supplering     | ja       | ja                  | nei              | ja  | poeng og rangering |
-        | Etterfylling   | nei      | nei                 | ja, må velge ett | ja  | poeng og rangering |
+      Så ser opptaksforvalter at runden har status "Publisert for søkere"
 
   Regel: Opptaksforvalter kan åpne en runde for ledige studieplasser
 
@@ -191,25 +166,18 @@ Egenskap: Legge til runder for plasstildeling i et opptak
     # Antall tilbud som skal gis (i databasen: opptaksparametere) settes per utdanningskvote
     # per runde, se 02 Tildelingsinnstillinger/antall_tilbud_som_skal_gis.feature.
     # Her settes vinduet: startdato og sluttdato for når lærestedene kan endre tallet.
+    # Hvem som kan endre tallet innenfor og utenfor perioden, står i antall_tilbud_som_skal_gis.feature.
 
     Scenario: Sette periode for å endre antall tilbud som skal gis
       Når opptaksforvalter setter perioden for å endre antall tilbud som skal gis i runden "Hovedrunde" til "2027-06-01" – "2027-07-10"
       Så kan opptaksforvalter ved lærestedene endre antall tilbud som skal gis for runden fra "2027-06-01" til "2027-07-10"
 
-    Scenario: Lærested kan ikke endre antall tilbud utenfor perioden
+    # AVKLART 2026-10-09: Perioden kan alltid endres.
+    # Gap mot koden: fs-admin har perioden bare i skjemaet for ny runde, ikke i redigeringsskjemaet.
+    Scenario: Endre perioden for å endre antall tilbud som skal gis
       Gitt at perioden for å endre antall tilbud som skal gis i runden "Hovedrunde" er "2027-06-01" – "2027-07-10"
-      Og dagens dato er "2027-07-11"
-      Så kan opptaksforvalter ved lærestedene ikke lenger endre antall tilbud som skal gis for runden
-
-    Scenario: Opptakseier kan endre antall tilbud utenfor perioden
-      Gitt at perioden for å endre antall tilbud som skal gis i runden "Hovedrunde" er "2027-06-01" – "2027-07-10"
-      Og dagens dato er "2027-07-11"
-      Så kan opptaksforvalter ved forvaltende organisasjon fortsatt endre antall tilbud som skal gis for runden
-
-    Scenario: Siste lagrede tall er korrekt uavhengig av hvem som satte det
-      Gitt at opptaksforvalter ved lærestedet satte antall tilbud som skal gis i utdanningskvoten "Ordinær" til 100
-      Når opptaksforvalter ved forvaltende organisasjon endrer antall tilbud til 120
-      Så er antall tilbud som skal gis i utdanningskvoten "Ordinær" 120
+      Når opptaksforvalter endrer perioden til "2027-06-01" – "2027-07-15"
+      Så kan opptaksforvalter ved lærestedene endre antall tilbud som skal gis for runden fram til "2027-07-15"
 
   Regel: Opptakets informasjonsdatoer for publisering påvirker ikke runden
 
@@ -224,17 +192,11 @@ Egenskap: Legge til runder for plasstildeling i et opptak
       Så har runden ingen publiseringsdato
       Og runden publiseres når opptaksforvalter velger å publisere resultatet
 
-  Regel: Minst én runde må finnes før plasstildelingen kan forberedes
-
-    Scenario: Opptak uten runder
-      Gitt at opptaket ikke har noen runder
-      Så kan opptaksforvalter ikke sette antall tilbud som skal gis på utdanningstilbudene i opptaket
-
 # AVKLARTE SPØRSMÅL (raffinering 2026-10-07):
 # - Ledige studieplasser er en egenskap ved etterfylling, ikke en egen rundetype.
 #   Endret 2026-10-08: egenskapen kan settes på alle rundetyper, også hovedtildelingen.
 # - Runder kan slettes så lenge de ikke er publisert til søker.
 # - Navn og svarfrist kan alltid endres.
 # - Opptaksforvalter setter ingen eksplisitt publiseringsdato. Publisering skjer når den skjer.
-# - Opptaksforvalter ved forvaltende organisasjon kan endre antall tilbud utenfor lærestedenes periode.
-# - Tidligopptak er ikke en rundetype (avklart tidligere).
+# - Tidligopptak er ikke en rundetype (avklart tidligere). Bekreftet 2026-10-09: søkere som får
+#   tilsagn på søknad om tidlig opptak, får tilbudsgaranti i rundene som kjøres.
