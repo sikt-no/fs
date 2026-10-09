@@ -41,10 +41,11 @@
 # - Konklusjonen krever ikke at kvalifiseringen er vurdert. Kvalifiseringen
 #   sjekkes per søknadsalternativ når tidligopptaket gjennomføres, se
 #   gi_tilbudsgaranti_ved_tidlig_opptak.feature.
-# - Vurderingen og konklusjonen låses når opptaksforvalteren har gjennomført
-#   tidligopptaket. Feil etter det rettes med manuell tilbudsgaranti fra T-rolle.
+# - (Endret 09.10.2026, se under.) Vurderingen og konklusjonen låses når
+#   opptaksforvalteren har gjennomført tidligopptaket. Feil etter det rettes med
+#   manuell tilbudsgaranti fra T-rolle.
 # - En søknad som ikke er konkludert når tidligopptaket gjennomføres, er ikke
-#   med, og kan ikke konkluderes etterpå.
+#   med. (Endret 09.10.2026, se under: den kan konkluderes etterpå.)
 #
 # AVKLART 08.10.2026
 #
@@ -71,6 +72,10 @@
 #   saksbehandleren en vanlig søknadsmangel, og søkeren får beskjed om den på
 #   samme måte som for andre mangler. Erstatter regelen fra 08.10 om at
 #   «ikke dokumentert» registreres som en mangel.
+# - Konklusjonen låses ikke. Saksbehandleren kan sette og endre den også etter
+#   at tidligopptaket er gjennomført. Det endrer ikke tilbudsgarantier som alt er
+#   gitt, eller svaret søkeren alt har fått, men en ny gjennomføring tar den med.
+#   Erstatter låsingen fra 07.10.
 #
 # BEGREPSBRUK
 #
@@ -174,7 +179,7 @@ Egenskap: Vurdere søknad om tidlig opptak
       Så ser saksbehandler at søkeren er kvalifisert til "Sykepleie, høst 2027"
       Og saksbehandler ser at søkeren ikke er kvalifisert til "Vernepleie, høst 2027"
 
-  Regel: Konklusjonen kan endres til tidligopptaket er gjennomført
+  Regel: Konklusjonen kan endres også etter at tidligopptaket er gjennomført
 
     Scenario: Endre konklusjon før tidligopptaket er gjennomført
       Gitt saksbehandler har konkludert med at søkeren deltar i tidligopptaket
@@ -182,13 +187,10 @@ Egenskap: Vurdere søknad om tidlig opptak
       Når saksbehandler konkluderer med at søkeren ikke deltar i tidligopptaket
       Så er det lagret at søkeren ikke deltar i tidligopptaket
 
-    Scenario: Låst etter at tidligopptaket er gjennomført
-      Gitt opptaksforvalter har gjennomført tidligopptaket
-      Når saksbehandler ser på søknaden om tidlig opptak
-      Så kan ikke saksbehandler endre konklusjonen
-
-    Scenario: Kan ikke konkludere etter at tidligopptaket er gjennomført
-      Gitt det er ikke konkludert om søkeren deltar i tidligopptaket
-      Og opptaksforvalter har gjennomført tidligopptaket
-      Når saksbehandler ser på søknaden om tidlig opptak
-      Så kan ikke saksbehandler konkludere
+    Scenario: Endre konklusjonen etter at tidligopptaket er gjennomført
+      Gitt søkeren fikk tilbudsgaranti på "Sykepleie, høst 2027" da tidligopptaket ble gjennomført
+      Og svaret på tidlig opptak er publisert
+      Når saksbehandler konkluderer med at søkeren ikke deltar i tidligopptaket
+      Så er det lagret at søkeren ikke deltar i tidligopptaket
+      Og søkeren har fortsatt tilbudsgaranti på "Sykepleie, høst 2027"
+      Og svaret søkeren har fått på tidlig opptak, er ikke endret
