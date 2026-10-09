@@ -40,12 +40,48 @@ Gjør dette **før** workflowen kommer på `main`. `package.json` har versjon `1
 
 ## Signering
 
-Appene er ikke signert. En `.dmg` lastet ned fra GitHub blir stoppet av Gatekeeper (høyreklikk og **Åpne**, eller `xattr -cr "/Applications/FS Kravforvaltning.app"`), og Windows SmartScreen advarer mot `.exe`-en. Dette står i release-notatene.
+### macOS
 
-Signering krever sertifikater som secrets i repoet:
+macOS-appen signeres med et **Developer ID Application**-sertifikat og notariseres av Apple i release-workflowen. Da åpnes den uten advarsel fra Gatekeeper. electron-builder gjør begge deler: den signerer alt i appen (også `pty.node` og `spawn-helper` fra node-pty) med hardened runtime, sender appen til Apple med `notarytool`, og stifter billetten til appen. Steget «Sjekk signaturen og notariseringen» stopper bygget hvis noe mangler.
 
-- macOS: Apple Developer ID-sertifikat (`CSC_LINK`, `CSC_KEY_PASSWORD`) og notarisering (`APPLE_ID`, `APPLE_APP_SPECIFIC_PASSWORD`, `APPLE_TEAM_ID`). Da fjernes `CSC_IDENTITY_AUTO_DISCOVERY: 'false'` fra workflowen
-- Windows: kodesigneringssertifikat, for eksempel Azure Trusted Signing
+Workflowen trenger fem secrets (*Settings → Secrets and variables → Actions → Secrets*). Mangler én av dem, stopper macOS-bygget, så det ikke publiseres en usignert app.
+
+| Secret | Innhold |
+|--------|---------|
+| `MAC_CSC_LINK` | Sertifikatet med privatnøkkel (`.p12`), base64-kodet |
+| `MAC_CSC_KEY_PASSWORD` | Passordet til `.p12`-fila |
+| `APPLE_API_KEY` | Innholdet i App Store Connect-nøkkelen (`AuthKey_<id>.p8`, hele fila med `-----BEGIN PRIVATE KEY-----`) |
+| `APPLE_API_KEY_ID` | Key ID til nøkkelen (10 tegn) |
+| `APPLE_API_ISSUER` | Issuer ID (UUID, øverst på siden med nøklene) |
+
+Notariseringen bruker en API-nøkkel for teamet, ikke en Apple-ID med app-spesifikt passord, så den ikke er knyttet til en person og ikke stopper på tofaktorinnlogging.
+
+**1. Lag sertifikatet** (på en Mac, én gang):
+
+1. Åpne *Nøkkelringtilgang → Sertifikatassistent → Be om et sertifikat fra en sertifiseringsinstans*. Fyll inn e-post og navn, velg **Lagret på disk**, og lagre `.certSigningRequest`-fila.
+2. Gå til <https://developer.apple.com/account/resources/certificates> og velg **+** → **Developer ID Application**. Bare kontoinnehaveren (Account Holder) kan lage Developer ID-sertifikater.
+3. Last opp forespørselen og last ned `developerID_application.cer`. Dobbeltklikk den, så havner den i nøkkelringen sammen med privatnøkkelen.
+4. I Nøkkelringtilgang, under *Mine sertifikater*: høyreklikk **Developer ID Application: <navn> (<team-ID>)** og velg **Eksporter**. Lagre som `.p12` med et sterkt passord.
+5. Base64-kod fila og legg den i `MAC_CSC_LINK`, og passordet i `MAC_CSC_KEY_PASSWORD`:
+
+   ```bash
+   base64 -i sertifikat.p12 | pbcopy
+   ```
+
+Slett `.p12`-fila etterpå, eller legg den i en passordhvelv. Sertifikatet gjelder i fem år, og må fornyes og byttes i secreten før det går ut. Apper som er signert og notarisert før det gikk ut, virker fortsatt.
+
+**2. Lag nøkkelen til notariseringen:**
+
+1. Gå til <https://appstoreconnect.apple.com/access/integrations/api> (*Users and Access → Integrations → App Store Connect API → Team Keys*). Krever rollen Admin eller Account Holder.
+2. Velg **+**, gi nøkkelen navnet `FS Kravforvaltning release` og tilgangen **Developer**.
+3. Last ned `AuthKey_<id>.p8`. Den kan bare lastes ned én gang.
+4. Legg innholdet i fila i `APPLE_API_KEY`, Key ID i `APPLE_API_KEY_ID` og Issuer ID i `APPLE_API_ISSUER`.
+
+**Lokalt** signerer `npm run app:dist` med et Developer ID-sertifikat i nøkkelringen, hvis du har et. Notariseringen skjer bare når `APPLE_API_KEY` (stien til `.p8`-fila), `APPLE_API_KEY_ID` og `APPLE_API_ISSUER` er satt.
+
+### Windows
+
+Windows-appen er ikke signert, og SmartScreen advarer mot `.exe`-en (**Mer informasjon → Kjør likevel**). Dette står i release-notatene. Signering krever et kodesigneringssertifikat, for eksempel Azure Trusted Signing.
 
 ## Bygge lokalt
 

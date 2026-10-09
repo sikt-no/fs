@@ -22,6 +22,9 @@ asarUnpack:
 npmRebuild: false
 # Uten mellomrom, så filene kan lastes opp til GitHub-releasen med glob (.github/workflows/kravforvaltning-release.yml)
 artifactName: fs-kravforvaltning-${version}-${os}-${arch}.${ext}
+# Signeres med Developer ID-sertifikatet i CSC_LINK (eller i nøkkelringen lokalt), med hardened runtime og
+# standard-entitlements fra electron-builder. Notariseres når APPLE_API_KEY, APPLE_API_KEY_ID og APPLE_API_ISSUER
+# er satt (release-workflowen). Se docs/release.md
 mac:
   target: dmg
   category: public.app-category.developer-tools
