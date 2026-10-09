@@ -43,13 +43,14 @@ Egenskap: Søknadsmangler
 
     Scenario: Opprette mangelkode
       Når opptaksforvalteren ved HK-dir oppretter en mangelkode i regelverkssamlingen "UHG 2027" med følgende opplysninger
-        | felt                                   | verdi                                       |
-        | Kode                                   | KAR                                         |
-        | Kategori                               | Spesielle krav                              |
-        | Kort beskrivelse                       | Mangler karakter                            |
-        | Informasjon til søker i Min kompetanse | Du mangler karakter i et fag som kreves.    |
-        | Stopper for opptak                     | Nei                                         |
-        | Aktiv                                  | Ja                                          |
+        | felt                                     | verdi                                    |
+        | Kode                                     | KAR                                      |
+        | Kategori                                 | Spesielle krav                           |
+        | Kort beskrivelse                         | Mangler karakter                         |
+        | Informasjon til søker i Min kompetanse   | Du mangler karakter i et fag som kreves. |
+        | Stopper for opptak                       | Nei                                      |
+        | Kan overskrives av automatisk behandling | Nei                                      |
+        | Aktiv                                    | Ja                                       |
       Så finnes mangelkoden "KAR" i regelverkssamlingen "UHG 2027"
 
     Scenario: Tilgjengelige kategorier for mangelkoder
@@ -219,15 +220,7 @@ Egenskap: Søknadsmangler
 
   # ── 3. Publisering og melding ────────────────────────────────
 
-  @draft @openquestion
   Regel: Søkeren ser bare manglene saksbehandleren har publisert, og får melding om dem
-    # ÅPNE SPØRSMÅL:
-    # - Sendes meldingen når manglene publiseres, eller er det et eget steg? STEK-422 sier at
-    #   meldingen sendes ved publisering, mens Figma viser «Send melding» som eget steg.
-    # - Publiseres alle manglene automatisk når saken settes til «Ferdig behandlet»? Koden og
-    #   gjennomgangen i STEK-420 (2026-09-08) gjør det.
-    # - Får søkeren én melding per opptak, også når flere saksbehandlende organisasjoner har
-    #   registrert mangler? STEK-422 sier én melding per søker.
 
     Scenario: Registrering av mangel publiserer ikke mangelen
       Når saksbehandleren ved Universitetet i Oslo registrerer mangelen "KAR"
@@ -239,10 +232,32 @@ Egenskap: Søknadsmangler
       Når saksbehandleren ved Universitetet i Oslo markerer mangelen "KAR" som klar til publisering
       Så ser søkeren mangelen "KAR" i Min kompetanse
 
-    Scenario: Søkeren får én melding om manglene som er publisert
-      Gitt at saksbehandleren ved Universitetet i Oslo har publisert manglene "KAR" og "STEMPEL"
-      Når søkeren får melding om manglene
+    Scenario: Saksbehandleren blir advart om mangler som ikke er publisert
+      Gitt at saken hos "Universitetet i Oslo" har mangelen "KNN" som ikke er publisert
+      Når saksbehandleren ved Universitetet i Oslo setter saken til "Ferdig behandlet"
+      Så ser saksbehandleren at søkeren ikke ser mangelen "KNN" i Min kompetanse
+
+    Scenario: Sette saken til ferdig behandlet uten å publisere manglene
+      Gitt at saksbehandleren ved Universitetet i Oslo er advart om at mangelen "KNN" ikke er publisert
+      Når saksbehandleren velger å sette saken til "Ferdig behandlet" uten å varsle søkeren
+      Så er saken "Ferdig behandlet"
+      Og søkeren ser ikke mangelen "KNN" i Min kompetanse
+      Og søkeren har ikke mottatt en melding av typen MANGEL
+
+    Scenario: Avbryte når saken har mangler som ikke er publisert
+      Gitt at saksbehandleren ved Universitetet i Oslo er advart om at mangelen "KNN" ikke er publisert
+      Når saksbehandleren avbryter
+      Så er ikke saken satt til "Ferdig behandlet"
+
+    Scenario: Søkeren får én melding om manglene som publiseres i saken
+      Gitt at saken hos "Universitetet i Oslo" har manglene "KAR" og "STEMPEL"
+      Når manglene "KAR" og "STEMPEL" publiseres
       Så mottar søkeren én melding av typen MANGEL
+
+    Scenario: Søkeren får melding fra hver saksbehandlende organisasjon som publiserer mangler
+      Gitt at saksbehandleren ved Universitetet i Oslo har publisert mangelen "KAR"
+      Når saksbehandleren ved UiT Norges arktiske universitet publiserer mangelen "STEMPEL"
+      Så mottar søkeren en ny melding av typen MANGEL om mangelen "STEMPEL"
 
     Scenario: Søkeren åpner meldingen om mangel
       Gitt at søkeren har mottatt en melding av typen MANGEL
@@ -251,22 +266,54 @@ Egenskap: Søknadsmangler
       Og søkeren ser fristen for å laste opp dokumentasjon
       Og søkeren kan gå til dokumentasjonssiden
 
-  @draft @openquestion
-  Regel: Fristen er dokumentasjonsfristen som gjelder søknadsalternativet
-    # ÅPNE SPØRSMÅL:
-    # - Hvilken frist vises når manglene gjelder søknadsalternativer med ulike frister?
+  Regel: Fristen for en mangel er ettersendingsfristen, med mindre en tidligere dokumentasjonsfrist ikke har gått ut
 
-    Scenariomal: Fristen når utdanningstilbudet <tidlig>
+    Scenariomal: Fristen for en mangel publisert <publisert> når <situasjon>
       Gitt at ettersendingsfristen i opptaket er "2027-07-01 23:59"
-      Og at "Politiutdanning, PHS" <tidlig>
-      Og at saken har en mangel på kompetanseregelverket til "Politiutdanning, PHS"
+      Og at <situasjon>
+      Og at saken har en mangel på kompetanseregelverket til "<søknadsalternativ>"
+      Og at mangelen ble publisert <publisert>
       Når søkeren åpner meldingen om mangel
-      Så er fristen "<frist>"
+      Så er fristen for "<søknadsalternativ>" "<frist>"
 
       Eksempler:
-        | tidlig                                            | frist            |
-        | har tidlig dokumentasjonsfrist "2027-03-01 23:59" | 2027-03-01 23:59 |
-        | ikke har tidlig dokumentasjonsfrist               | 2027-07-01 23:59 |
+        | situasjon                                                                                                                                                              | søknadsalternativ    | publisert  | frist            |
+        | ingen tidligere dokumentasjonsfrist gjelder                                                                                                                            | Informatikk, UiO     | 2027-03-10 | 2027-07-01 23:59 |
+        | "Politiutdanning, PHS" har tidlig dokumentasjonsfrist "2027-03-20 23:59"                                                                                               | Politiutdanning, PHS | 2027-03-10 | 2027-03-20 23:59 |
+        | "Politiutdanning, PHS" har tidlig dokumentasjonsfrist "2027-03-20 23:59"                                                                                               | Politiutdanning, PHS | 2027-05-10 | 2027-07-01 23:59 |
+        | søkeren har utdanningsbakgrunnen "Realkompetanse" med dokumentasjonsfrist "2027-03-20 23:59"                                                                           | Informatikk, UiO     | 2027-03-10 | 2027-03-20 23:59 |
+        | søkeren har utdanningsbakgrunnen "Realkompetanse" med dokumentasjonsfrist "2027-03-20 23:59"                                                                           | Informatikk, UiO     | 2027-05-10 | 2027-07-01 23:59 |
+        | "Informatikk, UiO" er i tidlig opptak med dokumentasjonsfrist "2027-03-20 23:59"                                                                                       | Informatikk, UiO     | 2027-03-10 | 2027-03-20 23:59 |
+        | "Informatikk, UiO" er i tidlig opptak med dokumentasjonsfrist "2027-03-20 23:59"                                                                                       | Informatikk, UiO     | 2027-05-10 | 2027-07-01 23:59 |
+        | søkeren har utdanningsbakgrunnen "Realkompetanse" med dokumentasjonsfrist "2027-03-20 23:59", og "Sykepleie, OsloMet" har tidlig dokumentasjonsfrist "2027-03-10 23:59" | Sykepleie, OsloMet   | 2027-03-05 | 2027-03-10 23:59 |
+
+    Scenario: Meldingen viser fristen for hvert søknadsalternativ med mangler
+      Gitt at ettersendingsfristen i opptaket er "2027-07-01 23:59"
+      Og at "Lektorutdanning, UiO" har tidlig dokumentasjonsfrist "2027-03-20 23:59"
+      Og at saken hos "Universitetet i Oslo" har søknadsalternativene "Lektorutdanning, UiO" og "Informatikk, UiO"
+      Og at saken har en mangel i kategorien "Generelle krav" som ble publisert 2027-03-10
+      Når søkeren åpner meldingen om mangel
+      Så ser søkeren fristen "2027-03-20 23:59" for "Lektorutdanning, UiO"
+      Og søkeren ser fristen "2027-07-01 23:59" for "Informatikk, UiO"
+
+    Scenario: Mangel på spesielle krav gir frist bare for søknadsalternativene med kompetanseregelverket
+      Gitt at "Informatikk, UiO" har kompetanseregelverket "MATR2"
+      Og at "Lektorutdanning, UiO" ikke har kompetanseregelverket "MATR2"
+      Og at saken har en mangel i kategorien "Spesielle krav" på kompetanseregelverket "MATR2"
+      Når søkeren åpner meldingen om mangel
+      Så ser søkeren fristen for "Informatikk, UiO"
+      Men søkeren ser ikke en frist for "Lektorutdanning, UiO"
+
+    Scenariomal: Mangel på <kategori> har ettersendingsfristen
+      Gitt at ettersendingsfristen i opptaket er "2027-07-01 23:59"
+      Og at saken har en mangel i kategorien "<kategori>"
+      Når søkeren åpner meldingen om mangel
+      Så er fristen for mangelen "2027-07-01 23:59"
+
+      Eksempler:
+        | kategori |
+        | Poeng    |
+        | Kvote    |
 
   # ── 4. Søkerens visning ──────────────────────────────────────
 
@@ -340,10 +387,10 @@ Egenskap: Søknadsmangler
   Regel: Mangelen for vitnemål som kommer i år settes og sjekkes ut automatisk
     # ÅPNE SPØRSMÅL:
     # - Hvilken mangelkode og hvilket kompetanseregelverk får den automatiske mangelen, og gjelder
-    #   den alle sakene i søknaden?
-    # - Hva betyr det at automatisk behandling overskriver en mangel som er satt manuelt, og hvor
-    #   angis det at en mangelkode kan overskrives? Prinsippet står i Confluence (Forretningsregler -
-    #   mangelfunksjoner), men verken Figma, STEK-174 eller koden har et felt for det.
+    #   den alle sakene i søknaden? Trolig begge deler: en mangel i kategorien «Generelle krav» i alle
+    #   sakene (uten kompetanseregelverk), og en mangel i kategorien «Spesielle krav» på
+    #   kompetanseregelverket for generell studiekompetanse i sakene som har det. Ikke bekreftet.
+    #   Koden har ikke den automatiske mangelen (sjekket 2026-10-09).
 
     Scenario: Saken får mangel når søkeren oppgir at vitnemålet kommer i år
       Når søkeren oppgir i søknaden at vitnemålet kommer i år
