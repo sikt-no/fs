@@ -228,7 +228,7 @@ interface Props {
   skillHint: (skill: string) => string;
   /** Én skill er alltid valgt (Krav, Avvik); uten kan Claude bruke alle de tillatte når ingen er valgt (Oppgaver) */
   preselect: boolean;
-  /** Claude kan lese kodeklonene (fs-admin, fs-plattform) her */
+  /** Claude kan lese kodeklonene (fs-admin, fs-plattform, min-kompetanse) her */
   codeDirs: boolean;
   /** Finnes fila i vieweren? Lenker til krav-filer i svarene åpner fila */
   has: (path: string) => boolean;
@@ -255,7 +255,7 @@ export function ClaudePanel({ status, width, onWidth, allowedSkills: modeSkills,
   // Skillene som kan velges i velgeren; de andre tillatte kan Claude bruke selv
   const choosable = allowedSkills.filter(s => CLAUDE_SKILLS_SHOWN.includes(s));
   const skillHint = (s: string) =>
-    noCode && s === 'fs-verify' && modeSkills.includes(s) ? 'krever lokale kopier av fs-admin eller fs-plattform. Velg dem under «Kodemapper».' : modeHint(s);
+    noCode && s === 'fs-verify' && modeSkills.includes(s) ? 'krever lokale kopier av fs-admin, fs-plattform eller min-kompetanse. Velg dem under «Kodemapper».' : modeHint(s);
   const cs = useConversations();
   const conv = currentChat(cs);
   const c = conv?.chat ?? EMPTY_CHAT;

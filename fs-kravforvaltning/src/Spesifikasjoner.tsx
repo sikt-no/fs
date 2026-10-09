@@ -1,5 +1,4 @@
 import { useEffect, useMemo, useState } from 'preact/hooks';
-import { CODE_DIRS } from '../shared/api';
 import type { GitInfo, Snapshot } from '../shared/model';
 import { applySpec, newSpecText, parseSpec, slugify, type SpecDoc } from '../shared/spec';
 import { DOMAINS, type RawTask, type TasksSnapshot } from '../shared/tasks';
@@ -7,6 +6,7 @@ import { parseUtforing, serializeUtforing, withRun, type SpecRun, type Utforing 
 import { domShort } from './oppgaveflyt';
 import { SpecDetail, type SpecActions } from './SpecDetail';
 import {
+  BOARD_REPOS,
   buildCards,
   canDrop,
   colOf,
@@ -159,11 +159,11 @@ export function Spesifikasjoner({ snap, entries, git, editable, sel, onSel, onOp
   const changed = useMemo(() => new Set(git ? [...git.uncommitted, ...git.committed].map(c => c.path) : []), [git]);
   const isDirty = (c: Card) => c.key === NEW_KEY || changed.has(c.path) || changed.has(`${c.dir}/utforing.md`);
 
-  const cols = columns(conf, [...CODE_DIRS].reverse(), cards.map(c => c.run.route));
+  const cols = columns(conf, BOARD_REPOS, cards.map(c => c.run.route));
   const repoName = (r: string) => cols.find(c => c.key === `repo:${r}`)?.name ?? r;
   const updConf = (key: ColKey, patch: Partial<ColConf>) =>
     setConf(cs => {
-      const all = columns(cs, [...CODE_DIRS].reverse(), cards.map(c => c.run.route));
+      const all = columns(cs, BOARD_REPOS, cards.map(c => c.run.route));
       const base = cs.length ? cs : all;
       const has = base.some(c => c.key === key);
       return has ? base.map(c => (c.key === key ? { ...c, ...patch } : c)) : [...base, { ...all.find(c => c.key === key)!, ...patch }];

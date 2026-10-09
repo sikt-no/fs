@@ -5,7 +5,7 @@ import { join } from 'node:path';
 import { after, test } from 'node:test';
 import type { ClaudeEvent } from '../shared/api.ts';
 import { mkdirSync } from 'node:fs';
-import { allowedAlways, ClaudeRunner, codeDirs, contextPrompt, dirArgs, executeArgs, implementPrompt, mentionPaths, findClaude, PANEL_DENY, parseStreamLine, projectSkills, skillArgs, skillChangedAt, skillHash, skillMeta, streamImages, toolSummary } from './claude.ts';
+import { allowedAlways, ClaudeRunner, codeDirs, contextPrompt, dirArgs, executeArgs, implementPrompt, mentionPaths, findClaude, nowStamp, PANEL_DENY, parseStreamLine, projectSkills, skillArgs, skillChangedAt, skillHash, skillMeta, streamImages, timeLine, toolSummary } from './claude.ts';
 import { existsSync, readFileSync } from 'node:fs';
 
 const tmp = mkdtempSync(join(tmpdir(), 'krav-claude-'));
@@ -91,16 +91,20 @@ test('codeDirs: overstyring, så env, så mappa ved siden av repoet', () => {
   assert.deepEqual(codeDirs(repo, {}), [
     { name: 'fs-admin', path: join(tmp, 'kodedir', 'fs-admin'), exists: true },
     { name: 'fs-plattform', path: join(tmp, 'kodedir', 'fs-plattform'), exists: false },
+    { name: 'min-kompetanse', path: join(tmp, 'kodedir', 'min-kompetanse'), exists: false },
   ]);
   assert.equal(codeDirs(repo, { KRAV_FS_PLATTFORM: annen })[1].path, annen);
+  assert.equal(codeDirs(repo, { KRAV_MIN_KOMPETANSE: annen })[2].exists, true, 'alle bindestreker blir _ i navnet på variabelen');
   assert.deepEqual(codeDirs(repo, {}, {}, false), [
     { name: 'fs-admin', path: '', exists: false },
     { name: 'fs-plattform', path: '', exists: false },
+    { name: 'min-kompetanse', path: '', exists: false },
   ], 'desktop-appen: ingen standardsti ved siden av repoet');
   assert.equal(codeDirs(repo, { KRAV_FS_PLATTFORM: annen }, {}, false)[1].exists, true, 'env gjelder fortsatt');
   assert.deepEqual(codeDirs(repo, { KRAV_FS_PLATTFORM: annen }, { 'fs-plattform': ' relativ ', 'fs-admin': 7 }), [
     { name: 'fs-admin', path: join(tmp, 'kodedir', 'fs-admin'), exists: true },
     { name: 'fs-plattform', path: 'relativ', exists: false },
+    { name: 'min-kompetanse', path: join(tmp, 'kodedir', 'min-kompetanse'), exists: false },
   ], 'en relativ sti godtas ikke, og ugyldige verdier ignoreres');
 });
 
@@ -437,4 +441,10 @@ test('ClaudeRunner: save_sketch skriver bildet fra verktøyresultatet (eller det
   assert.equal(readFileSync(join(tmp, 'tasks/opptak/x/spec/verify-2026-10-05/01-se-liste.png'), 'utf8'), 'SISTE');
   assert.deepEqual(saved, ['tasks/opptak/x/spec/krav-input/sketches/figma/a/screenshot.png', 'tasks/opptak/x/spec/verify-2026-10-05/01-se-liste.png']);
   runner.close();
+});
+
+test('nowStamp og timeLine: lokal tid i systemteksten, så fs-verify kan sette tidspunkt på rapporten uten shell', () => {
+  assert.equal(nowStamp(new Date(2026, 9, 9, 9, 5)), '2026-10-09 09:05');
+  assert.match(timeLine(new Date(2026, 0, 2, 14, 32)), /^Tidspunktet nå er 2026-01-02 14:32 \(lokal tid\)/);
+  assert.match(contextPrompt(null), /Tidspunktet nå er \d{4}-\d{2}-\d{2} \d{2}:\d{2}/);
 });

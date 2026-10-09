@@ -66,6 +66,7 @@ test('terminalArgs: verify kjører i kravrepoet, kan lese kodemappene og bare br
   assert.ok(deny.includes(`Edit(/${px(code)}/**)`), 'koden kan leses, ikke endres');
   assert.ok(deny.includes('Skill(fs-krav)') && deny.includes('Skill(fs-specify)') && !deny.includes('Skill(fs-verify)'));
   assert.match(after(args, '--append-system-prompt')[0], new RegExp(`Kodeklonene er ${code.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}`));
+  assert.match(after(args, '--append-system-prompt')[0], /Tidspunktet nå er \d{4}-\d{2}-\d{2} \d{2}:\d{2}/, 'fs-verify setter tidspunkt på rapporten');
 });
 
 test('terminalArgs: tom prompt, prompt som ser ut som et flagg og ukjent modus avvises', () => {

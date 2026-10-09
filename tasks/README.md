@@ -25,7 +25,7 @@ tasks/
         ├── flow.md               # valgfri: BAT-pipeline (eies av alfred)
         ├── memory.md             # valgfri: agent-journal
         ├── utforing.md           # valgfri: spesifikasjonene på veien gjennom kode-repoene (se Utføring)
-        ├── spec/                 # krav: spec-*.md, krav-input/, spec.log.md, verify-*.md, verify-<dato>/ (skjermbilder)
+        ├── spec/                 # krav: spec-*.md, krav-input/, spec.log.md, verify-*.md, verify-<dato>-<HHMM>/ (skjermbilder)
         └── <lag>/                # ett per lag/rolle: frontend, backend, subgraph, tester …
             ├── analysis-<slug>.md
             ├── plan-<slug>.md
@@ -130,7 +130,7 @@ Det kan være en person, en Claude Code-økt i repoet, eller en utførekjøring 
 
 Kommer to PR-er som tar samme steg, gir git en konflikt i seksjonen, og den siste løses for hånd.
 
-Når alle steg er levert, kjøres `fs-verify` avgrenset til spesifikasjonen. Den skriver `spec/verify-<dato>.md` med `- **Spec:** spec/spec-<x>.md` og tabellen `## Scenarioer` (`| Feature-ID | Scenario | Resultat | Bevis |`). Er alt funnet, blir kravene `@implemented`, og kortet står i «Verifisert». Mangler noe, settes steget i repoet der koden mangler, tilbake til `pågår` med `Tilbake: <dato>`.
+Når alle steg er levert, kjøres `fs-verify` avgrenset til spesifikasjonen. Den skriver `spec/verify-<dato>-<HHMM>.md` (med klokkeslett, så kjøringer kan sammenlignes) med `- **Spec:** spec/spec-<x>.md` og tabellen `## Scenarioer` (`| Feature-ID | Scenario | Resultat | Bevis |`). Er alt funnet, blir kravene `@implemented`, og kortet står i «Verifisert». Mangler noe, settes steget i repoet der koden mangler, tilbake til `pågår` med `Tilbake: <dato>`.
 
 Scenarioene `fs-verify` sjekker (gating-settet), er alle `Scenario:`/`Scenariomal:` som ikke er tagget `@draft`, `@deprecated`, `@openquestion` eller `@demo`, selv eller via `Regel:`. I et levert krav som endres, er det bare `@planned`- og `@in-progress`-delene, og `@deprecated`-delene sjekkes for at koden er borte. Den samme definisjonen står i `fs-kravforvaltning/src/specboard.ts` (`gating`), og de to holdes i synk.
 

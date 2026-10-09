@@ -5,7 +5,7 @@ import { homedir, tmpdir } from 'node:os';
 import { delimiter, dirname, join, resolve } from 'node:path';
 import { promisify } from 'node:util';
 import type { ExecuteTarget, PtyEvent, PtyInfo, PtyStartRequest } from '../shared/api.ts';
-import { dirArgs, EXECUTE_BASH, EXECUTE_DENY_BASH, executeArgs, posix, projectSkills, SKILL_NAME, writeMcpConfig } from './claude.ts';
+import { dirArgs, EXECUTE_BASH, EXECUTE_DENY_BASH, executeArgs, posix, projectSkills, SKILL_NAME, timeLine, writeMcpConfig } from './claude.ts';
 import { readMcpServers, readonlyTools, verifyTools } from './mcp.ts';
 
 /**
@@ -62,6 +62,7 @@ export function executeTeamPrompt(target: ExecuteTarget, repoRoot: string): stri
   const dir = spec ? spec.replace(/\/spec\/[^/]+$/, '') : null;
   return [
     ...TERMINAL_LINES,
+    timeLine(),
     `Du implementerer i repoet ${target.repo} (arbeidsmappa). Kravrepoet sikt-no/fs ligger i ${resolve(repoRoot)} (lagt til med --add-dir). Der kan du lese alt, men bare endre utforing.md i oppgavemappa.`,
     spec ? `Spesifikasjonen: ${join(resolve(repoRoot), spec)}. Les den, feature-filene den peker på og implementasjonsdetaljene (<feature>.design.md ved siden av feature-fila) før du begynner.` : '',
     'Bruk repoets egne skills og konvensjoner (CLAUDE.md).',
@@ -79,6 +80,7 @@ export function executeTeamPrompt(target: ExecuteTarget, repoRoot: string): stri
 export function verifyTeamPrompt(dirs: string[]): string {
   return [
     ...TERMINAL_LINES,
+    timeLine(),
     'Du verifiserer FS-krav i dette repoet mot koden, med fs-verify eller fs-verify-agent-teams.',
     dirs.length ? `Kodeklonene er ${dirs.join(', ')} (lagt til med --add-dir). Du og teammatene kan lese dem, men ikke endre dem.` : 'Ingen kodekloner er valgt; spør brukeren om stiene.',
   ].join('\n');
