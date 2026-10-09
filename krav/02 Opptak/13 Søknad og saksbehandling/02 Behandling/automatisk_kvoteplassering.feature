@@ -1,6 +1,6 @@
 # language: no
 # GitHub: #376
-@OPT-BEH-BEH-007 @must @draft
+@OPT-BEH-BEH-012 @must @draft
 Egenskap: Automatisk kvoteplassering
   Som saksbehandler
   ønsker jeg at søkere plasseres i kvoter automatisk der det er mulig
