@@ -9,7 +9,7 @@
 - Retagget `@in-progress` → `@implemented`: 0 (egenskapen er `@draft`, og ikke alt er funnet)
 - Fortsatt ikke levert: aldersgrensen på grunnlaget, at kvotespørsmål ikke stilles når aldersgrensen ikke er møtt, og visning av opptaksalderen i fs-admin
 - Slettet (`@deprecated`): 0
-- Regelen «Alderen beregnes fra opptakets dato for aldersberegning» er flyttet til `11 Opprette og vedlikeholde opptak/03 Innstillinger/innstillinger.feature` (`@OPT-OVO-INN-001`), og verifisert der: `verify-innstillinger-2026-10-09.md`
+- Regelen «Alderen beregnes fra opptakets dato for aldersberegning» er flyttet til `11 Opprette og vedlikeholde opptak/04 Frister/frister_og_hendelser.feature` (`@OPT-OVO-FRI-001`), og verifisert der: `verify-frister_og_hendelser-2026-10-09.md`
 
 ## Scenarioer
 
