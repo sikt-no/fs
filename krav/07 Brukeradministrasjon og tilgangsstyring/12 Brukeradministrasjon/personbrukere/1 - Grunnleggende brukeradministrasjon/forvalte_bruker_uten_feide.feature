@@ -67,8 +67,6 @@ Egenskap: Forvalte en person i brukeradministrasjonen
   @draft @openquestion
   Regel: Personen vises med navn, ikke med nummer
     # ÅPNE SPØRSMÅL:
-    # - Hva vises som hjemorganisasjon for en person som ikke er koblet til en Feide-bruker? Og
-    #   hva vises for en person som er koblet til flere Feide-brukere med ulike hjemorganisasjoner?
     # - Hvordan merkes en testperson i listen og på detaljsiden: egen kolonne, en merkelapp ved
     #   navnet, eller et filter?
     # - Personen kan ikke deaktiveres i API-et ennå. Skal status vises for personer før
@@ -85,6 +83,19 @@ Egenskap: Forvalte en person i brukeradministrasjonen
       Når brukeradministratoren ser detaljsiden for en person
       Så ser brukeradministratoren personens navn
       Men personens fødselsnummer, D-nummer eller SNR vises ikke
+
+    Scenario: Personen vises med alle organisasjonene hen er knyttet til
+      Gitt en person har tildelinger i én organisasjon
+      Og personen er koblet til to Feide-brukere med hver sin hjemorganisasjon
+      Når brukeradministratoren ser personen
+      Så ser brukeradministratoren organisasjonen tildelingene gjelder for
+      Og brukeradministratoren ser begge hjemorganisasjonene
+      Og hver organisasjon vises én gang
+
+    Scenario: En person uten koblet Feide-bruker vises med tildelingsorganisasjonene
+      Gitt en person er ikke koblet til noen Feide-bruker
+      Når brukeradministratoren ser personen
+      Så ser brukeradministratoren organisasjonene personens tildelinger gjelder for
 
     Scenario: En testperson er merket
       Gitt en person er en testperson
@@ -271,5 +282,5 @@ Egenskap: Forvalte en person i brukeradministrasjonen
 #   bortfaller.
 # - Hvordan en person uten aktive tildelinger får en ny tildeling: med fødselsnummer, D-nummer
 #   eller SNR (BRU-PER-GRU-013). En gjentatt tildeling avvises ikke lenger.
-# - Hva som vises som personens organisasjon, står fortsatt åpent, se regelen «Personen vises med
-#   navn, ikke med nummer».
+# - Personen vises med alle organisasjonene hen er knyttet til: organisasjonene tildelingene
+#   gjelder for og hjemorganisasjonene til Feide-brukerne hen er koblet til (Kjetil 09.10.2026).
