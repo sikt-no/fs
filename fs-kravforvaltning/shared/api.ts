@@ -56,7 +56,7 @@ export interface ClaudeRunRequest {
   skill?: string | null;
   /** Skillene som er lov der brukeren er; Claude kan bruke dem fritt, også når en skill er valgt */
   skills?: string[];
-  /** Kodemappene Claude kan lese (fs-admin, fs-plattform), som absolutte stier; de får `--add-dir`, men kan ikke endres */
+  /** Kodemappene Claude kan lese (fs-admin, fs-plattform, min-kompetanse), som absolutte stier; de får `--add-dir`, men kan ikke endres */
   dirs?: string[];
   /** Start meldingen med `/<skill>`, så skillen lastes (første melding etter at den er valgt) */
   invoke?: boolean;
@@ -158,10 +158,10 @@ export const CLAUDE_SKILLS = ['fs-krav', 'fs-krav-avvik', 'fs-specify', 'fs-spec
 export const CLAUDE_SKILLS_SHOWN = ['fs-krav', 'fs-implementasjonsdetaljer', 'fs-verify'];
 
 /** Kodeklonene fs-verify leter i, med standardstien backenden fant */
-export const CODE_DIRS = ['fs-admin', 'fs-plattform'] as const;
+export const CODE_DIRS = ['fs-admin', 'fs-plattform', 'min-kompetanse'] as const;
 export interface CodeDir {
   name: (typeof CODE_DIRS)[number];
-  /** Stien: overstyringen, ellers `KRAV_FS_ADMIN` / `KRAV_FS_PLATTFORM`, ellers mappa ved siden av repoet (ikke i desktop-appen). Tom: ingen valgt */
+  /** Stien: overstyringen, ellers `KRAV_FS_ADMIN` / `KRAV_FS_PLATTFORM` / `KRAV_MIN_KOMPETANSE`, ellers mappa ved siden av repoet (ikke i desktop-appen). Tom: ingen valgt */
   path: string;
   /** Finnes mappa */
   exists: boolean;

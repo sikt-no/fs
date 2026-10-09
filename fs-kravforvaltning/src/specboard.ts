@@ -473,7 +473,11 @@ export const COL_WHY: Record<string, string> = {
   verifisert: 'Krav @implemented eller alt funnet',
   'repo:fs-plattform': 'Subgraph og backend',
   'repo:fs-admin': 'Frontend',
+  'repo:min-kompetanse': 'Søkerside',
 };
+
+/** Repo-kolonnene på tavla når brukeren ikke har valgt noe, i den rekkefølgen en spesifikasjon typisk går gjennom dem */
+export const BOARD_REPOS = ['fs-plattform', 'fs-admin', 'min-kompetanse'];
 
 /**
  * Kolonnene i rekkefølge: Utkast og Klart til utvikling, repo-kolonnene, Til verifisering og Verifisert.

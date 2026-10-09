@@ -2,7 +2,7 @@ import { useEffect, useState } from 'preact/hooks';
 import type { CodeDir } from '../shared/api';
 import { transport } from './transport';
 
-// Stiene brukeren har valgt, per kodeklone. Uten valg bruker backenden KRAV_FS_ADMIN / KRAV_FS_PLATTFORM,
+// Stiene brukeren har valgt, per kodeklone. Uten valg bruker backenden KRAV_FS_ADMIN / KRAV_FS_PLATTFORM / KRAV_MIN_KOMPETANSE,
 // ellers mappa ved siden av repoet (dev-serveren). Desktop-appen har ingen standardsti: mappa velges her.
 const KEY = 'kravforvaltning:claudeDirs';
 const read = (): Record<string, string> => {
@@ -62,7 +62,7 @@ const set = (name: string, value: string | null) => {
 };
 
 /**
- * Kodeklonene Claude kan lese (fs-admin, fs-plattform), sammenfoldet over inputfeltet. Viser stien og om
+ * Kodeklonene Claude kan lese (fs-admin, fs-plattform, min-kompetanse), sammenfoldet over inputfeltet. Viser stien og om
  * mappa finnes. I desktop-appen velges mappa med mappevelgeren; i nettleseren kan stien skrives inn, og
  * en tom sti går tilbake til standardstien.
  */

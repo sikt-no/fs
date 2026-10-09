@@ -65,14 +65,14 @@ const isDir = (p: string) => {
 
 /**
  * Kodeklonene fs-verify leter i. Stien er overstyringen fra vieweren, ellers `KRAV_FS_ADMIN` /
- * `KRAV_FS_PLATTFORM`, ellers mappa ved siden av repoet (der de ligger i en vanlig utviklermappe).
+ * `KRAV_FS_PLATTFORM` / `KRAV_MIN_KOMPETANSE`, ellers mappa ved siden av repoet (der de ligger i en vanlig utviklermappe).
  * `siblings: false` (desktop-appen, der repoet er appens egen klone): ingen standardsti, brukeren velger mappa.
  */
 export function codeDirs(repo: string, env: NodeJS.ProcessEnv = process.env, overrides: unknown = {}, siblings = true): CodeDir[] {
   const o = overrides && typeof overrides === 'object' ? (overrides as Record<string, unknown>) : {};
   return CODE_DIRS.map(name => {
     const given = o[name];
-    const fromEnv = env[`KRAV_${name.replace('-', '_').toUpperCase()}`];
+    const fromEnv = env[`KRAV_${name.replace(/-/g, '_').toUpperCase()}`];
     const path = typeof given === 'string' && given.trim() ? given.trim() : fromEnv || (siblings ? resolve(repo, '..', name) : '');
     return { name, path, exists: !!path && isAbsolute(path) && isDir(path) };
   });

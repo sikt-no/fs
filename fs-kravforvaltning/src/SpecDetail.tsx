@@ -85,7 +85,7 @@ export function SpecDetail({ c, col, repos, repoName, cards, entries, ro, dirty,
       const st = run.steps.find(x => x.repo === r);
       if (!st) return;
       st.status = 'pågår';
-      if (!st.by) st.by = 'agent:' + (r === 'fs-admin' ? 'frontend' : r === 'fs-plattform' ? 'subgraph' : 'utvikler');
+      if (!st.by) st.by = 'agent:' + (r === 'fs-admin' || r === 'min-kompetanse' ? 'frontend' : r === 'fs-plattform' ? 'subgraph' : 'utvikler');
     }, `startet ${what} i ${repoName(r)}`);
   const all = c.feats.flatMap(f => f.sc);
   const unsent = !c.run.route.length;

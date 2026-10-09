@@ -91,16 +91,20 @@ test('codeDirs: overstyring, så env, så mappa ved siden av repoet', () => {
   assert.deepEqual(codeDirs(repo, {}), [
     { name: 'fs-admin', path: join(tmp, 'kodedir', 'fs-admin'), exists: true },
     { name: 'fs-plattform', path: join(tmp, 'kodedir', 'fs-plattform'), exists: false },
+    { name: 'min-kompetanse', path: join(tmp, 'kodedir', 'min-kompetanse'), exists: false },
   ]);
   assert.equal(codeDirs(repo, { KRAV_FS_PLATTFORM: annen })[1].path, annen);
+  assert.equal(codeDirs(repo, { KRAV_MIN_KOMPETANSE: annen })[2].exists, true, 'alle bindestreker blir _ i navnet på variabelen');
   assert.deepEqual(codeDirs(repo, {}, {}, false), [
     { name: 'fs-admin', path: '', exists: false },
     { name: 'fs-plattform', path: '', exists: false },
+    { name: 'min-kompetanse', path: '', exists: false },
   ], 'desktop-appen: ingen standardsti ved siden av repoet');
   assert.equal(codeDirs(repo, { KRAV_FS_PLATTFORM: annen }, {}, false)[1].exists, true, 'env gjelder fortsatt');
   assert.deepEqual(codeDirs(repo, { KRAV_FS_PLATTFORM: annen }, { 'fs-plattform': ' relativ ', 'fs-admin': 7 }), [
     { name: 'fs-admin', path: join(tmp, 'kodedir', 'fs-admin'), exists: true },
     { name: 'fs-plattform', path: 'relativ', exists: false },
+    { name: 'min-kompetanse', path: join(tmp, 'kodedir', 'min-kompetanse'), exists: false },
   ], 'en relativ sti godtas ikke, og ugyldige verdier ignoreres');
 });
 

@@ -3,7 +3,7 @@ import { test } from 'node:test';
 import type { Snapshot } from '../shared/model.ts';
 import type { RawTask, TasksSnapshot } from '../shared/tasks.ts';
 import { buildEntry } from '../server/parse.ts';
-import { buildCards, canDrop, colOf, columns, flags, gating, handoffPrompt, isVerified, missing, moveTo, parseVerify, phaseOf, pickable, prShort, specChanged, verifyOrder, verifyPrompt } from './specboard.ts';
+import { BOARD_REPOS, buildCards, canDrop, colOf, columns, flags, gating, handoffPrompt, isVerified, missing, moveTo, parseVerify, phaseOf, pickable, prShort, specChanged, verifyOrder, verifyPrompt } from './specboard.ts';
 
 const feature = (tag: string, id: string, body = '') => `# language: no
 ${id} @must @${tag}
@@ -203,6 +203,7 @@ test('handoffPrompt har spesifikasjonen, kravene, skissene og overleveringen fra
 
 test('columns: standardrepoene og repoene i rutene, med lagret rekkefølge, navn og fjerning', () => {
   const keys = (cs: { key: string }[]) => cs.map(c => c.key);
+  assert.deepEqual(keys(columns([], BOARD_REPOS, [])), ['utkast', 'klar', 'repo:fs-plattform', 'repo:fs-admin', 'repo:min-kompetanse', 'verifisering', 'verifisert']);
   assert.deepEqual(keys(columns([], ['fs-plattform', 'fs-admin'], [['fs-integrasjon']])), ['utkast', 'klar', 'repo:fs-plattform', 'repo:fs-admin', 'repo:fs-integrasjon', 'verifisering', 'verifisert']);
   const saved = [
     { key: 'repo:fs-admin' as const, name: 'Admin' },

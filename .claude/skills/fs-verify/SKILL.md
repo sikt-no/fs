@@ -26,7 +26,7 @@ Ber brukeren om å verifisere en egenskap eller en regel *uansett status* («Ver
 
 I Claude-panelet i FS Kravforvaltning har du ikke Bash:
 
-- Kodeklonene (fs-admin, fs-plattform) står i systemprompten. Bruk dem i stedet for å spørre, og spør bare hvis de mangler.
+- Kodeklonene (fs-admin, fs-plattform, min-kompetanse) står i systemprompten. Bruk dem i stedet for å spørre, og spør bare hvis de mangler.
 - `AskUserQuestion` virker: brukeren får spørsmålet som et kort med valgene. Hopper brukeren over, still spørsmålet i svaret, og vent på brukeren.
 - Du kan ikke slette filer. Skal en `@deprecated`-fil slettes, si hvilken, så sletter brukeren den selv. Blokker fjernes med `Edit`.
 - Lesende git går ikke. Bruk `Grep` og `Glob` i klonene.
@@ -38,10 +38,22 @@ I terminalen i FS Kravforvaltning («Verifiser i terminal …») og i Claude Cod
 ## Finn scope og kode (gjør dette FØRST)
 
 1. **Krav.** Oppga brukeren en spesifikasjon (`tasks/<domene>/<slug>/spec/spec-*.md`, typisk fra «Verifiser» i Spesifikasjoner i FS Kravforvaltning), er scope bare feature-filene under `## Krav` i den (slått opp på feature-ID). Oppga brukeren en `krav/`-sti (fil eller mappe), bruk den. Oppga brukeren en oppgave (`tasks/<domene>/<slug>`, eller bare slug — slå opp med `Glob` `tasks/*/<slug>/`), les Feature-ID-ene fra `## Krav` i alle `<oppgave>/spec/spec-*.md` (ikke det som står under *Utenfor scope*), og finn de autoritative filene under `krav/` på feature-ID (`@DOM-SUB-KAP-NNN`), ikke filnavn. Les ikke kopiene i `spec/krav-input/`: de finnes bare i eldre oppgaver, og kan være utdaterte. 0 treff → «ikke funnet under krav/», mer enn 1 → «duplisert feature-ID». Mangler begge, spør.
-2. **Kode.** Spør (`AskUserQuestion`) om stien til de lokale klonene av kode-repoene. Foreslå repoer fra `oppgave.md` (lenker), `<lag>/plan-*.md` og `<lag>/task-*-completion.md` når en oppgave er gitt. Sjekk at stiene finnes. Uten kode kan ingenting verifiseres: stopp og si det. Skriv aldri `.claude/spec.local.md`.
+2. **Kode.** Spør (`AskUserQuestion`) om stien til de lokale klonene av kode-repoene (se *Kodeklonene og lagene*). Foreslå repoer fra `oppgave.md` (lenker), `<lag>/plan-*.md` og `<lag>/task-*-completion.md` når en oppgave er gitt. Sjekk at stiene finnes. Uten kode kan ingenting verifiseres: stopp og si det. Skriv aldri `.claude/spec.local.md`.
 3. **Skjermbilder.** Har prompten ikke sagt om det skal tas skjermbilder («Ta skjermbilder» eller «Ingen skjermbilder»), spør med `AskUserQuestion` før du begynner å lete: «Skal jeg ta skjermbilder fra https://test-fsadmin.sikt.no/?», med valgene «Ja» og «Nei». Hopper brukeren over, regn det som «Nei», og si det i rapporten. Se *Skjermbilder*.
 4. **Hint.** Når en oppgave er gitt: les `design.md`, `<lag>/plan-*.md` og `<lag>/task-*-completion.md`. Filstier, komponentnavn, GraphQL-felt og ruter derfra er de beste stedene å lete.
 5. **Tidspunkt.** Ta tidspunktet for kjøringen nå (*Tidspunkt*), og si det til brukeren sammen med navnet rapporten får.
+
+### Kodeklonene og lagene
+
+Hvert kode-repo er ett lag, med en bokstav som brukes i rapporten (se `references/rapportmal.md`):
+
+| Repo | Lag | Bokstav | Hva det dekker |
+| --- | --- | --- | --- |
+| `fs-plattform` | backend | B | API (GraphQL-subgrafene), tjenestene og databasen |
+| `fs-admin` | frontend | F | Det saksbehandlere og forvaltere ser og gjør |
+| `min-kompetanse` | søkerside | M | Det søkeren ser og gjør: søknaden, Min kompetanse |
+
+Let etter hvert scenario i laget det gjelder: et scenario der søkeren ser eller gjør noe, finnes i min-kompetanse (og i backend), ikke i fs-admin. Mangler klonen for et lag scenarioet trenger, er laget ikke sjekket: skriv det under *Ikke sjekket* i `## Oppfølging`, og resultatet er `usikker`, ikke `ikke funnet`.
 
 ## Logg kjøringen
 
@@ -148,7 +160,7 @@ Et søk uten treff er svakt bevis: det kan bety at koden heter noe annet. Før e
 
 1. **Fagbegrepet** fra scenarioet, med og uten æ/ø/å (`søkeord`, `sokeord`, `soekeord`), i entall og flertall.
 2. **Kodenavnene** begrepet kan ha: camelCase og snake_case (`studieavgift`, `STUDIEAVGIFT`), engelske navn (`tuition`, `keyword`), og forkortelser.
-3. **Tekstene brukeren ser:** oversettelsesfilene (i fs-admin `src/common/messages/**/*.json`). En etikett der leder til komponenten som bruker den.
+3. **Tekstene brukeren ser:** oversettelsesfilene (i fs-admin `src/common/messages/**/*.json`, og tilsvarende i min-kompetanse). En etikett der leder til komponenten som bruker den.
 4. **Kodeverk og databasen:** migrasjonene (`**/db/migration/*.sql`) og kodeverkstabellene. Et begrep kan finnes som kodeverdi (`POLITI_ATTEST`) uten å være koblet til det scenarioet gjelder.
 5. **API-et:** GraphQL-skjemaene (`*.graphqls`, `*.graphql`) i alle subgrafene, ikke bare den du venter.
 
