@@ -102,7 +102,26 @@ Egenskap: Frister og hendelser for opptak
     Scenario: Sette frist for poenggrenser for tidlig opptak
       Gitt at opptaket har aktivert tidlig opptak
       Når opptaksforvalter setter frist for å sette poenggrenser for tidlig opptak til "2027-02-15 23:59"
-      Så må deltagende organisasjoner sette poenggrenser for tidlig opptak innen denne fristen
+      Så må deltakende organisasjoner sette poenggrenser for tidlig opptak innen denne fristen
+
+    @draft @openquestion
+    Scenario: Sette publiseringsdato for svar på tidlig opptak
+      # ÅPNE SPØRSMÅL:
+      # - Må verifiseres med design og domene. Flyttet hit 2026-10-09 fra
+      #   11 Opptak/06 Tidlig opptak/publisere_svar_på_tidlig_opptak.feature.
+      # - opptaksinnstillinger_utdanningstilbud.feature setter «dato for når svar sendes til søkere»
+      #   per utdanningstilbud. Skal det være én publiseringsdato per opptak i stedet?
+      Gitt at opptaket har aktivert tidlig opptak
+      Når opptaksforvalter setter publiseringsdato for svar på tidlig opptak til "2027-04-20"
+      Så blir svaret på tidlig opptak tidligst publisert til søkerne "2027-04-20"
+
+    @draft @openquestion
+    Scenario: Endre publiseringsdato for svar på tidlig opptak før den er passert
+      # ÅPNE SPØRSMÅL:
+      # - Må verifiseres med design og domene, som scenarioet over.
+      Gitt at publiseringsdatoen for svar på tidlig opptak ikke er passert
+      Når opptaksforvalter endrer publiseringsdatoen for svar på tidlig opptak
+      Så er det den nye datoen som gjelder for publisering av svaret
 
   Regel: Opptaksforvalter ved forvaltende organisasjon må kunne sette informasjonsdatoer for opptaksresultat
     # Faktiske svarfrister og publiseringstidspunkter bestemmes ut fra innstillinger på plasstildelingsrunde og når plasstildelingensrundene faktisk blir publisert.
