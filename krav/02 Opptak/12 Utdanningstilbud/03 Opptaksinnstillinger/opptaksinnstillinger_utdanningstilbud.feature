@@ -10,6 +10,7 @@ Egenskap: Opptaksinnstillinger per utdanningstilbud
   # Opptaksforvalter ved forvaltende organisasjon kan sette innstillinger på alle utdanningstilbud.
   # Innstillinger for flere utdanningstilbud av gangen står i sette_standardinnstillinger.feature (#599).
   # Antall studieplasser står i sette_studieplasser_og_antall_tilbud.feature (#596).
+  # Tidlig søknadsfrist og dokumentasjonsfrist står i 04 Behandle et utdanningstilbud/sette_tidlig_søknadsfrist.feature (SHI-708).
   Bakgrunn:
     Gitt at opptaksforvalter er innlogget
     Og at opptaket "Samordna opptak 2027" har utdanningstilbud
@@ -71,18 +72,6 @@ Egenskap: Opptaksinnstillinger per utdanningstilbud
       Når opptaksforvalter markerer utdanningstilbudet "Sykepleie, høst 2027" for tidlig tilbud
       Og opptaksforvalter setter dato for når svar sendes til søkere
       Så kan søkere som oppfyller kriteriene få tidlig svar på dette utdanningstilbudet
-
-  Regel: Opptaksforvalter kan sette tidlig søknadsfrist per utdanningstilbud
-
-    Scenario: Sette tidlig søknadsfrist
-      Gitt at opptaket åpner for at tidlig søknadsfrist kan angis per utdanningstilbud
-      Når opptaksforvalter setter tidlig søknadsfrist for utdanningstilbudet "Politihøyskolen, høst 2027"
-      Så har dette utdanningstilbudet en tidligere søknadsfrist enn opptakets generelle frist
-
-    Scenario: Sette tidlig dokumentasjonsfrist
-      Gitt at opptaket åpner for at tidlig søknadsfrist kan angis per utdanningstilbud
-      Når opptaksforvalter setter tidlig dokumentasjonsfrist til "2027-03-01 23:59" for utdanningstilbudet "Politihøyskolen, høst 2027"
-      Så må søkere til dette utdanningstilbudet laste opp dokumentasjon innen denne fristen
 
   # AVKLART 2026-10-08: Det finnes ingen innstilling for hvilke runder utdanningstilbudet deltar i.
   # Et utdanningstilbud er ute av en runde når det ikke er satt antall tilbud som skal gis for runden,
