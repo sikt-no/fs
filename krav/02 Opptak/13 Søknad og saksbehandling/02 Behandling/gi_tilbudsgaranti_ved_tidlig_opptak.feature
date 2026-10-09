@@ -109,6 +109,11 @@
 #   ingen saker står igjen som ikke er ferdig behandlet, før tidligopptaket
 #   gjennomføres. (Dokumentasjonen på STEK-503 sier at det bare gjennomføres én
 #   gang, og at det ikke kommer noen ny sjanse. Den må rettes.)
+# - (09.10.2026) Har søkeren reservert studieplass på et søknadsalternativ som tilbyr
+#   tidlig opptak, får søkeren tilbudsgaranti fra tidligopptaket der uten å nå
+#   poenggrensen, når søkeren deltar og saken er ferdig behandlet. Søkeren har alt en
+#   plass fra et tidligere opptak. Reservasjonen gir ikke i seg selv innvilget tidlig
+#   opptak (se_svar_på_tidlig_opptak.feature). Stemmer med STEK-503.
 # - Alle tre rollene (B-rolle, T-rolle og F-rolle) kan sette tilbudsgaranti manuelt,
 #   hver med sitt eget sett med tilbudsgarantityper (domeneekspert, med henvisning til
 #   Confluence OP «Tilbudsgaranti»). Det stemmer med STEK-270/262 og koden.
@@ -208,6 +213,14 @@ Egenskap: Gi tilbudsgaranti ved tidlig opptak
       Når opptaksforvalter gjennomfører tidligopptaket
       Så får ikke søkeren tilbudsgaranti på "Sykepleie, høst 2027"
       Og opptaksforvalter ser at saken ikke er ferdig behandlet
+
+    Scenario: Reservert studieplass gir tilbudsgaranti uten poenggrense
+      Gitt saksbehandler har konkludert med at søkeren deltar i tidligopptaket
+      Og søkeren har reservert studieplass på "Sykepleie, høst 2027"
+      Og søkeren er kvalifisert til "Sykepleie, høst 2027"
+      Og søkeren har 40 poeng til "Sykepleie, høst 2027"
+      Når opptaksforvalter gjennomfører tidligopptaket
+      Så får søkeren tilbudsgaranti på "Sykepleie, høst 2027"
 
     Scenario: Den høyeste poengsummen til søknadsalternativet gjelder
       Gitt saksbehandler har konkludert med at søkeren deltar i tidligopptaket

@@ -129,6 +129,7 @@ Kravene er `@in-progress`, og endres på stedet. Endringene står her, så den s
 - **2026-10-09, `@OPT-BEH-BEH-013`:** Feature-ID-en til `vurdere_søknad_om_tidlig_opptak.feature` er endret fra `@OPT-BEH-BEH-008` til `@OPT-BEH-BEH-013`, fordi `søknadsmangler.feature` (PR #700) også bruker 008. ID-en er byttet overalt i spec-en, også i tabellene over.
 - **2026-10-09, `@OPT-BEH-BEH-007`:** Rapporten og parameterne for gjennomføringen er utdypet etter STEK-489 og branchen STEK-503: nytt scenario «Angi grensen for kvotevarsel» (standard er hele kvoten), nytt scenario «Se antall saker som ikke er ferdig behandlet», og «Se utfallet for hver søker» viser også antall søkere som er vurdert og antall tilbudsgarantier som er satt. Rapporter fra tidligere gjennomføringer er ikke et krav.
 - **2026-10-09, `@OPT-BEH-BEH-007`:** Nytt scenario «Ny gjennomføring tar med en sak som er blitt ferdig behandlet», og en avklaring om at tidligopptaket kan gjennomføres mer enn én gang.
+- **2026-10-09, `@OPT-BEH-BEH-007`:** Nytt scenario «Reservert studieplass gir tilbudsgaranti uten poenggrense», med avklaring: søkeren har alt en plass fra et tidligere opptak, og får garanti fra tidligopptaket uten å nå poenggrensen når søkeren deltar og saken er ferdig behandlet. Stemmer med branchen STEK-503 (`TidligopptakTilbudsgarantiService.behandleSoker`). `main` gjør det ikke.
 
 ## Åpne spørsmål
 
