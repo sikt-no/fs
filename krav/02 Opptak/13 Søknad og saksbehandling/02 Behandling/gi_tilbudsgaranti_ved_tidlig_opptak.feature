@@ -13,7 +13,7 @@
 # Confluence PFS 3885400152 «Tilbudsgaranti».
 #
 # Vurderingen og konklusjonen står i vurdere_søknad_om_tidlig_opptak.feature.
-# Poenggrensen for tidlig tilbud settes per utdanningstilbud, se
+# Poenggrensen for tidlig opptak settes per utdanningstilbud, se
 # opptaksinnstillinger_utdanningstilbud.feature.
 #
 # Featuren slutter når tilbudsgarantiene er tildelt. Publiseringsdatoen og
@@ -131,7 +131,7 @@ Egenskap: Gi tilbudsgaranti ved tidlig opptak
 
   Bakgrunn:
     Gitt søkeren har søkt om tidlig opptak
-    Og "Sykepleie, høst 2027" er markert for tidlig tilbud med poenggrense 50
+    Og "Sykepleie, høst 2027" tilbyr tidlig opptak med poenggrense 50
 
   Regel: Opptaksforvalter gjennomfører tidligopptaket
 
@@ -179,9 +179,9 @@ Egenskap: Gi tilbudsgaranti ved tidlig opptak
     Scenariomal: Tilbudsgaranti på det høyest prioriterte søknadsalternativet
       Gitt saksbehandler har konkludert med at søkeren deltar i tidligopptaket
       Og søknaden har følgende søknadsalternativer:
-        | prioritet | søknadsalternativ     | tidlig tilbud | poenggrense      | kvalifisert | poeng |
-        | 1         | Sykepleie, høst 2027  | ja            | <grense sykepl.> | ja          | 55    |
-        | 2         | Vernepleie, høst 2027 | ja            | 40               | ja          | 55    |
+        | prioritet | søknadsalternativ     | tilbyr tidlig opptak | poenggrense      | kvalifisert | poeng |
+        | 1         | Sykepleie, høst 2027  | ja                   | <grense sykepl.> | ja          | 55    |
+        | 2         | Vernepleie, høst 2027 | ja                   | 40               | ja          | 55    |
       Når opptaksforvalter gjennomfører tidligopptaket
       Så får søkeren tilbudsgaranti på <garanti>
       Og søkeren får ikke tilbudsgaranti på <ikke garanti>
@@ -232,9 +232,9 @@ Egenskap: Gi tilbudsgaranti ved tidlig opptak
     Scenario: Tidligopptakstilbud fra tilbyder går foran poengsummen
       Gitt saksbehandler har konkludert med at søkeren deltar i tidligopptaket
       Og søknaden har følgende søknadsalternativer:
-        | prioritet | søknadsalternativ     | tidlig tilbud | poenggrense | kvalifisert | poeng | tilbudsgaranti fra tilbyder |
-        | 1         | Sykepleie, høst 2027  | ja            | 50          | ja          | ingen | tidligopptakstilbud         |
-        | 2         | Vernepleie, høst 2027 | ja            | 40          | ja          | 55    | ingen                       |
+        | prioritet | søknadsalternativ     | tilbyr tidlig opptak | poenggrense | kvalifisert | poeng | tilbudsgaranti fra tilbyder |
+        | 1         | Sykepleie, høst 2027  | ja                   | 50          | ja          | ingen | tidligopptakstilbud         |
+        | 2         | Vernepleie, høst 2027 | ja                   | 40          | ja          | 55    | ingen                       |
       Når opptaksforvalter gjennomfører tidligopptaket
       Så har søkeren tidligopptakstilbud på "Sykepleie, høst 2027"
       Og søkeren får ikke tilbudsgaranti på "Vernepleie, høst 2027"
@@ -283,7 +283,7 @@ Egenskap: Gi tilbudsgaranti ved tidlig opptak
       Og opptaksforvalter ser antall søkere per utfall, per behandlende organisasjon og per utdanningstilbud
 
     Scenario: Se utdanningstilbud med mangelfulle innstillinger
-      Gitt "Vernepleie, høst 2027" er markert for tidlig tilbud uten poenggrense
+      Gitt "Vernepleie, høst 2027" tilbyr tidlig opptak uten poenggrense
       Når opptaksforvalter prøvekjører tidligopptaket
       Så ser opptaksforvalter at "Vernepleie, høst 2027" mangler poenggrense
 

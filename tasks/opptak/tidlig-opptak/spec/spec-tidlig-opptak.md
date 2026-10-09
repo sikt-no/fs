@@ -122,6 +122,7 @@ Kravene er `@in-progress`, og endres på stedet. Endringene står her, så den s
 - **2026-10-09, `@OPT-SØK-SØK-011`:** «Se hva som må dokumenteres for begrunnelsen» er slått sammen med «Se begrunnelsene søkeren kan velge»: søkeren ser begrunnelsene med hva som må dokumenteres for hver av dem, og velger én. Kravet sier ikke i hvilken rekkefølge, eller når dokumentasjonskravet vises (avklart med Daniel). «Forklaringen på begrunnelsen» er tatt ut.
 - **2026-10-09, `@OPT-SØK-SØK-011`:** Kommentar om at ønsket om tidlig opptak blir stående når søkeren fjerner alle søknadsalternativene som tilbyr tidlig opptak. Søkeren kan da ikke få tilbudsgaranti, og svaret viser at søknadsalternativene ikke tilbyr tidlig opptak. Ingen ny regel.
 - **2026-10-09, `@OPT-BEH-BEH-007` og `@OPT-SØK-SØK-012`:** Kommentar om at «tilbudsgarantien gjelder igjen» er ett tilfelle av en generell oppførsel: å fjerne et søknadsalternativ eller trekke søknaden er en deaktivering, ikke en sletting (`soknadsalternativ.slettet`). Det finnes ikke noe generelt krav for det ennå (påpekt i review av PR #654). Det generelle kravet er utenfor denne oppgaven.
+- **2026-10-09, alle kravene:** «tidlig tilbud» heter nå «tilbyr tidlig opptak» (f.eks. «"Sykepleie, høst 2027" tilbyr tidlig opptak», «poenggrense for tidlig opptak»), som i koden (`utdanningstilbud.tilbyr_tidlig_opptak`) og skissen, etter review av PR #654. Gjelder også `opptaksinnstillinger_utdanningstilbud.feature` og `listevisning_utdanningstilbud.feature`. Issuet #578 bruker fortsatt «tidlig tilbud».
 
 ## Åpne spørsmål
 

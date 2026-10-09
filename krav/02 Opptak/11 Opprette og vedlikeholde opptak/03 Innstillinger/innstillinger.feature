@@ -80,8 +80,8 @@ Egenskap: Innstillinger for opptak
       Når opptaksforvalter setter lenken "https://www.samordnaopptak.no/universitet-og-hogskole/slik-soker-du/tidlig-opptak.html" til informasjon om tidlig opptak
       Så ser søkere i opptaket lenken til informasjon om tidlig opptak
       # Lagt til 09.10.2026 fra review av PR #654 (tidlig opptak): lenken settes per
-      # opptak, av opptakseieren, ikke per utdanningstilbud. Ønske fra Min kompetanse
-      # i STEK-267. Søkerens side står i 13 Søknad og saksbehandling/01 Søknad/
+      # opptak, av opptakseieren, ikke per utdanningstilbud. Er en del av å konfigurere
+      # tidlig opptak i opptaket (#578). Ønske fra Min kompetanse i STEK-267. Søkerens side står i 13 Søknad og saksbehandling/01 Søknad/
       # søke_om_tidlig_opptak.feature. Koden har ikke noe felt for lenken i dag.
 
   Regel: Opptaksforvalter kan åpne for søknad på ledige studieplasser

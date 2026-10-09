@@ -60,18 +60,18 @@ Egenskap: Opptaksinnstillinger per utdanningstilbud
       Og opptaksforvalter setter at ledige plasser i førstegangsvitnemålskvoten flyter til ordinær kvote
       Så omfordeler plasstildelingen ubrukte plasser fra førstegangsvitnemålskvoten til ordinær kvote
 
-  Regel: Opptaksforvalter kan markere utdanningstilbud for tidlig tilbud
+  Regel: Opptaksforvalter kan markere at et utdanningstilbud tilbyr tidlig opptak
 
-    Scenario: Markere utdanningstilbud for tidlig tilbud
+    Scenario: Markere at utdanningstilbudet tilbyr tidlig opptak
       Gitt at opptaket åpner for tidlig opptak
-      Når opptaksforvalter markerer utdanningstilbudet "Sykepleie, høst 2027" for tidlig tilbud
+      Når opptaksforvalter markerer at utdanningstilbudet "Sykepleie, høst 2027" tilbyr tidlig opptak
       Så kan søkere som oppfyller kriteriene få tidlig svar på dette utdanningstilbudet
       # Publiseringsdatoen for svar på tidlig opptak settes per opptak, ikke per
       # utdanningstilbud, se publisere_svar_på_tidlig_opptak.feature (avklart 25.09.2026).
 
-    Scenario: Sette poenggrense for tidlig tilbud
-      Gitt utdanningstilbudet "Sykepleie, høst 2027" er markert for tidlig tilbud
-      Når opptaksforvalter setter poenggrensen for tidlig tilbud til 50 for utdanningstilbudet "Sykepleie, høst 2027"
+    Scenario: Sette poenggrense for tidlig opptak
+      Gitt utdanningstilbudet "Sykepleie, høst 2027" tilbyr tidlig opptak
+      Når opptaksforvalter setter poenggrensen for tidlig opptak til 50 for utdanningstilbudet "Sykepleie, høst 2027"
       Så får søkere som deltar i tidligopptaket og har minst 50 poeng, tilbudsgaranti på "Sykepleie, høst 2027"
       # Se gi_tilbudsgaranti_ved_tidlig_opptak.feature. En egen verdi beregnet fra fjorårets
       # opptak kommer eventuelt senere (STEK-352).

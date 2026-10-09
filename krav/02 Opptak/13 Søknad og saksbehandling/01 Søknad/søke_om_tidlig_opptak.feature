@@ -25,7 +25,7 @@
 #   begrunnelser kan velges. Hver begrunnelse har et navn, en forklaring og en
 #   tekst om hva søkeren må dokumentere (STEK-267).
 # - Tidlig opptak kan bare søkes når opptaket tilbyr tidlig opptak, eller når
-#   minst ett av søknadsalternativene er markert for tidlig tilbud.
+#   minst ett av søknadsalternativene tilbyr tidlig opptak.
 # - (Endret 09.10.2026, se under.) Søkeren kan bytte begrunnelse fram til
 #   søknadsfristen for tidlig opptak.
 # - Søkeren får kvittering når begrunnelsen settes eller byttes (TOT-2384).
@@ -95,13 +95,13 @@ Egenskap: Søke om tidlig opptak
     # uten å trenge det. Fra skissen i Min kompetanse (avklart 08.10.2026).
 
     Scenario: Søke om tidlig opptak fra søknadsdetaljene
-      Gitt "Sykepleie, høst 2027" er markert for tidlig tilbud
+      Gitt "Sykepleie, høst 2027" tilbyr tidlig opptak
       Og søkeren har sendt søknaden med søknadsalternativet "Sykepleie, høst 2027"
       Når søkeren ser på søknadsdetaljene
       Så ser søkeren muligheten til å søke om tidlig opptak
 
     Scenario: Kan ikke søke om tidlig opptak før søknaden er sendt
-      Gitt "Sykepleie, høst 2027" er markert for tidlig tilbud
+      Gitt "Sykepleie, høst 2027" tilbyr tidlig opptak
       Og søkeren har ikke sendt søknaden
       Når søkeren fyller ut søknaden
       Så ser ikke søkeren muligheten til å søke om tidlig opptak
@@ -109,7 +109,7 @@ Egenskap: Søke om tidlig opptak
   Regel: Søkeren kan søke om tidlig opptak når opptaket tilbyr det
 
     Scenario: Søke om tidlig opptak med en begrunnelse
-      Gitt "Sykepleie, høst 2027" er markert for tidlig tilbud
+      Gitt "Sykepleie, høst 2027" tilbyr tidlig opptak
       Og søknaden har søknadsalternativet "Sykepleie, høst 2027"
       Når søkeren søker om tidlig opptak med begrunnelsen "Fullført videregående opplæring"
       Så har søkeren søkt om tidlig opptak med begrunnelsen "Fullført videregående opplæring"
@@ -117,9 +117,9 @@ Egenskap: Søke om tidlig opptak
 
     Scenario: Se hvilke søknadsalternativer som tilbyr tidlig opptak
       Gitt søknaden har følgende søknadsalternativer:
-        | søknadsalternativ     | tidlig tilbud |
-        | Sykepleie, høst 2027  | ja            |
-        | Historie, høst 2027   | nei           |
+        | søknadsalternativ    | tilbyr tidlig opptak |
+        | Sykepleie, høst 2027 | ja                   |
+        | Historie, høst 2027  | nei                  |
       Når søkeren ser på søknaden
       Så ser søkeren at "Sykepleie, høst 2027" tilbyr tidlig opptak
       Og søkeren ser at "Historie, høst 2027" ikke tilbyr tidlig opptak
@@ -131,7 +131,7 @@ Egenskap: Søke om tidlig opptak
 
     Scenario: Kan ikke søke om tidlig opptak når ingen søknadsalternativer tilbyr det
       Gitt opptaket "Samordna opptak 2027" tilbyr ikke tidlig opptak
-      Og ingen av søknadsalternativene er markert for tidlig tilbud
+      Og ingen av søknadsalternativene tilbyr tidlig opptak
       Når søkeren ser på søknaden
       Så ser ikke søkeren muligheten til å søke om tidlig opptak
 
