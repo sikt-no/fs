@@ -65,6 +65,11 @@
 #   stående. Scenarioet «Bytte begrunnelse før fristen» er fjernet.
 # - Scenarioet om begrunnelsen «Ingen begrunnelse» er fjernet. Det er
 #   konfigurasjon av opptaket, ikke en egen funksjon (se avklaringen fra 08.10).
+# - Søkeren ser begrunnelsene med hva som må dokumenteres for hver av dem, og
+#   velger én. Kravet sier ikke i hvilken rekkefølge, eller når
+#   dokumentasjonskravet vises (avklart med Daniel). Scenarioet «Se hva som må
+#   dokumenteres for begrunnelsen» er slått sammen med «Se begrunnelsene søkeren
+#   kan velge».
 #
 @OPT-SØK-SØK-011 @must @in-progress
 Egenskap: Søke om tidlig opptak
@@ -135,12 +140,8 @@ Egenskap: Søke om tidlig opptak
         | Gammel begrunnelse                  | nei   |
       Når søkeren skal søke om tidlig opptak
       Så kan søkeren velge mellom "Fullført videregående opplæring" og "Fullført fagskole"
+      Og søkeren ser hva som må dokumenteres for hver av begrunnelsene
       Og søkeren kan ikke velge "Gammel begrunnelse"
-
-    Scenario: Se hva som må dokumenteres for begrunnelsen
-      Når søkeren velger begrunnelsen "Fullført videregående opplæring"
-      Så ser søkeren forklaringen på begrunnelsen
-      Og søkeren ser hva som må dokumenteres for begrunnelsen
 
     Scenario: Se når søkeren søkte om tidlig opptak
       Gitt søkeren søkte om tidlig opptak med begrunnelsen "Fullført fagskole" "2027-01-15"
