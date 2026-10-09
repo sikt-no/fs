@@ -9,7 +9,7 @@
 # «Min Kompetanse 2026», node 2769-1614 (lenken står i STEK-267).
 #
 # Featuren slutter når søkeren har søkt om tidlig opptak. Vurderingen står i
-# vurdere_søknad_om_tidlig_opptak.feature (OPT-BEH-BEH-008), tilbudsgarantien i
+# vurdere_søknad_om_tidlig_opptak.feature (OPT-BEH-BEH-013), tilbudsgarantien i
 # gi_tilbudsgaranti_ved_tidlig_opptak.feature (OPT-BEH-BEH-007), og svaret i
 # se_svar_på_tidlig_opptak.feature (OPT-SØK-SØK-012).
 #

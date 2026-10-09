@@ -88,8 +88,10 @@
 # (tidligopptak_begrunnelsetype). Saksbehandleren registrerer ikke en egen
 # begrunnelse, men vurderer om søkerens begrunnelse er dokumentert, og velger en
 # konklusjon ut fra det.
+# - Feature-ID-en er endret fra @OPT-BEH-BEH-008 til @OPT-BEH-BEH-013, fordi
+#   søknadsmangler.feature (PR #700) også bruker 008 (09.10.2026).
 #
-@OPT-BEH-BEH-008 @must @in-progress
+@OPT-BEH-BEH-013 @must @in-progress
 Egenskap: Vurdere søknad om tidlig opptak
   Som saksbehandler
   ønsker jeg å vurdere søkerens begrunnelse for tidlig opptak og konkludere om søkeren deltar i tidligopptaket

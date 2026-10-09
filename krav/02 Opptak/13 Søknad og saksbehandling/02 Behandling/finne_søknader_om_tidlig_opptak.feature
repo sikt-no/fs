@@ -8,7 +8,7 @@
 # søkt om tidlig opptak, for å vurdere dem i tide.
 #
 # Vurderingen og konklusjonen står i vurdere_søknad_om_tidlig_opptak.feature
-# (OPT-BEH-BEH-008). Hva søkeren gjør, står i søke_om_tidlig_opptak.feature
+# (OPT-BEH-BEH-013). Hva søkeren gjør, står i søke_om_tidlig_opptak.feature
 # (OPT-SØK-SØK-011).
 #
 # Det finnes ikke noe krav for selve sakslisten i saksbehandlingen ennå. Dette
