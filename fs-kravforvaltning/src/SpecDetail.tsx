@@ -9,6 +9,7 @@ import { makeMentionIndex, mentionItems, searchMentions, type MentionHit, type M
 import { highlight, StatusIcon } from './Sidebar';
 import { colOf, currentRepo, featureId, handoffPrompt, missing, pickable, prShort, specifyPrompt, stepIcon, verifyPrompt, type Card, type ColConf } from './specboard';
 import { useCopy } from './useCopy';
+import { useVerifyScreenshots } from './verifyScreenshots';
 
 /** Handlingene som går til Claude Code utenfor panelets vanlige samtale */
 export interface SpecActions {
@@ -18,6 +19,10 @@ export interface SpecActions {
   executeWhy: string;
   /** Kan repoet utføres i (Claude Code finnes, og den lokale klonen er valgt)? */
   canExecute: (repo: string) => boolean;
+  /** «Utfør med team i <repo>»: terminalen med agent teams, i kode-repoet; `null` når den ikke er tilgjengelig */
+  executeTeam: ((c: Card, repo: string) => void) | null;
+  /** «Verifiser i terminal med agent team» (fs-verify-agent-teams); `null` når den ikke er tilgjengelig */
+  verifyTeam: ((c: Card, screenshots: boolean) => void) | null;
 }
 
 interface Props {
@@ -48,16 +53,16 @@ const RES_C: Record<string, string> = { funnet: 'var(--st-implemented)', 'ikke f
 const resMark = (r: string | null) => (r === 'funnet' ? 'omk omk--ok' : r === 'ikke funnet' ? 'omk omk--no' : r === 'usikker' ? 'omk sp-mk--us' : 'omk omk--na');
 const SKETCH_C: Record<SketchKind, string> = { OK: 'var(--st-implemented)', Avvik: 'var(--err)', Uavklart: 'var(--st-in-progress)' };
 
-/** En knapp som sender en prompt til Claude-panelet når det er åpent, og ellers kopierer den */
-function ClaudeAction({ label, prompt, solid }: { label: string; prompt: () => string; solid?: boolean }) {
+/** En knapp som sender en prompt til Claude-panelet når det er åpent, og ellers kopierer den. Med `skill` starter den en ny samtale med skillen */
+function ClaudeAction({ label, prompt, solid, skill }: { label: string; prompt: () => string; solid?: boolean; skill?: string }) {
   const claude = useClaudeTarget();
   const [copied, copy] = useCopy();
   return (
     <button
       class={'spbtn ' + (solid ? 'solid' : 'acc')}
       disabled={claude.ready && claude.busy}
-      title={claude.ready ? (claude.busy ? 'Claude jobber i samtalen; vent til svaret er ferdig' : 'Sender prompten til samtalen i Claude-panelet') : 'Claude-panelet er lukket: prompten kopieres'}
-      onClick={() => (claude.ready ? void claude.send(prompt()) : copy(prompt()))}
+      title={claude.ready ? (claude.busy ? 'Claude jobber i samtalen; vent til svaret er ferdig' : skill ? `Starter en ny samtale med ${skill} i Claude-panelet` : 'Sender prompten til samtalen i Claude-panelet') : 'Claude-panelet er lukket: prompten kopieres'}
+      onClick={() => (claude.ready ? void (skill ? claude.withSkill(prompt(), skill) : claude.send(prompt())) : copy(prompt()))}
     >
       <span class="sp-dia" />
       {claude.ready ? label : copied ? 'Kopiert' : `${label} (kopier prompt)`}
@@ -73,6 +78,15 @@ export function SpecDetail({ c, col, repos, repoName, cards, entries, ro, dirty,
   const [openFeat, setOpenFeat] = useState<Record<string, boolean>>({});
   const [promptFor, setPromptFor] = useState<string | null>(null);
   const [copied, copy] = useCopy();
+  const [shots, setShots] = useVerifyScreenshots();
+  /** Steget i repoet settes til «pågår», med agenten som har tatt det, og en linje i loggen */
+  const startStep = (r: string, what: string) =>
+    onRun(run => {
+      const st = run.steps.find(x => x.repo === r);
+      if (!st) return;
+      st.status = 'pågår';
+      if (!st.by) st.by = 'agent:' + (r === 'fs-admin' ? 'frontend' : r === 'fs-plattform' ? 'subgraph' : 'utvikler');
+    }, `startet ${what} i ${repoName(r)}`);
   const all = c.feats.flatMap(f => f.sc);
   const unsent = !c.run.route.length;
   const routeList = unsent ? c.doc.rute : c.run.route;
@@ -650,18 +664,27 @@ export function SpecDetail({ c, col, repos, repoName, cards, entries, ro, dirty,
                         title={s.blocked !== null ? 'Steget er blokkert' : actions.execute && actions.canExecute(r) ? `Utførekjøring i Claude-panelet, cwd = ${repoName(r)}` : actions.executeWhy}
                         onClick={() => {
                           if (!actions.execute || !actions.canExecute(r) || s.blocked !== null) return;
-                          onRun(run => {
-                            const st = run.steps.find(x => x.repo === r);
-                            if (!st) return;
-                            st.status = 'pågår';
-                            if (!st.by) st.by = 'agent:' + (r === 'fs-admin' ? 'frontend' : r === 'fs-plattform' ? 'subgraph' : 'utvikler');
-                          }, `startet utførekjøring i ${repoName(r)}`);
+                          startStep(r, 'utførekjøring');
                           actions.execute(c, r);
                         }}
                       >
                         <span class="sp-dia light" />
                         Utfør i {repoName(r)}
                       </button>
+                      {actions.executeTeam && (
+                        <button
+                          class="spbtn acc"
+                          disabled={s.blocked !== null || !actions.canExecute(r)}
+                          title={s.blocked !== null ? 'Steget er blokkert' : actions.canExecute(r) ? `Interaktiv Claude Code med agent teams i en terminal i Claude-panelet, cwd = ${repoName(r)}` : actions.executeWhy}
+                          onClick={() => {
+                            if (!actions.executeTeam || !actions.canExecute(r) || s.blocked !== null) return;
+                            startStep(r, 'utførekjøring med agent team');
+                            actions.executeTeam(c, r);
+                          }}
+                        >
+                          Utfør med team
+                        </button>
+                      )}
                       <button class="spbtn acc" onClick={() => setPromptFor(promptFor === pk ? null : pk)}>
                         {promptFor === pk ? 'Skjul prompt' : `Kopier prompt til ${repoName(r)}`}
                       </button>
@@ -687,7 +710,16 @@ export function SpecDetail({ c, col, repos, repoName, cards, entries, ro, dirty,
         {colKey === 'verifisering' && canEdit && (
           <div class="spd-send">
             <span>Alle steg er levert. fs-verify kjøres avgrenset til denne spesifikasjonen, med de valgte kodemappene.</span>
-            <ClaudeAction label="Verifiser" prompt={() => verifyPrompt(c)} solid />
+            <label class="spd-check">
+              <input type="checkbox" checked={shots} onChange={e => setShots((e.currentTarget as HTMLInputElement).checked)} />
+              Ta skjermbilder (test-fsadmin)
+            </label>
+            <ClaudeAction label="Verifiser" prompt={() => verifyPrompt(c, shots)} skill="fs-verify" solid />
+            {actions.verifyTeam && (
+              <button class="spbtn acc" title="fs-verify-agent-teams i en terminal i Claude-panelet: én teammate per feature-fil" onClick={() => actions.verifyTeam?.(c, shots)}>
+                Verifiser i terminal med agent team
+              </button>
+            )}
           </div>
         )}
 

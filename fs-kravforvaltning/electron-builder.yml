@@ -4,12 +4,22 @@ productName: FS Kravforvaltning
 directories:
   output: release
   buildResources: build
-# Alt appen trenger er bundlet inn i out/ av electron-vite; node_modules skal ikke med
+# Alt appen trenger er bundlet inn i out/ av electron-vite; node_modules skal ikke med, bortsett fra node-pty
+# (terminalen), som har en binærfil og `spawn-helper`. De må ligge utenfor asar-arkivet for å kunne kjøres.
 files:
   - out/**
   - package.json
   - "!node_modules/**"
+  - node_modules/node-pty/package.json
+  - node_modules/node-pty/lib/**
+  - node_modules/node-pty/prebuilds/${platform}-${arch}/**
+  - node_modules/node-pty/build/Release/**
 asar: true
+asarUnpack:
+  - node_modules/node-pty/**
+# node-pty har ferdigbygde N-API-binærfiler for macOS og Windows, som virker i Electron uten å bygges på nytt.
+# Linux har ingen; der bygges den med node-gyp i release-workflowen før pakkingen (N-API, så den virker også i Electron)
+npmRebuild: false
 # Uten mellomrom, så filene kan lastes opp til GitHub-releasen med glob (.github/workflows/kravforvaltning-release.yml)
 artifactName: fs-kravforvaltning-${version}-${os}-${arch}.${ext}
 mac:

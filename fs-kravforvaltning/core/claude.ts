@@ -5,9 +5,9 @@ import { accessSync, constants, readdirSync, readFileSync, rmSync, statSync, wri
 import { homedir, tmpdir } from 'node:os';
 import { delimiter, dirname, isAbsolute, join, resolve } from 'node:path';
 import { promisify } from 'node:util';
-import { CLAUDE_SKILLS, CODE_DIRS, type ClaudeApproveRequest, type ClaudeEvent, type ClaudeMcpServer, type CodeDir, type ClaudeRunRequest, type ClaudeSkill, type ClaudeSkills, type ClaudeStatus } from '../shared/api.ts';
-import { APPROVE_TIMEOUT_MS, APPROVE_TOOL, Approver, isAskable, SAVE_SKETCH_TOOL, SECRET_KEY } from './approve.ts';
-import { MCP_SERVERS, OWN_SERVER, readMcpServers, readonlyTools, type McpServers } from './mcp.ts';
+import { CLAUDE_SKILLS, CODE_DIRS, type ClaudeAnswerRequest, type ClaudeApproveRequest, type ClaudeEvent, type ClaudeMcpServer, type CodeDir, type ClaudeRunRequest, type ClaudeSkill, type ClaudeSkills, type ClaudeStatus } from '../shared/api.ts';
+import { APPROVE_TIMEOUT_MS, APPROVE_TOOL, Approver, QUESTION_TIMEOUT_MS, isAskable, SAVE_SKETCH_TOOL, SECRET_KEY } from './approve.ts';
+import { MCP_SERVERS, OWN_SERVER, readMcpServers, readonlyTools, verifyTools, type McpServers } from './mcp.ts';
 import { saveSketch } from './save.ts';
 
 const exec = promisify(execFile);
@@ -79,7 +79,7 @@ export function codeDirs(repo: string, env: NodeJS.ProcessEnv = process.env, ove
 }
 
 /** En absolutt sti som regel i `--disallowedTools`: `//sti` (POSIX-form, også på Windows: `//c/Users/…`) */
-const posix = (p: string) => resolve(p).replace(/\\/g, '/').replace(/^([A-Za-z]):/, (_, d: string) => '/' + d.toLowerCase());
+export const posix = (p: string) => resolve(p).replace(/\\/g, '/').replace(/^([A-Za-z]):/, (_, d: string) => '/' + d.toLowerCase());
 
 /**
  * Argumentene for kodemappene: `--add-dir` så Claude kan lese dem, og `Edit(//<sti>/**)` i
@@ -124,7 +124,7 @@ export function implementPrompt(target: { repo: string; spec: string }, repoRoot
     dir
       ? `Protokoll: sett «Status: pågår» og «Tatt av» under «### ${target.repo}» i ${join(resolve(repoRoot), dir, 'utforing.md')} når du begynner. Når du er ferdig, skriv «Overlevering» (det neste repo trenger å vite: nye felt, queries og mutations, endepunkter, kjente avvik), og si fra til brukeren at steget kan settes til levert når PR-en finnes. Er du blokkert, sett «Blokkert» med grunn.`
       : '',
-    'AskUserQuestion finnes ikke her: still spørsmålene i svaret, og vent på brukeren.',
+    'AskUserQuestion virker: brukeren får spørsmålene som et kort med valgene, og svarene kommer tilbake til deg. Bruk det når du trenger et valg fra brukeren. Hopper brukeren over, still spørsmålene i svaret, og vent på brukeren.',
     'MCP-verktøy (mcp__*) og WebFetch kan brukes, men brukeren må godkjenne hvert kall i FS Kravforvaltning. Blir et kall avvist, ikke prøv igjen uten å spørre brukeren.',
   ]
     .filter(Boolean)
@@ -272,6 +272,7 @@ export function toolSummary(name: string, input: Record<string, unknown> = {}): 
   if (typeof input.pattern === 'string') return input.pattern + (input.path ? ` i ${file(input.path)}` : '');
   if (typeof input.skill === 'string') return input.skill;
   if (Array.isArray(input.todos)) return `${input.todos.length} punkter`;
+  if (Array.isArray(input.questions)) return input.questions.map(q => (q as { header?: unknown })?.header).filter(h => typeof h === 'string').join(', ') || name;
   return name;
 }
 
@@ -434,7 +435,7 @@ export function contextPrompt(
       '{"mal": "…", "gjort": "…", "beslutninger": "…", "apneSporsmal": "…", "nesteSteg": "…", "paths": ["…"]}. ' +
       'Feltene er korte setninger på norsk; la et felt være tomt når det ikke er noe å si. paths er filene som er lest eller endret i samtalen og er viktige for å fortsette, relative til repoet. ' +
       'Brukeren får et kort med «Start ny samtale med oppsummeringen».',
-    'Du har ikke shell-tilgang; bruk Read, Glob, Grep, Edit og Write. AskUserQuestion finnes ikke her: still spørsmålene i svaret, og vent på brukeren.',
+    'Du har ikke shell-tilgang; bruk Read, Glob, Grep, Edit og Write. AskUserQuestion virker: brukeren får spørsmålene som et kort med valgene, og svarene kommer tilbake til deg. Bruk det når du trenger et valg fra brukeren. Hopper brukeren over, still spørsmålene i svaret, og vent på brukeren.',
     MCP_PROMPT,
     dirs.length ? `Du kan lese kodeklonene ${dirs.join(', ')}, men ikke endre dem.` : '',
     skills.includes('fs-verify')
@@ -459,7 +460,7 @@ interface Run {
  * Skriver MCP-konfigen til en midlertidig fil som bare brukeren kan lese, så hemmeligheter i headers og env ikke
  * står på kommandolinja (`ps`). Fila slettes når kjøringen er ferdig.
  */
-function writeMcpConfig(runId: string, servers: McpServers): string {
+export function writeMcpConfig(runId: string, servers: McpServers): string {
   const file = join(tmpdir(), `krav-mcp-${process.pid}-${runId}.json`);
   writeFileSync(file, JSON.stringify({ mcpServers: servers }), { mode: 0o600 });
   return file;
@@ -474,6 +475,8 @@ export interface RunnerOpts {
   home?: string;
   /** Hvor lenge et spørsmål om lov venter (tester) */
   approveTimeoutMs?: number;
+  /** Hvor lenge spørsmål fra AskUserQuestion venter (tester) */
+  questionTimeoutMs?: number;
   /** En skisse er skrevet av `save_sketch`; git-endringene skal leses på nytt */
   onSaved?: (path: string) => void;
   /** En kjøring er ferdig; Claude kan ha skrevet filer, også under tasks/ (som ikke overvåkes uten Oppgaver og Spesifikasjoner) */
@@ -510,6 +513,7 @@ export class ClaudeRunner {
       emit: (runId, ev) => this.emit(runId, ev),
       saveSketch: (id, path) => this.saveSketch(id, path),
       timeoutMs: opts.approveTimeoutMs,
+      questionTimeoutMs: opts.questionTimeoutMs,
     });
   }
 
@@ -552,6 +556,11 @@ export class ClaudeRunner {
 
   private emit(runId: string, event: ClaudeEvent) {
     this.emitter.emit('krav:claude', { runId, event });
+  }
+
+  /** Stien til `claude`, eller `null` (også for terminalen, `core/pty.ts`) */
+  binary(): Promise<string | null> {
+    return this.find();
   }
 
   private find() {
@@ -605,15 +614,17 @@ export class ClaudeRunner {
       const pool = skillPool(req.skills);
       const { allow, deny } = skillArgs(skill, known, pool);
       const dirs = dirArgs(req.dirs);
+      // fs-verify navigerer i nettleseren for skjermbildene uten å spørre (MCP_VERIFY)
+      const verify = skill === 'fs-verify' ? verifyTools() : [];
       // MCP-serverne brukeren har satt opp et annet sted (andre mapper, .mcp.json i kodemappene), og appens egen
-      mcpFile = writeMcpConfig(runId, { ...readMcpServers(this.cwd, dirs.paths, this.home()), [OWN_SERVER]: await this.approver.register(runId, { always }) });
+      mcpFile = writeMcpConfig(runId, { ...readMcpServers(this.cwd, dirs.paths, this.home()), [OWN_SERVER]: await this.approver.register(runId, { always: [...always, ...verify] }) });
       args = [
         '-p',
         '--output-format', 'stream-json',
         '--verbose',
         ...PERMISSION_ARGS,
         '--mcp-config', mcpFile,
-        '--allowedTools', ...CLAUDE_TOOLS, ...allow, ...readonlyTools(), ...always,
+        '--allowedTools', ...CLAUDE_TOOLS, ...allow, ...readonlyTools(), ...verify, ...always,
         ...dirs.add,
         '--append-system-prompt', contextPrompt(req.path, skill, pool, dirs.paths, mentionPaths(req.mentions)),
         ...(req.sessionId ? ['--resume', req.sessionId] : []),
@@ -624,8 +635,9 @@ export class ClaudeRunner {
     // Den korte PATH-en fra Finder: ta med mappa claude ligger i (npm-installasjoner trenger node derfra)
     env.PATH = [dirname(bin), env.PATH].filter(Boolean).join(delimiter);
     // Claude Code gir opp et MCP-kall etter omtrent 60 s uten MCP_TOOL_TIMEOUT, også spørsmålet om lov. Den må vente
-    // til brukeren har fått tid til å svare, også når brukeren har satt en lavere verdi selv.
-    env.MCP_TOOL_TIMEOUT = String(Math.max(Number(env.MCP_TOOL_TIMEOUT) || 0, (this.opts.approveTimeoutMs ?? APPROVE_TIMEOUT_MS) + 60_000));
+    // til brukeren har fått tid til å svare (også på AskUserQuestion), selv når brukeren har satt en lavere verdi selv.
+    const wait = Math.max(this.opts.approveTimeoutMs ?? APPROVE_TIMEOUT_MS, this.opts.questionTimeoutMs ?? QUESTION_TIMEOUT_MS);
+    env.MCP_TOOL_TIMEOUT = String(Math.max(Number(env.MCP_TOOL_TIMEOUT) || 0, wait + 60_000));
     const cleanup = () => {
       this.approver.unregister(runId);
       rmSync(mcpFile, { force: true });
@@ -701,7 +713,12 @@ export class ClaudeRunner {
     return this.approver.answer(req);
   }
 
-  /** Spørsmålene om lov som venter */
+  /** Brukerens svar på spørsmålene fra AskUserQuestion */
+  async answer(req: ClaudeAnswerRequest): Promise<boolean> {
+    return this.approver.answerQuestion(req);
+  }
+
+  /** Spørsmålene som venter (om lov, og fra AskUserQuestion) */
   pending() {
     return this.approver.pending();
   }

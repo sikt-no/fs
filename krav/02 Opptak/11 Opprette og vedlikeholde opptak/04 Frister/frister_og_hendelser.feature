@@ -105,7 +105,7 @@ Egenskap: Frister og hendelser for opptak
       Så må deltagende organisasjoner sette poenggrenser for tidlig opptak innen denne fristen
 
   Regel: Opptaksforvalter ved forvaltende organisasjon må kunne sette informasjonsdatoer for opptaksresultat
-    # Faktiske svarfrister og publiseringstidspunkter settes per plasstildelingsrunde
+    # Faktiske svarfrister og publiseringstidspunkter bestemmes ut fra innstillinger på plasstildelingsrunde og når plasstildelingensrundene faktisk blir publisert.
 
     Scenario: Sette dato for når hovedopptaket publiseres og søker kan forvente svar
       Når opptaksforvalter setter dato for når hovedopptaket publiseres til "2027-07-15"
@@ -113,7 +113,7 @@ Egenskap: Frister og hendelser for opptak
 
     Scenario: Sette første svarfrist som informasjon til søkere
       Når opptaksforvalter setter første svarfrist til "2027-07-20 23:59"
-      Så kan søkere se når de senest må svare på et eventuelt tilbud
+      Så kan søkere se når de senest kan forvente å måtte svare på et eventuelt tilbud
 
   Regel: Opptaksforvalter ved forvaltende organisasjon må kunne sette frist for endring av utdanningsbakgrunn
 

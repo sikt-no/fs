@@ -66,7 +66,7 @@ Bruk `AskUserQuestion` for å avklare. Eksempler:
 - "Hvor utløses primærhandlingen — toppen av siden, ved hver rad, eller begge?"
 - "Hva skjer ved tom tilstand?"
 
-Spør om én ting av gangen. Ikke gjett — be om svar når noe er uklart. I Claude-panelet i FS Kravforvaltning finnes ikke `AskUserQuestion`: still spørsmålene i svaret, og vent på brukeren.
+Spør om én ting av gangen. Ikke gjett — be om svar når noe er uklart. I Claude-panelet i FS Kravforvaltning virker `AskUserQuestion`: brukeren får spørsmålet som et kort med valgene. Hopper brukeren over, still spørsmålene i svaret, og vent på brukeren.
 
 ### 5. Skriv implementasjonsdetaljene
 Lagre som `<feature-navn>.design.md` i samme mappe som `.feature`-filen.

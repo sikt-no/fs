@@ -2,13 +2,17 @@
 // og andre visninger kan da sende en prompt rett inn i samtalen som er åpen (Avvik, Oppgaver),
 // eller legge tekst i inputfeltet (markert tekst i feature-visningen).
 import { useEffect, useState } from 'preact/hooks';
-import type { ExecuteTarget } from '../shared/api';
+import type { ExecuteTarget, PtyStartRequest } from '../shared/api';
 
 interface Target {
   /** Sender teksten som ny melding i samtalen som er åpen */
   send: (text: string) => Promise<void>;
   /** Starter en ny samtale som utførekjøring i kode-repoet, med teksten som første melding */
   execute: (text: string, target: ExecuteTarget, title: string) => Promise<void>;
+  /** Starter en terminaløkt (interaktiv claude med agent teams) i en ny samtale, med teksten som første melding */
+  terminal: (text: string, req: Omit<PtyStartRequest, 'prompt'>, title: string) => Promise<void>;
+  /** Starter en ny samtale med skillen `skill` (f.eks. fs-verify fra «Verifiser»), med teksten som første melding */
+  withSkill: (text: string, skill: string) => Promise<void>;
   /** Legger teksten til i inputfeltet; brukeren sender selv */
   insert: (text: string) => void;
 }
@@ -62,6 +66,8 @@ export function useClaudeTarget() {
     busy,
     send: (text: string) => (sender ? sender.send(text) : Promise.resolve()),
     execute: (text: string, target: ExecuteTarget, title: string) => (sender ? sender.execute(text, target, title) : Promise.resolve()),
+    withSkill: (text: string, skill: string) => (sender ? sender.withSkill(text, skill) : Promise.resolve()),
+    terminal: (text: string, req: Omit<PtyStartRequest, 'prompt'>, title: string) => (sender ? sender.terminal(text, req, title) : Promise.resolve()),
     insert: (text: string) => sender?.insert(text),
   };
 }

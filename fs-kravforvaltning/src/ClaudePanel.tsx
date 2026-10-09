@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'preact/hooks';
-import { CLAUDE_SKILLS_SHOWN, type ClaudeEvent, type ClaudeStatus, type ExecuteTarget } from '../shared/api';
+import { CLAUDE_SKILLS_SHOWN, type ClaudeEvent, type ClaudeStatus, type ExecuteTarget, type PtyStartRequest } from '../shared/api';
 import type { GitChange, Snapshot } from '../shared/model';
 import { isEditablePath } from '../shared/paths';
 import {
@@ -22,6 +22,9 @@ import {
   allowAlways,
   needsAuth,
   pendingPermissions,
+  pendingQuestions,
+  createTerminalConversation,
+  terminalExited,
   updateConversation,
   type ChatItem,
   type ChatPreset,
@@ -38,6 +41,9 @@ import { appendQuote } from './selection';
 import { covered } from './mention';
 import { MENTION_LIST_ID, MentionPicker, useMentions } from './MentionPicker';
 import { transport } from './transport';
+import { answerQuestion, QuestionCard } from './QuestionCard';
+import { TerminalView } from './TerminalView';
+import { ResizeHandle } from './ResizeHandle';
 
 /** Slik vises de faste meldingene i samtalen */
 const PRESET: Record<ChatPreset, { label: string; text: string }> = {
@@ -102,7 +108,10 @@ function answerPermission(convId: string, item: Extract<ChatItem, { kind: 'permi
 
 /** Panelet lukkes: spørsmålene som venter, avvises, så Claude ikke venter til tiden går ut */
 function denyAllPending() {
-  for (const conv of convs.list) for (const p of pendingPermissions(conv.chat)) void answerPermission(conv.id, p, 'deny', false, 'closed');
+  for (const conv of convs.list) {
+    for (const p of pendingPermissions(conv.chat)) void answerPermission(conv.id, p, 'deny', false, 'closed');
+    for (const q of pendingQuestions(conv.chat)) void answerQuestion(q, null, 'closed');
+  }
 }
 
 const PERMISSION_STATE: Record<Exclude<Extract<ChatItem, { kind: 'permission' }>['state'], 'pending'>, string> = {
@@ -188,58 +197,6 @@ function when(ms: number) {
 export const CLAUDE_WIDTH = 380;
 const MIN_WIDTH = 280;
 const maxWidth = () => Math.max(MIN_WIDTH, Math.round(innerWidth * 0.7));
-const clamp = (w: number) => Math.min(maxWidth(), Math.max(MIN_WIDTH, Math.round(w)));
-
-/**
- * Håndtaket på venstre kant: dra for å endre bredden, piltastene flytter 20 px (Shift: 80 px),
- * og dobbeltklikk går tilbake til standardbredden.
- */
-function ResizeHandle({ width, onWidth }: { width: number; onWidth: (w: number) => void }) {
-  const onPointerDown = (e: PointerEvent) => {
-    if (e.button !== 0) return;
-    e.preventDefault();
-    const el = e.currentTarget as HTMLElement;
-    // Panelet ligger helt til høyre, så bredden er avstanden fra pekeren til høyre kant av arbeidsflaten
-    const right = el.closest('.workspace')?.getBoundingClientRect().right ?? innerWidth;
-    el.setPointerCapture(e.pointerId);
-    document.body.classList.add('resizing');
-    const move = (ev: PointerEvent) => onWidth(clamp(right - ev.clientX));
-    const up = () => {
-      el.removeEventListener('pointermove', move);
-      el.removeEventListener('pointerup', up);
-      el.removeEventListener('pointercancel', up);
-      document.body.classList.remove('resizing');
-    };
-    el.addEventListener('pointermove', move);
-    el.addEventListener('pointerup', up);
-    el.addEventListener('pointercancel', up);
-  };
-  const onKeyDown = (e: KeyboardEvent) => {
-    const step = e.shiftKey ? 80 : 20;
-    if (e.key === 'ArrowLeft') onWidth(clamp(width + step));
-    else if (e.key === 'ArrowRight') onWidth(clamp(width - step));
-    else if (e.key === 'Home') onWidth(maxWidth());
-    else if (e.key === 'End') onWidth(MIN_WIDTH);
-    else return;
-    e.preventDefault();
-  };
-  return (
-    <div
-      class="claude-resize"
-      role="separator"
-      aria-orientation="vertical"
-      aria-label="Endre bredden på Claude-panelet"
-      aria-valuenow={width}
-      aria-valuemin={MIN_WIDTH}
-      aria-valuemax={maxWidth()}
-      tabIndex={0}
-      title="Dra for å endre bredden · dobbeltklikk for standard"
-      onPointerDown={onPointerDown}
-      onKeyDown={onKeyDown}
-      onDblClick={() => onWidth(CLAUDE_WIDTH)}
-    />
-  );
-}
 
 /** Lange meldinger (f.eks. en prompt fra Avvik) foldes sammen til de første linjene */
 function LongText({ text }: { text: string }) {
@@ -315,6 +272,8 @@ export function ClaudePanel({ status, width, onWidth, allowedSkills: modeSkills,
   const [input, setInput] = useState(draft.text);
   const [error, setError] = useState<string | null>(null);
   const [showList, setShowList] = useState(false);
+  // Tittelen på terminaløkten som startes, til ptyStart har svart (claude finnes, PATH fra skallet, node-pty)
+  const [starting, setStarting] = useState<string | null>(null);
   const list = useRef<HTMLDivElement>(null);
   const running = c.runId !== null;
   // Skillen før den første samtalen finnes; ellers den samtalen har valgt. Er den ikke tillatt her,
@@ -348,7 +307,7 @@ export function ClaudePanel({ status, width, onWidth, allowedSkills: modeSkills,
    * Sender `text` som ny melding i samtalen som er åpen (eller en ny). Brukes av inputfeltet, av «Send til Claude Code»
    * og av «Oppsummer samtalen» og «Lag forslag til PR» (`preset`).
    */
-  const sendText = async (text: string, mentions: string[] = [], preset?: ChatPreset, inConv?: string) => {
+  const sendText = async (text: string, mentions: string[] = [], preset?: ChatPreset, inConv?: string, withSkill?: string) => {
     if (!text || (running && !inConv)) return;
     setError(null);
     setShowList(false);
@@ -362,7 +321,7 @@ export function ClaudePanel({ status, width, onWidth, allowedSkills: modeSkills,
     const target = id;
     const cur = convs.list.find(x => x.id === target)!.chat;
     // En utførekjøring har ingen krav-skill: skillene er kode-repoets
-    const before = cur.target ? cur : chooseSkill(cur, skill);
+    const before = cur.target ? cur : chooseSkill(cur, withSkill ?? skill);
     const { chat: after, invoke } = send(before, text, sentPath, mentions, skillHashes(), preset);
     set(updateConversation(convs, target, () => after, Date.now()));
     try {
@@ -430,11 +389,31 @@ export function ClaudePanel({ status, width, onWidth, allowedSkills: modeSkills,
     set(createExecuteConversation(convs, id, Date.now(), target, title));
     await sendRef.current(text, [], undefined, id);
   };
+  // «Verifiser» i feature-visningen: ny samtale med fs-verify (en tom samtale gjenbrukes)
+  const withSkillText = async (text: string, s: string) => {
+    const next = createConversation(convs, newId(), Date.now(), s);
+    set(next);
+    await sendRef.current(text, [], undefined, next.current ?? undefined, s);
+  };
+  // «Utfør med team» og «Verifiser … i terminal med agent team»: interaktiv claude i en pseudo-terminal
+  const terminalText = async (text: string, req: Omit<PtyStartRequest, 'prompt'>, title: string) => {
+    setError(null);
+    setShowList(false);
+    setStarting(title);
+    try {
+      const { id } = await transport.call('ptyStart', { ...req, prompt: text, cols: 100, rows: 32 });
+      set(createTerminalConversation(convs, newId(), Date.now(), { id, mode: req.mode, repo: req.target?.repo }, title));
+    } catch (e) {
+      setError((e as Error).message);
+    } finally {
+      setStarting(null);
+    }
+  };
   const insertRef = useRef(insertText);
   insertRef.current = insertText;
   useEffect(() => {
     if (!status.available) return;
-    registerClaude({ send: t => sendRef.current(t), execute: (t, target, title) => executeText(t, target, title), insert: t => insertRef.current(t) });
+    registerClaude({ send: t => sendRef.current(t), execute: (t, target, title) => executeText(t, target, title), withSkill: (t, s) => withSkillText(t, s), terminal: (t, req, title) => terminalText(t, req, title), insert: t => insertRef.current(t) });
     return () => {
       registerClaude(null);
       setClaudeBusy(false);
@@ -467,7 +446,15 @@ export function ClaudePanel({ status, width, onWidth, allowedSkills: modeSkills,
 
   return (
     <aside class="claude">
-      <ResizeHandle width={width} onWidth={onWidth} />
+      <ResizeHandle
+        width={width}
+        onWidth={onWidth}
+        edge="left"
+        min={MIN_WIDTH}
+        max={maxWidth}
+        fallback={CLAUDE_WIDTH}
+        label="Endre bredden på Claude-panelet"
+      />
       <div class="claude-head">
         <span class="claude-mark" />
         <b>Claude</b>
@@ -489,12 +476,17 @@ export function ClaudePanel({ status, width, onWidth, allowedSkills: modeSkills,
           <button class="smallbtn" onClick={onClose} aria-label="Lukk Claude-panelet">Lukk</button>
         </div>
       </div>
-      {conv && !showList && !conv.chat.items.length && from && (
+      {conv && !showList && !starting && !conv.chat.items.length && from && (
         <div class="claude-info">
           <div class="claude-title muted">{conv.title}</div>
         </div>
       )}
-      {conv && !showList && conv.chat.items.length > 0 && (
+      {conv && !showList && !starting && c.terminal && (
+        <div class="claude-info">
+          <div class="claude-title" title={conv.title}>{conv.title}</div>
+        </div>
+      )}
+      {conv && !showList && !starting && conv.chat.items.length > 0 && (
         <div class="claude-info">
           <div class="claude-title" title={conv.title}>{conv.title}</div>
           {c.target && (
@@ -574,6 +566,21 @@ export function ClaudePanel({ status, width, onWidth, allowedSkills: modeSkills,
             </div>
           ))}
         </div>
+      ) : starting ? (
+        <>
+          <div class="claude-info">
+            <div class="claude-title" title={starting}>{starting}</div>
+          </div>
+          <div class="claude-empty cstarting" role="status">
+            <span class="spinner" aria-hidden="true" />
+            Starter Claude Code i en terminal …
+          </div>
+        </>
+      ) : c.terminal ? (
+        <>
+          {error && <div class="edwarn err" role="alert">{error}</div>}
+          <TerminalView key={c.terminal.id} session={c.terminal} onExit={code => conv && set(updateConversation(convs, conv.id, ch => terminalExited(ch, code), Date.now()))} />
+        </>
       ) : (
         <>
           <div class="claude-list" ref={list}>
@@ -617,7 +624,7 @@ export function ClaudePanel({ status, width, onWidth, allowedSkills: modeSkills,
                 <div key={n} class="cmsg assistant">
                   <ChatMarkdown text={i.text} has={has} onOpen={onOpen} onPr={onPr} change={change} onSummary={continueIn} skill={c.skill} edited={editedFiles(c)} />
                 </div>
-              ) : i.kind === 'tool' ? (
+              ) : i.kind === 'tool' && i.name === 'AskUserQuestion' ? null : i.kind === 'tool' ? (
                 <div key={n} class={'ctool ' + i.state}>
                   <span class="cdot" />
                   <span>{toolLabel(i.name)}</span>
@@ -629,6 +636,8 @@ export function ClaudePanel({ status, width, onWidth, allowedSkills: modeSkills,
                 </div>
               ) : i.kind === 'permission' ? (
                 <PermissionCard key={i.id} convId={conv!.id} item={i} />
+              ) : i.kind === 'question' ? (
+                <QuestionCard key={i.id} item={i} />
               ) : (
                 <div key={n} class={'cdone' + (i.ok ? '' : ' err')}>{i.text}</div>
               ),

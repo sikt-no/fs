@@ -217,7 +217,7 @@ test('editedFiles: filene Claude har endret, relative til repoet, også under ta
   assert.deepEqual(editedFiles(c), ['tasks/brukere/spec/verify-2026-09-29.md', 'krav/b.feature']);
 });
 
-import { allowAlways, needsAuth, pendingPermissions, toolLabel } from './claudeChat.ts';
+import { allowAlways, needsAuth, pendingPermissions, pendingQuestions, toolLabel } from './claudeChat.ts';
 
 test('spørsmål om lov: kortet legges til én gang, og svaret oppdaterer det', () => {
   let c = started(EMPTY_CHAT, 'r');
@@ -236,6 +236,25 @@ test('spørsmål om lov: kortet legges til én gang, og svaret oppdaterer det', 
   // Et spørsmål som fortsatt venter når kjøringen er ferdig, er avvist
   const done = apply(apply(started(EMPTY_CHAT, 'r'), 'r', perm), 'r', { kind: 'done', ok: true, sessionId: 's', durationMs: null, turns: null, error: null });
   assert.equal((done.items.find(i => i.kind === 'permission') as { state: string }).state, 'ended');
+});
+
+test('spørsmål fra AskUserQuestion: kortet legges til én gang, og svaret eller «Hopp over» oppdaterer det', () => {
+  const q = { kind: 'question' as const, id: 'r:2', questions: [{ question: 'Skjermbilder?', header: 'Bilder', multiSelect: false, options: [{ label: 'Ja', description: '' }, { label: 'Nei', description: '' }] }], toolUseId: 't' };
+  let c = apply(apply(started(EMPTY_CHAT, 'r'), 'r', q), 'r', q); // igjen etter omlasting (claudePending)
+  assert.equal(c.items.filter(i => i.kind === 'question').length, 1);
+  assert.deepEqual(pendingQuestions(c).map(p => p.id), ['r:2']);
+  c = apply(c, 'r', { kind: 'questionDone', id: 'r:2', answers: { 'Skjermbilder?': 'Ja' }, reason: 'user' });
+  assert.deepEqual(pendingQuestions(c), []);
+  assert.deepEqual(c.items.at(-1), { kind: 'question', id: 'r:2', questions: q.questions, state: 'answered', answers: { 'Skjermbilder?': 'Ja' } });
+  for (const [reason, state] of [['user', 'skipped'], ['timeout', 'timeout'], ['closed', 'closed'], ['ended', 'ended']] as const) {
+    const d = apply(apply(started(EMPTY_CHAT, 'r'), 'r', q), 'r', { kind: 'questionDone', id: 'r:2', answers: null, reason });
+    assert.equal((d.items.at(-1) as { state: string }).state, state);
+  }
+  const done = apply(apply(started(EMPTY_CHAT, 'r'), 'r', q), 'r', { kind: 'done', ok: true, sessionId: 's', durationMs: null, turns: null, error: null });
+  assert.equal((done.items.find(i => i.kind === 'question') as { state: string }).state, 'ended');
+  const cs = restoreConversations({ list: [{ id: 'a', title: 't', createdAt: 1, updatedAt: 1, chat: { items: [{ kind: 'question', id: 'x:1', questions: [], state: 'pending', answers: null }], runId: 'x' } }], current: 'a' }, []);
+  assert.equal((cs.list[0].chat.items[0] as { state: string }).state, 'ended', 'et spørsmål som ventet da kjøringen sluttet under omlastingen');
+  assert.equal(toolLabel('AskUserQuestion'), 'Spør deg');
 });
 
 test('tillat alltid lagres på samtalen, og MCP-servere som må logges inn', () => {
@@ -270,4 +289,19 @@ test('editedFiles tar med filene under tasks/ og skissene fra save_sketch', () =
   for (const id of ['a', 'b', 'c']) c = apply(c, 'r', { kind: 'toolResult', id, isError: false });
   assert.deepEqual(editedFiles(c), ['tasks/opptak/x/spec/spec-x.md', 'tasks/opptak/x/spec/krav-input/sketches/a.png', 'krav/a.feature']);
   assert.deepEqual(c.touched, ['krav/a.feature']);
+});
+
+import { createTerminalConversation, terminalExited } from './claudeChat.ts';
+
+test('terminal-samtale: lagres med økten, avsluttes én gang, og leses tilbake', () => {
+  const cs = createTerminalConversation(NO_CONVERSATIONS, 'k1', 5, { id: 't1', mode: 'execute', repo: 'fs-admin' }, 'Utfør med team: x i fs-admin');
+  assert.equal(cs.current, 'k1');
+  assert.equal(cs.list[0].title, 'Utfør med team: x i fs-admin');
+  assert.deepEqual(cs.list[0].chat.terminal, { id: 't1', mode: 'execute', repo: 'fs-admin' });
+  const done = terminalExited(cs.list[0].chat, 0);
+  assert.deepEqual(done.terminal, { id: 't1', mode: 'execute', repo: 'fs-admin', exited: true, code: 0 });
+  assert.equal(terminalExited(done, 1), done, 'bare første exit gjelder');
+  assert.equal(terminalExited(EMPTY_CHAT, 0), EMPTY_CHAT);
+  const back = restoreConversations(JSON.parse(JSON.stringify(cs)), []);
+  assert.deepEqual(back.list[0].chat.terminal, { id: 't1', mode: 'execute', repo: 'fs-admin' });
 });

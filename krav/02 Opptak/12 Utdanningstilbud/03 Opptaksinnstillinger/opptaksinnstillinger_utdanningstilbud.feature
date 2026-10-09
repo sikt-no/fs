@@ -9,7 +9,7 @@ Egenskap: Opptaksinnstillinger per utdanningstilbud
   # Opptaksforvalter ved deltakende organisasjon kan sette innstillinger på egne utdanningstilbud.
   # Opptaksforvalter ved forvaltende organisasjon kan sette innstillinger på alle utdanningstilbud.
   # Innstillinger for flere utdanningstilbud av gangen står i sette_standardinnstillinger.feature (#599).
-  # Antall studieplasser og antall tilbud står i sette_studieplasser_og_antall_tilbud.feature (#596).
+  # Antall studieplasser står i sette_studieplasser_og_antall_tilbud.feature (#596).
   Bakgrunn:
     Gitt at opptaksforvalter er innlogget
     Og at opptaket "Samordna opptak 2027" har utdanningstilbud
@@ -37,26 +37,19 @@ Egenskap: Opptaksinnstillinger per utdanningstilbud
       Når opptaksforvalter skal sette regelverk for et utdanningstilbud
       Så kan opptaksforvalter velge blant eksisterende regelverk i regelverkssamlingen
 
-  # Kilde for kvoteregelen: GitHub #597. Absolutte kvoter finnes i dag. Relativ fordeling gjenstår.
-  Regel: Opptaksforvalter kan sette utdanningskvoter med relativ fordeling
+  # Kilde for kvoteregelen: GitHub #597.
+  # AVKLART 2026-10-08: Prosentfordeling mellom utdanningskvoter utgår. Antall tilbud som skal gis settes
+  # som absolutte tall per utdanningskvote for hvert utdanningstilbud i hver runde, se
+  # 14 Plasstildeling/02 Tildelingsinnstillinger/antall_tilbud_som_skal_gis.feature.
+  @openquestion
+  # ÅPNE SPØRSMÅL:
+  # - Kan opptaksforvalter legge til eller fjerne utdanningskvoter som ikke følger av regelverkssamlingen?
+  Regel: Utdanningskvotene følger av regelverkssamlingen
 
     Scenario: Utdanningskvotene følger av regelverkssamlingen
       Gitt at regelverkssamlingen "UHG 2027" har kvotetypene "Ordinær" og "Førstegangsvitnemål"
       Når opptaksforvalter velger utdanningstilbudet "Sykepleie, høst 2027"
       Så har utdanningstilbudet utdanningskvotene "Ordinær" og "Førstegangsvitnemål"
-
-    Scenario: Sette prosentfordeling mellom utdanningskvoter
-      Når opptaksforvalter velger utdanningstilbudet "Sykepleie, høst 2027"
-      Og opptaksforvalter setter kvotefordelingen til 50 % ordinær og 50 % førstegangsvitnemål
-      Så fordeler plasstildelingen tilbudene mellom kvotene etter denne prosentfordelingen
-
-    @openquestion
-    # ÅPNE SPØRSMÅL:
-    # - Må summen av prosentfordelingen være 100 %? Hva skjer hvis den ikke er det?
-    # - Kan opptaksforvalter legge til eller fjerne utdanningskvoter som ikke følger av regelverkssamlingen?
-    Scenario: Alle utdanningskvoter settes som prosent
-      Når opptaksforvalter setter kvotefordelingen for utdanningstilbudet "Sykepleie, høst 2027"
-      Så angis hver utdanningskvote som en prosentandel av antall tilbud som skal gis
 
   # Hva plasstildelingen gjør med plassflyten, og vernet mot sirkulær plassflyt (#598), står i
   # 14 Plasstildeling/02 Tildelingsinnstillinger/plassflyt.feature.
@@ -102,27 +95,26 @@ Egenskap: Opptaksinnstillinger per utdanningstilbud
       Når opptaksforvalter setter tidlig dokumentasjonsfrist til "2027-03-01 23:59" for utdanningstilbudet "Politihøyskolen, høst 2027"
       Så må søkere til dette utdanningstilbudet laste opp dokumentasjon innen denne fristen
 
-  Regel: Opptaksforvalter kan velge hvilke plasstildelingsrunder utdanningstilbudet deltar i
+  # AVKLART 2026-10-08: Det finnes ingen innstilling for hvilke runder utdanningstilbudet deltar i.
+  # Et utdanningstilbud er ute av en runde når det ikke er satt antall tilbud som skal gis for runden,
+  # se 14 Plasstildeling/02 Tildelingsinnstillinger/antall_tilbud_som_skal_gis.feature.
 
-    Scenario: Ekskludere utdanningstilbud fra etterfylling
-      Gitt at opptaket har runder for hovedtildeling, supplering og etterfylling
-      Når opptaksforvalter angir at utdanningstilbudet "Sykepleie, høst 2027" ikke skal delta i etterfylling
-      Så deltar utdanningstilbudet ikke i etterfyllingsrunder
+  # Hvordan søknadsalternativene fordeles etter regelen, står i tildele_saksbehandlende_organisasjon.feature (@OPT-BEH-BEH-011).
+  Regel: Opptaksforvalter kan velge saksbehandlertildelingsregel per utdanningstilbud
 
-    Scenario: Ekskludere utdanningstilbud fra ledige studieplasser
-      Gitt at opptaket har en runde for ledige studieplasser
-      Når opptaksforvalter angir at utdanningstilbudet "Sykepleie, høst 2027" ikke skal delta i ledige studieplasser
-      Så deltar utdanningstilbudet ikke i runder for ledige studieplasser
+    Scenario: Velge saksbehandlertildelingsregel for et utdanningstilbud
+      Når opptaksforvalter velger saksbehandlertildelingsregelen "SPE" for utdanningstilbudet "Sykepleie, høst 2027"
+      Så fordeles søknadsalternativene til "Sykepleie, høst 2027" etter "SPE"
 
-  @openquestion
-  # ÅPNE SPØRSMÅL:
-  # - Hva er saksbehandlertildelingsregel i kontekst av utdanningstilbud?
-  # - Hvordan velger opptaksforvalter blant reglene som er satt på opptaket?
-  Regel: Opptaksforvalter kan sette saksbehandlertildelingsregel per utdanningstilbud
+    Scenario: Utdanningstilbud uten egen saksbehandlertildelingsregel følger opptakets standardregel
+      Når opptaksforvalter lagrer utdanningstilbudet "Sykepleie, høst 2027" uten å velge saksbehandlertildelingsregel
+      Så fordeles søknadsalternativene til "Sykepleie, høst 2027" etter opptakets standard tildelingsregel
 
-    Scenario: Sette saksbehandlertildelingsregel
-      Når opptaksforvalter setter saksbehandlertildelingsregel for utdanningstilbudet "Sykepleie, høst 2027"
-      Så fordeles søknadssaker for dette utdanningstilbudet til saksbehandlerorganisasjoner etter den angitte regelen
+    Scenario: Kun aktive saksbehandlertildelingsregler i opptaket kan velges
+      Gitt at saksbehandlertildelingsregelen "TRA" er inaktiv
+      Når opptaksforvalter velger saksbehandlertildelingsregel for utdanningstilbudet "Sykepleie, høst 2027"
+      Så kan opptaksforvalter kun velge blant de aktive saksbehandlertildelingsreglene i opptaket
+      Og ser ikke opptaksforvalter "TRA" blant valgene
 
   @openquestion
   # ÅPNE SPØRSMÅL:

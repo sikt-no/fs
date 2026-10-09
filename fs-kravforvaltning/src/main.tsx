@@ -1,6 +1,6 @@
 import { render } from 'preact';
 import { useEffect, useMemo, useRef, useState } from 'preact/hooks';
-import type { ClaudeStatus, MainStatus } from '../shared/api';
+import type { ClaudeStatus, MainStatus, PtyStartRequest } from '../shared/api';
 import type { Entry, FeatureModel, FocusEvent, GitInfo, Scen, Snapshot, Step, UpdateEvent } from '../shared/model';
 import { RULE } from '../shared/rules';
 import { buildTasks, type TasksSnapshot } from '../shared/tasks';
@@ -16,16 +16,17 @@ import { bannerShown } from './mainStatus';
 import { MarkdownView, type MdMode } from './MarkdownView';
 import { Oppgaver, taskKey, type OView } from './Oppgaver';
 import { NEW_KEY, Spesifikasjoner } from './Spesifikasjoner';
-import { buildCards, colOf, handoffPrompt, type Card } from './specboard';
+import { buildCards, colOf, handoffPrompt, verifyPrompt, type Card } from './specboard';
+import { verifyKravPrompt, type VerifyScope } from './verifyPrompt';
 import { whenClaudeReady } from './claudeBridge';
-import { useCodeDirs } from './CodeDirs';
+import { codeDirPaths, useCodeDirs } from './CodeDirs';
 import { isSpecPath } from '../shared/paths';
 import { Outline } from './Outline';
 import { PrDialog, proposeDraft } from './PrDialog';
 import type { PrProposal } from './prProposal';
 import { CLAUDE_WIDTH, ClaudePanel } from './ClaudePanel';
 import { refreshSkills } from './ClaudeSkills';
-import { buildTree, Sidebar, type TreeMode } from './Sidebar';
+import { buildTree, Sidebar, TREE_WIDTH, type TreeMode } from './Sidebar';
 import { StatusBar } from './StatusBar';
 import { TopBar, type Mode, type Theme } from './TopBar';
 import { transport } from './transport';
@@ -210,6 +211,8 @@ function App() {
   useEffect(() => save('claudeOpen', claudeOpen), [claudeOpen]);
   const [claudeWidth, setClaudeWidth] = useState(() => load('claudeWidth', CLAUDE_WIDTH));
   useEffect(() => save('claudeWidth', claudeWidth), [claudeWidth]);
+  const [treeWidth, setTreeWidth] = useState(() => load('treeWidth', TREE_WIDTH));
+  useEffect(() => save('treeWidth', treeWidth), [treeWidth]);
   useEffect(() => {
     if (EDITABLE) transport.call('claudeStatus').then(setClaude, () => setClaude(null));
   }, []);
@@ -635,6 +638,27 @@ function App() {
     if (!target) return alert('Claude-panelet svarte ikke. Åpne det og prøv igjen.');
     await target.execute(handoffPrompt(c, repo), { repo, dir, spec: c.path }, `Utfør: ${c.doc.title || c.file} i ${repo}`);
   };
+  // «Verifiser» på egenskapen eller en regel: ny samtale med fs-verify i Claude-panelet
+  const verify = async (e: Entry, scope: VerifyScope, screenshots: boolean) => {
+    const text = verifyKravPrompt(e, scope, screenshots);
+    if (!text) return;
+    setClaudeOpen(true);
+    const target = await whenClaudeReady();
+    if (!target) return alert('Claude-panelet svarte ikke. Åpne det og prøv igjen.');
+    await target.withSkill(text, 'fs-verify');
+  };
+  // Terminalen med agent teams (interaktiv claude): «Utfør med team i <repo>», og «Verifiser … i terminal med agent team»
+  const terminal = async (text: string, req: Omit<PtyStartRequest, 'prompt'>, title: string) => {
+    setClaudeOpen(true);
+    const target = await whenClaudeReady();
+    if (!target) return alert('Claude-panelet svarte ikke. Åpne det og prøv igjen.');
+    await target.terminal(text, req, title);
+  };
+  const executeTeam = async (c: Card, repo: string) => {
+    const dir = repoDir(repo);
+    if (dir) await terminal(handoffPrompt(c, repo), { mode: 'execute', target: { repo, dir, spec: c.path } }, `Utfør med team: ${c.doc.title || c.file} i ${repo}`);
+  };
+  const verifyTeam = async (text: string, title: string) => terminal(`/fs-verify-agent-teams ${text}`, { mode: 'verify', dirs: await codeDirPaths() }, title);
   const executeWhy = !claude?.available
     ? 'Fant ikke Claude Code på maskinen: kopier prompten til en økt i repoet'
     : 'Velg den lokale klonen av repoet under «Kodemapper» i Claude-panelet, eller kopier prompten';
@@ -733,7 +757,13 @@ function App() {
             onSel={selectSpec}
             onOpenKrav={path => select(path)}
             me={me}
-            actions={{ execute: claude?.available ? execute : null, executeWhy, canExecute: repo => !!claude?.available && !!repoDir(repo) }}
+            actions={{
+              execute: claude?.available ? execute : null,
+              executeWhy,
+              canExecute: repo => !!claude?.available && !!repoDir(repo),
+              executeTeam: claude?.available ? (c, repo) => void executeTeam(c, repo) : null,
+              verifyTeam: claude?.available ? (c, shots) => void verifyTeam(verifyPrompt(c, shots), `Verifiser med team: ${c.doc.title || c.file}`) : null,
+            }}
           />
         ) : mode === 'oppgaver' ? (
           <Oppgaver
@@ -749,7 +779,11 @@ function App() {
         ) : mode === 'avvik' ? (
           <Avvik entries={entries} filter={avvikFilter} onFilter={setAvvikFilter} onOpen={select} onReadRule={readRule} panelHidden={treeHidden} />
         ) : (
-          <div class={'grid' + (treeHidden ? ' notree' : '') + (tocHidden ? ' notoc' : '')}>
+          <div
+            class={'grid' + (treeHidden ? ' notree' : '') + (tocHidden ? ' notoc' : '')}
+            // Et smalere vindu enn sist: treet tar aldri mer enn halve bredden
+            style={{ '--tree-w': `min(${treeWidth}px, 50vw)` }}
+          >
             {!treeHidden && (
               <Sidebar
                 entries={entries}
@@ -766,6 +800,8 @@ function App() {
                 onPr={EDITABLE && git ? () => setPrFor(null) : undefined}
                 onPull={transport.kind === 'electron' ? pull : undefined}
                 pulling={pulling}
+                width={treeWidth}
+                onWidth={setTreeWidth}
               />
             )}
             <main
@@ -818,6 +854,15 @@ function App() {
                   onFindClose={k => setFind(f => ({ ...f, closed: { ...f.closed, [k]: true } }))}
                   onEdit={EDITABLE ? () => setEditing(true) : undefined}
                   onDelete={EDITABLE ? deleteCurrent : undefined}
+                  onVerify={claude?.available ? (scope, shots) => void verify(entry, scope, shots) : undefined}
+                  onVerifyTeam={
+                    claude?.available
+                      ? shots => {
+                          const text = verifyKravPrompt(entry, { kind: 'feature' }, shots);
+                          if (text) void verifyTeam(text, `Verifiser med team: ${entry.model?.title || current}`);
+                        }
+                      : undefined
+                  }
                 />
               )}
             </main>

@@ -19,13 +19,17 @@
     "app:dev:spesifikasjoner": "electron-vite dev --mode spesifikasjoner",
     "app:build": "electron-vite build",
     "app:dist": "electron-vite build && electron-builder",
+    "postinstall": "node scripts/node-pty-helper.mjs && node scripts/electron-install.mjs",
     "changeset:version": "changeset version && npm install --package-lock-only"
   },
   "dependencies": {
     "@cucumber/gherkin": "^42.0.1",
     "@cucumber/messages": "^34.2.1",
+    "@xterm/addon-fit": "^0.11.0",
+    "@xterm/xterm": "^6.0.0",
     "fuse.js": "^7.5.0",
     "isomorphic-git": "^1.42.3",
+    "node-pty": "^1.1.0",
     "preact": "^10.29.8"
   },
   "devDependencies": {

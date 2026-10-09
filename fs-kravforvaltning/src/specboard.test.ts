@@ -3,7 +3,7 @@ import { test } from 'node:test';
 import type { Snapshot } from '../shared/model.ts';
 import type { RawTask, TasksSnapshot } from '../shared/tasks.ts';
 import { buildEntry } from '../server/parse.ts';
-import { buildCards, canDrop, colOf, columns, flags, gating, handoffPrompt, isVerified, missing, moveTo, parseVerify, phaseOf, pickable, prShort, specChanged } from './specboard.ts';
+import { buildCards, canDrop, colOf, columns, flags, gating, handoffPrompt, isVerified, missing, moveTo, parseVerify, phaseOf, pickable, prShort, specChanged, verifyPrompt } from './specboard.ts';
 
 const feature = (tag: string, id: string, body = '') => `# language: no
 ${id} @must @${tag}
@@ -160,6 +160,15 @@ test('flagg og «spec endret»', () => {
   assert.deepEqual(flags(c, true).map(f => f.t), ['blokkert', '1 åpne spørsmål', 'ikke merget']);
   assert.equal(specChanged({ ...c, mtime: new Date('2026-09-10T12:00:00').getTime() }), true);
   assert.equal(specChanged({ ...c, mtime: new Date('2026-09-01T12:00:00').getTime() }), false);
+});
+
+test('verifyPrompt: linja om skjermbilder når valget er gjort, ellers spør fs-verify', () => {
+  const c = one({ 'spec/spec-roller.md': spec() });
+  const uten = verifyPrompt(c);
+  assert.match(uten, /^Verifiser spesifikasjonen tasks\/brukeradministrasjon-og-tilgangsstyring\/roller\/spec\/spec-roller\.md/);
+  assert.ok(!/skjermbilder/i.test(uten));
+  assert.equal(verifyPrompt(c, true).split('\n').at(-1), 'Ta skjermbilder av scenarioene som har en skjerm.');
+  assert.equal(verifyPrompt(c, false).split('\n').at(-1), 'Ingen skjermbilder.');
 });
 
 test('handoffPrompt har spesifikasjonen, kravene, skissene og overleveringen fra forrige steg', () => {

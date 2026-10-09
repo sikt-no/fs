@@ -22,9 +22,19 @@ Egenskap: Håndtere svar fra søker
       Når søkeren takker ja til tilbudet innen "2027-07-20 23:59"
       Så beholder søkeren tilbudet ut opptaket
 
+    # AVKLART 2026-10-08 (A1 i «Plasstildelingsløpet i Opptak»): et nei-svar gjør plassen ledig
+    # først når svarfristen er ute. Fram til fristen kan søkeren ombestemme seg.
     Scenario: Takke nei til tilbud
-      Når søkeren takker nei til tilbudet
+      Når søkeren takker nei til tilbudet innen "2027-07-20 23:59"
+      Og svarfristen "2027-07-20 23:59" er ute
       Så blir plassen ledig i neste plasstildeling i opptaket
+
+    Scenario: Nei-svar før svarfristen er ute
+      Gitt at søkeren har takket nei til tilbudet
+      Og at svarfristen "2027-07-20 23:59" ikke er ute
+      Når det gjennomføres en plasstildeling i opptaket
+      Så beholder søkeren tilbudet på "Sykepleie, høst 2027"
+      Og plassen blir ikke gitt til en annen søker
 
     Scenario: Søker svarer ikke innen svarfristen
       Gitt at søkeren ikke har svart på tilbudet
@@ -57,14 +67,19 @@ Egenskap: Håndtere svar fra søker
       Så blir tilbudet på "Vernepleie, høst 2027" ledig i neste plasstildeling
 
 # ÅPNE SPØRSMÅL:
-# - Skal et nei-svar frigjøre plassen før svarfristen er ute? I dag står plassen reservert til fristen.
 # - Skal en søker som takker ja og senere trekker seg frigjøre plassen til ventelisten? I dag frigjøres den aldri.
 #   Hva hvis søkeren allerede er opprettet som student?
 # - Når en søker har både et tilbud og et kansellert resultat på samme utdanningstilbud, hva skal søkeren se?
 # - Skal opptaksforvalter kunne overstyre et enkelt resultat manuelt, for eksempel gi ett tilbud uten ny plasstildeling?
 #   I dag krever alt en ny plasstildeling. Tilbudsgaranti er foreløpig eneste utvei.
 # - Må søkeren svare på ventelisteplass for å beholde den, eller står søkeren på ventelisten automatisk?
-# - Svar knyttes i dag til runde på løpenummer uten rundetype (mistenkt feil i oppgave.md).
+# - Svar knyttes i dag til runde på løpenummer uten rundetype (mistenkt feil, TAKE-284).
 #   Med én runde per rundetype må svaret knyttes til rundetypen.
-# - Fristsjekken bruker applikasjonsklokke i stedet for databaseklokke (mistenkt feil i oppgave.md).
+# - Fristsjekken bruker applikasjonsklokke i stedet for databaseklokke (mistenkt feil, TAKE-281).
+# - Saksbehandler kan i koden svare på vegne av søkeren. Skal det være et eget scenario, og hvem kan gjøre det?
+# - I koden må alle tilbud i runden besvares samtidig, og bare ett kan godtas. Gjelder det også
+#   etterfylling, der søkeren kan ha flere tilbud?
+# - Svarfristen er felles for runden. Trengs individuell svarfrist per søker eller per tilbud?
+# - At søkeren ikke svarte innen fristen, blir aldri lagret. Koden regner det ut hver gang svaret leses,
+#   og det finnes ingen «lukk runden». Skal svaret lagres når fristen er ute?
 # - Hører selve svarflyten i Min kompetanse hjemme her, eller under 13 Søknad og saksbehandling?
