@@ -9,8 +9,7 @@
 - Retagget `@in-progress` → `@implemented`: 0 (egenskapen er `@draft`, og ikke alt er funnet)
 - Fortsatt ikke levert: aldersgrensen på grunnlaget, at kvotespørsmål ikke stilles når aldersgrensen ikke er møtt, og visning av opptaksalderen i fs-admin
 - Slettet (`@deprecated`): 0
-- Utenfor gating: «Opptak med aldersregler mangler dato for aldersberegning» (`@openquestion`)
-- STEK-557 (standarddato for aldersberegning) er merget til origin/main (`0603d51ac5`)
+- Regelen «Alderen beregnes fra opptakets dato for aldersberegning» er flyttet til `11 Opprette og vedlikeholde opptak/03 Innstillinger/innstillinger.feature` (`@OPT-OVO-INN-001`), og verifisert der: `verify-innstillinger-2026-10-09.md`
 
 ## Scenarioer
 
@@ -22,9 +21,6 @@
 | `@OPT-BEH-BEH-012` | Grunnlag som ikke er koblet til kvotetypen | funnet | `fs-plattform/opptak/opptak-service/src/main/java/no/sikt/fs/opptak/saksbehandling/SoknadKvoteOppretterService.java:150` |
 | `@OPT-BEH-BEH-012` | Aldersgrense på grunnlaget | usikker | Operatorene stemmer (`fs-plattform/opptak/opptak-service/src/main/java/no/sikt/fs/opptak/regelverk/kvoteplassering/Aldersgrense.java:32`), men plasseringen leser `kvotetype_grunnlag.aldersgrense_default` (`KvoteplasseringGrunnlagService.java:285`), ikke `grunnlag.aldersgrense` |
 | `@OPT-BEH-BEH-012` | Kvotespørsmål stilles ikke når aldersgrensen ikke er møtt | ikke funnet | Bare plasseringen blokkeres (`fs-plattform/opptak/opptak-service/src/main/java/no/sikt/fs/opptak/saksbehandling/KvotesporsmalSvarService.java:377`). `sak_kvote` aktiveres uten alderssjekk, og fs-admin viser spørsmålet |
-| `@OPT-BEH-BEH-012` | Alder beregnes fra datoen opptaket har satt | funnet | `fs-plattform/opptak/opptak-service/src/main/java/no/sikt/fs/opptak/saksbehandling/AldersberegningsdatoUtleder.java:44` |
-| `@OPT-BEH-BEH-012` | Standarddato for aldersberegning | funnet | `fs-plattform/opptak/opptak-service/src/main/java/no/sikt/fs/opptak/saksbehandling/AldersberegningsdatoUtleder.java:51` · `AldersberegningsdatoDefault.java:19` |
-| `@OPT-BEH-BEH-012` | Opptak uten aldersregler trenger ikke dato for aldersberegning | funnet | `fs-plattform/opptak/opptak-service/src/main/java/no/sikt/fs/opptak/saksbehandling/Aldersberegningsdato.java:30` · `fs-plattform/opptak/opptak-service/src/main/java/no/sikt/fs/opptak/opptak/OpptakKreverAlderUtleder.java:52` |
 | `@OPT-BEH-BEH-012` | Alle kvotespørsmål besvart ja | funnet | `fs-plattform/opptak/opptak-service/src/main/java/no/sikt/fs/opptak/saksbehandling/KvotesporsmalSvarService.java:422` |
 | `@OPT-BEH-BEH-012` | Ett kvotespørsmål besvart nei | funnet | `fs-plattform/opptak/opptak-service/src/main/java/no/sikt/fs/opptak/saksbehandling/KvotesporsmalSvarService.java:428` |
 | `@OPT-BEH-BEH-012` | Kvotespørsmålene vises i søknadsbehandlingen | funnet | `fs-admin/src/domains/soknadsbehandling/features/KvoteplasseringCard/KvoteplasseringCard.tsx:113` |

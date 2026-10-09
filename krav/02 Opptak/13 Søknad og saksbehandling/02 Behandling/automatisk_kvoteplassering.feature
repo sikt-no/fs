@@ -62,40 +62,6 @@ Egenskap: Automatisk kvoteplassering
       Så ser ikke saksbehandleren kvotespørsmålet "FRA-HARDANGER"
       Og søkeren er ikke plassert i kvotetypen "JENTER-HARDANGER"
 
-  @openquestion
-  Regel: Alderen beregnes fra opptakets dato for aldersberegning
-    # ÅPNE SPØRSMÅL:
-    # - Kan dato for aldersberegning utledes fra en annen dato på opptaket, eller må opptaksforvalteren sette den selv? Koden utleder i dag 31.12 i året for publisering av resultat, men det er ikke avklart. Avklares med domenerådgiver.
-
-    Scenario: Alder beregnes fra datoen opptaket har satt
-      Gitt at opptaket har dato for aldersberegning "2027-04-15"
-      Og at søkeren er født "2005-06-01"
-      Når søknaden behandles
-      Så er søkerens opptaksalder 21 år
-
-    Scenario: Standarddato for aldersberegning
-      Gitt at opptaket ikke har dato for aldersberegning
-      Og at opptaket har dato for publisering av resultat "2027-07-15"
-      Og at søkeren er født "2005-09-01"
-      Når søknaden behandles
-      Så er søkerens opptaksalder 22 år
-
-    @openquestion
-    Scenario: Opptak med aldersregler mangler dato for aldersberegning
-      # ÅPNE SPØRSMÅL:
-      # - Hvilken dato antas når publisering av resultat også mangler? Eventuelt: hvordan løses dette på en god måte?
-      # - Datoen som ble brukt, vises ikke etter at søknaden er behandlet. Skal den vises, og i så fall hvor?
-      Gitt at regelverket i opptaket har en aldersgrense eller gir alderspoeng
-      Og at opptaket verken har dato for aldersberegning eller dato for publisering av resultat
-      Når søknaden behandles
-      Så behandles ikke søknaden før opptaket har en av datoene
-
-    Scenario: Opptak uten aldersregler trenger ikke dato for aldersberegning
-      Gitt at regelverket i opptaket verken har aldersgrense eller gir alderspoeng
-      Og at opptaket verken har dato for aldersberegning eller dato for publisering av resultat
-      Når søknaden behandles
-      Så behandles søknaden uten dato for aldersberegning
-
   Regel: Søkeren plasseres i en kvote med kvotespørsmål når alle kvotespørsmålene er besvart ja
 
     Scenario: Alle kvotespørsmål besvart ja
