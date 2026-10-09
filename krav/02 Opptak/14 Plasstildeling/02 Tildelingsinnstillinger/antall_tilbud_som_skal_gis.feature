@@ -1,7 +1,7 @@
 # language: no
 # GitHub: #583
 @OPT-PLA-INN-001 @must @draft
-Egenskap: Antall tilbud som skal gis per utdanningskvote
+Egenskap: Antall tilbud som skal gis per utdanningskvote (sette opptaksparametere)
   Som opptaksforvalter
   ønsker jeg å bestemme hvor mange tilbud som skal gis i hver utdanningskvote i en runde
   slik at plasstildelingen fyller studieplassene uten å gi for mange eller for få tilbud.
@@ -12,8 +12,11 @@ Egenskap: Antall tilbud som skal gis per utdanningskvote
   # Opptaksforvalter ved lærestedet setter tallene for egne utdanningstilbud innenfor perioden
   # som er satt på runden (se 01 Runder/legge_til_runde.feature).
   # Opptaksforvalter ved forvaltende organisasjon kan endre tallene også utenfor perioden.
-  # Begrep (avklart 2026-10-08): «antall tilbud som skal gis». «Overbooking», «måltall»,
-  # «antall ønsket ja-svar» og «opptaksparametere» brukes ikke.
+  # Begrep (avklart 2026-10-08): «antall tilbud som skal gis». «Overbooking», «måltall» og
+  # «antall ønsket ja-svar» brukes ikke.
+  # Brukerne kaller i dag handlingen å «sette opptaksparametere». Det ordet skjuler at det bare er
+  # én ting som settes, nemlig antall tilbud som skal gis. Det står derfor bare i parentes i tittelen
+  # og i denne kommentaren, og brukes ikke i scenarioene.
 
   Bakgrunn:
     Gitt at opptaksforvalter ved lærestedet er innlogget
