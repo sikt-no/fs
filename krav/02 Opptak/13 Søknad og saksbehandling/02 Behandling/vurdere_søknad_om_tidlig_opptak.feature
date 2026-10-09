@@ -116,10 +116,9 @@ Egenskap: Vurdere søknad om tidlig opptak
       Når saksbehandler ser på søknaden
       Så ser saksbehandler hvilken dokumentasjon søkeren må levere for begrunnelsen
 
-    Scenario: Se dokumentasjon søkeren har levert
-      Gitt søkeren har lastet opp dokumentasjon for tidlig opptak
-      Når saksbehandler ser på søknaden
-      Så ser saksbehandler dokumentasjonen søkeren har levert
+    # Dokumentasjonen søkeren har lastet opp, ser saksbehandleren på samme måte som
+    # annen dokumentasjon på søknaden, se behandle_søknad.feature (avklart
+    # 09.10.2026, review av PR #654).
 
   Regel: Saksbehandler konkluderer om søkeren deltar i tidligopptaket
     # Vurderingen og konklusjonen er ett steg: konklusjonen sier både om
@@ -164,8 +163,8 @@ Egenskap: Vurdere søknad om tidlig opptak
         | Vernepleie, høst 2027 | NTNU         |
       Og saksbehandler ved OsloMet har konkludert med at søkeren deltar i tidligopptaket
       Når saksbehandler ved NTNU konkluderer med at søkeren ikke deltar i tidligopptaket
-      Så deltar søkeren i tidligopptaket ved OsloMet
-      Og søkeren deltar ikke i tidligopptaket ved NTNU
+      Så er "Sykepleie, høst 2027" med i tidligopptaket
+      Og "Vernepleie, høst 2027" er ikke med i tidligopptaket
 
   Regel: Konklusjonen kan endres også etter at tidligopptaket er gjennomført
 

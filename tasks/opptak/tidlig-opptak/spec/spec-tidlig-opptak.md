@@ -114,6 +114,7 @@ Kravene er `@in-progress`, og endres på stedet. Endringene står her, så den s
 - **2026-10-09, `@OPT-BEH-BEH-008`:** Har søkeren ikke søkt om tidlig opptak, er hele steget for tidlig opptak skjult i saksbehandlingen. «Kan ikke konkludere når søkeren ikke har søkt om tidlig opptak» er erstattet av «Søknad uten ønske om tidlig opptak viser ikke tidlig opptak».
 - **2026-10-09, `@OPT-BEH-BEH-008`:** Konklusjonen låses ikke når tidligopptaket er gjennomført. Saksbehandleren kan sette og endre den etterpå, uten at tilbudsgarantier som alt er gitt, eller svaret søkeren har fått, endres. En ny gjennomføring tar den med. «Låst etter at tidligopptaket er gjennomført» og «Kan ikke konkludere etter at tidligopptaket er gjennomført» er erstattet av «Endre konklusjonen etter at tidligopptaket er gjennomført». Stemmer med koden.
 - **2026-10-09, `@OPT-BEH-BEH-008`:** Kvalifiseringen er ikke en del av steget for tidlig opptak. Den vurderes i den ordinære søknadsbehandlingen og sjekkes når tidligopptaket gjennomføres (`@OPT-BEH-BEH-007`). Scenarioet «Konkludere før kvalifiseringen er vurdert» og regelen «Kvalifisering hentes fra den ordinære søknadsbehandlingen» er fjernet.
+- **2026-10-09, `@OPT-BEH-BEH-008`:** «Se dokumentasjon søkeren har levert» er fjernet. Det er en generell funksjon i saksbehandlingen (`behandle_søknad.feature`). I «Konklusjon per organisasjon» sier utfallet nå hvilke søknadsalternativer som er med i tidligopptaket, ikke at søkeren «deltar i tidligopptaket ved» en organisasjon.
 
 ## Åpne spørsmål
 
