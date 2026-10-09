@@ -62,9 +62,9 @@ Egenskap: Innstillinger for opptak
 
   Regel: Opptaksforvalter kan sette tak for antall tilbud per tildelingsrunde
 
-    Scenario: Sette tak for antall tilbud en søker kan få per runde
+    Scenario: Sette tak for antall tilbud en søker kan få per plasstildelingsrunde
       Når opptaksforvalter setter tak for antall tilbud per tildelingsrunde til 1
-      Så kan ikke plasstildelingen gi flere enn 1 tilbud i en enkelt runde til en søker
+      Så kan ikke plasstildelingen gi flere enn 1 tilbud i en enkelt plasstildelingsrunde til en søker
       Og søker får se denne informasjonen
 
   Regel: Opptaksforvalter kan åpne for tidlig opptak
@@ -122,7 +122,7 @@ Egenskap: Innstillinger for opptak
       Når opptaksforvalter angir at det kreves studierett for å søke
       Så kan kun studenter med studierett ved lærestedet søke
 
-  # Saksbehandlertildeling er flyttet til samordnet_opptak.feature — kun relevant for samordnede opptak
+  # Saksbehandlertildeling er flyttet til samordna_opptak.feature — kun relevant for samordnede opptak
   # Mulighet til å åpne for at utdanningstilbud skal kunne sette avvikende frister fra opptaket, gjelder foreløbig globalt
   # fordi det ikke har vært et problem at læresteder setter alternative frister uten avklaring med hk-dir før. Fristen settes på utdanningstilbudet.
 

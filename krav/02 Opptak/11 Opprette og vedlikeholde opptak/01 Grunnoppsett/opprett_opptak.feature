@@ -10,7 +10,7 @@ Egenskap: Opprette et opptak
 
   Regel: Opptaksforvalter kan opprette et opptak
 
-    Scenario: Opprette et samordnet opptak
+    Scenario: Opprette et samordna opptak
       Når opptaksforvalter oppretter et nytt opptak
       Og opptaksforvalter velger at opptaket skal være samordnet
       Og opptaksforvalter gir opptaket navnet "Samordna opptak 2027"

@@ -3,29 +3,29 @@
 @OPT-PLA-TIL-001 @must @draft
 Egenskap: Starte en plasstildeling
   Som opptaksforvalter
-  ønsker jeg å starte en plasstildeling i en runde
+  ønsker jeg å starte en plasstildeling i en plasstildelingsrunde
   slik at studieplassene fordeles ut fra rangeringen og innstillingene i opptaket.
 
   # Kilde: tasks/opptak/plasstildeling/design.md (beslutning 3, oppgave 4), oppgave.md (oppgave 4) og
   # Confluence «Fra saksbehandling til plasstildeling» (2026-09-04).
-  # Plasstildelingen utføres som en bestilling og kjører i bakgrunnen. Én runde kan ha mange
+  # Plasstildelingen utføres som en bestilling og kjører i bakgrunnen. Én plasstildelingsrunde kan ha mange
   # plasstildelinger: prøvetildelinger som ikke publiseres, og til slutt én som publiseres.
   # Status i kode: løst (oppgave.md). Kandidat for @implemented etter verifisering.
 
   Bakgrunn:
     Gitt at opptaksforvalter ved forvaltende organisasjon er innlogget
-    Og at opptaket "Samordna opptak 2027" har runden "Hovedrunde" med rundetype "Hovedtildeling"
+    Og at opptaket "Samordna opptak 2027" har plasstildelingsrunden "Hovedrunde" med rundetype "Hovedtildeling"
 
   Regel: Opptaksforvalter bestiller en plasstildeling som kjører i bakgrunnen
 
     Scenario: Starte plasstildeling
-      Når opptaksforvalter starter en plasstildeling i runden "Hovedrunde"
+      Når opptaksforvalter starter en plasstildeling i "Hovedrunde"
       Så kjøres plasstildelingen i bakgrunnen
       Og opptaksforvalter ser status for plasstildelingen
 
     Scenario: Plasstildeling fryser grunnlaget ved start
       Gitt at søknadsbehandlingen har rangert søkerne til opptaket
-      Når opptaksforvalter starter en plasstildeling i runden "Hovedrunde"
+      Når opptaksforvalter starter en plasstildeling i "Hovedrunde"
       Så bruker plasstildelingen rangeringen slik den var da plasstildelingen startet
       Og grunnlaget lagres sammen med plasstildelingen
 
@@ -40,43 +40,43 @@ Egenskap: Starte en plasstildeling
       #   og som også er kvote på utdanningstilbudet, og saken har poengsum etter utdanningstilbudets
       #   rangeringsregelverk. Søkeren må ha fødselsdato, ellers feiler hele plasstildelingen.
       Gitt at søknaden til "Kari Nordmann" på "Sykepleie, høst 2027" er kvalifisert
-      Når opptaksforvalter starter en plasstildeling i runden "Hovedrunde"
+      Når opptaksforvalter starter en plasstildeling i "Hovedrunde"
       Så er søknaden til "Kari Nordmann" på "Sykepleie, høst 2027" med i plasstildelingen
 
-    Scenario: Ny plasstildeling i samme runde
-      Gitt at runden "Hovedrunde" har en plasstildeling som ikke er publisert
-      Når opptaksforvalter starter en ny plasstildeling i runden "Hovedrunde"
+    Scenario: Ny plasstildeling i samme plasstildelingsrunde
+      Gitt at plasstildelingsrunden "Hovedrunde" har en plasstildeling som ikke er publisert
+      Når opptaksforvalter starter en ny plasstildeling i "Hovedrunde"
       Så beregnes en ny plasstildeling fra oppdatert grunnlag
       Og den forrige plasstildelingen er fortsatt tilgjengelig
 
-  Regel: En plasstildeling etter hovedtildelingen bygger på forrige publiserte runde
+  Regel: En plasstildeling etter hovedtildelingen bygger på forrige publiserte plasstildelingsrunde
 
     Scenario: Plasstildeling i hovedtildelingen
-      Når opptaksforvalter starter en plasstildeling i runden "Hovedrunde"
-      Så bygger plasstildelingen ikke på noen tidligere runde
+      Når opptaksforvalter starter en plasstildeling i "Hovedrunde"
+      Så bygger plasstildelingen ikke på noen tidligere plasstildelingsrunde
 
-    Scenario: Plasstildeling i en senere runde
-      Gitt at runden "Hovedrunde" har en publisert plasstildeling
-      Og at opptaket har runden "Suppleringsrunde" med rundetype "Supplering"
-      Når opptaksforvalter starter en plasstildeling i runden "Suppleringsrunde"
+    Scenario: Plasstildeling i en senere plasstildelingsrunde
+      Gitt at plasstildelingsrunden "Hovedrunde" har en publisert plasstildeling
+      Og at opptaket har plasstildelingsrunden "Suppleringsrunde" med rundetype "Supplering"
+      Når opptaksforvalter starter en plasstildeling i "Suppleringsrunde"
       Så bygger plasstildelingen på den publiserte plasstildelingen i "Hovedrunde"
       Og tidligere tilbud, ventelister og svar er med i grunnlaget
 
     # AVKLART 2026-10-08: starten avvises.
-    # Gap mot koden («Plasstildelingsløpet i Opptak», kap. 1–2): i dag kjøres en slik runde som en
-    # hovedtildeling. Runden det bygges på, utledes som opptakets sist publiserte runde.
-    Scenario: Senere runde uten publisert forrige runde
-      Gitt at runden "Hovedrunde" ikke har en publisert plasstildeling
-      Når opptaksforvalter starter en plasstildeling i runden "Suppleringsrunde"
+    # Gap mot koden («Plasstildelingsløpet i Opptak», kap. 1–2): i dag kjøres en slik plasstildelingsrunde som en
+    # hovedtildeling. Plasstildelingsrunden det bygges på, utledes som opptakets sist publiserte plasstildelingsrunde.
+    Scenario: Senere plasstildelingsrunde uten publisert forrige plasstildelingsrunde
+      Gitt at plasstildelingsrunden "Hovedrunde" ikke har en publisert plasstildeling
+      Når opptaksforvalter starter en plasstildeling i "Suppleringsrunde"
       Så blir plasstildelingen ikke startet
-      Og opptaksforvalter får beskjed om at forrige runde må publiseres først
+      Og opptaksforvalter får beskjed om at forrige plasstildelingsrunde må publiseres først
 
   Regel: Plasstildelingen starter ikke på et tomt grunnlag
 
     Scenario: Ingen rangerte søkere
       Gitt at opptaket har utdanningskvoter
       Men søknadsbehandlingen har ingen rangerte søkere i opptaket
-      Når opptaksforvalter starter en plasstildeling i runden "Hovedrunde"
+      Når opptaksforvalter starter en plasstildeling i "Hovedrunde"
       Så blir plasstildelingen ikke startet
       Og opptaksforvalter får beskjed om at grunnlaget for plasstildelingen er tomt
 
@@ -89,10 +89,10 @@ Egenskap: Starte en plasstildeling
     #   rett saksbehandlingsfeil og bestill en ny.
     # - At en plasstildeling feilet er ikke synlig i dag. Hva skal opptaksforvalter se?
     Scenario: Plasstildeling feiler
-      Gitt at opptaksforvalter har startet en plasstildeling i runden "Hovedrunde"
+      Gitt at opptaksforvalter har startet en plasstildeling i "Hovedrunde"
       Når plasstildelingen feiler
       Så ser opptaksforvalter at plasstildelingen feilet
-      Og opptaksforvalter kan starte en ny plasstildeling i runden "Hovedrunde"
+      Og opptaksforvalter kan starte en ny plasstildeling i "Hovedrunde"
 
 # ÅPNE SPØRSMÅL:
 # - Kan opptaksforvalter ved lærestedet starte plasstildeling, eller bare forvaltende organisasjon?
@@ -100,12 +100,12 @@ Egenskap: Starte en plasstildeling
 # - Skal det finnes en kontroll før start som viser søkere som faller ut av grunnlaget
 #   (kvalifisert, men mangler poengsum, kvote eller grunnlag)? Se «Fra saksbehandling til plasstildeling», D6.
 # - Kan en plasstildeling startes mens perioden for å endre antall tilbud fortsatt er åpen?
-# - Hvordan fanges det opp at en søker har endret søknaden sin mellom runder?
+# - Hvordan fanges det opp at en søker har endret søknaden sin mellom plasstildelingsrunder?
 #   I koden vet kjøringen ikke hvilke studieønsker som er nye, så vernet «et nytt ønske skal ikke
 #   fortrenge et eksisterende tilbud» virker ikke.
-# - Svar leses i koden bare fra runden det bygges på, ikke fra alle tidligere runder. Et svar fra
-#   hovedrunden som ikke er gitt på nytt, er usynlig i den tredje runden. Skal alle tidligere svar telle?
-# - Rekkefølgen på rundene avgjøres i koden av når de ble publisert, ikke av løpenummeret.
+# - Svar leses i koden bare fra plasstildelingsrunden det bygges på, ikke fra alle tidligere plasstildelingsrunder. Et svar fra
+#   hovedrunden som ikke er gitt på nytt, er usynlig i den tredje plasstildelingsrunden. Skal alle tidligere svar telle?
+# - Rekkefølgen på plasstildelingsrundene avgjøres i koden av når de ble publisert, ikke av løpenummeret.
 #   Er det riktig?
 # - Er «skal kvoteplasseres» på sakens kvote riktig tolket som «denne kvoten er med i plasstildelingen»?
 #   («Fra saksbehandling til plasstildeling», D2)

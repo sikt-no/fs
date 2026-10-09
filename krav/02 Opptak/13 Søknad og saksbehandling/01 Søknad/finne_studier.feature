@@ -20,7 +20,7 @@ Egenskap: Listevisning og søk i utdanningstilbud
   # Ikke gjennomgått ennå: tidligere poenggrenser, forklaring av forkortelser, fritekst-søk,
   # søkeforslag, filtrene, nullstilling, ingen treff og deling av søket. Scenarioene for disse
   # bygger på Confluence og skissen, og skal gjennomgås før kravet kan bli @planned.
-  # Neste spørsmål: hvilke poenggrenser vises (kvoter, år, runde)?
+  # Neste spørsmål: hvilke poenggrenser vises (kvoter, år, plasstildelingsrunde)?
 
   Regel: Liste over alle utdanningstilbud
 
@@ -97,7 +97,7 @@ Egenskap: Listevisning og søk i utdanningstilbud
     Scenario: Se tidligere poenggrenser
       # ÅPNE SPØRSMÅL:
       # - Hvilke poenggrenser vises: ordinær kvote (ORD) og førstegangsvitnemål (ORDF) fra
-      #   hovedopptaket året før, alle kvotene, eller fra en annen runde eller flere år?
+      #   hovedopptaket året før, alle kvotene, eller fra en annen plasstildelingsrunde eller flere år?
       # - Hva betyr «Alle (ORD)» i skissen: at alle kvalifiserte søkere i kvoten fikk tilbud?
       Gitt at utdanningstilbudet "Sykepleie, høst 2027" hadde opptak året før
       Når søkeren åpner Finn studier

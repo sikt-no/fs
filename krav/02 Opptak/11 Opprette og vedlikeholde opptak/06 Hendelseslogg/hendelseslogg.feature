@@ -32,18 +32,18 @@ Egenskap: Hendelseslogg for opptak
         | Verdien etter endringen                            |
 
     Scenario: Hendelse som legger til en entitet
-      Når opptaksforvalter legger til runden "Suppleringsrunde" i opptaket
+      Når opptaksforvalter legger til plasstildelingsrunden "Suppleringsrunde" i opptaket
       Så logges en hendelse uten verdi før endringen
-      Og hendelsen har verdiene runden ble lagt til med
+      Og hendelsen har verdiene plasstildelingsrunden ble lagt til med
 
     Scenario: Hendelse som fjerner en entitet
-      Når opptaksforvalter sletter runden "Suppleringsrunde"
+      Når opptaksforvalter sletter plasstildelingsrunden "Suppleringsrunde"
       Så logges en hendelse uten verdi etter endringen
-      Og hendelsen har verdiene runden hadde før den ble slettet
+      Og hendelsen har verdiene plasstildelingsrunden hadde før den ble slettet
 
   Regel: Endringer på opptaket og det som hører til opptaket logges
 
-    # Hendelsene om runder, antall tilbud som skal gis, plassflyt og plasstildeling er lagt til 2026-10-09.
+    # Hendelsene om plasstildelingsrunder, antall tilbud som skal gis, plassflyt og plasstildeling er lagt til 2026-10-09.
     # Antall tilbud som skal gis kan endres av både lærestedet og forvaltende organisasjon,
     # og siste lagrede tall gjelder (14 Plasstildeling/01 Runder/forvalte_runder.feature).
     Scenariomal: Hendelser som logges
@@ -80,18 +80,18 @@ Egenskap: Hendelseslogg for opptak
         | oppretter opptaket                                    | opptaket                  |
         | deaktiverer opptaket                                  | opptaket                  |
 
-      Eksempler: Runder
+      Eksempler: Plasstildelingsrunder
         | handling                                              | entitet                   |
-        | legger til en runde                                   | runden                    |
-        | endrer navnet på en runde                             | runden                    |
-        | endrer svarfristen på en runde                        | runden                    |
-        | sletter en runde                                      | runden                    |
-        | åpner en runde for ledige studieplasser               | runden                    |
-        | setter perioden for å endre antall tilbud som skal gis | runden                   |
+        | legger til en plasstildelingsrunde                                   | plasstildelingsrunden                    |
+        | endrer navnet på en plasstildelingsrunde                             | plasstildelingsrunden                    |
+        | endrer svarfristen på en plasstildelingsrunde                        | plasstildelingsrunden                    |
+        | sletter en plasstildelingsrunde                                      | plasstildelingsrunden                    |
+        | åpner en plasstildelingsrunde for ledige studieplasser               | plasstildelingsrunden                    |
+        | setter perioden for å endre antall tilbud som skal gis | plasstildelingsrunden                   |
 
       Eksempler: Antall tilbud og plassflyt
         | handling                                              | entitet                   |
-        | endrer antall tilbud som skal gis i en utdanningskvote | utdanningskvoten i runden |
+        | endrer antall tilbud som skal gis i en utdanningskvote | utdanningskvoten i plasstildelingsrunden |
         | endrer plassflyt for en utdanningskvote               | utdanningskvoten          |
 
       Eksempler: Plasstildeling

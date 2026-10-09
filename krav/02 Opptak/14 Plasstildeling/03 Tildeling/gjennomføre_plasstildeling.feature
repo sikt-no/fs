@@ -9,8 +9,8 @@ Egenskap: Gjennomføre plasstildeling
   # ÅPNE SPØRSMÅL:
   #
   # Rundetype og utfall:
-  # - Hva betyr «bygger på forrige publiserte runde» i praksis? Er det at resultatet fra forrige
-  #   runde er utgangspunktet, og at bare endringer (opprykk, nye tilbud, bortfall) beregnes?
+  # - Hva betyr «bygger på forrige publiserte plasstildelingsrunde» i praksis? Er det at resultatet fra forrige
+  #   plasstildelingsrunde er utgangspunktet, og at bare endringer (opprykk, nye tilbud, bortfall) beregnes?
   #   Eller kjøres hele fordelingen på nytt med oppdaterte tall?
   # - Hvilke utfall (tilbud, venteliste, bortfall, avslag) er mulige i hvilken rundetype?
   #   I etterfylling finnes ikke bortfall — men det er ikke sagt eksplisitt.
@@ -46,7 +46,7 @@ Egenskap: Gjennomføre plasstildeling
   # - Skal søkere med lik rangering på venteliste dele ventelistenummer, eller få vilkårlige unike numre?
   #   I dag: vilkårlige unike. Hypotese: avhenger av poenglikhetsregelen.
   # - Skal ventelistenumre stå urørt etter opprykk, eller nummereres på nytt? Hypotese: nummereres på nytt.
-  # - Ventelistenumre kan i dag kollidere mellom runder (mistenkt feil, TAKE-280).
+  # - Ventelistenumre kan i dag kollidere mellom plasstildelingsrunder (mistenkt feil, TAKE-280).
   #
   # Bortfall og avslag:
   # - Er «bortfall» og «avslag» to ulike resultater i resultatlisten, eller er bortfall en type avslag?
@@ -55,11 +55,11 @@ Egenskap: Gjennomføre plasstildeling
   # Mistenkte feil fra kodegjennomgangen (TAKE-278, «Plasstildelingsløpet i Opptak», kap. 13):
   # - TAKE-279: bortfall regnes mot feil tilbud når søkeren har flere tilbud.
   # - TAKE-280: ventelistenumre kan kollidere mellom videreførte og nye rader.
-  # - TAKE-282: tidligere kansellert resultat leses som «ikke gyldig» i neste runde.
+  # - TAKE-282: tidligere kansellert resultat leses som «ikke gyldig» i neste plasstildelingsrunde.
   # - TAKE-283: ventelistenummer og rangering over 9 999, eller prioritet over 99, feller hele kjøringen.
   #
   # Innstillinger og grensetilfeller:
-  # - Innstillingen «maks antall tilbud per søker per runde» (innstillinger.feature) mot etterfylling,
+  # - Innstillingen «maks antall tilbud per søker per plasstildelingsrunde» (innstillinger.feature) mot etterfylling,
   #   der søkeren kan ha flere tilbud. Hvordan henger de sammen? Unntak for deltid under 60 stp?
   # - Tidligopptak: tilsagn som gir tilbudsgaranti i hovedtildelingen (Confluence «Samordnet plasstildeling»). Hører det med?
   #
@@ -68,11 +68,11 @@ Egenskap: Gjennomføre plasstildeling
   # «Plasstildelingsløpet i Opptak» og «Samordnet plasstildeling» (akseptansekriterier for algoritme).
   # Plasstildelingen eier fordelingen, ikke poengberegningen. Rangering og kvalifisering kommer fra
   # søknadsbehandlingen (se 10 Regelverk/03 Rangering).
-  # Hva rundetypen innebærer, er oppsummert i regelen «Rundetypen styrer hvordan plasstildelingen i runden oppfører seg».
+  # Hva rundetypen innebærer, er oppsummert i regelen «Rundetypen styrer hvordan plasstildelingen oppfører seg».
   # Status i kode: løst, men poenggrense lagres ikke og tapt kvalifisering gir stille bortfall (oppgave.md).
 
   Bakgrunn:
-    Gitt at opptaket "Samordna opptak 2027" har runden "Hovedrunde" med rundetype "Hovedtildeling"
+    Gitt at opptaket "Samordna opptak 2027" har plasstildelingsrunden "Hovedrunde" med rundetype "Hovedtildeling"
     Og at utdanningstilbudet "Sykepleie, høst 2027" har utdanningskvotene "Førstegangsvitnemål" og "Ordinær"
 
   Regel: Søkeren får tilbud på høyest mulige prioritet
@@ -168,7 +168,7 @@ Egenskap: Gjennomføre plasstildeling
       Og tilbudet teller som ett av tilbudene i utdanningskvoten "Ordinær"
 
     # AVKLART 2026-10-08: Saksbehandler setter tilbudsgaranti på søknaden. Søkeren får tilbud etter
-    # reglene for runden, og trenger ingen poengsum.
+    # reglene for plasstildelingsrunden, og trenger ingen poengsum.
     # Gap mot koden («Fra saksbehandling til plasstildeling», kap. 2–3 og D4): tilbudsgaranti fra
     # saksbehandlingen når ikke plasstildelingen, og en søknad uten poengsum kommer ikke med i grunnlaget.
     Scenario: Tilbudsgaranti uten poengsum
@@ -189,27 +189,27 @@ Egenskap: Gjennomføre plasstildeling
       Når plasstildelingen gjennomføres
       Så er poenggrensen for utdanningskvoten "Ordinær" «alle kvalifiserte har fått tilbud»
 
-  Regel: Rundetypen styrer hvordan plasstildelingen i runden oppfører seg
+  Regel: Rundetypen styrer hvordan plasstildelingen oppfører seg
 
     # Flyttet hit fra 01 Runder 2026-10-09. Tabellen oppsummerer hva rundetypen innebærer.
     # Scenarioene under regelen «Rundetypen avgjør hva som skjer med lavere prioriteter og tidligere tilbud»
     # viser hvordan.
     # AVKLART 2026-10-08: Kravet gjelder. Rundetypen skal styre oppførselen.
     # Gap mot koden («Plasstildelingsløpet i Opptak», kap. 2): ingen logikk skiller på rundetype i dag.
-    # Om en kjøring bygger på en tidligere runde, avgjøres av om opptaket har en publisert runde fra før.
+    # Om en kjøring bygger på en tidligere plasstildelingsrunde, avgjøres av om opptaket har en publisert plasstildelingsrunde fra før.
     # Bortfall gis alltid, og en søker får høyst ett ordinært tilbud. Etterfylling må bygges.
     Scenariomal: Regler som følger av rundetypen
-      Gitt at runden har rundetype "<rundetype>"
-      Så gjelder disse reglene for plasstildelingen i runden
+      Gitt at plasstildelingsrunden har rundetype "<rundetype>"
+      Så gjelder disse reglene for plasstildelingen
         | Regel                                                   | Verdi                 |
         | Søker som får tilbud mister lavere prioriteter          | <bortfall>            |
         | Frigjort plass ved opprykk gis til neste på ventelisten | <kompensasjonstilbud> |
         | Søker kan ha flere tilbud samtidig                      | <flere_tilbud>        |
-        | Bygger på forrige publiserte runde                      | <arv>                 |
+        | Bygger på forrige publiserte plasstildelingsrunde                      | <arv>                 |
         | Rangering                                               | <rangering>           |
 
       # AVKLART 2026-10-08: Rundetypen avgjør ikke om et utdanningstilbud kan ekskluderes.
-      # Et utdanningstilbud er ute av runden når det ikke er satt antall tilbud som skal gis,
+      # Et utdanningstilbud er ute av plasstildelingsrunden når det ikke er satt antall tilbud som skal gis,
       # se 02 Tildelingsinnstillinger/antall_tilbud_som_skal_gis.feature.
       Eksempler:
         | rundetype      | bortfall | kompensasjonstilbud | flere_tilbud     | arv | rangering          |
@@ -239,32 +239,32 @@ Egenskap: Gjennomføre plasstildeling
 
     Scenario: Ingen nye bortfall i etterfylling
       Gitt at søkeren "Kari Nordmann" har tilbud på prioritet 2 og står på venteliste til prioritet 1
-      Når plasstildelingen i runden "Etterfylling" gir søkeren tilbud på prioritet 1
+      Når plasstildelingen i "Etterfylling" gir søkeren tilbud på prioritet 1
       Så har søkeren tilbud på både prioritet 1 og prioritet 2
       Og søkeren må velge ett av tilbudene
 
-    # AVKLART 2026-10-08: Ledige studieplasser er en egenskap opptaksforvalter kan sette på en runde
+    # AVKLART 2026-10-08: Ledige studieplasser er en egenskap opptaksforvalter kan sette på en plasstildelingsrunde
     # av alle rundetyper, også hovedtildelingen. Det er ikke en egen rundetype. Kvalifiserte søkere som
     # søkte innen ordinær søknadsfrist, rangeres etter poeng og får plass først. Deretter fylles de
     # ledige plassene med kvalifiserte søkere som har søkt på ledige studieplasser, i rekkefølgen de
     # leverte søknaden. Søknadene samles opp, og opptaksforvalter kjører plasstildeling og publiserer
-    # resultatet som i andre runder. Tilbud gis ikke fortløpende.
-    # Både runden og utdanningstilbudet må åpne for ledige studieplasser (avklart 2026-10-08).
+    # resultatet som i andre plasstildelingsrunder. Tilbud gis ikke fortløpende.
+    # Både plasstildelingsrunden og utdanningstilbudet må åpne for ledige studieplasser (avklart 2026-10-08).
     # Gap mot koden («Plasstildelingsløpet i Opptak», kap. 9): i dag styres det bare av flagget
-    # «tilbyr ledige studieplasser» på utdanningstilbudet, uavhengig av runde.
-    Scenariomal: Ledige studieplasser i en runde
-      Gitt at opptaket har runden "<runde>" med rundetype "<rundetype>"
-      Og at opptaksforvalter har åpnet runden for ledige studieplasser
+    # «tilbyr ledige studieplasser» på utdanningstilbudet, uavhengig av plasstildelingsrunde.
+    Scenariomal: Ledige studieplasser i en plasstildelingsrunde
+      Gitt at opptaket har plasstildelingsrunden "<plasstildelingsrunde>" med rundetype "<rundetype>"
+      Og at opptaksforvalter har åpnet plasstildelingsrunden for ledige studieplasser
       Og at "Sykepleie, høst 2027" tilbyr ledige studieplasser
-      Og at det skal gis 30 tilbud på "Sykepleie, høst 2027" i runden
+      Og at det skal gis 30 tilbud på "Sykepleie, høst 2027" i plasstildelingsrunden
       Og at 13 kvalifiserte søkere søkte på "Sykepleie, høst 2027" innen ordinær søknadsfrist
       Og at 150 kvalifiserte søkere har søkt på "Sykepleie, høst 2027" på ledige studieplasser
-      Når plasstildelingen i "<runde>" gjennomføres
+      Når plasstildelingen i "<plasstildelingsrunde>" gjennomføres
       Så får de 13 søkerne som søkte innen ordinær søknadsfrist, tilbud etter poeng
       Og de 17 neste tilbudene går til søkerne som leverte søknad på ledige studieplasser først
 
       Eksempler:
-        | runde            | rundetype      |
+        | plasstildelingsrunde            | rundetype      |
         | Hovedrunde       | Hovedtildeling |
         | Suppleringsrunde | Supplering     |
         | Etterfylling     | Etterfylling   |

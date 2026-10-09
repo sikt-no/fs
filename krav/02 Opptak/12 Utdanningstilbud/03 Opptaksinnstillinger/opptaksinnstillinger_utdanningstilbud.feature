@@ -40,7 +40,7 @@ Egenskap: Opptaksinnstillinger per utdanningstilbud
 
   # Kilde for kvoteregelen: GitHub #597.
   # AVKLART 2026-10-08: Prosentfordeling mellom utdanningskvoter utgår. Antall tilbud som skal gis settes
-  # som absolutte tall per utdanningskvote for hvert utdanningstilbud i hver runde, se
+  # som absolutte tall per utdanningskvote for hvert utdanningstilbud i hver plasstildelingsrunde, se
   # 14 Plasstildeling/02 Tildelingsinnstillinger/antall_tilbud_som_skal_gis.feature.
   @openquestion
   # ÅPNE SPØRSMÅL:
@@ -73,8 +73,8 @@ Egenskap: Opptaksinnstillinger per utdanningstilbud
       Og opptaksforvalter setter dato for når svar sendes til søkere
       Så kan søkere som oppfyller kriteriene få tidlig svar på dette utdanningstilbudet
 
-  # AVKLART 2026-10-08: Det finnes ingen innstilling for hvilke runder utdanningstilbudet deltar i.
-  # Et utdanningstilbud er ute av en runde når det ikke er satt antall tilbud som skal gis for runden,
+  # AVKLART 2026-10-08: Det finnes ingen innstilling for hvilke plasstildelingsrunder utdanningstilbudet deltar i.
+  # Et utdanningstilbud er ute av en plasstildelingsrunde når det ikke er satt antall tilbud som skal gis for plasstildelingsrunden,
   # se 14 Plasstildeling/02 Tildelingsinnstillinger/antall_tilbud_som_skal_gis.feature.
 
   # Hvordan søknadsalternativene fordeles etter regelen, står i tildele_saksbehandlende_organisasjon.feature (@OPT-BEH-BEH-011).

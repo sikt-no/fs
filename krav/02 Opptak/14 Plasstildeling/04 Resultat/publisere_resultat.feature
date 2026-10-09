@@ -14,7 +14,7 @@ Egenskap: Publisere resultatet til søkerne
 
   Bakgrunn:
     Gitt at opptaksforvalter ved forvaltende organisasjon er innlogget
-    Og at runden "Hovedrunde" i opptaket "Samordna opptak 2027" har en plasstildeling som ikke er publisert
+    Og at plasstildelingsrunden "Hovedrunde" i opptaket "Samordna opptak 2027" har en plasstildeling som ikke er publisert
 
   Regel: Søkerne ser ikke resultatet før det er publisert
 
@@ -25,14 +25,14 @@ Egenskap: Publisere resultatet til søkerne
     Scenario: Publisere plasstildeling
       Når opptaksforvalter publiserer plasstildelingen
       Så ser søkerne resultatet sitt i Min kompetanse
-      Og søkere med tilbud får melding om at svar foreligger med svarfristen for runden
+      Og søkere med tilbud får melding om at svar foreligger med svarfristen for plasstildelingsrunden
 
     @openquestion
-    Scenario: Bare én publisert plasstildeling per runde
+    Scenario: Bare én publisert plasstildeling per plasstildelingsrunde
       # ÅPNE SPØRSMÅL:
-      # - Kan en runde ha mer enn én publisert plasstildeling, for eksempel hvis en feil oppdages etter publisering?
-      Gitt at runden "Hovedrunde" har en publisert plasstildeling
-      Når opptaksforvalter vil publisere en annen plasstildeling i runden "Hovedrunde"
+      # - Kan en plasstildelingsrunde ha mer enn én publisert plasstildeling, for eksempel hvis en feil oppdages etter publisering?
+      Gitt at plasstildelingsrunden "Hovedrunde" har en publisert plasstildeling
+      Når opptaksforvalter vil publisere en annen plasstildeling i "Hovedrunde"
       Så blir den andre plasstildelingen ikke publisert
 
   @openquestion
@@ -78,7 +78,7 @@ Egenskap: Publisere resultatet til søkerne
 # - Skal søkere få varsel på e-post/SMS ved publisering, og påminnelse før svarfristen? Hører det hjemme i 09 Kommunikasjon?
 # - Vedtaksbrev med klagerett: se Confluence «Vedtaksbrev og svar på opptaket». Hvor skal kravet ligge?
 # - Hvilke søkere får melding: bare de med tilbud, eller også de på venteliste og med avslag?
-# - Publisering kan ikke angres i dag. Svarfristen og publiseringstidspunktet kan nullstilles på runden,
+# - Publisering kan ikke angres i dag. Svarfristen og publiseringstidspunktet kan nullstilles på plasstildelingsrunden,
 #   men plasstildelingen står fortsatt som publisert. Skal det være mulig å angre en publisering?
 # - Et søknadsalternativ uten utdanningskvote er ikke med i plasstildelingen, og søkeren får ikke noe svar.
 #   Hva skal søkeren se?

@@ -30,7 +30,7 @@ Denne listen sammenstiller begreper brukt i kravene (`krav/02 Opptak/`), design-
 | Begrep i krav | Definisjon | Begrepskatalog | Gammel FS | Merknad |
 |---------------|------------|----------------|-----------|---------|
 | opptak | «Prosess som løper fra en søker leverer en søknad til søknad er behandlet og ferdig prosessert så det foreligger et svar til søker» | [opptak](https://fs.sikt.no/domenekunnskap/begreper/opptak/) (aktiv) | Opptak | OK. Sto som manglende i forrige versjon av lista, men finnes nå i katalogen |
-| samordna opptak | Opptak der søkeren søker på utdanningstilbud ved flere læresteder i én søknad, forvaltet av HK-dir | – | NOM-opptak | ✅ Avklart: «samordna opptak» er riktig form (offisielt navn). ⚠️ `samordnet_opptak.feature` og `opprett_opptak.feature` bruker fortsatt «samordnet» |
+| samordna opptak | Opptak der søkeren søker på utdanningstilbud ved flere læresteder i én søknad, forvaltet av HK-dir | – | NOM-opptak | ✅ Avklart: «samordna opptak» er riktig form (offisielt navn). Rettet i kravene 2026-10-09 |
 | lokalt opptak | Opptak som et lærested forvalter selv, der lærestedet er den eneste organisasjonen | – | Lokalt opptak | OK |
 | opptakstype | «Kategorisering av opptak med utdanningstilbud som har relativt like opptaksregler» | [opptakstype](https://fs.sikt.no/domenekunnskap/begreper/opptakstype/) | Opptakstype | OK |
 | tidlig opptak | Tidlig behandling av og tilbud til søkere i et opptak. Søkerne får ikke tildelt studierett tidligere enn andre søkere av den grunn: det reelle opptaket til utdanningen er ikke gjennomført. Løses med tilbudsgaranti i rundene som kjøres, ikke som en egen runde | – | Tidligopptak | ✅ Avklart: «tidlig opptak» (to ord) er riktig. ✅ Avklart 2026-10-09: definisjonen, og at det ikke er en rundetype |
@@ -108,7 +108,7 @@ Denne listen sammenstiller begreper brukt i kravene (`krav/02 Opptak/`), design-
 |---------------|------------|----------------|-----------|---------|
 | plasstildeling | «Bestemt utfall av søknadsbehandling i opptak som får virkning for alle søknader i ett opptak, i én av tre former»: tilbud om studieplass, venteliste eller avslag | [plasstildeling](https://fs.sikt.no/domenekunnskap/begreper/plasstildeling/) (utkast) | Opptakskjøring | OK. Erstatter «opptakskjøring». I kravene: beregningen som gjøres i en runde. Én runde kan ha flere plasstildelinger |
 | prøvetildeling | Plasstildeling som ikke publiseres, brukt til å kvalitetssikre resultatet før den som publiseres | – | – | Ny term i kravene |
-| plasstildelingsrunde | Vinduet i et opptak der plasser fordeles og søkerne får svar, med egen svarfrist. Et opptak kan ha flere plasstildelingsrunder | [opptaksrunde](https://fs.sikt.no/domenekunnskap/begreper/opptaksrunde/) (aktiv) | Kvoterunde / Opptaksrunde | ✅ Avklart 2026-09-30, bekreftet 2026-10-09: «plasstildelingsrunde». Kravene bruker for det meste «runde». ⚠️ Katalogen har «opptaksrunde» |
+| plasstildelingsrunde | Vinduet i et opptak der plasser fordeles og søkerne får svar, med egen svarfrist. Et opptak kan ha flere plasstildelingsrunder | [opptaksrunde](https://fs.sikt.no/domenekunnskap/begreper/opptaksrunde/) (aktiv) | Kvoterunde / Opptaksrunde | ✅ Avklart 2026-09-30, bekreftet 2026-10-09: «plasstildelingsrunde». Rettet i kravene 2026-10-09. ⚠️ Katalogen har «opptaksrunde» |
 | rundetype | Hva slags runde det er: hovedtildeling, supplering eller etterfylling. Settes når runden legges til, og kan ikke endres | – | – | ✅ Avklart 2026-10-09: tre rundetyper. Ledige studieplasser og tidlig opptak er ikke rundetyper. ⚠️ Kodeverket har også TIDLIG, LEDIGE_STUDIEPLASSER og TEST |
 | hovedtildeling | Den første runden i et opptak. Søkeren får tilbud på høyest mulige prioritet, og lavere prioriteter faller bort | – | Hovedopptak | Et opptak har én hovedtildeling. Kodeverket kaller den «Hovedopptak» |
 | supplering | Runde etter hovedtildelingen som bygger på forrige publiserte runde, med bortfall og kompensasjonstilbud ved opprykk | – | Suppleringsopptak | Kodeverket kaller den «Suppleringsopptak» |
@@ -203,9 +203,8 @@ Denne listen sammenstiller begreper brukt i kravene (`krav/02 Opptak/`), design-
 - «Tildelingsregel» → «saksbehandlertildelingsregel», og «samordnet» → «samordna»: `tildele_saksbehandlende_organisasjon.feature`, `opptaksinnstillinger_utdanningstilbud.feature`
 - Det åpne spørsmålet om plassflyt mellom plasstildelinger i `plassflyt.feature` er lukket
 
-Gjenstår:
-- «Samordnet opptak» står fortsatt i `samordnet_opptak.feature` (også i tittelen og filnavnet) og `opprett_opptak.feature`
-- Om kravene skal si «runde» eller «plasstildelingsrunde» i stegene, er ikke avgjort
+- «Samordnet opptak» → «samordna opptak» i alle opptakskrav. `samordnet_opptak.feature` heter nå `samordna_opptak.feature`
+- «Runde» → «plasstildelingsrunde» i alle opptakskrav, også i scenariotitler og steg. `forvalte_runder.feature` har tittelen «Plasstildelingsrunder i et opptak». Navn på runder i anførselstegn («Hovedrunde», «Suppleringsrunde») og mappenavnet `01 Runder` er ikke endret
 
 ## Avvik i begrepskatalogen som bør meldes
 

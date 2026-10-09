@@ -23,11 +23,11 @@ Egenskap: Sette standardinnstillinger for flere utdanningstilbud
       Så bruker alle de valgte utdanningstilbudene det angitte regelverket i søknadsbehandling og rangering
 
   # AVKLART 2026-10-08: Prosentfordeling mellom utdanningskvoter utgår. Antall tilbud som skal gis settes
-  # som absolutte tall per utdanningskvote for hvert utdanningstilbud i hver runde.
+  # som absolutte tall per utdanningskvote for hvert utdanningstilbud i hver plasstildelingsrunde.
 
 # ÅPNE SPØRSMÅL:
 # - Er en standardinnstilling en mal som utdanningstilbudene arver, slik at en endring slår gjennom
 #   på alle som ikke har egen innstilling? Eller er det en engangsoppdatering av de valgte tilbudene?
 # - Kan et enkelt utdanningstilbud avvike fra standardinnstillingen?
-# - Hvilke innstillinger kan settes som standard (regelverk, plassflyt, runder, tilbudsgaranti)?
+# - Hvilke innstillinger kan settes som standard (regelverk, plassflyt, plasstildelingsrunder, tilbudsgaranti)?
 # - Gjelder standarden for hele opptaket, for en organisasjon, eller for et utvalg tilbud?

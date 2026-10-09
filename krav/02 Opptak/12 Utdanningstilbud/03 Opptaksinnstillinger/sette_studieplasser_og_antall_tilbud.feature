@@ -10,7 +10,7 @@ Egenskap: Sette antall studieplasser per utdanningstilbud
   # Opptaksforvalter ved deltakende organisasjon setter tallene for egne utdanningstilbud.
   # Opptaksforvalter ved forvaltende organisasjon kan sette tallene for alle utdanningstilbud.
   # AVKLART 2026-10-08: Antall tilbud som skal gis settes ikke for utdanningstilbudet her. Det settes
-  # som absolutte tall per utdanningskvote for hvert utdanningstilbud i hver runde, se
+  # som absolutte tall per utdanningskvote for hvert utdanningstilbud i hver plasstildelingsrunde, se
   # 14 Plasstildeling/02 Tildelingsinnstillinger/antall_tilbud_som_skal_gis.feature.
   # Antall studieplasser vises der som grunnlag.
 
@@ -27,7 +27,7 @@ Egenskap: Sette antall studieplasser per utdanningstilbud
   @openquestion
   # ÅPNE SPØRSMÅL:
   # - Trengs «tak for ja-svar» (#398)? Begrepet «antall ønsket ja-svar» er tatt ut (2026-10-08),
-  #   og antall tilbud som skal gis settes per runde i 14 Plasstildeling.
+  #   og antall tilbud som skal gis settes per plasstildelingsrunde i 14 Plasstildeling.
   # - Hva skjer når taket er nådd: stopper plasstildelingen å gi nye tilbud?
   Regel: Opptaksforvalter kan sette tak for ja-svar
 

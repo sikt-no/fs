@@ -14,11 +14,11 @@ Egenskap: Plassflyt mellom utdanningskvoter
   #   Koden tar standarden fra kvotetypen og lar den overstyres per utdanningskvote, uten standard
   #   på opptaket. Fortsatt uavklart 2026-10-08.
   # AVKLART 2026-10-09: Plassflyt er bare at ubrukte plasser flyter mellom utdanningskvoter i et opptak.
-  # At en plasstildelingsrunde bygger på forrige runde, er informasjonsarv, ikke plassflyt.
+  # At en plasstildelingsrunde bygger på forrige plasstildelingsrunde, er informasjonsarv, ikke plassflyt.
   # - Sirkulær plassflyt håndteres i koden, men ikke i databasen. Skal den avvises når den settes
   #   (slik scenarioet under sier), eller bare håndteres i plasstildelingen?
   # - Plassflyt finnes på tre nivåer (kvotetype i regelverket, utdanningskvote i opptaket, og per plasstildeling).
-  #   Skal opptaksforvalter kunne endre plassflyten per runde?
+  #   Skal opptaksforvalter kunne endre plassflyten per plasstildelingsrunde?
   # - Forgrening (sende ledige plasser til flere utdanningskvoter) er ikke støttet. Bekrefte at det ikke trengs?
   # - Å flytte bare noen av de ledige plassene («flytt N av M») er ikke støttet. Trengs det?
   # - Flyter flere utdanningskvoter til samme mottaker, avgjør kvoteprioriteten rekkefølgen
@@ -33,7 +33,7 @@ Egenskap: Plassflyt mellom utdanningskvoter
 
   Bakgrunn:
     Gitt at opptaksforvalter ved lærestedet er innlogget
-    Og at utdanningstilbudet "Sykepleie, høst 2027" er med i runden "Hovedrunde" i opptaket "Samordna opptak 2027"
+    Og at utdanningstilbudet "Sykepleie, høst 2027" er med i plasstildelingsrunden "Hovedrunde" i opptaket "Samordna opptak 2027"
 
   Regel: Overskytende plasser flyter til den utdanningskvoten det er pekt på
 

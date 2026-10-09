@@ -1,6 +1,6 @@
 # language: no
 @OPT-OVO-SAM-001 @must @in-progress
-Egenskap: Samordnet opptak
+Egenskap: Samordna opptak
   Som opptaksforvalter ved forvaltende organisasjon
   ønsker jeg å invitere læresteder til å delta
   slik at de kan bidra med utdanningstilbud og behandle søknader.
@@ -9,9 +9,9 @@ Egenskap: Samordnet opptak
     Gitt at opptaksforvalter ved forvaltende organisasjon er innlogget
     Og at opptaket "Samordna opptak 2027" er opprettet som samordnet
 
-  Regel: Opptaksforvalter ved forvaltende organisasjon kan legge til organisasjoner i et samordnet opptak
+  Regel: Opptaksforvalter ved forvaltende organisasjon kan legge til organisasjoner i et samordna opptak
 
-    Scenario: Legge til lærested i samordnet opptak
+    Scenario: Legge til lærested i samordna opptak
       Når opptaksforvalter ved forvaltende organisasjon legger til organisasjonen "Universitetet i Oslo" som deltaker i opptaket
       Så kan opptaksforvalter ved Universitetet i Oslo knytte egne utdanningstilbud til opptaket
   # Følgevirkninger: Deltagende organisasjoner kan få søknader de har behandlerrolle for etter saksbehandlertildelingen
@@ -66,7 +66,7 @@ Egenskap: Samordnet opptak
   # Saksbehandlertildelingen er beskrevet i detalj i tildele_saksbehandlende_organisasjon.feature
   # (@OPT-BEH-BEH-011, PR #684). Om regelen skal stå her også, avgjøres i oppgaven
   # opprette-og-vedlikeholde-opptak.
-  Regel: Opptaksforvalter ved forvaltende organisasjon knytter regler for saksbehandlertildeling i samordnet opptak
+  Regel: Opptaksforvalter ved forvaltende organisasjon knytter regler for saksbehandlertildeling i samordna opptak
 
     Scenario: Sette regler for fordeling av søknader til saksbehandlerorganisasjoner
       Når opptaksforvalter ved forvaltende organisasjon knytter saksbehandlertildelingsregler for opptaket
