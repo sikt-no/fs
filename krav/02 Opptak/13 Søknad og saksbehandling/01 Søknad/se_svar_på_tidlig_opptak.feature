@@ -9,7 +9,7 @@ Egenskap: Se svar på søknad om tidlig opptak
   # Kravet forutsetter at søkeren har søkt om tidlig opptak, at saksbehandler har konkludert,
   # og at tilbudsgarantier for tidlig opptak er tildelt. Vurderingen, konklusjonen og
   # tildelingen står i gi_tilbudsgaranti_ved_tidlig_opptak.feature (OPT-BEH-BEH-007, #654).
-  # Publiseringsdatoen og meldingen til søkeren står i
+  # Publiseringen og meldingen til søkeren står i
   # krav/02 Opptak/11 Opptak/06 Tidlig opptak/publisere_svar_på_tidlig_opptak.feature.
   # "Tilbudsgaranti gitt av tilbyder" her er det 007 kaller manuell tilbudsgaranti fra T-rolle.
   #
@@ -23,26 +23,18 @@ Egenskap: Se svar på søknad om tidlig opptak
   Bakgrunn:
     Gitt at søkeren er innlogget
 
-  # "Publisert" betyr at begge forutsetningene er oppfylt — det som inntreffer sist avgjør.
-  # Svaret skal aldri bli synlig før det finnes noe å svare på.
-  Regel: Svaret på tidlig opptak publiseres når tidligopptaket er gjennomført og publiseringsdatoen er passert
-
-    Scenario: Svaret er ikke synlig før publiseringsdatoen
-      Gitt at tidligopptaket er gjennomført
-      Og at søkeren har fått tilbudsgaranti for tidlig opptak fra opptaksforvalter
-      Men publiseringsdatoen for svar på tidlig opptak er ikke passert
-      Når søkeren åpner søknaden sin
-      Så ser ikke søkeren svar på tidlig opptak på noen av søknadsalternativene
+  # "Publisert" betyr at opptaksforvalter har gjennomført tidligopptaket. Det er ingen
+  # egen publiseringsdato (avklart 09.10.2026, review av PR #654). Svaret skal aldri bli
+  # synlig før det finnes noe å svare på.
+  Regel: Svaret på tidlig opptak publiseres når tidligopptaket er gjennomført
 
     Scenario: Svaret er ikke synlig før tidligopptaket er gjennomført
-      Gitt at publiseringsdatoen for svar på tidlig opptak er passert
-      Men tidligopptaket er ikke gjennomført
+      Gitt at tidligopptaket ikke er gjennomført
       Når søkeren åpner søknaden sin
       Så ser ikke søkeren svar på tidlig opptak på noen av søknadsalternativene
 
-    Scenario: Svaret blir synlig når tidligopptaket er gjennomført og publiseringsdatoen er passert
+    Scenario: Svaret blir synlig når tidligopptaket er gjennomført
       Gitt at tidligopptaket er gjennomført
-      Og at publiseringsdatoen for svar på tidlig opptak er passert
       Når søkeren åpner søknaden sin
       Så ser søkeren svar på tidlig opptak på hvert av søknadsalternativene sine
 

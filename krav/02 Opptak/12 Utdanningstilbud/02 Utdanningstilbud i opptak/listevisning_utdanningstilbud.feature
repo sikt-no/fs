@@ -70,8 +70,8 @@ Egenskap: Listevisning og filtrering av utdanningstilbud i opptak
       Så ser opptaksforvalter utdanningstilbud som mangler opplysninger om hvor tilbudsgarantier skal tas fra
 
     # AVKLART 08.10.2026: Fristene for tidlig opptak er felles for opptaket
-    # (frister_og_hendelser.feature), og publiseringsdatoen for svar på tidlig opptak
-    # settes per opptak (publisere_svar_på_tidlig_opptak.feature). Utdanningstilbudet har
+    # (frister_og_hendelser.feature), og svaret på tidlig opptak publiseres for hele
+    # opptaket (publisere_svar_på_tidlig_opptak.feature). Utdanningstilbudet har
     # derfor ingen egen dato for tidlig opptak. Det som kan mangle på et utdanningstilbud
     # som tilbyr tidlig opptak, er poenggrensen. Tidlig søknadsfrist settes fritt per
     # utdanningstilbud (opptaksinnstillinger_utdanningstilbud.feature).

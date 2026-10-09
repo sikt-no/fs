@@ -66,8 +66,9 @@ Egenskap: Opptaksinnstillinger per utdanningstilbud
       Gitt at opptaket åpner for tidlig opptak
       Når opptaksforvalter markerer at utdanningstilbudet "Sykepleie, høst 2027" tilbyr tidlig opptak
       Så kan søkere som oppfyller kriteriene få tidlig svar på dette utdanningstilbudet
-      # Publiseringsdatoen for svar på tidlig opptak settes per opptak, ikke per
-      # utdanningstilbud, se publisere_svar_på_tidlig_opptak.feature (avklart 25.09.2026).
+      # Svaret på tidlig opptak publiseres for hele opptaket når tidligopptaket
+      # gjennomføres, ikke per utdanningstilbud, se publisere_svar_på_tidlig_opptak.feature
+      # (avklart 25.09.2026, uten egen publiseringsdato fra 09.10.2026).
 
     Scenario: Sette poenggrense for tidlig opptak
       Gitt utdanningstilbudet "Sykepleie, høst 2027" tilbyr tidlig opptak

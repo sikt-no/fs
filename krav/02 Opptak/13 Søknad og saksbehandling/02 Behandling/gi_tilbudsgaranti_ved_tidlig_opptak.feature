@@ -16,7 +16,7 @@
 # Poenggrensen for tidlig opptak settes per utdanningstilbud, se
 # opptaksinnstillinger_utdanningstilbud.feature.
 #
-# Featuren slutter når tilbudsgarantiene er tildelt. Publiseringsdatoen og
+# Featuren slutter når tilbudsgarantiene er tildelt. Publiseringen og
 # meldingen til søkerne står i publisere_svar_på_tidlig_opptak.feature
 # (OPT-OPT-TID-001), og hva søkeren ser, i se_svar_på_tidlig_opptak.feature
 # (OPT-SØK-SØK-012). Begge kommer med #642.
@@ -30,7 +30,9 @@
 #   nok poeng, tilbudsgaranti på søknadsalternativet.
 # - Om søkeren ikke får tilbudsgaranti, gjelder det bare tidlig opptak.
 #   Søknadsalternativene behandles videre i det ordinære opptaket.
-# - Svar publiseres til alle søkerne samtidig på én publiseringsdato for
+# - (Endret 09.10.2026: det er ingen egen publiseringsdato. Svaret publiseres
+#   når tidligopptaket gjennomføres, se publisere_svar_på_tidlig_opptak.feature.)
+#   Svar publiseres til alle søkerne samtidig på én publiseringsdato for
 #   tidlig opptak. Datoen knyttes til opptaket, ikke til utdanningstilbudet.
 # - (Endret 08.10.2026, se under.) Tilbudsgarantien holder bare så lenge
 #   søkeren beholder søknadsalternativet på samme prioritet.
@@ -47,9 +49,9 @@
 #   prioriterte som oppfyller kravene (som i se_svar_på_tidlig_opptak.feature).
 # - En søknad som ikke er konkludert, er ikke med i tidligopptaket.
 # - Opptaksforvalteren kan prøvekjøre og gjennomføre tidligopptaket flere
-#   ganger. En ny gjennomføring fjerner ingen tilbudsgarantier. Systemet sjekker
-#   ikke mot publiseringsdatoen: å gjennomføre før den er opptaksforvalterens
-#   ansvar.
+#   ganger. En ny gjennomføring fjerner ingen tilbudsgarantier. (Endret
+#   09.10.2026: det er ingen publiseringsdato. Gjennomføringen publiserer svaret
+#   til søkerne, men prøvekjøringen gjør det ikke.)
 # - En behandler med T-rolle kan sette tilbudsgaranti manuelt uten betingelser.
 #   (Utvidet 08.10.2026: også B-rolle og F-rolle kan sette tilbudsgaranti, se under.)
 #   Det gjelder også når søkeren ikke deltar i tidligopptaket, og det er slik
