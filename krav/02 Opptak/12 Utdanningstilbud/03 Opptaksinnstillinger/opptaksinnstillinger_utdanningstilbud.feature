@@ -53,6 +53,10 @@ Egenskap: Opptaksinnstillinger per utdanningstilbud
 
   # Hva plasstildelingen gjør med plassflyten, og vernet mot sirkulær plassflyt (#598), står i
   # 14 Plasstildeling/02 Tildelingsinnstillinger/plassflyt.feature.
+  @openquestion
+  # ÅPNE SPØRSMÅL:
+  # - Settes plassflyten per utdanningstilbud, eller som standard på opptaket? Uavklart 2026-10-08,
+  #   se 14 Plasstildeling/02 Tildelingsinnstillinger/plassflyt.feature.
   Regel: Opptaksforvalter kan sette plassflyt mellom utdanningskvoter
 
     Scenario: Sette plassflyt
@@ -99,7 +103,7 @@ Egenskap: Opptaksinnstillinger per utdanningstilbud
       Gitt at saksbehandlertildelingsregelen "TRA" er inaktiv
       Når opptaksforvalter velger saksbehandlertildelingsregel for utdanningstilbudet "Sykepleie, høst 2027"
       Så kan opptaksforvalter kun velge blant de aktive saksbehandlertildelingsreglene i opptaket
-      Og ser ikke opptaksforvalter "TRA" blant valgene
+      Men opptaksforvalter ser ikke "TRA" blant valgene
 
   @openquestion
   # ÅPNE SPØRSMÅL:
