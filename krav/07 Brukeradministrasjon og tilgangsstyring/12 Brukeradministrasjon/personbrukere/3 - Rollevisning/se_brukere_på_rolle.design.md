@@ -62,17 +62,17 @@ Velge en rolle i rolleoversikten åpner rollens oversiktsside.
 | Tom rolleoversikt | Brukeradministratoren har ingen roller hen kan tildele. Teksten under |
 | Tom liste på rollens oversiktsside | Ingen brukere brukeradministratoren kan se, har rollen aktivt tildelt. Teksten under. Knappen «Gi rollen til en person» vises fortsatt |
 | Feil ved henting | Felles feilvisning som på personbrukere-listen |
-| Bruker uten navn | Personen har ikke logget inn ennå (BRU-PER-GRU-013, regelen «Navnet hentes fra påloggingen», `@draft`). Teksten under, i navnekolonnen |
+| Bruker uten navn | Navnet er ikke kjent: personen har ikke logget inn, eller påloggingen oppga ikke navnet (BRU-PER-GRU-013, regelen «Navnet hentes fra påloggingen»). Teksten under, i navnekolonnen. Teksten sier ikke om personen har logget inn |
 
 ## Tekster
 
-Alle tekstene er forslag og må godkjennes av Kjetil. Dette er fasiten for tekstene.
+Tekstene er godkjent av Kjetil 09.10.2026. Dette er fasiten for tekstene.
 
 | Hvor | Når vises den | Tekst | Variasjoner | Scenario |
 |------|---------------|-------|-------------|----------|
 | Rolleoversikten | Brukeradministratoren har ingen roller hen kan tildele | «Du har ingen roller du kan tildele.» | – | Rolleoversikten viser bare roller brukeradministratoren har rett til å tildele |
 | Rollens oversiktsside | Ingen brukere brukeradministratoren kan se, har rollen | «Ingen brukere du har tilgang til, har denne rollen.» | – | Vise brukere som har en aktiv rolle |
-| Navnekolonnen | Personen har ikke noe navn ennå | «Ikke logget inn ennå» | – | Vise brukere som har en aktiv rolle |
+| Navnekolonnen | Navnet til personen er ikke kjent | «Navn ikke kjent» | – | Vise brukere som har en aktiv rolle (GRU-013: Navnet er ikke kjent før første pålogging) |
 
 **Skisser:** ingen skisser finnes.
 
@@ -100,9 +100,6 @@ tildeler brukeradministratoren flere roller med «Tildel roller».
 
 ## Åpne designspørsmål
 
-- [ ] Godkjenn tekstene i tabellen over.
 - [ ] Skal raden vise Feide-brukere og personer i samme liste til tildelingene er flyttet fra
       Feide-brukerne til personene (BRU-PER-GRU-014), og skal de i så fall merkes ulikt?
-- [ ] Teksten «Ikke logget inn ennå» passer ikke for en person som har logget inn med ID-porten,
-      men ikke har navn. Avhenger av det åpne spørsmålet om ID-porten i BRU-PER-GRU-013.
 - [ ] Heter menypunktet «Roller»?

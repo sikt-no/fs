@@ -58,7 +58,7 @@ Personen står da i listen.
 
 ## Tekster
 
-Alle tekstene er forslag og må godkjennes av Kjetil. Tekstene for reglene i BRU-PER-GRU-013
+Tekstene er godkjent av Kjetil 09.10.2026. Tekstene for reglene i BRU-PER-GRU-013
 (ugyldig nummer, testperson, rettighet og beskjeden ved suksess) står i implementasjonsdetaljene
 for GRU-013.
 
@@ -109,7 +109,6 @@ person, ikke bare til en Feide-bruker.
 
 ## Åpne designspørsmål
 
-- [ ] Godkjenn tekstene i tabellen over.
 - [ ] Skal snackbaren ved suksess ha en lenke til detaljsiden for personen («Åpne personen»), så
       brukeradministratoren kan gi flere roller med en gang? Snackbaren i fs-admin har i dag bare
       tekst.

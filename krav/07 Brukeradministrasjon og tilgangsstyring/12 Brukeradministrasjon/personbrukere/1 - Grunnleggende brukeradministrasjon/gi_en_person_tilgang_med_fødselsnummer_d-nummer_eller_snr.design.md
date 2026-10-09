@@ -36,20 +36,22 @@ Se implementasjonsdetaljene for BRU-PER-ROL-002.
 |----------|---------------|
 | Suksess | Dialogen lukkes. Snackbar med beskjeden ved suksess. Beskjeden har ikke personens navn |
 | Ugyldig nummer | Feltfeil under nummerfeltet. Ingen tildeling, ingen person opprettet |
+| FS-generert nummer | Feltfeil under nummerfeltet, med en egen tekst. Ingen tildeling, ingen person opprettet |
 | Testperson i ekte miljø | Feltfeil under nummerfeltet. Ingen tildeling |
 | Mangler rett til å tildele rollen | Feil i tilbakemeldingsflaten. Ingen tildeling, ingen person opprettet |
 | Annen feil | Feil i tilbakemeldingsflaten |
 
 ## Tekster
 
-Alle tekstene er forslag og må godkjennes av Kjetil. Dette er fasiten for tekstene.
+Tekstene er godkjent av Kjetil 09.10.2026. Dette er fasiten for tekstene.
 
 | Hvor | Når vises den | Tekst | Variasjoner | Scenario |
 |------|---------------|-------|-------------|----------|
 | Snackbar | Tildelingen er gitt | «Personen har fått rollen {rollekode}.» | `{rollekode}`. Teksten er den samme uansett om personen fantes fra før, og har ikke navnet | Svaret er det samme uansett hva som fantes fra før |
 | Feltfeil under nummerfeltet | Nummeret har ugyldige kontrollsifre | «Nummeret er ikke et gyldig fødselsnummer, D-nummer eller SNR. Sjekk at det er skrevet riktig.» | Den samme teksten for alle tre nummertypene, fordi et ugyldig nummer ikke kan plasseres i en type | Nummer med ugyldige kontrollsifre avvises |
+| Feltfeil under nummerfeltet | Nummeret er et FS-generert nummer | «Nummeret er et FS-generert nummer og kan ikke brukes. Bruk personens fødselsnummer, D-nummer eller SNR.» | – | FS-generert nummer avvises |
 | Feltfeil under nummerfeltet | Nummeret tilhører en testperson, og miljøet er et ekte miljø | «En testperson kan ikke få tilgang i et ekte miljø. Velg et testmiljø.» | – | Testperson får ikke tilgang i et ekte miljø |
-| Feltfeil under nummerfeltet | Nummeret tilhører en ekte person, og miljøet er et testmiljø | «En ekte person kan ikke få tilgang i et testmiljø. Velg et ekte miljø.» (foreslått tekst) | – | Ekte person får ikke tilgang i et testmiljø |
+| Feltfeil under nummerfeltet | Nummeret tilhører en ekte person, og miljøet er et testmiljø | «En ekte person kan ikke få tilgang i et testmiljø. Velg et ekte miljø.» | – | Ekte person får ikke tilgang i et testmiljø |
 | Tilbakemeldingsflaten | Brukeradministratoren har ikke rett til å tildele rollen for organisasjonen og miljøet | «Du har ikke rettighet til å tildele i denne kombinasjonen av organisasjon og miljø.» (finnes i fs-admin) | – | Rolle brukeradministratoren ikke har rett til å tildele |
 | Tilbakemeldingsflaten | Annen feil | «Kunne ikke gi rollen. Prøv igjen senere.» | – | – |
 
@@ -85,5 +87,4 @@ viser feilen API-et gir.
 
 ## Åpne designspørsmål
 
-- [ ] Godkjenn tekstene i tabellen over.
 - [ ] Skal snackbaren nevne organisasjonen og miljøet («… for {organisasjon} i {miljø}»)?

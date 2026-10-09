@@ -23,7 +23,7 @@ Egenskap: Gi en person tilgang med fødselsnummer, D-nummer eller SNR
   Svaret er det samme uansett om personen fantes fra før, og det avslører ikke hvilke
   tildelinger personen har i andre organisasjoner. Nummeret vises ikke i grensesnittet etterpå.
   Personen vises med navn. Navnet til en person som ikke fantes fra før, kommer fra personens
-  første pålogging.
+  første pålogging. Er navnet ikke kjent, vises «Navn ikke kjent».
 
   Kravet erstatter «Registrere en personbruker uten Feide-konto». Blokkene fra den modellen står
   nederst, merket med forslag til workshopen. Påloggingen med ID-porten er dekket av
@@ -183,6 +183,7 @@ Egenskap: Gi en person tilgang med fødselsnummer, D-nummer eller SNR
   Regel: Nummeret må ha gyldige kontrollsifre
     SNR har en egen personnummerserie, atskilt fra de fiktive numrene FS' egen generator lager
     (måned +50 og personnummer fra 70000 og oppover). Løsningen kan derfor skille et SNR fra dem.
+    Et FS-generert nummer avvises med en egen beskjed, også når kontrollsifrene er gyldige.
 
     Scenariomal: Nummer med ugyldige kontrollsifre avvises
       Gitt brukeradministratoren oppgir et <nummertype> med ugyldige kontrollsifre
@@ -197,10 +198,17 @@ Egenskap: Gi en person tilgang med fødselsnummer, D-nummer eller SNR
         | D-nummer       |
         | SNR            |
 
+    Scenario: FS-generert nummer avvises
+      Gitt brukeradministratoren oppgir et nummer fra FS' egen generator
+      Når brukeradministratoren gir personen en rolle for en organisasjon og et miljø
+      Så får personen ingen tildeling
+      Og det opprettes ingen person i databasen
+      Og brukeradministratoren får beskjed om at et FS-generert nummer ikke kan brukes
+
   Regel: En testperson kan ikke få tilgang i et ekte miljø, og en ekte person ikke i et testmiljø
     En testperson har nummer i Skatteetatens syntetiske serie. Et SNR tilhører en ekte person. Et
-    fiktivt nummer fra FS' egen generator avvises som ugyldig, fordi det ikke kan identifisere en
-    person.
+    fiktivt nummer fra FS' egen generator avvises, fordi det ikke kan identifisere en person (se
+    regelen «Nummeret må ha gyldige kontrollsifre»).
 
     Scenario: Testperson får ikke tilgang i et ekte miljø
       Gitt fødselsnummeret tilhører en testperson
@@ -288,26 +296,31 @@ Egenskap: Gi en person tilgang med fødselsnummer, D-nummer eller SNR
       Og jeg finner personbrukeren igjen i brukeroversikten
       Og tildelingen gir tilgang fra personbrukeren logger inn første gang
 
-  @draft @openquestion
+  @openquestion
   Regel: Navnet hentes fra påloggingen
     Navnet til en person som ikke fantes fra før, kommer fra personens første pålogging.
     Brukeradministratoren oppgir ikke navnet, og det hentes ikke fra Folkeregisteret. Feide
-    oppgir navnet ved pålogging.
+    oppgir navnet ved pålogging. Er navnet ikke kjent, vises «Navn ikke kjent». Det gjelder også
+    en person som har logget inn, men der påloggingen ikke oppga navnet.
+
+    Teksten er nøytral og sier ikke om personen har logget inn. En person som har logget inn før,
+    vises likevel med navn straks tildelingen er gitt. Et manglende navn kan derfor antyde at
+    personen ikke har logget inn før.
 
     # ÅPNE SPØRSMÅL:
-    # - ID-porten oppgir, så vidt vi vet, ikke navnet i tokenet. En person som bare logger inn med
-    #   ID-porten, kan derfor bli stående uten navn. Hva vises da?
-    # - En person som har logget inn før, vises med navn på rollens oversiktsside og i
-    #   brukeroversikten straks tildelingen er gitt. En person som ikke fantes fra før, vises uten
-    #   navn. Listen avslører dermed om personen har logget inn før, selv om beskjeden ikke gjør
-    #   det (regelen «Svaret avslører ikke om personen fantes fra før»). Er det akseptabelt?
+    # - Er det akseptabelt at et manglende navn kan antyde at personen ikke har logget inn før?
 
     Scenario: Navnet er ikke kjent før første pålogging
       Gitt brukeradministratoren har gitt en person som ikke fantes fra før, en rolle og oppgitt fødselsnummeret
       Og personen har ikke logget inn
       Når brukeradministratoren ser personen i brukeroversikten
-      Så er navnet tomt
-      Og det fremgår at personen ikke har logget inn ennå
+      Så vises navnet som «Navn ikke kjent»
+
+    Scenario: Navnet er ikke kjent når påloggingen ikke oppgir navnet
+      Gitt brukeradministratoren har gitt en person som ikke fantes fra før, en rolle og oppgitt fødselsnummeret
+      Og personen har logget inn med en påloggingsmåte som ikke oppga navnet
+      Når brukeradministratoren ser personen i brukeroversikten
+      Så vises navnet som «Navn ikke kjent»
 
     Scenario: Navnet vises etter første pålogging med Feide
       Gitt brukeradministratoren har gitt en person som ikke fantes fra før, en rolle og oppgitt fødselsnummeret
@@ -316,44 +329,44 @@ Egenskap: Gi en person tilgang med fødselsnummer, D-nummer eller SNR
       Så ser brukeradministratoren personens navn slik påloggingen oppga det
       Og personen kan søkes opp på navn
 
-  @draft @openquestion
-  Regel: Registrert, men ikke logget inn, er en varig tilstand
-    # ÅPNE SPØRSMÅL:
-    # - Regelen er fra den gamle modellen og bruker ordene «registrere» og «personbruker uten
-    #   Feide-konto». Skal den skrives om til «gi tilgang» og «person», eller fjernes?
+  @draft
+  Regel: En person som ikke har logget inn, beholder tildelingene til de fjernes
+    En person som har fått tilgang med fødselsnummer, D-nummer eller SNR, beholder tildelingene
+    selv om hen aldri logger inn. Tildelingene utløper ikke av at personen ikke logger inn.
 
-    Scenario: Tilstanden fremgår av detaljene og av brukeroversikten
-      Gitt jeg har registrert en personbruker som aldri har logget inn
-      Når jeg ser personbrukerens detaljside
-      Så fremgår det at personbrukeren ikke har logget inn ennå
-      Og jeg ser tildelingene personbrukeren har fått
-      Og det fremgår at tildelingene gjelder fra første pålogging
-      Og den samme tilstanden fremgår av brukeroversikten
+    Scenario: En person som ikke har logget inn, vises med tildelingene sine
+      Gitt brukeradministratoren har gitt en person som ikke fantes fra før, en rolle og oppgitt fødselsnummeret
+      Og personen har ikke logget inn
+      Når brukeradministratoren ser detaljsiden for personen
+      Så vises navnet som «Navn ikke kjent»
+      Og brukeradministratoren ser tildelingene personen har fått
+      Og personen vises med «Navn ikke kjent» i brukeroversikten
 
-    Scenario: Feil identifikasjon viser seg som en personbruker som aldri logger inn
-      Gitt jeg har registrert en personbruker med feil opplysninger om hvem personen er
-      Når personen logger inn
-      Så gjenkjennes hen ikke som den registrerte personbrukeren
-      Og det opprettes ingen personbruker for hen
-      Og det fremgår fortsatt at personbrukeren jeg registrerte ikke har logget inn ennå
-      Og tilstanden består så lenge opplysningene ikke rettes
+    Scenario: Feil identifikasjon viser seg som en person som aldri logger inn
+      Gitt brukeradministratoren har gitt en person en rolle og oppgitt feil fødselsnummer
+      Og ingen person med det oppgitte fødselsnummeret har logget inn
+      Når den riktige personen logger inn
+      Så har den riktige personen ikke tilgangene rollen gir
+      Og personen som fikk rollen, vises fortsatt med «Navn ikke kjent»
+      Og tilstanden består til brukeradministratoren fjerner tildelingen
 
-  @draft @openquestion
-  Regel: En registrert personbruker som ikke lenger har roller
-    # ÅPNE SPØRSMÅL:
-    # - Regelen er fra den gamle modellen og bruker ordene «registrere» og «personbruker uten
-    #   Feide-konto». Skal den skrives om til «gi tilgang» og «person», eller fjernes?
+  @draft
+  Regel: En person som ikke lenger har tildelinger
+    Fjernes den siste aktive tildelingen, blir personen usynlig for brukeradministratoren
+    (BRU-PER-GRU-012, regelen «Fjerning av den siste aktive tildelingen gjør personen usynlig»).
+    Personen finnes fortsatt i løsningen og kan logge inn. Hen kan få en ny tildeling med
+    fødselsnummer, D-nummer eller SNR.
 
     @openquestion
-    Scenario: Personbrukeren logger inn etter at den siste tildelingen er fjernet
+    Scenario: Personen logger inn etter at den siste tildelingen er fjernet
       # ÅPNE SPØRSMÅL:
-      # - Hva en innlogget personbruker uten tilganger skal møte, er ikke bestemt. Risikoen er
-      #   notert på Confluence 5022777363: påloggingen alene gir de ni fagskolene innlogging med
-      #   tomt tilgangssett, og ordlyden i beskjeden er ikke avklart.
-      Gitt en personbruker uten Feide-konto har fått sin siste aktive tildeling fjernet
+      # - Hva en innlogget person uten tilganger skal møte, er ikke bestemt. Risikoen er notert
+      #   på Confluence 5022777363: påloggingen alene gir de ni fagskolene innlogging med tomt
+      #   tilgangssett, og ordlyden i beskjeden er ikke avklart.
+      Gitt brukeradministratoren har fjernet den siste aktive tildelingen personen hadde
       Når personen logger inn
-      Så får personbrukeren beskjed om at hen ikke har tilganger i FS
-      Og personbrukeren møter ikke en feilmelding
+      Så får personen beskjed om at hen ikke har tilganger i FS
+      Og personen møter ikke en feilmelding
 
 # ÅPNE SPØRSMÅL:
 # - Oppdateres navnet ved senere pålogginger hvis personen bytter navn, eller står navnet slik
