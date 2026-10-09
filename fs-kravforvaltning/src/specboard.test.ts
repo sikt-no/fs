@@ -3,7 +3,7 @@ import { test } from 'node:test';
 import type { Snapshot } from '../shared/model.ts';
 import type { RawTask, TasksSnapshot } from '../shared/tasks.ts';
 import { buildEntry } from '../server/parse.ts';
-import { buildCards, canDrop, colOf, columns, flags, gating, handoffPrompt, isVerified, missing, moveTo, parseVerify, phaseOf, pickable, prShort, specChanged, verifyPrompt } from './specboard.ts';
+import { buildCards, canDrop, colOf, columns, flags, gating, handoffPrompt, isVerified, missing, moveTo, parseVerify, phaseOf, pickable, prShort, specChanged, verifyOrder, verifyPrompt } from './specboard.ts';
 
 const feature = (tag: string, id: string, body = '') => `# language: no
 ${id} @must @${tag}
@@ -126,11 +126,27 @@ test('colOf: Utkast med det som mangler, Klart til utvikling, Til verifisering o
 
 test('verifiseringsrapporten gir resultat per scenario, og alt funnet er Verifisert', () => {
   const report = `# Verifisering\n\n- **Dato:** 2026-10-03\n- **Spec:** spec/spec-roller.md\n\n## Scenarioer\n\n| Feature-ID | Scenario | Resultat | Bevis |\n|---|---|---|---|\n| \`@BRU-TIL-ROL-001\` | Første | funnet | fs-plattform/src/A.kt:12 |\n`;
-  assert.deepEqual(parseVerify(report, 'spec/verify-2026-10-03.md'), { file: 'spec/verify-2026-10-03.md', date: '2026-10-03', spec: 'spec-roller.md', rows: [{ id: '@BRU-TIL-ROL-001', sc: 'Første', r: 'funnet', bevis: 'fs-plattform/src/A.kt:12' }] });
+  assert.deepEqual(parseVerify(report, 'spec/verify-2026-10-03.md'), { file: 'spec/verify-2026-10-03.md', date: '2026-10-03', time: null, spec: 'spec-roller.md', rows: [{ id: '@BRU-TIL-ROL-001', sc: 'Første', r: 'funnet', bevis: 'fs-plattform/src/A.kt:12' }] });
   const c = one({ 'spec/spec-roller.md': spec(), 'spec/verify-2026-10-03.md': report });
   assert.equal(c.feats[0].sc[0].r, 'funnet');
   assert.equal(c.verified, '2026-10-03');
   assert.ok(isVerified(c));
+});
+
+test('verifiseringsrapporten har klokkeslett fra Dato eller filnavnet, og den nyeste rapporten gjelder', () => {
+  const rapport = (dato: string, r: string) => `- **Dato:** ${dato}\n- **Spec:** spec/spec-roller.md\n\n## Scenarioer\n\n| Feature-ID | Scenario | Resultat | Bevis |\n|---|---|---|---|\n| \`@BRU-TIL-ROL-001\` | Første | ${r} | x |\n`;
+  assert.equal(parseVerify(rapport('2026-10-09 14:32', 'funnet'), 'spec/verify-2026-10-09-1432.md').time, '14:32');
+  assert.equal(parseVerify('# V\n', 'spec/verify-2026-10-09-0905.md').time, '09:05');
+  assert.equal(parseVerify('# V\n', 'spec/verify-2026-10-09-0905.md').date, '2026-10-09');
+  // `-2` er ikke et klokkeslett
+  assert.equal(parseVerify('# V\n', 'spec/verify-2026-10-09-2.md').time, null);
+  const filer = ['spec/verify-2026-10-09-1432.md', 'spec/verify-2026-10-09-2.md', 'spec/verify-2026-10-08.md', 'spec/verify-2026-10-09.md', 'spec/verify-2026-10-09-0905.md', 'spec/verify-2026-10-09-1432-2.md'];
+  const sortert = filer.map(f => parseVerify('# V\n', f)).sort(verifyOrder).map(r => r.file);
+  assert.deepEqual(sortert, ['spec/verify-2026-10-08.md', 'spec/verify-2026-10-09.md', 'spec/verify-2026-10-09-2.md', 'spec/verify-2026-10-09-0905.md', 'spec/verify-2026-10-09-1432.md', 'spec/verify-2026-10-09-1432-2.md']);
+  // Den nyeste rapporten gir resultatet, også når filnavnet alene ville sortert den først
+  const c = one({ 'spec/spec-roller.md': spec(), 'spec/verify-2026-10-09-0905.md': rapport('2026-10-09 09:05', 'ikke funnet'), 'spec/verify-2026-10-09-1432.md': rapport('2026-10-09 14:32', 'funnet'), 'spec/verify-2026-10-09.md': rapport('2026-10-09', 'usikker') });
+  assert.equal(c.feats[0].sc[0].r, 'funnet');
+  assert.equal(c.verified, '2026-10-09 14:32');
 });
 
 test('canDrop og moveTo: sende, flytte mellom repoer og tilbake', () => {

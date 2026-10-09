@@ -5,7 +5,7 @@ import { join } from 'node:path';
 import { after, test } from 'node:test';
 import type { ClaudeEvent } from '../shared/api.ts';
 import { mkdirSync } from 'node:fs';
-import { allowedAlways, ClaudeRunner, codeDirs, contextPrompt, dirArgs, executeArgs, implementPrompt, mentionPaths, findClaude, PANEL_DENY, parseStreamLine, projectSkills, skillArgs, skillChangedAt, skillHash, skillMeta, streamImages, toolSummary } from './claude.ts';
+import { allowedAlways, ClaudeRunner, codeDirs, contextPrompt, dirArgs, executeArgs, implementPrompt, mentionPaths, findClaude, nowStamp, PANEL_DENY, parseStreamLine, projectSkills, skillArgs, skillChangedAt, skillHash, skillMeta, streamImages, timeLine, toolSummary } from './claude.ts';
 import { existsSync, readFileSync } from 'node:fs';
 
 const tmp = mkdtempSync(join(tmpdir(), 'krav-claude-'));
@@ -437,4 +437,10 @@ test('ClaudeRunner: save_sketch skriver bildet fra verktøyresultatet (eller det
   assert.equal(readFileSync(join(tmp, 'tasks/opptak/x/spec/verify-2026-10-05/01-se-liste.png'), 'utf8'), 'SISTE');
   assert.deepEqual(saved, ['tasks/opptak/x/spec/krav-input/sketches/figma/a/screenshot.png', 'tasks/opptak/x/spec/verify-2026-10-05/01-se-liste.png']);
   runner.close();
+});
+
+test('nowStamp og timeLine: lokal tid i systemteksten, så fs-verify kan sette tidspunkt på rapporten uten shell', () => {
+  assert.equal(nowStamp(new Date(2026, 9, 9, 9, 5)), '2026-10-09 09:05');
+  assert.match(timeLine(new Date(2026, 0, 2, 14, 32)), /^Tidspunktet nå er 2026-01-02 14:32 \(lokal tid\)/);
+  assert.match(contextPrompt(null), /Tidspunktet nå er \d{4}-\d{2}-\d{2} \d{2}:\d{2}/);
 });

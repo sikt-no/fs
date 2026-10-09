@@ -55,7 +55,7 @@ export interface Card {
   utforing: Utforing;
   feats: FeatCard[];
   mtime: number | null;
-  /** Dato for verifiseringsrapporten resultatene kommer fra */
+  /** Dato (og tidspunkt, `YYYY-MM-DD HH:MM`, når rapporten har det) for verifiseringsrapporten resultatene kommer fra */
   verified: string | null;
 }
 
@@ -69,15 +69,23 @@ const has = (tags: string[], t: string) => tags.includes('@' + t);
 export interface VerifyReport {
   file: string;
   date: string;
+  /** Klokkeslettet (`HH:MM`) fra `- **Dato:**` eller filnavnet (`verify-<dato>-<HHMM>.md`), eller null i eldre rapporter */
+  time: string | null;
   /** Spesifikasjonen rapporten gjelder (filnavnet), eller null når den ikke står */
   spec: string | null;
   rows: { id: string; sc: string; r: Result; bevis: string }[];
 }
 
-/** `spec/verify-<dato>.md` fra fs-verify: `- **Spec:**` og tabellen `## Scenarioer` */
+// Filnavnet: `verify-<dato>.md`, `verify-<dato>-<HHMM>.md`, og `-2`, `-3` … når fila finnes fra før
+const VERIFY_FILE = /(\d{4}-\d{2}-\d{2})(?:-(\d{2})(\d{2}))?(?:-(\d{1,3}))?\.md$/;
+
+/** `spec/verify-<dato>-<HHMM>.md` fra fs-verify: `- **Dato:**`, `- **Spec:**` og tabellen `## Scenarioer` */
 export function parseVerify(text: string, file: string): VerifyReport {
   const spec = text.match(/^-\s+\*\*Spec:?\*\*:?\s*`?([^`\n]+?)`?\s*$/m)?.[1];
-  const date = text.match(/^-\s+\*\*Dato:?\*\*:?\s*(\d{4}-\d{2}-\d{2})/m)?.[1] ?? file.match(/(\d{4}-\d{2}-\d{2})/)?.[1] ?? '';
+  const dato = text.match(/^-\s+\*\*Dato:?\*\*:?\s*(\d{4}-\d{2}-\d{2})(?:[ T](\d{2}):(\d{2}))?/m);
+  const named = file.match(VERIFY_FILE);
+  const date = dato?.[1] ?? named?.[1] ?? '';
+  const time = dato?.[2] ? `${dato[2]}:${dato[3]}` : named?.[2] ? `${named[2]}:${named[3]}` : null;
   const rows: VerifyReport['rows'] = [];
   const sec = text.split(/^## /m).find(s => /^Scenarioer\b/.test(s)) ?? '';
   for (const l of sec.split('\n')) {
@@ -86,7 +94,13 @@ export function parseVerify(text: string, file: string): VerifyReport {
     const r = cells[2].toLowerCase() as Result;
     if (r === 'funnet' || r === 'ikke funnet' || r === 'usikker') rows.push({ id: cells[0], sc: cells[1], r, bevis: cells[3] ?? '' });
   }
-  return { file, date, spec: spec ? base(spec) : null, rows };
+  return { file, date, time, spec: spec ? base(spec) : null, rows };
+}
+
+/** Eldste først: dato, klokkeslett (rapporter uten kommer først samme dag) og `-2`, `-3` … Filnavnet alene sorterer `-2` før den uten. */
+export function verifyOrder(a: VerifyReport, b: VerifyReport): number {
+  const n = (r: VerifyReport) => Number(r.file.match(VERIFY_FILE)?.[4] ?? 1);
+  return a.date.localeCompare(b.date) || (a.time ?? '').localeCompare(b.time ?? '') || n(a) - n(b) || a.file.localeCompare(b.file);
 }
 
 // —— Gating-settet ——
@@ -182,8 +196,8 @@ export function buildCards(snap: TasksSnapshot, entries: Snapshot): Card[] {
     const utforing = parseUtforing(t.sources['utforing.md'] ?? '');
     const reports = t.files
       .filter(f => /^spec\/verify-[^/]+\.md$/.test(f) && t.sources[f] !== undefined)
-      .sort()
-      .map(f => parseVerify(t.sources[f], f));
+      .map(f => parseVerify(t.sources[f], f))
+      .sort(verifyOrder);
     const specs = t.files.filter(f => /^spec\/spec-[^/]+\.md$/.test(f) && t.sources[f] !== undefined);
     for (const f of specs) out.push(card(t, f, utforing, reports, specs.length, entries, ids));
   }
@@ -232,7 +246,7 @@ function card(t: RawTask, f: string, utforing: Utforing, reports: VerifyReport[]
     utforing,
     feats,
     mtime: t.mtimes?.[f] ?? null,
-    verified: report?.date ?? null,
+    verified: report ? (report.time ? `${report.date} ${report.time}` : report.date) : null,
   };
 }
 
@@ -414,7 +428,7 @@ export function verifyPrompt(c: Card, screenshots?: boolean): string {
     'Krav:',
     ...c.feats.map(f => `- ${f.path ?? f.file} (${f.id})${f.remove ? ' — skal fjernes' : ''}`),
     '',
-    `Skriv rapporten i ${c.dir}/spec/verify-<dato>.md med «- **Spec:** spec/${c.file}» og tabellen «## Scenarioer» (Feature-ID, Scenario, Resultat, Bevis).`,
+    `Skriv rapporten i ${c.dir}/spec/verify-<dato>-<HHMM>.md (tidspunktet du starter) med «- **Dato:** <dato> <HH:MM>», «- **Spec:** spec/${c.file}» og tabellen «## Scenarioer» (Feature-ID, Scenario, Resultat, Bevis).`,
     `Mangler noe, sett steget i repoet der koden mangler, tilbake til «Status: pågår» med «Tilbake: <dato>» i ${c.dir}/utforing.md.`,
     // Uten valget spør fs-verify selv
     ...(screenshots === undefined ? [] : [screenshotLine(screenshots)]),
