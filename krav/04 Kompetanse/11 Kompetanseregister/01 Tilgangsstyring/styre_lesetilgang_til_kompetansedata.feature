@@ -87,12 +87,12 @@ Egenskap: Styre lesetilgang til kompetansedata
       Men applikasjonen får ikke vitnemål fra andre utdanningsnivåer
 
   @openquestion
-  Regel: Leserolle for egen organisasjon omfatter organisasjonene under den
+  Regel: Lesetilgang for en annen organisasjon enn Sikt er avgrenset til organisasjonen og organisasjonene under den
     # ÅPNE SPØRSMÅL:
-    # - Rollen KREG_KOMPETANSEOPPNAELSE_VGS_EGEN_ORG_LES trengs ikke for opptak 2027. Regelen står her for at leserollene for Sikt og leserollene for egen organisasjon skal følge samme modell, så ingenting må skrives om når skole- og fylkeskommunebrukere kommer.
+    # - Trengs ikke for opptak 2027. Regelen står her for at lesetilgang for Sikt og for andre organisasjoner skal følge samme modell, så ingenting må skrives om når skole- og fylkeskommunebrukere kommer.
+    # - Tilgangsmodellen i fs-plattform er (organisasjon, rolle, miljø). Er organisasjonen på tildelingen nok til å avgrense hvilke vitnemål som leses, eller trengs egne roller for det?
     # - Tilgangsstyringen kjenner bare organisasjonene fra Utdanningsregisteret (organisasjonskode), uten hierarki. KREG har enhetsregisteret fra NVB (organisasjonsnummer, med overordnet enhet), uten kobling til organisasjonskode. Hvor skal koblingen og hierarkiet ligge?
-    # - Tildeling nedover (Sikt til fylkeskommunene, fylkeskommunen til skolene) krever tildelingsrettighet for organisasjonen rollen gjelder for, og avhenger av den samme koblingen mellom organisasjonskode og enhet.
-    # - Confluence-siden har bare EGEN_ORG-variant for oppnåelse. Skal dokument, vurdering og merknad ha det samme?
+    # - Tildeling nedover (Sikt til fylkeskommunene, fylkeskommunen til skolene) krever tildelingsrettighet for organisasjonen tilgangen gjelder for, og avhenger av den samme koblingen mellom organisasjonskode og enhet.
 
     Scenario: Fylkeskommune leser VGS-vitnemål fra skolene i fylket
       Gitt en bruker i en fylkeskommune har leserollen for VGS-oppnåelse for organisasjonen brukeren tilhører
