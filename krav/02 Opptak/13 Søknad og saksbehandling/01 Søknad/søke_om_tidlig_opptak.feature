@@ -26,7 +26,8 @@
 #   tekst om hva søkeren må dokumentere (STEK-267).
 # - Tidlig opptak kan bare søkes når opptaket tilbyr tidlig opptak, eller når
 #   minst ett av søknadsalternativene er markert for tidlig tilbud.
-# - Søkeren kan bytte begrunnelse fram til søknadsfristen for tidlig opptak.
+# - (Endret 09.10.2026, se under.) Søkeren kan bytte begrunnelse fram til
+#   søknadsfristen for tidlig opptak.
 # - Søkeren får kvittering når begrunnelsen settes eller byttes (TOT-2384).
 # - Ønsket om tidlig opptak blir stående når søknaden endres, eller når hele søknaden trekkes.
 #
@@ -37,6 +38,7 @@
 #   ingen måte å gjøre det på (sokTidligOpptak krever en begrunnelse), og må endres.
 # - Søkeren ser når søknaden om tidlig opptak sist ble endret. Ønske fra Min
 #   kompetanse i STEK-267. Koden lagrer ikke tidspunktet i dag, og må endres.
+#   (Endret 09.10.2026: søkeren ser når hen søkte, siden bytte ikke er et krav.)
 # - Opptak som ikke krever begrunnelse, f.eks. lokale opptak ved OsloMet, legger
 #   inn en begrunnelse «Ingen begrunnelse» uten dokumentasjonskrav. Det trengs
 #   ingen egen funksjonalitet for det.
@@ -57,6 +59,12 @@
 #   opptaket. Ønsket i STEK-267 gjelder «opptaket/institusjonen sin egen
 #   info-side», f.eks. samordnaopptak.no. Lenken settes i
 #   11 Opprette og vedlikeholde opptak/03 Innstillinger/innstillinger.feature.
+# - Å bytte begrunnelse er ikke et krav i første versjon, siden skissene ikke
+#   viser det. Koden tillater det i dag (sokTidligOpptak skriver over
+#   begrunnelsen, og sender ny kvittering når den er endret), og det kan bli
+#   stående. Scenarioet «Bytte begrunnelse før fristen» er fjernet.
+# - Scenarioet om begrunnelsen «Ingen begrunnelse» er fjernet. Det er
+#   konfigurasjon av opptaket, ikke en egen funksjon (se avklaringen fra 08.10).
 #
 @OPT-SØK-SØK-011 @must @in-progress
 Egenskap: Søke om tidlig opptak
@@ -134,24 +142,10 @@ Egenskap: Søke om tidlig opptak
       Så ser søkeren forklaringen på begrunnelsen
       Og søkeren ser hva som må dokumenteres for begrunnelsen
 
-    Scenario: Søke om tidlig opptak med en begrunnelse uten dokumentasjonskrav
-      Gitt opptaket "Samordna opptak 2027" har begrunnelsen "Ingen begrunnelse" uten dokumentasjonskrav
-      Når søkeren søker om tidlig opptak med begrunnelsen "Ingen begrunnelse"
-      Så har søkeren søkt om tidlig opptak med begrunnelsen "Ingen begrunnelse"
-      Og søkeren ser at det ikke er noe som må dokumenteres
-
-    Scenario: Bytte begrunnelse før fristen
-      Gitt søknadsfristen for tidlig opptak er "2027-03-01 23:59"
-      Og søkeren har søkt om tidlig opptak med begrunnelsen "Fullført fagskole"
-      Når søkeren bytter til begrunnelsen "Fullført videregående opplæring" "2027-02-20"
-      Så har søkeren søkt om tidlig opptak med begrunnelsen "Fullført videregående opplæring"
-      Og søkeren får ny kvittering for søknaden om tidlig opptak
-
-    Scenario: Se når søknaden om tidlig opptak sist ble endret
+    Scenario: Se når søkeren søkte om tidlig opptak
       Gitt søkeren søkte om tidlig opptak med begrunnelsen "Fullført fagskole" "2027-01-15"
-      Og søkeren byttet til begrunnelsen "Fullført videregående opplæring" "2027-02-20"
       Når søkeren ser på søknaden
-      Så ser søkeren at søknaden om tidlig opptak sist ble endret "2027-02-20"
+      Så ser søkeren at søknaden om tidlig opptak ble sendt "2027-01-15"
 
   Regel: Tidlig opptak kan bare søkes innen søknadsfristen for tidlig opptak
 
