@@ -1,6 +1,6 @@
 # language: no
 # GitHub: #208
-@KOM-RES-RES-001 @must @draft
+@KOM-RES-RES-001 @must @planned
 Egenskap: Se egne resultater
   Som bruker av Min kompetanse
   ønsker jeg å se alle resultatene mine samlet på ett sted
