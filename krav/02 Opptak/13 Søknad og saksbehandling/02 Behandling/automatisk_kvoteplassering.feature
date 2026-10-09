@@ -62,7 +62,10 @@ Egenskap: Automatisk kvoteplassering
       Så ser ikke saksbehandleren kvotespørsmålet "FRA-HARDANGER"
       Og søkeren er ikke plassert i kvotetypen "JENTER-HARDANGER"
 
+  @openquestion
   Regel: Alderen beregnes fra opptakets dato for aldersberegning
+    # ÅPNE SPØRSMÅL:
+    # - Kan dato for aldersberegning utledes fra en annen dato på opptaket, eller må opptaksforvalteren sette den selv? Koden utleder i dag 31.12 i året for publisering av resultat, men det er ikke avklart. Avklares med domenerådgiver.
 
     Scenario: Alder beregnes fra datoen opptaket har satt
       Gitt at opptaket har dato for aldersberegning "2027-04-15"
