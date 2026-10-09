@@ -9,6 +9,10 @@ Egenskap: Plassflyt mellom utdanningskvoter
   # ÅPNE SPØRSMÅL:
   # - Hvor bestemmes plassflyten mellom ulike kvotetyper — på opptaket eller på utdanningstilbudet?
   #   Dagens fil antar utdanningstilbudet, men det er ikke avklart.
+  #   Kildene spriker: raffineringen 2026-10-07 sa at standard plassflyt er en opptaksinnstilling
+  #   (antall_tilbud_som_skal_gis.feature). Kvoterregelverket har standard plassflyt på kvotetypen.
+  #   Koden tar standarden fra kvotetypen og lar den overstyres per utdanningskvote, uten standard
+  #   på opptaket. Fortsatt uavklart 2026-10-08.
   # - Confluence (raffinering 2026-09-08) har krav om at plasser skal kunne flyte fra en tidligere
   #   plasstildeling til en senere. design.md beskriver dette som en blindsone. Er det utenfor scope for 2027?
   # - Sirkulær plassflyt håndteres i koden, men ikke i databasen. Skal den avvises når den settes
@@ -16,6 +20,9 @@ Egenskap: Plassflyt mellom utdanningskvoter
   # - Plassflyt finnes på tre nivåer (kvotetype i regelverket, utdanningskvote i opptaket, og per plasstildeling).
   #   Skal opptaksforvalter kunne endre plassflyten per runde?
   # - Forgrening (sende ledige plasser til flere utdanningskvoter) er ikke støttet. Bekrefte at det ikke trengs?
+  # - Å flytte bare noen av de ledige plassene («flytt N av M») er ikke støttet. Trengs det?
+  # - Flyter flere utdanningskvoter til samme mottaker, avgjør kvoteprioriteten rekkefølgen
+  #   («Plasstildelingsløpet i Opptak», kap. 4). Skal det stå som et scenario?
   # - #598 sier at «kun én utdanningskvote kan være siste mottaker». Scenarioet «Utdanningstilbud uten siste
   #   utdanningskvote» krever minst én. Skal det være nøyaktig én siste utdanningskvote per utdanningstilbud?
   #

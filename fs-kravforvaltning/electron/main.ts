@@ -7,6 +7,7 @@ import type { Boot } from '../shared/api.ts';
 import { createApi, dispatch } from '../core/api.ts';
 import { createAuth, type TokenStore } from '../core/auth.ts';
 import { ClaudeRunner } from '../core/claude.ts';
+import { PtyRunner } from '../core/pty.ts';
 import { ensureClone, isoVcs } from '../core/vcs-isogit.ts';
 import { modeOn, Workspace, type WorkspaceEvent } from '../core/workspace.ts';
 
@@ -74,11 +75,15 @@ const ready = (async () => {
   // Repoet er appens egen klone, så kodeklonene ligger ikke ved siden av; brukeren velger dem under «Kodemapper»
   const claude = new ClaudeRunner(dir, { siblingDirs: false, onSaved: () => ws.refreshGit(), onDone: () => ws.refreshGit() });
   claude.on(data => send('krav:claude', data));
+  // Terminalen (interaktiv claude med agent teams), med den samme claude-installasjonen
+  const pty = new PtyRunner(dir, { bin: () => claude.binary() });
+  pty.on(data => send('krav:pty', data));
   app.on('before-quit', () => {
     ws.close();
     claude.close();
+    pty.close();
   });
-  const api = createApi(ws, createAuth({ clientId: CLIENT_ID, store }), claude);
+  const api = createApi(ws, createAuth({ clientId: CLIENT_ID, store }), claude, pty);
   api.pickDir = async () => {
     const opts = { title: 'Velg kodemappe', properties: ['openDirectory' as const] };
     const r = await (win ? dialog.showOpenDialog(win, opts) : dialog.showOpenDialog(opts));

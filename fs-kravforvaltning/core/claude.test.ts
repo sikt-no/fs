@@ -218,7 +218,7 @@ test('ClaudeRunner sender meldingen på stdin, med verktøy, kontekst og resume'
   assert.equal(echo.mcp['chrome-devtools'].url, 'https://atl/mcp');
   assert.match(echo.mcp.kravforvaltning.url, /^http:\/\/127\.0\.0\.1:\d+\/mcp\//);
   assert.ok(!args.some(a => a.includes('hemmelig')), 'hemmeligheter står ikke på kommandolinja');
-  assert.equal(echo.toolTimeout, String(5 * 60_000 + 60_000), 'claude venter på spørsmålet om lov');
+  assert.equal(echo.toolTimeout, String(30 * 60_000 + 60_000), 'claude venter på spørsmålet om lov og på svar på AskUserQuestion');
   // `done` kommer fra stdout før prosessen er avsluttet; fila slettes når den er det
   for (let i = 0; i < 50 && runner.active().length; i++) await new Promise(r => setTimeout(r, 20));
   assert.ok(!existsSync(args[args.indexOf('--mcp-config') + 1]), 'konfigfila slettes etter kjøringen');
@@ -241,6 +241,12 @@ test('ClaudeRunner sender meldingen på stdin, med verktøy, kontekst og resume'
   assert.equal(fecho.input, 'verifiser', 'ingen skill å laste');
   const fargs: string[] = fecho.args;
   assert.ok(fargs.includes('Skill(fs-krav)') && fargs.includes('Skill(fs-verify)'));
+  assert.ok(!fargs.includes('mcp__chrome-devtools__navigate_page'), 'navigering spørres om uten valgt fs-verify');
+  // Med fs-verify valgt navigerer, klikker og trykker Claude i chrome-devtools uten å spørre (skjermbildene)
+  const vargs: string[] = JSON.parse(((await collect(runner, { prompt: 'verifiser', skill: 'fs-verify', skills: ['fs-verify', 'fs-krav'] }))[1] as { text: string }).text).args;
+  const vallowed = vargs.slice(vargs.indexOf('--allowedTools'), vargs.indexOf('--disallowedTools'));
+  assert.ok(['navigate_page', 'click', 'press_key'].every(t => vallowed.includes(`mcp__chrome-devtools__${t}`)));
+  assert.ok(!vallowed.includes('mcp__chrome-devtools__new_page') && !vallowed.includes('mcp__chrome-devtools__evaluate_script'));
   assert.deepEqual(fargs.slice(fargs.indexOf('--add-dir'), fargs.indexOf('--add-dir') + 3), ['--add-dir', kode, '--append-system-prompt']);
   assert.ok(fargs.at(-1)!.startsWith('Edit(//') && fargs.at(-1)!.endsWith('/kode/**)'));
   assert.equal(events.at(-1)!.kind, 'done');

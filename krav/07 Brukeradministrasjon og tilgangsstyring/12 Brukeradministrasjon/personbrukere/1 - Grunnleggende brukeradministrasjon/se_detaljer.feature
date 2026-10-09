@@ -1,6 +1,6 @@
 # language: no
 # GitHub: TBD
-@BRU-PER-GRU-007 @must @in-progress
+@BRU-PER-GRU-007 @must @implemented
 Egenskap: Se detaljer for personbruker
   Som brukeradministrator
   ønsker jeg å se detaljer for en personbruker, organisert i logiske datagrupper,
@@ -34,8 +34,10 @@ Egenskap: Se detaljer for personbruker
     Scenario: Se status
       Så ser jeg om personbrukeren er aktiv eller deaktivert
 
-  @draft
+  @draft @openquestion
   Regel: Sist brukt (planlagt etter v1)
+    # ÅPNE SPØRSMÅL:
+    # - Backend har ikke støtte for dette: tidspunktet personbrukeren sist brukte løsningen lagres ikke. Hvordan og hvor skal det registreres?
 
     Scenario: Se sist brukt
       Så ser jeg tidspunktet personbrukeren sist brukte løsningen

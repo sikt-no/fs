@@ -94,9 +94,22 @@ export const MCP_READONLY: Record<string, string[]> = {
   ],
 };
 
+/**
+ * Verktøyene i `MCP_SERVERS` som tillates uten spørsmål bare når fs-verify kjøres: skjermbildene fra test-fsadmin
+ * krever at fs-verify navigerer, klikker og trykker taster i nettleseren. Ellers spørres de om, som i `MCP_READONLY`.
+ */
+export const MCP_VERIFY: Record<string, string[]> = {
+  'chrome-devtools': ['navigate_page', 'click', 'press_key'],
+};
+
+const toolNames = (tools: Record<string, string[]>): string[] =>
+  MCP_SERVERS.flatMap(server => (tools[server] ?? []).map(tool => `mcp__${server}__${tool}`));
+
 /** `MCP_READONLY` som verktøynavn (`mcp__figma__get_metadata`), for serverne i `MCP_SERVERS` */
-export const readonlyTools = (): string[] =>
-  MCP_SERVERS.flatMap(server => (MCP_READONLY[server] ?? []).map(tool => `mcp__${server}__${tool}`));
+export const readonlyTools = (): string[] => toolNames(MCP_READONLY);
+
+/** `MCP_VERIFY` som verktøynavn (`mcp__chrome-devtools__navigate_page`), for serverne i `MCP_SERVERS` */
+export const verifyTools = (): string[] => toolNames(MCP_VERIFY);
 
 /** Serveren et `mcp__<server>__<verktøy>`-navn hører til */
 export const mcpServerOf = (tool: string) => tool.match(/^mcp__([\w.-]+?)__[\w.-]+$/)?.[1] ?? null;

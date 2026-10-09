@@ -78,3 +78,11 @@ Egenskap: Publisere resultatet til søkerne
 # - Skal søkere få varsel på e-post/SMS ved publisering, og påminnelse før svarfristen? Hører det hjemme i 09 Kommunikasjon?
 # - Vedtaksbrev med klagerett: se Confluence «Vedtaksbrev og svar på opptaket». Hvor skal kravet ligge?
 # - Hvilke søkere får melding: bare de med tilbud, eller også de på venteliste og med avslag?
+# - Publisering kan ikke angres i dag. Svarfristen og publiseringstidspunktet kan nullstilles på runden,
+#   men plasstildelingen står fortsatt som publisert. Skal det være mulig å angre en publisering?
+# - Et søknadsalternativ uten utdanningskvote er ikke med i plasstildelingen, og søkeren får ikke noe svar.
+#   Hva skal søkeren se?
+# - Har søkeren tilbud i én utdanningskvote og kansellert i en annen på samme utdanningstilbud, ser søkeren
+#   «kansellert» i dag (A3, videreført fra admissio). Er det riktig?
+#
+# Kilde: også Confluence «Plasstildelingsløpet i Opptak» (kap. 8).

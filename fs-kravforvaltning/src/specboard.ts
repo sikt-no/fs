@@ -5,6 +5,7 @@
 import type { Entry, Scen, Snapshot, Status } from '../shared/model.ts';
 import { parseSpec, type SpecDoc } from '../shared/spec.ts';
 import type { RawTask, TasksSnapshot } from '../shared/tasks.ts';
+import { screenshotLine } from './verifyPrompt.ts';
 import { emptyStep, parseUtforing, runFor, type SpecRun, type StepState, type Utforing } from '../shared/utforing.ts';
 
 export type Result = 'funnet' | 'ikke funnet' | 'usikker';
@@ -406,7 +407,7 @@ export function handoffPrompt(c: Card, repo: string): string {
 }
 
 /** fs-verify avgrenset til spesifikasjonen, med kodemappene som er valgt */
-export function verifyPrompt(c: Card): string {
+export function verifyPrompt(c: Card, screenshots?: boolean): string {
   return [
     `Verifiser spesifikasjonen ${c.path} mot koden i kodemappene.`,
     '',
@@ -415,6 +416,8 @@ export function verifyPrompt(c: Card): string {
     '',
     `Skriv rapporten i ${c.dir}/spec/verify-<dato>.md med «- **Spec:** spec/${c.file}» og tabellen «## Scenarioer» (Feature-ID, Scenario, Resultat, Bevis).`,
     `Mangler noe, sett steget i repoet der koden mangler, tilbake til «Status: pågår» med «Tilbake: <dato>» i ${c.dir}/utforing.md.`,
+    // Uten valget spør fs-verify selv
+    ...(screenshots === undefined ? [] : [screenshotLine(screenshots)]),
   ].join('\n');
 }
 
