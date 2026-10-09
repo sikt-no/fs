@@ -1,58 +1,65 @@
 # language: no
+# GitHub: #376
 @OPT-REG-KVO-002 @must @draft
 Egenskap: Kvotespørsmål
   Som opptaksforvalter
-  ønsker jeg å definere kvotespørsmål
-  slik at det kan avgjøres om en søker tilhører en bestemt kvote.
+  ønsker jeg å definere kvotespørsmål og knytte dem til kvotetyper
+  slik at det kan avgjøres om en søker skal plasseres i en bestemt kvote.
 
   Bakgrunn:
-    Gitt at jeg er innlogget som opptaksforvalter
+    Gitt at opptaksforvalteren er innlogget
     Og at regelverkssamlingen "UHG2027" er opprettet
-    Og at kvotetypen "SAMISK" finnes i samlingen
+    Og at kvotetypen "SAMISK" finnes i regelverkssamlingen
 
   Regel: Opptaksforvalter kan opprette kvotespørsmål med kode, navn og spørsmålstekst
 
     Scenario: Opprette kvotespørsmål
-      Når jeg oppretter et kvotespørsmål med kode "SAMISK-TILH"
-      Og jeg angir navn "Samisk tilhørighet" på bokmål
-      Og jeg angir spørsmålstekst "Er du av samisk ætt?" på bokmål
+      Når opptaksforvalteren oppretter et kvotespørsmål med kode "SAMISK-TILH"
+      Og opptaksforvalteren angir navn "Samisk tilhørighet" på bokmål
+      Og opptaksforvalteren angir spørsmålstekst "Er du av samisk ætt?" på bokmål
       Så er kvotespørsmålet opprettet
 
   Regel: Kvotespørsmål har navn og tekst på flere språk
 
     Scenario: Flerspråklig kvotespørsmål
-      Når jeg oppretter kvotespørsmålet "SAMISK-TILH"
-      Og jeg angir navn og spørsmålstekst på bokmål, nynorsk, engelsk og samisk
+      Når opptaksforvalteren oppretter kvotespørsmålet "SAMISK-TILH"
+      Og opptaksforvalteren angir navn og spørsmålstekst på bokmål, nynorsk, engelsk og samisk
       Så er tekstene lagret på alle fire språk
 
-  Regel: Kvotespørsmål har en preutfyllingsstrategi
+  Regel: Et kvotespørsmål kan kobles til en algoritme som besvarer det automatisk
 
-    Scenario: Kvotespørsmål besvares automatisk
-      Når jeg oppretter kvotespørsmålet "FV-SJEKK" med preutfylling "AUTOMATISK"
-      Så besvares spørsmålet automatisk basert på en algoritme
+    Scenario: Tilgjengelige algoritmer
+      Når opptaksforvalteren skal koble kvotespørsmålet "ER-KVINNE" til en algoritme
+      Så kan opptaksforvalteren velge mellom algoritmene:
+        | Algoritme |
+        | Er kvinne |
+        | Er mann   |
 
-    Scenario: Kvotespørsmål besvares av saksbehandler
-      Når jeg oppretter kvotespørsmålet "SPESIAL-VURD" med preutfylling "SAKSBEHANDLER"
-      Så må saksbehandler besvare spørsmålet manuelt
-
-    Scenario: Kvotespørsmål preutfylles med ja
-      Når jeg oppretter kvotespørsmålet "ALLE-FV" med preutfylling "JA"
-      Så preutfylles svaret med ja for alle søkere
-
-    Scenario: Kvotespørsmål preutfylles med nei
-      Når jeg oppretter kvotespørsmålet "INGEN-FV" med preutfylling "NEI"
-      Så preutfylles svaret med nei for alle søkere
+    Scenario: Koble kvotespørsmål til en algoritme
+      Gitt at kvotespørsmålet "ER-KVINNE" finnes
+      Når opptaksforvalteren kobler kvotespørsmålet "ER-KVINNE" til algoritmen "Er kvinne"
+      Så besvares kvotespørsmålet "ER-KVINNE" automatisk for hver søker ut fra algoritmen
 
   Regel: Kvotespørsmål kan knyttes til en kvotetype
 
     Scenario: Knytte kvotespørsmål til kvotetype
       Gitt at kvotespørsmålet "SAMISK-TILH" finnes
-      Når jeg knytter kvotespørsmålet til kvotetypen "SAMISK"
-      Så brukes spørsmålet for å avgjøre om søkeren tilhører samisk kvote
+      Når opptaksforvalteren knytter kvotespørsmålet "SAMISK-TILH" til kvotetypen "SAMISK"
+      Så brukes kvotespørsmålet til å avgjøre om søkeren plasseres i kvotetypen "SAMISK"
+
+    Scenario: Knytte flere kvotespørsmål til samme kvotetype
+      Gitt at kvotetypen "JENTER-HARDANGER" finnes
+      Når opptaksforvalteren knytter kvotespørsmålene "ER-KVINNE" og "FRA-HARDANGER" til kvotetypen "JENTER-HARDANGER"
+      Så må begge kvotespørsmålene være besvart ja før søkeren plasseres i kvotetypen "JENTER-HARDANGER"
+
+    Scenario: Informasjon om automatisk plassering
+      Gitt at kvotetypen "ORD" ikke har kvotespørsmål
+      Når opptaksforvalteren ser på kvotetypen "ORD"
+      Så ser opptaksforvalteren at søkere plasseres automatisk i kvotetypen "ORD"
 
   Regel: Et kvotespørsmål kan slettes
 
     Scenario: Slette kvotespørsmål
       Gitt at kvotespørsmålet "TestSporsmal" ikke er knyttet til noen kvotetype
-      Når jeg sletter kvotespørsmålet
-      Så er det slettet
+      Når opptaksforvalteren sletter kvotespørsmålet "TestSporsmal"
+      Så er kvotespørsmålet "TestSporsmal" slettet
