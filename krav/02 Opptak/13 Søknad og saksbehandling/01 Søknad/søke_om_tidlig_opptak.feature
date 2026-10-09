@@ -40,10 +40,10 @@
 # - Opptak som ikke krever begrunnelse, f.eks. lokale opptak ved OsloMet, legger
 #   inn en begrunnelse «Ingen begrunnelse» uten dokumentasjonskrav. Det trengs
 #   ingen egen funksjonalitet for det.
-# - Søkeren ser en lenke til lærestedets egen side om tidlig opptak («Les mer»)
-#   per søknadsalternativ. Lenken settes per utdanningstilbud, se
-#   opptaksinnstillinger_utdanningstilbud.feature. Ønske fra Min kompetanse i
-#   STEK-267. Koden har ikke noe felt for lenken i dag, og må endres.
+# - (Endret 09.10.2026, se under.) Søkeren ser en lenke til lærestedets egen
+#   side om tidlig opptak («Les mer») per søknadsalternativ. Lenken settes per
+#   utdanningstilbud, se opptaksinnstillinger_utdanningstilbud.feature. Ønske fra
+#   Min kompetanse i STEK-267. Koden har ikke noe felt for lenken i dag, og må endres.
 #
 # AVKLART 09.10.2026 (review av PR #654)
 #
@@ -52,6 +52,11 @@
 #   viser det ikke. Søkeren kan fortsatt trekke hele søknaden
 #   (trekke_søknad.feature). Regelen «Søkeren kan trekke ønsket om tidlig opptak
 #   innen fristen» er fjernet.
+# - Lenken til informasjon om tidlig opptak («Les mer») hører til opptaket, og
+#   settes av opptakseieren, ikke per utdanningstilbud. Søkeren ser én lenke for
+#   opptaket. Ønsket i STEK-267 gjelder «opptaket/institusjonen sin egen
+#   info-side», f.eks. samordnaopptak.no. Lenken settes i
+#   11 Opprette og vedlikeholde opptak/03 Innstillinger/innstillinger.feature.
 #
 @OPT-SØK-SØK-011 @must @in-progress
 Egenskap: Søke om tidlig opptak
@@ -101,12 +106,10 @@ Egenskap: Søke om tidlig opptak
       Så ser søkeren at "Sykepleie, høst 2027" tilbyr tidlig opptak
       Og søkeren ser at "Historie, høst 2027" ikke tilbyr tidlig opptak
 
-    Scenario: Se lærestedets side om tidlig opptak
-      Gitt "Sykepleie, høst 2027" er markert for tidlig tilbud
-      Og "Sykepleie, høst 2027" har lenken "https://www.oslomet.no/studier/soknad-og-opptak/tidlig-opptak" til informasjon om tidlig opptak
-      Og søknaden har søknadsalternativet "Sykepleie, høst 2027"
+    Scenario: Se informasjon om tidlig opptak i opptaket
+      Gitt opptaket har lenken "https://www.samordnaopptak.no/universitet-og-hogskole/slik-soker-du/tidlig-opptak.html" til informasjon om tidlig opptak
       Når søkeren ser på søknaden
-      Så ser søkeren lenken til informasjon om tidlig opptak for "Sykepleie, høst 2027"
+      Så ser søkeren lenken til informasjon om tidlig opptak
 
     Scenario: Kan ikke søke om tidlig opptak når ingen søknadsalternativer tilbyr det
       Gitt opptaket "Samordna opptak 2027" tilbyr ikke tidlig opptak

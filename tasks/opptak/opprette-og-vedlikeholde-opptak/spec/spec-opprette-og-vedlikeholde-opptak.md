@@ -57,6 +57,12 @@
 | `krav/02 Opptak/11 Opprette og vedlikeholde opptak/03 Innstillinger/innstillinger.feature` | `@OPT-OVO-INN-001 @must @planned` | `@OPT-OVO-INN-001 @must @in-progress` |
 | `krav/02 Opptak/11 Opprette og vedlikeholde opptak/04 Frister/frister_og_hendelser.feature` | `@OPT-OVO-FRI-001 @must @planned` | `@OPT-OVO-FRI-001 @must @in-progress` |
 
+## Endringer etter innhenting
+
+Kravene er `@in-progress`, og endres på stedet. Endringene står her, så den som implementerer, ser dem.
+
+- **2026-10-09, `@OPT-OVO-INN-001`:** Nytt scenario «Sette lenke til informasjon om tidlig opptak» under regelen «Opptaksforvalter kan åpne for tidlig opptak». Opptaksforvalteren setter én lenke per opptak til informasjon om tidlig opptak, og søkerne ser den i Min kompetanse («Les mer»). Kom fra reviewen av PR #654 (oppgaven `tasks/opptak/tidlig-opptak`), og ønsket i STEK-267. Lenken var før beskrevet per utdanningstilbud i `opptaksinnstillinger_utdanningstilbud.feature`. Koden har ikke noe felt for lenken i dag.
+
 ## Åpne spørsmål
 
 Ingen åpne spørsmål.

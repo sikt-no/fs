@@ -76,12 +76,9 @@ Egenskap: Opptaksinnstillinger per utdanningstilbud
       # Se gi_tilbudsgaranti_ved_tidlig_opptak.feature. En egen verdi beregnet fra fjorårets
       # opptak kommer eventuelt senere (STEK-352).
 
-    Scenario: Sette lenke til informasjon om tidlig opptak
-      Gitt utdanningstilbudet "Sykepleie, høst 2027" er markert for tidlig tilbud
-      Når opptaksforvalter setter lenken "https://www.oslomet.no/studier/soknad-og-opptak/tidlig-opptak" til informasjon om tidlig opptak for utdanningstilbudet "Sykepleie, høst 2027"
-      Så ser søkere med "Sykepleie, høst 2027" i søknaden lenken til informasjon om tidlig opptak
-      # Avklart 08.10.2026: lenken settes per utdanningstilbud, ikke per opptak.
-      # Ønske fra Min kompetanse (STEK-267). Se søke_om_tidlig_opptak.feature.
+    # Lenken til informasjon om tidlig opptak settes per opptak, ikke per
+    # utdanningstilbud, se 11 Opprette og vedlikeholde opptak/03 Innstillinger/
+    # innstillinger.feature (avklart 09.10.2026, review av PR #654).
 
   Regel: Opptaksforvalter kan sette tidlig søknadsfrist per utdanningstilbud
 
