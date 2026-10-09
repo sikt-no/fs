@@ -71,7 +71,7 @@
 # - Tilbudsgarantiene deles ut selv om de overskrider kvoten. Opptaksforvalter får et
 #   varsel, og fanger det i prøvekjøringen (STEK-269, STEK-426). Varselgrensen er en
 #   andel av kvoten som opptaksforvalter kan angi ved gjennomføringen. Er den ikke
-#   angitt, er grensen hele kvoten (avklart 09.10.2026).
+#   angitt, er grensen 30 prosent av kvoten (avklart 09.10.2026).
 # - Opptaksforvalter får en rapport over utfallet (STEK-489).
 #
 # AVKLART 08.10.2026
@@ -337,11 +337,17 @@ Egenskap: Gi tilbudsgaranti ved tidlig opptak
       Så får de 12 søkerne tilbudsgaranti på "Sykepleie, høst 2027"
       Og opptaksforvalter får varsel om at tilbudsgarantiene overskrider kvoten for "Sykepleie, høst 2027"
 
-    Scenario: Angi grensen for kvotevarsel
+    Scenario: Kvotevarsel ved 30 prosent når grensen ikke er angitt
       Gitt "Sykepleie, høst 2027" har 10 plasser i kvoten tilbudsgarantiene tas fra
       Og 4 søkere oppfyller kravene til tilbudsgaranti på "Sykepleie, høst 2027"
-      Når opptaksforvalter prøvekjører tidligopptaket med varsel når mer enn 30 prosent av kvoten får tilbudsgaranti
+      Når opptaksforvalter prøvekjører tidligopptaket uten å angi grensen for kvotevarsel
       Så får opptaksforvalter varsel om at tilbudsgarantiene overskrider 30 prosent av kvoten for "Sykepleie, høst 2027"
+
+    Scenario: Angi grensen for kvotevarsel
+      Gitt "Sykepleie, høst 2027" har 10 plasser i kvoten tilbudsgarantiene tas fra
+      Og 6 søkere oppfyller kravene til tilbudsgaranti på "Sykepleie, høst 2027"
+      Når opptaksforvalter prøvekjører tidligopptaket med varsel når mer enn 50 prosent av kvoten får tilbudsgaranti
+      Så får opptaksforvalter varsel om at tilbudsgarantiene overskrider 50 prosent av kvoten for "Sykepleie, høst 2027"
 
     Scenario: Tidligopptaket stopper uten én tilbudsgarantitype for tidlig opptak
       Gitt opptaket har ikke nøyaktig én aktiv tilbudsgarantitype for tidlig opptak som gir tilbud
