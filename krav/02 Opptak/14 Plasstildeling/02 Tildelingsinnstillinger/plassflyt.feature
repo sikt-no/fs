@@ -13,8 +13,8 @@ Egenskap: Plassflyt mellom utdanningskvoter
   #   (antall_tilbud_som_skal_gis.feature). Kvoterregelverket har standard plassflyt på kvotetypen.
   #   Koden tar standarden fra kvotetypen og lar den overstyres per utdanningskvote, uten standard
   #   på opptaket. Fortsatt uavklart 2026-10-08.
-  # - Confluence (raffinering 2026-09-08) har krav om at plasser skal kunne flyte fra en tidligere
-  #   plasstildeling til en senere. design.md beskriver dette som en blindsone. Er det utenfor scope for 2027?
+  # AVKLART 2026-10-09: Plassflyt er bare at ubrukte plasser flyter mellom utdanningskvoter i et opptak.
+  # At en plasstildelingsrunde bygger på forrige runde, er informasjonsarv, ikke plassflyt.
   # - Sirkulær plassflyt håndteres i koden, men ikke i databasen. Skal den avvises når den settes
   #   (slik scenarioet under sier), eller bare håndteres i plasstildelingen?
   # - Plassflyt finnes på tre nivåer (kvotetype i regelverket, utdanningskvote i opptaket, og per plasstildeling).

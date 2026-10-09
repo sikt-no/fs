@@ -86,7 +86,7 @@ Egenskap: Opptaksinnstillinger per utdanningstilbud
 
     Scenario: Utdanningstilbud uten egen saksbehandlertildelingsregel følger opptakets standardregel
       Når opptaksforvalter lagrer utdanningstilbudet "Sykepleie, høst 2027" uten å velge saksbehandlertildelingsregel
-      Så fordeles søknadsalternativene til "Sykepleie, høst 2027" etter opptakets standard tildelingsregel
+      Så fordeles søknadsalternativene til "Sykepleie, høst 2027" etter opptakets standard saksbehandlertildelingsregel
 
     Scenario: Kun aktive saksbehandlertildelingsregler i opptaket kan velges
       Gitt at saksbehandlertildelingsregelen "TRA" er inaktiv

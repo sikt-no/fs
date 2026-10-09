@@ -40,7 +40,7 @@ Egenskap: Se detaljer om egen søknad
     Scenario: Søkeren ser svarfristen når det finnes et tilbud å svare på
       Gitt at søkeren har et tilbud som kan besvares
       Når søkeren åpner søknaden
-      Så vises svarfristen for opptaksrunden
+      Så vises svarfristen for plasstildelingsrunden
 
   Regel: Søknaden viser dokumentasjon og kontaktopplysninger
 

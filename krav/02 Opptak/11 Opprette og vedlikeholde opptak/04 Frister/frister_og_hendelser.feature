@@ -109,7 +109,7 @@ Egenskap: Frister og hendelser for opptak
 
     Scenario: Sette dato for når hovedopptaket publiseres og søker kan forvente svar
       Når opptaksforvalter setter dato for når hovedopptaket publiseres til "2027-07-15"
-      Så informeres søkere om når de kan forvente svar på søknaden fra første opptaksrunde
+      Så informeres søkere om når de kan forvente svar på søknaden fra første plasstildelingsrunde
 
     Scenario: Sette første svarfrist som informasjon til søkere
       Når opptaksforvalter setter første svarfrist til "2027-07-20 23:59"
