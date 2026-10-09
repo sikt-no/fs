@@ -138,7 +138,7 @@ Egenskap: Forvalte en person i brukeradministrasjonen
       Gitt jeg nettopp har registrert en personbruker uten Feide-konto med en tildeling for en organisasjon jeg administrerer
       Når jeg åpner brukeroversikten
       Så ser jeg personbrukeren i listen
-      Og det fremgår at personbrukeren ikke har logget inn ennå
+      Og personbrukeren vises med «Navn ikke kjent» til hen har logget inn
 
     Scenario: Datatilgang gir synlighet når tildelingen er aktiv og gjelder i mitt miljø
       Gitt jeg har brukeradministrator-rollen for én eller flere organisasjoner
