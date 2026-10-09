@@ -70,6 +70,11 @@
 #   dokumentasjonskravet vises (avklart med Daniel). Scenarioet «Se hva som må
 #   dokumenteres for begrunnelsen» er slått sammen med «Se begrunnelsene søkeren
 #   kan velge».
+# - Fjerner søkeren alle søknadsalternativene som tilbyr tidlig opptak etter å ha
+#   søkt, blir ønsket om tidlig opptak stående. Det får så være: søkeren kan ikke
+#   få tilbudsgaranti fra tidligopptaket, og svaret viser at søknadsalternativene
+#   ikke tilbyr tidlig opptak (se_svar_på_tidlig_opptak.feature). Det er ingen
+#   egen regel for det.
 #
 @OPT-SØK-SØK-011 @must @in-progress
 Egenskap: Søke om tidlig opptak
