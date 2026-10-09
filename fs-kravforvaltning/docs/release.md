@@ -19,7 +19,7 @@ En endring som ikke skal nevnes i endringsloggen (refaktorering, tester), trenge
 
 Workflowen er `.github/workflows/kravforvaltning-release.yml`, og kjører ved push til `main` som endrer `fs-kravforvaltning/`.
 
-1. **Finnes det changesets**, lager eller oppdaterer workflowen PR-en *«fs-kravforvaltning: ny versjon»*. Den bumper `version` i `package.json` og `package-lock.json`, skriver endringene inn i `CHANGELOG.md` og sletter changeset-filene. PR-en oppdateres hver gang en ny changeset kommer på `main`.
+1. **Finnes det changesets**, lager workflowen versjons-commiten på branchen `changeset-release/main`. Den bumper `version` i `package.json` og `package-lock.json`, skriver endringene inn i `CHANGELOG.md` og sletter changeset-filene. Finnes PR-en *«fs-kravforvaltning: ny versjon»* fra branchen, oppdateres den hver gang en ny changeset kommer på `main`. Finnes den ikke, må den lages for hånd (se *Versjons-PR-en*).
 2. **Når den PR-en merges**, finnes det ingen changesets, og versjonen i `package.json` har ingen release. Da:
    - lages en draft-release `fs-kravforvaltning-v<versjon>` med endringene for versjonen fra `CHANGELOG.md`
    - bygges appen på tre maskiner, og filene lastes opp til releasen:
@@ -36,7 +36,31 @@ Taggen har prefikset `fs-kravforvaltning-`, fordi repoet først og fremst er kra
 Gjør dette **før** workflowen kommer på `main`. `package.json` har versjon `1.0.0`, som ikke har noen release, så første kjøring publiserer `fs-kravforvaltning-v1.0.0` med en gang.
 
 - **Repo-variabel `KRAV_GITHUB_CLIENT_ID`** (*Settings → Secrets and variables → Actions → Variables*) med Client ID til OAuth-appen. Det er en variabel, ikke en secret, fordi ID-en ikke er hemmelig (se [github-oauth.md](github-oauth.md)). Mangler den, stopper bygget, så det ikke publiseres en app der innloggingen ikke virker.
-- **«Allow GitHub Actions to create and approve pull requests»** (*Settings → Actions → General → Workflow permissions*) må være på, ellers kan ikke workflowen lage versjons-PR-en. Kan være låst på organisasjonsnivå.
+- **«Allow GitHub Actions to create and approve pull requests»** (*Settings → Actions → General → Workflow permissions*) er låst av organisasjonen sikt-no, så workflowen kan ikke lage versjons-PR-en selv. Den lages for hånd (se *Versjons-PR-en*).
+- **Regelsettet «Pull Requests for External»** (*Settings → Rules → Rulesets*) gjelder alle brancher, og forbyr sletting og force-push. changesets/action må force-pushe `changeset-release/main`, og lager, force-pusher og sletter den midlertidige branchen `changesets-ghcommit-temp/changeset-release/main`. Begge er derfor unntatt med *Exclude by pattern*: `changeset-release/**/*` og `changesets-ghcommit-temp/**/*`. En avsluttende `**` matcher bare ett nivå, så `changesets-ghcommit-temp/**` er ikke nok. Uten unntakene feiler jobben `version` med «Repository rule violations found – Cannot delete this branch».
+
+## Versjons-PR-en
+
+Workflowen kan ikke lage PR-en *«fs-kravforvaltning: ny versjon»* selv (se *Oppsett i GitHub*). Når det kommer changesets på `main` og det ikke finnes en åpen versjons-PR, feiler jobben `version` med «GitHub Actions is not permitted to create or approve pull requests». Versjons-commiten ligger likevel på `changeset-release/main`. Rutinen er:
+
+1. Sjekk at `changeset-release/main` er foran `main`, og at det ikke finnes en åpen PR fra branchen:
+
+   ```bash
+   git fetch origin
+   git log --oneline origin/main..origin/changeset-release/main
+   gh pr list --head changeset-release/main
+   ```
+
+2. Lag PR-en med tittelen **«fs-kravforvaltning: ny versjon»** (workflowen finner den på branchen, men tittelen bør være den samme), og endringene for versjonen fra `CHANGELOG.md` som beskrivelse:
+
+   ```bash
+   gh pr create --base main --head changeset-release/main --title 'fs-kravforvaltning: ny versjon' --body-file <beskrivelse.md>
+   ```
+
+3. Kjør den feilede kjøringen på nytt (*Re-run failed jobs*, eller `gh run rerun <id>`). Den finner PR-en, oppdaterer den («Updating found pull request #…»), og blir grønn. Etter dette holder workflowen PR-en oppdatert selv.
+4. Merge PR-en når det skal lages en release. Da bygges og publiseres appen (se *Fra changeset til release*).
+
+Claude kan gjøre steg 1–3 når du ber om det («lag release-PR for FS Kravforvaltning»).
 
 ## Signering
 
