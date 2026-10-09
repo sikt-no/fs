@@ -9,8 +9,9 @@ Egenskap: Se svar på søknad om tidlig opptak
   # Kravet forutsetter at søkeren har søkt om tidlig opptak, at saksbehandler har konkludert,
   # og at tilbudsgarantier for tidlig opptak er tildelt. Vurderingen, konklusjonen og
   # tildelingen står i gi_tilbudsgaranti_ved_tidlig_opptak.feature (OPT-BEH-BEH-007, #654).
-  # Publiseringsdatoen og meldingen til søkeren står i
-  # krav/02 Opptak/11 Opptak/06 Tidlig opptak/publisere_svar_på_tidlig_opptak.feature.
+  # Publiseringsdatoen står i krav/02 Opptak/11 Opprette og vedlikeholde opptak/04 Frister/frister_og_hendelser.feature.
+  # Publiseringen og meldingen til søkeren står i
+  # krav/02 Opptak/13 Søknad og saksbehandling/02 Behandling/publisere_svar_på_tidlig_opptak.feature.
   # "Tilbudsgaranti gitt av tilbyder" her er det 007 kaller manuell tilbudsgaranti fra T-rolle.
   #
   # Avgrensning: Kravet gjelder kun svaret på tidlig opptak. Andre tilbudsgarantier —
@@ -25,6 +26,10 @@ Egenskap: Se svar på søknad om tidlig opptak
 
   # "Publisert" betyr at begge forutsetningene er oppfylt — det som inntreffer sist avgjør.
   # Svaret skal aldri bli synlig før det finnes noe å svare på.
+  # MERK 2026-10-09: Regelen finnes også fra opptaksforvalterens side i
+  # 13 Søknad og saksbehandling/02 Behandling/publisere_svar_på_tidlig_opptak.feature
+  # («Svaret publiseres først når tidligopptaket er gjennomført»).
+  # De som jobber med kravene, må ta stilling til om den skal stå begge steder.
   Regel: Svaret på tidlig opptak publiseres når tidligopptaket er gjennomført og publiseringsdatoen er passert
 
     Scenario: Svaret er ikke synlig før publiseringsdatoen

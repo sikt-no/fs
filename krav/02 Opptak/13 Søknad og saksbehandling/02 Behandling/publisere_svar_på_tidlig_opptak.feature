@@ -1,6 +1,6 @@
 # language: no
 # GitHub: #456
-@OPT-OPT-TID-001 @must @draft
+@OPT-BEH-BEH-014 @must @draft
 Egenskap: Publisere svar på tidlig opptak
   Som opptaksforvalter ved forvaltende organisasjon
   ønsker jeg å styre når svaret på tidlig opptak blir synlig for søkerne, og sende dem melding om utfallet
@@ -12,28 +12,20 @@ Egenskap: Publisere svar på tidlig opptak
   # i regelen "Opptaksforvalter gjennomfører tidligopptaket".
   # Søkerens side av svaret er beskrevet i
   # krav/02 Opptak/13 Søknad og saksbehandling/01 Søknad/se_svar_på_tidlig_opptak.feature.
+  # Flyttet 2026-10-09 fra 11 Opptak/06 Tidlig opptak/ (feature-ID var @OPT-OPT-TID-001).
   Bakgrunn:
     Gitt at opptaksforvalter ved forvaltende organisasjon er innlogget
     Og at opptaket "Samordna opptak 2027" er åpnet for tidlig opptak
 
-  # Publiseringsdatoen (T-day) ligger på opptaket, jf. prosesshypotesen i notatet
-  # "2026-09-23 tidligopptaks-svar til søker".
-  # Merk avvik som må ryddes: krav/02 Opptak/12 Utdanningstilbud/opptaksinnstillinger_utdanningstilbud.feature
-  # legger i dag "dato for når svar sendes til søkere" på det enkelte utdanningstilbudet.
-  # Den datoen må fjernes eller omdefineres der, slik at det finnes én publiseringsdato per opptak.
-  Regel: Opptaksforvalter setter publiseringsdato for svar på tidlig opptak
-
-    Scenario: Sette publiseringsdato
-      Når opptaksforvalter setter publiseringsdato for svar på tidlig opptak til 20. april 2027
-      Så blir svaret på tidlig opptak tidligst publisert til søkerne 20. april 2027
-
-    Scenario: Endre publiseringsdato før den er passert
-      Gitt at publiseringsdatoen for svar på tidlig opptak ikke er passert
-      Når opptaksforvalter endrer publiseringsdatoen for svar på tidlig opptak
-      Så er det den nye datoen som gjelder for publisering av svaret
+  # Publiseringsdatoen for svar på tidlig opptak er flyttet 2026-10-09 til
+  # 11 Opprette og vedlikeholde opptak/04 Frister/frister_og_hendelser.feature.
 
   # Publisering henger på gjennomføringen, ikke bare på datoen: søkerne skal aldri møte et
   # tomt svar fordi datoen passerte uten at tidligopptaket var gjennomført.
+  # MERK 2026-10-09: Regelen finnes også fra søkerens side i
+  # 13 Søknad og saksbehandling/01 Søknad/se_svar_på_tidlig_opptak.feature
+  # («Svaret på tidlig opptak publiseres når tidligopptaket er gjennomført og publiseringsdatoen er passert»).
+  # De som jobber med kravene, må ta stilling til om den skal stå begge steder.
   Regel: Svaret publiseres først når tidligopptaket er gjennomført
 
     Scenario: Svaret publiseres ikke når tidligopptaket ikke er gjennomført
