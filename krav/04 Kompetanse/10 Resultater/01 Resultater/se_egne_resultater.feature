@@ -13,13 +13,6 @@ Egenskap: Se egne resultater
   Resultatene deles i fullførte kvalifikasjoner (grad fra høyere utdanning,
   vitnemål fra videregående) og enkeltresultater som ikke inngår i en kvalifikasjon.
 
-  # ÅPNE SPØRSMÅL:
-  # - Vitnemål fra videregående er ikke tilgjengelig som standard, verken her eller i Vitnemålsportalen. Skal kravet beskrive det, og hva brukeren får vite om det?
-  # - Fagskole og andre kilder finnes i dataene, men vises ikke. Skal de vises, og under hvilket nivå?
-  # - Skal innpassede emner markeres i graden?
-  # - Skal brukeren se summen av studiepoeng?
-  # - I hvilken rekkefølge skal kvalifikasjoner og emner vises? I dag følger rekkefølgen leverandøren.
-
   Bakgrunn:
     Gitt brukeren er innlogget i Min kompetanse
 
@@ -32,10 +25,32 @@ Egenskap: Se egne resultater
       Og hvert studiested vises bare én gang
 
     Scenario: Resultatene grupperes etter utdanningsnivå
-      Gitt brukeren har resultater fra høyere utdanning og videregående opplæring
+      Gitt brukeren har resultater fra flere utdanningsnivåer
       Når brukeren åpner resultatene
-      Så vises resultatene fra høyere utdanning og resultatene fra videregående opplæring hver for seg
-      Og resultatene fra høyere utdanning vises først
+      Så vises resultatene gruppert etter utdanningsnivå i denne rekkefølgen:
+        | utdanningsnivå         |
+        | Høyere utdanning       |
+        | Fagskole               |
+        | Videregående opplæring |
+        | Grunnskole             |
+        | Andre resultater       |
+      Og utdanningsnivåer uten resultater vises ikke
+
+    Scenario: Se resultater uten kjent utdanningsnivå
+      Gitt brukeren har et resultat i Vitnemålsportalen uten kjent utdanningsnivå
+      Når brukeren åpner resultatene
+      Så ser brukeren resultatet under andre resultater
+
+    Scenario: Kvalifikasjoner vises med den nyeste først
+      Gitt brukeren har en bachelorgrad fra NTNU oppnådd våren 2019
+      Og brukeren har en mastergrad fra UiO oppnådd våren 2021
+      Når brukeren åpner resultatene
+      Så vises mastergraden fra UiO før bachelorgraden fra NTNU
+
+    Scenario: Emner vises med den nyeste terminen først
+      Gitt brukeren har emnet INF1000 fra høsten 2017 og emnet INF2100 fra våren 2018
+      Når brukeren ser emnene i en kvalifikasjon eller enkeltemnene fra et studiested
+      Så vises INF2100 før INF1000
 
   Regel: Fullførte kvalifikasjoner
 
@@ -66,6 +81,13 @@ Egenskap: Se egne resultater
       Når brukeren velger å se resultatene i graden
       Så ser brukeren emnene i emnesamlingen under emnesamlingen
 
+    Scenario: Se innpassede emner i en grad
+      Gitt brukeren har en bachelorgrad fra NTNU
+      Og emnet EXPH0300 fra UiO er innpasset i graden
+      Når brukeren velger å se resultatene i graden
+      Så ser brukeren EXPH0300 blant emnene i graden
+      Og EXPH0300 er markert som innpasset fra UiO
+
     Scenario: Se beskrivelsen av et emne
       Gitt brukeren har et emne med beskrivelse fra lærestedet
       Når brukeren velger å se beskrivelsen av emnet
@@ -82,6 +104,12 @@ Egenskap: Se egne resultater
         | Programområder     |
         | Oppnådd kompetanse |
         | År bestått         |
+
+    Scenario: Vitnemål fra videregående er tilgjengelig uten at brukeren ber om det
+      Gitt brukeren har vitnemål fra Byåsen videregående skole i Nasjonal vitnemålsbase
+      Og brukeren har ikke bedt om å få vitnemålet tilgjengelig
+      Når brukeren åpner resultatene
+      Så ser brukeren vitnemålet fra Byåsen videregående skole
 
     Scenario: Se fagene på et vitnemål fra videregående
       Gitt brukeren har vitnemål fra Byåsen videregående skole
