@@ -12,7 +12,7 @@
 #
 # Saksbehandleren vurderer om søkerens begrunnelse er dokumentert. Om søkeren
 # er kvalifisert, avgjøres i den ordinære søknadsbehandlingen per
-# søknadsalternativ, og saksbehandleren ser resultatet her. Konklusjonen og
+# søknadsalternativ, uavhengig av tidlig opptak. Konklusjonen og
 # tilbudsgarantien står i gi_tilbudsgaranti_ved_tidlig_opptak.feature.
 #
 # AVKLART 25.09.2026
@@ -76,6 +76,11 @@
 #   at tidligopptaket er gjennomført. Det endrer ikke tilbudsgarantier som alt er
 #   gitt, eller svaret søkeren alt har fått, men en ny gjennomføring tar den med.
 #   Erstatter låsingen fra 07.10.
+# - Kvalifiseringen er en egen prosess i den ordinære søknadsbehandlingen, og
+#   saksbehandleren ser den der, ikke i steget for tidlig opptak. Den sjekkes
+#   når tidligopptaket gjennomføres (gi_tilbudsgaranti_ved_tidlig_opptak.feature).
+#   Scenarioet «Konkludere før kvalifiseringen er vurdert» og regelen
+#   «Kvalifisering hentes fra den ordinære søknadsbehandlingen» er fjernet.
 #
 # BEGREPSBRUK
 #
@@ -152,11 +157,6 @@ Egenskap: Vurdere søknad om tidlig opptak
       Når saksbehandler ser på søknaden
       Så ser ikke saksbehandler tidlig opptak i saken
 
-    Scenario: Konkludere før kvalifiseringen er vurdert
-      Gitt kvalifiseringen til "Sykepleie, høst 2027" er ikke vurdert i søknadsbehandlingen
-      Når saksbehandler konkluderer med at søkeren deltar i tidligopptaket
-      Så er det lagret at søkeren deltar i tidligopptaket
-
     Scenario: Konklusjon per organisasjon
       Gitt søknaden har følgende søknadsalternativer:
         | søknadsalternativ     | organisasjon |
@@ -166,18 +166,6 @@ Egenskap: Vurdere søknad om tidlig opptak
       Når saksbehandler ved NTNU konkluderer med at søkeren ikke deltar i tidligopptaket
       Så deltar søkeren i tidligopptaket ved OsloMet
       Og søkeren deltar ikke i tidligopptaket ved NTNU
-
-  Regel: Kvalifisering hentes fra den ordinære søknadsbehandlingen
-
-    Scenario: Se kvalifisering for søknadsalternativer med tidlig tilbud
-      Gitt søknaden har følgende søknadsalternativer:
-        | søknadsalternativ     | tidlig tilbud | kvalifisert |
-        | Sykepleie, høst 2027  | ja            | ja          |
-        | Vernepleie, høst 2027 | ja            | nei         |
-        | Historie, høst 2027   | nei           | ja          |
-      Når saksbehandler ser på søknaden
-      Så ser saksbehandler at søkeren er kvalifisert til "Sykepleie, høst 2027"
-      Og saksbehandler ser at søkeren ikke er kvalifisert til "Vernepleie, høst 2027"
 
   Regel: Konklusjonen kan endres også etter at tidligopptaket er gjennomført
 
