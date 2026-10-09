@@ -38,22 +38,22 @@ I terminalen i FS Kravforvaltning («Verifiser i terminal …») og i Claude Cod
 ## Finn scope og kode (gjør dette FØRST)
 
 1. **Krav.** Oppga brukeren en spesifikasjon (`tasks/<domene>/<slug>/spec/spec-*.md`, typisk fra «Verifiser» i Spesifikasjoner i FS Kravforvaltning), er scope bare feature-filene under `## Krav` i den (slått opp på feature-ID). Oppga brukeren en `krav/`-sti (fil eller mappe), bruk den. Oppga brukeren en oppgave (`tasks/<domene>/<slug>`, eller bare slug — slå opp med `Glob` `tasks/*/<slug>/`), les Feature-ID-ene fra `## Krav` i alle `<oppgave>/spec/spec-*.md` (ikke det som står under *Utenfor scope*), og finn de autoritative filene under `krav/` på feature-ID (`@DOM-SUB-KAP-NNN`), ikke filnavn. Les ikke kopiene i `spec/krav-input/`: de finnes bare i eldre oppgaver, og kan være utdaterte. 0 treff → «ikke funnet under krav/», mer enn 1 → «duplisert feature-ID». Mangler begge, spør.
-2. **Kode.** Spør (`AskUserQuestion`) om stien til de lokale klonene av kode-repoene (se *Kodeklonene og lagene*). Foreslå repoer fra `oppgave.md` (lenker), `<lag>/plan-*.md` og `<lag>/task-*-completion.md` når en oppgave er gitt. Sjekk at stiene finnes. Uten kode kan ingenting verifiseres: stopp og si det. Skriv aldri `.claude/spec.local.md`.
+2. **Kode.** Spør (`AskUserQuestion`) om stien til de lokale klonene av kode-repoene (se *Kodeklonene*). Foreslå repoer fra `oppgave.md` (lenker), `<lag>/plan-*.md` og `<lag>/task-*-completion.md` når en oppgave er gitt. Sjekk at stiene finnes. Uten kode kan ingenting verifiseres: stopp og si det. Skriv aldri `.claude/spec.local.md`.
 3. **Skjermbilder.** Har prompten ikke sagt om det skal tas skjermbilder («Ta skjermbilder» eller «Ingen skjermbilder»), spør med `AskUserQuestion` før du begynner å lete: «Skal jeg ta skjermbilder fra https://test-fsadmin.sikt.no/?», med valgene «Ja» og «Nei». Hopper brukeren over, regn det som «Nei», og si det i rapporten. Se *Skjermbilder*.
 4. **Hint.** Når en oppgave er gitt: les `design.md`, `<lag>/plan-*.md` og `<lag>/task-*-completion.md`. Filstier, komponentnavn, GraphQL-felt og ruter derfra er de beste stedene å lete.
 5. **Tidspunkt.** Ta tidspunktet for kjøringen nå (*Tidspunkt*), og si det til brukeren sammen med navnet rapporten får.
 
-### Kodeklonene og lagene
+### Kodeklonene
 
-Hvert kode-repo er ett lag, med en bokstav som brukes i rapporten (se `references/rapportmal.md`):
+Hvert kode-repo har en bokstav som brukes i `Bevis` i rapporten (se `references/rapportmal.md`). I rapporten skrives repoene med navn, ikke som lag (ikke «backend» eller «frontend»):
 
-| Repo | Lag | Bokstav | Hva det dekker |
-| --- | --- | --- | --- |
-| `fs-plattform` | backend | B | API (GraphQL-subgrafene), tjenestene og databasen |
-| `fs-admin` | frontend | F | Det saksbehandlere og forvaltere ser og gjør |
-| `min-kompetanse` | søkerside | M | Det søkeren ser og gjør: søknaden, Min kompetanse |
+| Repo | Bokstav | Hva det dekker |
+| --- | --- | --- |
+| `fs-plattform` | P | API (GraphQL-subgrafene), tjenestene og databasen |
+| `fs-admin` | A | Det saksbehandlere og forvaltere ser og gjør |
+| `min-kompetanse` | M | Det søkeren ser og gjør: søknaden, Min kompetanse |
 
-Let etter hvert scenario i laget det gjelder: et scenario der søkeren ser eller gjør noe, finnes i min-kompetanse (og i backend), ikke i fs-admin. Mangler klonen for et lag scenarioet trenger, er laget ikke sjekket: skriv det under *Ikke sjekket* i `## Oppfølging`, og resultatet er `usikker`, ikke `ikke funnet`.
+Let etter hvert scenario i repoet det gjelder: et scenario der søkeren ser eller gjør noe, finnes i min-kompetanse (og i fs-plattform), ikke i fs-admin. Mangler klonen et scenario trenger, er det repoet ikke sjekket: skriv det under *Ikke sjekket* i `## Oppfølging`, og resultatet er `usikker`, ikke `ikke funnet`.
 
 ## Logg kjøringen
 

@@ -1,6 +1,6 @@
 ---
 name: fs-verify-agent-teams
-description: Kjører `fs-verify` med et agent team (Claude Code agent teams, `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1`), med to roller. Finnerne (agenttypen `fs-verify-krav`) leter i koden og gir bevis (`fil:linje`) per scenario, én per feature-fil (eller én per gruppe av filer), parallelt. Kontrollørene (agenttypen `fs-verify-kontroll`) sjekker hvert svar uavhengig: leser hvert `funnet`, og søker på nytt etter hvert `ikke funnet`. Tar det samme scopet som `fs-verify` (en spesifikasjon, en `krav/`-sti eller en oppgave `tasks/<domene>/<slug>`) og lokale kloner av kode-repoene. Lead-en avgjør der finner og kontrollør er uenige, spør brukeren, retagger `@in-progress` → `@implemented`, fjerner `@in-progress` fra deler, sletter `@deprecated`-krav når koden er borte, og skriver rapporten i samme format som `fs-verify`, eventuelt med hva som gjenstår i hvert lag (backend, frontend og søkerside). Bare i en interaktiv økt (terminalen, også terminalen i FS Kravforvaltning), ikke i Claude-panelet. Kjører aldri git add/commit/push. Trigges av "verifiser kravene med agent team", "fs-verify med agent teams", "fs-verify parallelt", "verifiser mange krav samtidig", "fs-verify-agent-teams".
+description: Kjører `fs-verify` med et agent team (Claude Code agent teams, `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1`), med to roller. Finnerne (agenttypen `fs-verify-krav`) leter i koden og gir bevis (`fil:linje`) per scenario, én per feature-fil (eller én per gruppe av filer), parallelt. Kontrollørene (agenttypen `fs-verify-kontroll`) sjekker hvert svar uavhengig: leser hvert `funnet`, og søker på nytt etter hvert `ikke funnet`. Tar det samme scopet som `fs-verify` (en spesifikasjon, en `krav/`-sti eller en oppgave `tasks/<domene>/<slug>`) og lokale kloner av kode-repoene. Lead-en avgjør der finner og kontrollør er uenige, spør brukeren, retagger `@in-progress` → `@implemented`, fjerner `@in-progress` fra deler, sletter `@deprecated`-krav når koden er borte, og skriver rapporten i samme format som `fs-verify`, eventuelt med hva som gjenstår i hvert repo (fs-plattform, fs-admin og min-kompetanse). Bare i en interaktiv økt (terminalen, også terminalen i FS Kravforvaltning), ikke i Claude-panelet. Kjører aldri git add/commit/push. Trigges av "verifiser kravene med agent team", "fs-verify med agent teams", "fs-verify parallelt", "verifiser mange krav samtidig", "fs-verify-agent-teams".
 allowed-tools: Read, Write, Edit, Grep, Glob, Bash, AskUserQuestion, Agent, SendMessage, TaskCreate, TaskList, TaskGet, TaskUpdate
 ---
 
@@ -38,7 +38,7 @@ Som *Finn scope og kode* i `fs-verify`: kravene (spesifikasjon, `krav/`-sti elle
 
 Ber prompten om å verifisere en egenskap eller en regel *uansett status*, gjelder *Verifisere uansett status* i `fs-verify`: scope, gating-settet og hvilken ny status du kan tilby. Ber prompten om å verifisere en mappe *uansett status*, gjelder det samme for hver feature-fil i mappa.
 
-**Lagene.** Ber brukeren om å få vite hva som gjenstår i hvert lag (frontend og backend, eller i hvert repo), eller er kodeklonene mer enn ett lag og brukeren vil ha en oversikt over hva som gjenstår, skal finnerne vurdere hvert lag for seg (se *Start teamet*), og rapporten få `## Oversikt per krav` (variantene `[lag]` i rapportmalen, se *Rapport*). Lagene står i *Kodeklonene og lagene* i `fs-verify` (fs-plattform = backend, fs-admin = frontend, min-kompetanse = søkerside). Gi finnerne og kontrollørene tabellen over de lagene som er med.
+**Per repo.** Ber brukeren om å få vite hva som gjenstår i hvert repo, eller er det mer enn én kodeklone og brukeren vil ha en oversikt over hva som gjenstår, skal finnerne vurdere hvert repo for seg (se *Start teamet*), og rapporten få `## Oversikt per krav` (variantene `[per repo]` i rapportmalen, se *Rapport*). Repoene og bokstavene står i *Kodeklonene* i `fs-verify`. Gi finnerne og kontrollørene tabellen over de repoene som er med.
 
 Ta tidspunktet for kjøringen før teamet startes (*Tidspunkt* i `fs-verify`). Det gir navnet på rapporten (`verify-…-<YYYY-MM-DD>-<HHMM>.md`), `- **Dato:**` og mappa med skjermbilder, også om kjøringen tar lang tid.
 
@@ -72,8 +72,8 @@ Les hver feature-fil i scope selv, og klassifiser etter tabellen i *Klassifiser*
    - Bruk 4 finnere, så det er plass til én kontrollør fra starten. Når finnerne er ferdige, går plassene til kontrollører.
    - Finnes ikke `TaskCreate`, gir du hver finner filene sine i spawn-prompten, i den rekkefølgen den skal ta dem.
 2. **Én oppgave per feature-fil** med `TaskCreate` (når den finnes). Tittel: feature-ID og tittel. Beskrivelse: stien til fila, klassifiseringen, kodeklonene og hintene som gjelder fila (filstier, komponentnavn, GraphQL-felt, ruter).
-3. **Start finnerne** med Agent-verktøyet og agenttypen `fs-verify-krav`. Navnet er feature-ID-en, eller et kort navn for gruppa (`utd-liste`). Teammates ser ikke samtalen din, så spawn-prompten har alt: filene (eller oppgavene på lista som er deres), modusen (f.eks. *uansett status* og gating-settet), kodeklonene og hvilket lag hver er, hintene, og om lagene skal vurderes hver for seg. Be dem sende svaret for hver fil så snart fila er ferdig, ikke alt til slutt.
-4. **Start en kontrollør for hvert svar** fra en finner (én feature-fil), med agenttypen `fs-verify-kontroll` og navnet `kontroll-<feature-ID>`. Spawn-prompten har stien til feature-fila, kodeklonene og lagene, modusen, og resultattabellen fra finneren, med bevisene. Ikke send med resten av finnerens svar, og ikke hva du selv tror. Er det fullt (5 teammates), vent til en har stengt.
+3. **Start finnerne** med Agent-verktøyet og agenttypen `fs-verify-krav`. Navnet er feature-ID-en, eller et kort navn for gruppa (`utd-liste`). Teammates ser ikke samtalen din, så spawn-prompten har alt: filene (eller oppgavene på lista som er deres), modusen (f.eks. *uansett status* og gating-settet), kodeklonene, hintene, og om repoene skal vurderes hver for seg. Be dem sende svaret for hver fil så snart fila er ferdig, ikke alt til slutt.
+4. **Start en kontrollør for hvert svar** fra en finner (én feature-fil), med agenttypen `fs-verify-kontroll` og navnet `kontroll-<feature-ID>`. Spawn-prompten har stien til feature-fila, kodeklonene og om repoene vurderes hver for seg, modusen, og resultattabellen fra finneren, med bevisene. Ikke send med resten av finnerens svar, og ikke hva du selv tror. Er det fullt (5 teammates), vent til en har stengt.
 
 Vent på svarene. De kommer som meldinger; ikke poll oppgavelista i en løkke. Be teammates som er ferdige, om å stenge (`shutdown_request`), så plassen blir ledig.
 
@@ -81,7 +81,7 @@ Vent på svarene. De kommer som meldinger; ikke poll oppgavelista i en løkke. B
 
 **Svar fra en finner:**
 
-1. **Sjekk formatet.** Mangler tabellen, scenarioer i gating-settet, bevis eller (når det er bedt om) lagene, be finneren rette det med `SendMessage`.
+1. **Sjekk formatet.** Mangler tabellen, scenarioer i gating-settet, bevis eller (når det er bedt om) repoene, be finneren rette det med `SendMessage`.
 2. **Send det til kontroll** (*Start teamet*, steg 4).
 
 **Svar fra en kontrollør:**
@@ -109,7 +109,7 @@ Svarer brukeren **Avbryt**, stopp, skriv rapporten for det som er gjort, og rydd
 
 ## Rapport
 
-Som *Etter endringene* og *Rapport* i `fs-verify`, med samme filnavn, oppdatering av `utforing.md` og malen i [`fs-verify/references/rapportmal.md`](../fs-verify/references/rapportmal.md). Les malen før du skriver rapporten, og følg den nøyaktig. Med agent team gjelder alltid variantene merket `[agent team]` (linja `Team`), og når lagene er vurdert hver for seg (*Finn scope og kode*), også `[lag]`: `## Oversikt per krav` og lagene først i `Bevis`. Tallene regnes ut fra `## Scenarioer` (se *Rapport* i `fs-verify`).
+Som *Etter endringene* og *Rapport* i `fs-verify`, med samme filnavn, oppdatering av `utforing.md` og malen i [`fs-verify/references/rapportmal.md`](../fs-verify/references/rapportmal.md). Les malen før du skriver rapporten, og følg den nøyaktig. Med agent team gjelder alltid variantene merket `[agent team]` (linja `Team`), og når repoene er vurdert hver for seg (*Finn scope og kode*), også `[per repo]`: `## Oversikt per krav` og repoene først i `Bevis`. Tallene regnes ut fra `## Scenarioer` (se *Rapport* i `fs-verify`).
 
 ## Rydd opp
 

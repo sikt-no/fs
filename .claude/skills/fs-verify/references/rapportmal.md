@@ -8,7 +8,7 @@ Rapporten fra `fs-verify` og `fs-verify-agent-teams` følger denne malen, så to
 - **Varianter** er merket med `[…]` i malen. En linje eller seksjon med et merke er med bare når merket gjelder. Merket skrives ikke i rapporten.
   - `[oppgave]`: scope er en oppgave eller en spesifikasjon.
   - `[agent team]`: kjørt med `fs-verify-agent-teams`.
-  - `[lag]`: lagene er vurdert hver for seg. Lagene og bokstavene står i *Kodeklonene og lagene* i `fs-verify`: B = backend (fs-plattform), F = frontend (fs-admin), M = søkerside (min-kompetanse). Bare lagene som er med i kjøringen, står i rapporten.
+  - `[per repo]`: repoene er vurdert hver for seg. Bokstavene står i *Kodeklonene* i `fs-verify`: P = fs-plattform, A = fs-admin, M = min-kompetanse. Bare repoene som er med i kjøringen, står i rapporten.
   - `[uansett status]`: brukeren ba om å verifisere uansett status (*Verifisere uansett status* i `fs-verify`). `[ikke uansett status]` er det motsatte.
 - **Faste tekster** står uten `<…>` og skrives som de står. Det i `<…>` fylles inn. Der det står `a | b`, velges én.
 - **Tallene regnes ut** fra tabellen `## Scenarioer` og fra endringene du har gjort (se *Rapport* i `fs-verify`). Tallene i `## Oppsummering`, `## Oversikt per krav` og `Gating funnet` skal stemme med tabellen.
@@ -25,7 +25,7 @@ Rapporten fra `fs-verify` og `fs-verify-agent-teams` følger denne malen, så to
 - **Dato:** YYYY-MM-DD HH:MM
 - **Krav:** `<krav-sti eller oppgave>` (<N> feature-filer)
 - **Spec:** `spec/spec-<x>.md`                                         [oppgave, bare når scope er en spesifikasjon]
-- **Kode:** `<repo>` (<kort sha>, <lag>), `<repo>` (<kort sha>, <lag>)
+- **Kode:** `<repo>` (<kort sha>), `<repo>` (<kort sha>)
 - **Kontroll:** `fs-verify-kontroll` | manuell (Claude-panelet)
 - **Team:** <N> finnere (`fs-verify-krav`), <N> kontrollører (`fs-verify-kontroll`), <N>–<N> feature-filer per finner   [agent team]
 - **Skjermbilder:** ja | nei | nei (<grunn>)
@@ -37,13 +37,13 @@ Stiene er forkortet:                                                    [bare n�
 
 - `<forkortelse>` = `<sti fra rota av repoet>`
 
-## Oversikt per krav                                                   [lag]
+## Oversikt per krav                                                   [per repo]
 
-`Gjenstår` sier hvilke lag som må endres for at alle scenarioene i kravet skal være funnet.
+`Gjenstår` sier hvilke repoer som må endres for at alle scenarioene i kravet skal være funnet.
 
 | Feature-ID | Egenskap | Funnet | Gjenstår | Hva som gjenstår |
 | --- | --- | --- | --- | --- |
-| `@DOM-SUB-KAP-NNN` | <tittel> | <n>/<N> | <lag>, <lag> \| ingen | <én til tre setninger> |
+| `@DOM-SUB-KAP-NNN` | <tittel> | <n>/<N> | <repo>, <repo> \| ingen | <én til tre setninger> |
 
 Gjenstår: <verdi> <N>, <verdi> <N>, ingen <N>.
 
@@ -58,14 +58,14 @@ Gjenstår: <verdi> <N>, <verdi> <N>, ingen <N>.
 
 ## Scenarioer
 
-I `Bevis` står **B** for backend (fs-plattform), **F** for frontend (fs-admin) og **M** for søkerside (min-kompetanse), med `funnet` / `delvis` / `mangler` / `ikke relevant` for hvert lag.   [lag]
+I `Bevis` står **P** for fs-plattform, **A** for fs-admin og **M** for min-kompetanse, med `funnet` / `delvis` / `mangler` / `ikke relevant` for hvert repo.   [per repo]
 
 | Feature-ID | Scenario | Resultat | Bevis |
 | --- | --- | --- | --- |
 | `@DOM-SUB-KAP-NNN` | <scenariotittel> | funnet | `<repo>/<fil>:<linje>` — <hva koden gjør> |
 | `@DOM-SUB-KAP-NNN` | <scenariotittel> | ikke funnet | <hva som finnes> — søkt etter «<ord>», «<ord>» i <repoer> |
 | `@DOM-SUB-KAP-NNN` | <scenariotittel> | usikker | `<repo>/<fil>:<linje>` — <hvorfor det er uklart> |
-| `@DOM-SUB-KAP-NNN` | <scenariotittel> | funnet | B: funnet · F: ikke relevant · M: funnet — `<fil>:<linje>`, `<fil>:<linje>` |   [lag]
+| `@DOM-SUB-KAP-NNN` | <scenariotittel> | funnet | P: funnet · A: ikke relevant · M: funnet — `<fil>:<linje>`, `<fil>:<linje>` |   [per repo]
 
 ## Kontroll
 
@@ -121,7 +121,7 @@ Ingen.                                                                  [når de
 
 ## Om seksjonene
 
-- **`## Oversikt per krav`** `[lag]`: én rad per krav i scope. `Funnet` er funnet av gating-settet. `Gjenstår` er lagene som må endres, i rekkefølgen backend, frontend, søkerside og skilt med komma (`backend`, `frontend, søkerside`, `backend, frontend, søkerside`), eller `ingen`. Lagene kommer fra radene som ikke er `funnet` (`delvis` og `mangler` teller). Linja under teller kravene per verdi som forekommer, med flest først, og `ingen` til slutt, også med 0. Bokstavene i `Bevis` står i rekkefølgen B, F, M.
+- **`## Oversikt per krav`** `[per repo]`: én rad per krav i scope. `Funnet` er funnet av gating-settet. `Gjenstår` er repoene som må endres, med navn, i rekkefølgen fs-plattform, fs-admin, min-kompetanse og skilt med komma (`fs-plattform`, `fs-admin, min-kompetanse`), eller `ingen`. Skriv aldri «backend», «frontend» eller «begge». Repoene kommer fra radene som ikke er `funnet` (`delvis` og `mangler` teller). Linja under teller kravene per verdi som forekommer, med flest først, og `ingen` til slutt, også med 0. Bokstavene i `Bevis` står i rekkefølgen P, A, M.
 - **`## Levert`**: kravene og delene som har fått ny status i denne kjøringen. `Fra` er statusen før. En del (regel eller scenario) skrives som `Regel: <tittel>` eller `Scenario: <tittel>`.
 - **`## Ikke levert`**: alle kravene og delene i scope som ble verifisert, men ikke levert, med statusen de fortsatt har. `Hvorfor` er én av formene i malen. Krav som ikke ble verifisert (allerede levert, ikke klare), står under *Krav utenfor scope* i `## Oppfølging`.
 - **`## Oppfølging`**: bare funn som ikke står i en annen seksjon. Hvert punkt har en kort overskrift i fet skrift, og `fil:linje` når det handler om kode.

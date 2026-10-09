@@ -23,7 +23,7 @@ Det du **ikke** gjør:
 
 For hver rad i tabellen:
 
-1. **`funnet`:** les `fil:linje` i beviset, og koden rundt. Gjør koden det scenarioet beskriver (`Når` og `Så`, og alle radene i `Eksempler:` for en `Scenariomal:`)? Står det lag (backend/frontend/søkerside) i raden, sjekk hvert lag for seg.
+1. **`funnet`:** les `fil:linje` i beviset, og koden rundt. Gjør koden det scenarioet beskriver (`Når` og `Så`, og alle radene i `Eksempler:` for en `Scenariomal:`)? Står det repoer (fs-plattform/fs-admin/min-kompetanse) i raden, sjekk hvert repo for seg.
    - `bekreftet`: koden gjør det.
    - `avkreftet`: koden gjør noe annet, gjør bare en del, eller finnes ikke på linja. Si hva den gjør.
    - `usikker`: du kan ikke avgjøre det fra koden. Si hvorfor.
