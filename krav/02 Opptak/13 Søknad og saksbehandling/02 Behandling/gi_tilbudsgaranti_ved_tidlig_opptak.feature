@@ -103,6 +103,12 @@
 #   gjelder uansett konklusjon, om saken er ferdig behandlet, og poengsum
 #   (fagperson i STEK-269, 30.09.2026). Implementert på fs-plattform-branchen
 #   STEK-503_sett_sammen_tidligopptak_konklusjoner_for_soker, ikke på main.
+# - (09.10.2026) Opptaksforvalter kan gjennomføre tidligopptaket mer enn én gang. En ny
+#   gjennomføring tar med saker som er blitt ferdig behandlet, eller har fått
+#   konklusjon, siden forrige gjennomføring. Det er likevel lurt å prøvekjøre til
+#   ingen saker står igjen som ikke er ferdig behandlet, før tidligopptaket
+#   gjennomføres. (Dokumentasjonen på STEK-503 sier at det bare gjennomføres én
+#   gang, og at det ikke kommer noen ny sjanse. Den må rettes.)
 # - Alle tre rollene (B-rolle, T-rolle og F-rolle) kan sette tilbudsgaranti manuelt,
 #   hver med sitt eget sett med tilbudsgarantityper (domeneekspert, med henvisning til
 #   Confluence OP «Tilbudsgaranti»). Det stemmer med STEK-270/262 og koden.
@@ -264,6 +270,15 @@ Egenskap: Gi tilbudsgaranti ved tidlig opptak
       Og poenggrensen for "Sykepleie, høst 2027" er endret til 60
       Når opptaksforvalter gjennomfører tidligopptaket på nytt
       Så har søkeren fortsatt tilbudsgaranti på "Sykepleie, høst 2027"
+
+    Scenario: Ny gjennomføring tar med en sak som er blitt ferdig behandlet
+      Gitt saken til søkeren var ikke ferdig behandlet da tidligopptaket ble gjennomført
+      Og saksbehandler har konkludert med at søkeren deltar i tidligopptaket
+      Og saken er nå ferdig behandlet
+      Og søkeren er kvalifisert til "Sykepleie, høst 2027"
+      Og søkeren har 55 poeng til "Sykepleie, høst 2027"
+      Når opptaksforvalter gjennomfører tidligopptaket på nytt
+      Så får søkeren tilbudsgaranti på "Sykepleie, høst 2027"
 
     Scenario: Tilbudsgarantien flyttes til et høyere prioritert søknadsalternativ ved ny gjennomføring
       Gitt saksbehandler har konkludert med at søkeren deltar i tidligopptaket
