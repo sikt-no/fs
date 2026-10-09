@@ -140,10 +140,12 @@ Egenskap: Vurdere søknad om tidlig opptak
       Når saksbehandler vurderer søknaden "2027-02-12"
       Så kan saksbehandler konkludere om søkeren deltar i tidligopptaket
 
-    Scenario: Kan ikke konkludere når søkeren ikke har søkt om tidlig opptak
+    # Har søkeren ikke søkt om tidlig opptak, er hele steget for tidlig opptak
+    # skjult i saksbehandlingen (avklart 09.10.2026, review av PR #654).
+    Scenario: Søknad uten ønske om tidlig opptak viser ikke tidlig opptak
       Gitt saksbehandler er inne på en annen søknad der søkeren ikke har søkt om tidlig opptak
       Når saksbehandler ser på søknaden
-      Så kan ikke saksbehandler konkludere om søkeren deltar i tidligopptaket
+      Så ser ikke saksbehandler tidlig opptak i saken
 
     Scenario: Konkludere før kvalifiseringen er vurdert
       Gitt kvalifiseringen til "Sykepleie, høst 2027" er ikke vurdert i søknadsbehandlingen
