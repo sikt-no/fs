@@ -250,10 +250,33 @@ export function FeatureView({ entry, collapsed, flash, lineNumbers, mark, mainRe
 
   // Egenskapshodet slås sammen til ett kompakt kort når dokumentet scrolles
   const [compact, setCompact] = useState(false);
+  const compactRef = useRef(compact);
+  compactRef.current = compact;
   useEffect(() => {
     const main = mainRef.current;
     if (!main) return;
-    const onScroll = () => setCompact(c => (c ? main.scrollTop >= EXPAND_AT : main.scrollTop > COMPACT_AT));
+    // Sammenslåingen gjør dokumentet lavere. Er fila så kort at scrollTop da klemmes under EXPAND_AT,
+    // ville hodet foldet seg ut igjen med en gang, så da blir det stående utfoldet.
+    // Høydene måles på skjulte kopier utenfor flyten, så målingen ikke klemmer scrollTop
+    const fits = () => {
+      const head = main.querySelector<HTMLElement>('.fhead');
+      if (!head) return true;
+      const room = (compact: boolean) => {
+        const el = head.cloneNode(true) as HTMLElement;
+        el.className = 'fhead measure' + (compact ? ' compact' : '');
+        Object.assign(el.style, { position: 'absolute', visibility: 'hidden', top: '0', left: '0', boxSizing: 'border-box', width: `${head.offsetWidth}px` });
+        head.parentElement!.appendChild(el);
+        const cs = getComputedStyle(el);
+        const h = el.offsetHeight + parseFloat(cs.marginTop) + parseFloat(cs.marginBottom);
+        el.remove();
+        return h;
+      };
+      return main.scrollHeight - main.clientHeight - (room(false) - room(true)) >= EXPAND_AT;
+    };
+    const onScroll = () => {
+      if (compactRef.current) setCompact(main.scrollTop >= EXPAND_AT);
+      else if (main.scrollTop > COMPACT_AT && fits()) setCompact(true);
+    };
     onScroll();
     main.addEventListener('scroll', onScroll, { passive: true });
     return () => main.removeEventListener('scroll', onScroll);

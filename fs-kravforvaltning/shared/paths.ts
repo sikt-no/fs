@@ -10,7 +10,7 @@ export const isSpecPath = (p: string) => /^tasks\/[^/]+\/[^/]+\/(utforing\.md|sp
 /**
  * Bilde i en oppgave: skisse fra fs-specify eller fs-specify-delta (`tasks/<d>/<s>/spec/krav-input/sketches/…` eller
  * `tasks/<d>/<s>/spec/krav-input/changes/<dato>-<ref>/sketches/…`, også i undermapper som `figma/<slug>/sub-frames/`),
- * eller skjermbilde fra fs-verify (`tasks/<d>/<s>/spec/verify-<dato>/…`, ved siden av `verify-<dato>.md`).
+ * eller skjermbilde fra fs-verify (`tasks/<d>/<s>/spec/verify-<dato>-<HHMM>/…`, ved siden av `verify-<dato>-<HHMM>.md`).
  * Skrives av `save_sketch` i Claude-panelet (core/approve.ts), og kan sendes med «Lag PR», men ikke redigeres som tekst.
  */
 export const isSketchPath = (p: string) =>

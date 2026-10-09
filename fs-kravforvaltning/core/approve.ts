@@ -119,7 +119,7 @@ const TOOLS = {
       'Lagrer et bilde fra et tidligere verktøykall (f.eks. get_screenshot i Figma-MCP, take_screenshot i chrome-devtools, eller Read av et bilde) som fil i repoet. ' +
       'Bruk dette i stedet for Write for PNG og andre bilder. Uten tool_use_id lagres det siste bildet; kall derfor save_sketch rett etter verktøykallet som ga bildet. ' +
       'path er relativ til repoet, og må ligge under tasks/<domene>/<slug>/spec/krav-input/sketches/ eller tasks/<domene>/<slug>/spec/krav-input/changes/<dato>-<ref>/sketches/ ' +
-      '(skisser), eller tasks/<domene>/<slug>/spec/verify-<dato>/ (skjermbilder fra fs-verify), med .png, .jpg eller .webp.',
+      '(skisser), eller tasks/<domene>/<slug>/spec/verify-<dato>-<HHMM>/ (skjermbilder fra fs-verify), med .png, .jpg eller .webp.',
     inputSchema: {
       type: 'object',
       properties: {

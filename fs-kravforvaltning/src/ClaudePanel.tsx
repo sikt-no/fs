@@ -43,6 +43,7 @@ import { MENTION_LIST_ID, MentionPicker, useMentions } from './MentionPicker';
 import { transport } from './transport';
 import { answerQuestion, QuestionCard } from './QuestionCard';
 import { TerminalView } from './TerminalView';
+import { ResizeHandle } from './ResizeHandle';
 
 /** Slik vises de faste meldingene i samtalen */
 const PRESET: Record<ChatPreset, { label: string; text: string }> = {
@@ -196,58 +197,6 @@ function when(ms: number) {
 export const CLAUDE_WIDTH = 380;
 const MIN_WIDTH = 280;
 const maxWidth = () => Math.max(MIN_WIDTH, Math.round(innerWidth * 0.7));
-const clamp = (w: number) => Math.min(maxWidth(), Math.max(MIN_WIDTH, Math.round(w)));
-
-/**
- * Håndtaket på venstre kant: dra for å endre bredden, piltastene flytter 20 px (Shift: 80 px),
- * og dobbeltklikk går tilbake til standardbredden.
- */
-function ResizeHandle({ width, onWidth }: { width: number; onWidth: (w: number) => void }) {
-  const onPointerDown = (e: PointerEvent) => {
-    if (e.button !== 0) return;
-    e.preventDefault();
-    const el = e.currentTarget as HTMLElement;
-    // Panelet ligger helt til høyre, så bredden er avstanden fra pekeren til høyre kant av arbeidsflaten
-    const right = el.closest('.workspace')?.getBoundingClientRect().right ?? innerWidth;
-    el.setPointerCapture(e.pointerId);
-    document.body.classList.add('resizing');
-    const move = (ev: PointerEvent) => onWidth(clamp(right - ev.clientX));
-    const up = () => {
-      el.removeEventListener('pointermove', move);
-      el.removeEventListener('pointerup', up);
-      el.removeEventListener('pointercancel', up);
-      document.body.classList.remove('resizing');
-    };
-    el.addEventListener('pointermove', move);
-    el.addEventListener('pointerup', up);
-    el.addEventListener('pointercancel', up);
-  };
-  const onKeyDown = (e: KeyboardEvent) => {
-    const step = e.shiftKey ? 80 : 20;
-    if (e.key === 'ArrowLeft') onWidth(clamp(width + step));
-    else if (e.key === 'ArrowRight') onWidth(clamp(width - step));
-    else if (e.key === 'Home') onWidth(maxWidth());
-    else if (e.key === 'End') onWidth(MIN_WIDTH);
-    else return;
-    e.preventDefault();
-  };
-  return (
-    <div
-      class="claude-resize"
-      role="separator"
-      aria-orientation="vertical"
-      aria-label="Endre bredden på Claude-panelet"
-      aria-valuenow={width}
-      aria-valuemin={MIN_WIDTH}
-      aria-valuemax={maxWidth()}
-      tabIndex={0}
-      title="Dra for å endre bredden · dobbeltklikk for standard"
-      onPointerDown={onPointerDown}
-      onKeyDown={onKeyDown}
-      onDblClick={() => onWidth(CLAUDE_WIDTH)}
-    />
-  );
-}
 
 /** Lange meldinger (f.eks. en prompt fra Avvik) foldes sammen til de første linjene */
 function LongText({ text }: { text: string }) {
@@ -279,7 +228,7 @@ interface Props {
   skillHint: (skill: string) => string;
   /** Én skill er alltid valgt (Krav, Avvik); uten kan Claude bruke alle de tillatte når ingen er valgt (Oppgaver) */
   preselect: boolean;
-  /** Claude kan lese kodeklonene (fs-admin, fs-plattform) her */
+  /** Claude kan lese kodeklonene (fs-admin, fs-plattform, min-kompetanse) her */
   codeDirs: boolean;
   /** Finnes fila i vieweren? Lenker til krav-filer i svarene åpner fila */
   has: (path: string) => boolean;
@@ -306,7 +255,7 @@ export function ClaudePanel({ status, width, onWidth, allowedSkills: modeSkills,
   // Skillene som kan velges i velgeren; de andre tillatte kan Claude bruke selv
   const choosable = allowedSkills.filter(s => CLAUDE_SKILLS_SHOWN.includes(s));
   const skillHint = (s: string) =>
-    noCode && s === 'fs-verify' && modeSkills.includes(s) ? 'krever lokale kopier av fs-admin eller fs-plattform. Velg dem under «Kodemapper».' : modeHint(s);
+    noCode && s === 'fs-verify' && modeSkills.includes(s) ? 'krever lokale kopier av fs-admin, fs-plattform eller min-kompetanse. Velg dem under «Kodemapper».' : modeHint(s);
   const cs = useConversations();
   const conv = currentChat(cs);
   const c = conv?.chat ?? EMPTY_CHAT;
@@ -497,7 +446,15 @@ export function ClaudePanel({ status, width, onWidth, allowedSkills: modeSkills,
 
   return (
     <aside class="claude">
-      <ResizeHandle width={width} onWidth={onWidth} />
+      <ResizeHandle
+        width={width}
+        onWidth={onWidth}
+        edge="left"
+        min={MIN_WIDTH}
+        max={maxWidth}
+        fallback={CLAUDE_WIDTH}
+        label="Endre bredden på Claude-panelet"
+      />
       <div class="claude-head">
         <span class="claude-mark" />
         <b>Claude</b>

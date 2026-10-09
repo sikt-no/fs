@@ -1,5 +1,6 @@
 # language: no
 # GitHub: #595
+# Jira: SHI-709
 @OPT-OPT-UTD-003 @must @draft
 Egenskap: Trekke utdanningstilbud fra opptak
   Som opptaksforvalter
@@ -35,7 +36,11 @@ Egenskap: Trekke utdanningstilbud fra opptak
       Når opptaksforvalter trekker utdanningstilbudet "Sykepleie, høst 2027"
       Så fjernes utdanningstilbudet fra listen over utdanningstilbud i opptaket
 
+  @openquestion
   Regel: Trekking etter søknadsåpning gir tydeligere varsel og varsler søkere
+    # ÅPNE SPØRSMÅL:
+    # - Hva skal skje når et utdanningstilbud trekkes etter publisering? Det er ikke spesifisert, og skal avklares sammen med Tind og Puff (SHI-685).
+    # - Hvem har ansvaret for avklaringen, funksjonell design eller domene og design (SHI-685)?
 
     Scenario: Trekke utdanningstilbud etter søknadsåpning
       Gitt at søknadsperioden har startet

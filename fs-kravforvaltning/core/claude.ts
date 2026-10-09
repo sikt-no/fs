@@ -65,14 +65,14 @@ const isDir = (p: string) => {
 
 /**
  * Kodeklonene fs-verify leter i. Stien er overstyringen fra vieweren, ellers `KRAV_FS_ADMIN` /
- * `KRAV_FS_PLATTFORM`, ellers mappa ved siden av repoet (der de ligger i en vanlig utviklermappe).
+ * `KRAV_FS_PLATTFORM` / `KRAV_MIN_KOMPETANSE`, ellers mappa ved siden av repoet (der de ligger i en vanlig utviklermappe).
  * `siblings: false` (desktop-appen, der repoet er appens egen klone): ingen standardsti, brukeren velger mappa.
  */
 export function codeDirs(repo: string, env: NodeJS.ProcessEnv = process.env, overrides: unknown = {}, siblings = true): CodeDir[] {
   const o = overrides && typeof overrides === 'object' ? (overrides as Record<string, unknown>) : {};
   return CODE_DIRS.map(name => {
     const given = o[name];
-    const fromEnv = env[`KRAV_${name.replace('-', '_').toUpperCase()}`];
+    const fromEnv = env[`KRAV_${name.replace(/-/g, '_').toUpperCase()}`];
     const path = typeof given === 'string' && given.trim() ? given.trim() : fromEnv || (siblings ? resolve(repo, '..', name) : '');
     return { name, path, exists: !!path && isAbsolute(path) && isDir(path) };
   });
@@ -403,6 +403,16 @@ export const MCP_PROMPT =
   'Viser en MCP-server seg som ikke logget inn (needs-auth), si at brukeren må kjøre `claude` i terminalen og `/mcp` én gang for å logge inn; det kan ikke gjøres herfra. ' +
   `Bilder fra et verktøykall (get_screenshot i Figma, take_screenshot i chrome-devtools uten filePath) lagres med ${SAVE_SKETCH_TOOL} rett etter kallet (uten tool_use_id lagres det siste bildet), ikke med Write, som bare skriver tekst.`;
 
+/** Lokal tid som `YYYY-MM-DD HH:MM`. fs-verify bruker den i navnet på rapporten (`verify-<dato>-<HHMM>.md`) og i `- **Dato:**`, og panelet har ikke shell til å lese klokka */
+export function nowStamp(d: Date = new Date()): string {
+  const p = (n: number) => String(n).padStart(2, '0');
+  return `${d.getFullYear()}-${p(d.getMonth() + 1)}-${p(d.getDate())} ${p(d.getHours())}:${p(d.getMinutes())}`;
+}
+
+/** Linja med tidspunktet i systemteksten, i panelet og i terminalen */
+export const timeLine = (d: Date = new Date()) =>
+  `Tidspunktet nå er ${nowStamp(d)} (lokal tid). Bruk det når en skill ber om dato eller klokkeslett, f.eks. i navnet på verify-rapporten.`;
+
 /** Systemteksten som forteller Claude hvor den er, og hva brukeren ser på */
 export function contextPrompt(
   path: string | null | undefined,
@@ -417,6 +427,7 @@ export function contextPrompt(
     'Du kjører inne i FS Kravforvaltning (desktop-appen eller dev-serveren) for FS-kravene i dette repoet.',
     'Brukeren er typisk en domeneekspert. Svar kort og på norsk.',
     'Følg konvensjonene i krav/README.md når du skriver eller endrer .feature-filer.',
+    timeLine(),
     skill
       ? `Brukeren har valgt skillen ${skill} for denne samtalen, og den er lastet. ` +
         (others.length ? `Trenger oppgaven en annen skill, kan du bruke den med Skill-verktøyet: ${others.join(', ')}. ` : '') +

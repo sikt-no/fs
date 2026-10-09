@@ -58,6 +58,19 @@ Egenskap: Se detaljer om egen søknad
       Når søkeren åpner søknaden
       Så vises kontaktopplysninger til lærestedet søknaden gjelder
 
+    # Jira: SHI-703. Dukket opp fra designskissen for å behandle et utdanningstilbud (SHI-686).
+    # Erstatter «Søkeren ser kontaktopplysningene lærestedet kan nås på» når det er validert.
+    # Hvem som saksbehandler hvert søknadsalternativ, står i tildele_saksbehandlende_organisasjon.feature (@OPT-BEH-BEH-011).
+    @draft @openquestion
+    Scenario: Søkeren ser kontaktopplysningene til den saksbehandlende organisasjonen
+      # ÅPNE SPØRSMÅL:
+      # - Hvor kommer kontaktopplysningene til den saksbehandlende organisasjonen fra (registrert på organisasjonen, på opptakskontoret, eller angitt i opptaket)?
+      # - Hvilke kontaktopplysninger vises (navn, e-post, telefon, nettside)?
+      Gitt at søknadsalternativene til søknaden saksbehandles av "Universitetet i Oslo" og "HK-dir"
+      Når søkeren åpner søknaden
+      Så ser søkeren kontaktopplysningene til "Universitetet i Oslo" for søknadsalternativene som "Universitetet i Oslo" saksbehandler
+      Og søkeren ser kontaktopplysningene til "HK-dir" for søknadsalternativene som "HK-dir" saksbehandler
+
   Regel: Søkeren ser bare egne søknader
 
     Scenario: Søkeren åpner en søknad som ikke er søkerens egen

@@ -35,12 +35,12 @@ export async function deleteFile(repoRoot: string, path: string) {
 
 /**
  * Skriver et bilde fra `save_sketch` i Claude-panelet. Stien må være `isSketchFile` (`tasks/<d>/<s>/spec/krav-input/…/sketches/…`
- * eller `tasks/<d>/<s>/spec/verify-<dato>/…`); bildene redigeres ikke som tekst, så `kravPath` tar dem ikke.
+ * eller `tasks/<d>/<s>/spec/verify-<dato>-<HHMM>/…`); bildene redigeres ikke som tekst, så `kravPath` tar dem ikke.
  */
 export async function saveSketch(repoRoot: string, path: string, bytes: Uint8Array) {
   if (!isSketchFile(path)) {
     throw new Error(
-      `Bilder lagres under tasks/<domene>/<slug>/spec/krav-input/sketches/ (eller krav-input/changes/<dato>-<ref>/sketches/), eller tasks/<domene>/<slug>/spec/verify-<dato>/ for skjermbilder fra fs-verify, som .png, .jpg eller .webp: ${path}`,
+      `Bilder lagres under tasks/<domene>/<slug>/spec/krav-input/sketches/ (eller krav-input/changes/<dato>-<ref>/sketches/), eller tasks/<domene>/<slug>/spec/verify-<dato>-<HHMM>/ for skjermbilder fra fs-verify, som .png, .jpg eller .webp: ${path}`,
     );
   }
   const abs = resolve(repoRoot, path);
