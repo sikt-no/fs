@@ -405,6 +405,12 @@ Egenskap: Gi tilbudsgaranti ved tidlig opptak
         | fjerner "Sykepleie, høst 2027" fra søknaden |
         | trekker søknaden                            |
 
+    # Dette er ett tilfelle av en generell oppførsel: å fjerne et søknadsalternativ
+    # eller trekke søknaden er en deaktivering, ikke en sletting (soknadsalternativ.slettet
+    # i koden), og saksbehandlingen gjelder igjen når søknadsalternativet legges inn
+    # igjen. Det finnes ikke noe generelt krav for den oppførselen ennå, f.eks. i
+    # 01 Søknad/trekke_søknad.feature eller prioritere_søknadsalternativer.feature
+    # (påpekt i review av PR #654, 09.10.2026).
     Scenariomal: Tilbudsgarantien gjelder igjen når søknadsalternativet legges inn igjen før søknadsfristen
       Gitt søknadsfristen for opptaket er "2027-04-15 23:59"
       Og søkeren hadde tilbudsgaranti på "Sykepleie, høst 2027" som prioritet 1

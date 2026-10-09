@@ -214,7 +214,9 @@ Egenskap: Se svar på søknad om tidlig opptak
 # AVKLART 08.10.2026: Trekker søkeren søknaden eller fjerner søknadsalternativet,
 # faller tilbudsgarantien bort, og svaret viser ikke lenger innvilget. Legges
 # søknadsalternativet inn igjen før søknadsfristen for opptaket, gjelder
-# tilbudsgarantien igjen. Se gi_tilbudsgaranti_ved_tidlig_opptak.feature.
+# tilbudsgarantien igjen. Se gi_tilbudsgaranti_ved_tidlig_opptak.feature. Det er
+# ett tilfelle av at fjerning er deaktivering, ikke sletting, som det ikke finnes
+# noe generelt krav for ennå (påpekt i review av PR #654, 09.10.2026).
 #
 # AVKLART 08.10.2026: Svaret vises på språket søkeren har valgt i Min kompetanse,
 # på samme måte som meldingen om svaret (publisere_svar_på_tidlig_opptak.feature).
