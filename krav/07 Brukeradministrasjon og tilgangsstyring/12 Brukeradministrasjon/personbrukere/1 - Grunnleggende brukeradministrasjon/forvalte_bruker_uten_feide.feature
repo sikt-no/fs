@@ -209,17 +209,17 @@ Egenskap: Forvalte en person i brukeradministrasjonen
       Når jeg filtrerer på status «Deaktivert»
       Så ser jeg personbrukeren i listen
 
-  Regel: En personbruker uten Feide-konto er ikke tilordnbar som saksbehandler
+  Regel: En personbruker kan tilordnes som saksbehandler uansett innloggingsmåte
 
-    Scenario: Personbruker uten Feide-konto kan ikke velges som saksbehandler
+    Scenario: Personbruker uten Feide-konto kan velges som saksbehandler
       Gitt en personbruker uten Feide-konto er aktiv og har roller i opptak
       Når en administrator velger saksbehandler for en sak
-      Så er personbrukeren ikke valgbar som saksbehandler
+      Så er personbrukeren valgbar som saksbehandler
 
-    Scenario: Saksbehandlerlisten påvirkes ikke av registrering
-      Gitt en ny personbruker uten Feide-konto er registrert
+    Scenario: Registrering alene gjør ikke personbrukeren til saksbehandler
+      Gitt en ny personbruker uten Feide-konto er registrert uten roller i opptak
       Når en administrator åpner listen over mulige saksbehandlere
-      Så inneholder listen de samme personbrukerne som før registreringen
+      Så er personbrukeren ikke i listen
 
   @draft @openquestion
   Regel: Tildelingene flyttes fra Feide-brukeren til personen
