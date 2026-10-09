@@ -38,7 +38,7 @@ Som *Finn scope og kode* i `fs-verify`: kravene (spesifikasjon, `krav/`-sti elle
 
 Ber prompten om å verifisere en egenskap eller en regel *uansett status*, gjelder *Verifisere uansett status* i `fs-verify`: scope, gating-settet og hvilken ny status du kan tilby. Ber prompten om å verifisere en mappe *uansett status*, gjelder det samme for hver feature-fil i mappa.
 
-**Frontend og backend.** Ber brukeren om å få vite hva som gjenstår i frontend og backend (eller i hvert repo), eller er kodeklonene både et frontend- og et backend-repo og brukeren vil ha en oversikt over hva som gjenstår, skal finnerne vurdere hvert lag for seg (se *Start teamet*), og rapporten få *Oversikt per krav* (se *Rapport*). Si hvilket repo som er hvilket lag (f.eks. fs-plattform = backend, fs-admin = frontend).
+**Frontend og backend.** Ber brukeren om å få vite hva som gjenstår i frontend og backend (eller i hvert repo), eller er kodeklonene både et frontend- og et backend-repo og brukeren vil ha en oversikt over hva som gjenstår, skal finnerne vurdere hvert lag for seg (se *Start teamet*), og rapporten få `## Oversikt per krav` (variantene `[lag]` i rapportmalen, se *Rapport*). Si hvilket repo som er hvilket lag (f.eks. fs-plattform = backend, fs-admin = frontend).
 
 Ta tidspunktet for kjøringen før teamet startes (*Tidspunkt* i `fs-verify`). Det gir navnet på rapporten (`verify-…-<YYYY-MM-DD>-<HHMM>.md`), `- **Dato:**` og mappa med skjermbilder, også om kjøringen tar lang tid.
 
@@ -109,25 +109,7 @@ Svarer brukeren **Avbryt**, stopp, skriv rapporten for det som er gjort, og rydd
 
 ## Rapport
 
-Som *Etter endringene* og *Rapport* i `fs-verify`, med samme filnavn, format, `## Kontroll` og oppdatering av `utforing.md`, så Spesifikasjoner-visningen i FS Kravforvaltning leser resultatet. Tallene regnes ut fra `## Scenarioer` (se *Rapport* i `fs-verify`). Legg til to linjer i metadata-lista, etter `- **Kode:**`:
-
-```markdown
-- **Kontroll:** `fs-verify-kontroll`
-- **Team:** 4 finnere (`fs-verify-krav`), 9 kontrollører (`fs-verify-kontroll`), 2–8 feature-filer per finner
-```
-
-**Når lagene er vurdert hver for seg** (*Finn scope og kode*):
-
-- Tabellen `## Scenarioer` beholder de fire kolonnene, for den leses av FS Kravforvaltning. Lagene står først i `Bevis`: `B: funnet · F: mangler — <bevis>`, med `funnet` / `delvis` / `mangler` / `ikke relevant` for hvert lag. Forklar forkortelsene over tabellen.
-- Legg til `## Oversikt per krav` rett etter metadataene, med én rad per krav. `Gjenstår` er `frontend`, `backend`, `begge` eller `ingen`, ut fra lagene i radene som ikke er `funnet`:
-
-  ```markdown
-  | Feature-ID | Egenskap | Funnet | Gjenstår | Hva som gjenstår |
-  | --- | --- | --- | --- | --- |
-  | `@DOM-SUB-KAP-NNN` | <tittel> | 3/9 | begge | <én til tre setninger> |
-  ```
-
-- Avslutt oversikten med én linje som teller kravene per verdi i `Gjenstår`.
+Som *Etter endringene* og *Rapport* i `fs-verify`, med samme filnavn, oppdatering av `utforing.md` og malen i [`fs-verify/references/rapportmal.md`](../fs-verify/references/rapportmal.md). Les malen før du skriver rapporten, og følg den nøyaktig. Med agent team gjelder alltid variantene merket `[agent team]` (linja `Team`), og når lagene er vurdert hver for seg (*Finn scope og kode*), også `[lag]`: `## Oversikt per krav` og lagene først i `Bevis`. Tallene regnes ut fra `## Scenarioer` (se *Rapport* i `fs-verify`).
 
 ## Rydd opp
 
@@ -136,6 +118,7 @@ Når rapporten er skrevet (også etter **Avbryt** eller en feil): be hver teamma
 ## Referanser
 
 - **[`fs-verify`](../fs-verify/SKILL.md)** — alle reglene for verifisering, *Negative søk*, *Kontroll*, retagging, sletting og rapport.
+- **[`fs-verify/references/rapportmal.md`](../fs-verify/references/rapportmal.md)** — malen for rapporten.
 - **`.claude/agents/fs-verify-krav.md`** — finneren og svarformatet.
 - **`.claude/agents/fs-verify-kontroll.md`** — kontrolløren og svarformatet.
 - **`krav/README.md`** — statusaksen, *Delvis utkast*, *Avvikling* og *Endring av levert krav*.

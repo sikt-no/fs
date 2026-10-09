@@ -80,7 +80,7 @@ Vis oversikten til brukeren før du gjør noe.
 Ett krav om gangen:
 
 1. **Let etter hvert gating-scenario i koden.** Bruk hintene fra oppgaven, og søk etter begreper fra scenarioet (tekster i `Så`-stegene, feltnavn i tabellene, handlingen i `Når`). Les treffene. Et scenario er **funnet** når koden du har lest, gjør det scenarioet beskriver. En `Scenariomal:` er funnet når alle radene i `Eksempler:` er dekket. Før du skriver `ikke funnet`, følg *Negative søk*.
-2. **Se etter tester.** Finnes step definitions i `tester/steps/` for scenarioet, eller tester i kode-repoet som dekker det, nevn dem som ekstra bevis.
+2. **Se etter tester.** Finnes step definitions i `tester/steps/` for scenarioet, eller tester i kode-repoet som dekker det, nevn dem som ekstra bevis i chat. De står ikke i rapporten.
 3. **Kontroller resultatet** etter *Kontroll*, før du viser det til brukeren.
 4. **Vis resultatet** i chat: feature-ID, tittel, sti, og per scenario `funnet` (med `fil:linje` og én setning om hva koden gjør) / `ikke funnet` / `usikker` (med hvorfor). Si hva kontrollen endret. List scenarioene utenfor gating-settet for seg.
 5. **Spør én gang per krav** (`AskUserQuestion`, `multiSelect: false`): «Stemmer vurderingen for `<feature-ID> — <tittel>`?»
@@ -177,6 +177,8 @@ Hver kjøring har ett tidspunkt, `YYYY-MM-DD HH:MM` i lokal tid, som brukes i na
 
 ## Etter endringene
 
+Si dette i chat. Det står ikke i rapporten.
+
 - **Foreldreløse step definitions.** For slettede scenarioer: søk i `tester/steps/` etter stegtekstene. Steg som ikke lenger brukes av noen `.feature`-fil, listes. Ikke slett dem.
 - **Tester.** Et `@deprecated` scenario som fortsatt har step definitions, vil feile når koden fjernes. Nevn det.
 
@@ -191,75 +193,13 @@ Skriv aldri over en tidligere rapport, og endre den ikke: den er det du sammenli
 
 Skriv aldri rapporten noe annet sted under `krav/`. Ikke kall den `verification-*.md`: det mønsteret er reservert for `<lag>/` (se *Fire regler* i `tasks/README.md`).
 
-FS Kravforvaltning leser `- **Spec:**` og tabellen `## Scenarioer` (én rad per scenario i gating-settet, med `funnet` / `ikke funnet` / `usikker` og beviset), og viser resultatet på kortet i Spesifikasjoner. Hold formatet nøyaktig: Feature-ID med `@`, scenariotittelen slik den står i fila, og `Resultat` med små bokstaver. Resultatet i tabellen er resultatet etter kontrollen.
+**Formatet står i [`references/rapportmal.md`](references/rapportmal.md).** Les malen før du skriver rapporten, og følg den nøyaktig: alle seksjonene, i samme rekkefølge, med de faste tekstene. Det er det som gjør at to kjøringer kan sammenlignes. FS Kravforvaltning leser `- **Dato:**`, `- **Spec:**` og tabellen `## Scenarioer`, og viser resultatet på kortet i Spesifikasjoner.
 
 **Tall regnes ut, de telles ikke.** Alle tall i rapporten (scenarioer funnet per krav, i alt, og i *Oppsummering*) regnes ut fra tabellen `## Scenarioer` og fra endringene du har gjort, f.eks. med `awk` på rapportfila når du har Bash. Uten Bash: tell radene i tabellen én gang til, krav for krav, før du skriver tallene.
 
 `- **Kontroll:**` sier hvem som kontrollerte: `fs-verify-kontroll` (uavhengig) eller `manuell (Claude-panelet)`. `## Kontroll` lister radene der kontrollen endret resultatet, så leseren ser hva den første letingen bommet på.
 
 **`utforing.md`.** Når scope er en spesifikasjon som er sendt (har en seksjon i `<oppgave>/utforing.md`, se *Utføring* i `tasks/README.md`): mangler noe (`ikke funnet` eller `usikker`, og brukeren svarte «Noe mangler»), sett steget i repoet der koden mangler, tilbake til `- **Status**: pågår`, legg til `- **Tilbake**: <YYYY-MM-DD>`, og en linje i `Logg` (`<dato> — fs-verify — <n> ikke funnet, <n> usikker · tilbake til <repo>`). Er alt funnet, legg bare til en linje i `Logg` (`alt funnet · verifisert`); kortet står i «Verifisert» når kravene er `@implemented`.
-
-```markdown
-# Verifisering: <scope>
-
-- **Dato:** YYYY-MM-DD HH:MM
-- **Krav:** `<krav-sti eller oppgave>`
-- **Spec:** `spec/spec-<x>.md` (bare når scope er en spesifikasjon)
-- **Kode:** `<repo 1>`, `<repo 2>`
-- **Kontroll:** `fs-verify-kontroll` | manuell (Claude-panelet)
-
-## Oppsummering
-
-- Retagget `@in-progress` → `@implemented`: N
-- Deler i leverte krav som er levert (`@in-progress` fjernet): N
-- Fortsatt `@in-progress`: N
-- Slettet (`@deprecated`): N filer, N regler/scenarioer
-- `@deprecated` som fortsatt finnes i koden: N
-
-## Scenarioer
-
-| Feature-ID | Scenario | Resultat | Bevis |
-| --- | --- | --- | --- |
-| `@DOM-SUB-KAP-NNN` | <scenariotittel> | funnet | `<repo>/<fil>:<linje>` |
-| `@DOM-SUB-KAP-NNN` | <scenariotittel> | ikke funnet | <hva det ble søkt etter> |
-
-## Kontroll
-
-| Feature-ID | Scenario | Før kontroll | Etter kontroll | Hvorfor |
-| --- | --- | --- | --- | --- |
-| `@DOM-SUB-KAP-NNN` | <scenariotittel> | ikke funnet | usikker | `<repo>/<fil>:<linje>` — <hva kontrollen fant> |
-
-(«Kontrollen endret ingen resultater» når tabellen er tom.)
-
-## Retagget til @implemented
-
-| Feature-ID | Egenskap | Fil | Gating funnet |
-| --- | --- | --- | --- |
-
-## Deler levert
-
-| Feature-ID | Del | Fil | Gating funnet |
-| --- | --- | --- | --- |
-
-## Fortsatt @in-progress
-
-- **`<feature-ID>` — <tittel>**: <scenario> — ikke funnet / usikker / brukeren: «…»
-
-## Slettet
-
-- `<fil>` (hele kravet)
-- `<fil>` — regel/scenario `<tittel>`
-
-## @deprecated som fortsatt finnes i koden
-
-- **`<feature-ID>` — <tittel/del>** (`<fil>`)
-  - `<repo>/<fil>:<linje>` — <hva som finnes>
-
-## Oppfølging
-
-- Step definitions som ikke lenger brukes: `tester/steps/<fil>.ts:<linje>` — «<steg>»
-- Krav utenfor scope: <fil> (`@draft`/`@planned`) — <henvisning>
-```
 
 ## Git
 
