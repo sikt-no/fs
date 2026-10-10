@@ -2,7 +2,8 @@ name: Release FS Kravforvaltning
 
 # Changesets holder en «Version Packages»-PR oppdatert mens det finnes changesets i fs-kravforvaltning/.changeset/.
 # Når PR-en er merget (ingen changesets igjen, og versjonen i package.json har ingen release), bygges desktop-appen
-# for macOS, Windows og Linux og legges ved en GitHub-release med tag `fs-kravforvaltning-v<versjon>`.
+# for macOS og legges ved en GitHub-release med tag `fs-kravforvaltning-v<versjon>`. Windows og Linux er tatt ut
+# foreløpig, og står kommentert ut under.
 # Se fs-kravforvaltning/docs/release.md.
 
 on:
@@ -101,9 +102,12 @@ jobs:
           ### Installasjon
 
           - **macOS**: `.dmg` (`arm64` for Apple Silicon, `x64` for Intel). Appen er signert og notarisert av Apple.
-          - **Windows**: `.exe`. Appen er ikke signert: velg **Mer informasjon → Kjør likevel** hvis SmartScreen stopper den.
-          - **Linux**: `.AppImage`. Gjør fila kjørbar med `chmod +x`.
+
+          Er appen installert fra før, laster den ned den nye versjonen selv, og installerer den når den startes på nytt.
           EOF
+          # Windows og Linux er tatt ut av bygget foreløpig (se docs/release.md). Tas de inn igjen, legges disse til over:
+          # - **Windows**: `.exe`. Appen er ikke signert: velg **Mer informasjon → Kjør likevel** hvis SmartScreen stopper den.
+          # - **Linux**: `.AppImage`. Gjør fila kjørbar med `chmod +x`.
           gh release create "$TAG" --draft --target "$GITHUB_SHA" --title "FS Kravforvaltning $VERSION" --notes-file notes.md
 
   build:
@@ -112,15 +116,18 @@ jobs:
       fail-fast: false
       matrix:
         include:
+          # zip, blockmap og latest-mac.yml er det appen oppdaterer seg fra (electron/updater.ts)
           - os: macos-latest
             args: --mac --arm64 --x64
-            files: release/*.dmg
-          - os: windows-latest
-            args: --win --x64
-            files: release/*.exe
-          - os: ubuntu-latest
-            args: --linux --x64
-            files: release/*.AppImage
+            files: release/*.dmg release/*.zip release/*.blockmap release/latest-mac.yml
+          # Windows og Linux er tatt ut av bygget foreløpig (se fs-kravforvaltning/docs/release.md). Stegene under
+          # som gjelder dem (runner.os), står igjen, så det holder å ta inn radene igjen
+          # - os: windows-latest
+          #   args: --win --x64
+          #   files: release/*.exe release/*.blockmap release/latest.yml
+          # - os: ubuntu-latest
+          #   args: --linux --x64
+          #   files: release/*.AppImage release/latest-linux.yml
     runs-on: ${{ matrix.os }}
     env:
       MAIN_VITE_KRAV_GITHUB_CLIENT_ID: ${{ vars.KRAV_GITHUB_CLIENT_ID }}

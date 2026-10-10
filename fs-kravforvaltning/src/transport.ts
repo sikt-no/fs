@@ -5,13 +5,17 @@ import repoRoot from 'virtual:krav-root';
 import type { Api, ApiMethod, Boot } from '../shared/api';
 
 /** Hendelsene backenden sender til rendereren */
-export type KravEvent = 'krav:update' | 'krav:git' | 'krav:tasks' | 'krav:focus' | 'krav:blur' | 'krav:claude' | 'krav:pty' | 'krav:connect' | 'krav:disconnect';
+export type KravEvent = 'krav:update' | 'krav:git' | 'krav:tasks' | 'krav:focus' | 'krav:blur' | 'krav:claude' | 'krav:pty' | 'krav:connect' | 'krav:disconnect' | 'krav:app-update';
 
 /** Broen preload-skriptet i desktop-appen legger på `window.krav` (se electron/preload.ts) */
 export interface KravBridge {
   boot(): Promise<Boot>;
   invoke(method: ApiMethod, arg?: unknown): Promise<{ ok: true; value: unknown } | { ok: false; error: string }>;
   on(event: string, fn: (data: unknown) => void): () => void;
+  /** Ny versjon av appen som er lastet ned og venter på omstart, eller `null` */
+  updateDownloaded(): Promise<string | null>;
+  /** Avslutter appen og installerer den nye versjonen */
+  installUpdate(): Promise<void>;
 }
 declare global {
   interface Window {

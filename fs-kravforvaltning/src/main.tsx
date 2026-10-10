@@ -13,6 +13,8 @@ import { findGroups, findHits } from './find';
 import { headings, parseMd } from './markdown';
 import { MainBanner } from './MainBanner';
 import { bannerShown } from './mainStatus';
+import { UpdateToast } from './UpdateToast';
+import { updateToastShown } from '../shared/appUpdate';
 import { MarkdownView, type MdMode } from './MarkdownView';
 import { Oppgaver, taskKey, type OView } from './Oppgaver';
 import { NEW_KEY, Spesifikasjoner } from './Spesifikasjoner';
@@ -531,6 +533,20 @@ function App() {
     setMainLater(sha);
     save('mainLater', sha);
   };
+  // Desktop-appen: en ny versjon av appen er lastet ned fra GitHub-releasene (electron/updater.ts), og installeres
+  // ved omstart. Den vises som et kort nede til høyre. «Senere» skjuler kortet for den versjonen (`updateLater`), og
+  // legger knappen «<versjon> Start på nytt» i toppfeltet; versjonen installeres uansett når appen avsluttes
+  const [appUpdate, setAppUpdate] = useState<string | null>(null);
+  const [updateLater, setUpdateLater] = useState<string | null>(() => load('updateLater', null));
+  useEffect(() => {
+    if (!window.krav) return;
+    window.krav.updateDownloaded().then(setAppUpdate, () => {});
+    return transport.on('krav:app-update', setAppUpdate);
+  }, []);
+  const restartForUpdate = async () => {
+    if (await leaveEditor()) void window.krav?.installUpdate();
+  };
+  const updateToast = updateToastShown(appUpdate, updateLater);
   const select = async (path: string, line?: number) => {
     if (path !== state.current.current && !(await leaveEditor())) return;
     setPrFor(false);
@@ -739,6 +755,7 @@ function App() {
         onClaude={() => setClaudeOpen(o => !o)}
         onUpdate={mainStatus?.behind ? pull : null}
         pulling={pulling}
+        appUpdate={appUpdate && !updateToast ? { version: appUpdate, onRestart: restartForUpdate } : null}
         repoRoot={boot.repoRoot}
       />
       {bannerShown(mainStatus, mainLater) && <MainBanner info={mainStatus?.info} pulling={pulling} onLater={later} onPull={pull} />}
@@ -915,7 +932,7 @@ function App() {
       <StatusBar
         connected={connected}
         live={transport.live}
-        origin={transport.kind === 'electron' ? 'desktop-app' : `vite · ${location.host}`}
+        origin={transport.kind === 'electron' ? `desktop-app · v${import.meta.env.VITE_APP_VERSION}` : `vite · ${location.host}`}
         fileName={fileName}
         savedAt={entry?.savedAt}
         updated={updated}
@@ -924,6 +941,16 @@ function App() {
         avvik={mode !== 'krav'}
         fixMsg={fixMsg}
       />
+      {appUpdate && updateToast && (
+        <UpdateToast
+          version={appUpdate}
+          onLater={() => {
+            setUpdateLater(appUpdate);
+            save('updateLater', appUpdate);
+          }}
+          onRestart={restartForUpdate}
+        />
+      )}
     </div>
   );
 }

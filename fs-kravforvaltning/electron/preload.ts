@@ -25,6 +25,9 @@ contextBridge.exposeInMainWorld('krav', {
     return res;
   },
   invoke: (method: string, arg?: unknown) => ipcRenderer.invoke('krav:invoke', method, arg),
+  // Desktop-appen: versjonen som er lastet ned og venter på omstart (eller null), og omstarten
+  updateDownloaded: () => ipcRenderer.invoke('krav:update-downloaded'),
+  installUpdate: () => ipcRenderer.invoke('krav:update-install'),
   on(event: string, fn: (data: unknown) => void) {
     if (!listeners.has(event)) listeners.set(event, new Set());
     listeners.get(event)!.add(fn);
