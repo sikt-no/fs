@@ -25,10 +25,22 @@ artifactName: fs-kravforvaltning-${version}-${os}-${arch}.${ext}
 # Signeres med Developer ID-sertifikatet i CSC_LINK (eller i nøkkelringen lokalt), med hardened runtime og
 # standard-entitlements fra electron-builder. Notariseres når APPLE_API_KEY, APPLE_API_KEY_ID og APPLE_API_ISSUER
 # er satt (release-workflowen). Se docs/release.md
+# zip er det electron-updater laster ned ved oppdatering; dmg er for første installasjon
 mac:
-  target: dmg
+  target:
+    - dmg
+    - zip
   category: public.app-category.developer-tools
-win:
-  target: nsis
-linux:
-  target: AppImage
+# Windows og Linux er tatt ut av bygget foreløpig (se docs/release.md). Ta dem inn igjen her og i release-workflowen
+# win:
+#   target: nsis
+# linux:
+#   target: AppImage
+# Appen oppdaterer seg selv fra GitHub-releasene (electron/updater.ts). Med denne blokken skriver electron-builder
+# latest-mac.yml og *.blockmap til release/, også med `--publish never`. Workflowen laster dem opp selv med gh.
+# updater.ts setter feeden ved kjøring, fordi tagg-prefikset gjør at «Latest» i repoet ikke kan brukes
+publish:
+  provider: github
+  owner: sikt-no
+  repo: fs
+  releaseType: release

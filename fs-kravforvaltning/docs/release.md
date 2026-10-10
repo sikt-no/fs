@@ -1,6 +1,6 @@
 # Versjoner og release av FS Kravforvaltning
 
-Desktop-appen bygges for macOS, Windows og Linux av GitHub Actions, og legges ved en GitHub-release sammen med endringsloggen. Versjonen og endringsloggen styres med [Changesets](https://changesets.dev).
+Desktop-appen bygges for macOS av GitHub Actions, og legges ved en GitHub-release sammen med endringsloggen. Appen oppdaterer seg selv fra releasene (se *Automatisk oppdatering*). Windows og Linux er tatt ut av bygget foreløpig (se *Windows og Linux*). Versjonen og endringsloggen styres med [Changesets](https://changesets.dev).
 
 ## Når du endrer appen
 
@@ -22,14 +22,47 @@ Workflowen er `.github/workflows/kravforvaltning-release.yml`, og kjører ved pu
 1. **Finnes det changesets**, lager workflowen versjons-commiten på branchen `changeset-release/main`. Den bumper `version` i `package.json` og `package-lock.json`, skriver endringene inn i `CHANGELOG.md` og sletter changeset-filene. Finnes PR-en *«fs-kravforvaltning: ny versjon»* fra branchen, oppdateres den hver gang en ny changeset kommer på `main`. Finnes den ikke, må den lages for hånd (se *Versjons-PR-en*).
 2. **Når den PR-en merges**, finnes det ingen changesets, og versjonen i `package.json` har ingen release. Da:
    - lages en draft-release `fs-kravforvaltning-v<versjon>` med endringene for versjonen fra `CHANGELOG.md`
-   - bygges appen på tre maskiner, og filene lastes opp til releasen:
-     - macOS: `fs-kravforvaltning-<versjon>-mac-arm64.dmg` og `-mac-x64.dmg`
-     - Windows: `fs-kravforvaltning-<versjon>-win-x64.exe`
-     - Linux: `fs-kravforvaltning-<versjon>-linux-x86_64.AppImage`
-   - publiseres releasen når alle tre er lastet opp. Feiler ett bygg, blir releasen stående som draft, og neste kjøring (eller *Re-run failed jobs*) bygger den ferdig.
+   - bygges appen for macOS, og filene lastes opp til releasen:
+     - `fs-kravforvaltning-<versjon>-mac-arm64.dmg` og `-mac-x64.dmg`, for første installasjon
+     - `fs-kravforvaltning-<versjon>-mac-arm64.zip` og `-mac-x64.zip`, med `.blockmap`, og `latest-mac.yml`, som appen oppdaterer seg fra
+   - publiseres releasen når filene er lastet opp. Feiler bygget, blir releasen stående som draft, og neste kjøring (eller *Re-run failed jobs*) bygger den ferdig.
 3. Andre push til `main` gjør ingenting, så lenge versjonen allerede har en publisert release.
 
 Taggen har prefikset `fs-kravforvaltning-`, fordi repoet først og fremst er kravene, og en bar `v1.2.0` ville sett ut som en versjon av hele repoet.
+
+## Automatisk oppdatering
+
+Appen oppdaterer seg selv med [electron-updater](https://www.electron.build/auto-update) (`electron/updater.ts`):
+
+1. Ved oppstart og hver fjerde time henter den releasene i `sikt-no/fs` fra GitHub-API-et, og finner den nyeste publiserte releasen med taggen `fs-kravforvaltning-v<versjon>` (ikke draft og ikke prerelease, `latestReleaseTag` i `shared/appUpdate.ts`). Repoet kan få andre releaser, så «Latest» brukes ikke.
+2. Den leser `latest-mac.yml` i den releasen. Er versjonen nyere enn appen, lastes zip-fila for arkitekturen ned i bakgrunnen (bare endringene, med `.blockmap`, når det går).
+3. Når den er lastet ned, viser appen kortet «FS Kravforvaltning <versjon> er lastet ned» nede til høyre, med «Senere» og «Start på nytt». «Senere» bytter kortet mot knappen «<versjon> Start på nytt» i toppfeltet. Den nye versjonen installeres ved omstart, og ellers når appen avsluttes.
+
+`electron-builder.yml` har en `publish:`-blokk, så electron-builder skriver `latest-mac.yml` og `.blockmap`-filene til `release/`, og `app-update.yml` inn i appen, også med `--publish never`. Workflowen laster dem opp selv med `gh`. Oppdateringen virker bare når appen er signert, og den nye versjonen må være signert med det samme sertifikatet (Squirrel.Mac sjekker det).
+
+Releaser fra før 1.2.0 har ikke `latest-mac.yml`, og versjoner fra før 1.2.0 sjekker ikke etter oppdateringer. Brukere med en av dem må installere første versjon med automatisk oppdatering for hånd, fra `.dmg`-en.
+
+**Teste oppdateringen lokalt** (krever et Developer ID-sertifikat i nøkkelringen, se *Signering*): bygg to versjoner med zip, start den eldste med `KRAV_UPDATE_URL` mot en lokal server med den nyeste, og vent på kortet nede til høyre. `--user-data-dir` gjør at den ikke deler data med appen du har installert:
+
+```bash
+npx electron-vite build
+npx electron-builder --mac zip --arm64 --publish never -c.directories.output=/tmp/upd/a
+npx electron-builder --mac zip --arm64 --publish never -c.directories.output=/tmp/upd/b -c.extraMetadata.version=9.9.9
+(cd /tmp/upd/b && python3 -m http.server 8765) &
+KRAV_UPDATE_URL=http://127.0.0.1:8765 "/tmp/upd/a/mac-arm64/FS Kravforvaltning.app/Contents/MacOS/FS Kravforvaltning" --user-data-dir=/tmp/upd/data
+```
+
+## Windows og Linux
+
+Windows og Linux er tatt ut av bygget foreløpig. De står kommentert ut, ikke slettet, så de kan tas inn igjen:
+
+- `win:` og `linux:` i `electron-builder.yml`
+- radene for `windows-latest` og `ubuntu-latest` i matrisen i `.github/workflows/kravforvaltning-release.yml`, med filene appen oppdaterer seg fra: `*.exe`, `*.blockmap` og `latest.yml` for Windows, og `*.AppImage` og `latest-linux.yml` for Linux
+- linjene om Windows og Linux under *Installasjon* i release-notatet (i samme workflow)
+
+Stegene i workflowen som bare gjelder Linux (`Bygg node-pty`) og ikke-macOS (`Pakk`), står igjen, og trenger ingen endring. `electron/updater.ts` er ikke macOS-spesifikk, så oppdateringen virker på Windows (NSIS) og Linux (AppImage) når byggene kommer tilbake. Windows-appen er ikke signert, så SmartScreen kan advare både ved installasjon og oppdatering (se *Signering*).
+
+Brukere som har installert Windows- eller Linux-versjonen av 1.1.0 eller eldre, får ingen nye versjoner før byggene er tatt inn igjen.
 
 ## Oppsett i GitHub (én gang)
 
@@ -105,7 +138,7 @@ Slett `.p12`-fila etterpå, eller legg den i en passordhvelv. Sertifikatet gjeld
 
 ### Windows
 
-Windows-appen er ikke signert, og SmartScreen advarer mot `.exe`-en (**Mer informasjon → Kjør likevel**). Dette står i release-notatene. Signering krever et kodesigneringssertifikat, for eksempel Azure Trusted Signing.
+Windows er tatt ut av bygget foreløpig (se *Windows og Linux*). Windows-appen er ikke signert, og SmartScreen advarer mot `.exe`-en (**Mer informasjon → Kjør likevel**). Dette står i release-notatene. Signering krever et kodesigneringssertifikat, for eksempel Azure Trusted Signing.
 
 ## Bygge lokalt
 

@@ -1,5 +1,9 @@
+import { readFileSync } from 'node:fs';
 import { defineConfig } from 'electron-vite';
 import preact from '@preact/preset-vite';
+
+/** Versjonen i package.json, vist i statuslinja i desktop-appen */
+const { version } = JSON.parse(readFileSync(new URL('./package.json', import.meta.url), 'utf8')) as { version: string };
 
 /**
  * Desktop-appen (electron-vite): main-prosess, preload og renderer.
@@ -26,6 +30,7 @@ export default defineConfig({
   },
   renderer: {
     root: '.',
+    define: { 'import.meta.env.VITE_APP_VERSION': JSON.stringify(version) },
     plugins: [
       preact(),
       {

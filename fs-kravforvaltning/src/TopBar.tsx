@@ -40,11 +40,13 @@ interface Props {
   onUpdate: (() => void) | null;
   /** «Hent siste» pågår */
   pulling: boolean;
+  /** Desktop-appen: en ny versjon av appen er lastet ned, og kortet nede til høyre er skjult med «Senere». `null`: ingen knapp */
+  appUpdate: { version: string; onRestart: () => void } | null;
   /** Absolutt sti til repoet, for «Åpne i VS Code». `null` i statisk bygg */
   repoRoot: string | null;
 }
 
-export function TopBar({ path, connected, theme, onTheme, treeHidden, onToggleTree, tocHidden, onToggleToc, onHome, mode, onMode, nBad, oppgaver, nActive, oView, onOView, oCrumbs, spesifikasjoner, nSpecs, specState, claude, onClaude, onUpdate, pulling, repoRoot }: Props) {
+export function TopBar({ path, connected, theme, onTheme, treeHidden, onToggleTree, tocHidden, onToggleToc, onHome, mode, onMode, nBad, oppgaver, nActive, oView, onOView, oCrumbs, spesifikasjoner, nSpecs, specState, claude, onClaude, onUpdate, pulling, appUpdate, repoRoot }: Props) {
   const parts = mode === 'avvik' ? ['krav', '#/avvik'] : mode === 'oppgaver' ? oCrumbs : mode === 'spesifikasjoner' ? ['tasks', '*/*', 'utforing.md'] : path ? path.split('/') : [];
   return (
     <header class="topbar">
@@ -122,6 +124,12 @@ export function TopBar({ path, connected, theme, onTheme, treeHidden, onToggleTr
               </>
             )}
           </span>
+        )}
+        {appUpdate && (
+          <button class="apppill" onClick={appUpdate.onRestart} title={`Start på nytt for å installere ${appUpdate.version}`}>
+            <span class="ver mono">{appUpdate.version}</span>
+            Start på nytt
+          </button>
         )}
         {onUpdate && (
           <button

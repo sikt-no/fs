@@ -896,6 +896,24 @@ a.otf:hover { background: var(--sunken); text-decoration: none; }
 .mainbanner .later:disabled { opacity: .6; }
 .mainbanner .pull { display: flex; align-items: center; gap: 6px; border: 0; background: #fff; color: var(--banner-btn-ink); padding: 4px 14px; font-weight: 600; }
 .mainbanner .pull:hover:not(:disabled) { background: #ece9ff; }
+/* Desktop-appen: ny versjon av appen er lastet ned (designet «Oppdateringsvarsler», 1c). Kortet ligger nede til høyre,
+   over statuslinja; «Senere» bytter det mot knappen .apppill i toppfeltet. Main har båndet, appen kortet */
+.updatetoast { position: fixed; right: 16px; bottom: 44px; z-index: 30; width: 320px; box-sizing: border-box; display: flex; flex-direction: column; gap: 12px; padding: 14px 16px; background: var(--surface); border: 1px solid var(--line2); border-radius: 8px; box-shadow: 0 8px 28px rgba(0, 0, 0, .12); color: var(--ink); }
+.updatetoast .text { display: flex; flex-direction: column; gap: 4px; }
+.updatetoast .title { font-size: 13px; font-weight: 600; }
+.updatetoast .info { font-size: 12.5px; color: var(--ink2); text-wrap: pretty; }
+.updatetoast .btns { display: flex; justify-content: flex-end; gap: 8px; }
+.updatetoast button { border-radius: 5px; font: 12px var(--sans); cursor: pointer; }
+.updatetoast button:focus-visible { outline: 2px solid var(--acc); outline-offset: 2px; }
+.updatetoast .later { border: 1px solid var(--line2); background: var(--surface); color: var(--ink); padding: 4px 12px; }
+.updatetoast .later:hover { background: var(--panel); }
+/* --surface som tekst: hvit på lilla i lyst tema, mørk på lys lilla i mørkt */
+.updatetoast .restart { border: 0; background: var(--acc); color: var(--surface); padding: 4px 14px; font-weight: 600; }
+.updatetoast .restart:hover { background: var(--acc-ink); }
+.apppill { display: flex; align-items: center; gap: 7px; border: 1px solid var(--line2); border-radius: 5px; padding: 3px 10px; background: var(--surface); color: var(--ink); font: 12px var(--sans); cursor: pointer; white-space: nowrap; }
+.apppill:hover { background: var(--acc-soft); }
+.apppill:focus-visible { outline: 2px solid var(--acc); outline-offset: 1px; }
+.apppill .ver { font-size: 11px; color: var(--acc-ink); }
 /* Spinner mens «Hent siste» pågår */
 .spinner { display: inline-block; width: 10px; height: 10px; flex-shrink: 0; box-sizing: border-box; border: 1.5px solid currentColor; border-right-color: transparent; border-radius: 50%; animation: spin .7s linear infinite; vertical-align: -1px; }
 .smallbtn .spinner { margin-right: 5px; }

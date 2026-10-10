@@ -10,6 +10,7 @@ import { ClaudeRunner } from '../core/claude.ts';
 import { PtyRunner } from '../core/pty.ts';
 import { ensureClone, isoVcs } from '../core/vcs-isogit.ts';
 import { modeOn, Workspace, type WorkspaceEvent } from '../core/workspace.ts';
+import { installUpdate, startUpdater } from './updater.ts';
 
 /**
  * Desktop-appen (FS Kravforvaltning): vieweren med redigering og PR, uten at git må være installert.
@@ -26,6 +27,7 @@ import { modeOn, Workspace, type WorkspaceEvent } from '../core/workspace.ts';
  * - `OPPGAVER=1`: vis Oppgaver-modusen (eller bygg/start med `--mode oppgaver`, f.eks. `npm run app:dev:oppgaver`)
  * - `SPESIFIKASJONER=1`: vis Spesifikasjoner (eller `--mode spesifikasjoner`, f.eks. `npm run app:dev:spesifikasjoner`; begge: `--mode oppgaver+spesifikasjoner`)
  * - `KRAV_CLAUDE_PATH`: stien til `claude`, hvis den ikke finnes på vanlige steder
+ * - `KRAV_UPDATE_URL`: hent oppdateringer fra denne mappa i stedet for GitHub-releasen (se electron/updater.ts)
  */
 
 const REPO_URL = process.env.KRAV_REPO_URL || 'https://github.com/sikt-no/fs.git';
@@ -108,6 +110,9 @@ ipcMain.handle('krav:invoke', async (_e, method: string, arg: unknown) => {
   }
 });
 
+// «Start på nytt» i banneret for en ny versjon av appen
+ipcMain.handle('krav:update-install', () => installUpdate());
+
 function createWindow() {
   win = new BrowserWindow({
     width: 1400,
@@ -138,8 +143,16 @@ function createWindow() {
   win.on('closed', () => (win = null));
 }
 
+// Den siste versjonen som er lastet ned, sendes på nytt når vieweren er tegnet (den kan komme før)
+let downloaded: string | null = null;
+ipcMain.handle('krav:update-downloaded', () => downloaded);
+
 app.whenReady().then(() => {
   createWindow();
+  startUpdater(version => {
+    downloaded = version;
+    send('krav:app-update', version);
+  });
   app.on('activate', () => BrowserWindow.getAllWindows().length === 0 && createWindow());
 });
 app.on('window-all-closed', () => process.platform !== 'darwin' && app.quit());
