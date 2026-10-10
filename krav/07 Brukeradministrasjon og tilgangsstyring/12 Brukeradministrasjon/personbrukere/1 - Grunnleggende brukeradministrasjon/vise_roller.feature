@@ -39,6 +39,27 @@ Egenskap: Se en personbrukers roller
         | Tildelt dato  |
 
     @draft @openquestion
+    Scenario: Se hvem som tildelte rollen
+      # ÅPNE SPØRSMÅL:
+      # - «Tildelt av» viser i dag Feide-ID-en til den som tildelte rollen, og API-et kan bare vise
+      #   en Feide-bruker som tildeler. En brukeradministrator som logger inn med ID-porten, har
+      #   ingen Feide-ID. Skal «Tildelt av» vise navnet på brukeradministratoren?
+      # - Hva vises når rollen ble tildelt før tildelingene ble flyttet fra Feide-brukeren til
+      #   personen?
+      Gitt rollen ble tildelt av en annen brukeradministrator
+      Når brukeradministratoren ser på personbrukerens detaljside
+      Så ser brukeradministratoren navnet på brukeradministratoren som tildelte rollen
+
+    @draft @openquestion
+    Scenario: Se rollene til en person
+      # ÅPNE SPØRSMÅL:
+      # - Før tildelingene er flyttet, kan en Feide-bruker som er koblet til personen, ha roller.
+      #   Skal personens detaljside vise de rollene også? Se regelen om flytting i BRU-PER-GRU-014.
+      Gitt brukeradministratoren ser detaljsiden for en person
+      Når brukeradministratoren ser på personens roller
+      Så ser brukeradministratoren rollene personen er tildelt, med de samme feltene som for øvrige personbrukere
+
+    @draft @openquestion
     Scenario: Se tidsbegrensning på en rolle
       # ÅPNE SPØRSMÅL:
       # - Kravspesifiseringen er utsatt. Når skal tidsbegrensning på roller spesifiseres?
