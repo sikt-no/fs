@@ -21,7 +21,15 @@ npx changeset          # changeset for en endring i appen (versjon og endringslo
 
 ## Versjon og release
 
-Versjonen styres med Changesets (`.changeset/`). `.github/workflows/kravforvaltning-release.yml` holder en versjons-PR oppdatert mens det finnes changesets. Når den er merget, bygges desktop-appen for macOS (Windows og Linux er kommentert ut foreløpig) og publiseres som GitHub-release `fs-kravforvaltning-v<versjon>` med endringene fra `CHANGELOG.md`. Client ID kommer fra repo-variabelen `KRAV_GITHUB_CLIENT_ID`. En endring i appen som brukerne merker, skal ha en changeset i samme PR. Se `docs/release.md`.
+Versjonen styres med Changesets (`.changeset/`). `.github/workflows/kravforvaltning-release.yml` startes bare manuelt, fra `main` (`gh workflow run kravforvaltning-release.yml --ref main`): finnes det changesets, lager eller oppdaterer kjøringen versjons-PR-en (som må lages for hånd første gang, se *Versjons-PR-en* i `docs/release.md`). Når den er merget, kjøres workflowen igjen, og da bygges desktop-appen for macOS (Windows og Linux er kommentert ut foreløpig) og publiseres som GitHub-release `fs-kravforvaltning-v<versjon>` med endringene fra `CHANGELOG.md`. Client ID kommer fra repo-variabelen `KRAV_GITHUB_CLIENT_ID`. En endring i appen som brukerne merker, skal ha en changeset i samme PR. Se `docs/release.md`.
+
+**Spør om release.** Når du har pushet eller laget en PR med en endring i appen som har en changeset, spør brukeren med `AskUserQuestion` om det skal lages en release når endringen er på `main` («Ja, når PR-en er merget» / «Nei, vent med flere endringer»). Er svaret ja:
+
+1. Vent til endringen er merget til `main` (spør brukeren, merge ikke selv). Kjør `gh workflow run kravforvaltning-release.yml --ref main` og følg kjøringen (`gh run watch`).
+2. Feiler `version` med «GitHub Actions is not permitted to create or approve pull requests», lag versjons-PR-en for hånd og kjør jobben på nytt (*Versjons-PR-en* i `docs/release.md`).
+3. Be brukeren merge versjons-PR-en. Når den er merget, kjør workflowen igjen og følg den til releasen er publisert, eller si fra hvis bygget feiler.
+
+Start aldri workflowen uten at brukeren har sagt ja: en release går ut til alle som har appen, og den oppdaterer seg selv.
 
 ## Visningen
 

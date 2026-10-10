@@ -17,16 +17,22 @@ En endring som ikke skal nevnes i endringsloggen (refaktorering, tester), trenge
 
 ## Fra changeset til release
 
-Workflowen er `.github/workflows/kravforvaltning-release.yml`, og kjører ved push til `main` som endrer `fs-kravforvaltning/`.
+Workflowen er `.github/workflows/kravforvaltning-release.yml`. Den startes bare manuelt, fra `main`: *Actions → Release FS Kravforvaltning → Run workflow*, eller
 
-1. **Finnes det changesets**, lager workflowen versjons-commiten på branchen `changeset-release/main`. Den bumper `version` i `package.json` og `package-lock.json`, skriver endringene inn i `CHANGELOG.md` og sletter changeset-filene. Finnes PR-en *«fs-kravforvaltning: ny versjon»* fra branchen, oppdateres den hver gang en ny changeset kommer på `main`. Finnes den ikke, må den lages for hånd (se *Versjons-PR-en*).
-2. **Når den PR-en merges**, finnes det ingen changesets, og versjonen i `package.json` har ingen release. Da:
+```bash
+gh workflow run kravforvaltning-release.yml --ref main
+```
+
+En merge til `main` starter ingenting. En release er to kjøringer: den første lager versjons-PR-en, og den andre, etter at PR-en er merget, bygger og publiserer.
+
+1. **Finnes det changesets**, lager workflowen versjons-commiten på branchen `changeset-release/main`. Den bumper `version` i `package.json` og `package-lock.json`, skriver endringene inn i `CHANGELOG.md` og sletter changeset-filene. Finnes PR-en *«fs-kravforvaltning: ny versjon»* fra branchen, oppdateres den hver gang workflowen kjøres, med changesetene som er på `main` da. Finnes den ikke, må den lages for hånd (se *Versjons-PR-en*).
+2. **Når den PR-en er merget, kjøres workflowen en gang til.** Da finnes det ingen changesets, og versjonen i `package.json` har ingen release, så
    - lages en draft-release `fs-kravforvaltning-v<versjon>` med endringene for versjonen fra `CHANGELOG.md`
    - bygges appen for macOS, og filene lastes opp til releasen:
      - `fs-kravforvaltning-<versjon>-mac-arm64.dmg` og `-mac-x64.dmg`, for første installasjon
      - `fs-kravforvaltning-<versjon>-mac-arm64.zip` og `-mac-x64.zip`, med `.blockmap`, og `latest-mac.yml`, som appen oppdaterer seg fra
    - publiseres releasen når filene er lastet opp. Feiler bygget, blir releasen stående som draft, og neste kjøring (eller *Re-run failed jobs*) bygger den ferdig.
-3. Andre push til `main` gjør ingenting, så lenge versjonen allerede har en publisert release.
+3. En kjøring når versjonen allerede har en publisert release (og ingen changesets), gjør ingenting.
 
 Taggen har prefikset `fs-kravforvaltning-`, fordi repoet først og fremst er kravene, og en bar `v1.2.0` ville sett ut som en versjon av hele repoet.
 
@@ -74,7 +80,7 @@ Gjør dette **før** workflowen kommer på `main`. `package.json` har versjon `1
 
 ## Versjons-PR-en
 
-Workflowen kan ikke lage PR-en *«fs-kravforvaltning: ny versjon»* selv (se *Oppsett i GitHub*). Når det kommer changesets på `main` og det ikke finnes en åpen versjons-PR, feiler jobben `version` med «GitHub Actions is not permitted to create or approve pull requests». Versjons-commiten ligger likevel på `changeset-release/main`. Rutinen er:
+Workflowen kan ikke lage PR-en *«fs-kravforvaltning: ny versjon»* selv (se *Oppsett i GitHub*). Kjøres workflowen når det finnes changesets på `main` og ingen åpen versjons-PR, feiler jobben `version` med «GitHub Actions is not permitted to create or approve pull requests». Versjons-commiten ligger likevel på `changeset-release/main`. Rutinen er:
 
 1. Sjekk at `changeset-release/main` er foran `main`, og at det ikke finnes en åpen PR fra branchen:
 
@@ -90,10 +96,14 @@ Workflowen kan ikke lage PR-en *«fs-kravforvaltning: ny versjon»* selv (se *Op
    gh pr create --base main --head changeset-release/main --title 'fs-kravforvaltning: ny versjon' --body-file <beskrivelse.md>
    ```
 
-3. Kjør den feilede kjøringen på nytt (*Re-run failed jobs*, eller `gh run rerun <id>`). Den finner PR-en, oppdaterer den («Updating found pull request #…»), og blir grønn. Etter dette holder workflowen PR-en oppdatert selv.
-4. Merge PR-en når det skal lages en release. Da bygges og publiseres appen (se *Fra changeset til release*).
+3. Kjør den feilede kjøringen på nytt (*Re-run failed jobs*, eller `gh run rerun <id>`). Den finner PR-en, oppdaterer den («Updating found pull request #…»), og blir grønn. Kommer det flere changesets før PR-en er merget, tas de med neste gang workflowen kjøres.
+4. Merge PR-en, og kjør workflowen igjen (`gh workflow run kravforvaltning-release.yml --ref main`). Da bygges og publiseres appen (se *Fra changeset til release*).
 
-Claude kan gjøre steg 1–3 når du ber om det («lag release-PR for FS Kravforvaltning»).
+Claude kan gjøre steg 1–3 og kjøringen etter merge når du ber om det («lag release for FS Kravforvaltning»): Claude kjører workflowen, lager PR-en hvis den mangler, ber deg merge, kjører workflowen igjen og sier fra når releasen er publisert. Claude merger ikke selv.
+
+### Claude spør om release
+
+Når Claude har pushet eller laget en PR med en endring i appen som har en changeset, spør Claude om det skal lages en release når endringen er på `main`. Svarer du ja, gjør Claude det som står over. Svarer du nei, venter changesetene til neste release. Claude starter aldri workflowen uten at du har sagt ja, siden en release går ut til alle som har appen.
 
 ## Signering
 
