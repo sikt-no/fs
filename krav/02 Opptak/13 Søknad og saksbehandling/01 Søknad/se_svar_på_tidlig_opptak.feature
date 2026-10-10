@@ -1,6 +1,6 @@
 # language: no
 # GitHub: #456
-@OPT-SØK-SØK-005 @must @draft
+@OPT-SØK-SØK-012 @must @in-progress
 Egenskap: Se svar på søknad om tidlig opptak
   Som søker
   ønsker jeg å se utfallet av tidlig opptak for hvert av søknadsalternativene mine
@@ -9,7 +9,7 @@ Egenskap: Se svar på søknad om tidlig opptak
   # Kravet forutsetter at søkeren har søkt om tidlig opptak, at saksbehandler har konkludert,
   # og at tilbudsgarantier for tidlig opptak er tildelt. Vurderingen, konklusjonen og
   # tildelingen står i gi_tilbudsgaranti_ved_tidlig_opptak.feature (OPT-BEH-BEH-007, #654).
-  # Publiseringsdatoen og meldingen til søkeren står i
+  # Publiseringen og meldingen til søkeren står i
   # krav/02 Opptak/11 Opptak/06 Tidlig opptak/publisere_svar_på_tidlig_opptak.feature.
   # "Tilbudsgaranti gitt av tilbyder" her er det 007 kaller manuell tilbudsgaranti fra T-rolle.
   #
@@ -23,26 +23,18 @@ Egenskap: Se svar på søknad om tidlig opptak
   Bakgrunn:
     Gitt at søkeren er innlogget
 
-  # "Publisert" betyr at begge forutsetningene er oppfylt — det som inntreffer sist avgjør.
-  # Svaret skal aldri bli synlig før det finnes noe å svare på.
-  Regel: Svaret på tidlig opptak publiseres når tidligopptaket er gjennomført og publiseringsdatoen er passert
-
-    Scenario: Svaret er ikke synlig før publiseringsdatoen
-      Gitt at tidligopptaket er gjennomført
-      Og at søkeren har fått tilbudsgaranti for tidlig opptak fra opptaksforvalter
-      Men publiseringsdatoen for svar på tidlig opptak er ikke passert
-      Når søkeren åpner søknaden sin
-      Så ser ikke søkeren svar på tidlig opptak på noen av søknadsalternativene
+  # "Publisert" betyr at opptaksforvalter har gjennomført tidligopptaket. Det er ingen
+  # egen publiseringsdato (avklart 09.10.2026, review av PR #654). Svaret skal aldri bli
+  # synlig før det finnes noe å svare på.
+  Regel: Svaret på tidlig opptak publiseres når tidligopptaket er gjennomført
 
     Scenario: Svaret er ikke synlig før tidligopptaket er gjennomført
-      Gitt at publiseringsdatoen for svar på tidlig opptak er passert
-      Men tidligopptaket er ikke gjennomført
+      Gitt at tidligopptaket ikke er gjennomført
       Når søkeren åpner søknaden sin
       Så ser ikke søkeren svar på tidlig opptak på noen av søknadsalternativene
 
-    Scenario: Svaret blir synlig når tidligopptaket er gjennomført og publiseringsdatoen er passert
+    Scenario: Svaret blir synlig når tidligopptaket er gjennomført
       Gitt at tidligopptaket er gjennomført
-      Og at publiseringsdatoen for svar på tidlig opptak er passert
       Når søkeren åpner søknaden sin
       Så ser søkeren svar på tidlig opptak på hvert av søknadsalternativene sine
 
@@ -196,14 +188,27 @@ Egenskap: Se svar på søknad om tidlig opptak
       Når søkeren åpner søknaden sin
       Så ser søkeren det samlede svaret "Du har dokumentert grunner for tidlig opptak, men nådde ikke opp i konkurransen" for søknaden
 
-# ÅPNE SPØRSMÅL:
-# - Kravet forutsetter at tildelingen gir hver søker tilbudsgaranti på høyst ett
-#   søknadsalternativ — det høyest prioriterte — og at en tilbudsgaranti fra tilbyder der
-#   blir en tilbudsgaranti fra opptaksforvalter. STEK-269 avklarer det første: "gir
-#   automatikken kun garanti på høyeste relevante prioritet". Men
-#   gi_tilbudsgaranti_ved_tidlig_opptak.feature (OPT-BEH-BEH-007, #654) har ingen regel om
-#   det — der får alle som deltar og er over poenggrensen garanti. Må samkjøres med #654.
-# - Hva skjer med svaret når søkeren trekker søknaden, og hva skjer hvis søknadsalternativet
-#   gjenopprettes? Dette er et mer generelt spørsmål om trukne søknader og tilbudsgarantier,
-#   og hører sannsynligvis hjemme i et overordnet krav om søknadsbehandling enn her.
-# - Skal svaret vises på både norsk og engelsk, på linje med meldingen til søkeren?
+  Regel: Svaret vises på språket søkeren har valgt
+
+    Scenariomal: Se svaret på det valgte språket
+      Gitt søkeren har valgt <språk> i Min kompetanse
+      Og svaret på tidlig opptak er publisert
+      Når søkeren åpner søknaden sin
+      Så ser søkeren svaret på tidlig opptak på <språk>
+
+      Eksempler:
+        | språk      |
+        | bokmål     |
+        | nynorsk    |
+        | nordsamisk |
+        | engelsk    |
+
+# AVKLART 08.10.2026: Trekker søkeren søknaden eller fjerner søknadsalternativet,
+# faller tilbudsgarantien bort, og svaret viser ikke lenger innvilget. Legges
+# søknadsalternativet inn igjen før søknadsfristen for opptaket, gjelder
+# tilbudsgarantien igjen. Se gi_tilbudsgaranti_ved_tidlig_opptak.feature. Det er
+# ett tilfelle av at fjerning er deaktivering, ikke sletting, som det ikke finnes
+# noe generelt krav for ennå (påpekt i review av PR #654, 09.10.2026).
+#
+# AVKLART 08.10.2026: Svaret vises på språket søkeren har valgt i Min kompetanse,
+# på samme måte som meldingen om svaret (publisere_svar_på_tidlig_opptak.feature).

@@ -1,10 +1,17 @@
 # language: no
 # GitHub: #456
-@OPT-OPT-TID-001 @must @draft
+@OPT-OPT-TID-001 @must @in-progress
 Egenskap: Publisere svar på tidlig opptak
   Som opptaksforvalter ved forvaltende organisasjon
-  ønsker jeg å styre når svaret på tidlig opptak blir synlig for søkerne, og sende dem melding om utfallet
-  slik at alle søkere får svar samtidig og først etter at tilbudsgarantiene er kvalitetssikret.
+  ønsker jeg at svaret på tidlig opptak blir synlig for søkerne når jeg gjennomfører tidligopptaket, og å sende dem melding om utfallet
+  slik at alle søkere får svar samtidig, og først etter at tilbudsgarantiene er kontrollert i prøvekjøringen.
+
+  # AVKLART 09.10.2026 (review av PR #654): Det er ingen egen publiseringsdato for
+  # tidlig opptak. Svaret blir synlig for søkerne når opptaksforvalter gjennomfører
+  # tidligopptaket, ikke når tidligopptaket prøvekjøres. En ny gjennomføring endrer
+  # det søkerne ser med en gang. Meldingen sendes i et eget steg etterpå. Erstatter
+  # publiseringsdatoen fra 25.09.2026, som var en midlertidig løsning fordi svaret
+  # ble utledet fra saksbehandlingen og ikke kunne vite om tidligopptaket var kjørt.
 
   # Kravet forutsetter at søkerne har søkt om tidlig opptak, at saksbehandlerne har konkludert,
   # og at tilbudsgarantier for tidlig opptak er tildelt. Konklusjonen og gjennomføringen av
@@ -16,38 +23,22 @@ Egenskap: Publisere svar på tidlig opptak
     Gitt at opptaksforvalter ved forvaltende organisasjon er innlogget
     Og at opptaket "Samordna opptak 2027" er åpnet for tidlig opptak
 
-  # Publiseringsdatoen (T-day) ligger på opptaket, jf. prosesshypotesen i notatet
-  # "2026-09-23 tidligopptaks-svar til søker".
-  # Merk avvik som må ryddes: krav/02 Opptak/12 Utdanningstilbud/opptaksinnstillinger_utdanningstilbud.feature
-  # legger i dag "dato for når svar sendes til søkere" på det enkelte utdanningstilbudet.
-  # Den datoen må fjernes eller omdefineres der, slik at det finnes én publiseringsdato per opptak.
-  Regel: Opptaksforvalter setter publiseringsdato for svar på tidlig opptak
+  Regel: Svaret publiseres når tidligopptaket gjennomføres
 
-    Scenario: Sette publiseringsdato
-      Når opptaksforvalter setter publiseringsdato for svar på tidlig opptak til 20. april 2027
-      Så blir svaret på tidlig opptak tidligst publisert til søkerne 20. april 2027
-
-    Scenario: Endre publiseringsdato før den er passert
-      Gitt at publiseringsdatoen for svar på tidlig opptak ikke er passert
-      Når opptaksforvalter endrer publiseringsdatoen for svar på tidlig opptak
-      Så er det den nye datoen som gjelder for publisering av svaret
-
-  # Publisering henger på gjennomføringen, ikke bare på datoen: søkerne skal aldri møte et
-  # tomt svar fordi datoen passerte uten at tidligopptaket var gjennomført.
-  Regel: Svaret publiseres først når tidligopptaket er gjennomført
-
-    Scenario: Svaret publiseres ikke når tidligopptaket ikke er gjennomført
-      Gitt at publiseringsdatoen for svar på tidlig opptak er passert
-      Men tidligopptaket er ikke gjennomført
+    Scenario: Svaret er ikke publisert før tidligopptaket er gjennomført
+      Gitt at tidligopptaket ikke er gjennomført
       Så er ikke svaret på tidlig opptak publisert til søkerne
 
-    Scenario: Svaret publiseres når tidligopptaket gjennomføres etter publiseringsdatoen
-      Gitt at publiseringsdatoen for svar på tidlig opptak er passert
-      Og at tidligopptaket ikke er gjennomført
+    Scenario: Prøvekjøring publiserer ikke svaret
+      Gitt at tidligopptaket ikke er gjennomført
+      Når opptaksforvalter prøvekjører tidligopptaket
+      Så er ikke svaret på tidlig opptak publisert til søkerne
+
+    Scenario: Svaret publiseres når tidligopptaket gjennomføres
       Når opptaksforvalter gjennomfører tidligopptaket
       Så er svaret på tidlig opptak publisert til søkerne
 
-  # Hva søkeren faktisk ser før og etter publiseringsdatoen, er beskrevet i
+  # Hva søkeren faktisk ser før og etter at svaret er publisert, er beskrevet i
   # krav/02 Opptak/13 Søknad og saksbehandling/01 Søknad/se_svar_på_tidlig_opptak.feature.
   #
   # Meldingen gjelder kun tilbudsgarantiene for tidlig opptak som opptaksforvalter har delt
@@ -78,18 +69,23 @@ Egenskap: Publisere svar på tidlig opptak
       Når opptaksforvalter sender ut melding om svar på tidlig opptak
       Så mottar søkeren meldingen på engelsk
 
+    # Gjennomføringen og utsendingen er to separate steg (avklart 09.10.2026).
+    Scenario: Gjennomføring sender ingen melding
+      Når opptaksforvalter gjennomfører tidligopptaket
+      Så mottar ingen søkere melding om svar på tidlig opptak
+
+    Scenario: Meldingen om svar på tidlig opptak sendes bare én gang
+      Gitt at opptaksforvalter har sendt ut melding om svar på tidlig opptak
+      Når opptaksforvalter vil sende ut melding om svar på tidlig opptak igjen
+      Så ser ikke opptaksforvalter muligheten til å sende ut meldingen på nytt
+
   # Regelen over beskriver den fullførte utsendingen. Regelen under legger et
   # bekreftelsessteg foran den, og endrer ikke utfallet — søkerne mottar de samme meldingene.
-  @openquestion
-  # ÅPNE SPØRSMÅL:
-  # - Skal opptaksforvalter kunne kontrollere meldingsinnholdet før det når søkerne?
-  #   I dagens SO-løsning holdes brevene tilbake for en siste sjekk. Aktuelle varianter er
-  #   forhåndsvisning ved utløsning, en angrefrist der meldingene kan trekkes tilbake,
-  #   eller begge deler. Scenarioet under beskriver forhåndsvisning, og er et forslag.
-  #   Merk at prosesshypotesen i notatet "2026-09-23 tidligopptaks-svar til søker" skiller
-  #   kjøringen av automatikken (før publiseringsdatoen) fra meldingen (etter), slik at
-  #   embargoen fra SO-løsningen ikke lenger er den samme mekanismen. Se også det åpne
-  #   spørsmålet nederst om dry-run er tilstrekkelig kvalitetssikring.
+  #
+  # AVKLART 08.10.2026: Opptaksforvalter kontrollerer meldingen med en forhåndsvisning,
+  # og bekrefter før meldingene sendes. Det er ingen angrefrist etter utsendingen.
+  # Hvem som får tilbudsgaranti, er kontrollert i prøvekjøringen av tidligopptaket,
+  # se gi_tilbudsgaranti_ved_tidlig_opptak.feature.
   Regel: Opptaksforvalter kontrollerer meldingsinnholdet før utsending
 
     Scenario: Forhåndsvise meldingen før utsending
@@ -98,11 +94,8 @@ Egenskap: Publisere svar på tidlig opptak
       Så ser opptaksforvalter en forhåndsvisning av meldingen
       Og meldingene sendes først når opptaksforvalter bekrefter utsendingen
 
-# ÅPNE SPØRSMÅL:
-# - Kravet forutsetter at gjennomføringen gir hver søker tilbudsgaranti på høyst ett
-#   søknadsalternativ, jf. STEK-269. OPT-BEH-BEH-007 i #654 har ingen regel om det ennå.
-#   Må samkjøres med #654.
-# - Kan opptaksforvalter utløse utsendingen flere ganger, for eksempel etter en omkjøring
-#   av tildelingsrutinen? I så fall: får søkere som allerede har fått melding en ny melding?
-# - Skal opptaksforvalter se utfallet av tidlig opptak før publiseringsdatoen, eller er
-#   dry-run av tildelingsrutinen den eneste kvalitetssikringen før publisering?
+# AVKLART 08.10.2026: Søkerne får melding én gang, når svaret på tidlig opptak er
+# publisert. Opptaksforvalter kan prøvekjøre og gjennomføre tidligopptaket så mange
+# ganger som trengs før det, uten at søkerne får melding. (Endret 09.10.2026:
+# gjennomføringen publiserer svaret, men sender ingen melding. Meldingen sendes når
+# opptaksforvalter starter utsendingen.)

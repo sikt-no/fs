@@ -1,6 +1,6 @@
 # Veikart — Opptak
 
-Siste oppdatering: 2026-09-23
+Siste oppdatering: 2026-10-08
 
 Dette veikartet viser oppgaver teamene aktivt jobber med eller har levert for samordna opptak 2027. For overordnet prioritering på tvers av FS, se [Forberede opptak og etterbehandling](https://github.com/orgs/sikt-no/projects/10/views/24).
 
@@ -32,6 +32,7 @@ Dette veikartet viser oppgaver teamene aktivt jobber med eller har levert for sa
 | [#398](https://github.com/sikt-no/fs/issues/398) | Utdanningstilbud i opptak | #398 | utforskning | Must | – | – | [utdanningstilbud](utdanningstilbud/) |
 | [#216](https://github.com/sikt-no/fs/issues/216) | Ferdigstilling av plasstildeling | #216 | utforskning | Must | – | – | [plasstildeling](plasstildeling/) |
 | – | Vedtaksformidling | #216 | utforskning | Should | – | – | [vedtaksformidling](vedtaksformidling/) |
+| [#456](https://github.com/sikt-no/fs/issues/456) | Behandle søknader om tidlig opptak | #456 | utforskning | Must | @sondre-i-sikt, @JensPeterThomassen | – | [tidlig-opptak](tidlig-opptak/) |
 
 ## Ferdig
 
