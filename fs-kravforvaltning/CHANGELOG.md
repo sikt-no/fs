@@ -1,5 +1,11 @@
 # krav-viewer
 
+## 1.2.0
+
+### Minor Changes
+
+- 198b8a2: Appen oppdaterer seg selv: en ny versjon lastes ned i bakgrunnen, og installeres når du starter appen på nytt. Statuslinja viser hvilken versjon du har. Appen lages foreløpig bare for macOS.
+
 ## 1.1.0
 
 ### Minor Changes
