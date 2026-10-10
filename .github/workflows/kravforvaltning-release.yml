@@ -1,17 +1,13 @@
 name: Release FS Kravforvaltning
 
-# Changesets holder en «Version Packages»-PR oppdatert mens det finnes changesets i fs-kravforvaltning/.changeset/.
-# Når PR-en er merget (ingen changesets igjen, og versjonen i package.json har ingen release), bygges desktop-appen
-# for macOS og legges ved en GitHub-release med tag `fs-kravforvaltning-v<versjon>`. Windows og Linux er tatt ut
-# foreløpig, og står kommentert ut under.
+# Startes bare manuelt, fra main (Run workflow, eller `gh workflow run kravforvaltning-release.yml --ref main`).
+# En release er to kjøringer: finnes det changesets i fs-kravforvaltning/.changeset/, lager eller oppdaterer den første
+# versjons-PR-en «fs-kravforvaltning: ny versjon». Når PR-en er merget (ingen changesets igjen, og versjonen i
+# package.json har ingen release), bygger den neste desktop-appen for macOS og legger den ved en GitHub-release med
+# tag `fs-kravforvaltning-v<versjon>`. Windows og Linux er tatt ut foreløpig, og står kommentert ut under.
 # Se fs-kravforvaltning/docs/release.md.
 
 on:
-  push:
-    branches: [main]
-    paths:
-      - 'fs-kravforvaltning/**'
-      - '.github/workflows/kravforvaltning-release.yml'
   workflow_dispatch:
 
 permissions:
@@ -29,6 +25,8 @@ defaults:
 
 jobs:
   version:
+    # Bare fra main, så en kjøring fra en annen branch ikke lager versjons-PR eller release
+    if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     outputs:
       release: ${{ steps.check.outputs.release }}
