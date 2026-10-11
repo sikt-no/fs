@@ -2,7 +2,7 @@ import { existsSync } from 'node:fs';
 import { mkdir, readFile, rm, writeFile } from 'node:fs/promises';
 import { join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { app, BrowserWindow, dialog, ipcMain, nativeTheme, safeStorage, shell } from 'electron';
+import { app, BrowserWindow, dialog, ipcMain, Menu, nativeTheme, safeStorage, shell } from 'electron';
 import type { Boot } from '../shared/api.ts';
 import { createApi, dispatch } from '../core/api.ts';
 import { createAuth, type TokenStore } from '../core/auth.ts';
@@ -147,7 +147,41 @@ function createWindow() {
 let downloaded: string | null = null;
 ipcMain.handle('krav:update-downloaded', () => downloaded);
 
+/**
+ * Menyen på macOS med produktnavnet. Standardmenyen til Electron bruker `app.name` («About krav-viewer»), som kommer fra
+ * `name` i package.json. Navnet kan ikke byttes: det bestemmer datamappa (klonen, localStorage) og nøkkelen safeStorage
+ * bruker i nøkkelringen («krav-viewer Safe Storage»), så brukerne ville mistet dataene og innloggingen
+ */
+const PRODUCT = 'FS Kravforvaltning';
+function setMenu() {
+  if (process.platform !== 'darwin') return;
+  app.setAboutPanelOptions({ applicationName: PRODUCT, applicationVersion: app.getVersion() });
+  Menu.setApplicationMenu(
+    Menu.buildFromTemplate([
+      {
+        label: PRODUCT,
+        submenu: [
+          { role: 'about', label: `About ${PRODUCT}` },
+          { type: 'separator' },
+          { role: 'services' },
+          { type: 'separator' },
+          { role: 'hide', label: `Hide ${PRODUCT}` },
+          { role: 'hideOthers' },
+          { role: 'unhide' },
+          { type: 'separator' },
+          { role: 'quit', label: `Quit ${PRODUCT}` },
+        ],
+      },
+      { role: 'fileMenu' },
+      { role: 'editMenu' },
+      { role: 'viewMenu' },
+      { role: 'windowMenu' },
+    ]),
+  );
+}
+
 app.whenReady().then(() => {
+  setMenu();
   createWindow();
   startUpdater(version => {
     downloaded = version;
