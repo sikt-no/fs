@@ -217,6 +217,8 @@ export interface MainInfo {
   author: string | null;
   /** Tidspunktet for siste commit (ISO) */
   date: string | null;
+  /** Alle endringene er i appen selv (`fs-kravforvaltning/`), og ingen i kravene: da varsles det ikke */
+  onlyApp?: boolean;
 }
 
 export interface MainStatus {

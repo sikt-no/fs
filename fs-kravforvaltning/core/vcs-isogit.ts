@@ -208,6 +208,8 @@ export function isoVcs(dir: string, opts: { openPr?: OpenPr; compare?: CompareMa
       if (!remote || remote === local) return { behind: false };
       // Antall commits og endrede krav er bare pynt: uten dem vises banneret likevel
       const info = await compare(url, local, remote, token).catch(() => undefined);
+      // Bare endringer i appen (fs-kravforvaltning/): ingenting å hente for kravene, så ikke noe banner
+      if (info?.onlyApp) return { behind: false };
       return { behind: true, remote, ...(info ? { info } : {}) };
     },
 
