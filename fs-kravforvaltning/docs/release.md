@@ -44,7 +44,7 @@ Appen oppdaterer seg selv med [electron-updater](https://www.electron.build/auto
 2. Den leser `latest-mac.yml` i den releasen. Er versjonen nyere enn appen, lastes zip-fila for arkitekturen ned i bakgrunnen (bare endringene, med `.blockmap`, når det går).
 3. Når den er lastet ned, viser appen kortet «FS Kravforvaltning <versjon> er lastet ned» nede til høyre, med «Senere» og «Start på nytt». «Senere» bytter kortet mot knappen «<versjon> Start på nytt» i toppfeltet. Den nye versjonen installeres ved omstart, og ellers når appen avsluttes.
 
-`electron-builder.yml` har en `publish:`-blokk, så electron-builder skriver `latest-mac.yml` og `.blockmap`-filene til `release/`, og `app-update.yml` inn i appen, også med `--publish never`. Workflowen laster dem opp selv med `gh`. Oppdateringen virker bare når appen er signert, og den nye versjonen må være signert med det samme sertifikatet (Squirrel.Mac sjekker det).
+`electron-builder.yml` har en `publish:`-blokk, så electron-builder skriver `latest-mac.yml` og `.blockmap`-filene til `release/`, og `app-update.yml` inn i appen, også med `--publish never`. Workflowen laster dem opp selv med `gh`, men ikke `.dmg.blockmap`, som electron-updater ikke bruker på macOS. GitHub legger selv til *Source code* (zip og tar.gz) på alle releaser, og de kan ikke fjernes. Oppdateringen virker bare når appen er signert, og den nye versjonen må være signert med det samme sertifikatet (Squirrel.Mac sjekker det).
 
 Releaser fra før 1.2.0 har ikke `latest-mac.yml`, og versjoner fra før 1.2.0 sjekker ikke etter oppdateringer. Brukere med en av dem må installere første versjon med automatisk oppdatering for hånd, fra `.dmg`-en.
 

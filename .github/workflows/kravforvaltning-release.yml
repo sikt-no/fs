@@ -114,10 +114,11 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          # zip, blockmap og latest-mac.yml er det appen oppdaterer seg fra (electron/updater.ts)
+          # zip, zip.blockmap og latest-mac.yml er det appen oppdaterer seg fra (electron/updater.ts). dmg.blockmap
+          # lages også, men brukes ikke, og lastes ikke opp
           - os: macos-latest
             args: --mac --arm64 --x64
-            files: release/*.dmg release/*.zip release/*.blockmap release/latest-mac.yml
+            files: release/*.dmg release/*.zip release/*.zip.blockmap release/latest-mac.yml
           # Windows og Linux er tatt ut av bygget foreløpig (se fs-kravforvaltning/docs/release.md). Stegene under
           # som gjelder dem (runner.os), står igjen, så det holder å ta inn radene igjen
           # - os: windows-latest
