@@ -8,7 +8,7 @@ import { transport } from './transport';
 interface Props {
   git: GitInfo;
   entries: Snapshot;
-  /** Fila «Lag PR» ble åpnet fra (eller filene, fra Spesifikasjoner); krysses av i tillegg til det som er valgt i utkastet */
+  /** Fila «Lag PR» ble åpnet fra (eller filene, fra tavla «Oppgaver»); krysses av i tillegg til det som er valgt i utkastet */
   preselect?: string | string[];
   onClose: () => void;
 }

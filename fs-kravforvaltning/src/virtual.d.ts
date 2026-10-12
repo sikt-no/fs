@@ -18,7 +18,7 @@ declare module 'virtual:krav-root' {
 
 declare module 'virtual:krav-tasks' {
   import type { TasksSnapshot } from '../shared/tasks';
-  /** null når Oppgaver-modusen ikke er slått på (`--mode oppgaver`) */
+  /** Oppgavemappene og scope-filene i tasks/ (null i eldre bygg) */
   const tasks: TasksSnapshot | null;
   export default tasks;
 }

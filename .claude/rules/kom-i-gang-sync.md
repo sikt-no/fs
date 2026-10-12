@@ -12,7 +12,7 @@ paths:
 - **Hvordan en kravfil ser ut:** eksempelfila, taggene, Gitt/Når/Så og åpne spørsmål
 - **Livsløpet til et krav, og slik bidrar du:** statusene, hvem som setter dem, og skillene
 
-Fila er en eksport fra Claude Design. Den er pakket og komprimert, og kan ikke rettes for hånd. Kilden er fila «Krav i FS.dc.html» i prosjektet <https://claude.ai/design/p/7b91011d-fa2b-4086-8b9a-52fd52db2459?file=Krav+i+FS.dc.html>. For å åpne prosjektet trenger man lisensen «Claude for utviklere».
+Kilden er fila «Krav i FS.dc.html» i Claude Design-prosjektet <https://claude.ai/design/p/7b91011d-fa2b-4086-8b9a-52fd52db2459?file=Krav+i+FS.dc.html>. For å åpne prosjektet trenger man lisensen «Claude for utviklere». `kom-i-gang.html` er laget fra den som statisk HTML: samme markup, uten `support.js` (som henter React og Babel fra unpkg), og med et lite skript for velgeren av flyt (`data-o` på delene av diagrammet, `data-mode` på knappene).
 
 ## Når du endrer `krav/README.md`
 
@@ -27,4 +27,4 @@ Si hva på siden som ikke stemmer lenger. Endres bare formuleringen, trenger ikk
 
 ## Når `kom-i-gang.html` endres
 
-Ikke endre fila selv. Ny eksport legges over den gamle fila med samme navn, så lenkene i `README.md`, `krav/README.md` og `STATIC_PAGES` i `fs-kravforvaltning/src/markdown.ts` fortsatt virker.
+Endre kilden i Claude Design først (`read_file`, så `finalize_plan` og `write_files` med `if_match`, etter at brukeren har sagt ja), og gjør den samme endringen i `kom-i-gang.html`, så de to ikke glir fra hverandre. Fila beholder navnet, så lenkene i `README.md`, `krav/README.md` og `STATIC_PAGES` i `fs-kravforvaltning/src/markdown.ts` fortsatt virker. Se over sida i nettleseren etterpå, også velgeren av flyt.

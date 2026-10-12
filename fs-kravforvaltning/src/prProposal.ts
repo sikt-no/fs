@@ -51,7 +51,7 @@ export function parsePrProposal(text: string): PrProposal | null {
 
 /**
  * Legger `utforing.md` til i forslaget for hver oppgavemappe forslaget har filer fra, når fila har endringer (`changed`).
- * Den skrives av Spesifikasjoner-visningen (rute og steg), ikke av Claude, så Claude vet ikke at den er endret.
+ * Den skrives av tavla «Oppgaver» (rute og steg), ikke av Claude, så Claude vet ikke at den er endret.
  */
 export function withTaskState(pr: PrProposal, changed: (path: string) => boolean): PrProposal {
   const dirs = [...new Set(pr.paths.map(p => p.match(/^tasks\/[^/]+\/[^/]+\//)?.[0]).filter((d): d is string => !!d))];

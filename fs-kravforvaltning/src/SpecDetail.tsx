@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'preact/hooks';
-import { displayStatus, type Snapshot } from '../shared/model';
+import { displayStatus, scopeOf, type Snapshot } from '../shared/model';
 import type { SketchKind, SpecDoc } from '../shared/spec';
 import { DOMAINS } from '../shared/tasks';
 import { emptyStep, STEP_STATUSES, type SpecRun } from '../shared/utforing';
@@ -41,10 +41,19 @@ interface Props {
   onSend: () => void;
   onOpenKrav: (path: string) => void;
   actions: SpecActions;
+  /** I detaljpanelet til oppgaven: uten eget panel og uten «Lukk» */
+  embedded?: boolean;
+  /** Kravene i oppgavens scope-rad, som foreslås først i «+ Legg til krav» */
+  prefer?: string[];
+  /** Scopet oppgaven hører til; krav med et annet `@scope-*` merkes i velgeren */
+  scope?: string | null;
 }
 
+/** Utkastet til en ny spesifikasjon i en oppgave (`<dom>/<slug>/ny`), før det er skrevet til disk */
+export const isNewSpec = (c: Pick<Card, 'key'>) => c.key === 'ny' || c.key.endsWith('/ny');
+
 const COL_WHY: Record<string, string> = {
-  utkast: 'Fylles ut før den kan sendes.',
+  spesifiseres: 'Fylles ut før den kan sendes.',
   klar: 'Komplett. Velg rute og send.',
   verifisering: 'Alle steg er levert.',
   verifisert: 'Kravene er @implemented, eller fs-verify fant alt.',
@@ -54,7 +63,7 @@ const resMark = (r: string | null) => (r === 'funnet' ? 'omk omk--ok' : r === 'i
 const SKETCH_C: Record<SketchKind, string> = { OK: 'var(--st-implemented)', Avvik: 'var(--err)', Uavklart: 'var(--st-in-progress)' };
 
 /** En knapp som sender en prompt til Claude-panelet når det er åpent, og ellers kopierer den. Med `skill` starter den en ny samtale med skillen */
-function ClaudeAction({ label, prompt, solid, skill }: { label: string; prompt: () => string; solid?: boolean; skill?: string }) {
+export function ClaudeAction({ label, prompt, solid, skill }: { label: string; prompt: () => string; solid?: boolean; skill?: string }) {
   const claude = useClaudeTarget();
   const [copied, copy] = useCopy();
   return (
@@ -71,7 +80,7 @@ function ClaudeAction({ label, prompt, solid, skill }: { label: string; prompt: 
 }
 
 /** Detaljpanelet (440 px) for kortet som er valgt. Alt kan redigeres, unntatt i statisk bygg. */
-export function SpecDetail({ c, col, repos, repoName, cards, entries, ro, dirty, me, onClose, onDoc, onRun, onSend, onOpenKrav, actions }: Props) {
+export function SpecDetail({ c, col, repos, repoName, cards, entries, ro, dirty, me, onClose, onDoc, onRun, onSend, onOpenKrav, actions, embedded, prefer, scope }: Props) {
   const canEdit = !ro;
   const colKey = colOf(c);
   const cur = currentRepo(c);
@@ -105,13 +114,14 @@ export function SpecDetail({ c, col, repos, repoName, cards, entries, ro, dirty,
         }, log);
 
   return (
-    <aside class="spdetail">
-      <div class="spd">
+    <Wrap embedded={!!embedded}>
         <div class="spd-path mono">
           <span class="ell">{c.path}</span>
-          <button class="spbtn small" onClick={onClose}>
-            Lukk ×
-          </button>
+          {!embedded && (
+            <button class="spbtn small" onClick={onClose}>
+              Lukk ×
+            </button>
+          )}
         </div>
 
         <div class="spd-head">
@@ -139,11 +149,11 @@ export function SpecDetail({ c, col, repos, repoName, cards, entries, ro, dirty,
         {dirty && (
           <div class="spd-dirty">
             <span class="dot" />
-            <span>{c.key === 'ny' ? 'Skrives til disk når spesifikasjonen har tittel og første krav.' : 'Endret lokalt. Kommer med i neste «Lag PR» og gjelder først når den er på main.'}</span>
+            <span>{isNewSpec(c) ? 'Skrives til disk når spesifikasjonen har tittel og første krav.' : 'Endret lokalt. Kommer med i neste «Lag PR» og gjelder først når den er på main.'}</span>
           </div>
         )}
 
-        {colKey === 'utkast' && (
+        {colKey === 'spesifiseres' && (
           <div class="spd-box">
             <div class="spd-box-h">Mangler før Klart til utvikling</div>
             {miss.map(m => (
@@ -152,7 +162,7 @@ export function SpecDetail({ c, col, repos, repoName, cards, entries, ro, dirty,
                 <span>{m}</span>
               </div>
             ))}
-            {canEdit && c.key !== 'ny' && (
+            {canEdit && !isNewSpec(c) && (
               <div class="spd-box-f">
                 <ClaudeAction label={`Kjør ${c.doc.delta ? 'fs-specify-delta' : 'fs-specify'}`} prompt={() => specifyPrompt(c)} />
               </div>
@@ -255,7 +265,7 @@ export function SpecDetail({ c, col, repos, repoName, cards, entries, ro, dirty,
             );
           })}
           {!c.feats.length && <span class="omuted">Ingen krav ennå. Legg til feature-filene spesifikasjonen skal dekke. Domenet settes fra det første kravet.</span>}
-          {canEdit && <KravPicker c={c} cards={cards} entries={entries} onAdd={(refs, log) => onDoc(d => d.krav.push(...refs), log)} />}
+          {canEdit && <KravPicker c={c} cards={cards} entries={entries} prefer={prefer} scope={scope} onAdd={(refs, log) => onDoc(d => d.krav.push(...refs), log)} />}
         </section>
 
         <section class="spd-sec">
@@ -486,7 +496,7 @@ export function SpecDetail({ c, col, repos, repoName, cards, entries, ro, dirty,
           {unsent && (
             <div class="spd-send">
               <span>
-                {colKey === 'utkast'
+                {colKey === 'spesifiseres'
                   ? 'Ruta kan settes nå, men spesifikasjonen sendes først når den er komplett.'
                   : routeList.length
                     ? 'Forslag fra spec-dokumentet. Endre rekkefølgen over og send.'
@@ -740,7 +750,16 @@ export function SpecDetail({ c, col, repos, repoName, cards, entries, ro, dirty,
             {!c.run.log.length && <span class="omuted">Ingen hendelser ennå.</span>}
           </div>
         </section>
-      </div>
+    </Wrap>
+  );
+}
+
+/** Eget panel (440 px), eller en del av detaljpanelet til oppgaven */
+function Wrap({ embedded, children }: { embedded: boolean; children: preact.ComponentChildren }) {
+  if (embedded) return <div class="spd spd--embedded">{children}</div>;
+  return (
+    <aside class="spdetail">
+      <div class="spd">{children}</div>
     </aside>
   );
 }
@@ -753,6 +772,8 @@ interface PickerProps {
   c: Card;
   cards: Card[];
   entries: Snapshot;
+  prefer?: string[];
+  scope?: string | null;
   onAdd: (refs: SpecDoc['krav'], log: string) => void;
 }
 
@@ -760,7 +781,7 @@ interface PickerProps {
  * Velgeren for krav: søk etter fil eller mappe i krav/ (samme Fuse-søk som treet og @ i Claude-panelet).
  * Hele krav plukkes, aldri enkeltscenarioer. En mappe legger til alle feature-filene under den som kan plukkes.
  */
-function KravPicker({ c, cards, entries, onAdd }: PickerProps) {
+function KravPicker({ c, cards, entries, prefer = [], scope = null, onAdd }: PickerProps) {
   const items = useMemo(() => {
     const all = mentionItems(entries);
     return new Map([...all].filter(([p, i]) => p.startsWith('krav/') && (i.dir || i.entry?.kind === 'feature')));
@@ -795,8 +816,10 @@ function KravPicker({ c, cards, entries, onAdd }: PickerProps) {
   const all = filter === 'all';
   const dA = filter === 'file' ? [] : hits.filter(i => i.dir);
   const fA = filter === 'dir' ? [] : hits.filter(i => !i.dir);
+  // Uten søk: kravene i scope-raden først
+  const fromScope = query || filter === 'dir' ? [] : prefer.map(p => items.get(p)).filter((i): i is MentionItem => !!i && !i.dir);
   const dirs = dA.slice(0, all ? 5 : 14);
-  const files = fA.slice(0, all ? 7 : 14);
+  const files = [...fromScope, ...fA.filter(i => !fromScope.includes(i))].slice(0, all ? Math.max(7, fromScope.length) : 14);
   const flat = [...dirs, ...files];
 
   useEffect(() => {
@@ -837,7 +860,9 @@ function KravPicker({ c, cards, entries, onAdd }: PickerProps) {
           : 'i ' + (owner.doc.title || 'annen spec')
         : pk && !pk.ok
           ? pk.why
-          : (pk?.why ?? '');
+          : e?.model && scope && scopeOf(e.model.tags) && scopeOf(e.model.tags) !== scope
+            ? 'scope-' + scopeOf(e.model.tags)
+            : (pk?.why ?? '');
     const range = ranges.get(it.path) ?? [];
     return (
       <div
@@ -921,7 +946,7 @@ function KravPicker({ c, cards, entries, onAdd }: PickerProps) {
             {dirs.length > 0 && <div class="cmsec mono">{query ? 'Mapper' : 'Foreslått · mapper'}</div>}
             {dirs.map(row)}
             {dA.length > dirs.length && <div class="cmmore">+ {dA.length - dirs.length} flere mapper</div>}
-            {files.length > 0 && <div class="cmsec mono">Filer</div>}
+            {files.length > 0 && <div class="cmsec mono">{fromScope.length ? 'Fra scope-raden · filer' : 'Filer'}</div>}
             {files.map(row)}
             {fA.length > files.length && <div class="cmmore">+ {fA.length - files.length} flere filer</div>}
           </div>

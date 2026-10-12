@@ -9,7 +9,7 @@ import { createAuth, type TokenStore } from '../core/auth.ts';
 import { ClaudeRunner } from '../core/claude.ts';
 import { PtyRunner } from '../core/pty.ts';
 import { ensureClone, isoVcs } from '../core/vcs-isogit.ts';
-import { modeOn, Workspace, type WorkspaceEvent } from '../core/workspace.ts';
+import { Workspace, type WorkspaceEvent } from '../core/workspace.ts';
 import { installUpdate, startUpdater } from './updater.ts';
 
 /**
@@ -24,8 +24,6 @@ import { installUpdate, startUpdater } from './updater.ts';
  * - `KRAV_REPO`: bruk en eksisterende klone i stedet for appens egen (f.eks. dette repoet under utvikling)
  * - `KRAV_REPO_URL`: repoet som klones (standard https://github.com/sikt-no/fs.git)
  * - `KRAV_GITHUB_CLIENT_ID`: OAuth-appen for device flow (kan også bakes inn ved bygg med MAIN_VITE_KRAV_GITHUB_CLIENT_ID)
- * - `OPPGAVER=1`: vis Oppgaver-modusen (eller bygg/start med `--mode oppgaver`, f.eks. `npm run app:dev:oppgaver`)
- * - `SPESIFIKASJONER=1`: vis Spesifikasjoner (eller `--mode spesifikasjoner`, f.eks. `npm run app:dev:spesifikasjoner`; begge: `--mode oppgaver+spesifikasjoner`)
  * - `KRAV_CLAUDE_PATH`: stien til `claude`, hvis den ikke finnes på vanlige steder
  * - `KRAV_UPDATE_URL`: hent oppdateringer fra denne mappa i stedet for GitHub-releasen (se electron/updater.ts)
  */
@@ -69,8 +67,7 @@ const ready = (async () => {
     send('krav:progress', 'Henter kravene fra GitHub …');
     await ensureClone(dir, REPO_URL, await store.get(), msg => send('krav:progress', `Henter kravene fra GitHub: ${msg}`));
   }
-  const mode = import.meta.env.MODE;
-  const ws = new Workspace(dir, isoVcs(dir), { oppgaver: modeOn(mode, 'oppgaver'), spesifikasjoner: modeOn(mode, 'spesifikasjoner') });
+  const ws = new Workspace(dir, isoVcs(dir));
   await ws.readAll();
   for (const event of ['krav:update', 'krav:git', 'krav:tasks'] as WorkspaceEvent[]) ws.on(event, data => send(event, data));
   ws.watch();
@@ -142,7 +139,7 @@ function createWindow() {
   if (process.env.ELECTRON_RENDERER_URL) void win.loadURL(process.env.ELECTRON_RENDERER_URL);
   else void win.loadFile(join(here, '../renderer/index.html'));
   // Chromium skriver localStorage til disk med forsinkelse, og det som ikke er skrevet, er borte etter omstart
-  // (f.eks. rekkefølgen på kolonnene i Spesifikasjoner). Skriv det når brukeren går fra vinduet og når det lukkes
+  // (f.eks. rekkefølgen på kolonnene i Oppgaver). Skriv det når brukeren går fra vinduet og når det lukkes
   win.on('blur', () => session.defaultSession.flushStorageData());
   win.on('close', () => session.defaultSession.flushStorageData());
   win.on('closed', () => (win = null));

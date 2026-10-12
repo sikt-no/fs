@@ -1,11 +1,15 @@
 // Filene vieweren kan skrive, vise som endringer og sende med «Lag PR»: kravene, spesifikasjonene og
-// tilstandsfila under tasks/ (Spesifikasjoner-visningen), og skissene fra save_sketch. Felles for core/, server/ og rendereren.
+// tilstandsfila, oppgave.md og scope-filene under tasks/ (tavla «Oppgaver»), og skissene fra save_sketch. Felles for core/, server/ og rendereren.
 
 /** Krav-fil: `.feature` eller `.md` under krav/ */
 export const isKravPath = (p: string) => p.startsWith('krav/') && (p.endsWith('.feature') || p.endsWith('.md'));
 
-/** `tasks/<domene>/<slug>/utforing.md` eller `tasks/<domene>/<slug>/spec/spec-*.md` (også `spec-changes-*.md`) */
-export const isSpecPath = (p: string) => /^tasks\/[^/]+\/[^/]+\/(utforing\.md|spec\/spec-[^/]+\.md)$/.test(p);
+/**
+ * Det vieweren skriver under tasks/: `tasks/<domene>/<slug>/utforing.md`, `tasks/<domene>/<slug>/spec/spec-*.md`
+ * (også `spec-changes-*.md`), `tasks/<domene>/<slug>/oppgave.md` («+ Ny oppgave») og scope-fila `tasks/<domene>/scope-*.md` (fs-scope)
+ */
+export const isSpecPath = (p: string) =>
+  /^tasks\/[^/]+\/[^/]+\/(utforing\.md|oppgave\.md|spec\/spec-[^/]+\.md)$/.test(p) || /^tasks\/[^/]+\/scope-[^/]+\.md$/.test(p);
 
 /**
  * Bilde i en oppgave: skisse fra fs-specify eller fs-specify-delta (`tasks/<d>/<s>/spec/krav-input/sketches/…` eller

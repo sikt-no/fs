@@ -101,6 +101,10 @@ export interface FeatureModel {
   lint: Lint[]; // avvik fra gherkin-konvensjonene
   partialDraft: boolean; // egenskapen er ikke @draft, men har @draft-deler
   partialChange: boolean; // egenskapen er @implemented, og har @planned- eller @in-progress-deler (en endring av levert krav)
+  /** Slugen i `@scope-<slug>` på egenskapen (den første, når det er flere), ellers null */
+  scope: string | null;
+  /** Skjelett: kravet har ingen scenarioer ennå (typisk `Regel:`-titler fra `fs-scope`) */
+  skeleton: boolean;
   nLines: number;
   nRules: number;
   nScen: number;
@@ -125,6 +129,15 @@ export type Snapshot = Record<string, Entry>;
 export interface UpdateEvent {
   path: string;
   entry: Entry | null; // null = filen er slettet
+}
+
+export const SCOPE_PREFIX = '@scope-';
+export const SCOPE_SLUG = /^[a-z0-9][a-z0-9-]*$/;
+
+/** Slugen i den første gyldige `@scope-<slug>`-taggen, ellers null */
+export function scopeOf(tags: string[]): string | null {
+  for (const t of tags) if (t.startsWith(SCOPE_PREFIX) && SCOPE_SLUG.test(t.slice(SCOPE_PREFIX.length))) return t.slice(SCOPE_PREFIX.length);
+  return null;
 }
 
 export function statusOf(tags: string[]): Status | null {

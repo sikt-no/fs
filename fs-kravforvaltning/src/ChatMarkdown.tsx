@@ -157,7 +157,7 @@ export function ChatMarkdown({ text, has, onOpen, onPr, change, onSummary, skill
             </div>
           );
         }
-        // utforing.md i oppgavemappa kommer med når den er endret (Spesifikasjoner skriver den, ikke Claude)
+        // utforing.md i oppgavemappa kommer med når den er endret (tavla skriver den, ikke Claude)
         const parsed = b.lang === PR_LANG ? parsePrProposal(b.body.join('\n')) : null;
         const pr = parsed && withTaskState(parsed, p => !!change?.(p));
         if (pr) {

@@ -67,6 +67,12 @@ export const RULES: RuleDef[] = [
     desc: '@openquestion følges alltid av en «# ÅPNE SPØRSMÅL:»-kommentar som beskriver spørsmålet.' },
   { id: 'todo-comment', label: '# TODO: for spørsmål', short: '# TODO', sev: 'error', section: 'Åpne spørsmål',
     desc: 'Åpne spørsmål skrives under «# ÅPNE SPØRSMÅL:», ikke som «# TODO:».' },
+  { id: 'scope-format', label: 'Ugyldig scope-tag', short: 'Scope-format', sev: 'error', section: 'Scope',
+    desc: 'Scope-taggen skrives @scope-<slug>, der slugen er lik slugen i tasks/<domene>/scope-<slug>.md: små bokstaver (a–z), tall og bindestrek.' },
+  { id: 'scope-multiple', label: 'Flere scope-tagger', short: 'Flere scope', sev: 'error', section: 'Scope',
+    desc: 'En Egenskap, Regel eller et Scenario hører til høyst ett scope.' },
+  { id: 'scope-part', label: 'Scope-tag på del', short: 'Scope på del', sev: 'error', section: 'Scope',
+    desc: '@scope-* står på Egenskap. På Regel eller Scenario er den bare lov under en @implemented egenskap, for en del som endres i et nytt scope.' },
   { id: 'focus-tag', label: '@only / @focus i kravfil', short: '@only', sev: 'warning', section: 'Type',
     desc: '@only gjør scenarioet om til test.only i playwright-bdd, så resten av testene hoppes over. @focus har ingen virkning i playwright-bdd. Ingen av dem skal sjekkes inn i en kravfil.' },
 ];

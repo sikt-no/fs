@@ -39,7 +39,7 @@ Egenskap: Regelverkssamling
 ```
 
 - `# GitHub:` er valgfri, og peker på issuet kravet hører til. Den står rett over tag-linja.
-- Taggene er en unik ID (`@DOM-SUB-KAP-NNN`), prioritet (`@must`, `@should`, `@could` eller `@wont`) og status. Se *Tags*.
+- Taggene er en unik ID (`@DOM-SUB-KAP-NNN`), prioritet (`@must`, `@should`, `@could` eller `@wont`) og status, og eventuelt `@scope-<slug>`, som kobler kravet til et scope og en oppgave. Se *Tags*.
 - **Gitt** er forutsetningene, **Når** er handlingen, og **Så** er det forventede resultatet. Se *Gode scenarioer*.
 - Uklarheter gjettes ikke. De skrives i en `# ÅPNE SPØRSMÅL:`-kommentar, og en `Regel:` eller et `Scenario:` med spørsmål tagges `@openquestion`. Se *Åpne spørsmål*.
 
@@ -47,7 +47,7 @@ Egenskap: Regelverkssamling
 
 | Status | Betyr | Settes av |
 |---|---|---|
-| `@draft` | Utkast, ikke validert. Alle nye krav starter her | `fs-krav` |
+| `@draft` | Utkast, ikke validert. Alle nye krav starter her, eventuelt som skjelett | `fs-scope` / `fs-krav` |
 | `@planned` | Validert og klart til å bygges | `fs-krav`, etter en gjennomgang, eller når det er sagt at kravet skal ha `@planned` |
 | `@in-progress` | Hentet inn i en oppgave | `fs-specify` / `fs-specify-delta` |
 | `@implemented` | Bygget, og verifisert mot koden | `fs-verify` (også direkte fra `@draft` eller `@planned`, med «Verifiser» uansett status) |
@@ -57,9 +57,11 @@ Se *Kravstatus* og *Implementasjonsstatus*.
 
 ### Skills for kravarbeid
 
+`fs-scope` brukes før kravene skrives: initiativet avgrenses og deles i oppgaver, og det bestemmes hvilke krav hver oppgave har. Den skriver scope-fila (`tasks/<domene>/scope-<slug>.md`), oppretter oppgavene, lager skjelett-krav (`@draft`, brukerhistorie og `Regel:`-titler uten scenarioer) og setter `@scope-<slug>` på kravene. Den kan kjøres på nytt når som helst. Se *Scope*.
+
 `fs-krav` brukes til:
 
-- **Nye krav:** aktør, brukerhistorie, regler og scenarioer avklares, og fila skrives som `@draft`.
+- **Nye krav:** aktør, brukerhistorie, regler og scenarioer avklares, og fila skrives som `@draft`. Et skjelett fra `fs-scope` fylles ut der det ligger.
 - **Validering av en mappe:** utkastene gås gjennom ett spørsmål om gangen, de åpne spørsmålene lukkes, og det som er bekreftet, får `@planned`.
 - **Fjerning av krav:** krav som ikke er levert, slettes. Leverte krav får `@deprecated`. Se *Avvikling*.
 - **Endring av leverte krav:** den nye delen legges ved siden av den gamle som `@draft`. Når den er validert, får den `@planned`, og den gamle delen får `@deprecated`. Se *Endring av levert krav*.
@@ -200,7 +202,7 @@ En feature har høyst én prioritet. *(sjekkes automatisk)*
 
 Sier noe om selve **kravteksten** – er den ferdig skrevet, avklart og klar til bruk?
 
-- `@draft` – Utkast. Kravteksten er ikke ferdig: åpne spørsmål, uavklart scope, eller mangler review. Skal ikke legges til grunn for implementasjon som den er. **Alle nye krav starter som `@draft`**, og blir stående slik til de er validert. `@planned` settes bare på validerte krav – validert i en gjennomgang (`fs-krav`, modus B), eller når det eksplisitt er sagt at kravet skal ha `@planned`. Et krav uten status regnes som ikke validert. Før kravet blir `@in-progress`, sjekker `fs-specify` / `fs-specify-delta` det mot koden. Et krav som må endres etter sjekken, blir stående som `@planned`.
+- `@draft` – Utkast. Kravteksten er ikke ferdig, eller kravet er et skjelett fra `fs-scope` (brukerhistorie og `Regel:`-titler uten scenarioer; et skjelett gir ikke avvik): åpne spørsmål, uavklart scope, eller mangler review. Skal ikke legges til grunn for implementasjon som den er. **Alle nye krav starter som `@draft`**, og blir stående slik til de er validert. `@planned` settes bare på validerte krav – validert i en gjennomgang (`fs-krav`, modus B), eller når det eksplisitt er sagt at kravet skal ha `@planned`. Et krav uten status regnes som ikke validert. Før kravet blir `@in-progress`, sjekker `fs-specify` / `fs-specify-delta` det mot koden. Et krav som må endres etter sjekken, blir stående som `@planned`.
 
 `@draft` kan stå på to nivåer:
 
@@ -325,6 +327,22 @@ Egenskap: ...
     Scenario: Se brukerens roller
       ...
 ```
+
+### Scope
+
+Sier hvilket scope (og dermed hvilken oppgave) kravet hører til. Scopet er planen for et initiativ: mål, avgrensning, og oppgavene initiativet deles i, med kravene hver oppgave har. Det står i `tasks/<domene>/scope-<slug>.md` (se *Scope* i [`tasks/README.md`](../tasks/README.md)), og lages og endres med `fs-scope`.
+
+```
+@BRU-APP-API-001 @must @draft @scope-applikasjoner-iterasjon-3
+```
+
+- Formatet er `@scope-<slug>`, der `<slug>` er kebab-case: små bokstaver a–z, tall og `-`, og starter med bokstav eller tall. *(sjekkes automatisk)*
+- Slugen er den samme som i `scope-<slug>.md`, og unik på tvers av domener (det siste sjekkes på scope-fila, se *Scope* i `tasks/README.md`).
+- Taggen står på `Egenskap:`-tag-linja, og et krav har høyst én. Det samme gjelder en del. *(sjekkes automatisk)*
+- På `Regel:` eller `Scenario:`/`Scenariomal:` er taggen bare lov under en `@implemented` egenskap, for en del som endres i et nytt scope (se *Endring av levert krav*). Delen hører da til det nye scopet, og resten av egenskapen til det gamle. *(sjekkes automatisk)*
+- Taggen er ikke en statustag, og endrer ikke livsløpet. Statusen leses fra statustaggene, ikke fra scope-fila.
+- Taggen settes av `fs-scope`, og av `fs-krav` når et nytt krav skrives i et scope. `fs-krav` og `fs-specify` endrer den ellers ikke, men foreslår `fs-scope` når et krav ikke passer i scopet.
+- Kravene i et scope kan testes for seg: `npx playwright test --grep @scope-<slug>`.
 
 ### Type
 
