@@ -72,7 +72,7 @@ Egenskap: Styre lesetilgang til kompetansedata
   @openquestion
   Regel: Leserollene for VGS-data gjelder for Sikt og gir alle VGS-vitnemål i registeret
     # ÅPNE SPØRSMÅL:
-    # - Kan leserollene for VGS-data gis for andre organisasjoner enn Sikt? Rolleforslaget sier at bare Sikt tildeler dem, men andre organisasjoner, som FS, SSB og Lånekassen, kan senere trenge data fra flere organisasjoner. Ikke et krav for opptak 2027.
+    # - Sikt skal ha tilgang til data fra videregående opplæring uavhengig av organisasjonstilhørigheten til dataene. Må det representeres på databasenivå, for eksempel med et organisasjonshierarki der Sikt står øverst over VGS-skolene, eller bør det løses på en annen måte? Det samme gjelder senere for andre konsumenter som trenger data på tvers av utstedere (FS, SSB, Lånekassen), som ikke er et krav for opptak 2027.
 
     # Tilgangsstyringen i fs-plattform har ingen organisasjon over organisasjonene, og
     # ingen hierarki mellom dem: all tilgang er (organisasjon, rolle, miljø). Sikt er
