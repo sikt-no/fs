@@ -98,7 +98,8 @@ Alle under epicen TAKE-318.
 - **Repo:** fs-plattform, min-kompetanse
 - **Beskrivelse:** I dag stoppes bare innsending før `SØKING_ÅPNER` (`StudiekurvService.java:773`). Kladd kan opprettes før datoen, og tilbudene er synlige.
 - **Akseptansekriterier** (`@OPT-OVO-FRI-001` «Sette søknadsdato»):
-  - Søkeren kan ikke starte en søknad før søknadsdatoen. (Avklar med kravet om tilbudene skal være synlige før.)
+  - Søkeren kan ikke starte en søknad før søknadsdatoen.
+  - Utdanningstilbudene i opptaket er ikke synlige for søkerne før søknadsdatoen (avklart 2026-10-12).
 
 ### 2.7 Frist for poenggrenser i tidlig opptak
 
@@ -139,6 +140,7 @@ Alle under epicen TAKE-318.
 
 ## Ikke med (hører trolig hjemme hos andre)
 
-- **Tak for antall tilbud per runde** og **flagget for ledige studieplasser på opptaket**: begge brukes i plasstildelingen, og kravene er flyttet til `14 Plasstildeling/01 Runder/forvalte_runder.feature` (2026-10-12). Tas av teamet for plasstildeling.
+- **Tak for antall tilbud per runde**: brukes i plasstildelingen, og kravet er flyttet til `14 Plasstildeling/01 Runder/forvalte_runder.feature` (2026-10-12). Tas av teamet for plasstildeling.
+- **Flagget for ledige studieplasser på opptaket**: markeringen står i `innstillinger.feature`, og finnes i fs-admin. At plasstildelingen bruker flagget, tas av teamet for plasstildeling.
 - **Kreve studierett**: regelen er tagget `@wont` i kravet. Avklar om den skal tas ut før den kommer på lista.
 - **TAKE-336** (teste at oppretting og vedlikehold fungerer etter kravene): bruk verifiseringsrapporten som sjekkliste.

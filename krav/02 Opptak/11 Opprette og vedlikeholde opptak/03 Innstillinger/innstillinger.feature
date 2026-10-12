@@ -61,7 +61,7 @@ Egenskap: Innstillinger for opptak
       Så kan ikke en søker legge til flere enn 10 prioriterte søknadsalternativer i sin søknad
 
   # Flyttet 2026-10-12 til 14 Plasstildeling/01 Runder/forvalte_runder.feature: tak for antall tilbud
-  # per plasstildelingsrunde, og at opptaket tilbyr søknad på ledige studieplasser. Begge brukes i plasstildelingen.
+  # per plasstildelingsrunde, som brukes i plasstildelingen.
 
   Regel: Opptaksforvalter kan åpne for tidlig opptak
 
@@ -79,6 +79,17 @@ Egenskap: Innstillinger for opptak
       # opptak, av opptakseieren, ikke per utdanningstilbud. Er en del av å konfigurere
       # tidlig opptak i opptaket (#578). Ønske fra Min kompetanse i STEK-267. Søkerens side står i 13 Søknad og saksbehandling/01 Søknad/
       # søke_om_tidlig_opptak.feature. Koden har ikke noe felt for lenken i dag.
+
+  Regel: Opptaksforvalter kan åpne for søknad på ledige studieplasser
+
+    # Innstillingen gjelder hele opptaket. Hver plasstildelingsrunde åpnes for ledige studieplasser i
+    # 14 Plasstildeling/01 Runder/forvalte_runder.feature, og bare når opptaket tilbyr det.
+
+    Scenario: Aktivere ledige studieplasser
+      Når opptaksforvalter angir at opptaket tilbyr søknad på ledige studieplasser
+      Så er ledige studieplasser aktivert for opptaket
+      Og muligheten for ledige studieplasser blir tilgjengelig for søknad og saksbehandling
+      # Datoer for ledige studieplasser settes i 11 Opprette og vedlikeholde opptak/04 Frister/frister_og_hendelser.feature
 
   Regel: Opptaksforvalter kan legge til utdanningsbakgrunner som gjelder for opptaket
 

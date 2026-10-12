@@ -146,22 +146,11 @@ Egenskap: Plasstildelingsrunder i et opptak
       Så kan ikke plasstildelingen gi flere enn 1 tilbud i en enkelt plasstildelingsrunde til en søker
       Og søker får se denne informasjonen
 
-  Regel: Opptaksforvalter kan åpne for søknad på ledige studieplasser
-
-    # Flyttet hit 2026-10-12 fra 11 Opprette og vedlikeholde opptak/03 Innstillinger/innstillinger.feature.
-    # Innstillingen gjelder hele opptaket. Hver plasstildelingsrunde åpnes i regelen under.
-
-    Scenario: Aktivere ledige studieplasser
-      Når opptaksforvalter angir at opptaket tilbyr søknad på ledige studieplasser
-      Så er ledige studieplasser aktivert for opptaket
-      Og muligheten for ledige studieplasser blir tilgjengelig for søknad og saksbehandling
-      # Datoer for ledige studieplasser settes i 11 Opprette og vedlikeholde opptak/04 Frister/frister_og_hendelser.feature
-
   Regel: Opptaksforvalter kan åpne en plasstildelingsrunde for ledige studieplasser
 
     # AVKLART 2026-10-08: Egenskapen kan settes på alle rundetyper, også hovedtildelingen.
     # Den kan bare settes når opptaket tilbyr søknad på ledige studieplasser
-    # (se regelen over).
+    # (se 11 Opprette og vedlikeholde opptak/03 Innstillinger/innstillinger.feature).
     # Hvordan plasstildelingen rangerer søkerne, står i 03 Tildeling/gjennomføre_plasstildeling.feature.
     Scenariomal: Åpne plasstildelingsrunden for ledige studieplasser
       Gitt at opptaket tilbyr søknad på ledige studieplasser
