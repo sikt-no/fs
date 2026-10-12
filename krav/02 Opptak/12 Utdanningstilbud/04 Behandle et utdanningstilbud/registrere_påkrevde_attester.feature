@@ -1,6 +1,6 @@
 # language: no
 # Jira: SHI-692
-@OPT-OPT-UTD-014 @must @draft
+@OPT-OPT-UTD-014 @must @draft @scope-utdanningstilbud-2027
 Egenskap: Registrere påkrevde attester på utdanningstilbudet
   Som opptaksforvalter
   ønsker jeg å registrere hvilke attester som kreves for utdanningstilbudet

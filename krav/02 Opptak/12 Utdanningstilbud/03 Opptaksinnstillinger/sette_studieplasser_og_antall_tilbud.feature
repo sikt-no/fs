@@ -1,6 +1,6 @@
 # language: no
 # GitHub: #596
-@OPT-OPT-UTD-007 @must @draft
+@OPT-OPT-UTD-007 @must @draft @scope-utdanningstilbud-2027
 Egenskap: Sette antall studieplasser per utdanningstilbud
   Som opptaksforvalter
   ønsker jeg å sette hvor mange studieplasser vi har per utdanningstilbud
