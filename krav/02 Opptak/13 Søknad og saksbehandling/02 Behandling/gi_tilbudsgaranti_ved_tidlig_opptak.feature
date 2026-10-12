@@ -120,7 +120,9 @@
 # - Manuell tilbudsgaranti har ingen betingelser knyttet til tidlig opptak, heller
 #   ikke for typer som gjelder tidlig opptak. Tilbudsgaranti er generell, og gis av
 #   flere grunner enn tidlig opptak. Betingelsen fra dagens løsning (tidligsvar bare
-#   når søkeren har søkt om tidlig opptak) videreføres ikke.
+#   når søkeren har søkt om tidlig opptak) videreføres ikke. At tilbyder bare gir
+#   FOP eller FAL til søkere med godkjent grunn (fagperson i PR #654, 01.10.2026),
+#   er praksis, ikke en regel i systemet (avklart 12.10.2026).
 # - Kodeverkene tidlig opptak bygger på (begrunnelser, konklusjoner og
 #   tilbudsgarantityper) legges inn i databasen per opptak, og vedlikeholdes ikke i
 #   løsningen nå. At opptaksforvalter kan forvalte dem, kommer senere, bekreftet av
@@ -293,7 +295,14 @@ Egenskap: Gi tilbudsgaranti ved tidlig opptak
       Når opptaksforvalter gjennomfører tidligopptaket på nytt
       Så får søkeren tilbudsgaranti på "Sykepleie, høst 2027"
 
+    @openquestion
     Scenario: Tilbudsgarantien flyttes til et høyere prioritert søknadsalternativ ved ny gjennomføring
+      # ÅPNE SPØRSMÅL:
+      # - Skal tilbudsgarantien fra en tidligere gjennomføring på det lavere søknadsalternativet
+      #   fjernes, bli stående, eller bli stående og vises for opptaksforvalter i rapporten?
+      #   Første gjennomføring kan ha overskrevet en annen kode (f.eks. en negativ garanti fra
+      #   opptaksforvalter eller en reservasjon), som da går tapt hvis garantien fjernes.
+      #   Branchen STEK-503 lar den stå. Avklares med fagperson.
       Gitt saksbehandler har konkludert med at søkeren deltar i tidligopptaket
       Og søkeren fikk tilbudsgaranti på "Vernepleie, høst 2027" som prioritet 2 da tidligopptaket ble gjennomført
       Og søkeren når nå poenggrensen for "Sykepleie, høst 2027" som prioritet 1
