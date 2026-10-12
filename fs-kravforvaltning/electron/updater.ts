@@ -1,4 +1,4 @@
-import { app } from 'electron';
+import { app, session } from 'electron';
 import electronUpdater from 'electron-updater';
 import { latestReleaseTag, type Release } from '../shared/appUpdate.ts';
 
@@ -55,5 +55,6 @@ async function feedUrl(): Promise<string | null> {
 
 /** Avslutter appen og installerer versjonen som er lastet ned */
 export function installUpdate() {
+  session.defaultSession.flushStorageData();
   autoUpdater.quitAndInstall();
 }

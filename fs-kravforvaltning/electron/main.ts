@@ -2,7 +2,7 @@ import { existsSync } from 'node:fs';
 import { mkdir, readFile, rm, writeFile } from 'node:fs/promises';
 import { join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { app, BrowserWindow, dialog, ipcMain, Menu, nativeTheme, safeStorage, shell } from 'electron';
+import { app, BrowserWindow, dialog, ipcMain, Menu, nativeTheme, safeStorage, session, shell } from 'electron';
 import type { Boot } from '../shared/api.ts';
 import { createApi, dispatch } from '../core/api.ts';
 import { createAuth, type TokenStore } from '../core/auth.ts';
@@ -81,6 +81,7 @@ const ready = (async () => {
   const pty = new PtyRunner(dir, { bin: () => claude.binary() });
   pty.on(data => send('krav:pty', data));
   app.on('before-quit', () => {
+    session.defaultSession.flushStorageData();
     ws.close();
     claude.close();
     pty.close();
@@ -140,6 +141,10 @@ function createWindow() {
   });
   if (process.env.ELECTRON_RENDERER_URL) void win.loadURL(process.env.ELECTRON_RENDERER_URL);
   else void win.loadFile(join(here, '../renderer/index.html'));
+  // Chromium skriver localStorage til disk med forsinkelse, og det som ikke er skrevet, er borte etter omstart
+  // (f.eks. rekkefølgen på kolonnene i Spesifikasjoner). Skriv det når brukeren går fra vinduet og når det lukkes
+  win.on('blur', () => session.defaultSession.flushStorageData());
+  win.on('close', () => session.defaultSession.flushStorageData());
   win.on('closed', () => (win = null));
 }
 
