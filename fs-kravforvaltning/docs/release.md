@@ -29,8 +29,8 @@ En merge til `main` starter ingenting. En release er to kjøringer: den første 
 2. **Når den PR-en er merget, kjøres workflowen en gang til.** Da finnes det ingen changesets, og versjonen i `package.json` har ingen release, så
    - lages en draft-release `fs-kravforvaltning-v<versjon>` med endringene for versjonen fra `CHANGELOG.md`
    - bygges appen for macOS, og filene lastes opp til releasen:
-     - `fs-kravforvaltning-<versjon>-mac-arm64.dmg` og `-mac-x64.dmg`, for første installasjon
-     - `fs-kravforvaltning-<versjon>-mac-arm64.zip` og `-mac-x64.zip`, med `.blockmap`, og `latest-mac.yml`, som appen oppdaterer seg fra
+     - `fs-kravforvaltning-<versjon>-mac-arm64.dmg`, for første installasjon
+     - `fs-kravforvaltning-<versjon>-mac-arm64.zip`, med `.blockmap`, og `latest-mac.yml`, som appen oppdaterer seg fra
    - publiseres releasen når filene er lastet opp. Feiler bygget, blir releasen stående som draft, og neste kjøring (eller *Re-run failed jobs*) bygger den ferdig.
 3. En kjøring når versjonen allerede har en publisert release (og ingen changesets), gjør ingenting.
 
