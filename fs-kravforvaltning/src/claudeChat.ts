@@ -43,7 +43,7 @@ export interface Chat {
   loadedVersions: Record<string, string>;
   /** Samtalen denne fortsetter fra (startet fra en oppsummering, eller fordi en skill var oppdatert) */
   continuesFrom: string | null;
-  /** Utførekjøring fra Spesifikasjoner («Utfør i <repo>»): Claude kjører i kode-repoet. Mangler i eldre samtaler. */
+  /** Utførekjøring fra tavla «Oppgaver» («Utfør i <repo>»): Claude kjører i kode-repoet. Mangler i eldre samtaler. */
   target?: ExecuteTarget | null;
   /** «Tillat alltid i denne samtalen»: verktøyene som sendes som `allowTools` og ikke spørres om igjen */
   alwaysAllowed: string[];

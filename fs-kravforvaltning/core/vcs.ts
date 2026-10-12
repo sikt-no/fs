@@ -133,7 +133,7 @@ export const githubPr: OpenPr = async (url, token, pr) => {
   return createPullRequest(token, repo, pr);
 };
 
-/** Stiene i en PR må være krav-filer under krav/, eller spesifikasjoner og utforing.md under tasks/, uten `..` */
+/** Stiene i en PR må være krav-filer under krav/, eller det tavla og skillene skriver under tasks/ (`isEditablePath`), uten `..` */
 export function checkPaths(paths: string[]) {
   if (!paths.length) throw new Error('Velg minst én fil');
   for (const p of paths) {

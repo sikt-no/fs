@@ -383,7 +383,7 @@ export function ClaudePanel({ status, width, onWidth, allowedSkills: modeSkills,
   // Mens panelet er åpent kan andre visninger sende en prompt hit («Send til Claude Code»), eller legge tekst i inputfeltet
   const sendRef = useRef(sendText);
   sendRef.current = sendText;
-  // «Utfør i <repo>» fra Spesifikasjoner: ny samtale som kjører i kode-repoet
+  // «Utfør i <repo>» fra tavla «Oppgaver»: ny samtale som kjører i kode-repoet
   const executeText = async (text: string, target: ExecuteTarget, title: string) => {
     const id = newId();
     set(createExecuteConversation(convs, id, Date.now(), target, title));

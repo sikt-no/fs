@@ -4,7 +4,6 @@ import { fileURLToPath } from 'node:url';
 import { defineConfig, type Plugin } from 'vite';
 import preact from '@preact/preset-vite';
 import { kravPlugin } from './server/kravPlugin.ts';
-import { modeOn } from './core/workspace.ts';
 import { STATIC_PAGES } from './src/markdown.ts';
 
 const repoRoot = fileURLToPath(new URL('..', import.meta.url));
@@ -28,10 +27,8 @@ function staticPages(): Plugin {
   };
 }
 
-export default defineConfig(({ mode }) => ({
-  // Oppgaver og Spesifikasjoner (tasks/) er skjult med mindre de slås på: `npm run dev:oppgaver`,
-  // `npm run dev:spesifikasjoner`, `--mode oppgaver+spesifikasjoner`, eller OPPGAVER=1 / SPESIFIKASJONER=1
-  plugins: [preact(), staticPages(), kravPlugin(repoRoot, { oppgaver: modeOn(mode, 'oppgaver'), spesifikasjoner: modeOn(mode, 'spesifikasjoner') })],
+export default defineConfig(() => ({
+  plugins: [preact(), staticPages(), kravPlugin(repoRoot)],
   // Relative stier, så bygget fungerer under en understi (GitHub Pages: /fs/)
   base: './',
   // Hele krav/-snapshotet bygges inn i bundelen ved statisk bygg

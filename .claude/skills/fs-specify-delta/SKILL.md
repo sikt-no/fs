@@ -21,9 +21,11 @@ Brukeren har en **endring** — en commit, to commits, en branch, en test-fil el
 
 ## Finn oppgavemappa (gjør dette FØRST)
 
-Samme prosedyre som [`fs-specify` → _Finn oppgavemappa_](../fs-specify/SKILL.md#finn-oppgavemappa-gjør-dette-først): resultatet er **`<spec>/` = `tasks/<domene>/<slug>/spec/`**, og reglene i `tasks/README.md` gjelder (ingen `spec-*.md` i oppgave-rota, `spec/` er reservert for krav, ikke skriv `oppgave.md` — det gjør `fs-oppgave`).
+Samme prosedyre som [`fs-specify` → _Finn oppgavemappa_](../fs-specify/SKILL.md#finn-oppgavemappa-gjør-dette-først): resultatet er **`<spec>/` = `tasks/<domene>/<slug>/spec/`**, og reglene i `tasks/README.md` gjelder (ingen `spec-*.md` i oppgave-rota, `spec/` er reservert for krav). «Ny oppgave» skriver en minimal `oppgave.md`, som i `fs-specify`.
 
 En delta hører normalt til en oppgave som finnes fra før. Foreslå derfor eksisterende oppgaver først; «Ny oppgave» er fortsatt et gyldig valg.
+
+**Scope.** Har `oppgave.md` feltet `Scope:`, les scope-fila. Står et `@planned`-krav i endringen ikke i scope-raden for oppgaven, eller står det i en annen oppgave eller et annet scope (`@scope-*`), ta det med som vanlig, men nevn det, og foreslå `fs-scope` (modus B) for å oppdatere scopet. Endre ikke scope-fila eller taggen selv. Skisselenkene i scope-raden brukes som i `fs-specify` (*Skisser fra scopet*).
 
 ## Logg kjøringen
 
@@ -197,6 +199,7 @@ Følg [`fs-specify` → _Implementasjonsdetaljer_](../fs-specify/SKILL.md#implem
 ## Kilde
 
 - **Oppgave:** `tasks/<domene>/<slug>/`
+- **Scope:** scope-<slug> (utelat linja når oppgaven ikke har scope)
 - **Type:** `test` / `markdown` / `commit` / `commits` / `branch`
 - **Test/markdown:** kildefiler (lenker til fila i repoet, eller til kopien under `krav-input/changes/<YYYY-MM-DD>-<ref>/` for filer utenfor repoet), HEAD-SHA, og om filene har endringer som ikke er committet
 - **Commit:** full SHA (lenke til `https://github.com/sikt-no/fs/commit/<sha>`), parent-SHA
@@ -293,7 +296,7 @@ Minn brukeren på at endringene i `tasks/` og `krav/` ikke er committet.
 - Leser eller sammenligner ikke tidligere `spec-*.md`.
 - Oppretter, endrer eller lukker ikke GitHub-issues.
 - Kjører aldri git-kommandoer som endrer tilstand (`add`, `commit`, `push`, `checkout`, `fetch`, `stash`).
-- Skriver ikke utenfor `<spec>/` og `Egenskap:`-tag-linjene under `krav/`, bortsett fra implementasjonsdetaljene (`<feature-navn>.design.md`), som `fs-implementasjonsdetaljer` skriver. Fjerner aldri `@draft` fra en `Regel:`/`Scenario:`.
+- Skriver ikke utenfor `<spec>/` og `Egenskap:`-tag-linjene under `krav/`, bortsett fra implementasjonsdetaljene (`<feature-navn>.design.md`), som `fs-implementasjonsdetaljer` skriver, og en minimal `oppgave.md` ved «Ny oppgave». Skriver ikke scope-fila eller `@scope-*`-taggene. Fjerner aldri `@draft` fra en `Regel:`/`Scenario:`.
 
 ## Retningslinjer
 

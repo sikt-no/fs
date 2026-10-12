@@ -110,7 +110,7 @@ test('kontekstbruk og lastede skills følges gjennom samtalen', () => {
   let c = started(send(chooseSkill(EMPTY_CHAT, 'fs-krav'), 'a', null).chat, 'r');
   assert.deepEqual(c.loadedSkills, ['fs-krav'], 'lastet med /fs-krav');
   c = apply(c, 'r', { kind: 'usage', tokens: 40000 });
-  c = apply(c, 'r', { kind: 'tool', id: 's1', name: 'Skill', summary: 'fs-oppgave' });
+  c = apply(c, 'r', { kind: 'tool', id: 's1', name: 'Skill', summary: 'lage-steps' });
   c = apply(c, 'r', { kind: 'toolResult', id: 's1', isError: true });
   c = apply(c, 'r', { kind: 'tool', id: 's2', name: 'Skill', summary: 'fs-specify' });
   c = apply(c, 'r', { kind: 'toolResult', id: 's2', isError: false });

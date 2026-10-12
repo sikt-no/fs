@@ -20,7 +20,7 @@ Du samler krav. Du henter kravene fra `.feature`-filene under `krav/`, kobler de
 
 **Input er en mappe eller et sett med krav.** Er input en endring (branch, commit, test-fil eller markdown), eller skal spec-en vise hva som er endret i et krav, bruk `fs-specify-delta`. Tag-reglene er de samme i begge.
 
-**Spesifikasjon laget i FS Kravforvaltning.** I visningen «Spesifikasjoner» plukker brukeren hele krav og skriver omfang og skisser selv, og vieweren skriver `tasks/<domene>/<slug>/spec/spec-<slug>.md`. Peker invokasjonen på en slik fil (eller gir en liste med feature-filer):
+**Spesifikasjon laget i FS Kravforvaltning.** På tavla «Oppgaver» plukker brukeren hele krav og skriver omfang og skisser selv, og vieweren skriver `tasks/<domene>/<slug>/spec/spec-<slug>.md`. Peker invokasjonen på en slik fil (eller gir en liste med feature-filer):
 
 - Oppgavemappa er mappa fila ligger i, og spec-filnavnet beholdes.
 - Kravene er feature-filene under `## Krav` (slått opp på Feature-ID). Ta med alt som er `@planned` eller `@deprecated` i hver fil, etter filteret under. Spør ikke etter mappe eller filer.
@@ -34,8 +34,9 @@ Alt denne skillen skriver havner i krav-undermappa til én oppgave: **`<spec>/` 
 
 1. **Oppga brukeren en sti eller slug** i invokasjonen (`tasks/opptak/registrere-praksis`, `registrere-praksis`, eller en full sti til `.../spec/`), bruk den. En slug slås opp med `Glob` `tasks/*/<slug>/`; gir den mer enn ett treff, spør hvilken.
 2. **Ellers:** list oppgavemappene `tasks/<domene>/<slug>/` (alle mapper på det nivået, unntatt `mal/`; de fleste har `oppgave.md`) og vis oppgavene som finnes via `AskUserQuestion` (de mest relevante, gjerne filtrert på domenet brukeren nevner), pluss **«Ny oppgave»**.
-3. **Ny oppgave:** spør om `domene` — bare verdier fra domenetabellen i `tasks/README.md` er gyldige — og en kebab-case `slug` (lesbar beskrivelse, ikke issue-nummer; unik innenfor domenet). Opprett bare `tasks/<domene>/<slug>/spec/`. **Skriv ikke `oppgave.md`** — si til brukeren at den lages med `fs-oppgave` (fra [`tasks/mal/oppgave.md`](../../../tasks/mal/oppgave.md)).
+3. **Ny oppgave:** spør om `domene` — bare verdier fra domenetabellen i `tasks/README.md` er gyldige — en kebab-case `slug` (lesbar beskrivelse, ikke issue-nummer; unik innenfor domenet), tittel og issue (valgfritt). Skriv en minimal `tasks/<domene>/<slug>/oppgave.md` fra [`tasks/mal/oppgave.md`](../../../tasks/mal/oppgave.md): uten malkommentaren, med tittel, domene, slug, issue (eller `–`) og eier (eller `–`), og `–` i resten av feltene. `Fase` utelates. Statusloggen får én linje: `| <dato> | Opprettet med fs-specify | <eier eller –> | – |`. Hører oppgaven til et initiativ som skal deles i flere oppgaver, foreslå `fs-scope` i stedet.
 4. **Opprett `<spec>/`** hvis den ikke finnes.
+5. **Scope.** Har `oppgave.md` feltet `Scope:`, les scope-fila (`tasks/<domene>/scope-<slug>.md`). Raden for oppgaven i `## Oppgaver` gir kravene (Feature-ID-er) og skisselenkene som er utgangspunktet i *Hent kravene* og *Skisser*.
 
 Regler fra `tasks/README.md` som denne skillen må følge:
 
@@ -75,10 +76,11 @@ Hvert `AskUserQuestion`-kall i kjøringen appendes til `<spec>/questions-fs-spec
 
 Kravene kopieres ikke. Spesifikasjonen lenker til fila under `krav/` med Feature-ID. Kravet slik det var da spesifikasjonen ble laget, finnes i git: spesifikasjonen og retaggingen merges i samme PR, og `git log` på kravfila viser hva som er endret siden.
 
-1. **Bekreft mappen/filen** med brukeren før du leser — vis foreslått sti under `krav/` og spør hvis den ikke er entydig. Mangler sti helt, spør om den (bruk `krav/krav-oversikt.md` for å hjelpe brukeren å finne riktig kapabilitet). Er input en liste med feature-filer eller en spesifikasjon fra FS Kravforvaltning, er filene gitt: hopp over dette.
-2. **List filene** under stien som matcher `**/*.feature` (eller bruk lista).
-3. **Filtrer** — se _Filter_ nedenfor.
-4. **Skriv `<spec>/krav-input/manifest.md`**: kildemappe (repo-relativ), filene som er med (stier under `krav/`, med Feature-ID), hentet-tidspunkt, HEAD-SHA (`git rev-parse HEAD`; utelat linja der git ikke kan kjøres), og — hvis Figma-skisser hentes — Figma-URL, `fileKey`/`nodeId`, hvilke artefakter som ble lagret og hvilke som ble hoppet over (med grunn). Manifestet speiler **gjeldende** scope; filer som ble filtrert bort nevnes ikke.
+1. **Har oppgaven scope**, foreslå kravene i scope-raden for oppgaven (slått opp på Feature-ID) som utgangspunkt, og la brukeren bekrefte. Filteret under gjelder som før. Et `@planned`-krav som brukeren vil ha med, men som ikke står i raden, eller som står i en annen oppgave eller et annet scope (`@scope-*`), tas med når brukeren vil det. Nevn det, og foreslå `fs-scope` (modus B) for å oppdatere scopet. Endre ikke scope-fila eller taggen selv.
+2. **Bekreft mappen/filen** med brukeren før du leser — vis foreslått sti under `krav/` og spør hvis den ikke er entydig. Mangler sti helt, spør om den (bruk `krav/krav-oversikt.md` for å hjelpe brukeren å finne riktig kapabilitet). Er input en liste med feature-filer eller en spesifikasjon fra FS Kravforvaltning, er filene gitt: hopp over dette.
+3. **List filene** under stien som matcher `**/*.feature` (eller bruk lista).
+4. **Filtrer** — se _Filter_ nedenfor.
+5. **Skriv `<spec>/krav-input/manifest.md`**: kildemappe (repo-relativ), filene som er med (stier under `krav/`, med Feature-ID), hentet-tidspunkt, HEAD-SHA (`git rev-parse HEAD`; utelat linja der git ikke kan kjøres), og — hvis Figma-skisser hentes — Figma-URL, `fileKey`/`nodeId`, hvilke artefakter som ble lagret og hvilke som ble hoppet over (med grunn). Manifestet speiler **gjeldende** scope; filer som ble filtrert bort nevnes ikke.
 
 ## Filter: bare krav klare til arbeid (`@planned` / `@in-progress`)
 
@@ -162,7 +164,9 @@ For `@planned`-deler i et `@implemented` krav retagges `Regel:`-/`Scenario:`-lin
 
 ## Skisser — kobling og validering
 
-En spesifikasjon skal ha minst én skisse, eller `Ingen skisse: <grunn>` under `## Skisser` (f.eks. «bare API», «batchjobb»). Uten det står den som utkast i FS Kravforvaltning. Står skissene allerede i spesifikasjonen (laget i vieweren), spør ikke på nytt: gå rett til henting og validering.
+En spesifikasjon skal ha minst én skisse, eller `Ingen skisse: <grunn>` under `## Skisser` (f.eks. «bare API», «batchjobb»). Uten det står den i «Spesifiseres» på tavla i FS Kravforvaltning. Står skissene allerede i spesifikasjonen (laget i vieweren), spør ikke på nytt: gå rett til henting og validering.
+
+**Skisser fra scopet.** Har oppgaven scope, og har kravene en lenke i kolonnen `Skisse` i scope-raden, er lenkene skissene til de kravene: hent, lagre og valider dem som vanlig, uten å spørre om de finnes. Spør bare om skisser for krav som ikke har en.
 
 Ellers, etter at kravene er hentet, spør (`AskUserQuestion`):
 
@@ -263,6 +267,7 @@ Bevisste unntak: **`spec.log.md`** er append-only, og **`questions-fs-specify-<d
 
 - **Oppgave:** `tasks/<domene>/<slug>/`
 - **Kilde-mappe:** `krav/<…>`
+- **Scope:** scope-<slug> (utelat linja når oppgaven ikke har scope)
 - **GitHub:** `#NNNN` (fra `# GitHub:`-linjene i kravfilene, klikkbare lenker til `sikt-no/fs`. Utelat linja hvis ingen kravfil har en)
 - **Hentet:** `<YYYY-MM-DD HH:MM>`
 
@@ -352,7 +357,7 @@ Minn brukeren på at endringene i `tasks/` og `krav/` ikke er committet — det 
 - Analyserer ikke kode, foreslår ikke løsninger og skriver ikke kode. Leser koden bare i kodesjekken (se _Sjekk mot koden_).
 - Oppretter, endrer eller lukker ikke GitHub-issues.
 - Endrer ikke kravinnhold — bare implementasjonsstatus-taggen `@planned` → `@in-progress` (på `Egenskap:`, eller på delen i et levert krav som endres). Fjerner aldri `@draft` fra en `Regel:`/`Scenario:`.
-- Skriver ikke utenfor `<spec>/` og statustaggene under `krav/`, bortsett fra implementasjonsdetaljene (`<feature-navn>.design.md`), som `fs-implementasjonsdetaljer` skriver. Skriver ikke `oppgave.md`, `roadmap.md` eller andre oppgaveartefakter.
+- Skriver ikke utenfor `<spec>/` og statustaggene under `krav/`, bortsett fra implementasjonsdetaljene (`<feature-navn>.design.md`), som `fs-implementasjonsdetaljer` skriver, og en minimal `oppgave.md` ved «Ny oppgave». Skriver ikke `roadmap.md`, scope-fila, `@scope-*`-taggene eller andre oppgaveartefakter.
 - Kjører aldri `git add`, `commit`, `push` eller andre git-mutasjoner.
 
 ## Retningslinjer
@@ -367,6 +372,7 @@ Minn brukeren på at endringene i `tasks/` og `krav/` ikke er committet — det 
 - **[`references/askuserquestion-logging.md`](references/askuserquestion-logging.md)** — format for `questions-<skill>-<dato>.md`. Brukes også av `fs-specify-delta`.
 - **[`tasks/README.md`](../../../tasks/README.md)** — oppgavestrukturen, domenelista og reglene for `spec/`.
 - **`krav/README.md`** — tag-aksen og Feature-ID-formatet.
+- **`fs-scope`** — avgrenser initiativet, deler det i oppgaver og bestemmer kravene per oppgave (scope-fila og `@scope-<slug>`). Foreslås når et krav ikke passer i scopet.
 - **`fs-krav`** — ferdigstiller krav (`@draft` → `@planned`), og avvikler leverte krav (`@implemented` → `@deprecated`).
 - **`fs-implementasjonsdetaljer`** — skriver implementasjonsdetaljene (`<feature-navn>.design.md`), og sjekker at tekstene i skissene står der. Kjøres fra _Implementasjonsdetaljer_ over.
 - **`fs-verify`** — verifiserer koden: `@in-progress` → `@implemented`, og sletter `@deprecated`-krav når koden er borte.

@@ -28,7 +28,7 @@ test('githubRepo leser eier og repo fra https- og ssh-URL-er', () => {
 });
 
 test('checkPaths godtar krav-filer under krav/, og spec/ og utforing.md i en oppgavemappe under tasks/', () => {
-  checkPaths(['krav/a/b.feature', 'krav/README.md', 'tasks/opptak/x/utforing.md', 'tasks/opptak/x/spec/spec-x.md', 'tasks/opptak/x/spec/spec-changes-2026-10-04-abc.md']);
+  checkPaths(['krav/a/b.feature', 'krav/README.md', 'tasks/opptak/x/utforing.md', 'tasks/opptak/x/oppgave.md', 'tasks/opptak/scope-x.md', 'tasks/opptak/x/spec/spec-x.md', 'tasks/opptak/x/spec/spec-changes-2026-10-04-abc.md']);
   // Alt fs-specify og fs-verify skriver i spec/: logg, spørsmål, rapport, råkopier, manifest, Figma-artefakter
   checkPaths([
     'tasks/opptak/x/spec/spec.log.md',
@@ -40,7 +40,7 @@ test('checkPaths godtar krav-filer under krav/, og spec/ og utforing.md i en opp
     'tasks/opptak/x/spec/krav-input/sketches/figma/liste/tokens.json',
   ]);
   assert.throws(() => checkPaths([]), /minst én/);
-  for (const bad of ['tester/x.ts', 'krav/../x.feature', 'krav//x.feature', 'krav/x.txt', 'tasks/opptak/x/oppgave.md', 'tasks/opptak/x/frontend/plan-x.md', 'tasks/opptak/x/spec/x.sh', 'tasks/opptak/x/spec/../oppgave.md', 'tasks/README.md', 'tasks/opptak/x/../y/utforing.md']) {
+  for (const bad of ['tester/x.ts', 'krav/../x.feature', 'krav//x.feature', 'krav/x.txt', 'tasks/opptak/x/design.md', 'tasks/opptak/scope.md', 'tasks/opptak/x/frontend/plan-x.md', 'tasks/opptak/x/spec/x.sh', 'tasks/opptak/x/spec/../oppgave.md', 'tasks/README.md', 'tasks/opptak/x/../y/utforing.md']) {
     assert.throws(() => checkPaths([bad]), /Ugyldig/, bad);
   }
 });
@@ -53,11 +53,13 @@ test('kravPath avviser stier utenfor krav/ og andre filtyper', () => {
   }
 });
 
-test('kravPath godtar spesifikasjonene og utforing.md under tasks/, ikke andre filer der', () => {
+test('kravPath godtar spesifikasjonene, utforing.md, oppgave.md og scope-filene under tasks/, ikke andre filer der', () => {
   const root = join(tmp, 'repo');
   assert.equal(kravPath(root, 'tasks/opptak/x/utforing.md'), join(root, 'tasks/opptak/x/utforing.md'));
   assert.equal(kravPath(root, 'tasks/opptak/x/spec/spec-x.md'), join(root, 'tasks/opptak/x/spec/spec-x.md'));
-  for (const bad of ['tasks/opptak/x/oppgave.md', 'tasks/opptak/x/spec/spec.log.md', 'tasks/opptak/x/frontend/plan-x.md', 'tasks/README.md', 'tasks/opptak/../krav/x.md']) {
+  assert.equal(kravPath(root, 'tasks/opptak/x/oppgave.md'), join(root, 'tasks/opptak/x/oppgave.md'));
+  assert.equal(kravPath(root, 'tasks/opptak/scope-x.md'), join(root, 'tasks/opptak/scope-x.md'));
+  for (const bad of ['tasks/opptak/x/design.md', 'tasks/opptak/roadmap.md', 'tasks/opptak/x/spec/spec.log.md', 'tasks/opptak/x/frontend/plan-x.md', 'tasks/README.md', 'tasks/opptak/../krav/x.md']) {
     assert.throws(() => kravPath(root, bad), Error, bad);
   }
 });
@@ -122,28 +124,16 @@ test('cliVcs.publish lager branch fra origin/main i en worktree og lar arbeidska
   await assert.rejects(vcs.publish({ paths: ['krav/a.feature'], branch: 'endre-a', title: 't', body: '' }, 'tok'), /finnes allerede/);
 });
 
-test('modeOn: visningen slås på med --mode (også flere med +) eller miljøvariabelen', async () => {
-  const { modeOn } = await import('./workspace.ts');
-  assert.equal(modeOn('spesifikasjoner', 'spesifikasjoner', {}), true);
-  assert.equal(modeOn('oppgaver+spesifikasjoner', 'oppgaver', {}), true);
-  assert.equal(modeOn('oppgaver', 'spesifikasjoner', {}), false);
-  assert.equal(modeOn('development', 'spesifikasjoner', { SPESIFIKASJONER: '1' }), true);
-  assert.equal(modeOn(undefined, 'oppgaver', {}), false);
-});
-
-test('Workspace leser tasks/ bare når Oppgaver eller Spesifikasjoner er slått på', async () => {
+test('Workspace leser tasks/, også scope-filene', async () => {
   const { Workspace } = await import('./workspace.ts');
   const root = join(tmp, 'ws-tasks');
   mkdirSync(join(root, 'krav'), { recursive: true });
   mkdirSync(join(root, 'tasks', 'opptak', 'x', 'spec'), { recursive: true });
   writeFileSync(join(root, 'tasks', 'opptak', 'x', 'spec', 'spec-x.md'), '# Spec: X\n');
-  const av = new Workspace(root, null);
-  await av.readAll();
-  assert.equal(av.tasks, null);
-  const på = new Workspace(root, null, { spesifikasjoner: true });
+  writeFileSync(join(root, 'tasks', 'opptak', 'scope-x.md'), '# Scope: X\n');
+  const på = new Workspace(root, null);
   await på.readAll();
-  assert.equal(på.tasks?.spesifikasjoner, true);
-  assert.equal(på.tasks?.oppgaver, false);
+  assert.equal(på.tasks?.scopes?.['tasks/opptak/scope-x.md'], '# Scope: X\n');
   assert.equal(på.tasks?.tasks[0].sources['spec/spec-x.md'], '# Spec: X\n');
 });
 

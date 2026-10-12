@@ -101,7 +101,7 @@ export const changedFile = (git: GitInfo | null, path: string) =>
   !!git && [...git.uncommitted, ...git.committed].some(c => c.path === path);
 
 /**
- * Filene som er valgt når «Lag PR» åpnes. Uten utkast: fila (eller filene, fra Spesifikasjoner) dialogen åpnes fra,
+ * Filene som er valgt når «Lag PR» åpnes. Uten utkast: fila (eller filene, fra tavla «Oppgaver») dialogen åpnes fra,
  * ellers alle ucommittede. Med utkast: filene i utkastet, og filene dialogen åpnes fra som ikke er med.
  */
 export function draftPicked(draft: string[] | null, preselect: string | string[] | undefined, uncommitted: string[]): string[] {

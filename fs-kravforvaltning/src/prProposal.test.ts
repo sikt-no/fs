@@ -27,12 +27,12 @@ test('parsePrProposal: filer som ikke kan sendes med «Lag PR», legges i skippe
 
 test('parsePrProposal avviser forslag uten filer som kan sendes', () => {
   assert.equal(parsePrProposal('{"title": "T", "paths": ["tasks/x.md"]}'), null);
-  // Det fs-specify skriver i oppgavemappa, kan sendes; oppgave.md kan ikke
+  // Det fs-specify skriver i oppgavemappa, og oppgave.md og scope-fila fra fs-scope, kan sendes; design.md og roadmap.md kan ikke
   const spec = parsePrProposal(
-    '{"title": "T", "paths": ["tasks/opptak/x/spec/spec-x.md", "tasks/opptak/x/spec/spec.log.md", "tasks/opptak/x/spec/krav-input/local/krav/a.feature", "tasks/opptak/x/spec/krav-input/sketches/figma/a/screenshot.png", "tasks/opptak/x/oppgave.md"]}',
+    '{"title": "T", "paths": ["tasks/opptak/x/spec/spec-x.md", "tasks/opptak/x/spec/spec.log.md", "tasks/opptak/x/spec/krav-input/local/krav/a.feature", "tasks/opptak/x/spec/krav-input/sketches/figma/a/screenshot.png", "tasks/opptak/x/oppgave.md", "tasks/opptak/scope-x.md", "tasks/opptak/x/design.md", "tasks/opptak/roadmap.md"]}',
   );
-  assert.deepEqual(spec?.paths, ['tasks/opptak/x/spec/spec-x.md', 'tasks/opptak/x/spec/spec.log.md', 'tasks/opptak/x/spec/krav-input/local/krav/a.feature', 'tasks/opptak/x/spec/krav-input/sketches/figma/a/screenshot.png']);
-  assert.deepEqual(spec?.skipped, ['tasks/opptak/x/oppgave.md']);
+  assert.deepEqual(spec?.paths, ['tasks/opptak/x/spec/spec-x.md', 'tasks/opptak/x/spec/spec.log.md', 'tasks/opptak/x/spec/krav-input/local/krav/a.feature', 'tasks/opptak/x/spec/krav-input/sketches/figma/a/screenshot.png', 'tasks/opptak/x/oppgave.md', 'tasks/opptak/scope-x.md']);
+  assert.deepEqual(spec?.skipped, ['tasks/opptak/x/design.md', 'tasks/opptak/roadmap.md']);
   assert.equal(parsePrProposal('{"title": "T", "paths": ["krav/../package.json"]}'), null);
   assert.equal(parsePrProposal('{"title": "T", "paths": [3]}'), null);
 });
