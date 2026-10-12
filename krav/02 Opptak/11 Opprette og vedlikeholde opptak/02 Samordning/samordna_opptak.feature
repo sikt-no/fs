@@ -64,8 +64,8 @@ Egenskap: Samordna opptak
       Så er kun norske fagskoler tilgjengelige som deltakere
 
   # Saksbehandlertildelingen er beskrevet i detalj i tildele_saksbehandlende_organisasjon.feature
-  # (@OPT-BEH-BEH-011, PR #684). Om regelen skal stå her også, avgjøres i oppgaven
-  # opprette-og-vedlikeholde-opptak.
+  # (@OPT-BEH-BEH-011, PR #684), og løses av Puff. AVKLART 2026-10-12: regelen står her, fordi det
+  # som hører til opprette opptak, er at opptaksforvalter knytter reglene til opptaket.
   Regel: Opptaksforvalter ved forvaltende organisasjon knytter regler for saksbehandlertildeling i samordna opptak
 
     Scenario: Sette regler for fordeling av søknader til saksbehandlerorganisasjoner
