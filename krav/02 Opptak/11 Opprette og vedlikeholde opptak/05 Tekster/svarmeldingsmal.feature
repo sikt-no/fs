@@ -1,5 +1,5 @@
 # language: no
-@OPT-OVO-TEK-002 @wont @draft
+@OPT-OVO-TEK-002 @wont @draft @scope-opprette-opptak-2027
   ## Denne blir liggende til etter T3 2027, innholdet skal verifiseres og veivalg for den funksjonelle arkitekturen må besluttes
 Egenskap: Svarmeldingsmal for opptak
   Som opptaksforvalter ved forvaltende organisasjon

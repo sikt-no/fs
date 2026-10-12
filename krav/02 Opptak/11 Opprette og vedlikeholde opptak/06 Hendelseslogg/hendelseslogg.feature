@@ -1,5 +1,5 @@
 # language: no
-@OPT-OVO-LOG-001 @should @draft
+@OPT-OVO-LOG-001 @should @draft @scope-opprette-opptak-2027
 Egenskap: Hendelseslogg for opptak
   Som opptaksforvalter ved forvaltende organisasjon
   ønsker jeg en logg over hvem som har gjort hvilke endringer på opptaket og når
