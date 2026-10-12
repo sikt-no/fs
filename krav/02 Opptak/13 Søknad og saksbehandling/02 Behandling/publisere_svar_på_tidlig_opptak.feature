@@ -1,10 +1,13 @@
 # language: no
 # GitHub: #456
-@OPT-OPT-TID-001 @must @in-progress
+@OPT-BEH-BEH-014 @must @in-progress
 Egenskap: Publisere svar på tidlig opptak
   Som opptaksforvalter ved forvaltende organisasjon
   ønsker jeg at svaret på tidlig opptak blir synlig for søkerne når jeg gjennomfører tidligopptaket, og å sende dem melding om utfallet
   slik at alle søkere får svar samtidig, og først etter at tilbudsgarantiene er kontrollert i prøvekjøringen.
+
+  # Flyttet 12.10.2026 fra 11 Opptak/06 Tidlig opptak/, som er den gamle stien til
+  # 11 Opprette og vedlikeholde opptak. Feature-ID-en var @OPT-OPT-TID-001 (PR #712).
 
   # AVKLART 09.10.2026 (review av PR #654): Det er ingen egen publiseringsdato for
   # tidlig opptak. Svaret blir synlig for søkerne når opptaksforvalter gjennomfører

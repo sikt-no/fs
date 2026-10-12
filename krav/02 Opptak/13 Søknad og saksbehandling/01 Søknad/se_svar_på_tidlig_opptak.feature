@@ -10,7 +10,7 @@ Egenskap: Se svar på søknad om tidlig opptak
   # og at tilbudsgarantier for tidlig opptak er tildelt. Vurderingen, konklusjonen og
   # tildelingen står i gi_tilbudsgaranti_ved_tidlig_opptak.feature (OPT-BEH-BEH-007, #654).
   # Publiseringen og meldingen til søkeren står i
-  # krav/02 Opptak/11 Opptak/06 Tidlig opptak/publisere_svar_på_tidlig_opptak.feature.
+  # krav/02 Opptak/13 Søknad og saksbehandling/02 Behandling/publisere_svar_på_tidlig_opptak.feature.
   # "Tilbudsgaranti gitt av tilbyder" her er det 007 kaller manuell tilbudsgaranti fra T-rolle.
   #
   # Avgrensning: Kravet gjelder kun svaret på tidlig opptak. Andre tilbudsgarantier —

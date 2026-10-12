@@ -23,7 +23,7 @@
   - [`finne_søknader_om_tidlig_opptak.feature`](../../../krav/02%20Opptak/13%20S%C3%B8knad%20og%20saksbehandling/02%20Behandling/finne_s%C3%B8knader_om_tidlig_opptak.feature) (`@OPT-BEH-BEH-009`)
   - [`vurdere_søknad_om_tidlig_opptak.feature`](../../../krav/02%20Opptak/13%20S%C3%B8knad%20og%20saksbehandling/02%20Behandling/vurdere_s%C3%B8knad_om_tidlig_opptak.feature) (`@OPT-BEH-BEH-013`)
   - [`gi_tilbudsgaranti_ved_tidlig_opptak.feature`](../../../krav/02%20Opptak/13%20S%C3%B8knad%20og%20saksbehandling/02%20Behandling/gi_tilbudsgaranti_ved_tidlig_opptak.feature) (`@OPT-BEH-BEH-007`)
-  - [`publisere_svar_på_tidlig_opptak.feature`](../../../krav/02%20Opptak/11%20Opptak/06%20Tidlig%20opptak/publisere_svar_p%C3%A5_tidlig_opptak.feature) (`@OPT-OPT-TID-001`)
+  - [`publisere_svar_på_tidlig_opptak.feature`](../../../krav/02%20Opptak/13%20S%C3%B8knad%20og%20saksbehandling/02%20Behandling/publisere_svar_p%C3%A5_tidlig_opptak.feature) (`@OPT-BEH-BEH-014`)
   - [`se_svar_på_tidlig_opptak.feature`](../../../krav/02%20Opptak/13%20S%C3%B8knad%20og%20saksbehandling/01%20S%C3%B8knad/se_svar_p%C3%A5_tidlig_opptak.feature) (`@OPT-SØK-SØK-012`)
 - **Jira**: [STEK-188](https://sikt.atlassian.net/browse/STEK-188) «Forvalte og behandle tidligopptak»
 

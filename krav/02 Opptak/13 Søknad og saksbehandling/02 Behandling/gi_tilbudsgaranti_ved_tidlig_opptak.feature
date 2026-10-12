@@ -18,7 +18,7 @@
 #
 # Featuren slutter når tilbudsgarantiene er tildelt. Publiseringen og
 # meldingen til søkerne står i publisere_svar_på_tidlig_opptak.feature
-# (OPT-OPT-TID-001), og hva søkeren ser, i se_svar_på_tidlig_opptak.feature
+# (OPT-BEH-BEH-014), og hva søkeren ser, i se_svar_på_tidlig_opptak.feature
 # (OPT-SØK-SØK-012). Begge kommer med #642.
 #
 # AVKLART 25.09.2026

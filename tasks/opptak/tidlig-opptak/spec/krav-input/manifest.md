@@ -12,7 +12,7 @@
 | `@OPT-BEH-BEH-013` | `krav/02 Opptak/13 Søknad og saksbehandling/02 Behandling/vurdere_søknad_om_tidlig_opptak.feature` |
 | `@OPT-BEH-BEH-009` | `krav/02 Opptak/13 Søknad og saksbehandling/02 Behandling/finne_søknader_om_tidlig_opptak.feature` |
 | `@OPT-BEH-BEH-007` | `krav/02 Opptak/13 Søknad og saksbehandling/02 Behandling/gi_tilbudsgaranti_ved_tidlig_opptak.feature` |
-| `@OPT-OPT-TID-001` | `krav/02 Opptak/11 Opptak/06 Tidlig opptak/publisere_svar_på_tidlig_opptak.feature` |
+| `@OPT-BEH-BEH-014` | `krav/02 Opptak/13 Søknad og saksbehandling/02 Behandling/publisere_svar_på_tidlig_opptak.feature` |
 | `@OPT-SØK-SØK-012` | `krav/02 Opptak/13 Søknad og saksbehandling/01 Søknad/se_svar_på_tidlig_opptak.feature` |
 
 ## Figma-skisser
