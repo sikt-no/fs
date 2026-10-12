@@ -62,16 +62,14 @@ Alle under epicen TAKE-318.
 - **Akseptansekriterier** (`@OPT-OVO-INN-001` «Sette maks antall søknadsalternativer»):
   - Tallet forvalteren setter, lagres, og søkeren kan ikke legge til flere søknadsalternativer enn det.
 
-### 2.3 Lokale opptak: sperre deltakere og saksbehandlertildeling
+### 2.3 Lokale opptak: skjule saksbehandlertildeling i fs-admin
 
-- **Type:** Story · **Prioritet:** Høy
-- **Repo:** fs-plattform (og fs-admin for saksbehandlertildeling på utdanningstilbudet)
-- **Beskrivelse:** Lokale opptak skal fortsatt kunne opprettes som i dag. Saken gjelder bare at et lokalt opptak ikke skal kunne få andre organisasjoner som deltakere, eller saksbehandlertildeling. fs-admin skjuler samordning for lokale opptak, men API-et sjekker ikke `erSamordnet` (`OpprettOpptakMutations.java:149-155, 282-288`). Deltakerrader gir skrivetilgang til utdanningstilbud (`V300__rls_over_paa_auth_claims.sql:52`). Alle opptak får en standard tildelingsregel (`OpprettOpptakMutations.java:118-119`), og feltet «Saksbehandlertildeling» vises på utdanningstilbud i lokale opptak (`UtdanningstilbudDetails.tsx:591-608`, `UtdanningstilbudBatchActions.tsx:69-79`).
-- **Akseptansekriterier** (`@OPT-OVO-SAM-001` «Lokalt opptak tillater ikke andre organisasjoner», «Saksbehandlertildeling er ikke relevant for lokale opptak»):
+- **Type:** Story · **Prioritet:** Middels
+- **Repo:** fs-admin
+- **Beskrivelse:** Lokale opptak skal fortsatt kunne opprettes som i dag. Det er ikke gitt at skillet mellom samordna og lokale opptak skal bevares, så det er nok at brukergrensesnittet sperrer (avklart 2026-10-12). API-et trenger ikke endres. fs-admin skjuler allerede samordning for lokale opptak, men feltet «Saksbehandlertildeling» vises på utdanningstilbud i lokale opptak (`UtdanningstilbudDetails.tsx:591-608`), og det samme gjør massehandlingen «Sett saksbehandlertildeling» (`UtdanningstilbudBatchActions.tsx:69-79`).
+- **Akseptansekriterier** (`@OPT-OVO-SAM-001` «Saksbehandlertildeling er ikke relevant for lokale opptak»):
   - Lokale opptak kan opprettes som før.
-  - API-et avviser deltakere på et lokalt opptak.
-  - Lokale opptak har ingen saksbehandlertildeling, og forvalteren ser ikke muligheten.
-  - `SamordnetOpptakFT.java:283, 366` tester at det avvises, ikke bare at listen er tom.
+  - Opptaksforvalter ser ikke muligheten til å sette saksbehandlertildeling, verken på et utdanningstilbud eller som massehandling, i et lokalt opptak.
 
 ### 2.4 Håndheve fristene for redigering av utdanningstilbud
 

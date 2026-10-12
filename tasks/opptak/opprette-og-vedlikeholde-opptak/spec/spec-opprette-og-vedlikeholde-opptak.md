@@ -70,6 +70,7 @@ Kravene er `@in-progress`, og endres på stedet. Endringene står her, så den s
 - **2026-10-12, `@OPT-OVO-INN-001`:** Regelen «Opptaksforvalter kan sette tak for antall tilbud per tildelingsrunde» er **flyttet ut** til `14 Plasstildeling/01 Runder/forvalte_runder.feature`, fordi den brukes i plasstildelingen. Den er ikke lenger en del av denne oppgaven. Regelen om at opptaket tilbyr søknad på ledige studieplasser står fortsatt her. Regelen om krav om studierett er satt til `@draft` (var `@wont`), og skal ikke bygges nå.
 - **2026-10-12, `@OPT-OVO-FRI-001`:** Avklart i scenarioet «Sette søknadsdato»: **utdanningstilbudene blir synlige for søkerne først når opptaket åpner for søknad**. Steget sier nå «blir synlige for søkere fra denne datoen».
 - **2026-10-12, alle fire kravene:** Har fått `@scope-opprette-opptak-2027`, og oppgaven hører til [scope-opprette-opptak-2027](../../scope-opprette-opptak-2027.md). Ingen endring i hva som skal bygges.
+- **2026-10-12, `@OPT-OVO-SAM-001`:** Avklart at det ikke er gitt at skillet mellom samordna og lokale opptak skal bevares. Det er derfor nok at brukergrensesnittet ikke gjør det mulig å legge til andre organisasjoner eller sette saksbehandlertildeling i et lokalt opptak. API-et trenger ikke sperre det.
 
 ## Åpne spørsmål
 
