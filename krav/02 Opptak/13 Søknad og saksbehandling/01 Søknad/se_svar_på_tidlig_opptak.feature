@@ -26,7 +26,7 @@ Egenskap: Se svar på søknad om tidlig opptak
   # "Publisert" betyr at opptaksforvalter har gjennomført tidligopptaket. Det er ingen
   # egen publiseringsdato (avklart 09.10.2026, review av PR #654). Svaret skal aldri bli
   # synlig før det finnes noe å svare på.
-  Regel: Svaret på tidlig opptak publiseres når tidligopptaket er gjennomført
+  Regel: Svaret på tidlig opptak blir synlig når tidligopptaket er gjennomført
 
     Scenario: Svaret er ikke synlig før tidligopptaket er gjennomført
       Gitt at tidligopptaket ikke er gjennomført

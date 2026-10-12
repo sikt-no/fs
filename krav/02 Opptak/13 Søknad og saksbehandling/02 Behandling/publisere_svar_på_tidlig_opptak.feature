@@ -26,20 +26,20 @@ Egenskap: Publisere svar på tidlig opptak
     Gitt at opptaksforvalter ved forvaltende organisasjon er innlogget
     Og at opptaket "Samordna opptak 2027" er åpnet for tidlig opptak
 
-  Regel: Svaret publiseres når tidligopptaket gjennomføres
+  Regel: Svaret blir synlig for søkerne når tidligopptaket gjennomføres
 
-    Scenario: Svaret er ikke publisert før tidligopptaket er gjennomført
+    Scenario: Svaret er ikke synlig før tidligopptaket er gjennomført
       Gitt at tidligopptaket ikke er gjennomført
-      Så er ikke svaret på tidlig opptak publisert til søkerne
+      Så er ikke svaret på tidlig opptak synlig for søkerne
 
-    Scenario: Prøvekjøring publiserer ikke svaret
+    Scenario: Prøvekjøring gjør ikke svaret synlig
       Gitt at tidligopptaket ikke er gjennomført
       Når opptaksforvalter prøvekjører tidligopptaket
-      Så er ikke svaret på tidlig opptak publisert til søkerne
+      Så er ikke svaret på tidlig opptak synlig for søkerne
 
-    Scenario: Svaret publiseres når tidligopptaket gjennomføres
+    Scenario: Svaret blir synlig for søkerne når tidligopptaket gjennomføres
       Når opptaksforvalter gjennomfører tidligopptaket
-      Så er svaret på tidlig opptak publisert til søkerne
+      Så er svaret på tidlig opptak synlig for søkerne
 
   # Hva søkeren faktisk ser før og etter at svaret er publisert, er beskrevet i
   # krav/02 Opptak/13 Søknad og saksbehandling/01 Søknad/se_svar_på_tidlig_opptak.feature.
