@@ -59,7 +59,7 @@ Egenskap: Gjennomføre plasstildeling
   # - TAKE-283: ventelistenummer og rangering over 9 999, eller prioritet over 99, feller hele kjøringen.
   #
   # Innstillinger og grensetilfeller:
-  # - Innstillingen «maks antall tilbud per søker per plasstildelingsrunde» (innstillinger.feature) mot etterfylling,
+  # - Innstillingen «tak for antall tilbud per plasstildelingsrunde» (01 Runder/forvalte_runder.feature) mot etterfylling,
   #   der søkeren kan ha flere tilbud. Hvordan henger de sammen? Unntak for deltid under 60 stp?
   #
   # AVKLART 08.10.2026: Tilbudsgaranti fra tidligopptaket hører med, og gir tilbud i hovedtildelingen,
