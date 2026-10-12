@@ -115,6 +115,33 @@ Egenskap: Frister og hendelser for opptak
       Når opptaksforvalter setter første svarfrist til "2027-07-20 23:59"
       Så kan søkere se når de senest kan forvente å måtte svare på et eventuelt tilbud
 
+  Regel: Alderen beregnes fra opptakets dato for aldersberegning
+
+    Scenario: Alder beregnes fra datoen opptaket har satt
+      Gitt at opptaket har dato for aldersberegning "2027-04-15"
+      Og at søkeren er født "2005-06-01"
+      Når søknaden behandles
+      Så er søkerens opptaksalder 21 år
+
+    Scenario: Standarddato for aldersberegning
+      Gitt at opptaket ikke har dato for aldersberegning
+      Og at opptaket har dato for publisering av resultat "2027-07-15"
+      Og at søkeren er født "2005-09-01"
+      Når søknaden behandles
+      Så er søkerens opptaksalder 22 år
+
+    Scenario: Opptak med aldersregler mangler dato for aldersberegning
+      Gitt at regelverket i opptaket har en aldersgrense eller gir alderspoeng
+      Og at opptaket verken har dato for aldersberegning eller dato for publisering av resultat
+      Når søknaden behandles
+      Så behandles ikke søknaden før opptaket har en av datoene
+
+    Scenario: Opptak uten aldersregler trenger ikke dato for aldersberegning
+      Gitt at regelverket i opptaket verken har aldersgrense eller gir alderspoeng
+      Og at opptaket verken har dato for aldersberegning eller dato for publisering av resultat
+      Når søknaden behandles
+      Så behandles søknaden uten dato for aldersberegning
+
   Regel: Opptaksforvalter ved forvaltende organisasjon må kunne sette frist for endring av utdanningsbakgrunn
 
     Scenario: Sette frist for at saksbehandler kan endre søkers utdanningsbakgrunn
