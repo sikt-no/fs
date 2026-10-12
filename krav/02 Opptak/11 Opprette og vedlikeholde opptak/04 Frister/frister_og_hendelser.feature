@@ -102,7 +102,7 @@ Egenskap: Frister og hendelser for opptak
     Scenario: Sette frist for poenggrenser for tidlig opptak
       Gitt at opptaket har aktivert tidlig opptak
       Når opptaksforvalter setter frist for å sette poenggrenser for tidlig opptak til "2027-02-15 23:59"
-      Så må deltagende organisasjoner sette poenggrenser for tidlig opptak innen denne fristen
+      Så må deltakende organisasjoner sette poenggrenser for tidlig opptak innen denne fristen
 
   Regel: Opptaksforvalter ved forvaltende organisasjon må kunne sette informasjonsdatoer for opptaksresultat
     # Faktiske svarfrister og publiseringstidspunkter bestemmes ut fra innstillinger på plasstildelingsrunde og når plasstildelingensrundene faktisk blir publisert.

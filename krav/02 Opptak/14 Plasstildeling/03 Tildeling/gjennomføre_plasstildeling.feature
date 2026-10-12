@@ -61,7 +61,10 @@ Egenskap: Gjennomføre plasstildeling
   # Innstillinger og grensetilfeller:
   # - Innstillingen «maks antall tilbud per søker per plasstildelingsrunde» (innstillinger.feature) mot etterfylling,
   #   der søkeren kan ha flere tilbud. Hvordan henger de sammen? Unntak for deltid under 60 stp?
-  # - Tidligopptak: tilsagn som gir tilbudsgaranti i hovedtildelingen (Confluence «Samordnet plasstildeling»). Hører det med?
+  #
+  # AVKLART 08.10.2026: Tilbudsgaranti fra tidligopptaket hører med, og gir tilbud i hovedtildelingen,
+  # se regelen «Tilbudsgarantien gjelder i hovedopptaket» i
+  # 13 Søknad og saksbehandling/02 Behandling/gi_tilbudsgaranti_ved_tidlig_opptak.feature.
   #
   # Kilde: tasks/opptak/plasstildeling/design.md (prinsipp 1–3, rundetyper, del 2), oppgave.md (oppgave 5),
   # Confluence «2026-09-08 Raffinering plasstildeling», «Fra saksbehandling til plasstildeling»,
