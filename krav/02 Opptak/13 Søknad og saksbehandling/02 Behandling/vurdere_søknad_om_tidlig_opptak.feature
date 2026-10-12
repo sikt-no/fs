@@ -70,8 +70,8 @@
 #   Erstatter de to stegene fra 07.10, og stemmer med koden og skissen i FS-Admin.
 # - Systemet oppretter ingen mangel. Mangler dokumentasjonen, oppretter
 #   saksbehandleren en vanlig søknadsmangel (søknadsmangler.feature, PR #700), og
-#   søkeren får beskjed om den på samme måte som for andre mangler. Erstatter regelen fra 08.10 om at
-#   «ikke dokumentert» registreres som en mangel.
+#   søkeren får beskjed om den på samme måte som for andre mangler. Erstatter
+#   regelen fra 08.10 om at «ikke dokumentert» registreres som en mangel.
 # - Konklusjonen låses ikke. Saksbehandleren kan sette og endre den også etter
 #   at tidligopptaket er gjennomført. Det endrer ikke tilbudsgarantier som alt er
 #   gitt, eller svaret søkeren alt har fått, men en ny gjennomføring tar den med.
