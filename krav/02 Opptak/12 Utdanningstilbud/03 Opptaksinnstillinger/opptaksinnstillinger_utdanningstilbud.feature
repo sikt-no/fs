@@ -1,6 +1,6 @@
 # language: no
 # GitHub: #597
-@OPT-OPT-UTD-004 @must @draft
+@OPT-OPT-UTD-004 @must @draft @scope-utdanningstilbud-2027
 Egenskap: Opptaksinnstillinger per utdanningstilbud
   Som opptaksforvalter
   ønsker jeg å sette opptaksinnstillinger per utdanningstilbud
@@ -8,7 +8,7 @@ Egenskap: Opptaksinnstillinger per utdanningstilbud
 
   # Opptaksforvalter ved deltakende organisasjon kan sette innstillinger på egne utdanningstilbud.
   # Opptaksforvalter ved forvaltende organisasjon kan sette innstillinger på alle utdanningstilbud.
-  # Innstillinger for flere utdanningstilbud av gangen står i sette_standardinnstillinger.feature (#599).
+  # Innstillinger for flere utdanningstilbud av gangen står i sette_innstillinger_for_flere_utdanningstilbud.feature (#599).
   # Antall studieplasser står i sette_studieplasser_og_antall_tilbud.feature (#596).
   # Tidlig søknadsfrist og dokumentasjonsfrist står i 04 Behandle et utdanningstilbud/sette_tidlig_søknadsfrist.feature (SHI-708).
   Bakgrunn:

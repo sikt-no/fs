@@ -1,6 +1,6 @@
 # language: no
 # Jira: SHI-708
-@OPT-OPT-UTD-025 @must @draft
+@OPT-OPT-UTD-025 @must @draft @scope-utdanningstilbud-2027
 Egenskap: Sette tidlig søknadsfrist og dokumentasjonsfrist på utdanningstilbudet
   Som opptaksforvalter
   ønsker jeg å sette tidlig søknadsfrist og tidlig dokumentasjonsfrist per utdanningstilbud

@@ -1,7 +1,7 @@
 # language: no
 # GitHub: #599
-@OPT-OPT-UTD-008 @must @draft
-Egenskap: Sette standardinnstillinger for flere utdanningstilbud
+@OPT-OPT-UTD-008 @must @draft @scope-innstillinger-for-flere-utdanningstilbud
+Egenskap: Sette innstillinger for flere utdanningstilbud
   Som opptaksforvalter
   ønsker jeg å sette innstillinger som gjelder for flere utdanningstilbud av gangen
   slik at jeg ikke må sette opp hvert utdanningstilbud for seg.
@@ -26,8 +26,8 @@ Egenskap: Sette standardinnstillinger for flere utdanningstilbud
   # som absolutte tall per utdanningskvote for hvert utdanningstilbud i hver plasstildelingsrunde.
 
 # ÅPNE SPØRSMÅL:
-# - Er en standardinnstilling en mal som utdanningstilbudene arver, slik at en endring slår gjennom
-#   på alle som ikke har egen innstilling? Eller er det en engangsoppdatering av de valgte tilbudene?
-# - Kan et enkelt utdanningstilbud avvike fra standardinnstillingen?
-# - Hvilke innstillinger kan settes som standard (regelverk, plassflyt, plasstildelingsrunder, tilbudsgaranti)?
-# - Gjelder standarden for hele opptaket, for en organisasjon, eller for et utvalg tilbud?
+# - Er innstillingene en mal som utdanningstilbudene arver, slik at en endring slår gjennom
+#   på alle som ikke har en egen innstilling? Eller er det en engangsoppdatering av de valgte utdanningstilbudene?
+# - Kan et enkelt utdanningstilbud avvike fra innstillingene som er satt for flere utdanningstilbud?
+# - Hvilke innstillinger kan settes for flere utdanningstilbud av gangen (regelverk, plassflyt, plasstildelingsrunder, tilbudsgaranti)?
+# - Gjelder innstillingene for hele opptaket, for en organisasjon, eller for et utvalg utdanningstilbud?

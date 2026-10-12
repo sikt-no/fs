@@ -1,6 +1,6 @@
 # language: no
 # Jira: SHI-687
-@OPT-OPT-UTD-009 @must @draft
+@OPT-OPT-UTD-009 @must @draft @scope-utdanningstilbud-2027
 Egenskap: Vise URL til beskrivelse av utdanningstilbudet
   Som opptaksforvalter
   ønsker jeg å se URL-en til beskrivelsen av utdanningstilbudet

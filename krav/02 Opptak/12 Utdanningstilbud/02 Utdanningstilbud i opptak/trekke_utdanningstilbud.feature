@@ -1,7 +1,7 @@
 # language: no
 # GitHub: #595
 # Jira: SHI-709
-@OPT-OPT-UTD-003 @must @draft
+@OPT-OPT-UTD-003 @must @draft @scope-utdanningstilbud-2027
 Egenskap: Trekke utdanningstilbud fra opptak
   Som opptaksforvalter
   ønsker jeg å kunne trekke utdanningstilbud fra opptaket

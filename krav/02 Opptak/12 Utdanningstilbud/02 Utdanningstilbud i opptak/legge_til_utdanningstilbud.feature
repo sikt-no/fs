@@ -1,6 +1,6 @@
 # language: no
 # GitHub: #594
-@OPT-OPT-UTD-002 @must @draft
+@OPT-OPT-UTD-002 @must @draft @scope-utdanningstilbud-i-opptak-2027
 Egenskap: Legge til utdanningstilbud i opptak
   Som opptaksforvalter
   ønsker jeg å legge til utdanningstilbud i opptaket

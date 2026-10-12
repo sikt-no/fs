@@ -40,7 +40,7 @@ Denne listen sammenstiller begreper brukt i kravene (`krav/02 Opptak/`), design-
 | organisasjon | Generelt begrep for alle typer registrerte enheter | – | Institusjon | Nytt generelt begrep som erstatter «institusjon» (se `krav/README.md` terminologi) |
 | hendelseslogg | Logg over endringer på opptaket og det som hører til det, med hvem (rolle og organisasjon), hva, når, og verdien før og etter | – | – | Ny term (`hendelseslogg.feature`) |
 | hendelse | Én loggført endring i hendelsesloggen, med fast minimumsinnhold | – | – | Ny term (`hendelseslogg.feature`) |
-| standardinnstilling | Innstilling som settes for flere utdanningstilbud av gangen | – | – | Ny term (`sette_standardinnstillinger.feature`). Om det er en mal som arves, er uavklart |
+| standardinnstilling | Innstilling som settes for flere utdanningstilbud av gangen | – | – | Brukes ikke (2026-10-12). Kravet heter «Sette innstillinger for flere utdanningstilbud» (`sette_innstillinger_for_flere_utdanningstilbud.feature`). Om innstillingene er en mal som arves, er uavklart |
 
 ## Utdanningstilbud og søknad
 

@@ -1,6 +1,6 @@
 # language: no
 # GitHub: #398
-@OPT-OPT-UTD-001 @must @draft
+@OPT-OPT-UTD-001 @must @draft @scope-utdanningstilbud-i-opptak-2027
 Egenskap: Listevisning og filtrering av utdanningstilbud i opptak
   Som opptaksforvalter
   ønsker jeg en oversikt over relevante utdanningstilbud i opptaket, med mulighet for filtrering

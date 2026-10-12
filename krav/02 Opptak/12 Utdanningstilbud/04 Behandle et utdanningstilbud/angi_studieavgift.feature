@@ -1,6 +1,6 @@
 # language: no
 # Jira: SHI-701
-@OPT-OPT-UTD-022 @must @draft
+@OPT-OPT-UTD-022 @must @draft @scope-utdanningstilbud-2027
 Egenskap: Angi informasjon om studieavgift
   Som opptaksforvalter
   ønsker jeg å angi informasjon om eventuell studieavgift for utdanningstilbudet
