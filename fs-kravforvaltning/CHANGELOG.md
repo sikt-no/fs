@@ -1,5 +1,13 @@
 # krav-viewer
 
+## 1.2.1
+
+### Patch Changes
+
+- 6461615: Innstillingene som lagres i appen, som rekkefølgen på kolonnene i Spesifikasjoner, blir nå med etter omstart. Før kunne de siste endringene bli borte når appen ble avsluttet.
+- f36ff75: «Det finnes en ny versjon av main» vises ikke lenger når endringene på main bare gjelder selve appen.
+- fb10d34: Menyen på macOS viser «About FS Kravforvaltning» og «Quit FS Kravforvaltning», ikke «krav-viewer».
+
 ## 1.2.0
 
 ### Minor Changes
