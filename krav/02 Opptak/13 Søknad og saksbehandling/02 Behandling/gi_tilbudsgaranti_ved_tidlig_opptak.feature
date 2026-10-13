@@ -81,6 +81,10 @@
 #   fjernes tilbudsgarantien på det lavere. Dette er unntaket fra at en ny
 #   gjennomføring ikke fjerner tilbudsgarantier. Koden lar i dag den gamle
 #   tilbudsgarantien stå (TidligopptakTilbudsgarantiService), og må endres.
+#   (Bekreftet med fagperson 13.10.2026: tilbudsgarantien på det lavere
+#   søknadsalternativet fjernes. Har den første gjennomføringen overskrevet en
+#   annen kode, f.eks. en negativ garanti fra opptaksforvalter eller en
+#   reservasjon, går den koden tapt. Det er akseptert.)
 # - Tilbudsgarantien faller bort når søkeren fjerner søknadsalternativet eller
 #   trekker søknaden. Legger søkeren søknadsalternativet inn igjen før
 #   søknadsfristen for opptaket, gjelder tilbudsgarantien igjen, uansett
@@ -295,14 +299,7 @@ Egenskap: Gi tilbudsgaranti ved tidlig opptak
       Når opptaksforvalter gjennomfører tidligopptaket på nytt
       Så får søkeren tilbudsgaranti på "Sykepleie, høst 2027"
 
-    @openquestion
     Scenario: Tilbudsgarantien flyttes til et høyere prioritert søknadsalternativ ved ny gjennomføring
-      # ÅPNE SPØRSMÅL:
-      # - Skal tilbudsgarantien fra en tidligere gjennomføring på det lavere søknadsalternativet
-      #   fjernes, bli stående, eller bli stående og vises for opptaksforvalter i rapporten?
-      #   Første gjennomføring kan ha overskrevet en annen kode (f.eks. en negativ garanti fra
-      #   opptaksforvalter eller en reservasjon), som da går tapt hvis garantien fjernes.
-      #   Branchen STEK-503 lar den stå. Avklares med fagperson.
       Gitt saksbehandler har konkludert med at søkeren deltar i tidligopptaket
       Og søkeren fikk tilbudsgaranti på "Vernepleie, høst 2027" som prioritet 2 da tidligopptaket ble gjennomført
       Og søkeren når nå poenggrensen for "Sykepleie, høst 2027" som prioritet 1
