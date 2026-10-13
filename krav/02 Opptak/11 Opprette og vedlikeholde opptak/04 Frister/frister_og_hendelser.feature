@@ -1,5 +1,5 @@
 # language: no
-@OPT-OVO-FRI-001 @must @in-progress
+@OPT-OVO-FRI-001 @must @in-progress @scope-opprette-opptak-2027
 Egenskap: Frister og hendelser for opptak
   Som opptaksforvalter ved forvaltende organisasjon
   ønsker jeg å sette frister som styrer tidsrammene for opptaket
@@ -31,10 +31,11 @@ Egenskap: Frister og hendelser for opptak
 
   Regel: Opptaksforvalter ved forvaltende organisasjon må kunne åpne for søkning
 
+    # AVKLART 2026-10-12: Utdanningstilbudene blir synlige for søkerne først når opptaket åpner for søknad.
     Scenario: Sette søknadsdato
       Når opptaksforvalter setter at søknaden åpner "2027-02-01"
       Så kan søkere opprette og sende inn søknader fra denne datoen
-      Og utdanningstilbudene i opptaket er synlige for søkere
+      Og utdanningstilbudene i opptaket blir synlige for søkere fra denne datoen
 
   Regel: Opptaksforvalter ved forvaltende organisasjon må kunne sette generell søknadsfrist for opptaket
 
@@ -102,18 +103,34 @@ Egenskap: Frister og hendelser for opptak
     Scenario: Sette frist for poenggrenser for tidlig opptak
       Gitt at opptaket har aktivert tidlig opptak
       Når opptaksforvalter setter frist for å sette poenggrenser for tidlig opptak til "2027-02-15 23:59"
-      Så må deltagende organisasjoner sette poenggrenser for tidlig opptak innen denne fristen
+      Så må deltakende organisasjoner sette poenggrenser for tidlig opptak innen denne fristen
 
   Regel: Opptaksforvalter ved forvaltende organisasjon må kunne sette informasjonsdatoer for opptaksresultat
     # Faktiske svarfrister og publiseringstidspunkter bestemmes ut fra innstillinger på plasstildelingsrunde og når plasstildelingensrundene faktisk blir publisert.
 
     Scenario: Sette dato for når hovedopptaket publiseres og søker kan forvente svar
       Når opptaksforvalter setter dato for når hovedopptaket publiseres til "2027-07-15"
-      Så informeres søkere om når de kan forvente svar på søknaden fra første opptaksrunde
+      Så informeres søkere om når de kan forvente svar på søknaden fra første plasstildelingsrunde
 
     Scenario: Sette første svarfrist som informasjon til søkere
       Når opptaksforvalter setter første svarfrist til "2027-07-20 23:59"
       Så kan søkere se når de senest kan forvente å måtte svare på et eventuelt tilbud
+
+  Regel: Opptaksforvalter setter dato for aldersberegning
+
+    # Alderen søkeren har på denne datoen, brukes der regelverket har aldersgrenser,
+    # for eksempel for å avgjøre om søkeren kan konkurrere i førstegangsvitnemålskvoten.
+    # Selve utregningen av alderen skjer i saksbehandlingen, se
+    # 13 Søknad og saksbehandling/02 Behandling/automatisk_kvoteplassering.feature.
+
+    Scenario: Sette dato for aldersberegning
+      Når opptaksforvalter setter dato for aldersberegning til "2027-12-31"
+      Så har opptaket dato for aldersberegning "2027-12-31"
+
+    Scenario: Standarddato når datoen ikke er satt
+      Gitt at opptaksresultatene publiseres i 2027
+      Når opptaksforvalter ikke setter dato for aldersberegning
+      Så er opptakets dato for aldersberegning "2027-12-31"
 
   Regel: Opptaksforvalter ved forvaltende organisasjon må kunne sette frist for endring av utdanningsbakgrunn
 

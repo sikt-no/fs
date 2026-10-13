@@ -1,6 +1,6 @@
 # language: no
 # Jira: SHI-698
-@OPT-OPT-UTD-019 @must @draft
+@OPT-OPT-UTD-019 @must @draft @scope-utdanningstilbud-2027
 Egenskap: Vise endringslogg for utdanningstilbudet
   Som opptaksforvalter
   ønsker jeg å se en endringslogg for registreringene som gjøres på utdanningstilbudet

@@ -63,7 +63,7 @@ export interface ClaudeRunRequest {
   /** Andre skills vieweren kjenner fra før (plugins, personlige), så de kan avvises også før Claude har meldt dem */
   knownSkills?: string[];
   /**
-   * Utførekjøring (Spesifikasjoner, «Utfør i <repo>»): Claude kjører med kode-repoet som arbeidsmappe, med repoets
+   * Utførekjøring (tavla «Oppgaver», «Utfør i <repo>»): Claude kjører med kode-repoet som arbeidsmappe, med repoets
    * skills og CLAUDE.md, kan endre koden der og kjøre en avgrenset liste kommandoer. Kravrepoet får `--add-dir`, og
    * bare utforing.md kan endres i det. `skill`, `skills` og `dirs` brukes ikke da.
    */
@@ -149,13 +149,13 @@ export interface PtyInfo {
 }
 
 /** Skillene som kan velges i Claude-panelet; høyst én om gangen */
-export const CLAUDE_SKILLS = ['fs-krav', 'fs-krav-avvik', 'fs-specify', 'fs-specify-delta', 'fs-implementasjonsdetaljer', 'fs-verify'];
+export const CLAUDE_SKILLS = ['fs-scope', 'fs-krav', 'fs-krav-avvik', 'fs-specify', 'fs-specify-delta', 'fs-implementasjonsdetaljer', 'fs-verify'];
 
 /**
  * Skillene som vises i skillvelgeren. De andre i `CLAUDE_SKILLS` (fs-krav-avvik, fs-specify, fs-specify-delta) velges
- * ikke i panelet, men Claude kan bruke dem der de er tillatt, f.eks. med «Kjør fs-specify» i Spesifikasjoner.
+ * ikke i panelet, men Claude kan bruke dem der de er tillatt, f.eks. med «Kjør fs-specify» på tavla.
  */
-export const CLAUDE_SKILLS_SHOWN = ['fs-krav', 'fs-implementasjonsdetaljer', 'fs-verify'];
+export const CLAUDE_SKILLS_SHOWN = ['fs-scope', 'fs-krav', 'fs-implementasjonsdetaljer', 'fs-verify'];
 
 /** Kodeklonene fs-verify leter i, med standardstien backenden fant */
 export const CODE_DIRS = ['fs-admin', 'fs-plattform', 'min-kompetanse'] as const;
@@ -217,6 +217,8 @@ export interface MainInfo {
   author: string | null;
   /** Tidspunktet for siste commit (ISO) */
   date: string | null;
+  /** Alle endringene er i appen selv (`fs-kravforvaltning/`), og ingen i kravene: da varsles det ikke */
+  onlyApp?: boolean;
 }
 
 export interface MainStatus {

@@ -1,6 +1,6 @@
 # language: no
 # GitHub: #593
-@OPT-OPT-UTD-005 @must @draft
+@OPT-OPT-UTD-005 @must @draft @scope-utdanningstilbud-i-opptak-2027
 Egenskap: Hente utdanninger fra utdanningsregisteret
   Som opptaksforvalter
   ønsker jeg at opptaket får tak i relevante utdanninger og utdanningsinstanser fra utdanningsregisteret

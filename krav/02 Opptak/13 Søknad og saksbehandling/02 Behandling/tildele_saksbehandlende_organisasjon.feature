@@ -6,7 +6,7 @@ Egenskap: Tildele saksbehandlende organisasjon
   ønsker jeg å bestemme hvilken organisasjon som saksbehandler hvert søknadsalternativ
   slik at søkeren får færrest mulig saksbehandlende organisasjoner og søknaden behandles i samsvar med regelverket.
 
-  I et samordnet opptak søker søkeren på utdanningstilbud ved flere læresteder i én søknad.
+  I et samordna opptak søker søkeren på utdanningstilbud ved flere læresteder i én søknad.
   Hvert søknadsalternativ må saksbehandles av én organisasjon, som vurderer dokumentasjonen,
   setter grunnlaget og regner ut poengene. Som hovedregel saksbehandler lærestedet søkeren har
   prioritert høyest hele søknaden, også studiene ved de andre lærestedene. Da har søkeren én
@@ -28,53 +28,53 @@ Egenskap: Tildele saksbehandlende organisasjon
   Bakgrunn:
     Gitt at opptaket "Samordna opptak 2027" forvaltes av HK-dir
     Og at "Universitetet i Oslo", "UiT Norges arktiske universitet", "NTNU" og "Høgskulen på Vestlandet" deltar i opptaket
-    Og at opptaket har en standard tildelingsregel med «Alle som deltar i opptaket»
+    Og at opptaket har en standard saksbehandlertildelingsregel med «Alle som deltar i opptaket»
 
   # ── 1. Oppsett ───────────────────────────────────────────────
 
   Regel: Opptaksforvalteren ved forvaltende organisasjon setter opp tildelingsreglene for opptaket
 
-    Scenario: Opprette tildelingsregel
-      Når opptaksforvalteren ved HK-dir oppretter en tildelingsregel med følgende opplysninger
+    Scenario: Opprette saksbehandlertildelingsregel
+      Når opptaksforvalteren ved HK-dir oppretter en saksbehandlertildelingsregel med følgende opplysninger
         | felt                      | verdi                    |
         | Kode                      | JOU                      |
         | Beskrivelse               | Journalistutdanning      |
         | Hvem skal saksbehandle    | Tilbydere i samme sektor |
         | Aktiv                     | Ja                       |
-      Så finnes tildelingsregelen "JOU" i opptaket
+      Så finnes saksbehandlertildelingsregelen "JOU" i opptaket
 
-    Scenario: Nytt opptak får standard tildelingsregel med «Alle som deltar i opptaket»
+    Scenario: Nytt opptak får standard saksbehandlertildelingsregel med «Alle som deltar i opptaket»
       Når opptaksforvalteren ved HK-dir oppretter et nytt opptak
-      Så har opptaket en aktiv standard tildelingsregel med «Alle som deltar i opptaket»
+      Så har opptaket en aktiv standard saksbehandlertildelingsregel med «Alle som deltar i opptaket»
 
-    Scenario: Bytte standard tildelingsregel
-      Når opptaksforvalteren ved HK-dir velger "UVH" som standard tildelingsregel for opptaket
-      Så fordeles søknadsalternativer til utdanningstilbud uten egen tildelingsregel etter "UVH"
+    Scenario: Bytte standard saksbehandlertildelingsregel
+      Når opptaksforvalteren ved HK-dir velger "UVH" som standard saksbehandlertildelingsregel for opptaket
+      Så fordeles søknadsalternativer til utdanningstilbud uten egen saksbehandlertildelingsregel etter "UVH"
 
-    Scenario: Opptaket kan bare ha én aktiv tildelingsregel med «Alle som deltar i opptaket»
-      Gitt at opptaket har en aktiv tildelingsregel med «Alle som deltar i opptaket»
-      Når opptaksforvalteren ved HK-dir oppretter en ny aktiv tildelingsregel med «Alle som deltar i opptaket»
-      Så avvises tildelingsregelen
+    Scenario: Opptaket kan bare ha én aktiv saksbehandlertildelingsregel med «Alle som deltar i opptaket»
+      Gitt at opptaket har en aktiv saksbehandlertildelingsregel med «Alle som deltar i opptaket»
+      Når opptaksforvalteren ved HK-dir oppretter en ny aktiv saksbehandlertildelingsregel med «Alle som deltar i opptaket»
+      Så avvises saksbehandlertildelingsregelen
 
-    Scenario: Se hvilke utdanningstilbud som er knyttet til tildelingsregelen
-      Gitt at 12 utdanningstilbud er knyttet til tildelingsregelen "JOU"
-      Når opptaksforvalteren ved HK-dir åpner tildelingsregelen "JOU"
+    Scenario: Se hvilke utdanningstilbud som er knyttet til saksbehandlertildelingsregelen
+      Gitt at 12 utdanningstilbud er knyttet til saksbehandlertildelingsregelen "JOU"
+      Når opptaksforvalteren ved HK-dir åpner saksbehandlertildelingsregelen "JOU"
       Så ser opptaksforvalteren at "JOU" er knyttet til 12 utdanningstilbud
       Og opptaksforvalteren kan se utdanningstilbudene som er knyttet til "JOU"
 
-    Scenario: Slette tildelingsregel som ikke er knyttet til utdanningstilbud
-      Gitt at ingen utdanningstilbud er knyttet til tildelingsregelen "JOU"
-      Når opptaksforvalteren ved HK-dir sletter tildelingsregelen "JOU"
-      Så finnes ikke tildelingsregelen "JOU" i opptaket
+    Scenario: Slette saksbehandlertildelingsregel som ikke er knyttet til utdanningstilbud
+      Gitt at ingen utdanningstilbud er knyttet til saksbehandlertildelingsregelen "JOU"
+      Når opptaksforvalteren ved HK-dir sletter saksbehandlertildelingsregelen "JOU"
+      Så finnes ikke saksbehandlertildelingsregelen "JOU" i opptaket
 
-    Scenario: Tildelingsregel som er knyttet til utdanningstilbud kan ikke slettes
-      Gitt at utdanningstilbud er knyttet til tildelingsregelen "JOU"
-      Når opptaksforvalteren ved HK-dir åpner tildelingsregelen "JOU"
+    Scenario: Saksbehandlertildelingsregel som er knyttet til utdanningstilbud kan ikke slettes
+      Gitt at utdanningstilbud er knyttet til saksbehandlertildelingsregelen "JOU"
+      Når opptaksforvalteren ved HK-dir åpner saksbehandlertildelingsregelen "JOU"
       Så ser ikke opptaksforvalteren muligheten til å slette "JOU"
 
-    Scenariomal: Tildelingsregel som <bruk> kan ikke deaktiveres
-      Gitt at tildelingsregelen "SPE" <bruk>
-      Når opptaksforvalteren ved HK-dir deaktiverer tildelingsregelen "SPE"
+    Scenariomal: Saksbehandlertildelingsregel som <bruk> kan ikke deaktiveres
+      Gitt at saksbehandlertildelingsregelen "SPE" <bruk>
+      Når opptaksforvalteren ved HK-dir deaktiverer saksbehandlertildelingsregelen "SPE"
       Så avvises endringen
 
       Eksempler:
@@ -91,52 +91,52 @@ Egenskap: Tildele saksbehandlende organisasjon
       Når opptaksforvalteren ved Universitetet i Oslo åpner tildelingsreglene for opptaket
       Så ser ikke opptaksforvalteren muligheten til å opprette, endre eller slette tildelingsregler
 
-  # Lærestedets valg av tildelingsregel per utdanningstilbud står i opptaksinnstillinger_utdanningstilbud.feature (@OPT-OPT-UTD-004).
+  # Lærestedets valg av saksbehandlertildelingsregel per utdanningstilbud står i opptaksinnstillinger_utdanningstilbud.feature (@OPT-OPT-UTD-004).
 
   # ── 2. Fordeling ─────────────────────────────────────────────
 
   Regel: Ved «Alle som deltar i opptaket» saksbehandler lærestedet søkeren har prioritert høyest
 
     Scenario: Lærestedet på første prioritet saksbehandler hele søknaden
-      Gitt at søkeren har en utdanningsbakgrunn uten unntak på standard tildelingsregel
+      Gitt at søkeren har en utdanningsbakgrunn uten unntak på standard saksbehandlertildelingsregel
       Og at søkeren har søkt "Informatikk, UiO", "Historie, UiT" og "Sykepleie, NTNU" i den rekkefølgen
-      Og at ingen av utdanningstilbudene har egen tildelingsregel
+      Og at ingen av utdanningstilbudene har egen saksbehandlertildelingsregel
       Når søknadsalternativene fordeles
       Så er "Universitetet i Oslo" saksbehandlende organisasjon for alle søknadsalternativene
 
-    Scenario: Søknadsalternativ med egen tildelingsregel avgjør ikke hvem som saksbehandler resten av søknaden
-      Gitt at "Utøvende musikk, NTNU" har tildelingsregelen "UVH"
+    Scenario: Søknadsalternativ med egen saksbehandlertildelingsregel avgjør ikke hvem som saksbehandler resten av søknaden
+      Gitt at "Utøvende musikk, NTNU" har saksbehandlertildelingsregelen "UVH"
       Og at søkeren har søkt "Utøvende musikk, NTNU", "Historie, UiT" og "Informatikk, UiO" i den rekkefølgen
       Når søknadsalternativene fordeles
       Så er "NTNU" saksbehandlende organisasjon for "Utøvende musikk, NTNU"
       Og "UiT Norges arktiske universitet" er saksbehandlende organisasjon for "Historie, UiT" og "Informatikk, UiO"
 
-  Regel: Ved «Bare tilbyderen – også for studieønsker uten egen regel» saksbehandler tilbyderen også søknadsalternativene uten egen tildelingsregel
+  Regel: Ved «Bare tilbyderen – også for studieønsker uten egen regel» saksbehandler tilbyderen også søknadsalternativene uten egen saksbehandlertildelingsregel
 
-    Scenario: Tilbyderen saksbehandler søknadsalternativene uten egen tildelingsregel
-      Gitt at "Utøvende musikk, NTNU" har tildelingsregelen "SPE"
+    Scenario: Tilbyderen saksbehandler søknadsalternativene uten egen saksbehandlertildelingsregel
+      Gitt at "Utøvende musikk, NTNU" har saksbehandlertildelingsregelen "SPE"
       Og at søkeren har søkt "Informatikk, UiO" og "Utøvende musikk, NTNU" i den rekkefølgen
       Når søknadsalternativene fordeles
       Så er "NTNU" saksbehandlende organisasjon for begge søknadsalternativene
 
-    Scenario: Tilbyderen søkeren har prioritert høyest saksbehandler søknadsalternativene uten egen tildelingsregel
-      Gitt at "Utøvende musikk, NTNU" og "Musikkpedagogikk, HVL" har tildelingsregelen "SPE"
+    Scenario: Tilbyderen søkeren har prioritert høyest saksbehandler søknadsalternativene uten egen saksbehandlertildelingsregel
+      Gitt at "Utøvende musikk, NTNU" og "Musikkpedagogikk, HVL" har saksbehandlertildelingsregelen "SPE"
       Og at søkeren har søkt "Informatikk, UiO", "Musikkpedagogikk, HVL" og "Utøvende musikk, NTNU" i den rekkefølgen
       Når søknadsalternativene fordeles
       Så er "Høgskulen på Vestlandet" saksbehandlende organisasjon for "Musikkpedagogikk, HVL" og "Informatikk, UiO"
       Og "NTNU" er saksbehandlende organisasjon for "Utøvende musikk, NTNU"
 
-  Regel: Ved «Bare tilbyderen – bare dette studieønsket» saksbehandler tilbyderen bare søknadsalternativet med tildelingsregelen
+  Regel: Ved «Bare tilbyderen – bare dette studieønsket» saksbehandler tilbyderen bare søknadsalternativet med saksbehandlertildelingsregelen
 
     Scenario: Tilbyderen saksbehandler ikke søkerens andre søknadsalternativer
-      Gitt at "Utøvende musikk, NTNU" har tildelingsregelen "UVH"
+      Gitt at "Utøvende musikk, NTNU" har saksbehandlertildelingsregelen "UVH"
       Og at søkeren har søkt "Utøvende musikk, NTNU" og "Informatikk, UiO" i den rekkefølgen
       Når søknadsalternativene fordeles
       Så er "NTNU" saksbehandlende organisasjon for "Utøvende musikk, NTNU"
       Og "Universitetet i Oslo" er saksbehandlende organisasjon for "Informatikk, UiO"
 
     Scenario: Hver tilbyder saksbehandler sitt eget søknadsalternativ når standardregelen gjelder bare søknadsalternativet
-      Gitt at opptaket "Fagskoleopptak 2027" har en standard tildelingsregel med «Bare tilbyderen – bare dette studieønsket»
+      Gitt at opptaket "Fagskoleopptak 2027" har en standard saksbehandlertildelingsregel med «Bare tilbyderen – bare dette studieønsket»
       Og at søkeren har søkt "Elektrofag, Fagskolen Innlandet" og "Helsefag, Fagskolen i Viken" i "Fagskoleopptak 2027"
       Når søknadsalternativene fordeles
       Så er "Fagskolen Innlandet" saksbehandlende organisasjon for "Elektrofag, Fagskolen Innlandet"
@@ -145,34 +145,34 @@ Egenskap: Tildele saksbehandlende organisasjon
   Regel: Ved «Tilbydere i samme sektor» saksbehandler én organisasjon alle søknadsalternativene i sektoren
 
     Scenario: Tilbyderen søkeren har prioritert høyest i sektoren saksbehandler hele sektoren
-      Gitt at "Journalistikk, HVL" og "Journalistikk, UiT" har tildelingsregelen "JOU"
+      Gitt at "Journalistikk, HVL" og "Journalistikk, UiT" har saksbehandlertildelingsregelen "JOU"
       Og at søkeren har søkt "Informatikk, UiO", "Journalistikk, HVL" og "Journalistikk, UiT" i den rekkefølgen
       Når søknadsalternativene fordeles
       Så er "Høgskulen på Vestlandet" saksbehandlende organisasjon for alle søknadsalternativene
 
-    Scenario: Organisasjonen som er valgt på tildelingsregelen saksbehandler hele sektoren
-      Gitt at "Journalistikk, HVL" og "Journalistikk, UiT" har tildelingsregelen "JOU"
+    Scenario: Organisasjonen som er valgt på saksbehandlertildelingsregelen saksbehandler hele sektoren
+      Gitt at "Journalistikk, HVL" og "Journalistikk, UiT" har saksbehandlertildelingsregelen "JOU"
       Og at "UiT Norges arktiske universitet" er valgt som organisasjon på "JOU"
       Og at søkeren har søkt "Journalistikk, HVL" og "Journalistikk, UiT" i den rekkefølgen
       Når søknadsalternativene fordeles
       Så er "UiT Norges arktiske universitet" saksbehandlende organisasjon for begge søknadsalternativene
 
     Scenario: Søknadsalternativer i ulike sektorer fordeles hver for seg
-      Gitt at "Paramedisin, NTNU" har tildelingsregelen "PAP"
-      Og at "Journalistikk, HVL" har tildelingsregelen "JOU"
+      Gitt at "Paramedisin, NTNU" har saksbehandlertildelingsregelen "PAP"
+      Og at "Journalistikk, HVL" har saksbehandlertildelingsregelen "JOU"
       Og at søkeren har søkt "Paramedisin, NTNU", "Journalistikk, HVL" og "Informatikk, UiO" i den rekkefølgen
       Når søknadsalternativene fordeles
       Så er "NTNU" saksbehandlende organisasjon for "Paramedisin, NTNU" og "Informatikk, UiO"
       Og "Høgskulen på Vestlandet" er saksbehandlende organisasjon for "Journalistikk, HVL"
 
-    Scenario: Sektoren er lærestedene som har utdanningstilbud med samme tildelingsregel
-      Gitt at "Journalistikk, HVL" og "Journalistikk, UiT" har tildelingsregelen "JOU"
-      Når opptaksforvalteren ved NTNU velger tildelingsregelen "JOU" for "Journalistikk, NTNU"
+    Scenario: Sektoren er lærestedene som har utdanningstilbud med samme saksbehandlertildelingsregel
+      Gitt at "Journalistikk, HVL" og "Journalistikk, UiT" har saksbehandlertildelingsregelen "JOU"
+      Når opptaksforvalteren ved NTNU velger saksbehandlertildelingsregelen "JOU" for "Journalistikk, NTNU"
       Så er "NTNU" med i sektoren for "JOU"
 
-    Scenario: Søkerens prioritering avgjør hvem som saksbehandler søknadsalternativene uten egen tildelingsregel
-      Gitt at "Journalistikk, HVL" har tildelingsregelen "JOU"
-      Og at "Utøvende musikk, NTNU" har tildelingsregelen "SPE"
+    Scenario: Søkerens prioritering avgjør hvem som saksbehandler søknadsalternativene uten egen saksbehandlertildelingsregel
+      Gitt at "Journalistikk, HVL" har saksbehandlertildelingsregelen "JOU"
+      Og at "Utøvende musikk, NTNU" har saksbehandlertildelingsregelen "SPE"
       Og at søkeren har søkt "Journalistikk, HVL", "Utøvende musikk, NTNU" og "Informatikk, UiO" i den rekkefølgen
       Når søknadsalternativene fordeles
       Så er "Høgskulen på Vestlandet" saksbehandlende organisasjon for "Journalistikk, HVL" og "Informatikk, UiO"
@@ -183,7 +183,7 @@ Egenskap: Tildele saksbehandlende organisasjon
 
     Scenariomal: Opptaksforvalteren kan velge <organisasjon> som organisasjon for sektoren
       Når opptaksforvalteren ved HK-dir velger "<organisasjon>" som organisasjon på "JOU"
-      Så saksbehandler "<organisasjon>" søknadsalternativene med tildelingsregelen "JOU"
+      Så saksbehandler "<organisasjon>" søknadsalternativene med saksbehandlertildelingsregelen "JOU"
 
       Eksempler:
         | organisasjon                    |
@@ -195,14 +195,14 @@ Egenskap: Tildele saksbehandlende organisasjon
       Når opptaksforvalteren ved HK-dir velger organisasjon på "JOU"
       Så ser ikke opptaksforvalteren "Universitetet i Bergen" blant valgene
 
-  Regel: Unntak for utdanningsbakgrunn og ledige studieplasser overstyrer tildelingsregelen
+  Regel: Unntak for utdanningsbakgrunn og ledige studieplasser overstyrer saksbehandlertildelingsregelen
 
     Scenario: Legge til unntak for utdanningsbakgrunn
-      Når opptaksforvalteren ved HK-dir legger til følgende unntak på tildelingsregelen "JOU"
+      Når opptaksforvalteren ved HK-dir legger til følgende unntak på saksbehandlertildelingsregelen "JOU"
         | utdanningsbakgrunn  | fordeles til |
         | Utenlandsk          | HK-dir       |
         | Rudolf Steinerskole | HK-dir       |
-      Så gjelder unntakene for søknadsalternativene med tildelingsregelen "JOU"
+      Så gjelder unntakene for søknadsalternativene med saksbehandlertildelingsregelen "JOU"
 
     Scenariomal: HK-dir saksbehandler hele søknaden når søkeren har utdanningsbakgrunn <utdanningsbakgrunn>
       Gitt at tildelingsreglene har unntak som fordeler "<utdanningsbakgrunn>" til HK-dir
@@ -224,18 +224,18 @@ Egenskap: Tildele saksbehandlende organisasjon
       Og "UiT Norges arktiske universitet" er saksbehandlende organisasjon for "Historie, UiT"
       Og "NTNU" er saksbehandlende organisasjon for "Sykepleie, NTNU"
       # AVKLART 07.10.2026 i PR #684: søkere med realkompetanse saksbehandles alltid av tilbyderen.
-      # Det er ikke et unntak opptaksforvalteren legger på tildelingsregelen.
+      # Det er ikke et unntak opptaksforvalteren legger på saksbehandlertildelingsregelen.
 
-    Scenario: Unntaket går foran tildelingsregel der bare tilbyderen saksbehandler
-      Gitt at "Utøvende musikk, NTNU" har tildelingsregelen "SPE"
+    Scenario: Unntaket går foran saksbehandlertildelingsregel der bare tilbyderen saksbehandler
+      Gitt at "Utøvende musikk, NTNU" har saksbehandlertildelingsregelen "SPE"
       Og at "SPE" har unntak som fordeler "Utenlandsk" til HK-dir
       Og at søkeren har utdanningsbakgrunn "Utenlandsk"
       Og at søkeren har søkt "Informatikk, UiO" og "Utøvende musikk, NTNU" i den rekkefølgen
       Når søknadsalternativene fordeles
       Så er "HK-dir" saksbehandlende organisasjon for begge søknadsalternativene
 
-    Scenario: Tildelingsregel uten unntak for søkerens utdanningsbakgrunn følges som vanlig
-      Gitt at "Utøvende musikk, NTNU" har tildelingsregelen "UVH" uten unntak
+    Scenario: Saksbehandlertildelingsregel uten unntak for søkerens utdanningsbakgrunn følges som vanlig
+      Gitt at "Utøvende musikk, NTNU" har saksbehandlertildelingsregelen "UVH" uten unntak
       Og at søkeren har utdanningsbakgrunn "Utenlandsk"
       Og at søkeren har søkt "Informatikk, UiO" og "Utøvende musikk, NTNU" i den rekkefølgen
       Når søknadsalternativene fordeles
@@ -248,7 +248,7 @@ Egenskap: Tildele saksbehandlende organisasjon
       Når søkeren søker ledig studieplass på "Informatikk, UiO"
       Så er "Universitetet i Oslo" saksbehandlende organisasjon for "Informatikk, UiO"
       # AVKLART 08.10.2026 i PR #684: tilbyderen saksbehandler alltid ledig studieplass. Det er ikke et
-      # valg per tildelingsregel, så avkrysningen «Ledige studieplasser fordeles til tilbyder» i designet
+      # valg per saksbehandlertildelingsregel, så avkrysningen «Ledige studieplasser fordeles til tilbyder» i designet
       # og koden er et avvik.
 
     Scenario: Ledig studieplass går foran unntak for utdanningsbakgrunn
@@ -320,19 +320,19 @@ Egenskap: Tildele saksbehandlende organisasjon
       Når søkeren prioriterer "Historie, UiT" foran "Informatikk, UiO"
       Så er "Universitetet i Oslo" fortsatt saksbehandlende organisasjon for begge søknadsalternativene
 
-    Scenario: Nytt søknadsalternativ uten egen tildelingsregel får samme saksbehandlende organisasjon som før
+    Scenario: Nytt søknadsalternativ uten egen saksbehandlertildelingsregel får samme saksbehandlende organisasjon som før
       Gitt at søkeren har søkt "Informatikk, UiO", og søknadsalternativet er fordelt til "Universitetet i Oslo"
       Når søkeren legger til "Sykepleie, NTNU" som første prioritet
       Så er "Universitetet i Oslo" saksbehandlende organisasjon for "Sykepleie, NTNU"
 
     Scenario: Nytt søknadsalternativ der bare tilbyderen saksbehandler endrer ikke søknadsalternativene som er fordelt
       Gitt at søkeren har søkt "Informatikk, UiO", og søknadsalternativet er fordelt til "Universitetet i Oslo"
-      Når søkeren legger til "Utøvende musikk, NTNU" med tildelingsregelen "SPE"
+      Når søkeren legger til "Utøvende musikk, NTNU" med saksbehandlertildelingsregelen "SPE"
       Så er "NTNU" saksbehandlende organisasjon for "Utøvende musikk, NTNU"
       Og "Universitetet i Oslo" er fortsatt saksbehandlende organisasjon for "Informatikk, UiO"
 
     Scenario: Sletting av søknadsalternativet fordelingen bygget på endrer ikke de andre søknadsalternativene
-      Gitt at søkeren har søkt "Utøvende musikk, NTNU" med tildelingsregelen "SPE" og "Informatikk, UiO"
+      Gitt at søkeren har søkt "Utøvende musikk, NTNU" med saksbehandlertildelingsregelen "SPE" og "Informatikk, UiO"
       Og at begge søknadsalternativene er fordelt til "NTNU"
       Når søkeren sletter "Utøvende musikk, NTNU"
       Så er "NTNU" fortsatt saksbehandlende organisasjon for "Informatikk, UiO"

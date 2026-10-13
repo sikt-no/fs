@@ -6,7 +6,7 @@ import { ClaudeRunner } from '../core/claude.ts';
 import { PtyRunner } from '../core/pty.ts';
 import { cliVcs } from '../core/vcs-cli.ts';
 import { isoVcs } from '../core/vcs-isogit.ts';
-import { Workspace, type WorkspaceOpts } from '../core/workspace.ts';
+import { Workspace } from '../core/workspace.ts';
 
 const VIRTUAL = 'virtual:krav';
 const RESOLVED = '\0' + VIRTUAL;
@@ -21,17 +21,16 @@ const RESOLVED_ROOT = '\0' + VIRTUAL_ROOT;
  * Leser alle .feature- og .md-filer under krav/ (krav/README.md er forsiden), parser dem
  * og eksponerer dem som `virtual:krav`. I dev-server pushes endringer som `krav:update`-hendelser over websocket.
  * Git-endringer under krav/ eksponeres som `virtual:krav-git` og pushes som `krav:git`.
- * Oppgavemappene i tasks/ eksponeres som `virtual:krav-tasks` og pushes som `krav:tasks`, men bare med `oppgaver` eller
- * `spesifikasjoner`; ellers er modulen `null`. Flaggene i snapshotet sier hvilke av visningene vieweren viser.
+ * Oppgavemappene i tasks/ eksponeres som `virtual:krav-tasks` og pushes som `krav:tasks`, til tavla «Oppgaver».
  * `virtual:krav-root` er den absolutte stien til repoet («Åpne i VS Code»), bare i dev-serveren; i et statisk bygg er den `null`.
  *
  * Logikken står i core/ (felles med desktop-appen); pluginen kobler den til Vites watcher, websocket og
  * middlewares. I dev-serveren kan krav redigeres (`POST /__krav/save`) og sendes som PR (`POST /__krav/publish`).
  * Git-backenden er git og gh på maskinen, eller isomorphic-git med `VCS=isogit`.
  */
-export function kravPlugin(repoRoot: string, opts: WorkspaceOpts = {}): Plugin {
+export function kravPlugin(repoRoot: string): Plugin {
   const vcs = process.env.VCS === 'isogit' ? isoVcs(repoRoot) : cliVcs(repoRoot);
-  const ws = new Workspace(repoRoot, vcs, opts);
+  const ws = new Workspace(repoRoot, vcs);
   let serve = false;
 
   return {
@@ -61,14 +60,14 @@ export function kravPlugin(repoRoot: string, opts: WorkspaceOpts = {}): Plugin {
     },
 
     configureServer(server) {
-      // Filene Claude skriver under tasks/ (spec/, skisser) skal vises i «Endringer» også uten Oppgaver og Spesifikasjoner
+      // Filene Claude skriver (også under tasks/: spec/, skisser) skal vises i «Endringer» straks kjøringen er ferdig
       const claude = new ClaudeRunner(repoRoot, { onSaved: () => ws.refreshGit(), onDone: () => ws.refreshGit() });
       const pty = new PtyRunner(repoRoot, { bin: () => claude.binary() });
       const api = createApi(ws, createAuth({ clientId: process.env.KRAV_GITHUB_CLIENT_ID, store: memoryStore(), useGh: true }), claude, pty);
       claude.on(data => server.ws.send({ type: 'custom', event: 'krav:claude', data }));
       pty.on(data => server.ws.send({ type: 'custom', event: 'krav:pty', data }));
       server.watcher.add(ws.kravDir);
-      if (ws.withTasks) server.watcher.add(ws.tasksDir);
+      server.watcher.add(ws.tasksDir);
 
       // Hendelsene fra arbeidsflaten går ut over websocket; en manuell reload skal få ferskt innhold
       const invalidate = (id: string) => {

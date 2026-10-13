@@ -13,7 +13,7 @@ Egenskap: Svare på tilbud om studieplass
 
     Scenariomal: Søkeren kan svare på resultatet <resultat>
       Gitt at søknadsalternativet har plasstildelingsresultat <resultat>
-      Og svarfristen for opptaksrunden ikke har gått ut
+      Og svarfristen for plasstildelingsrunden ikke har gått ut
       Når søkeren åpner svarsiden for søknaden
       Så kan søkeren svare på søknadsalternativet
 
@@ -24,7 +24,7 @@ Egenskap: Svare på tilbud om studieplass
 
     Scenario: Svarfristen har gått ut
       Gitt at søknadsalternativet har plasstildelingsresultat TILBUD
-      Og svarfristen for opptaksrunden har gått ut
+      Og svarfristen for plasstildelingsrunden har gått ut
       Når søkeren åpner søknaden
       Så tilbys ikke søkeren å svare på søknadsalternativet
 
@@ -52,7 +52,7 @@ Egenskap: Svare på tilbud om studieplass
 
     Scenario: Søkeren endrer svar fra ja til nei
       Gitt at søkeren har takket ja til et tilbud
-      Og svarfristen for opptaksrunden ikke har gått ut
+      Og svarfristen for plasstildelingsrunden ikke har gått ut
       Når søkeren endrer svaret til nei
       Og søkeren lagrer svaret
       Så er det nye svaret registrert på søknadsalternativet
@@ -60,7 +60,7 @@ Egenskap: Svare på tilbud om studieplass
     Scenario: Søkeren ser svarfristen på søknaden
       Gitt at søkeren har et tilbud som kan besvares
       Når søkeren åpner søknaden
-      Så vises svarfristen for opptaksrunden
+      Så vises svarfristen for plasstildelingsrunden
 
   Regel: Svaret vises på søknaden
 

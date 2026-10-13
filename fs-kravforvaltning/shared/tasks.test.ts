@@ -1,8 +1,8 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
-import { buildTasks, metadata, parseTask, roadmapPhases, taskLint, type RawTask } from './tasks.ts';
+import { buildScopes, buildTasks, metadata, newOppgaveText, parseScope, parseTask, taskLint, type RawTask, type TasksSnapshot } from './tasks.ts';
 
-const oppgave = (o: { fase?: string; slug?: string; dom?: string; eier?: string; krav?: string; prs?: string } = {}) => `# Søk på fødselsnummer
+const oppgave = (o: { fase?: string; slug?: string; dom?: string; eier?: string; krav?: string; prs?: string; scope?: string } = {}) => `# Søk på fødselsnummer
 
 ## Metadata
 
@@ -12,7 +12,7 @@ const oppgave = (o: { fase?: string; slug?: string; dom?: string; eier?: string;
 - **Slug**: ${o.slug ?? 'sok'}
 - **Fase**: ${o.fase ?? 'utforskning'}
 - **Prioritet**: Must
-- **Eier**: ${o.eier ?? '–'}
+${o.scope ? `- **Scope**: ${o.scope}\n` : ''}- **Eier**: ${o.eier ?? '–'}
 - **Lenker**:
   - design: [design.md](design.md)
   - PRs: ${o.prs ?? '–'}
@@ -33,7 +33,7 @@ const raw = (files: string[], sources: Record<string, string> = {}, o: Parameter
   sources: { 'oppgave.md': oppgave(o), ...sources },
 });
 
-const rules = (r: RawTask, roadmap: Record<string, string> | null = null) => taskLint(parseTask(r), roadmap).map(l => l.rule);
+const rules = (r: RawTask) => taskLint(parseTask(r)).map(l => l.rule);
 
 test('metadata leser nøkkel/verdi-linjene og lenke-underpunktene', () => {
   const m = metadata(oppgave({ prs: '[#12](https://github.com/sikt-no/fs/pull/12)' }));
@@ -46,8 +46,7 @@ test('parseTask tolker oppgave.md', () => {
   const t = parseTask(raw([]));
   assert.equal(t.title, 'Søk på fødselsnummer');
   assert.equal(t.issue, 41);
-  assert.equal(t.phase, 'utforskning');
-  assert.equal(t.p, 1);
+  assert.equal(t.scope, null);
   assert.equal(t.prio, 'Must');
   assert.equal(t.metaDom, 'brukeradministrasjon-og-tilgangsstyring');
   assert.equal(t.metaSlug, 'sok');
@@ -105,24 +104,15 @@ test('specKrav: kravene under ## Krav i spesifikasjonene, også fra eldre lenker
   assert.deepEqual(parseTask(raw([])).specKrav, []);
 });
 
-test('review-utfallet leses fra avkrysset boks i Utfall', () => {
-  const r = (utfall: string) =>
-    parseTask(raw(['reviews/r01-prioritert-til-utforskning.md'], { 'reviews/r01-prioritert-til-utforskning.md': `# Review\n\n- **Reviewer**: @ola\n\n## Utfall\n\n${utfall}` })).reviews[0];
-  const ok = r('- [x] **Ingen verdifulle forbedringer** — videre.\n- [ ] **Forbedringer foreslått** — blir.');
-  assert.deepEqual([ok.n, ok.from, ok.to, ok.who, ok.ok], [1, 'prioritert', 'utforskning', '@ola', true]);
-  assert.equal(r('- [ ] **Ingen verdifulle forbedringer**\n- [x] **Forbedringer foreslått**').ok, false);
-  assert.equal(r('- [ ] **Ingen verdifulle forbedringer**\n- [ ] **Forbedringer foreslått**').ok, null);
-});
-
 test('regel 1: BAT-filer i oppgave-rota', () => {
   assert.deepEqual(rules(raw(['plan-krav.md'])), ['r1']);
-  assert.match(taskLint(parseTask(raw(['plan-krav.md'])), null)[0].hint, /<lag>\/plan-sok\.md/);
+  assert.match(taskLint(parseTask(raw(['plan-krav.md'])))[0].hint, /<lag>\/plan-sok\.md/);
   assert.deepEqual(rules(raw(['analysis-sok.md'])), ['r1']);
   assert.deepEqual(rules(raw(['frontend/plan-sok.md', 'frontend/analysis-sok.md', 'frontend/verification-sok.md'])), []);
 });
 
 test('regel 2: plan for et lag i rota', () => {
-  const l = taskLint(parseTask(raw(['plan-frontend.md'])), null);
+  const l = taskLint(parseTask(raw(['plan-frontend.md'])));
   assert.deepEqual(
     l.map(x => x.rule),
     ['r2'],
@@ -142,39 +132,84 @@ test('regel 4: mappe under mal/ eller domene som ikke finnes', () => {
   assert.deepEqual(rules(raw([])), []);
 });
 
-test('metadata: ugyldig fase, feil slug og feil domene', () => {
-  assert.deepEqual(rules(raw([], {}, { fase: 'prioritert | utforskning | utvikling' })), ['fase'], 'malteksten');
-  assert.deepEqual(rules(raw([], {}, { fase: 'utvikling (siden juli)' })), []);
-  assert.deepEqual(rules(raw([], {}, { fase: 'ferdig' })), ['fase']);
+test('metadata: oppgave.md mangler, feil slug og feil domene; Fase leses ikke', () => {
+  assert.deepEqual(rules(raw([], {}, { fase: 'prioritert | utforskning | utvikling' })), []);
+  assert.deepEqual(rules(raw([], {}, { fase: 'ferdig' })), []);
   assert.deepEqual(rules(raw([], {}, { slug: 'noe-annet' })), ['slug']);
   assert.deepEqual(rules(raw([], {}, { dom: 'opptak' })), ['domene']);
-  assert.deepEqual(rules({ ...raw([]), files: ['design.md'], sources: {} }), ['fase']);
+  assert.deepEqual(rules({ ...raw([]), files: ['design.md'], sources: {} }), ['oppgave']);
+  assert.match(taskLint(parseTask({ ...raw([]), files: ['design.md'], sources: {} }))[0].hint, /fs-scope/);
 });
 
-test('roadmap: fase i Aktive oppgaver og levert for Ferdig', () => {
-  const src = `# Veikart
+const DOM = 'brukeradministrasjon-og-tilgangsstyring';
+const scopeSrc = (o: { slug?: string; rows?: string } = {}) => `# Scope: Søk og filter
 
-## Aktive oppgaver
+- **Slug**: ${o.slug ?? 'sok-iterasjon-2'}
+- **Initiativ**: [#31](https://github.com/sikt-no/fs/issues/31)
+- **Eier**: @kari
+- **Siste oppdatering**: 2026-10-01
 
-| Issue | Oppgave | Initiativ | Fase | Prioritet | Eier | Reviewere | Mappe |
-|-------|---------|-----------|------|-----------|------|-----------|-------|
-| [#41](x) | Søk | #31 | utforskning | Must | – | – | [sok](sok/) |
+## Mål
 
-## Ferdig
+Finne brukere raskt.
 
-| Issue | Oppgave | Ferdig | Mappe |
-|-------|---------|--------|-------|
-| [#32](x) | Lesevisning | 2025-11-10 | [lesevisning](lesevisning/) |
+## Oppgaver
+
+| Oppgave | Krav | MoSCoW | Skisse | Issue | Kommentar |
+|---|---|---|---|---|---|
+${o.rows ?? `| [sok](sok/) | \`@BRU-BRU-SOK-001\` [sok.feature](../../krav/07%20Bru/12%20Bru/01%20S%C3%B8k/sok.feature), \`@BRU-BRU-SOK-002\` | Must | [Søk](https://www.figma.com/design/abc/x?node-id=1-2) | #41 | |
+| (ikke tildelt) | \`@BRU-BRU-SOK-003\` | Could | – | – | senere |`}
+
+## Åpne spørsmål
 `;
-  assert.deepEqual(roadmapPhases(src), { sok: 'utforskning', lesevisning: 'levert' });
-  assert.deepEqual(rules(raw([]), { sok: 'utforskning' }), []);
-  assert.deepEqual(rules(raw([]), { sok: 'utvikling' }), ['roadmap']);
-  assert.deepEqual(rules(raw([]), {}), ['roadmap']);
+
+test('parseScope leser metadata og tabellen Oppgaver', () => {
+  const sc = parseScope(`tasks/${DOM}/scope-sok-iterasjon-2.md`, scopeSrc())!;
+  assert.equal(sc.slug, 'sok-iterasjon-2');
+  assert.equal(sc.title, 'Søk og filter');
+  assert.equal(sc.metaSlug, 'sok-iterasjon-2');
+  assert.equal(sc.owner, '@kari');
+  assert.equal(sc.updated, '2026-10-01');
+  assert.equal(sc.rows.length, 2);
+  assert.deepEqual(sc.rows[0].ids, ['@BRU-BRU-SOK-001', '@BRU-BRU-SOK-002']);
+  assert.deepEqual(sc.rows[0].paths, ['krav/07 Bru/12 Bru/01 Søk/sok.feature']);
+  assert.equal(sc.rows[0].task, 'sok');
+  assert.equal(sc.rows[0].moscow, 'Must');
+  assert.deepEqual(sc.rows[0].sketches, [{ name: 'Søk', url: 'https://www.figma.com/design/abc/x?node-id=1-2' }]);
+  assert.equal(sc.rows[0].issue, 41);
+  assert.equal(sc.rows[1].task, null, '(ikke tildelt)');
+  assert.equal(sc.rows[1].comment, 'senere');
+  assert.equal(parseScope(`tasks/${DOM}/sok/scope-x.md`, scopeSrc()), null);
 });
 
-test('buildTasks sorterer på domene og fase og legger på regelsjekk', () => {
+const snapWith = (scopes: Record<string, string>, tasks: RawTask[] = [raw([])]): TasksSnapshot => ({ domains: { [DOM]: null }, tasks, scopes });
+
+test('scope: slugen i fila er lik filnavnet, unik på tvers av domener, og oppgavene finnes i domenet', () => {
+  const lint = (scopes: Record<string, string>) => buildScopes(snapWith(scopes)).flatMap(s => s.lint.map(l => l.title));
+  assert.deepEqual(lint({ [`tasks/${DOM}/scope-sok-iterasjon-2.md`]: scopeSrc() }), []);
+  assert.match(lint({ [`tasks/${DOM}/scope-sok-iterasjon-2.md`]: scopeSrc({ slug: 'annet' }) })[0], /Slug er annet/);
+  assert.match(lint({ [`tasks/${DOM}/scope-sok-iterasjon-2.md`]: scopeSrc({ rows: '| [finnes-ikke](finnes-ikke/) | `@BRU-BRU-SOK-001` | Must | – | – | |' }) })[0], /finnes-ikke finnes ikke/);
+  const twice = lint({ [`tasks/${DOM}/scope-sok-iterasjon-2.md`]: scopeSrc(), 'tasks/opptak/scope-sok-iterasjon-2.md': scopeSrc({ rows: '' }) });
+  assert.equal(twice.filter(t => /finnes også i/.test(t)).length, 2);
+});
+
+test('Scope i oppgave.md: scopet finnes, og oppgaven står i tabellen', () => {
+  const lint = (scope: string, scopes: Record<string, string>) => {
+    const r = raw([], {}, { scope });
+    return buildTasks(snapWith(scopes, [r]))[0].lint.map(l => l.rule + ':' + l.title);
+  };
+  const ok = { [`tasks/${DOM}/scope-sok-iterasjon-2.md`]: scopeSrc() };
+  assert.equal(parseTask(raw([], {}, { scope: '[scope-sok-iterasjon-2](../scope-sok-iterasjon-2.md)' })).scope, 'sok-iterasjon-2');
+  assert.deepEqual(lint('[scope-sok-iterasjon-2](../scope-sok-iterasjon-2.md)', ok), []);
+  assert.match(lint('[scope-borte](../scope-borte.md)', ok)[0], /^scope:scope-borte finnes ikke/);
+  const without = { [`tasks/${DOM}/scope-sok-iterasjon-2.md`]: scopeSrc({ rows: '| [annen](annen/) | `@BRU-BRU-SOK-001` | Must | – | – | |' }) };
+  assert.ok(lint('[scope-sok-iterasjon-2](../scope-sok-iterasjon-2.md)', without).some(l => /Står ikke i scope-sok-iterasjon-2/.test(l)));
+  assert.equal(parseTask(raw([], {}, { scope: '–' })).scope, null);
+});
+
+test('buildTasks sorterer på domene og tittel og legger på regelsjekk', () => {
   const a = { ...raw([], {}, { fase: 'utvikling' }), slug: 'a' };
-  a.sources = { 'oppgave.md': oppgave({ fase: 'utvikling', slug: 'a' }) };
+  a.sources = { 'oppgave.md': oppgave({ fase: 'utvikling', slug: 'a' }).replace('# Søk på fødselsnummer', '# Vis brukere') };
   const b = { ...raw(['plan-krav.md'], {}, { slug: 'b' }), slug: 'b' };
   b.sources = { 'oppgave.md': oppgave({ slug: 'b' }) };
   const out = buildTasks({ domains: { 'brukeradministrasjon-og-tilgangsstyring': null }, tasks: [a, b] });
@@ -186,4 +221,15 @@ test('buildTasks sorterer på domene og fase og legger på regelsjekk', () => {
     out[0].lint.map(l => l.rule),
     ['r1'],
   );
+});
+
+test('newOppgaveText: minimal oppgave.md som leses tilbake uten avvik', () => {
+  const src = newOppgaveText({ title: 'Søk på fødselsnummer', dom: DOM, slug: 'sok', issue: 41, owner: '@kari', date: '2026-10-12', via: 'Opprettet i FS Kravforvaltning' });
+  const t = parseTask({ dom: DOM, slug: 'sok', files: ['oppgave.md'], sources: { 'oppgave.md': src } });
+  assert.deepEqual([t.title, t.issue, t.metaDom, t.metaSlug, t.owner, t.scope], ['Søk på fødselsnummer', 41, DOM, 'sok', '@kari', null]);
+  assert.deepEqual(t.log, [{ d: '2026-10-12', t: 'Opprettet i FS Kravforvaltning', who: '@kari' }]);
+  assert.deepEqual(taskLint(t), []);
+  const uten = newOppgaveText({ title: 'X', dom: DOM, slug: 'x', scope: 'sok-iterasjon-2', date: '2026-10-12', via: 'Opprettet' });
+  assert.match(uten, /Åpne punkter/);
+  assert.equal(parseTask({ dom: DOM, slug: 'x', files: ['oppgave.md'], sources: { 'oppgave.md': uten } }).scope, 'sok-iterasjon-2');
 });

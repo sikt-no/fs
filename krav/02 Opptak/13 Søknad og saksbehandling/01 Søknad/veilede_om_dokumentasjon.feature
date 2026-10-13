@@ -21,6 +21,9 @@ Egenskap: Veilede søker om hvilken dokumentasjon som skal lastes opp
       #   til opptaket, til utdanningstilbudet, eller til hva søkeren søker på
       #   grunnlag av (dispensasjon, tidlig opptak, realkompetanse)? Det finnes
       #   ingen krav som beskriver denne sammenhengen i dag.
+      #   Delsvar 08.10.2026: For tidlig opptak er dokumentasjonskravet knyttet til
+      #   begrunnelsen søkeren velger, og settes per opptak (søke_om_tidlig_opptak.feature).
+      #   Dispensasjon og realkompetanse er ikke avklart.
 
     Scenario: Søker får vite at uetterspurt dokumentasjon kan bli slettet
       Når jeg skal laste opp dokumentasjon på søknaden

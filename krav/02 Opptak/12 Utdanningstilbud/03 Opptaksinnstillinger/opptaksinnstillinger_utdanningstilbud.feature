@@ -1,6 +1,6 @@
 # language: no
 # GitHub: #597
-@OPT-OPT-UTD-004 @must @draft
+@OPT-OPT-UTD-004 @must @draft @scope-utdanningstilbud-2027
 Egenskap: Opptaksinnstillinger per utdanningstilbud
   Som opptaksforvalter
   ønsker jeg å sette opptaksinnstillinger per utdanningstilbud
@@ -8,7 +8,7 @@ Egenskap: Opptaksinnstillinger per utdanningstilbud
 
   # Opptaksforvalter ved deltakende organisasjon kan sette innstillinger på egne utdanningstilbud.
   # Opptaksforvalter ved forvaltende organisasjon kan sette innstillinger på alle utdanningstilbud.
-  # Innstillinger for flere utdanningstilbud av gangen står i sette_standardinnstillinger.feature (#599).
+  # Innstillinger for flere utdanningstilbud av gangen står i sette_innstillinger_for_flere_utdanningstilbud.feature (#599).
   # Antall studieplasser står i sette_studieplasser_og_antall_tilbud.feature (#596).
   # Tidlig søknadsfrist og dokumentasjonsfrist står i 04 Behandle et utdanningstilbud/sette_tidlig_søknadsfrist.feature (SHI-708).
   Bakgrunn:
@@ -40,7 +40,7 @@ Egenskap: Opptaksinnstillinger per utdanningstilbud
 
   # Kilde for kvoteregelen: GitHub #597.
   # AVKLART 2026-10-08: Prosentfordeling mellom utdanningskvoter utgår. Antall tilbud som skal gis settes
-  # som absolutte tall per utdanningskvote for hvert utdanningstilbud i hver runde, se
+  # som absolutte tall per utdanningskvote for hvert utdanningstilbud i hver plasstildelingsrunde, se
   # 14 Plasstildeling/02 Tildelingsinnstillinger/antall_tilbud_som_skal_gis.feature.
   @openquestion
   # ÅPNE SPØRSMÅL:
@@ -65,16 +65,29 @@ Egenskap: Opptaksinnstillinger per utdanningstilbud
       Og opptaksforvalter setter at ledige plasser i førstegangsvitnemålskvoten flyter til ordinær kvote
       Så omfordeler plasstildelingen ubrukte plasser fra førstegangsvitnemålskvoten til ordinær kvote
 
-  Regel: Opptaksforvalter kan markere utdanningstilbud for tidlig tilbud
+  Regel: Opptaksforvalter kan markere at et utdanningstilbud tilbyr tidlig opptak
 
-    Scenario: Markere utdanningstilbud for tidlig tilbud
+    Scenario: Markere at utdanningstilbudet tilbyr tidlig opptak
       Gitt at opptaket åpner for tidlig opptak
-      Når opptaksforvalter markerer utdanningstilbudet "Sykepleie, høst 2027" for tidlig tilbud
-      Og opptaksforvalter setter dato for når svar sendes til søkere
+      Når opptaksforvalter markerer at utdanningstilbudet "Sykepleie, høst 2027" tilbyr tidlig opptak
       Så kan søkere som oppfyller kriteriene få tidlig svar på dette utdanningstilbudet
+      # Svaret på tidlig opptak publiseres for hele opptaket når tidligopptaket
+      # gjennomføres, ikke per utdanningstilbud, se publisere_svar_på_tidlig_opptak.feature
+      # (avklart 25.09.2026, uten egen publiseringsdato fra 09.10.2026).
 
-  # AVKLART 2026-10-08: Det finnes ingen innstilling for hvilke runder utdanningstilbudet deltar i.
-  # Et utdanningstilbud er ute av en runde når det ikke er satt antall tilbud som skal gis for runden,
+    Scenario: Sette poenggrense for tidlig opptak
+      Gitt utdanningstilbudet "Sykepleie, høst 2027" tilbyr tidlig opptak
+      Når opptaksforvalter setter poenggrensen for tidlig opptak til 50 for utdanningstilbudet "Sykepleie, høst 2027"
+      Så får søkere som deltar i tidligopptaket og har minst 50 poeng, tilbudsgaranti på "Sykepleie, høst 2027"
+      # Se gi_tilbudsgaranti_ved_tidlig_opptak.feature. En egen verdi beregnet fra fjorårets
+      # opptak kommer eventuelt senere (STEK-352).
+
+    # Lenken til informasjon om tidlig opptak settes per opptak, ikke per
+    # utdanningstilbud, se 11 Opprette og vedlikeholde opptak/03 Innstillinger/
+    # innstillinger.feature (avklart 09.10.2026, review av PR #654).
+
+  # AVKLART 2026-10-08: Det finnes ingen innstilling for hvilke plasstildelingsrunder utdanningstilbudet deltar i.
+  # Et utdanningstilbud er ute av en plasstildelingsrunde når det ikke er satt antall tilbud som skal gis for plasstildelingsrunden,
   # se 14 Plasstildeling/02 Tildelingsinnstillinger/antall_tilbud_som_skal_gis.feature.
 
   # Hvordan søknadsalternativene fordeles etter regelen, står i tildele_saksbehandlende_organisasjon.feature (@OPT-BEH-BEH-011).
@@ -86,7 +99,7 @@ Egenskap: Opptaksinnstillinger per utdanningstilbud
 
     Scenario: Utdanningstilbud uten egen saksbehandlertildelingsregel følger opptakets standardregel
       Når opptaksforvalter lagrer utdanningstilbudet "Sykepleie, høst 2027" uten å velge saksbehandlertildelingsregel
-      Så fordeles søknadsalternativene til "Sykepleie, høst 2027" etter opptakets standard tildelingsregel
+      Så fordeles søknadsalternativene til "Sykepleie, høst 2027" etter opptakets standard saksbehandlertildelingsregel
 
     Scenario: Kun aktive saksbehandlertildelingsregler i opptaket kan velges
       Gitt at saksbehandlertildelingsregelen "TRA" er inaktiv

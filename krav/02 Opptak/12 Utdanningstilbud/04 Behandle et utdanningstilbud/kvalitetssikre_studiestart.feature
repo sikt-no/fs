@@ -1,6 +1,6 @@
 # language: no
 # Jira: SHI-702
-@OPT-OPT-UTD-023 @must @draft
+@OPT-OPT-UTD-023 @must @draft @scope-utdanningstilbud-2027
 Egenskap: Kvalitetssikre studiestart på utdanningstilbudet
   Som opptaksforvalter
   ønsker jeg å kvalitetssikre og korrigere studiestart for utdanningstilbudet

@@ -13,7 +13,7 @@ Egenskap: Vise resultatet av plasstildelingen
 
   Bakgrunn:
     Gitt at saksbehandler ved lærestedet er innlogget
-    Og at runden "Hovedrunde" i opptaket "Samordna opptak 2027" har en plasstildeling som ikke er publisert
+    Og at plasstildelingsrunden "Hovedrunde" i opptaket "Samordna opptak 2027" har en plasstildeling som ikke er publisert
 
   Regel: Saksbehandler ser ett tydelig resultat per søknad
 
@@ -85,7 +85,7 @@ Egenskap: Vise resultatet av plasstildelingen
 # - Når en søker har både et tilbud og et kansellert resultat på samme utdanningstilbud, hva skal vises?
 # - Resultatet lagres i dag to steder (per plasstildeling og på søknadsalternativet). Hvilket er fasit
 #   for visningen i saksbehandlingen?
-# - Skal saksbehandler kunne sammenligne to plasstildelinger i samme runde (prøvetildelinger)?
+# - Skal saksbehandler kunne sammenligne to plasstildelinger i samme plasstildelingsrunde (prøvetildelinger)?
 # - Skal oppsummeringsbildet i saksbehandlingen vise status per søknadsalternativ fra plasstildelingen?
 #   (Confluence, raffinering 2026-09-08, oppgave 6)
 # - Tilgang til plasstildelingen er i dag gitt bare til rollen opptaksleder, og gir innsyn i alle søkere

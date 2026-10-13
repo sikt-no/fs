@@ -75,6 +75,16 @@ export async function createPullRequest(
   return data.html_url;
 }
 
+/** Appen ligger i samme repo som kravene, men endringer i den trenger ikke hentes i klonen */
+export const APP_DIR = 'fs-kravforvaltning/';
+/** GitHub compare gir høyst 300 filer; er lista full, kan resten være utenfor appen */
+const COMPARE_MAX_FILES = 300;
+
+/** Er alle de endrede filene i appen selv? En tom eller avkortet liste regnes som nei */
+export function onlyAppChanges(files: string[]): boolean {
+  return files.length > 0 && files.length < COMPARE_MAX_FILES && files.every(f => f.startsWith(APP_DIR));
+}
+
 /** Hva som er nytt på main mellom to commits; byttes ut i tester */
 export type CompareMain = (originUrl: string, base: string, head: string, token: string | null) => Promise<MainInfo>;
 
@@ -99,11 +109,13 @@ export async function compareCommits(
     commits?: { author?: { login?: string } | null; commit: { author?: { name?: string }; committer?: { date?: string } } }[];
   };
   const last = data.commits?.at(-1);
+  const files = (data.files ?? []).map(f => f.filename);
   return {
     commits: data.ahead_by,
     features: (data.files ?? []).filter(f => f.filename.startsWith('krav/') && f.filename.endsWith('.feature')).length,
     author: last?.author?.login ? '@' + last.author.login : (last?.commit.author?.name ?? null),
     date: last?.commit.committer?.date ?? null,
+    onlyApp: onlyAppChanges(files),
   };
 }
 
@@ -121,7 +133,7 @@ export const githubPr: OpenPr = async (url, token, pr) => {
   return createPullRequest(token, repo, pr);
 };
 
-/** Stiene i en PR må være krav-filer under krav/, eller spesifikasjoner og utforing.md under tasks/, uten `..` */
+/** Stiene i en PR må være krav-filer under krav/, eller det tavla og skillene skriver under tasks/ (`isEditablePath`), uten `..` */
 export function checkPaths(paths: string[]) {
   if (!paths.length) throw new Error('Velg minst én fil');
   for (const p of paths) {

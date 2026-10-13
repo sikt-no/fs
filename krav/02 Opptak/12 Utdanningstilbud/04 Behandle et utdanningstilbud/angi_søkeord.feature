@@ -1,6 +1,6 @@
 # language: no
 # Jira: SHI-695
-@OPT-OPT-UTD-017 @must @draft
+@OPT-OPT-UTD-017 @must @draft @scope-utdanningstilbud-2027
 Egenskap: Angi søkeord på utdanningstilbudet
   Som opptaksforvalter
   ønsker jeg å angi søkeord på utdanningstilbudet

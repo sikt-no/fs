@@ -96,12 +96,13 @@ test('klone, se endringer, publisere som branch og hente main', { skip: !hasGit 
   const prs: { head: string; title: string }[] = [];
   const compared: [string, string][] = [];
   let compareFails = false;
+  let compareOnlyApp = false;
   const vcs = isoVcs(dir, {
     openPr: async (_u, _t, pr) => (prs.push(pr), 'https://example.com/pr/1'),
     compare: async (_u, base, head) => {
       if (compareFails) throw new Error('rate limit');
       compared.push([base, head]);
-      return { commits: 2, features: 1, author: '@kari', date: '2026-09-30T10:00:00Z' };
+      return { commits: 2, features: 1, author: '@kari', date: '2026-09-30T10:00:00Z', ...(compareOnlyApp ? { onlyApp: true } : {}) };
     },
   });
 
@@ -165,6 +166,9 @@ test('klone, se endringer, publisere som branch og hente main', { skip: !hasGit 
   assert.equal(status.remote, remote);
   assert.deepEqual(status.info, { commits: 2, features: 1, author: '@kari', date: '2026-09-30T10:00:00Z' });
   assert.deepEqual(compared, [[git(dir, 'rev-parse', 'main'), remote]], 'sammenligner klonen med main på GitHub');
+  compareOnlyApp = true;
+  assert.deepEqual(await vcs.mainStatus!(null), { behind: false }, 'bare endringer i appen: ikke noe å varsle om');
+  compareOnlyApp = false;
   compareFails = true;
   assert.deepEqual(await vcs.mainStatus!(null), { behind: true, remote }, 'uten svar fra GitHub: status uten info');
   await vcs.pull!(null);

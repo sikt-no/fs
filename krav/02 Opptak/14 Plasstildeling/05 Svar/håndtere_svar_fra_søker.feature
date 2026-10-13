@@ -9,7 +9,7 @@ Egenskap: Håndtere svar fra søker
   # Kilde: tasks/opptak/plasstildeling/design.md (prinsipp 2, informasjonsarv, avklaring 4, 5 og 11),
   # oppgave.md (oppgave 9) og Confluence «2026-09-08 Raffinering plasstildeling» (oppgave 8).
   # Svarene behandles i neste plasstildeling i opptaket. Det gis ikke automatisk nye tilbud ved
-  # nei-svar mellom rundene (oppgave 10 i oppgave.md, utenfor scope 2027).
+  # nei-svar mellom plasstildelingsrundene (oppgave 10 i oppgave.md, utenfor scope 2027).
   # Status i kode: delvis. Ja/nei virker. Trukket ja-svar og manuell overstyring mangler.
 
   Bakgrunn:
@@ -56,7 +56,7 @@ Egenskap: Håndtere svar fra søker
 
     Scenario: Ingen bortfall på ventelisteplass fra etterfylling
       Gitt at søkeren har svart ja til å stå på venteliste til "Vernepleie, høst 2027"
-      Når plasstildelingen i runden "Etterfylling" gjennomføres
+      Når plasstildelingen i "Etterfylling" gjennomføres
       Så får søkeren ikke bortfall på "Vernepleie, høst 2027"
 
   Regel: Søker med flere tilbud må velge ett
@@ -73,13 +73,13 @@ Egenskap: Håndtere svar fra søker
 # - Skal opptaksforvalter kunne overstyre et enkelt resultat manuelt, for eksempel gi ett tilbud uten ny plasstildeling?
 #   I dag krever alt en ny plasstildeling. Tilbudsgaranti er foreløpig eneste utvei.
 # - Må søkeren svare på ventelisteplass for å beholde den, eller står søkeren på ventelisten automatisk?
-# - Svar knyttes i dag til runde på løpenummer uten rundetype (mistenkt feil, TAKE-284).
-#   Med én runde per rundetype må svaret knyttes til rundetypen.
+# - Svar knyttes i dag til plasstildelingsrunde på løpenummer uten rundetype (mistenkt feil, TAKE-284).
+#   Med én plasstildelingsrunde per rundetype må svaret knyttes til rundetypen.
 # - Fristsjekken bruker applikasjonsklokke i stedet for databaseklokke (mistenkt feil, TAKE-281).
 # - Saksbehandler kan i koden svare på vegne av søkeren. Skal det være et eget scenario, og hvem kan gjøre det?
-# - I koden må alle tilbud i runden besvares samtidig, og bare ett kan godtas. Gjelder det også
+# - I koden må alle tilbud i plasstildelingsrunden besvares samtidig, og bare ett kan godtas. Gjelder det også
 #   etterfylling, der søkeren kan ha flere tilbud?
-# - Svarfristen er felles for runden. Trengs individuell svarfrist per søker eller per tilbud?
+# - Svarfristen er felles for plasstildelingsrunden. Trengs individuell svarfrist per søker eller per tilbud?
 # - At søkeren ikke svarte innen fristen, blir aldri lagret. Koden regner det ut hver gang svaret leses,
-#   og det finnes ingen «lukk runden». Skal svaret lagres når fristen er ute?
+#   og det finnes ingen «lukk plasstildelingsrunden». Skal svaret lagres når fristen er ute?
 # - Hører selve svarflyten i Min kompetanse hjemme her, eller under 13 Søknad og saksbehandling?

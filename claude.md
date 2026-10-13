@@ -40,7 +40,7 @@ fs/
 │   ├── fixtures/                  # Test fixtures og hjelpefunksjoner
 │   └── .features-gen/             # Genererte testfiler (gitignored)
 ├── fs-kravforvaltning/            # FS Kravforvaltning: krav i nettleser og desktop-app (Vite + Preact, Electron)
-├── kom-i-gang.html                # Innføring i kravarbeidet, eksportert fra Claude Design (se .claude/rules/kom-i-gang-sync.md)
+├── kom-i-gang.html                # Innføring i kravarbeidet, laget fra designet i Claude Design (se .claude/rules/kom-i-gang-sync.md)
 ├── README.md
 └── claude.md
 ```
@@ -117,6 +117,7 @@ Andre vanlige tags:
 - `@ci` - Kjøres i CI/CD pipeline
 - `@fsadmin` - Tester for admin-grensesnittet
 - Domene-spesifikke tags (f.eks. `@opptakspilot`)
+- `@scope-<slug>` - Kobler kravet til et scope (`tasks/<domene>/scope-<slug>.md`) og oppgavene i det. Settes av `fs-scope`. Kjør kravene i et scope med `npx playwright test --grep @scope-<slug>`
 
 ## Gherkin-språk og konvensjoner
 
@@ -183,7 +184,8 @@ Then('skal {string} vises', async ({ page }, tekst: string) => {
 - `@e2e` tester: Bruker `page` fixture for browser-interaksjon
 
 ### Skills for kravarbeid (`.claude/skills/`)
-- `fs-krav` — kravarbeid: nye `.feature`-filer (enkeltstående eller for et initiativ), ferdigstilling av en mappe (`@draft` → `@planned`), fjerning av krav (leverte krav får `@deprecated`, resten slettes), og endring av leverte krav (egenskapen blir `@implemented`, den nye delen får `@planned` når den er validert, og delen den erstatter får `@deprecated`)
+- `fs-scope` — avgrenser et initiativ og deler det i oppgaver: scope-fila `tasks/<domene>/scope-<slug>.md` (mål, ikke-mål, kilder, og oppgavene med kravene hver oppgave har), oppgavene (`oppgave.md` med `Scope:`), skjelett-krav (`@draft`, `Regel:`-titler uten scenarioer) og taggen `@scope-<slug>` på kravene. Kildene (GitHub, Confluence, Jira, Figma, filer, URL-er) er valgfrie. Kan kjøres på nytt når som helst, og `fs-krav` og `fs-specify` foreslår den når et krav ikke passer i scopet
+- `fs-krav` — kravarbeid: nye `.feature`-filer og utfylling av skjelett-filer fra `fs-scope`, ferdigstilling av en mappe (`@draft` → `@planned`), fjerning av krav (leverte krav får `@deprecated`, resten slettes), og endring av leverte krav (egenskapen blir `@implemented`, den nye delen får `@planned` når den er validert, og delen den erstatter får `@deprecated`)
 - `fs-krav-avvik` — ser etter avvik fra konvensjonene som krever skjønn, og som FS Kravforvaltning ikke sjekker automatisk (f.eks. «egne» og «dem», terminologi, listevisningsmønsteret), i en mappe eller fil under `krav/`. Rapporterer med `fil:linje` og forslag, retter bare ren ordlyd etter at brukeren har sagt ja, og endrer aldri tagger
 - `fs-specify` — henter `@planned`-krav inn i en oppgave: `tasks/<domene>/<slug>/spec/` (`@planned` → `@in-progress`, også på `@planned`-deler i leverte krav som endres). Plukker også opp `@deprecated`-krav, og lager en spec for å fjerne koden
 - `fs-specify-delta` — det samme, men for en endring (commit, branch, test-fil eller markdown), med samme tag-regler, også for `@deprecated`
@@ -191,9 +193,8 @@ Then('skal {string} vises', async ({ page }, tekst: string) => {
 - `fs-verify` — verifiserer kravene mot koden i lokale kloner av kode-repoene: `@in-progress` → `@implemented` (på deler i leverte krav: `@in-progress` fjernes), og sletter `@deprecated`-krav når koden er borte (ellers lister den hvor koden fortsatt finnes). Med en spesifikasjon som scope skriver den `## Scenarioer` i `spec/verify-*.md` og sender steget tilbake i `utforing.md` når noe mangler. Før brukeren spørres, kontrolleres resultatet: av subagenten `fs-verify-kontroll` (`.claude/agents/`) når Agent-verktøyet finnes (terminalen, også i FS Kravforvaltning), ellers manuelt av skillen selv (Claude-panelet), og det sier den fra om
 - `fs-verify-agent-teams` — det samme som `fs-verify`, men med et agent team med to roller: finnere (agenttypen `fs-verify-krav` i `.claude/agents/`) leter i koden parallelt, én per feature-fil eller gruppe av filer, og kontrollører (`fs-verify-kontroll`) sjekker hvert svar uavhengig. Lead-en avgjør der de er uenige, spør, retagger og skriver rapporten, eventuelt med hva som gjenstår i hvert repo (fs-plattform, fs-admin og min-kompetanse). Krever `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1`, og virker bare i en interaktiv økt: i terminalen, eller i terminalen i FS Kravforvaltning («I terminal med agent team»), ikke i Claude-panelet
 - `lage-steps` — step definitions i `tester/steps/` for kravene
-- `fs-oppgave` — oppgavemappa `tasks/<domene>/<slug>/` ut fra malene i `tasks/mal/`: ny oppgave (`oppgave.md` og rad i `roadmap.md`), faseoverganger (`design.md`, `<lag>/plan-<slug>.md`) og review-filer
 
-Typisk flyt: `fs-krav` → `fs-oppgave` (ny oppgave) → `fs-specify` / `fs-specify-delta` (med `fs-implementasjonsdetaljer`) → `lage-steps` → `fs-verify` (eller `fs-verify-agent-teams` når det er mange feature-filer), med `fs-oppgave` for hver faseovergang og review. Se [`tasks/README.md`](tasks/README.md) for oppgavestrukturen. `.claude/rules/tasks-conventions.md` importerer den med `@../../tasks/README.md` når Claude jobber i `tasks/**`.
+Typisk flyt: `fs-scope` → `fs-krav` → `fs-specify` / `fs-specify-delta` (med `fs-implementasjonsdetaljer`) → `lage-steps` → `fs-verify` (eller `fs-verify-agent-teams` når det er mange feature-filer). Tavla «Oppgaver» i FS Kravforvaltning viser hvor hver oppgave er, utledet fra kravene og spesifikasjonene. Skillen `fs-oppgave` (faser, `roadmap.md` og review-filer) er ikke lenger i dette repoet, og kan brukes fra et annet sted. Se [`tasks/README.md`](tasks/README.md) for oppgavestrukturen. `.claude/rules/tasks-conventions.md` importerer den med `@../../tasks/README.md` når Claude jobber i `tasks/**`.
 
 ## CI/CD
 
