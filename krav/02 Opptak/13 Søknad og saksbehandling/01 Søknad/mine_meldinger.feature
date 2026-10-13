@@ -215,15 +215,6 @@ Egenskap: Se meldinger om egne søknader
         | søker om tidlig opptak              |
       Så mottar søkeren en melding av typen KVITTERING om endringen
 
-    @draft @openquestion
-    Scenario: Søkeren får kvittering for svar på tilbud
-      # ÅPNE SPØRSMÅL:
-      # - Skal kvitteringen vise hvilke tilbud og ventelisteplasser søkeren har svart ja og nei til, slik skissen i Figma gjør?
-      # - Skal kvitteringen vise svarfristen, med at svaret kan endres fram til fristen?
-      Gitt at søkeren har fått tilbud om studieplass
-      Når søkeren svarer på tilbudet
-      Så mottar søkeren en melding av typen KVITTERING om svaret
-
     Scenario: Søkeren får kvittering for saksbehandlerens endringer
       Gitt at søkeren har en søknad i et opptak
       Når saksbehandleren gjør en av disse endringene på søkerens vegne
@@ -241,6 +232,26 @@ Egenskap: Se meldinger om egne søknader
       Gitt at søkeren har fått tilbud om studieplass
       Når saksbehandleren svarer på tilbudet på søkerens vegne
       Så mottar søkeren en melding av typen GENERELL om at saksbehandleren har svart på tilbudet
+
+  @planned
+  Regel: Søkeren får kvittering for svar på tilbud
+
+    Scenario: Søkeren får kvittering for svar på tilbud
+      Gitt at søkeren har fått tilbud om studieplass
+      Når søkeren svarer på tilbudet
+      Så mottar søkeren en melding av typen KVITTERING om svaret
+
+    Scenario: Kvitteringen viser hva søkeren har svart
+      Gitt at søkeren har svart ja til et tilbud om studieplass og nei til en plass på venteliste
+      Når søkeren åpner kvitteringen for svaret
+      Så vises hvert tilbud og hver ventelisteplass søkeren har svart på, med svaret ja eller nei
+      Og svarene ja står før svarene nei
+
+    Scenario: Kvitteringen viser fristen for å endre svaret
+      Gitt at søkeren har mottatt en kvittering for svar på tilbud
+      Når søkeren åpner kvitteringen for svaret
+      Så vises svarfristen
+      Og søkeren kan gå videre til søknadssiden for å endre svaret
 
   @draft @openquestion
   Regel: Søkeren får melding om svar på søknaden

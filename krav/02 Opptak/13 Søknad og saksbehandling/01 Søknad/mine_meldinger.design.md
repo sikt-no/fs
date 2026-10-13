@@ -113,14 +113,19 @@ Over studiene i en kvittering: «Du har søkt opptak til følgende studier:», m
 
 Meldinger av typen GENERELL og TIDLIG_OPPTAK bruker tittelen og innholdet backend sender. Innholdet er markdown.
 
-### Ikke bygget (`@draft`)
+### Kvittering for svar på tilbud (`@planned`, ikke bygget)
 
-| Hvor | Tekst i skissene | Scenario |
-|------|------------------|----------|
-| Kvittering for svar på tilbud, tittel | Figma: «Du har svart på søknaden din.» Confluence: «Du har svart på søknaden.» | Søkeren får kvittering for svar på tilbud |
-| Kvittering for svar på tilbud, innhold | Figma: én linje per svar, «Du har takket ja til tilbud om studieplass ved {lærested, studium, studieform, sted}» og «Du har takket nei til venteliste ved {…}», og så «Svaret kan endres frem til {svarfrist}.» Confluence: «Svaret kan endres frem til svarfristen. Svarfrist: {dato og klokkeslett}.» | Søkeren får kvittering for svar på tilbud |
+Fra det nye designet (2026-10-12, steff1ma i #708). Svarene vises som en punktliste, med «Ja» og «Nei» i fet skrift, og alle svarene ja står før svarene nei.
 
-**Skisser:** Figma [Min Kompetanse 2026, «Mine meldinger»](https://www.figma.com/design/zYzcXLwDsgoqAhvZ8X1ron/Min-Kompetanse-2026?node-id=24-7678): innboksen (24:7679), Min oversikt (2380:8052), kvittering for innsendt søknad (24:9484), kvittering for svar (4500:8031) og seksjonen «Tekster» (3173:8320). Confluence [Kvitteringstekster Min kompetanse](https://sikt.atlassian.net/wiki/spaces/PFS/pages/5003673614/Kvitteringstekster+Min+kompetanse).
+| Hvor | Når vises den | Tekst | Variasjoner | Scenario |
+|------|---------------|-------|-------------|----------|
+| Tittel | Alltid | «Vi har mottatt svaret ditt» | – | Søkeren får kvittering for svar på tilbud |
+| Over svarene | Alltid | «Dette har du svart:» | – | Kvitteringen viser hva søkeren har svart |
+| Punkt, tilbud | Søkeren har svart på et tilbud om studieplass | «**Ja** til tilbud om studieplass ved {lærested}, {studium}, {studieform}, {sted}» | «**Nei** til tilbud om studieplass ved …» | Kvitteringen viser hva søkeren har svart |
+| Punkt, venteliste | Søkeren har svart på en plass på venteliste | «**Nei** til plass på venteliste ved {lærested}, {studium}, {studieform}, {sted}» | «**Ja** til plass på venteliste ved …» | Kvitteringen viser hva søkeren har svart |
+| Frist | Alltid | «Du kan endre svaret på søknadssiden innen {svarfrist med klokkeslett}.» | «endre svaret på søknadssiden» er en lenke til søknadssiden | Kvitteringen viser fristen for å endre svaret |
+
+**Skisser:** Figma [Min Kompetanse 2026, «Mine meldinger»](https://www.figma.com/design/zYzcXLwDsgoqAhvZ8X1ron/Min-Kompetanse-2026?node-id=24-7678): innboksen (24:7679), Min oversikt (2380:8052), kvittering for innsendt søknad (24:9484), kvittering for svar (4615:16018, erstatter 4500:8031) og seksjonen «Tekster» (3173:8320). Confluence [Kvitteringstekster Min kompetanse](https://sikt.atlassian.net/wiki/spaces/PFS/pages/5003673614/Kvitteringstekster+Min+kompetanse).
 
 ## Per-scenario detaljer
 
@@ -142,6 +147,7 @@ Studiene hentes fra søknaden slik den er nå, ikke fra et øyeblikksbilde.
 - [ ] Datoen på meldingskortene er ulik i Figma («12.06.2024» og «12. juni 2026»). Koden bruker «12. juni».
 - [ ] Figma viser «Viktig», mens #411 og #412 sier «Handling kreves». «Handling kreves» er ikke med i første versjon.
 - [ ] Figma viser sidetall under listen. Det er ikke bygget, og er ikke med i kravet.
-- [ ] Kvittering for svar på tilbud: Figma og Confluence har ulik tittel og ulik tekst om svarfristen. Det avklares sammen med de åpne spørsmålene i kravet.
+- [x] Kvittering for svar på tilbud: avklart med det nye designet (node 4615:16018). Den gamle skissen (4500:8031) og teksten i Confluence («Du har svart på søknaden.») er utdatert.
+- [ ] Kvittering for svar på tilbud: designet viser «Ja» til tilbud og «Nei» til venteliste. Tekstene for «Nei» til tilbud og «Ja» til venteliste er avledet av det. Stemmer de?
 - [ ] Melding om svar på søknaden: designet mangler (TOT-2518).
 - [ ] Kvittering for tidlig opptak bruker tittelen og teksten fra backend. Skal den ha egne tekster i frontenden, som de andre kvitteringene?
