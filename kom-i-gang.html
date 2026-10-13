@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<!--
+  Kom i gang med krav i FS. Laget fra «Krav i FS.dc.html» i Claude Design
+  (https://claude.ai/design/p/7b91011d-fa2b-4086-8b9a-52fd52db2459?file=Krav+i+FS.dc.html),
+  som statisk HTML med et lite skript for velgeren av flyt. Se .claude/rules/kom-i-gang-sync.md.
+-->
+<html lang="nb">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kom i gang med krav i FS</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&amp;family=IBM+Plex+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#f7f6fa;color:#0a0132;font-family:'IBM Plex Sans',sans-serif;-webkit-font-smoothing:antialiased}
+a{color:#7351fb;text-decoration:underline;text-underline-offset:3px}
+a:hover{color:#0a0132}
+[data-o]{transition:opacity .25s}
+.flowbtn{font-family:'IBM Plex Sans',sans-serif;font-size:15px;font-weight:600;border:none;cursor:pointer;padding:10px 18px;border-radius:8px;background:transparent;color:#4324c8;transition:background .2s,color .2s}
+.flowbtn[aria-pressed="true"]{background:#7351fb;color:#fff}
+.pill{font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:600;background:#0a0132;color:#fff;padding:3px 8px;border-radius:6px;white-space:nowrap}
+</style>
+</head>
+<body>
+<div style="max-width:1440px;margin:0 auto;padding:56px 40px 80px;display:flex;flex-direction:column;gap:56px">
+
+  <header style="display:flex;flex-direction:column;gap:16px;max-width:820px">
+    <div style="font-family:'IBM Plex Mono',monospace;font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:#7351fb;font-weight:600">sikt-no/fs · krav/</div>
+    <h1 style="margin:0;font-size:44px;line-height:1.1;font-weight:700;letter-spacing:-.02em">Kom i gang med krav i FS</h1>
+    <p style="margin:0;font-size:18px;line-height:1.55;color:#0a0132;text-wrap:pretty">Kravene til løsningene i studieadministrasjon skrives som Gherkin-scenarioer i .feature-filer, i mappa krav/ i repoet sikt-no/fs. Domeneeksperter og utviklere leser de samme filene, og de samme filene driver de automatiske testene.</p>
+    <p style="margin:0;font-size:16px;line-height:1.55;color:#767676">Se kravene: <a href="https://sikt-no.github.io/fs/">sikt-no.github.io/fs</a>, eller FS Kravforvaltning som desktop-app. Der kan du også redigere og lage PR, og følge oppgavene på tavla «Oppgaver».</p>
+  </header>
+
+  <section style="display:flex;flex-direction:column;gap:20px">
+    <div style="display:flex;align-items:baseline;gap:14px">
+      <span style="font-family:'IBM Plex Mono',monospace;font-size:14px;color:#7351fb;font-weight:600">01</span>
+      <h2 style="margin:0;font-size:26px;font-weight:600;letter-spacing:-.01em">Hvor kravene ligger</h2>
+    </div>
+    <p style="margin:0;font-size:16px;color:#767676;max-width:720px">Mappene har tre nivåer: Domene → Sub-domene → Kapabilitet, og kravfilene ligger bare på det nederste nivået, for eksempel:</p>
+    <code style="font-family:'IBM Plex Mono',monospace;font-size:15px;background:#ebe6fe;color:#4324c8;padding:10px 14px;border-radius:8px;align-self:flex-start;max-width:100%;overflow-wrap:anywhere">02 Opptak/10 Regelverk/01 Regelverkssamling/regelverkssamling.feature</code>
+    <div style="display:flex;flex-wrap:wrap;align-items:stretch;gap:12px">
+      <div style="background:#ebe6fe;border-radius:10px;padding:16px 20px;display:flex;flex-direction:column;gap:6px;min-width:150px">
+        <span style="font-size:12px;text-transform:uppercase;letter-spacing:.08em;color:#4324c8;font-weight:600">Domene</span>
+        <span style="font-family:'IBM Plex Mono',monospace;font-size:16px;font-weight:500">02 Opptak/</span>
+      </div>
+      <div style="display:flex;align-items:center;color:#7351fb;font-size:22px">→</div>
+      <div style="background:#ebe6fe;border-radius:10px;padding:16px 20px;display:flex;flex-direction:column;gap:6px;min-width:150px">
+        <span style="font-size:12px;text-transform:uppercase;letter-spacing:.08em;color:#4324c8;font-weight:600">Sub-domene</span>
+        <span style="font-family:'IBM Plex Mono',monospace;font-size:16px;font-weight:500">10 Regelverk/</span>
+      </div>
+      <div style="display:flex;align-items:center;color:#7351fb;font-size:22px">→</div>
+      <div style="background:#7351fb;color:#fff;border-radius:10px;padding:16px 20px;display:flex;flex-direction:column;gap:6px;min-width:150px">
+        <span style="font-size:12px;text-transform:uppercase;letter-spacing:.08em;font-weight:600">Kapabilitet</span>
+        <span style="font-family:'IBM Plex Mono',monospace;font-size:16px;font-weight:500">01 Regelverkssamling/</span>
+      </div>
+      <div style="display:flex;align-items:center;color:#7351fb;font-size:22px">→</div>
+      <div style="background:#0a0132;color:#fff;border-radius:10px;padding:16px 20px;display:flex;flex-direction:column;gap:6px;min-width:150px">
+        <span style="font-size:12px;text-transform:uppercase;letter-spacing:.08em;color:#c2bfcb;font-weight:600">Kravfiler</span>
+        <span style="font-family:'IBM Plex Mono',monospace;font-size:16px;font-weight:500">regelverkssamling.feature</span>
+      </div>
+    </div>
+    <p style="margin:0;font-size:16px;color:#767676;max-width:720px">02 Opptak er domenet, 10 Regelverk sub-domenet og 01 Regelverkssamling kapabiliteten.</p>
+  </section>
+
+  <section style="display:flex;flex-direction:column;gap:20px">
+    <div style="display:flex;align-items:baseline;gap:14px">
+      <span style="font-family:'IBM Plex Mono',monospace;font-size:14px;color:#7351fb;font-weight:600">02</span>
+      <h2 style="margin:0;font-size:26px;font-weight:600;letter-spacing:-.01em">Hvordan en kravfil ser ut</h2>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr));gap:20px">
+      <div style="margin:0;background:#0a0132;color:#fff;border-radius:12px;padding:28px 32px;font-family:'IBM Plex Mono',monospace;font-size:14px;line-height:1.75;display:flex;flex-direction:column;overflow:hidden">
+<div style="padding-left:0ch;min-height:1.75em"><span style="color:#c2bfcb"># language: no</span></div>
+<div style="padding-left:0ch;min-height:1.75em"><span style="color:#c2bfcb"># GitHub: #1234</span></div>
+<div style="padding-left:0ch;min-height:1.75em"><span style="color:#b9a6ff">@OPT-REG-SAM-001 @must @draft @scope-regelverk</span></div>
+<div style="padding-left:0ch;min-height:1.75em"><span style="color:#fff;font-weight:600">Egenskap:</span> Regelverkssamling</div>
+<div style="padding-left:2ch;min-height:1.75em">Som opptaksforvalter</div>
+<div style="padding-left:2ch;min-height:1.75em">ønsker jeg å opprette og forvalte regelverkssamlinger</div>
+<div style="padding-left:2ch;min-height:1.75em">slik at …</div>
+<div style="padding-left:0ch;min-height:1.75em">&nbsp;</div>
+<div style="padding-left:2ch;min-height:1.75em"><span style="font-weight:600">Regel:</span> …</div>
+<div style="padding-left:4ch;min-height:1.75em"><span style="font-weight:600">Scenario:</span> …</div>
+<div style="padding-left:6ch;min-height:1.75em"><span style="color:#b9a6ff">Gitt</span> …</div>
+<div style="padding-left:6ch;min-height:1.75em"><span style="color:#b9a6ff">Når</span> …</div>
+<div style="padding-left:6ch;min-height:1.75em"><span style="color:#b9a6ff">Så</span> …</div>
+</div>
+      <div style="display:flex;flex-direction:column;gap:12px">
+        <div style="background:#fff;border:1px solid #dedede;border-radius:12px;padding:20px 24px;display:flex;flex-direction:column;gap:12px">
+          <div style="font-weight:600;font-size:16px">Taggene</div>
+          <div style="display:flex;flex-wrap:wrap;gap:8px">
+            <span style="font-family:'IBM Plex Mono',monospace;font-size:13px;background:#ebe6fe;color:#4324c8;padding:4px 10px;border-radius:999px">@DOM-SUB-KAP-NNN</span>
+            <span style="font-family:'IBM Plex Mono',monospace;font-size:13px;background:#f1f1f1;color:#0a0132;padding:4px 10px;border-radius:999px">@must · @should · @could · @wont</span>
+            <span style="font-family:'IBM Plex Mono',monospace;font-size:13px;background:#f1f1f1;color:#0a0132;padding:4px 10px;border-radius:999px">status</span>
+            <span style="font-family:'IBM Plex Mono',monospace;font-size:13px;background:#fff;border:1px dashed #7351fb;color:#4324c8;padding:3px 10px;border-radius:999px">@scope-&lt;slug&gt;</span>
+          </div>
+          <div style="font-size:15px;line-height:1.5;color:#767676">En unik ID, prioritet og status. Scope-taggen er valgfri, og kobler kravet til et scope og oppgaven det hører til.</div>
+        </div>
+        <div style="background:#fff;border:1px solid #dedede;border-radius:12px;padding:20px 24px;display:grid;grid-template-columns:auto 1fr;gap:10px 18px;font-size:15px;line-height:1.4">
+          <span style="font-family:'IBM Plex Mono',monospace;color:#7351fb;font-weight:600">Gitt</span><span>er forutsetningene</span>
+          <span style="font-family:'IBM Plex Mono',monospace;color:#7351fb;font-weight:600">Når</span><span>er handlingen</span>
+          <span style="font-family:'IBM Plex Mono',monospace;color:#7351fb;font-weight:600">Så</span><span>er det forventede resultatet</span>
+        </div>
+        <div style="background:#ebe6fe;border-radius:12px;padding:20px 24px;display:flex;flex-direction:column;gap:8px">
+          <div style="font-weight:600;font-size:16px">Uklarheter gjettes ikke</div>
+          <div style="font-size:15px;line-height:1.5">De skrives som <code style="font-family:'IBM Plex Mono',monospace;font-size:14px;color:#4324c8"># ÅPNE SPØRSMÅL:</code> i fila, og delen de gjelder, tagges <code style="font-family:'IBM Plex Mono',monospace;font-size:14px;color:#4324c8">@openquestion</code>.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section style="display:flex;flex-direction:column;gap:20px">
+    <div style="display:flex;align-items:baseline;gap:14px">
+      <span style="font-family:'IBM Plex Mono',monospace;font-size:14px;color:#7351fb;font-weight:600">03</span>
+      <h2 style="margin:0;font-size:26px;font-weight:600;letter-spacing:-.01em">Livsløpet til et krav, og slik bidrar du</h2>
+    </div>
+    <p style="margin:0;font-size:16px;line-height:1.55;color:#767676;max-width:820px">Kravarbeidet gjøres sammen med Claude Code og skillene <code style="font-family:'IBM Plex Mono',monospace;color:#0a0132">fs-scope</code> og <code style="font-family:'IBM Plex Mono',monospace;color:#0a0132">fs-krav</code>, i terminalen eller i Claude-panelet i FS Kravforvaltning. Et initiativ avgrenses og deles i oppgaver med fs-scope, og kravene skrives med fs-krav.</p>
+
+    <div style="display:flex;flex-direction:column;gap:12px">
+      <div role="group" aria-label="Flyt" style="display:flex;flex-wrap:wrap;gap:4px;background:#ebe6fe;padding:4px;border-radius:12px;align-self:flex-start">
+        <button class="flowbtn" data-mode="alle" aria-pressed="true">Alle</button>
+        <button class="flowbtn" data-mode="N" aria-pressed="false">Normalflyt</button>
+        <button class="flowbtn" data-mode="E" aria-pressed="false">Endringsflyt</button>
+        <button class="flowbtn" data-mode="A" aria-pressed="false">Avviklingsflyt</button>
+      </div>
+      <p id="flowdesc" style="margin:0;font-size:15px;line-height:1.5;color:#0a0132;max-width:820px;min-height:1.5em">Hele livsløpet. Velg en flyt for å se den alene.</p>
+    </div>
+
+    <div style="background:#fff;border:1px solid #dedede;border-radius:16px;padding:24px;overflow:hidden">
+      <svg viewBox="0 0 1780 690" style="display:block;width:100%;height:auto" role="img" aria-label="Livsløpet til et krav: @draft, @planned, @in-progress, @implemented og @deprecated, med skillene som flytter kravet">
+        <foreignObject x="0" y="0" width="1780" height="690">
+        <div xmlns="http://www.w3.org/1999/xhtml" style="position:relative;width:1780px;height:690px;font-family:'IBM Plex Sans',sans-serif;color:#0a0132">
+          <svg width="1780" height="690" style="position:absolute;inset:0;overflow:visible">
+            <defs>
+              <marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0 0L10 5L0 10z" fill="#7351fb"></path></marker>
+              <marker id="ahg" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0 0L10 5L0 10z" fill="#767676"></path></marker>
+            </defs>
+            <path data-o="NE" d="M128 130V214" stroke="#7351fb" stroke-width="2" fill="none" marker-end="url(#ah)"></path>
+            <path data-o="NE" d="M216 275H350" stroke="#7351fb" stroke-width="2" fill="none" marker-end="url(#ah)"></path>
+            <path data-o="NEA" d="M532 275H666" stroke="#7351fb" stroke-width="2" fill="none" marker-end="url(#ah)"></path>
+            <path data-o="NEA" d="M848 275H902" stroke="#7351fb" stroke-width="2" fill="none" marker-end="url(#ah)"></path>
+            <path data-o="NE" d="M1088 275H1242" stroke="#7351fb" stroke-width="2" fill="none" marker-end="url(#ah)"></path>
+            <path data-o="A" d="M1424 275H1558" stroke="#767676" stroke-width="2" fill="none" marker-end="url(#ahg)"></path>
+            <path data-o="E" d="M1336 220V136" stroke="#7351fb" stroke-width="2" stroke-dasharray="5 5" fill="none" marker-end="url(#ah)"></path>
+            <path data-o="E" d="M1248 80H222" stroke="#7351fb" stroke-width="2" stroke-dasharray="5 5" fill="none" marker-end="url(#ah)"></path>
+            <path data-o="A" d="M128 330V434" stroke="#767676" stroke-width="2" stroke-dasharray="5 5" fill="none" marker-end="url(#ahg)"></path>
+            <path data-o="A" d="M444 330V434" stroke="#767676" stroke-width="2" stroke-dasharray="5 5" fill="none" marker-end="url(#ahg)"></path>
+            <path data-o="A" d="M998 330V480H1494" stroke="#767676" stroke-width="2" stroke-dasharray="5 5" fill="none" marker-end="url(#ahg)"></path>
+            <path data-o="A" d="M1720 330V650H602V346" stroke="#767676" stroke-width="2" stroke-dasharray="5 5" fill="none" marker-end="url(#ahg)"></path>
+          </svg>
+
+          <div data-o="NE" style="position:absolute;left:40px;top:30px;width:176px;height:100px;box-sizing:border-box;border:2px solid #7351fb;border-radius:999px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:0 18px;gap:4px;background:#fff">
+            <div style="font-weight:700;font-size:16px">Nytt krav</div>
+            <div style="font-size:12px;line-height:1.35;color:#767676">Avgrens initiativet, så aktør, regler og scenarioer</div>
+          </div>
+          <div data-o="NE" style="position:absolute;left:140px;top:150px;display:flex;flex-direction:column;align-items:flex-start;gap:4px"><span class="pill">fs-scope · skjelett</span><span class="pill">fs-krav · modus A</span></div>
+
+          <div data-o="E" style="position:absolute;left:1248px;top:30px;width:352px;height:106px;box-sizing:border-box;border:2px dashed #7351fb;border-radius:14px;display:flex;flex-direction:column;justify-content:center;padding:0 20px;gap:6px;background:#fff">
+            <div style="display:flex;align-items:center;justify-content:space-between;gap:12px">
+              <div style="font-weight:700;font-size:16px">Endre et levert krav</div>
+              <span class="pill">fs-krav · modus D</span>
+            </div>
+            <div style="font-size:13px;line-height:1.4">Den nye versjonen legges ved siden av den gamle. Når den er validert, erstatter den den gamle.</div>
+          </div>
+          <div data-o="E" style="position:absolute;left:300px;top:52px;width:600px;text-align:center;font-size:13px;color:#4324c8;font-weight:500">ny versjon starter som <span style="font-family:'IBM Plex Mono',monospace">@draft</span></div>
+
+          <div data-o="NEA" style="position:absolute;left:40px;top:220px;width:176px;height:110px;box-sizing:border-box;background:#ebe6fe;color:#0a0132;border-radius:14px;padding:16px;display:flex;flex-direction:column;gap:6px">
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:17px;font-weight:600;color:#4324c8">@draft</div>
+            <div style="font-size:13px;line-height:1.4;color:#0a0132">Utkast, ikke validert. Kan starte som skjelett fra fs-scope</div>
+          </div>
+          <div data-o="NEA" style="position:absolute;left:356px;top:220px;width:176px;height:110px;box-sizing:border-box;background:#fff;border:2px solid #7351fb;color:#0a0132;border-radius:14px;padding:16px;display:flex;flex-direction:column;gap:6px">
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:17px;font-weight:600;color:#7351fb">@planned</div>
+            <div style="font-size:13px;line-height:1.4;color:#0a0132">Validert og klart til å bygges</div>
+          </div>
+          <div data-o="NEA" style="position:absolute;left:672px;top:220px;width:176px;height:110px;box-sizing:border-box;background:#7351fb;color:#fff;border-radius:14px;padding:16px;display:flex;flex-direction:column;gap:6px">
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:17px;font-weight:600;color:#fff">@in-progress</div>
+            <div style="font-size:13px;line-height:1.4;color:#fff">Hentet inn i en oppgave, og under arbeid</div>
+          </div>
+          <div data-o="NEA" style="position:absolute;left:1248px;top:220px;width:176px;height:110px;box-sizing:border-box;background:#0a0132;color:#fff;border-radius:14px;padding:16px;display:flex;flex-direction:column;gap:6px">
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:17px;font-weight:600;color:#fff">@implemented</div>
+            <div style="font-size:13px;line-height:1.4;color:#e6e4ec">Bygget, og verifisert mot koden</div>
+          </div>
+          <div data-o="A" style="position:absolute;left:1564px;top:220px;width:176px;height:110px;box-sizing:border-box;background:#dedede;color:#0a0132;border-radius:14px;padding:16px;display:flex;flex-direction:column;gap:6px">
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:17px;font-weight:600;color:#0a0132">@deprecated</div>
+            <div style="font-size:13px;line-height:1.4;color:#0a0132">Levert, men skal fjernes</div>
+          </div>
+
+          <div data-o="NE" style="position:absolute;left:216px;top:236px;width:140px;text-align:center;font-size:12px;line-height:1.3;font-weight:600;color:#4324c8">Validere krav</div>
+          <div data-o="NE" style="position:absolute;left:216px;top:288px;width:140px;display:flex;justify-content:center"><span class="pill">fs-krav · modus B</span></div>
+          <div data-o="NE" style="position:absolute;left:216px;top:314px;width:140px;display:flex;justify-content:center"><span class="pill">fs-krav-avvik</span></div>
+          <div data-o="NEA" style="position:absolute;left:532px;top:228px;width:140px;text-align:center;font-size:12px;line-height:1.3;font-weight:600;color:#4324c8">Hentes inn i en oppgave</div>
+          <div data-o="NEA" style="position:absolute;left:532px;top:288px;width:140px;display:flex;justify-content:center"><span class="pill">fs-specify</span></div>
+          <div data-o="NEA" style="position:absolute;left:532px;top:314px;width:140px;display:flex;justify-content:center"><span class="pill">fs-specify-delta</span></div>
+          <div data-o="NEA" style="position:absolute;left:908px;top:220px;width:180px;height:110px;box-sizing:border-box;border:2px dashed #7351fb;border-radius:14px;background:#fff;padding:16px;display:flex;flex-direction:column;gap:6px">
+            <div style="font-weight:700;font-size:15px;line-height:1.3">Implementasjon i koden</div>
+            <div style="font-size:13px;line-height:1.4;color:#767676">Skills etter hva som skal lages</div>
+          </div>
+          <div data-o="NE" style="position:absolute;left:1108px;top:228px;width:140px;text-align:center;font-size:12px;line-height:1.3;font-weight:600;color:#4324c8">Verifiseres</div>
+          <div data-o="NE" style="position:absolute;left:1108px;top:288px;width:140px;display:flex;justify-content:center"><span class="pill">fs-verify</span></div>
+          <div data-o="A" style="position:absolute;left:1424px;top:228px;width:140px;text-align:center;font-size:12px;line-height:1.3;font-weight:600;color:#767676">Fjerne et levert krav</div>
+          <div data-o="A" style="position:absolute;left:1424px;top:288px;width:140px;display:flex;justify-content:center"><span class="pill">fs-krav · modus C</span></div>
+
+          <div data-o="A" style="position:absolute;left:136px;top:366px;display:flex;flex-direction:column;align-items:flex-start;gap:6px"><span style="font-size:12px;font-weight:600;color:#767676">Fjerne et krav</span><span class="pill">fs-krav · modus C</span></div>
+          <div data-o="A" style="position:absolute;left:452px;top:366px;display:flex;flex-direction:column;align-items:flex-start;gap:6px"><span style="font-size:12px;font-weight:600;color:#767676">Fjerne et krav</span><span class="pill">fs-krav · modus C</span></div>
+          <div data-o="A" style="position:absolute;left:1360px;top:448px;width:140px;text-align:center;font-size:12px;font-weight:600;color:#767676">når koden er borte</div>
+          <div data-o="A" style="position:absolute;left:1360px;top:492px;width:140px;display:flex;justify-content:center"><span class="pill">fs-verify</span></div>
+          <div data-o="A" style="position:absolute;left:700px;top:618px;width:960px;display:flex;justify-content:center;align-items:center;gap:10px;background:#fff;padding:0 8px;box-sizing:border-box"><span style="font-size:13px;font-weight:600;color:#767676;background:#fff;padding:0 6px">Følger utviklingsflyten: koden fjernes i en oppgave, og kravet beholder <span style="font-family:'IBM Plex Mono',monospace">@deprecated</span></span><span class="pill">fs-specify</span></div>
+
+          <div data-o="A" style="position:absolute;left:40px;top:440px;width:492px;height:80px;box-sizing:border-box;border:2px dashed #c2bfcb;border-radius:14px;display:flex;flex-direction:column;justify-content:center;padding:0 20px;gap:2px">
+            <div style="font-weight:700;font-size:16px">Slettes</div>
+            <div style="font-size:13px;color:#767676">Krav som ikke er levert, slettes direkte.</div>
+          </div>
+          <div data-o="A" style="position:absolute;left:1500px;top:440px;width:180px;height:80px;box-sizing:border-box;border:2px dashed #c2bfcb;border-radius:14px;display:flex;flex-direction:column;justify-content:center;padding:0 16px;gap:2px">
+            <div style="font-weight:700;font-size:16px">Slettes</div>
+            <div style="font-size:13px;color:#767676">Kravet fjernes fra repoet</div>
+          </div>
+        </div>
+        </foreignObject>
+      </svg>
+    </div>
+
+    <div style="display:flex;flex-direction:column;gap:14px">
+      <div style="display:flex;align-items:baseline;gap:12px;flex-wrap:wrap"><h3 style="margin:0;font-size:20px;font-weight:600">Når brukes hvilken skill</h3><span style="font-family:'IBM Plex Mono',monospace;font-size:13px;color:#767676">.claude/skills/</span></div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:12px">
+        <div style="background:#fff;border:1px solid #dedede;border-radius:12px;padding:16px 18px;display:flex;flex-direction:column;gap:8px">
+          <span style="font-family:'IBM Plex Mono',monospace;font-size:13px;font-weight:600;background:#0a0132;color:#fff;padding:4px 10px;border-radius:6px;align-self:flex-start">fs-scope</span>
+          <span style="font-size:14px;line-height:1.5">Avgrenser et initiativ og deler det i oppgaver, bestemmer hvilke krav hver oppgave har, oppretter oppgavene, lager skjelett-krav (@draft) og setter @scope-&lt;slug&gt;. Kan kjøres på nytt når scopet endres.</span>
+        </div>
+        <div style="background:#fff;border:1px solid #dedede;border-radius:12px;padding:16px 18px;display:flex;flex-direction:column;gap:8px">
+          <span style="font-family:'IBM Plex Mono',monospace;font-size:13px;font-weight:600;background:#0a0132;color:#fff;padding:4px 10px;border-radius:6px;align-self:flex-start">fs-krav</span>
+          <span style="font-size:14px;line-height:1.5">Nytt krav eller utfylling av et skjelett (A), validere krav i en mappe (B), fjerne krav (C) og endre et levert krav (D). Eier @draft → @planned og @implemented → @deprecated.</span>
+          <div style="background:#ebe6fe;border-radius:8px;padding:12px 14px;display:flex;flex-direction:column;gap:6px;margin-top:4px">
+            <span style="font-family:'IBM Plex Mono',monospace;font-size:12px;font-weight:600;background:#0a0132;color:#fff;padding:3px 8px;border-radius:6px;align-self:flex-start">fs-krav-avvik</span>
+            <span style="font-size:13px;line-height:1.5">Gå gjennom ordlyden i en mappe eller fil mot konvensjonene i krav/README.md, typisk før validering. Endrer aldri tagger.</span>
+          </div>
+        </div>
+        <div style="background:#fff;border:1px solid #dedede;border-radius:12px;padding:16px 18px;display:flex;flex-direction:column;gap:8px">
+          <span style="font-family:'IBM Plex Mono',monospace;font-size:13px;font-weight:600;background:#0a0132;color:#fff;padding:4px 10px;border-radius:6px;align-self:flex-start">fs-specify</span>
+          <span style="font-size:14px;line-height:1.5">Henter @planned-krav for én feature inn i en oppgave og retagger dem @in-progress.</span>
+          <div style="background:#ebe6fe;border-radius:8px;padding:12px 14px;display:flex;flex-direction:column;gap:6px;margin-top:4px">
+            <span style="font-family:'IBM Plex Mono',monospace;font-size:12px;font-weight:600;background:#0a0132;color:#fff;padding:3px 8px;border-radius:6px;align-self:flex-start">fs-specify-delta</span>
+            <span style="font-size:13px;line-height:1.5">Som fs-specify, men når utgangspunktet er en endring: feature-filer, markdown, en commit eller en branch.</span>
+          </div>
+        </div>
+        <div style="grid-column:1/-1;background:transparent;border:2px dashed #c2bfcb;border-radius:12px;padding:16px 18px;display:flex;flex-direction:column;gap:8px">
+          <span style="font-size:15px;font-weight:700;color:#0a0132">Implementasjon i koden</span>
+          <span style="font-size:14px;line-height:1.5">Bruker mange individuelle skills, avhengig av hva som skal lages. Disse peker på artefaktene som fs-specify har laget.</span>
+        </div>
+        <div style="grid-column:1/-1;background:#fff;border:1px solid #dedede;border-radius:12px;padding:16px 18px;display:flex;flex-direction:column;gap:8px">
+          <span style="font-family:'IBM Plex Mono',monospace;font-size:13px;font-weight:600;background:#0a0132;color:#fff;padding:4px 10px;border-radius:6px;align-self:flex-start">fs-verify</span>
+          <span style="font-size:14px;line-height:1.5">Verifiserer koden: @in-progress → @implemented, og sletter @deprecated-krav når koden er borte.</span>
+        </div>
+      </div>
+    </div>
+
+    <div style="display:flex;flex-direction:column;gap:14px">
+      <div style="display:flex;align-items:baseline;gap:12px;flex-wrap:wrap"><h3 style="margin:0;font-size:20px;font-weight:600">Følg oppgaven på tavla</h3><span style="font-family:'IBM Plex Mono',monospace;font-size:13px;color:#767676">FS Kravforvaltning · Oppgaver</span></div>
+      <p style="margin:0;font-size:15px;line-height:1.55;color:#767676;max-width:820px">Tavla «Oppgaver» har ett kort per oppgave, fra den opprettes til kravene er verifisert. Kolonnen utledes av taggene i kravene og spesifikasjonene, og settes ikke for hånd.</p>
+      <div style="display:flex;flex-wrap:wrap;align-items:stretch;gap:8px">
+        <div style="background:#fff;border:1px solid #dedede;border-radius:10px;padding:10px 14px;display:flex;flex-direction:column;gap:4px"><span style="font-size:14px;font-weight:600">I scope</span><span style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#4324c8">fs-scope</span></div>
+        <div style="display:flex;align-items:center;color:#7351fb;font-size:18px">→</div>
+        <div style="background:#fff;border:1px solid #dedede;border-radius:10px;padding:10px 14px;display:flex;flex-direction:column;gap:4px"><span style="font-size:14px;font-weight:600">Kravarbeid</span><span style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#4324c8">fs-krav</span></div>
+        <div style="display:flex;align-items:center;color:#7351fb;font-size:18px">→</div>
+        <div style="background:#fff;border:1px solid #dedede;border-radius:10px;padding:10px 14px;display:flex;flex-direction:column;gap:4px"><span style="font-size:14px;font-weight:600">Spesifiseres</span><span style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#4324c8">fs-specify</span></div>
+        <div style="display:flex;align-items:center;color:#7351fb;font-size:18px">→</div>
+        <div style="background:#fff;border:1px solid #dedede;border-radius:10px;padding:10px 14px;display:flex;flex-direction:column;gap:4px"><span style="font-size:14px;font-weight:600">Klart til utvikling</span><span style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#767676">sendes til første repo</span></div>
+        <div style="display:flex;align-items:center;color:#7351fb;font-size:18px">→</div>
+        <div style="background:#ebe6fe;border-radius:10px;padding:10px 14px;display:flex;flex-direction:column;gap:4px"><span style="font-size:14px;font-weight:600">fs-plattform, fs-admin, …</span><span style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#767676">ett steg per repo</span></div>
+        <div style="display:flex;align-items:center;color:#7351fb;font-size:18px">→</div>
+        <div style="background:#fff;border:1px solid #dedede;border-radius:10px;padding:10px 14px;display:flex;flex-direction:column;gap:4px"><span style="font-size:14px;font-weight:600">Til verifisering</span><span style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#4324c8">fs-verify</span></div>
+        <div style="display:flex;align-items:center;color:#7351fb;font-size:18px">→</div>
+        <div style="background:#0a0132;color:#fff;border-radius:10px;padding:10px 14px;display:flex;flex-direction:column;gap:4px"><span style="font-size:14px;font-weight:600">Verifisert</span><span style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#c2bfcb">@implemented</span></div>
+      </div>
+    </div>
+
+    <div style="background:#0a0132;color:#fff;border-radius:16px;padding:22px 28px;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:16px">
+      <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap">
+        <span style="font-family:'IBM Plex Mono',monospace;font-size:14px;background:#7351fb;padding:6px 12px;border-radius:8px;font-weight:600">PR → main</span>
+        <span style="font-size:17px">Endringene sendes som en PR til main, som alt annet i repoet.</span>
+      </div>
+      <span style="font-size:15px;color:#c2bfcb">Les mer: <a href="./#/krav/README.md" style="color:#fff">Slik jobber vi med krav</a> har alle konvensjonene.</span>
+    </div>
+  </section>
+</div>
+<script>
+// Velgeren av flyt: delene som ikke hører til flyten, tones ned (som renderVals i «Krav i FS.dc.html»)
+(() => {
+  const DESC = {
+    alle: 'Hele livsløpet. Velg en flyt for å se den alene.',
+    N: 'Normalflyt: et initiativ avgrenses med fs-scope, og et nytt krav går fra utkast (ofte et skjelett), via validering og implementasjon, til levert.',
+    E: 'Endringsflyt: et levert krav endres. Den nye versjonen legges ved siden av den gamle som @draft og går gjennom samme løp. Når den er validert, erstatter den den gamle.',
+    A: 'Avviklingsflyt: krav som ikke er levert, slettes. Leverte krav får @deprecated, koden fjernes i en oppgave, og kravet slettes når koden er borte.',
+  };
+  const set = m => {
+    document.querySelectorAll('[data-o]').forEach(el => (el.style.opacity = m === 'alle' || el.dataset.o.includes(m) ? '1' : '0.12'));
+    document.querySelectorAll('.flowbtn').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.mode === m)));
+    document.getElementById('flowdesc').textContent = DESC[m];
+  };
+  document.querySelectorAll('.flowbtn').forEach(b => b.addEventListener('click', () => set(b.dataset.mode)));
+})();
+</script>
+</body>
+</html>

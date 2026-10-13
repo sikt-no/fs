@@ -1,4 +1,4 @@
-# Designnotater: Opprette applikasjon
+# Implementasjonsdetaljer: Opprette applikasjon
 
 **Relatert feature:** [`opprette_applikasjon.feature`](./opprette_applikasjon.feature)
 

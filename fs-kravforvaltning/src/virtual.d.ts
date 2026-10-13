@@ -1,0 +1,24 @@
+declare module 'virtual:krav' {
+  import type { Snapshot } from '../shared/model';
+  const snapshot: Snapshot;
+  export default snapshot;
+}
+
+declare module 'virtual:krav-git' {
+  import type { GitInfo } from '../shared/model';
+  const git: GitInfo | null;
+  export default git;
+}
+
+declare module 'virtual:krav-root' {
+  /** Absolutt sti til repoet i dev-serveren, null i statisk bygg */
+  const root: string | null;
+  export default root;
+}
+
+declare module 'virtual:krav-tasks' {
+  import type { TasksSnapshot } from '../shared/tasks';
+  /** Oppgavemappene og scope-filene i tasks/ (null i eldre bygg) */
+  const tasks: TasksSnapshot | null;
+  export default tasks;
+}

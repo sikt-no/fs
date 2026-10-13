@@ -1,107 +1,105 @@
-        # language: no
-        @OPT-REG-KRA-001 @opptakspilot @opptakspilotkritisk @fsadmin
-        Egenskap: Kompetanseregelverk
-        Som administrator ønsker jeg å kunne opprette og vedlikeholde kompetanseregelverk som definerer kvalifiseringskrav for utdanningstilbud. Kompetanseregelverk er det grunnleggende regelverket for å avgjøre om en søker er kvalifisert for et studium basert på ulike grunnlag som vitnemål, forkurs, realkompetanse eller andre kvalifikasjoner. Regelverket inneholder kravelementer som kan være fagkrav fra videregående opplæring, opptaksprøver, praksis, arbeidserfaring, språkkrav eller andre typer kompetanse, med mulighet for å sette spesifikke poengkrav som resultatkrav, standpunktkrav og eksamenskrav. Systemet støtter både enkle og komplekse regler med OG/ELLER-logikk mellom krav, og alle beskrivelser og titler kan registreres på Bokmål, Nynorsk, Engelsk og Nordsamisk for å sikre tilgjengelighet for alle søkere.
+# language: no
+@OPT-REG-KRA-001 @must @draft
+Egenskap: Kompetanseregelverk
+  Som opptaksforvalter
+  ønsker jeg å opprette og vedlikeholde kompetanseregelverk
+  slik at kravene for kvalifisering av søkere er definert.
 
-        Scenario: Opprette nytt kompetanseregelverk med eksisterende kravelementer
-                        Når administratoren velger å opprette et kompetanseregelverk
-                        Og administratoren fyller inn følgende grunnleggende informasjon i kompetanseregelverket
-                        | felt            | verdi                                   |
-                        | navn            | Ingeniør elektronikk UiT                |
-                        | kode            | ELUIT                                   |
-                        | beskrivelse     | Krav for opptak til elektronikk ved UiT |
-                        | gyldig fra dato | 01.01.2026                              |
+  Bakgrunn:
+    Gitt at jeg er innlogget som opptaksforvalter
+    Og at regelverkssamlingen "UHG2027" er opprettet
 
-                        Og administratoren velger grunnlag "VES, VOV"
-                        Og administratoren legger til følgende eksisterende kravelementer for disse grunnlagene
-                        | kravelement | beskrivelse               | minimumskrav |
-                        | GENS        | Generell studiekompetanse | Ja           |
-                        | FFMAT       | Matematikk R1             | Karakter 4   |
-                        | FFYS1       | Fysikk 1                  | Karakter 3   |
-                        Og administratoren velger grunnlag "FOR"
-                        Og administratoren legger til følgende eksisterende kravelementer for dette grunnlaget
-                        | kravelement | beskrivelse            | minimumskrav |
-                        | FORFYS      | Fysikk fra forkurs     | Bestått      |
-                        | FORMAT      | Matematikk fra forkurs | Karakter C   |
-        Og administratoren lagrer kompetanseregelverket
-        Så skal administratoren kunne se kompetanseregelverket med kode "ELUIT" i listen over regelverk
+  Regel: Opptaksforvalter kan opprette et kompetanseregelverk med kode, beskrivelse og forklaring
 
-        Scenario: Opprette kompetanseregelverk med alternative krav innen ett grunnlag
-                        Når administratoren velger å opprette et kompetanseregelverk
-                        Og administratoren fyller inn følgende grunnleggende informasjon i kompetanseregelverket
-                        | felt            | verdi                                         |
-                        | navn            | Ingeniørutdanning generelle krav              |
-                        | kode            | HING                                          |
-                        | beskrivelse     | Generelle krav for opptak til ingeniørstudier |
-                        | gyldig fra dato | 01.01.2026                                    |
-                        Og administratoren velger grunnlag "VES"
-                        Og administratoren legger til kravelementet "GENS" (Generell studiekompetanse)
-                        Og administratoren legger til en kravgruppe "Alternativ 1" med følgende kravelementer
-                        | kravelement | beskrivelse   | minimumskrav |
-                        | FFMAT       | Matematikk R1 | Karakter 3   |
-                        | FFYS1       | Fysikk 1      | Karakter 3   |
-                        Og administratoren legger til en kravgruppe "Alternativ 2" med følgende kravelementer
-                        | kravelement | beskrivelse   | minimumskrav |
-                        | FFMAR       | Matematikk R2 | Karakter 4   |
-                        Og administratoren legger til en kravgruppe "Alternativ 3" med følgende kravelementer
-                        | kravelement | beskrivelse   | minimumskrav |
-                        | FMAS1       | Matematikk S1 | Karakter 4   |
-                        | FMAS2       | Matematikk S2 | Karakter 4   |
-                        | FFYS1       | Fysikk 1      | Karakter 3   |
-        Og administratoren definerer at søkeren må oppfylle ett av de tre alternativene (ELLER-logikk)
-        Og administratoren lagrer kompetanseregelverket
-        Så skal administratoren kunne se kompetanseregelverket med kode "HING" i listen over regelverk
+    Scenario: Opprette kompetanseregelverk
+      Når jeg oppretter et nytt kompetanseregelverk i regelverkssamlingen
+      Og jeg angir kode "GSK-UHG" og beskrivelse "Generelle krav for UHG-opptak"
+      Og jeg angir at regelverket er aktivt
+      Så er kompetanseregelverket opprettet i regelverkssamlingen
 
-        Scenario: Definere ulike karakterkrav for et kravelement i kompetanseregelverk
-                        Gitt at administratoren er i ferd med å opprette et kompetanseregelverk
-                        Og administratoren har valgt grunnlag "VES"
-                        Når administratoren legger til kravelementet "FFMAT" (Matematikk R1)
-                        Og administratoren definerer følgende karakterkrav for kravelementet
-                        | kravtype       | verdi | beskrivelse                                  |
-                        | Resultatkrav   | null  | Ingen separat krav til totalresultat i faget |
-                        | Standpunktkrav | 3     | Krav til standpunktkarakter gitt av lærer    |
-                        | Eksamenskrav   | 2     | Krav til eksamenskarakter                    |
-                        Og administratoren lagrer kravelementet i kompetanseregelverket
-                        Så skal kravelementet vises med de definerte karakterkravene i kompetanseregelverket
+  Regel: Kompetanseregelverk har beskrivelse og forklaring på flere språk
 
-                        Gitt at administratoren er i ferd med å opprette et kompetanseregelverk
-                        Og administratoren har valgt grunnlag "VES"
-                        Når administratoren legger til kravelementet "NORSK" (Norsk hovedmål, sidemål og muntlig)
-                        Og administratoren definerer følgende karakterkrav for kravelementet
-                        | kravtype       | verdi | beskrivelse                                           |
-                        | Resultatkrav   | 3     | Krav til gjennomsnitt av hovedmål, sidemål og muntlig |
-                        | Standpunktkrav | null  | Ingen separat krav til standpunktkarakterer           |
-                        | Eksamenskrav   | null  | Ingen separat krav til eksamenskarakterer             |
-        Og administratoren lagrer kravelementet i kompetanseregelverket
-        Så skal kravelementet vises med gjennomsnittskrav i kompetanseregelverket
+    Scenario: Flerspråklig beskrivelse og forklaring
+      Når jeg oppretter et kompetanseregelverk
+      Og jeg angir beskrivelse på bokmål, nynorsk, engelsk og samisk
+      Og jeg angir forklaring (markdown) på bokmål, nynorsk, engelsk og samisk
+      Så er tekstene lagret på alle fire språk
 
-        Scenario: Registrere tittel og beskrivelse på flere språk for kompetanseregelverk og kravelement
-                        Når administratoren velger å opprette et kompetanseregelverk
-                        Og administratoren fyller inn følgende flerspråklig informasjon for kompetanseregelverket
-                        | felt            | språk      | verdi                                                     |
-                        | navn            | Bokmål     | Ingeniørutdanning generelle krav                          |
-                        | navn            | Nynorsk    | Ingeniørutdanning generelle krav                          |
-                        | navn            | Engelsk    | Engineering Education General Requirements                |
-                        | navn            | Nordsamisk | Inšenevrahkadeapmi oppalaš gáibádusat                     |
-                        | beskrivelse     | Bokmål     | Generelle krav for opptak til ingeniørstudier             |
-                        | beskrivelse     | Nynorsk    | Generelle krav for opptak til ingeniørstudium             |
-                        | beskrivelse     | Engelsk    | General requirements for admission to engineering studies |
-                        | beskrivelse     | Nordsamisk | Oppalaš gáibádusat beassat inšenevraohppui                |
-                        | kode            | -          | HING                                                      |
-                        | gyldig fra dato | -          | 01.01.2026                                                |
-                        Og administratoren velger å opprette et nytt kravelement
-                        Og administratoren fyller inn følgende flerspråklig informasjon for kravelementet
-                        | felt        | språk      | verdi                                                      |
-                        | kode        | -          | FFYS1                                                      |
-                        | navn        | Bokmål     | Fysikk 1                                                   |
-                        | navn        | Nynorsk    | Fysikk 1                                                   |
-                        | navn        | Engelsk    | Physics 1                                                  |
-                        | navn        | Nordsamisk | Fysihkka 1                                                 |
-                        | beskrivelse | Bokmål     | Programfag Fysikk 1 fra videregående skole                 |
-                        | beskrivelse | Nynorsk    | Programfag Fysikk 1 frå vidaregåande skule                 |
-                        | beskrivelse | Engelsk    | Physics 1 programme subject from upper secondary education |
-                        | beskrivelse | Nordsamisk | Fysihkka 1 prográmmafága joatkkaskuvllas                   |
-Og administratoren lagrer både kompetanseregelverket og kravelementet
-Så skal administratoren kunne se kompetanseregelverket med tekster på alle fire språk
-Og administratoren skal kunne se kravelementet med tekster på alle fire språk
-Og tekstene skal vises i riktig språk basert på brukerens språkvalg
+  Regel: Et kompetanseregelverk kan ha flere kompetansekrav med ulike grunnlag
+
+    Scenario: Kompetansekrav med flere grunnlag
+      Når jeg oppretter kompetanseregelverket "Ingeniør elektronikk UiT" med kode "ELUIT"
+      Og jeg legger til et kompetansekrav med grunnlagene "VES" og "VOV"
+      Og jeg legger til kravelementene "GENS", "FFMAT" og "FFYS1" for disse grunnlagene
+      Og jeg legger til et annet kompetansekrav med grunnlaget "FOR"
+      Og jeg legger til kravelementene "FORFYS" og "FORMAT" for dette grunnlaget
+      Og jeg lagrer kompetanseregelverket
+      Så har regelverket to kompetansekrav med ulike grunnlag
+
+  Regel: Kompetansekrav kan kreve at alle eller ett av underkravene er oppfylt
+
+    Scenario: Alle krav må oppfylles (OG-logikk)
+      Når jeg legger til et kompetansekrav med "krever alle" satt til ja
+      Og jeg legger til kravelementene "GENS", "FFMAT" og "FFYS1"
+      Så må søkeren oppfylle alle tre kravelementene for å bli kvalifisert
+
+    Scenario: Ett av kravene er tilstrekkelig (ELLER-logikk)
+      Når jeg legger til et kompetansekrav med "krever alle" satt til nei
+      Og jeg legger til tre alternative kravgrupper
+      Så er det tilstrekkelig at søkeren oppfyller én av de tre alternativene
+
+  Regel: Kompetansekrav kan ha tilleggskrav med kravlister og kravelementer
+
+    Scenario: Opprette kompetanseregelverk med alternative tilleggskrav
+      Når jeg oppretter kompetanseregelverket "HING" for ingeniørstudier
+      Og jeg legger til kravelementet "GENS" (Generell studiekompetanse)
+      Og jeg legger til tilleggskrav med tre alternativer:
+        | Alternativ | Kravelementer              | Minimumskrav       |
+        | 1          | Matematikk R1, Fysikk 1   | Karakter 3         |
+        | 2          | Matematikk R2              | Karakter 4         |
+        | 3          | Matematikk S1+S2, Fysikk 1| Karakter 4, 4, 3   |
+      Og jeg definerer at søkeren må oppfylle ett av de tre alternativene
+      Og jeg lagrer kompetanseregelverket
+      Så har regelverket ELLER-logikk mellom tilleggskravgruppene
+
+  Regel: Kravelementer kan ha karakterkrav med ulike kravtyper
+
+    Scenario: Sette karakterkrav på kravelement
+      Gitt at jeg redigerer et kompetansekrav
+      Når jeg legger til kravelementet "FFMAT" (Matematikk R1)
+      Og jeg setter følgende karakterkrav:
+        | Kravtype       | Verdi | Beskrivelse                      |
+        | Resultatkrav   |       | Ingen krav til totalresultat     |
+        | Standpunktkrav | 3     | Krav til standpunktkarakter      |
+        | Eksamenskrav   | 2     | Krav til eksamenskarakter        |
+      Så vises kravelementet med de definerte karakterkravene
+
+    Scenario: Sette gjennomsnittskrav
+      Gitt at jeg redigerer et kompetansekrav
+      Når jeg legger til kravelementet "NORSK" med resultatkrav 3
+      Så beregnes gjennomsnittet av hovedmål, sidemål og muntlig mot kravet
+
+  Regel: Kompetansekrav kan kreve generell studiekompetanse
+
+    Scenario: Sette GSK-krav
+      Når jeg legger til et kompetansekrav med "krever generell studiekompetanse" satt til ja
+      Så må søkeren ha generell studiekompetanse for å bli kvalifisert gjennom dette kravet
+
+  Regel: Et kompetanseregelverk kan aktiveres og deaktiveres
+
+    Scenario: Deaktivere kompetanseregelverk
+      Gitt at kompetanseregelverket "GSK-UHG" er aktivt
+      Når jeg deaktiverer kompetanseregelverket
+      Så er det ikke lenger tilgjengelig for nye utdanningstilbud
+
+  Regel: Et kompetanseregelverk kan slettes når det ikke er i bruk
+
+    Scenario: Slette kompetanseregelverk som ikke er i bruk
+      Gitt at kompetanseregelverket "TestKrav" ikke er knyttet til noe utdanningstilbud
+      Når jeg sletter kompetanseregelverket
+      Så er det slettet
+
+    Scenario: Kan ikke slette kompetanseregelverk som er i bruk
+      Gitt at kompetanseregelverket "GSK-UHG" er knyttet til utdanningstilbud
+      Når jeg forsøker å slette kompetanseregelverket
+      Så får jeg beskjed om at det er i bruk og ikke kan slettes
