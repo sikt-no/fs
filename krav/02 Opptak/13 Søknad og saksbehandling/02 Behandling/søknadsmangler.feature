@@ -14,7 +14,7 @@ Egenskap: Søknadsmangler
   og kan laste opp dokumentasjonen der.
 
   Mangler hører til saken, det vil si søknadsalternativene én saksbehandlende organisasjon har
-  (se @OPT-BEH-BEH-007). Hver mangelkode hører til en kategori, og kategorien avgjør hva
+  (se @OPT-BEH-BEH-011). Hver mangelkode hører til en kategori, og kategorien avgjør hva
   mangelen hindrer:
   - Generelle krav: saksbehandleren kan ikke sette søkeren som kvalifisert til noen av
     søknadsalternativene i saken. En mangelkode i denne kategorien kan også sperre for opptak,
@@ -28,7 +28,7 @@ Egenskap: Søknadsmangler
   1. Mangelkoder – opptaksforvalteren forvalter mangelkodene og tekstene.
   2. Registrering – saksbehandleren registrerer, sjekker ut og sletter mangler i saken.
   3. Publisering og melding – søkeren får se manglene og får melding om dem, med frist.
-  4. Søkerens visning – søkeren ser manglene på dokumentasjonssiden.
+  4. Søkerens visning – søkeren ser manglene og laster opp dokumentasjon på dokumentasjonssiden.
   5. Innsyn – hvem som ser manglene i sakene.
   6. Automatikk – mangler som settes og sjekkes ut automatisk.
 
@@ -95,10 +95,10 @@ Egenskap: Søknadsmangler
 
     Scenario: Mangel på spesielle krav hindrer kvalifisering bare til søknadsalternativene med kompetanseregelverket
       Gitt at saken hos "Universitetet i Oslo" har følgende søknadsalternativer
-        | søknadsalternativ | kompetanseregelverk |
-        | Informatikk, UiO  | GSK-UHG, MATR2      |
-        | Historie, UiO     | GSK-UHG             |
-      Og at saken har en mangel i kategorien "Spesielle krav" på kompetanseregelverket "MATR2"
+        | søknadsalternativ | kompetanseregelverk      |
+        | Informatikk, UiO  | Regelverk A, Regelverk B |
+        | Historie, UiO     | Regelverk A              |
+      Og at saken har en mangel i kategorien "Spesielle krav" på kompetanseregelverket "Regelverk B"
       Når saksbehandleren ved Universitetet i Oslo vurderer kvalifiseringen
       Så kan ikke saksbehandleren sette søkeren som kvalifisert til "Informatikk, UiO"
       Men saksbehandleren kan sette søkeren som kvalifisert til "Historie, UiO"
@@ -130,19 +130,32 @@ Egenskap: Søknadsmangler
       Når saksbehandleren ved Universitetet i Oslo registrerer en mangel i saken med følgende opplysninger
         | felt                | verdi                                                      |
         | Mangelkode          | KAR                                                        |
-        | Kompetanseregelverk | MATR2                                                      |
+        | Kompetanseregelverk | Regelverk B                                                |
         | Kommentar           | Du mangler karakter i R2. Dokumenter ett av kravene under. |
-      Så har saken mangelen "KAR" på kompetanseregelverket "MATR2"
+      Så har saken mangelen "KAR" på kompetanseregelverket "Regelverk B"
+
+    Scenario: Saksbehandleren velger blant mangelkodene i regelverkssamlingen til opptaket
+      Gitt at regelverkssamlingen "UHG 2027" har mangelkodene "KAR" og "STEMPEL"
+      Og at en annen regelverkssamling har mangelkoden "ATT"
+      Når saksbehandleren ved Universitetet i Oslo velger mangelkode for en mangel
+      Så kan saksbehandleren velge "KAR" og "STEMPEL"
+      Og saksbehandleren kan ikke velge "ATT"
 
     Scenario: Saksbehandleren velger blant kompetanseregelverkene til søknadsalternativene i saken
-      Gitt at søknadsalternativene i saken hos "Universitetet i Oslo" har kompetanseregelverkene "GSK-UHG" og "MATR2"
+      Gitt at søknadsalternativene i saken hos "Universitetet i Oslo" har kompetanseregelverkene "Regelverk A" og "Regelverk B"
       Når saksbehandleren ved Universitetet i Oslo velger kompetanseregelverk for en mangel
-      Så kan saksbehandleren velge "GSK-UHG" og "MATR2"
+      Så kan saksbehandleren velge "Regelverk A" og "Regelverk B"
       Og saksbehandleren kan ikke velge andre kompetanseregelverk
 
     Scenario: Registrere mangel på kvote
       Når saksbehandleren ved Universitetet i Oslo registrerer mangelen "BOS" i kategorien "Kvote" på kvotespørsmålet "Bosted i Nord-Norge"
       Så har saken mangelen "BOS" på kvotespørsmålet "Bosted i Nord-Norge"
+
+    Scenario: Saksbehandleren velger blant kvotespørsmålene til søknadsalternativene i saken
+      Gitt at kvotene til søknadsalternativene i saken hos "Universitetet i Oslo" har kvotespørsmålene "Bosted i Nord-Norge" og "Samisk tilhørighet"
+      Når saksbehandleren ved Universitetet i Oslo velger kvotespørsmål for en mangel
+      Så kan saksbehandleren velge "Bosted i Nord-Norge" og "Samisk tilhørighet"
+      Og saksbehandleren kan ikke velge andre kvotespørsmål
 
     Scenariomal: En mangel i kategorien <kategori> <kobling>
       Når saksbehandleren ved Universitetet i Oslo registrerer en mangel i kategorien "<kategori>"
@@ -194,6 +207,10 @@ Egenskap: Søknadsmangler
 
   Regel: Saksbehandleren sjekker ut mangelen når søkeren har dokumentert på nytt
 
+    Når saksbehandleren har vurdert ny dokumentasjon og mener at mangelen er løst, sjekker
+    saksbehandleren ut mangelen. En mangel som er sjekket ut, står fortsatt i saken, så det
+    går an å se hva som har manglet, men den hindrer ikke lenger noe og vises ikke for søkeren.
+
     Scenario: Saksbehandleren ser at søkeren har lastet opp ny dokumentasjon
       Gitt at saken hos "Universitetet i Oslo" har mangelen "KAR"
       Når søkeren laster opp dokumentasjon
@@ -207,16 +224,16 @@ Egenskap: Søknadsmangler
       Og saken har fortsatt mangelen "KAR"
 
     Scenario: Mangel som er sjekket ut hindrer ikke kvalifisering
-      Gitt at saken hos "Universitetet i Oslo" har mangelen "KAR" på kompetanseregelverket "MATR2"
+      Gitt at saken hos "Universitetet i Oslo" har mangelen "KAR" på kompetanseregelverket "Regelverk B"
       Og at mangelen "KAR" er sjekket ut
       Når saksbehandleren ved Universitetet i Oslo vurderer kvalifiseringen
-      Så kan saksbehandleren sette søkeren som kvalifisert til søknadsalternativene med "MATR2"
+      Så kan saksbehandleren sette søkeren som kvalifisert til søknadsalternativene med "Regelverk B"
 
-    Scenario: Saksbehandleren ser om søkeren har sett mangelen
+    Scenario: Saksbehandleren ser om søkeren har lest mangelen
       Gitt at mangelen "KAR" er publisert
-      Og at søkeren har sett mangelen "KAR" i Min kompetanse
-      Når saksbehandleren ved Universitetet i Oslo ser manglene i saken
-      Så ser saksbehandleren at søkeren har sett mangelen "KAR"
+      Og at søkeren har åpnet mangelen "KAR" i Min kompetanse
+      Når saksbehandleren ved Universitetet i Oslo åpner manglene i saken
+      Så er mangelen "KAR" merket med at søkeren har lest den
 
   # ── 3. Publisering og melding ────────────────────────────────
 
@@ -297,9 +314,9 @@ Egenskap: Søknadsmangler
       Og søkeren ser fristen "2027-07-01 23:59" for "Informatikk, UiO"
 
     Scenario: Mangel på spesielle krav gir frist bare for søknadsalternativene med kompetanseregelverket
-      Gitt at "Informatikk, UiO" har kompetanseregelverket "MATR2"
-      Og at "Lektorutdanning, UiO" ikke har kompetanseregelverket "MATR2"
-      Og at saken har en mangel i kategorien "Spesielle krav" på kompetanseregelverket "MATR2"
+      Gitt at "Informatikk, UiO" har kompetanseregelverket "Regelverk B"
+      Og at "Lektorutdanning, UiO" ikke har kompetanseregelverket "Regelverk B"
+      Og at saken har en mangel i kategorien "Spesielle krav" på kompetanseregelverket "Regelverk B"
       Når søkeren åpner meldingen om mangel
       Så ser søkeren fristen for "Informatikk, UiO"
       Men søkeren ser ikke en frist for "Lektorutdanning, UiO"
@@ -319,30 +336,37 @@ Egenskap: Søknadsmangler
 
   Regel: Søkeren ser manglene på dokumentasjonssiden
 
+    Dokumentasjonssiden er siden i Min kompetanse der søkeren ser hvilken dokumentasjon som
+    mangler for søknadsalternativene, og laster opp dokumentasjonen.
+
     Scenario: Mangel på spesielle krav vises under søknadsalternativene med kompetanseregelverket
-      Gitt at "Informatikk, UiO" har kompetanseregelverket "MATR2"
-      Og at "Historie, UiO" ikke har kompetanseregelverket "MATR2"
-      Og at saken har den publiserte mangelen "KAR" på kompetanseregelverket "MATR2"
+      Gitt at "Informatikk, UiO" har kompetanseregelverket "Regelverk B"
+      Og at "Historie, UiO" ikke har kompetanseregelverket "Regelverk B"
+      Og at saken har den publiserte mangelen "KAR" på kompetanseregelverket "Regelverk B"
       Når søkeren åpner dokumentasjonssiden
       Så er "Informatikk, UiO" merket med at dokumentasjon mangler
       Og "Historie, UiO" er ikke merket med at dokumentasjon mangler
 
     Scenario: Søkeren ser kravene i kompetanseregelverket mangelen gjelder
-      Gitt at saken har den publiserte mangelen "KAR" på kompetanseregelverket "MATR2"
+      Gitt at saken har den publiserte mangelen "KAR" på kompetanseregelverket "Regelverk B"
       Når søkeren ser manglene for "Informatikk, UiO"
       Så ser søkeren informasjonen til søker for mangelkoden "KAR"
-      Og søkeren ser kravelementene i "MATR2"
+      Og søkeren ser kravelementene i "Regelverk B"
 
     Scenario: Søkeren ser kommentaren fra saksbehandleren
       Gitt at den publiserte mangelen "KAR" har en kommentar fra saksbehandleren
       Når søkeren ser manglene for "Informatikk, UiO"
       Så ser søkeren kommentaren fra saksbehandleren
 
-    Scenariomal: Mangel på <kategori> vises øverst på dokumentasjonssiden
+    @draft @openquestion
+    Scenariomal: Mangel på <kategori> gjelder ikke et bestemt søknadsalternativ
+      # ÅPNE SPØRSMÅL:
+      # - Gjelder mangler i kategoriene «Poeng» og «Kvote» søknaden som helhet, eller skal en
+      #   kvotemangel gjelde søknadsalternativene med kvoten (forslag fra review i PR #700)?
       Gitt at saken har en publisert mangel i kategorien "<kategori>"
       Når søkeren åpner dokumentasjonssiden
-      Så vises mangelen øverst på dokumentasjonssiden
-      Og mangelen vises ikke under søknadsalternativene
+      Så ser søkeren mangelen
+      Men ingen av søknadsalternativene er merket med at dokumentasjon mangler
 
       Eksempler:
         | kategori |
@@ -353,6 +377,24 @@ Egenskap: Søknadsmangler
       Gitt at den publiserte mangelen "KAR" er sjekket ut
       Når søkeren åpner dokumentasjonssiden
       Så ser ikke søkeren mangelen "KAR"
+
+  @draft @openquestion
+  Regel: Søkeren laster opp dokumentasjon for manglene
+    # ÅPNE SPØRSMÅL:
+    # - Knyttes dokumentasjonen søkeren laster opp, til en bestemt mangel, slik at saksbehandleren
+    #   ser hvilken mangel den er lastet opp for?
+    # - Hva skjer når fristen for mangelen har gått ut? Kan søkeren fortsatt laste opp dokumentasjon?
+
+    Scenario: Søkeren laster opp dokumentasjon for en mangel
+      Gitt at saken har den publiserte mangelen "KAR" på kompetanseregelverket "Regelverk B"
+      Når søkeren laster opp dokumentasjon på dokumentasjonssiden
+      Så har søknaden dokumentasjonen søkeren lastet opp
+
+    Scenario: Mangelen står til saksbehandleren har sjekket den ut
+      Gitt at søkeren har lastet opp dokumentasjon for den publiserte mangelen "KAR"
+      Og at saksbehandleren ikke har sjekket ut mangelen "KAR"
+      Når søkeren åpner dokumentasjonssiden
+      Så ser søkeren fortsatt mangelen "KAR"
 
   # ── 5. Innsyn ────────────────────────────────────────────────
 
@@ -391,6 +433,10 @@ Egenskap: Søknadsmangler
     #   sakene (uten kompetanseregelverk), og en mangel i kategorien «Spesielle krav» på
     #   kompetanseregelverket for generell studiekompetanse i sakene som har det. Ikke bekreftet.
     #   Koden har ikke den automatiske mangelen (sjekket 2026-10-09).
+    # - Hvem setter opp mangelkoden som settes automatisk, og hvordan vet løsningen hvilken
+    #   mangelkode det er? Opptaksforvalteren i regelverkssamlingen, eller et fast valg fra Sikt?
+    # - Regelen bygger på at søkeren kan oppgi at vitnemålet kommer i år (@OPT-SØK-SØK-013),
+    #   og det kravet er ikke avklart.
 
     Scenario: Saken får mangel når søkeren oppgir at vitnemålet kommer i år
       Når søkeren oppgir i søknaden at vitnemålet kommer i år
