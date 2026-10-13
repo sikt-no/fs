@@ -113,6 +113,8 @@
 #   ingen saker står igjen som ikke er ferdig behandlet, før tidligopptaket
 #   gjennomføres. (Dokumentasjonen på STEK-503 sier at det bare gjennomføres én
 #   gang, og at det ikke kommer noen ny sjanse. Den må rettes.)
+#   Mulig forbedring, ikke et krav: sikring mot en ny gjennomføring ved en feil
+#   etter at svarene er synlige for søkerne, se STEK-590 (13.10.2026).
 # - (09.10.2026) Har søkeren reservert studieplass på et søknadsalternativ som tilbyr
 #   tidlig opptak, får søkeren tilbudsgaranti fra tidligopptaket der uten å nå
 #   poenggrensen, når søkeren deltar og saken er ferdig behandlet. Søkeren har alt en
