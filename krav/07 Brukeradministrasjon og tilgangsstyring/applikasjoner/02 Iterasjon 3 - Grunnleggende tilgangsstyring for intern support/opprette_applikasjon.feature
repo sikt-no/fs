@@ -44,21 +44,10 @@ Egenskap: Opprette applikasjon
   Regel: Opprettelse krever valg av identitetsleverandør
 
     @deprecated
-    Scenario: Velge identitetsleverandør ved opprettelse (avvikles)
-      Når jeg starter opprettelse av en ny applikasjon
-      Så kan jeg velge én av identitetsleverandørene Feide og Maskinporten
-      Og identitetsleverandøren settes på applikasjonen og kan ikke endres senere
-
-    @deprecated
     Scenario: Velge identitetsleverandør ved opprettelse, inkludert FS
       Når jeg starter opprettelse av en ny applikasjon
       Så kan jeg velge én av identitetsleverandørene Feide, Maskinporten og FS (Maskinbruker)
       Og identitetsleverandøren settes på applikasjonen og kan ikke endres senere
-
-    @deprecated
-    Scenario: FS er ikke en valgbar identitetsleverandør
-      Når jeg starter opprettelse av en ny applikasjon
-      Så er FS ikke tilgjengelig som identitetsleverandør
 
     @draft @openquestion
     Scenario: Velge identitetsleverandør ved opprettelse
@@ -240,6 +229,7 @@ Egenskap: Opprette applikasjon
       Når jeg oppretter en ny applikasjon med Maskinporten som identitetsleverandør
       Så er konsument sin virksomhetsidentifikator registrert som "ukjent" på applikasjonen
 
+  @in-progress
   Regel: FS-applikasjoner identifiseres av et brukernavn som ikke verifiseres mot en ekstern kilde
 
     Scenario: Opprette applikasjon med FS-brukernavn
@@ -322,17 +312,13 @@ Egenskap: Opprette applikasjon
       Så er applikasjonen ikke aktiv i noen miljøer
       Og applikasjonen blir først aktiv i et miljø når den får tildelt sin første tilgang i det miljøet
 
-    @deprecated
-    Scenario: Nyopprettet applikasjon kan autentisere umiddelbart
-      Gitt jeg har opprettet en ny applikasjon
-      Så kan applikasjonen autentisere seg umiddelbart med sin eksterne identitet
-      Men applikasjonen får ikke tilgang til data før den har en tilgang i et miljø
-
+    @in-progress
     Scenario: Nyopprettet Feide- eller Maskinporten-applikasjon kan autentisere umiddelbart
       Gitt jeg har opprettet en ny applikasjon med Feide eller Maskinporten som identitetsleverandør
       Så kan applikasjonen autentisere seg umiddelbart med sin eksterne identitet
       Men applikasjonen får ikke tilgang til data før den har en tilgang i et miljø
 
+    @in-progress
     Scenario: Nyopprettet FS-applikasjon kan først autentisere når passord er satt
       Gitt jeg har opprettet en ny applikasjon med FS som identitetsleverandør
       Så kan applikasjonen først autentisere seg i et miljø når det er satt passord for det miljøet

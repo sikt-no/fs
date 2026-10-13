@@ -47,10 +47,6 @@ Egenskap: Se detaljer for applikasjon
       Gitt applikasjonen har FS som identitetsleverandør
       Så ser jeg applikasjonens brukernavn
 
-    @deprecated
-    Scenario: Se intern ID
-      Så ser jeg applikasjonens interne ID
-
   Regel: Detaljer kan redigeres direkte fra detaljer-fanen
 
     Scenario: Aktivere redigering av detaljer
