@@ -110,7 +110,8 @@
 # - (09.10.2026) Opptaksforvalter kan gjennomføre tidligopptaket mer enn én gang. En ny
 #   gjennomføring tar med saker som er blitt ferdig behandlet, eller har fått
 #   konklusjon, siden forrige gjennomføring. Det er likevel lurt å prøvekjøre til
-#   ingen saker står igjen som ikke er ferdig behandlet, før tidligopptaket
+#   ingen saker står igjen som ikke er ferdig behandlet eller mangler konklusjon, før
+#   tidligopptaket
 #   gjennomføres. (Dokumentasjonen på STEK-503 sier at det bare gjennomføres én
 #   gang, og at det ikke kommer noen ny sjanse. Den må rettes.)
 #   Mulig forbedring, ikke et krav: sikring mot en ny gjennomføring ved en feil
@@ -322,10 +323,13 @@ Egenskap: Gi tilbudsgaranti ved tidlig opptak
       Og opptaksforvalter ser antall søkere som er vurdert, og antall tilbudsgarantier som er satt
       Og opptaksforvalter ser antall søkere per utfall, per behandlende organisasjon og per utdanningstilbud
 
-    Scenario: Se antall saker som ikke er ferdig behandlet
-      Gitt 3 søkere som har søkt om tidlig opptak, har saker som ikke er ferdig behandlet
+    # Saker uten konklusjon telles med, også når de er ferdig behandlet: de er ikke med i
+    # tidligopptaket, og opptaksforvalteren gjør det samme med begge (avklart 13.10.2026).
+    Scenario: Se antall saker som ikke er ferdig behandlet eller mangler konklusjon
+      Gitt 2 søkere som har søkt om tidlig opptak, har saker som ikke er ferdig behandlet
+      Og 1 søker som har søkt om tidlig opptak, har en ferdig behandlet sak uten konklusjon
       Når opptaksforvalter prøvekjører tidligopptaket
-      Så ser opptaksforvalter at 3 saker ikke er ferdig behandlet
+      Så ser opptaksforvalter at 3 saker ikke er ferdig behandlet eller mangler konklusjon
 
     Scenario: Se utdanningstilbud med mangelfulle innstillinger
       Gitt "Vernepleie, høst 2027" tilbyr tidlig opptak uten poenggrense
