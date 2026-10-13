@@ -44,7 +44,9 @@
 # - Poeng lik poenggrensen gir tilbudsgaranti.
 # - Søkeren får tilbudsgaranti bare på søknadsalternativer der søkeren er
 #   kvalifisert. Er kvalifiseringen ikke vurdert, gis det ikke garanti, og
-#   opptaksforvalteren ser det i utfallet.
+#   opptaksforvalteren ser det i utfallet. (Unntak 13.10.2026, foreløpig: reservert
+#   studieplass gir tilbudsgaranti uten at søkeren er kvalifisert, se notatet om
+#   reservert studieplass under.)
 # - Søkeren får tilbudsgaranti på høyst ett søknadsalternativ: det høyest
 #   prioriterte som oppfyller kravene (som i se_svar_på_tidlig_opptak.feature).
 # - En søknad som ikke er konkludert, er ikke med i tidligopptaket.
@@ -121,6 +123,10 @@
 #   poenggrensen, når søkeren deltar og saken er ferdig behandlet. Søkeren har alt en
 #   plass fra et tidligere opptak. Reservasjonen gir ikke i seg selv innvilget tidlig
 #   opptak (se_svar_på_tidlig_opptak.feature). Stemmer med STEK-503.
+#   (13.10.2026, foreløpig) Kvalifisering kreves heller ikke: søkeren får tilbudsgaranti
+#   med reservert studieplass (RSO eller RES) også når søkeren ikke er kvalifisert, eller
+#   kvalifiseringen ikke er vurdert. Fagperson avklarte dette, men har sendt spørsmålet
+#   videre til en annen domeneekspert, så avklaringen er foreløpig.
 # - Alle tre rollene (B-rolle, T-rolle og F-rolle) kan sette tilbudsgaranti manuelt,
 #   hver med sitt eget sett med tilbudsgarantityper (domeneekspert, med henvisning til
 #   Confluence OP «Tilbudsgaranti»). Det stemmer med STEK-270/262 og koden.
@@ -228,6 +234,14 @@ Egenskap: Gi tilbudsgaranti ved tidlig opptak
       Og søkeren har reservert studieplass på "Sykepleie, høst 2027"
       Og søkeren er kvalifisert til "Sykepleie, høst 2027"
       Og søkeren har 40 poeng til "Sykepleie, høst 2027"
+      Når opptaksforvalter gjennomfører tidligopptaket
+      Så får søkeren tilbudsgaranti på "Sykepleie, høst 2027"
+
+    # Foreløpig avklaring 13.10.2026, se notatet om reservert studieplass øverst i fila.
+    Scenario: Reservert studieplass gir tilbudsgaranti uten kvalifisering
+      Gitt saksbehandler har konkludert med at søkeren deltar i tidligopptaket
+      Og søkeren har reservert studieplass på "Sykepleie, høst 2027"
+      Og søkeren er ikke kvalifisert til "Sykepleie, høst 2027"
       Når opptaksforvalter gjennomfører tidligopptaket
       Så får søkeren tilbudsgaranti på "Sykepleie, høst 2027"
 
