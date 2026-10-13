@@ -98,24 +98,24 @@ Egenskap: Gi en person tilgang med fødselsnummer, D-nummer eller SNR
       Og det opprettes ingen person i databasen
 
   @draft @openquestion
-  Regel: Personen kan søkes opp i FS-SIS i stedet for å oppgi nummeret
-    For institusjoner som bruker FS-SIS, kan brukeradministratoren finne personen med et
-    personsøk i SIS. Da må hen ikke alltid oppgi fødselsnummer, D-nummer eller SNR for en person
-    som ikke har tilganger fra før.
+  Regel: Personen kan finnes uten at nummeret oppgis
+    Brukeradministratoren kan finne en person som ikke har tilganger fra før, uten å oppgi
+    fødselsnummer, D-nummer eller SNR, og gi hen en rolle.
 
     # ÅPNE SPØRSMÅL:
     # - Prioriteten er ikke satt.
     # - Hva kan brukeradministratoren søke på, og hvilke opplysninger vises i treffene? Nummeret
     #   vises ellers ikke i grensesnittet.
-    # - Hvilke personer i SIS kan brukeradministratoren søke blant: bare personene ved egen
-    #   institusjon?
+    # - Hvilke personer kan brukeradministratoren finne: bare personene ved egen institusjon?
+    #   Hvor personene hentes fra, for eksempel FS-SIS for institusjonene som bruker det, avgjøres
+    #   av svaret.
     # - Kan et treff avsløre at personen har tildelinger i andre organisasjoner? Se regelen
     #   «Svaret avslører ikke om personen fantes fra før».
 
-    Scenario: Finne personen med personsøk i SIS
-      Gitt institusjonen bruker FS-SIS
-      Og personen finnes i SIS
-      Når brukeradministratoren finner personen med personsøk i SIS og gir hen en rolle for en organisasjon og et miljø
+    Scenario: Finne personen uten å oppgi nummeret
+      Gitt personen er registrert ved institusjonen
+      Og personen har ingen tilganger
+      Når brukeradministratoren finner personen og gir hen en rolle for en organisasjon og et miljø
       Så har personen rollen for organisasjonen og miljøet
       Og brukeradministratoren har ikke oppgitt personens fødselsnummer, D-nummer eller SNR
 
