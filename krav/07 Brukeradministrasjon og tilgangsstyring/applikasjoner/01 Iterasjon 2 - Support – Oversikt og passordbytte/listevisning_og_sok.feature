@@ -41,17 +41,13 @@ Egenskap: Listevisning og søk i applikasjoner
         | Antall tilganger     |
         | Status               |
 
-    @could @draft @openquestion
+    @could @planned
     Scenario: Liste er sortert etter navn som standard
-      # ÅPNE SPØRSMÅL:
-      # - Når kan fs-plattform sortere applikasjonene på navn på tvers av Feide-, Maskinporten- og FS-applikasjoner? (Jira: BAT-268)
       Når jeg åpner applikasjonsoversikten
       Så vises applikasjonene sortert etter navn i stigende rekkefølge
 
-    @could @draft @openquestion
+    @could @planned
     Scenariomal: Velge sorteringsretning for navn
-      # ÅPNE SPØRSMÅL:
-      # - Når kan fs-plattform sortere applikasjonene på navn på tvers av Feide-, Maskinporten- og FS-applikasjoner? (Jira: BAT-268)
       Gitt jeg ser listen over applikasjoner
       Når jeg velger å sortere på navn i <retning> rekkefølge
       Så vises applikasjonene sortert etter navn i <retning> rekkefølge

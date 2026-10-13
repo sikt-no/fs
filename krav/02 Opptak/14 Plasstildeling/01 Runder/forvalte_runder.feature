@@ -137,6 +137,15 @@ Egenskap: Plasstildelingsrunder i et opptak
       Og at plasstildelingsrunden er publisert til søker
       Så ser opptaksforvalter at plasstildelingsrunden har status "Publisert for søkere"
 
+  Regel: Opptaksforvalter kan sette tak for antall tilbud per plasstildelingsrunde
+
+    # Flyttet hit 2026-10-12 fra 11 Opprette og vedlikeholde opptak/03 Innstillinger/innstillinger.feature.
+
+    Scenario: Sette tak for antall tilbud en søker kan få per plasstildelingsrunde
+      Når opptaksforvalter setter tak for antall tilbud per plasstildelingsrunde til 1
+      Så kan ikke plasstildelingen gi flere enn 1 tilbud i en enkelt plasstildelingsrunde til en søker
+      Og søker får se denne informasjonen
+
   Regel: Opptaksforvalter kan åpne en plasstildelingsrunde for ledige studieplasser
 
     # AVKLART 2026-10-08: Egenskapen kan settes på alle rundetyper, også hovedtildelingen.

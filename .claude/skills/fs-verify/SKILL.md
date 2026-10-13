@@ -199,7 +199,7 @@ Si dette i chat. Det står ikke i rapporten.
 Skriv rapporten i chat, og til fil etter hva scope er. Filnavnet har alltid dato og klokkeslett (`<YYYY-MM-DD>-<HHMM>`, se *Tidspunkt*), så kjøringer samme dag kan sammenlignes og ikke skriver over hverandre:
 
 - **Oppgave eller spesifikasjon:** `<oppgave>/spec/verify-<YYYY-MM-DD>-<HHMM>.md` (`verify-2026-10-09-1432.md`; `-2`, `-3` … hvis fila finnes).
-- **Bare en `krav/`-sti:** rett ved siden av det som ble verifisert. For én fil: `verify-<feature-fil>-<YYYY-MM-DD>-<HHMM>.md` i samme mappe som fila, der `<feature-fil>` er filnavnet uten `.feature` (`fjerne_roller.feature` → `verify-fjerne_roller-2026-10-07-0915.md`). For en mappe: `verify-<mappenavn>-<YYYY-MM-DD>-<HHMM>.md` i mappa over, ved siden av mappa (`…/12 Brukeradministrasjon/personbrukere/` → `…/12 Brukeradministrasjon/verify-personbrukere-2026-10-07-0915.md`). `-2`, `-3` … hvis fila finnes. Linja `- **Spec:**` utelates.
+- **Bare en `krav/`-sti:** rett ved siden av det som ble verifisert. For én fil: `verify-<feature-fil>-<YYYY-MM-DD>-<HHMM>.md` i samme mappe som fila, der `<feature-fil>` er filnavnet uten `.feature` (`fjerne_roller.feature` → `verify-fjerne_roller-2026-10-07-0915.md`). For en mappe: `verify-<mappenavn>-<YYYY-MM-DD>-<HHMM>.md` inne i mappa, sammen med kravene den gjelder (`…/12 Brukeradministrasjon/personbrukere/` → `…/12 Brukeradministrasjon/personbrukere/verify-personbrukere-2026-10-07-0915.md`). `-2`, `-3` … hvis fila finnes. Linja `- **Spec:**` utelates.
 
 Skriv aldri over en tidligere rapport, og endre den ikke: den er det du sammenligner med neste gang.
 

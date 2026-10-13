@@ -1,5 +1,5 @@
 # language: no
-@OPT-OVO-FRI-001 @must @in-progress
+@OPT-OVO-FRI-001 @must @in-progress @scope-opprette-opptak-2027
 Egenskap: Frister og hendelser for opptak
   Som opptaksforvalter ved forvaltende organisasjon
   ønsker jeg å sette frister som styrer tidsrammene for opptaket
@@ -31,10 +31,11 @@ Egenskap: Frister og hendelser for opptak
 
   Regel: Opptaksforvalter ved forvaltende organisasjon må kunne åpne for søkning
 
+    # AVKLART 2026-10-12: Utdanningstilbudene blir synlige for søkerne først når opptaket åpner for søknad.
     Scenario: Sette søknadsdato
       Når opptaksforvalter setter at søknaden åpner "2027-02-01"
       Så kan søkere opprette og sende inn søknader fra denne datoen
-      Og utdanningstilbudene i opptaket er synlige for søkere
+      Og utdanningstilbudene i opptaket blir synlige for søkere fra denne datoen
 
   Regel: Opptaksforvalter ved forvaltende organisasjon må kunne sette generell søknadsfrist for opptaket
 
