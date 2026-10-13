@@ -52,7 +52,7 @@
 # UI-detaljer. Ordlyd, plassering, ikoner og hvordan seksjoner utvides hører i
 # se_digitale_resultater_i_søknad.design.md, jf. fs-implementasjonsdetaljer.
 #
-@OPT-SØK-SØK-004 @must @planned
+@OPT-SØK-SØK-004 @must @planned @scope-digitale-resultater-i-soknad
 Egenskap: Se digitale resultater i søknaden
   Som søker
   ønsker jeg å se hvilke digitale resultater systemet allerede har om meg
