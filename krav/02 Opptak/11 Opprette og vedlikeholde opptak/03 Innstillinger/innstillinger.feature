@@ -52,7 +52,7 @@ Egenskap: Innstillinger for opptak
       Når opptaksforvalter setter søknadsnummer med startnummer 1001 for opptaket "UHG 2027"
       Så får søknader i opptaket løpende nummer fra 1001
       Og søknadsnummeret får navnet til opptaket "UHG 2027" som tillegg i søknadsnummeret som ikke er synlig for søker eller saksbehandler
-      Og søknadsnumrene er dermed unike for dette opptaket, selv om det ikke ser slik ut for søker eller saksbehandler
+      Og søknadsnumrene er dermed unike for opptaket "UHG 2027", selv om det ikke ser slik ut for søker eller saksbehandler
 
   Regel: Opptaksforvalter kan sette tak for antall søknadsalternativer
 
@@ -104,7 +104,7 @@ Egenskap: Innstillinger for opptak
     Scenario: Legge til flere utdanningsbakgrunner
       Når opptaksforvalter legger til utdanningsbakgrunnene "Realkompetanse", "Utenlandsk utdanning" og "Steinerskole" i opptaket
       Så finnes disse utdanningsbakgrunnene i opptaket
-      Og søkere kan velge blant dem når de angir sin utdanningsbakgrunn
+      Og søkere kan velge blant utdanningsbakgrunnene i opptaket når de angir sin utdanningsbakgrunn
 
     Scenario: Fjerne en utdanningsbakgrunn fra opptaket
       Gitt at utdanningsbakgrunnen "Steinerskole" er lagt til i opptaket

@@ -144,7 +144,7 @@ Egenskap: Plasstildelingsrunder i et opptak
     Scenario: Sette tak for antall tilbud en søker kan få per plasstildelingsrunde
       Når opptaksforvalter setter tak for antall tilbud per plasstildelingsrunde til 1
       Så kan ikke plasstildelingen gi flere enn 1 tilbud i en enkelt plasstildelingsrunde til en søker
-      Og søker får se denne informasjonen
+      Og søkeren ser taket for antall tilbud per plasstildelingsrunde
 
   Regel: Opptaksforvalter kan åpne en plasstildelingsrunde for ledige studieplasser
 
