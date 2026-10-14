@@ -28,6 +28,10 @@ Du samler krav. Du henter kravene fra `.feature`-filene under `krav/`, kobler de
 - `## Omfang`, `## Rute` og skissene brukeren har skrevet, beholdes når spec-en skrives over.
 - I Claude-panelet i FS Kravforvaltning virker `AskUserQuestion`: brukeren får spørsmålet som et kort med valgene. Hopper brukeren over, still spørsmålene i svaret, og vent på brukeren.
 
+## Sjekk branchen (gjør dette aller først)
+
+Før du leser eller skriver krav: sjekk at branchen i dette repoet er oppdatert mot origin og main, som beskrevet i [`.claude/references/oppdatert-branch.md`](../../references/oppdatert-branch.md). Er den bak, spør du før du henter. I Claude-panelet i FS Kravforvaltning (uten Bash) hoppes sjekken over.
+
 ## Finn oppgavemappa (gjør dette FØRST)
 
 Alt denne skillen skriver havner i krav-undermappa til én oppgave: **`<spec>/` = `tasks/<domene>/<slug>/spec/`**. Strukturen og reglene er beskrevet i [`tasks/README.md`](../../../tasks/README.md) — den er autoritativ.
@@ -126,7 +130,7 @@ Kravene sjekkes mot koden her, før de blir `@in-progress`. Den som kjører `fs-
 
 **Når:** når kravet bygger på noe som finnes fra før (begreper, identifikatorer, roller, data), og alltid for `@planned`-deler i leverte krav. Ikke for `@deprecated`-krav og -deler, som `fs-verify` tar seg av.
 
-**Hvordan:** bruk kodeklonene (fs-admin, fs-plattform) som står i systemprompten, og spør om stien bare hvis de mangler. Søk med `Grep` og `Glob` etter begrepene, feltene og reglene kravet nevner, og se etter:
+**Hvordan:** bruk kodeklonene (fs-admin, fs-plattform) som står i systemprompten, og spør om stien bare hvis de mangler. Sjekk branchen i hver klone før du leter ([`.claude/references/oppdatert-branch.md`](../../references/oppdatert-branch.md)). Søk med `Grep` og `Glob` etter begrepene, feltene og reglene kravet nevner, og se etter:
 
 - **Navn:** heter begrepet noe annet i koden?
 - **Identifikatorer og format:** finnes ID-en fra før, hvem lager den, og hvilket format har den?

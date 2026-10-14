@@ -34,7 +34,7 @@ Du leser ikke all koden selv. Med mange filer har du ikke plass til det, og det 
 
 ## Finn scope og kode
 
-Som *Finn scope og kode* i `fs-verify`: kravene (spesifikasjon, `krav/`-sti eller oppgave, slått opp på feature-ID), kodeklonene (spør med `AskUserQuestion`, sjekk at stiene finnes), om det skal tas skjermbilder fra `https://test-fsadmin.sikt.no/` (spør med `AskUserQuestion` før teamet startes, når prompten ikke sier det) og hintene fra oppgaven (`design.md`, `<lag>/plan-*.md`, `<lag>/task-*-completion.md`). Ligger mappa i scope under et domene med en oppgave som handler om den (`tasks/<domene>/*/oppgave.md` som peker dit), les hintene derfra også.
+Som *Finn scope og kode* i `fs-verify`: branchen i dette repoet og i hver kodeklone sjekkes mot origin og main ([`.claude/references/oppdatert-branch.md`](../../references/oppdatert-branch.md)) av deg, før teamet startes (finnerne og kontrollørene sjekker ikke selv), kravene (spesifikasjon, `krav/`-sti eller oppgave, slått opp på feature-ID), kodeklonene (spør med `AskUserQuestion`, sjekk at stiene finnes), om det skal tas skjermbilder fra `https://test-fsadmin.sikt.no/` (spør med `AskUserQuestion` før teamet startes, når prompten ikke sier det) og hintene fra oppgaven (`design.md`, `<lag>/plan-*.md`, `<lag>/task-*-completion.md`). Ligger mappa i scope under et domene med en oppgave som handler om den (`tasks/<domene>/*/oppgave.md` som peker dit), les hintene derfra også.
 
 Ber prompten om å verifisere en egenskap eller en regel *uansett status*, gjelder *Verifisere uansett status* i `fs-verify`: scope, gating-settet og hvilken ny status du kan tilby. Ber prompten om å verifisere en mappe *uansett status*, gjelder det samme for hver feature-fil i mappa.
 
