@@ -39,10 +39,11 @@
 #   en generell forklaring (se .design.md). Scenarioene under utgår med den.
 #
 # Avklart 14.10.2026 — hvor søkeren ser resultatene:
-# - Resultatene vises i steget «Last opp dokumentasjon» i søknaden (steg 3 i
+# - Resultatene vises i steget «Dokumentasjon» i søknaden (steg 3 i
 #   Figma-skissen «Konsept dokumentopplastning», node 3920:14210), før søkeren
 #   blir bedt om å laste opp noe. Seksjonstittel og plassering i steget hører
-#   i .design.md.
+#   i .design.md. Steget heter «Dokumentasjon» som i min-kompetanse; skissen
+#   kaller det «Last opp dokumentasjon», som er overskriften på opplastingen.
 # - Steget «søkeren blir ikke bedt om å laste opp» utgår. Det er dekket av at
 #   søkeren ser at dokumentasjonen er hentet automatisk, og hva søkeren må
 #   laste opp, eies av @OPT-SØK-SØK-003 (#572).
@@ -68,7 +69,7 @@
 # UI-detaljer. Ordlyd, plassering, ikoner og hvordan seksjoner utvides hører i
 # se_digitale_resultater_i_søknad.design.md, jf. fs-implementasjonsdetaljer.
 #
-@OPT-SØK-SØK-004 @must @planned @scope-digitale-resultater-i-soknad
+@OPT-SØK-SØK-004 @must @in-progress @scope-digitale-resultater-i-soknad
 Egenskap: Se digitale resultater i søknaden
   Som søker
   ønsker jeg å se hvilke digitale resultater systemet allerede har om meg
@@ -81,11 +82,11 @@ Egenskap: Se digitale resultater i søknaden
     Gitt at søkeren er innlogget på personflaten
     Og søkeren har startet en søknad på et opptak
 
-  Regel: Søkeren ser de digitale resultatene i steget «Last opp dokumentasjon»
+  Regel: Søkeren ser de digitale resultatene i steget «Dokumentasjon»
 
     Scenario: Se at dokumentasjonen er hentet automatisk
       Gitt at søkeren har digitale resultater
-      Når søkeren kommer til steget «Last opp dokumentasjon» i søknaden
+      Når søkeren kommer til steget «Dokumentasjon» i søknaden
       Så ser søkeren at systemet har hentet dokumentasjon automatisk
       Og resultatene vises før opplastingen av dokumentasjon
       Og søkeren får vite at saksbehandleren ser dokumentasjonen når søknaden behandles
@@ -95,13 +96,13 @@ Egenskap: Se digitale resultater i søknaden
 
     Scenario: Resultatene vises gruppert på nivå
       Gitt at søkeren har resultater fra videregående opplæring og høyere utdanning
-      Når søkeren kommer til steget «Last opp dokumentasjon» i søknaden
+      Når søkeren kommer til steget «Dokumentasjon» i søknaden
       Så ser søkeren resultatene gruppert på utdanningsnivå
       Og videregående opplæring vises før høyere utdanning
 
     Scenario: Se opplysninger om et resultat
       Gitt at søkeren har et vitnemål
-      Når søkeren kommer til steget «Last opp dokumentasjon» i søknaden
+      Når søkeren kommer til steget «Dokumentasjon» i søknaden
       Så ser søkeren vitnemålet med følgende opplysninger
         | felt            |
         | Tittel          |
@@ -110,7 +111,7 @@ Egenskap: Se digitale resultater i søknaden
 
     Scenariomal: Se tilleggsopplysning for et resultat fra <nivå>
       Gitt at søkeren har et vitnemål fra <nivå>
-      Når søkeren kommer til steget «Last opp dokumentasjon» i søknaden
+      Når søkeren kommer til steget «Dokumentasjon» i søknaden
       Så ser søkeren <tilleggsopplysning>
 
       Eksempler:
@@ -124,14 +125,14 @@ Egenskap: Se digitale resultater i søknaden
       # - Hvilke opplysninger vet vi alltid om et resultat: utsteder og
       #   utdanningsnivå, eller mer?
       Gitt at søkeren har et digitalt resultat fra høyere utdanning der bare utstederen er kjent
-      Når søkeren kommer til steget «Last opp dokumentasjon» i søknaden
+      Når søkeren kommer til steget «Dokumentasjon» i søknaden
       Så ser søkeren utstederen av resultatet under høyere utdanning
       Og søkeren ser at resultatet er hentet automatisk
       Men søkeren får ikke beskjed om at opplysninger om resultatet mangler
 
     Scenario: Se at et resultat er hentet automatisk
       Gitt at søkeren har et digitalt resultat
-      Når søkeren kommer til steget «Last opp dokumentasjon» i søknaden
+      Når søkeren kommer til steget «Dokumentasjon» i søknaden
       Så ser søkeren at resultatet er hentet automatisk
       # Merkelappen sier hvordan resultatet kom inn, ikke hvor det kom fra.
       # Søkeren trenger å vite at hen ikke må laste det opp selv; hvilken
@@ -139,21 +140,21 @@ Egenskap: Se digitale resultater i søknaden
 
     Scenario: Andre resultater er lukket som standard
       Gitt at søkeren har resultater som verken er vitnemål eller grad
-      Når søkeren kommer til steget «Last opp dokumentasjon» i søknaden
+      Når søkeren kommer til steget «Dokumentasjon» i søknaden
       Så ser søkeren at det finnes andre resultater
       Men de andre resultatene vises ikke før søkeren velger å se dem
       # Lukket fordi de sjelden er avgjørende for søkeren.
 
     Scenario: Se andre resultater
       Gitt at søkeren har resultater som verken er vitnemål eller grad
-      Og søkeren er i steget «Last opp dokumentasjon» i søknaden
+      Og søkeren er i steget «Dokumentasjon» i søknaden
       Når søkeren velger å se andre resultater
       Så ser søkeren enkeltemnene og den øvrige dokumentasjonen
       # «Andre resultater» samler enkeltemner og øvrig dokumentasjon.
 
     Scenariomal: Samme forklaring vises uansett årsak til manglende resultater
       Gitt at <årsak>
-      Når søkeren kommer til steget «Last opp dokumentasjon» i søknaden
+      Når søkeren kommer til steget «Dokumentasjon» i søknaden
       Så ser søkeren én samlet forklaring på at systemet ikke har digitale resultater om hen
       Og søkeren får vite at all dokumentasjon må lastes opp manuelt
 
