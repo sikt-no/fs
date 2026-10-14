@@ -1,5 +1,5 @@
 # language: no
-@OPT-REG-SAM-001 @must @draft
+@OPT-REG-SAM-001 @must @draft @scope-regelverk-2027
 Egenskap: Regelverkssamling
   Som opptaksforvalter
   ønsker jeg å opprette og forvalte regelverkssamlinger

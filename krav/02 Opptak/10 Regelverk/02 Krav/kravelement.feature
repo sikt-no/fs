@@ -1,5 +1,5 @@
 # language: no
-@OPT-REG-KRA-002 @must @draft
+@OPT-REG-KRA-002 @must @draft @scope-regelverk-2027
 Egenskap: Kravelement
   Som opptaksforvalter
   ønsker jeg å opprette og vedlikeholde kravelementer

@@ -1,5 +1,5 @@
 # language: no
-@OPT-REG-RAN-001 @must @draft
+@OPT-REG-RAN-001 @must @draft @scope-regelverk-2027
 Egenskap: Rangeringsregelverk
   Som opptaksforvalter
   ønsker jeg å opprette og vedlikeholde rangeringsregelverk

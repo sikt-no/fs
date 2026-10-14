@@ -1,6 +1,6 @@
 # language: no
 # GitHub: #585
-@OPT-PLA-RES-001 @must @draft
+@OPT-PLA-RES-001 @must @draft @scope-plasstildeling-2027
 Egenskap: Se resultatet av plasstildelingen før publisering
   Som opptaksforvalter
   ønsker jeg å se resultatet av en plasstildeling før den publiseres

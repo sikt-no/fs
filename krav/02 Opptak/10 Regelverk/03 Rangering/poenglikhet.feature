@@ -1,5 +1,5 @@
 # language: no
-@OPT-REG-RAN-003 @must @draft
+@OPT-REG-RAN-003 @must @draft @scope-regelverk-2027
 Egenskap: Poenglikhetsregel
   Som opptaksforvalter
   ønsker jeg å definere poenglikhetsregler i regelverkssamlingen

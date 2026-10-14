@@ -1,6 +1,6 @@
 # language: no
 # GitHub: #376
-@OPT-REG-KVO-002 @must @draft
+@OPT-REG-KVO-002 @must @draft @scope-regelverk-2027
 Egenskap: Kvotespørsmål
   Som opptaksforvalter
   ønsker jeg å definere kvotespørsmål og knytte dem til kvotetyper

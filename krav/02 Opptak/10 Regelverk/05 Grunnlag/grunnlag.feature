@@ -1,5 +1,5 @@
 # language: no
-@OPT-REG-GRU-001 @must @draft
+@OPT-REG-GRU-001 @must @draft @scope-regelverk-2027
 Egenskap: Grunnlag og mangelkoder
   Som opptaksforvalter
   ønsker jeg å definere grunnlag og mangelkoder

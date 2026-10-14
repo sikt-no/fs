@@ -1,6 +1,6 @@
 # language: no
 # GitHub: #216
-@OPT-PLA-TIL-002 @must @draft
+@OPT-PLA-TIL-002 @must @draft @scope-plasstildeling-2027
 Egenskap: Gjennomføre plasstildeling
   Som opptaksforvalter
   ønsker jeg at plasstildelingen fordeler studieplassene etter rangering, kvoter og rundetype

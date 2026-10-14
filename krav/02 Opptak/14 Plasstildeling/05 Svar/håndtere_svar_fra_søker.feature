@@ -1,6 +1,6 @@
 # language: no
 # GitHub: #587
-@OPT-PLA-SVA-001 @must @draft
+@OPT-PLA-SVA-001 @must @draft @scope-plasstildeling-2027
 Egenskap: Håndtere svar fra søker
   Som søker
   ønsker jeg å svare på tilbud og ventelisteplass innen svarfristen

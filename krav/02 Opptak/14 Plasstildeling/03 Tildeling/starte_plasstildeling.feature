@@ -1,6 +1,6 @@
 # language: no
 # GitHub: #216
-@OPT-PLA-TIL-001 @must @draft
+@OPT-PLA-TIL-001 @must @draft @scope-plasstildeling-2027
 Egenskap: Starte en plasstildeling
   Som opptaksforvalter
   ønsker jeg å starte en plasstildeling i en plasstildelingsrunde

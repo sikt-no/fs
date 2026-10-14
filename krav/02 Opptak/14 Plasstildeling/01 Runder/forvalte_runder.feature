@@ -1,6 +1,6 @@
 # language: no
 # GitHub: #216
-@OPT-PLA-RUN-001 @must @draft
+@OPT-PLA-RUN-001 @must @draft @scope-plasstildeling-2027
 Egenskap: Plasstildelingsrunder i et opptak
   Som opptaksforvalter
   ønsker jeg å legge til og forvalte plasstildelingsrunder i et opptak

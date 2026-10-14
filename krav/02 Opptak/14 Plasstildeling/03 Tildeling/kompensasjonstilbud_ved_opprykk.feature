@@ -1,6 +1,6 @@
 # language: no
 # GitHub: #584
-@OPT-PLA-TIL-003 @must @draft
+@OPT-PLA-TIL-003 @must @draft @scope-plasstildeling-2027
 Egenskap: Kompensasjonstilbud ved opprykk i supplering
   Som opptaksforvalter
   ønsker jeg at plasser som frigjøres ved opprykk gis videre automatisk i suppleringsrunder

@@ -1,6 +1,6 @@
 # language: no
 # GitHub: #376
-@OPT-REG-KVO-001 @must @draft
+@OPT-REG-KVO-001 @must @draft @scope-regelverk-2027
 Egenskap: Kvotetype
   Som opptaksforvalter
   ønsker jeg å definere kvotetyper i regelverkssamlingen

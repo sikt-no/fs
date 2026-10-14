@@ -1,6 +1,6 @@
 # language: no
 # GitHub: #586
-@OPT-PLA-RES-002 @must @draft
+@OPT-PLA-RES-002 @must @draft @scope-plasstildeling-2027
 Egenskap: Publisere resultatet til søkerne
   Som opptaksforvalter
   ønsker jeg å bestemme når resultatet av en plasstildeling blir synlig for søkerne

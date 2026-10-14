@@ -1,5 +1,5 @@
 # language: no
-@OPT-REG-RAN-002 @must @draft
+@OPT-REG-RAN-002 @must @draft @scope-regelverk-2027
 Egenskap: Poengberegning
   Som opptaksforvalter
   ønsker jeg å definere poengklasser, poengvarianter, poengtyper og poengformler

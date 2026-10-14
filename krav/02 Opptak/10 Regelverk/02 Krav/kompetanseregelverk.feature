@@ -1,5 +1,5 @@
 # language: no
-@OPT-REG-KRA-001 @must @draft
+@OPT-REG-KRA-001 @must @draft @scope-regelverk-2027
 Egenskap: Kompetanseregelverk
   Som opptaksforvalter
   ønsker jeg å opprette og vedlikeholde kompetanseregelverk

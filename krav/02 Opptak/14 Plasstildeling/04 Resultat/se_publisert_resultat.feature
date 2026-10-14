@@ -1,6 +1,6 @@
 # language: no
 # GitHub: #585
-@OPT-PLA-RES-003 @must @draft
+@OPT-PLA-RES-003 @must @draft @scope-plasstildeling-2027
 Egenskap: Se publisert resultat av plasstildelingen
   Som saksbehandler
   ønsker jeg å se det publiserte resultatet av plasstildelingen for søknadene organisasjonen behandler
