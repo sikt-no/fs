@@ -7,11 +7,10 @@ Egenskap: Forvalte implikasjoner mellom roller
   ønsker jeg å legge til og fjerne implikasjoner mellom roller
   slik at det en rolle innebærer, kan endres i løsningen og ikke bare direkte i databasen.
 
-  En implikasjon fra rolle A til rolle B betyr at den som har A, også har B. Implikasjonen endrer
-  både hva A gir og hvor langt B rekker. Derfor kreves full forvaltningsrett for rollekatalogen i
-  eierorganisasjonen til navnerommet til begge rollene, slik det kreves når en rolle flyttes mellom
-  navnerom. Uten det kravet kunne forvalteren av ett navnerom gi rollene sine rekkevidde inn i et
-  annet.
+  En implikasjon fra rolle A til rolle B betyr at den som har A, også har B. Implikasjonen endrer hva
+  A betyr. Derfor kreves full forvaltningsrett for rollekatalogen bare i eierorganisasjonen til
+  navnerommet til A. Den som lar A innebære en rolle i et annet navnerom, godtar at den rollen kan
+  endres utenfor egen kontroll. Forvaltningsretten for rollekatalogen er en tiltrodd rolle.
 
   At rollene ikke kan danne en syklus, står i BRU-TIL-KAT-004. Hvordan en endret implikasjon virker
   inn i tildelinger og delegeringstak, står i BRU-TIL-KAT-005. Hva en utgått rolle betyr for
@@ -58,7 +57,7 @@ Egenskap: Forvalte implikasjoner mellom roller
       Gitt forvalteren har full forvaltningsrett for rollekatalogen i eierorganisasjonene til navnerommene "fs" og "opptak"
       Men forvalteren har ikke forvaltningsrett for rollekatalogen i eierorganisasjonen til navnerommet "sis"
       Og rollen "STUDENT_LES" ligger i navnerommet "sis"
-      Når forvalteren i én forespørsel legger til at "OPPTAKSLEDER" innebærer "OPPTAK_SKRIV" og at "OPPTAKSLEDER" innebærer "STUDENT_LES"
+      Når forvalteren i én forespørsel legger til at "OPPTAKSLEDER" innebærer "OPPTAK_SKRIV" og at "STUDENT_LES" innebærer "OPPTAK_LES"
       Så avvises forespørselen
       Og "OPPTAKSLEDER" innebærer ikke "OPPTAK_SKRIV"
 
@@ -66,12 +65,12 @@ Egenskap: Forvalte implikasjoner mellom roller
       Gitt forvalteren har full forvaltningsrett for rollekatalogen i eierorganisasjonene til navnerommene "fs" og "opptak"
       Men forvalteren har ikke forvaltningsrett for rollekatalogen i eierorganisasjonen til navnerommet "sis"
       Og rollen "STUDENT_LES" ligger i navnerommet "sis"
-      Og "OPPTAKSLEDER" innebærer både "OPPTAK_SKRIV" og "STUDENT_LES"
-      Når forvalteren i én forespørsel fjerner implikasjonene fra "OPPTAKSLEDER" til "OPPTAK_SKRIV" og fra "OPPTAKSLEDER" til "STUDENT_LES"
+      Og "OPPTAKSLEDER" innebærer "OPPTAK_SKRIV", og "STUDENT_LES" innebærer "OPPTAK_LES"
+      Når forvalteren i én forespørsel fjerner implikasjonene fra "OPPTAKSLEDER" til "OPPTAK_SKRIV" og fra "STUDENT_LES" til "OPPTAK_LES"
       Så avvises forespørselen
       Og "OPPTAKSLEDER" innebærer fortsatt "OPPTAK_SKRIV"
 
-  Regel: Full forvaltningsrett kreves i eierorganisasjonene til navnerommene til begge rollene
+  Regel: Full forvaltningsrett kreves i eierorganisasjonen til navnerommet til rollen implikasjonen går ut fra
 
     Scenariomal: Legge til en implikasjon med og uten forvaltningsrett
       Gitt forvalteren <rett i fs> full forvaltningsrett for rollekatalogen i eierorganisasjonen til navnerommet "fs"
@@ -82,7 +81,7 @@ Egenskap: Forvalte implikasjoner mellom roller
       Eksempler:
         | rett i fs   | rett i opptak | resultat                                         |
         | har         | har           | innebærer "OPPTAKSLEDER" rollen "OPPTAK_SKRIV"   |
-        | har         | har ikke      | avvises forespørselen som manglende rett          |
+        | har         | har ikke      | innebærer "OPPTAKSLEDER" rollen "OPPTAK_SKRIV"   |
         | har ikke    | har           | avvises forespørselen som manglende rett          |
 
     Scenariomal: Fjerne en implikasjon med og uten forvaltningsrett
@@ -95,7 +94,7 @@ Egenskap: Forvalte implikasjoner mellom roller
       Eksempler:
         | rett i fs   | rett i opptak | resultat                                              |
         | har         | har           | innebærer "OPPTAKSLEDER" ikke lenger "OPPTAK_SKRIV"   |
-        | har         | har ikke      | avvises forespørselen som manglende rett               |
+        | har         | har ikke      | innebærer "OPPTAKSLEDER" ikke lenger "OPPTAK_SKRIV"   |
         | har ikke    | har           | avvises forespørselen som manglende rett               |
 
     Scenario: Retten til å oppdatere beskrivelser er ikke nok
@@ -125,13 +124,13 @@ Egenskap: Forvalte implikasjoner mellom roller
 
     Scenario: Legge til en implikasjon som allerede gjelder, krever forvaltningsrett
       Gitt "OPPTAKSLEDER" innebærer "OPPTAK_SKRIV"
-      Og forvalteren har ikke full forvaltningsrett for rollekatalogen i eierorganisasjonen til navnerommet "opptak"
+      Og forvalteren har ikke full forvaltningsrett for rollekatalogen i eierorganisasjonen til navnerommet "fs"
       Når forvalteren legger til at "OPPTAKSLEDER" innebærer "OPPTAK_SKRIV"
       Så avvises forespørselen som manglende rett
 
     Scenario: Fjerne en implikasjon som ikke gjelder, krever forvaltningsrett
       Gitt "OPPTAKSLEDER" innebærer ikke "OPPTAK_SKRIV"
-      Og forvalteren har ikke full forvaltningsrett for rollekatalogen i eierorganisasjonen til navnerommet "opptak"
+      Og forvalteren har ikke full forvaltningsrett for rollekatalogen i eierorganisasjonen til navnerommet "fs"
       Når forvalteren fjerner implikasjonen fra "OPPTAKSLEDER" til "OPPTAK_SKRIV"
       Så avvises forespørselen som manglende rett
 
@@ -139,8 +138,7 @@ Egenskap: Forvalte implikasjoner mellom roller
 
     # Ved fjerning er en rolle som ikke finnes, bare en implikasjon som ikke gjelder. Svaret blir
     # det samme som for en kjent rolle uten implikasjonen, slik det er for en ukjent tilgang i et
-    # delegeringstak. Ved å legge til har en rolle som ikke finnes, ingen eierorganisasjon å ha
-    # forvaltningsrett i, og forespørselen avvises som manglende rett.
+    # delegeringstak. En implikasjon til en rolle som ikke finnes, kan ikke legges til.
 
     Scenario: Fjerne en implikasjon til en rolle som ikke finnes
       Gitt forvalteren har full forvaltningsrett for rollekatalogen i eierorganisasjonen til navnerommet "fs"
@@ -159,8 +157,7 @@ Egenskap: Forvalte implikasjoner mellom roller
       Gitt forvalteren har full forvaltningsrett for rollekatalogen i eierorganisasjonen til navnerommet "fs"
       Og rollen "FINNES_IKKE" finnes ikke i rollekatalogen
       Når forvalteren legger til at "OPPTAKSLEDER" innebærer "FINNES_IKKE"
-      Så avvises forespørselen som manglende rett
-      Og svaret er det samme som for en rolle i et navnerom forvalteren ikke har forvaltningsrett i
+      Så avvises forespørselen
 
   Regel: En fjernet implikasjon blir stående som historikk
 
