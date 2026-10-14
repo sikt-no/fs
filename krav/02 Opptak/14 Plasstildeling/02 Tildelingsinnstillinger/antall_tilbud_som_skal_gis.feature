@@ -122,6 +122,15 @@ Egenskap: Antall tilbud som skal gis per utdanningskvote (sette opptaksparameter
       Når opptaksforvalter ved forvaltende organisasjon endrer antall tilbud til 120
       Så er antall tilbud som skal gis i utdanningskvoten "Ordinær" 120
 
+  Regel: Antall tilbud kan ikke endres når plasstildelingsrunden er publisert
+
+    # AVKLART 2026-10-14 (designarbeidet i FS-Admin): Svarbrevene er sendt. For å gi flere tilbud må
+    # opptaksforvalter legge til en ny plasstildelingsrunde.
+    Scenario: Antall tilbud låses når plasstildelingsrunden er publisert
+      Gitt at plasstildelingsrunden "Hovedrunde" er publisert
+      Når opptaksforvalter ved forvaltende organisasjon ser antall tilbud som skal gis i "Hovedrunde"
+      Så kan opptaksforvalter ikke endre antall tilbud som skal gis i "Hovedrunde"
+
   Regel: Minst én plasstildelingsrunde må finnes før antall tilbud kan settes
 
     # Flyttet hit fra 01 Runder 2026-10-09.
@@ -149,6 +158,7 @@ Egenskap: Antall tilbud som skal gis per utdanningskvote (sette opptaksparameter
         | Totalt antall tilbud gitt i opptaket       |
         | Antall tilbud akseptert                    |
         | Netto tilbud                               |
+        | Ledige plasser å gi tilbud til             |
         | Antall søkere på venteliste                |
         | Antall søkere med tilbudsgaranti           |
 
@@ -169,6 +179,17 @@ Egenskap: Antall tilbud som skal gis per utdanningskvote (sette opptaksparameter
       Når opptaksforvalter ser antall tilbud som skal gis for utdanningstilbudet "Sykepleie, høst 2027"
       Så er netto tilbud 58
 
+    # AVKLART 2026-10-14 (designarbeidet i FS-Admin): Ledige plasser å gi tilbud til er en avledet verdi:
+    # studieplasser minus netto tilbud (akseptert og venter på svar).
+    @openquestion
+    Scenario: Ledige plasser å gi tilbud til
+      # ÅPNE SPØRSMÅL:
+      # - Skal noe mer trekkes fra enn akseptert og venter på svar? (Åpne spørsmål fra designarbeidet, nr. 7)
+      Gitt at "Sykepleie, høst 2027" har 100 studieplasser
+      Og at netto tilbud for "Sykepleie, høst 2027" er 58
+      Når opptaksforvalter ser antall tilbud som skal gis for utdanningstilbudet "Sykepleie, høst 2027"
+      Så er ledige plasser å gi tilbud til 42
+
   Regel: Et utdanningstilbud kan gi tilbud til alle kvalifiserte
 
     # Opptaksforvalter kan velge dette i stedet for å sette tall i utdanningskvotene.
@@ -181,7 +202,7 @@ Egenskap: Antall tilbud som skal gis per utdanningskvote (sette opptaksparameter
 
     # AVKLART 2026-10-08: Har lærestedet gitt for mange tilbud i hovedrunden, kan det sette et negativt
     # tall i suppleringsrunden. Da gis det ikke kompensasjonstilbud før antall tilbud er kommet ned på
-    # et bedre nivå enn først estimert. Negative tall er ikke lov i etterfylling.
+    # et bedre nivå enn først estimert. Negative tall er ikke lov i hovedtildeling eller etterfylling.
     # De første plassene som frigjøres, dekker det negative tallet. Resten gis som kompensasjonstilbud.
     Scenario: Negativt antall tilbud i supplering
       Gitt at opptaket har plasstildelingsrunden "Suppleringsrunde" med rundetype "Supplering"
@@ -190,11 +211,18 @@ Egenskap: Antall tilbud som skal gis per utdanningskvote (sette opptaksparameter
       Når plasstildelingen i "Suppleringsrunde" gjennomføres
       Så gis det 2 kompensasjonstilbud i utdanningskvoten "Ordinær"
 
-    Scenario: Negativt antall tilbud i etterfylling
-      Gitt at opptaket har plasstildelingsrunden "Etterfylling" med rundetype "Etterfylling"
-      Når opptaksforvalter setter antall tilbud som skal gis i utdanningskvoten "Ordinær" til -3 for plasstildelingsrunden "Etterfylling"
+    # AVKLART 2026-10-14: Negative tall er heller ikke lov i hovedtildeling. Der finnes ingen tidligere
+    # plasstildelingsrunde med for mange tilbud å rette opp.
+    Scenariomal: Negativt antall tilbud utenfor supplering
+      Gitt at opptaket har plasstildelingsrunden "<plasstildelingsrunde>" med rundetype "<rundetype>"
+      Når opptaksforvalter setter antall tilbud som skal gis i utdanningskvoten "Ordinær" til -3 for plasstildelingsrunden "<plasstildelingsrunde>"
       Så blir antall tilbud ikke lagret
-      Og opptaksforvalter får beskjed om at antall tilbud ikke kan være negativt i etterfylling
+      Og opptaksforvalter får beskjed om at antall tilbud ikke kan være negativt i <rundetype_tekst>
+
+      Eksempler:
+        | plasstildelingsrunde | rundetype      | rundetype_tekst |
+        | Hovedrunde           | Hovedtildeling | hovedtildeling  |
+        | Etterfylling         | Etterfylling   | etterfylling    |
 
   @openquestion
   Regel: I etterfylling gis nøyaktig det antallet tilbud som er satt
@@ -213,8 +241,8 @@ Egenskap: Antall tilbud som skal gis per utdanningskvote (sette opptaksparameter
 #   lærestedenes periode. Se 01 Runder/forvalte_runder.feature.
 # - Siste lagrede tall er korrekt uavhengig av hvem som satte det.
 # - Standard plassflyt for opptaket er en opptaksinnstilling, men løses som del av
-#   arbeidet med å lage plasstildelingen. Gjenåpnet 2026-10-08: om plassflyten settes på opptaket
-#   eller per utdanningstilbud er uavklart, se 02 Tildelingsinnstillinger/plassflyt.feature.
+#   arbeidet med å lage plasstildelingen. Avklart 2026-10-13: standard plassflyt settes på opptaket
+#   og gjelder alle utdanningskvoter, se 11 Opprette og vedlikeholde opptak/03 Innstillinger/sette_plassflyt.feature.
 # - Antall tilbud som skal gis settes direkte per utdanningskvote.
 #   Totalt antall tilbud er utledet (summen av utdanningskvotene), ikke satt eksplisitt.
 # - Default i utdanningskvotene er null. Endret 2026-10-08: ikke varsel, men filter på
@@ -223,4 +251,4 @@ Egenskap: Antall tilbud som skal gis per utdanningskvote (sette opptaksparameter
 #   antall nye tilbud i plasstildelingsrunden. Hver plasstildelingsrunde får egne tall.
 # - Avklart 2026-10-08: Antall tilbud settes som hele tall per utdanningskvote. Det utledes ikke fra
 #   standard kvotefordeling, så det trengs ingen avrunding.
-# - Avklart 2026-10-08: Negative tall er lov i supplering, ikke i etterfylling.
+# - Avklart 2026-10-08: Negative tall er lov i supplering, ikke i etterfylling. Avklart 2026-10-14: heller ikke i hovedtildeling.

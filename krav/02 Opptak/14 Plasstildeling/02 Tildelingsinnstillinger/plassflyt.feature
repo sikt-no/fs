@@ -6,25 +6,17 @@ Egenskap: Plassflyt mellom utdanningskvoter
   ønsker jeg at ledige plasser i en utdanningskvote flyter til en utdanningskvote jeg har pekt på
   slik at studieplasser ikke går tapt når det er for få kvalifiserte søkere i en utdanningskvote.
 
-  # ÅPNE SPØRSMÅL:
-  # - Hvor bestemmes plassflyten mellom ulike kvotetyper — på opptaket eller på utdanningstilbudet?
-  #   Dagens fil antar utdanningstilbudet, men det er ikke avklart.
-  #   Kildene spriker: raffineringen 2026-10-07 sa at standard plassflyt er en opptaksinnstilling
-  #   (antall_tilbud_som_skal_gis.feature). Kvoterregelverket har standard plassflyt på kvotetypen.
-  #   Koden tar standarden fra kvotetypen og lar den overstyres per utdanningskvote, uten standard
-  #   på opptaket. Fortsatt uavklart 2026-10-08.
+  # Standard plassflyt settes på opptaket, se
+  # 11 Opprette og vedlikeholde opptak/03 Innstillinger/sette_plassflyt.feature (flyttet dit 2026-10-13).
+  # Her står hva plasstildelingen gjør med plassflyten.
   # AVKLART 2026-10-09: Plassflyt er bare at ubrukte plasser flyter mellom utdanningskvoter i et opptak.
   # At en plasstildelingsrunde bygger på forrige plasstildelingsrunde, er informasjonsarv, ikke plassflyt.
-  # - Sirkulær plassflyt håndteres i koden, men ikke i databasen. Skal den avvises når den settes
-  #   (slik scenarioet under sier), eller bare håndteres i plasstildelingen?
-  # - Plassflyt finnes på tre nivåer (kvotetype i regelverket, utdanningskvote i opptaket, og per plasstildeling).
-  #   Skal opptaksforvalter kunne endre plassflyten per plasstildelingsrunde?
+  #
+  # ÅPNE SPØRSMÅL:
   # - Forgrening (sende ledige plasser til flere utdanningskvoter) er ikke støttet. Bekrefte at det ikke trengs?
   # - Å flytte bare noen av de ledige plassene («flytt N av M») er ikke støttet. Trengs det?
   # - Flyter flere utdanningskvoter til samme mottaker, avgjør kvoteprioriteten rekkefølgen
   #   («Plasstildelingsløpet i Opptak», kap. 4). Skal det stå som et scenario?
-  # - #598 sier at «kun én utdanningskvote kan være siste mottaker». Scenarioet «Utdanningstilbud uten siste
-  #   utdanningskvote» krever minst én. Skal det være nøyaktig én siste utdanningskvote per utdanningstilbud?
   #
   # Kilde: tasks/opptak/plasstildeling/design.md (prinsipp 3, oppgave 3) og oppgave.md (gap-analyse oppgave 3).
   # Vernet mot sirkulær plassflyt kommer fra GitHub #598.
@@ -32,8 +24,27 @@ Egenskap: Plassflyt mellom utdanningskvoter
   # Begrep: «kvoteflyt» heter nå «plassflyt».
 
   Bakgrunn:
-    Gitt at opptaksforvalter ved lærestedet er innlogget
-    Og at utdanningstilbudet "Sykepleie, høst 2027" er med i plasstildelingsrunden "Hovedrunde" i opptaket "Samordna opptak 2027"
+    Gitt at utdanningstilbudet "Sykepleie, høst 2027" er med i plasstildelingsrunden "Hovedrunde" i opptaket "Samordna opptak 2027"
+
+  Regel: Ledige plasser går til den første kvoten i kjeden som finnes på utdanningstilbudet
+
+    # AVKLART 2026-10-13: HK-dir har ikke funnet noen avvik fra standardisert plassflyt. En kvote kan
+    # ha flere mottakere i prioritert rekkefølge, og de ledige plassene går til den første som finnes
+    # på utdanningstilbudet. Eksempel fra HK-dir: samiskspråklig kvote går til Nordland, Troms og
+    # Finnmark-kvoten hvis den finnes, ellers til nordnorsk kvote, ellers til ordinær kvote.
+
+    Scenariomal: Plassflyt etter hvilke utdanningskvoter utdanningstilbudet har
+      Gitt at standard plassflyt for "Samisk" er "Nordland, Troms og Finnmark", deretter "Nordnorsk", deretter "Ordinær"
+      Og at utdanningstilbudet har utdanningskvotene <utdanningskvoter>
+      Og at "Samisk" har ledige plasser
+      Når plasstildelingen gjennomføres
+      Så flyter de ledige plassene i "Samisk" til "<mottaker>"
+
+      Eksempler:
+        | utdanningskvoter                                               | mottaker                    |
+        | Samisk, Nordland, Troms og Finnmark, Nordnorsk og Ordinær      | Nordland, Troms og Finnmark |
+        | Samisk, Nordnorsk og Ordinær                                   | Nordnorsk                   |
+        | Samisk og Ordinær                                              | Ordinær                     |
 
   Regel: Overskytende plasser flyter til den utdanningskvoten det er pekt på
 
@@ -53,32 +64,24 @@ Egenskap: Plassflyt mellom utdanningskvoter
       Når plasstildelingen gjennomføres
       Så ender de ledige plassene fra begge utdanningskvotene i "Ordinær"
 
-    Scenario: Siste utdanningskvote sender ikke plasser videre
-      Gitt at "Ordinær" er siste utdanningskvote
+    Scenario: Sistekvoten sender ikke plasser videre
+      Gitt at "Ordinær" er sistekvote
       Og at "Ordinær" har færre kvalifiserte søkere enn tilbud som skal gis
       Når plasstildelingen gjennomføres
       Så blir de ledige plassene i "Ordinær" stående ubrukt
 
-  Regel: Plassflyt er eksplisitt og avgrenset
+  Regel: Plassflyt går i en kjede innenfor utdanningstilbudet
 
-    Scenario: Én mottakende utdanningskvote
-      Når opptaksforvalter setter plassflyt for utdanningskvoten "Førstegangsvitnemål"
-      Så kan opptaksforvalter velge én utdanningskvote som skal motta ledige plasser
+    Scenario: Vanligste kjede i UHG
+      Gitt at standard plassflyt for opptaket er "Førstegangsvitnemål" til "Ordinær"
+      Og at "Ordinær" er sistekvote
+      Når plasstildelingen gjennomføres for et utdanningstilbud med utdanningskvotene "Førstegangsvitnemål" og "Ordinær"
+      Så flyter ledige plasser i "Førstegangsvitnemål" til "Ordinær"
 
     Scenario: Plassflyt mellom utdanningstilbud
-      Når opptaksforvalter setter plassflyt for utdanningskvoten "Førstegangsvitnemål"
-      Så kan opptaksforvalter bare velge utdanningskvoter på utdanningstilbudet "Sykepleie, høst 2027"
-
-    Scenario: Sirkulær plassflyt
-      Gitt at ledige plasser i "Førstegangsvitnemål" flyter til "Ordinær"
-      Når opptaksforvalter setter at ledige plasser i "Ordinær" skal flyte til "Førstegangsvitnemål"
-      Så blir plassflyten ikke lagret
-      Og opptaksforvalter får beskjed om at plassflyten ikke kan gå i ring
-
-    Scenario: Utdanningstilbud uten siste utdanningskvote
-      Når opptaksforvalter setter plassflyt slik at alle utdanningskvotene sender plasser videre
-      Så blir plassflyten ikke lagret
-      Og opptaksforvalter får beskjed om at minst én utdanningskvote må være siste utdanningskvote
+      Gitt at standard plassflyt for opptaket er satt
+      Når plasstildelingen gjennomføres
+      Så flyter ledige plasser bare mellom utdanningskvoter på samme utdanningstilbud
 
   Regel: Det kan spores at en plass kom via plassflyt
 

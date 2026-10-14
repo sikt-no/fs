@@ -28,11 +28,12 @@ Skillen har tre moduser. Velg ut fra invokasjonen, eller spør med `AskUserQuest
 
 ## Oppstart (gjør dette FØRST)
 
+0. **Sjekk branchen** i dette repoet mot origin og main, som beskrevet i [`.claude/references/oppdatert-branch.md`](../../references/oppdatert-branch.md). Er den bak, spør før du henter. I Claude-panelet (uten Bash) hoppes sjekken over.
 1. **Les `tasks/README.md`** (domenetabellen, *Scope*, *Tavla* og reglene for oppgave-rota) og *Tags* i `krav/README.md`.
 2. **Finn scopet** (modus B og C). Oppga brukeren en slug, en sti eller en oppgave, bruk den. En slug slås opp med `Glob` `tasks/*/scope-<slug>.md`, og en oppgave med `Glob` `tasks/*/<slug>/oppgave.md` (scopet står i `Scope:`). Ellers lister du `tasks/*/scope-*.md` og spør med `AskUserQuestion`.
 3. **Les det som finnes:** scope-fila (modus B og C), `oppgave.md` i oppgavene i domenet, og kravene med taggen (`Grep` `@scope-<slug>` under `krav/`). Kravene i `krav/` og oppgavene i `tasks/` leses alltid. Det er ikke en kilde brukeren må oppgi.
 
-Datoer tas fra samtalekonteksten (`# currentDate`). Filer skrives med Read, Write og Edit, ikke med `date`, `>>`, `cp` eller andre shell-konstruksjoner, så skillen virker likt på macOS, Linux og Windows. `Bash` brukes bare til `gh` (bare lesing).
+Datoer tas fra samtalekonteksten (`# currentDate`). Filer skrives med Read, Write og Edit, ikke med `date`, `>>`, `cp` eller andre shell-konstruksjoner, så skillen virker likt på macOS, Linux og Windows. `Bash` brukes bare til `gh` (bare lesing) og til å sjekke branchen.
 
 ## Kilder
 

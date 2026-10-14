@@ -29,6 +29,11 @@ Egenskap: Vise resultatet av plasstildelingen
         | bortfall                   | Bortfall                   |
         | avslag                     | Avslag                     |
 
+    Scenario: Saksbehandler ser resultatet per utdanningskvote
+      Gitt at søkeren "Kari Nordmann" fikk tilbud i "Førstegangsvitnemål" og kansellert i "Ordinær" på "Sykepleie, høst 2027"
+      Når saksbehandler ser resultatet for søkeren
+      Så ser saksbehandler tilbud i "Førstegangsvitnemål" og kansellert i "Ordinær"
+
   Regel: Saksbehandler ser totaltall for plasstildelingen
 
     Scenario: Totaltall for plasstildelingen
@@ -44,6 +49,13 @@ Egenskap: Vise resultatet av plasstildelingen
       Når saksbehandler velger utdanningstilbudet "Sykepleie, høst 2027" i resultatet
       Så ser saksbehandler tilbud, venteliste og poenggrense per utdanningskvote
 
+    # AVKLART 2026-10-14: Tilgang til plasstildelingen er nok. I dag krever tallet tilgang til opptaket, og ellers vises 0.
+    Scenario: Antall tilbud som skal gis vises med tilgang til plasstildelingen
+      Gitt at saksbehandler har tilgang til plasstildelingen, men ikke til opptaket
+      Og at antall tilbud som skal gis i "Sykepleie, høst 2027" i "Hovedrunde" er 30
+      Når saksbehandler velger utdanningstilbudet "Sykepleie, høst 2027" i resultatet
+      Så ser saksbehandler at antall tilbud som skal gis er 30
+
   Regel: Det kan spores at en plass kom via plassflyt
 
     Scenario: Tilbud gitt via plassflyt
@@ -51,48 +63,89 @@ Egenskap: Vise resultatet av plasstildelingen
       Når saksbehandler ser resultatet for søkeren
       Så ser saksbehandler at plassen kom fra utdanningskvoten "Førstegangsvitnemål"
 
-  Regel: Saksbehandler ser bare søkere til egne utdanningstilbud
+  Regel: Saksbehandler ser søknadene organisasjonen har behandlerrolle for
 
     # design.md del 2: tilgang i dag er alt-eller-ingenting. Inndeling per organisasjon er et personvernkrav.
-    Scenario: Resultat for egne utdanningstilbud
+    # Behandlerrollen bestemmes av reglene for saksbehandlertildeling, se
+    # 13 Søknad og saksbehandling/02 Behandling/tildele_saksbehandlende_organisasjon.feature.
+    Scenario: Resultat for søknad organisasjonen har behandlerrolle for
       Gitt at saksbehandler har tilgang fra "Universitetet i Bergen"
+      Og at "Universitetet i Bergen" har behandlerrolle for søknaden til "Kari Nordmann" på "Sykepleie, høst 2027" ved "Høgskulen på Vestlandet"
       Når saksbehandler ser resultatet av plasstildelingen
-      Så ser saksbehandler bare søkere til utdanningstilbud ved "Universitetet i Bergen"
+      Så ser saksbehandler resultatet for søknaden til "Kari Nordmann"
 
-  @openquestion
-  Regel: Lærestedene kontrollerer resultatet før publisering i samordna opptak
+    Scenario: Resultat for søknad organisasjonen ikke har behandlerrolle for
+      Gitt at saksbehandler har tilgang fra "Universitetet i Bergen"
+      Og at "Universitetet i Bergen" ikke har behandlerrolle for søknaden til "Ola Nordmann"
+      Når saksbehandler ser resultatet av plasstildelingen
+      Så ser saksbehandler ikke søknaden til "Ola Nordmann"
 
-    # ÅPNE SPØRSMÅL:
-    # - Beskrevet i Confluence «Opprette og konfigurere opptakskjøringsrunde» (mai 2026) og
-    #   «Leveranse: Plasstildeling» (godkjenne eller avslå resultatet), men ikke i design.md.
-    #   Er dette med for 2027?
-    # - Gjelder kontrollen også lokale opptak, der lærestedet selv er forvaltende organisasjon?
-    Scenario: Lærested avviser resultatet
-      Gitt at resultatet er sendt til lærestedene for kontroll
-      Når saksbehandler ved lærestedet avviser resultatet for "Sykepleie, høst 2027" med en begrunnelse
-      Så ser opptaksforvalter ved forvaltende organisasjon at resultatet er avvist med begrunnelsen
+    # AVKLART 2026-10-14: Manglende tilgang skjuler resultatet (designmønsteret for krav). I dag ser brukeren en tom liste.
+    Scenario: Bruker uten tilgang til plasstildelingen
+      Gitt at brukeren ikke har tilgang til plasstildelingen i opptaket "Samordna opptak 2027"
+      Når brukeren ser opptaket "Samordna opptak 2027"
+      Så ser brukeren ikke resultatet av plasstildelingen
 
-    Scenario: Publisering selv om et lærested har avvist
-      Gitt at ett lærested har avvist resultatet
-      Når opptaksforvalter ved forvaltende organisasjon publiserer plasstildelingen
-      Så blir plasstildelingen publisert
-      Og lærestedets status «ikke godkjent» står uendret
+  Regel: Opptaksforvalter ved deltakende organisasjon ser søknadene organisasjonen har behandlerrolle for
 
-# ÅPNE SPØRSMÅL:
-# - Tilgangsstyring for opptaksforvalter i samordna opptak: skal opptaksforvalter ved ett lærested
-#   se resultater for alle utdanningstilbud i opptaket, eller bare egne? design.md kaller dette et
-#   personvernfunn (del 2). Inndeling per organisasjon gjelder også opptaksforvalter, ikke bare saksbehandler.
-# - Når en søker har både et tilbud og et kansellert resultat på samme utdanningstilbud, hva skal vises?
-# - Resultatet lagres i dag to steder (per plasstildeling og på søknadsalternativet). Hvilket er fasit
-#   for visningen i saksbehandlingen?
-# - Skal saksbehandler kunne sammenligne to plasstildelinger i samme plasstildelingsrunde (prøvetildelinger)?
-# - Skal oppsummeringsbildet i saksbehandlingen vise status per søknadsalternativ fra plasstildelingen?
-#   (Confluence, raffinering 2026-09-08, oppgave 6)
-# - Tilgang til plasstildelingen er i dag gitt bare til rollen opptaksleder, og gir innsyn i alle søkere
-#   i opptaket. Skal saksbehandler ha tilgang, slik brukerhistorien sier?
-# - Uten tilgang ser brukeren i dag en tom liste, ikke en feilmelding. Da kan ingen se forskjell på
-#   «ingen resultater» og «ingen tilgang». Hva skal brukeren se?
-# - Antall tilbud som skal gis krever i dag tilgangen til å se opptaket. Med bare tilgang til plasstildelingen
-#   vises 0. Skal tilgangen til plasstildelingen være nok?
+    Scenario: Opptaksforvalter ved deltakende organisasjon ser resultatet for søknadene organisasjonen behandler
+      Gitt at opptaksforvalter har tilgang fra "Universitetet i Bergen", som deltar i opptaket
+      Og at "Universitetet i Bergen" har behandlerrolle for søknaden til "Kari Nordmann"
+      Og at "Universitetet i Bergen" ikke har behandlerrolle for søknaden til "Ola Nordmann"
+      Når opptaksforvalter ser resultatet av plasstildelingen
+      Så ser opptaksforvalter resultatet for søknaden til "Kari Nordmann"
+      Men opptaksforvalter ser ikke søknaden til "Ola Nordmann"
+
+    Scenario: Opptaksforvalter ved forvaltende organisasjon ser alle søknadene
+      Gitt at opptaksforvalter har tilgang fra den forvaltende organisasjonen i opptaket
+      Når opptaksforvalter ser resultatet av plasstildelingen
+      Så ser opptaksforvalter resultatet for alle søknadene i opptaket
+
+  Regel: Lærestedene kontrollerer resultatet før plasstildelingsrunden publiseres
+
+    # AVKLART 2026-10-14 (domeneekspert): Kontrollen er at lærestedene og forvaltende
+    # organisasjon har en oversiktlig måte å se om resultatet i runden er korrekt før det
+    # publiseres. Ved større feil endres antall tilbud som skal gis eller tilsvarende
+    # innstillinger, og plasstildelingen kjøres på nytt i runden før en ny kontroll.
+    # Fram til publisering kan lærestedene også endre saksbehandlingen (for eksempel
+    # tilbudsgaranti eller ny poengberegning). Godkjenning eller avvisning med status er ikke med.
+    # Kontrollen gjelder både samordna og lokale opptak.
+    Scenario: Lærestedet kontrollerer resultatet før publisering
+      Gitt at plasstildelingen i "Hovedrunde" ikke er publisert
+      Når saksbehandler ved lærestedet ser resultatet av plasstildelingen
+      Så ser saksbehandler resultatet for søknadene organisasjonen har behandlerrolle for
+      Og søkerne ser ikke resultatet
+
+    Scenario: Ny plasstildeling etter endret antall tilbud
+      Gitt at plasstildelingen i "Hovedrunde" ikke er publisert
+      Og at antall tilbud som skal gis i "Sykepleie, høst 2027" i "Hovedrunde" er endret fra 30 til 35
+      Når opptaksforvalter ved forvaltende organisasjon starter en ny plasstildeling i "Hovedrunde"
+      Så bruker den nye plasstildelingen 35 tilbud for "Sykepleie, høst 2027"
+      Og lærestedene kan kontrollere resultatet av den nye plasstildelingen
+
+  Regel: Plasstildelinger i samme plasstildelingsrunde kan sammenlignes
+
+    Scenario: Sammenligne to plasstildelinger i samme plasstildelingsrunde
+      Gitt at plasstildelingsrunden "Hovedrunde" har to plasstildelinger som ikke er publisert
+      Når saksbehandler sammenligner de to plasstildelingene for "Sykepleie, høst 2027"
+      Så ser saksbehandler tilbud, venteliste og poenggrense per utdanningskvote for hver av plasstildelingene
+
+  Regel: Oppsummeringen av søknaden viser resultatet fra plasstildelingen
+
+    # AVKLART 2026-10-14: Oppsummeringen viser resultatet fra den siste publiserte plasstildelingen.
+    # Kilde: Confluence, raffinering 2026-09-08, oppgave 6.
+    Scenariomal: Resultat per søknadsalternativ i oppsummeringen
+      Gitt at søkeren "Kari Nordmann" fikk <resultat> på "Sykepleie, høst 2027" i den publiserte plasstildelingen i "Hovedrunde"
+      Når saksbehandler ser oppsummeringen av søknaden til "Kari Nordmann"
+      Så vises "<visning>" for søknadsalternativet "Sykepleie, høst 2027"
+
+      Eksempler:
+        | resultat                  | visning               |
+        | tilbud                    | Tilbud                |
+        | ventelisteplass nummer 12 | Venteliste, nummer 12 |
+        | avslag                    | Avslag                |
+
+# Resultatet lagres i dag to steder (per plasstildeling og på søknadsalternativet). Hvor resultatet
+# lagres, avgjør teamet (avklart 2026-10-14).
 #
 # Kilde: også Confluence «Plasstildelingsløpet i Opptak» (kap. 8 og 10).
