@@ -24,24 +24,24 @@ Egenskap: Listevisning og søk i personbrukere
 
     @draft @openquestion
     Scenario: Se liste over personbrukere
+      # Listen viser bare personer. Feide-brukerne som er koblet til personen, og Feide-ID-ene
+      # deres, vises bare på detaljsiden (BRU-PER-GRU-014).
       # ÅPNE SPØRSMÅL:
-      # - En person som er koblet til en Feide-bruker, har hjemorganisasjonen fra Feide. Hva står i
-      #   kolonnen «Hjemorganisasjon» for en person uten Feide-bruker, og for en person koblet til
-      #   flere Feide-brukere med ulike hjemorganisasjoner?
-      # - Skal kolonnen «Feide-ID» beholdes for personer som er koblet til en Feide-bruker?
+      # - Hva står i kolonnen «Hjemorganisasjoner» for en person som ikke er koblet til noen
+      #   Feide-bruker?
       # - Skal testpersoner merkes med en egen kolonne eller ved navnet? Se «En testperson er
       #   merket i listen».
       # - Personer kan ikke deaktiveres i API-et ennå. Skal status vises for personer før det er på
       #   plass?
-      # - Listen viser bare personer. Feide-brukerne som er koblet til personen, vises på
-      #   detaljsiden (BRU-PER-GRU-014).
       Når brukeradministratoren åpner brukeroversikten
       Så ser brukeradministratoren en liste over alle personbrukere
       Og listen er sortert etter navn i stigende rekkefølge
       Og hvert innslag viser følgende informasjon:
-        | felt   |
-        | Navn   |
-        | Status |
+        | felt               |
+        | Navn               |
+        | Hjemorganisasjoner |
+        | Status             |
+      Og «Hjemorganisasjoner» viser hjemorganisasjonene til Feide-brukerne personen er koblet til, hver organisasjon én gang
 
     @draft @openquestion
     Scenario: Fødselsnummer vises ikke i listen
