@@ -1,6 +1,6 @@
 # language: no
 # GitHub: #597
-@OPT-OPT-UTD-004 @must @draft
+@OPT-OPT-UTD-004 @must @draft @scope-utdanningstilbud-2027
 Egenskap: Opptaksinnstillinger per utdanningstilbud
   Som opptaksforvalter
   ønsker jeg å sette opptaksinnstillinger per utdanningstilbud
@@ -8,7 +8,7 @@ Egenskap: Opptaksinnstillinger per utdanningstilbud
 
   # Opptaksforvalter ved deltakende organisasjon kan sette innstillinger på egne utdanningstilbud.
   # Opptaksforvalter ved forvaltende organisasjon kan sette innstillinger på alle utdanningstilbud.
-  # Innstillinger for flere utdanningstilbud av gangen står i sette_standardinnstillinger.feature (#599).
+  # Innstillinger for flere utdanningstilbud av gangen står i sette_innstillinger_for_flere_utdanningstilbud.feature (#599).
   # Antall studieplasser står i sette_studieplasser_og_antall_tilbud.feature (#596).
   # Tidlig søknadsfrist og dokumentasjonsfrist står i 04 Behandle et utdanningstilbud/sette_tidlig_søknadsfrist.feature (SHI-708).
   Bakgrunn:
@@ -56,14 +56,35 @@ Egenskap: Opptaksinnstillinger per utdanningstilbud
   # 14 Plasstildeling/02 Tildelingsinnstillinger/plassflyt.feature.
   @openquestion
   # ÅPNE SPØRSMÅL:
-  # - Settes plassflyten per utdanningstilbud, eller som standard på opptaket? Uavklart 2026-10-08,
-  #   se 14 Plasstildeling/02 Tildelingsinnstillinger/plassflyt.feature.
+  # - Kan standard plassflyt for opptaket overstyres per utdanningstilbud? Avklart 2026-10-13 at
+  #   standarden settes på opptaket og gjelder alle utdanningskvoter, se
+  #   11 Opprette og vedlikeholde opptak/03 Innstillinger/sette_plassflyt.feature.
   Regel: Opptaksforvalter kan sette plassflyt mellom utdanningskvoter
 
     Scenario: Sette plassflyt
       Når opptaksforvalter setter plassflyt for utdanningstilbudet "Sykepleie, høst 2027"
       Og opptaksforvalter setter at ledige plasser i førstegangsvitnemålskvoten flyter til ordinær kvote
       Så omfordeler plasstildelingen ubrukte plasser fra førstegangsvitnemålskvoten til ordinær kvote
+
+  Regel: Lærestedene ser plassflyten for utdanningstilbudene sine
+
+    # Ønske meldt 2026-10-13. Plassflyten følger standarden for opptaket, se
+    # 11 Opprette og vedlikeholde opptak/03 Innstillinger/sette_plassflyt.feature.
+
+    Scenario: Se plassflyten for et utdanningstilbud
+      Gitt at standard plassflyt for opptaket sender "Samisk" og "Førstegangsvitnemål" til "Ordinær"
+      Og at utdanningstilbudet "Sykepleie, høst 2027" har utdanningskvotene "Samisk", "Førstegangsvitnemål" og "Ordinær"
+      Når opptaksforvalter ved lærestedet ser utdanningstilbudet "Sykepleie, høst 2027"
+      Så ser opptaksforvalter plassflyten mellom utdanningskvotene på utdanningstilbudet
+        | fra                 | til     |
+        | Samisk              | Ordinær |
+        | Førstegangsvitnemål | Ordinær |
+
+    Scenario: Kvoter som ikke er på utdanningstilbudet, vises ikke i plassflyten
+      Gitt at standard plassflyt for opptaket har kvoten "Nordnorsk"
+      Og at utdanningstilbudet "Sykepleie, høst 2027" ikke har utdanningskvoten "Nordnorsk"
+      Når opptaksforvalter ved lærestedet ser utdanningstilbudet "Sykepleie, høst 2027"
+      Så vises ikke "Nordnorsk" i plassflyten for utdanningstilbudet
 
   Regel: Opptaksforvalter kan markere at et utdanningstilbud tilbyr tidlig opptak
 

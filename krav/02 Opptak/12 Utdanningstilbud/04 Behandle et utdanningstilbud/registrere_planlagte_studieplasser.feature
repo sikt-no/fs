@@ -1,6 +1,6 @@
 # language: no
 # Jira: SHI-690
-@OPT-OPT-UTD-012 @must @draft
+@OPT-OPT-UTD-012 @must @draft @scope-utdanningstilbud-2027
 Egenskap: Registrere planlagt antall studieplasser
   Som opptaksforvalter
   ønsker jeg å registrere planlagt antall studieplasser på utdanningstilbudet

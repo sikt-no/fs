@@ -63,7 +63,7 @@ Egenskap: Registrere og beregne praksis for søker
 
   Bakgrunn:
     Gitt jeg er innlogget i løsningen
-    Og jeg har rollen opptakssaksbehandler
+    Og jeg har rollen søknadsbehandler
     Og jeg behandler en sak på søknaden til en søker
 
   Regel: Praksisperioder registreres manuelt på saken
@@ -617,49 +617,49 @@ Egenskap: Registrere og beregne praksis for søker
     # knytte_praksis_til_opptakskrav.feature. Kalkulatoren viser begge
     # summene; saksbehandleren vurderer selv hvilken som gjelder.
 
-  # AVKLART 16.09.2026: rollen heter **opptakssaksbehandler**. Det er det
-  # autoritative navnet, og featuren bruker det konsekvent.
-  #
-  # Konsekvens utenfor denne featuren: behandle_søknad.feature bruker
-  # «saksbehandler for opptak», og aktørlisten i
-  # .claude/rules/gherkin-conventions.md lister bare «saksbehandler». Begge
-  # bør rettes opp mot «opptakssaksbehandler», men det hører ikke i denne
-  # PR-en — se kommentaren nederst i filen.
+  # AVKLART 07.10.2026: rollen heter **søknadsbehandler**, som i koden
+  # (SØKNADSBEHANDLER i opptak, FS-ADMIN_OPPTAK_SØKNADSBEHANDLER i FS Admin).
+  # Dette erstatter avklaringen 16.09.2026 om «opptakssaksbehandler», som
+  # ikke finnes som rolle. Besluttet ved kodesjekken i fs-specify
+  # (tasks/opptak/registrere-praksis). Se kommentaren nederst i filen om
+  # andre krav som bruker andre navn.
 
-  Regel: Kun brukere med opptakssaksbehandler-rollen kan registrere praksis
+  Regel: Kun brukere med søknadsbehandler-rollen kan registrere praksis
 
-    Scenario: Opptakssaksbehandler kan registrere praksis
-      Gitt jeg har rollen opptakssaksbehandler
+    Scenario: Søknadsbehandler kan registrere praksis
+      Gitt jeg har rollen søknadsbehandler
       Når jeg åpner en sak på søknaden til en søker
       Så kan jeg registrere, oppdatere og slette praksisperioder
 
-    Scenario: Bruker uten opptakssaksbehandler-rollen ser ikke praksisregistreringen
-      Gitt en bruker uten rollen opptakssaksbehandler er innlogget
+    Scenario: Bruker uten søknadsbehandler-rollen ser ikke praksisregistreringen
+      Gitt en bruker uten rollen søknadsbehandler er innlogget
       Når brukeren åpner en sak på søknaden til en søker
       Så ser brukeren ikke muligheten til å registrere praksis
 
-    Scenario: Bruker uten opptakssaksbehandler-rollen ser ikke registrert praksis
-      Gitt en bruker uten rollen opptakssaksbehandler er innlogget
+    Scenario: Bruker uten søknadsbehandler-rollen ser ikke registrert praksis
+      Gitt en bruker uten rollen søknadsbehandler er innlogget
       Og saken har registrerte praksisperioder
       Når brukeren åpner en sak på søknaden til en søker
       Så ser brukeren ikke praksisberegningen
 
     Scenario: Saksbehandlere i andre opptak ser ikke praksisen
       Gitt det er registrert praksisperioder på en sak i ett opptak
-      Når en opptakssaksbehandler i et annet opptak slår opp søkeren
+      Når en søknadsbehandler i et annet opptak slår opp søkeren
       Så ser saksbehandleren ikke praksisperiodene fra det andre opptaket
       # AVKLART 29.09.2026 (situasjon E og spørsmål 6): «Nei. Ingen i andre
       # opptak skal kunne se praksisen.» Hele praksisdelen er skjult for dem
-      # som ikke har rollen opptakssaksbehandler — også den registrerte
+      # som ikke har rollen søknadsbehandler — også den registrerte
       # praksisen og summen, ikke bare muligheten til å registrere.
 
 # OPPFØLGING UTENFOR DENNE FEATUREN
-# Rollenavnet «opptakssaksbehandler» er avklart som det autoritative. To
-# steder i repoet bruker andre navn på det som skal være samme rolle, og bør
-# rettes i en egen endring:
+# Rollenavnet «søknadsbehandler» er avklart 07.10.2026. Andre krav bruker
+# andre navn på det som skal være samme rolle, og bør rettes i en egen
+# endring:
 # - behandle_søknad.feature (@OPT-BEH-BEH-001) bruker «saksbehandler for
 #   opptak».
-# - Aktørlisten i .claude/rules/gherkin-conventions.md lister «administrator,
-#   søker, student, saksbehandler» — «opptakssaksbehandler» mangler.
-# Det er ikke gjort her, fordi endringer i felles konvensjoner og i en annen
-# feature ville utvide denne PR-en utover praksisberegning.
+# - knytte_praksis_til_opptakskrav.feature og vitnemålsbehandling.feature
+#   bruker «opptakssaksbehandler».
+# - Aktørlisten i krav/README.md lister «administrator, søker, student,
+#   saksbehandler». «søknadsbehandler» mangler.
+# Det er ikke gjort her, fordi endringer i felles konvensjoner og i andre
+# krav ville utvide endringen utover praksisberegning.

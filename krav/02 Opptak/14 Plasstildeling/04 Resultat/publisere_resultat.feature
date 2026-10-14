@@ -35,6 +35,16 @@ Egenskap: Publisere resultatet til søkerne
       Når opptaksforvalter vil publisere en annen plasstildeling i "Hovedrunde"
       Så blir den andre plasstildelingen ikke publisert
 
+  Regel: Opptaksforvalter velger hvilken plasstildeling i plasstildelingsrunden som publiseres
+
+    # Sammenligningen av plasstildelinger står i vise_resultat.feature.
+    Scenario: Publisere plasstildelingen med ønsket resultat
+      Gitt at plasstildelingsrunden "Hovedrunde" har plasstildelingene "Prøve 1" og "Prøve 2", som ikke er publisert
+      Og at opptaksforvalter har sammenlignet "Prøve 1" og "Prøve 2"
+      Når opptaksforvalter publiserer "Prøve 2"
+      Så ser søkerne resultatet fra "Prøve 2"
+      Og "Prøve 1" blir ikke publisert
+
   @openquestion
   Regel: Opptaksforvalter velger tidspunkt for publisering
 
@@ -64,12 +74,19 @@ Egenskap: Publisere resultatet til søkerne
       Gitt at utdanningstilbudet "Sykepleie, høst 2027" viser ventelistenummer for søkere
       Og at søkeren "Kari Nordmann" står som nummer 12 på ventelisten
       Når plasstildelingen er publisert
-      Så ser søkeren at hun står som nummer 12 på ventelisten til "Sykepleie, høst 2027"
+      Så ser søkeren at søkeren står som nummer 12 på ventelisten til "Sykepleie, høst 2027"
 
     Scenario: Poenggrense skjult for søker
       Gitt at utdanningstilbudet "Sykepleie, høst 2027" ikke viser poenggrense for søkere
       Når plasstildelingen er publisert
       Så ser søkerne ikke poenggrensen for "Sykepleie, høst 2027"
+
+    Scenario: Søker ser bare tilbudet når en annen utdanningskvote er kansellert
+      Gitt at søkeren "Kari Nordmann" konkurrerer om "Sykepleie, høst 2027" i utdanningskvotene "Førstegangsvitnemål" og "Ordinær"
+      Og at søkeren fikk tilbud i "Førstegangsvitnemål" og kansellert i "Ordinær"
+      Når plasstildelingen er publisert
+      Så ser søkeren tilbud på "Sykepleie, høst 2027"
+      Men søkeren ser ikke det kansellerte resultatet i "Ordinær"
 
 # ÅPNE SPØRSMÅL:
 # - Poenggrensen søkeren ser i dag kommer fra en annen kilde enn plasstildelingen. Vedtaket må
@@ -82,7 +99,8 @@ Egenskap: Publisere resultatet til søkerne
 #   men plasstildelingen står fortsatt som publisert. Skal det være mulig å angre en publisering?
 # - Et søknadsalternativ uten utdanningskvote er ikke med i plasstildelingen, og søkeren får ikke noe svar.
 #   Hva skal søkeren se?
-# - Har søkeren tilbud i én utdanningskvote og kansellert i en annen på samme utdanningstilbud, ser søkeren
-#   «kansellert» i dag (A3, videreført fra admissio). Er det riktig?
+#
+# AVKLART 2026-10-14: Har søkeren tilbud i én utdanningskvote og kansellert i en annen på samme
+# utdanningstilbud, ser søkeren bare tilbudet. I dag ser søkeren «kansellert» (A3, videreført fra admissio).
 #
 # Kilde: også Confluence «Plasstildelingsløpet i Opptak» (kap. 8).

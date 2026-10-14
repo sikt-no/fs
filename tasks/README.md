@@ -11,16 +11,18 @@ tasks/
 ├── README.md                     # dette dokumentet
 ├── mal/                          # felles maler — kopier når du starter en oppgave
 │   ├── oppgave.md
+│   ├── scope.md
 │   ├── design.md
 │   ├── plan.md
 │   └── review.md
 └── <domene>/                     # én mappe per domene (se domenelista under)
     ├── README.md                 # eierteam, konvensjoner
-    ├── roadmap.md                # teamets visning: aktive og ferdige oppgaver
+    ├── roadmap.md                # valgfri: teamets visning (brukes av fs-oppgave utenfor repoet)
+    ├── scope-<slug>.md           # ett per initiativ: mål, avgrensning, oppgavene og kravene deres (se Scope)
     └── <slug>/                   # én mappe per oppgave
         ├── oppgave.md            # metadata, statuslogg, lenker
-        ├── design.md             # opprettes i utforskningsfasen
-        ├── reviews/
+        ├── design.md             # valgfri
+        ├── reviews/              # valgfri
         │   └── rNN-<fra>-til-<til>.md
         ├── flow.md               # valgfri: BAT-pipeline (eies av alfred)
         ├── memory.md             # valgfri: agent-journal
@@ -60,13 +62,47 @@ Slug-en må være unik innenfor domenet, ikke globalt. Den er en lesbar kebab-ca
 3. **`spec/` er reservert** for kravene. Det er dit `fs-specify` og `fs-specify-delta` alltid skriver, slik at hvem som helst kan peke på `tasks/<domene>/<slug>/spec/` uten å vite hvilken rolle som produserte resten. *(`spec-*.md` og `krav-input/` utenfor `spec/` sjekkes automatisk)*
 4. **`mal/` er reservert på domene-nivå** — det er ikke et domene. Malfilene heter `plan.md`, ikke `plan-lag.md`, nettopp for ikke å treffe globbene i regel 1. *(sjekkes automatisk, sammen med domener som ikke står i domenetabellen)*
 
-`oppgave.md`, `design.md`, `memory.md`, `utforing.md` og `reviews/` treffer ingen glob og hører hjemme i oppgave-rota.
+`oppgave.md`, `design.md`, `memory.md`, `utforing.md` og `reviews/` treffer ingen glob og hører hjemme i oppgave-rota. `scope-<slug>.md` ligger på domenenivå, ved siden av oppgavemappene, og treffer heller ingen glob.
 
-FS Kravforvaltning (`fs-kravforvaltning/`, modusen «Oppgaver») sjekker reglene som er merket *(sjekkes automatisk)*, og viser brudd som avvik på oppgaven. Den sjekker også at `oppgave.md` finnes og har en gyldig `Fase`, at `Slug` og `Domene` i metadataene stemmer med mappa, og at fasen i domenets `roadmap.md` er den samme som i `oppgave.md`. Sjekkene står i `fs-kravforvaltning/shared/tasks.ts` og er testet i `fs-kravforvaltning/shared/tasks.test.ts`. Endrer du en merket regel, eller legger du til en regel som kan sjekkes, må koden og testene oppdateres i samme endring.
+## Scope
+
+Et scope er planen for et initiativ: mål, avgrensning, kilder, og oppgavene initiativet deles i, med kravene hver oppgave har. Det står i `tasks/<domene>/scope-<slug>.md`, og lages og endres med skillen `fs-scope` (malen er [`mal/scope.md`](mal/scope.md)). Kravene kobles til scopet med taggen `@scope-<slug>` (se *Scope* i [`krav/README.md`](../krav/README.md)).
+
+```markdown
+# Scope: <tittel>
+
+- **Slug**: <slug>
+- **Initiativ**: [#NNN](https://github.com/sikt-no/fs/issues/NNN) | –
+- **Eier**: @… | –
+- **Siste oppdatering**: <dato>
+
+## Mål
+## Ikke-mål
+## Kilder
+## Oppgaver
+
+| Oppgave | Krav | MoSCoW | Skisse | Issue | Kommentar |
+|---|---|---|---|---|---|
+| [plasstildeling](plasstildeling/) | `@OPT-PLA-RUN-001` [runder.feature](../../krav/…) | Must | [Runder](https://figma.com/…?node-id=…) | #… | |
+| (ikke tildelt) | `@OPT-PLA-RUN-002` [….feature](../../krav/…) | Could | – | – | |
+
+## Åpne spørsmål
+```
+
+- Én rad per krav. Kravet står med Feature-ID. En del av et levert krav skrives `` `@DOM-SUB-KAP-NNN` — Regel: <tittel> ``.
+- Status står ikke i tabellen. Den leses fra taggene i kravene.
+- `Skisse` er lenken til rammen som dekker kravet. `fs-specify` bruker den som skissen til kravet.
+- Slugen i `- **Slug**:` er den samme som i filnavnet. *(sjekkes automatisk)*
+- Slugen er unik på tvers av domener, siden taggen ikke har domene. *(sjekkes automatisk)*
+- Oppgavene i tabellen ligger som mapper i samme domene som scope-fila. Et initiativ som går over flere domener, får ett scope per domene. *(sjekkes automatisk)*
+
+`oppgave.md` får feltet `- **Scope**: [scope-<slug>](../scope-<slug>.md)`. En oppgave hører til høyst ett scope, scopet finnes, og oppgaven står i tabellen i scopet. *(sjekkes automatisk)* Har oppgaven scope, er scope-raden kilden til kravene, og `oppgave.md` lenker ikke til kravene i tillegg.
+
+FS Kravforvaltning (`fs-kravforvaltning/`, tavla «Oppgaver») sjekker reglene som er merket *(sjekkes automatisk)*, og viser brudd som avvik på oppgaven. Den sjekker også at `oppgave.md` finnes, og at `Slug` og `Domene` i metadataene stemmer med mappa. `Fase` og `roadmap.md` sjekkes ikke. Sjekkene står i `fs-kravforvaltning/shared/tasks.ts` og er testet i `fs-kravforvaltning/shared/tasks.test.ts`. Endrer du en merket regel, eller legger du til en regel som kan sjekkes, må koden og testene oppdateres i samme endring.
 
 ## Utføring
 
-En spesifikasjon fra `fs-specify` eller `fs-specify-delta` (`spec/spec-*.md`) samler hele krav: én eller flere feature-filer, med alt som er `@planned` eller `@deprecated` i dem. Spesifikasjonen går så gjennom kode-repoene, typisk fs-plattform (subgraph og backend) og så fs-admin (frontend), før `fs-verify` bekrefter at kravene er implementert. FS Kravforvaltning viser dette i visningen «Spesifikasjoner», med én kolonne per repo. Oppgavefasene over påvirker ikke den.
+En spesifikasjon fra `fs-specify` eller `fs-specify-delta` (`spec/spec-*.md`) samler hele krav: én eller flere feature-filer, med alt som er `@planned` eller `@deprecated` i dem. Spesifikasjonen går så gjennom kode-repoene, typisk fs-plattform (subgraph og backend) og så fs-admin (frontend), før `fs-verify` bekrefter at kravene er implementert. FS Kravforvaltning viser dette på tavla «Oppgaver», med én kolonne per repo (se *Tavla*).
 
 Spesifikasjonen har disse seksjonene i tillegg til dem `fs-specify` alltid skriver:
 
@@ -130,7 +166,7 @@ Det kan være en person, en Claude Code-økt i repoet, eller en utførekjøring 
 
 Kommer to PR-er som tar samme steg, gir git en konflikt i seksjonen, og den siste løses for hånd.
 
-Når alle steg er levert, kjøres `fs-verify` avgrenset til spesifikasjonen. Den skriver `spec/verify-<dato>-<HHMM>.md` (med klokkeslett, så kjøringer kan sammenlignes) med `- **Spec:** spec/spec-<x>.md` og tabellen `## Scenarioer` (`| Feature-ID | Scenario | Resultat | Bevis |`). Er alt funnet, blir kravene `@implemented`, og kortet står i «Verifisert». Mangler noe, settes steget i repoet der koden mangler, tilbake til `pågår` med `Tilbake: <dato>`.
+Når alle steg er levert, kjøres `fs-verify` avgrenset til spesifikasjonen. Den skriver `spec/verify-<dato>-<HHMM>.md` (med klokkeslett, så kjøringer kan sammenlignes) med `- **Spec:** spec/spec-<x>.md` og tabellen `## Scenarioer` (`| Feature-ID | Scenario | Resultat | Bevis |`). Er alt funnet, blir kravene `@implemented`, og spesifikasjonen er verifisert. Mangler noe, settes steget i repoet der koden mangler, tilbake til `pågår` med `Tilbake: <dato>`.
 
 Scenarioene `fs-verify` sjekker (gating-settet), er alle `Scenario:`/`Scenariomal:` som ikke er tagget `@draft`, `@deprecated`, `@openquestion` eller `@demo`, selv eller via `Regel:`. I et levert krav som endres, er det bare `@planned`- og `@in-progress`-delene, og `@deprecated`-delene sjekkes for at koden er borte. Den samme definisjonen står i `fs-kravforvaltning/src/specboard.ts` (`gating`), og de to holdes i synk.
 
@@ -139,28 +175,39 @@ Scenarioene `fs-verify` sjekker (gating-settet), er alle `Scenario:`/`Scenarioma
 Oppgavemappa *erstatter ikke* GitHub issues eller project-boards. Fordelingen er:
 
 - **GitHub issue**: kanonisk ID, kort beskrivelse, labels, prioritet, milestone, status, start-/ferdigdato. Synlig for produktledere og eksterne.
-- **`oppgave.md`**: referanse til issue, eier, reviewers, lenker til design/plan/review, append-only statuslogg. Internt for teamet.
-- **`roadmap.md`**: teamets egen linse på aktivt og ferdig arbeid.
+- **`scope-<slug>.md`**: initiativet delt i oppgaver, med kravene hver oppgave har.
+- **`oppgave.md`**: referanse til issue, eier, scope, lenker, append-only statuslogg. Internt for teamet.
+- **Tavla «Oppgaver»** i FS Kravforvaltning: hvor hver oppgave er, utledet fra kravene og spesifikasjonene.
+- **`roadmap.md`** (valgfri): teamets egen linse på aktivt og ferdig arbeid.
 
 Én oppgave ≙ én GitHub issue. ID-en er issue-nummeret (f.eks. `#36`); vi lager ikke lokal nummerering. Mappenavnet er en lesbar slug.
 
 For overordnet prioritering på tvers av FS, se [FS Offentlig saksoversikt](https://github.com/orgs/sikt-no/projects/4/views/3).
 
-## Faser, issue-status og BAT-steg
+## Tavla
 
-En oppgave går gjennom: **prioritert → utforskning → utvikling → innføring → levert**.
+FS Kravforvaltning viser oppgavene på tavla «Oppgaver», med ett kort per oppgavemappe fra den opprettes til kravene er verifisert. Kolonnen utledes alltid av kravene og spesifikasjonene, og settes ikke for hånd. `Fase` i `oppgave.md` leses ikke.
 
-| Fase i `oppgave.md` | Status på issue i project | Artefakt i oppgavemappa | BAT-steg | Krav-tag |
-|---------------------|---------------------------|--------------------------|----------|----------|
-| prioritert | Prioritert | `oppgave.md` | – | `@planned` |
-| utforskning | Behovsanalyse → Løsningsalternativ | `design.md`, `spec/`, `<lag>/analysis-*.md`, `<lag>/plan-*.md` | `fs-specify` / `fs-specify-delta`, `bat-analyze`, `bat-plan` | `@in-progress` |
-| utvikling | Utvikling | `<lag>/task-N-completion.md` | `bat-execute` | `@in-progress` |
-| innføring | Innføring | `<lag>/verification-*.md` | `bat-verify`, `fs-verify` | `@implemented` |
-| levert | Levert | – | – | `@implemented` |
+| Kolonne | Betyr | Krav-tag | Skill som flytter oppgaven videre |
+|---------|-------|----------|------------------------------------|
+| I scope | Oppgaven er avgrenset. Kravene er skjeletter, eller finnes ikke ennå | `@draft` (skjelett) | `fs-scope`, så `fs-krav` |
+| Kravarbeid | Kravene skrives og valideres. Noen har scenarioer og er `@draft` | `@draft` | `fs-krav` |
+| Spesifiseres | Kravene er `@planned`, men spesifikasjonen finnes ikke, mangler tittel, omfang eller skisse, har åpne spørsmål, eller kravene er ikke hentet inn | `@planned` | `fs-specify` / `fs-specify-delta` |
+| Klart til utvikling | Spesifikasjonen er komplett, og kravene er hentet inn. Ingen rute er satt ennå | `@in-progress` | Sendes til første repo i FS Kravforvaltning |
+| fs-plattform, fs-admin, … | Spesifikasjonen er i repoet (se *Utføring*) | `@in-progress` | Den som utfører steget |
+| Til verifisering | Alle stegene på ruta er levert | `@in-progress` | `fs-verify` |
+| Verifisert | Kravene er `@implemented` (eller slettet, for `@deprecated`), eller verify-rapporten har alt funnet | `@implemented` | – |
 
-Oppgaver tas inn først når issuet er Prioritert. Oppgaver i `levert` blir liggende i roadmap-arkivet.
+Kolonnen for en oppgave:
 
-**Krav-tag-kolonnen** viser hvor `Egenskap:`-taggen i `.feature`-fila står gjennom løpet. Hvert steg på aksen har én eier:
+- **Uten spesifikasjon:** har oppgaven ingen krav, eller er alle kravene skjeletter, står den i *I scope*. Har noen krav scenarioer og er `@draft`, står den i *Kravarbeid*. Er alle kravene `@planned` (eller lenger), står den i *Spesifiseres*, med «Mangler spesifikasjon».
+- **Med spesifikasjoner:** hver spesifikasjon har sin kolonne, og oppgaven står der den tidligste av spesifikasjonene som ikke er verifisert, står. Krav i scopet som ikke er i noen spesifikasjon, gir et flagg på kortet («3 krav uten spesifikasjon»).
+- **Verifisert:** alle spesifikasjonene er verifisert, og ingen krav i scope-raden står uten spesifikasjon og uten `@implemented`. Uten scope: alle spesifikasjonene er verifisert, og kravene fra krav-lenken er levert.
+- Krav med `@wont` teller ikke for kolonnen, og gir ikke flagg.
+
+Kravene til en oppgave er kravene i scope-raden når oppgaven har scope, ellers kravene i spesifikasjonene, ellers feature-filene under mappa i «Krav (Gherkin)» i `oppgave.md`. En lenke til et helt domene (`krav/07 …/`) sier ikke hvilke krav oppgaven har, og brukes ikke: en slik oppgave står i *I scope* til den får scope eller spesifikasjon.
+
+Hvert steg på tag-aksen har én eier:
 
 `@draft` →(`fs-krav`)→ `@planned` →(`fs-specify` / `fs-specify-delta`)→ `@in-progress` →(`fs-verify`)→ `@implemented` →(`fs-krav`)→ `@deprecated` →(`fs-verify`)→ slettet
 
@@ -168,36 +215,23 @@ Endres et krav som er levert, blir `Egenskap:` stående som `@implemented`, og d
 
 Se [`krav/README.md`](../krav/README.md) for den autoritative definisjonen av taggene.
 
-BAT-stegene er valgfrie. En oppgave kan kjøres helt for hånd — da er `flow.md`, `spec/` og `<lag>/`-artefaktene noe teamet skriver selv, og fasene betyr det samme.
-
-## Review-for-improvement
-
-Mellom hver fase skal en tredjepart gjøre et **review for improvement** — målet er å forbedre resultatet, ikke å godkjenne/avvise. Dette skjer som en PR-review på trunk-based vis:
-
-1. Eier lager en PR som flytter oppgaven videre (oppretter/endrer artefakter, oppdaterer `roadmap.md` og `oppgave.md`).
-2. Reviewer ser etter feil og muligheter for forbedring, og legger inn kommentarer/suggestions.
-3. Utfall:
-   - **Ingen verdifulle forbedringer**: PR merges, fase oppdateres, issue-status justeres.
-   - **Forbedringer foreslått**: PR stenges eller blir liggende mens eier følger opp; oppgaven forblir i samme fase; en *annen* tredjepart gjør neste review. `oppgave.md` fører liste over hvem som allerede har reviewet.
-
-### Hva som produseres per faseovergang
-
-| Overgang | Produkt |
-|----------|---------|
-| prioritert → utforskning | `design.md` |
-| utforskning → utvikling | Ett `<lag>/plan-<slug>.md` for hvert lag som må endres |
-| utvikling → innføring | PR(er) som leverer på plan; planfiler får avkryssede bokser |
-| innføring → levert | Alle planbokser avkrysset; lenker til relevante PRs i `oppgave.md` |
+Review skjer i PR-en som endrer oppgavemappa eller kravene. BAT-stegene (`bat-analyze`, `bat-plan`, `bat-execute`, `bat-verify`) er valgfrie, og skriver i `<lag>/`. `Fase` i `oppgave.md`, `roadmap.md`, `design.md` og `reviews/` er valgfrie. De brukes av `fs-oppgave` utenfor dette repoet, og leses ikke av FS Kravforvaltning.
 
 ## Legge til et nytt domene
 
 1. Sjekk at domenet finnes som toppnivå i [`krav/`](../krav/) — oppgavestrukturen speiler kravstrukturen, den finner ikke på egne inndelinger.
 2. Legg domenet til i tabellen over.
-3. Opprett `tasks/<domene>/` med `README.md` (eierteam og konvensjoner) og en `roadmap.md`.
+3. Opprett `tasks/<domene>/` med `README.md` (eierteam og konvensjoner). `roadmap.md` er valgfri.
 4. Kopier fra [`mal/`](mal/) når første oppgave opprettes.
 
 Et domene kan eies av ett team, og et team kan eie flere domener. Skriv hvilket team som eier domenet i domenets `README.md`.
 
 ## Maler
 
-[`mal/`](mal/) inneholder `oppgave.md`, `design.md`, `plan.md` og `review.md`. Kopier dem inn i oppgavemappa og fyll ut, eller bruk skillen `fs-oppgave`, som kopierer malene, fyller inn metadata og holder `oppgave.md` og `roadmap.md` i synk ved hver faseovergang. Team som vil avvike, kan legge egne maler i sitt domene — men mapping til issue-status og faseoverganger skal være forutsigbar på tvers.
+[`mal/`](mal/) inneholder `oppgave.md`, `scope.md`, `design.md`, `plan.md` og `review.md`.
+
+- `fs-scope` bruker `scope.md` og `oppgave.md` når et initiativ deles i oppgaver.
+- `fs-specify` og `fs-specify-delta` («Ny oppgave») og «+ Ny oppgave» på tavla i FS Kravforvaltning skriver en minimal `oppgave.md` fra malen: tittel, domene, slug, issue og eier, og `–` i resten.
+- `design.md`, `plan.md` og `review.md`, og `Fase` i `oppgave.md`, står for dem som bruker `fs-oppgave` fra et annet sted. FS Kravforvaltning leser dem ikke.
+
+Team som vil avvike, kan legge egne maler i sitt domene.

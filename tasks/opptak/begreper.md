@@ -40,7 +40,7 @@ Denne listen sammenstiller begreper brukt i kravene (`krav/02 Opptak/`), design-
 | organisasjon | Generelt begrep for alle typer registrerte enheter | – | Institusjon | Nytt generelt begrep som erstatter «institusjon» (se `krav/README.md` terminologi) |
 | hendelseslogg | Logg over endringer på opptaket og det som hører til det, med hvem (rolle og organisasjon), hva, når, og verdien før og etter | – | – | Ny term (`hendelseslogg.feature`) |
 | hendelse | Én loggført endring i hendelsesloggen, med fast minimumsinnhold | – | – | Ny term (`hendelseslogg.feature`) |
-| standardinnstilling | Innstilling som settes for flere utdanningstilbud av gangen | – | – | Ny term (`sette_standardinnstillinger.feature`). Om det er en mal som arves, er uavklart |
+| standardinnstilling | Innstilling som settes for flere utdanningstilbud av gangen | – | – | Brukes ikke (2026-10-12). Kravet heter «Sette innstillinger for flere utdanningstilbud» (`sette_innstillinger_for_flere_utdanningstilbud.feature`). Om innstillingene er en mal som arves, er uavklart |
 
 ## Utdanningstilbud og søknad
 
@@ -77,9 +77,9 @@ Denne listen sammenstiller begreper brukt i kravene (`krav/02 Opptak/`), design-
 | kvotesøknad | At en søker konkurrerer i én utdanningskvote, med en poengsum og en rangering. En søker har én kvotesøknad per utdanningskvote søkeren konkurrerer i | – | – | Ny term i kravene (plasstildeling) |
 | kvoteprioritet | «Innbyrdes rangering mellom ulike kvoter. Kvoteprioriteten angir hvilken kvote en søknad vurderes i først, dersom det finnes flere muligheter» | [kvoteprioritet](https://fs.sikt.no/domenekunnskap/begreper/kvoteprioritet/) (aktiv) | – | OK. Sto som manglende i forrige versjon av lista, men finnes nå i katalogen |
 | kvotespørsmål | Spørsmål i søknaden som avgjør hvilke kvoter søkeren kan konkurrere i | – | Kvotespørsmål | Finnes i gammel FS, mangler i begrepskatalogen |
-| plassflyt | «Automatisk overføring av ledige plasser fra en kvote til en annen når kvoten ikke fylles opp» | [plassflyt](https://fs.sikt.no/domenekunnskap/begreper/plassflyt/) (utkast) | Plassflyt / Kvotetilh plassflyt | ✅ Avklart: erstatter «kvoteflyt». ✅ Avklart 2026-10-09: plassflyt er bare at ubrukte plasser flyter mellom kvoter i et opptak. Det må ikke blandes med informasjonsarv mellom runder. ⚠️ Katalogen sier at plassflyt også kan gå mellom plasstildelinger. Om plassflyt settes på opptaket eller per utdanningstilbud, er uavklart |
+| plassflyt | «Automatisk overføring av ledige plasser fra en kvote til en annen når kvoten ikke fylles opp» | [plassflyt](https://fs.sikt.no/domenekunnskap/begreper/plassflyt/) (utkast) | Plassflyt / Kvotetilh plassflyt | ✅ Avklart: erstatter «kvoteflyt». ✅ Avklart 2026-10-09: plassflyt er bare at ubrukte plasser flyter mellom kvoter i et opptak. Det må ikke blandes med informasjonsarv mellom runder. ✅ Avklart 2026-10-13: standard plassflyt settes på opptaket, og gjelder alle utdanningskvoter. En kvote kan ha flere mottakere i prioritert rekkefølge. ⚠️ Katalogen sier at plassflyt også kan gå mellom plasstildelinger |
 | mottakende utdanningskvote | Utdanningskvoten som får de ledige plassene fra en annen utdanningskvote ved plassflyt | – | – | Ny term (`plassflyt.feature`) |
-| siste utdanningskvote | Utdanningskvote som ikke sender ledige plasser videre, typisk ordinær kvote | – | – | Ny term (`plassflyt.feature`) |
+| sistekvote | Den ene kvoten i opptaket som ikke sender ledige plasser videre, og som alle kjeder i plassflyten ender i. I UHG er det ordinær kvote | – | – | ✅ Avklart 2026-10-13: nøyaktig én sistekvote per opptak. Erstatter «siste utdanningskvote» (`sette_plassflyt.feature`) |
 | tilbud til alle kvalifiserte | Innstilling på et utdanningstilbud der alle kvalifiserte søkere får tilbud uansett poengsum, uten poenggrense | – | – | Ny term (`antall_tilbud_som_skal_gis.feature`) |
 
 ## Poengberegning og rangering

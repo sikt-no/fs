@@ -1,8 +1,7 @@
-import type { OView } from './Oppgaver';
 import { vscodeUrl } from './vscode';
 
 export type Theme = 'light' | 'dark';
-export type Mode = 'krav' | 'avvik' | 'spesifikasjoner' | 'oppgaver';
+export type Mode = 'krav' | 'avvik' | 'oppgaver';
 
 interface Props {
   path: string;
@@ -19,22 +18,14 @@ interface Props {
   onMode: (m: Mode) => void;
   /** Antall filer med avvik, vist på Avvik-knappen */
   nBad: number;
-  /** Vis Oppgaver-knappen (dev-serveren er startet med `--mode oppgaver`) */
-  oppgaver: boolean;
-  /** Antall oppgaver som ikke er levert, vist på Oppgaver-knappen */
+  /** Antall oppgaver som ikke er verifisert, vist på Oppgaver-knappen */
   nActive: number;
-  oView: OView;
-  onOView: (v: OView) => void;
   /** Brødsmulen i Oppgaver-modus */
   oCrumbs: string[];
   /** Claude-panelet: `null` når Claude Code ikke er tilgjengelig, ellers om panelet er åpent */
   claude: boolean | null;
   onClaude: () => void;
-  /** Vis Spesifikasjoner-knappen (dev-serveren er startet med `--mode spesifikasjoner`) */
-  spesifikasjoner: boolean;
-  /** Antall spesifikasjoner som ikke er verifisert, vist på Spesifikasjoner-knappen */
-  nSpecs: number;
-  /** Spesifikasjoner: skrivebeskyttet (statisk bygg), antall endrede filer under tasks/, og «Lag PR» */
+  /** Oppgaver: skrivebeskyttet (statisk bygg), antall endrede filer under tasks/, og «Lag PR» */
   specState: { ro: boolean; dirty: number; onPr: (() => void) | null };
   /** Desktop-appen: main på GitHub er nyere enn klonen; knappen henter siste. `null`: ingenting å hente */
   onUpdate: (() => void) | null;
@@ -46,8 +37,8 @@ interface Props {
   repoRoot: string | null;
 }
 
-export function TopBar({ path, connected, theme, onTheme, treeHidden, onToggleTree, tocHidden, onToggleToc, onHome, mode, onMode, nBad, oppgaver, nActive, oView, onOView, oCrumbs, spesifikasjoner, nSpecs, specState, claude, onClaude, onUpdate, pulling, appUpdate, repoRoot }: Props) {
-  const parts = mode === 'avvik' ? ['krav', '#/avvik'] : mode === 'oppgaver' ? oCrumbs : mode === 'spesifikasjoner' ? ['tasks', '*/*', 'utforing.md'] : path ? path.split('/') : [];
+export function TopBar({ path, connected, theme, onTheme, treeHidden, onToggleTree, tocHidden, onToggleToc, onHome, mode, onMode, nBad, nActive, oCrumbs, specState, claude, onClaude, onUpdate, pulling, appUpdate, repoRoot }: Props) {
+  const parts = mode === 'avvik' ? ['krav', '#/avvik'] : mode === 'oppgaver' ? oCrumbs : path ? path.split('/') : [];
   return (
     <header class="topbar">
       {/* Venstrepanelet: filtreet i Krav, mappene med avvik i Avvik */}
@@ -70,27 +61,10 @@ export function TopBar({ path, connected, theme, onTheme, treeHidden, onToggleTr
         <button aria-pressed={mode === 'avvik'} onClick={() => onMode('avvik')} title={`${nBad} filer med avvik fra konvensjonene`}>
           Avvik{nBad > 0 && <span class="badge">{nBad}</span>}
         </button>
-        {spesifikasjoner && (
-          <button aria-pressed={mode === 'spesifikasjoner'} onClick={() => onMode('spesifikasjoner')} title={`${nSpecs} spesifikasjoner som ikke er verifisert`}>
-            Spesifikasjoner<span class="badge neutral">{nSpecs}</span>
-          </button>
-        )}
-        {oppgaver && (
-          <button aria-pressed={mode === 'oppgaver'} onClick={() => onMode('oppgaver')} title={`${nActive} aktive oppgaver i tasks/`}>
-            Oppgaver<span class="badge neutral">{nActive}</span>
-          </button>
-        )}
+        <button aria-pressed={mode === 'oppgaver'} onClick={() => onMode('oppgaver')} title={`${nActive} oppgaver i tasks/ som ikke er verifisert`}>
+          Oppgaver<span class="badge neutral">{nActive}</span>
+        </button>
       </div>
-      {mode === 'oppgaver' && (
-        <div class="seg oviewseg" role="group" aria-label="Oppgavevisning">
-          <button aria-pressed={oView === 'mappe'} onClick={() => onOView('mappe')}>
-            <span class="oic-mappe" aria-hidden="true"><span /><span /><span /></span>Mappe
-          </button>
-          <button aria-pressed={oView === 'tavle'} onClick={() => onOView('tavle')}>
-            <span class="oic-tavle" aria-hidden="true"><span /><span /><span /></span>Tavle
-          </button>
-        </div>
-      )}
       <nav class="crumbs" aria-label="Sti">
         {parts.map((p, i) => (
           <span key={i} style={{ display: 'flex', gap: '6px' }}>
@@ -100,7 +74,7 @@ export function TopBar({ path, connected, theme, onTheme, treeHidden, onToggleTr
         ))}
       </nav>
       <div class="topbar-right">
-        {mode === 'spesifikasjoner' && (
+        {mode === 'oppgaver' && (
           <span class="spstate mono">
             {specState.ro ? (
               <>

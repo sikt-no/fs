@@ -23,6 +23,10 @@ Du leser kravene og finner tekst som bryter konvensjonene, der det trengs skjøn
 
 I Claude-panelet virker AskUserQuestion: brukeren får spørsmålet som et kort med valgene. Hopper brukeren over, still spørsmålene i svaret, og vent på brukeren.
 
+## Sjekk branchen (gjør dette aller først)
+
+Før du leser eller skriver krav: sjekk at branchen i dette repoet er oppdatert mot origin og main, som beskrevet i [`.claude/references/oppdatert-branch.md`](../../references/oppdatert-branch.md). Er den bak, spør du før du henter. I Claude-panelet i FS Kravforvaltning (uten Bash) hoppes sjekken over.
+
 ## Kilder (les FØRST)
 
 1. `krav/README.md`: hele fila. Særlig *Gode scenarioer*, *Aktører* og *Terminologi* (med *Ord som krever avklaring*, *Foretrukne begreper* og *Konkrete henvisninger*).

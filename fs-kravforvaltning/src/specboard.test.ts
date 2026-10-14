@@ -1,9 +1,9 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
 import type { Snapshot } from '../shared/model.ts';
-import type { RawTask, TasksSnapshot } from '../shared/tasks.ts';
+import { buildScopes, buildTasks, type RawTask, type TasksSnapshot } from '../shared/tasks.ts';
 import { buildEntry } from '../server/parse.ts';
-import { BOARD_REPOS, buildCards, canDrop, colOf, columns, flags, gating, handoffPrompt, isVerified, missing, moveTo, parseVerify, phaseOf, pickable, prShort, specChanged, verifyOrder, verifyPrompt } from './specboard.ts';
+import { BOARD_REPOS, buildCards, buildTaskCards, dragSpec, taskColOf, taskFlags, taskMissing, canDrop, colOf, columns, flags, gating, handoffPrompt, isVerified, missing, moveTo, parseVerify, phaseOf, pickable, prShort, specChanged, verifyOrder, verifyPrompt } from './specboard.ts';
 
 const feature = (tag: string, id: string, body = '') => `# language: no
 ${id} @must @${tag}
@@ -111,7 +111,7 @@ test('buildCards slår opp kravene på Feature-ID og leser utforing.md', () => {
 
 test('colOf: Utkast med det som mangler, Klart til utvikling, Til verifisering og Verifisert', () => {
   const draft = one({ 'spec/spec-roller.md': spec({ krav: ['planlagt.feature:@BRU-TIL-ROL-003'], skisse: false, omfang: '', q: '- [ ] Hva?' }) });
-  assert.equal(colOf(draft), 'utkast');
+  assert.equal(colOf(draft), 'spesifiseres');
   assert.deepEqual(missing(draft), ['Mangler omfang', 'Ingen skisse', '1 åpne spørsmål', 'planlagt.feature er ikke @in-progress']);
   const ready = one({ 'spec/spec-roller.md': spec() });
   assert.equal(colOf(ready), 'klar');
@@ -152,7 +152,9 @@ test('verifiseringsrapporten har klokkeslett fra Dato eller filnavnet, og den ny
 test('canDrop og moveTo: sende, flytte mellom repoer og tilbake', () => {
   const ready = one({ 'spec/spec-roller.md': spec() + '\n## Rute\n\nfs-plattform → fs-admin\n' });
   assert.equal(canDrop(ready, 'verifisert'), false);
-  assert.equal(canDrop(ready, 'utkast'), false);
+  assert.equal(canDrop(ready, 'spesifiseres'), false);
+  assert.equal(canDrop(ready, 'scope'), false);
+  assert.equal(canDrop(ready, 'kravarbeid'), false);
   assert.equal(canDrop(ready, 'repo:fs-admin'), true);
   const m = moveTo(ready, 'repo:fs-admin', 'fs-admin');
   assert.deepEqual(m.run.route, ['fs-plattform', 'fs-admin']);
@@ -203,22 +205,103 @@ test('handoffPrompt har spesifikasjonen, kravene, skissene og overleveringen fra
 
 test('columns: standardrepoene og repoene i rutene, med lagret rekkefølge, navn og fjerning', () => {
   const keys = (cs: { key: string }[]) => cs.map(c => c.key);
-  assert.deepEqual(keys(columns([], BOARD_REPOS, [])), ['utkast', 'klar', 'repo:fs-plattform', 'repo:fs-admin', 'repo:min-kompetanse', 'verifisering', 'verifisert']);
-  assert.deepEqual(keys(columns([], ['fs-plattform', 'fs-admin'], [['fs-integrasjon']])), ['utkast', 'klar', 'repo:fs-plattform', 'repo:fs-admin', 'repo:fs-integrasjon', 'verifisering', 'verifisert']);
+  assert.deepEqual(keys(columns([], BOARD_REPOS, [])), ['scope', 'kravarbeid', 'spesifiseres', 'klar', 'repo:fs-plattform', 'repo:fs-admin', 'repo:min-kompetanse', 'verifisering', 'verifisert']);
+  assert.deepEqual(keys(columns([], ['fs-plattform', 'fs-admin'], [['fs-integrasjon']])), ['scope', 'kravarbeid', 'spesifiseres', 'klar', 'repo:fs-plattform', 'repo:fs-admin', 'repo:fs-integrasjon', 'verifisering', 'verifisert']);
   const saved = [
     { key: 'repo:fs-admin' as const, name: 'Admin' },
     { key: 'repo:fs-plattform' as const, name: 'fs-plattform', removed: true },
     { key: 'klar' as const, name: 'Klar', hidden: true },
   ];
   const cs = columns(saved, ['fs-plattform', 'fs-admin'], []);
-  assert.deepEqual(keys(cs), ['utkast', 'klar', 'repo:fs-admin', 'verifisering', 'verifisert']);
-  assert.equal(cs[1].hidden, true);
-  assert.equal(cs[2].name, 'Admin');
+  assert.deepEqual(keys(cs), ['scope', 'kravarbeid', 'spesifiseres', 'klar', 'repo:fs-admin', 'verifisering', 'verifisert']);
+  assert.equal(cs[3].hidden, true);
+  assert.equal(cs[4].name, 'Admin');
   // Et fjernet repo som står i en rute, kommer tilbake
-  assert.deepEqual(keys(columns(saved, ['fs-plattform', 'fs-admin'], [['fs-plattform']])), ['utkast', 'klar', 'repo:fs-admin', 'repo:fs-plattform', 'verifisering', 'verifisert']);
+  assert.deepEqual(keys(columns(saved, ['fs-plattform', 'fs-admin'], [['fs-plattform']])), ['scope', 'kravarbeid', 'spesifiseres', 'klar', 'repo:fs-admin', 'repo:fs-plattform', 'verifisering', 'verifisert']);
 });
 
 test('prShort', () => {
   assert.equal(prShort('https://github.com/sikt-no/fs-plattform/pull/123'), 'fs-plattform#123');
   assert.equal(prShort('noe annet'), 'noe annet');
+});
+
+// —— Oppgavekortene ——
+
+const DOM = 'brukeradministrasjon-og-tilgangsstyring';
+const oppg = (slug: string, scope?: string) => `# Oppgave ${slug}\n\n- **Slug**: ${slug}\n- **Domene**: ${DOM}\n${scope ? `- **Scope**: [scope-${scope}](../scope-${scope}.md)\n` : ''}`;
+const skjelett = (id: string, tag = '@draft') => `# language: no
+${id} @must ${tag} @scope-roller
+Egenskap: Skjelett ${id}
+  Som administrator
+  ønsker jeg noe
+  slik at noe
+
+  Regel: Kommer
+`;
+const scopeFile = (rows: string) => `# Scope: Roller
+
+- **Slug**: roller
+
+## Oppgaver
+
+| Oppgave | Krav | MoSCoW | Skisse | Issue | Kommentar |
+|---|---|---|---|---|---|
+${rows}
+`;
+
+/** Tavla for én oppgave med scope: kravene i scope-raden, og spesifikasjonene i oppgaven */
+function board(krav: Record<string, string>, row: string, specs: Record<string, string> = {}) {
+  const ents: Snapshot = { ...entries };
+  for (const [p, src] of Object.entries(krav)) ents[p] = buildEntry(p, src, 0);
+  const t: RawTask = { dom: DOM, slug: 'roller', files: ['oppgave.md', ...Object.keys(specs)], sources: { 'oppgave.md': oppg('roller', 'roller'), ...specs }, mtimes: {} };
+  const sn: TasksSnapshot = { domains: { [DOM]: null }, tasks: [t], scopes: { [`tasks/${DOM}/scope-roller.md`]: scopeFile(row) } };
+  const scopes = buildScopes(sn);
+  return buildTaskCards(buildTasks(sn, scopes), scopes, buildCards(sn, ents), ents)[0];
+}
+
+test('oppgavekort: I scope, Kravarbeid og Spesifiseres utledes fra kravene i scope-raden', () => {
+  const a = 'krav/07 Bru/11 Til/02 Ny/ny_a.feature';
+  const b = 'krav/07 Bru/11 Til/02 Ny/ny_b.feature';
+  const row = '| [roller](roller/) | `@BRU-TIL-NYA-001` `@BRU-TIL-NYB-002` | Must | – | – | |';
+  const sk = board({ [a]: skjelett('@BRU-TIL-NYA-001'), [b]: skjelett('@BRU-TIL-NYB-002') }, row);
+  assert.equal(sk.krav.length, 2);
+  assert.equal(sk.kravFrom, 'scope');
+  assert.equal(taskColOf(sk), 'scope');
+  assert.match(taskMissing(sk)[0], /skjeletter/);
+  const kravarbeid = board({ [a]: skjelett('@BRU-TIL-NYA-001'), [b]: feature('draft', '@BRU-TIL-NYB-002') }, row);
+  assert.equal(taskColOf(kravarbeid), 'kravarbeid');
+  const klare = board({ [a]: feature('planned', '@BRU-TIL-NYA-001'), [b]: feature('planned', '@BRU-TIL-NYB-002') }, row);
+  assert.equal(taskColOf(klare), 'spesifiseres');
+  assert.deepEqual(taskMissing(klare), ['Mangler spesifikasjon · fs-specify']);
+  // Krav som ikke finnes ennå, regnes som skjeletter
+  assert.equal(taskColOf(board({}, '| [roller](roller/) | `@BRU-TIL-NYC-003` | Must | – | – | |')), 'scope');
+  assert.equal(taskColOf(board({}, '| [annen](annen/) | `@BRU-TIL-NYC-003` | Must | – | – | |')), 'scope', 'ingen krav');
+});
+
+test('oppgavekort: tidligste aktive spesifikasjon, flagg for krav uten spesifikasjon, og verifisert', () => {
+  const row = '| [roller](roller/) | `@BRU-TIL-ROL-001` `@BRU-TIL-ROL-003` | Must | – | – | |';
+  const t = board({}, row, { 'spec/spec-roller.md': spec() });
+  assert.equal(t.specs.length, 1);
+  assert.equal(taskColOf(t), 'klar');
+  assert.deepEqual(t.unspecced.map(k => k.id), ['@BRU-TIL-ROL-003']);
+  assert.ok(taskFlags(t, false).some(f => f.t === '1 krav uten spesifikasjon'));
+  assert.equal(dragSpec(t)?.file, 'spec-roller.md');
+  // To spesifikasjoner: oppgaven står i den tidligste, og kortet kan ikke dras
+  const to = board({}, row, { 'spec/spec-roller.md': spec(), 'spec/spec-utkast.md': spec({ skisse: false, krav: ['planlagt.feature:@BRU-TIL-ROL-003'] }) });
+  assert.equal(taskColOf(to), 'spesifiseres');
+  assert.equal(dragSpec(to), null);
+  // @wont teller ikke, og levert krav uten spesifikasjon trekker ikke tilbake
+  const levert = board({}, '| [roller](roller/) | `@BRU-TIL-ROL-004` | Must | – | – | |');
+  assert.equal(taskColOf(levert), 'verifisert');
+  const wont = board({}, '| [roller](roller/) | `@BRU-TIL-ROL-003` | Won\'t | – | – | |');
+  assert.equal(wont.unspecced.length, 0);
+});
+
+test('oppgavekort uten scope: kravene fra spesifikasjonene, og uten noe står oppgaven i I scope', () => {
+  const sn: TasksSnapshot = { domains: { [DOM]: null }, tasks: [{ dom: DOM, slug: 'roller', files: ['oppgave.md', 'spec/spec-roller.md'], sources: { 'oppgave.md': oppg('roller'), 'spec/spec-roller.md': spec() }, mtimes: {} }, { dom: DOM, slug: 'tom', files: ['oppgave.md'], sources: { 'oppgave.md': oppg('tom') } }] };
+  const cards = buildTaskCards(buildTasks(sn), [], buildCards(sn, entries), entries);
+  const roller = cards.find(c => c.slug === 'roller')!;
+  assert.equal(roller.kravFrom, 'spec');
+  assert.equal(taskColOf(roller), 'klar');
+  assert.equal(taskColOf(cards.find(c => c.slug === 'tom')!), 'scope');
 });

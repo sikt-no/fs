@@ -36,6 +36,22 @@ Egenskap: Automatisk kvoteplassering
       Når saksbehandleren behandler søknaden på grunnlaget "PRA"
       Så plasseres ikke søkeren i kvotetypen "ORDF"
 
+  Regel: Søkerens alder beregnes på opptakets dato for aldersberegning
+
+    # Flyttet hit 2026-10-12 fra 11 Opprette og vedlikeholde opptak/04 Frister/frister_og_hendelser.feature.
+    # Datoen settes på opptaket. Står den tom, er den 31.12 i året opptaksresultatene publiseres.
+    # Alderen brukes av aldersgrensene i regelen under.
+    Scenariomal: Alder på datoen for aldersberegning
+      Gitt at opptaket har dato for aldersberegning "<dato>"
+      Og at søkeren er født "<født>"
+      Når saksbehandleren behandler søknaden
+      Så er søkeren <alder> år på datoen for aldersberegning
+
+      Eksempler:
+        | dato       | født       | alder |
+        | 2027-04-15 | 2005-06-01 | 21    |
+        | 2027-12-31 | 2005-09-01 | 22    |
+
   Regel: Aldersgrensen på grunnlaget avgjør om søkeren kan plasseres i kvotene grunnlaget er koblet til
 
     Scenariomal: Aldersgrense på grunnlaget

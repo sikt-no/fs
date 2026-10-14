@@ -67,5 +67,6 @@ Overordnet: utdanningsregisteret får utdanninger som skal med i de samordna opp
 
 | Dato       | Hendelse                          | Av            | Lenke til review        |
 |------------|-----------------------------------|---------------|-------------------------|
+| 2026-10-12 | Del 2 og 3 delt i oppgaver i [scope-utdanningstilbud-2027](../scope-utdanningstilbud-2027.md) | – | – |
 | 2026-09-15 | Workshop: oppgavedeling avklart   | @karensikt    | –                       |
 | 2026-09-11 | Tatt inn i veikart (design)       | @karensikt    | –                       |

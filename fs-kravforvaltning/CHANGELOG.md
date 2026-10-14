@@ -1,5 +1,17 @@
 # krav-viewer
 
+## 1.3.1
+
+### Patch Changes
+
+- 9510fe8: Oppgaver som er slettet på main, blir ikke lenger stående som tomme kort på tavla «Oppgaver». «Hent siste» i desktop-appen fjerner nå også mappene som blir tomme, og tavla viser ikke mapper uten filer.
+
+## 1.3.0
+
+### Minor Changes
+
+- 0a30bb6: Oppgaver og Spesifikasjoner er slått sammen til én tavle, «Oppgaver», som alltid står i knapperaden øverst. Der hver oppgave flyter fra den opprettes til kravene er verifisert. Tavla har tre nye kolonner først (I scope, Kravarbeid og Spesifiseres, utledet fra kravene), og detaljpanelet viser oppgaven, scopet og kravene med spesifikasjonene som faner. Kravene kobles til et scope med taggen `@scope-<slug>`, og scope-filene `tasks/<domene>/scope-<slug>.md` lages med den nye skillen `fs-scope`. «+ Ny oppgave» lager en oppgave uten scope. Gamle lenker til Spesifikasjoner åpner oppgaven på tavla.
+
 ## 1.2.1
 
 ### Patch Changes

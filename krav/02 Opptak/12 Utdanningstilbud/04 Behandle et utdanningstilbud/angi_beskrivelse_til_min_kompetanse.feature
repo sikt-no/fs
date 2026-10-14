@@ -1,6 +1,6 @@
 # language: no
 # Jira: SHI-694
-@OPT-OPT-UTD-016 @must @draft
+@OPT-OPT-UTD-016 @must @draft @scope-utdanningstilbud-2027
 Egenskap: Angi beskrivelse av utdanningstilbudet til Min kompetanse
   Som opptaksforvalter
   ønsker jeg å angi en beskrivelse av utdanningstilbudet på flere språk

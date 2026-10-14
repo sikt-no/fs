@@ -490,7 +490,7 @@ export interface RunnerOpts {
   questionTimeoutMs?: number;
   /** En skisse er skrevet av `save_sketch`; git-endringene skal leses på nytt */
   onSaved?: (path: string) => void;
-  /** En kjøring er ferdig; Claude kan ha skrevet filer, også under tasks/ (som ikke overvåkes uten Oppgaver og Spesifikasjoner) */
+  /** En kjøring er ferdig; Claude kan ha skrevet filer, også under tasks/, og «Endringer» leses på nytt */
   onDone?: () => void;
 }
 

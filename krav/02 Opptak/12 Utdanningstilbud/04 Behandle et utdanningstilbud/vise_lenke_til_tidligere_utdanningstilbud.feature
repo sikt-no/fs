@@ -1,6 +1,6 @@
 # language: no
 # Jira: SHI-700
-@OPT-OPT-UTD-021 @could @draft
+@OPT-OPT-UTD-021 @could @draft @scope-utdanningstilbud-2027
 Egenskap: Vise lenke til tidligere utdanningstilbud
   Som opptaksforvalter
   ønsker jeg å sette og se en lenke til tidligere utdanningstilbud

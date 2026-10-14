@@ -1,6 +1,6 @@
 # language: no
 # Jira: SHI-710
-@OPT-OPT-UTD-026 @must @draft
+@OPT-OPT-UTD-026 @must @draft @scope-utdanningstilbud-i-opptak-2027
 Egenskap: Fjerne utdanningstilbud fra opptak
   Som opptaksforvalter
   ønsker jeg å fjerne utdanningstilbud som er lagt til i opptaket ved en feil, før opptaket er publisert

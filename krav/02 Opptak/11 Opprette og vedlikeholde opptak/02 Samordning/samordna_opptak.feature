@@ -1,5 +1,5 @@
 # language: no
-@OPT-OVO-SAM-001 @must @in-progress
+@OPT-OVO-SAM-001 @must @in-progress @scope-opprette-opptak-2027
 Egenskap: Samordna opptak
   Som opptaksforvalter ved forvaltende organisasjon
   ønsker jeg å invitere læresteder til å delta
@@ -13,7 +13,7 @@ Egenskap: Samordna opptak
 
     Scenario: Legge til lærested i samordna opptak
       Når opptaksforvalter ved forvaltende organisasjon legger til organisasjonen "Universitetet i Oslo" som deltaker i opptaket
-      Så kan opptaksforvalter ved Universitetet i Oslo knytte egne utdanningstilbud til opptaket
+      Så kan opptaksforvalter ved Universitetet i Oslo knytte utdanningstilbud ved Universitetet i Oslo til opptaket
   # Følgevirkninger: Deltagende organisasjoner kan få søknader de har behandlerrolle for etter saksbehandlertildelingen
   # Deltagende organisasjoners opptaksforvaltere kan se og vedlikeholde info på egne utdanningstilbud, og saksbehandlere kan se info om egne utdanningstilbud
 
@@ -37,6 +37,9 @@ Egenskap: Samordna opptak
       Så kan hen se opptakets innstillinger
       Men hen kan ikke endre frister, regelverk eller andre innstillinger
 
+  # AVKLART 2026-10-12: Det er ikke gitt at skillet mellom samordna og lokale opptak skal bevares.
+  # Det er derfor nok at brukergrensesnittet ikke gjør det mulig å legge til andre organisasjoner
+  # eller sette saksbehandlertildeling i et lokalt opptak. API-et trenger ikke sperre det.
   Regel: I et lokalt opptak kan ikke andre organisasjoner legges til
 
     Scenario: Lokalt opptak tillater ikke andre organisasjoner
@@ -51,7 +54,7 @@ Egenskap: Samordna opptak
 
     Scenario: Organisasjon som ikke finnes i utdanningsregisteret kan ikke legges til
       Gitt at organisasjonen "Ukjent organisasjon" ikke finnes i utdanningsregisteret
-      Så kan den ikke legges til som deltaker i opptaket
+      Så kan organisasjonen "Ukjent organisasjon" ikke legges til som deltaker i opptaket
 
   Regel: Opptaksforvalter kan begrense hvilke lærestedstyper som får delta i opptaket
 
@@ -64,8 +67,8 @@ Egenskap: Samordna opptak
       Så er kun norske fagskoler tilgjengelige som deltakere
 
   # Saksbehandlertildelingen er beskrevet i detalj i tildele_saksbehandlende_organisasjon.feature
-  # (@OPT-BEH-BEH-011, PR #684). Om regelen skal stå her også, avgjøres i oppgaven
-  # opprette-og-vedlikeholde-opptak.
+  # (@OPT-BEH-BEH-011, PR #684), og løses av Puff. AVKLART 2026-10-12: regelen står her, fordi det
+  # som hører til opprette opptak, er at opptaksforvalter knytter reglene til opptaket.
   Regel: Opptaksforvalter ved forvaltende organisasjon knytter regler for saksbehandlertildeling i samordna opptak
 
     Scenario: Sette regler for fordeling av søknader til saksbehandlerorganisasjoner

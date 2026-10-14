@@ -1,17 +1,17 @@
 ---
 name: fs-krav
 description: >
-  Initiativ-nivå kravarbeid i `krav/`-treet i dette repoet. Bruk når brukeren snakker om
-  et initiativ, kravspesifikasjon, eller vil binde flere kapabiliteter
-  sammen under én brukerhistorie. Trigges av: "definere krav for initiativ",
-  "kravspesifikasjon", "starte kravarbeid", "lage kravdokument",
-  "fullføre krav i mappe", "få krav klare til planning", "tagge med planned",
+  Kravarbeid på feature-fil-nivå i `krav/`-treet i dette repoet: regler og
+  scenarioer. Å avgrense et initiativ og dele det i oppgaver gjøres med
+  `fs-scope` først. Trigges av: "skrive krav", "lage feature-fil",
+  "skrive BDD-scenario", "fylle ut skjelett", "fullføre krav i mappe",
+  "få krav klare til planning", "tagge med planned",
   "ferdigstille drafts", "fjerne krav", "slette krav", "avvikle krav". Produserer nye `.feature`-filer fra bunnen (alltid som
-  `@draft`), ELLER fasiliterer en valideringsgjennomgang av kravene i en
+  `@draft`), fyller ut skjelett-filer fra `fs-scope`, ELLER fasiliterer en valideringsgjennomgang av kravene i en
   eksisterende mappe. Bare krav som valideres i gjennomgangen, eller som brukeren
   eksplisitt sier er klare, får `@planned` på `Egenskap:`. Resten forblir
-  `@draft` med åpne spørsmål dokumentert. Brukes også for enkeltstående
-  feature-filer ("skrive krav", "lage feature-fil", "skrive BDD-scenario").
+  `@draft` med åpne spørsmål dokumentert. Leser scope-fila når kravet har
+  `@scope-<slug>`, og foreslår `fs-scope` når et krav ikke passer i scopet.
   Fjerner også krav: ikke-leverte krav slettes, leverte krav (`@implemented`)
   tagges `@deprecated` til `fs-verify` har vist at koden er borte. Endrer
   leverte krav ("endre krav", "oppdatere levert krav", "ny versjon av regel"):
@@ -24,9 +24,11 @@ description: >
 
 ## Hensikt
 
-Spesifisere funksjonelle krav for et initiativ ved hjelp av brukerhistorier og Gherkin-scenarios (Gitt-Når-Så). Resultatet lagres som `.feature`-filer i `krav/`-mappen, strukturert etter **Domene → Sub-domene → Kapabilitet**.
+Spesifisere funksjonelle krav ved hjelp av brukerhistorier og Gherkin-scenarios (Gitt-Når-Så). Resultatet lagres som `.feature`-filer i `krav/`-mappen, strukturert etter **Domene → Sub-domene → Kapabilitet**.
 
 **Alle nye krav får `@draft`** og blir stående slik til de er validert.
+
+Hvilke krav et initiativ har, og hvilken oppgave de hører til, bestemmes med `fs-scope` (scope-fila `tasks/<domene>/scope-<slug>.md` og taggen `@scope-<slug>`). Denne skillen skriver hvordan kravene oppfører seg, og endrer ikke scopet. Se *Utenfor scopet*.
 
 Skillen fasiliterer derfor også **validering** av skisserte krav (modus B): Gå gjennom kravene i en mappe sammen med brukeren, lukk åpne spørsmål og konkretiser scenarioene. **`@planned` settes bare på krav som er validert i gjennomgangen, eller som brukeren eksplisitt sier skal ha `@planned`.** Skillen setter aldri `@planned` på eget skjønn, og aldri bare fordi innholdet «ser ferdig ut». En egenskap kan bli `@planned` selv om enkelte regler eller scenarioer bevisst står igjen som `@draft @openquestion` (se *Delvis utkast* i `krav/README.md`). Krav som mangler status regnes som ikke validert, og behandles som `@draft`.
 
@@ -38,13 +40,17 @@ Skillen fasiliterer derfor også **validering** av skisserte krav (modus B): Gå
 - **GitHub-issue er valgfritt.** Oppgir brukeren et issue når kravet opprettes, skrives det som `# GitHub: #NNNN` over tag-linja (se steg A6). Skillen oppretter, endrer, linker eller lukker ikke GitHub-issues, og kjører ikke `gh`.
 - **Confluence-bakgrunn er ofte tilgjengelig** via Atlassian-MCP (`mcp__claude_ai_Atlassian_Rovo__*`). Draft-filer refererer gjerne til kilden med en kommentar som `# Krav fra Confluence: K6 ...`. Bruk MCP-en til å hente siden når brukeren oppgir en URL/ID — **ikke** søk bredt i Confluence av eget initiativ; spør først.
 
+## Sjekk branchen (gjør dette aller først)
+
+Før du leser eller skriver krav: sjekk at branchen i dette repoet er oppdatert mot origin og main, som beskrevet i [`.claude/references/oppdatert-branch.md`](../../references/oppdatert-branch.md). Er den bak, spør du før du henter. I Claude-panelet i FS Kravforvaltning (uten Bash) hoppes sjekken over. Kommer skrivingen lenge etter oppstarten (f.eks. retaggingen i B5), sjekk på nytt rett før.
+
 ## Arbeidsmoduser
 
 Skillen har fire moduser. Velg modus basert på hva brukeren ber om. Hvis det er uklart, spør.
 
 | Modus | Når | Følg |
 |-------|-----|------|
-| **A. Nytt kravarbeid** | Bruker starter på et nytt initiativ / skal lage nye krav fra bunnen | *Prosess: Nytt kravarbeid* (steg A1–A7) |
+| **A. Nytt kravarbeid** | Bruker skal lage nye krav, eller fylle ut en skjelett-fil fra `fs-scope` | *Prosess: Nytt kravarbeid* (steg A1–A7) |
 | **B. Fullføre krav i mappe** | Bruker peker på en eksisterende mappe og vil gå gjennom og validere kravene, slik at de validerte kan få `@planned`. Trigge-ord: "fullføre krav i [mappe]", "få kravene klare", "tagge med planned", "ferdigstille iterasjon N" | *Prosess: Fullføre krav i mappe* (steg B1–B6) |
 | **C. Fjerne krav** | Bruker vil slette et krav, eller en regel/et scenario i et krav. Trigge-ord: "fjerne krav", "slette krav", "avvikle", "dette skal ikke lenger gjelde" | *Prosess: Fjerne krav* (steg C1–C4) |
 | **D. Endre levert krav** | Bruker vil endre eller utvide et krav som er `@implemented`. Trigge-ord: "endre krav", "oppdatere levert krav", "ny versjon av regel", "kravet skal nå være" | *Prosess: Endre levert krav* (steg D1–D4) |
@@ -55,7 +61,9 @@ Modusene kan kjedes: fullføring avdekker ofte behov for nye scenarios eller nye
 
 ### A1. Forstå initiativet
 
-Hvis brukeren allerede har jobbet med et initiativ i denne samtalen, bruk det uten å spørre på nytt. Ellers, spør brukeren:
+**Scope først.** Har kravet `@scope-<slug>` (eller skal det skrives i et scope brukeren nevner), les `tasks/*/scope-<slug>.md`: mål, ikke-mål, kilder, og raden kravet står i (oppgave, MoSCoW, skisse, issue). Hent kildene som står der, når de trengs. Det som står i scopet, spørres det ikke om på nytt. Er initiativet ikke avgrenset ennå, og brukeren vil dele det i oppgaver, foreslå `fs-scope` først.
+
+Hvis brukeren allerede har jobbet med et initiativ i denne samtalen, bruk det uten å spørre på nytt. Ellers, spør brukeren om det scopet ikke svarer på:
 
 - Hva heter initiativet / hvilken funksjonalitet skal spesifiseres?
 - Hvem er aktørene?
@@ -64,6 +72,8 @@ Hvis brukeren allerede har jobbet med et initiativ i denne samtalen, bruk det ut
 - **Finnes det bakgrunnsinformasjon i Confluence** som skal legges til grunn? (side-URL, tiny-link eller side-ID — f.eks. en kravspesifikasjon, en workshop-oppsummering, eller en K-nummerert kravliste). Hvis ja, hent innholdet via `mcp__claude_ai_Atlassian_Rovo__getConfluencePage` før du begynner å skrive scenarios. Bruker sier "nei" eller "hopp over" → fortsett uten.
 
 ### A2. Plasser kravet riktig i mappestrukturen
+
+**Finnes skjelett-fila** (fra `fs-scope`: `@draft`, brukerhistorie og `Regel:`-titler uten scenarioer), fyll den ut der den ligger. Plasseringen, Feature-ID-en, MoSCoW og scope-taggen er bestemt. Gå til A3.
 
 Feature-filer skal **kun** plasseres på kapabilitetsnivå (nivå 3):
 
@@ -142,7 +152,7 @@ Bruk `Regel:` for å gruppere relaterte scenarios under forretningsregler.
 
 Bekreft samlet innhold med brukeren før du skriver til disk.
 
-Feature-ID settes som tag på filen: `@DOM-SUB-KAP-NNN` (3-bokstavs forkortelser for domene/sub-domene/kapabilitet, utledet fra mappenavn, pluss neste ledige løpenummer). Tag-linja er alltid `@DOM-SUB-KAP-NNN @<moscow> @draft`.
+Feature-ID settes som tag på filen: `@DOM-SUB-KAP-NNN` (3-bokstavs forkortelser for domene/sub-domene/kapabilitet, utledet fra mappenavn, pluss neste ledige løpenummer). Tag-linja er alltid `@DOM-SUB-KAP-NNN @<moscow> @draft`. Skrives kravet i et scope, får det scope-taggen sist: `@DOM-SUB-KAP-NNN @<moscow> @draft @scope-<slug>`. I en skjelett-fil står tag-linja fra før, og endres ikke.
 
 Når du legger til en ny `Regel:` eller et nytt scenario i en fil som allerede er `@planned`/`@in-progress`, tagges den nye delen `@draft @openquestion` til den er validert, med mindre brukeren eksplisitt sier at den er klar. Er fila `@implemented`, følg modus D (*Endre levert krav*): leverte deler endres ikke på stedet.
 
@@ -202,6 +212,10 @@ Vis brukeren:
 - Åpne spørsmål som gjenstår
 - At kravet står som `@draft`
 - Neste steg: valider kravet gjennom modus B (*Fullføre krav i mappe*). Først når det er validert og har fått `@planned`, kan `fs-specify` hente det inn i en oppgavemappe og `lage-steps` implementere step-definitions
+
+### Utenfor scopet
+
+Skriver du et nytt krav som ikke står i scopet, eller hører kravet til en annen oppgave enn den det står i, skriv det som før, men si fra, og foreslå `fs-scope` (modus B) for å oppdatere scopet. Endre ikke scope-fila, `oppgave.md` eller `@scope-*`-taggene selv, bortsett fra å sette scope-taggen på et nytt krav som skrives i et scope (A6).
 
 ## Prosess: Fullføre krav i mappe
 
@@ -384,7 +398,7 @@ Hvilke deler endringen gjelder, avklares med brukeren, én om gangen: endres, fj
 
 Les så taggene på delen som endres. Er den `@draft`, `@planned` eller `@in-progress`, er den ikke levert. Endre den på stedet, uten ny blokk og uten `@deprecated`, og behold statustaggen. En `@draft`-del valideres som i D3, og en `@planned`-del som i modus B. Er delen `@in-progress`, si fra at spesifikasjonen i oppgaven som har hentet den inn, må oppdateres med endringen. Ny blokk (D2) lages bare for deler som er levert, det vil si deler uten egen statustag.
 
-Finn koden for den leverte delen i kodeklonene (fs-admin, fs-plattform), og vis `fil:linje`. Bruk klonene som står i systemprompten, og spør om stien bare hvis de mangler. Har brukeren ingen klone, gå videre: `fs-specify` sjekker kravet mot koden før det blir `@in-progress`. Den nye delen skrives (D2) ut fra hva koden gjør i dag, ikke bare ut fra den gamle teksten. Gjør koden noe annet enn den leverte teksten sier, spør før D2: *«Den leverte delen sier X, koden gjør Y. Hva skal den nye delen bygge på?»*
+Finn koden for den leverte delen i kodeklonene (fs-admin, fs-plattform), og vis `fil:linje`. Bruk klonene som står i systemprompten, og spør om stien bare hvis de mangler. Sjekk branchen i hver klone før du leter ([`.claude/references/oppdatert-branch.md`](../../references/oppdatert-branch.md)). Har brukeren ingen klone, gå videre: `fs-specify` sjekker kravet mot koden før det blir `@in-progress`. Den nye delen skrives (D2) ut fra hva koden gjør i dag, ikke bare ut fra den gamle teksten. Gjør koden noe annet enn den leverte teksten sier, spør før D2: *«Den leverte delen sier X, koden gjør Y. Hva skal den nye delen bygge på?»*
 
 ### D2. Skriv den nye delen som `@draft`
 
@@ -434,3 +448,4 @@ Setter brukeren eksplisitt at delen skal ha `@planned`, gjelder det samme unntak
 - **`krav/krav-oversikt.md`** — generert oversikt over alle eksisterende features
 - **`lage-steps`** — søsken-skill i dette repoet. Implementerer step-definitions i `tester/steps/` for `@planned`-krav (ikke for `@draft`-deler)
 - **`fs-specify`** / **`fs-specify-delta`** — søsken-skills i dette repoet. Henter `@planned`-krav, og `@planned`-deler i leverte krav, inn i en oppgavemappe under `tasks/`
+- **`fs-scope`** — søsken-skill i dette repoet. Avgrenser initiativet, deler det i oppgaver, lager skjelett-filene og setter `@scope-<slug>`. Kjøres før denne skillen, og på nytt når et krav ikke passer i scopet

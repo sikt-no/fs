@@ -1,5 +1,19 @@
 {
   "env": {
     "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1"
+  },
+  "permissions": {
+    "allow": [
+      "Bash(git fetch --quiet origin)",
+      "Bash(git -C * fetch --quiet origin)",
+      "Bash(git rev-parse *)",
+      "Bash(git -C * rev-parse *)",
+      "Bash(git rev-list *)",
+      "Bash(git -C * rev-list *)",
+      "Bash(git symbolic-ref --short refs/remotes/origin/HEAD)",
+      "Bash(git -C * symbolic-ref --short refs/remotes/origin/HEAD)",
+      "Bash(git log *)",
+      "Bash(git -C * log *)"
+    ]
   }
 }

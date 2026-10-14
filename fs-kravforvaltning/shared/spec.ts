@@ -1,5 +1,5 @@
 // Spesifikasjonene fra fs-specify og fs-specify-delta (`tasks/<d>/<s>/spec/spec-*.md`), tolket for
-// Spesifikasjoner-visningen, og skrevet tilbake når de redigeres der. Bare seksjonene som er endret, skrives om;
+// tavla «Oppgaver», og skrevet tilbake når de redigeres der. Bare seksjonene som er endret, skrives om;
 // resten av dokumentet (Kilde, Retagging, felt som «Lagrede artefakter») blir stående. Rene funksjoner, testet i spec.test.ts.
 
 export type SketchKind = 'OK' | 'Avvik' | 'Uavklart';
@@ -350,13 +350,14 @@ export function applySpec(text: string, prev: SpecDoc, next: SpecDoc, titles: Re
 }
 
 /** Skjelettet for en ny spesifikasjon som lages i vieweren */
-export function newSpecText(title: string, dir: string, date: string): string {
+export function newSpecText(title: string, dir: string, date: string, scope?: string | null): string {
   return [
     `# Spec: ${title}`,
     '',
     '## Kilde',
     '',
     `- **Oppgave:** \`${dir}/\``,
+    ...(scope ? [`- **Scope:** scope-${scope}`] : []),
     `- **Opprettet:** ${date} i FS Kravforvaltning`,
     '',
     '## Omfang',

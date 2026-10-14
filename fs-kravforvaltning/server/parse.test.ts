@@ -374,3 +374,48 @@ test('linjene til egenskapen, beskrivelsen og eksempelradene', () => {
   assert.deepEqual(m.desc.map(d => d.ln), [4, 5, 6]);
   assert.deepEqual(m.rules[0].scenarios[0].examples[0].lns, [13, 14]);
 });
+
+test('scope-tag: @scope-<slug> med gyldig slug', () => {
+  const ok = feature({ tags: '@OPT-REG-KRA-001 @must @planned @scope-plasstildeling-2027' });
+  assert.deepEqual(rules(ok), []);
+  assert.equal(parseFeature(ok, PATH).scope, 'plasstildeling-2027');
+  assert.ok(hasRule(feature({ tags: '@OPT-REG-KRA-001 @must @planned @scope-Plass_tildeling' }), 'scope-format'));
+  assert.ok(hasRule(feature({ tags: '@OPT-REG-KRA-001 @must @planned @scope-' }), 'scope-format'));
+  assert.equal(parseFeature(feature(), PATH).scope, null);
+});
+
+test('scope-tag: høyst én per element', () => {
+  assert.ok(hasRule(feature({ tags: '@OPT-REG-KRA-001 @must @planned @scope-a @scope-b' }), 'scope-multiple'));
+  const part = `  @planned @scope-a @scope-b
+  Scenario: Opprette et opptak
+    Gitt jeg er innlogget`;
+  assert.ok(hasRule(feature({ tags: '@OPT-REG-KRA-001 @must @implemented', body: part }), 'scope-multiple'));
+});
+
+test('scope-tag på del bare under en @implemented egenskap', () => {
+  const body = `  @planned @scope-ny-runde
+  Scenario: Opprette et opptak
+    Gitt jeg er innlogget`;
+  assert.deepEqual(rules(feature({ tags: '@OPT-REG-KRA-001 @must @implemented @scope-forste-runde', body })), []);
+  const plain = `  @scope-ny-runde
+  Scenario: Opprette et opptak
+    Gitt jeg er innlogget`;
+  assert.ok(hasRule(feature({ tags: '@OPT-REG-KRA-001 @must @planned', body: plain }), 'scope-part'));
+  assert.ok(hasRule(feature({ tags: '@OPT-REG-KRA-001 @must @draft', body: plain }), 'scope-part'));
+});
+
+test('et skjelett fra fs-scope (Regel: uten scenarioer) gir ingen avvik', () => {
+  const body = `  # ÅPNE SPØRSMÅL:
+  # - Hvem kan opprette runder?
+
+  Regel: Opprette runde
+
+  Regel: Avslutte runde
+`;
+  const src = feature({ tags: '@OPT-PLA-RUN-001 @must @draft @scope-plasstildeling', body });
+  assert.deepEqual(lint(src), []);
+  const m = parseFeature(src, PATH);
+  assert.equal(m.skeleton, true);
+  assert.equal(m.nRules, 2);
+  assert.equal(parseFeature(feature(), PATH).skeleton, false);
+});

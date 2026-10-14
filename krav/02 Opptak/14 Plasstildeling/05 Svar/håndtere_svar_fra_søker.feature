@@ -66,20 +66,36 @@ Egenskap: Håndtere svar fra søker
       Når søkeren takker ja til tilbudet på "Sykepleie, høst 2027"
       Så blir tilbudet på "Vernepleie, høst 2027" ledig i neste plasstildeling
 
+    # AVKLART 2026-10-14 (domeneekspert): Uansett runde kan søkeren bare takke ja til ett tilbud i samordna opptak.
+    # Antallet settes på opptaket, se 11 Opprette og vedlikeholde opptak/03 Innstillinger/innstillinger.feature.
+    Scenariomal: Søkeren kan bare takke ja til ett tilbud
+      Gitt at opptaket tillater at en søker takker ja til 1 tilbud
+      Og at søkeren har tilbud på både "Sykepleie, høst 2027" og "Vernepleie, høst 2027" etter "<plasstildelingsrunde>"
+      Og at søkeren har takket ja til tilbudet på "Sykepleie, høst 2027"
+      Når søkeren vil takke ja til tilbudet på "Vernepleie, høst 2027"
+      Så kan søkeren ikke ha takket ja til begge tilbudene
+
+      Eksempler:
+        | plasstildelingsrunde |
+        | Hovedrunde           |
+        | Suppleringsrunde     |
+        | Etterfylling         |
+
 # ÅPNE SPØRSMÅL:
 # - Skal en søker som takker ja og senere trekker seg frigjøre plassen til ventelisten? I dag frigjøres den aldri.
 #   Hva hvis søkeren allerede er opprettet som student?
-# - Når en søker har både et tilbud og et kansellert resultat på samme utdanningstilbud, hva skal søkeren se?
 # - Skal opptaksforvalter kunne overstyre et enkelt resultat manuelt, for eksempel gi ett tilbud uten ny plasstildeling?
 #   I dag krever alt en ny plasstildeling. Tilbudsgaranti er foreløpig eneste utvei.
 # - Må søkeren svare på ventelisteplass for å beholde den, eller står søkeren på ventelisten automatisk?
-# - Svar knyttes i dag til plasstildelingsrunde på løpenummer uten rundetype (mistenkt feil, TAKE-284).
-#   Med én plasstildelingsrunde per rundetype må svaret knyttes til rundetypen.
-# - Fristsjekken bruker applikasjonsklokke i stedet for databaseklokke (mistenkt feil, TAKE-281).
 # - Saksbehandler kan i koden svare på vegne av søkeren. Skal det være et eget scenario, og hvem kan gjøre det?
-# - I koden må alle tilbud i plasstildelingsrunden besvares samtidig, og bare ett kan godtas. Gjelder det også
-#   etterfylling, der søkeren kan ha flere tilbud?
+# - I koden må alle tilbud i plasstildelingsrunden besvares samtidig. Skal det være slik? (Avklart 2026-10-14:
+#   bare ett tilbud kan godtas, i alle rundetyper.)
 # - Svarfristen er felles for plasstildelingsrunden. Trengs individuell svarfrist per søker eller per tilbud?
 # - At søkeren ikke svarte innen fristen, blir aldri lagret. Koden regner det ut hver gang svaret leses,
 #   og det finnes ingen «lukk plasstildelingsrunden». Skal svaret lagres når fristen er ute?
 # - Hører selve svarflyten i Min kompetanse hjemme her, eller under 13 Søknad og saksbehandling?
+
+# Kjente feil i koden, følges opp i Jira. Dette er ikke åpne spørsmål om kravet:
+#   TAKE-284: svar knyttes til plasstildelingsrunde på løpenummer uten rundetype. Med én plasstildelingsrunde
+#   per rundetype må svaret knyttes til rundetypen.
+#   TAKE-281: fristsjekken bruker applikasjonsklokke i stedet for databaseklokke.

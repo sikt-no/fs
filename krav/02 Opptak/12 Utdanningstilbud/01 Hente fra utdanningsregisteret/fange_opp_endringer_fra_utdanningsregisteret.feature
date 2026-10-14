@@ -1,6 +1,6 @@
 # language: no
 # GitHub: #591, #592
-@OPT-OPT-UTD-006 @must @draft
+@OPT-OPT-UTD-006 @must @draft @scope-utdanningstilbud-i-opptak-2027
 Egenskap: Fange opp endringer fra utdanningsregisteret
   Som opptaksforvalter
   ønsker jeg at endringer på utdanninger i utdanningsregisteret kommer med over i opptaket

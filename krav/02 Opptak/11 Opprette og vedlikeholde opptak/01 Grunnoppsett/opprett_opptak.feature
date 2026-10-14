@@ -1,8 +1,8 @@
 # language: no
-@OPT-OVO-GRU-001 @must @in-progress
+@OPT-OVO-GRU-001 @must @in-progress @scope-opprette-opptak-2027
 Egenskap: Opprette et opptak
   Som opptaksforvalter
-  ønsker jeg å opprette et opptak for min organisasjon
+  ønsker jeg å opprette et opptak for organisasjonen jeg er opptaksforvalter ved
   slik at utdanningstilbud kan knyttes til det og søkere kan søke.
 
   Bakgrunn:
@@ -61,12 +61,28 @@ Egenskap: Opprette et opptak
       Når opptaksforvalter angir navn på bokmål, nynorsk, engelsk og samisk
       Så er navnene lagret på alle fire språk
 
-  Regel: Obligatorisk med både bokmål og nynorsk navn på opptak
+  Regel: Opptaket må ha navn på bokmål, nynorsk og engelsk
 
-    Scenario: Angi opptaksnavn på obligatoriske språk
-      Gitt at opptaksforvalter har opprettet opptaket "Samordna opptak 2027"
-      Når opptaksforvalter angir navn på bokmål og nynorsk
-      Så er obligatoriske navn fylt ut
+    Scenario: Lagre opptak med navn på alle obligatoriske språk
+      Når opptaksforvalter oppretter et nytt opptak
+      Og opptaksforvalter gir opptaket disse navnene
+        | språk   | navn                       |
+        | bokmål  | Samordna opptak 2027       |
+        | nynorsk | Samordna opptak 2027       |
+        | engelsk | Coordinated admission 2027 |
+      Og opptaksforvalter lagrer opptaket
+      Så er opptaket lagret med navn på bokmål, nynorsk og engelsk
+
+    Scenariomal: Navn mangler på et obligatorisk språk
+      Når opptaksforvalter oppretter et nytt opptak
+      Og opptaksforvalter gir opptaket navn på alle obligatoriske språk unntatt <språk>
+      Så kan opptaket ikke lagres
+
+      Eksempler:
+        | språk   |
+        | bokmål  |
+        | nynorsk |
+        | engelsk |
 
   @draft @openquestion
   # ÅPNE SPØRSMÅL:

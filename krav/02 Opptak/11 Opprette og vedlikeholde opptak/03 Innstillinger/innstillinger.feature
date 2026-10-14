@@ -1,5 +1,5 @@
 # language: no
-@OPT-OVO-INN-001 @must @in-progress
+@OPT-OVO-INN-001 @must @in-progress @scope-opprette-opptak-2027
 Egenskap: Innstillinger for opptak
   Som opptaksforvalter ved forvaltende organisasjon
   ønsker jeg å sette innstillinger for opptaket
@@ -52,7 +52,7 @@ Egenskap: Innstillinger for opptak
       Når opptaksforvalter setter søknadsnummer med startnummer 1001 for opptaket "UHG 2027"
       Så får søknader i opptaket løpende nummer fra 1001
       Og søknadsnummeret får navnet til opptaket "UHG 2027" som tillegg i søknadsnummeret som ikke er synlig for søker eller saksbehandler
-      Og søknadsnumrene er dermed unike for dette opptaket, selv om det ikke ser slik ut for søker eller saksbehandler
+      Og søknadsnumrene er dermed unike for opptaket "UHG 2027", selv om det ikke ser slik ut for søker eller saksbehandler
 
   Regel: Opptaksforvalter kan sette tak for antall søknadsalternativer
 
@@ -60,12 +60,19 @@ Egenskap: Innstillinger for opptak
       Når opptaksforvalter setter maks antall søknadsalternativer til 10
       Så kan ikke en søker legge til flere enn 10 prioriterte søknadsalternativer i sin søknad
 
-  Regel: Opptaksforvalter kan sette tak for antall tilbud per tildelingsrunde
+  # Taket som ble flyttet 2026-10-12 til 14 Plasstildeling/01 Runder/forvalte_runder.feature, er tatt ut
+  # igjen 2026-10-14. Innstillingen på opptaket er hvor mange tilbud søkeren kan takke ja til (under).
+  # Hvor mange tilbud søkeren kan få, avgjøres av rundetypen, se 14 Plasstildeling/03 Tildeling/gjennomføre_plasstildeling.feature.
+  @draft @openquestion
+  Regel: Opptaksforvalter setter hvor mange tilbud en søker kan takke ja til
 
-    Scenario: Sette tak for antall tilbud en søker kan få per plasstildelingsrunde
-      Når opptaksforvalter setter tak for antall tilbud per tildelingsrunde til 1
-      Så kan ikke plasstildelingen gi flere enn 1 tilbud i en enkelt plasstildelingsrunde til en søker
-      Og søker får se denne informasjonen
+    # AVKLART 2026-10-14: Innstillingen sier ikke hvor mange tilbud søkeren kan få, men hvor mange
+    # søkeren kan takke ja til og få studieplass på. I samordna opptak er det 1.
+    # ÅPNE SPØRSMÅL:
+    # - Hva er standardverdien når innstillingen ikke er satt?
+    Scenario: Sette antall tilbud en søker kan takke ja til
+      Når opptaksforvalter setter antall tilbud en søker kan takke ja til, til 1
+      Så kan en søker i opptaket takke ja til høyst 1 tilbud
 
   Regel: Opptaksforvalter kan åpne for tidlig opptak
 
@@ -86,11 +93,14 @@ Egenskap: Innstillinger for opptak
 
   Regel: Opptaksforvalter kan åpne for søknad på ledige studieplasser
 
+    # Innstillingen gjelder hele opptaket. Hver plasstildelingsrunde åpnes for ledige studieplasser i
+    # 14 Plasstildeling/01 Runder/forvalte_runder.feature, og bare når opptaket tilbyr det.
+
     Scenario: Aktivere ledige studieplasser
       Når opptaksforvalter angir at opptaket tilbyr søknad på ledige studieplasser
       Så er ledige studieplasser aktivert for opptaket
       Og muligheten for ledige studieplasser blir tilgjengelig for søknad og saksbehandling
-      # Datoer for ledige studieplasser settes i 04 Frister/frister_og_hendelser.feature
+      # Datoer for ledige studieplasser settes i 11 Opprette og vedlikeholde opptak/04 Frister/frister_og_hendelser.feature
 
   Regel: Opptaksforvalter kan legge til utdanningsbakgrunner som gjelder for opptaket
 
@@ -105,7 +115,7 @@ Egenskap: Innstillinger for opptak
     Scenario: Legge til flere utdanningsbakgrunner
       Når opptaksforvalter legger til utdanningsbakgrunnene "Realkompetanse", "Utenlandsk utdanning" og "Steinerskole" i opptaket
       Så finnes disse utdanningsbakgrunnene i opptaket
-      Og søkere kan velge blant dem når de angir sin utdanningsbakgrunn
+      Og søkere kan velge blant utdanningsbakgrunnene i opptaket når de angir sin utdanningsbakgrunn
 
     Scenario: Fjerne en utdanningsbakgrunn fra opptaket
       Gitt at utdanningsbakgrunnen "Steinerskole" er lagt til i opptaket
@@ -123,7 +133,7 @@ Egenskap: Innstillinger for opptak
       Når opptaksforvalter angir at søkere ikke kan laste opp dokumentasjon
       Så får søkere ikke laste opp dokumentasjon som del av søknaden
 
-  @wont
+  @draft
   # Ikke relevant for samordna opptak
   Regel: Opptaksforvalter kan sette krav om studierett for å søke
 

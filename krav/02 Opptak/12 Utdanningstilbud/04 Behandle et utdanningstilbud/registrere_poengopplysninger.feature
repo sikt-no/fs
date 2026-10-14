@@ -1,6 +1,6 @@
 # language: no
 # Jira: SHI-688
-@OPT-OPT-UTD-010 @must @draft
+@OPT-OPT-UTD-010 @must @draft @scope-utdanningstilbud-2027
 Egenskap: Registrere poengopplysninger for utdanningstilbudet
   Som opptaksforvalter
   ønsker jeg å se fjorårets median poengsum og registrere poenggrense for årets tidligopptak

@@ -4,15 +4,15 @@ import { isKravPath, isSketchFile, isSpecPath } from '../shared/paths.ts';
 
 /**
  * Absolutt sti for en fil som skal skrives. Stien er relativ til repo-roten, og må være en `.feature`- eller
- * `.md`-fil under krav/, eller en spesifikasjon eller tilstandsfil under tasks/ (`tasks/<d>/<s>/spec/spec-*.md`,
- * `tasks/<d>/<s>/utforing.md`). Kaster ved alt annet (`..`, absolutte stier, andre filtyper og mapper).
+ * `.md`-fil under krav/, eller det tavla skriver under tasks/ (`tasks/<d>/<s>/spec/spec-*.md`,
+ * `tasks/<d>/<s>/utforing.md`, `tasks/<d>/<s>/oppgave.md` og `tasks/<d>/scope-*.md`, `isSpecPath`). Kaster ved alt annet (`..`, absolutte stier, andre filtyper og mapper).
  */
 export function kravPath(repoRoot: string, path: string): string {
   if (typeof path !== 'string' || !path || isAbsolute(path) || path.includes('\\') || path.split('/').some(s => s === '..' || s === '.' || s === '')) {
     throw new Error(`Ugyldig sti: ${path}`);
   }
   if (path.startsWith('tasks/')) {
-    if (!isSpecPath(path)) throw new Error(`Under tasks/ kan bare spec/spec-*.md og utforing.md redigeres: ${path}`);
+    if (!isSpecPath(path)) throw new Error(`Under tasks/ kan bare spec/spec-*.md, utforing.md, oppgave.md og scope-*.md redigeres: ${path}`);
   } else if (!path.endsWith('.feature') && !path.endsWith('.md')) throw new Error(`Bare .feature- og .md-filer kan redigeres: ${path}`);
   const top = join(repoRoot, path.startsWith('tasks/') ? 'tasks' : 'krav');
   const abs = resolve(repoRoot, path);

@@ -2,7 +2,7 @@ import { AstBuilder, dialects, GherkinClassicTokenMatcher, Parser } from '@cucum
 import { IdGenerator } from '@cucumber/messages';
 import type { Background, Scenario, Step as GStep, Tag } from '@cucumber/messages';
 import { RULE } from '../shared/rules.ts';
-import { STATUSES, statusOf, type Entry, type FeatureModel, type Lint, type Note, type Question, type Rule, type Scen, type Step } from '../shared/model.ts';
+import { SCOPE_PREFIX, SCOPE_SLUG, STATUSES, scopeOf, statusOf, type Entry, type FeatureModel, type Lint, type Note, type Question, type Rule, type Scen, type Step } from '../shared/model.ts';
 
 const isStatus = (t: string) => (STATUSES as readonly string[]).includes(t.slice(1));
 const PRIORITIES = ['@must', '@should', '@could', '@wont'];
@@ -368,6 +368,14 @@ export function parseFeature(source: string, path?: string): FeatureModel {
     if (kw) push('unknown-keyword', `«${m[1]}:» er ikke et nøkkelord, og linja leses som beskrivelse — mente du «${kw}:»?`, i + 1);
   });
   for (const c of comments) if (/^\s*#\s*TODO\b/i.test(c.text)) push('todo-comment', '«# TODO:» brukt for åpent spørsmål — bruk «# ÅPNE SPØRSMÅL:» og @openquestion', c.line);
+  // Scope: @scope-<slug>, høyst én per element
+  const scopeTags = (what: string, tags: string[], ln: number) => {
+    const sc = tags.filter(t => t.startsWith(SCOPE_PREFIX) || t === '@scope');
+    for (const t of sc) if (!SCOPE_SLUG.test(t.slice(SCOPE_PREFIX.length))) push('scope-format', `«${t}» er ikke en gyldig scope-tag — bruk @scope-<slug> med små bokstaver, tall og bindestrek`, ln);
+    if (sc.length > 1) push('scope-multiple', `${what} har flere scope-tagger: ${sc.join(' ')}`, ln);
+    return sc;
+  };
+  scopeTags('Egenskap', ftags, f.location.line);
   const fstatus = statusOf(ftags);
   const fdraft = fstatus === 'draft';
   let partialDraft = false;
@@ -395,6 +403,8 @@ export function parseFeature(source: string, path?: string): FeatureModel {
       }
     }
     if (tags.includes('@openquestion') && !questions) push('openquestion-without-comment', `@openquestion på ${what} uten «# ÅPNE SPØRSMÅL:»-kommentar`, ln);
+    if (scopeTags(what, tags, ln).length && fstatus !== 'implemented')
+      push('scope-part', `@scope-* på ${what} under en ${fstatus ? '@' + fstatus : 'egenskap uten status'} — scope settes på Egenskap. På en del bare under en @implemented egenskap, for en del som endres`, ln);
   };
   const scenQ = (sc: Scen) => hasQ(sc.notes) || sc.steps.some(st => hasQ(st.notes ?? []));
   for (const r of rules) {
@@ -453,6 +463,8 @@ export function parseFeature(source: string, path?: string): FeatureModel {
     lint,
     partialDraft,
     partialChange,
+    scope: scopeOf(ftags),
+    skeleton: rules.every(r => r.scenarios.every(sc => sc.kind === 'Bakgrunn')),
     nLines,
     nRules: rules.filter(r => r.name !== null).length,
     nScen: rules.reduce((n, r) => n + r.scenarios.filter(s => s.kind !== 'Bakgrunn').length, 0),

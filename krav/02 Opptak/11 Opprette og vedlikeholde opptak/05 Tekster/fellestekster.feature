@@ -1,5 +1,5 @@
 # language: no
-@OPT-OVO-TEK-001 @wont @draft
+@OPT-OVO-TEK-001 @wont @draft @scope-opprette-opptak-2027
 Egenskap: Informasjon til søker i søknadsprosessen
   Som søker
   ønsker jeg relevant informasjon underveis i søknadsprosessen
@@ -14,10 +14,13 @@ Egenskap: Informasjon til søker i søknadsprosessen
 
   Regel: Søker informeres om prioritering av søknadsalternativer
 
-    Scenario: Søker ser informasjon om begrensning på antall tilbud per tildelingsrunde
-      Gitt at opptaksforvalter har satt tak for antall tilbud per tildelingsrunde til 1
+    # Endret 2026-10-14: Taket per tildelingsrunde er tatt ut. Hvor mange tilbud søkeren kan få, avgjøres av
+    # rundetypen, og hvor mange tilbud søkeren kan takke ja til, settes på opptaket (03 Innstillinger/innstillinger.feature).
+    Scenario: Søker ser informasjon om antall tilbud søkeren kan få og takke ja til
+      Gitt at opptaket tillater at en søker takker ja til 1 tilbud
       Når søker skal prioritere sine søknadsalternativer
-      Så informeres søker om at hen kun kan få tilbud på sitt høyest prioriterte alternativ per tildelingsrunde
+      Så informeres søker om at søkeren bare kan få tilbud på det høyest prioriterte søknadsalternativet søkeren når i hovedtildeling og supplering
+      Og søker informeres om at søkeren bare kan takke ja til 1 tilbud
 
   Regel: Søker informeres om utdanningsbakgrunn
 
