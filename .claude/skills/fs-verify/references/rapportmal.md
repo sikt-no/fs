@@ -25,7 +25,7 @@ Rapporten fra `fs-verify` og `fs-verify-agent-teams` følger denne malen, så to
 - **Dato:** YYYY-MM-DD HH:MM
 - **Krav:** `<krav-sti eller oppgave>` (<N> feature-filer)
 - **Spec:** `spec/spec-<x>.md`                                         [oppgave, bare når scope er en spesifikasjon]
-- **Kode:** `<repo>` (<kort sha>), `<repo>` (<kort sha>)
+- **Kode:** `<repo>` (<branch>, <kort sha>, <oppdatert | N bak origin | N bak main | ikke sjekket (Claude-panelet)>), `<repo>` (…)
 - **Kontroll:** `fs-verify-kontroll` | manuell (Claude-panelet)
 - **Team:** <N> finnere (`fs-verify-krav`), <N> kontrollører (`fs-verify-kontroll`), <N>–<N> feature-filer per finner   [agent team]
 - **Skjermbilder:** ja | nei | nei (<grunn>)

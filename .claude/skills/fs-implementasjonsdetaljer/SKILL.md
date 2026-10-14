@@ -15,6 +15,10 @@ Skriv implementasjonsdetaljene for en eksisterende `.feature`-fil: UI/design-pat
 
 ## Arbeidsflyt
 
+### 0. Sjekk branchen
+
+Sjekk at branchen i dette repoet er oppdatert mot origin og main, som beskrevet i [`.claude/references/oppdatert-branch.md`](../../references/oppdatert-branch.md). Er den bak, spør før du henter. I Claude-panelet (uten Bash) hoppes sjekken over. Kjøres skillen fra `fs-specify` eller `fs-specify-delta`, er det allerede gjort.
+
 ### 1. Forstå utgangspunktet
 - Les `.feature`-filen som ble pekt ut
 - Identifiser scenarioene og hvilke UI-elementer de implisitt forutsetter (knapper, lister, skjemaer, navigasjon)
