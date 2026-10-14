@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import { execFileSync, spawn } from 'node:child_process';
-import { mkdtempSync, readFileSync, rmSync, writeFileSync, mkdirSync } from 'node:fs';
+import { existsSync, mkdtempSync, readFileSync, rmSync, writeFileSync, mkdirSync } from 'node:fs';
 import { createServer, type Server } from 'node:http';
 import type { AddressInfo } from 'node:net';
 import { tmpdir } from 'node:os';
@@ -33,6 +33,8 @@ before(async () => {
   writeFileSync(join(seed, 'krav/README.md'), '# Krav\n');
   writeFileSync(join(seed, 'krav/01 A/10 B/01 C/se_ting.feature'), '# language: no\nEgenskap: Se ting\n');
   writeFileSync(join(seed, 'annet.txt'), 'ikke krav\n');
+  mkdirSync(join(seed, 'tasks/teknisk/gammel/spec'), { recursive: true });
+  writeFileSync(join(seed, 'tasks/teknisk/gammel/spec/spec-gammel.md'), '# Spec\n');
   git(root, 'init', '-q', '-b', 'main', seed);
   git(seed, 'add', '.');
   git(seed, '-c', 'user.name=Test', '-c', 'user.email=t@example.com', 'commit', '-q', '-m', 'start');
@@ -157,6 +159,7 @@ test('klone, se endringer, publisere som branch og hente main', { skip: !hasGit 
   git(root, 'clone', '-q', join(root, 'origin.git'), other);
   git(other, 'merge', '-q', '--ff-only', 'origin/krav/status-pa-se-ting');
   writeFileSync(join(other, 'krav/README.md'), '# Krav\n\nOppdatert\n');
+  git(other, 'rm', '-rq', 'tasks/teknisk/gammel');
   git(other, '-c', 'user.name=A', '-c', 'user.email=a@example.com', 'commit', '-q', '-am', 'readme');
   git(other, 'push', '-q', 'origin', 'main');
 
@@ -174,6 +177,8 @@ test('klone, se endringer, publisere som branch og hente main', { skip: !hasGit 
   await vcs.pull!(null);
   assert.deepEqual(await vcs.mainStatus!(null), { behind: false }, 'hentet');
   assert.match(readFileSync(join(dir, 'krav/README.md'), 'utf8'), /Oppdatert/);
+  assert.equal(existsSync(join(dir, 'tasks/teknisk')), false, 'mappene til en slettet oppgave fjernes, ikke bare filene');
+  assert.equal(existsSync(join(dir, sketch)), true, 'lokale filer blir stående');
   const afterPull = await vcs.info();
   assert.deepEqual(afterPull?.uncommitted, [], 'endringene er nå på main');
 });

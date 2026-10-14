@@ -1,6 +1,6 @@
 import fs from 'node:fs';
 import { readFile } from 'node:fs/promises';
-import { join } from 'node:path';
+import { dirname, join } from 'node:path';
 import git, { TREE, type TreeEntry } from 'isomorphic-git';
 import http from 'isomorphic-git/http/node';
 import type { PublishRequest, PublishResult } from '../shared/api.ts';
@@ -247,6 +247,7 @@ export function isoVcs(dir: string, opts: { openPr?: OpenPr; compare?: CompareMa
           // Slettet på main og ikke endret lokalt
           await fs.promises.rm(join(dir, p), { force: true });
           await git.remove({ fs, dir, cache, filepath: p });
+          await removeEmptyParents(dir, p);
         }
       }
       if (update.length) await git.checkout({ fs, dir, cache, ref: 'main', filepaths: update, force: true });
@@ -258,6 +259,13 @@ export function isoVcs(dir: string, opts: { openPr?: OpenPr; compare?: CompareMa
       }
     },
   };
+}
+
+/** Fjerner mappene over `path` som er blitt tomme, opp til `dir` (git har ikke tomme mapper) */
+async function removeEmptyParents(dir: string, path: string) {
+  for (let p = dirname(path); p !== '.' && p !== ''; p = dirname(p)) {
+    if (!(await fs.promises.rmdir(join(dir, p)).then(() => true, () => false))) return;
+  }
 }
 
 /** Kloner repoet til `dir` hvis det ikke finnes der (desktop-appen, første oppstart) */
