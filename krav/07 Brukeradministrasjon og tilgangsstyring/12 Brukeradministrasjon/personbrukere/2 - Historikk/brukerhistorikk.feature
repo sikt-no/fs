@@ -1,5 +1,5 @@
 # language: no
-# GitHub: #488
+# GitHub: #488, #482
 # Kilde: Brukerhistorie BH16 (temp/brukerhistorier.md)
 @BRU-PER-HIS-001 @draft
 Egenskap: Brukerhistorikk - tilganger over tid
@@ -17,6 +17,12 @@ Egenskap: Brukerhistorikk - tilganger over tid
     Gitt at brukeradministrator er i brukerens historikk
     Når brukeradministrator velger et tidspunkt
     Så skal det settet av tilganger og roller som var aktive på det tidspunktet vises
+
+  Scenario: Se tidligere deaktiveringer etter reaktivering
+    Gitt at en personbruker er deaktivert og senere reaktivert
+    Når brukeradministrator åpner personbrukerens historikk
+    Så vises deaktiveringen med tidspunktet og hvem som gjorde den
+    Og reaktiveringen vises med tidspunktet og hvem som gjorde den
 
 # ÅPNE SPØRSMÅL:
 # - Hvor langt tilbake skal historikken gå — alt fra opprettelsen, eller en grense?

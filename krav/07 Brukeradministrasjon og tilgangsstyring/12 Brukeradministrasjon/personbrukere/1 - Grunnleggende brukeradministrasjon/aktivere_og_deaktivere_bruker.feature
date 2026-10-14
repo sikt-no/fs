@@ -27,8 +27,6 @@ Egenskap: Aktivere og deaktivere en personbrukers samlede tilganger
       Så blir personbrukerens status «Aktiv»
       Og de tidligere tildelte tilgangene og rollene blir aktive igjen
       Og tildelinger som hadde utløpt på grunn av tidsbegrensning før deaktiveringen, blir ikke automatisk aktive
-      Og det lagres når reaktiveringen skjedde og hvem som gjorde den
-      Og det som ble lagret om den tidligere deaktiveringen, beholdes
 
   Regel: Skille mellom deaktivering og fjerning
 
