@@ -1,5 +1,11 @@
 # krav-viewer
 
+## 1.3.1
+
+### Patch Changes
+
+- 9510fe8: Oppgaver som er slettet på main, blir ikke lenger stående som tomme kort på tavla «Oppgaver». «Hent siste» i desktop-appen fjerner nå også mappene som blir tomme, og tavla viser ikke mapper uten filer.
+
 ## 1.3.0
 
 ### Minor Changes

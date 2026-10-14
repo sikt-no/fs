@@ -1,6 +1,6 @@
 # language: no
 # GitHub: #603
-@OPT-SØK-SØK-011 @must @draft
+@OPT-SØK-SØK-013 @must @draft
 Egenskap: Listevisning og søk i utdanningstilbud
   Som søker
   ønsker jeg en oversikt over utdanningstilbud jeg kan søke på, med mulighet for søk og filtrering

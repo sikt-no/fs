@@ -40,6 +40,10 @@ Skillen fasiliterer derfor også **validering** av skisserte krav (modus B): Gå
 - **GitHub-issue er valgfritt.** Oppgir brukeren et issue når kravet opprettes, skrives det som `# GitHub: #NNNN` over tag-linja (se steg A6). Skillen oppretter, endrer, linker eller lukker ikke GitHub-issues, og kjører ikke `gh`.
 - **Confluence-bakgrunn er ofte tilgjengelig** via Atlassian-MCP (`mcp__claude_ai_Atlassian_Rovo__*`). Draft-filer refererer gjerne til kilden med en kommentar som `# Krav fra Confluence: K6 ...`. Bruk MCP-en til å hente siden når brukeren oppgir en URL/ID — **ikke** søk bredt i Confluence av eget initiativ; spør først.
 
+## Sjekk branchen (gjør dette aller først)
+
+Før du leser eller skriver krav: sjekk at branchen i dette repoet er oppdatert mot origin og main, som beskrevet i [`.claude/references/oppdatert-branch.md`](../../references/oppdatert-branch.md). Er den bak, spør du før du henter. I Claude-panelet i FS Kravforvaltning (uten Bash) hoppes sjekken over. Kommer skrivingen lenge etter oppstarten (f.eks. retaggingen i B5), sjekk på nytt rett før.
+
 ## Arbeidsmoduser
 
 Skillen har fire moduser. Velg modus basert på hva brukeren ber om. Hvis det er uklart, spør.
@@ -64,6 +68,7 @@ Hvis brukeren allerede har jobbet med et initiativ i denne samtalen, bruk det ut
 - Hva heter initiativet / hvilken funksjonalitet skal spesifiseres?
 - Hvem er aktørene?
 - Hvilket domene hører dette til? (se `krav/` for eksisterende domener)
+- **Bygger kravet på kode, schema, skisser eller FS-klienten** (også når det står i scopet)? Følg da *Krav fra kode, skisser eller FS-klienten* i `krav/README.md`.
 - **Hører kravet til et GitHub-issue?** (f.eks. `#1234`). Valgfritt: svarer brukeren "nei" eller "hopp over", skrives fila uten `# GitHub:`-linje.
 - **Finnes det bakgrunnsinformasjon i Confluence** som skal legges til grunn? (side-URL, tiny-link eller side-ID — f.eks. en kravspesifikasjon, en workshop-oppsummering, eller en K-nummerert kravliste). Hvis ja, hent innholdet via `mcp__claude_ai_Atlassian_Rovo__getConfluencePage` før du begynner å skrive scenarios. Bruker sier "nei" eller "hopp over" → fortsett uten.
 
@@ -96,6 +101,7 @@ Før du skriver nye scenarios, les:
 
 - **Relaterte feature-filer** i samme kapabilitet/sub-domene for å unngå duplisering og matche stil
 - **Eksisterende step-definisjoner** i `tester/steps/**/*.ts` for å se hvilke Gherkin-fraser som allerede er implementert — gjenbruk dem når det passer
+- **Domenets begrepsliste** (se *Terminologi* i `krav/README.md`), hvis den finnes
 
 Presenter kort hva som finnes fra før, og avklar om nytt krav skal legges i ny fil eller i eksisterende.
 
@@ -316,7 +322,7 @@ Ta ett draft-krav om gangen. For hvert:
    - Åpne spørsmål som ikke er besvart
    - Skisse-pregede scenarios uten konkrete data / forventet resultat
    - Uklare feltlister, rolle-navn, feilmeldinger, forretningsregler
-   - Terminologi-avvik (`institusjon`, `institusjonsnummer` — se `krav/README.md`)
+   - Avvik fra *Gode scenarioer* og *Terminologi* i `krav/README.md`
    - Manglende `Bakgrunn:` der det ville redusert duplisering
 4. **Still konkrete spørsmål — ett om gangen.** Jf. interaksjonsprinsippet: ikke dump hele spørsmålslisten i én blokk. Still ett spørsmål, gi (a)/(b)/(c)-alternativer der det er naturlig, og vent på svar før du går til neste. Hovedregel: *aldri finn på valideringsregler, feilmeldinger eller forretningslogikk — spør brukeren*. Marker forslag tydelig som "forslag" hvis du presenterer dem for reaksjon.
 5. **Oppdater filen** basert på svarene: revider og konkretiser scenarios, legg til manglende scenarios, fjern besvarte `# ÅPNE SPØRSMÅL:`-kommentarer, stram opp språk, rett terminologi, og sørg for at Gherkin-konvensjonene følges (Scenariomal + Eksempler, deklarativ stil, én atferd per scenario).
@@ -394,7 +400,7 @@ Hvilke deler endringen gjelder, avklares med brukeren, én om gangen: endres, fj
 
 Les så taggene på delen som endres. Er den `@draft`, `@planned` eller `@in-progress`, er den ikke levert. Endre den på stedet, uten ny blokk og uten `@deprecated`, og behold statustaggen. En `@draft`-del valideres som i D3, og en `@planned`-del som i modus B. Er delen `@in-progress`, si fra at spesifikasjonen i oppgaven som har hentet den inn, må oppdateres med endringen. Ny blokk (D2) lages bare for deler som er levert, det vil si deler uten egen statustag.
 
-Finn koden for den leverte delen i kodeklonene (fs-admin, fs-plattform), og vis `fil:linje`. Bruk klonene som står i systemprompten, og spør om stien bare hvis de mangler. Har brukeren ingen klone, gå videre: `fs-specify` sjekker kravet mot koden før det blir `@in-progress`. Den nye delen skrives (D2) ut fra hva koden gjør i dag, ikke bare ut fra den gamle teksten. Gjør koden noe annet enn den leverte teksten sier, spør før D2: *«Den leverte delen sier X, koden gjør Y. Hva skal den nye delen bygge på?»*
+Finn koden for den leverte delen i kodeklonene (fs-admin, fs-plattform), og vis `fil:linje`. Bruk klonene som står i systemprompten, og spør om stien bare hvis de mangler. Sjekk branchen i hver klone før du leter ([`.claude/references/oppdatert-branch.md`](../../references/oppdatert-branch.md)). Har brukeren ingen klone, gå videre: `fs-specify` sjekker kravet mot koden før det blir `@in-progress`. Den nye delen skrives (D2) ut fra hva koden gjør i dag, ikke bare ut fra den gamle teksten. Følg *Krav fra kode, skisser eller FS-klienten* i `krav/README.md`: spør om det koden gjør, er ønsket atferd. Gjør koden noe annet enn den leverte teksten sier, spør før D2: *«Den leverte delen sier X, koden gjør Y. Hva skal den nye delen bygge på?»*
 
 ### D2. Skriv den nye delen som `@draft`
 

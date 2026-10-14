@@ -1,6 +1,6 @@
 # language: no
 # GitHub: #216
-@OPT-PLA-TIL-001 @must @draft
+@OPT-PLA-TIL-001 @must @draft @scope-plasstildeling-2027
 Egenskap: Starte en plasstildeling
   Som opptaksforvalter
   ønsker jeg å starte en plasstildeling i en plasstildelingsrunde
@@ -23,17 +23,34 @@ Egenskap: Starte en plasstildeling
       Så kjøres plasstildelingen i bakgrunnen
       Og opptaksforvalter ser status for plasstildelingen
 
+    # AVKLART 2026-10-14 (designarbeidet i FS-Admin): Bare forvaltende organisasjon starter plasstildeling.
+    # Lærestedene setter antall tilbud for utdanningstilbudene sine.
+    Scenario: Opptaksforvalter ved deltakende organisasjon kan ikke starte plasstildeling
+      Gitt at opptaksforvalter har tilgang fra "Universitetet i Bergen", som deltar i opptaket
+      Når opptaksforvalter ser plasstildelingsrunden "Hovedrunde"
+      Så ser opptaksforvalter ikke muligheten til å starte en plasstildeling
+
     Scenario: Plasstildeling fryser grunnlaget ved start
       Gitt at søknadsbehandlingen har rangert søkerne til opptaket
       Når opptaksforvalter starter en plasstildeling i "Hovedrunde"
       Så bruker plasstildelingen rangeringen slik den var da plasstildelingen startet
       Og grunnlaget lagres sammen med plasstildelingen
 
+    # AVKLART 2026-10-14 (designarbeidet i FS-Admin): Det er ingen sperre mellom perioden for lærestedene
+    # og start av plasstildeling. Opptaksforvalter ved forvaltende organisasjon styrer fristene.
+    Scenario: Starte plasstildeling mens perioden for antall tilbud er åpen
+      Gitt at perioden for å endre antall tilbud som skal gis i plasstildelingsrunden "Hovedrunde" er åpen
+      Og at antall tilbud som skal gis i "Sykepleie, høst 2027" i "Hovedrunde" er 30
+      Når opptaksforvalter starter en plasstildeling i "Hovedrunde"
+      Så blir plasstildelingen startet
+      Og plasstildelingen bruker 30 tilbud for "Sykepleie, høst 2027"
+
     # AVKLART 2026-10-08: Plasstildelingen henter søknadene i opptaket når opptaksforvalter starter den.
     @openquestion
     Scenario: Søknader som er med i plasstildelingen
       # ÅPNE SPØRSMÅL:
       # - Er det nok at søknaden er kvalifisert, eller må den ha status ferdigbehandlet?
+      #   Delvis avklart 2026-10-14: kvalifisert er utgangspunktet, men det finnes unntak. Hvilke unntak?
       #   Koden krever ikke ferdigbehandlet. En søknad er med når alt dette er oppfylt:
       #   søknadsalternativet er ikke slettet og har en behandlersak, saken er kvalifisert mot
       #   utdanningstilbudets kompetanseregelverk, saken har en aktiv kvote som skal kvoteplasseres
@@ -55,12 +72,18 @@ Egenskap: Starte en plasstildeling
       Når opptaksforvalter starter en plasstildeling i "Hovedrunde"
       Så bygger plasstildelingen ikke på noen tidligere plasstildelingsrunde
 
+    # AVKLART 2026-10-14 (domeneekspert): En plasstildeling tar alltid med alle kvalifiserte kvotesøknader
+    # når den starter. Når den bygger på forrige publiserte plasstildelingsrunde, tar den også med resultatet
+    # per kvotesøknad fra den publiserte plasstildelingen (tilbud, venteliste og bortfall) og søkernes svar på
+    # tilbud og venteliste. Hva det betyr for fordelingen, står i gjennomføre_plasstildeling.feature.
     Scenario: Plasstildeling i en senere plasstildelingsrunde
       Gitt at plasstildelingsrunden "Hovedrunde" har en publisert plasstildeling
       Og at opptaket har plasstildelingsrunden "Suppleringsrunde" med rundetype "Supplering"
       Når opptaksforvalter starter en plasstildeling i "Suppleringsrunde"
       Så bygger plasstildelingen på den publiserte plasstildelingen i "Hovedrunde"
-      Og tidligere tilbud, ventelister og svar er med i grunnlaget
+      Og alle kvalifiserte kvotesøknader er med i grunnlaget
+      Og resultatet per kvotesøknad fra den publiserte plasstildelingen i "Hovedrunde" er med i grunnlaget
+      Og søkernes svar på tilbud og venteliste er med i grunnlaget
 
     # AVKLART 2026-10-08: starten avvises.
     # Gap mot koden («Plasstildelingsløpet i Opptak», kap. 1–2): i dag kjøres en slik plasstildelingsrunde som en
@@ -95,11 +118,8 @@ Egenskap: Starte en plasstildeling
       Og opptaksforvalter kan starte en ny plasstildeling i "Hovedrunde"
 
 # ÅPNE SPØRSMÅL:
-# - Kan opptaksforvalter ved lærestedet starte plasstildeling, eller bare forvaltende organisasjon?
-#   I lokale opptak er det samme organisasjon.
 # - Skal det finnes en kontroll før start som viser søkere som faller ut av grunnlaget
 #   (kvalifisert, men mangler poengsum, kvote eller grunnlag)? Se «Fra saksbehandling til plasstildeling», D6.
-# - Kan en plasstildeling startes mens perioden for å endre antall tilbud fortsatt er åpen?
 # - Hvordan fanges det opp at en søker har endret søknaden sin mellom plasstildelingsrunder?
 #   I koden vet kjøringen ikke hvilke studieønsker som er nye, så vernet «et nytt ønske skal ikke
 #   fortrenge et eksisterende tilbud» virker ikke.

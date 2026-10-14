@@ -1,6 +1,6 @@
 # language: no
 # GitHub: #376
-@OPT-REG-KVO-002 @must @draft
+@OPT-REG-KVO-002 @must @implemented @scope-regelverk-2027
 Egenskap: Kvotespørsmål
   Som opptaksforvalter
   ønsker jeg å definere kvotespørsmål og knytte dem til kvotetyper
@@ -28,12 +28,13 @@ Egenskap: Kvotespørsmål
 
   Regel: Et kvotespørsmål kan kobles til en algoritme som besvarer det automatisk
 
+    # Justert etter koden 2026-10-14 (retrofitting): nedtrekket viser algoritmekodene.
     Scenario: Tilgjengelige algoritmer
       Når opptaksforvalteren skal koble kvotespørsmålet "ER-KVINNE" til en algoritme
       Så kan opptaksforvalteren velge mellom algoritmene:
         | Algoritme |
-        | Er kvinne |
-        | Er mann   |
+        | ER_KVINNE |
+        | ER_MANN   |
 
     Scenario: Koble kvotespørsmål til en algoritme
       Gitt at kvotespørsmålet "ER-KVINNE" finnes
@@ -52,7 +53,11 @@ Egenskap: Kvotespørsmål
       Når opptaksforvalteren knytter kvotespørsmålene "ER-KVINNE" og "FRA-HARDANGER" til kvotetypen "JENTER-HARDANGER"
       Så må begge kvotespørsmålene være besvart ja før søkeren plasseres i kvotetypen "JENTER-HARDANGER"
 
+    @draft @openquestion
     Scenario: Informasjon om automatisk plassering
+      # ÅPNE SPØRSMÅL:
+      # - Teksten finnes ikke på kvotetypen i fs-admin (verifisert 2026-10-14), bare i søknadsbehandlingen.
+      #   Skal opptaksforvalteren se den på kvotetypen?
       Gitt at kvotetypen "ORD" ikke har kvotespørsmål
       Når opptaksforvalteren ser på kvotetypen "ORD"
       Så ser opptaksforvalteren at søkere plasseres automatisk i kvotetypen "ORD"

@@ -52,7 +52,7 @@ Egenskap: Innstillinger for opptak
       Når opptaksforvalter setter søknadsnummer med startnummer 1001 for opptaket "UHG 2027"
       Så får søknader i opptaket løpende nummer fra 1001
       Og søknadsnummeret får navnet til opptaket "UHG 2027" som tillegg i søknadsnummeret som ikke er synlig for søker eller saksbehandler
-      Og søknadsnumrene er dermed unike for dette opptaket, selv om det ikke ser slik ut for søker eller saksbehandler
+      Og søknadsnumrene er dermed unike for opptaket "UHG 2027", selv om det ikke ser slik ut for søker eller saksbehandler
 
   Regel: Opptaksforvalter kan sette tak for antall søknadsalternativer
 
@@ -60,8 +60,19 @@ Egenskap: Innstillinger for opptak
       Når opptaksforvalter setter maks antall søknadsalternativer til 10
       Så kan ikke en søker legge til flere enn 10 prioriterte søknadsalternativer i sin søknad
 
-  # Flyttet 2026-10-12 til 14 Plasstildeling/01 Runder/forvalte_runder.feature: tak for antall tilbud
-  # per plasstildelingsrunde, som brukes i plasstildelingen.
+  # Taket som ble flyttet 2026-10-12 til 14 Plasstildeling/01 Runder/forvalte_runder.feature, er tatt ut
+  # igjen 2026-10-14. Innstillingen på opptaket er hvor mange tilbud søkeren kan takke ja til (under).
+  # Hvor mange tilbud søkeren kan få, avgjøres av rundetypen, se 14 Plasstildeling/03 Tildeling/gjennomføre_plasstildeling.feature.
+  @draft @openquestion
+  Regel: Opptaksforvalter setter hvor mange tilbud en søker kan takke ja til
+
+    # AVKLART 2026-10-14: Innstillingen sier ikke hvor mange tilbud søkeren kan få, men hvor mange
+    # søkeren kan takke ja til og få studieplass på. I samordna opptak er det 1.
+    # ÅPNE SPØRSMÅL:
+    # - Hva er standardverdien når innstillingen ikke er satt?
+    Scenario: Sette antall tilbud en søker kan takke ja til
+      Når opptaksforvalter setter antall tilbud en søker kan takke ja til, til 1
+      Så kan en søker i opptaket takke ja til høyst 1 tilbud
 
   Regel: Opptaksforvalter kan åpne for tidlig opptak
 
@@ -104,7 +115,7 @@ Egenskap: Innstillinger for opptak
     Scenario: Legge til flere utdanningsbakgrunner
       Når opptaksforvalter legger til utdanningsbakgrunnene "Realkompetanse", "Utenlandsk utdanning" og "Steinerskole" i opptaket
       Så finnes disse utdanningsbakgrunnene i opptaket
-      Og søkere kan velge blant dem når de angir sin utdanningsbakgrunn
+      Og søkere kan velge blant utdanningsbakgrunnene i opptaket når de angir sin utdanningsbakgrunn
 
     Scenario: Fjerne en utdanningsbakgrunn fra opptaket
       Gitt at utdanningsbakgrunnen "Steinerskole" er lagt til i opptaket

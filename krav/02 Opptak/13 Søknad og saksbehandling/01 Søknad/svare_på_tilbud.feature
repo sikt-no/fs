@@ -48,6 +48,21 @@ Egenskap: Svare på tilbud om studieplass
       Så avvises svaret fordi ikke alle tilbud er besvart
       Og ingen av svarene er registrert
 
+  @draft @openquestion
+  Regel: Søkeren kan ikke takke ja til flere tilbud enn opptaket tillater
+    # Nytt 2026-10-14 (endring av levert krav, tillegg): Antallet settes på opptaket, se
+    # 11 Opprette og vedlikeholde opptak/03 Innstillinger/innstillinger.feature. I samordna opptak er det 1.
+    # Hva det betyr for plasstildelingen, står i 14 Plasstildeling/05 Svar/håndtere_svar_fra_søker.feature.
+    # ÅPNE SPØRSMÅL:
+    # - Hva skjer når søkeren prøver å takke ja til ett tilbud til: avvises svaret, eller må søkeren velge
+    #   hvilket ja som skal gjelde?
+    Scenario: Søkeren takker ja til to tilbud når opptaket tillater ett
+      Gitt at opptaket tillater at en søker takker ja til 1 tilbud
+      Og at søkeren har tilbud på to søknadsalternativer
+      Når søkeren takker ja til begge tilbudene
+      Og søkeren lagrer svaret
+      Så er ikke ja-svaret registrert på begge søknadsalternativene
+
   Regel: Søkeren kan endre svaret sitt innenfor svarfristen
 
     Scenario: Søkeren endrer svar fra ja til nei

@@ -1,6 +1,6 @@
 # Slik jobber vi med krav
 
-Denne mappa inneholder akseptansekravene for løsningene som lages av studieadministrasjon i Sikt. Kravene skrives som Gherkin-scenarioer i `.feature`-filer. De er lesbare kravspesifikasjoner for domeneeksperter, og driver de automatiserte testene i `tester/`.
+Denne mappa inneholder akseptansekravene for løsningene som lages av studieadministrasjon i Sikt. Kravene skrives som Gherkin-scenarioer i `.feature`-filer. De er lesbare kravspesifikasjoner for domeneeksperter, og driver de automatiserte testene i `tester/`. Kravet beskriver atferden løsningen skal ha, og koden sjekkes mot kravet, ikke omvendt.
 
 Er du ny? [Kom i gang med krav i FS](../kom-i-gang.html) er en kort innføring i hvor kravene ligger, hvordan en kravfil ser ut, og hvordan du bidrar.
 
@@ -98,7 +98,8 @@ Fila må kunne leses som Gherkin. Kan den ikke det, viser FS Kravforvaltning sis
 
 Gherkin er et språk som alle andre, og må skrives godt for å være nyttig og forståelig. <https://automationpanda.com/bdd/> er en god guide til å skrive gode scenarioer og features, og <https://cucumber.io/docs/gherkin/reference/> er en god introduksjon.
 
-- Features skal deles etter **prosesser**, ikke etter komponenter.
+- Features skal deles etter **prosesser**, ikke etter komponenter. En fil eller regel per entitet, med opprette, endre og slette, eller per skjerm, er ofte et tegn på at kravet er delt etter komponenter.
+- Steg og titler skrives med domenets ord (se *Terminologi*). Tabell- og kolonnenavn, kodeverdier (`GODTATT_MEN_ANNULLERT`), API-kall og JSON hører ikke hjemme der. Grensesnittet står i `<feature>.design.md`. Kilder kan nevnes i `#`-kommentarer.
 - Hver feature-fil skal tydelig beskrive hva featuren gjør og hvilken verdi den gir. Skriv en god beskrivelse under `Egenskap:`-linja. *(at beskrivelsen finnes, sjekkes automatisk)*
 - Unngå for store scenarioer. Test helst bare én funksjonalitet per scenario. Noen scenarioer blir naturlig lengre fordi arbeidsflyten krever det.
 - Alle scenarioer følger rekkefølgen Gitt → Når → Så:
@@ -108,6 +109,12 @@ Gherkin er et språk som alle andre, og må skrives godt for å være nyttig og 
 - Det er lov med flere av hvert nøkkelord etter hverandre (med `Og`/`Men`), men aldri i en annen rekkefølge. *(sjekkes automatisk)*
 - Bruk datatabeller og `Scenariomal:` med `Eksempler:` for datadrevne scenarioer.
 - Bruk for det meste bestemt form på roller når handlinger utføres: «personen», «administratoren».
+
+### Krav fra kode, skisser eller FS-klienten
+
+- Kilden er grunnlag for spørsmål, ikke fasit. Avklar først prosessen og aktøren, og bruk så kilden til å finne reglene.
+- Spør for hver regel som kommer fra kilden: er dette ønsket atferd, eller bare slik koden er? Er svaret uklart, blir det et `# ÅPNE SPØRSMÅL:`.
+- Kontrollspørsmål: ville kravet fortsatt vært riktig om koden ble skrevet om fra bunnen?
 
 ## Filnavn
 
@@ -387,7 +394,7 @@ Bruk ikke `# TODO:` for åpne spørsmål. *(sjekkes automatisk)* FS Kravforvaltn
 
 ## Terminologi
 
-Disse reglene gjelder for alle kravfiler. Tvetydige ord skal **avklares** før teksten skrives eller godkjennes.
+Disse reglene gjelder for alle kravfiler. Tvetydige ord skal **avklares** før teksten skrives eller godkjennes. Hvert domene kan ha en begrepsliste i `krav/<NN Domene>/begreper.md`. Bruk den når den finnes.
 
 ### Ord som krever avklaring
 
