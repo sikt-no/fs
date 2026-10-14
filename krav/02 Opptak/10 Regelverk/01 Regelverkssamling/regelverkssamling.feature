@@ -1,5 +1,5 @@
 # language: no
-@OPT-REG-SAM-001 @must @draft @scope-regelverk-2027
+@OPT-REG-SAM-001 @must @implemented @scope-regelverk-2027
 Egenskap: Regelverkssamling
   Som opptaksforvalter
   ønsker jeg å opprette og forvalte regelverkssamlinger
@@ -8,13 +8,15 @@ Egenskap: Regelverkssamling
   Bakgrunn:
     Gitt at jeg er innlogget som opptaksforvalter
 
+  # Justert etter koden 2026-10-14 (retrofitting): fs-admin har navn bare på bokmål, og ved sletting av en
+  # samling som er i bruk vises en generell feilmelding.
   Regel: Opptaksforvalter kan opprette en regelverkssamling
 
     Scenario: Opprette regelverkssamling
       Når jeg oppretter en ny regelverkssamling med kode "UHG2027"
-      Og jeg angir navn på bokmål, nynorsk, engelsk og samisk
+      Og jeg angir navnet på bokmål
       Så er regelverkssamlingen opprettet
-      Og den eies av min organisasjon
+      Og den eies av organisasjonen jeg er opptaksforvalter ved
 
   Regel: En regelverkssamling er bundet til én organisasjon
 
@@ -27,11 +29,15 @@ Egenskap: Regelverkssamling
 
     Scenario: Kopiere regelverkssamling
       Gitt at regelverkssamlingen "UHG2027" eies av HK-dir
-      Når jeg kopierer regelverkssamlingen til min organisasjon
-      Så får min organisasjon en egen kopi av regelverkssamlingen med alt innhold
+      Når jeg kopierer regelverkssamlingen til organisasjonen jeg er opptaksforvalter ved
+      Så får organisasjonen jeg er opptaksforvalter ved en egen kopi av regelverkssamlingen med alt innhold
       Og endringer i originalen påvirker ikke kopien
 
+  @draft @openquestion
   Regel: En regelverkssamling kan deaktiveres
+    # ÅPNE SPØRSMÅL:
+    # - I dag har deaktivering ingen virkning: inaktive samlinger kan fortsatt velges for nye opptak
+    #   (verifisert 2026-10-14). Skal de skjules når samling velges for et nytt opptak?
 
     Scenario: Deaktivere regelverkssamling
       Gitt at regelverkssamlingen "UHG2027" er aktiv
@@ -49,14 +55,8 @@ Egenskap: Regelverkssamling
     Scenario: Kan ikke slette regelverkssamling som er i bruk
       Gitt at regelverkssamlingen "UHG2027" er knyttet til opptaket "Samordna opptak 2027"
       Når jeg forsøker å slette regelverkssamlingen
-      Så får jeg beskjed om at regelverkssamlingen er i bruk og ikke kan slettes
-
-  Regel: Navn på regelverkssamling kan angis på flere språk
-
-    Scenario: Flerspråklig navn
-      Når jeg oppretter en regelverkssamling
-      Og jeg angir navn på bokmål, nynorsk, engelsk og samisk
-      Så er navnene lagret på alle fire språk
+      Så blir regelverkssamlingen ikke slettet
+      Og jeg får beskjed om at regelverkssamlingen ikke kunne slettes
 
   Regel: Regelverkssamlingen inneholder kompetanseregelverk, rangeringsregelverk, kvotetyper, grunnlag og mangelkoder
 

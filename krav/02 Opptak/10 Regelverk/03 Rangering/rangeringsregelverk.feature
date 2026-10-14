@@ -1,5 +1,5 @@
 # language: no
-@OPT-REG-RAN-001 @must @draft @scope-regelverk-2027
+@OPT-REG-RAN-001 @must @implemented @scope-regelverk-2027
 Egenskap: Rangeringsregelverk
   Som opptaksforvalter
   ønsker jeg å opprette og vedlikeholde rangeringsregelverk
@@ -26,12 +26,7 @@ Egenskap: Rangeringsregelverk
       Og jeg kobler grunnlaget "FOR" til poengtypene "KAR-FORKURS" og "ALD-STD"
       Så vet rangeringen hvilke poengtyper som gjelder for hvert grunnlag
 
-  Regel: Et rangeringsregelverk har beskrivelse på flere språk
-
-    Scenario: Flerspråklig beskrivelse
-      Når jeg oppretter rangeringsregelverket "ORD-RANG"
-      Og jeg angir beskrivelse på bokmål, nynorsk, engelsk og samisk
-      Så er beskrivelsene lagret på alle fire språk
+  # Regelen om beskrivelse på flere språk er fjernet 2026-10-14 (retrofitting): fs-admin har beskrivelse bare på bokmål.
 
   Regel: Et rangeringsregelverk kan aktiveres og deaktiveres
 
@@ -50,4 +45,5 @@ Egenskap: Rangeringsregelverk
     Scenario: Kan ikke slette rangeringsregelverk som er i bruk
       Gitt at rangeringsregelverket "ORD-RANG" er knyttet til utdanningstilbud
       Når jeg forsøker å slette rangeringsregelverket
-      Så får jeg beskjed om at det er i bruk og ikke kan slettes
+      Så blir rangeringsregelverket ikke slettet
+      Og jeg får beskjed om at rangeringsregelverket ikke kunne slettes

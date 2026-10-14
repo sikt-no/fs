@@ -1,5 +1,5 @@
 # language: no
-@OPT-REG-KRA-001 @must @draft @scope-regelverk-2027
+@OPT-REG-KRA-001 @must @implemented @scope-regelverk-2027
 Egenskap: Kompetanseregelverk
   Som opptaksforvalter
   ønsker jeg å opprette og vedlikeholde kompetanseregelverk
@@ -62,17 +62,14 @@ Egenskap: Kompetanseregelverk
       Og jeg lagrer kompetanseregelverket
       Så har regelverket ELLER-logikk mellom tilleggskravgruppene
 
-  Regel: Kravelementer kan ha karakterkrav med ulike kravtyper
+  # Justert etter koden 2026-10-14 (retrofitting): fs-admin har bare resultatkrav (KODE[n] i uttrykket).
+  # Standpunktkrav og eksamenskrav finnes bare i API-et, og brukes ikke i vurderingen.
+  Regel: Kravelementer kan ha karakterkrav
 
     Scenario: Sette karakterkrav på kravelement
       Gitt at jeg redigerer et kompetansekrav
-      Når jeg legger til kravelementet "FFMAT" (Matematikk R1)
-      Og jeg setter følgende karakterkrav:
-        | Kravtype       | Verdi | Beskrivelse                      |
-        | Resultatkrav   |       | Ingen krav til totalresultat     |
-        | Standpunktkrav | 3     | Krav til standpunktkarakter      |
-        | Eksamenskrav   | 2     | Krav til eksamenskarakter        |
-      Så vises kravelementet med de definerte karakterkravene
+      Når jeg skriver "FFMAT[3]" i uttrykket for kompetansekravet
+      Så har kravelementet "FFMAT" resultatkrav 3
 
     Scenario: Sette gjennomsnittskrav
       Gitt at jeg redigerer et kompetansekrav
