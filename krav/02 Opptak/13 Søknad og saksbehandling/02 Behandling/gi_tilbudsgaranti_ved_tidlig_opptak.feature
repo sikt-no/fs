@@ -367,7 +367,7 @@ Egenskap: Gi tilbudsgaranti ved tidlig opptak
 
   # Manuell tilbudsgaranti fra behandler, tilbyder og opptaksforvalter, og at
   # tilbudsgarantien følger søknadsalternativet, står i gi_tilbudsgaranti.feature
-  # (OPT-BEH-BEH-010). At tilbudsgarantien gir tilbud, står i
+  # (OPT-BEH-BEH-010). At tilbudsgarantien gir tilbud, dekkes av
   # 14 Plasstildeling/03 Tildeling/gjennomføre_plasstildeling.feature. Reglene er flyttet
   # 14.10.2026, fordi de gjelder alle tilbudsgarantier, ikke bare tidlig opptak
   # (STEK-241, STEK-188).

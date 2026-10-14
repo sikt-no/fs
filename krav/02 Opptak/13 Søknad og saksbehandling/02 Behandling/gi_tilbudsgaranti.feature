@@ -27,8 +27,9 @@
 # Reglene «Behandler, tilbyder og opptaksforvalter kan sette tilbudsgaranti manuelt»
 # og «Tilbudsgarantien gjelder i hovedopptaket» er flyttet hit fra OPT-BEH-BEH-007
 # 14.10.2026. Der var de avklart og hentet inn i oppgaven tidlig-opptak. Scenarioene
-# om at tilbudsgarantien gir tilbud, er flyttet videre til gjennomføre_plasstildeling.feature,
-# og resten står under «Tilbudsgarantien følger søknadsalternativet».
+# om at tilbudsgarantien gir tilbud, er tatt ut, fordi regelen «Søker med tilbudsgaranti
+# får tilbud uavhengig av poengsum» i gjennomføre_plasstildeling.feature dekker dem. Resten
+# står under «Tilbudsgarantien følger søknadsalternativet».
 #
 # AVKLART
 #
@@ -140,7 +141,7 @@ Egenskap: Gi tilbudsgaranti
 
   # Hva plasstildelingen gjør med tilbudsgarantien, i alle plasstildelingsrunder, står i
   # regelen «Søker med tilbudsgaranti får tilbud uavhengig av poengsum» i
-  # 14 Plasstildeling/03 Tildeling/gjennomføre_plasstildeling.feature (flyttet dit 14.10.2026).
+  # 14 Plasstildeling/03 Tildeling/gjennomføre_plasstildeling.feature.
   Regel: Tilbudsgarantien følger søknadsalternativet
 
     Scenariomal: Tilbudsgarantien følger søknadsalternativet når prioriteten endres

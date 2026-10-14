@@ -200,25 +200,6 @@ Egenskap: Gjennomføre plasstildeling
       Når plasstildelingen gjennomføres
       Så konkurrerer søkeren om plass på "Sykepleie, høst 2027" etter rangeringen, som andre søkere
 
-    # Flyttet hit fra gi_tilbudsgaranti.feature (OPT-BEH-BEH-010) 14.10.2026, og før det fra
-    # OPT-BEH-BEH-007, der regelen gjaldt hovedopptaket. Den gjelder alle plasstildelingsrunder.
-    # At tilbudsgarantien følger søknadsalternativet når prioriteten endres, står i
-    # 13 Søknad og saksbehandling/02 Behandling/gi_tilbudsgaranti.feature.
-    Scenario: Søkeren får tilbud på et høyere prioritert søknadsalternativ enn tilbudsgarantien
-      Gitt at søknaden til "Ola Nordmann" på "Sykepleie, høst 2027" har en tilbudsgaranti som gir tilbud
-      Og at "Sykepleie, høst 2027" er prioritet 2
-      Og at søkeren når opp til "Historie, høst 2027" som er prioritet 1
-      Når plasstildelingen gjennomføres
-      Så får søkeren tilbud på "Historie, høst 2027"
-
-    Scenario: Søkeren blir ikke forbigått på søknadsalternativet med tilbudsgaranti
-      Gitt at søknaden til "Ola Nordmann" på "Sykepleie, høst 2027" har en tilbudsgaranti som gir tilbud
-      Og at "Sykepleie, høst 2027" er prioritet 2
-      Og at søkeren ikke når opp til "Historie, høst 2027" som er prioritet 1
-      Og at søkeren har færre poeng enn poenggrensen for "Sykepleie, høst 2027"
-      Når plasstildelingen gjennomføres
-      Så får søkeren tilbud på "Sykepleie, høst 2027"
-
   Regel: Poenggrensen beregnes per utdanningskvote
 
     Scenario: Poenggrense fra siste søker som fikk tilbud
