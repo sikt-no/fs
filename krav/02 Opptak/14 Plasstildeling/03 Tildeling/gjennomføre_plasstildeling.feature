@@ -296,8 +296,8 @@ Egenskap: Gjennomføre plasstildeling
 
     # AVKLART 2026-10-14: Et tilbud på en ledig studieplass gir ikke bortfall, i noen rundetype.
     # Søkeren beholder tilbudene og ventelisteplassene fra tidligere plasstildelingsrunder, og må velge.
-    # Tilbud på ledige studieplasser teller ikke mot taket for antall tilbud per plasstildelingsrunde
-    # (domeneekspert 2026-10-14), se 01 Runder/forvalte_runder.feature.
+    # Tilbud på ledige studieplasser kommer i tillegg til ett ordinært tilbud (domeneekspert 2026-10-14).
+    # Hvor mange tilbud søkeren kan takke ja til, settes på opptaket.
     Scenariomal: Tilbud på ledig studieplass gir ikke bortfall
       Gitt at plasstildelingsrunden "<plasstildelingsrunde>" med rundetype "<rundetype>" er åpnet for ledige studieplasser
       Og at søkeren "Kari Nordmann" fra en tidligere plasstildelingsrunde har tilbud på "Vernepleie, høst 2027" og står på venteliste til "Barnevern, høst 2027"
