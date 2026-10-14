@@ -62,8 +62,9 @@
 # AVKLART I JIRA (lagt inn 07.10.2026)
 #
 # - Bare saker som er ferdig behandlet, er med (STEK-425, 01.09.2026).
-# - Poengsummen er den høyeste søkeren har til søknadsalternativet, uansett kvote
-#   (STEK-269, 27.08.2026). I det gamle systemet var den hardkodet til ordinær kvote.
+# - Poengsummen er den høyeste søkeren har til søknadsalternativet etter tilbudets
+#   kompetanseregelverk, uansett kvote (STEK-269, 27.08.2026; STEK-582). I det gamle
+#   systemet var den hardkodet til ordinær kvote.
 # - Gjennomføringen gir tilbudsgarantien som opptaksforvalter. En tilbudsgaranti fra
 #   opptaksforvalter som ikke gir tilbud, erstattes. En som gir tilbud, røres ikke, og
 #   søkeren får da ingen ny tilbudsgaranti på lavere prioritet (STEK-269, 12.08.2026).
@@ -107,8 +108,7 @@
 #   enten har et tidligopptakstilbud fra før, eller oppfyller kravene. Ingen
 #   søknadsalternativer under får tilbudsgaranti. Et tidligopptakstilbud fra før
 #   gjelder uansett konklusjon, om saken er ferdig behandlet, og poengsum
-#   (fagperson i STEK-269, 30.09.2026). Implementert på fs-plattform-branchen
-#   STEK-503_sett_sammen_tidligopptak_konklusjoner_for_soker, ikke på main.
+#   (fagperson i STEK-269, 30.09.2026). Implementert i STEK-503.
 # - (09.10.2026) Opptaksforvalter kan gjennomføre tidligopptaket mer enn én gang. En ny
 #   gjennomføring tar med saker som er blitt ferdig behandlet, eller har fått
 #   konklusjon, siden forrige gjennomføring. Det er likevel lurt å prøvekjøre til
