@@ -84,7 +84,7 @@ Egenskap: Gjennomføre plasstildeling
 
   Regel: Ingen søker forsvinner stille
 
-    # AVKLART 2026-10-09 (tasks/opptak/begreper.md, avklaring 20): Bortfall og avslag er to ulike resultater.
+    # AVKLART 2026-10-09 (krav/02 Opptak/begreper.md, avklaring 20): Bortfall og avslag er to ulike resultater.
     # Avslag: søkeren er ikke kvalifisert, eller har ikke nådd opp og har ikke fått plass på venteliste.
     # Bortfall: søkeren mister tilbudet på en lavere prioritet fordi søkeren har fått tilbud på en høyere.
     # Gap mot koden: «kvalifisert uten tilbud» lagres i dag som bortfall, så de to kan ikke skilles i ettertid.
