@@ -122,6 +122,15 @@ Egenskap: Antall tilbud som skal gis per utdanningskvote (sette opptaksparameter
       Når opptaksforvalter ved forvaltende organisasjon endrer antall tilbud til 120
       Så er antall tilbud som skal gis i utdanningskvoten "Ordinær" 120
 
+  Regel: Antall tilbud kan ikke endres når plasstildelingsrunden er publisert
+
+    # AVKLART 2026-10-14 (designarbeidet i FS-Admin): Svarbrevene er sendt. For å gi flere tilbud må
+    # opptaksforvalter legge til en ny plasstildelingsrunde.
+    Scenario: Antall tilbud låses når plasstildelingsrunden er publisert
+      Gitt at plasstildelingsrunden "Hovedrunde" er publisert
+      Når opptaksforvalter ved forvaltende organisasjon ser antall tilbud som skal gis i "Hovedrunde"
+      Så kan opptaksforvalter ikke endre antall tilbud som skal gis i "Hovedrunde"
+
   Regel: Minst én plasstildelingsrunde må finnes før antall tilbud kan settes
 
     # Flyttet hit fra 01 Runder 2026-10-09.
@@ -149,6 +158,7 @@ Egenskap: Antall tilbud som skal gis per utdanningskvote (sette opptaksparameter
         | Totalt antall tilbud gitt i opptaket       |
         | Antall tilbud akseptert                    |
         | Netto tilbud                               |
+        | Ledige plasser å gi tilbud til             |
         | Antall søkere på venteliste                |
         | Antall søkere med tilbudsgaranti           |
 
@@ -168,6 +178,17 @@ Egenskap: Antall tilbud som skal gis per utdanningskvote (sette opptaksparameter
       Og at 12 av tilbudene er avslått eller ikke besvart innen svarfristen
       Når opptaksforvalter ser antall tilbud som skal gis for utdanningstilbudet "Sykepleie, høst 2027"
       Så er netto tilbud 58
+
+    # AVKLART 2026-10-14 (designarbeidet i FS-Admin): Ledige plasser å gi tilbud til er en avledet verdi:
+    # studieplasser minus netto tilbud (akseptert og venter på svar).
+    @openquestion
+    Scenario: Ledige plasser å gi tilbud til
+      # ÅPNE SPØRSMÅL:
+      # - Skal noe mer trekkes fra enn akseptert og venter på svar? (Åpne spørsmål fra designarbeidet, nr. 7)
+      Gitt at "Sykepleie, høst 2027" har 100 studieplasser
+      Og at netto tilbud for "Sykepleie, høst 2027" er 58
+      Når opptaksforvalter ser antall tilbud som skal gis for utdanningstilbudet "Sykepleie, høst 2027"
+      Så er ledige plasser å gi tilbud til 42
 
   Regel: Et utdanningstilbud kan gi tilbud til alle kvalifiserte
 

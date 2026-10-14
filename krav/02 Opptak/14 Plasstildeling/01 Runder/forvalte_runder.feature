@@ -137,23 +137,28 @@ Egenskap: Plasstildelingsrunder i et opptak
       Og at plasstildelingsrunden er publisert til søker
       Så ser opptaksforvalter at plasstildelingsrunden har status "Publisert for søkere"
 
+  @openquestion
   Regel: Opptaksforvalter kan sette tak for antall tilbud per plasstildelingsrunde
 
     # Flyttet hit 2026-10-12 fra 11 Opprette og vedlikeholde opptak/03 Innstillinger/innstillinger.feature.
-
+    # AVKLART 2026-10-14 (domeneekspert): I hovedopptak og supplering får søkeren bare ett ordinært tilbud.
+    # I etterfylling kan søkeren få flere tilbud. Ledige studieplasser har sin egen logikk, og tilbud der
+    # teller ikke mot taket. Uansett runde kan søkeren bare takke ja til ett tilbud.
+    # Det er ikke unntak for deltidsutdanninger under 60 stp (avklart 2026-10-14).
+    # ÅPNE SPØRSMÅL:
+    # - Trengs taket som innstilling på plasstildelingsrunden, når rundetypen avgjør om søkeren kan få ett
+    #   eller flere tilbud? Er det et tak for antall tilbud i etterfylling, eller er det ubegrenset?
     Scenario: Sette tak for antall tilbud en søker kan få per plasstildelingsrunde
       Når opptaksforvalter setter tak for antall tilbud per plasstildelingsrunde til 1
-      Så kan ikke plasstildelingen gi flere enn 1 tilbud i en enkelt plasstildelingsrunde til en søker
+      Så kan ikke plasstildelingen gi flere enn 1 ordinært tilbud i en enkelt plasstildelingsrunde til en søker
       Og søkeren ser taket for antall tilbud per plasstildelingsrunde
 
-    # AVKLART 2026-10-14: Taket gjelder alle tilbud i plasstildelingsrunden, også tilbud på ledige studieplasser.
-    # I samordna opptak er taket 1 i hovedrunde og supplering. I etterfylling kan søkeren få flere tilbud og må velge ett.
-    # Det er ikke unntak for deltidsutdanninger under 60 stp (avklart 2026-10-14).
-    Scenario: Taket gjelder også tilbud på ledige studieplasser
+    Scenario: Tilbud på ledige studieplasser teller ikke mot taket
       Gitt at taket for antall tilbud per plasstildelingsrunde er 1 i "Suppleringsrunde"
       Og at "Suppleringsrunde" er åpnet for ledige studieplasser
-      Når plasstildelingen i "Suppleringsrunde" gjennomføres
-      Så får ingen søker mer enn 1 tilbud i "Suppleringsrunde", ordinært eller på ledige studieplasser
+      Og at søkeren "Kari Nordmann" får et ordinært tilbud på "Vernepleie, høst 2027" i "Suppleringsrunde"
+      Når plasstildelingen i "Suppleringsrunde" gir søkeren tilbud på en ledig studieplass på "Sykepleie, høst 2027"
+      Så har søkeren begge tilbudene
 
   Regel: Opptaksforvalter kan åpne en plasstildelingsrunde for ledige studieplasser
 

@@ -224,11 +224,13 @@ Egenskap: Gjennomføre plasstildeling
         | Regel                                                   | Verdi                 |
         | Søker som får tilbud mister lavere prioriteter          | <bortfall>            |
         | Frigjort plass ved opprykk gis til neste på ventelisten | <kompensasjonstilbud> |
-        | Søker kan ha flere tilbud samtidig                      | <flere_tilbud>        |
+        | Søker kan ha flere ordinære tilbud samtidig             | <flere_tilbud>        |
         | Bygger på forrige publiserte plasstildelingsrunde       | <arv>                 |
         | Rangering                                               | <rangering>           |
         | Mulige utfall                                           | <utfall>              |
 
+      # AVKLART 2026-10-14 (domeneekspert): Tilbud på ledige studieplasser er unntaket. Søkeren kan få dem
+      # i tillegg til ett ordinært tilbud, også i hovedtildeling og supplering. Søkeren kan bare takke ja til ett.
       # AVKLART 2026-10-14: Bortfall i supplering virker som i hovedtildeling. Forskjellen er kompensasjonstilbud ved opprykk.
       # AVKLART 2026-10-14: Tilbud, venteliste og avslag finnes i alle rundetyper. Bortfall finnes ikke i etterfylling.
       # AVKLART 2026-10-08: Rundetypen avgjør ikke om et utdanningstilbud kan ekskluderes.
@@ -294,8 +296,8 @@ Egenskap: Gjennomføre plasstildeling
 
     # AVKLART 2026-10-14: Et tilbud på en ledig studieplass gir ikke bortfall, i noen rundetype.
     # Søkeren beholder tilbudene og ventelisteplassene fra tidligere plasstildelingsrunder, og må velge.
-    # Tilbud på ledige studieplasser teller mot det samme taket for antall tilbud per plasstildelingsrunde
-    # som ordinære tilbud, se 01 Runder/forvalte_runder.feature.
+    # Tilbud på ledige studieplasser teller ikke mot taket for antall tilbud per plasstildelingsrunde
+    # (domeneekspert 2026-10-14), se 01 Runder/forvalte_runder.feature.
     Scenariomal: Tilbud på ledig studieplass gir ikke bortfall
       Gitt at plasstildelingsrunden "<plasstildelingsrunde>" med rundetype "<rundetype>" er åpnet for ledige studieplasser
       Og at søkeren "Kari Nordmann" fra en tidligere plasstildelingsrunde har tilbud på "Vernepleie, høst 2027" og står på venteliste til "Barnevern, høst 2027"
@@ -309,13 +311,16 @@ Egenskap: Gjennomføre plasstildeling
         | Suppleringsrunde     | Supplering     |
         | Etterfylling         | Etterfylling   |
 
-    # AVKLART 2026-10-14: I hovedrunden finnes ingen tidligere plasstildelingsrunde. Med tak 1 får søkeren
-    # tilbud på det høyest prioriterte søknadsalternativet søkeren når, ordinært eller på en ledig studieplass.
-    Scenario: Høyeste prioritet vinner i hovedrunden når taket er 1
+    # AVKLART 2026-10-14 (domeneekspert): Ledige studieplasser har sin egen logikk. Også i hovedtildeling
+    # og supplering kan søkeren få et tilbud på en ledig studieplass i tillegg til ett ordinært tilbud.
+    @openquestion
+    Scenario: Søkeren kan få et ordinært tilbud og et tilbud på en ledig studieplass i samme runde
+      # ÅPNE SPØRSMÅL:
+      # - Hvor mange tilbud på ledige studieplasser kan en søker få? I koden er det fast inntil 10,
+      #   i tillegg til ett ordinært tilbud.
       Gitt at plasstildelingsrunden "Hovedrunde" er åpnet for ledige studieplasser
-      Og at taket for antall tilbud per plasstildelingsrunde er 1 i "Hovedrunde"
-      Og at søkeren "Kari Nordmann" har en ledig studieplass på "Sykepleie, høst 2027" som prioritet 1 og "Vernepleie, høst 2027" som prioritet 2
-      Og at søkeren når både den ledige studieplassen på "Sykepleie, høst 2027" og et ordinært tilbud på "Vernepleie, høst 2027"
+      Og at søkeren "Kari Nordmann" når et ordinært tilbud på "Vernepleie, høst 2027"
+      Og at søkeren når en ledig studieplass på "Sykepleie, høst 2027"
       Når plasstildelingen i "Hovedrunde" gjennomføres
-      Så får søkeren tilbud på den ledige studieplassen på "Sykepleie, høst 2027"
-      Og søkeren får ikke tilbud på "Vernepleie, høst 2027"
+      Så får søkeren tilbud på både "Vernepleie, høst 2027" og den ledige studieplassen på "Sykepleie, høst 2027"
+      Og søkeren må velge ett av tilbudene
