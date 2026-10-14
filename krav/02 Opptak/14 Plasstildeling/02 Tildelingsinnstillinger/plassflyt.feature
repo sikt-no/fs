@@ -85,7 +85,8 @@ Egenskap: Plassflyt mellom utdanningskvoter
 
   Regel: Det kan spores at en plass kom via plassflyt
 
-    # Visningen er beskrevet i 04 Resultat/vise_resultat.feature.
+    # Visningen er beskrevet i 04 Resultat/vise_resultat.feature (opptaksforvalter, før publisering)
+    # og 04 Resultat/se_publisert_resultat.feature (saksbehandler, etter publisering).
     Scenario: Tilbud gitt via plassflyt
       Gitt at søkeren "Kari Nordmann" fikk tilbud i "Ordinær" på en plass som fløt fra "Førstegangsvitnemål"
       Så er det lagret at plassen kom fra utdanningskvoten "Førstegangsvitnemål"

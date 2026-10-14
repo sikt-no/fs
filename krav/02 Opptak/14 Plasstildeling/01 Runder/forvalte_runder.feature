@@ -188,7 +188,7 @@ Egenskap: Plasstildelingsrunder i et opptak
   Regel: Opptakets informasjonsdatoer for publisering påvirker ikke plasstildelingsrunden
 
     # Fristene for når resultatet i hovedrunden kan forventes publisert, som settes i
-    # 11 Opptak/04 Frister/frister_og_hendelser.feature, er ren informasjon til søker.
+    # 11 Opprette og vedlikeholde opptak/04 Frister/frister_og_hendelser.feature, er ren informasjon til søker.
     # Opptaksforvalter setter ingen eksplisitt publiseringsdato på plasstildelingsrunden.
     # Publiseringsdato styres av når publiseringen faktisk finner sted.
 

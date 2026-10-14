@@ -59,7 +59,8 @@ Egenskap: Kompensasjonstilbud ved opprykk i supplering
         | Etterfylling     |
 
 # ÅPNE SPØRSMÅL:
-# - Skal en søker som har takket ja og senere trekker seg frigjøre plassen til kompensasjonstilbud? I dag frigjøres den aldri.
+# - Skal en søker som har takket ja og trekker seg etter svarfristen (GODTATT_MEN_ANNULLERT), frigjøre plassen
+#   til kompensasjonstilbud? I dag frigjøres den aldri. Innen svarfristen kan søkeren endre ja til nei.
 # - Skal det finnes en «topp opp til ønsket nivå»-funksjon de første ukene, i stedet for manuell overvåking?
 #   Lærestedene har bedt om det (design.md avklaring 9).
 # - Automatiske nye tilbud ved nei-svar utenfor plasstildelingsrundene er utenfor scope for 2027 (oppgave.md, oppgave 10).
