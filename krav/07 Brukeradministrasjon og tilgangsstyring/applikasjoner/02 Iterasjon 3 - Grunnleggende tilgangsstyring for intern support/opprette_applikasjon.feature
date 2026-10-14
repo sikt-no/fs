@@ -133,11 +133,11 @@ Egenskap: Opprette applikasjon
     Scenario: Opprette applikasjon når administrator har tilgang til kun én organisasjon
       Gitt jeg har tilgang til kun én organisasjon
       Når jeg oppretter en ny applikasjon
-      Så er min organisasjon satt som applikasjonseier
+      Så er organisasjonen jeg har tilgang til satt som applikasjonseier
 
     Scenario: Opprette applikasjon når administrator har tilgang til flere organisasjoner
       Gitt jeg har tilgang til flere organisasjoner
-      Når jeg oppretter en ny applikasjon og velger en av mine organisasjoner
+      Når jeg oppretter en ny applikasjon og velger en av organisasjonene jeg har tilgang til
       Så er den valgte organisasjonen satt som applikasjonseier
 
     Scenario: Super-applikasjonsadministrator velger blant alle organisasjoner
