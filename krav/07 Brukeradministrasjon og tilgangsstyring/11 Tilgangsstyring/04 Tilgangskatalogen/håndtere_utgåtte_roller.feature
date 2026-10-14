@@ -1,7 +1,7 @@
 # language: no
 # GitHub: #563
 # Implementert i fs-plattform !6135 (utkast, ikke merget), bortsett fra hvordan en rolle blir utgått.
-@BRU-TIL-KAT-008 @must @draft
+@BRU-TIL-KAT-008 @must @draft @openquestion
 Egenskap: Håndtere utgåtte roller i rollekatalogen
   Som forvalter av rollekatalogen
   ønsker jeg at en utgått rolle ikke kan få nye implikasjoner
