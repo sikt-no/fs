@@ -2,7 +2,7 @@
 # GitHub: #441
 @BRU-APP-API-004 @must @implemented
 Egenskap: Passordbytte for applikasjon
-  Som bruker
+  Som bruker med en rolle som gir tilgang til applikasjoner
   ønsker jeg å sette nytt passord på en applikasjon jeg har rettighet til å administrere
   slik at jeg kan hjelpe med passordbytte.
 

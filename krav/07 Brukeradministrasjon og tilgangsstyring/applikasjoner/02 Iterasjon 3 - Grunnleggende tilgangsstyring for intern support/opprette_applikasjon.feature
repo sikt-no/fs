@@ -28,8 +28,11 @@ Egenskap: Opprette applikasjon
   som «gjelder for».
 
   Opprettelse av FS-applikasjoner (maskinbruker-applikasjoner) skal
-  begrenses til applikasjonsadministratorer hos Sikt, så lenge FS'
-  webtjenester lever. Lærestedene skal ikke kunne opprette dem selv.
+  begrenses til applikasjonsadministratorer for organisasjonene med
+  organisasjonskode 20754 (Sikt), 7777 og 7778 (Sikts testhøyskoler), så lenge FS'
+  webtjenester lever. Begrensningen gjelder både det som vises i
+  løsningen, og kall direkte mot API-et. Lærestedene skal ikke kunne
+  opprette dem selv.
   Opprettelsen provisjonerer en maskinbruker i FS' webtjenester, med
   replikering av passordet, og det er en flate Sikt drifter. Bare
   opprettelsen begrenses: den løpende forvaltningen av en FS-applikasjon
@@ -49,43 +52,45 @@ Egenskap: Opprette applikasjon
       Så kan jeg velge én av identitetsleverandørene Feide, Maskinporten og FS (Maskinbruker)
       Og identitetsleverandøren settes på applikasjonen og kan ikke endres senere
 
-    @draft @openquestion
+    @planned
     Scenario: Velge identitetsleverandør ved opprettelse
-      # ÅPNE SPØRSMÅL:
-      # - Erstatter «Velge identitetsleverandør ved opprettelse, inkludert FS». I dag viser
-      #   fs-admin FS for alle som kan opprette applikasjoner, og bare backenden avviser
-      #   dem som ikke er hos Sikt. Skal FS skjules i valget for en lokal administrator?
-      Gitt jeg har applikasjonsadministrator-rollen for en organisasjon som ikke er Sikt
-      Når jeg starter opprettelse av en ny applikasjon
+      Gitt jeg har ikke applikasjonsadministrator-rollen for Sikt (20754), 7777 eller 7778
+      Når jeg starter opprettelse av en ny applikasjon i løsningen
       Så kan jeg velge én av identitetsleverandørene Feide og Maskinporten
       Og identitetsleverandøren settes på applikasjonen og kan ikke endres senere
 
   @draft @openquestion
-  Regel: Bare Sikt kan opprette en applikasjon med FS som identitetsleverandør
+  Regel: Bare applikasjonsadministratorer for Sikt, 7777 og 7778 kan opprette en applikasjon med FS som identitetsleverandør
     # ÅPNE SPØRSMÅL:
     # - Backenden avviser med «Du har ikke rettighet til å opprette
     #   maskinbruker-applikasjoner.» Er det teksten kravet skal ha?
     # - Backenden krever i tillegg skrivetilgang for applikasjonseieren i både demo og
     #   produksjon. Skal det stå i kravet?
+    # Backenden sjekker i dag bare Sikt (20754), ikke testhøyskolene 7777 og 7778.
 
-    Scenario: Applikasjonsadministrator hos Sikt kan velge FS
-      Gitt jeg har applikasjonsadministrator-rollen for Sikt
-      Når jeg starter opprettelse av en ny applikasjon
+    Scenario: Applikasjonsadministrator for Sikt, 7777 eller 7778 kan velge FS i løsningen
+      Gitt jeg har applikasjonsadministrator-rollen for Sikt (20754), 7777 eller 7778
+      Når jeg starter opprettelse av en ny applikasjon i løsningen
       Så kan jeg velge FS som identitetsleverandør
 
     Scenario: FS er ikke en valgbar identitetsleverandør for en lokal administrator
-      Gitt jeg har applikasjonsadministrator-rollen for en organisasjon som ikke er Sikt
-      Når jeg starter opprettelse av en ny applikasjon
+      Gitt jeg har ikke applikasjonsadministrator-rollen for Sikt (20754), 7777 eller 7778
+      Når jeg starter opprettelse av en ny applikasjon i løsningen
       Så er FS ikke tilgjengelig som identitetsleverandør
 
-    Scenario: Forsøk på å opprette en FS-applikasjon uten rettigheten avvises
-      Gitt jeg ikke har applikasjonsadministrator-rollen for Sikt
-      Når jeg forsøker å opprette en applikasjon med FS som identitetsleverandør
+    Scenario: API-et oppretter en FS-applikasjon for en applikasjonsadministrator for Sikt, 7777 eller 7778
+      Gitt jeg har applikasjonsadministrator-rollen for Sikt (20754), 7777 eller 7778
+      Når jeg via API-et oppretter en applikasjon med FS som identitetsleverandør
+      Så er applikasjonen opprettet
+
+    Scenario: API-et avviser opprettelse av en FS-applikasjon uten rettigheten
+      Gitt jeg har ikke applikasjonsadministrator-rollen for Sikt (20754), 7777 eller 7778
+      Når jeg via API-et forsøker å opprette en applikasjon med FS som identitetsleverandør
       Så avvises opprettelsen
-      Og det fremgår at opprettelse av maskinbruker-applikasjoner krever applikasjonsadministrator hos Sikt
+      Og det fremgår at opprettelse av maskinbruker-applikasjoner krever applikasjonsadministrator-rollen for Sikt, 7777 eller 7778
 
     Scenario: Opprettelsen provisjonerer en maskinbruker
-      Gitt jeg har applikasjonsadministrator-rollen for Sikt
+      Gitt jeg har applikasjonsadministrator-rollen for Sikt (20754), 7777 eller 7778
       Når jeg oppretter en applikasjon med FS som identitetsleverandør og velger en applikasjonseier
       Så er applikasjonen opprettet på den valgte applikasjonseieren
       Og det er provisjonert en tilhørende maskinbruker i FS' webtjenester
@@ -100,7 +105,7 @@ Egenskap: Opprette applikasjon
     # FS-datakilde i ett av miljøene, finnes det ingen delvis provisjonert tilstand.
 
     Scenario: Opprettelsen avvises i sin helhet når applikasjonseieren mangler FS-datakilde i et miljø
-      Gitt jeg har applikasjonsadministrator-rollen for Sikt
+      Gitt jeg har applikasjonsadministrator-rollen for Sikt (20754), 7777 eller 7778
       Og applikasjonseieren mangler registrert FS-datakilde i minst ett miljø
       Når jeg forsøker å opprette en applikasjon med FS som identitetsleverandør for applikasjonseieren
       Så avvises opprettelsen i sin helhet
@@ -108,7 +113,7 @@ Egenskap: Opprette applikasjon
       Og applikasjonen er ikke opprettet i noe miljø
 
   @draft @openquestion
-  Regel: Bare opprettelsen av en FS-applikasjon er begrenset til Sikt
+  Regel: Bare opprettelsen av en FS-applikasjon er begrenset til Sikt, 7777 og 7778
     # ÅPNE SPØRSMÅL:
     # - Hører reglen hjemme her, eller i BRU-APP-API-006, BRU-APP-API-010 og BRU-APP-API-004?
     # Begrensningen gjelder handlingen «ta i bruk en utfaset integrasjonsform», ikke
@@ -119,11 +124,11 @@ Egenskap: Opprette applikasjon
       Gitt det finnes en FS-applikasjon på en applikasjonseier
       Og jeg har rettighet til å administrere applikasjoner hos applikasjonseieren
       Så kan jeg endre navn og beskrivelse, deaktivere og reaktivere applikasjonen og bytte passord
-      Og ingen av handlingene krever applikasjonsadministrator hos Sikt
+      Og ingen av handlingene krever applikasjonsadministrator-rollen for Sikt, 7777 eller 7778
 
-    Scenario: Manglende Sikt-rettighet skjuler ikke den løpende forvaltningen
+    Scenario: Manglende rolle for Sikt, 7777 eller 7778 skjuler ikke den løpende forvaltningen i løsningen
       Gitt det finnes en FS-applikasjon på en organisasjon jeg administrerer
-      Og jeg har ikke applikasjonsadministrator-rollen for Sikt
+      Og jeg har ikke applikasjonsadministrator-rollen for Sikt (20754), 7777 eller 7778
       Når jeg åpner detaljsiden for applikasjonen
       Så ser jeg de samme administrasjonshandlingene som for en Feide- eller Maskinporten-applikasjon
       Men jeg ser ingen handling for å opprette en ny applikasjon med FS som identitetsleverandør

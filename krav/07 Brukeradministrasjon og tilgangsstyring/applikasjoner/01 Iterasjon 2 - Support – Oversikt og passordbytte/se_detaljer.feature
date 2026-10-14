@@ -2,7 +2,7 @@
 # GitHub: #439
 @BRU-APP-API-002 @must @implemented
 Egenskap: Se detaljer for applikasjon
-  Som bruker
+  Som bruker med en rolle som gir tilgang til applikasjoner
   ønsker jeg å se detaljer for en applikasjon, organisert i logiske datagrupper,
   slik at jeg har oversikt over applikasjonen.
 

@@ -2,7 +2,7 @@
 # GitHub: #438, #448, #449
 @BRU-APP-API-001 @must @implemented
 Egenskap: Listevisning og søk i applikasjoner
-  Som bruker
+  Som bruker med en rolle som gir tilgang til applikasjoner
   ønsker jeg en oversikt over applikasjoner jeg har tilgang til, med mulighet for søk og filtrering
   slik at jeg raskt kan finne og følge opp riktig applikasjon.
 

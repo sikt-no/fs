@@ -2,7 +2,7 @@
 # GitHub: #440
 @BRU-APP-API-003 @must @implemented
 Egenskap: Vise tilganger for applikasjon
-  Som bruker
+  Som bruker med en rolle som gir tilgang til applikasjoner
   ønsker jeg å se hvilke tilganger en applikasjon har
   slik at jeg forstår hvilke rettigheter og miljøtilgang applikasjonen er tildelt.
 
