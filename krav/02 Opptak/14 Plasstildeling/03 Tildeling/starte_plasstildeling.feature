@@ -34,6 +34,7 @@ Egenskap: Starte en plasstildeling
     Scenario: Søknader som er med i plasstildelingen
       # ÅPNE SPØRSMÅL:
       # - Er det nok at søknaden er kvalifisert, eller må den ha status ferdigbehandlet?
+      #   Delvis avklart 2026-10-14: kvalifisert er utgangspunktet, men det finnes unntak. Hvilke unntak?
       #   Koden krever ikke ferdigbehandlet. En søknad er med når alt dette er oppfylt:
       #   søknadsalternativet er ikke slettet og har en behandlersak, saken er kvalifisert mot
       #   utdanningstilbudets kompetanseregelverk, saken har en aktiv kvote som skal kvoteplasseres

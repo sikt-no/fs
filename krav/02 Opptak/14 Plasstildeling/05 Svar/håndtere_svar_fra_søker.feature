@@ -69,13 +69,9 @@ Egenskap: Håndtere svar fra søker
 # ÅPNE SPØRSMÅL:
 # - Skal en søker som takker ja og senere trekker seg frigjøre plassen til ventelisten? I dag frigjøres den aldri.
 #   Hva hvis søkeren allerede er opprettet som student?
-# - Når en søker har både et tilbud og et kansellert resultat på samme utdanningstilbud, hva skal søkeren se?
 # - Skal opptaksforvalter kunne overstyre et enkelt resultat manuelt, for eksempel gi ett tilbud uten ny plasstildeling?
 #   I dag krever alt en ny plasstildeling. Tilbudsgaranti er foreløpig eneste utvei.
 # - Må søkeren svare på ventelisteplass for å beholde den, eller står søkeren på ventelisten automatisk?
-# - Svar knyttes i dag til plasstildelingsrunde på løpenummer uten rundetype (mistenkt feil, TAKE-284).
-#   Med én plasstildelingsrunde per rundetype må svaret knyttes til rundetypen.
-# - Fristsjekken bruker applikasjonsklokke i stedet for databaseklokke (mistenkt feil, TAKE-281).
 # - Saksbehandler kan i koden svare på vegne av søkeren. Skal det være et eget scenario, og hvem kan gjøre det?
 # - I koden må alle tilbud i plasstildelingsrunden besvares samtidig, og bare ett kan godtas. Gjelder det også
 #   etterfylling, der søkeren kan ha flere tilbud?
@@ -83,3 +79,8 @@ Egenskap: Håndtere svar fra søker
 # - At søkeren ikke svarte innen fristen, blir aldri lagret. Koden regner det ut hver gang svaret leses,
 #   og det finnes ingen «lukk plasstildelingsrunden». Skal svaret lagres når fristen er ute?
 # - Hører selve svarflyten i Min kompetanse hjemme her, eller under 13 Søknad og saksbehandling?
+
+# Kjente feil i koden, følges opp i Jira. Dette er ikke åpne spørsmål om kravet:
+#   TAKE-284: svar knyttes til plasstildelingsrunde på løpenummer uten rundetype. Med én plasstildelingsrunde
+#   per rundetype må svaret knyttes til rundetypen.
+#   TAKE-281: fristsjekken bruker applikasjonsklokke i stedet for databaseklokke.

@@ -146,6 +146,15 @@ Egenskap: Plasstildelingsrunder i et opptak
       Så kan ikke plasstildelingen gi flere enn 1 tilbud i en enkelt plasstildelingsrunde til en søker
       Og søkeren ser taket for antall tilbud per plasstildelingsrunde
 
+    # AVKLART 2026-10-14: Taket gjelder alle tilbud i plasstildelingsrunden, også tilbud på ledige studieplasser.
+    # I samordna opptak er taket 1 i hovedrunde og supplering. I etterfylling kan søkeren få flere tilbud og må velge ett.
+    # Det er ikke unntak for deltidsutdanninger under 60 stp (avklart 2026-10-14).
+    Scenario: Taket gjelder også tilbud på ledige studieplasser
+      Gitt at taket for antall tilbud per plasstildelingsrunde er 1 i "Suppleringsrunde"
+      Og at "Suppleringsrunde" er åpnet for ledige studieplasser
+      Når plasstildelingen i "Suppleringsrunde" gjennomføres
+      Så får ingen søker mer enn 1 tilbud i "Suppleringsrunde", ordinært eller på ledige studieplasser
+
   Regel: Opptaksforvalter kan åpne en plasstildelingsrunde for ledige studieplasser
 
     # AVKLART 2026-10-08: Egenskapen kan settes på alle rundetyper, også hovedtildelingen.
