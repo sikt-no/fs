@@ -1,6 +1,6 @@
 # language: no
 # GitHub: #482
-@BRU-PER-GRU-004 @must @in-progress
+@BRU-PER-GRU-004 @must @implemented
 Egenskap: Aktivere og deaktivere en personbrukers samlede tilganger
   Som brukeradministrator
   ønsker jeg å deaktivere og senere reaktivere en personbrukers samlede tilganger og roller
@@ -21,6 +21,7 @@ Egenskap: Aktivere og deaktivere en personbrukers samlede tilganger
       Og personbrukeren kan ikke nå FS-data ved neste innloggingsforsøk
       Og det lagres når deaktiveringen skjedde og hvem som gjorde den
 
+    @planned
     Scenario: Reaktivere en deaktivert personbruker
       Gitt en personbruker er deaktivert
       Når jeg reaktiverer personbrukeren
