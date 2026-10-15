@@ -18,7 +18,7 @@ Seksjonen er bare visning. Søkeren kan ikke velge, endre eller fjerne resultate
   - linje 2: utsteder og utstedelsesdato, `«<utsteder>, <dd.mm.åååå>»`
   - linje 3 (mindre tekst): tilleggsopplysningen, det vil si kompetansen vitnemålet gir for videregående (f.eks. «Generell studiekompetanse»), og graden for høyere utdanning (f.eks. «Barnehagelærer - Bachelor»)
   - merkelapp til høyre: «Hentet automatisk»
-- **«Andre resultater»:** eget kort under nivåkortene, lukket som standard, med «Vis resultater» og et pil-ikon til høyre.
+- **«Andre resultater»:** eget kort under nivåkortene, lukket som standard, med «Vis resultater» og et pil-ikon til høyre. Kortet vises bare når søkeren har andre resultater. Det vises aldri som en tom accordion.
 - **Tom tilstand:** et informasjonspanel (GuidePanel med info-ikon) under overskriften, i stedet for ingressen og kortene.
 
 ## Interaksjonsmønstre
@@ -37,6 +37,7 @@ Søkeren kommer hit fra steget «Utdanningsbakgrunn», og går videre til «Opps
 | Tilstand | UI-håndtering |
 |----------|---------------|
 | Har resultater | Ingress, nivåkort og eventuelt «Andre resultater» |
+| Ingen andre resultater | Kortet «Andre resultater» vises ikke (scenario «Andre resultater vises ikke uten andre resultater») |
 | Tom (ingen digitale resultater) | Informasjonspanelet med forklaringen. Ingen nivåkort |
 | Feil (hentingen har feilet) | Samme informasjonspanel som tom tilstand. Ingen egen feilmelding (scenariomalen «Samme forklaring vises uansett årsak …») |
 | Resultat der bare utstederen er kjent (`@draft`) | Raden viser bare utstederen og merkelappen, ingen tittel, dato eller tilleggsopplysning, og ingen beskjed om at noe mangler. Skisse: `4274:43654` |
@@ -83,6 +84,9 @@ Bare utstederen og merkelappen. Ingen tom plass for tittel eller dato, og ingen 
 
 ### Scenario: Andre resultater er lukket som standard / Se andre resultater
 Lukket kort med «Vis resultater». Åpnet tilstand er ikke tegnet.
+
+### Scenario: Andre resultater vises ikke uten andre resultater
+Har søkeren bare vitnemål og grader, rendres ikke kortet «Andre resultater» i det hele tatt. Ingen tom accordion, og ingen tekst om at det ikke finnes andre resultater.
 
 ### Scenariomal: Samme forklaring vises uansett årsak til manglende resultater
 Samme informasjonspanel for ingen resultater og for feil.

@@ -10,11 +10,15 @@
 
 ## Omfang
 
-Søkeren ser i steget «Dokumentasjon» i søknadsflyten i Min kompetanse hvilke digitale resultater systemet allerede har om hen, før opplastingen. Resultatene grupperes på utdanningsnivå, med tittel, utsteder, utstedelsesdato og kompetansen eller graden vitnemålet gir, og merkelappen «Hentet automatisk». «Andre resultater» er lukket som standard. Søkeren uten resultater, eller der hentingen feiler, får én samlet forklaring. Spesifikasjonen dekker ikke hva søkeren må laste opp (`@OPT-SØK-SØK-003`, #572), resultatvisningen i Min kompetanse, eller et resultat der bare utstederen er kjent (`@draft`).
+Søkeren ser i steget «Dokumentasjon» i søknadsflyten i Min kompetanse hvilke digitale resultater systemet allerede har om hen, før opplastingen. Resultatene grupperes på utdanningsnivå, med tittel, utsteder, utstedelsesdato og kompetansen eller graden vitnemålet gir, og merkelappen «Hentet automatisk». «Andre resultater» er lukket som standard, og vises ikke når søkeren ikke har andre resultater. Søkeren uten resultater, eller der hentingen feiler, får én samlet forklaring. Spesifikasjonen dekker ikke hva søkeren må laste opp (`@OPT-SØK-SØK-003`, #572), resultatvisningen i Min kompetanse, eller et resultat der bare utstederen er kjent (`@draft`).
 
 ## Krav
 
 - **`se_digitale_resultater_i_søknad.feature`** (`@OPT-SØK-SØK-004`) — søkeren ser de digitale resultatene i steget «Dokumentasjon» i søknaden. ([krav/02 Opptak/13 Søknad og saksbehandling/01 Søknad/se_digitale_resultater_i_søknad.feature](../../../../krav/02%20Opptak/13%20S%C3%B8knad%20og%20saksbehandling/01%20S%C3%B8knad/se_digitale_resultater_i_s%C3%B8knad.feature))
+
+### Endringer etter at kravet ble hentet inn
+
+- **2026-10-15:** nytt scenario `Andre resultater vises ikke uten andre resultater`. Har søkeren bare vitnemål og grader, vises ikke «Andre resultater» i steget, heller ikke som en tom accordion. Implementasjonsdetaljene er oppdatert.
 
 ### Utenfor scope (`@draft`)
 

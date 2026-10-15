@@ -152,6 +152,13 @@ Egenskap: Se digitale resultater i søknaden
       Så ser søkeren enkeltemnene og den øvrige dokumentasjonen
       # «Andre resultater» samler enkeltemner og øvrig dokumentasjon.
 
+    Scenario: Andre resultater vises ikke uten andre resultater
+      Gitt at søkeren bare har resultater som er vitnemål eller grad
+      Når søkeren kommer til steget «Dokumentasjon» i søknaden
+      Så vises ikke andre resultater i steget
+      # Avklart 15.10.2026: ingen tom seksjon. Har søkeren ingen andre
+      # resultater, finnes ikke «Andre resultater» i steget.
+
     Scenariomal: Samme forklaring vises uansett årsak til manglende resultater
       Gitt at <årsak>
       Når søkeren kommer til steget «Dokumentasjon» i søknaden
