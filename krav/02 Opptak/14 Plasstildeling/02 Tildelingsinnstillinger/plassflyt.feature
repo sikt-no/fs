@@ -64,8 +64,8 @@ Egenskap: Plassflyt mellom utdanningskvoter
       Når plasstildelingen gjennomføres
       Så ender de ledige plassene fra begge utdanningskvotene i "Ordinær"
 
-    Scenario: Sistekvoten sender ikke plasser videre
-      Gitt at "Ordinær" er sistekvote
+    Scenario: Hovedkvoten sender ikke plasser videre
+      Gitt at "Ordinær" er hovedkvote
       Og at "Ordinær" har færre kvalifiserte søkere enn tilbud som skal gis
       Når plasstildelingen gjennomføres
       Så blir de ledige plassene i "Ordinær" stående ubrukt
@@ -74,7 +74,7 @@ Egenskap: Plassflyt mellom utdanningskvoter
 
     Scenario: Vanligste kjede i UHG
       Gitt at standard plassflyt for opptaket er "Førstegangsvitnemål" til "Ordinær"
-      Og at "Ordinær" er sistekvote
+      Og at "Ordinær" er hovedkvote
       Når plasstildelingen gjennomføres for et utdanningstilbud med utdanningskvotene "Førstegangsvitnemål" og "Ordinær"
       Så flyter ledige plasser i "Førstegangsvitnemål" til "Ordinær"
 
