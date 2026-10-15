@@ -61,18 +61,23 @@ Egenskap: Innstillinger for opptak
       Så kan ikke en søker legge til flere enn 10 prioriterte søknadsalternativer i sin søknad
 
   # Taket som ble flyttet 2026-10-12 til 14 Plasstildeling/01 Runder/forvalte_runder.feature, er tatt ut
-  # igjen 2026-10-14. Innstillingen på opptaket er hvor mange tilbud søkeren kan takke ja til (under).
+  # igjen 2026-10-14. Innstillingen på opptaket er et tak for hvor mange utdanningstilbud søkeren kan få opptak til (under).
   # Hvor mange tilbud søkeren kan få, avgjøres av rundetypen, se 14 Plasstildeling/03 Tildeling/gjennomføre_plasstildeling.feature.
-  @draft @openquestion
-  Regel: Opptaksforvalter setter hvor mange tilbud en søker kan takke ja til
+  @draft
+  Regel: Opptaksforvalter setter hvor mange utdanningstilbud en søker kan få opptak til
 
-    # AVKLART 2026-10-14: Innstillingen sier ikke hvor mange tilbud søkeren kan få, men hvor mange
-    # søkeren kan takke ja til og få studieplass på. I samordna opptak er det 1.
-    # ÅPNE SPØRSMÅL:
-    # - Hva er standardverdien når innstillingen ikke er satt?
-    Scenario: Sette antall tilbud en søker kan takke ja til
-      Når opptaksforvalter setter antall tilbud en søker kan takke ja til, til 1
-      Så kan en søker i opptaket takke ja til høyst 1 tilbud
+    # AVKLART 2026-10-15: Taket gjelder hvor mange utdanningstilbud søkeren kan ha studieplass på etter
+    # gjennomført opptak. Tilbud til søkeren i plasstildelingene er noe annet. Standardverdien er 1.
+    # Gap mot koden (sjekket 2026-10-15): fs-admin har feltet «Tilbud per tildelingsrunde» («Hvor mange tilbud
+    # en søker kan få i en runde»), som lagres i maks_antall_tilbud på opptaket. Ingen kode leser verdien,
+    # og den har ingen standardverdi.
+    Scenario: Sette tak for hvor mange utdanningstilbud en søker kan få opptak til
+      Når opptaksforvalter setter taket for hvor mange utdanningstilbud en søker kan få opptak til, til 1
+      Så kan en søker i opptaket få studieplass på høyst 1 utdanningstilbud etter gjennomført opptak
+
+    Scenario: Standardverdien er 1
+      Gitt at opptaksforvalter ikke har satt taket for hvor mange utdanningstilbud en søker kan få opptak til
+      Så kan en søker i opptaket få studieplass på høyst 1 utdanningstilbud etter gjennomført opptak
 
   Regel: Opptaksforvalter kan åpne for tidlig opptak
 
