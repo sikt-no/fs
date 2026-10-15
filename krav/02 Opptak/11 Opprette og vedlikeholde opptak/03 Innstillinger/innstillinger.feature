@@ -48,6 +48,8 @@ Egenskap: Innstillinger for opptak
 
   Regel: Opptaksforvalter kan sette startnummer for søknadene
 
+    # AVKLART 2026-10-15 (Q18, TAKE-413): Søker og saksbehandler ser bare løpenummeret, ikke opptakskoden.
+    # Nummeret er unikt i opptaket, men nummerserien kan ha hull.
     Scenario: Sette startnummer for søknader i opptaket
       Når opptaksforvalter setter søknadsnummer med startnummer 1001 for opptaket "UHG 2027"
       Så får søknader i opptaket løpende nummer fra 1001
@@ -81,6 +83,10 @@ Egenskap: Innstillinger for opptak
 
   Regel: Opptaksforvalter kan åpne for tidlig opptak
 
+    # AVKLART 2026-10-15 (Q2, TAKE-408): Tidlig opptak krever både at opptaket åpner for tidlig opptak, og at
+    # utdanningstilbudet tilbyr det. Det gjelder i søknaden, i kvitteringen og i saksbehandlingen. Et
+    # utdanningstilbud kan bare tilby tidlig opptak når opptaket åpner for det, se
+    # 12 Utdanningstilbud/03 Opptaksinnstillinger/opptaksinnstillinger_utdanningstilbud.feature.
     Scenario: Aktivere tidlig opptak
       Når opptaksforvalter aktiverer tidlig opptak
       Så er tidlig opptak aktivert for opptaket
@@ -95,6 +101,15 @@ Egenskap: Innstillinger for opptak
       # opptak, av opptakseieren, ikke per utdanningstilbud. Er en del av å konfigurere
       # tidlig opptak i opptaket (#578). Ønske fra Min kompetanse i STEK-267. Søkerens side står i 13 Søknad og saksbehandling/01 Søknad/
       # søke_om_tidlig_opptak.feature. Koden har ikke noe felt for lenken i dag.
+
+    # AVKLART 2026-10-15 (Q10, TAKE-408): Det er én lenke for alle språk. Hos Samordna opptak finnes informasjonen
+    # bare på nynorsk i dag.
+    Scenario: Lenken må være satt når tidlig opptak er aktivert
+      Gitt at tidlig opptak er aktivert for opptaket
+      Og at lenken til informasjon om tidlig opptak ikke er satt
+      Når opptaksforvalter lagrer opptaket
+      Så blir opptaket ikke lagret
+      Og opptaksforvalter ser at lenken til informasjon om tidlig opptak må være satt
 
   Regel: Opptaksforvalter kan åpne for søknad på ledige studieplasser
 
@@ -127,16 +142,34 @@ Egenskap: Innstillinger for opptak
       Når opptaksforvalter fjerner "Steinerskole" fra opptaket
       Så er "Steinerskole" ikke lenger tilgjengelig som utdanningsbakgrunn i opptaket
 
+    # AVKLART 2026-10-15 (Q8, TAKE-407)
+    Scenario: Utdanningsbakgrunn som søkere har valgt, kan ikke fjernes
+      Gitt at utdanningsbakgrunnen "Steinerskole" er lagt til i opptaket
+      Og at en søker har valgt utdanningsbakgrunnen "Steinerskole"
+      Når opptaksforvalter vil fjerne "Steinerskole" fra opptaket
+      Så blir "Steinerskole" ikke fjernet
+      Og opptaksforvalter ser at søkere har valgt utdanningsbakgrunnen
+
   # Ikke relevant for samordna opptak 2027, men antatt løst allerede
   Regel: Opptaksforvalter kan styre om søkere kan laste opp dokumentasjon
+
+    # AVKLART 2026-10-15 (Q1, TAKE-413): Standardverdien er at søkerne kan laste opp dokumentasjon.
+    # Innstillingen har alltid en verdi.
+    Scenario: Søkerne kan laste opp dokumentasjon når opptaksforvalter ikke har stengt for det
+      Gitt at opptaksforvalter ikke har angitt om søkere kan laste opp dokumentasjon
+      Så kan søkere laste opp dokumentasjon som del av søknaden
 
     Scenario: Åpne for dokumentasjonsopplasting
       Når opptaksforvalter angir at søkere kan laste opp dokumentasjon
       Så kan søkere laste opp dokumentasjon som del av søknaden
 
+    # AVKLART 2026-10-15 (Q17, TAKE-413): Når opplasting er stengt, kan søkeren heller ikke ettersende
+    # dokumentasjon. Saksbehandler kan fortsatt registrere dokumentasjon på søknaden.
     Scenario: Stenge for dokumentasjonsopplasting
       Når opptaksforvalter angir at søkere ikke kan laste opp dokumentasjon
       Så får søkere ikke laste opp dokumentasjon som del av søknaden
+      Og søkere kan heller ikke ettersende dokumentasjon
+      Men saksbehandler kan fortsatt registrere dokumentasjon på søknaden
 
   @draft
   # Ikke relevant for samordna opptak

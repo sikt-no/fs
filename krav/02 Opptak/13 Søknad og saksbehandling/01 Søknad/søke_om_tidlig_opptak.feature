@@ -24,8 +24,9 @@
 # - Søkeren velger én begrunnelse fra listen opptaket har satt opp. Bare aktive
 #   begrunnelser kan velges. Hver begrunnelse har et navn, en forklaring og en
 #   tekst om hva søkeren må dokumentere (STEK-267).
-# - Tidlig opptak kan bare søkes når opptaket tilbyr tidlig opptak, eller når
-#   minst ett av søknadsalternativene tilbyr tidlig opptak.
+# - (Endret 15.10.2026, Q2 i TAKE-408.) Tidlig opptak kan bare søkes når opptaket åpner for tidlig
+#   opptak, og minst ett av søknadsalternativene tilbyr tidlig opptak. Det holder ikke at bare ett av dem
+#   har det, slik koden gjorde 07.10.2026.
 # - (Endret 09.10.2026, se under.) Søkeren kan bytte begrunnelse fram til
 #   søknadsfristen for tidlig opptak.
 # - Søkeren får kvittering når begrunnelsen settes eller byttes (TOT-2384).
