@@ -54,18 +54,9 @@ Egenskap: Opptaksinnstillinger per utdanningstilbud
 
   # Hva plasstildelingen gjør med plassflyten, og vernet mot sirkulær plassflyt (#598), står i
   # 14 Plasstildeling/02 Tildelingsinnstillinger/plassflyt.feature.
-  @openquestion
-  # ÅPNE SPØRSMÅL:
-  # - Kan standard plassflyt for opptaket overstyres per utdanningstilbud? Avklart 2026-10-13 at
-  #   standarden settes på opptaket og gjelder alle utdanningskvoter, se
-  #   11 Opprette og vedlikeholde opptak/03 Innstillinger/sette_plassflyt.feature.
-  Regel: Opptaksforvalter kan sette plassflyt mellom utdanningskvoter
-
-    Scenario: Sette plassflyt
-      Når opptaksforvalter setter plassflyt for utdanningstilbudet "Sykepleie, høst 2027"
-      Og opptaksforvalter setter at ledige plasser i førstegangsvitnemålskvoten flyter til ordinær kvote
-      Så omfordeler plasstildelingen ubrukte plasser fra førstegangsvitnemålskvoten til ordinær kvote
-
+  # AVKLART 2026-10-15: Plassflyten kan ikke settes eller overstyres per utdanningstilbud. Regelen
+  # «Opptaksforvalter kan sette plassflyt mellom utdanningskvoter» er fjernet. Utdanningstilbudet viser
+  # bare plassflyten mellom utdanningskvotene som er knyttet til det.
   Regel: Lærestedene ser plassflyten og kvoteprioriteten for utdanningstilbudene sine
 
     # Ønske meldt 2026-10-13, utvidet med kvoteprioriteten 2026-10-15. Plassflyten og kvoteprioriteten settes på
