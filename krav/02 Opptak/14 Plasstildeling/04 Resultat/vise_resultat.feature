@@ -63,6 +63,13 @@ Egenskap: Se resultatet av plasstildelingen før publisering
       Når opptaksforvalter velger utdanningstilbudet "Sykepleie, høst 2027" i resultatet
       Så ser opptaksforvalter at antall tilbud som skal gis er 30
 
+    # AVKLART 2026-10-15 (domeneekspert): Lærestedene skal se antall tilbud som skal gis, og om utdanningstilbudet
+    # gir tilbud til alle kvalifiserte.
+    Scenario: Tilbud til alle kvalifiserte vises i resultatet
+      Gitt at utdanningstilbudet "Vernepleie, høst 2027" skal gi tilbud til alle kvalifiserte
+      Når opptaksforvalter ved lærestedet velger utdanningstilbudet "Vernepleie, høst 2027" i resultatet
+      Så ser opptaksforvalter at utdanningstilbudet gir tilbud til alle kvalifiserte
+
   Regel: Det kan spores at en plass kom via plassflyt
 
     Scenario: Tilbud gitt via plassflyt
@@ -117,6 +124,11 @@ Egenskap: Se resultatet av plasstildelingen før publisering
     # Fram til publisering kan lærestedene også endre saksbehandlingen (for eksempel
     # tilbudsgaranti eller ny poengberegning). Godkjenning eller avvisning med status er ikke med.
     # Kontrollen gjelder både samordna og lokale opptak. Det er opptaksforvalter ved lærestedet som kontrollerer.
+    # AVKLART 2026-10-15 (domeneekspert): Lærestedene kan endre antall tilbud som skal gis og tilbud til alle
+    # kvalifiserte bare i perioden som er satt på plasstildelingsrunden (antall_tilbud_som_skal_gis.feature).
+    # Etter perioden ser lærestedene bare resultatet, og melder feil til forvaltende organisasjon (HK-dir) på
+    # e-post. Forvaltende organisasjon kan fortsatt endre antall tilbud, og kan utvide perioden på runden.
+    # Saksbehandlingen kan lærestedene endre fram til publisering, også etter perioden.
     Scenario: Lærestedet kontrollerer resultatet før publisering
       Gitt at plasstildelingen i "Hovedrunde" ikke er publisert
       Når opptaksforvalter ved lærestedet ser resultatet av plasstildelingen
