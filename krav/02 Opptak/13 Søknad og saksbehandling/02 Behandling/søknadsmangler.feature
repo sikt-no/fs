@@ -422,6 +422,13 @@ Egenskap: Søknadsmangler
 
   @draft @openquestion
   Regel: Mangelen for generell studiekompetanse som fullføres i vår settes og sjekkes ut automatisk
+
+    Den automatiske mangelen gjelder bare søkere som oppgir at generell studiekompetanse fullføres
+    i vår. Den sjekkes ut når vitnemålet behandles automatisk, eller av saksbehandleren når søkeren
+    har dokumentert vitnemålet på annen måte, for eksempel ved å laste det opp. Oppgir ikke søkeren
+    at generell studiekompetanse fullføres i vår, kontrollerer saksbehandleren vitnemålet i
+    søknaden og registrerer en mangel hvis det mangler, som for de andre opptakskravene.
+
     # ÅPNE SPØRSMÅL:
     # - Hvilken mangelkode og hvilket kompetanseregelverk får den automatiske mangelen, og gjelder
     #   den alle sakene i søknaden? Trolig begge deler: en mangel i kategorien «Generelle krav» i alle
