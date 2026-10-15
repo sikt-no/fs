@@ -19,15 +19,15 @@ Egenskap: Oppgi at generell studiekompetanse fullføres i vår
       Og søkeren sender inn søknaden
       Så står det i søknaden at generell studiekompetanse fullføres i vår
 
-  Regel: Søkeren kan endre opplysningen frem til søknadsfristen
+  Regel: Søkeren kan endre at generell studiekompetanse fullføres i vår frem til søknadsfristen
 
-    Scenario: Søkeren endrer opplysningen før søknadsfristen
+    Scenario: Søkeren endrer før søknadsfristen at generell studiekompetanse fullføres i vår
       Gitt at søkeren har oppgitt i søknaden at generell studiekompetanse fullføres i vår
       Og at søknadsfristen i "Samordna opptak 2027" ikke har gått ut
       Når søkeren endrer søknaden til at generell studiekompetanse ikke fullføres i vår
       Så står det ikke lenger i søknaden at generell studiekompetanse fullføres i vår
 
-    Scenario: Søkeren kan ikke endre opplysningen etter søknadsfristen
+    Scenario: Søkeren kan ikke endre etter søknadsfristen at generell studiekompetanse fullføres i vår
       Gitt at søkeren har oppgitt i søknaden at generell studiekompetanse fullføres i vår
       Og at søknadsfristen i "Samordna opptak 2027" har gått ut
       Når søkeren åpner søknaden

@@ -432,13 +432,19 @@ Egenskap: Søknadsmangler
     #   mangelkode det er? Opptaksforvalteren i regelverkssamlingen, eller et fast valg fra Sikt?
     # - Regelen bygger på at søkeren kan oppgi at generell studiekompetanse fullføres i vår (@OPT-SØK-SØK-013),
     #   og det kravet er ikke avklart.
-    # - Hva skjer med den automatiske mangelen når søkeren endrer søknaden før søknadsfristen, så
-    #   generell studiekompetanse ikke lenger fullføres i vår? Slettes eller sjekkes mangelen ut
-    #   automatisk, eller må saksbehandleren gjøre det?
+    # - Skal søkeren få melding når den automatiske mangelen er publisert, og slettes fordi søkeren
+    #   endrer søknaden?
 
     Scenario: Saken får mangel når søkeren oppgir at generell studiekompetanse fullføres i vår
       Når søkeren oppgir i søknaden at generell studiekompetanse fullføres i vår
       Så får saken automatisk mangelen for generell studiekompetanse som fullføres i vår
+
+    Scenario: Mangelen slettes når søkeren endrer søknaden før søknadsfristen
+      Gitt at saken har den automatiske mangelen for generell studiekompetanse som fullføres i vår
+      Og at søknadsfristen i "Samordna opptak 2027" ikke har gått ut
+      Når søkeren endrer søknaden til at generell studiekompetanse ikke fullføres i vår
+      Så har saken ikke lenger mangelen for generell studiekompetanse som fullføres i vår
+      Og saksloggen viser at mangelen ble slettet fordi søkeren endret søknaden
 
     Scenario: Mangelen sjekkes ut når vitnemålet behandles automatisk
       Gitt at saken har den automatiske mangelen for generell studiekompetanse som fullføres i vår
