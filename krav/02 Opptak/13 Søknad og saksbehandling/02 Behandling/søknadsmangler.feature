@@ -17,12 +17,13 @@ Egenskap: Søknadsmangler
   (se @OPT-BEH-BEH-011). Hver mangelkode hører til en kategori, og kategorien avgjør hva
   mangelen hindrer:
   - Generelle krav: saksbehandleren kan ikke sette søkeren som kvalifisert til noen av
-    søknadsalternativene i saken. En mangelkode i denne kategorien kan også sperre for opptak,
-    slik at søkeren ikke deltar i tilbudskjøringen.
+    søknadsalternativene i saken.
   - Spesielle krav: mangelen knyttes til et kompetanseregelverk, og saksbehandleren kan ikke
     sette søkeren som kvalifisert til søknadsalternativene med kompetanseregelverket.
   - Poeng: hindrer ikke kvalifisering.
   - Kvote: mangelen knyttes til et kvotespørsmål, og hindrer ikke kvalifisering.
+
+  Uansett kategori kan en mangelkode også stoppe for opptak.
 
   Kravet har seks deler:
   1. Mangelkoder – opptaksforvalteren forvalter mangelkodene og tekstene.
@@ -61,17 +62,6 @@ Egenskap: Søknadsmangler
         | Spesielle krav |
         | Poeng          |
         | Kvote          |
-
-    Scenariomal: Stopper for opptak kan <tillatt> settes på en mangelkode i kategorien <kategori>
-      Når opptaksforvalteren ved HK-dir oppretter en mangelkode i kategorien "<kategori>"
-      Så kan opptaksforvalteren <tillatt> velge at mangelkoden stopper for opptak
-
-      Eksempler:
-        | kategori       | tillatt |
-        | Generelle krav | også    |
-        | Spesielle krav | ikke    |
-        | Poeng          | ikke    |
-        | Kvote          | ikke    |
 
     Scenariomal: Opptaksforvalteren ved <organisasjon> forvalter mangelkodene i <opptak>
       Gitt at opptaket "<opptak>" forvaltes av "<organisasjon>"
@@ -119,7 +109,12 @@ Egenskap: Søknadsmangler
       Når saksbehandleren ved Universitetet i Oslo har behandlet saken så langt dokumentasjonen rekker
       Så kan saksbehandleren sette saken til "Ferdig behandlet"
 
+    @draft @openquestion
     Scenario: Mangel som sperrer opptak holder søkeren utenfor tilbudskjøringen
+      # ÅPNE SPØRSMÅL:
+      # - Hva gjør «Stopper for opptak»? Søkere med mangler er med i tilbudskjøringen, med
+      #   status «ikke kvalifisert» (review i PR #700), og koden leser ikke `sperrer_opptak` i
+      #   plasstildelingen eller tilbudskjøringen (verify 2026-10-08).
       Gitt at saken hos "Universitetet i Oslo" har en mangel med en mangelkode som sperrer opptak
       Når tilbudskjøringen kjøres
       Så deltar ikke søkeren i tilbudskjøringen
@@ -426,7 +421,7 @@ Egenskap: Søknadsmangler
   # ── 6. Automatikk ────────────────────────────────────────────
 
   @draft @openquestion
-  Regel: Mangelen for vitnemål som kommer i år settes og sjekkes ut automatisk
+  Regel: Mangelen for generell studiekompetanse som fullføres i vår settes og sjekkes ut automatisk
     # ÅPNE SPØRSMÅL:
     # - Hvilken mangelkode og hvilket kompetanseregelverk får den automatiske mangelen, og gjelder
     #   den alle sakene i søknaden? Trolig begge deler: en mangel i kategorien «Generelle krav» i alle
@@ -435,15 +430,18 @@ Egenskap: Søknadsmangler
     #   Koden har ikke den automatiske mangelen (sjekket 2026-10-09).
     # - Hvem setter opp mangelkoden som settes automatisk, og hvordan vet løsningen hvilken
     #   mangelkode det er? Opptaksforvalteren i regelverkssamlingen, eller et fast valg fra Sikt?
-    # - Regelen bygger på at søkeren kan oppgi at vitnemålet kommer i år (@OPT-SØK-SØK-013),
+    # - Regelen bygger på at søkeren kan oppgi at generell studiekompetanse fullføres i vår (@OPT-SØK-SØK-013),
     #   og det kravet er ikke avklart.
+    # - Hva skjer med den automatiske mangelen når søkeren endrer søknaden før søknadsfristen, så
+    #   generell studiekompetanse ikke lenger fullføres i vår? Slettes eller sjekkes mangelen ut
+    #   automatisk, eller må saksbehandleren gjøre det?
 
-    Scenario: Saken får mangel når søkeren oppgir at vitnemålet kommer i år
-      Når søkeren oppgir i søknaden at vitnemålet kommer i år
-      Så får saken automatisk mangelen for vitnemål som kommer i år
+    Scenario: Saken får mangel når søkeren oppgir at generell studiekompetanse fullføres i vår
+      Når søkeren oppgir i søknaden at generell studiekompetanse fullføres i vår
+      Så får saken automatisk mangelen for generell studiekompetanse som fullføres i vår
 
     Scenario: Mangelen sjekkes ut når vitnemålet behandles automatisk
-      Gitt at saken har den automatiske mangelen for vitnemål som kommer i år
+      Gitt at saken har den automatiske mangelen for generell studiekompetanse som fullføres i vår
       Når vitnemålet behandles automatisk
       Så er mangelen sjekket ut
       Og saksloggen viser at mangelen ble sjekket ut av automatisk behandling
