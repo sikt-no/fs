@@ -1,6 +1,6 @@
 # language: no
 # GitHub: #552
-@BRU-PER-GRU-010 @must @planned
+@BRU-PER-GRU-010 @must @draft
 Egenskap: Automatisk synkronisering av roller fra namespacet "frontend/fs-admin"
   Som brukeradministrator
   ønsker jeg at roller som legges i namespacet "frontend/fs-admin" automatisk knyttes til fs-admin-applikasjonen i rolletabellen
