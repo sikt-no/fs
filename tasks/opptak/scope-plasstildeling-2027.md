@@ -3,7 +3,7 @@
 - **Slug**: plasstildeling-2027
 - **Initiativ**: [#216](https://github.com/sikt-no/fs/issues/216)
 - **Eier**: –
-- **Siste oppdatering**: 2026-10-14
+- **Siste oppdatering**: 2026-10-15
 
 ## Mål
 
@@ -33,6 +33,7 @@
 | [plasstildeling](plasstildeling/) | `@OPT-PLA-RUN-001` [forvalte_runder.feature](../../krav/02%20Opptak/14%20Plasstildeling/01%20Runder/forvalte_runder.feature) | Must | – | [#216](https://github.com/sikt-no/fs/issues/216) | Oppgave 1: legge til runder for plasstildeling. Kode etter workshop 2026-09-14: løst |
 | [plasstildeling](plasstildeling/) | `@OPT-PLA-INN-001` [antall_tilbud_som_skal_gis.feature](../../krav/02%20Opptak/14%20Plasstildeling/02%20Tildelingsinnstillinger/antall_tilbud_som_skal_gis.feature) | Must | – | [#583](https://github.com/sikt-no/fs/issues/583) | Oppgave 2: antall tilbud som skal gis per utdanningskvote. Jira [TAKE-327](https://sikt.atlassian.net/browse/TAKE-327). Kode: gjenstår |
 | [plasstildeling](plasstildeling/) | `@OPT-OVO-INN-002` [sette_plassflyt.feature](../../krav/02%20Opptak/11%20Opprette%20og%20vedlikeholde%20opptak/03%20Innstillinger/sette_plassflyt.feature) | Must | – | [#216](https://github.com/sikt-no/fs/issues/216) | Oppgave 3: standard plassflyt settes på opptaket. Ligger i 11 Opprette og vedlikeholde opptak, men løses i plasstildelingen |
+| [plasstildeling](plasstildeling/) | `@OPT-OVO-INN-003` [sette_kvoteprioritet.feature](../../krav/02%20Opptak/11%20Opprette%20og%20vedlikeholde%20opptak/03%20Innstillinger/sette_kvoteprioritet.feature) | Must | [Kvoteprioritet](https://www.figma.com/design/LmoNQlmAuE2FlE0fUo5GoO/FS-Admin---Seksjon-Opptak?node-id=22399-113465) | [#216](https://github.com/sikt-no/fs/issues/216) | Kvoteprioriteten settes på opptaket, sammen med plassflyten. Ligger i 11 Opprette og vedlikeholde opptak |
 | [plasstildeling](plasstildeling/) | `@OPT-PLA-INN-002` [plassflyt.feature](../../krav/02%20Opptak/14%20Plasstildeling/02%20Tildelingsinnstillinger/plassflyt.feature) | Must | – | [#216](https://github.com/sikt-no/fs/issues/216) | Oppgave 3: plassflyt ved ledige plasser per utdanningskvote. Kode: løst |
 | [plasstildeling](plasstildeling/) | `@OPT-PLA-TIL-001` [starte_plasstildeling.feature](../../krav/02%20Opptak/14%20Plasstildeling/03%20Tildeling/starte_plasstildeling.feature) | Must | – | [#216](https://github.com/sikt-no/fs/issues/216) | Oppgave 4: starte en plasstildeling. Kode: løst |
 | [plasstildeling](plasstildeling/) | `@OPT-PLA-TIL-002` [gjennomføre_plasstildeling.feature](../../krav/02%20Opptak/14%20Plasstildeling/03%20Tildeling/gjennomf%C3%B8re_plasstildeling.feature) | Must | – | [#216](https://github.com/sikt-no/fs/issues/216) | Oppgave 5: gjennomføre plasstildeling. Kode: løst |

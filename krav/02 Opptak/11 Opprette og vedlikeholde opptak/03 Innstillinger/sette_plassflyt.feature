@@ -20,11 +20,9 @@ Egenskap: Sette standard plassflyt for opptaket
   #   Se også opptaksinnstillinger_utdanningstilbud.feature.
   # - Plassflyt finnes på tre nivåer i koden (kvotetype i regelverket, utdanningskvote i opptaket, og per
   #   plasstildeling). Skal opptaksforvalter kunne endre plassflyten per plasstildelingsrunde?
-  # - Skissen «Kvoter» (Figma node 22410:106608) har en egen fane for kvoteprioritet på opptaket. I dag finnes
-  #   kvoteprioriteten per utdanningskvote på utdanningstilbudet (og på kvotetypen i koden). Skal kvoteprioriteten
-  #   settes på opptaket, som plassflyten?
   #
   # Vernet mot sirkulær plassflyt kommer fra GitHub #598.
+  # AVKLART 2026-10-15: Kvoteprioriteten settes også på opptaket, se sette_kvoteprioritet.feature.
   # Skisse: https://www.figma.com/design/LmoNQlmAuE2FlE0fUo5GoO/FS-Admin---Seksjon-Opptak?node-id=22410-106608
 
   Bakgrunn:

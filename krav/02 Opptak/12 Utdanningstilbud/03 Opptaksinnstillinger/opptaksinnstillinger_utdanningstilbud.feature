@@ -66,10 +66,12 @@ Egenskap: Opptaksinnstillinger per utdanningstilbud
       Og opptaksforvalter setter at ledige plasser i førstegangsvitnemålskvoten flyter til ordinær kvote
       Så omfordeler plasstildelingen ubrukte plasser fra førstegangsvitnemålskvoten til ordinær kvote
 
-  Regel: Lærestedene ser plassflyten for utdanningstilbudene sine
+  Regel: Lærestedene ser plassflyten og kvoteprioriteten for utdanningstilbudene sine
 
-    # Ønske meldt 2026-10-13. Plassflyten følger standarden for opptaket, se
-    # 11 Opprette og vedlikeholde opptak/03 Innstillinger/sette_plassflyt.feature.
+    # Ønske meldt 2026-10-13, utvidet med kvoteprioriteten 2026-10-15. Plassflyten og kvoteprioriteten settes på
+    # opptaket, se 11 Opprette og vedlikeholde opptak/03 Innstillinger/sette_plassflyt.feature og
+    # sette_kvoteprioritet.feature. Lærestedet ser dem på utdanningstilbudet, så de forstår sammenhengen mellom
+    # utdanningskvotene.
 
     Scenario: Se plassflyten for et utdanningstilbud
       Gitt at standard plassflyt for opptaket sender "Samisk" og "Førstegangsvitnemål" til "Ordinær"
@@ -85,6 +87,20 @@ Egenskap: Opptaksinnstillinger per utdanningstilbud
       Og at utdanningstilbudet "Sykepleie, høst 2027" ikke har utdanningskvoten "Nordnorsk"
       Når opptaksforvalter ved lærestedet ser utdanningstilbudet "Sykepleie, høst 2027"
       Så vises ikke "Nordnorsk" i plassflyten for utdanningstilbudet
+
+    Scenario: Se kvoteprioriteten for et utdanningstilbud
+      Gitt at kvoteprioriteten for opptaket er 1 for "Samisk", 4 for "Førstegangsvitnemål" og 12 for "Ordinær"
+      Og at utdanningstilbudet "Sykepleie, høst 2027" har utdanningskvotene "Samisk", "Førstegangsvitnemål" og "Ordinær"
+      Når opptaksforvalter ved lærestedet ser utdanningstilbudet "Sykepleie, høst 2027"
+      Så ser opptaksforvalter kvoteprioriteten for utdanningskvotene på utdanningstilbudet
+        | utdanningskvote     | kvoteprioritet |
+        | Samisk              | 1              |
+        | Førstegangsvitnemål | 4              |
+        | Ordinær             | 12             |
+
+    Scenario: Lærestedet kan ikke endre plassflyten eller kvoteprioriteten
+      Når opptaksforvalter ved lærestedet ser utdanningstilbudet "Sykepleie, høst 2027"
+      Så ser opptaksforvalter ikke muligheten til å endre plassflyten eller kvoteprioriteten
 
   Regel: Opptaksforvalter kan markere at et utdanningstilbud tilbyr tidlig opptak
 
