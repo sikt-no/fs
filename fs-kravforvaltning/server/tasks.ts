@@ -32,7 +32,7 @@ function readTask(abs: string, dom: string, slug: string): RawTask {
 
 /**
  * Leser tasks/: én oppføring per domenemappe (med roadmap.md), scope-filene (`scope-*.md`) og én per oppgavemappe under den.
- * Undermapper i mal/ tas med som oppgaver i domenet «mal», slik at regel 4 kan slå ut på dem.
+ * Undermapper i mal/ tas med som oppgaver i domenet «mal», slik at regel 4 kan slå ut på dem. Mapper uten filer tas ikke med.
  * Tolkningen skjer i shared/tasks.ts.
  */
 export function readTasks(repoRoot: string): TasksSnapshot {
@@ -50,7 +50,11 @@ export function readTasks(repoRoot: string): TasksSnapshot {
         snap.scopeMtimes![path] = statSync(join(domAbs, f)).mtimeMs;
       }
     }
-    for (const slug of dirs(domAbs)) snap.tasks.push(readTask(join(domAbs, slug), dom, slug));
+    for (const slug of dirs(domAbs)) {
+      const task = readTask(join(domAbs, slug), dom, slug);
+      // Git har ikke tomme mapper: en mappe uten filer er en rest etter en oppgave som er slettet på main
+      if (task.files.length) snap.tasks.push(task);
+    }
   }
   return snap;
 }

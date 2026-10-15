@@ -28,11 +28,12 @@ Skillen har tre moduser. Velg ut fra invokasjonen, eller spør med `AskUserQuest
 
 ## Oppstart (gjør dette FØRST)
 
+0. **Sjekk branchen** i dette repoet mot origin og main, som beskrevet i [`.claude/references/oppdatert-branch.md`](../../references/oppdatert-branch.md). Er den bak, spør før du henter. I Claude-panelet (uten Bash) hoppes sjekken over.
 1. **Les `tasks/README.md`** (domenetabellen, *Scope*, *Tavla* og reglene for oppgave-rota) og *Tags* i `krav/README.md`.
 2. **Finn scopet** (modus B og C). Oppga brukeren en slug, en sti eller en oppgave, bruk den. En slug slås opp med `Glob` `tasks/*/scope-<slug>.md`, og en oppgave med `Glob` `tasks/*/<slug>/oppgave.md` (scopet står i `Scope:`). Ellers lister du `tasks/*/scope-*.md` og spør med `AskUserQuestion`.
 3. **Les det som finnes:** scope-fila (modus B og C), `oppgave.md` i oppgavene i domenet, og kravene med taggen (`Grep` `@scope-<slug>` under `krav/`). Kravene i `krav/` og oppgavene i `tasks/` leses alltid. Det er ikke en kilde brukeren må oppgi.
 
-Datoer tas fra samtalekonteksten (`# currentDate`). Filer skrives med Read, Write og Edit, ikke med `date`, `>>`, `cp` eller andre shell-konstruksjoner, så skillen virker likt på macOS, Linux og Windows. `Bash` brukes bare til `gh` (bare lesing).
+Datoer tas fra samtalekonteksten (`# currentDate`). Filer skrives med Read, Write og Edit, ikke med `date`, `>>`, `cp` eller andre shell-konstruksjoner, så skillen virker likt på macOS, Linux og Windows. `Bash` brukes bare til `gh` (bare lesing) og til å sjekke branchen.
 
 ## Kilder
 
@@ -78,7 +79,7 @@ Brukes i modus A og B når en ny oppgave trengs.
 2. **Avgrens med brukeren, ett spørsmål om gangen:** mål, ikke-mål, og hva som er utsatt.
 3. **Slug og domene.** Slugen er kebab-case (a–z, 0–9 og `-`), og unik på tvers av alle `tasks/*/scope-*.md`, siden taggen ikke har domene. Går initiativet over flere domener, lag ett scope per domene.
 4. **Del i oppgaver.** Oppgaver som finnes, gjenbrukes og får `Scope:` i `oppgave.md` (har de et annet scope fra før, spør). Nye opprettes som i *Opprette en oppgave*. Har en oppgave en håndskrevet `## Oppgaver`-tabell, bruk den som utgangspunkt, og spør om den skal stå eller fjernes når scopet er skrevet.
-5. **Kartlegg kravene per oppgave.** Finn feature-filene som finnes (`Grep` på titler og begreper under `krav/`), og foreslå plassering av nye. Før nye mapper lages: sjekk at nummeret ikke er brukt fra før på samme nivå, og at sub-domenet og kapabiliteten ikke heter det samme (se *Mappestruktur* i `krav/README.md`). Bekreft med brukeren.
+5. **Kartlegg kravene per oppgave.** Finn feature-filene som finnes (`Grep` på titler og begreper under `krav/`), og foreslå plassering av nye. Før nye mapper lages: sjekk at nummeret ikke er brukt fra før på samme nivå, og at sub-domenet og kapabiliteten ikke heter det samme (se *Mappestruktur* i `krav/README.md`). Kravene og `Regel:`-titlene deles etter prosess og skrives med domenets ord, se *Krav fra kode, skisser eller FS-klienten* i `krav/README.md`. Bekreft med brukeren.
 6. **Skjelett-filer for nye krav.** Vis innholdet, og bekreft før det skrives til disk:
 
    ```gherkin

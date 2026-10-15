@@ -19,6 +19,10 @@ Brukeren har en **endring** — en commit, to commits, en branch, en test-fil el
 - **Bare `@planned`/`@in-progress`-`.feature`-krav skal bygges, og `@deprecated`-krav og -deler skal fjernes.** Markdown og kode-tester har ingen Gherkin-tag og filtreres ikke. Se _Filter_.
 - **Samme tag-regler som `fs-specify`.** Skillene skiller seg på input: `fs-specify` tar en mappe eller et sett med krav, denne tar en endring og viser hva som er lagt til, endret og fjernet.
 
+## Sjekk branchen (gjør dette aller først)
+
+Før du leser eller skriver krav: sjekk at branchen i dette repoet er oppdatert mot origin og main, som beskrevet i [`.claude/references/oppdatert-branch.md`](../../references/oppdatert-branch.md). Er den bak, spør du før du henter. I Claude-panelet i FS Kravforvaltning (uten Bash) hoppes sjekken over. Sjekken gjøres før SHA-ene festes, så `origin/main` og branchen er hentet. Kodeklonene sjekkes på samme måte når kravene sjekkes mot koden.
+
 ## Finn oppgavemappa (gjør dette FØRST)
 
 Samme prosedyre som [`fs-specify` → _Finn oppgavemappa_](../fs-specify/SKILL.md#finn-oppgavemappa-gjør-dette-først): resultatet er **`<spec>/` = `tasks/<domene>/<slug>/spec/`**, og reglene i `tasks/README.md` gjelder (ingen `spec-*.md` i oppgave-rota, `spec/` er reservert for krav). «Ny oppgave» skriver en minimal `oppgave.md`, som i `fs-specify`.
@@ -51,7 +55,7 @@ Spør via `AskUserQuestion` hvis invokasjonen ikke allerede sier det:
 
 `multiSelect: false`. "Other" → spør oppfølgende, ikke gjett.
 
-Alle git-kall er **lesende** og kjøres mot dette repoet (`git rev-parse`, `git show`, `git diff`, `git log`). Finnes ikke en ref lokalt, be brukeren kjøre `git fetch` selv — skillen kjører ikke `fetch`, `checkout` eller andre kommandoer som endrer git-tilstand.
+Git-kallene for selve endringen er **lesende** og kjøres mot dette repoet (`git rev-parse`, `git show`, `git diff`, `git log`). Skillen kjører ikke `checkout` eller andre kommandoer som endrer git-tilstand. Det eneste unntaket er *Sjekk branchen*: `git fetch`, og `git pull --ff-only` når brukeren har sagt ja. Finnes ikke en ref lokalt etter det, si fra, og spør.
 
 ## Git-referanser i stedet for kopier
 

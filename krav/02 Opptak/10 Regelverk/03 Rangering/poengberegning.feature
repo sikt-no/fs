@@ -1,5 +1,5 @@
 # language: no
-@OPT-REG-RAN-002 @must @draft
+@OPT-REG-RAN-002 @must @implemented @scope-regelverk-2027
 Egenskap: Poengberegning
   Som opptaksforvalter
   ønsker jeg å definere poengklasser, poengvarianter, poengtyper og poengformler
@@ -11,10 +11,10 @@ Egenskap: Poengberegning
 
   Regel: Opptaksforvalter kan opprette poengklasser
 
+    # Justert etter koden 2026-10-14 (retrofitting): fs-admin har ikke felt for default-verdi.
     Scenario: Opprette poengklasse
       Når jeg oppretter en poengklasse med kode "KAR"
       Og jeg angir navn "Karakterpoeng" på bokmål
-      Og jeg angir default-verdi 0
       Så er poengklassen opprettet
 
     Scenario: Poengklasse med flerspråklig navn
