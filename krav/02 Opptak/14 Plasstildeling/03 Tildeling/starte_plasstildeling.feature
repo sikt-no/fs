@@ -46,19 +46,41 @@ Egenskap: Starte en plasstildeling
       Og plasstildelingen bruker 30 tilbud for "Sykepleie, høst 2027"
 
     # AVKLART 2026-10-08: Plasstildelingen henter søknadene i opptaket når opptaksforvalter starter den.
-    @openquestion
-    Scenario: Søknader som er med i plasstildelingen
-      # ÅPNE SPØRSMÅL:
-      # - Er det nok at søknaden er kvalifisert, eller må den ha status ferdigbehandlet?
-      #   Delvis avklart 2026-10-14: kvalifisert er utgangspunktet, men det finnes unntak. Hvilke unntak?
-      #   Koden krever ikke ferdigbehandlet. En søknad er med når alt dette er oppfylt:
-      #   søknadsalternativet er ikke slettet og har en behandlersak, saken er kvalifisert mot
-      #   utdanningstilbudets kompetanseregelverk, saken har en aktiv kvote som skal kvoteplasseres
-      #   og som også er kvote på utdanningstilbudet, og saken har poengsum etter utdanningstilbudets
-      #   rangeringsregelverk. Søkeren må ha fødselsdato, ellers feiler hele plasstildelingen.
-      Gitt at søknaden til "Kari Nordmann" på "Sykepleie, høst 2027" er kvalifisert
+    # AVKLART 2026-10-15: Bare saker som er ferdig behandlet (FERDIG_BEHANDLET), er med i plasstildelingen.
+    # Statusen gjelder per sak, altså søknaden slik den ligger hos én saksbehandlende organisasjon, som i
+    # tidligopptaket (13 Søknad og saksbehandling/02 Behandling/gi_tilbudsgaranti_ved_tidlig_opptak.feature).
+    # Ved automatisk saksbehandling avsluttes saksbehandlingen ved at FERDIG_BEHANDLET settes. Av sakene som er
+    # med, kan søknadsalternativer som er kvalifisert og poengberegnet, eller har tilbudsgaranti, få tilbud.
+    # Gap mot koden: koden krever ikke at saken er ferdig behandlet. En søknad er med når alt dette er
+    # oppfylt: søknadsalternativet er ikke slettet og har en behandlersak, saken er kvalifisert mot
+    # utdanningstilbudets kompetanseregelverk, saken har en aktiv kvote som skal kvoteplasseres og som også er
+    # kvote på utdanningstilbudet, og saken har poengsum etter utdanningstilbudets rangeringsregelverk.
+    # Søkeren må ha fødselsdato, ellers feiler hele plasstildelingen.
+    Scenario: Bare saker som er ferdig behandlet, er med
+      Gitt at saken til "Kari Nordmann" er ferdig behandlet
+      Og at saken til "Ola Nordmann" ikke er ferdig behandlet
       Når opptaksforvalter starter en plasstildeling i "Hovedrunde"
-      Så er søknaden til "Kari Nordmann" på "Sykepleie, høst 2027" med i plasstildelingen
+      Så er saken til "Kari Nordmann" med i plasstildelingen
+      Men saken til "Ola Nordmann" er ikke med i plasstildelingen
+
+    Scenario: Automatisk saksbehandling gjør saken ferdig behandlet
+      Gitt at saken til "Kari Nordmann" er behandlet automatisk
+      Når den automatiske saksbehandlingen er ferdig
+      Så er saken til "Kari Nordmann" ferdig behandlet
+      Og saken til "Kari Nordmann" er med i neste plasstildeling
+
+    Scenariomal: Søknadsalternativer som kan få tilbud
+      Gitt at saken til "Kari Nordmann" er ferdig behandlet
+      Og at søknadsalternativet "Sykepleie, høst 2027" <tilstand>
+      Når opptaksforvalter starter en plasstildeling i "Hovedrunde"
+      Så <kan> søknadsalternativet få tilbud
+
+      Eksempler:
+        | tilstand                          | kan      |
+        | er kvalifisert og poengberegnet   | kan      |
+        | har tilbudsgaranti                | kan      |
+        | er kvalifisert, men uten poengsum | kan ikke |
+        | er ikke kvalifisert               | kan ikke |
 
     Scenario: Ny plasstildeling i samme plasstildelingsrunde
       Gitt at plasstildelingsrunden "Hovedrunde" har en plasstildeling som ikke er publisert

@@ -151,7 +151,7 @@ Denne listen sammenstiller begreper brukt i kravene (`krav/02 Opptak/`), design-
 |---------------|------------|----------------|---------|
 | kvalifisering | Prosessen der søkerens kompetanse sjekkes mot kompetansekravene | – | OK |
 | kvalifisert søker | «Søker som oppfyller alle formelle krav for opptak til et utdanningstilbud» | [kvalifisert søker](https://fs.sikt.no/domenekunnskap/begreper/kvalifisert_soker/) (utkast) | OK. Om søknaden også må være ferdigbehandlet for å være med i plasstildelingen, er uavklart |
-| ferdigbehandlet | Status på en søknad når saksbehandlingen er ferdig | – | Brukes i `trekke_søknad.feature` og plasstildelingen |
+| ferdigbehandlet | Status på en sak (søknaden hos én saksbehandlende organisasjon) når saksbehandlingen er ferdig (FERDIG_BEHANDLET). Ved automatisk saksbehandling settes den når den automatiske behandlingen er ferdig | – | Brukes i `trekke_søknad.feature`, tidligopptaket og plasstildelingen. Avklart 2026-10-15: bare saker som er ferdig behandlet, er med i plasstildelingen |
 | generell studiekompetanse (GSK) | Det generelle kompetansekravet for opptak til høyere utdanning | – | OK. Gammel FS: GSK |
 | realkompetanse | Kompetanse fra arbeid og annen erfaring som vurderes i stedet for formell utdanning | – | OK |
 | fagprofil | Søkerens registrerte fag og karakterer | – | Gammel FS: Fagprofil |
