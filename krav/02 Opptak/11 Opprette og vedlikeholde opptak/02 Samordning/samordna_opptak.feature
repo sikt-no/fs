@@ -23,6 +23,38 @@ Egenskap: Samordna opptak
       Gitt at organisasjonen "NTNU" ikke er lagt til som deltaker i opptaket
       Så kan ikke NTNU knytte utdanningstilbud til opptaket
 
+  # AVKLART 2026-10-16 (produktleder)
+  Regel: Organisasjoner som ikke deltar, kan ikke se opptaket
+
+    Scenario: Organisasjon som ikke deltar, ser ikke opptaket
+      Gitt at organisasjonen "NTNU" ikke er lagt til som deltaker i opptaket
+      Når opptaksforvalter ved NTNU ser listen over opptak
+      Så ser ikke opptaksforvalter opptaket "Samordna opptak 2027"
+
+  # AVKLART 2026-10-16 (produktleder): Saksbehandlere ser søknadene de skal behandle i søknadsbehandlingen,
+  # ikke gjennom utdanningstilbudene i opptaket.
+  Regel: Deltakende organisasjon ser bare utdanningstilbudene organisasjonen tilbyr
+
+    Scenario: Deltakende organisasjon ser ikke utdanningstilbud en annen organisasjon tilbyr
+      Gitt at organisasjonene "Universitetet i Oslo" og "Universitetet i Bergen" er lagt til som deltakere
+      Og at "Universitetet i Bergen" har knyttet utdanningstilbudet "Medisin, høst 2027" til opptaket
+      Når opptaksforvalter ved Universitetet i Oslo ser listen over utdanningstilbud i opptaket
+      Så ser ikke opptaksforvalter utdanningstilbudet "Medisin, høst 2027"
+
+  # AVKLART 2026-10-16 (produktleder)
+  Regel: En deltakende organisasjon kan ikke fjernes fra opptaket så lenge den har utdanningstilbud i det
+
+    Scenario: Fjerne en deltakende organisasjon som har utdanningstilbud i opptaket
+      Gitt at "Universitetet i Oslo" har knyttet utdanningstilbudet "Sykepleie, høst 2027" til opptaket
+      Når opptaksforvalter ved forvaltende organisasjon vil fjerne "Universitetet i Oslo" som deltaker i opptaket
+      Så avvises forespørselen
+      Og opptaksforvalter får beskjed om at utdanningstilbudene til Universitetet i Oslo må fjernes først
+
+    Scenario: Fjerne en deltakende organisasjon uten utdanningstilbud i opptaket
+      Gitt at "Universitetet i Oslo" ikke har utdanningstilbud i opptaket
+      Når opptaksforvalter ved forvaltende organisasjon fjerner "Universitetet i Oslo" som deltaker i opptaket
+      Så er "Universitetet i Oslo" ikke lenger deltaker i opptaket
+
   Regel: Det er kun opptaksforvalter ved forvaltende organisasjon som kan endre innstillinger i opptaket
     # forvaltende organisasjon = eierorganisasjon for det samordna opptaket. Vurder om ordlyden som den er, er utvetydig nok mht tilgangstyring og roller.
 
