@@ -365,6 +365,9 @@ Egenskap: Opptak ved Politihøgskolen
 
     # De siste årene har Politihøgskolen tatt inn alle som oppfyller kravene. Av og til trengs et tak.
     # Etter presentasjonen: søkerne konkurrerer om plass på opptaksprøvene, og et utvalg søkere blir innkalt.
+    # AVKLART 2026-10-16: Søkerne rangeres på poeng to ganger: her, når flere søkere er kvalifisert for å bli
+    # kalt inn til fysisk opptaksprøve enn Politihøgskolen vil kalle inn, og etter egnethetsvurderingen, i den
+    # vanlige plasstildelingen (se «Kvalifiserte søkere rangeres og får tilbud …»).
     # Søkerne rangeres etter konkurransepoengene per 1. mars.
     Scenario: De lavest rangerte søkerne over taket får avslag
       Gitt at 1300 søkere oppfyller kravene før den fysiske opptaksprøven
@@ -423,10 +426,18 @@ Egenskap: Opptak ved Politihøgskolen
 
   Regel: Kvalifiserte søkere rangeres og får tilbud når de når opp i plasstildelingen
 
-    Scenario: Kvalifisert søker rangeres som andre kvalifiserte søkere
+    # AVKLART 2026-10-16: Etter egnethetsvurderingen er plasstildelingen som vanlig. De kvalifiserte søkerne
+    # rangeres på poenggrunnlaget fra videregående skole, og det gis tilbud til det antallet Politihøgskolen har
+    # satt per utdanningskvote, i plasstildelingsrundene som ellers.
+    Scenario: Kvalifisert søker rangeres på poenggrunnlaget fra videregående skole
       Gitt at søkeren er kvalifisert for opptak ved Politihøgskolen
       Når plasstildelingen gjennomføres
-      Så rangeres søkeren i plasstildelingen på samme måte som andre kvalifiserte søkere
+      Så rangeres søkeren på poenggrunnlaget fra videregående skole, på samme måte som andre kvalifiserte søkere
+
+    Scenario: Tilbud gis til antallet Politihøgskolen har satt per utdanningskvote
+      Gitt at Politihøgskolen har satt antall tilbud som skal gis per utdanningskvote for "Politiutdanning, PHS"
+      Når plasstildelingsrunden gjennomføres
+      Så får de høyest rangerte kvalifiserte søkerne i hver utdanningskvote tilbud, opp til antallet som er satt
 
     Scenario: Kvalifisert søker med nok rangeringspoeng får tilbud
       Gitt at søkeren er kvalifisert for opptak ved Politihøgskolen
