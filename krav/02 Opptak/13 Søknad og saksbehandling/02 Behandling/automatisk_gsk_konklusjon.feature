@@ -13,7 +13,7 @@
 # tar inn gjenbruk fra tidligere samordna opptak, fra lokale opptak i FS Admin, og
 # fra lokale opptak i FS-klienten når konklusjonen er med i oversikten over
 # kvalitetssikrede GSK-konklusjoner.
-@OPT-BEH-BEH-015 @must @planned
+@OPT-BEH-BEH-015 @must @in-progress
 Egenskap: Automatisk GSK-konklusjon
   Som saksbehandler
   ønsker jeg at søknader der søkeren åpenbart har generell studiekompetanse, får GSK-konklusjonen automatisk
