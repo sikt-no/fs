@@ -2,7 +2,7 @@
 # GitHub: #441
 @BRU-APP-API-004 @must @implemented
 Egenskap: Passordbytte for applikasjon
-  Som bruker
+  Som bruker med en rolle som gir tilgang til applikasjoner
   ønsker jeg å sette nytt passord på en applikasjon jeg har rettighet til å administrere
   slik at jeg kan hjelpe med passordbytte.
 
@@ -26,7 +26,7 @@ Egenskap: Passordbytte for applikasjon
 
     Scenario: Passordbytte er tilgjengelig for FS-applikasjoner
       Gitt applikasjonen har FS som identitetsleverandør
-      Og jeg har rettighet til å endre passord på denne applikasjonen
+      Og jeg har rettighet til å endre passord på applikasjonen
       Så har jeg mulighet til å sette nytt passord
 
     Scenario: Passordbytte er ikke tilgjengelig for Feide- og Maskinporten-applikasjoner
@@ -36,26 +36,16 @@ Egenskap: Passordbytte for applikasjon
   Regel: Bruker kan kun endre passord på applikasjoner de har rettighet til å administrere
 
     Scenario: Passordbytte ikke tilgjengelig uten rettighet
-      Gitt jeg ikke har rettighet til å endre passord på denne applikasjonen
+      Gitt jeg ikke har rettighet til å endre passord på applikasjonen
       Så er muligheten til å sette nytt passord ikke tilgjengelig
 
-  @deprecated
-  Regel: Nytt passord genereres av systemet
-
-    Scenario: Generere nytt passord
-      Gitt jeg har rettighet til å endre passord på denne applikasjonen
-      Når jeg velger å generere et nytt passord
-      Så genererer systemet et nytt passord for applikasjonen
-      Og det nye passordet er lagret
-
-  @in-progress
   Regel: Nytt passord genereres av systemet for ett valgt miljø
 
     Scenario: Generere nytt passord for et miljø
-      Gitt jeg har rettighet til å endre passord på denne applikasjonen
+      Gitt jeg har rettighet til å endre passord på applikasjonen
       Når jeg velger et miljø og velger å generere et nytt passord
       Så genererer systemet et nytt passord for applikasjonen i det valgte miljøet
-      Og det nye passordet er lagret for det miljøet
+      Og det nye passordet er lagret for det valgte miljøet
 
     Scenario: Passord i ett miljø påvirker ikke de andre
       Gitt applikasjonen har et aktivt passord i flere miljøer
@@ -64,7 +54,7 @@ Egenskap: Passordbytte for applikasjon
 
     Scenario: Passord kan settes for et miljø applikasjonen ikke har tilganger i
       Gitt applikasjonen ikke har tilganger i et miljø
-      Når jeg genererer et nytt passord for det miljøet
+      Når jeg genererer et nytt passord for miljøet applikasjonen ikke har tilganger i
       Så er passordet lagret for miljøet
 
   Regel: Det genererte passordet vises én gang og kan kopieres
@@ -80,20 +70,10 @@ Egenskap: Passordbytte for applikasjon
       Så er passordet ikke lenger tilgjengelig
       Og jeg må generere et nytt passord dersom jeg trenger å se det på nytt
 
-  @deprecated
-  Regel: Kun ett passord er aktivt om gangen
-
-    Scenario: Nytt passord erstatter det gamle umiddelbart
-      Gitt applikasjonen har et aktivt passord
-      Når et nytt passord genereres
-      Så fungerer ikke det gamle passordet lenger
-      Og applikasjonen må autentisere seg med det nye passordet
-
-  @in-progress
   Regel: Kun ett passord er aktivt per miljø om gangen
 
     Scenario: Nytt passord erstatter det gamle i samme miljø
       Gitt applikasjonen har et aktivt passord i et miljø
-      Når et nytt passord genereres for det miljøet
-      Så fungerer ikke det gamle passordet lenger i det miljøet
-      Og applikasjonen må autentisere seg med det nye passordet i det miljøet
+      Når et nytt passord genereres for miljøet
+      Så fungerer ikke det gamle passordet lenger i miljøet
+      Og applikasjonen må autentisere seg med det nye passordet i miljøet

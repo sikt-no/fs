@@ -2,7 +2,7 @@
 # GitHub: #438, #448, #449
 @BRU-APP-API-001 @must @implemented
 Egenskap: Listevisning og søk i applikasjoner
-  Som bruker
+  Som bruker med en rolle som gir tilgang til applikasjoner
   ønsker jeg en oversikt over applikasjoner jeg har tilgang til, med mulighet for søk og filtrering
   slik at jeg raskt kan finne og følge opp riktig applikasjon.
 
@@ -78,8 +78,13 @@ Egenskap: Listevisning og søk i applikasjoner
       Når jeg velger en applikasjon
       Så ser jeg detaljsiden for valgt applikasjon
 
-    @deprecated
+    @deprecated @openquestion
     Scenario: Listen inkluderer eksisterende FS-applikasjoner
+      # ÅPNE SPØRSMÅL:
+      # - Koden for scenarioet blir aldri borte: filteret på identitetsleverandør
+      #   (`Tilgjengelige identitetsleverandører i filter`) har «FS (Maskinbruker)», og
+      #   trenger at FS-applikasjonene står i listen. Skal scenarioet slettes som
+      #   overflødig, eller gjelde igjen (uten `@deprecated`)?
       Når jeg åpner applikasjonsoversikten
       Så ser jeg også applikasjoner med FS som identitetsleverandør
       Og disse vises på lik linje med Feide- og Maskinporten-applikasjoner
@@ -178,7 +183,7 @@ Egenskap: Listevisning og søk i applikasjoner
 
   Regel: Synlighet via administrasjonsrettigheter (K11, K12)
 
-    Scenario: Applikasjonsadministrator ser applikasjoner fra egne organisasjoner
+    Scenario: Applikasjonsadministrator ser applikasjoner fra organisasjonene jeg administrerer
       Gitt jeg har applikasjonsadministrator-rollen for én eller flere organisasjoner
       Når jeg åpner applikasjonsoversikten
       Så ser jeg applikasjoner tilknyttet de organisasjonene jeg administrerer
@@ -189,11 +194,11 @@ Egenskap: Listevisning og søk i applikasjoner
       Når jeg åpner applikasjonsoversikten
       Så ser jeg organisasjonens applikasjoner i alle miljøene de er aktive i
 
-    Scenario: Applikasjonsadministrator ser også applikasjoner med tilganger i egne organisasjoner
+    Scenario: Applikasjonsadministrator ser også applikasjoner med tilganger til data i organisasjonene jeg administrerer
       Gitt jeg har applikasjonsadministrator-rollen for én eller flere organisasjoner
-      Og en applikasjon tilhører en annen organisasjon, men har tilganger som gir tilgang til data i en av mine organisasjoner
+      Og en applikasjon tilhører en annen organisasjon, men har tilganger som gir tilgang til data i en av organisasjonene jeg administrerer
       Når jeg åpner applikasjonsoversikten
-      Så ser jeg denne applikasjonen i listen
+      Så ser jeg applikasjonen i listen
       Og det fremgår hvilken organisasjon applikasjonen tilhører
 
     Scenario: Super-applikasjonsadministrator ser alle applikasjoner
