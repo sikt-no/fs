@@ -44,7 +44,9 @@
 # - Poeng lik poenggrensen gir tilbudsgaranti.
 # - Søkeren får tilbudsgaranti bare på søknadsalternativer der søkeren er
 #   kvalifisert. Er kvalifiseringen ikke vurdert, gis det ikke garanti, og
-#   opptaksforvalteren ser det i utfallet.
+#   opptaksforvalteren ser det i utfallet. (Unntak 13.10.2026, foreløpig: reservert
+#   studieplass gir tilbudsgaranti uten at søkeren er kvalifisert, se notatet om
+#   reservert studieplass under.)
 # - Søkeren får tilbudsgaranti på høyst ett søknadsalternativ: det høyest
 #   prioriterte som oppfyller kravene (som i se_svar_på_tidlig_opptak.feature).
 # - En søknad som ikke er konkludert, er ikke med i tidligopptaket.
@@ -60,8 +62,9 @@
 # AVKLART I JIRA (lagt inn 07.10.2026)
 #
 # - Bare saker som er ferdig behandlet, er med (STEK-425, 01.09.2026).
-# - Poengsummen er den høyeste søkeren har til søknadsalternativet, uansett kvote
-#   (STEK-269, 27.08.2026). I det gamle systemet var den hardkodet til ordinær kvote.
+# - Poengsummen er den høyeste søkeren har til søknadsalternativet etter tilbudets
+#   kompetanseregelverk, uansett kvote (STEK-269, 27.08.2026; STEK-582). I det gamle
+#   systemet var den hardkodet til ordinær kvote.
 # - Gjennomføringen gir tilbudsgarantien som opptaksforvalter. En tilbudsgaranti fra
 #   opptaksforvalter som ikke gir tilbud, erstattes. En som gir tilbud, røres ikke, og
 #   søkeren får da ingen ny tilbudsgaranti på lavere prioritet (STEK-269, 12.08.2026).
@@ -81,6 +84,10 @@
 #   fjernes tilbudsgarantien på det lavere. Dette er unntaket fra at en ny
 #   gjennomføring ikke fjerner tilbudsgarantier. Koden lar i dag den gamle
 #   tilbudsgarantien stå (TidligopptakTilbudsgarantiService), og må endres.
+#   (Bekreftet med fagperson 13.10.2026: tilbudsgarantien på det lavere
+#   søknadsalternativet fjernes. Har den første gjennomføringen overskrevet en
+#   annen kode, f.eks. en negativ garanti fra opptaksforvalter eller en
+#   reservasjon, går den koden tapt. Det er akseptert.)
 # - Tilbudsgarantien faller bort når søkeren fjerner søknadsalternativet eller
 #   trekker søknaden. Legger søkeren søknadsalternativet inn igjen før
 #   søknadsfristen for opptaket, gjelder tilbudsgarantien igjen, uansett
@@ -101,19 +108,25 @@
 #   enten har et tidligopptakstilbud fra før, eller oppfyller kravene. Ingen
 #   søknadsalternativer under får tilbudsgaranti. Et tidligopptakstilbud fra før
 #   gjelder uansett konklusjon, om saken er ferdig behandlet, og poengsum
-#   (fagperson i STEK-269, 30.09.2026). Implementert på fs-plattform-branchen
-#   STEK-503_sett_sammen_tidligopptak_konklusjoner_for_soker, ikke på main.
+#   (fagperson i STEK-269, 30.09.2026). Implementert i STEK-503.
 # - (09.10.2026) Opptaksforvalter kan gjennomføre tidligopptaket mer enn én gang. En ny
 #   gjennomføring tar med saker som er blitt ferdig behandlet, eller har fått
 #   konklusjon, siden forrige gjennomføring. Det er likevel lurt å prøvekjøre til
-#   ingen saker står igjen som ikke er ferdig behandlet, før tidligopptaket
+#   ingen saker står igjen som ikke er ferdig behandlet eller mangler konklusjon, før
+#   tidligopptaket
 #   gjennomføres. (Dokumentasjonen på STEK-503 sier at det bare gjennomføres én
 #   gang, og at det ikke kommer noen ny sjanse. Den må rettes.)
+#   Mulig forbedring, ikke et krav: sikring mot en ny gjennomføring ved en feil
+#   etter at svarene er synlige for søkerne, se STEK-590 (13.10.2026).
 # - (09.10.2026) Har søkeren reservert studieplass på et søknadsalternativ som tilbyr
 #   tidlig opptak, får søkeren tilbudsgaranti fra tidligopptaket der uten å nå
 #   poenggrensen, når søkeren deltar og saken er ferdig behandlet. Søkeren har alt en
 #   plass fra et tidligere opptak. Reservasjonen gir ikke i seg selv innvilget tidlig
 #   opptak (se_svar_på_tidlig_opptak.feature). Stemmer med STEK-503.
+#   (13.10.2026, foreløpig) Kvalifisering kreves heller ikke: søkeren får tilbudsgaranti
+#   med reservert studieplass (RSO eller RES) også når søkeren ikke er kvalifisert, eller
+#   kvalifiseringen ikke er vurdert. Fagperson avklarte dette, men har sendt spørsmålet
+#   videre til en annen domeneekspert, så avklaringen er foreløpig.
 # - Alle tre rollene (B-rolle, T-rolle og F-rolle) kan sette tilbudsgaranti manuelt,
 #   hver med sitt eget sett med tilbudsgarantityper (domeneekspert, med henvisning til
 #   Confluence OP «Tilbudsgaranti»). Det stemmer med STEK-270/262 og koden.
@@ -224,6 +237,14 @@ Egenskap: Gi tilbudsgaranti ved tidlig opptak
       Når opptaksforvalter gjennomfører tidligopptaket
       Så får søkeren tilbudsgaranti på "Sykepleie, høst 2027"
 
+    # Foreløpig avklaring 13.10.2026, se notatet om reservert studieplass øverst i fila.
+    Scenario: Reservert studieplass gir tilbudsgaranti uten kvalifisering
+      Gitt saksbehandler har konkludert med at søkeren deltar i tidligopptaket
+      Og søkeren har reservert studieplass på "Sykepleie, høst 2027"
+      Og søkeren er ikke kvalifisert til "Sykepleie, høst 2027"
+      Når opptaksforvalter gjennomfører tidligopptaket
+      Så får søkeren tilbudsgaranti på "Sykepleie, høst 2027"
+
     Scenario: Den høyeste poengsummen til søknadsalternativet gjelder
       Gitt saksbehandler har konkludert med at søkeren deltar i tidligopptaket
       Og søkeren er kvalifisert til "Sykepleie, høst 2027"
@@ -295,14 +316,7 @@ Egenskap: Gi tilbudsgaranti ved tidlig opptak
       Når opptaksforvalter gjennomfører tidligopptaket på nytt
       Så får søkeren tilbudsgaranti på "Sykepleie, høst 2027"
 
-    @openquestion
     Scenario: Tilbudsgarantien flyttes til et høyere prioritert søknadsalternativ ved ny gjennomføring
-      # ÅPNE SPØRSMÅL:
-      # - Skal tilbudsgarantien fra en tidligere gjennomføring på det lavere søknadsalternativet
-      #   fjernes, bli stående, eller bli stående og vises for opptaksforvalter i rapporten?
-      #   Første gjennomføring kan ha overskrevet en annen kode (f.eks. en negativ garanti fra
-      #   opptaksforvalter eller en reservasjon), som da går tapt hvis garantien fjernes.
-      #   Branchen STEK-503 lar den stå. Avklares med fagperson.
       Gitt saksbehandler har konkludert med at søkeren deltar i tidligopptaket
       Og søkeren fikk tilbudsgaranti på "Vernepleie, høst 2027" som prioritet 2 da tidligopptaket ble gjennomført
       Og søkeren når nå poenggrensen for "Sykepleie, høst 2027" som prioritet 1
@@ -323,10 +337,13 @@ Egenskap: Gi tilbudsgaranti ved tidlig opptak
       Og opptaksforvalter ser antall søkere som er vurdert, og antall tilbudsgarantier som er satt
       Og opptaksforvalter ser antall søkere per utfall, per behandlende organisasjon og per utdanningstilbud
 
-    Scenario: Se antall saker som ikke er ferdig behandlet
-      Gitt 3 søkere som har søkt om tidlig opptak, har saker som ikke er ferdig behandlet
+    # Saker uten konklusjon telles med, også når de er ferdig behandlet: de er ikke med i
+    # tidligopptaket, og opptaksforvalteren gjør det samme med begge (avklart 13.10.2026).
+    Scenario: Se antall saker som ikke er ferdig behandlet eller mangler konklusjon
+      Gitt 2 søkere som har søkt om tidlig opptak, har saker som ikke er ferdig behandlet
+      Og 1 søker som har søkt om tidlig opptak, har en ferdig behandlet sak uten konklusjon
       Når opptaksforvalter prøvekjører tidligopptaket
-      Så ser opptaksforvalter at 3 saker ikke er ferdig behandlet
+      Så ser opptaksforvalter at 3 saker ikke er ferdig behandlet eller mangler konklusjon
 
     Scenario: Se utdanningstilbud med mangelfulle innstillinger
       Gitt "Vernepleie, høst 2027" tilbyr tidlig opptak uten poenggrense

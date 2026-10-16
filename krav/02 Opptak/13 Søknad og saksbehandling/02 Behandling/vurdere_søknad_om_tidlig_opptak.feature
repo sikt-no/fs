@@ -69,7 +69,7 @@
 #   konklusjonen, f.eks. «KFF – Kan få tidlig opptak, har godkjent grunn».
 #   Erstatter de to stegene fra 07.10, og stemmer med koden og skissen i FS-Admin.
 # - Systemet oppretter ingen mangel. Mangler dokumentasjonen, oppretter
-#   saksbehandleren en vanlig søknadsmangel (søknadsmangler.feature, PR #700), og
+#   saksbehandleren en vanlig søknadsmangel (søknadsmangler.feature, OPT-BEH-BEH-008), og
 #   søkeren får beskjed om den på samme måte som for andre mangler. Erstatter
 #   regelen fra 08.10 om at «ikke dokumentert» registreres som en mangel.
 # - Konklusjonen låses ikke. Saksbehandleren kan sette og endre den også etter
@@ -89,7 +89,7 @@
 # begrunnelse, men vurderer om søkerens begrunnelse er dokumentert, og velger en
 # konklusjon ut fra det.
 # - Feature-ID-en er endret fra @OPT-BEH-BEH-008 til @OPT-BEH-BEH-013, fordi
-#   søknadsmangler.feature (PR #700) også bruker 008 (09.10.2026).
+#   søknadsmangler.feature også bruker 008 (09.10.2026).
 #
 @OPT-BEH-BEH-013 @must @in-progress
 Egenskap: Vurdere søknad om tidlig opptak

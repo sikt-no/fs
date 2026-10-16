@@ -38,6 +38,17 @@ Egenskap: Se svar på søknad om tidlig opptak
       Når søkeren åpner søknaden sin
       Så ser søkeren svar på tidlig opptak på hvert av søknadsalternativene sine
 
+    # En søker som har søkt, skal ha konklusjon før tidligopptaket gjennomføres. Mangler
+    # konklusjonen i en sak, er søknadsalternativene i saken ikke med i tidligopptaket, og
+    # får ingen tilbudsgaranti (gi_tilbudsgaranti_ved_tidlig_opptak.feature). De behandles
+    # i det ordinære opptaket (avklart med fagperson 13.10.2026).
+    Scenario: Søkeren ser ikke svar på søknadsalternativer der saken ikke har konklusjon
+      Gitt at tidligopptaket er gjennomført
+      Og at søkeren har søkt om tidlig opptak
+      Men det er ikke konkludert om søkeren deltar i tidligopptaket i saken med "Sykepleie, høst 2027"
+      Når søkeren åpner søknaden sin
+      Så ser ikke søkeren svar på tidlig opptak på "Sykepleie, høst 2027"
+
   # Dette er noe annet enn at saksbehandler har konkludert med at søkeren ikke deltar.
   # Den søkeren har søkt, og ser "ikke innvilget" på søknadsalternativene sine.
   Regel: Svaret på tidlig opptak vises bare til søkere som har søkt om tidlig opptak
