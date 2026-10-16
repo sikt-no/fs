@@ -10,12 +10,10 @@ Egenskap: Styre lesetilgang til kompetansedata
   # opplæring. Sikt er behandlingsansvarlig (forskrift 2024-06-03-900 § 20-6), og
   # registeret skal legge til rette for opptak (lov 2023-06-09-30 § 25-3).
   # Første leveranse dekker opptakssystemets behov for opptak 2027: lesetilgang til
-  # VGS-vitnemål uavhengig av utsteder. Reglene er skrevet slik at tilganger for
-  # fylkeskommuner, skoler og andre utdanningsnivåer kan legges til uten å endre dem.
+  # VGS-vitnemål uavhengig av utsteder. Tilgangen styres på utdanningsnivå og
+  # tilgangskode. Organisasjonstilhørighet og hierarki for andre organisasjoner enn
+  # Sikt er scopet ut (arkitektmøte 2026-10-16).
   # Kilde: Confluence «Behovene ved tilgangsstyring av KREG» (KK, side 5086904327).
-  #
-  # Status 2026-10-09: skrevet av én person, og skal diskuteres med teamet før
-  # kravet valideres og får @planned.
   #
   # Hvordan en applikasjon får tildelt en tilgangsrolle, er dekket av
   # @BRU-APP-API-007 (Tildele tilganger til en applikasjon). Dette kravet sier
@@ -64,21 +62,20 @@ Egenskap: Styre lesetilgang til kompetansedata
       Så får opptakssystemet VGS-vitnemålene
       Men opptakssystemet får ikke navn eller fødselsnummer fra kompetanseregisteret
 
-    Scenario: Applikasjon uten leserolle får tomt svar
-      Gitt en applikasjon ikke har noen leserolle for kompetanseregisteret
+    Scenario: Tilganger for Sikt uten leserolle gir tomt svar
+      Gitt en applikasjon har tilganger for Sikt, men ingen leserolle for kompetanseregisteret
       Når applikasjonen henter VGS-vitnemålene til en person
       Så får applikasjonen et tomt svar uten feil om manglende tilgang
 
-  @openquestion
   Regel: Leserollene for VGS-data gjelder for Sikt og gir alle VGS-vitnemål i registeret
-    # ÅPNE SPØRSMÅL:
-    # - Sikt skal ha tilgang til data fra videregående opplæring uavhengig av organisasjonstilhørigheten til dataene. Må det representeres på databasenivå, for eksempel med et organisasjonshierarki der Sikt står øverst over VGS-skolene, eller bør det løses på en annen måte? Det samme gjelder senere for andre konsumenter som trenger data på tvers av utstedere (FS, SSB, Lånekassen), som ikke er et krav for opptak 2027.
 
-    # Tilgangsstyringen i fs-plattform har ingen organisasjon over organisasjonene, og
-    # ingen hierarki mellom dem: all tilgang er (organisasjon, rolle, miljø). Sikt er
-    # behandlingsansvarlig for hele den nasjonale vitnemålsbasen, så en leserolle for
-    # VGS-data som gjelder for Sikt, gir VGS-vitnemål uavhengig av hvem som har
-    # utstedt dem. Den gir ingenting fra andre utdanningsnivåer.
+    # Avklart med arkitekt 2026-10-16: tilgangen sjekkes på både organisasjon og
+    # tilgangskode, ikke med et organisasjonshierarki i databasen. All tilgang i
+    # fs-plattform er (organisasjon, rolle, miljø). Sikt er behandlingsansvarlig for
+    # hele den nasjonale vitnemålsbasen, så en leserolle for VGS-data som gjelder
+    # for Sikt, gir VGS-vitnemål uavhengig av hvem som har utstedt dem. Den samme
+    # rollen for en annen organisasjon gir ingenting, og rollen gir ingenting fra
+    # andre utdanningsnivåer.
 
     Scenario: Leserolle for VGS-data for Sikt gir VGS-vitnemål fra alle utstedere
       Gitt en applikasjon har leserollen for VGS-oppnåelse for Sikt
@@ -86,25 +83,12 @@ Egenskap: Styre lesetilgang til kompetansedata
       Så får applikasjonen VGS-vitnemålene uavhengig av hvilken organisasjon som har utstedt dem
       Men applikasjonen får ikke vitnemål fra andre utdanningsnivåer
 
-  @openquestion
-  Regel: Lesetilgang for en annen organisasjon enn Sikt er avgrenset til organisasjonen og organisasjonene under den
-    # ÅPNE SPØRSMÅL:
-    # - Trengs ikke for opptak 2027. Regelen står her for at lesetilgang for Sikt og for andre organisasjoner skal følge samme modell, så ingenting må skrives om når skole- og fylkeskommunebrukere kommer.
-    # - Tilgangsmodellen i fs-plattform er (organisasjon, rolle, miljø). Er organisasjonen på tildelingen nok til å avgrense hvilke vitnemål som leses, eller trengs egne roller for det?
-    # - Tilgangsstyringen kjenner bare organisasjonene fra Utdanningsregisteret (organisasjonskode), uten hierarki. KREG har enhetsregisteret fra NVB (organisasjonsnummer, med overordnet enhet), uten kobling til organisasjonskode. Hvor skal koblingen og hierarkiet ligge?
-    # - Tildeling nedover (Sikt til fylkeskommunene, fylkeskommunen til skolene) krever tildelingsrettighet for organisasjonen tilgangen gjelder for, og avhenger av den samme koblingen mellom organisasjonskode og enhet.
+    Scenario: Leserolle for VGS-data for en annen organisasjon enn Sikt gir tomt svar
+      Gitt en applikasjon har leserollen for VGS-oppnåelse for en annen organisasjon enn Sikt
+      Når applikasjonen henter VGS-vitnemålene til en person
+      Så får applikasjonen et tomt svar uten feil om manglende tilgang
 
-    Scenario: Fylkeskommune leser VGS-vitnemål fra skolene i fylket
-      Gitt en bruker i en fylkeskommune har leserollen for VGS-oppnåelse for organisasjonen brukeren tilhører
-      Når brukeren henter VGS-vitnemålene til en person
-      Så får brukeren bare VGS-vitnemål utstedt av fylkeskommunen og organisasjonene under fylkeskommunen
-
-    Scenario: Skole leser bare VGS-vitnemål skolen selv har utstedt
-      Gitt en bruker ved en skole uten organisasjoner under seg har leserollen for VGS-oppnåelse for organisasjonen brukeren tilhører
-      Når brukeren henter VGS-vitnemålene til en person
-      Så får brukeren bare VGS-vitnemålene skolen har utstedt
-
-  Regel: En leserolle for vitnemålsdata gjelder ett utdanningsnivå
+  Regel: Hver leserolle for vitnemålsdata gjelder ett utdanningsnivå
 
     Scenario: Leserollene for VGS gir ikke fagskolevitnemål
       Gitt opptakssystemet har leserollene for VGS-dokument, VGS-oppnåelse, VGS-vurdering og VGS-merknad for Sikt
