@@ -19,6 +19,11 @@ Egenskap: Opptak ved Politihøgskolen
   # Politihøgskolen bruker Opptaksadmin (Eon assessment) til digitale tester, videointervju og brev med
   # sensitive opplysninger. Politihøgskolen behandler bare sine egne søkere, ikke søknadsalternativer til andre
   # læresteder.
+  # Opptaksprøver: individuell vurdering av søkeren på ulike faglige grunnlag, for eksempel egnethet, fysikk,
+  # eller praktisk eller utøvende kompetanse (avklart 2026-10-16, se begreper.md). Typiske eksempler er
+  # Politihøgskolen og musikkhøgskolene. Hos PHS er opptaksprøvene digitale tester og videointervju, fysisk
+  # opptaksprøve og egnethetsvurdering, og vurderingen skjer i Opptaksadmin. Prosessen er beskrevet som
+  # individuell opptaksvurdering på https://fs.sikt.no/domenekunnskap/prosesser/individuell_opptaksvurdering/
   # Reglene etter «Opptaksadmin henter søkerne fra FS» er behov fra underlaget som også gjelder andre læresteder.
   # De står her foreløpig, merket som må- eller bør-behov, med kravet som bør utvides.
   #

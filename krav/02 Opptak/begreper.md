@@ -157,6 +157,7 @@ Denne listen sammenstiller begreper brukt i kravene (`krav/02 Opptak/`), design-
 | fagprofil | Søkerens registrerte fag og karakterer | – | Gammel FS: Fagprofil |
 | utdanningsbakgrunn | Gruppe søkere med samme type utdanning, med egne frister i opptaket | – | ⚠️ Brukes i kravene for frister. Relatert til «kvalifikasjonsgrunnlag» i gammel FS, men bredere |
 | praksis / praksisperiode | Arbeidserfaring som kan telle i kvalifisering eller rangering | – | OK |
+| opptaksprøver | Individuell vurdering av søkeren på ulike faglige grunnlag, for eksempel egnethet, fysikk, eller praktisk eller utøvende kompetanse. Typiske eksempler er Politihøgskolen og musikkhøgskolene | – | ✅ Avklart 2026-10-16. Brukes i stedet for «individuell opptaksvurdering» ([fs.sikt.no](https://fs.sikt.no/domenekunnskap/prosesser/individuell_opptaksvurdering/)). Brukes i `15 Lærestedsspesifikke behov/01 Politihøgskolen/opptak_ved_politihøgskolen.feature` |
 
 ## Søknadsbehandling
 
@@ -234,6 +235,7 @@ Følgende begreper brukes i kravene, men finnes ikke (enda) i begrepskatalogen p
 - antall studieplasser
 - prøvetildeling
 - hendelseslogg
+- opptaksprøver
 - utdanningsbakgrunn (i kontekst av frister)
 
 Sto som manglende i forrige versjon av lista, men finnes nå i katalogen: opptak, etterfylling, kvoteprioritet, plassflyt, opptaksrunde, poenggrense, kapasitet, antall plasser, overbooking, kvalifisert søker.
