@@ -20,6 +20,17 @@ Egenskap: Fjerne tilganger fra en applikasjon
       Og velger organisasjon og miljø
       Så ser jeg en liste over tilganger jeg har rettighet til å fjerne for den valgte kombinasjonen
 
+    Scenario: Organisasjonene i valglisten vises med akronym
+      Gitt jeg har valgt å fjerne tilganger
+      Når jeg åpner valglisten for organisasjon
+      Så vises akronymet under navnet på hver organisasjon
+      Men bare navnet vises når organisasjonen ikke har akronym
+
+    Scenario: Søke i valglisten for organisasjon
+      Gitt jeg har valgt å fjerne tilganger
+      Når jeg skriver inn tekst i valglisten for organisasjon
+      Så viser valglisten bare organisasjonene der navnet eller akronymet inneholder den innskrevne teksten
+
     Scenario: Bekrefte fjerning av valgte tilganger
       Gitt jeg har valgt organisasjon, miljø og én eller flere tilganger å fjerne
       Når jeg bekrefter fjerningen
