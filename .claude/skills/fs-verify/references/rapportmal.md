@@ -89,10 +89,10 @@ Ingen.                                                                  [når in
 | Feature-ID | Egenskap eller del | Status | Gating funnet | Hvorfor |
 | --- | --- | --- | --- | --- |
 | `@DOM-SUB-KAP-NNN` | <tittel> | `@in-progress` | <n>/<N> | <N> ikke funnet, <N> usikker |
-| `@DOM-SUB-KAP-NNN` | <tittel> | `@draft` | <N>/<N> | Alt funnet. Brukeren svarte «Nei» på ny status |
+| `@DOM-SUB-KAP-NNN` | <tittel> | `@draft` | <N>/<N> | Alt funnet. Brukeren valgte «Ikke endre noe» |
 | `@DOM-SUB-KAP-NNN` | <tittel> | `@draft` | <N>/<N> | Alt funnet, men `@openquestion` står igjen |
-| `@DOM-SUB-KAP-NNN` | <tittel> | `@in-progress` | <n>/<N> | Brukeren svarte «Noe mangler»: <hva> |
-| `@DOM-SUB-KAP-NNN` | <tittel> | `@in-progress` | <n>/<N> | Brukeren svarte «Avbryt» |
+| `@DOM-SUB-KAP-NNN` | <tittel> | `@in-progress` | <n>/<N> | Brukeren sa at noe mangler: <hva> |
+| `@DOM-SUB-KAP-NNN` | <tittel> | `@in-progress` | <n>/<N> | Brukeren avbrøt gjennomgangen |
 
 Ingen.                                                                  [når alt er levert, i stedet for tabellen]
 

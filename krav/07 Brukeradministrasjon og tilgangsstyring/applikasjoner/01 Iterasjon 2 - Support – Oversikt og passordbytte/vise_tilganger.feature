@@ -64,6 +64,17 @@ Egenskap: Vise tilganger for applikasjon
     Når jeg velger en organisasjon i gjelder for-filteret
     Så vises kun tilganger som gjelder data i den valgte organisasjonen
 
+  @planned
+  Scenario: Organisasjonene i gjelder for-filteret vises med akronym
+    Når jeg åpner gjelder for-filteret
+    Så vises akronymet under navnet på hver organisasjon
+    Men organisasjonskoden vises når organisasjonen ikke har akronym
+
+  @planned
+  Scenario: Søke i gjelder for-filteret
+    Når jeg skriver inn tekst i gjelder for-filteret
+    Så viser gjelder for-filteret bare organisasjonene der navnet eller akronymet inneholder den innskrevne teksten
+
   Scenario: Filtrere tilgangsliste på tilgangskode
     Når jeg skriver inn tekst i tilgangskode-filteret
     Så vises kun tilganger der tilgangskoden inneholder den innskrevne teksten

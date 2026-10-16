@@ -1,5 +1,5 @@
 # language: no
-@OPT-OVO-GRU-001 @must @in-progress @scope-opprette-opptak-2027
+@OPT-OVO-GRU-001 @must @implemented @scope-opprette-opptak-2027
 Egenskap: Opprette et opptak
   Som opptaksforvalter
   ønsker jeg å opprette et opptak for organisasjonen jeg er opptaksforvalter ved

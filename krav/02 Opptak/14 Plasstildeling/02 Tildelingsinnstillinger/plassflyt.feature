@@ -13,11 +13,12 @@ Egenskap: Plassflyt mellom utdanningskvoter
   # At en plasstildelingsrunde bygger på forrige plasstildelingsrunde, er informasjonsarv, ikke plassflyt.
   #
   # ÅPNE SPØRSMÅL:
-  # - Forgrening (sende ledige plasser til flere utdanningskvoter) er ikke støttet. Bekrefte at det ikke trengs?
   # - Å flytte bare noen av de ledige plassene («flytt N av M») er ikke støttet. Trengs det?
   # - Flyter flere utdanningskvoter til samme mottaker, avgjør kvoteprioriteten rekkefølgen
   #   («Plasstildelingsløpet i Opptak», kap. 4). Skal det stå som et scenario?
   #
+  # AVKLART 2026-10-15: Forgrening trengs ikke. Hver kvote har én mottaker, og flere kvoter kan ha samme
+  # mottaker (sette_plassflyt.feature).
   # Kilde: tasks/opptak/plasstildeling/design.md (prinsipp 3, oppgave 3) og oppgave.md (gap-analyse oppgave 3).
   # Vernet mot sirkulær plassflyt kommer fra GitHub #598.
   # Status i kode: løst (oppgave.md). Kandidat for @implemented etter verifisering.
@@ -28,13 +29,14 @@ Egenskap: Plassflyt mellom utdanningskvoter
 
   Regel: Ledige plasser går til den første kvoten i kjeden som finnes på utdanningstilbudet
 
-    # AVKLART 2026-10-13: HK-dir har ikke funnet noen avvik fra standardisert plassflyt. En kvote kan
-    # ha flere mottakere i prioritert rekkefølge, og de ledige plassene går til den første som finnes
-    # på utdanningstilbudet. Eksempel fra HK-dir: samiskspråklig kvote går til Nordland, Troms og
-    # Finnmark-kvoten hvis den finnes, ellers til nordnorsk kvote, ellers til ordinær kvote.
+    # AVKLART 2026-10-13: HK-dir har ikke funnet noen avvik fra standardisert plassflyt. Eksempel fra HK-dir:
+    # samiskspråklig kvote går til Nordland, Troms og Finnmark-kvoten hvis den finnes, ellers til nordnorsk
+    # kvote, ellers til ordinær kvote.
+    # AVKLART 2026-10-15: Hver kvote har én mottaker, så eksempelet er en kjede. Finnes ikke mottakeren på
+    # utdanningstilbudet, går de ledige plassene videre i kjeden til den første kvoten som finnes.
 
     Scenariomal: Plassflyt etter hvilke utdanningskvoter utdanningstilbudet har
-      Gitt at standard plassflyt for "Samisk" er "Nordland, Troms og Finnmark", deretter "Nordnorsk", deretter "Ordinær"
+      Gitt at standard plassflyt er "Samisk" til "Nordland, Troms og Finnmark", "Nordland, Troms og Finnmark" til "Nordnorsk" og "Nordnorsk" til "Ordinær"
       Og at utdanningstilbudet har utdanningskvotene <utdanningskvoter>
       Og at "Samisk" har ledige plasser
       Når plasstildelingen gjennomføres
@@ -64,8 +66,8 @@ Egenskap: Plassflyt mellom utdanningskvoter
       Når plasstildelingen gjennomføres
       Så ender de ledige plassene fra begge utdanningskvotene i "Ordinær"
 
-    Scenario: Sistekvoten sender ikke plasser videre
-      Gitt at "Ordinær" er sistekvote
+    Scenario: Hovedkvoten sender ikke plasser videre
+      Gitt at "Ordinær" er hovedkvote
       Og at "Ordinær" har færre kvalifiserte søkere enn tilbud som skal gis
       Når plasstildelingen gjennomføres
       Så blir de ledige plassene i "Ordinær" stående ubrukt
@@ -74,7 +76,7 @@ Egenskap: Plassflyt mellom utdanningskvoter
 
     Scenario: Vanligste kjede i UHG
       Gitt at standard plassflyt for opptaket er "Førstegangsvitnemål" til "Ordinær"
-      Og at "Ordinær" er sistekvote
+      Og at "Ordinær" er hovedkvote
       Når plasstildelingen gjennomføres for et utdanningstilbud med utdanningskvotene "Førstegangsvitnemål" og "Ordinær"
       Så flyter ledige plasser i "Førstegangsvitnemål" til "Ordinær"
 

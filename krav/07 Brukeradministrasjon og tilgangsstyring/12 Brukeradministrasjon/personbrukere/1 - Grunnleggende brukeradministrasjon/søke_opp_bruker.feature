@@ -96,6 +96,19 @@ Egenskap: Listevisning og søk i personbrukere
       Når jeg velger en hjemorganisasjon som filter
       Så vises kun personbrukere med den valgte hjemorganisasjonen
 
+    @planned
+    Scenario: Hjemorganisasjonene i filteret vises med akronym
+      Gitt jeg ser listen over personbrukere
+      Når jeg åpner hjemorganisasjonsfilteret
+      Så vises akronymet under navnet på hver hjemorganisasjon
+      Men organisasjonskoden vises når hjemorganisasjonen ikke har akronym
+
+    @planned
+    Scenario: Søke i hjemorganisasjonsfilteret
+      Gitt jeg ser listen over personbrukere
+      Når jeg skriver inn tekst i hjemorganisasjonsfilteret
+      Så viser hjemorganisasjonsfilteret bare hjemorganisasjonene der navnet eller akronymet inneholder den innskrevne teksten
+
     Scenario: Tilgjengelige roller i filter
       Gitt jeg ser listen over personbrukere
       Når jeg åpner rollefilteret

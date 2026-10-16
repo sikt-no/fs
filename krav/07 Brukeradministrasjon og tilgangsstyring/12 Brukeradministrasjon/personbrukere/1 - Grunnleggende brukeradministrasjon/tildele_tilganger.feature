@@ -22,12 +22,30 @@ Egenskap: Tildele tilganger til en personbruker (planlagt etter v1)
     Scenario: Organisasjon er implisitt når administrator administrerer kun én organisasjon
       Gitt jeg administrerer kun én organisasjon
       Når jeg velger et miljø og en tilgang jeg har rettighet til å tildele
-      Så er tilgangen tildelt personbrukeren i det valgte miljøet for min organisasjon
+      Så er tilgangen tildelt personbrukeren i det valgte miljøet for organisasjonen jeg administrerer
 
     Scenario: Valglisten for organisasjon er begrenset til organisasjoner jeg administrerer
       Gitt jeg administrerer flere organisasjoner
       Når jeg åpner valglisten for organisasjon
       Så ser jeg kun organisasjoner jeg har brukeradministrator-rollen for
+
+    Scenario: Personbrukerens hjemorganisasjon er forhåndsvalgt
+      Gitt jeg administrerer flere organisasjoner
+      Og personbrukerens hjemorganisasjon er blant organisasjonene jeg administrerer
+      Når jeg velger å tildele en tilgang
+      Så er personbrukerens hjemorganisasjon valgt som organisasjon
+      Og jeg kan velge en annen av organisasjonene jeg administrerer
+
+    Scenariomal: Ingen organisasjon er forhåndsvalgt uten en hjemorganisasjon jeg administrerer
+      Gitt jeg administrerer flere organisasjoner
+      Og personbrukerens hjemorganisasjon er <hjemorganisasjon>
+      Når jeg velger å tildele en tilgang
+      Så er ingen organisasjon valgt
+
+      Eksempler:
+        | hjemorganisasjon                                 |
+        | ukjent                                           |
+        | ikke blant organisasjonene jeg administrerer     |
 
   Regel: En eller flere tilganger kan tildeles i én operasjon
 

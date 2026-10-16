@@ -90,7 +90,7 @@ Vent på svarene. De kommer som meldinger; ikke poll oppgavelista i en løkke. B
 2. **`avkreftet` eller `usikker`:** les det kontrolløren viser til, og det finneren viste til. Har kontrolløren rett, bruk det nye resultatet. Er det fortsatt uklart, blir resultatet `usikker`, med begge synene i beviset. Noter raden for `## Kontroll` i rapporten.
 3. **Et `funnet` som kontrollen avkrefter, kan aldri brukes til retagging**, selv om du er enig med finneren. Da blir det `usikker`, og brukeren avgjør.
 
-Før du viser et krav til brukeren for retagging eller sletting, les `fil:linje` for bevisene til det kravet selv. Du står ansvarlig for det du viser brukeren.
+Før du foreslår retagging eller sletting av et krav, les `fil:linje` for bevisene til det kravet selv. Du står ansvarlig for det du viser brukeren.
 
 ## Skjermbilder
 
@@ -98,14 +98,14 @@ Bare når brukeren har sagt ja (*Finn scope og kode*), og bare du tar dem, etter
 
 ## Bekreft og endre
 
-Ett krav om gangen, nøyaktig som i `fs-verify`, når det kontrollerte resultatet for kravet er klart:
+Vent til alle svarene er kontrollert (og skjermbildene tatt), og spør ikke underveis. Følg så *Rapport og endringer* i `fs-verify`: vis rapporten i chat, vis `## Forslag til endringer`, og spør én gang, med kravene nevnt i spørsmålet. Valgene er de samme: **Gjør endringene**, **Gå gjennom krav for krav** og **Ikke endre noe**. Hva som kan leveres og slettes, står i `fs-verify`:
 
-- `@in-progress`: steg 4–6 i *Verifisere implementasjon* (vis resultatet og hva kontrollen endret, spør «Stemmer vurderingen …?», retagg bare når alt i gating-settet er `funnet` og brukeren svarte **Stemmer**).
+- `@in-progress`: *Verifisere implementasjon* (alt i gating-settet er `funnet` etter kontrollen).
 - Deler i leverte krav: *Deler i leverte krav som endres* (fjern `@in-progress` fra delen).
-- `@deprecated`: steg 3–5 i *Verifisere at koden er borte* (spør før sletting).
-- *Uansett status*: spør bare om de kravene der hele gating-settet er `funnet`. For de andre blir statusen stående uansett, og resultatet står i rapporten.
+- `@deprecated`: *Verifisere at koden er borte* (ingen spor funnet).
+- *Uansett status*: bare kravene der hele gating-settet er `funnet`. For de andre blir statusen stående, og resultatet står i rapporten.
 
-Svarer brukeren **Avbryt**, stopp, skriv rapporten for det som er gjort, og rydd opp i teamet.
+Svarer brukeren **Avbryt** i gjennomgangen, stopp, skriv rapporten for det som er gjort, og rydd opp i teamet.
 
 ## Rapport
 

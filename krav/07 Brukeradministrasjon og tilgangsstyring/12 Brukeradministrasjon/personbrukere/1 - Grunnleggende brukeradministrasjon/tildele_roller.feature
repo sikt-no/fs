@@ -22,12 +22,30 @@ Egenskap: Tildele roller til en personbruker
     Scenario: Organisasjon er implisitt når administrator administrerer kun én organisasjon
       Gitt jeg administrerer kun én organisasjon
       Når jeg velger et miljø og en rolle jeg har rettighet til å tildele
-      Så er rollen tildelt personbrukeren i det valgte miljøet for min organisasjon
+      Så er rollen tildelt personbrukeren i det valgte miljøet for organisasjonen jeg administrerer
 
     Scenario: Valglisten for organisasjon er begrenset til organisasjoner jeg administrerer
       Gitt jeg administrerer flere organisasjoner
       Når jeg åpner valglisten for organisasjon
       Så ser jeg kun organisasjoner jeg har brukeradministrator-rollen for
+
+    Scenario: Personbrukerens hjemorganisasjon er forhåndsvalgt
+      Gitt jeg administrerer flere organisasjoner
+      Og personbrukerens hjemorganisasjon er blant organisasjonene jeg administrerer
+      Når jeg velger å tildele en rolle
+      Så er personbrukerens hjemorganisasjon valgt som organisasjon
+      Og jeg kan velge en annen av organisasjonene jeg administrerer
+
+    Scenariomal: Ingen organisasjon er forhåndsvalgt uten en hjemorganisasjon jeg administrerer
+      Gitt jeg administrerer flere organisasjoner
+      Og personbrukerens hjemorganisasjon er <hjemorganisasjon>
+      Når jeg velger å tildele en rolle
+      Så er ingen organisasjon valgt
+
+      Eksempler:
+        | hjemorganisasjon                                 |
+        | ukjent                                           |
+        | ikke blant organisasjonene jeg administrerer     |
 
   Regel: En eller flere roller kan tildeles i én operasjon
 
@@ -54,6 +72,30 @@ Egenskap: Tildele roller til en personbruker
       Gitt jeg har valgt organisasjon og miljø
       Når jeg åpner valglisten for roller
       Så vises kun roller jeg har rettighet til å tildele for den valgte kombinasjonen av organisasjon og miljø
+
+  Regel: Bare forretningsroller kan tildeles som rolle
+
+    Scenario: Valglisten for rolle viser bare forretningsroller
+      Gitt jeg har valgt organisasjon og miljø
+      Når jeg åpner valglisten for roller
+      Så vises bare forretningsroller
+      Men brukerflateroller og privilegier vises ikke
+
+    @draft @openquestion
+    Scenario: Tildeling av en rolle som ikke er en forretningsrolle avvises
+      # ÅPNE SPØRSMÅL:
+      # - Regelen skal også håndheves når rollen tildeles, ikke bare i valglisten. Når skal det bygges?
+      # - Finnes det direkte tildelinger av brukerflateroller fra før (f.eks. FS-ADMIN_OPPTAK_*), og skal de ryddes?
+      Når en rolle som ikke er en forretningsrolle tildeles personbrukeren
+      Så avvises tildelingen
+      Og personbrukeren har ikke fått rollen
+
+  Regel: Utgåtte roller kan ikke tildeles
+
+    Scenario: Utgåtte roller vises ikke i valglisten for rolle
+      Gitt en forretningsrolle er markert som utgått i rollekatalogen
+      Når jeg åpner valglisten for roller
+      Så vises ikke den utgåtte forretningsrollen
 
   Regel: En rolle som allerede er tildelt for samme organisasjon og miljø kan ikke tildeles på nytt
 
