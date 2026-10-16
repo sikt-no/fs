@@ -196,6 +196,8 @@ Then('skal {string} vises', async ({ page }, tekst: string) => {
 
 Alle fs-*-skillene sjekker at branchen er oppdatert mot origin og main før de gjør noe, i dette repoet og i kodeklonene de leser. Er branchen bak, spør de før de henter (`git pull --ff-only`). I Claude-panelet hoppes sjekken over, siden det ikke har Bash. Prosedyren står i [`.claude/references/oppdatert-branch.md`](.claude/references/oppdatert-branch.md).
 
+Brukerveiledningene for FS Admin ligger i fs-admin (`src/features/Brukerveiledninger/innhold/`), og skrives med skillen `fs-admin-brukerveiledninger` der. `fs-verify` og `fs-verify-agent-teams` minner brukeren på å oppdatere dem når et krav med kode i fs-admin blir levert, endret eller fjernet, og `fs-krav` når et levert krav endres eller avvikles. Påminnelsen står i [`.claude/references/brukerveiledninger.md`](.claude/references/brukerveiledninger.md).
+
 Typisk flyt: `fs-scope` → `fs-krav` → `fs-specify` / `fs-specify-delta` (med `fs-implementasjonsdetaljer`) → `lage-steps` → `fs-verify` (eller `fs-verify-agent-teams` når det er mange feature-filer). Tavla «Oppgaver» i FS Kravforvaltning viser hvor hver oppgave er, utledet fra kravene og spesifikasjonene. Skillen `fs-oppgave` (faser, `roadmap.md` og review-filer) er ikke lenger i dette repoet, og kan brukes fra et annet sted. Se [`tasks/README.md`](tasks/README.md) for oppgavestrukturen. `.claude/rules/tasks-conventions.md` importerer den med `@../../tasks/README.md` når Claude jobber i `tasks/**`.
 
 ## CI/CD
