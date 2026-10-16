@@ -119,6 +119,11 @@ Egenskap: Antall tilbud som skal gis per utdanningskvote (sette opptaksparameter
       Og dagens dato er "2027-07-11"
       Så kan opptaksforvalter ved forvaltende organisasjon fortsatt endre antall tilbud som skal gis for plasstildelingsrunden
 
+    # AVKLART 2026-10-16 (produktleder): Perioden virker som en åpningsdato. Er den ikke satt, holder den stengt.
+    Scenario: Lærested kan ikke sette antall tilbud når perioden ikke er satt
+      Gitt at det ikke er satt periode for å endre antall tilbud som skal gis i plasstildelingsrunden "Hovedrunde"
+      Så kan opptaksforvalter ved lærestedene ikke legge inn antall tilbud som skal gis for plasstildelingsrunden
+
     Scenario: Siste lagrede tall er korrekt uavhengig av hvem som satte det
       Gitt at opptaksforvalter ved lærestedet satte antall tilbud som skal gis i utdanningskvoten "Ordinær" til 100
       Når opptaksforvalter ved forvaltende organisasjon endrer antall tilbud til 120
