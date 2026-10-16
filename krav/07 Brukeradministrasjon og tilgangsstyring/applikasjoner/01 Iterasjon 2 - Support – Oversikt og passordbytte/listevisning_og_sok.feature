@@ -114,6 +114,19 @@ Egenskap: Listevisning og søk i applikasjoner
       Og organisasjonene er sortert alfabetisk
       Og "Alle applikasjonseiere" er valgt som standard
 
+    @planned
+    Scenario: Applikasjonseierne i filteret vises med akronym
+      Gitt jeg ser listen over applikasjoner
+      Når jeg åpner applikasjonseier-filteret
+      Så vises akronymet under navnet på hver organisasjon
+      Men organisasjonskoden vises når organisasjonen ikke har akronym
+
+    @planned
+    Scenario: Søke i applikasjonseier-filteret
+      Gitt jeg ser listen over applikasjoner
+      Når jeg skriver inn tekst i applikasjonseier-filteret
+      Så viser applikasjonseier-filteret bare organisasjonene der navnet eller akronymet inneholder den innskrevne teksten
+
     Scenario: Filtrere på applikasjonseier
       Gitt jeg ser listen over applikasjoner
       Når jeg velger en applikasjonseier som filter

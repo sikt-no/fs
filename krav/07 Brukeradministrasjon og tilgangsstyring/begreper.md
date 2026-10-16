@@ -40,6 +40,20 @@ Domenebegrepene er et semantisk lag oppå den tekniske modellen, ikke en ny tekn
 | Sammensatt enhet         | rolle                       | rolle                                    |
 | Semantikk                | ingen — alt er roller       | ja — tilgang vs. rolle har ulik betydning |
 
+## Forretningsrolle og brukerflaterolle
+
+Rollene har også ulike formål, uavhengig av om de presenteres som tilgang eller rolle:
+
+- **Forretningsrolle** er rollen et menneske faktisk får tildelt. Den svarer til en arbeidsoppgave eller et ansvar, og bestemmer hva personen kan gjøre og hvilke data personen får tilgang til.
+- **Brukerflaterolle** styrer bare hva som vises i en brukerflate, som hvilke sider og knapper FS Admin viser. Den er et hint til brukerflaten, ikke det som avgjør tilgangen. En forretningsrolle kan gi brukerflateroller.
+- **Privilegium** er den enkelte rettigheten i et API eller en tjeneste, for eksempel å lese eller endre data i en subgraf. En brukerflaterolle kan gi privilegier.
+
+Lagene henger sammen slik: forretningsrolle ⇒ brukerflaterolle ⇒ privilegium.
+
+Bare forretningsroller kan tildeles en personbruker som rolle (BRU-PER-GRU-003). Brukerflaterollene og privilegiene følger av forretningsrollene, og tildeles ikke som rolle. Enkelttilganger kan likevel tildeles direkte (BRU-PER-GRU-009).
+
+Teknisk skilles de på navnerommet rollen ligger i: forretningsrollene ligger i navnerommet `fs` (typen `forretning`), brukerflaterollene for FS Admin i navnerommet `fs-admin` (typen `frontend`), og privilegiene i navnerom av typen `subgraf` eller `tilgangsstyring`.
+
 ## Hvorfor skillet ønskes
 
 - **Speiler hverdagsspråket.** Folk spør «har du tilgang til X?» og «hvilken rolle har du?». Begrepene tilgang og rolle er allerede innarbeidet og intuitive, mens «en rolle som arver en rolle» er en teknisk abstraksjon de fleste administratorer ikke bør måtte forholde seg til.
