@@ -1,5 +1,5 @@
 # language: no
-@OPT-REG-RAN-003 @must @draft
+@OPT-REG-RAN-003 @must @draft @scope-regelverk-2027
 Egenskap: Poenglikhetsregel
   Som opptaksforvalter
   ønsker jeg å definere poenglikhetsregler i regelverkssamlingen
@@ -9,6 +9,10 @@ Egenskap: Poenglikhetsregel
   # standard på opptaket — ikke på rangeringsregelverket. Det er uklart hvorfor
   # regelen registreres i regelverkssamlingen og ikke rett på opptaket.
   # Se opptak/design.md for hvordan den brukes.
+  # Verifisert 2026-10-14 (retrofitting): ikke levert. Poenglikhetsreglene er faste koder i koden (ALDER, LODD,
+  # PRIORITET, TIDSPUNKT og UNDERREPRESENTERT_KJØNN), ligger ikke i regelverkssamlingen, og kan ikke forvaltes i
+  # fs-admin. Rekkefølgen er hardkodet. Regelen velges på opptaket (11 Opprette og vedlikeholde opptak/03
+  # Innstillinger/innstillinger.feature). Kravet står som videre ønske (#580).
 
   Bakgrunn:
     Gitt at jeg er innlogget som opptaksforvalter

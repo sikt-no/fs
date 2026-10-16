@@ -1,6 +1,6 @@
 # language: no
 # GitHub: #376
-@OPT-REG-KVO-001 @must @draft
+@OPT-REG-KVO-001 @must @implemented @scope-regelverk-2027
 Egenskap: Kvotetype
   Som opptaksforvalter
   ønsker jeg å definere kvotetyper i regelverkssamlingen
@@ -38,21 +38,9 @@ Egenskap: Kvotetype
       Når opptaksforvalteren oppretter kvotetypen "ORD" med default poengformel "KONKURRANSEPOENG"
       Så brukes poengformelen "KONKURRANSEPOENG" som standard for kvotetypen "ORD"
 
-  Regel: En kvotetype har en kvoteprioritet som bestemmer rekkefølgen
-
-    Scenario: Sette kvoteprioritet
-      Når opptaksforvalteren oppretter kvotetypen "ORDF" med kvoteprioritet 1
-      Og opptaksforvalteren oppretter kvotetypen "ORD" med kvoteprioritet 2
-      Så prøves søkere i førstegangsvitnemålskvoten før ordinær kvote
-
-  Regel: En kvotetype kan ha plassflyt til en annen kvotetype
-
-    # Merk: plassflyt på kvotetypenivå er default. Faktisk plassflyt settes
-    # per utdanningskvote på utdanningstilbudet og kan overstyre denne.
-    Scenario: Sette default plassflyt
-      Gitt at kvotetypene "ORD" og "ORDF" finnes
-      Når opptaksforvalteren setter at kvotetypen "ORDF" har plassflyt til "ORD"
-      Så flyter ledige plasser i ORDF-kvoten til ORD-kvoten som default
+  # Reglene om kvoteprioritet og default plassflyt på kvotetypen er fjernet 2026-10-14 (retrofitting).
+  # fs-admin har dem ikke på kvotetypen: kvoteprioriteten settes per utdanningskvote på utdanningstilbudet,
+  # og standard plassflyt på opptaket (11 Opprette og vedlikeholde opptak/03 Innstillinger/sette_plassflyt.feature).
 
   Regel: En kvotetype gjelder for grunnlagene den er koblet til
 
@@ -64,14 +52,17 @@ Egenskap: Kvotetype
       Gitt at grunnlaget "PRA" har aldersgrensen større enn 22 år
       Når opptaksforvalteren kobler grunnlaget "PRA" til kvotetypen "ORD"
       Så gjelder aldersgrensen på grunnlaget "PRA" også for kvotetypen "ORD"
-      Men opptaksforvalteren kan ikke sette en egen aldersgrense på kvotetypen "ORD"
 
     Scenario: Kvotetype uten grunnlag og kvotespørsmål
       Gitt at kvotetypen "TestKvote" verken har grunnlag eller kvotespørsmål
       Når søknadene i opptaket behandles
       Så plasseres ingen søkere automatisk i kvotetypen "TestKvote"
 
+  @draft @openquestion
   Regel: En kvotetype kan ha fire ulike rangeringsmetoder
+    # ÅPNE SPØRSMÅL:
+    # - Kvoterangeringen lagres, men brukes ikke i rangeringen (verifisert 2026-10-14). Skal den brukes?
+    # - IH betyr «Sivilingeniør, ingeniørhøgskole» i kodeverket, ikke «individuell helhetsvurdering». Hva er riktig?
 
     Scenariomal: Kvoterangering
       Når opptaksforvalteren oppretter en kvotetype med kvoterangering "<metode>"
@@ -94,4 +85,5 @@ Egenskap: Kvotetype
     Scenario: Kan ikke slette kvotetype som er i bruk
       Gitt at kvotetypen "ORD" er knyttet til utdanningstilbud
       Når opptaksforvalteren forsøker å slette kvotetypen "ORD"
-      Så får opptaksforvalteren beskjed om at kvotetypen "ORD" er i bruk
+      Så blir kvotetypen "ORD" ikke slettet
+      Og opptaksforvalteren får beskjed om at kvotetypen "ORD" ikke kunne slettes

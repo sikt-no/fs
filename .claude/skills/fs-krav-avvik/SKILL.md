@@ -29,9 +29,10 @@ Før du leser eller skriver krav: sjekk at branchen i dette repoet er oppdatert 
 
 ## Kilder (les FØRST)
 
-1. `krav/README.md`: hele fila. Særlig *Gode scenarioer*, *Aktører* og *Terminologi* (med *Ord som krever avklaring*, *Foretrukne begreper* og *Konkrete henvisninger*).
+1. `krav/README.md`: hele fila. Særlig *Gode scenarioer* (med *Krav fra kode, skisser eller FS-klienten*), *Aktører* og *Terminologi* (med *Ord som krever avklaring*, *Foretrukne begreper* og *Konkrete henvisninger*).
 2. `.claude/rules/design-patterns-for-krav.md`.
 3. `.claude/rules/listevisning-pattern.md`, bare for filer som beskriver en oversiktsside med en liste (se *Når mønsteret gjelder* der).
+4. Domenets begrepsliste (se *Terminologi* i `krav/README.md`), hvis den finnes.
 
 ## Scope
 
@@ -48,6 +49,8 @@ Brukeren oppgir en mappe eller fil under `krav/`. Mangler den, spør. Finn filen
    - `Grep` på `\b(min|mine|mitt)\b`: som «egne». Avvik når det gjelder en rolles tilknytning («min organisasjon»), ikke ved bokstavelig eierskap («min profil»).
    - `Grep` på `\b(den|denne|dette)\b`: avvik når ordet peker til et annet steg («Så ser jeg denne applikasjonen»). Ikke avvik når det står i samme steg, når «den» er artikkel foran et adjektiv («den valgte organisasjonen»), eller når «det» er formelt subjekt.
    - «sin/sine/sitt» er ikke avvik.
+   - `Grep` på `\b[A-ZÆØÅ]{2,}_[A-ZÆØÅ_]+\b|\b[a-zæøå]+_[a-zæøå_]+\b|\b[a-zæøå]+[A-ZÆØÅ][A-Za-zæøå]*\b|HTTP \d{3}|"[a-zæøå_]+":|\b(GET|POST|PUT|DELETE) /`: ord fra koden (*Gode scenarioer*), avvik i steg, tabeller og titler. Ikke avvik: `#`-kommentarer, tagger, `<parameter>` i `Scenariomal:`, feature-filnavn og testdata («SIKT_THS»). Treffer én verdi i en tabellkolonne, vurder hele kolonnen. Kodeverdier uten understrek («MANGEL», «GENERELL») finner ikke Grep, så de vurderes mot begrepslista. Bare ordlyd når domeneordet står i fila eller i begrepslista, ellers trenger avklaring.
+   - Alle reglene og scenarioene i fila er å opprette, endre og slette én eller flere entiteter, og verken brukerhistorien eller reglene sier hvilken prosess de hører til: *trenger avklaring*, med spørsmålet «Hvilken prosess hører dette til?». Ikke avvik når forvaltningen av grunndataene er prosessen, for eksempel kodeverk. Unntaket gjelder bare når brukerhistorien eller beskrivelsen sier det. Ellers trenger det avklaring, med spørsmålet om det er kodeverk. En fil som beskriver én skjerm eller komponent, er ikke avvik alene: skjerm er et tegn for `fs-krav` og `fs-scope`, ikke for denne sjekken.
 
 ## Klassifiser hvert funn
 

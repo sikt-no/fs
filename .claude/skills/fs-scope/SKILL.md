@@ -79,7 +79,7 @@ Brukes i modus A og B når en ny oppgave trengs.
 2. **Avgrens med brukeren, ett spørsmål om gangen:** mål, ikke-mål, og hva som er utsatt.
 3. **Slug og domene.** Slugen er kebab-case (a–z, 0–9 og `-`), og unik på tvers av alle `tasks/*/scope-*.md`, siden taggen ikke har domene. Går initiativet over flere domener, lag ett scope per domene.
 4. **Del i oppgaver.** Oppgaver som finnes, gjenbrukes og får `Scope:` i `oppgave.md` (har de et annet scope fra før, spør). Nye opprettes som i *Opprette en oppgave*. Har en oppgave en håndskrevet `## Oppgaver`-tabell, bruk den som utgangspunkt, og spør om den skal stå eller fjernes når scopet er skrevet.
-5. **Kartlegg kravene per oppgave.** Finn feature-filene som finnes (`Grep` på titler og begreper under `krav/`), og foreslå plassering av nye. Før nye mapper lages: sjekk at nummeret ikke er brukt fra før på samme nivå, og at sub-domenet og kapabiliteten ikke heter det samme (se *Mappestruktur* i `krav/README.md`). Bekreft med brukeren.
+5. **Kartlegg kravene per oppgave.** Finn feature-filene som finnes (`Grep` på titler og begreper under `krav/`), og foreslå plassering av nye. Før nye mapper lages: sjekk at nummeret ikke er brukt fra før på samme nivå, og at sub-domenet og kapabiliteten ikke heter det samme (se *Mappestruktur* i `krav/README.md`). Kravene og `Regel:`-titlene deles etter prosess og skrives med domenets ord, se *Krav fra kode, skisser eller FS-klienten* i `krav/README.md`. Bekreft med brukeren.
 6. **Skjelett-filer for nye krav.** Vis innholdet, og bekreft før det skrives til disk:
 
    ```gherkin

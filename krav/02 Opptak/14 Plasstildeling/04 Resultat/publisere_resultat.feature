@@ -1,6 +1,6 @@
 # language: no
 # GitHub: #586
-@OPT-PLA-RES-002 @must @draft
+@OPT-PLA-RES-002 @must @draft @scope-plasstildeling-2027
 Egenskap: Publisere resultatet til søkerne
   Som opptaksforvalter
   ønsker jeg å bestemme når resultatet av en plasstildeling blir synlig for søkerne
@@ -9,7 +9,7 @@ Egenskap: Publisere resultatet til søkerne
   # Kilde: tasks/opptak/plasstildeling/design.md (beslutning 2, prinsipp 4, del 2 «Søkeren skal kunne forstå svaret sitt»),
   # oppgave.md (oppgave 8) og Confluence «2026-09-08 Raffinering plasstildeling» (oppgave 7).
   # Beregning og publisering er to separate steg. Det gjør ubegrensede prøvetildelinger mulig.
-  # Melding til søker og vedtaksbrev: se 11 Opptak/05 Tekster/svarmeldingsmal.feature og 09 Kommunikasjon.
+  # Melding til søker: se 13 Søknad og saksbehandling/01 Søknad/mine_meldinger.feature.
   # Status i kode: delvis. Ventelistenummeret når ikke fram til søkeren.
 
   Bakgrunn:
@@ -81,7 +81,11 @@ Egenskap: Publisere resultatet til søkerne
       Når plasstildelingen er publisert
       Så ser søkerne ikke poenggrensen for "Sykepleie, høst 2027"
 
+    @openquestion
     Scenario: Søker ser bare tilbudet når en annen utdanningskvote er kansellert
+      # ÅPNE SPØRSMÅL:
+      # - Er «kansellert» et eget resultat, eller er det bortfall? Resultatlista i gjennomføre_plasstildeling.feature
+      #   har tilbud, venteliste, bortfall og avslag, og kaller dette bortfall.
       Gitt at søkeren "Kari Nordmann" konkurrerer om "Sykepleie, høst 2027" i utdanningskvotene "Førstegangsvitnemål" og "Ordinær"
       Og at søkeren fikk tilbud i "Førstegangsvitnemål" og kansellert i "Ordinær"
       Når plasstildelingen er publisert
@@ -92,7 +96,7 @@ Egenskap: Publisere resultatet til søkerne
 # - Poenggrensen søkeren ser i dag kommer fra en annen kilde enn plasstildelingen. Vedtaket må
 #   begrunnes med poenggrensen fra plasstildelingen (se gjennomføre_plasstildeling.feature).
 # - Arv av svartype ved publisering er uavklart (oppgave.md, gap-analyse oppgave 7).
-# - Skal søkere få varsel på e-post/SMS ved publisering, og påminnelse før svarfristen? Hører det hjemme i 09 Kommunikasjon?
+# - Skal søkere få varsel på e-post/SMS ved publisering, og påminnelse før svarfristen? Hører det hjemme i 13 Søknad og saksbehandling/01 Søknad/mine_meldinger.feature?
 # - Vedtaksbrev med klagerett: se Confluence «Vedtaksbrev og svar på opptaket». Hvor skal kravet ligge?
 # - Hvilke søkere får melding: bare de med tilbud, eller også de på venteliste og med avslag?
 # - Publisering kan ikke angres i dag. Svarfristen og publiseringstidspunktet kan nullstilles på plasstildelingsrunden,

@@ -14,7 +14,7 @@ Egenskap: Samordna opptak
     Scenario: Legge til lærested i samordna opptak
       Når opptaksforvalter ved forvaltende organisasjon legger til organisasjonen "Universitetet i Oslo" som deltaker i opptaket
       Så kan opptaksforvalter ved Universitetet i Oslo knytte utdanningstilbud ved Universitetet i Oslo til opptaket
-  # Følgevirkninger: Deltagende organisasjoner kan få søknader de har behandlerrolle for etter saksbehandlertildelingen
+  # Følgevirkninger: Deltagende organisasjoner kan få søknader de er saksbehandlende organisasjon for etter saksbehandlertildelingen
   # Deltagende organisasjoners opptaksforvaltere kan se og vedlikeholde info på egne utdanningstilbud, og saksbehandlere kan se info om egne utdanningstilbud
 
   Regel: Kun organisasjoner som deltar i opptaket kan legge til utdanningstilbud

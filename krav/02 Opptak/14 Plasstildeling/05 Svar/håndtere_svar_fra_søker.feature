@@ -1,6 +1,6 @@
 # language: no
 # GitHub: #587
-@OPT-PLA-SVA-001 @must @draft
+@OPT-PLA-SVA-001 @must @draft @scope-plasstildeling-2027
 Egenskap: Håndtere svar fra søker
   Som søker
   ønsker jeg å svare på tilbud og ventelisteplass innen svarfristen
@@ -10,7 +10,10 @@ Egenskap: Håndtere svar fra søker
   # oppgave.md (oppgave 9) og Confluence «2026-09-08 Raffinering plasstildeling» (oppgave 8).
   # Svarene behandles i neste plasstildeling i opptaket. Det gis ikke automatisk nye tilbud ved
   # nei-svar mellom plasstildelingsrundene (oppgave 10 i oppgave.md, utenfor scope 2027).
-  # Status i kode: delvis. Ja/nei virker. Trukket ja-svar og manuell overstyring mangler.
+  # Status i kode: delvis. Ja/nei virker. Trukket ja-svar etter svarfristen og manuell overstyring mangler.
+  # Svarflyten søkeren ser i Min kompetanse, står i 13 Søknad og saksbehandling/01 Søknad/svare_på_tilbud.feature
+  # (levert): hva som kan besvares, svar etter fristen, svar på ventelisteplass, samlet svar og endring av svar
+  # innen fristen. Denne fila beskriver hva svarene betyr for plasstildelingen.
 
   Bakgrunn:
     Gitt at søkeren "Kari Nordmann" er innlogget i Min kompetanse
@@ -64,10 +67,12 @@ Egenskap: Håndtere svar fra søker
     Scenario: Velge mellom to tilbud i etterfylling
       Gitt at søkeren har tilbud på både "Sykepleie, høst 2027" og "Vernepleie, høst 2027" etter "Etterfylling"
       Når søkeren takker ja til tilbudet på "Sykepleie, høst 2027"
+      Og svarfristen for "Etterfylling" er ute
       Så blir tilbudet på "Vernepleie, høst 2027" ledig i neste plasstildeling
 
     # AVKLART 2026-10-14 (domeneekspert): Uansett runde kan søkeren bare takke ja til ett tilbud i samordna opptak.
     # Antallet settes på opptaket, se 11 Opprette og vedlikeholde opptak/03 Innstillinger/innstillinger.feature.
+    # Svarflyten for søkeren står i 13 Søknad og saksbehandling/01 Søknad/svare_på_tilbud.feature.
     Scenariomal: Søkeren kan bare takke ja til ett tilbud
       Gitt at opptaket tillater at en søker takker ja til 1 tilbud
       Og at søkeren har tilbud på både "Sykepleie, høst 2027" og "Vernepleie, høst 2027" etter "<plasstildelingsrunde>"
@@ -82,18 +87,20 @@ Egenskap: Håndtere svar fra søker
         | Etterfylling         |
 
 # ÅPNE SPØRSMÅL:
-# - Skal en søker som takker ja og senere trekker seg frigjøre plassen til ventelisten? I dag frigjøres den aldri.
-#   Hva hvis søkeren allerede er opprettet som student?
+# - Skal en søker som takker ja og trekker seg etter svarfristen (svaret blir GODTATT_MEN_ANNULLERT), frigjøre
+#   plassen til ventelisten? I dag frigjøres den aldri. Hva hvis søkeren allerede er opprettet som student?
+#   (Innen svarfristen kan søkeren endre ja til nei, se 13 Søknad og saksbehandling/01 Søknad/svare_på_tilbud.feature.)
 # - Skal opptaksforvalter kunne overstyre et enkelt resultat manuelt, for eksempel gi ett tilbud uten ny plasstildeling?
 #   I dag krever alt en ny plasstildeling. Tilbudsgaranti er foreløpig eneste utvei.
 # - Må søkeren svare på ventelisteplass for å beholde den, eller står søkeren på ventelisten automatisk?
-# - Saksbehandler kan i koden svare på vegne av søkeren. Skal det være et eget scenario, og hvem kan gjøre det?
-# - I koden må alle tilbud i plasstildelingsrunden besvares samtidig. Skal det være slik? (Avklart 2026-10-14:
-#   bare ett tilbud kan godtas, i alle rundetyper.)
+#   (Søkeren kan svare på ventelisteplass, se svare_på_tilbud.feature. Om søkeren må, er ikke avklart.)
+# - Saksbehandler kan i koden svare på vegne av søkeren, og søkeren får da melding (levert, se
+#   13 Søknad og saksbehandling/01 Søknad/mine_meldinger.feature). Skal det stå som eget scenario her, og hvem kan gjøre det?
+# - Alle tilbud i søknaden besvares samlet (levert, se svare_på_tilbud.feature). Skal det være slik? (Avklart
+#   2026-10-14: søkeren kan bare takke ja til så mange tilbud som opptaket tillater.)
 # - Svarfristen er felles for plasstildelingsrunden. Trengs individuell svarfrist per søker eller per tilbud?
 # - At søkeren ikke svarte innen fristen, blir aldri lagret. Koden regner det ut hver gang svaret leses,
 #   og det finnes ingen «lukk plasstildelingsrunden». Skal svaret lagres når fristen er ute?
-# - Hører selve svarflyten i Min kompetanse hjemme her, eller under 13 Søknad og saksbehandling?
 
 # Kjente feil i koden, følges opp i Jira. Dette er ikke åpne spørsmål om kravet:
 #   TAKE-284: svar knyttes til plasstildelingsrunde på løpenummer uten rundetype. Med én plasstildelingsrunde

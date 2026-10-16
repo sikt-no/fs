@@ -133,7 +133,6 @@ Egenskap: Listevisning og søk i personbrukere
       Så ser jeg personbrukeren i listen
       Og hjemorganisasjonen som vises er personbrukerens egen, ikke organisasjonen tildelingen gjelder for
 
-    @planned
     Scenario: Brukeradministrator ser personbrukere fra andre organisasjoner med aktiv rolle i organisasjonene jeg administrerer
       Gitt jeg har brukeradministrator-rollen for én eller flere organisasjoner
       Og en personbruker har hjemorganisasjon utenfor organisasjonene jeg administrerer
@@ -174,7 +173,6 @@ Egenskap: Listevisning og søk i personbrukere
       Når jeg åpner brukeroversikten
       Så ser jeg ikke personbrukeren i listen
 
-    @planned
     Scenario: Personbrukere med annen hjemorganisasjon er ikke synlige når rollen gjelder i et miljø jeg ikke administrerer
       Gitt jeg har brukeradministrator-rollen for en organisasjon i ett miljø
       Og en personbruker har hjemorganisasjon utenfor organisasjonen jeg administrerer

@@ -3,6 +3,7 @@
 ## Metadata
 
 - **Issue**: [sikt-no/fs#216](https://github.com/sikt-no/fs/issues/216)
+- **Scope**: [scope-plasstildeling-2027](../scope-plasstildeling-2027.md)
 - **Initiativ**: #216 Ferdigstilling av plasstildeling i opptak
 - **Domene**: opptak
 - **Slug**: plasstildeling
@@ -19,7 +20,6 @@
   - PRs: –
   - Jira Epic: [TAKE-3](https://sikt.atlassian.net/browse/TAKE-3)
   - Confluence: [T3 2026 Forberede opptak og etterbehandling](https://sikt.atlassian.net/wiki/spaces/STUDIEADM/pages/4981817377)
-- **Krav (Gherkin)**: `krav/02 Opptak/14 Plasstildeling/` (skal utarbeides)
 
 ## Kort beskrivelse
 
@@ -27,18 +27,7 @@ Ferdigstille plasstildeling i opptak slik at opptaksforvalter kan opprette runde
 
 ## Oppgaver
 
-| # | Oppgave | MoSCoW | Status | Github-issue | Jira |
-|---|---------|--------|--------|-------------|------|
-| 1 | Legge til runder for plasstildeling i ett opptak | Must | Løst | | |
-| 2 | Beregne antall tilbud per utdanningskvote fra relativ fordeling | Must | Gjenstår | [#583](https://github.com/sikt-no/fs/issues/583) | [TAKE-327](https://sikt.atlassian.net/browse/TAKE-327) |
-| 3 | Beregne plassflyt ved ledige plasser per utdanningskvote | Must | Løst | | |
-| 4 | Starte en ny plasstildeling | Must | Løst | | |
-| 5 | Gjennomføre plasstildeling | Must | Løst | | |
-| 6 | Innføre kompensasjonstilbud ved opprykk (supplering) | Must | Gjenstår | [#584](https://github.com/sikt-no/fs/issues/584) | [TAKE-328](https://sikt.atlassian.net/browse/TAKE-328) |
-| 7 | Vise resultatet til saksbehandler | Must | Gjenstår | [#585](https://github.com/sikt-no/fs/issues/585) | [TAKE-329](https://sikt.atlassian.net/browse/TAKE-329) |
-| 8 | Publisere resultatet til søkerne | Must | Delvis | [#586](https://github.com/sikt-no/fs/issues/586) | [TAKE-330](https://sikt.atlassian.net/browse/TAKE-330) |
-| 9 | Håndtere svar fra søker | Must | Delvis | [#587](https://github.com/sikt-no/fs/issues/587) | [TAKE-331](https://sikt.atlassian.net/browse/TAKE-331) |
-| 10 | Systemet gir automatisk nye tilbud ved nei-svar | Won't | Utenfor scope 2027 | | |
+Oppgavetabellen er flyttet til [scope-plasstildeling-2027](../scope-plasstildeling-2027.md) 2026-10-14. Scope-tabellen er kilden til kravene.
 
 ## Workshop 2026-09-14: oppgavedeling og status
 
@@ -65,6 +54,7 @@ Plasstildeling utsettes fordi opptak, regelverk og utdanningstilbud har priorite
 
 | Dato       | Hendelse                          | Av            | Lenke til review        |
 |------------|-----------------------------------|---------------|-------------------------|
+| 2026-10-14 | Migrert til scope-plasstildeling-2027 | @karensikt | – |
 | 2026-09-15 | Workshop: utsatt til 8. des       | @karensikt    | –                       |
 | 2026-09-09 | Tatt inn i veikart (design)       | @karensikt    | –                       |
 | 2026-09-09 | Gap-analyse verifisert mot kode   | –             | design.md               |

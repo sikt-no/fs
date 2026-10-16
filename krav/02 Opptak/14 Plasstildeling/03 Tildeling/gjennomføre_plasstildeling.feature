@@ -1,17 +1,12 @@
 # language: no
 # GitHub: #216
-@OPT-PLA-TIL-002 @must @draft
+@OPT-PLA-TIL-002 @must @draft @scope-plasstildeling-2027
 Egenskap: Gjennomføre plasstildeling
   Som opptaksforvalter
   ønsker jeg at plasstildelingen fordeler studieplassene etter rangering, kvoter og rundetype
   slik at hver søker får et riktig og forklarbart svar på hver søknad.
 
   # ÅPNE SPØRSMÅL:
-  #
-  # Rundetype og utfall:
-  # - Hva betyr «bygger på forrige publiserte plasstildelingsrunde» i praksis? Er det at resultatet fra forrige
-  #   plasstildelingsrunde er utgangspunktet, og at bare endringer (opprykk, nye tilbud, bortfall) beregnes?
-  #   Eller kjøres hele fordelingen på nytt med oppdaterte tall?
   #
   # Poeng og rangering:
   # - Grunnlag uten poeng (HUP, REA): se Confluence «Hvordan løse HUP og andre grunnlag som ikke har poeng i plasstildeling».
@@ -89,7 +84,7 @@ Egenskap: Gjennomføre plasstildeling
 
   Regel: Ingen søker forsvinner stille
 
-    # AVKLART 2026-10-09 (tasks/opptak/begreper.md, avklaring 20): Bortfall og avslag er to ulike resultater.
+    # AVKLART 2026-10-09 (krav/02 Opptak/begreper.md, avklaring 20): Bortfall og avslag er to ulike resultater.
     # Avslag: søkeren er ikke kvalifisert, eller har ikke nådd opp og har ikke fått plass på venteliste.
     # Bortfall: søkeren mister tilbudet på en lavere prioritet fordi søkeren har fått tilbud på en høyere.
     # Gap mot koden: «kvalifisert uten tilbud» lagres i dag som bortfall, så de to kan ikke skilles i ettertid.
@@ -144,7 +139,7 @@ Egenskap: Gjennomføre plasstildeling
 
   Regel: Poenglikhetsregelen avgjør rekkefølgen ved lik poengsum
 
-    # Standard poenglikhetsregel settes på opptaket, se 11 Opptak/03 Innstillinger/innstillinger.feature.
+    # Standard poenglikhetsregel settes på opptaket, se 11 Opprette og vedlikeholde opptak/03 Innstillinger/innstillinger.feature.
     # Lærestedet kan bare velge «alle med samme sum får tilbud» som unntak. Strengere regler er ikke lov.
     # AVKLART 2026-10-14: Bare «Alle med samme sum får tilbud» gir hele gruppen på grensen tilbud.
     # Gap mot koden (A4): i dag får hele gruppen alltid tilbud, uansett poenglikhetsregel.
@@ -187,15 +182,24 @@ Egenskap: Gjennomføre plasstildeling
       Så får søkeren tilbud på "Sykepleie, høst 2027"
       Og tilbudet teller som ett av tilbudene i utdanningskvoten "Ordinær"
 
-    # AVKLART 2026-10-08: Saksbehandler setter tilbudsgaranti på søknaden. Søkeren får tilbud etter
-    # reglene for plasstildelingsrunden, og trenger ingen poengsum.
+    # AVKLART 2026-10-08: Søkeren med tilbudsgaranti får tilbud etter reglene for plasstildelingsrunden,
+    # og trenger ingen poengsum.
+    # AVKLART 2026-10-14: Plasstildelingen bryr seg ikke om hvem som satte tilbudsgarantien, bare om den er
+    # satt. Den tar bare hensyn til tilbudsgarantier som gir tilbud, altså der søkeren skal ha plass der
+    # tilbudsgarantien er gitt. Hvem som kan sette tilbudsgaranti, og typene, står i
+    # 13 Søknad og saksbehandling/02 Behandling/gi_tilbudsgaranti_ved_tidlig_opptak.feature.
     # Gap mot koden («Fra saksbehandling til plasstildeling», kap. 2–3 og D4): tilbudsgaranti fra
     # saksbehandlingen når ikke plasstildelingen, og en søknad uten poengsum kommer ikke med i grunnlaget.
     Scenario: Tilbudsgaranti uten poengsum
-      Gitt at saksbehandler har satt tilbudsgaranti på søknaden til "Ola Nordmann" på "Sykepleie, høst 2027"
+      Gitt at søknaden til "Ola Nordmann" på "Sykepleie, høst 2027" har en tilbudsgaranti som gir tilbud
       Og at søknaden ikke har poengsum
       Når plasstildelingen gjennomføres
       Så får søkeren tilbud på "Sykepleie, høst 2027"
+
+    Scenario: Tilbudsgaranti som ikke gir tilbud
+      Gitt at søknaden til "Ola Nordmann" på "Sykepleie, høst 2027" har en tilbudsgaranti som ikke gir tilbud
+      Når plasstildelingen gjennomføres
+      Så konkurrerer søkeren om plass på "Sykepleie, høst 2027" etter rangeringen, som andre søkere
 
   Regel: Poenggrensen beregnes per utdanningskvote
 
@@ -249,11 +253,29 @@ Egenskap: Gjennomføre plasstildeling
       Når plasstildelingen i "Hovedrunde" gjennomføres
       Så får søkeren bortfall på alle lavere prioriteter
 
-    Scenario: Tidligere tilbud beholdes i supplering
-      Gitt at søkeren "Kari Nordmann" fikk tilbud på prioritet 2 i "Hovedrunde"
+    # AVKLART 2026-10-14 (domeneekspert): «Bygger på forrige publiserte plasstildelingsrunde» betyr at
+    # aksepterte tilbud fra forrige runde garanteres med en automatisk tilbudsgaranti, og at søkeren bare
+    # konkurrerer om plass i utdanningskvotene søkeren står på venteliste til. Unntaket er søknadsalternativer
+    # der søkeren er blitt kvalifisert etter forrige runde, for eksempel etter en klage.
+    Scenario: Akseptert tilbud garanteres i supplering
+      Gitt at søkeren "Kari Nordmann" fikk tilbud på prioritet 2 i "Hovedrunde" og takket ja
       Og at søkeren fortsatt ikke er høyt nok rangert til prioritet 1
       Når plasstildelingen i "Suppleringsrunde" gjennomføres
-      Så beholder søkeren tilbudet på prioritet 2
+      Så beholder søkeren tilbudet på prioritet 2 med automatisk tilbudsgaranti
+
+    Scenario: Søkeren konkurrerer bare der søkeren står på venteliste
+      Gitt at søkeren "Kari Nordmann" har takket ja til tilbudet på prioritet 2 fra "Hovedrunde"
+      Og at søkeren står på venteliste til prioritet 1
+      Og at søkeren fikk bortfall på prioritet 3 i "Hovedrunde"
+      Når plasstildelingen i "Suppleringsrunde" gjennomføres
+      Så konkurrerer søkeren om plass på prioritet 1
+      Men søkeren konkurrerer ikke om plass på prioritet 3
+
+    Scenario: Søkeren konkurrerer etter ny kvalifisering
+      Gitt at søkeren "Kari Nordmann" ikke var kvalifisert på "Vernepleie, høst 2027" i "Hovedrunde"
+      Og at søkeren er blitt kvalifisert på "Vernepleie, høst 2027" etter en klage
+      Når plasstildelingen i "Suppleringsrunde" gjennomføres
+      Så konkurrerer søkeren om plass på "Vernepleie, høst 2027"
 
     Scenario: Opprykk i supplering
       Gitt at søkeren "Kari Nordmann" fikk tilbud på prioritet 2 i "Hovedrunde"

@@ -24,4 +24,4 @@ Egenskap: Opprette lokal rolle
 # - Hvilke tilganger og roller kan en rolleadministrator inkludere — kun fra egen organisasjon, eller også globale/delte roller?
 # - Skal en rolle kunne markeres som "krever taushetserklæring" ved opprettelse?
 # - Hvordan håndteres sirkulær arv (rolle A inkluderer B som inkluderer A) — avvist eller forhindret i UI?
-# - Forholdet mellom begrepene "tilgang" (atom) og "rolle" (sammensetning) ved tilbygging — se begrepsbruk.md.
+# - Forholdet mellom begrepene "tilgang" (atom) og "rolle" (sammensetning) ved tilbygging — se begreper.md i domenet.

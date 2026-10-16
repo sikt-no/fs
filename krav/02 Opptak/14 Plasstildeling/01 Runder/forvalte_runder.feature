@@ -1,6 +1,6 @@
 # language: no
 # GitHub: #216
-@OPT-PLA-RUN-001 @must @draft
+@OPT-PLA-RUN-001 @must @draft @scope-plasstildeling-2027
 Egenskap: Plasstildelingsrunder i et opptak
   Som opptaksforvalter
   ønsker jeg å legge til og forvalte plasstildelingsrunder i et opptak
@@ -149,11 +149,15 @@ Egenskap: Plasstildelingsrunder i et opptak
     # Den kan bare settes når opptaket tilbyr søknad på ledige studieplasser
     # (se 11 Opprette og vedlikeholde opptak/03 Innstillinger/innstillinger.feature).
     # Hvordan plasstildelingen rangerer søkerne, står i 03 Tildeling/gjennomføre_plasstildeling.feature.
+    # AVKLART 2026-10-15 (domeneekspert): Når runden er åpnet for ledige studieplasser, tar utdanningstilbud
+    # som tilbyr ledige studieplasser, imot nye søknader til behandling, og søknadene kan få tilbud i runden
+    # etter reglene for ledige studieplasser.
     Scenariomal: Åpne plasstildelingsrunden for ledige studieplasser
       Gitt at opptaket tilbyr søknad på ledige studieplasser
       Og at opptaket har plasstildelingsrunden "<plasstildelingsrunde>" med rundetype "<rundetype>"
       Når opptaksforvalter åpner plasstildelingsrunden "<plasstildelingsrunde>" for ledige studieplasser
-      Så er plasstildelingsrunden "<plasstildelingsrunde>" åpen for ledige studieplasser
+      Så tar utdanningstilbud som tilbyr ledige studieplasser, imot nye søknader til behandling
+      Og søknader på ledige studieplasser kan få tilbud i plasstildelingsrunden "<plasstildelingsrunde>" etter reglene for ledige studieplasser
 
       Eksempler:
         | plasstildelingsrunde            | rundetype      |
@@ -188,7 +192,7 @@ Egenskap: Plasstildelingsrunder i et opptak
   Regel: Opptakets informasjonsdatoer for publisering påvirker ikke plasstildelingsrunden
 
     # Fristene for når resultatet i hovedrunden kan forventes publisert, som settes i
-    # 11 Opptak/04 Frister/frister_og_hendelser.feature, er ren informasjon til søker.
+    # 11 Opprette og vedlikeholde opptak/04 Frister/frister_og_hendelser.feature, er ren informasjon til søker.
     # Opptaksforvalter setter ingen eksplisitt publiseringsdato på plasstildelingsrunden.
     # Publiseringsdato styres av når publiseringen faktisk finner sted.
 
