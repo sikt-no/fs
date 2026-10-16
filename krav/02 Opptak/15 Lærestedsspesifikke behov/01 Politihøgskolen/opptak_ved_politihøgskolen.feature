@@ -34,11 +34,27 @@ Egenskap: Opptak ved Politihøgskolen
   # Politihøgskolen og musikkhøgskolene. Hos PHS er opptaksprøvene digitale tester og videointervju, fysisk
   # opptaksprøve og egnethetsvurdering, og vurderingen skjer i Opptaksadmin. Prosessen er beskrevet som
   # individuell opptaksvurdering på https://fs.sikt.no/domenekunnskap/prosesser/individuell_opptaksvurdering/
+  # Presentasjonen «Opptaksprosessen» fra Politihøgskolen, 2026-10-16:
+  # - Mars: reelle søkere (BES). April: de reelle søkerne gjennomfører digitale tester og videointervju.
+  #   Fra mars til juni: saksbehandling av de formelle kravene og poengrangering.
+  # - Konkurranse om plass på opptaksprøvene, etter konkurransepoengsummen per 1. mars. Et utvalg søkere blir
+  #   innkalt (INN/MØT). Søkerne melder seg på og gjennomfører de fysiske testene i mai og juni.
+  # - Egnethetsvurdering: nemndene gjør en grunnvurdering (trinn 1), og et utvidet intervju (trinn 2) når de er i
+  #   tvil, for søkere som har bestått de fysiske testene.
+  # - Juli: vedtak og endelig poengrangering registreres. 20. juli: hovedopptaket i Samordna opptak, så
+  #   suppleringsopptak ved behov, og studiestart i august.
+  # - Hvem gjør hva: registersøk av Kripos, vandelskravet av jurist i seksjonen, de medisinske kravene av
+  #   opptaksleger, og egnetheten av opptaksnemndene.
+  # - Formelle krav (PHS): førerkort, norsk statsborgerskap, plettfri vandel og helsekrav. I tillegg generell
+  #   studiekompetanse og karakterkrav i norsk, fysiske tester og egnethetsvurdering.
+  # - Opptaksadmin er utviklet av seksjonen og Avdeling for strategi og virksomhetsstyring ved PHS. Formålet er
+  #   å administrere opptaksprøvene og søkerflyten, støtte aktørene i opptaksprosessen, gi søkerne
+  #   selvbetjening, og legge til rette for statistikk, rapportering og oppfølging.
   # Reglene etter «Opptaksadmin henter søkerne fra FS» er behov fra underlaget som også gjelder andre læresteder.
   # De står her foreløpig, merket som må- eller bør-behov, med kravet som bør utvides.
   #
   # ÅPNE SPØRSMÅL:
-  # - Hvem gjør hva: saksbehandler ved PHS, opptaksnemnd og fagspesialister (helse, vandel, egnethet)?
+  # - Hva gjør saksbehandleren ved PHS, juristen, opptakslegene og opptaksnemndene i FS, og hva i Opptaksadmin?
   # - Hvilke kvalifiseringskrav vurderes i FS, og hvilke i Opptaksadmin?
   # - Hvor registreres resultatet av de digitale testene, videointervjuet, den fysiske opptaksprøven og
   #   egnethetsvurderingen: i FS eller i Opptaksadmin?
@@ -49,9 +65,10 @@ Egenskap: Opptak ved Politihøgskolen
 
   Regel: Søkeren må samtykke til registersøk og bekrefte informasjonen om opptaket for å søke Politihøgskolen
 
-    # Fra gjennomgangen 2026-10-16: Samtykket og bekreftelsen gis når søkeren legger til søknadsalternativet,
-    # ikke i følgebrevet etterpå. Den som ikke samtykker og bekrefter, blir ikke søker til Politihøgskolen i det hele
-    # tatt. I dag skiller følgebrevet reelle søkere fra ikke-reelle.
+    # AVKLART 2026-10-16: Samtykket og bekreftelsen er en grunnforutsetning for å søke. Politihøgskolen vil bare ha
+    # søkere som har samtykket til registersøk og satt seg inn i informasjonen i følgebrevet og på nettsidene.
+    # Samtykket og bekreftelsen gis derfor når søkeren legger til søknadsalternativet, ikke i følgebrevet etterpå.
+    # I dag skiller følgebrevet reelle søkere fra ikke-reelle.
     # Erklæringene står i dag under «Samtykke og ansvarsbekreftelse» i følgebrevet, som søkeren signerer.
     Scenario: Søker må samtykke og bekrefte for å legge til politiutdanningen
       Når søkeren legger til "Politiutdanning, PHS" som søknadsalternativ
@@ -140,7 +157,8 @@ Egenskap: Opptak ved Politihøgskolen
 
     # AVKLART 2026-10-16: Søkeren som har levert politiattest og legeerklæring, er en reell søker, og blir
     # invitert til de digitale opptaksprøvene: digitale tester og videointervju i Opptaksadmin, Politihøgskolens
-    # system.
+    # system. Mangler en av dem, får søkeren ikke tilgang til de digitale opptaksprøvene, og blir registrert som
+    # ikke kvalifisert.
     Scenario: Søker som har levert attestene, blir invitert til digitale tester og videointervju
       Gitt at søkeren har levert politiattest innen "2027-03-20 23:59"
       Og at søkeren har levert legeerklæring innen "2027-03-20 23:59"
@@ -152,6 +170,7 @@ Egenskap: Opptak ved Politihøgskolen
       Når dokumentasjonsfristen er ute
       Så er søkeren ikke vurdert som reell søker
       Og søkeren blir ikke invitert til digitale tester og videointervju i Opptaksadmin
+      Og søkeren er registrert som ikke kvalifisert for opptak ved Politihøgskolen
 
       Eksempler:
         | mangler       |
@@ -257,6 +276,27 @@ Egenskap: Opptak ved Politihøgskolen
       Gitt at politiattesten til søkeren har en merknad
       Så vurderes vandelen til søkeren individuelt
 
+  Regel: Hvert kvalifiseringstrinn godkjenner sine kravelementer
+
+    # AVKLART 2026-10-16: Kvalifiseringen skjer i trinn, og hvert trinn godkjenner ulike kravelementer i
+    # kompetansekravene. Et godkjent trinn gir tilgang til neste trinn. Søkeren er kvalifisert for studiet først
+    # når alle kravene er oppfylt.
+    Scenariomal: Søker som har fått godkjent kravelementene i et trinn, går videre
+      Gitt at søkeren har fått godkjent <kravelementer>
+      Så får søkeren <tilgang>
+
+      Eksempler:
+        | kravelementer                                                   | tilgang                                             |
+        | samtykke til registersøk og bekreftet informasjonen om opptaket | søke "Politiutdanning, PHS"                         |
+        | levert politiattest og legeerklæring                            | tilgang til digitale tester og videointervju        |
+        | gjennomført digitale tester og videointervju                    | mulighet til å bli kalt inn til fysisk opptaksprøve |
+        | bestått den fysiske opptaksprøven                               | egnethetsvurdering av opptaksnemnda                 |
+
+    Scenario: Søker som har fått godkjent ett trinn, er ikke kvalifisert for studiet
+      Gitt at søkeren har bestått den fysiske opptaksprøven
+      Og at søkeren ikke er vurdert som egnet av opptaksnemnda ennå
+      Så er søkeren ikke kvalifisert for opptak ved Politihøgskolen
+
   Regel: Søkeren er kvalifisert når alle kravene er oppfylt
 
     # Etter FAQ-en til PHS: Generell studiekompetanse må være oppnådd innen 1. mars i søknadsåret. Kravet i
@@ -324,6 +364,7 @@ Egenskap: Opptak ved Politihøgskolen
     # - Hva skjer ved lik poengsum ved taket?
 
     # De siste årene har Politihøgskolen tatt inn alle som oppfyller kravene. Av og til trengs et tak.
+    # Etter presentasjonen: søkerne konkurrerer om plass på opptaksprøvene, og et utvalg søkere blir innkalt.
     # Søkerne rangeres etter konkurransepoengene per 1. mars.
     Scenario: De lavest rangerte søkerne over taket får avslag
       Gitt at 1300 søkere oppfyller kravene før den fysiske opptaksprøven
@@ -333,14 +374,15 @@ Egenskap: Opptak ved Politihøgskolen
       Og de 300 lavest rangerte søkerne får avslag med begrunnelsen at de er for lavt rangert på poengsum
 
   @openquestion
-  Regel: Søker som har bestått den fysiske opptaksprøven, er kvalifisert og rangeres i plasstildelingen
+  Regel: Beståtte opptaksprøver godkjenner kravelementene for opptaksprøvene
     # ÅPNE SPØRSMÅL:
     # - Egnethet («er vurdert som egnet av opptaksnemnda») godkjennes for seg, etter den fysiske opptaksprøven
     #   (nettsidene til PHS). Hvor registreres den?
-    # - Er søkeren kvalifisert når den fysiske opptaksprøven er godkjent, eller først når egnetheten er vurdert?
 
-    # AVKLART 2026-10-16: Etter at søkeren har gjennomført og fått godkjent den fysiske opptaksprøven,
-    # behandles søkeren som ellers i opptaket.
+    # AVKLART 2026-10-16: Bestått fysisk opptaksprøve godkjenner kravelementet, men søkeren er først kvalifisert
+    # når alle kravene er oppfylt, også egnetheten (se «Hvert kvalifiseringstrinn godkjenner sine kravelementer»).
+    # Da behandles søkeren som ellers i opptaket. Presentasjonen fra PHS (trinn 8): «Bli funnet egnet, og
+    # konkurrere om studieplass».
     # AVKLART 2026-10-16: Når søkeren har bestått opptaksprøvene, godkjennes de to kravene «har gjennomført
     # digitale tester og videointervju» og «har fått godkjent den fysiske opptaksprøven». Resultatet bør overføres
     # fra Opptaksadmin til FS gjennom API-et, se regelen «Opptaksadmin henter søkerne fra FS». I dag sendes det
@@ -349,12 +391,6 @@ Egenskap: Opptak ved Politihøgskolen
       Når søkeren har bestått opptaksprøvene
       Så er kravet «har gjennomført digitale tester og videointervju» godkjent
       Og kravet «har fått godkjent den fysiske opptaksprøven» er godkjent
-
-    Scenario: Søker som har bestått den fysiske opptaksprøven, rangeres i plasstildelingen
-      Gitt at søkeren har gjennomført den fysiske opptaksprøven
-      Og at søkeren har fått godkjent den fysiske opptaksprøven
-      Så er søkeren kvalifisert for opptak ved Politihøgskolen
-      Og søkeren rangeres i plasstildelingen på samme måte som andre kvalifiserte søkere
 
     Scenario: Søker som ikke har bestått den fysiske opptaksprøven, er ikke kvalifisert
       Gitt at søkeren ikke har fått godkjent den fysiske opptaksprøven
@@ -366,6 +402,16 @@ Egenskap: Opptak ved Politihøgskolen
     # politiets registre. Er nemnda usikker, kan søkeren bli kalt inn til et utvidet intervju på Teams, på
     # omtrent 45 minutter. Søkere som ikke består opptaksprøvene, må gjennomføre egnethetsvurderingen på nytt
     # hvis de søker igjen, med unntak for dem som fikk reservasjon tidligere år.
+    # Etter presentasjonen: Opptaksnemndene vurderer søkerne i to trinn: en grunnvurdering, og et utvidet intervju
+    # når nemnda er i tvil.
+    Scenario: Opptaksnemnda gjør en grunnvurdering av søkere som har bestått de fysiske testene
+      Gitt at søkeren har bestått den fysiske opptaksprøven
+      Så gjør opptaksnemnda en grunnvurdering av om søkeren er egnet
+
+    Scenario: Søkeren blir kalt inn til utvidet intervju når opptaksnemnda er i tvil
+      Gitt at opptaksnemnda er i tvil etter grunnvurderingen av søkeren
+      Så blir søkeren kalt inn til et utvidet intervju
+
     Scenario: Søker som ikke er vurdert som egnet, får avslag i begynnelsen av juli
       Gitt at opptaksnemnda har vurdert at søkeren ikke er egnet
       Så får søkeren avslag i løpet av den første uka i juli
@@ -375,13 +421,35 @@ Egenskap: Opptak ved Politihøgskolen
       Så får ikke søkeren egen beskjed om egnetheten
       Og søkeren får svar på søknaden i hovedopptaket 20. juli
 
-  Regel: Kvalifiserte søkere får tilbud når de når opp i plasstildelingen
+  Regel: Kvalifiserte søkere rangeres og får tilbud når de når opp i plasstildelingen
+
+    Scenario: Kvalifisert søker rangeres som andre kvalifiserte søkere
+      Gitt at søkeren er kvalifisert for opptak ved Politihøgskolen
+      Når plasstildelingen gjennomføres
+      Så rangeres søkeren i plasstildelingen på samme måte som andre kvalifiserte søkere
 
     Scenario: Kvalifisert søker med nok rangeringspoeng får tilbud
       Gitt at søkeren er kvalifisert for opptak ved Politihøgskolen
       Og at søkeren har nok rangeringspoeng til å nå opp i konkurransen
       Når plasstildelingen gjennomføres
       Så får søkeren tilbud om studieplass på "Politiutdanning, PHS"
+
+  @openquestion
+  Regel: Klager på vedtak behandles av arbeidsutvalget til styret ved Politihøgskolen
+    # ÅPNE SPØRSMÅL:
+    # - Registreres klagen og klagevedtaket i FS, og hvordan?
+
+    # Etter presentasjonen: klagebehandlingen skjer i Styrets arbeidsutvalg, i to omganger: først om de formelle
+    # kravene, og så om egnethetsvurderingen og poengberegningen.
+    Scenariomal: Søkeren klager på vedtaket
+      Gitt at søkeren har fått vedtak om <vedtaket gjelder>
+      Når søkeren klager på vedtaket
+      Så behandles klagen av arbeidsutvalget til styret ved Politihøgskolen
+
+      Eksempler:
+        | vedtaket gjelder                             |
+        | de formelle kravene, med helsekrav og vandel |
+        | egnethetsvurderingen og poengberegningen     |
 
   @openquestion
   Regel: Opptaksadmin henter søkerne fra FS
