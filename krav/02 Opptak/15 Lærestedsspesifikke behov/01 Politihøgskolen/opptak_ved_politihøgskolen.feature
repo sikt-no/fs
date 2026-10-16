@@ -2,8 +2,8 @@
 @OPT-LÆR-POL-001 @must @draft
 Egenskap: Opptak ved Politihøgskolen
   Som saksbehandler ved Politihøgskolen
-  ønsker jeg at søkere som ikke har samtykket til registersøk eller levert politiattest og legeerklæring,
-  holdes utenfor den videre behandlingen
+  ønsker jeg at bare personer som har samtykket til registersøk, kan søke, og at søkere som ikke har levert
+  politiattest og legeerklæring, holdes utenfor den videre behandlingen
   slik at Politihøgskolen bare går gjennom søkere som kan bli kvalifisert.
 
   # Kilde: notater om tilleggsbehov ved Politihøgskolen (PHS), 2026-10-16, og underlaget «Politihøgskolen og
@@ -12,7 +12,8 @@ Egenskap: Opptak ved Politihøgskolen
   # https://www.politihogskolen.no/studier/politiutdanning/soknad-og-opptak/opptakskrav/ og
   # https://www.politihogskolen.no/studier/politiutdanning/soknad-og-opptak/faq/index.html
   # Prosessen og fristene etter nettsidene: søknad i Samordna opptak innen 1. mars, følgebrev, politiattest og
-  # legeerklæring via Digipost innen 20. mars, digitale tester og videointervju i april, fysisk opptaksprøve,
+  # legeerklæring via Digipost innen 20. mars (samtykket skal heretter gis i søknaden, se første regel),
+  # digitale tester og videointervju i april, fysisk opptaksprøve,
   # egnethetsvurdering, frist for poengdokumentasjon 1. juli, tilbud 20. juli og svarfrist 24. juli.
   # Kravet holdes foreløpig for seg
   # selv, så det ikke blandes med de pågående kravene i 13 Søknad og saksbehandling og 14 Plasstildeling.
@@ -46,41 +47,83 @@ Egenskap: Opptak ved Politihøgskolen
     Gitt at utdanningstilbudet "Politiutdanning, PHS" har søknadsfrist "2027-03-01 23:59"
     Og at utdanningstilbudet "Politiutdanning, PHS" har dokumentasjonsfrist "2027-03-20 23:59"
 
-  Regel: Søkere til Politihøgskolen må samtykke til registersøk og levere politiattest og legeerklæring
+  Regel: Søkeren må samtykke til registersøk og bekrefte informasjonen om opptaket for å søke Politihøgskolen
 
-    # AVKLART 2026-10-16: Søkeren samtykker til registersøk ved å levere følgebrevet. I følgebrevet samtykker
-    # søkeren til søk i politiets systemer og registre, og bekrefter å ha lest og forstått informasjonen om
-    # opptaket på nettsidene til Politihøgskolen, blant annet fristene.
-    Scenario: Søker som søker Politihøgskolen, må samtykke og levere attester
+    # Fra gjennomgangen 2026-10-16: Samtykket og bekreftelsen gis når søkeren legger til søknadsalternativet,
+    # ikke i følgebrevet etterpå. Den som ikke samtykker og bekrefter, blir ikke søker til Politihøgskolen i det hele
+    # tatt. I dag skiller følgebrevet reelle søkere fra ikke-reelle.
+    # Erklæringene står i dag under «Samtykke og ansvarsbekreftelse» i følgebrevet, som søkeren signerer.
+    Scenario: Søker må samtykke og bekrefte for å legge til politiutdanningen
       Når søkeren legger til "Politiutdanning, PHS" som søknadsalternativ
-      Så må søkeren levere følgebrevet med samtykke til at registersøk gjennomføres
-      Og søkeren må levere politiattest og legeerklæring innen dokumentasjonsfristen
+      Så må søkeren erklære dette:
+        | erklæring                                                                                                                |
+        | Politihøgskolen har rett til å innhente opplysninger fra politiets registre etter politiloven § 24 b                     |
+        | søkeren er selv ansvarlig for at dokumentene som er sendt inn og lastet opp, er riktige                                  |
+        | søkeren vet at uriktige, mangelfulle eller misvisende opplysninger kan føre til tap av retten til å fullføre utdanningen |
+        | søkeren er kjent med at dokumentforfalskning blir politianmeldt                                                          |
+        | søkeren har lest og forstått informasjonen på https://www.politihogskolen.no/sokerinfo                                   |
 
-    Scenario: Søkeren bekrefter i følgebrevet å ha lest informasjonen om opptaket
-      Når søkeren leverer følgebrevet
-      Så bekrefter søkeren å ha lest og forstått informasjonen om opptaket på nettsidene til Politihøgskolen
+    Scenariomal: Søker som ikke samtykker eller bekrefter, kan ikke legge til politiutdanningen
+      Gitt at søkeren ikke har <mangler>
+      Når søkeren legger til "Politiutdanning, PHS" som søknadsalternativ
+      Så er "Politiutdanning, PHS" ikke lagt til som søknadsalternativ
+
+      Eksempler:
+        | mangler                                                           |
+        | samtykket til at registersøk gjennomføres                         |
+        | bekreftet å ha lest informasjonen om opptaket ved Politihøgskolen |
+
+  @openquestion
+  Regel: Søkeren opplyser om domfellelser og forelegg
+    # ÅPNE SPØRSMÅL:
+    # - Skal spørsmålet om vandel stilles i søknaden, når søkeren legger til politiutdanningen, eller fortsatt
+    #   i følgebrevet?
+    # - Hvor laster søkeren opp kopien av dommen eller forelegget: i søknaden, eller i Digipost som i dag?
+
+    # Fra følgebrevet («Om vandel»): «Har du blitt domfelt for, eller fått forelegg for straffbare handlinger?»
+    # Søkeren kan legge ved en forklaring om søkeren ønsker. Forenklede forelegg legges det ikke vekt på, og
+    # søkeren skal ikke opplyse om dem.
+    Scenario: Søker som har blitt domfelt eller fått forelegg, må legge ved kopi
+      Når søkeren svarer ja på at søkeren har blitt domfelt eller fått forelegg for straffbare handlinger
+      Så må søkeren legge ved kopi av dommen eller forelegget
+      Og søkeren kan legge ved en forklaring
+
+    Scenario: Søker som ikke har blitt domfelt eller fått forelegg, legger ikke ved noe
+      Når søkeren svarer nei på at søkeren har blitt domfelt eller fått forelegg for straffbare handlinger
+      Så trenger ikke søkeren å legge ved kopi av dom eller forelegg
 
   @openquestion
   Regel: Når søkeren har samtykket, sjekkes søkeren i registrene
     # ÅPNE SPØRSMÅL:
     # - Hvem sender forespørselen til Kripos, Folkeregisteret og Statens vegvesen, og hvor kommer svaret:
     #   i FS eller i Opptaksadmin?
+    # - Er henting av statsborgerskap fra Folkeregisteret et generelt behov, slik at statsborgerskapet hentes
+    #   for alle søkere, og ikke bare for søkere til Politihøgskolen? I dag hentes statsborgerskapet bare for
+    #   dem som blir studenter.
 
     Scenario: Kripos sjekker søkeren i sine registre
-      Gitt at søkeren har levert følgebrevet med samtykke til registersøk
+      Gitt at søkeren har samtykket til registersøk
       Når søkeren sjekkes i registrene
       Så sjekker Kripos opplysningene om søkeren i sine registre
 
-    Scenario: Folkeregisteret sjekker statsborgerskapet til søkeren
-      Gitt at søkeren har levert følgebrevet med samtykke til registersøk
-      Når søkeren sjekkes i registrene
-      Så sjekker Folkeregisteret om søkeren er registrert som norsk statsborger innen 1. mars i søknadsåret
-      # Etter FAQ-en til PHS: Dobbelt statsborgerskap er godkjent.
+    # Politihøgskolen krever bare at søkeren er norsk statsborger. Dobbelt statsborgerskap er godkjent.
+    # Etter FAQ-en til PHS: søkeren må være registrert som norsk statsborger innen 1. mars i søknadsåret.
+    Scenariomal: Folkeregisteret sjekker om søkeren er norsk statsborger
+      Gitt at søkeren har samtykket til registersøk
+      Og at søkeren er registrert med statsborgerskap <statsborgerskap> i Folkeregisteret per 1. mars 2027
+      Når statsborgerskapet til søkeren hentes fra Folkeregisteret
+      Så <oppfyller> søkeren kravet om norsk statsborgerskap
+
+      Eksempler:
+        | statsborgerskap | oppfyller      |
+        | norsk           | oppfyller      |
+        | norsk og svensk | oppfyller      |
+        | svensk          | oppfyller ikke |
 
     # Studentene må ha hatt førerkort i minst to år når de skal ut i praksis i andre studieår.
     # Etter nettsidene til PHS: førerkort klasse B senest 1. august året før søkeren søker.
     Scenariomal: Statens vegvesen sjekker om søkeren har hatt førerkort klasse B siden 1. august året før
-      Gitt at søkeren har levert følgebrevet med samtykke til registersøk
+      Gitt at søkeren har samtykket til registersøk
       Og at søkeren søker opptak høsten 2027
       Og at søkeren fikk førerkort klasse B "<dato>"
       Når Statens vegvesen sjekker førerkortet til søkeren
@@ -93,13 +136,34 @@ Egenskap: Opptak ved Politihøgskolen
         | 2026-08-02 | oppfyller ikke |
         | 2027-01-10 | oppfyller ikke |
 
-  Regel: Søkere uten samtykke og dokumentasjon innen fristen behandles ikke videre
+  Regel: Søkeren må levere politiattest og legeerklæring innen fristen for å bli invitert til de digitale opptaksprøvene
 
-    Scenario: Søker som ikke har levert innen dokumentasjonsfristen
+    # AVKLART 2026-10-16: Søkeren som har levert politiattest og legeerklæring, er en reell søker, og blir
+    # invitert til de digitale opptaksprøvene: digitale tester og videointervju i Opptaksadmin, Politihøgskolens
+    # system.
+    Scenario: Søker som har levert attestene, blir invitert til digitale tester og videointervju
+      Gitt at søkeren har levert politiattest innen "2027-03-20 23:59"
+      Og at søkeren har levert legeerklæring innen "2027-03-20 23:59"
+      Så er søkeren vurdert som reell søker
+      Og søkeren blir invitert til digitale tester og videointervju i Opptaksadmin
+
+    Scenariomal: Søker som mangler en attest, blir ikke invitert til testene
+      Gitt at søkeren ikke har levert <mangler> innen "2027-03-20 23:59"
+      Når dokumentasjonsfristen er ute
+      Så er søkeren ikke vurdert som reell søker
+      Og søkeren blir ikke invitert til digitale tester og videointervju i Opptaksadmin
+
+      Eksempler:
+        | mangler       |
+        | politiattest  |
+        | legeerklæring |
+
+  Regel: Søkere uten politiattest og legeerklæring innen fristen behandles ikke videre
+
+    Scenario: Søker som ikke har levert innen dokumentasjonsfristen, får avslag
       Gitt at søkeren ikke har levert legeerklæring innen "2027-03-20 23:59"
       Når dokumentasjonsfristen er ute
       Så behandler Politihøgskolen ikke søknaden videre
-      Og søkeren går ikke videre til digitale tester og videointervju
       Og søkeren får avslag som ikke kvalifisert i plasstildelingen
       Og søkeren får beskjed om at avslaget skyldes at dokumentasjonen ikke er mottatt
 
@@ -109,37 +173,27 @@ Egenskap: Opptak ved Politihøgskolen
       Så får søkeren ingen purring
 
     @openquestion
-    Scenario: Saksbehandler slipper å gå gjennom søkere uten samtykke og dokumentasjon
+    Scenario: Saksbehandler slipper å gå gjennom søkere uten politiattest og legeerklæring
       # ÅPNE SPØRSMÅL:
       # - Skal søkerne skjules, filtreres bort, eller få avslag automatisk når fristen er ute?
-      Gitt at søkeren ikke har samtykket til registersøk innen dokumentasjonsfristen
+      Gitt at søkeren ikke har levert politiattest og legeerklæring innen dokumentasjonsfristen
       Når saksbehandler ved Politihøgskolen går gjennom søknadene til "Politiutdanning, PHS"
       Så trenger ikke saksbehandleren å vurdere søknaden
 
-  Regel: Søker som har samtykket og levert attestene, er en reell søker og får gjennomføre testene
-
-    # AVKLART 2026-10-16: Har søkeren samtykket til registersøk (levert følgebrevet), levert politiattest og levert
-    # legeerklæring, er søkeren vurdert som reell. En reell søker får tilgang til digitale tester og
-    # videointervju i Opptaksadmin, Politihøgskolens system.
-    Scenario: Reell søker får tilgang til digitale tester og videointervju
-      Gitt at søkeren har levert følgebrevet med samtykke til registersøk
-      Og at søkeren har levert politiattest
-      Og at søkeren har levert legeerklæring
-      Så er søkeren vurdert som reell søker
-      Og søkeren får tilgang til digitale tester og videointervju i Opptaksadmin
-
-    Scenariomal: Søker som mangler samtykke eller en attest, får ikke tilgang til testene
-      Gitt at søkeren har levert alt unntatt "<mangler>"
-      Så er søkeren ikke vurdert som reell søker
-      Og søkeren får ikke tilgang til digitale tester og videointervju i Opptaksadmin
-
-      Eksempler:
-        | mangler                                  |
-        | følgebrevet med samtykke til registersøk |
-        | politiattest                             |
-        | legeerklæring                            |
-
+  @openquestion
   Regel: Saksbehandler registrerer at følgebrevet er mottatt, før søknaden saksbehandles
+    # ÅPNE SPØRSMÅL:
+    # - Trengs følgebrevet og registreringen fortsatt når samtykket, bekreftelsen og spørsmålet om vandel gis i
+    #   søknaden?
+
+    # Følgebrevet («Følgebrev for søkere til bachelor – politiutdanning») har i dag disse delene:
+    # - Søkernummer, navn, fødselsnummer, mobilnummer og e-post. Dette finnes allerede i søknaden.
+    # - «Om innsending av dokumentasjon»: søkeren bekrefter å vite at signert følgebrev, komplett utfylt
+    #   legeerklæring og uttømmende og utvidet politiattest skal sendes til «Politihøgskolen - opptak» i Digipost
+    #   senest 20. mars for å kunne være med i opptaket. Annen dokumentasjon lastes opp i søknaden.
+    # - «Om vandel»: se regelen «Søkeren opplyser om domfellelser og forelegg».
+    # - «Samtykke og ansvarsbekreftelse»: se den første regelen.
+    # - Obligatorisk dato og signatur.
 
     # Fra underlaget: I dag har alle søkere «Mottatt følgeskjema» = nei når de overføres til FS i begynnelsen av
     # mars. Følgebrevet kommer via Digipost, og saksbehandleren registrerer at det er mottatt. Følgebrevet skiller
@@ -465,7 +519,8 @@ Egenskap: Opptak ved Politihøgskolen
       Når søknadene omfordeles til saksbehandleren "Ola Nordmann"
       Så er søknadene tildelt "Ola Nordmann"
 
-  # Bør-behov fra underlaget. Bør utvides i 11 Opprette og vedlikeholde opptak/06 Hendelseslogg/hendelseslogg.feature.
+  # Bør-behov fra underlaget. Antatt et generelt behov i saksbehandlingen, se
+  # 13 Søknad og saksbehandling/02 Behandling/hendelseslogg_for_saksbehandling.feature.
   Regel: Saksbehandler kan se hvilke endringer som er gjort på en søker
 
     Scenario: Saksbehandler ser endringene på søkeren
