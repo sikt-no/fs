@@ -286,11 +286,10 @@ Egenskap: Opptak ved Politihøgskolen
       Så får søkeren <tilgang>
 
       Eksempler:
-        | kravelementer                                                   | tilgang                                             |
-        | samtykke til registersøk og bekreftet informasjonen om opptaket | søke "Politiutdanning, PHS"                         |
-        | levert politiattest og legeerklæring                            | tilgang til digitale tester og videointervju        |
-        | gjennomført digitale tester og videointervju                    | mulighet til å bli kalt inn til fysisk opptaksprøve |
-        | bestått den fysiske opptaksprøven                               | egnethetsvurdering av opptaksnemnda                 |
+        | kravelementer                                | tilgang                                             |
+        | levert politiattest og legeerklæring         | tilgang til digitale tester og videointervju        |
+        | gjennomført digitale tester og videointervju | mulighet til å bli kalt inn til fysisk opptaksprøve |
+        | bestått den fysiske opptaksprøven            | egnethetsvurdering av opptaksnemnda                 |
 
     Scenario: Søker som har fått godkjent ett trinn, er ikke kvalifisert for studiet
       Gitt at søkeren har bestått den fysiske opptaksprøven
@@ -309,7 +308,6 @@ Egenskap: Opptak ved Politihøgskolen
       Gitt at søkeren oppfyller disse kravene:
         | krav                                                                 |
         | er norsk statsborger                                                 |
-        | har samtykket til at registersøk gjennomføres                        |
         | har levert politiattest                                              |
         | har levert legeerklæring                                             |
         | har generell studiekompetanse med minst 3 i norsk hovedmål skriftlig |
