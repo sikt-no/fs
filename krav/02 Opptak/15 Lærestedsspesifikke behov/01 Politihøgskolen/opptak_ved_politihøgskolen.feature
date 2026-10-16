@@ -7,7 +7,14 @@ Egenskap: Opptak ved Politihøgskolen
   slik at Politihøgskolen bare går gjennom søkere som kan bli kvalifisert.
 
   # Kilde: notater om tilleggsbehov ved Politihøgskolen (PHS), 2026-10-16, og underlaget «Politihøgskolen og
-  # behov til FS Admin», oversendt fra PHS før møtet 2026-10-16. Kravet holdes foreløpig for seg
+  # behov til FS Admin», oversendt fra PHS før møtet 2026-10-16, og nettsidene til Politihøgskolen:
+  # https://www.politihogskolen.no/studier/politiutdanning/soknad-og-opptak/index.html og
+  # https://www.politihogskolen.no/studier/politiutdanning/soknad-og-opptak/opptakskrav/ og
+  # https://www.politihogskolen.no/studier/politiutdanning/soknad-og-opptak/faq/index.html
+  # Prosessen og fristene etter nettsidene: søknad i Samordna opptak innen 1. mars, følgebrev, politiattest og
+  # legeerklæring via Digipost innen 20. mars, digitale tester og videointervju i april, fysisk opptaksprøve,
+  # egnethetsvurdering, frist for poengdokumentasjon 1. juli, tilbud 20. juli og svarfrist 24. juli.
+  # Kravet holdes foreløpig for seg
   # selv, så det ikke blandes med de pågående kravene i 13 Søknad og saksbehandling og 14 Plasstildeling.
   # Beslektede krav:
   # - 12 Utdanningstilbud/04 Behandle et utdanningstilbud/registrere_påkrevde_attester.feature (krav om
@@ -16,8 +23,10 @@ Egenskap: Opptak ved Politihøgskolen
   #   og dokumentasjonsfrist per utdanningstilbud)
   # - 13 Søknad og saksbehandling/03 Dokumentasjon/skjerme_dokumentasjon.feature (politiattest og legeerklæring
   #   er skjermet)
-  # Politihøgskolen bruker Opptaksadmin (Eon assessment) til digitale tester, videointervju og brev med
-  # sensitive opplysninger. Politihøgskolen behandler bare sine egne søkere, ikke søknadsalternativer til andre
+  # Politihøgskolen bruker sitt eget system Opptaksadmin til opptaksprøvene og til brev med sensitive
+  # opplysninger. De digitale testene (personlighetstesten ADEPT-15 og kognitive tester) og videointervjuet
+  # leveres av Aon Assessment. Politihøgskolen tilbyr studieplasser i Oslo, Stavern, Bodø og Alta
+  # (nordnorsk kvote). Politihøgskolen behandler bare sine egne søkere, ikke søknadsalternativer til andre
   # læresteder.
   # Opptaksprøver: individuell vurdering av søkeren på ulike faglige grunnlag, for eksempel egnethet, fysikk,
   # eller praktisk eller utøvende kompetanse (avklart 2026-10-16, se begreper.md). Typiske eksempler er
@@ -56,7 +65,6 @@ Egenskap: Opptak ved Politihøgskolen
     # ÅPNE SPØRSMÅL:
     # - Hvem sender forespørselen til Kripos, Folkeregisteret og Statens vegvesen, og hvor kommer svaret:
     #   i FS eller i Opptaksadmin?
-    # - Hvilken dag i august gjelder for førerkortet?
 
     Scenario: Kripos sjekker søkeren i sine registre
       Gitt at søkeren har levert følgebrevet med samtykke til registersøk
@@ -66,19 +74,23 @@ Egenskap: Opptak ved Politihøgskolen
     Scenario: Folkeregisteret sjekker statsborgerskapet til søkeren
       Gitt at søkeren har levert følgebrevet med samtykke til registersøk
       Når søkeren sjekkes i registrene
-      Så sjekker Folkeregisteret om søkeren er norsk statsborger
+      Så sjekker Folkeregisteret om søkeren er registrert som norsk statsborger innen 1. mars i søknadsåret
+      # Etter FAQ-en til PHS: Dobbelt statsborgerskap er godkjent.
 
     # Studentene må ha hatt førerkort i minst to år når de skal ut i praksis i andre studieår.
-    Scenariomal: Statens vegvesen sjekker om søkeren har hatt førerkort siden august året før opptaket
+    # Etter nettsidene til PHS: førerkort klasse B senest 1. august året før søkeren søker.
+    Scenariomal: Statens vegvesen sjekker om søkeren har hatt førerkort klasse B siden 1. august året før
       Gitt at søkeren har levert følgebrevet med samtykke til registersøk
       Og at søkeren søker opptak høsten 2027
-      Og at søkeren fikk førerkort "<dato>"
+      Og at søkeren fikk førerkort klasse B "<dato>"
       Når Statens vegvesen sjekker førerkortet til søkeren
       Så <oppfyller> søkeren kravet om førerkort
 
       Eksempler:
         | dato       | oppfyller      |
         | 2026-06-15 | oppfyller      |
+        | 2026-08-01 | oppfyller      |
+        | 2026-08-02 | oppfyller ikke |
         | 2027-01-10 | oppfyller ikke |
 
   Regel: Søkere uten samtykke og dokumentasjon innen fristen behandles ikke videre
@@ -169,22 +181,50 @@ Egenskap: Opptak ved Politihøgskolen
       Når saksbehandler ved Politihøgskolen vil gi søkeren statusen "tilgang til digitale tester og videointervju"
       Så får søkeren ikke statusen
 
+  Regel: Politiattesten og legeerklæringen må oppfylle kravene til Politihøgskolen
+
+    # Etter FAQ-en til PHS: Politiattesten skal være uttømmende og utvidet, med formålet «Student -
+    # Politihøgskolen», og utstedt etter 1. februar i søknadsåret. Legeerklæringen skal være på skjemaet til
+    # Politihøgskolen, signert av søkeren og en lege med norsk autorisasjon, og høyst 6 måneder gammel når den
+    # sendes. Begge sendes via Digipost til «Politihøgskolen - opptak» innen 20. mars.
+    Scenariomal: Politiattest eller legeerklæring som ikke oppfyller kravene
+      Gitt at søkeren har levert <dokument> som <avvik>
+      Så oppfyller ikke <dokument> kravene til Politihøgskolen
+
+      Eksempler:
+        | dokument      | avvik                                   |
+        | politiattest  | er utstedt før 1. februar søknadsåret   |
+        | legeerklæring | er mer enn 6 måneder gammel             |
+        | legeerklæring | ikke er på skjemaet til Politihøgskolen |
+
+    # Etter FAQ-en til PHS: Politiattest med merknad vurderes individuelt. Søkere med merknad kan bli godkjent
+    # etter en konkret vurdering.
+    Scenario: Politiattest med merknad vurderes individuelt
+      Gitt at politiattesten til søkeren har en merknad
+      Så vurderes vandelen til søkeren individuelt
+
   Regel: Søkeren er kvalifisert når alle kravene er oppfylt
+
+    # Etter FAQ-en til PHS: Generell studiekompetanse må være oppnådd innen 1. mars i søknadsåret. Kravet i
+    # norsk er gjennomsnittet av standpunkt og eksamen i norsk hovedmål skriftlig, minst 3,0. Det kan også
+    # dekkes med minst 20 studiepoeng i norsk med gjennomsnitt D eller bedre, eller en godkjent test for søkere
+    # med utenlandsk utdanning. Søkere med realkompetanse må fylle minst 25 år i søknadsåret og ha minst 5 års
+    # relevant praksis. Dette hører hjemme i kompetanseregelverket (10 Regelverk).
 
     Scenario: Søker som oppfyller alle kravene, er kvalifisert
       Gitt at søkeren oppfyller disse kravene:
-        | krav                                              |
-        | er norsk statsborger                              |
-        | har samtykket til at registersøk gjennomføres     |
-        | har levert politiattest                           |
-        | har levert legeerklæring                          |
-        | har generell studiekompetanse med minst 3 i norsk |
-        | har hatt førerkort siden august året før opptaket |
-        | har plettfri vandel                               |
-        | oppfyller helsekravene                            |
-        | har gjennomført digitale tester og videointervju  |
-        | har fått godkjent den fysiske opptaksprøven       |
-        | er vurdert som egnet av opptaksnemnda             |
+        | krav                                                                 |
+        | er norsk statsborger                                                 |
+        | har samtykket til at registersøk gjennomføres                        |
+        | har levert politiattest                                              |
+        | har levert legeerklæring                                             |
+        | har generell studiekompetanse med minst 3 i norsk hovedmål skriftlig |
+        | har hatt førerkort klasse B siden 1. august året før                 |
+        | har plettfri vandel                                                  |
+        | oppfyller helsekravene                                               |
+        | har gjennomført digitale tester og videointervju                     |
+        | har fått godkjent den fysiske opptaksprøven                          |
+        | er vurdert som egnet av opptaksnemnda                                |
       Så er søkeren kvalifisert for opptak ved Politihøgskolen
 
     Scenariomal: Søker som ikke oppfyller ett av kravene, er ikke kvalifisert
@@ -192,23 +232,25 @@ Egenskap: Opptak ved Politihøgskolen
       Så er søkeren ikke kvalifisert for opptak ved Politihøgskolen
 
       Eksempler:
-        | krav                                              |
-        | er norsk statsborger                              |
-        | har generell studiekompetanse med minst 3 i norsk |
-        | har hatt førerkort siden august året før opptaket |
-        | har plettfri vandel                               |
-        | oppfyller helsekravene                            |
-        | har fått godkjent den fysiske opptaksprøven       |
-        | er vurdert som egnet av opptaksnemnda             |
+        | krav                                                                 |
+        | er norsk statsborger                                                 |
+        | har generell studiekompetanse med minst 3 i norsk hovedmål skriftlig |
+        | har hatt førerkort klasse B siden 1. august året før                 |
+        | har plettfri vandel                                                  |
+        | oppfyller helsekravene                                               |
+        | har fått godkjent den fysiske opptaksprøven                          |
+        | er vurdert som egnet av opptaksnemnda                                |
 
   @openquestion
   Regel: Søkeren må ha gjennomført digitale tester og videointervju innen fristen
     # ÅPNE SPØRSMÅL:
-    # - Hvilken dato i april er fristen, og hvor settes den?
+    # - Hvor settes fristen for den enkelte søkeren: i FS eller i Opptaksadmin?
+    # AVKLART (FAQ-en til PHS): Søkeren får en individuell frist når søkeren blir innkalt. Testene og intervjuet
+    # tar omtrent 1,5 timer, og kan ikke gjentas.
     # Kravet er gjennomført eller ikke gjennomført. Testene og intervjuet gjennomføres i Opptaksadmin.
 
     Scenario: Søker som ikke har gjennomført digitale tester og videointervju innen fristen
-      Gitt at søkeren ikke har gjennomført de digitale testene innen fristen i april
+      Gitt at søkeren ikke har gjennomført de digitale testene innen den individuelle fristen
       Så er søkeren ikke kvalifisert for opptak ved Politihøgskolen
 
   Regel: Søkere som har gjennomført digitale tester og videointervju, kan kalles inn til fysisk opptaksprøve
@@ -239,8 +281,9 @@ Egenskap: Opptak ved Politihøgskolen
   @openquestion
   Regel: Søker som har bestått den fysiske opptaksprøven, er kvalifisert og rangeres i plasstildelingen
     # ÅPNE SPØRSMÅL:
-    # - Egnethet («er vurdert som egnet av opptaksnemnda») godkjennes for seg. Når vurderes den, og hvor
-    #   registreres den?
+    # - Egnethet («er vurdert som egnet av opptaksnemnda») godkjennes for seg, etter den fysiske opptaksprøven
+    #   (nettsidene til PHS). Hvor registreres den?
+    # - Er søkeren kvalifisert når den fysiske opptaksprøven er godkjent, eller først når egnetheten er vurdert?
 
     # AVKLART 2026-10-16: Etter at søkeren har gjennomført og fått godkjent den fysiske opptaksprøven,
     # behandles søkeren som ellers i opptaket.
@@ -262,6 +305,21 @@ Egenskap: Opptak ved Politihøgskolen
     Scenario: Søker som ikke har bestått den fysiske opptaksprøven, er ikke kvalifisert
       Gitt at søkeren ikke har fått godkjent den fysiske opptaksprøven
       Så er søkeren ikke kvalifisert for opptak ved Politihøgskolen
+
+  Regel: Opptaksnemnda vurderer om søkeren er egnet, etter den fysiske opptaksprøven
+
+    # Etter FAQ-en til PHS: Vurderingen bygger på de digitale testene, videointervjuet og opplysningene fra
+    # politiets registre. Er nemnda usikker, kan søkeren bli kalt inn til et utvidet intervju på Teams, på
+    # omtrent 45 minutter. Søkere som ikke består opptaksprøvene, må gjennomføre egnethetsvurderingen på nytt
+    # hvis de søker igjen, med unntak for dem som fikk reservasjon tidligere år.
+    Scenario: Søker som ikke er vurdert som egnet, får avslag i begynnelsen av juli
+      Gitt at opptaksnemnda har vurdert at søkeren ikke er egnet
+      Så får søkeren avslag i løpet av den første uka i juli
+
+    Scenario: Søker som er vurdert som egnet, får svar i hovedopptaket
+      Gitt at opptaksnemnda har vurdert at søkeren er egnet
+      Så får ikke søkeren egen beskjed om egnetheten
+      Og søkeren får svar på søknaden i hovedopptaket 20. juli
 
   Regel: Kvalifiserte søkere får tilbud når de når opp i plasstildelingen
 
