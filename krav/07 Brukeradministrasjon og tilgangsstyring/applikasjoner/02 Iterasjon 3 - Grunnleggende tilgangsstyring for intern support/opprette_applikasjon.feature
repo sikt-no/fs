@@ -27,37 +27,123 @@ Egenskap: Opprette applikasjon
   applikasjonen, og den hvis data en tilgang gjelder. Den siste omtales
   som «gjelder for».
 
+  Opprettelse av FS-applikasjoner (maskinbruker-applikasjoner) er
+  begrenset til applikasjonsadministratorer for Sikt (organisasjonskode
+  20754). En FS-applikasjon kan opprettes for alle organisasjoner, men den
+  som oppretter, må også ha applikasjonsadministrator-rollen for
+  applikasjonseieren. Sikts testhøyskoler (7777 og 7778) er som alle andre
+  organisasjoner. Begrensningen er midlertidig, fordi FS-applikasjonene
+  skal fases ut, og gjelder både det som vises i løsningen, og kall
+  direkte mot API-et. Lærestedene skal ikke kunne opprette dem selv.
+  Opprettelsen provisjonerer en maskinbruker i FS' webtjenester, med
+  replikering av passordet, og det er en flate Sikt drifter. Bare
+  opprettelsen begrenses: den løpende forvaltningen av en FS-applikasjon
+  som finnes (navn og beskrivelse, deaktivering og reaktivering,
+  passordbytte) følger BRU-APP-API-006, BRU-APP-API-010 og
+  BRU-APP-API-004, med rettigheten hos applikasjonseieren. Endringen er
+  besluttet 24. august 2026, og reglene er avklart i reviewen 19. oktober
+  2026, bortsett fra regelen om den løpende forvaltningen.
+
   # Krav fra Confluence: K8 Opprette ny API-bruker, Discovery: Registrer applikasjon (4612784227), Rammeinnsikt: Grunnleggende selvbetjent administrasjon av API-brukere (4401102853)
 
   Regel: Opprettelse krever valg av identitetsleverandør
 
     @deprecated @scope-applikasjoner-etter-design-review
-    Scenario: Velge identitetsleverandør ved opprettelse
-      Når jeg starter opprettelse av en ny applikasjon
-      Så kan jeg velge én av identitetsleverandørene Feide og Maskinporten
-      Og identitetsleverandøren settes på applikasjonen og kan ikke endres senere
-
-    @in-progress @scope-applikasjoner-etter-design-review
     Scenario: Velge identitetsleverandør ved opprettelse, inkludert FS
       Når jeg starter opprettelse av en ny applikasjon
       Så kan jeg velge én av identitetsleverandørene Feide, Maskinporten og FS (Maskinbruker)
       Og identitetsleverandøren settes på applikasjonen og kan ikke endres senere
 
-    @deprecated @scope-applikasjoner-etter-design-review
-    Scenario: FS er ikke en valgbar identitetsleverandør
-      Når jeg starter opprettelse av en ny applikasjon
+    @planned
+    Scenario: Velge identitetsleverandør ved opprettelse
+      Gitt jeg har ikke applikasjonsadministrator-rollen for Sikt (20754)
+      Når jeg starter opprettelse av en ny applikasjon i løsningen
+      Så kan jeg velge én av identitetsleverandørene Feide og Maskinporten
+      Og identitetsleverandøren settes på applikasjonen og kan ikke endres senere
+
+  @planned
+  Regel: Bare applikasjonsadministratorer for Sikt kan opprette en applikasjon med FS som identitetsleverandør
+
+    Scenario: Applikasjonsadministrator for Sikt kan velge FS i løsningen
+      Gitt jeg har applikasjonsadministrator-rollen for Sikt (20754)
+      Når jeg starter opprettelse av en ny applikasjon i løsningen
+      Så kan jeg velge FS som identitetsleverandør
+
+    Scenario: FS er ikke en valgbar identitetsleverandør for en lokal administrator
+      Gitt jeg har ikke applikasjonsadministrator-rollen for Sikt (20754)
+      Når jeg starter opprettelse av en ny applikasjon i løsningen
       Så er FS ikke tilgjengelig som identitetsleverandør
+
+    Scenario: API-et oppretter en FS-applikasjon for en applikasjonsadministrator for Sikt
+      Gitt jeg har applikasjonsadministrator-rollen for Sikt (20754)
+      Og jeg har applikasjonsadministrator-rollen for applikasjonseieren
+      Når jeg via API-et oppretter en applikasjon med FS som identitetsleverandør for applikasjonseieren
+      Så er applikasjonen opprettet
+
+    Scenario: API-et avviser opprettelse av en FS-applikasjon uten rettigheten
+      Gitt jeg har ikke applikasjonsadministrator-rollen for Sikt (20754)
+      Når jeg via API-et forsøker å opprette en applikasjon med FS som identitetsleverandør
+      Så avvises opprettelsen
+      Og det fremgår at jeg ikke har rettighet til å opprette maskinbruker-applikasjoner
+
+    Scenario: Opprettelsen avvises uten applikasjonsadministrator-rollen for applikasjonseieren
+      Gitt jeg har applikasjonsadministrator-rollen for Sikt (20754)
+      Og jeg har ikke applikasjonsadministrator-rollen for applikasjonseieren
+      Når jeg forsøker å opprette en applikasjon med FS som identitetsleverandør for applikasjonseieren
+      Så avvises opprettelsen
+
+    Scenario: Opprettelsen provisjonerer en maskinbruker
+      Gitt jeg har applikasjonsadministrator-rollen for Sikt (20754)
+      Og jeg har applikasjonsadministrator-rollen for applikasjonseieren
+      Når jeg oppretter en applikasjon med FS som identitetsleverandør for applikasjonseieren
+      Så er applikasjonen opprettet på applikasjonseieren
+      Og det er provisjonert en tilhørende maskinbruker i FS' webtjenester
+
+  @planned
+  Regel: Opprettelsen av en FS-applikasjon er alt-eller-ingenting
+    # Maskinbrukeren provisjoneres i FS' webtjenester per miljø. Mangler applikasjonseieren
+    # FS-datakilde i ett av miljøene, finnes det ingen delvis provisjonert tilstand.
+
+    Scenario: Opprettelsen avvises i sin helhet når applikasjonseieren mangler FS-datakilde i et miljø
+      Gitt jeg har applikasjonsadministrator-rollen for Sikt (20754)
+      Og jeg har applikasjonsadministrator-rollen for applikasjonseieren
+      Og applikasjonseieren mangler registrert FS-datakilde i minst ett miljø
+      Når jeg forsøker å opprette en applikasjon med FS som identitetsleverandør for applikasjonseieren
+      Så avvises opprettelsen i sin helhet
+      Og det fremgår at applikasjonseieren mangler FS-datakilde
+      Og applikasjonen er ikke opprettet i noe miljø
+
+  @draft @openquestion
+  Regel: Bare opprettelsen av en FS-applikasjon er begrenset til Sikt
+    # ÅPNE SPØRSMÅL:
+    # - Hører reglen hjemme her, eller i BRU-APP-API-006, BRU-APP-API-010 og BRU-APP-API-004?
+    # Begrensningen gjelder handlingen «ta i bruk en utfaset integrasjonsform», ikke
+    # applikasjonen. Når den finnes, er den applikasjonseierens applikasjon på linje med
+    # de øvrige.
+
+    Scenario: Løpende forvaltning følger applikasjonseieren
+      Gitt det finnes en FS-applikasjon på en applikasjonseier
+      Og jeg har rettighet til å administrere applikasjoner hos applikasjonseieren
+      Så kan jeg endre navn og beskrivelse, deaktivere og reaktivere applikasjonen og bytte passord
+      Og ingen av handlingene krever applikasjonsadministrator-rollen for Sikt
+
+    Scenario: Manglende rolle for Sikt skjuler ikke den løpende forvaltningen i løsningen
+      Gitt det finnes en FS-applikasjon på en organisasjon jeg administrerer
+      Og jeg har ikke applikasjonsadministrator-rollen for Sikt (20754)
+      Når jeg åpner detaljsiden for applikasjonen
+      Så ser jeg de samme administrasjonshandlingene som for en Feide- eller Maskinporten-applikasjon
+      Men jeg ser ingen handling for å opprette en ny applikasjon med FS som identitetsleverandør
 
   Regel: Opprettelse krever en applikasjonseier
 
     Scenario: Opprette applikasjon når administrator har tilgang til kun én organisasjon
       Gitt jeg har tilgang til kun én organisasjon
       Når jeg oppretter en ny applikasjon
-      Så er min organisasjon satt som applikasjonseier
+      Så er organisasjonen jeg har tilgang til satt som applikasjonseier
 
     Scenario: Opprette applikasjon når administrator har tilgang til flere organisasjoner
       Gitt jeg har tilgang til flere organisasjoner
-      Når jeg oppretter en ny applikasjon og velger en av mine organisasjoner
+      Når jeg oppretter en ny applikasjon og velger en av organisasjonene jeg har tilgang til
       Så er den valgte organisasjonen satt som applikasjonseier
 
     Scenario: Super-applikasjonsadministrator velger blant alle organisasjoner
@@ -92,7 +178,7 @@ Egenskap: Opprette applikasjon
         | Feide                |
         | Maskinporten         |
 
-    @in-progress @scope-applikasjoner-etter-design-review
+    @scope-applikasjoner-etter-design-review
     Scenariomal: Opprette applikasjon med ekstern identitet og oppgitt navn
       Når jeg oppretter en ny applikasjon med identitetsleverandør <identitetsleverandør>, et navn og en ID
       Og ID-en finnes hos <identitetsleverandør>
@@ -175,7 +261,7 @@ Egenskap: Opprette applikasjon
       Så er miljø ikke en del av opprettelsen
       Og applikasjonen har samme identitet i alle miljøer
 
-  @in-progress @scope-applikasjoner-etter-design-review
+  @scope-applikasjoner-etter-design-review
   Regel: Beskrivelse kan angis ved opprettelse
 
     Scenario: Angi beskrivelse ved opprettelse
@@ -208,7 +294,7 @@ Egenskap: Opprette applikasjon
         | Feide                |
         | Maskinporten         |
 
-    @in-progress @scope-applikasjoner-etter-design-review
+    @scope-applikasjoner-etter-design-review
     Scenario: Opprettelse avvises når visningsnavnet er i bruk hos samme identitetsleverandør
       Gitt en applikasjon med identitetsleverandør Feide og et gitt visningsnavn allerede finnes
       Når jeg forsøker å opprette en ny applikasjon med identitetsleverandør Feide og samme visningsnavn
@@ -234,12 +320,6 @@ Egenskap: Opprette applikasjon
       Gitt jeg har opprettet en ny applikasjon
       Så er applikasjonen ikke aktiv i noen miljøer
       Og applikasjonen blir først aktiv i et miljø når den får tildelt sin første tilgang i det miljøet
-
-    @deprecated @scope-applikasjoner-etter-design-review
-    Scenario: Nyopprettet applikasjon kan autentisere umiddelbart
-      Gitt jeg har opprettet en ny applikasjon
-      Så kan applikasjonen autentisere seg umiddelbart med sin eksterne identitet
-      Men applikasjonen får ikke tilgang til data før den har en tilgang i et miljø
 
     @in-progress @scope-applikasjoner-etter-design-review
     Scenario: Nyopprettet Feide- eller Maskinporten-applikasjon kan autentisere umiddelbart
