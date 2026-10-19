@@ -5,7 +5,12 @@
 - **Oppgave:** `tasks/opptak/opprette-og-vedlikeholde-opptak/`
 - **Kilde-mappe:** `krav/02 Opptak/11 Opprette og vedlikeholde opptak/`
 - **GitHub:** [#577](https://github.com/sikt-no/fs/issues/577), [#578](https://github.com/sikt-no/fs/issues/578), [#579](https://github.com/sikt-no/fs/issues/579)
-- **Hentet:** 2026-09-30 14:14
+- **Scope:** scope-opprette-opptak-2027
+- **Hentet:** 2026-09-30 14:14 (oppdatert 2026-10-19 20:36: regelen om obligatoriske felt i `opprett_opptak.feature` er hentet inn)
+
+## Omfang
+
+Spesifikasjonen dekker at opptaksforvalter kan opprette et opptak (samordna eller lokalt) med navn, innstillinger og frister, invitere læresteder og se saksbehandlertildelingen. Kravene beskriver at verdiene settes og finnes på opptaket. Hvordan søknaden, saksbehandlingen, utdanningstilbudene og plasstildelingen bruker innstillingene og fristene, er ikke med. Det står i kravene der verdiene brukes, under «Uløst arbeid» i scope-fila.
 
 ## Krav
 
@@ -16,6 +21,8 @@
 - **`innstillinger.feature`** (`@OPT-OVO-INN-001`) — opptaksforvalter setter innstillinger: opptakstype, regelverkssamling, standard poenglikhetsregel (med mulighet for overstyring per utdanningstilbud), startnummer, maks søknadsalternativer, utdanningsbakgrunner, aktivering av tidlig opptak, ledige studieplasser og dokumentasjonsopplasting. ([krav-input/local/krav/02 Opptak/11 Opprette og vedlikeholde opptak/03 Innstillinger/innstillinger.feature](krav-input/local/krav/02%20Opptak/11%20Opptak/03%20Innstillinger/innstillinger.feature))
 
 - **`frister_og_hendelser.feature`** (`@OPT-OVO-FRI-001`) — opptaksforvalter ved forvaltende organisasjon setter generelle frister: redigering av utdanningstilbud, søkeperiode, omprioriteringsfrist, sletting av søknadsalternativer, dokumentasjonsfrister, tidlig opptak (søknadsfrist, dokumentasjonsfrist, frist for poenggrenser), ledige studieplasser, frist for endring av utdanningsbakgrunn, informasjonsdatoer for opptaksresultat (publiseringsdato og første svarfrist), og dato for aldersberegning. I tillegg: legge til utdanningsbakgrunner med avvikende søknads- og dokumentasjonsfrister. ([krav-input/local/krav/02 Opptak/11 Opprette og vedlikeholde opptak/04 Frister/frister_og_hendelser.feature](krav-input/local/krav/02%20Opptak/11%20Opptak/04%20Frister/frister_og_hendelser.feature))
+
+- **`opprett_opptak.feature` — regel `Utdanningsbakgrunner, poenglikhetsregel, maks antall søknadsalternativer og tak for tilbud per tildelingsrunde må være satt for å lagre et opptak`** (`@OPT-OVO-GRU-001`, endring av levert krav, tillegg) — opptaket kan ikke lagres når ett av de fire feltene mangler. Startnummer for søknader er ikke obligatorisk. Hentet inn 2026-10-19. ([krav/02 Opptak/11 Opprette og vedlikeholde opptak/01 Grunnoppsett/opprett_opptak.feature](../../../../krav/02%20Opptak/11%20Opprette%20og%20vedlikeholde%20opptak/01%20Grunnoppsett/opprett_opptak.feature))
 
 ### Utenfor scope (`@draft`)
 
@@ -48,6 +55,17 @@
   2. **«Krav til studierett for å søke»** vises som avkryssingsboks i Innstillinger, men regelen er tagget `@wont` i kravet (ikke relevant for samordna opptak). Designet inkluderer den for fullstendighet. Ikke et avvik — implementasjonen følger MoSCoW-prioriteringen.
   3. **Samordning**: «Utdanninger: N»-badges vises per organisasjon — ekstra informasjon som ikke står i kravene, men som ikke er i konflikt.
   4. **Frister**: Alle grupper og felt i designet samsvarer med kravene. Seksjon 05 (utdanningsbakgrunner med avvikende frister) er ny siden forrige kjøring og matcher regelen i `frister_og_hendelser.feature`.
+  5. **Obligatoriske felt** (2026-10-19): skissen viser feltene i Innstillinger, men ikke hvilke som er påkrevd. Den motsier ikke regelen om obligatoriske felt i `opprett_opptak.feature`.
+
+## Kodesjekk
+
+Sjekket 2026-10-19 for regelen om obligatoriske felt (`@OPT-OVO-GRU-001`).
+
+- **Sjekket:** fs-admin (main, `c68a88edc`), fs-plattform (main, `ad1ad4cdda`)
+- Utdanningsbakgrunner og standard poenglikhetsregel er påkrevd i fs-admin (`fs-admin/src/domains/opptak/features/OpptakManagement/OpptakManagementPage.tsx:191-197`).
+- `@OPT-OVO-GRU-001`: kravet sier at maks antall søknadsalternativer må være satt. fs-admin krever ikke feltet, og fs-plattform bruker 10 når det er utelatt (`fs-plattform/opptak/opptak-service/src/main/java/no/sikt/fs/opptak/opptak/OpprettOpptakMutations.java:90-91`). Kravet gjelder, og koden skal endres (fs-admin).
+- `@OPT-OVO-GRU-001`: kravet sier at tak for tilbud per tildelingsrunde må være satt. fs-admin krever ikke feltet (`fs-admin/src/domains/opptak/features/OpptakManagement/utils/emptyObjectGenerators.ts:30`). Koden skal endres, se TAKE-431.
+- API-et krever ingen av de fire feltene (`fs-plattform/opptak/opptak-subgraph/src/main/resources/schema/features/experimental/opptak/opptak.graphqls`, `OpprettOpptakV3Input`: poenglikhetsregel utelatt gir ALDER, en tom liste gir et opptak uten utdanningsbakgrunner). Kravet beskriver hva opptaksforvalter kan lagre, og det holder at fs-admin sperrer, som for den siste utdanningsbakgrunnen.
 
 ## Retagging
 
@@ -57,6 +75,9 @@
 | `krav/02 Opptak/11 Opprette og vedlikeholde opptak/02 Samordning/samordnet_opptak.feature` | `@OPT-OVO-SAM-001 @must @planned` | `@OPT-OVO-SAM-001 @must @in-progress` |
 | `krav/02 Opptak/11 Opprette og vedlikeholde opptak/03 Innstillinger/innstillinger.feature` | `@OPT-OVO-INN-001 @must @planned` | `@OPT-OVO-INN-001 @must @in-progress` |
 | `krav/02 Opptak/11 Opprette og vedlikeholde opptak/04 Frister/frister_og_hendelser.feature` | `@OPT-OVO-FRI-001 @must @planned` | `@OPT-OVO-FRI-001 @must @in-progress` |
+| `krav/02 Opptak/11 Opprette og vedlikeholde opptak/01 Grunnoppsett/opprett_opptak.feature` — Regel: Utdanningsbakgrunner, poenglikhetsregel, maks antall søknadsalternativer og tak for tilbud per tildelingsrunde må være satt for å lagre et opptak (2026-10-19) | `@planned` | `@in-progress` |
+
+`opprett_opptak.feature` er `@implemented` siden 2026-10-15. Egenskapen står urørt, og statusen står på regelen.
 
 ## Endringer etter innhenting
 
@@ -91,4 +112,4 @@ Kravene er `@in-progress`, og endres på stedet. Endringene står her, så den s
 
 ## Åpne spørsmål
 
-Ingen åpne spørsmål.
+- [ ] Implementasjonsdetaljer mangler for `opprett_opptak.feature` (`opprett_opptak.design.md`), blant annet tekstene for felt som mangler. Venter etter beslutning 2026-10-19. fs-admin har tekstene i `missingFields` i `src/common/messages/nb/opptak.json`.
