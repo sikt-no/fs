@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from 'preact/hooks';
 import type { GitInfo, Snapshot } from '../shared/model';
 import { isSpecPath } from '../shared/paths';
 import { applySpec, newSpecText, parseSpec, slugify, type Sketch, type SpecDoc } from '../shared/spec';
-import { DOMAINS, newOppgaveText, type RawTask, type TasksSnapshot } from '../shared/tasks';
+import { DOMAINS, newOppgaveText, type IssueRef, type RawTask, type TasksSnapshot } from '../shared/tasks';
 import { parseUtforing, serializeUtforing, withRun, type SpecRun, type Utforing } from '../shared/utforing';
 import { SpecDetail, type SpecActions } from './SpecDetail';
 import {
@@ -281,7 +281,7 @@ export function Tavle({ snap, entries, git, editable, sel, onSel, onOpenKrav, me
   };
 
   /** «+ Ny oppgave»: en minimal oppgave.md fra malen */
-  const createTask = (o: { title: string; dom: string; issue: number | null; owner: string | null }) => {
+  const createTask = (o: { title: string; dom: string; issue: IssueRef | null; owner: string | null }) => {
     let slug = slugify(o.title);
     const base = slug;
     for (let i = 2; merged.tasks.some(t => t.dom === o.dom && t.slug === slug); i++) slug = `${base}-${i}`;
@@ -658,7 +658,7 @@ function TaskCardView({ t, col, sel, dirty, repoName, me, draggable, dragging, o
       <div class="spcard-top mono">
         <span class="ell">{domShort(t.dom)}</span>
         {t.scope && <span class="sptag acc" title={t.scope.title}>{t.scope.slug}</span>}
-        {t.task.issue && <span>#{t.task.issue}</span>}
+        {t.task.issue && <span>{t.task.issue.key}</span>}
         <span class="push">
           {t.krav.length} krav{nSpecs ? ` · ${nSpecs} spec` : ''}
         </span>

@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
-import { buildScopes, buildTasks, metadata, newOppgaveText, parseScope, parseTask, taskLint, type RawTask, type TasksSnapshot } from './tasks.ts';
+import { buildScopes, buildTasks, metadata, newOppgaveText, parseIssue, parseScope, parseTask, taskLint, type RawTask, type TasksSnapshot } from './tasks.ts';
 
 const oppgave = (o: { fase?: string; slug?: string; dom?: string; eier?: string; krav?: string; prs?: string; scope?: string } = {}) => `# Søk på fødselsnummer
 
@@ -45,7 +45,7 @@ test('metadata leser nøkkel/verdi-linjene og lenke-underpunktene', () => {
 test('parseTask tolker oppgave.md', () => {
   const t = parseTask(raw([]));
   assert.equal(t.title, 'Søk på fødselsnummer');
-  assert.equal(t.issue, 41);
+  assert.deepEqual(t.issue, { key: '#41', url: 'https://github.com/sikt-no/fs/issues/41' });
   assert.equal(t.scope, null);
   assert.equal(t.prio, 'Must');
   assert.equal(t.metaDom, 'brukeradministrasjon-og-tilgangsstyring');
@@ -176,7 +176,7 @@ test('parseScope leser metadata og tabellen Oppgaver', () => {
   assert.equal(sc.rows[0].task, 'sok');
   assert.equal(sc.rows[0].moscow, 'Must');
   assert.deepEqual(sc.rows[0].sketches, [{ name: 'Søk', url: 'https://www.figma.com/design/abc/x?node-id=1-2' }]);
-  assert.equal(sc.rows[0].issue, 41);
+  assert.equal(sc.rows[0].issue?.key, '#41');
   assert.equal(sc.rows[1].task, null, '(ikke tildelt)');
   assert.equal(sc.rows[1].comment, 'senere');
   assert.equal(parseScope(`tasks/${DOM}/sok/scope-x.md`, scopeSrc()), null);
@@ -224,12 +224,23 @@ test('buildTasks sorterer på domene og tittel og legger på regelsjekk', () => 
 });
 
 test('newOppgaveText: minimal oppgave.md som leses tilbake uten avvik', () => {
-  const src = newOppgaveText({ title: 'Søk på fødselsnummer', dom: DOM, slug: 'sok', issue: 41, owner: '@kari', date: '2026-10-12', via: 'Opprettet i FS Kravforvaltning' });
+  const src = newOppgaveText({ title: 'Søk på fødselsnummer', dom: DOM, slug: 'sok', issue: parseIssue('BAT-268'), owner: '@kari', date: '2026-10-12', via: 'Opprettet i FS Kravforvaltning' });
+  assert.match(src, /- \*\*Issue\*\*: \[BAT-268\]\(https:\/\/sikt\.atlassian\.net\/browse\/BAT-268\)/);
   const t = parseTask({ dom: DOM, slug: 'sok', files: ['oppgave.md'], sources: { 'oppgave.md': src } });
-  assert.deepEqual([t.title, t.issue, t.metaDom, t.metaSlug, t.owner, t.scope], ['Søk på fødselsnummer', 41, DOM, 'sok', '@kari', null]);
+  assert.deepEqual([t.title, t.issue, t.metaDom, t.metaSlug, t.owner, t.scope], ['Søk på fødselsnummer', { key: 'BAT-268', url: 'https://sikt.atlassian.net/browse/BAT-268' }, DOM, 'sok', '@kari', null]);
   assert.deepEqual(t.log, [{ d: '2026-10-12', t: 'Opprettet i FS Kravforvaltning', who: '@kari' }]);
   assert.deepEqual(taskLint(t), []);
   const uten = newOppgaveText({ title: 'X', dom: DOM, slug: 'x', scope: 'sok-iterasjon-2', date: '2026-10-12', via: 'Opprettet' });
-  assert.match(uten, /Åpne punkter/);
+  assert.match(uten, /Oppgaven har ikke en Jira-sak ennå/);
   assert.equal(parseTask({ dom: DOM, slug: 'x', files: ['oppgave.md'], sources: { 'oppgave.md': uten } }).scope, 'sok-iterasjon-2');
+});
+
+test('parseIssue: Jira-sak, eller GitHub issue i oppgaver fra før', () => {
+  const jira = { key: 'BAT-268', url: 'https://sikt.atlassian.net/browse/BAT-268' };
+  assert.deepEqual(parseIssue('BAT-268'), jira);
+  assert.deepEqual(parseIssue('[BAT-268](https://sikt.atlassian.net/browse/BAT-268)'), jira);
+  assert.deepEqual(parseIssue('https://sikt.atlassian.net/browse/BAT-268'), jira);
+  assert.deepEqual(parseIssue('[sikt-no/fs#143](https://github.com/sikt-no/fs/issues/143)'), { key: '#143', url: 'https://github.com/sikt-no/fs/issues/143' });
+  assert.deepEqual(parseIssue('#143'), { key: '#143', url: 'https://github.com/sikt-no/fs/issues/143' });
+  for (const v of [undefined, '', '–', '1234', 'bat-1']) assert.equal(parseIssue(v), null, String(v));
 });

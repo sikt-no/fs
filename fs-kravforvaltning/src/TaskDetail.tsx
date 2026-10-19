@@ -1,6 +1,6 @@
 import type { ComponentChildren } from 'preact';
 import { useState } from 'preact/hooks';
-import { DOMAINS } from '../shared/tasks';
+import { DOMAINS, parseIssue, type IssueRef } from '../shared/tasks';
 import { ClaudeAction } from './SpecDetail';
 import { StatusIcon } from './Sidebar';
 import { colOf, COL_WHY, kravPrompt, taskSpecifyPrompt, type Card, type ColConf, type ColKey, type TaskCard } from './specboard';
@@ -103,7 +103,7 @@ export function TaskDetail({ t, col, missing, sel, ro, dirty, colName, onSpec, o
           </div>
           <div class="spmeta">
             <span class="omuted">Issue</span>
-            <span class="mono">{task.issue ? <a href={`https://github.com/sikt-no/fs/issues/${task.issue}`} target="_blank" rel="noreferrer">#{task.issue}</a> : '–'}</span>
+            <span class="mono">{task.issue ? <a href={task.issue.url} target="_blank" rel="noreferrer">{task.issue.key}</a> : '–'}</span>
             <span class="omuted">Eier</span>
             <span class="mono">{task.owner ?? '–'}</span>
             <span class="omuted">Domene</span>
@@ -252,8 +252,8 @@ export function TaskDetail({ t, col, missing, sel, ro, dirty, colName, onSpec, o
   );
 }
 
-/** «+ Ny oppgave»: tittel, domene, issue og eier. Skriver en minimal oppgave.md fra malen. */
-export function NewTaskForm({ me, onClose, onCreate }: { me: string; onClose: () => void; onCreate: (o: { title: string; dom: string; issue: number | null; owner: string | null }) => void }) {
+/** «+ Ny oppgave»: tittel, domene, Jira-sak og eier. Skriver en minimal oppgave.md fra malen. */
+export function NewTaskForm({ me, onClose, onCreate }: { me: string; onClose: () => void; onCreate: (o: { title: string; dom: string; issue: IssueRef | null; owner: string | null }) => void }) {
   const [title, setTitle] = useState('');
   const [dom, setDom] = useState('');
   const [issue, setIssue] = useState('');
@@ -288,7 +288,7 @@ export function NewTaskForm({ me, onClose, onCreate }: { me: string; onClose: ()
               ))}
             </select>
             <span class="omuted">Issue</span>
-            <input class="spinl mono" value={issue} placeholder="#1234 (valgfri)" onInput={e => setIssue((e.target as HTMLInputElement).value)} />
+            <input class="spinl mono" value={issue} placeholder="BAT-1234 (valgfri)" onInput={e => setIssue((e.target as HTMLInputElement).value)} />
             <span class="omuted">Eier</span>
             <input class="spinl mono" value={owner} placeholder="@brukernavn" onInput={e => setOwner((e.target as HTMLInputElement).value)} />
           </div>
@@ -297,7 +297,7 @@ export function NewTaskForm({ me, onClose, onCreate }: { me: string; onClose: ()
           <button
             class="spbtn solid"
             disabled={!ok}
-            onClick={() => onCreate({ title: title.trim(), dom, issue: Number(issue.replace(/\D/g, '')) || null, owner: owner.trim() || null })}
+            onClick={() => onCreate({ title: title.trim(), dom, issue: parseIssue(issue.trim()), owner: owner.trim() || null })}
           >
             Opprett oppgave
           </button>
