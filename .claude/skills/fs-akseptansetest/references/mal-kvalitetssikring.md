@@ -4,6 +4,8 @@ Sjekklista «Klar for akseptansetest» fra rutinen. Den gjelder hver sak før de
 
 Sjekklista er ikke for testerne. Den interne testen viser til den med én linje («Kvalitetssikring i teamet»).
 
+Siden samler også det teamet og testansvarlig trenger, men ikke testerne (seksjonen «Saken og kravene»): sakene i GitHub og Jira, kravfilene med Feature-ID og status, hva som er endret i kravene, «berører andre team», tekniske forhold, avvik mellom eksemplene i kravene og testdataene, viktige endringer fra FS-klienten (til introen i testmøtet), sporingen fra testtilfelle til krav, og det som ikke er med i testene, med taggen og det åpne spørsmålet.
+
 Status i hver rad er én av: `OK`, `Mangler`, `Ikke relevant: <grunn>`, `[Fylles ut av teamet]`. «Kilde» sier hvor skillen fant svaret. Det skillen ikke kan se fra repoet, står som `[Fylles ut av teamet]`.
 
 Fila skrives til `tasks/<domene>/<slug>/tester/kvalitetssikring-<slug>.md`:
@@ -15,6 +17,35 @@ Fila skrives til `tasks/<domene>/<slug>/tester/kvalitetssikring-<slug>.md`:
 - **Krav**: <feature-filer med Feature-ID og status>, commit `<sha>` (<dato>)
 - **Laget**: <YYYY-MM-DD> av fs-akseptansetest
 - **Gått gjennom av**: [Fylles ut av teamet] (en annen enn den som utviklet saken)
+
+## Saken og kravene
+
+Informasjon til teamet og testansvarlig. Den står ikke på testsidene.
+
+| Felt | Innhold |
+|---|---|
+| Sak | <GitHub-issue> · <Jira> |
+| Krav | <lenke til hver feature-fil> (`<Feature-ID>`, `<status>`), commit `<sha>` |
+| Endret siden forrige runde | <bare ved ny runde> |
+| Berører andre team | <fra `design.md` / `utforing.md`> |
+| Teknisk | <flagg, kode som ikke er merget, kodeverdier> |
+| Testdata mot kravene | <der eksemplene i kravene og testdataene er ulike> |
+
+### Viktige endringer fra FS-klienten
+
+<Til introen i testmøtet. Det som gir et annet resultat enn i dagens løsning.>
+
+### Åpne spørsmål
+
+<Spørsmål som avgjør forventet resultat i et testtilfelle. Skriv spørsmålet så det kan leses uten kravfila, hvilket testtilfelle det gjelder, og hva som skjer med testtilfellet til det er besvart. Står det ingen, utelates seksjonen.>
+
+### Sporing fra testtilfelle til krav
+
+| Intern | Ekstern | Krav | Scenario |
+|---|---|---|---|
+| 1.1 | 1 | `<Feature-ID>` | <scenariotittel fra kravet> |
+
+Ikke med i testene: <scenarioer utenfor gating-settet, med taggen og det åpne spørsmålet>.
 
 ## 1. Kravene er dekket (funksjonell test)
 
@@ -45,7 +76,7 @@ Fila skrives til `tasks/<domene>/<slug>/tester/kvalitetssikring-<slug>.md`:
 |---|---|---|---|
 | 4.1 | Automatiske tester er grønne i CI, og det er lagt til tester for det nye | [Fylles ut av teamet] | PR-ene i `utforing.md` |
 | 4.2 | Saken er deployet til miljøet der akseptansetesten kjøres, og virker der | [Fylles ut av teamet] | |
-| 4.3 | Testbrukere og testdata er klare for hvert scenario (se testbeskrivelsen) | | `tester/akseptansetest-intern-<slug>.md` |
+| 4.3 | Testbrukere og testdata er klare for hvert testtilfelle (kolonnene «Testbruker» og «Testdata» i den interne testen) | | `tester/akseptansetest-intern-<slug>.md` |
 | 4.4 | Universell utforming er sjekket der det er nytt grensesnitt (tastatur, skjermleser) | [Fylles ut av teamet] | |
 
 ## 5. Overlevering
@@ -61,5 +92,5 @@ Fila skrives til `tasks/<domene>/<slug>/tester/kvalitetssikring-<slug>.md`:
 
 - **Klar for akseptansetest**: Ja / Nei / Ja, med forbehold
 - **Mangler før testen**: <liste>
-- **Kjente begrensninger som testansvarlig må vite om**: <liste, går videre til testbeskrivelsen>
+- **Det testerne ikke kan gjøre**: <kort liste, går til «Dette kan du ikke gjøre i testen» i testene>
 ```

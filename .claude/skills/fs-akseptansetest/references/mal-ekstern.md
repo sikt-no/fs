@@ -6,7 +6,7 @@ For HK-dir og lærestedene. Den er lettere enn den interne med vilje: testerne s
 - **Bare det som kan testes.** Det som ikke er testbart i miljøet, står i «Ikke med i denne testen» med en kort grunn uten tekniske ord.
 - **Kort.** Sikt mot høyst 20–25 testtilfeller og under én time. Blir det mer, foreslå å dele i flere tester (C4).
 - **Ingen intern informasjon:** Feature-ID-er, tagger, commits, Jira, GitHub, feature-flagg, kodeverdier, verify-resultater, «berører andre team», åpne spørsmål og kvalitetssikringen i teamet. Er noe uavklart, avklar det før testen, eller ta testtilfellet ut.
-- **Testbrukeren står over hver del**, og i steget når den byttes (T1).
+- **Testbrukeren og testdataene står i hver test** (kolonnene «Testbruker» og «Testdata»), og bytte av testbruker er et eget steg (T1 og T13).
 - Testerne konkluderer selv (se informasjonsskrivet).
 
 Fila skrives til `tasks/<domene>/<slug>/tester/akseptansetest-ekstern-<slug>.md`. Alt over den første streken er metadata for repoet, og publiseres ikke. Har den interne testen et testtilfelle som svarer til et eksternt, står det i metadataene (`Bygger på`), så funn kan sammenlignes.
@@ -17,7 +17,7 @@ Fila skrives til `tasks/<domene>/<slug>/tester/akseptansetest-ekstern-<slug>.md`
 - **Nivå**: ekstern (trinn 3)
 - **Oppgave**: [tasks/<domene>/<slug>](../oppgave.md)
 - **Krav**: <feature-filer med Feature-ID>, commit `<sha>` (<dato>)
-- **Bygger på**: [intern akseptansetest](akseptansetest-intern-<slug>.md) (eksternt nr. → internt nr.: 1 → 1.1, 2 → 1.4, …)
+- **Bygger på**: [intern akseptansetest](akseptansetest-intern-<slug>.md). Sporingen fra test til krav står på kvalitetssikringssiden
 - **Testere**: <HK-dir, læresteder>
 - **Confluence**: –
 - **Laget**: <YYYY-MM-DD> av fs-akseptansetest
@@ -28,30 +28,29 @@ Velkommen til akseptansetesten av <navn>. I testen sjekker du om løsningen gjø
 
 ## Før du starter
 
-| | |
+| Felt | Innhold |
 |---|---|
 | Hva er laget | <2–3 setninger med vanlige ord: hva du kan gjøre, og hvor i løsningen> |
-| Hvor du tester | <url> |
-| Hvem du er | Del 1: <rolle> (<testbruker>, <organisasjon>). Del 2: … |
+| Hvor du tester | [<url>](<url>) |
+| Dette kan du ikke gjøre i testen | - <kort> <br>- <…> |
 | Tid | Ca. <N> minutter. Frist: <dato> |
 | Spørsmål underveis | <kontaktperson>, i <kanal / e-post / møte> |
 
 ## Slik fyller du ut
 
 1. Ta testene i rekkefølge, og følg stegene slik de står.
-2. Skriv det du så i «Faktisk resultat», og Ja, Nei eller Delvis i «Bestått?».
-3. Sjekk at det du har lagret, står der når du åpner siden igjen.
-4. Stemmer noe ikke, skriv hva du gjorde, hva du forventet og hva du fikk. Ta skjermbilde hvis du kan.
+2. «Testbruker» sier hvem du skal være. «Testdata» sier hva du bruker, og hva du lager som de neste testene trenger.
+3. Skriv det du så i «Faktisk resultat», og Ja, Nei eller Delvis i «Bestått?».
+4. Sjekk at det du har lagret, står der når du åpner siden igjen.
+5. Stemmer noe ikke, skriv hva du gjorde, hva du forventet og hva du fikk. Ta skjermbilde hvis du kan.
 
 ## Testene
 
-### Del 1: <hva du gjør>
+### Del 1: <hva du gjør> (ca. <N> minutter)
 
-**Logg inn som:** <rolle> (<testbruker>, <organisasjon>)
-
-| # | Hva du tester | Steg | Forventet resultat | Faktisk resultat | Bestått? |
-|---|---|---|---|---|---|
-| 1 | <med vanlige ord> | 1. Gå til … <br>2. … | <det du ser> | | |
+| # | Testbruker | Hva du tester | Testdata | Steg | Forventet resultat | Faktisk resultat | Bestått? |
+|---|---|---|---|---|---|---|---|
+| 1 | <navn>, <rolle> ved <organisasjon> | <med vanlige ord> | **Bruker:** … <br>**Lager:** … | 1. Logg inn som … <br>2. Gå til … <br>3. … | <det du ser> | | |
 
 ### Del 2: …
 
@@ -71,7 +70,7 @@ Her skriver du det du oppdager som ikke står i testene, f.eks. om brukervennlig
 
 ## Konklusjon
 
-| | |
+| Felt | Innhold |
 |---|---|
 | Utfall | Godkjent / Godkjent med forbehold / Ikke godkjent |
 | Begrunnelse | |

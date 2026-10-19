@@ -88,7 +88,7 @@ Still spørsmålene samlet med `AskUserQuestion` (høyst fire om gangen). Hopp o
 - **Hvem og når:** kontaktperson i teamet, testansvarlig, dato og tidsramme, Slack-tråd.
 - **Bare C:** hvem testerne er (HK-dir, læresteder), og hvilke deler av funksjonaliteten som gjelder dem. Eksterne tester bare det de skal bruke: i et samordna opptak er det kravene for samordna opptak, ikke for lokale opptak. Foreslå et utvalg ut fra rollene og reglene, og la brukeren velge (`multiSelect`).
 
-Mangler testdata, skriv `[Fylles ut: <hva som trengs>]` i dokumentet, og list det i oppsummeringen. Testeren skal aldri måtte lete fram data selv.
+Testbrukerne og testdataene skrives inn i hvert testtilfelle (kolonnene «Testbruker» og «Testdata»), ikke i egne tabeller. Mangler testdata, skriv `[Fylles ut: <hva som trengs>]` i cella, og list det i oppsummeringen. Testeren skal aldri måtte lete fram data selv.
 
 ### B2/C2. Sjekk hva som kan testes i miljøet
 
@@ -123,7 +123,7 @@ Nummerer testtilfellene `<del>.<n>`. Den eksterne testen nummereres for seg, fra
 
 ### B5/C5. Skriv dokumentet
 
-Fyll ut malen. Intern: alt i `references/mal-intern.md`. Ekstern: bare det som står i `references/mal-ekstern.md`. Den eksterne er kortere med vilje: ingen Feature-ID-er, tagger, commits, Jira-nøkler, feature-flagg, kodeverdier, verify-resultater eller «berører andre team». Det testerne trenger, er hva som er laget (2–3 setninger), hvor de tester, hvem de er, testtilfellene og hvor de melder funn.
+Fyll ut malen. Intern: `references/mal-intern.md`. Ekstern: `references/mal-ekstern.md`. Testsidene er for testerne, og har bare det de trenger: hva som er laget, brukerhistorien, hvor de tester, lenke til kvalitetssikringen (intern), hva de ikke kan gjøre i testen (en kort punktliste), hvem de spør, og testtilfellene med testbruker og testdata i hver rad. Feature-ID-er, tagger, commits, saker i GitHub og Jira, feature-flagg, kodeverdier, verify-resultater, «berører andre team», åpne spørsmål og sporingen fra testtilfelle til krav står på kvalitetssikringssiden (modus A), ikke på testsidene. Lag kvalitetssikringssiden også når brukeren bare ber om en test.
 
 Øverst i fila står metadata for repoet (oppgave, krav med commit, nivå, Confluence-lenke). Det publiseres ikke.
 

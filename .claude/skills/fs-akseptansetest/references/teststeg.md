@@ -6,7 +6,7 @@ Reglene gjelder intern og ekstern akseptansetest, og er sjekklista i modus D. De
 
 Hvert testtilfelle sier hvilken testbruker testeren er: rollen fra kravet, og testbrukeren med organisasjon.
 
-- Kolonnen «Logg inn som» (intern), eller overskriften på delen (ekstern): `Opptaksforvalter ved forvaltende organisasjon (testbruker 1: Ordentlig Rundskriv, HK-dir)`.
+- Kolonnen «Testbruker» i hvert testtilfelle, både intern og ekstern: `Ordentlig Rundskriv, opptaksforvalter ved HK-dir`. Ingen egen tabell med testbrukere, og ikke bare i overskriften på delen.
 - Bytte av testbruker er et eget nummerert steg: `3. Bytt rolle til Ansvarsfull Fotkrem (opptaksforvalter, NTNU).` Si hvordan man bytter, første gang det skjer.
 - Ikke «testbruker 3» alene. Testeren skal ikke måtte slå opp i en tabell.
 
@@ -54,13 +54,13 @@ To scenarioer som gjør det samme i løsningen, blir ett testtilfelle, med begge
 
 Testtilfellene står i rekkefølgen testeren gjør dem: samlet per testbruker, og innenfor testbrukeren etter hvor i løsningen (se B4 i SKILL.md). Testtilfeller på samme side står etter hverandre. Det som lager data, står før det som bruker dataene. Avhengigheter står i testtilfellet: «Bruker opptaket fra 1.1».
 
-## T13. Forutsetninger og opprydding
+## T13. Testdata i testtilfellet
 
-Det som må finnes før testtilfellet, står først: `Forutsetter: et opptak med minst ett utdanningstilbud (testdata: «Opptak med tilbud (test)»).` Det som må ryddes før neste testtilfelle, står som egen rad: «Gjør klar til neste test: slett periodene du har lagt inn».
+Kolonnen «Testdata» i hvert testtilfelle sier hva testeren bruker og hva testeren lager, med navn og hvor det finnes: `**Bruker:** opptaket «Samordna opptak 2027 – test 2» fra 1.2 og regelverkssamlingen «UHG 2027 v2».` `**Lager:** et utdanningstilbud i opptaket, som 6.1–6.3 trenger.` Ingen egen tabell med testdata. Det som må ryddes før neste testtilfelle, står som egen rad: «Gjør klar til neste test: slett periodene du har lagt inn».
 
 ## T14. Riktig nivå
 
 - Bare scenarioer fra kravene. Ingen helhetsrunde, regresjon eller universell utforming i akseptansetesten. Mangler et scenario, er det en kommentar til kontaktpersonen, ikke et nytt testtilfelle.
-- Intern: Feature-ID og scenariotittel i «Scenario». Tekniske forhold (flagg, branch, kodeverdi) bare i «Kjente begrensninger».
+- Intern: scenariotittelen med vanlige ord i «Scenario», uten Feature-ID. Feature-ID-er, saker, tekniske forhold (flagg, branch, kodeverdi) og sporingen står på kvalitetssikringssiden.
 - Ekstern: ingen Feature-ID-er, tagger, kodeverdier, GraphQL, Jira eller feature-flagg. «Hva du tester» med vanlige ord.
 - Ikke «(ikke testbart: …)» i forventet resultat. Det som ikke kan testes, står i egen tabell.

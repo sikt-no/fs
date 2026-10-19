@@ -38,7 +38,8 @@ Ved oppdatering: vis hva som endres, og spør.
 ## Fra fila til siden
 
 - Ta bare det som står under den første streken (`---`). Metadataene øverst er for repoet.
-- Skriv HTML etter `getContentFormatGuide`. Stegene i en tabellcelle blir en nummerert liste (`<td><ol><li>Gå til …</li><li>…</li></ol></td>`), ikke `<br>`.
+- Skriv HTML etter `getContentFormatGuide`. Stegene i en tabellcelle blir en nummerert liste (`<td><ol><li>Gå til …</li><li>…</li></ol></td>`), ikke `<br>`. Punkter (`- …`) i en celle blir en punktliste.
+- Alle tabeller får full bredde (`<table data-layout="full-width">`). Testtabellene får faste kolonnebredder med `data-colwidth` på hver celle, så stegene får plass: «#» 60, «Testbruker» 170, «Scenario» / «Hva du tester» 200, «Testdata» 260, «Steg» 520, «Forventet resultat» 280, «Faktisk resultat» 240, «Bestått?» 80. To-kolonnetabeller (Felt / Innhold): 220 og 1590.
 - Lenker til krav i repoet blir lenker til GitHub (`https://github.com/sikt-no/fs/blob/main/<sti>`, med mellomrom som `%20`).
 - Felt som skal fylles ut av teamet (`[Fylles ut …]`, `[Sjekk begrep]`), markeres med gul bakgrunn i cella (`data-background="#FFF0B3"`), så de ikke blir glemt.
 - Lag ikke `@`-omtaler av personer (`data-type="mention"`) uten en ekte konto-ID. Skriv navnet som tekst.
