@@ -42,7 +42,7 @@
 # LEVERANSEFORSLAG nederst i filen.
 #
 # L1 er unntaket. Den leveransen er besluttet 23.09.2026 og skilt ut til
-# vise_elektroniske_vitnemål.feature (@OPT-BEH-BEH-005, @planned). Denne fila
+# vise_digitale_resultater.feature (@OPT-BEH-BEH-005, @planned). Denne fila
 # dekker nå L2–L6.
 #
 @OPT-BEH-BEH-004 @must @draft
@@ -56,7 +56,7 @@ Egenskap: Vitnemålsbehandling
   elektronisk vitnemål uten forbedringer, klarer automatikken seg selv.
   Behovet oppstår når søkeren har flere vitnemål, har forbedret fag, eller har
   dokumentert fag som ikke finnes elektronisk. Visningen av vitnemålene, og
-  hvem som får innsyn i dem, er skilt ut i vise_elektroniske_vitnemål.feature
+  hvem som får innsyn i dem, er skilt ut i vise_digitale_resultater.feature
   (@OPT-BEH-BEH-005) som leveranse L1.
 
   Saksbehandlingen består av tre valg som henger sammen: hvilket vitnemål som
@@ -75,7 +75,7 @@ Egenskap: Vitnemålsbehandling
     Og jeg er inne på søknaden til en søker
 
   # Regelen «Søkerens elektroniske vitnemål vises» er skilt ut til
-  # vise_elektroniske_vitnemål.feature (@OPT-BEH-BEH-005) som leveranse L1
+  # vise_digitale_resultater.feature (@OPT-BEH-BEH-005) som leveranse L1
   # (#613). Reglene under forutsetter den visningen.
 
   Regel: Saksbehandleren velger hvilket vitnemål som legges til grunn
@@ -461,7 +461,7 @@ Egenskap: Vitnemålsbehandling
 
   Regel: Muligheten til å endre styres av rettighet, ikke av hvem som har tatt saken
 
-    # Innsyn er skilt ut til vise_elektroniske_vitnemål.feature
+    # Innsyn er skilt ut til vise_digitale_resultater.feature
     # (@OPT-BEH-BEH-005): hvem som ser vitnemålene, hvem som ikke gjør det, og
     # at tilordning ikke er en innsynsgrense. Den fila har også den fulle
     # begrunnelsen med kildereferanser. Regelen her dekker det som først kan
@@ -488,7 +488,7 @@ Egenskap: Vitnemålsbehandling
       Når jeg åpner søknaden til en søker
       Så kan jeg behandle vitnemålet
       # AVKLART 21.09.2026: tilgang styres av rettighet og organisasjon, ikke
-      # av tilordning. Full begrunnelse i vise_elektroniske_vitnemål.feature.
+      # av tilordning. Full begrunnelse i vise_digitale_resultater.feature.
 
 # AVGRENSNINGER — BEVISST UTENFOR DETTE KRAVET
 #
@@ -572,7 +572,7 @@ Egenskap: Vitnemålsbehandling
 # det. Resten av featuren er forbedringer rundt den kjernen.
 #
 #   L1  Vise vitnemålene                 #613     —        liten
-#       SKILT UT 23.09.2026 til vise_elektroniske_vitnemål.feature
+#       SKILT UT 23.09.2026 til vise_digitale_resultater.feature
 #       (@OPT-BEH-BEH-005). Regel «Søkerens elektroniske vitnemål vises», og
 #       innsynsdelen av tilgangsregelen. Ingen valg, ingen beregning.
 #       KREG-integrasjonen finnes allerede (hentKompetansebevis), så dette er
