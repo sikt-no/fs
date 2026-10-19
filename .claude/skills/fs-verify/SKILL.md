@@ -212,6 +212,7 @@ Si dette i chat. Det står ikke i rapporten.
 
 - **Foreldreløse step definitions.** For slettede scenarioer: søk i `tester/steps/` etter stegtekstene. Steg som ikke lenger brukes av noen `.feature`-fil, listes. Ikke slett dem.
 - **Tester.** Et `@deprecated` scenario som fortsatt har step definitions, vil feile når koden fjernes. Nevn det.
+- **Brukerveiledningene i fs-admin.** Har et krav med kode i fs-admin fått `@implemented`, har en del mistet `@in-progress`, eller er et `@deprecated`-krav eller en `@deprecated`-del slettet, minn brukeren på å oppdatere brukerveiledningene i fs-admin, med skillen `fs-admin-brukerveiledninger` der. Hva du sier, og når, står i [`.claude/references/brukerveiledninger.md`](../../references/brukerveiledninger.md). Ingen endring i statusen, ingen påminnelse.
 
 ## Rapport
 
@@ -243,3 +244,4 @@ Ikke `git add`, `commit`, `push`, `checkout` eller `stash` i noe repo. Lesende g
 - **`fs-krav`** — setter `@deprecated` når et levert krav skal fjernes.
 - **`fs-specify` / `fs-specify-delta`** — setter `@in-progress`, på egenskaper og på deler i leverte krav som endres.
 - **`.claude/agents/fs-verify-kontroll.md`** — kontrolløren som sjekker resultatene uavhengig (*Kontroll*).
+- **[`.claude/references/brukerveiledninger.md`](../../references/brukerveiledninger.md)** — påminnelsen om brukerveiledningene i fs-admin (*Etter endringene*).

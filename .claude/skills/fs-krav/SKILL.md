@@ -374,6 +374,7 @@ Vis brukeren hva som skal skje (fil, del, `@deprecated` eller sletting), og vent
 - Hvilke krav/deler som ble slettet, og hvilke som fikk `@deprecated`
 - Step definitions i `tester/steps/` som hørte til slettede scenarioer (listes, slettes ikke)
 - Neste steg for `@deprecated`: fjern koden, og kjør `fs-verify` for å slette kravet når koden er borte
+- Fikk et levert krav med kode i fs-admin `@deprecated`: påminnelsen om brukerveiledningene i fs-admin, se [`.claude/references/brukerveiledninger.md`](../../references/brukerveiledninger.md). Si at veiledningen oppdateres når koden er fjernet, ikke nå
 
 ## Prosess: Endre levert krav
 
@@ -433,6 +434,7 @@ Setter brukeren eksplisitt at delen skal ha `@planned`, gjelder det samme unntak
 - Koden for den leverte delen (`fil:linje`), eller at den ikke ble sjekket fordi brukeren ikke hadde kodeklonene
 - Step definitions i `tester/steps/` som hører til `@deprecated`-delene (listes, slettes ikke)
 - Neste steg: `fs-specify` / `fs-specify-delta` henter `@planned`-delene inn i en oppgave (`@planned` → `@in-progress` på delen), og `fs-verify` fjerner `@in-progress` når koden er på plass og sletter `@deprecated`-delene når den gamle koden er borte
+- Fikk en del i et levert krav med kode i fs-admin `@planned` eller `@deprecated`: påminnelsen om brukerveiledningene i fs-admin, se [`.claude/references/brukerveiledninger.md`](../../references/brukerveiledninger.md). Si at veiledningen oppdateres når endringen er levert, ikke nå
 
 ## Feilhåndtering
 
@@ -450,4 +452,5 @@ Setter brukeren eksplisitt at delen skal ha `@planned`, gjelder det samme unntak
 - **`krav/krav-oversikt.md`** — generert oversikt over alle eksisterende features
 - **`lage-steps`** — søsken-skill i dette repoet. Implementerer step-definitions i `tester/steps/` for `@planned`-krav (ikke for `@draft`-deler)
 - **`fs-specify`** / **`fs-specify-delta`** — søsken-skills i dette repoet. Henter `@planned`-krav, og `@planned`-deler i leverte krav, inn i en oppgavemappe under `tasks/`
+- **`fs-admin-brukerveiledninger`** — skill i fs-admin-repoet, ikke her. Skriver og oppdaterer brukerveiledningene i fs-admin (`src/features/Brukerveiledninger/innhold/`). Denne skillen skriver aldri i dem, men minner brukeren på dem når et levert krav endres eller avvikles ([`.claude/references/brukerveiledninger.md`](../../references/brukerveiledninger.md))
 - **`fs-scope`** — søsken-skill i dette repoet. Avgrenser initiativet, deler det i oppgaver, lager skjelett-filene og setter `@scope-<slug>`. Kjøres før denne skillen, og på nytt når et krav ikke passer i scopet

@@ -109,7 +109,7 @@ Svarer brukeren **Avbryt** i gjennomgangen, stopp, skriv rapporten for det som e
 
 ## Rapport
 
-Som *Etter endringene* og *Rapport* i `fs-verify`, med samme filnavn, oppdatering av `utforing.md` og malen i [`fs-verify/references/rapportmal.md`](../fs-verify/references/rapportmal.md). Les malen før du skriver rapporten, og følg den nøyaktig. Med agent team gjelder alltid variantene merket `[agent team]` (linja `Team`), og når repoene er vurdert hver for seg (*Finn scope og kode*), også `[per repo]`: `## Oversikt per krav` og repoene først i `Bevis`. Tallene regnes ut fra `## Scenarioer` (se *Rapport* i `fs-verify`).
+Som *Etter endringene* og *Rapport* i `fs-verify`, også påminnelsen om brukerveiledningene i fs-admin ([`.claude/references/brukerveiledninger.md`](../../references/brukerveiledninger.md)), med samme filnavn, oppdatering av `utforing.md` og malen i [`fs-verify/references/rapportmal.md`](../fs-verify/references/rapportmal.md). Les malen før du skriver rapporten, og følg den nøyaktig. Med agent team gjelder alltid variantene merket `[agent team]` (linja `Team`), og når repoene er vurdert hver for seg (*Finn scope og kode*), også `[per repo]`: `## Oversikt per krav` og repoene først i `Bevis`. Tallene regnes ut fra `## Scenarioer` (se *Rapport* i `fs-verify`).
 
 ## Rydd opp
 
@@ -122,4 +122,5 @@ Når rapporten er skrevet (også etter **Avbryt** eller en feil): be hver teamma
 - **`.claude/agents/fs-verify-krav.md`** — finneren og svarformatet.
 - **`.claude/agents/fs-verify-kontroll.md`** — kontrolløren og svarformatet.
 - **`krav/README.md`** — statusaksen, *Delvis utkast*, *Avvikling* og *Endring av levert krav*.
+- **[`.claude/references/brukerveiledninger.md`](../../references/brukerveiledninger.md)** — påminnelsen om brukerveiledningene i fs-admin.
 - **[`tasks/README.md`](../../../tasks/README.md)** — oppgavestrukturen, `spec/` og *Utføring*.
