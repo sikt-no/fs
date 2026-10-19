@@ -1,6 +1,6 @@
 # language: no
 # Jira: STEK-253
-@OPT-BEH-BEH-012 @must @draft
+@OPT-BEH-BEH-017 @must @draft
 Egenskap: Behandlingsstatus
   Som saksbehandler ved saksbehandlende organisasjon
   ønsker jeg at hver sak har en behandlingsstatus

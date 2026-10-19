@@ -107,7 +107,7 @@ Egenskap: Søknadsmangler
     Scenario: Saken kan behandles ferdig selv om den har mangler
       Gitt at saken hos "Universitetet i Oslo" har mangelen "KAR"
       Når saksbehandleren ved Universitetet i Oslo har behandlet saken så langt dokumentasjonen rekker
-      Så kan saksbehandleren sette saken til "Ferdig behandlet"
+      Så kan saksbehandleren sette saken til "Behandlet"
 
     @draft @openquestion
     Scenario: Mangel som sperrer opptak holder søkeren utenfor tilbudskjøringen
@@ -234,6 +234,9 @@ Egenskap: Søknadsmangler
 
   Regel: Søkeren ser bare manglene saksbehandleren har publisert, og får melding om dem
 
+    Manglene i saken som ikke er publisert, publiseres når saken settes til «Behandlet». Varselet
+    om det står i @OPT-BEH-BEH-017.
+
     Scenario: Registrering av mangel publiserer ikke mangelen
       Når saksbehandleren ved Universitetet i Oslo registrerer mangelen "KAR"
       Så ser ikke søkeren mangelen "KAR" i Min kompetanse
@@ -243,23 +246,6 @@ Egenskap: Søknadsmangler
       Gitt at saken hos "Universitetet i Oslo" har mangelen "KAR"
       Når saksbehandleren ved Universitetet i Oslo markerer mangelen "KAR" som klar til publisering
       Så ser søkeren mangelen "KAR" i Min kompetanse
-
-    Scenario: Saksbehandleren blir advart om mangler som ikke er publisert
-      Gitt at saken hos "Universitetet i Oslo" har mangelen "KNN" som ikke er publisert
-      Når saksbehandleren ved Universitetet i Oslo setter saken til "Ferdig behandlet"
-      Så ser saksbehandleren at søkeren ikke ser mangelen "KNN" i Min kompetanse
-
-    Scenario: Sette saken til ferdig behandlet uten å publisere manglene
-      Gitt at saksbehandleren ved Universitetet i Oslo er advart om at mangelen "KNN" ikke er publisert
-      Når saksbehandleren velger å sette saken til "Ferdig behandlet" uten å varsle søkeren
-      Så er saken "Ferdig behandlet"
-      Og søkeren ser ikke mangelen "KNN" i Min kompetanse
-      Og søkeren har ikke mottatt en melding av typen MANGEL
-
-    Scenario: Avbryte når saken har mangler som ikke er publisert
-      Gitt at saksbehandleren ved Universitetet i Oslo er advart om at mangelen "KNN" ikke er publisert
-      Når saksbehandleren avbryter
-      Så er ikke saken satt til "Ferdig behandlet"
 
     Scenario: Søkeren får én melding om manglene som publiseres i saken
       Gitt at saken hos "Universitetet i Oslo" har manglene "KAR" og "STEMPEL"
