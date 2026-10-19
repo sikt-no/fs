@@ -83,7 +83,7 @@ Et scope er planen for et initiativ: mål, avgrensning, kilder, og oppgavene ini
 
 | Oppgave | Krav | MoSCoW | Skisse | Issue | Kommentar |
 |---|---|---|---|---|---|
-| [plasstildeling](plasstildeling/) | `@OPT-PLA-RUN-001` [runder.feature](../../krav/…) | Must | [Runder](https://figma.com/…?node-id=…) | #… | |
+| [plasstildeling](plasstildeling/) | `@OPT-PLA-RUN-001` [runder.feature](../../krav/…) | Must | [Runder](https://figma.com/…?node-id=…) | [BAT-…](https://sikt.atlassian.net/browse/BAT-…) | |
 | (ikke tildelt) | `@OPT-PLA-RUN-002` [….feature](../../krav/…) | Could | – | – | |
 
 ## Åpne spørsmål
@@ -170,17 +170,18 @@ Når alle steg er levert, kjøres `fs-verify` avgrenset til spesifikasjonen. Den
 
 Scenarioene `fs-verify` sjekker (gating-settet), er alle `Scenario:`/`Scenariomal:` som ikke er tagget `@draft`, `@deprecated`, `@openquestion` eller `@demo`, selv eller via `Regel:`. I et levert krav som endres, er det bare `@planned`- og `@in-progress`-delene, og `@deprecated`-delene sjekkes for at koden er borte. Den samme definisjonen står i `fs-kravforvaltning/src/specboard.ts` (`gating`), og de to holdes i synk.
 
-## Forholdet til GitHub issues og projects
+## Forholdet til Jira og GitHub
 
-Oppgavemappa *erstatter ikke* GitHub issues eller project-boards. Fordelingen er:
+Oppgavemappa *erstatter ikke* Jira-saker, GitHub issues eller project-boards. Fordelingen er:
 
-- **GitHub issue**: kanonisk ID, kort beskrivelse, labels, prioritet, milestone, status, start-/ferdigdato. Synlig for produktledere og eksterne.
+- **Jira-sak**: oppgaven teamet løser. Kanonisk ID, status, sprint og den som jobber med den.
+- **GitHub issue**: initiativet og kravarbeidet (`Initiativ` i scope-fila, `# GitHub:` i kravfila). Synlig for produktledere og eksterne.
 - **`scope-<slug>.md`**: initiativet delt i oppgaver, med kravene hver oppgave har.
-- **`oppgave.md`**: referanse til issue, eier, scope, lenker, append-only statuslogg. Internt for teamet.
+- **`oppgave.md`**: referanse til Jira-saken, eier, scope, lenker, append-only statuslogg. Internt for teamet.
 - **Tavla «Oppgaver»** i FS Kravforvaltning: hvor hver oppgave er, utledet fra kravene og spesifikasjonene.
 - **`roadmap.md`** (valgfri): teamets egen linse på aktivt og ferdig arbeid.
 
-Én oppgave ≙ én GitHub issue. ID-en er issue-nummeret (f.eks. `#36`); vi lager ikke lokal nummerering. Mappenavnet er en lesbar slug.
+Én oppgave ≙ én Jira-sak. ID-en er saksnøkkelen (f.eks. `BAT-268`), og står i `Issue` i `oppgave.md` og i scope-tabellen; vi lager ikke lokal nummerering. Mappenavnet er en lesbar slug. Oppgaver fra før kan fortsatt peke på et GitHub issue.
 
 For overordnet prioritering på tvers av FS, se [FS Offentlig saksoversikt](https://github.com/orgs/sikt-no/projects/4/views/3).
 
