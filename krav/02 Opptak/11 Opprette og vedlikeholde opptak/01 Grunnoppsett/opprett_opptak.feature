@@ -57,7 +57,7 @@ Egenskap: Opprette et opptak
   # AVKLART 2026-10-19: Utdanningsbakgrunner, poenglikhetsregel, antall søknadsalternativer og tak for antall tilbud
   # per tildelingsrunde må være satt for å opprette et opptak. Startnummer for søknader er ikke obligatorisk,
   # se 03 Innstillinger/innstillinger.feature.
-  @planned
+  @in-progress
   Regel: Utdanningsbakgrunner, poenglikhetsregel, maks antall søknadsalternativer og tak for tilbud per tildelingsrunde må være satt for å lagre et opptak
 
     Scenariomal: Lagre opptak uten <innstilling>
