@@ -26,7 +26,9 @@ Egenskap: Frister og hendelser for opptak
     # - Antall studieplasser er tallet som settes på utdanningstilbudet (sette_studieplasser_og_antall_tilbud.feature).
     #   Det kan endres til første plasstildelingsrunde er publisert. Plasstildelinger som bare er kjørt for
     #   kontroll, låser det ikke.
-    # AVKLART 2026-10-16 (produktleder): Låsen på antall studieplasser gjelder også forvaltende organisasjon.
+    # AVKLART 2026-10-19 (produkteier, erstatter avklaringen 2026-10-16): Låsen på antall studieplasser gjelder
+    #   ikke opptaksforvalter ved forvaltende organisasjon, foreløpig. På sikt bør antall studieplasser komme fra
+    #   antall plasser som er registrert på kullet i SIS. Virkningen beskrives i sette_studieplasser_og_antall_tilbud.feature.
     # - Trekking er beskrevet i 12 Utdanningstilbud/02 Utdanningstilbud i opptak/trekke_utdanningstilbud.feature.
 
     Scenario: Opptaksforvalter må kunne åpne for tilknytning og redigering av utdanningstilbud
@@ -42,10 +44,6 @@ Egenskap: Frister og hendelser for opptak
       Og deltakende organisasjoner kan ikke lenger trekke sine utdanningstilbud fra opptaket
       Men antall studieplasser kan fortsatt redigeres fram til første plasstildelingsrunde er publisert
       Og kun opptaksforvalter ved forvaltende organisasjon kan trekke utdanningstilbud etter stengingsdato
-
-    Scenario: Ingen kan endre antall studieplasser etter at første plasstildelingsrunde er publisert
-      Gitt at første plasstildelingsrunde i opptaket er publisert
-      Så kan verken opptaksforvalter ved deltakende organisasjon eller ved forvaltende organisasjon endre antall studieplasser
 
   Regel: Opptaksforvalter ved forvaltende organisasjon må kunne åpne for søkning
 
