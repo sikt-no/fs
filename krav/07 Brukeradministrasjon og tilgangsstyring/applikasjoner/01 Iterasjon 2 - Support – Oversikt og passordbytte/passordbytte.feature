@@ -39,7 +39,7 @@ Egenskap: Passordbytte for applikasjon
       Gitt jeg ikke har rettighet til å endre passord på denne applikasjonen
       Så er muligheten til å sette nytt passord ikke tilgjengelig
 
-  @deprecated
+  @deprecated @scope-applikasjoner-etter-design-review
   Regel: Nytt passord genereres av systemet
 
     Scenario: Generere nytt passord
@@ -48,7 +48,7 @@ Egenskap: Passordbytte for applikasjon
       Så genererer systemet et nytt passord for applikasjonen
       Og det nye passordet er lagret
 
-  @in-progress
+  @in-progress @scope-applikasjoner-etter-design-review
   Regel: Nytt passord genereres av systemet for ett valgt miljø
 
     Scenario: Generere nytt passord for et miljø
@@ -80,7 +80,7 @@ Egenskap: Passordbytte for applikasjon
       Så er passordet ikke lenger tilgjengelig
       Og jeg må generere et nytt passord dersom jeg trenger å se det på nytt
 
-  @deprecated
+  @deprecated @scope-applikasjoner-etter-design-review
   Regel: Kun ett passord er aktivt om gangen
 
     Scenario: Nytt passord erstatter det gamle umiddelbart
@@ -89,7 +89,7 @@ Egenskap: Passordbytte for applikasjon
       Så fungerer ikke det gamle passordet lenger
       Og applikasjonen må autentisere seg med det nye passordet
 
-  @in-progress
+  @in-progress @scope-applikasjoner-etter-design-review
   Regel: Kun ett passord er aktivt per miljø om gangen
 
     Scenario: Nytt passord erstatter det gamle i samme miljø

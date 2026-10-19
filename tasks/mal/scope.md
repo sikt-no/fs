@@ -27,7 +27,7 @@ Status står ikke i tabellen: den leses fra taggene i kravene.
 
 | Oppgave | Krav | MoSCoW | Skisse | Issue | Kommentar |
 |---|---|---|---|---|---|
-| [<oppgave-slug>](<oppgave-slug>/) | `@DOM-SUB-KAP-NNN` [<fil>.feature](../../krav/<sti>/<fil>.feature) | Must | [<ramme>](https://www.figma.com/design/<fileKey>/…?node-id=<node>) | [#NNNN](https://github.com/sikt-no/fs/issues/NNNN) | |
+| [<oppgave-slug>](<oppgave-slug>/) | `@DOM-SUB-KAP-NNN` [<fil>.feature](../../krav/<sti>/<fil>.feature) | Must | [<ramme>](https://www.figma.com/design/<fileKey>/…?node-id=<node>) | [BAT-NNNN](https://sikt.atlassian.net/browse/BAT-NNNN) | |
 | (ikke tildelt) | `@DOM-SUB-KAP-NNN` [<fil>.feature](../../krav/<sti>/<fil>.feature) | Could | – | – | |
 
 ## Åpne spørsmål

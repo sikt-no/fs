@@ -31,19 +31,19 @@ Egenskap: Opprette applikasjon
 
   Regel: Opprettelse krever valg av identitetsleverandør
 
-    @deprecated
+    @deprecated @scope-applikasjoner-etter-design-review
     Scenario: Velge identitetsleverandør ved opprettelse
       Når jeg starter opprettelse av en ny applikasjon
       Så kan jeg velge én av identitetsleverandørene Feide og Maskinporten
       Og identitetsleverandøren settes på applikasjonen og kan ikke endres senere
 
-    @in-progress
+    @in-progress @scope-applikasjoner-etter-design-review
     Scenario: Velge identitetsleverandør ved opprettelse, inkludert FS
       Når jeg starter opprettelse av en ny applikasjon
       Så kan jeg velge én av identitetsleverandørene Feide, Maskinporten og FS (Maskinbruker)
       Og identitetsleverandøren settes på applikasjonen og kan ikke endres senere
 
-    @deprecated
+    @deprecated @scope-applikasjoner-etter-design-review
     Scenario: FS er ikke en valgbar identitetsleverandør
       Når jeg starter opprettelse av en ny applikasjon
       Så er FS ikke tilgjengelig som identitetsleverandør
@@ -79,7 +79,7 @@ Egenskap: Opprette applikasjon
 
   Regel: Feide- og Maskinporten-applikasjoner identifiseres av en ekstern ID som verifiseres mot identitetsleverandøren
 
-    @deprecated
+    @deprecated @scope-applikasjoner-etter-design-review
     Scenariomal: Opprette applikasjon med ekstern identitet
       Når jeg oppretter en ny applikasjon med identitetsleverandør <identitetsleverandør> og en ID
       Og ID-en finnes hos <identitetsleverandør>
@@ -92,7 +92,7 @@ Egenskap: Opprette applikasjon
         | Feide                |
         | Maskinporten         |
 
-    @in-progress
+    @in-progress @scope-applikasjoner-etter-design-review
     Scenariomal: Opprette applikasjon med ekstern identitet og oppgitt navn
       Når jeg oppretter en ny applikasjon med identitetsleverandør <identitetsleverandør>, et navn og en ID
       Og ID-en finnes hos <identitetsleverandør>
@@ -139,7 +139,7 @@ Egenskap: Opprette applikasjon
       Når ID-en hos identitetsleverandøren tilhører en annen organisasjon
       Så er applikasjonen likevel opprettet på den valgte applikasjonseieren
 
-  @in-progress
+  @in-progress @scope-applikasjoner-etter-design-review
   Regel: Konsument sin virksomhetsidentifikator oppgis ikke ved opprettelse
 
     Scenario: Konsument sin virksomhetsidentifikator er ikke en del av opprettelsen
@@ -150,7 +150,7 @@ Egenskap: Opprette applikasjon
       Når jeg oppretter en ny applikasjon med Maskinporten som identitetsleverandør
       Så er konsument sin virksomhetsidentifikator registrert som "ukjent" på applikasjonen
 
-  @in-progress
+  @in-progress @scope-applikasjoner-etter-design-review
   Regel: FS-applikasjoner identifiseres av et brukernavn som ikke verifiseres mot en ekstern kilde
 
     Scenario: Opprette applikasjon med FS-brukernavn
@@ -175,7 +175,7 @@ Egenskap: Opprette applikasjon
       Så er miljø ikke en del av opprettelsen
       Og applikasjonen har samme identitet i alle miljøer
 
-  @in-progress
+  @in-progress @scope-applikasjoner-etter-design-review
   Regel: Beskrivelse kan angis ved opprettelse
 
     Scenario: Angi beskrivelse ved opprettelse
@@ -196,7 +196,7 @@ Egenskap: Opprette applikasjon
 
   Regel: Visningsnavn må være globalt unikt på tvers av alle organisasjoner
 
-    @deprecated
+    @deprecated @scope-applikasjoner-etter-design-review
     Scenariomal: Opprettelse avvises når visningsnavn allerede er i bruk
       Gitt en applikasjon med et gitt visningsnavn allerede finnes
       Når jeg forsøker å opprette en ny applikasjon med identitetsleverandør <identitetsleverandør> og en ID hvis navn hos <identitetsleverandør> er det samme visningsnavnet
@@ -208,14 +208,14 @@ Egenskap: Opprette applikasjon
         | Feide                |
         | Maskinporten         |
 
-    @in-progress
+    @in-progress @scope-applikasjoner-etter-design-review
     Scenario: Opprettelse avvises når visningsnavnet er i bruk hos samme identitetsleverandør
       Gitt en applikasjon med identitetsleverandør Feide og et gitt visningsnavn allerede finnes
       Når jeg forsøker å opprette en ny applikasjon med identitetsleverandør Feide og samme visningsnavn
       Så avvises opprettelsen
       Og det fremgår at visningsnavnet allerede er i bruk
 
-    @in-progress
+    @in-progress @scope-applikasjoner-etter-design-review
     Scenario: Opprettelse avvises når visningsnavnet er i bruk hos en annen identitetsleverandør
       Gitt en applikasjon med identitetsleverandør Feide og et gitt visningsnavn allerede finnes
       Når jeg forsøker å opprette en ny applikasjon med identitetsleverandør Maskinporten og samme visningsnavn
@@ -235,19 +235,19 @@ Egenskap: Opprette applikasjon
       Så er applikasjonen ikke aktiv i noen miljøer
       Og applikasjonen blir først aktiv i et miljø når den får tildelt sin første tilgang i det miljøet
 
-    @deprecated
+    @deprecated @scope-applikasjoner-etter-design-review
     Scenario: Nyopprettet applikasjon kan autentisere umiddelbart
       Gitt jeg har opprettet en ny applikasjon
       Så kan applikasjonen autentisere seg umiddelbart med sin eksterne identitet
       Men applikasjonen får ikke tilgang til data før den har en tilgang i et miljø
 
-    @in-progress
+    @in-progress @scope-applikasjoner-etter-design-review
     Scenario: Nyopprettet Feide- eller Maskinporten-applikasjon kan autentisere umiddelbart
       Gitt jeg har opprettet en ny applikasjon med Feide eller Maskinporten som identitetsleverandør
       Så kan applikasjonen autentisere seg umiddelbart med sin eksterne identitet
       Men applikasjonen får ikke tilgang til data før den har en tilgang i et miljø
 
-    @in-progress
+    @in-progress @scope-applikasjoner-etter-design-review
     Scenario: Nyopprettet FS-applikasjon kan først autentisere når passord er satt
       Gitt jeg har opprettet en ny applikasjon med FS som identitetsleverandør
       Så kan applikasjonen først autentisere seg i et miljø når det er satt passord for det miljøet
