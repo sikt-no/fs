@@ -1,6 +1,6 @@
 # language: no
 # GitHub: #552
-@BRU-PER-GRU-010 @must @planned
+@BRU-PER-GRU-010 @must @draft
 Egenskap: Automatisk synkronisering av roller fra namespacet "frontend/fs-admin"
   Som brukeradministrator
   ønsker jeg at roller som legges i namespacet "frontend/fs-admin" automatisk knyttes til fs-admin-applikasjonen i rolletabellen
@@ -11,7 +11,6 @@ Egenskap: Automatisk synkronisering av roller fra namespacet "frontend/fs-admin"
     Scenario: Ny rolle i namespacet knyttes til fs-admin
       Når en ny rolle legges i namespacet "frontend/fs-admin"
       Så knyttes rollen til fs-admin-applikasjonen i rolletabellen
-      Og rollen kan tildeles personbrukere uten at noen har registrert den manuelt
 
     Scenario: Rolle i et annet namespace knyttes ikke til fs-admin
       Når en ny rolle legges i et annet namespace enn "frontend/fs-admin"
@@ -43,11 +42,6 @@ Egenskap: Automatisk synkronisering av roller fra namespacet "frontend/fs-admin"
       Så markeres rollen som utgått i rolletabellen
       Men rollen slettes ikke fra rolletabellen
 
-    Scenario: Utgått rolle kan ikke tildeles på nytt
-      Gitt en rolle er markert som utgått
-      Når en brukeradministrator skal tildele roller til en personbruker
-      Så er den utgåtte rollen ikke tilgjengelig for tildeling
-
     Scenario: Eksisterende tildelinger av en utgått rolle består
       Gitt personbrukere har fått tildelt en rolle
       Når rollen markeres som utgått
@@ -59,7 +53,6 @@ Egenskap: Automatisk synkronisering av roller fra namespacet "frontend/fs-admin"
       Gitt en rolle er markert som utgått
       Når rollen igjen finnes i namespacet "frontend/fs-admin"
       Så er rollen ikke lenger markert som utgått
-      Og rollen kan tildeles personbrukere på nytt
       # ÅPNE SPØRSMÅL: Skal en utgått rolle gjenoppstå automatisk hvis den kommer tilbake i
       # namespacet, eller skal gjenoppretting kreve en bevisst handling fra en administrator?
 
@@ -91,3 +84,19 @@ Egenskap: Automatisk synkronisering av roller fra namespacet "frontend/fs-admin"
 #   Henger sammen med BRU-PER-HIS-001/002/003.
 # - Gjelder det samme mønsteret for andre namespaces og applikasjoner (f.eks. andre frontender), eller
 #   er dette kravet spesifikt for fs-admin? Hvis mønsteret er generelt, hører det kanskje i 08 Teknisk.
+# - Roller i "frontend/fs-admin" kan ikke tildeles personbrukere direkte: bare forretningsroller kan det
+#   (BRU-PER-GRU-003). Gjelder "Eksisterende tildelinger av en utgått rolle består" da bare tildelinger
+#   gjennom en forretningsrolle, eller finnes det direkte tildelinger fra før som må ryddes?
+# - Kravet må skrives om når spørsmålene under er avklart med tilgangsstyringsteamet:
+#   - Aktør og verdi: brukeradministratoren forvalter verken navnerommet eller koblingen til FS Admin.
+#     Den egentlige verdien er at en forretningsrolle som gir brukerflateroller, viser de riktige sidene
+#     i FS Admin uten en manuell migrering per rollefamilie. Hvem er aktøren (f.eks. rolleforvalter)?
+#   - Hva er "rolletabellen" i domeneord? Forslag: rollene FS Admin kan bruke på vegne av en person.
+#   - Hva betyr "utgått": markert utgått i rollekatalogen, eller fjernet fra navnerommet?
+#   - Hva skjer i FS Admin når en brukerflaterolle blir utgått: ser personbrukere med en forretningsrolle
+#     som gir den, fortsatt sidene, eller forsvinner de?
+#   - Trengs synkroniseringen? Rollene FS Admin kan bruke, utvides allerede gjennom forretningsrollene.
+#     Synken gir bare noe for brukerflateroller som ingen forretningsrolle FS Admin kan bruke, gir.
+#   - Bør kravet flyttes ut av personbrukere, f.eks. til rollekatalogen eller 08 Teknisk?
+# - Terminologi ved omskriving: "navnerom" i stedet for "namespace", og "FS Admin" i stedet for
+#   "fs-admin-applikasjonen".

@@ -19,16 +19,17 @@ Repositoriet bruker Behavior-Driven Development (BDD) for å oppnå to mål:
 ```
 fs/
 ├── krav/                          # Gherkin feature-filer (lesbart for alle)
-│   ├── 00 Personas/               # Persona-definisjoner
-│   ├── 01 Forberede studier/      # Domene: Studieforberedelse
-│   ├── 02 Opptak/                 # Domene: Opptak
+│   ├── README.md                  # Slik jobber vi med krav (konvensjonene, forsiden i vieweren)
+│   ├── 01 Utdanning/
+│   ├── 02 Opptak/
 │   ├── 03 Gjennomføre studier/
 │   ├── 04 Kompetanse/
 │   ├── 05 Opplysninger om person/
-│   ├── 07 Tilgangstyring/
+│   ├── 07 Brukeradministrasjon og tilgangsstyring/
 │   ├── 08 Teknisk/
-│   ├── 09 Kommunikasjon/
+│   ├── 09 Organisasjon/
 │   ├── 10 Felleskrav/
+│   ├── _Interne prosesser/
 │   └── 99 Demo/                   # Demo/test features
 ├── tester/                        # All testkode og konfigurasjon (for utviklere)
 │   ├── .mise.toml                 # Mise: Node.js versjon (lts)
@@ -38,7 +39,8 @@ fs/
 │   ├── steps/                     # Step definitions
 │   ├── fixtures/                  # Test fixtures og hjelpefunksjoner
 │   └── .features-gen/             # Genererte testfiler (gitignored)
-├── viewer/                        # Live-visning av krav i nettleser (Vite + Preact)
+├── fs-kravforvaltning/            # FS Kravforvaltning: krav i nettleser og desktop-app (Vite + Preact, Electron)
+├── kom-i-gang.html                # Innføring i kravarbeidet, laget fra designet i Claude Design (se .claude/rules/kom-i-gang-sync.md)
 ├── README.md
 └── claude.md
 ```
@@ -46,6 +48,7 @@ fs/
 ### Separasjon av krav og kode
 
 - **`krav/`**: Kun `.feature`-filer som kan leses av alle. Ingen kode.
+  Konvensjonene for kravfilene (språk, filnavn, mappestruktur, tags, terminologi) står i [`krav/README.md`](krav/README.md). `.claude/rules/gherkin-conventions.md` importerer den med `@../../krav/README.md` (bare når Claude jobber med `.feature`-filer eller `krav/**/*.md`), så det finnes bare én versjon. Bruk import, ikke symlenke: Git for Windows sjekker ut symlenker som tekstfiler med bare målstien.
 - **`tester/`**: All teknisk konfigurasjon og kode. Utviklere jobber her.
 
 ## Kjøre tester
@@ -81,25 +84,17 @@ cd tester
 | `npm run test:integration` | Kun @integration tester |
 | `npm run test:e2e` | Kun @e2e tester |
 
-## Live-visning av krav
+## FS Kravforvaltning
 
-`viewer/` er en Vite-dev-server som viser hele `krav/`-treet og oppdaterer visningen straks en `.feature`-fil lagres (parse-feil vises som banner over sist gyldige versjon):
+`fs-kravforvaltning/` (**FS Kravforvaltning**) viser hele `krav/`-treet i nettleseren og som desktop-app, med avvik fra konvensjonene, redigering og PR, oppgavene i `tasks/`, spesifikasjonene og et Claude-panel. Den statiske versjonen publiseres til GitHub Pages (<https://sikt-no.github.io/fs/>) ved push til `main`.
 
 ```bash
-cd viewer
+cd fs-kravforvaltning
 npm install
 npm run dev
 ```
 
-`npm run build` lager et statisk bygg i `viewer/dist/` med hele `krav/`-snapshotet bakt inn (relative stier, hash-routing). `.github/workflows/deploy-viewer.yml` publiserer det til GitHub Pages (<https://sikt-no.github.io/fs/>) ved push til `main`. I statisk bygg er git-data `null`, så «Endringer»-modusen skjules.
-
-- `server/kravPlugin.ts` leser og overvåker `krav/` og `README.md` i repo-roten (forsiden), og sender `krav:update` over Vites websocket
-- `src/markdown.ts` + `src/MarkdownView.tsx` viser `.md`-filer formatert (overskrifter, lister, kodeblokker med «Kopier», tabeller, lenkekort), med bryter til rå markdown. Relative lenker til filer i vieweren åpnes internt
-- `server/parse.ts` parser med `@cucumber/gherkin` til modellen i `shared/model.ts`
-- `server/git.ts` leser endringer under `krav/` (ucommitted mot HEAD, og committet siden merge-base med `main`). Pluginen eksponerer dem som `virtual:krav-git`, pusher `krav:git` ved endringer i krav-filer eller i `.git` (HEAD, index, reflog), og sidebaren viser dem i «Endringer»-modus
-- `src/` er Preact-komponentene, portet fra designet «Gherkin Viewer» (Claude Design)
-- `src/search.ts` bygger en Fuse.js-indeks over filer og scenarioer for søket i treet; scenariotreff hopper til scenarioet via samme `focus`-state som VS Code-utvidelsen bruker
-- `vscode/` er en liten VS Code-utvidelse (ren JS, uten bygg) som poster aktiv fil og markørlinje til `POST /__krav/focus`; pluginen videresender det som `krav:focus`, og vieweren bytter fil og scroller til scenarioet. Installeres med `npm run vscode:install` (symlink til `~/.vscode/extensions`), og adressen settes med `kravViewer.url`
+Hvordan appen er bygget, kommandoene, release og reglene for å jobbe i den står i [`fs-kravforvaltning/CLAUDE.md`](fs-kravforvaltning/CLAUDE.md). Claude leser den når den jobber med filer i mappa. En endring i appen som brukerne merker, skal ha en changeset i samme PR.
 
 ## Teknologier
 
@@ -122,53 +117,11 @@ Andre vanlige tags:
 - `@ci` - Kjøres i CI/CD pipeline
 - `@fsadmin` - Tester for admin-grensesnittet
 - Domene-spesifikke tags (f.eks. `@opptakspilot`)
+- `@scope-<slug>` - Kobler kravet til et scope (`tasks/<domene>/scope-<slug>.md`) og oppgavene i det. Settes av `fs-scope`. Kjør kravene i et scope med `npx playwright test --grep @scope-<slug>`
 
-## Gherkin-språk (Norsk)
+## Gherkin-språk og konvensjoner
 
-Alle feature-filer skrives på **norsk**. Hver fil må starte med:
-
-```gherkin
-# language: no
-```
-
-### Norske nøkkelord
-
-| Norsk | Engelsk |
-|-------|---------|
-| `Egenskap:` | Feature |
-| `Bakgrunn:` | Background |
-| `Scenario:` | Scenario |
-| `Scenariomal:` | Scenario Outline |
-| `Eksempler:` | Examples |
-| `Gitt` | Given |
-| `Når` | When |
-| `Så` | Then |
-| `Og` | And |
-| `Men` | But |
-
-### Gherkin-syntaksregler
-
-**Datatabeller** - brukes for å sende data til et steg:
-```gherkin
-Gitt at tabellen har følgende kolonner
-  | Kolonne       |
-  | Navn          |
-  | Fødselsdato   |
-```
-
-**Scenariomal med Eksempler** - for parameteriserte tester:
-```gherkin
-Scenariomal: Velge antall per side
-  Når brukeren velger <antall> visninger per side
-  Så skal brukeren se <antall> rader
-
-  Eksempler:
-    | antall |
-    | 50     |
-    | 100    |
-```
-
-**Viktig**: `Eksempler:` skal KUN brukes med `Scenariomal:`, ikke med vanlig `Scenario:`.
+Feature-filene skrives på norsk Gherkin. Nøkkelord, gode scenarioer, filnavn, mappestruktur, tags og terminologi står i [`krav/README.md`](krav/README.md).
 
 ## playwright-bdd konfigurasjon
 
@@ -197,11 +150,8 @@ Se trace i HTML-rapporten: `npx playwright show-report`
 ## Konvensjoner for Claude
 
 ### Når du jobber med feature-filer
-- Bruk alltid `# language: no` på toppen
-- Følg eksisterende mappestruktur basert på domene
+- Følg konvensjonene i [`krav/README.md`](krav/README.md)
 - Bruk beskrivende scenario-navn på norsk
-- Inkluder relevante tags for testtype og domene
-- Bruk `Scenariomal:` (ikke `Scenario:`) når du bruker `Eksempler:`
 
 ### Når du jobber med step definitions
 - Skriv i TypeScript
@@ -234,12 +184,19 @@ Then('skal {string} vises', async ({ page }, tekst: string) => {
 - `@e2e` tester: Bruker `page` fixture for browser-interaksjon
 
 ### Skills for kravarbeid (`.claude/skills/`)
-- `fs-krav` — kravarbeid: nye `.feature`-filer (enkeltstående eller for et initiativ), og ferdigstilling av en mappe (`@draft` → `@planned`)
-- `fs-specify` — henter `@planned`-krav inn i en oppgave: `tasks/<domene>/<slug>/spec/` (`@planned` → `@in-progress`)
-- `fs-specify-delta` — det samme, men for en endring (commit, branch, test-fil eller markdown)
+- `fs-scope` — avgrenser et initiativ og deler det i oppgaver: scope-fila `tasks/<domene>/scope-<slug>.md` (mål, ikke-mål, kilder, og oppgavene med kravene hver oppgave har), oppgavene (`oppgave.md` med `Scope:`), skjelett-krav (`@draft`, `Regel:`-titler uten scenarioer) og taggen `@scope-<slug>` på kravene. Kildene (GitHub, Confluence, Jira, Figma, filer, URL-er) er valgfrie. Kan kjøres på nytt når som helst, og `fs-krav` og `fs-specify` foreslår den når et krav ikke passer i scopet
+- `fs-krav` — kravarbeid: nye `.feature`-filer og utfylling av skjelett-filer fra `fs-scope`, ferdigstilling av en mappe (`@draft` → `@planned`), fjerning av krav (leverte krav får `@deprecated`, resten slettes), og endring av leverte krav (egenskapen blir `@implemented`, den nye delen får `@planned` når den er validert, og delen den erstatter får `@deprecated`)
+- `fs-krav-avvik` — ser etter avvik fra konvensjonene som krever skjønn, og som FS Kravforvaltning ikke sjekker automatisk (f.eks. «egne» og «dem», terminologi, listevisningsmønsteret), i en mappe eller fil under `krav/`. Rapporterer med `fil:linje` og forslag, retter bare ren ordlyd etter at brukeren har sagt ja, og endrer aldri tagger
+- `fs-specify` — henter `@planned`-krav inn i en oppgave: `tasks/<domene>/<slug>/spec/` (`@planned` → `@in-progress`, også på `@planned`-deler i leverte krav som endres). Plukker også opp `@deprecated`-krav, og lager en spec for å fjerne koden
+- `fs-specify-delta` — det samme, men for en endring (commit, branch, test-fil eller markdown), med samme tag-regler, også for `@deprecated`
+- `fs-implementasjonsdetaljer` — implementasjonsdetaljene for et krav i `<feature>.design.md` ved siden av feature-fila: UI-mønstre, tilstander og tekstene. Sjekker at hjelpetekster, feilmeldinger og andre tekster med variasjoner står der, ikke bare i skissene. `fs-specify` og `fs-specify-delta` kjører den når implementasjonsdetaljene mangler
+- `fs-verify` — verifiserer kravene mot koden i lokale kloner av kode-repoene: `@in-progress` → `@implemented` (på deler i leverte krav: `@in-progress` fjernes), og sletter `@deprecated`-krav når koden er borte (ellers lister den hvor koden fortsatt finnes). Med en spesifikasjon som scope skriver den `## Scenarioer` i `spec/verify-*.md` og sender steget tilbake i `utforing.md` når noe mangler. Før brukeren spørres, kontrolleres resultatet: av subagenten `fs-verify-kontroll` (`.claude/agents/`) når Agent-verktøyet finnes (terminalen, også i FS Kravforvaltning), ellers manuelt av skillen selv (Claude-panelet), og det sier den fra om
+- `fs-verify-agent-teams` — det samme som `fs-verify`, men med et agent team med to roller: finnere (agenttypen `fs-verify-krav` i `.claude/agents/`) leter i koden parallelt, én per feature-fil eller gruppe av filer, og kontrollører (`fs-verify-kontroll`) sjekker hvert svar uavhengig. Lead-en avgjør der de er uenige, spør, retagger og skriver rapporten, eventuelt med hva som gjenstår i hvert repo (fs-plattform, fs-admin og min-kompetanse). Krever `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1`, og virker bare i en interaktiv økt: i terminalen, eller i terminalen i FS Kravforvaltning («I terminal med agent team»), ikke i Claude-panelet
 - `lage-steps` — step definitions i `tester/steps/` for kravene
 
-Typisk flyt: `fs-krav` → `fs-specify` / `fs-specify-delta` → `lage-steps`. Se [`tasks/README.md`](tasks/README.md) for oppgavestrukturen.
+Alle fs-*-skillene sjekker at branchen er oppdatert mot origin og main før de gjør noe, i dette repoet og i kodeklonene de leser. Er branchen bak, spør de før de henter (`git pull --ff-only`). I Claude-panelet hoppes sjekken over, siden det ikke har Bash. Prosedyren står i [`.claude/references/oppdatert-branch.md`](.claude/references/oppdatert-branch.md).
+
+Typisk flyt: `fs-scope` → `fs-krav` → `fs-specify` / `fs-specify-delta` (med `fs-implementasjonsdetaljer`) → `lage-steps` → `fs-verify` (eller `fs-verify-agent-teams` når det er mange feature-filer). Tavla «Oppgaver» i FS Kravforvaltning viser hvor hver oppgave er, utledet fra kravene og spesifikasjonene. Skillen `fs-oppgave` (faser, `roadmap.md` og review-filer) er ikke lenger i dette repoet, og kan brukes fra et annet sted. Se [`tasks/README.md`](tasks/README.md) for oppgavestrukturen. `.claude/rules/tasks-conventions.md` importerer den med `@../../tasks/README.md` når Claude jobber i `tasks/**`.
 
 ## CI/CD
 

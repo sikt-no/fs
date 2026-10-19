@@ -78,7 +78,7 @@
 #
 # UI-detaljer. Plassering, accordion-oppførsel, kolonnebredder og
 # vindushåndtering hører i vise_digitale_resultater.design.md, jf.
-# utdype-implementasjon-skillen.
+# fs-implementasjonsdetaljer-skillen.
 #
 @OPT-BEH-BEH-005 @must @draft
 Egenskap: Se søkerens digitale resultater

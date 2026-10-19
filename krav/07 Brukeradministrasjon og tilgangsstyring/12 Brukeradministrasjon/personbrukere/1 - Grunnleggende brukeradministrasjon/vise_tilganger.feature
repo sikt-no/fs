@@ -71,6 +71,15 @@ Egenskap: Se en personbrukers tilganger (planlagt etter v1)
       Når jeg velger en organisasjon som filter
       Så vises kun tilganger knyttet til den valgte organisasjonen
 
+    Scenario: Organisasjonene i filteret vises med akronym
+      Når jeg åpner organisasjonsfilteret
+      Så vises akronymet under navnet på hver organisasjon
+      Men organisasjonskoden vises når organisasjonen ikke har akronym
+
+    Scenario: Søke i organisasjonsfilteret
+      Når jeg skriver inn tekst i organisasjonsfilteret
+      Så viser organisasjonsfilteret bare organisasjonene der navnet eller akronymet inneholder den innskrevne teksten
+
     Scenario: Tilgjengelige miljøer i filter
       Når jeg åpner miljøfilteret
       Så inneholder filteret alle miljøer som er representert i den ufiltrerte listen

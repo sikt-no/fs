@@ -1,0 +1,218 @@
+name: Release FS Kravforvaltning
+
+# Startes bare manuelt, fra main (Run workflow, eller `gh workflow run kravforvaltning-release.yml --ref main`).
+# En release er to kjøringer: finnes det changesets i fs-kravforvaltning/.changeset/, lager eller oppdaterer den første
+# versjons-PR-en «fs-kravforvaltning: ny versjon». Når PR-en er merget (ingen changesets igjen, og versjonen i
+# package.json har ingen release), bygger den neste desktop-appen for macOS og legger den ved en GitHub-release med
+# tag `fs-kravforvaltning-v<versjon>`. Windows og Linux er tatt ut foreløpig, og står kommentert ut under.
+# Se fs-kravforvaltning/docs/release.md.
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: kravforvaltning-release
+  cancel-in-progress: false
+
+defaults:
+  run:
+    shell: bash
+    working-directory: fs-kravforvaltning
+
+jobs:
+  version:
+    # Bare fra main, så en kjøring fra en annen branch ikke lager versjons-PR eller release
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    outputs:
+      release: ${{ steps.check.outputs.release }}
+      version: ${{ steps.check.outputs.version }}
+      tag: ${{ steps.check.outputs.tag }}
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: lts/*
+          cache: npm
+          cache-dependency-path: fs-kravforvaltning/package-lock.json
+      - run: npm ci
+
+      - name: Oppdater Version Packages-PR
+        id: changesets
+        uses: changesets/action@v2
+        with:
+          cwd: fs-kravforvaltning
+          version-script: npm run changeset:version
+          commit-message: 'fs-kravforvaltning: ny versjon'
+          pr-title: 'fs-kravforvaltning: ny versjon'
+
+      - name: Finnes releasen for denne versjonen?
+        id: check
+        if: steps.changesets.outputs.has-changesets == 'false'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          version=$(node -p "require('./package.json').version")
+          tag="fs-kravforvaltning-v$version"
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+          echo "tag=$tag" >> "$GITHUB_OUTPUT"
+          # En draft fra en kjøring som feilet, bygges på nytt. En publisert release røres ikke.
+          if [ "$(gh release view "$tag" --json isDraft --jq .isDraft 2>/dev/null)" = "false" ]; then
+            echo "$tag er allerede publisert"
+            echo "release=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "release=true" >> "$GITHUB_OUTPUT"
+          fi
+
+  release:
+    needs: version
+    if: needs.version.outputs.release == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Sjekk at Client ID er satt
+        working-directory: .
+        env:
+          CLIENT_ID: ${{ vars.KRAV_GITHUB_CLIENT_ID }}
+        run: |
+          if [ -z "$CLIENT_ID" ]; then
+            echo "::error::Repo-variabelen KRAV_GITHUB_CLIENT_ID mangler. Uten den kan ikke brukerne logge inn på GitHub i appen (se fs-kravforvaltning/docs/github-oauth.md)."
+            exit 1
+          fi
+      - uses: actions/checkout@v7
+      - name: Lag draft-release med endringene fra CHANGELOG.md
+        env:
+          GH_TOKEN: ${{ github.token }}
+          VERSION: ${{ needs.version.outputs.version }}
+          TAG: ${{ needs.version.outputs.tag }}
+        run: |
+          if gh release view "$TAG" >/dev/null 2>&1; then
+            echo "Draft for $TAG finnes fra før"
+            exit 0
+          fi
+          [ -f CHANGELOG.md ] && awk -v v="$VERSION" '/^## /{ if (p) exit; if ($2 == v) p = 1; next } p' CHANGELOG.md > notes.md
+          [ -s notes.md ] || echo "FS Kravforvaltning $VERSION" > notes.md
+          cat >> notes.md <<'EOF'
+
+          ### Installasjon
+
+          - **macOS**: `.dmg` for Apple Silicon (`arm64`). Appen er signert og notarisert av Apple.
+
+          Er appen installert fra før, laster den ned den nye versjonen selv, og installerer den når den startes på nytt.
+          EOF
+          # Windows og Linux er tatt ut av bygget foreløpig (se docs/release.md). Tas de inn igjen, legges disse til over:
+          # - **Windows**: `.exe`. Appen er ikke signert: velg **Mer informasjon → Kjør likevel** hvis SmartScreen stopper den.
+          # - **Linux**: `.AppImage`. Gjør fila kjørbar med `chmod +x`.
+          gh release create "$TAG" --draft --target "$GITHUB_SHA" --title "FS Kravforvaltning $VERSION" --notes-file notes.md
+
+  build:
+    needs: [version, release]
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          # zip, zip.blockmap og latest-mac.yml er det appen oppdaterer seg fra (electron/updater.ts). dmg.blockmap
+          # lages også, men brukes ikke, og lastes ikke opp
+          - os: macos-latest
+            args: --mac --arm64
+            files: release/*.dmg release/*.zip release/*.zip.blockmap release/latest-mac.yml
+          # Windows og Linux er tatt ut av bygget foreløpig (se fs-kravforvaltning/docs/release.md). Stegene under
+          # som gjelder dem (runner.os), står igjen, så det holder å ta inn radene igjen
+          # - os: windows-latest
+          #   args: --win --x64
+          #   files: release/*.exe release/*.blockmap release/latest.yml
+          # - os: ubuntu-latest
+          #   args: --linux --x64
+          #   files: release/*.AppImage release/latest-linux.yml
+    runs-on: ${{ matrix.os }}
+    env:
+      MAIN_VITE_KRAV_GITHUB_CLIENT_ID: ${{ vars.KRAV_GITHUB_CLIENT_ID }}
+    steps:
+      # Bare appen: stiene i tasks/ og krav/ er for lange for Windows (MAX_PATH), og bygget bruker dem ikke
+      - uses: actions/checkout@v7
+        with:
+          sparse-checkout: fs-kravforvaltning
+      - uses: actions/setup-node@v7
+        with:
+          node-version: lts/*
+          cache: npm
+          cache-dependency-path: fs-kravforvaltning/package-lock.json
+      - name: Sjekk at Client ID er satt
+        run: |
+          if [ -z "$MAIN_VITE_KRAV_GITHUB_CLIENT_ID" ]; then
+            echo "::error::Repo-variabelen KRAV_GITHUB_CLIENT_ID mangler. Uten den kan ikke brukerne logge inn på GitHub i appen (se docs/github-oauth.md)."
+            exit 1
+          fi
+      # Uten sertifikat og nøkkel til notariseringen publiseres ikke en usignert macOS-app (se docs/release.md)
+      - name: Sjekk at signeringen er satt opp
+        if: runner.os == 'macOS'
+        env:
+          MAC_CSC_LINK: ${{ secrets.MAC_CSC_LINK }}
+          MAC_CSC_KEY_PASSWORD: ${{ secrets.MAC_CSC_KEY_PASSWORD }}
+          APPLE_API_KEY: ${{ secrets.APPLE_API_KEY }}
+          APPLE_API_KEY_ID: ${{ secrets.APPLE_API_KEY_ID }}
+          APPLE_API_ISSUER: ${{ secrets.APPLE_API_ISSUER }}
+        run: |
+          missing=0
+          for name in MAC_CSC_LINK MAC_CSC_KEY_PASSWORD APPLE_API_KEY APPLE_API_KEY_ID APPLE_API_ISSUER; do
+            if [ -z "${!name}" ]; then
+              echo "::error::Secret $name mangler. Uten den kan ikke macOS-appen signeres og notariseres (se docs/release.md)."
+              missing=1
+            fi
+          done
+          exit $missing
+      - run: npm ci
+      # node-pty (terminalen) har ingen ferdigbygd binærfil for Linux: bygg den med node-gyp. Direkte, siden npm kan
+      # være satt opp til ikke å kjøre installasjonsskriptene til avhengighetene
+      - name: Bygg node-pty
+        if: runner.os == 'Linux'
+        run: npx node-gyp rebuild --directory node_modules/node-pty
+      # spawn-helper må være kjørbar, også om postinstall ikke kjørte
+      - run: node scripts/node-pty-helper.mjs
+      - run: npx electron-vite build
+      # macOS: signeres med Developer ID-sertifikatet (CSC_LINK) og notariseres med App Store Connect-nøkkelen
+      # (APPLE_API_KEY er en sti, så nøkkelen skrives til en fil). CSC_LINK settes bare her, fordi electron-builder
+      # ellers prøver å signere Windows-bygget med det samme sertifikatet
+      - name: Pakk, signer og notariser
+        if: runner.os == 'macOS'
+        env:
+          CSC_LINK: ${{ secrets.MAC_CSC_LINK }}
+          CSC_KEY_PASSWORD: ${{ secrets.MAC_CSC_KEY_PASSWORD }}
+          APPLE_API_KEY_CONTENT: ${{ secrets.APPLE_API_KEY }}
+          APPLE_API_KEY_ID: ${{ secrets.APPLE_API_KEY_ID }}
+          APPLE_API_ISSUER: ${{ secrets.APPLE_API_ISSUER }}
+        run: |
+          export APPLE_API_KEY="$RUNNER_TEMP/AuthKey_$APPLE_API_KEY_ID.p8"
+          printf '%s\n' "$APPLE_API_KEY_CONTENT" > "$APPLE_API_KEY"
+          trap 'rm -f "$APPLE_API_KEY"' EXIT
+          npx electron-builder --publish never ${{ matrix.args }}
+      - name: Sjekk signaturen og notariseringen
+        if: runner.os == 'macOS'
+        run: |
+          for app in release/mac*/*.app; do
+            codesign --verify --deep --strict --verbose=2 "$app"
+            xcrun stapler validate "$app"
+            spctl --assess --type execute --verbose=2 "$app"
+          done
+      - name: Pakk
+        if: runner.os != 'macOS'
+        env:
+          CSC_IDENTITY_AUTO_DISCOVERY: 'false'
+        run: npx electron-builder --publish never ${{ matrix.args }}
+      - name: Last opp til releasen
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh release upload "${{ needs.version.outputs.tag }}" ${{ matrix.files }} --clobber
+
+  publish:
+    needs: [version, build]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Publiser releasen
+        working-directory: .
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh release edit "${{ needs.version.outputs.tag }}" --repo "$GITHUB_REPOSITORY" --draft=false --latest

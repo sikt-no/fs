@@ -21,6 +21,9 @@ Egenskap: Veilede søker om hvilken dokumentasjon som skal lastes opp
       #   til opptaket, til utdanningstilbudet, eller til hva søkeren søker på
       #   grunnlag av (dispensasjon, tidlig opptak, realkompetanse)? Det finnes
       #   ingen krav som beskriver denne sammenhengen i dag.
+      #   Delsvar 08.10.2026: For tidlig opptak er dokumentasjonskravet knyttet til
+      #   begrunnelsen søkeren velger, og settes per opptak (søke_om_tidlig_opptak.feature).
+      #   Dispensasjon og realkompetanse er ikke avklart.
 
     Scenario: Søker får vite at uetterspurt dokumentasjon kan bli slettet
       Når jeg skal laste opp dokumentasjon på søknaden
@@ -58,7 +61,7 @@ Egenskap: Veilede søker om hvilken dokumentasjon som skal lastes opp
 # ÅPNE SPØRSMÅL:
 # - Ordlyden i veiledningen er ikke fastsatt her. Konkret tekst, plassering og
 #   utforming hører i en <feature>.design.md ved siden av denne fila, jf.
-#   utdype-implementasjon-skillen. Steffen Andre Marstein har en åpen oppgave
+#   fs-implementasjonsdetaljer-skillen. Steffen Andre Marstein har en åpen oppgave
 #   om UX for dokumentopplasting fra møtet 28.08.2026.
 # - Løsningen begrenser ikke hva søkeren kan laste opp — det er en bevisst
 #   beslutning. Juristens tiltak om å begrense dokumentkategorier er derfor

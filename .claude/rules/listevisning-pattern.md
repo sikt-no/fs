@@ -73,9 +73,14 @@ Bruk disse titlene direkte, kun bytt ut `<elementer>`/`<element>`/`<X>`:
 - `Scenario: Filtrere på <verdi>` — f.eks. `Filtrere på miljø`, `Filtrere på status`.
 - `Scenario: Kombinere filtre`
 
+**Organisasjonsfilter** (i tillegg til paret over, når filterverdiene er organisasjoner):
+
+- `Scenario: <Verdier> i filteret vises med akronym` — f.eks. `Hjemorganisasjonene i filteret vises med akronym`, `Applikasjonseierne i filteret vises med akronym`.
+- `Scenario: Søke i <X>-filteret` — f.eks. `Søke i hjemorganisasjonsfilteret`, `Søke i applikasjonseier-filteret`.
+
 **Synlighet:**
 
-- `Scenario: <Rolle> ser <elementer> fra <scope>` — f.eks. `Applikasjonsadministrator ser applikasjoner fra egne organisasjoner`.
+- `Scenario: <Rolle> ser <elementer> fra <scope>` — f.eks. `Applikasjonsadministrator ser applikasjoner fra organisasjonene jeg administrerer`.
 - `Scenario: Super-<rolle> ser alle <elementer>`
 
 ### Stegformuleringer
@@ -94,6 +99,8 @@ Bruk førsteperson («jeg»), presens, og samme verb på tvers av features:
 - Standardvalg: `Og "Alle <verdier>" er valgt som standard` (alltid i anførselstegn).
 - Velge filterverdi: `Når jeg velger <verdi> som filter` / `Så vises kun <elementer> ...`.
 - Kombinere: `Når jeg kombinerer fritekst-søk med ett eller flere filter` / `Så vises kun <elementer> som matcher alle kriteriene`.
+- Akronym i organisasjonsfilter: `Når jeg åpner <X>-filteret` / `Så vises akronymet under navnet på hver organisasjon` / `Men organisasjonskoden vises når organisasjonen ikke har akronym`.
+- Søke i organisasjonsfilter: `Når jeg skriver inn tekst i <X>-filteret` / `Så viser <X>-filteret bare organisasjonene der navnet eller akronymet inneholder den innskrevne teksten`.
 
 ### Tabeller
 
@@ -141,6 +148,8 @@ I tillegg:
 
 Filterverdier sorteres alfabetisk i nedtrekk med mindre domenet har en annen naturlig rekkefølge (f.eks. status).
 
+Er filterverdiene organisasjoner, dekk også at akronymet vises under navnet (med organisasjonskoden som reserve når akronymet mangler), og at filteret kan søkes i på navn og akronym. Det er to egne scenarioer, så hvert scenario prøver én ting.
+
 ## Synlighet
 
 Når listen er rolle-/rettighetsstyrt:
@@ -151,7 +160,7 @@ Når listen er rolle-/rettighetsstyrt:
 
 ## Hva regelen *ikke* sier
 
-- Ingen UI-detaljer (knapp vs. lenke, plassering, ikoner) — det hører hjemme i `<feature>.design.md` via `utdype-implementasjon`.
+- Ingen UI-detaljer (knapp vs. lenke, plassering, ikoner) — det hører hjemme i `<feature>.design.md` via `fs-implementasjonsdetaljer`.
 - Ingen ytelsestall utover sidestørrelsen.
 - Ingen krav om uendelig scroll vs. eksplisitt «last inn flere»-knapp — beskriv brukerens intensjon («velger å laste inn flere»), ikke interaksjonen.
 
@@ -180,6 +189,7 @@ Når listen er rolle-/rettighetsstyrt:
 - [ ] «Alle X» (i anførselstegn) som default i hvert filter.
 - [ ] `Og`-rekkefølge i filter-scenario: innhold → unikhet → sortering → standardvalg.
 - [ ] «Kombinere filtre»-scenario.
+- [ ] Organisasjonsfilter: akronym vises under navnet, og filteret kan søkes i på navn og akronym.
 
 **Stegformuleringer:**
 

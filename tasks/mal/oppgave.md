@@ -1,17 +1,20 @@
 <!--
 Mal for oppgave.md. Kopier til tasks/<domene>/<slug>/oppgave.md og fyll ut.
-Se ../README.md for domeneliste, faser og reglene for hva som kan ligge i oppgave-rota.
+Se ../README.md for domeneliste og reglene for hva som kan ligge i oppgave-rota.
+Oppgaver i et scope opprettes med fs-scope. Uten scope skriver fs-specify og «+ Ny oppgave» i FS Kravforvaltning en minimal versjon.
+`Fase` er valgfri, og leses ikke av FS Kravforvaltning.
 -->
 
 # <Oppgavetittel>
 
 ## Metadata
 
-- **Issue**: [sikt-no/fs#NNNN](https://github.com/sikt-no/fs/issues/NNNN)
+- **Issue**: [BAT-NNNN](https://sikt.atlassian.net/browse/BAT-NNNN) (Jira-saken, se [`../README.md`](../README.md#forholdet-til-jira-og-github))
 - **Initiativ**: #NNN (hvis aktuelt)
 - **Domene**: <domene> (se [`../../README.md`](../../README.md#domener))
 - **Slug**: <slug> (= navnet på denne mappa)
-- **Fase**: prioritert | utforskning | utvikling | innføring | levert
+- **Scope**: [scope-<scope-slug>](../scope-<scope-slug>.md) | – (har oppgaven scope, er scope-raden kilden til kravene)
+- **Fase**: prioritert | utforskning | utvikling | innføring | levert (valgfri, brukes av fs-oppgave utenfor repoet)
 - **Prioritet**: Must | Should | Could | Won't
 - **Type**: feature
 - **Eier**: @brukernavn
@@ -23,7 +26,7 @@ Se ../README.md for domeneliste, faser og reglene for hva som kan ligge i oppgav
   - plan: `<lag>/plan-<slug>.md`
   - review: [reviews/](reviews/)
   - PRs: –
-- **Krav (Gherkin)**: `../../../krav/07 Brukeradministrasjon og tilgangsstyring/...` (hvis aktuelt)
+- **Krav (Gherkin)**: `../../../krav/07 Brukeradministrasjon og tilgangsstyring/...` (hvis aktuelt, og bare uten scope)
 
 ## Kort beskrivelse
 
@@ -31,7 +34,7 @@ Se ../README.md for domeneliste, faser og reglene for hva som kan ligge i oppgav
 
 ## Statuslogg
 
-Append-only. Ny linje på toppen ved hver faseovergang eller review.
+Append-only. Ny linje på toppen ved hver hendelse.
 
 | Dato       | Hendelse                          | Av            | Lenke til review        |
 |------------|-----------------------------------|---------------|-------------------------|

@@ -6,6 +6,7 @@
 - **Initiativ**: [#350 Brukeradministrasjon av FS Admin-brukere](https://github.com/sikt-no/fs/issues/350)
 - **Domene**: brukeradministrasjon-og-tilgangsstyring
 - **Slug**: grunnleggende-brukeradministrasjon
+- **Scope**: [scope-grunnleggende-brukeradministrasjon](../scope-grunnleggende-brukeradministrasjon.md)
 - **Fase**: utvikling
 - **Prioritet**: Should
 - **Type**: feature
@@ -20,7 +21,6 @@
   - flyt: [flow.md](flow.md)
   - review: –
   - PRs: –
-- **Krav (Gherkin)**: [`krav/07 Brukeradministrasjon og tilgangsstyring/12 Brukeradministrasjon/personbrukere/1 - Grunnleggende brukeradministrasjon`](../../../krav/07%20Brukeradministrasjon%20og%20tilgangsstyring/12%20Brukeradministrasjon/personbrukere/1%20-%20Grunnleggende%20brukeradministrasjon)
 
 ## Kort beskrivelse
 
@@ -32,6 +32,7 @@ Oppgaven dekker grunnleggende administrasjon av personbrukere: liste, detaljvisn
 
 | Dato       | Hendelse                                                        | Av          | Lenke til review |
 |------------|-----------------------------------------------------------------|-------------|------------------|
+| 2026-10-16 | Lagt i scope-grunnleggende-brukeradministrasjon                  | –           | –                |
 | 2026-09-22 | Slått sammen med BAT-mappa `tasks/grunnleggende-brukeradministrasjon` ved overgang til felles oppgavestruktur | –           | –                |
 | 2026-07-08 | 10 av 10 planlagte tasks implementert (`frontend/task-*-completion.md`) | –  | –                |
 | 2026-07-08 | Analyse og plan ferdig (fs-admin)                               | –           | –                |

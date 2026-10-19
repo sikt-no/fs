@@ -1,6 +1,6 @@
 # language: no
 # GitHub: #447
-@BRU-APP-API-010 @must @planned
+@BRU-APP-API-010 @must @implemented
 Egenskap: Deaktivere applikasjon
   Som bruker med applikasjonsadministrator-rollen
   ønsker jeg å deaktivere en applikasjon

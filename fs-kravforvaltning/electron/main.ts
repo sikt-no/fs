@@ -1,0 +1,194 @@
+import { existsSync } from 'node:fs';
+import { mkdir, readFile, rm, writeFile } from 'node:fs/promises';
+import { join, resolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
+import { app, BrowserWindow, dialog, ipcMain, Menu, nativeTheme, safeStorage, session, shell } from 'electron';
+import type { Boot } from '../shared/api.ts';
+import { createApi, dispatch } from '../core/api.ts';
+import { createAuth, type TokenStore } from '../core/auth.ts';
+import { ClaudeRunner } from '../core/claude.ts';
+import { PtyRunner } from '../core/pty.ts';
+import { ensureClone, isoVcs } from '../core/vcs-isogit.ts';
+import { Workspace, type WorkspaceEvent } from '../core/workspace.ts';
+import { installUpdate, startUpdater } from './updater.ts';
+
+/**
+ * Desktop-appen (FS Kravforvaltning): vieweren med redigering og PR, uten at git må være installert.
+ *
+ * Ved første oppstart klones repoet (grunn klone av main) til appens datamappe med isomorphic-git.
+ * Main-prosessen kjører den samme kjernen som dev-serveren (core/), og rendereren snakker med den
+ * over IPC via preload-broen (`window.krav`). Innlogging mot GitHub skjer med device flow, og tokenet
+ * lagres kryptert med safeStorage.
+ *
+ * Miljøvariabler:
+ * - `KRAV_REPO`: bruk en eksisterende klone i stedet for appens egen (f.eks. dette repoet under utvikling)
+ * - `KRAV_REPO_URL`: repoet som klones (standard https://github.com/sikt-no/fs.git)
+ * - `KRAV_GITHUB_CLIENT_ID`: OAuth-appen for device flow (kan også bakes inn ved bygg med MAIN_VITE_KRAV_GITHUB_CLIENT_ID)
+ * - `KRAV_CLAUDE_PATH`: stien til `claude`, hvis den ikke finnes på vanlige steder
+ * - `KRAV_UPDATE_URL`: hent oppdateringer fra denne mappa i stedet for GitHub-releasen (se electron/updater.ts)
+ */
+
+const REPO_URL = process.env.KRAV_REPO_URL || 'https://github.com/sikt-no/fs.git';
+const CLIENT_ID = process.env.KRAV_GITHUB_CLIENT_ID || import.meta.env.MAIN_VITE_KRAV_GITHUB_CLIENT_ID || null;
+const here = fileURLToPath(new URL('.', import.meta.url));
+
+/** Tokenet fra device flow, kryptert med operativsystemets nøkkelring (Keychain, DPAPI, libsecret) */
+function safeStore(file: string): TokenStore {
+  let cached: string | null | undefined;
+  return {
+    async get() {
+      if (cached !== undefined) return cached;
+      try {
+        cached = safeStorage.decryptString(await readFile(file));
+      } catch {
+        cached = null;
+      }
+      return cached;
+    },
+    async set(token) {
+      cached = token;
+      if (!token) return void (await rm(file, { force: true }));
+      if (!safeStorage.isEncryptionAvailable()) return; // bare i minnet, må logge inn på nytt ved neste start
+      await writeFile(file, safeStorage.encryptString(token), { mode: 0o600 });
+    },
+  };
+}
+
+let win: BrowserWindow | null = null;
+const send = (event: string, data?: unknown) => win?.webContents.send('krav:event', event, data);
+
+/** Klonen er klar og arbeidsflaten lest; rendereren venter på denne før den tegner */
+const ready = (async () => {
+  await app.whenReady();
+  const dir = process.env.KRAV_REPO ? resolve(process.env.KRAV_REPO) : join(app.getPath('userData'), 'repo');
+  const store = safeStore(join(app.getPath('userData'), 'github-token.bin'));
+  if (!existsSync(join(dir, '.git'))) {
+    await mkdir(dir, { recursive: true });
+    send('krav:progress', 'Henter kravene fra GitHub …');
+    await ensureClone(dir, REPO_URL, await store.get(), msg => send('krav:progress', `Henter kravene fra GitHub: ${msg}`));
+  }
+  const ws = new Workspace(dir, isoVcs(dir));
+  await ws.readAll();
+  for (const event of ['krav:update', 'krav:git', 'krav:tasks'] as WorkspaceEvent[]) ws.on(event, data => send(event, data));
+  ws.watch();
+  // Repoet er appens egen klone, så kodeklonene ligger ikke ved siden av; brukeren velger dem under «Kodemapper»
+  const claude = new ClaudeRunner(dir, { siblingDirs: false, onSaved: () => ws.refreshGit(), onDone: () => ws.refreshGit() });
+  claude.on(data => send('krav:claude', data));
+  // Terminalen (interaktiv claude med agent teams), med den samme claude-installasjonen
+  const pty = new PtyRunner(dir, { bin: () => claude.binary() });
+  pty.on(data => send('krav:pty', data));
+  app.on('before-quit', () => {
+    session.defaultSession.flushStorageData();
+    ws.close();
+    claude.close();
+    pty.close();
+  });
+  const api = createApi(ws, createAuth({ clientId: CLIENT_ID, store }), claude, pty);
+  api.pickDir = async () => {
+    const opts = { title: 'Velg kodemappe', properties: ['openDirectory' as const] };
+    const r = await (win ? dialog.showOpenDialog(win, opts) : dialog.showOpenDialog(opts));
+    return r.canceled ? null : (r.filePaths[0] ?? null);
+  };
+  return api;
+})();
+
+ipcMain.handle('krav:boot', async (): Promise<Boot | { error: string }> => {
+  try {
+    return (await ready).boot();
+  } catch (e) {
+    return { error: e instanceof Error ? e.message : String(e) };
+  }
+});
+
+ipcMain.handle('krav:invoke', async (_e, method: string, arg: unknown) => {
+  try {
+    return { ok: true, value: (await dispatch(await ready, method, arg)) ?? null };
+  } catch (e) {
+    return { ok: false, error: e instanceof Error ? e.message : String(e) };
+  }
+});
+
+// «Start på nytt» i banneret for en ny versjon av appen
+ipcMain.handle('krav:update-install', () => installUpdate());
+
+function createWindow() {
+  win = new BrowserWindow({
+    width: 1400,
+    height: 900,
+    title: 'FS Kravforvaltning',
+    // Samme bakgrunn som vieweren (--bg i theme.css), så vinduet ikke er hvitt før siden er tegnet
+    backgroundColor: nativeTheme.shouldUseDarkColors ? '#141415' : '#f7f7f6',
+    webPreferences: { preload: join(here, '../preload/index.cjs'), contextIsolation: true, sandbox: true },
+  });
+  // Lenker (GitHub, PR-er, innlogging) åpnes i nettleseren, ikke i appen, og vscode:-lenker i VS Code
+  win.webContents.setWindowOpenHandler(({ url }) => {
+    if (/^(https?|vscode):/.test(url)) void shell.openExternal(url);
+    return { action: 'deny' };
+  });
+  win.webContents.on('will-navigate', (e, url) => {
+    if (url.startsWith('vscode:')) {
+      e.preventDefault();
+      void shell.openExternal(url);
+      return;
+    }
+    if (url.startsWith('http') && !url.startsWith(process.env.ELECTRON_RENDERER_URL ?? '\0')) {
+      e.preventDefault();
+      void shell.openExternal(url);
+    }
+  });
+  if (process.env.ELECTRON_RENDERER_URL) void win.loadURL(process.env.ELECTRON_RENDERER_URL);
+  else void win.loadFile(join(here, '../renderer/index.html'));
+  // Chromium skriver localStorage til disk med forsinkelse, og det som ikke er skrevet, er borte etter omstart
+  // (f.eks. rekkefølgen på kolonnene i Oppgaver). Skriv det når brukeren går fra vinduet og når det lukkes
+  win.on('blur', () => session.defaultSession.flushStorageData());
+  win.on('close', () => session.defaultSession.flushStorageData());
+  win.on('closed', () => (win = null));
+}
+
+// Den siste versjonen som er lastet ned, sendes på nytt når vieweren er tegnet (den kan komme før)
+let downloaded: string | null = null;
+ipcMain.handle('krav:update-downloaded', () => downloaded);
+
+/**
+ * Menyen på macOS med produktnavnet. Standardmenyen til Electron bruker `app.name` («About krav-viewer»), som kommer fra
+ * `name` i package.json. Navnet kan ikke byttes: det bestemmer datamappa (klonen, localStorage) og nøkkelen safeStorage
+ * bruker i nøkkelringen («krav-viewer Safe Storage»), så brukerne ville mistet dataene og innloggingen
+ */
+const PRODUCT = 'FS Kravforvaltning';
+function setMenu() {
+  if (process.platform !== 'darwin') return;
+  app.setAboutPanelOptions({ applicationName: PRODUCT, applicationVersion: app.getVersion() });
+  Menu.setApplicationMenu(
+    Menu.buildFromTemplate([
+      {
+        label: PRODUCT,
+        submenu: [
+          { role: 'about', label: `About ${PRODUCT}` },
+          { type: 'separator' },
+          { role: 'services' },
+          { type: 'separator' },
+          { role: 'hide', label: `Hide ${PRODUCT}` },
+          { role: 'hideOthers' },
+          { role: 'unhide' },
+          { type: 'separator' },
+          { role: 'quit', label: `Quit ${PRODUCT}` },
+        ],
+      },
+      { role: 'fileMenu' },
+      { role: 'editMenu' },
+      { role: 'viewMenu' },
+      { role: 'windowMenu' },
+    ]),
+  );
+}
+
+app.whenReady().then(() => {
+  setMenu();
+  createWindow();
+  startUpdater(version => {
+    downloaded = version;
+    send('krav:app-update', version);
+  });
+  app.on('activate', () => BrowserWindow.getAllWindows().length === 0 && createWindow());
+});
+app.on('window-all-closed', () => process.platform !== 'darwin' && app.quit());

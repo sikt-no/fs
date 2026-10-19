@@ -1,6 +1,6 @@
 # language: no
 # GitHub: #480
-@BRU-PER-GRU-008 @must @planned
+@BRU-PER-GRU-008 @must @implemented
 Egenskap: Se en personbrukers roller
   Som brukeradministrator
   ønsker jeg å se hvilke roller en personbruker har
@@ -12,26 +12,32 @@ Egenskap: Se en personbrukers roller
 
   Regel: Visning av roller
 
-    Scenario: Se brukerens roller
+    @scope-synlighet-og-gjelder-for
+    Scenario: Se brukerens roller med «Gjelder for»
       Når jeg ser på personbrukerens detaljside
       Så ser jeg en seksjon med personbrukerens tildelte roller
       Og hver rolle viser følgende informasjon:
         | felt          |
         | Navn          |
         | Beskrivelse   |
-        | Organisasjon  |
+        | Gjelder for   |
         | Miljø         |
         | Tildelt av    |
         | Tildelt dato  |
 
-    @draft
+    @draft @openquestion
     Scenario: Se tidsbegrensning på en rolle
+      # ÅPNE SPØRSMÅL:
+      # - Kravspesifiseringen er utsatt. Når skal tidsbegrensning på roller spesifiseres?
       Gitt personbrukeren har en rolle med start- og/eller sluttidspunkt
       Når jeg ser på personbrukerens detaljside
       Så ser jeg gyldighetstidsrommet for rollen
 
-    @draft
+    @draft @openquestion
     Scenario: Se stedkoder på en rolle
+      # ÅPNE SPØRSMÅL:
+      # - Kravspesifiseringen er utsatt. Når skal stedkoder på roller spesifiseres?
+      # - Skal stedkode-visningen folde ut hierarkiet, eller liste enkeltkoder?
       Gitt personbrukeren har en rolle som er begrenset til bestemte stedkoder
       Når jeg ser på personbrukerens detaljside
       Så ser jeg hvilke stedkoder rollen gjelder for
@@ -53,6 +59,17 @@ Egenskap: Se en personbrukers roller
       Når jeg velger en organisasjon som filter
       Så vises kun roller knyttet til den valgte organisasjonen
 
+    @planned @scope-restanser-etter-onboarding
+    Scenario: Organisasjonene i filteret vises med akronym
+      Når jeg åpner organisasjonsfilteret
+      Så vises akronymet under navnet på hver organisasjon
+      Men organisasjonskoden vises når organisasjonen ikke har akronym
+
+    @planned @scope-restanser-etter-onboarding
+    Scenario: Søke i organisasjonsfilteret
+      Når jeg skriver inn tekst i organisasjonsfilteret
+      Så viser organisasjonsfilteret bare organisasjonene der navnet eller akronymet inneholder den innskrevne teksten
+
     Scenario: Tilgjengelige miljøer i filter
       Når jeg åpner miljøfilteret
       Så inneholder filteret alle miljøer som er representert i den ufiltrerte listen
@@ -71,4 +88,3 @@ Egenskap: Se en personbrukers roller
 # ÅPNE SPØRSMÅL:
 # - Skal sammensatte roller kunne foldes ut for å vise hvilke tilganger rollen gir, eller henvises administrator til rolle-detaljsiden?
 # - Skal listen være sorterbar (per navn, organisasjon, tildelt dato)?
-# - Skal stedkode-visningen folde ut hierarkiet, eller liste enkeltkoder?

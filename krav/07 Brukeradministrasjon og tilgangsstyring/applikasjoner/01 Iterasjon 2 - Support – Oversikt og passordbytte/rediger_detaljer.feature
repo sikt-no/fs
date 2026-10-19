@@ -1,8 +1,8 @@
 # language: no
 # GitHub: #443
-@BRU-APP-API-006 @must @planned
+@BRU-APP-API-006 @must @implemented
 Egenskap: Redigere detaljer for applikasjon
-  Som bruker
+  Som bruker med en rolle som gir tilgang til applikasjoner
   ønsker jeg å redigere detaljer for en applikasjon
   slik at informasjonen er oppdatert og korrekt.
 

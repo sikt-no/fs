@@ -1,5 +1,5 @@
 # language: no
-@OPT-REG-KRA-002 @must @draft
+@OPT-REG-KRA-002 @must @implemented @scope-regelverk-2027
 Egenskap: Kravelement
   Som opptaksforvalter
   ønsker jeg å opprette og vedlikeholde kravelementer
@@ -24,17 +24,13 @@ Egenskap: Kravelement
       Og jeg angir navn "Yrkeserfaring minimum 2 år" på bokmål
       Så er kravelementet opprettet i regelverkssamlingen
 
-  Regel: Kravelementer kan markeres som kjernefag
-
-    Scenario: Markere kravelement som kjernefag
-      Når jeg oppretter kravelementet "FFMAT" med "er kjernefag" satt til ja
-      Så er kravelementet markert som kjernefag
+  # Regelen om kjernefag er fjernet 2026-10-14 (retrofitting): valget er bevisst fjernet fra skjemaet i fs-admin.
 
   Regel: Kravelementer kan ha vitnemålskravkoder
 
     Scenario: Sette vitnemålskravkoder
-      Når jeg oppretter kravelementet "FFMAT"
-      Og jeg setter vitnemålskravkode 1 til "KL"
+      Når jeg oppretter kravelementet "FFMAT" som vitnemålsrelatert
+      Og jeg setter vitnemålskravkode 1 til "FFMAT"
       Så er vitnemålskravkoden lagret på kravelementet
 
   Regel: Kravelementer har navn på flere språk

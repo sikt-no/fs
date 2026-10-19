@@ -1,6 +1,6 @@
 # language: no
 # GitHub: #481
-@BRU-PER-GRU-011 @must @draft
+@BRU-PER-GRU-011 @could @draft
 Egenskap: Fjerne tilganger fra en personbruker (planlagt etter v1)
   Som brukeradministrator
   ønsker jeg å fjerne enkelttilganger fra en personbruker

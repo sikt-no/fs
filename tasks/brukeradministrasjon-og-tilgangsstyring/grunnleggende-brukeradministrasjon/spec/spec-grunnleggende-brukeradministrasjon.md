@@ -10,15 +10,25 @@
 - **Hentet:** 2026-07-07 11:59
 - **Filter:** kun `@planned` på `Egenskap:`-nivå. 5 av 7 filer passerte; 2 ble filtrert bort (`@draft`, se nedenfor).
 
+## Omfang
+
+Grunnleggende brukeradministrasjon
+
 ## Krav
 
 Fem `@planned`-features utgjør scope for denne iterasjonen. Hver bullet peker på den lagrede kopien i `krav-input/local/` (autoritativ tekst).
 
-- **`søke_opp_bruker.feature`** (BRU-PER-GRU-001, [#479](https://github.com/sikt-no/fs/issues/479)) — Listevisning og søk i personbrukere: liste med Navn, Feide-ID, Organisasjon, Status; sortering (navn stigende default + tie-break navn→Feide-ID); paginering «50 + last inn flere»; to fritekst-søk (navn / Feide-ID); filtre på **status, organisasjon, rolle og miljø**; synlighet via brukeradministrator-/super-brukeradministrator-rettigheter. ([krav-input/local/søke_opp_bruker.feature](krav-input/local/søke_opp_bruker.feature))
-- **`se_brukers_tilganger.feature`** (BRU-PER-GRU-002, [#480](https://github.com/sikt-no/fs/issues/480)) — Se en personbrukers tildelte roller og tilganger på detaljsiden (Navn, Status, Organisasjon, Tildelt av, Tildelt dato), skille aktive/inaktive, og filtrering på navn/status/organisasjon. ([krav-input/local/se_brukers_tilganger.feature](krav-input/local/se_brukers_tilganger.feature))
-- **`tildele_og_fjerne_tilganger.feature`** (BRU-PER-GRU-003, [#481](https://github.com/sikt-no/fs/issues/481)) — Tildele og fjerne roller og tilganger (enkeltvis, flere samtidig, delvis suksess), alt sporbart i historikk. ([krav-input/local/tildele_og_fjerne_tilganger.feature](krav-input/local/tildele_og_fjerne_tilganger.feature))
-- **`aktivere_og_deaktivere_bruker.feature`** (BRU-PER-GRU-004, [#482](https://github.com/sikt-no/fs/issues/482)) — Deaktivere og senere reaktivere en personbrukers samlede tilganger; deaktivering fryser (fjerner ikke) tildelingene, og er sporbart. ([krav-input/local/aktivere_og_deaktivere_bruker.feature](krav-input/local/aktivere_og_deaktivere_bruker.feature))
-- **`se_detaljer.feature`** (BRU-PER-GRU-007, GitHub TBD) — Se detaljer for en personbruker organisert i datagrupper (Navn, Feide-ID, Organisasjon, Status). ([krav-input/local/se_detaljer.feature](krav-input/local/se_detaljer.feature))
+- **`aktivere_og_deaktivere_bruker.feature`** (`@BRU-PER-GRU-004`) — Aktivere og deaktivere en personbrukers samlede tilganger. ([krav/07 Brukeradministrasjon og tilgangsstyring/12 Brukeradministrasjon/personbrukere/1 - Grunnleggende brukeradministrasjon/aktivere_og_deaktivere_bruker.feature](../../../../krav/07%20Brukeradministrasjon%20og%20tilgangsstyring/12%20Brukeradministrasjon/personbrukere/1%20-%20Grunnleggende%20brukeradministrasjon/aktivere_og_deaktivere_bruker.feature))
+
+- **`fjerne_roller.feature`** (`@BRU-PER-GRU-012`) — Fjerne roller fra en personbruker. ([krav/07 Brukeradministrasjon og tilgangsstyring/12 Brukeradministrasjon/personbrukere/1 - Grunnleggende brukeradministrasjon/fjerne_roller.feature](../../../../krav/07%20Brukeradministrasjon%20og%20tilgangsstyring/12%20Brukeradministrasjon/personbrukere/1%20-%20Grunnleggende%20brukeradministrasjon/fjerne_roller.feature))
+
+- **`synkronisere_roller_fra_namespace.feature`** (`@BRU-PER-GRU-010`) — Automatisk synkronisering av roller fra namespacet "frontend/fs-admin". ([krav/07 Brukeradministrasjon og tilgangsstyring/12 Brukeradministrasjon/personbrukere/1 - Grunnleggende brukeradministrasjon/synkronisere_roller_fra_namespace.feature](../../../../krav/07%20Brukeradministrasjon%20og%20tilgangsstyring/12%20Brukeradministrasjon/personbrukere/1%20-%20Grunnleggende%20brukeradministrasjon/synkronisere_roller_fra_namespace.feature))
+
+- **`søke_opp_bruker.feature`** (`@BRU-PER-GRU-001`) — Listevisning og søk i personbrukere. ([krav/07 Brukeradministrasjon og tilgangsstyring/12 Brukeradministrasjon/personbrukere/1 - Grunnleggende brukeradministrasjon/søke_opp_bruker.feature](../../../../krav/07%20Brukeradministrasjon%20og%20tilgangsstyring/12%20Brukeradministrasjon/personbrukere/1%20-%20Grunnleggende%20brukeradministrasjon/s%C3%B8ke_opp_bruker.feature))
+
+- **`tildele_roller.feature`** (`@BRU-PER-GRU-003`) — Tildele roller til en personbruker. ([krav/07 Brukeradministrasjon og tilgangsstyring/12 Brukeradministrasjon/personbrukere/1 - Grunnleggende brukeradministrasjon/tildele_roller.feature](../../../../krav/07%20Brukeradministrasjon%20og%20tilgangsstyring/12%20Brukeradministrasjon/personbrukere/1%20-%20Grunnleggende%20brukeradministrasjon/tildele_roller.feature))
+
+- **`vise_roller.feature`** (`@BRU-PER-GRU-008`) — Se en personbrukers roller. ([krav/07 Brukeradministrasjon og tilgangsstyring/12 Brukeradministrasjon/personbrukere/1 - Grunnleggende brukeradministrasjon/vise_roller.feature](../../../../krav/07%20Brukeradministrasjon%20og%20tilgangsstyring/12%20Brukeradministrasjon/personbrukere/1%20-%20Grunnleggende%20brukeradministrasjon/vise_roller.feature))
 
 ### Utenfor scope (filtrert bort, `@draft`)
 
@@ -46,13 +56,15 @@ Fem `@planned`-features utgjør scope for denne iterasjonen. Hver bullet peker p
 
 ## Åpne spørsmål
 
-Kravspørsmål som `bat-analyze`/`bat-krav`/design bør følge opp. (Tekniske spørsmål hører hjemme i `analysis-*.md`.)
-
 - [x] **1 — Søk i listen:** Kravet hadde ett fritekst-søk (navn ELLER Feide-ID); skissen har to separate filterfelt. **Beslutning:** produkteier oppdaterte `søke_opp_bruker.feature` til to separate søkefelt (`Fritekst-søk på navn` + `Fritekst-søk på Feide-ID`) + `Kombinere søk og filtre`. Skisse og krav er i samsvar.
 - [x] **2 — Miljø-filter i listen:** Skissens modaler viste et «Miljø»-felt som ikke sto i kravet. **Beslutning:** produkteier bestemte at listen skal ha et Miljø-filter på linje med Rolle-filteret; lagt til via `skrive-krav` (`Tilgjengelige miljøer i filter` + `Filtrere på miljø`).
 - [x] **3 — Tildele/fjerne-dialog (BRU-PER-GRU-003):** Modalene viser velgere for Organisasjon, Miljø og Navn. **Beslutning:** «Navn»-velgeren er fler-valg — Organisasjon + Miljø avgrenser utvalget, og «Navn» lar administrator velge flere tilganger/roller å tildele/fjerne i én operasjon. Dette dekker «Tildele flere roller og tilganger samtidig» + «Delvis suksess». Detaljert dialog-UX utdypes i design/utdype-implementasjon.
 - [x] **4 — «Miljø»-begrepet for personbruker-tilganger:** **Beslutning:** samme konsept som i applikasjoner-domenet (driftsmiljø, f.eks. demo/prod); lovlige miljø-verdier hentes fra samme kilde som i applikasjoner. Gjelder både liste-filteret og tildele/fjerne-dialogen — `bat-analyze`/subgraph bekrefter konkret felt/kilde mot faktisk schema.
 - [x] **5 — Sidestørrelse:** **Beslutning:** kravets 50 per side gjelder; skissens «Viser 10 av 67» er illustrativt. Ingen krav-endring.
-- [ ] **6 — Presentasjon av tilganger (BRU-PER-GRU-002):** Skal direkte tildelte tilganger skilles fra tilganger som kommer via en rolle (kilde-merking / utfolding)? **Beslutning:** bevisst utsatt til designfasen (produkteier). Forblir åpent for design/utdype-implementasjon.
+- [x] **6 — Presentasjon av tilganger (BRU-PER-GRU-002):** Skal direkte tildelte tilganger skilles fra tilganger som kommer via en rolle (kilde-merking / utfolding)? **Beslutning:** bevisst utsatt til designfasen (produkteier). Forblir åpent for design/utdype-implementasjon.
 - [x] **7 — Autorisasjonsregel for tildeling (BRU-PER-GRU-003):** **Beslutning:** avgrenses kun på (a) — en brukeradministrator kan tildele tilganger som gjelder ved en organisasjon de administrerer. (b)-betingelsen (at administrator selv har/kan administrere tilgangen) tas ikke med i v1. Endelig regel koordineres med rolledefinisjonsarbeidet i «4 - Opprette og administrere roller».
 - [x] **8 — Rolle-navn:** **Beslutning:** «brukeradministrator» / «super-brukeradministrator» er bekreftet og står ved lag.
+
+## Rute
+
+fs-admin → fs-plattform

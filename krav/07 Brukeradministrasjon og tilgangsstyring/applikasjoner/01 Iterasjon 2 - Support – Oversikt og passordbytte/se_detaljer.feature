@@ -1,8 +1,8 @@
 # language: no
 # GitHub: #439
-@BRU-APP-API-002 @must @planned
+@BRU-APP-API-002 @must @implemented
 Egenskap: Se detaljer for applikasjon
-  Som bruker
+  Som bruker med en rolle som gir tilgang til applikasjoner
   ønsker jeg å se detaljer for en applikasjon, organisert i logiske datagrupper,
   slik at jeg har oversikt over applikasjonen.
 
@@ -13,30 +13,39 @@ Egenskap: Se detaljer for applikasjon
 
   Regel: Detaljer organiseres i logiske datagrupper
 
-    Scenario: Se grunnleggende informasjon
-      Så ser jeg navn og beskrivelse
+    Scenario: Se felter som vises for alle applikasjoner
+      Så ser jeg følgende informasjon:
+        | felt                       |
+        | Navn                       |
+        | Beskrivelse                |
+        | Identitetsleverandør       |
+        | Applikasjonseier           |
+        | Miljøer                    |
+        | Status                     |
+        | Opprettet av               |
+        | Tidspunkt for opprettelse  |
+        | Sist endret av             |
+        | Tidspunkt for sist endring |
 
-    Scenario: Se identitetsleverandør
-      Så ser jeg applikasjonens identitetsleverandør
-
+    @deprecated @scope-applikasjoner-etter-design-review
     Scenario: Se ekstern ID fra identitetsleverandør
       Gitt applikasjonen har en ekstern ID fra identitetsleverandøren
       Så ser jeg den eksterne ID-en
 
-    Scenario: Se intern ID
-      Så ser jeg applikasjonens interne ID
+    @in-progress @scope-applikasjoner-etter-design-review
+    Scenario: Se Tjeneste-ID for Feide-applikasjon
+      Gitt applikasjonen har Feide som identitetsleverandør
+      Så ser jeg applikasjonens Tjeneste-ID
 
-    Scenario: Se organisasjon
-      Så ser jeg applikasjonens organisasjon
+    @in-progress @scope-applikasjoner-etter-design-review
+    Scenario: Se Client-ID for Maskinporten-applikasjon
+      Gitt applikasjonen har Maskinporten som identitetsleverandør
+      Så ser jeg applikasjonens Client-ID
 
-    Scenario: Se sporingsinfo
-      Så ser jeg opprettet av, opprettet tidspunkt, endret av og endret tidspunkt
-
-    Scenario: Se miljøer
-      Så ser jeg hvilke miljøer applikasjonen er aktiv i
-
-    Scenario: Se status
-      Så ser jeg om applikasjonen er aktiv eller deaktivert
+    @in-progress @scope-applikasjoner-etter-design-review
+    Scenario: Se brukernavn for FS-applikasjon
+      Gitt applikasjonen har FS som identitetsleverandør
+      Så ser jeg applikasjonens brukernavn
 
   Regel: Detaljer kan redigeres direkte fra detaljer-fanen
 
