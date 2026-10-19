@@ -12,20 +12,7 @@ Egenskap: Se en personbrukers roller
 
   Regel: Visning av roller
 
-    @deprecated @scope-synlighet-og-gjelder-for
-    Scenario: Se brukerens roller
-      Når jeg ser på personbrukerens detaljside
-      Så ser jeg en seksjon med personbrukerens tildelte roller
-      Og hver rolle viser følgende informasjon:
-        | felt          |
-        | Navn          |
-        | Beskrivelse   |
-        | Organisasjon  |
-        | Miljø         |
-        | Tildelt av    |
-        | Tildelt dato  |
-
-    @planned @scope-synlighet-og-gjelder-for
+    @scope-synlighet-og-gjelder-for
     Scenario: Se brukerens roller med «Gjelder for»
       Når jeg ser på personbrukerens detaljside
       Så ser jeg en seksjon med personbrukerens tildelte roller

@@ -29,5 +29,6 @@ Append-only. Ny linje på toppen ved hver hendelse.
 
 | Dato       | Hendelse                          | Av            | Lenke til review        |
 |------------|-----------------------------------|---------------|-------------------------|
+| 2026-10-19 | Verifisert med fs-verify: «Gjelder for» levert, «Se brukerens roller» slettet ([verify-2026-10-19-0839.md](spec/verify-2026-10-19-0839.md)) | – | – |
 | 2026-10-19 | Koblet til Jira-saken BAT-299 | – | – |
 | 2026-10-19 | Opprettet i scope-synlighet-og-gjelder-for | – | – |
