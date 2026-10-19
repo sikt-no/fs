@@ -17,3 +17,5 @@ History of skill invocations for this spec. Append-only — never edit past entr
 - 2026-09-30 — `fs-specify` started — krav/02 Opptak/11 Opptak (expanded scope: all 4 @planned features, re-run after krav and Figma updates)
 - 2026-09-30 — `fs-specify` ended (success) — wrote spec-opprette-og-vedlikeholde-opptak.md, 4 .feature files, 4 retagged @planned→@in-progress, 1 Figma sketch re-fetched with 5 sub-frames (ny: utdanningsbakgrunner med avvikende frister), validated OK, 0 avvik, 0 open questions
 - 2026-10-12 — manuell oppdatering — «Endringer etter innhenting» i spec-opprette-og-vedlikeholde-opptak.md: 7 endringer i kravene etter 2026-09-30 (engelsk navn obligatorisk, tak for tilbud flyttet til plasstildeling, studierett @draft, søknadsdato og synlighet, aldersberegning, saksbehandlertildeling, ordlyd og scope-tag)
+- 2026-10-19 — `fs-verify` started — 3 @in-progress (@OPT-OVO-SAM-001, @OPT-OVO-INN-001, @OPT-OVO-FRI-001), 1 @implemented med @planned-del (@OPT-OVO-GRU-001), 0 @deprecated
+- 2026-10-19 — `fs-verify` ended (success) — 0 retagget @implemented, 0 slettet; 43 funnet, 12 ikke funnet, 5 usikker av 60 (verify-2026-10-19-1958.md)

@@ -104,14 +104,22 @@ Egenskap: Samordna opptak
       Så er kun norske fagskoler tilgjengelige som deltakere
 
   # Saksbehandlertildelingen er beskrevet i detalj i tildele_saksbehandlende_organisasjon.feature
-  # (@OPT-BEH-BEH-011, PR #684), og løses av Puff. AVKLART 2026-10-12: regelen står her, fordi det
-  # som hører til opprette opptak, er at opptaksforvalter knytter reglene til opptaket.
-  Regel: Opptaksforvalter ved forvaltende organisasjon knytter regler for saksbehandlertildeling i samordna opptak
+  # (@OPT-BEH-BEH-011, PR #684), og løses av Puff.
+  # AVKLART 2026-10-19 (produkteier, etter fs-verify, erstatter avklaringen 2026-10-12): I et samordna opptak
+  # skal det være mulig å sette innstillinger for saksbehandlertildeling for opptaket, men det løses av Puff i
+  # tildele_saksbehandlende_organisasjon.feature. I denne iterasjonen
+  # skal opptaksforvalter kunne se saksbehandlertildelingen for opptaket og navigere dit.
+  # At feltet «Saksbehandlertildeling» vises skrivebeskyttet på utdanningstilbud i lokale opptak, er ikke
+  # prioritert (akseptansetesten 2.11).
+  Regel: Opptaksforvalter ved forvaltende organisasjon kan se og navigere til saksbehandlertildelingen i samordna opptak
 
-    Scenario: Sette regler for fordeling av søknader til saksbehandlerorganisasjoner
-      Når opptaksforvalter ved forvaltende organisasjon knytter saksbehandlertildelingsregler for opptaket
-      Så gjelder saksbehandlertildelingsreglene for opptaket, så søknader kan fordeles til deltakende organisasjoner etter de angitte reglene
+    Scenario: Se og navigere til saksbehandlertildelingen for opptaket
+      Gitt at opptaket "Samordna opptak 2027" er samordna
+      Når opptaksforvalter ved forvaltende organisasjon åpner opptaket
+      Så ser opptaksforvalter saksbehandlertildelingen for opptaket
+      Og opptaksforvalter kan navigere til saksbehandlertildelingen for opptaket
 
     Scenario: Saksbehandlertildeling er ikke relevant for lokale opptak
       Gitt at opptaket "Lokalt opptak høst 2027" er opprettet som lokalt
-      Så er innstillinger for saksbehandlertildeling ikke tilgjengelige
+      Når opptaksforvalter åpner opptaket
+      Så ser ikke opptaksforvalter saksbehandlertildelingen for opptaket

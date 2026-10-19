@@ -22,6 +22,13 @@ Egenskap: Innstillinger for opptak
       Så er opptakstypen oppdatert
       Og endringen påvirker ikke utdanningstilbud, søknader eller plasstildeling i opptaket
 
+    # AVKLART 2026-10-19 (produkteier, etter fs-verify): Det er ingen grunn til å låse opptakstypen når opptaket
+    # har utdanningstilbud, fordi opptakstypen ikke har noen følgelogikk.
+    Scenario: Endre opptakstype når utdanningstilbud er knyttet til opptaket
+      Gitt at opptaket har utdanningstilbud
+      Når opptaksforvalter endrer opptakstype for opptaket
+      Så er opptakstypen oppdatert
+
   Regel: Opptaksforvalter kan endre regelverkssamling når som helst
 
     # Hvilke regler utdanningstilbudene kan bruke, står i
@@ -87,31 +94,25 @@ Egenskap: Innstillinger for opptak
       Når opptaksforvalter setter maks antall søknadsalternativer til 10
       Så har opptaket maks 10 søknadsalternativer
 
-  # Taket som ble flyttet 2026-10-12 til 14 Plasstildeling/01 Runder/forvalte_runder.feature, er tatt ut
-  # igjen 2026-10-14. Innstillingen på opptaket er et tak for hvor mange utdanningstilbud søkeren kan få opptak til (under).
-  # Hvor mange tilbud søkeren kan få, avgjøres av rundetypen, se 14 Plasstildeling/03 Tildeling/gjennomføre_plasstildeling.feature.
-  Regel: Opptaksforvalter setter hvor mange utdanningstilbud en søker kan få opptak til
+  # AVKLART 2026-10-19 (produkteier, etter fs-verify): Innstillingen er tilbake til tak for antall tilbud per
+  # tildelingsrunde, slik fs-admin har feltet («Tilbud per tildelingsrunde», lagret i maks_antall_tilbud på opptaket).
+  # Det erstatter regelen fra 2026-10-14 om hvor mange utdanningstilbud en søker kan få opptak til.
+  # Taket er obligatorisk, er forhåndsutfylt med 1, og kan endres etter at opptaket er opprettet.
+  # Virkningen i plasstildelingen står i 14 Plasstildeling/03 Tildeling/gjennomføre_plasstildeling.feature.
+  Regel: Opptaksforvalter setter tak for antall tilbud per tildelingsrunde
 
-    # AVKLART 2026-10-15: Taket gjelder hvor mange utdanningstilbud søkeren kan ha studieplass på etter
-    # gjennomført opptak. Tilbud til søkeren i plasstildelingene er noe annet.
-    # AVKLART 2026-10-19: Taket er obligatorisk, er forhåndsutfylt med 1, og kan endres etter at opptaket er opprettet.
-    # Gap mot koden (sjekket 2026-10-15): fs-admin har feltet «Tilbud per tildelingsrunde» («Hvor mange tilbud
-    # en søker kan få i en runde»), som lagres i maks_antall_tilbud på opptaket. Ingen kode leser verdien,
-    # og den har ingen standardverdi.
-    # Virkningen står i 13 Søknad og saksbehandling/01 Søknad/svare_på_tilbud.feature og
-    # 14 Plasstildeling/05 Svar/håndtere_svar_fra_søker.feature, som sier «takke ja til».
-    Scenario: Sette tak for hvor mange utdanningstilbud en søker kan få opptak til
-      Når opptaksforvalter setter taket for hvor mange utdanningstilbud en søker kan få opptak til, til 1
-      Så har opptaket tak på 1 utdanningstilbud en søker kan få opptak til
+    Scenario: Sette tak for antall tilbud per tildelingsrunde
+      Når opptaksforvalter setter taket for antall tilbud per tildelingsrunde til 1
+      Så har opptaket tak på 1 tilbud per tildelingsrunde
 
     Scenario: Taket er forhåndsutfylt med 1
       Når opptaksforvalter oppretter et nytt opptak
-      Så er taket for hvor mange utdanningstilbud en søker kan få opptak til, satt til 1
+      Så er taket for antall tilbud per tildelingsrunde satt til 1
 
     Scenario: Endre taket etter at opptaket er opprettet
-      Gitt at taket for hvor mange utdanningstilbud en søker kan få opptak til, er 1
-      Når opptaksforvalter endrer taket for hvor mange utdanningstilbud en søker kan få opptak til, til 2
-      Så har opptaket tak på 2 utdanningstilbud en søker kan få opptak til
+      Gitt at taket for antall tilbud per tildelingsrunde er 1
+      Når opptaksforvalter endrer taket for antall tilbud per tildelingsrunde til 2
+      Så har opptaket tak på 2 tilbud per tildelingsrunde
 
   Regel: Opptaksforvalter kan åpne for tidlig opptak
 
