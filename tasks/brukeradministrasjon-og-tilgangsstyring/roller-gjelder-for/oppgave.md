@@ -2,7 +2,7 @@
 
 ## Metadata
 
-- **Issue**: –
+- **Issue**: [BAT-299](https://sikt.atlassian.net/browse/BAT-299)
 - **Initiativ**: [#350 Brukeradministrasjon av FS Admin-brukere](https://github.com/sikt-no/fs/issues/350)
 - **Domene**: brukeradministrasjon-og-tilgangsstyring
 - **Slug**: roller-gjelder-for
@@ -29,8 +29,5 @@ Append-only. Ny linje på toppen ved hver hendelse.
 
 | Dato       | Hendelse                          | Av            | Lenke til review        |
 |------------|-----------------------------------|---------------|-------------------------|
+| 2026-10-19 | Koblet til Jira-saken BAT-299 | – | – |
 | 2026-10-19 | Opprettet i scope-synlighet-og-gjelder-for | – | – |
-
-## Åpne punkter
-
-- Oppgaven har ikke en Jira-sak ennå.
