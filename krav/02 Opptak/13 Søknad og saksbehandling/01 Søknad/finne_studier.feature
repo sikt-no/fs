@@ -1,4 +1,5 @@
 # language: no
+# OBS (2026-10-19): ID-en @OPT-SØK-SØK-013 brukes også i oppgi_at_generell_studiekompetanse_fullføres_i_vår.feature. Ikke rettet, fordi andre team jobber med kravene.
 # GitHub: #603
 @OPT-SØK-SØK-013 @must @draft
 Egenskap: Listevisning og søk i utdanningstilbud

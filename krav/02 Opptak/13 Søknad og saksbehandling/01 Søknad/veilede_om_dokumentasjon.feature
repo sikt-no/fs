@@ -58,6 +58,47 @@ Egenskap: Veilede søker om hvilken dokumentasjon som skal lastes opp
       Når jeg fyller ut søknaden
       Så blir jeg ikke bedt om å dokumentere navn, fødselsnummer eller adresse
 
+  @draft
+  Regel: Søkeren kan laste opp dokumentasjon bare når opptaket åpner for det
+    # Virkningen av innstillingen for opplasting av dokumentasjon som opptaksforvalter setter i
+    # 11 Opprette og vedlikeholde opptak/03 Innstillinger/innstillinger.feature.
+    # Lagt til 2026-10-19 etter akseptansetesten av opprette og vedlikeholde opptak.
+
+    # AVKLART 2026-10-15 (Q1, TAKE-413): Standardverdien er at søkerne kan laste opp dokumentasjon.
+    Scenario: Søker kan laste opp dokumentasjon når opptaksforvalter ikke har stengt for det
+      Gitt opptaksforvalter ikke har stengt opptaket for opplasting av dokumentasjon
+      Når jeg laster opp et dokument på søknaden
+      Så er dokumentet lastet opp på søknaden
+
+    Scenario: Søker kan ikke laste opp eller ettersende dokumentasjon når opptaket har stengt for opplasting
+      Gitt opptaket har stengt for opplasting av dokumentasjon
+      Når jeg vil laste opp et dokument på søknaden
+      Så kan jeg ikke laste opp dokumentet
+      Og jeg kan ikke ettersende dokumentasjon på søknaden
+
+    # AVKLART 2026-10-15 (Q17, TAKE-413): Saksbehandler kan fortsatt registrere dokumentasjon på søknaden.
+    Scenario: Saksbehandler kan registrere dokumentasjon på søknaden når opptaket har stengt for opplasting
+      Gitt opptaket har stengt for opplasting av dokumentasjon
+      Når saksbehandleren registrerer et dokument på søknaden min
+      Så er dokumentet registrert på søknaden
+
+  @draft
+  Regel: Søkeren ser den ordinære dokumentasjonsfristen i opptaket
+    # Virkningen av den ordinære dokumentasjonsfristen som opptaksforvalter setter i
+    # 11 Opprette og vedlikeholde opptak/04 Frister/frister_og_hendelser.feature.
+    # Lagt til 2026-10-19 etter akseptansetesten av opprette og vedlikeholde opptak.
+    # AVKLART 2026-10-15 (Q14, TAKE-411): Fristen er informasjon om når dokumentasjonen bør være lastet opp.
+    # Det er ettersendingsfristen som stenger for opplasting, se
+    # 13 Søknad og saksbehandling/02 Behandling/søknadsmangler.feature.
+
+    Scenario: Søker ser dokumentasjonsfristen
+      Gitt den ordinære dokumentasjonsfristen i opptaket er "2027-04-15 23:59"
+      Og ettersendingsfristen i opptaket er "2027-07-01 23:59"
+      Og jeg har en utdanningsbakgrunn uten avvikende frister
+      Når jeg skal laste opp dokumentasjon på søknaden
+      Så ser jeg at dokumentasjonen bør være lastet opp innen "2027-04-15 23:59"
+      Og jeg ser at jeg kan laste opp dokumentasjon fram til "2027-07-01 23:59"
+
 # ÅPNE SPØRSMÅL:
 # - Ordlyden i veiledningen er ikke fastsatt her. Konkret tekst, plassering og
 #   utforming hører i en <feature>.design.md ved siden av denne fila, jf.

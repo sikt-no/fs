@@ -64,3 +64,47 @@ Egenskap: Legge til utdanningstilbud i opptak
       Gitt at opptaksforvalter har filtrert på studieprogram på 6.2 bachelornivå
       Så vises ikke emner som mulige utdanningstilbud
       Og studieprogram på 7 masternivå vises ikke som mulige utdanningstilbud
+
+  Regel: Deltakende organisasjoner kan knytte til og redigere utdanningstilbud bare i perioden opptaket er åpent for redigering
+    # Virkningen av når redigering av utdanningstilbud åpner og stenger, som opptaksforvalter setter i
+    # 11 Opprette og vedlikeholde opptak/04 Frister/frister_og_hendelser.feature.
+    # Lagt til 2026-10-19 etter akseptansetesten av opprette og vedlikeholde opptak.
+    # AVKLART 2026-10-15 (Q4, Q5 og Q13, TAKE-410): Fristen stenger alt deltakende organisasjoner endrer på
+    # utdanningstilbudet, unntatt antall studieplasser (sette_studieplasser_og_antall_tilbud.feature). I et lokalt
+    # opptak er lærestedet selv forvaltende organisasjon, så fristen begrenser ikke lærestedet.
+    # AVKLART 2026-10-15 (Q3, TAKE-410): En åpningsdato som ikke er satt, holder redigeringen stengt.
+    # Trekking står i trekke_utdanningstilbud.feature.
+
+    Scenario: Kan ikke knytte utdanningstilbud til opptaket før redigering åpner
+      Gitt at redigering av utdanningstilbud i opptaket åpner "2026-10-01"
+      Og at opptaksforvalter er ved en deltakende organisasjon
+      Når opptaksforvalter vil legge til utdanningstilbudet "Sykepleie, høst 2027" i opptaket "2026-09-30"
+      Så kan opptaksforvalter ikke legge til utdanningstilbudet "Sykepleie, høst 2027"
+
+    Scenario: Kan knytte til og redigere utdanningstilbud i perioden opptaket er åpent for redigering
+      Gitt at redigering av utdanningstilbud i opptaket åpner "2026-10-01" og stenger "2027-06-06"
+      Og at opptaksforvalter er ved en deltakende organisasjon
+      Når opptaksforvalter legger til utdanningstilbudet "Sykepleie, høst 2027" i opptaket "2026-10-15"
+      Så legges utdanningstilbudet "Sykepleie, høst 2027" til i opptaket
+      Og opptaksforvalter kan redigere utdanningstilbudet "Sykepleie, høst 2027"
+
+    Scenario: Kan ikke knytte til eller redigere utdanningstilbud etter at redigering stenger
+      Gitt at redigering av utdanningstilbud i opptaket stenger "2027-06-06"
+      Og at opptaksforvalter er ved en deltakende organisasjon
+      Og at utdanningstilbudet "Vernepleie, høst 2027" er lagt til i opptaket
+      Når opptaksforvalter åpner opptaket "2027-06-07"
+      Så kan opptaksforvalter ikke legge til utdanningstilbud i opptaket
+      Og opptaksforvalter kan ikke redigere utdanningstilbudet "Vernepleie, høst 2027"
+      Men opptaksforvalter kan fortsatt endre antall studieplasser for utdanningstilbudet "Vernepleie, høst 2027"
+
+    Scenario: Opptaksforvalter ved forvaltende organisasjon kan redigere utdanningstilbud etter at redigering stenger
+      Gitt at redigering av utdanningstilbud i opptaket stengte "2027-06-06"
+      Og at opptaksforvalter er ved forvaltende organisasjon
+      Når opptaksforvalter redigerer utdanningstilbudet "Sykepleie, høst 2027" "2027-06-10"
+      Så er endringen på utdanningstilbudet "Sykepleie, høst 2027" lagret
+
+    Scenario: Endringer fra utdanningsregisteret oppdateres etter at redigering stenger
+      Gitt at redigering av utdanningstilbud i opptaket stengte "2027-06-06"
+      Og at utdanningstilbudet "Sykepleie, høst 2027" er lagt til i opptaket
+      Når utdanningen til "Sykepleie, høst 2027" endres i utdanningsregisteret "2027-06-10"
+      Så oppdateres utdanningstilbudet "Sykepleie, høst 2027" i opptaket med endringen

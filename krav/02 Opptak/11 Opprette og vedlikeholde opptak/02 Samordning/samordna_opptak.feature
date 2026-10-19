@@ -67,10 +67,11 @@ Egenskap: Samordna opptak
       Når opptaksforvalter ved HK-dir åpner opptaket
       Så kan hen endre innstillinger, frister og regelverk
 
+    # AVKLART 2026-10-19: Opptaksforvalter ved deltakende organisasjon skal ha innsyn i alle frister og innstillinger på opptaket.
     Scenario: Opptaksforvalter ved deltakende organisasjon kan se, men ikke endre innstillinger
       Gitt at organisasjonen "Universitetet i Oslo" er lagt til som deltaker
       Når opptaksforvalter ved Universitetet i Oslo åpner opptaket
-      Så kan hen se opptakets innstillinger
+      Så kan hen se alle innstillinger og frister som er satt på opptaket
       Men hen kan ikke endre frister, regelverk eller andre innstillinger
 
   # AVKLART 2026-10-12: Det er ikke gitt at skillet mellom samordna og lokale opptak skal bevares.

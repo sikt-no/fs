@@ -149,3 +149,112 @@ Egenskap: Søke på opptak
   @draft
   Scenario: Søker kan gi tilbakemelding om sin opplevelse
 
+  @draft
+  Regel: Søkeren kan begynne på og sende inn en søknad bare når søknaden i opptaket har åpnet
+    # Virkningen av når søknaden åpner og den ordinære søknadsfristen, som opptaksforvalter setter i
+    # 11 Opprette og vedlikeholde opptak/04 Frister/frister_og_hendelser.feature.
+    # Lagt til 2026-10-19 etter akseptansetesten av opprette og vedlikeholde opptak.
+
+    # AVKLART 2026-10-19 (S1): Opptaket har ingen egen publiseringsdato. Søkerne kan ikke begynne på en søknad
+    # eller se utdanningstilbudene før søknaden åpner. Synligheten står i finne_studier.feature
+    # (Regel «Synlighet via søknadsperioden i opptaket»).
+    Scenario: Søkeren kan ikke begynne på en søknad før søknaden åpner
+      Gitt at søknaden i opptaket åpner "2027-02-01"
+      Når søkeren vil begynne på en søknad "2027-01-15"
+      Så kan søkeren ikke begynne på søknaden
+
+    Scenario: Søkeren kan sende inn søknaden fra søknaden åpner
+      Gitt at søknaden i opptaket åpner "2027-02-01"
+      Og at søkeren har en søknad som er klar til å sendes inn
+      Når søkeren sender inn søknaden "2027-02-01"
+      Så er søknaden sendt inn
+
+    # Flyttet fra frister_og_hendelser.feature. AVKLART 2026-10-15 (Q3, TAKE-410 og TAKE-411): En åpningsdato
+    # som ikke er satt, holder søknaden stengt.
+    Scenario: Søkeren kan ikke sende inn søknad når det ikke er satt når søknaden åpner
+      Gitt at det ikke er satt når søknaden åpner
+      Når en søker vil sende inn en søknad
+      Så kan søkeren ikke sende inn søknaden
+
+    Scenario: Søkeren kan ikke sende inn nye søknader etter ordinær søknadsfrist
+      Gitt at den ordinære søknadsfristen i opptaket er "2027-04-15 23:59"
+      Og at søkeren har en utdanningsbakgrunn uten avvikende frister
+      Når søkeren vil sende inn en ny søknad "2027-04-16"
+      Så kan søkeren ikke sende inn søknaden
+
+  @draft
+  Regel: Søknadsfristen og dokumentasjonsfristen følger søkerens utdanningsbakgrunn
+    # Virkningen av de avvikende fristene per utdanningsbakgrunn som opptaksforvalter setter i
+    # 11 Opprette og vedlikeholde opptak/04 Frister/frister_og_hendelser.feature.
+    # Lagt til 2026-10-19 etter akseptansetesten av opprette og vedlikeholde opptak.
+
+    Scenario: Søker med en utdanningsbakgrunn med avvikende frister får fristene for utdanningsbakgrunnen
+      Gitt at utdanningsbakgrunnen "Realkompetanse" har søknadsfrist "2027-03-01 23:59" og dokumentasjonsfrist "2027-03-01 23:59" i opptaket
+      Og at den ordinære søknadsfristen er "2027-04-15 23:59"
+      Og at søkeren har valgt utdanningsbakgrunnen "Realkompetanse"
+      Når søkeren ser på søknaden
+      Så er søknadsfristen for søkeren "2027-03-01 23:59"
+      Og dokumentasjonsfristen for søkeren er "2027-03-01 23:59"
+
+    # AVKLART 2026-10-19 (S4): Opptaksforvalter setter utdanningsbakgrunnene og fristene som gjelder i opptaket,
+    # og søknaden bruker dem.
+    Scenario: Søker med en utdanningsbakgrunn uten avvikende frister følger de ordinære fristene
+      Gitt at utdanningsbakgrunnen "Norsk videregående skole" ikke har avvikende frister i opptaket
+      Og at den ordinære søknadsfristen er "2027-04-15 23:59"
+      Og at den ordinære dokumentasjonsfristen er "2027-04-15 23:59"
+      Og at søkeren har valgt utdanningsbakgrunnen "Norsk videregående skole"
+      Når søkeren ser på søknaden
+      Så er søknadsfristen for søkeren "2027-04-15 23:59"
+      Og dokumentasjonsfristen for søkeren er "2027-04-15 23:59"
+
+    # Flyttet fra frister_og_hendelser.feature. AVKLART 2026-10-15 (Q7, TAKE-407): Bytter søkeren
+    # utdanningsbakgrunn, gjelder fristene for den nye bakgrunnen.
+    Scenario: Søker som bytter utdanningsbakgrunn, følger fristene for den nye bakgrunnen
+      Gitt at utdanningsbakgrunnen "Realkompetanse" har søknadsfrist "2027-03-01 23:59"
+      Og at den ordinære søknadsfristen er "2027-04-15 23:59"
+      Og at søkeren har valgt utdanningsbakgrunnen "Realkompetanse"
+      Når søkeren bytter til utdanningsbakgrunnen "Norsk videregående skole" "2027-03-20"
+      Så kan søkeren sende inn søknaden fram til "2027-04-15 23:59"
+
+  @draft
+  Regel: Søkeren velger utdanningsbakgrunn blant utdanningsbakgrunnene i opptaket
+    # Virkningen av utdanningsbakgrunnene som opptaksforvalter legger til i
+    # 11 Opprette og vedlikeholde opptak/03 Innstillinger/innstillinger.feature.
+    # Lagt til 2026-10-19 etter akseptansetesten av opprette og vedlikeholde opptak.
+
+    Scenario: Søkeren velger blant utdanningsbakgrunnene i opptaket
+      Gitt at opptaket har utdanningsbakgrunnene "Realkompetanse", "Utenlandsk utdanning" og "Steinerskole"
+      Når søkeren skal velge utdanningsbakgrunn i søknaden
+      Så kan søkeren velge mellom "Realkompetanse", "Utenlandsk utdanning" og "Steinerskole"
+
+    Scenario: En utdanningsbakgrunn som er fjernet fra opptaket, kan ikke velges
+      Gitt at opptaksforvalter har fjernet utdanningsbakgrunnen "Steinerskole" fra opptaket
+      Når søkeren skal velge utdanningsbakgrunn i søknaden
+      Så kan søkeren ikke velge "Steinerskole"
+
+    # AVKLART 2026-10-19 (S4): Det skal ikke være mulig å registrere en søknad uten utdanningsbakgrunn.
+    Scenario: Søknaden kan ikke sendes inn uten utdanningsbakgrunn
+      Gitt at søkeren ikke har valgt utdanningsbakgrunn i søknaden
+      Når søkeren vil sende inn søknaden
+      Så kan søkeren ikke sende inn søknaden
+      Og søkeren får beskjed om å velge utdanningsbakgrunn
+
+  @draft
+  Regel: Søknadsnummeret følger startnummeret i opptaket
+    # Virkningen av startnummeret som opptaksforvalter setter i
+    # 11 Opprette og vedlikeholde opptak/03 Innstillinger/innstillinger.feature.
+    # Lagt til 2026-10-19 etter akseptansetesten av opprette og vedlikeholde opptak.
+
+    # AVKLART 2026-10-15 (Q18, TAKE-413): Søkeren og saksbehandleren ser bare løpenummeret. Nummeret er unikt
+    # i opptaket, men nummerserien kan ha hull.
+    Scenario: Søknadene i opptaket får løpende nummer fra startnummeret
+      Gitt at startnummeret for søknadene i opptaket er 1001
+      Når søkerne sender inn søknader i opptaket
+      Så får søknadene løpende nummer fra 1001
+      Og søkeren og saksbehandleren ser bare løpenummeret
+      Og søknadsnummeret er unikt i opptaket
+
+    Scenario: Søknadene får løpende nummer fra 1 når startnummeret ikke er satt
+      Gitt at startnummeret for søknadene i opptaket ikke er satt
+      Når søkerne sender inn søknader i opptaket
+      Så får søknadene løpende nummer fra 1

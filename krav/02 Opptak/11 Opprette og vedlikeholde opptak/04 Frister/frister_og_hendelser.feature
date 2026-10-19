@@ -8,6 +8,8 @@ Egenskap: Frister og hendelser for opptak
   # Disse fristene gjelder for alle utdanningstilbud og alle søkere i opptaket,
   # med mindre det er satt avvikende frister på utdanningstilbud eller utdanningsbakgrunn.
   # I samordna opptak kan kun opptaksforvalter ved forvaltende organisasjon endre frister for opptaket.
+  # AVKLART 2026-10-19 (akseptansetesten): Kravet her beskriver at fristene settes og finnes på opptaket.
+  # Virkningen av hver frist står i kravet der fristen brukes, og det står under hver regel hvor.
 
   Bakgrunn:
     Gitt at opptaksforvalter ved forvaltende organisasjon er innlogget
@@ -16,144 +18,136 @@ Egenskap: Frister og hendelser for opptak
   Regel: Opptaksforvalter ved forvaltende organisasjon må kunne åpne og stenge for redigering av utdanningstilbud
 
     # AVKLART 2026-10-15 (Q4, Q5 og Q13, TAKE-410):
-    # - Fristen stenger alt deltakende organisasjoner endrer på utdanningstilbudet. Hvilke data det gjelder, står i
-    #   kravene i 12 Utdanningstilbud. Unntaket er antall studieplasser. Oppdateringer fra utdanningsregisteret
-    #   stoppes ikke. Antall tilbud som skal gis per utdanningskvote, settes på plasstildelingsrunden, og har sin
-    #   egen periode (14 Plasstildeling).
+    # - Fristen stenger alt deltakende organisasjoner endrer på utdanningstilbudet. Unntaket er antall
+    #   studieplasser. Oppdateringer fra utdanningsregisteret stoppes ikke. Antall tilbud som skal gis per
+    #   utdanningskvote, settes på plasstildelingsrunden, og har sin egen periode (14 Plasstildeling).
     # - Alle utdanningstilbud i opptaket har samme redigeringsfrist. Et utdanningstilbud kan ikke ha egen frist.
     # - Forvaltende organisasjon kan fortsatt redigere etter fristen. I et lokalt opptak er lærestedet selv
     #   forvaltende organisasjon, så fristen begrenser ikke lærestedet.
-    # - Antall studieplasser er tallet som settes på utdanningstilbudet (sette_studieplasser_og_antall_tilbud.feature).
-    #   Det kan endres til første plasstildelingsrunde er publisert. Plasstildelinger som bare er kjørt for
-    #   kontroll, låser det ikke.
+    # Virkningen står i 12 Utdanningstilbud: perioden for å knytte til og redigere i
+    # 02 Utdanningstilbud i opptak/legge_til_utdanningstilbud.feature, trekking i trekke_utdanningstilbud.feature,
+    # og antall studieplasser i 03 Opptaksinnstillinger/sette_studieplasser_og_antall_tilbud.feature.
     # AVKLART 2026-10-19 (produkteier, erstatter avklaringen 2026-10-16): Låsen på antall studieplasser gjelder
     #   ikke opptaksforvalter ved forvaltende organisasjon, foreløpig. På sikt bør antall studieplasser komme fra
-    #   antall plasser som er registrert på kullet i SIS. Virkningen beskrives i sette_studieplasser_og_antall_tilbud.feature.
-    # - Trekking er beskrevet i 12 Utdanningstilbud/02 Utdanningstilbud i opptak/trekke_utdanningstilbud.feature.
+    #   antall plasser som er registrert på kullet i SIS.
 
-    Scenario: Opptaksforvalter må kunne åpne for tilknytning og redigering av utdanningstilbud
+    Scenario: Sette når redigering av utdanningstilbud åpner
       Når opptaksforvalter setter at redigering av utdanningstilbud åpner "2026-10-01"
-      Så kan deltakende organisasjoner redigere sine utdanningstilbud fra "2026-10-01"
-      Og deltakende organisasjoner kan knytte sine utdanningstilbud til opptak fra "2026-10-01"
-      Og deltakende organisasjoner kan trekke sine utdanningstilbud fra opptak fra "2026-10-01"
+      Så har opptaket dato for når redigering av utdanningstilbud åpner "2026-10-01"
 
-    Scenario: Opptaksforvalter må kunne stenge for tilknytning, redigering og trekking av utdanningstilbud
+    Scenario: Sette når redigering av utdanningstilbud stenger
       Når opptaksforvalter setter at redigering av utdanningstilbud stenger "2027-06-06"
-      Så kan deltakende organisasjoner ikke lenger redigere sine utdanningstilbud
-      Og deltakende organisasjoner kan ikke lenger knytte sine utdanningstilbud til opptaket
-      Og deltakende organisasjoner kan ikke lenger trekke sine utdanningstilbud fra opptaket
-      Men antall studieplasser kan fortsatt redigeres fram til første plasstildelingsrunde er publisert
-      Og kun opptaksforvalter ved forvaltende organisasjon kan trekke utdanningstilbud etter stengingsdato
+      Så har opptaket dato for når redigering av utdanningstilbud stenger "2027-06-06"
 
   Regel: Opptaksforvalter ved forvaltende organisasjon må kunne åpne for søkning
 
-    # AVKLART 2026-10-12: Utdanningstilbudene blir synlige for søkerne først når opptaket åpner for søknad.
+    # AVKLART 2026-10-19 (S1, akseptansetesten): Opptaket har ingen egen dato for når utdanningstilbudene
+    # publiseres. Søkere kan ikke begynne på en søknad eller se utdanningstilbudene før søknaden åpner.
     # AVKLART 2026-10-15 (Q15, TAKE-412): Før det ser opptaksforvaltere og saksbehandlere utdanningstilbudene,
     # men ikke søkerne.
-    @openquestion
-    # ÅPNE SPØRSMÅL:
-    # - Skal opptaket ha en egen dato for når utdanningstilbudene publiseres for søkerne, atskilt fra når
-    #   søknaden åpner? Kodeverket har typen PUBLISERING_OPPTAK, som ikke brukes. Datoen avgjør også når et
-    #   utdanningstilbud ikke lenger kan fjernes, bare trekkes (fjerne_utdanningstilbud.feature). Avklares med HK-dir.
-    # - (Q16, TAKE-412) Hva skjer med kladder søkere har opprettet før datoen, med utdanningstilbud i?
-    #   Avhenger av svaret over.
+    # Virkningen står i 13 Søknad og saksbehandling/01 Søknad/søke_på_opptak.feature (søknaden) og
+    # finne_studier.feature (Regel «Synlighet via søknadsperioden i opptaket»).
     Scenario: Sette søknadsdato
       Når opptaksforvalter setter at søknaden åpner "2027-02-01"
-      Så kan søkere opprette og sende inn søknader fra "2027-02-01"
-      Og utdanningstilbudene i opptaket blir synlige for søkere fra "2027-02-01"
+      Så har opptaket dato for når søknaden åpner "2027-02-01"
 
   Regel: Opptaksforvalter ved forvaltende organisasjon må kunne sette generell søknadsfrist for opptaket
 
+    # Virkningen står i 13 Søknad og saksbehandling/01 Søknad/søke_på_opptak.feature.
     Scenario: Sette ordinær søknadsfrist
       Når opptaksforvalter setter ordinær søknadsfrist til "2027-04-15 23:59"
-      Så kan søkere sende inn nye søknader fram til "2027-04-15 23:59"
-      Og etter fristen er det ikke lenger mulig å sende inn nye søknader
+      Så har opptaket ordinær søknadsfrist "2027-04-15 23:59"
 
   Regel: Opptaksforvalter ved forvaltende organisasjon må kunne sette omprioriteringsfrist
 
+    # Virkningen står i 13 Søknad og saksbehandling/01 Søknad/prioritere_søknadsalternativer.feature.
     Scenario: Sette omprioriteringsfrist
       Når opptaksforvalter setter omprioriteringsfrist til "2027-04-15 23:59"
-      Så kan søkere endre prioritering av søknadsalternativer fram til "2027-04-15 23:59"
-      Og etter fristen er rekkefølgen på søknadsalternativene låst
+      Så har opptaket omprioriteringsfrist "2027-04-15 23:59"
 
   Regel: Opptaksforvalter ved forvaltende organisasjon må kunne sette frist for sletting av søknadsalternativer
 
+    # AVKLART 2026-10-15 (Q6, TAKE-411): Fristen for sletting kan være senere enn omprioriteringsfristen.
+    # Virkningen står i 13 Søknad og saksbehandling/01 Søknad/prioritere_søknadsalternativer.feature.
     Scenario: Sette frist for sletting av søknadsalternativer
       Når opptaksforvalter setter frist for sletting av søknadsalternativer til "2027-04-15 23:59"
-      Så kan søkere slette søknadsalternativer fra søknaden sin fram til "2027-04-15 23:59"
-      Og etter fristen kan ikke søkere slette søknadsalternativer
-      # AVKLART 2026-10-15 (Q6, TAKE-411): Fristen for sletting kan være senere enn omprioriteringsfristen.
-      # Søkeren kan da slette søknadsalternativer etter at rekkefølgen er låst.
+      Så har opptaket frist for sletting av søknadsalternativer "2027-04-15 23:59"
 
   Regel: Opptaksforvalter ved forvaltende organisasjon må kunne sette dokumentasjonsfrister
 
     # AVKLART 2026-10-15 (Q14, TAKE-411): Den ordinære dokumentasjonsfristen er informasjon om når
-    # dokumentasjonen bør være lastet opp. Det er ettersendingsfristen som stenger for opplasting, slik
-    # 13 Søknad og saksbehandling/02 Behandling/søknadsmangler.feature beskriver.
+    # dokumentasjonen bør være lastet opp. Det er ettersendingsfristen som stenger for opplasting.
+    # Virkningen står i 13 Søknad og saksbehandling/01 Søknad/veilede_om_dokumentasjon.feature og
+    # 02 Behandling/søknadsmangler.feature.
     Scenario: Sette ordinær dokumentasjonsfrist
-      Gitt at ettersendingsfristen er "2027-07-01 23:59"
       Når opptaksforvalter setter ordinær dokumentasjonsfrist til "2027-04-15 23:59"
-      Så informeres søkere om at dokumentasjonen skal være lastet opp innen "2027-04-15 23:59"
-      Og søkere kan laste opp dokumentasjon fram til ettersendingsfristen "2027-07-01 23:59"
+      Så har opptaket ordinær dokumentasjonsfrist "2027-04-15 23:59"
 
     Scenario: Sette ettersendingsfrist
       Når opptaksforvalter setter ettersendingsfrist til "2027-07-01 23:59"
-      Så kan søkere ettersende dokumentasjon fram til "2027-07-01 23:59"
-      Og etter fristen kan ikke søkere ettersende dokumentasjon
+      Så har opptaket ettersendingsfrist "2027-07-01 23:59"
 
   Regel: Opptaksforvalter ved forvaltende organisasjon må kunne sette informasjonsdatoer for ledige studieplasser
 
+    # Virkningen står i 13 Søknad og saksbehandling/01 Søknad/søke_på_ledige_studieplasser.feature.
     Scenario: Sette informasjonsfrist for ledige studieplasser
       Gitt at opptaket tilbyr søknad på ledige studieplasser
       Når opptaksforvalter setter informasjonsfrist for ledige studieplasser til "2027-07-20"
-      Så kan søkere se når restplasser legges ut
+      Så har opptaket informasjonsfrist for ledige studieplasser "2027-07-20"
 
     Scenario: Sette dato for når ledige studieplasser kan søkes
       Gitt at opptaket tilbyr søknad på ledige studieplasser
       Når opptaksforvalter setter at ledige studieplasser kan søkes fra "2027-07-25"
-      Så kan søkere søke på ledige studieplasser fra "2027-07-25"
+      Så har opptaket dato for når ledige studieplasser kan søkes "2027-07-25"
 
     Scenario: Sette dato for når ledige studieplasser stenger for søkning
       Gitt at opptaket tilbyr søknad på ledige studieplasser
       Når opptaksforvalter setter at ledige studieplasser stenger for søkning "2027-09-01"
-      Så kan søkere ikke lenger søke på ledige studieplasser etter "2027-09-01"
+      Så har opptaket dato for når ledige studieplasser stenger for søkning "2027-09-01"
 
   Regel: Opptaksforvalter ved forvaltende organisasjon må kunne sette frister for tidlig opptak
 
+    # AVKLART 2026-10-15 (Q11, TAKE-408): Dokumentasjonsfristen for tidlig opptak settes på opptaket, og det
+    # er den søkerne skal se. Koden har to koder for fristen i dag, og skal ha én.
+    # Virkningen står i 13 Søknad og saksbehandling/01 Søknad/søke_om_tidlig_opptak.feature (søknadsfristen og
+    # dokumentasjonsfristen) og i 12 Utdanningstilbud/03 Opptaksinnstillinger/opptaksinnstillinger_utdanningstilbud.feature
+    # (fristen for poenggrenser).
     Scenario: Sette søknadsfrist for tidlig opptak
       Gitt at opptaket har aktivert tidlig opptak
       Når opptaksforvalter setter søknadsfrist for tidlig opptak til "2027-03-01 23:59"
-      Så kan søkere søke om tidlig opptak fram til "2027-03-01 23:59"
-      Og etter fristen behandles søknaden i det ordinære opptaket
+      Så har opptaket søknadsfrist for tidlig opptak "2027-03-01 23:59"
 
     Scenario: Sette dokumentasjonsfrist for tidlig opptak
       Gitt at opptaket har aktivert tidlig opptak
       Når opptaksforvalter setter dokumentasjonsfrist for tidlig opptak til "2027-03-01 23:59"
-      Så informeres søkere om at de skal laste opp dokumentasjon innen "2027-03-01 23:59"
-      # AVKLART 2026-10-15 (Q11, TAKE-408): Dokumentasjonsfristen for tidlig opptak settes på opptaket, og det
-      # er den søkerne skal se. Koden har to koder for fristen i dag, og skal ha én.
+      Så har opptaket dokumentasjonsfrist for tidlig opptak "2027-03-01 23:59"
+
+    # AVKLART 2026-10-19 (akseptansetesten): Når tidlig opptak er aktivert, må søknadsfristen og
+    # dokumentasjonsfristen for tidlig opptak være satt.
+    Scenariomal: Opptaket kan ikke lagres uten <frist> når tidlig opptak er aktivert
+      Gitt at opptaket har aktivert tidlig opptak
+      Og at <frist> ikke er satt
+      Når opptaksforvalter lagrer opptaket
+      Så blir opptaket ikke lagret
+      Og opptaksforvalter ser at <frist> må være satt
+
+      Eksempler:
+        | frist                                   |
+        | søknadsfristen for tidlig opptak        |
+        | dokumentasjonsfristen for tidlig opptak |
 
     Scenario: Sette frist for poenggrenser for tidlig opptak
       Gitt at opptaket har aktivert tidlig opptak
       Når opptaksforvalter setter frist for å sette poenggrenser for tidlig opptak til "2027-02-15 23:59"
-      Så må deltakende organisasjoner sette poenggrenser for tidlig opptak innen "2027-02-15 23:59"
-
-    # AVKLART 2026-10-15 (Q12, TAKE-409): Fristen hindrer deltakende organisasjoner i å endre poenggrensene
-    # etter fristen. Forvaltende organisasjon kan fortsatt endre dem.
-    Scenario: Lærestedet kan ikke endre poenggrensen for tidlig opptak etter fristen
-      Gitt at opptaket har aktivert tidlig opptak
-      Og at fristen for å sette poenggrenser for tidlig opptak er "2027-02-15 23:59"
-      Og at fristen er ute
-      Når opptaksforvalter ved deltakende organisasjon vil endre poenggrensen for tidlig opptak på "Sykepleie, høst 2027"
-      Så kan opptaksforvalter ved deltakende organisasjon ikke endre poenggrensen
-      Men opptaksforvalter ved forvaltende organisasjon kan fortsatt endre poenggrensen
+      Så har opptaket frist for å sette poenggrenser for tidlig opptak "2027-02-15 23:59"
 
   Regel: Opptaksforvalter ved forvaltende organisasjon må kunne sette informasjonsdatoer for opptaksresultat
     # Faktiske svarfrister og publiseringstidspunkter bestemmes ut fra innstillinger på plasstildelingsrunde og når plasstildelingensrundene faktisk blir publisert.
+    # Virkningen står i 13 Søknad og saksbehandling/01 Søknad/se_egen_søknad.feature.
 
     Scenario: Sette dato for når hovedopptaket publiseres og søker kan forvente svar
       Når opptaksforvalter setter dato for når hovedopptaket publiseres til "2027-07-15"
-      Så informeres søkere om når de kan forvente svar på søknaden fra første plasstildelingsrunde
+      Så har opptaket dato for når hovedopptaket publiseres "2027-07-15"
 
     @openquestion
     # ÅPNE SPØRSMÅL:
@@ -163,7 +157,7 @@ Egenskap: Frister og hendelser for opptak
     #   ikke må settes to steder.
     Scenario: Sette første svarfrist som informasjon til søkere
       Når opptaksforvalter setter første svarfrist til "2027-07-20 23:59"
-      Så kan søkere se når de senest kan forvente å måtte svare på et eventuelt tilbud
+      Så har opptaket første svarfrist "2027-07-20 23:59"
 
   Regel: Opptaksforvalter setter dato for aldersberegning
 
@@ -183,52 +177,40 @@ Egenskap: Frister og hendelser for opptak
 
   Regel: Opptaksforvalter ved forvaltende organisasjon må kunne sette frist for endring av utdanningsbakgrunn
 
-    Scenario: Sette frist for at saksbehandler kan endre søkers utdanningsbakgrunn
+    # AVKLART 2026-10-19 (S3, akseptansetesten): Opptaket setter fristen, og saksbehandlertildelingen bruker den.
+    # En endring av utdanningsbakgrunnen etter fristen flytter ikke søknaden til en annen saksbehandlende
+    # organisasjon. Utdanningsbakgrunnen kan fortsatt endres, men bare opptaksforvalter ved forvaltende
+    # organisasjon kan endre hvem som saksbehandler søknaden.
+    # Virkningen står i 13 Søknad og saksbehandling/02 Behandling/tildele_saksbehandlende_organisasjon.feature
+    # (Regel «Søknadsalternativene flyttes når utdanningsbakgrunnen endres til en bakgrunn med unntak»).
+    Scenario: Sette frist for endring av utdanningsbakgrunn
       Når opptaksforvalter setter frist for endring av utdanningsbakgrunn til "2027-05-01 23:59"
-      Så kan saksbehandlere endre søkers utdanningsbakgrunn fram til "2027-05-01 23:59"
-      Og etter fristen kan saksbehandler ikke endre søkers utdanningsbakgrunn
+      Så har opptaket frist for endring av utdanningsbakgrunn "2027-05-01 23:59"
 
   Regel: Opptaksforvalter kan legge til utdanningsbakgrunner med avvikende frister
     # Opptaksforvalter legger eksplisitt til utdanningsbakgrunner som skal ha
     # egne søknads- og dokumentasjonsfrister. Utdanningsbakgrunner uten avvikende
-    # frister trenger ikke registreres — søkere følger da opptakets generelle frister.
-    # At søker faktisk får riktig frist basert på utdanningsbakgrunn er et krav
-    # til søknad og saksbehandling (se 13 Søknad og saksbehandling/).
+    # frister følger opptakets generelle frister.
     # AVKLART 2026-10-15 (Q9, TAKE-407): Bare søknadsfristen og dokumentasjonsfristen kan overstyres per
     # utdanningsbakgrunn.
-    # AVKLART 2026-10-15 (Q7, TAKE-407): Bytter søkeren utdanningsbakgrunn, gjelder fristene for den nye bakgrunnen.
-
-    Scenario: Søker som bytter utdanningsbakgrunn, følger fristene for den nye bakgrunnen
-      Gitt at utdanningsbakgrunnen "Realkompetanse" har søknadsfrist "2027-03-01 23:59"
-      Og at den ordinære søknadsfristen er "2027-04-15 23:59"
-      Og at søkeren har valgt utdanningsbakgrunnen "Realkompetanse"
-      Når søkeren bytter til utdanningsbakgrunnen "Norsk videregående skole" "2027-03-20"
-      Så kan søkeren sende inn søknaden fram til "2027-04-15 23:59"
+    # Virkningen for søkerne, også når søkeren bytter utdanningsbakgrunn (Q7), står i
+    # 13 Søknad og saksbehandling/01 Søknad/søke_på_opptak.feature.
 
     Scenario: Legge til utdanningsbakgrunn med avvikende frister
       Når opptaksforvalter legger til utdanningsbakgrunnen "Realkompetanse" i opptaket
       Og opptaksforvalter setter søknadsfrist til "2027-03-01 23:59"
       Og opptaksforvalter setter dokumentasjonsfrist til "2027-03-01 23:59"
-      Så får søkere med utdanningsbakgrunnen "Realkompetanse" egne søknads- og dokumentasjonsfrister i opptaket
-
-    Scenario: Søker uten registrert utdanningsbakgrunn følger ordinære frister
-      Gitt at det ikke er lagt til utdanningsbakgrunn for norsk videregående skole i opptaket
-      Når en søker søker med norsk videregående skole som utdanningsbakgrunn
-      Så gjelder de generelle fristene i opptaket
+      Så har utdanningsbakgrunnen "Realkompetanse" søknadsfrist og dokumentasjonsfrist "2027-03-01 23:59" i opptaket
 
   # AVKLART 2026-10-15 (Q3, TAKE-410 og TAKE-411): Hva en frist som ikke er satt, betyr, avhenger av fristen.
   # En åpningsdato som ikke er satt, holder handlingen stengt. Det gjelder når søknaden åpner, når redigering
   # av utdanningstilbud åpner, og når ledige studieplasser kan søkes. En frist for når noe stenger, som ikke
-  # er satt, begrenser ikke handlingen.
-  Regel: En åpningsdato som ikke er satt, holder stengt, og en frist som ikke er satt, begrenser ikke
+  # er satt, begrenser ikke handlingen. Virkningen står i kravene der fristene brukes.
+  # AVKLART 2026-10-19 (akseptansetesten): Fristene kan stå tomme. At fs-admin i dag krever alle fristene,
+  # er en feil.
+  Regel: Fristene kan stå tomme når opptaket lagres
 
-    Scenario: Søkere kan ikke sende inn søknad når det ikke er satt når søknaden åpner
-      Gitt at det ikke er satt når søknaden åpner
-      Når en søker vil sende inn en søknad
-      Så kan søkeren ikke sende inn søknaden
-
-    Scenario: Søkere kan slette søknadsalternativer når slettefristen ikke er satt
-      Gitt at søknaden har åpnet
-      Og at det ikke er satt frist for sletting av søknadsalternativer
-      Når en søker sletter et søknadsalternativ fra søknaden
-      Så er søknadsalternativet slettet
+    Scenario: Lagre opptaket uten frister
+      Gitt at opptaket ikke har aktivert tidlig opptak
+      Når opptaksforvalter lagrer opptaket uten å sette frister
+      Så er opptaket lagret
