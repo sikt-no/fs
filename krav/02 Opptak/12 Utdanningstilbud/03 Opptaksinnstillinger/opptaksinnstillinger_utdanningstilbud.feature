@@ -42,15 +42,33 @@ Egenskap: Opptaksinnstillinger per utdanningstilbud
   # AVKLART 2026-10-08: Prosentfordeling mellom utdanningskvoter utgår. Antall tilbud som skal gis settes
   # som absolutte tall per utdanningskvote for hvert utdanningstilbud i hver plasstildelingsrunde, se
   # 14 Plasstildeling/02 Tildelingsinnstillinger/antall_tilbud_som_skal_gis.feature.
-  @openquestion
-  # ÅPNE SPØRSMÅL:
-  # - Kan opptaksforvalter legge til eller fjerne utdanningskvoter som ikke følger av regelverkssamlingen?
+  # AVKLART 2026-10-16 (produktleder): Bare organisasjonen som har opprettet regelverket, kan endre det.
+  # I samordna opptak kan forvaltende organisasjon legge til kvoter i regelverkssamlingen som er knyttet
+  # til opptaket. Deltakende organisasjoner kan ikke legge til eller fjerne utdanningskvoter.
   Regel: Utdanningskvotene følger av regelverkssamlingen
 
     Scenario: Utdanningskvotene følger av regelverkssamlingen
       Gitt at regelverkssamlingen "UHG 2027" har kvotetypene "Ordinær" og "Førstegangsvitnemål"
       Når opptaksforvalter velger utdanningstilbudet "Sykepleie, høst 2027"
       Så har utdanningstilbudet utdanningskvotene "Ordinær" og "Førstegangsvitnemål"
+
+    Scenario: Forvaltende organisasjon legger til en kvote i regelverkssamlingen
+      Gitt at opptaksforvalter er ved forvaltende organisasjon "HK-dir"
+      Og at HK-dir har opprettet regelverkssamlingen "UHG 2027"
+      Når opptaksforvalter legger til kvotetypen "Samisk" i regelverkssamlingen "UHG 2027"
+      Så har regelverkssamlingen "UHG 2027" kvotetypen "Samisk"
+
+    Scenario: Deltakende organisasjon kan ikke legge til en utdanningskvote
+      Gitt at opptaksforvalter er ved deltakende organisasjon "Universitetet i Oslo"
+      Og at kvotetypen "Samisk" ikke er med i regelverkssamlingen for opptaket
+      Når opptaksforvalter vil legge til utdanningskvoten "Samisk" på utdanningstilbudet "Sykepleie, høst 2027"
+      Så avvises forespørselen
+
+    Scenario: Deltakende organisasjon kan ikke fjerne en utdanningskvote
+      Gitt at opptaksforvalter er ved deltakende organisasjon "Universitetet i Oslo"
+      Og at utdanningstilbudet "Sykepleie, høst 2027" har utdanningskvoten "Førstegangsvitnemål" fra regelverkssamlingen
+      Når opptaksforvalter vil fjerne utdanningskvoten "Førstegangsvitnemål" fra utdanningstilbudet
+      Så avvises forespørselen
 
   # Hva plasstildelingen gjør med plassflyten, og vernet mot sirkulær plassflyt (#598), står i
   # 14 Plasstildeling/02 Tildelingsinnstillinger/plassflyt.feature.

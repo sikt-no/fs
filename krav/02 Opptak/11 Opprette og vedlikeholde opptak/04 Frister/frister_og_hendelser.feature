@@ -26,6 +26,9 @@ Egenskap: Frister og hendelser for opptak
     # - Antall studieplasser er tallet som settes på utdanningstilbudet (sette_studieplasser_og_antall_tilbud.feature).
     #   Det kan endres til første plasstildelingsrunde er publisert. Plasstildelinger som bare er kjørt for
     #   kontroll, låser det ikke.
+    # AVKLART 2026-10-19 (produkteier, erstatter avklaringen 2026-10-16): Låsen på antall studieplasser gjelder
+    #   ikke opptaksforvalter ved forvaltende organisasjon, foreløpig. På sikt bør antall studieplasser komme fra
+    #   antall plasser som er registrert på kullet i SIS. Virkningen beskrives i sette_studieplasser_og_antall_tilbud.feature.
     # - Trekking er beskrevet i 12 Utdanningstilbud/02 Utdanningstilbud i opptak/trekke_utdanningstilbud.feature.
 
     Scenario: Opptaksforvalter må kunne åpne for tilknytning og redigering av utdanningstilbud
