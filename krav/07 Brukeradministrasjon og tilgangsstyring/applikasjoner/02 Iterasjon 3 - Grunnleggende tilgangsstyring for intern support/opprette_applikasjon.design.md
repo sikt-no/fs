@@ -13,7 +13,7 @@ Dialogboks med:
 - **Tittel:** "Opprett ny applikasjon"
 - **Felter** (obligatoriske, men avhengig av valgt identitetsleverandør):
   - Identitetsleverandør — valg mellom *Feide* og *Maskinporten*. *FS* er et tredje valg, og
-    vises bare for administratorer med applikasjonsadministrator-rollen for Sikt
+    vises bare for administratorer med applikasjonsadministrator-rollen for Sikt (20754)
   - Ekstern ID — ID hos valgt identitetsleverandør (verifiseres ved innsending); gjelder Feide
     og Maskinporten
   - Organisasjon — valgliste; antall valg avhenger av rollen:
@@ -46,7 +46,8 @@ Dialogboks med:
 | Feil (ID ikke funnet) | Feilmelding ved ID-feltet: "ID-en kunne ikke verifiseres hos {identitetsleverandør}" |
 | Feil (ID i bruk) | Feilmelding ved ID-feltet: "ID-en er allerede registrert" |
 | Feil (visningsnavn i bruk) | Feilmelding på toppen av dialogen: "Visningsnavnet «{navn}» er allerede i bruk" — siden navnet hentes fra idP-en, kan brukeren ikke endre det her |
-| Feil (mangler FS-datakilde) | Feilmelding på toppen av dialogen: "Organisasjonen mangler FS-datakilde i {miljø} — applikasjonen ble ikke opprettet". Dialogen holdes åpen med utfylte verdier |
+| Feil (mangler FS-datakilde) | Feilmelding på toppen av dialogen: "Organisasjonen mangler FS-datakilde — applikasjonen ble ikke opprettet". Miljøet nevnes ikke: opprettelsen er alt eller ingenting. Dialogen holdes åpen med utfylte verdier |
+| Feil (mangler rettighet til FS) | Feilmelding på toppen av dialogen: "Du har ikke rettighet til å opprette maskinbruker-applikasjoner." Gjelder når den som oppretter, mangler applikasjonsadministrator-rollen for Sikt (20754) eller for organisasjonen som skal eie applikasjonen |
 | Suksess | Dialog lukkes, navigasjon til detaljside, eventuelt toast/banner "Applikasjonen er opprettet" på detaljsiden |
 
 ## Per-scenario detaljer
@@ -55,9 +56,9 @@ Dialogboks med:
 Valget mellom Feide og Maskinporten presenteres tydelig (radioknapper eller segmentert kontroll). Etter opprettelse vises identitetsleverandøren som låst/skrivebeskyttet på detaljsiden.
 
 ### Scenario: FS som identitetsleverandør
-FS vises som alternativ **bare** for en administrator med applikasjonsadministrator-rollen for Sikt. For alle andre skal alternativet ikke vises i det hele tatt — ikke som et deaktivert valg, jf. prosjektmønsteret for manglende rettighet. Velges FS, provisjonerer opprettelsen en maskinbruker i FS' webtjenester, og dialogen bør si det: det opprettes noe utenfor applikasjonsoversikten, og handlingen er derfor tyngre enn de to andre valgene.
+FS vises som alternativ **bare** for en administrator med applikasjonsadministrator-rollen for Sikt (20754). Sikts testhøyskoler (7777 og 7778) har ingen særstilling. FS-applikasjonen kan opprettes for alle organisasjoner, men administratoren må også ha applikasjonsadministrator-rollen for organisasjonen som skal eie applikasjonen. For alle andre skal alternativet ikke vises i det hele tatt — ikke som et deaktivert valg, jf. prosjektmønsteret for manglende rettighet. Velges FS, provisjonerer opprettelsen en maskinbruker i FS' webtjenester, og dialogen bør si det: det opprettes noe utenfor applikasjonsoversikten, og handlingen er derfor tyngre enn de to andre valgene.
 
-Dialogen viser ikke miljøvalg for FS: applikasjonen er miljøløs, og identiteten gjelder i alle miljøer med én gang. I stedet for ekstern ID-oppslag verifiserer innsending at organisasjonen har registrert FS-datakilde i alle miljøer — mangler den i ett, avvises hele opprettelsen med en feilmelding som navngir miljøet, og ingenting opprettes delvis. Passord settes ikke i dialogen: detaljsiden blir inngangen til å sette ett passord per miljø, med den samme passordflyten som for øvrige applikasjoner.
+Dialogen viser ikke miljøvalg for FS: applikasjonen er miljøløs, og identiteten gjelder i alle miljøer med én gang. I stedet for ekstern ID-oppslag verifiserer innsending at organisasjonen har registrert FS-datakilde i alle miljøer — mangler den i ett, avvises hele opprettelsen med en feilmelding om at FS-datakilden mangler, og ingenting opprettes delvis. Meldingen nevner ikke miljøet. Passord settes ikke i dialogen: detaljsiden blir inngangen til å sette ett passord per miljø, med den samme passordflyten som for øvrige applikasjoner.
 
 Avgrensningen bør ikke lekke inn i detaljsiden: når applikasjonen først finnes, er den organisasjonens egen, og handlingene der (navn og beskrivelse, deaktivering og reaktivering, passordbytte) gates som for de øvrige applikasjonene.
 
@@ -94,7 +95,8 @@ Vurder en informasjonsboks på detaljsiden som forklarer at applikasjonen kan au
 ## Avklarte valg
 
 - **IdP-velger:** Radioknapper med Feide og Maskinporten — og FS som et tredje valg for
-  administratorer med applikasjonsadministrator-rollen for Sikt (besluttet 24. august 2026)
+  administratorer med applikasjonsadministrator-rollen for Sikt (20754) (besluttet 24. august 2026,
+  avklart i review 19. oktober 2026)
 - **Organisasjonsvelger:** Vanlig nedtrekksliste (uten søk), også for super-applikasjonsadministrator
 - **Plassering av "Opprett applikasjon"-knapp:** I `ActionButtons`-slot i `ListPageLayout` (etablert prosjektmønster for handlinger i listevisninger)
 - **Suksess-feedback:** Toast/snackbar på detaljsiden etter navigasjon ("Applikasjonen er opprettet")

@@ -78,13 +78,8 @@ Egenskap: Listevisning og søk i applikasjoner
       Når jeg velger en applikasjon
       Så ser jeg detaljsiden for valgt applikasjon
 
-    @deprecated @openquestion @scope-applikasjoner-etter-design-review
+    @scope-applikasjoner-etter-design-review
     Scenario: Listen inkluderer eksisterende FS-applikasjoner
-      # ÅPNE SPØRSMÅL:
-      # - Koden for scenarioet blir aldri borte: filteret på identitetsleverandør
-      #   (`Tilgjengelige identitetsleverandører i filter`) har «FS (Maskinbruker)», og
-      #   trenger at FS-applikasjonene står i listen. Skal scenarioet slettes som
-      #   overflødig, eller gjelde igjen (uten `@deprecated`)?
       Når jeg åpner applikasjonsoversikten
       Så ser jeg også applikasjoner med FS som identitetsleverandør
       Og disse vises på lik linje med Feide- og Maskinporten-applikasjoner
