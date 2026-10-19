@@ -31,17 +31,21 @@ Egenskap: Samordna opptak
       Når opptaksforvalter ved NTNU ser listen over opptak
       Så ser ikke opptaksforvalter opptaket "Samordna opptak 2027"
 
-  # AVKLART 2026-10-16 (produktleder): Saksbehandlere ser søknadene de skal behandle i søknadsbehandlingen,
-  # ikke gjennom utdanningstilbudene i opptaket.
-  Regel: Deltakende organisasjon ser bare utdanningstilbudene organisasjonen tilbyr
+    # AVKLART 2026-10-19 (produkteier, etter akseptansetesten 2.2): Regelen gjelder også når opptaksforvalter
+    # går rett til siden til opptaket, ikke bare listen.
+    Scenario: Organisasjon som ikke deltar, kan ikke åpne opptaket
+      Gitt at organisasjonen "NTNU" ikke er lagt til som deltaker i opptaket
+      Når opptaksforvalter ved NTNU går rett til siden til opptaket "Samordna opptak 2027"
+      Så ser ikke opptaksforvalter opptaket "Samordna opptak 2027"
 
-    Scenario: Deltakende organisasjon ser ikke utdanningstilbud en annen organisasjon tilbyr
-      Gitt at organisasjonene "Universitetet i Oslo" og "Universitetet i Bergen" er lagt til som deltakere
-      Og at "Universitetet i Bergen" har knyttet utdanningstilbudet "Medisin, høst 2027" til opptaket
-      Når opptaksforvalter ved Universitetet i Oslo ser listen over utdanningstilbud i opptaket
-      Så ser ikke opptaksforvalter utdanningstilbudet "Medisin, høst 2027"
+  # Hvilke utdanningstilbud en deltakende organisasjon ser i opptaket, står i
+  # 12 Utdanningstilbud/02 Utdanningstilbud i opptak/listevisning_utdanningstilbud.feature.
 
   # AVKLART 2026-10-16 (produktleder)
+  # AVKLART 2026-10-19 (produkteier): Etter at søknaden har åpnet, kan utdanningstilbud bare trekkes, ikke fjernes
+  # (12 Utdanningstilbud/02 Utdanningstilbud i opptak/fjerne_utdanningstilbud.feature). En deltaker med
+  # utdanningstilbud kan derfor ikke fjernes fra opptaket etter søknadsåpning, fordi søknadene gjelder
+  # utdanningstilbudene.
   Regel: En deltakende organisasjon kan ikke fjernes fra opptaket så lenge den har utdanningstilbud i det
 
     Scenario: Fjerne en deltakende organisasjon som har utdanningstilbud i opptaket

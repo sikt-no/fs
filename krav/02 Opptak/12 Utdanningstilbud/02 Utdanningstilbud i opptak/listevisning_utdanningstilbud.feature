@@ -39,6 +39,14 @@ Egenskap: Listevisning og filtrering av utdanningstilbud i opptak
       Når opptaksforvalter åpner oversikten over utdanningstilbud
       Så ser opptaksforvalter kun utdanningstilbud fra egen organisasjon
 
+    # AVKLART 2026-10-16 (produktleder): Saksbehandlere ser søknadene de skal behandle i søknadsbehandlingen,
+    # ikke gjennom utdanningstilbudene i opptaket. Flyttet hit fra samordna_opptak.feature 2026-10-19.
+    Scenario: Deltakende organisasjon ser ikke utdanningstilbud en annen organisasjon tilbyr
+      Gitt at organisasjonene "Universitetet i Oslo" og "Universitetet i Bergen" er lagt til som deltakere
+      Og at "Universitetet i Bergen" har knyttet utdanningstilbudet "Medisin, høst 2027" til opptaket
+      Når opptaksforvalter ved Universitetet i Oslo ser listen over utdanningstilbud i opptaket
+      Så ser ikke opptaksforvalter utdanningstilbudet "Medisin, høst 2027"
+
   Regel: Opptaksforvalter kan filtrere på starttermin og startår
 
     Scenario: Filtrere på starttermin og startår
