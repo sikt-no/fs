@@ -68,6 +68,14 @@ Egenskap: Gjennomføre plasstildeling
       Så prøves søkeren først i utdanningskvoten "Førstegangsvitnemål"
       Og deretter i utdanningskvoten "Ordinær"
 
+    # Flyttet hit 2026-10-19 fra 11 Opprette og vedlikeholde opptak/03 Innstillinger/sette_kvoteprioritet.feature.
+    # Kvoteprioriteten settes på opptaket, og lavest tall er høyest prioritet.
+    Scenario: Lavest tall gir høyest prioritet
+      Gitt at kvoteprioriteten for opptaket er 2 for "Førstegangsvitnemål (ORDF)" og 3 for "Ordinær kvote (ORD)"
+      Og at søkeren "Kari Nordmann" konkurrerer i begge kvotene og har nok poeng til tilbud i begge på "Sykepleie, høst 2027"
+      Når plasstildelingen gjennomføres
+      Så får søkeren tilbud i "Førstegangsvitnemål (ORDF)"
+
     Scenario: Tilbud i én utdanningskvote gir bortfall i de andre på samme utdanningstilbud
       Gitt at søkeren "Kari Nordmann" er kvalifisert i både "Førstegangsvitnemål" og "Ordinær" på "Sykepleie, høst 2027"
       Når plasstildelingen gir søkeren tilbud i utdanningskvoten "Førstegangsvitnemål"
