@@ -28,6 +28,15 @@ Egenskap: Opptaksinnstillinger per utdanningstilbud
       Når opptaksforvalter setter regelverk for et utdanningstilbud
       Så kan opptaksforvalter kun velge blant regelverkene i opptakets regelverkssamling
 
+    # AVKLART 2026-10-19: Utdanningstilbud som bruker regler fra den gamle regelverkssamlingen, mister alle reglene,
+    # og opptaksforvalter varsles først (11 Opprette og vedlikeholde opptak/03 Innstillinger/innstillinger.feature).
+    # Lagt til 2026-10-19 etter akseptansetesten av opprette og vedlikeholde opptak.
+    Scenario: Utdanningstilbudet mister reglene når opptakets regelverkssamling byttes
+      Gitt at utdanningstilbudet "Sykepleie, høst 2027" bruker regler fra opptakets regelverkssamling "UHG 2027"
+      Når opptaksforvalter bytter opptakets regelverkssamling til "UHG 2027 v2"
+      Så har utdanningstilbudet ikke lenger regler fra "UHG 2027"
+      Og utdanningstilbudet kan bare få regler fra "UHG 2027 v2"
+
     @openquestion
     # ÅPNE SPØRSMÅL:
     # - Skal kun opptaksforvalter ved forvaltende organisasjon få lov å opprette nye
@@ -131,6 +140,21 @@ Egenskap: Opptaksinnstillinger per utdanningstilbud
     # Lenken til informasjon om tidlig opptak settes per opptak, ikke per
     # utdanningstilbud, se 11 Opprette og vedlikeholde opptak/03 Innstillinger/
     # innstillinger.feature (avklart 09.10.2026, review av PR #654).
+
+  Regel: Deltakende organisasjon kan ikke endre poenggrensen for tidlig opptak etter fristen
+    # Virkningen av fristen for å sette poenggrenser for tidlig opptak, som opptaksforvalter setter i
+    # 11 Opprette og vedlikeholde opptak/04 Frister/frister_og_hendelser.feature.
+    # Lagt til 2026-10-19 etter akseptansetesten av opprette og vedlikeholde opptak.
+    # AVKLART 2026-10-15 (Q12, TAKE-409): Fristen hindrer deltakende organisasjoner i å endre poenggrensene
+    # etter fristen. Forvaltende organisasjon kan fortsatt endre poenggrensene.
+
+    Scenario: Lærestedet kan ikke endre poenggrensen for tidlig opptak etter fristen
+      Gitt at opptaket har aktivert tidlig opptak
+      Og at fristen for å sette poenggrenser for tidlig opptak er "2027-02-15 23:59"
+      Og at fristen er ute
+      Når opptaksforvalter ved deltakende organisasjon vil endre poenggrensen for tidlig opptak på "Sykepleie, høst 2027"
+      Så kan opptaksforvalter ved deltakende organisasjon ikke endre poenggrensen
+      Men opptaksforvalter ved forvaltende organisasjon kan fortsatt endre poenggrensen
 
   # AVKLART 2026-10-08: Det finnes ingen innstilling for hvilke plasstildelingsrunder utdanningstilbudet deltar i.
   # Et utdanningstilbud er ute av en plasstildelingsrunde når det ikke er satt antall tilbud som skal gis for plasstildelingsrunden,

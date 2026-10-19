@@ -140,7 +140,10 @@ Egenskap: Gjennomføre plasstildeling
   Regel: Poenglikhetsregelen avgjør rekkefølgen ved lik poengsum
 
     # Standard poenglikhetsregel settes på opptaket, se 11 Opprette og vedlikeholde opptak/03 Innstillinger/innstillinger.feature.
-    # Lærestedet kan bare velge «alle med samme sum får tilbud» som unntak. Strengere regler er ikke lov.
+    # I samordna opptak 2027 skal lærestedet bare kunne velge «alle med samme sum får tilbud» som unntak.
+    # AVKLART 2026-10-19 (produkteier): Det er behovet i samordna opptak nå. Kravet beskriver hva som skal være
+    # mulig: opptaksforvalter bestemmer hvilke regler som er tilgjengelige som unntak, og har ansvaret for at
+    # det registreres riktig.
     # AVKLART 2026-10-14: Bare «Alle med samme sum får tilbud» gir hele gruppen på grensen tilbud.
     # Gap mot koden (A4): i dag får hele gruppen alltid tilbud, uansett poenglikhetsregel.
     # AVKLART 2026-10-14: Underrepresentert kjønn skal støttes, også sammen med alder og loddtrekning.
