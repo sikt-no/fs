@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from 'preact/hooks';
 import type { GitInfo, Snapshot } from '../shared/model';
 import { isSpecPath } from '../shared/paths';
 import { applySpec, newSpecText, parseSpec, slugify, type Sketch, type SpecDoc } from '../shared/spec';
-import { DOMAINS, newOppgaveText, type RawTask, type TasksSnapshot } from '../shared/tasks';
+import { DOMAINS, newOppgaveText, type IssueRef, type RawTask, type TasksSnapshot } from '../shared/tasks';
 import { parseUtforing, serializeUtforing, withRun, type SpecRun, type Utforing } from '../shared/utforing';
 import { SpecDetail, type SpecActions } from './SpecDetail';
 import {
@@ -10,6 +10,7 @@ import {
   BOARD_REPOS,
   buildBoard,
   canDrop,
+  colIcon,
   colOf,
   COL_WHY,
   columns,
@@ -22,7 +23,9 @@ import {
   missing,
   moveTo,
   pickable,
+  leadSpec,
   prShort,
+  startStep,
   stepIcon,
   taskColOf,
   taskFlags,
@@ -33,7 +36,7 @@ import {
   type Flag,
   type TaskCard,
 } from './specboard';
-import { NewTaskForm, TaskDetail } from './TaskDetail';
+import { NewTaskForm, TaskDetail, type KravFrom } from './TaskDetail';
 import { NEW_TASK, splitSel } from './tavleHash';
 import { transport } from './transport';
 
@@ -41,6 +44,18 @@ import { transport } from './transport';
 export const NEW_KEY = 'ny';
 
 const COLS_KEY = 'kravforvaltning:specCols';
+const FILTER_KEY = 'kravforvaltning:tavleFilter';
+
+/** Filtrene på tavla. De huskes (localStorage) til de nullstilles. */
+interface TavleFilter {
+  dom: string | null;
+  /** Scope-slug, `–` for oppgaver uten scope, eller tom */
+  scope: string;
+  repo: string;
+  /** `meg`, `agent`, `andre`, `ingen` eller tom */
+  by: string;
+}
+const NO_FILTER: TavleFilter = { dom: null, scope: '', repo: '', by: '' };
 const DRAFT_KEY = 'kravforvaltning:specDraft';
 const readJson = <T,>(key: string, fallback: T): T => {
   try {
@@ -123,21 +138,14 @@ interface Props {
   /** `<dom>/<slug>`, `<dom>/<slug>/<spec-fil>`, `<dom>/<slug>/ny` eller `ny-oppgave` (se tavleHash.ts) */
   sel: string | null;
   onSel: (key: string | null) => void;
-  onOpenKrav: (path: string) => void;
+  /** Åpner kravet i Krav; `from` er oppgaven lenken kom fra, så Krav-visningen kan vise veien tilbake */
+  onOpenKrav: (path: string, from: KravFrom | null) => void;
   /** Hvem som står i loggen: `@login` fra GitHub, ellers «vieweren» */
   me: string;
   actions: SpecActions;
 }
 
-const colIcon = (c: ColConf) =>
-  c.key.startsWith('repo:')
-    ? 'sp-ic sp-ic--repo'
-    : c.key === 'verifisering'
-      ? 'sp-ic sp-ic--verif'
-      : `st st--${c.key === 'scope' ? 'none' : c.key === 'kravarbeid' || c.key === 'spesifiseres' ? 'draft' : c.key === 'klar' ? 'planned' : 'implemented'}`;
 
-/** Spesifikasjonen et oppgavekort viser rute og steg for: den aktive som står i samme kolonne som oppgaven */
-const leadSpec = (t: TaskCard, col: ColKey) => activeSpecs(t).find(s => colOf(s) === col) ?? null;
 
 /**
  * Tavla «Oppgaver»: ett kort per oppgave fra den opprettes (fs-scope eller «+ Ny oppgave») til kravene er verifisert.
@@ -154,16 +162,19 @@ export function Tavle({ snap, entries, git, editable, sel, onSel, onOpenKrav, me
     const d = readJson<NewDraft | null>(DRAFT_KEY, null);
     return d?.slug && d.dom ? d : null;
   });
-  const [dom, setDom] = useState<string | null>(null);
-  const [scopeF, setScopeF] = useState('');
-  const [repoF, setRepoF] = useState('');
-  const [byF, setByF] = useState('');
+  const [filter, setFilter] = useState<TavleFilter>(() => ({ ...NO_FILTER, ...readJson<Partial<TavleFilter>>(FILTER_KEY, {}) }));
+  const { dom, scope: scopeF, repo: repoF, by: byF } = filter;
+  const setDom = (v: string | null) => setFilter(f => ({ ...f, dom: v }));
+  const setScopeF = (v: string) => setFilter(f => ({ ...f, scope: v }));
+  const setRepoF = (v: string) => setFilter(f => ({ ...f, repo: v }));
+  const setByF = (v: string) => setFilter(f => ({ ...f, by: v }));
   const [editCols, setEditCols] = useState(false);
   const [drag, setDrag] = useState<string | null>(null);
   const [overCol, setOverCol] = useState<ColKey | null>(null);
 
   useEffect(() => writeJson(COLS_KEY, conf), [conf]);
   useEffect(() => writeJson(DRAFT_KEY, draft), [draft]);
+  useEffect(() => writeJson(FILTER_KEY, filter.dom || filter.scope || filter.repo || filter.by ? filter : null), [filter]);
   // Det som er lagret og lest inn igjen, trenger ikke ligge over lenger
   useEffect(() => {
     setOver(o => {
@@ -281,7 +292,7 @@ export function Tavle({ snap, entries, git, editable, sel, onSel, onOpenKrav, me
   };
 
   /** «+ Ny oppgave»: en minimal oppgave.md fra malen */
-  const createTask = (o: { title: string; dom: string; issue: number | null; owner: string | null }) => {
+  const createTask = (o: { title: string; dom: string; issue: IssueRef | null; owner: string | null }) => {
     let slug = slugify(o.title);
     const base = slug;
     for (let i = 2; merged.tasks.some(t => t.dom === o.dom && t.slug === slug); i++) slug = `${base}-${i}`;
@@ -313,13 +324,29 @@ export function Tavle({ snap, entries, git, editable, sel, onSel, onOpenKrav, me
 
   const { task: selTask, spec: selSpecFile, newTask } = splitSel(sel);
   const selCard = cards.find(c => c.key === selTask) ?? null;
-  // Spesifikasjonen som vises i panelet: den valgte, ellers den aktive oppgaven står i, ellers den første
-  const selSpec = selCard
-    ? (selSpecFile
-        ? selCard.specs.find(s => (selSpecFile === NEW_KEY ? s.key.endsWith('/' + NEW_KEY) : s.file === selSpecFile))
-        : (leadSpec(selCard, colOfTask(selCard)) ?? activeSpecs(selCard)[0] ?? selCard.specs[0])) ?? null
-    : null;
+  // Spesifikasjonen i det brede panelet: bare når den er valgt (`<dom>/<slug>/<fil>` eller `…/ny`)
+  const selSpec = selCard && selSpecFile ? (selCard.specs.find(s => (selSpecFile === NEW_KEY ? s.key.endsWith('/' + NEW_KEY) : s.file === selSpecFile)) ?? null) : null;
   const open = !!selCard || newTask;
+  const specSel = (t: TaskCard, s: Card) => `${t.key}/${s.key.endsWith('/' + NEW_KEY) ? NEW_KEY : s.file}`;
+
+  const hasFilter = !!(dom || scopeF || repoF || byF);
+  const filterText = [dom, scopeF ? (scopeF === '–' ? 'uten scope' : `scope-${scopeF}`) : '', repoF ? repoName(repoF) : '', byF ? `tatt av ${byF}` : ''].filter(Boolean).join(' · ') || 'ingen';
+  /** Åpner kravet i Krav, med oppgaven som er valgt som vei tilbake */
+  const openKrav = (path: string) => {
+    if (!selCard) return onOpenKrav(path, null);
+    const k = colOfTask(selCard);
+    const paths = [...selCard.krav.map(x => x.path), ...selCard.specs.flatMap(s => s.feats.map(f => f.path))].filter((p): p is string => !!p);
+    onOpenKrav(path, { sel: selCard.key, title: selCard.task.title, col: k, colName: cols.find(c => c.key === k)?.name ?? k, paths: [...new Set(paths)], filters: filterText });
+  };
+  /** «Sett rute og send»: ruta fra spesifikasjonen blir ruta i utforing.md, med alle steg som venter */
+  const sendSpec = (c: Card) => {
+    const rute = c.doc.rute;
+    if (ro || !rute.length) return;
+    save(c.path, applySpec(c.text, c.doc, { ...c.doc, rute: [] }, titles, `${c.dir}/spec`));
+    writeRun(c, { ...c.run, route: [...rute], steps: rute.map(r => ({ repo: r, status: 'venter', by: '', pr: [], handoff: '', blocked: null, back: null })) }, `sendte til ${repoName(rute[0])}`);
+  };
+  /** Steget i repoet settes til «pågår» før en utførekjøring */
+  const startRun = (c: Card, r: string, what: string) => updRun(c, run => startStep(run, r), `startet ${what} i ${repoName(r)}`);
 
   const drop = (c: Card, key: ColKey) => {
     const name = cols.find(x => x.key === key)?.name ?? key;
@@ -380,6 +407,12 @@ export function Tavle({ snap, entries, git, editable, sel, onSel, onOpenKrav, me
               ))}
             </select>
           </label>
+          {hasFilter && (
+            <button class="spfilter-reset" title="Filtrene huskes til du nullstiller dem" onClick={() => setFilter(NO_FILTER)}>
+              Nullstill filtre
+              <span class="sptag acc mono">huskes</span>
+            </button>
+          )}
           {!ro && (
             <div class="spactions">
               <button class={'spbtn' + (editCols ? ' solid' : '')} onClick={() => setEditCols(v => !v)}>
@@ -445,7 +478,7 @@ export function Tavle({ snap, entries, git, editable, sel, onSel, onOpenKrav, me
                 {!editCols ? (
                   <div class="spcol-h">
                     <div class="spcol-t">
-                      <span class={colIcon(col)} />
+                      <span class={colIcon(col.key)} />
                       <span class="spcol-name">{col.name}</span>
                       <span class="mono">{colCards.length}</span>
                     </div>
@@ -454,7 +487,7 @@ export function Tavle({ snap, entries, git, editable, sel, onSel, onOpenKrav, me
                 ) : (
                   <div class="spcol-h edit">
                     <div class="spcol-t">
-                      <span class={colIcon(col)} />
+                      <span class={colIcon(col.key)} />
                       <input value={col.name} onChange={e => updConf(col.key, { name: (e.target as HTMLInputElement).value })} />
                     </div>
                     <div class="spcol-tools mono">
@@ -571,45 +604,44 @@ export function Tavle({ snap, entries, git, editable, sel, onSel, onOpenKrav, me
           key={selCard.key}
           t={selCard}
           col={cols.find(x => x.key === colOfTask(selCard)) ?? { key: colOfTask(selCard), name: colOfTask(selCard) }}
-          missing={taskMissing(selCard)}
-          sel={selSpec}
+          open={selSpec}
           ro={ro}
           dirty={!ro && taskDirty(selCard)}
           colName={k => cols.find(x => x.key === k)?.name ?? k}
-          onSpec={s => onSel(s ? `${selCard.key}/${s.key.endsWith('/' + NEW_KEY) ? NEW_KEY : s.file}` : selCard.key)}
+          repoName={repoName}
+          actions={actions}
+          onSpec={s => onSel(specSel(selCard, s))}
           onNewSpec={() => newSpec(selCard)}
           onClose={() => onSel(null)}
-          onOpenKrav={onOpenKrav}
-        >
-          {selSpec && (
-            <SpecDetail
-              key={selSpec.key}
-              embedded
-              c={selSpec}
-              col={cols.find(x => x.key === colOf(selSpec)) ?? { key: colOf(selSpec), name: colOf(selSpec) }}
-              repos={repoCols.map(c => c.key.slice(5))}
-              repoName={repoName}
-              cards={specs}
-              entries={entries}
-              ro={ro}
-              dirty={!ro && specDirty(selSpec)}
-              me={me}
-              prefer={selCard.krav.map(k => k.path).filter((p): p is string => !!p)}
-              scope={selCard.scope?.slug ?? null}
-              onClose={() => onSel(null)}
-              onDoc={(fn, log) => updDoc(selSpec, fn, log)}
-              onRun={(fn, log) => updRun(selSpec, fn, log)}
-              onSend={() => {
-                const rute = selSpec.doc.rute;
-                if (!rute.length) return;
-                save(selSpec.path, applySpec(selSpec.text, selSpec.doc, { ...selSpec.doc, rute: [] }, titles, `${selSpec.dir}/spec`));
-                writeRun(selSpec, { ...selSpec.run, route: [...rute], steps: rute.map(r => ({ repo: r, status: 'venter', by: '', pr: [], handoff: '', blocked: null, back: null })) }, `sendte til ${repoName(rute[0])}`);
-              }}
-              onOpenKrav={onOpenKrav}
-              actions={actions}
-            />
-          )}
-        </TaskDetail>
+          onOpenKrav={openKrav}
+          onSend={sendSpec}
+          onStart={startRun}
+        />
+      )}
+      {selCard && selSpec && (
+        <SpecDetail
+          key={selSpec.key}
+          c={selSpec}
+          col={cols.find(x => x.key === colOf(selSpec)) ?? { key: colOf(selSpec), name: colOf(selSpec) }}
+          repos={repoCols.map(c => c.key.slice(5))}
+          repoName={repoName}
+          cards={specs}
+          entries={entries}
+          ro={ro}
+          dirty={!ro && specDirty(selSpec)}
+          me={me}
+          taskTitle={selCard.task.title}
+          siblings={selCard.specs}
+          onPick={s => onSel(specSel(selCard, s))}
+          prefer={selCard.krav.map(k => k.path).filter((p): p is string => !!p)}
+          scope={selCard.scope?.slug ?? null}
+          onClose={() => onSel(selCard.key)}
+          onDoc={(fn, log) => updDoc(selSpec, fn, log)}
+          onRun={(fn, log) => updRun(selSpec, fn, log)}
+          onSend={() => sendSpec(selSpec)}
+          onOpenKrav={openKrav}
+          actions={actions}
+        />
       )}
     </div>
   );
@@ -658,7 +690,7 @@ function TaskCardView({ t, col, sel, dirty, repoName, me, draggable, dragging, o
       <div class="spcard-top mono">
         <span class="ell">{domShort(t.dom)}</span>
         {t.scope && <span class="sptag acc" title={t.scope.title}>{t.scope.slug}</span>}
-        {t.task.issue && <span>#{t.task.issue}</span>}
+        {t.task.issue && <span>{t.task.issue.key}</span>}
         <span class="push">
           {t.krav.length} krav{nSpecs ? ` · ${nSpecs} spec` : ''}
         </span>

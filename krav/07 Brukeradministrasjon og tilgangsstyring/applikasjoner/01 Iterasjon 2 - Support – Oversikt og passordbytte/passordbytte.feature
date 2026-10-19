@@ -39,6 +39,7 @@ Egenskap: Passordbytte for applikasjon
       Gitt jeg ikke har rettighet til å endre passord på applikasjonen
       Så er muligheten til å sette nytt passord ikke tilgjengelig
 
+  @scope-applikasjoner-etter-design-review
   Regel: Nytt passord genereres av systemet for ett valgt miljø
 
     Scenario: Generere nytt passord for et miljø
@@ -70,6 +71,7 @@ Egenskap: Passordbytte for applikasjon
       Så er passordet ikke lenger tilgjengelig
       Og jeg må generere et nytt passord dersom jeg trenger å se det på nytt
 
+  @scope-applikasjoner-etter-design-review
   Regel: Kun ett passord er aktivt per miljø om gangen
 
     Scenario: Nytt passord erstatter det gamle i samme miljø

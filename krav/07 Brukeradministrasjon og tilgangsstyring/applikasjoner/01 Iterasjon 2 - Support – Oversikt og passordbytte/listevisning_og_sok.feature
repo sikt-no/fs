@@ -13,7 +13,7 @@ Egenskap: Listevisning og søk i applikasjoner
 
   Regel: Liste over alle applikasjoner (K1)
 
-    @deprecated
+    @deprecated @scope-applikasjoner-etter-design-review
     Scenario: Se liste over applikasjoner
       Når jeg åpner applikasjonsoversikten
       Så ser jeg en liste over alle applikasjoner
@@ -27,7 +27,7 @@ Egenskap: Listevisning og søk i applikasjoner
         | Antall tilganger|
         | Status          |
 
-    @in-progress
+    @in-progress @scope-applikasjoner-etter-design-review
     Scenario: Se liste over applikasjoner
       Når jeg åpner applikasjonsoversikten
       Så ser jeg en liste over alle applikasjoner
@@ -78,7 +78,7 @@ Egenskap: Listevisning og søk i applikasjoner
       Når jeg velger en applikasjon
       Så ser jeg detaljsiden for valgt applikasjon
 
-    @deprecated @openquestion
+    @deprecated @openquestion @scope-applikasjoner-etter-design-review
     Scenario: Listen inkluderer eksisterende FS-applikasjoner
       # ÅPNE SPØRSMÅL:
       # - Koden for scenarioet blir aldri borte: filteret på identitetsleverandør
@@ -119,14 +119,14 @@ Egenskap: Listevisning og søk i applikasjoner
       Og organisasjonene er sortert alfabetisk
       Og "Alle applikasjonseiere" er valgt som standard
 
-    @planned
+    @planned @scope-restanser-etter-onboarding
     Scenario: Applikasjonseierne i filteret vises med akronym
       Gitt jeg ser listen over applikasjoner
       Når jeg åpner applikasjonseier-filteret
       Så vises akronymet under navnet på hver organisasjon
       Men organisasjonskoden vises når organisasjonen ikke har akronym
 
-    @planned
+    @planned @scope-restanser-etter-onboarding
     Scenario: Søke i applikasjonseier-filteret
       Gitt jeg ser listen over applikasjoner
       Når jeg skriver inn tekst i applikasjonseier-filteret
@@ -137,7 +137,7 @@ Egenskap: Listevisning og søk i applikasjoner
       Når jeg velger en applikasjonseier som filter
       Så vises kun applikasjoner som eies av den valgte organisasjonen
 
-    @in-progress
+    @in-progress @scope-applikasjoner-etter-design-review
     Scenario: Tilgjengelige identitetsleverandører i filter
       Gitt jeg ser listen over applikasjoner
       Når jeg åpner identitetsleverandørfilteret
@@ -149,7 +149,7 @@ Egenskap: Listevisning og søk i applikasjoner
         | FS (Maskinbruker)           |
       Og "Alle identitetsleverandører" er valgt som standard
 
-    @in-progress
+    @in-progress @scope-applikasjoner-etter-design-review
     Scenario: Filtrere på identitetsleverandør
       Gitt jeg ser listen over applikasjoner
       Når jeg velger en identitetsleverandør som filter

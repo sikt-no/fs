@@ -3,7 +3,7 @@ import { test } from 'node:test';
 import type { Snapshot } from '../shared/model.ts';
 import { buildScopes, buildTasks, type RawTask, type TasksSnapshot } from '../shared/tasks.ts';
 import { buildEntry } from '../server/parse.ts';
-import { BOARD_REPOS, buildCards, buildTaskCards, dragSpec, taskColOf, taskFlags, taskMissing, canDrop, colOf, columns, flags, gating, handoffPrompt, isVerified, missing, moveTo, parseVerify, phaseOf, pickable, prShort, specChanged, verifyOrder, verifyPrompt } from './specboard.ts';
+import { BOARD_REPOS, buildCards, buildTaskCards, dragSpec, kravSummary, leadSpec, nextStep, taskColOf, taskFlags, taskMissing, canDrop, colOf, columns, flags, gating, handoffPrompt, isVerified, missing, moveTo, parseVerify, phaseOf, pickable, prShort, specChanged, verifyOrder, verifyPrompt } from './specboard.ts';
 
 const feature = (tag: string, id: string, body = '') => `# language: no
 ${id} @must @${tag}
@@ -304,4 +304,91 @@ test('oppgavekort uten scope: kravene fra spesifikasjonene, og uten noe står op
   assert.equal(roller.kravFrom, 'spec');
   assert.equal(taskColOf(roller), 'klar');
   assert.equal(taskColOf(cards.find(c => c.slug === 'tom')!), 'scope');
+});
+
+test('nextStep: fra kravene når oppgaven ikke har spesifikasjon', () => {
+  const a = 'krav/07 Bru/11 Til/02 Ny/ny_a.feature';
+  const b = 'krav/07 Bru/11 Til/02 Ny/ny_b.feature';
+  const row = '| [roller](roller/) | `@BRU-TIL-NYA-001` `@BRU-TIL-NYB-002` | Must | – | – | |';
+  const sk = board({ [a]: skjelett('@BRU-TIL-NYA-001'), [b]: skjelett('@BRU-TIL-NYB-002') }, row);
+  const n1 = nextStep(sk, taskColOf(sk));
+  assert.equal(n1.kind, 'skjelett');
+  assert.equal(n1.ctx, 'scope-roller');
+  assert.match(n1.lines[0].t, /^2 krav er skjeletter/);
+  const ka = nextStep(board({ [a]: skjelett('@BRU-TIL-NYA-001'), [b]: feature('draft', '@BRU-TIL-NYB-002') }, row), 'kravarbeid');
+  assert.equal(ka.kind, 'kravarbeid');
+  assert.deepEqual(ka.lines.map(l => l.t), ['1 krav er @draft og må valideres', '1 krav er fortsatt skjelett']);
+  const ms = nextStep(board({ [a]: feature('planned', '@BRU-TIL-NYA-001'), [b]: feature('planned', '@BRU-TIL-NYB-002') }, row), 'spesifiseres');
+  assert.equal(ms.kind, 'mangler-spec');
+  assert.deepEqual(ms.lines.map(l => [l.t, l.sub, l.mark]), [['Mangler spesifikasjon', undefined, 'err'], ['2 krav er klare til å hentes inn', 'ny_a.feature, ny_b.feature', 'planned']]);
+  const tom = nextStep(board({}, '| [annen](annen/) | `@BRU-TIL-NYC-003` | Must | – | – | |'), 'scope');
+  assert.equal(tom.kind, 'scope-tom');
+  assert.equal(tom.spec, null);
+  const levert = board({}, '| [roller](roller/) | `@BRU-TIL-ROL-004` | Must | – | – | |');
+  assert.deepEqual([nextStep(levert, taskColOf(levert)).kind, nextStep(levert, taskColOf(levert)).tone], ['verifisert', 'ok']);
+});
+
+test('nextStep: den ledende spesifikasjonen, de andre i oppgaven og krav uten spesifikasjon', () => {
+  const row = '| [roller](roller/) | `@BRU-TIL-ROL-001` `@BRU-TIL-ROL-003` | Must | – | – | |';
+  const klar = board({}, row, { 'spec/spec-roller.md': spec() });
+  const n = nextStep(klar, taskColOf(klar));
+  assert.equal(n.kind, 'klar');
+  assert.equal(n.spec?.file, 'spec-roller.md');
+  assert.deepEqual(n.lines.at(-1), { t: '1 krav uten spesifikasjon', sub: 'planlagt.feature', mark: 'warn' });
+  const to = board({}, row, { 'spec/spec-roller.md': spec(), 'spec/spec-utkast.md': spec({ skisse: false, krav: ['planlagt.feature:@BRU-TIL-ROL-003'] }) });
+  const m = nextStep(to, taskColOf(to));
+  assert.equal(m.kind, 'spec-mangler');
+  assert.equal(m.spec?.file, 'spec-utkast.md');
+  assert.equal(leadSpec(to, 'spesifiseres')?.file, 'spec-utkast.md');
+  assert.ok(m.lines.some(l => l.t === 'Ingen skisse' && l.mark === 'err'));
+  assert.deepEqual(m.lines.find(l => l.mark === 'col'), { t: 'Også i oppgaven: Roller', mark: 'col', col: 'klar' });
+});
+
+test('nextStep: steget i repoet, med overlevering, blokkert og sendt tilbake', () => {
+  const row = '| [roller](roller/) | `@BRU-TIL-ROL-001` | Must | – | – | |';
+  const utf = (admin: string) => `## spec/spec-roller.md
+
+- **Rute**: fs-plattform → fs-admin
+
+### fs-plattform
+
+- **Status**: levert
+- **Tatt av**: agent:subgraph
+- **PR**:
+  - https://github.com/sikt-no/fs-plattform/pull/9
+- **Overlevering**:
+  - Ny mutation tildelRolle
+  - Felt Rolle.enhet
+
+### fs-admin
+
+${admin}
+`;
+  const t = board({}, row, { 'spec/spec-roller.md': spec(), 'utforing.md': utf('- **Status**: pågår\n- **Tatt av**: agent:frontend\n- **Blokkert**: Venter på API\n- **Tilbake**: 2026-10-03') });
+  const n = nextStep(t, taskColOf(t));
+  assert.equal(n.kind, 'repo');
+  assert.equal(n.repo, 'fs-admin');
+  assert.equal(n.ctx, 'Roller · steg 2/2');
+  assert.equal(n.tone, 'err');
+  assert.deepEqual(n.lines.map(l => [l.t, l.sub, l.mark]), [
+    ['fs-admin · pågår', 'agent:frontend', 'pågår'],
+    ['Overlevering fra fs-plattform', 'Ny mutation tildelRolle …', 'dot'],
+    ['Blokkert: Venter på API', undefined, 'err'],
+    ['Sendt tilbake av fs-verify 2026-10-03', undefined, 'err'],
+  ]);
+  const ver = board({}, row, { 'spec/spec-roller.md': spec(), 'utforing.md': utf('- **Status**: levert\n- **PR**:\n  - https://github.com/sikt-no/fs-admin/pull/4') });
+  const v = nextStep(ver, taskColOf(ver));
+  assert.equal(v.kind, 'verifisering');
+  assert.equal(v.lines[0].sub, 'fs-plattform#9 · fs-admin#4');
+});
+
+test('kravSummary: opptelling per status, med skjeletter for seg', () => {
+  const a = 'krav/07 Bru/11 Til/02 Ny/ny_a.feature';
+  const t = board({ [a]: skjelett('@BRU-TIL-NYA-001') }, '| [roller](roller/) | `@BRU-TIL-NYA-001` `@BRU-TIL-ROL-001` `@BRU-TIL-ROL-003` `@BRU-TIL-NYZ-009` | Must | – | – | |');
+  assert.deepEqual(kravSummary(t), [
+    { k: 'in-progress', n: 1 },
+    { k: 'planned', n: 1 },
+    { k: 'skeleton', n: 1 },
+  ]);
+  assert.deepEqual(t.kravMissing, ['@BRU-TIL-NYZ-009'], 'krav som ikke finnes, står i kravMissing');
 });

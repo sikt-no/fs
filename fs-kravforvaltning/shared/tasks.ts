@@ -85,6 +85,25 @@ export interface LogRow {
   who: string;
 }
 
+/** Saken oppgaven løses i: en Jira-sak (`BAT-268`), eller et GitHub issue (`#143`) i oppgaver fra før */
+export interface IssueRef {
+  /** `BAT-268` eller `#143` */
+  key: string;
+  url: string;
+}
+
+export const JIRA_BROWSE = 'https://sikt.atlassian.net/browse/';
+const GITHUB_ISSUES = 'https://github.com/sikt-no/fs/issues/';
+
+/** Saken i `Issue` i oppgave.md eller scope-tabellen, eller det brukeren skriver i «+ Ny oppgave»: en Jira-nøkkel eller -lenke, ellers `#<nr>` for GitHub */
+export function parseIssue(v: string | undefined): IssueRef | null {
+  if (!v) return null;
+  const jira = /(?:^|[^A-Za-z0-9])([A-Z][A-Z0-9]+-\d+)\b/.exec(v);
+  if (jira) return { key: jira[1], url: JIRA_BROWSE + jira[1] };
+  const gh = /#(\d+)/.exec(v) ?? /github\.com\/sikt-no\/fs\/issues\/(\d+)/.exec(v);
+  return gh ? { key: '#' + gh[1], url: GITHUB_ISSUES + gh[1] } : null;
+}
+
 export interface Task {
   dom: string;
   slug: string;
@@ -93,7 +112,7 @@ export interface Task {
   files: string[];
   hasOppgave: boolean;
   title: string;
-  issue: number | null;
+  issue: IssueRef | null;
   initiativ: string | null;
   /** Slugen i `Scope:` i oppgave.md (`[scope-<slug>](../scope-<slug>.md)`), eller null */
   scope: string | null;
@@ -244,7 +263,7 @@ export function parseTask(raw: RawTask): Task {
     files: raw.files,
     hasOppgave: src !== undefined,
     title,
-    issue: Number(/#(\d+)/.exec(meta['Issue'] ?? '')?.[1]) || null,
+    issue: parseIssue(meta['Issue']),
     initiativ: none(meta['Initiativ']),
     scope: scopeSlug(meta['Scope']),
     prio: firstWord('Prioritet'),
@@ -353,7 +372,7 @@ export interface ScopeRow {
   paths: string[];
   moscow: string | null;
   sketches: { name: string; url: string }[];
-  issue: number | null;
+  issue: IssueRef | null;
   comment: string;
 }
 
@@ -452,7 +471,7 @@ export function parseScope(path: string, src: string, mtime: number | null = nul
       paths,
       moscow: none(r['moscow'])?.split(/\s/)[0] ?? null,
       sketches: links(sk).map(l => ({ name: l.text || l.href, url: l.href })),
-      issue: Number(/#(\d+)/.exec(r['issue'] ?? '')?.[1]) || null,
+      issue: parseIssue(r['issue']),
       comment: clean(r['kommentar'] ?? ''),
     };
   });
@@ -502,11 +521,11 @@ export function buildScopes(snap: TasksSnapshot): Scope[] {
 }
 
 /**
- * En minimal oppgave.md fra malen (tasks/mal/oppgave.md), til «+ Ny oppgave» på tavla: tittel, issue, domene, slug,
+ * En minimal oppgave.md fra malen (tasks/mal/oppgave.md), til «+ Ny oppgave» på tavla: tittel, Jira-sak, domene, slug,
  * scope og eier, uten malkommentar og plassholdere, og én linje i statusloggen.
  */
-export function newOppgaveText(o: { title: string; dom: string; slug: string; issue?: number | null; owner?: string | null; scope?: string | null; date: string; via: string }): string {
-  const issue = o.issue ? `[sikt-no/fs#${o.issue}](https://github.com/sikt-no/fs/issues/${o.issue})` : '–';
+export function newOppgaveText(o: { title: string; dom: string; slug: string; issue?: IssueRef | null; owner?: string | null; scope?: string | null; date: string; via: string }): string {
+  const issue = o.issue ? `[${o.issue.key}](${o.issue.url})` : '–';
   return [
     `# ${o.title}`,
     '',
@@ -518,7 +537,7 @@ export function newOppgaveText(o: { title: string; dom: string; slug: string; is
     `- **Scope**: ${o.scope ? `[scope-${o.scope}](../scope-${o.scope}.md)` : '–'}`,
     `- **Eier**: ${o.owner || '–'}`,
     '',
-    ...(o.issue ? [] : ['## Åpne punkter', '', '- Oppgaven har ikke et issue ennå.', '']),
+    ...(o.issue ? [] : ['## Åpne punkter', '', '- Oppgaven har ikke en Jira-sak ennå.', '']),
     '## Statuslogg',
     '',
     'Append-only. Ny linje på toppen ved hver hendelse.',

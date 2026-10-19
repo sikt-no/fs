@@ -27,22 +27,22 @@ Egenskap: Se detaljer for applikasjon
         | Sist endret av             |
         | Tidspunkt for sist endring |
 
-    @deprecated
+    @deprecated @scope-applikasjoner-etter-design-review
     Scenario: Se ekstern ID fra identitetsleverandør
       Gitt applikasjonen har en ekstern ID fra identitetsleverandøren
       Så ser jeg den eksterne ID-en
 
-    @in-progress
+    @in-progress @scope-applikasjoner-etter-design-review
     Scenario: Se Tjeneste-ID for Feide-applikasjon
       Gitt applikasjonen har Feide som identitetsleverandør
       Så ser jeg applikasjonens Tjeneste-ID
 
-    @in-progress
+    @in-progress @scope-applikasjoner-etter-design-review
     Scenario: Se Client-ID for Maskinporten-applikasjon
       Gitt applikasjonen har Maskinporten som identitetsleverandør
       Så ser jeg applikasjonens Client-ID
 
-    @in-progress
+    @in-progress @scope-applikasjoner-etter-design-review
     Scenario: Se brukernavn for FS-applikasjon
       Gitt applikasjonen har FS som identitetsleverandør
       Så ser jeg applikasjonens brukernavn
