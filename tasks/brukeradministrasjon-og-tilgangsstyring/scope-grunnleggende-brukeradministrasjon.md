@@ -34,4 +34,4 @@
 
 ## Åpne spørsmål
 
-- [ ] Jira-sak for oppgaven. Den har GitHub-issuet [#143](https://github.com/sikt-no/fs/issues/143) fra før.
+–

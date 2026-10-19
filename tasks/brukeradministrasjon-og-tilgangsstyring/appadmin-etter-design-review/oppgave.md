@@ -2,7 +2,7 @@
 
 ## Metadata
 
-- **Issue**: –
+- **Issue**: [BAT-270](https://sikt.atlassian.net/browse/BAT-270)
 - **Initiativ**: [#350 Brukeradministrasjon av FS Admin-brukere](https://github.com/sikt-no/fs/issues/350)
 - **Domene**: brukeradministrasjon-og-tilgangsstyring
 - **Slug**: appadmin-etter-design-review
@@ -29,8 +29,5 @@ Append-only. Ny linje på toppen ved hver hendelse.
 
 | Dato       | Hendelse                          | Av            | Lenke til review        |
 |------------|-----------------------------------|---------------|-------------------------|
+| 2026-10-19 | Koblet til Jira-saken BAT-270 | – | – |
 | 2026-10-19 | Opprettet i scope-applikasjoner-etter-design-review | – | – |
-
-## Åpne punkter
-
-- Oppgaven har ikke en Jira-sak ennå.

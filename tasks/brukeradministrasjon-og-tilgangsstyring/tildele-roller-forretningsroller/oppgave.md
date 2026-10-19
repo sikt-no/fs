@@ -2,7 +2,7 @@
 
 ## Metadata
 
-- **Issue**: –
+- **Issue**: [BAT-326](https://sikt.atlassian.net/browse/BAT-326)
 - **Initiativ**: [#350 Brukeradministrasjon av FS Admin-brukere](https://github.com/sikt-no/fs/issues/350)
 - **Domene**: brukeradministrasjon-og-tilgangsstyring
 - **Slug**: tildele-roller-forretningsroller
@@ -29,8 +29,5 @@ Append-only. Ny linje på toppen ved hver hendelse.
 
 | Dato       | Hendelse                          | Av            | Lenke til review        |
 |------------|-----------------------------------|---------------|-------------------------|
+| 2026-10-19 | Koblet til Jira-saken BAT-326 | – | – |
 | 2026-10-19 | Opprettet i scope-restanser-etter-onboarding | – | – |
-
-## Åpne punkter
-
-- Oppgaven har ikke en Jira-sak ennå.
