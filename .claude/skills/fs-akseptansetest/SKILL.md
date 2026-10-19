@@ -86,7 +86,7 @@ Still spørsmålene samlet med `AskUserQuestion` (høyst fire om gangen). Hopp o
 - **Testbrukere per rolle.** List rollene du fant i kravene (fra `Som <rolle>`, `Gitt jeg er <rolle>` og rollene i *Synlighet*-regler), og be om testbruker og organisasjon for hver. Testbrukere som ikke har en rolle i kravene, trengs ikke.
 - **Testdata:** opptak, søknader, søkere, saksnummer, regelverkssamlinger osv. som må finnes før testen. Be om navn og hvor de ligger (lenke).
 - **Hvem og når:** kontaktperson i teamet, testansvarlig, dato og tidsramme, Slack-tråd.
-- **Bare C:** hvem testerne er (HK-dir, læresteder), og hvilke deler av funksjonaliteten som gjelder dem. Eksterne tester bare det de skal bruke: i et samordna opptak er det kravene for samordna opptak, ikke for lokale opptak. Foreslå et utvalg ut fra rollene og reglene, og la brukeren velge (`multiSelect`).
+- **Bare C:** hvem testerne er (HK-dir, læresteder), og hvilke deler av funksjonaliteten som gjelder dem. Eksterne tester bare det de skal bruke: i et samordna opptak er det kravene for samordna opptak, ikke for lokale opptak. Som hovedregel tester de heller ikke negative scenarioer (det som ikke skal gå). De testes internt. Foreslå et utvalg ut fra rollene og reglene, og la brukeren velge (`multiSelect`).
 
 Testbrukerne og testdataene skrives inn i hvert testtilfelle (kolonnene «Testbruker» og «Testdata»), ikke i egne tabeller. Mangler testdata, skriv `[Fylles ut: <hva som trengs>]` i cella, og list det i oppsummeringen. Testeren skal aldri måtte lete fram data selv.
 

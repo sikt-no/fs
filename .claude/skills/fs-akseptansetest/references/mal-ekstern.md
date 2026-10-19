@@ -3,6 +3,7 @@
 For HK-dir og lærestedene. Den er lettere enn den interne med vilje: testerne skal komme raskt i gang, og skal ikke trenge bakgrunnen for saken.
 
 - **Bare det testerne skal bruke.** Ta med scenarioene for rollene og prosessene testerne har (f.eks. samordna opptak, ikke lokalt opptak). Utvalget gjøres sammen med brukeren (C1 i SKILL.md).
+- **Bare positive testtilfeller.** Som hovedregel tester eksterne ikke det som ikke skal gå (feilmeldinger, obligatoriske felt, sperrer, grenseverdier). Det testes i den interne testen, og står i «Ikke med i denne testen» med grunnen «Testes i den interne akseptansetesten». Et negativt testtilfelle tas bare med når brukeren ber om det.
 - **Bare det som kan testes.** Det som ikke er testbart i miljøet, står i «Ikke med i denne testen» med en kort grunn uten tekniske ord.
 - **Kort.** Sikt mot høyst 20–25 testtilfeller og under én time. Blir det mer, foreslå å dele i flere tester (C4).
 - **Ingen intern informasjon:** Feature-ID-er, tagger, commits, Jira, GitHub, feature-flagg, kodeverdier, verify-resultater, «berører andre team», åpne spørsmål og kvalitetssikringen i teamet. Er noe uavklart, avklar det før testen, eller ta testtilfellet ut.

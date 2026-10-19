@@ -46,29 +46,30 @@ Til introen i testmøtet.
 | 1.1 | 1 | `@OPT-OVO-INN-001` | Taket er forhåndsutfylt med 1 · Opplasting er åpen når opptaksforvalter ikke har endret innstillingen |
 | 1.2 | 1 | `@OPT-OVO-GRU-001`, `@OPT-OVO-FRI-001` | Opprette et samordna opptak · Lagre opptak med navn på alle obligatoriske språk · Lagre opptaket uten frister |
 | 1.3a–d | – | `@OPT-OVO-GRU-001` | Lagre opptak uten utdanningsbakgrunner / standard poenglikhetsregel / maks antall søknadsalternativer / tak for utdanningstilbud |
-| – | 2 | `@OPT-OVO-GRU-001` | Navn mangler på et obligatorisk språk (bestått i runde 1) |
-| – | 3 | `@OPT-OVO-SAM-001` | Legge til lærested · Filtrere på universiteter og høyskoler · Filtrere på fagskoler |
-| 2.1 | 4 | `@OPT-OVO-SAM-001` | Fjerne en deltakende organisasjon uten utdanningstilbud i opptaket |
-| – | 5 | `@OPT-OVO-SAM-001` | Sette regler for fordeling av søknader til saksbehandlerorganisasjoner (bestått i runde 1) |
+| – | 2 | `@OPT-OVO-SAM-001` | Legge til lærested · Filtrere på universiteter og høyskoler · Filtrere på fagskoler |
+| 2.1 | 3 | `@OPT-OVO-SAM-001` | Fjerne en deltakende organisasjon uten utdanningstilbud i opptaket |
+| – | 4 | `@OPT-OVO-SAM-001` | Sette regler for fordeling av søknader til saksbehandlerorganisasjoner (bestått i runde 1) |
 | 3.1 | – | `@OPT-OVO-INN-001` | Endre opptakstype |
-| 3.2 | 6 | `@OPT-OVO-INN-001`, `@OPT-OVO-SAM-001` | Endre regelverkssamling når ingen utdanningstilbud er knyttet til opptaket · Opptaksforvalter ved forvaltende organisasjon kan endre innstillinger |
-| 3.3 | 7 | `@OPT-OVO-INN-001`, `@OPT-OVO-FRI-001` | Aktivere ledige studieplasser · de tre datoene for ledige studieplasser |
-| 3.4 | 8 | `@OPT-OVO-INN-001` | Lenken må være satt når tidlig opptak er aktivert |
+| 3.2 | 5 | `@OPT-OVO-INN-001`, `@OPT-OVO-SAM-001` | Endre regelverkssamling når ingen utdanningstilbud er knyttet til opptaket · Opptaksforvalter ved forvaltende organisasjon kan endre innstillinger |
+| 3.3 | 6 | `@OPT-OVO-INN-001`, `@OPT-OVO-FRI-001` | Aktivere ledige studieplasser · de tre datoene for ledige studieplasser |
+| 3.4 | – | `@OPT-OVO-INN-001` | Lenken må være satt når tidlig opptak er aktivert |
 | 3.5a–b | – | `@OPT-OVO-FRI-001` | Opptaket kan ikke lagres uten søknadsfristen / dokumentasjonsfristen for tidlig opptak |
-| 3.6 | 9 | `@OPT-OVO-INN-001`, `@OPT-OVO-FRI-001` | Aktivere tidlig opptak · Sette lenke · Sette søknadsfrist, dokumentasjonsfrist og frist for poenggrenser for tidlig opptak |
-| 3.7 | 10 | `@OPT-OVO-INN-001` | Stenge og åpne for dokumentasjonsopplasting |
-| 3.8 | 10 | `@OPT-OVO-INN-001` | Startnummeret er 1 når det ikke er satt · Sette startnummer |
+| 3.6 | 7 | `@OPT-OVO-INN-001`, `@OPT-OVO-FRI-001` | Aktivere tidlig opptak · Sette lenke · Sette søknadsfrist, dokumentasjonsfrist og frist for poenggrenser for tidlig opptak |
+| 3.7 | 8 | `@OPT-OVO-INN-001` | Stenge og åpne for dokumentasjonsopplasting |
+| 3.8 | 8 | `@OPT-OVO-INN-001` | Startnummeret er 1 når det ikke er satt · Sette startnummer |
 | 3.9 | – | `@OPT-OVO-INN-001` | Endre taket etter at opptaket er opprettet |
-| 3.10–3.15 | 11 | `@OPT-OVO-FRI-001` | Redigering av utdanningstilbud · Søknadsdato · Ordinær søknadsfrist · Omprioriteringsfrist · Frist for sletting · Dokumentasjonsfrister · Frist for endring av utdanningsbakgrunn · Publisering av hovedopptaket |
-| 3.16–3.17 | 12 | `@OPT-OVO-FRI-001` | Standarddato når datoen ikke er satt · Sette dato for aldersberegning |
-| 3.18 | 13 | `@OPT-OVO-FRI-001` | Legge til utdanningsbakgrunn med avvikende frister |
-| 4.1 | 14 | `@OPT-OVO-SAM-001` | Opptaksforvalter ved deltakende organisasjon kan se, men ikke endre innstillinger |
+| 3.10–3.15 | 9 | `@OPT-OVO-FRI-001` | Redigering av utdanningstilbud · Søknadsdato · Ordinær søknadsfrist · Omprioriteringsfrist · Frist for sletting · Dokumentasjonsfrister · Frist for endring av utdanningsbakgrunn · Publisering av hovedopptaket |
+| 3.16–3.17 | 10 | `@OPT-OVO-FRI-001` | Standarddato når datoen ikke er satt · Sette dato for aldersberegning |
+| 3.18 | 11 | `@OPT-OVO-FRI-001` | Legge til utdanningsbakgrunn med avvikende frister |
+| 4.1 | 12 (bare at lærestedet ser innstillingene) | `@OPT-OVO-SAM-001` | Opptaksforvalter ved deltakende organisasjon kan se, men ikke endre innstillinger |
 | 4.2 | – | `@OPT-OVO-SAM-001` | Legge til lærested i samordna opptak |
 | 5.1–5.2 | – | `@OPT-OVO-SAM-001` | Organisasjon som ikke deltar, ser ikke opptaket · kan ikke åpne opptaket |
 | 6.1 | – | `@OPT-OVO-SAM-001` | Fjerne en deltakende organisasjon som har utdanningstilbud i opptaket |
 | 6.2–6.3 | – | `@OPT-OVO-INN-001` | Varsel før regelverkssamlingen byttes · Bytte regelverkssamling når utdanningstilbud er knyttet til opptaket |
 | 7.1 | – | `@OPT-OVO-GRU-001` | Opprette et lokalt opptak |
 | 7.2 | – | `@OPT-OVO-INN-001` | Den siste utdanningsbakgrunnen kan ikke fjernes |
+
+Den eksterne testen har ikke negative testtilfeller. De er bare med i den interne.
 
 Ikke med i testene: «Sette første svarfrist som informasjon til søkere» (`@openquestion`, Q19), gjenbruk og deaktivering av opptak (`@draft @openquestion`), krav om studierett (`@draft`), og virkningene som står i andre krav (`@draft`-reglene for uløst arbeid i #754).
 

@@ -62,5 +62,6 @@ Kolonnen «Testdata» i hvert testtilfelle sier hva testeren bruker og hva teste
 
 - Bare scenarioer fra kravene. Ingen helhetsrunde, regresjon eller universell utforming i akseptansetesten. Mangler et scenario, er det en kommentar til kontaktpersonen, ikke et nytt testtilfelle.
 - Intern: scenariotittelen med vanlige ord i «Scenario», uten Feature-ID. Feature-ID-er, saker, tekniske forhold (flagg, branch, kodeverdi) og sporingen står på kvalitetssikringssiden.
+- Ekstern: bare positive testtilfeller som hovedregel. Feilsituasjoner og sperrer testes internt (se `mal-ekstern.md`).
 - Ekstern: ingen Feature-ID-er, tagger, kodeverdier, GraphQL, Jira eller feature-flagg. «Hva du tester» med vanlige ord.
 - Ikke «(ikke testbart: …)» i forventet resultat. Det som ikke kan testes, står i egen tabell.
