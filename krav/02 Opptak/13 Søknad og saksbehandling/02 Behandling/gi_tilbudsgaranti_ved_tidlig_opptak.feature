@@ -342,7 +342,7 @@ Egenskap: Gi tilbudsgaranti ved tidlig opptak
       Når opptaksforvalter gjennomfører tidligopptaket
       Så ser opptaksforvalter utfallet for hvert søknadsalternativ som er vurdert
       Og opptaksforvalter ser antall søkere som er vurdert, og antall tilbudsgarantier som er satt
-      Og opptaksforvalter ser antall søkere per utfall, per behandlende organisasjon og per utdanningstilbud
+      Og opptaksforvalter ser antall søknadsalternativer per utfall, og antall tilbudsgarantier per behandlende organisasjon og per utdanningstilbud
 
     # Saker uten konklusjon telles med, også når de er ferdig behandlet: de er ikke med i
     # tidligopptaket, og opptaksforvalteren gjør det samme med begge (avklart 13.10.2026).
@@ -368,6 +368,15 @@ Egenskap: Gi tilbudsgaranti ved tidlig opptak
       Og 12 søkere oppfyller kravene til tilbudsgaranti på "Sykepleie, høst 2027"
       Når opptaksforvalter gjennomfører tidligopptaket
       Så får de 12 søkerne tilbudsgaranti på "Sykepleie, høst 2027"
+      Og opptaksforvalter får varsel om at tilbudsgarantiene overskrider kvoten for "Sykepleie, høst 2027"
+
+    # Avklart 20.10.2026. Koden teller bare tilbudsgarantiene som settes i kjøringen, og må endres.
+    Scenario: Kvotevarselet tar med tilbudsgarantier fra en tidligere gjennomføring
+      Gitt "Sykepleie, høst 2027" har 10 plasser i kvoten tilbudsgarantiene tas fra
+      Og 8 søkere fikk tilbudsgaranti på "Sykepleie, høst 2027" da tidligopptaket ble gjennomført
+      Og 4 andre søkere oppfyller nå kravene til tilbudsgaranti på "Sykepleie, høst 2027"
+      Når opptaksforvalter gjennomfører tidligopptaket på nytt
+      Så har 12 søkere tilbudsgaranti på "Sykepleie, høst 2027"
       Og opptaksforvalter får varsel om at tilbudsgarantiene overskrider kvoten for "Sykepleie, høst 2027"
 
     Scenario: Kvotevarsel ved 30 prosent når grensen ikke er angitt

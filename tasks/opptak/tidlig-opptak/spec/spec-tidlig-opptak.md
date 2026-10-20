@@ -80,24 +80,24 @@ Det som gjenstår i backend:
 - `@OPT-SØK-SØK-012`: API-et gir søkeren poengsum og poenggrense også når søkeren er innvilget, «for saksbehandlerens skyld» (`TidligopptakTilbudsgarantiService.java:725, 987`, `tidligopptak-status.graphqls:49-51`). Min kompetanse må skjule dem, som kravet sier.
 - `@OPT-SØK-SØK-011`: tidspunktet søkeren søkte, finnes bare på kvitteringen (`SoknadsKvittering.innsendtTidspunkt`). Bytter søkeren begrunnelse, kommer det en ny kvittering, og da er tidspunktet sist endret.
 
+### Avvik der koden skal endres
+
+- `@OPT-BEH-BEH-007` (avklart 2026-10-20): kvotevarselet skal regne med alle tilbudsgarantiene fra tidligopptaket på utdanningstilbudet, også dem fra en tidligere gjennomføring. Koden teller bare tilbudsgarantiene som settes i kjøringen. En garanti som står fra før (`ALLEREDE_SATT_POSITIV`), telles ikke (`TidligopptakTilbudsgarantiService.java:966-968, 1163-1166`). Nytt scenario «Kvotevarselet tar med tilbudsgarantier fra en tidligere gjennomføring».
+
 ### Avvik som må avklares
 
 Koden gjør noe annet enn kravet. Det er ikke bestemt om kravet eller koden skal endres.
 
 - `@OPT-SØK-SØK-011`: kravet sier at tidlig opptak kan søkes når opptaket åpner for det **og** minst ett søknadsalternativ tilbyr det (Q2 i TAKE-408). Koden bruker **eller** (`SokTidligOpptakService.java:112-113`), så en søker uten søknadsalternativ som tilbyr tidlig opptak, kan søke når opptaket har det slått på. Kvitteringen har samme tolkning (`SoknadKvitteringService.java:126-134`). Gjennomføringen krever `tilbyr_tidlig_opptak` per tilbud. Ingen scenarioer dekker tilfellet. Kravet eies av et annet team.
 
-Små avvik:
-
-- `@OPT-BEH-BEH-007`: rapporten teller søknadsalternativer per utfall, organisasjon og utdanningstilbud, ikke søkere (`TidligopptakTilbudsgarantiService.java:561-563, 1104`).
-- `@OPT-BEH-BEH-007`: kvotevarselet teller bare tilbudsgarantiene som settes i kjøringen. Garantier fra en tidligere gjennomføring (`ALLEREDE_SATT_POSITIV`) teller ikke (`TidligopptakTilbudsgarantiService.java:966-968, 1163-1166`).
-- `@OPT-SØK-SØK-012`: kommentaren i kravet (linje 21-22) sier at en tilbudsgaranti fra tilbyder aldri vises som innvilget. En FOP gir FOR fra gjennomføringen, og da innvilget, som `@OPT-BEH-BEH-007` sier. Bare kommentaren er berørt.
-- `@OPT-SØK-SØK-012`: svaret skjules for søkeren når hovedopptaket er publisert (`PUBLISERING_RESULTAT`, `V406`), og et fjernet søknadsalternativ skjules helt (`sa.slettet IS NULL`). Kravet sier ikke noe om det første, og sier at svaret «ikke lenger viser innvilget» om det andre.
-
 ### Løst siden 2026-10-08
 
 - `@OPT-BEH-BEH-007`, annen tilbudsgaranti fra opptaksforvalter (avklart 2026-10-20, kravet følger koden): bare tilbudsgaranti for tidlig opptak (kategori F) og reservert studieplass (kategori S) påvirker gjennomføringen. En annen kode fra opptaksforvalter, også en som gir tilbud, stopper ikke søkeren lavere ned, og overskrives på søknadsalternativet som får garantien (`SATT_OVERSKREV_POSITIV`, `TidligopptakTilbudsgarantiService.java:196-199, 1040-1050`, testen `TidligopptakTilbudsgarantiIT.overskriverAnnenPositivVerdi`).
 - `@OPT-BEH-BEH-013`, konklusjon når søkeren ikke har søkt (avklart 2026-10-20, kravet følger koden): backend godtar en konklusjon i alle saker (`SettTidligopptakKonklusjonService.java:29-65`). Det holder at steget er skjult i saksbehandlingen, og at gjennomføringen bare tar med søkere som har søkt (`TidligopptakTilbudsgarantiService.java:453-459`).
 - `@OPT-SØK-SØK-012`, poeng når søkeren ikke er kvalifisert (avklart 2026-10-20, kravet følger koden): søkeren ser ikke poengsum og poenggrense (`TidligopptakTilbudsgarantiService.java:655-663`). Nytt scenario i kravet.
+- `@OPT-BEH-BEH-007`, rapporten (avklart 2026-10-20, kravet følger koden): opptaksforvalter ser antall søknadsalternativer per utfall, og antall tilbudsgarantier per behandlende organisasjon og per utdanningstilbud (`tidligopptak-tilbudsgaranti-automatikk.graphqls:114-128`).
+- `@OPT-SØK-SØK-012`, kommentaren om tilbudsgaranti fra tilbyder (rettet 2026-10-20): kommentaren sier nå at et tidligopptakstilbud fra tilbyder (FOP) regnes med i gjennomføringen, og vises som innvilget, som i `@OPT-BEH-BEH-007` og koden.
+- `@OPT-SØK-SØK-012`, når svaret ikke vises (avklart 2026-10-20, kravet følger koden): svaret på tidlig opptak vises fram til hovedopptaket er publisert (`PUBLISERING_RESULTAT`, `V406`). Et fjernet søknadsalternativ viser ikke noe svar (`sa.slettet IS NULL`).
 - `@OPT-BEH-BEH-007`, kvalifisering: slås opp mot tilbudets kompetanseregelverk, med eget utfall `KVALIFISERING_IKKE_VURDERT` (STEK-582, `9041d067c7`). Reservert studieplass gir tilbudsgaranti før kvalifiseringen sjekkes.
 - `@OPT-BEH-BEH-007`, ny gjennomføring: tilbudsgarantien på lavere prioritet fjernes (`FJERNET_LAVERE_PRIORITET`, MR 6136).
 - `@OPT-BEH-BEH-007`, telleren: tar med saker som ikke er ferdig behandlet, og ferdig behandlede saker uten konklusjon (MR 6136, `cafb4758b3`).
@@ -168,6 +168,9 @@ Kravene er `@in-progress`, og endres på stedet. Endringene står her, så den s
 - **2026-10-20, `@OPT-BEH-BEH-007`:** Kravet følger koden (STEK-503) for en annen tilbudsgaranti fra opptaksforvalter: bare tilbudsgaranti for tidlig opptak og reservert studieplass påvirker tidligopptaket. En annen tilbudsgaranti, også en som gir tilbud, stopper ikke søkeren lavere ned, og erstattes på søknadsalternativet som får tilbudsgaranti fra tidligopptaket. Før sa kravet at en som gir tilbud, ikke røres (STEK-269, 12.08.2026). «Tilbudsgaranti på et høyere prioritert søknadsalternativ gir ingen ny tilbudsgaranti» er erstattet av «Annen tilbudsgaranti på et høyere prioritert søknadsalternativ stopper ikke tidligopptaket», og «Tilbudsgaranti fra opptaksforvalter som gir tilbud blir erstattet» er nytt.
 - **2026-10-20, `@OPT-BEH-BEH-013`:** Avklaringen fra 08.10 om at saksbehandleren bare kan konkludere når søkeren har søkt, krever ikke lenger at koden avviser en konklusjon i andre saker. Det holder at steget er skjult når søkeren ikke har søkt (avklart 09.10), og at gjennomføringen bare tar med søkere som har søkt. Ingen scenarioer er endret.
 - **2026-10-20, `@OPT-SØK-SØK-012`:** Nytt scenario «Poengsum og poenggrense vises ikke når søkeren ikke er kvalifisert», som i koden (STEK-582). At API-et gir poengene også når søkeren er innvilget, er ikke et avvik: kravet gjelder hva søkeren ser, og Min kompetanse må skjule dem.
+- **2026-10-20, `@OPT-BEH-BEH-007`:** I «Se utfallet for hver søker» ser opptaksforvalter antall søknadsalternativer per utfall, og antall tilbudsgarantier per behandlende organisasjon og per utdanningstilbud, ikke antall søkere. Utfallet hører til søknadsalternativet, så antall søkere per utfall er ikke godt definert. Som i koden.
+- **2026-10-20, `@OPT-BEH-BEH-007`:** Nytt scenario «Kvotevarselet tar med tilbudsgarantier fra en tidligere gjennomføring»: varselet regner med alle tilbudsgarantiene fra tidligopptaket på utdanningstilbudet. Koden teller bare dem som settes i kjøringen, og må endres (se _Kodesjekk_).
+- **2026-10-20, `@OPT-SØK-SØK-012`:** Ny regel «Svaret på tidlig opptak vises fram til hovedopptaket er publisert», med scenarioet «Svaret på tidlig opptak vises ikke etter at hovedopptaket er publisert», som i koden. Avklaringen fra 08.10 om et fjernet søknadsalternativ sier nå at søkeren ikke ser noe svar på det, og viser til `@OPT-BEH-BEH-010`. Kommentaren om tilbudsgaranti fra tilbyder sier at en FOP vises som innvilget.
 
 ## Åpne spørsmål
 
