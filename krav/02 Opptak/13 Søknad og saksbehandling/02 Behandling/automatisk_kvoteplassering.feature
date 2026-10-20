@@ -145,7 +145,18 @@ Egenskap: Automatisk kvoteplassering
       Så ser saksbehandleren et innslag utført av maskinbrukeren
       Og saksbehandleren ser hvem som startet den automatiske behandlingen
 
-    Scenario: Kvoteplasseringen viser opptaksalderen
+    Scenariomal: Endringsloggen viser opptaksalderen
+      Gitt at grunnlaget for kvotetypen "ORDF" har en aldersgrense
+      Og at automatikken har <utfall> søkeren i kvotetypen "ORDF" på grunn av alderen
+      Når saksbehandleren ser på endringsloggen for saken
+      Så ser saksbehandleren opptaksalderen og aldersgrensen i innslaget for kvoteplasseringen
+
+      Eksempler:
+        | utfall        |
+        | plassert      |
+        | ikke plassert |
+
+    Scenario: Ny automatisk behandling uten endring gir ikke nytt innslag
       Gitt at automatikken har plassert søkeren i kvotetypen "ORDF" der grunnlaget har en aldersgrense
-      Når saksbehandleren ser på kvoteplasseringen
-      Så ser saksbehandleren opptaksalderen som ble brukt mot aldersgrensen
+      Når søknaden behandles automatisk på nytt uten at alder eller grunnlag er endret
+      Så får endringsloggen ikke et nytt innslag for kvoteplasseringen
