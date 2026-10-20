@@ -159,6 +159,14 @@ Egenskap: Se svar på søknad om tidlig opptak
       Når søkeren åpner søknaden sin
       Så ser ikke søkeren poengsum og poenggrense på noen av søknadsalternativene
 
+    # Avklart 20.10.2026, som i koden (STEK-582).
+    Scenario: Poengsum og poenggrense vises ikke når søkeren ikke er kvalifisert
+      Gitt at svaret på tidlig opptak er publisert
+      Og at søkeren deltok i tidlig opptak på søknadsalternativet "Profesjonsstudiet i medisin, høst 2027"
+      Men søkeren er ikke kvalifisert til "Profesjonsstudiet i medisin, høst 2027"
+      Når søkeren åpner søknaden sin
+      Så ser ikke søkeren poengsum og poenggrense på "Profesjonsstudiet i medisin, høst 2027"
+
     Scenario: Poengsum og poenggrense vises ikke på søknadsalternativer uten tidlig opptak
       Gitt at svaret på tidlig opptak er publisert
       Og at utdanningstilbudet "Historie, høst 2027" ikke deltar i tidlig opptak

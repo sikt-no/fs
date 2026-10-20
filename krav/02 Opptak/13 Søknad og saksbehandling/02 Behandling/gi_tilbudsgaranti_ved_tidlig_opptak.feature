@@ -66,9 +66,12 @@
 # - Poengsummen er den høyeste søkeren har til søknadsalternativet etter tilbudets
 #   kompetanseregelverk, uansett kvote (STEK-269, 27.08.2026; STEK-582). I det gamle
 #   systemet var den hardkodet til ordinær kvote.
-# - Gjennomføringen gir tilbudsgarantien som opptaksforvalter. En tilbudsgaranti fra
-#   opptaksforvalter som ikke gir tilbud, erstattes. En som gir tilbud, røres ikke, og
-#   søkeren får da ingen ny tilbudsgaranti på lavere prioritet (STEK-269, 12.08.2026).
+# - Gjennomføringen gir tilbudsgarantien som opptaksforvalter. Bare tilbudsgaranti for
+#   tidlig opptak og reservert studieplass påvirker tidligopptaket. En annen tilbudsgaranti
+#   fra opptaksforvalter, også en som gir tilbud, stopper ikke søkeren lavere ned, og
+#   erstattes på søknadsalternativet som får tilbudsgaranti fra tidligopptaket. Den går da
+#   tapt. (Endret 20.10.2026, som i STEK-503. Var: en som gir tilbud, røres ikke, og
+#   søkeren får ingen ny tilbudsgaranti på lavere prioritet, STEK-269, 12.08.2026.)
 # - Tilbudsgarantitypen for tidlig opptak hentes fra opptakets kodeverk, ikke hardkodet.
 #   Det må finnes nøyaktig én aktiv type i kategorien for tidlig opptak som gir tilbud
 #   og kan brukes av opptaksforvalter (STEK-269).
@@ -257,16 +260,26 @@ Egenskap: Gi tilbudsgaranti ved tidlig opptak
       Når opptaksforvalter gjennomfører tidligopptaket
       Så får søkeren tilbudsgaranti for tidlig opptak på "Sykepleie, høst 2027"
 
-    Scenario: Tilbudsgaranti på et høyere prioritert søknadsalternativ gir ingen ny tilbudsgaranti
+    Scenario: Tilbudsgaranti fra opptaksforvalter som gir tilbud blir erstattet
+      Gitt saksbehandler har konkludert med at søkeren deltar i tidligopptaket
+      Og søkeren er kvalifisert til "Sykepleie, høst 2027"
+      Og søkeren har 55 poeng til "Sykepleie, høst 2027"
+      Og opptaksforvalter har satt en tilbudsgaranti som gir tilbud på "Sykepleie, høst 2027"
+      Og tilbudsgarantien er ikke for tidlig opptak
+      Når opptaksforvalter gjennomfører tidligopptaket
+      Så får søkeren tilbudsgaranti for tidlig opptak på "Sykepleie, høst 2027"
+
+    Scenario: Annen tilbudsgaranti på et høyere prioritert søknadsalternativ stopper ikke tidligopptaket
       Gitt saksbehandler har konkludert med at søkeren deltar i tidligopptaket
       Og søknaden har følgende søknadsalternativer:
         | prioritet | søknadsalternativ     | tilbudsgaranti fra opptaksforvalter |
         | 1         | Historie, høst 2027   | gir tilbud                          |
         | 2         | Sykepleie, høst 2027  | ingen                               |
+      Og tilbudsgarantien på "Historie, høst 2027" er ikke for tidlig opptak
       Og søkeren er kvalifisert til "Sykepleie, høst 2027"
       Og søkeren har 55 poeng til "Sykepleie, høst 2027"
       Når opptaksforvalter gjennomfører tidligopptaket
-      Så får ikke søkeren tilbudsgaranti på "Sykepleie, høst 2027"
+      Så får søkeren tilbudsgaranti på "Sykepleie, høst 2027"
 
     Scenario: Tidligopptakstilbud fra tilbyder går foran poengsummen
       Gitt saksbehandler har konkludert med at søkeren deltar i tidligopptaket

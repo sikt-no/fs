@@ -51,8 +51,9 @@
 #
 # - Saksbehandleren kan bare konkludere når søkeren selv har søkt om tidlig
 #   opptak. Tilbudsgaranti fra tidligopptaket får bare søkere som har søkt.
-#   Koden sjekker ikke dette i dag (SettTidligopptakKonklusjonService), og må
-#   endres.
+#   (Endret 20.10.2026: det holder at steget er skjult i saksbehandlingen når
+#   søkeren ikke har søkt, se under, og at gjennomføringen bare tar med søkere som
+#   har søkt. Koden trenger ikke avvise en konklusjon i andre saker.)
 # - (Endret 09.10.2026, se under.) Er begrunnelsen ikke dokumentert, registreres
 #   det som en mangel på søknaden, og søkeren får beskjed om den. Etter det
 #   vurderer saksbehandleren fritt om søkeren skal delta i tidligopptaket. Dette
