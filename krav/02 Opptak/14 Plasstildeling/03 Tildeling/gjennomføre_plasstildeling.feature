@@ -29,8 +29,7 @@ Egenskap: Gjennomføre plasstildeling
   #   TAKE-283: ventelistenummer og rangering over 9 999, eller prioritet over 99, feller hele kjøringen.
 
   # AVKLART 08.10.2026: Tilbudsgaranti fra tidligopptaket hører med, og gir tilbud i hovedtildelingen,
-  # se regelen «Tilbudsgarantien gjelder i hovedopptaket» i
-  # 13 Søknad og saksbehandling/02 Behandling/gi_tilbudsgaranti_ved_tidlig_opptak.feature.
+  # se regelen «Søker med tilbudsgaranti får tilbud uavhengig av poengsum» under.
   #
   # Kilde: tasks/opptak/plasstildeling/design.md (prinsipp 1–3, rundetyper, del 2), oppgave.md (oppgave 5),
   # Confluence «2026-09-08 Raffinering plasstildeling», «Fra saksbehandling til plasstildeling»,
@@ -67,6 +66,14 @@ Egenskap: Gjennomføre plasstildeling
       Når plasstildelingen gjennomføres
       Så prøves søkeren først i utdanningskvoten "Førstegangsvitnemål"
       Og deretter i utdanningskvoten "Ordinær"
+
+    # Flyttet hit 2026-10-19 fra 11 Opprette og vedlikeholde opptak/03 Innstillinger/sette_kvoteprioritet.feature.
+    # Kvoteprioriteten settes på opptaket, og lavest tall er høyest prioritet.
+    Scenario: Lavest tall gir høyest prioritet
+      Gitt at kvoteprioriteten for opptaket er 2 for "Førstegangsvitnemål (ORDF)" og 3 for "Ordinær kvote (ORD)"
+      Og at søkeren "Kari Nordmann" konkurrerer i begge kvotene og har nok poeng til tilbud i begge på "Sykepleie, høst 2027"
+      Når plasstildelingen gjennomføres
+      Så får søkeren tilbud i "Førstegangsvitnemål (ORDF)"
 
     Scenario: Tilbud i én utdanningskvote gir bortfall i de andre på samme utdanningstilbud
       Gitt at søkeren "Kari Nordmann" er kvalifisert i både "Førstegangsvitnemål" og "Ordinær" på "Sykepleie, høst 2027"
@@ -140,7 +147,10 @@ Egenskap: Gjennomføre plasstildeling
   Regel: Poenglikhetsregelen avgjør rekkefølgen ved lik poengsum
 
     # Standard poenglikhetsregel settes på opptaket, se 11 Opprette og vedlikeholde opptak/03 Innstillinger/innstillinger.feature.
-    # Lærestedet kan bare velge «alle med samme sum får tilbud» som unntak. Strengere regler er ikke lov.
+    # I samordna opptak 2027 skal lærestedet bare kunne velge «alle med samme sum får tilbud» som unntak.
+    # AVKLART 2026-10-19 (produkteier): Det er behovet i samordna opptak nå. Kravet beskriver hva som skal være
+    # mulig: opptaksforvalter bestemmer hvilke regler som er tilgjengelige som unntak, og har ansvaret for at
+    # det registreres riktig.
     # AVKLART 2026-10-14: Bare «Alle med samme sum får tilbud» gir hele gruppen på grensen tilbud.
     # Gap mot koden (A4): i dag får hele gruppen alltid tilbud, uansett poenglikhetsregel.
     # AVKLART 2026-10-14: Underrepresentert kjønn skal støttes, også sammen med alder og loddtrekning.
@@ -187,7 +197,7 @@ Egenskap: Gjennomføre plasstildeling
     # AVKLART 2026-10-14: Plasstildelingen bryr seg ikke om hvem som satte tilbudsgarantien, bare om den er
     # satt. Den tar bare hensyn til tilbudsgarantier som gir tilbud, altså der søkeren skal ha plass der
     # tilbudsgarantien er gitt. Hvem som kan sette tilbudsgaranti, og typene, står i
-    # 13 Søknad og saksbehandling/02 Behandling/gi_tilbudsgaranti_ved_tidlig_opptak.feature.
+    # 13 Søknad og saksbehandling/02 Behandling/gi_tilbudsgaranti.feature.
     # Gap mot koden («Fra saksbehandling til plasstildeling», kap. 2–3 og D4): tilbudsgaranti fra
     # saksbehandlingen når ikke plasstildelingen, og en søknad uten poengsum kommer ikke med i grunnlaget.
     Scenario: Tilbudsgaranti uten poengsum

@@ -21,7 +21,7 @@ Egenskap: Aktivere og deaktivere en personbrukers samlede tilganger
       Og personbrukeren kan ikke nå FS-data ved neste innloggingsforsøk
       Og det lagres når deaktiveringen skjedde og hvem som gjorde den
 
-    @planned
+    @planned @scope-grunnleggende-brukeradministrasjon
     Scenario: Reaktivere en deaktivert personbruker
       Gitt en personbruker er deaktivert
       Når jeg reaktiverer personbrukeren

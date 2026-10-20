@@ -9,7 +9,8 @@
 # som «ikke helt riktig», og går foran den der de sier ulikt.
 #
 # Tidlig opptak er én av flere typer tilbudsgaranti. Generell håndtering av
-# tilbudsgaranti hører til Jira STEK-241 «Tilbudsgaranti», se også
+# tilbudsgaranti står i gi_tilbudsgaranti.feature (OPT-BEH-BEH-010), og hører
+# til Jira STEK-241 «Tilbudsgaranti», se også
 # Confluence PFS 3885400152 «Tilbudsgaranti».
 #
 # Vurderingen og konklusjonen står i vurdere_søknad_om_tidlig_opptak.feature.
@@ -54,10 +55,9 @@
 #   ganger. En ny gjennomføring fjerner ingen tilbudsgarantier. (Endret
 #   09.10.2026: det er ingen publiseringsdato. Gjennomføringen publiserer svaret
 #   til søkerne, men prøvekjøringen gjør det ikke.)
-# - En behandler med T-rolle kan sette tilbudsgaranti manuelt uten betingelser.
-#   (Utvidet 08.10.2026: også B-rolle og F-rolle kan sette tilbudsgaranti, se under.)
-#   Det gjelder også når søkeren ikke deltar i tidligopptaket, og det er slik
-#   feil rettes etter at tidligopptaket er gjennomført.
+# - Manuell tilbudsgaranti står i gi_tilbudsgaranti.feature (OPT-BEH-BEH-010).
+#   Den krever ikke at søkeren deltar i tidligopptaket, og det er slik feil
+#   rettes etter at tidligopptaket er gjennomført.
 #
 # AVKLART I JIRA (lagt inn 07.10.2026)
 #
@@ -88,18 +88,10 @@
 #   søknadsalternativet fjernes. Har den første gjennomføringen overskrevet en
 #   annen kode, f.eks. en negativ garanti fra opptaksforvalter eller en
 #   reservasjon, går den koden tapt. Det er akseptert.)
-# - Tilbudsgarantien faller bort når søkeren fjerner søknadsalternativet eller
-#   trekker søknaden. Legger søkeren søknadsalternativet inn igjen før
-#   søknadsfristen for opptaket, gjelder tilbudsgarantien igjen, uansett
-#   prioritet (prioriteten er endret 08.10.2026, se under).
-# - Tilbudsgarantien følger søknadsalternativet, uansett prioritet. Den faller
-#   ikke bort når søkeren flytter søknadsalternativet ned, eller når et nytt
-#   søknadsalternativ legges over. Garantien betyr at søkeren aldri blir forbigått
-#   på søknadsalternativet: søkeren får tilbud der, uansett poeng, med mindre
-#   søkeren når opp på et søknadsalternativ med høyere prioritet. Prioriteten
-#   avgjør hvilket tilbud søkeren får, ikke om garantien gjelder. Det samme
-#   gjelder når søkeren legger søknadsalternativet inn igjen før søknadsfristen.
-#   Dette erstatter regelen fra 25.09 om samme prioritet, og stemmer med koden.
+# - At tilbudsgarantien følger søknadsalternativet uansett prioritet, faller bort
+#   når søknadsalternativet fjernes, og gjelder igjen når det legges inn igjen før
+#   søknadsfristen, står i gi_tilbudsgaranti.feature (OPT-BEH-BEH-010). Det gjelder
+#   også tilbudsgarantien fra tidligopptaket.
 #
 # AVKLART 08.10.2026 (etter review fra fagperson i STEK-269)
 #
@@ -127,9 +119,6 @@
 #   med reservert studieplass (RSO eller RES) også når søkeren ikke er kvalifisert, eller
 #   kvalifiseringen ikke er vurdert. Fagperson avklarte dette, men har sendt spørsmålet
 #   videre til en annen domeneekspert, så avklaringen er foreløpig.
-# - Alle tre rollene (B-rolle, T-rolle og F-rolle) kan sette tilbudsgaranti manuelt,
-#   hver med sitt eget sett med tilbudsgarantityper (domeneekspert, med henvisning til
-#   Confluence OP «Tilbudsgaranti»). Det stemmer med STEK-270/262 og koden.
 # - Manuell tilbudsgaranti har ingen betingelser knyttet til tidlig opptak, heller
 #   ikke for typer som gjelder tidlig opptak. Tilbudsgaranti er generell, og gis av
 #   flere grunner enn tidlig opptak. Betingelsen fra dagens løsning (tidligsvar bare
@@ -381,119 +370,16 @@ Egenskap: Gi tilbudsgaranti ved tidlig opptak
       Så får ingen søkere tilbudsgaranti
       Og opptaksforvalter ser at tilbudsgarantitypen for tidlig opptak mangler eller er tvetydig
 
-  # Tre roller kan sette tilbudsgaranti manuelt, hver i sitt eget felt og med sitt eget
-  # sett med tilbudsgarantityper (avklart med domeneekspert 08.10.2026, se Confluence OP
-  # «Tilbudsgaranti»). Hvilke typer en rolle kan bruke, står på tilbudsgarantitypen i
-  # opptakets kodeverk.
-  #
-  # - B-rolle: saksbehandler ved organisasjonen som behandler saken.
-  #   Eksempler fra dagens løsning: etter klage, reservert plass.
-  # - T-rolle: tilbyder, organisasjonen som tilbyr utdanningstilbudet.
-  #   Eksempler: særskilt vurdering, tidligsvar (forhåndsopptak).
-  # - F-rolle: opptaksforvalter ved organisasjonen som eier opptaket.
-  #   Eksempler: etter telefonsamtale, forhåndsløfte.
-  Regel: Behandler, tilbyder og opptaksforvalter kan sette tilbudsgaranti manuelt
-
-    Scenariomal: Sette tilbudsgaranti i feltet for rollen
-      Gitt behandleren har <rolle>
-      Og tilbudsgarantitypen "<type>" kan brukes av <rolle>
-      Når behandleren setter tilbudsgarantien "<type>" på "Sykepleie, høst 2027"
-      Så har søkeren tilbudsgarantien "<type>" fra <rolle> på "Sykepleie, høst 2027"
-
-      Eksempler:
-        | rolle   | type                                     |
-        | B-rolle | Tilbudsgaranti innvilges etter klage     |
-        | T-rolle | Tilbudsgaranti, særskilt vurdering       |
-        | F-rolle | Tilbudsgaranti gitt etter telefonsamtale |
-
-    Scenario: Bare tilbudsgarantitypene for rollen kan velges
-      Gitt behandleren har B-rolle
-      Og tilbudsgarantitypen "Tilbudsgaranti, særskilt vurdering" kan bare brukes av T-rolle
-      Når behandleren skal sette tilbudsgaranti på "Sykepleie, høst 2027"
-      Så kan ikke behandleren velge "Tilbudsgaranti, særskilt vurdering"
-
-    Scenario: Behandler ser ikke muligheten til å sette tilbudsgaranti for en rolle behandleren ikke har
-      Gitt behandleren har B-rolle
-      Og behandleren har ikke T-rolle eller F-rolle
-      Når behandleren ser på "Sykepleie, høst 2027" i saken
-      Så ser behandleren muligheten til å sette tilbudsgaranti fra B-rolle
-      Men behandleren ser ikke muligheten til å sette tilbudsgaranti fra T-rolle eller F-rolle
-
-    Scenario: Se tilbudsgarantiene fra alle rollene
-      Gitt søkeren har følgende tilbudsgarantier på "Sykepleie, høst 2027":
-        | rolle   | type                                     |
-        | B-rolle | Tilbudsgaranti innvilges etter klage     |
-        | F-rolle | Tilbudsgaranti gitt etter telefonsamtale |
-      Når behandleren ser på "Sykepleie, høst 2027" i saken
-      Så ser behandleren begge tilbudsgarantiene og hvilken rolle som har satt dem
-
-    Scenario: Sette tilbudsgaranti når søknaden ikke kan poengberegnes
-      Gitt behandleren har T-rolle
-      Og søknaden kan ikke poengberegnes
-      Når behandleren setter tilbudsgaranti på "Sykepleie, høst 2027"
-      Så har søkeren tilbudsgaranti på "Sykepleie, høst 2027"
+  # Manuell tilbudsgaranti fra behandler, tilbyder og opptaksforvalter, og at
+  # tilbudsgarantien følger søknadsalternativet, står i gi_tilbudsgaranti.feature
+  # (OPT-BEH-BEH-010). At tilbudsgarantien gir tilbud, dekkes av
+  # 14 Plasstildeling/03 Tildeling/gjennomføre_plasstildeling.feature. Reglene er flyttet
+  # 14.10.2026, fordi de gjelder alle tilbudsgarantier, ikke bare tidlig opptak
+  # (STEK-241, STEK-188).
+  Regel: Manuell tilbudsgaranti krever ikke deltakelse i tidligopptaket
 
     Scenario: Sette tilbudsgaranti når søkeren ikke deltar i tidligopptaket
       Gitt behandleren har T-rolle
       Og det er ikke konkludert med at søkeren deltar i tidligopptaket
       Når behandleren setter tilbudsgaranti på "Sykepleie, høst 2027"
       Så har søkeren tilbudsgaranti på "Sykepleie, høst 2027"
-
-  Regel: Tilbudsgarantien gjelder i hovedopptaket
-
-    Scenario: Tilbudsgarantien gir tilbud i hovedopptaket
-      Gitt søkeren har tilbudsgaranti på "Sykepleie, høst 2027" som prioritet 1
-      Når hovedopptaket kjøres
-      Så får søkeren tilbud på "Sykepleie, høst 2027"
-
-    Scenario: Søkeren får tilbud på et høyere prioritert søknadsalternativ
-      Gitt søkeren har tilbudsgaranti på "Sykepleie, høst 2027" som prioritet 2
-      Og søkeren når opp til "Historie, høst 2027" som prioritet 1 i hovedopptaket
-      Når hovedopptaket kjøres
-      Så får søkeren tilbud på "Historie, høst 2027"
-
-    Scenario: Søkeren blir ikke forbigått på søknadsalternativet med tilbudsgaranti
-      Gitt søkeren har tilbudsgaranti på "Sykepleie, høst 2027" som prioritet 2
-      Og søkeren når ikke opp til "Historie, høst 2027" som prioritet 1 i hovedopptaket
-      Og søkeren har færre poeng enn poenggrensen for "Sykepleie, høst 2027" i hovedopptaket
-      Når hovedopptaket kjøres
-      Så får søkeren tilbud på "Sykepleie, høst 2027"
-
-    Scenariomal: Tilbudsgarantien følger søknadsalternativet når prioriteten endres
-      Gitt søkeren har tilbudsgaranti på "Sykepleie, høst 2027" som prioritet 2
-      Når søkeren <endring>
-      Så har søkeren fortsatt tilbudsgaranti på "Sykepleie, høst 2027"
-
-      Eksempler:
-        | endring                                          |
-        | flytter "Sykepleie, høst 2027" til prioritet 1   |
-        | flytter "Sykepleie, høst 2027" til prioritet 3   |
-        | legger til "Historie, høst 2027" som prioritet 1 |
-
-    Scenariomal: Tilbudsgarantien faller bort når søknadsalternativet fjernes
-      Gitt søkeren har tilbudsgaranti på "Sykepleie, høst 2027" som prioritet 1
-      Når søkeren <handling>
-      Så har søkeren ikke lenger tilbudsgaranti på "Sykepleie, høst 2027"
-
-      Eksempler:
-        | handling                                    |
-        | fjerner "Sykepleie, høst 2027" fra søknaden |
-        | trekker søknaden                            |
-
-    # Dette er ett tilfelle av en generell oppførsel: å fjerne et søknadsalternativ
-    # eller trekke søknaden er en deaktivering, ikke en sletting (soknadsalternativ.slettet
-    # i koden), og saksbehandlingen gjelder igjen når søknadsalternativet legges inn
-    # igjen. Det finnes ikke noe generelt krav for den oppførselen ennå, f.eks. i
-    # 01 Søknad/trekke_søknad.feature eller prioritere_søknadsalternativer.feature
-    # (påpekt i review av PR #654, 09.10.2026).
-    Scenariomal: Tilbudsgarantien gjelder igjen når søknadsalternativet legges inn igjen før søknadsfristen
-      Gitt søknadsfristen for opptaket er "2027-04-15 23:59"
-      Og søkeren hadde tilbudsgaranti på "Sykepleie, høst 2027" som prioritet 1
-      Og søkeren fjernet "Sykepleie, høst 2027" fra søknaden "2027-04-01"
-      Når søkeren legger inn "Sykepleie, høst 2027" igjen som prioritet <prioritet> "2027-04-08"
-      Så har søkeren tilbudsgaranti på "Sykepleie, høst 2027" igjen
-
-      Eksempler:
-        | prioritet |
-        | 1         |
-        | 2         |

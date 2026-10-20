@@ -96,6 +96,19 @@ Egenskap: Listevisning og søk i personbrukere
       Når jeg velger en hjemorganisasjon som filter
       Så vises kun personbrukere med den valgte hjemorganisasjonen
 
+    @planned @scope-restanser-etter-onboarding
+    Scenario: Hjemorganisasjonene i filteret vises med akronym
+      Gitt jeg ser listen over personbrukere
+      Når jeg åpner hjemorganisasjonsfilteret
+      Så vises akronymet under navnet på hver hjemorganisasjon
+      Men organisasjonskoden vises når hjemorganisasjonen ikke har akronym
+
+    @planned @scope-restanser-etter-onboarding
+    Scenario: Søke i hjemorganisasjonsfilteret
+      Gitt jeg ser listen over personbrukere
+      Når jeg skriver inn tekst i hjemorganisasjonsfilteret
+      Så viser hjemorganisasjonsfilteret bare hjemorganisasjonene der navnet eller akronymet inneholder den innskrevne teksten
+
     Scenario: Tilgjengelige roller i filter
       Gitt jeg ser listen over personbrukere
       Når jeg åpner rollefilteret
@@ -123,7 +136,7 @@ Egenskap: Listevisning og søk i personbrukere
       Så ser jeg personbrukeren i listen
       Og jeg ser personbrukeren uavhengig av hvilket miljø administrasjonsrettigheten min gjelder for
 
-    @deprecated
+    @deprecated @scope-synlighet-og-gjelder-for
     Scenario: Brukeradministrator ser personbrukere med datatilgang fra egne organisasjoner
       Gitt jeg har brukeradministrator-rollen for én eller flere organisasjoner
       Og en personbruker har hjemorganisasjon utenfor de organisasjonene jeg administrerer
@@ -141,7 +154,7 @@ Egenskap: Listevisning og søk i personbrukere
       Så ser jeg personbrukeren i listen
       Og hjemorganisasjonen som vises er personbrukerens egen
 
-    @deprecated
+    @deprecated @scope-synlighet-og-gjelder-for
     Scenario: Personbrukere uten tilknytning til egne organisasjoner er ikke synlige
       Gitt jeg har brukeradministrator-rollen for én eller flere organisasjoner
       Og en personbruker har hjemorganisasjon utenfor de organisasjonene jeg administrerer
@@ -149,7 +162,7 @@ Egenskap: Listevisning og søk i personbrukere
       Når jeg åpner brukeroversikten
       Så ser jeg ikke personbrukeren i listen
 
-    @deprecated
+    @deprecated @scope-synlighet-og-gjelder-for
     Scenario: Personbrukere med kun inaktiv datatilgang fra egne organisasjoner er ikke synlige
       Gitt jeg har brukeradministrator-rollen for én eller flere organisasjoner
       Og en personbruker har hjemorganisasjon utenfor de organisasjonene jeg administrerer
@@ -157,7 +170,7 @@ Egenskap: Listevisning og søk i personbrukere
       Når jeg åpner brukeroversikten
       Så ser jeg ikke personbrukeren i listen
 
-    @planned
+    @planned @scope-synlighet-og-gjelder-for
     Scenario: Personbrukere med annen hjemorganisasjon er ikke synlige uten aktiv rolle i organisasjonene jeg administrerer
       Gitt jeg har brukeradministrator-rollen for én eller flere organisasjoner
       Og en personbruker har hjemorganisasjon utenfor organisasjonene jeg administrerer
@@ -165,7 +178,7 @@ Egenskap: Listevisning og søk i personbrukere
       Når jeg åpner brukeroversikten
       Så ser jeg ikke personbrukeren i listen
 
-    @deprecated
+    @deprecated @scope-synlighet-og-gjelder-for
     Scenario: Personbrukere med datatilgang i et miljø jeg ikke administrerer er ikke synlige
       Gitt jeg har brukeradministrator-rollen for en organisasjon i ett miljø
       Og en personbruker har hjemorganisasjon utenfor de organisasjonene jeg administrerer

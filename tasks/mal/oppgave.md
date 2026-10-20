@@ -9,7 +9,7 @@ Oppgaver i et scope opprettes med fs-scope. Uten scope skriver fs-specify og «+
 
 ## Metadata
 
-- **Issue**: [sikt-no/fs#NNNN](https://github.com/sikt-no/fs/issues/NNNN)
+- **Issue**: [BAT-NNNN](https://sikt.atlassian.net/browse/BAT-NNNN) (Jira-saken, se [`../README.md`](../README.md#forholdet-til-jira-og-github))
 - **Initiativ**: #NNN (hvis aktuelt)
 - **Domene**: <domene> (se [`../../README.md`](../../README.md#domener))
 - **Slug**: <slug> (= navnet på denne mappa)

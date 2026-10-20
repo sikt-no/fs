@@ -2,7 +2,7 @@
 # GitHub: #439
 @BRU-APP-API-002 @must @implemented
 Egenskap: Se detaljer for applikasjon
-  Som bruker
+  Som bruker med en rolle som gir tilgang til applikasjoner
   ønsker jeg å se detaljer for en applikasjon, organisert i logiske datagrupper,
   slik at jeg har oversikt over applikasjonen.
 
@@ -27,29 +27,25 @@ Egenskap: Se detaljer for applikasjon
         | Sist endret av             |
         | Tidspunkt for sist endring |
 
-    @deprecated
+    @deprecated @scope-applikasjoner-etter-design-review
     Scenario: Se ekstern ID fra identitetsleverandør
       Gitt applikasjonen har en ekstern ID fra identitetsleverandøren
       Så ser jeg den eksterne ID-en
 
-    @in-progress
+    @in-progress @scope-applikasjoner-etter-design-review
     Scenario: Se Tjeneste-ID for Feide-applikasjon
       Gitt applikasjonen har Feide som identitetsleverandør
       Så ser jeg applikasjonens Tjeneste-ID
 
-    @in-progress
+    @in-progress @scope-applikasjoner-etter-design-review
     Scenario: Se Client-ID for Maskinporten-applikasjon
       Gitt applikasjonen har Maskinporten som identitetsleverandør
       Så ser jeg applikasjonens Client-ID
 
-    @in-progress
+    @in-progress @scope-applikasjoner-etter-design-review
     Scenario: Se brukernavn for FS-applikasjon
       Gitt applikasjonen har FS som identitetsleverandør
       Så ser jeg applikasjonens brukernavn
-
-    @deprecated
-    Scenario: Se intern ID
-      Så ser jeg applikasjonens interne ID
 
   Regel: Detaljer kan redigeres direkte fra detaljer-fanen
 

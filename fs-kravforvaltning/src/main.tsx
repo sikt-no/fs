@@ -17,6 +17,8 @@ import { UpdateToast } from './UpdateToast';
 import { updateToastShown } from '../shared/appUpdate';
 import { MarkdownView, type MdMode } from './MarkdownView';
 import { Tavle } from './Tavle';
+import { TaskBackBar } from './TaskBackBar';
+import type { KravFrom } from './TaskDetail';
 import { buildBoard, handoffPrompt, taskColOf, verifyPrompt, type Card } from './specboard';
 import { normalizeHash, parseTavleHash, splitSel, tavleHash } from './tavleHash';
 import { verifyKravPrompt, type VerifyScope } from './verifyPrompt';
@@ -159,6 +161,8 @@ function App() {
     fromHash() === 'avvik' ? 'avvik' : parseOppgaverHash(fromHash()) ? 'oppgaver' : 'krav',
   );
   const [tavleSel, setTavleSel] = useState<string | null>(() => parseOppgaverHash(fromHash())?.sel ?? null);
+  // Oppgaven et krav ble åpnet fra på tavla, til båndet «← <oppgave>» i Krav
+  const [kravFrom, setKravFrom] = useState<KravFrom | null>(null);
   const [tasksSnap, setTasksSnap] = useState<TasksSnapshot>(initialTasks ?? { domains: {}, tasks: [] });
   const [avvikFilter, setAvvikFilter] = useState<Filter>(NO_FILTER);
   const [fixMsg, setFixMsg] = useState<string | null>(null);
@@ -245,6 +249,10 @@ function App() {
   }, [current]);
   // Husk hvor brukeren er, til neste gang vieweren åpnes uten hash
   useEffect(() => save('hash', location.hash), [current, mode, tavleSel]);
+  // Tilbake på tavla trengs ikke båndet lenger
+  useEffect(() => {
+    if (mode === 'oppgaver') setKravFrom(null);
+  }, [mode]);
 
   // Følg markøren i VS Code: scroll til regelen/scenarioet som inneholder linjen
   useEffect(() => {
@@ -725,7 +733,10 @@ function App() {
             editable={EDITABLE}
             sel={tavleSel}
             onSel={selectTavle}
-            onOpenKrav={path => select(path)}
+            onOpenKrav={(path, from) => {
+              setKravFrom(from);
+              void select(path);
+            }}
             me={me}
             actions={{
               execute: claude?.available ? execute : null,
@@ -771,6 +782,16 @@ function App() {
                 if (focus && !(e.target as Element).closest('.card')) setFocus(null);
               }}
             >
+              {kravFrom && kravFrom.paths.includes(current) && prFor === false && !editing && (
+                <TaskBackBar
+                  from={kravFrom}
+                  onBack={() => {
+                    setTavleSel(kravFrom.sel);
+                    setMode('oppgaver');
+                    history.pushState(null, '', tavleHash(kravFrom.sel));
+                  }}
+                />
+              )}
               {prFor !== false && git ? (
                 <PrDialog key={prSeq} git={git} entries={entries} preselect={prFor ?? undefined} onClose={() => setPrFor(false)} />
               ) : editing && current ? (

@@ -70,22 +70,6 @@ Egenskap: Håndtere svar fra søker
       Og svarfristen for "Etterfylling" er ute
       Så blir tilbudet på "Vernepleie, høst 2027" ledig i neste plasstildeling
 
-    # AVKLART 2026-10-14 (domeneekspert): Uansett runde kan søkeren bare takke ja til ett tilbud i samordna opptak.
-    # Antallet settes på opptaket, se 11 Opprette og vedlikeholde opptak/03 Innstillinger/innstillinger.feature.
-    # Svarflyten for søkeren står i 13 Søknad og saksbehandling/01 Søknad/svare_på_tilbud.feature.
-    Scenariomal: Søkeren kan bare takke ja til ett tilbud
-      Gitt at opptaket tillater at en søker takker ja til 1 tilbud
-      Og at søkeren har tilbud på både "Sykepleie, høst 2027" og "Vernepleie, høst 2027" etter "<plasstildelingsrunde>"
-      Og at søkeren har takket ja til tilbudet på "Sykepleie, høst 2027"
-      Når søkeren vil takke ja til tilbudet på "Vernepleie, høst 2027"
-      Så kan søkeren ikke ha takket ja til begge tilbudene
-
-      Eksempler:
-        | plasstildelingsrunde |
-        | Hovedrunde           |
-        | Suppleringsrunde     |
-        | Etterfylling         |
-
 # ÅPNE SPØRSMÅL:
 # - Skal en søker som takker ja og trekker seg etter svarfristen (svaret blir GODTATT_MEN_ANNULLERT), frigjøre
 #   plassen til ventelisten? I dag frigjøres den aldri. Hva hvis søkeren allerede er opprettet som student?

@@ -2,7 +2,7 @@
 # GitHub: #438, #448, #449
 @BRU-APP-API-001 @must @implemented
 Egenskap: Listevisning og søk i applikasjoner
-  Som bruker
+  Som bruker med en rolle som gir tilgang til applikasjoner
   ønsker jeg en oversikt over applikasjoner jeg har tilgang til, med mulighet for søk og filtrering
   slik at jeg raskt kan finne og følge opp riktig applikasjon.
 
@@ -13,7 +13,7 @@ Egenskap: Listevisning og søk i applikasjoner
 
   Regel: Liste over alle applikasjoner (K1)
 
-    @deprecated
+    @deprecated @scope-applikasjoner-etter-design-review
     Scenario: Se liste over applikasjoner
       Når jeg åpner applikasjonsoversikten
       Så ser jeg en liste over alle applikasjoner
@@ -27,7 +27,7 @@ Egenskap: Listevisning og søk i applikasjoner
         | Antall tilganger|
         | Status          |
 
-    @in-progress
+    @in-progress @scope-applikasjoner-etter-design-review
     Scenario: Se liste over applikasjoner
       Når jeg åpner applikasjonsoversikten
       Så ser jeg en liste over alle applikasjoner
@@ -78,7 +78,7 @@ Egenskap: Listevisning og søk i applikasjoner
       Når jeg velger en applikasjon
       Så ser jeg detaljsiden for valgt applikasjon
 
-    @deprecated
+    @scope-applikasjoner-etter-design-review
     Scenario: Listen inkluderer eksisterende FS-applikasjoner
       Når jeg åpner applikasjonsoversikten
       Så ser jeg også applikasjoner med FS som identitetsleverandør
@@ -114,12 +114,25 @@ Egenskap: Listevisning og søk i applikasjoner
       Og organisasjonene er sortert alfabetisk
       Og "Alle applikasjonseiere" er valgt som standard
 
+    @planned @scope-restanser-etter-onboarding
+    Scenario: Applikasjonseierne i filteret vises med akronym
+      Gitt jeg ser listen over applikasjoner
+      Når jeg åpner applikasjonseier-filteret
+      Så vises akronymet under navnet på hver organisasjon
+      Men organisasjonskoden vises når organisasjonen ikke har akronym
+
+    @planned @scope-restanser-etter-onboarding
+    Scenario: Søke i applikasjonseier-filteret
+      Gitt jeg ser listen over applikasjoner
+      Når jeg skriver inn tekst i applikasjonseier-filteret
+      Så viser applikasjonseier-filteret bare organisasjonene der navnet eller akronymet inneholder den innskrevne teksten
+
     Scenario: Filtrere på applikasjonseier
       Gitt jeg ser listen over applikasjoner
       Når jeg velger en applikasjonseier som filter
       Så vises kun applikasjoner som eies av den valgte organisasjonen
 
-    @in-progress
+    @in-progress @scope-applikasjoner-etter-design-review
     Scenario: Tilgjengelige identitetsleverandører i filter
       Gitt jeg ser listen over applikasjoner
       Når jeg åpner identitetsleverandørfilteret
@@ -131,7 +144,7 @@ Egenskap: Listevisning og søk i applikasjoner
         | FS (Maskinbruker)           |
       Og "Alle identitetsleverandører" er valgt som standard
 
-    @in-progress
+    @in-progress @scope-applikasjoner-etter-design-review
     Scenario: Filtrere på identitetsleverandør
       Gitt jeg ser listen over applikasjoner
       Når jeg velger en identitetsleverandør som filter
@@ -165,7 +178,7 @@ Egenskap: Listevisning og søk i applikasjoner
 
   Regel: Synlighet via administrasjonsrettigheter (K11, K12)
 
-    Scenario: Applikasjonsadministrator ser applikasjoner fra egne organisasjoner
+    Scenario: Applikasjonsadministrator ser applikasjoner fra organisasjonene jeg administrerer
       Gitt jeg har applikasjonsadministrator-rollen for én eller flere organisasjoner
       Når jeg åpner applikasjonsoversikten
       Så ser jeg applikasjoner tilknyttet de organisasjonene jeg administrerer
@@ -176,11 +189,11 @@ Egenskap: Listevisning og søk i applikasjoner
       Når jeg åpner applikasjonsoversikten
       Så ser jeg organisasjonens applikasjoner i alle miljøene de er aktive i
 
-    Scenario: Applikasjonsadministrator ser også applikasjoner med tilganger i egne organisasjoner
+    Scenario: Applikasjonsadministrator ser også applikasjoner med tilganger til data i organisasjonene jeg administrerer
       Gitt jeg har applikasjonsadministrator-rollen for én eller flere organisasjoner
-      Og en applikasjon tilhører en annen organisasjon, men har tilganger som gir tilgang til data i en av mine organisasjoner
+      Og en applikasjon tilhører en annen organisasjon, men har tilganger som gir tilgang til data i en av organisasjonene jeg administrerer
       Når jeg åpner applikasjonsoversikten
-      Så ser jeg denne applikasjonen i listen
+      Så ser jeg applikasjonen i listen
       Og det fremgår hvilken organisasjon applikasjonen tilhører
 
     Scenario: Super-applikasjonsadministrator ser alle applikasjoner

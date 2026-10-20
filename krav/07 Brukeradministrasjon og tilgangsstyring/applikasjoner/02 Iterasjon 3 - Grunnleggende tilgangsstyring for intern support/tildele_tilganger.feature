@@ -40,6 +40,17 @@ Egenskap: Tildele tilganger til en applikasjon
       Når jeg åpner valglisten for organisasjon
       Så ser jeg kun organisasjoner jeg har applikasjonsadministrator-rollen for
 
+    Scenario: Organisasjonene i valglisten vises med akronym
+      Gitt jeg har tilgang til flere organisasjoner
+      Når jeg åpner valglisten for organisasjon
+      Så vises akronymet under navnet på hver organisasjon
+      Men bare navnet vises når organisasjonen ikke har akronym
+
+    Scenario: Søke i valglisten for organisasjon
+      Gitt jeg har tilgang til flere organisasjoner
+      Når jeg skriver inn tekst i valglisten for organisasjon
+      Så viser valglisten bare organisasjonene der navnet eller akronymet inneholder den innskrevne teksten
+
   Regel: En applikasjon kan ha tilganger i flere miljøer
 
     Scenario: Tildeling i nytt miljø gjør applikasjonen aktiv i miljøet
