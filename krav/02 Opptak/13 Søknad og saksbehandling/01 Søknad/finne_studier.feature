@@ -125,13 +125,13 @@ Egenskap: Listevisning og søk i utdanningstilbud
       Når søkeren søker med fritekst på "Bergen"
       Så filtreres listen til utdanningstilbud der navnet, lærestedet eller studiestedet matcher søket
 
-    Scenario: Fritekst-søk på stikkord
-      # Stikkordene settes av opptaksforvalter (opptaksinnstillinger_utdanningstilbud.feature).
-      Gitt at utdanningstilbudet "Profesjonsstudiet i medisin, høst 2027" har stikkordet "lege"
+    Scenario: Fritekst-søk på søkeord
+      # Søkeordene settes av opptaksforvalter (@OPT-OPT-UTD-017, angi_søkeord.feature).
+      Gitt at utdanningstilbudet "Profesjonsstudiet i medisin, høst 2027" har søkeordet "lege"
       Når søkeren søker med fritekst på "lege"
       Så vises utdanningstilbudet "Profesjonsstudiet i medisin, høst 2027" i listen
 
-    Scenario: Treff som matcher flest søkeord, vises først
+    Scenario: Treff som matcher flest ord i søket, vises først
       Når søkeren søker med fritekst på "sykepleie Bergen"
       Så vises utdanningstilbud som matcher både "sykepleie" og "Bergen" før utdanningstilbud som bare matcher ett av ordene
 
