@@ -370,7 +370,8 @@ Egenskap: Gi tilbudsgaranti ved tidlig opptak
       Så får de 12 søkerne tilbudsgaranti på "Sykepleie, høst 2027"
       Og opptaksforvalter får varsel om at tilbudsgarantiene overskrider kvoten for "Sykepleie, høst 2027"
 
-    # Avklart 20.10.2026. Koden teller bare tilbudsgarantiene som settes i kjøringen, og må endres.
+    # Avklart 20.10.2026. Koden teller bare tilbudsgarantiene som settes i kjøringen, og må endres
+    # (STEK-623).
     Scenario: Kvotevarselet tar med tilbudsgarantier fra en tidligere gjennomføring
       Gitt "Sykepleie, høst 2027" har 10 plasser i kvoten tilbudsgarantiene tas fra
       Og 8 søkere fikk tilbudsgaranti på "Sykepleie, høst 2027" da tidligopptaket ble gjennomført

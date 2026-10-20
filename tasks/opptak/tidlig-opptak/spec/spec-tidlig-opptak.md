@@ -82,7 +82,7 @@ Det som gjenstår i backend:
 
 ### Avvik der koden skal endres
 
-- `@OPT-BEH-BEH-007` (avklart 2026-10-20): kvotevarselet skal regne med alle tilbudsgarantiene fra tidligopptaket på utdanningstilbudet, også dem fra en tidligere gjennomføring. Koden teller bare tilbudsgarantiene som settes i kjøringen. En garanti som står fra før (`ALLEREDE_SATT_POSITIV`), telles ikke (`TidligopptakTilbudsgarantiService.java:966-968, 1163-1166`). Nytt scenario «Kvotevarselet tar med tilbudsgarantier fra en tidligere gjennomføring».
+- `@OPT-BEH-BEH-007` (avklart 2026-10-20): kvotevarselet skal regne med alle tilbudsgarantiene fra tidligopptaket på utdanningstilbudet, også dem fra en tidligere gjennomføring. Koden teller bare tilbudsgarantiene som settes i kjøringen. En garanti som står fra før (`ALLEREDE_SATT_POSITIV`), telles ikke (`TidligopptakTilbudsgarantiService.java:966-968, 1163-1166`). Nytt scenario «Kvotevarselet tar med tilbudsgarantier fra en tidligere gjennomføring». Jira: STEK-623.
 
 ### Avvik som må avklares
 
@@ -169,7 +169,7 @@ Kravene er `@in-progress`, og endres på stedet. Endringene står her, så den s
 - **2026-10-20, `@OPT-BEH-BEH-013`:** Avklaringen fra 08.10 om at saksbehandleren bare kan konkludere når søkeren har søkt, krever ikke lenger at koden avviser en konklusjon i andre saker. Det holder at steget er skjult når søkeren ikke har søkt (avklart 09.10), og at gjennomføringen bare tar med søkere som har søkt. Ingen scenarioer er endret.
 - **2026-10-20, `@OPT-SØK-SØK-012`:** Nytt scenario «Poengsum og poenggrense vises ikke når søkeren ikke er kvalifisert», som i koden (STEK-582). At API-et gir poengene også når søkeren er innvilget, er ikke et avvik: kravet gjelder hva søkeren ser, og Min kompetanse må skjule dem.
 - **2026-10-20, `@OPT-BEH-BEH-007`:** I «Se utfallet for hver søker» ser opptaksforvalter antall søknadsalternativer per utfall, og antall tilbudsgarantier per behandlende organisasjon og per utdanningstilbud, ikke antall søkere. Utfallet hører til søknadsalternativet, så antall søkere per utfall er ikke godt definert. Som i koden.
-- **2026-10-20, `@OPT-BEH-BEH-007`:** Nytt scenario «Kvotevarselet tar med tilbudsgarantier fra en tidligere gjennomføring»: varselet regner med alle tilbudsgarantiene fra tidligopptaket på utdanningstilbudet. Koden teller bare dem som settes i kjøringen, og må endres (se _Kodesjekk_).
+- **2026-10-20, `@OPT-BEH-BEH-007`:** Nytt scenario «Kvotevarselet tar med tilbudsgarantier fra en tidligere gjennomføring»: varselet regner med alle tilbudsgarantiene fra tidligopptaket på utdanningstilbudet. Koden teller bare dem som settes i kjøringen, og må endres (STEK-623, se _Kodesjekk_).
 - **2026-10-20, `@OPT-SØK-SØK-012`:** Ny regel «Svaret på tidlig opptak vises fram til hovedopptaket er publisert», med scenarioet «Svaret på tidlig opptak vises ikke etter at hovedopptaket er publisert», som i koden. Avklaringen fra 08.10 om et fjernet søknadsalternativ sier nå at søkeren ikke ser noe svar på det, og viser til `@OPT-BEH-BEH-010`. Kommentaren om tilbudsgaranti fra tilbyder sier at en FOP vises som innvilget.
 
 ## Åpne spørsmål
