@@ -100,6 +100,7 @@ Hvis en ny sub-domene eller kapabilitet må opprettes, bekreft navnet med bruker
 Før du skriver nye scenarios, les:
 
 - **Relaterte feature-filer** i samme kapabilitet/sub-domene for å unngå duplisering og matche stil
+- **Krav i andre mapper som kravet bygger på eller henviser til**, og kravene som refererer til dem (`Grep "@(depends-on|ref)-<ID>"` i `krav/`). De blir referanser i det nye kravet, se *Referanser mellom krav* under
 - **Eksisterende step-definisjoner** i `tester/steps/**/*.ts` for å se hvilke Gherkin-fraser som allerede er implementert — gjenbruk dem når det passer
 - **Domenets begrepsliste** (se *Terminologi* i `krav/README.md`), hvis den finnes
 
@@ -154,7 +155,7 @@ Bruk `Regel:` for å gruppere relaterte scenarios under forretningsregler.
 
 Bekreft samlet innhold med brukeren før du skriver til disk.
 
-Feature-ID settes som tag på filen: `@DOM-SUB-KAP-NNN` (3-bokstavs forkortelser for domene/sub-domene/kapabilitet, utledet fra mappenavn, pluss neste ledige løpenummer). Tag-linja er alltid `@DOM-SUB-KAP-NNN @<moscow> @draft`. Skrives kravet i et scope, får det scope-taggen sist: `@DOM-SUB-KAP-NNN @<moscow> @draft @scope-<slug>`. I en skjelett-fil står tag-linja fra før, og endres ikke.
+Feature-ID settes som tag på filen: `@DOM-SUB-KAP-NNN` (3-bokstavs forkortelser for domene/sub-domene/kapabilitet, utledet fra mappenavn, pluss neste ledige løpenummer). Tag-linja er alltid `@DOM-SUB-KAP-NNN @<moscow> @draft`. Skrives kravet i et scope, får det scope-taggen sist: `@DOM-SUB-KAP-NNN @<moscow> @draft @scope-<slug>`. I en skjelett-fil står tag-linja fra før, og endres ikke, bortsett fra at referanser kan legges til sist. Referanser til andre krav (`@depends-on-<ID>`, `@ref-<ID>`) står på delen de gjelder, se *Referanser mellom krav* under.
 
 Når du legger til en ny `Regel:` eller et nytt scenario i en fil som allerede er `@planned`/`@in-progress`, tagges den nye delen `@draft @openquestion` til den er validert, med mindre brukeren eksplisitt sier at den er klar. Er fila `@implemented`, følg modus D (*Endre levert krav*): leverte deler endres ikke på stedet.
 
@@ -198,6 +199,8 @@ Egenskap: {EGENSKAP_NAVN}
 **`# GitHub:`-linja er valgfri.** Den skrives bare når brukeren har oppgitt et issue, som en Gherkin-kommentar `# GitHub: #NNNN` på **linjen rett over tag-linjen** for `Egenskap`-en (mellom `# language: no` og `@DOM-SUB-KAP-NNN`-taggen). Referansen tilhører egenskapen konseptuelt, men skrives utenfor `Egenskap`-blokken slik at den er synlig uten å scrolle gjennom brukerhistorien.
 
 Dekker en egenskap flere issues, list alle: `# GitHub: #1234, #1250`. En eksisterende `# GitHub:`-linje blir stående når fila endres, flyttes eller omdøpes.
+
+Får et krav ny Feature-ID, oppdater referansene til den gamle ID-en i samme endring: `Grep "@(depends-on|ref)-<gammel ID>"` i `krav/`, og bytt til den nye. En fil som bare flyttes eller omdøpes, beholder ID-en, så referansene står urørt.
 
 Hvis en fil noen gang inneholder flere `Egenskap:`-blokker, plasseres én `# GitHub:`-kommentar over hver sine tag-linje — slik at referansen alltid er direkte knyttet til egenskapen like under.
 
@@ -324,6 +327,7 @@ Ta ett draft-krav om gangen. For hvert:
    - Uklare feltlister, rolle-navn, feilmeldinger, forretningsregler
    - Avvik fra *Gode scenarioer* og *Terminologi* i `krav/README.md`
    - Manglende `Bakgrunn:` der det ville redusert duplisering
+   - Referanser: `@depends-on-` og `@ref-` til ID-er som ikke finnes, og referanser som står i fritekst i kommentarene (se *Referanser mellom krav* under). Spør om de skal bli tagger
 4. **Still konkrete spørsmål — ett om gangen.** Jf. interaksjonsprinsippet: ikke dump hele spørsmålslisten i én blokk. Still ett spørsmål, gi (a)/(b)/(c)-alternativer der det er naturlig, og vent på svar før du går til neste. Hovedregel: *aldri finn på valideringsregler, feilmeldinger eller forretningslogikk — spør brukeren*. Marker forslag tydelig som "forslag" hvis du presenterer dem for reaksjon.
 5. **Oppdater filen** basert på svarene: revider og konkretiser scenarios, legg til manglende scenarios, fjern besvarte `# ÅPNE SPØRSMÅL:`-kommentarer, stram opp språk, rett terminologi, og sørg for at Gherkin-konvensjonene følges (Scenariomal + Eksempler, deklarativ stil, én atferd per scenario).
 6. **Be brukeren om validering.** Når åpne spørsmål i hovedflyten er besvart og scenariene er konkrete nok til implementasjon, spør: *"Er [tittel] validert slik det står nå? (a) Ja → `@planned`, (b) Nei → beholder `@draft`."* Bytt `@draft` med `@planned` på `Egenskap:`-tag-linjen bare ved (a). Ikke behold begge. Eksempel: `@BRU-APP-API-001 @must @draft` → `@BRU-APP-API-001 @must @planned`.
@@ -367,11 +371,12 @@ Finn fila, og eventuelt regelen eller scenarioet, som skal bort. Er det uklart, 
 
 ### C3. Bekreft før du sletter
 
-Vis brukeren hva som skal skje (fil, del, `@deprecated` eller sletting), og vent på bekreftelse. Slett aldri en fil eller blokk uten bekreftelse. Hele filer slettes med `rm "<sti>"`. Kjører skillen uten Bash (for eksempel i Claude-panelet i FS Kravforvaltning), kan den ikke slette filer: si da hvilken fil brukeren må slette selv.
+Finn referansene til kravet: `Grep "@(depends-on|ref)-<ID>"` i `krav/`. Fjernes hele kravet, gjelder alle. Fjernes en del, gjelder de som handler om delen, ut fra kommentaren under taggen. Vis brukeren hva som skal skje (fil, del, `@deprecated` eller sletting), med kravene som refererer til det, og vent på bekreftelse. Krav med `@depends-on-` må kanskje endres selv: spør. Slettes kravet, fjernes referansene til det i samme endring. Får det `@deprecated`, blir referansene stående til `fs-verify` sletter kravet. Slett aldri en fil eller blokk uten bekreftelse. Hele filer slettes med `rm "<sti>"`. Kjører skillen uten Bash (for eksempel i Claude-panelet i FS Kravforvaltning), kan den ikke slette filer: si da hvilken fil brukeren må slette selv.
 
 ### C4. Oppsummer
 
 - Hvilke krav/deler som ble slettet, og hvilke som fikk `@deprecated`
+- Referanser til kravet som ble fjernet, og krav med `@depends-on-` som må følges opp
 - Step definitions i `tester/steps/` som hørte til slettede scenarioer (listes, slettes ikke)
 - Neste steg for `@deprecated`: fjern koden, og kjør `fs-verify` for å slette kravet når koden er borte
 
@@ -399,6 +404,8 @@ Finn fila og regelen eller scenarioet som skal endres. Er det uklart, spør. Les
 Hvilke deler endringen gjelder, avklares med brukeren, én om gangen: endres, fjernes eller legges til?
 
 Les så taggene på delen som endres. Er den `@draft`, `@planned` eller `@in-progress`, er den ikke levert. Endre den på stedet, uten ny blokk og uten `@deprecated`, og behold statustaggen. En `@draft`-del valideres som i D3, og en `@planned`-del som i modus B. Er delen `@in-progress`, si fra at spesifikasjonen i oppgaven som har hentet den inn, må oppdateres med endringen. Ny blokk (D2) lages bare for deler som er levert, det vil si deler uten egen statustag.
+
+Finn kravene som bygger på kravet: `Grep "@depends-on-<ID>"` i `krav/`. List dem for brukeren, med delen taggen står på, og spør om noen av dem må endres sammen med kravet.
 
 Finn koden for den leverte delen i kodeklonene (fs-admin, fs-plattform), og vis `fil:linje`. Bruk klonene som står i systemprompten, og spør om stien bare hvis de mangler. Sjekk branchen i hver klone før du leter ([`.claude/references/oppdatert-branch.md`](../../references/oppdatert-branch.md)). Har brukeren ingen klone, gå videre: `fs-specify` sjekker kravet mot koden før det blir `@in-progress`. Den nye delen skrives (D2) ut fra hva koden gjør i dag, ikke bare ut fra den gamle teksten. Følg *Krav fra kode, skisser eller FS-klienten* i `krav/README.md`: spør om det koden gjør, er ønsket atferd. Gjør koden noe annet enn den leverte teksten sier, spør før D2: *«Den leverte delen sier X, koden gjør Y. Hva skal den nye delen bygge på?»*
 
@@ -431,8 +438,20 @@ Setter brukeren eksplisitt at delen skal ha `@planned`, gjelder det samme unntak
 - Hvilke deler som er `@planned`, og hvilke som fortsatt er `@draft` (med åpne spørsmål)
 - Hvilke deler som fikk `@deprecated`, og hvilken ny del de erstattes av
 - Koden for den leverte delen (`fil:linje`), eller at den ikke ble sjekket fordi brukeren ikke hadde kodeklonene
+- Kravene med `@depends-on-` til kravet, og om de må endres
 - Step definitions i `tester/steps/` som hører til `@deprecated`-delene (listes, slettes ikke)
 - Neste steg: `fs-specify` / `fs-specify-delta` henter `@planned`-delene inn i en oppgave (`@planned` → `@in-progress` på delen), og `fs-verify` fjerner `@in-progress` når koden er på plass og sletter `@deprecated`-delene når den gamle koden er borte
+
+## Referanser mellom krav
+
+Et krav peker på et annet krav med `@depends-on-<Feature-ID>` eller `@ref-<Feature-ID>`. Den autoritative regelen står i *Referanser* i `krav/README.md`.
+
+- **Testen for typen:** Må denne delen sjekkes hvis kravet det pekes på, endres? Ja gir `@depends-on-`, nei gir `@ref-`. Bruker et scenario i delen en verdi eller en innstilling fra kravet («settes i X»), er det `@depends-on-`. Er du i tvil, spør.
+- **Plassering:** på delen referansen gjelder. Bygger hele kravet på et annet krav, står taggen sist på `Egenskap:`-tag-linja, etter `@scope-<slug>`. På en `Regel:` eller et `Scenario:` uten tagger lager du en ny tag-linje rett over, med samme innrykk. Har delen tagger fra før, legges referansen til sist på samme linje.
+- **Kommentaren:** stien eller filnavnet tas bort når taggen sier det samme. Det som forklarer referansen, blir stående: «Etter at opptaket er publisert, kan utdanningstilbud bare trekkes.» Gjelder referansen én regel i kravet, står regeltittelen i kommentaren.
+- **Blir stående som kommentar:** historikk («flyttet hit», «skilt ut fra», «Feature-ID-en var»), krav som nevnes i `# ÅPNE SPØRSMÅL:`, og henvisninger til en mappe. Peker en historikk-kommentar på en ID som nå tilhører et annet krav, settes aldri en tag.
+- **Sjekk at ID-en finnes** før du setter taggen: `Grep "^\s*@(.*\s@)?<ID>\b"` i `krav/**/*.feature`. Har to filer samme ID, si fra, og sett ikke taggen før det er ryddet.
+- **Statusen endres ikke** av en referanse. En referanse kan settes på en levert del uten at delen får `@draft`, siden atferden er den samme.
 
 ## Feilhåndtering
 

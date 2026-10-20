@@ -404,6 +404,44 @@ test('scope-tag på del bare under en @implemented egenskap', () => {
   assert.ok(hasRule(feature({ tags: '@OPT-REG-KRA-001 @must @draft', body: plain }), 'scope-part'));
 });
 
+test('referanser: @depends-on- og @ref- med Feature-ID', () => {
+  const body = `  @depends-on-OPT-OVO-INN-001 @ref-OPT-SØK-SØK-011
+  Regel: Opptak
+    Scenario: Opprette et opptak
+      Gitt jeg er innlogget`;
+  assert.deepEqual(rules(feature({ tags: '@OPT-REG-KRA-001 @must @planned @depends-on-OPT-REG-SAM-001', body })), []);
+  assert.ok(hasRule(feature({ tags: '@OPT-REG-KRA-001 @must @planned @ref-regelverkssamling' }), 'ref-format'));
+  assert.ok(hasRule(feature({ tags: '@OPT-REG-KRA-001 @must @planned @depends-on-' }), 'ref-format'));
+  assert.ok(hasRule(feature({ tags: '@OPT-REG-KRA-001 @must @planned @ref' }), 'ref-format'));
+});
+
+test('referanser: ikke til eget krav', () => {
+  assert.ok(hasRule(feature({ tags: '@OPT-REG-KRA-001 @must @planned @ref-OPT-REG-KRA-001' }), 'ref-self'));
+  const part = `  @depends-on-OPT-REG-KRA-001
+  Scenario: Opprette et opptak
+    Gitt jeg er innlogget`;
+  assert.ok(hasRule(feature({ body: part }), 'ref-self'));
+});
+
+test('referanser: samme referanse og begge typer på samme del', () => {
+  assert.ok(hasRule(feature({ tags: '@OPT-REG-KRA-001 @must @planned @ref-OPT-REG-SAM-001 @ref-OPT-REG-SAM-001' }), 'ref-duplicate'));
+  const part = `  @depends-on-OPT-REG-SAM-001 @ref-OPT-REG-SAM-001
+  Scenario: Opprette et opptak
+    Gitt jeg er innlogget`;
+  assert.ok(hasRule(feature({ body: part }), 'ref-both-types'));
+  // Ulike deler kan ha ulike typer til samme krav
+  const parts = `  @depends-on-OPT-REG-SAM-001
+  Regel: Opprette
+    Scenario: Opprette et opptak
+      Gitt jeg er innlogget
+
+  @ref-OPT-REG-SAM-001
+  Regel: Endre
+    Scenario: Endre et opptak
+      Gitt jeg er innlogget`;
+  assert.deepEqual(rules(feature({ body: parts })), []);
+});
+
 test('et skjelett fra fs-scope (Regel: uten scenarioer) gir ingen avvik', () => {
   const body = `  # ÅPNE SPØRSMÅL:
   # - Hvem kan opprette runder?

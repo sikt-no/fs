@@ -73,7 +73,15 @@ export const RULES: RuleDef[] = [
     desc: 'En Egenskap, Regel eller et Scenario hører til høyst ett scope.' },
   { id: 'scope-part', label: 'Scope-tag på del', short: 'Scope på del', sev: 'error', section: 'Scope',
     desc: '@scope-* står på Egenskap. På Regel eller Scenario er den bare lov under en @implemented egenskap, for en del som endres i et nytt scope.' },
-  { id: 'focus-tag', label: '@only / @focus i kravfil', short: '@only', sev: 'warning', section: 'Type',
+  { id: 'ref-format', label: 'Ugyldig referanse', short: 'Referanse-format', sev: 'error', section: 'Referanser',
+    desc: 'En referanse skrives @depends-on-<Feature-ID> eller @ref-<Feature-ID>, for eksempel @depends-on-OPT-BEH-BEH-011.' },
+  { id: 'ref-self', label: 'Referanse til eget krav', short: 'Til eget krav', sev: 'error', section: 'Referanser',
+    desc: 'Et krav refererer ikke til seg selv. Gjelder referansen en annen regel i samme krav, skriv det i en kommentar.' },
+  { id: 'ref-duplicate', label: 'Samme referanse to ganger', short: 'Dobbel referanse', sev: 'warning', section: 'Referanser',
+    desc: 'En Egenskap, Regel eller et Scenario har hver referanse bare én gang.' },
+  { id: 'ref-both-types', label: '@depends-on- og @ref- til samme krav', short: 'Begge typer', sev: 'warning', section: 'Referanser',
+    desc: 'En del har enten @depends-on- eller @ref- til et krav, ikke begge. @depends-on- er allerede en referanse.' },
+  { id: 'focus-tag',label: '@only / @focus i kravfil', short: '@only', sev: 'warning', section: 'Type',
     desc: '@only gjør scenarioet om til test.only i playwright-bdd, så resten av testene hoppes over. @focus har ingen virkning i playwright-bdd. Ingen av dem skal sjekkes inn i en kravfil.' },
 ];
 

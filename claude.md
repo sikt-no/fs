@@ -118,6 +118,8 @@ Andre vanlige tags:
 - `@fsadmin` - Tester for admin-grensesnittet
 - Domene-spesifikke tags (f.eks. `@opptakspilot`)
 - `@scope-<slug>` - Kobler kravet til et scope (`tasks/<domene>/scope-<slug>.md`) og oppgavene i det. Settes av `fs-scope`. Kjør kravene i et scope med `npx playwright test --grep @scope-<slug>`
+- `@depends-on-<Feature-ID>` - Delen bygger på et annet krav, og må sjekkes når det endres. Finn kravene som bygger på et krav med `grep -rn "@depends-on-<ID>" krav/`
+- `@ref-<Feature-ID>` - Henvisning til et annet krav for den som leser. Se *Referanser* i [`krav/README.md`](krav/README.md)
 
 ## Gherkin-språk og konvensjoner
 
