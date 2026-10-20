@@ -48,6 +48,13 @@
 #   typer, og de påvirker ikke hverandre, verken samtidig eller over tid (14.10.2026).
 #   En type fra et tidligere opptak vises derfor i sakene i det opptaket.
 # - Plasstildelingen henter tilbudsgarantiene fra saksbehandlingen (STEK-263, 08.10.2026).
+# - Tilbudsgarantien følger søknadsalternativet, uansett prioritet. Den faller ikke bort
+#   når søkeren flytter søknadsalternativet ned, eller når et nytt søknadsalternativ legges
+#   over. Prioriteten avgjør hvilket tilbud søkeren får, ikke om tilbudsgarantien gjelder.
+#   Den faller bort når søkeren fjerner søknadsalternativet eller trekker søknaden, og
+#   gjelder igjen, uansett prioritet, når søknadsalternativet legges inn igjen før
+#   søknadsfristen (avklart for tidlig opptak 08.10.2026, i OPT-BEH-BEH-007, og stemmer
+#   med koden).
 #
 @OPT-BEH-BEH-010 @must @draft
 Egenskap: Gi tilbudsgaranti
@@ -117,6 +124,13 @@ Egenskap: Gi tilbudsgaranti
       Når behandleren fjerner tilbudsgarantien fra B-rolle på "Sykepleie, høst 2027"
       Så har søkeren fortsatt tilbudsgarantien "Tilbudsgaranti gitt etter telefonsamtale" fra F-rolle på "Sykepleie, høst 2027"
 
+    Scenario: Behandler ser ikke muligheten til å endre tilbudsgarantien fra en annen rolle
+      Gitt behandleren har F-rolle
+      Og behandleren har ikke B-rolle
+      Og søkeren har tilbudsgarantien "Tilbudsgaranti innvilges etter klage" fra B-rolle på "Sykepleie, høst 2027"
+      Når behandleren ser på "Sykepleie, høst 2027" i saken
+      Så ser ikke behandleren muligheten til å endre eller fjerne tilbudsgarantien fra B-rolle
+
   Regel: Tilbudsgarantitypene hører til opptaket
 
     Scenario: Bare tilbudsgarantitypene i opptaket kan velges
@@ -131,7 +145,7 @@ Egenskap: Gi tilbudsgaranti
       Gitt behandleren Kari Nordmann har B-rolle
       Når Kari Nordmann <handling> tilbudsgarantien fra B-rolle på "Sykepleie, høst 2027"
       Så ser behandlerne av saken at Kari Nordmann har <handling> tilbudsgarantien fra B-rolle på "Sykepleie, høst 2027"
-      Og behandlerne av saken ser når det skjedde, og hvilken tilbudsgarantitype det gjelder
+      Og behandlerne av saken ser når tilbudsgarantien ble <handling>, og hvilken tilbudsgarantitype det gjelder
 
       Eksempler:
         | handling |

@@ -53,10 +53,9 @@
 #   ganger. En ny gjennomføring fjerner ingen tilbudsgarantier. (Endret
 #   09.10.2026: det er ingen publiseringsdato. Gjennomføringen publiserer svaret
 #   til søkerne, men prøvekjøringen gjør det ikke.)
-# - En behandler med T-rolle kan sette tilbudsgaranti manuelt uten betingelser.
-#   (Utvidet 08.10.2026: også B-rolle og F-rolle kan sette tilbudsgaranti, se under.)
-#   Det gjelder også når søkeren ikke deltar i tidligopptaket, og det er slik
-#   feil rettes etter at tidligopptaket er gjennomført.
+# - Manuell tilbudsgaranti står i gi_tilbudsgaranti.feature (OPT-BEH-BEH-010).
+#   Den krever ikke at søkeren deltar i tidligopptaket, og det er slik feil
+#   rettes etter at tidligopptaket er gjennomført.
 #
 # AVKLART I JIRA (lagt inn 07.10.2026)
 #
@@ -82,18 +81,10 @@
 #   fjernes tilbudsgarantien på det lavere. Dette er unntaket fra at en ny
 #   gjennomføring ikke fjerner tilbudsgarantier. Koden lar i dag den gamle
 #   tilbudsgarantien stå (TidligopptakTilbudsgarantiService), og må endres.
-# - Tilbudsgarantien faller bort når søkeren fjerner søknadsalternativet eller
-#   trekker søknaden. Legger søkeren søknadsalternativet inn igjen før
-#   søknadsfristen for opptaket, gjelder tilbudsgarantien igjen, uansett
-#   prioritet (prioriteten er endret 08.10.2026, se under).
-# - Tilbudsgarantien følger søknadsalternativet, uansett prioritet. Den faller
-#   ikke bort når søkeren flytter søknadsalternativet ned, eller når et nytt
-#   søknadsalternativ legges over. Garantien betyr at søkeren aldri blir forbigått
-#   på søknadsalternativet: søkeren får tilbud der, uansett poeng, med mindre
-#   søkeren når opp på et søknadsalternativ med høyere prioritet. Prioriteten
-#   avgjør hvilket tilbud søkeren får, ikke om garantien gjelder. Det samme
-#   gjelder når søkeren legger søknadsalternativet inn igjen før søknadsfristen.
-#   Dette erstatter regelen fra 25.09 om samme prioritet, og stemmer med koden.
+# - At tilbudsgarantien følger søknadsalternativet uansett prioritet, faller bort
+#   når søknadsalternativet fjernes, og gjelder igjen når det legges inn igjen før
+#   søknadsfristen, står i gi_tilbudsgaranti.feature (OPT-BEH-BEH-010). Det gjelder
+#   også tilbudsgarantien fra tidligopptaket.
 #
 # AVKLART 08.10.2026 (etter review fra fagperson i STEK-269)
 #
@@ -115,9 +106,6 @@
 #   poenggrensen, når søkeren deltar og saken er ferdig behandlet. Søkeren har alt en
 #   plass fra et tidligere opptak. Reservasjonen gir ikke i seg selv innvilget tidlig
 #   opptak (se_svar_på_tidlig_opptak.feature). Stemmer med STEK-503.
-# - Alle tre rollene (B-rolle, T-rolle og F-rolle) kan sette tilbudsgaranti manuelt,
-#   hver med sitt eget sett med tilbudsgarantityper (domeneekspert, med henvisning til
-#   Confluence OP «Tilbudsgaranti»). Det stemmer med STEK-270/262 og koden.
 # - Manuell tilbudsgaranti har ingen betingelser knyttet til tidlig opptak, heller
 #   ikke for typer som gjelder tidlig opptak. Tilbudsgaranti er generell, og gis av
 #   flere grunner enn tidlig opptak. Betingelsen fra dagens løsning (tidligsvar bare
