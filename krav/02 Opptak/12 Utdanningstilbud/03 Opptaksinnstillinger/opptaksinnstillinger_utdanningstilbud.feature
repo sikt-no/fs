@@ -191,16 +191,6 @@ Egenskap: Opptaksinnstillinger per utdanningstilbud
       Når opptaksforvalter angir at ventelistenummer skal vises for søkere på utdanningstilbudet "Sykepleie, høst 2027"
       Så kan søkere se sitt ventelistenummer for dette utdanningstilbudet
 
-  Regel: Opptaksforvalter kan sette tags med assosiative termer
-
-    Scenario: Sette tags på utdanningstilbud
-      Når opptaksforvalter setter tags "medisin, lege" på utdanningstilbudet "Profesjonsstudiet i medisin, høst 2027"
-      Så kan søkere finne utdanningstilbudet ved å søke på "lege"
-
-    Scenario: Sette tags for rettsvitenskap
-      Når opptaksforvalter setter tags "advokat, jus, jurist" på utdanningstilbudet "Masterstudiet i rettsvitenskap, høst 2027"
-      Så kan søkere finne utdanningstilbudet ved å søke på "advokat"
-
   Regel: Opptaksforvalter kan sette opplysninger om tilbudsgaranti
 
     Scenario: Sette hvor tilbudsgarantier tas fra
