@@ -258,6 +258,10 @@ function card(t: RawTask, f: string, utforing: Utforing, reports: VerifyReport[]
  * fs-specify, og utledes fra kravene. Så Klart til utvikling, repoene, Til verifisering og Verifisert.
  */
 export type ColKey = 'scope' | 'kravarbeid' | 'spesifiseres' | 'klar' | 'verifisering' | 'verifisert' | `repo:${string}`;
+/** Klassene til ikonet for en kolonne: repo, til verifisering, eller statusikonet kolonnen svarer til */
+export const colIcon = (k: ColKey) =>
+  k.startsWith('repo:') ? 'sp-ic sp-ic--repo' : k === 'verifisering' ? 'sp-ic sp-ic--verif' : `st st--${k === 'scope' ? 'none' : k === 'kravarbeid' || k === 'spesifiseres' ? 'draft' : k === 'klar' ? 'planned' : 'implemented'}`;
+
 /** Kolonnene som utledes, og som et kort ikke kan dras til */
 export const DERIVED_COLS: ColKey[] = ['scope', 'kravarbeid', 'spesifiseres', 'verifisert'];
 
@@ -294,6 +298,14 @@ export function colOf(c: Pick<Card, 'doc' | 'feats' | 'run'>): ColKey {
     return r ? `repo:${r}` : 'verifisering';
   }
   return missing(c).length ? 'spesifiseres' : 'klar';
+}
+
+/** Steget i repoet settes til «pågår» før en utførekjøring, med agenten som tar det når ingen har tatt det */
+export function startStep(run: SpecRun, repo: string) {
+  const st = run.steps.find(x => x.repo === repo);
+  if (!st) return;
+  st.status = 'pågår';
+  if (!st.by) st.by = 'agent:' + (repo === 'fs-admin' || repo === 'min-kompetanse' ? 'frontend' : repo === 'fs-plattform' ? 'subgraph' : 'utvikler');
 }
 
 /** Repoet i det gjeldende steget (første som ikke er levert), når kortet står i en repo-kolonne */
@@ -630,6 +642,130 @@ export function taskFlags(t: TaskCard, dirty: boolean): Flag[] {
   if (t.task.lint.length) out.push({ t: `${t.task.lint.length} avvik i mappa`, kind: 'err' });
   if (dirty) out.push({ t: 'ikke merget', kind: 'acc' });
   return out;
+}
+
+// —— Neste steg i oppgavepanelet ——
+
+/** Spesifikasjonen neste steg gjelder: den aktive som står i samme kolonne som oppgaven */
+export const leadSpec = (t: Pick<TaskCard, 'specs'>, col: ColKey) => activeSpecs(t).find(s => colOf(s) === col) ?? null;
+
+/** Hva slags neste steg oppgaven har. Visningen velger knappene ut fra dette. */
+export type NextKind = 'scope-tom' | 'skjelett' | 'kravarbeid' | 'mangler-spec' | 'spec-mangler' | 'klar' | 'repo' | 'verifisering' | 'verifisert';
+
+/** En linje i «Neste steg». `mark` er ikonet: et avvik, en advarsel, ferdig, en prikk, `@planned`, stegstatusen, eller kolonnen i `col` */
+export interface NextLine {
+  t: string;
+  sub?: string;
+  mark: 'err' | 'warn' | 'ok' | 'dot' | 'planned' | 'col' | StepState['status'];
+  col?: ColKey;
+}
+
+export interface NextStep {
+  kind: NextKind;
+  /** Spesifikasjonen steget gjelder, når det gjelder en */
+  spec: Card | null;
+  /** Repoet i steget, i en repo-kolonne */
+  repo: string | null;
+  /** Det steget gjelder, til høyre i overskriften */
+  ctx: string;
+  lines: NextLine[];
+  /** `err` når steget er blokkert eller sendt tilbake, `ok` når oppgaven er verifisert */
+  tone: 'acc' | 'err' | 'ok';
+}
+
+/**
+ * Neste steg for oppgaven i kolonnen `col` (designet «Spesifikasjoner», runde 4): hva som mangler eller skjer nå, for
+ * oppgaven uten spesifikasjon (fra kravene) eller for den ledende spesifikasjonen (`leadSpec`). Til slutt de andre
+ * aktive spesifikasjonene i oppgaven, og kravene som ikke har spesifikasjon.
+ */
+export function nextStep(t: TaskCard, col: ColKey): NextStep {
+  const s = leadSpec(t, col);
+  const live = t.krav.filter(k => !k.wont);
+  const out: NextStep = { kind: 'verifisert', spec: s, repo: null, ctx: '', lines: [], tone: 'acc' };
+  const scopeName = t.scope ? `scope-${t.scope.slug}` : '';
+  if (!s) {
+    if (col === 'scope' && !live.length) {
+      out.kind = 'scope-tom';
+      out.ctx = scopeName || 'scope-fila';
+      out.lines.push({ t: 'Ingen krav er koblet til oppgaven', mark: 'err', sub: t.scope ? undefined : 'Oppgaven har heller ikke scope' });
+    } else if (col === 'scope') {
+      out.kind = 'skjelett';
+      out.ctx = scopeName;
+      out.lines.push({ t: `${t.unspecced.filter(k => k.skeleton).length} krav er skjeletter: brukerhistorie og Regel:-titler, uten scenarioer`, mark: 'err' });
+    } else if (col === 'kravarbeid') {
+      out.kind = 'kravarbeid';
+      out.ctx = 'fs-krav';
+      const draft = t.unspecced.filter(k => !k.skeleton && k.status === 'draft').length;
+      const skel = t.unspecced.filter(k => k.skeleton).length;
+      if (draft) out.lines.push({ t: `${draft} krav er @draft og må valideres`, mark: 'err' });
+      if (skel) out.lines.push({ t: `${skel} krav er fortsatt skjelett`, mark: 'err' });
+    } else if (col === 'spesifiseres') {
+      out.kind = 'mangler-spec';
+      out.ctx = 'spec/';
+      out.lines.push({ t: 'Mangler spesifikasjon', mark: 'err' });
+      const ready = t.unspecced.length;
+      if (ready) out.lines.push({ t: `${ready} krav er klare til å hentes inn`, sub: t.unspecced.map(k => k.file).join(', '), mark: 'planned' });
+    } else {
+      out.tone = 'ok';
+      out.ctx = 'ferdig';
+      out.lines.push({ t: 'Ingenting å gjøre. Kravene er @implemented, eller fs-verify fant alt.', mark: 'ok' });
+    }
+  } else {
+    const sc = colOf(s);
+    const title = s.doc.title || s.file;
+    if (sc === 'spesifiseres') {
+      out.kind = 'spec-mangler';
+      out.ctx = s.file;
+      for (const m of missing(s)) out.lines.push({ t: m, mark: 'err' });
+    } else if (sc === 'klar') {
+      out.kind = 'klar';
+      out.ctx = s.file;
+      out.lines.push({ t: 'Spesifikasjonen er komplett', mark: 'ok' });
+      out.lines.push(s.doc.rute.length ? { t: 'Foreslått rute', sub: s.doc.rute.join(' → '), mark: 'dot' } : { t: 'Ingen rute ennå', mark: 'dot' });
+    } else if (sc.startsWith('repo:')) {
+      const repo = sc.slice(5);
+      const st = stepOf(s.run, repo);
+      const i = s.run.route.indexOf(repo);
+      out.kind = 'repo';
+      out.repo = repo;
+      out.ctx = `${title} · steg ${i + 1}/${s.run.route.length}`;
+      out.lines.push({ t: `${repo} · ${st.status}`, sub: st.by || 'ingen har tatt steget', mark: st.status });
+      const prev = i > 0 ? stepOf(s.run, s.run.route[i - 1]) : null;
+      if (prev?.handoff.trim()) {
+        const rows = prev.handoff.trim().split('\n');
+        out.lines.push({ t: `Overlevering fra ${prev.repo}`, sub: rows[0].replace(/^[-*]\s+/, '') + (rows.length > 1 ? ' …' : ''), mark: 'dot' });
+      }
+      if (st.blocked !== null) {
+        out.tone = 'err';
+        out.lines.push({ t: `Blokkert: ${st.blocked}`, mark: 'err' });
+      }
+      if (st.back) {
+        const all = s.feats.flatMap(f => f.sc);
+        const no = all.filter(x => x.r === 'ikke funnet').length;
+        const us = all.filter(x => x.r === 'usikker').length;
+        out.tone = 'err';
+        out.lines.push({ t: `Sendt tilbake av fs-verify ${st.back}`, sub: no + us ? `${no} ikke funnet · ${us} usikker` : undefined, mark: 'err' });
+      }
+    } else if (sc === 'verifisering') {
+      out.kind = 'verifisering';
+      out.ctx = s.file;
+      const prs = s.run.route.map(r => stepOf(s.run, r).pr.at(-1)).filter((p): p is string => !!p).map(prShort);
+      out.lines.push({ t: 'Alle steg på ruta er levert', sub: prs.join(' · ') || undefined, mark: 'ok' });
+    }
+  }
+  for (const o of activeSpecs(t).filter(x => x !== s)) out.lines.push({ t: `Også i oppgaven: ${o.doc.title || o.file}`, mark: 'col', col: colOf(o) });
+  if (t.specs.length && t.unspecced.length) out.lines.push({ t: `${t.unspecced.length} krav uten spesifikasjon`, sub: t.unspecced.map(k => k.file).join(', '), mark: 'warn' });
+  return out;
+}
+
+/** Statusene i opptellingen over kravene, i rekkefølgen de vises */
+export type KravKey = 'implemented' | 'in-progress' | 'planned' | 'draft' | 'deprecated' | 'skeleton' | 'wont' | 'missing';
+const KRAV_ORDER: KravKey[] = ['implemented', 'in-progress', 'planned', 'draft', 'deprecated', 'skeleton', 'wont', 'missing'];
+const kravKey = (k: KravRow): KravKey => (k.wont ? 'wont' : !k.path ? 'missing' : k.skeleton ? 'skeleton' : (k.status ?? 'missing'));
+
+/** Hvor mange krav oppgaven har med hver status (skjeletter, `@wont` og krav som ikke finnes for seg) */
+export function kravSummary(t: Pick<TaskCard, 'krav'>): { k: KravKey; n: number }[] {
+  return KRAV_ORDER.map(k => ({ k, n: t.krav.filter(r => kravKey(r) === k).length })).filter(x => x.n);
 }
 
 /** Alt tavla bygges av: scopene, oppgavene, spesifikasjonene og oppgavekortene */

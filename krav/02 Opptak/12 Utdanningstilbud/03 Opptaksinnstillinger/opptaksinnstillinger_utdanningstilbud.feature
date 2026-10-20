@@ -28,6 +28,15 @@ Egenskap: Opptaksinnstillinger per utdanningstilbud
       Når opptaksforvalter setter regelverk for et utdanningstilbud
       Så kan opptaksforvalter kun velge blant regelverkene i opptakets regelverkssamling
 
+    # AVKLART 2026-10-19: Utdanningstilbud som bruker regler fra den gamle regelverkssamlingen, mister alle reglene,
+    # og opptaksforvalter varsles først (11 Opprette og vedlikeholde opptak/03 Innstillinger/innstillinger.feature).
+    # Lagt til 2026-10-19 etter akseptansetesten av opprette og vedlikeholde opptak.
+    Scenario: Utdanningstilbudet mister reglene når opptakets regelverkssamling byttes
+      Gitt at utdanningstilbudet "Sykepleie, høst 2027" bruker regler fra opptakets regelverkssamling "UHG 2027"
+      Når opptaksforvalter bytter opptakets regelverkssamling til "UHG 2027 v2"
+      Så har utdanningstilbudet ikke lenger regler fra "UHG 2027"
+      Og utdanningstilbudet kan bare få regler fra "UHG 2027 v2"
+
     @openquestion
     # ÅPNE SPØRSMÅL:
     # - Skal kun opptaksforvalter ved forvaltende organisasjon få lov å opprette nye
@@ -42,9 +51,9 @@ Egenskap: Opptaksinnstillinger per utdanningstilbud
   # AVKLART 2026-10-08: Prosentfordeling mellom utdanningskvoter utgår. Antall tilbud som skal gis settes
   # som absolutte tall per utdanningskvote for hvert utdanningstilbud i hver plasstildelingsrunde, se
   # 14 Plasstildeling/02 Tildelingsinnstillinger/antall_tilbud_som_skal_gis.feature.
-  @openquestion
-  # ÅPNE SPØRSMÅL:
-  # - Kan opptaksforvalter legge til eller fjerne utdanningskvoter som ikke følger av regelverkssamlingen?
+  # AVKLART 2026-10-16 (produktleder): Bare organisasjonen som har opprettet regelverket, kan endre det.
+  # I samordna opptak kan forvaltende organisasjon legge til kvoter i regelverkssamlingen som er knyttet
+  # til opptaket. Deltakende organisasjoner kan ikke legge til eller fjerne utdanningskvoter.
   Regel: Utdanningskvotene følger av regelverkssamlingen
 
     Scenario: Utdanningskvotene følger av regelverkssamlingen
@@ -52,24 +61,35 @@ Egenskap: Opptaksinnstillinger per utdanningstilbud
       Når opptaksforvalter velger utdanningstilbudet "Sykepleie, høst 2027"
       Så har utdanningstilbudet utdanningskvotene "Ordinær" og "Førstegangsvitnemål"
 
+    Scenario: Forvaltende organisasjon legger til en kvote i regelverkssamlingen
+      Gitt at opptaksforvalter er ved forvaltende organisasjon "HK-dir"
+      Og at HK-dir har opprettet regelverkssamlingen "UHG 2027"
+      Når opptaksforvalter legger til kvotetypen "Samisk" i regelverkssamlingen "UHG 2027"
+      Så har regelverkssamlingen "UHG 2027" kvotetypen "Samisk"
+
+    Scenario: Deltakende organisasjon kan ikke legge til en utdanningskvote
+      Gitt at opptaksforvalter er ved deltakende organisasjon "Universitetet i Oslo"
+      Og at kvotetypen "Samisk" ikke er med i regelverkssamlingen for opptaket
+      Når opptaksforvalter vil legge til utdanningskvoten "Samisk" på utdanningstilbudet "Sykepleie, høst 2027"
+      Så avvises forespørselen
+
+    Scenario: Deltakende organisasjon kan ikke fjerne en utdanningskvote
+      Gitt at opptaksforvalter er ved deltakende organisasjon "Universitetet i Oslo"
+      Og at utdanningstilbudet "Sykepleie, høst 2027" har utdanningskvoten "Førstegangsvitnemål" fra regelverkssamlingen
+      Når opptaksforvalter vil fjerne utdanningskvoten "Førstegangsvitnemål" fra utdanningstilbudet
+      Så avvises forespørselen
+
   # Hva plasstildelingen gjør med plassflyten, og vernet mot sirkulær plassflyt (#598), står i
   # 14 Plasstildeling/02 Tildelingsinnstillinger/plassflyt.feature.
-  @openquestion
-  # ÅPNE SPØRSMÅL:
-  # - Kan standard plassflyt for opptaket overstyres per utdanningstilbud? Avklart 2026-10-13 at
-  #   standarden settes på opptaket og gjelder alle utdanningskvoter, se
-  #   11 Opprette og vedlikeholde opptak/03 Innstillinger/sette_plassflyt.feature.
-  Regel: Opptaksforvalter kan sette plassflyt mellom utdanningskvoter
+  # AVKLART 2026-10-15: Plassflyten kan ikke settes eller overstyres per utdanningstilbud. Regelen
+  # «Opptaksforvalter kan sette plassflyt mellom utdanningskvoter» er fjernet. Utdanningstilbudet viser
+  # bare plassflyten mellom utdanningskvotene som er knyttet til det.
+  Regel: Lærestedene ser plassflyten og kvoteprioriteten for utdanningstilbudene sine
 
-    Scenario: Sette plassflyt
-      Når opptaksforvalter setter plassflyt for utdanningstilbudet "Sykepleie, høst 2027"
-      Og opptaksforvalter setter at ledige plasser i førstegangsvitnemålskvoten flyter til ordinær kvote
-      Så omfordeler plasstildelingen ubrukte plasser fra førstegangsvitnemålskvoten til ordinær kvote
-
-  Regel: Lærestedene ser plassflyten for utdanningstilbudene sine
-
-    # Ønske meldt 2026-10-13. Plassflyten følger standarden for opptaket, se
-    # 11 Opprette og vedlikeholde opptak/03 Innstillinger/sette_plassflyt.feature.
+    # Ønske meldt 2026-10-13, utvidet med kvoteprioriteten 2026-10-15. Plassflyten og kvoteprioriteten settes på
+    # opptaket, se 11 Opprette og vedlikeholde opptak/03 Innstillinger/sette_plassflyt.feature og
+    # sette_kvoteprioritet.feature. Lærestedet ser dem på utdanningstilbudet, så de forstår sammenhengen mellom
+    # utdanningskvotene.
 
     Scenario: Se plassflyten for et utdanningstilbud
       Gitt at standard plassflyt for opptaket sender "Samisk" og "Førstegangsvitnemål" til "Ordinær"
@@ -85,6 +105,20 @@ Egenskap: Opptaksinnstillinger per utdanningstilbud
       Og at utdanningstilbudet "Sykepleie, høst 2027" ikke har utdanningskvoten "Nordnorsk"
       Når opptaksforvalter ved lærestedet ser utdanningstilbudet "Sykepleie, høst 2027"
       Så vises ikke "Nordnorsk" i plassflyten for utdanningstilbudet
+
+    Scenario: Se kvoteprioriteten for et utdanningstilbud
+      Gitt at kvoteprioriteten for opptaket er 1 for "Samisk", 4 for "Førstegangsvitnemål" og 12 for "Ordinær"
+      Og at utdanningstilbudet "Sykepleie, høst 2027" har utdanningskvotene "Samisk", "Førstegangsvitnemål" og "Ordinær"
+      Når opptaksforvalter ved lærestedet ser utdanningstilbudet "Sykepleie, høst 2027"
+      Så ser opptaksforvalter kvoteprioriteten for utdanningskvotene på utdanningstilbudet
+        | utdanningskvote     | kvoteprioritet |
+        | Samisk              | 1              |
+        | Førstegangsvitnemål | 4              |
+        | Ordinær             | 12             |
+
+    Scenario: Lærestedet kan ikke endre plassflyten eller kvoteprioriteten
+      Når opptaksforvalter ved lærestedet ser utdanningstilbudet "Sykepleie, høst 2027"
+      Så ser opptaksforvalter ikke muligheten til å endre plassflyten eller kvoteprioriteten
 
   Regel: Opptaksforvalter kan markere at et utdanningstilbud tilbyr tidlig opptak
 
@@ -106,6 +140,21 @@ Egenskap: Opptaksinnstillinger per utdanningstilbud
     # Lenken til informasjon om tidlig opptak settes per opptak, ikke per
     # utdanningstilbud, se 11 Opprette og vedlikeholde opptak/03 Innstillinger/
     # innstillinger.feature (avklart 09.10.2026, review av PR #654).
+
+  Regel: Deltakende organisasjon kan ikke endre poenggrensen for tidlig opptak etter fristen
+    # Virkningen av fristen for å sette poenggrenser for tidlig opptak, som opptaksforvalter setter i
+    # 11 Opprette og vedlikeholde opptak/04 Frister/frister_og_hendelser.feature.
+    # Lagt til 2026-10-19 etter akseptansetesten av opprette og vedlikeholde opptak.
+    # AVKLART 2026-10-15 (Q12, TAKE-409): Fristen hindrer deltakende organisasjoner i å endre poenggrensene
+    # etter fristen. Forvaltende organisasjon kan fortsatt endre poenggrensene.
+
+    Scenario: Lærestedet kan ikke endre poenggrensen for tidlig opptak etter fristen
+      Gitt at opptaket har aktivert tidlig opptak
+      Og at fristen for å sette poenggrenser for tidlig opptak er "2027-02-15 23:59"
+      Og at fristen er ute
+      Når opptaksforvalter ved deltakende organisasjon vil endre poenggrensen for tidlig opptak på "Sykepleie, høst 2027"
+      Så kan opptaksforvalter ved deltakende organisasjon ikke endre poenggrensen
+      Men opptaksforvalter ved forvaltende organisasjon kan fortsatt endre poenggrensen
 
   # AVKLART 2026-10-08: Det finnes ingen innstilling for hvilke plasstildelingsrunder utdanningstilbudet deltar i.
   # Et utdanningstilbud er ute av en plasstildelingsrunde når det ikke er satt antall tilbud som skal gis for plasstildelingsrunden,

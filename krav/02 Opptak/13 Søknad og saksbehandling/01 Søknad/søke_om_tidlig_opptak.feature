@@ -24,8 +24,9 @@
 # - Søkeren velger én begrunnelse fra listen opptaket har satt opp. Bare aktive
 #   begrunnelser kan velges. Hver begrunnelse har et navn, en forklaring og en
 #   tekst om hva søkeren må dokumentere (STEK-267).
-# - Tidlig opptak kan bare søkes når opptaket tilbyr tidlig opptak, eller når
-#   minst ett av søknadsalternativene tilbyr tidlig opptak.
+# - (Endret 15.10.2026, Q2 i TAKE-408.) Tidlig opptak kan bare søkes når opptaket åpner for tidlig
+#   opptak, og minst ett av søknadsalternativene tilbyr tidlig opptak. Det holder ikke at bare ett av dem
+#   har det, slik koden gjorde 07.10.2026.
 # - (Endret 09.10.2026, se under.) Søkeren kan bytte begrunnelse fram til
 #   søknadsfristen for tidlig opptak.
 # - Søkeren får kvittering når begrunnelsen settes eller byttes (TOT-2384).
@@ -167,3 +168,31 @@ Egenskap: Søke om tidlig opptak
       Gitt søkeren har søkt om tidlig opptak med begrunnelsen "Fullført videregående opplæring"
       Når søkeren legger til søknadsalternativet "Vernepleie, høst 2027"
       Så har søkeren fortsatt søkt om tidlig opptak med begrunnelsen "Fullført videregående opplæring"
+
+  @draft
+  Regel: Søkeren ser dokumentasjonsfristen for tidlig opptak
+    # Virkningen av dokumentasjonsfristen for tidlig opptak som opptaksforvalter setter i
+    # 11 Opprette og vedlikeholde opptak/04 Frister/frister_og_hendelser.feature.
+    # Lagt til 2026-10-19 etter akseptansetesten av opprette og vedlikeholde opptak.
+    # AVKLART 2026-10-15 (Q11, TAKE-408): Fristen settes på opptaket, og det er den søkerne ser. Koden har to
+    # koder for fristen i dag (fs-admin setter FRIST_TIDLIGOPPTAK_OPPLASTING, Min kompetanse leser
+    # FRIST_TIDLIG_OPPLASTING), og skal ha én.
+
+    Scenario: Se dokumentasjonsfristen for tidlig opptak
+      Gitt dokumentasjonsfristen for tidlig opptak i opptaket "Samordna opptak 2027" er "2027-03-01 23:59"
+      Når søkeren skal søke om tidlig opptak
+      Så ser søkeren at dokumentasjonen for tidlig opptak skal være lastet opp innen "2027-03-01 23:59"
+
+  @draft
+  Regel: Søknad etter fristen for tidlig opptak behandles i det ordinære opptaket
+    # Virkningen av søknadsfristen for tidlig opptak som opptaksforvalter setter i
+    # 11 Opprette og vedlikeholde opptak/04 Frister/frister_og_hendelser.feature.
+    # Lagt til 2026-10-19 etter akseptansetesten av opprette og vedlikeholde opptak.
+    # At søkeren ikke kan søke om tidlig opptak etter fristen, står i regelen «Tidlig opptak kan bare søkes
+    # innen søknadsfristen for tidlig opptak».
+
+    Scenario: Søknad sendt etter fristen for tidlig opptak behandles i det ordinære opptaket
+      Gitt søknadsfristen for tidlig opptak er "2027-03-01 23:59"
+      Og "Sykepleie, høst 2027" tilbyr tidlig opptak
+      Når søkeren sender søknaden med søknadsalternativet "Sykepleie, høst 2027" "2027-03-10"
+      Så behandles søknaden i det ordinære opptaket

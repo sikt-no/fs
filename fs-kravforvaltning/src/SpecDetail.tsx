@@ -1,3 +1,4 @@
+import type { ComponentChildren } from 'preact';
 import { useEffect, useMemo, useRef, useState } from 'preact/hooks';
 import { displayStatus, scopeOf, type Snapshot } from '../shared/model';
 import type { SketchKind, SpecDoc } from '../shared/spec';
@@ -7,7 +8,7 @@ import { useClaudeTarget } from './claudeBridge';
 import { shortPath, type MentionFilter } from './mention';
 import { makeMentionIndex, mentionItems, searchMentions, type MentionHit, type MentionItem } from './search';
 import { highlight, StatusIcon } from './Sidebar';
-import { colOf, currentRepo, featureId, handoffPrompt, missing, pickable, prShort, specifyPrompt, stepIcon, verifyPrompt, type Card, type ColConf } from './specboard';
+import { colIcon, colOf, currentRepo, featureId, handoffPrompt, missing, pickable, prShort, specifyPrompt, startStep as startRun, stepIcon, verifyPrompt, type Card, type ColConf } from './specboard';
 import { useCopy } from './useCopy';
 import { useVerifyScreenshots } from './verifyScreenshots';
 
@@ -41,8 +42,12 @@ interface Props {
   onSend: () => void;
   onOpenKrav: (path: string) => void;
   actions: SpecActions;
-  /** I detaljpanelet til oppgaven: uten eget panel og uten «Lukk» */
-  embedded?: boolean;
+  /** Tittelen på oppgaven spesifikasjonen hører til (i båndet øverst) */
+  taskTitle: string;
+  /** Spesifikasjonene i oppgaven, som faner når det er flere */
+  siblings: Card[];
+  /** Bytter til en annen spesifikasjon i oppgaven */
+  onPick: (c: Card) => void;
   /** Kravene i oppgavens scope-rad, som foreslås først i «+ Legg til krav» */
   prefer?: string[];
   /** Scopet oppgaven hører til; krav med et annet `@scope-*` merkes i velgeren */
@@ -58,6 +63,8 @@ const COL_WHY: Record<string, string> = {
   verifisering: 'Alle steg er levert.',
   verifisert: 'Kravene er @implemented, eller fs-verify fant alt.',
 };
+/** Feature-filer med så mange scenarioer eller færre er åpne fra start i det brede panelet */
+const OPEN_SC = 12;
 const RES_C: Record<string, string> = { funnet: 'var(--st-implemented)', 'ikke funnet': 'var(--err)', usikker: 'var(--st-in-progress)' };
 const resMark = (r: string | null) => (r === 'funnet' ? 'omk omk--ok' : r === 'ikke funnet' ? 'omk omk--no' : r === 'usikker' ? 'omk sp-mk--us' : 'omk omk--na');
 const SKETCH_C: Record<SketchKind, string> = { OK: 'var(--st-implemented)', Avvik: 'var(--err)', Uavklart: 'var(--st-in-progress)' };
@@ -79,8 +86,8 @@ export function ClaudeAction({ label, prompt, solid, skill }: { label: string; p
   );
 }
 
-/** Detaljpanelet (440 px) for kortet som er valgt. Alt kan redigeres, unntatt i statisk bygg. */
-export function SpecDetail({ c, col, repos, repoName, cards, entries, ro, dirty, me, onClose, onDoc, onRun, onSend, onOpenKrav, actions, embedded, prefer, scope }: Props) {
+/** Spesifikasjonen i det brede panelet over tavla. Alt kan redigeres, unntatt i statisk bygg. */
+export function SpecDetail({ c, col, repos, repoName, cards, entries, ro, dirty, me, onClose, onDoc, onRun, onSend, onOpenKrav, actions, taskTitle, siblings, onPick, prefer, scope }: Props) {
   const canEdit = !ro;
   const colKey = colOf(c);
   const cur = currentRepo(c);
@@ -89,13 +96,7 @@ export function SpecDetail({ c, col, repos, repoName, cards, entries, ro, dirty,
   const [copied, copy] = useCopy();
   const [shots, setShots] = useVerifyScreenshots();
   /** Steget i repoet settes til «pågår», med agenten som har tatt det, og en linje i loggen */
-  const startStep = (r: string, what: string) =>
-    onRun(run => {
-      const st = run.steps.find(x => x.repo === r);
-      if (!st) return;
-      st.status = 'pågår';
-      if (!st.by) st.by = 'agent:' + (r === 'fs-admin' || r === 'min-kompetanse' ? 'frontend' : r === 'fs-plattform' ? 'subgraph' : 'utvikler');
-    }, `startet ${what} i ${repoName(r)}`);
+  const startStep = (r: string, what: string) => onRun(run => startRun(run, r), `startet ${what} i ${repoName(r)}`);
   const all = c.feats.flatMap(f => f.sc);
   const unsent = !c.run.route.length;
   const routeList = unsent ? c.doc.rute : c.run.route;
@@ -114,16 +115,7 @@ export function SpecDetail({ c, col, repos, repoName, cards, entries, ro, dirty,
         }, log);
 
   return (
-    <Wrap embedded={!!embedded}>
-        <div class="spd-path mono">
-          <span class="ell">{c.path}</span>
-          {!embedded && (
-            <button class="spbtn small" onClick={onClose}>
-              Lukk ×
-            </button>
-          )}
-        </div>
-
+    <Drawer taskTitle={taskTitle} siblings={siblings} current={c} onPick={onPick} onClose={onClose}>
         <div class="spd-head">
           <input
             class="spd-title"
@@ -139,10 +131,12 @@ export function SpecDetail({ c, col, repos, repoName, cards, entries, ro, dirty,
           />
           <div class="spd-col">
             <span class="ochip acc">
-              <span class={col.key.startsWith('repo:') ? 'sp-ic sp-ic--repo' : ''} />
+              <span class={colIcon(colKey)} />
               {col.name}
             </span>
             <span class="omuted">{cur ? 'Første steg som ikke er levert.' : COL_WHY[colKey]}</span>
+            {c.doc.delta && <span class="sptag">delta · fs-specify-delta</span>}
+            <span class="mono omuted small ell">{c.path}</span>
           </div>
         </div>
 
@@ -153,23 +147,8 @@ export function SpecDetail({ c, col, repos, repoName, cards, entries, ro, dirty,
           </div>
         )}
 
-        {colKey === 'spesifiseres' && (
-          <div class="spd-box">
-            <div class="spd-box-h">Mangler før Klart til utvikling</div>
-            {miss.map(m => (
-              <div key={m} class="spd-miss">
-                <span class="omk omk--no" />
-                <span>{m}</span>
-              </div>
-            ))}
-            {canEdit && !isNewSpec(c) && (
-              <div class="spd-box-f">
-                <ClaudeAction label={`Kjør ${c.doc.delta ? 'fs-specify-delta' : 'fs-specify'}`} prompt={() => specifyPrompt(c)} />
-              </div>
-            )}
-          </div>
-        )}
-
+        <div class="spd-grid">
+        <div class="spd-main">
         <section class="spd-sec">
           <div class="spd-sec-h">
             <span>Omfang</span>
@@ -198,7 +177,8 @@ export function SpecDetail({ c, col, repos, repoName, cards, entries, ro, dirty,
           </div>
           {c.feats.map((f, i) => {
             const key = f.id || f.file;
-            const open = !!openFeat[key];
+            // Åpne fra start når de er få nok til å leses i panelet
+            const open = openFeat[key] ?? f.sc.length <= OPEN_SC;
             const okN = f.sc.filter(x => x.r === 'funnet').length;
             const has = f.sc.some(x => x.r);
             const st = f.path ? displayStatus(entries[f.path] ?? { status: null }) : null;
@@ -444,6 +424,31 @@ export function SpecDetail({ c, col, repos, repoName, cards, entries, ro, dirty,
             />
           )}
         </section>
+
+        </div>
+
+        <div class="spd-side">
+        <div class="spd-side-h">
+          <span>Utføring</span>
+          <span class="mono omuted">utforing.md</span>
+        </div>
+
+        {colKey === 'spesifiseres' && (
+          <div class="spd-box">
+            <div class="spd-box-h">Mangler før Klart til utvikling</div>
+            {miss.map(m => (
+              <div key={m} class="spd-miss">
+                <span class="omk omk--no" />
+                <span>{m}</span>
+              </div>
+            ))}
+            {canEdit && !isNewSpec(c) && (
+              <div class="spd-box-f">
+                <ClaudeAction label={`Kjør ${c.doc.delta ? 'fs-specify-delta' : 'fs-specify'}`} prompt={() => specifyPrompt(c)} />
+              </div>
+            )}
+          </div>
+        )}
 
         <section class="spd-sec">
           <div class="spd-sec-h">
@@ -750,17 +755,70 @@ export function SpecDetail({ c, col, repos, repoName, cards, entries, ro, dirty,
             {!c.run.log.length && <span class="omuted">Ingen hendelser ennå.</span>}
           </div>
         </section>
-    </Wrap>
+        </div>
+        </div>
+    </Drawer>
   );
 }
 
-/** Eget panel (440 px), eller en del av detaljpanelet til oppgaven */
-function Wrap({ embedded, children }: { embedded: boolean; children: preact.ComponentChildren }) {
-  if (embedded) return <div class="spd spd--embedded">{children}</div>;
+interface DrawerProps {
+  taskTitle: string;
+  siblings: Card[];
+  current: Card;
+  onPick: (c: Card) => void;
+  onClose: () => void;
+  children: ComponentChildren;
+}
+
+/**
+ * Det brede panelet over tavla (designet «Spesifikasjoner», runde 4): båndet «SPESIFIKASJON · i oppgaven …», fanene for
+ * spesifikasjonene i oppgaven og «Lukk ×». Tavla og oppgaven ligger nedtonet bak; klikk der eller Esc lukker.
+ */
+function Drawer({ taskTitle, siblings, current, onPick, onClose, children }: DrawerProps) {
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape' && !(e.target as Element | null)?.closest?.('input, textarea, select')) onClose();
+    };
+    addEventListener('keydown', onKey);
+    return () => removeEventListener('keydown', onKey);
+  }, [onClose]);
   return (
-    <aside class="spdetail">
-      <div class="spd">{children}</div>
-    </aside>
+    <div class="spdrawer-wrap">
+      <div class="spdrawer-scrim" title="Tilbake til oppgaven" onClick={onClose} />
+      <aside class="spdrawer" aria-label="Spesifikasjon">
+        <div class="spdrawer-h">
+          <span class="spdrawer-kind mono">SPESIFIKASJON</span>
+          <span class="spdrawer-task ell">
+            i oppgaven{' '}
+            <a
+              href="#"
+              onClick={e => {
+                e.preventDefault();
+                onClose();
+              }}
+            >
+              {taskTitle}
+            </a>
+          </span>
+          {siblings.length > 1 && (
+            <div class="spdrawer-tabs">
+              {siblings.map(s => (
+                <button key={s.key} class={s.key === current.key ? 'on' : ''} onClick={() => onPick(s)}>
+                  <span class={colIcon(colOf(s))} />
+                  <span class="ell">{s.doc.title || (isNewSpec(s) ? 'Ny spesifikasjon' : s.file)}</span>
+                </button>
+              ))}
+            </div>
+          )}
+          <button class="spbtn small spdrawer-close" onClick={onClose}>
+            Lukk ×
+          </button>
+        </div>
+        <div class="spdrawer-b">
+          <div class="spd spd--wide">{children}</div>
+        </div>
+      </aside>
+    </div>
   );
 }
 

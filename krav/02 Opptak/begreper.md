@@ -79,7 +79,7 @@ Denne listen sammenstiller begreper brukt i kravene (`krav/02 Opptak/`), design-
 | kvotespørsmål | Spørsmål i søknaden som avgjør hvilke kvoter søkeren kan konkurrere i | – | Kvotespørsmål | Finnes i gammel FS, mangler i begrepskatalogen |
 | plassflyt | «Automatisk overføring av ledige plasser fra en kvote til en annen når kvoten ikke fylles opp» | [plassflyt](https://fs.sikt.no/domenekunnskap/begreper/plassflyt/) (utkast) | Plassflyt / Kvotetilh plassflyt | ✅ Avklart: erstatter «kvoteflyt». ✅ Avklart 2026-10-09: plassflyt er bare at ubrukte plasser flyter mellom kvoter i et opptak. Det må ikke blandes med informasjonsarv mellom runder. ✅ Avklart 2026-10-13: standard plassflyt settes på opptaket, og gjelder alle utdanningskvoter. En kvote kan ha flere mottakere i prioritert rekkefølge. ⚠️ Katalogen sier at plassflyt også kan gå mellom plasstildelinger |
 | mottakende utdanningskvote | Utdanningskvoten som får de ledige plassene fra en annen utdanningskvote ved plassflyt | – | – | Ny term (`plassflyt.feature`) |
-| sistekvote | Den ene kvoten i opptaket som ikke sender ledige plasser videre, og som alle kjeder i plassflyten ender i. I UHG er det ordinær kvote | – | – | ✅ Avklart 2026-10-13: nøyaktig én sistekvote per opptak. Erstatter «siste utdanningskvote» (`sette_plassflyt.feature`) |
+| hovedkvote | Den ene kvoten i opptaket som ikke sender ledige plasser videre, og som alle kjeder i plassflyten ender i. I UHG er det ordinær kvote | – | – | ✅ Avklart 2026-10-13: nøyaktig én per opptak. Endret 2026-10-15 fra «sistekvote» til «hovedkvote», som i skissen «Kvoter» (Figma 22410:106608). Erstatter «siste utdanningskvote» (`sette_plassflyt.feature`) |
 | tilbud til alle kvalifiserte | Innstilling på et utdanningstilbud der alle kvalifiserte søkere får tilbud uansett poengsum, uten poenggrense | – | – | Ny term (`antall_tilbud_som_skal_gis.feature`) |
 
 ## Poengberegning og rangering
@@ -151,12 +151,13 @@ Denne listen sammenstiller begreper brukt i kravene (`krav/02 Opptak/`), design-
 |---------------|------------|----------------|---------|
 | kvalifisering | Prosessen der søkerens kompetanse sjekkes mot kompetansekravene | – | OK |
 | kvalifisert søker | «Søker som oppfyller alle formelle krav for opptak til et utdanningstilbud» | [kvalifisert søker](https://fs.sikt.no/domenekunnskap/begreper/kvalifisert_soker/) (utkast) | OK. Om søknaden også må være ferdigbehandlet for å være med i plasstildelingen, er uavklart |
-| ferdigbehandlet | Status på en søknad når saksbehandlingen er ferdig | – | Brukes i `trekke_søknad.feature` og plasstildelingen |
+| ferdigbehandlet | Status på en sak (søknaden hos én saksbehandlende organisasjon) når saksbehandlingen er ferdig (FERDIG_BEHANDLET). Ved automatisk saksbehandling settes den når den automatiske behandlingen er ferdig | – | Brukes i `trekke_søknad.feature`, tidligopptaket og plasstildelingen. Avklart 2026-10-15: bare saker som er ferdig behandlet, er med i plasstildelingen |
 | generell studiekompetanse (GSK) | Det generelle kompetansekravet for opptak til høyere utdanning | – | OK. Gammel FS: GSK |
 | realkompetanse | Kompetanse fra arbeid og annen erfaring som vurderes i stedet for formell utdanning | – | OK |
 | fagprofil | Søkerens registrerte fag og karakterer | – | Gammel FS: Fagprofil |
 | utdanningsbakgrunn | Gruppe søkere med samme type utdanning, med egne frister i opptaket | – | ⚠️ Brukes i kravene for frister. Relatert til «kvalifikasjonsgrunnlag» i gammel FS, men bredere |
 | praksis / praksisperiode | Arbeidserfaring som kan telle i kvalifisering eller rangering | – | OK |
+| opptaksprøver | Individuell vurdering av søkeren på ulike faglige grunnlag, for eksempel egnethet, fysikk, eller praktisk eller utøvende kompetanse. Typiske eksempler er Politihøgskolen og musikkhøgskolene | – | ✅ Avklart 2026-10-16. Brukes i stedet for «individuell opptaksvurdering» ([fs.sikt.no](https://fs.sikt.no/domenekunnskap/prosesser/individuell_opptaksvurdering/)). Brukes i `15 Lærestedsspesifikke behov/01 Politihøgskolen/opptak_ved_politihøgskolen.feature` |
 
 ## Søknadsbehandling
 
@@ -234,6 +235,7 @@ Følgende begreper brukes i kravene, men finnes ikke (enda) i begrepskatalogen p
 - antall studieplasser
 - prøvetildeling
 - hendelseslogg
+- opptaksprøver
 - utdanningsbakgrunn (i kontekst av frister)
 
 Sto som manglende i forrige versjon av lista, men finnes nå i katalogen: opptak, etterfylling, kvoteprioritet, plassflyt, opptaksrunde, poenggrense, kapasitet, antall plasser, overbooking, kvalifisert søker.

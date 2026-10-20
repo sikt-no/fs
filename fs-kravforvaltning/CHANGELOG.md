@@ -1,5 +1,17 @@
 # krav-viewer
 
+## 1.5.0
+
+### Minor Changes
+
+- 6714bb7: Detaljpanelet på tavla «Oppgaver» viser status og neste steg: én boks «Neste steg» med knappen som gjør det (Kjør fs-krav, Kjør fs-specify, Sett rute og send, Utfør i <repo>, Verifiser), kravene med en opptelling per status, og spesifikasjonene som rader. Avvik og statuslogg er sammenfoldet nederst. En spesifikasjon åpnes i et bredt panel over tavla, merket «Spesifikasjon», med faner når oppgaven har flere; et klikk utenfor panelet eller Esc tar deg tilbake til oppgaven. Et krav som åpnes fra panelet, viser et bånd øverst i Krav med veien tilbake til oppgaven. Filtrene på tavla huskes til de nullstilles.
+
+## 1.4.0
+
+### Minor Changes
+
+- ce7f441: Tavla «Oppgaver» viser Jira-saken oppgaven løses i (f.eks. `BAT-268`), med lenke til Jira, på kortet og i detaljpanelet. «+ Ny oppgave» tar en Jira-nøkkel. Oppgaver som peker på et GitHub issue, vises som før, og initiativet er fortsatt et GitHub issue.
+
 ## 1.3.1
 
 ### Patch Changes

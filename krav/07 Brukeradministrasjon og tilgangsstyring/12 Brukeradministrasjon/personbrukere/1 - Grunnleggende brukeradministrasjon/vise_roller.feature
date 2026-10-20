@@ -12,20 +12,7 @@ Egenskap: Se en personbrukers roller
 
   Regel: Visning av roller
 
-    @deprecated
-    Scenario: Se brukerens roller
-      Når jeg ser på personbrukerens detaljside
-      Så ser jeg en seksjon med personbrukerens tildelte roller
-      Og hver rolle viser følgende informasjon:
-        | felt          |
-        | Navn          |
-        | Beskrivelse   |
-        | Organisasjon  |
-        | Miljø         |
-        | Tildelt av    |
-        | Tildelt dato  |
-
-    @planned
+    @scope-synlighet-og-gjelder-for
     Scenario: Se brukerens roller med «Gjelder for»
       Når jeg ser på personbrukerens detaljside
       Så ser jeg en seksjon med personbrukerens tildelte roller
@@ -71,6 +58,17 @@ Egenskap: Se en personbrukers roller
     Scenario: Filtrere på organisasjon
       Når jeg velger en organisasjon som filter
       Så vises kun roller knyttet til den valgte organisasjonen
+
+    @planned @scope-restanser-etter-onboarding
+    Scenario: Organisasjonene i filteret vises med akronym
+      Når jeg åpner organisasjonsfilteret
+      Så vises akronymet under navnet på hver organisasjon
+      Men organisasjonskoden vises når organisasjonen ikke har akronym
+
+    @planned @scope-restanser-etter-onboarding
+    Scenario: Søke i organisasjonsfilteret
+      Når jeg skriver inn tekst i organisasjonsfilteret
+      Så viser organisasjonsfilteret bare organisasjonene der navnet eller akronymet inneholder den innskrevne teksten
 
     Scenario: Tilgjengelige miljøer i filter
       Når jeg åpner miljøfilteret

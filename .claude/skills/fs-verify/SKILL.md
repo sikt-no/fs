@@ -31,7 +31,7 @@ I Claude-panelet i FS Kravforvaltning har du ikke Bash:
 - Du kan ikke slette filer. Skal en `@deprecated`-fil slettes, si hvilken, så sletter brukeren den selv. Blokker fjernes med `Edit`.
 - Lesende git går ikke. Bruk `Grep` og `Glob` i klonene. Branchene i kravrepoet og klonene blir derfor ikke sjekket mot origin (*Sjekk branchen*): skriv `ikke sjekket (Claude-panelet)` i `- **Kode:**` i rapporten.
 - Skjermbilder tas med chrome-devtools-MCP. `navigate_page`, `click` og `press_key` er godkjent på forhånd når fs-verify kjøres, sammen med verktøyene som bare leser (`take_screenshot`, `take_snapshot`, `wait_for` …). Andre kall, f.eks. `new_page` og `fill`, må godkjennes i panelet (se *Skjermbilder*).
-- Du har ikke Agent-verktøyet, så du kan ikke starte kontrolløren (`fs-verify-kontroll`). Du gjør kontrollen selv (*Kontroll*), og den er ikke uavhengig. **Si det til brukeren før du begynner å lete**, med denne setningen: «Kontrollen av resultatene gjøres manuelt i Claude-panelet: jeg sjekker mine egne funn, uten en uavhengig kontrollør. Les bevisene før du svarer «Stemmer». Vil du ha uavhengig kontroll, kjør Verifiser i terminalen.» Skriv `- **Kontroll:** manuell (Claude-panelet)` i rapporten.
+- Du har ikke Agent-verktøyet, så du kan ikke starte kontrolløren (`fs-verify-kontroll`). Du gjør kontrollen selv (*Kontroll*), og den er ikke uavhengig. **Si det til brukeren før du begynner å lete**, med denne setningen: «Kontrollen av resultatene gjøres manuelt i Claude-panelet: jeg sjekker mine egne funn, uten en uavhengig kontrollør. Les bevisene i rapporten før du sier ja til endringene. Vil du ha uavhengig kontroll, kjør Verifiser i terminalen.» Skriv `- **Kontroll:** manuell (Claude-panelet)` i rapporten.
 
 I terminalen i FS Kravforvaltning («Verifiser i terminal …») og i Claude Code i terminalen har du Agent-verktøyet, og kontrolløren kjøres som vanlig.
 
@@ -90,20 +90,17 @@ Vis oversikten til brukeren før du gjør noe.
 
 **Gating-sett** = alle `Scenario:`/`Scenariomal:` under `Egenskap:`, minus de som er (selv eller via `Regel:`) tagget `@draft`, `@deprecated`, `@openquestion` eller `@demo`. `Bakgrunn:` er ikke et eget punkt. Den samme definisjonen står i `gating` i `fs-kravforvaltning/src/specboard.ts` (fremdriften på kortene i Spesifikasjoner); endres den ene, endres den andre i samme endring.
 
-Ett krav om gangen:
+For hvert krav:
 
 1. **Let etter hvert gating-scenario i koden.** Bruk hintene fra oppgaven, og søk etter begreper fra scenarioet (tekster i `Så`-stegene, feltnavn i tabellene, handlingen i `Når`). Les treffene. Et scenario er **funnet** når koden du har lest, gjør det scenarioet beskriver. En `Scenariomal:` er funnet når alle radene i `Eksempler:` er dekket. Før du skriver `ikke funnet`, følg *Negative søk*.
 2. **Se etter tester.** Finnes step definitions i `tester/steps/` for scenarioet, eller tester i kode-repoet som dekker det, nevn dem som ekstra bevis i chat. De står ikke i rapporten.
 3. **Kontroller resultatet** etter *Kontroll*, før du viser det til brukeren.
-4. **Vis resultatet** i chat: feature-ID, tittel, sti, og per scenario `funnet` (med `fil:linje` og én setning om hva koden gjør) / `ikke funnet` / `usikker` (med hvorfor). Si hva kontrollen endret. List scenarioene utenfor gating-settet for seg.
-5. **Spør én gang per krav** (`AskUserQuestion`, `multiSelect: false`): «Stemmer vurderingen for `<feature-ID> — <tittel>`?»
-   - **Stemmer** — vurderingen er riktig.
-   - **Noe mangler** — brukeren vet om noe som ikke virker (spør hva i fritekst).
-   - **Kunne ikke verifisere** — ikke mulig å avgjøre nå.
-   - **Avbryt** — stopp her.
-6. **Retagg `@in-progress` → `@implemented`** bare når gating-settet ikke er tomt, **alle** gating-scenarioer er `funnet`, brukeren svarte **Stemmer**, og ingen `@openquestion` står igjen i fila. Én `Edit` på `Egenskap:`-tag-linja; bare statustaggen byttes: `@OPT-SOK-VIS-001 @must @in-progress` → `@OPT-SOK-VIS-001 @must @implemented`. `@draft`- og `@deprecated`-deler står urørt.
 
-Ellers står kravet som `@in-progress`, og det som mangler, kommer i rapporten.
+Spør ikke underveis. Når alle kravene i scope er kontrollert, går du videre til *Rapport og endringer*.
+
+**Kan leveres** når gating-settet ikke er tomt, **alle** gating-scenarioer er `funnet` etter kontrollen, og ingen `@openquestion` står igjen i fila. Retaggingen er én `Edit` på `Egenskap:`-tag-linja; bare statustaggen byttes: `@OPT-SOK-VIS-001 @must @in-progress` → `@OPT-SOK-VIS-001 @must @implemented`. `@draft`- og `@deprecated`-deler står urørt.
+
+Ellers står kravet som `@in-progress`, og det som mangler, står i rapporten.
 
 ### Skjermbilder
 
@@ -124,8 +121,8 @@ Skjermbilder av appen som kjører, er ekstra bevis for scenarioer som har en skj
 Når et levert krav endres, står egenskapen som `@implemented`, og statusen på delen (se *Endring av levert krav* i `krav/README.md`). En `@in-progress`-del verifiseres som et krav, med disse forskjellene:
 
 - **Gating-sett** = scenarioene i delen (for en `Regel:`: alle scenarioene under den), minus de som er tagget `@openquestion` eller `@demo`.
-- Spørsmålet i steg 5 gjelder delen: «Stemmer vurderingen for `<feature-ID> — <tittel på delen>`?»
-- **Når alt er funnet og brukeren svarte Stemmer:** fjern `@in-progress` fra `Regel:`-/`Scenario:`-linja med én `Edit`. Andre tagger på linja står urørt. Blir linja tom, fjern hele linja. Delen arver da `@implemented` fra egenskapen. `Egenskap:`-linja endres ikke.
+- I forslaget og spørsmålene står delen med tittel: `<feature-ID> — Regel: <tittel>`.
+- **Når delen kan leveres og brukeren har sagt ja:** fjern `@in-progress` fra `Regel:`-/`Scenario:`-linja med én `Edit`. Andre tagger på linja står urørt. Blir linja tom, fjern hele linja. Delen arver da `@implemented` fra egenskapen. `Egenskap:`-linja endres ikke.
 - Erstatter delen en `@deprecated`-del, verifiser den `@deprecated`-delen i samme kjøring (*Verifisere at koden er borte*). Den nye koden kan være på plass selv om den gamle ikke er fjernet enda, og da blir den `@deprecated`-delen stående.
 
 ### Verifisere uansett status
@@ -134,8 +131,8 @@ Når et levert krav endres, står egenskapen som `@implemented`, og statusen på
 
 - **Scope** er egenskapen eller regelen, ikke resten av fila.
 - **Gating-sett** = scenarioene i scope, også det som er `@draft` eller `@planned`, minus `@demo`. `@deprecated`-deler følger *Verifisere at koden er borte*.
-- Let, kontroller, vis resultatet og spør som i *Verifisere implementasjon*, steg 1–5. Rapporten skrives som ellers (*Rapport*).
-- **Ny status tilbys** bare når hele gating-settet er `funnet`, ingen `@openquestion` står igjen i scope, og brukeren svarte **Stemmer**. Spør med `AskUserQuestion` før du endrer: «Alt er funnet. Skal `<feature-ID> — <tittel>` bli levert?» — **Ja** / **Nei**.
+- Let og kontroller som i *Verifisere implementasjon*, steg 1–3. Rapporten og spørsmålet kommer etterpå (*Rapport og endringer*).
+- **Ny status foreslås** bare når hele gating-settet er `funnet` og ingen `@openquestion` står igjen i scope. Endringen gjøres bare når brukeren har sagt ja (*Rapport og endringer*):
   - **Egenskap** med `@draft`, `@planned` eller `@in-progress`: bytt statustaggen på `Egenskap:`-linja med `@implemented`. `@draft`-deler under den står urørt, og er fortsatt ikke levert.
   - **Egenskap** som er `@implemented`: ingen endring. Har den `@draft`-, `@planned`- eller `@in-progress`-deler, si at de verifiseres hver for seg.
   - **Regel** under en `@implemented` egenskap, med `@draft`, `@planned` eller `@in-progress`: fjern statustaggen fra `Regel:`-linja, som i *Deler i leverte krav som endres*. Regelen arver `@implemented`. Erstatter regelen en `@deprecated`-del, verifiser den også.
@@ -145,12 +142,12 @@ Når et levert krav endres, står egenskapen som `@implemented`, og statusen på
 
 ## Verifisere at koden er borte (`@deprecated`)
 
-Ett krav eller én del om gangen:
+For hvert krav eller hver del:
 
 1. **Let etter spor.** Feature-ID, scenariotitler, tekster fra `Så`-stegene, feltnavn fra tabellene, og navn fra `design.md`/planer (komponenter, ruter, GraphQL-felt, tabeller), etter sjekklista i *Negative søk*. Les treffene, og skill ekte kode fra tilfeldige ordlikheter.
 2. **Kontroller resultatet** etter *Kontroll*. «Ingen spor funnet» fører til sletting, så kontrollen er ekstra viktig her.
-3. **Vis resultatet**: `finnes fortsatt` (med `fil:linje` og hvorfor du mener det er denne funksjonaliteten) eller `ingen spor funnet` (med hva du og kontrollen søkte etter, og i hvilke repoer).
-4. **Ingen spor funnet:** spør (`AskUserQuestion`): «Fant ingen spor av `<feature-ID> — <tittel/del>` i `<repoer>`. Slette kravet?» — **Slett** / **Behold** / **Avbryt**. Ved **Slett**:
+3. **Resultatet** er `finnes fortsatt` (med `fil:linje` og hvorfor du mener det er denne funksjonaliteten) eller `ingen spor funnet` (med hva du og kontrollen søkte etter, og i hvilke repoer). Det vises i rapporten.
+4. **Ingen spor funnet:** kravet (eller delen) **kan slettes**. Det slettes bare når brukeren har sagt ja (*Rapport og endringer*):
    - `@deprecated` på `Egenskap:` → slett fila (`rm "<sti>"`). Blir kapabilitetsmappa tom, si fra (ikke slett mappa).
    - `@deprecated` på `Regel:`/`Scenario:` → fjern blokken med én `Edit`: tag-linja, kommentarene rett over og under nøkkelordlinja, og alt til neste blokk på samme eller høyere nivå. Resten av fila står urørt. Les fila etterpå og sjekk at den fortsatt er gyldig Gherkin.
 5. **Finnes fortsatt:** kravet blir stående. Det kommer på lista over `@deprecated` som fortsatt finnes i koden.
@@ -188,6 +185,27 @@ Hver kjøring har ett tidspunkt, `YYYY-MM-DD HH:MM` i lokal tid, som brukes i na
 2. Ellers, med Bash: `date '+%Y-%m-%d %H:%M'`.
 3. Ellers: spør brukeren hva klokka er. Gjett aldri.
 
+## Rapport og endringer
+
+Når alle kravene i scope er kontrollert, viser du rapporten først, og spør etterpå. Brukeren skal aldri få et spørsmål om et resultat de ikke har sett.
+
+1. **Vis rapporten i chat**, etter malen (*Rapport*), med seksjonene som ikke avhenger av svaret: metadataene, `## Oversikt per krav` (når den er med), `## Scenarioer`, `## Kontroll`, `## @deprecated som fortsatt finnes i koden` og `## Oppfølging`. Scenarioene utenfor gating-settet listes for seg under tabellen.
+2. **Vis forslaget** rett under, som `## Forslag til endringer` (bare i chat, ikke i fila):
+   - **Kan leveres:** `<feature-ID> — <tittel>` (`<fil>`, `<status>` → `@implemented`, <n>/<n> funnet), og deler som `<feature-ID> — Regel: <tittel>` (`@in-progress` fjernes).
+   - **Kan slettes:** `<feature-ID> — <tittel eller del>` (`<fil>`, hele fila eller blokken), med repoene det er søkt i.
+   - **Blir stående:** kravene og delene som ikke kan leveres, med `<n>/<N> funnet` og hvorfor.
+3. **Er forslaget tomt** (ingenting kan leveres eller slettes): ikke spør. Gå til steg 5.
+4. **Spør én gang** (`AskUserQuestion`, `multiSelect: false`). Spørsmålet nevner kravene, så det kan leses uten resten av chatten: «Rapporten står over. `<feature-ID> — <tittel>` (<n>/<n>) og `<feature-ID> — <tittel>` (<n>/<n>) kan leveres, og `<feature-ID> — <tittel>` kan slettes (ingen spor i <repoer>). Hva vil du gjøre?» Er det mer enn fem, skriv antallet og «se Forslag til endringer over». Valgene:
+   - **Gjør endringene** — lever og slett alt under *Kan leveres* og *Kan slettes*.
+   - **Gå gjennom krav for krav** — se under.
+   - **Ikke endre noe** — alle kravene blir stående som de er, og det står i rapporten.
+
+   Brukeren kan også skrive i «Annet», f.eks. at noe ikke virker. Les det, og gjør resultatet for det kravet om til `usikker` eller `ikke funnet` når brukeren sier at noe mangler. Spør igjen med det nye forslaget.
+
+   **Gå gjennom krav for krav:** ett `AskUserQuestion` per krav eller del i forslaget, i rekkefølgen i rapporten. Vis resultattabellen for kravet i chat rett før, og la spørsmålet stå alene: «`<feature-ID> — <tittel>` (`<fil>`): <n>/<n> scenarioer funnet, bl.a. `<repo>/<fil>:<linje>` (<hva koden gjør>). Kontrollen <bekreftet alle | endret <n>>. Skal kravet bli `@implemented`?» (for en del: «Skal delen leveres?») — **Ja** / **Nei, noe mangler** (spør hva i fritekst) / **Avbryt** (stopp, og la resten stå). For en sletting: «Fant ingen spor av `<feature-ID> — <tittel eller del>` i <repoer> (søkt etter «<ord>», «<ord>»). Slette <fila | blokken>?» — **Slett** / **Behold** / **Avbryt**.
+5. **Gjør endringene** brukeren sa ja til (retagging i *Verifisere implementasjon*, *Deler i leverte krav som endres* og *Verifisere uansett status*, sletting i *Verifisere at koden er borte*, steg 4).
+6. **Skriv rapporten til fil** (*Rapport*), med alle seksjonene, og vis `## Oppsummering`, `## Levert`, `## Ikke levert` og `## Slettet` i chat, med stien til rapporten. Fila skrives først nå, fordi tavla «Oppgaver» leser den: en rapport der alt er funnet, flytter kortet til «Verifisert».
+
 ## Etter endringene
 
 Si dette i chat. Det står ikke i rapporten.
@@ -197,7 +215,7 @@ Si dette i chat. Det står ikke i rapporten.
 
 ## Rapport
 
-Skriv rapporten i chat, og til fil etter hva scope er. Filnavnet har alltid dato og klokkeslett (`<YYYY-MM-DD>-<HHMM>`, se *Tidspunkt*), så kjøringer samme dag kan sammenlignes og ikke skriver over hverandre:
+Rapporten vises i chat før spørsmålet, og skrives til fil når endringene er gjort (*Rapport og endringer*). Fila ligger etter hva scope er. Filnavnet har alltid dato og klokkeslett (`<YYYY-MM-DD>-<HHMM>`, se *Tidspunkt*), så kjøringer samme dag kan sammenlignes og ikke skriver over hverandre:
 
 - **Oppgave eller spesifikasjon:** `<oppgave>/spec/verify-<YYYY-MM-DD>-<HHMM>.md` (`verify-2026-10-09-1432.md`; `-2`, `-3` … hvis fila finnes).
 - **Bare en `krav/`-sti:** rett ved siden av det som ble verifisert. For én fil: `verify-<feature-fil>-<YYYY-MM-DD>-<HHMM>.md` i samme mappe som fila, der `<feature-fil>` er filnavnet uten `.feature` (`fjerne_roller.feature` → `verify-fjerne_roller-2026-10-07-0915.md`). For en mappe: `verify-<mappenavn>-<YYYY-MM-DD>-<HHMM>.md` inne i mappa, sammen med kravene den gjelder (`…/12 Brukeradministrasjon/personbrukere/` → `…/12 Brukeradministrasjon/personbrukere/verify-personbrukere-2026-10-07-0915.md`). `-2`, `-3` … hvis fila finnes. Linja `- **Spec:**` utelates.
@@ -212,7 +230,7 @@ Skriv aldri rapporten noe annet sted under `krav/`. Ikke kall den `verification-
 
 `- **Kontroll:**` sier hvem som kontrollerte: `fs-verify-kontroll` (uavhengig) eller `manuell (Claude-panelet)`. `## Kontroll` lister radene der kontrollen endret resultatet, så leseren ser hva den første letingen bommet på.
 
-**`utforing.md`.** Når scope er en spesifikasjon som er sendt (har en seksjon i `<oppgave>/utforing.md`, se *Utføring* i `tasks/README.md`): mangler noe (`ikke funnet` eller `usikker`, og brukeren svarte «Noe mangler»), sett steget i repoet der koden mangler, tilbake til `- **Status**: pågår`, legg til `- **Tilbake**: <YYYY-MM-DD>`, og en linje i `Logg` (`<dato> — fs-verify — <n> ikke funnet, <n> usikker · tilbake til <repo>`). Er alt funnet, legg bare til en linje i `Logg` (`alt funnet · verifisert`); kortet står i «Verifisert» når kravene er `@implemented`.
+**`utforing.md`.** Når scope er en spesifikasjon som er sendt (har en seksjon i `<oppgave>/utforing.md`, se *Utføring* i `tasks/README.md`): mangler noe (`ikke funnet` eller `usikker` etter kontrollen, eller brukeren har sagt at noe mangler), sett steget i repoet der koden mangler, tilbake til `- **Status**: pågår`, legg til `- **Tilbake**: <YYYY-MM-DD>`, og en linje i `Logg` (`<dato> — fs-verify — <n> ikke funnet, <n> usikker · tilbake til <repo>`). Er alt funnet, legg bare til en linje i `Logg` (`alt funnet · verifisert`); kortet står i «Verifisert» når kravene er `@implemented`.
 
 ## Git
 

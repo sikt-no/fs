@@ -105,6 +105,8 @@ Egenskap: Antall tilbud som skal gis per utdanningskvote (sette opptaksparameter
   Regel: Lærestedene kan endre antall tilbud bare innenfor perioden som er satt på plasstildelingsrunden
 
     # Flyttet hit fra 01 Runder 2026-10-09. Perioden settes på plasstildelingsrunden, se 01 Runder/forvalte_runder.feature.
+    # AVKLART 2026-10-15 (domeneekspert): Perioden gjelder også tilbud til alle kvalifiserte, men ikke
+    # saksbehandlingen. Etter perioden melder lærestedene feil til forvaltende organisasjon på e-post.
     # Gap mot koden (verifisert 2026-10-09): perioden håndheves ikke. Alle med tilgang til å endre
     # opptaket kan endre antall tilbud når som helst.
     Scenario: Lærested kan ikke endre antall tilbud utenfor perioden
@@ -116,6 +118,11 @@ Egenskap: Antall tilbud som skal gis per utdanningskvote (sette opptaksparameter
       Gitt at perioden for å endre antall tilbud som skal gis i plasstildelingsrunden "Hovedrunde" er "2027-06-01" – "2027-07-10"
       Og dagens dato er "2027-07-11"
       Så kan opptaksforvalter ved forvaltende organisasjon fortsatt endre antall tilbud som skal gis for plasstildelingsrunden
+
+    # AVKLART 2026-10-16 (produktleder): Perioden virker som en åpningsdato. Er den ikke satt, holder den stengt.
+    Scenario: Lærested kan ikke sette antall tilbud når perioden ikke er satt
+      Gitt at det ikke er satt periode for å endre antall tilbud som skal gis i plasstildelingsrunden "Hovedrunde"
+      Så kan opptaksforvalter ved lærestedene ikke legge inn antall tilbud som skal gis for plasstildelingsrunden
 
     Scenario: Siste lagrede tall er korrekt uavhengig av hvem som satte det
       Gitt at opptaksforvalter ved lærestedet satte antall tilbud som skal gis i utdanningskvoten "Ordinær" til 100

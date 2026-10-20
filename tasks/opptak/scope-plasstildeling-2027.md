@@ -3,11 +3,11 @@
 - **Slug**: plasstildeling-2027
 - **Initiativ**: [#216](https://github.com/sikt-no/fs/issues/216)
 - **Eier**: –
-- **Siste oppdatering**: 2026-10-14
+- **Siste oppdatering**: 2026-10-15
 
 ## Mål
 
-- Opptaksforvalter kan opprette plasstildelingsrunder, sette antall tilbud og plassflyt, starte og gjennomføre plasstildelinger, kontrollere og publisere resultatet.
+- Opptaksforvalter kan opprette plasstildelingsrunder, sette antall tilbud, starte og gjennomføre plasstildelinger, kontrollere og publisere resultatet.
 - Saksbehandler og søker ser det publiserte resultatet, og søkeren kan svare på tilbud og ventelisteplass.
 - Klar for første samordna opptak 2027. Produksjonsfrist 8. desember 2026.
 
@@ -15,6 +15,8 @@
 
 - Automatiske nye tilbud ved nei-svar mellom plasstildelingsrundene (oppgave 10, Won't 2027).
 - Vedtaksformidling (svarmelding, påminnelse, åpnet vedtak, digital postkasse og hendelseslogg). Det blir en egen oppgave og et eget scope senere, se [vedtaksformidling](vedtaksformidling/).
+- Å sette standard plassflyt og kvoteprioritet for opptaket (`@OPT-OVO-INN-002` og `@OPT-OVO-INN-003`). De er flyttet til [scope-kvoter-i-opptaket-2027](scope-kvoter-i-opptaket-2027.md) 2026-10-15, så de kan leveres før plasstildelingen. Hva plasstildelingen gjør med dem, er fortsatt her.
+- At lærestedene melder feil i resultatet til forvaltende organisasjon i løsningen (Could, senere). E-post er godt nok nå, så lenge forvaltende organisasjon kan endre antall tilbud etter lærestedenes periode (avklart med domeneekspert 2026-10-15).
 - Regelverk, rangering og kvalifisering. De kommer fra søknadsbehandlingen og regelverket, ikke fra plasstildelingen.
 
 ## Kilder
@@ -32,7 +34,6 @@
 |---|---|---|---|---|---|
 | [plasstildeling](plasstildeling/) | `@OPT-PLA-RUN-001` [forvalte_runder.feature](../../krav/02%20Opptak/14%20Plasstildeling/01%20Runder/forvalte_runder.feature) | Must | – | [#216](https://github.com/sikt-no/fs/issues/216) | Oppgave 1: legge til runder for plasstildeling. Kode etter workshop 2026-09-14: løst |
 | [plasstildeling](plasstildeling/) | `@OPT-PLA-INN-001` [antall_tilbud_som_skal_gis.feature](../../krav/02%20Opptak/14%20Plasstildeling/02%20Tildelingsinnstillinger/antall_tilbud_som_skal_gis.feature) | Must | – | [#583](https://github.com/sikt-no/fs/issues/583) | Oppgave 2: antall tilbud som skal gis per utdanningskvote. Jira [TAKE-327](https://sikt.atlassian.net/browse/TAKE-327). Kode: gjenstår |
-| [plasstildeling](plasstildeling/) | `@OPT-OVO-INN-002` [sette_plassflyt.feature](../../krav/02%20Opptak/11%20Opprette%20og%20vedlikeholde%20opptak/03%20Innstillinger/sette_plassflyt.feature) | Must | – | [#216](https://github.com/sikt-no/fs/issues/216) | Oppgave 3: standard plassflyt settes på opptaket. Ligger i 11 Opprette og vedlikeholde opptak, men løses i plasstildelingen |
 | [plasstildeling](plasstildeling/) | `@OPT-PLA-INN-002` [plassflyt.feature](../../krav/02%20Opptak/14%20Plasstildeling/02%20Tildelingsinnstillinger/plassflyt.feature) | Must | – | [#216](https://github.com/sikt-no/fs/issues/216) | Oppgave 3: plassflyt ved ledige plasser per utdanningskvote. Kode: løst |
 | [plasstildeling](plasstildeling/) | `@OPT-PLA-TIL-001` [starte_plasstildeling.feature](../../krav/02%20Opptak/14%20Plasstildeling/03%20Tildeling/starte_plasstildeling.feature) | Must | – | [#216](https://github.com/sikt-no/fs/issues/216) | Oppgave 4: starte en plasstildeling. Kode: løst |
 | [plasstildeling](plasstildeling/) | `@OPT-PLA-TIL-002` [gjennomføre_plasstildeling.feature](../../krav/02%20Opptak/14%20Plasstildeling/03%20Tildeling/gjennomf%C3%B8re_plasstildeling.feature) | Must | – | [#216](https://github.com/sikt-no/fs/issues/216) | Oppgave 5: gjennomføre plasstildeling. Kode: løst |
