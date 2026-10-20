@@ -24,12 +24,12 @@
 #   - Søkeren ser reservert studieplass (STEK-553, on hold).
 #   - Behandler overstyrer hvilken utdanningskvote tilbudsgarantien tas fra (STEK-270).
 #
-# Reglene «Behandler, tilbyder og opptaksforvalter kan sette tilbudsgaranti manuelt»
-# og «Tilbudsgarantien gjelder i hovedopptaket» er flyttet hit fra OPT-BEH-BEH-007
-# 14.10.2026. Der var de avklart og hentet inn i oppgaven tidlig-opptak. Scenarioene
-# om at tilbudsgarantien gir tilbud, er tatt ut, fordi regelen «Søker med tilbudsgaranti
-# får tilbud uavhengig av poengsum» i gjennomføre_plasstildeling.feature dekker dem. Resten
-# står under «Tilbudsgarantien følger søknadsalternativet».
+# Regelen «Behandler, tilbyder og opptaksforvalter kan sette tilbudsgaranti manuelt» og
+# scenarioene om at tilbudsgarantien følger søknadsalternativet, er flyttet hit fra
+# OPT-BEH-BEH-007 14.10.2026. Der var de avklart og hentet inn i oppgaven tidlig-opptak.
+# Scenarioene i 007 om at tilbudsgarantien gir tilbud i hovedopptaket, er ikke flyttet,
+# fordi regelen «Søker med tilbudsgaranti får tilbud uavhengig av poengsum» i
+# gjennomføre_plasstildeling.feature dekker dem.
 #
 # AVKLART
 #
