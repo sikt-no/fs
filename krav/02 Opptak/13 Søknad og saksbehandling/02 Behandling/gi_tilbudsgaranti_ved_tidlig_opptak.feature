@@ -35,8 +35,9 @@
 #   når tidligopptaket gjennomføres, se publisere_svar_på_tidlig_opptak.feature.)
 #   Svar publiseres til alle søkerne samtidig på én publiseringsdato for
 #   tidlig opptak. Datoen knyttes til opptaket, ikke til utdanningstilbudet.
-# - (Endret 08.10.2026, se under, og gi_tilbudsgaranti.feature (OPT-BEH-BEH-010).) Tilbudsgarantien holder bare så lenge
-#   søkeren beholder søknadsalternativet på samme prioritet.
+# - (Endret 08.10.2026, se under og gi_tilbudsgaranti.feature, OPT-BEH-BEH-010.)
+#   Tilbudsgarantien holder bare så lenge søkeren beholder søknadsalternativet på
+#   samme prioritet.
 # - Garantien er et minimum. Når søkeren når opp på et høyere prioritert
 #   søknadsalternativ, gjelder ordinær plasstildeling.
 #
@@ -105,9 +106,8 @@
 #   gjennomføring tar med saker som er blitt ferdig behandlet, eller har fått
 #   konklusjon, siden forrige gjennomføring. Det er likevel lurt å prøvekjøre til
 #   ingen saker står igjen som ikke er ferdig behandlet eller mangler konklusjon, før
-#   tidligopptaket
-#   gjennomføres. (Dokumentasjonen på STEK-503 sa at det bare gjennomføres én
-#   gang. Den er rettet.)
+#   tidligopptaket gjennomføres. (Dokumentasjonen på STEK-503 sa at det bare
+#   gjennomføres én gang. Den er rettet.)
 #   Mulig forbedring, ikke et krav: sikring mot en ny gjennomføring ved en feil
 #   etter at svarene er synlige for søkerne, se STEK-590 (13.10.2026).
 # - (09.10.2026) Har søkeren reservert studieplass på et søknadsalternativ som tilbyr
@@ -226,8 +226,13 @@ Egenskap: Gi tilbudsgaranti ved tidlig opptak
       Når opptaksforvalter gjennomfører tidligopptaket
       Så får søkeren tilbudsgaranti på "Sykepleie, høst 2027"
 
-    # Foreløpig avklaring 13.10.2026, se notatet om reservert studieplass øverst i fila.
+    @openquestion
     Scenario: Reservert studieplass gir tilbudsgaranti uten kvalifisering
+      # ÅPNE SPØRSMÅL:
+      # - Gir reservert studieplass (RSO eller RES) tilbudsgaranti også når søkeren ikke er
+      #   kvalifisert, eller kvalifiseringen ikke er vurdert? Fagperson svarte ja 13.10.2026, men
+      #   har sendt spørsmålet videre til en annen domeneekspert, så svaret er foreløpig. Koden
+      #   gjør det (STEK-582). Se notatet om reservert studieplass øverst i fila.
       Gitt saksbehandler har konkludert med at søkeren deltar i tidligopptaket
       Og søkeren har reservert studieplass på "Sykepleie, høst 2027"
       Og søkeren er ikke kvalifisert til "Sykepleie, høst 2027"

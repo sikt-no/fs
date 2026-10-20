@@ -35,6 +35,7 @@ Egenskap: Se svar på søknad om tidlig opptak
 
     Scenario: Svaret blir synlig når tidligopptaket er gjennomført
       Gitt at tidligopptaket er gjennomført
+      Og at det er konkludert om søkeren deltar i tidligopptaket i alle sakene
       Når søkeren åpner søknaden sin
       Så ser søkeren svar på tidlig opptak på hvert av søknadsalternativene sine
 
@@ -45,7 +46,7 @@ Egenskap: Se svar på søknad om tidlig opptak
     Scenario: Søkeren ser ikke svar på søknadsalternativer der saken ikke har konklusjon
       Gitt at tidligopptaket er gjennomført
       Og at søkeren har søkt om tidlig opptak
-      Men det er ikke konkludert om søkeren deltar i tidligopptaket i saken med "Sykepleie, høst 2027"
+      Men det er ikke konkludert om søkeren deltar i tidligopptaket i saken som gjelder "Sykepleie, høst 2027"
       Når søkeren åpner søknaden sin
       Så ser ikke søkeren svar på tidlig opptak på "Sykepleie, høst 2027"
 
