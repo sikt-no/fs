@@ -4,9 +4,10 @@
 # KILDER OG ETTERPRØVBARHET
 #
 # Skilt ut fra vitnemålsbehandling.feature (@OPT-BEH-BEH-004) 23.09.2026 som
-# leveranse L1 av seks i initiativet #607 Vitnemålsbehandling. Parent-featuren
-# beholder L2–L6 og står fortsatt som @draft, fordi leveransekuttet for dem
-# ikke er besluttet. L1 er besluttet, og kravteksten for den er ferdig.
+# leveranse L1 av seks i initiativet #607 Vitnemålsbehandling. 08.10.2026 ble
+# også L2–L6 delt i hver sin kravspesifikasjon, og vitnemålsbehandling.feature
+# ble erstattet av dem. Oversikten over leveransene, kildene og
+# avgrensningene står i vitnemålsbehandling.md i samme mappe.
 #
 # Kravet dekker visning av søkerens elektroniske VGS-vitnemål i FS Admin,
 # steg 2 «Grunnlag». Det erstatter oversiktsdelen av vitnemålsbehandling
@@ -34,8 +35,8 @@
 # Tilgangsregelen er snevret til det denne leveransen kan innfri: innsyn. At
 # endringsrettighet gir mulighet til å *behandle* vitnemålet, og at
 # leserettighet skjuler den muligheten, kan ikke verifiseres før det finnes
-# noe å endre. De to scenarioene følger L2 og står fortsatt i
-# vitnemålsbehandling.feature.
+# noe å endre. De to scenarioene følger L2 og står i
+# velge_vitnemål_som_grunnlag.feature.
 #
 # Resultater fra høyere utdanning er utenfor. De finnes i dag bare som en
 # umodellert JSON-streng fra Vitnemålsportalen (Soker.vitnemal: String, i
@@ -45,8 +46,8 @@
 # BEGREPSBRUK
 #
 # Denne featuren kaller seksjonen «vitnemålsoversikten», fordi den i L1 bare
-# viser. Fra L2 får samme seksjon valg, og vitnemålsbehandling.feature kaller
-# den da «vitnemålsbehandlingen». Bør samordnes når L2 planlegges.
+# viser. Fra L2 får samme seksjon valg, og kravene for L2–L6 kaller den da
+# «vitnemålsbehandlingen». Bør samordnes når L2 planlegges.
 #
 # UI-detaljer. Plassering, accordion-oppførsel, kolonnebredder og
 # vindushåndtering hører i vise_elektroniske_vitnemål.design.md, jf.
@@ -108,7 +109,7 @@ Egenskap: Se søkerens elektroniske vitnemål
       #
       # Andre halvdel av kravet er holdt utenfor denne leveransen: skjemaet for
       # å legge inn fag manuelt bygges i L4 (#610). Kravet om at skjemaet da
-      # alltid skal være åpent står i vitnemålsbehandling.feature, og må
+      # alltid skal være åpent står i legge_inn_og_endre_fag.feature, og må
       # innfris sammen med skjemaet.
 
     Scenario: Åpne et vitnemål i eget vindu
@@ -124,8 +125,8 @@ Egenskap: Se søkerens elektroniske vitnemål
       Når jeg åpner vitnemålsoversikten
       Så ser jeg det annullerte vitnemålet tydelig markert som annullert
       # At et annullert vitnemål ikke kan legges til grunn for en ny beregning
-      # er en konsekvens av valget, og hører derfor i L2 (#608). Den
-      # begrensningen står fortsatt i vitnemålsbehandling.feature.
+      # er en konsekvens av valget, og hører derfor i L2 (#608),
+      # velge_vitnemål_som_grunnlag.feature.
 
     Scenario: Vitnemål uten relevans for opptaket vises ikke
       Gitt søkeren har et annullert vitnemål
