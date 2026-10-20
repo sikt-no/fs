@@ -29,8 +29,7 @@ Egenskap: Gjennomføre plasstildeling
   #   TAKE-283: ventelistenummer og rangering over 9 999, eller prioritet over 99, feller hele kjøringen.
 
   # AVKLART 08.10.2026: Tilbudsgaranti fra tidligopptaket hører med, og gir tilbud i hovedtildelingen,
-  # se regelen «Tilbudsgarantien gjelder i hovedopptaket» i
-  # 13 Søknad og saksbehandling/02 Behandling/gi_tilbudsgaranti_ved_tidlig_opptak.feature.
+  # se regelen «Søker med tilbudsgaranti får tilbud uavhengig av poengsum» under.
   #
   # Kilde: tasks/opptak/plasstildeling/design.md (prinsipp 1–3, rundetyper, del 2), oppgave.md (oppgave 5),
   # Confluence «2026-09-08 Raffinering plasstildeling», «Fra saksbehandling til plasstildeling»,
@@ -198,7 +197,7 @@ Egenskap: Gjennomføre plasstildeling
     # AVKLART 2026-10-14: Plasstildelingen bryr seg ikke om hvem som satte tilbudsgarantien, bare om den er
     # satt. Den tar bare hensyn til tilbudsgarantier som gir tilbud, altså der søkeren skal ha plass der
     # tilbudsgarantien er gitt. Hvem som kan sette tilbudsgaranti, og typene, står i
-    # 13 Søknad og saksbehandling/02 Behandling/gi_tilbudsgaranti_ved_tidlig_opptak.feature.
+    # 13 Søknad og saksbehandling/02 Behandling/gi_tilbudsgaranti.feature.
     # Gap mot koden («Fra saksbehandling til plasstildeling», kap. 2–3 og D4): tilbudsgaranti fra
     # saksbehandlingen når ikke plasstildelingen, og en søknad uten poengsum kommer ikke med i grunnlaget.
     Scenario: Tilbudsgaranti uten poengsum
