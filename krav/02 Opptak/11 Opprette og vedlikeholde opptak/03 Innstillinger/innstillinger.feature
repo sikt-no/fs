@@ -57,6 +57,7 @@ Egenskap: Innstillinger for opptak
   # ikke av opptakets standard poenglikhetsregel. Se krav/02 Opptak/14 Plasstildeling/.
   # Virkningen står i 12 Utdanningstilbud/04 Behandle et utdanningstilbud/overstyre_regler_for_poenglikhet.feature
   # og 14 Plasstildeling/03 Tildeling/gjennomføre_plasstildeling.feature.
+  @ref-OPT-PLA-TIL-002
   Regel: Opptaksforvalter setter standard poenglikhetsregel for opptaket
 
     Scenario: Standard poenglikhetsregel med mulighet for unntak per utdanningstilbud
@@ -99,6 +100,7 @@ Egenskap: Innstillinger for opptak
   # Det erstatter regelen fra 2026-10-14 om hvor mange utdanningstilbud en søker kan få opptak til.
   # Taket er obligatorisk, er forhåndsutfylt med 1, og kan endres etter at opptaket er opprettet.
   # Virkningen i plasstildelingen står i 14 Plasstildeling/03 Tildeling/gjennomføre_plasstildeling.feature.
+  @ref-OPT-PLA-TIL-002
   Regel: Opptaksforvalter setter tak for antall tilbud per tildelingsrunde
 
     Scenario: Sette tak for antall tilbud per tildelingsrunde

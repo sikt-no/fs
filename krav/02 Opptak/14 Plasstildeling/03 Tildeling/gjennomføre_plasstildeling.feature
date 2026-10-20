@@ -58,6 +58,7 @@ Egenskap: Gjennomføre plasstildeling
       Så får søkeren tilbud på "Vernepleie, høst 2027"
       Og søkeren står på venteliste til "Sykepleie, høst 2027"
 
+  @depends-on-OPT-OVO-INN-003
   Regel: Søkeren prøves i utdanningskvotene etter kvoteprioritet
 
     Scenario: Mest spesielle utdanningskvote først
