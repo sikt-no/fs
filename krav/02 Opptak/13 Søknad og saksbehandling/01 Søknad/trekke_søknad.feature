@@ -52,6 +52,7 @@ Egenskap: Trekke egen søknad
       Når søkeren trekker søknaden
       Så er søknaden trukket
 
+  @deprecated
   Regel: Trukne søknader vises som trukket
 
     Scenario: Søkeren ser en trukket søknad i oversikten
@@ -63,3 +64,11 @@ Egenskap: Trekke egen søknad
       Gitt at søkeren har trukket en søknad
       Når søkeren åpner oversikten over egne søknader
       Så tilbys ikke søkeren å åpne den trukne søknaden
+
+  @planned
+  Regel: Trukne søknader vises ikke
+
+    Scenario: Søkeren ser ikke en trukket søknad i oversikten
+      Gitt at søkeren har trukket en søknad
+      Når søkeren åpner oversikten over søknadene sine
+      Så vises ikke den trukne søknaden
