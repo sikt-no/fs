@@ -51,6 +51,20 @@ Egenskap: Tildele tilganger til en applikasjon
       Når jeg skriver inn tekst i valglisten for organisasjon
       Så viser valglisten bare organisasjonene der navnet eller akronymet inneholder den innskrevne teksten
 
+  @planned @scope-restanser-etter-onboarding
+  Regel: Valglistene følger rettigheten til å tildele tilganger på applikasjoner
+
+    Scenario: Valglisten for organisasjon viser bare organisasjoner der jeg kan tildele tilganger på applikasjoner
+      Gitt jeg har rettighet til å tildele og fjerne roller på personbrukere i én organisasjon
+      Og rettighet til å tildele og fjerne tilganger på applikasjoner i en annen organisasjon
+      Når jeg åpner valglisten for organisasjon
+      Så ser jeg bare organisasjonen der jeg kan tildele tilganger på applikasjoner
+
+    Scenario: Valglisten for miljø avhenger av valgt organisasjon
+      Gitt jeg har valgt en organisasjon
+      Når jeg åpner valglisten for miljø
+      Så ser jeg bare miljøene der jeg kan tildele tilganger på applikasjoner i den valgte organisasjonen
+
   Regel: En applikasjon kan ha tilganger i flere miljøer
 
     Scenario: Tildeling i nytt miljø gjør applikasjonen aktiv i miljøet
