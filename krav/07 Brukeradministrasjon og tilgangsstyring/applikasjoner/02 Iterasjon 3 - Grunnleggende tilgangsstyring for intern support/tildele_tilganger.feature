@@ -51,7 +51,7 @@ Egenskap: Tildele tilganger til en applikasjon
       Når jeg skriver inn tekst i valglisten for organisasjon
       Så viser valglisten bare organisasjonene der navnet eller akronymet inneholder den innskrevne teksten
 
-  @draft
+  @planned @scope-restanser-etter-onboarding
   Regel: Valglistene følger rettigheten til å tildele tilganger på applikasjoner
 
     Scenario: Valglisten for organisasjon viser bare organisasjoner der jeg kan tildele tilganger på applikasjoner

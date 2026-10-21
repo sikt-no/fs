@@ -47,7 +47,7 @@ Egenskap: Fjerne tilganger fra en applikasjon
       Gitt applikasjonen har en tilgang jeg ikke har rettighet til å fjerne
       Så er muligheten til å fjerne den tilgangen ikke tilgjengelig
 
-  @draft
+  @planned @scope-restanser-etter-onboarding
   Regel: Valglistene følger rettigheten til å fjerne tilganger på applikasjoner
 
     Scenario: Valglisten for organisasjon viser bare organisasjoner der jeg kan fjerne tilganger på applikasjoner
