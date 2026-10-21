@@ -13,23 +13,22 @@ Egenskap: Innstillinger for opptak
     Gitt at opptaksforvalter ved forvaltende organisasjon er innlogget
     Og at opptaket "Samordna opptak 2027" er opprettet
 
-  # AVKLART 2026-10-19: Opptakstype og regelverkssamling skal kunne endres når som helst.
+  # AVKLART 2026-10-21 (produkteier): Opptakstype og regelverkssamling kan bare endres så lenge ingen
+  # utdanningstilbud er knyttet til opptaket. Det erstatter avklaringen 2026-10-19 om at de kan endres når som
+  # helst, med varsel om at utdanningstilbudene mister reglene.
   # Opptakstypen brukes bare til å kategorisere opptaket, og har ingen annen funksjon i systemet.
-  Regel: Opptaksforvalter kan endre opptakstype når som helst
+  Regel: Opptaksforvalter kan endre opptakstype så lenge ingen utdanningstilbud er knyttet til opptaket
 
-    Scenario: Endre opptakstype
+    Scenario: Endre opptakstype når ingen utdanningstilbud er knyttet til opptaket
+      Gitt at opptaket ikke har noen utdanningstilbud
       Når opptaksforvalter endrer opptakstype for opptaket
       Så er opptakstypen oppdatert
-      Og endringen påvirker ikke utdanningstilbud, søknader eller plasstildeling i opptaket
 
-    # AVKLART 2026-10-19 (produkteier, etter fs-verify): Det er ingen grunn til å låse opptakstypen når opptaket
-    # har utdanningstilbud, fordi opptakstypen ikke har noen følgelogikk.
-    Scenario: Endre opptakstype når utdanningstilbud er knyttet til opptaket
+    Scenario: Kan ikke endre opptakstype når utdanningstilbud er knyttet til opptaket
       Gitt at opptaket har utdanningstilbud
-      Når opptaksforvalter endrer opptakstype for opptaket
-      Så er opptakstypen oppdatert
+      Så kan ikke opptaksforvalter endre opptakstypen
 
-  Regel: Opptaksforvalter kan endre regelverkssamling når som helst
+  Regel: Opptaksforvalter kan endre regelverkssamling så lenge ingen utdanningstilbud er knyttet til opptaket
 
     # Hvilke regler utdanningstilbudene kan bruke, står i
     # 12 Utdanningstilbud/03 Opptaksinnstillinger/opptaksinnstillinger_utdanningstilbud.feature.
@@ -38,20 +37,9 @@ Egenskap: Innstillinger for opptak
       Når opptaksforvalter endrer regelverkssamlingen til "UHG 2027 v2"
       Så har opptaket regelverkssamlingen "UHG 2027 v2"
 
-    # AVKLART 2026-10-19: Utdanningstilbud som bruker regler fra den gamle regelverkssamlingen, mister alle reglene.
-    # Opptaksforvalter varsles om konsekvensene før regelverkssamlingen byttes.
-    Scenario: Varsel før regelverkssamlingen byttes
+    Scenario: Kan ikke endre regelverkssamling når utdanningstilbud er knyttet til opptaket
       Gitt at opptaket har utdanningstilbud som bruker regler fra gjeldende regelverkssamling
-      Når opptaksforvalter vil endre regelverkssamlingen til "UHG 2027 v2"
-      Så ser opptaksforvalter et varsel om at utdanningstilbudene som bruker regler fra gjeldende regelverkssamling, mister alle reglene
-      Og opptaksforvalter kan velge å avbryte endringen
-
-    # At utdanningstilbudene mister reglene, står i
-    # 12 Utdanningstilbud/03 Opptaksinnstillinger/opptaksinnstillinger_utdanningstilbud.feature.
-    Scenario: Bytte regelverkssamling når utdanningstilbud er knyttet til opptaket
-      Gitt at opptaket har utdanningstilbud som bruker regler fra gjeldende regelverkssamling
-      Når opptaksforvalter bekrefter endringen av regelverkssamlingen til "UHG 2027 v2"
-      Så har opptaket regelverkssamlingen "UHG 2027 v2"
+      Så kan ikke opptaksforvalter endre regelverkssamlingen
 
   # Poenglikhetsregel for ledige studieplasser styres av rundetypen i plasstildelingen,
   # ikke av opptakets standard poenglikhetsregel. Se krav/02 Opptak/14 Plasstildeling/.

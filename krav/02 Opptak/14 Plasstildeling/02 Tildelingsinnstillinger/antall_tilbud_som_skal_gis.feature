@@ -247,9 +247,8 @@ Egenskap: Antall tilbud som skal gis per utdanningskvote (sette opptaksparameter
 # - Opptaksforvalter ved forvaltende organisasjon kan endre antall tilbud også utenfor
 #   lærestedenes periode. Se 01 Runder/forvalte_runder.feature.
 # - Siste lagrede tall er korrekt uavhengig av hvem som satte det.
-# - Standard plassflyt for opptaket er en opptaksinnstilling, men løses som del av
-#   arbeidet med å lage plasstildelingen. Avklart 2026-10-13: standard plassflyt settes på opptaket
-#   og gjelder alle utdanningskvoter, se 11 Opprette og vedlikeholde opptak/03 Innstillinger/sette_plassflyt.feature.
+# - Standard plassflyt er en del av regelverket. Avklart 2026-10-21: standard plassflyt settes i
+#   regelverkssamlingen og gjelder alle utdanningskvoter, se 10 Regelverk/04 Kvoter/sette_plassflyt.feature.
 # - Antall tilbud som skal gis settes direkte per utdanningskvote.
 #   Totalt antall tilbud er utledet (summen av utdanningskvotene), ikke satt eksplisitt.
 # - Default i utdanningskvotene er null. Endret 2026-10-08: ikke varsel, men filter på
