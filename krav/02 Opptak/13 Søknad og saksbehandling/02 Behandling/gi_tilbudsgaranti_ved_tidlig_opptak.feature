@@ -138,8 +138,9 @@
 # - «Innvilget tidlig opptak» (brukt i #642) betyr at søkeren har fått
 #   tilbudsgaranti gjennom tidligopptaket.
 # - «Gjennomføre tidligopptaket» er det samme som tildelingsrutinen i #642.
-# - Behandler med T-rolle er tilbyder. Manuell tilbudsgaranti fra T-rolle er
-#   det #642 kaller tilbudsgaranti gitt av tilbyder.
+# - Tilbyder er lærestedet som tilbyr utdanningstilbudet, eller saksbehandleren som
+#   setter tilbudsgaranti for det (T-rolle i dagens løsning). Manuell tilbudsgaranti
+#   fra tilbyder er det #642 kaller tilbudsgaranti gitt av tilbyder.
 # - «Tidligopptakstilbud» er en tilbudsgaranti av en type i kategorien for tidlig
 #   opptak som gir tilbud: den gjennomføringen setter (FOR), eller den tilbyder
 #   setter manuelt (FOP), f.eks. når søkeren ikke kan poengberegnes.
@@ -407,7 +408,6 @@ Egenskap: Gi tilbudsgaranti ved tidlig opptak
   Regel: Manuell tilbudsgaranti krever ikke deltakelse i tidligopptaket
 
     Scenario: Sette tilbudsgaranti når søkeren ikke deltar i tidligopptaket
-      Gitt behandleren har T-rolle
-      Og det er ikke konkludert med at søkeren deltar i tidligopptaket
-      Når behandleren setter tilbudsgaranti på "Sykepleie, høst 2027"
-      Så har søkeren tilbudsgaranti på "Sykepleie, høst 2027"
+      Gitt det er ikke konkludert med at søkeren deltar i tidligopptaket
+      Når tilbyder setter tilbudsgaranti på "Sykepleie, høst 2027"
+      Så har søkeren tilbudsgaranti fra tilbyder på "Sykepleie, høst 2027"
