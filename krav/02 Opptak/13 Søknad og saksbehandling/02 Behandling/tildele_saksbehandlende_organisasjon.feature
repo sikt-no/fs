@@ -1,6 +1,6 @@
 # language: no
 # GitHub: #207
-@OPT-BEH-BEH-011 @must @planned
+@OPT-BEH-BEH-011 @must @in-progress
 Egenskap: Tildele saksbehandlende organisasjon
   Som opptaksforvalter ved forvaltende organisasjon
   ønsker jeg å bestemme hvilken organisasjon som saksbehandler hvert søknadsalternativ
