@@ -218,6 +218,16 @@ test('sub-domener nummereres fra 10, kapabiliteter har nummer', () => {
   assert.ok(!hasRule(feature(), 'folder-numbering', 'krav/99 Demo/01 Studiekatalog/01 Søk/lage_opptak.feature'));
 });
 
+test('flyter ligger rett under en nummerert prosess i _Flyter', () => {
+  const ok = 'krav/_Flyter/10 Opptaksløpet/tidlig_opptak.feature';
+  assert.ok(!hasRule(feature(), 'wrong-level', ok));
+  assert.ok(!hasRule(feature(), 'folder-numbering', ok));
+  assert.ok(hasRule(feature(), 'wrong-level', 'krav/_Flyter/tidlig_opptak.feature'));
+  assert.ok(hasRule(feature(), 'wrong-level', 'krav/_Flyter/10 Opptaksløpet/01 Tidlig/tidlig_opptak.feature'));
+  assert.ok(hasRule(feature(), 'folder-numbering', 'krav/_Flyter/Opptaksløpet/tidlig_opptak.feature'));
+  assert.ok(hasRule(feature(), 'folder-numbering', 'krav/_Flyter/05 Opptaksløpet/tidlig_opptak.feature'));
+});
+
 test('sub-domene og kapabilitet heter ikke det samme', () => {
   assert.ok(hasRule(feature(), 'same-name', 'krav/05 Opplysninger om person/10 Søk/01 Søk/lage_opptak.feature'));
   assert.ok(!hasRule(feature(), 'same-name', 'krav/09 Organisasjon/10 Finn organisasjon/01 Identifikatorsøk/lage_opptak.feature'));

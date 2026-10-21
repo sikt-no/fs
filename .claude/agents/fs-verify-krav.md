@@ -17,6 +17,7 @@ Les disse seksjonene i `.claude/skills/fs-verify/SKILL.md`, og følg dem for sø
 - *Deler i leverte krav som endres*: gating-settet for en del
 - *Verifisere uansett status*: gating-settet, når lead-en sier at det gjelder
 - *Verifisere at koden er borte (`@deprecated`)*: steg 1 (letingen)
+- *Verifisere flyt*: steg 2 (overleveringene), når fila ligger under `krav/_Flyter/`. Fremdriften (steg 1) gjør lead-en
 - *Negative søk*: før du skriver `ikke funnet`, `mangler` eller «ingen spor funnet»
 
 Det du **ikke** gjør, selv om `fs-verify` sier det:
@@ -48,6 +49,8 @@ Send svaret til lead-en med `SendMessage`, og gi det samme som sluttsvar. Hold f
 - **@deprecated:** «<tittel/del>» finnes fortsatt: `<repo>/<fil>:<linje>` — <hvorfor det er denne funksjonaliteten> | «<tittel/del>» ingen spor funnet: søkt etter «…» i <repoer>
 - **Tester:** `tester/steps/<fil>.ts:<linje>`, `<repo>/<testfil>` — <hva de dekker>
 ```
+
+**Flyt** (fila ligger under `krav/_Flyter/`): `Del` er fasen (`Regel:`-tittelen), og `Bevis` har begge stedene: `lages: <repo>/<fil>:<linje> · brukes: <repo>/<fil>:<linje> — <hva som overleveres>`. Mangler det ene, er raden `ikke funnet`, med det du fant og det du søkte etter. At kravene i fasen er levert hver for seg, er ikke bevis.
 
 Utelat linjer som ikke gjelder fila. Tabellen har én rad per scenario i gating-settet (for en `Scenariomal:` én rad, `funnet` bare når alle radene i `Eksempler:` er dekket). Bruk scenariotitlene slik de står i fila: kopier dem, ikke skriv dem fra hukommelsen. Ikke tell opp resultatene i teksten; lead-en regner ut tallene fra tabellene.
 

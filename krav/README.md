@@ -20,6 +20,8 @@ krav/02 Opptak/10 Regelverk/01 Regelverkssamling/regelverkssamling.feature
 
 `02 Opptak` er domenet, `10 Regelverk` sub-domenet og `01 Regelverkssamling` kapabiliteten. Se *Mappestruktur*.
 
+Løp som går på tvers av domener, beskrives som flyter i `krav/_Flyter`. Se *Flyter*.
+
 ### Hvordan en kravfil ser ut
 
 ```gherkin
@@ -66,6 +68,7 @@ Se *Kravstatus* og *Implementasjonsstatus*.
 - **Validering av en mappe:** utkastene gås gjennom ett spørsmål om gangen, de åpne spørsmålene lukkes, og det som er bekreftet, får `@planned`.
 - **Fjerning av krav:** krav som ikke er levert, slettes. Leverte krav får `@deprecated`. Se *Avvikling*.
 - **Endring av leverte krav:** den nye delen legges ved siden av den gamle som `@draft`. Når den er validert, får den `@planned`, og den gamle delen får `@deprecated`. Se *Endring av levert krav*.
+- **Flyter:** et løp på tvers av domener, fase for fase, med kravene hver fase bygger på. Se *Flyter*.
 
 ## Språk
 
@@ -126,7 +129,7 @@ Gherkin er et språk som alle andre, og må skrives godt for å være nyttig og 
 
 Tre nivåer: **Domene → Sub-domene → Kapabilitet**
 
-Feature-filer skal **kun** ligge på kapabilitetsnivå (nivå 3). *(sjekkes automatisk)* Sub-domener nummereres fra `10`, kapabiliteter fra `01`. `_Interne prosesser` og `99 Demo` følger ikke nummereringen. *(sjekkes automatisk)*
+Feature-filer skal **kun** ligge på kapabilitetsnivå (nivå 3). *(sjekkes automatisk)* Sub-domener nummereres fra `10`, kapabiliteter fra `01`. `_Interne prosesser` og `99 Demo` følger ikke nummereringen. *(sjekkes automatisk)* Unntaket er `_Flyter`, som har ett nivå: `krav/_Flyter/<NN Prosess>/flyt.feature`, med prosessene nummerert fra `10`. *(sjekkes automatisk)* Se *Flyter*.
 
 ```
 krav/
@@ -159,6 +162,7 @@ krav/
 - `10 Felleskrav` – tverrgående funksjonalitet
 - `99 Demo` – demo og testing
 - `_Interne prosesser` – egne arbeidsprosesser (f.eks. GitHub-automatisering)
+- `_Flyter` – løp på tvers av domener (se *Flyter*)
 
 ### Tverrgående kapabiliteter: hva vs. hvordan
 
@@ -231,6 +235,8 @@ Implementasjonsstatusen beveger seg langs én akse, og hvert steg har én eier:
 `@draft` →(`fs-krav`)→ `@planned` →(`fs-specify` / `fs-specify-delta`)→ `@in-progress` →(`fs-verify`)→ `@implemented` →(`fs-krav`)→ `@deprecated` →(`fs-verify`)→ slettet
 
 Unntaket er «Verifiser» på en egenskap eller en regel i FS Kravforvaltning: brukeren ber `fs-verify` verifisere *uansett status*. Finnes alt i koden, og brukeren bekrefter, kan `fs-verify` gi en `@draft`- eller `@planned`-egenskap statusen `@implemented` direkte, og fjerne `@draft`, `@planned` eller `@in-progress` fra en regel under en `@implemented` egenskap, så regelen er levert. Det gjelder bare det brukeren ba om, og aldri en regel under en egenskap som ikke er levert.
+
+En flyt i `krav/_Flyter` hentes ikke inn i en oppgave, og hopper over `@in-progress`: `fs-verify` gir en `@planned` flyt statusen `@implemented`. Se *Flyter*.
 
 Et krav skal ha nøyaktig én av disse på `Egenskap:`-tag-linja. Ikke sett to samtidig, og ikke la et krav stå uten status. På `Regel:`/`Scenario:` brukes `@draft` og `@deprecated`. `@planned` og `@in-progress` er bare lov på en del under en `@implemented` egenskap, når et levert krav endres (se *Endring av levert krav*). `@implemented` settes aldri på en del: en levert del har ingen egen statustag. *(sjekkes automatisk)*
 
@@ -412,6 +418,73 @@ Referansene settes av `fs-krav`. Når et krav endres, slettes eller får ny ID, 
 Sier noe om at et **konkret scenario eller regel** har en uavklart detalj, selv om resten av kravet er klart til implementasjon.
 
 - `@openquestion` – Scenarioet/regelen har en uavklart detalj som må besvares før implementasjon kan begynne i akkurat den delen. Plasseres på scenario- eller regel-nivå (ikke på `Egenskap:` – bruk `@draft` hvis hele kravet er utkast, og `@draft @openquestion` hvis hele regelen/scenarioet er utkast, se *Delvis utkast*). *(sjekkes automatisk)* Skal **alltid** følges av en `# ÅPNE SPØRSMÅL:`-kommentar like under som beskriver spørsmålet. *(sjekkes automatisk)* Taggen gjør det mulig å søke på tvers av krav-mappa (`grep -r @openquestion krav/`) for å finne gjenstående avklaringer. En `Egenskap:` kan være `@planned` selv om ett scenario er `@openquestion` – det markerer at hovedflyten er klar, men at en detalj må lukkes før delen kan implementeres.
+
+## Flyter
+
+> **Pilot.** Konvensjonen prøves ut på tre flyter i Opptaksløpet (saksbehandlertildeling, automatisk saksbehandling og mangelmelding), og evalueres etterpå. Bakgrunnen står i `forslag-flyter-og-referanser.md` i rota av repoet.
+
+En flyt beskriver et løp på tvers av domener, fase for fase: «hva skjer fra … til …?». Den er en egen feature-fil i `krav/_Flyter`. Hver `Regel:` er en fase, og `@depends-on-` på regelen peker på kravene fasen går gjennom (se *Referanser*). Reglene står i kravene. Flyten gjentar dem ikke, men beskriver overleveringene mellom dem.
+
+```
+krav/_Flyter/
+└── 10 Opptaksløpet/
+    ├── opptaksløpet.feature        # oversikt: fasene i hele løpet
+    ├── saksbehandlertildeling.feature
+    └── mangelmelding.feature
+```
+
+- **Prosess:** et livsløp på tvers av domener, som Opptaksløpet. Prosessene nummereres fra `10` i livsløpsrekkefølge, og speiler ikke domenene. Flytene ligger rett under prosessen, uten flere mappenivåer. *(sjekkes automatisk)*
+- **Oversiktsflyt:** én per prosess, med samme navn som prosessen og ID-en `@FLY-<prosess>-<prosess>-001` (`@FLY-OPT-OPT-001` for Opptaksløpet). Hver `Regel:` er en fase i hele løpet, og `@depends-on-` peker på flyten for fasen.
+- **ID:** `@FLY-<prosess>-<flyt>-NNN`, for eksempel `@FLY-OPT-SAK-001`. Formatet er det samme som for Feature-ID, og sjekkes på samme måte.
+- **Tagger:** som et krav: ID, prioritet og status, og typisk `@e2e`.
+- **Flyt på flyt:** en fase kan bygge på en annen flyt med `@depends-on-FLY-…`. Flyten den bygger på, ligger i samme prosess.
+- **Fase uten krav:** en fase uten `@depends-on-` viser at kravet mangler. Fasen får `@openquestion` og en `# ÅPNE SPØRSMÅL:` som sier hvilket krav som mangler, og kravet skrives med `fs-scope` eller `fs-krav`.
+- **Kjente brudd** i løpet (for eksempel en Jira-sak) står i en kommentar under beskrivelsen.
+- **Scenarioene** er få, tynne og deklarative. Det som skjedde i en tidligere fase, står som en tilstand i `Gitt`: `Gitt søkeren har tilbudsgaranti fra tidligopptaket`. Gherkin har ikke løkker: en runde fram og tilbake blir ett scenario per utfall.
+
+```gherkin
+# language: no
+@FLY-OPT-TID-001 @should @draft @e2e
+Egenskap: Tidlig opptak
+  Søkeren søker tidlig opptak, får søknaden vurdert, får tilbudsgaranti,
+  og får tilbud i hovedopptaket.
+  # Kjent brudd: STEK-263, tilbudsgarantien fra tidligopptaket leses ikke i hovedopptaket.
+
+  @depends-on-OPT-BEH-BEH-007 @depends-on-OPT-PLA-TIL-002
+  Regel: Tilbudsgarantien gir tilbud i hovedopptaket
+    Scenario: Søkeren med tilbudsgaranti får tilbud i hovedopptaket
+      Gitt søkeren har tilbudsgaranti fra tidligopptaket
+      Når plasstildelingen i hovedopptaket gjennomføres
+      Så får søkeren tilbud på søknadsalternativet
+```
+
+### Hva er en flyt?
+
+En kandidat er en flyt når den:
+
+1. går over minst to sub-domener eller domener
+2. har en overlevering: en tilstand som én aktør eller ett system lager, og en annen bruker
+3. svarer på et spørsmål noen faktisk stiller: «hva skjer fra … til …?»
+
+Faller den på terskelen, holder det med `@depends-on-` eller `@ref-` mellom kravene. En fase som er ett krav uten overlevering inni seg, er en fase, ikke en egen flyt.
+
+### To statuser
+
+Et brudd i overleveringen kan skjules av kravene. Testene for hvert krav setter opp tilstanden selv, så de kan gå grønt selv om det ene kravet aldri får det det andre lager. Bare flyten tester overleveringen.
+
+| Status | Kommer fra | Sier |
+|---|---|---|
+| Fremdrift | Statusen på kravene flyten bygger på | «3 av 5 faser levert» |
+| Flytens egen status | Taggen på flyten | at overleveringene virker i koden |
+
+Flytens egen status går `@draft` →(`fs-krav`)→ `@planned` →(`fs-verify`)→ `@implemented`. Den hentes ikke inn i en oppgave, og hopper over `@in-progress`. `fs-verify` setter `@implemented` når alle fasene er levert, og den har funnet i koden både stedet der hver overlevering lages og stedet der den brukes.
+
+Flytene finnes med `grep`, som referansene:
+
+| Spørsmål | Svar |
+|---|---|
+| Hvilke flyter går gjennom kravet? | `grep -rln "@depends-on-OPT-OPT-UTD-004" krav/_Flyter/` |
+| Hva må sjekkes når kravet endres, også flytene? | `grep -rn "@depends-on-OPT-OPT-UTD-004" krav/` |
 
 ## Åpne spørsmål
 

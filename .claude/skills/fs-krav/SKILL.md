@@ -17,7 +17,9 @@ description: >
   leverte krav ("endre krav", "oppdatere levert krav", "ny versjon av regel"):
   egenskapen blir stående `@implemented`, den nye delen legges ved siden av som
   `@draft` og får `@planned` når den er validert, og delen den erstatter får
-  `@deprecated`.
+  `@deprecated`. Skriver flyter i `krav/_Flyter` ("skriv en flyt", "flyt for",
+  "hva skjer fra … til …"): et løp på tvers av domener, med én `Regel:` per
+  fase og `@depends-on-` til kravene fasen bygger på.
 ---
 
 # Definere krav
@@ -46,7 +48,7 @@ Før du leser eller skriver krav: sjekk at branchen i dette repoet er oppdatert 
 
 ## Arbeidsmoduser
 
-Skillen har fire moduser. Velg modus basert på hva brukeren ber om. Hvis det er uklart, spør.
+Skillen har fem moduser. Velg modus basert på hva brukeren ber om. Hvis det er uklart, spør.
 
 | Modus | Når | Følg |
 |-------|-----|------|
@@ -54,6 +56,7 @@ Skillen har fire moduser. Velg modus basert på hva brukeren ber om. Hvis det er
 | **B. Fullføre krav i mappe** | Bruker peker på en eksisterende mappe og vil gå gjennom og validere kravene, slik at de validerte kan få `@planned`. Trigge-ord: "fullføre krav i [mappe]", "få kravene klare", "tagge med planned", "ferdigstille iterasjon N" | *Prosess: Fullføre krav i mappe* (steg B1–B6) |
 | **C. Fjerne krav** | Bruker vil slette et krav, eller en regel/et scenario i et krav. Trigge-ord: "fjerne krav", "slette krav", "avvikle", "dette skal ikke lenger gjelde" | *Prosess: Fjerne krav* (steg C1–C4) |
 | **D. Endre levert krav** | Bruker vil endre eller utvide et krav som er `@implemented`. Trigge-ord: "endre krav", "oppdatere levert krav", "ny versjon av regel", "kravet skal nå være" | *Prosess: Endre levert krav* (steg D1–D4) |
+| **E. Skrive flyt** | Bruker vil beskrive et løp på tvers av domener. Trigge-ord: "skriv en flyt", "flyt for", "hva skjer fra … til …", "pilot for flyt" | *Prosess: Skrive flyt* (steg E1–E5) |
 
 Modusene kan kjedes: fullføring avdekker ofte behov for nye scenarios eller nye features, som da følger modus A videre.
 
@@ -94,6 +97,8 @@ Sjekk `krav/krav-oversikt.md` og bla i `krav/`-mappen for å:
 Hvis en ny sub-domene eller kapabilitet må opprettes, bekreft navnet med brukeren før du lager mappen. Bruk toposiffer-prefiks (`10`, `11`, `12` ...) i tråd med eksisterende konvensjon.
 
 **Tverrgående kapabiliteter:** Skillet mellom *hva* (domene-spesifikt) og *hvordan* (`10 Felleskrav`) er beskrevet i konvensjonsfilen. Ved tvil, spør.
+
+**Flyter:** beskriver brukeren et løp på tvers av domener, og ikke ett krav, er det en flyt. Den ligger i `krav/_Flyter/<NN Prosess>/`, ikke på kapabilitetsnivå. Gå til modus E.
 
 ### A3. Les eksisterende kontekst
 
@@ -328,6 +333,7 @@ Ta ett draft-krav om gangen. For hvert:
    - Avvik fra *Gode scenarioer* og *Terminologi* i `krav/README.md`
    - Manglende `Bakgrunn:` der det ville redusert duplisering
    - Referanser: `@depends-on-` og `@ref-` til ID-er som ikke finnes, og referanser som står i fritekst i kommentarene (se *Referanser mellom krav* under). Spør om de skal bli tagger
+   - For en flyt (`krav/_Flyter/`): faser uten `@depends-on-` og uten åpent spørsmål, og scenarioer som gjentar en regel fra kravet de bygger på (se *Prosess: Skrive flyt*). En flyt får `@planned` bare når hver fase har `@depends-on-` eller et åpent spørsmål om kravet som mangler
 4. **Still konkrete spørsmål — ett om gangen.** Jf. interaksjonsprinsippet: ikke dump hele spørsmålslisten i én blokk. Still ett spørsmål, gi (a)/(b)/(c)-alternativer der det er naturlig, og vent på svar før du går til neste. Hovedregel: *aldri finn på valideringsregler, feilmeldinger eller forretningslogikk — spør brukeren*. Marker forslag tydelig som "forslag" hvis du presenterer dem for reaksjon.
 5. **Oppdater filen** basert på svarene: revider og konkretiser scenarios, legg til manglende scenarios, fjern besvarte `# ÅPNE SPØRSMÅL:`-kommentarer, stram opp språk, rett terminologi, og sørg for at Gherkin-konvensjonene følges (Scenariomal + Eksempler, deklarativ stil, én atferd per scenario).
 6. **Be brukeren om validering.** Når åpne spørsmål i hovedflyten er besvart og scenariene er konkrete nok til implementasjon, spør: *"Er [tittel] validert slik det står nå? (a) Ja → `@planned`, (b) Nei → beholder `@draft`."* Bytt `@draft` med `@planned` på `Egenskap:`-tag-linjen bare ved (a). Ikke behold begge. Eksempel: `@BRU-APP-API-001 @must @draft` → `@BRU-APP-API-001 @must @planned`.
@@ -442,6 +448,62 @@ Setter brukeren eksplisitt at delen skal ha `@planned`, gjelder det samme unntak
 - Step definitions i `tester/steps/` som hører til `@deprecated`-delene (listes, slettes ikke)
 - Neste steg: `fs-specify` / `fs-specify-delta` henter `@planned`-delene inn i en oppgave (`@planned` → `@in-progress` på delen), og `fs-verify` fjerner `@in-progress` når koden er på plass og sletter `@deprecated`-delene når den gamle koden er borte
 
+## Prosess: Skrive flyt
+
+En flyt beskriver et løp på tvers av domener, fase for fase. Den autoritative regelen står i *Flyter* i `krav/README.md`. Flyten gjentar ikke reglene i kravene: den sier hvilke krav hver fase bygger på, og beskriver overleveringene mellom dem.
+
+Still spørsmålene ett om gangen, som i modus B.
+
+### E1. Sjekk terskelen
+
+Gå gjennom de tre kriteriene i *Hva er en flyt?* med brukeren:
+
+1. Går løpet over minst to sub-domener eller domener?
+2. Har det en overlevering: en tilstand som én aktør eller ett system lager, og en annen bruker?
+3. Svarer det på et spørsmål noen faktisk stiller: «hva skjer fra … til …?»
+
+Faller kandidaten på terskelen, skriv ingen flyt. Foreslå `@depends-on-` eller `@ref-` mellom kravene i stedet (*Referanser mellom krav*). Er løpet ett krav uten overlevering inni seg, er det en fase i en annen flyt, ikke en egen flyt.
+
+### E2. Plassering og ID
+
+- **Prosessen:** finn prosessmappa i `krav/_Flyter/` (`Glob "krav/_Flyter/*/"`). Finnes ikke prosessen, foreslå navn og nummer (fra `10`, i livsløpsrekkefølge), og lag mappa bare når brukeren har bekreftet.
+- **Filnavnet:** snake_case, etter løpet: `saksbehandlertildeling.feature`, `fra_søknad_til_studieplass.feature`.
+- **ID:** `@FLY-<prosess>-<flyt>-NNN`, med tre bokstaver for prosessen og flyten (`@FLY-OPT-SAK-001` for Opptaksløpet → Saksbehandlertildeling). Sjekk at ID-en er ledig: `Grep "@FLY-<prosess>-<flyt>-"` i `krav/_Flyter/`.
+- **Oversiktsflyten** for prosessen (`<prosess>.feature`, f.eks. `opptaksløpet.feature`) har én `Regel:` per fase i hele løpet. Finnes den ikke, lag den som skjelett (`@draft`, beskrivelse og `Regel:`-titler uten scenarioer), med ID-en `@FLY-<prosess>-<prosess>-001`. Legg til `@depends-on-<ID til den nye flyten>` på fasen flyten hører til, og lag fasen hvis den mangler.
+
+### E3. Fasene
+
+Finn fasene sammen med brukeren, i den rekkefølgen løpet går. Hver fase blir én `Regel:`, med en tittel som sier hva som skjer i fasen («Søknadsalternativene fordeles når søknaden sendes»).
+
+For hver fase:
+
+1. **Finn kravene** fasen går gjennom: søk i `krav/` etter begrepene, og les kravene. Les statusen. Les ikke bare tittelen: kravet skal faktisk beskrive det som skjer i fasen.
+2. **Sett `@depends-on-<ID>`** på `Regel:`-linja for hvert krav (*Referanser mellom krav*). En fase kan bygge på en annen flyt i samme prosess med `@depends-on-FLY-…`. Gjelder referansen én regel i et stort krav, skriv regeltittelen i en kommentar under taggen.
+3. **Fase uten krav:** finnes ikke kravet, skriv fasen uten `@depends-on-`, tagg den `@openquestion`, og skriv en `# ÅPNE SPØRSMÅL:` som sier hvilket krav som mangler, og hvor det kan høre hjemme. Noter det til oppsummeringen. Kravet skrives med `fs-scope` (når det hører til et initiativ) eller modus A.
+4. **Overlapp:** beskriver to eller flere krav den samme regelen, si fra. Spør hvilket krav som skal eie regelen. Ryddingen gjøres i kravene (modus B for `@draft`/`@planned`, modus D for leverte krav), ikke i flyten.
+
+### E4. Scenarioene
+
+- Ett eller få scenarioer per fase, deklarative og tynne. De beskriver overleveringen, ikke reglene.
+- Det som skjedde i en tidligere fase, står som en tilstand i `Gitt`: `Gitt søkeren har tilbudsgaranti fra tidligopptaket`. Scenarioer kaller ikke andre scenarioer.
+- Det `Så` sier, er det neste fase eller neste aktør bruker: `Så er søkeren med når tidligopptaket gjennomføres`.
+- Gjenta ikke valideringsregler, feilmeldinger eller felter fra kravene. Trenger leseren dem, står de i kravet `@depends-on-` peker på.
+- Gherkin har ikke løkker. En runde fram og tilbake (søkeren dokumenterer en mangel, saksbehandleren sjekker den ut) blir ett scenario for runden, og ett scenario per annet utfall.
+- Bruk samme stegformuleringer som kravene der det går. Da gir de én felles step definition (`Grep` i `tester/steps/` og i kravene).
+- **Kjente brudd** i løpet (f.eks. en Jira-sak der overleveringen ikke virker) står i en kommentar under beskrivelsen: `# Kjent brudd: STEK-263, …`.
+
+### E5. Skriv fila og oppsummer
+
+Fila følger malen i *Flyter* i `krav/README.md`: `# language: no`, tag-linja `@FLY-<prosess>-<flyt>-NNN @<moscow> @draft @e2e` (og `@scope-<slug>` hvis flyten hører til et scope), `Egenskap:` med en beskrivelse av løpet fra start til slutt, og fasene. En flyt har ingen brukerhistorie (Som / ønsker / slik at), fordi den går over flere aktører. Vis fila før du skriver den.
+
+Oppsummer:
+
+- Stien og ID-en, og fasen i oversiktsflyten
+- **Fremdriften:** hver fase med kravene og statusen deres. En fase er levert når alle kravene er `@implemented`
+- Faser uten krav, med forslag til `fs-scope` eller modus A
+- Overlapp som ble funnet, og kjente brudd
+- Neste steg: valider flyten med modus B (`@draft` → `@planned`). Når kravene er levert, verifiserer `fs-verify` flyten (overleveringene i koden), og setter `@implemented`. Flyten hentes ikke inn i en oppgave med `fs-specify`
+
 ## Referanser mellom krav
 
 Et krav peker på et annet krav med `@depends-on-<Feature-ID>` eller `@ref-<Feature-ID>`. Den autoritative regelen står i *Referanser* i `krav/README.md`.
@@ -469,4 +531,5 @@ Et krav peker på et annet krav med `@depends-on-<Feature-ID>` eller `@ref-<Feat
 - **`krav/krav-oversikt.md`** — generert oversikt over alle eksisterende features
 - **`lage-steps`** — søsken-skill i dette repoet. Implementerer step-definitions i `tester/steps/` for `@planned`-krav (ikke for `@draft`-deler)
 - **`fs-specify`** / **`fs-specify-delta`** — søsken-skills i dette repoet. Henter `@planned`-krav, og `@planned`-deler i leverte krav, inn i en oppgavemappe under `tasks/`
+- **`fs-verify`** — søsken-skill i dette repoet. Verifiserer leverte krav, og flytene: fremdriften fra kravene, og at overleveringene virker i koden
 - **`fs-scope`** — søsken-skill i dette repoet. Avgrenser initiativet, deler det i oppgaver, lager skjelett-filene og setter `@scope-<slug>`. Kjøres før denne skillen, og på nytt når et krav ikke passer i scopet
