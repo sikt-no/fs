@@ -135,7 +135,8 @@ Egenskap: Gi tilbudsgaranti
       Så kan ikke saksbehandleren velge "Reservert studieplass"
 
   # En endring vises som at tilbudsgarantien er satt på nytt, med den nye typen
-  # (avklart med Daniel 21.10.2026, som i STEK-559).
+  # (avklart med Daniel 21.10.2026, som i STEK-559). Endringsloggen viser i dag ikke
+  # hvilket søknadsalternativ endringen gjelder, og må endres (STEK-627).
   Regel: Endringer i tilbudsgarantien kan spores
 
     Scenario: Se hvem som har satt tilbudsgarantien
