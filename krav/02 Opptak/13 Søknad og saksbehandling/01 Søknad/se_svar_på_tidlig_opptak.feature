@@ -11,15 +11,19 @@ Egenskap: Se svar på søknad om tidlig opptak
   # tildelingen står i gi_tilbudsgaranti_ved_tidlig_opptak.feature (OPT-BEH-BEH-007, #654).
   # Publiseringen og meldingen til søkeren står i
   # krav/02 Opptak/13 Søknad og saksbehandling/02 Behandling/publisere_svar_på_tidlig_opptak.feature.
-  # "Tilbudsgaranti gitt av tilbyder" her er det 007 kaller manuell tilbudsgaranti fra T-rolle.
+  # "Tilbudsgaranti gitt av tilbyder" her er manuell tilbudsgaranti fra T-rolle, se
+  # gi_tilbudsgaranti.feature (OPT-BEH-BEH-010).
   #
   # Avgrensning: Kravet gjelder kun svaret på tidlig opptak. Andre tilbudsgarantier —
   # særlig reservert studieplass — kommer fra en annen kilde og vises uavhengig av dette
   # svaret. En søker kan derfor se "ikke innvilget" på tidlig opptak og samtidig ha
   # reservert studieplass på samme søknadsalternativ.
   #
-  # Svaret bygger kun på tilbudsgarantien for tidlig opptak fra opptaksforvalter. En
-  # tilbudsgaranti gitt av tilbyder vises aldri som innvilget tidlig opptak til søkeren.
+  # Svaret bygger kun på tilbudsgarantien for tidlig opptak fra opptaksforvalter, som
+  # gjennomføringen setter. En tilbudsgaranti gitt av tilbyder vises ikke i seg selv som
+  # innvilget. Et tidligopptakstilbud fra tilbyder (FOP) regnes med i gjennomføringen, og
+  # gir tilbudsgaranti for tidlig opptak på søknadsalternativet (OPT-BEH-BEH-007). Da vises
+  # det som innvilget.
   Bakgrunn:
     Gitt at søkeren er innlogget
 
@@ -35,8 +39,31 @@ Egenskap: Se svar på søknad om tidlig opptak
 
     Scenario: Svaret blir synlig når tidligopptaket er gjennomført
       Gitt at tidligopptaket er gjennomført
+      Og at det er konkludert om søkeren deltar i tidligopptaket i alle sakene
       Når søkeren åpner søknaden sin
       Så ser søkeren svar på tidlig opptak på hvert av søknadsalternativene sine
+
+    # En søker som har søkt, skal ha konklusjon før tidligopptaket gjennomføres. Mangler
+    # konklusjonen i en sak, er søknadsalternativene i saken ikke med i tidligopptaket, og
+    # får ingen tilbudsgaranti (gi_tilbudsgaranti_ved_tidlig_opptak.feature). De behandles
+    # i det ordinære opptaket (avklart med fagperson 13.10.2026).
+    Scenario: Søkeren ser ikke svar på søknadsalternativer der saken ikke har konklusjon
+      Gitt at tidligopptaket er gjennomført
+      Og at søkeren har søkt om tidlig opptak
+      Men det er ikke konkludert om søkeren deltar i tidligopptaket i saken som gjelder "Sykepleie, høst 2027"
+      Når søkeren åpner søknaden sin
+      Så ser ikke søkeren svar på tidlig opptak på "Sykepleie, høst 2027"
+
+  # Etter at hovedopptaket er publisert, er det svaret fra hovedopptaket som gjelder
+  # (avklart 20.10.2026, som i koden).
+  Regel: Svaret på tidlig opptak vises fram til hovedopptaket er publisert
+
+    Scenario: Svaret på tidlig opptak vises ikke etter at hovedopptaket er publisert
+      Gitt at tidligopptaket er gjennomført
+      Og at søkeren har søkt om tidlig opptak
+      Og at hovedopptaket er publisert
+      Når søkeren åpner søknaden sin
+      Så ser ikke søkeren svar på tidlig opptak på noen av søknadsalternativene
 
   # Dette er noe annet enn at saksbehandler har konkludert med at søkeren ikke deltar.
   # Den søkeren har søkt, og ser "ikke innvilget" på søknadsalternativene sine.
@@ -147,6 +174,14 @@ Egenskap: Se svar på søknad om tidlig opptak
       Når søkeren åpner søknaden sin
       Så ser ikke søkeren poengsum og poenggrense på noen av søknadsalternativene
 
+    # Avklart 20.10.2026, som i koden (STEK-582).
+    Scenario: Poengsum og poenggrense vises ikke når søkeren ikke er kvalifisert
+      Gitt at svaret på tidlig opptak er publisert
+      Og at søkeren deltok i tidlig opptak på søknadsalternativet "Profesjonsstudiet i medisin, høst 2027"
+      Men søkeren er ikke kvalifisert til "Profesjonsstudiet i medisin, høst 2027"
+      Når søkeren åpner søknaden sin
+      Så ser ikke søkeren poengsum og poenggrense på "Profesjonsstudiet i medisin, høst 2027"
+
     Scenario: Poengsum og poenggrense vises ikke på søknadsalternativer uten tidlig opptak
       Gitt at svaret på tidlig opptak er publisert
       Og at utdanningstilbudet "Historie, høst 2027" ikke deltar i tidlig opptak
@@ -204,9 +239,9 @@ Egenskap: Se svar på søknad om tidlig opptak
         | engelsk    |
 
 # AVKLART 08.10.2026: Trekker søkeren søknaden eller fjerner søknadsalternativet,
-# faller tilbudsgarantien bort, og svaret viser ikke lenger innvilget. Legges
-# søknadsalternativet inn igjen før søknadsfristen for opptaket, gjelder
-# tilbudsgarantien igjen. Se gi_tilbudsgaranti_ved_tidlig_opptak.feature. Det er
+# faller tilbudsgarantien bort, og søkeren ser ikke noe svar på søknadsalternativet.
+# Legges søknadsalternativet inn igjen før søknadsfristen for opptaket, gjelder
+# tilbudsgarantien igjen. Se gi_tilbudsgaranti.feature (OPT-BEH-BEH-010). Det er
 # ett tilfelle av at fjerning er deaktivering, ikke sletting, som det ikke finnes
 # noe generelt krav for ennå (påpekt i review av PR #654, 09.10.2026).
 #
