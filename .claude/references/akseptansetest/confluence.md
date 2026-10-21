@@ -1,6 +1,6 @@
 # Confluence i testflyten
 
-Felles for `fs-testplan`, `fs-testcaser-intern`, `fs-testcaser-ekstern`, `fs-testrapport` og Confluence-steget i `fs-verify`. Testplanen er hovedsiden for en leveranse, og alle de andre sidene er undersider til den.
+Felles for `fs-testplan`, `fs-testcaser-intern`, `fs-testcaser-ekstern`, `fs-testrapport` og Confluence-steget i `fs-verify`. Testplanen er hovedsiden for en leveranse, og alle de andre sidene er undersider til den. Verifiseringen kommer før testplanen, så undersiden «Verifisering – …» lages av `fs-testplan` når testplanen opprettes, og av `fs-verify` når den kjøres på nytt med en testplan som finnes.
 
 ## Verktøy
 
@@ -18,7 +18,7 @@ Bruk Atlassian-MCP-en som finnes i økta. Navnet avhenger av oppsettet, f.eks. `
 ```
 Testplaner (5126062121)
 └── Testplan – <leveranse>                                  ← fs-testplan
-    ├── Verifisering – <leveranse> – <YYYY-MM-DD HH:MM>     ← fs-verify
+    ├── Verifisering – <leveranse> – <YYYY-MM-DD HH:MM>     ← fs-testplan (første), fs-verify (på nytt)
     ├── Testrapport – verifisering – <leveranse>            ← fs-testrapport
     ├── Intern akseptansetest – <leveranse>                 ← fs-testcaser-intern
     ├── Testrapport – intern akseptansetest – <leveranse>   ← fs-testrapport
@@ -32,7 +32,7 @@ Testplaner (5126062121)
 
 ## Finn testplanen
 
-Alle skillene etter `fs-testplan` starter med testplanen:
+Skillene etter `fs-testplan`, og `fs-verify` når den skal legge resultatet i Confluence, starter med testplanen:
 
 1. Oppga brukeren en testplan (`akseptansetest/<slug>`, eller `testplan.md` i den), bruk den.
 2. Oppga brukeren et scope, en oppgave, en mappe eller en feature-fil: `Grep` etter den (`@scope-<slug>`, `tasks/<domene>/<slug>`, `krav/<sti>`) i `- **Kilde**:` i `akseptansetest/*/testplan.md`. For en feature-fil: søk også etter Feature-ID-en i «Omfang». Ett treff er testplanen. Flere treff: spør hvilken.
@@ -70,12 +70,12 @@ Ved oppdatering: vis hva som endres, og spør.
 
 ## «Status i flyten» på testplanen
 
-Testplanen har en tabell med de sju stegene. Den eneste delen av testplanen de andre skillene endrer, er sin egen rad i den tabellen:
+Testplanen har en tabell med de sju stegene. `fs-testplan` fyller ut rad 1 og 2 når testplanen lages. Den eneste delen av testplanen de andre skillene endrer, er sin egen rad i den tabellen:
 
 | Steg | Side | Status | Dato |
 |---|---|---|---|
-| 1. Testplan | (denne siden) | Laget | <dato> |
-| 2. Verifisering (`fs-verify`) | <lenke> | Alt funnet / <N> mangler | <dato> |
+| 1. Verifisering (`fs-verify`) | <lenke> | Alt funnet / <N> ikke funnet, <N> usikker / Ikke kjørt | <dato> |
+| 2. Testplan | (denne siden) | Laget | <dato> |
 | 3. Testrapport – verifisering | <lenke> | Klar / Ikke klar for intern akseptansetest | <dato> |
 | 4. Intern akseptansetest | <lenke> | Klar til test / Pågår / Ferdig | <dato> |
 | 5. Testrapport – intern | <lenke> | Godkjent / Godkjent med forbehold / Ikke godkjent / Venter på beslutning | <dato> |

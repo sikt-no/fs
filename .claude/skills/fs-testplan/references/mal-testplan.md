@@ -2,7 +2,7 @@
 
 Testplanen er hovedsiden for en leveranse i Confluence, og grunnlaget for testcasene i den interne og den eksterne akseptansetesten. Malen er utledet fra [teststrategien](https://sikt.atlassian.net/wiki/spaces/STUDIEADM/pages/5117902850) (*Testplan og sluttrapport*, og radene for hvert trinn) og «Mal: Testbeskrivelse» i [rutinen](https://sikt.atlassian.net/wiki/spaces/STUDIEADM/pages/5091196953).
 
-Testplanen er planen før testen. Resultatene står på undersidene (testcasene og testrapportene), ikke her. Den eneste delen andre skills endrer, er sin egen rad i «Status i flyten».
+Testplanen lages etter verifiseringen (steg 1), og bygger på resultatet. Testplanen er planen før testen. Resultatene står på undersidene (testcasene og testrapportene), ikke her. Den eneste delen andre skills endrer, er sin egen rad i «Status i flyten».
 
 Fila skrives til `akseptansetest/<testplan-slug>/testplan.md`. Alt over den første streken er metadata for repoet, og publiseres ikke.
 
@@ -15,6 +15,7 @@ Fila skrives til `akseptansetest/<testplan-slug>/testplan.md`. Alt over den før
 - **Scope-fil**: [scope-<slug>](../../tasks/<domene>/scope-<slug>.md)[, …]   (når kravene har scope)
 - **Oppgaver**: [<domene>/<slug>](../../tasks/<domene>/<slug>/oppgave.md)[, …]   (når det finnes oppgaver)
 - **Krav**: <N> feature-filer, <N> `@implemented`, commit `<sha>` (<YYYY-MM-DD>)
+- **Verifisering**: [verify-<YYYY-MM-DD>-<HHMM>.md](<sti til rapporten>)[, …] | –   (verify-rapportene testplanen bygger på)
 - **Confluence**: –
 - **Laget**: <YYYY-MM-DD> av fs-testplan
 
@@ -68,7 +69,7 @@ De automatiske testene av de samme kravene: `npx playwright test --grep @scope-<
 
 ## Venter på verifisering
 
-Kravene er laget, men `fs-verify` har ikke bekreftet dem ennå. De tas med i testen når de er `@implemented`.
+Kravene er laget, men `fs-verify` har ikke funnet alt ennå. De tas med i testen når de er `@implemented`.
 
 | Krav | Feature-ID | Status | Hva som venter |
 |---|---|---|---|
@@ -109,7 +110,7 @@ Klart når testansvarlig har logget inn som testbruker og ser testdataene.
 | 2 | Testdataene er identifisert og tilgjengelige | [Fylles ut av teamet] |
 | 3 | Testdataene kan settes tilbake eller lages på nytt | [Fylles ut av teamet] |
 | 4 | Testbrukerne finnes i rollene leveransen gjelder, i minst to organisasjoner | [Fylles ut av teamet] |
-| 5 | `fs-verify` har funnet alle scenarioene, og en annen person har kontrollert rapporten | <fra steg 2 og 3, eller «Venter»> |
+| 5 | `fs-verify` har funnet alle scenarioene, og en annen person har kontrollert rapporten | <fra verify-rapporten i steg 1, og steg 3, eller «Venter»> |
 | 6 | Testcasene er laget og gått gjennom av testansvarlig | Venter |
 | 7 | Testansvarlig har logget inn som testbruker og ser testdataene | [Fylles ut av testansvarlig] |
 
@@ -131,8 +132,8 @@ Testansvarlig skriver hva som skal til for at testen blir godkjent, helst før u
 
 | Steg | Side | Status | Dato |
 |---|---|---|---|
-| 1. Testplan | (denne siden) | Laget | <YYYY-MM-DD> |
-| 2. Verifisering (`fs-verify`) | – | Venter | |
+| 1. Verifisering (`fs-verify`) | <lenke til verify-rapporten> | Alt funnet / <N> ikke funnet, <N> usikker / Ikke kjørt | <dato i rapporten> |
+| 2. Testplan | (denne siden) | Laget | <YYYY-MM-DD> |
 | 3. Testrapport – verifisering | – | Venter | |
 | 4. Intern akseptansetest | – | Venter | |
 | 5. Testrapport – intern | – | Venter | |

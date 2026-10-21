@@ -1,6 +1,6 @@
 # Kravene i en testplan
 
-Felles for skillene i testflyten. `fs-testplan` finner kravene fra kilden brukeren oppgir, og skriver dem i «Omfang» i testplanen. De andre skillene leser kravene derfra, med Feature-ID, så alle trinnene tester de samme kravene, også om det kommer nye krav i mappa eller scopet etterpå.
+Felles for skillene i testflyten. Verifiseringen (`fs-verify` eller `fs-verify-agent-teams`) kjøres først, på kilden, og setter `@implemented` på kravene der koden er funnet. `fs-testplan` finner så kravene fra den samme kilden, og skriver dem i «Omfang» i testplanen. De andre skillene leser kravene derfra, med Feature-ID, så alle trinnene tester de samme kravene, også om det kommer nye krav i mappa eller scopet etterpå.
 
 **Det som testes, er det som er `@implemented`.** Krav og deler med en annen status står i testplanen, men ikke i testcasene.
 
@@ -67,13 +67,13 @@ Filene brukeren oppga, i den rekkefølgen brukeren oppga dem. Én gruppe.
 
 **Endrede krav i et scope.** Er leveransen et scope eller en oppgave med scope, og har et `@implemented` krav taggen `@scope-<slug>` bare på enkelte deler, er det bare de delene som testes (delene som er levert i scopet). Resten av kravet ble levert og testet før. Ved en mappe eller fil testes hele det leverte kravet, med mindre brukeren sier noe annet.
 
-Er ingen av kravene `@implemented`, si det før testplanen skrives: testplanen kan lages, men det er ingenting å lage testcaser for ennå. Foreslå `fs-verify`.
+Er ingen av kravene `@implemented`, si det før testplanen skrives: testplanen kan lages, men det er ingenting å lage testcaser for ennå. Er verifiseringen ikke kjørt, foreslå `fs-verify` på kilden først.
 
 Det som faller ut, listes i «Ikke med i denne testen» med grunnen: taggen, og det åpne spørsmålet når delen er `@openquestion`. På testsidene skrives grunnen med vanlige ord, uten tagger.
 
 ## Kravene i de andre skillene
 
-`fs-verify`, `fs-testcaser-intern`, `fs-testcaser-ekstern` og `fs-testrapport` bruker Feature-ID-ene i «Omfang» og «Venter på verifisering» i testplanen, og slår dem opp under `krav/`. De finner ikke kravene på nytt fra kilden. Har et krav fått ny status siden testplanen ble laget (for eksempel `@implemented` etter `fs-verify`), gjelder statusen i kravfila. Er det kommet nye krav i kilden, si fra, og foreslå å kjøre `fs-testplan` på nytt.
+`fs-testcaser-intern`, `fs-testcaser-ekstern`, `fs-testrapport`, og `fs-verify` når den kjøres på nytt med testplanen, bruker Feature-ID-ene i «Omfang» og «Venter på verifisering» i testplanen, og slår dem opp under `krav/`. De finner ikke kravene på nytt fra kilden. Har et krav fått ny status siden testplanen ble laget (for eksempel `@implemented` etter `fs-verify`), gjelder statusen i kravfila. Er det kommet nye krav i kilden, si fra, og foreslå å kjøre `fs-testplan` på nytt.
 
 ## Commit
 
