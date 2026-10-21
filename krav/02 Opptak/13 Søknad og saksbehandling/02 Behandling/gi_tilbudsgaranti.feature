@@ -175,7 +175,8 @@ Egenskap: Gi tilbudsgaranti
     # Avklart med domeneekspert 21.10.2026: også tilbudsgarantien fra saksbehandler følger
     # søknadsalternativet når det flyttes til en annen saksbehandlende organisasjon, selv om
     # saksbehandlingen starter på nytt der (tildele_saksbehandlende_organisasjon.feature).
-    # Koden kopierer i dag bare tilbudsgarantien fra tilbyder og opptaksforvalter, og må endres.
+    # Koden kopierer i dag bare tilbudsgarantien fra tilbyder og opptaksforvalter, og må
+    # endres (STEK-626).
     Scenariomal: Tilbudsgarantien følger søknadsalternativet når det flyttes til en annen saksbehandlende organisasjon
       Gitt søkeren har tilbudsgaranti fra <rolle> på "Informatikk, UiO"
       Når "Informatikk, UiO" flyttes fra "Universitetet i Oslo" til "HK-dir"
