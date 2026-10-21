@@ -21,13 +21,16 @@
 # (FS-Admin - Seksjon Opptak, node 10119-38734). Jira-initiativ SOPP-184.
 #
 # Ny stack: VGS-resultatene kommer fra KREG/NVB — kompetansebevisByNasjonalId
-# og hentKompetansebevis. Integrasjonen finnes allerede, så denne leveransen
-# er i hovedsak presentasjon.
+# og hentKompetansebevis. Integrasjonen finnes allerede. Poengene per
+# vitnemål (karakterpoeng, realfagspoeng og språkpoeng) kommer fra Team Puffs
+# poengberegning, som må kunne beregne poeng for hvert vitnemål, ikke bare for
+# det som er lagt til grunn. AVKLART 21.10.2026: poengene per vitnemål er med
+# i L1.
 #
 # AVGRENSNING MOT SENERE LEVERANSER
 #
-# Ingen valg og ingen beregning. Saksbehandleren ser hva søkeren har, og
-# slipper å slå opp i FS-klienten. Å legge et vitnemål til grunn hører i L2
+# Ingen valg. Saksbehandleren ser hva søkeren har, med poengene hvert
+# vitnemål gir, og slipper å slå opp i FS-klienten. Å legge et vitnemål til grunn hører i L2
 # (#608), fagvalg per poengvariant i L3 (#609), manuell inntasting av fag i L4
 # (#610), sammenligning av vitnemål i L5 (#611) og varsel ved nytt vitnemål
 # fra NVB i L6 (#612).
@@ -82,22 +85,37 @@ Egenskap: Se søkerens elektroniske vitnemål
       Når jeg åpner vitnemålsoversikten
       Så ser jeg hvert vitnemål med følgende opplysninger
         | felt                |
+        | Vitnemålsnummer     |
         | Utstedelsesdato     |
-        | Dokumenttype        |
-        | Status              |
+        | GSK                 |
         | Førstegangsvitnemål |
-        | Reform              |
-        | Dispensasjon        |
-        | Påstand om GSK      |
-      # AVKLART 21.09.2026: dispensasjon og påstand om GSK vises som del av
+        | Karakterpoeng       |
+        | Realfagspoeng       |
+        | Språkpoeng          |
+      Og førstegangsvitnemålet vises først
+      Og de andre vitnemålene er sortert etter utstedelsesdato, fra eldste til nyeste
+      # AVKLART 21.10.2026: førstegangsvitnemålet vises først. Resten følger
+      # etter utstedelsesdato, fra eldste til nyeste.
+      #
+      # AVKLART 21.10.2026: opplysningene er vitnemålsnummer, utstedt dato,
+      # GSK, førstegangsvitnemål (ja/nei), karakterpoeng, realfagspoeng og
+      # språkpoeng, som i tabellen «Vitnemål» i Figma-målbildet.
+      # Vitnemålsnummeret gjør at vitnemålet kan kjennes igjen. Dokumenttype,
+      # status, reform og dispensasjon er tatt ut. At et annullert vitnemål
+      # markeres, gjelder fortsatt («Annullert vitnemål som er brukt i en
+      # beregning vises»).
+      #
+      # AVKLART 21.09.2026 (delvis erstattet 21.10.2026, dispensasjon vises
+      # ikke lenger): dispensasjon og påstand om GSK vises som del av
       # vitnemålets opplysninger, selv om selve GSK-vurderingen er avgrenset
       # ut av initiativet. Begrunnelse: de er kontekst for hvilket vitnemål som
       # bør legges til grunn, og saksbehandleren skal slippe å bytte
       # skjermbilde for å se dem.
       #
-      # Feltene er verifisert mot NVB_VGDOK og mot KREG-spørringen
-      # hentKompetansebevis: datoUtstedt, vgdoktypekode, status, foerstegangsvm,
-      # reformkode, dispensasjonskode og paastandOmGsk.
+      # Feltene fra vitnemålet er verifisert mot NVB_VGDOK og mot
+      # KREG-spørringen hentKompetansebevis: datoUtstedt, foerstegangsvm og
+      # paastandOmGsk. Poengene per vitnemål kommer fra Team Puffs
+      # poengberegning, ikke fra KREG.
 
     Scenario: Søker uten elektroniske vitnemål
       Gitt søkeren ikke har elektroniske vitnemål
@@ -112,12 +130,37 @@ Egenskap: Se søkerens elektroniske vitnemål
       # alltid skal være åpent står i legge_inn_og_endre_fag.feature, og må
       # innfris sammen med skjemaet.
 
-    Scenario: Åpne et vitnemål i eget vindu
+    Scenario: Vitnemålene kan ikke hentes
+      Gitt søkerens elektroniske vitnemål ikke kan hentes fra NVB
+      Når jeg åpner grunnlaget på søknaden
+      Så ser jeg en tydelig feilmelding om at vitnemålene ikke kunne hentes
+      # AVKLART 21.10.2026: når vitnemålene ikke kan hentes, skal
+      # saksbehandleren få en tydelig feilmelding. Det skal ikke se ut som at
+      # søkeren ikke har elektroniske vitnemål («Søker uten elektroniske
+      # vitnemål»).
+      #
+      # Ny stack har allerede KregUtilgjengeligFeil for denne situasjonen.
+      # Utformingen av feilmeldingen hører i
+      # vise_elektroniske_vitnemål.design.md.
+
+    Scenario: Poengene vises tomme når poengberegningen ikke svarer
       Gitt søkeren har elektroniske vitnemål
-      Når jeg velger å åpne et vitnemål i eget vindu
-      Så vises vitnemålet i et eget vindu ved siden av saksbehandlingen
-      # Formålet er å kunne lese vitnemålet mens saksbehandlingen står åpen,
-      # eventuelt på en ekstern skjerm.
+      Og poengberegningen feiler eller ikke svarer
+      Når jeg åpner vitnemålsoversikten
+      Så ser jeg hvert vitnemål med opplysningene fra vitnemålet
+      Men karakterpoeng, realfagspoeng og språkpoeng vises tomme
+      # AVKLART 21.10.2026: når Team Puffs poengberegning ikke svarer, står
+      # poengkolonnene tomme. Vitnemålene vises likevel.
+
+    Scenario: Åpne et vitnemål i ny fane
+      Gitt søkeren har elektroniske vitnemål
+      Når jeg velger å åpne et vitnemål i ny fane
+      Så vises vitnemålet i en ny fane
+      Og saksbehandlingen står fortsatt åpen
+      # Formålet er å kunne lese vitnemålet mens saksbehandlingen står åpen.
+      #
+      # AVKLART 21.10.2026: vitnemålet åpnes i en ny fane, ikke i et eget
+      # vindu ved siden av saksbehandlingen.
 
     Scenario: Annullert vitnemål som er brukt i en beregning vises
       Gitt søkeren har et annullert vitnemål
@@ -128,7 +171,7 @@ Egenskap: Se søkerens elektroniske vitnemål
       # er en konsekvens av valget, og hører derfor i L2 (#608),
       # velge_vitnemål_som_grunnlag.feature.
 
-    Scenario: Vitnemål uten relevans for opptaket vises ikke
+    Scenario: Annullert vitnemål som ikke er brukt i en beregning vises ikke
       Gitt søkeren har et annullert vitnemål
       Og det annullerte vitnemålet er ikke brukt i en beregning på dette opptaket
       Når jeg åpner vitnemålsoversikten

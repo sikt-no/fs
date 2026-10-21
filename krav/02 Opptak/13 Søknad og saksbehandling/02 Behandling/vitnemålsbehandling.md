@@ -60,6 +60,7 @@ Kravene erstatter to funksjoner i FS-klienten: vitnemålsbehandling (FS143.001 V
 
   Ingen spørsmål står åpne.
 - **08.10.2026:** Oppdelingen i leveranser er besluttet, og hver leveranse har fått sin egen kravspesifikasjon.
+- **21.10.2026:** Gjennomgang av L1 og L2 i teamet. Vitnemålsoversikten i L1 viser karakterpoeng, realfagspoeng og språkpoeng per vitnemål. L1 er dermed ikke lenger bare visning: den er avhengig av at Team Puff kan beregne poeng for hvert vitnemål. Scenarioet «Automatikken har ikke beregnet poeng når søkeren har flere vitnemål» er fjernet fra L2. Når saksbehandleren er i vitnemålsbehandleren, vet de allerede at saken er manuell og ikke kan gjøres automatisk, så en egen forklaring trengs ikke.
 
 ## Avgrensninger: bevisst utenfor kravene
 
