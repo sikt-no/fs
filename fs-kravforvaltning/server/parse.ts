@@ -322,8 +322,16 @@ export function parseFeature(source: string, path?: string): FeatureModel {
   if (!/^\s*#\s*language:\s*no\s*$/.test(firstLine)) push('missing-language', 'Fila starter ikke med «# language: no»', 1);
   if (path?.startsWith('krav/')) {
     const seg = path.split('/');
-    if (seg.length !== 5) push('wrong-level', 'Fila ligger ikke på kapabilitetsnivå (krav/Domene/Sub-domene/Kapabilitet/)', 1);
+    // Flyter har ett nivå under _Flyter: krav/_Flyter/Prosess/flyt.feature
+    const flyt = seg[1] === '_Flyter';
+    if (flyt && seg.length !== 4) push('wrong-level', 'Flyten ligger ikke rett under en prosess (krav/_Flyter/Prosess/)', 1);
+    else if (!flyt && seg.length !== 5) push('wrong-level', 'Fila ligger ikke på kapabilitetsnivå (krav/Domene/Sub-domene/Kapabilitet/)', 1);
     if (!SNAKE_CASE.test(seg[seg.length - 1])) push('not-snake-case', `Filnavnet «${seg[seg.length - 1]}» er ikke i snake_case`, 1);
+    if (flyt && seg.length === 4) {
+      const n = seg[2].match(/^(\d+) /);
+      if (!n) push('folder-numbering', `Prosessen «${seg[2]}» mangler nummer (fra 10)`, 1);
+      else if (+n[1] < 10) push('folder-numbering', `Prosessen «${seg[2]}» er nummerert under 10`, 1);
+    }
     // _Interne prosesser og 99 Demo følger ikke nummereringen
     if (seg.length === 5 && !/^(_|99 )/.test(seg[1])) {
       const [sub, kap] = [seg[2], seg[3]];

@@ -249,6 +249,8 @@ Det gir **1 prosess og 5 flyter for hele Opptak**, ikke 8 for ett sub-domene.
 | FS Kravforvaltning (`parse.ts` + tester) | Steg 1: avvik for formatet, referanse til kravet selv, samme referanse to ganger og begge typer på samme del |
 | FS Kravforvaltning (visning) | Steg 6: lenker, «Bygger på», «Brukes av», tillate `_Flyter` med to nivåer, og visning av flyter |
 
+**Status, oktober 2026:** referansene (steg 1) er i `krav/README.md`, skillene og `parse.ts`. Flytene er lagt inn for pilotene: *Flyter* i `krav/README.md`, modus E i `fs-krav`, sjekkene for flyter i `fs-krav-avvik`, *Verifisere flyt* i `fs-verify` (og `fs-verify-agent-teams`), og `parse.ts` godtar `_Flyter` med to nivåer. Det som gjenstår, er visningen i FS Kravforvaltning (steg 6).
+
 ## Forslag til rekkefølge
 
 Referansene kommer først, fordi flytene bygger på dem. Så kommer tre piloter for flyt, fra den enkleste til den mest komplekse. Hver pilot tester noe nytt i forslaget. Etter pilotene evaluerer vi, før appen og resten av flytene.
