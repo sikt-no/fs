@@ -8,8 +8,8 @@ Kravet var én fil (`vitnemålsbehandling.feature`, `@OPT-BEH-BEH-004`) fram til
 
 | Leveranse | Kravspesifikasjon | Feature-ID | Issue | Bygger på | Størrelse | Status |
 |---|---|---|---|---|---|---|
-| L1 Vise vitnemålene | [vise_elektroniske_vitnemål.feature](vise_elektroniske_vitnemål.feature) | `@OPT-BEH-BEH-005` | #613 | — | liten | `@planned` |
-| L2 Velge ett vitnemål for hele saken | [velge_vitnemål_som_grunnlag.feature](velge_vitnemål_som_grunnlag.feature) | `@OPT-BEH-BEH-004` | #608 | L1 | middels | `@draft` |
+| L1 Vise vitnemålene | [vise_elektroniske_vitnemål.feature](vise_elektroniske_vitnemål.feature) | `@OPT-BEH-BEH-005` | #613 | — | liten | `@in-progress` |
+| L2 Velge ett vitnemål for hele saken | [velge_vitnemål_som_grunnlag.feature](velge_vitnemål_som_grunnlag.feature) | `@OPT-BEH-BEH-004` | #608 | L1 | middels | `@in-progress` |
 | L3 Fagvalg per poengvariant | [velge_fag_per_poengvariant.feature](velge_fag_per_poengvariant.feature) | `@OPT-BEH-BEH-007` | #609 | L2 | middels | `@draft` |
 | L4 Manuell inntasting og endring av fag | [legge_inn_og_endre_fag.feature](legge_inn_og_endre_fag.feature) | `@OPT-BEH-BEH-008` | #610 | L2, L3 | stor | `@draft` |
 | L5 Sammenligning av vitnemål | [sammenligne_vitnemål.feature](sammenligne_vitnemål.feature) | `@OPT-BEH-BEH-009` | #611 | L1 | liten | `@draft` |

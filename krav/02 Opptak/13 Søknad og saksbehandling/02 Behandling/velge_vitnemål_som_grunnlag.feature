@@ -11,7 +11,7 @@
 # flere vitnemål. Mønsteret finnes å kopiere — settGskKonklusjonFraVitnemaal
 # gjør nøyaktig dette for GSK.
 #
-@OPT-BEH-BEH-004 @must @draft
+@OPT-BEH-BEH-004 @must @in-progress
 Egenskap: Velge vitnemål som grunnlag for poengberegningen
   Som saksbehandler i opptak
   ønsker jeg å velge hvilket vitnemål som legges til grunn for poengberegningen
