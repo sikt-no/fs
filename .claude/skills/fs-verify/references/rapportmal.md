@@ -10,6 +10,7 @@ Rapporten fra `fs-verify` og `fs-verify-agent-teams` følger denne malen, så to
   - `[agent team]`: kjørt med `fs-verify-agent-teams`.
   - `[per repo]`: repoene er vurdert hver for seg. Bokstavene står i *Kodeklonene* i `fs-verify`: P = fs-plattform, A = fs-admin, M = min-kompetanse. Bare repoene som er med i kjøringen, står i rapporten.
   - `[uansett status]`: brukeren ba om å verifisere uansett status (*Verifisere uansett status* i `fs-verify`). `[ikke uansett status]` er det motsatte.
+  - `[confluence]`: resultatet er lagt i Confluence (*Confluence* i `fs-verify`). Linja skrives inn etter at siden er laget, i samme kjøring.
 - **Faste tekster** står uten `<…>` og skrives som de står. Det i `<…>` fylles inn. Der det står `a | b`, velges én.
 - **Tallene regnes ut** fra tabellen `## Scenarioer` og fra endringene du har gjort (se *Rapport* i `fs-verify`). Tallene i `## Oppsummering`, `## Oversikt per krav` og `Gating funnet` skal stemme med tabellen.
 - **`## Scenarioer` leses av FS Kravforvaltning.** Fire kolonner, Feature-ID med `@`, scenariotittelen slik den står i fila, og `Resultat` med små bokstaver: `funnet`, `ikke funnet` eller `usikker`. Resultatet er det som gjelder etter kontrollen.
@@ -23,12 +24,13 @@ Rapporten fra `fs-verify` og `fs-verify-agent-teams` følger denne malen, så to
 # Verifisering: <scope>
 
 - **Dato:** YYYY-MM-DD HH:MM
-- **Krav:** `<krav-sti eller oppgave>` (<N> feature-filer)
+- **Krav:** `<krav-sti, oppgave eller @scope-<slug>>` (<N> feature-filer)
 - **Spec:** `spec/spec-<x>.md`                                         [oppgave, bare når scope er en spesifikasjon]
 - **Kode:** `<repo>` (<branch>, <kort sha>, <oppdatert | N bak origin | N bak main | ikke sjekket (Claude-panelet)>), `<repo>` (…)
 - **Kontroll:** `fs-verify-kontroll` | manuell (Claude-panelet)
 - **Team:** <N> finnere (`fs-verify-krav`), <N> kontrollører (`fs-verify-kontroll`), <N>–<N> feature-filer per finner   [agent team]
 - **Skjermbilder:** ja | nei | nei (<grunn>)
+- **Confluence:** <url> | <url> (utkast)                                [confluence]
 
 Gating-sett: scenarioene som ikke er tagget `@draft`, `@deprecated`, `@openquestion` eller `@demo`.   [ikke uansett status]
 Gating-sett: alle scenarioene i scope, også `@draft`, `@planned` og `@openquestion`, minus `@demo` (verifisert uansett status).   [uansett status]
