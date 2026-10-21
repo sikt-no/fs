@@ -28,14 +28,8 @@ Egenskap: Opptaksinnstillinger per utdanningstilbud
       Når opptaksforvalter setter regelverk for et utdanningstilbud
       Så kan opptaksforvalter kun velge blant regelverkene i opptakets regelverkssamling
 
-    # AVKLART 2026-10-19: Utdanningstilbud som bruker regler fra den gamle regelverkssamlingen, mister alle reglene,
-    # og opptaksforvalter varsles først (11 Opprette og vedlikeholde opptak/03 Innstillinger/innstillinger.feature).
-    # Lagt til 2026-10-19 etter akseptansetesten av opprette og vedlikeholde opptak.
-    Scenario: Utdanningstilbudet mister reglene når opptakets regelverkssamling byttes
-      Gitt at utdanningstilbudet "Sykepleie, høst 2027" bruker regler fra opptakets regelverkssamling "UHG 2027"
-      Når opptaksforvalter bytter opptakets regelverkssamling til "UHG 2027 v2"
-      Så har utdanningstilbudet ikke lenger regler fra "UHG 2027"
-      Og utdanningstilbudet kan bare få regler fra "UHG 2027 v2"
+    # Opptakets regelverkssamling kan ikke byttes når utdanningstilbud er knyttet til opptaket (avklart 2026-10-21,
+    # 11 Opprette og vedlikeholde opptak/03 Innstillinger/innstillinger.feature).
 
     @openquestion
     # ÅPNE SPØRSMÅL:
