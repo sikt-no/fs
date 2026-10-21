@@ -12,16 +12,16 @@ Egenskap: Legge til utdanningstilbud i opptak
 
   Regel: Opptaksforvalter ved deltakende organisasjon kan legge til alle sine utdanningstilbud
 
-    Scenario: Legge til alle utdanningstilbud fra egen organisasjon
+    Scenario: Legge til alle utdanningstilbud fra organisasjonen opptaksforvalter er ved
       Gitt at opptaksforvalter er ved en deltakende organisasjon
-      Når opptaksforvalter velger å legge til alle utdanningstilbud fra egen organisasjon som matcher opptakets kriterier
+      Når opptaksforvalter velger å legge til alle utdanningstilbud fra organisasjonen opptaksforvalter er ved, som matcher opptakets kriterier
       Så legges alle relevante utdanningstilbud fra organisasjonen til i opptaket
 
   Regel: Opptaksforvalter ved deltakende organisasjon kan legge til enkelttilbud
 
-    Scenario: Legge til enkelttilbud fra egen organisasjon
+    Scenario: Legge til enkelttilbud fra organisasjonen opptaksforvalter er ved
       Gitt at opptaksforvalter er ved en deltakende organisasjon
-      Når opptaksforvalter velger å legge til utdanningstilbudet "Sykepleie, høst 2027" fra egen organisasjon
+      Når opptaksforvalter velger å legge til utdanningstilbudet "Sykepleie, høst 2027" fra organisasjonen opptaksforvalter er ved
       Så legges utdanningstilbudet til i opptaket
 
   Regel: Opptaksforvalter kan legge til flere utdanningstilbud av gangen
@@ -53,7 +53,7 @@ Egenskap: Legge til utdanningstilbud i opptak
     Scenario: Filtrere på NKR-nivå for UHG-opptak
       Når opptaksforvalter filtrerer på utdanningstype studieprogram
       Og opptaksforvalter filtrerer på NKR-nivåene 6.1 Høgskolekandidat, 6.2 Bachelor, 7 Master
-      Så vises kun studieprogram på disse nivåene som mulige utdanningstilbud
+      Så vises kun studieprogram på NKR-nivåene 6.1, 6.2 og 7 som mulige utdanningstilbud
 
     Scenario: Filtrere på NKR-nivå for HYU-opptak
       Når opptaksforvalter filtrerer på utdanningstype studieprogram
@@ -65,6 +65,11 @@ Egenskap: Legge til utdanningstilbud i opptak
       Så vises ikke emner som mulige utdanningstilbud
       Og studieprogram på 7 masternivå vises ikke som mulige utdanningstilbud
 
+  @openquestion
+  # ÅPNE SPØRSMÅL:
+  # - Skal regelen få @depends-on-OPT-OVO-FRI-001 (frister_og_hendelser.feature), siden den bygger på når redigering av utdanningstilbud åpner og stenger?
+  # - Skal regelen få @ref-OPT-OPT-UTD-007 (sette_studieplasser_og_antall_tilbud.feature), der unntaket for antall studieplasser står?
+  # - Skal regelen få @ref-OPT-OPT-UTD-003 (trekke_utdanningstilbud.feature), der trekking står?
   Regel: Deltakende organisasjoner kan knytte til og redigere utdanningstilbud bare i perioden opptaket er åpent for redigering
     # Virkningen av når redigering av utdanningstilbud åpner og stenger, som opptaksforvalter setter i
     # 11 Opprette og vedlikeholde opptak/04 Frister/frister_og_hendelser.feature.
