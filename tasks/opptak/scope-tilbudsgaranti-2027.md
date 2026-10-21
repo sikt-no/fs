@@ -33,7 +33,7 @@
 |---|---|---|---|---|---|
 | [tilbudsgaranti](tilbudsgaranti/) | `@OPT-BEH-BEH-010` [gi_tilbudsgaranti.feature](../../krav/02%20Opptak/13%20S%C3%B8knad%20og%20saksbehandling/02%20Behandling/gi_tilbudsgaranti.feature) | Must | – | [STEK-241](https://sikt.atlassian.net/browse/STEK-241) | Reglene for manuell tilbudsgaranti er flyttet fra `@OPT-BEH-BEH-007` (PR #737) |
 | (ikke tildelt) | `@OPT-OVO-INN-004` [forvalte_tilbudsgarantityper.feature](../../krav/02%20Opptak/11%20Opprette%20og%20vedlikeholde%20opptak/03%20Innstillinger/forvalte_tilbudsgarantityper.feature) | Could | – | [STEK-349](https://sikt.atlassian.net/browse/STEK-349) | Skjelett |
-| (ikke tildelt) | `@OPT-SØK-SØK-015` [reservert_studieplass.feature](../../krav/02%20Opptak/13%20S%C3%B8knad%20og%20saksbehandling/01%20S%C3%B8knad/reservert_studieplass.feature) | Could | – | [STEK-553](https://sikt.atlassian.net/browse/STEK-553) | Skjelett, on hold |
+| (ikke tildelt) | `@OPT-SØK-SØK-016` [reservert_studieplass.feature](../../krav/02%20Opptak/13%20S%C3%B8knad%20og%20saksbehandling/01%20S%C3%B8knad/reservert_studieplass.feature) | Could | – | [STEK-553](https://sikt.atlassian.net/browse/STEK-553) | Skjelett, on hold |
 | (ikke tildelt) | `@OPT-BEH-BEH-017` [velge_utdanningskvote_for_tilbudsgaranti.feature](../../krav/02%20Opptak/13%20S%C3%B8knad%20og%20saksbehandling/02%20Behandling/velge_utdanningskvote_for_tilbudsgaranti.feature) | Could | – | [STEK-270](https://sikt.atlassian.net/browse/STEK-270) | Skjelett |
 
 ## Åpne spørsmål
