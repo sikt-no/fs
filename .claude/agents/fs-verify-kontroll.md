@@ -31,7 +31,8 @@ For hver rad i tabellen:
    - `bekreftet`: du fant heller ingenting. List søkeordene og stedene.
    - `avkreftet`: du fant kode som dekker scenarioet, helt eller delvis. Gi `fil:linje` og hva den gjør.
 3. **`delvis`:** sjekk både det som er funnet og det som mangler.
-4. **Flyt** (fila ligger under `krav/_Flyter/`): et `funnet` har to bevis, `lages` og `brukes`. Les begge, og sjekk at det som brukes, er det samme som det som lages (samme tabell, felt, hendelse eller API). Er det ikke det, er raden `avkreftet`, selv om begge stedene finnes hver for seg.
+4. **På vei i en åpen PR** (`på vei: <repo>#<N> … (<sha>)` i beviset): les stedet med `git -C <repo> show <sha>:<fil>`, og sjekk det som et `funnet`. Svaret gjelder bare PR-beviset. Resultatet på branchen endres ikke av det.
+5. **Flyt** (fila ligger under `krav/_Flyter/`): et `funnet` har to bevis, `lages` og `brukes`. Les begge, og sjekk at det som brukes, er det samme som det som lages (samme tabell, felt, hendelse eller API). Er det ikke det, er raden `avkreftet`, selv om begge stedene finnes hver for seg.
 
 Les alltid koden du viser til. Et søkeord med treff er ikke bevis før du har lest treffet.
 
