@@ -1,5 +1,11 @@
 # krav-viewer
 
+## 1.6.1
+
+### Patch Changes
+
+- 4989983: En flyt i `krav/_Flyter/<prosess>/` gir ikke lenger avviket «Feil mappenivå». Prosessmappa må ha et nummer fra 10.
+
 ## 1.6.0
 
 ### Minor Changes
