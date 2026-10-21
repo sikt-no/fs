@@ -25,7 +25,6 @@ Egenskap: Overstyre regler for poenglikhet på utdanningstilbudet
       Når opptaksforvalter overstyrer regelen for poenglikhet
       Så kan kun regler som er angitt som tilgjengelige for opptaket velges
 
-  @draft
   Regel: Utdanningstilbudet kan ikke overstyre poenglikhetsregelen når opptaket ikke åpner for unntak
     # Virkningen av standard poenglikhetsregel uten mulighet for unntak, som opptaksforvalter setter i
     # 11 Opprette og vedlikeholde opptak/03 Innstillinger/innstillinger.feature.
