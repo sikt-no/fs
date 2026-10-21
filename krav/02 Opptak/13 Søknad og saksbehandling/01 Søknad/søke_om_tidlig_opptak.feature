@@ -107,7 +107,9 @@ Egenskap: Søke om tidlig opptak
       Når søkeren fyller ut søknaden
       Så ser ikke søkeren muligheten til å søke om tidlig opptak
 
+  @depends-on-OPT-OVO-INN-001 @depends-on-OPT-OPT-UTD-004
   Regel: Søkeren kan søke om tidlig opptak når opptaket tilbyr det
+    # Tidlig opptak må være slått på både på opptaket og på utdanningstilbudet.
 
     Scenario: Søke om tidlig opptak med en begrunnelse
       Gitt "Sykepleie, høst 2027" tilbyr tidlig opptak

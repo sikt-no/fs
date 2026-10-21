@@ -40,6 +40,7 @@ Egenskap: Regelverkssamling
 
 - `# GitHub:` er valgfri, og peker på issuet kravet hører til. Den står rett over tag-linja.
 - Taggene er en unik ID (`@DOM-SUB-KAP-NNN`), prioritet (`@must`, `@should`, `@could` eller `@wont`) og status, og eventuelt `@scope-<slug>`, som kobler kravet til et scope og en oppgave. Se *Tags*.
+- Et krav som bygger på et annet krav, får `@depends-on-<Feature-ID>`, og en henvisning får `@ref-<Feature-ID>`. Se *Referanser*.
 - **Gitt** er forutsetningene, **Når** er handlingen, og **Så** er det forventede resultatet. Se *Gode scenarioer*.
 - Uklarheter gjettes ikke. De skrives i en `# ÅPNE SPØRSMÅL:`-kommentar, og en `Regel:` eller et `Scenario:` med spørsmål tagges `@openquestion`. Se *Åpne spørsmål*.
 
@@ -350,6 +351,52 @@ Sier hvilket scope (og dermed hvilken oppgave) kravet hører til. Scopet er plan
 - Taggen er ikke en statustag, og endrer ikke livsløpet. Statusen leses fra statustaggene, ikke fra scope-fila.
 - Taggen settes av `fs-scope`, og av `fs-krav` når et nytt krav skrives i et scope. `fs-krav` og `fs-specify` endrer den ellers ikke, men foreslår `fs-scope` når et krav ikke passer i scopet.
 - Kravene i et scope kan testes for seg: `npx playwright test --grep @scope-<slug>`.
+
+### Referanser
+
+Sier at et krav peker på et annet krav. Det er to typer, og de skiller seg på hva referansen betyr:
+
+| Tag | Betyr |
+|---|---|
+| `@depends-on-<Feature-ID>` | Delen bygger på kravet. Endres kravet, må delen sjekkes, og delen kan ikke leveres før kravet |
+| `@ref-<Feature-ID>` | Henvisning for den som leser: «se også», «står der», «avgjøres der» |
+
+**Testen for typen:** Må denne delen sjekkes hvis kravet det pekes på, endres? Ja gir `@depends-on-`, nei gir `@ref-`.
+
+```gherkin
+  @depends-on-OPT-OVO-INN-001
+  Regel: Søkeren kan søke om tidlig opptak når opptaket tilbyr det
+    # Tidlig opptak må være slått på både på opptaket og på utdanningstilbudet.
+
+  @ref-OPT-PLA-TIL-002
+  Regel: Opptaksforvalter setter tak for antall tilbud per tildelingsrunde
+    # Hvordan taket brukes i plasstildelingen, står der.
+```
+
+- Formatet er `@depends-on-` eller `@ref-` og Feature-ID-en uten `@`: `@depends-on-OPT-BEH-BEH-011`. *(sjekkes automatisk)*
+- Taggen står på delen referansen gjelder: `Egenskap:`, `Regel:` eller `Scenario:`/`Scenariomal:`. Bygger hele kravet på et annet krav, står den på `Egenskap:`-tag-linja, etter eventuell `@scope-<slug>`. Taggen på `Egenskap:` gjelder alle scenarioene i kravet.
+- Taggen peker på hele kravet. Gjelder referansen én regel i kravet, skrives regeltittelen i en kommentar under taggen. Kommentaren er ellers valgfri, og forklarer referansen når det trengs.
+- Retningen gir seg av hvor taggen står. Den andre retningen, «hva bygger på dette kravet?», skrives ikke ned, men finnes med `grep`.
+- Et krav refererer ikke til seg selv. *(sjekkes automatisk)*
+- En del har hver referanse én gang, og har enten `@depends-on-` eller `@ref-` til et krav, ikke begge. *(sjekkes automatisk)*
+- ID-en må finnes, og `@depends-on-` går ikke i ring (A → B → A). Det krever flere filer, og sjekkes av `fs-krav-avvik`.
+- Taggen er ikke en statustag, og endrer ikke livsløpet.
+
+Dette er ikke referanser, og blir stående som kommentarer:
+
+- **Historikk:** «flyttet hit fra …», «skilt ut fra …», «Feature-ID-en var …». Den gamle ID-en finnes ikke lenger, eller tilhører et annet krav.
+- **Åpne spørsmål:** et krav som nevnes i `# ÅPNE SPØRSMÅL:`. Referansen settes når spørsmålet er besvart.
+- **Mapper:** en henvisning til en mappe (`14 Plasstildeling/`) og ikke til ett krav.
+
+Referansene i begge retninger:
+
+| Spørsmål | Svar |
+|---|---|
+| Hva må sjekkes når kravet endres? | `grep -rn "@depends-on-OPT-BEH-BEH-011" krav/` |
+| Hva henger sammen med kravet? | `grep -rnE "@(depends-on\|ref)-OPT-BEH-BEH-011" krav/` |
+| Hvilke tester bygger på kravet? | `npx playwright test --grep @depends-on-OPT-BEH-BEH-011` |
+
+Referansene settes av `fs-krav`. Når et krav endres, slettes eller får ny ID, lister `fs-krav` kravene som refererer til det. `fs-specify` og `fs-specify-delta` tar med kravene det bygges på, og sier fra når et av dem ikke er `@planned` eller lenger.
 
 ### Type
 

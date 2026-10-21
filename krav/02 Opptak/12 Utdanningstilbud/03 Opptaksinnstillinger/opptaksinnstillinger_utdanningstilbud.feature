@@ -84,6 +84,7 @@ Egenskap: Opptaksinnstillinger per utdanningstilbud
   # AVKLART 2026-10-15: Plassflyten kan ikke settes eller overstyres per utdanningstilbud. Regelen
   # «Opptaksforvalter kan sette plassflyt mellom utdanningskvoter» er fjernet. Utdanningstilbudet viser
   # bare plassflyten mellom utdanningskvotene som er knyttet til det.
+  @depends-on-OPT-OVO-INN-002 @depends-on-OPT-OVO-INN-003
   Regel: Lærestedene ser plassflyten og kvoteprioriteten for utdanningstilbudene sine
 
     # Ønske meldt 2026-10-13, utvidet med kvoteprioriteten 2026-10-15. Plassflyten og kvoteprioriteten settes på
@@ -120,6 +121,7 @@ Egenskap: Opptaksinnstillinger per utdanningstilbud
       Når opptaksforvalter ved lærestedet ser utdanningstilbudet "Sykepleie, høst 2027"
       Så ser opptaksforvalter ikke muligheten til å endre plassflyten eller kvoteprioriteten
 
+  @depends-on-OPT-OVO-INN-001
   Regel: Opptaksforvalter kan markere at et utdanningstilbud tilbyr tidlig opptak
 
     Scenario: Markere at utdanningstilbudet tilbyr tidlig opptak

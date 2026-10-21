@@ -1,6 +1,6 @@
 # language: no
 # GitHub: #216, #598
-@OPT-PLA-INN-002 @must @draft @scope-plasstildeling-2027
+@OPT-PLA-INN-002 @must @draft @scope-plasstildeling-2027 @depends-on-OPT-OVO-INN-002
 Egenskap: Plassflyt mellom utdanningskvoter
   Som opptaksforvalter
   ønsker jeg at ledige plasser i en utdanningskvote flyter til en utdanningskvote jeg har pekt på

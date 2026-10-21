@@ -125,8 +125,9 @@ Egenskap: Listevisning og søk i utdanningstilbud
       Når søkeren søker med fritekst på "Bergen"
       Så filtreres listen til utdanningstilbud der navnet, lærestedet eller studiestedet matcher søket
 
+    @depends-on-OPT-OPT-UTD-017
     Scenario: Fritekst-søk på søkeord
-      # Søkeordene settes av opptaksforvalter (@OPT-OPT-UTD-017, angi_søkeord.feature).
+      # Søkeordene settes av opptaksforvalter på utdanningstilbudet.
       Gitt at utdanningstilbudet "Profesjonsstudiet i medisin, høst 2027" har søkeordet "lege"
       Når søkeren søker med fritekst på "lege"
       Så vises utdanningstilbudet "Profesjonsstudiet i medisin, høst 2027" i listen

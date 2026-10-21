@@ -1,6 +1,6 @@
 # language: no
 # GitHub: #216, #598
-@OPT-OVO-INN-002 @must @planned @scope-kvoter-i-opptaket-2027
+@OPT-OVO-INN-002 @must @planned @scope-kvoter-i-opptaket-2027 @ref-OPT-PLA-INN-002
 Egenskap: Sette standard plassflyt for opptaket
   Som opptaksforvalter ved forvaltende organisasjon
   ønsker jeg å sette én standard plassflyt for opptaket
