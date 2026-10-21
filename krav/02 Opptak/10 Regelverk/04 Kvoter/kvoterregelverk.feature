@@ -39,8 +39,8 @@ Egenskap: Kvotetype
       Så brukes poengformelen "KONKURRANSEPOENG" som standard for kvotetypen "ORD"
 
   # Reglene om kvoteprioritet og default plassflyt på kvotetypen er fjernet 2026-10-14 (retrofitting).
-  # fs-admin har dem ikke på kvotetypen: kvoteprioriteten settes per utdanningskvote på utdanningstilbudet,
-  # og standard plassflyt på opptaket (11 Opprette og vedlikeholde opptak/03 Innstillinger/sette_plassflyt.feature).
+  # fs-admin har dem ikke på kvotetypen. Kvoteprioriteten og standard plassflyt settes for hele
+  # regelverkssamlingen (avklart 2026-10-21), se sette_kvoteprioritet.feature og sette_plassflyt.feature.
 
   Regel: En kvotetype gjelder for grunnlagene den er koblet til
 

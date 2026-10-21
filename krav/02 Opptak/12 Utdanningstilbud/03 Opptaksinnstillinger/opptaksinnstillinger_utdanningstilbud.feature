@@ -47,69 +47,120 @@ Egenskap: Opptaksinnstillinger per utdanningstilbud
   # 14 Plasstildeling/02 Tildelingsinnstillinger/antall_tilbud_som_skal_gis.feature.
   # AVKLART 2026-10-16 (produktleder): Bare organisasjonen som har opprettet regelverket, kan endre det.
   # I samordna opptak kan forvaltende organisasjon legge til kvoter i regelverkssamlingen som er knyttet
-  # til opptaket. Deltakende organisasjoner kan ikke legge til eller fjerne utdanningskvoter.
-  Regel: Utdanningskvotene følger av regelverkssamlingen
+  # til opptaket.
+  # AVKLART 2026-10-21 (produkteier): Lærestedet velger hvilke av kvotetypene i regelverkssamlingen som gjelder
+  # for utdanningstilbudene sine, og kan legge til og fjerne utdanningskvoter. Utdanningstilbudet får ikke alle
+  # kvotetypene automatisk. Det erstatter avklaringen 2026-10-16 om at deltakende organisasjoner verken kan legge
+  # til eller fjerne utdanningskvoter.
+  Regel: Lærestedet velger utdanningskvotene blant kvotetypene i regelverkssamlingen
 
-    Scenario: Utdanningskvotene følger av regelverkssamlingen
-      Gitt at regelverkssamlingen "UHG 2027" har kvotetypene "Ordinær" og "Førstegangsvitnemål"
-      Når opptaksforvalter velger utdanningstilbudet "Sykepleie, høst 2027"
-      Så har utdanningstilbudet utdanningskvotene "Ordinær" og "Førstegangsvitnemål"
+    Scenario: Legge til utdanningskvoter fra regelverkssamlingen
+      Gitt at opptaket bruker regelverkssamlingen "UHG 2027"
+      Og at regelverkssamlingen "UHG 2027" har kvotetypene "Samisk førstegangsvitnemål (SAMF)", "Førstegangsvitnemål (ORDF)" og "Ordinær kvote (ORD)"
+      Når opptaksforvalter ved lærestedet legger til "Førstegangsvitnemål (ORDF)" og "Ordinær kvote (ORD)" på utdanningstilbudet "Sykepleie, høst 2027"
+      Så har utdanningstilbudet "Sykepleie, høst 2027" utdanningskvotene "Førstegangsvitnemål (ORDF)" og "Ordinær kvote (ORD)"
 
-    Scenario: Forvaltende organisasjon legger til en kvote i regelverkssamlingen
-      Gitt at opptaksforvalter er ved forvaltende organisasjon "HK-dir"
+    # AVKLART 2026-10-21 (produkteier): Alle utdanningstilbud i opptak som bruker regelverkssamlingen, må ha
+    # hovedkvoten. De andre kvotetypene er valgfrie, og flytretningen gjelder likevel, se
+    # 14 Plasstildeling/02 Tildelingsinnstillinger/plassflyt.feature.
+    Scenario: Utdanningstilbudet må ha hovedkvoten
+      Gitt at "Ordinær kvote (ORD)" er hovedkvoten i regelverkssamlingen for opptaket
+      Og at utdanningstilbudet "Sykepleie, høst 2027" ikke har utdanningskvoten "Ordinær kvote (ORD)"
+      Når opptaksforvalter ved lærestedet lagrer utdanningstilbudet
+      Så blir utdanningstilbudet ikke lagret
+      Og opptaksforvalter ser at utdanningstilbudet må ha hovedkvoten "Ordinær kvote (ORD)"
+
+    Scenario: Hovedkvoten kan ikke fjernes fra utdanningstilbudet
+      Gitt at "Ordinær kvote (ORD)" er hovedkvoten i regelverkssamlingen for opptaket
+      Og at utdanningstilbudet "Sykepleie, høst 2027" har utdanningskvoten "Ordinær kvote (ORD)"
+      Når opptaksforvalter ved lærestedet vil fjerne "Ordinær kvote (ORD)" fra utdanningstilbudet
+      Så kan opptaksforvalter ikke fjerne "Ordinær kvote (ORD)"
+
+    Scenario: Fjerne en utdanningskvote fra utdanningstilbudet
+      Gitt at utdanningstilbudet "Sykepleie, høst 2027" har utdanningskvotene "Førstegangsvitnemål (ORDF)" og "Ordinær kvote (ORD)"
+      Når opptaksforvalter ved lærestedet fjerner "Førstegangsvitnemål (ORDF)" fra utdanningstilbudet
+      Så har utdanningstilbudet "Sykepleie, høst 2027" bare utdanningskvoten "Ordinær kvote (ORD)"
+
+    Scenario: Kvotetyper som ikke er i regelverkssamlingen, kan ikke legges til
+      Gitt at kvotetypen "Samisk språkkompetanse (SAM)" ikke er med i regelverkssamlingen for opptaket
+      Når opptaksforvalter ved lærestedet vil legge til "Samisk språkkompetanse (SAM)" på utdanningstilbudet "Sykepleie, høst 2027"
+      Så avvises forespørselen
+
+    # AVKLART 2026-10-21 (produkteier): En kvotetype kan ikke brukes av utdanningstilbud før den har
+    # kvoteprioritet og er koblet til plassflyten i regelverkssamlingen.
+    Scenariomal: Kvotetype uten <mangler> kan ikke legges til
+      Gitt at kvotetypen "Idrett (IDRETT)" i regelverkssamlingen for opptaket mangler <mangler>
+      Når opptaksforvalter ved lærestedet vil legge til "Idrett (IDRETT)" på utdanningstilbudet "Idrett, høst 2027"
+      Så kan opptaksforvalter ikke legge til "Idrett (IDRETT)" på utdanningstilbudet
+
+      Eksempler:
+        | mangler         |
+        | kvoteprioritet  |
+        | plassflyt       |
+
+    Scenario: Regelverksforvalter legger til en kvotetype i regelverkssamlingen
+      Gitt at regelverksforvalter er ved forvaltende organisasjon "HK-dir"
       Og at HK-dir har opprettet regelverkssamlingen "UHG 2027"
-      Når opptaksforvalter legger til kvotetypen "Samisk" i regelverkssamlingen "UHG 2027"
-      Så har regelverkssamlingen "UHG 2027" kvotetypen "Samisk"
+      Når regelverksforvalter legger til kvotetypen "Samisk språkkompetanse (SAM)" i regelverkssamlingen "UHG 2027"
+      Så har regelverkssamlingen "UHG 2027" kvotetypen "Samisk språkkompetanse (SAM)"
 
-    Scenario: Deltakende organisasjon kan ikke legge til en utdanningskvote
-      Gitt at opptaksforvalter er ved deltakende organisasjon "Universitetet i Oslo"
-      Og at kvotetypen "Samisk" ikke er med i regelverkssamlingen for opptaket
-      Når opptaksforvalter vil legge til utdanningskvoten "Samisk" på utdanningstilbudet "Sykepleie, høst 2027"
-      Så avvises forespørselen
+  # AVKLART 2026-10-21 (produkteier): Utdanningskvotene følger kvoteprioriteten og plassflyten som er satt i
+  # regelverkssamlingen opptaket bruker. Lærestedet setter dem ikke selv.
+  @depends-on-OPT-REG-KVO-003 @depends-on-OPT-REG-KVO-004
+  Regel: Utdanningskvotene følger kvoteprioriteten og plassflyten i regelverkssamlingen
 
-    Scenario: Deltakende organisasjon kan ikke fjerne en utdanningskvote
-      Gitt at opptaksforvalter er ved deltakende organisasjon "Universitetet i Oslo"
-      Og at utdanningstilbudet "Sykepleie, høst 2027" har utdanningskvoten "Førstegangsvitnemål" fra regelverkssamlingen
-      Når opptaksforvalter vil fjerne utdanningskvoten "Førstegangsvitnemål" fra utdanningstilbudet
-      Så avvises forespørselen
+    Scenario: Utdanningskvotene får kvoteprioriteten fra regelverkssamlingen
+      Gitt at kvoteprioriteten i regelverkssamlingen "UHG 2027" er 1 for "Samisk førstegangsvitnemål (SAMF)", 2 for "Førstegangsvitnemål (ORDF)" og 3 for "Ordinær kvote (ORD)"
+      Og at opptaket bruker regelverkssamlingen "UHG 2027"
+      Når opptaksforvalter ved lærestedet legger til "Førstegangsvitnemål (ORDF)" og "Ordinær kvote (ORD)" på utdanningstilbudet "Sykepleie, høst 2027"
+      Så har utdanningskvotene på utdanningstilbudet kvoteprioriteten fra regelverkssamlingen
+        | utdanningskvote            | kvoteprioritet |
+        | Førstegangsvitnemål (ORDF) | 2              |
+        | Ordinær kvote (ORD)        | 3              |
+
+    Scenario: Utdanningskvotene følger plassflyten i regelverkssamlingen
+      Gitt at standard plassflyt i regelverkssamlingen "UHG 2027" sender "Førstegangsvitnemål (ORDF)" til "Ordinær kvote (ORD)"
+      Og at opptaket bruker regelverkssamlingen "UHG 2027"
+      Når opptaksforvalter ved lærestedet legger til "Førstegangsvitnemål (ORDF)" og "Ordinær kvote (ORD)" på utdanningstilbudet "Sykepleie, høst 2027"
+      Så går ledige plasser i "Førstegangsvitnemål (ORDF)" til "Ordinær kvote (ORD)" på utdanningstilbudet
 
   # Hva plasstildelingen gjør med plassflyten, og vernet mot sirkulær plassflyt (#598), står i
   # 14 Plasstildeling/02 Tildelingsinnstillinger/plassflyt.feature.
   # AVKLART 2026-10-15: Plassflyten kan ikke settes eller overstyres per utdanningstilbud. Regelen
   # «Opptaksforvalter kan sette plassflyt mellom utdanningskvoter» er fjernet. Utdanningstilbudet viser
   # bare plassflyten mellom utdanningskvotene som er knyttet til det.
-  @depends-on-OPT-OVO-INN-002 @depends-on-OPT-OVO-INN-003
+  @depends-on-OPT-REG-KVO-003 @depends-on-OPT-REG-KVO-004
   Regel: Lærestedene ser plassflyten og kvoteprioriteten for utdanningstilbudene sine
 
-    # Ønske meldt 2026-10-13, utvidet med kvoteprioriteten 2026-10-15. Plassflyten og kvoteprioriteten settes på
-    # opptaket, se 11 Opprette og vedlikeholde opptak/03 Innstillinger/sette_plassflyt.feature og
+    # Ønske meldt 2026-10-13, utvidet med kvoteprioriteten 2026-10-15. Plassflyten og kvoteprioriteten settes i
+    # regelverkssamlingen (endret 2026-10-21), se 10 Regelverk/04 Kvoter/sette_plassflyt.feature og
     # sette_kvoteprioritet.feature. Lærestedet ser dem på utdanningstilbudet, så de forstår sammenhengen mellom
     # utdanningskvotene.
 
     Scenario: Se plassflyten for et utdanningstilbud
-      Gitt at standard plassflyt for opptaket sender "Samisk" og "Førstegangsvitnemål" til "Ordinær"
-      Og at utdanningstilbudet "Sykepleie, høst 2027" har utdanningskvotene "Samisk", "Førstegangsvitnemål" og "Ordinær"
+      Gitt at standard plassflyt i regelverkssamlingen sender "Samisk førstegangsvitnemål (SAMF)" og "Førstegangsvitnemål (ORDF)" til "Ordinær kvote (ORD)"
+      Og at utdanningstilbudet "Sykepleie, høst 2027" har utdanningskvotene "Samisk førstegangsvitnemål (SAMF)", "Førstegangsvitnemål (ORDF)" og "Ordinær kvote (ORD)"
       Når opptaksforvalter ved lærestedet ser utdanningstilbudet "Sykepleie, høst 2027"
       Så ser opptaksforvalter plassflyten mellom utdanningskvotene på utdanningstilbudet
-        | fra                 | til     |
-        | Samisk              | Ordinær |
-        | Førstegangsvitnemål | Ordinær |
+        | fra                               | til                 |
+        | Samisk førstegangsvitnemål (SAMF) | Ordinær kvote (ORD) |
+        | Førstegangsvitnemål (ORDF)        | Ordinær kvote (ORD) |
 
     Scenario: Kvoter som ikke er på utdanningstilbudet, vises ikke i plassflyten
-      Gitt at standard plassflyt for opptaket har kvoten "Nordnorsk"
-      Og at utdanningstilbudet "Sykepleie, høst 2027" ikke har utdanningskvoten "Nordnorsk"
+      Gitt at standard plassflyt i regelverkssamlingen har kvoten "Nordnorsk (NN)"
+      Og at utdanningstilbudet "Sykepleie, høst 2027" ikke har utdanningskvoten "Nordnorsk (NN)"
       Når opptaksforvalter ved lærestedet ser utdanningstilbudet "Sykepleie, høst 2027"
-      Så vises ikke "Nordnorsk" i plassflyten for utdanningstilbudet
+      Så vises ikke "Nordnorsk (NN)" i plassflyten for utdanningstilbudet
 
     Scenario: Se kvoteprioriteten for et utdanningstilbud
-      Gitt at kvoteprioriteten for opptaket er 1 for "Samisk", 4 for "Førstegangsvitnemål" og 12 for "Ordinær"
-      Og at utdanningstilbudet "Sykepleie, høst 2027" har utdanningskvotene "Samisk", "Førstegangsvitnemål" og "Ordinær"
+      Gitt at kvoteprioriteten i regelverkssamlingen er 1 for "Samisk førstegangsvitnemål (SAMF)", 4 for "Førstegangsvitnemål (ORDF)" og 12 for "Ordinær kvote (ORD)"
+      Og at utdanningstilbudet "Sykepleie, høst 2027" har utdanningskvotene "Samisk førstegangsvitnemål (SAMF)", "Førstegangsvitnemål (ORDF)" og "Ordinær kvote (ORD)"
       Når opptaksforvalter ved lærestedet ser utdanningstilbudet "Sykepleie, høst 2027"
       Så ser opptaksforvalter kvoteprioriteten for utdanningskvotene på utdanningstilbudet
-        | utdanningskvote     | kvoteprioritet |
-        | Samisk              | 1              |
-        | Førstegangsvitnemål | 4              |
-        | Ordinær             | 12             |
+        | utdanningskvote                   | kvoteprioritet |
+        | Samisk førstegangsvitnemål (SAMF) | 1              |
+        | Førstegangsvitnemål (ORDF)        | 4              |
+        | Ordinær kvote (ORD)               | 12             |
 
     Scenario: Lærestedet kan ikke endre plassflyten eller kvoteprioriteten
       Når opptaksforvalter ved lærestedet ser utdanningstilbudet "Sykepleie, høst 2027"
