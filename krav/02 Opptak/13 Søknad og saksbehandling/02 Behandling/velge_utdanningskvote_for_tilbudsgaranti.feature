@@ -1,5 +1,8 @@
 # language: no
-# Kilde: Jira STEK-270. Hvilken utdanningskvote tilbudsgarantiene tas fra for et
+# Kilde: Jira STEK-270. I FS-klienten kan behandleren overstyre hvilken utdanningskvote
+# tilbudsgarantien for et søknadsalternativ tas fra. Det finnes ikke i nye opptak, og er
+# parkert i Confluence PFS 4431249457 «Ting vi må huske på før vi kan gå i produksjon».
+# Hvilken utdanningskvote tilbudsgarantiene tas fra for et
 # utdanningstilbud, settes i opptaksinnstillingene («Sette hvor tilbudsgarantier tas fra» i
 # 12 Utdanningstilbud/03 Opptaksinnstillinger/opptaksinnstillinger_utdanningstilbud.feature,
 # OPT-OPT-UTD-004), og brukes i plasstildelingen («Tilbudsgaranti tas fra markert
@@ -14,7 +17,6 @@ Egenskap: Velge utdanningskvote for tilbudsgaranti
   # ÅPNE SPØRSMÅL:
   # - Er det behov for dette i 2027?
   # - Hvilke roller kan velge utdanningskvote: bare rollen som satte tilbudsgarantien?
-  # - Fant ikke unntaket i fs-plattform 21.10.2026: tilbudsgaranti_kvote har bare opptak,
-  #   utdanningstilbud og kvote. Er det bygget et annet sted, eller bare i skissene?
+  # - Hvordan virker det i FS-klienten i dag?
 
   Regel: Behandler kan velge en annen utdanningskvote for tilbudsgarantien
