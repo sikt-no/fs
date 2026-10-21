@@ -78,7 +78,7 @@ I `Bevis` står **P** for fs-plattform, **A** for fs-admin og **M** for min-komp
 | --- | --- | --- | --- |
 | `@DOM-SUB-KAP-NNN` | <scenariotittel> | funnet | `<repo>/<fil>:<linje>` — <hva koden gjør> |
 | `@DOM-SUB-KAP-NNN` | <scenariotittel> | ikke funnet | <hva som finnes> — søkt etter «<ord>», «<ord>» i <repoer> |
-| `@DOM-SUB-KAP-NNN` | <scenariotittel> | ikke funnet | ikke på branchen — søkt etter «<ord>» i <repoer> · på vei: <repo>#<N> `<fil>:<linje>` (<kort sha>) — <hva koden gjør> |
+| `@DOM-SUB-KAP-NNN` | <scenariotittel> | ikke funnet | ikke på branchen — søkt etter «<ord>» i <repoer> · på vei: <branch> (<repo>#<N>, <kort sha>) `<fil>:<linje>` — <hva koden gjør> |
 | `@DOM-SUB-KAP-NNN` | <scenariotittel> | usikker | `<repo>/<fil>:<linje>` — <hvorfor det er uklart> |
 | `@DOM-SUB-KAP-NNN` | <scenariotittel> | funnet | P: funnet · A: ikke relevant · M: funnet — `<fil>:<linje>`, `<fil>:<linje>` |   [per repo]
 | `@FLY-PRO-FLY-NNN` | <scenariotittel> | funnet | lages: `<repo>/<fil>:<linje>` · brukes: `<repo>/<fil>:<linje>` — <hva som overleveres> |   [flyt]
@@ -134,7 +134,7 @@ Det som står her, er ikke levert, og er ikke brukt til retagging eller sletting
 
 | Repo | PR | Feature-ID | Scenario eller del | Dekker | Bevis |
 | --- | --- | --- | --- | --- | --- |
-| `<repo>` | [#<N> <tittel>](<url>) (<kort sha>, <utkast \| klar til review>) | `@DOM-SUB-KAP-NNN` | <scenariotittel> | ja \| delvis \| fjerner koden | `<fil>:<linje>` — <hva koden gjør> |
+| `<repo>` | [#<N> <tittel>](<url>) (`<branch>`, <kort sha>, <utkast \| klar til review>) | `@DOM-SUB-KAP-NNN` | <scenariotittel> | ja \| delvis \| fjerner koden | `<fil>:<linje>` — <hva koden gjør> |
 
 Ingen.                                                                  [når ingen åpne PR-er dekker noe i scope, eller de ikke er sjekket, i stedet for tabellen]
 
@@ -153,5 +153,5 @@ Ingen.                                                                  [når de
 - **`## Fremdrift for flyter`** `[flyt]`: én rad per fase, i rekkefølgen i flyten. En fase er levert når alle kravene den bygger på, er `@implemented` (en flyt den bygger på, også). `mangler krav` når fasen ikke har `@depends-on-`. Linja under tabellen står én gang per flyt.
 - **`## Levert`**: kravene og delene som har fått ny status i denne kjøringen. `Fra` er statusen før. En del (regel eller scenario) skrives som `Regel: <tittel>` eller `Scenario: <tittel>`.
 - **`## Ikke levert`**: alle kravene og delene i scope som ble verifisert, men ikke levert, med statusen de fortsatt har. `Hvorfor` er én av formene i malen. Krav som ikke ble verifisert (allerede levert, ikke klare), står under *Krav utenfor scope* i `## Oppfølging`.
-- **`## På vei i åpne PR-er`**: én rad per scenario eller `@deprecated`-del som ikke er funnet (eller finnes fortsatt) på branchen, men som en åpen PR dekker (*Åpne PR-er i kode-repoene* i `fs-verify`). `Dekker` er `ja` når PR-en gjør alt scenarioet beskriver, `delvis` ellers, og `fjerner koden` for en `@deprecated`-del. Repoene står i rekkefølgen fs-plattform, fs-admin, min-kompetanse.
+- **`## På vei i åpne PR-er`**: én rad per scenario eller `@deprecated`-del som ikke er funnet (eller finnes fortsatt) på branchen, men som en åpen PR dekker (*Åpne PR-er i kode-repoene* i `fs-verify`). Bare det som faktisk er på vei, står her og i `Bevis`. Skriv aldri «på vei: ingen» eller «ingen branch ennå». `PR` har branchnavnet. `Dekker` er `ja` når PR-en gjør alt scenarioet beskriver, `delvis` ellers, og `fjerner koden` for en `@deprecated`-del. Repoene står i rekkefølgen fs-plattform, fs-admin, min-kompetanse.
 - **`## Oppfølging`**: bare funn som ikke står i en annen seksjon. Hvert punkt har en kort overskrift i fet skrift, og `fil:linje` når det handler om kode.
