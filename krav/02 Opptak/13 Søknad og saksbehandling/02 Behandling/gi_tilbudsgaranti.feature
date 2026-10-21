@@ -139,19 +139,27 @@ Egenskap: Gi tilbudsgaranti
       Når behandleren skal sette tilbudsgaranti på "Sykepleie, høst 2027"
       Så kan ikke behandleren velge "Reservert studieplass"
 
+  # En endring vises som at tilbudsgarantien er satt på nytt, med den nye typen
+  # (avklart med Daniel 21.10.2026, som i STEK-559).
   Regel: Endringer i tilbudsgarantien kan spores
 
-    Scenariomal: Se hvem som har <handling> tilbudsgarantien
+    Scenario: Se hvem som har satt tilbudsgarantien
       Gitt behandleren Kari Nordmann har B-rolle
-      Når Kari Nordmann <handling> tilbudsgarantien fra B-rolle på "Sykepleie, høst 2027"
-      Så ser behandlerne av saken at Kari Nordmann har <handling> tilbudsgarantien fra B-rolle på "Sykepleie, høst 2027"
-      Og behandlerne av saken ser når tilbudsgarantien ble <handling>, og hvilken tilbudsgarantitype det gjelder
+      Når Kari Nordmann setter tilbudsgarantien fra B-rolle på "Sykepleie, høst 2027"
+      Så ser behandlerne av saken at Kari Nordmann har satt tilbudsgarantien fra B-rolle på "Sykepleie, høst 2027"
+      Og behandlerne av saken ser når tilbudsgarantien ble satt
 
-      Eksempler:
-        | handling |
-        | satt     |
-        | endret   |
-        | fjernet  |
+    Scenario: Se hvem som har fjernet tilbudsgarantien
+      Gitt behandleren Kari Nordmann har B-rolle
+      Og søkeren har tilbudsgaranti fra B-rolle på "Sykepleie, høst 2027"
+      Når Kari Nordmann fjerner tilbudsgarantien fra B-rolle på "Sykepleie, høst 2027"
+      Så ser behandlerne av saken at Kari Nordmann har fjernet tilbudsgarantien fra B-rolle på "Sykepleie, høst 2027"
+      Og behandlerne av saken ser når tilbudsgarantien ble fjernet
+
+    Scenario: Se hvilken tilbudsgarantitype som ble satt
+      Gitt behandleren Kari Nordmann har B-rolle
+      Når Kari Nordmann setter tilbudsgarantien "Garanti for test" fra B-rolle på "Sykepleie, høst 2027"
+      Så ser behandlerne av saken at tilbudsgarantien "Garanti for test" ble satt fra B-rolle på "Sykepleie, høst 2027"
 
   # Hva plasstildelingen gjør med tilbudsgarantien, i alle plasstildelingsrunder, står i
   # regelen «Søker med tilbudsgaranti får tilbud uavhengig av poengsum» i
