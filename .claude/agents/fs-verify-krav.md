@@ -26,6 +26,7 @@ Det du **ikke** gjør, selv om `fs-verify` sier det:
 - Ikke spør brukeren (du har ikke `AskUserQuestion`). Er noe uklart, si det i svaret som `usikker`.
 - Ikke ta skjermbilder. Lead-en gjør det.
 - Bash bare for lesende git (`git -C <repo> log`, `grep`, `ls-files`). Aldri `add`, `commit`, `push`, `checkout` eller `stash`.
+- Har lead-en gitt deg åpne PR-er (repo, nummer og SHA), let i dem etter scenarioene som er `ikke funnet` eller `usikker` på branchen, med `git -C <repo> grep -i <ord> <sha>` og `git -C <repo> show <sha>:<fil>`, etter *Åpne PR-er i kode-repoene* i `fs-verify`. Det du finner der, står som `på vei: <branch> (<repo>#<N>, <kort sha>) <fil>:<linje>` i beviset, og endrer ikke resultatet. Finner du ingenting i PR-ene, skriv ingenting om dem: aldri «på vei: ingen» eller «ingen branch ennå».
 
 **Påstå aldri mer enn du har sett.** Et scenario er `funnet` bare når du har lest koden på `fil:linje`, og den gjør det scenarioet beskriver. Et søk uten treff er ikke bevis for at koden er borte, bare at du ikke fant den. Skriv hva du søkte etter.
 
