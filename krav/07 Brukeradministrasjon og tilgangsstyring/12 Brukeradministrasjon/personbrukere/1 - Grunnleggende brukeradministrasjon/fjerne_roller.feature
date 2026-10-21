@@ -59,6 +59,20 @@ Egenskap: Fjerne roller fra en personbruker
       Når jeg ser på personbrukerens roller
       Så er muligheten til å fjerne tilgjengelig kun for roller i organisasjoner jeg har brukeradministrator-rollen for
 
+  @draft
+  Regel: Valglistene følger rettigheten til å fjerne roller fra personbrukere
+
+    Scenario: Valglisten for organisasjon viser bare organisasjoner der jeg kan fjerne roller fra personbrukere
+      Gitt jeg har rettighet til å tildele og fjerne tilganger på applikasjoner i én organisasjon
+      Og rettighet til å tildele og fjerne roller på personbrukere i en annen organisasjon
+      Når jeg åpner valglisten for organisasjon
+      Så ser jeg bare organisasjonen der jeg kan fjerne roller fra personbrukere
+
+    Scenario: Valglisten for miljø avhenger av valgt organisasjon
+      Gitt jeg har valgt en organisasjon
+      Når jeg åpner valglisten for miljø
+      Så ser jeg bare miljøene der jeg kan fjerne roller fra personbrukere i den valgte organisasjonen
+
   Regel: Fjerning av en rolle fjerner tilgangene rollen ga
 
     Scenario: Tilganger som kom fra rollen faller bort

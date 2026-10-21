@@ -47,6 +47,20 @@ Egenskap: Fjerne tilganger fra en applikasjon
       Gitt applikasjonen har en tilgang jeg ikke har rettighet til å fjerne
       Så er muligheten til å fjerne den tilgangen ikke tilgjengelig
 
+  @draft
+  Regel: Valglistene følger rettigheten til å fjerne tilganger på applikasjoner
+
+    Scenario: Valglisten for organisasjon viser bare organisasjoner der jeg kan fjerne tilganger på applikasjoner
+      Gitt jeg har rettighet til å tildele og fjerne roller på personbrukere i én organisasjon
+      Og rettighet til å tildele og fjerne tilganger på applikasjoner i en annen organisasjon
+      Når jeg åpner valglisten for organisasjon
+      Så ser jeg bare organisasjonen der jeg kan fjerne tilganger på applikasjoner
+
+    Scenario: Valglisten for miljø avhenger av valgt organisasjon
+      Gitt jeg har valgt en organisasjon
+      Når jeg åpner valglisten for miljø
+      Så ser jeg bare miljøene der jeg kan fjerne tilganger på applikasjoner i den valgte organisasjonen
+
   Regel: Arvede tilganger kan ikke fjernes direkte
 
     Scenario: Arvet tilgang kan ikke fjernes
