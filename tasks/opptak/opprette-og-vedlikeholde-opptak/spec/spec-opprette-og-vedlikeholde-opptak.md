@@ -83,6 +83,7 @@ Sjekket 2026-10-19 for regelen om obligatoriske felt (`@OPT-OVO-GRU-001`).
 
 Kravene er `@in-progress`, og endres på stedet. Endringene står her, så den som implementerer, ser dem.
 
+- **2026-10-21, `@OPT-OVO-FRI-001`:** **Alle de ordinære fristene er obligatoriske**, og leveres i dette scopet. Regelen «Fristene kan stå tomme når opptaket lagres» (19.10) er erstattet av «De ordinære fristene må være satt for å lagre opptaket». Fristene for tidlig opptak (også fristen for poenggrenser) og for ledige studieplasser er obligatoriske når de er aktivert. Dato for aldersberegning og avvikende frister per utdanningsbakgrunn er valgfrie. Det er slik fs-admin gjør i dag, så TAKE-426 trengs ikke. Ny regel «Fristene må komme i riktig rekkefølge» er `@draft @openquestion`, og er ikke med i spesifikasjonen før den er avklart.
 - **2026-10-19, etter fs-verify (`spec/verify-2026-10-19-1958.md`):**
   - `@OPT-OVO-INN-001`: **Taket er tilbake til «Tilbud per tildelingsrunde»**, slik fs-admin har feltet (`maks_antall_tilbud`). Regelen heter «Opptaksforvalter setter tak for antall tilbud per tildelingsrunde», og er fortsatt obligatorisk, forhåndsutfylt med 1 og kan endres. Det erstatter regelen fra 2026-10-14 om hvor mange utdanningstilbud en søker kan få opptak til.
   - `@OPT-OVO-INN-001`: Nytt scenario «Endre opptakstype når utdanningstilbud er knyttet til opptaket». Opptakstypen har ingen følgelogikk, så fs-admin skal ikke låse feltet.

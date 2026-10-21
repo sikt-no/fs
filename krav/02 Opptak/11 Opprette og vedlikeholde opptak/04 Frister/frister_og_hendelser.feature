@@ -124,6 +124,7 @@ Egenskap: Frister og hendelser for opptak
 
     # AVKLART 2026-10-19 (akseptansetesten): Når tidlig opptak er aktivert, må søknadsfristen og
     # dokumentasjonsfristen for tidlig opptak være satt.
+    # AVKLART 2026-10-21 (produkteier): Det gjelder også fristen for poenggrenser for tidlig opptak.
     Scenariomal: Opptaket kan ikke lagres uten <frist> når tidlig opptak er aktivert
       Gitt at opptaket har aktivert tidlig opptak
       Og at <frist> ikke er satt
@@ -132,9 +133,10 @@ Egenskap: Frister og hendelser for opptak
       Og opptaksforvalter ser at <frist> må være satt
 
       Eksempler:
-        | frist                                   |
-        | søknadsfristen for tidlig opptak        |
-        | dokumentasjonsfristen for tidlig opptak |
+        | frist                                              |
+        | søknadsfristen for tidlig opptak                   |
+        | dokumentasjonsfristen for tidlig opptak            |
+        | fristen for å sette poenggrenser for tidlig opptak |
 
     Scenario: Sette frist for poenggrenser for tidlig opptak
       Gitt at opptaket har aktivert tidlig opptak
@@ -202,15 +204,67 @@ Egenskap: Frister og hendelser for opptak
       Og opptaksforvalter setter dokumentasjonsfrist til "2027-03-01 23:59"
       Så har utdanningsbakgrunnen "Realkompetanse" søknadsfrist og dokumentasjonsfrist "2027-03-01 23:59" i opptaket
 
-  # AVKLART 2026-10-15 (Q3, TAKE-410 og TAKE-411): Hva en frist som ikke er satt, betyr, avhenger av fristen.
-  # En åpningsdato som ikke er satt, holder handlingen stengt. Det gjelder når søknaden åpner, når redigering
-  # av utdanningstilbud åpner, og når ledige studieplasser kan søkes. En frist for når noe stenger, som ikke
-  # er satt, begrenser ikke handlingen. Virkningen står i kravene der fristene brukes.
-  # AVKLART 2026-10-19 (akseptansetesten): Fristene kan stå tomme. At fs-admin i dag krever alle fristene,
-  # er en feil.
-  Regel: Fristene kan stå tomme når opptaket lagres
+  # AVKLART 2026-10-21 (produkteier): Alle de ordinære fristene er obligatoriske, og leveres i scopet for å
+  # opprette opptak nå. Det erstatter avklaringen 2026-10-19 om at fristene kan stå tomme (regelen «Fristene kan
+  # stå tomme når opptaket lagres»). Fristene for tidlig opptak og ledige studieplasser er obligatoriske når de er
+  # aktivert. Dato for aldersberegning og avvikende frister per utdanningsbakgrunn er valgfrie.
+  # Hva en frist som ikke er satt, betyr når den brukes (Q3, TAKE-410 og TAKE-411), står i kravene der fristene
+  # brukes.
+  Regel: De ordinære fristene må være satt for å lagre opptaket
 
-    Scenario: Lagre opptaket uten frister
-      Gitt at opptaket ikke har aktivert tidlig opptak
-      Når opptaksforvalter lagrer opptaket uten å sette frister
+    Scenariomal: Opptaket kan ikke lagres uten <frist>
+      Gitt at <frist> ikke er satt
+      Når opptaksforvalter lagrer opptaket
+      Så blir opptaket ikke lagret
+      Og opptaksforvalter ser at <frist> må være satt
+
+      Eksempler:
+        | frist                                              |
+        | datoen for når redigering av utdanningstilbud åpner    |
+        | datoen for når redigering av utdanningstilbud stenger  |
+        | datoen for når søknaden åpner                          |
+        | den ordinære søknadsfristen                            |
+        | omprioriteringsfristen                                 |
+        | fristen for sletting av søknadsalternativer            |
+        | den ordinære dokumentasjonsfristen                     |
+        | ettersendingsfristen                                   |
+        | fristen for endring av utdanningsbakgrunn              |
+        | datoen for når hovedopptaket publiseres                |
+
+    Scenariomal: Opptaket kan ikke lagres uten <frist> når ledige studieplasser er aktivert
+      Gitt at opptaket tilbyr søknad på ledige studieplasser
+      Og at <frist> ikke er satt
+      Når opptaksforvalter lagrer opptaket
+      Så blir opptaket ikke lagret
+      Og opptaksforvalter ser at <frist> må være satt
+
+      Eksempler:
+        | frist                                              |
+        | informasjonsfristen for ledige studieplasser               |
+        | datoen for når ledige studieplasser kan søkes              |
+        | datoen for når ledige studieplasser stenger for søkning    |
+
+    Scenario: Dato for aldersberegning og avvikende frister kan stå tomme
+      Gitt at alle de ordinære fristene er satt
+      Og at dato for aldersberegning ikke er satt
+      Og at ingen utdanningsbakgrunn har avvikende frister
+      Når opptaksforvalter lagrer opptaket
       Så er opptaket lagret
+
+  # AVKLART 2026-10-21 (produkteier): Sammenhengene mellom fristene er ikke viktige å levere nå.
+  @draft @openquestion
+  Regel: Fristene må komme i riktig rekkefølge
+    # ÅPNE SPØRSMÅL:
+    # - Hvilke frister må ligge før andre? Kandidater: åpner før stenger (redigering av utdanningstilbud, søknaden,
+    #   ledige studieplasser), ordinær dokumentasjonsfrist senest lik ettersendingsfristen, søknadsfristen og
+    #   dokumentasjonsfristen for tidlig opptak før den ordinære søknadsfristen, fristen for poenggrenser før
+    #   søknadsfristen for tidlig opptak, omprioriteringsfristen og fristen for sletting etter at søknaden åpner,
+    #   og avvikende frister per utdanningsbakgrunn etter at søknaden åpner.
+    # - Skal opptaket ikke kunne lagres når rekkefølgen er feil, eller skal opptaksforvalter bare få en advarsel?
+
+    Scenario: Den ordinære søknadsfristen kan ikke være før søknaden åpner
+      Gitt at søknaden åpner "2027-02-01"
+      Når opptaksforvalter setter ordinær søknadsfrist til "2027-01-15 23:59"
+      Og opptaksforvalter lagrer opptaket
+      Så blir opptaket ikke lagret
+      Og opptaksforvalter ser at den ordinære søknadsfristen må være etter at søknaden åpner
