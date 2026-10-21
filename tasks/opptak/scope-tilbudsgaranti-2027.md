@@ -1,0 +1,43 @@
+# Scope: Tilbudsgaranti 2027
+
+- **Slug**: tilbudsgaranti-2027
+- **Initiativ**: [#512](https://github.com/sikt-no/fs/issues/512)
+- **Eier**: –
+- **Siste oppdatering**: 2026-10-21
+
+## Mål
+
+- Behandler (B-rolle), tilbyder (T-rolle) og opptaksforvalter (F-rolle) kan gi, endre og fjerne tilbudsgaranti på et søknadsalternativ, med tilbudsgarantitypene opptaket har for rollen.
+- Behandlerne ser tilbudsgarantiene fra alle rollene, og hvem som har satt, endret og fjernet dem.
+- Tilbudsgarantien følger søknadsalternativet, og plasstildelingen henter den fra saksbehandlingen (STEK-263).
+
+## Ikke-mål
+
+- Tidligopptaket (`@OPT-BEH-BEH-007`, STEK-188). Det er i oppgaven [tidlig-opptak](tidlig-opptak/).
+- Hvordan plasstildelingen gir tilbud med tilbudsgaranti (`@OPT-PLA-TIL-002`, [scope-plasstildeling-2027](scope-plasstildeling-2027.md)).
+- Hvilken utdanningskvote tilbudsgarantiene tas fra for et utdanningstilbud (`@OPT-OPT-UTD-004`, [scope-utdanningstilbud-2027](scope-utdanningstilbud-2027.md)).
+- Utsatt, står som skjeletter i raden «(ikke tildelt)»: forvaltning av tilbudsgarantityper (STEK-349, typene legges inn i databasen per opptak for 2027), reservert studieplass for søkeren (STEK-553, on hold), og unntak fra utdanningskvoten for ett søknadsalternativ (STEK-270).
+
+## Kilder
+
+- [GitHub #512](https://github.com/sikt-no/fs/issues/512) — «Saksbehandler kan sette tilbudsgaranti på søknadalternativ»
+- [STEK-241](https://sikt.atlassian.net/browse/STEK-241) — «Tilbudsgaranti», med STEK-262 (hvem som kan sette hvilken tilbudsgaranti), STEK-263 (plasstildelingen henter tilbudsgarantiene) og STEK-270 (tilbyder og opptaksforvalter)
+- [STEK-349](https://sikt.atlassian.net/browse/STEK-349) — opptakseieren forvalter tilbudsgarantitypene i opptaket
+- [STEK-553](https://sikt.atlassian.net/browse/STEK-553) — søkeren ser reservert studieplass (kategori S), on hold
+- [Confluence PFS 3885400152](https://sikt.atlassian.net/wiki/spaces/PFS/pages/3885400152) — «Tilbudsgaranti», dagens løsning i UHG, HYU/FSU og lokale opptak
+- [Confluence PFS 5086576688](https://sikt.atlassian.net/wiki/spaces/PFS/pages/5086576688) — «2026-10-07 Status tilbudsgarantier og Tidlig opptak»
+
+## Oppgaver
+
+| Oppgave | Krav | MoSCoW | Skisse | Issue | Kommentar |
+|---|---|---|---|---|---|
+| [tilbudsgaranti](tilbudsgaranti/) | `@OPT-BEH-BEH-010` [gi_tilbudsgaranti.feature](../../krav/02%20Opptak/13%20S%C3%B8knad%20og%20saksbehandling/02%20Behandling/gi_tilbudsgaranti.feature) | Must | – | [STEK-241](https://sikt.atlassian.net/browse/STEK-241) | Reglene for manuell tilbudsgaranti er flyttet fra `@OPT-BEH-BEH-007` (PR #737) |
+| (ikke tildelt) | `@OPT-OVO-INN-004` [forvalte_tilbudsgarantityper.feature](../../krav/02%20Opptak/11%20Opprette%20og%20vedlikeholde%20opptak/03%20Innstillinger/forvalte_tilbudsgarantityper.feature) | Could | – | [STEK-349](https://sikt.atlassian.net/browse/STEK-349) | Skjelett |
+| (ikke tildelt) | `@OPT-SØK-SØK-015` [reservert_studieplass.feature](../../krav/02%20Opptak/13%20S%C3%B8knad%20og%20saksbehandling/01%20S%C3%B8knad/reservert_studieplass.feature) | Could | – | [STEK-553](https://sikt.atlassian.net/browse/STEK-553) | Skjelett, on hold |
+| (ikke tildelt) | `@OPT-BEH-BEH-017` [velge_utdanningskvote_for_tilbudsgaranti.feature](../../krav/02%20Opptak/13%20S%C3%B8knad%20og%20saksbehandling/02%20Behandling/velge_utdanningskvote_for_tilbudsgaranti.feature) | Could | – | [STEK-270](https://sikt.atlassian.net/browse/STEK-270) | Skjelett |
+
+## Åpne spørsmål
+
+- [ ] Finnes det skisser for å gi tilbudsgaranti i saksbehandlingen? Spec-en for tidlig opptak viser til skissen «FS-Admin – tidlig opptak», med eget felt per rolle.
+- [ ] Unntak fra utdanningskvoten for ett søknadsalternativ (`@OPT-BEH-BEH-017`) er ikke funnet i fs-plattform. Er det bygget, eller bare i skissene?
+- [ ] Sidefunn fra kodesjekken for tidlig opptak: tilbudsgarantien fra behandler kopieres ikke når søknadsalternativet flyttes til en annen behandler (`BehandlertildelingService.java:474-477`). Sjekkes i `fs-specify` for `@OPT-BEH-BEH-010`.
