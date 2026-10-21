@@ -6,7 +6,7 @@
 Egenskap: Forvalte tilbudsgarantityper
   Som opptaksforvalter
   ønsker jeg å forvalte tilbudsgarantitypene i opptaket
-  slik at behandlere, tilbydere og opptaksforvaltere kan gi tilbudsgarantiene opptaket trenger.
+  slik at saksbehandlere, tilbydere og opptaksforvaltere kan gi tilbudsgarantiene opptaket trenger.
 
   # ÅPNE SPØRSMÅL:
   # - For 2027 legges typene inn i databasen per opptak. Når skal opptakseieren forvalte dem selv?

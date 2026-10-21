@@ -21,7 +21,7 @@
 
 ## Kort beskrivelse
 
-Behandler, tilbyder og opptaksforvalter gir søkeren tilbudsgaranti på et søknadsalternativ etter en individuell vurdering, så søkeren får tilbud uavhengig av den ordinære rangeringen. Tidligopptaket er i oppgaven [tidlig-opptak](../tidlig-opptak/).
+Saksbehandler, tilbyder og opptaksforvalter gir søkeren tilbudsgaranti på et søknadsalternativ etter en individuell vurdering, så søkeren får tilbud uavhengig av den ordinære rangeringen. Tidligopptaket er i oppgaven [tidlig-opptak](../tidlig-opptak/).
 
 ## Statuslogg
 

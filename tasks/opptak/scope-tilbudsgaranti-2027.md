@@ -7,8 +7,8 @@
 
 ## Mål
 
-- Behandler (B-rolle), tilbyder (T-rolle) og opptaksforvalter (F-rolle) kan gi, endre og fjerne tilbudsgaranti på et søknadsalternativ, med tilbudsgarantitypene opptaket har for rollen.
-- Behandlerne ser tilbudsgarantiene fra alle rollene, og hvem som har satt, endret og fjernet dem.
+- Saksbehandler, tilbyder og opptaksforvalter kan gi, endre og fjerne tilbudsgaranti på et søknadsalternativ, med tilbudsgarantitypene opptaket har for rollen.
+- Saksbehandlerne ser tilbudsgarantiene fra alle rollene, og hvem som har satt og fjernet dem, og på hvilket søknadsalternativ.
 - Tilbudsgarantien følger søknadsalternativet, og plasstildelingen henter den fra saksbehandlingen (STEK-263).
 
 ## Ikke-mål
@@ -34,12 +34,11 @@
 
 | Oppgave | Krav | MoSCoW | Skisse | Issue | Kommentar |
 |---|---|---|---|---|---|
-| [tilbudsgaranti](tilbudsgaranti/) | `@OPT-BEH-BEH-010` [gi_tilbudsgaranti.feature](../../krav/02%20Opptak/13%20S%C3%B8knad%20og%20saksbehandling/02%20Behandling/gi_tilbudsgaranti.feature) | Must | [Søknadsalternativ i saksbehandlingen](https://www.figma.com/design/LmoNQlmAuE2FlE0fUo5GoO/FS-Admin---Seksjon-Opptak?node-id=9840-220112) | [STEK-241](https://sikt.atlassian.net/browse/STEK-241) | Reglene for manuell tilbudsgaranti er flyttet fra `@OPT-BEH-BEH-007` (PR #737). Hvilke av de tre feltene brukeren kan endre, regnes ut i frontend fra rollen og organisasjonen den gjelder ved (STEK-270, løsning 1b). Det hører til i `gi_tilbudsgaranti.design.md` |
+| [tilbudsgaranti](tilbudsgaranti/) | `@OPT-BEH-BEH-010` [gi_tilbudsgaranti.feature](../../krav/02%20Opptak/13%20S%C3%B8knad%20og%20saksbehandling/02%20Behandling/gi_tilbudsgaranti.feature) | Must | [Søknadsalternativ i saksbehandlingen](https://www.figma.com/design/LmoNQlmAuE2FlE0fUo5GoO/FS-Admin---Seksjon-Opptak?node-id=9840-220112) | [STEK-241](https://sikt.atlassian.net/browse/STEK-241) | Reglene for manuell tilbudsgaranti er flyttet fra `@OPT-BEH-BEH-007` (PR #737). Hvilke av de tre feltene brukeren kan endre, regnes ut i frontend fra rollen og organisasjonen den gjelder ved (STEK-270, løsning 1b). Det hører til i `gi_tilbudsgaranti.design.md`. Tilbudsgarantien fra saksbehandler følger søknadsalternativet også når det flyttes til en annen saksbehandler (#772), og koden endres i STEK-626 |
 | (ikke tildelt) | `@OPT-OVO-INN-004` [forvalte_tilbudsgarantityper.feature](../../krav/02%20Opptak/11%20Opprette%20og%20vedlikeholde%20opptak/03%20Innstillinger/forvalte_tilbudsgarantityper.feature) | Could | – | [STEK-349](https://sikt.atlassian.net/browse/STEK-349) | Skjelett |
 | (ikke tildelt) | `@OPT-SØK-SØK-016` [reservert_studieplass.feature](../../krav/02%20Opptak/13%20S%C3%B8knad%20og%20saksbehandling/01%20S%C3%B8knad/reservert_studieplass.feature) | Could | – | [STEK-553](https://sikt.atlassian.net/browse/STEK-553) | Skjelett, on hold |
 | (ikke tildelt) | `@OPT-BEH-BEH-017` [velge_utdanningskvote_for_tilbudsgaranti.feature](../../krav/02%20Opptak/13%20S%C3%B8knad%20og%20saksbehandling/02%20Behandling/velge_utdanningskvote_for_tilbudsgaranti.feature) | Could | – | [STEK-270](https://sikt.atlassian.net/browse/STEK-270) | Skjelett |
 
 ## Åpne spørsmål
 
-- [ ] Skissene viser én nedtrekksmeny for tilbudsgaranti, ikke tre felt. I STEK-270 er det avklart at feltene for B-, T- og F-rolle vises hver for seg, og at et felt for en rolle brukeren ikke har, bare viser verdien. Det står i `@OPT-BEH-BEH-010`. Skal skissene oppdateres, eller holder det at `fs-specify` noterer avviket?
-- [ ] Sidefunn fra kodesjekken for tidlig opptak: tilbudsgarantien fra behandler kopieres ikke når søknadsalternativet flyttes til en annen behandler (`BehandlertildelingService.java:474-477`). Sjekkes i `fs-specify` for `@OPT-BEH-BEH-010`.
+- [ ] Skissene viser én nedtrekksmeny for tilbudsgaranti, ikke tre felt. I STEK-270 er det avklart at feltene for saksbehandler, tilbyder og opptaksforvalter vises hver for seg, og at et felt for en rolle brukeren ikke har, bare viser verdien. Det står i `@OPT-BEH-BEH-010`. Skal skissene oppdateres, eller holder det at `fs-specify` noterer avviket?
