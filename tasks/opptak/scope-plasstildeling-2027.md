@@ -15,7 +15,7 @@
 
 - Automatiske nye tilbud ved nei-svar mellom plasstildelingsrundene (oppgave 10, Won't 2027).
 - Vedtaksformidling (svarmelding, påminnelse, åpnet vedtak, digital postkasse og hendelseslogg). Det blir en egen oppgave og et eget scope senere, se [vedtaksformidling](vedtaksformidling/).
-- Å sette standard plassflyt og kvoteprioritet for opptaket (`@OPT-OVO-INN-002` og `@OPT-OVO-INN-003`). De er flyttet til [scope-kvoter-i-opptaket-2027](scope-kvoter-i-opptaket-2027.md) 2026-10-15, så de kan leveres før plasstildelingen. Hva plasstildelingen gjør med dem, er fortsatt her.
+- Å sette standard plassflyt og kvoteprioritet (`@OPT-REG-KVO-003` og `@OPT-REG-KVO-004`, før `@OPT-OVO-INN-002` og `@OPT-OVO-INN-003`). De settes i regelverkssamlingen (avklart 2026-10-21). De er flyttet til [scope-kvoter-i-opptaket-2027](scope-kvoter-i-opptaket-2027.md) 2026-10-15, så de kan leveres før plasstildelingen. Hva plasstildelingen gjør med dem, er fortsatt her.
 - At lærestedene melder feil i resultatet til forvaltende organisasjon i løsningen (Could, senere). E-post er godt nok nå, så lenge forvaltende organisasjon kan endre antall tilbud etter lærestedenes periode (avklart med domeneekspert 2026-10-15).
 - Regelverk, rangering og kvalifisering. De kommer fra søknadsbehandlingen og regelverket, ikke fra plasstildelingen.
 
