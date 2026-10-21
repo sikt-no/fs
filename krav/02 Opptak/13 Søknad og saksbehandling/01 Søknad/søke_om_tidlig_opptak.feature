@@ -157,6 +157,11 @@ Egenskap: Søke om tidlig opptak
       Så ser søkeren at søknaden om tidlig opptak ble sendt "2027-01-15"
 
   Regel: Tidlig opptak kan bare søkes innen søknadsfristen for tidlig opptak
+    # Virkningen av søknadsfristen for tidlig opptak som opptaksforvalter setter i
+    # 11 Opprette og vedlikeholde opptak/04 Frister/frister_og_hendelser.feature.
+    # Regelen «Søknad etter fristen for tidlig opptak behandles i det ordinære opptaket»
+    # (lagt til 2026-10-19 etter akseptansetesten av opprette og vedlikeholde opptak) er
+    # fjernet 2026-10-21, fordi den overlappet med denne regelen.
 
     Scenario: Kan ikke søke om tidlig opptak etter fristen
       Gitt søknadsfristen for tidlig opptak er "2027-03-01 23:59"
@@ -184,17 +189,3 @@ Egenskap: Søke om tidlig opptak
       Gitt dokumentasjonsfristen for tidlig opptak i opptaket "Samordna opptak 2027" er "2027-03-01 23:59"
       Når søkeren skal søke om tidlig opptak
       Så ser søkeren at dokumentasjonen for tidlig opptak skal være lastet opp innen "2027-03-01 23:59"
-
-  @draft
-  Regel: Søknad etter fristen for tidlig opptak behandles i det ordinære opptaket
-    # Virkningen av søknadsfristen for tidlig opptak som opptaksforvalter setter i
-    # 11 Opprette og vedlikeholde opptak/04 Frister/frister_og_hendelser.feature.
-    # Lagt til 2026-10-19 etter akseptansetesten av opprette og vedlikeholde opptak.
-    # At søkeren ikke kan søke om tidlig opptak etter fristen, står i regelen «Tidlig opptak kan bare søkes
-    # innen søknadsfristen for tidlig opptak».
-
-    Scenario: Søknad sendt etter fristen for tidlig opptak behandles i det ordinære opptaket
-      Gitt søknadsfristen for tidlig opptak er "2027-03-01 23:59"
-      Og "Sykepleie, høst 2027" tilbyr tidlig opptak
-      Når søkeren sender søknaden med søknadsalternativet "Sykepleie, høst 2027" "2027-03-10"
-      Så behandles søknaden i det ordinære opptaket
