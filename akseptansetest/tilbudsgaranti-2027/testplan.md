@@ -145,7 +145,7 @@ Testansvarlig skriver beslutningen og begrunnelsen i sluttrapporten. Rettede fun
 |---|---|---|---|
 | 1. Verifisering (`fs-verify`) | [Verifisering – Tilbudsgaranti i saksbehandlingen 2027 – 2026-10-22 08:50](https://sikt.atlassian.net/wiki/spaces/STUDIEADM/pages/edit-v2/5130125348) (utkast), [verify-2026-10-22-0850.md](../../tasks/opptak/tilbudsgaranti/spec/verify-2026-10-22-0850.md) | Alt funnet | 2026-10-22 |
 | 2. Testplan | (denne siden) | Laget | 2026-10-22 |
-| 3. Testrapport – verifisering | – | Venter | |
+| 3. Testrapport – verifisering | [Testrapport – verifisering – Tilbudsgaranti i saksbehandlingen 2027](https://sikt.atlassian.net/wiki/spaces/STUDIEADM/pages/edit-v2/5131075597) (utkast), [testrapport-verifisering-2026-10-22.md](testrapport-verifisering-2026-10-22.md) | Klar | 2026-10-22 |
 | 4. Intern akseptansetest | – | Venter | |
 | 4b. CDP-kjøring (valgfri) | – | Ikke aktuell | |
 | 5. Testrapport – intern | – | Venter | |
