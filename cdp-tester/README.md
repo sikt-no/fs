@@ -61,6 +61,18 @@ Hver mappe med tester har en seksjon som sier hva testene krever, med nøkkelen,
 | `personbruker-over-50` | testdata | Minst 51 personbrukere synlige for brukeradministratoren | «Liste viser de 50 første personbrukerne» |
 ```
 
+## Installere `cdp`-skillen
+
+Testene kjøres med `cdp`-skillen (CLI-en `browser-harness-js`). Den er **ikke en del av repoet**: hver som skal kjøre testene, installerer den selv. Mappene den legger igjen (`.agents/`, `.claude/skills/cdp` og `skills-lock.json`) er ignorert av git, og skal ikke committes. `fs-testcaser-cdp` trenger den ikke for å lage eller oppdatere testene, bare for å kjøre dem.
+
+1. Fra rota av repoet: `npx skills add browser-use/browser-harness-js` (kilden står i `skills-lock.json` etter installasjonen). Pilotkjøringen brukte versjonen med `computedHash` `c23c7528…`.
+2. Første kall med `browser-harness-js` installerer `bun` automatisk (laster ned og kjører et installasjonsskript fra bun.sh, og legger `~/.bun/bin` til i `~/.zshrc`). Vil du ikke det, sett `BROWSER_HARNESS_SKIP_BUN_INSTALL=1` og installer `bun` selv. CLI-en ligger ikke på PATH etter installasjonen: kall den med full sti (`.claude/skills/cdp/sdk/browser-harness-js`), eller lag en symlenke som `cdp`-skillen beskriver.
+3. Åpne `chrome://inspect/#remote-debugging` i Chrome, huk av «Discover network targets», og klikk **Allow** når Chrome spør.
+4. Bruk helst en egen Chrome-profil per testbruker (`--user-data-dir`). `cdp`-skillen kobler til Chrome-en som kjører, og agenten kan da lese alle cookies i profilen, også for andre tjenester.
+5. Avslutt med `browser-harness-js --stop` når kjøringen er ferdig. Serveren lytter uautentisert på `127.0.0.1:9876`.
+
+`cdp`-skillen har ingen egne sikkerhetsregler. Reglene for kjøringen (miljø-guard, lesende kjøring som standard, bevis) står i `fs-testcaser-cdp` under «Før en kjøring».
+
 ## Kjøring og resultat
 
 Testene kjøres av en agent med `cdp`-skillen. Resultatet lages per leveranse i `akseptansetest/<slug>/kjoring-<YYYY-MM-DD-HHMM>/resultat.md`, og uten leveranse i `kjoring-…/` i mappa ved testene. Skjermbilder legges i samme mappe, men er ignorert av git: bare `resultat.md` committes. Resultatet lagres i Confluence når brukeren sier ja (skjermbilder kan legges ved siden for hånd). En tester bekrefter foreslått status, og agenten fyller aldri ut «Status» på testcasene eller i testrapporten.
