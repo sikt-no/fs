@@ -7,7 +7,7 @@
 - **Oppgaver**: [opptak/tilbudsgaranti](../../tasks/opptak/tilbudsgaranti/oppgave.md)
 - **Krav**: 4 feature-filer, 1 `@implemented`, commit `6478bee` (2026-10-22)
 - **Verifisering**: [verify-2026-10-22-0850.md](../../tasks/opptak/tilbudsgaranti/spec/verify-2026-10-22-0850.md)
-- **Confluence**: –
+- **Confluence**: https://sikt.atlassian.net/wiki/spaces/STUDIEADM/pages/edit-v2/5130158105 (utkast), under [Testplaner](https://sikt.atlassian.net/wiki/spaces/STUDIEADM/pages/5126062121/Testplaner)
 - **Laget**: 2026-10-22 av fs-testplan
 
 ---
