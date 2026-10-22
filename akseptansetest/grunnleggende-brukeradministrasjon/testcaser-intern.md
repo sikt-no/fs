@@ -55,7 +55,7 @@
 
 Intern akseptansetest av «Grunnleggende brukeradministrasjon». Testbeskrivelsen, testbrukerne og testdataene står i [testplanen](https://sikt.atlassian.net/wiki/spaces/STUDIEADM/pages/edit-v2/5125963817). Felt med gul bakgrunn fylles ut av teamet før testen.
 
-Testen går i produksjon: [Fylles ut: URL]. Menypunktet «Personbrukere» vises der bare når flaggene `tilgangsstyring-meny` og `tilgangsstyring-brukeradministrasjon` er på [Fylles ut: bekreftet av teamet].
+Testen går i testmiljøet: [Fylles ut: URL]. Menypunktet «Personbrukere» vises der bare når flaggene `tilgangsstyring-meny` og `tilgangsstyring-brukeradministrasjon` er på. Fs-admin har dem alltid på i development, review og test [Fylles ut: bekreftet av teamet].
 
 ## Slik tester du
 

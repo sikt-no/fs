@@ -69,12 +69,13 @@ Vis oversikten før du spør teamet: verify-rapporten (dato, resultat), kravene 
 
 ## 3. Spør teamet
 
-Still spørsmålene samlet med `AskUserQuestion`, høyst fire om gangen. Har forrige testplan svaret, vis det og spør om det fortsatt gjelder.
+Still spørsmålene samlet med `AskUserQuestion`, høyst fire om gangen. Har forrige testplan svaret, vis det og spør om det fortsatt gjelder. Spørsmålene om roller, testbrukere, testdata og miljø står i [`.claude/references/akseptansetest/roller-og-testdata.md`](../../references/akseptansetest/roller-og-testdata.md), og er de samme som `fs-testcaser-cdp` bruker. Følg den.
 
-1. **Leveransen:** navnet (tittelen på siden), versjonen, testmiljøet (URL) og feature-flagg.
-2. **Testbrukerne:** list rollene du fant i kravene (`Som <rolle>`, `Gitt jeg er <rolle>`, rollene i *Synlighet*-regler), og be om navn og organisasjon for hver. Nummerer dem fra 1. Minst to organisasjoner.
-3. **Testdataene:** opptak, søkere, søknader, regelverkssamlinger osv. som må finnes, hvor de ligger, og om de kan settes tilbake.
+1. **Leveransen:** navnet (tittelen på siden), versjonen, testmiljøet (URL, alltid et testmiljø) og feature-flagg.
+2. **Testbrukerne:** som i referansen: rollene du fant i kravene, navn og organisasjon for hver, nummerert fra 1, minst to organisasjoner.
+3. **Testdataene:** som i referansen: opptak, søkere, søknader, regelverkssamlinger osv. som må finnes, hvor de ligger, og om de kan settes tilbake.
 4. **Roller og tid:** testansvarlig, kontaktperson, andre testere, tidspunkt, Slack-kanal, og om leveransen også skal til ekstern akseptansetest (og hvem som tester der).
+5. **CDP (valgfritt):** «Skal en CDP-agent kjøre testene (steg 4b)?» Svaret er ja eller nei, og nei er standard. Ved ja: bruk tabellene med CDP-kolonnene fra malen (`Nøkkel`, `Innlogging`, `Start-URL`, `Søk/URL`, `Utgangstilstand` og `Brukes av`), fyll dem ut, og les koden som beskrevet i referansen (*Lese koden når CDP er valgt*). Legg forutsetning 8 inn i testplanen, og sett steg 4b i «Status i flyten» til «Venter». Ved nei: bruk tabellene uten CDP-kolonnene, ta ikke med forutsetning 8, og skriv «Ikke aktuell» i steg 4b.
 
 Det brukeren hopper over, skrives som `[Fylles ut: <hva>]`.
 
@@ -87,7 +88,7 @@ Fyll ut malen, og skriv `akseptansetest/<testplan-slug>/testplan.md`:
 - «Venter på verifisering»: krav og deler som er `@in-progress`, eller `@planned`-deler i leverte krav som endres, med det verify-rapporten sier mangler.
 - «Ikke med i denne testen» med grunnen fra `krav-fra-testplan.md`.
 - Forutsetning 5 fylles ut fra verify-rapporten.
-- «Status i flyten»: steg 1 er verifiseringen, med rapporten (fila, og siden i Confluence når den finnes), «Alt funnet» eller «<N> ikke funnet, <N> usikker», og datoen i rapporten. Uten rapport: «Ikke kjørt». Steg 2 er «Laget». Er leveransen ikke til ekstern test, er steg 6 og 7 «Ikke aktuell».
+- «Status i flyten»: steg 1 er verifiseringen, med rapporten (fila, og siden i Confluence når den finnes), «Alt funnet» eller «<N> ikke funnet, <N> usikker», og datoen i rapporten. Uten rapport: «Ikke kjørt». Steg 2 er «Laget». Steg 4b (CDP) er «Venter» når teamet har valgt det, ellers «Ikke aktuell». Er leveransen ikke til ekstern test, er steg 6 og 7 «Ikke aktuell».
 - «Funn og alvorlighetsgrad» og «Beslutning» ordrett fra `alvorlighetsgrad.md`.
 
 ## 5. Vis fram og publiser

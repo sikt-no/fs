@@ -401,6 +401,9 @@ Referansene i begge retninger:
 | Hva må sjekkes når kravet endres? | `grep -rn "@depends-on-OPT-BEH-BEH-011" krav/` |
 | Hva henger sammen med kravet? | `grep -rnE "@(depends-on\|ref)-OPT-BEH-BEH-011" krav/` |
 | Hvilke tester bygger på kravet? | `npx playwright test --grep @depends-on-OPT-BEH-BEH-011` |
+| Hvilke CDP-tester må sjekkes når kravet endres? | `grep -rn "@depends-on-OPT-BEH-BEH-011" cdp-tester/` |
+
+CDP-testene i [`cdp-tester/`](../cdp-tester/README.md) bruker de samme taggene, med de samme betydningene: `@depends-on-<Feature-ID>` på en test som må sjekkes når kravet endres, og `@ref-<Feature-ID>` på et krav testen bare bruker som forutsetning. Kravene peker ikke tilbake til testene.
 
 Referansene settes av `fs-krav`. Når et krav endres, slettes eller får ny ID, lister `fs-krav` kravene som refererer til det. `fs-specify` og `fs-specify-delta` tar med kravene det bygges på, og sier fra når et av dem ikke er `@planned` eller lenger.
 

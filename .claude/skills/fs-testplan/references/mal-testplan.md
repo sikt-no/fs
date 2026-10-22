@@ -29,7 +29,7 @@ Testplan for «<leveranse>». Planen sier hva som testes, av hvem, hvor og når,
 |---|---|
 | Hva er levert | <2–4 setninger: hva brukeren kan gjøre, og hvor i løsningen> |
 | Versjon | <versjon, release eller dato for deploy> |
-| Testmiljø | [<url>](<url>) |
+| Testmiljø | [<url>](<url>) (alltid et testmiljø, aldri produksjon) |
 | Feature-flagg | <flagg som må være på, eller «Ingen»> |
 | Kilde | <scopet, oppgaven, mappa eller filene, med lenke til GitHub> |
 | Scope | `@scope-<slug>` · [scope-fila på GitHub](<lenke>), eller «Ingen» |
@@ -45,11 +45,27 @@ Testplan for «<leveranse>». Planen sier hva som testes, av hvem, hvor og når,
 
 Testbrukerne finnes i minst to organisasjoner, så vi kan teste at ingen ser data de ikke skal se.
 
+**Bare når teamet har svart ja på CDP (steg 4b):** legg til kolonnene `Nøkkel` (etter `Nr`), `Innlogging` og `Start-URL` (etter `Organisasjon`):
+
+| Nr | Nøkkel | Navn | Rolle | Organisasjon | Innlogging | Start-URL | Brukes til |
+|---|---|---|---|---|---|---|---|
+| 1 | <nøkkel> | <navn> | <rolle fra kravene> | <organisasjon> | <verdi i «Overstyrt bruker», Chrome-profil eller Feide-ID> | <URL> | <hvilke krav eller deler> |
+
+Nøkkelen er et stabilt navn i kebab-case for rollen (`brukeradministrator-alle-miljoer`), og endres ikke om navnet på testbrukeren byttes. Aldri passord i testplanen. Ved nei står kolonnene ikke i testplanen. Se [`roller-og-testdata.md`](../../../references/akseptansetest/roller-og-testdata.md).
+
 ### Testdata
 
 | Hva | Navn | Hvor | Kan settes tilbake |
 |---|---|---|---|
 | <opptak, søker, regelverkssamling …> | <navn> | <lenke eller sted> | Ja / Nei / <hvordan> |
+
+**Bare når teamet har svart ja på CDP:** legg til kolonnene `Nøkkel` (etter `Hva`), og `Søk/URL`, `Utgangstilstand` og `Brukes av` (etter `Hvor`):
+
+| Hva | Nøkkel | Navn | Hvor | Søk/URL | Utgangstilstand | Brukes av | Kan settes tilbake |
+|---|---|---|---|---|---|---|---|
+| <opptak, søker, regelverkssamling …> | <nøkkel> | <navn> | <lenke eller sted> | <hvordan objektet åpnes> | <hva testen forutsetter> | <Feature-ID og scenario, eller testcase-Nr> | Ja / Nei / <hvordan> |
+
+Kolonnene for CDP står bare i testplanen, ikke i testcasene for den eksterne testen.
 
 ## Omfang
 
@@ -113,6 +129,7 @@ Klart når testansvarlig har logget inn som testbruker og ser testdataene.
 | 5 | `fs-verify` har funnet alle scenarioene, og en annen person har kontrollert rapporten | <fra verify-rapporten i steg 1, og steg 3, eller «Venter»> |
 | 6 | Testcasene er laget og gått gjennom av testansvarlig | Venter |
 | 7 | Testansvarlig har logget inn som testbruker og ser testdataene | [Fylles ut av testansvarlig] |
+| 8 | CDP-agenten kan logge inn som hver testbruker, og nøklene i testbrukere og testdata er utfylt (rad 8 tas bare med når teamet har valgt CDP) | [Fylles ut av teamet] |
 
 ## Kriterier for godkjent
 
@@ -136,6 +153,7 @@ Testansvarlig skriver hva som skal til for at testen blir godkjent, helst før u
 | 2. Testplan | (denne siden) | Laget | <YYYY-MM-DD> |
 | 3. Testrapport – verifisering | – | Venter | |
 | 4. Intern akseptansetest | – | Venter | |
+| 4b. CDP-kjøring (valgfri) | – | Venter / Ikke aktuell | |
 | 5. Testrapport – intern | – | Venter | |
 | 6. Ekstern akseptansetest | – | Venter / Ikke aktuell | |
 | 7. Testrapport – ekstern | – | Venter / Ikke aktuell | |
