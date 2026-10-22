@@ -60,7 +60,7 @@ Det som testes, er kravene som er `@implemented`. Feature-ID-ene her er kravene 
 |---|---|---|---|
 | [Gi tilbudsgaranti](https://github.com/sikt-no/fs/blob/6478beea804db1a91ade2db494161ec86f4f2775/krav/02%20Opptak/13%20S%C3%B8knad%20og%20saksbehandling/02%20Behandling/gi_tilbudsgaranti.feature) | `@OPT-BEH-BEH-010` | `@implemented` | 17 (25 testcaser med eksemplene i scenariomalene) |
 
-Scenarioene i testen er de leverte scenarioene i gating-settet: alle scenarioene som ikke er utkast, avviklet, har åpne spørsmål eller er demo, og som ikke er under endring. Er kilden et scope, og kravet ble levert før, er det bare delene som er levert i scopet.
+Scenarioene i testen er de leverte scenarioene i gating-settet: alle scenarioene som ikke er utkast, avviklet eller demo, og som ikke er under endring. Et levert scenario med et åpent spørsmål testes som det står, og spørsmålet står under tabellen. Er kilden et scope, og kravet ble levert før, er det bare delene som er levert i scopet.
 
 De automatiske testene av de samme kravene: `npx playwright test --grep @scope-tilbudsgaranti-2027`
 
