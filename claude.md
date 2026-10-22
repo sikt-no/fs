@@ -32,6 +32,8 @@ fs/
 │   ├── _Interne prosesser/
 │   ├── _Flyter/                   # Flyter på tvers av domener (pilot, se «Flyter» i krav/README.md)
 │   └── 99 Demo/                   # Demo/test features
+├── cdp-tester/                    # Varige CDP-tester (Gherkin som en agent kjører i Chrome mot testmiljø), lages fra krav/ (se cdp-tester/README.md)
+├── akseptansetest/                # Testplaner, testcaser og rapporter for akseptansetesten, og CDP-kjøringer (se akseptansetest/README.md)
 ├── tester/                        # All testkode og konfigurasjon (for utviklere)
 │   ├── .mise.toml                 # Mise: Node.js versjon (lts)
 │   ├── package.json               # Node.js avhengigheter
@@ -199,6 +201,7 @@ Then('skal {string} vises', async ({ page }, tekst: string) => {
 - `fs-testplan` — testplanen for en leveranse (et scope, en oppgave, en mappe under `krav/` eller feature-filer), etter teststrategien i Confluence. Kjøres etter `fs-verify`, og bygger på verify-rapporten: testbeskrivelse, nummererte testbrukere, omfang, forutsetninger, kriterier for godkjent og «Status i flyten». Kravene står med Feature-ID i «Omfang», og det er dem resten av testflyten tester. Det som testes, er det som er `@implemented`. Skriver `akseptansetest/<slug>/testplan.md`, og hovedsiden i Confluence når brukeren sier ja
 - `fs-testcaser-intern` — testcasene for den interne akseptansetesten: hvert `@implemented` scenario i gating-settet blir én testcase, i rekkefølgen i feature-fila, med én tabell per regel. Underside til testplanen
 - `fs-testcaser-ekstern` — testcasene for den eksterne akseptansetesten: hovedflyten satt sammen til oppgaver i arbeidsprosessen, uten tekniske ord. Underside til testplanen
+- `fs-testcaser-cdp` — de varige CDP-testene i `cdp-tester/` (valgfritt steg 4b): kravene i gating-settet som kjørbar Gherkin for `cdp`-skillen, mot et testmiljø. Testbruker og testdata er nøkler, som slås opp i testplanen (kolonnene `Nøkkel`, `Søk/URL`, `Utgangstilstand`, `Brukes av`) eller spørres om med de samme spørsmålene (`.claude/references/akseptansetest/roller-og-testdata.md`). Referansene til kravene er `@depends-on-<Feature-ID>`, identiske titler og en header med commit og blob-hash, som gir en diff når kravet er endret. Kan kjøres manuelt, uten testplan, for å lage eller oppdatere testene. Endrer aldri `krav/`
 - `fs-testrapport` — testrapporten etter verifiseringen, den interne og den eksterne akseptansetesten: teller resultatene, sorterer funnene etter alvorlighetsgrad og foreslår et utfall. Testansvarlig skriver beslutningen. Underside til testplanen
 
 Alle fs-*-skillene sjekker at branchen er oppdatert mot origin og main før de gjør noe, i dette repoet og i kodeklonene de leser. Er branchen bak, spør de før de henter (`git pull --ff-only`). I Claude-panelet hoppes sjekken over, siden det ikke har Bash. Prosedyren står i [`.claude/references/oppdatert-branch.md`](.claude/references/oppdatert-branch.md).
