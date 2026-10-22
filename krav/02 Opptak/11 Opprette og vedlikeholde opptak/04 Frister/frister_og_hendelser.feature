@@ -159,12 +159,13 @@ Egenskap: Frister og hendelser for opptak
       Når opptaksforvalter setter første svarfrist til "2027-07-20 23:59"
       Så har opptaket første svarfrist "2027-07-20 23:59"
 
+  @ref-OPT-BEH-BEH-012
+  # Selve utregningen av alderen skjer i saksbehandlingen, i regelen
+  # «Søkerens alder beregnes på opptakets dato for aldersberegning».
   Regel: Opptaksforvalter setter dato for aldersberegning
 
     # Alderen søkeren har på denne datoen, brukes der regelverket har aldersgrenser,
     # for eksempel for å avgjøre om søkeren kan konkurrere i førstegangsvitnemålskvoten.
-    # Selve utregningen av alderen skjer i saksbehandlingen, se
-    # 13 Søknad og saksbehandling/02 Behandling/automatisk_kvoteplassering.feature.
 
     Scenario: Sette dato for aldersberegning
       Når opptaksforvalter setter dato for aldersberegning til "2027-12-31"
