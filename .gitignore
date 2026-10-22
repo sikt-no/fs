@@ -51,5 +51,11 @@ akseptansetest/**/kjoring-*/*
 cdp-tester/**/kjoring-*/*
 !cdp-tester/**/kjoring-*/resultat.md
 
+# cdp-skillen installeres av hver bruker, og er ikke en del av repoet (se cdp-tester/README.md).
+# .claude/skills/cdp er en symlenke til .agents/skills/cdp
+.agents/
+skills-lock.json
+.claude/skills/cdp
+
 # Lokale arbeidsnotater
 temp/

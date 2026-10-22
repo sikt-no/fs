@@ -259,7 +259,7 @@ Forskjellen på `@openquestion` alene og `@draft @openquestion`:
 
 | Tagging på `Regel:`/`Scenario:` | Betyr |
 |---|---|
-| `@openquestion` | Delen er klar til implementasjon, men en detalj må lukkes før akkurat den detaljen bygges. |
+| `@openquestion` | Delen er klar til implementasjon, og bygges og leveres som den står. Spørsmålet må fortsatt besvares, og står i verify-rapporten og testplanen til det er lukket. |
 | `@draft @openquestion` | Delen som helhet er ikke klar, og skal holdes utenfor implementasjonen til den er avklart. |
 
 ```gherkin
@@ -420,7 +420,7 @@ Referansene settes av `fs-krav`. Når et krav endres, slettes eller får ny ID, 
 
 Sier noe om at et **konkret scenario eller regel** har en uavklart detalj, selv om resten av kravet er klart til implementasjon.
 
-- `@openquestion` – Scenarioet/regelen har en uavklart detalj som må besvares før implementasjon kan begynne i akkurat den delen. Plasseres på scenario- eller regel-nivå (ikke på `Egenskap:` – bruk `@draft` hvis hele kravet er utkast, og `@draft @openquestion` hvis hele regelen/scenarioet er utkast, se *Delvis utkast*). *(sjekkes automatisk)* Skal **alltid** følges av en `# ÅPNE SPØRSMÅL:`-kommentar like under som beskriver spørsmålet. *(sjekkes automatisk)* Taggen gjør det mulig å søke på tvers av krav-mappa (`grep -r @openquestion krav/`) for å finne gjenstående avklaringer. En `Egenskap:` kan være `@planned` selv om ett scenario er `@openquestion` – det markerer at hovedflyten er klar, men at en detalj må lukkes før delen kan implementeres.
+- `@openquestion` – Scenarioet/regelen har en uavklart detalj som må besvares, men delen bygges, verifiseres og testes som den står. Plasseres på scenario- eller regel-nivå (ikke på `Egenskap:` – bruk `@draft` hvis hele kravet er utkast, og `@draft @openquestion` hvis hele regelen/scenarioet er utkast, se *Delvis utkast*). *(sjekkes automatisk)* Skal **alltid** følges av en `# ÅPNE SPØRSMÅL:`-kommentar like under som beskriver spørsmålet. *(sjekkes automatisk)* Taggen gjør det mulig å søke på tvers av krav-mappa (`grep -r @openquestion krav/`) for å finne gjenstående avklaringer. En `Egenskap:` kan være `@planned` selv om ett scenario er `@openquestion` – det markerer at delen er klar, men at en detalj må avklares. Skal delen holdes utenfor til spørsmålet er besvart, tagges den `@draft @openquestion`.
 
 ## Flyter
 

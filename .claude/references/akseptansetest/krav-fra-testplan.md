@@ -54,7 +54,9 @@ Filene brukeren oppga, i den rekkefølgen brukeren oppga dem. Én gruppe.
 
 ## Hvilke scenarioer som er med
 
-**Gating-settet** er det samme som i `fs-verify` og *Utføring* i `tasks/README.md`: alle `Scenario:`/`Scenariomal:` som ikke er tagget `@draft`, `@deprecated`, `@openquestion` eller `@demo`, selv eller via `Regel:`.
+**Gating-settet** er det samme som i `fs-verify` og *Utføring* i `tasks/README.md`: alle `Scenario:`/`Scenariomal:` som ikke er tagget `@draft`, `@deprecated` eller `@demo`, selv eller via `Regel:`.
+
+**Åpne spørsmål.** En del med bare `@openquestion` (uten `@draft`) er klar til implementasjon (*Oppfølging* i `krav/README.md`), og er i gating-settet. Er den levert, testes den som det står, og spørsmålet står som merknad: i «Omfang» i testplanen, og under tabellen for regelen i testcasene. En del med `@draft @openquestion` er utkast, og er ikke med.
 
 **Testcasene lages bare for det som er levert:** scenarioer i gating-settet under en `@implemented` egenskap, uten `@planned` eller `@in-progress` på delen.
 
@@ -71,7 +73,7 @@ Filene brukeren oppga, i den rekkefølgen brukeren oppga dem. Én gruppe.
 
 Er ingen av kravene `@implemented`, si det før testplanen skrives: testplanen kan lages, men det er ingenting å lage testcaser for ennå. Er verifiseringen ikke kjørt, foreslå `fs-verify` på kilden først.
 
-Det som faller ut, listes i «Ikke med i denne testen» med grunnen: taggen, og det åpne spørsmålet når delen er `@openquestion`. På testsidene skrives grunnen med vanlige ord, uten tagger.
+Det som faller ut, listes i «Ikke med i denne testen» med grunnen: taggen, og det åpne spørsmålet når delen er `@draft @openquestion`. På testsidene skrives grunnen med vanlige ord, uten tagger.
 
 ## Flyter
 
