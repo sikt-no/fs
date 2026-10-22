@@ -1,5 +1,11 @@
 # krav-viewer
 
+## 1.6.2
+
+### Patch Changes
+
+- 989a489: Tavla «Oppgaver» teller nå scenarioer med `@openquestion` (uten `@draft`) med i fremdriften i verifiseringen, som `fs-verify` og akseptansetesten. Et åpent spørsmål holder ikke lenger et levert scenario utenfor.
+
 ## 1.6.1
 
 ### Patch Changes
