@@ -207,8 +207,9 @@ Egenskap: Opptaksinnstillinger per utdanningstilbud
   # Et utdanningstilbud er ute av en plasstildelingsrunde når det ikke er satt antall tilbud som skal gis for plasstildelingsrunden,
   # se 14 Plasstildeling/02 Tildelingsinnstillinger/antall_tilbud_som_skal_gis.feature.
 
-  # Hvordan søknadsalternativene fordeles etter regelen, står i tildele_saksbehandlende_organisasjon.feature (@OPT-BEH-BEH-011).
+  @depends-on-OPT-BEH-BEH-011
   Regel: Opptaksforvalter kan velge saksbehandlertildelingsregel per utdanningstilbud
+    # Reglene, og om de er aktive, settes der. Hvordan søknadsalternativene fordeles etter regelen, står også der.
 
     Scenario: Velge saksbehandlertildelingsregel for et utdanningstilbud
       Når opptaksforvalter velger saksbehandlertildelingsregelen "SPE" for utdanningstilbudet "Sykepleie, høst 2027"

@@ -32,7 +32,9 @@ Egenskap: Tildele saksbehandlende organisasjon
 
   # ── 1. Oppsett ───────────────────────────────────────────────
 
+  @ref-OPT-OPT-UTD-004
   Regel: Opptaksforvalteren ved forvaltende organisasjon setter opp tildelingsreglene for opptaket
+    # Lærestedets valg av saksbehandlertildelingsregel per utdanningstilbud står der.
 
     Scenario: Opprette saksbehandlertildelingsregel
       Når opptaksforvalteren ved HK-dir oppretter en saksbehandlertildelingsregel med følgende opplysninger
@@ -90,8 +92,6 @@ Egenskap: Tildele saksbehandlende organisasjon
     Scenario: Deltakende lærested kan ikke endre tildelingsreglene
       Når opptaksforvalteren ved Universitetet i Oslo åpner tildelingsreglene for opptaket
       Så ser ikke opptaksforvalteren muligheten til å opprette, endre eller slette tildelingsregler
-
-  # Lærestedets valg av saksbehandlertildelingsregel per utdanningstilbud står i opptaksinnstillinger_utdanningstilbud.feature (@OPT-OPT-UTD-004).
 
   # ── 2. Fordeling ─────────────────────────────────────────────
 
