@@ -352,6 +352,8 @@ Etter pilotene ser vi på:
 
 Referansene og flytene vises i appen: lenker, «Bygger på», «Brukes av» og «Se også», flyten med én bane per domene, og fremdriften og flytens egen status. Dette er et tillegg. Konvensjonen virker uten.
 
+Spesifikasjonen for visningen, som designet i Claude Design bygger på, står i [`fs-kravforvaltning/docs/flyter-og-referanser.md`](fs-kravforvaltning/docs/flyter-og-referanser.md).
+
 ### Steg 7: Resten av flytene
 
 - Tidlig opptak (`@FLY-OPT-TID-001`), med STEK-263 som kjent brudd.
