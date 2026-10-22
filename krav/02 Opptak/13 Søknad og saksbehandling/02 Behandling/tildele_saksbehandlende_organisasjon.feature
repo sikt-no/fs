@@ -342,14 +342,12 @@ Egenskap: Tildele saksbehandlende organisasjon
       # sendte inn først. Som hovedregel endres den ikke når søkeren sender inn på nytt, endrer
       # prioriteringen, sletter eller legger til søknadsalternativer.
 
-  @openquestion
+  @depends-on-OPT-OVO-FRI-001
+  # OPT-OVO-FRI-001: «Opptaksforvalter ved forvaltende organisasjon må kunne sette frist for endring av utdanningsbakgrunn»
   Regel: Søknadsalternativene flyttes når utdanningsbakgrunnen endres til en bakgrunn med unntak
-    # ÅPNE SPØRSMÅL:
-    # - Fristen for endring av utdanningsbakgrunn gjelder saksbehandlerens endring (avklart i fs-specify
-    #   28.09.2026). Gjelder den også søkerens egen endring? Kan søkeren endre utdanningsbakgrunnen sin
-    #   etter fristen, og flyttes søknadsalternativene da, slik «Søkeren bytter til utenlandsk
-    #   utdanningsbakgrunn» sier uten frist?
-    # - Regelen bruker fristen fra OPT-OVO-FRI-001. Skal den ha @depends-on-OPT-OVO-FRI-001?
+    # AVKLART 22.10.2026: Fristen for endring av utdanningsbakgrunn gjelder bare saksbehandlerens endring.
+    # Søkeren kan endre utdanningsbakgrunnen så lenge søknaden kan endres, og søknadsalternativene flyttes
+    # hver gang.
 
     Scenario: Søkeren bytter til utenlandsk utdanningsbakgrunn
       Gitt at søkerens søknadsalternativer er fordelt til "Universitetet i Oslo"

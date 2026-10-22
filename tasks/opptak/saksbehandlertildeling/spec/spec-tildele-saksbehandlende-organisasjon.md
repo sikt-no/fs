@@ -79,6 +79,8 @@ Disse delene er validert, men utsatt. Kravet blir stående som `@in-progress` ti
   - **Beslutning (2026-10-22, Håkon):** begrepet er «behandlertildelingsregel», som i FS Admin, og erstatter både «tildelingsregel» og «saksbehandlertildelingsregel» (begrepslista nr. 17). Byttet overalt, også i flyten `@FLY-OPT-SAK-001`. To scenarioer har fått ny tittel: `Behandlertildelingsreglene er ikke tilgjengelige i lokale opptak` og `Deltakende lærested kan ikke endre behandlertildelingsreglene`.
 - [x] `Søknaden får én sak per saksbehandlende organisasjon` hadde en tilstand i `Når` (åpent spørsmål fra main).
   - **Beslutning (2026-10-22, Håkon):** `Når søknadsalternativene fordeles`, som i reglene om fordeling. `Gitt` sier hvilken organisasjon som saksbehandler hvert søknadsalternativ.
+- [x] Regelen `Søknadsalternativene flyttes når utdanningsbakgrunnen endres til en bakgrunn med unntak` (to åpne spørsmål fra main).
+  - **Beslutning (2026-10-22, Håkon):** fristen gjelder bare saksbehandlerens endring. Søkeren kan endre utdanningsbakgrunnen så lenge søknaden kan endres, og søknadsalternativene flyttes hver gang, slik koden gjør. Regelen har fått `@depends-on-OPT-OVO-FRI-001`, og regelen om fristen i `@OPT-OVO-FRI-001` har fått `@ref-OPT-BEH-BEH-011`.
 
 
 ## Rute
