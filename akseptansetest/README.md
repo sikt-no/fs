@@ -2,6 +2,8 @@
 
 Her står testplanene for akseptansetestene, med testcasene og testrapportene. Mappa ligger i rota av repoet, ikke under `tasks/`, fordi en test kan gå på tvers av domener. Flyten og reglene står i [teststrategien](https://sikt.atlassian.net/wiki/spaces/STUDIEADM/pages/5117902850) i Confluence.
 
+Hele prosessen, fra kravene skrives til leveransen er godkjent, er forklart steg for steg i [Kom i gang med krav og akseptansetest i FS](https://sikt-no.github.io/fs/kom-i-gang.html#testplan) (`kom-i-gang.html`).
+
 ## Flyten
 
 | Steg | Hva | Skill | Fil | Side i Confluence |

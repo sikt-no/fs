@@ -43,7 +43,7 @@ fs/
 │   ├── fixtures/                  # Test fixtures og hjelpefunksjoner
 │   └── .features-gen/             # Genererte testfiler (gitignored)
 ├── fs-kravforvaltning/            # FS Kravforvaltning: krav i nettleser og desktop-app (Vite + Preact, Electron)
-├── kom-i-gang.html                # Innføring i kravarbeidet, laget fra designet i Claude Design (se .claude/rules/kom-i-gang-sync.md)
+├── kom-i-gang.html                # Innføring i kravarbeidet og akseptansetesten, steg for steg (se .claude/rules/kom-i-gang-sync.md)
 ├── README.md
 └── claude.md
 ```

@@ -2,7 +2,7 @@
 
 Denne mappa inneholder akseptansekravene for løsningene som lages av studieadministrasjon i Sikt. Kravene skrives som Gherkin-scenarioer i `.feature`-filer. De er lesbare kravspesifikasjoner for domeneeksperter, og driver de automatiserte testene i `tester/`. Kravet beskriver atferden løsningen skal ha, og koden sjekkes mot kravet, ikke omvendt.
 
-Er du ny? [Kom i gang med krav i FS](../kom-i-gang.html) er en kort innføring i hvor kravene ligger, hvordan en kravfil ser ut, og hvordan du bidrar.
+Er du ny? [Kom i gang med krav og akseptansetest i FS](../kom-i-gang.html) er en innføring i hvor kravene ligger, hvordan en kravfil ser ut, og hele prosessen steg for steg, fra kravene skrives til leveransen er godkjent i akseptansetesten.
 
 Dette dokumentet er de gjeldende konvensjonene for alle kravfiler. Claude leser den samme fila (via `.claude/rules/gherkin-conventions.md`), så det finnes bare én versjon av reglene.
 
