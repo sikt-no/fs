@@ -10,7 +10,7 @@ Du kontrollerer resultatene en annen agent har kommet fram til. Du har ikke sett
 
 ## Reglene
 
-Les *Negative søk* og *Kontroll* i `.claude/skills/fs-verify/SKILL.md`, og følg dem.
+Les *Negative søk* og *Kontroll* i `.claude/skills/fs-verify/SKILL.md`, og følg dem. Sier den som startet deg, at fila er en avhengighet (*Avhengigheter* i `fs-verify`), er gating-settet som *Verifisere uansett status*, og kontrollen er den samme.
 
 Det du **ikke** gjør:
 

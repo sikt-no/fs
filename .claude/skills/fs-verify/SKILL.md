@@ -1,6 +1,6 @@
 ---
 name: fs-verify
-description: Verifiserer krav mot koden i dette repoet. Tar en `krav/`-sti, et scope (`@scope-<slug>`) eller en oppgave (`tasks/<domene>/<slug>`) og lokale kloner av kode-repoene. For hvert `@in-progress`-krav leter skillen etter implementasjonen av hvert scenario i koden, får resultatet kontrollert (av subagenten `fs-verify-kontroll` når Agent-verktøyet finnes, ellers manuelt), viser bevis (`fil:linje`), og retagger `@in-progress` → `@implemented` på `Egenskap:`-linja når alt er funnet og brukeren bekrefter. En `@in-progress`-del (`Regel:`/`Scenario:`) i et levert krav som endres, verifiseres på samme måte, og da fjernes `@in-progress` fra delen. For hvert `@deprecated`-krav (egenskap eller `Regel:`/`Scenario:`) leter skillen etter spor i koden. Er koden borte og brukeren bekrefter, slettes fila eller blokken, sammen med referansene (`@depends-on-`, `@ref-`) til kravet; finnes den fortsatt, listes stedene. Verifiserer også flyter i `krav/_Flyter/`: fremdriften fra kravene fasene bygger på, og at overleveringene mellom kravene virker i koden (stedet der tilstanden lages og stedet der den brukes), og gir flyten `@planned` → `@implemented`. Skriver rapport i chat, og i `tasks/<domene>/<slug>/spec/verify-<YYYY-MM-DD>-<HHMM>.md` når en oppgave er gitt, ellers rett ved siden av kravet som `verify-<feature-fil>-<YYYY-MM-DD>-<HHMM>.md` (eller `verify-<mappenavn>-<YYYY-MM-DD>-<HHMM>.md` for en hel mappe), og i `akseptansetest/<scope-slug>/` for et scope, med tidspunkt så kjøringer kan sammenlignes. Er steg 1 i akseptansetesten: rapporten er grunnlaget for testplanen (`fs-testplan`). Tar også en testplan (`akseptansetest/<slug>`) som scope når verifiseringen kjøres på nytt, og spør da etter rapporten om resultatet skal legges som en underside til testplanen i Confluence. Kjører aldri git add/commit/push. Trigges av "verifiser kravene", "er kravene implementert", "tagg kravene som implementert", "sjekk om deprecated-krav kan slettes", "rydd i deprecated", "finnes koden fortsatt", "verifiser testplanen", "legg verifiseringen i Confluence", "verifiser flyten", "virker overleveringene", "fs-verify".
+description: Verifiserer krav mot koden i dette repoet. Tar en `krav/`-sti, et scope (`@scope-<slug>`) eller en oppgave (`tasks/<domene>/<slug>`) og lokale kloner av kode-repoene. Spør først hva som skal verifiseres (`@in-progress`, `@deprecated`, flyter, alle krav uansett status, eller noe annet), og hvor mange nivåer med `@depends-on-` som skal følges, med status fra taggene eller verifisert i koden (avhengighetene retagges aldri). For hvert `@in-progress`-krav leter skillen etter implementasjonen av hvert scenario i koden, får resultatet kontrollert (av subagenten `fs-verify-kontroll` når Agent-verktøyet finnes, ellers manuelt), viser bevis (`fil:linje`), og retagger `@in-progress` → `@implemented` på `Egenskap:`-linja når alt er funnet og brukeren bekrefter. En `@in-progress`-del (`Regel:`/`Scenario:`) i et levert krav som endres, verifiseres på samme måte, og da fjernes `@in-progress` fra delen. For hvert `@deprecated`-krav (egenskap eller `Regel:`/`Scenario:`) leter skillen etter spor i koden. Er koden borte og brukeren bekrefter, slettes fila eller blokken, sammen med referansene (`@depends-on-`, `@ref-`) til kravet; finnes den fortsatt, listes stedene. Verifiserer også flyter i `krav/_Flyter/`: fremdriften fra kravene fasene bygger på, og at overleveringene mellom kravene virker i koden (stedet der tilstanden lages og stedet der den brukes), og gir flyten `@planned` → `@implemented`. Skriver rapport i chat, og i `tasks/<domene>/<slug>/spec/verify-<YYYY-MM-DD>-<HHMM>.md` når en oppgave er gitt, ellers rett ved siden av kravet som `verify-<feature-fil>-<YYYY-MM-DD>-<HHMM>.md` (eller `verify-<mappenavn>-<YYYY-MM-DD>-<HHMM>.md` for en hel mappe), og i `akseptansetest/<scope-slug>/` for et scope, med tidspunkt så kjøringer kan sammenlignes. Er steg 1 i akseptansetesten: rapporten er grunnlaget for testplanen (`fs-testplan`). Tar også en testplan (`akseptansetest/<slug>`) som scope når verifiseringen kjøres på nytt, og spør da etter rapporten om resultatet skal legges som en underside til testplanen i Confluence. Kjører aldri git add/commit/push. Trigges av "verifiser kravene", "er kravene implementert", "tagg kravene som implementert", "sjekk om deprecated-krav kan slettes", "rydd i deprecated", "finnes koden fortsatt", "verifiser testplanen", "legg verifiseringen i Confluence", "verifiser flyten", "virker overleveringene", "fs-verify".
 allowed-tools: Read, Write, Edit, Grep, Glob, Bash, AskUserQuestion
 ---
 
@@ -16,7 +16,7 @@ Du sammenligner kravene med koden, og lukker løkka tilbake til kravene. Du eier
 
 `@in-progress` →(**`fs-verify`**)→ `@implemented` →(`fs-krav`)→ `@deprecated` →(**`fs-verify`**)→ slettet
 
-Ber brukeren om å verifisere en egenskap eller en regel *uansett status* («Verifiser» i FS Kravforvaltning), kan du også gi `@draft` og `@planned` statusen `@implemented`. Se *Verifisere uansett status*.
+Hva du verifiserer, og hvor langt du følger `@depends-on-`, spør du om først (*Omfang og avhengigheter*). Ber brukeren om å verifisere *uansett status* («Verifiser» i FS Kravforvaltning, eller valget *alle krav uansett status*), kan du også gi `@draft` og `@planned` statusen `@implemented`. Se *Verifisere uansett status*.
 
 En flyt i `krav/_Flyter/` går `@planned` →(**`fs-verify`**)→ `@implemented`, uten `@in-progress`. Se *Verifisere flyt*.
 
@@ -42,9 +42,10 @@ I terminalen i FS Kravforvaltning («Verifiser i terminal …») og i Claude Cod
 0. **Sjekk branchen** i dette repoet mot origin og main, som beskrevet i [`.claude/references/oppdatert-branch.md`](../../references/oppdatert-branch.md). Er den bak, spør før du henter.
 1. **Krav.** Oppga brukeren en spesifikasjon (`tasks/<domene>/<slug>/spec/spec-*.md`, typisk fra «Verifiser» på tavla «Oppgaver» i FS Kravforvaltning), er scope bare feature-filene under `## Krav` i den (slått opp på feature-ID). Oppga brukeren et scope (`scope-<slug>`, `@scope-<slug>` eller `tasks/<domene>/scope-<slug>.md`), er scope alle kravene og delene med taggen `@scope-<slug>`, funnet og sjekket mot scope-tabellen som i *Scope* i [`.claude/references/akseptansetest/krav-fra-testplan.md`](../../references/akseptansetest/krav-fra-testplan.md). Oppga brukeren en testplan (`akseptansetest/<slug>`, eller `testplan.md` i den), er scope kravene i «Omfang» og «Venter på verifisering» i testplanen, slått opp på Feature-ID (*Kravene i de andre skillene* i [`.claude/references/akseptansetest/krav-fra-testplan.md`](../../references/akseptansetest/krav-fra-testplan.md)). Oppga brukeren en `krav/`-sti (fil eller mappe), bruk den. En sti under `krav/_Flyter/`, eller en `@FLY-`-ID, er en flyt (*Verifisere flyt*). Et scope, en oppgave eller en testplan tar også med flytene som går gjennom kravene, funnet som i *Finn flytene* i [`.claude/references/akseptansetest/krav-fra-testplan.md`](../../references/akseptansetest/krav-fra-testplan.md) (for en testplan: flytene i «Flyter»), så testplanen kan bygge på resultatet. En spesifikasjon tar dem ikke med: der er en flyt bare med når den er valgt selv. Oppga brukeren en oppgave (`tasks/<domene>/<slug>`, eller bare slug — slå opp med `Glob` `tasks/*/<slug>/`), les Feature-ID-ene fra `## Krav` i alle `<oppgave>/spec/spec-*.md` (ikke det som står under *Utenfor scope*), og finn de autoritative filene under `krav/` på feature-ID (`@DOM-SUB-KAP-NNN`), ikke filnavn. Les ikke kopiene i `spec/krav-input/`: de finnes bare i eldre oppgaver, og kan være utdaterte. 0 treff → «ikke funnet under krav/», mer enn 1 → «duplisert feature-ID». Mangler begge, spør.
 2. **Kode.** Spør (`AskUserQuestion`) om stien til de lokale klonene av kode-repoene (se *Kodeklonene*). Foreslå repoer fra `oppgave.md` (lenker), `<lag>/plan-*.md` og `<lag>/task-*-completion.md` når en oppgave er gitt. Sjekk at stiene finnes, og sjekk branchen i hver klone ([`.claude/references/oppdatert-branch.md`](../../references/oppdatert-branch.md)): det er koden på branchen som verifiseres. Uten kode kan ingenting verifiseres: stopp og si det. Skriv aldri `.claude/spec.local.md`.
-3. **Skjermbilder.** Har prompten ikke sagt om det skal tas skjermbilder («Ta skjermbilder» eller «Ingen skjermbilder»), spør med `AskUserQuestion` før du begynner å lete: «Skal jeg ta skjermbilder fra https://test-fsadmin.sikt.no/?», med valgene «Ja» og «Nei». Hopper brukeren over, regn det som «Nei», og si det i rapporten. Se *Skjermbilder*.
-4. **Hint.** Når en oppgave er gitt: les `design.md`, `<lag>/plan-*.md` og `<lag>/task-*-completion.md`. Filstier, komponentnavn, GraphQL-felt og ruter derfra er de beste stedene å lete.
-5. **Tidspunkt.** Ta tidspunktet for kjøringen nå (*Tidspunkt*), og si det til brukeren sammen med navnet rapporten får.
+3. **Omfang og avhengigheter.** Spør hva som skal verifiseres, og hvor langt `@depends-on-` skal følges (*Omfang og avhengigheter* under). Spørsmålene stilles i ett `AskUserQuestion`-kall, sammen med spørsmålet om skjermbilder (steg 4) når det også skal stilles.
+4. **Skjermbilder.** Har prompten ikke sagt om det skal tas skjermbilder («Ta skjermbilder» eller «Ingen skjermbilder»), spør med `AskUserQuestion` før du begynner å lete: «Skal jeg ta skjermbilder fra https://test-fsadmin.sikt.no/?», med valgene «Ja» og «Nei». Hopper brukeren over, regn det som «Nei», og si det i rapporten. Se *Skjermbilder*.
+5. **Hint.** Når en oppgave er gitt: les `design.md`, `<lag>/plan-*.md` og `<lag>/task-*-completion.md`. Filstier, komponentnavn, GraphQL-felt og ruter derfra er de beste stedene å lete.
+6. **Tidspunkt.** Ta tidspunktet for kjøringen nå (*Tidspunkt*), og si det til brukeren sammen med navnet rapporten får.
 
 ### Kodeklonene
 
@@ -58,12 +59,34 @@ Hvert kode-repo har en bokstav som brukes i `Bevis` i rapporten (se `references/
 
 Let etter hvert scenario i repoet det gjelder: et scenario der søkeren ser eller gjør noe, finnes i min-kompetanse (og i fs-plattform), ikke i fs-admin. Mangler klonen et scenario trenger, er det repoet ikke sjekket: skriv det under *Ikke sjekket* i `## Oppfølging`, og resultatet er `usikker`, ikke `ikke funnet`.
 
+### Omfang og avhengigheter
+
+Skillen brukes ofte til å sjekke om en oppgave er levert, ikke bare til å flytte `@in-progress` → `@implemented`. Spør derfor hva som skal verifiseres, og hvor langt avhengighetene skal følges, før du leter. Still spørsmålene i ett `AskUserQuestion`-kall (høyst 4 spørsmål, også spørsmålet om skjermbilder):
+
+1. **«Hva skal verifiseres?»** (`multiSelect: true`). Si i spørsmålet at standarden er de tre første.
+   - **`@in-progress`**: egenskaper, og deler i leverte krav som endres (*Verifisere implementasjon*).
+   - **`@deprecated`**: at koden er borte (*Verifisere at koden er borte*).
+   - **Flyter**: flytene i scope, og flytene som går gjennom kravene (*Verifisere flyt*).
+   - **Alle krav uansett status**: *Verifisere uansett status* for hver egenskap i scope, også `@draft`, `@planned` og `@implemented`.
+
+   I «Annet» kan brukeren skrive noe annet, for eksempel bare én regel, bare det som er `@implemented` (for å se om noe har falt bort), eller én feature-ID. Tolk svaret, og si hva du har forstått før du leter. Hopper brukeren over, gjelder standarden, og det står i `- **Omfang:**` i rapporten.
+2. **«Hvor mange nivåer med `@depends-on-` skal følges?»** — **1 nivå: de direkte avhengighetene** (anbefalt) / **Ingen** / **2 nivåer** / **Alle nivåer**. Et annet tall kan skrives i «Annet». Hopper brukeren over, gjelder 1 nivå.
+3. **«Skal avhengighetene letes etter i koden?»** — **Nei, bare status fra taggene** (anbefalt) / **Ja, verifiser dem i koden**. Svaret brukes ikke når svaret på spørsmål 2 er «Ingen». Hopper brukeren over, gjelder «bare status».
+
+**Spør ikke om det prompten allerede svarer på:**
+
+- Ber prompten om å verifisere en egenskap eller en regel *uansett status* («Verifiser» i feature-visningen i FS Kravforvaltning), er omfanget *Verifisere uansett status* for den egenskapen eller regelen. Spørsmål 1 stilles ikke.
+- Er scope en spesifikasjon («Verifiser» på tavla «Oppgaver»), er omfanget `@in-progress` og `@deprecated`. En spesifikasjon tar ikke med flytene (*Finn scope og kode*, steg 1). Spørsmål 1 stilles ikke.
+- Sier prompten hva som skal verifiseres, eller hvor mange nivåer («Avhengigheter: 1 nivå, bare status»), stilles ikke det spørsmålet.
+
+Ellers stilles spørsmål 2 og 3 alltid, også når spørsmål 1 ikke stilles. Svarene står i `- **Omfang:**` og `- **Avhengigheter:**` i rapporten, og i `started`-linja i loggen.
+
 ## Logg kjøringen
 
 Når en oppgave er gitt, skrives én `started`-linje og én `ended`-linje til `<oppgave>/spec/spec.log.md`, i formatet fra [`fs-specify` → *Logg kjøringen*](../fs-specify/SKILL.md#logg-kjøringen-gjør-dette-andre). Bruk bare Read og Write.
 
 ```
-- 2026-09-29 — `fs-verify` started — 3 @in-progress, 2 @deprecated
+- 2026-09-29 — `fs-verify` started — 3 @in-progress, 2 @deprecated · omfang: @in-progress, @deprecated · avhengigheter: 1 nivå, bare status
 - 2026-09-29 — `fs-verify` ended (success) — 2 retagget @implemented, 1 fil og 1 regel slettet, 1 @deprecated finnes fortsatt i koden
 ```
 
@@ -86,9 +109,9 @@ Les hver `.feature`-fil i scope og sorter:
 | Flyt (`krav/_Flyter/`) med `@planned` eller `@in-progress` | *Verifisere flyt* |
 | Flyt med `@draft` | Bare fremdriften (*Verifisere flyt*, steg 1). Henvis til `fs-krav` for validering |
 
-Ber prompten om å verifisere *uansett status*, gjelder ikke tabellen for egenskapen eller regelen i scope: se *Verifisere uansett status*.
+Tabellen gjelder det som er valgt i *Omfang og avhengigheter*. En rad som ikke er valgt (f.eks. `@deprecated` når bare `@in-progress` er valgt), verifiseres ikke, og står i oversikten og i `## Oppfølging` som «ikke valgt i denne kjøringen». Er *alle krav uansett status* valgt, eller ber prompten om å verifisere *uansett status*, gjelder ikke tabellen for egenskapene og reglene i scope: se *Verifisere uansett status*.
 
-Vis oversikten til brukeren før du gjør noe.
+Vis oversikten til brukeren før du gjør noe, med avhengighetene (*Avhengigheter*) når de skal følges.
 
 ## Verifisere implementasjon (`@in-progress`)
 
@@ -110,7 +133,7 @@ Ellers står kravet som `@in-progress`, og det som mangler, står i rapporten.
 
 Skjermbilder av appen som kjører, er ekstra bevis for scenarioer som har en skjerm (lister, skjemaer, detaljsider). De erstatter ikke `fil:linje`: et scenario er fortsatt `funnet` bare når du har lest koden.
 
-1. **Bare når brukeren har sagt ja** (*Finn scope og kode*, steg 3). Adressen er alltid `https://test-fsadmin.sikt.no/`. Spør ikke om den.
+1. **Bare når brukeren har sagt ja** (*Finn scope og kode*, steg 4). Adressen er alltid `https://test-fsadmin.sikt.no/`. Spør ikke om den.
 2. **Bruk chrome-devtools-MCP** (`navigate_page` i siden som er åpen, `click`, `press_key` og `take_screenshot`, som er godkjent på forhånd i FS Kravforvaltning; `new_page` bare når det ikke finnes noen side). Finnes den ikke, si at brukeren må legge den til og starte den én gang med den lokale Claude Code-CLI-en i terminalen: `claude mcp add --scope user chrome-devtools -- npx chrome-devtools-mcp@latest`. Bruk navnet `chrome-devtools`, for det er navnet FS Kravforvaltning tar med. Gå videre uten skjermbilder. Avviser brukeren et kall, prøv ikke igjen uten å spørre. Krever appen innlogging, be brukeren logge inn i nettleservinduet chrome-devtools åpner, og vent.
 3. **Ta ett skjermbilde per scenario** som har en skjerm. Gjør det som står i `Gitt`/`Når` så langt det går uten å endre data, og ta bildet av det `Så` beskriver. Endrer et scenario data (opprette, endre, slette), ta bare bildet av skjemaet eller siden før handlingen, og si det.
 4. **Lagre bildet** når en oppgave er gitt, som `<oppgave>/spec/verify-<YYYY-MM-DD>-<HHMM>/<NN>-<scenario-kebab>.png` (`NN` = to sifre; mappa har samme navn som rapporten, uten `.md`, også med `-2`-suffiks):
@@ -131,14 +154,14 @@ Når et levert krav endres, står egenskapen som `@implemented`, og statusen på
 
 ### Verifisere uansett status
 
-«Verifiser» på en egenskap eller en regel i FS Kravforvaltning ber deg verifisere den *uansett status*. Prompten sier hvilken egenskap eller regel (med linja), og statusen på regelen og egenskapen. Kodeklonene og skjermbildene er som ellers (*Finn scope og kode*).
+«Verifiser» på en egenskap eller en regel i FS Kravforvaltning ber deg verifisere den *uansett status*. Prompten sier hvilken egenskap eller regel (med linja), og statusen på regelen og egenskapen. Kodeklonene og skjermbildene er som ellers (*Finn scope og kode*). Det samme gjelder når brukeren har valgt *alle krav uansett status* i *Omfang og avhengigheter*: da verifiseres hver egenskap i scope på denne måten.
 
-- **Scope** er egenskapen eller regelen, ikke resten av fila.
+- **Scope** er egenskapen eller regelen, ikke resten av fila. Er *alle krav uansett status* valgt, er scope hver egenskap i scope, med alle reglene.
 - **Gating-sett** = scenarioene i scope, også det som er `@draft` eller `@planned`, minus `@demo`. `@deprecated`-deler følger *Verifisere at koden er borte*.
 - Let og kontroller som i *Verifisere implementasjon*, steg 1–3. Rapporten og spørsmålet kommer etterpå (*Rapport og endringer*).
 - **Ny status foreslås** bare når hele gating-settet er `funnet`. `@openquestion` i scope står i `## Oppfølging`, og stopper ikke den nye statusen. Endringen gjøres bare når brukeren har sagt ja (*Rapport og endringer*):
   - **Egenskap** med `@draft`, `@planned` eller `@in-progress`: bytt statustaggen på `Egenskap:`-linja med `@implemented`. `@draft`-deler under den står urørt, og er fortsatt ikke levert.
-  - **Egenskap** som er `@implemented`: ingen endring. Har den `@draft`-, `@planned`- eller `@in-progress`-deler, si at de verifiseres hver for seg.
+  - **Egenskap** som er `@implemented`: ingen endring. Har den `@draft`-, `@planned`- eller `@in-progress`-deler, si at de verifiseres hver for seg. Mangler et scenario som er levert, står det i `## Oppfølging` som «levert, men ikke funnet i koden», så teamet kan se på det.
   - **Regel** under en `@implemented` egenskap, med `@draft`, `@planned` eller `@in-progress`: fjern statustaggen fra `Regel:`-linja, som i *Deler i leverte krav som endres*. Regelen arver `@implemented`. Erstatter regelen en `@deprecated`-del, verifiser den også.
   - **Regel** uten egen status under en `@implemented` egenskap: den er allerede levert, ingen endring.
   - **Regel** under en egenskap som ikke er `@implemented`: ingen endring. En del kan ikke være levert når egenskapen ikke er det. Si at hele egenskapen må verifiseres.
@@ -153,6 +176,20 @@ En flyt (`krav/_Flyter/`, se *Flyter* i `krav/README.md`) beskriver et løp på 
 3. **Ny status** foreslås bare når alle fasene er levert og hele gating-settet er `funnet`: `@planned` eller `@in-progress` → `@implemented` på `Egenskap:`-linja, når brukeren sier ja (*Rapport og endringer*). Er en fase ikke levert, står flyten under *Blir stående*, med fasene som mangler. Mangler en overlevering i en levert fase, foreslå i `## Oppfølging` at bruddet skrives som kjent brudd i flyten med `fs-krav` (modus E). Du skriver ikke kommentaren selv.
 
 Rapporten får `## Fremdrift for flyter` (se `[flyt]` i [`references/rapportmal.md`](references/rapportmal.md)), og scenarioene står i `## Scenarioer` med begge bevisene.
+
+## Avhengigheter
+
+Antall nivåer og om avhengighetene letes etter i koden, står i svaret på *Omfang og avhengigheter*. Med «Ingen» hopper du over denne seksjonen.
+
+1. **Finn avhengighetene.** Nivå 1 er `@depends-on-<ID>` på kravene i scope: på `Egenskap:`, `Regel:` og `Scenario:`/`Scenariomal:`, men bare på delene som er med i verifiseringen. Nivå 2 er det kravene på nivå 1 bygger på, og så videre. Slå opp ID-en som i *Verifisere flyt*, steg 1 (`Grep "^\s*@(.*\s@)?<ID>\b"` i `krav/**/*.feature`). `@ref-` følges ikke: det er bare en henvisning (*Referanser* i `krav/README.md`).
+   - Hvert krav tas med én gang, på det laveste nivået det finnes på. Et krav som er i scope, er ikke en avhengighet.
+   - En ring (A → B → A) stopper der, og står i `## Oppfølging` som avvik (sjekk med `fs-krav-avvik`). En ID som ikke finnes, står med «finnes ikke».
+   - For en flyt er nivå 1 kravene fasene bygger på, og statusen deres står allerede i fremdriften (*Verifisere flyt*, steg 1). Bruk den. En `@depends-on-FLY-…` er også et nivå.
+2. **Bare status** (standard): les statusen på `Egenskap:`, og på delen referansen gjelder når kommentaren under taggen sier hvilken regel det er. Dette leser bare tagger.
+3. **Verifisert i koden:** let og kontroller etter *Verifisere uansett status* (gating-settet, *Negative søk* og *Kontroll*), med hele egenskapen som scope. Resultatet står bare i rapporten (`### Scenarioer i avhengighetene`). Foreslå aldri ny status for en avhengighet, og slett ingenting. Skal avhengigheten få ny status, må den verifiseres med seg selv i scope.
+4. **Levering mot avhengighetene.** En del som bygger på et krav, kan ikke leveres før kravet (*Referanser* i `krav/README.md`). Står et krav eller en del under *Kan leveres*, og bygger det (på nivå 1) på et krav som ikke er `@implemented`, skriv det bak kravet i forslaget («bygger på `@X`, som er `@planned`»), og i `## Oppfølging`. Det stopper ikke forslaget. Brukeren avgjør.
+
+Rapporten får `## Avhengigheter` (se `[avhengigheter]` i [`references/rapportmal.md`](references/rapportmal.md)). `## Scenarioer` og `## Oppsummering` gjelder bare kravene i scope: tavla «Oppgaver», `fs-testplan` og `fs-testrapport` leser dem, og avhengighetene skal ikke telle med.
 
 ## Verifisere at koden er borte (`@deprecated`)
 
@@ -204,9 +241,9 @@ Hver kjøring har ett tidspunkt, `YYYY-MM-DD HH:MM` i lokal tid, som brukes i na
 
 Når alle kravene i scope er kontrollert, viser du rapporten først, og spør etterpå. Brukeren skal aldri få et spørsmål om et resultat de ikke har sett.
 
-1. **Vis rapporten i chat**, etter malen (*Rapport*), med seksjonene som ikke avhenger av svaret: metadataene, `## Oversikt per krav` (når den er med), `## Scenarioer`, `## Kontroll`, `## @deprecated som fortsatt finnes i koden` og `## Oppfølging`. Scenarioene utenfor gating-settet listes for seg under tabellen.
+1. **Vis rapporten i chat**, etter malen (*Rapport*), med seksjonene som ikke avhenger av svaret: metadataene, `## Oversikt per krav` (når den er med), `## Avhengigheter` (når den er med), `## Scenarioer`, `## Kontroll`, `## @deprecated som fortsatt finnes i koden` og `## Oppfølging`. Scenarioene utenfor gating-settet listes for seg under tabellen.
 2. **Vis forslaget** rett under, som `## Forslag til endringer` (bare i chat, ikke i fila):
-   - **Kan leveres:** `<feature-ID> — <tittel>` (`<fil>`, `<status>` → `@implemented`, <n>/<n> funnet), og deler som `<feature-ID> — Regel: <tittel>` (`@in-progress` fjernes).
+   - **Kan leveres:** `<feature-ID> — <tittel>` (`<fil>`, `<status>` → `@implemented`, <n>/<n> funnet), og deler som `<feature-ID> — Regel: <tittel>` (`@in-progress` fjernes). Bygger kravet på et krav som ikke er levert, står det bak: «bygger på `@<ID>`, som er `@<status>`» (*Avhengigheter*, steg 4).
    - **Kan slettes:** `<feature-ID> — <tittel eller del>` (`<fil>`, hele fila eller blokken), med repoene det er søkt i, og referansene til kravet som fjernes (`<fil>`: `@depends-on-<ID>` | `@ref-<ID>`).
    - **Blir stående:** kravene og delene som ikke kan leveres, med `<n>/<N> funnet` og hvorfor.
 3. **Er forslaget tomt** (ingenting kan leveres eller slettes): ikke spør. Gå til steg 5.
@@ -270,7 +307,7 @@ Ikke `git add`, `commit`, `push`, `checkout` eller `stash` i noe repo. Lesende g
 
 ## Referanser
 
-- **`krav/README.md`** — statusaksen, *Delvis utkast* og *Avvikling*.
+- **`krav/README.md`** — statusaksen, *Delvis utkast*, *Avvikling* og *Referanser* (`@depends-on-` og `@ref-`).
 - **[`tasks/README.md`](../../../tasks/README.md)** — oppgavestrukturen og reglene for `spec/`.
 - **`fs-krav`** — setter `@deprecated` når et levert krav skal fjernes.
 - **`fs-specify` / `fs-specify-delta`** — setter `@in-progress`, på egenskaper og på deler i leverte krav som endres.

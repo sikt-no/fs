@@ -11,6 +11,8 @@ Rapporten fra `fs-verify` og `fs-verify-agent-teams` følger denne malen, så to
   - `[per repo]`: repoene er vurdert hver for seg. Bokstavene står i *Kodeklonene* i `fs-verify`: P = fs-plattform, A = fs-admin, M = min-kompetanse. Bare repoene som er med i kjøringen, står i rapporten.
   - `[uansett status]`: brukeren ba om å verifisere uansett status (*Verifisere uansett status* i `fs-verify`). `[ikke uansett status]` er det motsatte.
   - `[flyt]`: scope har en flyt under `krav/_Flyter/` (*Verifisere flyt* i `fs-verify`).
+  - `[avhengigheter]`: `@depends-on-` er fulgt minst ett nivå (*Avhengigheter* i `fs-verify`). `[avhengigheter i koden]`: avhengighetene er også verifisert i koden.
+  - `[blandet]`: noen krav er verifisert *uansett status*, og andre med det vanlige gating-settet (f.eks. «Annet» i *Omfang og avhengigheter*).
   - `[confluence]`: resultatet er lagt i Confluence (*Confluence* i `fs-verify`). Linja skrives inn etter at siden er laget, i samme kjøring.
 - **Faste tekster** står uten `<…>` og skrives som de står. Det i `<…>` fylles inn. Der det står `a | b`, velges én.
 - **Tallene regnes ut** fra tabellen `## Scenarioer` og fra endringene du har gjort (se *Rapport* i `fs-verify`). Tallene i `## Oppsummering`, `## Oversikt per krav` og `Gating funnet` skal stemme med tabellen.
@@ -28,6 +30,8 @@ Rapporten fra `fs-verify` og `fs-verify-agent-teams` følger denne malen, så to
 - **Krav:** `<krav-sti, oppgave eller @scope-<slug>>` (<N> feature-filer)
 - **Spec:** `spec/spec-<x>.md`                                         [oppgave, bare når scope er en spesifikasjon]
 - **Kode:** `<repo>` (<branch>, <kort sha>, <oppdatert | N bak origin | N bak main | ikke sjekket (Claude-panelet)>), `<repo>` (…)
+- **Omfang:** <`@in-progress` | `@deprecated` | flyter | alle krav uansett status | <det brukeren skrev>, skilt med komma> (<valgt | standard, ikke valgt | fra prompten>)
+- **Avhengigheter:** ingen | <n> nivå(er), bare status | <n> nivå(er), verifisert i koden | alle nivåer, bare status | alle nivåer, verifisert i koden
 - **Kontroll:** `fs-verify-kontroll` | manuell (Claude-panelet)
 - **Team:** <N> finnere (`fs-verify-krav`), <N> kontrollører (`fs-verify-kontroll`), <N>–<N> feature-filer per finner   [agent team]
 - **Skjermbilder:** ja | nei | nei (<grunn>)
@@ -35,6 +39,7 @@ Rapporten fra `fs-verify` og `fs-verify-agent-teams` følger denne malen, så to
 
 Gating-sett: scenarioene som ikke er tagget `@draft`, `@deprecated` eller `@demo` (`@openquestion` alene er med).   [ikke uansett status]
 Gating-sett: alle scenarioene i scope, også `@draft` og `@planned`, minus `@demo` (verifisert uansett status).   [uansett status]
+Gating-sett: alle scenarioene, minus `@demo`, for `<@DOM-SUB-KAP-NNN>`, `<@DOM-SUB-KAP-NNN>` (verifisert uansett status), og de som ikke er tagget `@draft`, `@deprecated` eller `@demo` for resten.   [blandet, i stedet for de to over]
 
 Stiene er forkortet:                                                    [bare når stier er forkortet]
 
@@ -68,6 +73,22 @@ Fremdriften kommer fra statusen på kravene fasene bygger på (`@depends-on-`). 
 | `@FLY-PRO-FLY-NNN` | <regeltittel> | `@DOM-SUB-KAP-NNN` (`@implemented`), `@DOM-SUB-KAP-NNN` (`@planned`) | ja \| nei \| mangler krav |
 
 `@FLY-PRO-FLY-NNN`: <n> av <N> faser levert.
+
+## Avhengigheter                                                       [avhengigheter]
+
+Kravene i scope bygger på disse kravene (`@depends-on-`, <n> nivå(er) | alle nivåer). Avhengighetene får aldri ny status i denne kjøringen.
+
+| Krav i scope | Bygger på | Nivå | Status | Funnet | Merknad |
+| --- | --- | --- | --- | --- | --- |
+| `@DOM-SUB-KAP-NNN` | `@DOM-SUB-KAP-NNN` <tittel> | 1 | `@implemented` \| `@in-progress` \| `@planned` \| `@draft` \| `@deprecated` \| finnes ikke | <n>/<N> \| – | <tom \| ikke levert, `@DOM-SUB-KAP-NNN` kan ikke leveres før dette \| ring: <A → B → A> \| Regel: <tittel>> |
+
+Avhengigheter: <N> på nivå 1, <N> på nivå 2 …, <N> av dem ikke `@implemented`.
+
+### Scenarioer i avhengighetene                                         [avhengigheter i koden]
+
+| Feature-ID | Scenario | Resultat | Bevis |
+| --- | --- | --- | --- |
+| `@DOM-SUB-KAP-NNN` | <scenariotittel> | funnet \| ikke funnet \| usikker | <som i `## Scenarioer`> |
 
 ## Scenarioer
 
@@ -132,6 +153,9 @@ Ingen.                                                                  [når in
 - **Åpent spørsmål:** `<@DOM-SUB-KAP-NNN>` «<scenario eller regel>» — <spørsmålet fra `# ÅPNE SPØRSMÅL:`>   [ett punkt per `@openquestion` i gating-settet]
 - **Ikke sjekket:** <det som ikke kunne sjekkes, og hvorfor, f.eks. et repo som ikke er blant kodeklonene>
 - **Krav utenfor scope:** `<fil>` (`<status>`) — <henvisning til `fs-krav` / `fs-specify`>
+- **Ikke valgt i denne kjøringen:** `<fil>` (`<status>`) — <det som ikke var med i `Omfang`, f.eks. `@deprecated`>
+- **Bygger på krav som ikke er levert:** `<@DOM-SUB-KAP-NNN>` bygger på `<@DOM-SUB-KAP-NNN>` (`<status>`)   [avhengigheter]
+- **Levert, men ikke funnet i koden:** `<@DOM-SUB-KAP-NNN>` «<scenario>» — <hva som mangler>   [uansett status, for `@implemented` krav]
 
 Ingen.                                                                  [når det ikke er noe, i stedet for lista]
 ````
@@ -140,6 +164,7 @@ Ingen.                                                                  [når de
 
 - **`## Oversikt per krav`** `[per repo]`: én rad per krav i scope. `Funnet` er funnet av gating-settet. `Gjenstår` er repoene som må endres, med navn, i rekkefølgen fs-plattform, fs-admin, min-kompetanse og skilt med komma (`fs-plattform`, `fs-admin, min-kompetanse`), eller `ingen`. Skriv aldri «backend», «frontend» eller «begge». Repoene kommer fra radene som ikke er `funnet` (`delvis` og `mangler` teller). Linja under teller kravene per verdi som forekommer, med flest først, og `ingen` til slutt, også med 0. Bokstavene i `Bevis` står i rekkefølgen P, A, M.
 - **`## Fremdrift for flyter`** `[flyt]`: én rad per fase, i rekkefølgen i flyten. En fase er levert når alle kravene den bygger på, er `@implemented` (en flyt den bygger på, også). `mangler krav` når fasen ikke har `@depends-on-`. Linja under tabellen står én gang per flyt.
+- **`## Avhengigheter`** `[avhengigheter]`: én rad per par (krav i scope, avhengighet), sortert på krav i scope og så nivå. På nivå 2 og lenger er `Krav i scope` kravet i scope kjeden starter i. `Funnet` er `<n>/<N>` av gating-settet (som *uansett status*) når avhengighetene er verifisert i koden, ellers `–`. Merknaden «kan ikke leveres før dette» står bare på nivå 1, når avhengigheten ikke er `@implemented`. Avhengighetene teller ikke i `## Oppsummering`, og radene deres står aldri i `## Scenarioer`, fordi tavla «Oppgaver», `fs-testplan` og `fs-testrapport` leser den tabellen.
 - **`## Levert`**: kravene og delene som har fått ny status i denne kjøringen. `Fra` er statusen før. En del (regel eller scenario) skrives som `Regel: <tittel>` eller `Scenario: <tittel>`.
 - **`## Ikke levert`**: alle kravene og delene i scope som ble verifisert, men ikke levert, med statusen de fortsatt har. `Hvorfor` er én av formene i malen. Krav som ikke ble verifisert (allerede levert, ikke klare), står under *Krav utenfor scope* i `## Oppfølging`.
 - **`## Oppfølging`**: bare funn som ikke står i en annen seksjon. Hvert punkt har en kort overskrift i fet skrift, og `fil:linje` når det handler om kode.
