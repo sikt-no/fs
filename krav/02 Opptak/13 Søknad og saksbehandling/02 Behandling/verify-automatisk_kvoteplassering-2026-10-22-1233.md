@@ -83,4 +83,4 @@ Ingen.
 
 - **Kombinasjonskvote som faller bort på grunn av alder:** en kvote med kvotespørsmål som tas ut fordi aldersgrensen ikke er møtt (`P-svc/saksbehandling/SoknadKvoteOppretterService.java:164`), gir ikke innslag med opptaksalderen i endringsloggen. Scenarioet gjelder en kvote uten kvotespørsmål, så det rammes ikke. Avklares eventuelt med `fs-krav`.
 - **Levert uten validering:** kravet gikk fra `@draft` til `@implemented` med verifisering uansett status, uten gjennomgang i `fs-krav`.
-- **Kontroll av scenario 1–14:** kontrollert av `fs-verify-kontroll` i kjøringen 2026-10-22 12:17 (`verify-automatisk_kvoteplassering-2026-10-22-1217.md`). Teksten og koden for dem er ikke endret siden.
+- **Kontroll av scenario 1–14:** kontrollert av `fs-verify-kontroll` i en kjøring 2026-10-22 12:17, før sikt-no/fs#790 var merget. Teksten og koden for dem er ikke endret siden.
