@@ -106,7 +106,7 @@ export function verifyOrder(a: VerifyReport, b: VerifyReport): number {
 
 // —— Gating-settet ——
 
-/** Scenarioene i et krav som skal implementeres (eller fjernes), med regelen de står under. Holdes i synk med fs-verify. */
+/** Scenarioene i et krav som skal implementeres (eller fjernes), med regelen de står under. Holdes i synk med fs-verify. `@openquestion` alene er med: delen er klar til implementasjon, og bare `@draft` holder den utenfor. */
 export function gating(e: Entry | undefined): { t: string; remove: boolean }[] {
   const m = e?.model;
   if (!m) return [];
@@ -116,7 +116,7 @@ export function gating(e: Entry | undefined): { t: string; remove: boolean }[] {
     for (const s of r.scenarios) {
       if (s.kind === 'Bakgrunn') continue;
       const tags = [...r.tags, ...s.tags];
-      const off = has(tags, 'openquestion') || has(tags, 'demo');
+      const off = has(tags, 'demo');
       if (st === 'deprecated') out.push({ t: s.name, remove: true });
       else if (has(tags, 'deprecated')) {
         if (st === 'implemented' || st === 'in-progress') out.push({ t: s.name, remove: true });

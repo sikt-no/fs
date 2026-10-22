@@ -1,7 +1,7 @@
 # language: no
 # GitHub: #595
 # Jira: SHI-709
-@OPT-OPT-UTD-003 @must @draft @scope-utdanningstilbud-2027
+@OPT-OPT-UTD-003 @must @implemented @scope-utdanningstilbud-2027
 Egenskap: Trekke utdanningstilbud fra opptak
   Som opptaksforvalter
   ønsker jeg å kunne trekke utdanningstilbud fra opptaket
@@ -20,6 +20,7 @@ Egenskap: Trekke utdanningstilbud fra opptak
 
   Regel: Opptaksforvalter ved deltakende organisasjon eller forvaltende organisasjon kan trekke utdanningstilbud
 
+    @in-progress
     Scenario: Opptaksforvalter ved deltakende organisasjon trekker utdanningstilbud organisasjonen tilbyr
       Gitt at opptaksforvalter er ved en deltakende organisasjon
       Når opptaksforvalter velger å trekke utdanningstilbudet "Sykepleie, høst 2027"
@@ -38,6 +39,9 @@ Egenskap: Trekke utdanningstilbud fra opptak
   # - Kravet sier «søknadsperioden har startet», mens fjerne_utdanningstilbud.feature sier «opptaket har åpnet for søknad». Er det det samme, og hvilken formulering skal brukes?
   Regel: Trekking før søknadsåpning fjerner utdanningstilbudet fra listen
 
+    @planned @openquestion
+    # ÅPNE SPØRSMÅL:
+    # - Serveren avviser trekk før opptaket er publisert og sletter tilbudet i stedet. Skal «trekke» før søknadsåpning være en egen handling, eller er det den samme som å fjerne (se spørsmålet over regelen)?
     Scenario: Trekke utdanningstilbud før søknadsåpning
       Gitt at søknadsperioden ikke har startet
       Når opptaksforvalter trekker utdanningstilbudet "Sykepleie, høst 2027"
@@ -49,6 +53,7 @@ Egenskap: Trekke utdanningstilbud fra opptak
     # - Hva skal skje når et utdanningstilbud trekkes etter publisering? Det er ikke spesifisert, og skal avklares sammen med Tind og Puff (SHI-685).
     # - Hvem har ansvaret for avklaringen, funksjonell design eller domene og design (SHI-685)?
 
+    @in-progress
     Scenario: Trekke utdanningstilbud etter søknadsåpning
       Gitt at søknadsperioden har startet
       Og at søkere har søkt på utdanningstilbudet "Sykepleie, høst 2027"

@@ -8,7 +8,7 @@
 # Bygger på L2. Selvstendig, men gir bare mening etter L2, siden det er det
 # låste grunnlaget som kan bli utdatert.
 #
-@OPT-BEH-BEH-010 @must @draft
+@OPT-BEH-BEH-021 @must @draft
 Egenskap: Varsle om nytt vitnemål
   Som saksbehandler i opptak
   ønsker jeg å bli varslet når grunnlaget jeg har valgt, blir utdatert

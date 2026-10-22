@@ -60,7 +60,7 @@ Som *Logg kjøringen* i `fs-verify`, med skillnavnet `fs-verify-agent-teams`:
 Les hver feature-fil i scope selv, og klassifiser etter tabellen i *Klassifiser* i `fs-verify`. Vis oversikten før du starter teamet.
 
 - Bare filer med noe å verifisere (`@in-progress` eller `@deprecated` på egenskapen eller på en del, eller alle filene i scope når det skal verifiseres *uansett status*) får en finner.
-- En flyt (`krav/_Flyter/`) med `@planned` eller `@in-progress` får en finner, som en feature-fil. Fremdriften (*Verifisere flyt*, steg 1) leser bare tagger, og den slår du opp selv.
+- En flyt (`krav/_Flyter/`) med `@planned` eller `@in-progress` får en finner, som en feature-fil, også flytene et scope, en oppgave eller en testplan tar med (*Finn scope og kode* i `fs-verify`). Fremdriften (*Verifisere flyt*, steg 1) leser bare tagger, og den slår du opp selv. Si til finneren hvilke faser som er levert: scenarioene i de andre fasene er `ikke funnet` med «fasen er ikke levert», og leter ikke finneren etter.
 - Resten (allerede levert, `@draft`, `@planned`, to statustagger) rapporteres som i `fs-verify`, uten finner.
 - **Én fil å verifisere:** ikke start et team. Følg `fs-verify` direkte (med kontrolløren som subagent).
 

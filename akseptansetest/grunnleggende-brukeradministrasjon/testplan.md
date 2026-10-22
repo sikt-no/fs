@@ -19,38 +19,42 @@ Testplan for «Grunnleggende brukeradministrasjon». Planen sier hva som testes,
 |---|---|
 | Hva er levert | Brukeradministratorer kan se en liste over personbrukerne i FS Admin: dem som har hjemorganisasjon i organisasjonene de administrerer, og dem som har en aktiv rolle der. De kan søke på navn og Feide-ID, og filtrere på status, hjemorganisasjon og rolle. På detaljsiden ser de navn, Feide-ID, hjemorganisasjon og status, og rollene til personbrukeren med «Gjelder for» og miljø, med filtre. De kan fjerne én eller flere roller, og deaktivere en personbruker uten at tildelingene fjernes. |
 | Versjon | [Fylles ut: versjon eller dato for deploy] |
-| Testmiljø | Produksjon: [Fylles ut: URL] |
-| Feature-flagg | Ingen |
+| Testmiljø | [Fylles ut: URL til testmiljøet] (alltid et testmiljø, aldri produksjon) |
+| Feature-flagg | Menypunktet «Personbrukere» vises bare når `tilgangsstyring-meny` og `tilgangsstyring-brukeradministrasjon` er på. Fs-admin har dem alltid på i development, review og test (`environmentsOverride`). [Fylles ut: bekreftet av teamet for dette testmiljøet] |
 | Kilde | Kravmappa [1 - Grunnleggende brukeradministrasjon](https://github.com/sikt-no/fs/tree/64d875ae3a521113de8354e1788bd57642507196/krav/07%20Brukeradministrasjon%20og%20tilgangsstyring/12%20Brukeradministrasjon/personbrukere/1%20-%20Grunnleggende%20brukeradministrasjon) |
 | Scope | Ingen for hele leveransen. Deler av kravene har `@scope-grunnleggende-brukeradministrasjon`, `@scope-restanser-etter-onboarding` og `@scope-synlighet-og-gjelder-for` · [scope-filene på GitHub](https://github.com/sikt-no/fs/tree/64d875ae3a521113de8354e1788bd57642507196/tasks/brukeradministrasjon-og-tilgangsstyring) |
 | Saker | Levert: [#143](https://github.com/sikt-no/fs/issues/143) (initiativ [#350](https://github.com/sikt-no/fs/issues/350)), [#479](https://github.com/sikt-no/fs/issues/479), [#480](https://github.com/sikt-no/fs/issues/480), [#481](https://github.com/sikt-no/fs/issues/481), [#482](https://github.com/sikt-no/fs/issues/482) · [BAT-299](https://sikt.atlassian.net/browse/BAT-299). Venter: [BAT-298](https://sikt.atlassian.net/browse/BAT-298), [BAT-325](https://sikt.atlassian.net/browse/BAT-325), [BAT-326](https://sikt.atlassian.net/browse/BAT-326) |
 | Berører andre team | [Fylles ut: står ikke i oppgavene] |
-| Kjente begrensninger | <ul><li>Testen går i produksjon. Deaktivering og fjerning av roller endrer de ekte tilgangene til testbrukerne, og må settes tilbake etterpå (se *Testdata*).</li><li>Reaktivering lagrer ikke historikken: det som var lagret om deaktiveringen, blir borte, og det lagres ikke når og av hvem reaktiveringen ble gjort. Reaktivering er ikke med i testen, men brukes for å sette testdataene tilbake.</li><li>Verifiseringen 14.10 fant ikke sikkert 6 av scenarioene: valglistene for organisasjon og miljø når en rolle fjernes, kan vise organisasjoner og miljøer der administratoren ikke har rett (serveren avviser fjerningen, rettes i BAT-326). Filtervalgene for hjemorganisasjon og rolle i listen, og for organisasjon og miljø i rollevisningen, kan vise valg som ikke finnes i listen. Det er sannsynlig at testen gir funn her.</li><li>Synligheten i listen regnes fra alle aktive tildelinger, ikke bare roller (rettes i BAT-298). Scenarioene om synlighet som er levert, består, men en personbruker med bare en tilgang kan også bli vist.</li><li>Fanen «Tilganger» er slått av på detaljsiden. De to scenarioene om tilganger som faller bort eller består når en rolle fjernes, kan ikke sjekkes på detaljsiden. [Fylles ut: hvordan testerne sjekker tilgangene]</li><li>Listen kan ikke sorteres (sorteringen er utkast). Den er sortert etter navn i stigende rekkefølge.</li></ul> |
+| Kjente begrensninger | <ul><li>Testen går i testmiljøet. Deaktivering og fjerning av roller endrer tilgangene til testbrukerne, og må settes tilbake etterpå (se *Testdata*).</li><li>Reaktivering lagrer ikke historikken: det som var lagret om deaktiveringen, blir borte, og det lagres ikke når og av hvem reaktiveringen ble gjort. Reaktivering er ikke med i testen, men brukes for å sette testdataene tilbake.</li><li>Verifiseringen 14.10 fant ikke sikkert 6 av scenarioene: valglistene for organisasjon og miljø når en rolle fjernes, kan vise organisasjoner og miljøer der administratoren ikke har rett (serveren avviser fjerningen, rettes i BAT-326). Filtervalgene for hjemorganisasjon og rolle i listen, og for organisasjon og miljø i rollevisningen, kan vise valg som ikke finnes i listen. Det er sannsynlig at testen gir funn her.</li><li>Synligheten i listen regnes fra alle aktive tildelinger, ikke bare roller (rettes i BAT-298). Scenarioene om synlighet som er levert, består, men en personbruker med bare en tilgang kan også bli vist.</li><li>Fanen «Tilganger» er slått av på detaljsiden. De to scenarioene om tilganger som faller bort eller består når en rolle fjernes, kan ikke sjekkes på detaljsiden. [Fylles ut: hvordan testerne sjekker tilgangene]</li><li>Listen kan ikke sorteres (sorteringen er utkast). Den er sortert etter navn i stigende rekkefølge.</li></ul> |
 
 ### Testbrukere
 
-| Nr | Navn | Rolle | Organisasjon | Brukes til |
-|---|---|---|---|---|
-| 1 | [Fylles ut: navn] | Brukeradministrator, i alle miljøer | [Fylles ut: organisasjon A] | Listen, søk og filtre, detaljsiden, rollene, fjerne roller og deaktivere (`@BRU-PER-GRU-001`, `-004`, `-007`, `-008`, `-012`) |
-| 2 | [Fylles ut: navn] | Brukeradministrator | [Fylles ut: organisasjon B] | Synlighet: personbrukere med hjemorganisasjon i organisasjon B og en aktiv rolle i organisasjon A (`@BRU-PER-GRU-001`). Roller i en organisasjon testbruker 1 ikke administrerer (`@BRU-PER-GRU-012`) |
-| 3 | [Fylles ut: navn] | Brukeradministrator, i bare ett miljø | [Fylles ut: organisasjon A] | Synlighet når rollen gjelder i et miljø testbrukeren ikke administrerer (`@BRU-PER-GRU-001`) |
+| Nr | Nøkkel | Navn | Rolle | Organisasjon | Innlogging | Start-URL | Brukes til |
+|---|---|---|---|---|---|---|---|
+| 1 | `brukeradministrator-alle-miljoer` | [Fylles ut: navn] | Brukeradministrator, i alle miljøer | [Fylles ut: organisasjon A] | [Fylles ut: Chrome-profil eller Feide-ID] | [Fylles ut: URL til FS Admin i testmiljøet] | Listen, søk og filtre, detaljsiden, rollene, fjerne roller og deaktivere (`@BRU-PER-GRU-001`, `-004`, `-007`, `-008`, `-012`) |
+| 2 | `brukeradministrator-organisasjon-b` | [Fylles ut: navn] | Brukeradministrator | [Fylles ut: organisasjon B] | [Fylles ut: Chrome-profil eller Feide-ID] | [Fylles ut: URL til FS Admin i testmiljøet] | Synlighet: personbrukere med hjemorganisasjon i organisasjon B og en aktiv rolle i organisasjon A (`@BRU-PER-GRU-001`). Roller i en organisasjon testbruker 1 ikke administrerer (`@BRU-PER-GRU-012`) |
+| 3 | `brukeradministrator-ett-miljo` | [Fylles ut: navn] | Brukeradministrator, i bare ett miljø | [Fylles ut: organisasjon A] | [Fylles ut: Chrome-profil eller Feide-ID] | [Fylles ut: URL til FS Admin i testmiljøet] | Synlighet når rollen gjelder i et miljø testbrukeren ikke administrerer (`@BRU-PER-GRU-001`) |
 
 Testbrukerne finnes i minst to organisasjoner, så vi kan teste at ingen ser data de ikke skal se.
+
+`Nøkkel`, `Innlogging` og `Start-URL` er for CDP-kjøringen (steg 4b). Nøkkelen er et stabilt navn for rollen, og endres ikke om navnet på testbrukeren byttes. Aldri passord i testplanen. Se [`roller-og-testdata.md`](../../.claude/references/akseptansetest/roller-og-testdata.md).
 
 ### Testdata
 
 Testdataene er testbrukernes egne: testerne deaktiverer og fjerner roller fra hverandre, og setter det tilbake etterpå.
 
-| Hva | Navn | Hvor | Kan settes tilbake |
-|---|---|---|---|
-| Personbruker med flere aktive roller i organisasjon A, også den samme rollen i flere kombinasjoner av organisasjon og miljø (fjernes) | [Fylles ut: hvilken testbruker] | FS Admin, Brukeradministrasjon | Ja: rollene tildeles på nytt etter testen |
-| Personbruker med aktive roller som deaktiveres | [Fylles ut: hvilken testbruker] | FS Admin, Brukeradministrasjon | Ja: reaktiveres etter testen. Historikken om deaktiveringen blir borte (se *Kjente begrensninger*) |
-| Personbruker med roller i både organisasjon A og B, og en rolle testbruker 1 ikke har rett til å fjerne | [Fylles ut: hvilken testbruker] | FS Admin, Brukeradministrasjon | Ingenting endres |
-| Personbruker med hjemorganisasjon utenfor organisasjon A og en aktiv rolle i organisasjon A, i et miljø testbruker 1 administrerer | [Fylles ut: hvilken testbruker] | FS Admin, Brukeradministrasjon | Ingenting endres |
-| Personbruker med hjemorganisasjon utenfor organisasjon A og eneste aktive rolle i organisasjon A i et annet miljø enn det testbruker 3 administrerer | [Fylles ut: navn] | FS Admin, Brukeradministrasjon | Ingenting endres |
-| Personbruker med et domene i Feide-ID-en som ikke er registrert på noen organisasjon | [Fylles ut: navn] | FS Admin, Brukeradministrasjon | Ingenting endres |
-| Personbruker med en rolle som gir tilganger, og en tilgang som både er tildelt direkte og følger av rollen | [Fylles ut: navn] | [Fylles ut: tilganger kan ikke tildeles i FS Admin] | [Fylles ut] |
-| Flere enn 50 personbrukere testbruker 1 kan se, for «last inn flere» | – | FS Admin, Brukeradministrasjon | Ingenting endres |
+| Hva | Nøkkel | Navn | Hvor | Søk/URL | Utgangstilstand | Brukes av | Kan settes tilbake |
+|---|---|---|---|---|---|---|---|
+| Personbruker med flere aktive roller i organisasjon A, også den samme rollen i flere kombinasjoner av organisasjon og miljø (fjernes) | `personbruker-flere-aktive-roller` | [Fylles ut: hvilken testbruker] | FS Admin, Brukeradministrasjon | [Fylles ut: Feide-ID eller URL] | Minst to roller i organisasjon A, og minst én rolle i flere kombinasjoner av organisasjon og miljø | `@BRU-PER-GRU-012`: testcase 2.1–2.3 | Ja: rollene tildeles på nytt etter testen |
+| Personbruker med aktive roller som deaktiveres | `personbruker-deaktiveres` | [Fylles ut: hvilken testbruker] | FS Admin, Brukeradministrasjon | [Fylles ut: Feide-ID eller URL] | Aktiv, med flere aktive roller | `@BRU-PER-GRU-004`: testcase 1.1–1.2 | Ja: reaktiveres etter testen. Historikken om deaktiveringen blir borte (se *Kjente begrensninger*) |
+| Personbruker med roller i både organisasjon A og B, og en rolle testbruker 1 ikke har rett til å fjerne | `personbruker-rolle-uten-fjerningsrett` | [Fylles ut: hvilken testbruker] | FS Admin, Brukeradministrasjon | [Fylles ut: Feide-ID eller URL] | Roller i organisasjon A og B, minst én rolle i B | `@BRU-PER-GRU-012`: testcase 2.4–2.5 | Ingenting endres |
+| Personbruker med hjemorganisasjon utenfor organisasjon A og en aktiv rolle i organisasjon A, i et miljø testbruker 1 administrerer | `personbruker-annen-hjemorganisasjon-aktiv-rolle` | [Fylles ut: hvilken testbruker] | FS Admin, Brukeradministrasjon | [Fylles ut: Feide-ID eller URL] | Hjemorganisasjon utenfor A, aktiv rolle i A | `@BRU-PER-GRU-001`: testcase 4.16 | Ingenting endres |
+| Personbruker med hjemorganisasjon utenfor organisasjon A og eneste aktive rolle i organisasjon A i et annet miljø enn det testbruker 3 administrerer | `personbruker-annen-hjemorganisasjon-annet-miljo` | [Fylles ut: navn] | FS Admin, Brukeradministrasjon | [Fylles ut: Feide-ID eller URL] | Hjemorganisasjon utenfor A, eneste aktive rolle i A i et miljø testbruker 3 ikke administrerer | `@BRU-PER-GRU-001`: testcase 4.17 | Ingenting endres |
+| Personbruker med et domene i Feide-ID-en som ikke er registrert på noen organisasjon | `personbruker-ukjent-feide-domene` | [Fylles ut: navn] | FS Admin, Brukeradministrasjon | [Fylles ut: Feide-ID eller URL] | Feide-domene som ikke finnes på noen organisasjon | `@BRU-PER-GRU-007`: testcase 3.4 | Ingenting endres |
+| Personbruker med en rolle som gir tilganger, og en tilgang som både er tildelt direkte og følger av rollen | `personbruker-rolle-og-direkte-tilgang` | [Fylles ut: navn] | [Fylles ut: tilganger kan ikke tildeles i FS Admin] | [Fylles ut] | Rolle som gir tilganger, og samme tilgang tildelt direkte | `@BRU-PER-GRU-012`: ikke testbart nå | [Fylles ut] |
+| Flere enn 50 personbrukere testbruker 1 kan se, for «last inn flere» | `over-50-personbrukere` | – | FS Admin, Brukeradministrasjon | – | Minst 51 personbrukere synlige for testbruker 1 (verifiseringen 7.10 fant 71 aktive i testmiljøet: kontrolleres) | `@BRU-PER-GRU-001`: testcase 4.2–4.4 | Ingenting endres |
+
+`Nøkkel`, `Søk/URL`, `Utgangstilstand` og `Brukes av` er for CDP-kjøringen (steg 4b), som `Nøkkel` over.
 
 ## Omfang
 
@@ -134,6 +138,7 @@ Klart når testansvarlig har logget inn som testbruker og ser testdataene.
 | 5 | `fs-verify` har funnet alle scenarioene, og en annen person har kontrollert rapporten | Delvis: 32 av 38 funnet, 6 usikre (verifiseringen 2026-10-14, og 2026-10-19 for «Gjelder for»). Kontrollert av `fs-verify-kontroll`. [Fylles ut: hvem som har kontrollert rapporten] |
 | 6 | Testcasene er laget og gått gjennom av testansvarlig | Laget, venter på gjennomgang av testansvarlig |
 | 7 | Testansvarlig har logget inn som testbruker og ser testdataene | [Fylles ut av testansvarlig] |
+| 8 | CDP-agenten kan logge inn som hver testbruker, og nøklene, `Innlogging` og `Søk/URL` i testbrukere og testdata er utfylt (bare når CDP er valgt) | Ikke aktuell til teamet har svart ja på CDP |
 
 ## Kriterier for godkjent
 
@@ -165,10 +170,11 @@ Testansvarlig skriver beslutningen og begrunnelsen i sluttrapporten. Rettede fun
 
 | Steg | Side | Status | Dato |
 |---|---|---|---|
-| 1. Testplan | (denne siden) | Laget | 2026-10-21 |
-| 2. Verifisering (`fs-verify`) | – | Venter | |
+| 1. Verifisering (`fs-verify`) | [verify-1 - Grunnleggende brukeradministrasjon-2026-10-14-1544.md](../../krav/07%20Brukeradministrasjon%20og%20tilgangsstyring/12%20Brukeradministrasjon/personbrukere/1%20-%20Grunnleggende%20brukeradministrasjon/verify-1%20-%20Grunnleggende%20brukeradministrasjon-2026-10-14-1544.md), [verify-2026-10-19-0839.md](../../tasks/brukeradministrasjon-og-tilgangsstyring/roller-gjelder-for/spec/verify-2026-10-19-0839.md) | 32 av 38 funnet, 6 usikre | 2026-10-14, 2026-10-19 |
+| 2. Testplan | (denne siden) | Laget | 2026-10-21 |
 | 3. Testrapport – verifisering | – | Venter | |
 | 4. Intern akseptansetest | [Intern akseptansetest – Grunnleggende brukeradministrasjon](https://sikt.atlassian.net/wiki/spaces/STUDIEADM/pages/edit-v2/5126127626) (utkast) | Klar til test | 2026-10-21 |
+| 4b. CDP-kjøring (valgfri) | – | Ikke aktuell | |
 | 5. Testrapport – intern | – | Venter | |
 | 6. Ekstern akseptansetest | – | Venter | |
 | 7. Testrapport – ekstern | – | Venter | |

@@ -1,5 +1,5 @@
 # language: no
-@OPT-BEH-BEH-016 @should @draft
+@OPT-BEH-BEH-016 @should @draft @ref-OPT-BEH-BEH-012
 Egenskap: Hendelseslogg for saksbehandling
   Som saksbehandler
   ønsker jeg en logg over hvem som har gjort hvilke endringer på søkeren og søknaden, og når
@@ -12,7 +12,7 @@ Egenskap: Hendelseslogg for saksbehandling
   # endringer på opptaket. Begge bygger på en generell revisjonsmekanisme som gjelder på tvers av FS.
   # Beslektede krav som allerede logger i endringsloggen for saken:
   # - søknadsmangler.feature (saksloggen viser mangler som er registrert og endret)
-  # - automatisk_kvoteplassering.feature (endringsloggen viser at maskinbrukeren har plassert søkeren i kvoten)
+  # - OPT-BEH-BEH-012 (endringsloggen viser at maskinbrukeren har plassert søkeren i kvoten)
   #
   # ÅPNE SPØRSMÅL:
   # - Hvilke endringer skal logges: status, kvalifisering, poeng, dokumentasjon, tildeling til saksbehandler?

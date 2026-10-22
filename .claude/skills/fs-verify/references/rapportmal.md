@@ -33,8 +33,8 @@ Rapporten fra `fs-verify` og `fs-verify-agent-teams` følger denne malen, så to
 - **Skjermbilder:** ja | nei | nei (<grunn>)
 - **Confluence:** <url> | <url> (utkast)                                [confluence]
 
-Gating-sett: scenarioene som ikke er tagget `@draft`, `@deprecated`, `@openquestion` eller `@demo`.   [ikke uansett status]
-Gating-sett: alle scenarioene i scope, også `@draft`, `@planned` og `@openquestion`, minus `@demo` (verifisert uansett status).   [uansett status]
+Gating-sett: scenarioene som ikke er tagget `@draft`, `@deprecated` eller `@demo` (`@openquestion` alene er med).   [ikke uansett status]
+Gating-sett: alle scenarioene i scope, også `@draft` og `@planned`, minus `@demo` (verifisert uansett status).   [uansett status]
 
 Stiene er forkortet:                                                    [bare når stier er forkortet]
 
@@ -81,6 +81,7 @@ I `Bevis` står **P** for fs-plattform, **A** for fs-admin og **M** for min-komp
 | `@DOM-SUB-KAP-NNN` | <scenariotittel> | funnet | P: funnet · A: ikke relevant · M: funnet — `<fil>:<linje>`, `<fil>:<linje>` |   [per repo]
 | `@FLY-PRO-FLY-NNN` | <scenariotittel> | funnet | lages: `<repo>/<fil>:<linje>` · brukes: `<repo>/<fil>:<linje>` — <hva som overleveres> |   [flyt]
 | `@FLY-PRO-FLY-NNN` | <scenariotittel> | ikke funnet | lages: `<repo>/<fil>:<linje>` · brukes: ikke funnet — søkt etter «<ord>» i <repoer> |   [flyt]
+| `@FLY-PRO-FLY-NNN` | <scenariotittel> | ikke funnet | fasen er ikke levert: `@DOM-SUB-KAP-NNN` er `@planned` — ikke søkt |   [flyt]
 
 ## Kontroll
 
@@ -105,7 +106,6 @@ Ingen.                                                                  [når in
 | --- | --- | --- | --- | --- |
 | `@DOM-SUB-KAP-NNN` | <tittel> | `@in-progress` | <n>/<N> | <N> ikke funnet, <N> usikker |
 | `@DOM-SUB-KAP-NNN` | <tittel> | `@draft` | <N>/<N> | Alt funnet. Brukeren valgte «Ikke endre noe» |
-| `@DOM-SUB-KAP-NNN` | <tittel> | `@draft` | <N>/<N> | Alt funnet, men `@openquestion` står igjen |
 | `@DOM-SUB-KAP-NNN` | <tittel> | `@in-progress` | <n>/<N> | Brukeren sa at noe mangler: <hva> |
 | `@DOM-SUB-KAP-NNN` | <tittel> | `@in-progress` | <n>/<N> | Brukeren avbrøt gjennomgangen |
 
@@ -129,6 +129,7 @@ Ingen.                                                                  [når in
 ## Oppfølging
 
 - **<kort overskrift>:** <funn i koden som ikke er et scenario, men som bør følges opp, med `<fil>:<linje>`>
+- **Åpent spørsmål:** `<@DOM-SUB-KAP-NNN>` «<scenario eller regel>» — <spørsmålet fra `# ÅPNE SPØRSMÅL:`>   [ett punkt per `@openquestion` i gating-settet]
 - **Ikke sjekket:** <det som ikke kunne sjekkes, og hvorfor, f.eks. et repo som ikke er blant kodeklonene>
 - **Krav utenfor scope:** `<fil>` (`<status>`) — <henvisning til `fs-krav` / `fs-specify`>
 

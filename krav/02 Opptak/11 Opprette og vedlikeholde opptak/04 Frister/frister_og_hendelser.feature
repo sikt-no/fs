@@ -15,7 +15,12 @@ Egenskap: Frister og hendelser for opptak
     Gitt at opptaksforvalter ved forvaltende organisasjon er innlogget
     Og at opptaket "Samordna opptak 2027" er opprettet
 
+  @openquestion
   Regel: Opptaksforvalter ved forvaltende organisasjon må kunne åpne og stenge for redigering av utdanningstilbud
+    # ÅPNE SPØRSMÅL:
+    # - Virkningen står i legge_til_utdanningstilbud.feature, trekke_utdanningstilbud.feature og
+    #   sette_studieplasser_og_antall_tilbud.feature. Skal regelen ha @ref-OPT-OPT-UTD-002, @ref-OPT-OPT-UTD-003
+    #   og @ref-OPT-OPT-UTD-007?
 
     # AVKLART 2026-10-15 (Q4, Q5 og Q13, TAKE-410):
     # - Fristen stenger alt deltakende organisasjoner endrer på utdanningstilbudet. Unntaket er antall
@@ -39,7 +44,11 @@ Egenskap: Frister og hendelser for opptak
       Når opptaksforvalter setter at redigering av utdanningstilbud stenger "2027-06-06"
       Så har opptaket dato for når redigering av utdanningstilbud stenger "2027-06-06"
 
+  @openquestion
   Regel: Opptaksforvalter ved forvaltende organisasjon må kunne åpne for søkning
+    # ÅPNE SPØRSMÅL:
+    # - Virkningen står i søke_på_opptak.feature og finne_studier.feature. Skal regelen ha @ref-OPT-SØK-SØK-001
+    #   og @ref-OPT-SØK-SØK-013?
 
     # AVKLART 2026-10-19 (S1, akseptansetesten): Opptaket har ingen egen dato for når utdanningstilbudene
     # publiseres. Søkere kan ikke begynne på en søknad eller se utdanningstilbudene før søknaden åpner.
@@ -51,21 +60,30 @@ Egenskap: Frister og hendelser for opptak
       Når opptaksforvalter setter at søknaden åpner "2027-02-01"
       Så har opptaket dato for når søknaden åpner "2027-02-01"
 
+  @openquestion
   Regel: Opptaksforvalter ved forvaltende organisasjon må kunne sette generell søknadsfrist for opptaket
+    # ÅPNE SPØRSMÅL:
+    # - Virkningen står i søke_på_opptak.feature. Skal regelen ha @ref-OPT-SØK-SØK-001?
 
     # Virkningen står i 13 Søknad og saksbehandling/01 Søknad/søke_på_opptak.feature.
     Scenario: Sette ordinær søknadsfrist
       Når opptaksforvalter setter ordinær søknadsfrist til "2027-04-15 23:59"
       Så har opptaket ordinær søknadsfrist "2027-04-15 23:59"
 
+  @openquestion
   Regel: Opptaksforvalter ved forvaltende organisasjon må kunne sette omprioriteringsfrist
+    # ÅPNE SPØRSMÅL:
+    # - Virkningen står i prioritere_søknadsalternativer.feature. Skal regelen ha @ref-OPT-SØK-SØK-006?
 
     # Virkningen står i 13 Søknad og saksbehandling/01 Søknad/prioritere_søknadsalternativer.feature.
     Scenario: Sette omprioriteringsfrist
       Når opptaksforvalter setter omprioriteringsfrist til "2027-04-15 23:59"
       Så har opptaket omprioriteringsfrist "2027-04-15 23:59"
 
+  @openquestion
   Regel: Opptaksforvalter ved forvaltende organisasjon må kunne sette frist for sletting av søknadsalternativer
+    # ÅPNE SPØRSMÅL:
+    # - Virkningen står i prioritere_søknadsalternativer.feature. Skal regelen ha @ref-OPT-SØK-SØK-006?
 
     # AVKLART 2026-10-15 (Q6, TAKE-411): Fristen for sletting kan være senere enn omprioriteringsfristen.
     # Virkningen står i 13 Søknad og saksbehandling/01 Søknad/prioritere_søknadsalternativer.feature.
@@ -73,7 +91,11 @@ Egenskap: Frister og hendelser for opptak
       Når opptaksforvalter setter frist for sletting av søknadsalternativer til "2027-04-15 23:59"
       Så har opptaket frist for sletting av søknadsalternativer "2027-04-15 23:59"
 
+  @openquestion
   Regel: Opptaksforvalter ved forvaltende organisasjon må kunne sette dokumentasjonsfrister
+    # ÅPNE SPØRSMÅL:
+    # - Virkningen står i veilede_om_dokumentasjon.feature og søknadsmangler.feature. Skal regelen ha
+    #   @ref-OPT-SØK-SØK-003 og @ref-OPT-BEH-BEH-008?
 
     # AVKLART 2026-10-15 (Q14, TAKE-411): Den ordinære dokumentasjonsfristen er informasjon om når
     # dokumentasjonen bør være lastet opp. Det er ettersendingsfristen som stenger for opplasting.
@@ -87,7 +109,10 @@ Egenskap: Frister og hendelser for opptak
       Når opptaksforvalter setter ettersendingsfrist til "2027-07-01 23:59"
       Så har opptaket ettersendingsfrist "2027-07-01 23:59"
 
+  @openquestion
   Regel: Opptaksforvalter ved forvaltende organisasjon må kunne sette informasjonsdatoer for ledige studieplasser
+    # ÅPNE SPØRSMÅL:
+    # - Virkningen står i søke_på_ledige_studieplasser.feature. Skal regelen ha @ref-OPT-SØK-SØK-014?
 
     # Virkningen står i 13 Søknad og saksbehandling/01 Søknad/søke_på_ledige_studieplasser.feature.
     Scenario: Sette informasjonsfrist for ledige studieplasser
@@ -105,7 +130,11 @@ Egenskap: Frister og hendelser for opptak
       Når opptaksforvalter setter at ledige studieplasser stenger for søkning "2027-09-01"
       Så har opptaket dato for når ledige studieplasser stenger for søkning "2027-09-01"
 
+  @openquestion
   Regel: Opptaksforvalter ved forvaltende organisasjon må kunne sette frister for tidlig opptak
+    # ÅPNE SPØRSMÅL:
+    # - Virkningen står i søke_om_tidlig_opptak.feature og opptaksinnstillinger_utdanningstilbud.feature. Skal
+    #   regelen ha @ref-OPT-SØK-SØK-011 og @ref-OPT-OPT-UTD-004?
 
     # AVKLART 2026-10-15 (Q11, TAKE-408): Dokumentasjonsfristen for tidlig opptak settes på opptaket, og det
     # er den søkerne skal se. Koden har to koder for fristen i dag, og skal ha én.
@@ -143,7 +172,11 @@ Egenskap: Frister og hendelser for opptak
       Når opptaksforvalter setter frist for å sette poenggrenser for tidlig opptak til "2027-02-15 23:59"
       Så har opptaket frist for å sette poenggrenser for tidlig opptak "2027-02-15 23:59"
 
+  @openquestion
   Regel: Opptaksforvalter ved forvaltende organisasjon må kunne sette informasjonsdatoer for opptaksresultat
+    # ÅPNE SPØRSMÅL:
+    # - Virkningen står i se_egen_søknad.feature. Skal regelen ha @ref-OPT-SØK-SØK-009?
+
     # Faktiske svarfrister og publiseringstidspunkter bestemmes ut fra innstillinger på plasstildelingsrunde og når plasstildelingensrundene faktisk blir publisert.
     # Virkningen står i 13 Søknad og saksbehandling/01 Søknad/se_egen_søknad.feature.
 
@@ -161,12 +194,13 @@ Egenskap: Frister og hendelser for opptak
       Når opptaksforvalter setter første svarfrist til "2027-07-20 23:59"
       Så har opptaket første svarfrist "2027-07-20 23:59"
 
+  @ref-OPT-BEH-BEH-012
+  # Selve utregningen av alderen skjer i saksbehandlingen, i regelen
+  # «Søkerens alder beregnes på opptakets dato for aldersberegning».
   Regel: Opptaksforvalter setter dato for aldersberegning
 
     # Alderen søkeren har på denne datoen, brukes der regelverket har aldersgrenser,
     # for eksempel for å avgjøre om søkeren kan konkurrere i førstegangsvitnemålskvoten.
-    # Selve utregningen av alderen skjer i saksbehandlingen, se
-    # 13 Søknad og saksbehandling/02 Behandling/automatisk_kvoteplassering.feature.
 
     Scenario: Sette dato for aldersberegning
       Når opptaksforvalter setter dato for aldersberegning til "2027-12-31"
@@ -177,7 +211,10 @@ Egenskap: Frister og hendelser for opptak
       Når opptaksforvalter ikke setter dato for aldersberegning
       Så er opptakets dato for aldersberegning "2027-12-31"
 
+  @openquestion
   Regel: Opptaksforvalter ved forvaltende organisasjon må kunne sette frist for endring av utdanningsbakgrunn
+    # ÅPNE SPØRSMÅL:
+    # - Virkningen står i tildele_saksbehandlende_organisasjon.feature. Skal regelen ha @ref-OPT-BEH-BEH-011?
 
     # AVKLART 2026-10-19 (S3, akseptansetesten): Opptaket setter fristen, og saksbehandlertildelingen bruker den.
     # En endring av utdanningsbakgrunnen etter fristen flytter ikke søknaden til en annen saksbehandlende
@@ -189,7 +226,11 @@ Egenskap: Frister og hendelser for opptak
       Når opptaksforvalter setter frist for endring av utdanningsbakgrunn til "2027-05-01 23:59"
       Så har opptaket frist for endring av utdanningsbakgrunn "2027-05-01 23:59"
 
+  @openquestion
   Regel: Opptaksforvalter kan legge til utdanningsbakgrunner med avvikende frister
+    # ÅPNE SPØRSMÅL:
+    # - Virkningen står i søke_på_opptak.feature. Skal regelen ha @ref-OPT-SØK-SØK-001?
+
     # Opptaksforvalter legger eksplisitt til utdanningsbakgrunner som skal ha
     # egne søknads- og dokumentasjonsfrister. Utdanningsbakgrunner uten avvikende
     # frister følger opptakets generelle frister.

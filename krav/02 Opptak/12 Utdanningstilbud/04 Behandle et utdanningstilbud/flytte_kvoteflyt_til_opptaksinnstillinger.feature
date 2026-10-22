@@ -1,6 +1,6 @@
 # language: no
 # Jira: SHI-691
-@OPT-OPT-UTD-013 @must @draft
+@OPT-OPT-UTD-013 @must @implemented
 Egenskap: Flytte registrering av kvoteflyt til opptaksinnstillinger
   Som opptaksforvalter
   ønsker jeg å registrere kvoteflyt i opptaksinnstillingene i stedet for på det enkelte utdanningstilbudet
@@ -11,6 +11,7 @@ Egenskap: Flytte registrering av kvoteflyt til opptaksinnstillinger
 
   Regel: Kvoteflyt registreres i opptaksinnstillinger
 
+    @in-progress
     Scenario: Registrere kvoteflyt i opptaksinnstillinger
       Når opptaksforvalter registrerer kvoteflyt i opptaksinnstillingene
       Så lagres kvoteflyten på opptaket

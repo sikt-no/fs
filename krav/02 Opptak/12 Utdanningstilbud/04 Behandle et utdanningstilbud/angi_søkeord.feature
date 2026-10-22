@@ -1,6 +1,6 @@
 # language: no
 # Jira: SHI-695
-@OPT-OPT-UTD-017 @must @draft @scope-utdanningstilbud-2027
+@OPT-OPT-UTD-017 @must @implemented @scope-utdanningstilbud-2027
 Egenskap: Angi søkeord på utdanningstilbudet
   Som opptaksforvalter
   ønsker jeg å angi søkeord på utdanningstilbudet
@@ -26,6 +26,7 @@ Egenskap: Angi søkeord på utdanningstilbudet
 
   Regel: Søkeord hjelper søkeren å finne utdanningstilbud i Min kompetanse
 
+    @in-progress
     Scenario: Søker finner utdanningstilbud via søkeord
       Gitt at utdanningstilbudet har søkeordet "Lege"
       Når søkeren søker på "Lege" i Min kompetanse

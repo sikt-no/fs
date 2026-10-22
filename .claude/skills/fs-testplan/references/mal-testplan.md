@@ -14,7 +14,7 @@ Fila skrives til `akseptansetest/<testplan-slug>/testplan.md`. Alt over den før
 - **Scope**: @scope-<slug>[, @scope-<slug> …] | –   (scope-id-ene kravene har)
 - **Scope-fil**: [scope-<slug>](../../tasks/<domene>/scope-<slug>.md)[, …]   (når kravene har scope)
 - **Oppgaver**: [<domene>/<slug>](../../tasks/<domene>/<slug>/oppgave.md)[, …]   (når det finnes oppgaver)
-- **Krav**: <N> feature-filer, <N> `@implemented`, commit `<sha>` (<YYYY-MM-DD>)
+- **Krav**: <N> feature-filer, <N> `@implemented`, <N> flyter, commit `<sha>` (<YYYY-MM-DD>)
 - **Verifisering**: [verify-<YYYY-MM-DD>-<HHMM>.md](<sti til rapporten>)[, …] | –   (verify-rapportene testplanen bygger på)
 - **Confluence**: –
 - **Laget**: <YYYY-MM-DD> av fs-testplan
@@ -29,7 +29,7 @@ Testplan for «<leveranse>». Planen sier hva som testes, av hvem, hvor og når,
 |---|---|
 | Hva er levert | <2–4 setninger: hva brukeren kan gjøre, og hvor i løsningen> |
 | Versjon | <versjon, release eller dato for deploy> |
-| Testmiljø | [<url>](<url>) |
+| Testmiljø | [<url>](<url>) (alltid et testmiljø, aldri produksjon) |
 | Feature-flagg | <flagg som må være på, eller «Ingen»> |
 | Kilde | <scopet, oppgaven, mappa eller filene, med lenke til GitHub> |
 | Scope | `@scope-<slug>` · [scope-fila på GitHub](<lenke>), eller «Ingen» |
@@ -45,11 +45,27 @@ Testplan for «<leveranse>». Planen sier hva som testes, av hvem, hvor og når,
 
 Testbrukerne finnes i minst to organisasjoner, så vi kan teste at ingen ser data de ikke skal se.
 
+**Bare når teamet har svart ja på CDP (steg 4b):** legg til kolonnene `Nøkkel` (etter `Nr`), `Innlogging` og `Start-URL` (etter `Organisasjon`):
+
+| Nr | Nøkkel | Navn | Rolle | Organisasjon | Innlogging | Start-URL | Brukes til |
+|---|---|---|---|---|---|---|---|
+| 1 | <nøkkel> | <navn> | <rolle fra kravene> | <organisasjon> | <verdi i «Overstyrt bruker», Chrome-profil eller Feide-ID> | <URL> | <hvilke krav eller deler> |
+
+Nøkkelen er et stabilt navn i kebab-case for rollen (`brukeradministrator-alle-miljoer`), og endres ikke om navnet på testbrukeren byttes. Aldri passord i testplanen. Ved nei står kolonnene ikke i testplanen. Se [`roller-og-testdata.md`](../../../references/akseptansetest/roller-og-testdata.md).
+
 ### Testdata
 
 | Hva | Navn | Hvor | Kan settes tilbake |
 |---|---|---|---|
 | <opptak, søker, regelverkssamling …> | <navn> | <lenke eller sted> | Ja / Nei / <hvordan> |
+
+**Bare når teamet har svart ja på CDP:** legg til kolonnene `Nøkkel` (etter `Hva`), og `Søk/URL`, `Utgangstilstand` og `Brukes av` (etter `Hvor`):
+
+| Hva | Nøkkel | Navn | Hvor | Søk/URL | Utgangstilstand | Brukes av | Kan settes tilbake |
+|---|---|---|---|---|---|---|---|
+| <opptak, søker, regelverkssamling …> | <nøkkel> | <navn> | <lenke eller sted> | <hvordan objektet åpnes> | <hva testen forutsetter> | <Feature-ID og scenario, eller testcase-Nr> | Ja / Nei / <hvordan> |
+
+Kolonnene for CDP står bare i testplanen, ikke i testcasene for den eksterne testen.
 
 ## Omfang
 
@@ -63,9 +79,26 @@ Det som testes, er kravene som er `@implemented`. Feature-ID-ene her er kravene 
 |---|---|---|---|
 | [<tittel>](<lenke til GitHub på commiten>) | `@DOM-SUB-KAP-NNN` | `@implemented` | <N> |
 
-Scenarioene i testen er de leverte scenarioene i gating-settet: alle scenarioene som ikke er utkast, avviklet, har åpne spørsmål eller er demo, og som ikke er under endring. Er kilden et scope, og kravet ble levert før, er det bare delene som er levert i scopet.
+Åpent spørsmål: `@DOM-SUB-KAP-NNN` «<scenario eller regel>»: <spørsmålet>. Testes som det står.   [én linje per scenario eller regel i testen med `@openquestion`]
 
-De automatiske testene av de samme kravene: `npx playwright test --grep @scope-<slug>` (eller `--grep "@<ID-1>|@<ID-2>"` uten scope)
+Scenarioene i testen er de leverte scenarioene i gating-settet: alle scenarioene som ikke er utkast, avviklet eller demo, og som ikke er under endring. Et levert scenario med et åpent spørsmål testes som det står, og spørsmålet står under tabellen. Er kilden et scope, og kravet ble levert før, er det bare delene som er levert i scopet.
+
+De automatiske testene av de samme kravene: `npx playwright test --grep @scope-<slug>` (eller `--grep "@<ID-1>|@<ID-2>"` uten scope). Med flyter: `--grep "@scope-<slug>|@FLY-<ID>"`.
+
+## Flyter
+
+Flytene viser hva som skjer fra ett krav til det neste, på tvers av domener. Her testes overleveringene: at det ett krav lager, blir brukt av det neste. Kravene i fasene testes hver for seg i «Omfang».
+
+### <Tittel på flyten> (`@FLY-PRO-FLY-NNN`, `@implemented` | `@planned`)
+
+- **Testes**: hele flyten | deler av flyten (fasene <fasene>)
+- **Hvorfor**: <flyten er levert / <n> av <N> faser er levert / teamet valgte fasene i leveransen>
+
+| Fase | Bygger på | Fase levert | I leveransen | Scenarioer i testen |
+|---|---|---|---|---|
+| <regeltittel> | `@DOM-SUB-KAP-NNN` (`@implemented`), `@DOM-SUB-KAP-NNN` (`@planned`) | ja / nei / mangler krav | ja / nei | <N> / – |
+
+Ingen av kravene er med i en flyt.                                     <når det ikke er flyter>
 
 ## Venter på verifisering
 
@@ -82,6 +115,7 @@ Ingen.                                                                  <når ta
 | Hva | Hvorfor |
 |---|---|
 | <krav eller scenario> | <venter på verifisering / ikke avklart ennå: åpent spørsmål / kommer senere / skal fjernes> |
+| <flyt: fase eller overlevering> | <fasen er ikke levert / fasen mangler krav / overleveringen er ikke funnet / fasen er ikke i leveransen / kjent brudd> |
 
 ## Roller
 
@@ -113,6 +147,8 @@ Klart når testansvarlig har logget inn som testbruker og ser testdataene.
 | 5 | `fs-verify` har funnet alle scenarioene, og en annen person har kontrollert rapporten | <fra verify-rapporten i steg 1, og steg 3, eller «Venter»> |
 | 6 | Testcasene er laget og gått gjennom av testansvarlig | Venter |
 | 7 | Testansvarlig har logget inn som testbruker og ser testdataene | [Fylles ut av testansvarlig] |
+| 8 | CDP-agenten kan logge inn som hver testbruker, og nøklene i testbrukere og testdata er utfylt (rad 8 tas bare med når teamet har valgt CDP) | [Fylles ut av teamet] |
+| 9 | <Kjent brudd i flyten «<tittel>»: <bruddet, med saken>> er løst | <Venter / Løst>   (én rad per kjent brudd, bare når flyten har det, nummerert etter de andre radene) |
 
 ## Kriterier for godkjent
 
@@ -136,6 +172,7 @@ Testansvarlig skriver hva som skal til for at testen blir godkjent, helst før u
 | 2. Testplan | (denne siden) | Laget | <YYYY-MM-DD> |
 | 3. Testrapport – verifisering | – | Venter | |
 | 4. Intern akseptansetest | – | Venter | |
+| 4b. CDP-kjøring (valgfri) | – | Venter / Ikke aktuell | |
 | 5. Testrapport – intern | – | Venter | |
 | 6. Ekstern akseptansetest | – | Venter / Ikke aktuell | |
 | 7. Testrapport – ekstern | – | Venter / Ikke aktuell | |

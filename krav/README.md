@@ -2,7 +2,7 @@
 
 Denne mappa inneholder akseptansekravene for løsningene som lages av studieadministrasjon i Sikt. Kravene skrives som Gherkin-scenarioer i `.feature`-filer. De er lesbare kravspesifikasjoner for domeneeksperter, og driver de automatiserte testene i `tester/`. Kravet beskriver atferden løsningen skal ha, og koden sjekkes mot kravet, ikke omvendt.
 
-Er du ny? [Kom i gang med krav i FS](../kom-i-gang.html) er en kort innføring i hvor kravene ligger, hvordan en kravfil ser ut, og hvordan du bidrar.
+Er du ny? [Kom i gang med krav og akseptansetest i FS](../kom-i-gang.html) er en innføring i hvor kravene ligger, hvordan en kravfil ser ut, og hele prosessen steg for steg, fra kravene skrives til leveransen er godkjent i akseptansetesten.
 
 Dette dokumentet er de gjeldende konvensjonene for alle kravfiler. Claude leser den samme fila (via `.claude/rules/gherkin-conventions.md`), så det finnes bare én versjon av reglene.
 
@@ -259,7 +259,7 @@ Forskjellen på `@openquestion` alene og `@draft @openquestion`:
 
 | Tagging på `Regel:`/`Scenario:` | Betyr |
 |---|---|
-| `@openquestion` | Delen er klar til implementasjon, men en detalj må lukkes før akkurat den detaljen bygges. |
+| `@openquestion` | Delen er klar til implementasjon, og bygges og leveres som den står. Spørsmålet må fortsatt besvares, og står i verify-rapporten og testplanen til det er lukket. |
 | `@draft @openquestion` | Delen som helhet er ikke klar, og skal holdes utenfor implementasjonen til den er avklart. |
 
 ```gherkin
@@ -401,6 +401,9 @@ Referansene i begge retninger:
 | Hva må sjekkes når kravet endres? | `grep -rn "@depends-on-OPT-BEH-BEH-011" krav/` |
 | Hva henger sammen med kravet? | `grep -rnE "@(depends-on\|ref)-OPT-BEH-BEH-011" krav/` |
 | Hvilke tester bygger på kravet? | `npx playwright test --grep @depends-on-OPT-BEH-BEH-011` |
+| Hvilke CDP-tester må sjekkes når kravet endres? | `grep -rn "@depends-on-OPT-BEH-BEH-011" cdp-tester/` |
+
+CDP-testene i [`cdp-tester/`](../cdp-tester/README.md) bruker de samme taggene, med de samme betydningene: `@depends-on-<Feature-ID>` på en test som må sjekkes når kravet endres, og `@ref-<Feature-ID>` på et krav testen bare bruker som forutsetning. Kravene peker ikke tilbake til testene.
 
 Referansene settes av `fs-krav`. Når et krav endres, slettes eller får ny ID, lister `fs-krav` kravene som refererer til det. `fs-specify` og `fs-specify-delta` tar med kravene det bygges på, og sier fra når et av dem ikke er `@planned` eller lenger.
 
@@ -417,7 +420,7 @@ Referansene settes av `fs-krav`. Når et krav endres, slettes eller får ny ID, 
 
 Sier noe om at et **konkret scenario eller regel** har en uavklart detalj, selv om resten av kravet er klart til implementasjon.
 
-- `@openquestion` – Scenarioet/regelen har en uavklart detalj som må besvares før implementasjon kan begynne i akkurat den delen. Plasseres på scenario- eller regel-nivå (ikke på `Egenskap:` – bruk `@draft` hvis hele kravet er utkast, og `@draft @openquestion` hvis hele regelen/scenarioet er utkast, se *Delvis utkast*). *(sjekkes automatisk)* Skal **alltid** følges av en `# ÅPNE SPØRSMÅL:`-kommentar like under som beskriver spørsmålet. *(sjekkes automatisk)* Taggen gjør det mulig å søke på tvers av krav-mappa (`grep -r @openquestion krav/`) for å finne gjenstående avklaringer. En `Egenskap:` kan være `@planned` selv om ett scenario er `@openquestion` – det markerer at hovedflyten er klar, men at en detalj må lukkes før delen kan implementeres.
+- `@openquestion` – Scenarioet/regelen har en uavklart detalj som må besvares, men delen bygges, verifiseres og testes som den står. Plasseres på scenario- eller regel-nivå (ikke på `Egenskap:` – bruk `@draft` hvis hele kravet er utkast, og `@draft @openquestion` hvis hele regelen/scenarioet er utkast, se *Delvis utkast*). *(sjekkes automatisk)* Skal **alltid** følges av en `# ÅPNE SPØRSMÅL:`-kommentar like under som beskriver spørsmålet. *(sjekkes automatisk)* Taggen gjør det mulig å søke på tvers av krav-mappa (`grep -r @openquestion krav/`) for å finne gjenstående avklaringer. En `Egenskap:` kan være `@planned` selv om ett scenario er `@openquestion` – det markerer at delen er klar, men at en detalj må avklares. Skal delen holdes utenfor til spørsmålet er besvart, tagges den `@draft @openquestion`.
 
 ## Flyter
 
@@ -478,6 +481,8 @@ Et brudd i overleveringen kan skjules av kravene. Testene for hvert krav setter 
 | Flytens egen status | Taggen på flyten | at overleveringene virker i koden |
 
 Flytens egen status går `@draft` →(`fs-krav`)→ `@planned` →(`fs-verify`)→ `@implemented`. Den hentes ikke inn i en oppgave, og hopper over `@in-progress`. `fs-verify` setter `@implemented` når alle fasene er levert, og den har funnet i koden både stedet der hver overlevering lages og stedet der den brukes.
+
+I akseptansetesten tas flytene som går gjennom kravene i leveransen, med (`fs-testplan`), og overleveringene testes: hele flyten når den er `@implemented`, ellers de leverte fasene i leveransen.
 
 Flytene finnes med `grep`, som referansene:
 
