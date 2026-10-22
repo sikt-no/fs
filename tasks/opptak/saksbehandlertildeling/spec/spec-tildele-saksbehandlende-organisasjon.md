@@ -77,6 +77,8 @@ Disse delene er validert, men utsatt. Kravet blir stående som `@in-progress` ti
   - **Endret (2026-10-22):** `Gitt` sier nå at standardregelen har unntaket.
 - [x] «Tildelingsreglene» i kravet (åpent spørsmål fra main, begrepslista nr. 17).
   - **Beslutning (2026-10-22, Håkon):** begrepet er «behandlertildelingsregel», som i FS Admin, og erstatter både «tildelingsregel» og «saksbehandlertildelingsregel» (begrepslista nr. 17). Byttet overalt, også i flyten `@FLY-OPT-SAK-001`. To scenarioer har fått ny tittel: `Behandlertildelingsreglene er ikke tilgjengelige i lokale opptak` og `Deltakende lærested kan ikke endre behandlertildelingsreglene`.
+- [x] `Søknaden får én sak per saksbehandlende organisasjon` hadde en tilstand i `Når` (åpent spørsmål fra main).
+  - **Beslutning (2026-10-22, Håkon):** `Når søknadsalternativene fordeles`, som i reglene om fordeling. `Gitt` sier hvilken organisasjon som saksbehandler hvert søknadsalternativ.
 
 
 ## Rute

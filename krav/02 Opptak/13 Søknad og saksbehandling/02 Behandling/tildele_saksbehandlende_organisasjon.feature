@@ -305,13 +305,10 @@ Egenskap: Tildele saksbehandlende organisasjon
         | søkeren endrer søknaden                                           |
         | saksbehandleren legger til et søknadsalternativ på vegne av søkeren |
 
-    @openquestion
     Scenario: Søknaden får én sak per saksbehandlende organisasjon
-      # ÅPNE SPØRSMÅL:
-      # - «Når søknadsalternativene er fordelt» er en tilstand, ikke en handling. Hvilken handling er det,
-      #   for eksempel «Når søkeren sender inn søknaden»?
-      Gitt at søkerens søknadsalternativer fordeles til "NTNU" og "Universitetet i Oslo"
-      Når søknadsalternativene er fordelt
+      Gitt at søkeren har søkt "Sykepleie, NTNU" og "Informatikk, UiO"
+      Og at "Sykepleie, NTNU" skal saksbehandles av "NTNU" og "Informatikk, UiO" av "Universitetet i Oslo"
+      Når søknadsalternativene fordeles
       Så har søknaden én sak hos "NTNU" og én sak hos "Universitetet i Oslo"
 
     Scenario: Tilbyder som ikke er saksbehandlende organisasjon får ingen sak
