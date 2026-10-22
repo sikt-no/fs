@@ -13,7 +13,7 @@ Kravet var én fil (`vitnemålsbehandling.feature`, `@OPT-BEH-BEH-004`) fram til
 | L3 Fagvalg per poengvariant | [velge_fag_per_poengvariant.feature](velge_fag_per_poengvariant.feature) | `@OPT-BEH-BEH-007` | #609 | L2 | middels | `@draft` |
 | L4 Manuell inntasting og endring av fag | [legge_inn_og_endre_fag.feature](legge_inn_og_endre_fag.feature) | `@OPT-BEH-BEH-008` | #610 | L2, L3 | stor | `@draft` |
 | L5 Sammenligning av vitnemål | [sammenligne_vitnemål.feature](sammenligne_vitnemål.feature) | `@OPT-BEH-BEH-009` | #611 | L1 | liten | `@draft` |
-| L6 Varsel ved nytt vitnemål fra NVB | [varsle_om_nytt_vitnemål.feature](varsle_om_nytt_vitnemål.feature) | `@OPT-BEH-BEH-010` | #612 | L2 | liten | `@draft` |
+| L6 Varsel ved nytt vitnemål fra NVB | [varsle_om_nytt_vitnemål.feature](varsle_om_nytt_vitnemål.feature) | `@OPT-BEH-BEH-021` | #612 | L2 | liten | `@draft` |
 
 L2 beholder Feature-ID-en til den opprinnelige fila, fordi den er kjernen i initiativet.
 

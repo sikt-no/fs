@@ -11,17 +11,29 @@ Egenskap: Opptaksinnstillinger per utdanningstilbud
   # Innstillinger for flere utdanningstilbud av gangen står i sette_innstillinger_for_flere_utdanningstilbud.feature (#599).
   # Antall studieplasser står i sette_studieplasser_og_antall_tilbud.feature (#596).
   # Tidlig søknadsfrist og dokumentasjonsfrist står i 04 Behandle et utdanningstilbud/sette_tidlig_søknadsfrist.feature (SHI-708).
+  # ÅPNE SPØRSMÅL:
+  # - Kommentarene over viser til tre krav i fritekst. Skal de bli referanser på Egenskap-linja:
+  #   @ref-OPT-OPT-UTD-008 (sette_innstillinger_for_flere_utdanningstilbud.feature),
+  #   @ref-OPT-OPT-UTD-007 (sette_studieplasser_og_antall_tilbud.feature) og
+  #   @ref-OPT-OPT-UTD-025 (sette_tidlig_søknadsfrist.feature)?
+  # - Kommentaren mellom regelen om poenggrensen og regelen om saksbehandlertildelingsregel viser til
+  #   antall_tilbud_som_skal_gis.feature. Skal den bli @ref-OPT-PLA-INN-001, og på hvilken del?
+
   Bakgrunn:
     Gitt at opptaksforvalter er innlogget
     Og at opptaket "Samordna opptak 2027" har utdanningstilbud
 
+  @openquestion
   Regel: Opptaksforvalter kan sette kompetanseregelverk og rangeringsregelverk
+    # ÅPNE SPØRSMÅL:
+    # - Kommentaren om at regelverkssamlingen ikke kan byttes, viser til innstillinger.feature i fritekst.
+    #   Skal regelen ha @ref-OPT-OVO-INN-001?
 
     Scenario: Sette regelverk på ett utdanningstilbud
       Når opptaksforvalter velger utdanningstilbudet "Sykepleie, høst 2027"
       Og opptaksforvalter setter kompetanseregelverk til "GSK"
       Og opptaksforvalter setter rangeringsregelverk til "Ordinær rangering"
-      Så vurderes søkere til dette utdanningstilbudet etter GSK-kravene
+      Så vurderes søkere til "Sykepleie, høst 2027" etter GSK-kravene
       Og søkere rangeres etter reglene i "Ordinær rangering"
 
     Scenario: Kun regelverk fra opptakets regelverkssamling kan velges
@@ -52,7 +64,12 @@ Egenskap: Opptaksinnstillinger per utdanningstilbud
   # for utdanningstilbudene sine, og kan legge til og fjerne utdanningskvoter. Utdanningstilbudet får ikke alle
   # kvotetypene automatisk. Det erstatter avklaringen 2026-10-16 om at deltakende organisasjoner verken kan legge
   # til eller fjerne utdanningskvoter.
+  @openquestion
   Regel: Lærestedet velger utdanningskvotene blant kvotetypene i regelverkssamlingen
+    # ÅPNE SPØRSMÅL:
+    # - Avklaringene viser til antall_tilbud_som_skal_gis.feature og plassflyt.feature i fritekst. Skal
+    #   regelen ha @ref-OPT-PLA-INN-001 og @ref-OPT-PLA-INN-002 (eller @depends-on-, hvis den må sjekkes
+    #   når de endres)?
 
     Scenario: Legge til utdanningskvoter fra regelverkssamlingen
       Gitt at opptaket bruker regelverkssamlingen "UHG 2027"
@@ -129,8 +146,11 @@ Egenskap: Opptaksinnstillinger per utdanningstilbud
   # AVKLART 2026-10-15: Plassflyten kan ikke settes eller overstyres per utdanningstilbud. Regelen
   # «Opptaksforvalter kan sette plassflyt mellom utdanningskvoter» er fjernet. Utdanningstilbudet viser
   # bare plassflyten mellom utdanningskvotene som er knyttet til det.
-  @depends-on-OPT-REG-KVO-003 @depends-on-OPT-REG-KVO-004
+  @depends-on-OPT-REG-KVO-003 @depends-on-OPT-REG-KVO-004 @openquestion
   Regel: Lærestedene ser plassflyten og kvoteprioriteten for utdanningstilbudene sine
+    # ÅPNE SPØRSMÅL:
+    # - Kommentaren over regelen viser til plassflyt.feature i fritekst. Skal regelen ha
+    #   @ref-OPT-PLA-INN-002?
 
     # Ønske meldt 2026-10-13, utvidet med kvoteprioriteten 2026-10-15. Plassflyten og kvoteprioriteten settes i
     # regelverkssamlingen (endret 2026-10-21), se 10 Regelverk/04 Kvoter/sette_plassflyt.feature og
@@ -166,13 +186,17 @@ Egenskap: Opptaksinnstillinger per utdanningstilbud
       Når opptaksforvalter ved lærestedet ser utdanningstilbudet "Sykepleie, høst 2027"
       Så ser opptaksforvalter ikke muligheten til å endre plassflyten eller kvoteprioriteten
 
-  @depends-on-OPT-OVO-INN-001
+  @depends-on-OPT-OVO-INN-001 @openquestion
   Regel: Opptaksforvalter kan markere at et utdanningstilbud tilbyr tidlig opptak
+    # ÅPNE SPØRSMÅL:
+    # - Kommentarene i regelen viser til publisere_svar_på_tidlig_opptak.feature og
+    #   gi_tilbudsgaranti_ved_tidlig_opptak.feature i fritekst. Skal regelen ha @ref-OPT-BEH-BEH-014 og
+    #   @ref-OPT-BEH-BEH-007, eller skal scenarioet om poenggrensen ha @depends-on-OPT-BEH-BEH-007?
 
     Scenario: Markere at utdanningstilbudet tilbyr tidlig opptak
       Gitt at opptaket åpner for tidlig opptak
       Når opptaksforvalter markerer at utdanningstilbudet "Sykepleie, høst 2027" tilbyr tidlig opptak
-      Så kan søkere som oppfyller kriteriene få tidlig svar på dette utdanningstilbudet
+      Så kan søkere som oppfyller kriteriene få tidlig svar på "Sykepleie, høst 2027"
       # Svaret på tidlig opptak publiseres for hele opptaket når tidligopptaket
       # gjennomføres, ikke per utdanningstilbud, se publisere_svar_på_tidlig_opptak.feature
       # (avklart 25.09.2026, uten egen publiseringsdato fra 09.10.2026).
@@ -188,7 +212,12 @@ Egenskap: Opptaksinnstillinger per utdanningstilbud
     # utdanningstilbud, se 11 Opprette og vedlikeholde opptak/03 Innstillinger/
     # innstillinger.feature (avklart 09.10.2026, review av PR #654).
 
+  @openquestion
   Regel: Deltakende organisasjon kan ikke endre poenggrensen for tidlig opptak etter fristen
+    # ÅPNE SPØRSMÅL:
+    # - Regelen bruker fristen for å sette poenggrenser fra frister_og_hendelser.feature. Skal den ha
+    #   @depends-on-OPT-OVO-FRI-001?
+
     # Virkningen av fristen for å sette poenggrenser for tidlig opptak, som opptaksforvalter setter i
     # 11 Opprette og vedlikeholde opptak/04 Frister/frister_og_hendelser.feature.
     # Lagt til 2026-10-19 etter akseptansetesten av opprette og vedlikeholde opptak.
@@ -233,11 +262,11 @@ Egenskap: Opptaksinnstillinger per utdanningstilbud
 
     Scenario: Velge å vise poenggrense for søker
       Når opptaksforvalter angir at poenggrense skal vises for søkere på utdanningstilbudet "Sykepleie, høst 2027"
-      Så kan søkere se poenggrensen for dette utdanningstilbudet
+      Så kan søkere se poenggrensen for "Sykepleie, høst 2027"
 
     Scenario: Velge å vise ventelistenummer for søker
       Når opptaksforvalter angir at ventelistenummer skal vises for søkere på utdanningstilbudet "Sykepleie, høst 2027"
-      Så kan søkere se sitt ventelistenummer for dette utdanningstilbudet
+      Så kan søkere se sitt ventelistenummer for "Sykepleie, høst 2027"
 
   Regel: Opptaksforvalter kan sette opplysninger om tilbudsgaranti
 

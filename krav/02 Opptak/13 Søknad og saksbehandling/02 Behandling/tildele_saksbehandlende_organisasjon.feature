@@ -32,8 +32,14 @@ Egenskap: Tildele saksbehandlende organisasjon
 
   # ── 1. Oppsett ───────────────────────────────────────────────
 
-  @ref-OPT-OPT-UTD-004
+  @ref-OPT-OPT-UTD-004 @openquestion
   Regel: Opptaksforvalteren ved forvaltende organisasjon setter opp tildelingsreglene for opptaket
+    # ÅPNE SPØRSMÅL:
+    # - Begrepslista (nr. 17) sier at «tildelingsregel» er erstattet av «saksbehandlertildelingsregel».
+    #   Er «tildelingsreglene» et samlebegrep for saksbehandlertildelingsreglene, standardregelen og
+    #   unntakene, eller skal ordet byttes? Det gjelder regeltittelen, beskrivelsen, de to siste
+    #   scenarioene i regelen og «tildelingsreglene har unntak» i regelen om unntak.
+
     # Lærestedets valg av saksbehandlertildelingsregel per utdanningstilbud står der.
 
     Scenario: Opprette saksbehandlertildelingsregel
@@ -304,7 +310,11 @@ Egenskap: Tildele saksbehandlende organisasjon
         | søkeren endrer søknaden                                           |
         | saksbehandleren legger til et søknadsalternativ på vegne av søkeren |
 
+    @openquestion
     Scenario: Søknaden får én sak per saksbehandlende organisasjon
+      # ÅPNE SPØRSMÅL:
+      # - «Når søknadsalternativene er fordelt» er en tilstand, ikke en handling. Hvilken handling er det,
+      #   for eksempel «Når søkeren sender inn søknaden»?
       Gitt at søkerens søknadsalternativer fordeles til "NTNU" og "Universitetet i Oslo"
       Når søknadsalternativene er fordelt
       Så har søknaden én sak hos "NTNU" og én sak hos "Universitetet i Oslo"
@@ -340,7 +350,14 @@ Egenskap: Tildele saksbehandlende organisasjon
       # sendte inn først. Som hovedregel endres den ikke når søkeren sender inn på nytt, endrer
       # prioriteringen, sletter eller legger til søknadsalternativer.
 
+  @openquestion
   Regel: Søknadsalternativene flyttes når utdanningsbakgrunnen endres til en bakgrunn med unntak
+    # ÅPNE SPØRSMÅL:
+    # - Fristen for endring av utdanningsbakgrunn gjelder saksbehandlerens endring (avklart i fs-specify
+    #   28.09.2026). Gjelder den også søkerens egen endring? Kan søkeren endre utdanningsbakgrunnen sin
+    #   etter fristen, og flyttes søknadsalternativene da, slik «Søkeren bytter til utenlandsk
+    #   utdanningsbakgrunn» sier uten frist?
+    # - Regelen bruker fristen fra OPT-OVO-FRI-001. Skal den ha @depends-on-OPT-OVO-FRI-001?
 
     Scenario: Søkeren bytter til utenlandsk utdanningsbakgrunn
       Gitt at søkerens søknadsalternativer er fordelt til "Universitetet i Oslo"
@@ -380,7 +397,7 @@ Egenskap: Tildele saksbehandlende organisasjon
         | Dispensasjon       |
 
     Scenariomal: Saksbehandlerens endring til utenlandsk utdanningsbakgrunn når fristen <frist>
-      Gitt at fristen for selvbetjent endring av utdanningsbakgrunn <frist>
+      Gitt at fristen for endring av utdanningsbakgrunn <frist>
       Og at søkerens søknadsalternativer er fordelt til "Universitetet i Oslo"
       Når saksbehandleren ved Universitetet i Oslo endrer søkerens utdanningsbakgrunn til "Utenlandsk"
       Så er <organisasjon> saksbehandlende organisasjon for alle søknadsalternativene
@@ -391,7 +408,7 @@ Egenskap: Tildele saksbehandlende organisasjon
         | har gått ut       | "Universitetet i Oslo" |
 
     Scenario: Opptaksforvalteren ved forvaltende organisasjon er ikke bundet av fristen
-      Gitt at fristen for selvbetjent endring av utdanningsbakgrunn har gått ut
+      Gitt at fristen for endring av utdanningsbakgrunn har gått ut
       Og at søkerens søknadsalternativer er fordelt til "Universitetet i Oslo"
       Når opptaksforvalteren ved HK-dir endrer søkerens utdanningsbakgrunn til "Utenlandsk"
       Så er "HK-dir" saksbehandlende organisasjon for alle søknadsalternativene
@@ -429,7 +446,7 @@ Egenskap: Tildele saksbehandlende organisasjon
       Så ser søkeren saksbehandlende organisasjon for hvert søknadsalternativ
       Men søkeren ser ikke sakene
 
-    Scenario: Saksbehandleren ved forvaltende organisasjon ser bare sakene hos forvaltende organisasjon
+    Scenario: Saksbehandleren ved forvaltende organisasjon ser bare saken hos forvaltende organisasjon
       Gitt at søknaden har saker hos "HK-dir" og "Universitetet i Oslo"
       Når saksbehandleren ved HK-dir åpner søknaden
       Så ser saksbehandleren bare saken hos "HK-dir"

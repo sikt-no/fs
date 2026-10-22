@@ -12,19 +12,30 @@ Egenskap: Saksbehandlertildeling
     Og at "Universitetet i Oslo", "UiT Norges arktiske universitet", "NTNU" og "Høgskulen på Vestlandet" deltar i opptaket
     Og at opptaket har en standard saksbehandlertildelingsregel med «Alle som deltar i opptaket»
 
-  @depends-on-OPT-OVO-SAM-001 @depends-on-OPT-BEH-BEH-011
+  @depends-on-OPT-OVO-SAM-001 @depends-on-OPT-BEH-BEH-011 @openquestion
   # OPT-OVO-SAM-001: lærestedene som deltar i opptaket.
   # OPT-BEH-BEH-011: «Opptaksforvalteren ved forvaltende organisasjon setter opp tildelingsreglene for opptaket»
   # og «Et lærested kan ha saksbehandlingen sin hos en annen organisasjon i opptaket».
   Regel: Tildelingsreglene settes for opptaket
+    # ÅPNE SPØRSMÅL:
+    # - Begrepslista (nr. 17) sier at «tildelingsregel» er erstattet av «saksbehandlertildelingsregel».
+    #   Er «tildelingsreglene» et samlebegrep for saksbehandlertildelingsreglene, standardregelen og
+    #   unntakene, eller skal ordet byttes (her, i beskrivelsen og i OPT-BEH-BEH-011)?
+    # - I OPT-BEH-BEH-011 betyr «SPE» «Bare tilbyderen – også for studieønsker uten egen regel», og «UVH»
+    #   betyr «Bare tilbyderen – bare dette studieønsket». Skal flyten bruke «UVH», så testdataene
+    #   betyr det samme i flyten og i kravet?
 
     Scenario: Lærestedene kan velge saksbehandlertildelingsregelen opptaket har satt opp
       Når opptaksforvalteren ved HK-dir oppretter den aktive saksbehandlertildelingsregelen "SPE" med «Bare tilbyderen – bare dette studieønsket»
       Så kan opptaksforvalteren ved NTNU velge "SPE" for utdanningstilbudene ved NTNU i opptaket
 
-  @depends-on-OPT-OPT-UTD-004
+  @depends-on-OPT-OPT-UTD-004 @openquestion
   # «Opptaksforvalter kan velge saksbehandlertildelingsregel per utdanningstilbud»
   Regel: Utdanningstilbudet får saksbehandlertildelingsregel
+    # ÅPNE SPØRSMÅL:
+    # - Fasen tester den samme overleveringen som fase 1: en aktiv saksbehandlertildelingsregel i
+    #   opptaket kan velges på utdanningstilbudet. Skal fase 1 slutte med at «SPE» er aktiv i
+    #   opptaket, eller skal de to fasene slås sammen?
 
     Scenario: Utdanningstilbudet får saksbehandlertildelingsregelen fra opptaket
       Gitt at saksbehandlertildelingsregelen "SPE" er aktiv i opptaket
@@ -35,7 +46,13 @@ Egenskap: Saksbehandlertildeling
   # «Søknadsalternativene fordeles når søknaden sendes inn eller endres, og fordelingen ligger fast»
   Regel: Søknadsalternativene fordeles når søknaden sendes
 
+    @openquestion
     Scenario: Søknaden blir én sak hos hver saksbehandlende organisasjon
+      # ÅPNE SPØRSMÅL:
+      # - Steget om at "Universitetet i Oslo" er saksbehandlende organisasjon for "Informatikk, UiO" og
+      #   "Historie, UiT", og steget om "NTNU", gjentar fordelingsreglene i OPT-BEH-BEH-011. Overleveringen
+      #   er at saksbehandlertildelingsregelen på utdanningstilbudet brukes når søknaden sendes inn, og at
+      #   søknaden blir én sak per organisasjon. Holder det med de to siste stegene?
       Gitt at "Utøvende musikk, NTNU" har saksbehandlertildelingsregelen "SPE"
       Og at "Informatikk, UiO" og "Historie, UiT" ikke har egen saksbehandlertildelingsregel
       Når søkeren sender inn søknaden med "Informatikk, UiO", "Utøvende musikk, NTNU" og "Historie, UiT" i den rekkefølgen
@@ -43,16 +60,26 @@ Egenskap: Saksbehandlertildeling
       Og "NTNU" er saksbehandlende organisasjon for "Utøvende musikk, NTNU"
       Og søknaden har én sak hos "Universitetet i Oslo" og én sak hos "NTNU"
 
+    @openquestion
     Scenario: Organisasjonen som saksbehandler på vegne av lærestedet får saken
+      # ÅPNE SPØRSMÅL:
+      # - "Arkitektur- og designhøgskolen i Oslo" og "OsloMet" deltar ikke i opptaket i bakgrunnen, og
+      #   OPT-BEH-BEH-011 krever at organisasjonen som saksbehandler på vegne av lærestedet, deltar. Skal
+      #   scenarioet få steget `Gitt at "Arkitektur- og designhøgskolen i Oslo" og "OsloMet" deltar i opptaket`?
       Gitt at "OsloMet" saksbehandler på vegne av "Arkitektur- og designhøgskolen i Oslo" i opptaket
       Når søkeren sender inn søknaden med "Arkitektur, AHO"
       Så har søknaden én sak hos "OsloMet"
 
-  @depends-on-OPT-BEH-BEH-011 @depends-on-OPT-BEH-BEH-010
+  @depends-on-OPT-BEH-BEH-011 @depends-on-OPT-BEH-BEH-010 @openquestion
   # OPT-BEH-BEH-011: «Saksbehandlende organisasjon ser bare saker hos organisasjonen» og
   # «Tilbyderen ser saksbehandlingen når en annen organisasjon saksbehandler utdanningstilbudet».
   # OPT-BEH-BEH-010: tilbudsgarantien tilbyderen setter.
   Regel: Den saksbehandlende organisasjonen ser saken
+    # ÅPNE SPØRSMÅL:
+    # - Scenarioet om tilbudsgaranti gjelder tilbyderen, ikke den saksbehandlende organisasjonen. Skal det
+    #   flyttes til en egen fase («Tilbyderen setter tilbudsgaranti»), eller skal regeltittelen utvides?
+    # - Begge scenarioene står nesten ordrett i OPT-BEH-BEH-011 («Saksbehandleren ser bare saken hos
+    #   organisasjonen sin» og «Tilbyderen setter tilbudsgaranti»). Hvilken overlevering skal fasen vise?
 
     Scenario: Saksbehandleren ved den saksbehandlende organisasjonen ser saken
       Gitt at søknaden har saker hos "Universitetet i Oslo" og "NTNU"
