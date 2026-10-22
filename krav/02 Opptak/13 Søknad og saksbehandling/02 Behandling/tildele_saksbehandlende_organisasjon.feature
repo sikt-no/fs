@@ -235,6 +235,7 @@ Egenskap: Tildele saksbehandlende organisasjon
     Scenario: Unntaket går foran saksbehandlertildelingsregel der bare tilbyderen saksbehandler
       Gitt at "Utøvende musikk, NTNU" har saksbehandlertildelingsregelen "SPE"
       Og at "SPE" har unntak som fordeler "Utenlandsk" til HK-dir
+      Og at standardregelen har unntak som fordeler "Utenlandsk" til HK-dir
       Og at søkeren har utdanningsbakgrunn "Utenlandsk"
       Og at søkeren har søkt "Informatikk, UiO" og "Utøvende musikk, NTNU" i den rekkefølgen
       Når søknadsalternativene fordeles
@@ -413,11 +414,22 @@ Egenskap: Tildele saksbehandlende organisasjon
       Når opptaksforvalteren ved HK-dir endrer søkerens utdanningsbakgrunn til "Utenlandsk"
       Så er "HK-dir" saksbehandlende organisasjon for alle søknadsalternativene
 
-    Scenario: Søknadsalternativet saksbehandles på nytt hos organisasjonen det flyttes til
-      Gitt at "Informatikk, UiO" har tilbudsgaranti
+    Scenariomal: Søknadsalternativet saksbehandles på nytt hos organisasjonen det flyttes til
+      Gitt at "Informatikk, UiO" har tilbudsgaranti fra <rolle>
       Når "Informatikk, UiO" flyttes fra "Universitetet i Oslo" til "HK-dir"
       Så starter saksbehandlingen av "Informatikk, UiO" på nytt hos "HK-dir"
-      Og "Informatikk, UiO" har fortsatt tilbudsgaranti
+      Og "Informatikk, UiO" har fortsatt tilbudsgaranti fra <rolle>
+
+      Eksempler:
+        | rolle            |
+        | tilbyder         |
+        | opptaksforvalter |
+
+    Scenario: Tilbudsgarantien fra saksbehandleren følger ikke med til organisasjonen det flyttes til
+      # AVKLART 22.10.2026: garantien fra saksbehandleren er satt av organisasjonen saken flyttes fra.
+      Gitt at "Informatikk, UiO" har tilbudsgaranti fra saksbehandler
+      Når "Informatikk, UiO" flyttes fra "Universitetet i Oslo" til "HK-dir"
+      Så har ikke "Informatikk, UiO" lenger tilbudsgaranti fra saksbehandler
 
     @draft @openquestion
     # ÅPNE SPØRSMÅL:

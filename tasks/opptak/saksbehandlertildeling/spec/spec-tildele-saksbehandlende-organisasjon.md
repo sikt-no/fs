@@ -67,13 +67,14 @@ Disse delene er validert, men utsatt. Kravet blir stående som `@in-progress` ti
 - [x] Saksbehandleren ved HK-dir: kravet sier at saksbehandleren bare ser sakene HK-dir saksbehandler. I dag gir SE_SØKNADSBEHANDLING ved forvaltende organisasjon lesetilgang til alle sakene i opptaket, beskrevet som et bevisst personvernvalg (`V329`, STEK-269).
   - **Beslutning (2026-10-12):** Kravet gjelder. Domeneeksperten bekrefter at saksbehandleren ved HK-dir bare skal se sakene HK-dir saksbehandler. Opptaksforvalteren ved forvaltende organisasjon ser fortsatt alle sakene (regelen «Opptaksforvalteren ved forvaltende organisasjon ser alle sakene i opptaket»). De som laget `V329` (STEK-269), får beskjed om at valget endres.
 - [x] Tilbudsgaranti ved flytting: scenarioet `Søknadsalternativet saksbehandles på nytt hos organisasjonen det flyttes til` sier at tilbudsgarantien følger med. I dag nullstilles garantien som organisasjonen saken flyttes fra, har satt. Gjelder kravet alle garantier, eller bare dem fra forvalter og tilbyder?
-  - **Beslutning (2026-10-22, Håkon):** Tilbudsgarantiene beholdes når saken flyttes, unntatt den saksbehandleren har satt. Koden gjør dette (`BehandlertildelingService`). Kravet må presiseres med hvem som har satt garantien.
+  - **Beslutning (2026-10-22, Håkon):** Tilbudsgarantiene beholdes når saken flyttes, unntatt den saksbehandleren har satt. Koden gjør dette (`BehandlertildelingService`). Kravet er presisert 2026-10-22: scenarioet er en scenariomal for garantien fra tilbyder og opptaksforvalter, og scenarioet `Tilbudsgarantien fra saksbehandleren følger ikke med til organisasjonen det flyttes til` er nytt.
 - [ ] Implementasjonsdetaljer mangler for `tildele_saksbehandlende_organisasjon.feature` (`tildele_saksbehandlende_organisasjon.design.md`). Utsatt fordi Figma-MCP nådde grensen for kall.
 - [ ] Skisse mangler for valget av organisasjon som saksbehandler på vegne av et lærested.
 - [ ] Funn i fs-admin fra [verify-2026-10-21-1600.md](verify-2026-10-21-1600.md), ikke rettet. Lagt inn som [STEK-629](https://sikt.atlassian.net/browse/STEK-629) under STEK-572:
   - Valglista for organisasjon for sektoren henter alle organisasjoner, ikke bare dem som deltar i opptaket (`BehandlertildelingsregelSektorOrganisasjonCombobox.tsx`). Backend avviser først ved lagring.
   - «Opprett» i tildelingsreglene sjekker rollen uten organisasjon (`BehandlertildelingsreglerResultList.tsx:69-72`), så opptaksforvaltere ved deltakende læresteder ser knappen. Backend avviser lagringen.
-- [ ] Presisering i kravet: `Unntaket går foran saksbehandlertildelingsregel der bare tilbyderen saksbehandler` holder bare når standardregelen også har unntaket for «Utenlandsk». Det står ikke i `Gitt`.
+- [x] Presisering i kravet: `Unntaket går foran saksbehandlertildelingsregel der bare tilbyderen saksbehandler` holder bare når standardregelen også har unntaket for «Utenlandsk». Det står ikke i `Gitt`.
+  - **Endret (2026-10-22):** `Gitt` sier nå at standardregelen har unntaket.
 
 ## Rute
 
