@@ -27,8 +27,8 @@
 - [Confluence PFS 3885400152](https://sikt.atlassian.net/wiki/spaces/PFS/pages/3885400152) — «Tilbudsgaranti», dagens løsning i UHG, HYU/FSU og lokale opptak
 - [Confluence PFS 5086576688](https://sikt.atlassian.net/wiki/spaces/PFS/pages/5086576688) — «2026-10-07 Status tilbudsgarantier og Tidlig opptak»
 - [Confluence PFS 4431249457](https://sikt.atlassian.net/wiki/spaces/PFS/pages/4431249457) — «Ting vi må huske på før vi kan gå i produksjon», der overstyring av utdanningskvoten for én søker er parkert (STEK-270)
-- [Figma, node 9840:220112](https://www.figma.com/design/LmoNQlmAuE2FlE0fUo5GoO/FS-Admin---Seksjon-Opptak?node-id=9840-220112) — saksbehandlingen, detaljene for et søknadsalternativ, med en nedtrekksmeny for tilbudsgaranti
-- [Figma, node 16945:72343](https://www.figma.com/design/LmoNQlmAuE2FlE0fUo5GoO/FS-Admin---Seksjon-Opptak?node-id=16945-72343) — behandling av søknad om tidlig opptak, med nedtrekksmenyen for tilbudsgaranti i skuffen (STEK-270)
+- [Figma, node 9840:220112](https://www.figma.com/design/LmoNQlmAuE2FlE0fUo5GoO/FS-Admin---Seksjon-Opptak?node-id=9840-220112) — saksbehandlingen, detaljene for et søknadsalternativ. Tilbudsgarantien står i rammen 9840:223140 som én avkrysningsboks, og skissen er utdatert (se *Åpne spørsmål*)
+- [Figma, node 16945:72343](https://www.figma.com/design/LmoNQlmAuE2FlE0fUo5GoO/FS-Admin---Seksjon-Opptak?node-id=16945-72343) — behandling av søknad om tidlig opptak, med nedtrekksmenyen for tilbudsgaranti i skuffen (STEK-270). Noden finnes ikke lenger i Figma (2026-10-21), og designeren er spurt om en nyere skisse
 
 ## Oppgaver
 
@@ -41,4 +41,5 @@
 
 ## Åpne spørsmål
 
-- [ ] Skissene viser én nedtrekksmeny for tilbudsgaranti, ikke tre felt. I STEK-270 er det avklart at feltene for saksbehandler, tilbyder og opptaksforvalter vises hver for seg, og at et felt for en rolle brukeren ikke har, bare viser verdien. Det står i `@OPT-BEH-BEH-010`. Skal skissene oppdateres, eller holder det at `fs-specify` noterer avviket?
+- [x] Skissene viser én nedtrekksmeny for tilbudsgaranti, ikke tre felt. I STEK-270 er det avklart at feltene for saksbehandler, tilbyder og opptaksforvalter vises hver for seg, og at et felt for en rolle brukeren ikke har, bare viser verdien. Det står i `@OPT-BEH-BEH-010`. Skal skissene oppdateres, eller holder det at `fs-specify` noterer avviket?
+  - **Svar (2026-10-21):** Kravet er riktig, og skissen er utdatert. Det holder at `fs-specify` noterer avviket (se [spec-tilbudsgaranti.md](tilbudsgaranti/spec/spec-tilbudsgaranti.md)). Fs-admin er bygget etter kravet. Designeren er spurt om det finnes en nyere skisse.

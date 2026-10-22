@@ -59,7 +59,7 @@
 #   søknadsfristen (avklart for tidlig opptak 08.10.2026, i OPT-BEH-BEH-007, og stemmer
 #   med koden).
 #
-@OPT-BEH-BEH-010 @must @planned @scope-tilbudsgaranti-2027
+@OPT-BEH-BEH-010 @must @implemented @scope-tilbudsgaranti-2027
 Egenskap: Gi tilbudsgaranti
   Som saksbehandler
   ønsker jeg å gi søkeren tilbudsgaranti på et søknadsalternativ etter en individuell vurdering
@@ -134,9 +134,9 @@ Egenskap: Gi tilbudsgaranti
       Når saksbehandleren skal sette tilbudsgaranti på "Sykepleie, høst 2027"
       Så kan ikke saksbehandleren velge "Reservert studieplass"
 
-  # En endring vises som at tilbudsgarantien er satt på nytt, med den nye typen
-  # (avklart med Daniel 21.10.2026, som i STEK-559). Endringsloggen viser i dag ikke
-  # hvilket søknadsalternativ endringen gjelder, og må endres (STEK-627).
+  # Endringsloggen viser hvilket søknadsalternativ endringen gjelder, og om
+  # tilbudsgarantien er satt, endret eller fjernet (STEK-627). Kravet har ikke et eget
+  # scenario for endret.
   Regel: Endringer i tilbudsgarantien kan spores
 
     Scenario: Se hvem som har satt tilbudsgarantien
