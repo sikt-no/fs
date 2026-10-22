@@ -117,7 +117,7 @@ Finnes testfila fra før:
 
 Vis en kort oppsummering: antall tester og scenarioer generert (og endret, ved oppdatering), antall `@endrer-data`, «Ikke kjørbart» med grunner, nøklene som mangler og det som må fylles ut. Skriv aldri til Confluence uten ja.
 
-Si hva som er neste steg: kjør testene med `cdp`-skillen (se *Før en kjøring*), eller `fs-testplan` for å fylle ut nøklene.
+Si hva som er neste steg: kjør testene med `cdp`-skillen (se *Før en kjøring*, og *Installere `cdp`-skillen* i `cdp-tester/README.md` når den ikke er installert), eller `fs-testplan` for å fylle ut nøklene.
 
 ## Før en kjøring
 
@@ -127,7 +127,7 @@ Si hva som er neste steg: kjør testene med `cdp`-skillen (se *Før en kjøring*
 - **Lesende kjøring som standard.** Scenarioer med `@endrer-data` hoppes over til brukeren ber om dem. Aldri `Fetch.*`, `Network.setCookie(s)`, `Storage.clear*` eller `clearBrowserCookies`, og aldri `handleJavaScriptDialog({accept:true})` uten at scenarioet sier hva dialogen er (eksemplene i `dialogs.md` aksepterer alt).
 - **Tilkobling.** `cdp`-skillen kobler til brukerens kjørende Chrome (`chrome://inspect/#remote-debugging`, brukeren klikker Allow), og agenten ser alle cookies i profilen. Bruk en egen Chrome-profil per testbruker (`--user-data-dir`), og la brukeren logge inn med Feide testbruker selv. Bytte av testbruker er bytte av profil, ikke cookies.
 - **Bevis.** Tekst og DOM (`Runtime.evaluate`) er primærbevis, skjermbilder sekundære. Tell rader i skjermen, ikke via GraphQL: et direkte API-kall kan gi flere rader enn løsningen viser. Resultatet skrives til `kjoring-<YYYY-MM-DD-HHMM>/resultat.md` (se malen), aldri til `/tmp`. Skjermbilder legges i samme mappe, men er ignorert av git (`.gitignore`): bare `resultat.md` committes, og den viser til bildene som «lokalt, ikke i git».
-- **Installasjon.** `browser-harness-js` og `bun` må være installert av brukeren. Serveren lytter uautentisert på `127.0.0.1:9876`. Avslutt med `browser-harness-js --stop` etter kjøringen.
+- **Installasjon.** `cdp`-skillen er ikke en del av repoet: hver bruker installerer den selv (`npx skills add browser-use/browser-harness-js`, se *Installere `cdp`-skillen* i [`cdp-tester/README.md`](../../../cdp-tester/README.md)), og mappene den legger igjen er ignorert av git. Finnes ikke `.claude/skills/cdp`, eller er `browser-harness-js` og `bun` ikke installert, si det, vis veiledningen i README-en, og installer ikke noe uten at brukeren sier ja. Serveren lytter uautentisert på `127.0.0.1:9876`. Avslutt med `browser-harness-js --stop` etter kjøringen.
 - **Foreslå, ikke fyll ut.** Agenten skriver foreslått status. En tester bekrefter den. Ingen «Status» på testcaser eller i testrapporten fylles ut av agenten.
 
 ## Hva skillen ikke gjør
