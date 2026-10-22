@@ -92,7 +92,7 @@ Vis oversikten til brukeren før du gjør noe.
 
 ## Verifisere implementasjon (`@in-progress`)
 
-**Gating-sett** = alle `Scenario:`/`Scenariomal:` under `Egenskap:`, minus de som er (selv eller via `Regel:`) tagget `@draft`, `@deprecated`, `@openquestion` eller `@demo`. `Bakgrunn:` er ikke et eget punkt. Den samme definisjonen står i `gating` i `fs-kravforvaltning/src/specboard.ts` (fremdriften på kortene i Spesifikasjoner); endres den ene, endres den andre i samme endring.
+**Gating-sett** = alle `Scenario:`/`Scenariomal:` under `Egenskap:`, minus de som er (selv eller via `Regel:`) tagget `@draft`, `@deprecated` eller `@demo`. En del med bare `@openquestion` (uten `@draft`) er med: den er klar til implementasjon (*Oppfølging* i `krav/README.md`), og skal finnes i koden. `Bakgrunn:` er ikke et eget punkt. Den samme definisjonen står i `gating` i `fs-kravforvaltning/src/specboard.ts` (fremdriften på kortene i Spesifikasjoner); endres den ene, endres den andre i samme endring.
 
 For hvert krav:
 
@@ -102,7 +102,7 @@ For hvert krav:
 
 Spør ikke underveis. Når alle kravene i scope er kontrollert, går du videre til *Rapport og endringer*.
 
-**Kan leveres** når gating-settet ikke er tomt, **alle** gating-scenarioer er `funnet` etter kontrollen, og ingen `@openquestion` står igjen i fila. Retaggingen er én `Edit` på `Egenskap:`-tag-linja; bare statustaggen byttes: `@OPT-SOK-VIS-001 @must @in-progress` → `@OPT-SOK-VIS-001 @must @implemented`. `@draft`- og `@deprecated`-deler står urørt.
+**Kan leveres** når gating-settet ikke er tomt, **alle** gating-scenarioer er `funnet` etter kontrollen. Åpne spørsmål stopper ikke leveransen: `@openquestion` på et scenario i gating-settet står i `## Oppfølging` med spørsmålet, og `@draft @openquestion`-deler er ikke levert (de er utenfor gating-settet). Retaggingen er én `Edit` på `Egenskap:`-tag-linja; bare statustaggen byttes: `@OPT-SOK-VIS-001 @must @in-progress` → `@OPT-SOK-VIS-001 @must @implemented`. `@draft`- og `@deprecated`-deler står urørt.
 
 Ellers står kravet som `@in-progress`, og det som mangler, står i rapporten.
 
@@ -124,7 +124,7 @@ Skjermbilder av appen som kjører, er ekstra bevis for scenarioer som har en skj
 
 Når et levert krav endres, står egenskapen som `@implemented`, og statusen på delen (se *Endring av levert krav* i `krav/README.md`). En `@in-progress`-del verifiseres som et krav, med disse forskjellene:
 
-- **Gating-sett** = scenarioene i delen (for en `Regel:`: alle scenarioene under den), minus de som er tagget `@openquestion` eller `@demo`.
+- **Gating-sett** = scenarioene i delen (for en `Regel:`: alle scenarioene under den), minus de som er tagget `@demo`. `@openquestion` på et scenario i delen står i `## Oppfølging`, som for et krav.
 - I forslaget og spørsmålene står delen med tittel: `<feature-ID> — Regel: <tittel>`.
 - **Når delen kan leveres og brukeren har sagt ja:** fjern `@in-progress` fra `Regel:`-/`Scenario:`-linja med én `Edit`. Andre tagger på linja står urørt. Blir linja tom, fjern hele linja. Delen arver da `@implemented` fra egenskapen. `Egenskap:`-linja endres ikke.
 - Erstatter delen en `@deprecated`-del, verifiser den `@deprecated`-delen i samme kjøring (*Verifisere at koden er borte*). Den nye koden kan være på plass selv om den gamle ikke er fjernet enda, og da blir den `@deprecated`-delen stående.
@@ -136,7 +136,7 @@ Når et levert krav endres, står egenskapen som `@implemented`, og statusen på
 - **Scope** er egenskapen eller regelen, ikke resten av fila.
 - **Gating-sett** = scenarioene i scope, også det som er `@draft` eller `@planned`, minus `@demo`. `@deprecated`-deler følger *Verifisere at koden er borte*.
 - Let og kontroller som i *Verifisere implementasjon*, steg 1–3. Rapporten og spørsmålet kommer etterpå (*Rapport og endringer*).
-- **Ny status foreslås** bare når hele gating-settet er `funnet` og ingen `@openquestion` står igjen i scope. Endringen gjøres bare når brukeren har sagt ja (*Rapport og endringer*):
+- **Ny status foreslås** bare når hele gating-settet er `funnet`. `@openquestion` i scope står i `## Oppfølging`, og stopper ikke den nye statusen. Endringen gjøres bare når brukeren har sagt ja (*Rapport og endringer*):
   - **Egenskap** med `@draft`, `@planned` eller `@in-progress`: bytt statustaggen på `Egenskap:`-linja med `@implemented`. `@draft`-deler under den står urørt, og er fortsatt ikke levert.
   - **Egenskap** som er `@implemented`: ingen endring. Har den `@draft`-, `@planned`- eller `@in-progress`-deler, si at de verifiseres hver for seg.
   - **Regel** under en `@implemented` egenskap, med `@draft`, `@planned` eller `@in-progress`: fjern statustaggen fra `Regel:`-linja, som i *Deler i leverte krav som endres*. Regelen arver `@implemented`. Erstatter regelen en `@deprecated`-del, verifiser den også.

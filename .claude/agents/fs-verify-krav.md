@@ -45,7 +45,8 @@ Send svaret til lead-en med `SendMessage`, og gi det samme som sluttsvar. Hold f
 | <scenariotittel> | – | ikke funnet | søkt etter «…», «…» i <repoer> |
 | <scenariotittel> | – | usikker | `<repo>/<fil>:<linje>` — <hvorfor> |
 
-- **Utenfor gating:** <scenario> (`@draft` / `@openquestion` / `@demo` / `@deprecated`)
+- **Utenfor gating:** <scenario> (`@draft` / `@demo` / `@deprecated`). `@openquestion` alene er i gating-settet
+- **Åpne spørsmål:** <scenario> — <spørsmålet fra `# ÅPNE SPØRSMÅL:`>   [scenarioer i gating-settet med `@openquestion`]
 - **@deprecated:** «<tittel/del>» finnes fortsatt: `<repo>/<fil>:<linje>` — <hvorfor det er denne funksjonaliteten> | «<tittel/del>» ingen spor funnet: søkt etter «…» i <repoer>
 - **Tester:** `tester/steps/<fil>.ts:<linje>`, `<repo>/<testfil>` — <hva de dekker>
 ```

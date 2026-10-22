@@ -20,6 +20,12 @@ Egenskap: Tittel ${id}
       # ÅPNE SPØRSMÅL:
       # - Hva?
       Gitt noe
+
+    @openquestion
+    Scenario: Med åpent spørsmål
+      # ÅPNE SPØRSMÅL:
+      # - Hvilke grenser?
+      Gitt noe
 ${body}`;
 
 const changed = `# language: no
@@ -74,8 +80,11 @@ const raw = (sources: Record<string, string>, files = Object.keys(sources)): Raw
 const snap = (...tasks: RawTask[]): TasksSnapshot => ({ domains: {}, tasks });
 const one = (sources: Record<string, string>) => buildCards(snap(raw(sources)), entries)[0];
 
-test('gating: alt utenom @draft/@openquestion; i et levert krav bare @in-progress-delene, og @deprecated som skal fjernes', () => {
-  assert.deepEqual(gating(entries['krav/07 Bru/11 Til/01 Rol/tildele_rolle.feature']), [{ t: 'Første', remove: false }]);
+test('gating: alt utenom @draft, også @openquestion alene; i et levert krav bare @in-progress-delene, og @deprecated som skal fjernes', () => {
+  assert.deepEqual(gating(entries['krav/07 Bru/11 Til/01 Rol/tildele_rolle.feature']), [
+    { t: 'Første', remove: false },
+    { t: 'Med åpent spørsmål', remove: false },
+  ]);
   assert.deepEqual(gating(entries['krav/07 Bru/11 Til/01 Rol/endre_rolle.feature']), [
     { t: 'Gammel visning (avvikles)', remove: true },
     { t: 'Ny visning', remove: false },
@@ -125,8 +134,11 @@ test('colOf: Utkast med det som mangler, Klart til utvikling, Til verifisering o
 });
 
 test('verifiseringsrapporten gir resultat per scenario, og alt funnet er Verifisert', () => {
-  const report = `# Verifisering\n\n- **Dato:** 2026-10-03\n- **Spec:** spec/spec-roller.md\n\n## Scenarioer\n\n| Feature-ID | Scenario | Resultat | Bevis |\n|---|---|---|---|\n| \`@BRU-TIL-ROL-001\` | Første | funnet | fs-plattform/src/A.kt:12 |\n`;
-  assert.deepEqual(parseVerify(report, 'spec/verify-2026-10-03.md'), { file: 'spec/verify-2026-10-03.md', date: '2026-10-03', time: null, spec: 'spec-roller.md', rows: [{ id: '@BRU-TIL-ROL-001', sc: 'Første', r: 'funnet', bevis: 'fs-plattform/src/A.kt:12' }] });
+  const report = `# Verifisering\n\n- **Dato:** 2026-10-03\n- **Spec:** spec/spec-roller.md\n\n## Scenarioer\n\n| Feature-ID | Scenario | Resultat | Bevis |\n|---|---|---|---|\n| \`@BRU-TIL-ROL-001\` | Første | funnet | fs-plattform/src/A.kt:12 |\n| \`@BRU-TIL-ROL-001\` | Med åpent spørsmål | funnet | fs-plattform/src/A.kt:20 |\n`;
+  assert.deepEqual(parseVerify(report, 'spec/verify-2026-10-03.md'), { file: 'spec/verify-2026-10-03.md', date: '2026-10-03', time: null, spec: 'spec-roller.md', rows: [
+    { id: '@BRU-TIL-ROL-001', sc: 'Første', r: 'funnet', bevis: 'fs-plattform/src/A.kt:12' },
+    { id: '@BRU-TIL-ROL-001', sc: 'Med åpent spørsmål', r: 'funnet', bevis: 'fs-plattform/src/A.kt:20' },
+  ] });
   const c = one({ 'spec/spec-roller.md': spec(), 'spec/verify-2026-10-03.md': report });
   assert.equal(c.feats[0].sc[0].r, 'funnet');
   assert.equal(c.verified, '2026-10-03');

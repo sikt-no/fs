@@ -733,7 +733,7 @@ footer .inner{padding-block:24px 48px;display:flex;flex-direction:column;gap:6px
     <div class="body">
       <p>fs-verify leter etter implementasjonen av hvert scenario i lokale kloner av kode-repoene, og viser bevis med <code>fil:linje</code>. En kontrollør (subagenten fs-verify-kontroll) sjekker hvert svar uavhengig før du blir spurt. Når alt er funnet og du sier ja, blir kravet <code>@implemented</code>. Er det mange feature-filer, gjør fs-verify-agent-teams det samme med flere finnere parallelt.</p>
       <div class="cols">
-        <div class="box"><h3>Gating-settet</h3><p class="small">Scenarioene som sjekkes: alle som ikke er tagget <code>@draft</code>, <code>@deprecated</code>, <code>@openquestion</code> eller <code>@demo</code>. Det samme settet brukes i akseptansetesten.</p></div>
+        <div class="box"><h3>Gating-settet</h3><p class="small">Scenarioene som sjekkes: alle som ikke er tagget <code>@draft</code>, <code>@deprecated</code> eller <code>@demo</code>. Et scenario med bare <code>@openquestion</code> er med, og spørsmålet står i rapporten. Det samme settet brukes i akseptansetesten.</p></div>
         <div class="box"><h3>Når noe mangler</h3><p class="small">Statusen blir stående. Steget i repoet der koden mangler, settes tilbake til <code>pågår</code> i <code>utforing.md</code>, med <code>Tilbake: &lt;dato&gt;</code>.</p></div>
         <div class="box"><h3>Flyter og avviklede krav</h3><p class="small">For en flyt finner den både stedet der tilstanden lages og der den brukes. Et <code>@deprecated</code>-krav slettes når koden er borte, sammen med referansene til det.</p></div>
       </div>
@@ -824,7 +824,7 @@ footer .inner{padding-block:24px 48px;display:flex;flex-direction:column;gap:6px
         <table>
           <thead><tr><th>Svar</th><th>Når</th></tr></thead>
           <tbody>
-            <tr><td><span class="sev ok">Ja</span></td><td>Alle scenarioene i gating-settet er funnet, alle kravene i testplanen er <code>@implemented</code>, og ingen åpne spørsmål står igjen.</td></tr>
+            <tr><td><span class="sev ok">Ja</span></td><td>Alle scenarioene i gating-settet er funnet, og alle kravene i testplanen er <code>@implemented</code>. Åpne spørsmål i scenarioene som testes, står i rapporten, men stopper ikke testen.</td></tr>
             <tr><td><span class="sev warn">Ja, med forbehold</span></td><td>Alt over er klart, men en overlevering i en flyt er ikke funnet. Kravene kan testes, men den overleveringen testes ikke før koden er rettet.</td></tr>
             <tr><td><span class="sev bad">Nei</span></td><td>Noe mangler. Rapporten viser hva, og i hvilket repo.</td></tr>
           </tbody>

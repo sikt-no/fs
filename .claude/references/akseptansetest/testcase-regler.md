@@ -58,7 +58,7 @@ Bruker en testcase data som en tidligere testcase har laget, står det i stegene
 ## R11. Riktig nivå
 
 - Bare scenarioer fra kravene. Ingen helhetsrunde, regresjon eller test av universell utforming. Scenarioene i flytene i testplanen («Flyter») er med: de tester overleveringen mellom to krav, og er ikke en helhetsrunde. Mangler et viktig tilfelle, legges det inn i kravet med `fs-krav`, ikke bare i testen.
-- **Intern:** én testcase per scenario, og én per eksempelrad i en `Scenariomal:` (`1.3a`, `1.3b`). Feilsituasjoner er med når de står i kravet. Rekkefølgen i feature-fila.
+- **Intern:** én testcase per scenario, og én per eksempelrad i en `Scenariomal:` (`1.3a`, `1.3b`). Feilsituasjoner er med når de står i kravet. Rekkefølgen i feature-fila. Har scenarioet et åpent spørsmål (`@openquestion` uten `@draft`), testes det som det står, og spørsmålet står med vanlige ord under tabellen for regelen: `Åpent spørsmål til 1.3: Løsningen godtar 0–9999. Dekker det alle utdanningstilbud?` Testeren kan svare i en kommentar, men svaret endrer ikke status på testcasen.
 - **Ekstern:** testcasen er en oppgave i arbeidsprosessen, gjennom flere scenarioer. Bare hovedflyten. Ingen Feature-ID-er, scope-id-er, tagger, kodeverdier, GraphQL, Jira eller feature-flagg.
 
 ## Sjekkliste før utkastet vises
