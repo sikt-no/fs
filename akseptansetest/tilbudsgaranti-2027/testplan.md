@@ -33,7 +33,7 @@ Testplan for «Tilbudsgaranti i saksbehandlingen 2027». Planen sier hva som tes
 | Nr | Navn | Rolle | Organisasjon | Brukes til |
 |---|---|---|---|---|
 | 1 | [Fylles ut: navn] | Saksbehandler ved den saksbehandlende organisasjonen | [Fylles ut: organisasjon A, for eksempel UiO] | Sette, endre og fjerne tilbudsgaranti, se tilbudsgarantiene fra de andre rollene, endringsloggen, og endre utdanningsbakgrunnen så søknadsalternativet flyttes (`@OPT-BEH-BEH-010`) |
-| 2 | [Fylles ut: navn] | Tilbyder: saksbehandler ved lærestedet som tilbyr utdanningstilbudet | [Fylles ut: organisasjon B, for eksempel UiT] | Sette tilbudsgaranti fra tilbyder, også når søknaden ikke kan poengberegnes (`@OPT-BEH-BEH-010`) |
+| 2 | [Fylles ut: navn] | Tilbyder: saksbehandler ved lærestedet som tilbyr utdanningstilbudet | [Fylles ut: organisasjon B, for eksempel UiT] | Sette tilbudsgaranti fra tilbyder (`@OPT-BEH-BEH-010`) |
 | 3 | [Fylles ut: navn] | Opptaksforvalter ved den forvaltende organisasjonen, med SE_SØKNADSBEHANDLING, MODIFISERE_OPPTAK og OPPTAK_TILBGARANTI_GI_VIA_OPPTAK | [Fylles ut: organisasjonen som forvalter opptaket, for eksempel HK-dir] | Sette tilbudsgaranti fra opptaksforvalter, og ikke kunne endre den fra saksbehandler (`@OPT-BEH-BEH-010`) |
 | 4 | [Fylles ut: navn] | Søker | – | Endre prioritet, fjerne og legge inn igjen søknadsalternativet, og trekke søknaden, i Min kompetanse (`@OPT-BEH-BEH-010`) |
 
@@ -46,7 +46,6 @@ Testbrukerne finnes i minst to organisasjoner, så vi kan teste at ingen ser dat
 | Et opptak med tilbudsgarantityper for alle tre rollene, for eksempel «Tilbudsgaranti innvilges etter klage» (saksbehandler), «Tilbudsgaranti, særskilt vurdering» (tilbyder) og «Tilbudsgaranti gitt etter telefonsamtale» (opptaksforvalter), og én type som bare kan brukes av tilbyder. Søknadsfristen i opptaket må ikke ha gått ut | [Fylles ut: opptak] | [Fylles ut] | [Fylles ut] |
 | En tilbudsgarantitype som bare finnes i et annet opptak | [Fylles ut: opptak og type] | [Fylles ut] | [Fylles ut] |
 | En søker med en søknad med minst tre søknadsalternativer, der ett tilbys av en annen organisasjon enn den som saksbehandler | [Fylles ut: søker] | [Fylles ut] | [Fylles ut] |
-| En søknad som ikke kan poengberegnes | [Fylles ut: søker] | [Fylles ut] | [Fylles ut] |
 | En søker der utdanningsbakgrunnen kan endres, så søknadsalternativet flyttes til en annen saksbehandlende organisasjon | [Fylles ut: søker] | [Fylles ut] | [Fylles ut] |
 | En søker som kan trekke søknaden | [Fylles ut: søker] | [Fylles ut] | [Fylles ut] |
 
@@ -58,7 +57,7 @@ Det som testes, er kravene som er `@implemented`. Feature-ID-ene her er kravene 
 
 | Krav | Feature-ID | Status | Scenarioer i testen |
 |---|---|---|---|
-| [Gi tilbudsgaranti](https://github.com/sikt-no/fs/blob/6478beea804db1a91ade2db494161ec86f4f2775/krav/02%20Opptak/13%20S%C3%B8knad%20og%20saksbehandling/02%20Behandling/gi_tilbudsgaranti.feature) | `@OPT-BEH-BEH-010` | `@implemented` | 17 (25 testcaser med eksemplene i scenariomalene) |
+| [Gi tilbudsgaranti](https://github.com/sikt-no/fs/blob/6478beea804db1a91ade2db494161ec86f4f2775/krav/02%20Opptak/13%20S%C3%B8knad%20og%20saksbehandling/02%20Behandling/gi_tilbudsgaranti.feature) | `@OPT-BEH-BEH-010` | `@implemented` | 16 av 17 (24 testcaser med eksemplene i scenariomalene). Det siste står i «Ikke med i denne testen» |
 
 Scenarioene i testen er de leverte scenarioene i gating-settet: alle scenarioene som ikke er utkast, avviklet eller demo, og som ikke er under endring. Et levert scenario med et åpent spørsmål testes som det står, og spørsmålet står under tabellen. Er kilden et scope, og kravet ble levert før, er det bare delene som er levert i scopet.
 
@@ -82,6 +81,7 @@ Ingen.
 | At søkeren med tilbudsgaranti får tilbud i plasstildelingen (`@OPT-PLA-TIL-002`) | Hører til scope-plasstildeling-2027 |
 | Hvilken utdanningskvote tilbudsgarantiene tas fra (`@OPT-OPT-UTD-004`) | Hører til scope-utdanningstilbud-2027 |
 | [Velge utdanningskvote for tilbudsgaranti](https://github.com/sikt-no/fs/blob/6478beea804db1a91ade2db494161ec86f4f2775/krav/02%20Opptak/13%20S%C3%B8knad%20og%20saksbehandling/02%20Behandling/velge_utdanningskvote_for_tilbudsgaranti.feature) (`@OPT-BEH-BEH-017`) | Kommer senere: utkast uten scenarioer |
+| Scenarioet «Sette tilbudsgaranti når søknaden ikke kan poengberegnes» i Gi tilbudsgaranti (`@OPT-BEH-BEH-010`) | Testes senere (besluttet 2026-10-22) |
 
 ## Roller
 
