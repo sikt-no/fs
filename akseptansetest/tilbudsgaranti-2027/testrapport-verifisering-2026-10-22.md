@@ -1,10 +1,10 @@
 # Testrapport – verifisering – Tilbudsgaranti i saksbehandlingen 2027
 
 - **Nivå**: verifisering
-- **Testplan**: [testplan.md](testplan.md) · https://sikt.atlassian.net/wiki/spaces/STUDIEADM/pages/edit-v2/5130158105 (utkast)
+- **Testplan**: [testplan.md](testplan.md) · https://sikt.atlassian.net/wiki/spaces/STUDIEADM/pages/5130158105
 - **Scope**: @scope-tilbudsgaranti-2027
 - **Grunnlag**: [verify-2026-10-22-0850.md](../../tasks/opptak/tilbudsgaranti/spec/verify-2026-10-22-0850.md), lest 2026-10-22 10:48
-- **Confluence**: https://sikt.atlassian.net/wiki/spaces/STUDIEADM/pages/edit-v2/5131075597 (utkast)
+- **Confluence**: https://sikt.atlassian.net/wiki/spaces/STUDIEADM/pages/5131075597
 - **Laget**: 2026-10-22 av fs-testrapport
 
 ---
