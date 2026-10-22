@@ -92,10 +92,11 @@ Egenskap: Se søkerens elektroniske vitnemål
         | Karakterpoeng       |
         | Realfagspoeng       |
         | Språkpoeng          |
-      Og førstegangsvitnemålet vises først
-      Og de andre vitnemålene er sortert etter utstedelsesdato, fra eldste til nyeste
-      # AVKLART 21.10.2026: førstegangsvitnemålet vises først. Resten følger
-      # etter utstedelsesdato, fra eldste til nyeste.
+      Og vitnemålene er sortert etter utstedelsesdato, fra eldste til nyeste
+      # AVKLART 22.10.2026: alle vitnemålene sorteres kronologisk, etter
+      # utstedelsesdato. Erstatter avklaringen fra 21.10.2026 om at
+      # førstegangsvitnemålet skulle stå først. Domeneekspertene påpekte at
+      # førstegangsvitnemålet så å si alltid kommer først uansett.
       #
       # AVKLART 21.10.2026: opplysningene er vitnemålsnummer, utstedt dato,
       # GSK, førstegangsvitnemål (ja/nei), karakterpoeng, realfagspoeng og
@@ -143,14 +144,19 @@ Egenskap: Se søkerens elektroniske vitnemål
       # Utformingen av feilmeldingen hører i
       # vise_elektroniske_vitnemål.design.md.
 
-    Scenario: Poengene vises tomme når poengberegningen ikke svarer
+    Scenario: Feilmelding når poengberegningen ikke svarer
       Gitt søkeren har elektroniske vitnemål
       Og poengberegningen feiler eller ikke svarer
       Når jeg åpner vitnemålsoversikten
       Så ser jeg hvert vitnemål med opplysningene fra vitnemålet
+      Og jeg ser en feilmelding om at poengene ikke kunne beregnes
       Men karakterpoeng, realfagspoeng og språkpoeng vises tomme
       # AVKLART 21.10.2026: når Team Puffs poengberegning ikke svarer, står
       # poengkolonnene tomme. Vitnemålene vises likevel.
+      #
+      # AVKLART 22.10.2026: saksbehandleren får i tillegg en feilmelding, så
+      # det går fram at poengene mangler på grunn av en feil. Utformingen
+      # hører i vise_elektroniske_vitnemål.design.md.
 
     Scenario: Åpne et vitnemål i ny fane
       Gitt søkeren har elektroniske vitnemål

@@ -187,6 +187,14 @@ Egenskap: Velge vitnemål som grunnlag for poengberegningen
       # søknadsalternativene i saken, skal vises. Simuleringen fant at poeng
       # fra andre saker i samme søknad ble vist (F1, STEK-593).
 
+    @openquestion
+    # ÅPNE SPØRSMÅL:
+    # - Skal en verdi saksbehandleren har lagt inn selv, overskrives når
+    #   saksbehandleren senere velger å beregne poengene på nytt? Låsen
+    #   gjelder den automatiske poengberegningen, ikke beregningen
+    #   saksbehandleren starter selv. Spørsmålet kom fra domeneekspertene
+    #   22.10.2026: en lagret verdi skal ikke overstyres av automatikken, men
+    #   når saksbehandleren aktivt beregner, må systemet kunne overstyre den.
     Scenariomal: Legge inn <poengtype> selv på en poengvariant
       Gitt jeg har lagt et vitnemål til grunn
       Og jeg har lagt inn <poengtype> selv på en poengvariant

@@ -59,6 +59,7 @@ Ingen retagging i denne kjøringen. Kravet var allerede `@in-progress` (satt for
 - [ ] **Skisseavvik 2, poengfeltene:** Skal «Poeng fra vitnemål» ha SUM og KAR opprinnelig/med forbedring? Skal feltene kunne redigeres der, eller per poengvariant?
 - [ ] **Skissen er utdatert (avvik 1):** Beregn-handlingen og advarselen om endringer som ikke er lagret må skisseres. Det samme gjelder opplåsing av poeng og beskjedene om ugyldig verdi og feilet beregning.
 - [ ] **Implementasjonsdetaljer mangler** for `velge_vitnemål_som_grunnlag.feature`: beregn-handlingen, advarselen, beskjeden når beregningen feiler og beskjeden om ugyldig verdi. Lages med `fs-implementasjonsdetaljer`.
+- [ ] **Poeng lagt inn for hånd og ny beregning (fra domeneekspertene 22.10.2026):** Skal en verdi saksbehandleren har lagt inn selv, overskrives når saksbehandleren senere velger å beregne poengene på nytt? Scenariomalen «Legge inn <poengtype> selv på en poengvariant» er tagget `@openquestion`, og den detaljen må avklares før den bygges.
 - [ ] **Kravelementene:** Ingen scenarioer sier at kravelementene vurderes ut fra vitnemålet som er valgt, selv om L2 skal la `vurderKravelementerAutomatisk` kjøre for søkere med flere vitnemål.
 - [ ] **Vitnemål som annulleres etter at det er valgt:** Poengene er låst og blir utdaterte til L6 er levert. Skal saksbehandleren varsles i L2?
 - [ ] **GSK og poeng:** Må vitnemålet for GSK og vitnemålet for poengberegningen være det samme?

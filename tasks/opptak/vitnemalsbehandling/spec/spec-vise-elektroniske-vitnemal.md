@@ -13,7 +13,9 @@ Saksbehandleren ser søkerens elektroniske VGS-vitnemål i steg 2 «Grunnlag»: 
 
 ## Krav
 
-- **`vise_elektroniske_vitnemål.feature`** (`@OPT-BEH-BEH-005`, `@must`) — oversikten over vitnemålene med teller, opplysninger og poeng per vitnemål, sortering (førstegangsvitnemålet først, så eldste til nyeste), ny fane, feilmelding når vitnemålene ikke kan hentes, tomme poeng når poengberegningen ikke svarer, visning av annullerte vitnemål, og innsyn styrt av rettighet, ikke av tilordning. 11 scenarioer. ([krav/…/vise_elektroniske_vitnemål.feature](../../../../krav/02%20Opptak/13%20S%C3%B8knad%20og%20saksbehandling/02%20Behandling/vise_elektroniske_vitnem%C3%A5l.feature))
+- **`vise_elektroniske_vitnemål.feature`** (`@OPT-BEH-BEH-005`, `@must`) — oversikten over vitnemålene med teller, opplysninger og poeng per vitnemål, sortering etter utstedelsesdato, fra eldste til nyeste, ny fane, feilmelding når vitnemålene ikke kan hentes, feilmelding og tomme poeng når poengberegningen ikke svarer, visning av annullerte vitnemål, og innsyn styrt av rettighet, ikke av tilordning. 11 scenarioer. ([krav/…/vise_elektroniske_vitnemål.feature](../../../../krav/02%20Opptak/13%20S%C3%B8knad%20og%20saksbehandling/02%20Behandling/vise_elektroniske_vitnem%C3%A5l.feature))
+
+**Endret etter henting (22.10.2026):** Kravet er endret på stedet etter svar fra domeneekspertene. Alle vitnemålene sorteres nå kronologisk (førstegangsvitnemålet står ikke først av seg selv), og scenarioet «Poengene vises tomme når poengberegningen ikke svarer» heter nå «Feilmelding når poengberegningen ikke svarer» og krever en feilmelding i tillegg til tomme poeng.
 
 Avklaringene fra gjennomgangen 21.10.2026 står som `AVKLART`-kommentarer i kravfila og i [vitnemålsbehandling.md](../../../../krav/02%20Opptak/13%20S%C3%B8knad%20og%20saksbehandling/02%20Behandling/vitnem%C3%A5lsbehandling.md).
 
@@ -68,7 +70,7 @@ Ingen retagging i denne kjøringen. Kravet var allerede `@in-progress` (satt for
 - [ ] **Telleren:** Skal den telle annullerte vitnemål som er skjult?
 - [ ] **«Brukt i en beregning»:** Gjelder det bare poeng, eller også GSK og kravelementer? Gjelder det opptaket eller søknaden? «Er brukt» eller «har vært brukt»?
 - [ ] **Organisasjonen som behandler saken:** Hvilken organisasjon er det i et samordnet opptak?
-- [ ] **Avhengighet til Team Puff:** Poengberegningen må kunne beregne poeng for hvert vitnemål, ikke bare for det som er lagt til grunn.
+- [ ] **Avhengighet til Team Puff:** Poengberegningen må kunne beregne poeng for hvert vitnemål, ikke bare for det som er lagt til grunn. Ifølge domeneekspertene må poengene være på plass til opptaket i 2027, men det er usikkert om Puff blir ferdig før L1 skal akseptansetestes. Må avtales med Puff. Kan L1 akseptansetestes uten poengene?
 
 ## Rute
 
