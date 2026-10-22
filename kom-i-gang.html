@@ -60,6 +60,11 @@ a:hover{color:#0a0132}
       </div>
     </div>
     <p style="margin:0;font-size:16px;color:#767676;max-width:720px">02 Opptak er domenet, 10 Regelverk sub-domenet og 01 Regelverkssamling kapabiliteten.</p>
+    <div style="background:#fff;border:1px solid #dedede;border-radius:12px;padding:20px 24px;display:flex;flex-direction:column;gap:12px;max-width:820px">
+      <div style="display:flex;align-items:baseline;gap:12px;flex-wrap:wrap"><span style="font-weight:600;font-size:16px">Flyter på tvers av domener</span><span style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:#767676">pilot</span></div>
+      <code style="font-family:'IBM Plex Mono',monospace;font-size:14px;background:#ebe6fe;color:#4324c8;padding:8px 12px;border-radius:8px;align-self:flex-start;max-width:100%;overflow-wrap:anywhere">_Flyter/10 Opptaksløpet/saksbehandlertildeling.feature</code>
+      <div style="font-size:15px;line-height:1.5;color:#767676">Et løp på tvers av domener, «hva skjer fra … til …?», beskrives som en flyt i krav/_Flyter, med én Regel: per fase. Hver fase peker på kravene den bygger på med @depends-on-, og flyten beskriver overleveringene mellom kravene, ikke reglene på nytt.</div>
+    </div>
   </section>
 
   <section style="display:flex;flex-direction:column;gap:20px">
@@ -91,8 +96,9 @@ a:hover{color:#0a0132}
             <span style="font-family:'IBM Plex Mono',monospace;font-size:13px;background:#f1f1f1;color:#0a0132;padding:4px 10px;border-radius:999px">@must · @should · @could · @wont</span>
             <span style="font-family:'IBM Plex Mono',monospace;font-size:13px;background:#f1f1f1;color:#0a0132;padding:4px 10px;border-radius:999px">status</span>
             <span style="font-family:'IBM Plex Mono',monospace;font-size:13px;background:#fff;border:1px dashed #7351fb;color:#4324c8;padding:3px 10px;border-radius:999px">@scope-&lt;slug&gt;</span>
+            <span style="font-family:'IBM Plex Mono',monospace;font-size:13px;background:#fff;border:1px dashed #7351fb;color:#4324c8;padding:3px 10px;border-radius:999px">@depends-on-&lt;ID&gt; · @ref-&lt;ID&gt;</span>
           </div>
-          <div style="font-size:15px;line-height:1.5;color:#767676">En unik ID, prioritet og status. Scope-taggen er valgfri, og kobler kravet til et scope og oppgaven det hører til.</div>
+          <div style="font-size:15px;line-height:1.5;color:#767676">En unik ID, prioritet og status. Scope-taggen er valgfri, og kobler kravet til et scope og oppgaven det hører til. Et krav som bygger på et annet krav, får @depends-on-&lt;ID&gt;, og en henvisning får @ref-&lt;ID&gt;.</div>
         </div>
         <div style="background:#fff;border:1px solid #dedede;border-radius:12px;padding:20px 24px;display:grid;grid-template-columns:auto 1fr;gap:10px 18px;font-size:15px;line-height:1.4">
           <span style="font-family:'IBM Plex Mono',monospace;color:#7351fb;font-weight:600">Gitt</span><span>er forutsetningene</span>
@@ -226,7 +232,7 @@ a:hover{color:#0a0132}
         </div>
         <div style="background:#fff;border:1px solid #dedede;border-radius:12px;padding:16px 18px;display:flex;flex-direction:column;gap:8px">
           <span style="font-family:'IBM Plex Mono',monospace;font-size:13px;font-weight:600;background:#0a0132;color:#fff;padding:4px 10px;border-radius:6px;align-self:flex-start">fs-krav</span>
-          <span style="font-size:14px;line-height:1.5">Nytt krav eller utfylling av et skjelett (A), validere krav i en mappe (B), fjerne krav (C) og endre et levert krav (D). Eier @draft → @planned og @implemented → @deprecated.</span>
+          <span style="font-size:14px;line-height:1.5">Nytt krav eller utfylling av et skjelett (A), validere krav i en mappe (B), fjerne krav (C), endre et levert krav (D) og skrive en flyt (E). Eier @draft → @planned og @implemented → @deprecated.</span>
           <div style="background:#ebe6fe;border-radius:8px;padding:12px 14px;display:flex;flex-direction:column;gap:6px;margin-top:4px">
             <span style="font-family:'IBM Plex Mono',monospace;font-size:12px;font-weight:600;background:#0a0132;color:#fff;padding:3px 8px;border-radius:6px;align-self:flex-start">fs-krav-avvik</span>
             <span style="font-size:13px;line-height:1.5">Gå gjennom ordlyden i en mappe eller fil mot konvensjonene i krav/README.md, typisk før validering. Endrer aldri tagger.</span>
@@ -239,6 +245,10 @@ a:hover{color:#0a0132}
             <span style="font-family:'IBM Plex Mono',monospace;font-size:12px;font-weight:600;background:#0a0132;color:#fff;padding:3px 8px;border-radius:6px;align-self:flex-start">fs-specify-delta</span>
             <span style="font-size:13px;line-height:1.5">Som fs-specify, men når utgangspunktet er en endring: feature-filer, markdown, en commit eller en branch.</span>
           </div>
+          <div style="background:#ebe6fe;border-radius:8px;padding:12px 14px;display:flex;flex-direction:column;gap:6px">
+            <span style="font-family:'IBM Plex Mono',monospace;font-size:12px;font-weight:600;background:#0a0132;color:#fff;padding:3px 8px;border-radius:6px;align-self:flex-start">fs-implementasjonsdetaljer</span>
+            <span style="font-size:13px;line-height:1.5">Implementasjonsdetaljene for et krav i &lt;feature&gt;.design.md: UI-mønstre, tilstander og tekstene. fs-specify kjører den når de mangler.</span>
+          </div>
         </div>
         <div style="grid-column:1/-1;background:transparent;border:2px dashed #c2bfcb;border-radius:12px;padding:16px 18px;display:flex;flex-direction:column;gap:8px">
           <span style="font-size:15px;font-weight:700;color:#0a0132">Implementasjon i koden</span>
@@ -246,7 +256,20 @@ a:hover{color:#0a0132}
         </div>
         <div style="grid-column:1/-1;background:#fff;border:1px solid #dedede;border-radius:12px;padding:16px 18px;display:flex;flex-direction:column;gap:8px">
           <span style="font-family:'IBM Plex Mono',monospace;font-size:13px;font-weight:600;background:#0a0132;color:#fff;padding:4px 10px;border-radius:6px;align-self:flex-start">fs-verify</span>
-          <span style="font-size:14px;line-height:1.5">Verifiserer koden: @in-progress → @implemented, og sletter @deprecated-krav når koden er borte.</span>
+          <span style="font-size:14px;line-height:1.5">Verifiserer koden: @in-progress → @implemented, og sletter @deprecated-krav når koden er borte. Verifiserer også flytene: at overleveringene mellom kravene virker i koden. En flyt hentes ikke inn i en oppgave, og går rett fra @planned til @implemented.</span>
+        </div>
+        <div style="grid-column:1/-1;background:#fff;border:1px solid #dedede;border-radius:12px;padding:16px 18px;display:flex;flex-direction:column;gap:10px">
+          <span style="font-size:15px;font-weight:700;color:#0a0132">Akseptansetesten</span>
+          <div style="display:flex;flex-wrap:wrap;align-items:center;gap:6px">
+            <span class="pill">fs-testplan</span><span style="color:#7351fb">→</span>
+            <span class="pill">fs-testrapport</span><span style="color:#7351fb">→</span>
+            <span class="pill">fs-testcaser-intern</span><span style="color:#7351fb">→</span>
+            <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:600;border:1px dashed #7351fb;color:#4324c8;padding:2px 8px;border-radius:6px;white-space:nowrap">fs-testcaser-cdp · valgfri</span><span style="color:#7351fb">→</span>
+            <span class="pill">fs-testrapport</span><span style="color:#7351fb">→</span>
+            <span class="pill">fs-testcaser-ekstern</span><span style="color:#7351fb">→</span>
+            <span class="pill">fs-testrapport</span>
+          </div>
+          <span style="font-size:14px;line-height:1.5">Etter verifiseringen testes det som er @implemented, etter teststrategien i Confluence. Testplanen sier hvilke krav som testes, og testcasene lages fra kravene. Er et krav med i en flyt, testes også overleveringene i flyten: at det ett krav lager, blir brukt av det neste. Filene ligger i akseptansetest/.</span>
         </div>
       </div>
     </div>
