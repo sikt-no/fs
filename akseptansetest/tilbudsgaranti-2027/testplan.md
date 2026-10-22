@@ -143,7 +143,7 @@ Testansvarlig skriver beslutningen og begrunnelsen i sluttrapporten. Rettede fun
 
 | Steg | Side | Status | Dato |
 |---|---|---|---|
-| 1. Verifisering (`fs-verify`) | [verify-2026-10-22-0850.md](../../tasks/opptak/tilbudsgaranti/spec/verify-2026-10-22-0850.md) | Alt funnet | 2026-10-22 |
+| 1. Verifisering (`fs-verify`) | [Verifisering – Tilbudsgaranti i saksbehandlingen 2027 – 2026-10-22 08:50](https://sikt.atlassian.net/wiki/spaces/STUDIEADM/pages/edit-v2/5130125348) (utkast), [verify-2026-10-22-0850.md](../../tasks/opptak/tilbudsgaranti/spec/verify-2026-10-22-0850.md) | Alt funnet | 2026-10-22 |
 | 2. Testplan | (denne siden) | Laget | 2026-10-22 |
 | 3. Testrapport – verifisering | – | Venter | |
 | 4. Intern akseptansetest | – | Venter | |
