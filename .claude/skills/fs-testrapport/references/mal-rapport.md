@@ -29,7 +29,7 @@ Testrapport for «<leveranse>». <Én setning: hva rapporten bygger på (verifis
 |---|---|
 | Scenarioer | <N> funnet, <N> ikke funnet, <N> usikker, av <N>   (bare kravene, ikke radene for flytene) |
 | Krav levert (`@implemented`) | <N> av <N> |
-| Åpne spørsmål som står igjen | <N> |
+| Åpne spørsmål som står igjen | <N> i scenarioene i testen (stopper ikke testen), eller «Ingen» |
 | Overleveringer i flytene | <N> funnet, av <N> i testplanen (en `@implemented` flyt teller som funnet), eller «Ingen flyter» |
 | Kontrollert av | [Fylles ut av teamet] (en annen enn den som kjørte `fs-verify`) |
 | Klar for intern akseptansetest | Ja / Ja, med forbehold: <overleveringene som ikke er funnet> / Nei: <grunn> |

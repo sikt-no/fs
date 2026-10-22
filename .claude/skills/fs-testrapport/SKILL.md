@@ -46,7 +46,7 @@ Sjekk at branchen i dette repoet er oppdatert mot origin og main, som beskrevet 
 
 - Den nyeste verify-rapporten for leveransen: `akseptansetest/<slug>/verify-*.md` (testplan for et scope), eller `spec/verify-*.md` i oppgaven. Har undersiden «Verifisering – …» en nyere dato, les den med `getConfluencePage`. Finnes flere rapporter for ulike oppgaver i scopet, ta den nyeste for hver oppgave, og si hvilke du har brukt.
 - Kravene i «Omfang» og «Venter på verifisering» i testplanen, for å se om alle er verifisert. Krav som ikke er med i noen rapport, står under «Det som mangler» med «ikke verifisert».
-- `Grep` etter `@openquestion` i kravene. Et åpent spørsmål som står igjen, gir «Ikke klar».
+- `Grep` etter `@openquestion` i kravene i «Omfang», og tell bare dem på scenarioer og regler i testen (`@draft @openquestion`-deler er ikke med). De står i «Åpne spørsmål som står igjen» og i oppfølgingen, men stopper ikke testen: delen er klar til implementasjon, og testes som den står (*Åpne spørsmål* i `krav-fra-testplan.md`).
 - Flytene i «Flyter» i testplanen: `## Fremdrift for flyter` og flytradene (`@FLY-…`) i `## Scenarioer` i verify-rapporten. En flyt som er `@implemented`, har ingen rader der, og overleveringene i den regnes som funnet. Har rapporten ingen rader for en annen flyt i testplanen, står overleveringene under «Det som mangler» med «ikke verifisert».
 
 **Intern og ekstern:**
@@ -57,7 +57,7 @@ Sjekk at branchen i dette repoet er oppdatert mot origin og main, som beskrevet 
 
 ## 3. Regn ut og sorter
 
-**Verifisering:** tallene fra `## Scenarioer` i verify-rapporten. «Scenarioer» i oppsummeringen teller bare kravene. Radene for flytene (`@FLY-…`) telles i «Overleveringer i flytene», der bare overleveringene testplanen tar med, teller. «Klar for intern akseptansetest» er «Ja» når alle scenarioene i gating-settet er `funnet`, alle kravene i testplanen er `@implemented`, og ingen `@openquestion` står igjen. Ellers «Nei», med det som mangler. Flytene teller bare for overleveringene testplanen tar med (*Hele eller deler av flyten* i `krav-fra-testplan.md`), ikke for faser som ikke er levert. Er alt annet klart, men en av disse overleveringene ikke `funnet`, er svaret «Ja, med forbehold», med overleveringene: kravene kan testes, men overleveringen testes ikke før koden er rettet. At en annen person har kontrollert rapporten, er et kriterium i strategien, men står som `[Fylles ut av teamet]`.
+**Verifisering:** tallene fra `## Scenarioer` i verify-rapporten. «Scenarioer» i oppsummeringen teller bare kravene. Radene for flytene (`@FLY-…`) telles i «Overleveringer i flytene», der bare overleveringene testplanen tar med, teller. «Klar for intern akseptansetest» er «Ja» når alle scenarioene i gating-settet er `funnet`, og alle kravene i testplanen er `@implemented`. Ellers «Nei», med det som mangler. Flytene teller bare for overleveringene testplanen tar med (*Hele eller deler av flyten* i `krav-fra-testplan.md`), ikke for faser som ikke er levert. Er alt annet klart, men en av disse overleveringene ikke `funnet`, er svaret «Ja, med forbehold», med overleveringene: kravene kan testes, men overleveringen testes ikke før koden er rettet. At en annen person har kontrollert rapporten, er et kriterium i strategien, men står som `[Fylles ut av teamet]`.
 
 **Intern og ekstern:**
 

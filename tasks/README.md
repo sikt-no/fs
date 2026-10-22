@@ -168,7 +168,7 @@ Kommer to PR-er som tar samme steg, gir git en konflikt i seksjonen, og den sist
 
 Når alle steg er levert, kjøres `fs-verify` avgrenset til spesifikasjonen. Den skriver `spec/verify-<dato>-<HHMM>.md` (med klokkeslett, så kjøringer kan sammenlignes) med `- **Spec:** spec/spec-<x>.md` og tabellen `## Scenarioer` (`| Feature-ID | Scenario | Resultat | Bevis |`). Er alt funnet, blir kravene `@implemented`, og spesifikasjonen er verifisert. Mangler noe, settes steget i repoet der koden mangler, tilbake til `pågår` med `Tilbake: <dato>`.
 
-Scenarioene `fs-verify` sjekker (gating-settet), er alle `Scenario:`/`Scenariomal:` som ikke er tagget `@draft`, `@deprecated`, `@openquestion` eller `@demo`, selv eller via `Regel:`. I et levert krav som endres, er det bare `@planned`- og `@in-progress`-delene, og `@deprecated`-delene sjekkes for at koden er borte. Den samme definisjonen står i `fs-kravforvaltning/src/specboard.ts` (`gating`), og de to holdes i synk.
+Scenarioene `fs-verify` sjekker (gating-settet), er alle `Scenario:`/`Scenariomal:` som ikke er tagget `@draft`, `@deprecated` eller `@demo`, selv eller via `Regel:`. En del med bare `@openquestion` (uten `@draft`) er med: den er klar til implementasjon, og spørsmålet stopper ikke leveransen. I et levert krav som endres, er det bare `@planned`- og `@in-progress`-delene, og `@deprecated`-delene sjekkes for at koden er borte. Den samme definisjonen står i `fs-kravforvaltning/src/specboard.ts` (`gating`), og de to holdes i synk.
 
 ## Forholdet til Jira og GitHub
 

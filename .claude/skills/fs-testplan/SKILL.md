@@ -89,7 +89,7 @@ Det brukeren hopper over, skrives som `[Fylles ut: <hva>]`.
 Fyll ut malen, og skriv `akseptansetest/<testplan-slug>/testplan.md`:
 
 - «Hva er levert» med vanlige ord, fra brukerhistoriene og `utforing.md`.
-- «Omfang» per gruppe (oppgave, kapabilitetsmappe eller filene), med lenke til hvert krav på GitHub (på commiten), Feature-ID, status og antall scenarioer som testes. Bare krav som er `@implemented`, står her.
+- «Omfang» per gruppe (oppgave, kapabilitetsmappe eller filene), med lenke til hvert krav på GitHub (på commiten), Feature-ID, status og antall scenarioer som testes. Bare krav som er `@implemented`, står her. Har et scenario eller en regel i testen `@openquestion`, står spørsmålet under tabellen (*Åpne spørsmål* i `krav-fra-testplan.md`).
 - «Flyter»: én underseksjon per flyt, med om hele flyten eller deler av den testes og hvorfor, og én rad per fase, med kravene fasen bygger på (status), om fasen er levert og i leveransen, og antall scenarioer som testes. Uten flyter: «Ingen av kravene er med i en flyt.»
 - «Venter på verifisering»: krav og deler som er `@in-progress`, eller `@planned`-deler i leverte krav som endres, med det verify-rapporten sier mangler.
 - «Ikke med i denne testen» med grunnen fra `krav-fra-testplan.md`, også fasene og overleveringene i flytene som ikke testes.
