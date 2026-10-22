@@ -44,3 +44,9 @@ npm-debug.log*
 # FS Kravforvaltning, desktop-appen (electron-vite / electron-builder)
 fs-kravforvaltning/out/
 fs-kravforvaltning/release/
+
+# CDP-kjøringer: bare resultat.md går i git. Skjermbilder og annet ligger lokalt
+akseptansetest/**/kjoring-*/*
+!akseptansetest/**/kjoring-*/resultat.md
+cdp-tester/**/kjoring-*/*
+!cdp-tester/**/kjoring-*/resultat.md
