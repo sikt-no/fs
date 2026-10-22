@@ -1,5 +1,0 @@
----
-"krav-viewer": minor
----
-
-Ny visning «Flyter» (fjerde knapp i toppfeltet) viser flytene i `krav/_Flyter`: fremdriften og flytens egen status hver for seg, fasene som tidslinje (oversiktsflyten som svømmebane), kravene hver fase bygger på, og overleveringene. Velg hvor mange nivåer med `@depends-on-` som skal følges (1, 2, 3 eller alle), og om hele kravet eller bare regelen fasen bygger på skal følges, så alle avhengighetene i flyten kan avdekkes. Fanene «Kravene i flyten», «Per domene» og «Matrise» viser hva som må være levert, per team og per fase. Hele krav som er levert, skilles fra regler og scenarioer som er levert i et krav som er delvis levert (`@implemented` på delen under en `@in-progress` egenskap): fremdriften viser begge, kravene merkes «delvis levert», «Kravene i flyten» har kolonnen «Levert», og matrisen teller krav: et krav gjenstår til hele kravet er levert, siden `@depends-on-` peker på hele kravet. Varslene (faser uten krav, brutte referanser, avviklede krav, ring, kjente brudd) regnes alltid med alle nivåer. I Krav har en flyt lenken «Vis flyten», og et krav en flyt bygger på, «Med i N flyter».
