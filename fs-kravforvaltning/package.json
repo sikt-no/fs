@@ -1,6 +1,6 @@
 {
   "name": "krav-viewer",
-  "version": "1.6.2",
+  "version": "1.6.3",
   "private": true,
   "description": "Live-visning av Gherkin-kravene i krav/",
   "type": "module",
