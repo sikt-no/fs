@@ -241,9 +241,11 @@ interface Props {
   onVerify?: (scope: VerifyScope, screenshots: boolean) => void;
   /** «I terminal med agent team» på egenskapen (fs-verify-agent-teams) */
   onVerifyTeam?: (screenshots: boolean) => void;
+  /** «Vis flyten» på en flyt, «Med i N flyter» på et krav flytene bygger på; åpner Flyter */
+  flowLink?: { label: string; title?: string; onClick: () => void };
 }
 
-export function FeatureView({ entry, collapsed, flash, lineNumbers, mark, mainRef, onToggle, find, findClosed, onFindClose, onLine, onEdit, onDelete, onVerify, onVerifyTeam }: Props) {
+export function FeatureView({ entry, collapsed, flash, lineNumbers, mark, mainRef, onToggle, find, findClosed, onFindClose, onLine, onEdit, onDelete, onVerify, onVerifyTeam, flowLink }: Props) {
   const f = entry.model;
   const hit = (from: number, to = from) => (mark && from <= mark.to && to >= mark.from ? ' cursor' : '');
   const fileName = entry.path.slice(entry.path.lastIndexOf('/') + 1);
@@ -348,6 +350,11 @@ export function FeatureView({ entry, collapsed, flash, lineNumbers, mark, mainRe
           <span data-ln={f.langLn ?? f.ln} data-sep=" · ">språk: {f.lang}</span>
           <span data-ln={f.ln} data-sep=" · ">{f.nRules} regler · {f.nScen} scenarioer</span>
           <span data-ln={f.ln} data-sep=" · ">{f.nLines} linjer</span>
+          {flowLink && (
+            <button class="flowlink" title={flowLink.title} onClick={flowLink.onClick}>
+              {flowLink.label}
+            </button>
+          )}
           {onEdit && <button class="smallbtn editbtn" onClick={onEdit}>Rediger</button>}
           {onDelete && <button class="smallbtn editbtn" onClick={onDelete}>Slett kravfil</button>}
           {onVerify && <VerifyMenu what="egenskapen" onVerify={shots => onVerify({ kind: 'feature' }, shots)} onTerminal={onVerifyTeam} />}

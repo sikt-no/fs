@@ -416,11 +416,11 @@ Sier at et krav peker på et annet krav. Det er to typer, og de skiller seg på 
 
 - Formatet er `@depends-on-` eller `@ref-` og Feature-ID-en uten `@`: `@depends-on-OPT-BEH-BEH-011`. *(sjekkes automatisk)*
 - Taggen står på delen referansen gjelder: `Egenskap:`, `Regel:` eller `Scenario:`/`Scenariomal:`. Bygger hele kravet på et annet krav, står den på `Egenskap:`-tag-linja, etter eventuell `@scope-<slug>`. Taggen på `Egenskap:` gjelder alle scenarioene i kravet.
-- Taggen peker på hele kravet. Gjelder referansen én regel i kravet, skrives regeltittelen i en kommentar under taggen. Kommentaren er ellers valgfri, og forklarer referansen når det trengs.
+- Taggen peker på hele kravet. Gjelder referansen én regel i kravet, skrives regeltittelen i «…» i en kommentar under taggen. Kommentaren er ellers valgfri, og forklarer referansen når det trengs.
 - Retningen gir seg av hvor taggen står. Den andre retningen, «hva bygger på dette kravet?», skrives ikke ned, men finnes med `grep`.
 - Et krav refererer ikke til seg selv. *(sjekkes automatisk)*
 - En del har hver referanse én gang, og har enten `@depends-on-` eller `@ref-` til et krav, ikke begge. *(sjekkes automatisk)*
-- ID-en må finnes, og `@depends-on-` går ikke i ring (A → B → A). Det krever flere filer, og sjekkes av `fs-krav-avvik`.
+- ID-en må finnes, `@depends-on-` går ikke i ring (A → B → A), og regeltittelen i «…» under taggen må finnes i kravet det pekes på. Det krever flere filer, og sjekkes av `fs-krav-avvik`.
 - Taggen er ikke en statustag, og endrer ikke livsløpet.
 
 Dette er ikke referanser, og blir stående som kommentarer:
