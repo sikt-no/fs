@@ -8,23 +8,11 @@ Egenskap: Listevisning og søk i utdanningstilbud i opptaket
 
   # ÅPNE SPØRSMÅL:
   # - Kravet følger ikke mønsteret for listevisning (Liste / Søk og filtrering / Synlighet). Det mangler «Se liste over utdanningstilbud» med kolonnene i en tabell, sortering, paginering (de 50 første, laste inn flere, alle er lastet inn), navigering til detaljsiden, «Tilgjengelige … i filter» med «Alle …» som standard for hvert filter, «Kombinere filtre», og akronym og søk i organisasjonsfilteret. Skal kravet skrives om etter mønsteret?
-  # - «Se grunndata om utdanning» handler om detaljsiden til utdanningstilbudet, ikke om lista. Hører regelen hjemme i dette kravet?
   # - Mønsteret for listevisning skriver stegene i første person («jeg»), mens kravene i Opptak skriver «opptaksforvalter». Skal Opptak følge mønsteret, eller er det et bevisst unntak?
 
   Bakgrunn:
     Gitt at opptaksforvalter er innlogget
-    Og at opptaket "Samordna opptak 2027" er opprettet med kriterier for utdanningstyper og -nivåer
-
-  @openquestion
-  # ÅPNE SPØRSMÅL:
-  # - Kravet har tre ulike steg for å åpne lista: «åpner oversikten over tilgjengelige utdanningstilbud», «åpner oversikten over utdanningstilbud» og «ser listen over utdanningstilbud i opptaket». Er «tilgjengelige utdanningstilbud» her lista over utdanningstilbud som kan legges til i opptaket (som filtrene i legge_til_utdanningstilbud.feature), eller den samme lista som utdanningstilbudene i opptaket?
-  Regel: Opptaksforvalter ser kun utdanningstilbud som matcher opptakets kriterier
-
-    @in-progress
-    Scenario: Se relevante utdanningstilbud
-      Gitt at opptaket tillater studieprogram på bachelornivå
-      Når opptaksforvalter åpner oversikten over tilgjengelige utdanningstilbud
-      Så ser opptaksforvalter kun studieprogram på bachelornivå fra deltakende organisasjoner
+    Og at opptaket "Samordna opptak 2027" er opprettet med deltakende organisasjoner
 
   Regel: Grunndata fra utdanningsregisteret vises tydelig
 
@@ -80,35 +68,27 @@ Egenskap: Listevisning og søk i utdanningstilbud i opptaket
       Når opptaksforvalter filtrerer på utdanningstilbud med ufullstendige opplysninger
       Så ser opptaksforvalter utdanningstilbud som mangler rangeringsregelverk
 
-    @in-progress @openquestion
-    # ÅPNE SPØRSMÅL:
-    # - Begrepslista har «kvoteprioritet», ikke «kvoteprioritering». Er det kvoteprioritet som menes?
-    Scenario: Filtrere på utdanningstilbud som mangler kvoter, kvoteprioritering eller plassflyt
+    @in-progress
+    Scenario: Filtrere på utdanningstilbud som mangler kvoter, kvoteprioritet eller plassflyt
       Når opptaksforvalter filtrerer på utdanningstilbud med ufullstendige opplysninger
-      Så ser opptaksforvalter utdanningstilbud som mangler kvoter, kvoteprioritering eller plassflyt
+      Så ser opptaksforvalter utdanningstilbud som mangler kvoter, kvoteprioritet eller plassflyt
 
     @in-progress
     Scenario: Filtrere på utdanningstilbud som mangler opplysninger om tilbudsgaranti
       Når opptaksforvalter filtrerer på utdanningstilbud med ufullstendige opplysninger
       Så ser opptaksforvalter utdanningstilbud som mangler opplysninger om hvor tilbudsgarantier skal tas fra
 
-    # AVKLART 08.10.2026: Fristene for tidlig opptak er felles for opptaket
-    # (frister_og_hendelser.feature), og svaret på tidlig opptak publiseres for hele
-    # opptaket (publisere_svar_på_tidlig_opptak.feature). Utdanningstilbudet har
-    # derfor ingen egen dato for tidlig opptak. Det som kan mangle på et utdanningstilbud
-    # som tilbyr tidlig opptak, er poenggrensen. Tidlig søknadsfrist settes fritt per
-    # utdanningstilbud (opptaksinnstillinger_utdanningstilbud.feature).
-    @in-progress @openquestion
-    # ÅPNE SPØRSMÅL:
-    # - Skal scenarioet få @ref-OPT-OPT-UTD-004 (opptaksinnstillinger_utdanningstilbud.feature) og @ref-OPT-OVO-FRI-001 (frister_og_hendelser.feature), som kommentaren over viser til?
+    # AVKLART 08.10.2026: Fristene for tidlig opptak er felles for opptaket, og svaret på
+    # tidlig opptak publiseres for hele opptaket. Utdanningstilbudet har derfor ingen egen
+    # dato for tidlig opptak. Det som kan mangle på et utdanningstilbud som tilbyr tidlig
+    # opptak, er poenggrensen. Tidlig søknadsfrist settes fritt per utdanningstilbud.
+    @in-progress @depends-on-OPT-OPT-UTD-025 @ref-OPT-OVO-FRI-001
     Scenario: Filtrere på utdanningstilbud som mangler dato for tidlig søknadsfrist
       Gitt at et utdanningstilbud er markert med tidlig søknadsfrist
       Når opptaksforvalter filtrerer på utdanningstilbud med ufullstendige opplysninger
       Så ser opptaksforvalter utdanningstilbud der dato for tidlig søknadsfrist ikke er satt
 
-    @in-progress @openquestion
-    # ÅPNE SPØRSMÅL:
-    # - Skal scenarioet få @ref-OPT-BEH-BEH-014 (publisere_svar_på_tidlig_opptak.feature) og @ref-OPT-OVO-FRI-001 (frister_og_hendelser.feature), som kommentaren over forrige scenario viser til?
+    @in-progress @depends-on-OPT-OPT-UTD-010 @ref-OPT-BEH-BEH-014
     Scenario: Filtrere på utdanningstilbud som mangler poenggrense for tidlig opptak
       Gitt at et utdanningstilbud tilbyr tidlig opptak
       Når opptaksforvalter filtrerer på utdanningstilbud med ufullstendige opplysninger

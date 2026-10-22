@@ -10,6 +10,8 @@ Egenskap: Angi søkeord på utdanningstilbudet
     Gitt at opptaksforvalter har åpnet et utdanningstilbud
 
   Regel: Søkeord kan angis på utdanningstilbudet
+    # AVKLART 2026-10-22: Søkeord er fritekst, med forslag fra søkeord som allerede er brukt.
+    # Et utdanningstilbud har høyst 20 søkeord, og et søkeord har høyst 50 tegn. Det er ingen krav til format.
 
     Scenario: Legge til søkeord på utdanningstilbud
       Når opptaksforvalter legger til søkeordet "Lege" på utdanningstilbudet
@@ -31,7 +33,3 @@ Egenskap: Angi søkeord på utdanningstilbudet
       Gitt at utdanningstilbudet har søkeordet "Lege"
       Når søkeren søker på "Lege" i Min kompetanse
       Så vises utdanningstilbudet i søkeresultatet
-
-# ÅPNE SPØRSMÅL:
-# - Er søkeord fritekst, eller velges de fra en forhåndsdefinert liste?
-# - Finnes det begrensninger på antall søkeord eller format (f.eks. med/uten "#")?

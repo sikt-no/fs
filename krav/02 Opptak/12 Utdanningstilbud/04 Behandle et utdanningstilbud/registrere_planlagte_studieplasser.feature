@@ -12,10 +12,8 @@ Egenskap: Registrere planlagt antall studieplasser
   Bakgrunn:
     Gitt at opptaksforvalter har åpnet et utdanningstilbud
 
-  @openquestion
   Regel: Planlagt antall studieplasser kan registreres
-    # ÅPNE SPØRSMÅL:
-    # - Løsningen godtar et heltall fra 0 til 9999. Dekker det alle utdanningstilbud, eller trengs andre grenser?
+    # AVKLART 2026-10-22: Planlagt antall studieplasser er et heltall fra 0 til 9999.
 
     Scenario: Registrere planlagt antall studieplasser
       Når opptaksforvalter registrerer planlagt antall studieplasser

@@ -10,6 +10,7 @@ Egenskap: Registrere poengopplysninger for utdanningstilbudet
     Gitt at opptaksforvalter har åpnet et utdanningstilbud
 
   Regel: Median poengsum for fjoråret vises
+    # AVKLART 2026-10-22: Medianen finnes i databasen. Den registreres ikke av opptaksforvalter, og vises på utdanningstilbudet.
 
     @in-progress
     Scenario: Se median poengsum for fjorårets opptatte
@@ -17,6 +18,7 @@ Egenskap: Registrere poengopplysninger for utdanningstilbudet
       Så vises median poengsum for fjorårets opptatte
 
   Regel: Poenggrense for årets tidligopptak kan registreres og vises
+    # AVKLART 2026-10-22: Det er én poenggrense per utdanningstilbud, ikke per kvote.
 
     Scenario: Registrere poenggrense for tidligopptak
       Når opptaksforvalter registrerer poenggrensen for årets tidligopptak
@@ -25,8 +27,3 @@ Egenskap: Registrere poengopplysninger for utdanningstilbudet
     Scenario: Se registrert poenggrense for tidligopptak
       Gitt at det er registrert en poenggrense for årets tidligopptak
       Så vises poenggrensen for tidligopptak
-
-# ÅPNE SPØRSMÅL:
-# - Hvor hentes fjorårets median poengsum fra? Kilden er ikke avklart (må utredes).
-# - Skal median beregnes automatisk fra opptaksdata, eller registreres manuelt?
-# - Gjelder poenggrensen for tidligopptak per kvote, eller er det én samlet grense per utdanningstilbud?

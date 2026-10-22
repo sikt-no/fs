@@ -10,16 +10,6 @@ Egenskap: Legge til utdanningstilbud i opptak
     Gitt at opptaksforvalter er innlogget
     Og at opptaket "Samordna opptak 2027" er opprettet med deltakende organisasjoner
 
-  Regel: Opptaksforvalter ved deltakende organisasjon kan legge til alle sine utdanningstilbud
-
-    @planned @openquestion
-    # ÅPNE SPØRSMÅL:
-    # - Det finnes ingen egen handling for å legge til alle i dag. Holder det at opptaksforvalter filtrerer på organisasjonen og velger alle treffene, eller skal det være en egen handling?
-    Scenario: Legge til alle utdanningstilbud fra organisasjonen opptaksforvalter er ved
-      Gitt at opptaksforvalter er ved en deltakende organisasjon
-      Når opptaksforvalter velger å legge til alle utdanningstilbud fra organisasjonen opptaksforvalter er ved, som matcher opptakets kriterier
-      Så legges alle relevante utdanningstilbud fra organisasjonen til i opptaket
-
   Regel: Opptaksforvalter ved deltakende organisasjon kan legge til enkelttilbud
 
     Scenario: Legge til enkelttilbud fra organisasjonen opptaksforvalter er ved
@@ -34,6 +24,12 @@ Egenskap: Legge til utdanningstilbud i opptak
       Når opptaksforvalter velger å legge til utdanningstilbudene "Sykepleie, høst 2027" og "Vernepleie, høst 2027"
       Så legges begge utdanningstilbudene til i opptaket
 
+    @planned
+    Scenario: Legge til alle utdanningstilbudene i en filtrert liste
+      Gitt at opptaksforvalter har filtrert listen over utdanningstilbud som kan legges til
+      Når opptaksforvalter velger alle utdanningstilbudene i listen og legger dem til i opptaket
+      Så legges alle utdanningstilbudene i den filtrerte listen til i opptaket
+
   Regel: Opptaksforvalter ved forvaltende organisasjon kan legge til utdanningstilbud for alle deltakende organisasjoner
 
     Scenario: Opptaksforvalter ved forvaltende organisasjon legger til utdanningstilbud for en annen organisasjon
@@ -43,12 +39,20 @@ Egenskap: Legge til utdanningstilbud i opptak
 
   Regel: Kun utdanningstilbud fra deltakende organisasjoner kan legges til
 
-    @planned @openquestion
-    # ÅPNE SPØRSMÅL:
-    # - Holder det at utdanningstilbud fra organisasjoner som ikke deltar, ikke kan velges, eller skal serveren også avvise forsøk på å legge dem til?
+    @planned
+    # AVKLART 2026-10-22: Det holder at utdanningstilbud fra organisasjoner som ikke deltar, ikke kan velges.
     Scenario: Organisasjon som ikke deltar kan ikke legge til utdanningstilbud
       Gitt at organisasjonen "NTNU" ikke er lagt til som deltaker i opptaket
       Så kan ikke utdanningstilbud fra NTNU legges til i opptaket
+
+  @depends-on-OPT-OPT-UTD-005
+  Regel: Opptaksforvalter ser kun utdanningstilbud som matcher opptakets kriterier
+
+    @in-progress
+    Scenario: Se relevante utdanningstilbud
+      Gitt at opptaket tillater studieprogram på bachelornivå
+      Når opptaksforvalter åpner listen over utdanningstilbud som kan legges til i opptaket
+      Så ser opptaksforvalter kun studieprogram på bachelornivå fra deltakende organisasjoner
 
   Regel: Opptaksforvalter kan filtrere på utdanningstype og studienivå når utdanningstilbud legges til
 
@@ -75,29 +79,27 @@ Egenskap: Legge til utdanningstilbud i opptak
       Så vises ikke emner som mulige utdanningstilbud
       Og studieprogram på 7 masternivå vises ikke som mulige utdanningstilbud
 
-  @openquestion
-  # ÅPNE SPØRSMÅL:
-  # - Skal regelen få @depends-on-OPT-OVO-FRI-001 (frister_og_hendelser.feature), siden den bygger på når redigering av utdanningstilbud åpner og stenger?
-  # - Skal regelen få @ref-OPT-OPT-UTD-007 (sette_studieplasser_og_antall_tilbud.feature), der unntaket for antall studieplasser står?
-  # - Skal regelen få @ref-OPT-OPT-UTD-003 (trekke_utdanningstilbud.feature), der trekking står?
+  @depends-on-OPT-OVO-FRI-001 @ref-OPT-OPT-UTD-007 @ref-OPT-OPT-UTD-003
   Regel: Deltakende organisasjoner kan knytte til og redigere utdanningstilbud bare i perioden opptaket er åpent for redigering
-    # Virkningen av når redigering av utdanningstilbud åpner og stenger, som opptaksforvalter setter i
-    # 11 Opprette og vedlikeholde opptak/04 Frister/frister_og_hendelser.feature.
+    # Virkningen av når redigering av utdanningstilbud åpner og stenger, som opptaksforvalter setter i fristene for opptaket.
     # Lagt til 2026-10-19 etter akseptansetesten av opprette og vedlikeholde opptak.
     # AVKLART 2026-10-15 (Q4, Q5 og Q13, TAKE-410): Fristen stenger alt deltakende organisasjoner endrer på
-    # utdanningstilbudet, unntatt antall studieplasser (sette_studieplasser_og_antall_tilbud.feature). I et lokalt
+    # utdanningstilbudet, unntatt antall studieplasser. I et lokalt
     # opptak er lærestedet selv forvaltende organisasjon, så fristen begrenser ikke lærestedet.
     # AVKLART 2026-10-15 (Q3, TAKE-410): En åpningsdato som ikke er satt, holder redigeringen stengt.
-    # Trekking står i trekke_utdanningstilbud.feature.
 
-    @planned @openquestion
-    # ÅPNE SPØRSMÅL:
-    # - En åpningsdato som ikke er satt skal holde redigeringen stengt (AVKLART Q3), men løsningen regner den som åpen. Er avklaringen fortsatt gjeldende?
-    # - Holder det at muligheten skjules for deltakende organisasjoner, eller skal serveren også avvise endringer før redigeringen åpner?
+    @planned
     Scenario: Kan ikke knytte utdanningstilbud til opptaket før redigering åpner
       Gitt at redigering av utdanningstilbud i opptaket åpner "2026-10-01"
       Og at opptaksforvalter er ved en deltakende organisasjon
       Når opptaksforvalter vil legge til utdanningstilbudet "Sykepleie, høst 2027" i opptaket "2026-09-30"
+      Så kan opptaksforvalter ikke legge til utdanningstilbudet "Sykepleie, høst 2027"
+
+    @planned
+    Scenario: Redigering er stengt når åpningsdatoen ikke er satt
+      Gitt at det ikke er satt når redigering av utdanningstilbud i opptaket åpner
+      Og at opptaksforvalter er ved en deltakende organisasjon
+      Når opptaksforvalter vil legge til utdanningstilbudet "Sykepleie, høst 2027" i opptaket
       Så kan opptaksforvalter ikke legge til utdanningstilbudet "Sykepleie, høst 2027"
 
     Scenario: Kan knytte til og redigere utdanningstilbud i perioden opptaket er åpent for redigering
@@ -107,9 +109,8 @@ Egenskap: Legge til utdanningstilbud i opptak
       Så legges utdanningstilbudet "Sykepleie, høst 2027" til i opptaket
       Og opptaksforvalter kan redigere utdanningstilbudet "Sykepleie, høst 2027"
 
-    @planned @openquestion
-    # ÅPNE SPØRSMÅL:
-    # - Holder det at muligheten skjules for deltakende organisasjoner, eller skal serveren også avvise endringer etter at redigeringen stenger?
+    @planned
+    # AVKLART 2026-10-22: Det holder at muligheten skjules for deltakende organisasjoner.
     Scenario: Kan ikke knytte til eller redigere utdanningstilbud etter at redigering stenger
       Gitt at redigering av utdanningstilbud i opptaket stenger "2027-06-06"
       Og at opptaksforvalter er ved en deltakende organisasjon

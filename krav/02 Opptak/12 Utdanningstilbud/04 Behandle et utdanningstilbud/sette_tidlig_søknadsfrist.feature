@@ -1,6 +1,6 @@
 # language: no
 # Jira: SHI-708
-@OPT-OPT-UTD-025 @must @draft @scope-utdanningstilbud-2027
+@OPT-OPT-UTD-025 @must @planned @scope-utdanningstilbud-2027
 Egenskap: Sette tidlig søknadsfrist og dokumentasjonsfrist på utdanningstilbudet
   Som opptaksforvalter
   ønsker jeg å sette tidlig søknadsfrist og tidlig dokumentasjonsfrist per utdanningstilbud
@@ -10,14 +10,28 @@ Egenskap: Sette tidlig søknadsfrist og dokumentasjonsfrist på utdanningstilbud
     Gitt at opptaksforvalter er innlogget
     Og at opptaket "Samordna opptak 2027" har utdanningstilbud
 
+  @openquestion
   Regel: Opptaksforvalter kan sette tidlig søknadsfrist per utdanningstilbud
+    # ÅPNE SPØRSMÅL:
+    # - Hva skjer med søkere som ikke har lastet opp dokumentasjon innen den tidlige dokumentasjonsfristen? Kan søkeren ikke laste opp etter fristen, eller merkes dokumentasjonen som levert for sent for saksbehandleren?
+    # AVKLART 2026-10-22: Tidlig søknadsfrist settes fritt per utdanningstilbud. Opptaket trenger ingen egen innstilling for det.
 
     Scenario: Sette tidlig søknadsfrist
-      Gitt at opptaket åpner for at tidlig søknadsfrist kan angis per utdanningstilbud
-      Når opptaksforvalter setter tidlig søknadsfrist for utdanningstilbudet "Politihøyskolen, høst 2027"
-      Så har utdanningstilbudet en tidligere søknadsfrist enn opptakets generelle frist
+      Gitt at søknadsfristen for opptaket er "2027-04-15 23:59"
+      Når opptaksforvalter setter tidlig søknadsfrist til "2027-03-01 23:59" for utdanningstilbudet "Politihøyskolen, høst 2027"
+      Så har utdanningstilbudet "Politihøyskolen, høst 2027" tidlig søknadsfrist "2027-03-01 23:59"
+
+    Scenariomal: Tidlig søknadsfrist må være før søknadsfristen for opptaket
+      Gitt at søknadsfristen for opptaket er "2027-04-15 23:59"
+      Når opptaksforvalter setter tidlig søknadsfrist til "<frist>" for utdanningstilbudet "Politihøyskolen, høst 2027"
+      Så lagres ikke den tidlige søknadsfristen
+      Og opptaksforvalter får beskjed om at tidlig søknadsfrist må være før søknadsfristen for opptaket
+
+      Eksempler:
+        | frist            |
+        | 2027-04-15 23:59 |
+        | 2027-04-20 23:59 |
 
     Scenario: Sette tidlig dokumentasjonsfrist
-      Gitt at opptaket åpner for at tidlig søknadsfrist kan angis per utdanningstilbud
       Når opptaksforvalter setter tidlig dokumentasjonsfrist til "2027-03-01 23:59" for utdanningstilbudet "Politihøyskolen, høst 2027"
-      Så må søkere til utdanningstilbudet laste opp dokumentasjon innen dokumentasjonsfristen
+      Så har utdanningstilbudet "Politihøyskolen, høst 2027" tidlig dokumentasjonsfrist "2027-03-01 23:59"
