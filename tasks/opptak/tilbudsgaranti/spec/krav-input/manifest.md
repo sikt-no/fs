@@ -1,8 +1,8 @@
 # Krav-input
 
 - **Kilde:** scope-raden for oppgaven i `tasks/opptak/scope-tilbudsgaranti-2027.md`
-- **Hentet:** 2026-10-21 15:42
-- **HEAD:** `c9fd3ed9c126898a7663a9bd9e05377097652085` (branch `krav/tilbudsgaranti-stek-627`, med en ucommittet endring i kommentaren til regelen «Endringer i tilbudsgarantien kan spores»)
+- **Hentet:** 2026-10-22 08:46
+- **HEAD:** `b6f702dc82d4dcee575662f770fc3fc68eba427f` (branch `krav/tilbudsgaranti-stek-627`)
 
 ## Krav
 
@@ -10,14 +10,16 @@
 
 ## Skisser
 
-### Søknadsalternativ i saksbehandlingen
+### Skuffen, fanen «Søknadsalternativ»
 
-- **Figma-URL:** https://www.figma.com/design/LmoNQlmAuE2FlE0fUo5GoO/FS-Admin---Seksjon-Opptak?node-id=9840-220112
+- **Figma-URL:** https://www.figma.com/design/LmoNQlmAuE2FlE0fUo5GoO/FS-Admin---Seksjon-Opptak?node-id=9348-84214 (fra designeren 2026-10-22)
 - **fileKey:** `LmoNQlmAuE2FlE0fUo5GoO`
-- **nodeId:** `9840:220112` (seksjonen «Saksbehandling sekvens V2», 85 002 × 23 035 punkter). Tilbudsgarantien står i rammen `9840:223140` «studiealternativ v2», under seksjonen «Kvoter».
-- **Lagret:** `sketches/figma/soknadsalternativ-i-saksbehandlingen/screenshot.png` (rammen `9840:223140`)
+- **nodeId:** `9348:84214` (komponenten `ActiveTab=Søknadsalternativer`)
+- **Lagret:**
+  - `sketches/figma/skuff-soknadsalternativ/screenshot.png`
+  - `sketches/figma/skuff-soknadsalternativ/design-context.md` (strukturen fra `get_metadata`, og tekstene)
 - **Ikke lagret:**
-  - Skjermbilde av hele seksjonen: for stor til å leses (1024 × 279 etter nedskalering).
-  - `design-context.md`, `variables.md` og `assets/`: skissen er utdatert, og brukes ikke til implementasjonsdetaljer.
-  - Sub-frames: seksjonen har over 13 000 noder. Bare rammen med tilbudsgaranti er hentet.
-- **Død lenke:** scope-fila lenker også til node `16945:72343` (behandling av søknad om tidlig opptak, med nedtrekksmenyen for tilbudsgaranti). Figma svarer at noden ikke finnes i fila.
+  - `get_design_context`, `variables.md` og `assets/`: skissen brukes til validering og tekster, ikke til kode.
+  - Sub-frames: komponenten er én skjerm, og skjermbildet viser hele den.
+
+Erstatter skissen «Søknadsalternativ i saksbehandlingen» (Figma `9840:223140`), som var utdatert, og som er fjernet fra `sketches/`.

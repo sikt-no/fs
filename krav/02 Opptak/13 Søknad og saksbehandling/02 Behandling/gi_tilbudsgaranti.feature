@@ -59,7 +59,7 @@
 #   søknadsfristen (avklart for tidlig opptak 08.10.2026, i OPT-BEH-BEH-007, og stemmer
 #   med koden).
 #
-@OPT-BEH-BEH-010 @must @in-progress @scope-tilbudsgaranti-2027
+@OPT-BEH-BEH-010 @must @implemented @scope-tilbudsgaranti-2027
 Egenskap: Gi tilbudsgaranti
   Som saksbehandler
   ønsker jeg å gi søkeren tilbudsgaranti på et søknadsalternativ etter en individuell vurdering
