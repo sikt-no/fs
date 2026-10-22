@@ -8,8 +8,8 @@ Kravet var én fil (`vitnemålsbehandling.feature`, `@OPT-BEH-BEH-004`) fram til
 
 | Leveranse | Kravspesifikasjon | Feature-ID | Issue | Bygger på | Størrelse | Status |
 |---|---|---|---|---|---|---|
-| L1 Vise vitnemålene | [vise_elektroniske_vitnemål.feature](vise_elektroniske_vitnemål.feature) | `@OPT-BEH-BEH-005` | #613 | — | liten | `@planned` |
-| L2 Velge ett vitnemål for hele saken | [velge_vitnemål_som_grunnlag.feature](velge_vitnemål_som_grunnlag.feature) | `@OPT-BEH-BEH-004` | #608 | L1 | middels | `@draft` |
+| L1 Vise vitnemålene | [vise_elektroniske_vitnemål.feature](vise_elektroniske_vitnemål.feature) | `@OPT-BEH-BEH-005` | #613 | — | liten | `@in-progress` |
+| L2 Velge ett vitnemål for hele saken | [velge_vitnemål_som_grunnlag.feature](velge_vitnemål_som_grunnlag.feature) | `@OPT-BEH-BEH-004` | #608 | L1 | middels | `@in-progress` |
 | L3 Fagvalg per poengvariant | [velge_fag_per_poengvariant.feature](velge_fag_per_poengvariant.feature) | `@OPT-BEH-BEH-007` | #609 | L2 | middels | `@draft` |
 | L4 Manuell inntasting og endring av fag | [legge_inn_og_endre_fag.feature](legge_inn_og_endre_fag.feature) | `@OPT-BEH-BEH-008` | #610 | L2, L3 | stor | `@draft` |
 | L5 Sammenligning av vitnemål | [sammenligne_vitnemål.feature](sammenligne_vitnemål.feature) | `@OPT-BEH-BEH-009` | #611 | L1 | liten | `@draft` |
@@ -60,6 +60,12 @@ Kravene erstatter to funksjoner i FS-klienten: vitnemålsbehandling (FS143.001 V
 
   Ingen spørsmål står åpne.
 - **08.10.2026:** Oppdelingen i leveranser er besluttet, og hver leveranse har fått sin egen kravspesifikasjon.
+- **21.10.2026:** Gjennomgang av L1 og L2 i teamet. Vitnemålsoversikten i L1 viser karakterpoeng, realfagspoeng og språkpoeng per vitnemål. L1 er dermed ikke lenger bare visning: den er avhengig av at Team Puff kan beregne poeng for hvert vitnemål. Scenarioet «Automatikken har ikke beregnet poeng når søkeren har flere vitnemål» er fjernet fra L2. Når saksbehandleren er i vitnemålsbehandleren, vet de allerede at saken er manuell og ikke kan gjøres automatisk, så en egen forklaring trengs ikke.
+- **22.10.2026:** Domeneeksperter svarte på de 20 beslutningene fra 21.10. 19 fikk bare ja. To endringer og ett nytt spørsmål:
+  - Alle vitnemålene sorteres kronologisk etter utstedelsesdato. Førstegangsvitnemålet står ikke først av seg selv (L1).
+  - Når poengberegningen ikke svarer, får saksbehandleren en feilmelding i tillegg til tomme poeng (L1).
+  - Åpent spørsmål (L2): Skal en verdi saksbehandleren har lagt inn selv, overskrives når saksbehandleren senere beregner poengene på nytt?
+  - Poengene per vitnemål i L1 må være på plass til opptaket i 2027. Det er usikkert om Team Puff blir ferdig før L1 skal akseptansetestes. Det må avtales med Puff, og det må vurderes om L1 kan akseptansetestes uten poengene.
 
 ## Avgrensninger: bevisst utenfor kravene
 
