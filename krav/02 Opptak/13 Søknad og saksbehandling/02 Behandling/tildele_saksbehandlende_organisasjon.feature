@@ -15,12 +15,12 @@ Egenskap: Tildele saksbehandlende organisasjon
   søkere med utenlandsk utdanning.
 
   Løsningen fordeler derfor hvert søknadsalternativ til en saksbehandlende organisasjon etter
-  tildelingsregler som opptaksforvalteren setter opp. Søknaden blir til én sak hos hver
+  saksbehandlertildelingsregler som opptaksforvalteren setter opp. Søknaden blir til én sak hos hver
   saksbehandlende organisasjon. Det er organisasjonen som har ansvaret, ikke en enkelt
   saksbehandler, og det er organisasjonen som får tilgang til saken.
 
   Kravet har fire deler:
-  1. Oppsett – opptaksforvalteren setter opp tildelingsreglene for opptaket.
+  1. Oppsett – opptaksforvalteren setter opp saksbehandlertildelingsreglene for opptaket.
   2. Fordeling – hvordan hver fordeling og hvert unntak avgjør hvem som saksbehandler.
   3. Endring – når fordelingen ligger fast, og når søknadsalternativer flyttes.
   4. Innsyn – hvem som ser sakene.
@@ -32,14 +32,8 @@ Egenskap: Tildele saksbehandlende organisasjon
 
   # ── 1. Oppsett ───────────────────────────────────────────────
 
-  @ref-OPT-OPT-UTD-004 @openquestion
-  Regel: Opptaksforvalteren ved forvaltende organisasjon setter opp tildelingsreglene for opptaket
-    # ÅPNE SPØRSMÅL:
-    # - Begrepslista (nr. 17) sier at «tildelingsregel» er erstattet av «saksbehandlertildelingsregel».
-    #   Er «tildelingsreglene» et samlebegrep for saksbehandlertildelingsreglene, standardregelen og
-    #   unntakene, eller skal ordet byttes? Det gjelder regeltittelen, beskrivelsen, de to siste
-    #   scenarioene i regelen og «tildelingsreglene har unntak» i regelen om unntak.
-
+  @ref-OPT-OPT-UTD-004
+  Regel: Opptaksforvalteren ved forvaltende organisasjon setter opp saksbehandlertildelingsreglene for opptaket
     # Lærestedets valg av saksbehandlertildelingsregel per utdanningstilbud står der.
 
     Scenario: Opprette saksbehandlertildelingsregel
@@ -90,14 +84,14 @@ Egenskap: Tildele saksbehandlende organisasjon
         | er standard i opptaket              |
         | er knyttet til utdanningstilbud     |
 
-    Scenario: Tildelingsreglene er ikke tilgjengelige i lokale opptak
+    Scenario: Saksbehandlertildelingsreglene er ikke tilgjengelige i lokale opptak
       Gitt at opptaket "Lokalt opptak høst 2027" er opprettet som lokalt
       Når opptaksforvalteren åpner opptaket "Lokalt opptak høst 2027"
-      Så ser ikke opptaksforvalteren tildelingsreglene for opptaket
+      Så ser ikke opptaksforvalteren saksbehandlertildelingsreglene for opptaket
 
-    Scenario: Deltakende lærested kan ikke endre tildelingsreglene
-      Når opptaksforvalteren ved Universitetet i Oslo åpner tildelingsreglene for opptaket
-      Så ser ikke opptaksforvalteren muligheten til å opprette, endre eller slette tildelingsregler
+    Scenario: Deltakende lærested kan ikke endre saksbehandlertildelingsreglene
+      Når opptaksforvalteren ved Universitetet i Oslo åpner saksbehandlertildelingsreglene for opptaket
+      Så ser ikke opptaksforvalteren muligheten til å opprette, endre eller slette saksbehandlertildelingsregler
 
   # ── 2. Fordeling ─────────────────────────────────────────────
 
@@ -211,7 +205,7 @@ Egenskap: Tildele saksbehandlende organisasjon
       Så gjelder unntakene for søknadsalternativene med saksbehandlertildelingsregelen "JOU"
 
     Scenariomal: HK-dir saksbehandler hele søknaden når søkeren har utdanningsbakgrunn <utdanningsbakgrunn>
-      Gitt at tildelingsreglene har unntak som fordeler "<utdanningsbakgrunn>" til HK-dir
+      Gitt at saksbehandlertildelingsreglene har unntak som fordeler "<utdanningsbakgrunn>" til HK-dir
       Og at søkeren har utdanningsbakgrunn "<utdanningsbakgrunn>"
       Og at søkeren har søkt "Informatikk, UiO", "Historie, UiT" og "Sykepleie, NTNU" i den rekkefølgen
       Når søknadsalternativene fordeles

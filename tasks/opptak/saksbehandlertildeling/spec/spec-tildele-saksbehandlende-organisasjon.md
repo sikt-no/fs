@@ -14,7 +14,7 @@ Spesifikasjonen dekker hvordan søknadsalternativene i et samordnet opptak forde
 
 ## Krav
 
-- **`tildele_saksbehandlende_organisasjon.feature`** (`@OPT-BEH-BEH-011`): tildelingsreglene i opptaket, fordelingen etter «Alle som deltar i opptaket», «Bare tilbyderen» og «Tilbydere i samme sektor», unntak, saksbehandling på vegne av et lærested, når fordelingen skjer, flytting ved endret utdanningsbakgrunn, og innsyn for saksbehandler, opptaksforvalter og tilbyder. ([krav/02 Opptak/13 Søknad og saksbehandling/02 Behandling/tildele_saksbehandlende_organisasjon.feature](../../../../krav/02%20Opptak/13%20S%C3%B8knad%20og%20saksbehandling/02%20Behandling/tildele_saksbehandlende_organisasjon.feature))
+- **`tildele_saksbehandlende_organisasjon.feature`** (`@OPT-BEH-BEH-011`): saksbehandlertildelingsreglene i opptaket, fordelingen etter «Alle som deltar i opptaket», «Bare tilbyderen» og «Tilbydere i samme sektor», unntak, saksbehandling på vegne av et lærested, når fordelingen skjer, flytting ved endret utdanningsbakgrunn, og innsyn for saksbehandler, opptaksforvalter og tilbyder. ([krav/02 Opptak/13 Søknad og saksbehandling/02 Behandling/tildele_saksbehandlende_organisasjon.feature](../../../../krav/02%20Opptak/13%20S%C3%B8knad%20og%20saksbehandling/02%20Behandling/tildele_saksbehandlende_organisasjon.feature))
 
 ### Utenfor scope (`@draft`)
 
@@ -42,7 +42,7 @@ Disse delene er validert, men utsatt. Kravet blir stående som `@in-progress` ti
 - **Referanse:** <https://www.figma.com/design/LmoNQlmAuE2FlE0fUo5GoO/FS-Admin---Seksjon-Opptak?node-id=18283-139419> (`fileKey` `LmoNQlmAuE2FlE0fUo5GoO`, `nodeId` `18283:139419`, siden «Saksbehandlertildeling»)
 - **Lagrede artefakter:** [screenshot.png](krav-input/sketches/figma/saksbehandlertildelingsregler/screenshot.png), [design-context.md](krav-input/sketches/figma/saksbehandlertildelingsregler/design-context.md). Skjermbildet av seksjonen «Endre utdanningsbakgrunn og B-rolle», sub-frames og variabler ble ikke hentet (grensen for kall i Figma-MCP).
 - **Dekker krav:** `tildele_saksbehandlende_organisasjon.feature`
-  - «Saksbehandlertildelingsregler» → regelen «Opptaksforvalteren ved forvaltende organisasjon setter opp tildelingsreglene for opptaket» (standardregel, liste, status, sletting)
+  - «Saksbehandlertildelingsregler» → regelen «Opptaksforvalteren ved forvaltende organisasjon setter opp saksbehandlertildelingsreglene for opptaket» (standardregel, liste, status, sletting)
   - «Opprett tildelingsregel» og «JOU» → fordelingene, organisasjon for sektoren og unntak for utdanningsbakgrunn
   - «Studiealternativ knyttet til JOU» → scenario `Se hvilke utdanningstilbud som er knyttet til saksbehandlertildelingsregelen`
   - «Endre utdanningsbakgrunn og B-rolle» → regelen «Søknadsalternativene flyttes når utdanningsbakgrunnen endres til en bakgrunn med unntak»
@@ -72,9 +72,12 @@ Disse delene er validert, men utsatt. Kravet blir stående som `@in-progress` ti
 - [ ] Skisse mangler for valget av organisasjon som saksbehandler på vegne av et lærested.
 - [ ] Funn i fs-admin fra [verify-2026-10-21-1600.md](verify-2026-10-21-1600.md), ikke rettet. Lagt inn som [STEK-629](https://sikt.atlassian.net/browse/STEK-629) under STEK-572:
   - Valglista for organisasjon for sektoren henter alle organisasjoner, ikke bare dem som deltar i opptaket (`BehandlertildelingsregelSektorOrganisasjonCombobox.tsx`). Backend avviser først ved lagring.
-  - «Opprett» i tildelingsreglene sjekker rollen uten organisasjon (`BehandlertildelingsreglerResultList.tsx:69-72`), så opptaksforvaltere ved deltakende læresteder ser knappen. Backend avviser lagringen.
+  - «Opprett» i saksbehandlertildelingsreglene sjekker rollen uten organisasjon (`BehandlertildelingsreglerResultList.tsx:69-72`), så opptaksforvaltere ved deltakende læresteder ser knappen. Backend avviser lagringen.
 - [x] Presisering i kravet: `Unntaket går foran saksbehandlertildelingsregel der bare tilbyderen saksbehandler` holder bare når standardregelen også har unntaket for «Utenlandsk». Det står ikke i `Gitt`.
   - **Endret (2026-10-22):** `Gitt` sier nå at standardregelen har unntaket.
+- [x] «Tildelingsreglene» i kravet (åpent spørsmål fra main, begrepslista nr. 17).
+  - **Beslutning (2026-10-22, Håkon):** byttes til «saksbehandlertildelingsreglene» overalt, også i flyten `@FLY-OPT-SAK-001`. To scenarioer har fått ny tittel: `Saksbehandlertildelingsreglene er ikke tilgjengelige i lokale opptak` og `Deltakende lærested kan ikke endre saksbehandlertildelingsreglene`.
+
 
 ## Rute
 

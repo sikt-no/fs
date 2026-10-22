@@ -2,7 +2,7 @@
 @FLY-OPT-SAK-001 @must @planned @e2e
 Egenskap: Saksbehandlertildeling
   Fra opptaket settes opp, til riktig organisasjon har saken. Opptaksforvalteren ved forvaltende
-  organisasjon setter opp tildelingsreglene for opptaket, og hvert utdanningstilbud får en
+  organisasjon setter opp saksbehandlertildelingsreglene for opptaket, og hvert utdanningstilbud får en
   saksbehandlertildelingsregel. Når søkeren sender inn søknaden, fordeles søknadsalternativene,
   og søknaden blir én sak hos hver saksbehandlende organisasjon. Endres utdanningsbakgrunnen
   til en bakgrunn med unntak før fristen opptaket har satt, flyttes søknadsalternativene.
@@ -14,13 +14,10 @@ Egenskap: Saksbehandlertildeling
 
   @depends-on-OPT-OVO-SAM-001 @depends-on-OPT-BEH-BEH-011 @openquestion
   # OPT-OVO-SAM-001: lærestedene som deltar i opptaket.
-  # OPT-BEH-BEH-011: «Opptaksforvalteren ved forvaltende organisasjon setter opp tildelingsreglene for opptaket»
+  # OPT-BEH-BEH-011: «Opptaksforvalteren ved forvaltende organisasjon setter opp saksbehandlertildelingsreglene for opptaket»
   # og «Et lærested kan ha saksbehandlingen sin hos en annen organisasjon i opptaket».
-  Regel: Tildelingsreglene settes for opptaket
+  Regel: Saksbehandlertildelingsreglene settes for opptaket
     # ÅPNE SPØRSMÅL:
-    # - Begrepslista (nr. 17) sier at «tildelingsregel» er erstattet av «saksbehandlertildelingsregel».
-    #   Er «tildelingsreglene» et samlebegrep for saksbehandlertildelingsreglene, standardregelen og
-    #   unntakene, eller skal ordet byttes (her, i beskrivelsen og i OPT-BEH-BEH-011)?
     # - I OPT-BEH-BEH-011 betyr «SPE» «Bare tilbyderen – også for studieønsker uten egen regel», og «UVH»
     #   betyr «Bare tilbyderen – bare dette studieønsket». Skal flyten bruke «UVH», så testdataene
     #   betyr det samme i flyten og i kravet?
