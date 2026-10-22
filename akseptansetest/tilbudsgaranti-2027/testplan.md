@@ -110,7 +110,7 @@ Klart når testansvarlig har logget inn som testbruker og ser testdataene.
 | 3 | Testdataene kan settes tilbake eller lages på nytt | [Fylles ut av teamet] |
 | 4 | Testbrukerne finnes i rollene leveransen gjelder, i minst to organisasjoner | [Fylles ut av teamet] |
 | 5 | `fs-verify` har funnet alle scenarioene, og en annen person har kontrollert rapporten | Oppfylt: 17 av 17 funnet 2026-10-22, kontrollert av `fs-verify-kontroll` |
-| 6 | Testcasene er laget og gått gjennom av testansvarlig | Venter |
+| 6 | Testcasene er laget og gått gjennom av testansvarlig | Laget, venter på gjennomgang av testansvarlig |
 | 7 | Testansvarlig har logget inn som testbruker og ser testdataene | [Fylles ut av testansvarlig] |
 
 ## Kriterier for godkjent
@@ -146,7 +146,7 @@ Testansvarlig skriver beslutningen og begrunnelsen i sluttrapporten. Rettede fun
 | 1. Verifisering (`fs-verify`) | [Verifisering – Tilbudsgaranti i saksbehandlingen 2027 – 2026-10-22 08:50](https://sikt.atlassian.net/wiki/spaces/STUDIEADM/pages/edit-v2/5130125348) (utkast), [verify-2026-10-22-0850.md](../../tasks/opptak/tilbudsgaranti/spec/verify-2026-10-22-0850.md) | Alt funnet | 2026-10-22 |
 | 2. Testplan | (denne siden) | Laget | 2026-10-22 |
 | 3. Testrapport – verifisering | [Testrapport – verifisering – Tilbudsgaranti i saksbehandlingen 2027](https://sikt.atlassian.net/wiki/spaces/STUDIEADM/pages/edit-v2/5131075597) (utkast), [testrapport-verifisering-2026-10-22.md](testrapport-verifisering-2026-10-22.md) | Klar | 2026-10-22 |
-| 4. Intern akseptansetest | – | Venter | |
+| 4. Intern akseptansetest | [Intern akseptansetest – Tilbudsgaranti i saksbehandlingen 2027](https://sikt.atlassian.net/wiki/spaces/STUDIEADM/pages/edit-v2/5130289193) (utkast), [testcaser-intern.md](testcaser-intern.md) | Klar til test | 2026-10-22 |
 | 4b. CDP-kjøring (valgfri) | – | Ikke aktuell | |
 | 5. Testrapport – intern | – | Venter | |
 | 6. Ekstern akseptansetest | – | Venter | |
