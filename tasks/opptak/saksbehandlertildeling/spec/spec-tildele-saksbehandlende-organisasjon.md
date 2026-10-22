@@ -20,6 +20,14 @@ Spesifikasjonen dekker hvordan søknadsalternativene i et samordnet opptak forde
 
 - **`tildele_saksbehandlende_organisasjon.feature`, scenario `Flyttet søknadsalternativ vises som overført hos organisasjonen det flyttes til`**: venter på avklaring med domeneekspert om en flyttet sak skal få status «Overført», og om det hører hjemme her eller i et eget krav om endring av B-rolle.
 
+### Utsatt (2026-10-22)
+
+Disse delene er validert, men utsatt. Kravet blir stående som `@in-progress` til de er levert.
+
+- **Regel «Et lærested kan ha saksbehandlingen sin hos en annen organisasjon i opptaket»**: valget i FS Admin mangler. Utsatt i [STEK-579](https://sikt.atlassian.net/browse/STEK-579). Teamet vil verifisere det som er laget, før det tas inn mer.
+- **Regel «Tilbyderen ser saksbehandlingen når en annen organisasjon saksbehandler utdanningstilbudet»**: utsatt i [STEK-576](https://sikt.atlassian.net/browse/STEK-576) (On Hold).
+- **Scenario `Søkeren ser saksbehandlende organisasjon, men ikke sakene`**: søkeren ser ikke sakene, men visningen av saksbehandlende organisasjon mangler i API-et og min-kompetanse. Utsatt sammen med delene over.
+
 ### Relaterte krav som ikke er med
 
 - `opptaksinnstillinger_utdanningstilbud.feature` (`@OPT-OPT-UTD-004`, `@draft`), regelen «Opptaksforvalter kan velge saksbehandlertildelingsregel per utdanningstilbud».
@@ -61,6 +69,10 @@ Spesifikasjonen dekker hvordan søknadsalternativene i et samordnet opptak forde
 - [ ] Tilbudsgaranti ved flytting: scenarioet `Søknadsalternativet saksbehandles på nytt hos organisasjonen det flyttes til` sier at tilbudsgarantien følger med. I dag nullstilles garantien som organisasjonen saken flyttes fra, har satt. Gjelder kravet alle garantier, eller bare dem fra forvalter og tilbyder?
 - [ ] Implementasjonsdetaljer mangler for `tildele_saksbehandlende_organisasjon.feature` (`tildele_saksbehandlende_organisasjon.design.md`). Utsatt fordi Figma-MCP nådde grensen for kall.
 - [ ] Skisse mangler for valget av organisasjon som saksbehandler på vegne av et lærested.
+- [ ] Funn i fs-admin fra [verify-2026-10-21-1600.md](verify-2026-10-21-1600.md), ikke rettet:
+  - Valglista for organisasjon for sektoren henter alle organisasjoner, ikke bare dem som deltar i opptaket (`BehandlertildelingsregelSektorOrganisasjonCombobox.tsx`). Backend avviser først ved lagring.
+  - «Opprett» i tildelingsreglene sjekker rollen uten organisasjon (`BehandlertildelingsreglerResultList.tsx:69-72`), så opptaksforvaltere ved deltakende læresteder ser knappen. Backend avviser lagringen.
+- [ ] Presisering i kravet: `Unntaket går foran saksbehandlertildelingsregel der bare tilbyderen saksbehandler` holder bare når standardregelen også har unntaket for «Utenlandsk». Det står ikke i `Gitt`.
 
 ## Rute
 
