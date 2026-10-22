@@ -50,3 +50,6 @@ akseptansetest/**/kjoring-*/*
 !akseptansetest/**/kjoring-*/resultat.md
 cdp-tester/**/kjoring-*/*
 !cdp-tester/**/kjoring-*/resultat.md
+
+# Lokale arbeidsnotater
+temp/

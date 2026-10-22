@@ -2,6 +2,8 @@
 
 Her står testplanene for akseptansetestene, med testcasene og testrapportene. Mappa ligger i rota av repoet, ikke under `tasks/`, fordi en test kan gå på tvers av domener. Flyten og reglene står i [teststrategien](https://sikt.atlassian.net/wiki/spaces/STUDIEADM/pages/5117902850) i Confluence.
 
+Hele prosessen, fra kravene skrives til leveransen er godkjent, er forklart steg for steg i [Kom i gang med krav og akseptansetest i FS](https://sikt-no.github.io/fs/kom-i-gang.html#testplan) (`kom-i-gang.html`).
+
 ## Flyten
 
 | Steg | Hva | Skill | Fil | Side i Confluence |
@@ -47,6 +49,8 @@ En testplan gjelder et scope, en oppgave, en mappe under `krav/` eller én eller
 - **Feature-fil:** filene.
 
 Det som testes, er det som er `@implemented`. Krav som er `@in-progress`, står i «Venter på verifisering», og resten i «Ikke med i denne testen».
+
+Er et krav med i en flyt i `krav/_Flyter/`, står flyten i «Flyter» i testplanen, og overleveringene i den testes også: at det ett krav lager, blir brukt av det neste. Hele flyten testes når den er `@implemented`, ellers fasene i leveransen som er levert. Se *Flyter* i [`krav-fra-testplan.md`](../.claude/references/akseptansetest/krav-fra-testplan.md).
 
 Kravene står med Feature-ID i «Omfang» i testplanen, og alle skillene i flyten leser dem derfra, så alle trinnene tester de samme kravene. Scope-id-ene kravene har, står i `- **Scope**:`. De automatiske testene av de samme kravene kjøres med `npx playwright test --grep @scope-<slug>`, eller med Feature-ID-ene når kravene ikke har scope. Reglene står i [`.claude/references/akseptansetest/krav-fra-testplan.md`](../.claude/references/akseptansetest/krav-fra-testplan.md).
 

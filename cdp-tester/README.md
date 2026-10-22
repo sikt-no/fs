@@ -16,7 +16,7 @@ cdp-tester/
 ```
 
 - **Speilet sti:** en test av ett krav ligger under samme mappesti som kravfila har under `krav/`, så testen finnes fra kravet. Filnavnet er det samme som kravfila.
-- **`_Løp`:** en test som går over flere domener, som en flyt. Prosessene er nummerert og navngitt som i `krav/_Flyter`.
+- **`_Løp`:** en test som går over flere domener, som en flyt. Prosessene er nummerert og navngitt som i `krav/_Flyter`. En test av en flyt har samme filnavn som flyten, og `@depends-on-FLY-…`. Den sjekker overleveringene: tilstanden i `Gitt` er laget gjennom løsningen i fasen før, ikke lagt inn direkte.
 - **`README.md` i mappa** har to seksjoner: **Krever** (nøklene testene bruker, se under) og **Ikke kjørbart** (scenarioer som ikke er generert, med grunn).
 
 ## Gherkin-regler for testene

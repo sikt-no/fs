@@ -1,6 +1,6 @@
 ---
 name: fs-testcaser-ekstern
-description: Lager testcasene for den eksterne akseptansetesten (erfarne brukere fra lærestedene, HK-dir og andre eksterne parter), etter teststrategien «Teststrategi for FS – fra krav til akseptanse» i Confluence (STUDIEADM). Bygger på testplanen (`akseptansetest/<slug>`) og testrapporten fra den interne testen, og leser kravene fra «Omfang» i testplanen (et scope, en oppgave, en mappe eller feature-filer). Bare hovedflyten: feilsituasjonene er testet internt. Hver testcase er en oppgave i arbeidsprosessen som går gjennom flere scenarioer i den rekkefølgen brukerne jobber, også på tvers av domener, med hensikt, testdata og forventet resultat, og hvert scenario får sin egen status. Ingen Feature-ID-er, scope-id-er, tagger eller tekniske ord på siden. Skriver `akseptansetest/<slug>/testcaser-ekstern.md`, og oppretter undersiden «Ekstern akseptansetest – <leveranse>» under testplanen bare når brukeren sier ja. Endrer aldri kravene eller taggene. Trigges av "lag testcaser for ekstern akseptansetest", "ekstern akseptansetest", "akseptansetest for HK-dir", "akseptansetest for lærestedene", "fs-testcaser-ekstern".
+description: Lager testcasene for den eksterne akseptansetesten (erfarne brukere fra lærestedene, HK-dir og andre eksterne parter), etter teststrategien «Teststrategi for FS – fra krav til akseptanse» i Confluence (STUDIEADM). Bygger på testplanen (`akseptansetest/<slug>`) og testrapporten fra den interne testen, og leser kravene fra «Omfang» i testplanen (et scope, en oppgave, en mappe eller feature-filer). Bare hovedflyten: feilsituasjonene er testet internt. Hver testcase er en oppgave i arbeidsprosessen som går gjennom flere scenarioer i den rekkefølgen brukerne jobber, også på tvers av domener (fasene i flytene i «Flyter» i testplanen gir rekkefølgen når de finnes), med hensikt, testdata og forventet resultat, og hvert scenario får sin egen status. Ingen Feature-ID-er, scope-id-er, tagger eller tekniske ord på siden. Skriver `akseptansetest/<slug>/testcaser-ekstern.md`, og oppretter undersiden «Ekstern akseptansetest – <leveranse>» under testplanen bare når brukeren sier ja. Endrer aldri kravene eller taggene. Trigges av "lag testcaser for ekstern akseptansetest", "ekstern akseptansetest", "akseptansetest for HK-dir", "akseptansetest for lærestedene", "fs-testcaser-ekstern".
 allowed-tools: Read, Write, Edit, Grep, Glob, Bash, AskUserQuestion
 ---
 
@@ -38,21 +38,23 @@ Sjekk at branchen i dette repoet er oppdatert mot origin og main, som beskrevet 
 
 ## 1. Les testplanen og den interne testen
 
-1. Finn testplanen etter *Finn testplanen* i `confluence.md`. Fra den trenger du kravene i «Omfang», kilden og scope-id-ene, oppgavene, testbrukerne, testdataene, testmiljøet og de eksterne testerne.
+1. Finn testplanen etter *Finn testplanen* i `confluence.md`. Fra den trenger du kravene i «Omfang», flytene i «Flyter», kilden og scope-id-ene, oppgavene, testbrukerne, testdataene, testmiljøet og de eksterne testerne.
 2. **Er leveransen godkjent internt?** Les den nyeste `testrapport-intern-*.md`, eller siden «Testrapport – intern akseptansetest – …». Er utfallet ikke fylt ut, eller er det «Ikke godkjent», si det, og spør om du skal fortsette. Ved «Godkjent med forbehold»: ta med de kjente manglene i «Dette kan du ikke gjøre i testen» når de berører testcasene.
 3. Les `testcaser-intern.md`: stegene, ordene fra skjermen og testdataene kan gjenbrukes. Det er den beste kilden til stegene.
 4. **Flere leveranser i samme runde.** Strategien foreslår å samle flere leveranser til én testrunde. Har testplanen flere kilder (flere scope, mapper eller filer), er de alle med. Skal testen ta med leveranser fra andre testplaner, spør om hvilke.
 
 ## 2. Velg scenarioene
 
-1. Kravene i «Omfang» i testplanen, med gating-settet (`krav-fra-testplan.md`). Bare det som er godkjent i den interne testen.
+1. Kravene i «Omfang» i testplanen, med gating-settet (`krav-fra-testplan.md`), og scenarioene i fasene i «Flyter» som er med i testen. Bare det som er godkjent i den interne testen.
 2. **Hovedflyten:** scenarioene der brukeren får gjort det prosessen handler om. Ta ut feilsituasjoner, sperrer, feilmeldinger, obligatoriske felt og grenseverdier. De står i «Ikke med i denne testen» med «Testet i den interne akseptansetesten».
 3. **Hvem testerne er:** spør (`AskUserQuestion`, `multiSelect`) hvilke deler som gjelder dem. Foreslå et utvalg ut fra rollene i kravene. Eksterne tester bare det de skal bruke: i et samordna opptak er det kravene for samordna opptak, ikke for lokale opptak.
 
 ## 3. Sett sammen oppgavene i arbeidsprosessen
 
-1. **Finn rekkefølgen brukerne jobber i.** Bruk rekkefølgen oppgavene står i scope-tabellen, brukerhistoriene, og hvilke data et scenario lager som et annet bruker (opprette et opptak → registrere en søknad → behandle den). Går leveransen over flere domener, følger rekkefølgen arbeidsprosessen, ikke domenene.
+1. **Finn rekkefølgen brukerne jobber i.** Har testplanen flyter, er de kilden: fasene i flyten er rekkefølgen, og de er beskrevet på tvers av domener fra før. Ellers bruk rekkefølgen oppgavene står i scope-tabellen, brukerhistoriene, og hvilke data et scenario lager som et annet bruker (opprette et opptak → registrere en søknad → behandle den). Går leveransen over flere domener, følger rekkefølgen arbeidsprosessen, ikke domenene.
 2. **Del hovedflyten i oppgaver.** Én testcase er én oppgave med en hensikt testeren kjenner igjen fra jobben sin («Sett opp et opptak og åpne det for søknader»). Hver testcase går gjennom flere scenarioer, og hvert scenario er en del (`1a`, `1b`) med sin egen «Status».
+   - **Med flyt:** én testcase per flyt, eller per del av flyten som testes, når den holder seg innenfor tidsrammen. Er flyten for lang, del den mellom to faser, og la den neste testcasen bruke dataene fra den første (R10). Delene er hovedflyt-scenarioene i kravene i «Omfang» som fasene bygger på, i rekkefølgen i flyten. Scenarioet i flyten blir en egen del der den neste fasen starter: testeren sjekker at det som ble laget, er brukt («Søkeren har fått tilbud, uten at du har gjort noe mer»). Kravene i «Omfang» som ikke er med i en flyt, settes sammen som over.
+   - Bruk ikke ordene «flyt» og «fase» på siden. Skriv hva brukeren gjør.
 3. **Vis forslaget før du skriver stegene:** oppgavene, delene, og hvilke scenarioer som er i hver. Spør om rekkefølgen og oppdelingen er riktig.
 
 ## 4. Skriv testcasene

@@ -2,7 +2,7 @@
 
 Denne mappa inneholder akseptansekravene for løsningene som lages av studieadministrasjon i Sikt. Kravene skrives som Gherkin-scenarioer i `.feature`-filer. De er lesbare kravspesifikasjoner for domeneeksperter, og driver de automatiserte testene i `tester/`. Kravet beskriver atferden løsningen skal ha, og koden sjekkes mot kravet, ikke omvendt.
 
-Er du ny? [Kom i gang med krav i FS](../kom-i-gang.html) er en kort innføring i hvor kravene ligger, hvordan en kravfil ser ut, og hvordan du bidrar.
+Er du ny? [Kom i gang med krav og akseptansetest i FS](../kom-i-gang.html) er en innføring i hvor kravene ligger, hvordan en kravfil ser ut, og hele prosessen steg for steg, fra kravene skrives til leveransen er godkjent i akseptansetesten.
 
 Dette dokumentet er de gjeldende konvensjonene for alle kravfiler. Claude leser den samme fila (via `.claude/rules/gherkin-conventions.md`), så det finnes bare én versjon av reglene.
 
@@ -481,6 +481,8 @@ Et brudd i overleveringen kan skjules av kravene. Testene for hvert krav setter 
 | Flytens egen status | Taggen på flyten | at overleveringene virker i koden |
 
 Flytens egen status går `@draft` →(`fs-krav`)→ `@planned` →(`fs-verify`)→ `@implemented`. Den hentes ikke inn i en oppgave, og hopper over `@in-progress`. `fs-verify` setter `@implemented` når alle fasene er levert, og den har funnet i koden både stedet der hver overlevering lages og stedet der den brukes.
+
+I akseptansetesten tas flytene som går gjennom kravene i leveransen, med (`fs-testplan`), og overleveringene testes: hele flyten når den er `@implemented`, ellers de leverte fasene i leveransen.
 
 Flytene finnes med `grep`, som referansene:
 

@@ -14,7 +14,7 @@ Fila skrives til `akseptansetest/<testplan-slug>/testplan.md`. Alt over den før
 - **Scope**: @scope-<slug>[, @scope-<slug> …] | –   (scope-id-ene kravene har)
 - **Scope-fil**: [scope-<slug>](../../tasks/<domene>/scope-<slug>.md)[, …]   (når kravene har scope)
 - **Oppgaver**: [<domene>/<slug>](../../tasks/<domene>/<slug>/oppgave.md)[, …]   (når det finnes oppgaver)
-- **Krav**: <N> feature-filer, <N> `@implemented`, commit `<sha>` (<YYYY-MM-DD>)
+- **Krav**: <N> feature-filer, <N> `@implemented`, <N> flyter, commit `<sha>` (<YYYY-MM-DD>)
 - **Verifisering**: [verify-<YYYY-MM-DD>-<HHMM>.md](<sti til rapporten>)[, …] | –   (verify-rapportene testplanen bygger på)
 - **Confluence**: –
 - **Laget**: <YYYY-MM-DD> av fs-testplan
@@ -81,7 +81,22 @@ Det som testes, er kravene som er `@implemented`. Feature-ID-ene her er kravene 
 
 Scenarioene i testen er de leverte scenarioene i gating-settet: alle scenarioene som ikke er utkast, avviklet, har åpne spørsmål eller er demo, og som ikke er under endring. Er kilden et scope, og kravet ble levert før, er det bare delene som er levert i scopet.
 
-De automatiske testene av de samme kravene: `npx playwright test --grep @scope-<slug>` (eller `--grep "@<ID-1>|@<ID-2>"` uten scope)
+De automatiske testene av de samme kravene: `npx playwright test --grep @scope-<slug>` (eller `--grep "@<ID-1>|@<ID-2>"` uten scope). Med flyter: `--grep "@scope-<slug>|@FLY-<ID>"`.
+
+## Flyter
+
+Flytene viser hva som skjer fra ett krav til det neste, på tvers av domener. Her testes overleveringene: at det ett krav lager, blir brukt av det neste. Kravene i fasene testes hver for seg i «Omfang».
+
+### <Tittel på flyten> (`@FLY-PRO-FLY-NNN`, `@implemented` | `@planned`)
+
+- **Testes**: hele flyten | deler av flyten (fasene <fasene>)
+- **Hvorfor**: <flyten er levert / <n> av <N> faser er levert / teamet valgte fasene i leveransen>
+
+| Fase | Bygger på | Fase levert | I leveransen | Scenarioer i testen |
+|---|---|---|---|---|
+| <regeltittel> | `@DOM-SUB-KAP-NNN` (`@implemented`), `@DOM-SUB-KAP-NNN` (`@planned`) | ja / nei / mangler krav | ja / nei | <N> / – |
+
+Ingen av kravene er med i en flyt.                                     <når det ikke er flyter>
 
 ## Venter på verifisering
 
@@ -98,6 +113,7 @@ Ingen.                                                                  <når ta
 | Hva | Hvorfor |
 |---|---|
 | <krav eller scenario> | <venter på verifisering / ikke avklart ennå: åpent spørsmål / kommer senere / skal fjernes> |
+| <flyt: fase eller overlevering> | <fasen er ikke levert / fasen mangler krav / overleveringen er ikke funnet / fasen er ikke i leveransen / kjent brudd> |
 
 ## Roller
 
@@ -130,6 +146,7 @@ Klart når testansvarlig har logget inn som testbruker og ser testdataene.
 | 6 | Testcasene er laget og gått gjennom av testansvarlig | Venter |
 | 7 | Testansvarlig har logget inn som testbruker og ser testdataene | [Fylles ut av testansvarlig] |
 | 8 | CDP-agenten kan logge inn som hver testbruker, og nøklene i testbrukere og testdata er utfylt (rad 8 tas bare med når teamet har valgt CDP) | [Fylles ut av teamet] |
+| 9 | <Kjent brudd i flyten «<tittel>»: <bruddet, med saken>> er løst | <Venter / Løst>   (én rad per kjent brudd, bare når flyten har det, nummerert etter de andre radene) |
 
 ## Kriterier for godkjent
 

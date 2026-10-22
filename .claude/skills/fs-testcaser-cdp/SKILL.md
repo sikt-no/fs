@@ -1,6 +1,6 @@
 ---
 name: fs-testcaser-cdp
-description: Lager og oppdaterer de varige CDP-testene i `cdp-tester/`, Gherkin som en agent kjører i Chrome med `cdp`-skillen mot et testmiljø, fra kravene under `krav/` (og testcasene i `akseptansetest/` når de finnes). Valgfritt steg 4b i akseptansetestflyten, og kan også kjøres manuelt, uten testplan, for å lage nye tester eller oppdatere eksisterende når kravene er endret. Hvert scenario i gating-settet som er `@implemented`, blir et uavhengig, konkret scenario med skjermens ord, testbruker og testdata som nøkler (ikke navn), og en `Så` agenten kan se. Referansene til kravene er `@depends-on-<Feature-ID>` (og `@ref-`), identiske `Regel:`- og `Scenario:`-titler, og en header med kravfila og commit og blob-hash, som gir en diff når kravet er endret. Roller og testdata avklares fra samme grunnlag som resten av flyten: testplanens tabeller (kolonnene `Nøkkel`, `Søk/URL`, `Utgangstilstand`, `Brukes av`), eller de samme spørsmålene når testplan mangler. Skriver `cdp-tester/<kravstien>/<fil>.feature` og `README.md` («Krever», «Ikke kjørbart»). Endrer aldri `krav/`. Trigges av "lag CDP-tester", "oppdater CDP-tester", "CDP-kjøring", "cdp-tester", "kjørbare tester for kravet", "tester for CDP", "steg 4b", "fs-testcaser-cdp".
+description: Lager og oppdaterer de varige CDP-testene i `cdp-tester/`, Gherkin som en agent kjører i Chrome med `cdp`-skillen mot et testmiljø, fra kravene under `krav/` (og testcasene i `akseptansetest/` når de finnes). Valgfritt steg 4b i akseptansetestflyten, og kan også kjøres manuelt, uten testplan, for å lage nye tester eller oppdatere eksisterende når kravene er endret. Hvert scenario i gating-settet som er `@implemented`, blir et uavhengig, konkret scenario, og overleveringene i flytene i `krav/_Flyter` blir tester i `cdp-tester/_Løp/`, hvert med skjermens ord, testbruker og testdata som nøkler (ikke navn), og en `Så` agenten kan se. Referansene til kravene er `@depends-on-<Feature-ID>` (og `@ref-`), identiske `Regel:`- og `Scenario:`-titler, og en header med kravfila og commit og blob-hash, som gir en diff når kravet er endret. Roller og testdata avklares fra samme grunnlag som resten av flyten: testplanens tabeller (kolonnene `Nøkkel`, `Søk/URL`, `Utgangstilstand`, `Brukes av`), eller de samme spørsmålene når testplan mangler. Skriver `cdp-tester/<kravstien>/<fil>.feature` og `README.md` («Krever», «Ikke kjørbart»). Endrer aldri `krav/`. Trigges av "lag CDP-tester", "oppdater CDP-tester", "CDP-kjøring", "cdp-tester", "kjørbare tester for kravet", "tester for CDP", "steg 4b", "fs-testcaser-cdp".
 allowed-tools: Read, Write, Edit, Grep, Glob, Bash, AskUserQuestion
 ---
 
@@ -49,6 +49,7 @@ Argumentet avgjør:
 |---|---|
 | en testplan (`akseptansetest/<slug>`, eller en slug som finnes der) | **Fra flyten (steg 4b).** Kravene er de i «Omfang» i testplanen. Roller, testdata og miljø fra testplanens tabeller |
 | krav: en feature-fil, en mappe, `@scope-<slug>`, en oppgave eller en Feature-ID | **Manuelt.** Kravene finnes etter *Finn kravene* i `krav-fra-testplan.md` |
+| en flyt: en sti under `krav/_Flyter/`, eller en `@FLY-`-ID | **Manuelt, flyt.** Bare flyten (steg 2, punkt 4) |
 | en eksisterende test i `cdp-tester/` | **Manuelt, oppdatering** (se steg 5) |
 
 Er det uklart, spør (`AskUserQuestion`).
@@ -62,7 +63,8 @@ Er det uklart, spør (`AskUserQuestion`).
 1. Kravene og gating-settet per krav, som i `krav-fra-testplan.md`. Bare krav som er `@implemented` (og de leverte delene i et endret krav) blir tester. Manuelt på et krav som ikke er `@implemented`: si det, og spør om det skal lages likevel (testen kjøres ikke før kravet er levert).
 2. Les verify-rapporten for kravene når den finnes. Et scenario som er `ikke funnet` eller `usikker` der, kommer i «Ikke kjørbart» til teamet har svart.
 3. **Ordene fra skjermen:** `testcaser-intern.md` når den finnes (ordene og verdiene, uten avhengighetene mellom casene), `<feature>.design.md` og skissene, og koden (fs-admin for saksbehandlere og forvaltere, min-kompetanse for søkeren): menyer, ruter, felt, knapper, `Så`-tekster og feilmeldinger. Se *Lese koden* i `roller-og-testdata.md`. Merk det du ikke finner, `[Sjekk begrep]`.
-4. **Hva agenten kan se:** noe som ikke finnes i miljøet, eller som ikke kan ses i skjermen, kommer i «Ikke kjørbart», med grunn.
+4. **Flytene.** Fra flyten: flytene i «Flyter» i testplanen. Manuelt: flytene som går gjennom kravene (*Finn flytene* i `krav-fra-testplan.md`), eller flyten brukeren oppga. Hvilke scenarioer som blir tester, avgjøres etter *Hele eller deler av flyten* i den samme fila. Det som ikke blir test, står i «Ikke kjørbart» med grunnen («fasen er ikke levert», «overleveringen er ikke funnet»).
+5. **Hva agenten kan se:** noe som ikke finnes i miljøet, eller som ikke kan ses i skjermen, kommer i «Ikke kjørbart», med grunn.
 
 ## 3. Nøkler: roller og testdata
 
@@ -75,6 +77,7 @@ Er det uklart, spør (`AskUserQuestion`).
 For hvert krav, skriv `cdp-tester/<kravets sti under krav/>/<samme filnavn som kravet>`, etter malen:
 
 - Header med kravfila, commit og blob-hash (`git rev-parse origin/main:<sti>`), og hva den er generert fra. Taggene: `@TST-…` og `@depends-on-<Feature-ID>` på `Egenskap:`. For en test som går over flere domener: `cdp-tester/_Løp/<NN Prosess>/<test>.feature`, med ett `@depends-on-` per krav.
+- **En flyt** blir `cdp-tester/_Løp/<NN Prosess>/<samme filnavn som flyten>.feature`, med prosessmappa fra `krav/_Flyter`. Headeren har flytfila. `@TST-<prosess>-<flyt>-NNN @depends-on-FLY-<prosess>-<flyt>-NNN` står på `Egenskap:`, og hver `Regel:` har de samme `@depends-on-` som fasen i flyten. Titlene er flytens. Tilstanden i `Gitt` er en testdata-nøkkel med en `Utgangstilstand` som er laget gjennom løsningen i fasen før (for eksempel en søknad som har fått tilbudsgaranti i tidligopptaket), ikke lagt inn direkte. Ellers tester scenarioet ikke overleveringen. `Så` sjekkes der den neste aktøren jobber.
 - `Regel:`- og `Scenario:`-titlene identiske med kravets. En `Scenariomal:` gir én rad i `Eksempler:` per eksempel i kravet.
 - `Gitt` har testbruker som nøkkel, start (menyvei eller URL, med ordene fra skjermen), og testdata som nøkler. Aldri «fra forrige scenario».
 - `Når`: én handling per steg, skjermens ord i «», alle verdier med.
@@ -95,7 +98,7 @@ Sjekkliste før du viser fram:
 
 **Referansesjekken** (ved hver generering og oppdatering):
 
-1. Hver `@depends-on-` og `@ref-` peker på en Feature-ID som finnes i nøyaktig én feature-fil under `krav/`.
+1. Hver `@depends-on-` og `@ref-` peker på en Feature-ID (eller en flyt-ID) som finnes i nøyaktig én feature-fil under `krav/`.
 2. Hver `Regel:` og hvert `Scenario:` finnes i den fila med samme tittel.
 3. Hash i headeren er lik hash for kravfila nå. Er den ulik, er testen utdatert (se steg 5).
 4. Hvert scenario i gating-settet er generert eller står i «Ikke kjørbart».

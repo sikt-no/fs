@@ -81,6 +81,7 @@ I `Bevis` står **P** for fs-plattform, **A** for fs-admin og **M** for min-komp
 | `@DOM-SUB-KAP-NNN` | <scenariotittel> | funnet | P: funnet · A: ikke relevant · M: funnet — `<fil>:<linje>`, `<fil>:<linje>` |   [per repo]
 | `@FLY-PRO-FLY-NNN` | <scenariotittel> | funnet | lages: `<repo>/<fil>:<linje>` · brukes: `<repo>/<fil>:<linje>` — <hva som overleveres> |   [flyt]
 | `@FLY-PRO-FLY-NNN` | <scenariotittel> | ikke funnet | lages: `<repo>/<fil>:<linje>` · brukes: ikke funnet — søkt etter «<ord>» i <repoer> |   [flyt]
+| `@FLY-PRO-FLY-NNN` | <scenariotittel> | ikke funnet | fasen er ikke levert: `@DOM-SUB-KAP-NNN` er `@planned` — ikke søkt |   [flyt]
 
 ## Kontroll
 

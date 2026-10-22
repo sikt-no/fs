@@ -57,7 +57,7 @@ Bruker en testcase data som en tidligere testcase har laget, står det i stegene
 
 ## R11. Riktig nivå
 
-- Bare scenarioer fra kravene. Ingen helhetsrunde, regresjon eller test av universell utforming. Mangler et viktig tilfelle, legges det inn i kravet med `fs-krav`, ikke bare i testen.
+- Bare scenarioer fra kravene. Ingen helhetsrunde, regresjon eller test av universell utforming. Scenarioene i flytene i testplanen («Flyter») er med: de tester overleveringen mellom to krav, og er ikke en helhetsrunde. Mangler et viktig tilfelle, legges det inn i kravet med `fs-krav`, ikke bare i testen.
 - **Intern:** én testcase per scenario, og én per eksempelrad i en `Scenariomal:` (`1.3a`, `1.3b`). Feilsituasjoner er med når de står i kravet. Rekkefølgen i feature-fila.
 - **Ekstern:** testcasen er en oppgave i arbeidsprosessen, gjennom flere scenarioer. Bare hovedflyten. Ingen Feature-ID-er, scope-id-er, tagger, kodeverdier, GraphQL, Jira eller feature-flagg.
 
@@ -65,7 +65,7 @@ Bruker en testcase data som en tidligere testcase har laget, står det i stegene
 
 | # | Sjekk |
 |---|---|
-| 1 | Hvert scenario i gating-settet har en testcase, eller står i «Ikke testbart nå» eller «Ikke med i denne testen» |
+| 1 | Hvert scenario i gating-settet har en testcase, eller står i «Ikke testbart nå» eller «Ikke med i denne testen». Det gjelder også scenarioene i fasene i «Flyter» som er med i testen |
 | 2 | Ingen testcase svarer til noe som ikke står i kravene |
 | 3 | R1–R11 er fulgt i hver testcase |
 | 4 | «Faktisk resultat» og «Status» er tomme |

@@ -34,6 +34,7 @@ Fila skrives til `akseptansetest/<testplan-slug>/testcaser-ekstern.md`. Alt over
   | Nr | Steg i oppgaven | Feature-ID | Scenario | Intern |
   |---|---|---|---|---|
   | 1 | a | `@DOM-SUB-KAP-NNN` | <scenariotittel fra kravet> | 1.1 |
+  | 1 | b | `@FLY-PRO-FLY-NNN` | <fasen>: <scenariotittel fra flyten> | 4.1 |
 
 ---
 
@@ -98,3 +99,4 @@ Her skriver du det du oppdager som ikke står i testcasene, for eksempel om bruk
 
 - Testcasene nummereres fra 1. Delene (ett scenario hver) får bokstav: `1a`, `1b`, `1c`.
 - Stegene løper gjennom hele testcasen, så del `1b` fortsetter der `1a` slapp.
+- En testcase som følger en flyt, har delene i rekkefølgen i flyten. Scenarioet i flyten er en egen del, og står i sporingen med flyt-ID-en og fasen.
