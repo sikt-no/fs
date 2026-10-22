@@ -1,6 +1,6 @@
 # language: no
 # GitHub: #594
-@OPT-OPT-UTD-002 @must @draft @scope-utdanningstilbud-i-opptak-2027
+@OPT-OPT-UTD-002 @must @implemented @scope-utdanningstilbud-i-opptak-2027
 Egenskap: Legge til utdanningstilbud i opptak
   Som opptaksforvalter
   ønsker jeg å legge til utdanningstilbud i opptaket
@@ -12,6 +12,9 @@ Egenskap: Legge til utdanningstilbud i opptak
 
   Regel: Opptaksforvalter ved deltakende organisasjon kan legge til alle sine utdanningstilbud
 
+    @planned @openquestion
+    # ÅPNE SPØRSMÅL:
+    # - Det finnes ingen egen handling for å legge til alle i dag. Holder det at opptaksforvalter filtrerer på organisasjonen og velger alle treffene, eller skal det være en egen handling?
     Scenario: Legge til alle utdanningstilbud fra organisasjonen opptaksforvalter er ved
       Gitt at opptaksforvalter er ved en deltakende organisasjon
       Når opptaksforvalter velger å legge til alle utdanningstilbud fra organisasjonen opptaksforvalter er ved, som matcher opptakets kriterier
@@ -40,26 +43,33 @@ Egenskap: Legge til utdanningstilbud i opptak
 
   Regel: Kun utdanningstilbud fra deltakende organisasjoner kan legges til
 
+    @planned @openquestion
+    # ÅPNE SPØRSMÅL:
+    # - Holder det at utdanningstilbud fra organisasjoner som ikke deltar, ikke kan velges, eller skal serveren også avvise forsøk på å legge dem til?
     Scenario: Organisasjon som ikke deltar kan ikke legge til utdanningstilbud
       Gitt at organisasjonen "NTNU" ikke er lagt til som deltaker i opptaket
       Så kan ikke utdanningstilbud fra NTNU legges til i opptaket
 
   Regel: Opptaksforvalter kan filtrere på utdanningstype og studienivå når utdanningstilbud legges til
 
+    @in-progress
     Scenario: Filtrere på utdanningstype
       Når opptaksforvalter filtrerer på utdanningstype studieprogram
       Så vises kun studieprogram som mulige utdanningstilbud
 
+    @in-progress
     Scenario: Filtrere på NKR-nivå for UHG-opptak
       Når opptaksforvalter filtrerer på utdanningstype studieprogram
       Og opptaksforvalter filtrerer på NKR-nivåene 6.1 Høgskolekandidat, 6.2 Bachelor, 7 Master
       Så vises kun studieprogram på NKR-nivåene 6.1, 6.2 og 7 som mulige utdanningstilbud
 
+    @in-progress
     Scenario: Filtrere på NKR-nivå for HYU-opptak
       Når opptaksforvalter filtrerer på utdanningstype studieprogram
       Og opptaksforvalter filtrerer på NKR-nivåene 5.1 fagskole og 5.2 fagskole
       Så vises kun fagskoleutdanninger av typen studieprogram som mulige utdanningstilbud
 
+    @in-progress
     Scenario: Utdanninger utenfor filteret vises ikke
       Gitt at opptaksforvalter har filtrert på studieprogram på 6.2 bachelornivå
       Så vises ikke emner som mulige utdanningstilbud
@@ -80,6 +90,10 @@ Egenskap: Legge til utdanningstilbud i opptak
     # AVKLART 2026-10-15 (Q3, TAKE-410): En åpningsdato som ikke er satt, holder redigeringen stengt.
     # Trekking står i trekke_utdanningstilbud.feature.
 
+    @planned @openquestion
+    # ÅPNE SPØRSMÅL:
+    # - En åpningsdato som ikke er satt skal holde redigeringen stengt (AVKLART Q3), men løsningen regner den som åpen. Er avklaringen fortsatt gjeldende?
+    # - Holder det at muligheten skjules for deltakende organisasjoner, eller skal serveren også avvise endringer før redigeringen åpner?
     Scenario: Kan ikke knytte utdanningstilbud til opptaket før redigering åpner
       Gitt at redigering av utdanningstilbud i opptaket åpner "2026-10-01"
       Og at opptaksforvalter er ved en deltakende organisasjon
@@ -93,6 +107,9 @@ Egenskap: Legge til utdanningstilbud i opptak
       Så legges utdanningstilbudet "Sykepleie, høst 2027" til i opptaket
       Og opptaksforvalter kan redigere utdanningstilbudet "Sykepleie, høst 2027"
 
+    @planned @openquestion
+    # ÅPNE SPØRSMÅL:
+    # - Holder det at muligheten skjules for deltakende organisasjoner, eller skal serveren også avvise endringer etter at redigeringen stenger?
     Scenario: Kan ikke knytte til eller redigere utdanningstilbud etter at redigering stenger
       Gitt at redigering av utdanningstilbud i opptaket stenger "2027-06-06"
       Og at opptaksforvalter er ved en deltakende organisasjon
@@ -108,6 +125,7 @@ Egenskap: Legge til utdanningstilbud i opptak
       Når opptaksforvalter redigerer utdanningstilbudet "Sykepleie, høst 2027" "2027-06-10"
       Så er endringen på utdanningstilbudet "Sykepleie, høst 2027" lagret
 
+    @in-progress
     Scenario: Endringer fra utdanningsregisteret oppdateres etter at redigering stenger
       Gitt at redigering av utdanningstilbud i opptaket stengte "2027-06-06"
       Og at utdanningstilbudet "Sykepleie, høst 2027" er lagt til i opptaket

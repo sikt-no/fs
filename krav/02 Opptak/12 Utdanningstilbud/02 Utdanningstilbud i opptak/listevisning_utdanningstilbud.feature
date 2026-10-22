@@ -1,6 +1,6 @@
 # language: no
 # GitHub: #398
-@OPT-OPT-UTD-001 @must @draft @scope-utdanningstilbud-i-opptak-2027
+@OPT-OPT-UTD-001 @must @implemented @scope-utdanningstilbud-i-opptak-2027
 Egenskap: Listevisning og søk i utdanningstilbud i opptaket
   Som opptaksforvalter
   ønsker jeg en oversikt over relevante utdanningstilbud i opptaket, med mulighet for søk og filtrering
@@ -20,6 +20,7 @@ Egenskap: Listevisning og søk i utdanningstilbud i opptaket
   # - Kravet har tre ulike steg for å åpne lista: «åpner oversikten over tilgjengelige utdanningstilbud», «åpner oversikten over utdanningstilbud» og «ser listen over utdanningstilbud i opptaket». Er «tilgjengelige utdanningstilbud» her lista over utdanningstilbud som kan legges til i opptaket (som filtrene i legge_til_utdanningstilbud.feature), eller den samme lista som utdanningstilbudene i opptaket?
   Regel: Opptaksforvalter ser kun utdanningstilbud som matcher opptakets kriterier
 
+    @in-progress
     Scenario: Se relevante utdanningstilbud
       Gitt at opptaket tillater studieprogram på bachelornivå
       Når opptaksforvalter åpner oversikten over tilgjengelige utdanningstilbud
@@ -42,11 +43,13 @@ Egenskap: Listevisning og søk i utdanningstilbud i opptaket
 
   Regel: Opptaksforvalter ved deltakende organisasjon ser kun utdanningstilbud organisasjonen tilbyr
 
+    @in-progress
     Scenario: Deltakende organisasjon ser kun utdanningstilbudene sine
       Gitt at opptaksforvalter er ved en deltakende organisasjon
       Når opptaksforvalter åpner oversikten over utdanningstilbud
       Så ser opptaksforvalter kun utdanningstilbud fra organisasjonen opptaksforvalter er ved
 
+    @in-progress
     # AVKLART 2026-10-16 (produktleder): Saksbehandlere ser søknadene de skal behandle i søknadsbehandlingen,
     # ikke gjennom utdanningstilbudene i opptaket. Flyttet hit fra samordna_opptak.feature 2026-10-19.
     Scenario: Deltakende organisasjon ser ikke utdanningstilbud en annen organisasjon tilbyr
@@ -77,13 +80,14 @@ Egenskap: Listevisning og søk i utdanningstilbud i opptaket
       Når opptaksforvalter filtrerer på utdanningstilbud med ufullstendige opplysninger
       Så ser opptaksforvalter utdanningstilbud som mangler rangeringsregelverk
 
-    @openquestion
+    @in-progress @openquestion
     # ÅPNE SPØRSMÅL:
     # - Begrepslista har «kvoteprioritet», ikke «kvoteprioritering». Er det kvoteprioritet som menes?
     Scenario: Filtrere på utdanningstilbud som mangler kvoter, kvoteprioritering eller plassflyt
       Når opptaksforvalter filtrerer på utdanningstilbud med ufullstendige opplysninger
       Så ser opptaksforvalter utdanningstilbud som mangler kvoter, kvoteprioritering eller plassflyt
 
+    @in-progress
     Scenario: Filtrere på utdanningstilbud som mangler opplysninger om tilbudsgaranti
       Når opptaksforvalter filtrerer på utdanningstilbud med ufullstendige opplysninger
       Så ser opptaksforvalter utdanningstilbud som mangler opplysninger om hvor tilbudsgarantier skal tas fra
@@ -94,7 +98,7 @@ Egenskap: Listevisning og søk i utdanningstilbud i opptaket
     # derfor ingen egen dato for tidlig opptak. Det som kan mangle på et utdanningstilbud
     # som tilbyr tidlig opptak, er poenggrensen. Tidlig søknadsfrist settes fritt per
     # utdanningstilbud (opptaksinnstillinger_utdanningstilbud.feature).
-    @openquestion
+    @in-progress @openquestion
     # ÅPNE SPØRSMÅL:
     # - Skal scenarioet få @ref-OPT-OPT-UTD-004 (opptaksinnstillinger_utdanningstilbud.feature) og @ref-OPT-OVO-FRI-001 (frister_og_hendelser.feature), som kommentaren over viser til?
     Scenario: Filtrere på utdanningstilbud som mangler dato for tidlig søknadsfrist
@@ -102,7 +106,7 @@ Egenskap: Listevisning og søk i utdanningstilbud i opptaket
       Når opptaksforvalter filtrerer på utdanningstilbud med ufullstendige opplysninger
       Så ser opptaksforvalter utdanningstilbud der dato for tidlig søknadsfrist ikke er satt
 
-    @openquestion
+    @in-progress @openquestion
     # ÅPNE SPØRSMÅL:
     # - Skal scenarioet få @ref-OPT-BEH-BEH-014 (publisere_svar_på_tidlig_opptak.feature) og @ref-OPT-OVO-FRI-001 (frister_og_hendelser.feature), som kommentaren over forrige scenario viser til?
     Scenario: Filtrere på utdanningstilbud som mangler poenggrense for tidlig opptak
