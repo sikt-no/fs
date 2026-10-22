@@ -21,7 +21,7 @@ Still dem samlet med `AskUserQuestion`, høyst fire om gangen. Har en tidligere 
 
 1. **Roller:** list rollene kravene nevner (`Som <rolle>`, `Gitt jeg er <rolle>`, rollene i *Synlighet*-regler). Når CDP er valgt, les i tillegg koden og vis hva den krever, med fil:linje, og hva som avviker fra kravene (se under).
 2. **Testbrukere:** be om navn og organisasjon for hver rolle. Nummerer dem fra 1, og gi hver en nøkkel. Minst to organisasjoner. Når CDP er valgt: `Innlogging` (Chrome-profilnavn eller Feide-ID) og eventuelt `Start-URL`.
-3. **Testdata:** de dataene scenarioene krever (`Gitt`-stegene: personbrukere, opptak, søkere, søknader, regelverkssamlinger osv.), hvor de ligger, og om de kan settes tilbake. Gi hver en nøkkel. Når CDP er valgt: `Søk/URL` (hvordan objektet åpnes), `Utgangstilstand` (hva testen forutsetter) og `Brukes av` (Feature-ID og scenario, eller testcase-Nr).
+3. **Testdata:** de dataene scenarioene krever (`Gitt`-stegene: personbrukere, opptak, søkere, søknader, regelverkssamlinger osv.), hvor de ligger, og om de kan settes tilbake. Gi hver en nøkkel. Når CDP er valgt: `Søk/URL` (hvordan objektet åpnes), `Utgangstilstand` (hva testen forutsetter) og `Brukes av` (Feature-ID og scenario, eller testcase-Nr). For en overlevering i en flyt (`Brukes av` er en `@FLY-`-ID) skal tilstanden være laget gjennom løsningen i fasen før, ikke lagt inn direkte: si hvordan i `Utgangstilstand`.
 4. **Miljøet:** URL til testmiljøet, versjon og feature-flagg. Det er alltid et testmiljø, aldri produksjon.
 
 Det brukeren hopper over, skrives som `[Fylles ut: <hva>]`. Gjett aldri det bare teamet vet.

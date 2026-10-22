@@ -27,11 +27,12 @@ Testrapport for «<leveranse>». <Én setning: hva rapporten bygger på (verifis
 <verifisering>
 | Felt | Innhold |
 |---|---|
-| Scenarioer | <N> funnet, <N> ikke funnet, <N> usikker, av <N> |
+| Scenarioer | <N> funnet, <N> ikke funnet, <N> usikker, av <N>   (bare kravene, ikke radene for flytene) |
 | Krav levert (`@implemented`) | <N> av <N> |
 | Åpne spørsmål som står igjen | <N> |
+| Overleveringer i flytene | <N> funnet, av <N> i testplanen (en `@implemented` flyt teller som funnet), eller «Ingen flyter» |
 | Kontrollert av | [Fylles ut av teamet] (en annen enn den som kjørte `fs-verify`) |
-| Klar for intern akseptansetest | Ja / Nei: <grunn> |
+| Klar for intern akseptansetest | Ja / Ja, med forbehold: <overleveringene som ikke er funnet> / Nei: <grunn> |
 
 <intern / ekstern>
 | Felt | Innhold |
@@ -49,7 +50,7 @@ Testrapport for «<leveranse>». <Én setning: hva rapporten bygger på (verifis
 |---|---|---|---|---|---|
 | <oppgave> | [<tittel>](<lenke>) | <n> | <n> | <n> | `@implemented` / `@in-progress` |
 
-<intern: per oppgave, krav og regel, som testcasene>
+<intern: per oppgave, krav og regel, som testcasene. En flyt står etter kravene, med flyten i «Krav» og fasen i «Regel»>
 | Oppgave | Krav | Regel | Bestått | Ikke bestått | Ikke testet |
 |---|---|---|---|---|---|
 
@@ -57,11 +58,22 @@ Testrapport for «<leveranse>». <Én setning: hva rapporten bygger på (verifis
 | Testcase | Scenario | Status |
 |---|---|---|
 
+## Flyter                                                             [verifisering]
+
+Fra «Flyter» i testplanen, og fremdriften og overleveringene i verify-rapporten.
+
+| Flyt | Testes | Faser levert | Overleveringer funnet | Kjent brudd |
+|---|---|---|---|---|
+| <tittel> (`@FLY-PRO-FLY-NNN`) | hele flyten / deler av flyten | <n> av <N> | <n> av <N> i testen | <bruddet, eller «–»> |
+
+Ingen av kravene er med i en flyt.                                     [når det ikke er flyter]
+
 ## Det som mangler                                                     [verifisering]
 
 | Krav | Scenario | Resultat | Hva som mangler | Repo |
 |---|---|---|---|---|
 | <krav> | <scenario> | ikke funnet / usikker | <fra Bevis> | <fs-plattform / fs-admin / min-kompetanse> |
+| <flyt: fasen> | <scenario> | ikke funnet / ikke verifisert | <lages: … · brukes: ikke funnet> | <repo> |
 
 Ingen.                                                                  [når tabellen er tom]
 
@@ -102,6 +114,7 @@ Bare ved «Godkjent med forbehold».
 | Mangel | Ansvarlig | Frist |
 |---|---|---|
 | <fra funnene med «Må fikses før innføring»> | [Fylles ut av teamet] | [Fylles ut av teamet] |
+| <kjent brudd i en flyt (`# Kjent brudd:`), med saken> | [Fylles ut av teamet] | [Fylles ut av teamet] |
 
 ## Beslutning                                                          [intern, ekstern]
 

@@ -2,7 +2,7 @@
 
 Felles for skillene i testflyten. Verifiseringen (`fs-verify` eller `fs-verify-agent-teams`) kjøres først, på kilden, og setter `@implemented` på kravene der koden er funnet. `fs-testplan` finner så kravene fra den samme kilden, og skriver dem i «Omfang» i testplanen. De andre skillene leser kravene derfra, med Feature-ID, så alle trinnene tester de samme kravene, også om det kommer nye krav i mappa eller scopet etterpå.
 
-**Det som testes, er det som er `@implemented`.** Krav og deler med en annen status står i testplanen, men ikke i testcasene.
+**Det som testes, er det som er `@implemented`.** Krav og deler med en annen status står i testplanen, men ikke i testcasene. Unntaket er en levert fase i en flyt som ikke er `@implemented` ennå (se *Flyter*).
 
 ## Leveransen
 
@@ -16,6 +16,8 @@ En testplan gjelder én av fire kilder. En testplan kan ha flere kilder av samme
 | Feature-fil | Én eller flere `.feature`-filer under `krav/` | Filene |
 
 Er det uklart hva brukeren mener (for eksempel en slug som både er et scope og en oppgave), spør.
+
+En flyt i `krav/_Flyter/` er ikke en egen leveranse. Flytene som går gjennom kravene, kommer med i tillegg, uansett kilde (se *Flyter*).
 
 ## Finn kravene
 
@@ -71,9 +73,44 @@ Er ingen av kravene `@implemented`, si det før testplanen skrives: testplanen k
 
 Det som faller ut, listes i «Ikke med i denne testen» med grunnen: taggen, og det åpne spørsmålet når delen er `@openquestion`. På testsidene skrives grunnen med vanlige ord, uten tagger.
 
+## Flyter
+
+En flyt (`krav/_Flyter/`, se *Flyter* i `krav/README.md`) beskriver et løp på tvers av domener. Hver `Regel:` er en fase, og `@depends-on-` på fasen peker på kravene fasen bygger på. Testene for hvert krav setter opp tilstanden selv, så bare flyten tester at det ett krav lager, blir brukt av det neste. Er et krav i leveransen med i en flyt, testes derfor også overleveringene i flyten.
+
+### Finn flytene
+
+1. For hver Feature-ID i kilden (i «Omfang» når testplanen finnes): `grep -rlE "@depends-on-<ID>\b" krav/_Flyter/`. Uten Bash: `Grep` med samme mønster.
+2. Ta også med flytene med en av scope-id-ene i testplanen (`@scope-<slug>`).
+3. En flyt som bare nås gjennom en annen flyt (`@depends-on-FLY-…`, typisk oversiktsflyten), tas ikke med av seg selv.
+4. En flyt som er `@draft`, `@deprecated` eller `@wont`, står i «Ikke med i denne testen», med taggen.
+
+### Fasene
+
+For hver fase (`Regel:`) i flyten:
+
+- **I leveransen:** et av kravene i `@depends-on-` er i «Omfang».
+- **Levert:** alle kravene i `@depends-on-` er `@implemented` (for en `@depends-on-FLY-…`: flyten er `@implemented`). Det er det samme som steg 1 i *Verifisere flyt* i `fs-verify`.
+- **Mangler krav:** fasen har ingen `@depends-on-`.
+
+### Hele eller deler av flyten
+
+Overleveringen står i scenarioet i fasen: tilstanden i `Gitt` lages ett sted, og brukes til det `Så` sier. Et scenario i en flyt kan testes når det er i gating-settet (se *Hvilke scenarioer som er med*), og overleveringen er verifisert:
+
+- **Flyten er `@implemented`:** statusen er beviset. `fs-verify` satte den bare da alle overleveringene var funnet, og verifiserer ikke en levert flyt på nytt, så den har ingen rader i nyere verify-rapporter.
+- **Flyten er ikke `@implemented`:** fasen er levert, og verify-rapporten har scenarioet som `funnet`.
+
+- **Hele flyten** når flyten er `@implemented`. Det er standard, også når leveransen bare berører én fase: en endring i ett krav kan bryte overleveringer i flere faser, og en flyt har få scenarioer. Har flyten flere enn fem faser, eller berører leveransen bare én fase, spør `fs-testplan` om hele flyten skal testes, eller bare fasene i leveransen, og anbefaler hele.
+- **Deler av flyten** når flyten ikke er `@implemented`: de leverte fasene i leveransen, der scenarioet er funnet. En levert fase i en `@planned` flyt testes, selv om flyten ikke er `@implemented`, fordi kravene fasen bygger på, er levert, og overleveringen er funnet i koden.
+- Det som ikke testes, står i «Ikke med i denne testen», med grunnen: «fasen er ikke levert», «fasen mangler krav», «overleveringen er ikke funnet», eller «fasen er ikke i leveransen» (når teamet har valgt deler).
+- **Kjent brudd:** står det `# Kjent brudd:` i flyten, står bruddet i «Forutsetninger» i testplanen, og overleveringen det gjelder, testes ikke før bruddet er løst.
+
+### Kravene i de andre fasene
+
+Kravene en fase bygger på som ikke er i «Omfang», står bare i kolonnen «Bygger på» i «Flyter» i testplanen, med status. De blir aldri testcaser selv. `fs-testcaser-intern` og `fs-testcaser-ekstern` kan lese dem for å skrive stegene som lager tilstanden i `Gitt`.
+
 ## Kravene i de andre skillene
 
-`fs-testcaser-intern`, `fs-testcaser-ekstern`, `fs-testrapport`, og `fs-verify` når den kjøres på nytt med testplanen, bruker Feature-ID-ene i «Omfang» og «Venter på verifisering» i testplanen, og slår dem opp under `krav/`. De finner ikke kravene på nytt fra kilden. Har et krav fått ny status siden testplanen ble laget (for eksempel `@implemented` etter `fs-verify`), gjelder statusen i kravfila. Er det kommet nye krav i kilden, si fra, og foreslå å kjøre `fs-testplan` på nytt.
+`fs-testcaser-intern`, `fs-testcaser-ekstern`, `fs-testrapport`, og `fs-verify` når den kjøres på nytt med testplanen, bruker Feature-ID-ene i «Omfang» og «Venter på verifisering» i testplanen, og flyt-ID-ene i «Flyter», og slår dem opp under `krav/`. De finner ikke kravene og flytene på nytt fra kilden. Unntaket er kravene i de andre fasene i en flyt, som leses for å sette opp tilstanden (se *Flyter*). Har et krav eller en flyt fått ny status siden testplanen ble laget (for eksempel `@implemented` etter `fs-verify`), gjelder statusen i kravfila. Er det kommet nye krav i kilden, si fra, og foreslå å kjøre `fs-testplan` på nytt.
 
 ## Commit
 
@@ -85,3 +122,4 @@ Kommandoen står i testplanen, så teamet kan kjøre de automatiske testene av d
 
 - Med scope-id: `npx playwright test --grep @scope-<slug>` (*Scope* i `krav/README.md`).
 - Uten scope-id, eller når kravene ikke er hele scopet: `npx playwright test --grep "@<ID-1>|@<ID-2>"`, med Feature-ID-ene i «Omfang».
+- Flytene i «Flyter»: legg flyt-ID-ene til (`--grep "@scope-<slug>|@FLY-<ID>"`), så overleveringene kjøres sammen med kravene.

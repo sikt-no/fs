@@ -482,6 +482,8 @@ Et brudd i overleveringen kan skjules av kravene. Testene for hvert krav setter 
 
 Flytens egen status går `@draft` →(`fs-krav`)→ `@planned` →(`fs-verify`)→ `@implemented`. Den hentes ikke inn i en oppgave, og hopper over `@in-progress`. `fs-verify` setter `@implemented` når alle fasene er levert, og den har funnet i koden både stedet der hver overlevering lages og stedet der den brukes.
 
+I akseptansetesten tas flytene som går gjennom kravene i leveransen, med (`fs-testplan`), og overleveringene testes: hele flyten når den er `@implemented`, ellers de leverte fasene i leveransen.
+
 Flytene finnes med `grep`, som referansene:
 
 | Spørsmål | Svar |

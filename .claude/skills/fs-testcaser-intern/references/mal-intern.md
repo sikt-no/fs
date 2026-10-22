@@ -23,6 +23,7 @@ Fila skrives til `akseptansetest/<testplan-slug>/testcaser-intern.md`. Alt over 
   | Nr | Feature-ID | Regel | Scenario |
   |---|---|---|---|
   | 1.1 | `@DOM-SUB-KAP-NNN` | <regeltittel> | <scenariotittel fra kravet> |
+  | 4.1 | `@FLY-PRO-FLY-NNN` | <regeltittel (fasen)> | <scenariotittel fra flyten> |
 
 ---
 
@@ -51,6 +52,18 @@ Intern akseptansetest av «<leveranse>». Testbeskrivelsen, testbrukerne og test
 | | | *Gjør klar til neste test: …* | | | |
 
 <Et krav uten `Regel:` får én tabell rett under kravet.>
+
+<Etter kravene (og etter oppgavene, med scope): én del per flyt i «Flyter» i testplanen.>
+
+### Del <n>: Fra <start> til <slutt> (<flytens tittel>)
+
+Tester at det som lages i ett steg, blir brukt i det neste. <Hele flyten / Fasene <fasene>>, se testplanen.
+
+#### <regeltittel (fasen)>
+
+| Nr | Scenario | Steg | Forventet resultat | Faktisk resultat | Status |
+|---|---|---|---|---|---|
+| <n>.1 | <scenariotittel> | 1. Bruk søknaden fra 2.3. <br>2. Logg inn som testbruker <nr> (<navn>, <rolle> ved <organisasjon>). <br>3. Gå til «…». | <det den neste aktøren ser: at tilstanden er brukt> | | |
 
 ## Ikke testbart nå
 
@@ -87,3 +100,4 @@ Det du oppdager som ikke gjelder testcasene, for eksempel brukervennlighet, elle
 - `<del>.<n>`: delen er kravet, nummerert fra 1 i rekkefølgen i testplanen. `n` løper gjennom hele kravet, ikke per regel, så nummeret er unikt.
 - En `Scenariomal:` gir én testcase per eksempelrad: `1.3a`, `1.3b`, med verdiene fra raden i scenariotittelen og stegene.
 - Rader for opprydding («Gjør klar til neste test») har ikke nummer.
+- En flyt er en egen del, nummerert videre etter kravene. `n` løper gjennom hele flyten.
