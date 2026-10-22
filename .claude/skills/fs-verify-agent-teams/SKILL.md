@@ -23,6 +23,8 @@ Du leser ikke all koden selv. Med mange filer har du ikke plass til det, og det 
 
 ## Forutsetninger (gjør dette FØRST)
 
+0. **Er input en verify-rapport** (`verify-*.md`)? Da er det *Gjennomgang av en verify-rapport* i `fs-verify`, som er en samtale med brukeren og ikke trenger et team. Følg `fs-verify` direkte, og si det.
+
 1. **Agent teams må være på.** Sjekk at team-verktøyene (`SendMessage`, `TaskCreate`, `TaskList`, `TaskUpdate`) finnes i økten, og/eller `echo $CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS`. Er de ikke det, si at agent teams slås på med
 
    ```json
@@ -102,14 +104,15 @@ Bare når brukeren har sagt ja (*Finn scope og kode*), og bare du tar dem, etter
 
 ## Bekreft og endre
 
-Vent til alle svarene er kontrollert (og skjermbildene tatt), og spør ikke underveis. Følg så *Rapport og endringer* i `fs-verify`: vis rapporten i chat, vis `## Forslag til endringer`, og spør én gang, med kravene nevnt i spørsmålet. Valgene er de samme: **Gjør endringene**, **Gå gjennom krav for krav** og **Ikke endre noe**. Hva som kan leveres og slettes, står i `fs-verify`:
+Vent til alle svarene er kontrollert (og skjermbildene tatt), og spør ikke underveis. Følg så *Rapport og endringer* i `fs-verify`: skriv rapporten til fil først, med `## Forslag til endringer`, gi bare et kort sammendrag og lenken i chat, og still oppfølgingsspørsmålene etterpå, der hvert spørsmål har med referansene det gjelder (`krav/…:<linje>` og `<repo>/<fil>:<linje>`). Oppdater rapportfila med svarene. Hva som kan leveres og slettes, står i `fs-verify`:
 
 - `@in-progress`: *Verifisere implementasjon* (alt i gating-settet er `funnet` etter kontrollen).
 - Deler i leverte krav: *Deler i leverte krav som endres* (fjern `@in-progress` fra delen).
+- Delvis levert: *Delvis levert* (egenskapen `@in-progress`, de leverte delene `@implemented`).
 - `@deprecated`: *Verifisere at koden er borte* (ingen spor funnet).
 - *Uansett status*: bare kravene der hele gating-settet er `funnet`. For de andre blir statusen stående, og resultatet står i rapporten.
 
-Svarer brukeren **Avbryt** i gjennomgangen, stopp, skriv rapporten for det som er gjort, og rydd opp i teamet.
+Svarer brukeren **Avbryt** i gjennomgangen, stopp, oppdater rapportfila med det som er gjort, og rydd opp i teamet.
 
 ## Rapport
 

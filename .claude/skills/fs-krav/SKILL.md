@@ -368,10 +368,10 @@ Finn fila, og eventuelt regelen eller scenarioet, som skal bort. Er det uklart, 
 |---------------|------------------------|------------|
 | Hele kravet | `@draft`, `@planned` eller ingen status | Ikke levert. Slett fila. |
 | Hele kravet | `@implemented` | Bytt `@implemented` med `@deprecated` på `Egenskap:`-tag-linja. Fjern eventuelle `@deprecated` på deler (de er dekket av egenskapen). |
-| Hele kravet | `@in-progress` | Spør om noe av kravet allerede er levert (fra en tidligere iterasjon). Ja → som `@implemented`. Nei → slett fila, og si fra at oppgaven som har hentet kravet inn, må oppdateres. |
+| Hele kravet | `@in-progress` | Har kravet `@implemented`-deler, er det delvis levert (*Delvis levert* i `krav/README.md`): bytt `@in-progress` med `@deprecated` på `Egenskap:`, og fjern `@implemented` og `@deprecated` fra delene. Ellers: spør om noe av kravet allerede er levert (fra en tidligere iterasjon). Ja → som `@implemented`. Nei → slett fila, og si fra at oppgaven som har hentet kravet inn, må oppdateres. |
 | Hele kravet | `@deprecated` | Allerede avviklet. Ingen endring. |
 | En regel/et scenario | `@draft` eller `@planned` | Ikke levert. Slett blokken (med tagger og kommentarer). |
-| En regel/et scenario | `@implemented` eller `@in-progress` | Er delen `@draft`, `@planned` eller `@in-progress`, er den ikke levert: slett blokken (erstatter den en `@deprecated`-del, spør om den gamle delen skal gjelde igjen, og fjern i så fall `@deprecated` og ` (avvikles)` i tittelen fra den). Ellers: legg `@deprecated` på `Regel:`-/`Scenario:`-linja. `Egenskap:`-taggen endres ikke. |
+| En regel/et scenario | `@implemented` eller `@in-progress` | Er delen `@draft`, `@planned` eller `@in-progress`, er den ikke levert: slett blokken (erstatter den en `@deprecated`-del, spør om den gamle delen skal gjelde igjen, og fjern i så fall `@deprecated` og ` (avvikles)` i tittelen fra den). Er delen `@implemented` (delvis levert, under `@in-progress`), er den levert: bytt `@implemented` med `@deprecated`. Er delen uten status under `@in-progress`, spør om den er levert fra en tidligere iterasjon (ja → `@deprecated`, nei → slett blokken). Ellers: legg `@deprecated` på `Regel:`-/`Scenario:`-linja. `Egenskap:`-taggen endres ikke. |
 
 **Mekanikk:** én `Edit` på tag-linja. Bare statustaggen byttes; feature-ID, MoSCoW og andre tagger står urørt: `@BRU-APP-API-001 @must @implemented` → `@BRU-APP-API-001 @must @deprecated`. Mangler delen en tag-linje, legg en ny linje med `@deprecated` rett over `Regel:`/`Scenario:`, med samme innrykk.
 
@@ -404,7 +404,7 @@ Finn fila og regelen eller scenarioet som skal endres. Er det uklart, spør. Les
 |------------------------|------------|
 | `@implemented` | Fortsett med D2. |
 | `@draft` eller `@planned` | Ingenting er levert. Endre delen på stedet (modus A/B). |
-| `@in-progress` | Spør om delen som endres, allerede er levert (fra en tidligere iterasjon). Nei → endre på stedet, og si fra at oppgaven som har hentet kravet inn, må oppdateres. Ja → si at dette ikke støttes: vent til egenskapen er `@implemented`, eller avklar med brukeren. |
+| `@in-progress` | Er delen `@implemented` (delvis levert, *Delvis levert* i `krav/README.md`), er den levert: legg den nye delen ved siden av som `@draft` (D2). Når den er validert, fjernes `@draft`, og den gamle delen får `@deprecated` i stedet for `@implemented`. Er delen uten status, spør om den allerede er levert (fra en tidligere iterasjon). Nei → endre på stedet, og si fra at oppgaven som har hentet kravet inn, må oppdateres. Ja → som en `@implemented` del. |
 | `@deprecated` | Kravet er avviklet. Skal det gjelde igjen, er det et nytt krav (modus A). |
 
 Hvilke deler endringen gjelder, avklares med brukeren, én om gangen: endres, fjernes eller legges til?

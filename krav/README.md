@@ -52,7 +52,7 @@ Egenskap: Regelverkssamling
 |---|---|---|
 | `@draft` | Utkast, ikke validert. Alle nye krav starter her, eventuelt som skjelett | `fs-scope` / `fs-krav` |
 | `@planned` | Validert og klart til å bygges | `fs-krav`, etter en gjennomgang, eller når det er sagt at kravet skal ha `@planned` |
-| `@in-progress` | Hentet inn i en oppgave | `fs-specify` / `fs-specify-delta` |
+| `@in-progress` | Hentet inn i en oppgave, eller delvis levert | `fs-specify` / `fs-specify-delta`, eller `fs-verify` når noe av kravet er levert |
 | `@implemented` | Bygget, og verifisert mot koden | `fs-verify` (også direkte fra `@draft` eller `@planned`, med «Verifiser» uansett status) |
 | `@deprecated` | Levert, men skal fjernes | `fs-krav`. `fs-verify` sletter fila (eller blokken, for en del) når koden er borte |
 
@@ -236,9 +236,11 @@ Implementasjonsstatusen beveger seg langs én akse, og hvert steg har én eier:
 
 Unntaket er «Verifiser» på en egenskap eller en regel i FS Kravforvaltning: brukeren ber `fs-verify` verifisere *uansett status*. Finnes alt i koden, og brukeren bekrefter, kan `fs-verify` gi en `@draft`- eller `@planned`-egenskap statusen `@implemented` direkte, og fjerne `@draft`, `@planned` eller `@in-progress` fra en regel under en `@implemented` egenskap, så regelen er levert. Det gjelder bare det brukeren ba om, og aldri en regel under en egenskap som ikke er levert.
 
+Det andre unntaket er et krav som er delvis levert: `fs-verify` gir en `@draft`- eller `@planned`-egenskap statusen `@in-progress` når noe av den finnes i koden, også når kravet ikke er i en spesifikasjon. Se *Delvis levert*.
+
 En flyt i `krav/_Flyter` hentes ikke inn i en oppgave, og hopper over `@in-progress`: `fs-verify` gir en `@planned` flyt statusen `@implemented`. Se *Flyter*.
 
-Et krav skal ha nøyaktig én av disse på `Egenskap:`-tag-linja. Ikke sett to samtidig, og ikke la et krav stå uten status. På `Regel:`/`Scenario:` brukes `@draft` og `@deprecated`. `@planned` og `@in-progress` er bare lov på en del under en `@implemented` egenskap, når et levert krav endres (se *Endring av levert krav*). `@implemented` settes aldri på en del: en levert del har ingen egen statustag. *(sjekkes automatisk)*
+Et krav skal ha nøyaktig én av disse på `Egenskap:`-tag-linja. Ikke sett to samtidig, og ikke la et krav stå uten status. På `Regel:`/`Scenario:` brukes `@draft` og `@deprecated`. `@planned` og `@in-progress` er bare lov på en del under en `@implemented` egenskap, når et levert krav endres (se *Endring av levert krav*). `@implemented` på en del er bare lov under en `@in-progress` egenskap, for en del som er levert (se *Delvis levert*). Under en `@implemented` egenskap har en levert del ingen egen statustag. *(sjekkes automatisk)*
 
 Den tidligere taggen `@levert` er erstattet av `@implemented`. *(sjekkes automatisk)*
 
@@ -339,6 +341,39 @@ Egenskap: ...
 
     @planned
     Scenario: Se brukerens roller
+      ...
+```
+
+### Delvis levert
+
+Er noe av et krav levert, men ikke alt, er egenskapen `@in-progress`, og delene som er levert, er `@implemented`. Det settes av `fs-verify` når den finner delene i koden, og brukeren bekrefter.
+
+- `@implemented` står på `Regel:` når alle scenarioene i regelen er funnet, ellers på hvert `Scenario:`/`Scenariomal:` som er funnet. På et scenario under en `@implemented` regel er taggen overflødig. *(sjekkes automatisk)*
+- `@implemented` på en del er bare lov under en `@in-progress` egenskap. *(sjekkes automatisk)* Delen kombineres ikke med en annen statustag. *(sjekkes automatisk)*
+- En del som ikke er levert, har ingen statustag. Er det uklart om den skal bygges, endres eller fjernes, får den `@openquestion` og en `# ÅPNE SPØRSMÅL:` (se *Oppfølging*). `@draft`-deler står urørt.
+- Var egenskapen `@draft` eller `@planned`, setter `fs-verify` den til `@in-progress`, også når kravet ikke er i en spesifikasjon. Det står i verify-rapporten, så kravet kan hentes inn i en oppgave med `fs-specify`.
+- Når resten er levert, gir `fs-verify` egenskapen `@implemented`, og fjerner `@implemented` fra delene i samme endring.
+- En `@implemented` egenskap settes aldri tilbake til `@in-progress`. Mangler noe i et levert krav, står det i verify-rapporten.
+- En `@implemented` del er levert, og endres ikke på stedet. Skal den bort, byttes `@implemented` med `@deprecated` (*Avvikling*). Skal den endres, legges den nye delen ved siden av som `@draft`, som i *Endring av levert krav*. Når den er validert, fjernes `@draft` (delen skal bygges, som resten av egenskapen), og den gamle delen får `@deprecated`.
+- I akseptansetesten testes delene som er `@implemented`, og resten av kravet venter på verifisering.
+
+```gherkin
+@BRU-APP-API-001 @must @in-progress
+Egenskap: ...
+
+  @implemented
+  Regel: Hovedflyt som er levert
+    Scenario: ...
+
+  Regel: Varsling
+    @implemented
+    Scenario: Varsel på e-post
+      ...
+
+    @openquestion
+    Scenario: Varsel i løsningen
+      # ÅPNE SPØRSMÅL:
+      # - Ikke funnet i koden. Skal varselet i løsningen bygges, eller fjernes fra kravet?
       ...
 ```
 

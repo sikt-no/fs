@@ -17,7 +17,7 @@ Du gjør kravene om til testcaser som testansvarlig kan følge i løsningen uten
 Fra strategien:
 
 - **Mål:** bekrefte at kravene er løst riktig, faglig sett.
-- **Hvilke scenarioer:** alle scenarioene i kravene som leveransen har gjort `@implemented`. Endres et levert krav, testes de nye og endrede scenarioene.
+- **Hvilke scenarioer:** alle scenarioene i kravene som leveransen har gjort `@implemented`. Endres et levert krav, testes de nye og endrede scenarioene. Er et krav delvis levert, testes delene som er `@implemented`.
 - **Hvor grundig:** hvert scenario blir én testcase og testes slik det står. En scenariomal gir én testcase per eksempel. Feilsituasjoner og grensetilfeller testes når de står som scenarioer i kravet.
 - **Rekkefølge:** rekkefølgen i feature-fila.
 
@@ -61,7 +61,7 @@ Er testbrukere eller testdata `[Fylles ut …]` i testplanen, si det før du beg
 ## 2. Finn scenarioene
 
 1. Kravene i «Omfang» i testplanen, slått opp på Feature-ID under `krav/` (*Kravene i de andre skillene* i `krav-fra-testplan.md`), i rekkefølgen i testplanen.
-2. Gating-settet per krav. Bare krav som er `@implemented` (eller deler som er levert i et endret krav) blir testcaser. Et krav som fortsatt er `@in-progress`, står i «Ikke med i denne testen» med «Venter på verifisering», og du foreslår `fs-verify`. Et scenario med `@openquestion` (uten `@draft`) blir testcase som det står, med spørsmålet under tabellen for regelen (*Åpne spørsmål* i `krav-fra-testplan.md`).
+2. Gating-settet per krav. Bare krav som er `@implemented` (eller deler som er levert i et endret krav, eller `@implemented`-deler i et krav som er delvis levert) blir testcaser. Et krav som er `@in-progress` uten `@implemented`-deler, og delene som ikke er levert i et delvis levert krav, står i «Ikke med i denne testen» med «Venter på verifisering», og du foreslår `fs-verify`. Et scenario med `@openquestion` (uten `@draft`) blir testcase som det står, med spørsmålet under tabellen for regelen (*Åpne spørsmål* i `krav-fra-testplan.md`).
 3. Les den nyeste verify-rapporten for leveransen (se *Verifisering* i `fs-testrapport`). Et scenario som er `ikke funnet` eller `usikker` der, spør du teamet om før du tar det med.
 4. **Flytene.** For hver flyt i «Flyter»: scenarioene i fasene som er med i testen (*Hele eller deler av flyten* i `krav-fra-testplan.md`), i rekkefølgen i flyten. Har en flyt fått ny status siden testplanen ble laget, gjelder statusen i fila. Les også kravene fasene bygger på, også dem som ikke er i «Omfang»: hovedflyten i dem er stegene som lager tilstanden i `Gitt` (*Kravene i de andre fasene*).
 

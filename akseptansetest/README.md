@@ -48,7 +48,7 @@ En testplan gjelder et scope, en oppgave, en mappe under `krav/` eller én eller
 - **Mappe:** alle feature-filene under mappa.
 - **Feature-fil:** filene.
 
-Det som testes, er det som er `@implemented`. Krav som er `@in-progress`, står i «Venter på verifisering», og resten i «Ikke med i denne testen».
+Det som testes, er det som er `@implemented`, også de leverte delene i et krav som er delvis levert (`@implemented` på en regel eller et scenario under en `@in-progress` egenskap). Krav som er `@in-progress`, og delene som ikke er levert, står i «Venter på verifisering», og resten i «Ikke med i denne testen».
 
 Er et krav med i en flyt i `krav/_Flyter/`, står flyten i «Flyter» i testplanen, og overleveringene i den testes også: at det ett krav lager, blir brukt av det neste. Hele flyten testes når den er `@implemented`, ellers fasene i leveransen som er levert. Se *Flyter* i [`krav-fra-testplan.md`](../.claude/references/akseptansetest/krav-fra-testplan.md).
 

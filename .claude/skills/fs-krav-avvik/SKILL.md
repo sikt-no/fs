@@ -76,7 +76,7 @@ Er du i tvil, er det *trenger avklaring*.
 Statusen avgjør hvordan et funn kan rettes:
 
 - `@draft`, `@planned`, `@in-progress`: teksten kan endres der den står. Under `@planned` er kravet validert, så et funn som *trenger avklaring* bør tilbake til `fs-krav` (modus B).
-- `@implemented` (og deler uten egen status under den): leverte deler endres ikke på stedet (*Endring av levert krav*). Er det bare ordlyd, og atferden er den samme, kan brukeren velge et bevisst unntak og endre på stedet. Si det i rapporten, og la brukeren velge.
+- `@implemented` (og deler uten egen status under den), og `@implemented`-deler under en `@in-progress` egenskap (*Delvis levert*): leverte deler endres ikke på stedet (*Endring av levert krav*). Er det bare ordlyd, og atferden er den samme, kan brukeren velge et bevisst unntak og endre på stedet. Si det i rapporten, og la brukeren velge.
 
 ## Rapport
 

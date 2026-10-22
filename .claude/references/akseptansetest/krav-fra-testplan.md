@@ -2,7 +2,7 @@
 
 Felles for skillene i testflyten. Verifiseringen (`fs-verify` eller `fs-verify-agent-teams`) kjøres først, på kilden, og setter `@implemented` på kravene der koden er funnet. `fs-testplan` finner så kravene fra den samme kilden, og skriver dem i «Omfang» i testplanen. De andre skillene leser kravene derfra, med Feature-ID, så alle trinnene tester de samme kravene, også om det kommer nye krav i mappa eller scopet etterpå.
 
-**Det som testes, er det som er `@implemented`.** Krav og deler med en annen status står i testplanen, men ikke i testcasene. Unntaket er en levert fase i en flyt som ikke er `@implemented` ennå (se *Flyter*).
+**Det som testes, er det som er `@implemented`:** egenskaper som er `@implemented`, og deler som er `@implemented` under en `@in-progress` egenskap (delvis levert, se *Delvis levert* i `krav/README.md`). Krav og deler med en annen status står i testplanen, men ikke i testcasene. Unntaket er en levert fase i en flyt som ikke er `@implemented` ennå (se *Flyter*).
 
 ## Leveransen
 
@@ -58,20 +58,21 @@ Filene brukeren oppga, i den rekkefølgen brukeren oppga dem. Én gruppe.
 
 **Åpne spørsmål.** En del med bare `@openquestion` (uten `@draft`) er klar til implementasjon (*Oppfølging* i `krav/README.md`), og er i gating-settet. Er den levert, testes den som det står, og spørsmålet står som merknad: i «Omfang» i testplanen, og under tabellen for regelen i testcasene. En del med `@draft @openquestion` er utkast, og er ikke med.
 
-**Testcasene lages bare for det som er levert:** scenarioer i gating-settet under en `@implemented` egenskap, uten `@planned` eller `@in-progress` på delen.
+**Testcasene lages bare for det som er levert:** scenarioer i gating-settet under en `@implemented` egenskap, uten `@planned` eller `@in-progress` på delen, og scenarioer i gating-settet som er `@implemented` (selv eller via `Regel:`) under en `@in-progress` egenskap.
 
 | Status | I testplanen | I testcasene |
 |---|---|---|
 | `@implemented` på `Egenskap:` | «Omfang» | Med |
 | `@implemented`, med `@planned`- eller `@in-progress`-deler (levert krav som endres) | «Omfang». Delene som endres, står i «Venter på verifisering» | De leverte delene. Er leveransen et scope, bare delene som er levert i scopet (se under) |
-| `@in-progress` på `Egenskap:` | «Venter på verifisering» | Ikke med før `fs-verify` har satt `@implemented` |
+| `@in-progress` på `Egenskap:`, med `@implemented`-deler (delvis levert) | «Omfang», med status «delvis levert». Delene som ikke er levert, står i «Venter på verifisering» | De leverte delene (`@implemented`) |
+| `@in-progress` på `Egenskap:`, uten `@implemented`-deler | «Venter på verifisering» | Ikke med før `fs-verify` har satt `@implemented` på kravet eller på deler av det |
 | `@planned`, `@draft`, uten status | «Ikke med i denne testen», med taggen | Ikke med |
 | `@deprecated` (egenskap eller del) | «Ikke med i denne testen» («skal fjernes») | Ikke med |
 | `@wont` på `Egenskap:` | «Ikke med i denne testen» («skal ikke lages») | Ikke med |
 
 **Endrede krav i et scope.** Er leveransen et scope eller en oppgave med scope, og har et `@implemented` krav taggen `@scope-<slug>` bare på enkelte deler, er det bare de delene som testes (delene som er levert i scopet). Resten av kravet ble levert og testet før. Ved en mappe eller fil testes hele det leverte kravet, med mindre brukeren sier noe annet.
 
-Er ingen av kravene `@implemented`, si det før testplanen skrives: testplanen kan lages, men det er ingenting å lage testcaser for ennå. Er verifiseringen ikke kjørt, foreslå `fs-verify` på kilden først.
+Er ingen av kravene `@implemented`, og ingen delvis levert, si det før testplanen skrives: testplanen kan lages, men det er ingenting å lage testcaser for ennå. Er verifiseringen ikke kjørt, foreslå `fs-verify` på kilden først.
 
 Det som faller ut, listes i «Ikke med i denne testen» med grunnen: taggen, og det åpne spørsmålet når delen er `@draft @openquestion`. På testsidene skrives grunnen med vanlige ord, uten tagger.
 

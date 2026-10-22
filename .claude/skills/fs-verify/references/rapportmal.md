@@ -1,6 +1,6 @@
 # Rapportmal for fs-verify
 
-Rapporten fra `fs-verify` og `fs-verify-agent-teams` følger denne malen, så to kjøringer kan sammenlignes linje for linje. Den samme teksten skrives i chat og til fil (filnavnet står i *Rapport* i `fs-verify`).
+Rapporten fra `fs-verify` og `fs-verify-agent-teams` følger denne malen, så to kjøringer kan sammenlignes linje for linje. Rapporten skrives til fil før brukeren blir spurt, og oppdateres med svarene i samme kjøring (*Rapport og endringer* i `fs-verify`). I chat står bare et sammendrag og lenken (filnavnet står i *Rapport* i `fs-verify`).
 
 ## Regler
 
@@ -12,6 +12,7 @@ Rapporten fra `fs-verify` og `fs-verify-agent-teams` følger denne malen, så to
   - `[uansett status]`: brukeren ba om å verifisere uansett status (*Verifisere uansett status* i `fs-verify`). `[ikke uansett status]` er det motsatte.
   - `[flyt]`: scope har en flyt under `krav/_Flyter/` (*Verifisere flyt* i `fs-verify`).
   - `[avhengigheter]`: `@depends-on-` er fulgt minst ett nivå (*Avhengigheter* i `fs-verify`). `[avhengigheter i koden]`: avhengighetene er også verifisert i koden.
+  - `[gjennomgang]`: kjøringen er en gjennomgang av en tidligere rapport (*Gjennomgang av en verify-rapport* i `fs-verify`).
   - `[blandet]`: noen krav er verifisert *uansett status*, og andre med det vanlige gating-settet (f.eks. «Annet» i *Omfang og avhengigheter*).
   - `[confluence]`: resultatet er lagt i Confluence (*Confluence* i `fs-verify`). Linja skrives inn etter at siden er laget, i samme kjøring.
 - **Faste tekster** står uten `<…>` og skrives som de står. Det i `<…>` fylles inn. Der det står `a | b`, velges én.
@@ -32,6 +33,7 @@ Rapporten fra `fs-verify` og `fs-verify-agent-teams` følger denne malen, så to
 - **Kode:** `<repo>` (<branch>, <kort sha>, <oppdatert | N bak origin | N bak main | ikke sjekket (Claude-panelet)>), `<repo>` (…)
 - **Omfang:** <`@in-progress` | `@deprecated` | flyter | alle krav uansett status | <det brukeren skrev>, skilt med komma> (<valgt | standard, ikke valgt | fra prompten>)
 - **Avhengigheter:** ingen | <n> nivå(er), bare status | <n> nivå(er), verifisert i koden | alle nivåer, bare status | alle nivåer, verifisert i koden
+- **Bygger på:** `<sti til den forrige rapporten>`                    [gjennomgang]
 - **Kontroll:** `fs-verify-kontroll` | manuell (Claude-panelet)
 - **Team:** <N> finnere (`fs-verify-krav`), <N> kontrollører (`fs-verify-kontroll`), <N>–<N> feature-filer per finner   [agent team]
 - **Skjermbilder:** ja | nei | nei (<grunn>)
@@ -112,16 +114,42 @@ I `Bevis` står **P** for fs-plattform, **A** for fs-admin og **M** for min-komp
 
 Kontrollen endret ingen resultater.                                    [når tabellen er tom, i stedet for den]
 
+## Forslag til endringer
+
+**Kan leveres**
+
+- `@DOM-SUB-KAP-NNN` — <tittel> (`<krav/…/fil.feature>`, `<status>` → `@implemented`, <n>/<n> funnet)
+- `@DOM-SUB-KAP-NNN` — Regel: <tittel> (`<krav/…/fil.feature>:<linje>`, `@in-progress` fjernes, <n>/<n> funnet) — bygger på `@DOM-SUB-KAP-NNN`, som er `@planned`   [bak, når kravet bygger på et krav som ikke er levert]
+
+**Delvis levert**
+
+- `@DOM-SUB-KAP-NNN` — <tittel> (`<krav/…/fil.feature>`, `<status>` → `@in-progress`, <n>/<N> funnet) — `@implemented` på: Regel: <tittel> (linje <n>), Scenario: <tittel> (linje <n>)
+
+**Kan slettes**
+
+- `@DOM-SUB-KAP-NNN` — <tittel eller del> (`<krav/…/fil.feature>`, hele fila | blokken) — ingen spor i <repoer>, søkt etter «<ord>», «<ord>» · referanser som fjernes: `<fil>`: `@depends-on-<ID>`
+
+**Blir stående**
+
+- `@DOM-SUB-KAP-NNN` — <tittel> (`<status>`, <n>/<N> funnet) — <hvorfor>
+
+Ingen.                                                                  [under en overskrift uten punkter]
+
 ## Levert
+
+Venter på svar.                                                         [før brukeren har svart, i stedet for tabellen]
 
 | Feature-ID | Egenskap eller del | Fil | Fra | Gating funnet |
 | --- | --- | --- | --- | --- |
 | `@DOM-SUB-KAP-NNN` | <tittel> | `<fil>` | `@in-progress` \| `@planned` \| `@draft` | <n>/<n> |
 | `@DOM-SUB-KAP-NNN` | Regel: <tittel> | `<fil>` | `@in-progress` | <n>/<n> |
+| `@DOM-SUB-KAP-NNN` | <tittel> (delvis: `@in-progress`, <n> deler `@implemented`) | `<fil>` | `@planned` \| `@draft` \| `@in-progress` | <n>/<N> |
 
 Ingen.                                                                  [når ingenting er levert, i stedet for tabellen]
 
 ## Ikke levert
+
+Venter på svar.                                                         [før brukeren har svart, i stedet for tabellen]
 
 | Feature-ID | Egenskap eller del | Status | Gating funnet | Hvorfor |
 | --- | --- | --- | --- | --- |
@@ -129,16 +157,27 @@ Ingen.                                                                  [når in
 | `@DOM-SUB-KAP-NNN` | <tittel> | `@draft` | <N>/<N> | Alt funnet. Brukeren valgte «Ikke endre noe» |
 | `@DOM-SUB-KAP-NNN` | <tittel> | `@in-progress` | <n>/<N> | Brukeren sa at noe mangler: <hva> |
 | `@DOM-SUB-KAP-NNN` | <tittel> | `@in-progress` | <n>/<N> | Brukeren avbrøt gjennomgangen |
+| `@DOM-SUB-KAP-NNN` | <tittel> | `@in-progress` | <n>/<N> | Ikke besvart |
 
 Ingen.                                                                  [når alt er levert, i stedet for tabellen]
 
 ## Slettet
+
+Venter på svar.                                                         [før brukeren har svart, i stedet for lista]
 
 - `<fil>` (hele kravet)
 - `<fil>` — Regel: <tittel>
 - Referanse fjernet: `@depends-on-<ID>` | `@ref-<ID>` i `<fil>` (<Egenskap | Regel: <tittel>>)
 
 Ingen.                                                                  [når ingenting er slettet, i stedet for lista]
+
+## Avklaringer                                                         [gjennomgang]
+
+| Feature-ID | Del | Spørsmål | Svar | Endring |
+| --- | --- | --- | --- | --- |
+| `@DOM-SUB-KAP-NNN` | Scenario: <tittel> | <spørsmålet, slik det ble stilt> | <svaret> | <`ikke funnet` → `funnet` \| `@openquestion` lagt til \| spørsmål fjernet \| foreslått `fs-krav` \| ingen> |
+
+Ingen avklaringer.                                                     [når ingenting ble gått gjennom, i stedet for tabellen]
 
 ## @deprecated som fortsatt finnes i koden
 
@@ -165,6 +204,9 @@ Ingen.                                                                  [når de
 - **`## Oversikt per krav`** `[per repo]`: én rad per krav i scope. `Funnet` er funnet av gating-settet. `Gjenstår` er repoene som må endres, med navn, i rekkefølgen fs-plattform, fs-admin, min-kompetanse og skilt med komma (`fs-plattform`, `fs-admin, min-kompetanse`), eller `ingen`. Skriv aldri «backend», «frontend» eller «begge». Repoene kommer fra radene som ikke er `funnet` (`delvis` og `mangler` teller). Linja under teller kravene per verdi som forekommer, med flest først, og `ingen` til slutt, også med 0. Bokstavene i `Bevis` står i rekkefølgen P, A, M.
 - **`## Fremdrift for flyter`** `[flyt]`: én rad per fase, i rekkefølgen i flyten. En fase er levert når alle kravene den bygger på, er `@implemented` (en flyt den bygger på, også). `mangler krav` når fasen ikke har `@depends-on-`. Linja under tabellen står én gang per flyt.
 - **`## Avhengigheter`** `[avhengigheter]`: én rad per par (krav i scope, avhengighet), sortert på krav i scope og så nivå. På nivå 2 og lenger er `Krav i scope` kravet i scope kjeden starter i. `Funnet` er `<n>/<N>` av gating-settet (som *uansett status*) når avhengighetene er verifisert i koden, ellers `–`. Merknaden «kan ikke leveres før dette» står bare på nivå 1, når avhengigheten ikke er `@implemented`. Avhengighetene teller ikke i `## Oppsummering`, og radene deres står aldri i `## Scenarioer`, fordi tavla «Oppgaver», `fs-testplan` og `fs-testrapport` leser den tabellen.
+- **`## Forslag til endringer`**: det som ble foreslått før brukeren svarte, med stiene til kravene, så forslaget kan leses i fila mens spørsmålene stilles. Står uendret når svarene er gitt; det som faktisk ble gjort, står i `## Levert`, `## Ikke levert` og `## Slettet`.
+- **«Venter på svar.»** står i `## Levert`, `## Ikke levert` og `## Slettet` bare mellom at fila skrives og at brukeren har svart. Når kjøringen er ferdig, står det aldri igjen.
+- **`## Avklaringer`** `[gjennomgang]`: ett punkt per spørsmål i gjennomgangen, i rekkefølgen de ble stilt. `Endring` sier hva som ble gjort i kravfila eller i resultatet.
 - **`## Levert`**: kravene og delene som har fått ny status i denne kjøringen. `Fra` er statusen før. En del (regel eller scenario) skrives som `Regel: <tittel>` eller `Scenario: <tittel>`.
 - **`## Ikke levert`**: alle kravene og delene i scope som ble verifisert, men ikke levert, med statusen de fortsatt har. `Hvorfor` er én av formene i malen. Krav som ikke ble verifisert (allerede levert, ikke klare), står under *Krav utenfor scope* i `## Oppfølging`.
 - **`## Oppfølging`**: bare funn som ikke står i en annen seksjon. Hvert punkt har en kort overskrift i fet skrift, og `fil:linje` når det handler om kode.
