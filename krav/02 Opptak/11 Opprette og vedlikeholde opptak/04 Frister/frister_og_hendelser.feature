@@ -211,7 +211,7 @@ Egenskap: Frister og hendelser for opptak
       Når opptaksforvalter ikke setter dato for aldersberegning
       Så er opptakets dato for aldersberegning "2027-12-31"
 
-  @ref-OPT-BEH-BEH-011
+  @ref-OPT-BEH-BEH-011 @ref-FLY-OPT-SAK-001
   # OPT-BEH-BEH-011: virkningen av fristen står i regelen «Søknadsalternativene flyttes når utdanningsbakgrunnen endres til en bakgrunn med unntak».
   Regel: Opptaksforvalter ved forvaltende organisasjon må kunne sette frist for endring av utdanningsbakgrunn
     # AVKLART 2026-10-19 (S3, akseptansetesten): Opptaket setter fristen, og saksbehandlertildelingen bruker den.

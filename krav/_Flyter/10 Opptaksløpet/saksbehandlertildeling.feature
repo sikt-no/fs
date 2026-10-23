@@ -93,14 +93,13 @@ Egenskap: Saksbehandlertildeling
   # OPT-BEH-BEH-011: «Søknadsalternativene flyttes når utdanningsbakgrunnen endres til en bakgrunn med unntak»
   Regel: Søknadsalternativene flyttes når utdanningsbakgrunnen endres
 
-    Scenario: Søknadsalternativene flyttes til HK-dir før fristen for endring av utdanningsbakgrunn
-      Gitt at opptakets frist for endring av utdanningsbakgrunn ikke har gått ut
+    Scenariomal: Saksbehandlertildelingen bruker fristen opptaket har satt
+      Gitt at opptaksforvalteren ved HK-dir har satt frist for endring av utdanningsbakgrunn til "2027-05-01 23:59"
       Og at søkerens søknadsalternativer er fordelt til "Universitetet i Oslo"
-      Når saksbehandleren ved Universitetet i Oslo endrer søkerens utdanningsbakgrunn til "Utenlandsk"
-      Så er "HK-dir" saksbehandlende organisasjon for alle søknadsalternativene
+      Når saksbehandleren ved Universitetet i Oslo endrer søkerens utdanningsbakgrunn til "Utenlandsk" den <dato>
+      Så er <organisasjon> saksbehandlende organisasjon for alle søknadsalternativene
 
-    Scenario: Søknadsalternativene blir hos organisasjonen etter fristen for endring av utdanningsbakgrunn
-      Gitt at opptakets frist for endring av utdanningsbakgrunn har gått ut
-      Og at søkerens søknadsalternativer er fordelt til "Universitetet i Oslo"
-      Når saksbehandleren ved Universitetet i Oslo endrer søkerens utdanningsbakgrunn til "Utenlandsk"
-      Så er "Universitetet i Oslo" fortsatt saksbehandlende organisasjon for alle søknadsalternativene
+      Eksempler:
+        | dato         | organisasjon           |
+        | "2027-04-30" | "HK-dir"               |
+        | "2027-05-02" | "Universitetet i Oslo" |

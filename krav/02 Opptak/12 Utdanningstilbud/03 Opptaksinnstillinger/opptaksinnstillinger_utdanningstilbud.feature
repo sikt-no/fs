@@ -236,7 +236,7 @@ Egenskap: Opptaksinnstillinger per utdanningstilbud
   # Et utdanningstilbud er ute av en plasstildelingsrunde når det ikke er satt antall tilbud som skal gis for plasstildelingsrunden,
   # se 14 Plasstildeling/02 Tildelingsinnstillinger/antall_tilbud_som_skal_gis.feature.
 
-  @depends-on-OPT-BEH-BEH-011
+  @depends-on-OPT-BEH-BEH-011 @ref-FLY-OPT-SAK-001
   Regel: Opptaksforvalter kan velge behandlertildelingsregel per utdanningstilbud
     # Reglene, og om de er aktive, settes der. Hvordan søknadsalternativene fordeles etter regelen, står også der.
 

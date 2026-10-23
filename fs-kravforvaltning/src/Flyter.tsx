@@ -15,10 +15,12 @@ import {
   flowTree,
   flowWarnings,
   focusLn,
-  focusParts,
   isFlowId,
   isPartial,
   ORD,
+  partCount,
+  partsOf,
+  type FlowPart,
   pathOf,
   phaseStatus,
   progress,
@@ -44,6 +46,8 @@ interface Props {
   depth: Depth;
   onSelect: (path: string | null) => void;
   onDepth: (d: Depth) => void;
+  /** Fasen som skal vises (fra «Fase N i <flyt>» i Krav); `seq` gjør at samme fase kan vises igjen */
+  goPhase?: { n: number; seq: number } | null;
   /** Åpner en fil i Krav, eventuelt på en linje */
   onOpen: (path: string, line?: number) => void;
   sideHidden: boolean;
@@ -151,7 +155,7 @@ const WARN_LABEL: Record<FlowWarning['kind'], string> = {
   break: 'kjent brudd',
 };
 
-export function Flyter({ ix, path, depth, onSelect, onDepth, onOpen, sideHidden, outlineHidden }: Props) {
+export function Flyter({ ix, path, depth, onSelect, onDepth, goPhase, onOpen, sideHidden, outlineHidden }: Props) {
   const flow = path ? (ix.flows.find(f => f.path === path) ?? null) : null;
   const [q, setQ] = useState('');
   const [closed, setClosed] = useState<Record<string, boolean>>({});
@@ -201,6 +205,12 @@ export function Flyter({ ix, path, depth, onSelect, onDepth, onOpen, sideHidden,
     setTab('phases');
     setTimeout(() => scrollToPhase(n), 40);
   };
+  // Fra «Fase N i <flyt>» i Krav: etter at flyten er valgt (og visningen har gått øverst)
+  useEffect(() => {
+    if (!goPhase) return;
+    const t = setTimeout(() => toPhase(goPhase.n), 80);
+    return () => clearTimeout(t);
+  }, [goPhase?.seq]);
   const goSeen = (phase: number, id: string) => {
     toPhase(phase);
     setFlash(id);
@@ -528,15 +538,14 @@ function FlowView(p: ViewProps) {
               const ready = list.filter(k => !k.open.size).length;
               const whole = ks.filter(k => k.status === 'implemented').length;
               const part = ks.filter(isPartial).length;
-              const rules = ks.reduce((a, k) => a + k.delivery.rules, 0);
-              const rulesDone = ks.reduce((a, k) => a + k.delivery.rulesDone, 0);
+              const pc = partCount(list);
               return (
                 <div class="fl-levert">
                   <span>
                     Kravene, {depthText(depth)}: <b>{ready} av {ks.length}</b> levert for flyten{follow === 'part' ? <> · {whole} som helhet{part > 0 && <>, {part} delvis levert</>}</> : part > 0 && <>, {part} delvis levert</>}
                   </span>
-                  <span>
-                    Reglene i kravene: <b>{rulesDone} av {rules}</b> levert
+                  <span title={follow === 'part' ? 'Ankrene, ellers reglene i «…» under taggen, ellers reglene i hele kravet' : 'Reglene i kravene, unntatt utkast og avviklede regler'}>
+                    {follow === 'part' ? 'Delene flyten bygger på' : 'Reglene i kravene'}: <b>{pc.done} av {pc.total}</b> levert
                   </span>
                 </div>
               );
@@ -657,8 +666,8 @@ function FlowView(p: ViewProps) {
 
       {tab === 'phases' && <Phases {...p} tree={tree} />}
       {tab === 'krav' && <KravTab {...p} tree={tree} list={list} intro={`Det som må være levert for at flyten skal virke, til ${depthText(depth)}${followT}.`} />}
-      {tab === 'dom' && <DomTab ix={ix} list={list} onOpen={p.onOpen} intro={`Kravene flyten bygger på, til ${depthText(depth)}${followT}, samlet per domene og sub-domene. Hvert sub-domene er et team som kan levere til flyten.`} />}
-      {tab === 'mx' && <MatrixTab ix={ix} flow={flow} list={list} toPhase={p.toPhase} intro={`Hvor mange krav som gjenstår per sub-domene i hver fase, til ${depthText(depth)}${followT}. Tallet er kravene der ${follow === 'part' ? 'delen fasen bygger på' : 'hele kravet'} ikke er levert, av alle kravene sub-domenet leverer til fasen.`} />}
+      {tab === 'dom' && <DomTab ix={ix} list={list} follow={follow} onOpen={p.onOpen} intro={`Kravene flyten bygger på, til ${depthText(depth)}${followT}, samlet per domene og sub-domene. Hvert sub-domene er et team som kan levere til flyten.`} />}
+      {tab === 'mx' && <MatrixTab ix={ix} flow={flow} list={list} toPhase={p.toPhase} depth={depth} follow={follow} />}
     </>
   );
 }
@@ -865,24 +874,18 @@ function DepCard(p: ViewProps & { ph: FlowPhase; n: DepNode; occ: Record<string,
             </a>
           </div>
         )}
-        {n.focus?.kind === 'anchor' ? (
-          <div class="dnote" title={`Delene i ${n.id} med @ref-${p.flow.id}: fasen bygger bare på dem`}>
-            <span class="mono muted">@ref-</span>
+        {n.focus && (
+          <div
+            class="dnote"
+            title={n.focus.kind === 'anchor' ? `Delene i ${n.id} med @ref-${p.flow.id}${n.notes.length ? ' i reglene i «…»' : ''}: fasen bygger bare på dem` : 'Reglene i «…» i kommentaren under taggen: fasen bygger bare på dem'}
+          >
+            <span class="mono muted">{n.focus.kind === 'anchor' ? '@ref-' : n.notes.length > 1 ? 'regler' : 'regel'}</span>
             <span class="parts">
-              {focusParts(n.focus).map((pt, i) => (
-                <span key={i}>
-                  <span class="mono">{pt.k}:</span> {pt.t}
-                </span>
+              {partsOf(ix, n.id, n.focus).map(pt => (
+                <PartLink key={pt.ln} pt={pt} open={() => p.onOpen(pathOf(ix, n.id)!, pt.ln)} />
               ))}
             </span>
           </div>
-        ) : (
-          n.note && (
-            <div class="dnote">
-              <span class="mono muted">regel</span>
-              <span>«{n.note}»</span>
-            </div>
-          )
         )}
         {follow === 'part' && !n.focus && hasOwnDeps && depth > 1 && !fl && <span class="muted small">Ikke noe anker eller regel i kommentaren: hele kravet følges</span>}
       </div>
@@ -897,6 +900,22 @@ function DepCard(p: ViewProps & { ph: FlowPhase; n: DepNode; occ: Record<string,
     </div>
   );
 }
+
+const partSt = (pt: FlowPart) => (pt.status === 'implemented' ? 'levert' : (pt.status ?? 'ingen status'));
+/** En del av kravet med statusen sin, som åpner kravet på delen */
+const PartLink = ({ pt, open }: { pt: FlowPart; open: () => void }) => (
+  <a
+    class="fl-part"
+    title={partSt(pt)}
+    onClick={e => {
+      e.stopPropagation();
+      open();
+    }}
+  >
+    <Dot c={stColor(pt.status)} z={6} />
+    <span class="mono">{pt.part === 'rule' ? 'Regel' : pt.part === 'scenario' ? 'Scenario' : 'Hele kravet'}:</span> {pt.name}
+  </a>
+);
 
 /** Radene i treet under et kort, til og med valgt nivå */
 function walkRows(p: ViewProps, node: DepNode, pn: number, out: JSX.Element[]) {
@@ -915,11 +934,13 @@ function walkRows(p: ViewProps, node: DepNode, pn: number, out: JSX.Element[]) {
       </span>
     ));
     // Delen av kravet som følges: ankrene (@ref-<kravet over>), ellers regelen i kommentaren under taggen
-    const focus = focusParts(c.focus).map((pt, i) => (
-      <span key={'f' + i} class="part focus" title={c.focus?.kind === 'anchor' ? `${c.id} har @ref-${node.id} på delen: ${node.id} bygger bare på den` : 'Regelen i kommentaren under taggen'}>
-        <span class="mono">→ {pt.k}:</span> {pt.t} <span class="mono muted">{c.focus?.kind === 'anchor' ? '@ref-' : '«…»'}</span>
-      </span>
-    ));
+    const focus = c.focus
+      ? partsOf(ix, c.id, c.focus).map(pt => (
+          <span key={'f' + pt.ln} class="part focus" title={`${c.focus?.kind === 'anchor' ? `${c.id} har @ref-${node.id} på delen: ${node.id} bygger bare på den` : 'Regelen i kommentaren under taggen'} · ${partSt(pt)}`}>
+            <span class="mono">→</span> <PartLink pt={pt} open={() => p.onOpen(pathOf(ix, c.id)!, pt.ln)} /> <span class="mono muted">{c.focus?.kind === 'anchor' ? '@ref-' : '«…»'}</span>
+          </span>
+        ))
+      : [];
     out.push(
       <div
         key={key}
@@ -1035,7 +1056,8 @@ function KravTab(p: ViewProps & { tree: ReturnType<typeof flowTree>; list: FlatK
             <div role="row" class="hd mono">
               <span>STATUS</span>
               <span>KRAV</span>
-              <span>LEVERT</span>
+              <span title={p.follow === 'part' ? 'Reglene og scenarioene flyten bygger på: ankrene, ellers reglene i «…», ellers reglene i kravet' : 'Reglene i kravet'}>{p.follow === 'part' ? 'FOR FLYTEN' : 'REGLER'}</span>
+              <span title="Hele kravet">LEVERT</span>
               <span>NIVÅ</span>
               <span>FASER</span>
               <span>VIA</span>
@@ -1051,6 +1073,7 @@ function KravTab(p: ViewProps & { tree: ReturnType<typeof flowTree>; list: FlatK
                     <span class="mono">{k.id}</span>
                     <span>{titleOf(ix, k.id)}</span>
                   </span>
+                  <ForFlow ix={ix} k={k} follow={p.follow} onOpen={p.onOpen} />
                   <span class={'small' + (isPartial(ix.krav.get(k.id)!) ? ' partial' : '')}>{levert(ix, k.id) ?? '–'}</span>
                   <span class="mono">{k.level}</span>
                   <span>fase {[...k.phases].sort((a, b) => a - b).join(', ')}</span>
@@ -1065,6 +1088,39 @@ function KravTab(p: ViewProps & { tree: ReturnType<typeof flowTree>; list: FlatK
         </div>
       ))}
     </div>
+  );
+}
+
+/** Delene av kravet flyten bygger på, og hvor mange av dem som er levert. Med «Bare delen» står delene med status under */
+function ForFlow({ ix, k, follow, onOpen }: { ix: FlowIndex; k: FlatKrav; follow: Follow; onOpen: (path: string, line?: number) => void }) {
+  const pc = partCount([k]);
+  const parts = [...k.parts.values()].sort((a, b) => a.ln - b.ln);
+  const whole = parts.length === 1 && parts[0].part === 'feature';
+  // Følges hele kravet (fra minst én fase), er delene alle reglene: da står bare tallet
+  const all = follow === 'whole' || k.whole;
+  const unit = whole ? '' : !all ? (pc.total === 1 ? ' del' : ' deler') : pc.total === 1 ? ' regel' : ' regler';
+  return (
+    <span class="k fl-forflow">
+      <span class={'small' + (pc.done === pc.total ? ' partial' : '')}>
+        {whole ? (pc.done ? 'hele kravet' : 'hele kravet, ikke levert') : `${pc.done} av ${pc.total}${unit}${all && follow === 'part' ? ' · hele kravet' : ''}`}
+      </span>
+      {!all &&
+        !whole &&
+        parts.map(pt => (
+          <a
+            key={pt.ln}
+            class="small"
+            title={`${pt.part === 'rule' ? 'Regel' : 'Scenario'}: ${pt.name} · ${pt.status === 'implemented' ? 'levert' : (pt.status ?? 'ingen status')} · fase ${[...pt.phases].sort((a, b) => a - b).join(', ')}`}
+            onClick={e => {
+              e.stopPropagation();
+              onOpen(ix.krav.get(k.id)!.path, pt.ln);
+            }}
+          >
+            <Dot c={stColor(pt.status)} z={6} />
+            <span class="t">{pt.name}</span>
+          </a>
+        ))}
+    </span>
   );
 }
 
@@ -1084,6 +1140,18 @@ function statusBar(ix: FlowIndex, arr: FlatKrav[]) {
     })()].join(' · '),
   };
 }
+/** Stolpen for delene i fasen, etter statusen på hver del */
+function partBar(arr: FlatKrav[], phase: number) {
+  const st: Record<string, number> = {};
+  let n = 0;
+  for (const k of arr)
+    for (const pt of k.parts.values())
+      if (pt.phases.has(phase)) {
+        st[pt.status ?? 'none'] = (st[pt.status ?? 'none'] ?? 0) + 1;
+        n++;
+      }
+  return ORDER.filter(o => st[o]).map(o => ({ w: (st[o] / n) * 100 + '%', c: o === 'none' ? 'var(--st-none)' : STC[o] }));
+}
 const Bar = ({ bar, h = 6, title }: { bar: { w: string; c: string }[]; h?: number; title?: string }) => (
   <span class="fl-bar" title={title} style={{ height: h + 'px' }}>
     {bar.map((b, i) => <span key={i} style={{ width: b.w, background: b.c }} />)}
@@ -1102,17 +1170,19 @@ function byDomain(ix: FlowIndex, list: FlatKrav[]) {
   return [...m.entries()].sort((a, b) => coll.compare(a[0], b[0])).map(([dom, subs]) => ({ dom, subs: [...subs.entries()].sort((a, b) => coll.compare(a[0], b[0])) }));
 }
 
-function DomTab({ ix, list, intro, onOpen }: { ix: FlowIndex; list: FlatKrav[]; intro: string; onOpen: (path: string) => void }) {
+function DomTab({ ix, list, follow, intro, onOpen }: { ix: FlowIndex; list: FlatKrav[]; follow: Follow; intro: string; onOpen: (path: string) => void }) {
   const groups = byDomain(ix, list);
   const agg = (arr: FlatKrav[]) => {
     const nr = arr.reduce((a, k) => a + (ix.krav.get(k.id)?.rules.length ?? 0), 0);
-    const used = arr.reduce((a, k) => a + k.rules.size, 0);
-    const whole = arr.filter(k => k.whole).length;
+    // Delene flyten bygger på: også et scenario med ankeret som ikke står under en regel
+    const pc = partCount(arr);
+    const used = pc.total ? `${pc.total} ${follow === 'part' ? (pc.total === 1 ? 'del' : 'deler') : pc.total === 1 ? 'regel' : 'regler'} · ${pc.done} levert` : '–';
+    const whole = follow === 'part' ? arr.filter(k => k.whole).length : 0;
     const ph = new Set(arr.flatMap(k => [...k.phases]));
     return {
       nK: arr.length,
       nR: nr,
-      used: used ? `${used} av ${nr}` : '–',
+      used,
       whole: whole ? (whole === 1 ? '1 krav følges helt' : `${whole} krav følges helt`) : '',
       ...statusBar(ix, arr),
       phases: ph.size ? 'fase ' + [...ph].sort((a, b) => a - b).join(', ') : '–',
@@ -1128,7 +1198,7 @@ function DomTab({ ix, list, intro, onOpen }: { ix: FlowIndex; list: FlatKrav[]; 
           <span>DOMENE / SUB-DOMENE</span>
           <span class="r">KRAV</span>
           <span class="r">REGLER</span>
-          <span>REGLER FLYTEN PEKER PÅ</span>
+          <span>{follow === 'part' ? 'DELER FLYTEN BYGGER PÅ' : 'REGLER FLYTEN BYGGER PÅ'}</span>
           <span>STATUS PÅ KRAVENE</span>
           <span>FASER</span>
         </div>
@@ -1184,28 +1254,50 @@ function DomTab({ ix, list, intro, onOpen }: { ix: FlowIndex; list: FlatKrav[]; 
           </div>
         )}
       </div>
-      <span class="muted small">«Regler flyten peker på» er reglene som står i kommentaren under taggen på fasen, eller der @depends-on- står i kravet over. Et krav uten en slik regel følges helt.</span>
+      <span class="muted small">
+        {follow === 'part'
+          ? '«Deler flyten bygger på» er reglene og scenarioene med ankeret (@ref- til flyten eller kravet over), ellers reglene i «…» i kommentaren under taggen. Et krav uten anker eller regel i «…» følges helt, og da teller alle reglene i kravet. «Levert» er delene som er levert.'
+          : '«Regler flyten bygger på» er alle reglene i kravene, unntatt utkast og avviklede regler. «Levert» er reglene som er levert.'}
+      </span>
     </div>
   );
 }
 
 // Matrise --------------------------------------------------------------------------------------
 
-function MatrixTab({ ix, flow, list, toPhase, intro }: { ix: FlowIndex; flow: Flow; list: FlatKrav[]; toPhase: (n: number) => void; intro: string }) {
-  // Kravet er enheten: et krav gjenstår i fasen til delen fasen bygger på, er levert (hele kravet med «Følg: Hele kravet»)
-  const val = (arr: FlatKrav[]) => arr.length;
-  const remOf = (arr: FlatKrav[], phase?: number) => arr.filter(k => (phase === undefined ? k.open.size > 0 : k.open.has(phase))).length;
+function MatrixTab({ ix, flow, list, toPhase, depth, follow }: { ix: FlowIndex; flow: Flow; list: FlatKrav[]; toPhase: (n: number) => void; depth: Depth; follow: Follow }) {
+  // Enheten er kravet eller delene: et krav gjenstår i fasen til delen fasen bygger på, er levert (hele kravet med
+  // «Følg: Hele kravet»), og en del (regel eller scenario) til den selv er levert
+  const [unit, setUnit] = useState<'krav' | 'deler'>('krav');
+  const unitT = unit === 'krav' ? 'krav' : follow === 'part' ? 'deler' : 'regler';
+  const val = (arr: FlatKrav[], phase?: number) => (unit === 'krav' ? arr.length : partCount(arr, phase).total);
+  const remOf = (arr: FlatKrav[], phase?: number) =>
+    unit === 'krav' ? arr.filter(k => (phase === undefined ? k.open.size > 0 : k.open.has(phase))).length : partCount(arr, phase).open;
   const cellsFor = (arr: FlatKrav[]) =>
     flow.phases.map(ph => {
       const inP = arr.filter(k => k.phases.has(ph.n));
-      return { tot: val(inP), rem: remOf(inP, ph.n), inP };
+      return { tot: val(inP, ph.n), rem: remOf(inP, ph.n), inP, phase: ph.n };
     });
+  const tip = (inP: FlatKrav[], phase: number) =>
+    unit === 'krav'
+      ? inP.map(k => `${k.id} ${statusOf(ix, k.id) ?? ''}${levert(ix, k.id) ? ` (levert: ${levert(ix, k.id)})` : ''}`).join('\n')
+      : inP
+          .flatMap(k =>
+            [...k.parts.values()].filter(pt => pt.phases.has(phase)).map(pt => `${k.id} ${pt.part === 'feature' ? 'hele kravet' : (pt.part === 'rule' ? 'Regel: ' : 'Scenario: ') + pt.name} · ${pt.status === 'implemented' ? 'levert' : (pt.status ?? 'ingen status')}`),
+          )
+          .join('\n');
+  const intro =
+    unit === 'krav'
+      ? `Hvor mange krav som gjenstår per sub-domene i hver fase, til ${depthText(depth)}${follow === 'part' ? ', bare delen fasen bygger på' : ''}. Tallet er kravene der ${follow === 'part' ? 'delen fasen bygger på' : 'hele kravet'} ikke er levert, av alle kravene sub-domenet leverer til fasen.`
+      : follow === 'part'
+        ? `Hvor mange deler som gjenstår per sub-domene i hver fase, til ${depthText(depth)}. En del er en regel eller et scenario fasen bygger på (ankeret, ellers regelen i «…»), eller reglene i kravet når fasen bygger på hele kravet. Tallet er delene som ikke er levert, av alle delene sub-domenet leverer til fasen.`
+        : `Hvor mange regler som gjenstår per sub-domene i hver fase, til ${depthText(depth)}. Tallet er reglene i kravene som ikke er levert, av alle reglene (unntatt utkast og avviklede) sub-domenet leverer til fasen.`;
   const groups = byDomain(ix, list);
   const rows = groups.flatMap(({ dom, subs }) => [{ name: dom, isDom: true, arr: subs.flatMap(s => s[1]) }, ...subs.map(([sub, arr]) => ({ name: sub, isDom: false, arr }))]);
   let maxRem = 1;
   rows.forEach(r => !r.isDom && cellsFor(r.arr).forEach(c => (maxRem = Math.max(maxRem, c.rem))));
   const cols = `minmax(190px,1.6fr) repeat(${flow.phases.length}, minmax(84px,1fr)) 92px`;
-  const cell = (c: { tot: number; rem: number; inP: FlatKrav[] }, strong: boolean, key: number) => {
+  const cell = (c: { tot: number; rem: number; inP: FlatKrav[]; phase: number }, strong: boolean, key: number) => {
     if (!c.tot)
       return (
         <div key={key} role="cell" class="mxc" aria-label="ingen">
@@ -1219,8 +1311,8 @@ function MatrixTab({ ix, flow, list, toPhase, intro }: { ix: FlowIndex; flow: Fl
         key={key}
         role="cell"
         class="mxc"
-        aria-label={done ? `alt levert, ${c.tot} krav` : `${c.rem} av ${c.tot} krav gjenstår`}
-        title={c.inP.map(k => `${k.id} ${statusOf(ix, k.id) ?? ''}${levert(ix, k.id) ? ` (levert: ${levert(ix, k.id)})` : ''}`).join('\n')}
+        aria-label={done ? `alt levert, ${c.tot} ${unitT}` : `${c.rem} av ${c.tot} ${unitT} gjenstår`}
+        title={tip(c.inP, c.phase)}
         style={{ background: done ? 'transparent' : `color-mix(in oklch, var(--warn) ${pct}%, var(--surface))` }}
       >
         <span class="v">
@@ -1229,7 +1321,7 @@ function MatrixTab({ ix, flow, list, toPhase, intro }: { ix: FlowIndex; flow: Fl
           </span>
           <span class="of">av {c.tot}</span>
         </span>
-        <Bar bar={statusBar(ix, c.inP).bar} h={4} />
+        <Bar bar={unit === 'krav' ? statusBar(ix, c.inP).bar : partBar(c.inP, c.phase)} h={4} />
       </div>
     );
   };
@@ -1238,6 +1330,18 @@ function MatrixTab({ ix, flow, list, toPhase, intro }: { ix: FlowIndex; flow: Fl
     <div class="fl-tab">
       <div class="fl-tabhead">
         <span class="fl-intro">{intro}</span>
+        <div class="fl-ctl right">
+          <span>Tell</span>
+          <Seg
+            label="Tell"
+            cur={unit}
+            set={setUnit}
+            opts={[
+              { v: 'krav', l: 'Krav' },
+              { v: 'deler', l: follow === 'part' ? 'Deler' : 'Regler', title: follow === 'part' ? 'Reglene og scenarioene fasene bygger på' : 'Reglene i kravene' },
+            ]}
+          />
+        </div>
       </div>
       {list.length ? (
         <div class="fl-mxwrap">
@@ -1282,7 +1386,7 @@ function MatrixTab({ ix, flow, list, toPhase, intro }: { ix: FlowIndex; flow: Fl
               <span role="rowheader" class="rh">Gjenstår per fase</span>
               {flow.phases.map(ph => {
                 const inP = list.filter(k => k.phases.has(ph.n));
-                const tot = val(inP);
+                const tot = val(inP, ph.n);
                 const rem = remOf(inP, ph.n);
                 return (
                   <div key={ph.n} role="cell" class="mxc">
@@ -1328,7 +1432,11 @@ function MatrixTab({ ix, flow, list, toPhase, intro }: { ix: FlowIndex; flow: Fl
         <span>
           <span class="mono" style={{ color: 'var(--st-implemented)' }}>✓</span>alt levert
         </span>
-        <span>Et krav gjenstår til hele kravet er levert, også når noen regler er det. Gjenstår-kolonnen teller hvert krav én gang, selv om det er med i flere faser. Hold over en celle for å se kravene.</span>
+        <span>
+          {unit === 'krav'
+            ? `Et krav gjenstår til ${follow === 'part' ? 'delen fasen bygger på' : 'hele kravet'} er levert. Gjenstår-kolonnen teller hvert krav én gang, selv om det er med i flere faser. Hold over en celle for å se kravene.`
+            : `En ${follow === 'part' ? 'del' : 'regel'} gjenstår til den selv er levert. Gjenstår-kolonnen teller hver ${follow === 'part' ? 'del' : 'regel'} én gang, selv om den er med i flere faser. Hold over en celle for å se ${follow === 'part' ? 'delene' : 'reglene'}.`}
+        </span>
       </div>
     </div>
   );

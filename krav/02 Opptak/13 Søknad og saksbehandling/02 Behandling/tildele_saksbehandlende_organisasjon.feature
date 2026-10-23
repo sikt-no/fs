@@ -32,7 +32,7 @@ Egenskap: Tildele saksbehandlende organisasjon
 
   # ── 1. Oppsett ───────────────────────────────────────────────
 
-  @ref-OPT-OPT-UTD-004
+  @ref-OPT-OPT-UTD-004 @ref-FLY-OPT-SAK-001
   Regel: Opptaksforvalteren ved forvaltende organisasjon setter opp behandlertildelingsreglene for opptaket
     # Lærestedets valg av behandlertildelingsregel per utdanningstilbud står der.
 
@@ -265,6 +265,7 @@ Egenskap: Tildele saksbehandlende organisasjon
       # AVKLART 08.10.2026 i PR #684: det som avgjør, er om ledige studieplasser har åpnet. Om perioden
       # for ledige studieplasser er stengt, spiller ingen rolle.
 
+  @ref-FLY-OPT-SAK-001
   Regel: Et lærested kan ha saksbehandlingen sin hos en annen organisasjon i opptaket
 
     Scenario: Velge organisasjon som saksbehandler på vegne av lærestedet når lærestedet legges til i opptaket
@@ -293,6 +294,7 @@ Egenskap: Tildele saksbehandlende organisasjon
 
   # ── 3. Endring ───────────────────────────────────────────────
 
+  @ref-FLY-OPT-SAK-001
   Regel: Søknadsalternativene fordeles når søknaden sendes inn eller endres, og fordelingen ligger fast
 
     Scenariomal: Søknadsalternativene fordeles når <hendelse>
@@ -342,7 +344,7 @@ Egenskap: Tildele saksbehandlende organisasjon
       # sendte inn først. Som hovedregel endres den ikke når søkeren sender inn på nytt, endrer
       # prioriteringen, sletter eller legger til søknadsalternativer.
 
-  @depends-on-OPT-OVO-FRI-001
+  @depends-on-OPT-OVO-FRI-001 @ref-FLY-OPT-SAK-001
   # OPT-OVO-FRI-001: «Opptaksforvalter ved forvaltende organisasjon må kunne sette frist for endring av utdanningsbakgrunn»
   Regel: Søknadsalternativene flyttes når utdanningsbakgrunnen endres til en bakgrunn med unntak
     # AVKLART 22.10.2026: Fristen for endring av utdanningsbakgrunn gjelder bare saksbehandlerens endring.
@@ -434,6 +436,7 @@ Egenskap: Tildele saksbehandlende organisasjon
 
   # ── 4. Innsyn ────────────────────────────────────────────────
 
+  @ref-FLY-OPT-SAK-001
   Regel: Saksbehandlende organisasjon ser bare saker hos organisasjonen
 
     Scenario: Saksbehandleren ser bare saken hos organisasjonen sin
@@ -459,6 +462,7 @@ Egenskap: Tildele saksbehandlende organisasjon
       Når opptaksforvalteren ved HK-dir åpner søknaden
       Så ser opptaksforvalteren sakene hos "Universitetet i Oslo" og "UiT Norges arktiske universitet"
 
+  @ref-FLY-OPT-SAK-001
   Regel: Tilbyderen ser saksbehandlingen når en annen organisasjon saksbehandler utdanningstilbudet
 
     Scenario: Tilbyderen ser søknadsalternativ som en annen organisasjon saksbehandler

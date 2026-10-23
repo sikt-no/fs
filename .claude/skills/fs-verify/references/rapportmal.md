@@ -68,7 +68,7 @@ Gjenstår: <verdi> <N>, <verdi> <N>, ingen <N>.
 
 ## Fremdrift for flyter                                                [flyt]
 
-Fremdriften kommer fra statusen på delen av kravene fasene bygger på (`@depends-on-`, og ankeret eller regelen i «…»). Den endrer ingen tagger.
+Fremdriften kommer fra statusen på delen av kravene fasene bygger på (`@depends-on-`, og ankrene innenfor reglene i «…», ellers alle ankrene, ellers reglene i «…»). Den endrer ingen tagger.
 
 | Flyt | Fase | Bygger på | Fase levert |
 | --- | --- | --- | --- |
@@ -202,7 +202,7 @@ Ingen.                                                                  [når de
 ## Om seksjonene
 
 - **`## Oversikt per krav`** `[per repo]`: én rad per krav i scope. `Funnet` er funnet av gating-settet. `Gjenstår` er repoene som må endres, med navn, i rekkefølgen fs-plattform, fs-admin, min-kompetanse og skilt med komma (`fs-plattform`, `fs-admin, min-kompetanse`), eller `ingen`. Skriv aldri «backend», «frontend» eller «begge». Repoene kommer fra radene som ikke er `funnet` (`delvis` og `mangler` teller). Linja under teller kravene per verdi som forekommer, med flest først, og `ingen` til slutt, også med 0. Bokstavene i `Bevis` står i rekkefølgen P, A, M.
-- **`## Fremdrift for flyter`** `[flyt]`: én rad per fase, i rekkefølgen i flyten. En fase er levert når delen av hvert krav den bygger på, er levert: delene med ankeret (`@ref-<flytens ID>`), ellers regelen i «…» under taggen, ellers hele kravet (`@implemented`). En flyt den bygger på, må være `@implemented`. Bygger fasen på en del, står delen og statusen på den i `Bygger på`. `mangler krav` når fasen ikke har `@depends-on-`. Linja under tabellen står én gang per flyt.
+- **`## Fremdrift for flyter`** `[flyt]`: én rad per fase, i rekkefølgen i flyten. En fase er levert når delen av hvert krav den bygger på, er levert: delene med ankeret (`@ref-<flytens ID>`) innenfor reglene i «…» under taggen (alle ankrene når ingen ligger i dem), ellers reglene i «…», ellers hele kravet (`@implemented`). En flyt den bygger på, må være `@implemented`. Bygger fasen på en del, står delen og statusen på den i `Bygger på`. `mangler krav` når fasen ikke har `@depends-on-`. Linja under tabellen står én gang per flyt.
 - **`## Avhengigheter`** `[avhengigheter]`: én rad per par (krav i scope, avhengighet), sortert på krav i scope og så nivå. På nivå 2 og lenger er `Krav i scope` kravet i scope kjeden starter i. `Funnet` er `<n>/<N>` av gating-settet (som *uansett status*) når avhengighetene er verifisert i koden, ellers `–`. Merknaden «kan ikke leveres før dette» står bare på nivå 1, når avhengigheten ikke er `@implemented`. Avhengighetene teller ikke i `## Oppsummering`, og radene deres står aldri i `## Scenarioer`, fordi tavla «Oppgaver», `fs-testplan` og `fs-testrapport` leser den tabellen.
 - **`## Forslag til endringer`**: det som ble foreslått før brukeren svarte, med stiene til kravene, så forslaget kan leses i fila mens spørsmålene stilles. Står uendret når svarene er gitt; det som faktisk ble gjort, står i `## Levert`, `## Ikke levert` og `## Slettet`.
 - **«Venter på svar.»** står i `## Levert`, `## Ikke levert` og `## Slettet` bare mellom at fila skrives og at brukeren har svart. Når kjøringen er ferdig, står det aldri igjen.
