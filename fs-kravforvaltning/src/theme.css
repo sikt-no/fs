@@ -1490,7 +1490,10 @@ body.resizing iframe, body.resizing .main { pointer-events: none; }
 .fl-group { display: flex; flex-direction: column; gap: 6px; }
 .fl-table { border: 1px solid var(--line); border-radius: 8px; background: var(--surface); overflow: hidden; font-size: 12.5px; }
 .fl-table [role="row"] { display: grid; gap: 12px; padding: 8px 14px; align-items: baseline; }
-.fl-table.krav [role="row"] { grid-template-columns: 110px minmax(0, 2.4fr) minmax(0, 1fr) 46px minmax(0, 1fr) minmax(0, 1.1fr) minmax(0, 1fr) minmax(0, 1.3fr); }
+.fl-table.krav [role="row"] { grid-template-columns: 110px minmax(0, 2.2fr) minmax(0, 1.6fr) minmax(0, 1fr) 46px minmax(0, 1fr) minmax(0, 1.1fr) minmax(0, 1fr) minmax(0, 1.3fr); }
+.fl-forflow a { display: flex; align-items: baseline; gap: 5px; color: var(--ink2); line-height: 1.35; }
+.fl-forflow a:hover { color: var(--acc); }
+.fl-forflow .fl-dot { flex-shrink: 0; transform: translateY(-1px); }
 .fl-table .partial { color: var(--st-implemented); }
 .fl-table.dom [role="row"] { grid-template-columns: minmax(0, 2.2fr) 70px 70px minmax(200px, 1.3fr) minmax(0, 1.4fr) minmax(0, 1fr); align-items: center; }
 .fl-table .hd { background: var(--sunken); font-size: 10.5px; color: var(--muted); letter-spacing: .03em; padding: 7px 14px; }

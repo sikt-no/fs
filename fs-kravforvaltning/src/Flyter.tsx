@@ -1035,7 +1035,8 @@ function KravTab(p: ViewProps & { tree: ReturnType<typeof flowTree>; list: FlatK
             <div role="row" class="hd mono">
               <span>STATUS</span>
               <span>KRAV</span>
-              <span>LEVERT</span>
+              <span title={p.follow === 'part' ? 'Reglene og scenarioene flyten bygger på: ankrene, ellers reglene i «…», ellers reglene i kravet' : 'Reglene i kravet'}>{p.follow === 'part' ? 'FOR FLYTEN' : 'REGLER'}</span>
+              <span title="Hele kravet">LEVERT</span>
               <span>NIVÅ</span>
               <span>FASER</span>
               <span>VIA</span>
@@ -1051,6 +1052,7 @@ function KravTab(p: ViewProps & { tree: ReturnType<typeof flowTree>; list: FlatK
                     <span class="mono">{k.id}</span>
                     <span>{titleOf(ix, k.id)}</span>
                   </span>
+                  <ForFlow ix={ix} k={k} follow={p.follow} onOpen={p.onOpen} />
                   <span class={'small' + (isPartial(ix.krav.get(k.id)!) ? ' partial' : '')}>{levert(ix, k.id) ?? '–'}</span>
                   <span class="mono">{k.level}</span>
                   <span>fase {[...k.phases].sort((a, b) => a - b).join(', ')}</span>
@@ -1065,6 +1067,35 @@ function KravTab(p: ViewProps & { tree: ReturnType<typeof flowTree>; list: FlatK
         </div>
       ))}
     </div>
+  );
+}
+
+/** Delene av kravet flyten bygger på, og hvor mange av dem som er levert. Med «Bare delen» står delene med status under */
+function ForFlow({ ix, k, follow, onOpen }: { ix: FlowIndex; k: FlatKrav; follow: Follow; onOpen: (path: string, line?: number) => void }) {
+  const pc = partCount([k]);
+  const parts = [...k.parts.values()].sort((a, b) => a.ln - b.ln);
+  const whole = parts.length === 1 && parts[0].part === 'feature';
+  const unit = whole ? '' : follow === 'part' ? (pc.total === 1 ? ' del' : ' deler') : pc.total === 1 ? ' regel' : ' regler';
+  return (
+    <span class="k fl-forflow">
+      <span class={'small' + (pc.done === pc.total ? ' partial' : '')}>{whole ? (pc.done ? 'hele kravet' : 'hele kravet, ikke levert') : `${pc.done} av ${pc.total}${unit}`}</span>
+      {follow === 'part' &&
+        !whole &&
+        parts.map(pt => (
+          <a
+            key={pt.ln}
+            class="small"
+            title={`${pt.part === 'rule' ? 'Regel' : 'Scenario'}: ${pt.name} · ${pt.status === 'implemented' ? 'levert' : (pt.status ?? 'ingen status')} · fase ${[...pt.phases].sort((a, b) => a - b).join(', ')}`}
+            onClick={e => {
+              e.stopPropagation();
+              onOpen(ix.krav.get(k.id)!.path, pt.ln);
+            }}
+          >
+            <Dot c={stColor(pt.status)} z={6} />
+            {pt.name}
+          </a>
+        ))}
+    </span>
   );
 }
 
