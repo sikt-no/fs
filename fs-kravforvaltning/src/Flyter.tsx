@@ -19,6 +19,7 @@ import {
   isFlowId,
   isPartial,
   ORD,
+  partCount,
   pathOf,
   phaseStatus,
   progress,
@@ -528,15 +529,14 @@ function FlowView(p: ViewProps) {
               const ready = list.filter(k => !k.open.size).length;
               const whole = ks.filter(k => k.status === 'implemented').length;
               const part = ks.filter(isPartial).length;
-              const rules = ks.reduce((a, k) => a + k.delivery.rules, 0);
-              const rulesDone = ks.reduce((a, k) => a + k.delivery.rulesDone, 0);
+              const pc = partCount(list);
               return (
                 <div class="fl-levert">
                   <span>
                     Kravene, {depthText(depth)}: <b>{ready} av {ks.length}</b> levert for flyten{follow === 'part' ? <> · {whole} som helhet{part > 0 && <>, {part} delvis levert</>}</> : part > 0 && <>, {part} delvis levert</>}
                   </span>
-                  <span>
-                    Reglene i kravene: <b>{rulesDone} av {rules}</b> levert
+                  <span title={follow === 'part' ? 'Ankrene, ellers reglene i «…» under taggen, ellers reglene i hele kravet' : 'Reglene i kravene, unntatt utkast og avviklede regler'}>
+                    {follow === 'part' ? 'Delene flyten bygger på' : 'Reglene i kravene'}: <b>{pc.done} av {pc.total}</b> levert
                   </span>
                 </div>
               );

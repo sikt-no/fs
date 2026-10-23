@@ -15,6 +15,7 @@ import {
   flyterHash,
   focusLn,
   parseFlyterHash,
+  partCount,
   partStatus,
   phaseStatus,
   progress,
@@ -417,6 +418,19 @@ test('ankeret og «…»: fasen bygger på ankrene innenfor reglene i «…», e
   assert.deepEqual(names(2), ['R1', 'R2', 'S3']); // ingen ankre i R4: alle ankrene
   assert.deepEqual(names(3), ['R1', 'R2', 'S3']); // uten «…»: alle ankrene
   assert.deepEqual(ski.phases.map(p => phaseStatus(six, p)), ['implemented', 'in-progress', 'in-progress', 'in-progress']);
+});
+
+test('delene flyten bygger på: ankrene per fase, eller reglene i hele kravet', () => {
+  const part = flatKrav(six, ski, flowTree(six, ski, 'part'), 1);
+  assert.deepEqual(
+    [...part[0].parts.values()].map(p => [p.name, p.status, [...p.phases]]),
+    [['R1', 'implemented', [1, 3, 4]], ['S3', 'implemented', [1, 3, 4]], ['R2', 'in-progress', [2, 3, 4]]],
+  );
+  assert.deepEqual(partCount(part), { total: 3, done: 2, open: 1 });
+  assert.deepEqual(partCount(part, 2), { total: 1, done: 0, open: 1 });
+  const whole = flatKrav(six, ski, flowTree(six, ski, 'whole'), 1);
+  assert.deepEqual([...whole[0].parts.values()].map(p => p.name), ['R1', 'R2', 'R3', 'R4']);
+  assert.deepEqual(partCount(whole), { total: 4, done: 2, open: 2 });
 });
 
 test('uten anker følges alle reglene i «…», ikke bare den første', () => {

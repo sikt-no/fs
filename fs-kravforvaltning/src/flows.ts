@@ -581,6 +581,33 @@ export function chainLow(ix: FlowIndex, t: FlowTree, depth: number): { status: S
 
 // Kravene i flyten ------------------------------------------------------------------------------
 
+/** En del av et krav flyten bygger på: en regel eller et scenario, eller kravet selv når det ikke har regler */
+export interface FlowPart {
+  part: 'feature' | 'rule' | 'scenario';
+  name: string;
+  /** Regelen delen hører til (for et scenario: regelen over) */
+  rule: string | null;
+  /** Linja i kravet (0 for kravet selv) */
+  ln: number;
+  /** Statusen delen har (`implemented` når den er levert, se `deliveryOf`) */
+  status: Status | null;
+}
+
+/**
+ * Delene av kravet som følges: ankrene, reglene i «…», eller, uten `focus`, reglene i kravet som er med (ikke
+ * `@draft`, `@deprecated` eller `@demo`). Et krav uten slike regler er én del, med statusen på kravet
+ */
+export function partsOf(ix: FlowIndex, id: string, focus: Focus): FlowPart[] {
+  const k = ix.krav.get(id);
+  if (!k) return [];
+  const rule = (name: string) => k.rules.find(r => r.name === name);
+  if (focus?.kind === 'anchor')
+    return focus.parts.map(a => ({ ...a, status: (a.part === 'rule' ? k.rules.find(r => r.ln === a.ln) : k.scenarios.find(s => s.ln === a.ln))?.status ?? null }));
+  if (focus?.kind === 'note') return focus.rules.flatMap(n => (rule(n) ? [{ part: 'rule' as const, name: n, rule: n, ln: rule(n)!.ln, status: rule(n)!.status }] : []));
+  const rules = k.rules.filter(r => r.done !== null).map(r => ({ part: 'rule' as const, name: r.name, rule: r.name, ln: r.ln, status: r.status }));
+  return rules.length ? rules : [{ part: 'feature', name: k.title, rule: null, ln: 0, status: k.status }];
+}
+
 export interface FlatKrav {
   id: string;
   /** Nivået kravet først dukker opp på */
@@ -596,6 +623,24 @@ export interface FlatKrav {
   whole: boolean;
   /** Fasene der delen som følges (eller hele kravet, med `follow: 'whole'`), ikke er levert: kravet gjenstår der */
   open: Set<number>;
+  /**
+   * Delene flyten bygger på, på linja i kravet, med fasene de er med i: delen som følges med `follow: 'part'`
+   * (`partsOf`), og reglene i kravet med `follow: 'whole'`
+   */
+  parts: Map<number, FlowPart & { phases: Set<number> }>;
+}
+
+/** Delene i `list` flyten bygger på, og hvor mange av dem som er levert. Med `phase` bare delene i den fasen */
+export function partCount(list: FlatKrav[], phase?: number) {
+  let total = 0;
+  let done = 0;
+  for (const k of list)
+    for (const pt of k.parts.values())
+      if (phase === undefined || pt.phases.has(phase)) {
+        total++;
+        if (pt.status === 'implemented') done++;
+      }
+  return { total, done, open: total - done };
 }
 
 /** Kravene flyten bygger på, til og med `depth`, uten duplikater */
@@ -605,9 +650,14 @@ export function flatKrav(ix: FlowIndex, f: Flow, t: FlowTree, depth: number): Fl
     if (n.level > depth || n.cycle) return;
     if (!isFlowId(n.id) && exists(ix, n.id)) {
       let it = items.get(n.id);
-      if (!it) items.set(n.id, (it = { id: n.id, level: n.level, phases: new Set(), via: new Set(), group, rules: new Set(), whole: false, open: new Set() }));
+      if (!it) items.set(n.id, (it = { id: n.id, level: n.level, phases: new Set(), via: new Set(), group, rules: new Set(), whole: false, open: new Set(), parts: new Map() }));
       it.phases.add(n.phase);
       if (nodeStatus(ix, n, t.follow) !== 'implemented') it.open.add(n.phase);
+      for (const pt of partsOf(ix, n.id, t.follow === 'part' ? n.focus : null)) {
+        const have = it.parts.get(pt.ln);
+        if (have) have.phases.add(n.phase);
+        else it.parts.set(pt.ln, { ...pt, phases: new Set([n.phase]) });
+      }
       // Delen står i ankrene i kravet, eller i kommentaren under taggen. Uten dem gjelder referansen hele kravet
       const fc = n.focus;
       if (fc?.kind === 'anchor') fc.parts.forEach(a => a.rule && it!.rules.add(a.rule));
