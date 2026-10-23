@@ -658,7 +658,7 @@ function FlowView(p: ViewProps) {
       {tab === 'phases' && <Phases {...p} tree={tree} />}
       {tab === 'krav' && <KravTab {...p} tree={tree} list={list} intro={`Det som må være levert for at flyten skal virke, til ${depthText(depth)}${followT}.`} />}
       {tab === 'dom' && <DomTab ix={ix} list={list} onOpen={p.onOpen} intro={`Kravene flyten bygger på, til ${depthText(depth)}${followT}, samlet per domene og sub-domene. Hvert sub-domene er et team som kan levere til flyten.`} />}
-      {tab === 'mx' && <MatrixTab ix={ix} flow={flow} list={list} toPhase={p.toPhase} intro={`Hvor mange krav som gjenstår per sub-domene i hver fase, til ${depthText(depth)}${followT}. Tallet er kravene der ${follow === 'part' ? 'delen fasen bygger på' : 'hele kravet'} ikke er levert, av alle kravene sub-domenet leverer til fasen.`} />}
+      {tab === 'mx' && <MatrixTab ix={ix} flow={flow} list={list} toPhase={p.toPhase} depth={depth} follow={follow} />}
     </>
   );
 }
@@ -1084,6 +1084,18 @@ function statusBar(ix: FlowIndex, arr: FlatKrav[]) {
     })()].join(' · '),
   };
 }
+/** Stolpen for delene i fasen, etter statusen på hver del */
+function partBar(arr: FlatKrav[], phase: number) {
+  const st: Record<string, number> = {};
+  let n = 0;
+  for (const k of arr)
+    for (const pt of k.parts.values())
+      if (pt.phases.has(phase)) {
+        st[pt.status ?? 'none'] = (st[pt.status ?? 'none'] ?? 0) + 1;
+        n++;
+      }
+  return ORDER.filter(o => st[o]).map(o => ({ w: (st[o] / n) * 100 + '%', c: o === 'none' ? 'var(--st-none)' : STC[o] }));
+}
 const Bar = ({ bar, h = 6, title }: { bar: { w: string; c: string }[]; h?: number; title?: string }) => (
   <span class="fl-bar" title={title} style={{ height: h + 'px' }}>
     {bar.map((b, i) => <span key={i} style={{ width: b.w, background: b.c }} />)}
@@ -1191,21 +1203,39 @@ function DomTab({ ix, list, intro, onOpen }: { ix: FlowIndex; list: FlatKrav[]; 
 
 // Matrise --------------------------------------------------------------------------------------
 
-function MatrixTab({ ix, flow, list, toPhase, intro }: { ix: FlowIndex; flow: Flow; list: FlatKrav[]; toPhase: (n: number) => void; intro: string }) {
-  // Kravet er enheten: et krav gjenstår i fasen til delen fasen bygger på, er levert (hele kravet med «Følg: Hele kravet»)
-  const val = (arr: FlatKrav[]) => arr.length;
-  const remOf = (arr: FlatKrav[], phase?: number) => arr.filter(k => (phase === undefined ? k.open.size > 0 : k.open.has(phase))).length;
+function MatrixTab({ ix, flow, list, toPhase, depth, follow }: { ix: FlowIndex; flow: Flow; list: FlatKrav[]; toPhase: (n: number) => void; depth: Depth; follow: Follow }) {
+  // Enheten er kravet eller delene: et krav gjenstår i fasen til delen fasen bygger på, er levert (hele kravet med
+  // «Følg: Hele kravet»), og en del (regel eller scenario) til den selv er levert
+  const [unit, setUnit] = useState<'krav' | 'deler'>('krav');
+  const unitT = unit === 'krav' ? 'krav' : follow === 'part' ? 'deler' : 'regler';
+  const val = (arr: FlatKrav[], phase?: number) => (unit === 'krav' ? arr.length : partCount(arr, phase).total);
+  const remOf = (arr: FlatKrav[], phase?: number) =>
+    unit === 'krav' ? arr.filter(k => (phase === undefined ? k.open.size > 0 : k.open.has(phase))).length : partCount(arr, phase).open;
   const cellsFor = (arr: FlatKrav[]) =>
     flow.phases.map(ph => {
       const inP = arr.filter(k => k.phases.has(ph.n));
-      return { tot: val(inP), rem: remOf(inP, ph.n), inP };
+      return { tot: val(inP, ph.n), rem: remOf(inP, ph.n), inP, phase: ph.n };
     });
+  const tip = (inP: FlatKrav[], phase: number) =>
+    unit === 'krav'
+      ? inP.map(k => `${k.id} ${statusOf(ix, k.id) ?? ''}${levert(ix, k.id) ? ` (levert: ${levert(ix, k.id)})` : ''}`).join('\n')
+      : inP
+          .flatMap(k =>
+            [...k.parts.values()].filter(pt => pt.phases.has(phase)).map(pt => `${k.id} ${pt.part === 'feature' ? 'hele kravet' : (pt.part === 'rule' ? 'Regel: ' : 'Scenario: ') + pt.name} · ${pt.status === 'implemented' ? 'levert' : (pt.status ?? 'ingen status')}`),
+          )
+          .join('\n');
+  const intro =
+    unit === 'krav'
+      ? `Hvor mange krav som gjenstår per sub-domene i hver fase, til ${depthText(depth)}${follow === 'part' ? ', bare delen fasen bygger på' : ''}. Tallet er kravene der ${follow === 'part' ? 'delen fasen bygger på' : 'hele kravet'} ikke er levert, av alle kravene sub-domenet leverer til fasen.`
+      : follow === 'part'
+        ? `Hvor mange deler som gjenstår per sub-domene i hver fase, til ${depthText(depth)}. En del er en regel eller et scenario fasen bygger på (ankeret, ellers regelen i «…»), eller reglene i kravet når fasen bygger på hele kravet. Tallet er delene som ikke er levert, av alle delene sub-domenet leverer til fasen.`
+        : `Hvor mange regler som gjenstår per sub-domene i hver fase, til ${depthText(depth)}. Tallet er reglene i kravene som ikke er levert, av alle reglene (unntatt utkast og avviklede) sub-domenet leverer til fasen.`;
   const groups = byDomain(ix, list);
   const rows = groups.flatMap(({ dom, subs }) => [{ name: dom, isDom: true, arr: subs.flatMap(s => s[1]) }, ...subs.map(([sub, arr]) => ({ name: sub, isDom: false, arr }))]);
   let maxRem = 1;
   rows.forEach(r => !r.isDom && cellsFor(r.arr).forEach(c => (maxRem = Math.max(maxRem, c.rem))));
   const cols = `minmax(190px,1.6fr) repeat(${flow.phases.length}, minmax(84px,1fr)) 92px`;
-  const cell = (c: { tot: number; rem: number; inP: FlatKrav[] }, strong: boolean, key: number) => {
+  const cell = (c: { tot: number; rem: number; inP: FlatKrav[]; phase: number }, strong: boolean, key: number) => {
     if (!c.tot)
       return (
         <div key={key} role="cell" class="mxc" aria-label="ingen">
@@ -1219,8 +1249,8 @@ function MatrixTab({ ix, flow, list, toPhase, intro }: { ix: FlowIndex; flow: Fl
         key={key}
         role="cell"
         class="mxc"
-        aria-label={done ? `alt levert, ${c.tot} krav` : `${c.rem} av ${c.tot} krav gjenstår`}
-        title={c.inP.map(k => `${k.id} ${statusOf(ix, k.id) ?? ''}${levert(ix, k.id) ? ` (levert: ${levert(ix, k.id)})` : ''}`).join('\n')}
+        aria-label={done ? `alt levert, ${c.tot} ${unitT}` : `${c.rem} av ${c.tot} ${unitT} gjenstår`}
+        title={tip(c.inP, c.phase)}
         style={{ background: done ? 'transparent' : `color-mix(in oklch, var(--warn) ${pct}%, var(--surface))` }}
       >
         <span class="v">
@@ -1229,7 +1259,7 @@ function MatrixTab({ ix, flow, list, toPhase, intro }: { ix: FlowIndex; flow: Fl
           </span>
           <span class="of">av {c.tot}</span>
         </span>
-        <Bar bar={statusBar(ix, c.inP).bar} h={4} />
+        <Bar bar={unit === 'krav' ? statusBar(ix, c.inP).bar : partBar(c.inP, c.phase)} h={4} />
       </div>
     );
   };
@@ -1238,6 +1268,18 @@ function MatrixTab({ ix, flow, list, toPhase, intro }: { ix: FlowIndex; flow: Fl
     <div class="fl-tab">
       <div class="fl-tabhead">
         <span class="fl-intro">{intro}</span>
+        <div class="fl-ctl right">
+          <span>Tell</span>
+          <Seg
+            label="Tell"
+            cur={unit}
+            set={setUnit}
+            opts={[
+              { v: 'krav', l: 'Krav' },
+              { v: 'deler', l: follow === 'part' ? 'Deler' : 'Regler', title: follow === 'part' ? 'Reglene og scenarioene fasene bygger på' : 'Reglene i kravene' },
+            ]}
+          />
+        </div>
       </div>
       {list.length ? (
         <div class="fl-mxwrap">
@@ -1282,7 +1324,7 @@ function MatrixTab({ ix, flow, list, toPhase, intro }: { ix: FlowIndex; flow: Fl
               <span role="rowheader" class="rh">Gjenstår per fase</span>
               {flow.phases.map(ph => {
                 const inP = list.filter(k => k.phases.has(ph.n));
-                const tot = val(inP);
+                const tot = val(inP, ph.n);
                 const rem = remOf(inP, ph.n);
                 return (
                   <div key={ph.n} role="cell" class="mxc">
@@ -1328,7 +1370,11 @@ function MatrixTab({ ix, flow, list, toPhase, intro }: { ix: FlowIndex; flow: Fl
         <span>
           <span class="mono" style={{ color: 'var(--st-implemented)' }}>✓</span>alt levert
         </span>
-        <span>Et krav gjenstår til hele kravet er levert, også når noen regler er det. Gjenstår-kolonnen teller hvert krav én gang, selv om det er med i flere faser. Hold over en celle for å se kravene.</span>
+        <span>
+          {unit === 'krav'
+            ? `Et krav gjenstår til ${follow === 'part' ? 'delen fasen bygger på' : 'hele kravet'} er levert. Gjenstår-kolonnen teller hvert krav én gang, selv om det er med i flere faser. Hold over en celle for å se kravene.`
+            : `En ${follow === 'part' ? 'del' : 'regel'} gjenstår til den selv er levert. Gjenstår-kolonnen teller hver ${follow === 'part' ? 'del' : 'regel'} én gang, selv om den er med i flere faser. Hold over en celle for å se ${follow === 'part' ? 'delene' : 'reglene'}.`}
+        </span>
       </div>
     </div>
   );
