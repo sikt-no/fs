@@ -163,7 +163,7 @@ Testansvarlig skriver beslutningen og begrunnelsen i sluttrapporten. Rettede fun
 | 3. Testrapport – verifisering | – | Venter | |
 | 4. Intern akseptansetest | [Intern akseptansetest – Opprette og vedlikeholde opptak](https://sikt.atlassian.net/wiki/spaces/STUDIEADM/pages/5127209099) · [testcaser-intern.md](testcaser-intern.md) | Klar til test for opprett opptak. Testcasene for oversikten over opptak lages | 2026-10-21 |
 | 5. Testrapport – intern | – | Venter | |
-| 6. Ekstern akseptansetest | – | Venter | |
+| 6. Ekstern akseptansetest | [Ekstern akseptansetest – Opprette opptak 2027](https://sikt.atlassian.net/wiki/spaces/STUDIEADM/pages/5137334279) · [testcaser-ekstern.md](testcaser-ekstern.md) | Klar til test | 2026-10-23 |
 | 7. Testrapport – ekstern | – | Venter | |
 
 ## Læring
