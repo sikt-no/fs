@@ -22,6 +22,15 @@ Egenskap: Listevisning og søk i utdanningstilbud i opptaket
       Så ser opptaksforvalter grunndata fra utdanningsregisteret (navn, studiepoeng, nivå, campus)
       Og det er tydelig hvilke data som kommer fra utdanningsregisteret
 
+  @planned
+  Regel: Opptaksforvalter ser campus for utdanningstilbudene i opptaket
+
+    Scenario: Se campus i listen over utdanningstilbud i opptaket
+      Gitt at utdanningstilbudet "Sykepleie, høst 2027" er lagt til i opptaket på campusene "Blindern" og "Kjeller"
+      Når opptaksforvalter åpner oversikten over utdanningstilbud
+      Så ser opptaksforvalter to utdanningstilbud "Sykepleie, høst 2027"
+      Og campus vises for hvert av utdanningstilbudene
+
   Regel: Opptaksforvalter ved forvaltende organisasjon kan filtrere på organisasjon
 
     Scenario: Filtrere på organisasjon som opptaksforvalter ved forvaltende organisasjon
