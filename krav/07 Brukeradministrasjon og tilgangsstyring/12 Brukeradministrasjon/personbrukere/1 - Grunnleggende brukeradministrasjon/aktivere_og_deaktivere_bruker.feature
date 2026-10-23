@@ -21,15 +21,12 @@ Egenskap: Aktivere og deaktivere en personbrukers samlede tilganger
       Og personbrukeren kan ikke nå FS-data ved neste innloggingsforsøk
       Og det lagres når deaktiveringen skjedde og hvem som gjorde den
 
-    @planned @scope-grunnleggende-brukeradministrasjon
     Scenario: Reaktivere en deaktivert personbruker
       Gitt en personbruker er deaktivert
       Når jeg reaktiverer personbrukeren
       Så blir personbrukerens status «Aktiv»
       Og de tidligere tildelte tilgangene og rollene blir aktive igjen
       Og tildelinger som hadde utløpt på grunn av tidsbegrensning før deaktiveringen, blir ikke automatisk aktive
-      Og det lagres når reaktiveringen skjedde og hvem som gjorde den
-      Og det som ble lagret om den tidligere deaktiveringen, beholdes
 
   Regel: Skille mellom deaktivering og fjerning
 
