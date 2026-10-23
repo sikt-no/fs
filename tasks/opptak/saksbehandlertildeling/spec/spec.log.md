@@ -8,3 +8,5 @@ History of skill invocations for this spec. Append-only — never edit past entr
 - 2026-10-12 — `fs-specify` ended (success) — wrote spec-tildele-saksbehandlende-organisasjon.md, 1 .feature file, 1 retagged @in-progress, 1 Figma sketch linked (partly fetched, Figma-MCP rate limit), 4 open questions
 - 2026-10-21 — `fs-verify` started — 1 @in-progress, 0 @deprecated
 - 2026-10-21 — `fs-verify` ended (success) — 0 retagget @implemented, 45/56 funnet, 8 ikke funnet, 3 usikker, verify-2026-10-21-1600.md
+- 2026-10-23 — `fs-verify` started — gjennomgang av verify-2026-10-21-1600.md (Delvis levert) · omfang: @in-progress, @deprecated · avhengigheter: 1 nivå, bare status
+- 2026-10-23 — `fs-verify` ended (success) — delvis levert: 11 deler @implemented, 49/56 funnet, 7 ikke funnet (utsatt: STEK-579, STEK-576, søkeren), verify-2026-10-23-1041.md

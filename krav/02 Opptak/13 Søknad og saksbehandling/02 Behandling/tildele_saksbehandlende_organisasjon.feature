@@ -32,7 +32,7 @@ Egenskap: Tildele saksbehandlende organisasjon
 
   # ── 1. Oppsett ───────────────────────────────────────────────
 
-  @ref-OPT-OPT-UTD-004 @ref-FLY-OPT-SAK-001
+  @ref-OPT-OPT-UTD-004 @ref-FLY-OPT-SAK-001 @implemented
   Regel: Opptaksforvalteren ved forvaltende organisasjon setter opp behandlertildelingsreglene for opptaket
     # Lærestedets valg av behandlertildelingsregel per utdanningstilbud står der.
 
@@ -95,6 +95,7 @@ Egenskap: Tildele saksbehandlende organisasjon
 
   # ── 2. Fordeling ─────────────────────────────────────────────
 
+  @implemented
   Regel: Ved «Alle som deltar i opptaket» saksbehandler lærestedet søkeren har prioritert høyest
 
     Scenario: Lærestedet på første prioritet saksbehandler hele søknaden
@@ -111,6 +112,7 @@ Egenskap: Tildele saksbehandlende organisasjon
       Så er "NTNU" saksbehandlende organisasjon for "Utøvende musikk, NTNU"
       Og "UiT Norges arktiske universitet" er saksbehandlende organisasjon for "Historie, UiT" og "Informatikk, UiO"
 
+  @implemented
   Regel: Ved «Bare tilbyderen – også for studieønsker uten egen regel» saksbehandler tilbyderen også søknadsalternativene uten egen behandlertildelingsregel
 
     Scenario: Tilbyderen saksbehandler søknadsalternativene uten egen behandlertildelingsregel
@@ -126,6 +128,7 @@ Egenskap: Tildele saksbehandlende organisasjon
       Så er "Høgskulen på Vestlandet" saksbehandlende organisasjon for "Musikkpedagogikk, HVL" og "Informatikk, UiO"
       Og "NTNU" er saksbehandlende organisasjon for "Utøvende musikk, NTNU"
 
+  @implemented
   Regel: Ved «Bare tilbyderen – bare dette studieønsket» saksbehandler tilbyderen bare søknadsalternativet med behandlertildelingsregelen
 
     Scenario: Tilbyderen saksbehandler ikke søkerens andre søknadsalternativer
@@ -142,6 +145,7 @@ Egenskap: Tildele saksbehandlende organisasjon
       Så er "Fagskolen Innlandet" saksbehandlende organisasjon for "Elektrofag, Fagskolen Innlandet"
       Og "Fagskolen i Viken" er saksbehandlende organisasjon for "Helsefag, Fagskolen i Viken"
 
+  @implemented
   Regel: Ved «Tilbydere i samme sektor» saksbehandler én organisasjon alle søknadsalternativene i sektoren
 
     Scenario: Tilbyderen søkeren har prioritert høyest i sektoren saksbehandler hele sektoren
@@ -195,6 +199,7 @@ Egenskap: Tildele saksbehandlende organisasjon
       Når opptaksforvalteren ved HK-dir velger organisasjon på "JOU"
       Så ser ikke opptaksforvalteren "Universitetet i Bergen" blant valgene
 
+  @implemented
   Regel: Unntak for utdanningsbakgrunn og ledige studieplasser overstyrer behandlertildelingsregelen
 
     Scenario: Legge til unntak for utdanningsbakgrunn
@@ -265,8 +270,12 @@ Egenskap: Tildele saksbehandlende organisasjon
       # AVKLART 08.10.2026 i PR #684: det som avgjør, er om ledige studieplasser har åpnet. Om perioden
       # for ledige studieplasser er stengt, spiller ingen rolle.
 
-  @ref-FLY-OPT-SAK-001
+  @ref-FLY-OPT-SAK-001 @openquestion
   Regel: Et lærested kan ha saksbehandlingen sin hos en annen organisasjon i opptaket
+    # ÅPNE SPØRSMÅL:
+    # - Ingrid Helset foreslår i STEK-579 (22.10.2026), og Marit Bjørnerud Rønning er enig, at dette lages
+    #   som en behandlertildelingsregel som opptaksforvalteren ved organisasjonen som oppretter opptaket,
+    #   setter. Skal regelen skrives om slik?
 
     Scenario: Velge organisasjon som saksbehandler på vegne av lærestedet når lærestedet legges til i opptaket
       Når opptaksforvalteren ved HK-dir legger til "Arkitektur- og designhøgskolen i Oslo" som deltaker i opptaket
@@ -294,7 +303,7 @@ Egenskap: Tildele saksbehandlende organisasjon
 
   # ── 3. Endring ───────────────────────────────────────────────
 
-  @ref-FLY-OPT-SAK-001
+  @ref-FLY-OPT-SAK-001 @implemented
   Regel: Søknadsalternativene fordeles når søknaden sendes inn eller endres, og fordelingen ligger fast
 
     Scenariomal: Søknadsalternativene fordeles når <hendelse>
@@ -344,7 +353,7 @@ Egenskap: Tildele saksbehandlende organisasjon
       # sendte inn først. Som hovedregel endres den ikke når søkeren sender inn på nytt, endrer
       # prioriteringen, sletter eller legger til søknadsalternativer.
 
-  @depends-on-OPT-OVO-FRI-001 @ref-FLY-OPT-SAK-001
+  @depends-on-OPT-OVO-FRI-001 @ref-FLY-OPT-SAK-001 @implemented
   # OPT-OVO-FRI-001: «Opptaksforvalter ved forvaltende organisasjon må kunne sette frist for endring av utdanningsbakgrunn»
   Regel: Søknadsalternativene flyttes når utdanningsbakgrunnen endres til en bakgrunn med unntak
     # AVKLART 22.10.2026: Fristen for endring av utdanningsbakgrunn gjelder bare saksbehandlerens endring.
@@ -413,14 +422,9 @@ Egenskap: Tildele saksbehandlende organisasjon
 
       Eksempler:
         | rolle            |
+        | saksbehandler    |
         | tilbyder         |
         | opptaksforvalter |
-
-    Scenario: Tilbudsgarantien fra saksbehandleren følger ikke med til organisasjonen det flyttes til
-      # AVKLART 22.10.2026: garantien fra saksbehandleren er satt av organisasjonen saken flyttes fra.
-      Gitt at "Informatikk, UiO" har tilbudsgaranti fra saksbehandler
-      Når "Informatikk, UiO" flyttes fra "Universitetet i Oslo" til "HK-dir"
-      Så har ikke "Informatikk, UiO" lenger tilbudsgaranti fra saksbehandler
 
     @draft @openquestion
     # ÅPNE SPØRSMÅL:
@@ -429,6 +433,9 @@ Egenskap: Tildele saksbehandlende organisasjon
     #   Statusen skifter til «Under behandling» ved første endring. Ikke bygget. Skal det med,
     #   og hører det i så fall hjemme her eller i et eget krav om endring av B-rolle sammen med
     #   de andre behovene fra workshopen (merknader, batch-flytting)?
+    # - Ingrid Helset (23.10.2026): påbegynt saksbehandling følger med til den nye organisasjonen,
+    #   bortsett fra interne merknader. Behandlingsstatusen settes til «ikke behandlet», og dokumentene
+    #   nullstilles til uåpnet. Skal scenarioet si det i stedet for status «Overført»?
     Scenario: Flyttet søknadsalternativ vises som overført hos organisasjonen det flyttes til
       Når "Informatikk, UiO" flyttes fra "Universitetet i Oslo" til "HK-dir"
       Så har saken hos "HK-dir" status «Overført»
@@ -439,6 +446,7 @@ Egenskap: Tildele saksbehandlende organisasjon
   @ref-FLY-OPT-SAK-001
   Regel: Saksbehandlende organisasjon ser bare saker hos organisasjonen
 
+    @implemented
     Scenario: Saksbehandleren ser bare saken hos organisasjonen sin
       Gitt at søknaden har saker hos "Universitetet i Oslo" og "UiT Norges arktiske universitet"
       Når saksbehandleren ved Universitetet i Oslo åpner søknaden
@@ -450,11 +458,13 @@ Egenskap: Tildele saksbehandlende organisasjon
       Så ser søkeren saksbehandlende organisasjon for hvert søknadsalternativ
       Men søkeren ser ikke sakene
 
+    @implemented
     Scenario: Saksbehandleren ved forvaltende organisasjon ser bare saken hos forvaltende organisasjon
       Gitt at søknaden har saker hos "HK-dir" og "Universitetet i Oslo"
       Når saksbehandleren ved HK-dir åpner søknaden
       Så ser saksbehandleren bare saken hos "HK-dir"
 
+  @implemented
   Regel: Opptaksforvalteren ved forvaltende organisasjon ser alle sakene i opptaket
 
     Scenario: Opptaksforvalteren ved HK-dir ser sakene hos alle saksbehandlende organisasjoner
