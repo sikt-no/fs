@@ -433,6 +433,27 @@ test('delene flyten bygger på: ankrene per fase, eller reglene i hele kravet', 
   assert.deepEqual(partCount(whole), { total: 4, done: 2, open: 2 });
 });
 
+test('et scenario med ankeret som ikke står under en regel, er en del', () => {
+  const files2 = {
+    [A + 'u.feature']: krav('@OPT-REG-KRA-040 @must @planned', 'U', `
+  @ref-FLY-OPT-UTE-001
+  Scenario: Uten regel
+    Gitt noe
+    Når noe
+    Så noe
+`),
+    [F + 'ute.feature']: krav('@FLY-OPT-UTE-001 @must @planned @e2e', 'Ute', `
+  @depends-on-OPT-REG-KRA-040
+  Regel: Fasen
+`),
+  };
+  const ix3 = buildFlows(Object.fromEntries(Object.entries(files2).map(([p, s]) => [p, buildEntry(p, s, 0)])));
+  const f = ix3.byId.get('FLY-OPT-UTE-001')!;
+  const list = flatKrav(ix3, f, flowTree(ix3, f, 'part'), 1);
+  assert.deepEqual([...list[0].parts.values()].map(p => [p.part, p.name, p.rule]), [['scenario', 'Uten regel', null]]);
+  assert.deepEqual(partCount(list), { total: 1, done: 0, open: 1 });
+});
+
 test('uten anker følges alle reglene i «…», ikke bare den første', () => {
   const ix2 = buildFlows(Object.fromEntries(Object.entries(skill).map(([p, s]) => [p, buildEntry(p, s.replaceAll('@ref-FLY-OPT-SKI-001', ''), 0)])));
   const f = ix2.byId.get('FLY-OPT-SKI-001')!;

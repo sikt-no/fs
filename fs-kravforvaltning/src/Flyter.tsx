@@ -657,7 +657,7 @@ function FlowView(p: ViewProps) {
 
       {tab === 'phases' && <Phases {...p} tree={tree} />}
       {tab === 'krav' && <KravTab {...p} tree={tree} list={list} intro={`Det som må være levert for at flyten skal virke, til ${depthText(depth)}${followT}.`} />}
-      {tab === 'dom' && <DomTab ix={ix} list={list} onOpen={p.onOpen} intro={`Kravene flyten bygger på, til ${depthText(depth)}${followT}, samlet per domene og sub-domene. Hvert sub-domene er et team som kan levere til flyten.`} />}
+      {tab === 'dom' && <DomTab ix={ix} list={list} follow={follow} onOpen={p.onOpen} intro={`Kravene flyten bygger på, til ${depthText(depth)}${followT}, samlet per domene og sub-domene. Hvert sub-domene er et team som kan levere til flyten.`} />}
       {tab === 'mx' && <MatrixTab ix={ix} flow={flow} list={list} toPhase={p.toPhase} depth={depth} follow={follow} />}
     </>
   );
@@ -1145,17 +1145,19 @@ function byDomain(ix: FlowIndex, list: FlatKrav[]) {
   return [...m.entries()].sort((a, b) => coll.compare(a[0], b[0])).map(([dom, subs]) => ({ dom, subs: [...subs.entries()].sort((a, b) => coll.compare(a[0], b[0])) }));
 }
 
-function DomTab({ ix, list, intro, onOpen }: { ix: FlowIndex; list: FlatKrav[]; intro: string; onOpen: (path: string) => void }) {
+function DomTab({ ix, list, follow, intro, onOpen }: { ix: FlowIndex; list: FlatKrav[]; follow: Follow; intro: string; onOpen: (path: string) => void }) {
   const groups = byDomain(ix, list);
   const agg = (arr: FlatKrav[]) => {
     const nr = arr.reduce((a, k) => a + (ix.krav.get(k.id)?.rules.length ?? 0), 0);
-    const used = arr.reduce((a, k) => a + k.rules.size, 0);
-    const whole = arr.filter(k => k.whole).length;
+    // Delene flyten bygger på: også et scenario med ankeret som ikke står under en regel
+    const pc = partCount(arr);
+    const used = pc.total ? `${pc.total} ${follow === 'part' ? (pc.total === 1 ? 'del' : 'deler') : pc.total === 1 ? 'regel' : 'regler'} · ${pc.done} levert` : '–';
+    const whole = follow === 'part' ? arr.filter(k => k.whole).length : 0;
     const ph = new Set(arr.flatMap(k => [...k.phases]));
     return {
       nK: arr.length,
       nR: nr,
-      used: used ? `${used} av ${nr}` : '–',
+      used,
       whole: whole ? (whole === 1 ? '1 krav følges helt' : `${whole} krav følges helt`) : '',
       ...statusBar(ix, arr),
       phases: ph.size ? 'fase ' + [...ph].sort((a, b) => a - b).join(', ') : '–',
@@ -1171,7 +1173,7 @@ function DomTab({ ix, list, intro, onOpen }: { ix: FlowIndex; list: FlatKrav[]; 
           <span>DOMENE / SUB-DOMENE</span>
           <span class="r">KRAV</span>
           <span class="r">REGLER</span>
-          <span>REGLER FLYTEN PEKER PÅ</span>
+          <span>{follow === 'part' ? 'DELER FLYTEN BYGGER PÅ' : 'REGLER FLYTEN BYGGER PÅ'}</span>
           <span>STATUS PÅ KRAVENE</span>
           <span>FASER</span>
         </div>
@@ -1227,7 +1229,11 @@ function DomTab({ ix, list, intro, onOpen }: { ix: FlowIndex; list: FlatKrav[]; 
           </div>
         )}
       </div>
-      <span class="muted small">«Regler flyten peker på» er reglene som står i kommentaren under taggen på fasen, eller der @depends-on- står i kravet over. Et krav uten en slik regel følges helt.</span>
+      <span class="muted small">
+        {follow === 'part'
+          ? '«Deler flyten bygger på» er reglene og scenarioene med ankeret (@ref- til flyten eller kravet over), ellers reglene i «…» i kommentaren under taggen. Et krav uten anker eller regel i «…» følges helt, og da teller alle reglene i kravet. «Levert» er delene som er levert.'
+          : '«Regler flyten bygger på» er alle reglene i kravene, unntatt utkast og avviklede regler. «Levert» er reglene som er levert.'}
+      </span>
     </div>
   );
 }
