@@ -436,12 +436,12 @@ function focusIn(krav: Map<string, Krav>, id: string, from: string | null, notes
 const inFocus = (f: NonNullable<Focus>, d: KravDep) =>
   f.kind === 'note' ? d.rule !== null && f.rules.includes(d.rule) : f.parts.some(a => (a.part === 'rule' ? d.rule === a.name : d.rule === a.rule && (d.part === 'rule' || d.partName === a.name)));
 
-/** Linja i kravet der delen som følges, står */
-export const focusLn = (ix: FlowIndex, id: string, f: Focus) => (f?.kind === 'anchor' ? f.parts[0].ln : f?.kind === 'note' ? ix.krav.get(id)?.rules.find(r => r.name === f.rules[0])?.ln : undefined);
-
-/** Delene som følges, som tekst: `Regel: …` og `Scenario: …` */
-export const focusParts = (f: Focus): Part[] =>
-  f?.kind === 'anchor' ? f.parts.map(a => ({ k: a.part === 'rule' ? 'Regel' : 'Scenario', t: a.name })) : f?.kind === 'note' ? f.rules.map(t => ({ k: 'Regel', t })) : [];
+/** Linja i kravet der delen som følges, står: den første delen som ikke er levert, ellers den første delen */
+export function focusLn(ix: FlowIndex, id: string, f: Focus): number | undefined {
+  if (!f) return undefined;
+  const ps = partsOf(ix, id, f).sort((a, b) => a.ln - b.ln);
+  return (ps.find(p => p.status !== 'implemented') ?? ps[0])?.ln;
+}
 
 /** Det et krav eller en flyt bygger på, gruppert per ID. Med `follow: 'part'` følges bare delen i `focus` og `Egenskap:` */
 export function depsOf(ix: FlowIndex, id: string, focus: Focus, follow: Follow) {

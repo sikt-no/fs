@@ -1447,6 +1447,10 @@ body.resizing iframe, body.resizing .main { pointer-events: none; }
 .fl-dep .dnote { display: flex; gap: 6px; font-size: 12px; line-height: 1.4; color: var(--ink2); }
 .fl-dep .dnote .mono { font-size: 10.5px; flex-shrink: 0; padding-top: 1px; }
 .fl-dep .dnote .parts { display: flex; flex-direction: column; gap: 2px; }
+.fl-part { display: inline-flex; align-items: baseline; gap: 5px; color: inherit; cursor: pointer; }
+.fl-part:hover { color: var(--acc); }
+.fl-part .fl-dot { transform: translateY(-1px); }
+.fl-dep .dnote .fl-part .mono { padding-top: 0; }
 .fl-dep .deprecated { border-top: 1px solid var(--warn); background: var(--warn-soft); padding: 8px 12px; font-size: 12.5px; line-height: 1.45; }
 .fl-dep .seenmsg { border-top: 1px dashed var(--line2); padding: 6px 12px; font-size: 11.5px; color: var(--muted); }
 .fl-rep { font-size: 10.5px; padding: 1px 6px; border-radius: 3px; background: var(--acc-soft); color: var(--acc-ink); }

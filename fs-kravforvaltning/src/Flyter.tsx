@@ -15,11 +15,12 @@ import {
   flowTree,
   flowWarnings,
   focusLn,
-  focusParts,
   isFlowId,
   isPartial,
   ORD,
   partCount,
+  partsOf,
+  type FlowPart,
   pathOf,
   phaseStatus,
   progress,
@@ -865,24 +866,18 @@ function DepCard(p: ViewProps & { ph: FlowPhase; n: DepNode; occ: Record<string,
             </a>
           </div>
         )}
-        {n.focus?.kind === 'anchor' ? (
-          <div class="dnote" title={`Delene i ${n.id} med @ref-${p.flow.id}: fasen bygger bare på dem`}>
-            <span class="mono muted">@ref-</span>
+        {n.focus && (
+          <div
+            class="dnote"
+            title={n.focus.kind === 'anchor' ? `Delene i ${n.id} med @ref-${p.flow.id}${n.notes.length ? ' i reglene i «…»' : ''}: fasen bygger bare på dem` : 'Reglene i «…» i kommentaren under taggen: fasen bygger bare på dem'}
+          >
+            <span class="mono muted">{n.focus.kind === 'anchor' ? '@ref-' : n.notes.length > 1 ? 'regler' : 'regel'}</span>
             <span class="parts">
-              {focusParts(n.focus).map((pt, i) => (
-                <span key={i}>
-                  <span class="mono">{pt.k}:</span> {pt.t}
-                </span>
+              {partsOf(ix, n.id, n.focus).map(pt => (
+                <PartLink key={pt.ln} pt={pt} open={() => p.onOpen(pathOf(ix, n.id)!, pt.ln)} />
               ))}
             </span>
           </div>
-        ) : (
-          n.notes.length > 0 && (
-            <div class="dnote">
-              <span class="mono muted">{n.notes.length > 1 ? 'regler' : 'regel'}</span>
-              <span>{n.notes.map(t => `«${t}»`).join(', ')}</span>
-            </div>
-          )
         )}
         {follow === 'part' && !n.focus && hasOwnDeps && depth > 1 && !fl && <span class="muted small">Ikke noe anker eller regel i kommentaren: hele kravet følges</span>}
       </div>
@@ -897,6 +892,22 @@ function DepCard(p: ViewProps & { ph: FlowPhase; n: DepNode; occ: Record<string,
     </div>
   );
 }
+
+const partSt = (pt: FlowPart) => (pt.status === 'implemented' ? 'levert' : (pt.status ?? 'ingen status'));
+/** En del av kravet med statusen sin, som åpner kravet på delen */
+const PartLink = ({ pt, open }: { pt: FlowPart; open: () => void }) => (
+  <a
+    class="fl-part"
+    title={partSt(pt)}
+    onClick={e => {
+      e.stopPropagation();
+      open();
+    }}
+  >
+    <Dot c={stColor(pt.status)} z={6} />
+    <span class="mono">{pt.part === 'rule' ? 'Regel' : pt.part === 'scenario' ? 'Scenario' : 'Hele kravet'}:</span> {pt.name}
+  </a>
+);
 
 /** Radene i treet under et kort, til og med valgt nivå */
 function walkRows(p: ViewProps, node: DepNode, pn: number, out: JSX.Element[]) {
@@ -915,11 +926,13 @@ function walkRows(p: ViewProps, node: DepNode, pn: number, out: JSX.Element[]) {
       </span>
     ));
     // Delen av kravet som følges: ankrene (@ref-<kravet over>), ellers regelen i kommentaren under taggen
-    const focus = focusParts(c.focus).map((pt, i) => (
-      <span key={'f' + i} class="part focus" title={c.focus?.kind === 'anchor' ? `${c.id} har @ref-${node.id} på delen: ${node.id} bygger bare på den` : 'Regelen i kommentaren under taggen'}>
-        <span class="mono">→ {pt.k}:</span> {pt.t} <span class="mono muted">{c.focus?.kind === 'anchor' ? '@ref-' : '«…»'}</span>
-      </span>
-    ));
+    const focus = c.focus
+      ? partsOf(ix, c.id, c.focus).map(pt => (
+          <span key={'f' + pt.ln} class="part focus" title={`${c.focus?.kind === 'anchor' ? `${c.id} har @ref-${node.id} på delen: ${node.id} bygger bare på den` : 'Regelen i kommentaren under taggen'} · ${partSt(pt)}`}>
+            <span class="mono">→</span> <PartLink pt={pt} open={() => p.onOpen(pathOf(ix, c.id)!, pt.ln)} /> <span class="mono muted">{c.focus?.kind === 'anchor' ? '@ref-' : '«…»'}</span>
+          </span>
+        ))
+      : [];
     out.push(
       <div
         key={key}

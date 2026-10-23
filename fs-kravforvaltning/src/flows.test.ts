@@ -418,6 +418,10 @@ test('ankeret og «…»: fasen bygger på ankrene innenfor reglene i «…», e
   assert.deepEqual(names(2), ['R1', 'R2', 'S3']); // ingen ankre i R4: alle ankrene
   assert.deepEqual(names(3), ['R1', 'R2', 'S3']); // uten «…»: alle ankrene
   assert.deepEqual(ski.phases.map(p => phaseStatus(six, p)), ['implemented', 'in-progress', 'in-progress', 'in-progress']);
+  // Klikk på kortet åpner den første delen som ikke er levert
+  const r2 = six.krav.get('OPT-BEH-BEH-030')!.rules.find(r => r.name === 'R2')!.ln;
+  assert.equal(focusLn(six, 'OPT-BEH-BEH-030', ski.phases[3].links[0].focus), r2);
+  assert.equal(focusLn(six, 'OPT-BEH-BEH-030', ski.phases[0].links[0].focus), six.krav.get('OPT-BEH-BEH-030')!.rules[0].ln);
 });
 
 test('delene flyten bygger på: ankrene per fase, eller reglene i hele kravet', () => {
