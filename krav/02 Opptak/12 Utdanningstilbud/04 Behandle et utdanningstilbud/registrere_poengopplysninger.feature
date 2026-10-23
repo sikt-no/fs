@@ -12,8 +12,10 @@ Egenskap: Registrere poengopplysninger for utdanningstilbudet
   Regel: Median poengsum for fjoråret vises
     # AVKLART 2026-10-22: Medianen finnes i databasen. Den registreres ikke av opptaksforvalter, og vises på utdanningstilbudet.
 
-    @in-progress
+    @in-progress @openquestion
     Scenario: Se median poengsum for fjorårets opptatte
+      # ÅPNE SPØRSMÅL:
+      # - Ikke funnet i main (verify 2026-10-22): fs-admin viser «Ikke tilgjengelig» og henter ikke medianen. Branchen einor/shi-688-feat-median-og-poenggrenser i fs-admin henter og viser den. Leveres scenarioet når den er merget?
       Gitt at utdanningstilbudet har en median poengsum fra fjorårets opptak
       Så vises median poengsum for fjorårets opptatte
 
