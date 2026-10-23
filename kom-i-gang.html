@@ -551,7 +551,7 @@ footer .inner{padding-block:24px 48px;display:flex;flex-direction:column;gap:6px
             <tr><td><code>@draft</code> … <code>@deprecated</code></td><td>Status. Nøyaktig én på <code>Egenskap:</code>. Alle nye krav starter som <code>@draft</code>.</td></tr>
             <tr><td><code>@scope-&lt;slug&gt;</code></td><td>Kobler kravet til et scope og oppgaven det hører til.</td></tr>
             <tr><td><code>@depends-on-&lt;ID&gt;</code></td><td>Delen bygger på kravet. Endres det, må delen sjekkes.</td></tr>
-            <tr><td><code>@ref-&lt;ID&gt;</code></td><td>Henvisning for den som leser: «se også».</td></tr>
+            <tr><td><code>@ref-&lt;ID&gt;</code></td><td>Henvisning for den som leser: «se også». På en regel eller et scenario i kravet det bygges på, er den et anker: kravet med ID-en bygger bare på den delen.</td></tr>
             <tr><td><code>@openquestion</code></td><td>Delen har en uavklart detalj. Følges alltid av <code># ÅPNE SPØRSMÅL:</code>.</td></tr>
             <tr><td><code>@e2e</code> · <code>@integration</code></td><td>Testtype for de automatiske testene.</td></tr>
           </tbody>

@@ -416,12 +416,36 @@ Sier at et krav peker på et annet krav. Det er to typer, og de skiller seg på 
 
 - Formatet er `@depends-on-` eller `@ref-` og Feature-ID-en uten `@`: `@depends-on-OPT-BEH-BEH-011`. *(sjekkes automatisk)*
 - Taggen står på delen referansen gjelder: `Egenskap:`, `Regel:` eller `Scenario:`/`Scenariomal:`. Bygger hele kravet på et annet krav, står den på `Egenskap:`-tag-linja, etter eventuell `@scope-<slug>`. Taggen på `Egenskap:` gjelder alle scenarioene i kravet.
-- Taggen peker på hele kravet. Gjelder referansen én regel i kravet, skrives regeltittelen i «…» i en kommentar under taggen. Kommentaren er ellers valgfri, og forklarer referansen når det trengs.
-- Retningen gir seg av hvor taggen står. Den andre retningen, «hva bygger på dette kravet?», skrives ikke ned, men finnes med `grep`.
+- Taggen peker på hele kravet. Bygger delen bare på noen regler eller scenarioer i kravet, settes et anker i kravet det pekes på (se *Anker* under). Kommentaren under taggen er ellers valgfri, og forklarer referansen når det trengs.
+- Retningen gir seg av hvor taggen står. Den andre retningen, «hva bygger på dette kravet?», skrives ikke ned, men finnes med `grep`. Unntaket er ankeret.
 - Et krav refererer ikke til seg selv. *(sjekkes automatisk)*
 - En del har hver referanse én gang, og har enten `@depends-on-` eller `@ref-` til et krav, ikke begge. *(sjekkes automatisk)*
 - ID-en må finnes, `@depends-on-` går ikke i ring (A → B → A), og regeltittelen i «…» under taggen må finnes i kravet det pekes på. Det krever flere filer, og sjekkes av `fs-krav-avvik`.
 - Taggen er ikke en statustag, og endrer ikke livsløpet.
+
+#### Anker
+
+`@depends-on-` peker på hele kravet. Bygger en del av krav A bare på noen regler eller scenarioer i krav B, får de delene i B `@ref-A`. Det er ankeret:
+
+> Har A `@depends-on-B`, og har en `Regel:` eller et `Scenario:`/`Scenariomal:` i B `@ref-A`, bygger A bare på de delene av B som har `@ref-A`. Har ingen del i B `@ref-A`, bygger A på hele B. `@ref-A` på `Egenskap:` i B betyr også hele kravet.
+
+```gherkin
+# A: OPT-OPT-UTD-004
+  @depends-on-OPT-BEH-BEH-011
+  Regel: Opptaksforvalter kan velge saksbehandlertildelingsregel per utdanningstilbud
+
+# B: OPT-BEH-BEH-011
+  @ref-OPT-OPT-UTD-004
+  Regel: Opptaksforvalteren ved forvaltende organisasjon setter opp tildelingsreglene for opptaket
+```
+
+- Ankeret er en vanlig `@ref-`, og leses også som en henvisning: «A bygger på denne delen». Den som endrer delen, ser hvilke krav som må sjekkes, rett over delen.
+- Ankeret gjelder bare når A har `@depends-on-B`. Ellers er `@ref-A` i B en vanlig henvisning.
+- A kan være en flyt: en fase med `@depends-on-B` bygger på delene i B som har `@ref-<flytens ID>`.
+- Ankeret sier hvilket krav som bygger på delen, ikke hvilken del av A. Har A flere deler med `@depends-on-B`, bygger alle på de samme delene av B. Skal de skilles, står regeltittelen i «…» i kommentaren under taggen i A.
+- Rekkefølgen når det leses hvilken del av B som gjelder: ankeret, så regeltittelen i «…» under taggen i A, ellers hele kravet.
+- Ankeret settes av `fs-krav`, sammen med `@depends-on-`. At ankeret og regeltittelen i «…» peker på samme del, krever flere filer, og sjekkes av `fs-krav-avvik`.
+- Ankeret sier hvilken del av B som følges. Det endrer ikke når A kan leveres: en fase er levert når kravene den bygger på, er `@implemented` som helhet (se *Flyter*).
 
 Dette er ikke referanser, og blir stående som kommentarer:
 
@@ -435,6 +459,7 @@ Referansene i begge retninger:
 |---|---|
 | Hva må sjekkes når kravet endres? | `grep -rn "@depends-on-OPT-BEH-BEH-011" krav/` |
 | Hva henger sammen med kravet? | `grep -rnE "@(depends-on\|ref)-OPT-BEH-BEH-011" krav/` |
+| Hvilke deler av kravet bygger andre krav på? | `@ref-` på `Regel:`/`Scenario:`-linjene i kravet (ankrene) |
 | Hvilke tester bygger på kravet? | `npx playwright test --grep @depends-on-OPT-BEH-BEH-011` |
 | Hvilke CDP-tester må sjekkes når kravet endres? | `grep -rn "@depends-on-OPT-BEH-BEH-011" cdp-tester/` |
 

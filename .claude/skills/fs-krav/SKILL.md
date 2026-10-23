@@ -478,7 +478,7 @@ Finn fasene sammen med brukeren, i den rekkefølgen løpet går. Hver fase blir 
 For hver fase:
 
 1. **Finn kravene** fasen går gjennom: søk i `krav/` etter begrepene, og les kravene. Les statusen. Les ikke bare tittelen: kravet skal faktisk beskrive det som skjer i fasen.
-2. **Sett `@depends-on-<ID>`** på `Regel:`-linja for hvert krav (*Referanser mellom krav*). En fase kan bygge på en annen flyt i samme prosess med `@depends-on-FLY-…`. Gjelder referansen én regel i et stort krav, skriv regeltittelen i en kommentar under taggen.
+2. **Sett `@depends-on-<ID>`** på `Regel:`-linja for hvert krav (*Referanser mellom krav*). En fase kan bygge på en annen flyt i samme prosess med `@depends-on-FLY-…`. Bygger fasen bare på noen regler eller scenarioer i et stort krav, sett ankeret `@ref-<flytens ID>` på de delene i kravet (*Anker* i `krav/README.md`, og *Referanser mellom krav* under).
 3. **Fase uten krav:** finnes ikke kravet, skriv fasen uten `@depends-on-`, tagg den `@openquestion`, og skriv en `# ÅPNE SPØRSMÅL:` som sier hvilket krav som mangler, og hvor det kan høre hjemme. Noter det til oppsummeringen. Kravet skrives med `fs-scope` (når det hører til et initiativ) eller modus A.
 4. **Overlapp:** beskriver to eller flere krav den samme regelen, si fra. Spør hvilket krav som skal eie regelen. Ryddingen gjøres i kravene (modus B for `@draft`/`@planned`, modus D for leverte krav), ikke i flyten.
 
@@ -510,7 +510,9 @@ Et krav peker på et annet krav med `@depends-on-<Feature-ID>` eller `@ref-<Feat
 
 - **Testen for typen:** Må denne delen sjekkes hvis kravet det pekes på, endres? Ja gir `@depends-on-`, nei gir `@ref-`. Bruker et scenario i delen en verdi eller en innstilling fra kravet («settes i X»), er det `@depends-on-`. Er du i tvil, spør.
 - **Plassering:** på delen referansen gjelder. Bygger hele kravet på et annet krav, står taggen sist på `Egenskap:`-tag-linja, etter `@scope-<slug>`. På en `Regel:` eller et `Scenario:` uten tagger lager du en ny tag-linje rett over, med samme innrykk. Har delen tagger fra før, legges referansen til sist på samme linje.
-- **Kommentaren:** stien eller filnavnet tas bort når taggen sier det samme. Det som forklarer referansen, blir stående: «Etter at opptaket er publisert, kan utdanningstilbud bare trekkes.» Gjelder referansen én regel i kravet, står regeltittelen i kommentaren.
+- **Kommentaren:** stien eller filnavnet tas bort når taggen sier det samme. Det som forklarer referansen, blir stående: «Etter at opptaket er publisert, kan utdanningstilbud bare trekkes.»
+- **Anker:** bygger delen bare på noen regler eller scenarioer i kravet B det pekes på, får de delene i B `@ref-<ID til kravet med @depends-on->` (*Anker* i `krav/README.md`). Spør brukeren hvilke deler det gjelder, og vis endringen i B før du skriver den. Ankeret settes i samme endring som `@depends-on-`, og fjernes når `@depends-on-` fjernes. Har kravet flere deler med `@depends-on-B` som bygger på ulike deler av B, skriv regeltittelen i «…» i kommentaren under hver tag i tillegg.
+- **Når en del med anker endres eller slettes** (modus B, C og D): `@ref-<ID>` på delen sier hvilke krav som bygger på den. List dem, som for `@depends-on-` på hele kravet. Flyttes eller deles delen, følger ankeret med til delen som har innholdet.
 - **Blir stående som kommentar:** historikk («flyttet hit», «skilt ut fra», «Feature-ID-en var»), krav som nevnes i `# ÅPNE SPØRSMÅL:`, og henvisninger til en mappe. Peker en historikk-kommentar på en ID som nå tilhører et annet krav, settes aldri en tag.
 - **Sjekk at ID-en finnes** før du setter taggen: `Grep "^\s*@(.*\s@)?<ID>\b"` i `krav/**/*.feature`. Har to filer samme ID, si fra, og sett ikke taggen før det er ryddet.
 - **Statusen endres ikke** av en referanse. En referanse kan settes på en levert del uten at delen får `@draft`, siden atferden er den samme.
