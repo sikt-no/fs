@@ -25,17 +25,17 @@ Testplan for «Tilbudsgaranti i saksbehandlingen 2027». Planen sier hva som tes
 | Kilde | Scopet [scope-tilbudsgaranti-2027](https://github.com/sikt-no/fs/blob/6478beea804db1a91ade2db494161ec86f4f2775/tasks/opptak/scope-tilbudsgaranti-2027.md), oppgaven [tilbudsgaranti](https://github.com/sikt-no/fs/tree/6478beea804db1a91ade2db494161ec86f4f2775/tasks/opptak/tilbudsgaranti) |
 | Scope | `@scope-tilbudsgaranti-2027` · [scope-fila på GitHub](https://github.com/sikt-no/fs/blob/6478beea804db1a91ade2db494161ec86f4f2775/tasks/opptak/scope-tilbudsgaranti-2027.md) |
 | Saker | [#512](https://github.com/sikt-no/fs/issues/512) · [STEK-241](https://sikt.atlassian.net/browse/STEK-241), [STEK-626](https://sikt.atlassian.net/browse/STEK-626), [STEK-627](https://sikt.atlassian.net/browse/STEK-627) |
-| Berører andre team | [Fylles ut: står ikke i oppgaven] |
-| Kjente begrensninger | <ul><li>Skissen fra designeren viser én tilbudsgaranti per søknadsalternativ. Løsningen viser alltid alle tre, «Tilbudsgaranti fra behandler», «… fra tilbyder» og «… fra forvalter», og bare feltet for rollen brukeren har, kan endres (STEK-270). Det er løsningen, ikke skissen, som er riktig.</li><li>Valglisten viser også tilbudsgarantityper som ikke er aktive, og løsningen godtar dem. Kravet sier ingenting om det.</li><li>Endringsloggen bruker ordene «Behandler», «Tilbyder» og «Forvalter», og skiller mellom «satte», «endret» og «fjernet».</li><li>Implementasjonsdetaljene (`gi_tilbudsgaranti.design.md`) er ikke skrevet ennå.</li><li>Det søkeren gjør (endre prioritet, fjerne og legge inn igjen søknadsalternativet, trekke søknaden), skjer i Min kompetanse, som ikke er sjekket i verifiseringen.</li></ul> |
+| Berører andre team | Testen berører ikke andre team. Vi er avhengige av testbrukere med gode roller, og at opptak og utdanningstilbud, samt et par søknader, finnes. |
+| Kjente begrensninger | <ul><li>Skissen fra designeren viser én tilbudsgaranti per søknadsalternativ. Løsningen viser alltid alle tre, «Tilbudsgaranti fra behandler», «… fra tilbyder» og «… fra forvalter», og bare feltet for rollen brukeren har, kan endres (STEK-270). Det er løsningen, ikke skissen, som er riktig.</li><li>Valglisten viser også tilbudsgarantityper som ikke er aktive, og løsningen godtar dem. Kravet sier ingenting om det.</li><li>Endringsloggen bruker ordene «Behandler», «Tilbyder» og «Forvalter», og skiller mellom «satte», «endret» og «fjernet».</li><li>Implementasjonsdetaljene (`gi_tilbudsgaranti.design.md`) er ikke skrevet ennå.</li><li>Det søkeren gjør (endre prioritet, fjerne og legge inn igjen søknadsalternativet, trekke søknaden), skjer i Min kompetanse, som ikke er sjekket i verifiseringen.</li><li>Tilbyderen ser bare saken når tilbyderen hører til samme organisasjon som saksbehandler. I dag kan derfor bare tilbydere ved den saksbehandlende organisasjonen sette tilbudsgaranti fra tilbyder, og testen bruker en tilbyder ved NTNU, som også saksbehandler. At en tilbyder ved en annen organisasjon kan se saken og sette tilbudsgaranti, rettes i [STEK-576](https://sikt.atlassian.net/browse/STEK-576), og testes på nytt når det er levert.</li></ul> |
 
 ### Testbrukere
 
 | Nr | Navn | Rolle | Organisasjon | Brukes til |
 |---|---|---|---|---|
-| 1 | [Fylles ut: navn] | Saksbehandler ved den saksbehandlende organisasjonen | [Fylles ut: organisasjon A, for eksempel UiO] | Sette, endre og fjerne tilbudsgaranti, se tilbudsgarantiene fra de andre rollene, endringsloggen, og endre utdanningsbakgrunnen så søknadsalternativet flyttes (`@OPT-BEH-BEH-010`) |
-| 2 | [Fylles ut: navn] | Tilbyder: saksbehandler ved lærestedet som tilbyr utdanningstilbudet | [Fylles ut: organisasjon B, for eksempel UiT] | Sette tilbudsgaranti fra tilbyder (`@OPT-BEH-BEH-010`) |
-| 3 | [Fylles ut: navn] | Opptaksforvalter ved den forvaltende organisasjonen, med SE_SØKNADSBEHANDLING, MODIFISERE_OPPTAK og OPPTAK_TILBGARANTI_GI_VIA_OPPTAK | [Fylles ut: organisasjonen som forvalter opptaket, for eksempel HK-dir] | Sette tilbudsgaranti fra opptaksforvalter, og ikke kunne endre den fra saksbehandler (`@OPT-BEH-BEH-010`) |
-| 4 | [Fylles ut: navn] | Søker | – | Endre prioritet, fjerne og legge inn igjen søknadsalternativet, og trekke søknaden, i Min kompetanse (`@OPT-BEH-BEH-010`) |
+| 1 | Ansvarsfull Fotkrem - OPPTAK_SAKSBEHANDLER - NTNU | Saksbehandler ved den saksbehandlende organisasjonen | NTNU | Sette, endre og fjerne tilbudsgaranti, se tilbudsgarantiene fra de andre rollene, endringsloggen, og endre utdanningsbakgrunnen så søknadsalternativet flyttes (`@OPT-BEH-BEH-010`) |
+| 2 | Ansvarsfull Fotkrem - OPPTAK_FORVALTER - NTNU | Tilbyder: saksbehandler ved lærestedet som tilbyr utdanningstilbudet | NTNU | Sette tilbudsgaranti fra tilbyder (`@OPT-BEH-BEH-010`) |
+| 3 | Ordentlig Rundskriv - OPPTAK_FORVALTER_OG_OPPTAK_SAKSBEHANDLER - HK-dir | Opptaksforvalter ved den forvaltende organisasjonen, med SE_SØKNADSBEHANDLING, MODIFISERE_OPPTAK og OPPTAK_TILBGARANTI_GI_VIA_OPPTAK | HK-dir | Sette tilbudsgaranti fra opptaksforvalter, og ikke kunne endre den fra saksbehandler (`@OPT-BEH-BEH-010`) |
+| 4 | Overbevisende Havhest (fnr 29900598090) | Søker | – | Endre prioritet, fjerne og legge inn igjen søknadsalternativet, og trekke søknaden, i Min kompetanse (`@OPT-BEH-BEH-010`) |
 
 Testbrukerne finnes i minst to organisasjoner, så vi kan teste at ingen ser data de ikke skal se.
 
@@ -43,11 +43,11 @@ Testbrukerne finnes i minst to organisasjoner, så vi kan teste at ingen ser dat
 
 | Hva | Navn | Hvor | Kan settes tilbake |
 |---|---|---|---|
-| Et opptak med tilbudsgarantityper for alle tre rollene, for eksempel «Tilbudsgaranti innvilges etter klage» (saksbehandler), «Tilbudsgaranti, særskilt vurdering» (tilbyder) og «Tilbudsgaranti gitt etter telefonsamtale» (opptaksforvalter), og én type som bare kan brukes av tilbyder. Søknadsfristen i opptaket må ikke ha gått ut | [Fylles ut: opptak] | [Fylles ut] | [Fylles ut] |
-| En tilbudsgarantitype som bare finnes i et annet opptak | [Fylles ut: opptak og type] | [Fylles ut] | [Fylles ut] |
-| En søker med en søknad med minst tre søknadsalternativer, der ett tilbys av en annen organisasjon enn den som saksbehandler | [Fylles ut: søker] | [Fylles ut] | [Fylles ut] |
-| En søker der utdanningsbakgrunnen kan endres, så søknadsalternativet flyttes til en annen saksbehandlende organisasjon | [Fylles ut: søker] | [Fylles ut] | [Fylles ut] |
-| En søker som kan trekke søknaden | [Fylles ut: søker] | [Fylles ut] | [Fylles ut] |
+| Et opptak med tilbudsgarantitypene testcasene bruker: KLA «Tilbudsgaranti etter ny vurdering» og RES «Tilbudsgaranti pga reservert plass» (saksbehandler), REA «Tilbudsgaranti etter realkompetansevurd.» (tilbyder) og FOR «Tilbudsgaranti, forhåndsløfte» (opptaksforvalter). TEL skal ikke finnes i opptaket (se raden under). Søknadsfristen i opptaket må ikke ha gått ut | Samordna UHG-simulering høsten 2026, opptaksnr. 34 | https://test-fsadmin.sikt.no/opptak/T3BwdGFrOjM0 | Trengs ikke, opptaket endres ikke |
+| En tilbudsgarantitype som bare finnes i et annet opptak | I opptaksnr. 1 (Opptak UHG 2025) finnes det tilbudsgarantitype TEL (Tilbudsgaranti gitt etter telefonsamtale) som saksbehandler (feks. Kort Dompap - OPPTAK_SAKSBEHANDLER - UiT) kan sette. Denne finnes ikke i opptaksnr. 34 | https://test-fsadmin.sikt.no/opptak/T3BwdGFrOjE | Trengs ikke, garantitypene må bare finnes |
+| En søker med en søknad med minst tre søknadsalternativer, der ett tilbys av en annen organisasjon enn den som saksbehandler | Overbevisende Havhest (fnr 29900598090). Søknaden er i dag 1000836 | https://test.minkompetanse.no/nb/soknader/c29rbmFkOjU2NDE3ZjlhLTYxMTItNDRlYS1hMmRiLThmOGFkMzJlY2FkYiwzNA | Man kan tilbakestille søknaden i Min Kompetanse |
+| En søker der utdanningsbakgrunnen kan endres, så søknadsalternativet flyttes til en annen saksbehandlende organisasjon | Overbevisende Havhest (fnr 29900598090) | Saksbehandler kan gjøre det i FS Admin https://test-fsadmin.sikt.no/opptak/T3BwdGFrOjM0/soknadsbehandling/sak/U2FrOjU2NDE3ZjlhLTYxMTItNDRlYS1hMmRiLThmOGFkMzJlY2FkYiwzNCwxOTQ/gsk , men jeg vet ikke hvor søker kan gjøre det selv. | Denne er farlig, for jeg er usikker om saksbehandlertildeling tilbakestilles når utdanningsbakgrunn tilbakestilles - jeg tror når en sak først går til HK-dir, så kommer det ikke tilbake til “førsteprioritets institusjon” |
+| En søker som kan trekke søknaden | Overbevisende Havhest (fnr 29900598090) | https://test.minkompetanse.no/nb/soknader/c29rbmFkOjU2NDE3ZjlhLTYxMTItNDRlYS1hMmRiLThmOGFkMzJlY2FkYiwzNA Søker kan trekke hele søknaden eller enkelte alternativer her. | Alle alternativer som er trukket kan legges inn igjen av søker. Har søknaden blitt trukket, gjenopprettes den vel. |
 
 ## Omfang
 
@@ -57,7 +57,7 @@ Det som testes, er kravene som er `@implemented`. Feature-ID-ene her er kravene 
 
 | Krav | Feature-ID | Status | Scenarioer i testen |
 |---|---|---|---|
-| [Gi tilbudsgaranti](https://github.com/sikt-no/fs/blob/6478beea804db1a91ade2db494161ec86f4f2775/krav/02%20Opptak/13%20S%C3%B8knad%20og%20saksbehandling/02%20Behandling/gi_tilbudsgaranti.feature) | `@OPT-BEH-BEH-010` | `@implemented` | 16 av 17 (24 testcaser med eksemplene i scenariomalene). Det siste står i «Ikke med i denne testen» |
+| [Gi tilbudsgaranti](https://github.com/sikt-no/fs/blob/6478beea804db1a91ade2db494161ec86f4f2775/krav/02%20Opptak/13%20S%C3%B8knad%20og%20saksbehandling/02%20Behandling/gi_tilbudsgaranti.feature) | `@OPT-BEH-BEH-010` | `@implemented` | 16 av 17 (21 testcaser med eksemplene i scenariomalene). Det siste står i «Ikke med i denne testen» |
 
 Scenarioene i testen er de leverte scenarioene i gating-settet: alle scenarioene som ikke er utkast, avviklet eller demo, og som ikke er under endring. Et levert scenario med et åpent spørsmål testes som det står, og spørsmålet står under tabellen. Er kilden et scope, og kravet ble levert før, er det bare delene som er levert i scopet.
 
@@ -82,6 +82,7 @@ Ingen.
 | Hvilken utdanningskvote tilbudsgarantiene tas fra (`@OPT-OPT-UTD-004`) | Hører til scope-utdanningstilbud-2027 |
 | [Velge utdanningskvote for tilbudsgaranti](https://github.com/sikt-no/fs/blob/6478beea804db1a91ade2db494161ec86f4f2775/krav/02%20Opptak/13%20S%C3%B8knad%20og%20saksbehandling/02%20Behandling/velge_utdanningskvote_for_tilbudsgaranti.feature) (`@OPT-BEH-BEH-017`) | Kommer senere: utkast uten scenarioer |
 | Scenarioet «Sette tilbudsgaranti når søknaden ikke kan poengberegnes» i Gi tilbudsgaranti (`@OPT-BEH-BEH-010`) | Testes senere (besluttet 2026-10-22) |
+| Eksempelet «legger til "Historie, høst 2027" som prioritet 1» i scenariomalen «Tilbudsgarantien følger søknadsalternativet når prioriteten endres» (`@OPT-BEH-BEH-010`) | Ikke relevant: tilbudsgarantien er knyttet til søknadsalternativet, ikke til prioriteten. At søknadsalternativet flyttes ned og opp igjen, testes (besluttet 2026-10-23) |
 
 ## Roller
 
