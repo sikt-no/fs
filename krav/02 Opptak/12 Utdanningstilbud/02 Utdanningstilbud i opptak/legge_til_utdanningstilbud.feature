@@ -132,3 +132,14 @@ Egenskap: Legge til utdanningstilbud i opptak
       Og at utdanningstilbudet "Sykepleie, høst 2027" er lagt til i opptaket
       Når utdanningen til "Sykepleie, høst 2027" endres i utdanningsregisteret "2027-06-10"
       Så oppdateres utdanningstilbudet "Sykepleie, høst 2027" i opptaket med endringen
+
+  @planned
+  Regel: Opptaksforvalter ved deltakende organisasjon kan bare redigere utdanningstilbud organisasjonen tilbyr
+    # Jira: SHI-747
+
+    Scenario: Deltakende organisasjon kan ikke redigere utdanningstilbud en annen organisasjon tilbyr
+      Gitt at opptaksforvalter er ved deltakende organisasjon "Universitetet i Oslo"
+      Og at redigering av utdanningstilbud er åpen i opptaket
+      Når det sendes en forespørsel om å redigere utdanningstilbudet "Vernepleie, høst 2027", som "Universitetet i Bergen" tilbyr
+      Så avvises forespørselen
+      Og utdanningstilbudet "Vernepleie, høst 2027" er ikke endret

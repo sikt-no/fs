@@ -32,6 +32,14 @@ Egenskap: Trekke utdanningstilbud fra opptak
       Så varsles opptaksforvalter om konsekvensen av å trekke
       Og utdanningstilbudet trekkes fra opptaket
 
+    @planned
+    Scenario: Deltakende organisasjon kan ikke trekke utdanningstilbud en annen organisasjon tilbyr
+      # Jira: SHI-747
+      Gitt at opptaksforvalter er ved deltakende organisasjon "Universitetet i Oslo"
+      Når det sendes en forespørsel om å trekke utdanningstilbudet "Vernepleie, høst 2027", som "Universitetet i Bergen" tilbyr
+      Så avvises forespørselen
+      Og utdanningstilbudet "Vernepleie, høst 2027" er ikke trukket
+
   Regel: Utdanningstilbud som trekkes etter søknadsåpning, blir liggende på opptaket
 
     @in-progress
