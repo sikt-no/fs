@@ -211,7 +211,7 @@ Egenskap: Frister og hendelser for opptak
       Når opptaksforvalter ikke setter dato for aldersberegning
       Så er opptakets dato for aldersberegning "2027-12-31"
 
-  @openquestion
+  @openquestion @ref-FLY-OPT-SAK-001
   Regel: Opptaksforvalter ved forvaltende organisasjon må kunne sette frist for endring av utdanningsbakgrunn
     # ÅPNE SPØRSMÅL:
     # - Virkningen står i tildele_saksbehandlende_organisasjon.feature. Skal regelen ha @ref-OPT-BEH-BEH-011?

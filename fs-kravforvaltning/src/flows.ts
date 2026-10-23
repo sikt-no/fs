@@ -653,12 +653,13 @@ export function flowWarnings(ix: FlowIndex, f: Flow): FlowWarning[] {
     }
     const s = statusOf(ix, n.id);
     if (s === 'deprecated' && once('d:' + from + n.id)) out.push({ kind: 'deprecated', flow: f.id, phase: n.phase, id: n.id, from, level: n.level, text: `${n.id} er avviklet. ${from} peker på det, og må peke på kravet som erstatter det.` });
-    // Ankeret peker på en del som er utkast eller avviklet: delen blir ikke levert, og fasen heller ikke
+    // Ankeret peker på en del som selv er tagget utkast eller avviklet: delen blir ikke levert, og fasen heller ikke.
+    // En del som bare arver `@draft` fra egenskapen, er et vanlig utkast og varsles ikke
     if (s !== 'deprecated' && n.focus?.kind === 'anchor') {
       const k = ix.krav.get(n.id)!;
       for (const a of n.focus.parts) {
         const ps = (a.part === 'rule' ? k.rules.find(r => r.ln === a.ln) : k.scenarios.find(sc => sc.ln === a.ln))?.status;
-        if ((ps === 'draft' || ps === 'deprecated') && once('p:' + from + n.id + ':' + a.ln))
+        if ((ps === 'draft' || ps === 'deprecated') && ps !== s && once('p:' + from + n.id + ':' + a.ln))
           out.push({ kind: 'part-left', flow: f.id, phase: n.phase, id: n.id, from, level: n.level, text: `${from} bygger på «${a.name}» i ${n.id}, som er ${ps === 'draft' ? 'utkast' : 'avviklet'}. Delen blir ikke levert slik den står.` });
       }
     }

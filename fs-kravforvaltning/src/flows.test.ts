@@ -348,6 +348,11 @@ test('varslene: ankeret på et utkast, og flyten bak delen den bygger på', () =
   assert.deepEqual(w.map(x => x.kind), ['part-left', 'flow-behind']);
   assert.match(w[0].text, /«Utkast» i OPT-REG-KRA-022, som er utkast/);
   assert.match(w[1].text, /delen flyten bygger på i OPT-REG-KRA-021 er planned/);
+  // Er hele kravet @draft, arver delen statusen, og det varsles ikke
+  const draft = { ...lev, [A + 'r.feature']: lev[A + 'r.feature'].replace('@in-progress', '@draft').replace('@draft @openquestion @ref-', '@openquestion @ref-').replace('  @implemented\n  Regel: Ferdig', '  Regel: Ferdig') };
+  const dix = buildFlows(Object.fromEntries(Object.entries(draft).map(([p, s]) => [p, buildEntry(p, s, 0)])));
+  assert.deepEqual(flowWarnings(dix, dix.byId.get('FLY-OPT-LEV-001')!).map(x => x.kind), ['flow-behind']);
+  assert.equal(phaseStatus(dix, dix.byId.get('FLY-OPT-LEV-001')!.phases[3]), 'draft');
 });
 
 test('ruta: #/flyter, stien og nivåene', () => {
