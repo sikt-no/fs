@@ -16,6 +16,7 @@ Les disse seksjonene i `.claude/skills/fs-verify/SKILL.md`, og følg dem for sø
 - *Verifisere implementasjon (`@in-progress`)*: gating-settet og steg 1–2 (letingen og testene). Kontrollen i steg 3 gjør kontrolløren.
 - *Deler i leverte krav som endres*: gating-settet for en del
 - *Verifisere uansett status*: gating-settet, når lead-en sier at det gjelder
+- *Avhengigheter*, steg 3: når lead-en sier at fila er en avhengighet. Gating-settet er som *uansett status*, og svaret er det samme
 - *Verifisere at koden er borte (`@deprecated`)*: steg 1 (letingen)
 - *Verifisere flyt*: steg 2 (overleveringene), når fila ligger under `krav/_Flyter/`. Fremdriften (steg 1) gjør lead-en
 - *Negative søk*: før du skriver `ikke funnet`, `mangler` eller «ingen spor funnet»

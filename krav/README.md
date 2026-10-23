@@ -52,7 +52,7 @@ Egenskap: Regelverkssamling
 |---|---|---|
 | `@draft` | Utkast, ikke validert. Alle nye krav starter her, eventuelt som skjelett | `fs-scope` / `fs-krav` |
 | `@planned` | Validert og klart til å bygges | `fs-krav`, etter en gjennomgang, eller når det er sagt at kravet skal ha `@planned` |
-| `@in-progress` | Hentet inn i en oppgave | `fs-specify` / `fs-specify-delta` |
+| `@in-progress` | Hentet inn i en oppgave, eller delvis levert | `fs-specify` / `fs-specify-delta`, eller `fs-verify` når noe av kravet er levert |
 | `@implemented` | Bygget, og verifisert mot koden | `fs-verify` (også direkte fra `@draft` eller `@planned`, med «Verifiser» uansett status) |
 | `@deprecated` | Levert, men skal fjernes | `fs-krav`. `fs-verify` sletter fila (eller blokken, for en del) når koden er borte |
 
@@ -236,9 +236,11 @@ Implementasjonsstatusen beveger seg langs én akse, og hvert steg har én eier:
 
 Unntaket er «Verifiser» på en egenskap eller en regel i FS Kravforvaltning: brukeren ber `fs-verify` verifisere *uansett status*. Finnes alt i koden, og brukeren bekrefter, kan `fs-verify` gi en `@draft`- eller `@planned`-egenskap statusen `@implemented` direkte, og fjerne `@draft`, `@planned` eller `@in-progress` fra en regel under en `@implemented` egenskap, så regelen er levert. Det gjelder bare det brukeren ba om, og aldri en regel under en egenskap som ikke er levert.
 
+Det andre unntaket er et krav som er delvis levert: `fs-verify` gir en `@draft`- eller `@planned`-egenskap statusen `@in-progress` når noe av den finnes i koden, også når kravet ikke er i en spesifikasjon. Se *Delvis levert*.
+
 En flyt i `krav/_Flyter` hentes ikke inn i en oppgave, og hopper over `@in-progress`: `fs-verify` gir en `@planned` flyt statusen `@implemented`. Se *Flyter*.
 
-Et krav skal ha nøyaktig én av disse på `Egenskap:`-tag-linja. Ikke sett to samtidig, og ikke la et krav stå uten status. På `Regel:`/`Scenario:` brukes `@draft` og `@deprecated`. `@planned` og `@in-progress` er bare lov på en del under en `@implemented` egenskap, når et levert krav endres (se *Endring av levert krav*). `@implemented` settes aldri på en del: en levert del har ingen egen statustag. *(sjekkes automatisk)*
+Et krav skal ha nøyaktig én av disse på `Egenskap:`-tag-linja. Ikke sett to samtidig, og ikke la et krav stå uten status. På `Regel:`/`Scenario:` brukes `@draft` og `@deprecated`. `@planned` og `@in-progress` er bare lov på en del under en `@implemented` egenskap, når et levert krav endres (se *Endring av levert krav*). `@implemented` på en del er bare lov under en `@in-progress` egenskap, for en del som er levert (se *Delvis levert*). Under en `@implemented` egenskap har en levert del ingen egen statustag. *(sjekkes automatisk)*
 
 Den tidligere taggen `@levert` er erstattet av `@implemented`. *(sjekkes automatisk)*
 
@@ -342,6 +344,39 @@ Egenskap: ...
       ...
 ```
 
+### Delvis levert
+
+Er noe av et krav levert, men ikke alt, er egenskapen `@in-progress`, og delene som er levert, er `@implemented`. Det settes av `fs-verify` når den finner delene i koden, og brukeren bekrefter.
+
+- `@implemented` står på `Regel:` når alle scenarioene i regelen er funnet, ellers på hvert `Scenario:`/`Scenariomal:` som er funnet. På et scenario under en `@implemented` regel er taggen overflødig. *(sjekkes automatisk)*
+- `@implemented` på en del er bare lov under en `@in-progress` egenskap. *(sjekkes automatisk)* Delen kombineres ikke med en annen statustag. *(sjekkes automatisk)*
+- En del som ikke er levert, har ingen statustag. Er det uklart om den skal bygges, endres eller fjernes, får den `@openquestion` og en `# ÅPNE SPØRSMÅL:` (se *Oppfølging*). `@draft`-deler står urørt.
+- Var egenskapen `@draft` eller `@planned`, setter `fs-verify` den til `@in-progress`, også når kravet ikke er i en spesifikasjon. Det står i verify-rapporten, så kravet kan hentes inn i en oppgave med `fs-specify`.
+- Når resten er levert, gir `fs-verify` egenskapen `@implemented`, og fjerner `@implemented` fra delene i samme endring.
+- En `@implemented` egenskap settes aldri tilbake til `@in-progress`. Mangler noe i et levert krav, står det i verify-rapporten.
+- En `@implemented` del er levert, og endres ikke på stedet. Skal den bort, byttes `@implemented` med `@deprecated` (*Avvikling*). Skal den endres, legges den nye delen ved siden av som `@draft`, som i *Endring av levert krav*. Når den er validert, fjernes `@draft` (delen skal bygges, som resten av egenskapen), og den gamle delen får `@deprecated`.
+- I akseptansetesten testes delene som er `@implemented`, og resten av kravet venter på verifisering.
+
+```gherkin
+@BRU-APP-API-001 @must @in-progress
+Egenskap: ...
+
+  @implemented
+  Regel: Hovedflyt som er levert
+    Scenario: ...
+
+  Regel: Varsling
+    @implemented
+    Scenario: Varsel på e-post
+      ...
+
+    @openquestion
+    Scenario: Varsel i løsningen
+      # ÅPNE SPØRSMÅL:
+      # - Ikke funnet i koden. Skal varselet i løsningen bygges, eller fjernes fra kravet?
+      ...
+```
+
 ### Scope
 
 Sier hvilket scope (og dermed hvilken oppgave) kravet hører til. Scopet er planen for et initiativ: mål, avgrensning, og oppgavene initiativet deles i, med kravene hver oppgave har. Det står i `tasks/<domene>/scope-<slug>.md` (se *Scope* i [`tasks/README.md`](../tasks/README.md)), og lages og endres med `fs-scope`.
@@ -381,12 +416,38 @@ Sier at et krav peker på et annet krav. Det er to typer, og de skiller seg på 
 
 - Formatet er `@depends-on-` eller `@ref-` og Feature-ID-en uten `@`: `@depends-on-OPT-BEH-BEH-011`. *(sjekkes automatisk)*
 - Taggen står på delen referansen gjelder: `Egenskap:`, `Regel:` eller `Scenario:`/`Scenariomal:`. Bygger hele kravet på et annet krav, står den på `Egenskap:`-tag-linja, etter eventuell `@scope-<slug>`. Taggen på `Egenskap:` gjelder alle scenarioene i kravet.
-- Taggen peker på hele kravet. Gjelder referansen én regel i kravet, skrives regeltittelen i en kommentar under taggen. Kommentaren er ellers valgfri, og forklarer referansen når det trengs.
-- Retningen gir seg av hvor taggen står. Den andre retningen, «hva bygger på dette kravet?», skrives ikke ned, men finnes med `grep`.
+- Taggen peker på hele kravet. Bygger delen bare på noen regler eller scenarioer i kravet, settes et anker i kravet det pekes på (se *Anker* under). Kommentaren under taggen er ellers valgfri, og forklarer referansen når det trengs.
+- Retningen gir seg av hvor taggen står. Den andre retningen, «hva bygger på dette kravet?», skrives ikke ned, men finnes med `grep`. Unntaket er ankeret.
 - Et krav refererer ikke til seg selv. *(sjekkes automatisk)*
 - En del har hver referanse én gang, og har enten `@depends-on-` eller `@ref-` til et krav, ikke begge. *(sjekkes automatisk)*
-- ID-en må finnes, og `@depends-on-` går ikke i ring (A → B → A). Det krever flere filer, og sjekkes av `fs-krav-avvik`.
+- ID-en må finnes, `@depends-on-` går ikke i ring (A → B → A), og regeltittelen i «…» under taggen må finnes i kravet det pekes på. Det krever flere filer, og sjekkes av `fs-krav-avvik`.
 - Taggen er ikke en statustag, og endrer ikke livsløpet.
+
+#### Anker
+
+`@depends-on-` peker på hele kravet. Bygger en del av krav A bare på noen regler eller scenarioer i krav B, får de delene i B `@ref-A`. Det er ankeret:
+
+> Har A `@depends-on-B`, og har en `Regel:` eller et `Scenario:`/`Scenariomal:` i B `@ref-A`, bygger A bare på de delene av B som har `@ref-A`. Har ingen del i B `@ref-A`, bygger A på hele B. `@ref-A` på `Egenskap:` i B betyr også hele kravet.
+
+Eksempel (ankeret finnes ikke i repoet):
+
+```gherkin
+# A: OPT-OPT-UTD-004
+  @depends-on-OPT-BEH-BEH-011
+  Regel: Opptaksforvalter kan velge saksbehandlertildelingsregel per utdanningstilbud
+
+# B: OPT-BEH-BEH-011
+  @ref-OPT-OPT-UTD-004
+  Regel: Opptaksforvalteren ved forvaltende organisasjon setter opp tildelingsreglene for opptaket
+```
+
+- Ankeret er en vanlig `@ref-`, og leses også som en henvisning: «A bygger på denne delen». Den som endrer delen, ser hvilke krav som må sjekkes, rett over delen.
+- Ankeret gjelder bare når A har `@depends-on-B`. Ellers er `@ref-A` i B en vanlig henvisning.
+- A kan være en flyt: en fase med `@depends-on-B` bygger på delene i B som har `@ref-<flytens ID>`.
+- Ankeret sier hvilket krav som bygger på delen, ikke hvilken del av A. Har A flere deler med `@depends-on-B`, bygger alle på de samme delene av B. Skal de skilles, står regeltittelen i «…» i kommentaren under taggen i A.
+- Rekkefølgen når det leses hvilken del av B som gjelder: ankeret, så regeltittelen i «…» under taggen i A, ellers hele kravet.
+- Ankeret settes av `fs-krav`, sammen med `@depends-on-`. At ankeret og regeltittelen i «…» peker på samme del, krever flere filer, og sjekkes av `fs-krav-avvik`.
+- Ankeret sier også når A kan leveres. En fase er levert når delen den bygger på, er levert: delene med ankeret, ellers regelen i «…» under taggen, ellers hele kravet (`@implemented`). Se *Flyter*.
 
 Dette er ikke referanser, og blir stående som kommentarer:
 
@@ -400,6 +461,7 @@ Referansene i begge retninger:
 |---|---|
 | Hva må sjekkes når kravet endres? | `grep -rn "@depends-on-OPT-BEH-BEH-011" krav/` |
 | Hva henger sammen med kravet? | `grep -rnE "@(depends-on\|ref)-OPT-BEH-BEH-011" krav/` |
+| Hvilke deler av kravet bygger andre krav på? | `@ref-` på `Regel:`/`Scenario:`-linjene i kravet (ankrene) |
 | Hvilke tester bygger på kravet? | `npx playwright test --grep @depends-on-OPT-BEH-BEH-011` |
 | Hvilke CDP-tester må sjekkes når kravet endres? | `grep -rn "@depends-on-OPT-BEH-BEH-011" cdp-tester/` |
 
@@ -477,8 +539,18 @@ Et brudd i overleveringen kan skjules av kravene. Testene for hvert krav setter 
 
 | Status | Kommer fra | Sier |
 |---|---|---|
-| Fremdrift | Statusen på kravene flyten bygger på | «3 av 5 faser levert» |
+| Fremdrift | Statusen på delene av kravene flyten bygger på | «3 av 5 faser levert» |
 | Flytens egen status | Taggen på flyten | at overleveringene virker i koden |
+
+En fase er levert når delen av hvert krav den bygger på, er levert, og flytene den bygger på, er `@implemented`. Delen er den samme som følges (se *Anker*): delene med ankeret, ellers regelen i «…» under taggen, ellers hele kravet. Om en del er levert, leses av taggene som i *Delvis levert* og *Endring av levert krav*:
+
+- Er kravet `@in-progress`, er delen levert når den selv er `@implemented`. En regel er levert når alle scenarioene i den er det.
+- Er kravet `@implemented`, er delen levert når den ikke er `@planned` eller `@in-progress`. Da holder den på å endres.
+- Er kravet `@draft` eller `@planned`, er ingenting levert.
+- En del som er `@draft` eller `@deprecated`, blir ikke levert. Peker ankeret på en slik del, er fasen ikke levert, og FS Kravforvaltning varsler.
+- Peker ankeret på flere deler, må alle være levert.
+
+En flyt kan derfor være `@implemented` selv om et krav den bygger på, ikke er levert som helhet. Endres delen flyten bygger på, er fasen ikke levert lenger, og FS Kravforvaltning varsler at flyten er bak kravene.
 
 Flytens egen status går `@draft` →(`fs-krav`)→ `@planned` →(`fs-verify`)→ `@implemented`. Den hentes ikke inn i en oppgave, og hopper over `@in-progress`. `fs-verify` setter `@implemented` når alle fasene er levert, og den har funnet i koden både stedet der hver overlevering lages og stedet der den brukes.
 

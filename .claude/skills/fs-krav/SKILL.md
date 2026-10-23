@@ -368,10 +368,10 @@ Finn fila, og eventuelt regelen eller scenarioet, som skal bort. Er det uklart, 
 |---------------|------------------------|------------|
 | Hele kravet | `@draft`, `@planned` eller ingen status | Ikke levert. Slett fila. |
 | Hele kravet | `@implemented` | Bytt `@implemented` med `@deprecated` på `Egenskap:`-tag-linja. Fjern eventuelle `@deprecated` på deler (de er dekket av egenskapen). |
-| Hele kravet | `@in-progress` | Spør om noe av kravet allerede er levert (fra en tidligere iterasjon). Ja → som `@implemented`. Nei → slett fila, og si fra at oppgaven som har hentet kravet inn, må oppdateres. |
+| Hele kravet | `@in-progress` | Har kravet `@implemented`-deler, er det delvis levert (*Delvis levert* i `krav/README.md`): bytt `@in-progress` med `@deprecated` på `Egenskap:`, og fjern `@implemented` og `@deprecated` fra delene. Ellers: spør om noe av kravet allerede er levert (fra en tidligere iterasjon). Ja → som `@implemented`. Nei → slett fila, og si fra at oppgaven som har hentet kravet inn, må oppdateres. |
 | Hele kravet | `@deprecated` | Allerede avviklet. Ingen endring. |
 | En regel/et scenario | `@draft` eller `@planned` | Ikke levert. Slett blokken (med tagger og kommentarer). |
-| En regel/et scenario | `@implemented` eller `@in-progress` | Er delen `@draft`, `@planned` eller `@in-progress`, er den ikke levert: slett blokken (erstatter den en `@deprecated`-del, spør om den gamle delen skal gjelde igjen, og fjern i så fall `@deprecated` og ` (avvikles)` i tittelen fra den). Ellers: legg `@deprecated` på `Regel:`-/`Scenario:`-linja. `Egenskap:`-taggen endres ikke. |
+| En regel/et scenario | `@implemented` eller `@in-progress` | Er delen `@draft`, `@planned` eller `@in-progress`, er den ikke levert: slett blokken (erstatter den en `@deprecated`-del, spør om den gamle delen skal gjelde igjen, og fjern i så fall `@deprecated` og ` (avvikles)` i tittelen fra den). Er delen `@implemented` (delvis levert, under `@in-progress`), er den levert: bytt `@implemented` med `@deprecated`. Er delen uten status under `@in-progress`, spør om den er levert fra en tidligere iterasjon (ja → `@deprecated`, nei → slett blokken). Ellers: legg `@deprecated` på `Regel:`-/`Scenario:`-linja. `Egenskap:`-taggen endres ikke. |
 
 **Mekanikk:** én `Edit` på tag-linja. Bare statustaggen byttes; feature-ID, MoSCoW og andre tagger står urørt: `@BRU-APP-API-001 @must @implemented` → `@BRU-APP-API-001 @must @deprecated`. Mangler delen en tag-linje, legg en ny linje med `@deprecated` rett over `Regel:`/`Scenario:`, med samme innrykk.
 
@@ -404,7 +404,7 @@ Finn fila og regelen eller scenarioet som skal endres. Er det uklart, spør. Les
 |------------------------|------------|
 | `@implemented` | Fortsett med D2. |
 | `@draft` eller `@planned` | Ingenting er levert. Endre delen på stedet (modus A/B). |
-| `@in-progress` | Spør om delen som endres, allerede er levert (fra en tidligere iterasjon). Nei → endre på stedet, og si fra at oppgaven som har hentet kravet inn, må oppdateres. Ja → si at dette ikke støttes: vent til egenskapen er `@implemented`, eller avklar med brukeren. |
+| `@in-progress` | Er delen `@implemented` (delvis levert, *Delvis levert* i `krav/README.md`), er den levert: legg den nye delen ved siden av som `@draft` (D2). Når den er validert, fjernes `@draft`, og den gamle delen får `@deprecated` i stedet for `@implemented`. Er delen uten status, spør om den allerede er levert (fra en tidligere iterasjon). Nei → endre på stedet, og si fra at oppgaven som har hentet kravet inn, må oppdateres. Ja → som en `@implemented` del. |
 | `@deprecated` | Kravet er avviklet. Skal det gjelde igjen, er det et nytt krav (modus A). |
 
 Hvilke deler endringen gjelder, avklares med brukeren, én om gangen: endres, fjernes eller legges til?
@@ -478,7 +478,7 @@ Finn fasene sammen med brukeren, i den rekkefølgen løpet går. Hver fase blir 
 For hver fase:
 
 1. **Finn kravene** fasen går gjennom: søk i `krav/` etter begrepene, og les kravene. Les statusen. Les ikke bare tittelen: kravet skal faktisk beskrive det som skjer i fasen.
-2. **Sett `@depends-on-<ID>`** på `Regel:`-linja for hvert krav (*Referanser mellom krav*). En fase kan bygge på en annen flyt i samme prosess med `@depends-on-FLY-…`. Gjelder referansen én regel i et stort krav, skriv regeltittelen i en kommentar under taggen.
+2. **Sett `@depends-on-<ID>`** på `Regel:`-linja for hvert krav (*Referanser mellom krav*). En fase kan bygge på en annen flyt i samme prosess med `@depends-on-FLY-…`. Bygger fasen bare på noen regler eller scenarioer i et stort krav, sett ankeret `@ref-<flytens ID>` på de delene i kravet (*Anker* i `krav/README.md`, og *Referanser mellom krav* under).
 3. **Fase uten krav:** finnes ikke kravet, skriv fasen uten `@depends-on-`, tagg den `@openquestion`, og skriv en `# ÅPNE SPØRSMÅL:` som sier hvilket krav som mangler, og hvor det kan høre hjemme. Noter det til oppsummeringen. Kravet skrives med `fs-scope` (når det hører til et initiativ) eller modus A.
 4. **Overlapp:** beskriver to eller flere krav den samme regelen, si fra. Spør hvilket krav som skal eie regelen. Ryddingen gjøres i kravene (modus B for `@draft`/`@planned`, modus D for leverte krav), ikke i flyten.
 
@@ -499,7 +499,7 @@ Fila følger malen i *Flyter* i `krav/README.md`: `# language: no`, tag-linja `@
 Oppsummer:
 
 - Stien og ID-en, og fasen i oversiktsflyten
-- **Fremdriften:** hver fase med kravene og statusen deres. En fase er levert når alle kravene er `@implemented`
+- **Fremdriften:** hver fase med kravene og statusen deres. En fase er levert når delen den bygger på, er levert: delene med ankeret, ellers regelen i «…», ellers hele kravet (*Flyter* i `krav/README.md`)
 - Faser uten krav, med forslag til `fs-scope` eller modus A
 - Overlapp som ble funnet, og kjente brudd
 - Neste steg: valider flyten med modus B (`@draft` → `@planned`). Når kravene er levert, verifiserer `fs-verify` flyten (overleveringene i koden), og setter `@implemented`. Flyten hentes ikke inn i en oppgave med `fs-specify`
@@ -510,7 +510,9 @@ Et krav peker på et annet krav med `@depends-on-<Feature-ID>` eller `@ref-<Feat
 
 - **Testen for typen:** Må denne delen sjekkes hvis kravet det pekes på, endres? Ja gir `@depends-on-`, nei gir `@ref-`. Bruker et scenario i delen en verdi eller en innstilling fra kravet («settes i X»), er det `@depends-on-`. Er du i tvil, spør.
 - **Plassering:** på delen referansen gjelder. Bygger hele kravet på et annet krav, står taggen sist på `Egenskap:`-tag-linja, etter `@scope-<slug>`. På en `Regel:` eller et `Scenario:` uten tagger lager du en ny tag-linje rett over, med samme innrykk. Har delen tagger fra før, legges referansen til sist på samme linje.
-- **Kommentaren:** stien eller filnavnet tas bort når taggen sier det samme. Det som forklarer referansen, blir stående: «Etter at opptaket er publisert, kan utdanningstilbud bare trekkes.» Gjelder referansen én regel i kravet, står regeltittelen i kommentaren.
+- **Kommentaren:** stien eller filnavnet tas bort når taggen sier det samme. Det som forklarer referansen, blir stående: «Etter at opptaket er publisert, kan utdanningstilbud bare trekkes.»
+- **Anker:** bygger delen bare på noen regler eller scenarioer i kravet B det pekes på, får de delene i B `@ref-<ID til kravet med @depends-on->` (*Anker* i `krav/README.md`). Spør brukeren hvilke deler det gjelder, og vis endringen i B før du skriver den. Ankeret settes i samme endring som `@depends-on-`, og fjernes når `@depends-on-` fjernes. Har kravet flere deler med `@depends-on-B` som bygger på ulike deler av B, skriv regeltittelen i «…» i kommentaren under hver tag i tillegg.
+- **Når en del med anker endres eller slettes** (modus B, C og D): `@ref-<ID>` på delen sier hvilke krav som bygger på den. List dem, som for `@depends-on-` på hele kravet. Flyttes eller deles delen, følger ankeret med til delen som har innholdet.
 - **Blir stående som kommentar:** historikk («flyttet hit», «skilt ut fra», «Feature-ID-en var»), krav som nevnes i `# ÅPNE SPØRSMÅL:`, og henvisninger til en mappe. Peker en historikk-kommentar på en ID som nå tilhører et annet krav, settes aldri en tag.
 - **Sjekk at ID-en finnes** før du setter taggen: `Grep "^\s*@(.*\s@)?<ID>\b"` i `krav/**/*.feature`. Har to filer samme ID, si fra, og sett ikke taggen før det er ryddet.
 - **Statusen endres ikke** av en referanse. En referanse kan settes på en levert del uten at delen får `@draft`, siden atferden er den samme.

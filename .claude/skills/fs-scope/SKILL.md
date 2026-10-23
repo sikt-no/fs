@@ -119,14 +119,14 @@ Kjøres når brukeren ber om det, eller når `fs-krav` eller `fs-specify` foresl
 - **Utsette eller endre MoSCoW:** endre MoSCoW i tabellen og MoSCoW-taggen i kravet. Utsatte krav kan stå i raden `(ikke tildelt)`.
 - **Ta et krav ut av scopet:** fjern taggen og raden. Ut fra statusen:
   - `@draft` eller `@planned`: foreslå `@wont`, eller sletting med `fs-krav` (modus C).
-  - `@in-progress`: advar om at spesifikasjonen i oppgaven som har hentet kravet inn, må oppdateres. Tavla flagger kortet.
+  - `@in-progress`: advar om at spesifikasjonen i oppgaven som har hentet kravet inn, må oppdateres. Tavla flagger kortet. Er kravet delvis levert (`@implemented`-deler), si det: de leverte delene er i koden, og fjernes med `fs-krav` (modus C).
   - `@implemented` eller `@deprecated`: fjern bare taggen.
 
 Tabellen skrives over på plass, og `Siste oppdatering` settes til dagens dato.
 
 ## Modus C — Status
 
-Ingen endringer. Per oppgave: kolonnen på tavla (se *Tavla* i `tasks/README.md`), og hvilke krav som er skjelett, `@draft`, `@planned`, `@in-progress` og `@implemented`. I tillegg:
+Ingen endringer. Per oppgave: kolonnen på tavla (se *Tavla* i `tasks/README.md`), og hvilke krav som er skjelett, `@draft`, `@planned`, `@in-progress` (og av dem delvis levert) og `@implemented`. I tillegg:
 
 - krav med taggen som ikke står i tabellen
 - rader som peker på Feature-ID-er som ikke finnes, eller på krav uten taggen eller med et annet scope

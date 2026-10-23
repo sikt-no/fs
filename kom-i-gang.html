@@ -428,7 +428,7 @@ footer .inner{padding-block:24px 48px;display:flex;flex-direction:column;gap:6px
         </div>
         <div style="grid-column:1/-1;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:16px 18px;display:flex;flex-direction:column;gap:8px">
           <span style="font-family:'IBM Plex Mono',monospace;font-size:13px;font-weight:600;background:var(--ink);color:#fff;padding:4px 10px;border-radius:6px;align-self:flex-start">fs-verify</span>
-          <span style="font-size:14px;line-height:1.5">Verifiserer koden: @in-progress → @implemented, og sletter @deprecated-krav når koden er borte. Verifiserer også flytene: at overleveringene mellom kravene virker i koden. En flyt hentes ikke inn i en oppgave, og går rett fra @planned til @implemented.</span>
+          <span style="font-size:14px;line-height:1.5">Verifiserer koden: @in-progress → @implemented, og sletter @deprecated-krav når koden er borte. Er noe av et krav levert, blir kravet @in-progress og de leverte delene @implemented. Verifiserer også flytene: at overleveringene mellom kravene virker i koden. En flyt hentes ikke inn i en oppgave, og går rett fra @planned til @implemented.</span>
         </div>
         <div style="grid-column:1/-1;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:16px 18px;display:flex;flex-direction:column;gap:10px">
           <span style="font-size:15px;font-weight:700;color:var(--fg)">Akseptansetesten</span>
@@ -551,7 +551,7 @@ footer .inner{padding-block:24px 48px;display:flex;flex-direction:column;gap:6px
             <tr><td><code>@draft</code> … <code>@deprecated</code></td><td>Status. Nøyaktig én på <code>Egenskap:</code>. Alle nye krav starter som <code>@draft</code>.</td></tr>
             <tr><td><code>@scope-&lt;slug&gt;</code></td><td>Kobler kravet til et scope og oppgaven det hører til.</td></tr>
             <tr><td><code>@depends-on-&lt;ID&gt;</code></td><td>Delen bygger på kravet. Endres det, må delen sjekkes.</td></tr>
-            <tr><td><code>@ref-&lt;ID&gt;</code></td><td>Henvisning for den som leser: «se også».</td></tr>
+            <tr><td><code>@ref-&lt;ID&gt;</code></td><td>Henvisning for den som leser: «se også». På en regel eller et scenario i kravet det bygges på, er den et anker: kravet med ID-en bygger bare på den delen.</td></tr>
             <tr><td><code>@openquestion</code></td><td>Delen har en uavklart detalj. Følges alltid av <code># ÅPNE SPØRSMÅL:</code>.</td></tr>
             <tr><td><code>@e2e</code> · <code>@integration</code></td><td>Testtype for de automatiske testene.</td></tr>
           </tbody>
@@ -617,7 +617,7 @@ footer .inner{padding-block:24px 48px;display:flex;flex-direction:column;gap:6px
       <span class="g">Så</span> får søkeren tilbud på søknadsalternativet</div>
       <div class="cols">
         <div class="box"><h3>Når er det en flyt?</h3><ul class="small"><li>Den går over minst to sub-domener eller domener.</li><li>Den har en overlevering mellom aktører eller systemer.</li><li>Den svarer på et spørsmål noen faktisk stiller.</li></ul><p class="small muted">Ellers holder det med <code>@depends-on-</code> eller <code>@ref-</code> mellom kravene.</p></div>
-        <div class="box"><h3>To statuser</h3><p class="small"><b>Fremdriften</b> kommer fra kravene: «3 av 5 faser levert». <b>Flytens egen status</b> sier at overleveringene virker i koden, og går <code>@draft</code> → <code>@planned</code> → <code>@implemented</code>. En flyt hentes ikke inn i en oppgave.</p></div>
+        <div class="box"><h3>To statuser</h3><p class="small"><b>Fremdriften</b> kommer fra kravene: «3 av 5 faser levert». En fase er levert når delen den bygger på, er levert, også når resten av kravet ikke er det. <b>Flytens egen status</b> sier at overleveringene virker i koden, og går <code>@draft</code> → <code>@planned</code> → <code>@implemented</code>. En flyt hentes ikke inn i en oppgave.</p></div>
         <div class="box"><h3>Fase uten krav</h3><p class="small">Fasen får <code>@openquestion</code> og et spørsmål om hvilket krav som mangler. Kravet skrives med fs-scope eller fs-krav.</p></div>
       </div>
     </div>
@@ -642,7 +642,7 @@ footer .inner{padding-block:24px 48px;display:flex;flex-direction:column;gap:6px
     <div class="body">
       <p>Et krav får <code>@planned</code> bare når det er validert: gått gjennom med domeneeksperten, eller når det er sagt eksplisitt at kravet skal ha <code>@planned</code>. Et krav uten status regnes som ikke validert.</p>
       <ol>
-        <li><b>Se etter avvik.</b> fs-krav-avvik sjekker det som krever skjønn: ordlyd, terminologi, listevisningsmønsteret, referanser som ikke finnes, og faser uten krav i flytene. Den retter bare ren ordlyd, og bare når du sier ja.</li>
+        <li><b>Se etter avvik.</b> fs-krav-avvik sjekker det som krever skjønn: ordlyd, terminologi, listevisningsmønsteret, referanser og regeltitler som ikke finnes, og faser uten krav i flytene. Den retter bare ren ordlyd, og bare når du sier ja.</li>
         <li><b>Gå gjennom mappa.</b> fs-krav i modus B tar utkastene ett spørsmål om gangen, og lukker de åpne spørsmålene.</li>
         <li><b>Det som er bekreftet, får <code>@planned</code>.</b> Det som fortsatt er uklart, blir stående som <code>@draft</code>, med spørsmålene dokumentert.</li>
       </ol>
@@ -732,12 +732,14 @@ footer .inner{padding-block:24px 48px;display:flex;flex-direction:column;gap:6px
     </div>
     <div class="body">
       <p>fs-verify leter etter implementasjonen av hvert scenario i lokale kloner av kode-repoene, og viser bevis med <code>fil:linje</code>. En kontrollør (subagenten fs-verify-kontroll) sjekker hvert svar uavhengig før du blir spurt. Når alt er funnet og du sier ja, blir kravet <code>@implemented</code>. Er det mange feature-filer, gjør fs-verify-agent-teams det samme med flere finnere parallelt.</p>
+      <p>Før letingen spør fs-verify hva som skal verifiseres: <code>@in-progress</code>, <code>@deprecated</code>, flyter, alle krav uansett status, eller noe annet. Den spør også hvor mange nivåer med <code>@depends-on-</code> som skal følges. Avhengighetene vises med status, og kan også verifiseres i koden, men de får aldri ny status.</p>
+      <p>Rapporten skrives til fil før du blir spurt, og hvert spørsmål viser kravet og koden det gjelder. Er noe av et krav levert, blir kravet <code>@in-progress</code>, og delene som er levert, <code>@implemented</code>. Gir du fs-verify en verify-rapport, går den gjennom resultatene med deg: det som er usikkert eller ikke funnet, og de åpne spørsmålene.</p>
       <div class="cols">
         <div class="box"><h3>Gating-settet</h3><p class="small">Scenarioene som sjekkes: alle som ikke er tagget <code>@draft</code>, <code>@deprecated</code> eller <code>@demo</code>. Et scenario med bare <code>@openquestion</code> er med, og spørsmålet står i rapporten. Det samme settet brukes i akseptansetesten.</p></div>
         <div class="box"><h3>Når noe mangler</h3><p class="small">Statusen blir stående. Steget i repoet der koden mangler, settes tilbake til <code>pågår</code> i <code>utforing.md</code>, med <code>Tilbake: &lt;dato&gt;</code>.</p></div>
         <div class="box"><h3>Flyter og avviklede krav</h3><p class="small">For en flyt finner den både stedet der tilstanden lages og der den brukes. Et <code>@deprecated</code>-krav slettes når koden er borte, sammen med referansene til det.</p></div>
       </div>
-      <p class="note">Verifiseringen er også første steg i akseptansetesten. Rapporten er grunnlaget for testplanen: det som er <code>@implemented</code>, er det som testes. Et scope, en oppgave eller en testplan tar også med flytene som går gjennom kravene.</p>
+      <p class="note">Verifiseringen er også første steg i akseptansetesten. Rapporten er grunnlaget for testplanen: det som er <code>@implemented</code>, er det som testes, også de leverte delene i et krav som er delvis levert. Et scope, en oppgave eller en testplan tar også med flytene som går gjennom kravene.</p>
     </div>
     <aside class="facts">
       <dl>
@@ -783,7 +785,7 @@ footer .inner{padding-block:24px 48px;display:flex;flex-direction:column;gap:6px
             <tr><td>Testbeskrivelse</td><td>Hva er levert, versjon, testmiljø, flagg, kilde, scope, saker, kjente begrensninger. Testbrukere og testdata.</td></tr>
             <tr><td>Omfang</td><td>Kravene som er <code>@implemented</code>, per oppgave eller kapabilitet, med Feature-ID og antall scenarioer.</td></tr>
             <tr><td>Flyter</td><td>Flytene som går gjennom kravene, om hele eller deler testes, og én rad per fase.</td></tr>
-            <tr><td>Venter på verifisering</td><td>Krav som er <code>@in-progress</code>, med det verify-rapporten sier mangler.</td></tr>
+            <tr><td>Venter på verifisering</td><td>Krav som er <code>@in-progress</code>, og delene som ikke er levert i et krav som er delvis levert, med det verify-rapporten sier mangler.</td></tr>
             <tr><td>Ikke med i denne testen</td><td>Det som faller ut, med grunnen.</td></tr>
             <tr><td>Forutsetninger</td><td>Miljø, testdata, testbrukere, verifiseringen, testcasene, innloggingen, og kjente brudd i flytene.</td></tr>
             <tr><td>Kriterier for godkjent</td><td>Skrives av testansvarlig, helst før utviklingen starter.</td></tr>

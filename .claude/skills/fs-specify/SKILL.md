@@ -91,7 +91,7 @@ Kravene kopieres ikke. Spesifikasjonen lenker til fila under `krav/` med Feature
 
 En `.feature`-fil passerer hvis `Egenskap:`-tag-linja har **`@planned` eller `@in-progress`**, eller hvis kravet er avviklet (se _`@deprecated`-krav og -deler_ under). Andre tags på enkelt-`Regel:`/`Scenario:` påvirker ikke om fila passerer — med unntak av `@draft` og `@deprecated`, se _`@draft`-deler_ og _`@deprecated`-deler_ under.
 
-- `@in-progress` må passere fordi skillen selv setter den (se _Retagg_). Ellers ville en ny kjøring mot samme krav filtrert bort alt.
+- `@in-progress` må passere fordi skillen selv setter den (se _Retagg_). Ellers ville en ny kjøring mot samme krav filtrert bort alt. Et `@in-progress` krav kan også være delvis levert (`fs-verify`, se *Delvis levert* i `krav/README.md`): delene som er `@implemented`, er levert, og er ikke med i scope. Resten bygges.
 - `@implemented` passerer **ikke** — kravet er levert; en ny iterasjon går via `fs-krav` (modus D). Unntak: har fila `@planned`-, `@in-progress`- eller `@deprecated`-deler, passerer den med bare de delene (se _Deler i leverte krav som endres_ under).
 - `@deprecated` passerer — kravet er avviklet, og spec-en er en bestilling om å fjerne koden (se *Avvikling* i `krav/README.md`).
 - `@draft` og utaggede passerer ikke.

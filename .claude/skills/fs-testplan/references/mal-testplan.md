@@ -14,7 +14,7 @@ Fila skrives til `akseptansetest/<testplan-slug>/testplan.md`. Alt over den før
 - **Scope**: @scope-<slug>[, @scope-<slug> …] | –   (scope-id-ene kravene har)
 - **Scope-fil**: [scope-<slug>](../../tasks/<domene>/scope-<slug>.md)[, …]   (når kravene har scope)
 - **Oppgaver**: [<domene>/<slug>](../../tasks/<domene>/<slug>/oppgave.md)[, …]   (når det finnes oppgaver)
-- **Krav**: <N> feature-filer, <N> `@implemented`, <N> flyter, commit `<sha>` (<YYYY-MM-DD>)
+- **Krav**: <N> feature-filer, <N> `@implemented`, <N> delvis levert, <N> flyter, commit `<sha>` (<YYYY-MM-DD>)
 - **Verifisering**: [verify-<YYYY-MM-DD>-<HHMM>.md](<sti til rapporten>)[, …] | –   (verify-rapportene testplanen bygger på)
 - **Confluence**: –
 - **Laget**: <YYYY-MM-DD> av fs-testplan
@@ -69,7 +69,7 @@ Kolonnene for CDP står bare i testplanen, ikke i testcasene for den eksterne te
 
 ## Omfang
 
-Det som testes, er kravene som er `@implemented`. Feature-ID-ene her er kravene resten av testflyten bruker.
+Det som testes, er kravene som er `@implemented`, og de leverte delene i krav som er delvis levert. Feature-ID-ene her er kravene resten av testflyten bruker.
 
 <Én underseksjon per gruppe: per oppgave i scope-tabellen (scope), per kapabilitetsmappe i rekkefølgen i `krav/` (mappe). Én oppgave eller enkeltfiler: bare tabellen, uten underseksjon.>
 
@@ -77,7 +77,7 @@ Det som testes, er kravene som er `@implemented`. Feature-ID-ene her er kravene 
 
 | Krav | Feature-ID | Status | Scenarioer i testen |
 |---|---|---|---|
-| [<tittel>](<lenke til GitHub på commiten>) | `@DOM-SUB-KAP-NNN` | `@implemented` | <N> |
+| [<tittel>](<lenke til GitHub på commiten>) | `@DOM-SUB-KAP-NNN` | `@implemented` \| `@in-progress` (delvis levert) | <N> |
 
 Åpent spørsmål: `@DOM-SUB-KAP-NNN` «<scenario eller regel>»: <spørsmålet>. Testes som det står.   [én linje per scenario eller regel i testen med `@openquestion`]
 
@@ -102,7 +102,7 @@ Ingen av kravene er med i en flyt.                                     <når det
 
 ## Venter på verifisering
 
-Kravene er laget, men `fs-verify` har ikke funnet alt ennå. De tas med i testen når de er `@implemented`.
+Kravene er laget, men `fs-verify` har ikke funnet alt ennå. De tas med i testen når de er `@implemented`. For et krav som er delvis levert, står delene som ikke er levert, her.
 
 | Krav | Feature-ID | Status | Hva som venter |
 |---|---|---|---|

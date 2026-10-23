@@ -154,6 +154,7 @@ Test-fil-kilde (uten diff): tag-en på fila slik den er.
 - Et krav eller en del som *blir* `@deprecated` i endringen, listes med lenke til før-tilstanden, så det er tydelig hva som var levert.
 - Et krav eller en del som allerede var `@deprecated`, og ligger i en fil som er med i endringen, listes også. Da trengs ingen før-lenke.
 - En `@implemented` fil i endringen passerer bare med sine `@deprecated`-deler, og med `@planned`-/`@in-progress`-deler (se under).
+- En `@in-progress` fil med `@implemented`-deler er delvis levert (*Delvis levert* i `krav/README.md`): de leverte delene er ikke med i scope, som i `fs-specify`.
 
 **Deler i leverte krav som endres** håndteres som i [`fs-specify` → _Deler i leverte krav som endres_](../fs-specify/SKILL.md#deler-i-leverte-krav-som-endres): egenskapen står som `@implemented`, `@planned`/`@in-progress`-deler skal bygges, og `@deprecated`-delen de erstatter, skal fjernes. For diff-kilder gjelder **etter**-tilstanden per del:
 

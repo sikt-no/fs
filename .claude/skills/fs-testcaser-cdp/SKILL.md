@@ -16,7 +16,7 @@ Du gjør kravene om til varige tester som en agent kan kjøre i Chrome, uten å 
 
 Steget er valgfritt i akseptansetestflyten (steg 4b i [`akseptansetest/README.md`](../../../akseptansetest/README.md)), og kan også kjøres manuelt.
 
-- **Kravene er fasit for hva som testes.** Testene dekker gating-settet som er `@implemented`, i rekkefølgen i feature-fila. Endre aldri kravene eller taggene i `krav/`. Er et scenario ikke testbart som det står (uklart, mangler forventet resultat, motsier koden), noter det i «Ikke kjørbart», og foreslå `fs-krav`.
+- **Kravene er fasit for hva som testes.** Testene dekker gating-settet som er `@implemented` (også de leverte delene i et krav som er delvis levert), i rekkefølgen i feature-fila. Endre aldri kravene eller taggene i `krav/`. Er et scenario ikke testbart som det står (uklart, mangler forventet resultat, motsier koden), noter det i «Ikke kjørbart», og foreslå `fs-krav`.
 - **Testene er varige.** De overlever testplaner og akseptansetester. Derfor har de nøkler for testbruker og testdata, aldri navn, Feide-ID eller `testbruker <nr>`, og ingen miljø-URL.
 - **Samme grunnlag som resten av flyten.** Roller og testdata kommer fra testplanen, eller fra de samme spørsmålene når den mangler: [`.claude/references/akseptansetest/roller-og-testdata.md`](../../references/akseptansetest/roller-og-testdata.md). Spør aldri teamet om noe testplanen allerede svarer på.
 - **Gjett aldri det bare teamet vet.** Det som mangler, står som `[Fylles ut: <hva>]`, og scenarioet kjøres ikke før det er utfylt.
@@ -60,7 +60,7 @@ Er det uklart, spør (`AskUserQuestion`).
 
 ## 2. Finn scenarioene og ordene
 
-1. Kravene og gating-settet per krav, som i `krav-fra-testplan.md`. Bare krav som er `@implemented` (og de leverte delene i et endret krav) blir tester. Manuelt på et krav som ikke er `@implemented`: si det, og spør om det skal lages likevel (testen kjøres ikke før kravet er levert).
+1. Kravene og gating-settet per krav, som i `krav-fra-testplan.md`. Bare krav som er `@implemented` (og de leverte delene i et endret krav, og `@implemented`-delene i et krav som er delvis levert) blir tester. Manuelt på et krav som ikke er `@implemented`: si det, og spør om det skal lages likevel (testen kjøres ikke før kravet er levert).
 2. Les verify-rapporten for kravene når den finnes. Et scenario som er `ikke funnet` eller `usikker` der, kommer i «Ikke kjørbart» til teamet har svart.
 3. **Ordene fra skjermen:** `testcaser-intern.md` når den finnes (ordene og verdiene, uten avhengighetene mellom casene), `<feature>.design.md` og skissene, og koden (fs-admin for saksbehandlere og forvaltere, min-kompetanse for søkeren): menyer, ruter, felt, knapper, `Så`-tekster og feilmeldinger. Se *Lese koden* i `roller-og-testdata.md`. Merk det du ikke finner, `[Sjekk begrep]`.
 4. **Flytene.** Fra flyten: flytene i «Flyter» i testplanen. Manuelt: flytene som går gjennom kravene (*Finn flytene* i `krav-fra-testplan.md`), eller flyten brukeren oppga. Hvilke scenarioer som blir tester, avgjøres etter *Hele eller deler av flyten* i den samme fila. Det som ikke blir test, står i «Ikke kjørbart» med grunnen («fasen er ikke levert», «overleveringen er ikke funnet»).
@@ -107,7 +107,7 @@ Sjekkliste før du viser fram:
 
 Finnes testfila fra før:
 
-1. Sammenlign blob-hashen i headeren med kravfila nå. Er de like, og ingen nye `@implemented`-scenarioer er kommet til, er det ingenting å gjøre.
+1. Sammenlign blob-hashen i headeren med kravfila nå. Er de like, og ingen nye `@implemented`-scenarioer er kommet til (heller ikke nye `@implemented`-deler i et krav som er delvis levert), er det ingenting å gjøre.
 2. Ellers, list hva som er endret i kravet: nye, endrede og fjernede `Regel:` og `Scenario:`, med titlene (`git diff <commit-i-headeren>..origin/main -- <kravfila>`).
 3. Vis forslaget som en diff mot testfila. Scenarioer som er rettet for hånd (andre steg enn skillen ville skrevet), nevnes, og skrives aldri over uten ja.
 4. Skriv det brukeren godkjenner, og oppdater headeren (commit, hash, dato) og «Krever» og «Ikke kjørbart».

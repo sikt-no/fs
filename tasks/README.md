@@ -214,6 +214,8 @@ Hvert steg på tag-aksen har én eier:
 
 Endres et krav som er levert, blir `Egenskap:` stående som `@implemented`, og den samme aksen går på delen (`Regel:`/`Scenario:`) som endres: den nye delen går `@draft` → `@planned` → `@in-progress` → levert, og delen den erstatter, får `@deprecated`. Se *Endring av levert krav* i `krav/README.md`.
 
+Er noe av et krav levert, men ikke alt, setter `fs-verify` egenskapen til `@in-progress` og de leverte delene til `@implemented`, også når kravet ikke er i en spesifikasjon. Se *Delvis levert* i `krav/README.md`.
+
 Se [`krav/README.md`](../krav/README.md) for den autoritative definisjonen av taggene.
 
 Review skjer i PR-en som endrer oppgavemappa eller kravene. BAT-stegene (`bat-analyze`, `bat-plan`, `bat-execute`, `bat-verify`) er valgfrie, og skriver i `<lag>/`. `Fase` i `oppgave.md`, `roadmap.md`, `design.md` og `reviews/` er valgfrie. De brukes av `fs-oppgave` utenfor dette repoet, og leses ikke av FS Kravforvaltning.

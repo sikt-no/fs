@@ -28,7 +28,7 @@ Testrapport for «<leveranse>». <Én setning: hva rapporten bygger på (verifis
 | Felt | Innhold |
 |---|---|
 | Scenarioer | <N> funnet, <N> ikke funnet, <N> usikker, av <N>   (bare kravene, ikke radene for flytene) |
-| Krav levert (`@implemented`) | <N> av <N> |
+| Krav levert (`@implemented`) | <N> av <N>, og <N> delvis levert |
 | Åpne spørsmål som står igjen | <N> i scenarioene i testen (stopper ikke testen), eller «Ingen» |
 | Overleveringer i flytene | <N> funnet, av <N> i testplanen (en `@implemented` flyt teller som funnet), eller «Ingen flyter» |
 | Kontrollert av | [Fylles ut av teamet] (en annen enn den som kjørte `fs-verify`) |
@@ -48,7 +48,7 @@ Testrapport for «<leveranse>». <Én setning: hva rapporten bygger på (verifis
 <verifisering: fra «Oversikt per krav» eller «Scenarioer» i verify-rapporten>
 | Oppgave | Krav | Funnet | Ikke funnet | Usikker | Status |
 |---|---|---|---|---|---|
-| <oppgave> | [<tittel>](<lenke>) | <n> | <n> | <n> | `@implemented` / `@in-progress` |
+| <oppgave> | [<tittel>](<lenke>) | <n> | <n> | <n> | `@implemented` / `@in-progress` (delvis levert) / `@in-progress` |
 
 <intern: per oppgave, krav og regel, som testcasene. En flyt står etter kravene, med flyten i «Krav» og fasen i «Regel»>
 | Oppgave | Krav | Regel | Bestått | Ikke bestått | Ikke testet |

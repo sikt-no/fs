@@ -1,5 +1,25 @@
 # krav-viewer
 
+## 1.8.0
+
+### Minor Changes
+
+- 5b13ff5: Flyter følger ankeret: har en regel eller et scenario i kravet en fase (eller et krav i kjeden) bygger på, `@ref-<ID-en som peker på kravet>`, følges bare de delene av kravet. Kortet og treet viser delene med `@ref-`, og et klikk åpner kravet på den første av dem. Uten anker brukes regelen i «…» i kommentaren under taggen, som før. For et scenario følges også `@depends-on-` på regelen over. «Følg» heter nå «Bare delen fasen bygger på» (standard) og «Hele kravet».
+- 5909625: Flyter: en fase er levert når delen den bygger på, er levert, ikke først når hele kravet er det. Delen er ankeret (`@ref-<flytens ID>`), ellers regelen i «…» under taggen, ellers hele kravet. Fremdriften, fasene, kjedestatusen og matrisen regnes fra delen (matrisen og kjeden fra hele kravet med «Følg: Hele kravet»). Fremdriften viser krav levert for flyten, og hvor mange av dem som er levert som helhet. Nytt varsel når ankeret peker på en del som er utkast eller avviklet, og «flyten bak kravene» sammenligner med delen flyten bygger på.
+
+## 1.7.0
+
+### Minor Changes
+
+- 907dc79: Ny visning «Flyter» (fjerde knapp i toppfeltet) viser flytene i `krav/_Flyter`: fremdriften og flytens egen status hver for seg, fasene som tidslinje (oversiktsflyten som svømmebane), kravene hver fase bygger på, og overleveringene. Velg hvor mange nivåer med `@depends-on-` som skal følges (1, 2, 3 eller alle), og om hele kravet eller bare regelen fasen bygger på skal følges, så alle avhengighetene i flyten kan avdekkes. Fanene «Kravene i flyten», «Per domene» og «Matrise» viser hva som må være levert, per team og per fase. Hele krav som er levert, skilles fra regler og scenarioer som er levert i et krav som er delvis levert (`@implemented` på delen under en `@in-progress` egenskap): fremdriften viser begge, kravene merkes «delvis levert», «Kravene i flyten» har kolonnen «Levert», og matrisen teller krav: et krav gjenstår til hele kravet er levert, siden `@depends-on-` peker på hele kravet. Varslene (faser uten krav, brutte referanser, avviklede krav, ring, kjente brudd) regnes alltid med alle nivåer. I Krav har en flyt lenken «Vis flyten», og et krav en flyt bygger på, «Med i N flyter».
+- 907dc79: Tannhjulet rett etter menyen i toppfeltet velger hvilke visninger som vises. Krav og Flyter er alltid med. Avvik og Oppgaver er skjult som standard, og slås på med tannhjulet. Skjuler du visningen du står i, går visningen til Krav. Valget lagres på maskinen.
+
+## 1.6.3
+
+### Patch Changes
+
+- 500e5dc: `@implemented` på en regel eller et scenario under en `@in-progress` egenskap gir ikke lenger avvik: det betyr at delen er levert, mens resten av kravet ikke er det (*Delvis levert* i `krav/README.md`). Under andre egenskaper, på et scenario under en `@implemented` regel, og sammen med en annen statustag på delen gir det fortsatt avvik.
+
 ## 1.6.2
 
 ### Patch Changes
