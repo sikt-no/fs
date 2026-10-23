@@ -19,17 +19,21 @@ Bunnen av modalen har «Avbryt» og primærknappen «Tildel roller».
 ### Én organisasjon
 
 Administrerer administratoren bare én organisasjon, er feltet så normalt som mulig: en vanlig, aktiv nedtrekksliste der organisasjonen er forhåndsvalgt. Administratoren kan åpne listen og se at det ikke finnes andre valg, slik det ville vært med flere organisasjoner. Feltet er **ikke** deaktivert, for det ser ut som en feil eller som om noe mangler.
+
 ## Interaksjonsmønstre
 
 ### Primærhandling
-«Tildel roller» er aktiv når organisasjon, miljø og minst én rolle er valgt. Mens tildelingen pågår, står det «Tildeler …» på knappen, og begge knappene er deaktivert.
+Knappen «Tildel roller» i modalen kan trykkes når organisasjon, miljø og minst én rolle er valgt. Når administratoren trykker på den, lagres tildelingene. Mens det lagres, står det «Tildeler …» på knappen, og administratoren kan ikke trykke på «Tildel roller» eller «Avbryt».
+
+- Blir alle rollene tildelt, lukkes modalen, og administratoren er tilbake på fanen Roller. Listen over roller oppdateres automatisk med de nye rollene, og kvitteringen vises.
+- Blir noen av rollene ikke tildelt, blir modalen stående, og utfallet vises per rolle (se *Delvis suksess* under *Tilstander*).
 
 ### Sekundære handlinger
-- «Avbryt» lukker modalen og nullstiller valgene.
-- Endres organisasjonen, nullstilles miljøet. Endres organisasjonen eller miljøet, nullstilles rollene som er valgt.
+- Når administratoren trykker på «Avbryt», lukkes modalen uten at noe lagres, og valgene nullstilles.
+- Når administratoren velger en annen organisasjon, nullstilles miljøet og rollene som er valgt. Når administratoren velger et annet miljø, nullstilles rollene som er valgt.
 
 ### Navigasjon
-Detaljsiden for personbrukeren → fanen Roller → «Tildel roller». Når alle rollene er tildelt, lukkes modalen, og listen over roller oppdateres.
+Administratoren åpner modalen ved å trykke på «Tildel roller» over listen på fanen Roller, på detaljsiden for personbrukeren. Etter at rollene er lagret, eller administratoren har trykket på «Avbryt», er administratoren tilbake på fanen Roller.
 
 ## Tilstander
 
@@ -42,7 +46,7 @@ Detaljsiden for personbrukeren → fanen Roller → «Tildel roller». Når alle
 | Henter roller | Feltet Roller er deaktivert, med hjelpeteksten «Henter …» |
 | Ingen roller å tildele | Feltet Roller er deaktivert, med hjelpeteksten «Ingen roller å tildele i denne kombinasjonen.» |
 | Rolle allerede tildelt | Rollen står i listen, men kan ikke velges, og har «allerede tildelt» under. Gjelder bare roller som er tildelt direkte. En arvet rolle kan tildeles direkte |
-| Suksess (alle tildelt) | Modalen lukkes, og en kvittering vises |
+| Suksess (alle tildelt) | Modalen lukkes, listen over roller på fanen Roller oppdateres automatisk, og kvitteringen vises |
 | Delvis suksess | Modalen blir stående. Utfallet vises per rolle i tre grupper: tildelt, ikke bekreftet og ikke tildelt (med årsak). Valgene nullstilles |
 | Feil for alle | Feilmeldingen vises én gang i modalen |
 
@@ -76,7 +80,7 @@ Hjelpetekster, feilmeldinger, bekreftelser og andre tekster med variasjoner. Det
 Organisasjonen er forhåndsvalgt i et vanlig felt som kan åpnes, ikke i et deaktivert felt (se *Én organisasjon*). Miljø er det første feltet administratoren må velge i.
 
 ### Scenario: Personbrukerens hjemorganisasjon er forhåndsvalgt
-Hjemorganisasjonen er valgt når modalen åpnes. «Avbryt» og ny åpning setter den tilbake.
+Hjemorganisasjonen er valgt når modalen åpnes. Velger administratoren en annen organisasjon, trykker på «Avbryt» og åpner modalen igjen, er hjemorganisasjonen valgt på nytt.
 
 ### Scenario: Allerede tildelt rolle vises som ikke-valgbar
 Gjelder roller som er tildelt direkte for kombinasjonen av organisasjon og miljø. Arvede roller kan velges.
