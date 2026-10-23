@@ -1497,6 +1497,7 @@ body.resizing iframe, body.resizing .main { pointer-events: none; }
 .fl-table.krav [role="row"] { grid-template-columns: 110px minmax(0, 2.2fr) minmax(0, 1.6fr) minmax(0, 1fr) 46px minmax(0, 1fr) minmax(0, 1.1fr) minmax(0, 1fr) minmax(0, 1.3fr); }
 .fl-forflow a { display: flex; align-items: baseline; gap: 5px; color: var(--ink2); line-height: 1.35; }
 .fl-forflow a:hover { color: var(--acc); }
+.fl-forflow a .t { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .fl-forflow .fl-dot { flex-shrink: 0; transform: translateY(-1px); }
 .fl-table .partial { color: var(--st-implemented); }
 .fl-table.dom [role="row"] { grid-template-columns: minmax(0, 2.2fr) 70px 70px minmax(200px, 1.3fr) minmax(0, 1.4fr) minmax(0, 1fr); align-items: center; }

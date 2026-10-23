@@ -1088,11 +1088,15 @@ function ForFlow({ ix, k, follow, onOpen }: { ix: FlowIndex; k: FlatKrav; follow
   const pc = partCount([k]);
   const parts = [...k.parts.values()].sort((a, b) => a.ln - b.ln);
   const whole = parts.length === 1 && parts[0].part === 'feature';
-  const unit = whole ? '' : follow === 'part' ? (pc.total === 1 ? ' del' : ' deler') : pc.total === 1 ? ' regel' : ' regler';
+  // Følges hele kravet (fra minst én fase), er delene alle reglene: da står bare tallet
+  const all = follow === 'whole' || k.whole;
+  const unit = whole ? '' : !all ? (pc.total === 1 ? ' del' : ' deler') : pc.total === 1 ? ' regel' : ' regler';
   return (
     <span class="k fl-forflow">
-      <span class={'small' + (pc.done === pc.total ? ' partial' : '')}>{whole ? (pc.done ? 'hele kravet' : 'hele kravet, ikke levert') : `${pc.done} av ${pc.total}${unit}`}</span>
-      {follow === 'part' &&
+      <span class={'small' + (pc.done === pc.total ? ' partial' : '')}>
+        {whole ? (pc.done ? 'hele kravet' : 'hele kravet, ikke levert') : `${pc.done} av ${pc.total}${unit}${all && follow === 'part' ? ' · hele kravet' : ''}`}
+      </span>
+      {!all &&
         !whole &&
         parts.map(pt => (
           <a
@@ -1105,7 +1109,7 @@ function ForFlow({ ix, k, follow, onOpen }: { ix: FlowIndex; k: FlatKrav; follow
             }}
           >
             <Dot c={stColor(pt.status)} z={6} />
-            {pt.name}
+            <span class="t">{pt.name}</span>
           </a>
         ))}
     </span>
