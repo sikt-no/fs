@@ -1552,6 +1552,8 @@ body.resizing iframe, body.resizing .main { pointer-events: none; }
 /* Lenkene i metalinja i Krav */
 .meta .flowlink { font-family: var(--mono); font-size: 12px; color: var(--acc); background: none; border: 0; padding: 0; cursor: pointer; }
 .meta .flowlink:hover { text-decoration: underline; }
+.flowlink.part { font-family: var(--mono); font-size: 11px; color: var(--acc); background: none; border: 0; padding: 0 2px; cursor: pointer; white-space: nowrap; }
+.flowlink.part:hover, .flowlink.part:focus-visible { text-decoration: underline; }
 
 @media (max-width: 1100px) { .flyter, .flyter.noside { grid-template-columns: 250px minmax(0, 1fr); } .flyter.noside { grid-template-columns: minmax(0, 1fr); } .fl-outline { display: none; } }
 @media (max-width: 760px) {

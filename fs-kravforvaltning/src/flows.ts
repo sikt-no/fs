@@ -630,6 +630,26 @@ export interface FlatKrav {
   parts: Map<number, FlowPart & { phases: Set<number> }>;
 }
 
+/**
+ * Fasene i flytene som bygger på hver del av kravet `id`, på linja i kravet: delene med ankeret til flyten, ellers
+ * reglene i «…» under taggen på fasen. Fasene som bygger på hele kravet, er ikke med (de står i `through`)
+ */
+export function phasesOfParts(ix: FlowIndex, id: string): Map<number, { flow: Flow; phase: FlowPhase }[]> {
+  const out = new Map<number, { flow: Flow; phase: FlowPhase }[]>();
+  for (const t of ix.through.get(id) ?? []) {
+    const flow = ix.byId.get(t.flow)!;
+    const phase = flow.phases[t.phase - 1];
+    for (const l of phase.links)
+      if (l.id === id && l.focus)
+        for (const pt of partsOf(ix, id, l.focus)) {
+          const arr = out.get(pt.ln) ?? [];
+          if (!arr.some(x => x.flow === flow && x.phase === phase)) arr.push({ flow, phase });
+          out.set(pt.ln, arr);
+        }
+  }
+  return out;
+}
+
 /** Delene i `list` flyten bygger på, og hvor mange av dem som er levert. Med `phase` bare delene i den fasen */
 export function partCount(list: FlatKrav[], phase?: number) {
   let total = 0;

@@ -46,6 +46,8 @@ interface Props {
   depth: Depth;
   onSelect: (path: string | null) => void;
   onDepth: (d: Depth) => void;
+  /** Fasen som skal vises (fra «Fase N i <flyt>» i Krav); `seq` gjør at samme fase kan vises igjen */
+  goPhase?: { n: number; seq: number } | null;
   /** Åpner en fil i Krav, eventuelt på en linje */
   onOpen: (path: string, line?: number) => void;
   sideHidden: boolean;
@@ -153,7 +155,7 @@ const WARN_LABEL: Record<FlowWarning['kind'], string> = {
   break: 'kjent brudd',
 };
 
-export function Flyter({ ix, path, depth, onSelect, onDepth, onOpen, sideHidden, outlineHidden }: Props) {
+export function Flyter({ ix, path, depth, onSelect, onDepth, goPhase, onOpen, sideHidden, outlineHidden }: Props) {
   const flow = path ? (ix.flows.find(f => f.path === path) ?? null) : null;
   const [q, setQ] = useState('');
   const [closed, setClosed] = useState<Record<string, boolean>>({});
@@ -203,6 +205,12 @@ export function Flyter({ ix, path, depth, onSelect, onDepth, onOpen, sideHidden,
     setTab('phases');
     setTimeout(() => scrollToPhase(n), 40);
   };
+  // Fra «Fase N i <flyt>» i Krav: etter at flyten er valgt (og visningen har gått øverst)
+  useEffect(() => {
+    if (!goPhase) return;
+    const t = setTimeout(() => toPhase(goPhase.n), 80);
+    return () => clearTimeout(t);
+  }, [goPhase?.seq]);
   const goSeen = (phase: number, id: string) => {
     toPhase(phase);
     setFlash(id);

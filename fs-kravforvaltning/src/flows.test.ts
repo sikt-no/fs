@@ -16,6 +16,7 @@ import {
   focusLn,
   parseFlyterHash,
   partCount,
+  phasesOfParts,
   partStatus,
   phaseStatus,
   progress,
@@ -456,6 +457,16 @@ test('et scenario med ankeret som ikke står under en regel, er en del', () => {
   const list = flatKrav(ix3, f, flowTree(ix3, f, 'part'), 1);
   assert.deepEqual([...list[0].parts.values()].map(p => [p.part, p.name, p.rule]), [['scenario', 'Uten regel', null]]);
   assert.deepEqual(partCount(list), { total: 1, done: 0, open: 1 });
+});
+
+test('fasene som bygger på hver del av kravet', () => {
+  const k = six.krav.get('OPT-BEH-BEH-030')!;
+  const m = phasesOfParts(six, 'OPT-BEH-BEH-030');
+  const of = (ln: number) => (m.get(ln) ?? []).map(x => x.phase.n);
+  assert.deepEqual(of(k.rules[0].ln), [1, 3, 4]); // R1
+  assert.deepEqual(of(k.rules[1].ln), [2, 3, 4]); // R2
+  assert.deepEqual(of(k.rules[3].ln), []); // R4 har ikke ankeret, og fase 3 faller tilbake til alle ankrene
+  assert.deepEqual(of(k.scenarios.find(s => s.name === 'S3')!.ln), [1, 3, 4]);
 });
 
 test('uten anker følges alle reglene i «…», ikke bare den første', () => {

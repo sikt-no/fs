@@ -243,9 +243,11 @@ interface Props {
   onVerifyTeam?: (screenshots: boolean) => void;
   /** «Vis flyten» på en flyt, «Med i N flyter» på et krav flytene bygger på; åpner Flyter */
   flowLink?: { label: string; title?: string; onClick: () => void };
+  /** «Fase N i <flyt>» på en regel eller et scenario en fase i en flyt bygger på (linja i kravet); åpner fasen i Flyter */
+  partFlows?: (ln: number) => { label: string; title: string; onClick: () => void }[];
 }
 
-export function FeatureView({ entry, collapsed, flash, lineNumbers, mark, mainRef, onToggle, find, findClosed, onFindClose, onLine, onEdit, onDelete, onVerify, onVerifyTeam, flowLink }: Props) {
+export function FeatureView({ entry, collapsed, flash, lineNumbers, mark, mainRef, onToggle, find, findClosed, onFindClose, onLine, onEdit, onDelete, onVerify, onVerifyTeam, flowLink, partFlows }: Props) {
   const f = entry.model;
   const hit = (from: number, to = from) => (mark && from <= mark.to && to >= mark.from ? ' cursor' : '');
   const fileName = entry.path.slice(entry.path.lastIndexOf('/') + 1);
@@ -380,6 +382,11 @@ export function FeatureView({ entry, collapsed, flash, lineNumbers, mark, mainRe
                   <span class="kbadge rule">Regel {num}</span>
                   <h2><Txt text={r.name} loc={`r${ri}`} />{r.name && <CopyTitle text={r.name} />}</h2>
                   <Tags tags={r.tags} />
+                  {partFlows?.(r.ln).map(l => (
+                    <button key={l.label} class="flowlink part" title={l.title} onClick={l.onClick}>
+                      {l.label}
+                    </button>
+                  ))}
                   {onVerify && <VerifyMenu what="regelen" onVerify={shots => onVerify({ kind: 'rule', index: ri }, shots)} />}
                 </div>
               )}
@@ -413,6 +420,27 @@ export function FeatureView({ entry, collapsed, flash, lineNumbers, mark, mainRe
                         {s.name && <CopyTitle text={s.name} />}
                       </span>
                       <Tags tags={s.tags} />
+                      {partFlows?.(s.ln).map(l => (
+                        <span
+                          key={l.label}
+                          class="flowlink part"
+                          role="link"
+                          tabIndex={0}
+                          title={l.title}
+                          onClick={e => {
+                            e.stopPropagation();
+                            l.onClick();
+                          }}
+                          onKeyDown={e => {
+                            if (e.key !== 'Enter') return;
+                            e.stopPropagation();
+                            e.preventDefault();
+                            l.onClick();
+                          }}
+                        >
+                          {l.label}
+                        </span>
+                      ))}
                       {nq > 0 && <span class="qbadge" title="Åpne spørsmål">? {nq}</span>}
                       {forced && <span class="findbadge forced">åpnet av søk</span>}
                       {nHits > 0 && <span class="findbadge">{nHits} treff</span>}

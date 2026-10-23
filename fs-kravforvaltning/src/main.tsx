@@ -10,7 +10,7 @@ import { Editor, type EditorFlush } from './Editor';
 import { fixed, NO_FILTER, type Filter } from './health';
 import { FeatureView, scenKey, stepKey } from './FeatureView';
 import { findGroups, findHits } from './find';
-import { buildFlows, flyterHash, FLOW_ROOT, parseFlyterHash, type Depth } from './flows';
+import { buildFlows, flyterHash, FLOW_ROOT, parseFlyterHash, phasesOfParts, type Depth } from './flows';
 import { Flyter } from './Flyter';
 import { headings, parseMd } from './markdown';
 import { MainBanner } from './MainBanner';
@@ -174,6 +174,8 @@ function App() {
   );
   // Flyten som er valgt i Flyter (null: startsiden), og hvor mange nivåer med @depends-on- som vises
   const [flowPath, setFlowPath] = useState<string | null>(startFlowPath);
+  // Fasen Flyter skal vise når flyten åpnes fra en regel eller et scenario i Krav
+  const [flowPhase, setFlowPhase] = useState<{ n: number; seq: number } | null>(null);
   const [flowDepth, setFlowDepth] = useState<Depth>(() => startFlow?.depth ?? savedDepth());
   // Hvilke av Avvik og Oppgaver som vises i menyen (tannhjulet etter menyen)
   const [menu, setMenu] = useState<MenuShow>(() => ({ ...MENU_DEFAULT, ...load<Partial<MenuShow>>('menu', {}) }));
@@ -639,11 +641,12 @@ function App() {
     setPrSeq(n => n + 1);
     setPrFor(null);
   };
-  /** Velger en flyt i Flyter (null: startsiden). Flyten blir også fila i Krav */
-  const selectFlow = async (p: string | null) => {
+  /** Velger en flyt i Flyter (null: startsiden), eventuelt på en fase. Flyten blir også fila i Krav */
+  const selectFlow = async (p: string | null, phase?: number) => {
     if (!(await leaveEditor())) return;
     setMode('flyter');
     setFlowPath(p);
+    setFlowPhase(phase ? { n: phase, seq: Date.now() } : null);
     if (p) setCurrent(p);
     history.pushState(null, '', flyterHash(p, flowDepth));
   };
@@ -661,6 +664,19 @@ function App() {
     const only = through.length === 1 ? flows.byId.get(through[0]) : undefined;
     const names = through.map(f => flows.byId.get(f)?.title ?? f).join(', ');
     return { label: `Med i ${through.length} ${through.length === 1 ? 'flyt' : 'flyter'}`, title: names, onClick: () => void selectFlow(only?.path ?? null) };
+  })();
+  // «Fase N i <flyt>» på regelen eller scenarioet en fase bygger på (ankeret, eller regelen i «…»)
+  const partFlows = (() => {
+    if (!entry?.model || entry.kind !== 'feature' || current.startsWith(FLOW_ROOT)) return undefined;
+    const id = entry.model.tags.map(t => /^@([A-ZÆØÅ]+-[A-ZÆØÅ]+-[A-ZÆØÅ]+-\d{3})$/.exec(t)?.[1]).find(Boolean);
+    const m = id ? phasesOfParts(flows, id) : null;
+    if (!m?.size) return undefined;
+    return (ln: number) =>
+      (m.get(ln) ?? []).map(({ flow, phase }) => ({
+        label: `Fase ${phase.n} i ${flow.title}`,
+        title: `Fase ${phase.n} i ${flow.title} bygger på delen: «${phase.title}». Åpner fasen i Flyter`,
+        onClick: () => void selectFlow(flow.path, phase.n),
+      }));
   })();
   const selectTavle = (sel: string | null) => {
     setTavleSel(sel);
@@ -817,6 +833,7 @@ function App() {
             path={flowPath}
             depth={flowDepth}
             onSelect={p => void selectFlow(p)}
+            goPhase={flowPhase}
             onDepth={selectDepth}
             onOpen={(p, ln) => void select(p, ln)}
             sideHidden={treeHidden}
@@ -911,6 +928,7 @@ function App() {
                   onEdit={EDITABLE ? () => setEditing(true) : undefined}
                   onDelete={EDITABLE ? deleteCurrent : undefined}
                   flowLink={flowLink}
+                  partFlows={partFlows}
                   onVerify={claude?.available ? (scope, shots) => void verify(entry, scope, shots) : undefined}
                   onVerifyTeam={
                     claude?.available
