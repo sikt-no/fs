@@ -1,6 +1,6 @@
 # language: no
 # GitHub: #398
-@OPT-OPT-UTD-001 @must @implemented @scope-utdanningstilbud-i-opptak-2027
+@OPT-OPT-UTD-001 @must @in-progress @scope-utdanningstilbud-i-opptak-2027
 Egenskap: Listevisning og søk i utdanningstilbud i opptaket
   Som opptaksforvalter
   ønsker jeg en oversikt over relevante utdanningstilbud i opptaket, med mulighet for søk og filtrering
@@ -14,6 +14,7 @@ Egenskap: Listevisning og søk i utdanningstilbud i opptaket
     Gitt at opptaksforvalter er innlogget
     Og at opptaket "Samordna opptak 2027" er opprettet med deltakende organisasjoner
 
+  @implemented
   Regel: Grunndata fra utdanningsregisteret vises tydelig
 
     Scenario: Se grunndata om utdanning
@@ -22,6 +23,7 @@ Egenskap: Listevisning og søk i utdanningstilbud i opptaket
       Så ser opptaksforvalter grunndata fra utdanningsregisteret (navn, studiepoeng, nivå, campus)
       Og det er tydelig hvilke data som kommer fra utdanningsregisteret
 
+  @implemented
   Regel: Opptaksforvalter ved forvaltende organisasjon kan filtrere på organisasjon
 
     Scenario: Filtrere på organisasjon som opptaksforvalter ved forvaltende organisasjon
@@ -31,13 +33,11 @@ Egenskap: Listevisning og søk i utdanningstilbud i opptaket
 
   Regel: Opptaksforvalter ved deltakende organisasjon ser kun utdanningstilbud organisasjonen tilbyr
 
-    @in-progress
     Scenario: Deltakende organisasjon ser kun utdanningstilbudene sine
       Gitt at opptaksforvalter er ved en deltakende organisasjon
       Når opptaksforvalter åpner oversikten over utdanningstilbud
       Så ser opptaksforvalter kun utdanningstilbud fra organisasjonen opptaksforvalter er ved
 
-    @in-progress
     # AVKLART 2026-10-16 (produktleder): Saksbehandlere ser søknadene de skal behandle i søknadsbehandlingen,
     # ikke gjennom utdanningstilbudene i opptaket. Flyttet hit fra samordna_opptak.feature 2026-10-19.
     Scenario: Deltakende organisasjon ser ikke utdanningstilbud en annen organisasjon tilbyr
@@ -46,12 +46,14 @@ Egenskap: Listevisning og søk i utdanningstilbud i opptaket
       Når opptaksforvalter ved Universitetet i Oslo ser listen over utdanningstilbud i opptaket
       Så ser ikke opptaksforvalter utdanningstilbudet "Medisin, høst 2027"
 
+  @implemented
   Regel: Opptaksforvalter kan filtrere på starttermin og startår
 
     Scenario: Filtrere på starttermin og startår
       Når opptaksforvalter filtrerer på starttermin "høst" og startår "2027"
       Så ser opptaksforvalter kun utdanningstilbud med oppstart høst 2027
 
+  @implemented
   Regel: Opptaksforvalter kan filtrere på navn på studieprogram
 
     Scenario: Fritekst-søk på studieprogramnavn
@@ -60,20 +62,23 @@ Egenskap: Listevisning og søk i utdanningstilbud i opptaket
 
   Regel: Opptaksforvalter kan filtrere på utdanningstilbud med ufullstendige opplysninger
 
+    @implemented
     Scenario: Filtrere på utdanningstilbud som mangler kompetanseregelverk
       Når opptaksforvalter filtrerer på utdanningstilbud med ufullstendige opplysninger
       Så ser opptaksforvalter utdanningstilbud som mangler kompetanseregelverk
 
+    @implemented
     Scenario: Filtrere på utdanningstilbud som mangler rangeringsregelverk
       Når opptaksforvalter filtrerer på utdanningstilbud med ufullstendige opplysninger
       Så ser opptaksforvalter utdanningstilbud som mangler rangeringsregelverk
 
-    @in-progress
+    @openquestion
     Scenario: Filtrere på utdanningstilbud som mangler kvoter, kvoteprioritet eller plassflyt
+      # ÅPNE SPØRSMÅL:
+      # - Delvis levert (verify 2026-10-22): «Har mangler» tar med utdanningstilbud uten kvoter, men ikke dem som mangler kvoteprioritet eller plassflyt. Skal kvoteprioritet og plassflyt tas med i «Har mangler»?
       Når opptaksforvalter filtrerer på utdanningstilbud med ufullstendige opplysninger
       Så ser opptaksforvalter utdanningstilbud som mangler kvoter, kvoteprioritet eller plassflyt
 
-    @in-progress
     Scenario: Filtrere på utdanningstilbud som mangler opplysninger om tilbudsgaranti
       Når opptaksforvalter filtrerer på utdanningstilbud med ufullstendige opplysninger
       Så ser opptaksforvalter utdanningstilbud som mangler opplysninger om hvor tilbudsgarantier skal tas fra
@@ -82,13 +87,13 @@ Egenskap: Listevisning og søk i utdanningstilbud i opptaket
     # tidlig opptak publiseres for hele opptaket. Utdanningstilbudet har derfor ingen egen
     # dato for tidlig opptak. Det som kan mangle på et utdanningstilbud som tilbyr tidlig
     # opptak, er poenggrensen. Tidlig søknadsfrist settes fritt per utdanningstilbud.
-    @in-progress @depends-on-OPT-OPT-UTD-025 @ref-OPT-OVO-FRI-001
+    @depends-on-OPT-OPT-UTD-025 @ref-OPT-OVO-FRI-001
     Scenario: Filtrere på utdanningstilbud som mangler dato for tidlig søknadsfrist
       Gitt at et utdanningstilbud er markert med tidlig søknadsfrist
       Når opptaksforvalter filtrerer på utdanningstilbud med ufullstendige opplysninger
       Så ser opptaksforvalter utdanningstilbud der dato for tidlig søknadsfrist ikke er satt
 
-    @in-progress @depends-on-OPT-OPT-UTD-010 @ref-OPT-BEH-BEH-014
+    @depends-on-OPT-OPT-UTD-010 @ref-OPT-BEH-BEH-014
     Scenario: Filtrere på utdanningstilbud som mangler poenggrense for tidlig opptak
       Gitt at et utdanningstilbud tilbyr tidlig opptak
       Når opptaksforvalter filtrerer på utdanningstilbud med ufullstendige opplysninger
