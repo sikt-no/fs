@@ -429,6 +429,8 @@ Sier at et krav peker på et annet krav. Det er to typer, og de skiller seg på 
 
 > Har A `@depends-on-B`, og har en `Regel:` eller et `Scenario:`/`Scenariomal:` i B `@ref-A`, bygger A bare på de delene av B som har `@ref-A`. Har ingen del i B `@ref-A`, bygger A på hele B. `@ref-A` på `Egenskap:` i B betyr også hele kravet.
 
+Eksempel (ankeret finnes ikke i repoet):
+
 ```gherkin
 # A: OPT-OPT-UTD-004
   @depends-on-OPT-BEH-BEH-011
