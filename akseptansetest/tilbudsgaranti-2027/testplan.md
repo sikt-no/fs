@@ -57,7 +57,7 @@ Det som testes, er kravene som er `@implemented`. Feature-ID-ene her er kravene 
 
 | Krav | Feature-ID | Status | Scenarioer i testen |
 |---|---|---|---|
-| [Gi tilbudsgaranti](https://github.com/sikt-no/fs/blob/6478beea804db1a91ade2db494161ec86f4f2775/krav/02%20Opptak/13%20S%C3%B8knad%20og%20saksbehandling/02%20Behandling/gi_tilbudsgaranti.feature) | `@OPT-BEH-BEH-010` | `@implemented` | 16 av 17 (21 testcaser med eksemplene i scenariomalene). Det siste står i «Ikke med i denne testen» |
+| [Gi tilbudsgaranti](https://github.com/sikt-no/fs/blob/6478beea804db1a91ade2db494161ec86f4f2775/krav/02%20Opptak/13%20S%C3%B8knad%20og%20saksbehandling/02%20Behandling/gi_tilbudsgaranti.feature) | `@OPT-BEH-BEH-010` | `@implemented` | 16 av 17 (20 testcaser med eksemplene i scenariomalene). Det siste står i «Ikke med i denne testen» |
 
 Scenarioene i testen er de leverte scenarioene i gating-settet: alle scenarioene som ikke er utkast, avviklet eller demo, og som ikke er under endring. Et levert scenario med et åpent spørsmål testes som det står, og spørsmålet står under tabellen. Er kilden et scope, og kravet ble levert før, er det bare delene som er levert i scopet.
 
@@ -83,6 +83,7 @@ Ingen.
 | [Velge utdanningskvote for tilbudsgaranti](https://github.com/sikt-no/fs/blob/6478beea804db1a91ade2db494161ec86f4f2775/krav/02%20Opptak/13%20S%C3%B8knad%20og%20saksbehandling/02%20Behandling/velge_utdanningskvote_for_tilbudsgaranti.feature) (`@OPT-BEH-BEH-017`) | Kommer senere: utkast uten scenarioer |
 | Scenarioet «Sette tilbudsgaranti når søknaden ikke kan poengberegnes» i Gi tilbudsgaranti (`@OPT-BEH-BEH-010`) | Testes senere (besluttet 2026-10-22) |
 | Eksempelet «legger til "Historie, høst 2027" som prioritet 1» i scenariomalen «Tilbudsgarantien følger søknadsalternativet når prioriteten endres» (`@OPT-BEH-BEH-010`) | Ikke relevant: tilbudsgarantien er knyttet til søknadsalternativet, ikke til prioriteten. At søknadsalternativet flyttes ned og opp igjen, testes (besluttet 2026-10-23) |
+| Eksempelet «trekker søknaden» i scenariomalen «Tilbudsgarantien faller bort når søknadsalternativet fjernes» (`@OPT-BEH-BEH-010`) | Ikke relevant: når søknaden er trukket, er alle søknadsalternativene trukket, og det er ingen tilbudsgaranti å se. Eksempelet «fjerner søknadsalternativet» testes (besluttet 2026-10-23) |
 
 ## Roller
 
