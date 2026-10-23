@@ -24,6 +24,21 @@ Egenskap: Legge til utdanningstilbud i opptak
       Når opptaksforvalter velger å legge til utdanningstilbudene "Sykepleie, høst 2027" og "Vernepleie, høst 2027"
       Så legges begge utdanningstilbudene til i opptaket
 
+  @planned @depends-on-OPT-OPT-UTD-005
+  Regel: Opptaksforvalter ser campus for utdanningstilbudene som kan legges til
+
+    Scenario: Se campus i listen over utdanningstilbud som kan legges til
+      Gitt at utdanningsregisteret har bachelorprogrammet "Sykepleie" med studiestart høst 2027 på campusene "Blindern" og "Kjeller"
+      Når opptaksforvalter åpner listen over utdanningstilbud som kan legges til i opptaket
+      Så ser opptaksforvalter to utdanningstilbud "Sykepleie, høst 2027"
+      Og campus vises for hvert av utdanningstilbudene
+
+    Scenario: Legge til utdanningstilbudet på én campus
+      Gitt at utdanningsregisteret har bachelorprogrammet "Sykepleie" med studiestart høst 2027 på campusene "Blindern" og "Kjeller"
+      Når opptaksforvalter legger til utdanningstilbudet "Sykepleie, høst 2027" på campus "Kjeller"
+      Så legges utdanningstilbudet "Sykepleie, høst 2027" på campus "Kjeller" til i opptaket
+      Og utdanningstilbudet "Sykepleie, høst 2027" på campus "Blindern" kan fortsatt legges til
+
     @planned
     Scenario: Legge til alle utdanningstilbudene i en filtrert liste
       Gitt at opptaksforvalter har filtrert listen over utdanningstilbud som kan legges til
