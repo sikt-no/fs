@@ -9,6 +9,7 @@ Egenskap: Samordna opptak
     Gitt at opptaksforvalter ved forvaltende organisasjon er innlogget
     Og at opptaket "Samordna opptak 2027" er opprettet som samordna
 
+  @implemented
   Regel: Opptaksforvalter ved forvaltende organisasjon kan legge til organisasjoner i et samordna opptak
 
     Scenario: Legge til lærested i samordna opptak
@@ -17,6 +18,7 @@ Egenskap: Samordna opptak
   # Følgevirkninger: Deltakende organisasjoner kan få søknader de er saksbehandlende organisasjon for etter saksbehandlertildelingen
   # Deltakende organisasjoners opptaksforvaltere kan se og vedlikeholde info på egne utdanningstilbud, og saksbehandlere kan se info om egne utdanningstilbud
 
+  @implemented
   Regel: Kun organisasjoner som deltar i opptaket kan legge til utdanningstilbud
 
     Scenario: Organisasjon som ikke deltar kan ikke legge til utdanningstilbud
@@ -50,7 +52,7 @@ Egenskap: Samordna opptak
   # (12 Utdanningstilbud/02 Utdanningstilbud i opptak/fjerne_utdanningstilbud.feature). En deltaker med
   # utdanningstilbud kan derfor ikke fjernes fra opptaket etter søknadsåpning, fordi søknadene gjelder
   # utdanningstilbudene.
-  @openquestion
+  @openquestion @implemented
   Regel: En deltakende organisasjon kan ikke fjernes fra opptaket så lenge den har utdanningstilbud i det
     # ÅPNE SPØRSMÅL:
     # - Avklaringen viser til fjerne_utdanningstilbud.feature i fritekst. Skal regelen ha
@@ -73,6 +75,7 @@ Egenskap: Samordna opptak
     # - Forvaltende organisasjon = eierorganisasjon for det samordna opptaket. Er ordlyden utvetydig nok
     #   når det gjelder tilgangsstyring og roller? Er spørsmålet besvart, fjernes det.
 
+    @implemented
     Scenario: Opptaksforvalter ved forvaltende organisasjon kan endre innstillinger
       Gitt at HK-dir har opprettet og dermed er forvalter av opptaket "Samordna opptak 2027"
       Når opptaksforvalter ved HK-dir åpner opptaket
@@ -88,12 +91,14 @@ Egenskap: Samordna opptak
   # AVKLART 2026-10-12: Det er ikke gitt at skillet mellom samordna og lokale opptak skal bevares.
   # Det er derfor nok at brukergrensesnittet ikke gjør det mulig å legge til andre organisasjoner
   # eller sette saksbehandlertildeling i et lokalt opptak. API-et trenger ikke sperre det.
+  @implemented
   Regel: I et lokalt opptak kan ikke andre organisasjoner legges til
 
     Scenario: Lokalt opptak tillater ikke andre organisasjoner
       Gitt at opptaket "Lokalt opptak høst 2027" er opprettet som lokalt
       Så er det ikke mulig å legge til andre organisasjoner som deltakere
 
+  @implemented
   Regel: Kun organisasjoner som finnes i utdanningsregisteret kan legges til som deltakere
 
     Scenario: Legge til organisasjon som finnes i utdanningsregisteret
@@ -104,6 +109,7 @@ Egenskap: Samordna opptak
       Gitt at organisasjonen "Ukjent organisasjon" ikke finnes i utdanningsregisteret
       Så kan organisasjonen "Ukjent organisasjon" ikke legges til som deltaker i opptaket
 
+  @implemented
   Regel: Opptaksforvalter kan begrense hvilke lærestedstyper som får delta i opptaket
 
     Scenario: Filtrere på universiteter og høyskoler
@@ -134,6 +140,7 @@ Egenskap: Samordna opptak
       Så ser opptaksforvalter saksbehandlertildelingen for opptaket
       Og opptaksforvalter kan navigere til saksbehandlertildelingen for opptaket
 
+    @implemented
     Scenario: Saksbehandlertildeling er ikke relevant for lokale opptak
       Gitt at opptaket "Lokalt opptak høst 2027" er opprettet som lokalt
       Når opptaksforvalter åpner opptaket

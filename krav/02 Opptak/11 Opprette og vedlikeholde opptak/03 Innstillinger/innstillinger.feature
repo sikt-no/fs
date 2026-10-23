@@ -17,6 +17,7 @@ Egenskap: Innstillinger for opptak
   # utdanningstilbud er knyttet til opptaket. Det erstatter avklaringen 2026-10-19 om at de kan endres når som
   # helst, med varsel om at utdanningstilbudene mister reglene.
   # Opptakstypen brukes bare til å kategorisere opptaket, og har ingen annen funksjon i systemet.
+  @implemented
   Regel: Opptaksforvalter kan endre opptakstype så lenge ingen utdanningstilbud er knyttet til opptaket
 
     Scenario: Endre opptakstype når ingen utdanningstilbud er knyttet til opptaket
@@ -28,6 +29,7 @@ Egenskap: Innstillinger for opptak
       Gitt at opptaket har utdanningstilbud
       Så kan ikke opptaksforvalter endre opptakstypen
 
+  @implemented
   Regel: Opptaksforvalter kan endre regelverkssamling så lenge ingen utdanningstilbud er knyttet til opptaket
 
     # Hvilke regler utdanningstilbudene kan bruke, står i
@@ -45,7 +47,7 @@ Egenskap: Innstillinger for opptak
   # ikke av opptakets standard poenglikhetsregel. Se krav/02 Opptak/14 Plasstildeling/.
   # Virkningen står i 12 Utdanningstilbud/04 Behandle et utdanningstilbud/overstyre_regler_for_poenglikhet.feature
   # og 14 Plasstildeling/03 Tildeling/gjennomføre_plasstildeling.feature.
-  @ref-OPT-PLA-TIL-002
+  @ref-OPT-PLA-TIL-002 @implemented
   Regel: Opptaksforvalter setter standard poenglikhetsregel for opptaket
 
     Scenario: Standard poenglikhetsregel med mulighet for unntak per utdanningstilbud
@@ -62,6 +64,7 @@ Egenskap: Innstillinger for opptak
       Så har opptaket rangering etter alder som standard poenglikhetsregel
       Og opptaket har ingen poenglikhetsregler som er tilgjengelige som unntak for utdanningstilbudene
 
+  @implemented
   Regel: Opptaksforvalter kan sette startnummer for søknadene
 
     # AVKLART 2026-10-15 (Q18, TAKE-413): Søker og saksbehandler ser bare løpenummeret, ikke opptakskoden.
@@ -76,6 +79,7 @@ Egenskap: Innstillinger for opptak
       Gitt at opptaksforvalter ikke har satt startnummer for søknader i opptaket
       Så har opptaket startnummer 1 for søknadene
 
+  @implemented
   Regel: Opptaksforvalter setter tak for antall søknadsalternativer
 
     # Virkningen står i 13 Søknad og saksbehandling/01 Søknad/studiekurv.feature.
@@ -88,7 +92,7 @@ Egenskap: Innstillinger for opptak
   # Det erstatter regelen fra 2026-10-14 om hvor mange utdanningstilbud en søker kan få opptak til.
   # Taket er obligatorisk, er forhåndsutfylt med 1, og kan endres etter at opptaket er opprettet.
   # Virkningen i plasstildelingen står i 14 Plasstildeling/03 Tildeling/gjennomføre_plasstildeling.feature.
-  @ref-OPT-PLA-TIL-002
+  @ref-OPT-PLA-TIL-002 @implemented
   Regel: Opptaksforvalter setter tak for antall tilbud per tildelingsrunde
 
     Scenario: Sette tak for antall tilbud per tildelingsrunde
@@ -104,6 +108,7 @@ Egenskap: Innstillinger for opptak
       Når opptaksforvalter endrer taket for antall tilbud per tildelingsrunde til 2
       Så har opptaket tak på 2 tilbud per tildelingsrunde
 
+  @implemented
   Regel: Opptaksforvalter kan åpne for tidlig opptak
 
     # AVKLART 2026-10-15 (Q2, TAKE-408): Tidlig opptak krever både at opptaket åpner for tidlig opptak, og at
@@ -135,6 +140,7 @@ Egenskap: Innstillinger for opptak
       Så blir opptaket ikke lagret
       Og opptaksforvalter ser at lenken til informasjon om tidlig opptak må være satt
 
+  @implemented
   Regel: Opptaksforvalter kan åpne for søknad på ledige studieplasser
 
     # Innstillingen gjelder hele opptaket. Hver plasstildelingsrunde åpnes for ledige studieplasser i
@@ -149,6 +155,7 @@ Egenskap: Innstillinger for opptak
       Så er ledige studieplasser aktivert for opptaket
       Og opptaket har datoene for ledige studieplasser
 
+  @implemented
   Regel: Opptaksforvalter kan legge til utdanningsbakgrunner som gjelder for opptaket
 
     # Opptaksforvalter velger blant godkjente utdanningsbakgrunner fra utdanningsbakgrunn-tabellen.
@@ -185,6 +192,7 @@ Egenskap: Innstillinger for opptak
       Og opptaksforvalter ser at opptaket må ha minst én utdanningsbakgrunn
 
   # Ikke relevant for samordna opptak 2027, men antatt løst allerede
+  @implemented
   Regel: Opptaksforvalter kan styre om søkere kan laste opp dokumentasjon
 
     # AVKLART 2026-10-15 (Q1, TAKE-413): Standardverdien er at søkerne kan laste opp dokumentasjon.
