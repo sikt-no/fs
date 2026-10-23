@@ -211,17 +211,13 @@ Egenskap: Frister og hendelser for opptak
       Når opptaksforvalter ikke setter dato for aldersberegning
       Så er opptakets dato for aldersberegning "2027-12-31"
 
-  @openquestion @ref-FLY-OPT-SAK-001
+  @ref-OPT-BEH-BEH-011 @ref-FLY-OPT-SAK-001
+  # OPT-BEH-BEH-011: virkningen av fristen står i regelen «Søknadsalternativene flyttes når utdanningsbakgrunnen endres til en bakgrunn med unntak».
   Regel: Opptaksforvalter ved forvaltende organisasjon må kunne sette frist for endring av utdanningsbakgrunn
-    # ÅPNE SPØRSMÅL:
-    # - Virkningen står i tildele_saksbehandlende_organisasjon.feature. Skal regelen ha @ref-OPT-BEH-BEH-011?
-
     # AVKLART 2026-10-19 (S3, akseptansetesten): Opptaket setter fristen, og saksbehandlertildelingen bruker den.
     # En endring av utdanningsbakgrunnen etter fristen flytter ikke søknaden til en annen saksbehandlende
     # organisasjon. Utdanningsbakgrunnen kan fortsatt endres, men bare opptaksforvalter ved forvaltende
     # organisasjon kan endre hvem som saksbehandler søknaden.
-    # Virkningen står i 13 Søknad og saksbehandling/02 Behandling/tildele_saksbehandlende_organisasjon.feature
-    # (Regel «Søknadsalternativene flyttes når utdanningsbakgrunnen endres til en bakgrunn med unntak»).
     Scenario: Sette frist for endring av utdanningsbakgrunn
       Når opptaksforvalter setter frist for endring av utdanningsbakgrunn til "2027-05-01 23:59"
       Så har opptaket frist for endring av utdanningsbakgrunn "2027-05-01 23:59"
