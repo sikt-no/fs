@@ -19,9 +19,6 @@ Bunnen av modalen har «Avbryt» og primærknappen «Tildel roller».
 ### Én organisasjon
 
 Administrerer administratoren bare én organisasjon, er feltet så normalt som mulig: en vanlig, aktiv nedtrekksliste der organisasjonen er forhåndsvalgt. Administratoren kan åpne listen og se at det ikke finnes andre valg, slik det ville vært med flere organisasjoner. Feltet er **ikke** deaktivert, for det ser ut som en feil eller som om noe mangler.
-
-I dag deaktiveres feltet (`fs-admin`, `TildelRolleAction.tsx:370`, `hasSingleOrg`). Det skal endres.
-
 ## Interaksjonsmønstre
 
 ### Primærhandling
@@ -53,7 +50,7 @@ Valglisten for roller viser bare forretningsroller som ikke er utgått. Filtreri
 
 ## Tekster
 
-Tekstene er hentet fra fs-admin (`src/common/messages/nb/tilgangsstyring.json`, `TildelRolleAction`). Skissen har bare de faste etikettene.
+Hjelpetekster, feilmeldinger, bekreftelser og andre tekster med variasjoner. Dette er fasiten for tekstene.
 
 | Hvor | Når vises den | Tekst | Variasjoner | Scenario |
 |------|---------------|-------|-------------|----------|
@@ -73,9 +70,6 @@ Tekstene er hentet fra fs-admin (`src/common/messages/nb/tilgangsstyring.json`, 
 | Feil | Personbrukeren finnes ikke | «Personbrukeren finnes ikke, eller du har ikke tilgang til den.» | Som over | Delvis suksess ved samtidig tildeling av roller |
 | Feil | Ingen tildeling ble bekreftet | «Ingen roller ble bekreftet tildelt. Kan skyldes at du ikke har innsyn i tildelingene for denne organisasjonen og dette miljøet — last siden på nytt for å se hva som står der nå.» | «tilganger» på fanen Tilganger | Delvis suksess ved samtidig tildeling av roller |
 | Feil | Annen feil | «Kunne ikke tildele roller. Prøv igjen senere.» | «tilganger» på fanen Tilganger | Tildele en rolle til en personbruker |
-
-**Skisser:** [06-tildele-rolle-modal.png](../../../../../tasks/brukeradministrasjon-og-tilgangsstyring/grunnleggende-brukeradministrasjon/spec/krav-input/sketches/figma/brukeradministrasjon-malbilde/sub-frames/06-tildele-rolle-modal.png) (Figma: [FS-Admin – Målbilde, node 4561:10449](https://www.figma.com/design/dlG13wATArPvG69oePHPeL/FS-Admin---M%C3%A5lbilde?node-id=4561-10449)). Skissen har ingen tekster med variasjoner. Den bruker «Valg» som plassholder og «Navn» som etikett for rollene, mens koden bruker «Ikke valgt» og «Roller».
-
 ## Per-scenario detaljer
 
 ### Scenario: Organisasjonen er forhåndsvalgt når administratoren administrerer én organisasjon
@@ -92,4 +86,4 @@ Hver rolle tildeles for seg. Rollene som ble tildelt, står etterpå som «aller
 
 ## Åpne designspørsmål
 
-- [ ] Skissen bruker «Valg» som plassholder og «Navn» som etikett for rollene, mens koden bruker «Ikke valgt» og «Roller». Skal skissen oppdateres?
+Ingen.

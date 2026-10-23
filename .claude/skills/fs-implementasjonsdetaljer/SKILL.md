@@ -31,7 +31,7 @@ For hvert scenario, vurder hva som mangler av UI-detaljer:
 - Hvilke felter vises, og i hvilken rekkefølge?
 - Hvordan håndteres tom tilstand, lasting, feil?
 - Hvilke navigasjons- eller filtreringsmønstre forventes?
-- Hvordan kobles dette til eksisterende komponenter?
+- Hvilke vanlige UI-elementer brukes (nedtrekksliste, modal, tabell)? Beskriv dem med vanlige ord, ikke med navn fra koden
 
 ### 3. Verifiser tekstene i skissene
 Tekster med variasjoner hører hjemme i implementasjonsdetaljene, ikke i skissene. En skisse viser én tilstand, blir fort utdatert, og kan ikke søkes i eller endres i en PR. Implementasjonsdetaljene er fasiten for tekstene; skissen viser bare hvor de står.
@@ -60,7 +60,7 @@ Overskrifter, feltetiketter og knappetekster som står fast, trenger ikke være 
 
 For **Mangler**: legg teksten inn i `## Tekster` ordrett fra skissen, med når den vises og hvilket scenario den hører til. For **Avvik** og **Ufullstendig**: spør med `AskUserQuestion`, én tekst om gangen (hvilken tekst er riktig, og hva de andre variantene skal være). Gjett ikke tekst. Det som ikke blir avklart, går til «Åpne designspørsmål».
 
-Skissene endres ikke. Er en skisse utdatert, noter det under «Åpne designspørsmål».
+Skissene endres ikke. Er en skisse utdatert, si det i chat. Det skrives ikke i implementasjonsdetaljene, som ikke nevner skissene (se *Avgrenset til kravet* under *Konvensjoner*).
 
 Rapporter til slutt i chat: hvor mange tekster som ble funnet, og hvilke som ble lagt inn, avklart eller står åpne, med skissen hver tekst kom fra.
 
@@ -118,8 +118,6 @@ Hjelpetekster, feilmeldinger, bekreftelser og andre tekster med variasjoner. Det
 |------|---------------|-------|-------------|----------|
 | <felt, dialog, side> | <tilstand eller hendelse> | «<tekst>» | <f.eks. entall/flertall, per status, `{antall}`> | <scenarionavn> |
 
-**Skisser:** <hvilke skisser tekstene er sjekket mot, med sti eller lenke>
-
 ## Per-scenario detaljer
 
 ### Scenario: <navn fra feature-filen>
@@ -133,7 +131,7 @@ Hjelpetekster, feilmeldinger, bekreftelser og andre tekster med variasjoner. Det
 ## Konvensjoner
 
 - **Ikke endre `.feature`-filen.** Implementasjonsdetaljene er et rent tillegg.
-- **Bruk relative lenker** til feature-filen.
+- **Avgrenset til kravet.** Implementasjonsdetaljene beskriver designet for kravet de hører til, og bare det: hvordan scenarioene i feature-fila skal se ut og oppføre seg. Den eneste lenken er den til feature-fila. De peker ikke til noe annet: ingen lenker eller stier til kode, andre filer i repoet, skisser (Figma, bilder), spesifikasjoner, oppgaver, saker i Jira eller GitHub, andre krav (Feature-ID-er) eller verify-rapporter. De sier ikke hva koden gjør i dag, eller hvor en tekst kom fra. Tekster fra koden eller skissene kan brukes, men skrives inn som fasit, uten kilde. Det som gjelder kilden, står i spesifikasjonen eller i chat.
 - **Hold det kort.** Notatene skal være lesbare, ikke uttømmende.
 - **Tekster står i implementasjonsdetaljene, ikke bare i skissene.** Hjelpetekster, feilmeldinger og tekster med variasjoner skrives i `## Tekster`, med alle variantene. Skissen viser bare hvor de står.
 - **Marker uavklarte ting** under "Åpne designspørsmål" — ikke gjett.
