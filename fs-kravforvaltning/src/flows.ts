@@ -24,6 +24,19 @@ export interface KravDep {
   note: string | null;
 }
 
+/** En regel eller et scenario med `@ref-<A>`: A bygger bare på denne delen når A har `@depends-on-` til kravet (*Anker*) */
+export interface Anchor {
+  part: 'rule' | 'scenario';
+  /** Regel- eller scenariotittelen */
+  name: string;
+  /** Regelen delen hører til (for et scenario: regelen over) */
+  rule: string | null;
+  ln: number;
+}
+
+/** Delen av kravet som følges: ankrene, regelen fra kommentaren under taggen, eller hele kravet (`null`) */
+export type Focus = { kind: 'anchor'; parts: Anchor[] } | { kind: 'note'; rule: string } | null;
+
 /** Hva som er levert av kravet: reglene og scenarioene som er med (ikke `@draft`, `@deprecated` eller `@demo`) */
 export interface Delivery {
   rules: number;
@@ -44,6 +57,8 @@ export interface Krav {
   domain: string;
   sub: string;
   deps: KravDep[];
+  /** ID-en i `@ref-` på en regel eller et scenario → delene med den taggen (ankrene) */
+  anchors: Map<string, Anchor[]>;
 }
 
 export interface PhaseLink {
@@ -218,6 +233,7 @@ export function buildFlows(entries: Snapshot): FlowIndex {
       domain: seg[1] ?? '',
       sub: seg[2] ?? '',
       deps: [],
+      anchors: new Map(),
     };
     const add = (tags: string[], dep: Omit<KravDep, 'id' | 'note'>, quoted: string[]) => {
       for (const t of tagIds(tags, DEP)) {
@@ -226,10 +242,20 @@ export function buildFlows(entries: Snapshot): FlowIndex {
         pending.push({ k, dep: d, quoted });
       }
     };
+    // @ref- på Egenskap: betyr hele kravet, og er ikke et anker
+    const anchor = (tags: string[], a: Anchor) => {
+      for (const t of tagIds(tags, REF)) k.anchors.set(t, [...(k.anchors.get(t) ?? []), a]);
+    };
     add(m.tags, { part: 'feature', partName: null, rule: null, ln: m.ln }, quotes(m.notes, m.ln));
     for (const r of m.rules) {
-      if (r.name !== null) add(r.tags, { part: 'rule', partName: r.name, rule: r.name, ln: r.ln }, quotes(r.notes, r.ln));
-      for (const s of r.scenarios) add(s.tags, { part: 'scenario', partName: s.name, rule: r.name, ln: s.ln }, quotes(s.notes, s.ln));
+      if (r.name !== null) {
+        add(r.tags, { part: 'rule', partName: r.name, rule: r.name, ln: r.ln }, quotes(r.notes, r.ln));
+        anchor(r.tags, { part: 'rule', name: r.name, rule: r.name, ln: r.ln });
+      }
+      for (const s of r.scenarios) {
+        add(s.tags, { part: 'scenario', partName: s.name, rule: r.name, ln: s.ln }, quotes(s.notes, s.ln));
+        if (s.kind !== 'Bakgrunn') anchor(s.tags, { part: 'scenario', name: s.name, rule: r.name, ln: s.ln });
+      }
     }
     if (!krav.has(id)) krav.set(id, k);
   }
@@ -299,7 +325,7 @@ export function progress(ix: FlowIndex, f: Flow) {
 
 // Avhengighetstreet -----------------------------------------------------------------------------
 
-export type Follow = 'whole' | 'rule';
+export type Follow = 'part' | 'whole';
 export interface Part {
   k: string;
   t: string;
@@ -310,8 +336,10 @@ export interface DepNode {
   level: number;
   /** Fasen treet står under */
   phase: number;
-  /** Regelen i kravet som følges, når kommentaren under taggen har en regeltittel */
+  /** Regeltittelen i «…» i kommentaren under taggen, når den er en regel i kravet */
   note: string | null;
+  /** Delen av kravet som følges fra kravet (eller flyten) over: ankrene, ellers regelen i `note` */
+  focus: Focus;
   /** Hvor taggen står i kravet over: hele kravet, en regel eller et scenario (fasene for en flyt) */
   parts: Part[] | null;
   /** Linja i kravet over der taggen står (for å åpne den) */
@@ -332,8 +360,32 @@ export interface FlowTree {
   max: number;
 }
 
-/** Det et krav eller en flyt bygger på, gruppert per ID. Med `follow: 'rule'` og en regel følges bare den regelen */
-export function depsOf(ix: FlowIndex, id: string, note: string | null, follow: Follow) {
+/**
+ * Delen av kravet `id` som `from` (kravet eller flyten over) bygger på: delene i kravet med `@ref-<from>` (ankeret),
+ * ellers regelen i kommentaren under taggen, ellers hele kravet. Noden nås bare gjennom en `@depends-on-`, så
+ * `@ref-` på delen er alltid et anker her
+ */
+export function focusOf(ix: FlowIndex, id: string, from: string | null, note: string | null): Focus {
+  const k = ix.krav.get(id);
+  if (!k) return null;
+  const parts = from ? k.anchors.get(from) : undefined;
+  if (parts?.length) return { kind: 'anchor', parts };
+  return note && k.rules.some(r => r.name === note) ? { kind: 'note', rule: note } : null;
+}
+
+/** `@depends-on-` på en regel gjelder scenarioene i den, så et scenario følger også taggene på regelen over */
+const inFocus = (f: NonNullable<Focus>, d: KravDep) =>
+  f.kind === 'note' ? d.rule === f.rule : f.parts.some(a => (a.part === 'rule' ? d.rule === a.name : d.rule === a.rule && (d.part === 'rule' || d.partName === a.name)));
+
+/** Linja i kravet der delen som følges, står */
+export const focusLn = (ix: FlowIndex, id: string, f: Focus) => (f?.kind === 'anchor' ? f.parts[0].ln : f?.kind === 'note' ? ix.krav.get(id)?.rules.find(r => r.name === f.rule)?.ln : undefined);
+
+/** Delene som følges, som tekst: `Regel: …` og `Scenario: …` */
+export const focusParts = (f: Focus): Part[] =>
+  f?.kind === 'anchor' ? f.parts.map(a => ({ k: a.part === 'rule' ? 'Regel' : 'Scenario', t: a.name })) : f?.kind === 'note' ? [{ k: 'Regel', t: f.rule }] : [];
+
+/** Det et krav eller en flyt bygger på, gruppert per ID. Med `follow: 'part'` følges bare delen i `focus` og `Egenskap:` */
+export function depsOf(ix: FlowIndex, id: string, focus: Focus, follow: Follow) {
   const out = new Map<string, { id: string; parts: Part[]; note: string | null; ln: number }>();
   if (isFlowId(id)) {
     for (const p of ix.byId.get(id)?.phases ?? [])
@@ -346,9 +398,9 @@ export function depsOf(ix: FlowIndex, id: string, note: string | null, follow: F
   }
   const k = ix.krav.get(id);
   if (!k) return [];
-  const onlyRule = follow === 'rule' && note && k.rules.some(r => r.name === note) ? note : null;
+  const only = follow === 'part' ? focus : null;
   for (const d of k.deps) {
-    if (onlyRule && d.part !== 'feature' && d.rule !== onlyRule) continue;
+    if (only && d.part !== 'feature' && !inFocus(only, d)) continue;
     const o = out.get(d.id) ?? { id: d.id, parts: [], note: d.note, ln: d.ln };
     o.parts.push(d.part === 'feature' ? { k: 'Hele kravet', t: '' } : { k: d.part === 'rule' ? 'Regel' : 'Scenario', t: d.partName ?? '' });
     o.note ??= d.note;
@@ -357,26 +409,23 @@ export function depsOf(ix: FlowIndex, id: string, note: string | null, follow: F
   return [...out.values()];
 }
 
-/** Følger rule-valget bare når kommentaren under taggen peker på en regel i kravet */
-export const followsWhole = (ix: FlowIndex, id: string, note: string | null) => !note || !ix.krav.get(id)?.rules.some(r => r.name === note);
-
 const MAX_LEVEL = 50;
 
 /**
  * Treet bygges bredde først, så hvert krav får det laveste nivået det finnes på. Et krav som er fulgt før, vises
- * som lenke (`seenAt`). Med `follow: 'rule'` følges et krav på nytt for en annen regel, eller helt, hvis det bare
- * er fulgt for én regel før: det er ulike avhengigheter.
+ * som lenke (`seenAt`). Med `follow: 'part'` følges et krav på nytt for en annen del, eller helt, hvis det bare
+ * er fulgt for én del før: det er ulike avhengigheter.
  */
 export function flowTree(ix: FlowIndex, f: Flow, follow: Follow): FlowTree {
   const seen = new Map<string, { phase: number; level: number }>();
   const followed = new Set<string>();
-  const scope = (id: string, note: string | null) => (follow === 'rule' && !followsWhole(ix, id, note) ? note! : '*');
+  const scope = (fc: Focus) => (follow === 'whole' || !fc ? '*' : fc.kind === 'note' ? 'r:' + fc.rule : 'a:' + fc.parts.map(a => a.ln).join(','));
   const node = (id: string, level: number, phase: number, note: string | null, parent: DepNode | null, parts: Part[] | null, parentLn: number | null): DepNode => ({
-    id, level, phase, note, parts, parentLn, children: [], seenAt: null, cycle: false, chain: [...(parent?.chain ?? []), id], parent,
+    id, level, phase, note, focus: focusOf(ix, id, parent?.id ?? f.id, note), parts, parentLn, children: [], seenAt: null, cycle: false, chain: [...(parent?.chain ?? []), id], parent,
   });
   // Følger noden videre, eller merker den som vist før
   const place = (n: DepNode, into: DepNode[]) => {
-    const sc = scope(n.id, n.note);
+    const sc = scope(n.focus);
     if (followed.has(n.id + '|*') || followed.has(n.id + '|' + sc)) n.seenAt = seen.get(n.id)!;
     else {
       followed.add(n.id + '|' + sc);
@@ -397,7 +446,7 @@ export function flowTree(ix: FlowIndex, f: Flow, follow: Follow): FlowTree {
     lvl++;
     const next: DepNode[] = [];
     for (const n of frontier)
-      for (const d of depsOf(ix, n.id, n.note, follow)) {
+      for (const d of depsOf(ix, n.id, n.focus, follow)) {
         const c = node(d.id, lvl, n.phase, d.note, n, d.parts, d.ln);
         if (n.chain.includes(d.id) || d.id === f.id) c.cycle = true;
         else place(c, next);
@@ -479,7 +528,7 @@ export interface FlatKrav {
   via: Set<string>;
   /** Flyten kravet hører til (i en oversiktsflyt: flyten fasen peker på) */
   group: string;
-  /** Reglene i kravet som flyten peker på (teksten i «…» i kommentaren under taggen) */
+  /** Reglene i kravet som flyten bygger på: fra ankrene (for et scenario: regelen over), ellers fra kommentaren under taggen */
   rules: Set<string>;
   /** Minst én referanse til kravet sier ikke hvilken regel den gjelder */
   whole: boolean;
@@ -494,10 +543,10 @@ export function flatKrav(ix: FlowIndex, f: Flow, t: FlowTree, depth: number): Fl
       let it = items.get(n.id);
       if (!it) items.set(n.id, (it = { id: n.id, level: n.level, phases: new Set(), via: new Set(), group, rules: new Set(), whole: false }));
       it.phases.add(n.phase);
-      const k = ix.krav.get(n.id)!;
-      // Regelen står i kommentaren under taggen, enten på fasen eller i kravet over. Uten den gjelder referansen hele kravet
-      const named = n.note && k.rules.some(r => r.name === n.note) ? n.note : null;
-      if (named) it.rules.add(named);
+      // Delen står i ankrene i kravet, eller i kommentaren under taggen. Uten dem gjelder referansen hele kravet
+      const fc = n.focus;
+      if (fc?.kind === 'anchor') fc.parts.forEach(a => a.rule && it!.rules.add(a.rule));
+      else if (fc?.kind === 'note') it.rules.add(fc.rule);
       else it.whole = true;
       it.via.add(n.parent && !isFlowId(n.parent.id) ? n.parent.id : f.overview ? 'flyten' : 'fasen');
     }

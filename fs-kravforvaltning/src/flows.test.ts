@@ -13,6 +13,7 @@ import {
   flowTree,
   flowWarnings,
   flyterHash,
+  focusLn,
   parseFlyterHash,
   phaseStatus,
   progress,
@@ -115,14 +116,94 @@ test('fremdriften: en fase er levert når alle kravene er implemented, og en fas
   assert.equal(phaseStatus(ix, opt.phases[1]), 'broken');
 });
 
-test('hele kravet følger alle @depends-on-, bare regelen følger regelen kommentaren peker på', () => {
+test('hele kravet følger alle @depends-on-, bare delen følger regelen kommentaren peker på', () => {
   const whole = flowTree(ix, sak, 'whole');
   assert.deepEqual([1, 2, 3, Infinity].map(d => countTo(ix, whole, d).krav), [2, 3, 4, 4]);
-  const rule = flowTree(ix, sak, 'rule');
+  const part = flowTree(ix, sak, 'part');
   // Fase en følger bare «Første regel i A», men fase to følger hele A (ingen regel i kommentaren)
-  assert.deepEqual([1, 2, 3, Infinity].map(d => countTo(ix, rule, d).krav), [2, 3, 4, 4]);
-  assert.deepEqual(depsOf(ix, 'OPT-REG-KRA-001', 'Første regel i A', 'rule'), []);
-  assert.deepEqual(depsOf(ix, 'OPT-REG-KRA-001', null, 'rule').map(d => [d.id, d.parts]), [['OPT-BEH-BEH-001', [{ k: 'Regel', t: 'Andre regel i A' }]]]);
+  assert.deepEqual([1, 2, 3, Infinity].map(d => countTo(ix, part, d).krav), [2, 3, 4, 4]);
+  assert.deepEqual(part.roots[0][0].focus, { kind: 'note', rule: 'Første regel i A' });
+  assert.equal(part.roots[1][0].focus, null);
+  assert.deepEqual(depsOf(ix, 'OPT-REG-KRA-001', { kind: 'note', rule: 'Første regel i A' }, 'part'), []);
+  assert.deepEqual(depsOf(ix, 'OPT-REG-KRA-001', null, 'part').map(d => [d.id, d.parts]), [['OPT-BEH-BEH-001', [{ k: 'Regel', t: 'Andre regel i A' }]]]);
+});
+
+// Ankeret: delene i kravet med @ref-<ID-en som peker på kravet> (*Anker* i krav/README.md)
+const ank: Record<string, string> = {
+  [A + 'x.feature']: krav('@OPT-REG-KRA-010 @must @planned', 'X', `
+  @depends-on-OPT-REG-KRA-011
+  Regel: Første regel i X
+    Scenario: S1
+      Gitt noe
+      Når noe
+      Så noe
+
+  @depends-on-OPT-REG-KRA-012
+  Regel: Andre regel i X
+    @ref-FLY-OPT-ANK-001
+    Scenario: S2
+      Gitt noe
+      Når noe
+      Så noe
+
+    @depends-on-OPT-REG-KRA-013
+    Scenario: S3
+      Gitt noe
+      Når noe
+      Så noe
+`),
+  [A + 'y.feature']: krav('@OPT-REG-KRA-012 @must @planned @ref-OPT-REG-KRA-099', 'Y', `
+  @depends-on-OPT-REG-KRA-014
+  Regel: Y1
+
+  @ref-OPT-REG-KRA-010
+  Regel: Y2
+    @depends-on-OPT-REG-KRA-015
+    Scenario: S4
+      Gitt noe
+      Når noe
+      Så noe
+`),
+  ...Object.fromEntries(['011', '013', '014', '015'].map(n => [A + `k${n}.feature`, krav(`@OPT-REG-KRA-${n} @must @planned`, 'K' + n, '')])),
+  [F + 'anker.feature']: krav('@FLY-OPT-ANK-001 @must @planned @e2e', 'Anker', `
+  @depends-on-OPT-REG-KRA-010
+  # «Første regel i X»
+  Regel: Fasen bygger på ett scenario i X
+    Scenario: Overleveringen
+      Gitt noe
+      Når noe
+      Så noe
+`),
+};
+const aix = buildFlows(Object.fromEntries(Object.entries(ank).map(([p, s]) => [p, buildEntry(p, s, 0)])));
+const anker = aix.byId.get('FLY-OPT-ANK-001')!;
+const ids = (ns: { id: string }[]) => ns.map(n => n.id).sort();
+
+test('ankeret: @ref- på en regel eller et scenario samles per ID, @ref- på Egenskap: er ikke et anker', () => {
+  assert.deepEqual([...aix.krav.get('OPT-REG-KRA-010')!.anchors.keys()], ['FLY-OPT-ANK-001']);
+  assert.deepEqual(aix.krav.get('OPT-REG-KRA-010')!.anchors.get('FLY-OPT-ANK-001')!.map(a => [a.part, a.name, a.rule]), [['scenario', 'S2', 'Andre regel i X']]);
+  assert.deepEqual([...aix.krav.get('OPT-REG-KRA-012')!.anchors.keys()], ['OPT-REG-KRA-010']);
+});
+
+test('ankeret går foran kommentaren, og et scenario følger også taggene på regelen over', () => {
+  const t = flowTree(aix, anker, 'part');
+  const x = t.roots[0][0];
+  assert.equal(x.focus?.kind, 'anchor');
+  // Scenarioet S2 følger @depends-on- på «Andre regel i X», ikke på S3 eller «Første regel i X» (kommentaren)
+  assert.deepEqual(ids(x.children), ['OPT-REG-KRA-012']);
+  // Y har ankeret @ref-OPT-REG-KRA-010 på Y2, så bare scenarioet under Y2 følges, ikke Y1
+  const y = x.children[0];
+  assert.deepEqual(y.focus, { kind: 'anchor', parts: [{ part: 'rule', name: 'Y2', rule: 'Y2', ln: y.focus?.kind === 'anchor' ? y.focus.parts[0].ln : 0 }] });
+  assert.deepEqual(ids(y.children), ['OPT-REG-KRA-015']);
+  assert.equal(focusLn(aix, 'OPT-REG-KRA-010', x.focus), aix.krav.get('OPT-REG-KRA-010')!.anchors.get('FLY-OPT-ANK-001')![0].ln);
+  assert.deepEqual([...flatKrav(aix, anker, t, Infinity).find(k => k.id === 'OPT-REG-KRA-010')!.rules], ['Andre regel i X']);
+});
+
+test('hele kravet følger alle @depends-on-, også med anker', () => {
+  const t = flowTree(aix, anker, 'whole');
+  assert.deepEqual(ids(t.roots[0][0].children), ['OPT-REG-KRA-011', 'OPT-REG-KRA-012', 'OPT-REG-KRA-013']);
+  assert.deepEqual([1, 2, 3].map(d => countTo(aix, t, d).krav), [1, 4, 6]);
+  assert.deepEqual([1, 2, 3].map(d => countTo(aix, flowTree(aix, anker, 'part'), d).krav), [1, 2, 3]);
 });
 
 test('et krav som er vist før, får seenAt i stedet for et nytt tre', () => {

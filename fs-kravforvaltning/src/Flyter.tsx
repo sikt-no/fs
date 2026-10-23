@@ -14,6 +14,8 @@ import {
   flatKrav,
   flowTree,
   flowWarnings,
+  focusLn,
+  focusParts,
   isFlowId,
   isPartial,
   ORD,
@@ -28,6 +30,7 @@ import {
   type Flow,
   type FlowIndex,
   type FlowPhase,
+  type Focus,
   type FlowWarning,
   type Follow,
   type Handover,
@@ -151,7 +154,7 @@ export function Flyter({ ix, path, depth, onSelect, onDepth, onOpen, sideHidden,
   const flow = path ? (ix.flows.find(f => f.path === path) ?? null) : null;
   const [q, setQ] = useState('');
   const [closed, setClosed] = useState<Record<string, boolean>>({});
-  const [follow, setFollow] = useState<Follow>('whole');
+  const [follow, setFollow] = useState<Follow>('part');
   const [tab, setTab] = useState<Tab>('phases');
   const [sort, setSort] = useState<Sort>('level');
   const [fold, setFold] = useState<Record<string, boolean>>({});
@@ -207,13 +210,12 @@ export function Flyter({ ix, path, depth, onSelect, onDepth, onOpen, sideHidden,
     onSelect(f.path);
     if (phase) setTimeout(() => scrollToPhase(phase), 80);
   };
-  /** Åpner kravet i Krav, på regelen fasen bygger på når den er kjent */
-  const openKrav = (id: string, note?: string | null) => {
+  /** Åpner kravet i Krav, på delen fasen bygger på når den er kjent (ankeret, ellers regelen i kommentaren) */
+  const openKrav = (id: string, focus?: Focus) => {
     const p = pathOf(ix, id);
     if (!p) return;
     if (isFlowId(id)) return openFlow(ix.byId.get(id)!);
-    const rule = note ? ix.krav.get(id)?.rules.find(r => r.name === note) : undefined;
-    onOpen(p, rule?.ln);
+    onOpen(p, focusLn(ix, id, focus ?? null));
   };
   const isHl = (id: string) => hl === id || flash === id;
   const hover = (id: string) => ({ onMouseEnter: () => setHl(id), onMouseLeave: () => setHl(null), onFocus: () => setHl(id), onBlur: () => setHl(null) });
@@ -461,7 +463,7 @@ interface ViewProps {
   goSeen: (phase: number, id: string) => void;
   toPhase: (n: number) => void;
   openFlow: (f: Flow, phase?: number, fromPhase?: number) => void;
-  openKrav: (id: string, note?: string | null) => void;
+  openKrav: (id: string, focus?: Focus) => void;
   onOpen: (path: string, line?: number) => void;
   progFlash: boolean;
 }
@@ -484,7 +486,7 @@ function FlowView(p: ViewProps) {
   const levelMsg = depth === Infinity ? `Ingen nye krav etter nivå ${tree.max}.` :depth > tree.max ? `Ingen nye krav på nivå ${depth}: alle avhengighetene er vist.` : '';
   const headWarns = warns.filter(w => w.kind === 'flow-behind' || w.kind === 'cross-process' || w.kind === 'cycle');
   const domCount = new Set(list.map(k => ix.krav.get(k.id)!.domain + '/' + ix.krav.get(k.id)!.sub)).size;
-  const followT = follow === 'rule' ? ', bare regelen fasen bygger på' : '';
+  const followT = follow === 'part' ? ', bare delen fasen bygger på' : '';
 
   return (
     <>
@@ -643,8 +645,8 @@ function FlowView(p: ViewProps) {
             cur={follow}
             set={p.setFollow}
             opts={[
+              { v: 'part', l: 'Bare delen fasen bygger på' },
               { v: 'whole', l: 'Hele kravet' },
-              { v: 'rule', l: 'Bare regelen fasen bygger på' },
             ]}
           />
         </div>
@@ -808,7 +810,7 @@ function DepCard(p: ViewProps & { ph: FlowPhase; n: DepNode; occ: Record<string,
   const hl = p.isHl(n.id);
   const rows: JSX.Element[] = [];
   if (!n.seenAt) walkRows(p, n, ph.n, rows);
-  const hasOwnDeps = depsOf(ix, n.id, n.note, follow).length > 0;
+  const hasOwnDeps = depsOf(ix, n.id, n.focus, follow).length > 0;
 
   if (!ok)
     return (
@@ -828,8 +830,8 @@ function DepCard(p: ViewProps & { ph: FlowPhase; n: DepNode; occ: Record<string,
     );
 
   return (
-    <div class={'fl-dep' + (hl ? ' hl' : '') + (statusOf(ix, n.id) === 'deprecated' ? ' dep' : '')} tabIndex={0} {...p.hover(n.id)} onKeyDown={e => e.key === 'Enter' && e.target === e.currentTarget && p.openKrav(n.id, n.note)}>
-      <div class="body" onClick={() => p.openKrav(n.id, n.note)}>
+    <div class={'fl-dep' + (hl ? ' hl' : '') + (statusOf(ix, n.id) === 'deprecated' ? ' dep' : '')} tabIndex={0} {...p.hover(n.id)} onKeyDown={e => e.key === 'Enter' && e.target === e.currentTarget && p.openKrav(n.id, n.focus)}>
+      <div class="body" onClick={() => p.openKrav(n.id, n.focus)}>
         <div class="drow">
           <St c={fl ? stColor(fl.status) : st.c} l={fl ? `flyten er ${fl.status ?? 'uten status'}` : st.l} />
           <Partial ix={ix} id={n.id} />
@@ -861,13 +863,26 @@ function DepCard(p: ViewProps & { ph: FlowPhase; n: DepNode; occ: Record<string,
             </a>
           </div>
         )}
-        {n.note && (
-          <div class="dnote">
-            <span class="mono muted">regel</span>
-            <span>«{n.note}»</span>
+        {n.focus?.kind === 'anchor' ? (
+          <div class="dnote" title={`Delene i ${n.id} med @ref-${p.flow.id}: fasen bygger bare på dem`}>
+            <span class="mono muted">@ref-</span>
+            <span class="parts">
+              {focusParts(n.focus).map((pt, i) => (
+                <span key={i}>
+                  <span class="mono">{pt.k}:</span> {pt.t}
+                </span>
+              ))}
+            </span>
           </div>
+        ) : (
+          n.note && (
+            <div class="dnote">
+              <span class="mono muted">regel</span>
+              <span>«{n.note}»</span>
+            </div>
+          )
         )}
-        {follow === 'rule' && !n.note && hasOwnDeps && depth > 1 && !fl && <span class="muted small">Ingen regel i kommentaren: hele kravet følges</span>}
+        {follow === 'part' && !n.focus && hasOwnDeps && depth > 1 && !fl && <span class="muted small">Ikke noe anker eller regel i kommentaren: hele kravet følges</span>}
       </div>
       {statusOf(ix, n.id) === 'deprecated' && <div class="deprecated">Kravet er avviklet. Fasen peker på det, og må peke på kravet som erstatter det.</div>}
       {rows.length > 0 && (
@@ -895,6 +910,12 @@ function walkRows(p: ViewProps, node: DepNode, pn: number, out: JSX.Element[]) {
     const parts = (c.parts ?? [{ k: 'Hele kravet', t: '' }]).map((pt, i) => (
       <span key={i} class="part">
         <span class="mono">{pt.k}{pt.t ? ':' : ''}</span> {pt.t}
+      </span>
+    ));
+    // Delen av kravet som følges: ankrene (@ref-<kravet over>), ellers regelen i kommentaren under taggen
+    const focus = focusParts(c.focus).map((pt, i) => (
+      <span key={'f' + i} class="part focus" title={c.focus?.kind === 'anchor' ? `${c.id} har @ref-${node.id} på delen: ${node.id} bygger bare på den` : 'Regelen i kommentaren under taggen'}>
+        <span class="mono">→ {pt.k}:</span> {pt.t} <span class="mono muted">{c.focus?.kind === 'anchor' ? '@ref-' : '«…»'}</span>
       </span>
     ));
     out.push(
@@ -930,7 +951,7 @@ function walkRows(p: ViewProps, node: DepNode, pn: number, out: JSX.Element[]) {
             </>
           ) : (
             <>
-              <div class="line" onClick={() => p.openKrav(c.id, c.note)}>
+              <div class="line" onClick={() => p.openKrav(c.id, c.focus)}>
                 <span class="mono">{c.id}</span>
                 <span class="t">{titleOf(ix, c.id)}</span>
                 <span class="fl-st right">
@@ -941,6 +962,7 @@ function walkRows(p: ViewProps, node: DepNode, pn: number, out: JSX.Element[]) {
                 </span>
               </div>
               {parts}
+              {focus}
               {statusOf(ix, c.id) === 'deprecated' && <span class="warn small">Avviklet: {node.id} må peke på kravet som erstatter det.</span>}
             </>
           )}

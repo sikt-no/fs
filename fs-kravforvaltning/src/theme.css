@@ -1446,6 +1446,7 @@ body.resizing iframe, body.resizing .main { pointer-events: none; }
 .fl-dep .flow { display: flex; flex-direction: column; gap: 6px; padding-top: 2px; font-size: 12px; }
 .fl-dep .dnote { display: flex; gap: 6px; font-size: 12px; line-height: 1.4; color: var(--ink2); }
 .fl-dep .dnote .mono { font-size: 10.5px; flex-shrink: 0; padding-top: 1px; }
+.fl-dep .dnote .parts { display: flex; flex-direction: column; gap: 2px; }
 .fl-dep .deprecated { border-top: 1px solid var(--warn); background: var(--warn-soft); padding: 8px 12px; font-size: 12.5px; line-height: 1.45; }
 .fl-dep .seenmsg { border-top: 1px dashed var(--line2); padding: 6px 12px; font-size: 11.5px; color: var(--muted); }
 .fl-rep { font-size: 10.5px; padding: 1px 6px; border-radius: 3px; background: var(--acc-soft); color: var(--acc-ink); }
@@ -1461,6 +1462,7 @@ body.resizing iframe, body.resizing .main { pointer-events: none; }
 .fl-trrow .line .t { font-size: 12.5px; line-height: 1.35; color: var(--ink); overflow-wrap: anywhere; }
 .fl-trrow .part { font-size: 11.5px; line-height: 1.4; color: var(--muted); }
 .fl-trrow .part .mono { font-size: 10.5px; }
+.fl-trrow .part.focus { color: var(--ink2); }
 .fl-refs { display: flex; flex-direction: column; gap: 3px; padding: 0 2px; font-size: 12.5px; color: var(--muted); }
 .fl-refs > .mono { font-size: 10.5px; }
 .fl-refs > div { display: flex; gap: 8px; align-items: baseline; cursor: pointer; }
