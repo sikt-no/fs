@@ -1,5 +1,21 @@
 # krav-viewer
 
+## 1.9.0
+
+### Minor Changes
+
+- c9cd3b9: Flyter: matrisen kan telle delene fasene bygger på («Tell: Krav | Deler»), ikke bare kravene. En del er en regel eller et scenario med ankeret, eller regelen i «…», og den gjenstår til den selv er levert. Med «Følg: Hele kravet» teller den reglene i kravene. Hold over en celle for å se delene og statusen deres.
+- 07218bb: Krav: en regel eller et scenario som en fase i en flyt bygger på (med ankeret, eller regelen i «…» under taggen på fasen), har «Fase N i <flyt>» i hodet. Lenken åpner Flyter på fasen.
+
+### Patch Changes
+
+- 635705e: Flyter: bygger flere faser på samme krav, venter hver fase bare på delene med ankeret som ligger i reglene i «…» under taggen på fasen, ikke på alle delene med ankeret. Uten anker følges alle reglene i «…», ikke bare den første.
+- d2f3524: Flyter: fremdriften teller «Delene flyten bygger på» (ankrene, eller reglene i «…»), ikke alle reglene i kravene. Med «Følg: Hele kravet» teller den reglene i kravene, som før.
+- f28b259: Flyter: «Kravene i flyten» har kolonnen «For flyten», med delene av kravet flyten bygger på og statusen på hver av dem. Klikk på en del åpner kravet på den. «Levert» viser fortsatt hvor mye av hele kravet som er levert.
+- f7aeb24: Flyter: «Per domene» viser delene flyten bygger på per sub-domene, og hvor mange av dem som er levert. Et scenario med ankeret som ikke står under en regel, telles nå med.
+- 8bdb450: Flyter: kortet og treet i «Fasene» viser statusen på hver del fasen bygger på, og et klikk på en del åpner kravet på den. Et klikk på kortet åpner kravet på den første delen som ikke er levert.
+- 8b429a2: Flyter: varselet «del som er utkast» kommer bare når delen ankeret peker på, selv er tagget `@draft` eller `@deprecated`, ikke når hele kravet er et utkast.
+
 ## 1.8.0
 
 ### Minor Changes
