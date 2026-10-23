@@ -420,7 +420,7 @@ Sier at et krav peker på et annet krav. Det er to typer, og de skiller seg på 
 - Retningen gir seg av hvor taggen står. Den andre retningen, «hva bygger på dette kravet?», skrives ikke ned, men finnes med `grep`. Unntaket er ankeret.
 - Et krav refererer ikke til seg selv. *(sjekkes automatisk)*
 - En del har hver referanse én gang, og har enten `@depends-on-` eller `@ref-` til et krav, ikke begge. *(sjekkes automatisk)*
-- ID-en må finnes, `@depends-on-` går ikke i ring (A → B → A), og regeltittelen i «…» under taggen må finnes i kravet det pekes på. Det krever flere filer, og sjekkes av `fs-krav-avvik`.
+- ID-en må finnes, `@depends-on-` går ikke i ring (A → B → A), og regeltitlene i «…» under taggen må finnes i kravet det pekes på. Det krever flere filer, og sjekkes av `fs-krav-avvik`.
 - Taggen er ikke en statustag, og endrer ikke livsløpet.
 
 #### Anker
