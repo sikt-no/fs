@@ -103,7 +103,7 @@ Overleveringen står i scenarioet i fasen: tilstanden i `Gitt` lages ett sted, o
 - **Flyten er ikke `@implemented`:** fasen er levert, og verify-rapporten har scenarioet som `funnet`.
 
 - **Hele flyten** når flyten er `@implemented`. Det er standard, også når leveransen bare berører én fase: en endring i ett krav kan bryte overleveringer i flere faser, og en flyt har få scenarioer. Har flyten flere enn fem faser, eller berører leveransen bare én fase, spør `fs-testplan` om hele flyten skal testes, eller bare fasene i leveransen, og anbefaler hele.
-- **Deler av flyten** når flyten ikke er `@implemented`: de leverte fasene i leveransen, der scenarioet er funnet. En levert fase i en `@planned` flyt testes, selv om flyten ikke er `@implemented`, fordi kravene fasen bygger på, er levert, og overleveringen er funnet i koden.
+- **Deler av flyten** når flyten ikke er `@implemented`: de leverte fasene i leveransen, der scenarioet er funnet. En levert fase i en `@planned` flyt testes, selv om flyten ikke er `@implemented`, fordi delen av kravene fasen bygger på, er levert (*Flyter* i `krav/README.md`), og overleveringen er funnet i koden.
 - Det som ikke testes, står i «Ikke med i denne testen», med grunnen: «fasen er ikke levert», «fasen mangler krav», «overleveringen er ikke funnet», eller «fasen er ikke i leveransen» (når teamet har valgt deler).
 - **Kjent brudd:** står det `# Kjent brudd:` i flyten, står bruddet i «Forutsetninger» i testplanen, og overleveringen det gjelder, testes ikke før bruddet er løst.
 

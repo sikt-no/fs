@@ -15,6 +15,7 @@ import {
   flyterHash,
   focusLn,
   parseFlyterHash,
+  partStatus,
   phaseStatus,
   progress,
 } from './flows.ts';
@@ -107,7 +108,7 @@ test('kommentaren under taggen blir regelen fasen bygger på, bare når regelen 
   assert.equal(sak.phases[1].links[0].note, null);
 });
 
-test('fremdriften: en fase er levert når alle kravene er implemented, og en fase uten krav teller i totalen', () => {
+test('fremdriften: en fase er levert når delen av kravene den bygger på, er levert, og en fase uten krav teller i totalen', () => {
   assert.equal(phaseStatus(ix, sak.phases[0]), 'implemented');
   assert.equal(phaseStatus(ix, sak.phases[1]), 'deprecated');
   assert.equal(phaseStatus(ix, sak.phases[2]), 'missing');
@@ -243,6 +244,110 @@ test('varslene regnes med alle nivåer', () => {
   const kinds = (f: typeof sak) => flowWarnings(ix, f).map(w => w.kind);
   assert.deepEqual(kinds(sak), ['break', 'missing', 'deprecated']);
   assert.deepEqual(kinds(opt), ['deprecated', 'broken']);
+});
+
+// Fasen er levert når delen den bygger på, er levert: ankeret, ellers regelen i «…», ellers hele kravet
+const lev: Record<string, string> = {
+  [A + 'p.feature']: krav('@OPT-REG-KRA-020 @must @in-progress', 'P', `
+  @implemented @ref-FLY-OPT-LEV-001
+  Regel: Levert del
+    Scenario: S1
+      Gitt noe
+      Når noe
+      Så noe
+
+  Regel: Ikke levert
+    Scenario: S2
+      Gitt noe
+      Når noe
+      Så noe
+`),
+  [A + 'q.feature']: krav('@OPT-REG-KRA-021 @must @implemented', 'Q', `
+  Regel: Levert
+    Scenario: S1
+      Gitt noe
+      Når noe
+      Så noe
+
+  @planned
+  Regel: Endres
+    Scenario: S2
+      Gitt noe
+      Når noe
+      Så noe
+`),
+  [A + 'r.feature']: krav('@OPT-REG-KRA-022 @must @in-progress', 'R', `
+  @draft @openquestion @ref-FLY-OPT-LEV-001
+  Regel: Utkast
+    # ÅPNE SPØRSMÅL:
+    # - Hva?
+    Scenario: S1
+      Gitt noe
+      Når noe
+      Så noe
+
+  @implemented
+  Regel: Ferdig
+    Scenario: S2
+      Gitt noe
+      Når noe
+      Så noe
+`),
+  [A + 's.feature']: krav('@OPT-REG-KRA-023 @must @in-progress', 'S', `
+  @implemented
+  Regel: Ferdig
+    Scenario: S1
+      Gitt noe
+      Når noe
+      Så noe
+
+  Regel: Gjenstår
+    Scenario: S2
+      Gitt noe
+      Når noe
+      Så noe
+`),
+  [F + 'levert.feature']: krav('@FLY-OPT-LEV-001 @must @implemented @e2e', 'Levert', `
+  @depends-on-OPT-REG-KRA-020
+  Regel: Ankeret er levert
+
+  @depends-on-OPT-REG-KRA-021
+  # «Levert»
+  Regel: Regelen i kommentaren er levert
+
+  @depends-on-OPT-REG-KRA-021
+  # «Endres»
+  Regel: Regelen i kommentaren endres
+
+  @depends-on-OPT-REG-KRA-022
+  Regel: Ankeret er et utkast
+
+  @depends-on-OPT-REG-KRA-023
+  Regel: Hele kravet er ikke levert
+`),
+};
+const lix = buildFlows(Object.fromEntries(Object.entries(lev).map(([p, s]) => [p, buildEntry(p, s, 0)])));
+const levF = lix.byId.get('FLY-OPT-LEV-001')!;
+
+test('fremdriften: ankeret og regelen i «…» avgjør når fasen er levert, ellers hele kravet', () => {
+  assert.deepEqual(levF.phases.map(p => phaseStatus(lix, p)), ['implemented', 'implemented', 'planned', 'draft', 'in-progress']);
+  assert.deepEqual(progress(lix, levF), { delivered: 2, total: 5, missing: 0 });
+  assert.equal(partStatus(lix, 'OPT-REG-KRA-020', null), 'in-progress');
+});
+
+test('matrisen og kjeden: delen som følges, eller hele kravet', () => {
+  const open = (follow: 'part' | 'whole') => Object.fromEntries(flatKrav(lix, levF, flowTree(lix, levF, follow), 1).map(k => [k.id, [...k.open]]));
+  assert.deepEqual(open('part'), { 'OPT-REG-KRA-020': [], 'OPT-REG-KRA-021': [3], 'OPT-REG-KRA-022': [4], 'OPT-REG-KRA-023': [5] });
+  assert.deepEqual(open('whole'), { 'OPT-REG-KRA-020': [1], 'OPT-REG-KRA-021': [], 'OPT-REG-KRA-022': [4], 'OPT-REG-KRA-023': [5] });
+  assert.equal(chainLow(lix, flowTree(lix, levF, 'part'), 1)?.status, 'draft');
+  assert.equal(chainLow(lix, flowTree(lix, levF, 'whole'), 1)?.status, 'in-progress');
+});
+
+test('varslene: ankeret på et utkast, og flyten bak delen den bygger på', () => {
+  const w = flowWarnings(lix, levF);
+  assert.deepEqual(w.map(x => x.kind), ['part-left', 'flow-behind']);
+  assert.match(w[0].text, /«Utkast» i OPT-REG-KRA-022, som er utkast/);
+  assert.match(w[1].text, /delen flyten bygger på i OPT-REG-KRA-021 er planned/);
 });
 
 test('ruta: #/flyter, stien og nivåene', () => {

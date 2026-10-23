@@ -144,6 +144,7 @@ const WARN_LABEL: Record<FlowWarning['kind'], string> = {
   missing: 'fase uten krav',
   broken: 'brutt referanse',
   deprecated: 'avviklet krav',
+  'part-left': 'del som er utkast',
   'flow-behind': 'flyten bak kravene',
   'cross-process': 'annen prosess',
   cycle: 'ring',
@@ -524,6 +525,7 @@ function FlowView(p: ViewProps) {
             </div>
             {(() => {
               const ks = list.map(k => ix.krav.get(k.id)!);
+              const ready = list.filter(k => !k.open.size).length;
               const whole = ks.filter(k => k.status === 'implemented').length;
               const part = ks.filter(isPartial).length;
               const rules = ks.reduce((a, k) => a + k.delivery.rules, 0);
@@ -531,7 +533,7 @@ function FlowView(p: ViewProps) {
               return (
                 <div class="fl-levert">
                   <span>
-                    Kravene, {depthText(depth)}: <b>{whole} av {ks.length}</b> levert som helhet{part > 0 && <>, {part} delvis levert</>}
+                    Kravene, {depthText(depth)}: <b>{ready} av {ks.length}</b> levert for flyten{follow === 'part' ? <> · {whole} som helhet{part > 0 && <>, {part} delvis levert</>}</> : part > 0 && <>, {part} delvis levert</>}
                   </span>
                   <span>
                     Reglene i kravene: <b>{rulesDone} av {rules}</b> levert
@@ -656,7 +658,7 @@ function FlowView(p: ViewProps) {
       {tab === 'phases' && <Phases {...p} tree={tree} />}
       {tab === 'krav' && <KravTab {...p} tree={tree} list={list} intro={`Det som må være levert for at flyten skal virke, til ${depthText(depth)}${followT}.`} />}
       {tab === 'dom' && <DomTab ix={ix} list={list} onOpen={p.onOpen} intro={`Kravene flyten bygger på, til ${depthText(depth)}${followT}, samlet per domene og sub-domene. Hvert sub-domene er et team som kan levere til flyten.`} />}
-      {tab === 'mx' && <MatrixTab ix={ix} flow={flow} list={list} toPhase={p.toPhase} intro={`Hvor mange krav som gjenstår per sub-domene i hver fase, til ${depthText(depth)}${followT}. Tallet er kravene som ikke er levert som helhet, av alle kravene sub-domenet leverer til fasen.`} />}
+      {tab === 'mx' && <MatrixTab ix={ix} flow={flow} list={list} toPhase={p.toPhase} intro={`Hvor mange krav som gjenstår per sub-domene i hver fase, til ${depthText(depth)}${followT}. Tallet er kravene der ${follow === 'part' ? 'delen fasen bygger på' : 'hele kravet'} ikke er levert, av alle kravene sub-domenet leverer til fasen.`} />}
     </>
   );
 }
@@ -1190,13 +1192,13 @@ function DomTab({ ix, list, intro, onOpen }: { ix: FlowIndex; list: FlatKrav[]; 
 // Matrise --------------------------------------------------------------------------------------
 
 function MatrixTab({ ix, flow, list, toPhase, intro }: { ix: FlowIndex; flow: Flow; list: FlatKrav[]; toPhase: (n: number) => void; intro: string }) {
-  // Kravet er enheten: @depends-on- peker på hele kravet, og et krav gjenstår til hele kravet er levert
+  // Kravet er enheten: et krav gjenstår i fasen til delen fasen bygger på, er levert (hele kravet med «Følg: Hele kravet»)
   const val = (arr: FlatKrav[]) => arr.length;
-  const remOf = (arr: FlatKrav[]) => arr.filter(k => statusOf(ix, k.id) !== 'implemented').length;
+  const remOf = (arr: FlatKrav[], phase?: number) => arr.filter(k => (phase === undefined ? k.open.size > 0 : k.open.has(phase))).length;
   const cellsFor = (arr: FlatKrav[]) =>
     flow.phases.map(ph => {
       const inP = arr.filter(k => k.phases.has(ph.n));
-      return { tot: val(inP), rem: remOf(inP), inP };
+      return { tot: val(inP), rem: remOf(inP, ph.n), inP };
     });
   const groups = byDomain(ix, list);
   const rows = groups.flatMap(({ dom, subs }) => [{ name: dom, isDom: true, arr: subs.flatMap(s => s[1]) }, ...subs.map(([sub, arr]) => ({ name: sub, isDom: false, arr }))]);
@@ -1281,7 +1283,7 @@ function MatrixTab({ ix, flow, list, toPhase, intro }: { ix: FlowIndex; flow: Fl
               {flow.phases.map(ph => {
                 const inP = list.filter(k => k.phases.has(ph.n));
                 const tot = val(inP);
-                const rem = remOf(inP);
+                const rem = remOf(inP, ph.n);
                 return (
                   <div key={ph.n} role="cell" class="mxc">
                     {!ph.links.length ? (

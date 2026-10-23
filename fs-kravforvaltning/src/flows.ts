@@ -50,8 +50,13 @@ export interface Krav {
   path: string;
   title: string;
   status: Status | null;
-  /** Reglene i kravet, og om regelen er levert (`null`: ikke med, fordi den er `@draft`, `@deprecated` eller `@demo`) */
-  rules: { name: string; ln: number; done: boolean | null }[];
+  /**
+   * Reglene i kravet, og om regelen er levert (`null`: ikke med, fordi den er `@draft`, `@deprecated` eller `@demo`).
+   * `status` er statusen delen har (`partStatus`)
+   */
+  rules: { name: string; ln: number; done: boolean | null; status: Status | null }[];
+  /** Scenarioene i kravet, med regelen over og statusen delen har */
+  scenarios: { name: string; rule: string | null; ln: number; status: Status | null }[];
   delivery: Delivery;
   /** `02 Opptak` og `13 Søknad og saksbehandling` fra stien */
   domain: string;
@@ -64,6 +69,8 @@ export interface Krav {
 export interface PhaseLink {
   id: string;
   note: string | null;
+  /** Delen av kravet fasen bygger på (`focusOf`): avgjør når fasen er levert */
+  focus: Focus;
 }
 
 export interface Handover {
@@ -135,27 +142,49 @@ const left = (tags: string[]) => has(tags, 'draft') || has(tags, 'deprecated') |
  * Er den `@in-progress`, er bare delene som er tagget `@implemented` levert (taggen på en regel gjelder scenarioene i
  * den). Ellers er ingenting levert. En regel er levert når alle scenarioene i den er det; en regel uten scenarioer
  * når den selv er det.
+ *
+ * Statusen på en del er `implemented` når delen er levert, ellers statustaggen på delen (`@draft`, `@deprecated`,
+ * `@planned`, `@in-progress`), ellers statusen på egenskapen. En `@demo`-del har ingen status. En regel med
+ * scenarioer har den laveste statusen blant dem.
  */
-export function deliveryOf(status: Status | null, m: FeatureModel): { rules: Krav['rules']; delivery: Delivery } {
+export function deliveryOf(status: Status | null, m: FeatureModel): { rules: Krav['rules']; scenarios: Krav['scenarios']; delivery: Delivery } {
   const d: Delivery = { rules: 0, rulesDone: 0, scen: 0, scenDone: 0 };
   const rules: Krav['rules'] = [];
+  const scenarios: Krav['scenarios'] = [];
   const open = (tags: string[]) => has(tags, 'planned') || has(tags, 'in-progress');
   const done = (tags: string[]) => (status === 'implemented' ? !open(tags) : status === 'in-progress' ? has(tags, 'implemented') : false);
+  const partSt = (tags: string[]): Status | null =>
+    status === 'deprecated' || has(tags, 'deprecated') ? 'deprecated'
+    : has(tags, 'draft') ? 'draft'
+    : has(tags, 'demo') ? null
+    : done(tags) ? 'implemented'
+    : has(tags, 'in-progress') ? 'in-progress'
+    : has(tags, 'planned') ? 'planned'
+    : status;
   for (const r of m.rules) {
     const out = status === 'deprecated' || left(r.tags);
-    const scs = out ? [] : r.scenarios.filter(sc => sc.kind !== 'Bakgrunn' && !left(sc.tags));
+    const all = r.scenarios.filter(sc => sc.kind !== 'Bakgrunn');
+    for (const sc of all) scenarios.push({ name: sc.name, rule: r.name, ln: sc.ln, status: partSt([...r.tags, ...sc.tags]) });
+    const scs = out ? [] : all.filter(sc => !left(sc.tags));
     const scDone = scs.filter(sc => done([...r.tags, ...sc.tags])).length;
     d.scen += scs.length;
     d.scenDone += scDone;
     if (r.name === null) continue;
     const ruleDone = out ? null : scs.length ? scDone === scs.length : done(r.tags);
-    rules.push({ name: r.name, ln: r.ln, done: ruleDone });
+    const ruleSt = out || !scs.length ? partSt(r.tags) : lowest(scs.map(sc => partSt([...r.tags, ...sc.tags])));
+    rules.push({ name: r.name, ln: r.ln, done: ruleDone, status: ruleSt });
     if (ruleDone !== null) {
       d.rules++;
       if (ruleDone) d.rulesDone++;
     }
   }
-  return { rules, delivery: d };
+  return { rules, scenarios, delivery: d };
+}
+
+/** Den laveste statusen. Deler uten status (`@demo`) telles ikke, og uten noen status er svaret `null` */
+function lowest(sts: (Status | null | undefined)[]): Status | null {
+  const known = sts.filter((s): s is Status => s != null);
+  return known.length ? known.reduce((a, b) => (ORD[b] < ORD[a] ? b : a)) : null;
 }
 
 /** Kravet er ikke levert som helhet, men noen regler eller scenarioer er det */
@@ -200,7 +229,7 @@ export function buildFlows(entries: Snapshot): FlowIndex {
           n: phases.length + 1,
           title: r.name,
           ln: r.ln,
-          links: tagIds(r.tags, DEP).map(t => ({ id: t, note: null, quoted }) as PhaseLink & { quoted: string[] }),
+          links: tagIds(r.tags, DEP).map(t => ({ id: t, note: null, focus: null, quoted }) as PhaseLink & { quoted: string[] }),
           refs: tagIds(r.tags, REF),
           questions: [...r.notes, ...r.scenarios.flatMap(s => [...s.notes, ...s.steps.flatMap(st => st.notes ?? [])])].filter(n => n.kind === 'question').flatMap(n => n.items.map(i => i.text)),
           handovers: r.scenarios.map(s => ({ name: s.name, ln: s.ln, steps: s.steps.map(st => ({ kw: st.kw.trim(), text: st.text })), openQuestion: s.tags.includes('@openquestion') })),
@@ -270,7 +299,8 @@ export function buildFlows(entries: Snapshot): FlowIndex {
     for (const ph of f.phases)
       ph.links = ph.links.map(l => {
         const { quoted, ...rest } = l as PhaseLink & { quoted: string[] };
-        return { ...rest, note: ruleIn(l.id, quoted) };
+        const note = ruleIn(l.id, quoted);
+        return { ...rest, note, focus: focusIn(krav, l.id, f.id, note) };
       });
 
   const coll = new Intl.Collator('nb', { numeric: true });
@@ -299,18 +329,33 @@ export const domainOf = (ix: FlowIndex, id: string) => {
   return isFlowId(id) ? 'flyt' : k ? `${k.domain} › ${k.sub}` : '';
 };
 
-/** Fasen er levert når alle kravene (og flytene) den bygger på, er `@implemented` (som fremdriften i fs-verify) */
-export const delivered = (ix: FlowIndex, p: FlowPhase) => p.links.length > 0 && p.links.every(l => statusOf(ix, l.id) === 'implemented');
+/**
+ * Statusen på delen av kravet som følges (`focus`): den laveste statusen blant ankrene, statusen på regelen i «…»,
+ * eller statusen på kravet når hele kravet følges (og for en flyt). Er delen levert, er den `implemented`, også når
+ * resten av kravet ikke er det (*Anker* i krav/README.md)
+ */
+export function partStatus(ix: FlowIndex, id: string, focus: Focus): Status | null {
+  const k = ix.krav.get(id);
+  if (!k || !focus) return statusOf(ix, id);
+  const sts =
+    focus.kind === 'note'
+      ? [k.rules.find(r => r.name === focus.rule)?.status]
+      : focus.parts.map(a => (a.part === 'rule' ? k.rules.find(r => r.ln === a.ln) : k.scenarios.find(s => s.ln === a.ln))?.status);
+  return sts.some(s => s != null) ? lowest(sts) : k.status;
+}
+
+/** Fasen er levert når delen av hvert krav den bygger på, er levert, og flytene den bygger på, er `@implemented` (som fremdriften i fs-verify) */
+export const delivered = (ix: FlowIndex, p: FlowPhase) => p.links.length > 0 && p.links.every(l => partStatus(ix, l.id, l.focus) === 'implemented');
 
 export type PhaseStatus = Status | 'missing' | 'broken';
-/** Levert, den laveste statusen blant kravene, `broken` når en ID ikke finnes, og `missing` uten krav */
+/** Levert, den laveste statusen blant delene fasen bygger på, `broken` når en ID ikke finnes, og `missing` uten krav */
 export function phaseStatus(ix: FlowIndex, p: FlowPhase): PhaseStatus {
   if (!p.links.length) return 'missing';
   if (delivered(ix, p)) return 'implemented';
   let low: Status | null = null;
   let first = true;
   for (const l of p.links) {
-    const s = statusOf(ix, l.id);
+    const s = partStatus(ix, l.id, l.focus);
     if (!exists(ix, l.id)) return 'broken';
     if (first || ord(s) < ord(low)) low = s;
     first = false;
@@ -355,6 +400,8 @@ export interface DepNode {
 
 export interface FlowTree {
   roots: DepNode[][];
+  /** Hva som følges: avgjør om statusen er delen eller hele kravet (`nodeStatus`) */
+  follow: Follow;
   seen: Map<string, { phase: number; level: number }>;
   /** Det dypeste nivået */
   max: number;
@@ -365,8 +412,10 @@ export interface FlowTree {
  * ellers regelen i kommentaren under taggen, ellers hele kravet. Noden nås bare gjennom en `@depends-on-`, så
  * `@ref-` på delen er alltid et anker her
  */
-export function focusOf(ix: FlowIndex, id: string, from: string | null, note: string | null): Focus {
-  const k = ix.krav.get(id);
+export const focusOf = (ix: FlowIndex, id: string, from: string | null, note: string | null): Focus => focusIn(ix.krav, id, from, note);
+
+function focusIn(krav: Map<string, Krav>, id: string, from: string | null, note: string | null): Focus {
+  const k = krav.get(id);
   if (!k) return null;
   const parts = from ? k.anchors.get(from) : undefined;
   if (parts?.length) return { kind: 'anchor', parts };
@@ -456,7 +505,7 @@ export function flowTree(ix: FlowIndex, f: Flow, follow: Follow): FlowTree {
   }
   let max = 1;
   seen.forEach(v => (max = Math.max(max, v.level)));
-  return { roots, seen, max };
+  return { roots, follow, seen, max };
 }
 
 /** Alle nodene til og med `depth`, også dem som er vist før */
@@ -506,12 +555,15 @@ export function chainBehind(ix: FlowIndex, roots: DepNode[], depth: number): { s
   return null;
 }
 
-/** Den laveste statusen i kjeden til og med `depth`, og hvor den er */
+/** Statusen på noden: delen som følges med `follow: 'part'`, ellers hele kravet */
+export const nodeStatus = (ix: FlowIndex, n: DepNode, follow: Follow) => (follow === 'part' ? partStatus(ix, n.id, n.focus) : statusOf(ix, n.id));
+
+/** Den laveste statusen i kjeden til og med `depth`, og hvor den er. Med `follow: 'part'` er det statusen på delen som følges */
 export function chainLow(ix: FlowIndex, t: FlowTree, depth: number): { status: Status | null; at: DepNode } | null {
   let low: { status: Status | null; at: DepNode } | null = null;
   for (const n of nodesTo(t, depth)) {
     if (n.cycle || !exists(ix, n.id)) continue;
-    const s = statusOf(ix, n.id);
+    const s = nodeStatus(ix, n, t.follow);
     if (!low || ord(s) < ord(low.status)) low = { status: s, at: n };
   }
   return low;
@@ -532,6 +584,8 @@ export interface FlatKrav {
   rules: Set<string>;
   /** Minst én referanse til kravet sier ikke hvilken regel den gjelder */
   whole: boolean;
+  /** Fasene der delen som følges (eller hele kravet, med `follow: 'whole'`), ikke er levert: kravet gjenstår der */
+  open: Set<number>;
 }
 
 /** Kravene flyten bygger på, til og med `depth`, uten duplikater */
@@ -541,8 +595,9 @@ export function flatKrav(ix: FlowIndex, f: Flow, t: FlowTree, depth: number): Fl
     if (n.level > depth || n.cycle) return;
     if (!isFlowId(n.id) && exists(ix, n.id)) {
       let it = items.get(n.id);
-      if (!it) items.set(n.id, (it = { id: n.id, level: n.level, phases: new Set(), via: new Set(), group, rules: new Set(), whole: false }));
+      if (!it) items.set(n.id, (it = { id: n.id, level: n.level, phases: new Set(), via: new Set(), group, rules: new Set(), whole: false, open: new Set() }));
       it.phases.add(n.phase);
+      if (nodeStatus(ix, n, t.follow) !== 'implemented') it.open.add(n.phase);
       // Delen står i ankrene i kravet, eller i kommentaren under taggen. Uten dem gjelder referansen hele kravet
       const fc = n.focus;
       if (fc?.kind === 'anchor') fc.parts.forEach(a => a.rule && it!.rules.add(a.rule));
@@ -558,7 +613,7 @@ export function flatKrav(ix: FlowIndex, f: Flow, t: FlowTree, depth: number): Fl
 
 // Varsler ---------------------------------------------------------------------------------------
 
-export type WarnKind = 'missing' | 'broken' | 'deprecated' | 'flow-behind' | 'cross-process' | 'cycle' | 'break';
+export type WarnKind = 'missing' | 'broken' | 'deprecated' | 'part-left' | 'flow-behind' | 'cross-process' | 'cycle' | 'break';
 export interface FlowWarning {
   kind: WarnKind;
   flow: string;
@@ -598,9 +653,18 @@ export function flowWarnings(ix: FlowIndex, f: Flow): FlowWarning[] {
     }
     const s = statusOf(ix, n.id);
     if (s === 'deprecated' && once('d:' + from + n.id)) out.push({ kind: 'deprecated', flow: f.id, phase: n.phase, id: n.id, from, level: n.level, text: `${n.id} er avviklet. ${from} peker på det, og må peke på kravet som erstatter det.` });
-    if (f.status === 'implemented' && s !== 'implemented' && !behind) behind = n;
+    // Ankeret peker på en del som er utkast eller avviklet: delen blir ikke levert, og fasen heller ikke
+    if (s !== 'deprecated' && n.focus?.kind === 'anchor') {
+      const k = ix.krav.get(n.id)!;
+      for (const a of n.focus.parts) {
+        const ps = (a.part === 'rule' ? k.rules.find(r => r.ln === a.ln) : k.scenarios.find(sc => sc.ln === a.ln))?.status;
+        if ((ps === 'draft' || ps === 'deprecated') && once('p:' + from + n.id + ':' + a.ln))
+          out.push({ kind: 'part-left', flow: f.id, phase: n.phase, id: n.id, from, level: n.level, text: `${from} bygger på «${a.name}» i ${n.id}, som er ${ps === 'draft' ? 'utkast' : 'avviklet'}. Delen blir ikke levert slik den står.` });
+      }
+    }
+    if (f.status === 'implemented' && partStatus(ix, n.id, n.focus) !== 'implemented' && !behind) behind = n;
   }
-  if (behind) out.push({ kind: 'flow-behind', flow: f.id, phase: behind.phase, id: behind.id, level: behind.level, text: `Flyten er @implemented, men ${behind.id} er ${statusOf(ix, behind.id) ?? 'uten status'}. Kravet er endret etter at flyten ble verifisert.` });
+  if (behind) out.push({ kind: 'flow-behind', flow: f.id, phase: behind.phase, id: behind.id, level: behind.level, text: `Flyten er @implemented, men ${behind.focus ? 'delen flyten bygger på i ' : ''}${behind.id} er ${partStatus(ix, behind.id, behind.focus) ?? 'uten status'}. Kravet er endret etter at flyten ble verifisert.` });
   return out;
 }
 

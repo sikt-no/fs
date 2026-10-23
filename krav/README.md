@@ -447,7 +447,7 @@ Eksempel (ankeret finnes ikke i repoet):
 - Ankeret sier hvilket krav som bygger på delen, ikke hvilken del av A. Har A flere deler med `@depends-on-B`, bygger alle på de samme delene av B. Skal de skilles, står regeltittelen i «…» i kommentaren under taggen i A.
 - Rekkefølgen når det leses hvilken del av B som gjelder: ankeret, så regeltittelen i «…» under taggen i A, ellers hele kravet.
 - Ankeret settes av `fs-krav`, sammen med `@depends-on-`. At ankeret og regeltittelen i «…» peker på samme del, krever flere filer, og sjekkes av `fs-krav-avvik`.
-- Ankeret sier hvilken del av B som følges. Det endrer ikke når A kan leveres: en fase er levert når kravene den bygger på, er `@implemented` som helhet (se *Flyter*).
+- Ankeret sier også når A kan leveres. En fase er levert når delen den bygger på, er levert: delene med ankeret, ellers regelen i «…» under taggen, ellers hele kravet (`@implemented`). Se *Flyter*.
 
 Dette er ikke referanser, og blir stående som kommentarer:
 
@@ -539,8 +539,18 @@ Et brudd i overleveringen kan skjules av kravene. Testene for hvert krav setter 
 
 | Status | Kommer fra | Sier |
 |---|---|---|
-| Fremdrift | Statusen på kravene flyten bygger på | «3 av 5 faser levert» |
+| Fremdrift | Statusen på delene av kravene flyten bygger på | «3 av 5 faser levert» |
 | Flytens egen status | Taggen på flyten | at overleveringene virker i koden |
+
+En fase er levert når delen av hvert krav den bygger på, er levert, og flytene den bygger på, er `@implemented`. Delen er den samme som følges (se *Anker*): delene med ankeret, ellers regelen i «…» under taggen, ellers hele kravet. Om en del er levert, leses av taggene som i *Delvis levert* og *Endring av levert krav*:
+
+- Er kravet `@in-progress`, er delen levert når den selv er `@implemented`. En regel er levert når alle scenarioene i den er det.
+- Er kravet `@implemented`, er delen levert når den ikke er `@planned` eller `@in-progress`. Da holder den på å endres.
+- Er kravet `@draft` eller `@planned`, er ingenting levert.
+- En del som er `@draft` eller `@deprecated`, blir ikke levert. Peker ankeret på en slik del, er fasen ikke levert, og FS Kravforvaltning varsler.
+- Peker ankeret på flere deler, må alle være levert.
+
+En flyt kan derfor være `@implemented` selv om et krav den bygger på, ikke er levert som helhet. Endres delen flyten bygger på, er fasen ikke levert lenger, og FS Kravforvaltning varsler at flyten er bak kravene.
 
 Flytens egen status går `@draft` →(`fs-krav`)→ `@planned` →(`fs-verify`)→ `@implemented`. Den hentes ikke inn i en oppgave, og hopper over `@in-progress`. `fs-verify` setter `@implemented` når alle fasene er levert, og den har funnet i koden både stedet der hver overlevering lages og stedet der den brukes.
 
