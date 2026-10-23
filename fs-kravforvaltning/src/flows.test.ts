@@ -104,8 +104,8 @@ test('flytene leses fra krav/_Flyter, med prosess, oversikt og fasene', () => {
 });
 
 test('kommentaren under taggen blir regelen fasen bygger på, bare når regelen finnes i kravet', () => {
-  assert.equal(sak.phases[0].links[0].note, 'Første regel i A');
-  assert.equal(sak.phases[1].links[0].note, null);
+  assert.deepEqual(sak.phases[0].links[0].notes, ['Første regel i A']);
+  assert.deepEqual(sak.phases[1].links[0].notes, []);
 });
 
 test('fremdriften: en fase er levert når delen av kravene den bygger på, er levert, og en fase uten krav teller i totalen', () => {
@@ -123,9 +123,9 @@ test('hele kravet følger alle @depends-on-, bare delen følger regelen kommenta
   const part = flowTree(ix, sak, 'part');
   // Fase en følger bare «Første regel i A», men fase to følger hele A (ingen regel i kommentaren)
   assert.deepEqual([1, 2, 3, Infinity].map(d => countTo(ix, part, d).krav), [2, 3, 4, 4]);
-  assert.deepEqual(part.roots[0][0].focus, { kind: 'note', rule: 'Første regel i A' });
+  assert.deepEqual(part.roots[0][0].focus, { kind: 'note', rules: ['Første regel i A'] });
   assert.equal(part.roots[1][0].focus, null);
-  assert.deepEqual(depsOf(ix, 'OPT-REG-KRA-001', { kind: 'note', rule: 'Første regel i A' }, 'part'), []);
+  assert.deepEqual(depsOf(ix, 'OPT-REG-KRA-001', { kind: 'note', rules: ['Første regel i A'] }, 'part'), []);
   assert.deepEqual(depsOf(ix, 'OPT-REG-KRA-001', null, 'part').map(d => [d.id, d.parts]), [['OPT-BEH-BEH-001', [{ k: 'Regel', t: 'Andre regel i A' }]]]);
 });
 
@@ -186,7 +186,7 @@ test('ankeret: @ref- på en regel eller et scenario samles per ID, @ref- på Ege
   assert.deepEqual([...aix.krav.get('OPT-REG-KRA-012')!.anchors.keys()], ['OPT-REG-KRA-010']);
 });
 
-test('ankeret går foran kommentaren, og et scenario følger også taggene på regelen over', () => {
+test('ankeret gjelder når ingen ankre ligger i regelen i «…», og et scenario følger også taggene på regelen over', () => {
   const t = flowTree(aix, anker, 'part');
   const x = t.roots[0][0];
   assert.equal(x.focus?.kind, 'anchor');
@@ -353,6 +353,78 @@ test('varslene: ankeret på et utkast, og flyten bak delen den bygger på', () =
   const dix = buildFlows(Object.fromEntries(Object.entries(draft).map(([p, s]) => [p, buildEntry(p, s, 0)])));
   assert.deepEqual(flowWarnings(dix, dix.byId.get('FLY-OPT-LEV-001')!).map(x => x.kind), ['flow-behind']);
   assert.equal(phaseStatus(dix, dix.byId.get('FLY-OPT-LEV-001')!.phases[3]), 'draft');
+});
+
+// Flere faser bygger på samme krav, som har ankeret på flere regler: «…» under taggen sier hvilke av dem fasen bygger på
+const skill: Record<string, string> = {
+  [B + 's.feature']: krav('@OPT-BEH-BEH-030 @must @in-progress', 'S', `
+  @implemented @ref-FLY-OPT-SKI-001
+  Regel: R1
+    Scenario: S1
+      Gitt noe
+      Når noe
+      Så noe
+
+  @ref-FLY-OPT-SKI-001
+  Regel: R2
+    Scenario: S2
+      Gitt noe
+      Når noe
+      Så noe
+
+  @implemented
+  Regel: R3
+    @ref-FLY-OPT-SKI-001
+    Scenario: S3
+      Gitt noe
+      Når noe
+      Så noe
+
+  Regel: R4
+    Scenario: S4
+      Gitt noe
+      Når noe
+      Så noe
+`),
+  [F + 'skill.feature']: krav('@FLY-OPT-SKI-001 @must @planned @e2e', 'Skill', `
+  @depends-on-OPT-BEH-BEH-030
+  # «R1» og «R3»
+  Regel: Første fase
+
+  @depends-on-OPT-BEH-BEH-030
+  # «R2»
+  Regel: Andre fase
+
+  @depends-on-OPT-BEH-BEH-030
+  # «R4»
+  Regel: Tredje fase
+
+  @depends-on-OPT-BEH-BEH-030
+  Regel: Fjerde fase
+`),
+};
+const six = buildFlows(Object.fromEntries(Object.entries(skill).map(([p, s]) => [p, buildEntry(p, s, 0)])));
+const ski = six.byId.get('FLY-OPT-SKI-001')!;
+
+test('ankeret og «…»: fasen bygger på ankrene innenfor reglene i «…», ellers alle ankrene', () => {
+  const names = (i: number) => {
+    const f = ski.phases[i].links[0].focus;
+    return f?.kind === 'anchor' ? f.parts.map(a => a.name) : f;
+  };
+  assert.deepEqual(ski.phases[0].links[0].notes, ['R1', 'R3']);
+  assert.deepEqual(names(0), ['R1', 'S3']); // scenarioet S3 hører til R3
+  assert.deepEqual(names(1), ['R2']);
+  assert.deepEqual(names(2), ['R1', 'R2', 'S3']); // ingen ankre i R4: alle ankrene
+  assert.deepEqual(names(3), ['R1', 'R2', 'S3']); // uten «…»: alle ankrene
+  assert.deepEqual(ski.phases.map(p => phaseStatus(six, p)), ['implemented', 'in-progress', 'in-progress', 'in-progress']);
+});
+
+test('uten anker følges alle reglene i «…», ikke bare den første', () => {
+  const ix2 = buildFlows(Object.fromEntries(Object.entries(skill).map(([p, s]) => [p, buildEntry(p, s.replaceAll('@ref-FLY-OPT-SKI-001', ''), 0)])));
+  const f = ix2.byId.get('FLY-OPT-SKI-001')!;
+  assert.deepEqual(f.phases[0].links[0].focus, { kind: 'note', rules: ['R1', 'R3'] });
+  assert.equal(phaseStatus(ix2, f.phases[0]), 'implemented');
+  assert.equal(phaseStatus(ix2, f.phases[2]), 'in-progress');
 });
 
 test('ruta: #/flyter, stien og nivåene', () => {

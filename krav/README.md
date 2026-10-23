@@ -444,10 +444,14 @@ Eksempel (ankeret finnes ikke i repoet):
 - Ankeret er en vanlig `@ref-`, og leses også som en henvisning: «A bygger på denne delen». Den som endrer delen, ser hvilke krav som må sjekkes, rett over delen.
 - Ankeret gjelder bare når A har `@depends-on-B`. Ellers er `@ref-A` i B en vanlig henvisning.
 - A kan være en flyt: en fase med `@depends-on-B` bygger på delene i B som har `@ref-<flytens ID>`.
-- Ankeret sier hvilket krav som bygger på delen, ikke hvilken del av A. Har A flere deler med `@depends-on-B`, bygger alle på de samme delene av B. Skal de skilles, står regeltittelen i «…» i kommentaren under taggen i A.
-- Rekkefølgen når det leses hvilken del av B som gjelder: ankeret, så regeltittelen i «…» under taggen i A, ellers hele kravet.
+- Ankeret sier hvilket krav som bygger på delen, ikke hvilken del av A. Har A flere deler med `@depends-on-B` (for eksempel flere faser i en flyt), skilles de med regeltitlene i «…» i kommentaren under taggen i A: delen bygger på ankrene som ligger i de reglene i B. Et scenario med ankeret hører til regelen over.
+- Slik leses hvilken del av B som gjelder:
+  1. Ankrene innenfor reglene i «…» under taggen i A.
+  2. Står det ingen regler i «…», eller ligger ingen av ankrene i dem: alle ankrene.
+  3. Uten anker: reglene i «…» (alle, når det står flere).
+  4. Ellers hele kravet.
 - Ankeret settes av `fs-krav`, sammen med `@depends-on-`. At ankeret og regeltittelen i «…» peker på samme del, krever flere filer, og sjekkes av `fs-krav-avvik`.
-- Ankeret sier også når A kan leveres. En fase er levert når delen den bygger på, er levert: delene med ankeret, ellers regelen i «…» under taggen, ellers hele kravet (`@implemented`). Se *Flyter*.
+- Ankeret sier også når A kan leveres. En fase er levert når delen den bygger på (lest som over), er levert, eller hele kravet (`@implemented`) når den bygger på hele kravet. Se *Flyter*.
 
 Dette er ikke referanser, og blir stående som kommentarer:
 
@@ -542,7 +546,7 @@ Et brudd i overleveringen kan skjules av kravene. Testene for hvert krav setter 
 | Fremdrift | Statusen på delene av kravene flyten bygger på | «3 av 5 faser levert» |
 | Flytens egen status | Taggen på flyten | at overleveringene virker i koden |
 
-En fase er levert når delen av hvert krav den bygger på, er levert, og flytene den bygger på, er `@implemented`. Delen er den samme som følges (se *Anker*): delene med ankeret, ellers regelen i «…» under taggen, ellers hele kravet. Om en del er levert, leses av taggene som i *Delvis levert* og *Endring av levert krav*:
+En fase er levert når delen av hvert krav den bygger på, er levert, og flytene den bygger på, er `@implemented`. Delen er den samme som følges (se *Anker*): ankrene innenfor reglene i «…» under taggen (alle ankrene når ingen ligger i dem), ellers reglene i «…», ellers hele kravet. Om en del er levert, leses av taggene som i *Delvis levert* og *Endring av levert krav*:
 
 - Er kravet `@in-progress`, er delen levert når den selv er `@implemented`. En regel er levert når alle scenarioene i den er det.
 - Er kravet `@implemented`, er delen levert når den ikke er `@planned` eller `@in-progress`. Da holder den på å endres.

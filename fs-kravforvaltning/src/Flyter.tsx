@@ -877,10 +877,10 @@ function DepCard(p: ViewProps & { ph: FlowPhase; n: DepNode; occ: Record<string,
             </span>
           </div>
         ) : (
-          n.note && (
+          n.notes.length > 0 && (
             <div class="dnote">
-              <span class="mono muted">regel</span>
-              <span>«{n.note}»</span>
+              <span class="mono muted">{n.notes.length > 1 ? 'regler' : 'regel'}</span>
+              <span>{n.notes.map(t => `«${t}»`).join(', ')}</span>
             </div>
           )
         )}

@@ -499,7 +499,7 @@ Fila følger malen i *Flyter* i `krav/README.md`: `# language: no`, tag-linja `@
 Oppsummer:
 
 - Stien og ID-en, og fasen i oversiktsflyten
-- **Fremdriften:** hver fase med kravene og statusen deres. En fase er levert når delen den bygger på, er levert: delene med ankeret, ellers regelen i «…», ellers hele kravet (*Flyter* i `krav/README.md`)
+- **Fremdriften:** hver fase med kravene og statusen deres. En fase er levert når delen den bygger på, er levert: ankrene innenfor reglene i «…» (alle ankrene når ingen ligger i dem), ellers reglene i «…», ellers hele kravet (*Anker* og *Flyter* i `krav/README.md`). Bygger flere faser på samme krav, skriv regeltitlene i «…» under taggen i hver fase, så fasene venter på hver sine deler
 - Faser uten krav, med forslag til `fs-scope` eller modus A
 - Overlapp som ble funnet, og kjente brudd
 - Neste steg: valider flyten med modus B (`@draft` → `@planned`). Når kravene er levert, verifiserer `fs-verify` flyten (overleveringene i koden), og setter `@implemented`. Flyten hentes ikke inn i en oppgave med `fs-specify`
