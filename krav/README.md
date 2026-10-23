@@ -434,11 +434,11 @@ Eksempel (ankeret finnes ikke i repoet):
 ```gherkin
 # A: OPT-OPT-UTD-004
   @depends-on-OPT-BEH-BEH-011
-  Regel: Opptaksforvalter kan velge saksbehandlertildelingsregel per utdanningstilbud
+  Regel: Opptaksforvalter kan velge behandlertildelingsregel per utdanningstilbud
 
 # B: OPT-BEH-BEH-011
   @ref-OPT-OPT-UTD-004
-  Regel: Opptaksforvalteren ved forvaltende organisasjon setter opp tildelingsreglene for opptaket
+  Regel: Opptaksforvalteren ved forvaltende organisasjon setter opp behandlertildelingsreglene for opptaket
 ```
 
 - Ankeret er en vanlig `@ref-`, og leses også som en henvisning: «A bygger på denne delen». Den som endrer delen, ser hvilke krav som må sjekkes, rett over delen.
