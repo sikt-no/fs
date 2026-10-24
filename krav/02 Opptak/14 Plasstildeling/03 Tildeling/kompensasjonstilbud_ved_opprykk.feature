@@ -1,14 +1,15 @@
 # language: no
 # GitHub: #584
 @OPT-PLA-TIL-003 @must @draft @scope-plasstildeling-2027
-Egenskap: Kompensasjonstilbud ved opprykk i supplering
+Egenskap: Kompensasjonstilbud ved opprykk
   Som opptaksforvalter
-  ønsker jeg at plasser som frigjøres ved opprykk gis videre automatisk i suppleringsrunder
+  ønsker jeg at plasser som frigjøres ved opprykk gis videre automatisk i plasstildelingsrunder med kompensasjonstilbud ved opprykk
   slik at kapasiteten på utdanningstilbudet utnyttes best mulig uten manuell oppfølging.
 
   # Kilde: tasks/opptak/plasstildeling/design.md (rundetyper, informasjonsarv, avklaring 3 og 8) og
   # oppgave.md (oppgave 6).
-  # Kompensasjonstilbud gjelder bare rundetype «Supplering». Antall tilbud som skal gis settes per
+  # Kompensasjonstilbud gjelder plasstildelingsrunder der rundetypen har innstillingen «Kompensasjonstilbud ved
+  # opprykk» (endret 2026-10-24). I samordna opptak er det Supplering. Antall tilbud som skal gis settes per
   # plasstildelingsrunde (se 02 Tildelingsinnstillinger/antall_tilbud_som_skal_gis.feature).
   # Det finnes bare én suppleringslogikk. Den historiske forskjellen mellom UHG og HYU (med og uten
   # kompensasjon) videreføres ikke.
@@ -17,6 +18,7 @@ Egenskap: Kompensasjonstilbud ved opprykk i supplering
   Bakgrunn:
     Gitt at opptaket "Samordna opptak 2027" har en publisert plasstildeling i "Hovedrunde"
     Og at opptaket har plasstildelingsrunden "Suppleringsrunde" med rundetype "Supplering"
+    Og at rundetypen "Supplering" har innstillingen "Kompensasjonstilbud ved opprykk"
     Og at antall tilbud som skal gis i "Sykepleie, høst 2027" i "Suppleringsrunde" er 10
 
   Regel: En plass som frigjøres ved opprykk gis til neste på ventelisten
@@ -43,20 +45,15 @@ Egenskap: Kompensasjonstilbud ved opprykk i supplering
       Når plasstildelingen i "Suppleringsrunde" gjennomføres
       Så gis det ikke kompensasjonstilbud på "Sykepleie, høst 2027"
 
-  Regel: Kompensasjonstilbud gis bare i supplering
+  @depends-on-OPT-REG-RUN-001
+  Regel: Kompensasjonstilbud gis bare når rundetypen har kompensasjonstilbud ved opprykk
 
-    Scenariomal: Ingen kompensasjonstilbud i andre rundetyper
-      Gitt at plasstildelingsrunden har rundetype "<rundetype>"
+    Scenario: Ingen kompensasjonstilbud uten innstillingen
+      Gitt at opptaket har plasstildelingsrunden "Supplering uten kompensasjon" med en rundetype som har bortfall og bygger på forrige publiserte plasstildelingsrunde
+      Og at rundetypen ikke har innstillingen "Kompensasjonstilbud ved opprykk"
       Og at en søker med tilbud rykker opp til en høyere prioritet
-      Når plasstildelingen gjennomføres
+      Når plasstildelingen i "Supplering uten kompensasjon" gjennomføres
       Så gis det ikke automatisk nytt tilbud på plassen som ble frigjort
-
-      # AVKLART 2026-10-07, endret 2026-10-08: Ledige studieplasser er en egenskap ved plasstildelingsrunden,
-      # ikke en egen rundetype.
-      Eksempler:
-        | rundetype        |
-        | Hovedtildeling   |
-        | Etterfylling     |
 
 # ÅPNE SPØRSMÅL:
 # - Skal en søker som har takket ja og trekker seg etter svarfristen (GODTATT_MEN_ANNULLERT), frigjøre plassen
