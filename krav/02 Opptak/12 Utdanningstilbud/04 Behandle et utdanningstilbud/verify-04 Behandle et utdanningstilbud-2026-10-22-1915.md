@@ -8,6 +8,7 @@
 - **Kontroll:** `fs-verify-kontroll`
 - **Team:** 4 finnere (`fs-verify-krav`), 12 kontrollører (`fs-verify-kontroll`), 2–7 feature-filer per finner
 - **Skjermbilder:** nei
+- **Confluence:** https://sikt.atlassian.net/wiki/spaces/STUDIEADM/pages/5137596442
 
 Gating-sett: alle scenarioene i scope, også `@draft` og `@planned`, minus `@demo` (verifisert uansett status).
 
