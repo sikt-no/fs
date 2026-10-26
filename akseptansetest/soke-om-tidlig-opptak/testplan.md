@@ -141,7 +141,7 @@ Testansvarlig skriver beslutningen og begrunnelsen i sluttrapporten. Rettede fun
 |---|---|---|---|
 | 1. Verifisering (`fs-verify`) | [Verifisering – Søke om tidlig opptak – 2026-10-26 09:50](https://sikt.atlassian.net/wiki/spaces/STUDIEADM/pages/5143887891) · [verify-søke_om_tidlig_opptak-2026-10-26-0950.md](../../krav/02%20Opptak/13%20S%C3%B8knad%20og%20saksbehandling/01%20S%C3%B8knad/verify-s%C3%B8ke_om_tidlig_opptak-2026-10-26-0950.md) | Alt funnet | 2026-10-26 |
 | 2. Testplan | (denne siden) | Laget | 2026-10-26 |
-| 3. Testrapport – verifisering | – | Venter | |
+| 3. Testrapport – verifisering | [Testrapport – verifisering – Søke om tidlig opptak](https://sikt.atlassian.net/wiki/spaces/STUDIEADM/pages/5146836993) · [testrapport-verifisering-2026-10-26.md](testrapport-verifisering-2026-10-26.md) | Klar | 2026-10-26 |
 | 4. Intern akseptansetest | – | Venter | |
 | 4b. CDP-kjøring (valgfri) | – | Ikke aktuell | |
 | 5. Testrapport – intern | – | Venter | |
