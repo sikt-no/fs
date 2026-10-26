@@ -51,10 +51,8 @@
 #   Søkere med flere vitnemål behandles i vitnemålsbehandlingen.
 # - Søknadsmangler: søknadsmangler.feature har allerede «Mangelen sjekkes ut
 #   når vitnemålet behandles automatisk». «Godkjenn» i FS-klienten fjerner også
-#   søknadsmanglene for vitnemålet. Referansen settes ikke som tag ennå, fordi
-#   søknadsmangler.feature og legge_inn_og_endre_fag.feature har samme
-#   Feature-ID (@OPT-BEH-BEH-008) på main.
-@OPT-BEH-BEH-018 @must @draft
+#   søknadsmanglene for vitnemålet.
+@OPT-BEH-BEH-018 @must @draft @ref-OPT-BEH-BEH-008
 Egenskap: Automatisk poengberegning
   Som saksbehandler
   ønsker jeg at poengene fra søkerens elektroniske vitnemål beregnes automatisk

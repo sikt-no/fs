@@ -58,8 +58,7 @@
 # - Hvilke grunnlag som finnes, og egenskapene deres, settes opp i regelverket
 #   (grunnlag.feature).
 # - GSK-konklusjonen settes i automatisk_gsk_konklusjon.feature.
-# - Poengene beregnes i automatisk_poengberegning.feature
-#   (@OPT-BEH-BEH-018, på branchen opptak/automatisk-poengberegning).
+# - Poengene beregnes i automatisk_poengberegning.feature (@OPT-BEH-BEH-018).
 # - Kvoteplasseringen står i automatisk_kvoteplassering.feature.
 # - Søkere med flere vitnemål får vitnemålet valgt av saksbehandleren i
 #   vitnemålsbehandlingen.
@@ -115,13 +114,13 @@ Egenskap: Automatisk grunnlag
       Gitt at søkeren har ett elektronisk vitnemål som gir generell studiekompetanse
       Og at et grunnlag som passer søkeren, ikke er med i regelverket til noen av søknadsalternativene
       Når søknaden behandles automatisk
-      Så får ikke søknaden det grunnlaget
+      Så får ikke søknaden grunnlaget som ikke er med i regelverket
 
     Scenario: Grunnlag uten egenskaper for automatikken settes ikke automatisk
       # PRA, REA, VPL og BCH velges av saksbehandleren.
       Gitt at søknadsalternativenes regelverk har et grunnlag uten aldersgrense, uten krav om vitnemål og uten krav om førstegangsvitnemål
       Når søknaden behandles automatisk
-      Så får ikke søknaden det grunnlaget automatisk
+      Så får ikke søknaden grunnlaget uten egenskaper for automatikken
 
     Scenario: Førstegangsvitnemål går foran
       Gitt at søkeren passer til et grunnlag som krever førstegangsvitnemål
@@ -219,7 +218,7 @@ Egenskap: Automatisk grunnlag
 
   Regel: Grunnlag som saksbehandleren har valgt, endres ikke av automatikken
 
-    Scenario: Grunnlag som saksbehandleren legger til, låser saken
+    Scenario: Grunnlag som saksbehandleren legger til, låser grunnlagene
       Gitt at søknaden har grunnlag som er satt automatisk
       Når saksbehandleren legger til et grunnlag
       Så er grunnlagene på søknaden låst mot automatikken
