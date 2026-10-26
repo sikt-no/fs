@@ -106,7 +106,7 @@ Klart når testansvarlig har logget inn som testbruker og ser testdataene.
 | 3 | Testdataene kan settes tilbake eller lages på nytt | [Fylles ut av teamet] |
 | 4 | Testbrukerne finnes i rollene leveransen gjelder, i minst to organisasjoner | [Fylles ut av teamet] |
 | 5 | `fs-verify` har funnet alle scenarioene, og en annen person har kontrollert rapporten | `fs-verify` fant alle 9 scenarioene (2026-10-26 09:50), kontrollert av `fs-verify-kontroll`. Kontrollen av en person venter på steg 3 |
-| 6 | Testcasene er laget og gått gjennom av testansvarlig | Venter |
+| 6 | Testcasene er laget og gått gjennom av testansvarlig | Laget, venter på gjennomgang av testansvarlig |
 | 7 | Testansvarlig har logget inn som testbruker og ser testdataene | [Fylles ut av testansvarlig] |
 
 ## Kriterier for godkjent
@@ -142,7 +142,7 @@ Testansvarlig skriver beslutningen og begrunnelsen i sluttrapporten. Rettede fun
 | 1. Verifisering (`fs-verify`) | [Verifisering – Søke om tidlig opptak – 2026-10-26 09:50](https://sikt.atlassian.net/wiki/spaces/STUDIEADM/pages/5143887891) · [verify-søke_om_tidlig_opptak-2026-10-26-0950.md](../../krav/02%20Opptak/13%20S%C3%B8knad%20og%20saksbehandling/01%20S%C3%B8knad/verify-s%C3%B8ke_om_tidlig_opptak-2026-10-26-0950.md) | Alt funnet | 2026-10-26 |
 | 2. Testplan | (denne siden) | Laget | 2026-10-26 |
 | 3. Testrapport – verifisering | [Testrapport – verifisering – Søke om tidlig opptak](https://sikt.atlassian.net/wiki/spaces/STUDIEADM/pages/5146836993) · [testrapport-verifisering-2026-10-26.md](testrapport-verifisering-2026-10-26.md) | Klar | 2026-10-26 |
-| 4. Intern akseptansetest | – | Venter | |
+| 4. Intern akseptansetest | [Intern akseptansetest – Søke om tidlig opptak](https://sikt.atlassian.net/wiki/spaces/STUDIEADM/pages/5146705926) · [testcaser-intern.md](testcaser-intern.md) | Klar til test | 2026-10-26 |
 | 4b. CDP-kjøring (valgfri) | – | Ikke aktuell | |
 | 5. Testrapport – intern | – | Venter | |
 | 6. Ekstern akseptansetest | – | Venter | |
