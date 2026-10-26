@@ -48,6 +48,22 @@ Egenskap: Velge utdanningsbakgrunn i søknad
       Og søkeren får beskjed om å velge utdanningsbakgrunn
 
   @openquestion
+  Regel: Søkeren kan endre utdanningsbakgrunn etter at søknaden er sendt inn
+    # ÅPNE SPØRSMÅL:
+    # - Skal søkeren selv kunne endre utdanningsbakgrunnen etter at søknaden er sendt inn,
+    #   eller er det bare saksbehandleren som kan det?
+    # - Hvis søkeren kan det: til hvilken frist? Søknadsfristen, fristen for endring av
+    #   utdanningsbakgrunn (@OPT-OVO-FRI-001), eller en annen frist?
+    # Kilde: HK-Dir-historiene 9467 «Endre utdanningsbakgrunn» og 9448 «Endre innsendt søknad».
+    # Saksbehandlerens endring hører til søknadsbehandlingen. Hvilken organisasjon som
+    # saksbehandler søknaden etter endringen, står i @OPT-BEH-BEH-011.
+
+    Scenario: Søkeren endrer utdanningsbakgrunn i en innsendt søknad
+      Gitt at søkeren har sendt inn søknaden med utdanningsbakgrunnen "Utenlandsk utdanning"
+      Når søkeren endrer utdanningsbakgrunnen til "Steinerskole"
+      Så er "Steinerskole" registrert som utdanningsbakgrunn i søknaden
+
+  @openquestion
   Regel: Søkeren oppgir utdanningsland når utdanningsbakgrunnen krever det
     # ÅPNE SPØRSMÅL:
     # - Hvor er det bestemt om en utdanningsbakgrunn krever utdanningsland: på
