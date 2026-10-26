@@ -21,3 +21,5 @@ History of skill invocations for this spec. Append-only — never edit past entr
 - 2026-10-19 — `fs-verify` ended (success) — 0 retagget @implemented, 0 slettet; 43 funnet, 12 ikke funnet, 5 usikker av 60 (verify-2026-10-19-1958.md)
 - 2026-10-19 — `fs-specify` started — @OPT-OVO-GRU-001 — Regel: Utdanningsbakgrunner, poenglikhetsregel, maks antall søknadsalternativer og tak for tilbud per tildelingsrunde må være satt for å lagre et opptak (@planned-del i levert krav)
 - 2026-10-19 — `fs-specify` ended (success) — 1 del retagget @planned→@in-progress (@OPT-OVO-GRU-001, regel om obligatoriske felt); kodesjekk: 2 avvik (maks søknadsalternativer og tak ikke påkrevd i fs-admin), koden skal endres; skisse uendret (OK med merknad); 1 åpent spørsmål (implementasjonsdetaljer venter)
+- 2026-10-26 — `fs-verify` started — 1 @in-progress (@OPT-OVO-INN-001, innstillinger.feature) · omfang: @in-progress, delvis levert · avhengigheter: ingen
+- 2026-10-26 — `fs-verify` ended (success) — 1 retagget @implemented (@OPT-OVO-INN-001, 24/24 funnet, 1 avgjort av brukeren), 0 slettet (verify-2026-10-26-0941.md)
