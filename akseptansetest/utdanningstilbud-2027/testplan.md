@@ -40,20 +40,29 @@ Testbrukerne finnes i minst to organisasjoner, så vi kan teste at ingen ser dat
 
 ### Testdata
 
+Alle testcasene bruker opptaket «Sektordemo 23.10.26». Opptaket må være i ulike tilstander, og testbruker 1 (opptaksforvalter ved forvaltende organisasjon) flytter fristene i opptaket mellom fasene. Testcasene tas fase for fase, ikke i nummerrekkefølge. Fase 3–5 kommer sist, i tilfelle søknadsåpningen ikke kan flyttes tilbake. Etter testen settes fristene tilbake slik de var før fase 1.
+
+| Fase | Fristene i Sektordemo 23.10.26 | Testcaser |
+|---|---|---|
+| 1 | Redigering av utdanningstilbud åpner i morgen | 2.5 |
+| 2 | Redigering er åpen, og søknad er ikke åpnet | 1.1, 1.2, 1.4, 2.1–2.4, 2.6, del 3 og hele økt 2 |
+| 3 | Søknad er åpnet, og redigering er fortsatt åpen | 1.3 |
+| 4 | Redigering er stengt, og trekkfristen er ikke passert | 1.5, 2.7, 2.8, 4.1 |
+| 5 | Trekkfristen er passert | 4.2 |
+
 | Hva | Navn | Hvor | Kan settes tilbake |
 |---|---|---|---|
-| Opptak med deltakende organisasjoner som ikke har åpnet for søknad, med redigering av utdanningstilbud åpen | [Fylles ut: f.eks. testopptak for «Samordna opptak 2027»] | [Fylles ut] | [Fylles ut] |
-| Opptak som har åpnet for søknad (fjerning avvises) | [Fylles ut] | [Fylles ut] | [Fylles ut] |
-| Opptak der redigeringen ikke har åpnet ennå, og ett der redigeringen er stengt (redigeringsfristen er passert) | [Fylles ut] | [Fylles ut] | [Fylles ut] |
-| Opptak der trekkfristen for utdanningstilbud er passert | [Fylles ut] | [Fylles ut] | [Fylles ut] |
+| Opptaket, med deltakende organisasjoner, i fasene over | Sektordemo 23.10.26 | FS Admin, Opptak | Fristene: ja, settes tilbake etter testen. Fjerning (1.1, 1.2, 1.4) og trekking (4.1) kan ikke angres. |
+| Utdanningstilbud i opptaket: minst tre som kan fjernes, ett som kan trekkes, og ett for økt 2 med kompetanseregelverk og rangeringsregelverk | [Fylles ut] | Sektordemo 23.10.26 | Nei, de fjernes eller trekkes |
+| Utdanningstilbud i opptaket fra minst to organisasjoner, med ulik starttermin og ulikt startår, og noen uten kompetanseregelverk eller rangeringsregelverk | [Fylles ut] | Sektordemo 23.10.26 | [Fylles ut] |
 | En organisasjon som ikke er deltaker i opptaket, med utdanninger i utdanningsregisteret | [Fylles ut: f.eks. NTNU] | [Fylles ut] | – |
 | Utdanninger i utdanningsregisteret for de deltakende organisasjonene, nok til å legge til flere av gangen | [Fylles ut] | Utdanningsregisteret | – |
-| Utdanningstilbud i opptaket fra minst to organisasjoner, med ulik starttermin og ulikt startår, og noen uten kompetanseregelverk eller rangeringsregelverk | [Fylles ut] | [Fylles ut] | [Fylles ut] |
 | Utdanningstilbud med og uten beskrivelses-URL i utdanningsregisteret | [Fylles ut] | Utdanningsregisteret | – |
-| Opptak med standardregel for poenglikhet og tillatte unntak, og ett uten mulighet for unntak | [Fylles ut] | FS Admin, Opptak | Ingenting endres |
+| Standardregel for poenglikhet med tillatte unntak (9.1–9.3) | [Fylles ut: åpner Sektordemo 23.10.26 for unntak?] | FS Admin, Opptak | Ingenting endres |
+| Opptak med standardregel for poenglikhet uten mulighet for unntak (9.4) | [Fylles ut: eget opptak, eller endres innstillingen på Sektordemo 23.10.26?] | FS Admin, Opptak | [Fylles ut] |
 | Flere regler for poenglikhet som er tilgjengelige for opptaket, og minst én som ikke er det | [Fylles ut: reglene] | [Fylles ut] | Ingenting endres |
 | Utdanningstilbud i opptaket som bruker standardregelen for poenglikhet | [Fylles ut: utdanningstilbudet] | FS Admin, detaljsiden for utdanningstilbudet | [Fylles ut: Ja, regelen settes tilbake til standardregelen etter testen?] |
-| Søknadsfrist for opptaket (for tidlig søknadsfrist og tidlig dokumentasjonsfrist) | [Fylles ut] | [Fylles ut] | [Fylles ut] |
+| Søknadsfrist for opptaket (14.1) | [Fylles ut: søknadsfristen i Sektordemo 23.10.26] | Opptaksinnstillingene i Sektordemo 23.10.26 | – |
 
 ## Omfang
 
