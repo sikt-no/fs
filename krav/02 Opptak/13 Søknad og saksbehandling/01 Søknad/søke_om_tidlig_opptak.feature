@@ -151,7 +151,12 @@ Egenskap: Søke om tidlig opptak
       Og søkeren ser hva som må dokumenteres for hver av begrunnelsene
       Og søkeren kan ikke velge "Gammel begrunnelse"
 
+    @draft @openquestion
     Scenario: Se når søkeren søkte om tidlig opptak
+      # ÅPNE SPØRSMÅL:
+      # - Når skal dette bygges? Det er en fin utvidelse, men ikke prioritert nå (2026-10-26).
+      #   Søknaden lagrer ikke når søkeren søkte, bare begrunnelsen. Søkeren ser tidspunktet
+      #   i kvitteringen i Mine meldinger.
       Gitt søkeren søkte om tidlig opptak med begrunnelsen "Fullført fagskole" "2027-01-15"
       Når søkeren ser på søknaden
       Så ser søkeren at søknaden om tidlig opptak ble sendt "2027-01-15"
@@ -165,9 +170,9 @@ Egenskap: Søke om tidlig opptak
 
     Scenario: Kan ikke søke om tidlig opptak etter fristen
       Gitt søknadsfristen for tidlig opptak er "2027-03-01 23:59"
-      Når søkeren prøver å søke om tidlig opptak "2027-03-02"
-      Så har ikke søkeren søkt om tidlig opptak
-      Og søkeren ser at fristen for å søke om tidlig opptak er ute
+      Og søkeren har ikke søkt om tidlig opptak
+      Når søkeren ser på søknaden "2027-03-02"
+      Så kan ikke søkeren søke om tidlig opptak
 
   Regel: Søknaden om tidlig opptak gjelder hele søknaden
 
