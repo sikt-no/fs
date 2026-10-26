@@ -35,6 +35,10 @@ For hver rad i tabellen:
 
 Les alltid koden du viser til. Et søkeord med treff er ikke bevis før du har lest treffet.
 
+5. **Tilgang og datakonsistens** (når du har fått den tabellen): for hver rad, les `fil:linje` og koden rundt. `stemmer` er bekreftet når tilgangssjekken gjør det raden sier for den rollen, handlingen og organisasjonen. Raden er avkreftet når en annen sjekk, et annet filter eller en annen rolle gjelder, eller når koden ikke er der. `ikke funnet`: søk selv etter tilgangssjekken (mutation, resolver, filter på organisasjon, fremmednøkkel) med egne søkeord. Sjekk også at raden ikke mangler en rolle eller handling kravet nevner.
+6. **Regler uten scenario** (når du har fått den tabellen): les hvert `fil:linje`. Finnes regelen, og gjør den det raden sier? Dekker et scenario i feature-fila den likevel (så er den ikke «uten scenario»)? Let også etter regler finneren bommet på: valideringer, obligatoriske felt og standardverdier i samme komponenter, og list dem som `tilføyd`.
+7. **Åpne spørsmål:** tell `@openquestion` i feature-fila selv, og si fra om tallene til finneren ikke stemmer.
+
 ## Svar
 
 Send svaret til den som startet deg (`SendMessage` når du er teammate, ellers som sluttsvar). Hold formatet nøyaktig, med scenariotittelen slik den står i fila:
@@ -48,8 +52,21 @@ Send svaret til den som startet deg (`SendMessage` når du er teammate, ellers s
 | <scenariotittel> | ikke funnet | avkreftet | usikker | `<repo>/<fil>:<linje>` — <hva som finnes> |
 | <scenariotittel> | ikke funnet | bekreftet | ikke funnet | søkt etter «…», «…» i <steder> |
 
+### Tilgang og datakonsistens
+
+| Rad (rolle og handling) | Opprinnelig | Kontroll | Foreslått | Begrunnelse |
+| --- | --- | --- | --- | --- |
+| <rolle> <oppretter> <hva> | stemmer | bekreftet | stemmer | `<repo>/<fil>:<linje>` |
+
+### Regler uten scenario
+
+| Regel | Kontroll | Begrunnelse |
+| --- | --- | --- |
+| <regel> | bekreftet \| avkreftet \| tilføyd | `<repo>/<fil>:<linje>` — <hva som finnes, eller hvilket scenario som dekker den> |
+
+- **Åpne spørsmål:** tallene stemmer | stemmer ikke: <n> regler, <n> scenarioer
 - **Avkreftet:** N av M rader
 - **Søkt i tillegg:** <søkeord og steder du brukte som ikke stod i bevisene>
 ```
 
-`Foreslått` er resultatet du mener scenarioet skal ha (`funnet`, `ikke funnet` eller `usikker`). Én rad per rad i tabellen du fikk.
+`Foreslått` er resultatet du mener scenarioet skal ha (`funnet`, `ikke funnet` eller `usikker`). Én rad per rad i tabellene du fikk. Seksjonene for tilgang og regler utelater du hvis du ikke har fått dem.
