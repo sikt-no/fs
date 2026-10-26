@@ -45,6 +45,13 @@ Egenskap: Listevisning og søk i personbrukere
       Og kolonnen viser hvor mange aktive roller personbrukeren har
       Og serveren avgjør hva som er en aktiv rolle
 
+    @planned
+    Scenario: Filtrere på har aktive roller
+      Gitt jeg ser listen over personbrukere
+      Når jeg velger filteret «har aktive roller»
+      Så vises kun personbrukere som har minst én aktiv rolle
+      Og serveren avgjør hva som er en aktiv rolle
+
     @draft @openquestion
     # ÅPNE SPØRSMÅL:
     # - API-et støtter ikke sortering på navn ennå, og UI-kontrollen er derfor fjernet. Når skal dette komme på plass, og hvem følger opp på API-siden?
