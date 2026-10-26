@@ -22,6 +22,7 @@ Egenskap: Listevisning og søk i utdanningstilbud
   # søkeforslag, filtrene, nullstilling, ingen treff og deling av søket. Scenarioene for disse
   # bygger på Confluence og skissen, og skal gjennomgås før kravet kan bli @planned.
   # Neste spørsmål: hvilke poenggrenser vises (kvoter, år, plasstildelingsrunde)?
+  # Avklart 2026-10-23: studiested-filteret er kommune, utledet fra campus på utdanningstilbudet (OPT-OPT-UTD-005).
 
   Regel: Liste over alle utdanningstilbud
 
@@ -40,6 +41,13 @@ Egenskap: Listevisning og søk i utdanningstilbud
         | Lærested                           |
         | Studiested                         |
         | Tidligere poenggrenser             |
+
+    # Hver campus et studieprogram starter på, er et eget utdanningstilbud (OPT-OPT-UTD-005).
+    Scenario: Studiestedet i listen er stedet der utdanningstilbudet har campus
+      Gitt at utdanningstilbudet "Sykepleie, høst 2027" ved NTNU har campus i Ålesund
+      Når søkeren åpner Finn studier
+      Så står studiestedet "Ålesund" på utdanningstilbudet "Sykepleie, høst 2027"
+      Men studiestedet er ikke "Trondheim", der NTNU har adressen
 
     Scenario: Listen er sortert alfabetisk på navn uten søketekst
       Gitt at søkeren ikke har skrevet noe i søkefeltet
@@ -184,6 +192,9 @@ Egenskap: Listevisning og søk i utdanningstilbud
         | Vårsemester  |
       Og ingen semestre er valgt som standard
 
+    # Progresjonen utledes av prosenttallet for heltid: 100 er heltid, under 100 er deltid.
+    # Prosenttallet er påkrevd på studieprogram og studieretning. Mangler det på et emne, er ingenting
+    # registrert, og emnet regnes som 100 % heltid (Kjartan, 2026-10-26).
     Scenario: Tilgjengelige progresjoner i filter
       Når søkeren åpner filteret for progresjon
       Så inneholder filteret disse progresjonene:
@@ -203,13 +214,13 @@ Egenskap: Listevisning og søk i utdanningstilbud
       Og ingen studieformer er valgt som standard
 
     @openquestion
-    Scenario: Tilgjengelige studiesteder i filter
+    Scenario: Tilgjengelige kommuner i filter
       # ÅPNE SPØRSMÅL:
-      # - Inneholder filteret bare studiestedene til utdanningstilbudene i listen, eller alle studiesteder?
-      Når søkeren åpner filteret for studiested
-      Så inneholder filteret studiestedene til utdanningstilbudene i listen
-      Og hvert studiested vises kun én gang
-      Og studiestedene er sortert alfabetisk
+      # - Inneholder filteret bare kommunene til utdanningstilbudene i listen, eller alle kommuner?
+      Når søkeren åpner filteret for kommune
+      Så inneholder filteret kommunene til utdanningstilbudene i listen
+      Og hver kommune vises kun én gang
+      Og kommunene er sortert alfabetisk
       Og "Alle" er valgt som standard
 
     @openquestion
@@ -232,8 +243,12 @@ Egenskap: Listevisning og søk i utdanningstilbud
         | oppstart   | Høstsemester   |
         | progresjon | Deltid         |
         | studieform | Nettstudium    |
-        | studiested | Trondheim      |
+        | kommune    | Ålesund        |
         | lærested   | NTNU           |
+
+    Scenario: Kommunefilteret og studiestedet i listen stemmer overens
+      Når søkeren velger "Ålesund" som filter for kommune
+      Så står studiestedet "Ålesund" på hvert utdanningstilbud i listen
 
     @openquestion
     Scenario: Velge flere verdier i samme filter
