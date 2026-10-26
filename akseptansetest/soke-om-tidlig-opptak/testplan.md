@@ -34,7 +34,7 @@ Testplan for «Søke om tidlig opptak». Planen sier hva som testes, av hvem, hv
 | 1 | [Fylles ut] | Søker med en sendt søknad der noen søknadsalternativer tilbyr tidlig opptak og noen ikke, og som ikke har søkt om tidlig opptak | – | Søke om tidlig opptak, se søknadsalternativene som ikke tilbyr det, begrunnelsene og lenken, og legge til et søknadsalternativ etterpå (`@OPT-SØK-SØK-011`) |
 | 2 | [Fylles ut] | Søker med en søknad der ingen søknadsalternativer tilbyr tidlig opptak | – | Ikke kunne søke om tidlig opptak (`@OPT-SØK-SØK-011`) |
 | 3 | [Fylles ut] | Søker som ikke har sendt søknaden ennå | – | Ikke kunne søke om tidlig opptak før søknaden er sendt (`@OPT-SØK-SØK-011`) |
-| 4 | [Fylles ut] | Søker med en sendt søknad i et opptak der fristen for tidlig opptak er ute, og som ikke har søkt om tidlig opptak | – | Ikke kunne søke om tidlig opptak etter fristen (`@OPT-SØK-SØK-011`) |
+| 4 | [Fylles ut] | Søker med en sendt søknad i opptaket, der minst ett søknadsalternativ tilbyr tidlig opptak, og som ikke har søkt om tidlig opptak | – | Ikke kunne søke om tidlig opptak etter fristen, når fristen er flyttet til i går (`@OPT-SØK-SØK-011`) |
 
 Testbrukerne er søkere, som ikke hører til en organisasjon. Det er ingen synlighet mellom organisasjoner å teste i denne leveransen.
 
@@ -45,7 +45,7 @@ Testbrukerne er søkere, som ikke hører til en organisasjon. Det er ingen synli
 | Et opptak med tidlig opptak, en søknadsfrist for tidlig opptak som ikke er ute, lenke til informasjon om tidlig opptak, og begrunnelser for tidlig opptak der minst én ikke er aktiv | [Fylles ut: opptaket velges senere] | [Fylles ut] | Trengs ikke, opptaket endres ikke |
 | Utdanningstilbud i opptaket som tilbyr tidlig opptak, og utdanningstilbud som ikke gjør det | [Fylles ut] | [Fylles ut] | Trengs ikke |
 | Et utdanningstilbud som tilbyr tidlig opptak, som testbruker 1 kan legge til etter å ha søkt | [Fylles ut] | [Fylles ut] | Søknadsalternativet kan fjernes igjen |
-| Et opptak der søknadsfristen for tidlig opptak er ute, eller en måte å flytte fristen på | [Fylles ut] | [Fylles ut] | [Fylles ut] |
+| Søknadsfristen for tidlig opptak i opptaket flyttes til i går før den siste testcasen (1.9), og tilbake etterpå. Fristen gjelder hele opptaket, så ingen andre bør teste i opptaket mens den er flyttet | [Fylles ut: hvem som flytter fristen (opptaksforvalter)] | [Fylles ut: i FS Admin, eller med SQL] | Ja: fristen settes tilbake til den som sto der |
 | Søknaden om tidlig opptak fra testbruker 1 | – | – | Nei, søkeren kan ikke trekke ønsket. Bruk en ny søker, eller nullstill i databasen |
 
 ## Omfang
