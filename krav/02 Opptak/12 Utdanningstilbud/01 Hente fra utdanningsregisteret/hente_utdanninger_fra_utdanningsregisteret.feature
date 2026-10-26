@@ -56,9 +56,7 @@ Egenskap: Hente utdanninger fra utdanningsregisteret
         | har studiestart høst 2028                        |
         | er et studieprogram på masternivå                |
 
-    @openquestion
-    # ÅPNE SPØRSMÅL:
-    # - Blir hver campus et eget utdanningstilbud når samme studieprogram har oppstart på flere campuser?
+    # AVKLART 2026-10-23: Hver campus blir et eget utdanningstilbud når samme studieprogram har oppstart på flere campuser.
     Scenario: Samme studieprogram på to campuser
       Gitt at utdanningsregisteret har instanser av bachelorprogrammet "Sykepleie" med studiestart høst 2027 på campusene "Blindern" og "Kjeller"
       Når opptaket henter utdanninger fra utdanningsregisteret
