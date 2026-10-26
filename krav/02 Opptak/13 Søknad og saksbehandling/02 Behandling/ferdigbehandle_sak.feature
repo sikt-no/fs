@@ -8,7 +8,9 @@ Egenskap: Ferdigbehandle en sak
   En sak er søknaden slik den ligger hos én saksbehandlende organisasjon. Saken behandles
   helautomatisk når søkeren har ett vitnemål med positiv GSK-konklusjon, eller når
   saksbehandleren har valgt vitnemålet. Den automatiske behandlingen avgjør grunnlaget,
-  poengene, kravelementene og kvoten, og setter saken til ferdig behandlet når alt er avgjort. Kan den ikke avgjøre et steg, gjør den stegene
+  poengene, kravelementene og kvoten, og setter saken til ferdig behandlet når alt er avgjort.
+  Har saksbehandleren valgt vitnemålet, beregner saksbehandleren poengene i vitnemålsbehandlingen
+  (OPT-BEH-BEH-004), og den automatiske behandlingen avgjør resten. Kan den ikke avgjøre et steg, gjør den stegene
   som ikke bygger på det, og saken blir stående under behandling. Saksbehandleren gjør resten,
   og setter saken til ferdig behandlet. Bare saker som er ferdig behandlet, er med i
   plasstildelingen.
