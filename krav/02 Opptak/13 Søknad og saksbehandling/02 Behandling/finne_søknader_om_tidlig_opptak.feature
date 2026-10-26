@@ -9,93 +9,80 @@
 #
 # Vurderingen og konklusjonen står i vurdere_søknad_om_tidlig_opptak.feature
 # (OPT-BEH-BEH-013). Hva søkeren gjør, står i søke_om_tidlig_opptak.feature
-# (OPT-SØK-SØK-011).
+# (OPT-SØK-SØK-011). Hvilke saker som er med når tidligopptaket gjennomføres, står i
+# gi_tilbudsgaranti_ved_tidlig_opptak.feature (OPT-BEH-BEH-007).
 #
 # Det finnes ikke noe krav for selve sakslisten i saksbehandlingen ennå. Dette
 # kravet beskriver bare filtrene for tidlig opptak. Sakslisten får ingen egen
-# kolonne for tidlig opptak (avklart 08.10.2026). Kolonnene hører hjemme i et
-# eget krav for sakslisten.
+# kolonne for tidlig opptak (avklart 08.10.2026).
 #
 # AVKLART 09.10.2026 (review av PR #654)
 #
 # - Kravet beskriver hva saksbehandleren kan filtrere på, ikke hvordan filtrene
 #   ser ut eller hva de heter. Det hører hjemme i implementasjonsdetaljene.
-# - Det er to egenskaper som kan filtreres hver for seg og kombineres med de
-#   andre filtrene i sakslisten: om søkeren har søkt om tidlig opptak, og
-#   konklusjonen for tidlig opptak. Ingen av filtrene tar med andre betingelser
-#   i det skjulte.
-# - Dette erstatter filteret «Tidlig opptak ikke ferdig behandlet» (08.10.2026),
-#   som kombinerte søkt, konklusjon og ferdig behandlet i ett valg.
 #
-# Koden (fs-plattform main, 07.10.2026) har ikke filtre for tidlig opptak:
-# SakFilterV2Input i saksbehandling/sak.graphqls filtrerer på status,
-# utdanningsbakgrunn, levert tidspunkt med mer, men ikke på tidlig opptak.
-# Statusfilteret finnes.
+# AVKLART 23.10.2026 (kravet følger det som leveres i STEK-561 og STEK-268)
+#
+# - Filteret for tidlig opptak har tre valg: søkt om tidlig opptak, mangler
+#   konklusjon og har konklusjon. Valgene i filteret kombineres med «eller», og
+#   filteret kombineres med de andre filtrene i sakslisten med «og», som de andre
+#   filtrene.
+# - Valgene for konklusjon gjelder bare saker der søkeren har søkt om tidlig opptak.
+#   En sak der søkeren ikke har søkt, mangler ikke konklusjon.
+# - Det filtreres ikke på hvilken konklusjon saken har, eller på om søkeren deltar.
+#   Erstatter filteret på konklusjonen (deltar, deltar ikke, ingen) fra 09.10.2026.
+# - Filteret for tidlig opptak er uavhengig av saksbehandlingsstatusen. Hvilke saker
+#   som er med i tidligopptaket, avgjøres når det gjennomføres (OPT-BEH-BEH-007), og
+#   filtrene skal ikke gi det samme utvalget som prøvekjøringen.
 #
 @OPT-BEH-BEH-009 @must @in-progress
 Egenskap: Finne søknader om tidlig opptak
   Som saksbehandler
-  ønsker jeg å filtrere sakene på om søkeren har søkt om tidlig opptak, og på konklusjonen for tidlig opptak
+  ønsker jeg å filtrere sakene på om søkeren har søkt om tidlig opptak, og på om saken har konklusjon for tidlig opptak
   slik at jeg raskt finner sakene som må behandles før tidligopptaket gjennomføres.
 
   Bakgrunn:
     Gitt saksbehandler er innlogget i løsningen
-    Og saksbehandler ser listen over saker i opptaket "Samordna opptak 2027"
+    Og opptaket "Samordna opptak 2027" har følgende saker:
+      | søker         | søkt om tidlig opptak | konklusjon for tidlig opptak                   | saksbehandlingsstatus |
+      | Kari Nordmann | ja                    | KFF – Kan få tidlig opptak, har godkjent grunn | ferdig behandlet      |
+      | Per Hansen    | ja                    | ingen                                          | ubehandlet            |
+      | Anne Lie      | ja                    | KIF – Kan ikke få tidlig opptak, mangler grunn | under behandling      |
+      | Ola Nordmann  | nei                   | ingen                                          | ubehandlet            |
 
   Regel: Søk og filtrering av saker på tidlig opptak
-    En søker er med i tidligopptaket bare når saksbehandleren har konkludert med
-    at søkeren deltar, og saken er ferdig behandlet. Med filtrene for tidlig opptak
-    og statusfilteret finner saksbehandleren sakene der noe av dette mangler, slik
-    at ingen søker faller ut av tidligopptaket uten at saksbehandleren har bestemt det.
+    Saksbehandleren kan filtrere på om søkeren har søkt om tidlig opptak, og på om
+    saken mangler eller har konklusjon for tidlig opptak. Valgene for konklusjon
+    gjelder bare saker der søkeren har søkt.
 
-    Scenario: Filtrene for tidlig opptak er ikke i bruk som standard
-      Gitt opptaket har følgende saker:
-        | søker         | søkt om tidlig opptak |
-        | Kari Nordmann | ja                    |
-        | Ola Nordmann  | nei                   |
-      Når saksbehandler åpner sakslisten
-      Så ser saksbehandler sakene til "Kari Nordmann" og "Ola Nordmann"
+    Scenario: Filteret for tidlig opptak er ikke i bruk som standard
+      Når saksbehandler åpner sakslisten i opptaket "Samordna opptak 2027"
+      Så ser saksbehandler sakene til "Kari Nordmann", "Per Hansen", "Anne Lie" og "Ola Nordmann"
 
-    Scenario: Filtrere på søkt om tidlig opptak
-      Gitt opptaket har følgende saker:
-        | søker         | søkt om tidlig opptak |
-        | Kari Nordmann | ja                    |
-        | Ola Nordmann  | nei                   |
-      Når saksbehandler filtrerer på saker der søkeren har søkt om tidlig opptak
-      Så vises kun saken til "Kari Nordmann"
-
-    Scenariomal: Filtrere på konklusjonen for tidlig opptak
-      Gitt opptaket har følgende saker:
-        | søker         | konklusjon for tidlig opptak |
-        | Kari Nordmann | deltar                       |
-        | Per Hansen    | ingen                        |
-        | Anne Lie      | deltar ikke                  |
-      Når saksbehandler filtrerer på saker der konklusjonen for tidlig opptak er <konklusjon>
-      Så vises kun saken til "<søker>"
-
-      Eksempler:
-        | konklusjon  | søker         |
-        | deltar      | Kari Nordmann |
-        | ingen       | Per Hansen    |
-        | deltar ikke | Anne Lie      |
-
-    Scenario: Kombinere filtrene for tidlig opptak med andre filtre
-      Når saksbehandler kombinerer filtrene for tidlig opptak med ett eller flere andre filtre
-      Så vises kun saker som matcher alle kriteriene
-
-    Scenariomal: Finne saker som faller ut av tidligopptaket
-      Gitt opptaket har følgende saker:
-        | søker         | søkt om tidlig opptak | konklusjon for tidlig opptak | ferdig behandlet |
-        | Kari Nordmann | ja                    | deltar                       | ja               |
-        | Per Hansen    | ja                    | ingen                        | nei              |
-        | Lise Berg     | ja                    | ingen                        | ja               |
-        | Nils Dahl     | ja                    | deltar                       | nei              |
-        | Anne Lie      | ja                    | deltar ikke                  | nei              |
-        | Ola Nordmann  | nei                   | ingen                        | nei              |
-      Når saksbehandler filtrerer på <filtre>
+    Scenariomal: Filtrere på tidlig opptak
+      Når saksbehandler filtrerer på saker der <valg>
       Så vises kun <saker>
 
       Eksempler:
-        | filtre                                                    | saker                                  |
-        | konklusjonen ingen                                        | sakene til "Per Hansen" og "Lise Berg" |
-        | konklusjonen deltar og saker som ikke er ferdig behandlet | saken til "Nils Dahl"                  |
+        | valg                                   | saker                                                  |
+        | søkeren har søkt om tidlig opptak      | sakene til "Kari Nordmann", "Per Hansen" og "Anne Lie" |
+        | konklusjonen for tidlig opptak mangler | saken til "Per Hansen"                                 |
+        | saken har konklusjon for tidlig opptak | sakene til "Kari Nordmann" og "Anne Lie"               |
+
+    Scenario: Saker der søkeren ikke har søkt, mangler ikke konklusjon
+      Når saksbehandler filtrerer på saker der konklusjonen for tidlig opptak mangler
+      Så vises ikke saken til "Ola Nordmann"
+
+    Scenariomal: Valg i filteret for tidlig opptak kombineres med eller
+      Når saksbehandler filtrerer på saker der <valg>
+      Så vises kun <saker>
+
+      Eksempler:
+        | valg                                                                                | saker                                                  |
+        | konklusjonen for tidlig opptak mangler eller saken har konklusjon for tidlig opptak | sakene til "Kari Nordmann", "Per Hansen" og "Anne Lie" |
+        | søkeren har søkt om tidlig opptak eller konklusjonen for tidlig opptak mangler      | sakene til "Kari Nordmann", "Per Hansen" og "Anne Lie" |
+
+    Scenario: Filteret for tidlig opptak kombineres med saksbehandlingsstatus
+      Når saksbehandler filtrerer på saker der saken har konklusjon for tidlig opptak
+      Og saksbehandler filtrerer på saksbehandlingsstatusen "under behandling"
+      Så vises kun saken til "Anne Lie"
