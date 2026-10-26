@@ -124,11 +124,11 @@ Egenskap: Automatisk poengberegning
       Så får søknaden ingen poeng beregnet automatisk
 
       Eksempler:
-        | grunn                                                         |
-        | søkeren har flere elektroniske vitnemål som ikke er annullert |
-        | søkerens eneste elektroniske dokument er et kompetansebevis   |
-        | søkerens eneste elektroniske vitnemål er annullert            |
-        | søkeren ikke har noe elektronisk vitnemål                     |
+        | grunn                                                                                                     |
+        | søkeren har flere elektroniske vitnemål som ikke er annullert, og saksbehandleren har ikke valgt ett av dem |
+        | søkerens eneste elektroniske dokument er et kompetansebevis                                               |
+        | søkerens eneste elektroniske vitnemål er annullert                                                        |
+        | søkeren ikke har noe elektronisk vitnemål                                                                 |
 
     @openquestion
     Scenario: Automatisk beregnede poeng når vitnemålet ikke lenger er entydig

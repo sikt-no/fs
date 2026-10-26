@@ -61,7 +61,8 @@
 # - Poengene beregnes i automatisk_poengberegning.feature
 #   (@OPT-BEH-BEH-018, på branchen opptak/automatisk-poengberegning).
 # - Kvoteplasseringen står i automatisk_kvoteplassering.feature.
-# - Søkere med flere vitnemål behandles i vitnemålsbehandlingen.
+# - Søkere med flere vitnemål får vitnemålet valgt av saksbehandleren i
+#   vitnemålsbehandlingen.
 @OPT-BEH-BEH-019 @must @draft
 Egenskap: Automatisk grunnlag
   Som saksbehandler
@@ -70,8 +71,9 @@ Egenskap: Automatisk grunnlag
 
   Grunnlaget avgjør hvilke opptakskrav søknaden vurderes mot, hvordan søkeren
   rangeres, og hvilke kvoter søkeren kan plasseres i. Har søkeren ett
-  elektronisk vitnemål som gir generell studiekompetanse, velger systemet
-  grunnlaget ut fra vitnemålet og søkerens alder. Hvilke grunnlag som kan
+  elektronisk vitnemål som gir generell studiekompetanse, eller har
+  saksbehandleren valgt ett av vitnemålene, velger systemet grunnlaget ut fra
+  vitnemålet og søkerens alder. Hvilke grunnlag som kan
   velges automatisk, og hva som skal til, bestemmes av egenskapene
   regelverksbyggeren har gitt grunnlaget i regelverket.
 
@@ -164,12 +166,21 @@ Egenskap: Automatisk grunnlag
       Så får søknaden ingen grunnlag automatisk
 
       Eksempler:
-        | grunn                                                          |
-        | søkeren har flere elektroniske vitnemål som ikke er annullert  |
-        | søkerens eneste elektroniske dokument er et kompetansebevis    |
-        | vitnemålet ikke gir generell studiekompetanse                  |
-        | søkeren ikke har noe elektronisk vitnemål                      |
-        | ingen av grunnlagene i regelverket passer søkeren              |
+        | grunn                                                                                                    |
+        | søkeren har flere elektroniske vitnemål som ikke er annullert, og saksbehandleren har ikke valgt ett av dem |
+        | søkerens eneste elektroniske dokument er et kompetansebevis                                               |
+        | vitnemålet ikke gir generell studiekompetanse                                                             |
+        | søkeren ikke har noe elektronisk vitnemål                                                                 |
+        | ingen av grunnlagene i regelverket passer søkeren                                                         |
+
+    @ref-OPT-BEH-BEH-025
+    Scenario: Grunnlag fra vitnemålet saksbehandleren har valgt
+      # Avklart 2026-10-26 i review av PR #818: har saksbehandleren valgt vitnemålet, behandles
+      # saken automatisk på det.
+      Gitt at søkeren har et elektronisk vitnemål fra 2024 og et fra 2025 som gir generell studiekompetanse
+      Og at saksbehandleren har valgt vitnemålet fra 2025
+      Når søknaden behandles automatisk
+      Så får søknaden grunnlaget ut fra vitnemålet fra 2025
 
   @ref-OPT-BEH-BEH-015
   Regel: Grunnlaget settes etter GSK-konklusjonen

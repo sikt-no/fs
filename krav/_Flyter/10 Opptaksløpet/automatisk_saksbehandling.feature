@@ -17,7 +17,6 @@ Egenskap: Automatisk saksbehandling
 
   Bakgrunn:
     Gitt at søknaden til "Kari Nordmann" har en sak hos "Universitetet i Oslo"
-    Og at "Kari Nordmann" har ett vitnemål med positiv GSK-konklusjon
 
   @depends-on-OPT-BEH-BEH-015 @depends-on-OPT-BEH-BEH-025
   # OPT-BEH-BEH-015: «Konklusjon fra vitnemålet»
@@ -25,9 +24,15 @@ Egenskap: Automatisk saksbehandling
   Regel: Vitnemålet med positiv GSK-konklusjon avgjør om saken behandles helautomatisk
 
     Scenario: Saken behandles helautomatisk på vitnemålet med positiv GSK-konklusjon
-      Gitt at vitnemålet til "Kari Nordmann" fikk en positiv GSK-konklusjon da søknaden kom inn
+      Gitt at "Kari Nordmann" har ett vitnemål, og det fikk en positiv GSK-konklusjon da søknaden kom inn
       Når søknaden behandles automatisk
       Så behandles saken hos "Universitetet i Oslo" helautomatisk på vitnemålet
+
+    Scenario: Saken behandles helautomatisk på vitnemålet saksbehandleren har valgt
+      Gitt at "Kari Nordmann" har et vitnemål fra 2024 og et vitnemål fra 2025 med positiv GSK-konklusjon
+      Og at saksbehandleren ved Universitetet i Oslo har valgt vitnemålet fra 2025
+      Når søknaden behandles automatisk
+      Så behandles saken hos "Universitetet i Oslo" helautomatisk på vitnemålet fra 2025
 
   @depends-on-OPT-BEH-BEH-019
   Regel: Søknaden får grunnlag fra vitnemålet

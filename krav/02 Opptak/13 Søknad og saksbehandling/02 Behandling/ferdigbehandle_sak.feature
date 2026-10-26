@@ -62,7 +62,8 @@ Egenskap: Ferdigbehandle en sak
     Scenario: Søker med flere vitnemål der bare ett har positiv GSK-konklusjon
       # ÅPNE SPØRSMÅL:
       # - Hvis en søker har to eller flere vitnemål, men bare ett har en positiv GSK-konklusjon,
-      #   skal saken gå gjennom den helautomatiske flyten eller ikke?
+      #   skal saken gå gjennom den helautomatiske flyten eller ikke? Svaret endrer også raden
+      #   «søkeren har flere elektroniske vitnemål …» i OPT-BEH-BEH-018 og OPT-BEH-BEH-019.
       Gitt at "Kari Nordmann" har to vitnemål
       Og at bare ett av vitnemålene har en positiv GSK-konklusjon
       Når søknaden behandles automatisk
