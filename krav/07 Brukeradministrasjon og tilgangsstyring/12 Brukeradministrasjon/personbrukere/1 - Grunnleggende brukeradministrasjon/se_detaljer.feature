@@ -35,15 +35,9 @@ Egenskap: Se detaljer for personbruker
       Så ser jeg at personbrukeren ikke har en hjemorganisasjon
       Men organisasjonene personbrukerens tildelinger gjelder for, vises ikke som hjemorganisasjon
 
-    @openquestion
+    @deprecated
     Scenario: Se status
-      # ÅPNE SPØRSMÅL:
-      # - En personbruker har ingen status (beslutning 23.10.2026), så scenarioet gjelder bare detaljsiden for en Feide-bruker. Skal den fortsatt vise status? Det avhenger av om Feide-brukere fortsatt skal kunne deaktiveres (BRU-PER-GRU-004).
       Så ser jeg om personbrukeren er aktiv eller deaktivert
-
-    @planned
-    Scenario: Personbrukeren har ingen status
-      Så ser jeg ingen status for personbrukeren
 
   @draft @openquestion
   Regel: Sist brukt (planlagt etter v1)
