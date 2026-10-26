@@ -244,11 +244,18 @@ Egenskap: Søknadsmangler
       Så ser ikke søkeren mangelen "KAR" i Min kompetanse
       Og søkeren har ikke mottatt en melding av typen MANGEL
 
+    Scenario: Saksbehandleren publiserer mangelen
+      Gitt at saken hos "Universitetet i Oslo" har mangelen "KAR"
+      Når saksbehandleren ved Universitetet i Oslo markerer mangelen "KAR" som klar til publisering
+      Så ser søkeren mangelen "KAR" i Min kompetanse
+
     @draft @openquestion
     Scenario: Saksbehandleren publiserer manglene i saken
       # ÅPNE SPØRSMÅL:
       # - Publiseringen er endret etter raffineringen: saksbehandleren publiserer alle manglene i
       #   saken samlet, og søkeren får melding hver gang. Ikke gått gjennom med teamet.
+      # - Når publiseringen av hele saken er validert, fjernes «Saksbehandleren publiserer
+      #   mangelen» og «Søkeren får én melding om manglene som publiseres i saken» i samme endring.
       Gitt at saken hos "Universitetet i Oslo" har manglene "KAR" og "STEMPEL"
       Når saksbehandleren ved Universitetet i Oslo publiserer manglene i saken
       Så ser søkeren manglene "KAR" og "STEMPEL" i Min kompetanse
@@ -303,6 +310,11 @@ Egenskap: Søknadsmangler
       Gitt at saksbehandleren ved Universitetet i Oslo er advart om at mangelen "KNN" ikke er publisert
       Når saksbehandleren avbryter
       Så er ikke saken satt til "Ferdig behandlet"
+
+    Scenario: Søkeren får én melding om manglene som publiseres i saken
+      Gitt at saken hos "Universitetet i Oslo" har manglene "KAR" og "STEMPEL"
+      Når manglene "KAR" og "STEMPEL" publiseres
+      Så mottar søkeren én melding av typen MANGEL
 
     Scenario: Søkeren får melding fra hver saksbehandlende organisasjon som publiserer mangler
       Gitt at saksbehandleren ved Universitetet i Oslo har publisert mangelen "KAR"
