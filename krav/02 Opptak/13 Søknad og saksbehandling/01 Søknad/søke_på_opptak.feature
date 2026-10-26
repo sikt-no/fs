@@ -217,29 +217,6 @@ Egenskap: Søke på opptak
       Så kan søkeren sende inn søknaden fram til "2027-04-15 23:59"
 
   @draft
-  Regel: Søkeren velger utdanningsbakgrunn blant utdanningsbakgrunnene i opptaket
-    # Virkningen av utdanningsbakgrunnene som opptaksforvalter legger til i
-    # 11 Opprette og vedlikeholde opptak/03 Innstillinger/innstillinger.feature.
-    # Lagt til 2026-10-19 etter akseptansetesten av opprette og vedlikeholde opptak.
-
-    Scenario: Søkeren velger blant utdanningsbakgrunnene i opptaket
-      Gitt at opptaket har utdanningsbakgrunnene "Realkompetanse", "Utenlandsk utdanning" og "Steinerskole"
-      Når søkeren skal velge utdanningsbakgrunn i søknaden
-      Så kan søkeren velge mellom "Realkompetanse", "Utenlandsk utdanning" og "Steinerskole"
-
-    Scenario: En utdanningsbakgrunn som er fjernet fra opptaket, kan ikke velges
-      Gitt at opptaksforvalter har fjernet utdanningsbakgrunnen "Steinerskole" fra opptaket
-      Når søkeren skal velge utdanningsbakgrunn i søknaden
-      Så kan søkeren ikke velge "Steinerskole"
-
-    # AVKLART 2026-10-19 (S4): Det skal ikke være mulig å registrere en søknad uten utdanningsbakgrunn.
-    Scenario: Søknaden kan ikke sendes inn uten utdanningsbakgrunn
-      Gitt at søkeren ikke har valgt utdanningsbakgrunn i søknaden
-      Når søkeren vil sende inn søknaden
-      Så kan søkeren ikke sende inn søknaden
-      Og søkeren får beskjed om å velge utdanningsbakgrunn
-
-  @draft
   Regel: Søknadsnummeret følger startnummeret i opptaket
     # Virkningen av startnummeret som opptaksforvalter setter i
     # 11 Opprette og vedlikeholde opptak/03 Innstillinger/innstillinger.feature.

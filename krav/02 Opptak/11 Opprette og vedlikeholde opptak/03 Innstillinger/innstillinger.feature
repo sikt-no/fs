@@ -149,12 +149,13 @@ Egenskap: Innstillinger for opptak
       Så er ledige studieplasser aktivert for opptaket
       Og opptaket har datoene for ledige studieplasser
 
+  @ref-OPT-SØK-SØK-017
   Regel: Opptaksforvalter kan legge til utdanningsbakgrunner som gjelder for opptaket
 
     # Opptaksforvalter velger blant godkjente utdanningsbakgrunner fra utdanningsbakgrunn-tabellen.
     # Avvikende søknads- og dokumentasjonsfrister per utdanningsbakgrunn settes i
     # 04 Frister/frister_og_hendelser.feature.
-    # Søkerens valg av utdanningsbakgrunn står i 13 Søknad og saksbehandling/01 Søknad/søke_på_opptak.feature.
+    # Søkerens valg av utdanningsbakgrunn står i OPT-SØK-SØK-017.
 
     Scenario: Legge til utdanningsbakgrunner fra godkjent liste
       Når opptaksforvalter legger til utdanningsbakgrunner i opptaket
