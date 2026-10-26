@@ -63,7 +63,7 @@ Egenskap: Automatisk saksbehandling
     Scenario: Søkeren er kvalifisert når vitnemålet oppfyller kravelementene
       Gitt at søknaden har grunnlag
       Og at "Informatikk, UiO" har kravelementet "Matematikk R1"
-      Og at vitnemålet har "Matematikk R1"
+      Og at vitnemålet saken behandles helautomatisk på, har "Matematikk R1"
       Når søknaden behandles automatisk
       Så er søkeren kvalifisert for "Informatikk, UiO"
 
@@ -95,7 +95,7 @@ Egenskap: Automatisk saksbehandling
       Så er saken hos "Universitetet i Oslo" ferdig behandlet
       Og søkeren ser mangelen for "Matematikk R2" i Min kompetanse
 
-    Scenario: Saken går til saksbehandleren når poengene ikke kan beregnes
+    Scenario: Saken er ikke med i plasstildelingen når poengene ikke kan beregnes
       Gitt at poengene for "Informatikk, UiO" ikke kan beregnes på grunn av en feil i rangeringsregelverket
       Når den automatiske behandlingen er ferdig
       Så er saken hos "Universitetet i Oslo" ikke med når opptaksforvalteren starter en plasstildeling

@@ -83,6 +83,7 @@ Egenskap: Ferdigbehandle en sak
       Så er saken hos "Universitetet i Oslo" ferdig behandlet
 
     @depends-on-OPT-BEH-BEH-008
+    # OPT-BEH-BEH-008: «Kategorien til mangelkoden avgjør hva mangelen hindrer» og «Saken får mangler for kravelementene søkeren ikke oppfyller»
     Scenario: Saken er ferdig behandlet selv om kravelementene ga mangel
       Gitt at "Informatikk, UiO" har kravelementet "Matematikk R2"
       Og at vitnemålet ikke har "Matematikk R2"
@@ -91,6 +92,7 @@ Egenskap: Ferdigbehandle en sak
       Og saken hos "Universitetet i Oslo" er ferdig behandlet
 
     @depends-on-OPT-BEH-BEH-008
+    # OPT-BEH-BEH-008: «Søkeren ser bare manglene saksbehandleren har publisert, og får melding om dem»
     Scenario: Den automatiske behandlingen publiserer manglene når saken blir ferdig behandlet
       # Avklart 2026-10-26 i review av PR #818: saksbehandleren gjør ingenting i saken, så
       # automatikken publiserer manglene når den setter saken til ferdig behandlet.

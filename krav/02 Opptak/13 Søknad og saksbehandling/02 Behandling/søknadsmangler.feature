@@ -237,6 +237,7 @@ Egenskap: Søknadsmangler
 
   # ── 3. Publisering og melding ────────────────────────────────
 
+  @ref-OPT-BEH-BEH-025
   Regel: Søkeren ser bare manglene saksbehandleren har publisert, og får melding om dem
 
     Scenario: Registrering av mangel publiserer ikke mangelen
@@ -470,7 +471,7 @@ Egenskap: Søknadsmangler
 
   # ── 6. Automatikk ────────────────────────────────────────────
 
-  @draft @openquestion @depends-on-OPT-BEH-BEH-020 @ref-FLY-OPT-AUT-001
+  @draft @openquestion @depends-on-OPT-BEH-BEH-020 @ref-FLY-OPT-AUT-001 @ref-OPT-BEH-BEH-025
   Regel: Saken får mangler for kravelementene søkeren ikke oppfyller
 
     Manglene lages når kravelementene i saken vurderes, av den automatiske behandlingen eller av
