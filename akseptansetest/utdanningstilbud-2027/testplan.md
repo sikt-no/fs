@@ -50,7 +50,9 @@ Testbrukerne finnes i minst to organisasjoner, så vi kan teste at ingen ser dat
 | Utdanninger i utdanningsregisteret for de deltakende organisasjonene, nok til å legge til flere av gangen | [Fylles ut] | Utdanningsregisteret | – |
 | Utdanningstilbud i opptaket fra minst to organisasjoner, med ulik starttermin og ulikt startår, og noen uten kompetanseregelverk eller rangeringsregelverk | [Fylles ut] | [Fylles ut] | [Fylles ut] |
 | Utdanningstilbud med og uten beskrivelses-URL i utdanningsregisteret | [Fylles ut] | Utdanningsregisteret | – |
-| Opptak med standardregel for poenglikhet og tillatte unntak, og ett uten mulighet for unntak | [Fylles ut] | [Fylles ut] | [Fylles ut] |
+| Opptak med standardregel for poenglikhet og tillatte unntak, og ett uten mulighet for unntak | [Fylles ut] | FS Admin, Opptak | Ingenting endres |
+| Flere regler for poenglikhet som er tilgjengelige for opptaket, og minst én som ikke er det | [Fylles ut: reglene] | [Fylles ut] | Ingenting endres |
+| Utdanningstilbud i opptaket som bruker standardregelen for poenglikhet | [Fylles ut: utdanningstilbudet] | FS Admin, detaljsiden for utdanningstilbudet | [Fylles ut: Ja, regelen settes tilbake til standardregelen etter testen?] |
 | Søknadsfrist for opptaket (for tidlig søknadsfrist og tidlig dokumentasjonsfrist) | [Fylles ut] | [Fylles ut] | [Fylles ut] |
 
 ## Omfang
