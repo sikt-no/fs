@@ -145,6 +145,8 @@ Egenskap: Automatisk grunnlag
     #   kombinasjoner (VOV med VOT, VES med VPL). Ny stack setter alltid ett.
     #   Fagfolkene vil at førstegangsvitnemål skal gi både VOV og VES
     #   (STEK-514). Hvilke kombinasjoner er gyldige, og hvor settes de opp?
+    # - Svaret må stemme med «Førstegangsvitnemål går foran» og den første raden i
+    #   «Grunnlag ut fra alder og førstegangsvitnemål», som i dag gir bare VOV.
 
     Scenario: Søker med førstegangsvitnemål får både VOV og VES
       Gitt at søknadsalternativenes regelverk har grunnlagene VOV og VES
