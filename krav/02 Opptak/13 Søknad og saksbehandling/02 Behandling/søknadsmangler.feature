@@ -273,15 +273,39 @@ Egenskap: Søknadsmangler
       Så mottar søkeren en ny melding av typen MANGEL
 
     @draft @openquestion
-    Scenario: Saksbehandleren ser at endringer i manglene ikke er publisert
+    Scenario: Saksbehandleren publiserer en sak som bare har automatiske mangler
       # ÅPNE SPØRSMÅL:
-      # - Hvilke endringer må publiseres på nytt? Tilbakemeldingen etter raffineringen nevner at en
-      #   registrert mangel slettes, at kommentaren fra saksbehandleren lagres, og at et kravelement
-      #   endres i steget «Spesielle opptakskrav» slik at de automatiske manglene endres. Gjelder det
-      #   også en ny mangel, og en mangel som sjekkes ut?
-      Gitt at saksbehandleren ved Universitetet i Oslo har publisert mangelen "KAR"
-      Når saksbehandleren sletter mangelen "KAR"
+      # - Publiseringen er endret etter raffineringen: saksbehandleren publiserer alle manglene i
+      #   saken samlet, og søkeren får melding hver gang. Ikke gått gjennom med teamet.
+      # Kode i dag: «Oppdater mangel i Min kompetanse» kan ikke brukes når saken bare har
+      # automatiske mangler.
+      Gitt at saken hos "Universitetet i Oslo" bare har den automatiske mangelen for "Matematikk R2"
+      Når saksbehandleren ved Universitetet i Oslo publiserer manglene i saken
+      Så ser søkeren den automatiske mangelen for "Matematikk R2" i Min kompetanse
+
+    @draft @openquestion
+    Scenario: Den automatiske behandlingen publiserer manglene når saken blir ferdig behandlet
+      # ÅPNE SPØRSMÅL:
+      # - Tittelen på regelen sier at saksbehandleren publiserer. Skal den si «manglene som er
+      #   publisert», nå som den automatiske behandlingen også publiserer (OPT-BEH-BEH-025)?
+      Gitt at saken hos "Universitetet i Oslo" har den automatiske mangelen for "Matematikk R2"
+      Når den automatiske behandlingen setter saken til ferdig behandlet
+      Så ser søkeren den automatiske mangelen for "Matematikk R2" i Min kompetanse
+      Og søkeren mottar én melding av typen MANGEL
+
+    @draft @openquestion
+    Scenariomal: Saksbehandleren ser at endringene ikke er publisert når <endring>
+      # ÅPNE SPØRSMÅL:
+      # - Må også en ny mangel, og en mangel som sjekkes ut, publiseres på nytt?
+      Gitt at saksbehandleren ved Universitetet i Oslo har publisert mangelen "KAR" og den automatiske mangelen for "Matematikk R2"
+      Når <endring>
       Så ser saksbehandleren at endringene i manglene ikke er publisert
+
+      Eksempler:
+        | endring                                                          |
+        | saksbehandleren sletter mangelen "KAR"                           |
+        | saksbehandleren lagrer en kommentar på mangelen "KAR"            |
+        | saksbehandleren vurderer at "Matematikk R2" er oppfylt           |
 
     Scenario: Saksbehandleren blir advart om mangler som ikke er publisert
       Gitt at saken hos "Universitetet i Oslo" har mangelen "KNN" som ikke er publisert
@@ -511,6 +535,7 @@ Egenskap: Søknadsmangler
       Og at saksbehandleren ved Universitetet i Oslo har registrert mangelen "STEMPEL"
       Når saksbehandleren åpner manglene i saken
       Så ser saksbehandleren <mangel> og mangelen "STEMPEL"
+      Og saksbehandleren ser teksten søkeren får for <mangel>
 
       Eksempler:
         | mangel                                                                     |
