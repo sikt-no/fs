@@ -7,7 +7,8 @@
 #
 # Vitnemålsveien finnes i fs-plattform (opptak-service, autosak/gsk:
 # GskVedtakAutoService, GskVedtakTilbakekallingService), og kjøres som første
-# steg i den automatiske saksbehandlingen. Gjenbruk av konklusjoner fra
+# steg i den automatiske saksbehandlingen. Kravet flytter beregningen til når
+# søknaden kommer inn, og konklusjonen fra vitnemålet til vitnemålet. Gjenbruk av konklusjoner fra
 # tidligere opptak finnes ikke: koden ser bare etter konklusjoner i samme
 # opptak. Confluence v2 setter gjenbruksbasen utenfor versjonen. Dette kravet
 # tar inn gjenbruk fra tidligere samordna opptak, fra lokale opptak i FS Admin, og
@@ -20,11 +21,11 @@ Egenskap: Automatisk GSK-konklusjon
   slik at jeg bare trenger å vurdere generell studiekompetanse der grunnlaget ikke er entydig.
 
   Generell studiekompetanse (GSK) er det generelle opptakskravet til høyere utdanning.
-  Når en søknad kommer inn, ser systemet etter et grunnlag som gir GSK: først et
-  vitnemål, så en positiv konklusjon fra et tidligere opptak. Finnes et slikt
-  grunnlag, får søknaden en positiv GSK-konklusjon. Ellers vurderes GSK manuelt.
-  GSK-konklusjonen ligger på søknaden, og gjelder hos alle organisasjonene
-  søkeren søker hos i opptaket.
+  Når en søknad kommer inn, hentes søkerens vitnemål, og GSK beregnes for hvert
+  vitnemål. Konklusjonen lagres på vitnemålet, med grunnlagskoden og tidspunktet
+  den ble beregnet. Gir ingen vitnemål GSK, ser systemet etter en positiv konklusjon
+  fra et tidligere opptak. Ellers vurderes GSK manuelt. GSK beregnes før den
+  automatiske saksbehandlingen, og er ikke et steg i den.
   Automatikken setter aldri en negativ konklusjon, og overskriver aldri en konklusjon
   som finnes. Den gjelder alle opptak, også fagskoleopptak.
 
@@ -32,23 +33,38 @@ Egenskap: Automatisk GSK-konklusjon
   # Det avviker fra Sikts tolkning i Confluence v2 om at GSK i fagskoleopptak ikke
   # skal lagres som konklusjon, fordi GSK der er et alternativt kompetansekrav.
 
+  @draft @openquestion
   Regel: Konklusjon fra vitnemålet
+    # ÅPNE SPØRSMÅL:
+    # - Får søknaden også en GSK-konklusjon fra vitnemålet, eller står konklusjonen bare på
+    #   vitnemålet? Gjenbruk fra tidligere opptak, manuell endring og annullering gjelder i dag
+    #   konklusjonen på søknaden.
 
     Scenario: Vitnemål som gir generell studiekompetanse
-      Gitt at søkeren har ett vitnemål som ikke er annullert
+      Gitt at søkeren har et vitnemål som ikke er annullert
       Og at vitnemålet har utstedelsesdato
       Og at løpet på vitnemålet gir generell studiekompetanse
       Og at vitnemålet sier at søkeren har generell studiekompetanse
       Og at vitnemålet består seksfagskontrollen
-      Når søknaden behandles automatisk
-      Så får søknaden en positiv GSK-konklusjon
+      Når søknaden kommer inn
+      Så har vitnemålet en positiv GSK-konklusjon
       Og grunnlagskoden er grunnlagskoden for løpet på vitnemålet
       Og grunnlagsdatoen er utstedelsesdatoen på vitnemålet
 
+    Scenario: Tidspunktet for beregningen lagres på vitnemålet
+      Gitt at søkeren har et vitnemål som gir generell studiekompetanse
+      Når søknaden kommer inn 26.10.2026 kl. 10:14
+      Så er GSK-konklusjonen på vitnemålet beregnet 26.10.2026 kl. 10:14
+
+    Scenario: Hvert vitnemål får sin egen GSK-konklusjon
+      Gitt at søkeren har to vitnemål som ikke er annullert
+      Når søknaden kommer inn
+      Så er GSK beregnet for begge vitnemålene
+
     Scenario: Grunnlagskoder som settes automatisk
       Gitt at søkeren har et vitnemål som gir generell studiekompetanse
-      Når søknaden behandles automatisk
-      Så er grunnlagskoden i GSK-konklusjonen en av disse:
+      Når søknaden kommer inn
+      Så er grunnlagskoden i GSK-konklusjonen på vitnemålet en av disse:
         | grunnlagskode | vitnemål                                    | reform |
         | AØA           | allmenne og økonomiske fag                  | R94    |
         | RFA           | andre studieforberedende vitnemål           | R94    |
@@ -56,14 +72,13 @@ Egenskap: Automatisk GSK-konklusjon
         | KLS           | studieforberedende vitnemål                 | KL     |
         | KLY           | yrkesfaglige vitnemål                       | KL     |
 
-    Scenariomal: Ingen konklusjon fra vitnemålet når <grunn>
+    Scenariomal: Ingen positiv konklusjon fra vitnemålet når <grunn>
       Gitt at <grunn>
-      Når søknaden behandles automatisk
-      Så får søknaden ingen GSK-konklusjon fra vitnemålet
+      Når søknaden kommer inn
+      Så finnes det ingen positiv GSK-konklusjon fra vitnemålet
 
       Eksempler:
         | grunn                                                         |
-        | søkeren har flere vitnemål som ikke er annullert              |
         | søkerens eneste dokument er et kompetansebevis                |
         | vitnemålet mangler utstedelsesdato                            |
         | løpet på vitnemålet ikke gir generell studiekompetanse        |
@@ -79,14 +94,14 @@ Egenskap: Automatisk GSK-konklusjon
     Scenario: Gjenbruke positiv konklusjon fra tidligere samordna opptak
       Gitt at søknaden ikke får GSK-konklusjon fra vitnemålet
       Og at søkeren har en positiv GSK-konklusjon fra et tidligere samordna opptak
-      Når søknaden behandles automatisk
+      Når søknaden kommer inn
       Så får søknaden en positiv GSK-konklusjon
       Og grunnlagskoden og grunnlagsdatoen er de samme som i den tidligere konklusjonen
 
     Scenario: Vitnemålet går foran tidligere konklusjon
       Gitt at søkeren har et vitnemål som gir generell studiekompetanse
       Og at søkeren har en positiv GSK-konklusjon fra et tidligere opptak
-      Når søknaden behandles automatisk
+      Når søknaden kommer inn
       Så bygger søknadens GSK-konklusjon på vitnemålet
 
     # Negative konklusjoner: avklart 2026-10-13. Overskriver saksbehandleren en positiv
@@ -98,18 +113,18 @@ Egenskap: Automatisk GSK-konklusjon
       Gitt at søknaden ikke får GSK-konklusjon fra vitnemålet
       Og at søkeren har en positiv GSK-konklusjon fra et opptak i 2024
       Og at søkeren har en negativ GSK-konklusjon fra et opptak i 2025
-      Når søknaden behandles automatisk
+      Når søknaden kommer inn
       Så får søknaden ingen GSK-konklusjon fra tidligere opptak
 
     Scenario: Negative konklusjoner gjenbrukes ikke
       Gitt at søkeren bare har negative GSK-konklusjoner fra tidligere opptak
-      Når søknaden behandles automatisk
+      Når søknaden kommer inn
       Så får søknaden ingen GSK-konklusjon fra tidligere opptak
 
     Scenario: Gjenbruke positiv konklusjon fra lokalt opptak
       Gitt at søknaden ikke får GSK-konklusjon fra vitnemålet
       Og at søkerens eneste positive GSK-konklusjon er satt i FS Admin i et lokalt opptak
-      Når søknaden behandles automatisk
+      Når søknaden kommer inn
       Så får søknaden en positiv GSK-konklusjon
       Og grunnlagskoden og grunnlagsdatoen er de samme som i den tidligere konklusjonen
 
@@ -121,20 +136,20 @@ Egenskap: Automatisk GSK-konklusjon
       Gitt at søknaden ikke får GSK-konklusjon fra vitnemålet
       Og at søkerens eneste positive GSK-konklusjon er satt i FS-klienten i et lokalt opptak
       Og at konklusjonen er med i oversikten over kvalitetssikrede GSK-konklusjoner
-      Når søknaden behandles automatisk
+      Når søknaden kommer inn
       Så får søknaden en positiv GSK-konklusjon
       Og grunnlagskoden og grunnlagsdatoen er de samme som i den tidligere konklusjonen
 
     Scenario: Konklusjon fra FS-klienten som ikke er kvalitetssikret, gjenbrukes ikke
       Gitt at søkerens eneste positive GSK-konklusjon er satt i FS-klienten i et lokalt opptak
       Og at konklusjonen ikke er med i oversikten over kvalitetssikrede GSK-konklusjoner
-      Når søknaden behandles automatisk
+      Når søknaden kommer inn
       Så får søknaden ingen GSK-konklusjon fra tidligere opptak
 
     Scenario: Konklusjon som bygger på et annullert vitnemål gjenbrukes ikke
       Gitt at søkeren har en positiv GSK-konklusjon fra et avsluttet opptak
       Og at vitnemålet konklusjonen bygger på, er annullert
-      Når søknaden behandles automatisk
+      Når søknaden kommer inn
       Så får søknaden ingen GSK-konklusjon fra tidligere opptak
 
   Regel: Automatikken setter bare positive konklusjoner, og bare der ingen finnes
@@ -142,19 +157,19 @@ Egenskap: Automatisk GSK-konklusjon
     Scenario: Ingen grunnlag for generell studiekompetanse
       Gitt at søknaden ikke får GSK-konklusjon fra vitnemålet
       Og at søkeren ikke har noen positiv GSK-konklusjon fra et tidligere opptak
-      Når søknaden behandles automatisk
+      Når søknaden kommer inn
       Så får søknaden ingen GSK-konklusjon
       Og generell studiekompetanse vurderes manuelt
 
     Scenario: Konklusjon på søknaden overskrives ikke
       Gitt at søknaden har en GSK-konklusjon, satt av en hvilken som helst organisasjon i opptaket
       Og at søkeren har et vitnemål som gir generell studiekompetanse
-      Når søknaden behandles automatisk
+      Når søknaden kommer inn
       Så er GSK-konklusjonen på søknaden uendret
 
     Scenario: Systemet setter aldri en negativ konklusjon
       Gitt at søkeren ikke har noe grunnlag for generell studiekompetanse
-      Når søknaden behandles automatisk
+      Når søknaden kommer inn
       Så får søknaden ingen negativ GSK-konklusjon
 
   # Reglene for manuell endring ligger i grenselandet mellom automatisk og manuell
