@@ -38,6 +38,13 @@ Egenskap: Listevisning og søk i personbrukere
         | Hjemorganisasjon |
       Og «Feide-IDer» viser Feide-ID-ene til Feide-brukerne som er koblet til personbrukeren
 
+    @planned
+    Scenario: Se antall aktive roller per personbruker
+      Når jeg åpner brukeroversikten
+      Så viser listen kolonnen «Aktive roller» for hver personbruker
+      Og kolonnen viser hvor mange aktive roller personbrukeren har
+      Og serveren avgjør hva som er en aktiv rolle
+
     @draft @openquestion
     # ÅPNE SPØRSMÅL:
     # - API-et støtter ikke sortering på navn ennå, og UI-kontrollen er derfor fjernet. Når skal dette komme på plass, og hvem følger opp på API-siden?
@@ -84,7 +91,7 @@ Egenskap: Listevisning og søk i personbrukere
       Når jeg søker med fritekst på Feide-ID
       Så filtreres listen til personbrukere der Feide-ID inneholder søketeksten
 
-    # En personbruker har ingen status, så statusfilteret avvikles (beslutning 23.10.2026).
+    # Status for brukere avvikles (beslutning 26.10.2026), så statusfilteret avvikles.
     @deprecated
     Scenario: Tilgjengelige statuser i filter
       Gitt jeg ser listen over personbrukere
