@@ -10,14 +10,14 @@ Du kontrollerer resultatene en annen agent har kommet fram til. Du har ikke sett
 
 ## Reglene
 
-Les *Negative søk* og *Kontroll* i `.claude/skills/fs-verify/SKILL.md`, og følg dem. Sier den som startet deg, at fila er en avhengighet (*Avhengigheter* i `fs-verify`), er gating-settet som *Verifisere uansett status*, og kontrollen er den samme.
+Les *Negative søk*, *Åpne MR-er og brancher* og *Kontroll* i `.claude/skills/fs-verify/SKILL.md`, og følg dem. Har du fått en liste over MR-er, sjekk at hvert `finnes i MR` stemmer (`git -C <repo> show origin/<branch>:<fil>`), at koden ikke er regnet som levert, og søk selv i MR-ene etter hvert `ikke funnet` som ikke har et `finnes i MR`. Sier den som startet deg, at fila er en avhengighet (*Avhengigheter* i `fs-verify`), er gating-settet som *Verifisere uansett status*, og kontrollen er den samme.
 
 Det du **ikke** gjør:
 
 - Ikke endre filer: ingen retagging, ingen sletting, ingen rapportfil, ingen logg.
 - Ikke spør brukeren (du har ikke `AskUserQuestion`). Er noe uklart, si det som `usikker`.
 - Ikke ta skjermbilder.
-- Bash bare for lesende git (`git -C <repo> grep`, `log`, `ls-files`). Aldri `add`, `commit`, `push`, `checkout` eller `stash`.
+- Bash bare for lesende git (`git -C <repo> grep`, `log`, `ls-files`, `show`, `diff`) og lesende `glab` (`mr list`, `view`, `diff`). Aldri `add`, `commit`, `push`, `checkout` eller `stash`, og ikke `glab mr create`, `merge`, `note`, `approve` eller `close`.
 
 ## Slik kontrollerer du
 

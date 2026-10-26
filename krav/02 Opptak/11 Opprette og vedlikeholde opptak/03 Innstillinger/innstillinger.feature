@@ -1,5 +1,5 @@
 # language: no
-@OPT-OVO-INN-001 @must @in-progress @scope-opprette-opptak-2027
+@OPT-OVO-INN-001 @must @implemented @scope-opprette-opptak-2027
 Egenskap: Innstillinger for opptak
   Som opptaksforvalter ved forvaltende organisasjon
   ønsker jeg å sette innstillinger for opptaket
@@ -88,7 +88,7 @@ Egenskap: Innstillinger for opptak
   # Det erstatter regelen fra 2026-10-14 om hvor mange utdanningstilbud en søker kan få opptak til.
   # Taket er obligatorisk, er forhåndsutfylt med 1, og kan endres etter at opptaket er opprettet.
   # Virkningen i plasstildelingen står i 14 Plasstildeling/03 Tildeling/gjennomføre_plasstildeling.feature.
-  @ref-OPT-PLA-TIL-002
+  @ref-OPT-PLA-TIL-002 @deprecated
   Regel: Opptaksforvalter setter tak for antall tilbud per tildelingsrunde
 
     Scenario: Sette tak for antall tilbud per tildelingsrunde
@@ -149,12 +149,13 @@ Egenskap: Innstillinger for opptak
       Så er ledige studieplasser aktivert for opptaket
       Og opptaket har datoene for ledige studieplasser
 
+  @ref-OPT-SØK-SØK-017
   Regel: Opptaksforvalter kan legge til utdanningsbakgrunner som gjelder for opptaket
 
     # Opptaksforvalter velger blant godkjente utdanningsbakgrunner fra utdanningsbakgrunn-tabellen.
     # Avvikende søknads- og dokumentasjonsfrister per utdanningsbakgrunn settes i
     # 04 Frister/frister_og_hendelser.feature.
-    # Søkerens valg av utdanningsbakgrunn står i 13 Søknad og saksbehandling/01 Søknad/søke_på_opptak.feature.
+    # Søkerens valg av utdanningsbakgrunn står i OPT-SØK-SØK-017.
 
     Scenario: Legge til utdanningsbakgrunner fra godkjent liste
       Når opptaksforvalter legger til utdanningsbakgrunner i opptaket

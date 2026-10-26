@@ -71,3 +71,27 @@ Egenskap: Trekke utdanningstilbud fra opptak
       Gitt at trekkfristen for utdanningstilbud er passert
       Og at opptaksforvalter er ved en deltakende organisasjon
       Så kan opptaksforvalter ikke trekke utdanningstilbud fra opptaket
+
+  @depends-on-OPT-OVO-FRI-001
+  Regel: Opptaksforvalter ved deltakende organisasjon kan trekke fram til trekkfristen, også etter at redigeringen har stengt
+
+    # AVKLART 2026-10-26 (produkteier): Trekkfristen er uavhengig av redigeringsfristen.
+    Scenario: Deltakende organisasjon trekker utdanningstilbud etter at redigeringen har stengt
+      Gitt at redigering av utdanningstilbud har stengt
+      Og at trekkfristen for utdanningstilbud ikke er passert
+      Og at opptaksforvalter er ved deltakende organisasjon "Universitetet i Oslo"
+      Når opptaksforvalter velger å trekke utdanningstilbudet "Sykepleie, høst 2027", som "Universitetet i Oslo" tilbyr
+      Så varsles opptaksforvalter om konsekvensen av å trekke
+      Og utdanningstilbudet trekkes fra opptaket
+
+  @depends-on-OPT-OVO-FRI-001
+  Regel: Opptaksforvalter ved forvaltende organisasjon kan trekke utdanningstilbud etter trekkfristen
+
+    # Lagt til 2026-10-26: Trekkfristen virker som redigeringsfristen. Den stenger for deltakende organisasjoner,
+    # men ikke for forvaltende organisasjon.
+    Scenario: Forvaltende organisasjon trekker utdanningstilbud etter trekkfristen
+      Gitt at trekkfristen for utdanningstilbud er passert
+      Og at opptaksforvalter er ved forvaltende organisasjon
+      Når opptaksforvalter velger å trekke utdanningstilbudet "Sykepleie, høst 2027"
+      Så varsles opptaksforvalter om konsekvensen av å trekke
+      Og utdanningstilbudet trekkes fra opptaket

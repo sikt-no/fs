@@ -1,6 +1,6 @@
 # language: no
 # GitHub: #216
-@OPT-REG-KVO-004 @must @planned @scope-kvoter-i-opptaket-2027 @ref-OPT-PLA-TIL-002 @ref-OPT-OPT-UTD-004
+@OPT-REG-KVO-004 @must @in-progress @scope-kvoter-i-opptaket-2027 @ref-OPT-PLA-TIL-002 @ref-OPT-OPT-UTD-004
 Egenskap: Sette kvoteprioritet i regelverkssamlingen
   Som regelverksforvalter ved organisasjonen som eier regelverkssamlingen
   ønsker jeg å rangere kvotetypene i regelverkssamlingen med kvoteprioritet
