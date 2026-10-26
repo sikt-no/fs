@@ -40,7 +40,7 @@ Testbrukerne finnes i minst to organisasjoner, så vi kan teste at ingen ser dat
 
 ### Testdata
 
-Alle testcasene bruker opptaket «Sektordemo 23.10.26». Opptaket må være i ulike tilstander, og testbruker 1 (opptaksforvalter ved forvaltende organisasjon) flytter fristene i opptaket mellom fasene. Testcasene tas fase for fase, ikke i nummerrekkefølge. Fase 3–5 kommer sist, i tilfelle søknadsåpningen ikke kan flyttes tilbake. Etter testen settes fristene tilbake slik de var før fase 1.
+Alle testcasene bruker opptaket «Sektordemo 23.10.26». Opptaket må være i ulike tilstander, og testbruker 1 (opptaksforvalter ved forvaltende organisasjon) flytter fristene i opptaket mellom fasene. Testcasene tas fase for fase, ikke i nummerrekkefølge. Fase 3–5 kommer sist, i tilfelle søknadsåpningen ikke kan flyttes tilbake. Ingenting trenger å settes tilbake etter testen.
 
 | Fase | Fristene i Sektordemo 23.10.26 | Testcaser |
 |---|---|---|
@@ -52,15 +52,15 @@ Alle testcasene bruker opptaket «Sektordemo 23.10.26». Opptaket må være i ul
 
 | Hva | Navn | Hvor | Kan settes tilbake |
 |---|---|---|---|
-| Opptaket, med deltakende organisasjoner, i fasene over | Sektordemo 23.10.26 | FS Admin, Opptak | Fristene: ja, settes tilbake etter testen. Fjerning (1.1, 1.2, 1.4) og trekking (4.1) kan ikke angres. |
+| Opptaket, med deltakende organisasjoner, i fasene over | Sektordemo 23.10.26 | FS Admin, Opptak | Trenger ikke settes tilbake. Fjerning (1.1, 1.2, 1.4) og trekking (4.1) kan ikke angres. |
 | Utdanningstilbud i opptaket: minst tre som kan fjernes, ett som kan trekkes, og ett for økt 2 med kompetanseregelverk og rangeringsregelverk | Testeren velger | Sektordemo 23.10.26 | Nei, de fjernes eller trekkes |
 | Utdanningstilbud i opptaket fra UiT og UiO, med ulik starttermin og ulikt startår, og noen uten kompetanseregelverk eller rangeringsregelverk | Testeren velger | Sektordemo 23.10.26 | – |
 | Utdanninger i utdanningsregisteret for de deltakende organisasjonene, nok til å legge til flere av gangen | Testeren velger | Utdanningsregisteret | – |
 | Utdanningstilbud med og uten beskrivelses-URL i utdanningsregisteret | Testeren velger | Utdanningsregisteret | – |
-| Standardregel for poenglikhet med tillatte unntak (9.1–9.3) | Sektordemo 23.10.26 [Fylles ut: bekreft at opptaket åpner for unntak] | FS Admin, Opptak | Ingenting endres |
-| Flere regler for poenglikhet som er tilgjengelige for opptaket, og minst én som ikke er det | [Fylles ut: reglene] | [Fylles ut] | Ingenting endres |
-| Utdanningstilbud i opptaket som bruker standardregelen for poenglikhet | Testeren velger | FS Admin, detaljsiden for utdanningstilbudet | [Fylles ut: Ja, regelen settes tilbake til standardregelen etter testen?] |
-| Søknadsfrist for opptaket (14.1) | [Fylles ut: søknadsfristen i Sektordemo 23.10.26] | Opptaksinnstillingene i Sektordemo 23.10.26 | – |
+| Standardregel for poenglikhet med tillatte unntak (9.1–9.3) | Sektordemo 23.10.26, som åpner for unntak fra standardregelen | FS Admin, Opptak | Ingenting endres |
+| Reglene for poenglikhet som er tilgjengelige for opptaket. Bare de kan velges på utdanningstilbudet (9.3). | Reglene som er tilgjengelige i Sektordemo 23.10.26 | Opptaksinnstillingene i Sektordemo 23.10.26 | Ingenting endres |
+| Utdanningstilbud i opptaket som bruker standardregelen for poenglikhet | Testeren velger | FS Admin, detaljsiden for utdanningstilbudet | Trenger ikke settes tilbake |
+| Søknadsfrist for opptaket (14.1) | 15.04.2027 | Opptaksinnstillingene i Sektordemo 23.10.26 | – |
 
 ## Omfang
 
@@ -157,7 +157,7 @@ Klart når testansvarlig har logget inn som testbruker og ser testdataene.
 |---|---|---|
 | 1 | Leveransen er lagt ut i testmiljøet, og den virker der | [Fylles ut av teamet] |
 | 2 | Testdataene er identifisert og tilgjengelige | [Fylles ut av teamet] |
-| 3 | Testdataene kan settes tilbake eller lages på nytt | [Fylles ut av teamet] |
+| 3 | Testdataene kan settes tilbake eller lages på nytt | Ikke nødvendig: testdataene trenger ikke settes tilbake etter testen |
 | 4 | Testbrukerne finnes i rollene leveransen gjelder, i minst to organisasjoner | [Fylles ut av teamet] |
 | 5 | `fs-verify` har funnet alle scenarioene, og en annen person har kontrollert rapporten | Ikke oppfylt: 44 av 71 scenarioer funnet (25 ikke funnet, 2 usikker), og de tre scenarioene fra SHI-747 er ikke levert. Av de 44 som er funnet, testes 42 (to testes ikke i denne runden). Rapportene er kontrollert av `fs-verify-kontroll`, ikke av en annen person: [Fylles ut: hvem kontrollerer rapportene] |
 | 6 | Testcasene er laget og gått gjennom av testansvarlig | Laget, venter på gjennomgang av testansvarlig |
