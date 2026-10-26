@@ -9,12 +9,17 @@
 # GskVedtakAutoService, GskVedtakTilbakekallingService), og kjøres som første
 # steg i den automatiske saksbehandlingen. Kravet flytter beregningen til
 # vitnemålsimporten, og lagrer opptakssystemets egen påstand om GSK på vitnemålet.
-# Påstanden fra KREG brukes ikke lenger. Gjenbruk av konklusjoner fra
-# tidligere opptak finnes ikke: koden ser bare etter konklusjoner i samme
-# opptak. Confluence v2 setter gjenbruksbasen utenfor versjonen. Dette kravet
-# tar inn gjenbruk fra tidligere samordna opptak, fra lokale opptak i FS Admin, og
-# fra lokale opptak i FS-klienten når konklusjonen er med i oversikten over
-# kvalitetssikrede GSK-konklusjoner.
+# Påstanden fra KREG brukes ikke lenger. Dette kravet tar inn gjenbruk fra
+# tidligere samordna opptak, fra lokale opptak i FS Admin, og fra lokale opptak i
+# FS-klienten når konklusjonen er med i oversikten over kvalitetssikrede
+# GSK-konklusjoner.
+#
+# Gjenbruk i 2027-opptaket (STEK-442): det er ikke avklart hvordan gjenbruksdata skal
+# organiseres i produktområdet. For 2027 lastes GSK-konklusjonene og annulleringene
+# fra det gamle opptakssystemet (gjenbruksbasen i SODA, tabellene gskvedtak og
+# gskvedtakannullering) inn i midlertidige gjenbrukstabeller før opptaket. De er
+# konklusjoner fra tidligere opptak i dette kravet. Tabellene fjernes etter
+# 2027-opptaket.
 @OPT-BEH-BEH-015 @must @planned
 Egenskap: Automatisk GSK-konklusjon
   Som saksbehandler
@@ -131,7 +136,11 @@ Egenskap: Automatisk GSK-konklusjon
     # med fem koder under «Opptakssystemets påstand om GSK på vitnemålet» gjelder bare
     # vitnemål.
 
+    @openquestion
     Scenario: Gjenbruke positiv konklusjon fra tidligere samordna opptak
+      # ÅPNE SPØRSMÅL:
+      # - Gjenbruksbasen har konklusjoner med kildekoden IMM (1907–2001) i tillegg til
+      #   NOM (samordna opptak, 1997–2026). Skal IMM-konklusjonene også gjenbrukes?
       Gitt at søknaden ikke får GSK-konklusjon fra vitnemålet
       Og at søkeren har en positiv GSK-konklusjon fra et tidligere samordna opptak
       Når søknaden opprettes
@@ -149,6 +158,9 @@ Egenskap: Automatisk GSK-konklusjon
     # gjenbruken av eldre positive konklusjoner. Derfor må negative konklusjoner lagres
     # som konklusjoner. Det avviker fra Confluence v2, der negative konklusjoner bare er
     # mangler og ikke bevares.
+    # Den siste konklusjonen: avklart 2026-10-26 at det er konklusjonen som ble satt
+    # sist, også når søkeren har flere konklusjoner fra samme år og termin, fra ulike
+    # organisasjoner.
     Scenario: Bare den siste tidligere konklusjonen gjenbrukes
       Gitt at søknaden ikke får GSK-konklusjon fra vitnemålet
       Og at søkeren har en positiv GSK-konklusjon fra et opptak i 2024
@@ -186,6 +198,18 @@ Egenskap: Automatisk GSK-konklusjon
       Når søknaden opprettes
       Så får søknaden ingen GSK-konklusjon fra tidligere opptak
 
+    @draft @openquestion
+    Scenario: Annullert konklusjon gjenbrukes ikke
+      # ÅPNE SPØRSMÅL:
+      # - En annullering kan gjelde fra en dato fram i tid. Gjenbrukes konklusjonen fram til den datoen?
+      Gitt at søknaden ikke får GSK-konklusjon fra vitnemålet
+      Og at søkerens eneste positive GSK-konklusjon fra et tidligere opptak er annullert
+      Når søknaden opprettes
+      Så får søknaden ingen GSK-konklusjon fra tidligere opptak
+
+    # Gjelder bare konklusjoner som vet hvilket vitnemål de bygger på. Konklusjonene fra
+    # gjenbruksbasen gjør ikke det. For dem er det annulleringene i gjenbruksbasen som
+    # gjelder (se «Annullert konklusjon gjenbrukes ikke»).
     Scenario: Konklusjon som bygger på et annullert vitnemål gjenbrukes ikke
       Gitt at søkeren har en positiv GSK-konklusjon fra et avsluttet opptak
       Og at vitnemålet konklusjonen bygger på, er annullert
@@ -214,6 +238,8 @@ Egenskap: Automatisk GSK-konklusjon
 
   # Reglene for manuell endring ligger i grenselandet mellom automatisk og manuell
   # saksbehandling, og kan bli flyttet til et eget krav når kravstrukturen bygges ut.
+  # At saksbehandleren ser søkerens tidligere GSK-konklusjoner og henter én inn i
+  # opptaket når automatikken ikke har satt noen (STEK-443), skal bli et eget krav.
   Regel: Saksbehandleren endrer GSK-konklusjonen
 
     Scenario: Overskrive positiv konklusjon med negativ konklusjon
@@ -235,6 +261,9 @@ Egenskap: Automatisk GSK-konklusjon
     # Kilden: vitnemålene hentes fra KREG. Er et vitnemål annullert der, trekkes
     # konklusjonene som bygger på det, tilbake. Det gjelder bare i opptak som ikke er
     # avsluttet. I avsluttede opptak står konklusjonen urørt.
+    # Konklusjoner fra gjenbruksbasen (STEK-442) vet ikke hvilket vitnemål de bygger på,
+    # og trekkes ikke tilbake etter denne regelen. For dem er det annulleringene i
+    # gjenbruksbasen som gjelder.
     # Melding til søkeren: avklart 2026-10-13 at søkeren ikke får egen beskjed om at
     # konklusjonen er trukket tilbake. Søkeren får vite det gjennom resultatet av
     # saksbehandlingen.
@@ -284,4 +313,9 @@ Egenskap: Automatisk GSK-konklusjon
       Når saksbehandleren ser på GSK-konklusjonen
       Så ser saksbehandleren at konklusjonen er satt automatisk
       Og saksbehandleren ser om konklusjonen bygger på et vitnemål eller et tidligere opptak
+
+    Scenario: Se hvilket opptak en gjenbrukt konklusjon kommer fra
+      Gitt at søknaden har fått en GSK-konklusjon som er gjenbrukt fra et tidligere opptak
+      Når saksbehandleren ser på GSK-konklusjonen
+      Så ser saksbehandleren hvilket opptak konklusjonen kommer fra
 
