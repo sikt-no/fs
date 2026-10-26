@@ -10,11 +10,11 @@ Hver fase bygger på den forrige og gjentar den ikke. Derfor gjelder ikke alle r
 
 | Fase | Hva testcasene er | Reglene |
 |---|---|---|
-| 2. Agentisk funksjonstest | Ett scenario (eller en utledet testcase) per testcase: positive og negative, med gyldige og ugyldige data, og feltvalidering | R1–R9, R12–R15 |
-| 3. Intern akseptansetest | Flyter og avhengigheter: oppgaver i arbeidsprosessen, gjennom flere scenarioer | R1–R8, R10–R15. R9 bare når en feilsituasjon er en del av flyten |
-| 4. Ekstern akseptansetest | Flytforslag til partene, som eier testcasene sine | R1–R4, R6–R8, R10, R11 og R14 |
+| 2. Agentisk funksjonstest | Ett scenario (eller en utledet testcase) per testcase: positive og negative, med gyldige og ugyldige data, og feltvalidering | R1–R9, R12–R16 |
+| 3. Intern akseptansetest | Flyter og avhengigheter: oppgaver i arbeidsprosessen, gjennom flere scenarioer | R1–R8, R10–R16. R9 bare når en feilsituasjon er en del av flyten |
+| 4. Ekstern akseptansetest | Flytforslag til partene, som eier testcasene sine | R1–R4, R6–R8, R10, R11, R14 og R16 |
 
-Feltvalidering, grenseverdier, obligatoriske felt og feilsituasjoner testes i fase 2, og testes ikke på nytt i fase 3 og 4. Tilgangsstyring og datakonsistens er sjekket i koden i fase 1.
+Feltvalidering, grenseverdier, obligatoriske felt og feilsituasjoner testes i fase 2, og testes ikke på nytt i fase 3 og 4. Det lages ikke egne testcaser for roller og tilganger: `fs-verify` har verifisert i koden i fase 1 at de er laget slik kravet sier, og at datakonsistensen holder. Scenarioene i kravet, også om synlighet, testes som de står.
 
 ## Kolonnene
 
@@ -90,9 +90,9 @@ Fyller flere testcaser ut det samme skjemaet, står utfyllingen én gang, øvers
 
 Det gjelder både en ny testrunde og kjøringer med flere agenter.
 
-- **Fase 2 lager sine egne testdata.** Hver testcase (eller kjøring) setter opp dataene den trenger, manuelt eller seedet via API (se *Testdata* i `roller-og-testdata.md`), og forutsetter ikke data fra en annen testcase. Er testcasen `@endrer-data`, eller lager den data som ikke kan slettes, rydder eller tilbakestiller den etterpå.
+- **Testcasene i fase 2 er uavhengige.** Hver testcase bygger på testdataene i testplanen, i utgangstilstanden der (se *Testdata* i `roller-og-testdata.md`), og ikke på data fra en annen testcase. Hvordan testdataene lages og settes tilbake, er utenfor teststrategien. Er testcasen `@endrer-data`, eller lager scenarioet selv data som ikke kan slettes, rydder eller tilbakestiller testcasen etterpå.
 - Lager testen data som ikke kan slettes, og som finnes igjen på navn, har navnet en del som skiller kjøringene: `«Samordna opptak 2027 (test {KJØRING})»`. Øverst står det hva `{KJØRING}` byttes ut med (for eksempel dato og klokkeslett når testen starter).
-- Endrer en testcase noe som andre testcaser eller en senere kjøring bygger på, settes det tilbake, og verdien noteres i et eget steg før den endres: `sett «Planlagte studieplasser» tilbake til verdien du noterte i steg 2`. I fase 3 står det som en egen rad: `Rydd opp etter 2.7: …`.
+- Endrer en testcase noe som andre testcaser eller en senere kjøring bygger på, settes det tilbake, og verdien noteres i et eget steg før den endres: `sett «Planlagte studieplasser» tilbake til verdien du noterte i steg 2`. I fase 3 står det som en egen rad (R10): `Gjør klar til neste test: …`.
 - Testdata som bare kan brukes én gang (for eksempel et utdanningstilbud som legges til i et opptak), står som `[Fylles ut: …, ikke det samme som i en tidligere kjøring]`.
 - Kan en testcase ved en kjent mangel lage data testen ikke regnet med, har dataene et eget navn, så de ikke blandes med resten.
 - Tilstander som bygger på datoer er sanne bare i et vindu. Fristene står i forhold til dagen testen kjøres (se `roller-og-testdata.md`).
@@ -101,11 +101,13 @@ Det gjelder både en ny testrunde og kjøringer med flere agenter.
 
 Virker ikke et steg, eller finnes ikke en verdi i testmiljøet, er det et funn. Ikke prøv deg fram en annen vei. Testcasen blir «Ikke testet», med det som ble sett i «Faktisk resultat», og det står i «Andre funn» om det er testdataene eller løsningen. Den som kjører testen kan foreslå en vei rundt i «Faktisk resultat», men går den ikke. Unntaket er når testansvarlig har sagt at nærmeste verdi kan brukes: det står da i «Faktisk resultat», og statusen settes ut fra det kravet sier, ikke ut fra verdien i stegene. Gjelder agenten i fase 2 like mye som testeren i fase 3 og 4.
 
-Testcaser merket «Kjent mangel (<sak>)» har saken fra verify-rapporten eller fra teamet. Før testen starter sjekkes saken (Jira-status, eller endringsloggen i kodeklonen). Er den levert, fjernes merket, og regelen foreslås til `fs-verify`.
-
 ## R15. Testdata finnes, eller merkes
 
-Sjekk at testdataene som ikke lages av testen selv, finnes i testmiljøet før testcasene skrives: verdiene i nedtrekkslistene (regelverkssamling, poenglikhetsregel, kodeverk) og opptakene i testplanen. Finnes ikke en verdi, bruk verdien som finnes, og si det i oppsummeringen. Kan det ikke sjekkes, merk verdien `[Sjekk testdata]`.
+Sjekk at testdataene i testplanen finnes i testmiljøet før testcasene skrives: verdiene i nedtrekkslistene (regelverkssamling, poenglikhetsregel, kodeverk) og opptakene i testplanen. Finnes ikke en verdi, bruk verdien som finnes, og si det i oppsummeringen. Kan det ikke sjekkes, merk verdien `[Sjekk testdata]`.
+
+## R16. Kjent mangel har en kilde, og sjekkes
+
+En testcase merket «Kjent mangel (<sak>)» har saken fra verify-rapporten eller fra teamet, aldri en antakelse. Før testen starter, og hver gang skillen kjøres på nytt, sjekkes saken (Jira-status, eller endringsloggen i kodeklonen). Er saken levert, fjernes merket, testcasen testes som de andre, og regelen foreslås til `fs-verify`. Sjekket står i oppsummeringen: `TAKE-431: levert i fs-admin 0.61.0 (2026-10-22), merket fjernet fra 1.5c og 1.5d.`
 
 ## Sjekkliste før utkastet vises
 
@@ -117,4 +119,5 @@ Sjekk at testdataene som ikke lages av testen selv, finnes i testmiljøet før t
 | 4 | «Faktisk resultat» og «Status» er tomme |
 | 5 | Det som må fylles ut, er merket `[Fylles ut …]`, `[Sjekk begrep]` eller `[Sjekk testdata]`, og står i oppsummeringen til brukeren |
 | 6 | Følg stegene bokstavelig, med lista over obligatoriske felt fra koden ved siden av: Når testen forventet resultat? Mangler et obligatorisk felt i en testcase som skal lagre? Mangler noe annet enn feltet som testes, i en feilsituasjon? Gir en henvisning (`som i Utfylling A`) det testcasen trenger? |
-| 7 | Fase 2: hver testcase lager sine egne testdata og rydder etter seg, og kan kjøres på nytt (R13) |
+| 7 | Fase 2: hver testcase er uavhengig, rydder etter seg og kan kjøres på nytt (R13) |
+| 8 | Hver «Kjent mangel» har en sak, og saken er sjekket (R16) |

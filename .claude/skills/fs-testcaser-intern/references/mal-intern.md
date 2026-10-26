@@ -1,6 +1,6 @@
 # Mal: Intern akseptansetest
 
-For testansvarlig (domeneekspert) og de andre interne testerne. Formen er den [teststrategien (forslag)](https://sikt.atlassian.net/wiki/spaces/STUDIEADM/pages/5145100326) gir i *Fase 3* og *Testplan og sluttrapport*: én testcase per flyt, med flere scenarioer i rekkefølgen arbeidsprosessen går, og eget resultat per scenario.
+For testansvarlig (domeneekspert) og de andre interne testerne. Formen er den [teststrategien (forslag)](https://sikt.atlassian.net/wiki/spaces/STUDIEADM/pages/5145100326) gir i *Fase 3* og *Testplan og sluttrapport*: én testcase per flyt (eller per oppgave uten flyt, for krav som ikke hører til en flyt), med flere scenarioer i rekkefølgen arbeidsprosessen går, og eget resultat per scenario.
 
 Siden er for testerne. Testbeskrivelsen (miljø, versjon, flagg, testbrukere, testdata, roller) står i testplanen, og siden lenker dit i stedet for å gjenta den. Beslutningen står i testrapporten.
 
@@ -18,7 +18,7 @@ Fila skrives til `akseptansetest/<testplan-slug>/testcaser-intern.md`. Alt over 
 - **Scope**: @scope-<slug>[, …] | –
 - **Krav**: <N> feature-filer, commit `<sha>` (<YYYY-MM-DD>)
 - **Verifisering**: <verify-fil>, <N> av <N> funnet
-- **Agentisk funksjonstest**: <testrapport-agentisk-fil>, utfall: <utfall>
+- **Agentisk funksjonstest**: <testrapport-agentisk-fil>, gjennomgått av testansvarlig: ja / nei, åpne funn med «Stopper»: <N>
 - **Confluence**: –
 - **Laget**: <YYYY-MM-DD> av fs-testcaser-intern
 - **Sporing**:
@@ -36,7 +36,7 @@ Intern akseptansetest av «<leveranse>». Testbeskrivelsen, testbrukerne og test
 ## Slik tester du
 
 - Dette er en test av at leveransen henger sammen i arbeidsprosessen og med resten av FS. Enkeltfunksjoner, obligatoriske felt og feilmeldinger er testet i den agentiske funksjonstesten, og testes ikke på nytt her. Du kan ta stikkprøver.
-- Ta testcasene i rekkefølge, og følg stegene slik de står. Virker ikke et steg, er det et funn. Ikke prøv deg fram en annen vei.
+- Ta testcasene i rekkefølge, og følg stegene slik de står. Virker ikke et steg, eller finnes ikke en verdi i testmiljøet, er det et funn. Ikke prøv deg fram en annen vei. Testcasen blir «Ikke testet», med det du så i «Faktisk resultat», og i «Andre funn» skriver du om det er testdataene eller løsningen. Du kan foreslå en vei rundt i «Faktisk resultat», men gå den ikke. Unntaket er når testansvarlig har sagt at nærmeste verdi kan brukes: skriv det i «Faktisk resultat», og sett status ut fra det kravet sier, ikke ut fra verdien i stegene.
 - Hver testcase er en oppgave i arbeidsprosessen, med flere deler. Hver del har sin egen rad med «Faktisk resultat» og «Status».
 - Fyll ut «Faktisk resultat» med det du så, og «Status» med Bestått, Ikke bestått eller Ikke testet. Ved «Ikke testet», skriv hvorfor i «Faktisk resultat».
 - Sjekk at det du har lagret, står der når du åpner siden igjen.
@@ -73,6 +73,21 @@ Intern akseptansetest av «<leveranse>». Testbeskrivelsen, testbrukerne og test
 
 <Flere flyter: én testcase til, nummerert videre. Er en flyt for lang, del den mellom to faser, og la neste testcase bruke dataene fra den første (R10).>
 
+### <Nr>. <Oppgaven i arbeidsprosessen, med vanlige ord> (oppgave uten flyt) (ca. <N> minutter)
+
+<For et krav som ikke hører til en flyt (*Hva er en flyt?* i `krav/README.md`). Samme form som en flyt, men innenfor ett krav og uten overlevering. Nummereres videre etter flytene, i den rekkefølgen brukerne møter oppgavene.>
+
+**Hensikt:** <hva testeren skal få til i oppgaven, og hva det viser>
+
+**Testdata:** testbruker <nr> (<navn>, <rolle> ved <organisasjon>). Bruker: <data som må finnes>. Lager: <data de neste testcasene trenger>.
+
+**Avhengigheter som sjekkes:** <fra «Avhengigheter», eller «Ingen»>
+
+| Del | Scenario | Steg | Forventet resultat | Faktisk resultat | Status |
+|---|---|---|---|---|---|
+| <Nr>a | <scenariotittel fra kravet> | 1. Logg inn som testbruker <nr> (<navn>, <rolle> ved <organisasjon>). <br>2. … | <det testeren ser> | | |
+| <Nr>b | <scenariotittel fra kravet> | 3. … | … | | |
+
 ### Regresjon
 
 <Bare når leveransen endrer noe andre bygger på. Ellers utelates delen.>
@@ -107,7 +122,7 @@ Scenarioene er laget, men kan ikke testes i testmiljøet ennå.
 | Hva | Hvorfor |
 |---|---|
 | Feltvalidering, feilmeldinger og grenseverdier | Testet i den agentiske funksjonstesten (fase 2) |
-| <krav som ikke inngår i en flyt, med vanlige ord> | <venter på flyt / testes som egen oppgave / kommer senere> |
+| <krav som venter på en flyt, med vanlige ord> | <venter på flyt (ny flyt foreslått til kravarbeidet) / kommer senere> |
 | <med vanlige ord> | <kort, uten tagger: ikke avklart ennå / kommer senere / testes i en annen leveranse> |
 
 ## Funn
@@ -129,7 +144,7 @@ Det du oppdager som ikke gjelder testcasene, for eksempel brukervennlighet, elle
 
 ## Nummerering
 
-- Testcasene nummereres fra 1 i rekkefølgen i arbeidsprosessen, én per flyt (eller del av en flyt). Delene (ett scenario hver) får bokstav: `1a`, `1b`, `1c`.
+- Testcasene nummereres fra 1 i rekkefølgen i arbeidsprosessen, én per flyt (eller del av en flyt) og én per oppgave uten flyt. Delene (ett scenario hver) får bokstav: `1a`, `1b`, `1c`.
 - Stegene løper gjennom hele testcasen, så del `1b` fortsetter der `1a` slapp.
 - En `Scenariomal:` som brukes i flyten, gir én del per eksempelrad som er med, med verdiene fra raden i scenariotittelen og stegene.
 - Regresjonsflyter nummereres `R1`, `R2`, med delene `R1a`, `R1b`. Avhengigheter som testes for seg, nummereres `A1`, `A2`.

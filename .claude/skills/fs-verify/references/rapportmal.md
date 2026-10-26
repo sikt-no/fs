@@ -114,7 +114,7 @@ I `Bevis` står **P** for fs-plattform, **A** for fs-admin og **M** for min-komp
 
 ## Tilgang og datakonsistens
 
-Sjekket på kodenivå (*Tilgang og datakonsistens* i `fs-verify`). Ingenting er kjørt. Radene er ikke scenarioer, og står ikke i `## Scenarioer`.
+Sjekket på kodenivå (*Tilgang og datakonsistens* i `fs-verify`): at rollene og tilgangene er implementert slik kravet sier. Ingenting er kjørt, og rollene er ikke testet. Radene er grunnlaget for testbrukerne i testplanen. Radene er ikke scenarioer, og står ikke i `## Scenarioer`.
 
 | Feature-ID | Sjekk | Rolle og handling | Kravet sier | Koden gjør | Resultat | Bevis |
 | --- | --- | --- | --- | --- | --- | --- |
@@ -152,9 +152,9 @@ Koden i disse er ikke merget, og regnes ikke som levert. Scenarioene som bare fi
 
 ## Kontroll
 
-| Feature-ID | Scenario | Før kontroll | Etter kontroll | Hvorfor |
-| --- | --- | --- | --- | --- |
-| `@DOM-SUB-KAP-NNN` | <scenariotittel> | ikke funnet | usikker | `<repo>/<fil>:<linje>` — <hva kontrollen fant> |
+| Feature-ID | Type | Scenario, rad eller regel | Før kontroll | Etter kontroll | Hvorfor |
+| --- | --- | --- | --- | --- | --- |
+| `@DOM-SUB-KAP-NNN` | scenario \| tilgang \| regel | <scenariotittel, rolle og handling, eller regelen> | ikke funnet | usikker | `<repo>/<fil>:<linje>` — <hva kontrollen fant> |
 
 Kontrollen endret ingen resultater.                                    [når tabellen er tom, i stedet for den]
 

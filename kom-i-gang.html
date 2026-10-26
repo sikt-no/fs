@@ -735,7 +735,7 @@ footer .inner{padding-block:24px 48px;display:flex;flex-direction:column;gap:6px
       <p>fs-verify leter etter implementasjonen av hvert scenario i lokale kloner av kode-repoene, og viser bevis med <code>fil:linje</code>. En kontrollør (subagenten fs-verify-kontroll) sjekker hvert svar uavhengig før du blir spurt. Når alt er funnet og du sier ja, blir kravet <code>@implemented</code>. fs-verify ser også etter åpne MR-er og brancher i GitLab som hører til kravene. Kode som bare finnes i en MR, regnes ikke som levert, men rapporten viser hvor den er. Er det mange feature-filer, gjør fs-verify-agent-teams det samme med flere finnere parallelt.</p>
       <p>Før letingen spør fs-verify hva som skal verifiseres: <code>@in-progress</code>, <code>@deprecated</code>, flyter, alle krav uansett status, eller noe annet. Den spør også hvor mange nivåer med <code>@depends-on-</code> som skal følges. Avhengighetene vises med status, og kan også verifiseres i koden, men de får aldri ny status.</p>
       <p>Rapporten skrives til fil før du blir spurt, og hvert spørsmål viser kravet og koden det gjelder. Er noe av et krav levert, blir kravet <code>@in-progress</code>, og delene som er levert, <code>@implemented</code>. Gir du fs-verify en verify-rapport, går den gjennom resultatene med deg: det som er usikkert eller ikke funnet, og de åpne spørsmålene.</p>
-      <p>I tillegg til scenarioene sjekker fs-verify tre ting i koden, og rapporterer dem i egne seksjoner: <b>tilgangsstyring og datakonsistens</b> (roller × organisasjon × opprette, lese, endre og slette stemmer med kravet, ingen ser eller endrer data fra en annen organisasjon, og sletting gir ikke foreldreløse data), <b>regler i koden uten scenario</b> (valideringer, grenser og standardverdier som kravet ikke sier noe om), og <b>antall åpne spørsmål per krav</b>. Ingenting kjøres: koden leses og sammenlignes med kravet.</p>
+      <p>I tillegg til scenarioene sjekker fs-verify tre ting i koden, og rapporterer dem i egne seksjoner: <b>tilgangsstyring og datakonsistens</b> (at roller × organisasjon × opprette, lese, endre og slette er implementert slik kravet sier, uten at rollene testes, ingen ser eller endrer data fra en annen organisasjon, og sletting gir ikke foreldreløse data), <b>regler i koden uten scenario</b> (valideringer, grenser og standardverdier som kravet ikke sier noe om), og <b>antall åpne spørsmål per krav</b>. Ingenting kjøres: koden leses og sammenlignes med kravet.</p>
       <div class="cols">
         <div class="box"><h3>Gating-settet</h3><p class="small">Scenarioene som sjekkes: alle som ikke er tagget <code>@draft</code>, <code>@deprecated</code> eller <code>@demo</code>. Et scenario med bare <code>@openquestion</code> er med, og spørsmålet står i rapporten. Åpne spørsmål stopper ikke noe. Det samme settet brukes i akseptansetesten.</p></div>
         <div class="box"><h3>Når noe mangler</h3><p class="small">Statusen blir stående. Steget i repoet der koden mangler, settes tilbake til <code>pågår</code> i <code>utforing.md</code>, med <code>Tilbake: &lt;dato&gt;</code>.</p></div>
@@ -768,13 +768,13 @@ footer .inner{padding-block:24px 48px;display:flex;flex-direction:column;gap:6px
       <h2>Lag testplanen</h2>
     </div>
     <div class="body">
-      <p>Testplanen planlegger testingen: hvilke krav og flyter som testes, av hvem, hvor og når, og hva som skal til for å godkjenne leveransen. Den lager ikke testcasene: fs-testcaser-cdp lager testcasene for den agentiske testen, og fs-testcaser-intern flyttestene. Leveransen er et scope, en oppgave, en mappe under <code>krav/</code> eller feature-filer. fs-testplan finner kravene, scenarioene i gating-settet og den nyeste verify-rapporten, og foreslår fs-verify først når rapporten mangler eller er eldre enn kravene.</p>
+      <p>Testplanen planlegger testingen: hvilke krav og flyter som testes, omfanget av testcasene som skal lages, av hvem, hvor og når, og når fasene er ferdige. Kravene er kriteriene for godkjent. Den lager ikke selve testcasene: fs-testcaser-cdp lager testcasene for den agentiske testen, og fs-testcaser-intern flyttestene. Leveransen er et scope, en oppgave, en mappe under <code>krav/</code> eller feature-filer. fs-testplan finner kravene, scenarioene i gating-settet og den nyeste verify-rapporten, og foreslår fs-verify først når rapporten mangler eller er eldre enn kravene.</p>
       <div class="box">
         <h3>Teamet blir spurt om</h3>
         <ol class="small">
           <li><b>Leveransen:</b> navnet, versjonen, testmiljøet (alltid et testmiljø) og feature-flagg.</li>
-          <li><b>Testbrukerne:</b> navn og organisasjon for hver rolle i kravene, nummerert fra 1, ved alle organisasjonene kravet gjelder. Antallet følger av tilgangsmatrisen per krav.</li>
-          <li><b>Testdataene:</b> testautomatiseringen lager sine egne testdata. For hvert krav vurderes det om de lages manuelt (gjennom løsningen) eller seedes via API, og at de kan settes tilbake før hver kjøring.</li>
+          <li><b>Testbrukerne:</b> navn og organisasjon for rollene som utfører scenarioene, nummerert fra 1, ved organisasjonene kravet gjelder. Antallet følger av tilgangsmatrisen fra fs-verify. Det lages ikke egne testcaser for roller og tilgang, så det trengs ikke testbrukere bare for å vise at en rolle mangler tilgang.</li>
+          <li><b>Testdataene:</b> hvilke data hvert krav trenger, og i hvilken tilstand. Hvordan de lages og settes tilbake, løses separat, utenfor teststrategien.</li>
           <li><b>Avhengighetskart:</b> avhengigheter utenfor brukerens flyt, som andre moduler, integrasjoner, batchjobber, rapporter og eksport, når testleder vurderer at leveransen trenger det.</li>
           <li><b>Roller og tid:</b> testansvarlig, kontaktperson, testere, tidspunkt, Slack-kanal, og om leveransen skal til ekstern test.</li>
           <li><b>Flytene:</b> hele eller deler av en lang flyt, når det trengs.</li>
@@ -784,18 +784,20 @@ footer .inner{padding-block:24px 48px;display:flex;flex-direction:column;gap:6px
         <table>
           <thead><tr><th>Seksjon</th><th>Innhold</th></tr></thead>
           <tbody>
-            <tr><td>Testbeskrivelse</td><td>Hva er levert, versjon, testmiljø, flagg, kilde, scope, saker, kjente begrensninger. Testbrukere og testdata.</td></tr>
+            <tr><td>Testbeskrivelse</td><td>Hva er levert, versjon, testmiljø, flagg, kilde, scope, saker, kjente begrensninger, avhengighetskart. Testbrukere og testdata.</td></tr>
             <tr><td>Omfang</td><td>Kravene som er <code>@implemented</code>, per oppgave eller kapabilitet, med Feature-ID og antall scenarioer.</td></tr>
             <tr><td>Flyter</td><td>Flytene som går gjennom kravene, om hele eller deler testes, og én rad per fase.</td></tr>
-            <tr><td>Testdata</td><td>Hvilke data hvert krav trenger, og om de lages manuelt eller seedes via API.</td></tr>
+            <tr><td>Testdata</td><td>Hvilke data hvert krav trenger, med nøkkel og utgangstilstand.</td></tr>
             <tr><td>Åpne spørsmål</td><td>Antall regler og scenarioer med åpne spørsmål per krav, fra verify-rapporten. De stopper ikke testen.</td></tr>
             <tr><td>Regler uten scenario</td><td>Reglene i koden som verify-rapporten fant uten scenario i kravet, som input til den agentiske testen.</td></tr>
+            <tr><td>Testcaser som skal lages</td><td>Omfanget, ikke testcasene: per regel antall scenarioer, utledede testcaser og teknikk (fase 2), og flytene og oppgavene (fase 3).</td></tr>
             <tr><td>Venter på verifisering</td><td>Krav som er <code>@in-progress</code>, og delene som ikke er levert i et krav som er delvis levert, med det verify-rapporten sier mangler.</td></tr>
             <tr><td>Ikke med i denne testen</td><td>Det som faller ut, med grunnen.</td></tr>
             <tr><td>Forutsetninger</td><td>Miljø, testdata, testbrukere, verifiseringen, testcasene, innloggingen, og kjente brudd i flytene.</td></tr>
-            <tr><td>Kriterier for godkjent</td><td>Skrives av testansvarlig, helst før utviklingen starter.</td></tr>
+            <tr><td>Kriterier for godkjent</td><td>Kravene er kriteriene. Tabellen sier når hver fase er ferdig.</td></tr>
             <tr><td>Status i flyten</td><td>Én rad per fase i teststrategien, med lenke, status og dato.</td></tr>
-            <tr><td>Sporbarhet per krav</td><td>Scenario → kode (fase 1) → testcase og resultat (fase 2) → flyt (fase 3).</td></tr>
+            <tr><td>Vedlegg</td><td>Lenker til verifiseringsrapporten, den agentiske testrapporten og testcasene.</td></tr>
+            <tr><td>Sporbarhet per krav</td><td>Scenario → kode (fase 1) → testcase, teknikk og resultat (fase 2) → flyt (fase 3).</td></tr>
           </tbody>
         </table>
       </div>
@@ -862,11 +864,11 @@ footer .inner{padding-block:24px 48px;display:flex;flex-direction:column;gap:6px
       <div class="cols">
         <div class="box"><h3>Hva testes</h3><ul class="small"><li>Alle scenarioer som er <code>@implemented</code>, slik de står. En scenariomal gir én test per eksempel.</li><li>Testcaser agenten utleder fra reglene, også reglene fs-verify fant uten scenario.</li><li>Negativ testing: ugyldige verdier, feil format, feil rekkefølge, data som ikke finnes eller er slettet.</li><li>Hvert obligatorisk felt tomt, med bare mellomrom og med for lang verdi, og feilmeldingen kontrolleres.</li></ul></div>
         <div class="box"><h3>Teknikk og bevis</h3><ul class="small"><li>Agenten velger teknikk per regel (grenseverdier, ekvivalensklasser, beslutningstabeller, tilstandsoverganger) og skriver hvilken som er brukt.</li><li>Hver test lagrer steg, input, faktisk resultat og skjermbilde eller logg, så et menneske kan etterprøve den. Bildene ligger i <code>akseptansetest/&lt;slug&gt;/</code>, og er ignorert av git.</li></ul></div>
-        <div class="box"><h3>Testdata</h3><p class="small">Testene lager sine egne testdata, manuelt gjennom løsningen eller seedet via API, slik testplanen sier. Dataene kan settes tilbake før hver kjøring, så testene kan kjøres på nytt.</p></div>
+        <div class="box"><h3>Testdata</h3><p class="small">Testene bruker testdataene i testplanen, i utgangstilstanden der. Hvordan de lages, er utenfor teststrategien. Dataene settes tilbake før hver kjøring, og data testen selv lager, får unike navn, så testene kan kjøres på nytt.</p></div>
       </div>
       <div class="box tint">
         <h3>Kravet dekker ikke</h3>
-        <p class="small">Utleder agenten et tilfelle kravet ikke sier noe om, og løsningen oppfører seg uventet, føres det som funn av typen «Kravet dekker ikke». Det avklares i kravet med fs-krav, ikke bare i testen. CRUD, tilgangsstyring og datakonsistens er verifisert i koden i fase 1, og testes ikke her.</p>
+        <p class="small">Utleder agenten et tilfelle kravet ikke sier noe om, og løsningen oppfører seg uventet, føres det som funn av typen «Kravet dekker ikke». Det avklares i kravet med fs-krav, ikke bare i testen. Roller, tilgangsstyring og datakonsistens er verifisert i koden i fase 1. Scenarioene i kravet testes som de står, også synlighet for en rolle, men det lages ikke egne testcaser for roller og tilgang.</p>
       </div>
       <p class="note">Agenten foreslår resultater, og kan ikke godkjenne en leveranse. Testansvarlig går gjennom alle funn og tar stikkprøver av de beståtte testene. Etterpå lager fs-testrapport (agentisk) rapporten fra kjøringen. Inngangskriteriet til intern akseptansetest er at alle testene er kjørt, at ingen funn med alvorlighetsgraden «Stopper» står åpne, og at testansvarlig har gått gjennom rapporten.</p>
     </div>
@@ -891,7 +893,7 @@ footer .inner{padding-block:24px 48px;display:flex;flex-direction:column;gap:6px
       <p>Domeneekspertene bekrefter at leveransen virker i arbeidsprosessen og sammen med resten av FS, faglig sett. Den interne testen tester <b>flyter og avhengigheter</b>, ikke enkeltfunksjoner: feltvalidering og feilsituasjoner er testet i fase 2, og tilgang er sjekket i fase 1. fs-testcaser-intern lager flyttestene som testansvarlig kan følge uten å kjenne løsningen fra før.</p>
       <div class="cols">
         <div class="box"><h3>Vurdering per krav</h3><ul class="small"><li>Inngår kravet i en flyt i <code>krav/_Flyter</code>? Da vurderes det om flyten skal testes.</li><li>Inngår det ikke i en flyt: skal det lages en ny flyt (fs-krav), eller kobles kravet til en eksisterende?</li><li>Bare scenarioene som inngår i flytene testes, ikke alle.</li><li>Regresjon av tidligere leverte flyter når leveransen endrer noe andre bygger på.</li></ul></div>
-        <div class="box"><h3>Testcasene</h3><ul class="small"><li>Én testcase er én flyt, i rekkefølgen arbeidsprosessen går, ikke rekkefølgen i feature-fila.</li><li>Hensikt, testdata og forventet resultat, og avhengighetene som sjekkes underveis.</li><li>Hvert scenario i flyten får eget resultat.</li><li>Testbrukeren fra testplanen står i første steg, med ordene fra skjermen og alle verdiene, og en sjekk av at det er lagret.</li></ul></div>
+        <div class="box"><h3>Testcasene</h3><ul class="small"><li>Én testcase er én flyt, i rekkefølgen arbeidsprosessen går, ikke rekkefølgen i feature-fila. Et krav som ikke hører til en flyt, testes som en oppgave uten flyt.</li><li>Hensikt, testdata og forventet resultat, og avhengighetene som sjekkes underveis.</li><li>Hvert scenario i flyten får eget resultat.</li><li>Testbrukeren fra testplanen står i første steg, med ordene fra skjermen og alle verdiene, og en sjekk av at det er lagret.</li></ul></div>
         <div class="box"><h3>Avhengighetskart</h3><p class="small">Testleder vurderer om leveransen trenger et avhengighetskart: det leveransen bygger på eller påvirker utenfor brukerens flyt, som andre moduler, integrasjoner, batchjobber, rapporter, eksport og andre teams leveranser. De sjekkes underveis i flytene der det er mulig, ellers for seg.</p></div>
       </div>
       <p class="small">Kolonnene er <b>Nr · Scenario · Steg · Forventet resultat · Faktisk resultat · Status</b>. Testerne fyller ut de to siste på siden i Confluence: <span class="sev ok">Bestått</span> <span class="sev bad">Ikke bestått</span> <span class="sev" style="background:var(--off-bg);color:var(--fg)">Ikke testet</span>. Testansvarlig kan ta stikkprøver av det som er testet i fase 2.</p>
@@ -950,7 +952,7 @@ footer .inner{padding-block:24px 48px;display:flex;flex-direction:column;gap:6px
     <div class="body">
       <p>Erfarne brukere fra lærestedene, HK-dir og andre eksterne parter bekrefter at løsningen dekker deres egne krav og behov. Bare leveranser som er godkjent internt, går hit. Sikt legger til rette og leder testen, men <b>partene har sine egne krav og akseptansekriterier og lager eller eier testcasene sine</b>. Feature-filene våre er ikke grunnlaget her. Testerne kjenner fagfeltet, men ikke løsningen og ikke kravene.</p>
       <div class="cols">
-        <div class="box"><h3>Flyter som utgangspunkt</h3><p class="small">fs-testcaser-ekstern foreslår flyter satt sammen til oppgaver i arbeidsprosessen, uten tekniske ord, med rekkefølgen fra flytene i testplanen. Partene bestemmer hvilke scenarioer, hvor grundig og i hvilken rekkefølge. Skillen kan også ta inn partenes egne krav, og vise hva Sikt allerede har testet.</p></div>
+        <div class="box"><h3>Flyter som utgangspunkt</h3><p class="small">fs-testcaser-ekstern foreslår flyter satt sammen til oppgaver i arbeidsprosessen, uten tekniske ord, bygget på flyttestene fra den interne testen. Partene bestemmer hvilke scenarioer, hvor grundig og i hvilken rekkefølge. Skillen kan også ta inn partenes egne krav, og vise hva Sikt allerede har testet.</p></div>
         <div class="box"><h3>Sikt leverer</h3><p class="small">Testmiljø, testdata og testbrukere, flytbeskrivelsene fra den interne testen (eksportert av fs-testcaser-ekstern), og rapportene fra fase 2 og 3, så partene ser hva som er testet.</p></div>
         <div class="box"><h3>Funn i to typer</h3><p class="small"><b>Avvik fra våre krav</b> er feil. <b>Krav vi ikke har</b> er endringsforslag, og går til kravarbeidet (fs-krav). Samme maler og alvorlighetsgrader som i den interne testen.</p></div>
       </div>

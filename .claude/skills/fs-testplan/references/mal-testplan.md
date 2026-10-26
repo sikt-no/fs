@@ -2,7 +2,7 @@
 
 Testplanen er hovedsiden for en leveranse i Confluence, og grunnlaget for testcasene i den agentiske funksjonstesten (fase 2), den interne akseptansetesten (fase 3) og den eksterne akseptansetesten (fase 4). Malen er utledet fra [teststrategien (forslag)](https://sikt.atlassian.net/wiki/spaces/STUDIEADM/pages/5145100326) (*Testplan og sluttrapport*, og radene for hver fase) og «Mal: Testbeskrivelse» i [rutinen](https://sikt.atlassian.net/wiki/spaces/STUDIEADM/pages/5091196953).
 
-Testplanen lages etter verifiseringen (fase 1), og bygger på resultatet. Testplanen planlegger: den sier hvilke krav og flyter som testes, hvordan testdata lages, og hva som skal til for å godkjenne. Testcasene lages av `fs-testcaser-cdp` (fase 2) og `fs-testcaser-intern` (fase 3), og står på undersider. Resultatene står på undersidene (testcasene og testrapportene), ikke her. Den eneste delen andre skills endrer, er sin egen rad i «Status i flyten» og raden i «Sporbarhet per krav».
+Testplanen lages etter verifiseringen (fase 1), og bygger på resultatet. Testplanen planlegger: den sier hvilke krav og flyter som testes, omfanget av testcasene som skal lages (*Testcaser som skal lages*), hvilke testbrukere og testdata testene trenger, og når fasene er ferdige. Selve testcasene lages av `fs-testcaser-cdp` (fase 2) og `fs-testcaser-intern` (fase 3), og står, med resultatene, på undersider og i `cdp-tester/`. Testplanen er hovedsiden, og lenker til dem. De eneste delene andre skills endrer, er sin egen rad i «Status i flyten», «Vedlegg» og radene i «Sporbarhet per krav».
 
 Fila skrives til `akseptansetest/<testplan-slug>/testplan.md`. Alt over den første streken er metadata for repoet, og publiseres ikke.
 
@@ -36,6 +36,7 @@ Testplan for «<leveranse>». Planen sier hva som testes, av hvem, hvor og når,
 | Saker | <GitHub-issue> · <Jira> |
 | Berører andre team | <fra `design.md` / `utforing.md`, eller «Nei»> |
 | Kjente begrensninger | <det som ikke virker eller ikke kan testes i miljøet> |
+| Avhengighetskart | [Avhengighetskart](#avhengighetskart), eller «Ikke aktuelt» |
 
 ### Testbrukere
 
@@ -43,7 +44,7 @@ Testplan for «<leveranse>». Planen sier hva som testes, av hvem, hvor og når,
 |---|---|---|---|---|
 | 1 | <navn> | <rolle fra kravene> | <organisasjon> | <hvilke krav eller deler> |
 
-Testbrukerne finnes i alle relevante roller ved organisasjonene kravet gjelder. Antallet bestemmes per krav ut fra tilgangsmatrisen: rolle × organisasjon (egen organisasjon, en annen organisasjon, ingen tilgang), så fase 2 kan teste roller med og uten tilgang.
+Testbrukerne finnes i rollene scenarioene nevner, ved organisasjonene kravet gjelder. Antallet bestemmes per krav ut fra tilgangsmatrisen. Det lages ikke egne testcaser for roller og tilgang i fase 2: `fs-verify` har verifisert i koden at de er laget slik kravet sier (fase 1). Scenarioene i kravet, også om synlighet, testes som de står.
 
 Kolonnene `Nøkkel` (etter `Nr`), `Innlogging` og `Start-URL` (etter `Organisasjon`) er alltid med, fordi den agentiske funksjonstesten (fase 2) bruker dem:
 
@@ -55,25 +56,21 @@ Nøkkelen er et stabilt navn i kebab-case for rollen (`brukeradministrator-alle-
 
 #### Tilgangsmatrise
 
+Fra tilgangsradene i verify-rapporten. Den viser hvilke roller kravet har ved hvilke organisasjoner, og hvilken testbruker som dekker hver rad. En rad uten tilgang trenger ingen testbruker, med mindre et scenario handler om den.
+
 | Krav | Rolle | Egen organisasjon | Annen organisasjon | Testbruker (Nr) |
 |---|---|---|---|---|
-| `@DOM-SUB-KAP-NNN` | <rolle> | ser / endrer / ingen tilgang | ser / endrer / ingen tilgang | <Nr> |
+| `@DOM-SUB-KAP-NNN` | <rolle> | ser / endrer / ingen tilgang | ser / endrer / ingen tilgang | <Nr> / – |
 
 ### Testdata
 
-Testautomatiseringen (fase 2) lager sine egne testdata, manuelt eller seedet via API, og stoler ikke på data som allerede finnes. Testdata er syntetiske. Vurderingen gjøres per krav (eller per gruppe av krav som deler data):
+Testdataene testene trenger, med nøkkel. Testplanen sier hvilke data som trengs og hvilken tilstand de skal ha, ikke hvordan de lages: det løses separat, og ligger utenfor teststrategien. Testdata er syntetiske.
 
-| Krav | Hva må opprettes | Opprettes av | Hvordan ryddes eller tilbakestilles | Kan testen kjøres på nytt |
-|---|---|---|---|---|
-| `@DOM-SUB-KAP-NNN` | <opptak, søker, regelverkssamling …, med verdiene som trengs> | Manuelt / API (<mutation eller endepunkt>) / Finnes i testmiljøet | <slettes, settes tilbake, ny unik verdi per kjøring, kan ikke ryddes> | Ja / Nei: <grunn> |
+| Hva | Nøkkel | Navn | Hvor | Søk/URL | Utgangstilstand | Brukes av |
+|---|---|---|---|---|---|---|
+| <opptak, søker, regelverkssamling …> | <nøkkel> | <navn> | <lenke eller sted> | <hvordan objektet åpnes> | <hva testen forutsetter, med datoene i forhold til testdagen> | <Feature-ID og scenario, eller testcase-Nr> |
 
-Kan dataene ikke slettes (slik at en ny kjøring finner dem igjen på navn), skal navnene gjøres unike per kjøring, eller testen forutsetter tilbakestilling av miljøet. Oppretter agenten dataene gjennom API-et, står kallet i raden, så testcasene kan gjenbruke det.
-
-Dataene testcasene bruker, står med nøkkel:
-
-| Hva | Nøkkel | Navn | Hvor | Søk/URL | Utgangstilstand | Opprettes av | Brukes av | Kan settes tilbake |
-|---|---|---|---|---|---|---|---|---|
-| <opptak, søker, regelverkssamling …> | <nøkkel> | <navn> | <lenke eller sted> | <hvordan objektet åpnes> | <hva testen forutsetter> | Manuelt / API / Finnes i testmiljøet | <Feature-ID og scenario, eller testcase-Nr> | Ja / Nei / <hvordan> |
+Data scenarioet selv lager (for eksempel «Opprett opptak»), står ikke her: de lages av stegene i testcasen (R13 i `testcase-regler.md`).
 
 Kolonnene `Søk/URL`, `Utgangstilstand` og `Brukes av` står bare i testplanen, ikke i testcasene for den interne og den eksterne testen.
 
@@ -160,6 +157,26 @@ Ingen.                                                                  <når ta
 
 Ingen.                                                                  <når verify-rapporten ikke fant noen>
 
+## Testcaser som skal lages
+
+Omfanget av testcasene, ikke testcasene selv. `fs-testcaser-cdp` lager testcasene for fase 2 ut fra tabellen, og `fs-testcaser-intern` flyttestene for fase 3. Teamet og testansvarlig går gjennom omfanget før testcasene lages.
+
+### Fase 2: agentisk funksjonstest
+
+| Krav | Regel | Scenarioer | Utledede testcaser | Teknikk |
+|---|---|---|---|---|
+| `@DOM-SUB-KAP-NNN` | <regeltittel, eller regel i koden uten scenario> | <N> (scenariomal: <N> eksempler) | <hva som prøves: obligatoriske felt «<felt>», «<felt>» (tomt, bare mellomrom, for lang verdi), grenseverdier for «<felt>», ugyldige statusoverganger …> | grenseverdianalyse / ekvivalensklasser / beslutningstabell / tilstandsoverganger / – |
+
+Testcasene står i `cdp-tester/<kravstien>/` (lenke når de er laget). Utledede testcaser lages bare der regelen har verdier eller betingelser å teste.
+
+### Fase 3: intern akseptansetest
+
+| Flyt eller oppgave | Krav | Scenarioer i flyten | Avhengigheter som sjekkes | Regresjon |
+|---|---|---|---|---|
+| <tittel på flyten, eller «Oppgave uten flyt: <oppgave>»> | `@DOM-SUB-KAP-NNN`, … | <N> | <fra avhengighetskartet, eller «–»> | ja: <tidligere levert flyt> / nei |
+
+Krav som ikke er med i noen flyt: <N>. De testes som oppgaver uten flyt, eller står i «Ikke med i denne testen» (se *Vurdering per krav*).
+
 ## Ikke med i denne testen
 
 | Hva | Hvorfor |
@@ -193,10 +210,10 @@ Klart når testansvarlig har logget inn som testbruker og ser testdataene.
 | # | Forutsetning | Status |
 |---|---|---|
 | 1 | Leveransen er lagt ut i testmiljøet, og den virker der | [Fylles ut av teamet] |
-| 2 | Testdata kan opprettes av testautomatiseringen (manuelt eller seedet via API), og vurderingen i «Testdata» er fylt ut | [Fylles ut av teamet] |
-| 3 | Testdataene kan settes tilbake eller lages på nytt, så testen kan kjøres på nytt | [Fylles ut av teamet] |
-| 4 | Testbrukerne finnes i alle relevante roller ved organisasjonene kravene gjelder (tilgangsmatrisen) | [Fylles ut av teamet] |
-| 5 | `fs-verify` har funnet alle scenarioene, og en annen person har kontrollert rapporten | <fra verify-rapporten i fase 1, og fase 2, eller «Venter»> |
+| 2 | Testdataene i «Testdata» finnes i testmiljøet, i utgangstilstanden der. Tilstander som bygger på datoer, er sjekket samme dag som testen | [Fylles ut av teamet] |
+| 3 | Testdataene kan settes tilbake før hver kjøring | [Fylles ut av teamet] |
+| 4 | Testbrukerne finnes i rollene ved organisasjonene kravene gjelder (tilgangsmatrisen) | [Fylles ut av teamet] |
+| 5 | `fs-verify` har funnet alle scenarioene, og en annen person har kontrollert rapporten. Åpne spørsmål stopper ikke, og står i «Åpne spørsmål» | <fra verify-rapporten, eller «Venter»> |
 | 6 | De agentiske testcasene (`fs-testcaser-cdp`) er laget, og testansvarlig og teamet har gått gjennom dem før kjøringen | Venter |
 | 7 | Flyttestcasene for den interne akseptansetesten (`fs-testcaser-intern`) er laget og gått gjennom av testansvarlig | Venter |
 | 8 | CDP-agenten kan logge inn som hver testbruker, og nøklene i testbrukere og testdata er utfylt | [Fylles ut av teamet] |
@@ -205,18 +222,14 @@ Klart når testansvarlig har logget inn som testbruker og ser testdataene.
 
 ## Kriterier for godkjent
 
-Testansvarlig skriver hva som skal til for at testen blir godkjent, helst før utviklingen starter. Kriteriene per fase er et utgangspunkt, og kan strammes inn:
+Kravene i «Omfang» er kriteriene for godkjent: hvert scenario er et akseptansekriterium. Mangler et viktig tilfelle, legges det inn i kravet (`fs-krav`), ikke her. Fasene er ferdige når:
 
 | Fase | Ferdig når |
 |---|---|
-| 1. Verifisering | Alle scenarioene er funnet, og en annen person har kontrollert rapporten. Åpne spørsmål står i rapporten, men stopper ikke |
+| 1. Verifisering | Alle scenarioene er funnet, og en annen person har kontrollert rapporten. Åpne spørsmål står i testplanen, men stopper ikke |
 | 2. Agentisk funksjonstest | Alle testcasene er kjørt, ingen funn med «Stopper» står åpne, og testansvarlig har gått gjennom rapporten. Det er inngangskriteriet til intern akseptansetest |
 | 3. Intern akseptansetest | Beslutningen er tatt: godkjent, godkjent med forbehold eller ikke godkjent |
 | 4. Ekstern akseptansetest | De eksterne partene har akseptert mot sine egne krav |
-
-Leveransespesifikke kriterier:
-
-[Fylles ut av testansvarlig]
 
 ## Funn og alvorlighetsgrad
 
@@ -238,13 +251,22 @@ Leveransespesifikke kriterier:
 
 Testrapportene (verifisering, agentisk, intern og ekstern) står som undersider, og lenken står i raden for fasen.
 
+## Vedlegg
+
+| Vedlegg | Lenke |
+|---|---|
+| Verifiseringsrapporten (fase 1) | <lenke til undersiden, eller verify-rapporten i repoet> |
+| Agentisk testrapport (fase 2) | – |
+| Testcasene for fase 2 | `cdp-tester/<kravstien>/`, og kjøringen i `akseptansetest/<slug>/kjoring-<dato>/` |
+| Testcasene for fase 3 | – |
+
 ## Sporbarhet per krav
 
 Fylles ut av rapportene etter hvert som fasene er ferdige. Raden følger scenarioet fra kravet til koden og til testen.
 
-| Krav | Scenario | Kode (fase 1) | Testcase og resultat (fase 2) | Flyt (fase 3) |
+| Krav | Scenario | Kode (fase 1) | Testcase, teknikk og resultat (fase 2) | Flyt (fase 3) |
 |---|---|---|---|---|
-| `@DOM-SUB-KAP-NNN` | <scenario> | `<repo>/<fil>:<linje>` | <Nr, resultat> | <flyt og fase, eller «–»> |
+| `@DOM-SUB-KAP-NNN` | <scenario> | `<repo>/<fil>:<linje>` | <Nr, teknikk, resultat> | <flyt og fase, eller «–»> |
 
 ## Læring
 

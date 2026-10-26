@@ -2,7 +2,7 @@
 
 Varige tester som en agent kjører i Chrome mot et testmiljø, i den agentiske funksjonstesten (fase 2 i [teststrategien (forslag)](https://sikt.atlassian.net/wiki/spaces/STUDIEADM/pages/5145100326)). De er skrevet som Gherkin, og kan brukes av flere verktøy. Agenten i fase 2 kjører dem med `cdp`-skillen (`.claude/skills/cdp`). De er ikke krav: kravene i [`krav/`](../krav/README.md) sier *hva* som skal gjelde, og her står *hvordan* det sjekkes i skjermen, med skjermens ord og konkrete verdier. Testene lages og oppdateres med skillen `fs-testcaser-cdp`, fra kravene, og de overlever testplaner og akseptansetester.
 
-Testene dekker alle scenarioene som er `@implemented`, pluss testcaser agenten utleder fra reglene: negativ testing, obligatoriske felt og grenseverdier. CRUD, tilgangsstyring og datakonsistens verifiseres på kodenivå i fase 1 (`fs-verify`), og testes ikke her.
+Testene dekker alle scenarioene som er `@implemented`, pluss testcaser agenten utleder fra reglene: negativ testing, obligatoriske felt og grenseverdier. Roller, tilgangsstyring og datakonsistens verifiseres i koden i fase 1 (`fs-verify`). Scenarioene i kravet testes som de står, også synlighet for en rolle, men det lages ikke egne testcaser for roller og tilgang.
 
 Mappa ligger ved siden av `krav/` og ikke under den, fordi konvensjonene for krav forbyr UI-ord og data i steg, og kravstatusene (`@draft` … `@implemented`) ikke passer for en test. `bddgen` leser bare `../krav/**/*.feature`, så filene her kjøres ikke av Playwright.
 
@@ -25,7 +25,7 @@ cdp-tester/
 
 - `# language: no`. Én `Egenskap:` per krav. `Regel:`- og `Scenario:`-titlene er identiske med kravets, så tittelen er referansen til kravet.
 - **Uavhengige scenarioer.** Hvert scenario starter fra en kjent tilstand, og bygger aldri på et annet scenario.
-- **Testen lager sine egne testdata.** Testdataene finnes ikke på forhånd: testen oppretter dem selv, enten gjennom løsningen (manuelt) eller ved å seede dem via API, og setter dem tilbake etterpå, så testen kan kjøres på nytt. Hvordan hver nøkkel opprettes og ryddes, står i testplanen (kolonnen `Opprettes av`) og i «Krever». Data som ikke kan slettes, får et unikt navn per kjøring (for eksempel med tidspunktet), så en ny kjøring ikke finner data fra den forrige.
+- **Testdataene står i testplanen.** Testen forutsetter at testdataene finnes i utgangstilstanden testplanen og «Krever» beskriver. Hvordan de lages og settes tilbake, er utenfor teststrategien. Data scenarioet selv lager og som ikke kan slettes, får et unikt navn per kjøring (for eksempel med tidspunktet), så en ny kjøring ikke finner data fra den forrige, og data testen endrer, settes tilbake.
 - **Utledede testcaser.** Hver `Regel:` får i tillegg testcaser agenten utleder (negativ testing, obligatoriske felt, grenseverdier). De har tittelen `<tittel på regelen>: <hva som prøves>`, og tekniken som er brukt (grenseverdianalyse, ekvivalensklasser, beslutningstabell eller tilstandsoverganger) står i en `# Teknikk:`-kommentar over scenarioet. De hører til regelen, men finnes ikke i kravet, så de merkes `@utledet`. Viser en utledet testcase en oppførsel kravet ikke sier noe om, er det et funn av typen «Kravet dekker ikke».
 - **Nøkler, ikke personer.** `Gitt` har testbruker og testdata som nøkler i «»: `Gitt jeg er logget inn som «brukeradministrator-alle-miljoer»`. Ingen navn, Feide-ID, `testbruker <nr>` eller passord i testfilene. Nøklene slås opp i testplanen (kolonnen `Nøkkel`) eller i svar fra brukeren ved kjøring.
 - **Skjermens ord og konkrete verdier.** Menyer, felt, knapper og tekster i «», én handling per steg. `Så` er noe agenten ser: en tekst, et antall, noe som er synlig eller ikke. Ikke «filtreres listen til …».
@@ -59,17 +59,19 @@ Hver mappe med tester har en seksjon som sier hva testene krever, med nøkkelen,
 ```markdown
 ## Krever
 
-| Nøkkel | Type | Beskrivelse | Opprettes av | Brukes av |
-|---|---|---|---|---|
-| `brukeradministrator-alle-miljoer` | testbruker | Brukeradministrator i alle miljøer, ved organisasjon A | Finnes i testmiljøet | alle scenarioer |
-| `personbruker-over-50` | testdata | Minst 51 personbrukere synlige for brukeradministratoren | API (seedes før scenarioet, slettes etterpå) | «Liste viser de 50 første personbrukerne» |
+| Nøkkel | Type | Beskrivelse | Brukes av |
+|---|---|---|---|
+| `brukeradministrator-alle-miljoer` | testbruker | Brukeradministrator i alle miljøer, ved organisasjon A | alle scenarioer |
+| `personbruker-over-50` | testdata | Minst 51 personbrukere synlige for brukeradministratoren | «Liste viser de 50 første personbrukerne» |
 ```
 
-`Opprettes av` er `Finnes i testmiljøet` (testbrukere, og data testen bare leser), `Manuelt` (testen oppretter dataene gjennom løsningen, som en del av scenarioet eller i `Gitt`) eller `API` (seedes før scenarioet). Samme tre verdier (`Manuelt`, `API`, `Finnes i testmiljøet`) står i testplanen.
+Beskrivelsen av testdata er utgangstilstanden testen forutsetter, den samme som `Utgangstilstand` i testplanen.
 
 ## `cdp`-skillen
 
 Testene kjøres med `cdp`-skillen (`.claude/skills/cdp`, CLI-en `browser-harness-js`). `fs-testcaser-cdp` trenger den ikke for å lage eller oppdatere testene, bare for å kjøre dem.
+
+Skillen er ikke en del av repoet. Hver bruker installerer den fra GitHub-repoet [`browser-use/browser-harness-js`](https://github.com/browser-use/browser-harness-js). Den legges i `.agents/skills/cdp`, med `.claude/skills/cdp` som symlenke dit, og `skills-lock.json` sier hvilken versjon som er installert. Alle tre er ignorert av git (`.gitignore`).
 
 1. Første kall med `browser-harness-js` installerer `bun` automatisk (laster ned og kjører et installasjonsskript fra bun.sh, og legger `~/.bun/bin` til i `~/.zshrc`). Vil du ikke det, sett `BROWSER_HARNESS_SKIP_BUN_INSTALL=1` og installer `bun` selv. CLI-en ligger ikke på PATH: kall den med full sti (`.claude/skills/cdp/sdk/browser-harness-js`), eller lag en symlenke som `cdp`-skillen beskriver.
 2. Åpne `chrome://inspect/#remote-debugging` i Chrome, huk av «Discover network targets», og klikk **Allow** når Chrome spør.
@@ -80,7 +82,9 @@ Testene kjøres med `cdp`-skillen (`.claude/skills/cdp`, CLI-en `browser-harness
 
 ## Kjøring og resultat
 
-Testene kjøres av en agent, i den agentiske funksjonstesten. Testansvarlig har ansvaret for at agenten blir kjørt og tester riktig, men selve kjøringen kan gjøres av andre. Resultatet lages per leveranse i `akseptansetest/<slug>/kjoring-<YYYY-MM-DD-HHMM>/resultat.md`, og uten leveranse i `kjoring-…/` i mappa ved testene. Bevisene er steg, input, faktisk resultat og skjermbilde eller logg for hver testcase. Skjermbildene legges i samme mappe, men er ignorert av git (`.gitignore`): bare `resultat.md` committes. Resultatet lagres i Confluence når brukeren sier ja (skjermbilder kan legges ved siden for hånd).
+Testene kjøres av en agent, i den agentiske funksjonstesten. Testansvarlig har ansvaret for at agenten blir kjørt og tester riktig, men selve kjøringen kan gjøres av andre. Resultatet lages per leveranse i `akseptansetest/<slug>/kjoring-<YYYY-MM-DD-HHMM>/resultat.md`, og uten leveranse i `kjoring-…/` i mappa ved testene. Bevisene er steg, input, faktisk resultat og skjermbilde eller logg for hver testcase. Skjermbildene legges i samme mappe, men er ignorert av git (`.gitignore`): bare `resultat.md` committes. Resultatet lagres i Confluence når brukeren sier ja. Den som kjører agenten, legger skjermbildene ved siden med den agentiske testrapporten før testansvarlig går gjennom funnene.
+
+Agenten følger stegene slik de står (R14 i [`testcase-regler.md`](../.claude/references/akseptansetest/testcase-regler.md)). Virker ikke et steg, eller finnes ikke en verdi, er det et funn, og testcasen blir «Ikke testet».
 
 Agenten foreslår status, og kan aldri godkjenne en leveranse. En tester bekrefter foreslått status, og testansvarlig går gjennom alle funn og tar stikkprøver av de beståtte testcasene, etter en risikovurdering. Agenten fyller aldri ut «Status» på testcasene eller i testrapporten.
 

@@ -58,11 +58,11 @@ Testcasene under er et forslag fra Sikt. Dere bestemmer selv hva dere tester, hv
 
 ## Slik fyller du ut
 
-1. Ta testcasene i rekkefølge, og følg stegene slik de står.
+1. Ta testcasene i rekkefølge, og følg stegene slik de står. Virker ikke et steg, eller finnes ikke en verdi i testmiljøet, er det et funn. Ikke prøv deg fram en annen vei. Testcasen blir «Ikke testet», med det du så i «Faktisk resultat», og i «Andre funn» skriver du om det er testdataene eller løsningen. Du kan foreslå en vei rundt i «Faktisk resultat», men gå den ikke. Unntaket er når Sikt har sagt at nærmeste verdi kan brukes: skriv det i «Faktisk resultat», og sett status ut fra det som skal skje, ikke ut fra verdien i stegene.
 2. Hver testcase er en oppgave du gjør i løsningen. Den har flere deler, og hver del har sin egen rad med «Faktisk resultat» og «Status».
 3. Skriv det du så i «Faktisk resultat», og Bestått, Ikke bestått eller Ikke testet i «Status».
 4. Sjekk at det du har lagret, står der når du åpner siden igjen.
-5. Stemmer noe ikke, skriv det i «Funn»: hva du gjorde, hva du forventet og hva du fikk. Ta skjermbilde hvis du kan. Velg «Avvik fra krav» når løsningen ikke gjør det den skal, og «Endringsforslag» når du savner noe som ikke er avtalt.
+5. Stemmer noe ikke, skriv det i «Funn»: hva du gjorde, hva du forventet og hva du fikk. Ta skjermbilde hvis du kan. Velg «Feil» når løsningen ikke gjør det den skal, og «Endringsforslag» når du savner noe som ikke er avtalt.
 
 ## Testcaser
 
@@ -92,7 +92,7 @@ Testcasene under er et forslag fra Sikt. Dere bestemmer selv hva dere tester, hv
 
 | # | Testcase | Fase funnet | Funntype | Hva skjedde | Hva var forventet | Steg for å gjenskape | Skjermbilde | Alvorlighetsgrad | Sak |
 |---|---|---|---|---|---|---|---|---|---|
-| | | 4. Ekstern | <Avvik fra krav / Endringsforslag> | | | | | | |
+| | | 4. Ekstern | <Feil / Endringsforslag> | | | | | | |
 
 <Tabellene «Funntype» og «Alvorlighetsgrad» fra `alvorlighetsgrad.md`, ordrett. Et endringsforslag går til kravarbeidet, og har ikke alvorlighetsgrad «Stopper» uten at partene sier det.>
 

@@ -45,19 +45,29 @@ Testrapport for «<leveranse>». <Én setning: hva rapporten bygger på (verifis
 | Fra scenarioene i kravene | <N> testcaser |
 | Utledet av agenten | <N> testcaser (regler uten scenario, negativ testing, obligatoriske felt) |
 | Funn | <N> Stopper, <N> Må fikses før innføring, <N> Kan fikses senere. Av dem <N> «Kravet dekker ikke» |
-| Testdata | <opprettet manuelt / seedet via API / ryddet etter kjøringen: ja / nei> |
+| Testdata | <testdataene i testplanen fantes eller ble laget: ja / nei: <hvilke som manglet>> |
 | Gjennomgått av testansvarlig | [Fylles ut av testansvarlig] |
 | Stikkprøve av beståtte testcaser | [Fylles ut av testansvarlig]   (størrelsen avgjøres etter en risikovurdering, det er ikke noe fast antall) |
-| Inngangskriterium til intern akseptansetest | Oppfylt / Ikke oppfylt: <ikke alle testcasene er kjørt / «Stopper»-funn står åpne / ikke gjennomgått av testansvarlig> |
+| Inngangskriterium til intern akseptansetest | Oppfylt / Ikke oppfylt (se «Inngangskriteriet til intern akseptansetest») |
 
 <intern / ekstern>
 | Felt | Innhold |
 |---|---|
 | Testcaser | <N> bestått, <N> ikke bestått, <N> ikke testet, <N> ikke fylt ut, av <N> |
-| Funn | <N> Stopper, <N> Må fikses før innføring, <N> Kan fikses senere. Av dem <N> «Kravet dekker ikke» (intern) / <N> avvik fra krav og <N> endringsforslag (ekstern) |
+| Funn | <N> Stopper, <N> Må fikses før innføring, <N> Kan fikses senere. Av dem <N> «Kravet dekker ikke» (intern) / <N> feil (avvik fra kravene våre) og <N> endringsforslag (krav vi ikke har) (ekstern) |
 | Testet av | <fra testsiden> |
 | Testperiode | <dato> |
 | Forslag til utfall | Godkjent / Godkjent med forbehold / Ikke godkjent: <grunn> |
+
+## Inngangskriteriet til intern akseptansetest                       [agentisk]
+
+Sjekkes for seg, fordi det er inngangen til fase 3. Den agentiske rapporten har ingen beslutning, bare dette.
+
+| Kriterium | Oppfylt |
+|---|---|
+| Alle testcasene er kjørt (ingen «ikke fylt ut», og «ikke testet» har begrunnelse) | Ja / Nei: <N> ikke kjørt, <N> «ikke testet» uten begrunnelse |
+| Ingen funn med «Stopper» står åpne | Ja / Nei: <funnene> |
+| Testansvarlig har gått gjennom rapporten, også funnene og stikkprøven av de beståtte | [Fylles ut av testansvarlig] |
 
 ## Resultat per krav
 
@@ -114,13 +124,22 @@ Ingen.                                                                  [når ta
 
 | Felt | Innhold |
 |---|---|
-| Testdata | <hva agenten opprettet, manuelt eller via API, og om det er ryddet> |
+| Testdata | <testdataene fra testplanen som ble brukt, og de som manglet eller var i feil tilstand> |
 | Kan kjøres på nytt | Ja / Nei: <grunn> |
 | Bevis | `akseptansetest/<slug>/kjoring-<YYYY-MM-DD-HHMM>/` (`resultat.md` er i git, skjermbilder er lokale og ikke i git) |
 
 ## Ikke bestått                                                        [agentisk, intern, ekstern]
 
 | Nr | Scenario | Faktisk resultat | Funn |
+|---|---|---|---|
+
+Ingen.                                                                  [når tabellen er tom]
+
+## Bestått, men faktisk resultat avviker                               [agentisk, intern, ekstern]
+
+Testcaser med status «Bestått» der «Faktisk resultat» beskriver noe annet enn forventet resultat. Testansvarlig ser på dem og avgjør status. Skillen endrer ikke statusen.
+
+| Nr | Scenario | Forventet resultat | Faktisk resultat |
 |---|---|---|---|
 
 Ingen.                                                                  [når tabellen er tom]
@@ -136,11 +155,11 @@ Ingen.                                                                  [når ta
 
 ## Funn                                                                [agentisk, intern, ekstern]
 
-Sortert etter alvorlighetsgrad. «Fase funnet» er 2 (agentisk), 3 (intern) eller 4 (ekstern). Typen er «Feil» eller «Kravet dekker ikke» (fase 2 og 3), og «Avvik fra krav» eller «Endringsforslag» (fase 4). «Kravet dekker ikke» og «Endringsforslag» avklares i kravet, ikke bare i testen.
+Sortert etter alvorlighetsgrad. «Fase funnet» er 2 (agentisk), 3 (intern) eller 4 (ekstern). Typen er «Feil» eller «Kravet dekker ikke» (fase 2 og 3), og «Feil (avvik fra kravene våre)» eller «Endringsforslag (krav vi ikke har)» (fase 4). «Kravet dekker ikke» og «Endringsforslag» avklares i kravet, ikke bare i testen.
 
 | # | Fase funnet | Testcase | Type | Hva skjedde | Alvorlighetsgrad | Sak | Oppfølging |
 |---|---|---|---|---|---|---|---|
-| | 2 / 3 / 4 | | Feil | | Stopper | | Feil i løsningen / Avvik fra krav: teamet lager oppgave · Kravet dekker ikke / Endringsforslag: `fs-krav`, med spørsmålet · Testcasen var feil · Utenfor testen |
+| | 2 / 3 / 4 | | Feil | | Stopper | | Feil i løsningen / Feil (avvik fra kravene våre): teamet lager oppgave · Kravet dekker ikke / Endringsforslag: `fs-krav`, med spørsmålet · Testcasen var feil · Utenfor testen |
 
 Ingen.                                                                  [når tabellen er tom]
 

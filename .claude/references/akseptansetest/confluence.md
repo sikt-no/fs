@@ -1,6 +1,6 @@
 # Confluence i testflyten
 
-Felles for `fs-testplan`, `fs-testcaser-cdp`, `fs-testcaser-intern`, `fs-testcaser-ekstern`, `fs-testrapport` og Confluence-steget i `fs-verify`. Testplanen er hovedsiden for en leveranse, og alle de andre sidene er undersider til den. Verifiseringen kommer før testplanen, så undersiden «Verifisering – …» lages av `fs-testplan` når testplanen opprettes, og av `fs-verify` når den kjøres på nytt med en testplan som finnes.
+Felles for `fs-testplan`, `fs-testcaser-cdp`, `fs-testcaser-intern`, `fs-testcaser-ekstern`, `fs-testrapport` og Confluence-steget i `fs-verify`. Testplanen er hovedsiden for en leveranse, og alle de andre sidene er undersider til den. Testplanen viser omfanget av testcasene som skal lages (seksjonen «Testcaser som skal lages»), ikke selve testcasene: testcasene, resultatene fra kjøringene og testrapportene står på undersidene (eller i `cdp-tester/` for fase 2), og testplanen lenker til dem fra «Status i flyten» og «Vedlegg». Verifiseringen kommer før testplanen, så undersiden «Verifisering – …» lages av `fs-testplan` når testplanen opprettes, og av `fs-verify` når den kjøres på nytt med en testplan som finnes.
 
 ## Verktøy
 
@@ -75,7 +75,8 @@ Strategien står i Confluence: [Teststrategi for FS – fra krav til akseptanse 
 2. Finn det testerne og testansvarlig har fylt ut: cellene i «Faktisk resultat» og «Status», radene i «Funn» (med «Fase» og «Type») og «Andre funn», «Beslutning», «Kriterier for godkjent», «Kontrollert av» og «Bekreftet av deltakerne». Er noe av det fylt ut, skriv det aldri over. Endre bare de andre delene, og behold det som er fylt ut, ord for ord.
 3. Behold `data-colwidth`, `data-local-id` og inline-kommentarer (`class="annotation"`) slik de er.
 4. Er testen i gang (noe er fylt ut), og en testcase må endres, si det til brukeren først. Steg testeren allerede har fulgt, endres ikke. Legg heller til en merknad i raden.
-5. Skriv en `versionMessage` som sier hva som er endret.
+5. **«Slik tester du»** (eller «Slik fyller du ut» på den eksterne siden) tas med fra malen når testcasene oppdateres, så eldre sider får reglene som har kommet til siden, for eksempel «følg stegene slik de står» (R14 i `testcase-regler.md`). Det testerne har fylt ut, står ikke i den delen, så den kan skrives over.
+6. Skriv en `versionMessage` som sier hva som er endret.
 
 ## «Status i flyten» på testplanen
 

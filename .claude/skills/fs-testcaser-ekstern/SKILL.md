@@ -59,11 +59,11 @@ Passer et av partenes krav ikke med kravene våre, er det ikke noe du retter: de
 
 Du setter sammen et utgangspunkt. Partene kan ta det, endre det eller bytte det ut.
 
-1. **Finn rekkefølgen brukerne jobber i.** Har testplanen flyter, er de kilden: fasene i flyten er rekkefølgen, og de er beskrevet på tvers av domener fra før. Ellers bruk flyttestene i `testcaser-intern.md`, rekkefølgen oppgavene står i scope-tabellen, brukerhistoriene, og hvilke data et scenario lager som et annet bruker (opprette et opptak → registrere en søknad → behandle den). Går leveransen over flere domener, følger rekkefølgen arbeidsprosessen, ikke domenene.
+1. **Grunnlaget er den interne testen, ikke feature-filene.** Forslaget bygger på flyttestene i `testcaser-intern.md` (fase 3, også oppgavene uten flyt) og flytene i «Flyter» i testplanen: fasene i flyten er rekkefølgen, og de er beskrevet på tvers av domener fra før. Har partene egne krav (steg 2), går de foran: velg og ordne flytene etter dem, og si hvilke av partenes krav som ikke er dekket av noen flyt. Mangler flyttestene, bruk rekkefølgen oppgavene står i scope-tabellen, brukerhistoriene, og hvilke data et scenario lager som et annet bruker (opprette et opptak → registrere en søknad → behandle den), og si det i oppsummeringen. Går leveransen over flere domener, følger rekkefølgen arbeidsprosessen, ikke domenene.
 2. **Bare hovedflyten:** scenarioene der brukeren får gjort det prosessen handler om. Feilsituasjoner, sperrer, feilmeldinger, obligatoriske felt og grenseverdier tas ikke med. De står i «Ikke med i denne testen» med «Testet i den agentiske funksjonstesten».
 3. **Hvem testerne er:** spør (`AskUserQuestion`, `multiSelect`) hvilke deler som gjelder dem. Foreslå et utvalg ut fra rollene i kravene og partenes krav. Eksterne tester bare det de skal bruke: i et samordna opptak er det kravene for samordna opptak, ikke for lokale opptak.
 4. **Del hovedflyten i oppgaver.** Én testcase er én oppgave med en hensikt testeren kjenner igjen fra jobben sin («Sett opp et opptak og åpne det for søknader»). Hver testcase går gjennom flere scenarioer, og hvert scenario er en del (`1a`, `1b`) med sin egen «Status».
-   - **Med flyt:** én testcase per flyt, eller per del av flyten som testes, når den holder seg innenfor tidsrammen. Er flyten for lang, del den mellom to faser, og la den neste testcasen bruke dataene fra den første (R10). Delene er hovedflyt-scenarioene i kravene i «Omfang» som fasene bygger på, i rekkefølgen i flyten. Scenarioet i flyten blir en egen del der den neste fasen starter: testeren sjekker at det som ble laget, er brukt («Søkeren har fått tilbud, uten at du har gjort noe mer»).
+   - **Med flyt:** én testcase per flyt, eller per del av flyten som testes, når den holder seg innenfor tidsrammen. Er flyten for lang, del den mellom to faser, og la den neste testcasen bruke dataene fra den første (R10). Delene er delene i flyttesten fra den interne testen, i rekkefølgen i flyten, uten de delene partene ikke skal bruke. Scenarioet i flyten blir en egen del der den neste fasen starter: testeren sjekker at det som ble laget, er brukt («Søkeren har fått tilbud, uten at du har gjort noe mer»).
    - Bruk ikke ordene «flyt» og «fase» på siden. Skriv hva brukeren gjør.
 5. **Vis forslaget før du skriver stegene:** oppgavene, delene, og hvilke scenarioer som er i hver. Spør om rekkefølgen og oppdelingen er riktig.
 
@@ -75,7 +75,7 @@ Du setter sammen et utgangspunkt. Partene kan ta det, endre det eller bytte det 
 - Ingen Feature-ID-er, scope-id-er, tagger, kodeverdier, GraphQL, Jira eller feature-flagg på siden. Sporingen står i metadataene.
 - «Faktisk resultat» og «Status» står tomme.
 - Siden sier at dette er et forslag, og at partene kan legge til egne testcaser etter sine egne krav (en tom del «Testcaser fra partene»).
-- **Funn:** tabellen har funntypene «Avvik fra krav» og «Endringsforslag» (*Funntype* i `alvorlighetsgrad.md`), og siden sier hvor tilbakemeldingene sendes: den faste kanalen (spør kontaktpersonen, og skriv `[Fylles ut: kanal]` hvis den ikke finnes).
+- **Funn:** tabellen har funntypene «Feil (avvik fra kravene våre)» og «Endringsforslag (krav vi ikke har)» (*Funntype* i `alvorlighetsgrad.md`), og siden sier hvor tilbakemeldingene sendes: den faste kanalen (spør kontaktpersonen, og skriv `[Fylles ut: kanal]` hvis den ikke finnes).
 
 ## 5. Flytbeskrivelser og rapporter til partene
 

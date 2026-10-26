@@ -56,7 +56,7 @@ Egenskap: <tittelen i kravet>
 
 - **`@utledet`** er en testcase agenten har utledet fra regelen, ikke fra et scenario i kravet. Tittelen er regelens tittel, kolon, og hva som prøves. `# Teknikk:` over scenarioet sier hvilken teknikk som er brukt (grenseverdianalyse, ekvivalensklasser, beslutningstabell eller tilstandsoverganger). Scenarioene fra kravet har ingen `# Teknikk:`.
 - **Én feilsituasjon prøver én ting:** alle andre obligatoriske felt er fylt ut, så det er feltet testcasen handler om som stopper lagringen. Et forhåndsutfylt felt tømmes («Fjern tallet i «<felt>»»), det «står» ikke tomt.
-- **Testdata:** `Gitt` sier at dataene er opprettet, og hvordan de opprettes står i `Krever` (kolonnen `Opprettes av`). Opprettes de i testen, har dataene et unikt navn per kjøring.
+- **Testdata:** `Gitt` sier hvilken tilstand dataene har (utgangstilstanden i `Krever` og i testplanen). Hvordan de lages, står ikke i testen. Data scenarioet selv lager, har et unikt navn per kjøring når de ikke kan slettes.
 - `@TST-…`: `@TST-<DOM>-<SUB>-<KAP>-NNN` for en speilet sti (neste ledige løpenummer i mappa), `@TST-<prosess>-<test>-NNN` for `_Løp`.
 - **En flyt** (`_Løp/<NN Prosess>/<samme filnavn som flyten>.feature`): `# Flyt: krav/_Flyter/<NN Prosess>/<fil>.feature @ <commit> (blob <hash>)` i stedet for `# Krav:`, `@depends-on-FLY-…` på `Egenskap:`, og fasens `@depends-on-` på hver `Regel:`. `Gitt` har tilstanden som en testdata-nøkkel: `Og søknaden «<testdata-nøkkel>» har fått tilbudsgaranti i tidligopptaket`.
 - `@depends-on-<Feature-ID>` (uten `@` i ID-en) på `Egenskap:`. Bygger en `Regel:` eller et `Scenario:` også på et annet krav, får delen en egen tagg. `@ref-<Feature-ID>` for et krav testen bare bruker som forutsetning.
@@ -74,10 +74,10 @@ Tester for <kravene i mappa>. Kravene: [<fil>.feature](<relativ lenke til kravfi
 
 ## Krever
 
-| Nøkkel | Type | Beskrivelse | Opprettes av | Brukes av |
-|---|---|---|---|---|
-| `<nøkkel>` | testbruker | <rolle og organisasjon som beskrivelse, ikke navn> | Finnes i testmiljøet | alle scenarioer / «<scenario>» |
-| `<nøkkel>` | testdata | <utgangstilstand, for eksempel «minst 51 personbrukere synlige for testbrukeren»> | Manuelt / API (<hvordan, og hvordan det ryddes>) | «<scenario>» |
+| Nøkkel | Type | Beskrivelse | Brukes av |
+|---|---|---|---|
+| `<nøkkel>` | testbruker | <rolle og organisasjon som beskrivelse, ikke navn> | alle scenarioer / «<scenario>» |
+| `<nøkkel>` | testdata | <utgangstilstand, for eksempel «minst 51 personbrukere synlige for testbrukeren»> | «<scenario>» |
 
 ## Ikke kjørbart
 
@@ -98,6 +98,8 @@ Ingen.      <når tabellen er tom>
 - **Testplan**: [testplan.md](<sti>) | –
 - **Miljø**: <URL, versjon, flagg>   (fra testplanen eller oppgitt av brukeren)
 - **Tester**: <filene i cdp-tester/ som er kjørt>
+- **Slik er testen kjørt**: stegene er fulgt slik de står (R14). Virket ikke et steg, eller fantes ikke en verdi, er testcasen «Ikke testet», med det som ble sett i «Faktisk resultat»
+- **Kjente mangler**: <sak: status sjekket <dato>, testcasene> | Ingen   (R16)
 - **Krav**: commit `<sha>`
 - **Kjørt av**: <agent> for <bruker>
 - **Testdata**: <hva som ble opprettet (manuelt/API), og at det er ryddet / satt tilbake>
