@@ -32,7 +32,7 @@ Testplan for «Utdanningstilbud i samordna opptak 2027». Planen sier hva som te
 
 | Nr | Navn | Rolle | Organisasjon | Brukes til |
 |---|---|---|---|---|
-| 1 | ORDENTLIG RUNDSKRIV | Opptaksforvalter ved forvaltende organisasjon | [Fylles ut: den forvaltende organisasjonen i Sektordemo 23.10.26] | Legge til for en annen organisasjon, fjerne, trekke, redigere etter redigeringsfristen, filtrere på organisasjon, og detaljsiden (UTD-001, 002, 003, 026 og 04 Behandle et utdanningstilbud) |
+| 1 | ORDENTLIG RUNDSKRIV | Opptaksforvalter ved forvaltende organisasjon | Sikt | Legge til for en annen organisasjon, fjerne, trekke, redigere etter redigeringsfristen, filtrere på organisasjon, og detaljsiden (UTD-001, 002, 003, 026 og 04 Behandle et utdanningstilbud) |
 | 2 | KORT DOMPAPP UiT | Opptaksforvalter ved deltakende organisasjon | UiT Norges arktiske universitet | Legge til og fjerne tilbud organisasjonen tilbyr innenfor redigeringsperioden, og trekkfristen (UTD-002, 003, 026) |
 | 3 | KORT DOMPAPP UIO | Opptaksforvalter ved deltakende organisasjon | Universitetet i Oslo | Den andre deltakende organisasjonen, med egne utdanningstilbud i opptaket (UTD-001, 002) |
 
@@ -45,7 +45,7 @@ Alle testcasene bruker opptaket «Sektordemo 23.10.26». Opptaket må være i ul
 | Fase | Fristene i Sektordemo 23.10.26 | Testcaser |
 |---|---|---|
 | 1 | Redigering av utdanningstilbud åpner i morgen | 2.5 |
-| 2 | Redigering er åpen, og søknad er ikke åpnet | 1.1, 1.2, 1.4, 2.1–2.4, 2.6, del 3 og hele økt 2 |
+| 2 | Redigering er åpen, og søknad er ikke åpnet | 1.1, 1.2, 1.4, 2.1–2.3, 2.6, del 3 og hele økt 2 (unntatt 9.4) |
 | 3 | Søknad er åpnet, og redigering er fortsatt åpen | 1.3 |
 | 4 | Redigering er stengt, og trekkfristen er ikke passert | 1.5, 2.7, 2.8, 4.1 |
 | 5 | Trekkfristen er passert | 4.2 |
@@ -55,11 +55,9 @@ Alle testcasene bruker opptaket «Sektordemo 23.10.26». Opptaket må være i ul
 | Opptaket, med deltakende organisasjoner, i fasene over | Sektordemo 23.10.26 | FS Admin, Opptak | Fristene: ja, settes tilbake etter testen. Fjerning (1.1, 1.2, 1.4) og trekking (4.1) kan ikke angres. |
 | Utdanningstilbud i opptaket: minst tre som kan fjernes, ett som kan trekkes, og ett for økt 2 med kompetanseregelverk og rangeringsregelverk | Testeren velger | Sektordemo 23.10.26 | Nei, de fjernes eller trekkes |
 | Utdanningstilbud i opptaket fra UiT og UiO, med ulik starttermin og ulikt startår, og noen uten kompetanseregelverk eller rangeringsregelverk | Testeren velger | Sektordemo 23.10.26 | – |
-| En organisasjon som ikke er deltaker i opptaket, med utdanninger i utdanningsregisteret | [Fylles ut: f.eks. NTNU] | [Fylles ut] | – |
 | Utdanninger i utdanningsregisteret for de deltakende organisasjonene, nok til å legge til flere av gangen | Testeren velger | Utdanningsregisteret | – |
 | Utdanningstilbud med og uten beskrivelses-URL i utdanningsregisteret | Testeren velger | Utdanningsregisteret | – |
-| Standardregel for poenglikhet med tillatte unntak (9.1–9.3) | [Fylles ut: åpner Sektordemo 23.10.26 for unntak?] | FS Admin, Opptak | Ingenting endres |
-| Opptak med standardregel for poenglikhet uten mulighet for unntak (9.4) | [Fylles ut: eget opptak, eller endres innstillingen på Sektordemo 23.10.26?] | FS Admin, Opptak | [Fylles ut] |
+| Standardregel for poenglikhet med tillatte unntak (9.1–9.3) | Sektordemo 23.10.26 [Fylles ut: bekreft at opptaket åpner for unntak] | FS Admin, Opptak | Ingenting endres |
 | Flere regler for poenglikhet som er tilgjengelige for opptaket, og minst én som ikke er det | [Fylles ut: reglene] | [Fylles ut] | Ingenting endres |
 | Utdanningstilbud i opptaket som bruker standardregelen for poenglikhet | Testeren velger | FS Admin, detaljsiden for utdanningstilbudet | [Fylles ut: Ja, regelen settes tilbake til standardregelen etter testen?] |
 | Søknadsfrist for opptaket (14.1) | [Fylles ut: søknadsfristen i Sektordemo 23.10.26] | Opptaksinnstillingene i Sektordemo 23.10.26 | – |
@@ -73,7 +71,7 @@ Det som testes, er kravene som er `@implemented`, og de leverte delene i krav so
 | Krav | Feature-ID | Status | Scenarioer i testen |
 |---|---|---|---|
 | [Fjerne utdanningstilbud fra opptak](https://github.com/sikt-no/fs/blob/b67676a/krav/02%20Opptak/12%20Utdanningstilbud/02%20Utdanningstilbud%20i%20opptak/fjerne_utdanningstilbud.feature) | `@OPT-OPT-UTD-026` | `@in-progress` (delvis levert) | 5 |
-| [Legge til utdanningstilbud i opptak](https://github.com/sikt-no/fs/blob/b67676a/krav/02%20Opptak/12%20Utdanningstilbud/02%20Utdanningstilbud%20i%20opptak/legge_til_utdanningstilbud.feature) | `@OPT-OPT-UTD-002` | `@in-progress` (delvis levert) | 8 |
+| [Legge til utdanningstilbud i opptak](https://github.com/sikt-no/fs/blob/b67676a/krav/02%20Opptak/12%20Utdanningstilbud/02%20Utdanningstilbud%20i%20opptak/legge_til_utdanningstilbud.feature) | `@OPT-OPT-UTD-002` | `@in-progress` (delvis levert) | 7 |
 | [Listevisning og søk i utdanningstilbud i opptaket](https://github.com/sikt-no/fs/blob/b67676a/krav/02%20Opptak/12%20Utdanningstilbud/02%20Utdanningstilbud%20i%20opptak/listevisning_utdanningstilbud.feature) | `@OPT-OPT-UTD-001` | `@in-progress` (delvis levert) | 6 |
 | [Trekke utdanningstilbud fra opptak](https://github.com/sikt-no/fs/blob/b67676a/krav/02%20Opptak/12%20Utdanningstilbud/02%20Utdanningstilbud%20i%20opptak/trekke_utdanningstilbud.feature) | `@OPT-OPT-UTD-003` | `@in-progress` (delvis levert) | 2 |
 
@@ -87,7 +85,7 @@ Merknad: `@OPT-OPT-UTD-001` har åpne spørsmål om kravet som helhet: om det sk
 | [Angi informasjon om studieavgift](https://github.com/sikt-no/fs/blob/b67676a/krav/02%20Opptak/12%20Utdanningstilbud/04%20Behandle%20et%20utdanningstilbud/angi_studieavgift.feature) | `@OPT-OPT-UTD-022` | `@implemented` | 2 |
 | [Angi søkeord på utdanningstilbudet](https://github.com/sikt-no/fs/blob/b67676a/krav/02%20Opptak/12%20Utdanningstilbud/04%20Behandle%20et%20utdanningstilbud/angi_s%C3%B8keord.feature) | `@OPT-OPT-UTD-017` | `@implemented` | 3 |
 | [Kvoteflyt registreres ikke på utdanningstilbudet](https://github.com/sikt-no/fs/blob/b67676a/krav/02%20Opptak/12%20Utdanningstilbud/04%20Behandle%20et%20utdanningstilbud/flytte_kvoteflyt_til_opptaksinnstillinger.feature) | `@OPT-OPT-UTD-013` | `@implemented` | 1 |
-| [Overstyre regler for poenglikhet på utdanningstilbudet](https://github.com/sikt-no/fs/blob/b67676a/krav/02%20Opptak/12%20Utdanningstilbud/04%20Behandle%20et%20utdanningstilbud/overstyre_regler_for_poenglikhet.feature) | `@OPT-OPT-UTD-015` | `@implemented` | 4 |
+| [Overstyre regler for poenglikhet på utdanningstilbudet](https://github.com/sikt-no/fs/blob/b67676a/krav/02%20Opptak/12%20Utdanningstilbud/04%20Behandle%20et%20utdanningstilbud/overstyre_regler_for_poenglikhet.feature) | `@OPT-OPT-UTD-015` | `@implemented` | 3 |
 | [Registrere planlagt antall studieplasser](https://github.com/sikt-no/fs/blob/b67676a/krav/02%20Opptak/12%20Utdanningstilbud/04%20Behandle%20et%20utdanningstilbud/registrere_planlagte_studieplasser.feature) | `@OPT-OPT-UTD-012` | `@implemented` | 2 |
 | [Registrere poengopplysninger for utdanningstilbudet](https://github.com/sikt-no/fs/blob/b67676a/krav/02%20Opptak/12%20Utdanningstilbud/04%20Behandle%20et%20utdanningstilbud/registrere_poengopplysninger.feature) | `@OPT-OPT-UTD-010` | `@implemented` | 2 |
 | [Registrere påkrevde attester på utdanningstilbudet](https://github.com/sikt-no/fs/blob/b67676a/krav/02%20Opptak/12%20Utdanningstilbud/04%20Behandle%20et%20utdanningstilbud/registrere_p%C3%A5krevde_attester.feature) | `@OPT-OPT-UTD-014` | `@implemented` | 2 |
@@ -97,7 +95,7 @@ Merknad: `@OPT-OPT-UTD-001` har åpne spørsmål om kravet som helhet: om det sk
 
 Åpent spørsmål: `@OPT-OPT-UTD-025` «Opptaksforvalter kan sette tidlig søknadsfrist per utdanningstilbud»: Hva skjer med søkere som ikke har lastet opp dokumentasjon innen den tidlige dokumentasjonsfristen? Kan søkeren ikke laste opp etter fristen, eller merkes dokumentasjonen som levert for sent for saksbehandleren? Testes som det står.
 
-Scenarioene i testen er de leverte scenarioene i gating-settet: alle scenarioene som ikke er utkast, avviklet eller demo, og som ikke er under endring. Et levert scenario med et åpent spørsmål testes som det står, og spørsmålet står under tabellen. I alt 44 scenarioer: 21 i 02 Utdanningstilbud i opptak og 23 i 04 Behandle et utdanningstilbud.
+Scenarioene i testen er de leverte scenarioene i gating-settet: alle scenarioene som ikke er utkast, avviklet eller demo, og som ikke er under endring. Et levert scenario med et åpent spørsmål testes som det står, og spørsmålet står under tabellen. I alt 42 scenarioer: 20 i 02 Utdanningstilbud i opptak og 22 i 04 Behandle et utdanningstilbud. To leverte scenarioer testes ikke i denne runden (se «Ikke med i denne testen»).
 
 De automatiske testene av de samme kravene: `npx playwright test --grep "@OPT-OPT-UTD-026|@OPT-OPT-UTD-002|@OPT-OPT-UTD-001|@OPT-OPT-UTD-003|@OPT-OPT-UTD-016|@OPT-OPT-UTD-022|@OPT-OPT-UTD-017|@OPT-OPT-UTD-013|@OPT-OPT-UTD-015|@OPT-OPT-UTD-012|@OPT-OPT-UTD-010|@OPT-OPT-UTD-014|@OPT-OPT-UTD-011|@OPT-OPT-UTD-025|@OPT-OPT-UTD-009"`.
 
@@ -124,6 +122,8 @@ Kravene er laget, men `fs-verify` har ikke funnet alt ennå. De tas med i testen
 
 | Hva | Hvorfor |
 |---|---|
+| `@OPT-OPT-UTD-002` «Organisasjon som ikke deltar kan ikke legge til utdanningstilbud» (testcase 2.4) | Testes ikke i denne runden. Scenarioet er levert. |
+| `@OPT-OPT-UTD-015` «Kan ikke overstyre regel for poenglikhet når opptaket ikke åpner for unntak» (testcase 9.4) | Testes ikke i denne runden. Scenarioet er levert. |
 | `@OPT-OPT-UTD-019` Vise endringslogg for utdanningstilbudet | Ikke avklart ennå (`@draft`): hvilke felt som logges, og kravene fra Team Bat om endringslogg |
 | `@OPT-OPT-UTD-021` Vise lenke til tidligere utdanningstilbud | Ikke avklart ennå (`@draft`): hva «tidligere utdanningstilbud» betyr, og om lenken settes manuelt |
 | `@OPT-OPT-UTD-027` Sette kjønnspoeng på utdanningstilbudet | Kommer senere (`@draft`, skjelett uten scenarioer) |
@@ -159,7 +159,7 @@ Klart når testansvarlig har logget inn som testbruker og ser testdataene.
 | 2 | Testdataene er identifisert og tilgjengelige | [Fylles ut av teamet] |
 | 3 | Testdataene kan settes tilbake eller lages på nytt | [Fylles ut av teamet] |
 | 4 | Testbrukerne finnes i rollene leveransen gjelder, i minst to organisasjoner | [Fylles ut av teamet] |
-| 5 | `fs-verify` har funnet alle scenarioene, og en annen person har kontrollert rapporten | Ikke oppfylt: 44 av 71 scenarioer funnet (25 ikke funnet, 2 usikker), og de tre scenarioene fra SHI-747 er ikke levert. De 44 som er funnet, testes. Rapportene er kontrollert av `fs-verify-kontroll`, ikke av en annen person: [Fylles ut: hvem kontrollerer rapportene] |
+| 5 | `fs-verify` har funnet alle scenarioene, og en annen person har kontrollert rapporten | Ikke oppfylt: 44 av 71 scenarioer funnet (25 ikke funnet, 2 usikker), og de tre scenarioene fra SHI-747 er ikke levert. Av de 44 som er funnet, testes 42 (to testes ikke i denne runden). Rapportene er kontrollert av `fs-verify-kontroll`, ikke av en annen person: [Fylles ut: hvem kontrollerer rapportene] |
 | 6 | Testcasene er laget og gått gjennom av testansvarlig | Laget, venter på gjennomgang av testansvarlig |
 | 7 | Testansvarlig har logget inn som testbruker og ser testdataene | [Fylles ut av testansvarlig] |
 
