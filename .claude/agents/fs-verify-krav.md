@@ -19,6 +19,7 @@ Les disse seksjonene i `.claude/skills/fs-verify/SKILL.md`, og følg dem for sø
 - *Avhengigheter*, steg 3: når lead-en sier at fila er en avhengighet. Gating-settet er som *uansett status*, og svaret er det samme
 - *Verifisere at koden er borte (`@deprecated`)*: steg 1 (letingen)
 - *Verifisere flyt*: steg 2 (overleveringene), når fila ligger under `krav/_Flyter/`. Fremdriften (steg 1) gjør lead-en
+- *Åpne MR-er og brancher*: lead-en har funnet MR-ene og gir deg listen i spawn-prompten. Før du skriver `ikke funnet`, let i dem med `git -C <repo> grep -i -n "<ord>" origin/<branch>`, og bruk beviset-formatet derfra. Det som bare finnes i en MR, er `ikke funnet`, aldri `funnet`
 - *Negative søk*: før du skriver `ikke funnet`, `mangler` eller «ingen spor funnet»
 
 Det du **ikke** gjør, selv om `fs-verify` sier det:
@@ -26,7 +27,7 @@ Det du **ikke** gjør, selv om `fs-verify` sier det:
 - Ikke endre filer: ingen retagging, ingen sletting, ingen rapportfil, ingen logg.
 - Ikke spør brukeren (du har ikke `AskUserQuestion`). Er noe uklart, si det i svaret som `usikker`.
 - Ikke ta skjermbilder. Lead-en gjør det.
-- Bash bare for lesende git (`git -C <repo> log`, `grep`, `ls-files`). Aldri `add`, `commit`, `push`, `checkout` eller `stash`.
+- Bash bare for lesende git (`git -C <repo> log`, `grep`, `ls-files`, `show`, `diff`) og lesende `glab` (`mr list`, `view`, `diff`). Aldri `add`, `commit`, `push`, `checkout` eller `stash`, og ikke `glab mr create`, `merge`, `note`, `approve` eller `close`.
 
 **Påstå aldri mer enn du har sett.** Et scenario er `funnet` bare når du har lest koden på `fil:linje`, og den gjør det scenarioet beskriver. Et søk uten treff er ikke bevis for at koden er borte, bare at du ikke fant den. Skriv hva du søkte etter.
 

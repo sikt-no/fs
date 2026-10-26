@@ -33,7 +33,7 @@ I Claude-panelet i FS Kravforvaltning har du ikke Bash:
 - Kodeklonene (fs-admin, fs-plattform, min-kompetanse) står i systemprompten. Bruk dem i stedet for å spørre, og spør bare hvis de mangler.
 - `AskUserQuestion` virker: brukeren får spørsmålet som et kort med valgene. Hopper brukeren over, still spørsmålet i svaret, og vent på brukeren.
 - Du kan ikke slette filer. Skal en `@deprecated`-fil slettes, si hvilken, så sletter brukeren den selv. Blokker fjernes med `Edit`.
-- Lesende git går ikke. Bruk `Grep` og `Glob` i klonene. Branchene i kravrepoet og klonene blir derfor ikke sjekket mot origin (*Sjekk branchen*): skriv `ikke sjekket (Claude-panelet)` i `- **Kode:**` i rapporten.
+- Lesende git går ikke. Bruk `Grep` og `Glob` i klonene. Branchene i kravrepoet og klonene blir derfor ikke sjekket mot origin (*Sjekk branchen*): skriv `ikke sjekket (Claude-panelet)` i `- **Kode:**` i rapporten. Åpne MR-er og brancher (*Åpne MR-er og brancher*) kan heller ikke sjekkes: skriv `ikke sjekket (Claude-panelet)` i `- **Åpne MR-er:**`.
 - Skjermbilder tas med chrome-devtools-MCP. `navigate_page`, `click` og `press_key` er godkjent på forhånd når fs-verify kjøres, sammen med verktøyene som bare leser (`take_screenshot`, `take_snapshot`, `wait_for` …). Andre kall, f.eks. `new_page` og `fill`, må godkjennes i panelet (se *Skjermbilder*).
 - Du har ikke Agent-verktøyet, så du kan ikke starte kontrolløren (`fs-verify-kontroll`). Du gjør kontrollen selv (*Kontroll*), og den er ikke uavhengig. **Si det til brukeren før du begynner å lete**, med denne setningen: «Kontrollen av resultatene gjøres manuelt i Claude-panelet: jeg sjekker mine egne funn, uten en uavhengig kontrollør. Les bevisene i rapporten før du sier ja til endringene. Vil du ha uavhengig kontroll, kjør Verifiser i terminalen.» Skriv `- **Kontroll:** manuell (Claude-panelet)` i rapporten.
 
@@ -44,6 +44,7 @@ I terminalen i FS Kravforvaltning («Verifiser i terminal …») og i Claude Cod
 0. **Sjekk branchen** i dette repoet mot origin og main, som beskrevet i [`.claude/references/oppdatert-branch.md`](../../references/oppdatert-branch.md). Er den bak, spør før du henter.
 1. **Krav.** Oppga brukeren en verify-rapport (`verify-*.md`), følg *Gjennomgang av en verify-rapport* i stedet for resten av denne lista. Oppga brukeren en spesifikasjon (`tasks/<domene>/<slug>/spec/spec-*.md`, typisk fra «Verifiser» på tavla «Oppgaver» i FS Kravforvaltning), er scope bare feature-filene under `## Krav` i den (slått opp på feature-ID). Oppga brukeren et scope (`scope-<slug>`, `@scope-<slug>` eller `tasks/<domene>/scope-<slug>.md`), er scope alle kravene og delene med taggen `@scope-<slug>`, funnet og sjekket mot scope-tabellen som i *Scope* i [`.claude/references/akseptansetest/krav-fra-testplan.md`](../../references/akseptansetest/krav-fra-testplan.md). Oppga brukeren en testplan (`akseptansetest/<slug>`, eller `testplan.md` i den), er scope kravene i «Omfang» og «Venter på verifisering» i testplanen, slått opp på Feature-ID (*Kravene i de andre skillene* i [`.claude/references/akseptansetest/krav-fra-testplan.md`](../../references/akseptansetest/krav-fra-testplan.md)). Oppga brukeren en `krav/`-sti (fil eller mappe), bruk den. En sti under `krav/_Flyter/`, eller en `@FLY-`-ID, er en flyt (*Verifisere flyt*). Et scope, en oppgave eller en testplan tar også med flytene som går gjennom kravene, funnet som i *Finn flytene* i [`.claude/references/akseptansetest/krav-fra-testplan.md`](../../references/akseptansetest/krav-fra-testplan.md) (for en testplan: flytene i «Flyter»), så testplanen kan bygge på resultatet. En spesifikasjon tar dem ikke med: der er en flyt bare med når den er valgt selv. Oppga brukeren en oppgave (`tasks/<domene>/<slug>`, eller bare slug — slå opp med `Glob` `tasks/*/<slug>/`), les Feature-ID-ene fra `## Krav` i alle `<oppgave>/spec/spec-*.md` (ikke det som står under *Utenfor scope*), og finn de autoritative filene under `krav/` på feature-ID (`@DOM-SUB-KAP-NNN`), ikke filnavn. Les ikke kopiene i `spec/krav-input/`: de finnes bare i eldre oppgaver, og kan være utdaterte. 0 treff → «ikke funnet under krav/», mer enn 1 → «duplisert feature-ID». Mangler begge, spør.
 2. **Kode.** Spør (`AskUserQuestion`) om stien til de lokale klonene av kode-repoene (se *Kodeklonene*). Foreslå repoer fra `oppgave.md` (lenker), `<lag>/plan-*.md` og `<lag>/task-*-completion.md` når en oppgave er gitt. Sjekk at stiene finnes, og sjekk branchen i hver klone ([`.claude/references/oppdatert-branch.md`](../../references/oppdatert-branch.md)): det er koden på branchen som verifiseres. Uten kode kan ingenting verifiseres: stopp og si det. Skriv aldri `.claude/spec.local.md`.
+2b. **Åpne MR-er og brancher.** Finn MR-ene og branchene i hver klone som kan inneholde koden for kravene i scope (*Åpne MR-er og brancher*). Det gjøres uten spørsmål, og resultatet står i rapporten.
 3. **Omfang og avhengigheter.** Spør hva som skal verifiseres, og hvor langt `@depends-on-` skal følges (*Omfang og avhengigheter* under). Spørsmålene stilles i ett `AskUserQuestion`-kall, sammen med spørsmålet om skjermbilder (steg 4) når det også skal stilles.
 4. **Skjermbilder.** Har prompten ikke sagt om det skal tas skjermbilder («Ta skjermbilder» eller «Ingen skjermbilder»), spør med `AskUserQuestion` før du begynner å lete: «Skal jeg ta skjermbilder fra https://test-fsadmin.sikt.no/?», med valgene «Ja» og «Nei». Hopper brukeren over, regn det som «Nei», og si det i rapporten. Se *Skjermbilder*.
 5. **Hint.** Når en oppgave er gitt: les `design.md`, `<lag>/plan-*.md` og `<lag>/task-*-completion.md`. Filstier, komponentnavn, GraphQL-felt og ruter derfra er de beste stedene å lete.
@@ -228,8 +229,33 @@ Et søk uten treff er svakt bevis: det kan bety at koden heter noe annet. Før e
 3. **Tekstene brukeren ser:** oversettelsesfilene (i fs-admin `src/common/messages/**/*.json`, og tilsvarende i min-kompetanse). En etikett der leder til komponenten som bruker den.
 4. **Kodeverk og databasen:** migrasjonene (`**/db/migration/*.sql`) og kodeverkstabellene. Et begrep kan finnes som kodeverdi (`POLITI_ATTEST`) uten å være koblet til det scenarioet gjelder.
 5. **API-et:** GraphQL-skjemaene (`*.graphqls`, `*.graphql`) i alle subgrafene, ikke bare den du venter.
+6. **Åpne MR-er og brancher** fra steg 2b (*Åpne MR-er og brancher*), med de samme søkeordene.
 
 Søk med `git -C <repo> grep -i` (eller Grep), som tar alle filtyper. Skill ekte kode fra genererte filer (`generated/`). List søkeordene og stedene i beviset. Finner du noe som ligner, men ikke dekker scenarioet, skriv det i beviset også: da er resultatet `ikke funnet`, men leseren ser hva som finnes.
+
+## Åpne MR-er og brancher
+
+Koden for et krav er ofte skrevet, men ikke merget. Før et scenario står som `ikke funnet`, skal du derfor ha sett etter den i åpne MR-er og aktive brancher i kodeklonene. Det som bare finnes der, er ikke levert: scenarioet blir `ikke funnet` (og kravet retagges ikke), men beviset og rapporten sier hvor koden er, så leseren ser at den er på vei.
+
+**Finn kandidatene** (steg 2b, én gang per klone, med Bash):
+
+1. `git -C <repo> fetch origin --prune`. Det flytter ikke utsjekket branch eller filer.
+2. Åpne MR-er: `glab mr list -R <gruppe/repo> -F json` (repoet fra `git -C <repo> remote get-url origin`, f.eks. `fs/fs-plattform` eller `studieadm/fs-admin`). Ta med utkast (`--draft`). Les `iid`, `title`, `source_branch`, `target_branch`, `author`, `draft`, `web_url`.
+3. Brancher uten MR: bare de som navnet peker ut, `git -C <repo> branch -r --list '*<nøkkel>*'`. Repoene har tusenvis av brancher, så ikke list alle.
+
+En MR eller branch er kandidat når nøkkelen står i branchnavnet, tittelen eller beskrivelsen (`glab mr view <iid> -R <repo>`): feature-ID-en (`OPT-OVO-INN-001`), `<slug>` fra scopet eller oppgaven, Jira-saken (`BAT-268`, fra `Issue` i `oppgave.md` og scope-tabellen), eller GitHub-issuet (`# GitHub:` i kravfila). Har du hint fra oppgaven (`<lag>/plan-*.md`, `task-*-completion.md`), bruk også filene og komponentene der: `glab mr diff <iid> -R <repo>` eller `git -C <repo> diff --name-only origin/<target>...origin/<source>` viser om MR-en rører dem. MR-er som ikke treffer noe, tas ikke med. Er det uklart om en MR hører til, ta den med og skriv «usikker kobling».
+
+**Let i dem** uten å sjekke ut noe:
+
+- `git -C <repo> grep -i -n "<ord>" origin/<source_branch> -- <sti>` og `git -C <repo> show origin/<source_branch>:<fil>`.
+- Gjelder bare for scenarioer som ikke er funnet på den utsjekkede branchen. Søkeordene er de samme som i *Negative søk*.
+- Er MR-en allerede merget, er koden på `main`: oppdater klonen (*Sjekk branchen*) i stedet for å lete i MR-en.
+
+**Beviset** får et eget format, så det ikke kan forveksles med levert kode: `ikke funnet på <branch> — finnes i MR !<iid> (<åpen | utkast>, <repo>, <source_branch>): <fil>:<linje> — <hva koden gjør>`. Resultatet i `## Scenarioer` er fortsatt `ikke funnet`, og FS Kravforvaltning leser det slik. Retagging, `## Forslag til endringer` og tallene i `## Oppsummering` bygger bare på det som er på den utsjekkede branchen.
+
+**Rapporten** får linja `- **Åpne MR-er:**` og seksjonen `## Åpne MR-er og brancher` (*rapportmal.md*), med MR-ene, hvilke krav de ser ut til å levere, og hvor mange scenarioer som er funnet der. Står en MR bak main eller har den konflikter (`glab mr view`), si det.
+
+**Kontrollen** gjelder dem også: kontrolløren får listen over MR-er og branchene som ble lett i, og sjekker at et `finnes i MR` er riktig, og at det ikke finnes kode i en MR som er oversett.
 
 ## Kontroll
 
@@ -348,7 +374,7 @@ Skjermbildene fra *Skjermbilder* lastes ikke opp. Siden lenker til mappa på Git
 
 ## Git
 
-Ikke `git add`, `commit`, `push`, `checkout` eller `stash` i noe repo. Lesende git-kommandoer (`git -C <repo> log`, `grep`, `ls-files`) er lov. Brukeren commiter endringene i `krav/`, eller lager PR med «Lag PR» i FS Kravforvaltning.
+Ikke `git add`, `commit`, `push`, `checkout` eller `stash` i noe repo. Lesende git-kommandoer (`git -C <repo> log`, `grep`, `ls-files`, `show`, `diff`, `fetch`) er lov, også mot andre refs (`origin/<branch>`). Det samme gjelder lesende `glab` (`glab mr list`, `view`, `diff`). Aldri `glab mr create`, `merge`, `note`, `approve`, `update` eller `close`. Brukeren commiter endringene i `krav/`, eller lager PR med «Lag PR» i FS Kravforvaltning.
 
 ## Referanser
 

@@ -31,6 +31,7 @@ Rapporten fra `fs-verify` og `fs-verify-agent-teams` følger denne malen, så to
 - **Krav:** `<krav-sti, oppgave eller @scope-<slug>>` (<N> feature-filer)
 - **Spec:** `spec/spec-<x>.md`                                         [oppgave, bare når scope er en spesifikasjon]
 - **Kode:** `<repo>` (<branch>, <kort sha>, <oppdatert | N bak origin | N bak main | ikke sjekket (Claude-panelet)>), `<repo>` (…)
+- **Åpne MR-er:** ingen funnet | <N> MR-er i <repo>, <N> i <repo> (<N> med kode for kravene) | ikke sjekket (Claude-panelet)
 - **Omfang:** <`@in-progress` | `@deprecated` | flyter | alle krav uansett status | <det brukeren skrev>, skilt med komma> (<valgt | standard, ikke valgt | fra prompten>)
 - **Avhengigheter:** ingen | <n> nivå(er), bare status | <n> nivå(er), verifisert i koden | alle nivåer, bare status | alle nivåer, verifisert i koden
 - **Bygger på:** `<sti til den forrige rapporten>`                    [gjennomgang]
@@ -100,11 +101,20 @@ I `Bevis` står **P** for fs-plattform, **A** for fs-admin og **M** for min-komp
 | --- | --- | --- | --- |
 | `@DOM-SUB-KAP-NNN` | <scenariotittel> | funnet | `<repo>/<fil>:<linje>` — <hva koden gjør> |
 | `@DOM-SUB-KAP-NNN` | <scenariotittel> | ikke funnet | <hva som finnes> — søkt etter «<ord>», «<ord>» i <repoer> |
+| `@DOM-SUB-KAP-NNN` | <scenariotittel> | ikke funnet | ikke funnet på <branch> — finnes i MR !<iid> (åpen, <repo>, <source_branch>): `<fil>:<linje>` — <hva koden gjør> |   [MR]
 | `@DOM-SUB-KAP-NNN` | <scenariotittel> | usikker | `<repo>/<fil>:<linje>` — <hvorfor det er uklart> |
 | `@DOM-SUB-KAP-NNN` | <scenariotittel> | funnet | P: funnet · A: ikke relevant · M: funnet — `<fil>:<linje>`, `<fil>:<linje>` |   [per repo]
 | `@FLY-PRO-FLY-NNN` | <scenariotittel> | funnet | lages: `<repo>/<fil>:<linje>` · brukes: `<repo>/<fil>:<linje>` — <hva som overleveres> |   [flyt]
 | `@FLY-PRO-FLY-NNN` | <scenariotittel> | ikke funnet | lages: `<repo>/<fil>:<linje>` · brukes: ikke funnet — søkt etter «<ord>» i <repoer> |   [flyt]
 | `@FLY-PRO-FLY-NNN` | <scenariotittel> | ikke funnet | fasen er ikke levert: `@DOM-SUB-KAP-NNN` er `@planned` — ikke søkt |   [flyt]
+
+## Åpne MR-er og brancher                                              [når MR-er eller brancher er funnet]
+
+Koden i disse er ikke merget, og regnes ikke som levert. Scenarioene som bare finnes her, står som `ikke funnet` i `## Scenarioer`, med `finnes i MR !<iid>` i beviset.
+
+| Repo | MR / branch | Status | Krav den ser ut til å levere | Funnet der | Merknad |
+| --- | --- | --- | --- | --- | --- |
+| `<repo>` | [!<iid> <tittel>](<web_url>) (`<source_branch>`) | åpen \| utkast \| branch uten MR | `@DOM-SUB-KAP-NNN` | <n>/<N> | <tom \| bak main \| konflikter \| usikker kobling> |
 
 ## Kontroll
 
