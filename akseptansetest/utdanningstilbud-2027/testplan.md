@@ -32,11 +32,11 @@ Testplan for «Utdanningstilbud i samordna opptak 2027». Planen sier hva som te
 
 | Nr | Navn | Rolle | Organisasjon | Brukes til |
 |---|---|---|---|---|
-| 1 | [Fylles ut: navn] | Opptaksforvalter ved forvaltende organisasjon | [Fylles ut: f.eks. HK-dir] | Legge til for en annen organisasjon, fjerne, trekke, redigere etter redigeringsfristen, filtrere på organisasjon, og detaljsiden (UTD-001, 002, 003, 026 og 04 Behandle et utdanningstilbud) |
-| 2 | [Fylles ut: navn] | Opptaksforvalter ved deltakende organisasjon | [Fylles ut: f.eks. Universitetet i Oslo] | Legge til og fjerne tilbud organisasjonen tilbyr innenfor redigeringsperioden, og trekkfristen (UTD-002, 003, 026) |
-| 3 | [Fylles ut: navn] | Opptaksforvalter ved deltakende organisasjon | [Fylles ut: f.eks. Universitetet i Bergen] | Den andre deltakende organisasjonen, med egne utdanningstilbud i opptaket (UTD-001, 002) |
+| 1 | ORDENTLIG RUNDSKRIV | Opptaksforvalter ved forvaltende organisasjon | [Fylles ut: den forvaltende organisasjonen i Sektordemo 23.10.26] | Legge til for en annen organisasjon, fjerne, trekke, redigere etter redigeringsfristen, filtrere på organisasjon, og detaljsiden (UTD-001, 002, 003, 026 og 04 Behandle et utdanningstilbud) |
+| 2 | KORT DOMPAPP UiT | Opptaksforvalter ved deltakende organisasjon | UiT Norges arktiske universitet | Legge til og fjerne tilbud organisasjonen tilbyr innenfor redigeringsperioden, og trekkfristen (UTD-002, 003, 026) |
+| 3 | KORT DOMPAPP UIO | Opptaksforvalter ved deltakende organisasjon | Universitetet i Oslo | Den andre deltakende organisasjonen, med egne utdanningstilbud i opptaket (UTD-001, 002) |
 
-Testbrukerne finnes i minst to organisasjoner, så vi kan teste at ingen ser data de ikke skal se.
+Testbrukerne finnes i minst to organisasjoner, så vi kan teste at ingen ser data de ikke skal se. Testeren velger selv hvilke utdanningstilbud og utdanninger som brukes i testcasene, så lenge de oppfyller kravene i testdata-tabellen.
 
 ### Testdata
 
@@ -53,15 +53,15 @@ Alle testcasene bruker opptaket «Sektordemo 23.10.26». Opptaket må være i ul
 | Hva | Navn | Hvor | Kan settes tilbake |
 |---|---|---|---|
 | Opptaket, med deltakende organisasjoner, i fasene over | Sektordemo 23.10.26 | FS Admin, Opptak | Fristene: ja, settes tilbake etter testen. Fjerning (1.1, 1.2, 1.4) og trekking (4.1) kan ikke angres. |
-| Utdanningstilbud i opptaket: minst tre som kan fjernes, ett som kan trekkes, og ett for økt 2 med kompetanseregelverk og rangeringsregelverk | [Fylles ut] | Sektordemo 23.10.26 | Nei, de fjernes eller trekkes |
-| Utdanningstilbud i opptaket fra minst to organisasjoner, med ulik starttermin og ulikt startår, og noen uten kompetanseregelverk eller rangeringsregelverk | [Fylles ut] | Sektordemo 23.10.26 | [Fylles ut] |
+| Utdanningstilbud i opptaket: minst tre som kan fjernes, ett som kan trekkes, og ett for økt 2 med kompetanseregelverk og rangeringsregelverk | Testeren velger | Sektordemo 23.10.26 | Nei, de fjernes eller trekkes |
+| Utdanningstilbud i opptaket fra UiT og UiO, med ulik starttermin og ulikt startår, og noen uten kompetanseregelverk eller rangeringsregelverk | Testeren velger | Sektordemo 23.10.26 | – |
 | En organisasjon som ikke er deltaker i opptaket, med utdanninger i utdanningsregisteret | [Fylles ut: f.eks. NTNU] | [Fylles ut] | – |
-| Utdanninger i utdanningsregisteret for de deltakende organisasjonene, nok til å legge til flere av gangen | [Fylles ut] | Utdanningsregisteret | – |
-| Utdanningstilbud med og uten beskrivelses-URL i utdanningsregisteret | [Fylles ut] | Utdanningsregisteret | – |
+| Utdanninger i utdanningsregisteret for de deltakende organisasjonene, nok til å legge til flere av gangen | Testeren velger | Utdanningsregisteret | – |
+| Utdanningstilbud med og uten beskrivelses-URL i utdanningsregisteret | Testeren velger | Utdanningsregisteret | – |
 | Standardregel for poenglikhet med tillatte unntak (9.1–9.3) | [Fylles ut: åpner Sektordemo 23.10.26 for unntak?] | FS Admin, Opptak | Ingenting endres |
 | Opptak med standardregel for poenglikhet uten mulighet for unntak (9.4) | [Fylles ut: eget opptak, eller endres innstillingen på Sektordemo 23.10.26?] | FS Admin, Opptak | [Fylles ut] |
 | Flere regler for poenglikhet som er tilgjengelige for opptaket, og minst én som ikke er det | [Fylles ut: reglene] | [Fylles ut] | Ingenting endres |
-| Utdanningstilbud i opptaket som bruker standardregelen for poenglikhet | [Fylles ut: utdanningstilbudet] | FS Admin, detaljsiden for utdanningstilbudet | [Fylles ut: Ja, regelen settes tilbake til standardregelen etter testen?] |
+| Utdanningstilbud i opptaket som bruker standardregelen for poenglikhet | Testeren velger | FS Admin, detaljsiden for utdanningstilbudet | [Fylles ut: Ja, regelen settes tilbake til standardregelen etter testen?] |
 | Søknadsfrist for opptaket (14.1) | [Fylles ut: søknadsfristen i Sektordemo 23.10.26] | Opptaksinnstillingene i Sektordemo 23.10.26 | – |
 
 ## Omfang
