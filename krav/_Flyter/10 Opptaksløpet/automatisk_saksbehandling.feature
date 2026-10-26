@@ -2,37 +2,38 @@
 @FLY-OPT-AUT-001 @must @draft @e2e @depends-on-FLY-OPT-SAK-001
 Egenskap: Automatisk saksbehandling
   Fra søknaden er blitt en sak hos den saksbehandlende organisasjonen, til saken er ferdig
-  behandlet og er med i plasstildelingen, uten at en saksbehandler har gjort noe. Flyten gjelder
-  søkere med ett vitnemål som gir generell studiekompetanse. Den automatiske behandlingen setter
-  GSK-konklusjonen, grunnlaget, poengene, vurderingen av kravelementene og kvoten, i den
-  rekkefølgen, og setter saken til ferdig behandlet når alt er avgjort. Søkere uten et slikt
-  vitnemål behandles manuelt, og er ikke med i flyten. Rettes en feil i regelverket, beregner
-  opptaksforvalteren søknadsalternativene feilen gjaldt, på nytt.
+  behandlet og er med i plasstildelingen, uten at en saksbehandler har gjort noe. GSK beregnes
+  for hvert vitnemål når søknaden kommer inn, før flyten. Flyten gjelder søkere med ett vitnemål
+  med positiv GSK-konklusjon, og søkere der saksbehandleren har valgt vitnemålet. Den automatiske
+  behandlingen setter grunnlaget, poengene, vurderingen av kravelementene og kvoten, i den
+  rekkefølgen, og setter saken til ferdig behandlet når alt er avgjort. Andre søkere behandles
+  manuelt, og er ikke med i flyten. Rettes en feil i regelverket, beregner opptaksforvalteren
+  søknadsalternativene feilen gjaldt, på nytt.
 
   # Kjent brudd: den automatiske behandlingen setter ikke saken til ferdig behandlet, og
   # plasstildelingen krever ikke at saken er ferdig behandlet (se OPT-BEH-BEH-025 og OPT-PLA-TIL-001).
+  # Kjent brudd: den automatiske behandlingen setter GSK-konklusjonen selv, og GSK lagres ikke på
+  # vitnemålet (se OPT-BEH-BEH-015).
 
   Bakgrunn:
     Gitt at søknaden til "Kari Nordmann" har en sak hos "Universitetet i Oslo"
-    Og at "Kari Nordmann" har ett vitnemål som gir generell studiekompetanse
+    Og at "Kari Nordmann" har ett vitnemål med positiv GSK-konklusjon
 
-  @depends-on-OPT-BEH-BEH-015 @openquestion
-  Regel: GSK fra vitnemålet blir søknadens GSK-konklusjon
-    # ÅPNE SPØRSMÅL:
-    # - Kravet om at vitnemålet i KREG sier om søkeren har generell studiekompetanse, mangler.
-    #   Hører det hjemme i 04 Kompetanse?
-    # - Kommer GSK på vitnemålet ferdig fra skolen, eller beregnes den når vitnemålet importeres
-    #   til KREG? I fs-plattform er det et obligatorisk felt i vitnemålet som importeres.
+  @depends-on-OPT-BEH-BEH-015 @depends-on-OPT-BEH-BEH-025
+  # OPT-BEH-BEH-015: «Konklusjon fra vitnemålet»
+  # OPT-BEH-BEH-025: «Bare saker med ett vitnemål med positiv GSK-konklusjon behandles helautomatisk»
+  Regel: Vitnemålet med positiv GSK-konklusjon avgjør om saken behandles helautomatisk
 
-    Scenario: Søknaden får GSK-konklusjonen fra vitnemålet
+    Scenario: Saken behandles helautomatisk på vitnemålet med positiv GSK-konklusjon
+      Gitt at vitnemålet til "Kari Nordmann" fikk en positiv GSK-konklusjon da søknaden kom inn
       Når søknaden behandles automatisk
-      Så har søknaden en positiv GSK-konklusjon fra vitnemålet
+      Så behandles saken hos "Universitetet i Oslo" helautomatisk på vitnemålet
 
   @depends-on-OPT-BEH-BEH-019
-  Regel: Søknaden får grunnlag fra GSK-konklusjonen
+  Regel: Søknaden får grunnlag fra vitnemålet
 
     Scenario: Søknaden får grunnlag
-      Gitt at søknaden har en positiv GSK-konklusjon fra vitnemålet
+      Gitt at saken hos "Universitetet i Oslo" behandles helautomatisk på vitnemålet
       Når søknaden behandles automatisk
       Så har søknaden grunnlag
 
@@ -72,6 +73,7 @@ Egenskap: Automatisk saksbehandling
       Så er søkeren plassert i "Ordinær kvote" for "Informatikk, UiO"
 
   @depends-on-OPT-BEH-BEH-025 @depends-on-OPT-PLA-TIL-001
+  # OPT-BEH-BEH-025: «Den automatiske behandlingen setter saken til ferdig behandlet når alt er avgjort»
   Regel: Saken blir ferdig behandlet og er med i plasstildelingen
 
     Scenario: Saken er med i plasstildelingen når den automatiske behandlingen har avgjort alt
