@@ -87,6 +87,17 @@ Egenskap: Ferdigbehandle en sak
       Så har saken en automatisk mangel som viser at "Matematikk R2" ikke er oppfylt
       Og saken hos "Universitetet i Oslo" er ferdig behandlet
 
+    @depends-on-OPT-BEH-BEH-008
+    Scenario: Den automatiske behandlingen publiserer manglene når saken blir ferdig behandlet
+      # Avklart 2026-10-26 i review av PR #818: saksbehandleren gjør ingenting i saken, så
+      # automatikken publiserer manglene når den setter saken til ferdig behandlet.
+      Gitt at "Informatikk, UiO" har kravelementene "Matematikk R2" og "Fysikk 2"
+      Og at vitnemålet verken har "Matematikk R2" eller "Fysikk 2"
+      Når søknaden behandles automatisk
+      Så er saken hos "Universitetet i Oslo" ferdig behandlet
+      Og søkeren ser de automatiske manglene for "Matematikk R2" og "Fysikk 2" i Min kompetanse
+      Og søkeren har mottatt én melding av typen MANGEL
+
   Regel: Steg som bygger på et steg som ikke kan avgjøres, hoppes over
 
     Bakgrunn:

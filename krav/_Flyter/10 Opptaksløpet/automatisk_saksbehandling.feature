@@ -56,12 +56,6 @@ Egenskap: Automatisk saksbehandling
       Når søknaden behandles automatisk
       Så er søkeren kvalifisert for "Informatikk, UiO"
 
-    Scenario: Saken får mangel når vitnemålet ikke oppfyller kravelementet
-      Gitt at søknaden har grunnlag
-      Og at "Informatikk, UiO" har kravelementet "Matematikk R2"
-      Og at vitnemålet ikke har "Matematikk R2"
-      Når søknaden behandles automatisk
-      Så har saken en automatisk mangel som viser at "Matematikk R2" ikke er oppfylt
 
   @depends-on-OPT-BEH-BEH-012
   Regel: Søkeren plasseres i kvote
@@ -84,11 +78,16 @@ Egenskap: Automatisk saksbehandling
       Så er saken hos "Universitetet i Oslo" ferdig behandlet
       Og saken hos "Universitetet i Oslo" er med når opptaksforvalteren starter en plasstildeling
 
-    Scenario: Saken går til saksbehandleren når et steg ikke kan avgjøres
+    Scenario: Søkeren ser mangelen fra kravelementene når saken er ferdig behandlet
+      Gitt at saken har en automatisk mangel som viser at "Matematikk R2" ikke er oppfylt
+      Når den automatiske behandlingen er ferdig
+      Så er saken hos "Universitetet i Oslo" ferdig behandlet
+      Og søkeren ser mangelen for "Matematikk R2" i Min kompetanse
+
+    Scenario: Saken går til saksbehandleren når poengene ikke kan beregnes
       Gitt at poengene for "Informatikk, UiO" ikke kan beregnes på grunn av en feil i rangeringsregelverket
       Når den automatiske behandlingen er ferdig
-      Så er saken hos "Universitetet i Oslo" under behandling
-      Og saken hos "Universitetet i Oslo" er ikke med når opptaksforvalteren starter en plasstildeling
+      Så er saken hos "Universitetet i Oslo" ikke med når opptaksforvalteren starter en plasstildeling
 
   @depends-on-OPT-BEH-BEH-026
   Regel: Søknadsalternativene beregnes på nytt når regelverket er rettet

@@ -23,6 +23,9 @@ Egenskap: Beregne automatisk på nytt
   # - En sak som var under behandling fordi et steg ikke kunne avgjøres, kan avgjøres når feilen er
   #   rettet. Blir den ferdig behandlet, eller må saksbehandleren gjøre det (OPT-BEH-BEH-025)?
   # - Skal søkeren få vite det når kvalifiseringen, poengene eller kvoten endres?
+  # - Når beregningen på nytt gir nye automatiske mangler i en sak som er ferdig behandlet, hvem
+  #   publiserer dem? Den automatiske behandlingen publiserer manglene når den setter saken til
+  #   ferdig behandlet (OPT-BEH-BEH-025), men her forblir saken ferdig behandlet.
   # - Kjører beregningen i bakgrunnen, som plasstildelingen, og ser opptaksforvalteren når den er
   #   ferdig?
 
