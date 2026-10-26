@@ -1,0 +1,99 @@
+# language: no
+@FLY-OPT-AUT-001 @must @draft @e2e @depends-on-FLY-OPT-SAK-001
+Egenskap: Automatisk saksbehandling
+  Fra søknaden er blitt en sak hos den saksbehandlende organisasjonen, til saken er ferdig
+  behandlet og er med i plasstildelingen, uten at en saksbehandler har gjort noe. Flyten gjelder
+  søkere med ett vitnemål som gir generell studiekompetanse. Den automatiske behandlingen setter
+  GSK-konklusjonen, grunnlaget, poengene, vurderingen av kravelementene og kvoten, i den
+  rekkefølgen, og setter saken til ferdig behandlet når alt er avgjort. Søkere uten et slikt
+  vitnemål behandles manuelt, og er ikke med i flyten. Rettes en feil i regelverket, beregner
+  opptaksforvalteren søknadsalternativene feilen gjaldt, på nytt.
+
+  # Kjent brudd: den automatiske behandlingen setter ikke saken til ferdig behandlet, og
+  # plasstildelingen krever ikke at saken er ferdig behandlet (se OPT-BEH-BEH-025 og OPT-PLA-TIL-001).
+
+  Bakgrunn:
+    Gitt at søknaden til "Kari Nordmann" har en sak hos "Universitetet i Oslo"
+    Og at "Kari Nordmann" har ett vitnemål som gir generell studiekompetanse
+
+  @depends-on-OPT-BEH-BEH-015 @openquestion
+  Regel: GSK fra vitnemålet blir søknadens GSK-konklusjon
+    # ÅPNE SPØRSMÅL:
+    # - Kravet om at vitnemålet i KREG sier om søkeren har generell studiekompetanse, mangler.
+    #   Hører det hjemme i 04 Kompetanse?
+    # - Kommer GSK på vitnemålet ferdig fra skolen, eller beregnes den når vitnemålet importeres
+    #   til KREG? I fs-plattform er det et obligatorisk felt i vitnemålet som importeres.
+
+    Scenario: Søknaden får GSK-konklusjonen fra vitnemålet
+      Når søknaden behandles automatisk
+      Så har søknaden en positiv GSK-konklusjon fra vitnemålet
+
+  @depends-on-OPT-BEH-BEH-019
+  Regel: Søknaden får grunnlag fra GSK-konklusjonen
+
+    Scenario: Søknaden får grunnlag
+      Gitt at søknaden har en positiv GSK-konklusjon fra vitnemålet
+      Når søknaden behandles automatisk
+      Så har søknaden grunnlag
+
+  @depends-on-OPT-BEH-BEH-018 @depends-on-OPT-REG-RAN-002
+  Regel: Poengene beregnes fra grunnlaget og rangeringsregelverket
+
+    Scenario: Søknadsalternativet får poengsum
+      Gitt at søknaden har grunnlag
+      Når søknaden behandles automatisk
+      Så har "Informatikk, UiO" poengsum for søknaden
+
+  @depends-on-OPT-BEH-BEH-020 @depends-on-OPT-BEH-BEH-008
+  # OPT-BEH-BEH-008: «Saken får mangler for kravelementene søkeren ikke oppfyller»
+  Regel: Kravelementene avgjør om søkeren er kvalifisert
+
+    Scenario: Søkeren er kvalifisert når vitnemålet oppfyller kravelementene
+      Gitt at søknaden har grunnlag
+      Og at "Informatikk, UiO" har kravelementet "Matematikk R1"
+      Og at vitnemålet har "Matematikk R1"
+      Når søknaden behandles automatisk
+      Så er søkeren kvalifisert for "Informatikk, UiO"
+
+    Scenario: Saken får mangel når vitnemålet ikke oppfyller kravelementet
+      Gitt at søknaden har grunnlag
+      Og at "Informatikk, UiO" har kravelementet "Matematikk R2"
+      Og at vitnemålet ikke har "Matematikk R2"
+      Når søknaden behandles automatisk
+      Så har saken en automatisk mangel som viser at "Matematikk R2" ikke er oppfylt
+
+  @depends-on-OPT-BEH-BEH-012
+  Regel: Søkeren plasseres i kvote
+
+    Scenario: Den kvalifiserte søkeren plasseres i kvoten grunnlaget er koblet til
+      Gitt at søkeren er kvalifisert for "Informatikk, UiO"
+      Og at grunnlaget er koblet til kvotetypen "Ordinær kvote"
+      Når søknaden behandles automatisk
+      Så er søkeren plassert i "Ordinær kvote" for "Informatikk, UiO"
+
+  @depends-on-OPT-BEH-BEH-025 @depends-on-OPT-PLA-TIL-001
+  Regel: Saken blir ferdig behandlet og er med i plasstildelingen
+
+    Scenario: Saken er med i plasstildelingen når den automatiske behandlingen har avgjort alt
+      Gitt at søkeren er kvalifisert for "Informatikk, UiO"
+      Og at "Informatikk, UiO" har poengsum for søknaden
+      Og at søkeren er plassert i kvote for "Informatikk, UiO"
+      Når den automatiske behandlingen er ferdig
+      Så er saken hos "Universitetet i Oslo" ferdig behandlet
+      Og saken hos "Universitetet i Oslo" er med når opptaksforvalteren starter en plasstildeling
+
+    Scenario: Saken går til saksbehandleren når et steg ikke kan avgjøres
+      Gitt at poengene for "Informatikk, UiO" ikke kan beregnes på grunn av en feil i rangeringsregelverket
+      Når den automatiske behandlingen er ferdig
+      Så er saken hos "Universitetet i Oslo" under behandling
+      Og saken hos "Universitetet i Oslo" er ikke med når opptaksforvalteren starter en plasstildeling
+
+  @depends-on-OPT-BEH-BEH-026
+  Regel: Søknadsalternativene beregnes på nytt når regelverket er rettet
+
+    Scenario: Poengene beregnes på nytt når rangeringsregelverket er rettet
+      Gitt at saken hos "Universitetet i Oslo" er ferdig behandlet
+      Og at opptaksforvalteren har rettet rangeringsregelverket for "Informatikk, UiO"
+      Når opptaksforvalteren beregner poengene på nytt for "Informatikk, UiO"
+      Så har "Informatikk, UiO" poengsum etter det rettede rangeringsregelverket
+      Og saken hos "Universitetet i Oslo" er fortsatt ferdig behandlet

@@ -108,6 +108,7 @@ Egenskap: Søknadsmangler
         | Poeng    |
         | Kvote    |
 
+    @ref-OPT-BEH-BEH-025
     Scenario: Saken kan behandles ferdig selv om den har mangler
       Gitt at saken hos "Universitetet i Oslo" har mangelen "KAR"
       Når saksbehandleren ved Universitetet i Oslo har behandlet saken så langt dokumentasjonen rekker
@@ -457,7 +458,7 @@ Egenskap: Søknadsmangler
 
   # ── 6. Automatikk ────────────────────────────────────────────
 
-  @draft @openquestion @depends-on-OPT-BEH-BEH-020
+  @draft @openquestion @depends-on-OPT-BEH-BEH-020 @ref-FLY-OPT-AUT-001
   Regel: Saken får mangler for kravelementene søkeren ikke oppfyller
 
     Manglene lages når kravelementene i saken vurderes, av den automatiske behandlingen eller av

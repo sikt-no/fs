@@ -32,6 +32,7 @@ Egenskap: Automatisk GSK-konklusjon
   # Det avviker fra Sikts tolkning i Confluence v2 om at GSK i fagskoleopptak ikke
   # skal lagres som konklusjon, fordi GSK der er et alternativt kompetansekrav.
 
+  @ref-FLY-OPT-AUT-001
   Regel: Konklusjon fra vitnemålet
 
     Scenario: Vitnemål som gir generell studiekompetanse
