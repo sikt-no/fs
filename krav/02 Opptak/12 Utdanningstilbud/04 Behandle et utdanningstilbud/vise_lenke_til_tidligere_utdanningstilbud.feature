@@ -9,7 +9,12 @@ Egenskap: Vise lenke til tidligere utdanningstilbud
   Bakgrunn:
     Gitt at opptaksforvalter har åpnet et utdanningstilbud
 
+  @openquestion
   Regel: Lenke til tidligere utdanningstilbud kan settes og vises
+    # ÅPNE SPØRSMÅL:
+    # - Hva menes med "tidligere utdanningstilbud" — fjorårets tilbud, eller et tilbud som er erstattet?
+    # - Settes lenken manuelt, eller utledes den automatisk?
+    # - Skal lenken framvises for opptaksforvalter, for søkeren, eller begge?
 
     Scenario: Sette lenke til tidligere utdanningstilbud
       Når opptaksforvalter setter en lenke til et tidligere utdanningstilbud
@@ -18,8 +23,3 @@ Egenskap: Vise lenke til tidligere utdanningstilbud
     Scenario: Se lenke til tidligere utdanningstilbud
       Gitt at utdanningstilbudet har en lenke til et tidligere utdanningstilbud
       Så vises lenken til det tidligere utdanningstilbudet
-
-# ÅPNE SPØRSMÅL:
-# - Dette er merket "draft:" i Jira. Hva menes med "tidligere utdanningstilbud" — fjorårets tilbud, eller et tilbud som er erstattet?
-# - Settes lenken manuelt, eller utledes den automatisk?
-# - Skal lenken framvises for opptaksforvalter, for søkeren, eller begge?
