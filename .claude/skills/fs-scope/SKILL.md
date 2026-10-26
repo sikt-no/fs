@@ -64,7 +64,7 @@ Brukeren gir en eller flere Figma-lenker. Skjermene og flytene i skissen blir ka
 Brukes i modus A og B når en ny oppgave trengs.
 
 1. **Domene.** Oppgavene i et scope ligger i samme domene som scope-fila. Bare verdiene i domenetabellen i `tasks/README.md` er gyldige. Finnes ikke domenet, pek på «Legge til et nytt domene» i README-en og stopp. Skillen oppretter ikke domener.
-2. **Issue.** Én oppgave ≙ én Jira-sak (se *Forholdet til Jira og GitHub* i `tasks/README.md`). Spør etter saksnøkkelen. Har oppgaven ikke issue enda, skriv `–` i metadata og legg et punkt under `## Åpne punkter` nederst i fila om at issue mangler.
+2. **Issue.** Én oppgave ≙ én Jira-sak (se *Forholdet til Jira og GitHub* i `tasks/README.md`). Spør etter saksnøkkelen. Har oppgaven ikke issue enda, skriv `–` i metadata og legg et punkt under `## Åpne punkter` nederst i fila om at issue mangler. Før en ny Jira-sak foreslås for oppgaven, kjør `jira-overlapp-sjekk`, så saken ikke overlapper med en som finnes.
 3. **Slug.** Kebab-case, lesbar beskrivelse, ikke issue-nummeret. Æ/ø/å skrives som ae/o/a. Sjekk med `Glob` at `tasks/<domene>/<slug>/` ikke finnes fra før.
 4. **Skriv `tasks/<domene>/<slug>/oppgave.md`** fra `tasks/mal/oppgave.md`:
    - Fjern malkommentaren (`<!-- … -->`) øverst.
