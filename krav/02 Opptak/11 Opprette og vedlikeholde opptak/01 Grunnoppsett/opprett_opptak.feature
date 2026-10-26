@@ -54,11 +54,11 @@ Egenskap: Opprette et opptak
       Men opptaksforvalter setter ikke opptakstype
       Så kan opptaket ikke lagres
 
-  # AVKLART 2026-10-19: Utdanningsbakgrunner, poenglikhetsregel, antall søknadsalternativer og tak for antall tilbud
-  # per tildelingsrunde må være satt for å opprette et opptak. Startnummer for søknader er ikke obligatorisk,
+  # AVKLART 2026-10-19: Utdanningsbakgrunner, poenglikhetsregel og antall søknadsalternativer
+  # må være satt for å opprette et opptak. Startnummer for søknader er ikke obligatorisk,
   # se 03 Innstillinger/innstillinger.feature.
   @in-progress
-  Regel: Utdanningsbakgrunner, poenglikhetsregel, maks antall søknadsalternativer og tak for tilbud per tildelingsrunde må være satt for å lagre et opptak
+  Regel: Utdanningsbakgrunner, poenglikhetsregel og maks antall søknadsalternativer må være satt for å lagre et opptak
 
     Scenariomal: Lagre opptak uten <innstilling>
       Når opptaksforvalter oppretter et nytt opptak
@@ -73,7 +73,6 @@ Egenskap: Opprette et opptak
         | utdanningsbakgrunner                      |
         | standard poenglikhetsregel                |
         | maks antall søknadsalternativer           |
-        | tak for antall tilbud per tildelingsrunde |
 
   # Endret 2026-10-19 etter akseptansetesten: de to reglene om navn er slått sammen, fordi de testet det samme.
   # Atferden er den samme. Samisk er valgfritt.
