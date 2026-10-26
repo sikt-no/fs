@@ -30,6 +30,8 @@
   | 3.4 | `@OPT-OPT-UTD-001` | Opptaksforvalter kan filtrere på navn på studieprogram | Fritekst-søk på studieprogramnavn |
   | 3.5 | `@OPT-OPT-UTD-001` | Opptaksforvalter kan filtrere på utdanningstilbud med ufullstendige opplysninger | Filtrere på utdanningstilbud som mangler kompetanseregelverk |
   | 3.6 | `@OPT-OPT-UTD-001` | Opptaksforvalter kan filtrere på utdanningstilbud med ufullstendige opplysninger | Filtrere på utdanningstilbud som mangler rangeringsregelverk |
+  | 3.7 | `@OPT-OPT-UTD-001` | Opptaksforvalter ved deltakende organisasjon ser kun utdanningstilbud organisasjonen tilbyr | Deltakende organisasjon ser kun utdanningstilbudene sine |
+  | 3.8 | `@OPT-OPT-UTD-001` | Opptaksforvalter ved deltakende organisasjon ser kun utdanningstilbud organisasjonen tilbyr | Deltakende organisasjon ser ikke utdanningstilbud en annen organisasjon tilbyr |
   | 4.1 | `@OPT-OPT-UTD-003` | Opptaksforvalter ved deltakende organisasjon eller forvaltende organisasjon kan trekke utdanningstilbud | Opptaksforvalter ved forvaltende organisasjon trekker utdanningstilbud |
   | 4.2 | `@OPT-OPT-UTD-003` | Trekking er ikke mulig etter trekkfristen for deltakende organisasjoner | Opptaksforvalter ved deltakende organisasjon forsøker å trekke etter trekkfristen |
   | 5.1a | `@OPT-OPT-UTD-016` | Beskrivelse til Min kompetanse kan angis per språk | Angi beskrivelse på <språk> (bokmål) |
@@ -62,7 +64,7 @@
 
 Intern akseptansetest av «Utdanningstilbud i samordna opptak 2027». Testbeskrivelsen, testbrukerne og testdataene står i [testplanen](https://sikt.atlassian.net/wiki/spaces/STUDIEADM/pages/5137235987).
 
-Testen har 45 testcaser og tar 1,5–3 timer. Den er delt i to økter: økt 1 er del 1–4 (utdanningstilbud i opptaket, 20 testcaser), og økt 2 er del 5–15 (detaljsiden for et utdanningstilbud, 25 testcaser).
+Testen har 47 testcaser og tar 1,5–3 timer. Den er delt i to økter: økt 1 er del 1–4 (utdanningstilbud i opptaket, 22 testcaser), og økt 2 er del 5–15 (detaljsiden for et utdanningstilbud, 25 testcaser).
 
 ## Slik tester du
 
@@ -176,6 +178,15 @@ Alle testcasene bruker opptaket «Sektordemo 23.10.26». Opptaket må være i ul
 | 3.5 | Filtrere på utdanningstilbud som mangler kompetanseregelverk | 1. Fortsett som testbruker 1, i lista over utdanningstilbud i det samme opptaket. <br>2. Velg «Har mangler» i filteret «Status». | Lista viser utdanningstilbudene uten kompetanseregelverk, med «Ikke valgt» i «Kompetanseregelverk» og «Har mangler» i «Status». Ingen av radene har «OK» i «Status». | | |
 | 3.6 | Filtrere på utdanningstilbud som mangler rangeringsregelverk | 1. Fortsett som testbruker 1, med «Har mangler» valgt i filteret «Status». <br>2. Se gjennom kolonnen «Rangeringsregelverk» i lista. | Lista viser utdanningstilbudene uten rangeringsregelverk, med «Ikke valgt» i «Rangeringsregelverk» og «Har mangler» i «Status». | | |
 | | | *Gjør klar til neste test: velg «Fjern alle filtre».* | | | |
+
+#### Regel: Opptaksforvalter ved deltakende organisasjon ser kun utdanningstilbud organisasjonen tilbyr
+
+| Nr | Scenario | Steg | Forventet resultat | Faktisk resultat | Status |
+|---|---|---|---|---|---|
+| 3.7 | Deltakende organisasjon ser kun utdanningstilbudene sine | 1. Logg ut, og logg inn som testbruker 3 (KORT DOMPAPP UIO, opptaksforvalter ved Universitetet i Oslo). <br>2. Gå til «Opptak», velg opptaket «Sektordemo 23.10.26», og velg «Gå til utdanningstilbud». <br>3. Se gjennom kolonnen «Organisasjon» i lista. | Lista viser bare utdanningstilbud med «UiO» i «Organisasjon». | | |
+| 3.8 | Deltakende organisasjon ser ikke utdanningstilbud en annen organisasjon tilbyr | 1. Fortsett som testbruker 3, i lista over utdanningstilbud i Sektordemo 23.10.26. <br>2. Skriv inn navnet på et utdanningstilbud som UiT tilbyr, for eksempel det fra 2.1, i «Søk». | Utdanningstilbudet som UiT tilbyr, står ikke i lista. | | |
+
+Kjent mangel: verifiseringen 2026-10-22 fant at en deltakende organisasjon ser alle utdanningstilbudene i opptaket. Ser testbruker 3 utdanningstilbud fra andre organisasjoner, skriv det i «Faktisk resultat», og sett «Ikke bestått». Avviket føres som en kjent mangel, og gir ikke «Ikke godkjent» alene.
 
 ### Del 4: Trekke utdanningstilbud fra opptak (trekke_utdanningstilbud.feature)
 
@@ -335,7 +346,6 @@ Scenarioene er laget, men kan ikke testes i testmiljøet ennå.
 | Legge til: redigering er stengt når åpningsdatoen ikke er satt | Venter på verifisering: løsningen holder redigeringen åpen |
 | Legge til: endringer fra utdanningsregisteret oppdateres etter at redigering stenger | Venter på verifisering: utdanningstilbudene oppdateres ikke automatisk |
 | Legge til: deltakende organisasjon kan ikke redigere et utdanningstilbud en annen organisasjon tilbyr | Venter på verifisering: ikke levert ennå (SHI-747) |
-| Liste: deltakende organisasjon ser bare utdanningstilbudene sine (2 scenarioer) | Venter på verifisering: deltakende organisasjon ser alle utdanningstilbudene i opptaket |
 | Liste: filtrere på utdanningstilbud som mangler kvoteprioritet eller plassflyt, tilbudsgaranti, tidlig søknadsfrist eller poenggrense for tidlig opptak (4 scenarioer) | Venter på verifisering: «Har mangler» tar bare med kompetanseregelverk, rangeringsregelverk og kvoter |
 | Trekke: deltakende organisasjon trekker et utdanningstilbud organisasjonen tilbyr | Venter på verifisering: deltakende organisasjon har ikke knappen for å trekke |
 | Trekke: deltakende organisasjon kan ikke trekke et utdanningstilbud en annen organisasjon tilbyr | Venter på verifisering: ikke levert ennå (SHI-747) |
