@@ -193,8 +193,9 @@ Egenskap: Listevisning og søk i utdanningstilbud
       Og ingen semestre er valgt som standard
 
     # Progresjonen utledes av prosenttallet for heltid: 100 er heltid, under 100 er deltid.
-    # Prosenttallet er påkrevd på studieprogram og studieretning. Mangler det på et emne, er ingenting
-    # registrert, og emnet regnes som 100 % heltid (Kjartan, 2026-10-26).
+    # - Prosenttallet er påkrevd på studieprogram og studieretning, og alle har en verdi (Kjartan, via Haakon Paulin).
+    # - Mangler verdien, er progresjonen ikke registrert i SIS (Haakon Paulin).
+    # - Mangler verdien, regnes utdanningstilbudet som heltid (Kjetil Røse Høybråten).
     Scenario: Tilgjengelige progresjoner i filter
       Når søkeren åpner filteret for progresjon
       Så inneholder filteret disse progresjonene:
