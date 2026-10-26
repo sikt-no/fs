@@ -1,6 +1,6 @@
 # language: no
 # GitHub: #597
-@OPT-OPT-UTD-004 @must @draft @scope-utdanningstilbud-2027
+@OPT-OPT-UTD-004 @must @in-progress @scope-utdanningstilbud-2027
 Egenskap: Opptaksinnstillinger per utdanningstilbud
   Som opptaksforvalter
   ønsker jeg å sette opptaksinnstillinger per utdanningstilbud
@@ -29,6 +29,7 @@ Egenskap: Opptaksinnstillinger per utdanningstilbud
     # - Kommentaren om at regelverkssamlingen ikke kan byttes, viser til innstillinger.feature i fritekst.
     #   Skal regelen ha @ref-OPT-OVO-INN-001?
 
+    @implemented
     Scenario: Sette regelverk på ett utdanningstilbud
       Når opptaksforvalter velger utdanningstilbudet "Sykepleie, høst 2027"
       Og opptaksforvalter setter kompetanseregelverk til "GSK"
@@ -36,6 +37,7 @@ Egenskap: Opptaksinnstillinger per utdanningstilbud
       Så vurderes søkere til "Sykepleie, høst 2027" etter GSK-kravene
       Og søkere rangeres etter reglene i "Ordinær rangering"
 
+    @implemented
     Scenario: Kun regelverk fra opptakets regelverkssamling kan velges
       Når opptaksforvalter setter regelverk for et utdanningstilbud
       Så kan opptaksforvalter kun velge blant regelverkene i opptakets regelverkssamling
@@ -71,6 +73,7 @@ Egenskap: Opptaksinnstillinger per utdanningstilbud
     #   regelen ha @ref-OPT-PLA-INN-001 og @ref-OPT-PLA-INN-002 (eller @depends-on-, hvis den må sjekkes
     #   når de endres)?
 
+    @implemented
     Scenario: Legge til utdanningskvoter fra regelverkssamlingen
       Gitt at opptaket bruker regelverkssamlingen "UHG 2027"
       Og at regelverkssamlingen "UHG 2027" har kvotetypene "Samisk førstegangsvitnemål (SAMF)", "Førstegangsvitnemål (ORDF)" og "Ordinær kvote (ORD)"
@@ -93,11 +96,13 @@ Egenskap: Opptaksinnstillinger per utdanningstilbud
       Når opptaksforvalter ved lærestedet vil fjerne "Ordinær kvote (ORD)" fra utdanningstilbudet
       Så kan opptaksforvalter ikke fjerne "Ordinær kvote (ORD)"
 
+    @implemented
     Scenario: Fjerne en utdanningskvote fra utdanningstilbudet
       Gitt at utdanningstilbudet "Sykepleie, høst 2027" har utdanningskvotene "Førstegangsvitnemål (ORDF)" og "Ordinær kvote (ORD)"
       Når opptaksforvalter ved lærestedet fjerner "Førstegangsvitnemål (ORDF)" fra utdanningstilbudet
       Så har utdanningstilbudet "Sykepleie, høst 2027" bare utdanningskvoten "Ordinær kvote (ORD)"
 
+    @implemented
     Scenario: Kvotetyper som ikke er i regelverkssamlingen, kan ikke legges til
       Gitt at kvotetypen "Samisk språkkompetanse (SAM)" ikke er med i regelverkssamlingen for opptaket
       Når opptaksforvalter ved lærestedet vil legge til "Samisk språkkompetanse (SAM)" på utdanningstilbudet "Sykepleie, høst 2027"
@@ -115,6 +120,7 @@ Egenskap: Opptaksinnstillinger per utdanningstilbud
         | kvoteprioritet  |
         | plassflyt       |
 
+    @implemented
     Scenario: Regelverksforvalter legger til en kvotetype i regelverkssamlingen
       Gitt at regelverksforvalter er ved forvaltende organisasjon "HK-dir"
       Og at HK-dir har opprettet regelverkssamlingen "UHG 2027"
@@ -135,6 +141,7 @@ Egenskap: Opptaksinnstillinger per utdanningstilbud
         | Førstegangsvitnemål (ORDF) | 2              |
         | Ordinær kvote (ORD)        | 3              |
 
+    @implemented
     Scenario: Utdanningskvotene følger plassflyten i regelverkssamlingen
       Gitt at standard plassflyt i regelverkssamlingen "UHG 2027" sender "Førstegangsvitnemål (ORDF)" til "Ordinær kvote (ORD)"
       Og at opptaket bruker regelverkssamlingen "UHG 2027"
@@ -186,7 +193,7 @@ Egenskap: Opptaksinnstillinger per utdanningstilbud
       Når opptaksforvalter ved lærestedet ser utdanningstilbudet "Sykepleie, høst 2027"
       Så ser opptaksforvalter ikke muligheten til å endre plassflyten eller kvoteprioriteten
 
-  @depends-on-OPT-OVO-INN-001 @openquestion
+  @depends-on-OPT-OVO-INN-001 @openquestion @implemented
   Regel: Opptaksforvalter kan markere at et utdanningstilbud tilbyr tidlig opptak
     # ÅPNE SPØRSMÅL:
     # - Kommentarene i regelen viser til publisere_svar_på_tidlig_opptak.feature og
@@ -236,7 +243,7 @@ Egenskap: Opptaksinnstillinger per utdanningstilbud
   # Et utdanningstilbud er ute av en plasstildelingsrunde når det ikke er satt antall tilbud som skal gis for plasstildelingsrunden,
   # se 14 Plasstildeling/02 Tildelingsinnstillinger/antall_tilbud_som_skal_gis.feature.
 
-  @depends-on-OPT-BEH-BEH-011 @ref-FLY-OPT-SAK-001
+  @depends-on-OPT-BEH-BEH-011 @ref-FLY-OPT-SAK-001 @implemented
   Regel: Opptaksforvalter kan velge saksbehandlertildelingsregel per utdanningstilbud
     # Reglene, og om de er aktive, settes der. Hvordan søknadsalternativene fordeles etter regelen, står også der.
 
@@ -268,6 +275,7 @@ Egenskap: Opptaksinnstillinger per utdanningstilbud
       Når opptaksforvalter angir at ventelistenummer skal vises for søkere på utdanningstilbudet "Sykepleie, høst 2027"
       Så kan søkere se sitt ventelistenummer for "Sykepleie, høst 2027"
 
+  @implemented
   Regel: Opptaksforvalter kan sette opplysninger om tilbudsgaranti
 
     Scenario: Sette hvor tilbudsgarantier tas fra

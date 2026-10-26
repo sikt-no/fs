@@ -154,6 +154,7 @@ Egenskap: Legge til utdanningstilbud i opptak
       Når utdanningen til "Sykepleie, høst 2027" endres i utdanningsregisteret "2027-06-10"
       Så oppdateres utdanningstilbudet "Sykepleie, høst 2027" i opptaket med endringen
 
+  @implemented
   Regel: Opptaksforvalter ved deltakende organisasjon kan bare redigere utdanningstilbud organisasjonen tilbyr
     # Jira: SHI-747
 

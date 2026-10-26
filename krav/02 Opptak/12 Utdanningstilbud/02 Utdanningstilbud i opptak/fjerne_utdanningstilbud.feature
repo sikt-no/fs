@@ -46,18 +46,16 @@ Egenskap: Fjerne utdanningstilbud fra opptak
   # for utdanningstilbud.
   # Forvaltende organisasjon kan fjerne alle utdanningstilbud også etter redigeringsfristen, fram til
   # opptaket åpner for søknad.
-  @depends-on-OPT-OVO-FRI-001 @ref-OPT-OPT-UTD-001
+  @depends-on-OPT-OVO-FRI-001 @ref-OPT-OPT-UTD-001 @implemented
   Regel: Opptaksforvalter ved deltakende organisasjon kan fjerne utdanningstilbud organisasjonen tilbyr, fram til redigeringsfristen
     # Opptaksforvalter ved deltakende organisasjon ser ikke utdanningstilbud en annen organisasjon tilbyr.
 
-    @implemented
     Scenario: Deltakende organisasjon fjerner eget utdanningstilbud før redigeringsfristen
       Gitt at opptaksforvalter er ved deltakende organisasjon "Universitetet i Oslo"
       Og at redigering av utdanningstilbud er åpen i opptaket
       Når opptaksforvalter fjerner utdanningstilbudet "Sykepleie, høst 2027", som "Universitetet i Oslo" tilbyr
       Så er utdanningstilbudet ikke lenger med i opptaket
 
-    @implemented
     Scenario: Deltakende organisasjon kan ikke fjerne eget utdanningstilbud etter redigeringsfristen
       Gitt at opptaksforvalter er ved deltakende organisasjon "Universitetet i Oslo"
       Og at redigering av utdanningstilbud er stengt i opptaket

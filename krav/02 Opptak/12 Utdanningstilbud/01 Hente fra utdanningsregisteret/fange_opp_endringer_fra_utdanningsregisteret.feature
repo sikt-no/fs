@@ -1,6 +1,6 @@
 # language: no
 # GitHub: #591, #592
-@OPT-OPT-UTD-006 @must @draft @scope-utdanningstilbud-i-opptak-2027
+@OPT-OPT-UTD-006 @must @in-progress @scope-utdanningstilbud-i-opptak-2027
 Egenskap: Fange opp endringer fra utdanningsregisteret
   Som opptaksforvalter
   ønsker jeg at endringer på utdanninger i utdanningsregisteret kommer med over i opptaket
@@ -43,6 +43,7 @@ Egenskap: Fange opp endringer fra utdanningsregisteret
       Så får opptaksforvalter beskjed om at utdanningstilbudet er deaktivert i utdanningsregisteret
       Og opptaksforvalter kan trekke utdanningstilbudet fra opptaket
 
+    @implemented
     Scenario: Deaktivert utdanningsinstans er ikke tilgjengelig
       Gitt at utdanningsregisteret har en instans av bachelorprogrammet "Vernepleie" med studiestart høst 2027
       Og at utdanningstilbudet "Vernepleie, høst 2027" ikke er lagt til i opptaket
@@ -51,6 +52,7 @@ Egenskap: Fange opp endringer fra utdanningsregisteret
 
   Regel: Reaktivering i utdanningsregisteret fanges opp i opptaket (#592)
 
+    @implemented
     Scenario: Reaktivert utdanningsinstans blir tilgjengelig igjen
       Gitt at utdanningsinstansen for "Vernepleie, høst 2027" er deaktivert i utdanningsregisteret
       Og at utdanningstilbudet ikke er lagt til i opptaket

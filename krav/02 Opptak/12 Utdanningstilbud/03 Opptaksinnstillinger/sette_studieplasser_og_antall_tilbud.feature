@@ -1,6 +1,6 @@
 # language: no
 # GitHub: #596
-@OPT-OPT-UTD-007 @must @draft @scope-utdanningstilbud-2027
+@OPT-OPT-UTD-007 @must @in-progress @scope-utdanningstilbud-2027
 Egenskap: Sette antall studieplasser per utdanningstilbud
   Som opptaksforvalter
   ønsker jeg å sette hvor mange studieplasser vi har per utdanningstilbud
@@ -18,6 +18,7 @@ Egenskap: Sette antall studieplasser per utdanningstilbud
     Gitt at opptaksforvalter er innlogget
     Og at utdanningstilbudet "Sykepleie, høst 2027" er lagt til i opptaket "Samordna opptak 2027"
 
+  @implemented
   Regel: Opptaksforvalter setter antall studieplasser
 
     Scenario: Sette antall studieplasser
@@ -43,12 +44,14 @@ Egenskap: Sette antall studieplasser per utdanningstilbud
     # av utdanningstilbud, og kan endres til første plasstildelingsrunde er publisert. Plasstildelinger som bare
     # er kjørt for kontroll, låser det ikke.
 
+    @implemented
     Scenario: Endre antall studieplasser etter at redigering av utdanningstilbud har stengt
       Gitt at redigering av utdanningstilbud i opptaket har stengt
       Og at ingen plasstildelingsrunde i opptaket er publisert
       Når opptaksforvalter ved deltakende organisasjon setter antall studieplasser til 180 for utdanningstilbudet "Sykepleie, høst 2027"
       Så har utdanningstilbudet 180 studieplasser
 
+    @implemented
     Scenario: Endre antall studieplasser etter en plasstildeling som bare er kjørt for kontroll
       Gitt at en plasstildeling i opptaket er kjørt for kontroll, men ikke publisert
       Når opptaksforvalter setter antall studieplasser til 180 for utdanningstilbudet "Sykepleie, høst 2027"
@@ -62,6 +65,7 @@ Egenskap: Sette antall studieplasser per utdanningstilbud
     # AVKLART 2026-10-19 (produkteier): Låsen gjelder ikke opptaksforvalter ved forvaltende organisasjon, foreløpig.
     # På sikt bør antall studieplasser komme fra antall plasser som er registrert på kullet i SIS, men det er en
     # standardisering vi ikke er klare for ennå.
+    @implemented
     Scenario: Forvaltende organisasjon kan endre antall studieplasser etter at første plasstildelingsrunde er publisert
       Gitt at første plasstildelingsrunde i opptaket er publisert
       Når opptaksforvalter ved forvaltende organisasjon setter antall studieplasser til 180 for utdanningstilbudet "Sykepleie, høst 2027"
