@@ -1,6 +1,6 @@
 # Confluence i testflyten
 
-Felles for `fs-testplan`, `fs-testcaser-intern`, `fs-testcaser-ekstern`, `fs-testrapport` og Confluence-steget i `fs-verify`. Testplanen er hovedsiden for en leveranse, og alle de andre sidene er undersider til den. Verifiseringen kommer før testplanen, så undersiden «Verifisering – …» lages av `fs-testplan` når testplanen opprettes, og av `fs-verify` når den kjøres på nytt med en testplan som finnes.
+Felles for `fs-testplan`, `fs-testcaser-cdp`, `fs-testcaser-intern`, `fs-testcaser-ekstern`, `fs-testrapport` og Confluence-steget i `fs-verify`. Testplanen er hovedsiden for en leveranse, og alle de andre sidene er undersider til den. Verifiseringen kommer før testplanen, så undersiden «Verifisering – …» lages av `fs-testplan` når testplanen opprettes, og av `fs-verify` når den kjøres på nytt med en testplan som finnes.
 
 ## Verktøy
 
@@ -19,12 +19,17 @@ Bruk Atlassian-MCP-en som finnes i økta. Navnet avhenger av oppsettet, f.eks. `
 Testplaner (5126062121)
 └── Testplan – <leveranse>                                  ← fs-testplan
     ├── Verifisering – <leveranse> – <YYYY-MM-DD HH:MM>     ← fs-testplan (første), fs-verify (på nytt)
-    ├── Testrapport – verifisering – <leveranse>            ← fs-testrapport
-    ├── Intern akseptansetest – <leveranse>                 ← fs-testcaser-intern
-    ├── Testrapport – intern akseptansetest – <leveranse>   ← fs-testrapport
-    ├── Ekstern akseptansetest – <leveranse>                ← fs-testcaser-ekstern
-    └── Testrapport – ekstern akseptansetest – <leveranse>  ← fs-testrapport
+    ├── Testrapport – verifisering – <leveranse>            ← fs-testrapport (fase 1)
+    ├── Testrapport – agentisk funksjonstest – <leveranse>  ← fs-testrapport (fase 2)
+    ├── Intern akseptansetest – <leveranse>                 ← fs-testcaser-intern (fase 3)
+    ├── Testrapport – intern akseptansetest – <leveranse>   ← fs-testrapport (fase 3)
+    ├── Ekstern akseptansetest – <leveranse>                ← fs-testcaser-ekstern (fase 4)
+    ├── Flytbeskrivelser til partene – <leveranse>          ← fs-testcaser-ekstern (fase 4, valgfri)
+    └── Testrapport – ekstern akseptansetest – <leveranse>  ← fs-testrapport (fase 4)
 ```
+
+- **Testcasene i fase 2** ligger i repoet (`cdp-tester/`, Gherkin), og har ingen egen side. Resultatene fra kjøringen (`akseptansetest/<slug>/kjoring-<dato>/resultat.md`) står i «Testrapport – agentisk funksjonstest», med testcasene, teknikken, resultatet og funnene. Bildene ligger lokalt, ikke i git, og legges ikke i Confluence uten at brukeren ber om det.
+- **Flytbeskrivelser til partene** er flytene fra den interne testen, uten tekniske ord, og rapportene fra fase 2 og 3, slik at partene ser hva som er testet. Siden lages bare når brukeren sier ja, og bare for leveranser som er godkjent internt.
 
 - **Foreldresiden til testplanen** er alltid [Testplaner](https://sikt.atlassian.net/wiki/spaces/STUDIEADM/pages/5126062121/Testplaner) (`5126062121`, rommet `STUDIEADM`). Spør ikke om foreldresiden. Alle de andre sidene er undersider til testplanen.
 - **Titlene** må være unike i rommet. Finnes tittelen fra før (et nytt testløp av samme leveranse), legg til datoen: `Intern akseptansetest – <leveranse> – <YYYY-MM-DD>`.
@@ -60,31 +65,38 @@ Ved oppdatering: vis hva som endres, og spør.
 - Felt som skal fylles ut (`[Fylles ut …]`, `[Sjekk begrep]`), får gul bakgrunn i cella (`data-background="#FFF0B3"`), så de ikke blir glemt.
 - Lag ikke `@`-omtaler av personer (`data-type="mention"`) uten en ekte konto-ID. Skriv navnet som tekst.
 
+## Strategien
+
+Strategien står i Confluence: [Teststrategi for FS – fra krav til akseptanse (forslag)](https://sikt.atlassian.net/wiki/spaces/STUDIEADM/pages/5145100326) (`5145100326`). Forslaget skal skrives over den gamle siden (`5117902850`). Inntil det er gjort er `5145100326` ID-en skillene bruker, og etterpå er det `5117902850` igjen. Skal ID-en byttes, søk etter den i hele repoet (`grep -rn 5145100326 .`).
+
 ## Oppdatere en side som finnes
 
 1. Les siden med `contentFormat: "html"`.
-2. Finn det testerne og testansvarlig har fylt ut: cellene i «Faktisk resultat» og «Status», radene i «Funn» og «Andre funn», «Beslutning», «Kriterier for godkjent», «Kontrollert av» og «Bekreftet av deltakerne». Er noe av det fylt ut, skriv det aldri over. Endre bare de andre delene, og behold det som er fylt ut, ord for ord.
+2. Finn det testerne og testansvarlig har fylt ut: cellene i «Faktisk resultat» og «Status», radene i «Funn» (med «Fase» og «Type») og «Andre funn», «Beslutning», «Kriterier for godkjent», «Kontrollert av» og «Bekreftet av deltakerne». Er noe av det fylt ut, skriv det aldri over. Endre bare de andre delene, og behold det som er fylt ut, ord for ord.
 3. Behold `data-colwidth`, `data-local-id` og inline-kommentarer (`class="annotation"`) slik de er.
 4. Er testen i gang (noe er fylt ut), og en testcase må endres, si det til brukeren først. Steg testeren allerede har fulgt, endres ikke. Legg heller til en merknad i raden.
 5. Skriv en `versionMessage` som sier hva som er endret.
 
 ## «Status i flyten» på testplanen
 
-Testplanen har en tabell med de sju stegene. `fs-testplan` fyller ut rad 1 og 2 når testplanen lages. Den eneste delen av testplanen de andre skillene endrer, er sin egen rad i den tabellen:
+Testplanen har en tabell med fasene. `fs-testplan` fyller ut raden for verifiseringen og raden «Testplan» når testplanen lages. Den eneste delen av testplanen de andre skillene endrer, er sin egen rad i den tabellen (og «Sporbarhet per krav» og funnene, som `fs-testrapport` og testerne fyller ut):
 
-| Steg | Side | Status | Dato |
+| Fase | Side | Status | Dato |
 |---|---|---|---|
 | 1. Verifisering (`fs-verify`) | <lenke> | Alt funnet / <N> ikke funnet, <N> usikker / Ikke kjørt | <dato> |
-| 2. Testplan | (denne siden) | Laget | <dato> |
-| 3. Testrapport – verifisering | <lenke> | Klar / Ikke klar for intern akseptansetest | <dato> |
-| 4. Intern akseptansetest | <lenke> | Klar til test / Pågår / Ferdig | <dato> |
-| 5. Testrapport – intern | <lenke> | Godkjent / Godkjent med forbehold / Ikke godkjent / Venter på beslutning | <dato> |
-| 6. Ekstern akseptansetest | <lenke> | Klar til test / Pågår / Ferdig / Ikke aktuell | <dato> |
-| 7. Testrapport – ekstern | <lenke> | Akseptert / Ikke akseptert / Venter på bekreftelse | <dato> |
+| 1. Testrapport – verifisering | <lenke> | Klar / Ikke klar for agentisk funksjonstest | <dato> |
+| Testplan | (denne siden) | Laget | <dato> |
+| 2. Agentisk funksjonstest – testcaser (`fs-testcaser-cdp`) | `cdp-tester/<sti>` | Ikke laget / Laget / Oppdatert | <dato> |
+| 2. Agentisk funksjonstest – kjøring | `kjoring-<dato>/resultat.md` | Venter / Kjørt / Kjørt med funn | <dato> |
+| 2. Testrapport – agentisk funksjonstest | <lenke> | Klar / Ikke klar for intern akseptansetest / Venter på gjennomgang | <dato> |
+| 3. Intern akseptansetest | <lenke> | Klar til test / Pågår / Ferdig | <dato> |
+| 3. Testrapport – intern | <lenke> | Godkjent / Godkjent med forbehold / Ikke godkjent / Venter på beslutning | <dato> |
+| 4. Ekstern akseptansetest | <lenke> | Klar til test / Pågår / Ferdig / Ikke aktuell | <dato> |
+| 4. Testrapport – ekstern | <lenke> | Akseptert / Ikke akseptert / Venter på bekreftelse | <dato> |
 
 Les testplanen med `contentFormat: "html"`, bytt bare cellene i raden, og oppdater siden med en `versionMessage` («Status i flyten: <steg>»). Oppdater også raden i `testplan.md`. Spør ikke en gang til om raden, når brukeren allerede har sagt ja til å publisere undersiden.
 
 ## Etter publisering
 
 - Skriv lenken i metadataene i fila: `- **Confluence**: <url>`, og `<url> (utkast)` for et utkast.
-- Foreslå teksten til Slack-tråden «Akseptansetesting <leveranse>» med lenken, når siden er en testside (steg 4 eller 6). Skillen poster ikke selv.
+- Foreslå teksten til Slack-tråden «Akseptansetesting <leveranse>» med lenken, når siden er en testside (fase 3 eller 4). Skillen poster ikke selv.

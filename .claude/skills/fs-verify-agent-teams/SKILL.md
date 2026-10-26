@@ -14,7 +14,7 @@ $ARGUMENTS
 
 Du er lead i et agent team, og gjør det samme som `fs-verify`, men lar teammates gjøre letingen og kontrollen, parallelt. Reglene står i [`fs-verify/SKILL.md`](../fs-verify/SKILL.md), og gjelder uendret, også *Negative søk* og *Kontroll*. Les den før du starter. Denne skillen sier bare hvordan arbeidet deles.
 
-- **Finnerne** (agenttypen `fs-verify-krav`, `.claude/agents/fs-verify-krav.md`) leser feature-filene sine, leter i koden og gir bevis.
+- **Finnerne** (agenttypen `fs-verify-krav`, `.claude/agents/fs-verify-krav.md`) leser feature-filene sine, leter i koden og gir bevis. De rapporterer også tilgang og datakonsistens, regler uten scenario og tallene for åpne spørsmål, per krav (fase 1 i teststrategien (forslag), se *Tilgang og datakonsistens*, *Regler uten scenario* og *Åpne spørsmål* i `fs-verify`).
 - **Kontrollørene** (agenttypen `fs-verify-kontroll`, `.claude/agents/fs-verify-kontroll.md`) får svaret fra en finner for én feature-fil, og sjekker det mot koden uten å vite hvordan finneren lette.
 - **Du** klassifiserer, starter teamet, sender hvert svar til kontroll, avgjør der finner og kontrollør er uenige, spør brukeren, retagger, sletter, skriver rapport og logg, og rydder opp i teamet.
 - Teammatene endrer ingen filer og spør ikke brukeren. De samme forbudene som i `fs-verify` gjelder alle: ikke skriv eller rett applikasjonskode, ikke endre kravinnhold, ingen `git add`/`commit`/`push`/`checkout`/`stash`.
@@ -87,7 +87,7 @@ Vent på svarene. De kommer som meldinger; ikke poll oppgavelista i en løkke. B
 
 **Svar fra en finner:**
 
-1. **Sjekk formatet.** Mangler tabellen, scenarioer i gating-settet, bevis eller (når det er bedt om) repoene, be finneren rette det med `SendMessage`.
+1. **Sjekk formatet.** Mangler tabellen, scenarioer i gating-settet, bevis, tilgangsradene (for krav som har roller, organisasjoner eller data som endres) eller (når det er bedt om) repoene, be finneren rette det med `SendMessage`. Send tilgangsradene og reglene uten scenario til kontrolløren sammen med scenariotabellen.
 2. **Send det til kontroll** (*Start teamet*, steg 4).
 
 **Svar fra en kontrollør:**
@@ -96,7 +96,7 @@ Vent på svarene. De kommer som meldinger; ikke poll oppgavelista i en løkke. B
 2. **`avkreftet` eller `usikker`:** les det kontrolløren viser til, og det finneren viste til. Har kontrolløren rett, bruk det nye resultatet. Er det fortsatt uklart, blir resultatet `usikker`, med begge synene i beviset. Noter raden for `## Kontroll` i rapporten.
 3. **Et `funnet` som kontrollen avkrefter, kan aldri brukes til retagging**, selv om du er enig med finneren. Da blir det `usikker`, og brukeren avgjør.
 
-Før du foreslår retagging eller sletting av et krav, les `fil:linje` for bevisene til det kravet selv. Du står ansvarlig for det du viser brukeren.
+Før du foreslår retagging eller sletting av et krav, les `fil:linje` for bevisene til det kravet selv. Tilgangsradene og reglene uten scenario slår du sammen på samme måte, og du regner ut `## Åpne spørsmål` selv fra `@openquestion` i kravfilene (finnernes tall er en kontroll, ikke kilden). `- **Menneskelig kontroll:**` i rapporten fyller du aldri ut: kontrollørene er ikke den andre personen (*Kontroll* i `fs-verify`). Du står ansvarlig for det du viser brukeren.
 
 ## Skjermbilder
 
