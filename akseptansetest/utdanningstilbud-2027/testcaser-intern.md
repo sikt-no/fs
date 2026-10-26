@@ -32,6 +32,8 @@
   | 3.6 | `@OPT-OPT-UTD-001` | Opptaksforvalter kan filtrere på utdanningstilbud med ufullstendige opplysninger | Filtrere på utdanningstilbud som mangler rangeringsregelverk |
   | 3.7 | `@OPT-OPT-UTD-001` | Opptaksforvalter ved deltakende organisasjon ser kun utdanningstilbud organisasjonen tilbyr | Deltakende organisasjon ser kun utdanningstilbudene sine |
   | 3.8 | `@OPT-OPT-UTD-001` | Opptaksforvalter ved deltakende organisasjon ser kun utdanningstilbud organisasjonen tilbyr | Deltakende organisasjon ser ikke utdanningstilbud en annen organisasjon tilbyr |
+  | 3.9 | `@OPT-OVO-SAM-001` | Organisasjoner som ikke deltar, kan ikke se opptaket | Organisasjon som ikke deltar, ser ikke opptaket |
+  | 3.10 | `@OPT-OVO-SAM-001` | Organisasjoner som ikke deltar, kan ikke se opptaket | Organisasjon som ikke deltar, kan ikke åpne opptaket |
   | 4.1 | `@OPT-OPT-UTD-003` | Opptaksforvalter ved deltakende organisasjon eller forvaltende organisasjon kan trekke utdanningstilbud | Opptaksforvalter ved forvaltende organisasjon trekker utdanningstilbud |
   | 4.2 | `@OPT-OPT-UTD-003` | Trekking er ikke mulig etter trekkfristen for deltakende organisasjoner | Opptaksforvalter ved deltakende organisasjon forsøker å trekke etter trekkfristen |
   | 5.1a | `@OPT-OPT-UTD-016` | Beskrivelse til Min kompetanse kan angis per språk | Angi beskrivelse på <språk> (bokmål) |
@@ -64,7 +66,7 @@
 
 Intern akseptansetest av «Utdanningstilbud i samordna opptak 2027». Testbeskrivelsen, testbrukerne og testdataene står i [testplanen](https://sikt.atlassian.net/wiki/spaces/STUDIEADM/pages/5137235987).
 
-Testen har 47 testcaser og tar 1,5–3 timer. Den er delt i to økter: økt 1 er del 1–4 (utdanningstilbud i opptaket, 22 testcaser), og økt 2 er del 5–15 (detaljsiden for et utdanningstilbud, 25 testcaser).
+Testen har 49 testcaser og tar 1,5–3 timer. Den er delt i to økter: økt 1 er del 1–4 (utdanningstilbud i opptaket, 24 testcaser), og økt 2 er del 5–15 (detaljsiden for et utdanningstilbud, 25 testcaser).
 
 ## Slik tester du
 
@@ -187,6 +189,15 @@ Alle testcasene bruker opptaket «Sektordemo 23.10.26». Opptaket må være i ul
 | 3.8 | Deltakende organisasjon ser ikke utdanningstilbud en annen organisasjon tilbyr | 1. Fortsett som testbruker 3, i lista over utdanningstilbud i Sektordemo 23.10.26. <br>2. Skriv inn navnet på et utdanningstilbud som UiT tilbyr, for eksempel det fra 2.1, i «Søk». | Utdanningstilbudet som UiT tilbyr, står ikke i lista. | | |
 
 Kjent mangel: verifiseringen 2026-10-22 fant at en deltakende organisasjon ser alle utdanningstilbudene i opptaket. Ser testbruker 3 utdanningstilbud fra andre organisasjoner, skriv det i «Faktisk resultat», og sett «Ikke bestått». Avviket føres som en kjent mangel, og gir ikke «Ikke godkjent» alene.
+
+#### Regel: Organisasjoner som ikke deltar, kan ikke se opptaket (samordna_opptak.feature, @OPT-OVO-SAM-001)
+
+| Nr | Scenario | Steg | Forventet resultat | Faktisk resultat | Status |
+|---|---|---|---|---|---|
+| 3.9 | Organisasjon som ikke deltar, ser ikke opptaket | 1. Logg ut, og logg inn som testbruker 4 (VENNLIG SKOG HiØ, opptaksforvalter ved Høgskolen i Østfold). Høgskolen i Østfold deltar ikke i Sektordemo 23.10.26. <br>2. Gå til «Opptak». <br>3. Se gjennom lista over opptak. | «Sektordemo 23.10.26» står ikke i lista over opptak, og testbruker 4 ser ingen av utdanningstilbudene i opptaket. | | |
+| 3.10 | Organisasjon som ikke deltar, kan ikke åpne opptaket | 1. Logg ut, og logg inn som testbruker 1 (ORDENTLIG RUNDSKRIV, opptaksforvalter ved Sikt). <br>2. Gå til «Opptak», velg opptaket «Sektordemo 23.10.26», og velg «Gå til utdanningstilbud». <br>3. Kopier adressen til siden fra adressefeltet i nettleseren. <br>4. Logg ut, og logg inn som testbruker 4. <br>5. Lim inn adressen i adressefeltet, og gå til siden. | Testbruker 4 ser verken opptaket eller utdanningstilbudene i det. | | |
+
+Kjent mangel: verifiseringen av opprette og vedlikeholde opptak 2026-10-19 fant ikke at organisasjoner som ikke deltar, er stengt ute fra opptaket. Ser testbruker 4 opptaket eller utdanningstilbudene i det, skriv det i «Faktisk resultat», og sett «Ikke bestått». Avviket føres som en kjent mangel, og gir ikke «Ikke godkjent» alene.
 
 ### Del 4: Trekke utdanningstilbud fra opptak (trekke_utdanningstilbud.feature)
 
