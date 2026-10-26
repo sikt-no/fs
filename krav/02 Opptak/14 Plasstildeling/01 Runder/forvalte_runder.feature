@@ -167,12 +167,22 @@ Egenskap: Plasstildelingsrunder i et opptak
       Og at plasstildelingsrunden er publisert til søker
       Så ser opptaksforvalter at plasstildelingsrunden har status "Publisert for søkere"
 
-  # Regelen om tak for antall tilbud per plasstildelingsrunde er tatt ut 2026-10-14. Hvor mange tilbud søkeren
-  # kan få, avgjøres av innstillingene fra rundetypen (03 Tildeling/gjennomføre_plasstildeling.feature): ett
-  # ordinært tilbud når tilbud gir bortfall på lavere prioriteter, ellers flere, og tilbud på ledige studieplasser
-  # i tillegg.
-  # Hvor mange tilbud søkeren kan takke ja til, settes på opptaket
-  # (11 Opprette og vedlikeholde opptak/03 Innstillinger/innstillinger.feature).
+  @openquestion
+  Regel: Opptaksforvalter setter tak for antall tilbud per søker i plasstildelingsrunden
+    # ÅPNE SPØRSMÅL:
+    # - Skal taket settes på hver plasstildelingsrunde, eller være en innstilling i rundetypen i regelverkssamlingen?
+    #   Antagelsen er per plasstildelingsrunde: grunnlogikken står i rundetypen, og taket gir fleksibilitet for
+    #   opptak som skal gi flere tilbud per søker enn samordna opptak.
+    # - Hva er standardverdien, og hvordan virker taket sammen med «Tilbud gir bortfall på lavere prioriteter»
+    #   i rundetypen?
+
+    # Flyttet hit 2026-10-26 fra 11 Opprette og vedlikeholde opptak/03 Innstillinger/innstillinger.feature, der
+    # regelen «Opptaksforvalter setter tak for antall tilbud per tildelingsrunde» er @deprecated.
+    # Tilbud på ledige studieplasser kommer i tillegg (03 Tildeling/gjennomføre_plasstildeling.feature).
+    Scenario: Sette tak for antall tilbud per søker i plasstildelingsrunden
+      Gitt at opptaket har plasstildelingsrunden "Etterfylling" med rundetype "Etterfylling"
+      Når opptaksforvalter setter taket for antall tilbud per søker i plasstildelingsrunden "Etterfylling" til 2
+      Så kan en søker få høyst 2 tilbud i plasstildelingsrunden "Etterfylling"
 
   Regel: Opptaksforvalter kan åpne en plasstildelingsrunde for ledige studieplasser
 
