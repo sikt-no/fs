@@ -100,7 +100,7 @@ Egenskap: Ferdigbehandle en sak
       Og saken hos "Universitetet i Oslo" er ferdig behandlet
 
     @depends-on-OPT-BEH-BEH-008
-    # OPT-BEH-BEH-008: «Søkeren ser bare manglene saksbehandleren har publisert, og får melding om dem»
+    # OPT-BEH-BEH-008: «Søkeren ser bare manglene som er publisert, og får melding om dem»
     Scenario: Den automatiske behandlingen publiserer manglene når saken blir ferdig behandlet
       # Avklart 2026-10-26 i review av PR #818: saksbehandleren gjør ingenting i saken, så
       # automatikken publiserer manglene når den setter saken til ferdig behandlet.

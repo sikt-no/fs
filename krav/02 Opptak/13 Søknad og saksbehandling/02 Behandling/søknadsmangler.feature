@@ -238,7 +238,9 @@ Egenskap: Søknadsmangler
   # ── 3. Publisering og melding ────────────────────────────────
 
   @ref-OPT-BEH-BEH-025
-  Regel: Søkeren ser bare manglene saksbehandleren har publisert, og får melding om dem
+  Regel: Søkeren ser bare manglene som er publisert, og får melding om dem
+    # Den automatiske behandlingen publiserer manglene når den setter saken til ferdig
+    # behandlet. Det står i OPT-BEH-BEH-025.
 
     Scenario: Registrering av mangel publiserer ikke mangelen
       Når saksbehandleren ved Universitetet i Oslo registrerer mangelen "KAR"
@@ -282,16 +284,6 @@ Egenskap: Søknadsmangler
       Gitt at saken hos "Universitetet i Oslo" bare har den automatiske mangelen for "Matematikk R2"
       Når saksbehandleren ved Universitetet i Oslo publiserer manglene i saken
       Så ser søkeren den automatiske mangelen for "Matematikk R2" i Min kompetanse
-
-    @draft @openquestion
-    Scenario: Den automatiske behandlingen publiserer manglene når saken blir ferdig behandlet
-      # ÅPNE SPØRSMÅL:
-      # - Tittelen på regelen sier at saksbehandleren publiserer. Skal den si «manglene som er
-      #   publisert», nå som den automatiske behandlingen også publiserer (OPT-BEH-BEH-025)?
-      Gitt at saken hos "Universitetet i Oslo" har den automatiske mangelen for "Matematikk R2"
-      Når den automatiske behandlingen setter saken til ferdig behandlet
-      Så ser søkeren den automatiske mangelen for "Matematikk R2" i Min kompetanse
-      Og søkeren mottar én melding om mangler
 
     @draft @openquestion
     Scenariomal: Saksbehandleren ser at endringene ikke er publisert når <endring>
