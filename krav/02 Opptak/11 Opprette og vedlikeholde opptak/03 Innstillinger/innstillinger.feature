@@ -179,7 +179,12 @@ Egenskap: Innstillinger for opptak
       Og opptaksforvalter ser at søkere har valgt utdanningsbakgrunnen
 
     # AVKLART 2026-10-19: Et opprettet opptak skal alltid ha minst én utdanningsbakgrunn.
+    @openquestion
     Scenario: Den siste utdanningsbakgrunnen kan ikke fjernes
+      # ÅPNE SPØRSMÅL:
+      # - Skal alle opptak ha utdanningsbakgrunn, eller bare UHG-opptak (samordna opptak)?
+      #   Avklares i TOT-2586. Gjelder det bare UHG, skal andre opptak kunne være uten
+      #   utdanningsbakgrunn.
       Gitt at "Steinerskole" er den eneste utdanningsbakgrunnen i opptaket
       Når opptaksforvalter vil fjerne "Steinerskole" fra opptaket
       Så blir "Steinerskole" ikke fjernet
