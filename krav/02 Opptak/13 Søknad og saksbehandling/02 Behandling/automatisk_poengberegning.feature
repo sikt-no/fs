@@ -109,7 +109,6 @@ Egenskap: Automatisk beregning av vitnemålspoeng
         | karakterpoeng |
         | realfagspoeng |
         | språkpoeng    |
-        | skolepoeng    |
 
     Scenario: Låst poeng beregnes ikke på nytt
       Gitt at søknaden har et låst vitnemålspoeng
