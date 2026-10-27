@@ -1,12 +1,12 @@
 # language: no
-@OPT-BEH-BEH-025 @must @draft
+@OPT-BEH-BEH-025 @must @draft @ref-OPT-BEH-BEH-004 @ref-OPT-BEH-BEH-018 @ref-OPT-BEH-BEH-019 @ref-OPT-BEH-BEH-020
 Egenskap: Ferdigbehandle en sak
   Som saksbehandler
   ønsker jeg at saker som kan behandles helt automatisk, blir ferdig behandlet uten at jeg gjør noe
   slik at jeg bare trenger å behandle sakene den automatiske behandlingen ikke kunne fullføre.
 
   En sak er søknaden slik den ligger hos én saksbehandlende organisasjon. Saken behandles
-  helautomatisk når søkeren har ett vitnemål med påstanden at søkeren har GSK. Den automatiske
+  helautomatisk når søkeren har ett vitnemål, og vitnemålet har påstanden at søkeren har GSK. Den automatiske
   behandlingen avgjør da grunnlaget, poengene, kravelementene og kvoten, og setter saken til
   ferdig behandlet når alt er avgjort. Har søkeren flere vitnemål med påstanden GSK, velger
   saksbehandleren vitnemålet, og beregner poengene i vitnemålsbehandlingen (OPT-BEH-BEH-004).
@@ -38,9 +38,9 @@ Egenskap: Ferdigbehandle en sak
 
   @depends-on-OPT-BEH-BEH-015 @ref-FLY-OPT-AUT-001
   # OPT-BEH-BEH-015: «Opptakssystemets påstand om GSK på vitnemålet»
-  Regel: Bare saker med ett vitnemål med påstanden GSK behandles helautomatisk
+  Regel: Bare saker der søkeren har ett vitnemål, med påstanden GSK, behandles helautomatisk
 
-    Scenario: Saken behandles helautomatisk når søkeren har ett vitnemål med påstanden GSK
+    Scenario: Saken behandles helautomatisk når søkeren har ett vitnemål, med påstanden GSK
       Gitt at "Kari Nordmann" har ett vitnemål
       Og at vitnemålet har påstanden at søkeren har GSK
       Når søknaden behandles automatisk
@@ -56,14 +56,6 @@ Egenskap: Ferdigbehandle en sak
       Når søknaden behandles automatisk
       Så behandles ikke saken hos "Universitetet i Oslo" helautomatisk
 
-    Scenario: Saksbehandleren velger vitnemålet saken behandles automatisk på
-      # Vitnemålet saksbehandleren velger, kan være et annet enn vitnemålet GSK-konklusjonen på
-      # søknaden bygger på (OPT-BEH-BEH-015, «Konklusjon på søknaden fra vitnemålet»: det med senest
-      # utstedelsesdato). Begge vitnemålene gir GSK, og konklusjonen endres ikke av valget.
-      Gitt at "Kari Nordmann" har et vitnemål fra 2024 og et vitnemål fra 2025 med påstanden at søkeren har GSK
-      Når saksbehandleren ved Universitetet i Oslo velger vitnemålet fra 2025 for automatisk behandling
-      Så behandles saken hos "Universitetet i Oslo" automatisk på vitnemålet fra 2025
-
     @openquestion
     Scenario: Søker med flere vitnemål der bare ett har påstanden GSK
       # ÅPNE SPØRSMÅL:
@@ -78,6 +70,18 @@ Egenskap: Ferdigbehandle en sak
       Og at bare ett av vitnemålene har påstanden at søkeren har GSK
       Når søknaden behandles automatisk
       Så behandles saken hos "Universitetet i Oslo" helautomatisk på vitnemålet med påstanden at søkeren har GSK
+
+  @ref-OPT-BEH-BEH-015
+  # OPT-BEH-BEH-015: «Konklusjon på søknaden fra vitnemålet»
+  Regel: Har søkeren flere vitnemål med påstanden GSK, behandles saken automatisk på vitnemålet saksbehandleren velger
+
+    Scenario: Saksbehandleren velger vitnemålet saken behandles automatisk på
+      # Vitnemålet saksbehandleren velger, kan være et annet enn vitnemålet GSK-konklusjonen på
+      # søknaden bygger på (det med senest utstedelsesdato). Begge vitnemålene gir GSK, og
+      # konklusjonen endres ikke av valget.
+      Gitt at "Kari Nordmann" har to vitnemål med påstanden at søkeren har GSK, ett fra 2024 og ett fra 2025
+      Når saksbehandleren ved Universitetet i Oslo velger vitnemålet fra 2025 for automatisk behandling
+      Så behandles saken hos "Universitetet i Oslo" automatisk på vitnemålet fra 2025
 
   @ref-FLY-OPT-AUT-001
   Regel: Den automatiske behandlingen setter saken til ferdig behandlet når alt er avgjort

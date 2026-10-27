@@ -4,7 +4,7 @@ Egenskap: Automatisk saksbehandling
   Fra søknaden er blitt en sak hos den saksbehandlende organisasjonen, til saken er ferdig
   behandlet og er med i plasstildelingen, uten at en saksbehandler har gjort noe. Påstanden om
   GSK beregnes for hvert vitnemål når vitnemålet importeres, før flyten (OPT-BEH-BEH-015).
-  Flyten gjelder søkere med ett vitnemål med påstanden at søkeren har GSK. Den automatiske
+  Flyten gjelder søkere med ett vitnemål, med påstanden at søkeren har GSK. Den automatiske
   behandlingen setter grunnlaget, poengene, vurderingen av kravelementene og kvoten, i den
   rekkefølgen, og setter saken til ferdig behandlet når alt er avgjort. Andre søkere behandles
   ikke helautomatisk, og er ikke med i flyten (se OPT-BEH-BEH-025). Rettes en feil i
@@ -20,7 +20,7 @@ Egenskap: Automatisk saksbehandling
 
   @depends-on-OPT-BEH-BEH-015 @depends-on-OPT-BEH-BEH-025
   # OPT-BEH-BEH-015: «Opptakssystemets påstand om GSK på vitnemålet»
-  # OPT-BEH-BEH-025: «Bare saker med ett vitnemål med påstanden GSK behandles helautomatisk»
+  # OPT-BEH-BEH-025: «Bare saker der søkeren har ett vitnemål, med påstanden GSK, behandles helautomatisk»
   Regel: Vitnemålet med påstanden GSK avgjør om saken behandles helautomatisk
 
     Scenario: Saken behandles helautomatisk på vitnemålet med påstanden GSK
@@ -58,7 +58,6 @@ Egenskap: Automatisk saksbehandling
       Når søknaden behandles automatisk
       Så er søkeren kvalifisert for "Informatikk, UiO"
 
-
   @depends-on-OPT-BEH-BEH-012
   Regel: Søkeren plasseres i kvote
 
@@ -86,8 +85,8 @@ Egenskap: Automatisk saksbehandling
       Så er saken hos "Universitetet i Oslo" ferdig behandlet
       Og søkeren ser mangelen for "Matematikk R2" i Min kompetanse
 
-    Scenario: Saken er ikke med i plasstildelingen når poengene ikke kan beregnes
-      Gitt at poengene for "Informatikk, UiO" ikke kan beregnes på grunn av en feil i rangeringsregelverket
+    Scenario: Saken er ikke med i plasstildelingen når poengene ikke kan avgjøres
+      Gitt at poengene for "Informatikk, UiO" ikke kan avgjøres på grunn av en feil i regelverket
       Når den automatiske behandlingen er ferdig
       Så er saken hos "Universitetet i Oslo" ikke med når opptaksforvalteren starter en plasstildeling
 
@@ -96,7 +95,7 @@ Egenskap: Automatisk saksbehandling
 
     Scenario: Poengene beregnes på nytt når rangeringsregelverket er rettet
       Gitt at saken hos "Universitetet i Oslo" er ferdig behandlet
-      Og at opptaksforvalteren har rettet rangeringsregelverket for "Informatikk, UiO"
-      Når opptaksforvalteren beregner poengene på nytt for "Informatikk, UiO"
+      Og at opptaksforvalteren har rettet en feil i rangeringsregelverket
+      Når opptaksforvalteren beregner på nytt for søknadsalternativene med rangeringsregelverket som er rettet
       Så har "Informatikk, UiO" poengsum etter det rettede rangeringsregelverket
       Og saken hos "Universitetet i Oslo" er fortsatt ferdig behandlet

@@ -89,17 +89,17 @@ Egenskap: Automatisk poengberegning
       Når poengene beregnes automatisk
       Så har poengtypene fått poeng beregnet fra vitnemålet
 
-    Scenariomal: Poengklasser som beregnes fra vitnemålet
+    Scenariomal: <poeng> beregnes fra vitnemålet
       Gitt at søkeren har ett elektronisk vitnemål med påstanden at søkeren har GSK
-      Og at søknaden har en poengtype i poengklassen <poengklasse> som er koblet til beregningen fra vitnemålet
+      Og at søknaden har en poengtype for <poeng> som er koblet til beregningen fra vitnemålet
       Når poengene beregnes automatisk
       Så har poengtypen fått <poeng> beregnet fra vitnemålet
 
       Eksempler:
-        | poengklasse | poeng          |
-        | KAR         | karakterpoeng  |
-        | REA         | realfagspoeng  |
-        | SPR         | språkpoeng     |
+        | poeng         |
+        | karakterpoeng |
+        | realfagspoeng |
+        | språkpoeng    |
 
     Scenario: Poengtype som ikke er koblet til beregningen, beregnes ikke
       Gitt at søkeren har ett elektronisk vitnemål med påstanden at søkeren har GSK

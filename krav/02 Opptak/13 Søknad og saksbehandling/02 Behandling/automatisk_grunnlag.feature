@@ -62,7 +62,7 @@
 # - Kvoteplasseringen står i automatisk_kvoteplassering.feature.
 # - Søkere med flere vitnemål får vitnemålet valgt av saksbehandleren i
 #   vitnemålsbehandlingen.
-@OPT-BEH-BEH-019 @must @draft
+@OPT-BEH-BEH-019 @must @draft @ref-OPT-BEH-BEH-012 @ref-OPT-BEH-BEH-015 @ref-OPT-BEH-BEH-018
 Egenskap: Automatisk grunnlag
   Som saksbehandler
   ønsker jeg at søknaden får grunnlaget sitt automatisk når søkerens vitnemål og alder avgjør det
@@ -178,7 +178,7 @@ Egenskap: Automatisk grunnlag
     Scenario: Grunnlag fra vitnemålet saksbehandleren har valgt
       # Avklart 2026-10-26 i review av PR #818: har saksbehandleren valgt vitnemålet, behandles
       # saken automatisk på det.
-      Gitt at søkeren har et elektronisk vitnemål fra 2024 og et fra 2025 med påstanden at søkeren har GSK
+      Gitt at søkeren har to elektroniske vitnemål med påstanden at søkeren har GSK, ett fra 2024 og ett fra 2025
       Og at saksbehandleren har valgt vitnemålet fra 2025
       Når søknaden behandles automatisk
       Så får søknaden grunnlaget ut fra vitnemålet fra 2025
@@ -201,10 +201,10 @@ Egenskap: Automatisk grunnlag
       Når saksbehandleren starter den automatiske behandlingen for søknaden
       Så får søknaden grunnlaget automatisk
 
-    Scenario: Grunnlag fra studieprogrammet når søknadsalternativet opprettes
-      Gitt at studieprogrammet har et grunnlag som skal settes automatisk
-      Når søkeren søker på studieprogrammet
-      Så får søknaden grunnlaget fra studieprogrammet
+    Scenario: Grunnlag fra utdanningstilbudet når søknadsalternativet opprettes
+      Gitt at utdanningstilbudet har et grunnlag som skal settes automatisk
+      Når søkeren søker på utdanningstilbudet
+      Så får søknaden grunnlaget fra utdanningstilbudet
 
   Regel: Grunnlag som saksbehandleren har valgt, endres ikke av automatikken
 
