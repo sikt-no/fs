@@ -178,11 +178,11 @@ Egenskap: Automatisk vurdering av spesielle opptakskrav
       Så er søkeren ikke kvalifisert på grunnlaget
 
     Scenario: Søkeren kan være kvalifisert på ett grunnlag og ikke på et annet
-      Gitt at søknaden har grunnlagene VOV og VES
-      Og at saksbehandleren har lagt inn et unntak for et kravelement på grunnlaget VOV
+      Gitt at søknaden har grunnlagene "VOV" og "VES"
+      Og at saksbehandleren har lagt inn et unntak for et kravelement på grunnlaget "VOV"
       Når kravene er vurdert
-      Så er søkeren kvalifisert på grunnlaget VES
-      Og søkeren er ikke kvalifisert på grunnlaget VOV
+      Så er søkeren kvalifisert på grunnlaget "VES"
+      Og søkeren er ikke kvalifisert på grunnlaget "VOV"
 
     @openquestion
     Scenario: Kvalifisert per poengvariant

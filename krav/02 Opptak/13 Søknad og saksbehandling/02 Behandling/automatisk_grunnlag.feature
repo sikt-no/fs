@@ -95,14 +95,14 @@ Egenskap: Automatisk grunnlag
       # - Hvor går aldersgrensen for VOV? Confluence (PFS 4022829198) sier at
       #   22 år med førstegangsvitnemål gir VES. Dokumentasjonen til
       #   FS-klienten sier at VOV gjelder til og med 22 år.
-      Gitt at søknadsalternativenes regelverk har grunnlagene VOV og VES
-      Og at VOV krever førstegangsvitnemål og har en aldersgrense
-      Og at VES krever et vitnemål
+      Gitt at søknadsalternativenes regelverk har grunnlagene "VOV" og "VES"
+      Og at grunnlaget "VOV" krever førstegangsvitnemål og har en aldersgrense
+      Og at grunnlaget "VES" krever et vitnemål
       Og at søkeren har ett elektronisk vitnemål med påstanden at søkeren har GSK
       Og at vitnemålet <er førstegangsvitnemål>
       Og at søkeren er <alder> år på datoen for aldersberegning
       Når søknaden behandles automatisk
-      Så får søknaden grunnlaget <grunnlag>
+      Så får søknaden grunnlaget "<grunnlag>"
 
       Eksempler:
         | er førstegangsvitnemål      | alder | grunnlag |
@@ -147,12 +147,12 @@ Egenskap: Automatisk grunnlag
     # - Svaret må stemme med «Førstegangsvitnemål går foran» og den første raden i
     #   «Grunnlag ut fra alder og førstegangsvitnemål», som i dag gir bare VOV.
 
-    Scenario: Søker med førstegangsvitnemål får både VOV og VES
-      Gitt at søknadsalternativenes regelverk har grunnlagene VOV og VES
+    Scenario: Søker med førstegangsvitnemål får både "VOV" og "VES"
+      Gitt at søknadsalternativenes regelverk har grunnlagene "VOV" og "VES"
       Og at søkeren har ett elektronisk førstegangsvitnemål med påstanden at søkeren har GSK
-      Og at søkeren er innenfor aldersgrensen for VOV
+      Og at søkeren er innenfor aldersgrensen for "VOV"
       Når søknaden behandles automatisk
-      Så får søknaden grunnlagene VOV og VES
+      Så får søknaden grunnlagene "VOV" og "VES"
 
     Scenario: Grunnlag som ikke kan kombineres, settes ikke sammen
       Gitt at to grunnlag ikke kan kombineres
