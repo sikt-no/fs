@@ -13,7 +13,7 @@ Testplanen (`akseptansetest/<slug>/testplan.md`) har to tabeller (se `fs-testpla
 
 **Nøkkelen** er et stabilt navn i kebab-case, uten æ, ø og å, som beskriver rollen eller tilstanden og ikke personen: `brukeradministrator-alle-miljoer`, `personbruker-flere-aktive-roller`. Testene i `cdp-tester/` bruker nøkler, aldri «testbruker 1» eller et navn, siden nummer og navn hører til én testplan. En nøkkel endres ikke når navnet på testbrukeren byttes.
 
-**Aldri passord eller hemmeligheter** i testplanen. `Innlogging` er navnet på Chrome-profilen testbrukeren er logget inn i, eller Feide-ID-en brukeren logger inn med.
+**Aldri passord eller hemmeligheter** i testplanen. `Innlogging` er verdien testbrukeren har i «Overstyrt bruker» (nedtrekksmenyen øverst til høyre i FS Admin, normalen i TEST), eller navnet på Chrome-profilen eller Feide-ID-en når testbrukeren logger inn for seg.
 
 ## Testdata
 
@@ -32,7 +32,7 @@ For hvert krav:
 Still dem samlet med `AskUserQuestion`, høyst fire om gangen. Har en tidligere testplan svart for de samme kravene, vis svaret og spør om det fortsatt gjelder.
 
 1. **Roller:** list rollene kravene nevner (`Som <rolle>`, `Gitt jeg er <rolle>`, rollene i *Synlighet*-regler), og les koden og vis hva den krever, med fil:linje, og hva som avviker fra kravene (se under).
-2. **Testbrukere:** be om navn og organisasjon for hver rolle. Nummerer dem fra 1, og gi hver en nøkkel. Testbrukerne skal finnes i rollene scenarioene nevner, ved de organisasjonene kravet gjelder. Har kravet scenarioer om synlighet (hva en rolle ser fra organisasjonene den administrerer), trengs data fra minst to organisasjoner. Antallet bestemmes per krav ut fra tilgangsmatrisen: tilgangsradene i verify-rapporten (roller × organisasjon). Scenarioene testes som de står, men det lages ikke egne testcaser for roller og tilgang (de er verifisert i koden i fase 1), så det trengs ikke testbrukere bare for å vise at en rolle mangler tilgang. Spør også etter `Innlogging` (Chrome-profilnavn eller Feide-ID) og eventuelt `Start-URL`.
+2. **Testbrukere:** be om navn og organisasjon for hver rolle. Nummerer dem fra 1, og gi hver en nøkkel. Testbrukerne skal finnes i rollene scenarioene nevner, ved de organisasjonene kravet gjelder. Har kravet scenarioer om synlighet (hva en rolle ser fra organisasjonene den administrerer), trengs data fra minst to organisasjoner. Antallet bestemmes per krav ut fra tilgangsmatrisen: tilgangsradene i verify-rapporten (roller × organisasjon). Scenarioene testes som de står, men det lages ikke egne testcaser for roller og tilgang (de er verifisert i koden i fase 1), så det trengs ikke testbrukere bare for å vise at en rolle mangler tilgang. Spør også etter `Innlogging` (verdien i «Overstyrt bruker», ellers Chrome-profilnavn eller Feide-ID) og eventuelt `Start-URL`.
 3. **Testdata:** for hvert krav, etter *Testdata* over: de dataene scenarioene krever, og hvor de ligger. Gi hver en nøkkel, og fyll ut `Søk/URL` (hvordan objektet åpnes), `Utgangstilstand` (hva testen forutsetter, med datoene i forhold til testdagen) og `Brukes av` (Feature-ID og scenario, eller testcase-Nr). Gjelder en testcase en flyt: hvilken fase som lager tilstanden. Spør ikke om hvordan dataene lages: det er utenfor strategien.
 4. **Miljøet:** URL til testmiljøet, versjon og feature-flagg. Det er alltid et testmiljø, aldri produksjon. Kan testdataene settes tilbake før hver kjøring?
 

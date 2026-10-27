@@ -75,7 +75,7 @@ Skillen er ikke en del av repoet. Hver bruker installerer den fra GitHub-repoet 
 
 1. Første kall med `browser-harness-js` installerer `bun` automatisk (laster ned og kjører et installasjonsskript fra bun.sh, og legger `~/.bun/bin` til i `~/.zshrc`). Vil du ikke det, sett `BROWSER_HARNESS_SKIP_BUN_INSTALL=1` og installer `bun` selv. CLI-en ligger ikke på PATH: kall den med full sti (`.claude/skills/cdp/sdk/browser-harness-js`), eller lag en symlenke som `cdp`-skillen beskriver.
 2. Åpne `chrome://inspect/#remote-debugging` i Chrome, huk av «Discover network targets», og klikk **Allow** når Chrome spør.
-3. Bruk helst en egen Chrome-profil per testbruker (`--user-data-dir`). `cdp`-skillen kobler til Chrome-en som kjører, og agenten kan da lese alle cookies i profilen, også for andre tjenester.
+3. Bruk en egen Chrome-profil til testingen (`--user-data-dir`), ikke den du bruker ellers. `cdp`-skillen kobler til Chrome-en som kjører, og agenten kan da lese alle cookies i profilen, også for andre tjenester. Logg inn selv. Testbrukeren byttes i «Overstyrt bruker» øverst til høyre i FS Admin, som er normalen i TEST, med verdien i `Innlogging` i testplanen.
 4. Avslutt med `browser-harness-js --stop` når kjøringen er ferdig. Serveren lytter uautentisert på `127.0.0.1:9876`.
 
 `cdp`-skillen har ingen egne sikkerhetsregler. Reglene for kjøringen (miljø-guard, forbudte kall, bevis) står i `fs-testcaser-cdp` under «Før en kjøring».
