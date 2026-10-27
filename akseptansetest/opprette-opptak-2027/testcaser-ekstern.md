@@ -20,7 +20,7 @@
   | 2 | d | `@OPT-OVO-SAM-001` | Se og navigere til saksbehandlertildelingen for opptaket | 2.13 |
   | 3 | a | `@OPT-OVO-INN-001` | Endre opptakstype når ingen utdanningstilbud er knyttet til opptaket · Endre regelverkssamling når ingen utdanningstilbud er knyttet til opptaket | 3.1, 3.3 |
   | 3 | b | `@OPT-OVO-INN-001` | Standard poenglikhetsregel med mulighet for unntak per utdanningstilbud | 3.5 |
-  | 3 | c | `@OPT-OVO-INN-001` | Sette startnummer for søknader i opptaket · Sette maks antall søknadsalternativer · Sette tak for antall tilbud per tildelingsrunde | 3.7, 3.9, 3.10 |
+  | 3 | c | `@OPT-OVO-INN-001` | Sette startnummer for søknader i opptaket · Sette maks antall søknadsalternativer | 3.7, 3.9 |
   | 3 | d | `@OPT-OVO-INN-001` | Aktivere tidlig opptak · Sette lenke til informasjon om tidlig opptak | 3.13, 3.14 |
   | 3 | e | `@OPT-OVO-INN-001` | Aktivere ledige studieplasser | 3.16 |
   | 3 | f | `@OPT-OVO-INN-001` | Legge til flere utdanningsbakgrunner · Fjerne en utdanningsbakgrunn fra opptaket | 3.18, 3.19 |
@@ -101,11 +101,11 @@ Velkommen til akseptansetesten av «Opprette opptak 2027». I testen sjekker du 
 |---|---|---|---|---|---|
 | 3a | Endre opptakstype og regelverk | 1. Åpne «Samordna opptak 2027 (ekstern test)», og velg «Endre innstillinger for opptaket». <br>2. «Opptakstype»: [Fylles ut: en annen opptakstype]. <br>3. «Regelverksamling knyttet til opptaket»: «UHG 2027 v2». <br>4. Velg «Lagre». | Lagret. Den nye opptakstypen og «UHG 2027 v2» står på opptaket. | | |
 | 3b | Tillat unntak fra poenglikhetsregelen | 5. Velg «Endre innstillinger for opptaket». <br>6. Kryss av for «Poenglikhetsregel skal kunne overstyres på utdanningstilbudet.». <br>7. «Tillatte poenglikhetsregler»: «Alle søkere med samme poengsum får tilbud» og «Alder, eldre foran yngre». <br>8. Velg «Lagre». | Lagret. De to reglene står i «Tillatte poenglikhetsregler». | | |
-| 3c | Sett startnummer og tak | 9. Velg «Endre innstillinger for opptaket». <br>10. «Startnummer for søknader»: 1001. <br>11. «Antall søknadsalternativer»: 10. <br>12. «Tilbud per tildelingsrunde»: 1. <br>13. Velg «Lagre». | Lagret. 1001, 10 og 1 står i feltene. | | |
-| 3d | Åpne for tidlig opptak | 14. Velg «Endre innstillinger for opptaket». <br>15. Kryss av for «Kan søke på tidlig opptak». <br>16. Lenke til informasjonssiden [Sjekk begrep: feltet]: «https://www.samordnaopptak.no/universitet-og-hogskole/slik-soker-du/tidlig-opptak.html». <br>17. Velg «Fyll inn testdatoer». <br>18. Velg «Lagre». | Lagret. «Kan søke på tidlig opptak» er krysset av, og lenken står der. | | |
-| 3e | Åpne for ledige studieplasser | 19. Velg «Endre innstillinger for opptaket». <br>20. Kryss av for «Ledige studieplasser». <br>21. Velg «Fyll inn testdatoer». <br>22. Velg «Lagre». | Lagret. «Ledige studieplasser» er krysset av, med datoer. | | |
-| 3f | Endre utdanningsbakgrunnene | 23. Velg «Endre innstillinger for opptaket». <br>24. Velg «Utenlandsk utdanning» og «Steinerskole» i «Godkjente utdanningsbakgrunner». <br>25. Velg «Lagre». <br>26. Velg «Endre innstillinger for opptaket». Fjern «Steinerskole», og velg «Lagre». | Lagret. «Realkompetanse» og «Utenlandsk utdanning» står i «Godkjente utdanningsbakgrunner». | | |
-| 3g | La søkerne laste opp dokumenter | 27. Velg «Endre innstillinger for opptaket». <br>28. Kryss av for «Søker kan laste opp dokumenter». <br>29. Velg «Lagre». | Lagret. «Søker kan laste opp dokumenter» er krysset av. | | |
+| 3c | Sett startnummer og antall søknadsalternativer | 9. Velg «Endre innstillinger for opptaket». <br>10. «Startnummer for søknader»: 1001. <br>11. «Antall søknadsalternativer»: 10. <br>12. Velg «Lagre». | Lagret. 1001 og 10 står i feltene. | | |
+| 3d | Åpne for tidlig opptak | 13. Velg «Endre innstillinger for opptaket». <br>14. Kryss av for «Kan søke på tidlig opptak». <br>15. Lenke til informasjonssiden [Sjekk begrep: feltet]: «https://www.samordnaopptak.no/universitet-og-hogskole/slik-soker-du/tidlig-opptak.html». <br>16. Velg «Fyll inn testdatoer». <br>17. Velg «Lagre». | Lagret. «Kan søke på tidlig opptak» er krysset av, og lenken står der. | | |
+| 3e | Åpne for ledige studieplasser | 18. Velg «Endre innstillinger for opptaket». <br>19. Kryss av for «Ledige studieplasser». <br>20. Velg «Fyll inn testdatoer». <br>21. Velg «Lagre». | Lagret. «Ledige studieplasser» er krysset av, med datoer. | | |
+| 3f | Endre utdanningsbakgrunnene | 22. Velg «Endre innstillinger for opptaket». <br>23. Velg «Utenlandsk utdanning» og «Steinerskole» i «Godkjente utdanningsbakgrunner». <br>24. Velg «Lagre». <br>25. Velg «Endre innstillinger for opptaket». Fjern «Steinerskole», og velg «Lagre». | Lagret. «Realkompetanse» og «Utenlandsk utdanning» står i «Godkjente utdanningsbakgrunner». | | |
+| 3g | La søkerne laste opp dokumenter | 26. Velg «Endre innstillinger for opptaket». <br>27. Kryss av for «Søker kan laste opp dokumenter». <br>28. Velg «Lagre». | Lagret. «Søker kan laste opp dokumenter» er krysset av. | | |
 
 ### 4. Sett fristene for opptaket (ca. 12 minutter)
 
@@ -152,6 +152,7 @@ Alle stegene gjøres under «Endre innstillinger for opptaket». Lagre etter hve
 | Gjenbruke innstillinger fra et tidligere opptak, og deaktivere et opptak | Kommer senere |
 | Hendelseslogg, fellestekster og svarmeldingsmal | Kommer senere |
 | Lister med flere enn 50 opptak | TEST har færre opptak |
+| «Tilbud per tildelingsrunde» | Skal flyttes til plasstildelingsrunden, og fjernes fra innstillingene for opptaket |
 
 ## Funn
 
