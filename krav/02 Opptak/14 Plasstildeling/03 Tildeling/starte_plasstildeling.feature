@@ -49,25 +49,21 @@ Egenskap: Starte en plasstildeling
     # AVKLART 2026-10-15: Bare saker som er ferdig behandlet (FERDIG_BEHANDLET), er med i plasstildelingen.
     # Statusen gjelder per sak, altså søknaden slik den ligger hos én saksbehandlende organisasjon, som i
     # tidligopptaket (13 Søknad og saksbehandling/02 Behandling/gi_tilbudsgaranti_ved_tidlig_opptak.feature).
-    # Ved automatisk saksbehandling avsluttes saksbehandlingen ved at FERDIG_BEHANDLET settes. Av sakene som er
-    # med, kan søknadsalternativer som er kvalifisert og poengberegnet, eller har tilbudsgaranti, få tilbud.
+    # Hvordan saken blir ferdig behandlet, også av den automatiske behandlingen, står i kravet taggen peker på
+    # (flyttet dit 2026-10-26). Av sakene som er med, kan søknadsalternativer som er kvalifisert og
+    # poengberegnet, eller har tilbudsgaranti, få tilbud.
     # Gap mot koden: koden krever ikke at saken er ferdig behandlet. En søknad er med når alt dette er
     # oppfylt: søknadsalternativet er ikke slettet og har en behandlersak, saken er kvalifisert mot
     # utdanningstilbudets kompetanseregelverk, saken har en aktiv kvote som skal kvoteplasseres og som også er
     # kvote på utdanningstilbudet, og saken har poengsum etter utdanningstilbudets rangeringsregelverk.
     # Søkeren må ha fødselsdato, ellers feiler hele plasstildelingen.
+    @depends-on-OPT-BEH-BEH-025 @ref-FLY-OPT-AUT-001
     Scenario: Bare saker som er ferdig behandlet, er med
       Gitt at saken til "Kari Nordmann" er ferdig behandlet
       Og at saken til "Ola Nordmann" ikke er ferdig behandlet
       Når opptaksforvalter starter en plasstildeling i "Hovedrunde"
       Så er saken til "Kari Nordmann" med i plasstildelingen
       Men saken til "Ola Nordmann" er ikke med i plasstildelingen
-
-    Scenario: Automatisk saksbehandling gjør saken ferdig behandlet
-      Gitt at saken til "Kari Nordmann" er behandlet automatisk
-      Når den automatiske saksbehandlingen er ferdig
-      Så er saken til "Kari Nordmann" ferdig behandlet
-      Og saken til "Kari Nordmann" er med i neste plasstildeling
 
     Scenariomal: Søknadsalternativer som kan få tilbud
       Gitt at saken til "Kari Nordmann" er ferdig behandlet
