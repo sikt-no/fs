@@ -4,7 +4,7 @@ Rapporten fra `fs-verify` og `fs-verify-agent-teams` følger denne malen, så to
 
 ## Regler
 
-- **Alle seksjonene står med, i rekkefølgen under.** En seksjon uten innhold får teksten som står i malen (f.eks. «Ingen.»). Ta aldri ut en seksjon, og legg ikke til egne seksjoner. Det som ikke passer noe sted, står under `## Oppfølging`.
+- **Alle seksjonene står med, i rekkefølgen under.** Fase 1 i teststrategien (forslag) gir tre seksjoner i tillegg til scenarioene: `## Tilgang og datakonsistens`, `## Regler uten scenario` og `## Åpne spørsmål`. `- **Menneskelig kontroll:**` fylles aldri ut av skillen. En seksjon uten innhold får teksten som står i malen (f.eks. «Ingen.»). Ta aldri ut en seksjon, og legg ikke til egne seksjoner. Det som ikke passer noe sted, står under `## Oppfølging`.
 - **Varianter** er merket med `[…]` i malen. En linje eller seksjon med et merke er med bare når merket gjelder. Merket skrives ikke i rapporten.
   - `[oppgave]`: scope er en oppgave eller en spesifikasjon.
   - `[agent team]`: kjørt med `fs-verify-agent-teams`.
@@ -31,10 +31,12 @@ Rapporten fra `fs-verify` og `fs-verify-agent-teams` følger denne malen, så to
 - **Krav:** `<krav-sti, oppgave eller @scope-<slug>>` (<N> feature-filer)
 - **Spec:** `spec/spec-<x>.md`                                         [oppgave, bare når scope er en spesifikasjon]
 - **Kode:** `<repo>` (<branch>, <kort sha>, <oppdatert | N bak origin | N bak main | ikke sjekket (Claude-panelet)>), `<repo>` (…)
+- **Åpne MR-er:** ingen funnet | <N> MR-er i <repo>, <N> i <repo> (<N> med kode for kravene) | ikke sjekket (Claude-panelet)
 - **Omfang:** <`@in-progress` | `@deprecated` | flyter | alle krav uansett status | <det brukeren skrev>, skilt med komma> (<valgt | standard, ikke valgt | fra prompten>)
 - **Avhengigheter:** ingen | <n> nivå(er), bare status | <n> nivå(er), verifisert i koden | alle nivåer, bare status | alle nivåer, verifisert i koden
 - **Bygger på:** `<sti til den forrige rapporten>`                    [gjennomgang]
 - **Kontroll:** `fs-verify-kontroll` | manuell (Claude-panelet)
+- **Menneskelig kontroll:** [Fylles ut: navn og dato for personen som har kontrollert rapporten]
 - **Team:** <N> finnere (`fs-verify-krav`), <N> kontrollører (`fs-verify-kontroll`), <N>–<N> feature-filer per finner   [agent team]
 - **Skjermbilder:** ja | nei | nei (<grunn>)
 - **Confluence:** <url> | <url> (utkast)                                [confluence]
@@ -65,6 +67,9 @@ Gjenstår: <verdi> <N>, <verdi> <N>, ingen <N>.
 - Krav og deler som ikke er levert: <N>
 - Slettet (`@deprecated`): <N> filer, <N> regler/scenarioer
 - `@deprecated` som fortsatt finnes i koden: <N>
+- Tilgang og datakonsistens: <N> stemmer, <N> avviker, <N> ikke funnet, <N> usikker, av <N>
+- Regler i koden uten scenario: <N>
+- Åpne spørsmål: <N> regler og <N> scenarioer i gating-settet, <N> utenfor gating (`@draft`)
 
 ## Fremdrift for flyter                                                [flyt]
 
@@ -100,17 +105,56 @@ I `Bevis` står **P** for fs-plattform, **A** for fs-admin og **M** for min-komp
 | --- | --- | --- | --- |
 | `@DOM-SUB-KAP-NNN` | <scenariotittel> | funnet | `<repo>/<fil>:<linje>` — <hva koden gjør> |
 | `@DOM-SUB-KAP-NNN` | <scenariotittel> | ikke funnet | <hva som finnes> — søkt etter «<ord>», «<ord>» i <repoer> |
+| `@DOM-SUB-KAP-NNN` | <scenariotittel> | ikke funnet | ikke funnet på <branch> — finnes i MR !<iid> (åpen, <repo>, <source_branch>): `<fil>:<linje>` — <hva koden gjør> |   [MR]
 | `@DOM-SUB-KAP-NNN` | <scenariotittel> | usikker | `<repo>/<fil>:<linje>` — <hvorfor det er uklart> |
 | `@DOM-SUB-KAP-NNN` | <scenariotittel> | funnet | P: funnet · A: ikke relevant · M: funnet — `<fil>:<linje>`, `<fil>:<linje>` |   [per repo]
 | `@FLY-PRO-FLY-NNN` | <scenariotittel> | funnet | lages: `<repo>/<fil>:<linje>` · brukes: `<repo>/<fil>:<linje>` — <hva som overleveres> |   [flyt]
 | `@FLY-PRO-FLY-NNN` | <scenariotittel> | ikke funnet | lages: `<repo>/<fil>:<linje>` · brukes: ikke funnet — søkt etter «<ord>» i <repoer> |   [flyt]
 | `@FLY-PRO-FLY-NNN` | <scenariotittel> | ikke funnet | fasen er ikke levert: `@DOM-SUB-KAP-NNN` er `@planned` — ikke søkt |   [flyt]
 
+## Tilgang og datakonsistens
+
+Sjekket på kodenivå (*Tilgang og datakonsistens* i `fs-verify`): at rollene og tilgangene er implementert slik kravet sier. Ingenting er kjørt, og rollene er ikke testet. Radene er grunnlaget for testbrukerne i testplanen. Radene er ikke scenarioer, og står ikke i `## Scenarioer`.
+
+| Feature-ID | Sjekk | Rolle og handling | Kravet sier | Koden gjør | Resultat | Bevis |
+| --- | --- | --- | --- | --- | --- | --- |
+| `@DOM-SUB-KAP-NNN` | tilgang \| organisasjon \| konsistens | <rolle> <oppretter \| leser \| endrer \| sletter> <hva> | <hva kravet sier, med scenario eller regel> \| ikke beskrevet | <hva tilgangssjekken eller koden gjør> | stemmer \| avviker \| ikke beskrevet \| ikke funnet \| usikker | `<repo>/<fil>:<linje>` — <hva koden gjør> |
+
+Ingen krav i scope har roller, organisasjoner eller data som endres.     [når tabellen er tom, i stedet for den]
+
+## Regler uten scenario
+
+Regler i koden som ingen scenario i kravet dekker (*Regler uten scenario* i `fs-verify`). Input til testplanen og den agentiske testen (fase 2). Listen er ikke fullstendig: den har det som ble sett under letingen.
+
+| Feature-ID | Regel i koden | Type | Bevis | Forslag |
+| --- | --- | --- | --- | --- |
+| `@DOM-SUB-KAP-NNN` | <hva regelen gjør, med verdier, grenser eller meldingen> | validering \| obligatorisk felt \| grense \| standardverdi \| tilgangssjekk \| tilstandsovergang \| annet | `<repo>/<fil>:<linje>` | legg til scenario med `fs-krav` \| testes i fase 2 \| uklart om ønsket \| dekkes av `@draft`-scenario: <tittel> |
+
+Ingen.                                                                  [når det ikke er noe, i stedet for tabellen]
+
+## Åpne spørsmål
+
+Tellet fra `@openquestion` i kravfilene. `@openquestion` stopper ikke leveransen og testen: delen testes som den står, og `@draft @openquestion` er utenfor gating-settet. Spørsmålene står i `## Oppfølging`.
+
+| Feature-ID | Egenskap | Regler | Scenarioer | Utenfor gating (`@draft`) |
+| --- | --- | --- | --- | --- |
+| `@DOM-SUB-KAP-NNN` | <tittel> | <n> av <N> | <n> av <N> | <n> |
+
+Ingen åpne spørsmål.                                                    [når det ikke er noe, i stedet for tabellen]
+
+## Åpne MR-er og brancher                                              [når MR-er eller brancher er funnet]
+
+Koden i disse er ikke merget, og regnes ikke som levert. Scenarioene som bare finnes her, står som `ikke funnet` i `## Scenarioer`, med `finnes i MR !<iid>` i beviset.
+
+| Repo | MR / branch | Status | Krav den ser ut til å levere | Funnet der | Merknad |
+| --- | --- | --- | --- | --- | --- |
+| `<repo>` | [!<iid> <tittel>](<web_url>) (`<source_branch>`) | åpen \| utkast \| branch uten MR | `@DOM-SUB-KAP-NNN` | <n>/<N> | <tom \| bak main \| konflikter \| usikker kobling> |
+
 ## Kontroll
 
-| Feature-ID | Scenario | Før kontroll | Etter kontroll | Hvorfor |
-| --- | --- | --- | --- | --- |
-| `@DOM-SUB-KAP-NNN` | <scenariotittel> | ikke funnet | usikker | `<repo>/<fil>:<linje>` — <hva kontrollen fant> |
+| Feature-ID | Type | Scenario, rad eller regel | Før kontroll | Etter kontroll | Hvorfor |
+| --- | --- | --- | --- | --- | --- |
+| `@DOM-SUB-KAP-NNN` | scenario \| tilgang \| regel | <scenariotittel, rolle og handling, eller regelen> | ikke funnet | usikker | `<repo>/<fil>:<linje>` — <hva kontrollen fant> |
 
 Kontrollen endret ingen resultater.                                    [når tabellen er tom, i stedet for den]
 
@@ -190,6 +234,7 @@ Ingen.                                                                  [når in
 
 - **<kort overskrift>:** <funn i koden som ikke er et scenario, men som bør følges opp, med `<fil>:<linje>`>
 - **Åpent spørsmål:** `<@DOM-SUB-KAP-NNN>` «<scenario eller regel>» — <spørsmålet fra `# ÅPNE SPØRSMÅL:`>   [ett punkt per `@openquestion` i gating-settet]
+- **Tilgang avviker:** `<@DOM-SUB-KAP-NNN>` <rolle og handling> — <hva kravet sier og hva koden gjør>, `<repo>/<fil>:<linje>`   [ett punkt per rad med `avviker` eller `ikke funnet` i `## Tilgang og datakonsistens`]
 - **Ikke sjekket:** <det som ikke kunne sjekkes, og hvorfor, f.eks. et repo som ikke er blant kodeklonene>
 - **Krav utenfor scope:** `<fil>` (`<status>`) — <henvisning til `fs-krav` / `fs-specify`>
 - **Ikke valgt i denne kjøringen:** `<fil>` (`<status>`) — <det som ikke var med i `Omfang`, f.eks. `@deprecated`>
@@ -202,6 +247,9 @@ Ingen.                                                                  [når de
 ## Om seksjonene
 
 - **`## Oversikt per krav`** `[per repo]`: én rad per krav i scope. `Funnet` er funnet av gating-settet. `Gjenstår` er repoene som må endres, med navn, i rekkefølgen fs-plattform, fs-admin, min-kompetanse og skilt med komma (`fs-plattform`, `fs-admin, min-kompetanse`), eller `ingen`. Skriv aldri «backend», «frontend» eller «begge». Repoene kommer fra radene som ikke er `funnet` (`delvis` og `mangler` teller). Linja under teller kravene per verdi som forekommer, med flest først, og `ingen` til slutt, også med 0. Bokstavene i `Bevis` står i rekkefølgen P, A, M.
+- **`## Tilgang og datakonsistens`**: én rad per sjekk, krav for krav i rekkefølgen i `krav/`. Tilgang gjelder rolle × handling (opprette, lese, endre, slette) og organisasjon, `organisasjon` gjelder at data fra en annen organisasjon verken kan ses eller endres, og `konsistens` gjelder at sletting og endring ikke gir foreldreløse eller motstridende data. `Resultat` er det som gjelder etter kontrollen. Tallene i `## Oppsummering` regnes ut fra tabellen.
+- **`## Regler uten scenario`**: én rad per regel, krav for krav. Radene er input til testplanen og fase 2, og endrer ikke kravet.
+- **`## Åpne spørsmål`**: én rad per krav med minst ett `@openquestion`, ellers teksten «Ingen åpne spørsmål.». `Regler` og `Scenarioer` er antall med åpne spørsmål av totalt i gating-settet (`<n> av <N>`), og `Utenfor gating` er antall regler og scenarioer med `@draft @openquestion`. `fs-testplan` leser tallene.
 - **`## Fremdrift for flyter`** `[flyt]`: én rad per fase, i rekkefølgen i flyten. En fase er levert når delen av hvert krav den bygger på, er levert: delene med ankeret (`@ref-<flytens ID>`) innenfor reglene i «…» under taggen (alle ankrene når ingen ligger i dem), ellers reglene i «…», ellers hele kravet (`@implemented`). En flyt den bygger på, må være `@implemented`. Bygger fasen på en del, står delen og statusen på den i `Bygger på`. `mangler krav` når fasen ikke har `@depends-on-`. Linja under tabellen står én gang per flyt.
 - **`## Avhengigheter`** `[avhengigheter]`: én rad per par (krav i scope, avhengighet), sortert på krav i scope og så nivå. På nivå 2 og lenger er `Krav i scope` kravet i scope kjeden starter i. `Funnet` er `<n>/<N>` av gating-settet (som *uansett status*) når avhengighetene er verifisert i koden, ellers `–`. Merknaden «kan ikke leveres før dette» står bare på nivå 1, når avhengigheten ikke er `@implemented`. Avhengighetene teller ikke i `## Oppsummering`, og radene deres står aldri i `## Scenarioer`, fordi tavla «Oppgaver», `fs-testplan` og `fs-testrapport` leser den tabellen.
 - **`## Forslag til endringer`**: det som ble foreslått før brukeren svarte, med stiene til kravene, så forslaget kan leses i fila mens spørsmålene stilles. Står uendret når svarene er gitt; det som faktisk ble gjort, står i `## Levert`, `## Ikke levert` og `## Slettet`.

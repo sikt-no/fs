@@ -1,6 +1,6 @@
 ---
 name: fs-verify
-description: Verifiserer krav mot koden i dette repoet. Tar en `krav/`-sti, et scope (`@scope-<slug>`) eller en oppgave (`tasks/<domene>/<slug>`) og lokale kloner av kode-repoene. Spør først hva som skal verifiseres (`@in-progress`, `@deprecated`, flyter, alle krav uansett status, eller noe annet), og hvor mange nivåer med `@depends-on-` som skal følges, med status fra taggene eller verifisert i koden (avhengighetene retagges aldri). For hvert `@in-progress`-krav leter skillen etter implementasjonen av hvert scenario i koden, får resultatet kontrollert (av subagenten `fs-verify-kontroll` når Agent-verktøyet finnes, ellers manuelt), viser bevis (`fil:linje`), og retagger `@in-progress` → `@implemented` på `Egenskap:`-linja når alt er funnet og brukeren bekrefter. En `@in-progress`-del (`Regel:`/`Scenario:`) i et levert krav som endres, verifiseres på samme måte, og da fjernes `@in-progress` fra delen. Er noe av et krav levert, men ikke alt, blir egenskapen `@in-progress` og de leverte delene `@implemented` (delvis levert). Gis en verify-rapport (`verify-*.md`), går skillen gjennom resultatene med brukeren: usikre og ikke funne scenarioer, delvis leverte krav, og åpne spørsmål (`@openquestion` fjernes når svaret ikke endrer kravet, ellers foreslås `fs-krav`), og skriver en ny rapport. For hvert `@deprecated`-krav (egenskap eller `Regel:`/`Scenario:`) leter skillen etter spor i koden. Er koden borte og brukeren bekrefter, slettes fila eller blokken, sammen med referansene (`@depends-on-`, `@ref-`) til kravet; finnes den fortsatt, listes stedene. Verifiserer også flyter i `krav/_Flyter/`: fremdriften fra kravene fasene bygger på, og at overleveringene mellom kravene virker i koden (stedet der tilstanden lages og stedet der den brukes), og gir flyten `@planned` → `@implemented`. Skriver rapporten til fil før den spør (i chat står bare et sammendrag, og hvert oppfølgingsspørsmål har med referansene det gjelder: `krav/…:linje` og `<repo>/<fil>:<linje>`), i `tasks/<domene>/<slug>/spec/verify-<YYYY-MM-DD>-<HHMM>.md` når en oppgave er gitt, ellers rett ved siden av kravet som `verify-<feature-fil>-<YYYY-MM-DD>-<HHMM>.md` (eller `verify-<mappenavn>-<YYYY-MM-DD>-<HHMM>.md` for en hel mappe), og i `akseptansetest/<scope-slug>/` for et scope, med tidspunkt så kjøringer kan sammenlignes. Er steg 1 i akseptansetesten: rapporten er grunnlaget for testplanen (`fs-testplan`). Tar også en testplan (`akseptansetest/<slug>`) som scope når verifiseringen kjøres på nytt, og spør da etter rapporten om resultatet skal legges som en underside til testplanen i Confluence. Kjører aldri git add/commit/push. Trigges av "verifiser kravene", "er kravene implementert", "tagg kravene som implementert", "sjekk om deprecated-krav kan slettes", "rydd i deprecated", "finnes koden fortsatt", "verifiser testplanen", "legg verifiseringen i Confluence", "verifiser flyten", "virker overleveringene", "gå gjennom verify-rapporten", "forbedre verifiseringen", "avklar åpne spørsmål i verifiseringen", "delvis levert", "fs-verify".
+description: Verifiserer krav mot koden i dette repoet. Tar en `krav/`-sti, et scope (`@scope-<slug>`) eller en oppgave (`tasks/<domene>/<slug>`) og lokale kloner av kode-repoene. Spør først hva som skal verifiseres (`@in-progress`, `@deprecated`, flyter, alle krav uansett status, eller noe annet), og hvor mange nivåer med `@depends-on-` som skal følges, med status fra taggene eller verifisert i koden (avhengighetene retagges aldri). For hvert `@in-progress`-krav leter skillen etter implementasjonen av hvert scenario i koden, får resultatet kontrollert (av subagenten `fs-verify-kontroll` når Agent-verktøyet finnes, ellers manuelt), viser bevis (`fil:linje`), og retagger `@in-progress` → `@implemented` på `Egenskap:`-linja når alt er funnet og brukeren bekrefter. En `@in-progress`-del (`Regel:`/`Scenario:`) i et levert krav som endres, verifiseres på samme måte, og da fjernes `@in-progress` fra delen. Er noe av et krav levert, men ikke alt, blir egenskapen `@in-progress` og de leverte delene `@implemented` (delvis levert). Gis en verify-rapport (`verify-*.md`), går skillen gjennom resultatene med brukeren: usikre og ikke funne scenarioer, delvis leverte krav, og åpne spørsmål (`@openquestion` fjernes når svaret ikke endrer kravet, ellers foreslås `fs-krav`), og skriver en ny rapport. For hvert `@deprecated`-krav (egenskap eller `Regel:`/`Scenario:`) leter skillen etter spor i koden. Er koden borte og brukeren bekrefter, slettes fila eller blokken, sammen med referansene (`@depends-on-`, `@ref-`) til kravet; finnes den fortsatt, listes stedene. Verifiserer også flyter i `krav/_Flyter/`: fremdriften fra kravene fasene bygger på, og at overleveringene mellom kravene virker i koden (stedet der tilstanden lages og stedet der den brukes), og gir flyten `@planned` → `@implemented`. Skriver rapporten til fil før den spør (i chat står bare et sammendrag, og hvert oppfølgingsspørsmål har med referansene det gjelder: `krav/…:linje` og `<repo>/<fil>:<linje>`), i `tasks/<domene>/<slug>/spec/verify-<YYYY-MM-DD>-<HHMM>.md` når en oppgave er gitt, ellers rett ved siden av kravet som `verify-<feature-fil>-<YYYY-MM-DD>-<HHMM>.md` (eller `verify-<mappenavn>-<YYYY-MM-DD>-<HHMM>.md` for en hel mappe), og i `akseptansetest/<scope-slug>/` for et scope, med tidspunkt så kjøringer kan sammenlignes. Er fase 1 i teststrategien (forslag): kravene sjekkes mot koden (white-box, ingenting kjøres), og rapporten er grunnlaget for testplanen (`fs-testplan`). Verifiserer også på kodenivå at roller og tilganger er implementert slik kravet sier (tester dem ikke), og datakonsistensen, og rapporterer regler i koden som ikke har et scenario i kravet, og antall åpne spørsmål per krav. `@implemented` betyr bare at koden er funnet. Tar også en testplan (`akseptansetest/<slug>`) som scope når verifiseringen kjøres på nytt, og spør da etter rapporten om resultatet skal legges som en underside til testplanen i Confluence. Kjører aldri git add/commit/push. Trigges av "verifiser kravene", "er kravene implementert", "tagg kravene som implementert", "sjekk om deprecated-krav kan slettes", "rydd i deprecated", "finnes koden fortsatt", "verifiser testplanen", "legg verifiseringen i Confluence", "verifiser flyten", "virker overleveringene", "sjekk tilgangsstyringen i koden", "regler uten scenario", "gå gjennom verify-rapporten", "forbedre verifiseringen", "avklar åpne spørsmål i verifiseringen", "delvis levert", "fs-verify".
 allowed-tools: Read, Write, Edit, Grep, Glob, Bash, AskUserQuestion
 ---
 
@@ -22,6 +22,8 @@ En flyt i `krav/_Flyter/` går `@planned` →(**`fs-verify`**)→ `@implemented`
 
 Er noe av et krav levert, men ikke alt, blir egenskapen `@in-progress` og delene som er levert, `@implemented` (*Delvis levert*). Gir brukeren en verify-rapport, går du gjennom resultatene i den sammen med brukeren (*Gjennomgang av en verify-rapport*): det som er usikkert eller ikke funnet, delvis leverte krav og åpne spørsmål.
 
+Verifiseringen er fase 1 i [teststrategien (forslag)](https://sikt.atlassian.net/wiki/spaces/STUDIEADM/pages/5145100326): white-box, der koden leses og sammenlignes med scenarioene, og ingenting kjøres. Den sier ikke om løsningen virker for brukeren. `@implemented` betyr bare at koden er funnet, og om leveransen er godkjent, står i sluttrapportene fra testene. Verifiseringen kommer i tillegg til teamets vanlige kvalitetssikring (enhetstester, automatiske tester i CI og universell utforming), og erstatter den ikke. I tillegg til scenarioene sjekker du tre ting som rapporten gir videre til testplanen: at roller og tilganger er implementert i koden, og datakonsistensen (*Tilgang og datakonsistens*), regler i koden uten scenario i kravet (*Regler uten scenario*, også input til den agentiske testen i fase 2), og de åpne spørsmålene (*Åpne spørsmål*), som ikke stopper leveransen, men nevnes i testplanen.
+
 - **Ikke skriv eller rett applikasjonskode.** Mangler noe, rapporterer du det.
 - **Ikke endre kravinnhold.** Du bytter bare statustaggen på `Egenskap:`-linja, fjerner `@in-progress` fra deler i leverte krav som endres, setter og fjerner `@implemented` på deler (*Delvis levert*), sletter filer eller blokker som er `@deprecated`, og fjerner referansene (`@depends-on-`, `@ref-`) til det du sletter. I *Gjennomgang av en verify-rapport* kan du også legge til eller fjerne `@openquestion` med `# ÅPNE SPØRSMÅL:`. Steg, titler og tabeller endres bare med `fs-krav`.
 - **Påstå aldri mer enn du har sett.** Bevis er et konkret sted i koden (`fil:linje`) som du har lest. Et søk uten treff er ikke bevis for at koden er borte, bare at du ikke fant den. Derfor bekrefter brukeren alle retagginger og slettinger.
@@ -33,7 +35,7 @@ I Claude-panelet i FS Kravforvaltning har du ikke Bash:
 - Kodeklonene (fs-admin, fs-plattform, min-kompetanse) står i systemprompten. Bruk dem i stedet for å spørre, og spør bare hvis de mangler.
 - `AskUserQuestion` virker: brukeren får spørsmålet som et kort med valgene. Hopper brukeren over, still spørsmålet i svaret, og vent på brukeren.
 - Du kan ikke slette filer. Skal en `@deprecated`-fil slettes, si hvilken, så sletter brukeren den selv. Blokker fjernes med `Edit`.
-- Lesende git går ikke. Bruk `Grep` og `Glob` i klonene. Branchene i kravrepoet og klonene blir derfor ikke sjekket mot origin (*Sjekk branchen*): skriv `ikke sjekket (Claude-panelet)` i `- **Kode:**` i rapporten.
+- Lesende git går ikke. Bruk `Grep` og `Glob` i klonene. Branchene i kravrepoet og klonene blir derfor ikke sjekket mot origin (*Sjekk branchen*): skriv `ikke sjekket (Claude-panelet)` i `- **Kode:**` i rapporten. Åpne MR-er og brancher (*Åpne MR-er og brancher*) kan heller ikke sjekkes: skriv `ikke sjekket (Claude-panelet)` i `- **Åpne MR-er:**`.
 - Skjermbilder tas med chrome-devtools-MCP. `navigate_page`, `click` og `press_key` er godkjent på forhånd når fs-verify kjøres, sammen med verktøyene som bare leser (`take_screenshot`, `take_snapshot`, `wait_for` …). Andre kall, f.eks. `new_page` og `fill`, må godkjennes i panelet (se *Skjermbilder*).
 - Du har ikke Agent-verktøyet, så du kan ikke starte kontrolløren (`fs-verify-kontroll`). Du gjør kontrollen selv (*Kontroll*), og den er ikke uavhengig. **Si det til brukeren før du begynner å lete**, med denne setningen: «Kontrollen av resultatene gjøres manuelt i Claude-panelet: jeg sjekker mine egne funn, uten en uavhengig kontrollør. Les bevisene i rapporten før du sier ja til endringene. Vil du ha uavhengig kontroll, kjør Verifiser i terminalen.» Skriv `- **Kontroll:** manuell (Claude-panelet)` i rapporten.
 
@@ -44,6 +46,7 @@ I terminalen i FS Kravforvaltning («Verifiser i terminal …») og i Claude Cod
 0. **Sjekk branchen** i dette repoet mot origin og main, som beskrevet i [`.claude/references/oppdatert-branch.md`](../../references/oppdatert-branch.md). Er den bak, spør før du henter.
 1. **Krav.** Oppga brukeren en verify-rapport (`verify-*.md`), følg *Gjennomgang av en verify-rapport* i stedet for resten av denne lista. Oppga brukeren en spesifikasjon (`tasks/<domene>/<slug>/spec/spec-*.md`, typisk fra «Verifiser» på tavla «Oppgaver» i FS Kravforvaltning), er scope bare feature-filene under `## Krav` i den (slått opp på feature-ID). Oppga brukeren et scope (`scope-<slug>`, `@scope-<slug>` eller `tasks/<domene>/scope-<slug>.md`), er scope alle kravene og delene med taggen `@scope-<slug>`, funnet og sjekket mot scope-tabellen som i *Scope* i [`.claude/references/akseptansetest/krav-fra-testplan.md`](../../references/akseptansetest/krav-fra-testplan.md). Oppga brukeren en testplan (`akseptansetest/<slug>`, eller `testplan.md` i den), er scope kravene i «Omfang» og «Venter på verifisering» i testplanen, slått opp på Feature-ID (*Kravene i de andre skillene* i [`.claude/references/akseptansetest/krav-fra-testplan.md`](../../references/akseptansetest/krav-fra-testplan.md)). Oppga brukeren en `krav/`-sti (fil eller mappe), bruk den. En sti under `krav/_Flyter/`, eller en `@FLY-`-ID, er en flyt (*Verifisere flyt*). Et scope, en oppgave eller en testplan tar også med flytene som går gjennom kravene, funnet som i *Finn flytene* i [`.claude/references/akseptansetest/krav-fra-testplan.md`](../../references/akseptansetest/krav-fra-testplan.md) (for en testplan: flytene i «Flyter»), så testplanen kan bygge på resultatet. En spesifikasjon tar dem ikke med: der er en flyt bare med når den er valgt selv. Oppga brukeren en oppgave (`tasks/<domene>/<slug>`, eller bare slug — slå opp med `Glob` `tasks/*/<slug>/`), les Feature-ID-ene fra `## Krav` i alle `<oppgave>/spec/spec-*.md` (ikke det som står under *Utenfor scope*), og finn de autoritative filene under `krav/` på feature-ID (`@DOM-SUB-KAP-NNN`), ikke filnavn. Les ikke kopiene i `spec/krav-input/`: de finnes bare i eldre oppgaver, og kan være utdaterte. 0 treff → «ikke funnet under krav/», mer enn 1 → «duplisert feature-ID». Mangler begge, spør.
 2. **Kode.** Spør (`AskUserQuestion`) om stien til de lokale klonene av kode-repoene (se *Kodeklonene*). Foreslå repoer fra `oppgave.md` (lenker), `<lag>/plan-*.md` og `<lag>/task-*-completion.md` når en oppgave er gitt. Sjekk at stiene finnes, og sjekk branchen i hver klone ([`.claude/references/oppdatert-branch.md`](../../references/oppdatert-branch.md)): det er koden på branchen som verifiseres. Uten kode kan ingenting verifiseres: stopp og si det. Skriv aldri `.claude/spec.local.md`.
+2b. **Åpne MR-er og brancher.** Finn MR-ene og branchene i hver klone som kan inneholde koden for kravene i scope (*Åpne MR-er og brancher*). Det gjøres uten spørsmål, og resultatet står i rapporten.
 3. **Omfang og avhengigheter.** Spør hva som skal verifiseres, og hvor langt `@depends-on-` skal følges (*Omfang og avhengigheter* under). Spørsmålene stilles i ett `AskUserQuestion`-kall, sammen med spørsmålet om skjermbilder (steg 4) når det også skal stilles.
 4. **Skjermbilder.** Har prompten ikke sagt om det skal tas skjermbilder («Ta skjermbilder» eller «Ingen skjermbilder»), spør med `AskUserQuestion` før du begynner å lete: «Skal jeg ta skjermbilder fra https://test-fsadmin.sikt.no/?», med valgene «Ja» og «Nei». Hopper brukeren over, regn det som «Nei», og si det i rapporten. Se *Skjermbilder*.
 5. **Hint.** Når en oppgave er gitt: les `design.md`, `<lag>/plan-*.md` og `<lag>/task-*-completion.md`. Filstier, komponentnavn, GraphQL-felt og ruter derfra er de beste stedene å lete.
@@ -127,7 +130,7 @@ For hvert krav:
 
 Spør ikke underveis. Når alle kravene i scope er kontrollert, går du videre til *Rapport og endringer*: rapporten skrives til fil før du spør.
 
-**Kan leveres** når gating-settet ikke er tomt, **alle** gating-scenarioer er `funnet` etter kontrollen. Åpne spørsmål stopper ikke leveransen: `@openquestion` på et scenario i gating-settet står i `## Oppfølging` med spørsmålet, og `@draft @openquestion`-deler er ikke levert (de er utenfor gating-settet). Retaggingen er én `Edit` på `Egenskap:`-tag-linja; bare statustaggen byttes: `@OPT-SOK-VIS-001 @must @in-progress` → `@OPT-SOK-VIS-001 @must @implemented`. `@draft`- og `@deprecated`-deler står urørt.
+**Kan leveres** når gating-settet ikke er tomt, **alle** gating-scenarioer er `funnet` etter kontrollen. Tilgangsavvik (*Tilgang og datakonsistens*) og regler uten scenario hindrer ikke forslaget, men står i spørsmålet. Åpne spørsmål stopper ikke leveransen: `@openquestion` på et scenario i gating-settet står i `## Oppfølging` med spørsmålet, og `@draft @openquestion`-deler er ikke levert (de er utenfor gating-settet). Retaggingen er én `Edit` på `Egenskap:`-tag-linja; bare statustaggen byttes: `@OPT-SOK-VIS-001 @must @in-progress` → `@OPT-SOK-VIS-001 @must @implemented`. `@draft`- og `@deprecated`-deler står urørt.
 
 Ellers står kravet som `@in-progress`, og det som mangler, står i rapporten. Er noe av kravet funnet, foreslår du `@implemented` på delene som er levert (*Delvis levert*).
 
@@ -192,6 +195,42 @@ En flyt (`krav/_Flyter/`, se *Flyter* i `krav/README.md`) beskriver et løp på 
 
 Rapporten får `## Fremdrift for flyter` (se `[flyt]` i [`references/rapportmal.md`](references/rapportmal.md)), og scenarioene står i `## Scenarioer` med begge bevisene.
 
+## Tilgang og datakonsistens
+
+CRUD, tilgangsstyring og datakonsistens verifiseres bare her, på kodenivå. Du tester ikke rollene: du verifiserer i koden at rollene og tilgangene er implementert slik kravet sier, så opprette, lese, endre og slette potensielt er riktig. Den agentiske funksjonstesten (fase 2) tester ikke tilgang, og den interne testen gjør det heller ikke, så det du ikke ser etter her, blir ikke sjekket noe annet sted. Du kjører ingenting: du leser koden og sammenligner med kravet. Tilgangsradene er grunnlaget for tilgangsmatrisen og testbrukerne i testplanen (`fs-testplan`).
+
+Gjelder kravene i scope som verifiseres (ikke avhengighetene), og bare for krav som har roller, organisasjoner eller data som opprettes, endres eller slettes. Et rent visningskrav uten tilgangsregler får ingen rader.
+
+For hvert slikt krav, sjekk i koden (fs-plattform for tilgangssjekken i subgraph og backend, fs-admin og min-kompetanse for hva som vises og skjules):
+
+1. **Tilgangsreglene.** Roller × organisasjon × opprette/lese/endre/slette. Finn tilgangssjekken for hver handling kravet har, og sammenlign med rollene i kravet (`Gitt`-stegene, `Regel:`-titlene og `Synlighet`-reglene). Mangler tilgangssjekk, eller er den et annet sted enn grensesnittet, skriv det.
+2. **Organisasjonsgrensen.** Kan en bruker se eller endre data fra en annen organisasjon enn den hen har tilgang til? Se etter filter på organisasjon i spørringer og mutations, og at en id fra en annen organisasjon avvises.
+3. **Sletting og endring.** Gir det foreldreløse eller motstridende data? Se etter fremmednøkler og kaskade, referanser fra andre tabeller eller krav (`@depends-on-`), og avhengige verdier som ikke oppdateres sammen.
+
+Resultatet per sjekk er `stemmer` (koden gjør det kravet sier, lest på `fil:linje`), `avviker` (koden gjør noe annet, og hva), `ikke beskrevet` (kravet sier ikke noe om tilgangen, og koden har en regel: den er også en rad i *Regler uten scenario*), `ikke funnet` (ingen tilgangssjekk funnet, etter *Negative søk*) eller `usikker`. Kontrolløren sjekker radene på samme måte som scenarioene (*Kontroll*).
+
+Radene står i `## Tilgang og datakonsistens` i rapporten, ikke i `## Scenarioer`: FS Kravforvaltning leser den tabellen som scenarioer. Et avvik endrer ikke kravet og stopper ikke forslaget i *Rapport og endringer*, men står i spørsmålet om å levere kravet, og i `## Oppfølging`. Foreslå `fs-krav` når kravet bør si noe om tilgangen.
+
+## Regler uten scenario
+
+Koden har ofte regler kravet ikke sier noe om: valideringer, obligatoriske felt og grenser, standardverdier, tilgangssjekker og tilstandsoverganger. De er input til testplanen og den agentiske testen (fase 2), som utleder testcaser fra reglene, og til kravarbeidet, når kravet bør ha dem.
+
+For hvert krav du har lest koden for, list reglene du **så** mens du leste (ikke et fullstendig søk i hele repoet): valideringen i input-typen eller skjemaet, standardverdien i `emptyObjectGenerators`-filene, sperren i mutationen, og lignende. Ta bare med en regel som hører til funksjonaliteten kravet beskriver, og som ingen scenario i kravet dekker (også `@draft`-scenarioer: da står det «dekkes av `@draft`-scenario»). Hver regel står med `fil:linje`, hva den gjør (verdiene, grensene, meldingen), og et forslag: `legg til scenario med fs-krav` (kravet bør si det), `testes i fase 2` (en detalj testen utleder), eller `uklart om ønsket` (koden kan være feil). Du endrer ikke kravet.
+
+Radene står i `## Regler uten scenario`. Kontrolløren sjekker at hver regel finnes og er uten scenario, og søker etter regler du bommet på.
+
+## Åpne spørsmål
+
+Rapporten teller åpne spørsmål per krav, så leseren og testplanen ser hvor kravet ikke er avklart. `@openquestion` gater ikke noe: en del med bare `@openquestion` er med i gating-settet og testes som den står, og `@draft @openquestion` er utenfor.
+
+For hvert krav i scope, tell fra feature-fila (ikke fra koden):
+
+- **Regler** med `@openquestion` på `Regel:`-linja
+- **Scenarioer** med åpne spørsmål: `@openquestion` på scenarioet selv eller på regelen over, i gating-settet
+- **Utenfor gating:** regler og scenarioer med `@draft @openquestion`
+
+Tallene står i `## Åpne spørsmål`, og spørsmålene (fra `# ÅPNE SPØRSMÅL:`) i `## Oppfølging`. Tallene regnes ut, de telles ikke på øyemål (*Rapport*).
+
 ## Avhengigheter
 
 Antall nivåer og om avhengighetene letes etter i koden, står i svaret på *Omfang og avhengigheter*. Med «Ingen» hopper du over denne seksjonen.
@@ -228,19 +267,48 @@ Et søk uten treff er svakt bevis: det kan bety at koden heter noe annet. Før e
 3. **Tekstene brukeren ser:** oversettelsesfilene (i fs-admin `src/common/messages/**/*.json`, og tilsvarende i min-kompetanse). En etikett der leder til komponenten som bruker den.
 4. **Kodeverk og databasen:** migrasjonene (`**/db/migration/*.sql`) og kodeverkstabellene. Et begrep kan finnes som kodeverdi (`POLITI_ATTEST`) uten å være koblet til det scenarioet gjelder.
 5. **API-et:** GraphQL-skjemaene (`*.graphqls`, `*.graphql`) i alle subgrafene, ikke bare den du venter.
+6. **Åpne MR-er og brancher** fra steg 2b (*Åpne MR-er og brancher*), med de samme søkeordene.
 
 Søk med `git -C <repo> grep -i` (eller Grep), som tar alle filtyper. Skill ekte kode fra genererte filer (`generated/`). List søkeordene og stedene i beviset. Finner du noe som ligner, men ikke dekker scenarioet, skriv det i beviset også: da er resultatet `ikke funnet`, men leseren ser hva som finnes.
+
+## Åpne MR-er og brancher
+
+Koden for et krav er ofte skrevet, men ikke merget. Før et scenario står som `ikke funnet`, skal du derfor ha sett etter den i åpne MR-er og aktive brancher i kodeklonene. Det som bare finnes der, er ikke levert: scenarioet blir `ikke funnet` (og kravet retagges ikke), men beviset og rapporten sier hvor koden er, så leseren ser at den er på vei.
+
+**Finn kandidatene** (steg 2b, én gang per klone, med Bash):
+
+1. `git -C <repo> fetch origin --prune`. Det flytter ikke utsjekket branch eller filer.
+2. Åpne MR-er: `glab mr list -R <gruppe/repo> -F json` (repoet fra `git -C <repo> remote get-url origin`, f.eks. `fs/fs-plattform` eller `studieadm/fs-admin`). Ta med utkast (`--draft`). Les `iid`, `title`, `source_branch`, `target_branch`, `author`, `draft`, `web_url`.
+3. Brancher uten MR: bare de som navnet peker ut, `git -C <repo> branch -r --list '*<nøkkel>*'`. Repoene har tusenvis av brancher, så ikke list alle.
+
+En MR eller branch er kandidat når nøkkelen står i branchnavnet, tittelen eller beskrivelsen (`glab mr view <iid> -R <repo>`): feature-ID-en (`OPT-OVO-INN-001`), `<slug>` fra scopet eller oppgaven, Jira-saken (`BAT-268`, fra `Issue` i `oppgave.md` og scope-tabellen), eller GitHub-issuet (`# GitHub:` i kravfila). Har du hint fra oppgaven (`<lag>/plan-*.md`, `task-*-completion.md`), bruk også filene og komponentene der: `glab mr diff <iid> -R <repo>` eller `git -C <repo> diff --name-only origin/<target>...origin/<source>` viser om MR-en rører dem. MR-er som ikke treffer noe, tas ikke med. Er det uklart om en MR hører til, ta den med og skriv «usikker kobling».
+
+**Let i dem** uten å sjekke ut noe:
+
+- `git -C <repo> grep -i -n "<ord>" origin/<source_branch> -- <sti>` og `git -C <repo> show origin/<source_branch>:<fil>`.
+- Gjelder bare for scenarioer som ikke er funnet på den utsjekkede branchen. Søkeordene er de samme som i *Negative søk*.
+- Er MR-en allerede merget, er koden på `main`: oppdater klonen (*Sjekk branchen*) i stedet for å lete i MR-en.
+
+**Beviset** får et eget format, så det ikke kan forveksles med levert kode: `ikke funnet på <branch> — finnes i MR !<iid> (<åpen | utkast>, <repo>, <source_branch>): <fil>:<linje> — <hva koden gjør>`. Resultatet i `## Scenarioer` er fortsatt `ikke funnet`, og FS Kravforvaltning leser det slik. Retagging, `## Forslag til endringer` og tallene i `## Oppsummering` bygger bare på det som er på den utsjekkede branchen.
+
+**Rapporten** får linja `- **Åpne MR-er:**` og seksjonen `## Åpne MR-er og brancher` (*rapportmal.md*), med MR-ene, hvilke krav de ser ut til å levere, og hvor mange scenarioer som er funnet der. Står en MR bak main eller har den konflikter (`glab mr view`), si det.
+
+**Kontrollen** gjelder dem også: kontrolløren får listen over MR-er og branchene som ble lett i, og sjekker at et `finnes i MR` er riktig, og at det ikke finnes kode i en MR som er oversett.
 
 ## Kontroll
 
 Den som har lett, ser lett det den venter å se. Før resultatet vises til brukeren, kontrolleres det av en som ikke har lett.
 
-**Med Agent-verktøyet** (Claude Code i terminalen, også terminalen i FS Kravforvaltning): start subagenten `fs-verify-kontroll` (`.claude/agents/fs-verify-kontroll.md`) for hver feature-fil, gjerne flere parallelt. Gi den stien til feature-fila, kodeklonene og resultattabellen, ikke hvordan du lette. Den svarer med `bekreftet` / `avkreftet` / `usikker` per rad og et forslag til resultat.
+**Med Agent-verktøyet** (Claude Code i terminalen, også terminalen i FS Kravforvaltning): start subagenten `fs-verify-kontroll` (`.claude/agents/fs-verify-kontroll.md`) for hver feature-fil, gjerne flere parallelt. Gi den stien til feature-fila, kodeklonene og resultattabellen, tilgangsradene og reglene uten scenario, ikke hvordan du lette. Den svarer med `bekreftet` / `avkreftet` / `usikker` per rad og et forslag til resultat.
 
 **Uten Agent-verktøyet** (Claude-panelet i FS Kravforvaltning): gjør kontrollen selv, og si til brukeren at den er manuell (se *I FS Kravforvaltning*):
 
 1. Les `fil:linje` på nytt for hvert `funnet`, og sjekk koden mot `Når` og `Så`, ikke mot det du skrev.
 2. Søk på nytt for hvert `ikke funnet` med søkeord du ikke har brukt, etter *Negative søk*.
+
+Kontrollen gjelder også radene i `## Tilgang og datakonsistens` (leses på `fil:linje`, og `ikke funnet` søkes etter på nytt) og `## Regler uten scenario` (finnes regelen, og dekker et scenario i kravet den likevel? har kontrolløren funnet regler som mangler?). Det kontrollen endrer, står i `## Kontroll`.
+
+**Kontroll er ikke menneskelig kontroll.** `fs-verify-kontroll` er en uavhengig agent, og «ferdig når» i fase 1 krever i tillegg at en annen person enn den som kjørte verifiseringen, har lest rapporten og bevisene. Det er et felt i rapporten (`- **Menneskelig kontroll:**`) som du aldri fyller ut: det står som `[Fylles ut: navn og dato]` til personen har skrevet det selv, i rapportfila (og på siden i Confluence når den finnes), og `fs-testrapport` (verifisering) leser det.
 
 **Når kontrollen er uenig:** les det kontrollen viser til. Har kontrollen rett, bruk det nye resultatet. Er dere fortsatt uenige, blir resultatet `usikker`, med begge synene i beviset, og brukeren avgjør. Et `funnet` som kontrollen avkrefter, kan aldri brukes til retagging.
 
@@ -261,7 +329,7 @@ Når alle kravene i scope er kontrollert, skriver du rapporten til fil **før** 
    - **Delvis levert:** `<feature-ID> — <tittel>` (`<fil>`, `<status>` → `@in-progress`, <n>/<N> funnet), med delene som får `@implemented` (`Regel: <tittel>` eller `Scenario: <tittel>`, med linja).
    - **Kan slettes:** `<feature-ID> — <tittel eller del>` (`<fil>`, hele fila eller blokken), med repoene det er søkt i, og referansene til kravet som fjernes (`<fil>`: `@depends-on-<ID>` | `@ref-<ID>`).
    - **Blir stående:** kravene og delene som ikke kan leveres, med `<n>/<N> funnet` og hvorfor.
-2. **Si kort fra i chat**, og vis ikke tabellene: lenken til rapportfila (som markdown-lenke, så den kan åpnes), linjene i `## Oppsummering`, og én linje per krav eller del i forslaget (`<feature-ID> — <tittel>`: kan leveres <n>/<n> | kan slettes | blir stående <n>/<N>). Scenarioene utenfor gating-settet nevnes med antall.
+2. **Si kort fra i chat**, og vis ikke tabellene: lenken til rapportfila (som markdown-lenke, så den kan åpnes), linjene i `## Oppsummering`, og én linje per krav eller del i forslaget (`<feature-ID> — <tittel>`: kan leveres <n>/<n> | kan slettes | blir stående <n>/<N>), med antall avvik i tilgangen og regler uten scenario når det er noen. Scenarioene utenfor gating-settet nevnes med antall.
 3. **Er det ingenting å spørre om** (ingen `usikker`, og ingenting kan leveres, leveres delvis eller slettes): ikke spør. Gå til steg 5.
 4. **Still oppfølgingsspørsmålene** med `AskUserQuestion`, høyst 4 spørsmål per kall, i rekkefølgen i rapporten. Hvert spørsmål skal kunne leses alene, uten rapporten og uten chatten over:
    - Feature-ID, tittel og stien til kravet med linja (`krav/…/fil.feature:<linje>`) står i spørsmålet.
@@ -320,35 +388,35 @@ Rapporten skrives til fil før spørsmålene, og oppdateres med svarene i samme 
 - **Scope:** `akseptansetest/<scope-slug>/verify-<YYYY-MM-DD>-<HHMM>.md`, i mappa testplanen for scopet får (*Struktur* i [`akseptansetest/README.md`](../../../akseptansetest/README.md)). Lag mappa hvis den ikke finnes. `- **Spec:**` utelates, og `- **Krav:**` er `@scope-<slug>` (<N> feature-filer).
 - **Testplan:** gjelder testplanen én oppgave, som for en oppgave (`<oppgave>/spec/verify-…`). Ellers (et scope, en mappe eller feature-filer) i testplanmappa: `akseptansetest/<slug>/verify-<YYYY-MM-DD>-<HHMM>.md`. `- **Spec:**` utelates, og `- **Krav:**` er kilden i testplanen (`@scope-<slug>`, `krav/<sti>/` eller filene, <N> feature-filer).
 
-Skriv aldri over en tidligere rapport, og endre den ikke: den er det du sammenligner med neste gang. Rapporten fra kjøringen som pågår, oppdateres med svarene (*Rapport og endringer*, steg 5) og linja `- **Confluence:**` (*Confluence*), og ikke etter at kjøringen er ferdig.
+Skriv aldri over en tidligere rapport, og endre den ikke: den er det du sammenligner med neste gang. Rapporten fra kjøringen som pågår, oppdateres med svarene (*Rapport og endringer*, steg 5) og linja `- **Confluence:**` (*Confluence*), og ikke etter at kjøringen er ferdig. Unntaket er `- **Menneskelig kontroll:**`, som personen som kontrollerer rapporten, fyller ut etterpå (*Kontroll*). Du fyller det aldri ut.
 
 Skriv aldri rapporten noe annet sted under `krav/`. Ikke kall den `verification-*.md`: det mønsteret er reservert for `<lag>/` (se *Fire regler* i `tasks/README.md`).
 
 **Formatet står i [`references/rapportmal.md`](references/rapportmal.md).** Les malen før du skriver rapporten, og følg den nøyaktig: alle seksjonene, i samme rekkefølge, med de faste tekstene. Det er det som gjør at to kjøringer kan sammenlignes. FS Kravforvaltning leser `- **Dato:**`, `- **Spec:**` og tabellen `## Scenarioer`, og viser resultatet på kortet i Spesifikasjoner.
 
-**Tall regnes ut, de telles ikke.** Alle tall i rapporten (scenarioer funnet per krav, i alt, og i *Oppsummering*) regnes ut fra tabellen `## Scenarioer` og fra endringene du har gjort, f.eks. med `awk` på rapportfila når du har Bash. Uten Bash: tell radene i tabellen én gang til, krav for krav, før du skriver tallene.
+**Tall regnes ut, de telles ikke.** Alle tall i rapporten (scenarioer funnet per krav, i alt, og i *Oppsummering*, og tallene i `## Åpne spørsmål`) regnes ut fra tabellen `## Scenarioer`, fra `@openquestion`-taggene i kravfilene og fra endringene du har gjort, f.eks. med `awk` på rapportfila når du har Bash. Uten Bash: tell radene i tabellen én gang til, krav for krav, før du skriver tallene.
 
-`- **Kontroll:**` sier hvem som kontrollerte: `fs-verify-kontroll` (uavhengig) eller `manuell (Claude-panelet)`. `## Kontroll` lister radene der kontrollen endret resultatet, så leseren ser hva den første letingen bommet på.
+`- **Kontroll:**` sier hvem som kontrollerte: `fs-verify-kontroll` (uavhengig) eller `manuell (Claude-panelet)`. `## Kontroll` lister radene der kontrollen endret resultatet, så leseren ser hva den første letingen bommet på. Kolonnen `Type` sier om raden er et scenario, en tilgangsrad eller en regel uten scenario.
 
 **`utforing.md`.** Når scope er en spesifikasjon som er sendt (har en seksjon i `<oppgave>/utforing.md`, se *Utføring* i `tasks/README.md`): mangler noe (`ikke funnet` eller `usikker` etter kontrollen, eller brukeren har sagt at noe mangler), sett steget i repoet der koden mangler, tilbake til `- **Status**: pågår`, legg til `- **Tilbake**: <YYYY-MM-DD>`, og en linje i `Logg` (`<dato> — fs-verify — <n> ikke funnet, <n> usikker · tilbake til <repo>`). Er alt funnet, legg bare til en linje i `Logg` (`alt funnet · verifisert`); kortet står i «Verifisert» når kravene er `@implemented`.
 
 ## Confluence
 
-Verifiseringen er steg 1 i akseptansetesten (se [`akseptansetest/README.md`](../../../akseptansetest/README.md)), før testplanen, som i [teststrategien](https://sikt.atlassian.net/wiki/spaces/STUDIEADM/pages/5117902850). Resultatet kan legges som en underside til testplanen i Confluence, så testflyten har verifiseringen på samme sted som testcasene og testrapportene. Gjør dette etter at rapporten er skrevet. Retaggingen og rapporten endres ikke av det.
+Verifiseringen er fase 1 i akseptansetesten (se [`akseptansetest/README.md`](../../../akseptansetest/README.md)), før testplanen, som i [teststrategien](https://sikt.atlassian.net/wiki/spaces/STUDIEADM/pages/5145100326). Resultatet kan legges som en underside til testplanen i Confluence, så testflyten har verifiseringen på samme sted som testcasene og testrapportene. Gjør dette etter at rapporten er skrevet. Retaggingen og rapporten endres ikke av det.
 
 0. **Finnes testplanen?** Se etter testplanen etter *Finn testplanen* i [`.claude/references/akseptansetest/confluence.md`](../../references/akseptansetest/confluence.md): testplanen i scope, eller `Grep` etter kilden (scope-id-en, oppgaven, mappa eller fila) i `akseptansetest/*/testplan.md`. Finnes ingen testplan med `- **Confluence**:`, er dette den første verifiseringen: spør ikke om Confluence. Si at neste steg er `fs-testplan` med den samme kilden, og at den bygger på rapporten og legger den som underside når testplanen opprettes. Slutt der. Finnes testplanen, fortsett.
 1. **Spør** (`AskUserQuestion`): «Legg resultatet i Confluence?», med valgene «Ja, som utkast» (anbefalt), «Ja, publiser» og «Nei». Spør ikke når prompten allerede har sagt det («Legg resultatet i Confluence» eller «Ikke Confluence»). Finnes ingen Atlassian-MCP i økta, eller er den ikke logget inn, spør ikke: si det, og at rapporten står i fila. Hopper brukeren over, regn det som «Nei».
 2. **Testplanen** er den du fant i steg 0.
-3. **Lag undersiden** «Verifisering – <leveranse> – <YYYY-MM-DD HH:MM>» (tidspunktet for kjøringen, *Tidspunkt*) under testplanen, med `status: "draft"` ved «Ja, som utkast». Innholdet er rapporten fra og med metadataene: `## Oversikt per krav` (når den finnes), `## Oppsummering`, `## Scenarioer` og `## Levert`, med tabellene som i fila. Stiene i `Bevis` blir lenker til GitHub på commiten i `- **Kode:**` (`https://github.com/sikt-no/<repo>/blob/<sha>/<sti>#L<linje>`). Følg *Fra fila til siden* i `confluence.md`.
+3. **Lag undersiden** «Verifisering – <leveranse> – <YYYY-MM-DD HH:MM>» (tidspunktet for kjøringen, *Tidspunkt*) under testplanen, med `status: "draft"` ved «Ja, som utkast». Innholdet er rapporten fra og med metadataene: `## Oversikt per krav` (når den finnes), `## Oppsummering`, `## Scenarioer`, `## Tilgang og datakonsistens`, `## Regler uten scenario`, `## Åpne spørsmål` og `## Levert`, med tabellene som i fila. Stiene i `Bevis` blir lenker til GitHub på commiten i `- **Kode:**` (`https://github.com/sikt-no/<repo>/blob/<sha>/<sti>#L<linje>`). Følg *Fra fila til siden* i `confluence.md`.
 4. **Oppdater testplanen:** raden «1. Verifisering (`fs-verify`)» i «Status i flyten», med lenken, «Alt funnet» eller «<N> ikke funnet, <N> usikker», og datoen (*«Status i flyten» på testplanen* i `confluence.md`). Oppdater raden i `testplan.md` også. Andre deler av testplanen rører du ikke.
 5. **Skriv lenken** i metadataene i rapportfila: `- **Confluence:** <url>` (`<url> (utkast)` for et utkast), etter `- **Skjermbilder:**` (variant `[confluence]` i rapportmalen).
-6. **Si hva som er neste steg:** `fs-testrapport` for verifiseringen, med testplanen. Er det kommet krav i «Omfang» som var i «Venter på verifisering», foreslå også å kjøre `fs-testplan` på nytt, så de står i «Omfang».
+6. **Si hva som er neste steg:** `fs-testrapport` for verifiseringen, med testplanen (og at en annen person skal kontrollere rapporten, *Kontroll*), at tilgangsradene er grunnlaget for testbrukerne i testplanen, at reglene uten scenario er input til den agentiske testen (`fs-testcaser-cdp`), og at de åpne spørsmålene nevnes i testplanen, men ikke stopper leveransen. Er det kommet krav i «Omfang» som var i «Venter på verifisering», foreslå også å kjøre `fs-testplan` på nytt, så de står i «Omfang».
 
 Skjermbildene fra *Skjermbilder* lastes ikke opp. Siden lenker til mappa på GitHub når den er committet.
 
 ## Git
 
-Ikke `git add`, `commit`, `push`, `checkout` eller `stash` i noe repo. Lesende git-kommandoer (`git -C <repo> log`, `grep`, `ls-files`) er lov. Brukeren commiter endringene i `krav/`, eller lager PR med «Lag PR» i FS Kravforvaltning.
+Ikke `git add`, `commit`, `push`, `checkout` eller `stash` i noe repo. Lesende git-kommandoer (`git -C <repo> log`, `grep`, `ls-files`, `show`, `diff`, `fetch`) er lov, også mot andre refs (`origin/<branch>`). Det samme gjelder lesende `glab` (`glab mr list`, `view`, `diff`). Aldri `glab mr create`, `merge`, `note`, `approve`, `update` eller `close`. Brukeren commiter endringene i `krav/`, eller lager PR med «Lag PR» i FS Kravforvaltning.
 
 ## Referanser
 
@@ -358,4 +426,4 @@ Ikke `git add`, `commit`, `push`, `checkout` eller `stash` i noe repo. Lesende g
 - **`fs-specify` / `fs-specify-delta`** — setter `@in-progress`, på egenskaper og på deler i leverte krav som endres.
 - **`.claude/agents/fs-verify-kontroll.md`** — kontrolløren som sjekker resultatene uavhengig (*Kontroll*).
 - **[`.claude/references/akseptansetest/`](../../references/akseptansetest/)** — scope som kilde, testplanen som scope, og Confluence-steget (*Confluence*).
-- **`fs-testplan`** — neste steg i akseptansetesten, og bygger på rapporten.
+- **`fs-testplan`** — neste steg i akseptansetesten, og bygger på rapporten: kravene, åpne spørsmål, reglene uten scenario og tilgangsradene.

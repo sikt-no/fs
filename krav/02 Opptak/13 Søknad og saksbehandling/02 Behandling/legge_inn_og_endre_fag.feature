@@ -10,7 +10,10 @@
 # inntasting før det finnes en mekanisme for fagvalg per poengvariant, må den
 # aksen ettermonteres på manuelt innlagte fag.
 #
-@OPT-BEH-BEH-008 @must @draft
+# Feature-ID-en er endret fra @OPT-BEH-BEH-008 til @OPT-BEH-BEH-023, fordi
+# søknadsmangler.feature også bruker 008 (26.10.2026).
+#
+@OPT-BEH-BEH-023 @must @draft
 Egenskap: Legge inn og endre fag i grunnlaget
   Som saksbehandler i opptak
   ønsker jeg å legge inn fag som bare finnes i opplastet dokumentasjon, og endre fag slik reglene tillater
