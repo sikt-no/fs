@@ -9,7 +9,7 @@
 # Påstanden fra KREG: avklart 2026-10-27 at beregningen ikke bruker påstanden fra KREG,
 # som i @OPT-BEH-BEH-015 («Påstanden fra KREG brukes ikke»). Koden krever i dag at
 # KREG sier GSK, og bruker kontrollmotoren som kryssjekk. Det er et avvik fra kravet.
-@OPT-BEH-BEH-025 @must @draft
+@OPT-BEH-BEH-027 @must @draft
 Egenskap: Beregne GSK fra vitnemål
   Som saksbehandler
   ønsker jeg at systemet beregner om et vitnemål gir generell studiekompetanse
