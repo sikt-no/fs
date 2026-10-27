@@ -109,7 +109,7 @@ Egenskap: Ferdigbehandle en sak
       Når søknaden behandles automatisk
       Så er saken hos "Universitetet i Oslo" ferdig behandlet
       Og søkeren ser de automatiske manglene for "Matematikk R2" og "Fysikk 2" i Min kompetanse
-      Og søkeren har mottatt én melding av typen MANGEL
+      Og søkeren har mottatt én melding om mangler
 
   Regel: Steg som bygger på et steg som ikke kan avgjøres, hoppes over
 

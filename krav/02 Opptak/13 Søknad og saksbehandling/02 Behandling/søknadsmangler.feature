@@ -243,7 +243,7 @@ Egenskap: Søknadsmangler
     Scenario: Registrering av mangel publiserer ikke mangelen
       Når saksbehandleren ved Universitetet i Oslo registrerer mangelen "KAR"
       Så ser ikke søkeren mangelen "KAR" i Min kompetanse
-      Og søkeren har ikke mottatt en melding av typen MANGEL
+      Og søkeren har ikke mottatt en melding om mangler
 
     Scenario: Saksbehandleren publiserer mangelen
       Gitt at saken hos "Universitetet i Oslo" har mangelen "KAR"
@@ -260,7 +260,7 @@ Egenskap: Søknadsmangler
       Gitt at saken hos "Universitetet i Oslo" har manglene "KAR" og "STEMPEL"
       Når saksbehandleren ved Universitetet i Oslo publiserer manglene i saken
       Så ser søkeren manglene "KAR" og "STEMPEL" i Min kompetanse
-      Og søkeren mottar én melding av typen MANGEL
+      Og søkeren mottar én melding om mangler
 
     @draft @openquestion
     Scenario: Søkeren får melding hver gang saksbehandleren publiserer manglene
@@ -270,7 +270,7 @@ Egenskap: Søknadsmangler
       Gitt at saksbehandleren ved Universitetet i Oslo har publisert mangelen "KAR"
       Og at saksbehandleren har registrert mangelen "STEMPEL"
       Når saksbehandleren publiserer manglene i saken
-      Så mottar søkeren en ny melding av typen MANGEL
+      Så mottar søkeren en ny melding om mangler
 
     @draft @openquestion
     Scenario: Saksbehandleren publiserer en sak som bare har automatiske mangler
@@ -291,7 +291,7 @@ Egenskap: Søknadsmangler
       Gitt at saken hos "Universitetet i Oslo" har den automatiske mangelen for "Matematikk R2"
       Når den automatiske behandlingen setter saken til ferdig behandlet
       Så ser søkeren den automatiske mangelen for "Matematikk R2" i Min kompetanse
-      Og søkeren mottar én melding av typen MANGEL
+      Og søkeren mottar én melding om mangler
 
     @draft @openquestion
     Scenariomal: Saksbehandleren ser at endringene ikke er publisert når <endring>
@@ -322,14 +322,14 @@ Egenskap: Søknadsmangler
       Når saksbehandleren velger å publisere manglene og sette saken til "Ferdig behandlet"
       Så er saken "Ferdig behandlet"
       Og søkeren ser mangelen "KNN" i Min kompetanse
-      Og søkeren har mottatt en melding av typen MANGEL
+      Og søkeren har mottatt en melding om mangler
 
     Scenario: Sette saken til ferdig behandlet uten å publisere manglene
       Gitt at saksbehandleren ved Universitetet i Oslo er advart om at mangelen "KNN" ikke er publisert
       Når saksbehandleren velger å sette saken til "Ferdig behandlet" uten å varsle søkeren
       Så er saken "Ferdig behandlet"
       Og søkeren ser ikke mangelen "KNN" i Min kompetanse
-      Og søkeren har ikke mottatt en melding av typen MANGEL
+      Og søkeren har ikke mottatt en melding om mangler
 
     Scenario: Avbryte når saken har mangler som ikke er publisert
       Gitt at saksbehandleren ved Universitetet i Oslo er advart om at mangelen "KNN" ikke er publisert
@@ -339,15 +339,15 @@ Egenskap: Søknadsmangler
     Scenario: Søkeren får én melding om manglene som publiseres i saken
       Gitt at saken hos "Universitetet i Oslo" har manglene "KAR" og "STEMPEL"
       Når manglene "KAR" og "STEMPEL" publiseres
-      Så mottar søkeren én melding av typen MANGEL
+      Så mottar søkeren én melding om mangler
 
     Scenario: Søkeren får melding fra hver saksbehandlende organisasjon som publiserer mangler
       Gitt at saksbehandleren ved Universitetet i Oslo har publisert mangelen "KAR"
       Når saksbehandleren ved UiT Norges arktiske universitet publiserer mangelen "STEMPEL"
-      Så mottar søkeren en ny melding av typen MANGEL om mangelen "STEMPEL"
+      Så mottar søkeren en ny melding om mangelen "STEMPEL"
 
     Scenario: Søkeren åpner meldingen om mangel
-      Gitt at søkeren har mottatt en melding av typen MANGEL
+      Gitt at søkeren har mottatt en melding om mangler
       Når søkeren åpner meldingen
       Så ser søkeren at det er registrert mangler i søknaden
       Og søkeren ser fristen for å laste opp dokumentasjon
