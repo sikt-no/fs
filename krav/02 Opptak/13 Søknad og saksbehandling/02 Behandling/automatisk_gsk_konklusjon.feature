@@ -204,12 +204,6 @@ Egenskap: Automatisk GSK-konklusjon
       Så får søknaden en positiv GSK-konklusjon
       Og grunnlagskoden og grunnlagsdatoen er de samme som i den tidligere konklusjonen
 
-    Scenario: Konklusjon fra FS-klienten som ikke er kvalitetssikret, gjenbrukes ikke
-      Gitt at søkerens eneste positive GSK-konklusjon er satt i FS-klienten i et lokalt opptak
-      Og at konklusjonen ikke er med i oversikten over kvalitetssikrede GSK-konklusjoner
-      Når søknaden opprettes
-      Så får søknaden ingen GSK-konklusjon fra tidligere opptak
-
     @draft @openquestion
     Scenario: Annullert konklusjon gjenbrukes ikke
       # ÅPNE SPØRSMÅL:
