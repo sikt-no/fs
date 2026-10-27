@@ -183,16 +183,6 @@ Egenskap: Automatisk grunnlag
       Når søknaden behandles automatisk
       Så får søknaden grunnlaget ut fra vitnemålet fra 2025
 
-  @ref-OPT-BEH-BEH-015
-  Regel: Grunnlaget settes etter GSK-konklusjonen
-    # Ny stack setter GSK-konklusjonen før grunnlaget, i samme automatiske
-    # behandling.
-
-    Scenario: Grunnlaget settes når vitnemålet gir generell studiekompetanse
-      Gitt at søkeren har ett elektronisk vitnemål som gir generell studiekompetanse
-      Når søknaden behandles automatisk
-      Så har søknaden fått GSK-konklusjonen før grunnlaget settes
-
   @openquestion
   Regel: Når grunnlaget settes
     # ÅPNE SPØRSMÅL:
