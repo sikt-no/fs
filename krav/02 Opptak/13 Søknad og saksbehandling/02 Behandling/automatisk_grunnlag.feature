@@ -70,7 +70,7 @@ Egenskap: Automatisk grunnlag
 
   Grunnlaget avgjør hvilke opptakskrav søknaden vurderes mot, hvordan søkeren
   rangeres, og hvilke kvoter søkeren kan plasseres i. Har søkeren ett
-  elektronisk vitnemål som gir generell studiekompetanse, eller har
+  elektronisk vitnemål med påstanden at søkeren har GSK, eller har
   saksbehandleren valgt ett av vitnemålene, velger systemet grunnlaget ut fra
   vitnemålet og søkerens alder. Hvilke grunnlag som kan
   velges automatisk, og hva som skal til, bestemmes av egenskapene
@@ -98,7 +98,7 @@ Egenskap: Automatisk grunnlag
       Gitt at søknadsalternativenes regelverk har grunnlagene VOV og VES
       Og at VOV krever førstegangsvitnemål og har en aldersgrense
       Og at VES krever et vitnemål
-      Og at søkeren har ett elektronisk vitnemål som gir generell studiekompetanse
+      Og at søkeren har ett elektronisk vitnemål med påstanden at søkeren har GSK
       Og at vitnemålet <er førstegangsvitnemål>
       Og at søkeren er <alder> år på datoen for aldersberegning
       Når søknaden behandles automatisk
@@ -111,7 +111,7 @@ Egenskap: Automatisk grunnlag
         | er førstegangsvitnemål      | 22    | VES      |
 
     Scenario: Bare grunnlag i søknadsalternativenes regelverk kan settes
-      Gitt at søkeren har ett elektronisk vitnemål som gir generell studiekompetanse
+      Gitt at søkeren har ett elektronisk vitnemål med påstanden at søkeren har GSK
       Og at et grunnlag som passer søkeren, ikke er med i regelverket til noen av søknadsalternativene
       Når søknaden behandles automatisk
       Så får ikke søknaden grunnlaget som ikke er med i regelverket
@@ -149,7 +149,7 @@ Egenskap: Automatisk grunnlag
 
     Scenario: Søker med førstegangsvitnemål får både VOV og VES
       Gitt at søknadsalternativenes regelverk har grunnlagene VOV og VES
-      Og at søkeren har ett elektronisk førstegangsvitnemål som gir generell studiekompetanse
+      Og at søkeren har ett elektronisk førstegangsvitnemål med påstanden at søkeren har GSK
       Og at søkeren er innenfor aldersgrensen for VOV
       Når søknaden behandles automatisk
       Så får søknaden grunnlagene VOV og VES
@@ -170,7 +170,7 @@ Egenskap: Automatisk grunnlag
         | grunn                                                                                                    |
         | søkeren har flere elektroniske vitnemål som ikke er annullert, og saksbehandleren har ikke valgt ett av dem |
         | søkerens eneste elektroniske dokument er et kompetansebevis                                               |
-        | vitnemålet ikke gir generell studiekompetanse                                                             |
+        | vitnemålet har påstanden at søkeren ikke har GSK                                                          |
         | søkeren ikke har noe elektronisk vitnemål                                                                 |
         | ingen av grunnlagene i regelverket passer søkeren                                                         |
 
@@ -178,7 +178,7 @@ Egenskap: Automatisk grunnlag
     Scenario: Grunnlag fra vitnemålet saksbehandleren har valgt
       # Avklart 2026-10-26 i review av PR #818: har saksbehandleren valgt vitnemålet, behandles
       # saken automatisk på det.
-      Gitt at søkeren har et elektronisk vitnemål fra 2024 og et fra 2025 som gir generell studiekompetanse
+      Gitt at søkeren har et elektronisk vitnemål fra 2024 og et fra 2025 med påstanden at søkeren har GSK
       Og at saksbehandleren har valgt vitnemålet fra 2025
       Når søknaden behandles automatisk
       Så får søknaden grunnlaget ut fra vitnemålet fra 2025
@@ -197,7 +197,7 @@ Egenskap: Automatisk grunnlag
     #   videreføres?
 
     Scenario: Saksbehandleren starter den automatiske behandlingen
-      Gitt at søkeren har ett elektronisk vitnemål som gir generell studiekompetanse
+      Gitt at søkeren har ett elektronisk vitnemål med påstanden at søkeren har GSK
       Når saksbehandleren starter den automatiske behandlingen for søknaden
       Så får søknaden grunnlaget automatisk
 
