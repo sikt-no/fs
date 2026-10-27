@@ -111,7 +111,7 @@ Fyll ut malen, og skriv `akseptansetest/<testplan-slug>/testplan.md`:
 - «Testcaser som skal lages»: for fase 2 én rad per regel i testen (og per regel uten scenario som testes), med antall scenarioer (en scenariomal teller eksemplene), de utledede testcasene og teknikken. Finn de obligatoriske feltene, lengdene, grenseverdiene og statusene i koden eller i `<feature>.design.md` (*Lese koden* i `roller-og-testdata.md`), og skriv hva som prøves, ikke stegene. For fase 3 én rad per flyt eller oppgave uten flyt fra «Vurdering per krav», med kravene, antall scenarioer, avhengighetene og om det er regresjon, og hvor mange krav som ikke er med i noen flyt.
 - «Ikke med i denne testen» med grunnen fra `krav-fra-testplan.md`, også fasene og overleveringene i flytene som ikke testes.
 - «Forutsetninger»: et `# Kjent brudd:` i en flyt blir en egen rad.
-- Forutsetning 5 fylles ut fra verify-rapporten. Forutsetning 8 (CDP-agenten og nøklene) er alltid med.
+- Forutsetning 5 fylles ut fra verify-rapporten. Forutsetning 8 (innloggingen, «Overstyrt bruker» og nøklene) er alltid med.
 - «Kriterier for godkjent»: kravene i «Omfang» er kriteriene, og tabellen sier når hver fase er ferdig, fra malen.
 - «Status i flyten»: 1. Verifisering er verify-rapporten (fila, og siden i Confluence når den finnes), «Alt funnet» eller «<N> ikke funnet, <N> usikker», og datoen i rapporten. Uten rapport: «Ikke kjørt». «Testplan» er «Laget». 2. Agentisk funksjonstest og 3. Intern akseptansetest er «Venter». Er leveransen ikke til ekstern test, er 4. Ekstern akseptansetest «Ikke aktuell», ellers «Venter».
 - «Vedlegg»: verify-rapporten (fase 1). Resten står med «–» til de andre skillene fyller dem.
