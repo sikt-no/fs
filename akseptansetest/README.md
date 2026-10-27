@@ -32,7 +32,9 @@ akseptansetest/
     ├── testcaser-ekstern.md
     ├── verify-<YYYY-MM-DD>-<HHMM>.md     # fra fs-verify, når leveransen er et scope (mappa har scope-slugen)
     ├── kjoring-<YYYY-MM-DD>-<HHMM>/      # valgfritt (steg 4b): resultat.md fra en CDP-kjøring (skjermbilder ligger lokalt, ignorert av git)
-    └── testrapport-<verifisering|intern|ekstern>-<YYYY-MM-DD>.md
+    ├── testrapport-<verifisering|intern|ekstern>-<YYYY-MM-DD>.md
+    ├── oppsett.md                    # forslag: hva som gjøres i testmiljøet før og etter testen (se «Oppsett av testmiljøet»)
+    └── oppsett/                      # forslag: skriptene oppsett.md viser til
 ```
 
 - **Testplan-slugen** er scope-slugen for et scope, `<domene>-<oppgave-slug>` for en oppgave (en oppgave-slug er bare unik innenfor domenet), og navnet på mappa eller fila i kebab-case for en mappe eller fil.
@@ -72,3 +74,17 @@ Kolonnene er `Nr | Scenario | Steg | Forventet resultat | Faktisk resultat | Sta
 - **Status** er `Bestått`, `Ikke bestått` eller `Ikke testet` (med en kort begrunnelse). Det er den testrapporten teller.
 
 Reglene for testcasene står i [`.claude/references/akseptansetest/testcase-regler.md`](../.claude/references/akseptansetest/testcase-regler.md).
+
+## Oppsett av testmiljøet (forslag)
+
+> Dette er et forslag fra opptaksteamet, prøvd ut i [`soke-om-tidlig-opptak/`](soke-om-tidlig-opptak/oppsett.md). Det er ikke avtalt på tvers av teamene ennå. Si fra hvis dere gjør det annerledes, eller har et bedre sted.
+
+Mange tester trenger at noe gjøres i testmiljøet først, for eksempel at en innstilling endres, eller at en søknad gjøres klar, og at det settes tilbake etterpå. Uten et felles sted ligger slike skript lokalt hos den som skrev dem, og de andre i teamet finner dem ikke.
+
+- **`oppsett.md`** ligger ved siden av testplanen, og har tre deler: *Før testen* (hva, hvordan og hvem), *Sjekk* (hvordan man ser at alt er klart), og *Etter testen* (hva som settes tilbake, og hva som ikke kan settes tilbake).
+- **Løsningen først.** Det som kan gjøres i løsningen, beskrives som steg der, gjerne de samme som «Gjør klar»-stegene i testcasene. SQL brukes bare der løsningen ikke kan gjøre det.
+- **`oppsett/`** har skriptene. Vi tar vare på tre slags: de som setter opp før testen, de som sjekker at oppsettet er riktig, og de som setter tilbake etterpå. Engangsspørringer for å finne testdata tas ikke med.
+- **Sjekkskriptet** bare leser, og gir én tabell med én rad per sjekk og en kolonne `ok`, så alt kan ses i ett resultat. Det kjøres dagen før testen, siden data i testmiljøet ikke alltid blir liggende.
+- **Hvert skript** sier i en kommentar øverst hva det gjør, hvilket skript som setter det tilbake, og at det kjøres som superbruker når tabellene har RLS. `oppsett.md` sier hvilken versjon av fs-plattform skriptene er skrevet mot, siden skjemaet kan endres av migreringene der.
+- **Testplanen** viser til `oppsett.md` i tabellen «Testdata», i kolonnen «Kan settes tilbake» eller der det passer.
+- **Ingen hemmeligheter.** Ingen passord, tokens eller ekte personopplysninger i skriptene. Testpersonene i testmiljøet er syntetiske.
