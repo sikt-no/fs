@@ -2,18 +2,18 @@
 @FLY-OPT-AUT-001 @must @draft @e2e @depends-on-FLY-OPT-SAK-001
 Egenskap: Automatisk saksbehandling
   Fra søknaden er blitt en sak hos den saksbehandlende organisasjonen, til saken er ferdig
-  behandlet og er med i plasstildelingen, uten at en saksbehandler har gjort noe. GSK beregnes
-  for hvert vitnemål når søknaden kommer inn, før flyten. Flyten gjelder søkere med ett vitnemål
-  med påstanden at søkeren har GSK. Den automatiske
+  behandlet og er med i plasstildelingen, uten at en saksbehandler har gjort noe. Påstanden om
+  GSK beregnes for hvert vitnemål når vitnemålet importeres, før flyten (OPT-BEH-BEH-015).
+  Flyten gjelder søkere med ett vitnemål med påstanden at søkeren har GSK. Den automatiske
   behandlingen setter grunnlaget, poengene, vurderingen av kravelementene og kvoten, i den
   rekkefølgen, og setter saken til ferdig behandlet når alt er avgjort. Andre søkere behandles
-  ikke helautomatisk, og er ikke med i flyten (se OPT-BEH-BEH-025). Rettes en feil i regelverket, beregner opptaksforvalteren
-  søknadsalternativene feilen gjaldt, på nytt.
+  ikke helautomatisk, og er ikke med i flyten (se OPT-BEH-BEH-025). Rettes en feil i
+  regelverket, beregner opptaksforvalteren søknadsalternativene feilen gjaldt, på nytt.
 
   # Kjent brudd: den automatiske behandlingen setter ikke saken til ferdig behandlet, og
   # plasstildelingen krever ikke at saken er ferdig behandlet (se OPT-BEH-BEH-025 og OPT-PLA-TIL-001).
-  # Kjent brudd: den automatiske behandlingen setter GSK-konklusjonen selv, og GSK lagres ikke på
-  # vitnemålet (se OPT-BEH-BEH-015).
+  # Kjent brudd: koden beregner GSK i den automatiske behandlingen, ikke når vitnemålet importeres,
+  # og påstanden lagres ikke på vitnemålet (se OPT-BEH-BEH-015).
 
   Bakgrunn:
     Gitt at søknaden til "Kari Nordmann" har en sak hos "Universitetet i Oslo"
