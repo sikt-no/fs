@@ -6,7 +6,7 @@
 - **Scope-fil**: [scope-opprette-opptak-2027](../../tasks/opptak/scope-opprette-opptak-2027.md)
 - **Oppgaver**: [opptak/opprette-og-vedlikeholde-opptak](../../tasks/opptak/opprette-og-vedlikeholde-opptak/oppgave.md)
 - **Krav**: 8 feature-filer i scopet, 5 i testen (2 `@implemented`, 3 `@in-progress`), commit `a8d128e` (2026-10-21)
-- **Verifisering**: [verify-2026-10-21-1442.md](../../tasks/opptak/opprette-og-vedlikeholde-opptak/spec/verify-2026-10-21-1442.md), [verify-2026-10-21-2142.md](../../tasks/opptak/opprette-og-vedlikeholde-opptak/spec/verify-2026-10-21-2142.md)
+- **Verifisering**: [verify-2026-10-21-1442.md](https://github.com/sikt-no/fs/blob/3936e8aef713dc588d9d9fa11e36a9468b7d37a6/tasks/opptak/opprette-og-vedlikeholde-opptak/spec/verify-2026-10-21-1442.md), [verify-2026-10-21-2142.md](../../tasks/opptak/opprette-og-vedlikeholde-opptak/spec/verify-2026-10-21-2142.md)
 - **Confluence**: https://sikt.atlassian.net/wiki/spaces/STUDIEADM/pages/5128028165, under [Testplaner](https://sikt.atlassian.net/wiki/spaces/STUDIEADM/pages/5126062121/Testplaner)
 - **Laget**: 2026-10-21 av fs-testplan. Ny versjon 2026-10-21 kl. 22: hele scopet, også det som ikke er levert (avvik fra teststrategien, avgjort av produkteier)
 
@@ -158,7 +158,7 @@ Testansvarlig skriver beslutningen og begrunnelsen i sluttrapporten. Rettede fun
 
 | Steg | Side | Status | Dato |
 |---|---|---|---|
-| 1. Verifisering (`fs-verify`) | [Verifisering – Opprette og vedlikeholde opptak – 2026-10-21 14:42](https://sikt.atlassian.net/wiki/spaces/STUDIEADM/pages/5127045158) · [verify-2026-10-21-1442.md](../../tasks/opptak/opprette-og-vedlikeholde-opptak/spec/verify-2026-10-21-1442.md) | 11 ikke funnet, 2 usikker (14:42). Oversikten over opptak: alt funnet (21:42, [Verifisering – … – 2026-10-21 21:42](https://sikt.atlassian.net/wiki/spaces/STUDIEADM/pages/5128650825) · [verify-2026-10-21-2142.md](../../tasks/opptak/opprette-og-vedlikeholde-opptak/spec/verify-2026-10-21-2142.md)) | 2026-10-21 |
+| 1. Verifisering (`fs-verify`) | [Verifisering – Opprette og vedlikeholde opptak – 2026-10-21 14:42](https://sikt.atlassian.net/wiki/spaces/STUDIEADM/pages/5127045158) · [verify-2026-10-21-1442.md](https://github.com/sikt-no/fs/blob/3936e8aef713dc588d9d9fa11e36a9468b7d37a6/tasks/opptak/opprette-og-vedlikeholde-opptak/spec/verify-2026-10-21-1442.md) | 11 ikke funnet, 2 usikker (14:42). Oversikten over opptak: alt funnet (21:42, [Verifisering – … – 2026-10-21 21:42](https://sikt.atlassian.net/wiki/spaces/STUDIEADM/pages/5128650825) · [verify-2026-10-21-2142.md](../../tasks/opptak/opprette-og-vedlikeholde-opptak/spec/verify-2026-10-21-2142.md)) | 2026-10-21 |
 | 2. Testplan | (denne siden) | Laget, ny versjon med oversikten over opptak | 2026-10-21 |
 | 3. Testrapport – verifisering | – | Venter | |
 | 4. Intern akseptansetest | [Intern akseptansetest – Opprette og vedlikeholde opptak](https://sikt.atlassian.net/wiki/spaces/STUDIEADM/pages/5127209099) · [testcaser-intern.md](testcaser-intern.md) | Klar til test for opprett opptak. Testcasene for oversikten over opptak lages | 2026-10-21 |
