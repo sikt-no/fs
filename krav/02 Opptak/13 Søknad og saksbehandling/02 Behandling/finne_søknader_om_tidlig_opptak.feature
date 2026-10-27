@@ -24,9 +24,11 @@
 # AVKLART 23.10.2026 (kravet følger det som leveres i STEK-561 og STEK-268)
 #
 # - Filteret for tidlig opptak har tre valg: søkt om tidlig opptak, mangler
-#   konklusjon og har konklusjon. Valgene i filteret kombineres med «eller», og
-#   filteret kombineres med de andre filtrene i sakslisten med «og», som de andre
-#   filtrene.
+#   konklusjon og har konklusjon. Filteret kombineres med de andre filtrene i
+#   sakslisten med «og», som de andre filtrene.
+# - (Endret 27.10.2026, etter koden fra STEK-561.) De to valgene for konklusjon
+#   kombineres med «eller». Valget søkt om tidlig opptak kombineres med valgene for
+#   konklusjon med «og». Erstatter at alle valgene i filteret kombineres med «eller».
 # - Valgene for konklusjon gjelder bare saker der søkeren har søkt om tidlig opptak.
 #   En sak der søkeren ikke har søkt, mangler ikke konklusjon.
 # - Det filtreres ikke på hvilken konklusjon saken har, eller på om søkeren deltar.
@@ -35,7 +37,7 @@
 #   som er med i tidligopptaket, avgjøres når det gjennomføres (OPT-BEH-BEH-007), og
 #   filtrene skal ikke gi det samme utvalget som prøvekjøringen.
 #
-@OPT-BEH-BEH-009 @must @in-progress
+@OPT-BEH-BEH-009 @must @implemented
 Egenskap: Finne søknader om tidlig opptak
   Som saksbehandler
   ønsker jeg å filtrere sakene på om søkeren har søkt om tidlig opptak, og på om saken har konklusjon for tidlig opptak
@@ -73,14 +75,13 @@ Egenskap: Finne søknader om tidlig opptak
       Når saksbehandler filtrerer på saker der konklusjonen for tidlig opptak mangler
       Så vises ikke saken til "Ola Nordmann"
 
-    Scenariomal: Valg i filteret for tidlig opptak kombineres med eller
-      Når saksbehandler filtrerer på saker der <valg>
-      Så vises kun <saker>
+    Scenario: Valgene for konklusjon kombineres med eller
+      Når saksbehandler filtrerer på saker der konklusjonen for tidlig opptak mangler eller saken har konklusjon for tidlig opptak
+      Så vises kun sakene til "Kari Nordmann", "Per Hansen" og "Anne Lie"
 
-      Eksempler:
-        | valg                                                                                | saker                                                  |
-        | konklusjonen for tidlig opptak mangler eller saken har konklusjon for tidlig opptak | sakene til "Kari Nordmann", "Per Hansen" og "Anne Lie" |
-        | søkeren har søkt om tidlig opptak eller konklusjonen for tidlig opptak mangler      | sakene til "Kari Nordmann", "Per Hansen" og "Anne Lie" |
+    Scenario: Søkt om tidlig opptak kombineres med valgene for konklusjon med og
+      Når saksbehandler filtrerer på saker der søkeren har søkt om tidlig opptak og konklusjonen for tidlig opptak mangler
+      Så vises kun saken til "Per Hansen"
 
     Scenario: Filteret for tidlig opptak kombineres med saksbehandlingsstatus
       Når saksbehandler filtrerer på saker der saken har konklusjon for tidlig opptak

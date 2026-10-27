@@ -44,6 +44,41 @@ Egenskap: Frister og hendelser for opptak
       Når opptaksforvalter setter at redigering av utdanningstilbud stenger "2027-06-06"
       Så har opptaket dato for når redigering av utdanningstilbud stenger "2027-06-06"
 
+  @ref-OPT-OPT-UTD-003
+  Regel: Opptaksforvalter ved forvaltende organisasjon må kunne sette frist for å trekke utdanningstilbud
+
+    # Lagt til 2026-10-26: Trekkfristen er en egen frist, i tillegg til redigeringsfristen.
+    # Virkningen står i 12 Utdanningstilbud/02 Utdanningstilbud i opptak/trekke_utdanningstilbud.feature.
+    # AVKLART 2026-10-26 (produkteier): Trekkfristen må være satt for å lagre opptaket, og kan ikke være før
+    # redigeringen av utdanningstilbud stenger.
+    Scenario: Sette frist for å trekke utdanningstilbud
+      Når opptaksforvalter setter fristen for å trekke utdanningstilbud til "2027-06-20 23:59"
+      Så har opptaket frist for å trekke utdanningstilbud "2027-06-20 23:59"
+
+    Scenario: Opptaket kan ikke lagres uten fristen for å trekke utdanningstilbud
+      Gitt at fristen for å trekke utdanningstilbud ikke er satt
+      Når opptaksforvalter lagrer opptaket
+      Så blir opptaket ikke lagret
+      Og opptaksforvalter ser at fristen for å trekke utdanningstilbud må være satt
+
+    Scenariomal: Fristen for å trekke utdanningstilbud kan være samme dag som redigeringen stenger, eller senere
+      Gitt at redigering av utdanningstilbud stenger "2027-06-06"
+      Når opptaksforvalter setter fristen for å trekke utdanningstilbud til "<trekkfrist>"
+      Og opptaksforvalter lagrer opptaket
+      Så er opptaket lagret
+
+      Eksempler:
+        | trekkfrist       |
+        | 2027-06-06 23:59 |
+        | 2027-06-20 23:59 |
+
+    Scenario: Fristen for å trekke utdanningstilbud kan ikke være før redigeringen stenger
+      Gitt at redigering av utdanningstilbud stenger "2027-06-06"
+      Når opptaksforvalter setter fristen for å trekke utdanningstilbud til "2027-06-05 23:59"
+      Og opptaksforvalter lagrer opptaket
+      Så blir opptaket ikke lagret
+      Og opptaksforvalter ser at fristen for å trekke utdanningstilbud ikke kan være før redigeringen av utdanningstilbud stenger
+
   @openquestion
   Regel: Opptaksforvalter ved forvaltende organisasjon må kunne åpne for søkning
     # ÅPNE SPØRSMÅL:
