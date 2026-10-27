@@ -39,7 +39,7 @@ Egenskap: Automatisk kvoteplassering
       Når saksbehandleren behandler søknaden på grunnlaget "PRA"
       Så plasseres ikke søkeren i kvotetypen "ORDF"
 
-  @depends-on-OPT-OVO-FRI-001
+  @depends-on-OPT-OVO-FRI-001 @ref-OPT-BEH-BEH-028
   # Regelen «Opptaksforvalter setter dato for aldersberegning».
   Regel: Søkerens alder beregnes på opptakets dato for aldersberegning
 
