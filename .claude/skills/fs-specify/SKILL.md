@@ -38,7 +38,7 @@ Alt denne skillen skriver havner i krav-undermappa til én oppgave: **`<spec>/` 
 
 1. **Oppga brukeren en sti eller slug** i invokasjonen (`tasks/opptak/registrere-praksis`, `registrere-praksis`, eller en full sti til `.../spec/`), bruk den. En slug slås opp med `Glob` `tasks/*/<slug>/`; gir den mer enn ett treff, spør hvilken.
 2. **Ellers:** list oppgavemappene `tasks/<domene>/<slug>/` (alle mapper på det nivået, unntatt `mal/`; de fleste har `oppgave.md`) og vis oppgavene som finnes via `AskUserQuestion` (de mest relevante, gjerne filtrert på domenet brukeren nevner), pluss **«Ny oppgave»**.
-3. **Ny oppgave:** spør om `domene` — bare verdier fra domenetabellen i `tasks/README.md` er gyldige — en kebab-case `slug` (lesbar beskrivelse, ikke issue-nummer; unik innenfor domenet), tittel og issue (valgfritt). Skriv en minimal `tasks/<domene>/<slug>/oppgave.md` fra [`tasks/mal/oppgave.md`](../../../tasks/mal/oppgave.md): uten malkommentaren, med tittel, domene, slug, issue (eller `–`) og eier (eller `–`), og `–` i resten av feltene. `Fase` utelates. Statusloggen får én linje: `| <dato> | Opprettet med fs-specify | <eier eller –> | – |`. Hører oppgaven til et initiativ som skal deles i flere oppgaver, foreslå `fs-scope` i stedet.
+3. **Ny oppgave:** spør om `domene` — bare verdier fra domenetabellen i `tasks/README.md` er gyldige — en kebab-case `slug` (lesbar beskrivelse, ikke issue-nummer; unik innenfor domenet), tittel og issue (valgfritt). Før en ny Jira-sak foreslås for oppgaven, kjør `jira-overlapp-sjekk`. Skriv en minimal `tasks/<domene>/<slug>/oppgave.md` fra [`tasks/mal/oppgave.md`](../../../tasks/mal/oppgave.md): uten malkommentaren, med tittel, domene, slug, issue (eller `–`) og eier (eller `–`), og `–` i resten av feltene. `Fase` utelates. Statusloggen får én linje: `| <dato> | Opprettet med fs-specify | <eier eller –> | – |`. Hører oppgaven til et initiativ som skal deles i flere oppgaver, foreslå `fs-scope` i stedet.
 4. **Opprett `<spec>/`** hvis den ikke finnes.
 5. **Scope.** Har `oppgave.md` feltet `Scope:`, les scope-fila (`tasks/<domene>/scope-<slug>.md`). Raden for oppgaven i `## Oppgaver` gir kravene (Feature-ID-er) og skisselenkene som er utgangspunktet i *Hent kravene* og *Skisser*.
 
@@ -91,7 +91,7 @@ Kravene kopieres ikke. Spesifikasjonen lenker til fila under `krav/` med Feature
 
 En `.feature`-fil passerer hvis `Egenskap:`-tag-linja har **`@planned` eller `@in-progress`**, eller hvis kravet er avviklet (se _`@deprecated`-krav og -deler_ under). Andre tags på enkelt-`Regel:`/`Scenario:` påvirker ikke om fila passerer — med unntak av `@draft` og `@deprecated`, se _`@draft`-deler_ og _`@deprecated`-deler_ under.
 
-- `@in-progress` må passere fordi skillen selv setter den (se _Retagg_). Ellers ville en ny kjøring mot samme krav filtrert bort alt.
+- `@in-progress` må passere fordi skillen selv setter den (se _Retagg_). Ellers ville en ny kjøring mot samme krav filtrert bort alt. Et `@in-progress` krav kan også være delvis levert (`fs-verify`, se *Delvis levert* i `krav/README.md`): delene som er `@implemented`, er levert, og er ikke med i scope. Resten bygges.
 - `@implemented` passerer **ikke** — kravet er levert; en ny iterasjon går via `fs-krav` (modus D). Unntak: har fila `@planned`-, `@in-progress`- eller `@deprecated`-deler, passerer den med bare de delene (se _Deler i leverte krav som endres_ under).
 - `@deprecated` passerer — kravet er avviklet, og spec-en er en bestilling om å fjerne koden (se *Avvikling* i `krav/README.md`).
 - `@draft` og utaggede passerer ikke.

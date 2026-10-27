@@ -9,7 +9,10 @@
 # designet er det minst modne i initiativet (Confluence har «1. versjon av
 # design»).
 #
-@OPT-BEH-BEH-009 @must @draft
+# Feature-ID-en er endret fra @OPT-BEH-BEH-009 til @OPT-BEH-BEH-024, fordi
+# finne_søknader_om_tidlig_opptak.feature også bruker 009 (26.10.2026).
+#
+@OPT-BEH-BEH-024 @must @draft
 Egenskap: Sammenligne vitnemål
   Som saksbehandler i opptak
   ønsker jeg å sammenligne søkerens vitnemål med hverandre

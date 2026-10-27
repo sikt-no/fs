@@ -9,7 +9,11 @@ Egenskap: Vise endringslogg for utdanningstilbudet
   Bakgrunn:
     Gitt at opptaksforvalter har åpnet et utdanningstilbud
 
+  @openquestion
   Regel: Endringslogg for utdanningstilbudet kan ses
+    # ÅPNE SPØRSMÅL:
+    # - Hvilke felt og registreringer skal logges?
+    # - Kravet venter på innsiktsarbeidet og kravene fra Team Bat, som jobber med endringslogg nå.
 
     Scenario: Se endringslogg for registreringer på utdanningstilbudet
       Gitt at det er gjort registreringer på utdanningstilbudet
@@ -18,7 +22,3 @@ Egenskap: Vise endringslogg for utdanningstilbudet
     Scenario: Endringslogg viser hvem som endret og når
       Gitt at det er gjort en registrering på utdanningstilbudet
       Så viser endringsloggen hvem som gjorde endringen og tidspunktet
-
-# ÅPNE SPØRSMÅL:
-# - Hvilke felt og registreringer skal logges?
-# - Kravet må raffineres og samkjøres med team-bat, som jobber med endringslogg nå.
