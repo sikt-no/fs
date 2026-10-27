@@ -59,7 +59,8 @@
 #   poengene settes i automatisk_grunnlag.feature (@OPT-BEH-BEH-019) og
 #   automatisk_poengberegning.feature (@OPT-BEH-BEH-018), som ennå bare ligger
 #   på hver sin branch.
-# - Søkere med flere vitnemål behandles i vitnemålsbehandlingen.
+# - Hvordan saksbehandleren velger vitnemål for søkere med flere vitnemål,
+#   står i velge_vitnemål_som_grunnlag.feature (@OPT-BEH-BEH-004).
 @OPT-BEH-BEH-020 @must @draft
 Egenskap: Automatisk vurdering av spesielle opptakskrav
   Som saksbehandler
@@ -87,68 +88,105 @@ Egenskap: Automatisk vurdering av spesielle opptakskrav
   #   andre sakene skal ikke vurderes på denne saken (STEK-593).
   # - Skal et studieønske som fjernes, også fjerne kravelementene det ga
   #   (STEK-505)?
+  # - FS157.001 i FS-klienten beregner om søkerne er kvalifisert for et helt
+  #   opptak. Trengs det tilsvarende?
 
   @depends-on-OPT-REG-KRA-002
   Regel: Kravelementer som er koblet til vitnemålet, vurderes automatisk
     # Koblingen er kravkoden for vitnemålet, som settes på kravelementet i
-    # regelverket.
+    # regelverket. Én kravkode sjekker vitnemål fra både R94 og Kunnskapsløftet.
 
     Scenario: Fagkrav som er oppfylt på vitnemålet
       Gitt at søkeren har ett elektronisk vitnemål som ikke er annullert
       Og at vitnemålet har Matematikk R1
-      Og at søknaden har kravelementet Matematikk R1, koblet til vitnemålet
+      Og at søknaden har fagkravet Matematikk R1, koblet til vitnemålet
       Når søknaden behandles automatisk
-      Så er kravelementet Matematikk R1 oppfylt
+      Så er fagkravet Matematikk R1 oppfylt
 
     Scenario: Fagkrav som ikke er oppfylt på vitnemålet
       Gitt at søkeren har ett elektronisk vitnemål som ikke er annullert
       Og at vitnemålet ikke har Matematikk R1
-      Og at søknaden har kravelementet Matematikk R1, koblet til vitnemålet
+      Og at søknaden har fagkravet Matematikk R1, koblet til vitnemålet
       Når søknaden behandles automatisk
-      Så er kravelementet Matematikk R1 ikke oppfylt
+      Så er fagkravet Matematikk R1 ikke oppfylt
 
-    Scenario: Karakteren fra vitnemålet registreres på kravelementet
+    Scenario: Karakteren fra vitnemålet registreres på fagkravet
       Gitt at søkeren har ett elektronisk vitnemål med karakteren 5 i Fysikk 1
-      Og at søknaden har kravelementet Fysikk 1, koblet til vitnemålet
+      Og at søknaden har fagkravet Fysikk 1, koblet til vitnemålet
       Når søknaden behandles automatisk
-      Så har kravelementet Fysikk 1 karakteren 5
+      Så er fagkravet Fysikk 1 oppfylt
+      Og fagkravet Fysikk 1 har karakteren 5
 
-    Scenario: Kravelement som ikke er koblet til vitnemålet, vurderes ikke automatisk
-      Gitt at søknaden har et kravelement som ikke er koblet til vitnemålet
+    Scenario: Fagkrav uten karakter oppfylles uten karakter
+      Gitt at søkeren har ett elektronisk vitnemål som ikke er annullert
+      Og at vitnemålet har faget som fagkravet krever, uten tallkarakter
+      Og at søknaden har fagkravet, koblet til vitnemålet
+      Når søknaden behandles automatisk
+      Så er fagkravet oppfylt
+      Og fagkravet har ingen karakter
+
+    Scenario: Karakterkrav får karakteren fra vitnemålet
+      Gitt at søkeren har ett elektronisk vitnemål med karakteren 4 i engelsk
+      Og at søknaden har karakterkravet engelsk, koblet til vitnemålet
+      Når søknaden behandles automatisk
+      Så har karakterkravet engelsk karakteren 4
+
+    Scenario: Beste karakter gjelder for programfag matematikk
+      Gitt at søkeren har ett elektronisk vitnemål med karakteren 5 i Matematikk R1 og karakteren 3 i Matematikk S1
+      Og at søknaden har kravelementet programfag matematikk, koblet til vitnemålet
+      Når søknaden behandles automatisk
+      Så har kravelementet programfag matematikk karakteren 5
+
+    Scenario: Kravelement som ikke er koblet til vitnemålet, vurderes ikke
+      Gitt at søkeren har ett elektronisk vitnemål som ikke er annullert
+      Og at søknaden har et kravelement som ikke er koblet til vitnemålet
       Når søknaden behandles automatisk
       Så er kravelementet ikke vurdert
 
-    @openquestion
-    Scenario: Kravelementet kobles til vitnemålet for hver reform
-      # ÅPNE SPØRSMÅL:
-      # - FS-klienten har én kravkode for R94 og én for Kunnskapsløftet på
-      #   kravelementet. Ny stack bruker én kode, og den andre er tatt ut av
-      #   bruk. Trengs det en kode per reform, eller dekker kontrollmotoren
-      #   begge med én?
-      Gitt at søkeren har et elektronisk vitnemål fra R94
+    Scenario: Kravelement vurderes mot vitnemål fra R94
+      Gitt at søkeren har ett elektronisk vitnemål fra R94
       Og at søknaden har et kravelement som er koblet til vitnemålet
       Når søknaden behandles automatisk
       Så er kravelementet vurdert mot vitnemålet fra R94
 
-    Scenario: Kravelement med ugyldig karakter må vurderes manuelt
-      Gitt at søkeren har ett elektronisk vitnemål med en ugyldig karakter i et fag
-      Og at søknaden har et kravelement for faget, koblet til vitnemålet
+    Scenario: Ugyldig karakter må vurderes manuelt
+      Gitt at søkeren har ett elektronisk vitnemål med en ugyldig karakter i Fysikk 1
+      Og at søknaden har fagkravet Fysikk 1, koblet til vitnemålet
       Når søknaden behandles automatisk
-      Så har kravelementet ingen karakter
-      Og det fremgår at kravelementet må vurderes manuelt
+      Så har fagkravet Fysikk 1 ingen karakter
+      Og saksbehandleren ser at fagkravet må vurderes manuelt
 
-  Regel: Ingen automatisk vurdering uten ett entydig vitnemål
+  @depends-on-OPT-BEH-BEH-004
+  Regel: Kravelementene vurderes bare mot ett entydig vitnemål
+    # Har søkeren flere vitnemål, velger saksbehandleren vitnemålet først.
 
     Scenariomal: Ingen automatisk vurdering når <grunn>
       Gitt at <grunn>
+      Og at søknaden har et kravelement som er koblet til vitnemålet
       Når søknaden behandles automatisk
-      Så er ingen kravelementer vurdert automatisk
+      Så er kravelementet ikke vurdert
 
       Eksempler:
-        | grunn                                                          |
-        | søkeren har flere elektroniske vitnemål som ikke er annullert  |
-        | søkerens eneste elektroniske dokument er et kompetansebevis    |
-        | søkeren ikke har noe elektronisk vitnemål                      |
+        | grunn                                                                                                    |
+        | søkeren har flere elektroniske vitnemål som ikke er annullert, og saksbehandleren ikke har valgt vitnemål |
+        | søkerens eneste elektroniske dokument er et kompetansebevis                                              |
+        | søkeren ikke har noe elektronisk vitnemål                                                                |
+
+    Scenario: Kravelementene vurderes mot vitnemålet saksbehandleren har valgt
+      # Ikke bygget i dag: koden vurderer bare når søkeren har ett vitnemål.
+      Gitt at søkeren har flere elektroniske vitnemål som ikke er annullert
+      Og at saksbehandleren har valgt ett av vitnemålene som grunnlag
+      Og at søknaden har et kravelement som er koblet til vitnemålet
+      Når søknaden behandles automatisk
+      Så er kravelementet vurdert mot vitnemålet saksbehandleren har valgt
+
+    Scenario: Kompetansebevis ved siden av vitnemålet stopper ikke vurderingen
+      # Ikke bygget i dag: koden krever at vitnemålet er søkerens eneste dokument.
+      Gitt at søkeren har ett elektronisk vitnemål som ikke er annullert
+      Og at søkeren har et elektronisk kompetansebevis
+      Og at søknaden har et kravelement som er koblet til vitnemålet
+      Når søknaden behandles automatisk
+      Så er kravelementet vurdert mot vitnemålet
 
   @depends-on-OPT-REG-KRA-001 @ref-OPT-BEH-BEH-015
   Regel: Om søkeren er kvalifisert, avgjøres per grunnlag
@@ -195,63 +233,79 @@ Egenskap: Automatisk vurdering av spesielle opptakskrav
       Så er søkeren kvalifisert i ordinær kvote
       Og søkeren er ikke kvalifisert i kvoten for førstegangsvitnemål
 
-  @openquestion
-  Regel: Når kravene vurderes
-    # ÅPNE SPØRSMÅL:
-    # - Når skal kravene vurderes automatisk? Det kan følge de samme
-    #   anledningene som poengberegningen og grunnlaget: når søknaden kommer
-    #   inn med elektronisk vitnemål, når søkeren får vitnemål innen
-    #   ettersendingsfristen, når saksbehandleren har satt sammen grunnlaget i
-    #   vitnemålsbehandlingen, eller når saksbehandleren starter den
-    #   automatiske behandlingen for én eller flere søknader. I dag starter
-    #   saksbehandleren den med «Start automatisk behandling» for én søknad.
-    # - FS157.001 i FS-klienten beregner om søkerne er kvalifisert for et helt
-    #   opptak. Trengs det tilsvarende?
+  Regel: Kravelementene vurderes i den automatiske behandlingen
+    # Vurderingen kommer etter poengberegningen og før kvalifiseringen beregnes
+    # på nytt.
 
-    Scenario: Saksbehandleren starter den automatiske behandlingen
+    Scenario: Kravelementet vurderes i den automatiske behandlingen
       Gitt at søkeren har ett elektronisk vitnemål som ikke er annullert
-      Når saksbehandleren starter den automatiske behandlingen for søknaden
-      Så er kravelementene som er koblet til vitnemålet, vurdert
+      Og at søknaden har et kravelement som er koblet til vitnemålet
+      Når søknaden behandles automatisk
+      Så er kravelementet vurdert
 
-    Scenario: Kravene vurderes når saksbehandleren har satt sammen grunnlaget
-      Gitt at søkeren har flere elektroniske vitnemål
-      Når saksbehandleren har valgt vitnemålet som skal legges til grunn
-      Så er kravelementene som er koblet til vitnemålet, vurdert mot det valgte vitnemålet
+    Scenario: Feil i vurderingen stopper ikke resten av behandlingen
+      Gitt at vurderingen av kravelementene ikke lar seg gjennomføre for søknaden
+      Når søknaden behandles automatisk
+      Så er kravelementene ikke vurdert
+      Og resten av den automatiske behandlingen er gjennomført
 
-  Regel: Vurderinger som saksbehandleren har gjort, endres ikke av automatikken
+  Regel: Saksbehandlerens vurdering av et kravelement endres ikke av automatikken
+    # Saksbehandleren kan også la kravelementet stå uten å endre vurderingen,
+    # og det er da låst på samme måte. Låsen gjelder ett kravelement, ikke hele
+    # saken.
+
+    Scenario: Saksbehandleren overstyrer vurderingen automatikken har satt
+      Gitt at søknaden har fagkravet Fysikk 1, vurdert automatisk som ikke oppfylt
+      Når saksbehandleren setter at fagkravet Fysikk 1 er oppfylt
+      Så er fagkravet Fysikk 1 oppfylt
+      Og fagkravet Fysikk 1 er låst mot automatisk vurdering
+
+    Scenario: Saksbehandleren overstyrer karakteren som automatikken har satt
+      Gitt at søknaden har fagkravet Fysikk 1, vurdert automatisk med karakteren 4
+      Når saksbehandleren setter karakteren 5 på fagkravet Fysikk 1
+      Så har fagkravet Fysikk 1 karakteren 5
+      Og fagkravet Fysikk 1 er låst mot automatisk vurdering
 
     Scenario: Kravelement som saksbehandleren vurderer, låses
       Gitt at søknaden har et kravelement som er vurdert automatisk
       Når saksbehandleren endrer vurderingen av kravelementet
       Så er kravelementet låst mot automatisk vurdering
 
+    Scenario: Saksbehandleren lar kravelementet stå
+      Gitt at søknaden har et kravelement som er vurdert automatisk
+      Når saksbehandleren lar kravelementet stå
+      Så er kravelementet låst mot automatisk vurdering
+      Og vurderingen av kravelementet er som før
+
     Scenario: Låst kravelement vurderes ikke på nytt
-      Gitt at søknaden har et låst kravelement
+      Gitt at søknaden har et kravelement som er låst mot automatisk vurdering
       Når søknaden behandles automatisk
       Så er vurderingen av kravelementet uendret
 
+    Scenario: Andre kravelementer vurderes selv om saksbehandleren har vurdert ett
+      Gitt at saksbehandleren har vurdert Matematikk R1 på søknaden
+      Og at søknaden har fagkravet Fysikk 1, koblet til vitnemålet
+      Når søknaden behandles automatisk
+      Så er fagkravet Fysikk 1 vurdert automatisk
+      Og vurderingen av Matematikk R1 er uendret
+
     Scenario: Nullstilt kravelement kan vurderes automatisk igjen
-      Gitt at søknaden har et låst kravelement
+      Gitt at søknaden har et kravelement som er låst mot automatisk vurdering
       Når saksbehandleren nullstiller vurderingen av kravelementet
       Og søknaden behandles automatisk
       Så er kravelementet vurdert automatisk på nytt
 
-    Scenario: Automatikken endrer aldri unntak per grunnlag
+    Scenario: Unntak per grunnlag endres ikke
       Gitt at saksbehandleren har lagt inn et unntak for et kravelement på et grunnlag
       Når søknaden behandles automatisk
       Så er unntaket uendret
 
-    @openquestion
-    Scenario: Nye kravelementer på en søknad saksbehandleren har vurdert
-      # ÅPNE SPØRSMÅL:
-      # - Brukerhistorie 4 (PFS 4544528389) vil at systemet ikke skal vurdere
-      #   nye kravelementer automatisk når saksbehandleren har vurdert noe
-      #   manuelt på saken. Ny stack låser bare kravelementet saksbehandleren
-      #   har vurdert, og vurderer nye kravelementer automatisk. Hva er riktig?
-      Gitt at saksbehandleren har vurdert et kravelement på søknaden
-      Og at søknaden får et nytt kravelement
-      Når søknaden behandles automatisk
-      Så er det nye kravelementet ikke vurdert automatisk
+    Scenario: Saksbehandleren fyller ut bare Ja eller Nei
+      Gitt at søknaden har fagkravet Fysikk 1, koblet til vitnemålet, uten vurdering
+      Og at vitnemålet har karakteren 5 i Fysikk 1
+      Når saksbehandleren setter at fagkravet Fysikk 1 er oppfylt
+      Og søknaden behandles automatisk
+      Så har fagkravet Fysikk 1 ingen karakter
 
   Regel: Når grunnlaget endres, vurderes kravene på nytt
 
@@ -267,15 +321,18 @@ Egenskap: Automatisk vurdering av spesielle opptakskrav
       Og søknaden behandles automatisk
       Så er kravelementene for det nye grunnlaget vurdert
 
-  Regel: Sporbarhet
+  Regel: Det fremgår at kravelementet er vurdert automatisk
 
     Scenario: Se at kravelementet er vurdert automatisk
-      # I fs-admin ser en automatisk vurdering lik ut som en vurdering
-      # saksbehandleren har gjort.
       Gitt at et kravelement er vurdert automatisk
       Når saksbehandleren ser på de spesielle opptakskravene
       Så ser saksbehandleren at kravelementet er vurdert automatisk
       Og saksbehandleren ser hvilket vitnemål vurderingen bygger på
+
+    Scenario: Manuell endring fjerner markeringen som automatisk vurdert
+      Gitt at et kravelement er vurdert automatisk
+      Når saksbehandleren endrer vurderingen av kravelementet
+      Så er kravelementet ikke lenger markert som vurdert automatisk
 
     Scenario: Endringsloggen viser at automatikken vurderte kravelementet
       Gitt at et kravelement er vurdert automatisk
