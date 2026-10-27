@@ -12,24 +12,15 @@
 
   | Nr | Feature-ID | Regel | Scenario |
   |---|---|---|---|
-  | 1.1 | `@OPT-BEH-BEH-009` | Søk og filtrering av saker på tidlig opptak | Filteret for tidlig opptak er ikke i bruk som standard |
-  | 1.2a | `@OPT-BEH-BEH-009` | Søk og filtrering av saker på tidlig opptak | Filtrere på tidlig opptak (søkeren har søkt om tidlig opptak) |
-  | 1.2b | `@OPT-BEH-BEH-009` | Søk og filtrering av saker på tidlig opptak | Filtrere på tidlig opptak (konklusjonen for tidlig opptak mangler) |
-  | 1.2c | `@OPT-BEH-BEH-009` | Søk og filtrering av saker på tidlig opptak | Filtrere på tidlig opptak (saken har konklusjon for tidlig opptak) |
-  | 1.3 | `@OPT-BEH-BEH-009` | Søk og filtrering av saker på tidlig opptak | Saker der søkeren ikke har søkt, mangler ikke konklusjon |
-  | 1.4 | `@OPT-BEH-BEH-009` | Søk og filtrering av saker på tidlig opptak | Valgene for konklusjon kombineres med eller |
-  | 1.5 | `@OPT-BEH-BEH-009` | Søk og filtrering av saker på tidlig opptak | Søkt om tidlig opptak kombineres med valgene for konklusjon med og |
-  | 1.6 | `@OPT-BEH-BEH-009` | Søk og filtrering av saker på tidlig opptak | Filteret for tidlig opptak kombineres med saksbehandlingsstatus |
+  | 1.1 | `@OPT-BEH-BEH-009` | Søk og filtrering av saker på tidlig opptak | Filtrere på tidlig opptak (søkeren har søkt om tidlig opptak) |
+  | 1.2 | `@OPT-BEH-BEH-009` | Søk og filtrering av saker på tidlig opptak | Filtrere på tidlig opptak (konklusjonen for tidlig opptak mangler), og Saker der søkeren ikke har søkt, mangler ikke konklusjon |
   | 2.1 | `@OPT-BEH-BEH-013` | Saksbehandler ser søkerens grunnlag for tidlig opptak | Se søkerens begrunnelse for tidlig opptak |
   | 2.2 | `@OPT-BEH-BEH-013` | Saksbehandler ser søkerens grunnlag for tidlig opptak | Se dokumentasjonskrav for begrunnelsen |
   | 2.3 | `@OPT-BEH-BEH-013` | Saksbehandler konkluderer om søkeren deltar i tidligopptaket | Velge blant konklusjonene opptaket har |
   | 2.4a | `@OPT-BEH-BEH-013` | Saksbehandler konkluderer om søkeren deltar i tidligopptaket | Konkludere om søkeren deltar i tidligopptaket (KFF – deltar) |
   | 2.4b | `@OPT-BEH-BEH-013` | Saksbehandler konkluderer om søkeren deltar i tidligopptaket | Konkludere om søkeren deltar i tidligopptaket (KIF – ikke deltar) |
-  | 2.5 | `@OPT-BEH-BEH-013` | Saksbehandler konkluderer om søkeren deltar i tidligopptaket | Konkludere før dokumentasjonsfristen har gått ut |
-  | 2.6 | `@OPT-BEH-BEH-013` | Saksbehandler konkluderer om søkeren deltar i tidligopptaket | Søknad uten ønske om tidlig opptak viser ikke tidlig opptak |
-  | 2.7 | `@OPT-BEH-BEH-013` | Saksbehandler konkluderer om søkeren deltar i tidligopptaket | Konklusjon per organisasjon |
-  | 2.8 | `@OPT-BEH-BEH-013` | Konklusjonen kan endres også etter at tidligopptaket er gjennomført | Endre konklusjon før tidligopptaket er gjennomført |
-  | 2.9 | `@OPT-BEH-BEH-013` | Konklusjonen kan endres også etter at tidligopptaket er gjennomført | Endre konklusjonen etter at tidligopptaket er gjennomført |
+  | 2.5 | `@OPT-BEH-BEH-013` | Saksbehandler konkluderer om søkeren deltar i tidligopptaket | Søknad uten ønske om tidlig opptak viser ikke tidlig opptak |
+  | 2.6 | `@OPT-BEH-BEH-013` | Saksbehandler konkluderer om søkeren deltar i tidligopptaket | Konklusjon per organisasjon |
 
 ---
 
@@ -37,14 +28,13 @@ Intern akseptansetest av «Saksbehandling av tidlig opptak». Testbeskrivelsen, 
 
 Testcasene bruker disse søkerne fra testdataene i testplanen. Alle sakene behandles ved organisasjonen til testbruker 1, ellers ser ikke testbruker 1 dem i sakslisten. Navnene og søknadsnumrene fylles ut av teamet.
 
-| Søker | Søkt om tidlig opptak | Konklusjon for tidlig opptak | Behandlingsstatus | Navn og søknadsnummer |
-|---|---|---|---|---|
-| Søker A | ja | «KFF – Kan få tidlig opptak, har godkjent grunn» | Behandlet | [Fylles ut: navn og søknadsnummer] |
-| Søker B | ja | ingen | Ikke behandlet | [Fylles ut: navn og søknadsnummer] |
-| Søker C | ja | «KIF – Kan ikke få tidlig opptak, mangler grunn» | Under behandling | [Fylles ut: navn og søknadsnummer] |
-| Søker D | nei | ingen | Ikke behandlet | [Fylles ut: navn og søknadsnummer] |
-| Søker E | ja, med søknadsalternativer ved organisasjonen til testbruker 1 og testbruker 2 | ingen | Ikke behandlet | [Fylles ut: navn og søknadsnummer] |
-| Søker F | ja, i et opptak der tidligopptaket er gjennomført, med tilbudsgaranti fra tidligopptaket | «KFF – Kan få tidlig opptak, har godkjent grunn» | Behandlet | [Fylles ut: opptak, navn og søknadsnummer] |
+| Søker | Søkt om tidlig opptak | Konklusjon for tidlig opptak | Navn og søknadsnummer |
+|---|---|---|---|
+| Søker A | ja | «KFF – Kan få tidlig opptak, har godkjent grunn» | [Fylles ut: navn og søknadsnummer] |
+| Søker B | ja | ingen | [Fylles ut: navn og søknadsnummer] |
+| Søker C | ja | «KIF – Kan ikke få tidlig opptak, mangler grunn» | [Fylles ut: navn og søknadsnummer] |
+| Søker D | nei | ingen | [Fylles ut: navn og søknadsnummer] |
+| Søker E | ja, med søknadsalternativer ved organisasjonen til testbruker 1 og testbruker 2 | ingen | [Fylles ut: navn og søknadsnummer] |
 
 Konklusjonene heter kanskje noe annet i opptaket. Står det andre navn i «Konklusjon», bruk den som gir deltakelse der det står «KFF», og den som ikke gir deltakelse der det står «KIF». [Fylles ut: navnene på konklusjonene i opptaket]
 
@@ -65,23 +55,14 @@ Konklusjonene heter kanskje noe annet i opptaket. Står det andre navn i «Konkl
 
 Filteret «Tidlig opptak» vises bare når minst én sak i opptaket treffer et av valgene.
 
+Del 1 tester det saksbehandleren trenger for tidlig opptak: å finne sakene som har med tidlig opptak å gjøre, og sakene som mangler konklusjon. Hvordan filtrene virker sammen med hverandre og med de andre filtrene, testes ikke her (se «Ikke med i denne testen»).
+
 | Nr | Scenario | Steg | Forventet resultat | Faktisk resultat | Status |
 |---|---|---|---|---|---|
-| 1.1 | Filteret for tidlig opptak er ikke i bruk som standard | 1. Logg inn som testbruker 1 ([Fylles ut: navn], saksbehandler ved [Fylles ut: organisasjon A]). <br>2. Gå til «Søknadsbehandling». <br>3. Velg opptaket [Fylles ut: opptak] i «Velg Opptak». <br>4. Se på filteret «Tidlig opptak» og på listen «Saker i opptak». | Ingen av valgene i «Tidlig opptak» («Har søkt tidlig opptak», «Mangler konklusjon på tidlig opptak», «Har konklusjon på tidlig opptak») er krysset av. Listen viser søknadene til søker A, B, C og D. | | |
-| 1.2a | Filtrere på tidlig opptak (søkeren har søkt om tidlig opptak) | 1. Fortsett fra 1.1. <br>2. Kryss av for «Har søkt tidlig opptak» i «Tidlig opptak». | Listen viser søknadene til søker A, B og C. Søknaden til søker D vises ikke. | | |
+| 1.1 | Filtrere på tidlig opptak (søkeren har søkt om tidlig opptak) | 1. Logg inn som testbruker 1 ([Fylles ut: navn], saksbehandler ved [Fylles ut: organisasjon A]). <br>2. Gå til «Søknadsbehandling». <br>3. Velg opptaket [Fylles ut: opptak] i «Velg Opptak». <br>4. Kryss av for «Har søkt tidlig opptak» i «Tidlig opptak». | Listen viser søknadene til søker A, B og C. Søknaden til søker D vises ikke. | | |
 | | | *Gjør klar til neste test: fjern krysset for «Har søkt tidlig opptak».* | | | |
-| 1.2b | Filtrere på tidlig opptak (konklusjonen for tidlig opptak mangler) | 1. Fortsett fra 1.2a. <br>2. Kryss av for «Mangler konklusjon på tidlig opptak» i «Tidlig opptak». | Listen viser søknaden til søker B. Søknadene til søker A, C og D vises ikke. | | |
+| 1.2 | Filtrere på tidlig opptak (konklusjonen for tidlig opptak mangler) | 1. Fortsett fra 1.1. <br>2. Kryss av for «Mangler konklusjon på tidlig opptak» i «Tidlig opptak». | Listen viser søknaden til søker B. Søknadene til søker A og C (som har konklusjon) og søker D (som ikke har søkt) vises ikke. | | |
 | | | *Gjør klar til neste test: fjern krysset for «Mangler konklusjon på tidlig opptak».* | | | |
-| 1.2c | Filtrere på tidlig opptak (saken har konklusjon for tidlig opptak) | 1. Fortsett fra 1.2b. <br>2. Kryss av for «Har konklusjon på tidlig opptak» i «Tidlig opptak». | Listen viser søknadene til søker A og C. Søknadene til søker B og D vises ikke. | | |
-| | | *Gjør klar til neste test: fjern krysset for «Har konklusjon på tidlig opptak».* | | | |
-| 1.3 | Saker der søkeren ikke har søkt, mangler ikke konklusjon | 1. Fortsett fra 1.2c. <br>2. Kryss av for «Mangler konklusjon på tidlig opptak» i «Tidlig opptak». <br>3. Skriv søknadsnummeret til søker D i «Søknadsnummer». | Søknaden til søker D vises ikke, selv om søker D ikke har noen konklusjon. | | |
-| | | *Gjør klar til neste test: tøm «Søknadsnummer», og fjern krysset for «Mangler konklusjon på tidlig opptak».* | | | |
-| 1.4 | Valgene for konklusjon kombineres med eller | 1. Fortsett fra 1.3. <br>2. Kryss av for «Mangler konklusjon på tidlig opptak» i «Tidlig opptak». <br>3. Kryss av for «Har konklusjon på tidlig opptak» i «Tidlig opptak». | Listen viser søknadene til søker A, B og C. Søknaden til søker D vises ikke. | | |
-| | | *Gjør klar til neste test: fjern begge kryssene.* | | | |
-| 1.5 | Søkt om tidlig opptak kombineres med valgene for konklusjon med og | 1. Fortsett fra 1.4. <br>2. Kryss av for «Har søkt tidlig opptak» i «Tidlig opptak». <br>3. Kryss av for «Mangler konklusjon på tidlig opptak» i «Tidlig opptak». | Listen viser søknaden til søker B. Søknadene til søker A, C og D vises ikke. | | |
-| | | *Gjør klar til neste test: fjern begge kryssene.* | | | |
-| 1.6 | Filteret for tidlig opptak kombineres med saksbehandlingsstatus | 1. Fortsett fra 1.5. <br>2. Kryss av for «Har konklusjon på tidlig opptak» i «Tidlig opptak». <br>3. Kryss av for «Under behandling» i «Behandlingsstatus». | Listen viser søknaden til søker C. Søknadene til søker A, B og D vises ikke. | | |
-| | | *Gjør klar til neste test: fjern begge kryssene.* | | | |
 
 ### Del 2: Vurdere søknad om tidlig opptak (vurdere_søknad_om_tidlig_opptak.feature)
 
@@ -99,20 +80,10 @@ Filteret «Tidlig opptak» vises bare når minst én sak i opptaket treffer et a
 | 2.3 | Velge blant konklusjonene opptaket har | 1. Fortsett fra 2.2. <br>2. Åpne nedtrekkslisten «Konklusjon». | Listen har «Ikke valgt» og konklusjonene i opptaket: [Fylles ut: navnene på konklusjonene, f.eks. «KFF – Kan få tidlig opptak, har godkjent grunn» og «KIF – Kan ikke få tidlig opptak, mangler grunn»], og ingen andre. | | |
 | 2.4a | Konkludere om søkeren deltar i tidligopptaket (KFF – deltar) | 1. Fortsett fra 2.3. <br>2. Velg «KFF – Kan få tidlig opptak, har godkjent grunn» i «Konklusjon». <br>3. Velg «Lagre og avslutt». <br>4. Velg «Gå til sak» på søknaden til søker B igjen, og gå til steget «Tidlig opptak». | Meldingen «Konklusjonen er lagret» vises etter steg 2. Når saken åpnes igjen, står «KFF – Kan få tidlig opptak, har godkjent grunn» i «Konklusjon». | | |
 | 2.4b | Konkludere om søkeren deltar i tidligopptaket (KIF – ikke deltar) | 1. Fortsett fra 2.4a. <br>2. Velg «KIF – Kan ikke få tidlig opptak, mangler grunn» i «Konklusjon». <br>3. Velg «Lagre og avslutt». <br>4. Velg «Gå til sak» på søknaden til søker B igjen, og gå til steget «Tidlig opptak». | Meldingen «Konklusjonen er lagret» vises etter steg 2. Når saken åpnes igjen, står «KIF – Kan ikke få tidlig opptak, mangler grunn» i «Konklusjon». | | |
-| 2.5 | Konkludere før dokumentasjonsfristen har gått ut | 1. Sjekk at dokumentasjonsfristen for tidlig opptak i opptaket ikke har gått ut: [Fylles ut: fristen]. <br>2. Fortsett fra 2.4b, i saken til søker B. <br>3. Velg «KFF – Kan få tidlig opptak, har godkjent grunn» i «Konklusjon». <br>4. Velg «Lagre og avslutt». <br>5. Velg «Gå til sak» på søknaden til søker B igjen, og gå til steget «Tidlig opptak». | «Konklusjon» kan velges selv om fristen ikke har gått ut. Når saken åpnes igjen, står «KFF – Kan få tidlig opptak, har godkjent grunn» i «Konklusjon». | | |
 | | | *Gjør klar til neste test: velg «Ikke valgt» i «Konklusjon» for søker B, så søker B igjen er uten konklusjon.* | | | |
-| 2.6 | Søknad uten ønske om tidlig opptak viser ikke tidlig opptak | 1. Gå tilbake til «Saker i opptak». <br>2. Velg «Gå til sak» på søknaden til søker D. <br>3. Se på stegene i saken. | Steget «Tidlig opptak» finnes ikke i saken. | | |
-| 2.7 | Konklusjon per organisasjon | 1. Velg «Gå til sak» på søknaden til søker E, og gå til steget «Tidlig opptak». <br>2. Velg «KFF – Kan få tidlig opptak, har godkjent grunn» i «Konklusjon». <br>3. Logg ut, og logg inn som testbruker 2 ([Fylles ut: navn], saksbehandler ved [Fylles ut: organisasjon B]). [Fylles ut: hvordan man bytter testbruker i testmiljøet] <br>4. Gå til «Søknadsbehandling», og velg opptaket [Fylles ut: opptak]. <br>5. Velg «Gå til sak» på søknaden til søker E, og gå til steget «Tidlig opptak». <br>6. Velg «KIF – Kan ikke få tidlig opptak, mangler grunn» i «Konklusjon». <br>7. Velg «Lagre og avslutt», og åpne saken til søker E igjen. <br>8. Logg ut, og logg inn som testbruker 1 igjen. <br>9. Åpne saken til søker E, og gå til steget «Tidlig opptak». | Etter steg 7 står «KIF – Kan ikke få tidlig opptak, mangler grunn» i «Konklusjon» for testbruker 2. Etter steg 9 står fortsatt «KFF – Kan få tidlig opptak, har godkjent grunn» i «Konklusjon» for testbruker 1. | | |
+| 2.5 | Søknad uten ønske om tidlig opptak viser ikke tidlig opptak | 1. Gå tilbake til «Saker i opptak». <br>2. Velg «Gå til sak» på søknaden til søker D. <br>3. Se på stegene i saken. | Steget «Tidlig opptak» finnes ikke i saken. | | |
+| 2.6 | Konklusjon per organisasjon | 1. Velg «Gå til sak» på søknaden til søker E, og gå til steget «Tidlig opptak». <br>2. Velg «KFF – Kan få tidlig opptak, har godkjent grunn» i «Konklusjon». <br>3. Logg ut, og logg inn som testbruker 2 ([Fylles ut: navn], saksbehandler ved [Fylles ut: organisasjon B]). [Fylles ut: hvordan man bytter testbruker i testmiljøet] <br>4. Gå til «Søknadsbehandling», og velg opptaket [Fylles ut: opptak]. <br>5. Velg «Gå til sak» på søknaden til søker E, og gå til steget «Tidlig opptak». <br>6. Velg «KIF – Kan ikke få tidlig opptak, mangler grunn» i «Konklusjon». <br>7. Velg «Lagre og avslutt», og åpne saken til søker E igjen. <br>8. Logg ut, og logg inn som testbruker 1 igjen. <br>9. Åpne saken til søker E, og gå til steget «Tidlig opptak». | Etter steg 7 står «KIF – Kan ikke få tidlig opptak, mangler grunn» i «Konklusjon» for testbruker 2. Etter steg 9 står fortsatt «KFF – Kan få tidlig opptak, har godkjent grunn» i «Konklusjon» for testbruker 1. | | |
 | | | *Gjør klar til neste test: velg «Ikke valgt» i «Konklusjon» for søker E, som testbruker 1 og som testbruker 2.* | | | |
-
-#### Regel: Konklusjonen kan endres også etter at tidligopptaket er gjennomført
-
-| Nr | Scenario | Steg | Forventet resultat | Faktisk resultat | Status |
-|---|---|---|---|---|---|
-| 2.8 | Endre konklusjon før tidligopptaket er gjennomført | 1. Logg inn som testbruker 1 ([Fylles ut: navn], saksbehandler ved [Fylles ut: organisasjon A]). <br>2. Gå til «Søknadsbehandling», og velg opptaket [Fylles ut: opptak] (der tidligopptaket ikke er gjennomført). <br>3. Velg «Gå til sak» på søknaden til søker A, og gå til steget «Tidlig opptak». <br>4. Velg «KIF – Kan ikke få tidlig opptak, mangler grunn» i «Konklusjon». <br>5. Velg «Lagre og avslutt», og åpne saken til søker A igjen. | Når saken åpnes igjen, står «KIF – Kan ikke få tidlig opptak, mangler grunn» i «Konklusjon». | | |
-| | | *Gjør klar til neste test: velg «KFF – Kan få tidlig opptak, har godkjent grunn» i «Konklusjon» for søker A igjen.* | | | |
-| 2.9 | Endre konklusjonen etter at tidligopptaket er gjennomført | 1. Gå til «Søknadsbehandling», og velg opptaket der tidligopptaket er gjennomført: [Fylles ut: opptak]. <br>2. Velg «Gå til sak» på søknaden til søker F. <br>3. Velg «Vis» på «Skuff», og velg fanen «Søknadsalternativer». <br>4. Noter tilbudsgarantien i «Tilbudsgaranti fra forvalter» på [Fylles ut: søknadsalternativet med tilbudsgaranti fra tidligopptaket]. <br>5. Gå til steget «Tidlig opptak». <br>6. Velg «KIF – Kan ikke få tidlig opptak, mangler grunn» i «Konklusjon». <br>7. Velg «Lagre og avslutt», og åpne saken til søker F igjen. <br>8. Velg «Vis» på «Skuff», og velg fanen «Søknadsalternativer». | Konklusjonen kan endres: «KIF – Kan ikke få tidlig opptak, mangler grunn» står i «Konklusjon» når saken åpnes igjen. I «Tilbudsgaranti fra forvalter» står fortsatt den samme tilbudsgarantien som i steg 4. | | |
-| | | *Gjør klar til neste test: velg «KFF – Kan få tidlig opptak, har godkjent grunn» i «Konklusjon» for søker F igjen.* | | | |
 
 ## Ikke testbart nå
 
@@ -120,15 +91,17 @@ Scenarioene er laget, men kan ikke testes i testmiljøet ennå.
 
 | Scenario | Hvorfor | Når det kan testes |
 |---|---|---|
-| Konklusjon per organisasjon (2.7): at søknadsalternativet ved organisasjon A er med i tidligopptaket, og søknadsalternativet ved organisasjon B ikke er det | Det ses først når opptaksforvalteren prøvekjører eller gjennomfører tidligopptaket, og det er ikke med i denne testen. Testcasen sjekker at konklusjonene lagres hver for seg. | Når gjennomføringen av tidligopptaket testes |
-| Endre konklusjonen etter at tidligopptaket er gjennomført (2.9): at svaret søkeren har fått på tidlig opptak ikke er endret | Det ses av søkeren i Min kompetanse, og testplanen har ingen testbruker for søkeren | Når teamet legger til en testbruker for søker F, kan det legges inn som steg i 2.9 |
+| Konklusjon per organisasjon (2.6): at søknadsalternativet ved organisasjon A er med i tidligopptaket, og søknadsalternativet ved organisasjon B ikke er det | Det ses først når opptaksforvalteren prøvekjører eller gjennomfører tidligopptaket, og det er ikke med i denne testen. Testcasen sjekker at konklusjonene lagres hver for seg. | Når gjennomføringen av tidligopptaket testes |
 
 ## Ikke med i denne testen
 
 | Hva | Hvorfor |
 |---|---|
+| Detaljtesting av filtrene for tidlig opptak: at filtrene ikke er i bruk som standard, «Har konklusjon på tidlig opptak», og hvordan valgene virker sammen med hverandre og med «Behandlingsstatus» | Scopet ut av denne testen. Det viktigste for saksbehandleren er å finne sakene som har med tidlig opptak å gjøre, og sakene som mangler konklusjon (1.1 og 1.2). Alt er funnet i koden i verifiseringen. |
+| Konkludere før dokumentasjonsfristen har gått ut | Scopet ut av denne testen. Kjøres testen før fristen, konkluderer testeren uansett før fristen i 2.4a og 2.4b. At konklusjonen ikke er knyttet til fristen, er funnet i koden i verifiseringen. |
+| Endre konklusjonen før og etter at tidligopptaket er gjennomført | Scopet ut av denne testen. At konklusjonen kan endres før gjennomføringen, testes alt i 2.4a og 2.4b. At den kan endres etter gjennomføringen, uten at tilbudsgarantien og svaret til søkeren endres, krever et opptak der tidligopptaket er gjennomført. Det tas med når gjennomføringen av tidligopptaket testes. |
 | Søke om tidlig opptak | Testes i en annen leveranse. Søknadene saksbehandleren behandler, er testdata. |
-| Gjennomføre tidligopptaket og gi tilbudsgaranti | Testes i en annen leveranse. Opptaket der tidligopptaket er gjennomført, er testdata. |
+| Gjennomføre tidligopptaket og gi tilbudsgaranti | Testes i en annen leveranse. |
 | Publisere svar på tidlig opptak, og svaret søkeren ser | Testes i en annen leveranse |
 | Søknadsmangel når dokumentasjonen mangler | Saksbehandleren bruker de vanlige søknadsmanglene, som testes for seg |
 

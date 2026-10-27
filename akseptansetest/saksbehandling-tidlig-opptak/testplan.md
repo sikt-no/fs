@@ -41,12 +41,11 @@ Testbrukerne finnes i minst to organisasjoner, så vi kan teste at ingen ser dat
 | Hva | Navn | Hvor | Kan settes tilbake |
 |---|---|---|---|
 | Opptak med tidlig opptak slått på, med begrunnelser (med dokumentasjonskrav) og konklusjoner for tidlig opptak (f.eks. «KFF – Kan få tidlig opptak, har godkjent grunn» og «KIF – Kan ikke få tidlig opptak, mangler grunn») | [Fylles ut: opptak] | [Fylles ut: lenke] | [Fylles ut] |
-| Søker som har søkt om tidlig opptak, uten konklusjon, med saken ubehandlet | [Fylles ut: søker] | [Fylles ut] | Ja: konklusjonen kan fjernes igjen |
-| Søker som har søkt om tidlig opptak, med konklusjon, med saken under behandling | [Fylles ut: søker] | [Fylles ut] | Ja: konklusjonen kan endres tilbake |
-| Søker som har søkt om tidlig opptak, med konklusjon, med saken ferdig behandlet | [Fylles ut: søker] | [Fylles ut] | Ja |
+| Søker som har søkt om tidlig opptak, uten konklusjon | [Fylles ut: søker] | [Fylles ut] | Ja: konklusjonen kan fjernes igjen |
+| Søker som har søkt om tidlig opptak, med konklusjonen «KFF – Kan få tidlig opptak, har godkjent grunn» | [Fylles ut: søker] | [Fylles ut] | Ja: konklusjonen kan endres tilbake |
+| Søker som har søkt om tidlig opptak, med konklusjonen «KIF – Kan ikke få tidlig opptak, mangler grunn» | [Fylles ut: søker] | [Fylles ut] | Ja |
 | Søker som ikke har søkt om tidlig opptak | [Fylles ut: søker] | [Fylles ut] | – (endres ikke) |
 | Søker som har søkt om tidlig opptak, med søknadsalternativer ved organisasjon A og organisasjon B | [Fylles ut: søker] | [Fylles ut] | Ja: konklusjonene kan fjernes igjen |
-| Søker i et opptak der tidligopptaket er gjennomført, med tilbudsgaranti fra tidligopptaket og publisert svar | [Fylles ut: opptak og søker] | [Fylles ut] | [Fylles ut: konklusjonen kan endres tilbake, men gjennomføringen kan ikke gjøres om] |
 
 ## Omfang
 
@@ -54,8 +53,8 @@ Det som testes, er kravene som er `@implemented`, og de leverte delene i krav so
 
 | Krav | Feature-ID | Status | Scenarioer i testen |
 |---|---|---|---|
-| [Finne søknader om tidlig opptak](https://github.com/sikt-no/fs/blob/5605e7e/krav/02%20Opptak/13%20S%C3%B8knad%20og%20saksbehandling/02%20Behandling/finne_s%C3%B8knader_om_tidlig_opptak.feature) | `@OPT-BEH-BEH-009` | `@implemented` | 6 |
-| [Vurdere søknad om tidlig opptak](https://github.com/sikt-no/fs/blob/5605e7e/krav/02%20Opptak/13%20S%C3%B8knad%20og%20saksbehandling/02%20Behandling/vurdere_s%C3%B8knad_om_tidlig_opptak.feature) | `@OPT-BEH-BEH-013` | `@implemented` | 9 |
+| [Finne søknader om tidlig opptak](https://github.com/sikt-no/fs/blob/5605e7e/krav/02%20Opptak/13%20S%C3%B8knad%20og%20saksbehandling/02%20Behandling/finne_s%C3%B8knader_om_tidlig_opptak.feature) | `@OPT-BEH-BEH-009` | `@implemented` | 2 av 6 (se «Ikke med i denne testen») |
+| [Vurdere søknad om tidlig opptak](https://github.com/sikt-no/fs/blob/5605e7e/krav/02%20Opptak/13%20S%C3%B8knad%20og%20saksbehandling/02%20Behandling/vurdere_s%C3%B8knad_om_tidlig_opptak.feature) | `@OPT-BEH-BEH-013` | `@implemented` | 6 av 9 (se «Ikke med i denne testen») |
 
 Scenarioene i testen er de leverte scenarioene i gating-settet: alle scenarioene som ikke er utkast, avviklet eller demo, og som ikke er under endring. Et levert scenario med et åpent spørsmål testes som det står, og spørsmålet står under tabellen. Er kilden et scope, og kravet ble levert før, er det bare delene som er levert i scopet.
 
@@ -77,8 +76,11 @@ Ingen.
 
 | Hva | Hvorfor |
 |---|---|
+| Detaljtesting av filtrene i «Finne søknader om tidlig opptak» (`@OPT-BEH-BEH-009`): «Filteret for tidlig opptak er ikke i bruk som standard», «Har konklusjon» i «Filtrere på tidlig opptak», «Valgene for konklusjon kombineres med eller», «Søkt om tidlig opptak kombineres med valgene for konklusjon med og» og «Filteret for tidlig opptak kombineres med saksbehandlingsstatus» | Scopet ut av denne testen. Det viktigste for saksbehandleren er å finne sakene som har med tidlig opptak å gjøre, og sakene som mangler konklusjon. Det testes. Alle scenarioene er funnet i koden i verifiseringen. |
+| «Konkludere før dokumentasjonsfristen har gått ut» i «Vurdere søknad om tidlig opptak» (`@OPT-BEH-BEH-013`) | Scopet ut av denne testen. Kjøres testen før fristen, konkluderer testeren uansett før fristen. At konklusjonen ikke er knyttet til fristen, er funnet i koden i verifiseringen. |
 | Søke om tidlig opptak (`@OPT-SØK-SØK-011`) | Utenfor leveransen. Søkeren lager søknadene saksbehandleren behandler, og de står i testdataene. |
-| Gjennomføre tidligopptaket og gi tilbudsgaranti (`@OPT-BEH-BEH-007`) | Utenfor leveransen. Et opptak der tidligopptaket er gjennomført, trengs som testdata for «Endre konklusjonen etter at tidligopptaket er gjennomført». |
+| Regelen «Konklusjonen kan endres også etter at tidligopptaket er gjennomført» i «Vurdere søknad om tidlig opptak» (`@OPT-BEH-BEH-013`): «Endre konklusjon før tidligopptaket er gjennomført» og «Endre konklusjonen etter at tidligopptaket er gjennomført» | Scopet ut av denne testen. Å endre konklusjonen før gjennomføringen testes alt når testeren bytter konklusjon i «Konkludere om søkeren deltar i tidligopptaket». Å endre den etter gjennomføringen krever et opptak der tidligopptaket er gjennomført, og tas med når gjennomføringen av tidligopptaket (`@OPT-BEH-BEH-007`) testes. |
+| Gjennomføre tidligopptaket og gi tilbudsgaranti (`@OPT-BEH-BEH-007`) | Utenfor leveransen |
 | Publisere svar på tidlig opptak (`@OPT-BEH-BEH-014`) og søkerens svar (`@OPT-SØK-SØK-012`) | Utenfor leveransen |
 | Søknadsmangel når dokumentasjonen mangler (`@OPT-BEH-BEH-008`) | Utenfor leveransen. Saksbehandleren bruker de vanlige søknadsmanglene. |
 
