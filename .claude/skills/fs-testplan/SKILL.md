@@ -42,7 +42,7 @@ Sjekk at branchen i dette repoet er oppdatert mot origin og main, som beskrevet 
 3. [`.claude/references/akseptansetest/alvorlighetsgrad.md`](../../references/akseptansetest/alvorlighetsgrad.md): tekstene om funn, alvorlighetsgrad og beslutning.
 4. [`.claude/references/akseptansetest/confluence.md`](../../references/akseptansetest/confluence.md) før du leser fra eller skriver til Confluence.
 
-Strategien (forslaget, side 5145100326) er kilden til malen. Er den endret etter malen her, si fra, men følg malen til den er oppdatert. Disse er avklart, også der siden sier noe annet: testplanen viser omfanget av testcasene, ikke testcasene selv; det lages ikke egne testcaser for roller og tilgang i fase 2 (de er verifisert i koden i fase 1); åpne spørsmål stopper ikke, men nevnes i testplanen; testplanen sier hvilke testdata som trengs, ikke hvordan de lages; og kravene er kriteriene for godkjent.
+Strategien (forslaget, side 5145100326) er kilden til malen. Er den endret etter malen her, si fra, men følg malen til den er oppdatert. Disse er avklart, og står også i strategien: testplanen viser omfanget av testcasene, ikke testcasene selv; det lages ikke egne testcaser for roller og tilgang i fase 2 (de er verifisert i koden i fase 1); åpne spørsmål stopper ikke, men nevnes i testplanen; testplanen sier hvilke testdata som trengs, ikke hvordan de lages; og kravene er kriteriene for godkjent.
 
 ## 1. Finn leveransen
 

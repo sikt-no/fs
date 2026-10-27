@@ -16,16 +16,17 @@ Bruk Atlassian-MCP-en som finnes i økta. Navnet avhenger av oppsettet, f.eks. `
 ## Sidetreet
 
 ```
-Testplaner (5126062121)
-└── Testplan – <leveranse>                                  ← fs-testplan
-    ├── Verifisering – <leveranse> – <YYYY-MM-DD HH:MM>     ← fs-testplan (første), fs-verify (på nytt)
-    ├── Testrapport – verifisering – <leveranse>            ← fs-testrapport (fase 1)
-    ├── Testrapport – agentisk funksjonstest – <leveranse>  ← fs-testrapport (fase 2)
-    ├── Intern akseptansetest – <leveranse>                 ← fs-testcaser-intern (fase 3)
-    ├── Testrapport – intern akseptansetest – <leveranse>   ← fs-testrapport (fase 3)
-    ├── Ekstern akseptansetest – <leveranse>                ← fs-testcaser-ekstern (fase 4)
-    ├── Flytbeskrivelser til partene – <leveranse>          ← fs-testcaser-ekstern (fase 4, valgfri)
-    └── Testrapport – ekstern akseptansetest – <leveranse>  ← fs-testrapport (fase 4)
+Teststrategi for FS – fra krav til akseptanse (forslag) (5145100326)
+└── Testplaner (5126062121)
+    └── Testplan – <leveranse>                                  ← fs-testplan
+        ├── Verifisering – <leveranse> – <YYYY-MM-DD HH:MM>     ← fs-testplan (første), fs-verify (på nytt)
+        ├── Testrapport – verifisering – <leveranse>            ← fs-testrapport (fase 1)
+        ├── Testrapport – agentisk funksjonstest – <leveranse>  ← fs-testrapport (fase 2)
+        ├── Intern akseptansetest – <leveranse>                 ← fs-testcaser-intern (fase 3)
+        ├── Testrapport – intern akseptansetest – <leveranse>   ← fs-testrapport (fase 3)
+        ├── Ekstern akseptansetest – <leveranse>                ← fs-testcaser-ekstern (fase 4)
+        ├── Flytbeskrivelser til partene – <leveranse>          ← fs-testcaser-ekstern (fase 4, valgfri)
+        └── Testrapport – ekstern akseptansetest – <leveranse>  ← fs-testrapport (fase 4)
 ```
 
 - **Testcasene i fase 2** ligger i repoet (`cdp-tester/`, Gherkin), og har ingen egen side. Resultatene fra kjøringen (`akseptansetest/<slug>/kjoring-<dato>/resultat.md`) står i «Testrapport – agentisk funksjonstest», med testcasene, teknikken, resultatet og funnene. Bildene ligger lokalt, ikke i git, og legges ikke i Confluence uten at brukeren ber om det.
@@ -67,7 +68,7 @@ Ved oppdatering: vis hva som endres, og spør.
 
 ## Strategien
 
-Strategien står i Confluence: [Teststrategi for FS – fra krav til akseptanse (forslag)](https://sikt.atlassian.net/wiki/spaces/STUDIEADM/pages/5145100326) (`5145100326`). Forslaget skal skrives over den gamle siden (`5117902850`). Inntil det er gjort er `5145100326` ID-en skillene bruker, og etterpå er det `5117902850` igjen. Skal ID-en byttes, søk etter den i hele repoet (`grep -rn 5145100326 .`).
+Strategien står i Confluence: [Teststrategi for FS – fra krav til akseptanse (forslag)](https://sikt.atlassian.net/wiki/spaces/STUDIEADM/pages/5145100326) (`5145100326`), under «Kvalitetssikring og akseptansetesting» (`5091196953`). «Testplaner» ligger under strategien. Den gamle strategien (`5117902850`) brukes ikke av skillene. Skal ID-en byttes, søk etter den i hele repoet (`grep -rn 5145100326 .`).
 
 ## Oppdatere en side som finnes
 
