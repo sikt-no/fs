@@ -43,7 +43,9 @@ Egenskap: Automatisk GSK-konklusjon
   # Det avviker fra Sikts tolkning i Confluence v2 om at GSK i fagskoleopptak ikke
   # skal lagres som konklusjon, fordi GSK der er et alternativt kompetansekrav.
 
+  @depends-on-OPT-BEH-BEH-025
   Regel: Opptakssystemets påstand om GSK på vitnemålet
+    # Hvordan GSK beregnes for vitnemålet (seksfagskontrollen og grunnlagskoden), står der.
 
     Scenario: Vitnemål som gir generell studiekompetanse
       Gitt at søkeren har et vitnemål som ikke er annullert
