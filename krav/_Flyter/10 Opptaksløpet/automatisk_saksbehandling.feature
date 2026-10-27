@@ -19,7 +19,7 @@ Egenskap: Automatisk saksbehandling
     Gitt at søknaden til "Kari Nordmann" har en sak hos "Universitetet i Oslo"
 
   @depends-on-OPT-BEH-BEH-015 @depends-on-OPT-BEH-BEH-025
-  # OPT-BEH-BEH-015: «Konklusjon fra vitnemålet»
+  # OPT-BEH-BEH-015: «Opptakssystemets påstand om GSK på vitnemålet»
   # OPT-BEH-BEH-025: «Bare saker med ett vitnemål med positiv GSK-konklusjon behandles helautomatisk»
   Regel: Vitnemålet med positiv GSK-konklusjon avgjør om saken behandles helautomatisk
 

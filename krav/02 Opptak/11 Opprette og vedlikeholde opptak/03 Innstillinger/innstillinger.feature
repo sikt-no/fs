@@ -79,6 +79,10 @@ Egenskap: Innstillinger for opptak
   Regel: Opptaksforvalter setter tak for antall søknadsalternativer
 
     # Virkningen står i 13 Søknad og saksbehandling/01 Søknad/studiekurv.feature.
+    # AVKLART 2026-10-26 (ekstern akseptansetest, HK-dir): Når opptaket åpner for søknad på
+    # ledige studieplasser, gjelder taket for den ordinære søknaden og for søknaden til ledige
+    # studieplasser hver for seg. Med maks 10 kan søkeren ha opptil 10 søknadsalternativer i den
+    # ordinære søknaden og opptil 10 i søknaden til ledige studieplasser.
     Scenario: Sette maks antall søknadsalternativer
       Når opptaksforvalter setter maks antall søknadsalternativer til 10
       Så har opptaket maks 10 søknadsalternativer

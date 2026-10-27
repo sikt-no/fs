@@ -36,7 +36,7 @@ Egenskap: Ferdigbehandle en sak
     Gitt at søknaden til "Kari Nordmann" har en sak hos "Universitetet i Oslo"
 
   @depends-on-OPT-BEH-BEH-015 @ref-FLY-OPT-AUT-001
-  # OPT-BEH-BEH-015: «Konklusjon fra vitnemålet»
+  # OPT-BEH-BEH-015: «Opptakssystemets påstand om GSK på vitnemålet»
   Regel: Bare saker med ett vitnemål med positiv GSK-konklusjon behandles helautomatisk
 
     Scenario: Saken behandles helautomatisk når søkeren har ett vitnemål med positiv GSK-konklusjon
