@@ -30,6 +30,11 @@ Egenskap: Samle utdanningstilbud i studiekurven
       # ÅPNE SPØRSMÅL:
       # - Hva er maksimalt antall prioriteringer, og settes det per opptak eller globalt?
       # - Skal grensen hindre at tilbudet legges i kurven, eller først slå ut når søknaden prioriteres?
+      # AVKLART 2026-10-26 (ekstern akseptansetest, HK-dir): Grensen settes per opptak, som maks antall
+      # søknadsalternativer (innstillinger.feature, OPT-OVO-INN-001). Når opptaket åpner for søknad på
+      # ledige studieplasser, gjelder grensen for den ordinære søknaden og for søknaden til ledige
+      # studieplasser hver for seg. Med maks 10 kan søkeren ha opptil 10 søknadsalternativer i den
+      # ordinære søknaden og opptil 10 i søknaden til ledige studieplasser.
       Gitt at søkeren har like mange utdanningstilbud i studiekurven som opptaket tillater
       Når søkeren legger til enda et utdanningstilbud i samme opptak
       Så får søkeren beskjed om at grensen for antall prioriteringer er nådd
