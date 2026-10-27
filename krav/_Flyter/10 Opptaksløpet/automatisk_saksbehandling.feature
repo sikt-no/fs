@@ -4,10 +4,10 @@ Egenskap: Automatisk saksbehandling
   Fra søknaden er blitt en sak hos den saksbehandlende organisasjonen, til saken er ferdig
   behandlet og er med i plasstildelingen, uten at en saksbehandler har gjort noe. GSK beregnes
   for hvert vitnemål når søknaden kommer inn, før flyten. Flyten gjelder søkere med ett vitnemål
-  med påstanden at søkeren har GSK, og søkere der saksbehandleren har valgt vitnemålet. Den automatiske
+  med påstanden at søkeren har GSK. Den automatiske
   behandlingen setter grunnlaget, poengene, vurderingen av kravelementene og kvoten, i den
   rekkefølgen, og setter saken til ferdig behandlet når alt er avgjort. Andre søkere behandles
-  manuelt, og er ikke med i flyten. Rettes en feil i regelverket, beregner opptaksforvalteren
+  ikke helautomatisk, og er ikke med i flyten (se OPT-BEH-BEH-025). Rettes en feil i regelverket, beregner opptaksforvalteren
   søknadsalternativene feilen gjaldt, på nytt.
 
   # Kjent brudd: den automatiske behandlingen setter ikke saken til ferdig behandlet, og
@@ -27,12 +27,6 @@ Egenskap: Automatisk saksbehandling
       Gitt at "Kari Nordmann" har ett vitnemål med påstanden at søkeren har GSK
       Når søknaden behandles automatisk
       Så behandles saken hos "Universitetet i Oslo" helautomatisk på vitnemålet
-
-    Scenario: Saken behandles helautomatisk på vitnemålet saksbehandleren har valgt
-      Gitt at "Kari Nordmann" har et vitnemål fra 2024 og et vitnemål fra 2025 med påstanden at søkeren har GSK
-      Og at saksbehandleren ved Universitetet i Oslo har valgt vitnemålet fra 2025
-      Når søknaden behandles automatisk
-      Så behandles saken hos "Universitetet i Oslo" helautomatisk på vitnemålet fra 2025
 
   @depends-on-OPT-BEH-BEH-019
   Regel: Søknaden får grunnlag fra vitnemålet

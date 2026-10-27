@@ -6,11 +6,12 @@ Egenskap: Ferdigbehandle en sak
   slik at jeg bare trenger å behandle sakene den automatiske behandlingen ikke kunne fullføre.
 
   En sak er søknaden slik den ligger hos én saksbehandlende organisasjon. Saken behandles
-  helautomatisk når søkeren har ett vitnemål med påstanden at søkeren har GSK, eller når
-  saksbehandleren har valgt vitnemålet. Den automatiske behandlingen avgjør grunnlaget,
-  poengene, kravelementene og kvoten, og setter saken til ferdig behandlet når alt er avgjort.
-  Har saksbehandleren valgt vitnemålet, beregner saksbehandleren poengene i vitnemålsbehandlingen
-  (OPT-BEH-BEH-004), og den automatiske behandlingen avgjør resten. Kan den ikke avgjøre et steg, gjør den stegene
+  helautomatisk når søkeren har ett vitnemål med påstanden at søkeren har GSK. Den automatiske
+  behandlingen avgjør da grunnlaget, poengene, kravelementene og kvoten, og setter saken til
+  ferdig behandlet når alt er avgjort. Har søkeren flere vitnemål med påstanden GSK, velger
+  saksbehandleren vitnemålet, og beregner poengene i vitnemålsbehandlingen (OPT-BEH-BEH-004).
+  Saken behandles da automatisk på vitnemålet, og den automatiske behandlingen avgjør resten.
+  Kan den automatiske behandlingen ikke avgjøre et steg, gjør den stegene
   som ikke bygger på det, og saken blir stående under behandling. Saksbehandleren gjør resten,
   og setter saken til ferdig behandlet. Bare saker som er ferdig behandlet, er med i
   plasstildelingen.
@@ -55,10 +56,10 @@ Egenskap: Ferdigbehandle en sak
       Når søknaden behandles automatisk
       Så behandles ikke saken hos "Universitetet i Oslo" helautomatisk
 
-    Scenario: Saksbehandleren velger vitnemålet saken behandles helautomatisk på
+    Scenario: Saksbehandleren velger vitnemålet saken behandles automatisk på
       Gitt at "Kari Nordmann" har et vitnemål fra 2024 og et vitnemål fra 2025 med påstanden at søkeren har GSK
-      Når saksbehandleren ved Universitetet i Oslo velger vitnemålet fra 2025 for helautomatisk behandling
-      Så behandles saken hos "Universitetet i Oslo" helautomatisk på vitnemålet fra 2025
+      Når saksbehandleren ved Universitetet i Oslo velger vitnemålet fra 2025 for automatisk behandling
+      Så behandles saken hos "Universitetet i Oslo" automatisk på vitnemålet fra 2025
 
     @openquestion
     Scenario: Søker med flere vitnemål der bare ett har påstanden GSK
