@@ -161,7 +161,6 @@ krav/
 - `09 Organisasjon` – organisasjonsforvaltning
 - `10 Felleskrav` – tverrgående funksjonalitet
 - `99 Demo` – demo og testing
-- `_Interne prosesser` – egne arbeidsprosesser (f.eks. GitHub-automatisering)
 - `_Flyter` – løp på tvers av domener (se *Flyter*)
 
 ### Tverrgående kapabiliteter: hva vs. hvordan
