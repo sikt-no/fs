@@ -57,6 +57,9 @@ Egenskap: Ferdigbehandle en sak
       Så behandles ikke saken hos "Universitetet i Oslo" helautomatisk
 
     Scenario: Saksbehandleren velger vitnemålet saken behandles automatisk på
+      # Vitnemålet saksbehandleren velger, kan være et annet enn vitnemålet GSK-konklusjonen på
+      # søknaden bygger på (OPT-BEH-BEH-015, «Konklusjon på søknaden fra vitnemålet»: det med senest
+      # utstedelsesdato). Begge vitnemålene gir GSK, og konklusjonen endres ikke av valget.
       Gitt at "Kari Nordmann" har et vitnemål fra 2024 og et vitnemål fra 2025 med påstanden at søkeren har GSK
       Når saksbehandleren ved Universitetet i Oslo velger vitnemålet fra 2025 for automatisk behandling
       Så behandles saken hos "Universitetet i Oslo" automatisk på vitnemålet fra 2025
