@@ -31,10 +31,11 @@ Egenskap: Automatisk GSK-konklusjon
   for hvert vitnemål, uavhengig av påstanden fra KREG. Påstanden lagres på vitnemålet,
   med grunnlagskoden og tidspunktet den ble beregnet, og gjelder i alle opptak.
   Søknader som ikke har en GSK-konklusjon, får en positiv konklusjon når et vitnemål
-  har påstanden GSK. Når søknaden opprettes, importeres vitnemålene først. Gir ingen av
-  dem GSK, ser systemet etter en positiv konklusjon fra et tidligere opptak. Ellers
-  vurderes GSK manuelt. Dette er en del av vitnemålsimporten, ikke av den automatiske
-  saksbehandlingen.
+  har påstanden GSK. Vitnemål importeres når søknaden opprettes, og når KREG får nye
+  vitnemål for en søker med aktive søknader. Når søknaden opprettes, importeres
+  vitnemålene først. Gir ingen av dem GSK, ser systemet etter en positiv konklusjon fra
+  et tidligere opptak. Ellers vurderes GSK manuelt. Dette er en del av
+  vitnemålsimporten, ikke av den automatiske saksbehandlingen.
   Automatikken setter aldri en negativ konklusjon på søknaden, og overskriver aldri en
   konklusjon som finnes. Den gjelder alle opptak, også fagskoleopptak.
 
@@ -78,10 +79,7 @@ Egenskap: Automatisk GSK-konklusjon
         | KLS           | studieforberedende vitnemål                 | KL     |
         | KLY           | yrkesfaglige vitnemål                       | KL     |
 
-    @openquestion
     Scenariomal: Påstanden er at søkeren ikke har GSK når <grunn>
-      # ÅPNE SPØRSMÅL:
-      # - Får et kompetansebevis påstanden at søkeren ikke har GSK, eller ingen påstand?
       Gitt at <grunn>
       Når vitnemålet importeres
       Så har vitnemålet påstanden at søkeren ikke har generell studiekompetanse
@@ -96,6 +94,11 @@ Egenskap: Automatisk GSK-konklusjon
       Gitt at søkeren har et annullert vitnemål
       Når vitnemålet importeres
       Så har vitnemålet ingen påstand om generell studiekompetanse
+
+    Scenario: Kompetansebevis får ingen påstand
+      Gitt at søkerens eneste dokument er et kompetansebevis
+      Når kompetansebeviset importeres
+      Så har kompetansebeviset ingen påstand om generell studiekompetanse
 
   Regel: Konklusjon på søknaden fra vitnemålet
 
@@ -112,22 +115,33 @@ Egenskap: Automatisk GSK-konklusjon
       Når vitnemålet importeres
       Så får søknaden ingen GSK-konklusjon fra vitnemålet
 
-    @openquestion
-    Scenario: Det nyeste vitnemålet som gir GSK, brukes
-      # ÅPNE SPØRSMÅL:
-      # - Er det nyeste vitnemålet det med senest utstedelsesdato, eller det som ble importert sist?
+    Scenario: Vitnemålet med senest utstedelsesdato brukes
       Gitt at søkeren har to vitnemål med påstanden at søkeren har GSK
       Når vitnemålene importeres
-      Så bygger søknadens GSK-konklusjon på det nyeste av dem
+      Så bygger søknadens GSK-konklusjon på vitnemålet med senest utstedelsesdato
 
-    @openquestion
     Scenario: Alle søknader uten konklusjon oppdateres
-      # ÅPNE SPØRSMÅL:
-      # - Oppdateres også søknader i avsluttede opptak?
       Gitt at søkeren har en søknad uten GSK-konklusjon og en søknad med GSK-konklusjon
+      Og at opptakene ikke er avsluttet
       Når et vitnemål med påstanden at søkeren har GSK importeres
       Så får søknaden uten konklusjon en positiv GSK-konklusjon
       Og GSK-konklusjonen på den andre søknaden er uendret
+
+    Scenario: Søknader i avsluttede opptak oppdateres ikke
+      Gitt at søkeren har en søknad uten GSK-konklusjon i et avsluttet opptak
+      Når et vitnemål med påstanden at søkeren har GSK importeres
+      Så får søknaden ingen GSK-konklusjon
+
+    @openquestion
+    Scenario: Nytt vitnemål fra KREG etter at søknaden er opprettet
+      # ÅPNE SPØRSMÅL:
+      # - Hvordan FS-opptak abonnerer på endringer i KREG for aktive søkere, er ikke
+      #   besluttet. Det settes opp i en egen sak.
+      Gitt at søknaden ikke har noen GSK-konklusjon
+      Og at opptaket ikke er avsluttet
+      Når KREG får et nytt vitnemål for søkeren
+      Så importeres vitnemålet
+      Og GSK beregnes for vitnemålet uten at noen starter det
 
   Regel: Konklusjon fra tidligere opptak
     # Grunnlagskoder: avklart 2026-10-13 at alle positive konklusjoner kan gjenbrukes,
@@ -136,11 +150,9 @@ Egenskap: Automatisk GSK-konklusjon
     # med fem koder under «Opptakssystemets påstand om GSK på vitnemålet» gjelder bare
     # vitnemål.
 
-    @openquestion
+    # Kildekoder: avklart 2026-10-27 at alle rader i gjenbruksbasen kan gjenbrukes i 2027,
+    # både NOM (samordna opptak, 1997–2026) og IMM (1907–2001).
     Scenario: Gjenbruke positiv konklusjon fra tidligere samordna opptak
-      # ÅPNE SPØRSMÅL:
-      # - Gjenbruksbasen har konklusjoner med kildekoden IMM (1907–2001) i tillegg til
-      #   NOM (samordna opptak, 1997–2026). Skal IMM-konklusjonene også gjenbrukes?
       Gitt at søknaden ikke får GSK-konklusjon fra vitnemålet
       Og at søkeren har en positiv GSK-konklusjon fra et tidligere samordna opptak
       Når søknaden opprettes
@@ -294,9 +306,9 @@ Egenskap: Automatisk GSK-konklusjon
     @openquestion
     Scenario: Annulleringen oppdages uten at søkeren endrer søknaden
       # ÅPNE SPØRSMÅL:
-      # - Hvordan får systemet vite at et vitnemål er annullert, når søkeren ikke
-      #   sender inn eller endrer en søknad? Varsel fra KREG, eller en jevnlig sjekk?
-      #   I dag hentes vitnemålene bare når en søknadshendelse behandles.
+      # - Hvordan FS-opptak abonnerer på endringer i KREG for aktive søkere, er ikke
+      #   besluttet. Det settes opp i en egen sak. I dag hentes vitnemålene bare når en
+      #   søknadshendelse behandles.
       Gitt at søknaden har en automatisk GSK-konklusjon som bygger på et vitnemål
       Og at opptaket ikke er avsluttet
       Og at søkeren ikke har sendt inn eller endret søknaden etter at konklusjonen ble satt
