@@ -4,7 +4,7 @@
 # Kravelementer.GSK, og autosak/gsk: GskKonklusjonEvaluator). Kontrollmotoren er en
 # port av kravkodene i NVB2 (krav-kl.txt og krav-r94.txt på
 # soda.samordnaopptak.no/open/nvb/), og er AB-testet mot NVB2 på 1,43 millioner
-# vitnemål uten avvik. NVB2 er fasit når kravet og kilden er uenige.
+# vitnemål. Avvikene fra testen er rettet. NVB2 er referansen når kravet valideres.
 #
 # Påstanden fra KREG: avklart 2026-10-27 at beregningen ikke bruker påstanden fra KREG,
 # som i @OPT-BEH-BEH-015 («Påstanden fra KREG brukes ikke»). Koden krever i dag at
@@ -17,23 +17,27 @@ Egenskap: Beregne GSK fra vitnemål
 
   Generell studiekompetanse (GSK) er det generelle opptakskravet til høyere utdanning.
   Systemet beregner GSK for ett vitnemål om gangen. Beregningen ser på fagene på
-  vitnemålet og løpet vitnemålet er utstedt for. Vitnemålet gir GSK når fagene
-  oppfyller alle delkravene for reformen, og løpet gir en grunnlagskode. Resultatet
+  vitnemålet og løpet vitnemålet er utstedt for. Seksfagskontrollen sjekker om fagene
+  oppfyller alle delkravene for reformen. Vitnemålet gir GSK når det består
+  seksfagskontrollen, og løpet gir en grunnlagskode. Resultatet
   er at vitnemålet gir GSK med en grunnlagskode, eller at vitnemålet ikke gir GSK.
 
   Hvilke vitnemål som beregnes, når beregningen skjer, og hva resultatet brukes til,
   står i @OPT-BEH-BEH-015. Det gjelder også annullerte vitnemål, vitnemål uten
   utstedelsesdato og kompetansebevis.
 
-  Regel: Bare aktive fag på vitnemålet telles med
+  @openquestion
+  Regel: Fag som saksbehandleren har tatt ut av kontrollene, telles ikke med
+    # Fagresultatene på vitnemålet har en fagstatus. Saksbehandleren bruker den til å
+    # angi om et fag skal være med i kontrollene av vitnemålet. Avklart 2026-10-27 at
+    # fagstatusen hører til et annet krav, og at kontrollene må følge den.
+    # ÅPNE SPØRSMÅL:
+    # - Kravet for fagstatusen er ikke skrevet. Når det finnes, får regelen
+    #   @depends-on- til det.
 
-    @openquestion
-    Scenario: Fag som ikke er aktivt, oppfyller ikke et delkrav
-      # ÅPNE SPØRSMÅL:
-      # - Hva betyr det at et fag ikke er aktivt på vitnemålet? Koden bruker et
-      #   statusflagg fra KREG. Hvilke fag er det, og er det ønsket at de ikke teller?
+    Scenario: Fag som er tatt ut av kontrollene, oppfyller ikke et delkrav
       Gitt at vitnemålet har samfunnsfag (SAF1001)
-      Og at faget ikke er aktivt
+      Og at saksbehandleren har tatt faget ut av kontrollene
       Når GSK beregnes for vitnemålet
       Så er delkravet for samfunnsfag ikke oppfylt
 
@@ -97,37 +101,17 @@ Egenskap: Beregne GSK fra vitnemål
         | påbygging                          | matematikk for yrkesfag på vg1 (1T-Y eller 1P-Y) og matematikk 2T-Y eller 2P-Y på vg3 (MAT1010, MAT1005 eller MAT1151)         |
         | programfag                         | R1 (REA3022 eller REA3056), R2 (REA3024 eller REA3058), S1 (REA3026 eller REA3060) eller S2 (REA3028 eller REA3062), skriftlig   |
 
-    Scenariomal: Påbygging med <fag> på vg1 (<fagkode>)
+    Scenariomal: Påbygging med matematikk <fag> på vg1
       Gitt at vitnemålet er fra Kunnskapsløftet
-      Og at vitnemålet har <fag> (<fagkode>)
+      Og at vitnemålet har matematikk <fag> på vg1 (<fagkoder>)
       Og at vitnemålet har matematikk 2T-Y på vg3 (MAT1010)
       Når GSK beregnes for vitnemålet
       Så er delkravet for matematikk oppfylt
 
       Eksempler:
-        | fagkode | fag                 |
-        | MAT1006 | Matematikk 1T-Y     |
-        | MAT1001 | Matematikk 1P-Y     |
-        | MAT1111 | Matematikk 1P-Y BA  |
-        | MAT1113 | Matematikk 1P-Y     |
-        | MAT1115 | Matematikk 1P-Y     |
-        | MAT1117 | Matematikk 1P-Y     |
-        | MAT1119 | Matematikk 1P-Y     |
-        | MAT1121 | Matematikk 1P-Y     |
-        | MAT1123 | Matematikk 1P-Y     |
-        | MAT1125 | Matematikk 1P-Y     |
-        | MAT1127 | Matematikk 1P-Y     |
-        | MAT1129 | Matematikk 1P-Y     |
-        | MAT1131 | Matematikk 1T-Y     |
-        | MAT1133 | Matematikk 1T-Y     |
-        | MAT1135 | Matematikk 1T-Y     |
-        | MAT1137 | Matematikk 1T-Y     |
-        | MAT1139 | Matematikk 1T-Y     |
-        | MAT1141 | Matematikk 1T-Y     |
-        | MAT1143 | Matematikk 1T-Y     |
-        | MAT1145 | Matematikk 1T-Y     |
-        | MAT1147 | Matematikk 1T-Y     |
-        | MAT1149 | Matematikk 1T-Y     |
+        | fag  | fagkoder                                                                                                              |
+        | 1P-Y | MAT1001, MAT1111 (Matematikk 1P-Y BA), MAT1113, MAT1115, MAT1117, MAT1119, MAT1121, MAT1123, MAT1125, MAT1127 eller MAT1129 |
+        | 1T-Y | MAT1006, MAT1131, MAT1133, MAT1135, MAT1137, MAT1139, MAT1141, MAT1143, MAT1145, MAT1147 eller MAT1149              |
 
     Scenario: Matematikk for yrkesfag på vg1 alene oppfyller ikke matematikkravet
       Gitt at vitnemålet er fra Kunnskapsløftet
@@ -208,6 +192,40 @@ Egenskap: Beregne GSK fra vitnemål
     #   koder (FF_sf_samisk2 og FF_sf_finsk2 i krav-kl.txt). Utkastet viser til kilden.
     # - Norsk hovedmål (NOR1049) ført som privatist med vitnemålsmerknaden VMM25 kan
     #   erstatte hovedmålskoden. Skal regelen stå i kravet, eller er den en detalj i kilden?
+    # Standard norsk er én av tre varianter: norsk hovedmål, sidemål og muntlig, norsk for
+    # elever med kort botid eller som går over fra Reform 94, eller norsk for tegnspråklige.
+    # Alle tre variantene gjelder der kravet sier «standard norsk».
+
+    Scenariomal: Standard norsk med <variant>
+      Gitt at vitnemålet er fra Kunnskapsløftet
+      Og at vitnemålet har <fag>
+      Når GSK beregnes for vitnemålet
+      Så har vitnemålet standard norsk
+
+      Eksempler:
+        | variant                                 | fag                                                                                                                                                   |
+        | norsk hovedmål, sidemål og muntlig      | norsk hovedmål (NOR1211, NOR1267, NOR1231 eller NOR1270), norsk sidemål (NOR1212, NOR1268, NOR1232 eller NOR1271) og norsk muntlig (NOR1213, NOR1269, NOR1233 eller NOR1272) |
+        | kort botid, studieforberedende          | norsk skriftlig for kort botid (NOR1405 eller NOR1420) og norsk muntlig for kort botid (NOR1406 eller NOR1421)                                        |
+        | kort botid, påbygging                   | norsk skriftlig for kort botid (NOR1410 eller NOR1422) og norsk muntlig for kort botid (NOR1411 eller NOR1423)                                        |
+        | overgang fra Reform 94                  | NOR1063 og NOR1064                                                                                                                                    |
+        | NOR1050 og NOR1049 uten VMM25           | NOR1050 og NOR1049, og vitnemålet har ikke merknaden VMM25                                                                                            |
+        | norsk for tegnspråklige                 | norsk tekstskaping (NOR1033, NOR1072, NOR1253 eller NOR1074), norsk muntlig for tegnspråklige (NOR1034, NOR1073, NOR1254 eller NOR1075) og norsk for døve (NOR1039, NOR1079, NOR1259 eller NOR1080) |
+
+    Scenariomal: Merknaden VMM25 med <fag> gir ikke standard norsk
+      # Er VMM25 ført sammen med disse fagene, er det en feilføring.
+      Gitt at vitnemålet er fra Kunnskapsløftet
+      Og at vitnemålet har merknaden VMM25
+      Og at vitnemålet har <fag>
+      Og at vitnemålet ikke har norsk hovedmål, sidemål og muntlig
+      Og at vitnemålet ikke har norsk for tegnspråklige
+      Når GSK beregnes for vitnemålet
+      Så har vitnemålet ikke standard norsk
+
+      Eksempler:
+        | fag                       |
+        | norsk for kort botid      |
+        | NOR1063 og NOR1064        |
+        | NOR1050 og NOR1049        |
 
     Scenariomal: Norskkravet er oppfylt med <variant>
       Gitt at vitnemålet er fra Kunnskapsløftet
@@ -216,16 +234,14 @@ Egenskap: Beregne GSK fra vitnemål
       Så er norskdelen av delkravet for norsk og historie oppfylt
 
       Eksempler:
-        | variant                        | fag                                                                                                                                                   |
-        | standard norsk                 | norsk hovedmål (NOR1211, NOR1267, NOR1231 eller NOR1270), norsk sidemål (NOR1212, NOR1268, NOR1232 eller NOR1271) og norsk muntlig (NOR1213, NOR1269, NOR1233 eller NOR1272) |
-        | norsk for elever med kort botid | norsk skriftlig og muntlig for kort botid, studieforberedende (NOR1405 eller NOR1420, og NOR1406 eller NOR1421) eller påbygging (NOR1410 eller NOR1422, og NOR1411 eller NOR1423) |
-        | norsk for tegnspråklige        | norsk tekstskaping (NOR1033, NOR1072, NOR1253 eller NOR1074), norsk muntlig for tegnspråklige (NOR1034, NOR1073, NOR1254 eller NOR1075) og norsk for døve (NOR1039, NOR1079, NOR1259 eller NOR1080) |
-        | samisk 1. språk                | samisk 1. språk skriftlig og muntlig (nordsamisk, sørsamisk eller lulesamisk), og norsk for samisk 1. språk (NOR1025, NOR1280, NOR1245 eller NOR1282, og NOR1026, NOR1281, NOR1246 eller NOR1283) eller standard norsk |
-        | samisk eller finsk 2. språk    | samisk eller finsk 2. språk, og norsk skriftlig for samisk eller finsk 2. språk (NOR1218, NOR1287, NOR1238 eller NOR1288) med norsk muntlig, eller standard norsk |
+        | variant                     | fag                                                                                                                                                   |
+        | standard norsk              | standard norsk, med en av de tre variantene                                                                                                          |
+        | samisk 1. språk             | samisk 1. språk skriftlig og muntlig (nordsamisk, sørsamisk eller lulesamisk), og norsk for samisk 1. språk (NOR1025, NOR1280, NOR1245 eller NOR1282, og NOR1026, NOR1281, NOR1246 eller NOR1283) eller standard norsk, med en av de tre variantene |
+        | samisk eller finsk 2. språk | samisk eller finsk 2. språk, og norsk skriftlig for samisk eller finsk 2. språk (NOR1218, NOR1287, NOR1238 eller NOR1288) med norsk muntlig, eller standard norsk, med en av de tre variantene |
 
-    Scenariomal: Standard norsk med <fag> (<fagkode>)
+    Scenariomal: Standard norsk krever historie etter standard plan (<fagkode>)
       Gitt at vitnemålet er fra Kunnskapsløftet
-      Og at vitnemålet har standard norsk
+      Og at vitnemålet har standard norsk, med en av de tre variantene
       Og at vitnemålet har <fag> (<fagkode>)
       Når GSK beregnes for vitnemålet
       Så er delkravet for norsk og historie oppfylt
@@ -244,19 +260,28 @@ Egenskap: Beregne GSK fra vitnemål
       Når GSK beregnes for vitnemålet
       Så er delkravet for norsk og historie ikke oppfylt
 
-    Scenariomal: Samisk eller finsk gir flere historiefag
+    Scenariomal: <variant> godtar alle historiefagene
       Gitt at vitnemålet er fra Kunnskapsløftet
       Og at vitnemålet oppfyller norskkravet med <variant>
-      Og at vitnemålet har historie <historie>
+      Og at vitnemålet har ett av disse historiefagene:
+        | fagkode | fag                                                                  |
+        | HIS1002 | Historie, vg3 studieforberedende utdanningsprogram                   |
+        | HIS1010 | Historie, vg3 studieforberedende utdanningsprogram                   |
+        | HIS1005 | historie for studieforberedende, samisk plan                         |
+        | HIS1013 | historie for studieforberedende, samisk plan                         |
+        | HIS1003 | Historie, vg3 påbygging til generell studiekompetanse                |
+        | HIS1011 | Historie, vg3 påbygging til generell studiekompetanse                |
+        | HIS1006 | Historie, samisk plan, vg3 påbygging til generell studiekompetanse   |
+        | HIS1014 | historie på vg3 påbygging, samisk eller finsk plan                   |
+        | HIS1008 | historie på vg3 påbygging, samisk eller finsk plan                   |
+        | HIS1015 | historie på vg3 påbygging, samisk eller finsk plan                   |
       Når GSK beregnes for vitnemålet
       Så er delkravet for norsk og historie oppfylt
 
       Eksempler:
-        | variant                     | historie                                                         |
-        | samisk 1. språk             | for studieforberedende, standard plan (HIS1002 eller HIS1010)   |
-        | samisk 1. språk             | for studieforberedende, samisk plan (HIS1005 eller HIS1013)     |
-        | samisk eller finsk 2. språk | på vg3 påbygging, standard plan (HIS1003 eller HIS1011)         |
-        | samisk eller finsk 2. språk | på vg3 påbygging, samisk eller finsk plan (HIS1006, HIS1014, HIS1008 eller HIS1015) |
+        | variant                     |
+        | samisk 1. språk             |
+        | samisk eller finsk 2. språk |
 
   Regel: Delkravene for Reform 94
 
@@ -324,7 +349,11 @@ Egenskap: Beregne GSK fra vitnemål
     #   importeres, eller bare når saksbehandleren starter kontrollen på et vitnemål?
     #   I dag gjør koden det bare når saksbehandleren starter kontrollen, som i det
     #   gamle FS (FS158001). Avgjøres av produkteier.
-    # - Ordet «løp» brukes ikke i begreper.md. Er «løp» riktig ord for saksbehandlerne?
+    #   Svaret gjelder også @OPT-BEH-BEH-015, der GSK beregnes når vitnemålet importeres.
+    #   Scenariomalen «Påstanden er at søkeren ikke har GSK når <grunn>» der sier at et
+    #   løp som ikke gir GSK, gir påstanden «ikke GSK». Svaret avgjør om det gjelder et
+    #   yrkesfaglig løp uten grunnlagskode der vitnemålet består seksfagskontrollen.
+    # «Løp»: avklart 2026-10-27 at løp er et begrep saksbehandlerne kjenner.
 
     Scenariomal: Yrkesfaglig løp fra <reform> gir grunnlagskoden <grunnlagskode>
       Gitt at vitnemålet er fra <reform>
