@@ -68,8 +68,12 @@ Egenskap: Ferdigbehandle en sak
     Scenario: Søker med flere vitnemål der bare ett har påstanden GSK
       # ÅPNE SPØRSMÅL:
       # - Hvis en søker har to eller flere vitnemål, men bare ett har påstanden at søkeren har GSK,
-      #   skal saken gå gjennom den helautomatiske flyten eller ikke? Svaret endrer også raden
-      #   «søkeren har flere elektroniske vitnemål …» i OPT-BEH-BEH-018 og OPT-BEH-BEH-019.
+      #   skal saken gå gjennom den helautomatiske flyten eller ikke? Søknaden får GSK-konklusjonen
+      #   fra vitnemålet med påstanden (OPT-BEH-BEH-015, «Konklusjon på søknaden fra vitnemålet»).
+      #   Det som står igjen, er om grunnlaget og poengene kan bygge på det vitnemålet uten at
+      #   saksbehandleren har valgt. Det andre vitnemålet kan ha fag som gir søkeren flere poeng.
+      #   Svaret endrer også raden «søkeren har flere elektroniske vitnemål …» i OPT-BEH-BEH-018
+      #   og OPT-BEH-BEH-019.
       Gitt at "Kari Nordmann" har to vitnemål
       Og at bare ett av vitnemålene har påstanden at søkeren har GSK
       Når søknaden behandles automatisk
