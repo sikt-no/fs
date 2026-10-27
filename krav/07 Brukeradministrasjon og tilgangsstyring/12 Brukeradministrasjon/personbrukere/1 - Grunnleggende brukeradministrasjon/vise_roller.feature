@@ -59,13 +59,13 @@ Egenskap: Se en personbrukers roller
       Når jeg velger en organisasjon som filter
       Så vises kun roller knyttet til den valgte organisasjonen
 
-    @planned @scope-restanser-etter-onboarding
+    @scope-restanser-etter-onboarding
     Scenario: Organisasjonene i filteret vises med akronym
       Når jeg åpner organisasjonsfilteret
       Så vises akronymet under navnet på hver organisasjon
       Men organisasjonskoden vises når organisasjonen ikke har akronym
 
-    @planned @scope-restanser-etter-onboarding
+    @scope-restanser-etter-onboarding
     Scenario: Søke i organisasjonsfilteret
       Når jeg skriver inn tekst i organisasjonsfilteret
       Så viser organisasjonsfilteret bare organisasjonene der navnet eller akronymet inneholder den innskrevne teksten

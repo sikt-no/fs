@@ -127,14 +127,14 @@ Egenskap: Listevisning og søk i personbrukere
       Når jeg velger en hjemorganisasjon som filter
       Så vises kun personbrukere med den valgte hjemorganisasjonen
 
-    @planned @scope-restanser-etter-onboarding
+    @scope-restanser-etter-onboarding
     Scenario: Hjemorganisasjonene i filteret vises med akronym
       Gitt jeg ser listen over personbrukere
       Når jeg åpner hjemorganisasjonsfilteret
       Så vises akronymet under navnet på hver hjemorganisasjon
       Men organisasjonskoden vises når hjemorganisasjonen ikke har akronym
 
-    @planned @scope-restanser-etter-onboarding
+    @scope-restanser-etter-onboarding
     Scenario: Søke i hjemorganisasjonsfilteret
       Gitt jeg ser listen over personbrukere
       Når jeg skriver inn tekst i hjemorganisasjonsfilteret
