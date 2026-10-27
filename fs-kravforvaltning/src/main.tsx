@@ -10,6 +10,8 @@ import { Editor, type EditorFlush } from './Editor';
 import { fixed, NO_FILTER, type Filter } from './health';
 import { FeatureView, scenKey, stepKey } from './FeatureView';
 import { findGroups, findHits } from './find';
+import { buildFlows, flyterHash, FLOW_ROOT, parseFlyterHash, phasesOfParts, type Depth } from './flows';
+import { Flyter } from './Flyter';
 import { headings, parseMd } from './markdown';
 import { MainBanner } from './MainBanner';
 import { bannerShown } from './mainStatus';
@@ -32,7 +34,7 @@ import { CLAUDE_WIDTH, ClaudePanel } from './ClaudePanel';
 import { refreshSkills } from './ClaudeSkills';
 import { buildTree, Sidebar, TREE_WIDTH, type TreeMode } from './Sidebar';
 import { StatusBar } from './StatusBar';
-import { TopBar, type Mode, type Theme } from './TopBar';
+import { MENU_DEFAULT, TopBar, type MenuShow, type Mode, type Theme } from './TopBar';
 import { transport } from './transport';
 import './theme.css';
 
@@ -53,8 +55,10 @@ const CLAUDE_SKILLS_BY_MODE: Record<Mode, { allowed: string[]; preselect: boolea
   krav: { allowed: ['fs-krav', 'fs-scope', 'fs-krav-avvik', 'fs-implementasjonsdetaljer', 'fs-verify'], preselect: true, codeDirs: true },
   avvik: { allowed: ['fs-krav', 'fs-krav-avvik'], preselect: true, codeDirs: false },
   oppgaver: { allowed: ['fs-scope', 'fs-krav', 'fs-specify', 'fs-specify-delta', 'fs-implementasjonsdetaljer', 'fs-verify'], preselect: false, codeDirs: true },
+  // Flyter: fs-krav skriver flytene, fs-krav-avvik finner faser uten krav, og fs-verify verifiserer overleveringene
+  flyter: { allowed: ['fs-krav', 'fs-scope', 'fs-krav-avvik', 'fs-verify'], preselect: true, codeDirs: true },
 };
-const MODE_LABEL: Record<Mode, string> = { krav: 'Krav', avvik: 'Avvik', oppgaver: 'Oppgaver' };
+const MODE_LABEL: Record<Mode, string> = { krav: 'Krav', avvik: 'Avvik', oppgaver: 'Oppgaver', flyter: 'Flyter' };
 /** Hvorfor en skill ikke kan velges i `mode`: «brukes i Krav og Oppgaver, ikke i Avvik» */
 const skillHint = (mode: Mode) => (skill: string) => {
   const where = (Object.keys(CLAUDE_SKILLS_BY_MODE) as Mode[]).filter(m => CLAUDE_SKILLS_BY_MODE[m].allowed.includes(skill)).map(m => MODE_LABEL[m]);
@@ -119,6 +123,12 @@ function asCompact<T>(main: HTMLElement, fn: (offset: number) => T): T {
 /** Valget på tavla fra hashen (se tavleHash.ts), eller `undefined` når hashen ikke er tavla */
 const parseOppgaverHash = parseTavleHash;
 
+/** Antall nivåer med @depends-on- i Flyter: fra hashen når den har det, ellers det brukeren valgte sist */
+const savedDepth = (): Depth => {
+  const v = load<number | 'alle'>('flowDepth', 1);
+  return v === 'alle' ? Infinity : typeof v === 'number' && v >= 1 ? v : 1;
+};
+
 /** Forsiden: krav/README.md */
 const README = 'krav/README.md';
 
@@ -155,11 +165,20 @@ function changedSteps(prev: FeatureModel | undefined, next: FeatureModel | undef
 
 function App() {
   const [entries, setEntries] = useState<Snapshot>(initial);
-  const [current, setCurrent] = useState(() => (initial[fromHash()] ? fromHash() : defaultPath(initial)));
-  // #/avvik er avviksdashbordet, #/oppgaver… er oppgavene; alle andre hasher er en fil
+  const startFlow = parseFlyterHash(fromHash());
+  const startFlowPath = startFlow?.path && initial[startFlow.path] ? startFlow.path : null;
+  const [current, setCurrent] = useState(() => startFlowPath ?? (initial[fromHash()] ? fromHash() : defaultPath(initial)));
+  // #/avvik er avviksdashbordet, #/oppgaver… er oppgavene, #/flyter… er flytene; alle andre hasher er en fil
   const [mode, setMode] = useState<Mode>(() =>
-    fromHash() === 'avvik' ? 'avvik' : parseOppgaverHash(fromHash()) ? 'oppgaver' : 'krav',
+    fromHash() === 'avvik' ? 'avvik' : parseOppgaverHash(fromHash()) ? 'oppgaver' : startFlow ? 'flyter' : 'krav',
   );
+  // Flyten som er valgt i Flyter (null: startsiden), og hvor mange nivåer med @depends-on- som vises
+  const [flowPath, setFlowPath] = useState<string | null>(startFlowPath);
+  // Fasen Flyter skal vise når flyten åpnes fra en regel eller et scenario i Krav
+  const [flowPhase, setFlowPhase] = useState<{ n: number; seq: number } | null>(null);
+  const [flowDepth, setFlowDepth] = useState<Depth>(() => startFlow?.depth ?? savedDepth());
+  // Hvilke av Avvik og Oppgaver som vises i menyen (tannhjulet etter menyen)
+  const [menu, setMenu] = useState<MenuShow>(() => ({ ...MENU_DEFAULT, ...load<Partial<MenuShow>>('menu', {}) }));
   const [tavleSel, setTavleSel] = useState<string | null>(() => parseOppgaverHash(fromHash())?.sel ?? null);
   // Oppgaven et krav ble åpnet fra på tavla, til båndet «← <oppgave>» i Krav
   const [kravFrom, setKravFrom] = useState<KravFrom | null>(null);
@@ -215,6 +234,7 @@ function App() {
   const md = useMemo(() => (entry?.kind === 'md' ? parseMd(entry.source ?? '') : null), [entry]);
   const nBad = useMemo(() => Object.values(entries).filter(e => e.kind === 'feature' && e.path.startsWith('krav/') && e.lint).length, [entries]);
   const board = useMemo(() => buildBoard(tasksSnap, entries), [tasksSnap, entries]);
+  const flows = useMemo(() => buildFlows(entries), [entries]);
   const nActive = board.cards.filter(c => taskColOf(c) !== 'verifisert').length;
   // Hvem som står i loggen i utforing.md: GitHub-brukeren når den er kjent
   const [me, setMe] = useState('vieweren');
@@ -248,7 +268,8 @@ function App() {
     setFind({ q: '', cur: 0, closed: {} });
   }, [current]);
   // Husk hvor brukeren er, til neste gang vieweren åpnes uten hash
-  useEffect(() => save('hash', location.hash), [current, mode, tavleSel]);
+  useEffect(() => save('hash', location.hash), [current, mode, tavleSel, flowPath, flowDepth]);
+  useEffect(() => save('flowDepth', flowDepth === Infinity ? 'alle' : flowDepth), [flowDepth]);
   // Tilbake på tavla trengs ikke båndet lenger
   useEffect(() => {
     if (mode === 'oppgaver') setKravFrom(null);
@@ -364,7 +385,14 @@ function App() {
     const onHash = () => {
       const p = fromHash();
       const o = parseOppgaverHash(p);
-      if (p === 'avvik') setMode('avvik');
+      const fl = parseFlyterHash(p);
+      if (fl) {
+        setMode('flyter');
+        const fp = fl.path && state.current.entries[fl.path] ? fl.path : null;
+        setFlowPath(fp);
+        if (fp) setCurrent(fp);
+        setFlowDepth(fl.depth ?? 1);
+      } else if (p === 'avvik') setMode('avvik');
       else if (o) {
         setMode('oppgaver');
         setTavleSel(o.sel);
@@ -585,6 +613,12 @@ function App() {
     } else if (m === 'oppgaver') {
       setMode('oppgaver');
       history.pushState(null, '', tavleHash(tavleSel));
+    } else if (m === 'flyter') {
+      // Fila i Krav når den er en flyt, ellers flyten som var valgt sist
+      const fp = current.startsWith(FLOW_ROOT) && entries[current]?.kind === 'feature' ? current : flowPath && entries[flowPath] ? flowPath : null;
+      setMode('flyter');
+      setFlowPath(fp);
+      history.pushState(null, '', flyterHash(fp, flowDepth));
     } else if (mode === 'avvik' && avvikFilter.file && entries[avvikFilter.file]) select(avvikFilter.file); // fila som er valgt i dashbordet
     else {
       setMode('krav');
@@ -607,6 +641,43 @@ function App() {
     setPrSeq(n => n + 1);
     setPrFor(null);
   };
+  /** Velger en flyt i Flyter (null: startsiden), eventuelt på en fase. Flyten blir også fila i Krav */
+  const selectFlow = async (p: string | null, phase?: number) => {
+    if (!(await leaveEditor())) return;
+    setMode('flyter');
+    setFlowPath(p);
+    setFlowPhase(phase ? { n: phase, seq: Date.now() } : null);
+    if (p) setCurrent(p);
+    history.pushState(null, '', flyterHash(p, flowDepth));
+  };
+  const selectDepth = (d: Depth) => {
+    setFlowDepth(d);
+    history.replaceState(null, '', flyterHash(flowPath, d));
+  };
+  // «Vis flyten» og «Med i N flyter» i metalinja i Krav
+  const flowLink = (() => {
+    if (!entry?.model || entry.kind !== 'feature') return undefined;
+    if (current.startsWith(FLOW_ROOT)) return { label: 'Vis flyten', onClick: () => void selectFlow(current) };
+    const id = entry.model.tags.map(t => /^@([A-ZÆØÅ]+-[A-ZÆØÅ]+-[A-ZÆØÅ]+-\d{3})$/.exec(t)?.[1]).find(Boolean);
+    const through = [...new Set((id && flows.through.get(id)?.map(t => t.flow)) || [])];
+    if (!through.length) return undefined;
+    const only = through.length === 1 ? flows.byId.get(through[0]) : undefined;
+    const names = through.map(f => flows.byId.get(f)?.title ?? f).join(', ');
+    return { label: `Med i ${through.length} ${through.length === 1 ? 'flyt' : 'flyter'}`, title: names, onClick: () => void selectFlow(only?.path ?? null) };
+  })();
+  // «Fase N i <flyt>» på regelen eller scenarioet en fase bygger på (ankeret, eller regelen i «…»)
+  const partFlows = (() => {
+    if (!entry?.model || entry.kind !== 'feature' || current.startsWith(FLOW_ROOT)) return undefined;
+    const id = entry.model.tags.map(t => /^@([A-ZÆØÅ]+-[A-ZÆØÅ]+-[A-ZÆØÅ]+-\d{3})$/.exec(t)?.[1]).find(Boolean);
+    const m = id ? phasesOfParts(flows, id) : null;
+    if (!m?.size) return undefined;
+    return (ln: number) =>
+      (m.get(ln) ?? []).map(({ flow, phase }) => ({
+        label: `Fase ${phase.n} i ${flow.title}`,
+        title: `Fase ${phase.n} i ${flow.title} bygger på delen: «${phase.title}». Åpner fasen i Flyter`,
+        onClick: () => void selectFlow(flow.path, phase.n),
+      }));
+  })();
   const selectTavle = (sel: string | null) => {
     setTavleSel(sel);
     history.pushState(null, '', tavleHash(sel));
@@ -684,6 +755,7 @@ function App() {
   const claudePath =
     mode === 'krav' ? (entry ? current : null)
     : mode === 'avvik' ? (avvikFilter.file ?? null)
+    : mode === 'flyter' ? flowPath
     : specCard ? specCard.path
     : shownTask ? shownTask.dir : null;
 
@@ -711,6 +783,15 @@ function App() {
         nBad={nBad}
         nActive={nActive}
         oCrumbs={oCrumbs}
+        flowPath={flowPath}
+        nFlows={flows.flows.length}
+        menu={menu}
+        onMenu={m => {
+          setMenu(m);
+          save('menu', m);
+          // Skjules visningen brukeren står i, går visningen til Krav
+          if ((mode === 'avvik' || mode === 'oppgaver') && !m[mode]) void changeMode('krav');
+        }}
         specState={{ ro: !EDITABLE, dirty: specDirty.length, onPr: EDITABLE && git ? specPr : null }}
         claude={claude ? claudeOpen : null}
         onClaude={() => setClaudeOpen(o => !o)}
@@ -745,6 +826,18 @@ function App() {
               executeTeam: claude?.available ? (c, repo) => void executeTeam(c, repo) : null,
               verifyTeam: claude?.available ? (c, shots) => void verifyTeam(verifyPrompt(c, shots), `Verifiser med team: ${c.doc.title || c.file}`) : null,
             }}
+          />
+        ) : mode === 'flyter' ? (
+          <Flyter
+            ix={flows}
+            path={flowPath}
+            depth={flowDepth}
+            onSelect={p => void selectFlow(p)}
+            goPhase={flowPhase}
+            onDepth={selectDepth}
+            onOpen={(p, ln) => void select(p, ln)}
+            sideHidden={treeHidden}
+            outlineHidden={tocHidden}
           />
         ) : mode === 'avvik' ? (
           <Avvik entries={entries} filter={avvikFilter} onFilter={setAvvikFilter} onOpen={select} onReadRule={readRule} panelHidden={treeHidden} />
@@ -834,6 +927,8 @@ function App() {
                   onFindClose={k => setFind(f => ({ ...f, closed: { ...f.closed, [k]: true } }))}
                   onEdit={EDITABLE ? () => setEditing(true) : undefined}
                   onDelete={EDITABLE ? deleteCurrent : undefined}
+                  flowLink={flowLink}
+                  partFlows={partFlows}
                   onVerify={claude?.available ? (scope, shots) => void verify(entry, scope, shots) : undefined}
                   onVerifyTeam={
                     claude?.available

@@ -410,13 +410,17 @@ export function parseFeature(source: string, path?: string): FeatureModel {
   let partialDraft = false;
   let partialChange = false;
   const hasQ = (notes: Note[]) => notes.some(n => n.kind === 'question');
-  const checkPart = (what: string, tags: string[], ln: number, questions: boolean) => {
+  const checkPart = (what: string, tags: string[], ln: number, questions: boolean, ruleTags: string[] = []) => {
     for (const t of tags.filter(t => isStatus(t) && t !== '@draft' && t !== '@deprecated')) {
-      if (t === '@implemented') push('status-on-part', `@implemented på ${what} — en levert del har ingen egen status, den arver @implemented fra Egenskap`, ln);
-      else if (fstatus !== 'implemented') push('status-on-part', `${t} på ${what} — @planned og @in-progress er bare lov på deler under en @implemented egenskap`, ln);
+      if (t === '@implemented') {
+        // Delvis levert: egenskapen er @in-progress, og delen som er levert, er @implemented
+        if (fstatus === 'implemented') push('status-on-part', `@implemented på ${what} — en levert del under en @implemented egenskap har ingen egen status, den arver @implemented fra Egenskap`, ln);
+        else if (fstatus !== 'in-progress') push('status-on-part', `@implemented på ${what} — en levert del er bare lov under en @in-progress egenskap (delvis levert)`, ln);
+        else if (ruleTags.includes('@implemented')) push('status-on-part', `@implemented på ${what} er overflødig når regelen er @implemented`, ln);
+      } else if (fstatus !== 'implemented') push('status-on-part', `${t} på ${what} — @planned og @in-progress er bare lov på deler under en @implemented egenskap`, ln);
       else partialChange = true;
     }
-    const pst = tags.filter(t => isStatus(t) && t !== '@implemented');
+    const pst = tags.filter(isStatus);
     if (pst.length > 1 && !(pst.length === 2 && pst.includes('@draft') && pst.includes('@deprecated')))
       push('part-multiple-statuses', `${what} har flere statustagger: ${pst.join(' ')}`, ln);
     if (tags.includes('@deprecated')) {
@@ -441,7 +445,7 @@ export function parseFeature(source: string, path?: string): FeatureModel {
     if (r.name !== null) checkPart('Regel', r.tags, r.ln, hasQ(r.notes) || r.scenarios.some(scenQ));
     for (const sc of r.scenarios) {
       if (sc.kind === 'Bakgrunn') continue;
-      checkPart(sc.kind, sc.tags, sc.ln, scenQ(sc));
+      checkPart(sc.kind, sc.tags, sc.ln, scenQ(sc), r.tags);
       // Og/Men arver typen til steget før, og teller ikke
       let rank = -1;
       for (const st of rawSteps.get(sc) ?? []) {

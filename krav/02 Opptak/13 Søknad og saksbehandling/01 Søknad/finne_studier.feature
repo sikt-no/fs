@@ -22,6 +22,7 @@ Egenskap: Listevisning og søk i utdanningstilbud
   # søkeforslag, filtrene, nullstilling, ingen treff og deling av søket. Scenarioene for disse
   # bygger på Confluence og skissen, og skal gjennomgås før kravet kan bli @planned.
   # Neste spørsmål: hvilke poenggrenser vises (kvoter, år, plasstildelingsrunde)?
+  # Avklart 2026-10-23: studiested-filteret er kommune, utledet fra campus på utdanningstilbudet (OPT-OPT-UTD-005).
 
   Regel: Liste over alle utdanningstilbud
 
@@ -40,6 +41,13 @@ Egenskap: Listevisning og søk i utdanningstilbud
         | Lærested                           |
         | Studiested                         |
         | Tidligere poenggrenser             |
+
+    # Hver campus et studieprogram starter på, er et eget utdanningstilbud (OPT-OPT-UTD-005).
+    Scenario: Studiestedet i listen er stedet der utdanningstilbudet har campus
+      Gitt at utdanningstilbudet "Sykepleie, høst 2027" ved NTNU har campus i Ålesund
+      Når søkeren åpner Finn studier
+      Så står studiestedet "Ålesund" på utdanningstilbudet "Sykepleie, høst 2027"
+      Men studiestedet er ikke "Trondheim", der NTNU har adressen
 
     Scenario: Listen er sortert alfabetisk på navn uten søketekst
       Gitt at søkeren ikke har skrevet noe i søkefeltet
@@ -184,6 +192,10 @@ Egenskap: Listevisning og søk i utdanningstilbud
         | Vårsemester  |
       Og ingen semestre er valgt som standard
 
+    # Progresjonen utledes av prosenttallet for heltid: 100 er heltid, under 100 er deltid.
+    # - Prosenttallet er påkrevd på studieprogram og studieretning, og alle har en verdi (Kjartan, via Haakon Paulin).
+    # - Mangler verdien, er progresjonen ikke registrert i SIS (Haakon Paulin).
+    # - Mangler verdien, regnes utdanningstilbudet som heltid (Kjetil Røse Høybråten).
     Scenario: Tilgjengelige progresjoner i filter
       Når søkeren åpner filteret for progresjon
       Så inneholder filteret disse progresjonene:
@@ -203,13 +215,13 @@ Egenskap: Listevisning og søk i utdanningstilbud
       Og ingen studieformer er valgt som standard
 
     @openquestion
-    Scenario: Tilgjengelige studiesteder i filter
+    Scenario: Tilgjengelige kommuner i filter
       # ÅPNE SPØRSMÅL:
-      # - Inneholder filteret bare studiestedene til utdanningstilbudene i listen, eller alle studiesteder?
-      Når søkeren åpner filteret for studiested
-      Så inneholder filteret studiestedene til utdanningstilbudene i listen
-      Og hvert studiested vises kun én gang
-      Og studiestedene er sortert alfabetisk
+      # - Inneholder filteret bare kommunene til utdanningstilbudene i listen, eller alle kommuner?
+      Når søkeren åpner filteret for kommune
+      Så inneholder filteret kommunene til utdanningstilbudene i listen
+      Og hver kommune vises kun én gang
+      Og kommunene er sortert alfabetisk
       Og "Alle" er valgt som standard
 
     @openquestion
@@ -232,8 +244,12 @@ Egenskap: Listevisning og søk i utdanningstilbud
         | oppstart   | Høstsemester   |
         | progresjon | Deltid         |
         | studieform | Nettstudium    |
-        | studiested | Trondheim      |
+        | kommune    | Ålesund        |
         | lærested   | NTNU           |
+
+    Scenario: Kommunefilteret og studiestedet i listen stemmer overens
+      Når søkeren velger "Ålesund" som filter for kommune
+      Så står studiestedet "Ålesund" på hvert utdanningstilbud i listen
 
     @openquestion
     Scenario: Velge flere verdier i samme filter
@@ -300,28 +316,15 @@ Egenskap: Listevisning og søk i utdanningstilbud
       Når søkeren åpner Finn studier
       Så vises ikke utdanningstilbudene i opptaket "Samordna opptak 2027" i listen
 
-    # AVKLART 2026-10-22 (produkteier): Søkeren ser bare utdanningstilbud som er åpne for søknad.
-    # Etter den ordinære søknadsfristen vises bare utdanningstilbud som er åpne for søknad på ledige studieplasser.
     @openquestion
     Scenario: Søkeren ser ikke utdanningstilbud der søknadsfristen har gått ut
       # ÅPNE SPØRSMÅL:
-      # - Gjelder den tidlige søknadsfristen for utdanningstilbudet (sette_tidlig_søknadsfrist.feature)
-      #   og de avvikende fristene per utdanningsbakgrunn (frister_og_hendelser.feature) også her?
-      #   Finn studier vises også for søkere som ikke er innlogget, og som ikke har valgt utdanningsbakgrunn.
-      Gitt at den ordinære søknadsfristen i opptaket "Samordna opptak 2027" har gått ut
-      Og at utdanningstilbudet "Sykepleie, høst 2027" ikke er åpent for søknad på ledige studieplasser
+      # - Hvilken frist styrer når utdanningstilbudet forsvinner fra listen: fristen for opptaket,
+      #   den tidlige søknadsfristen for utdanningstilbudet (opptaksinnstillinger_utdanningstilbud.feature),
+      #   eller fristen som gjelder for utdanningsbakgrunnen til søkeren (frister_og_hendelser.feature)?
+      Gitt at søknadsfristen for utdanningstilbudet "Sykepleie, høst 2027" har gått ut
       Når søkeren åpner Finn studier
       Så vises ikke utdanningstilbudet "Sykepleie, høst 2027" i listen
-
-    @openquestion
-    Scenario: Søkeren ser utdanningstilbud som er åpne for søknad på ledige studieplasser
-      # ÅPNE SPØRSMÅL:
-      # - Kravene sier i dag bare at opptaket tilbyr søknad på ledige studieplasser (søke_på_ledige_studieplasser.feature).
-      #   Hvor bestemmes det hvilke utdanningstilbud som er åpne for ledige studieplasser?
-      Gitt at den ordinære søknadsfristen i opptaket "Samordna opptak 2027" har gått ut
-      Og at utdanningstilbudet "Sykepleie, høst 2027" er åpent for søknad på ledige studieplasser
-      Når søkeren åpner Finn studier
-      Så vises utdanningstilbudet "Sykepleie, høst 2027" i listen
 
     @openquestion
     Scenario: Søkeren ser ikke et trukket utdanningstilbud

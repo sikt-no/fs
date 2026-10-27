@@ -9,7 +9,10 @@
 # kvoten for førstegangsvitnemål, som er den vanskeligste enkeltbiten i hele
 # initiativet.
 #
-@OPT-BEH-BEH-007 @must @draft
+# Feature-ID-en er endret fra @OPT-BEH-BEH-007 til @OPT-BEH-BEH-022, fordi
+# gi_tilbudsgaranti_ved_tidlig_opptak.feature også bruker 007 (26.10.2026).
+#
+@OPT-BEH-BEH-022 @must @draft
 Egenskap: Velge fag per poengvariant
   Som saksbehandler i opptak
   ønsker jeg å velge hvilket vitnemål og hvilke fag som skal telle i hver poengvariant
