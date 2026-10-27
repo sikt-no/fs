@@ -31,10 +31,10 @@ Testplan for «Søke om tidlig opptak». Planen sier hva som testes, av hvem, hv
 
 | Nr | Navn | Rolle | Organisasjon | Brukes til |
 |---|---|---|---|---|
-| 1 | [Fylles ut] | Søker med en sendt søknad der noen søknadsalternativer tilbyr tidlig opptak og noen ikke, og som ikke har søkt om tidlig opptak | – | Søke om tidlig opptak, se søknadsalternativene som ikke tilbyr det, begrunnelsene og lenken, og legge til et søknadsalternativ etterpå (`@OPT-SØK-SØK-011`) |
-| 2 | [Fylles ut] | Søker med en søknad der ingen søknadsalternativer tilbyr tidlig opptak | – | Ikke kunne søke om tidlig opptak (`@OPT-SØK-SØK-011`) |
-| 3 | [Fylles ut] | Søker som ikke har sendt søknaden ennå | – | Ikke kunne søke om tidlig opptak før søknaden er sendt (`@OPT-SØK-SØK-011`) |
-| 4 | [Fylles ut] | Søker med en sendt søknad i opptaket, der minst ett søknadsalternativ tilbyr tidlig opptak, og som ikke har søkt om tidlig opptak | – | Ikke kunne søke om tidlig opptak etter fristen, når fristen er flyttet til i går (`@OPT-SØK-SØK-011`) |
+| 1 | Samtidig Sild (fødselsnummer 10830798485, søknad 1000670). Gjøres klar før testen: legger til «Biovitenskap» ved UiO, så søknaden har ett søknadsalternativ som ikke tilbyr tidlig opptak | Søker med en sendt søknad der noen søknadsalternativer tilbyr tidlig opptak og noen ikke, og som ikke har søkt om tidlig opptak | – | Søke om tidlig opptak, se søknadsalternativene som ikke tilbyr det, begrunnelsene og lenken, og legge til et søknadsalternativ etterpå (`@OPT-SØK-SØK-011`) |
+| 2 | Heidi Lykke (fødselsnummer 05849540000, søknad 1004306), med bare «Rettsvitenskap (jus)» ved UiO | Søker med en sendt søknad der ingen søknadsalternativer tilbyr tidlig opptak | – | Ikke kunne søke om tidlig opptak (`@OPT-SØK-SØK-011`) |
+| 3 | Fredag Lørdag (fødselsnummer 12919210263), med en søknad i opptaket som ikke er sendt | Søker som ikke har sendt søknaden ennå | – | Ikke kunne søke om tidlig opptak før søknaden er sendt (`@OPT-SØK-SØK-011`) |
+| 4 | Ullen Bikkje (fødselsnummer 31900699630, søknad 1004225 i opptak 2) | Søker med en sendt søknad i opptaket der søknadsfristen for tidlig opptak er ute, der minst ett søknadsalternativ tilbyr tidlig opptak, og som ikke har søkt om tidlig opptak | – | Ikke kunne søke om tidlig opptak etter fristen (`@OPT-SØK-SØK-011`) |
 
 Testbrukerne er søkere, som ikke hører til en organisasjon. Det er ingen synlighet mellom organisasjoner å teste i denne leveransen.
 
@@ -42,10 +42,11 @@ Testbrukerne er søkere, som ikke hører til en organisasjon. Det er ingen synli
 
 | Hva | Navn | Hvor | Kan settes tilbake |
 |---|---|---|---|
-| Et opptak med tidlig opptak, en søknadsfrist for tidlig opptak som ikke er ute, lenke til informasjon om tidlig opptak, og begrunnelser for tidlig opptak der minst én ikke er aktiv | [Fylles ut: opptaket velges senere] | [Fylles ut] | Trengs ikke, opptaket endres ikke |
-| Utdanningstilbud i opptaket som tilbyr tidlig opptak, og utdanningstilbud som ikke gjør det | [Fylles ut] | [Fylles ut] | Trengs ikke |
-| Et utdanningstilbud som tilbyr tidlig opptak, som testbruker 1 kan legge til etter å ha søkt | [Fylles ut] | [Fylles ut] | Søknadsalternativet kan fjernes igjen |
-| Søknadsfristen for tidlig opptak i opptaket flyttes til i går før den siste testcasen (1.9), og tilbake etterpå. Fristen gjelder hele opptaket, så ingen andre bør teste i opptaket mens den er flyttet | [Fylles ut: hvem som flytter fristen (opptaksforvalter)] | [Fylles ut: i FS Admin, eller med SQL] | Ja: fristen settes tilbake til den som sto der |
+| Et opptak med tidlig opptak, en søknadsfrist for tidlig opptak som ikke er ute, lenke til informasjon om tidlig opptak, og begrunnelser for tidlig opptak der minst én ikke er aktiv | «Samordna UHG-simulering høsten 2026» (opptak 34). Søknadsfristen for tidlig opptak er 6.10.2027. Grunnlaget «Avvikle virksomheten» gjøres inaktivt før testen (1.4), med `tidlig-opptak-34-gjor-grunnlag-inaktivt.sql` i `fs-plattform/opptak/local/`, og aktivt igjen etterpå med `tidlig-opptak-34-gjor-grunnlag-aktivt.sql` | Min kompetanse | Ja, grunnlaget gjøres aktivt igjen etter testen |
+| Utdanningstilbud i opptaket som tilbyr tidlig opptak, og utdanningstilbud som ikke gjør det | 23 tilbyr tidlig opptak. «Biovitenskap» og «Rettsvitenskap (jus)» ved UiO gjør det ikke | Min kompetanse. Flere opptak har utdanningstilbud med de samme navnene. De i opptak 34 har søknadsfrist 13.10.2027 | Trengs ikke |
+| Et utdanningstilbud som tilbyr tidlig opptak, som testbruker 1 kan legge til etter å ha søkt | «Grunnskolelærerutdanning for trinn 5-10 (300 studiepoeng)» i Halden (utdanningstilbud 126) | Min kompetanse, søknadsfrist 13.10.2027 | Søknadsalternativet kan fjernes igjen |
+| Et opptak med tidlig opptak der søknadsfristen for tidlig opptak er ute (22.10.2026), og et utdanningstilbud som tilbyr tidlig opptak, for 1.9 | «Opptak UHM 2025» (opptak 2) | Min kompetanse | Trengs ikke, opptaket endres ikke |
+| Søknadene til testbruker 1, 2 og 3. Søknadene i testmiljøet blir ikke liggende lenge, så de sjekkes, og gjøres klare igjen ved behov, dagen før testen | – | Min kompetanse | Ja, som i «Gjør klar»-stegene i testcasene |
 | Søknaden om tidlig opptak fra testbruker 1 | – | – | Nei, søkeren kan ikke trekke ønsket. Bruk en ny søker, eller nullstill i databasen |
 
 ## Omfang
