@@ -52,17 +52,20 @@
 # - Søknadsmangler: søknadsmangler.feature har allerede «Mangelen sjekkes ut
 #   når vitnemålet behandles automatisk». «Godkjenn» i FS-klienten fjerner også
 #   søknadsmanglene for vitnemålet.
-@OPT-BEH-BEH-018 @must @draft @ref-OPT-BEH-BEH-008
+@OPT-BEH-BEH-018 @must @draft @depends-on-OPT-BEH-BEH-015 @ref-OPT-BEH-BEH-008
 Egenskap: Automatisk poengberegning
   Som saksbehandler
   ønsker jeg at poengene fra søkerens elektroniske vitnemål beregnes automatisk
   slik at jeg bare trenger å behandle poengene der grunnlaget ikke er entydig.
 
-  Har søkeren ett elektronisk vitnemål, beregner systemet karakterpoeng,
-  realfagspoeng og språkpoeng fra det, og legger dem i poengtypene regelverket
-  har koblet til beregningen. Har søkeren flere vitnemål, beregnes ingenting
-  automatisk, og saksbehandleren velger grunnlaget i vitnemålsbehandlingen. Den
-  samme beregningen brukes da på grunnlaget saksbehandleren har valgt.
+  Har søkeren ett elektronisk vitnemål, og har opptakssystemet beregnet at
+  vitnemålet gir GSK (påstanden på vitnemålet, OPT-BEH-BEH-015), beregner
+  systemet karakterpoeng, realfagspoeng og språkpoeng fra det, og legger dem i
+  poengtypene regelverket har koblet til beregningen. Uten påstanden at søkeren
+  har GSK beregnes ingenting automatisk. Har søkeren flere vitnemål, beregnes
+  ingenting automatisk, og saksbehandleren velger grunnlaget i
+  vitnemålsbehandlingen. Den samme beregningen brukes da på grunnlaget
+  saksbehandleren har valgt.
 
   Poeng som saksbehandleren har satt eller låst, beregnes aldri på nytt. Det
   fremgår om et poeng er beregnet automatisk eller satt av saksbehandleren, og
@@ -79,13 +82,13 @@ Egenskap: Automatisk poengberegning
     # Poengtypene og koblingen til beregningen settes opp i regelverket.
 
     Scenario: Poeng beregnes fra søkerens eneste vitnemål
-      Gitt at søkeren har ett elektronisk vitnemål som ikke er annullert
+      Gitt at søkeren har ett elektronisk vitnemål med påstanden at søkeren har GSK
       Og at søknaden har poengtyper som er koblet til beregningen fra vitnemålet
       Når poengene beregnes automatisk
       Så har poengtypene fått poeng beregnet fra vitnemålet
 
     Scenariomal: Poengklasser som beregnes fra vitnemålet
-      Gitt at søkeren har ett elektronisk vitnemål som ikke er annullert
+      Gitt at søkeren har ett elektronisk vitnemål med påstanden at søkeren har GSK
       Og at søknaden har en poengtype i poengklassen <poengklasse> som er koblet til beregningen fra vitnemålet
       Når poengene beregnes automatisk
       Så har poengtypen fått <poeng> beregnet fra vitnemålet
@@ -97,7 +100,7 @@ Egenskap: Automatisk poengberegning
         | SPR         | språkpoeng     |
 
     Scenario: Poengtype som ikke er koblet til beregningen, beregnes ikke
-      Gitt at søkeren har ett elektronisk vitnemål som ikke er annullert
+      Gitt at søkeren har ett elektronisk vitnemål med påstanden at søkeren har GSK
       Og at søknaden har en poengtype som ikke er koblet til beregningen fra vitnemålet
       Når poengene beregnes automatisk
       Så er poengtypen uendret
@@ -109,7 +112,7 @@ Egenskap: Automatisk poengberegning
       #   lastet opp som fil skal beregnes, og at saksbehandleren justerer
       #   etterpå. STEK-454 sier «ingen kompetansebevis». Gjelder STEK-454 bare
       #   kompetansebevis fra NVB, så de to er forenlige?
-      Gitt at søkeren har ett elektronisk vitnemål som ikke er annullert
+      Gitt at søkeren har ett elektronisk vitnemål med påstanden at søkeren har GSK
       Og at søkeren har lastet opp et kompetansebevis
       Når poengene beregnes automatisk
       Så har poengtypene fått poeng beregnet fra det elektroniske vitnemålet
@@ -122,11 +125,12 @@ Egenskap: Automatisk poengberegning
       Så får søknaden ingen poeng beregnet automatisk
 
       Eksempler:
-        | grunn                                                         |
-        | søkeren har flere elektroniske vitnemål som ikke er annullert |
-        | søkerens eneste elektroniske dokument er et kompetansebevis   |
-        | søkerens eneste elektroniske vitnemål er annullert            |
-        | søkeren ikke har noe elektronisk vitnemål                     |
+        | grunn                                                                                                       |
+        | søkeren har flere elektroniske vitnemål som ikke er annullert, og saksbehandleren har ikke valgt ett av dem |
+        | søkerens eneste elektroniske dokument er et kompetansebevis                                                 |
+        | søkerens eneste elektroniske vitnemål er annullert                                                          |
+        | vitnemålet har påstanden at søkeren ikke har GSK                                                            |
+        | søkeren ikke har noe elektronisk vitnemål                                                                   |
 
     @openquestion
     Scenario: Automatisk beregnede poeng når vitnemålet ikke lenger er entydig
@@ -157,7 +161,7 @@ Egenskap: Automatisk poengberegning
     #   beregninger. Hvilke av disse skal videreføres?
 
     Scenario: Søknad med elektronisk vitnemål kommer inn
-      Gitt at søkeren har ett elektronisk vitnemål som ikke er annullert
+      Gitt at søkeren har ett elektronisk vitnemål med påstanden at søkeren har GSK
       Når søknaden sendes inn
       Så beregnes poengene automatisk
 
@@ -175,7 +179,7 @@ Egenskap: Automatisk poengberegning
       Så beregnes poengene fra grunnlaget saksbehandleren har satt sammen
 
     Scenario: Saksbehandleren starter beregningen for én søknad
-      Gitt at søkeren har ett elektronisk vitnemål som ikke er annullert
+      Gitt at søkeren har ett elektronisk vitnemål med påstanden at søkeren har GSK
       Når saksbehandleren starter den automatiske poengberegningen for søknaden
       Så beregnes poengene automatisk
 
