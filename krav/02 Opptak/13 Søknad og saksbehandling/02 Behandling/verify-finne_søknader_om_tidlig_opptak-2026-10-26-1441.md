@@ -7,6 +7,7 @@
 - **Avhengigheter:** ingen
 - **Kontroll:** `fs-verify-kontroll`
 - **Skjermbilder:** nei
+- **Confluence:** https://sikt.atlassian.net/wiki/spaces/STUDIEADM/pages/5148966925
 
 Gating-sett: scenarioene som ikke er tagget `@draft`, `@deprecated` eller `@demo` (`@openquestion` alene er med).
 
