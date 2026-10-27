@@ -167,12 +167,12 @@ Egenskap: Automatisk grunnlag
       Så får søknaden ingen grunnlag automatisk
 
       Eksempler:
-        | grunn                                                                                                    |
+        | grunn                                                                                                       |
         | søkeren har flere elektroniske vitnemål som ikke er annullert, og saksbehandleren har ikke valgt ett av dem |
-        | søkerens eneste elektroniske dokument er et kompetansebevis                                               |
-        | vitnemålet har påstanden at søkeren ikke har GSK                                                          |
-        | søkeren ikke har noe elektronisk vitnemål                                                                 |
-        | ingen av grunnlagene i regelverket passer søkeren                                                         |
+        | søkerens eneste elektroniske dokument er et kompetansebevis                                                 |
+        | vitnemålet har påstanden at søkeren ikke har GSK                                                            |
+        | søkeren ikke har noe elektronisk vitnemål                                                                   |
+        | ingen av grunnlagene i regelverket passer søkeren                                                           |
 
     @ref-OPT-BEH-BEH-025
     Scenario: Grunnlag fra vitnemålet saksbehandleren har valgt
