@@ -52,20 +52,22 @@
 # - Søknadsmangler: søknadsmangler.feature har allerede «Mangelen sjekkes ut
 #   når vitnemålet behandles automatisk». «Godkjenn» i FS-klienten fjerner også
 #   søknadsmanglene for vitnemålet.
-@OPT-BEH-BEH-018 @must @draft @depends-on-OPT-BEH-BEH-015 @ref-OPT-BEH-BEH-008
+@OPT-BEH-BEH-018 @must @draft @depends-on-OPT-BEH-BEH-015 @depends-on-OPT-BEH-BEH-019 @ref-OPT-BEH-BEH-008
 Egenskap: Automatisk poengberegning
   Som saksbehandler
   ønsker jeg at poengene fra søkerens elektroniske vitnemål beregnes automatisk
-  slik at jeg bare trenger å behandle poengene der grunnlaget ikke er entydig.
+  slik at jeg bare trenger å behandle poengene der vitnemålet ikke er entydig.
 
-  Har søkeren ett elektronisk vitnemål, og har opptakssystemet beregnet at
-  vitnemålet gir GSK (påstanden på vitnemålet, OPT-BEH-BEH-015), beregner
-  systemet karakterpoeng, realfagspoeng og språkpoeng fra det, og legger dem i
-  poengtypene regelverket har koblet til beregningen. Uten påstanden at søkeren
-  har GSK beregnes ingenting automatisk. Har søkeren flere vitnemål, beregnes
-  ingenting automatisk, og saksbehandleren velger grunnlaget i
-  vitnemålsbehandlingen. Den samme beregningen brukes da på grunnlaget
-  saksbehandleren har valgt.
+  Grunnlaget søknaden har fått (OPT-BEH-BEH-019), avgjør hvilke poengtyper
+  søknaden har: rangeringsregelverket kobler hvert grunnlag til poengtyper.
+  Poengene i poengtypene beregnes fra vitnemålet. Har søkeren ett elektronisk
+  vitnemål, og har opptakssystemet beregnet at vitnemålet gir GSK (påstanden på
+  vitnemålet, OPT-BEH-BEH-015), beregner systemet karakterpoeng, realfagspoeng og
+  språkpoeng fra det, og legger dem i poengtypene regelverket har koblet til
+  beregningen. Uten påstanden at søkeren har GSK, eller uten grunnlag, beregnes
+  ingenting automatisk. Har søkeren flere vitnemål, beregnes ingenting
+  automatisk, og saksbehandleren velger vitnemålet i vitnemålsbehandlingen. Den
+  samme beregningen brukes da på vitnemålet saksbehandleren har valgt.
 
   Poeng som saksbehandleren har satt eller låst, beregnes aldri på nytt. Det
   fremgår om et poeng er beregnet automatisk eller satt av saksbehandleren, og
@@ -130,6 +132,7 @@ Egenskap: Automatisk poengberegning
         | søkerens eneste elektroniske dokument er et kompetansebevis                                                 |
         | søkerens eneste elektroniske vitnemål er annullert                                                          |
         | vitnemålet har påstanden at søkeren ikke har GSK                                                            |
+        | søknaden har ikke grunnlag                                                                                  |
         | søkeren ikke har noe elektronisk vitnemål                                                                   |
 
     @openquestion
@@ -171,12 +174,12 @@ Egenskap: Automatisk poengberegning
       Så beregnes poengene automatisk
 
     @ref-OPT-BEH-BEH-004
-    Scenario: Saksbehandleren har satt sammen grunnlaget
+    Scenario: Saksbehandleren har satt sammen dokumentasjonen
       # Hvordan saksbehandleren velger vitnemål og fag, står i
       # vitnemålsbehandlingen. Poengene beregnes med den samme beregningen.
       Gitt at søkeren har dokumentasjon som ikke kan beregnes automatisk
-      Når saksbehandleren har satt sammen grunnlaget fra opplastet og elektronisk dokumentasjon
-      Så beregnes poengene fra grunnlaget saksbehandleren har satt sammen
+      Når saksbehandleren har satt sammen dokumentasjonen fra opplastet og elektronisk dokumentasjon
+      Så beregnes poengene fra dokumentasjonen saksbehandleren har satt sammen
 
     Scenario: Saksbehandleren starter beregningen for én søknad
       Gitt at søkeren har ett elektronisk vitnemål med påstanden at søkeren har GSK

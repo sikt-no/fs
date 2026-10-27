@@ -36,14 +36,11 @@ Egenskap: Automatisk saksbehandling
       Når søknaden behandles automatisk
       Så har søknaden grunnlag
 
-  @depends-on-OPT-BEH-BEH-018 @depends-on-OPT-REG-RAN-002 @openquestion
+  @depends-on-OPT-BEH-BEH-018 @depends-on-OPT-REG-RAN-001 @depends-on-OPT-REG-RAN-002
   Regel: Poengene beregnes fra grunnlaget og rangeringsregelverket
-    # ÅPNE SPØRSMÅL:
-    # - Bygger poengene på vitnemålet eller på grunnlaget? I OPT-BEH-BEH-018 er «grunnlaget»
-    #   dokumentasjonen poengene beregnes fra, og i OPT-BEH-BEH-019 er det kvalifikasjonsgrunnlaget
-    #   (VOV, VES). OPT-BEH-BEH-018 sier ikke at poengene trenger grunnlaget. Bygger de på
-    #   vitnemålet, er det ingen overlevering fra fasen for grunnlag, og fasen heter «Poengene
-    #   beregnes fra vitnemålet».
+    # Overleveringen: grunnlaget avgjør hvilke poengtyper søknaden har (rangeringsregelverket
+    # kobler grunnlag til poengtyper), og poengene i dem beregnes fra vitnemålet.
+    # Avklart 2026-10-27 i review av PR #818, fra koden i fs-plattform (PoengRadOppdateringService).
 
     Scenario: Søknadsalternativet får poengsum
       Gitt at søknaden har grunnlag
