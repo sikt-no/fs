@@ -141,11 +141,11 @@ Denne listen sammenstiller begreper brukt i kravene (`krav/02 Opptak/`), design-
 | Begrep i krav | Definisjon | Begrepskatalog | Merknad |
 |---------------|------------|----------------|---------|
 | søknadsfrist | Fristen for å levere søknad i opptaket | Referert i [søknad](https://fs.sikt.no/domenekunnskap/begreper/soknad/) | OK |
-| dokumentasjonsfrist | Fristen for å laste opp dokumentasjon | – | OK |
+| informasjonsdato for dokumentasjon | Datoen dokumentasjonen bør være lastet opp innen. Stenger ikke for opplasting: det gjør bare innstillingen «Søker kan laste opp dokumenter» | – | ✅ Avklart 2026-10-27: erstatter «ordinær dokumentasjonsfrist» |
 | omprioriteringsfrist | Fristen for å endre rekkefølgen på søknadsalternativene | Referert i [søknad](https://fs.sikt.no/domenekunnskap/begreper/soknad/) | OK |
-| ettersendingsfrist | Fristen for å ettersende dokumentasjon | Referert i [søknad](https://fs.sikt.no/domenekunnskap/begreper/soknad/) | OK |
+| ettersendingsfrist | Datoen for å ettersende dokumentasjon. Stenger ikke for opplasting | Referert i [søknad](https://fs.sikt.no/domenekunnskap/begreper/soknad/) | ⚠️ Åpent spørsmål: frist for mangler, eller informasjonsdato? |
 | frist for poenggrenser | Frist ved tidlig opptak | – | Ny i kravene, for tidlig opptak |
-| informasjonsdato | Dato på opptaket som bare er informasjon til søker, for eksempel når resultatet kan forventes publisert | – | OK |
+| informasjonsdato | Dato på opptaket som bare er informasjon til søker, for eksempel når resultatet kan forventes publisert | – | ✅ Avklart 2026-10-27: brukes om datoer uten virkning. «Frist» brukes bare om datoer som har en virkning, for eksempel en sperre. Datoen for publisering av hovedopptaket er en informasjonsdato |
 | publiseringsdato | – | – | ⚠️ Avklart 2026-10-07: runden har ingen publiseringsdato som settes. Publiseringstidspunktet er når opptaksforvalter publiserer. Bør tas ut som eget begrep |
 
 ## Kvalifisering og vurdering
@@ -199,6 +199,7 @@ Denne listen sammenstiller begreper brukt i kravene (`krav/02 Opptak/`), design-
 | 19 | plassflyt | plassflyt mellom runder | Plassflyt er mellom kvoter. Det som går mellom runder, er informasjonsarv | 2026-10-09 |
 | 20 | avslag / bortfall | – | To ulike svar: avslag = ikke kvalifisert eller ikke nådd opp. Bortfall = mister tilbud på lavere prioritet | 2026-10-09 |
 | 21 | rundetype = navn og rundeinnstillinger i regelverkssamlingen | rundetype som styrer plasstildelingen | Plasstildelingen leser innstillingene, og ser aldri på rundetypen. Innstillingene kan ikke justeres på runden | 2026-10-24 |
+| 22 | frist (datoer med virkning) / informasjonsdato (datoer uten virkning) | dokumentasjonsfrist om datoen dokumentasjonen bør være lastet opp innen | Ordet sier hva datoen gjør. Den ordinære dokumentasjonsfristen heter informasjonsdato for dokumentasjon | 2026-10-27 |
 
 ---
 
