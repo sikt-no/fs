@@ -1,5 +1,5 @@
 -- Gjør grunnlaget «Avvikle virksomheten» (AVVIKLE) for tidlig opptak inaktivt i opptak 34.
--- Kjøres før den interne akseptansetesten av «Søke om tidlig opptak»: testcase 1.4 venter at
+-- Kjøres før den interne akseptansetesten av «Søke om tidlig opptak»: testcase 3.1 venter at
 -- et grunnlag som ikke er aktivt, ikke vises for søkeren. Det gjelder hele opptak 34.
 -- Settes tilbake med etter-testen-gjor-grunnlag-aktivt.sql etter testen.
 -- Kjøres som superbruker: tabellen har RLS.

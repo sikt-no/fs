@@ -1,7 +1,7 @@
 # Testrapport – verifisering – Søke om tidlig opptak
 
 - **Nivå**: verifisering
-- **Testplan**: [testplan.md](testplan.md) · https://sikt.atlassian.net/wiki/spaces/STUDIEADM/pages/5144772613
+- **Akseptansetesting**: [akseptansetesting.md](akseptansetesting.md) · https://sikt.atlassian.net/wiki/spaces/STUDIEADM/pages/5144772613
 - **Scope**: –
 - **Grunnlag**: [verify-søke_om_tidlig_opptak-2026-10-26-0950.md](../../krav/02%20Opptak/13%20S%C3%B8knad%20og%20saksbehandling/01%20S%C3%B8knad/verify-s%C3%B8ke_om_tidlig_opptak-2026-10-26-0950.md), lest 2026-10-26 15:49
 - **Confluence**: https://sikt.atlassian.net/wiki/spaces/STUDIEADM/pages/5146836993
