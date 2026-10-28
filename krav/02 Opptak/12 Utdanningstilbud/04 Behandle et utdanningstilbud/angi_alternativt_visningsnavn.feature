@@ -1,4 +1,5 @@
 # language: no
+# Jira: SHI-780
 @OPT-OPT-UTD-033 @must @draft @scope-utdanningstilbud-2027
 Egenskap: Angi alternativt visningsnavn til Min kompetanse
   Som opptaksforvalter
