@@ -10,7 +10,7 @@ Egenskap: Listevisning og søk i opptak
   # men hadde ikke noe krav. HK-dir ba om å filtrere og sortere på opptakstype og navn, og å åpne detaljene i et opptak.
   # AVKLART 2026-10-21 (produkteier): Kravet beskriver lista slik den er bygget.
   # AVKLART 2026-10-21 (produkteier): Status er ikke med i lista, i sorteringen eller i filtrene. Det er ennå ikke forskjell
-  # på aktive og deaktiverte opptak, og å deaktivere et opptak kommer senere (01 Grunnoppsett/opprett_opptak.feature).
+  # på aktive og deaktiverte opptak, og å gjøre et opptak historisk kommer senere (01 Grunnoppsett/opptaksstatus.feature).
   # HK-dir ønsker også å sortere på navn. Det er ikke med i kravet nå.
   # Hvilke opptak en organisasjon som ikke deltar, ser, står i samordna_opptak.feature
   # (Regel: Organisasjoner som ikke deltar, kan ikke se opptaket).

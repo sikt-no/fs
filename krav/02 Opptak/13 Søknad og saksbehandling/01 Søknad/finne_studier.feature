@@ -303,7 +303,9 @@ Egenskap: Listevisning og søk i utdanningstilbud
       Når søkeren skriver "sy" i søkefeltet
       Så får søkeren høyst 8 forslag
 
+  @depends-on-OPT-OVO-GRU-004
   Regel: Synlighet via søknadsperioden i opptaket
+    # Opptaket er upublisert til søknaden åpner, og kan avpubliseres (opptaksstatus.feature).
 
     Scenario: Søkeren ser utdanningstilbud i opptak med åpen søknadsperiode
       Gitt at søknaden i opptaket "Samordna opptak 2027" har åpnet
@@ -313,6 +315,11 @@ Egenskap: Listevisning og søk i utdanningstilbud
 
     Scenario: Søkeren ser ikke utdanningstilbud i opptak der søknaden ikke har åpnet
       Gitt at søknaden i opptaket "Samordna opptak 2027" ikke har åpnet
+      Når søkeren åpner Finn studier
+      Så vises ikke utdanningstilbudene i opptaket "Samordna opptak 2027" i listen
+
+    Scenario: Søkeren ser ikke utdanningstilbud i et avpublisert opptak
+      Gitt at opptaket "Samordna opptak 2027" er avpublisert
       Når søkeren åpner Finn studier
       Så vises ikke utdanningstilbudene i opptaket "Samordna opptak 2027" i listen
 

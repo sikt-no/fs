@@ -182,6 +182,28 @@ Egenskap: Søke på opptak
       Når søkeren vil sende inn en ny søknad "2027-04-16"
       Så kan søkeren ikke sende inn søknaden
 
+  @draft @depends-on-OPT-OVO-GRU-004
+  Regel: Søkeren kan ikke begynne på eller endre en søknad i et avpublisert opptak
+    # Virkningen av at opptaksforvalter avpubliserer opptaket (opptaksstatus.feature).
+    # Lagt til 2026-10-28 (produkteier).
+
+    Scenario: Søkeren kan ikke begynne på en søknad i et avpublisert opptak
+      Gitt at opptaket "Samordna opptak 2027" er avpublisert
+      Når søkeren vil begynne på en søknad i opptaket "Samordna opptak 2027"
+      Så kan søkeren ikke begynne på søknaden
+
+    Scenario: Søkeren kan ikke endre søknaden i et avpublisert opptak
+      Gitt at søkeren har en søknad i opptaket "Samordna opptak 2027"
+      Og at opptaket "Samordna opptak 2027" er avpublisert
+      Når søkeren vil endre søknaden
+      Så kan søkeren ikke endre søknaden
+
+    Scenario: Søkeren ser søknaden i et avpublisert opptak
+      Gitt at søkeren har en søknad i opptaket "Samordna opptak 2027"
+      Og at opptaket "Samordna opptak 2027" er avpublisert
+      Når søkeren åpner søknaden
+      Så ser søkeren søknaden
+
   @draft
   Regel: Søknadsfristen og dokumentasjonsfristen følger søkerens utdanningsbakgrunn
     # Virkningen av de avvikende fristene per utdanningsbakgrunn som opptaksforvalter setter i

@@ -1,0 +1,109 @@
+# language: no
+@OPT-OVO-GRU-004 @must @draft
+Egenskap: Status på opptaket
+  Som opptaksforvalter
+  ønsker jeg å styre når søkerne ser opptaket, og når opptaket ikke lenger er i bruk
+  slik at søkerne bare ser utdanningstilbud de kan søke på, og et avsluttet opptak ikke endres.
+
+  Opptaket har to statuser. Publiseringen sier om søkerne ser utdanningstilbudene i opptaket og kan søke
+  i Min kompetanse: upublisert, publisert eller avpublisert. Aktiv eller historisk sier om opptaket er i bruk
+  for dem som jobber med opptaket.
+
+  # Kilde: produkteier 2026-10-28. Svarer til HK-9846 og HK-9847 (publisering) og HK-9848 (Arkivert, her historisk).
+  # Regelen om å deaktivere opptaket er flyttet hit fra opprett_opptak.feature.
+  # Feature-ID-en er 004, fordi 002 ble brukt om et forslag om publisering av opptak.
+
+  Bakgrunn:
+    Gitt at opptaksforvalter er innlogget
+
+  @depends-on-OPT-OVO-FRI-001
+  Regel: Opptaket er upublisert til søknaden åpner
+    # Bygger på «Opptaksforvalter ved forvaltende organisasjon må kunne åpne for søkning».
+    # Hva søkerne ser, står i finne_studier.feature og søke_på_opptak.feature.
+
+    Scenario: Opptaket er upublisert før søknaden åpner
+      Gitt at søknaden i opptaket "Samordna opptak 2027" åpner "2027-02-01"
+      Når det er "2027-01-31"
+      Så er opptaket "Samordna opptak 2027" upublisert
+
+    Scenario: Opptaket publiseres når søknaden åpner
+      Gitt at søknaden i opptaket "Samordna opptak 2027" åpner "2027-02-01"
+      Når det er "2027-02-01"
+      Så er opptaket "Samordna opptak 2027" publisert
+
+    Scenario: Opptaket er upublisert når det ikke er satt når søknaden åpner
+      Gitt at det ikke er satt når søknaden i opptaket "Samordna opptak 2027" åpner
+      Så er opptaket "Samordna opptak 2027" upublisert
+
+  @openquestion
+  Regel: Opptaksforvalter ved forvaltende organisasjon kan avpublisere opptaket
+    # ÅPNE SPØRSMÅL:
+    # - Avpubliseres opptaket med en gang, med en avpubliseringsdato, eller begge deler?
+    # - Kan et avpublisert opptak publiseres igjen?
+
+    Scenario: Avpublisere opptaket
+      Gitt at opptaket "Samordna opptak 2027" er publisert
+      Når opptaksforvalter ved forvaltende organisasjon avpubliserer opptaket
+      Så er opptaket "Samordna opptak 2027" avpublisert
+
+  Regel: Opptaket er aktivt når det er opprettet
+
+    Scenario: Opptaket er aktivt når det er lagret
+      Når opptaksforvalter oppretter et nytt opptak med alle obligatoriske verdier
+      Og opptaksforvalter lagrer opptaket
+      Så er opptaket aktivt
+
+    @ref-OPT-OVO-SAM-001
+    Scenario: Deltakende organisasjon ser et aktivt opptak før det er publisert
+      Gitt at opptaket "Samordna opptak 2027" er aktivt
+      Og at opptaket "Samordna opptak 2027" er upublisert
+      Og at organisasjonen "UiB" deltar i opptaket "Samordna opptak 2027"
+      Når saksbehandler ved "UiB" åpner opptaksoversikten
+      Så ser saksbehandleren opptaket "Samordna opptak 2027"
+
+  @openquestion
+  Regel: Opptaksforvalter ved forvaltende organisasjon kan gjøre opptaket historisk
+    # ÅPNE SPØRSMÅL:
+    # - Kan et historisk opptak gjøres aktivt igjen?
+
+    Scenario: Gjøre opptaket historisk
+      Gitt at opptaket "Samordna opptak 2027" er avpublisert
+      Når opptaksforvalter ved forvaltende organisasjon gjør opptaket historisk
+      Så er opptaket "Samordna opptak 2027" historisk
+
+    Scenario: Opptaket kan ikke gjøres historisk mens det er publisert
+      Gitt at opptaket "Samordna opptak 2027" er publisert
+      Når opptaksforvalter ved forvaltende organisasjon vil gjøre opptaket historisk
+      Så kan opptaket ikke gjøres historisk
+
+    Scenario: Opptaksforvalter ved deltakende organisasjon kan ikke gjøre opptaket historisk
+      Gitt at organisasjonen "UiB" deltar i opptaket "Samordna opptak 2027"
+      Når opptaksforvalter ved "UiB" åpner opptaket "Samordna opptak 2027"
+      Så ser opptaksforvalteren ikke muligheten til å gjøre opptaket historisk
+
+  @openquestion
+  Regel: Et historisk opptak kan bare ses og søkes i
+    # ÅPNE SPØRSMÅL:
+    # - Vises historiske opptak i opptaksoversikten, og skal lista kunne filtreres på aktiv og historisk?
+    # - Kan et historisk opptak brukes som grunnlag for et nytt opptak (gjenbruk i opprett_opptak.feature)?
+
+    Scenario: Innstillingene kan ikke endres i et historisk opptak
+      Gitt at opptaket "Samordna opptak 2027" er historisk
+      Når opptaksforvalter åpner innstillingene for opptaket "Samordna opptak 2027"
+      Så kan opptaksforvalteren ikke endre innstillingene
+
+    Scenariomal: Oppgaver kan ikke utføres i et historisk opptak
+      Gitt at opptaket "Samordna opptak 2027" er historisk
+      Når <rolle> vil <oppgave> i opptaket "Samordna opptak 2027"
+      Så kan oppgaven ikke utføres
+
+      Eksempler:
+        | rolle            | oppgave                        |
+        | opptaksforvalter | knytte til et utdanningstilbud |
+        | saksbehandler    | behandle en søknad             |
+        | opptaksforvalter | gjennomføre plasstildeling     |
+
+    Scenario: Saksbehandler kan søke etter søknader i et historisk opptak
+      Gitt at opptaket "Samordna opptak 2027" er historisk
+      Når saksbehandler søker etter en søknad i opptaket "Samordna opptak 2027"
+      Så finner saksbehandleren søknaden
