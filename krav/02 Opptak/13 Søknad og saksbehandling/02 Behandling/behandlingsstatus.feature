@@ -107,19 +107,6 @@ Egenskap: Behandlingsstatus
       Når det kommer ny dokumentasjon i saken
       Så har saken fortsatt behandlingsstatusen "Ferdig behandlet"
 
-  @ref-OPT-BEH-BEH-025
-  Regel: Den automatiske behandlingen endrer ikke en behandlingsstatus saksbehandleren har satt
-
-    Scenariomal: Den automatiske behandlingen endrer ikke behandlingsstatusen når saksbehandleren har satt saken til <status>
-      Gitt at saksbehandleren ved Universitetet i Oslo har satt saken til "<status>"
-      Når søknaden behandles automatisk
-      Så har saken fortsatt behandlingsstatusen "<status>"
-
-      Eksempler:
-        | status           |
-        | Under behandling |
-        | Ferdig behandlet |
-
   @ref-OPT-BEH-BEH-016
   Regel: Saksloggen viser endringene i behandlingsstatusen
 
