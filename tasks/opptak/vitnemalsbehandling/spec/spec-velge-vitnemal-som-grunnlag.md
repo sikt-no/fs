@@ -17,6 +17,8 @@ Saksbehandleren velger ett vitnemål som grunnlag for poengberegningen i hele sa
 
 **Endret etter henting (28.10.2026, commit `42ebab7`):** Team Puff er tatt ut av kravet. Poengberegningen er kode i opptak i fs-plattform, og regelen «Poeng beregnes fra det valgte grunnlaget» viser til den automatiske poengberegningen (`@ref-OPT-BEH-BEH-018`). Ingen steg er endret.
 
+**Endret etter henting (28.10.2026, `fs-krav`):** Scenarioet «Saksbehandler med kun leserettighet ser grunnlaget» er endret på stedet. Valg som viser en tilstand (radioknapper og avkrysningsbokser) vises deaktivert for en saksbehandler med bare leserettighet, mens handlinger og felt for å legge inn verdier skjules. Regelen gjelder hele vitnemålsbehandlingen, L1–L6, og står i `vitnemålsbehandling.md`.
+
 Avklaringene fra gjennomgangen 21.10.2026 står som `AVKLART`-kommentarer i kravfila og i [vitnemålsbehandling.md](../../../../krav/02%20Opptak/13%20S%C3%B8knad%20og%20saksbehandling/02%20Behandling/vitnem%C3%A5lsbehandling.md). Kravet bygger på L1 ([spec-vise-elektroniske-vitnemal.md](spec-vise-elektroniske-vitnemal.md)).
 
 ## Skisser
@@ -42,13 +44,13 @@ Avklaringene fra gjennomgangen 21.10.2026 står som `AVKLART`-kommentarer i krav
 |---|---|---|---|
 | 1 | Skissen viser «Endringer er lagret: 12:53» og ingen handling for å beregne poengene. Kravet sier at poengene beregnes når saksbehandleren velger det, at endringen lagres først når beregningen er uten feil, og at saksbehandleren advares om endringer som ikke er lagret. (Fra 2026-10-21, fortsatt ikke rettet.) | **Kravene er riktige. Skissen er utdatert.** | Skissen må få en handling for å beregne og advarselen om endringer som ikke er lagret. |
 | 2 | «Poeng fra vitnemål» har feltene KAR opprinnelig, KAR med forbedring, Realfag, Språk og SUM, og de ser låst ut. Kravet sier at karakter-, realfags- og språkpoeng vises hver for seg per poengvariant, og at saksbehandleren kan legge dem inn selv. (Fra 2026-10-21, uendret.) | **Vet ikke** | Åpent spørsmål. |
-| 3 | «… saksbehandler har kun leserettighet» viser radioknappene deaktivert. Kravet sier «Men jeg ser ikke muligheten til å endre dem», og mønsteret er at manglende tilgang skjuler elementet. | **Skissen er riktig. Kravet må endres.** (2026-10-28) | Scenarioet «Saksbehandler med kun leserettighet ser grunnlaget» må endres med `fs-krav`, og avviket fra mønsteret i `design-patterns-for-krav.md` må begrunnes. |
+| 3 | «… saksbehandler har kun leserettighet» viser radioknappene deaktivert. Kravet sier «Men jeg ser ikke muligheten til å endre dem», og mønsteret er at manglende tilgang skjuler elementet. | **Skissen er riktig. Kravet må endres.** (2026-10-28) | Kravet er endret samme dag med `fs-krav`, med begrunnelse, og regelen gjelder hele vitnemålsbehandlingen (se *Endret etter henting*). |
 
 - **Ikke skissert:** tilstanden der et nytt vitnemål er valgt, men ikke beregnet, opplåsing av poeng, beskjeden om ugyldig verdi og beskjeden når poengberegningen feiler. Tekstene for de to siste tilstandene står delvis i implementasjonsdetaljene.
 
 ## Implementasjonsdetaljer
 
-- **`velge_vitnemål_som_grunnlag.feature`** — [velge_vitnemål_som_grunnlag.design.md](../../../../krav/02%20Opptak/13%20S%C3%B8knad%20og%20saksbehandling/02%20Behandling/velge_vitnem%C3%A5l_som_grunnlag.design.md) (9 åpne designspørsmål). Laget 2026-10-28, og oppdatert samme dag etter de nye skissene: radioknappen er valgt og deaktivert (ikke invalid), og radioknappene vises deaktivert ved leserettighet.
+- **`velge_vitnemål_som_grunnlag.feature`** — [velge_vitnemål_som_grunnlag.design.md](../../../../krav/02%20Opptak/13%20S%C3%B8knad%20og%20saksbehandling/02%20Behandling/velge_vitnem%C3%A5l_som_grunnlag.design.md) (8 åpne designspørsmål). Laget 2026-10-28, og oppdatert samme dag etter de nye skissene: radioknappen er valgt og deaktivert (ikke invalid), og radioknappene vises deaktivert ved leserettighet.
 
 ## Kodesjekk
 
@@ -64,7 +66,7 @@ Ingen retagging. Kravet er allerede `@in-progress` (satt for hånd 2026-10-21 i 
 
 ## Åpne spørsmål
 
-- [ ] **Krav mangler (skisseavvik 3), leserettighet:** Skissen viser radioknappene deaktivert for en saksbehandler med bare leserettighet, og designeren har valgt skissen. Scenarioet «Saksbehandler med kun leserettighet ser grunnlaget» sier at muligheten til å endre ikke vises. Endres med `fs-krav`.
+- [x] **Krav mangler (skisseavvik 3), leserettighet:** Scenarioet «Saksbehandler med kun leserettighet ser grunnlaget» er endret 28.10.2026 med `fs-krav`. Valg vises deaktivert, handlinger og felt skjules, i hele vitnemålsbehandlingen.
 - [ ] **Skisseavvik 2, poengfeltene:** Skal «Poeng fra vitnemål» ha SUM og KAR opprinnelig/med forbedring? Skal feltene kunne redigeres der, eller per poengvariant?
 - [ ] **Skissen er utdatert (skisseavvik 1):** Beregn-handlingen og advarselen om endringer som ikke er lagret må skisseres. Det samme gjelder opplåsing av poeng.
 - [ ] **Implementasjonsdetaljer delvis på plass:** Teksten på handlingen for å beregne, advarselen om endringer som ikke er lagret, beskjeden om ugyldig verdi og opplåsing mangler i `velge_vitnemål_som_grunnlag.design.md`.

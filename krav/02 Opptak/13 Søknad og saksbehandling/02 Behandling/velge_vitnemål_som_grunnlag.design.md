@@ -41,7 +41,7 @@ Saksbehandleren kommer hit fra steg 2 «Grunnlag» i saksbehandlingen. Går saks
 | Annullert vitnemål er det valgte | Radioknappen er valgt og deaktivert. Taggen «Annullert» står etter vitnemålsnummeret. Raden er ikke grå, fordi poengene fortsatt bygger på den. Advarselen står over tabellen. |
 | Annullert vitnemål er det valgte, nytt vitnemål valgt, ikke beregnet | Den nye radioknappen er valgt. Den annullerte raden beholder radioknappen til beregningen er lagret, så valget kan angres. Advarselen bytter tekst (se `## Tekster`). |
 | Annullert vitnemål er byttet ut, og beregningen er lagret | Advarselen forsvinner. Den annullerte raden får tilstanden «Annullert vitnemål, ikke valgt». |
-| Bare leserettighet | Radioknappene vises deaktivert (skissen, avklart 28.10.2026). Ingen handling for å beregne, ingen felt for å legge inn poeng. Advarselen vises uten handlingsoppfordring. Avviker fra kravet, se åpne designspørsmål. |
+| Bare leserettighet | Alle radioknapper og avkrysningsbokser vises deaktivert, også «Legg inn manuelt». Ingen handling for å beregne, ingen felt for å legge inn poeng: de lagrede verdiene vises som tekst. Advarselen vises uten handlingsoppfordring. |
 | HUP | Ingen radioknapper og ingen poengfelt. Vitnemålene vises (L1). |
 
 ## Tekster
@@ -78,11 +78,16 @@ Poengfeltene står tomme fra et nytt vitnemål er valgt til poengene er beregnet
 
 ### Scenario: Saksbehandler med kun leserettighet ser grunnlaget
 
-Skissen viser radioknappene deaktivert, og designeren har bestemt at skissen gjelder (28.10.2026). Kravet sier at muligheten til å endre ikke vises, og mønsteret i `.claude/rules/design-patterns-for-krav.md` er å skjule, ikke deaktivere. Kravet må derfor endres med `fs-krav`, eller skissen. Handlingen for å beregne og feltene for å legge inn poeng vises ikke. Advarselen vises, men bare med første setning, fordi saksbehandleren ikke kan gjøre det den ber om.
+Regelen gjelder hele vitnemålsbehandlingen, L1–L6 (avklart 28.10.2026, se `vitnemålsbehandling.md`):
+
+- **Vises deaktivert:** valg som viser en tilstand, det vil si radioknapper og avkrysningsbokser. I L2 er det radioknappen per vitnemål og «Legg inn manuelt». Fra L3 og L4 gjelder det samme for radioknappen per poengvariant og avkrysningsboksene for fag og tilleggsfag.
+- **Skjules:** handlinger (handlingen for å beregne, låse opp, legge til fag) og felt for å legge inn eller endre verdier. De lagrede verdiene vises som tekst.
+
+Dette avviker bevisst fra mønsteret i `.claude/rules/design-patterns-for-krav.md` om å skjule, ikke deaktivere: valgene er informasjon, fordi de viser hva poengene bygger på, og siden ser lik ut for alle. Advarselen vises, men bare med første setning, fordi saksbehandleren ikke kan gjøre det den ber om.
 
 ## Åpne designspørsmål
 
-- [ ] **Leserettighet:** Skissen viser radioknappene deaktivert, mens kravet sier at muligheten til å endre ikke vises. Designeren har valgt skissen (28.10.2026). Scenarioet «Saksbehandler med kun leserettighet ser grunnlaget» må endres med `fs-krav`, og avviket fra mønsteret «manglende tilgang skjuler elementet» må begrunnes.
+- [x] **Leserettighet:** Avklart 28.10.2026. Valg vises deaktivert, handlinger og felt skjules, i hele vitnemålsbehandlingen. Scenarioet «Saksbehandler med kun leserettighet ser grunnlaget» er endret, med begrunnelse.
 - [ ] **Skissen er utdatert:** «Endringer er lagret: 12:53» i steg 2 stemmer ikke med kravet. Endringer lagres først når poengene er beregnet uten feil. Skissen mangler handlingen for å beregne og advarselen om endringer som ikke er lagret.
 - [ ] **Teksten på handlingen for å beregne** er ikke bestemt.
 - [ ] **Advarselen om endringer som ikke er lagret** (scenario «Advarsel om endringer som ikke er lagret») er ikke skissert, og teksten er ikke bestemt. Det er heller ikke bestemt hva «går fra saken» omfatter: «Åpne neste sak», bytte steg, lukke fanen.
