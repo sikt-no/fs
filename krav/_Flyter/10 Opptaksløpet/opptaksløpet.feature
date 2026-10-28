@@ -22,9 +22,10 @@ Egenskap: Opptaksløpet
   # - Flyten for fasen er ikke skrevet (forslaget: tidlig_opptak.feature).
   Regel: Søkeren får tilbudsgaranti i tidlig opptak
 
-  @openquestion
+  @depends-on-FLY-OPT-AUT-001 @openquestion
   # ÅPNE SPØRSMÅL:
-  # - Flyten for fasen er ikke skrevet (forslaget: fra_søknad_til_studieplass.feature).
+  # - Flyten for plasstildelingen er ikke skrevet (forslaget: fra_søknad_til_studieplass.feature).
+  #   Den automatiske saksbehandlingen står i automatisk_saksbehandling.feature.
   Regel: Søknadene behandles, og studieplassene tildeles
 
   @openquestion
