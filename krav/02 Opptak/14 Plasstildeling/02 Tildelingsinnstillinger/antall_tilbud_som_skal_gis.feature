@@ -17,13 +17,21 @@ Egenskap: Antall tilbud som skal gis per utdanningskvote (sette opptaksparameter
   # Brukerne kaller i dag handlingen å «sette opptaksparametere». Det ordet skjuler at det bare er
   # én ting som settes, nemlig antall tilbud som skal gis. Det står derfor bare i parentes i tittelen
   # og i denne kommentaren, og brukes ikke i scenarioene.
+  # AVKLART 2026-10-28 (produkteier, spørsmål fra brukertesten med HK-dir 2026-10-27): Også antall tilbud som skal
+  # gis i hovedtildelingen settes på plasstildelingsrunden, i perioden for å endre antall tilbud. Det hentes ikke
+  # fra utdanningstilbudet, som bare har studieplassene (12 Utdanningstilbud/03 Opptaksinnstillinger).
 
   Bakgrunn:
     Gitt at opptaksforvalter ved lærestedet er innlogget
     Og at opptaket "Samordna opptak 2027" har plasstildelingsrunden "Hovedrunde" med rundetype "Hovedtildeling"
     Og at utdanningstilbudet "Sykepleie, høst 2027" har utdanningskvotene "Førstegangsvitnemål" og "Ordinær"
 
+  @openquestion
   Regel: Opptaksforvalter setter antall tilbud som skal gis per utdanningskvote for plasstildelingsrunden
+    # ÅPNE SPØRSMÅL:
+    # - HK-10158 ønsker ett samlet mål for aksepterte tilbud gjennom alle plasstildelingsrundene. Kravet har ett tall
+    #   per plasstildelingsrunde. Er det fortsatt et behov? (brukertesten med HK-dir, oktober 2026)
+
 
     # Opptaksforvalter slår opp siden for å sette antall tilbud som skal gis og ser
     # en liste over utdanningstilbud med sine utdanningskvoter.
@@ -75,20 +83,64 @@ Egenskap: Antall tilbud som skal gis per utdanningskvote (sette opptaksparameter
         | Mangler antall tilbud i utdanningskvotene |
       Og "Alle utdanningstilbud" er valgt som standard
 
-    @openquestion
+    # AVKLART 2026-10-28 (produkteier, etter brukertesten med HK-dir 2026-10-27): Et utdanningstilbud der minst én
+    # utdanningskvote mangler tall, hører til «Mangler antall tilbud i utdanningskvotene».
     Scenariomal: Filtrere på antall tilbud
-      # ÅPNE SPØRSMÅL:
-      # - Et utdanningstilbud med tall i noen utdanningskvoter, men ikke i alle: hører det til «Har»,
-      #   til «Mangler», eller trengs en egen verdi?
       Gitt at "Sykepleie, høst 2027" har antall tilbud som skal gis i alle utdanningskvotene for plasstildelingsrunden "Hovedrunde"
       Og at "Vernepleie, høst 2027" mangler antall tilbud som skal gis i alle utdanningskvotene for plasstildelingsrunden "Hovedrunde"
+      Og at "Barnevern, høst 2027" mangler antall tilbud som skal gis i én av utdanningskvotene for plasstildelingsrunden "Hovedrunde"
       Når opptaksforvalter velger "<filter>" som filter
-      Så vises bare "<utdanningstilbud>" i listen
+      Så vises bare <utdanningstilbud> i listen
 
       Eksempler:
-        | filter                                    | utdanningstilbud      |
-        | Har antall tilbud i utdanningskvotene     | Sykepleie, høst 2027  |
-        | Mangler antall tilbud i utdanningskvotene | Vernepleie, høst 2027 |
+        | filter                                    | utdanningstilbud                                   |
+        | Har antall tilbud i utdanningskvotene     | "Sykepleie, høst 2027"                             |
+        | Mangler antall tilbud i utdanningskvotene | "Vernepleie, høst 2027" og "Barnevern, høst 2027"  |
+
+  Regel: Opptaksforvalter kan søke, filtrere og sortere utdanningstilbudene
+    # Lagt til 2026-10-28 etter brukertestene med HK-dir (oktober 2026): «filtrere på lærested», «søk på navn» og
+    # «sortering på alle kolonnene». Følger mønsteret for listevisning (.claude/rules/listevisning-pattern.md).
+
+    Scenariomal: Velge sorteringsretning for <felt>
+      Når opptaksforvalter velger å sortere på <felt> i <retning> rekkefølge
+      Så vises utdanningstilbudene sortert etter <felt> i <retning> rekkefølge
+
+      Eksempler:
+        | felt                                   | retning  |
+        | utdanningstilbud                       | stigende |
+        | utdanningstilbud                       | synkende |
+        | tilbyder                               | stigende |
+        | studieplasser                          | synkende |
+        | ledige plasser å gi tilbud til         | synkende |
+        | antall tilbud som skal gis i runden    | synkende |
+
+    Scenario: Fritekst-søk på navn
+      Når opptaksforvalter søker med fritekst på navnet på utdanningstilbudet
+      Så filtreres listen til utdanningstilbud som matcher søket
+
+    Scenario: Tilgjengelige tilbydere i filter
+      Når opptaksforvalter åpner tilbyderfilteret
+      Så viser tilbyderfilteret organisasjonene som tilbyr utdanningstilbud i opptaket
+      Og hver organisasjon vises kun én gang
+      Og organisasjonene er sortert alfabetisk
+      Og "Alle tilbydere" er valgt som standard
+
+    Scenario: Filtrere på tilbyder
+      Når opptaksforvalter velger "Universitetet i Bergen" som filter
+      Så vises kun utdanningstilbudene "Universitetet i Bergen" tilbyr
+
+    Scenario: Tilbyderne i filteret vises med akronym
+      Når opptaksforvalter åpner tilbyderfilteret
+      Så vises akronymet under navnet på hver organisasjon
+      Men organisasjonskoden vises når organisasjonen ikke har akronym
+
+    Scenario: Søke i tilbyderfilteret
+      Når opptaksforvalter skriver inn tekst i tilbyderfilteret
+      Så viser tilbyderfilteret bare organisasjonene der navnet eller akronymet inneholder den innskrevne teksten
+
+    Scenario: Kombinere filtre
+      Når opptaksforvalter kombinerer filteret for antall tilbud med tilbyderfilteret
+      Så vises kun utdanningstilbud som matcher alle kriteriene
 
   Regel: Et utdanningstilbud uten antall tilbud som skal gis, gir ingen nye tilbud i plasstildelingsrunden
 
@@ -107,16 +159,18 @@ Egenskap: Antall tilbud som skal gis per utdanningskvote (sette opptaksparameter
     # Flyttet hit fra 01 Runder 2026-10-09. Perioden settes på plasstildelingsrunden, se 01 Runder/forvalte_runder.feature.
     # AVKLART 2026-10-15 (domeneekspert): Perioden gjelder også tilbud til alle kvalifiserte, men ikke
     # saksbehandlingen. Etter perioden melder lærestedene feil til opptakets forvalter på e-post.
+    # AVKLART 2026-10-28 (produkteier, etter brukertesten med HK-dir): Opptakets forvalter åpner ikke for endring for
+    # ett lærested etter perioden. Forvalteren endrer tallene selv, eller utvider perioden for alle.
     # Gap mot koden (verifisert 2026-10-09): perioden håndheves ikke. Alle med tilgang til å endre
     # opptaket kan endre antall tilbud når som helst.
     Scenario: Lærested kan ikke endre antall tilbud utenfor perioden
-      Gitt at perioden for å endre antall tilbud som skal gis i plasstildelingsrunden "Hovedrunde" er "2027-06-01" – "2027-07-10"
-      Og dagens dato er "2027-07-11"
+      Gitt at perioden for å endre antall tilbud som skal gis i plasstildelingsrunden "Hovedrunde" er "2027-06-01 08:00" – "2027-07-10 16:00"
+      Og klokka er "2027-07-10 16:01"
       Så kan opptaksforvalter ved lærestedene ikke lenger endre antall tilbud som skal gis for plasstildelingsrunden
 
     Scenario: Opptakets forvalter kan endre antall tilbud utenfor perioden
-      Gitt at perioden for å endre antall tilbud som skal gis i plasstildelingsrunden "Hovedrunde" er "2027-06-01" – "2027-07-10"
-      Og dagens dato er "2027-07-11"
+      Gitt at perioden for å endre antall tilbud som skal gis i plasstildelingsrunden "Hovedrunde" er "2027-06-01 08:00" – "2027-07-10 16:00"
+      Og klokka er "2027-07-10 16:01"
       Så kan opptakets forvalter fortsatt endre antall tilbud som skal gis for plasstildelingsrunden
 
     # AVKLART 2026-10-16 (produktleder): Perioden virker som en åpningsdato. Er den ikke satt, holder den stengt.
@@ -164,10 +218,12 @@ Egenskap: Antall tilbud som skal gis per utdanningskvote (sette opptaksparameter
         | Totalt antall tilbud som skal gis i plasstildelingsrunden |
         | Totalt antall tilbud gitt i opptaket       |
         | Antall tilbud akseptert                    |
+        | Antall tilbud som venter på svar           |
         | Netto tilbud                               |
         | Ledige plasser å gi tilbud til             |
         | Antall søkere på venteliste                |
         | Antall søkere med tilbudsgaranti           |
+        | Antall tilbudsgarantier som har gitt tilbud |
 
     # Antall tilbud gitt, antall aksepterte, netto tilbud og antall på venteliste oppdateres
     # etterhvert som publisering av tilbud er gjort og svar begynner å komme inn fra søkere.
@@ -196,6 +252,62 @@ Egenskap: Antall tilbud som skal gis per utdanningskvote (sette opptaksparameter
       Og at netto tilbud for "Sykepleie, høst 2027" er 58
       Når opptaksforvalter ser antall tilbud som skal gis for utdanningstilbudet "Sykepleie, høst 2027"
       Så er ledige plasser å gi tilbud til 42
+
+  Regel: Opptaksforvalter varsles når antall tilbud som skal gis er høyere enn ledige plasser
+    # Lagt til 2026-10-28 etter brukertesten med HK-dir 2026-10-27 («varsel om overskredet antall plasser»).
+    # Varselet stopper ikke lagringen: et lærested kan ha grunn til å gi flere tilbud enn ledige plasser.
+
+    Scenario: Varsel når antall tilbud er høyere enn ledige plasser
+      Gitt at ledige plasser å gi tilbud til for "Sykepleie, høst 2027" er 42
+      Når opptaksforvalter setter totalt antall tilbud som skal gis i plasstildelingsrunden "Hovedrunde" for "Sykepleie, høst 2027" til 50
+      Så får utdanningstilbudet "Sykepleie, høst 2027" et varsel om at antall tilbud som skal gis er høyere enn ledige plasser
+      Men antall tilbud som skal gis er lagret
+
+    Scenario: Ingen varsel når antall tilbud er innenfor ledige plasser
+      Gitt at ledige plasser å gi tilbud til for "Sykepleie, høst 2027" er 42
+      Når opptaksforvalter setter totalt antall tilbud som skal gis i plasstildelingsrunden "Hovedrunde" for "Sykepleie, høst 2027" til 40
+      Så får utdanningstilbudet "Sykepleie, høst 2027" ikke varsel om antall tilbud
+
+  @openquestion
+  Regel: Opptakets forvalter kontrollerer antall tilbud lærestedene har satt før plasstildelingen
+    # ÅPNE SPØRSMÅL:
+    # - Hvilken terskel skal antall tilbud som skal gis sammenlignes med studieplassene etter?
+    # - Hva skal antall tilbud sammenlignes med for å vurdere overbooking? HK-10169 (statistikk for overbooking
+    #   fra tidligere år) er ikke dekket.
+    # Lagt til 2026-10-28 etter brukertesten med HK-dir 2026-10-27: HK-dir kontrollerer det lærestedene har satt:
+    # «ønska tilbud opp mot planlagte studieplasser (terskelverdi?), alle kvalifiserte tilbud, mangler antall tilbud
+    # som skal gis, antall tilbud som skal gis opp mot overbooking».
+
+    Scenariomal: Opptakets forvalter ser utdanningstilbud som skal kontrolleres
+      Gitt at lærestedene har satt antall tilbud som skal gis for plasstildelingsrunden "Hovedrunde"
+      Når opptakets forvalter kontrollerer antall tilbud som skal gis i "Hovedrunde"
+      Så ser opptakets forvalter utdanningstilbudene som <avvik>
+
+      Eksempler:
+        | avvik                                                        |
+        | har antall tilbud som skal gis over terskelen for studieplassene |
+        | gir tilbud til alle kvalifiserte                             |
+        | mangler antall tilbud i minst én utdanningskvote             |
+
+  @openquestion
+  Regel: Lærestedene varsles når perioden for å endre antall tilbud åpner
+    # ÅPNE SPØRSMÅL:
+    # - Hvem ved lærestedet får varselet? Brukertesten nevnte opptaksansvarlig eller stedfortreder, og HK-dir har lister
+    #   over kontaktpersonene. Skal kontaktpunktene for opptak ligge i løsningen, eventuelt i 09 Organisasjon?
+    #   Se også HK-9307 (dele informasjon med lærestedene i løsningen).
+    # Lagt til 2026-10-28 etter brukertestene med HK-dir (oktober 2026): «Varsel om når periode åpner er gull»,
+    # «Varsle lærested på nytt – melding mellom saksbehandlere» og «Varsler og oppgaver er mye enklere enn e-post».
+    # AVKLART 2026-10-28 (produkteier): Varselet er en melding i FS Admin, ikke en e-post.
+
+    Scenario: Lærestedene varsles når perioden åpner
+      Gitt at perioden for å endre antall tilbud som skal gis i plasstildelingsrunden "Hovedrunde" er "2027-06-01 08:00" – "2027-07-10 16:00"
+      Når klokka er "2027-06-01 08:00"
+      Så får lærestedene som deltar i opptaket, et varsel om at de kan sette antall tilbud som skal gis i "Hovedrunde"
+
+    Scenario: Opptakets forvalter varsler et lærested på nytt
+      Gitt at "Universitetet i Bergen" mangler antall tilbud som skal gis i plasstildelingsrunden "Hovedrunde"
+      Når opptakets forvalter varsler "Universitetet i Bergen" på nytt
+      Så får "Universitetet i Bergen" et nytt varsel om å sette antall tilbud som skal gis i "Hovedrunde"
 
   Regel: Et utdanningstilbud kan gi tilbud til alle kvalifiserte
 

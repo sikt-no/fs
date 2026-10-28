@@ -4,12 +4,14 @@
 Egenskap: Se resultatet av plasstildelingen før publisering
   Som opptaksforvalter
   ønsker jeg å se resultatet av en plasstildeling før den publiseres
-  slik at jeg kan kvalitetssikre resultatet før søkerne og saksbehandlerne får se det.
+  slik at jeg kan kvalitetssikre resultatet før søkerne får se det.
 
   # Kilde: tasks/opptak/plasstildeling/design.md (mål, del 2 om tilgangsstyring og forklarbarhet),
   # oppgave.md (oppgave 7) og Confluence «Opprette og konfigurere opptakskjøringsrunde» (steg 2 og 3).
   # AVKLART 2026-10-14: Før publisering ser bare opptaksforvalter plasstildelingen: hos opptakets
   # forvalter alle søknadene, og ved et deltakende lærested søknadene organisasjonen er saksbehandlende organisasjon for.
+  # Endret 2026-10-28 (produkteier, etter brukertesten med HK-dir 2026-10-27): saksbehandlere ved lærestedet ser
+  # også plasstildelingen før den er publisert, for de samme søknadene. Bare søkerne venter til publiseringen.
   # Det saksbehandler ser etter publisering, står i se_publisert_resultat.feature. Det søkeren ser,
   # står i publisere_resultat.feature.
   # Status i kode: gjenstår.
@@ -18,7 +20,12 @@ Egenskap: Se resultatet av plasstildelingen før publisering
     Gitt at opptakets forvalter er innlogget
     Og at plasstildelingsrunden "Hovedrunde" i opptaket "Samordna opptak 2027" har en plasstildeling som ikke er publisert
 
+  @openquestion
   Regel: Opptaksforvalter ser ett tydelig resultat per søknad
+    # ÅPNE SPØRSMÅL:
+    # - Skal søknadstidspunktet vises ved ventelistenummeret? Det manglet i brukertesten med HK-dir (oktober 2026).
+    # - Hvilke diagnoser trenger opptaksforvalter for å forstå resultatet? «Tidspunkt for søknad» ble nevnt, men
+    #   kriteriene er uklare (se HK-10976).
 
     Scenariomal: Resultat for en søknad
       Gitt at søkeren "Kari Nordmann" fikk <resultat> på "Sykepleie, høst 2027"
@@ -41,7 +48,12 @@ Egenskap: Se resultatet av plasstildelingen før publisering
       Når opptaksforvalter ser resultatet for søkeren
       Så ser opptaksforvalter tilbud i "Førstegangsvitnemål" og kansellert i "Ordinær"
 
+  @openquestion
   Regel: Opptaksforvalter ser totaltall for plasstildelingen
+    # ÅPNE SPØRSMÅL:
+    # - Skal et totaltall kunne åpnes, så opptaksforvalter ser søknadene bak tallet, innenfor søknadene organisasjonen
+    #   har tilgang til? I testen 28.10.2026 så brukeren at én søker med utdanningstilbudet som 1. prioritet hadde
+    #   fått tilbud, men ikke hvem.
 
     Scenario: Totaltall for plasstildelingen
       Når opptaksforvalter ser resultatet av plasstildelingen
@@ -77,7 +89,7 @@ Egenskap: Se resultatet av plasstildelingen før publisering
       Når opptaksforvalter ser resultatet for søkeren
       Så ser opptaksforvalter at plassen kom fra utdanningskvoten "Førstegangsvitnemål"
 
-  Regel: Bare opptaksforvalter ser plasstildelingen før den er publisert
+  Regel: Søkerne ser ikke plasstildelingen før den er publisert, men lærestedene gjør det
 
     # AVKLART 2026-10-14: Organisasjonen ser søknadene den er saksbehandlende organisasjon for, og i tillegg alle
     # søknadene til utdanningstilbudene den tilbyr, også når en annen organisasjon saksbehandler dem.
@@ -104,10 +116,17 @@ Egenskap: Se resultatet av plasstildelingen før publisering
       Når opptaksforvalter ser resultatet av plasstildelingen
       Så ser opptaksforvalter resultatet for alle søknadene i opptaket
 
-    Scenario: Saksbehandler ser ikke plasstildelingen før den er publisert
-      Gitt at saksbehandler ved lærestedet er innlogget
-      Når saksbehandler ser opptaket "Samordna opptak 2027"
-      Så ser saksbehandler ikke resultatet av plasstildelingen i "Hovedrunde"
+    # Endret 2026-10-28: saksbehandler så tidligere ikke plasstildelingen før den var publisert.
+    Scenario: Saksbehandler ved lærestedet ser plasstildelingen før den er publisert
+      Gitt at saksbehandler har tilgang fra "Universitetet i Bergen", som deltar i opptaket
+      Og at "Universitetet i Bergen" er saksbehandlende organisasjon for søknaden til "Kari Nordmann"
+      Når saksbehandler ser resultatet av plasstildelingen i "Hovedrunde"
+      Så ser saksbehandler resultatet for søknaden til "Kari Nordmann"
+
+    Scenario: Søkeren ser ikke plasstildelingen før den er publisert
+      Gitt at søkeren "Kari Nordmann" er innlogget i Min kompetanse
+      Når søkeren ser søknaden sin
+      Så ser søkeren ikke resultatet av plasstildelingen i "Hovedrunde"
 
     # AVKLART 2026-10-14: Manglende tilgang skjuler resultatet (designmønsteret for krav). I dag ser brukeren en tom liste.
     Scenario: Bruker uten tilgang til plasstildelingen
@@ -115,7 +134,15 @@ Egenskap: Se resultatet av plasstildelingen før publisering
       Når brukeren ser opptaket "Samordna opptak 2027"
       Så ser brukeren ikke resultatet av plasstildelingen
 
+  @openquestion
   Regel: Lærestedene kontrollerer resultatet før plasstildelingsrunden publiseres
+    # ÅPNE SPØRSMÅL:
+    # - Skal lærestedene kunne markere feil i resultatet i løsningen, for en søknad eller et utdanningstilbud,
+    #   og med en frist for kontrollen? Eller holder en infoboks til lærestedet med kontaktinfo og frist:
+    #   «Har du oppdaget feil, kontakt HK-dir på … innen …»? Hva trenger HK-dir å vite for å være trygge før publisering? I brukertesten med HK-dir 2026-10-27 (HK-10162): «markere enkeltforekomster
+    #   mer enn melde som kontrollert», «se igjennom innen frist, gi tilbakemelding om noe er galt», «kan meldes på
+    #   e-post i verste fall». Inntil videre melder lærestedene feil på e-post (avklart 2026-10-28).
+
 
     # AVKLART 2026-10-14 (domeneekspert): Kontrollen er at lærestedene og opptakets
     # forvalter har en oversiktlig måte å se om resultatet i runden er korrekt før det
@@ -133,7 +160,7 @@ Egenskap: Se resultatet av plasstildelingen før publisering
       Gitt at plasstildelingen i "Hovedrunde" ikke er publisert
       Når opptaksforvalter ved lærestedet ser resultatet av plasstildelingen
       Så ser opptaksforvalter resultatet for søknadene organisasjonen er saksbehandlende organisasjon for, og for søknadene til utdanningstilbudene organisasjonen tilbyr
-      Og søkerne og saksbehandlerne ser ikke resultatet
+      Og søkerne ser ikke resultatet
 
     Scenario: Ny plasstildeling etter endret antall tilbud
       Gitt at plasstildelingen i "Hovedrunde" ikke er publisert
@@ -141,6 +168,21 @@ Egenskap: Se resultatet av plasstildelingen før publisering
       Når opptakets forvalter starter en ny plasstildeling i "Hovedrunde"
       Så bruker den nye plasstildelingen 35 tilbud for "Sykepleie, høst 2027"
       Og lærestedene kan kontrollere resultatet av den nye plasstildelingen
+
+  @openquestion @depends-on-OPT-PLA-RES-002
+  Regel: Opptaksforvalter ser resultatet slik søkeren vil se det i Min kompetanse
+    # ÅPNE SPØRSMÅL:
+    # - Ser også saksbehandler ved lærestedet resultatet slik søkeren vil se det?
+    # - HK-dir ønsker en liste med «sære» søkere å ta stikkprøver av. Hva gjør en søker sær?
+    # Lagt til 2026-10-28 etter brukertestene med HK-dir (oktober 2026): HK-dir vil se det søkeren ser før publisering,
+    # for å ta stikkprøver. Det søkeren ser etter publisering, står i publisere_resultat.feature.
+    # Svarbrevet (svarmeldingen) er ikke med. Det utforskes for seg, se Confluence «Vedtaksbrev og svar på opptaket»
+    # (https://sikt.atlassian.net/wiki/spaces/STUDIEADM/pages/4972347396) og HK-13784.
+
+    Scenario: Se resultatet slik søkeren vil se det
+      Gitt at plasstildelingen i "Hovedrunde" ikke er publisert
+      Når opptaksforvalter ser resultatet for søknaden til "Kari Nordmann" slik søkeren vil se det
+      Så ser opptaksforvalter resultatet slik det vil vises for søkeren i Min kompetanse når plasstildelingen er publisert
 
   Regel: Plasstildelinger i samme plasstildelingsrunde kan sammenlignes
 

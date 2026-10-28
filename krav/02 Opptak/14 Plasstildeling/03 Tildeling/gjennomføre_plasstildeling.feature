@@ -195,17 +195,32 @@ Egenskap: Gjennomføre plasstildeling
 
   Regel: Søker med tilbudsgaranti får tilbud uavhengig av poengsum
 
-    @openquestion
     Scenario: Tilbudsgaranti tas fra markert utdanningskvote
-      # ÅPNE SPØRSMÅL:
-      # - Hva skjer når utdanningskvoten er full? I koden gir tilbudsgaranti alltid tilbud, også ut over
-      #   antall tilbud som skal gis («Plasstildelingsløpet i Opptak», kap. 3). Skal det gis flere tilbud
-      #   enn tallet, skal garantien fortrenge den lavest rangerte, eller skal garantien komme i tillegg?
       Gitt at tilbudsgarantier for "Sykepleie, høst 2027" tas fra utdanningskvoten "Ordinær"
       Og at søkeren "Ola Nordmann" har tilbudsgaranti på "Sykepleie, høst 2027"
       Når plasstildelingen gjennomføres
       Så får søkeren tilbud på "Sykepleie, høst 2027"
       Og tilbudet teller som ett av tilbudene i utdanningskvoten "Ordinær"
+
+    # AVKLART 2026-10-28 (produkteier, etter brukertesten med HK-dir 2026-10-27, HK-11411): «Tilbudsgaranti
+    # overkjører antall tilbud som skal gis.» Søkere med tilbudsgaranti får alltid tilbud, også når utdanningskvoten
+    # er full eller antall tilbud som skal gis er 0. De andre tilbudene gis opp til antall tilbud som skal gis,
+    # så det kan bli gitt flere tilbud enn tallet. Det er det koden gjør i dag («Plasstildelingsløpet i Opptak», kap. 3).
+    Scenario: Tilbudsgaranti gir tilbud når utdanningskvoten er full
+      Gitt at det skal gis 30 tilbud i utdanningskvoten "Ordinær" på "Sykepleie, høst 2027"
+      Og at 30 søkere uten tilbudsgaranti er rangert foran søkeren "Ola Nordmann" i utdanningskvoten "Ordinær"
+      Og at søkeren "Ola Nordmann" har tilbudsgaranti på "Sykepleie, høst 2027"
+      Når plasstildelingen gjennomføres
+      Så får søkeren "Ola Nordmann" tilbud på "Sykepleie, høst 2027"
+      Og de 30 søkerne uten tilbudsgaranti får tilbud
+      Og det er gitt 31 tilbud i utdanningskvoten "Ordinær"
+
+    Scenario: Bare søkere med tilbudsgaranti får tilbud når antall tilbud er 0
+      Gitt at antall tilbud som skal gis i utdanningskvoten "Ordinær" på "Sykepleie, høst 2027" er 0
+      Og at søkeren "Ola Nordmann" har tilbudsgaranti på "Sykepleie, høst 2027"
+      Når plasstildelingen gjennomføres
+      Så får søkeren "Ola Nordmann" tilbud på "Sykepleie, høst 2027"
+      Og ingen søkere uten tilbudsgaranti får tilbud i utdanningskvoten "Ordinær"
 
     # AVKLART 2026-10-08: Søkeren med tilbudsgaranti får tilbud etter reglene for plasstildelingsrunden,
     # og trenger ingen poengsum.

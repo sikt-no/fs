@@ -81,3 +81,5 @@ Egenskap: Forvalte rundetyper i regelverkssamlingen
 
 # ÅPNE SPØRSMÅL:
 # - Kan en rundetype slettes når ingen plasstildelingsrunder bruker den?
+# - Skal rundetypene følge med, eller legges ved siden av, når regelverkssamlingen kopieres
+#   (OPT-REG-SAM-001)? Trengs et skille mellom felleskoder for opptaket og regelverket? (brukertesten med HK-dir, oktober 2026)

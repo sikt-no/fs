@@ -50,6 +50,21 @@ Egenskap: Håndtere svar fra søker
       Når søkeren vil svare på tilbudet
       Så kan søkeren ikke lenger svare på tilbudet
 
+  @depends-on-OPT-PLA-RUN-001
+  Regel: Søkeren får beskjed når svarfristen flyttes
+    # Lagt til 2026-10-28 etter brukertesten med HK-dir 2026-10-27: svarfristen kan flyttes, men det må være
+    # tydelig for søkeren. Opptaksforvalter endrer svarfristen på plasstildelingsrunden (forvalte_runder.feature).
+
+    Scenario: Søkeren får melding om ny svarfrist
+      Gitt at søkeren ikke har svart på tilbudet
+      Når opptaksforvalter endrer svarfristen for "Hovedrunde" til "2027-07-25 23:59"
+      Så får søkeren en melding om at svarfristen er "2027-07-25 23:59"
+
+    Scenario: Søkeren ser den nye svarfristen på tilbudet
+      Gitt at svarfristen for "Hovedrunde" er endret til "2027-07-25 23:59"
+      Når søkeren ser tilbudet på "Sykepleie, høst 2027"
+      Så ser søkeren svarfristen "2027-07-25 23:59"
+
   Regel: Søkeren kan svare ja til å stå på venteliste
 
     Scenario: Stå på venteliste
