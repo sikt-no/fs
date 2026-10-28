@@ -485,6 +485,31 @@ Egenskap: Søknadsmangler
       Så ser saksbehandleren mangelen "KAR"
       Men saksbehandleren ser ikke muligheten til å endre mangelen "KAR"
 
+  @draft @openquestion
+  Regel: Saksbehandleren finner sakene med en bestemt mangelkode
+
+    Saksbehandleren må kunne finne sakene som har en bestemt mangel, for eksempel alle sakene
+    der vitnemålet kommer senere, for å følge dem opp.
+
+    # ÅPNE SPØRSMÅL:
+    # - Det finnes ikke noe krav for listen over saker ennå. Filteret står her til det kravet er skrevet.
+    # - Skal filteret ta med saker der mangelen er sjekket ut, eller bare saker der mangelen gjelder?
+    # - Kan saksbehandleren velge flere mangelkoder samtidig?
+
+    Scenario: Tilgjengelige mangelkoder i filter
+      Gitt at regelverkssamlingen "UHG 2027" har mangelkodene "STEMPEL", "DUA" og "KAR"
+      Når saksbehandleren ved Universitetet i Oslo åpner mangelkodefilteret i listen over saker i "Samordna opptak 2027"
+      Så inneholder filteret mangelkodene i regelverkssamlingen "UHG 2027"
+      Og mangelkodene er sortert alfabetisk
+      Og "Alle mangelkoder" er valgt som standard
+
+    Scenario: Filtrere på mangelkode
+      Gitt at saken til søkeren "Kari Nordmann" hos "Universitetet i Oslo" har mangelen "DUA"
+      Og at saken til søkeren "Ola Nordmann" hos "Universitetet i Oslo" ikke har mangelen "DUA"
+      Når saksbehandleren ved Universitetet i Oslo velger "DUA" som filter i listen over saker
+      Så vises saken til "Kari Nordmann"
+      Men saken til "Ola Nordmann" vises ikke
+
   # ── 6. Automatikk ────────────────────────────────────────────
 
   @draft @openquestion @depends-on-OPT-BEH-BEH-020 @ref-FLY-OPT-AUT-001 @ref-OPT-BEH-BEH-025
@@ -559,54 +584,93 @@ Egenskap: Søknadsmangler
         | sjekket ut | kan overskrives av automatisk behandling      | kommer tilbake      | har saken igjen en automatisk mangel som viser at "Matematikk R2" ikke er oppfylt |
         | sjekket ut | ikke kan overskrives av automatisk behandling | kommer ikke tilbake | er den automatiske mangelen for "Matematikk R2" fortsatt sjekket ut               |
 
-  @draft @openquestion
+  @draft @openquestion @ref-FLY-OPT-AUT-001
   Regel: Mangelen for generell studiekompetanse som fullføres i vår settes og sjekkes ut automatisk
 
-    Den automatiske mangelen gjelder bare søkere som oppgir at generell studiekompetanse fullføres
-    i vår. Den sjekkes ut når vitnemålet behandles automatisk, eller av saksbehandleren når søkeren
-    har dokumentert vitnemålet på annen måte, for eksempel ved å laste det opp. Oppgir ikke søkeren
-    at generell studiekompetanse fullføres i vår, kontrollerer saksbehandleren vitnemålet i
-    søknaden og registrerer en mangel hvis det mangler, som for de andre opptakskravene.
+    Søkere som fullfører videregående opplæring i vår, oppgir i søknaden at generell
+    studiekompetanse fullføres i vår, og at vitnemålet kommer senere. Saken får da automatisk
+    én mangel i kategorien «Generelle krav», som stopper for opptak til vitnemålet er på plass.
+    Opptaksforvalteren bestemmer hvilken mangelkode som brukes, ved å merke én mangelkode i
+    regelverkssamlingen. Mangelen sjekkes ut når saken behandles automatisk, eller av
+    saksbehandleren når søkeren har dokumentert vitnemålet på annen måte. Mangelen slettes ikke
+    av saksbehandleren, men sjekkes ut, så det går an å se at den har vært der.
+    # I det gamle systemet het mangelkoden DUA. Eksemplene bruker den koden.
 
     # ÅPNE SPØRSMÅL:
-    # - Hvilken mangelkode og hvilket kompetanseregelverk får den automatiske mangelen, og gjelder
-    #   den alle sakene i søknaden? Trolig begge deler: en mangel i kategorien «Generelle krav» i alle
-    #   sakene (uten kompetanseregelverk), og en mangel i kategorien «Spesielle krav» på
-    #   kompetanseregelverket for generell studiekompetanse i sakene som har det. Ikke bekreftet.
-    #   Koden har ikke den automatiske mangelen (sjekket 2026-10-09).
-    # - Hvordan vet løsningen hvilken mangelkode som settes automatisk? Forslag etter raffineringen:
-    #   et kryss eller et felt som kobler mangelkoden til søkerspørsmålet under «Utdanningsbakgrunn»,
-    #   så mangelkoden DUA ikke må hardkodes.
-    # - Er «vitnemålet kommer senere», som søkeren svarer på, det samme som at generell
-    #   studiekompetanse fullføres i vår, eller noe bredere? Gjelder også @OPT-SØK-SØK-013.
-    # - Regelen bygger på at søkeren kan oppgi at generell studiekompetanse fullføres i vår (@OPT-SØK-SØK-013),
-    #   og det kravet er ikke avklart.
-    # - Skal søkeren få melding når den automatiske mangelen er publisert, og slettes fordi søkeren
-    #   endrer søknaden?
+    # - Bygger på at søkeren kan oppgi at generell studiekompetanse fullføres i vår (OPT-SØK-SØK-013).
+    #   Det kravet er ikke avklart, og ID-en brukes også i finne_studier.feature, så referansen er ikke satt som tag.
+    # - Er «vitnemålet kommer senere» det samme som at generell studiekompetanse fullføres i vår,
+    #   eller noe bredere? Gjelder også OPT-SØK-SØK-013.
+    # - Får alle sakene i søknaden mangelen, eller bare én av dem?
+    # - Må den merkede mangelkoden ha kategorien «Generelle krav» og stoppe for opptak, eller
+    #   bestemmer opptaksforvalteren det på mangelkoden som ellers?
+    # - Hva skjer når opptaksforvalteren merker en mangelkode og en annen allerede er merket:
+    #   avvises endringen, eller flyttes merket?
+    # - Hvordan varsles opptaksforvalteren når ingen mangelkode er merket?
+    # - Hva i den automatiske saksbehandlingen sjekker ut mangelen: at vitnemålet med GSK er hentet,
+    #   eller at saken er behandlet helautomatisk?
+    # - Kan saksbehandleren slette mangelen, eller bare sjekke den ut?
+
+    Scenario: Opptaksforvalteren merker mangelkoden for generell studiekompetanse som fullføres i vår
+      Når opptaksforvalteren ved HK-dir merker mangelkoden "DUA" i regelverkssamlingen "UHG 2027" for generell studiekompetanse som fullføres i vår
+      Så er "DUA" mangelkoden for generell studiekompetanse som fullføres i vår i regelverkssamlingen "UHG 2027"
+
+    Scenario: Bare én mangelkode i regelverkssamlingen er merket for generell studiekompetanse som fullføres i vår
+      Gitt at mangelkoden "DUA" i regelverkssamlingen "UHG 2027" er merket for generell studiekompetanse som fullføres i vår
+      Når opptaksforvalteren ved HK-dir merker mangelkoden "VIT" i regelverkssamlingen "UHG 2027" for generell studiekompetanse som fullføres i vår
+      Så avvises endringen
 
     Scenario: Saken får mangel når søkeren oppgir at generell studiekompetanse fullføres i vår
+      Gitt at mangelkoden "DUA" i regelverkssamlingen "UHG 2027" er merket for generell studiekompetanse som fullføres i vår
       Når søkeren oppgir i søknaden at generell studiekompetanse fullføres i vår
-      Så får saken automatisk mangelen for generell studiekompetanse som fullføres i vår
+      Så har saken den automatiske mangelen "DUA"
 
-    Scenario: Mangelen slettes når søkeren endrer søknaden før søknadsfristen
-      Gitt at saken har den automatiske mangelen for generell studiekompetanse som fullføres i vår
-      Og at søknadsfristen i "Samordna opptak 2027" ikke har gått ut
+    Scenario: Saken får ikke mangel når ingen mangelkode er merket
+      Gitt at ingen mangelkode i regelverkssamlingen "UHG 2027" er merket for generell studiekompetanse som fullføres i vår
+      Når søkeren oppgir i søknaden at generell studiekompetanse fullføres i vår
+      Så har ikke saken en automatisk mangel for generell studiekompetanse som fullføres i vår
+      Og opptaksforvalteren ved HK-dir får varsel om at ingen mangelkode er merket
+
+    Scenario: Den automatiske mangelen stopper for opptak
+      Gitt at saken har den automatiske mangelen "DUA"
+      Når saksbehandleren ved Universitetet i Oslo vurderer kvalifiseringen
+      Så kan ikke saksbehandleren sette søkeren som kvalifisert til noen av søknadsalternativene i saken
+
+    Scenario: Søkeren får ikke egen melding om den automatiske mangelen
+      Når saken får den automatiske mangelen "DUA"
+      Så har søkeren ikke mottatt en melding om mangler
+
+    Scenario: Mangelen slettes når søkeren endrer søknaden
+      Gitt at saken har den automatiske mangelen "DUA"
+      Og at mangelen "DUA" ikke er sjekket ut
       Når søkeren endrer søknaden til at generell studiekompetanse ikke fullføres i vår
-      Så har saken ikke lenger mangelen for generell studiekompetanse som fullføres i vår
-      Og saksloggen viser at mangelen ble slettet fordi søkeren endret søknaden
+      Så har ikke saken mangelen "DUA"
 
-    Scenario: Mangelen sjekkes ut når vitnemålet behandles automatisk
-      Gitt at saken har den automatiske mangelen for generell studiekompetanse som fullføres i vår
-      Når vitnemålet behandles automatisk
-      Så er mangelen sjekket ut
-      Og saksloggen viser at mangelen ble sjekket ut av automatisk behandling
+    Scenario: Mangel som er sjekket ut slettes ikke når søkeren endrer søknaden
+      Gitt at saken har den automatiske mangelen "DUA"
+      Og at mangelen "DUA" er sjekket ut
+      Når søkeren endrer søknaden til at generell studiekompetanse ikke fullføres i vår
+      Så har saken fortsatt mangelen "DUA"
 
-    Scenariomal: Automatisk behandling overskriver manuelt satt mangel når mangelkoden <overskrivbar>
-      Gitt at saksbehandleren har registrert en mangel med en mangelkode som <overskrivbar>
-      Når automatisk behandling setter en mangel i saken
-      Så <resultat>
+    Scenario: Mangelen sjekkes ut når saken behandles automatisk
+      Gitt at saken har den automatiske mangelen "DUA"
+      Når saken behandles automatisk
+      Så er mangelen "DUA" sjekket ut
+
+    Scenario: Saksbehandleren sjekker ut mangelen når søkeren har dokumentert vitnemålet
+      Gitt at saken har den automatiske mangelen "DUA"
+      Og at søkeren har lastet opp vitnemålet
+      Når saksbehandleren ved Universitetet i Oslo sjekker ut mangelen "DUA"
+      Så er mangelen "DUA" sjekket ut
+      Og saken har fortsatt mangelen "DUA"
+
+    Scenariomal: Saksloggen viser at mangelen ble <hendelse> av <aktør>
+      Når <aktør> gjør at mangelen "DUA" blir <hendelse>
+      Så viser saksloggen at mangelen "DUA" ble <hendelse> av <aktør>
 
       Eksempler:
-        | overskrivbar         | resultat                          |
-        | kan overskrives      | overskrives mangelen              |
-        | ikke kan overskrives | står mangelen fra saksbehandleren |
+        | hendelse   | aktør                                    |
+        | registrert | søkeren                                  |
+        | slettet    | søkeren                                  |
+        | sjekket ut | den automatiske behandlingen             |
+        | sjekket ut | saksbehandleren ved Universitetet i Oslo |
