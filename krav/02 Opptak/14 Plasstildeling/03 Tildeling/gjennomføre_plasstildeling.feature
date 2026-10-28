@@ -203,17 +203,26 @@ Egenskap: Gjennomføre plasstildeling
       Og tilbudet teller som ett av tilbudene i utdanningskvoten "Ordinær"
 
     # AVKLART 2026-10-28 (produkteier, etter brukertesten med HK-dir 2026-10-27, HK-11411): «Tilbudsgaranti
-    # overkjører antall tilbud som skal gis.» Søkere med tilbudsgaranti får alltid tilbud, også når utdanningskvoten
-    # er full eller antall tilbud som skal gis er 0. De andre tilbudene gis opp til antall tilbud som skal gis,
-    # så det kan bli gitt flere tilbud enn tallet. Det er det koden gjør i dag («Plasstildelingsløpet i Opptak», kap. 3).
-    Scenario: Tilbudsgaranti gir tilbud når utdanningskvoten er full
+    # overkjører antall tilbud som skal gis.» Tilbudsgarantiene teller med i antall tilbud som skal gis, og gis
+    # først. De andre søkerne får tilbud på plassene som er igjen. Er det flere søkere med tilbudsgaranti enn antall
+    # tilbud som skal gis, får alle med tilbudsgaranti tilbud, og ingen andre. Koden gjør dette i dag for automatisk
+    # tilbudsgaranti (verify-2026-10-28-1645, `StudyProgrammeSm.java`), men tilbudsgaranti fra saksbehandlingen
+    # når ikke plasstildelingen.
+    Scenario: Tilbudsgaranti teller med i antall tilbud som skal gis
       Gitt at det skal gis 30 tilbud i utdanningskvoten "Ordinær" på "Sykepleie, høst 2027"
       Og at 30 søkere uten tilbudsgaranti er rangert foran søkeren "Ola Nordmann" i utdanningskvoten "Ordinær"
       Og at søkeren "Ola Nordmann" har tilbudsgaranti på "Sykepleie, høst 2027"
       Når plasstildelingen gjennomføres
       Så får søkeren "Ola Nordmann" tilbud på "Sykepleie, høst 2027"
-      Og de 30 søkerne uten tilbudsgaranti får tilbud
-      Og det er gitt 31 tilbud i utdanningskvoten "Ordinær"
+      Og de 29 høyest rangerte søkerne uten tilbudsgaranti får tilbud
+      Og det er gitt 30 tilbud i utdanningskvoten "Ordinær"
+
+    Scenario: Flere søkere med tilbudsgaranti enn antall tilbud som skal gis
+      Gitt at det skal gis 2 tilbud i utdanningskvoten "Ordinær" på "Sykepleie, høst 2027"
+      Og at 3 søkere har tilbudsgaranti på "Sykepleie, høst 2027"
+      Når plasstildelingen gjennomføres
+      Så får de 3 søkerne med tilbudsgaranti tilbud på "Sykepleie, høst 2027"
+      Og ingen søkere uten tilbudsgaranti får tilbud i utdanningskvoten "Ordinær"
 
     Scenario: Bare søkere med tilbudsgaranti får tilbud når antall tilbud er 0
       Gitt at antall tilbud som skal gis i utdanningskvoten "Ordinær" på "Sykepleie, høst 2027" er 0
