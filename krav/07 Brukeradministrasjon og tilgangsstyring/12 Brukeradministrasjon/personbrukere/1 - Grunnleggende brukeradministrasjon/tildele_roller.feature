@@ -106,7 +106,6 @@ Egenskap: Tildele roller til en personbruker
       Og det fremgår at rollen allerede er tildelt
 
 # ÅPNE SPØRSMÅL:
-# - Kan en brukeradministrator tildele roller til en deaktivert personbruker, og er rollen i så fall inaktiv inntil reaktivering? BRU-PER-GRU-004 sier at deaktivering fryser tildelingene uten å fjerne dem, men det er ikke avklart om nye tildelinger kan legges til mens personbrukeren er deaktivert.
 # - Autorisasjon: regelen sier at brukeren kun kan tildele roller de har rettighet til å tildele, men ikke hva rettigheten består i. Forslag: bare roller som (a) gjelder ved en organisasjon administratoren administrerer, og (b) administratoren selv har eller kan administrere. Henger sammen med rolledefinisjons-arbeidet i "4 - Opprette og administrere roller".
 # - Skal varsel sendes til personbrukeren ved endringer i roller? Avklares sammen med BRU-PER-HIS-003.
 # - Krever tildeling at brukeren har godkjent bruksvilkår / signert taushetserklæring først? Henger sammen med "1 - Bruksvilkår".

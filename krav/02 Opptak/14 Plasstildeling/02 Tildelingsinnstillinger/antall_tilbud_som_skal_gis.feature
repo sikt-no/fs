@@ -11,7 +11,7 @@ Egenskap: Antall tilbud som skal gis per utdanningskvote (sette opptaksparameter
   # Antall tilbud som skal gis settes per utdanningskvote for den enkelte plasstildelingsrunde.
   # Opptaksforvalter ved lærestedet setter tallene for egne utdanningstilbud innenfor perioden
   # som er satt på plasstildelingsrunden (se 01 Runder/forvalte_runder.feature).
-  # Opptaksforvalter ved forvaltende organisasjon kan endre tallene også utenfor perioden.
+  # Opptakets forvalter kan endre tallene også utenfor perioden.
   # Begrep (avklart 2026-10-08): «antall tilbud som skal gis». «Overbooking», «måltall» og
   # «antall ønsket ja-svar» brukes ikke.
   # Brukerne kaller i dag handlingen å «sette opptaksparametere». Det ordet skjuler at det bare er
@@ -106,7 +106,7 @@ Egenskap: Antall tilbud som skal gis per utdanningskvote (sette opptaksparameter
 
     # Flyttet hit fra 01 Runder 2026-10-09. Perioden settes på plasstildelingsrunden, se 01 Runder/forvalte_runder.feature.
     # AVKLART 2026-10-15 (domeneekspert): Perioden gjelder også tilbud til alle kvalifiserte, men ikke
-    # saksbehandlingen. Etter perioden melder lærestedene feil til forvaltende organisasjon på e-post.
+    # saksbehandlingen. Etter perioden melder lærestedene feil til opptakets forvalter på e-post.
     # Gap mot koden (verifisert 2026-10-09): perioden håndheves ikke. Alle med tilgang til å endre
     # opptaket kan endre antall tilbud når som helst.
     Scenario: Lærested kan ikke endre antall tilbud utenfor perioden
@@ -114,14 +114,19 @@ Egenskap: Antall tilbud som skal gis per utdanningskvote (sette opptaksparameter
       Og dagens dato er "2027-07-11"
       Så kan opptaksforvalter ved lærestedene ikke lenger endre antall tilbud som skal gis for plasstildelingsrunden
 
-    Scenario: Opptakseier kan endre antall tilbud utenfor perioden
+    Scenario: Opptakets forvalter kan endre antall tilbud utenfor perioden
       Gitt at perioden for å endre antall tilbud som skal gis i plasstildelingsrunden "Hovedrunde" er "2027-06-01" – "2027-07-10"
       Og dagens dato er "2027-07-11"
-      Så kan opptaksforvalter ved forvaltende organisasjon fortsatt endre antall tilbud som skal gis for plasstildelingsrunden
+      Så kan opptakets forvalter fortsatt endre antall tilbud som skal gis for plasstildelingsrunden
+
+    # AVKLART 2026-10-16 (produktleder): Perioden virker som en åpningsdato. Er den ikke satt, holder den stengt.
+    Scenario: Lærested kan ikke sette antall tilbud når perioden ikke er satt
+      Gitt at det ikke er satt periode for å endre antall tilbud som skal gis i plasstildelingsrunden "Hovedrunde"
+      Så kan opptaksforvalter ved lærestedene ikke legge inn antall tilbud som skal gis for plasstildelingsrunden
 
     Scenario: Siste lagrede tall er korrekt uavhengig av hvem som satte det
       Gitt at opptaksforvalter ved lærestedet satte antall tilbud som skal gis i utdanningskvoten "Ordinær" til 100
-      Når opptaksforvalter ved forvaltende organisasjon endrer antall tilbud til 120
+      Når opptakets forvalter endrer antall tilbud til 120
       Så er antall tilbud som skal gis i utdanningskvoten "Ordinær" 120
 
   Regel: Antall tilbud kan ikke endres når plasstildelingsrunden er publisert
@@ -130,7 +135,7 @@ Egenskap: Antall tilbud som skal gis per utdanningskvote (sette opptaksparameter
     # opptaksforvalter legge til en ny plasstildelingsrunde.
     Scenario: Antall tilbud låses når plasstildelingsrunden er publisert
       Gitt at plasstildelingsrunden "Hovedrunde" er publisert
-      Når opptaksforvalter ved forvaltende organisasjon ser antall tilbud som skal gis i "Hovedrunde"
+      Når opptakets forvalter ser antall tilbud som skal gis i "Hovedrunde"
       Så kan opptaksforvalter ikke endre antall tilbud som skal gis i "Hovedrunde"
 
   Regel: Minst én plasstildelingsrunde må finnes før antall tilbud kan settes
@@ -200,14 +205,18 @@ Egenskap: Antall tilbud som skal gis per utdanningskvote (sette opptaksparameter
       Så får alle kvalifiserte søkere tilbud uavhengig av poengsum
       Og utdanningstilbudet har ingen poenggrense
 
-  Regel: I supplering kan antall tilbud som skal gis være negativt
+  @depends-on-OPT-REG-RUN-001
+  Regel: Antall tilbud kan være negativt når rundetypen har kompensasjonstilbud ved opprykk
 
+    # Endret 2026-10-24: Et negativt tall stopper kompensasjonstilbudene til lærestedet er nede på riktig nivå,
+    # og har bare en virkning når rundetypen har kompensasjonstilbud ved opprykk. I samordna opptak er det Supplering.
     # AVKLART 2026-10-08: Har lærestedet gitt for mange tilbud i hovedrunden, kan det sette et negativt
     # tall i suppleringsrunden. Da gis det ikke kompensasjonstilbud før antall tilbud er kommet ned på
     # et bedre nivå enn først estimert. Negative tall er ikke lov i hovedtildeling eller etterfylling.
     # De første plassene som frigjøres, dekker det negative tallet. Resten gis som kompensasjonstilbud.
-    Scenario: Negativt antall tilbud i supplering
+    Scenario: Negativt antall tilbud med kompensasjonstilbud
       Gitt at opptaket har plasstildelingsrunden "Suppleringsrunde" med rundetype "Supplering"
+      Og at rundetypen "Supplering" har innstillingen "Kompensasjonstilbud ved opprykk"
       Og at antall tilbud som skal gis i utdanningskvoten "Ordinær" er -5 for plasstildelingsrunden "Suppleringsrunde"
       Og at 7 tilbud i utdanningskvoten "Ordinær" er frigjort ved opprykk eller avslag
       Når plasstildelingen i "Suppleringsrunde" gjennomføres
@@ -215,16 +224,17 @@ Egenskap: Antall tilbud som skal gis per utdanningskvote (sette opptaksparameter
 
     # AVKLART 2026-10-14: Negative tall er heller ikke lov i hovedtildeling. Der finnes ingen tidligere
     # plasstildelingsrunde med for mange tilbud å rette opp.
-    Scenariomal: Negativt antall tilbud utenfor supplering
-      Gitt at opptaket har plasstildelingsrunden "<plasstildelingsrunde>" med rundetype "<rundetype>"
+    Scenariomal: Negativt antall tilbud uten kompensasjonstilbud
+      Gitt at rundetypen "<rundetype>" ikke har innstillingen "Kompensasjonstilbud ved opprykk"
+      Og at opptaket har plasstildelingsrunden "<plasstildelingsrunde>" med rundetype "<rundetype>"
       Når opptaksforvalter setter antall tilbud som skal gis i utdanningskvoten "Ordinær" til -3 for plasstildelingsrunden "<plasstildelingsrunde>"
       Så blir antall tilbud ikke lagret
-      Og opptaksforvalter får beskjed om at antall tilbud ikke kan være negativt i <rundetype_tekst>
+      Og opptaksforvalter får beskjed om at antall tilbud bare kan være negativt når plasstildelingsrunden har kompensasjonstilbud ved opprykk
 
       Eksempler:
-        | plasstildelingsrunde | rundetype      | rundetype_tekst |
-        | Hovedrunde           | Hovedtildeling | hovedtildeling  |
-        | Etterfylling         | Etterfylling   | etterfylling    |
+        | plasstildelingsrunde | rundetype      |
+        | Hovedrunde           | Hovedtildeling |
+        | Etterfylling         | Etterfylling   |
 
   @openquestion
   Regel: I etterfylling gis nøyaktig det antallet tilbud som er satt
@@ -232,6 +242,8 @@ Egenskap: Antall tilbud som skal gis per utdanningskvote (sette opptaksparameter
     # ÅPNE SPØRSMÅL:
     # - Kommer fra Confluence «Samordnet plasstildeling» (mai 2026), ikke bekreftet i design.md.
     #   Stemmer det at lærestedet selv må regne inn forventet frafall i etterfylling?
+    # - Endret 2026-10-24: Rundetypen styrer ikke plasstildelingen lenger. Følger regelen av at rundetypen
+    #   ikke har kompensasjonstilbud ved opprykk, eller trengs det en egen innstilling?
     Scenario: Etterfylling gir det antallet tilbud som er satt
       Gitt at opptaket har plasstildelingsrunden "Etterfylling" med rundetype "Etterfylling"
       Når opptaksforvalter setter antall tilbud som skal gis i utdanningskvoten "Ordinær" til 10 for plasstildelingsrunden "Etterfylling"
@@ -239,12 +251,11 @@ Egenskap: Antall tilbud som skal gis per utdanningskvote (sette opptaksparameter
       Og plasstildelingen kompenserer ikke for frafall
 
 # AVKLARTE SPØRSMÅL (raffinering 2026-10-07):
-# - Opptaksforvalter ved forvaltende organisasjon kan endre antall tilbud også utenfor
+# - Opptakets forvalter kan endre antall tilbud også utenfor
 #   lærestedenes periode. Se 01 Runder/forvalte_runder.feature.
 # - Siste lagrede tall er korrekt uavhengig av hvem som satte det.
-# - Standard plassflyt for opptaket er en opptaksinnstilling, men løses som del av
-#   arbeidet med å lage plasstildelingen. Avklart 2026-10-13: standard plassflyt settes på opptaket
-#   og gjelder alle utdanningskvoter, se 11 Opprette og vedlikeholde opptak/03 Innstillinger/sette_plassflyt.feature.
+# - Standard plassflyt er en del av regelverket. Avklart 2026-10-21: standard plassflyt settes i
+#   regelverkssamlingen og gjelder alle utdanningskvoter, se 10 Regelverk/04 Kvoter/sette_plassflyt.feature.
 # - Antall tilbud som skal gis settes direkte per utdanningskvote.
 #   Totalt antall tilbud er utledet (summen av utdanningskvotene), ikke satt eksplisitt.
 # - Default i utdanningskvotene er null. Endret 2026-10-08: ikke varsel, men filter på

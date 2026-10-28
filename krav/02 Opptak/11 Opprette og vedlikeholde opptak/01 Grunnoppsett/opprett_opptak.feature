@@ -54,14 +54,34 @@ Egenskap: Opprette et opptak
       Men opptaksforvalter setter ikke opptakstype
       Så kan opptaket ikke lagres
 
-  Regel: Navn som eksponeres til søkere må kunne angis på flere språk
+  # AVKLART 2026-10-19: Utdanningsbakgrunner, poenglikhetsregel og antall søknadsalternativer
+  # må være satt for å opprette et opptak. Startnummer for søknader er ikke obligatorisk,
+  # se 03 Innstillinger/innstillinger.feature.
+  @in-progress
+  Regel: Utdanningsbakgrunner, poenglikhetsregel og maks antall søknadsalternativer må være satt for å lagre et opptak
+
+    Scenariomal: Lagre opptak uten <innstilling>
+      Når opptaksforvalter oppretter et nytt opptak
+      Og opptaksforvalter gir opptaket navnet "Samordna opptak 2027"
+      Og opptaksforvalter knytter til regelverkssamlingen "UHG 2027"
+      Og opptaksforvalter setter opptakstype
+      Men opptaket mangler <innstilling>
+      Så kan opptaket ikke lagres
+
+      Eksempler:
+        | innstilling                               |
+        | utdanningsbakgrunner                      |
+        | standard poenglikhetsregel                |
+        | maks antall søknadsalternativer           |
+
+  # Endret 2026-10-19 etter akseptansetesten: de to reglene om navn er slått sammen, fordi de testet det samme.
+  # Atferden er den samme. Samisk er valgfritt.
+  Regel: Opptaket må ha navn på bokmål, nynorsk og engelsk, fordi navnet vises for søkerne
 
     Scenario: Angi opptaksnavn på flere språk
       Gitt at opptaksforvalter har opprettet opptaket "Samordna opptak 2027"
       Når opptaksforvalter angir navn på bokmål, nynorsk, engelsk og samisk
       Så er navnene lagret på alle fire språk
-
-  Regel: Opptaket må ha navn på bokmål, nynorsk og engelsk
 
     Scenario: Lagre opptak med navn på alle obligatoriske språk
       Når opptaksforvalter oppretter et nytt opptak

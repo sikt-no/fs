@@ -29,7 +29,7 @@
 
 ## Kort beskrivelse
 
-Søkere kan be om tidlig opptak med en dokumentert begrunnelse, saksbehandlerne vurderer søknadene, og opptaksforvalteren gjennomfører tidligopptaket, slik at søkere med nok poeng får tilbudsgaranti før hovedopptaket. Oppgaven dekker også publisering av svaret og meldingen til søkerne, og at tilbudsgarantien gjelder i hovedopptaket.
+Søkere kan be om tidlig opptak med en dokumentert begrunnelse, saksbehandlerne vurderer søknadene, og opptaksforvalteren gjennomfører tidligopptaket, slik at søkere med nok poeng får tilbudsgaranti før hovedopptaket. Oppgaven dekker også publisering av svaret og meldingen til søkerne.
 
 ## Statuslogg
 

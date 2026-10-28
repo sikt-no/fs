@@ -9,13 +9,13 @@ Egenskap: Plasstildelingsrunder i et opptak
   # Kilde: tasks/opptak/plasstildeling/design.md (oppgave 1) og Confluence
   # «2026-09-08 Raffinering plasstildeling», «Opprette og konfigurere opptakskjøringsrunde»
   # og raffinering 2026-10-07.
-  # Opptaksforvalter ved forvaltende organisasjon legger til plasstildelingsrunder. I samordna opptak er det
+  # Opptakets forvalter legger til plasstildelingsrunder. I samordna opptak er det
   # Samordna opptak (HK-dir). I lokale opptak er lærestedet den eneste organisasjonen og forvalter selv.
   # En plasstildelingsrunde er vinduet der plasser fordeles. Plasstildelingen er beregningen som gjøres i plasstildelingsrunden,
   # og én plasstildelingsrunde kan ha mange plasstildelinger (se 03 Tildeling).
 
   Bakgrunn:
-    Gitt at opptaksforvalter ved forvaltende organisasjon er innlogget
+    Gitt at opptakets forvalter er innlogget
     Og at opptaket "Samordna opptak 2027" er opprettet
 
   Regel: Opptaksforvalter legger til en plasstildelingsrunde med navn, rundetype og svarfrist
@@ -51,38 +51,46 @@ Egenskap: Plasstildelingsrunder i et opptak
       Når opptaksforvalter setter påminnelse om svarfrist til "2027-07-18"
       Så får søkere med ubesvart tilbud i plasstildelingsrunden en påminnelse "2027-07-18"
 
-  Regel: Et opptak har én hovedtildeling, men kan ha flere plasstildelingsrunder av andre typer
+  @depends-on-OPT-REG-RUN-001
+  Regel: Rundetypene i regelverkssamlingen avgjør hvilke plasstildelingsrunder opptaket kan ha
 
+    # Endret 2026-10-24: Rundetypene og innstillingene defineres i regelverkssamlingen for opptaket
+    # (10 Regelverk/06 Rundetyper/forvalte_rundetyper.feature).
+    # At et samordna opptak har én hovedtildeling, og at den er først, følger av innstillingene.
     # Kodeverket har også TIDLIG, LEDIGE_STUDIEPLASSER og TEST, som ikke er rundetyper i kravet,
     # og fs-admin lar bare opptaksforvalter velge HOVED (verifisert 2026-10-09).
     Scenario: Tilgjengelige rundetyper
+      Gitt at opptaket har regelverkssamlingen "UHG2027"
       Når opptaksforvalter legger til en plasstildelingsrunde
-      Så kan opptaksforvalter velge mellom disse rundetypene
-        | Rundetype        |
-        | Hovedtildeling   |
-        | Supplering       |
-        | Etterfylling     |
+      Så kan opptaksforvalter velge mellom rundetypene i regelverkssamlingen "UHG2027"
+        | Rundetype      |
+        | Hovedtildeling |
+        | Supplering     |
+        | Etterfylling   |
 
     # AVKLART 2026-10-07, endret 2026-10-08: Ledige studieplasser er en egenskap ved plasstildelingsrunden,
-    # ikke en egen rundetype. Opptaksforvalter kan åpne en plasstildelingsrunde av alle rundetyper
-    # for nye søknader på ledige plasser (se 03 Tildeling/gjennomføre_plasstildeling.feature).
+    # ikke en egen rundetype. Endret 2026-10-24: Rundetypen sier om plasstildelingsrunden kan åpnes for
+    # ledige studieplasser (se regelen om ledige studieplasser under).
 
-    Scenario: Hovedtildeling kan bare finnes én gang
-      Gitt at opptaket har plasstildelingsrunden "Hovedrunde" med rundetype "Hovedtildeling"
+    Scenario: Rundetype som bare kan finnes én gang
+      Gitt at rundetypen "Hovedtildeling" har innstillingen "Bare én i opptaket"
+      Og at opptaket har plasstildelingsrunden "Hovedrunde" med rundetype "Hovedtildeling"
       Når opptaksforvalter legger til en ny plasstildelingsrunde med rundetype "Hovedtildeling"
       Så blir plasstildelingsrunden ikke lagt til
-      Og opptaksforvalter får beskjed om at opptaket allerede har en hovedtildeling
+      Og opptaksforvalter får beskjed om at opptaket allerede har en plasstildelingsrunde med rundetype "Hovedtildeling"
 
-    Scenario: Flere plasstildelingsrunder av samme type etter hovedtildelingen
+    Scenario: Flere plasstildelingsrunder av samme rundetype
       Gitt at opptaket har plasstildelingsrunden "Hovedrunde" med rundetype "Hovedtildeling"
       Og at opptaket har plasstildelingsrunden "Suppleringsrunde 1" med rundetype "Supplering"
       Når opptaksforvalter legger til plasstildelingsrunden "Suppleringsrunde 2" med rundetype "Supplering" og svarfrist "2027-09-01 23:59"
       Så har opptaket to plasstildelingsrunder med rundetype "Supplering"
 
-    Scenario: Hovedtildeling er første plasstildelingsrunde i opptaket
+    Scenario: Rundetype som bygger på forrige plasstildelingsrunde, kan ikke være først
       Gitt at opptaket ikke har noen plasstildelingsrunder
-      Når opptaksforvalter legger til plasstildelingsrunder i opptaket
-      Så er den første plasstildelingsrunden av rundetype "Hovedtildeling"
+      Og at rundetypen "Supplering" har innstillingen "Bygger på forrige publiserte plasstildelingsrunde"
+      Når opptaksforvalter legger til en plasstildelingsrunde med rundetype "Supplering"
+      Så blir plasstildelingsrunden ikke lagt til
+      Og opptaksforvalter får beskjed om at opptaket må ha en plasstildelingsrunde fra før
 
     Scenario: Valgfri rekkefølge på rundetyper etter hovedtildelingen
       Gitt at opptaket har plasstildelingsrunden "Hovedrunde" med rundetype "Hovedtildeling"
@@ -97,6 +105,28 @@ Egenskap: Plasstildelingsrunder i et opptak
       Og opptaksforvalter endrer svarfristen til "2027-07-25 23:59"
       Så heter plasstildelingsrunden "Hovedtildeling 2027"
       Og søkere som får tilbud i plasstildelingsrunden må svare innen "2027-07-25 23:59"
+
+  @depends-on-OPT-REG-RUN-001
+  Regel: Plasstildelingsrunden har innstillingene fra rundetypen
+
+    # AVKLART 2026-10-24: Innstillingene kan ikke justeres på plasstildelingsrunden. Trengs en annen
+    # kombinasjon, lages en ny rundetype i regelverkssamlingen
+    # (10 Regelverk/06 Rundetyper/forvalte_rundetyper.feature).
+    Scenario: Se innstillingene på plasstildelingsrunden
+      Gitt at opptaket har plasstildelingsrunden "Suppleringsrunde" med rundetype "Supplering"
+      Når opptaksforvalter ser plasstildelingsrunden "Suppleringsrunde"
+      Så ser opptaksforvalter innstillingene fra rundetypen "Supplering"
+        | Innstilling                                       | Verdi |
+        | Tilbud gir bortfall på lavere prioriteter         | ja    |
+        | Kompensasjonstilbud ved opprykk                   | ja    |
+        | Bygger på forrige publiserte plasstildelingsrunde | ja    |
+        | Bare én i opptaket                                | nei   |
+        | Kan åpnes for ledige studieplasser                | ja    |
+
+    Scenario: Innstillingene kan ikke endres på plasstildelingsrunden
+      Gitt at opptaket har plasstildelingsrunden "Suppleringsrunde" med rundetype "Supplering"
+      Når opptaksforvalter endrer plasstildelingsrunden "Suppleringsrunde"
+      Så ser opptaksforvalter ikke muligheten til å endre innstillingene fra rundetypen
 
   Regel: Rundetypen kan ikke endres etter at plasstildelingsrunden er lagt til
 
@@ -137,15 +167,28 @@ Egenskap: Plasstildelingsrunder i et opptak
       Og at plasstildelingsrunden er publisert til søker
       Så ser opptaksforvalter at plasstildelingsrunden har status "Publisert for søkere"
 
-  # Regelen om tak for antall tilbud per plasstildelingsrunde er tatt ut 2026-10-14. Hvor mange tilbud søkeren
-  # kan få, avgjøres av rundetypen (03 Tildeling/gjennomføre_plasstildeling.feature): ett ordinært tilbud i
-  # hovedtildeling og supplering, flere i etterfylling, og tilbud på ledige studieplasser i tillegg.
-  # Hvor mange tilbud søkeren kan takke ja til, settes på opptaket
-  # (11 Opprette og vedlikeholde opptak/03 Innstillinger/innstillinger.feature).
+  @openquestion
+  Regel: Opptaksforvalter setter tak for antall tilbud per søker i plasstildelingsrunden
+    # ÅPNE SPØRSMÅL:
+    # - Skal taket settes på hver plasstildelingsrunde, eller være en innstilling i rundetypen i regelverkssamlingen?
+    #   Antagelsen er per plasstildelingsrunde: grunnlogikken står i rundetypen, og taket gir fleksibilitet for
+    #   opptak som skal gi flere tilbud per søker enn samordna opptak.
+    # - Hva er standardverdien, og hvordan virker taket sammen med «Tilbud gir bortfall på lavere prioriteter»
+    #   i rundetypen?
+
+    # Flyttet hit 2026-10-26 fra 11 Opprette og vedlikeholde opptak/03 Innstillinger/innstillinger.feature, der
+    # regelen «Opptaksforvalter setter tak for antall tilbud per tildelingsrunde» er @deprecated.
+    # Tilbud på ledige studieplasser kommer i tillegg (03 Tildeling/gjennomføre_plasstildeling.feature).
+    Scenario: Sette tak for antall tilbud per søker i plasstildelingsrunden
+      Gitt at opptaket har plasstildelingsrunden "Etterfylling" med rundetype "Etterfylling"
+      Når opptaksforvalter setter taket for antall tilbud per søker i plasstildelingsrunden "Etterfylling" til 2
+      Så kan en søker få høyst 2 tilbud i plasstildelingsrunden "Etterfylling"
 
   Regel: Opptaksforvalter kan åpne en plasstildelingsrunde for ledige studieplasser
 
     # AVKLART 2026-10-08: Egenskapen kan settes på alle rundetyper, også hovedtildelingen.
+    # Endret 2026-10-24: Den kan settes når rundetypen har innstillingen «Kan åpnes for ledige studieplasser».
+    # I samordna opptak har alle tre rundetypene den.
     # Den kan bare settes når opptaket tilbyr søknad på ledige studieplasser
     # (se 11 Opprette og vedlikeholde opptak/03 Innstillinger/innstillinger.feature).
     # Hvordan plasstildelingen rangerer søkerne, står i 03 Tildeling/gjennomføre_plasstildeling.feature.
@@ -154,6 +197,7 @@ Egenskap: Plasstildelingsrunder i et opptak
     # etter reglene for ledige studieplasser.
     Scenariomal: Åpne plasstildelingsrunden for ledige studieplasser
       Gitt at opptaket tilbyr søknad på ledige studieplasser
+      Og at rundetypen "<rundetype>" har innstillingen "Kan åpnes for ledige studieplasser"
       Og at opptaket har plasstildelingsrunden "<plasstildelingsrunde>" med rundetype "<rundetype>"
       Når opptaksforvalter åpner plasstildelingsrunden "<plasstildelingsrunde>" for ledige studieplasser
       Så tar utdanningstilbud som tilbyr ledige studieplasser, imot nye søknader til behandling
@@ -167,6 +211,13 @@ Egenskap: Plasstildelingsrunder i et opptak
 
     Scenario: Opptaket tilbyr ikke søknad på ledige studieplasser
       Gitt at opptaket ikke tilbyr søknad på ledige studieplasser
+      Og at opptaket har plasstildelingsrunden "Etterfylling" med rundetype "Etterfylling"
+      Når opptaksforvalter endrer plasstildelingsrunden "Etterfylling"
+      Så ser opptaksforvalter ikke muligheten til å åpne plasstildelingsrunden for ledige studieplasser
+
+    Scenario: Rundetypen kan ikke åpnes for ledige studieplasser
+      Gitt at opptaket tilbyr søknad på ledige studieplasser
+      Og at rundetypen "Etterfylling" ikke har innstillingen "Kan åpnes for ledige studieplasser"
       Og at opptaket har plasstildelingsrunden "Etterfylling" med rundetype "Etterfylling"
       Når opptaksforvalter endrer plasstildelingsrunden "Etterfylling"
       Så ser opptaksforvalter ikke muligheten til å åpne plasstildelingsrunden for ledige studieplasser

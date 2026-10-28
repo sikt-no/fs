@@ -1,4 +1,5 @@
 # language: no
+# OBS (2026-10-19): ID-en @OPT-SØK-SØK-013 brukes også i oppgi_at_generell_studiekompetanse_fullføres_i_vår.feature. Ikke rettet, fordi andre team jobber med kravene.
 # GitHub: #603
 @OPT-SØK-SØK-013 @must @draft
 Egenskap: Listevisning og søk i utdanningstilbud
@@ -21,6 +22,7 @@ Egenskap: Listevisning og søk i utdanningstilbud
   # søkeforslag, filtrene, nullstilling, ingen treff og deling av søket. Scenarioene for disse
   # bygger på Confluence og skissen, og skal gjennomgås før kravet kan bli @planned.
   # Neste spørsmål: hvilke poenggrenser vises (kvoter, år, plasstildelingsrunde)?
+  # Avklart 2026-10-23: studiested-filteret er kommune, utledet fra campus på utdanningstilbudet (OPT-OPT-UTD-005).
 
   Regel: Liste over alle utdanningstilbud
 
@@ -39,6 +41,13 @@ Egenskap: Listevisning og søk i utdanningstilbud
         | Lærested                           |
         | Studiested                         |
         | Tidligere poenggrenser             |
+
+    # Hver campus et studieprogram starter på, er et eget utdanningstilbud (OPT-OPT-UTD-005).
+    Scenario: Studiestedet i listen er stedet der utdanningstilbudet har campus
+      Gitt at utdanningstilbudet "Sykepleie, høst 2027" ved NTNU har campus i Ålesund
+      Når søkeren åpner Finn studier
+      Så står studiestedet "Ålesund" på utdanningstilbudet "Sykepleie, høst 2027"
+      Men studiestedet er ikke "Trondheim", der NTNU har adressen
 
     Scenario: Listen er sortert alfabetisk på navn uten søketekst
       Gitt at søkeren ikke har skrevet noe i søkefeltet
@@ -124,13 +133,14 @@ Egenskap: Listevisning og søk i utdanningstilbud
       Når søkeren søker med fritekst på "Bergen"
       Så filtreres listen til utdanningstilbud der navnet, lærestedet eller studiestedet matcher søket
 
-    Scenario: Fritekst-søk på stikkord
-      # Stikkordene settes av opptaksforvalter (opptaksinnstillinger_utdanningstilbud.feature).
-      Gitt at utdanningstilbudet "Profesjonsstudiet i medisin, høst 2027" har stikkordet "lege"
+    @depends-on-OPT-OPT-UTD-017
+    Scenario: Fritekst-søk på søkeord
+      # Søkeordene settes av opptaksforvalter på utdanningstilbudet.
+      Gitt at utdanningstilbudet "Profesjonsstudiet i medisin, høst 2027" har søkeordet "lege"
       Når søkeren søker med fritekst på "lege"
       Så vises utdanningstilbudet "Profesjonsstudiet i medisin, høst 2027" i listen
 
-    Scenario: Treff som matcher flest søkeord, vises først
+    Scenario: Treff som matcher flest ord i søket, vises først
       Når søkeren søker med fritekst på "sykepleie Bergen"
       Så vises utdanningstilbud som matcher både "sykepleie" og "Bergen" før utdanningstilbud som bare matcher ett av ordene
 
@@ -182,6 +192,10 @@ Egenskap: Listevisning og søk i utdanningstilbud
         | Vårsemester  |
       Og ingen semestre er valgt som standard
 
+    # Progresjonen utledes av prosenttallet for heltid: 100 er heltid, under 100 er deltid.
+    # - Prosenttallet er påkrevd på studieprogram og studieretning, og alle har en verdi (Kjartan, via Haakon Paulin).
+    # - Mangler verdien, er progresjonen ikke registrert i SIS (Haakon Paulin).
+    # - Mangler verdien, regnes utdanningstilbudet som heltid (Kjetil Røse Høybråten).
     Scenario: Tilgjengelige progresjoner i filter
       Når søkeren åpner filteret for progresjon
       Så inneholder filteret disse progresjonene:
@@ -201,13 +215,13 @@ Egenskap: Listevisning og søk i utdanningstilbud
       Og ingen studieformer er valgt som standard
 
     @openquestion
-    Scenario: Tilgjengelige studiesteder i filter
+    Scenario: Tilgjengelige kommuner i filter
       # ÅPNE SPØRSMÅL:
-      # - Inneholder filteret bare studiestedene til utdanningstilbudene i listen, eller alle studiesteder?
-      Når søkeren åpner filteret for studiested
-      Så inneholder filteret studiestedene til utdanningstilbudene i listen
-      Og hvert studiested vises kun én gang
-      Og studiestedene er sortert alfabetisk
+      # - Inneholder filteret bare kommunene til utdanningstilbudene i listen, eller alle kommuner?
+      Når søkeren åpner filteret for kommune
+      Så inneholder filteret kommunene til utdanningstilbudene i listen
+      Og hver kommune vises kun én gang
+      Og kommunene er sortert alfabetisk
       Og "Alle" er valgt som standard
 
     @openquestion
@@ -230,8 +244,12 @@ Egenskap: Listevisning og søk i utdanningstilbud
         | oppstart   | Høstsemester   |
         | progresjon | Deltid         |
         | studieform | Nettstudium    |
-        | studiested | Trondheim      |
+        | kommune    | Ålesund        |
         | lærested   | NTNU           |
+
+    Scenario: Kommunefilteret og studiestedet i listen stemmer overens
+      Når søkeren velger "Ålesund" som filter for kommune
+      Så står studiestedet "Ålesund" på hvert utdanningstilbud i listen
 
     @openquestion
     Scenario: Velge flere verdier i samme filter

@@ -76,3 +76,16 @@ Egenskap: Se detaljer om egen søknad
     Scenario: Søkeren åpner en søknad som ikke er søkerens egen
       Når søkeren forsøker å åpne en søknad som tilhører en annen søker
       Så får søkeren ikke se søknaden
+
+  @draft
+  Regel: Søkeren ser når hovedopptaket publiseres
+    # Virkningen av datoen for når hovedopptaket publiseres, som opptaksforvalter setter i
+    # 11 Opprette og vedlikeholde opptak/04 Frister/frister_og_hendelser.feature.
+    # Lagt til 2026-10-19 etter akseptansetesten av opprette og vedlikeholde opptak.
+    # Når hovedopptaket faktisk publiseres, følger av plasstildelingsrunden. Datoen på opptaket er informasjon,
+    # så søkeren vet når svaret kan ventes.
+
+    Scenario: Søkeren ser datoen hovedopptaket publiseres
+      Gitt at datoen for når hovedopptaket publiseres, er "2027-07-15" i opptaket
+      Når søkeren åpner søknaden
+      Så ser søkeren at hovedopptaket publiseres "2027-07-15"

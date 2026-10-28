@@ -1,15 +1,19 @@
 # language: no
 # Jira: SHI-690
-@OPT-OPT-UTD-012 @must @draft @scope-utdanningstilbud-2027
+@OPT-OPT-UTD-012 @must @implemented @scope-utdanningstilbud-2027 @ref-OPT-OPT-UTD-007
 Egenskap: Registrere planlagt antall studieplasser
   Som opptaksforvalter
   ønsker jeg å registrere planlagt antall studieplasser på utdanningstilbudet
   slik at planlagt kapasitet er synlig for planlegging og for søkere.
 
+  # AVKLART 2026-10-21: Planlagt antall studieplasser er det samme tallet som antall studieplasser
+  # i 03 Opptaksinnstillinger. Hvem som kan endre tallet, og når, står der.
+
   Bakgrunn:
     Gitt at opptaksforvalter har åpnet et utdanningstilbud
 
   Regel: Planlagt antall studieplasser kan registreres
+    # AVKLART 2026-10-22: Planlagt antall studieplasser er et heltall fra 0 til 9999.
 
     Scenario: Registrere planlagt antall studieplasser
       Når opptaksforvalter registrerer planlagt antall studieplasser
@@ -18,7 +22,3 @@ Egenskap: Registrere planlagt antall studieplasser
     Scenario: Se planlagt antall studieplasser
       Gitt at det er registrert et planlagt antall studieplasser
       Så vises planlagt antall studieplasser
-
-# ÅPNE SPØRSMÅL:
-# - Hvordan forholder "planlagt antall studieplasser" seg til antall studieplasser i "03 Opptaksinnstillinger" (sette_studieplasser_og_antall_tilbud)? Er dette samme tall, eller et eget planleggingsfelt?
-# - Finnes det valideringsregler (heltall, minimum/maksimum)?

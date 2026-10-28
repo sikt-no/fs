@@ -1,13 +1,13 @@
 # language: no
 # GitHub: #216, #598
-@OPT-PLA-INN-002 @must @draft @scope-plasstildeling-2027
+@OPT-PLA-INN-002 @must @draft @scope-plasstildeling-2027 @depends-on-OPT-REG-KVO-003
 Egenskap: Plassflyt mellom utdanningskvoter
   Som opptaksforvalter
   ønsker jeg at ledige plasser i en utdanningskvote flyter til en utdanningskvote jeg har pekt på
   slik at studieplasser ikke går tapt når det er for få kvalifiserte søkere i en utdanningskvote.
 
-  # Standard plassflyt settes på opptaket, se
-  # 11 Opprette og vedlikeholde opptak/03 Innstillinger/sette_plassflyt.feature (flyttet dit 2026-10-13).
+  # Standard plassflyt settes i regelverkssamlingen, se
+  # 10 Regelverk/04 Kvoter/sette_plassflyt.feature (flyttet dit 2026-10-21, fra opptaket).
   # Her står hva plasstildelingen gjør med plassflyten.
   # AVKLART 2026-10-09: Plassflyt er bare at ubrukte plasser flyter mellom utdanningskvoter i et opptak.
   # At en plasstildelingsrunde bygger på forrige plasstildelingsrunde, er informasjonsarv, ikke plassflyt.
@@ -47,6 +47,20 @@ Egenskap: Plassflyt mellom utdanningskvoter
         | Samisk, Nordland, Troms og Finnmark, Nordnorsk og Ordinær      | Nordland, Troms og Finnmark |
         | Samisk, Nordnorsk og Ordinær                                   | Nordnorsk                   |
         | Samisk og Ordinær                                              | Ordinær                     |
+
+    # AVKLART 2026-10-21 (produkteier): Utdanningstilbudet trenger ikke å ha alle kvotetypene, bare hovedkvoten.
+    # Flytretningen gjelder likevel: kvotene utdanningstilbudet har, følger kjeden mot hovedkvoten.
+    Scenariomal: Flytretningen gjelder selv om utdanningstilbudet ikke har alle kvotene
+      Gitt at standard plassflyt i regelverkssamlingen er "Samisk språkkompetanse (SAM)" til "Nordnorsk (NN)", "Nordnorsk (NN)" til "Førstegangsvitnemål (ORDF)" og "Førstegangsvitnemål (ORDF)" til "Ordinær kvote (ORD)"
+      Og at "Ordinær kvote (ORD)" er hovedkvoten
+      Og at utdanningstilbudet har utdanningskvotene <utdanningskvoter>
+      Når plasstildelingen gjennomføres
+      Så flyter ledige plasser <flyt>
+
+      Eksempler:
+        | utdanningskvoter                                                                                                   | flyt                                                                                                   |
+        | "Samisk språkkompetanse (SAM)", "Nordnorsk (NN)", "Førstegangsvitnemål (ORDF)" og "Ordinær kvote (ORD)"            | fra "Samisk språkkompetanse (SAM)" til "Nordnorsk (NN)", til "Førstegangsvitnemål (ORDF)" og til "Ordinær kvote (ORD)" |
+        | "Nordnorsk (NN)", "Førstegangsvitnemål (ORDF)" og "Ordinær kvote (ORD)"                                            | fra "Nordnorsk (NN)" til "Førstegangsvitnemål (ORDF)" og til "Ordinær kvote (ORD)"                      |
 
   Regel: Overskytende plasser flyter til den utdanningskvoten det er pekt på
 

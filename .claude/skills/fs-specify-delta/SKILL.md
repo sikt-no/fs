@@ -132,6 +132,8 @@ Samme regel som [`fs-specify` → _Filter_](../fs-specify/SKILL.md#filter-bare-k
 
 Endringen avgjør hvilke filer som vurderes. `@deprecated`-krav som ikke er med i endringen, kommer ikke med. Skal de tas inn uten en endring, bruk `fs-specify` på mappa.
 
+**Avhengigheter:** samle `@depends-on-` fra kravene og delene som er med, i etter-tilstanden, som i [`fs-specify` → _Hent kravene_](../fs-specify/SKILL.md#hent-kravene) punkt 5. Kravene det pekes på, kan ligge utenfor endringen. De leses fra arbeidstreet, retagges ikke og står i `## Avhengigheter`. Er et av dem ikke `@planned` eller lenger, si fra før retaggingen. Har endringen lagt til, endret eller fjernet en `@depends-on-`, nevn det under kravet i `## Krav`.
+
 Hvilken tilstand som styrer per diff-status:
 
 - `added` → **etter**-tilstand. En ny fil med bare `@draft` faller utenfor.
@@ -152,6 +154,7 @@ Test-fil-kilde (uten diff): tag-en på fila slik den er.
 - Et krav eller en del som *blir* `@deprecated` i endringen, listes med lenke til før-tilstanden, så det er tydelig hva som var levert.
 - Et krav eller en del som allerede var `@deprecated`, og ligger i en fil som er med i endringen, listes også. Da trengs ingen før-lenke.
 - En `@implemented` fil i endringen passerer bare med sine `@deprecated`-deler, og med `@planned`-/`@in-progress`-deler (se under).
+- En `@in-progress` fil med `@implemented`-deler er delvis levert (*Delvis levert* i `krav/README.md`): de leverte delene er ikke med i scope, som i `fs-specify`.
 
 **Deler i leverte krav som endres** håndteres som i [`fs-specify` → _Deler i leverte krav som endres_](../fs-specify/SKILL.md#deler-i-leverte-krav-som-endres): egenskapen står som `@implemented`, `@planned`/`@in-progress`-deler skal bygges, og `@deprecated`-delen de erstatter, skal fjernes. For diff-kilder gjelder **etter**-tilstanden per del:
 
@@ -249,6 +252,12 @@ Følg [`fs-specify` → _Implementasjonsdetaljer_](../fs-specify/SKILL.md#implem
 
 - **`<feature-fil>` — regel/scenario `<tittel>`** — venter på: <spørsmål fra `# ÅPNE SPØRSMÅL:`>
 
+## Avhengigheter
+
+[Krav utenfor endringen som kravene over bygger på (`@depends-on-`), i etter-tilstanden. Samme format som i [`fs-specify` → _Avhengigheter_](../fs-specify/SKILL.md). Utelat hvis tom.]
+
+- **`@DOM-SUB-KAP-NNN`** `<feature-fil>` — `@<status>`. Brukes av `<feature-fil eller regel>`. ([krav/<sti>.feature](../../../../krav/<sti>.feature))
+
 ## Skisser
 
 [Én underseksjon per skisse, samme felter som i `fs-specify`, eller linja `Ingen skisse: <grunn>`.]
@@ -300,7 +309,7 @@ Minn brukeren på at endringene i `tasks/` og `krav/` ikke er committet.
 - Leser eller sammenligner ikke tidligere `spec-*.md`.
 - Oppretter, endrer eller lukker ikke GitHub-issues.
 - Kjører aldri git-kommandoer som endrer tilstand (`add`, `commit`, `push`, `checkout`, `fetch`, `stash`).
-- Skriver ikke utenfor `<spec>/` og `Egenskap:`-tag-linjene under `krav/`, bortsett fra implementasjonsdetaljene (`<feature-navn>.design.md`), som `fs-implementasjonsdetaljer` skriver, og en minimal `oppgave.md` ved «Ny oppgave». Skriver ikke scope-fila eller `@scope-*`-taggene. Fjerner aldri `@draft` fra en `Regel:`/`Scenario:`.
+- Skriver ikke utenfor `<spec>/` og `Egenskap:`-tag-linjene under `krav/`, bortsett fra implementasjonsdetaljene (`<feature-navn>.design.md`), som `fs-implementasjonsdetaljer` skriver, og en minimal `oppgave.md` ved «Ny oppgave». Skriver ikke scope-fila, `@scope-*`-taggene eller referansetaggene (`@depends-on-`, `@ref-`). Fjerner aldri `@draft` fra en `Regel:`/`Scenario:`.
 
 ## Retningslinjer
 

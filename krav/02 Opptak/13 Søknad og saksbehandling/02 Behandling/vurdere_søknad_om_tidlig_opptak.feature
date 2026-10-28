@@ -51,8 +51,9 @@
 #
 # - Saksbehandleren kan bare konkludere når søkeren selv har søkt om tidlig
 #   opptak. Tilbudsgaranti fra tidligopptaket får bare søkere som har søkt.
-#   Koden sjekker ikke dette i dag (SettTidligopptakKonklusjonService), og må
-#   endres.
+#   (Endret 20.10.2026: det holder at steget er skjult i saksbehandlingen når
+#   søkeren ikke har søkt, se under, og at gjennomføringen bare tar med søkere som
+#   har søkt. Koden trenger ikke avvise en konklusjon i andre saker.)
 # - (Endret 09.10.2026, se under.) Er begrunnelsen ikke dokumentert, registreres
 #   det som en mangel på søknaden, og søkeren får beskjed om den. Etter det
 #   vurderer saksbehandleren fritt om søkeren skal delta i tidligopptaket. Dette
@@ -69,7 +70,7 @@
 #   konklusjonen, f.eks. «KFF – Kan få tidlig opptak, har godkjent grunn».
 #   Erstatter de to stegene fra 07.10, og stemmer med koden og skissen i FS-Admin.
 # - Systemet oppretter ingen mangel. Mangler dokumentasjonen, oppretter
-#   saksbehandleren en vanlig søknadsmangel (søknadsmangler.feature, PR #700), og
+#   saksbehandleren en vanlig søknadsmangel (søknadsmangler.feature, OPT-BEH-BEH-008), og
 #   søkeren får beskjed om den på samme måte som for andre mangler. Erstatter
 #   regelen fra 08.10 om at «ikke dokumentert» registreres som en mangel.
 # - Konklusjonen låses ikke. Saksbehandleren kan sette og endre den også etter
@@ -89,9 +90,9 @@
 # begrunnelse, men vurderer om søkerens begrunnelse er dokumentert, og velger en
 # konklusjon ut fra det.
 # - Feature-ID-en er endret fra @OPT-BEH-BEH-008 til @OPT-BEH-BEH-013, fordi
-#   søknadsmangler.feature (PR #700) også bruker 008 (09.10.2026).
+#   søknadsmangler.feature også bruker 008 (09.10.2026).
 #
-@OPT-BEH-BEH-013 @must @in-progress
+@OPT-BEH-BEH-013 @must @implemented
 Egenskap: Vurdere søknad om tidlig opptak
   Som saksbehandler
   ønsker jeg å vurdere søkerens begrunnelse for tidlig opptak og konkludere om søkeren deltar i tidligopptaket

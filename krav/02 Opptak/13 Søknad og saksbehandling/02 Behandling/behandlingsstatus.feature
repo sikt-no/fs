@@ -1,20 +1,29 @@
 # language: no
 # Jira: STEK-253
-@OPT-BEH-BEH-017 @must @draft
+@OPT-BEH-BEH-029 @must @draft @ref-OPT-BEH-BEH-008 @ref-OPT-BEH-BEH-025 @ref-OPT-PLA-TIL-001
 Egenskap: Behandlingsstatus
   Som saksbehandler ved saksbehandlende organisasjon
   ønsker jeg at hver sak har en behandlingsstatus
-  slik at bare søkere i ferdig behandlede saker er med i tilbudskjøringen, og arbeidet kan følges opp.
+  slik at arbeidet med sakene kan fordeles og følges opp, og bare ferdig behandlede saker er med i plasstildelingen.
 
   Behandlingsstatusen viser hvor langt saksbehandlingen har kommet. En sak har én av tre
-  statuser: «Ikke behandlet», «Under behandling» eller «Behandlet».
+  statuser:
+  - «Ikke behandlet»: ingen har sett på eller gjort noe med saken ennå.
+  - «Under behandling»: noen har sett på eller gjort noe med saken.
+  - «Ferdig behandlet»: saksbehandleren har gjort det som kan gjøres i saken. Saken er enten
+    ferdig, eller venter på ny informasjon fra søkeren.
 
-  Statusen avgjør hvilke søkere som er med i tilbudskjøringen. Bare saker som er «Behandlet»,
-  er med. Statusen viser også saksbehandlerne hvilke saker ingen har begynt på, hvilke som er
-  i arbeid, og hvilke som er ferdige, så arbeidet kan fordeles og følges opp.
+  Behandlingsstatusen er ikke det samme som konklusjonen i saken. En sak kan være ferdig
+  behandlet selv om søkeren ikke er kvalifisert, eller saken har mangler.
+
+  Statusen viser saksbehandlerne hvilke saker ingen har begynt på, hvilke som er i arbeid, og
+  hvilke som er ferdige. Bare saker som er ferdig behandlet, er med i plasstildelingen. Det står
+  i kravet til plasstildelingen. Når den automatiske behandlingen setter saken til ferdig
+  behandlet, står i kravet om å ferdigbehandle en sak.
 
   Behandlingsstatusen erstatter dokumentasjonsstatusen i dagens løsning. Mangelkodene som lå
-  i dokumentasjonsstatusen, er mangler i saken (se @OPT-BEH-BEH-008).
+  i dokumentasjonsstatusen, er mangler i saken. Varselet om mangler som ikke er publisert når
+  saken settes til «Ferdig behandlet», står i kravet til søknadsmangler.
 
   # ÅPNE SPØRSMÅL:
   # - Skal saksbehandleren kunne finne saker på mangelkode, slik som med dokumentasjonsstatusen
@@ -42,51 +51,28 @@ Egenskap: Behandlingsstatus
         | fra              | til              |
         | Ikke behandlet   | Under behandling |
         | Under behandling | Ikke behandlet   |
-        | Behandlet        | Under behandling |
-        | Behandlet        | Ikke behandlet   |
+        | Ferdig behandlet | Under behandling |
+        | Ferdig behandlet | Ikke behandlet   |
 
-  Regel: Saken kan bare bli Behandlet når den har minst én mangel eller ett grunnlag
+  Regel: Saken kan bare bli Ferdig behandlet når den har minst én mangel eller ett grunnlag
 
-    Scenariomal: Sette saken til Behandlet fra <fra> når saken har <innhold>
+    Scenariomal: Sette saken til Ferdig behandlet fra <fra> når saken har <innhold>
       Gitt at saken har behandlingsstatusen "<fra>"
       Og at saken har <innhold>
-      Når saksbehandleren ved Universitetet i Oslo setter saken til "Behandlet"
-      Så har saken behandlingsstatusen "Behandlet"
+      Når saksbehandleren ved Universitetet i Oslo setter saken til "Ferdig behandlet"
+      Så har saken behandlingsstatusen "Ferdig behandlet"
 
       Eksempler:
         | fra              | innhold     |
         | Ikke behandlet   | en mangel   |
         | Under behandling | et grunnlag |
 
-    Scenario: Saken kan ikke bli Behandlet uten mangel eller grunnlag
+    Scenario: Saken kan ikke bli Ferdig behandlet uten mangel eller grunnlag
       Gitt at saken har behandlingsstatusen "Under behandling"
       Og at saken verken har mangler eller grunnlag
-      Når saksbehandleren ved Universitetet i Oslo setter saken til "Behandlet"
+      Når saksbehandleren ved Universitetet i Oslo setter saken til "Ferdig behandlet"
       Så har saken fortsatt behandlingsstatusen "Under behandling"
-      Og saksbehandleren ser at saken må ha minst én mangel eller ett grunnlag for å bli "Behandlet"
-
-  Regel: Mangler som ikke er publisert, publiseres når saken settes til Behandlet
-
-    Scenario: Saksbehandleren blir advart om at manglene blir publisert
-      Gitt at saken har mangelen "KNN" som ikke er publisert
-      Når saksbehandleren ved Universitetet i Oslo setter saken til "Behandlet"
-      Så ser saksbehandleren at mangelen "KNN" blir publisert hvis saken settes til "Behandlet"
-      Og avbryt er valgt som standard
-
-    Scenario: Manglene publiseres når saksbehandleren fortsetter
-      Gitt at saksbehandleren ved Universitetet i Oslo er advart om at mangelen "KNN" blir publisert
-      Når saksbehandleren fortsetter
-      Så har saken behandlingsstatusen "Behandlet"
-      Og søkeren ser mangelen "KNN" i Min kompetanse
-      Og søkeren har mottatt en melding av typen MANGEL
-
-    Scenario: Avbryte for å endre manglene før de publiseres
-      Gitt at saken har behandlingsstatusen "Under behandling"
-      Og at saksbehandleren ved Universitetet i Oslo er advart om at mangelen "KNN" blir publisert
-      Når saksbehandleren avbryter
-      Så har saken fortsatt behandlingsstatusen "Under behandling"
-      Og mangelen "KNN" er ikke publisert
-      Og saksbehandleren kan endre eller slette mangelen "KNN"
+      Og saksbehandleren ser at saken må ha minst én mangel eller ett grunnlag for å bli "Ferdig behandlet"
 
   Regel: Saken blir Under behandling når saksbehandleren endrer vurderingen eller leser et dokument
 
@@ -97,19 +83,19 @@ Egenskap: Behandlingsstatus
       Og saksbehandleren ser at behandlingsstatusen er endret til "Under behandling"
 
       Eksempler:
-        | fra            | handling                  |
-        | Ikke behandlet | registrerer et grunnlag   |
-        | Behandlet      | endrer kvalifiseringen    |
-        | Behandlet      | endrer poengene           |
-        | Behandlet      | endrer kvoteplasseringen  |
-        | Ikke behandlet | registrerer en mangel     |
-        | Ikke behandlet | leser et dokument i saken |
-        | Behandlet      | leser et dokument i saken |
+        | fra              | handling                  |
+        | Ikke behandlet   | registrerer et grunnlag   |
+        | Ferdig behandlet | endrer kvalifiseringen    |
+        | Ferdig behandlet | endrer poengene           |
+        | Ferdig behandlet | endrer kvoteplasseringen  |
+        | Ikke behandlet   | registrerer en mangel     |
+        | Ikke behandlet   | leser et dokument i saken |
+        | Ferdig behandlet | leser et dokument i saken |
 
     Scenariomal: Behandlingsstatusen endres ikke når saksbehandleren <handling>
-      Gitt at saken har behandlingsstatusen "Behandlet"
+      Gitt at saken har behandlingsstatusen "Ferdig behandlet"
       Når saksbehandleren ved Universitetet i Oslo <handling>
-      Så har saken fortsatt behandlingsstatusen "Behandlet"
+      Så har saken fortsatt behandlingsstatusen "Ferdig behandlet"
 
       Eksempler:
         | handling                                   |
@@ -117,56 +103,24 @@ Egenskap: Behandlingsstatus
         | tilordner saken til en annen saksbehandler |
 
     Scenario: Ny dokumentasjon endrer ikke behandlingsstatusen
-      Gitt at saken har behandlingsstatusen "Behandlet"
+      Gitt at saken har behandlingsstatusen "Ferdig behandlet"
       Når det kommer ny dokumentasjon i saken
-      Så har saken fortsatt behandlingsstatusen "Behandlet"
+      Så har saken fortsatt behandlingsstatusen "Ferdig behandlet"
 
-  @openquestion
-  Regel: Den automatiske behandlingen setter saken til Behandlet
-    # ÅPNE SPØRSMÅL:
-    # - Mangelen for generell studiekompetanse som fullføres i vår settes automatisk når søkeren
-    #   sender søknaden (@OPT-BEH-BEH-008). Skal den alene gjøre saken «Behandlet»? I så fall er
-    #   saken ferdig før noen saksbehandler har sett på den.
+  @ref-OPT-BEH-BEH-025
+  Regel: Den automatiske behandlingen endrer ikke en behandlingsstatus saksbehandleren har satt
 
-    Scenariomal: Saken blir Behandlet når den automatiske behandlingen gir <innhold>
-      Gitt at saken har behandlingsstatusen "Ikke behandlet"
-      Når den automatiske behandlingen gir saken <innhold>
-      Så har saken behandlingsstatusen "Behandlet"
-
-      Eksempler:
-        | innhold     |
-        | et grunnlag |
-        | en mangel   |
-
-    Scenario: Saken blir Behandlet selv om ikke alle søknadsalternativene er vurdert automatisk
-      Gitt at saken har behandlingsstatusen "Ikke behandlet"
-      Og at saken har søknadsalternativene "Informatikk, UiO" og "Historie, UiO"
-      Når den automatiske behandlingen gir grunnlag for "Informatikk, UiO", men ikke for "Historie, UiO"
-      Så har saken behandlingsstatusen "Behandlet"
-
-    Scenariomal: Den automatiske behandlingen endrer ikke behandlingsstatusen når saken er <status>
-      Gitt at saken har behandlingsstatusen "<status>"
-      Når den automatiske behandlingen gir saken et grunnlag
+    Scenariomal: Den automatiske behandlingen endrer ikke behandlingsstatusen når saksbehandleren har satt saken til <status>
+      Gitt at saksbehandleren ved Universitetet i Oslo har satt saken til "<status>"
+      Når søknaden behandles automatisk
       Så har saken fortsatt behandlingsstatusen "<status>"
 
       Eksempler:
         | status           |
         | Under behandling |
-        | Behandlet        |
+        | Ferdig behandlet |
 
-  Regel: Bare saker som er Behandlet, er med i tilbudskjøringen
-
-    Scenariomal: Sak som er <status>, i tilbudskjøringen
-      Gitt at saken har behandlingsstatusen "<status>"
-      Når tilbudskjøringen kjøres
-      Så <resultat> i tilbudskjøringen for søknadsalternativene i saken
-
-      Eksempler:
-        | status           | resultat            |
-        | Behandlet        | deltar søkeren      |
-        | Under behandling | deltar ikke søkeren |
-        | Ikke behandlet   | deltar ikke søkeren |
-
+  @ref-OPT-BEH-BEH-016
   Regel: Saksloggen viser endringene i behandlingsstatusen
 
     Scenariomal: Saksloggen viser endring av behandlingsstatus når <årsak>
@@ -179,4 +133,4 @@ Egenskap: Behandlingsstatus
         | hendelse                                                                     | til              | årsak                                   |
         | saksbehandleren ved Universitetet i Oslo setter saken til "Under behandling" | Under behandling | saksbehandleren endret statusen         |
         | saksbehandleren ved Universitetet i Oslo leser et dokument i saken           | Under behandling | saksbehandleren leste et dokument       |
-        | den automatiske behandlingen gir saken et grunnlag                           | Behandlet        | den automatiske behandlingen var ferdig |
+        | den automatiske behandlingen setter saken til ferdig behandlet               | Ferdig behandlet | den automatiske behandlingen var ferdig |

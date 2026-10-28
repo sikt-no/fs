@@ -8,7 +8,8 @@ const isStatus = (t: string) => (STATUSES as readonly string[]).includes(t.slice
 const PRIORITIES = ['@must', '@should', '@could', '@wont'];
 // Tre bokstaver per ledd, men README tillater unntak for lesbarhet (f.eks. @TEK-BRU-UI-001)
 const FEATURE_ID = /^@[A-ZÆØÅ]{2,4}-[A-ZÆØÅ]{2,4}-[A-ZÆØÅ]{2,4}-\d{3}$/;
-const SNAKE_CASE = /^[a-zæøå0-9]+(_[a-zæøå0-9]+)*\.feature$/;
+const REF_PREFIXES = ['@depends-on-', '@ref-'];
+const SNAKE_CASE =/^[a-zæøå0-9]+(_[a-zæøå0-9]+)*\.feature$/;
 const STEP_RANK: Record<string, number> = { Context: 0, Action: 1, Outcome: 2 };
 
 // Nøkkelordene som innleder en blokk, og det norske nøkkelordet vi foreslår for hver type
@@ -321,10 +322,18 @@ export function parseFeature(source: string, path?: string): FeatureModel {
   if (!/^\s*#\s*language:\s*no\s*$/.test(firstLine)) push('missing-language', 'Fila starter ikke med «# language: no»', 1);
   if (path?.startsWith('krav/')) {
     const seg = path.split('/');
-    if (seg.length !== 5) push('wrong-level', 'Fila ligger ikke på kapabilitetsnivå (krav/Domene/Sub-domene/Kapabilitet/)', 1);
+    // Flyter har ett nivå under _Flyter: krav/_Flyter/Prosess/flyt.feature
+    const flyt = seg[1] === '_Flyter';
+    if (flyt && seg.length !== 4) push('wrong-level', 'Flyten ligger ikke rett under en prosess (krav/_Flyter/Prosess/)', 1);
+    else if (!flyt && seg.length !== 5) push('wrong-level', 'Fila ligger ikke på kapabilitetsnivå (krav/Domene/Sub-domene/Kapabilitet/)', 1);
     if (!SNAKE_CASE.test(seg[seg.length - 1])) push('not-snake-case', `Filnavnet «${seg[seg.length - 1]}» er ikke i snake_case`, 1);
-    // _Interne prosesser og 99 Demo følger ikke nummereringen
-    if (seg.length === 5 && !/^(_|99 )/.test(seg[1])) {
+    if (flyt && seg.length === 4) {
+      const n = seg[2].match(/^(\d+) /);
+      if (!n) push('folder-numbering', `Prosessen «${seg[2]}» mangler nummer (fra 10)`, 1);
+      else if (+n[1] < 10) push('folder-numbering', `Prosessen «${seg[2]}» er nummerert under 10`, 1);
+    }
+    // 99 Demo følger ikke nummereringen
+    if (seg.length === 5 && !/^99 /.test(seg[1])) {
       const [sub, kap] = [seg[2], seg[3]];
       const n = sub.match(/^(\d+) /);
       if (!n) push('folder-numbering', `Sub-domenet «${sub}» mangler nummer (fra 10)`, 1);
@@ -376,18 +385,42 @@ export function parseFeature(source: string, path?: string): FeatureModel {
     return sc;
   };
   scopeTags('Egenskap', ftags, f.location.line);
+  // Referanser: @depends-on-<Feature-ID> og @ref-<Feature-ID>. At ID-en finnes, og at @depends-on- ikke
+  // går i ring, krever flere filer og sjekkes av fs-krav-avvik.
+  const refTags = (what: string, tags: string[], ln: number) => {
+    const kinds = new Map<string, string>();
+    for (const [i, t] of tags.entries()) {
+      const prefix = REF_PREFIXES.find(p => t.startsWith(p) || t === p.slice(0, -1));
+      if (!prefix) continue;
+      const target = '@' + t.slice(prefix.length);
+      if (!FEATURE_ID.test(target)) {
+        push('ref-format', `«${t}» er ikke en gyldig referanse — bruk ${prefix}<Feature-ID>, for eksempel ${prefix}OPT-BEH-BEH-011`, ln);
+        continue;
+      }
+      if (ids.includes(target)) push('ref-self', `${what} refererer til sitt eget krav (${t})`, ln);
+      if (tags.indexOf(t) < i) push('ref-duplicate', `${what} har referansen ${t} to ganger`, ln);
+      else if (kinds.has(target) && kinds.get(target) !== prefix)
+        push('ref-both-types', `${what} har både @depends-on- og @ref- til ${target} — @depends-on- er allerede en referanse`, ln);
+      kinds.set(target, prefix);
+    }
+  };
+  refTags('Egenskap', ftags, f.location.line);
   const fstatus = statusOf(ftags);
   const fdraft = fstatus === 'draft';
   let partialDraft = false;
   let partialChange = false;
   const hasQ = (notes: Note[]) => notes.some(n => n.kind === 'question');
-  const checkPart = (what: string, tags: string[], ln: number, questions: boolean) => {
+  const checkPart = (what: string, tags: string[], ln: number, questions: boolean, ruleTags: string[] = []) => {
     for (const t of tags.filter(t => isStatus(t) && t !== '@draft' && t !== '@deprecated')) {
-      if (t === '@implemented') push('status-on-part', `@implemented på ${what} — en levert del har ingen egen status, den arver @implemented fra Egenskap`, ln);
-      else if (fstatus !== 'implemented') push('status-on-part', `${t} på ${what} — @planned og @in-progress er bare lov på deler under en @implemented egenskap`, ln);
+      if (t === '@implemented') {
+        // Delvis levert: egenskapen er @in-progress, og delen som er levert, er @implemented
+        if (fstatus === 'implemented') push('status-on-part', `@implemented på ${what} — en levert del under en @implemented egenskap har ingen egen status, den arver @implemented fra Egenskap`, ln);
+        else if (fstatus !== 'in-progress') push('status-on-part', `@implemented på ${what} — en levert del er bare lov under en @in-progress egenskap (delvis levert)`, ln);
+        else if (ruleTags.includes('@implemented')) push('status-on-part', `@implemented på ${what} er overflødig når regelen er @implemented`, ln);
+      } else if (fstatus !== 'implemented') push('status-on-part', `${t} på ${what} — @planned og @in-progress er bare lov på deler under en @implemented egenskap`, ln);
       else partialChange = true;
     }
-    const pst = tags.filter(t => isStatus(t) && t !== '@implemented');
+    const pst = tags.filter(isStatus);
     if (pst.length > 1 && !(pst.length === 2 && pst.includes('@draft') && pst.includes('@deprecated')))
       push('part-multiple-statuses', `${what} har flere statustagger: ${pst.join(' ')}`, ln);
     if (tags.includes('@deprecated')) {
@@ -403,6 +436,7 @@ export function parseFeature(source: string, path?: string): FeatureModel {
       }
     }
     if (tags.includes('@openquestion') && !questions) push('openquestion-without-comment', `@openquestion på ${what} uten «# ÅPNE SPØRSMÅL:»-kommentar`, ln);
+    refTags(what, tags, ln);
     if (scopeTags(what, tags, ln).length && fstatus !== 'implemented')
       push('scope-part', `@scope-* på ${what} under en ${fstatus ? '@' + fstatus : 'egenskap uten status'} — scope settes på Egenskap. På en del bare under en @implemented egenskap, for en del som endres`, ln);
   };
@@ -411,7 +445,7 @@ export function parseFeature(source: string, path?: string): FeatureModel {
     if (r.name !== null) checkPart('Regel', r.tags, r.ln, hasQ(r.notes) || r.scenarios.some(scenQ));
     for (const sc of r.scenarios) {
       if (sc.kind === 'Bakgrunn') continue;
-      checkPart(sc.kind, sc.tags, sc.ln, scenQ(sc));
+      checkPart(sc.kind, sc.tags, sc.ln, scenQ(sc), r.tags);
       // Og/Men arver typen til steget før, og teller ikke
       let rank = -1;
       for (const st of rawSteps.get(sc) ?? []) {

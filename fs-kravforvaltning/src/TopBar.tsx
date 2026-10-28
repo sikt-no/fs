@@ -1,7 +1,12 @@
+import { useEffect, useRef, useState } from 'preact/hooks';
 import { vscodeUrl } from './vscode';
 
 export type Theme = 'light' | 'dark';
-export type Mode = 'krav' | 'avvik' | 'oppgaver';
+export type Mode = 'krav' | 'avvik' | 'oppgaver' | 'flyter';
+/** Visningene som kan vises i menyen (designet «Menyvalg»). Krav og Flyter er alltid med, Avvik og Oppgaver er skjult til de velges */
+export type Optional = 'avvik' | 'oppgaver';
+export type MenuShow = Record<Optional, boolean>;
+export const MENU_DEFAULT: MenuShow = { avvik: false, oppgaver: false };
 
 interface Props {
   path: string;
@@ -22,6 +27,13 @@ interface Props {
   nActive: number;
   /** Brødsmulen i Oppgaver-modus */
   oCrumbs: string[];
+  /** Flyten som er valgt i Flyter, `null` på startsiden */
+  flowPath: string | null;
+  /** Antall flyter i krav/_Flyter, vist på Flyter-knappen */
+  nFlows: number;
+  /** Hvilke av Avvik og Oppgaver som vises i menyen, og tannhjulet som endrer det */
+  menu: MenuShow;
+  onMenu: (m: MenuShow) => void;
   /** Claude-panelet: `null` når Claude Code ikke er tilgjengelig, ellers om panelet er åpent */
   claude: boolean | null;
   onClaude: () => void;
@@ -37,12 +49,13 @@ interface Props {
   repoRoot: string | null;
 }
 
-export function TopBar({ path, connected, theme, onTheme, treeHidden, onToggleTree, tocHidden, onToggleToc, onHome, mode, onMode, nBad, nActive, oCrumbs, specState, claude, onClaude, onUpdate, pulling, appUpdate, repoRoot }: Props) {
-  const parts = mode === 'avvik' ? ['krav', '#/avvik'] : mode === 'oppgaver' ? oCrumbs : path ? path.split('/') : [];
+export function TopBar({ path, connected, theme, onTheme, treeHidden, onToggleTree, tocHidden, onToggleToc, onHome, mode, onMode, nBad, nActive, oCrumbs, flowPath, nFlows, menu, onMenu, specState, claude, onClaude, onUpdate, pulling, appUpdate, repoRoot }: Props) {
+  const parts =
+    mode === 'avvik' ? ['krav', '#/avvik'] : mode === 'oppgaver' ? oCrumbs : mode === 'flyter' ? (flowPath ? flowPath.split('/') : ['krav', '#/flyter']) : path ? path.split('/') : [];
   return (
     <header class="topbar">
-      {/* Venstrepanelet: filtreet i Krav, mappene med avvik i Avvik */}
-      {(mode === 'krav' || mode === 'avvik') && (
+      {/* Venstrepanelet: filtreet i Krav, mappene med avvik i Avvik, flytene i Flyter */}
+      {mode !== 'oppgaver' && (
         <button
           class="treebtn"
           title={treeHidden ? 'Vis filtre' : 'Skjul filtre'}
@@ -58,13 +71,21 @@ export function TopBar({ path, connected, theme, onTheme, treeHidden, onToggleTr
       </button>
       <div class="seg modeseg" role="group" aria-label="Visning">
         <button aria-pressed={mode === 'krav'} onClick={() => onMode('krav')}>Krav</button>
-        <button aria-pressed={mode === 'avvik'} onClick={() => onMode('avvik')} title={`${nBad} filer med avvik fra konvensjonene`}>
-          Avvik{nBad > 0 && <span class="badge">{nBad}</span>}
-        </button>
-        <button aria-pressed={mode === 'oppgaver'} onClick={() => onMode('oppgaver')} title={`${nActive} oppgaver i tasks/ som ikke er verifisert`}>
-          Oppgaver<span class="badge neutral">{nActive}</span>
+        {menu.avvik && (
+          <button aria-pressed={mode === 'avvik'} onClick={() => onMode('avvik')} title={`${nBad} filer med avvik fra konvensjonene`}>
+            Avvik{nBad > 0 && <span class="badge">{nBad}</span>}
+          </button>
+        )}
+        {menu.oppgaver && (
+          <button aria-pressed={mode === 'oppgaver'} onClick={() => onMode('oppgaver')} title={`${nActive} oppgaver i tasks/ som ikke er verifisert`}>
+            Oppgaver<span class="badge neutral">{nActive}</span>
+          </button>
+        )}
+        <button aria-pressed={mode === 'flyter'} onClick={() => onMode('flyter')} title={`${nFlows} flyter i krav/_Flyter`}>
+          Flyter<span class="badge neutral">{nFlows}</span>
         </button>
       </div>
+      <MenuGear menu={menu} onMenu={onMenu} />
       <nav class="crumbs" aria-label="Sti">
         {parts.map((p, i) => (
           <span key={i} style={{ display: 'flex', gap: '6px' }}>
@@ -131,7 +152,7 @@ export function TopBar({ path, connected, theme, onTheme, treeHidden, onToggleTr
             VS Code
           </a>
         )}
-        {mode === 'krav' && (
+        {(mode === 'krav' || mode === 'flyter') && (
           <button
             class="tocbtn"
             title={tocHidden ? 'Vis innhold' : 'Skjul innhold'}
@@ -163,5 +184,61 @@ export function TopBar({ path, connected, theme, onTheme, treeHidden, onToggleTr
         </div>
       </div>
     </header>
+  );
+}
+
+const MENU_ITEMS: { key: Mode; label: string; locked?: boolean }[] = [
+  { key: 'krav', label: 'Krav', locked: true },
+  { key: 'avvik', label: 'Avvik' },
+  { key: 'oppgaver', label: 'Oppgaver' },
+  { key: 'flyter', label: 'Flyter', locked: true },
+];
+
+/** Tannhjulet rett etter menyen: velg hvilke visninger som vises. Lukkes med klikk utenfor eller Esc */
+function MenuGear({ menu, onMenu }: { menu: MenuShow; onMenu: (m: MenuShow) => void }) {
+  const [open, setOpen] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    if (!open) return;
+    const down = (e: MouseEvent) => !ref.current?.contains(e.target as Node) && setOpen(false);
+    const key = (e: KeyboardEvent) => e.key === 'Escape' && setOpen(false);
+    addEventListener('mousedown', down);
+    addEventListener('keydown', key);
+    return () => {
+      removeEventListener('mousedown', down);
+      removeEventListener('keydown', key);
+    };
+  }, [open]);
+  return (
+    <div class="menugear" ref={ref}>
+      <button class="gearbtn" title="Velg hva som vises i menyen" aria-label="Velg hva som vises i menyen" aria-expanded={open} onClick={() => setOpen(o => !o)}>
+        ⚙︎
+      </button>
+      {open && (
+        <div class="menupop" role="menu" aria-label="Vis i menyen">
+          <div class="menupop-head">VIS I MENYEN</div>
+          <div class="menupop-items">
+            {MENU_ITEMS.map(i => {
+              const on = i.locked || menu[i.key as Optional];
+              return (
+                <button
+                  key={i.key}
+                  role="menuitemcheckbox"
+                  aria-checked={on}
+                  disabled={i.locked}
+                  class={i.locked ? 'locked' : ''}
+                  onClick={() => !i.locked && onMenu({ ...menu, [i.key]: !menu[i.key as Optional] })}
+                >
+                  <span class={'box' + (on ? ' on' : '')}>{on ? '✓' : ''}</span>
+                  <span class="label">{i.label}</span>
+                  {i.locked && <span class="always">alltid</span>}
+                </button>
+              );
+            })}
+          </div>
+          <div class="menupop-foot">Lagres på denne maskinen.</div>
+        </div>
+      )}
+    </div>
   );
 }

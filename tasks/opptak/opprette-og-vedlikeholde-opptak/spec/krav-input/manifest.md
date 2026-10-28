@@ -14,6 +14,12 @@
 | `krav/02 Opptak/11 Opprette og vedlikeholde opptak/03 Innstillinger/innstillinger.feature` | `@OPT-OVO-INN-001` | `@planned` |
 | `krav/02 Opptak/11 Opprette og vedlikeholde opptak/04 Frister/frister_og_hendelser.feature` | `@OPT-OVO-FRI-001` | `@planned` |
 
+## Deler i leverte krav (hentet 2026-10-19 20:36, HEAD `ca7515f`)
+
+| Fil | Feature-ID | Del | Status ved henting |
+|-----|------------|-----|--------------------|
+| `krav/02 Opptak/11 Opprette og vedlikeholde opptak/01 Grunnoppsett/opprett_opptak.feature` | `@OPT-OVO-GRU-001` (`@implemented`) | Regel: Utdanningsbakgrunner, poenglikhetsregel, maks antall søknadsalternativer og tak for tilbud per tildelingsrunde må være satt for å lagre et opptak | `@planned` → `@in-progress` |
+
 ## Filtrert bort (3 stk, `@draft`)
 
 | Fil | Feature-ID | Grunn |

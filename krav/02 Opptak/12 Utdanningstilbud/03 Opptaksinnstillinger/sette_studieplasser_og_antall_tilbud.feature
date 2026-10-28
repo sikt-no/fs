@@ -35,6 +35,38 @@ Egenskap: Sette antall studieplasser per utdanningstilbud
       Når opptaksforvalter setter tak for ja-svar til 220 for utdanningstilbudet "Sykepleie, høst 2027"
       Så gir ikke plasstildelingen nye tilbud når 220 søkere har svart ja
 
+  Regel: Deltakende organisasjoner kan endre antall studieplasser til første plasstildelingsrunde er publisert
+    # Virkningen av når redigering av utdanningstilbud stenger, som opptaksforvalter setter i
+    # 11 Opprette og vedlikeholde opptak/04 Frister/frister_og_hendelser.feature.
+    # Lagt til 2026-10-19 etter akseptansetesten av opprette og vedlikeholde opptak.
+    # AVKLART 2026-10-15 (Q4, Q5 og Q13, TAKE-410): Antall studieplasser er unntatt fra fristen for redigering
+    # av utdanningstilbud, og kan endres til første plasstildelingsrunde er publisert. Plasstildelinger som bare
+    # er kjørt for kontroll, låser det ikke.
+
+    Scenario: Endre antall studieplasser etter at redigering av utdanningstilbud har stengt
+      Gitt at redigering av utdanningstilbud i opptaket har stengt
+      Og at ingen plasstildelingsrunde i opptaket er publisert
+      Når opptaksforvalter ved deltakende organisasjon setter antall studieplasser til 180 for utdanningstilbudet "Sykepleie, høst 2027"
+      Så har utdanningstilbudet 180 studieplasser
+
+    Scenario: Endre antall studieplasser etter en plasstildeling som bare er kjørt for kontroll
+      Gitt at en plasstildeling i opptaket er kjørt for kontroll, men ikke publisert
+      Når opptaksforvalter setter antall studieplasser til 180 for utdanningstilbudet "Sykepleie, høst 2027"
+      Så har utdanningstilbudet 180 studieplasser
+
+    Scenario: Deltakende organisasjon kan ikke endre antall studieplasser etter at første plasstildelingsrunde er publisert
+      Gitt at første plasstildelingsrunde i opptaket er publisert
+      Når opptaksforvalter ved deltakende organisasjon vil endre antall studieplasser for utdanningstilbudet "Sykepleie, høst 2027"
+      Så kan opptaksforvalter ved deltakende organisasjon ikke endre antall studieplasser for utdanningstilbudet "Sykepleie, høst 2027"
+
+    # AVKLART 2026-10-19 (produkteier): Låsen gjelder ikke opptaksforvalter ved forvaltende organisasjon, foreløpig.
+    # På sikt bør antall studieplasser komme fra antall plasser som er registrert på kullet i SIS, men det er en
+    # standardisering vi ikke er klare for ennå.
+    Scenario: Forvaltende organisasjon kan endre antall studieplasser etter at første plasstildelingsrunde er publisert
+      Gitt at første plasstildelingsrunde i opptaket er publisert
+      Når opptaksforvalter ved forvaltende organisasjon setter antall studieplasser til 180 for utdanningstilbudet "Sykepleie, høst 2027"
+      Så har utdanningstilbudet "Sykepleie, høst 2027" 180 studieplasser
+
 # ÅPNE SPØRSMÅL:
 # - #398 nevner «kapasitet, tilbud som skal gis, tak for ja-svar +++». Hvilke andre tilleggsdata trengs?
 # - Må antall studieplasser være satt før søknadsåpning?

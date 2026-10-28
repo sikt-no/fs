@@ -24,3 +24,14 @@ Egenskap: Overstyre regler for poenglikhet på utdanningstilbudet
     Scenario: Kun regler tilgjengelige for opptaket kan velges
       Når opptaksforvalter overstyrer regelen for poenglikhet
       Så kan kun regler som er angitt som tilgjengelige for opptaket velges
+
+  Regel: Utdanningstilbudet kan ikke overstyre poenglikhetsregelen når opptaket ikke åpner for unntak
+    # Virkningen av standard poenglikhetsregel uten mulighet for unntak, som opptaksforvalter setter i
+    # 11 Opprette og vedlikeholde opptak/03 Innstillinger/innstillinger.feature.
+    # Lagt til 2026-10-19 etter akseptansetesten av opprette og vedlikeholde opptak.
+
+    Scenario: Kan ikke overstyre regel for poenglikhet når opptaket ikke åpner for unntak
+      Gitt at opptaket har standardregelen "rangering etter alder" for poenglikhet uten mulighet for unntak
+      Når opptaksforvalter vil overstyre regelen for poenglikhet på utdanningstilbudet
+      Så kan opptaksforvalter ikke overstyre regelen for poenglikhet
+      Og utdanningstilbudet bruker "rangering etter alder" ved poenglikhet

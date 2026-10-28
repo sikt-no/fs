@@ -77,7 +77,7 @@
 #   ikke tilbyr tidlig opptak (se_svar_på_tidlig_opptak.feature). Det er ingen
 #   egen regel for det.
 #
-@OPT-SØK-SØK-011 @must @in-progress
+@OPT-SØK-SØK-011 @must @implemented
 Egenskap: Søke om tidlig opptak
   Som søker
   ønsker jeg å søke om tidlig opptak med en begrunnelse
@@ -107,7 +107,9 @@ Egenskap: Søke om tidlig opptak
       Når søkeren fyller ut søknaden
       Så ser ikke søkeren muligheten til å søke om tidlig opptak
 
+  @depends-on-OPT-OVO-INN-001 @depends-on-OPT-OPT-UTD-004
   Regel: Søkeren kan søke om tidlig opptak når opptaket tilbyr det
+    # Tidlig opptak må være slått på både på opptaket og på utdanningstilbudet.
 
     Scenario: Søke om tidlig opptak med en begrunnelse
       Gitt "Sykepleie, høst 2027" tilbyr tidlig opptak
@@ -149,18 +151,28 @@ Egenskap: Søke om tidlig opptak
       Og søkeren ser hva som må dokumenteres for hver av begrunnelsene
       Og søkeren kan ikke velge "Gammel begrunnelse"
 
+    @draft @openquestion
     Scenario: Se når søkeren søkte om tidlig opptak
+      # ÅPNE SPØRSMÅL:
+      # - Når skal dette bygges? Det er en fin utvidelse, men ikke prioritert nå (2026-10-26).
+      #   Søknaden lagrer ikke når søkeren søkte, bare begrunnelsen. Søkeren ser tidspunktet
+      #   i kvitteringen i Mine meldinger.
       Gitt søkeren søkte om tidlig opptak med begrunnelsen "Fullført fagskole" "2027-01-15"
       Når søkeren ser på søknaden
       Så ser søkeren at søknaden om tidlig opptak ble sendt "2027-01-15"
 
   Regel: Tidlig opptak kan bare søkes innen søknadsfristen for tidlig opptak
+    # Virkningen av søknadsfristen for tidlig opptak som opptaksforvalter setter i
+    # 11 Opprette og vedlikeholde opptak/04 Frister/frister_og_hendelser.feature.
+    # Regelen «Søknad etter fristen for tidlig opptak behandles i det ordinære opptaket»
+    # (lagt til 2026-10-19 etter akseptansetesten av opprette og vedlikeholde opptak) er
+    # fjernet 2026-10-21, fordi den overlappet med denne regelen.
 
     Scenario: Kan ikke søke om tidlig opptak etter fristen
       Gitt søknadsfristen for tidlig opptak er "2027-03-01 23:59"
-      Når søkeren prøver å søke om tidlig opptak "2027-03-02"
-      Så har ikke søkeren søkt om tidlig opptak
-      Og søkeren ser at fristen for å søke om tidlig opptak er ute
+      Og søkeren har ikke søkt om tidlig opptak
+      Når søkeren ser på søknaden "2027-03-02"
+      Så kan ikke søkeren søke om tidlig opptak
 
   Regel: Søknaden om tidlig opptak gjelder hele søknaden
 
@@ -168,3 +180,17 @@ Egenskap: Søke om tidlig opptak
       Gitt søkeren har søkt om tidlig opptak med begrunnelsen "Fullført videregående opplæring"
       Når søkeren legger til søknadsalternativet "Vernepleie, høst 2027"
       Så har søkeren fortsatt søkt om tidlig opptak med begrunnelsen "Fullført videregående opplæring"
+
+  @draft
+  Regel: Søkeren ser dokumentasjonsfristen for tidlig opptak
+    # Virkningen av dokumentasjonsfristen for tidlig opptak som opptaksforvalter setter i
+    # 11 Opprette og vedlikeholde opptak/04 Frister/frister_og_hendelser.feature.
+    # Lagt til 2026-10-19 etter akseptansetesten av opprette og vedlikeholde opptak.
+    # AVKLART 2026-10-15 (Q11, TAKE-408): Fristen settes på opptaket, og det er den søkerne ser. Koden har to
+    # koder for fristen i dag (fs-admin setter FRIST_TIDLIGOPPTAK_OPPLASTING, Min kompetanse leser
+    # FRIST_TIDLIG_OPPLASTING), og skal ha én.
+
+    Scenario: Se dokumentasjonsfristen for tidlig opptak
+      Gitt dokumentasjonsfristen for tidlig opptak i opptaket "Samordna opptak 2027" er "2027-03-01 23:59"
+      Når søkeren skal søke om tidlig opptak
+      Så ser søkeren at dokumentasjonen for tidlig opptak skal være lastet opp innen "2027-03-01 23:59"

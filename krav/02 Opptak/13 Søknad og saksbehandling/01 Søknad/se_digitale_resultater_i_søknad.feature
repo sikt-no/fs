@@ -31,12 +31,29 @@
 #   struktur og rekkefølge som @OPT-BEH-BEH-005 på saksbehandlersiden — de to
 #   ble besluttet uavhengig og landet likt.
 #
-# Avklart 2026-01-10 — raffinering med utviklere (se Confluence):
+# Avklart 01.10.2026 — raffinering med utviklere (se Confluence):
 # - Regelen «Det fremgår når grunnlaget er ufullstendig» utgår. Kompetanse-
 #   subgrafen har en rad som viser hvilke resultater som finnes, uavhengig av
 #   om kilden kan nås der og da. Søkeren varsles derfor aldri om delvis eller
 #   mislykket henting — mangler et resultat, forblir det tomt, og søkeren får
 #   en generell forklaring (se .design.md). Scenarioene under utgår med den.
+#
+# Avklart 14.10.2026 — hvor søkeren ser resultatene:
+# - Resultatene vises i steget «Dokumentasjon» i søknaden (steg 3 i
+#   Figma-skissen «Konsept dokumentopplastning», node 3920:14210), før søkeren
+#   blir bedt om å laste opp noe. Seksjonstittel og plassering i steget hører
+#   i .design.md. Steget heter «Dokumentasjon» som i min-kompetanse; skissen
+#   kaller det «Last opp dokumentasjon», som er overskriften på opplastingen.
+# - Steget «søkeren blir ikke bedt om å laste opp» utgår. Det er dekket av at
+#   søkeren ser at dokumentasjonen er hentet automatisk, og hva søkeren må
+#   laste opp, eies av @OPT-SØK-SØK-003 (#572).
+# - For videregående vitnemål ser søkeren hvilken kompetanse vitnemålet gir,
+#   for eksempel generell studiekompetanse eller yrkeskompetanse, ikke bare om
+#   det gir generell studiekompetanse.
+# - Finnes et resultat, men detaljene ikke kunne hentes, ser søkeren det som
+#   er kjent, uten beskjed om at noe mangler (som beslutningen 01.10.2026 om
+#   at søkeren aldri varsles om delvis henting). Søkeren skal ikke laste opp
+#   resultatet. Figma: rammen «Frame 1000002327».
 #
 # BEGREPSBRUK
 #
@@ -52,7 +69,7 @@
 # UI-detaljer. Ordlyd, plassering, ikoner og hvordan seksjoner utvides hører i
 # se_digitale_resultater_i_søknad.design.md, jf. fs-implementasjonsdetaljer.
 #
-@OPT-SØK-SØK-004 @must @planned @scope-digitale-resultater-i-soknad
+@OPT-SØK-SØK-004 @must @in-progress @scope-digitale-resultater-i-soknad
 Egenskap: Se digitale resultater i søknaden
   Som søker
   ønsker jeg å se hvilke digitale resultater systemet allerede har om meg
@@ -65,27 +82,27 @@ Egenskap: Se digitale resultater i søknaden
     Gitt at søkeren er innlogget på personflaten
     Og søkeren har startet en søknad på et opptak
 
-  Regel: Søkeren ser de digitale resultatene i søknaden
+  Regel: Søkeren ser de digitale resultatene i steget «Dokumentasjon»
 
     Scenario: Se at dokumentasjonen er hentet automatisk
       Gitt at søkeren har digitale resultater
-      Når søkeren kommer til dokumentasjonssteget i søknaden
+      Når søkeren kommer til steget «Dokumentasjon» i søknaden
       Så ser søkeren at systemet har hentet dokumentasjon automatisk
-      Og søkeren blir ikke bedt om å laste den opp
+      Og resultatene vises før opplastingen av dokumentasjon
       Og søkeren får vite at saksbehandleren ser dokumentasjonen når søknaden behandles
       # AVKLART 25.09.2026: siste ledd er nytt. Søkeren skal vite at det hen
       # ser her er det samme saksbehandleren får se — det er en opplysning om
       # innsyn, ikke en UI-detalj. Speiler @OPT-BEH-BEH-005.
 
     Scenario: Resultatene vises gruppert på nivå
-      Gitt at søkeren har resultater fra flere utdanningsnivåer
-      Når søkeren kommer til dokumentasjonssteget i søknaden
+      Gitt at søkeren har resultater fra videregående opplæring og høyere utdanning
+      Når søkeren kommer til steget «Dokumentasjon» i søknaden
       Så ser søkeren resultatene gruppert på utdanningsnivå
       Og videregående opplæring vises før høyere utdanning
 
     Scenario: Se opplysninger om et resultat
       Gitt at søkeren har et vitnemål
-      Når søkeren kommer til dokumentasjonssteget i søknaden
+      Når søkeren kommer til steget «Dokumentasjon» i søknaden
       Så ser søkeren vitnemålet med følgende opplysninger
         | felt            |
         | Tittel          |
@@ -94,32 +111,57 @@ Egenskap: Se digitale resultater i søknaden
 
     Scenariomal: Se tilleggsopplysning for et resultat fra <nivå>
       Gitt at søkeren har et vitnemål fra <nivå>
-      Når søkeren kommer til dokumentasjonssteget i søknaden
-      Så ser søkeren i tillegg <tilleggsopplysning>
+      Når søkeren kommer til steget «Dokumentasjon» i søknaden
+      Så ser søkeren <tilleggsopplysning>
 
       Eksempler:
-        | nivå                   | tilleggsopplysning         |
-        | videregående opplæring | om vitnemålet gir generell studiekompetanse |
-        | høyere utdanning       | hvilken grad vitnemålet gir |
+        | nivå                   | tilleggsopplysning                 |
+        | videregående opplæring | hvilken kompetanse vitnemålet gir  |
+        | høyere utdanning       | hvilken grad vitnemålet gir        |
+
+    @draft @openquestion
+    Scenario: Se et resultat der bare utstederen er kjent
+      # ÅPNE SPØRSMÅL:
+      # - Hvilke opplysninger vet vi alltid om et resultat: utsteder og
+      #   utdanningsnivå, eller mer?
+      Gitt at søkeren har et digitalt resultat fra høyere utdanning der bare utstederen er kjent
+      Når søkeren kommer til steget «Dokumentasjon» i søknaden
+      Så ser søkeren utstederen av resultatet under høyere utdanning
+      Og søkeren ser at resultatet er hentet automatisk
+      Men søkeren får ikke beskjed om at opplysninger om resultatet mangler
 
     Scenario: Se at et resultat er hentet automatisk
       Gitt at søkeren har et digitalt resultat
-      Når søkeren kommer til dokumentasjonssteget i søknaden
+      Når søkeren kommer til steget «Dokumentasjon» i søknaden
       Så ser søkeren at resultatet er hentet automatisk
       # Merkelappen sier hvordan resultatet kom inn, ikke hvor det kom fra.
       # Søkeren trenger å vite at hen ikke må laste det opp selv; hvilken
       # kilde det stammer fra er ikke søkerens sak.
 
+    Scenario: Andre resultater er lukket som standard
+      Gitt at søkeren har resultater som verken er vitnemål eller grad
+      Når søkeren kommer til steget «Dokumentasjon» i søknaden
+      Så ser søkeren at det finnes andre resultater
+      Men de andre resultatene vises ikke før søkeren velger å se dem
+      # Lukket fordi de sjelden er avgjørende for søkeren.
+
     Scenario: Se andre resultater
       Gitt at søkeren har resultater som verken er vitnemål eller grad
+      Og søkeren er i steget «Dokumentasjon» i søknaden
       Når søkeren velger å se andre resultater
-      Så ser søkeren de øvrige resultatene
-      # «Andre resultater» samler enkeltemner og øvrig dokumentasjon, og er
-      # lukket som standard fordi de sjelden er avgjørende for søkeren.
+      Så ser søkeren enkeltemnene og den øvrige dokumentasjonen
+      # «Andre resultater» samler enkeltemner og øvrig dokumentasjon.
+
+    Scenario: Andre resultater vises ikke uten andre resultater
+      Gitt at søkeren bare har resultater som er vitnemål eller grad
+      Når søkeren kommer til steget «Dokumentasjon» i søknaden
+      Så vises ikke andre resultater i steget
+      # Avklart 15.10.2026: ingen tom seksjon. Har søkeren ingen andre
+      # resultater, finnes ikke «Andre resultater» i steget.
 
     Scenariomal: Samme forklaring vises uansett årsak til manglende resultater
       Gitt at <årsak>
-      Når søkeren kommer til dokumentasjonssteget i søknaden
+      Når søkeren kommer til steget «Dokumentasjon» i søknaden
       Så ser søkeren én samlet forklaring på at systemet ikke har digitale resultater om hen
       Og søkeren får vite at all dokumentasjon må lastes opp manuelt
 

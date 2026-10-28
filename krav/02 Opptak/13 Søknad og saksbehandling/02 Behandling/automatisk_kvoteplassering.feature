@@ -1,6 +1,6 @@
 # language: no
 # GitHub: #376
-@OPT-BEH-BEH-012 @must @draft
+@OPT-BEH-BEH-012 @must @implemented
 Egenskap: Automatisk kvoteplassering
   Som saksbehandler
   ønsker jeg at søkere plasseres i kvoter automatisk der det er mulig
@@ -9,6 +9,9 @@ Egenskap: Automatisk kvoteplassering
   Automatisk plassering i kvoter er mulig dersom kvotespørsmålet lar seg besvare automatisk,
   og dersom dokumentasjon eller data knyttet til søknaden kan leses av systemet.
 
+  @depends-on-OPT-REG-KVO-001 @depends-on-OPT-BEH-BEH-020
+  # OPT-REG-KVO-001: «En kvotetype gjelder for grunnlagene den er koblet til».
+  # OPT-BEH-BEH-020 avgjør om søkeren er kvalifisert på grunnlaget.
   Regel: Søkeren plasseres automatisk i en kvote uten kvotespørsmål
 
     Scenario: Plassering i kvote uten kvotespørsmål
@@ -36,6 +39,8 @@ Egenskap: Automatisk kvoteplassering
       Når saksbehandleren behandler søknaden på grunnlaget "PRA"
       Så plasseres ikke søkeren i kvotetypen "ORDF"
 
+  @depends-on-OPT-OVO-FRI-001 @ref-OPT-BEH-BEH-028
+  # Regelen «Opptaksforvalter setter dato for aldersberegning».
   Regel: Søkerens alder beregnes på opptakets dato for aldersberegning
 
     # Flyttet hit 2026-10-12 fra 11 Opprette og vedlikeholde opptak/04 Frister/frister_og_hendelser.feature.
@@ -52,6 +57,8 @@ Egenskap: Automatisk kvoteplassering
         | 2027-04-15 | 2005-06-01 | 21    |
         | 2027-12-31 | 2005-09-01 | 22    |
 
+  @depends-on-OPT-REG-KVO-001
+  # Regelen «En kvotetype gjelder for grunnlagene den er koblet til».
   Regel: Aldersgrensen på grunnlaget avgjør om søkeren kan plasseres i kvotene grunnlaget er koblet til
 
     Scenariomal: Aldersgrense på grunnlaget
@@ -78,6 +85,8 @@ Egenskap: Automatisk kvoteplassering
       Så ser ikke saksbehandleren kvotespørsmålet "FRA-HARDANGER"
       Og søkeren er ikke plassert i kvotetypen "JENTER-HARDANGER"
 
+  @depends-on-OPT-REG-KVO-002
+  # Regelen «Kvotespørsmål kan knyttes til en kvotetype».
   Regel: Søkeren plasseres i en kvote med kvotespørsmål når alle kvotespørsmålene er besvart ja
 
     Scenario: Alle kvotespørsmål besvart ja
@@ -92,6 +101,8 @@ Egenskap: Automatisk kvoteplassering
       Når saksbehandleren besvarer kvotespørsmålet "FRA-HARDANGER" med nei
       Så plasseres ikke søkeren i kvotetypen "JENTER-HARDANGER"
 
+  @depends-on-OPT-REG-KVO-002
+  # Regelen «Kvotespørsmål kan knyttes til en kvotetype».
   Regel: Saksbehandleren tar stilling til kvotespørsmål, ikke til kvotetyper
 
     Scenario: Kvotespørsmålene vises i søknadsbehandlingen
@@ -107,6 +118,8 @@ Egenskap: Automatisk kvoteplassering
       Så vises kvotespørsmålet "FRA-HARDANGER" én gang
       Og svaret på kvotespørsmålet "FRA-HARDANGER" gjelder for begge kvotetypene
 
+  @depends-on-OPT-REG-KVO-002
+  # Regelen «Et kvotespørsmål kan kobles til en algoritme som besvarer det automatisk».
   Regel: Kvotespørsmål med algoritme besvares automatisk og kan ikke endres av saksbehandleren
 
     Scenario: Automatisk besvart kvotespørsmål vises låst
@@ -122,6 +135,7 @@ Egenskap: Automatisk kvoteplassering
       Når et svar på kvotespørsmålet "ER-KVINNE" sendes inn direkte mot API-et
       Så avvises lagringen av svaret
 
+  @ref-OPT-BEH-BEH-016
   Regel: Endringsloggen viser at maskinbrukeren har plassert søkeren i kvoten
 
     Scenario: Automatisk kvoteplassering i endringsloggen
@@ -131,7 +145,18 @@ Egenskap: Automatisk kvoteplassering
       Så ser saksbehandleren et innslag utført av maskinbrukeren
       Og saksbehandleren ser hvem som startet den automatiske behandlingen
 
-    Scenario: Kvoteplasseringen viser opptaksalderen
+    Scenariomal: Endringsloggen viser opptaksalderen
+      Gitt at grunnlaget for kvotetypen "ORDF" har en aldersgrense
+      Og at automatikken har <utfall> søkeren i kvotetypen "ORDF" på grunn av alderen
+      Når saksbehandleren ser på endringsloggen for saken
+      Så ser saksbehandleren opptaksalderen og aldersgrensen i innslaget for kvoteplasseringen
+
+      Eksempler:
+        | utfall        |
+        | plassert      |
+        | ikke plassert |
+
+    Scenario: Ny automatisk behandling uten endring gir ikke nytt innslag
       Gitt at automatikken har plassert søkeren i kvotetypen "ORDF" der grunnlaget har en aldersgrense
-      Når saksbehandleren ser på kvoteplasseringen
-      Så ser saksbehandleren opptaksalderen som ble brukt mot aldersgrensen
+      Når søknaden behandles automatisk på nytt uten at alder eller grunnlag er endret
+      Så får endringsloggen ikke et nytt innslag for kvoteplasseringen
