@@ -4,6 +4,8 @@ Denne mappa inneholder akseptansekravene for løsningene som lages av studieadmi
 
 Er du ny? [Kom i gang med krav og akseptansetest i FS](../kom-i-gang.html) er en innføring i hvor kravene ligger, hvordan en kravfil ser ut, og hele prosessen steg for steg, fra kravene skrives til leveransen er godkjent i akseptansetesten.
 
+Det finnes også to presentasjoner. [Slik jobber vi med krav](https://claude.ai/artifact/FLUQtvcNBjdeP6i7JG9CqF) er for alle, og [Krav – detaljert presentasjon](https://claude.ai/artifact/Sx4D8zmmWp8kz86Mqq88WY) går i detalj på taggene, skillene, verifiseringen og testene. De som har utviklerlisens, har redigeringstilgang til presentasjonene.
+
 Dette dokumentet er de gjeldende konvensjonene for alle kravfiler. Claude leser den samme fila (via `.claude/rules/gherkin-conventions.md`), så det finnes bare én versjon av reglene.
 
 FS Kravforvaltning sjekker noen av reglene i dette dokumentet automatisk, og viser brudd som «Avvik fra konvensjoner». Reglene som sjekkes er merket med *(sjekkes automatisk)*. Sjekkene står i `fs-kravforvaltning/server/parse.ts` og er testet i `fs-kravforvaltning/server/parse.test.ts`. Endrer du en merket regel, eller legger du til en regel som kan sjekkes, må `parse.ts` og testene oppdateres i samme endring.
