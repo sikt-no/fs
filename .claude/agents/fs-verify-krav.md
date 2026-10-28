@@ -20,6 +20,8 @@ Les disse seksjonene i `.claude/skills/fs-verify/SKILL.md`, og følg dem for sø
 - *Verifisere at koden er borte (`@deprecated`)*: steg 1 (letingen)
 - *Verifisere flyt*: steg 2 (overleveringene), når fila ligger under `krav/_Flyter/`. Fremdriften (steg 1) gjør lead-en
 - *Åpne MR-er og brancher*: lead-en har funnet MR-ene og gir deg listen i spawn-prompten. Før du skriver `ikke funnet`, let i dem med `git -C <repo> grep -i -n "<ord>" origin/<branch>`, og bruk beviset-formatet derfra. Det som bare finnes i en MR, er `ikke funnet`, aldri `funnet`
+- *Tilgang og datakonsistens* og *Regler uten scenario*: for hvert krav du har lest koden for, når lead-en ikke har sagt at fila er en avhengighet (for en avhengighet gjør du ingen av delene)
+- *Åpne spørsmål*: tell `@openquestion` i fila (feature-fila, ikke koden)
 - *Negative søk*: før du skriver `ikke funnet`, `mangler` eller «ingen spor funnet»
 
 Det du **ikke** gjør, selv om `fs-verify` sier det:
@@ -51,11 +53,29 @@ Send svaret til lead-en med `SendMessage`, og gi det samme som sluttsvar. Hold f
 - **Åpne spørsmål:** <scenario> — <spørsmålet fra `# ÅPNE SPØRSMÅL:`>   [scenarioer i gating-settet med `@openquestion`]
 - **@deprecated:** «<tittel/del>» finnes fortsatt: `<repo>/<fil>:<linje>` — <hvorfor det er denne funksjonaliteten> | «<tittel/del>» ingen spor funnet: søkt etter «…» i <repoer>
 - **Tester:** `tester/steps/<fil>.ts:<linje>`, `<repo>/<testfil>` — <hva de dekker>
+
+### Tilgang og datakonsistens
+
+| Sjekk | Rolle og handling | Kravet sier | Koden gjør | Resultat | Bevis |
+| --- | --- | --- | --- | --- | --- |
+| tilgang | <rolle> <oppretter> <hva> | <hva kravet sier> \| ikke beskrevet | <hva tilgangssjekken gjør> | stemmer | `<repo>/<fil>:<linje>` — <hva koden gjør> |
+| organisasjon | <rolle> <leser> <hva> | <…> | <…> | avviker | `<repo>/<fil>:<linje>` — <hva som avviker> |
+| konsistens | <sletter> <hva> | <…> | <…> | ikke funnet | søkt etter «…» i <repoer> |
+
+### Regler uten scenario
+
+| Regel i koden | Type | Bevis | Forslag |
+| --- | --- | --- | --- |
+| <hva regelen gjør, med verdier eller meldingen> | validering \| obligatorisk felt \| grense \| standardverdi \| tilgangssjekk \| tilstandsovergang \| annet | `<repo>/<fil>:<linje>` | legg til scenario med `fs-krav` \| testes i fase 2 \| uklart om ønsket |
+
+### Åpne spørsmål (tall)
+
+- **Regler:** <n> av <N> | **Scenarioer:** <n> av <N> (gating-settet) | **Utenfor gating (`@draft @openquestion`):** <n>
 ```
 
 **Flyt** (fila ligger under `krav/_Flyter/`): `Del` er fasen (`Regel:`-tittelen), og `Bevis` har begge stedene: `lages: <repo>/<fil>:<linje> · brukes: <repo>/<fil>:<linje> — <hva som overleveres>`. Mangler det ene, er raden `ikke funnet`, med det du fant og det du søkte etter. At kravene i fasen er levert hver for seg, er ikke bevis.
 
-Utelat linjer som ikke gjelder fila. Tabellen har én rad per scenario i gating-settet (for en `Scenariomal:` én rad, `funnet` bare når alle radene i `Eksempler:` er dekket). Bruk scenariotitlene slik de står i fila: kopier dem, ikke skriv dem fra hukommelsen. Ikke tell opp resultatene i teksten; lead-en regner ut tallene fra tabellene.
+Utelat linjer og seksjoner som ikke gjelder fila (en fil uten roller, organisasjoner eller data som endres, har ingen tilgangsrader, og et rent visningskrav kan ha ingen regler uten scenario). Skriv i så fall «Ingen.» under overskriften. Radene i de to seksjonene er ikke scenarioer: ikke ta dem med i tabellen over. Tabellen har én rad per scenario i gating-settet (for en `Scenariomal:` én rad, `funnet` bare når alle radene i `Eksempler:` er dekket). Bruk scenariotitlene slik de står i fila: kopier dem, ikke skriv dem fra hukommelsen. Ikke tell opp resultatene i teksten; lead-en regner ut tallene fra tabellene.
 
 **Repoene hver for seg.** Ber lead-en om det, legg til én kolonne per repo lead-en har gitt deg etter `Resultat`, med reponavnet som overskrift (`fs-plattform`, `fs-admin`, `min-kompetanse`), og `funnet` / `delvis` / `mangler` / `ikke relevant` (f.eks. er en ren synkjobb `ikke relevant` for fs-admin og min-kompetanse). `Resultat` er `funnet` bare når alle repoene som er relevante, er `funnet`. Gi `fil:linje` fra hvert repo som har kode. Avslutt fila med `- **Gjenstår:** <repoene som må endres, skilt med komma> | ingen — <hva som mangler>`.
 

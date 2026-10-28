@@ -13,7 +13,7 @@ Egenskap: Publisere resultatet til søkerne
   # Status i kode: delvis. Ventelistenummeret når ikke fram til søkeren.
 
   Bakgrunn:
-    Gitt at opptaksforvalter ved forvaltende organisasjon er innlogget
+    Gitt at opptakets forvalter er innlogget
     Og at plasstildelingsrunden "Hovedrunde" i opptaket "Samordna opptak 2027" har en plasstildeling som ikke er publisert
 
   Regel: Søkerne ser ikke resultatet før det er publisert

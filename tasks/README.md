@@ -51,7 +51,7 @@ Domenet er kebab-slug av toppnivået i [`krav/`](../krav/), uten tallprefiks og 
 | `organisasjon` | `09 Organisasjon` |
 | `felleskrav` | `10 Felleskrav` |
 
-Dette er den autoritative lista. Får `krav/` et nytt toppnivå, legges domenet til her først. `99 Demo` og `_Interne prosesser` er ikke oppgavedomener.
+Dette er den autoritative lista. Får `krav/` et nytt toppnivå, legges domenet til her først. `99 Demo` er ikke et oppgavedomene.
 
 Slug-en må være unik innenfor domenet, ikke globalt. Den er en lesbar kebab-case-beskrivelse — ikke issue-nummeret.
 

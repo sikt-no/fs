@@ -15,7 +15,7 @@ paths:
 Siden har to deler:
 
 - **Oversikt** (`#oversikt`, startvisningen) følger «Kort fortalt» i `krav/README.md`: hvor kravene ligger, hvordan en kravfil ser ut, livsløpet til et krav, skillene og tavla. Den var opprinnelig «Krav i FS.dc.html» i Claude Design, men vedlikeholdes nå bare her.
-- **Prosessen** (steg 1–12, og sidesporene Flyter, Endre og Avvikle) viser ett steg om gangen. Steg 1–6 følger `krav/README.md` og `tasks/README.md` (*Utføring* og *Tavla*). Steg 7–12 følger `akseptansetest/README.md`, `.claude/references/akseptansetest/` og teststrategien i Confluence.
+- **Prosessen** (steg 1–13, og sidesporene Flyter, Endre og Avvikle) viser ett steg om gangen. Steg 1–6 følger `krav/README.md` og `tasks/README.md` (*Utføring* og *Tavla*). Steg 7–13 følger `akseptansetest/README.md`, `.claude/references/akseptansetest/` og teststrategien i Confluence.
 
 ## Når du endrer konvensjonene eller skillene
 

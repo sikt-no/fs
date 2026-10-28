@@ -13,7 +13,7 @@ Egenskap: Starte en plasstildeling
   # Status i kode: løst (oppgave.md). Kandidat for @implemented etter verifisering.
 
   Bakgrunn:
-    Gitt at opptaksforvalter ved forvaltende organisasjon er innlogget
+    Gitt at opptakets forvalter er innlogget
     Og at opptaket "Samordna opptak 2027" har plasstildelingsrunden "Hovedrunde" med rundetype "Hovedtildeling"
 
   Regel: Opptaksforvalter bestiller en plasstildeling som kjører i bakgrunnen
@@ -23,7 +23,7 @@ Egenskap: Starte en plasstildeling
       Så kjøres plasstildelingen i bakgrunnen
       Og opptaksforvalter ser status for plasstildelingen
 
-    # AVKLART 2026-10-14 (designarbeidet i FS-Admin): Bare forvaltende organisasjon starter plasstildeling.
+    # AVKLART 2026-10-14 (designarbeidet i FS-Admin): Bare opptakets forvalter starter plasstildeling.
     # Lærestedene setter antall tilbud for utdanningstilbudene sine.
     Scenario: Opptaksforvalter ved deltakende organisasjon kan ikke starte plasstildeling
       Gitt at opptaksforvalter har tilgang fra "Universitetet i Bergen", som deltar i opptaket
@@ -37,7 +37,7 @@ Egenskap: Starte en plasstildeling
       Og grunnlaget lagres sammen med plasstildelingen
 
     # AVKLART 2026-10-14 (designarbeidet i FS-Admin): Det er ingen sperre mellom perioden for lærestedene
-    # og start av plasstildeling. Opptaksforvalter ved forvaltende organisasjon styrer fristene.
+    # og start av plasstildeling. Opptakets forvalter styrer fristene.
     Scenario: Starte plasstildeling mens perioden for antall tilbud er åpen
       Gitt at perioden for å endre antall tilbud som skal gis i plasstildelingsrunden "Hovedrunde" er åpen
       Og at antall tilbud som skal gis i "Sykepleie, høst 2027" i "Hovedrunde" er 30
@@ -49,25 +49,21 @@ Egenskap: Starte en plasstildeling
     # AVKLART 2026-10-15: Bare saker som er ferdig behandlet (FERDIG_BEHANDLET), er med i plasstildelingen.
     # Statusen gjelder per sak, altså søknaden slik den ligger hos én saksbehandlende organisasjon, som i
     # tidligopptaket (13 Søknad og saksbehandling/02 Behandling/gi_tilbudsgaranti_ved_tidlig_opptak.feature).
-    # Ved automatisk saksbehandling avsluttes saksbehandlingen ved at FERDIG_BEHANDLET settes. Av sakene som er
-    # med, kan søknadsalternativer som er kvalifisert og poengberegnet, eller har tilbudsgaranti, få tilbud.
+    # Hvordan saken blir ferdig behandlet, også av den automatiske behandlingen, står i kravet taggen peker på
+    # (flyttet dit 2026-10-26). Av sakene som er med, kan søknadsalternativer som er kvalifisert og
+    # poengberegnet, eller har tilbudsgaranti, få tilbud.
     # Gap mot koden: koden krever ikke at saken er ferdig behandlet. En søknad er med når alt dette er
     # oppfylt: søknadsalternativet er ikke slettet og har en behandlersak, saken er kvalifisert mot
     # utdanningstilbudets kompetanseregelverk, saken har en aktiv kvote som skal kvoteplasseres og som også er
     # kvote på utdanningstilbudet, og saken har poengsum etter utdanningstilbudets rangeringsregelverk.
     # Søkeren må ha fødselsdato, ellers feiler hele plasstildelingen.
+    @depends-on-OPT-BEH-BEH-025 @ref-FLY-OPT-AUT-001
     Scenario: Bare saker som er ferdig behandlet, er med
       Gitt at saken til "Kari Nordmann" er ferdig behandlet
       Og at saken til "Ola Nordmann" ikke er ferdig behandlet
       Når opptaksforvalter starter en plasstildeling i "Hovedrunde"
       Så er saken til "Kari Nordmann" med i plasstildelingen
       Men saken til "Ola Nordmann" er ikke med i plasstildelingen
-
-    Scenario: Automatisk saksbehandling gjør saken ferdig behandlet
-      Gitt at saken til "Kari Nordmann" er behandlet automatisk
-      Når den automatiske saksbehandlingen er ferdig
-      Så er saken til "Kari Nordmann" ferdig behandlet
-      Og saken til "Kari Nordmann" er med i neste plasstildeling
 
     Scenariomal: Søknadsalternativer som kan få tilbud
       Gitt at saken til "Kari Nordmann" er ferdig behandlet
@@ -88,9 +84,13 @@ Egenskap: Starte en plasstildeling
       Så beregnes en ny plasstildeling fra oppdatert grunnlag
       Og den forrige plasstildelingen er fortsatt tilgjengelig
 
-  Regel: En plasstildeling etter hovedtildelingen bygger på forrige publiserte plasstildelingsrunde
+  @depends-on-OPT-REG-RUN-001
+  Regel: En plasstildeling bygger på forrige publiserte plasstildelingsrunde når rundetypen sier det
 
-    Scenario: Plasstildeling i hovedtildelingen
+    # Endret 2026-10-24: Om plasstildelingen bygger på forrige publiserte plasstildelingsrunde, er en innstilling
+    # i rundetypen. I samordna opptak har Supplering og Etterfylling den, og Hovedtildeling ikke.
+    Scenario: Plasstildeling som ikke bygger på en tidligere plasstildelingsrunde
+      Gitt at rundetypen "Hovedtildeling" ikke har innstillingen "Bygger på forrige publiserte plasstildelingsrunde"
       Når opptaksforvalter starter en plasstildeling i "Hovedrunde"
       Så bygger plasstildelingen ikke på noen tidligere plasstildelingsrunde
 
@@ -98,8 +98,9 @@ Egenskap: Starte en plasstildeling
     # når den starter. Når den bygger på forrige publiserte plasstildelingsrunde, tar den også med resultatet
     # per kvotesøknad fra den publiserte plasstildelingen (tilbud, venteliste og bortfall) og søkernes svar på
     # tilbud og venteliste. Hva det betyr for fordelingen, står i gjennomføre_plasstildeling.feature.
-    Scenario: Plasstildeling i en senere plasstildelingsrunde
-      Gitt at plasstildelingsrunden "Hovedrunde" har en publisert plasstildeling
+    Scenario: Plasstildeling som bygger på forrige publiserte plasstildelingsrunde
+      Gitt at rundetypen "Supplering" har innstillingen "Bygger på forrige publiserte plasstildelingsrunde"
+      Og at plasstildelingsrunden "Hovedrunde" har en publisert plasstildeling
       Og at opptaket har plasstildelingsrunden "Suppleringsrunde" med rundetype "Supplering"
       Når opptaksforvalter starter en plasstildeling i "Suppleringsrunde"
       Så bygger plasstildelingen på den publiserte plasstildelingen i "Hovedrunde"
@@ -110,8 +111,9 @@ Egenskap: Starte en plasstildeling
     # AVKLART 2026-10-08: starten avvises.
     # Gap mot koden («Plasstildelingsløpet i Opptak», kap. 1–2): i dag kjøres en slik plasstildelingsrunde som en
     # hovedtildeling. Plasstildelingsrunden det bygges på, utledes som opptakets sist publiserte plasstildelingsrunde.
-    Scenario: Senere plasstildelingsrunde uten publisert forrige plasstildelingsrunde
-      Gitt at plasstildelingsrunden "Hovedrunde" ikke har en publisert plasstildeling
+    Scenario: Forrige plasstildelingsrunde er ikke publisert
+      Gitt at rundetypen "Supplering" har innstillingen "Bygger på forrige publiserte plasstildelingsrunde"
+      Og at plasstildelingsrunden "Hovedrunde" ikke har en publisert plasstildeling
       Når opptaksforvalter starter en plasstildeling i "Suppleringsrunde"
       Så blir plasstildelingen ikke startet
       Og opptaksforvalter får beskjed om at forrige plasstildelingsrunde må publiseres først
