@@ -578,8 +578,8 @@ Egenskap: Søknadsmangler
     #   et kryss eller et felt som kobler mangelkoden til søkerspørsmålet under «Utdanningsbakgrunn»,
     #   så mangelkoden DUA ikke må hardkodes.
     # - Er «vitnemålet kommer senere», som søkeren svarer på, det samme som at generell
-    #   studiekompetanse fullføres i vår, eller noe bredere? Gjelder også @OPT-SØK-SØK-013.
-    # - Regelen bygger på at søkeren kan oppgi at generell studiekompetanse fullføres i vår (@OPT-SØK-SØK-013),
+    #   studiekompetanse fullføres i vår, eller noe bredere? Gjelder også @OPT-SØK-SØK-017.
+    # - Regelen bygger på at søkeren kan oppgi at generell studiekompetanse fullføres i vår (@OPT-SØK-SØK-017),
     #   og det kravet er ikke avklart.
     # - Skal søkeren få melding når den automatiske mangelen er publisert, og slettes fordi søkeren
     #   endrer søknaden?

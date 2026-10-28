@@ -1,5 +1,5 @@
 # language: no
-# GitHub: #632, #215
+# GitHub: #632, #215, #413
 #
 # Kilder: Confluence PFS 4408344578 «Utdanningsbakgrunn» og
 # PFS 3940188262 «2025-08-15: Utdanningsbakgrunn - Møte med HK-dir», og
@@ -107,6 +107,52 @@ Egenskap: Velge utdanningsbakgrunn i søknad
       Når søkeren vil sende inn søknaden
       Så kan søkeren ikke sende inn søknaden
       Og søkeren får beskjed om å oppgi utdanningsland
+
+  @openquestion @ref-OPT-BEH-BEH-008
+  Regel: Søkeren oppgir at norsk videregående opplæring fullføres i vår
+    # Flyttet hit fra oppgi_at_generell_studiekompetanse_fullføres_i_vår.feature 2026-10-28.
+    # Feature-ID-en var @OPT-SØK-SØK-013, som også brukes av finne_studier.feature.
+    # AVKLART 2026-10-28: Søkeren kan oppgi det uansett hvilken utdanningsbakgrunn som er valgt.
+    # Saken får da automatisk mangelen for generell studiekompetanse som fullføres i vår (DUA).
+    # AVKLART 2026-10-28: «Norsk videregående opplæring fullføres i vår» (skissen: «Jeg fullfører
+    # norsk videregående i løpet av denne våren») og «generell studiekompetanse fullføres i vår»
+    # (søknadsmangler.feature) betyr det samme.
+    # ÅPNE SPØRSMÅL:
+    # - Hvilke ord skal kravene bruke: «norsk videregående opplæring fullføres i vår», som i
+    #   skissen, eller «generell studiekompetanse fullføres i vår», som i søknadsmangler.feature?
+
+    Scenariomal: Søkeren med <utdanningsbakgrunn> oppgir at norsk videregående opplæring fullføres i vår
+      Når søkeren velger utdanningsbakgrunnen "<utdanningsbakgrunn>"
+      Og søkeren oppgir at norsk videregående opplæring fullføres i vår
+      Og søkeren sender inn søknaden
+      Så står det i søknaden at norsk videregående opplæring fullføres i vår
+
+      Eksempler:
+        | utdanningsbakgrunn            |
+        | Norsk videregående skole      |
+        | Utenlandsk videregående skole |
+        | Realkompetanse                |
+
+  @openquestion
+  Regel: Søkeren kan endre frem til søknadsfristen at norsk videregående opplæring fullføres i vår
+    # ÅPNE SPØRSMÅL:
+    # - Kan søkeren endre dette etter at søknaden er sendt inn? Henger sammen med regelen
+    #   «Søkeren kan endre utdanningsbakgrunn etter at søknaden er sendt inn». HK-dir
+    #   (Ingrids liste for DUA) sier at mangelen fjernes når søkeren fjerner krysset innen søknadsfristen.
+    # Endres det etter innsending, må endringen gi en hendelse på søknaden, så den automatiske
+    # mangelen kan settes eller slettes (@OPT-BEH-BEH-008, Geir V 2026-10-27).
+
+    Scenario: Søkeren endrer før søknadsfristen at norsk videregående opplæring fullføres i vår
+      Gitt at søkeren har sendt inn søknaden og oppgitt at norsk videregående opplæring fullføres i vår
+      Og at søknadsfristen i "Samordna opptak 2027" ikke har gått ut
+      Når søkeren endrer søknaden til at norsk videregående opplæring ikke fullføres i vår
+      Så står det ikke lenger i søknaden at norsk videregående opplæring fullføres i vår
+
+    Scenario: Søkeren kan ikke endre etter søknadsfristen at norsk videregående opplæring fullføres i vår
+      Gitt at søkeren har sendt inn søknaden og oppgitt at norsk videregående opplæring fullføres i vår
+      Og at søknadsfristen i "Samordna opptak 2027" har gått ut
+      Når søkeren åpner søknaden
+      Så ser ikke søkeren muligheten til å endre at norsk videregående opplæring fullføres i vår
 
   @openquestion
   Regel: Søkeren med GSK-konklusjon velger ikke utdanningsbakgrunn
