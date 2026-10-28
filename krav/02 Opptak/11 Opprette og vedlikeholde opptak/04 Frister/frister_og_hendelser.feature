@@ -49,8 +49,9 @@ Egenskap: Frister og hendelser for opptak
 
     # Lagt til 2026-10-26: Trekkfristen er en egen frist, i tillegg til redigeringsfristen.
     # Virkningen står i 12 Utdanningstilbud/02 Utdanningstilbud i opptak/trekke_utdanningstilbud.feature.
-    # AVKLART 2026-10-26 (produkteier): Trekkfristen må være satt for å lagre opptaket, og kan ikke være før
+    # AVKLART 2026-10-26 (produkteier): Trekkfristen må være satt for å lagre opptaket, og bør ikke være før
     # redigeringen av utdanningstilbud stenger.
+    # AVKLART 2026-10-27 (produkteier, etter akseptansetesten): Feil rekkefølge gir et varsel, ikke en sperre.
     Scenario: Sette frist for å trekke utdanningstilbud
       Når opptaksforvalter setter fristen for å trekke utdanningstilbud til "2027-06-20 23:59"
       Så har opptaket frist for å trekke utdanningstilbud "2027-06-20 23:59"
@@ -72,12 +73,12 @@ Egenskap: Frister og hendelser for opptak
         | 2027-06-06 23:59 |
         | 2027-06-20 23:59 |
 
-    Scenario: Fristen for å trekke utdanningstilbud kan ikke være før redigeringen stenger
+    Scenario: Varsel når fristen for å trekke utdanningstilbud er før redigeringen stenger
       Gitt at redigering av utdanningstilbud stenger "2027-06-06"
       Når opptaksforvalter setter fristen for å trekke utdanningstilbud til "2027-06-05 23:59"
       Og opptaksforvalter lagrer opptaket
-      Så blir opptaket ikke lagret
-      Og opptaksforvalter ser at fristen for å trekke utdanningstilbud ikke kan være før redigeringen av utdanningstilbud stenger
+      Så er opptaket lagret
+      Og opptaksforvalter ser et varsel om at fristen for å trekke utdanningstilbud er før redigeringen av utdanningstilbud stenger
 
   @openquestion
   Regel: Opptaksforvalter ved forvaltende organisasjon må kunne åpne for søkning
@@ -127,18 +128,24 @@ Egenskap: Frister og hendelser for opptak
       Så har opptaket frist for sletting av søknadsalternativer "2027-04-15 23:59"
 
   @openquestion
-  Regel: Opptaksforvalter ved forvaltende organisasjon må kunne sette dokumentasjonsfrister
+  Regel: Opptaksforvalter ved forvaltende organisasjon må kunne sette informasjonsdato for dokumentasjon og ettersendingsfrist
     # ÅPNE SPØRSMÅL:
     # - Virkningen står i veilede_om_dokumentasjon.feature og søknadsmangler.feature. Skal regelen ha
     #   @ref-OPT-SØK-SØK-003 og @ref-OPT-BEH-BEH-008?
+    # - Er ettersendingsfristen en frist (fristen for å rette en mangel, søknadsmangler.feature), eller en
+    #   informasjonsdato? Den stenger ikke for opplasting.
 
-    # AVKLART 2026-10-15 (Q14, TAKE-411): Den ordinære dokumentasjonsfristen er informasjon om når
-    # dokumentasjonen bør være lastet opp. Det er ettersendingsfristen som stenger for opplasting.
+    # AVKLART 2026-10-15 (Q14, TAKE-411): Den ordinære datoen er informasjon om når dokumentasjonen bør være
+    # lastet opp.
+    # AVKLART 2026-10-27 (produkteier, etter akseptansetesten): Ingen av datoene stenger for opplasting. Det gjør
+    # bare innstillingen «Søker kan laste opp dokumenter» (03 Innstillinger/innstillinger.feature). Den ordinære
+    # datoen heter derfor informasjonsdato for dokumentasjon, ikke dokumentasjonsfrist: «frist» brukes bare om
+    # datoer som har en virkning.
     # Virkningen står i 13 Søknad og saksbehandling/01 Søknad/veilede_om_dokumentasjon.feature og
     # 02 Behandling/søknadsmangler.feature.
-    Scenario: Sette ordinær dokumentasjonsfrist
-      Når opptaksforvalter setter ordinær dokumentasjonsfrist til "2027-04-15 23:59"
-      Så har opptaket ordinær dokumentasjonsfrist "2027-04-15 23:59"
+    Scenario: Sette informasjonsdato for dokumentasjon
+      Når opptaksforvalter setter informasjonsdatoen for dokumentasjon til "2027-04-15 23:59"
+      Så har opptaket informasjonsdato for dokumentasjon "2027-04-15 23:59"
 
     Scenario: Sette ettersendingsfrist
       Når opptaksforvalter setter ettersendingsfrist til "2027-07-01 23:59"
@@ -229,7 +236,7 @@ Egenskap: Frister og hendelser for opptak
       Når opptaksforvalter setter første svarfrist til "2027-07-20 23:59"
       Så har opptaket første svarfrist "2027-07-20 23:59"
 
-  @ref-OPT-BEH-BEH-012
+  @ref-OPT-BEH-BEH-012 @ref-OPT-BEH-BEH-028
   # Selve utregningen av alderen skjer i saksbehandlingen, i regelen
   # «Søkerens alder beregnes på opptakets dato for aldersberegning».
   Regel: Opptaksforvalter setter dato for aldersberegning
@@ -302,7 +309,7 @@ Egenskap: Frister og hendelser for opptak
         | den ordinære søknadsfristen                            |
         | omprioriteringsfristen                                 |
         | fristen for sletting av søknadsalternativer            |
-        | den ordinære dokumentasjonsfristen                     |
+        | informasjonsdatoen for dokumentasjon                   |
         | ettersendingsfristen                                   |
         | fristen for endring av utdanningsbakgrunn              |
         | datoen for når hovedopptaket publiseres                |
@@ -327,20 +334,33 @@ Egenskap: Frister og hendelser for opptak
       Når opptaksforvalter lagrer opptaket
       Så er opptaket lagret
 
+  @draft @openquestion
+  Regel: Klokkeslettet for en frist er 23:59 som standard
+    # ÅPNE SPØRSMÅL:
+    # - Gjelder 23:59 for alle fristene og informasjonsdatoene, også datoene for når noe åpner (for eksempel
+    #   når søknaden åpner), eller bare for datoene der noe stenger?
+
+    # Lagt til 2026-10-27 etter akseptansetesten (TAKE-454): Med 00:00 blir fristene lett satt feil.
+    Scenario: Ny frist får klokkeslettet 23:59
+      Når opptaksforvalter setter den ordinære søknadsfristen til "2027-04-15" uten klokkeslett
+      Så har opptaket ordinær søknadsfrist "2027-04-15 23:59"
+
   # AVKLART 2026-10-21 (produkteier): Sammenhengene mellom fristene er ikke viktige å levere nå.
   @draft @openquestion
-  Regel: Fristene må komme i riktig rekkefølge
+  Regel: Opptaksforvalter får et varsel når fristene står i feil rekkefølge
     # ÅPNE SPØRSMÅL:
-    # - Hvilke frister må ligge før andre? Kandidater: åpner før stenger (redigering av utdanningstilbud, søknaden,
-    #   ledige studieplasser), ordinær dokumentasjonsfrist senest lik ettersendingsfristen, søknadsfristen og
-    #   dokumentasjonsfristen for tidlig opptak før den ordinære søknadsfristen, fristen for poenggrenser før
-    #   søknadsfristen for tidlig opptak, omprioriteringsfristen og fristen for sletting etter at søknaden åpner,
+    # - Hvilke frister bør ligge før andre? Kandidater: åpner før stenger (redigering av utdanningstilbud, søknaden,
+    #   ledige studieplasser), informasjonsdatoen for dokumentasjon senest lik ettersendingsfristen, søknadsfristen og
+    #   informasjonsdatoen for dokumentasjon for tidlig opptak før den ordinære søknadsfristen, fristen for poenggrenser
+    #   før søknadsfristen for tidlig opptak, omprioriteringsfristen og fristen for sletting etter at søknaden åpner,
     #   og avvikende frister per utdanningsbakgrunn etter at søknaden åpner.
-    # - Skal opptaket ikke kunne lagres når rekkefølgen er feil, eller skal opptaksforvalter bare få en advarsel?
 
-    Scenario: Den ordinære søknadsfristen kan ikke være før søknaden åpner
+    # AVKLART 2026-10-27 (produkteier, etter akseptansetesten, TAKE-457): Feil rekkefølge gir et varsel
+    # (veiledning), ikke en sperre. Opptaket kan lagres, fordi et opptak kan ha grunner til å legge fristene
+    # annerledes. Det gjelder alle fristene.
+    Scenario: Varsel når sletting av søknadsalternativer er før søknaden åpner
       Gitt at søknaden åpner "2027-02-01"
-      Når opptaksforvalter setter ordinær søknadsfrist til "2027-01-15 23:59"
+      Når opptaksforvalter setter fristen for sletting av søknadsalternativer til "2027-01-15 23:59"
       Og opptaksforvalter lagrer opptaket
-      Så blir opptaket ikke lagret
-      Og opptaksforvalter ser at den ordinære søknadsfristen må være etter at søknaden åpner
+      Så er opptaket lagret
+      Og opptaksforvalter ser et varsel om at fristen for sletting av søknadsalternativer er før søknaden åpner
