@@ -8,6 +8,15 @@
 # Manuelt velger saksbehandleren grunnlag i steget «Grunnlag» i fs-admin
 # (leggTilGrunnlag og fjernGrunnlag).
 #
+# Flere kilder (fra utkastet i PR #818): Jira FOL-34, STEK-297, STEK-298,
+# STEK-299, STEK-514, STEK-454, STEK-430, STEK-315, STEK-317, STEK-505,
+# STEK-583, STEK-280. Confluence PFS 4460740612 «Brukerhistorier automatisk
+# valg av grunnlag», 4453629977 «2026-03-11 Raffinering automatisk valg av
+# grunnlag», 4022829198 «Automatisere valg av grunnlag», 4986798081 «Endring i
+# hvordan kvote og grunnlag henger sammen». GitHub #199. I FS-klienten setter
+# «Godkjenn VM» i Søknad samlebilde og rutinen FS158.001 grunnlaget sammen med
+# poengene.
+#
 # AVGRENSNING
 #
 # - Hvilke grunnlag som finnes, og egenskapene de har for automatikken
@@ -15,11 +24,11 @@
 #   i regelverket (grunnlag.feature).
 # - GSK-konklusjonen settes i automatisk_gsk_konklusjon.feature.
 # - Hvordan alderspoeng, kjønnspoeng og de andre tilleggspoengene beregnes, står i
-#   automatiske_tilleggspoeng.feature (@OPT-BEH-BEH-028), som skrives på en annen branch.
+#   automatiske_tilleggspoeng.feature (@OPT-BEH-BEH-028).
 # - Vitnemålspoeng står i automatisk_poengberegning.feature (@OPT-BEH-BEH-018),
 #   og kravelementene i automatisk_kvalifisering.feature (@OPT-BEH-BEH-020).
 # - Søkere med flere vitnemål behandles i vitnemålsbehandlingen.
-@OPT-BEH-BEH-019 @must @draft
+@OPT-BEH-BEH-019 @must @draft @ref-OPT-BEH-BEH-012 @ref-OPT-BEH-BEH-018
 Egenskap: Automatisk grunnlag
   Som saksbehandler
   ønsker jeg at søknaden får grunnlaget sitt automatisk når søkerens vitnemål og alder avgjør det
@@ -34,6 +43,11 @@ Egenskap: Automatisk grunnlag
 
   Grunnlag som saksbehandleren har valgt, endres aldri av automatikken. Det
   fremgår om et grunnlag er satt automatisk eller av saksbehandleren.
+
+  # ÅPNE SPØRSMÅL:
+  # - Skal grunnlaget ligge på saken eller på søknaden? FS-klienten har det på
+  #   personen. Spørsmålet ble tatt opp i raffineringen og med HK-dir 16.03.2026.
+  # - Skal et studieønske som fjernes, også fjerne grunnlaget det ga (STEK-505)?
 
   @depends-on-OPT-REG-GRU-001
   Regel: Grunnlaget velges ut fra egenskapene regelverket har gitt det
@@ -72,11 +86,14 @@ Egenskap: Automatisk grunnlag
       Så får søknaden grunnlaget som krever førstegangsvitnemål
       Men søknaden får ikke grunnlaget som bare krever et vitnemål
 
-    Scenario: Grunnlag som bare har en aldersgrense, kommer sist
-      Gitt at søkeren passer til et grunnlag som bare har en aldersgrense
-      Og at søkeren også passer til et grunnlag som krever et vitnemål
+    @openquestion
+    Scenario: Flere grunnlag passer like godt
+      # ÅPNE SPØRSMÅL:
+      # - Ny stack velger grunnlaget med lavest kode alfabetisk, og logger en
+      #   advarsel. Er det ønsket, eller skal ingen settes?
+      Gitt at søkeren passer like godt til to grunnlag
       Når søknaden behandles automatisk
-      Så får søknaden grunnlaget som krever et vitnemål
+      Så får søknaden ett av grunnlagene
 
     Scenario: Grunnlag uten egenskaper for automatikken settes ikke
       Gitt at regelverket har et grunnlag uten aldersgrense, uten krav om vitnemål og uten krav om førstegangsvitnemål
@@ -97,7 +114,8 @@ Egenskap: Automatisk grunnlag
   Regel: Ingen automatisk grunnlag uten ett vitnemål som gir generell studiekompetanse
     # Ett vitnemål er nok, også når søkeren har et kompetansebevis i tillegg.
     # Søkere med flere vitnemål behandles i vitnemålsbehandlingen, og den
-    # automatiske behandlingen stopper for dem.
+    # automatiske behandlingen stopper for dem til saksbehandleren har valgt
+    # vitnemålet.
 
     Scenariomal: Ingen grunnlag settes automatisk når <grunn>
       Gitt at <grunn>
@@ -113,9 +131,17 @@ Egenskap: Automatisk grunnlag
 
     Scenario: Søker med flere vitnemål behandles ikke automatisk
       Gitt at søkeren har to elektroniske vitnemål som ikke er annullert
+      Og at saksbehandleren ikke har valgt ett av vitnemålene
       Når søknaden behandles automatisk
       Så blir søknaden ikke behandlet automatisk
       Og søknaden får ingen grunnlag automatisk
+
+    @ref-OPT-BEH-BEH-025
+    Scenario: Grunnlag fra vitnemålet saksbehandleren har valgt
+      Gitt at søkeren har to elektroniske vitnemål som gir generell studiekompetanse, ett fra 2024 og ett fra 2025
+      Og at saksbehandleren har valgt vitnemålet fra 2025
+      Når søknaden behandles automatisk
+      Så får søknaden grunnlaget ut fra vitnemålet fra 2025
 
     Scenario: Kompetansebevis ved siden av vitnemålet stopper ikke automatikken
       Gitt at søkeren har ett elektronisk vitnemål som gir generell studiekompetanse
@@ -143,6 +169,16 @@ Egenskap: Automatisk grunnlag
       Gitt at søkeren har ett elektronisk vitnemål som gir generell studiekompetanse
       Når den automatiske behandlingen kjøres for søknaden
       Så får søknaden grunnlaget automatisk
+
+    @openquestion
+    Scenario: Grunnlag fra utdanningstilbudet når søknadsalternativet opprettes
+      # ÅPNE SPØRSMÅL:
+      # - FS-klienten kan sette et grunnlag fra studieprogrammet når
+      #   søknadsalternativet opprettes («Aut.kvalgrunnlag»). Skal det
+      #   videreføres?
+      Gitt at utdanningstilbudet har et grunnlag som skal settes automatisk
+      Når søkeren søker på utdanningstilbudet
+      Så får søknaden grunnlaget fra utdanningstilbudet
 
   Regel: Grunnlag som saksbehandleren har valgt, endres ikke av automatikken
 
@@ -194,59 +230,62 @@ Egenskap: Automatisk grunnlag
       Når søknaden behandles automatisk
       Så har søknaden bare det nye grunnlaget
 
+    @openquestion
+    Scenario: Gjøre søknaden tilgjengelig for automatikken igjen
+      # ÅPNE SPØRSMÅL:
+      # - Ny stack har ingen måte å låse opp grunnlagene på. Raffineringen
+      #   spurte hvordan en sak settes tilbake slik at den kan behandles
+      #   automatisk igjen. Trengs det?
+      Gitt at grunnlagene på søknaden er låst mot automatikken
+      Når saksbehandleren låser opp grunnlagene
+      Og søknaden behandles automatisk
+      Så kan søknaden få grunnlag automatisk igjen
+
+    @openquestion
+    Scenario: Grunnlag utenfor aldersgrensen kan ikke velges manuelt
+      # ÅPNE SPØRSMÅL:
+      # - I dag kan saksbehandleren velge et grunnlag selv om søkeren er utenfor
+      #   aldersgrensen. Søkeren blir da ikke plassert i kvoten (STEK-583). Skal
+      #   valget hindres?
+      Gitt at søkeren er utenfor aldersgrensen til et grunnlag
+      Når saksbehandleren legger til grunnlaget
+      Så blir ikke grunnlaget lagt til
+
+  @depends-on-OPT-OVO-FRI-001
+  # Regelen «Opptaksforvalter setter dato for aldersberegning».
+  Regel: Grunnlag med aldersgrense krever dato for aldersberegning
+
+    @openquestion
+    Scenario: Opptaket mangler dato for aldersberegning
+      # ÅPNE SPØRSMÅL:
+      # - I dag stopper valget av grunnlaget med en beskjed når opptaket har
+      #   alderspoeng og verken dato for aldersberegning eller dato for
+      #   publisering av resultatet. Alderen kan da ikke fastslås. Skal grunnlag
+      #   med aldersgrense heller filtreres bort, så de ikke kan velges?
+      Gitt at regelverket har grunnlaget "VOV" med aldersgrensen under 22 år
+      Og at opptaket ikke har dato for aldersberegning eller dato for publisering av resultatet
+      Når saksbehandleren velger grunnlaget "VOV" for søknaden
+      Så får saksbehandleren beskjed om at opptaket mangler dato for aldersberegning
+      Og grunnlaget er ikke lagt til
+
+  @ref-OPT-BEH-BEH-028
   Regel: Når grunnlaget settes, vurderes søknaden på nytt
     # Gjelder uansett om grunnlaget er satt automatisk eller av saksbehandleren.
+    # Hvordan tilleggspoengene regnes ut, står i kravet.
 
-    Scenario: Opptakskrav og kvoter følger grunnlaget saksbehandleren legger til
+    Scenario: Opptakskrav, kvoter og tilleggspoeng følger grunnlaget saksbehandleren legger til
       Gitt at søknaden har et grunnlag
       Når saksbehandleren legger til et annet grunnlag
       Så er opptakskravene vurdert på nytt mot grunnlagene
       Og kvotene søkeren kan plasseres i er oppdatert etter grunnlagene
+      Og tilleggspoengene er regnet ut for grunnlagene
 
-    Scenario: Opptakskrav og kvoter følger grunnlaget som er satt automatisk
+    Scenario: Opptakskrav, kvoter og tilleggspoeng følger grunnlaget som er satt automatisk
       Gitt at søknaden ikke har noe grunnlag
       Når søknaden får et grunnlag automatisk
       Så er opptakskravene vurdert mot grunnlaget
       Og kvotene søkeren kan plasseres i er oppdatert etter grunnlaget
-
-  Regel: Poeng fra poengalgoritmene settes uavhengig av hvem som setter grunnlaget
-    # Hvordan tilleggspoengene beregnes, står i automatiske_tilleggspoeng.feature
-    # (@OPT-BEH-BEH-028). Poengene bygger ikke på vitnemålet.
-
-    Scenario: Saksbehandleren velger grunnlag og søknaden får poengene grunnlaget gir
-      Gitt at rangeringsregelverket gir alderspoeng og kjønnspoeng for grunnlaget
-      Og at søknaden ikke har noe grunnlag
-      Når saksbehandleren legger til grunnlaget
-      Så har søknaden alderspoeng og kjønnspoeng for grunnlaget
-
-    Scenario: Søker uten elektronisk vitnemål får poeng fra poengalgoritmene
-      Gitt at søkeren ikke har noe elektronisk vitnemål
-      Og at rangeringsregelverket gir alderspoeng og kjønnspoeng for grunnlaget
-      Når saksbehandleren legger til grunnlaget
-      Så har søknaden alderspoeng og kjønnspoeng for grunnlaget
-
-    Scenario: Poengene regnes ut på nytt når saksbehandleren endrer grunnlaget
-      Gitt at rangeringsregelverket gir alderspoeng og kjønnspoeng for to grunnlag
-      Og at søknaden har det ene grunnlaget
-      Når saksbehandleren bytter til det andre grunnlaget
-      Så har søknaden alderspoeng og kjønnspoeng for det andre grunnlaget
-
-    Scenario: Poengene er låst for automatikken når saksbehandleren har behandlet saken
-      Gitt at saksbehandleren har behandlet saken
-      Og at søknaden har alderspoeng og kjønnspoeng for grunnlaget
-      Når den automatiske behandlingen kjøres for søknaden
-      Så er alderspoengene og kjønnspoengene på søknaden uendret
-
-    Scenariomal: Samme poeng uansett hvem som setter grunnlaget
-      Gitt at rangeringsregelverket gir alderspoeng og kjønnspoeng for grunnlaget
-      Og at søkeren har ett elektronisk vitnemål som gir generell studiekompetanse
-      Når <hvem> setter grunnlaget på søknaden
-      Så har søknaden de samme alderspoengene og kjønnspoengene for grunnlaget
-
-      Eksempler:
-        | hvem                         |
-        | den automatiske behandlingen |
-        | saksbehandleren              |
+      Og tilleggspoengene er regnet ut for grunnlaget
 
   Regel: Sporbarhet
 

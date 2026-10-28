@@ -1,7 +1,7 @@
 # language: no
 # GitHub: #501
 # Kilde: Bullet fra #350-body — "Brukers roller og tilganger deaktiveres automatisk når bruker slutter i en stilling"
-@BRU-PER-ETT-005 @planned
+@BRU-PER-ETT-005 @draft
 Egenskap: Fjerne alle roller ved stillingsslutt
   Som brukeradministrator
   ønsker jeg at en person automatisk mister alle roller når personen slutter i en stilling

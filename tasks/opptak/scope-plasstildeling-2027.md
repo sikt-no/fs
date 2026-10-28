@@ -3,11 +3,12 @@
 - **Slug**: plasstildeling-2027
 - **Initiativ**: [#216](https://github.com/sikt-no/fs/issues/216)
 - **Eier**: –
-- **Siste oppdatering**: 2026-10-15
+- **Siste oppdatering**: 2026-10-24
 
 ## Mål
 
 - Opptaksforvalter kan opprette plasstildelingsrunder, sette antall tilbud, starte og gjennomføre plasstildelinger, kontrollere og publisere resultatet.
+- Rundetypene er definert i regelverkssamlingen, med innstillingene plasstildelingen leser. Plasstildelingen ser aldri på hvilken rundetype det er, så andre opptak kan få egne rundetyper uten kodeendring (avklart 2026-10-24). Samordna opptak (UHG og HYU) får hovedtildeling, supplering og etterfylling med samme oppførsel som før.
 - Saksbehandler og søker ser det publiserte resultatet, og søkeren kan svare på tilbud og ventelisteplass.
 - Klar for første samordna opptak 2027. Produksjonsfrist 8. desember 2026.
 
@@ -16,8 +17,8 @@
 - Automatiske nye tilbud ved nei-svar mellom plasstildelingsrundene (oppgave 10, Won't 2027).
 - Vedtaksformidling (svarmelding, påminnelse, åpnet vedtak, digital postkasse og hendelseslogg). Det blir en egen oppgave og et eget scope senere, se [vedtaksformidling](vedtaksformidling/).
 - Å sette standard plassflyt og kvoteprioritet (`@OPT-REG-KVO-003` og `@OPT-REG-KVO-004`, før `@OPT-OVO-INN-002` og `@OPT-OVO-INN-003`). De settes i regelverkssamlingen (avklart 2026-10-21). De er flyttet til [scope-kvoter-i-opptaket-2027](scope-kvoter-i-opptaket-2027.md) 2026-10-15, så de kan leveres før plasstildelingen. Hva plasstildelingen gjør med dem, er fortsatt her.
-- At lærestedene melder feil i resultatet til forvaltende organisasjon i løsningen (Could, senere). E-post er godt nok nå, så lenge forvaltende organisasjon kan endre antall tilbud etter lærestedenes periode (avklart med domeneekspert 2026-10-15).
-- Regelverk, rangering og kvalifisering. De kommer fra søknadsbehandlingen og regelverket, ikke fra plasstildelingen.
+- At lærestedene melder feil i resultatet til opptakets forvalter i løsningen (Could, senere). E-post er godt nok nå, så lenge opptakets forvalter kan endre antall tilbud etter lærestedenes periode (avklart med domeneekspert 2026-10-15).
+- Regelverk, rangering og kvalifisering. De kommer fra søknadsbehandlingen og regelverket, ikke fra plasstildelingen. Unntaket er rundetypene (`@OPT-REG-RUN-001`), som plasstildelingen trenger nå.
 
 ## Kilder
 
@@ -32,12 +33,13 @@
 
 | Oppgave | Krav | MoSCoW | Skisse | Issue | Kommentar |
 |---|---|---|---|---|---|
+| [plasstildeling](plasstildeling/) | `@OPT-REG-RUN-001` [forvalte_rundetyper.feature](../../krav/02%20Opptak/10%20Regelverk/06%20Rundetyper/forvalte_rundetyper.feature) | Must | – | [#216](https://github.com/sikt-no/fs/issues/216) | Rundetypene og innstillingene deres i regelverkssamlingen (avklart 2026-10-24). Kode: gjenstår |
 | [plasstildeling](plasstildeling/) | `@OPT-PLA-RUN-001` [forvalte_runder.feature](../../krav/02%20Opptak/14%20Plasstildeling/01%20Runder/forvalte_runder.feature) | Must | – | [#216](https://github.com/sikt-no/fs/issues/216) | Oppgave 1: legge til runder for plasstildeling. Kode etter workshop 2026-09-14: løst |
 | [plasstildeling](plasstildeling/) | `@OPT-PLA-INN-001` [antall_tilbud_som_skal_gis.feature](../../krav/02%20Opptak/14%20Plasstildeling/02%20Tildelingsinnstillinger/antall_tilbud_som_skal_gis.feature) | Must | – | [#583](https://github.com/sikt-no/fs/issues/583) | Oppgave 2: antall tilbud som skal gis per utdanningskvote. Jira [TAKE-327](https://sikt.atlassian.net/browse/TAKE-327). Kode: gjenstår |
 | [plasstildeling](plasstildeling/) | `@OPT-PLA-INN-002` [plassflyt.feature](../../krav/02%20Opptak/14%20Plasstildeling/02%20Tildelingsinnstillinger/plassflyt.feature) | Must | – | [#216](https://github.com/sikt-no/fs/issues/216) | Oppgave 3: plassflyt ved ledige plasser per utdanningskvote. Kode: løst |
 | [plasstildeling](plasstildeling/) | `@OPT-PLA-TIL-001` [starte_plasstildeling.feature](../../krav/02%20Opptak/14%20Plasstildeling/03%20Tildeling/starte_plasstildeling.feature) | Must | – | [#216](https://github.com/sikt-no/fs/issues/216) | Oppgave 4: starte en plasstildeling. Kode: løst |
 | [plasstildeling](plasstildeling/) | `@OPT-PLA-TIL-002` [gjennomføre_plasstildeling.feature](../../krav/02%20Opptak/14%20Plasstildeling/03%20Tildeling/gjennomf%C3%B8re_plasstildeling.feature) | Must | – | [#216](https://github.com/sikt-no/fs/issues/216) | Oppgave 5: gjennomføre plasstildeling. Kode: løst |
-| [plasstildeling](plasstildeling/) | `@OPT-PLA-TIL-003` [kompensasjonstilbud_ved_opprykk.feature](../../krav/02%20Opptak/14%20Plasstildeling/03%20Tildeling/kompensasjonstilbud_ved_opprykk.feature) | Must | – | [#584](https://github.com/sikt-no/fs/issues/584) | Oppgave 6: kompensasjonstilbud ved opprykk i supplering. Jira [TAKE-328](https://sikt.atlassian.net/browse/TAKE-328). Kode: gjenstår |
+| [plasstildeling](plasstildeling/) | `@OPT-PLA-TIL-003` [kompensasjonstilbud_ved_opprykk.feature](../../krav/02%20Opptak/14%20Plasstildeling/03%20Tildeling/kompensasjonstilbud_ved_opprykk.feature) | Must | – | [#584](https://github.com/sikt-no/fs/issues/584) | Oppgave 6: kompensasjonstilbud ved opprykk. Jira [TAKE-328](https://sikt.atlassian.net/browse/TAKE-328). Kode: gjenstår |
 | [plasstildeling](plasstildeling/) | `@OPT-PLA-RES-001` [vise_resultat.feature](../../krav/02%20Opptak/14%20Plasstildeling/04%20Resultat/vise_resultat.feature) | Must | – | [#585](https://github.com/sikt-no/fs/issues/585) | Oppgave 7: resultatet før publisering, for opptaksforvalter. Jira [TAKE-329](https://sikt.atlassian.net/browse/TAKE-329). Kode: gjenstår |
 | [plasstildeling](plasstildeling/) | `@OPT-PLA-RES-003` [se_publisert_resultat.feature](../../krav/02%20Opptak/14%20Plasstildeling/04%20Resultat/se_publisert_resultat.feature) | Must | – | [#585](https://github.com/sikt-no/fs/issues/585) | Oppgave 7: det publiserte resultatet, for saksbehandler. Jira [TAKE-329](https://sikt.atlassian.net/browse/TAKE-329). Kode: gjenstår |
 | [plasstildeling](plasstildeling/) | `@OPT-PLA-RES-002` [publisere_resultat.feature](../../krav/02%20Opptak/14%20Plasstildeling/04%20Resultat/publisere_resultat.feature) | Must | – | [#586](https://github.com/sikt-no/fs/issues/586) | Oppgave 8: publisere resultatet til søkerne. Jira [TAKE-330](https://sikt.atlassian.net/browse/TAKE-330). Kode: delvis |
