@@ -14,6 +14,7 @@ Egenskap: Se resultatet av plasstildelingen før publisering
   # også plasstildelingen før den er publisert, for de samme søknadene. Bare søkerne venter til publiseringen.
   # Det saksbehandler ser etter publisering, står i se_publisert_resultat.feature. Det søkeren ser,
   # står i publisere_resultat.feature.
+  # Resultatet slik søkeren vil se det, står i se_resultatet_som_søker.feature (@could, skilt ut 2026-10-28).
   # Status i kode: gjenstår.
 
   Bakgrunn:
@@ -168,21 +169,6 @@ Egenskap: Se resultatet av plasstildelingen før publisering
       Når opptakets forvalter starter en ny plasstildeling i "Hovedrunde"
       Så bruker den nye plasstildelingen 35 tilbud for "Sykepleie, høst 2027"
       Og lærestedene kan kontrollere resultatet av den nye plasstildelingen
-
-  @openquestion @depends-on-OPT-PLA-RES-002
-  Regel: Opptaksforvalter ser resultatet slik søkeren vil se det i Min kompetanse
-    # ÅPNE SPØRSMÅL:
-    # - Ser også saksbehandler ved lærestedet resultatet slik søkeren vil se det?
-    # - HK-dir ønsker en liste med «sære» søkere å ta stikkprøver av. Hva gjør en søker sær?
-    # Lagt til 2026-10-28 etter brukertestene med HK-dir (oktober 2026): HK-dir vil se det søkeren ser før publisering,
-    # for å ta stikkprøver. Det søkeren ser etter publisering, står i publisere_resultat.feature.
-    # Svarbrevet (svarmeldingen) er ikke med. Det utforskes for seg, se Confluence «Vedtaksbrev og svar på opptaket»
-    # (https://sikt.atlassian.net/wiki/spaces/STUDIEADM/pages/4972347396) og HK-13784.
-
-    Scenario: Se resultatet slik søkeren vil se det
-      Gitt at plasstildelingen i "Hovedrunde" ikke er publisert
-      Når opptaksforvalter ser resultatet for søknaden til "Kari Nordmann" slik søkeren vil se det
-      Så ser opptaksforvalter resultatet slik det vil vises for søkeren i Min kompetanse når plasstildelingen er publisert
 
   Regel: Plasstildelinger i samme plasstildelingsrunde kan sammenlignes
 

@@ -45,14 +45,6 @@ Egenskap: Plasstildelingsrunder i et opptak
         | rundetype  |
         | svarfrist  |
 
-    # Gap mot koden (verifisert 2026-10-09): påminnelse om svarfrist finnes ikke i fs-admin eller fs-plattform.
-    # Endret 2026-10-28 etter brukertesten med HK-dir 2026-10-27: påminnelsen settes med dato og klokkeslett.
-    # AVKLART 2026-10-28 (produkteier, etter brukertesten med HK-dir): Én påminnelse per plasstildelingsrunde holder.
-    Scenario: Sette påminnelse om svarfrist
-      Gitt at plasstildelingsrunden "Hovedrunde" har svarfrist "2027-07-20 23:59"
-      Når opptaksforvalter setter påminnelse om svarfrist til "2027-07-18 09:00"
-      Så får søkere med ubesvart tilbud i plasstildelingsrunden en påminnelse "2027-07-18 09:00"
-
   @depends-on-OPT-REG-RUN-001
   Regel: Rundetypene i regelverkssamlingen avgjør hvilke plasstildelingsrunder opptaket kan ha
 
@@ -100,7 +92,8 @@ Egenskap: Plasstildelingsrunder i et opptak
       Så kan etterfyllingsrunden komme før en eventuell suppleringsrunde
 
   Regel: Navn og svarfrist kan alltid endres
-    # Hva søkeren merker når svarfristen flyttes, står i 05 Svar/håndtere_svar_fra_søker.feature.
+    # Hva søkeren merker når svarfristen flyttes, står i 05 Svar/håndtere_svar_fra_søker.feature, og meldingen
+    # til søkeren i 05 Svar/varsler_og_meldinger_i_plasstildelingen.feature. Der står også påminnelsen om svarfrist.
 
     Scenario: Endre navn og svarfrist på en plasstildelingsrunde
       Gitt at opptaket har plasstildelingsrunden "Hovedrunde" med rundetype "Hovedtildeling"
