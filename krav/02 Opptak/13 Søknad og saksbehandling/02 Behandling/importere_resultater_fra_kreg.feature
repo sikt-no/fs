@@ -2,16 +2,16 @@
 # Utledet fra koden i fs-plattform (opptak), sjekket mot main 2026-10-28: SoknadshendelseJobb
 # henter resultatene etter at sakene er opprettet, KregKlient (kompetanseoppnaelseByNasjonalId),
 # KregVgsParser og VgsLagringService lagrer dem i kompetanse.vgs_dokument med fag,
-# programområder og merknader. Hva som gjøres med resultatene etterpå, står i
-# OPT-BEH-BEH-015 (GSK), -018 (poeng), -019 (grunnlag) og -020 (kravelementer).
-@OPT-BEH-BEH-029 @must @draft
+# programområder og merknader. Hva som gjøres med resultatene etterpå (GSK, poeng, grunnlag og
+# kravelementer), står i kravene i @ref-taggene.
+@OPT-BEH-BEH-029 @must @draft @ref-OPT-BEH-BEH-015 @ref-OPT-BEH-BEH-018 @ref-OPT-BEH-BEH-019 @ref-OPT-BEH-BEH-020
 Egenskap: Importere resultater fra KREG
   Som saksbehandler
   ønsker jeg at søkerens resultater fra videregående skole hentes fra KREG når søknaden kommer inn
   slik at søknaden behandles på resultatene søkeren har, uten at jeg må hente dem selv.
 
   KREG (Nasjonal vitnemålsdatabase) har søkerens vitnemål og kompetansebevis fra videregående
-  skole. Opptaket henter dem med søkerens fødselsnummer og lagrer dem på søkeren, så de gjelder
+  skole. Opptakssystemet henter dem med søkerens fødselsnummer og lagrer dem på søkeren, så de gjelder
   alle søknadene søkeren har. Saksbehandlingen og den automatiske behandlingen bygger på det
   som er lagret.
 
@@ -49,7 +49,7 @@ Egenskap: Importere resultater fra KREG
       # ÅPNE SPØRSMÅL:
       # - I dag hentes resultatene først når sakene er opprettet. Mangler opptaket regler for å
       #   fordele søknadene, venter hentingen også. Skal resultatene hentes uansett?
-      Gitt at opptaket mangler regler for å fordele søknadene
+      Gitt at opptaket mangler saksbehandlertildelingsregel
       Og at søkeren har et vitnemål i KREG
       Når søkeren sender inn søknaden
       Så er vitnemålet importert
@@ -87,7 +87,7 @@ Egenskap: Importere resultater fra KREG
       Så har søkeren vitnemålet én gang
       Og det importerte vitnemålet er uendret
 
-  Regel: Et vitnemål som er annullert i KREG, er annullert i opptaket
+  Regel: Et vitnemål som er annullert i KREG, er annullert i opptakssystemet
 
     Scenario: Annullert vitnemål importeres som annullert
       Gitt at søkeren har et annullert vitnemål i KREG

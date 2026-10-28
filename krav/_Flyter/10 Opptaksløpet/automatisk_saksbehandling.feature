@@ -3,7 +3,7 @@
 Egenskap: Automatisk saksbehandling
   Fra søknaden er blitt en sak hos den saksbehandlende organisasjonen, til saken er ferdig
   behandlet og er med i plasstildelingen, uten at en saksbehandler har gjort noe. Søkerens
-  vitnemål importeres fra KREG når søknaden kommer inn (OPT-BEH-BEH-029), og påstanden om GSK
+  vitnemål importeres fra KREG når saken er opprettet (OPT-BEH-BEH-029), og påstanden om GSK
   beregnes for hvert vitnemål når vitnemålet importeres (OPT-BEH-BEH-015).
   Flyten gjelder søkere med ett vitnemål, med påstanden at søkeren har GSK. Den automatiske
   behandlingen setter grunnlaget, poengene, vurderingen av kravelementene og kvoten, i den
@@ -23,9 +23,9 @@ Egenskap: Automatisk saksbehandling
   # OPT-BEH-BEH-029: «Resultatene hentes når søknaden kommer inn», «Alle vitnemål og kompetansebevis søkeren har i KREG, importeres»
   Regel: Søkerens resultater importeres fra KREG når søknaden kommer inn
 
-    Scenario: Vitnemålet fra KREG er klart for behandlingen når søknaden er sendt inn
+    Scenario: Vitnemålet fra KREG er klart for behandlingen når saken er opprettet
       Gitt at "Kari Nordmann" har et vitnemål i KREG
-      Når "Kari Nordmann" sender inn søknaden
+      Når saken hos "Universitetet i Oslo" er opprettet
       Så er vitnemålet importert
       Og GSK kan beregnes for vitnemålet
 
