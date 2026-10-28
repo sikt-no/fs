@@ -29,7 +29,6 @@ fs/
 │   ├── 08 Teknisk/
 │   ├── 09 Organisasjon/
 │   ├── 10 Felleskrav/
-│   ├── _Interne prosesser/
 │   ├── _Flyter/                   # Flyter på tvers av domener (pilot, se «Flyter» i krav/README.md)
 │   └── 99 Demo/                   # Demo/test features
 ├── cdp-tester/                    # Varige tester for den agentiske funksjonstesten (Gherkin som en agent kjører i Chrome mot testmiljø), lages fra krav/ (se cdp-tester/README.md)

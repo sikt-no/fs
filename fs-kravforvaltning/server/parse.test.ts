@@ -214,8 +214,9 @@ test('sub-domener nummereres fra 10, kapabiliteter har nummer', () => {
   assert.ok(hasRule(feature(), 'folder-numbering', 'krav/02 Opptak/05 Regelverk/02 Krav/lage_opptak.feature'));
   assert.ok(hasRule(feature(), 'folder-numbering', 'krav/02 Opptak/10 Regelverk/Krav/lage_opptak.feature'));
   assert.ok(!hasRule(feature(), 'folder-numbering'));
-  // Demo og interne prosesser følger ikke nummereringen
+  // Demo følger ikke nummereringen, men andre mapper med _ gjør det
   assert.ok(!hasRule(feature(), 'folder-numbering', 'krav/99 Demo/01 Studiekatalog/01 Søk/lage_opptak.feature'));
+  assert.ok(hasRule(feature(), 'folder-numbering', 'krav/_Andre/Studiekatalog/Søk/lage_opptak.feature'));
 });
 
 test('flyter ligger rett under en nummerert prosess i _Flyter', () => {
