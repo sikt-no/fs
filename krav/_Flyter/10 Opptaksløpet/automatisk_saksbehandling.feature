@@ -2,8 +2,9 @@
 @FLY-OPT-AUT-001 @must @draft @e2e @depends-on-FLY-OPT-SAK-001
 Egenskap: Automatisk saksbehandling
   Fra søknaden er blitt en sak hos den saksbehandlende organisasjonen, til saken er ferdig
-  behandlet og er med i plasstildelingen, uten at en saksbehandler har gjort noe. Påstanden om
-  GSK beregnes for hvert vitnemål når vitnemålet importeres, før flyten (OPT-BEH-BEH-015).
+  behandlet og er med i plasstildelingen, uten at en saksbehandler har gjort noe. Søkerens
+  vitnemål importeres fra KREG når søknaden kommer inn (OPT-BEH-BEH-029), og påstanden om GSK
+  beregnes for hvert vitnemål når vitnemålet importeres (OPT-BEH-BEH-015).
   Flyten gjelder søkere med ett vitnemål, med påstanden at søkeren har GSK. Den automatiske
   behandlingen setter grunnlaget, poengene, vurderingen av kravelementene og kvoten, i den
   rekkefølgen, og setter saken til ferdig behandlet når alt er avgjort. Andre søkere behandles
@@ -17,6 +18,16 @@ Egenskap: Automatisk saksbehandling
 
   Bakgrunn:
     Gitt at søknaden til "Kari Nordmann" har en sak hos "Universitetet i Oslo"
+
+  @depends-on-OPT-BEH-BEH-029
+  # OPT-BEH-BEH-029: «Resultatene hentes når søknaden kommer inn», «Alle vitnemål og kompetansebevis søkeren har i KREG, importeres»
+  Regel: Søkerens resultater importeres fra KREG når søknaden kommer inn
+
+    Scenario: Vitnemålet fra KREG er klart for behandlingen når søknaden er sendt inn
+      Gitt at "Kari Nordmann" har et vitnemål i KREG
+      Når "Kari Nordmann" sender inn søknaden
+      Så er vitnemålet importert
+      Og GSK kan beregnes for vitnemålet
 
   @depends-on-OPT-BEH-BEH-015 @depends-on-OPT-BEH-BEH-025
   # OPT-BEH-BEH-015: «Opptakssystemets påstand om GSK på vitnemålet»
