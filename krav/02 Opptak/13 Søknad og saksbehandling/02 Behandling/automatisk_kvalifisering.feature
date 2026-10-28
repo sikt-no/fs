@@ -239,7 +239,7 @@ Egenskap: Automatisk vurdering av spesielle opptakskrav
 
     Scenario: Kravelementet vurderes i den automatiske behandlingen
       Gitt at søkeren har ett elektronisk vitnemål som ikke er annullert
-      Og at søknaden har et kravelement som er koblet til vitnemålet
+      Og at søknaden har et kravelement som er koblet til en kravkode som kan vurderes automatisk
       Når søknaden behandles automatisk
       Så er kravelementet vurdert
 
@@ -250,9 +250,10 @@ Egenskap: Automatisk vurdering av spesielle opptakskrav
       Og resten av den automatiske behandlingen er gjennomført
 
   Regel: Saksbehandlerens vurdering av et kravelement endres ikke av automatikken
-    # Saksbehandleren kan også la kravelementet stå uten å endre vurderingen,
-    # og det er da låst på samme måte. Låsen gjelder ett kravelement, ikke hele
-    # saken.
+    # Saksbehandleren kan også velge "la stå" på kravelementet uten å endre
+    # vurderingen, og det er da låst på samme måte. Et kravelement som
+    # saksbehandleren bare ser på, er ikke låst. Låsen gjelder ett kravelement,
+    # ikke hele saken.
 
     Scenario: Saksbehandleren overstyrer vurderingen automatikken har satt
       Gitt at søknaden har fagkravet Fysikk 1, vurdert automatisk som ikke oppfylt
@@ -271,11 +272,17 @@ Egenskap: Automatisk vurdering av spesielle opptakskrav
       Når saksbehandleren endrer vurderingen av kravelementet
       Så er kravelementet låst mot automatisk vurdering
 
-    Scenario: Saksbehandleren lar kravelementet stå
+    Scenario: Saksbehandleren velger "la stå" på kravelementet
       Gitt at søknaden har et kravelement som er vurdert automatisk
-      Når saksbehandleren lar kravelementet stå
+      Når saksbehandleren velger "la stå" på kravelementet
       Så er kravelementet låst mot automatisk vurdering
       Og vurderingen av kravelementet er som før
+
+    Scenario: Kravelement som saksbehandleren bare ser på, vurderes automatisk igjen
+      Gitt at søknaden har et kravelement som er vurdert automatisk
+      Og at saksbehandleren har sett på kravelementet uten å endre vurderingen eller velge "la stå"
+      Når søknaden behandles automatisk
+      Så er kravelementet vurdert automatisk på nytt
 
     Scenario: Låst kravelement vurderes ikke på nytt
       Gitt at søknaden har et kravelement som er låst mot automatisk vurdering
@@ -284,7 +291,7 @@ Egenskap: Automatisk vurdering av spesielle opptakskrav
 
     Scenario: Andre kravelementer vurderes selv om saksbehandleren har vurdert ett
       Gitt at saksbehandleren har vurdert Matematikk R1 på søknaden
-      Og at søknaden har fagkravet Fysikk 1, koblet til vitnemålet
+      Og at søknaden har fagkravet Fysikk 1, koblet til en kravkode som kan vurderes automatisk
       Når søknaden behandles automatisk
       Så er fagkravet Fysikk 1 vurdert automatisk
       Og vurderingen av Matematikk R1 er uendret
@@ -299,13 +306,6 @@ Egenskap: Automatisk vurdering av spesielle opptakskrav
       Gitt at saksbehandleren har lagt inn et unntak for et kravelement på et grunnlag
       Når søknaden behandles automatisk
       Så er unntaket uendret
-
-    Scenario: Saksbehandleren fyller ut bare Ja eller Nei
-      Gitt at søknaden har fagkravet Fysikk 1, koblet til vitnemålet, uten vurdering
-      Og at vitnemålet har karakteren 5 i Fysikk 1
-      Når saksbehandleren setter at fagkravet Fysikk 1 er oppfylt
-      Og søknaden behandles automatisk
-      Så har fagkravet Fysikk 1 ingen karakter
 
   Regel: Når grunnlaget endres, vurderes kravene på nytt
 
