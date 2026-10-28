@@ -74,12 +74,14 @@ Egenskap: Se søkerens elektroniske vitnemål
 
   Regel: Søkerens elektroniske vitnemål vises
 
+    @implemented
     Scenario: Se at søkeren har elektroniske vitnemål
       Gitt søkeren har elektroniske vitnemål
       Når jeg åpner grunnlaget på søknaden
       Så ser jeg hvor mange elektroniske vitnemål søkeren har
       Men vitnemålsoversikten er ikke åpnet
 
+    @implemented
     Scenario: Åpne vitnemålsoversikten
       Gitt søkeren har to elektroniske vitnemål
       Når jeg åpner vitnemålsoversikten
@@ -118,6 +120,7 @@ Egenskap: Se søkerens elektroniske vitnemål
       # paastandOmGsk. Poengene per vitnemål kommer fra Team Puffs
       # poengberegning, ikke fra KREG.
 
+    @implemented
     Scenario: Søker uten elektroniske vitnemål
       Gitt søkeren ikke har elektroniske vitnemål
       Når jeg åpner grunnlaget på søknaden
@@ -158,6 +161,7 @@ Egenskap: Se søkerens elektroniske vitnemål
       # det går fram at poengene mangler på grunn av en feil. Utformingen
       # hører i vise_elektroniske_vitnemål.design.md.
 
+    @implemented
     Scenario: Åpne et vitnemål i ny fane
       Gitt søkeren har elektroniske vitnemål
       Når jeg velger å åpne et vitnemål i ny fane
@@ -177,6 +181,7 @@ Egenskap: Se søkerens elektroniske vitnemål
       # er en konsekvens av valget, og hører derfor i L2 (#608),
       # velge_vitnemål_som_grunnlag.feature.
 
+    @implemented
     Scenario: Annullert vitnemål som ikke er brukt i en beregning vises ikke
       Gitt søkeren har et annullert vitnemål
       Og det annullerte vitnemålet er ikke brukt i en beregning på dette opptaket
@@ -198,6 +203,7 @@ Egenskap: Se søkerens elektroniske vitnemål
       # Regelen over holder det synlig i nettopp de tilfellene feilen kan
       # oppstå.
 
+  @implemented
   Regel: Innsyn styres av rettighet, ikke av hvem som har tatt saken
 
     Scenario: Saksbehandler med leserettighet ser søkerens vitnemål
