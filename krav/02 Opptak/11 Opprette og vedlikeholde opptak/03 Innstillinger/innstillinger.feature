@@ -209,6 +209,25 @@ Egenskap: Innstillinger for opptak
       Når opptaksforvalter angir at søkere ikke kan laste opp dokumentasjon
       Så er opptaket stengt for at søkere kan laste opp dokumentasjon
 
+  @draft @openquestion
+  Regel: Opptaksforvalter får et varsel når opplasting av dokumentasjon stenges
+    # ÅPNE SPØRSMÅL:
+    # - Skal informasjonsdatoen for dokumentasjon og ettersendingsfristen fjernes fra opptaket, eller bare skjules,
+    #   når opplasting stenges?
+
+    # Lagt til 2026-10-27 etter akseptansetesten: Som for de andre innstillingene med frister (tidlig opptak og
+    # ledige studieplasser) skal opptaksforvalter få et varsel før innstillingen slås av. Datoene for
+    # dokumentasjon skal ikke stå og kunne fylles ut når søkerne ikke kan laste opp dokumentasjon.
+    Scenario: Varsel før opplasting av dokumentasjon stenges
+      Gitt at opptaket har informasjonsdato for dokumentasjon "2027-04-15 23:59"
+      Når opptaksforvalter angir at søkere ikke kan laste opp dokumentasjon
+      Så ser opptaksforvalter et varsel om at datoene for dokumentasjon ikke lenger gjelder
+
+    Scenario: Datoene for dokumentasjon vises ikke når opplasting er stengt
+      Gitt at opptaket er stengt for at søkere kan laste opp dokumentasjon
+      Når opptaksforvalter ser fristene for opptaket
+      Så ser opptaksforvalter ikke informasjonsdatoen for dokumentasjon eller ettersendingsfristen
+
   @draft
   # Ikke relevant for samordna opptak
   Regel: Opptaksforvalter kan sette krav om studierett for å søke

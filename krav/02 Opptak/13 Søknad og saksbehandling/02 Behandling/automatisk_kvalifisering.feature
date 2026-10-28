@@ -78,9 +78,10 @@ Egenskap: Automatisk vurdering av spesielle opptakskrav
   fremgår om et kravelement er vurdert automatisk eller av saksbehandleren.
 
   # ÅPNE SPØRSMÅL:
-  # - «Godkjenn» i FS-klienten sletter søknadsmanglene for kravelementer som
-  #   gjelder vitnemålet. Skal den automatiske vurderingen gjøre det samme?
-  #   Se søknadsmangler.feature.
+  # - Den automatiske vurderingen lager og sjekker ut mangler for
+  #   kravelementene (søknadsmangler.feature). Skal den også gjøre noe med
+  #   manglene saksbehandleren har registrert, slik «Godkjenn» i FS-klienten
+  #   sletter dem?
   # - knytte_praksis_til_opptakskrav.feature (@OPT-BEH-BEH-006) setter et
   #   kravelement automatisk oppfylt fra praksis. Hvordan virker de to
   #   automatikkene sammen, og hvem eier låsingen?
@@ -215,11 +216,11 @@ Egenskap: Automatisk vurdering av spesielle opptakskrav
       Så er søkeren ikke kvalifisert på grunnlaget
 
     Scenario: Søkeren kan være kvalifisert på ett grunnlag og ikke på et annet
-      Gitt at søknaden har grunnlagene VOV og VES
-      Og at saksbehandleren har lagt inn et unntak for et kravelement på grunnlaget VOV
+      Gitt at søknaden har grunnlagene "VOV" og "VES"
+      Og at saksbehandleren har lagt inn et unntak for et kravelement på grunnlaget "VOV"
       Når kravene er vurdert
-      Så er søkeren kvalifisert på grunnlaget VES
-      Og søkeren er ikke kvalifisert på grunnlaget VOV
+      Så er søkeren kvalifisert på grunnlaget "VES"
+      Og søkeren er ikke kvalifisert på grunnlaget "VOV"
 
     @openquestion
     Scenario: Kvalifisert per poengvariant

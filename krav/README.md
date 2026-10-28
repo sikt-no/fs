@@ -129,7 +129,7 @@ Gherkin er et språk som alle andre, og må skrives godt for å være nyttig og 
 
 Tre nivåer: **Domene → Sub-domene → Kapabilitet**
 
-Feature-filer skal **kun** ligge på kapabilitetsnivå (nivå 3). *(sjekkes automatisk)* Sub-domener nummereres fra `10`, kapabiliteter fra `01`. `_Interne prosesser` og `99 Demo` følger ikke nummereringen. *(sjekkes automatisk)* Unntaket er `_Flyter`, som har ett nivå: `krav/_Flyter/<NN Prosess>/flyt.feature`, med prosessene nummerert fra `10`. *(sjekkes automatisk)* Se *Flyter*.
+Feature-filer skal **kun** ligge på kapabilitetsnivå (nivå 3). *(sjekkes automatisk)* Sub-domener nummereres fra `10`, kapabiliteter fra `01`. `99 Demo` følger ikke nummereringen. *(sjekkes automatisk)* Unntaket er `_Flyter`, som har ett nivå: `krav/_Flyter/<NN Prosess>/flyt.feature`, med prosessene nummerert fra `10`. *(sjekkes automatisk)* Se *Flyter*.
 
 ```
 krav/
@@ -161,7 +161,6 @@ krav/
 - `09 Organisasjon` – organisasjonsforvaltning
 - `10 Felleskrav` – tverrgående funksjonalitet
 - `99 Demo` – demo og testing
-- `_Interne prosesser` – egne arbeidsprosesser (f.eks. GitHub-automatisering)
 - `_Flyter` – løp på tvers av domener (se *Flyter*)
 
 ### Tverrgående kapabiliteter: hva vs. hvordan

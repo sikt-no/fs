@@ -63,6 +63,8 @@ Egenskap: Veilede søker om hvilken dokumentasjon som skal lastes opp
     # Virkningen av innstillingen for opplasting av dokumentasjon som opptaksforvalter setter i
     # 11 Opprette og vedlikeholde opptak/03 Innstillinger/innstillinger.feature.
     # Lagt til 2026-10-19 etter akseptansetesten av opprette og vedlikeholde opptak.
+    # AVKLART 2026-10-27 (produkteier, etter akseptansetesten): Det er bare innstillingen som stenger for
+    # opplasting, ikke informasjonsdatoen for dokumentasjon eller ettersendingsfristen.
 
     # AVKLART 2026-10-15 (Q1, TAKE-413): Standardverdien er at søkerne kan laste opp dokumentasjon.
     Scenario: Søker kan laste opp dokumentasjon når opptaksforvalter ikke har stengt for det
@@ -82,22 +84,30 @@ Egenskap: Veilede søker om hvilken dokumentasjon som skal lastes opp
       Når saksbehandleren registrerer et dokument på søknaden min
       Så er dokumentet registrert på søknaden
 
-  @draft
-  Regel: Søkeren ser den ordinære dokumentasjonsfristen i opptaket
-    # Virkningen av den ordinære dokumentasjonsfristen som opptaksforvalter setter i
+  @draft @openquestion
+  Regel: Søkeren ser informasjonsdatoen for dokumentasjon i opptaket
+    # ÅPNE SPØRSMÅL:
+    # - Hva skal søkeren få vite om ettersendingsfristen, når den ikke stenger for opplasting? Er den en frist
+    #   for mangler, eller en informasjonsdato (11 Opprette og vedlikeholde opptak/04 Frister/frister_og_hendelser.feature)?
+
+    # Virkningen av informasjonsdatoen for dokumentasjon som opptaksforvalter setter i
     # 11 Opprette og vedlikeholde opptak/04 Frister/frister_og_hendelser.feature.
     # Lagt til 2026-10-19 etter akseptansetesten av opprette og vedlikeholde opptak.
-    # AVKLART 2026-10-15 (Q14, TAKE-411): Fristen er informasjon om når dokumentasjonen bør være lastet opp.
-    # Det er ettersendingsfristen som stenger for opplasting, se
-    # 13 Søknad og saksbehandling/02 Behandling/søknadsmangler.feature.
+    # AVKLART 2026-10-15 (Q14, TAKE-411): Datoen er informasjon om når dokumentasjonen bør være lastet opp.
+    # AVKLART 2026-10-27 (produkteier, etter akseptansetesten): Ingen dato stenger for opplasting. Det gjør bare
+    # innstillingen for opplasting, se regelen over.
 
-    Scenario: Søker ser dokumentasjonsfristen
-      Gitt den ordinære dokumentasjonsfristen i opptaket er "2027-04-15 23:59"
-      Og ettersendingsfristen i opptaket er "2027-07-01 23:59"
+    Scenario: Søker ser informasjonsdatoen for dokumentasjon
+      Gitt informasjonsdatoen for dokumentasjon i opptaket er "2027-04-15 23:59"
       Og jeg har en utdanningsbakgrunn uten avvikende frister
       Når jeg skal laste opp dokumentasjon på søknaden
       Så ser jeg at dokumentasjonen bør være lastet opp innen "2027-04-15 23:59"
-      Og jeg ser at jeg kan laste opp dokumentasjon fram til "2027-07-01 23:59"
+
+    Scenario: Søker kan laste opp dokumentasjon etter informasjonsdatoen
+      Gitt informasjonsdatoen for dokumentasjon i opptaket er "2027-04-15 23:59"
+      Og opptaket er åpent for opplasting av dokumentasjon
+      Når jeg laster opp et dokument på søknaden "2027-05-02"
+      Så er dokumentet lastet opp på søknaden
 
 # ÅPNE SPØRSMÅL:
 # - Ordlyden i veiledningen er ikke fastsatt her. Konkret tekst, plassering og
