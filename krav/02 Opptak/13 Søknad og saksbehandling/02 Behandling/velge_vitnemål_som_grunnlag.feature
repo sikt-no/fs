@@ -19,7 +19,7 @@ Egenskap: Velge vitnemål som grunnlag for poengberegningen
 
   Den automatiske saksbehandlingen stopper når søkeren har flere vitnemål.
   Denne leveransen lar saksbehandleren peke ut ett vitnemål som grunnlag for
-  hele saken, og viser poengene Team Puffs beregning gir tilbake. Et valgt
+  hele saken, og viser poengene poengberegningen i opptak gir tilbake. Et valgt
   grunnlag låser poengene mot automatisk reberegning.
 
   Valget gjelder ett vitnemål for hele saken. Å velge vitnemål og fag per
@@ -104,12 +104,14 @@ Egenskap: Velge vitnemål som grunnlag for poengberegningen
       # ikke gjelde samtidig, se avgrensningen om valg av grunnlag i
       # vitnemålsbehandling.md.
 
+  @ref-OPT-BEH-BEH-018
   Regel: Poeng beregnes fra det valgte grunnlaget
 
-    # Poengberegningen eies av Team Puff. Vitnemålsbehandleren kaller
-    # endepunktene deres med grunnlaget saksbehandleren har valgt, og viser
-    # resultatet. Hvordan poengene regnes ut (hvilke karakterer som teller,
-    # avrunding, satser og tak) hører ikke til dette kravet.
+    # Poengene beregnes av poengberegningen i opptak, den samme som i den
+    # automatiske poengberegningen. Vitnemålsbehandleren sender grunnlaget
+    # saksbehandleren har valgt, og viser resultatet. Hvordan poengene regnes
+    # ut (hvilke karakterer som teller, avrunding, satser og tak) hører ikke
+    # til dette kravet.
     #
     # I L2 er grunnlaget det valgte vitnemålet. L3 og L4 utvider grunnlaget
     # med fagvalg og manuelt innlagte fag, og de samme scenarioene gjelder da
@@ -155,8 +157,8 @@ Egenskap: Velge vitnemål som grunnlag for poengberegningen
       Når jeg velger å beregne poengene
       Så er det lagrede grunnlaget uendret
       Og jeg ser at endringen ikke ble gjennomført
-      # AVKLART 08.10.2026: grunnlaget lagres ikke når kallet til Team Puffs
-      # endepunkt feiler. Saksbehandleren må gjøre endringen på nytt senere.
+      # AVKLART 08.10.2026: grunnlaget lagres ikke når poengberegningen
+      # feiler. Saksbehandleren må gjøre endringen på nytt senere.
       # Grunnlag og poeng er dermed aldri ute av takt.
       #
       # Endret 21.10.2026: kallet skjer når saksbehandleren velger å beregne
@@ -232,8 +234,8 @@ Egenskap: Velge vitnemål som grunnlag for poengberegningen
         | språkpoeng    |
       # AVKLART 21.10.2026: skjemaet skal stoppe ugyldige verdier, både for
       # realfagspoeng og språkpoeng. Grensene, for eksempel taket på
-      # realfagspoeng, eies av Team Puff, så skjemaet må få dem derfra.
-      # Utformingen av beskjeden hører i
+      # realfagspoeng, hører til poengberegningen, så skjemaet må få dem
+      # derfra. Utformingen av beskjeden hører i
       # velge_vitnemål_som_grunnlag.design.md.
 
     Scenario: Se hvilket vitnemål et poeng bygger på
