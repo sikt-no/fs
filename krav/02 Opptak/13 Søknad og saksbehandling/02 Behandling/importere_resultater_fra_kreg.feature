@@ -137,15 +137,29 @@ Egenskap: Importere resultater fra KREG
     # - Hvilke søkere abonnerer opptaket på, og hvor lenge? Alle med aktive søknader, eller
     #   bare til opptaket er avsluttet?
     # - Hvilke endringer skal komme: nytt vitnemål, annullering, opphevet annullering?
+    # - Hva skjer med en søknad som er behandlet, når vitnemålet den er behandlet på, annulleres
+    #   eller erstattes? Behandles den på nytt, varsles saksbehandleren, eller begge deler?
+    #   GSK-konklusjonen trekkes tilbake etter OPT-BEH-BEH-015, og spørsmålet står også i
+    #   OPT-BEH-BEH-025.
     # Varselet til saksbehandleren om nytt vitnemål står i OPT-BEH-BEH-021.
 
-    Scenario: Nytt vitnemål i KREG importeres uten at søkeren endrer søknaden
-      Gitt at søkeren har en søknad i et opptak som ikke er avsluttet
-      Når KREG får et nytt vitnemål for søkeren
+    Scenario: Søkeren får vitnemålet etter at søknaden er levert
+      Gitt at søkeren har levert søknaden uten å ha et vitnemål i KREG
+      Og at opptaket ikke er avsluttet
+      Når KREG får et vitnemål for søkeren
       Så er vitnemålet importert uten at søkeren har endret søknaden
 
-    Scenario: Annullering i KREG importeres uten at søkeren endrer søknaden
-      Gitt at søkerens vitnemål er importert
-      Og at søkeren har en søknad i et opptak som ikke er avsluttet
+    Scenario: Vitnemålet annulleres og erstattes av et nytt etter at opptakssystemet har behandlet søknaden
+      Gitt at opptakssystemet har behandlet søknaden på søkerens importerte vitnemål
+      Og at opptaket ikke er avsluttet
       Når vitnemålet annulleres i KREG
-      Så er det importerte vitnemålet annullert uten at søkeren har endret søknaden
+      Og søkeren får et nytt vitnemål i KREG
+      Så er det importerte vitnemålet annullert
+      Og det nye vitnemålet er importert
+
+    Scenario: Vitnemålet annulleres uten at det kommer et nytt, etter at opptakssystemet har behandlet søknaden
+      Gitt at opptakssystemet har behandlet søknaden på søkerens importerte vitnemål
+      Og at opptaket ikke er avsluttet
+      Når vitnemålet annulleres i KREG
+      Så er det importerte vitnemålet annullert
+      Og søkeren har ikke noe importert vitnemål som ikke er annullert
