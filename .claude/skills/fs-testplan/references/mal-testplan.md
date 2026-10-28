@@ -50,9 +50,9 @@ Kolonnene `Nøkkel` (etter `Nr`), `Innlogging` og `Start-URL` (etter `Organisasj
 
 | Nr | Nøkkel | Navn | Rolle | Organisasjon | Innlogging | Start-URL | Brukes til |
 |---|---|---|---|---|---|---|---|
-| 1 | <nøkkel> | <navn> | <rolle fra kravene> | <organisasjon> | <verdi i «Overstyrt bruker» (ellers Chrome-profil eller Feide-ID)> | <URL> | <hvilke krav eller deler> |
+| 1 | <rolle>-<relasjon> | <navn> | <forretningsrollen fra koden> | <organisasjon> | <raden i «Overstyrt bruker»: `<NAVN> • <rolle> (<organisasjon>)` (ellers Chrome-profil eller Feide-ID)> | <URL> | <hvilke krav eller deler> |
 
-Nøkkelen er et stabilt navn i kebab-case for rollen (`brukeradministrator-alle-miljoer`), og endres ikke om navnet på testbrukeren byttes. Aldri passord i testplanen. Se [`roller-og-testdata.md`](../../../references/akseptansetest/roller-og-testdata.md).
+Nøkkelen er rollen og relasjonen scenarioet trenger (`opptak-forvalter-deltakende`), aldri organisasjonen eller personen, og endres ikke om testbrukeren eller organisasjonen byttes. Rollene foreslås fra koden (*Finne rollene og foreslå testbrukere*), og personaen og `Innlogging` kopieres fra miljøfila (`cdp-tester/_Miljøer/<miljø>.md`), som er kilden: «Fra [<miljø>.md](<lenke>), <dato>». Er de uenige, gjelder miljøfila. Aldri passord i testplanen. Se [`roller-og-testdata.md`](../../../references/akseptansetest/roller-og-testdata.md).
 
 #### Tilgangsmatrise
 
@@ -64,7 +64,7 @@ Fra tilgangsradene i verify-rapporten. Den viser hvilke roller kravet har ved hv
 
 ### Testdata
 
-Testdataene testene trenger, med nøkkel. Testplanen sier hvilke data som trengs og hvilken tilstand de skal ha, ikke hvordan de lages: det løses separat, og ligger utenfor teststrategien. Testdata er syntetiske.
+Testdataene testene trenger, med nøkkel. Testplanen sier hvilke data som trengs og hvilken tilstand de skal ha, ikke hvordan de lages: det løses separat, og ligger utenfor teststrategien. Testdata er syntetiske. Navnet og `Søk/URL` kopieres fra miljøfila, som er kilden: «Fra [<miljø>.md](<lenke>), <dato>».
 
 | Hva | Nøkkel | Navn | Hvor | Søk/URL | Utgangstilstand | Brukes av |
 |---|---|---|---|---|---|---|
@@ -167,7 +167,7 @@ Omfanget av testcasene, ikke testcasene selv. `fs-testcaser-cdp` lager testcasen
 |---|---|---|---|---|
 | `@DOM-SUB-KAP-NNN` | <regeltittel, eller regel i koden uten scenario> | <N> (scenariomal: <N> eksempler) | <hva som prøves: obligatoriske felt «<felt>», «<felt>» (tomt, bare mellomrom, for lang verdi), grenseverdier for «<felt>», ugyldige statusoverganger …> | grenseverdianalyse / ekvivalensklasser / beslutningstabell / tilstandsoverganger / – |
 
-Testcasene står i `cdp-tester/<kravstien>/` (lenke når de er laget). Utledede testcaser lages bare der regelen har verdier eller betingelser å teste.
+Testcasene står i `cdp-tester/<kravstien>/` (lenke når de er laget). Finnes testene fra før, står de her som de er, og lages testene etter testplanen, synkes tabellen med `fs-testplan` (*Synk med testene og miljøfila*). Utledede testcaser lages bare der regelen har verdier eller betingelser å teste.
 
 ### Fase 3: intern akseptansetest
 

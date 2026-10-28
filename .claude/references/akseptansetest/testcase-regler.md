@@ -51,7 +51,7 @@ Eksemplene i Gherkin («NTNU», en dato) er eksempler, ikke testdata. Testbruker
 
 ## R6. Hele veien til resultatet
 
-Stegene går helt til der det forventede resultatet kan ses. Skal resultatet ses et annet sted (hos søkeren, i saksbehandlingen, som en annen testbruker), står stegene dit i testcasen. Kan det ikke ses i testmiljøet, er testcasen ikke testbar nå (se *Ikke testbart nå* i malen, eller «Ikke kjørbart» i `cdp-tester/`).
+Stegene går helt til der det forventede resultatet kan ses. Skal resultatet ses et annet sted (hos søkeren, i saksbehandlingen, som en annen testbruker), står stegene dit i testcasen. Kan det ikke ses i testmiljøet, er testcasen ikke testbar nå (se *Ikke testbart nå* i malen). I `cdp-tester/` lages testen likevel, og kjøringen viser at den ikke kan tas.
 
 ## R7. Forventet resultat kan ses
 
@@ -113,7 +113,7 @@ En testcase merket «Kjent mangel (<sak>)» har saken fra verify-rapporten eller
 
 | # | Sjekk |
 |---|---|
-| 1 | Hvert scenario i gating-settet har en testcase (fase 2), eller står i «Ikke testbart nå»/«Ikke kjørbart» eller «Ikke med i denne testen». I fase 3 er alle scenarioene i fasene i «Flyter» som er med i testen, dekket |
+| 1 | Hvert scenario i gating-settet har en testcase (fase 2), eller står i «Ikke testbart nå» eller «Ikke med i denne testen» (i `cdp-tester/` blir alle tester). I fase 3 er alle scenarioene i fasene i «Flyter» som er med i testen, dekket |
 | 2 | Ingen testcase svarer til noe som ikke står i kravene, eller (fase 2) til en utledet regel som er merket som det |
 | 3 | Reglene for fasen (tabellen over) er fulgt i hver testcase |
 | 4 | «Faktisk resultat» og «Status» er tomme |

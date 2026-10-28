@@ -1,6 +1,6 @@
 ---
 name: fs-testcaser-cdp
-description: Lager og oppdaterer de varige testene for den agentiske funksjonstesten (fase 2 i teststrategien (forslag), «Teststrategi for FS – fra krav til akseptanse» i Confluence, STUDIEADM): `cdp-tester/`, Gherkin som en agent kjører i Chrome med `cdp`-skillen mot et testmiljø, fra kravene under `krav/` og testplanen. Fase 2 er obligatorisk og tar mesteparten av den funksjonelle testingen. Hvert scenario i gating-settet som er `@implemented`, blir et uavhengig, konkret scenario, og i tillegg lager skillen testcaser fra reglene (også regler i koden uten scenario, fra verify-rapporten): positiv og negativ testing, obligatoriske felt (tomt, bare mellomrom, for lang verdi, feilmeldingen kontrollert), og testteknikk valgt per regel (grenseverdianalyse, ekvivalensklasser, beslutningstabell, tilstandsoverganger) og skrevet i testen. Testdataene er de testplanen lister, i utgangstilstanden der (hvordan de lages, er utenfor strategien), og testene er uavhengige og kan kjøres på nytt. Overleveringene i flytene i `krav/_Flyter` blir tester i `cdp-tester/_Løp/` (fase 3 tester flytene manuelt, men testene kan brukes av flere). Hvert scenario har skjermens ord, testbruker og testdata som nøkler (ikke navn), og en `Så` agenten kan se. Referansene til kravene er `@depends-on-<Feature-ID>` (og `@ref-`), identiske `Regel:`- og `Scenario:`-titler, og en header med kravfila og commit og blob-hash, som gir en diff når kravet er endret. Omfanget kommer fra «Testcaser som skal lages» i testplanen, og roller og testdata fra testplanens tabeller (kolonnene `Nøkkel`, `Søk/URL`, `Utgangstilstand`, `Brukes av`), eller de samme spørsmålene når testplan mangler. Skriver `cdp-tester/<kravstien>/<fil>.feature` og `README.md` («Krever», «Ikke kjørbart»), og sier hvordan agenten kjører dem og hvor resultatet og bevisene legges. Kan også kjøres manuelt, uten testplan, for å lage nye tester eller oppdatere eksisterende når kravene er endret. Endrer aldri `krav/`. Trigges av "lag CDP-tester", "oppdater CDP-tester", "agentisk funksjonstest", "agentisk test", "CDP-kjøring", "cdp-tester", "kjørbare tester for kravet", "tester for CDP", "fase 2", "fs-testcaser-cdp".
+description: Lager og oppdaterer de varige testene for den agentiske funksjonstesten (fase 2 i teststrategien (forslag), «Teststrategi for FS – fra krav til akseptanse» i Confluence, STUDIEADM): `cdp-tester/`, Gherkin som en agent kjører i Chrome med `cdp`-skillen mot et testmiljø, fra kravene under `krav/`. Inndata er krav (en feature-fil, en mappe, `@scope-<slug>`, en oppgave eller en Feature-ID), en flyt, en eksisterende test, eller en testplan, som bare velger kravene («Omfang»). For hvert krav: finnes testen og er kravet uendret, gjøres ingenting; er kravet endret, foreslås en oppdatering som diff; mangler testen, lages den. Hvert scenario i gating-settet som er `@implemented`, blir et uavhengig, konkret scenario, og i tillegg lager skillen testcaser fra reglene (også regler i koden uten scenario, fra verify-rapporten): positiv og negativ testing, obligatoriske felt (tomt, bare mellomrom, for lang verdi, feilmeldingen kontrollert), og testteknikk valgt per regel (grenseverdianalyse, ekvivalensklasser, beslutningstabell, tilstandsoverganger) og skrevet i testen. Testbrukere og testdata er nøkler, slått opp i miljøfila (`cdp-tester/_Miljøer/<miljø>.md`), som er den autoritative oversikten over personaene og rollene i FS Admin i miljøet: testbrukeren kobles til en persona der, og testdataene finnes i utgangstilstanden der. Testene kjenner ikke til testplaner: de har ingen status, kjente mangler, henvisninger til en testplan eller miljøverdier, og kan kjøres frittstående og senere. Overleveringene i flytene i `krav/_Flyter` blir tester i `cdp-tester/_Løp/`. Hvert scenario har skjermens ord, testbruker og testdata som nøkler (ikke navn), og en `Så` agenten kan se. Referansene til kravene er `@depends-on-<Feature-ID>` (og `@ref-`), identiske `Regel:`- og `Scenario:`-titler, og en header med kravfila og commit og blob-hash, som gir en diff når kravet er endret. Skriver `cdp-tester/<kravstien>/<fil>.feature` og `README.md` («Krever»), og nye nøkler i miljøfila når brukeren sier ja. Reglene for å kjøre testene står i `cdp-tester/README.md`. Endrer aldri `krav/`. Trigges av "lag CDP-tester", "oppdater CDP-tester", "agentisk funksjonstest", "agentisk test", "cdp-tester", "kjørbare tester for kravet", "tester for CDP", "fase 2", "fs-testcaser-cdp".
 allowed-tools: Read, Write, Edit, Grep, Glob, Bash, AskUserQuestion
 ---
 
@@ -14,25 +14,24 @@ $ARGUMENTS
 
 Du gjør kravene om til varige tester som en agent kan kjøre i Chrome, uten å gjette. Kravene i `krav/` er deklarative, og sier hva som skal gjelde. Testene her sier hvordan det sjekkes i skjermen: skjermens ord, konkrete verdier og noe som kan ses. Konvensjonene står i [`cdp-tester/README.md`](../../../cdp-tester/README.md).
 
-Det er fase 2 i [teststrategien (forslag)](https://sikt.atlassian.net/wiki/spaces/STUDIEADM/pages/5145100326), den agentiske funksjonstesten (se [`akseptansetest/README.md`](../../../akseptansetest/README.md)). Den er obligatorisk, kommer etter testplanen og før den interne akseptansetesten, og kan også kjøres manuelt, uten testplan.
+Det er fase 2 i [teststrategien (forslag)](https://sikt.atlassian.net/wiki/spaces/STUDIEADM/pages/5145100326), den agentiske funksjonstesten (se [`akseptansetest/README.md`](../../../akseptansetest/README.md)). Den er obligatorisk, og kommer før den interne akseptansetesten. Testene lages fra kravene, med eller uten en testplan, og kan være laget tidligere.
 
 Fra strategien:
 
 - **Mål:** bekrefte at hver funksjon virker som kravet sier, med gyldige og ugyldige data.
-- **Omfang:** alle scenarioene leveransen har gjort `@implemented`, pluss testcasene du utleder fra reglene, også reglene `fs-verify` fant i koden uten scenario. Testplanen viser omfanget og teknikken per regel («Testcaser som skal lages»). Følg det, og si fra når du finner mer eller mindre enn planen.
+- **Omfang:** alle scenarioene leveransen har gjort `@implemented`, pluss testcasene du utleder fra reglene, også reglene `fs-verify` fant i koden uten scenario. Du velger teknikken per regel. Gis en testplan, er «Testcaser som skal lages» der en sjekk: avvikene står i oppsummeringen, aldri i testene.
 - **Hva testes:** positiv testing (hvert scenario slik det står, en scenariomal gir én testcase per eksempel), negativ testing (ugyldige verdier, feil format, handlinger i feil rekkefølge, data som ikke finnes eller er slettet), og obligatoriske felt: hvert felt testes tomt, med bare mellomrom og med for lang verdi, og feilmeldingen kontrolleres.
 - **Teknikk:** du velger teknikken ut fra regelen, og skriver hvilken som er brukt i testen: grenseverdianalyse (min, maks, like over og like under, tomt felt), ekvivalensklasser, beslutningstabeller for regler med flere betingelser, og tilstandsoverganger (for eksempel statusene til en søknad).
 - **Ikke her:** roller, tilgangsstyring og datakonsistens verifiseres i koden i fase 1 (`fs-verify`). Scenarioene i kravet testes som de står, også synlighet for en rolle, men du utleder ikke egne testcaser for roller og tilgang. Flyter på tvers og avhengigheter testes i fase 3.
 - **Utenfor kravet:** utleder du et tilfelle kravet ikke sier noe om, og løsningen oppfører seg uventet, er det et funn av typen «Kravet dekker ikke». Det avklares i kravet (`fs-krav`), ikke bare i testen.
 
-- **Kravene er fasit for hva som testes.** Testene dekker gating-settet som er `@implemented` (også de leverte delene i et krav som er delvis levert), i rekkefølgen i feature-fila. Endre aldri kravene eller taggene i `krav/`. Er et scenario ikke testbart som det står (uklart, mangler forventet resultat, motsier koden), noter det i «Ikke kjørbart», og foreslå `fs-krav`.
-- **Testene er varige.** De overlever testplaner og akseptansetester. Derfor har de nøkler for testbruker og testdata, aldri navn, Feide-ID eller `testbruker <nr>`, og ingen miljø-URL.
-- **Testdataene står i testplanen.** Hver testdata-nøkkel har en `Utgangstilstand` i testplanen, og testen forutsetter at dataene finnes slik før kjøringen. Hvordan de lages og settes tilbake, er utenfor teststrategien. Data scenarioet selv lager (for eksempel «Opprett opptak»), får et unikt navn per kjøring når de ikke kan slettes, og data testen endrer, settes tilbake (R13).
-- **Testene er verktøyuavhengige.** Gherkin-filene skal kunne leses og brukes av flere (agenter, testere, andre verktøy). Det som er spesifikt for CDP, står bare i «Før en kjøring» og i resultatmalen.
+- **Kravene er fasit for hva som testes.** Testene dekker gating-settet som er `@implemented` (også de leverte delene i et krav som er delvis levert), i rekkefølgen i feature-fila. Endre aldri kravene eller taggene i `krav/`. Alle scenarioene i gating-settet blir tester. Er et scenario uklart, mangler forventet resultat eller motsier koden, skriv testen så godt kravet lar deg, merk det med `[Sjekk begrep]` eller en kommentar, og foreslå `fs-krav` i oppsummeringen. Kan testen ikke kjøres, er det kjøringen som viser det.
+- **Testene er varige, og kjenner ikke testplanen.** De overlever testplaner og akseptansetester, og skal kunne kjøres frittstående senere. Derfor har de nøkler for testbruker og testdata, aldri navn, Feide-ID eller `testbruker <nr>`, og ingen miljø-URL. De har heller ikke status for kravet eller leveransen, kjente mangler, saker med status, resultater fra verifiseringen eller en kjøring, henvisninger til en testplan eller testcaser i den, eller verdier som bare gjelder ett miljø («Bare det som varer» i `cdp-tester/README.md`). En testplan kan velge hvilke krav som får tester, men testene og `README.md`-ene viser aldri til den.
+- **Miljøfila er autoritativ.** Personaene og rollene i FS Admin, nøklene og verdiene står i miljøfila (`cdp-tester/_Miljøer/<miljø>.md`). Testbrukerne kobles til en persona der, og testdataene har sin `Utgangstilstand` der. Hvordan testdataene lages og settes tilbake, er utenfor teststrategien. Data scenarioet selv lager (for eksempel «Opprett opptak»), får et unikt navn per kjøring når de ikke kan slettes, og data testen endrer, settes tilbake (R13).
+- **Testene er verktøyuavhengige.** Gherkin-filene skal kunne leses og brukes av flere (agenter, testere, andre verktøy). Det som er spesifikt for CDP, står bare i *Kjøring og resultat* i `cdp-tester/README.md` og i resultatmalen.
 - **Agenten foreslår, mennesker godkjenner.** Agenten kan aldri godkjenne en leveranse. Testansvarlig går gjennom alle funn og tar stikkprøver av de beståtte testcasene, etter en risikovurdering.
-- **Samme grunnlag som resten av flyten.** Roller og testdata kommer fra testplanen, eller fra de samme spørsmålene når den mangler: [`.claude/references/akseptansetest/roller-og-testdata.md`](../../references/akseptansetest/roller-og-testdata.md). Spør aldri teamet om noe testplanen allerede svarer på.
-- **Gjett aldri det bare teamet vet.** Det som mangler, står som `[Fylles ut: <hva>]`, og scenarioet kjøres ikke før det er utfylt.
-- **Åpne spørsmål gater ikke.** Et scenario eller en regel med `@openquestion` (uten `@draft`) blir testcase som den står. Spørsmålet står i resultatet.
+- **Gjett aldri det bare teamet vet.** Det som mangler, står som `[Fylles ut: <hva>]` i miljøfila, og scenarioet blir «Ikke testet» i kjøringen til det er utfylt.
+- **Åpne spørsmål gater ikke.** Et scenario eller en regel med `@openquestion` (uten `@draft`) blir testcase som den står.
 - **Overskriv aldri håndrettede scenarioer.** Finnes testfila fra før, vis en diff og foreslå.
 - **Alltid et testmiljø, aldri produksjon.**
 - **Publiser aldri til Confluence uten ja.** Se [`confluence.md`](../../references/akseptansetest/confluence.md).
@@ -47,38 +46,44 @@ Sjekk at branchen i dette repoet er oppdatert mot origin og main, som beskrevet 
 
 ## Kilder (les FØRST)
 
-1. [`cdp-tester/README.md`](../../../cdp-tester/README.md): mappestrukturen, Gherkin-reglene, referansene og «Krever».
+1. [`cdp-tester/README.md`](../../../cdp-tester/README.md): mappestrukturen, Gherkin-reglene, referansene, «Krever» og *Miljøfila* (også *Vedlikehold av miljøfila*).
 2. [`references/mal-cdp.md`](references/mal-cdp.md): malene for testfila, `README.md` og resultatet.
-3. [`.claude/references/akseptansetest/roller-og-testdata.md`](../../references/akseptansetest/roller-og-testdata.md): spørsmålene og kolonnene.
-4. [`.claude/references/akseptansetest/krav-fra-testplan.md`](../../references/akseptansetest/krav-fra-testplan.md): kravene i en testplan, og gating-settet.
+3. [`.claude/references/akseptansetest/roller-og-testdata.md`](../../references/akseptansetest/roller-og-testdata.md): *Nøkkelen*, *Finne rollene og foreslå testbrukere*, *Testdata* og *Lese koden*.
+4. [`.claude/references/akseptansetest/krav-fra-testplan.md`](../../references/akseptansetest/krav-fra-testplan.md): *Finn kravene*, gating-settet og flytene.
 5. [`.claude/references/akseptansetest/testcase-regler.md`](../../references/akseptansetest/testcase-regler.md): reglene for fase 2 i tabellen der (R1–R9 og R12–R16), blant annet R9 (feilsituasjoner), R13 (testen kan kjøres på nytt), R14 (følg stegene slik de står) og R16 (kjent mangel). R10 (avhengigheter mellom testcaser) og R11s regler for fase 3 og 4 gjelder ikke: CDP-scenarioene er uavhengige.
 6. [`.claude/references/akseptansetest/confluence.md`](../../references/akseptansetest/confluence.md) før du leser fra eller skriver til Confluence.
 
-## 1. Avgjør måten
+## 1. Finn kravene, og om testene finnes
 
-Argumentet avgjør:
+Argumentet sier hvilke krav som skal ha tester:
 
-| Argument | Måte |
+| Argument | Kravene |
 |---|---|
-| en testplan (`akseptansetest/<slug>`, eller en slug som finnes der) | **Fra testplanen (fase 2).** Kravene er de i «Omfang» i testplanen. Roller, testdata og miljø fra testplanens tabeller |
-| krav: en feature-fil, en mappe, `@scope-<slug>`, en oppgave eller en Feature-ID | **Manuelt.** Kravene finnes etter *Finn kravene* i `krav-fra-testplan.md` |
-| en flyt: en sti under `krav/_Flyter/`, eller en `@FLY-`-ID | **Manuelt, flyt.** Bare flyten (steg 2, punkt 4) |
-| en eksisterende test i `cdp-tester/` | **Manuelt, oppdatering** (se steg 5) |
+| krav: en feature-fil, en mappe, `@scope-<slug>`, en oppgave eller en Feature-ID | Etter *Finn kravene* i `krav-fra-testplan.md` |
+| en flyt: en sti under `krav/_Flyter/`, eller en `@FLY-`-ID | Flyten (steg 2, punkt 4) |
+| en eksisterende test i `cdp-tester/` | Kravet i headeren (steg 5) |
+| en testplan (`akseptansetest/<slug>`, eller en slug som finnes der) | Feature-ID-ene i «Omfang», og flytene i «Flyter». Les ikke noe annet fra testplanen enn «Testcaser som skal lages», som en sjekk (steg 2, punkt 6) |
 
-Er det uklart, spør (`AskUserQuestion`).
+Er det uklart, spør (`AskUserQuestion`). Let aldri etter en testplan når argumentet er krav.
 
-**Fra testplanen:** les `testplan.md`, og siden i Confluence når den finnes (teamet kan ha fylt ut mer der). Mangler testplanen tabellene for fase 2 (nøkler, «Testcaser som skal lages»), si det, og spør om den skal lages eller oppdateres først (`fs-testplan`), eller om du skal fortsette manuelt.
+For hvert krav, se etter testen: `grep -rln "@depends-on-<Feature-ID>" cdp-tester/`, og den speilede stien.
 
-**Manuelt:** finn en testplan som dekker kravene (`grep -rl "<Feature-ID>" akseptansetest/*/testplan.md`, nyeste først), og bruk tabellene i den når den har kolonnen `Nøkkel`. Finnes ingen, spør du etter en konkret verdi per nøkkel (steg 3), og bruker svarene bare til denne kjøringen: de lagres ikke i testene. Foreslå `fs-testplan` for å lagre dem, men krev det ikke.
+| Testen | Hva du gjør |
+|---|---|
+| finnes, og blob-hashen i headeren er lik kravfila nå, og ingen scenarioer i gating-settet mangler i testen | Ingenting. Testen står i oppsummeringen som «uendret» |
+| finnes, men hashen er ulik, eller scenarioer i gating-settet mangler (også nye som er levert) | Oppdatering (steg 5) |
+| finnes ikke | Lag den (steg 2–4) |
+
+Vis lista før du lager eller endrer noe.
 
 ## 2. Finn scenarioene og ordene
 
-1. Kravene og gating-settet per krav, som i `krav-fra-testplan.md`. Bare krav som er `@implemented` (og de leverte delene i et endret krav, og `@implemented`-delene i et krav som er delvis levert) blir tester. Manuelt på et krav som ikke er `@implemented`: si det, og spør om det skal lages likevel (testen kjøres ikke før kravet er levert).
-2. Les verify-rapporten for kravene når den finnes. Et scenario som er `ikke funnet` eller `usikker` der, kommer i «Ikke kjørbart» til teamet har svart. **Regler i koden uten scenario** (valideringer og andre regler verify-rapporten har funnet, og som kravet ikke sier noe om) er input til utledede testcaser (punkt 6). Tilgangssjekkene i rapporten testes ikke her: de er verifisert i koden i fase 1.
-3. **Ordene fra skjermen:** `testcaser-intern.md` når den finnes (ordene og verdiene, uten avhengighetene mellom casene), `<feature>.design.md` og skissene, og koden (fs-admin for saksbehandlere og forvaltere, min-kompetanse for søkeren): menyer, ruter, felt, knapper, `Så`-tekster og feilmeldinger. Se *Lese koden* i `roller-og-testdata.md`. Merk det du ikke finner, `[Sjekk begrep]`.
-4. **Flytene.** Fra flyten: flytene i «Flyter» i testplanen. Manuelt: flytene som går gjennom kravene (*Finn flytene* i `krav-fra-testplan.md`), eller flyten brukeren oppga. Hvilke scenarioer som blir tester, avgjøres etter *Hele eller deler av flyten* i den samme fila. Det som ikke blir test, står i «Ikke kjørbart» med grunnen («fasen er ikke levert», «overleveringen er ikke funnet»).
-5. **Hva agenten kan se:** noe som ikke finnes i miljøet, eller som ikke kan ses i skjermen, kommer i «Ikke kjørbart», med grunn.
-6. **Utledede testcaser.** For hver `Regel:`, og for hver regel i koden uten scenario: bruk teknikken og de utledede testcasene fra «Testcaser som skal lages» i testplanen. Manuelt, eller når testplanen ikke har raden: velg teknikk ut fra regelen. Lag testcasene teknikken gir.
+1. Kravene og gating-settet per krav, som i `krav-fra-testplan.md`. Bare krav som er `@implemented` (og de leverte delene i et endret krav, og `@implemented`-delene i et krav som er delvis levert) blir tester. Er et krav du har fått som argument, ikke `@implemented`: si det, og spør om det skal lages likevel (testen kjøres ikke før kravet er levert).
+2. Les verify-rapporten for kravene når den finnes. Et scenario som er `ikke funnet` eller `usikker` der, lages likevel når det er `@implemented`: om det er levert, avgjøres av kjøringen, ikke av testen. **Regler i koden uten scenario** (valideringer og andre regler verify-rapporten har funnet, og som kravet ikke sier noe om) er input til utledede testcaser (punkt 6). Tilgangssjekkene i rapporten testes ikke her: de er verifisert i koden i fase 1.
+3. **Ordene fra skjermen:** `<feature>.design.md` og skissene, og koden (fs-admin for saksbehandlere og forvaltere, min-kompetanse for søkeren): menyer, ruter, felt, knapper, `Så`-tekster og feilmeldinger. Se *Lese koden* i `roller-og-testdata.md`. Merk det du ikke finner, `[Sjekk begrep]`.
+4. **Flytene.** Flyten brukeren oppga, eller flytene som går gjennom kravene (*Finn flytene* i `krav-fra-testplan.md`), eller flytene i «Flyter» når en testplan valgte kravene. Hvilke scenarioer som blir tester, avgjøres etter *Hele eller deler av flyten* i den samme fila. Faser som ikke er levert, står i oppsummeringen, ikke i testene.
+5. **Hva agenten kan se:** `Så` er noe som kan ses i skjermen. Kan kravets resultat ikke ses i skjermen, skriv det nærmeste som kan ses, og si det i oppsummeringen. At testdata mangler i et miljø, avgjør ikke om testen lages.
+6. **Utledede testcaser.** For hver `Regel:`, og for hver regel i koden uten scenario: velg teknikk ut fra regelen, og lag testcasene teknikken gir. Valgte en testplan kravene, sammenlign med «Testcaser som skal lages» der, og skriv avvikene i oppsummeringen.
    - **Grenseverdianalyse** for tall, datoer og lengder: min, maks, like under og like over, og tomt felt.
    - **Ekvivalensklasser** for valg og kategorier: én verdi fra hver klasse, også en ugyldig.
    - **Beslutningstabell** for en regel med flere betingelser: én testcase per rad i tabellen. Ta tabellen med i `# Teknikk:`-kommentaren.
@@ -90,31 +95,33 @@ Er det uklart, spør (`AskUserQuestion`).
 
 ## 3. Nøkler: roller og testdata
 
-1. Fra scenarioene (`Gitt`-stegene og rollene i kravet) og de utledede testcasene: lag nøklene for testbrukere og testdata, i kebab-case uten æ, ø og å. Skriv dem i seksjonen «Krever» i `cdp-tester/<sti>/README.md`, med en beskrivelse (ikke et navn), utgangstilstanden og hvilke scenarioer som bruker dem.
-2. **Testdataene forutsettes.** Hver testdata-nøkkel er data som finnes i testmiljøet før kjøringen, i utgangstilstanden i testplanen. Hvordan de lages, er utenfor teststrategien, og står ikke i testene.
-3. **Kjørbar flere ganger.** Data scenarioet selv lager og som ikke kan slettes, får et unikt navn per kjøring (for eksempel med tidspunktet), og søk etter dem bruker det unike navnet. Data testen endrer, settes tilbake i et avsluttende steg. Kan ikke miljøet settes tilbake, står det i testplanen, og `@endrer-data` hoppes over i kjøringen.
-4. Slå opp hver nøkkel i testplanen (kolonnen `Nøkkel`, `Utgangstilstand` og `Brukes av`), eller spør etter en konkret verdi manuelt med spørsmålene i `roller-og-testdata.md`. Mangler nøkkelen i testplanen eller svaret, står den som `[Fylles ut: <hva>]` i oppsummeringen, og scenarioet kjøres ikke.
-5. Stopp hvis en verdi ser ut som et ekte fødselsnummer eller et ekte navn.
+Miljøfila (`cdp-tester/_Miljøer/<miljø>.md`, normalt `test.md`) er kilden. Spør hvilket miljø når det finnes flere filer.
+
+1. **Nøklene.** Fra scenarioene (`Gitt`-stegene og rollene i kravet) og de utledede testcasene: lag nøklene for testbrukere og testdata etter *Nøkkelen* i `roller-og-testdata.md` (rolle og relasjon, aldri organisasjon, person eller år). Bruk nøkler som finnes i miljøfila eller i «Krever» i andre mapper når de betyr det samme. Organisasjoner i stegene skrives `{ORG:<nøkkel>}`, `{ORGNAVN:<nøkkel>}` eller `{ORGKODE:<nøkkel>}`.
+2. **«Krever».** Skriv nøklene i `cdp-tester/<sti>/README.md`, med typen og hvilke scenarioer som bruker dem (`Nøkkel | Type | Brukes av`). Hva nøkkelen krever, står bare i miljøfila: «Krever» for en testbruker, «Utgangstilstand» for testdata. Beskrivelsen sier egenskapene, ikke verdien i ett miljø. For en testbruker: rollene skjermene og API-et krever (*Finne rollene og foreslå testbrukere*, punkt 1–4 i `roller-og-testdata.md`, med `fil:linje` i oppsummeringen) og relasjonen til organisasjonen.
+3. **Testbrukerne i miljøfila.** Finnes nøkkelen i «Testbrukere», sjekk at personaen fortsatt står i «Personaer» og har tildelingene «Krever» sier. Finnes den ikke, foreslå en persona fra «Personaer» som har rollen, ved en organisasjon som oppfyller relasjonen, og en annen organisasjon enn de andre testbrukerne når scenarioene skiller mellom dem. Er personaen ikke bekreftet (`–` i «Bekreftet»), si det. Finnes ingen som passer, si at en persona må legges til i fs-admin og tildelingen i tilgangsstyring, og foreslå raden med `[Fylles ut]`. Er katalogen gammel («Personaer sist sjekket»), foreslå *Vedlikehold av miljøfila* først.
+4. **Testdataene i miljøfila.** Hver testdata-nøkkel er data som finnes i testmiljøet før kjøringen, i utgangstilstanden i miljøfila. Mangler nøkkelen, foreslå raden med `Utgangstilstand` (etter *Testdata* i `roller-og-testdata.md`, med datoene i forhold til testdagen), og spør etter verdien. Mangler verdien, står den som `[Fylles ut: <hva>]`. Hvordan dataene lages, er utenfor teststrategien.
+5. **Kjørbar flere ganger.** Data scenarioet selv lager og som ikke kan slettes, får `{KJØRING}` i navnet, og søk etter dem bruker det unike navnet. Data testen endrer, settes tilbake i et avsluttende steg.
+6. Skriv i miljøfila bare når brukeren sier ja. Stopp hvis en verdi ser ut som et ekte fødselsnummer eller et ekte navn.
 
 ## 4. Skriv testene
 
 For hvert krav, skriv `cdp-tester/<kravets sti under krav/>/<samme filnavn som kravet>`, etter malen:
 
-- Header med kravfila, commit og blob-hash (`git rev-parse origin/main:<sti>`), og hva den er generert fra. Taggene: `@TST-…` og `@depends-on-<Feature-ID>` på `Egenskap:`. For en test som går over flere domener: `cdp-tester/_Løp/<NN Prosess>/<test>.feature`, med ett `@depends-on-` per krav.
+- Header med datoen, og kravfila med commit og blob-hash (`git rev-parse origin/main:<sti>`). Ingen henvisning til en testplan: testen hører ikke til én leveranse. Taggene: `@TST-…` og `@depends-on-<Feature-ID>` på `Egenskap:`. For en test som går over flere domener: `cdp-tester/_Løp/<NN Prosess>/<test>.feature`, med ett `@depends-on-` per krav.
 - **En flyt** blir `cdp-tester/_Løp/<NN Prosess>/<samme filnavn som flyten>.feature`, med prosessmappa fra `krav/_Flyter`. Headeren har flytfila. `@TST-<prosess>-<flyt>-NNN @depends-on-FLY-<prosess>-<flyt>-NNN` står på `Egenskap:`, og hver `Regel:` har de samme `@depends-on-` som fasen i flyten. Titlene er flytens. Tilstanden i `Gitt` er en testdata-nøkkel med en `Utgangstilstand` som er laget gjennom løsningen i fasen før (for eksempel en søknad som har fått tilbudsgaranti i tidligopptaket), ikke lagt inn direkte. Ellers tester scenarioet ikke overleveringen. `Så` sjekkes der den neste aktøren jobber.
 - `Regel:`- og `Scenario:`-titlene identiske med kravets. En `Scenariomal:` gir én rad i `Eksempler:` per eksempel i kravet.
 - `Gitt` har testbruker som nøkkel, start (menyvei eller URL, med ordene fra skjermen), og testdata som nøkler, i utgangstilstanden i «Krever». Aldri «fra forrige scenario».
 - **Utledede testcaser** (steg 2, punkt 6) står under regelen, med `@utledet` og `# Teknikk:`, og tittelen `<regelens tittel>: <hva som prøves>`. Én feilsituasjon prøver én ting: alle andre obligatoriske felt er fylt ut, så det er feltet testcasen handler om som stopper lagringen, og `Så` sier at det er det eneste som mangler. Et forhåndsutfylt felt tømmes, det «står» ikke tomt.
 - `Når`: én handling per steg, skjermens ord i «», alle verdier med.
 - `Så`: noe agenten ser. Gjør kravets generelle `Så` konkret (en tekst, et antall, noe synlig eller borte). Lagrer scenarioet noe, åpnes siden på nytt før `Så`.
-- `@endrer-data` på scenarioet når det endrer data, med avsluttende steg som setter tilbake. Taggen sier at oppryddingen er med, og scenarioet kjøres som alle andre (*Før en kjøring*).
-- Scenarioer som ikke kan kjøres, står ikke i fila, men i «Ikke kjørbart» i `README.md`, med grunn og når det kan kjøres.
+- `@endrer-data` på scenarioet når det endrer data, med avsluttende steg som setter tilbake. Taggen sier at oppryddingen er med, og scenarioet kjøres som alle andre (*Regler for kjøringen* i `cdp-tester/README.md`).
 
 Sjekkliste før du viser fram:
 
 | # | Sjekk |
 |---|---|
-| 1 | Hvert scenario i gating-settet er generert eller står i «Ikke kjørbart» |
+| 1 | Hvert scenario i gating-settet er generert |
 | 2 | Ingen filer i `krav/` er endret, og ingen test ligger der |
 | 3 | Ingen testfil har navn, Feide-ID, `testbruker <nr>`, passord eller miljø-URL |
 | 4 | Hvert scenario er uavhengig, og har en `Så` agenten kan se |
@@ -123,52 +130,45 @@ Sjekkliste før du viser fram:
 | 7 | Hver testdata-nøkkel har en utgangstilstand, og testen kan kjøres på nytt (unike navn eller opprydding) |
 | 8 | Hver utledede testcase har `@utledet` og `# Teknikk:`, og hver feilsituasjon prøver én ting |
 | 9 | Ingen utledet testcase tester roller, tilgangsstyring eller datakonsistens (fase 1), eller flyter på tvers (fase 3, bortsett fra testene i `_Løp/`) |
-| 10 | Testcasene stemmer med «Testcaser som skal lages» i testplanen, og avvikene står i oppsummeringen |
-| 11 | Hver «Kjent mangel» har en sak, og saken er sjekket (R16) |
+| 10 | Valgte en testplan kravene: avvikene fra «Testcaser som skal lages» står i oppsummeringen, ikke i testene |
+| 11 | Ingen testfil eller `README.md` i `cdp-tester/<sti>/` nevner en testplan, `akseptansetest/` eller testcaser derfra (`grep -rniE "testplan|akseptansetest|# Testcase:" cdp-tester/<sti>/`) |
+| 12 | Testene og `README.md` har bare det som varer: ingen kravstatus, kjente mangler, saker med status, datoer fra verifiseringen eller kjøringer, eller verdier fra ett miljø («Bare det som varer» i `cdp-tester/README.md`) |
+| 14 | Hver nøkkel i «Krever» finnes i miljøfila, eller er foreslått der (med `[Fylles ut]` når verdien mangler), og hver testbruker peker på en persona i «Personaer» |
+| 13 | Ingen nøkkel har navnet på en organisasjon, en person eller et år, og ingen steg har navnet på en organisasjon (bruk `{ORG:<nøkkel>}`) |
 
 **Referansesjekken** (ved hver generering og oppdatering):
 
 1. Hver `@depends-on-` og `@ref-` peker på en Feature-ID (eller en flyt-ID) som finnes i nøyaktig én feature-fil under `krav/`.
 2. Hver `Regel:` og hvert `Scenario:` finnes i den fila med samme tittel.
 3. Hash i headeren er lik hash for kravfila nå. Er den ulik, er testen utdatert (se steg 5).
-4. Hvert scenario i gating-settet er generert eller står i «Ikke kjørbart».
+4. Hvert scenario i gating-settet er generert.
 
 ## 5. Oppdatere eksisterende tester
 
 Finnes testfila fra før:
 
-1. Sammenlign blob-hashen i headeren med kravfila nå. Er de like, og ingen nye `@implemented`-scenarioer er kommet til (heller ikke nye `@implemented`-deler i et krav som er delvis levert), er det ingenting å gjøre.
+1. Sammenlign blob-hashen i headeren med kravfila nå. Er de like, og ingen scenarioer i gating-settet mangler i testen (heller ikke nye `@implemented`-deler i et krav som er delvis levert), er det ingenting å gjøre.
 2. Ellers, list hva som er endret i kravet: nye, endrede og fjernede `Regel:` og `Scenario:`, med titlene (`git diff <commit-i-headeren>..origin/main -- <kravfila>`).
 3. Vis forslaget som en diff mot testfila. Scenarioer som er rettet for hånd (andre steg enn skillen ville skrevet), nevnes, og skrives aldri over uten ja.
-4. Skriv det brukeren godkjenner, og oppdater headeren (commit, hash, dato) og «Krever» og «Ikke kjørbart».
+4. Skriv det brukeren godkjenner, og oppdater headeren (commit, hash, dato) og «Krever». Mangler et scenario i gating-settet i testen, lag det.
 5. Fjernede krav: foreslå å slette testen, men slett aldri uten ja.
+6. Har testene innhold som ikke varer, eller henvisninger til en testplan (sjekk 11 og 12), foreslå å fjerne det, eller flytte verdier til miljøfila.
 
 ## 6. Vis fram
 
-Vis en kort oppsummering: antall tester og scenarioer generert (og endret, ved oppdatering), antall `@utledet` og teknikkene som er brukt, antall `@endrer-data`, avvik fra omfanget i testplanen, kjente mangler og status på sakene (R16), antall scenarioer og regler med åpne spørsmål, «Ikke kjørbart» med grunner, nøklene som mangler og det som må fylles ut. Skriv aldri til Confluence uten ja.
+Vis en kort oppsummering: kravene, og for hvert om testen var uendret, er oppdatert eller er ny; antall scenarioer generert og endret, antall `@utledet` og teknikkene som er brukt, antall `@endrer-data`, avvik fra «Testcaser som skal lages» når en testplan valgte kravene, antall scenarioer og regler med åpne spørsmål, scenarioer som er uklare eller der resultatet ikke kan ses i skjermen, testbrukerne med personaen de er koblet til (og om den er bekreftet), endringene du foreslår i miljøfila, og det som må fylles ut. Skriv aldri til Confluence uten ja.
 
-Si hva som er neste steg: testplanen gjennomgås av teamet og testansvarlig før kjøringen (er det ikke gjort, si det). Så kjører agenten testene med `cdp`-skillen (se *Før en kjøring*, og *`cdp`-skillen* i `cdp-tester/README.md`), og følger stegene slik de står (R14). Lenk til testene i «Vedlegg» i testplanen. Testansvarlig har ansvaret for at agenten blir kjørt og tester riktig, men selve kjøringen kan gjøres av andre. Etterpå: `fs-testrapport` (agentisk). Rapporten er inngangskriteriet til intern akseptansetest (fase 3): alle testcasene er kjørt, ingen funn med alvorlighetsgraden «Stopper» står åpne, og testansvarlig har gått gjennom rapporten.
+Si hva som er neste steg: finnes det en testplan med kravene, synkes den med `fs-testplan` (skillen endrer aldri testplanen selv). Testene kjøres med `cdp`-skillen etter *Kjøring og resultat* i `cdp-tester/README.md`, mot miljøfila. Skillen kjører ikke testene selv. Hører kjøringen til en akseptansetest, sier `akseptansetest/README.md` hvor resultatet legges, og `fs-testrapport` (agentisk) lager rapporten.
 
-## Før en kjøring
+## Kjøringen
 
-`cdp`-skillen (`.claude/skills/cdp`) har ingen sikkerhetsregler. Reglene under gjelder for agenten som kjører testene, og står her fordi det er `fs-testcaser-cdp` som lager det som kjøres:
-
-- **Miljø-guard.** Før første handling: sjekk at URL-en er testmiljøet fra testplanen (eller det brukeren oppga), og avbryt hvis den er produksjon eller et annet domene enn FS Admin og Feide.
-- **Alt kjøres, mot et miljø som kan settes tilbake.** Testdataene er satt tilbake før kjøringen (forutsetning i testplanen), og testene rydder etter seg, så scenarioene med `@endrer-data` kjøres som alle andre. Er det avklart i testplanen at miljøet ikke kan settes tilbake, hoppes de over (og står i «Hoppet over» i resultatet) til brukeren ber om dem. Testbrukerne og andre data enn de testen selv har laget, endres aldri.
-- **Forbudte kall.** Aldri `Fetch.*`, `Network.setCookie(s)`, `Storage.clear*` eller `clearBrowserCookies`, og aldri `handleJavaScriptDialog({accept:true})` uten at scenarioet sier hva dialogen er (eksemplene i `dialogs.md` aksepterer alt).
-- **Tilkobling.** `cdp`-skillen kobler til brukerens kjørende Chrome (`chrome://inspect/#remote-debugging`, brukeren klikker Allow), og agenten ser alle cookies i profilen. Bruk en egen Chrome-profil til testingen (`--user-data-dir`), ikke den brukeren bruker ellers, og la brukeren logge inn selv.
-- **Bytte testbruker.** Normalen i TEST er å bytte i «Overstyrt bruker» (nedtrekksmenyen øverst til høyre i FS Admin), med verdien i `Innlogging` i testplanen. Agenten bytter i menyen før hvert scenario der testbrukeren er en annen, og sjekker at riktig testbruker er valgt før første steg, også når forrige scenario sluttet som en annen. Er det ikke avklart at backend bruker rollene og organisasjonen til den overstyrte brukeren, står det i oppsummeringen. Med Feide-innlogging per testbruker er bytte av testbruker bytte av profil. Bytt aldri testbruker ved å endre cookies.
-- **Bevis.** Hver testcase lagrer steg, input, faktisk resultat og skjermbilde eller logg, så et menneske kan etterprøve resultatet. Tekst og DOM (`Runtime.evaluate`) er primærbevis, skjermbilder sekundære. Tell rader i skjermen, ikke via GraphQL: et direkte API-kall kan gi flere rader enn løsningen viser. Resultatet skrives til `akseptansetest/<slug>/kjoring-<YYYY-MM-DD-HHMM>/resultat.md` (med testplan), eller `cdp-tester/<sti>/kjoring-<YYYY-MM-DD-HHMM>/resultat.md` (uten), aldri til `/tmp` (se malen). Skjermbilder legges i samme mappe, men er ignorert av git (`.gitignore`): bare `resultat.md` committes, og den viser til bildene som «lokalt, ikke i git». Den som kjører agenten, legger skjermbildene som vedlegg på siden med den agentiske testrapporten (`fs-testrapport`, agentisk), før testansvarlig går gjennom funnene, så de kan etterprøves.
-- **Følg stegene slik de står** (R14). Virker ikke et steg, eller finnes ikke en verdi, er det et funn, og testcasen blir «Ikke testet». Agenten prøver seg ikke fram en annen vei.
-- **Funn.** Et funn har typen «Feil» eller «Kravet dekker ikke» (en utledet testcase der kravet ikke sier noe om tilfellet), «Fase funnet» 2, og alvorlighetsgrad fra testansvarlig (`alvorlighetsgrad.md`). «Kravet dekker ikke» avklares i kravet (`fs-krav`), ikke bare i testen.
-- **Installasjon.** `cdp`-skillen er ikke en del av repoet: hver bruker installerer den (`.claude/skills/cdp` er ignorert av git, se *`cdp`-skillen* i `cdp-tester/README.md`). Mangler skillen, `bun` eller `browser-harness-js`, vis veiledningen i `cdp-tester/README.md` (*`cdp`-skillen*), og installer ikke noe uten at brukeren sier ja.
-- **Foreslå, ikke fyll ut.** Agenten skriver foreslått status. En tester bekrefter den, og testansvarlig tar stikkprøver av de beståtte testcasene etter en risikovurdering (ikke et fast antall). Ingen «Status» på testcaser eller i testrapporten fylles ut av agenten, og agenten kan ikke godkjenne leveransen.
+Reglene for agenten som kjører testene (miljø-guard, forbudte kall, bytte av testbruker, bevis, funn og hvor resultatet legges) står i *Regler for kjøringen* i [`cdp-tester/README.md`](../../../cdp-tester/README.md), og malen for resultatet i [`references/mal-cdp.md`](references/mal-cdp.md). De står ikke her, fordi den som kjører testene, ikke trenger denne skillen.
 
 ## Hva skillen ikke gjør
 
 - Endrer ikke kravene, taggene, scope-fila eller `oppgave.md`.
 - Kjører ikke testene. Den lager og oppdaterer dem, og sier hvordan de kjøres.
-- Lager ikke testdata. Testdataene står i testplanen, og prosessen med å lage dem er utenfor teststrategien.
+- Lager ikke testdata. Testdataene står i miljøfila, og prosessen med å lage dem er utenfor teststrategien.
 - Lager ikke testcasene for fase 3 og 4 (`fs-testcaser-intern`, `fs-testcaser-ekstern`), testplanen (`fs-testplan`) eller rapportene (`fs-testrapport`).
 - Utleder ikke testcaser for roller, tilgangsstyring eller datakonsistens (fase 1, `fs-verify`), og ikke flyter på tvers (fase 3), bortsett fra overleveringene i `_Løp/`.
 - Kjører aldri git add/commit/push, og kjører aldri `git pull` i kodeklonene.
