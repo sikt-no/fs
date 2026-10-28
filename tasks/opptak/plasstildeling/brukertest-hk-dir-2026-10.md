@@ -66,6 +66,10 @@ Notatene fra to brukertester med HK-dir (oktober 2026), sortert og sett opp mot 
 - HK-dir vil se det søkeren ser før publisering: resultatet og svarbrevet, for stikkprøver og for en liste med «sære» søkere. Ingen krav dekker dette (se HK-13784). Skal det med?
 - Etter publisering tar HK-dir stikkprøver: endringer i ventelisten, riktig vedtak, justeringer etter nye runder. Holder `@OPT-PLA-RES-003`, eller trengs mer?
 
+**Resultatet av plasstildelingen** (test 28.10.2026)
+
+- Etter kjøringen ser brukeren at én søker med utdanningstilbudet som 1. prioritet har fått tilbud, men ikke hvem. Skal totaltallene i `@OPT-PLA-RES-001` kunne åpnes, så brukeren ser søkerne bak tallet (innenfor søknadene organisasjonen har tilgang til)?
+
 **Diagnoser** (ikke i kravene, se HK-10976)
 
 - Hvilke diagnoser trengs? «Tidspunkt for søknad» er nevnt, men kriteriene er uklare.
@@ -74,6 +78,14 @@ Notatene fra to brukertester med HK-dir (oktober 2026), sortert og sett opp mot 
 **Utenfor plasstildelingen**
 
 - Møttregistrering (KD vil ha statistikk, DBH-rapportering): HK-10199, HK-10200, HK-10201, HK-10818. Ikke dekket.
+
+### Feil funnet i test (28.10.2026)
+
+| Feil | Krav | Kommentar |
+|---|---|---|
+| Brukeren fikk lagret antall tilbud som skal gis etter at fristen var ute | `@OPT-PLA-INN-001`, «Lærestedene kan endre antall tilbud bare innenfor perioden …» | Kjent gap: perioden håndheves ikke (verifisert 2026-10-09). Opptakets forvalter skal fortsatt kunne endre etter fristen, så sjekk hvilken rolle brukeren hadde |
+| Antall tilbud satt i en utdanningskvote på ett utdanningstilbud smitter over til de andre utdanningstilbudene | `@OPT-PLA-INN-001`, «Sette antall tilbud i en utdanningskvote for plasstildelingsrunden» | Feil i koden. Vurder et scenario om at tallet bare gjelder utdanningstilbudet det er satt for |
+| Organisasjonene vises som «N/A» i miljøet med eksempeldata | – | Testdata eller miljø, ikke krav |
 
 ## 2. Brukervennlighet og implementasjonsdetaljer
 
@@ -104,3 +116,4 @@ Hører hjemme i skissene og i `<feature>.design.md` (`fs-implementasjonsdetaljer
 - Bekreftelse før publisering (Maciek).
 - Sette antall tilbud per kvote, også «tilbud til alle kvalifiserte», direkte i listen.
 - Tidspunkt-velger på svarfrist, påminnelse og periode.
+- Sortering på alle kolonnene i listene (test 28.10.2026). Listevisningsmønsteret (`.claude/rules/listevisning-pattern.md`) har sortering per felt, men listen i `@OPT-PLA-INN-001` har ingen sortering i kravet i dag.
