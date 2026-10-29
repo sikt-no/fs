@@ -3,6 +3,8 @@
 > Eksisterende krav som ikke er nevnt i denne delta-en forblir gjeldende. Endringer her erstatter eller utvider tidligere krav på de berørte områdene.
 
 > **Avvik fra skillen:** Regelen i denne delta-en er `@draft`. `fs-specify-delta` holder normalt `@draft`-deler utenfor. Kjetil har bestemt at den skal være med som endringen likevel, uten at statusen endres. Regelen står fortsatt som `@draft`, og ingenting er retagget. Den er ikke validert som `@planned`, så spesifikasjonen er ikke klar til utvikling før statusen er avklart.
+>
+> **Oppdatert 2026-10-29:** Regelen er senere validert, og har `@planned` fra egenskapen (se åpent spørsmål 1). Den er ikke retagget `@in-progress` ennå.
 
 ## Kilde
 
@@ -48,7 +50,7 @@ Når organisasjon og miljø er valgt i dialogen «Tildel roller», viser valglis
 
 ## Implementasjonsdetaljer
 
-- **`tildele_roller.feature`** — [tildele_roller.design.md](../../../../krav/07%20Brukeradministrasjon%20og%20tilgangsstyring/12%20Brukeradministrasjon/personbrukere/1%20-%20Grunnleggende%20brukeradministrasjon/tildele_roller.design.md) (1 åpent designspørsmål)
+- **`tildele_roller.feature`** — [tildele_roller.design.md](../../../../krav/07%20Brukeradministrasjon%20og%20tilgangsstyring/12%20Brukeradministrasjon/personbrukere/1%20-%20Grunnleggende%20brukeradministrasjon/tildele_roller.design.md) (ingen åpne designspørsmål)
 
 ## Kodesjekk
 
@@ -77,7 +79,8 @@ Ingen retagging. Regelen er `@draft` og står urørt, og `Egenskap:`-linja (`@BR
   **Beslutning 2026-10-29 (Kjetil):** Regelen hører til denne oppgaven (BAT-326). Scopet er oppdatert med `fs-scope` (modus B): mål, kilde (#866) og kommentaren i scope-raden for `@BRU-PER-GRU-003`. Egenskapen har `@scope-restanser-etter-onboarding` fra før, så regelen har ikke fått en egen scope-tag.
 - [x] Hvilke perioder i taket teller: bare delegeringer som gjelder nå, eller også delegeringer med en periode som starter senere? Standardvalg til det er avklart: bare de som gjelder nå.
   **Beslutning 2026-10-29 (Kjetil):** Bare tak som gjelder nå, teller: gyldighetsperioden inneholder tidspunktet nå, og taket er ikke ugyldiggjort. Tak med en periode som starter senere eller er utløpt, teller ikke. Begrunnelse: regelen skal fjerne roller som ikke får effekt for personbrukeren, og et tak som ikke gjelder nå, gir ingen effekt.
-- [ ] Skal den tomme valglisten ha en egen tekst når ingen applikasjon har tak, så den skiller seg fra manglende rettighet? (Åpent designspørsmål i implementasjonsdetaljene.)
+- [x] Skal den tomme valglisten ha en egen tekst når ingen applikasjon har tak, så den skiller seg fra manglende rettighet? (Åpent designspørsmål i implementasjonsdetaljene.)
+  **Beslutning 2026-10-29 (Kjetil):** Den nøytrale teksten «Ingen roller å tildele i denne kombinasjonen.» (`rollerIngenRettighet`, varianten for roller, i `tilgangsstyring.json`) beholdes. Begrunnelse: den følger mønsteret i tilgangsstyringsmodulen i FS Admin. Dialogen for applikasjoner bruker samme tekst («Ingen tilganger å tildele i denne kombinasjonen.»), og koden sier at den tomme listen er porten (`useTildelbareTilgangskoder`), så klienten skiller ikke på hvorfor listen er tom. En tildeling som faktisk avvises, har en egen feilmelding: «Du har ikke rettighet til å tildele i denne kombinasjonen av organisasjon og miljø.» Designspørsmålet i `tildele_roller.design.md` er lukket på samme måte.
 
 ## Rute
 
