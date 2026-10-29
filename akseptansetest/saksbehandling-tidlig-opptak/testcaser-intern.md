@@ -19,7 +19,8 @@
   | 1.4a | `@OPT-BEH-BEH-013` | Saksbehandler konkluderer om søkeren deltar i tidligopptaket | Konkludere om søkeren deltar i tidligopptaket (KFF – deltar) |
   | 1.4b | `@OPT-BEH-BEH-013` | Saksbehandler konkluderer om søkeren deltar i tidligopptaket | Konkludere om søkeren deltar i tidligopptaket (AFH – ikke deltar) |
   | 1.5 | `@OPT-BEH-BEH-013` | Saksbehandler konkluderer om søkeren deltar i tidligopptaket | Søknad uten ønske om tidlig opptak viser ikke tidlig opptak |
-  | 1.6 | `@OPT-BEH-BEH-013` | Saksbehandler konkluderer om søkeren deltar i tidligopptaket | Konklusjon per organisasjon |
+  | 1.6a | `@OPT-BEH-BEH-013` | Saksbehandler konkluderer om søkeren deltar i tidligopptaket | Konklusjon per organisasjon (UiT konkluderer i sin sak) |
+  | 1.6b | `@OPT-BEH-BEH-013` | Saksbehandler konkluderer om søkeren deltar i tidligopptaket | Konklusjon per organisasjon (konklusjonen i saken ved HVL er uendret) |
   | 2.1 | `@OPT-BEH-BEH-009` | Søk og filtrering av saker på tidlig opptak | Filtrere på tidlig opptak (søkeren har søkt om tidlig opptak) |
   | 2.2 | `@OPT-BEH-BEH-009` | Søk og filtrering av saker på tidlig opptak | Filtrere på tidlig opptak (konklusjonen for tidlig opptak mangler), og Saker der søkeren ikke har søkt, mangler ikke konklusjon |
 
@@ -27,14 +28,14 @@
 
 Intern akseptansetest av «Saksbehandling av tidlig opptak». Testbeskrivelsen, testbrukerne og testdataene står i [testplanen](https://sikt.atlassian.net/wiki/spaces/STUDIEADM/pages/5147721786). Felt med gul bakgrunn fylles ut av teamet før testen.
 
-Testcasene bruker disse søkerne fra testdataene i testplanen. Ingen av dem har konklusjon for tidlig opptak når testen starter. Del 1 gir dem konklusjoner, og del 2 bruker konklusjonene til å teste filtrene. Alle sakene behandles ved HVL, ellers ser ikke testbruker 1 dem i sakslisten.
+Testcasene bruker disse søkerne fra testdataene i testplanen. Ingen av dem har konklusjon for tidlig opptak når testen starter. Del 1 gir dem konklusjoner, og del 2 bruker konklusjonene til å teste filtrene. Alle søkerne har en sak som behandles av HVL, ellers ser ikke testbruker 1 dem i sakslisten. Søker D har i tillegg en egen sak som behandles av UiT: søknaden er delt i to saker, én per organisasjon.
 
 | Søker | Søkt om tidlig opptak | Konklusjon etter del 1 | Søker og søknad |
 |---|---|---|---|
 | Søker A | ja | «Ikke dokumentert behov for tidligopptak» (AFH) (1.4b) | Utgått Breiflabb, søknad 1000902 |
 | Søker B | ja | ingen | Optimistisk Hest, søknad 1001008 |
 | Søker C | nei | ingen | Dedikert Jerv, søknad 1001012 |
-| Søker D | ja, med søknadsalternativer ved HVL og UiT | «Kan få tidligopptak, har godkjent grunn.» (KFF) ved HVL (1.6) | Smart klippfisk, søknad 1000748 |
+| Søker D | ja, med to saker: én behandles av HVL og én av UiT | «Kan få tidligopptak, har godkjent grunn.» (KFF) i saken ved HVL (1.6a) | Smart klippfisk, søknad 1000748 |
 
 
 ## Slik tester du
@@ -45,6 +46,14 @@ Testcasene bruker disse søkerne fra testdataene i testplanen. Ingen av dem har 
 - Et funn med alvorlighetsgraden «Stopper» gir ikke godkjent, men test resten av testcasene hvis det er mulig.
 - Funn skrives i «Funn», med alvorlighetsgrad. Spørsmål underveis tas i Slack-tråden «Akseptansetesting Saksbehandling av tidlig opptak».
 
+## Slik bytter du testbruker
+
+1. Bruk menyen øverst til høyre, og logg inn som den nye testbrukeren.
+2. Gå til søknadene i opptaket «Samordna UHG-simulering høsten 2026» (opptak 34).
+3. Last inn siden på nytt i nettleseren (F5, eller Cmd+R på Mac).
+
+Steg 3 er viktig. Uten den kan FS Admin oppføre seg rart etter byttet, på grunn av en kjent feil i mellomlagringen som ikke er en del av denne testen.
+
 ## Testcaser
 
 ### Del 1: Vurdere søknad om tidlig opptak (vurdere_søknad_om_tidlig_opptak.feature)
@@ -53,32 +62,33 @@ Testcasene bruker disse søkerne fra testdataene i testplanen. Ingen av dem har 
 
 | Nr | Scenario | Steg | Forventet resultat | Faktisk resultat | Status |
 |---|---|---|---|---|---|
-| 1.1 | Se søkerens begrunnelse for tidlig opptak | 1. Logg inn som testbruker 1 (RU BRØDSKIVE, saksbehandler (OPPTAK_SAKSBEHANDLER) ved HVL). <br>2. Gå til søknadene i opptaket «Samordna UHG-simulering høsten 2026» (opptak 34). <br>3. Åpne saken til søker A. <br>4. Gå til steget «Tidlig opptak». | Steget «Tidlig opptak» finnes i saken. Under «Begrunnelse fra søker» står «Jeg har behov for særskilt tilrettelegging på studiestedet». | | |
+| 1.1 | Se søkerens begrunnelse for tidlig opptak | 1. Logg inn som testbruker 1 (RU BRØDSKIVE, saksbehandler (OPPTAK_SAKSBEHANDLER) ved HVL). <br>2. Gå til søknadene i opptaket «Samordna UHG-simulering høsten 2026» (opptak 34). <br>3. Åpne saken til søker A (søknad 1000902). <br>4. Gå til steget «Tidlig opptak». | Steget «Tidlig opptak» finnes i saken. Under «Begrunnelse fra søker» står «Jeg har behov for særskilt tilrettelegging på studiestedet». | | |
 | 1.2 | Se dokumentasjonskrav for begrunnelsen | 1. Fortsett fra 1.1. <br>2. Se på «Dokumentasjonskrav» i steget «Tidlig opptak». | Under «Dokumentasjonskrav» står en tekst som begynner med «Du må dokumentere behovet med attest fra sakkyndig, for eksempel lege. Attest som …». | | |
 
 #### Regel: Saksbehandler konkluderer om søkeren deltar i tidligopptaket
 
 | Nr | Scenario | Steg | Forventet resultat | Faktisk resultat | Status |
 |---|---|---|---|---|---|
-| 1.3 | Velge blant konklusjonene opptaket har | 1. Fortsett fra 1.2. <br>2. Åpne nedtrekkslisten «Konklusjon». | Listen har «Ikke valgt», «Kan få tidligopptak, har godkjent grunn.» (KFF) og «Ikke dokumentert behov for tidligopptak» (AFH), og ingen andre. «Ikke valgt» er valgt. | | |
-| 1.4a | Konkludere om søkeren deltar i tidligopptaket (KFF – deltar) | 1. Fortsett fra 1.3. <br>2. Velg «Kan få tidligopptak, har godkjent grunn.» (KFF) i «Konklusjon». <br>3. Gå tilbake til sakslisten. <br>4. Åpne saken til søker A igjen, og gå til steget «Tidlig opptak». | Meldingen «Konklusjonen er lagret» vises etter steg 2. Når saken åpnes igjen, står «Kan få tidligopptak, har godkjent grunn.» (KFF) i «Konklusjon». | | |
-| 1.4b | Konkludere om søkeren deltar i tidligopptaket (AFH – ikke deltar) | 1. Fortsett fra 1.4a. <br>2. Velg «Ikke dokumentert behov for tidligopptak» (AFH) i «Konklusjon». <br>3. Gå tilbake til sakslisten. <br>4. Åpne saken til søker A igjen, og gå til steget «Tidlig opptak». | Meldingen «Konklusjonen er lagret» vises etter steg 2. Når saken åpnes igjen, står «Ikke dokumentert behov for tidligopptak» (AFH) i «Konklusjon». Søker A har nå konklusjonen AFH, som brukes i del 2. | | |
-| 1.5 | Søknad uten ønske om tidlig opptak viser ikke tidlig opptak | 1. Gå tilbake til sakslisten. <br>2. Åpne saken til søker C. <br>3. Se på stegene i saken. | Steget «Tidlig opptak» finnes ikke i saken. | | |
-| 1.6 | Konklusjon per organisasjon | 1. Gå tilbake til sakslisten. <br>2. Åpne saken til søker D, og gå til steget «Tidlig opptak». <br>3. Velg «Kan få tidligopptak, har godkjent grunn.» (KFF) i «Konklusjon». <br>4. Bruk menyen øverst til høyre, og logg inn som testbruker 2 (KORT DOMPAP, saksbehandler (OPPTAK_SAKSBEHANDLER) ved UiT). <br>5. Gå til søknadene i opptaket «Samordna UHG-simulering høsten 2026» (opptak 34). <br>6. Åpne saken til søker D, og gå til steget «Tidlig opptak». <br>7. Velg «Ikke dokumentert behov for tidligopptak» (AFH) i «Konklusjon». <br>8. Gå tilbake til sakslisten, og åpne saken til søker D igjen. <br>9. Bruk menyen øverst til høyre, og logg inn som testbruker 1 igjen. <br>10. Gå til søknadene i opptaket, og åpne saken til søker D. Gå til steget «Tidlig opptak». | Etter steg 8 står «Ikke dokumentert behov for tidligopptak» (AFH) i «Konklusjon» for testbruker 2. Etter steg 10 står fortsatt «Kan få tidligopptak, har godkjent grunn.» (KFF) i «Konklusjon» for testbruker 1. | | |
+| 1.3 | Velge blant konklusjonene opptaket har | 1. Fortsett fra 1.2. <br>2. Åpne nedtrekkslisten «Konklusjon». | Listen inneholder «Ikke valgt», «Kan få tidligopptak, har godkjent grunn.» (KFF) og «Ikke dokumentert behov for tidligopptak» (AFH). «Ikke valgt» er valgt. | | |
+| 1.4a | Konkludere om søkeren deltar i tidligopptaket (KFF – deltar) | 1. Fortsett fra 1.3. <br>2. Velg «Kan få tidligopptak, har godkjent grunn.» (KFF) i «Konklusjon». <br>3. Gå tilbake til sakslisten. <br>4. Åpne saken til søker A (søknad 1000902) igjen, og gå til steget «Tidlig opptak». | Meldingen «Konklusjonen er lagret» vises etter steg 2. Når saken åpnes igjen, står «Kan få tidligopptak, har godkjent grunn.» (KFF) i «Konklusjon». | | |
+| 1.4b | Konkludere om søkeren deltar i tidligopptaket (AFH – ikke deltar) | 1. Fortsett fra 1.4a. <br>2. Velg «Ikke dokumentert behov for tidligopptak» (AFH) i «Konklusjon». <br>3. Gå tilbake til sakslisten. <br>4. Åpne saken til søker A (søknad 1000902) igjen, og gå til steget «Tidlig opptak». | Meldingen «Konklusjonen er lagret» vises etter steg 2. Når saken åpnes igjen, står «Ikke dokumentert behov for tidligopptak» (AFH) i «Konklusjon». Søker A har nå konklusjonen AFH, som brukes i del 2. | | |
+| 1.5 | Søknad uten ønske om tidlig opptak viser ikke tidlig opptak | 1. Gå tilbake til sakslisten. <br>2. Åpne saken til søker C (søknad 1001012). <br>3. Se på stegene i saken. | Steget «Tidlig opptak» finnes ikke i saken. | | |
+| 1.6a | Konklusjon per organisasjon (UiT konkluderer i sin sak) | 1. Gå tilbake til sakslisten. <br>2. Åpne saken til søker D (søknad 1000748, saken ved HVL), og gå til steget «Tidlig opptak». <br>3. Velg «Kan få tidligopptak, har godkjent grunn.» (KFF) i «Konklusjon». <br>4. Bytt til testbruker 2 (KORT DOMPAP, saksbehandler (OPPTAK_SAKSBEHANDLER) ved UiT), som beskrevet i «Slik bytter du testbruker». Husk å laste inn siden på nytt. <br>5. Åpne saken til søker D (søknad 1000748, saken ved UiT), og gå til steget «Tidlig opptak». <br>6. Velg «Ikke dokumentert behov for tidligopptak» (AFH) i «Konklusjon». <br>7. Gå tilbake til sakslisten, og åpne saken til søker D (søknad 1000748, saken ved UiT) igjen. | Når saken ved UiT åpnes igjen, står «Ikke dokumentert behov for tidligopptak» (AFH) i «Konklusjon». | | |
+| 1.6b | Konklusjon per organisasjon (konklusjonen i saken ved HVL er uendret) | 1. Fortsett fra 1.6a. <br>2. Bytt tilbake til testbruker 1 (RU BRØDSKIVE, saksbehandler (OPPTAK_SAKSBEHANDLER) ved HVL), som beskrevet i «Slik bytter du testbruker». Husk å laste inn siden på nytt. <br>3. Åpne saken til søker D (søknad 1000748, saken ved HVL), og gå til steget «Tidlig opptak». | I saken ved HVL står fortsatt «Kan få tidligopptak, har godkjent grunn.» (KFF) i «Konklusjon». | | |
 
 ### Del 2: Finne søknader om tidlig opptak (finne_søknader_om_tidlig_opptak.feature)
 
 #### Regel: Søk og filtrering av saker på tidlig opptak
 
-Del 2 bruker konklusjonene fra del 1: søker A har AFH, søker D har KFF ved HVL, og søker B har ingen konklusjon. Søker C har ikke søkt.
+Del 2 bruker konklusjonene fra del 1: søker A har AFH, søker D har KFF i saken ved HVL, og søker B har ingen konklusjon. Søker C har ikke søkt.
 
 Del 2 tester det saksbehandleren trenger for tidlig opptak: å finne sakene som har med tidlig opptak å gjøre, og sakene som mangler konklusjon. Hvordan filtrene virker sammen med hverandre og med de andre filtrene, testes ikke her (se «Ikke med i denne testen»). Filteret «Tidlig opptak» vises bare når minst én sak i opptaket treffer et av valgene. Er sakslisten lang, kan du skrive søknadsnummeret i «Søknadsnummer» for å se om en bestemt søknad er med.
 
 | Nr | Scenario | Steg | Forventet resultat | Faktisk resultat | Status |
 |---|---|---|---|---|---|
-| 2.1 | Filtrere på tidlig opptak (søkeren har søkt om tidlig opptak) | 1. Fortsett fra 1.6, som testbruker 1. <br>2. Gå tilbake til sakslisten. <br>3. Kryss av for «Har søkt tidlig opptak» i «Tidlig opptak». | Listen viser søknadene til søker A, B og D. Søknaden til søker C vises ikke. | | |
-| 2.2 | Filtrere på tidlig opptak (konklusjonen for tidlig opptak mangler) | 1. Fortsett fra 2.1. <br>2. Fjern krysset for «Har søkt tidlig opptak». <br>3. Kryss av for «Mangler konklusjon på tidlig opptak» i «Tidlig opptak». | Listen viser søknaden til søker B. Søknadene til søker A og D (som har konklusjon) og søker C (som ikke har søkt) vises ikke. | | |
-| | | *Etter testen, hvis den skal kjøres på nytt: velg «Ikke valgt» i «Konklusjon» for søker A, og for søker D som testbruker 1 og som testbruker 2.* | | | |
+| 2.1 | Filtrere på tidlig opptak (søkeren har søkt om tidlig opptak) | 1. Fortsett fra 1.6b, som testbruker 1. <br>2. Gå tilbake til sakslisten. <br>3. Kryss av for «Har søkt tidlig opptak» i «Tidlig opptak». | Listen inneholder søknadene til søker A (1000902), B (1001008) og D (1000748). Søknaden til søker C (1001012) er ikke med. | | |
+| 2.2 | Filtrere på tidlig opptak (konklusjonen for tidlig opptak mangler) | 1. Fortsett fra 2.1. <br>2. Fjern krysset for «Har søkt tidlig opptak». <br>3. Kryss av for «Mangler konklusjon på tidlig opptak» i «Tidlig opptak». | Listen inneholder søknaden til søker B (1001008). Søknadene til søker A (1000902) og D (1000748), som har konklusjon, og søker C (1001012), som ikke har søkt, er ikke med. | | |
+| | | *Etter testen, hvis den skal kjøres på nytt: velg «Ikke valgt» i «Konklusjon» for søker A (søknad 1000902), og i begge sakene til søker D (søknad 1000748), som testbruker 1 og som testbruker 2.* | | | |
 
 ## Ikke testbart nå
 
@@ -86,7 +96,7 @@ Scenarioene er laget, men kan ikke testes i testmiljøet ennå.
 
 | Scenario | Hvorfor | Når det kan testes |
 |---|---|---|
-| Konklusjon per organisasjon (1.6): at søknadsalternativet ved HVL er med i tidligopptaket, og søknadsalternativet ved UiT ikke er det | Det ses først når opptaksforvalteren prøvekjører eller gjennomfører tidligopptaket, og det er ikke med i denne testen. Testcasen sjekker at konklusjonene lagres hver for seg. | Når gjennomføringen av tidligopptaket testes |
+| Konklusjon per organisasjon (1.6a og 1.6b): at søknadsalternativet ved HVL er med i tidligopptaket, og søknadsalternativet ved UiT ikke er det | Det ses først når opptaksforvalteren prøvekjører eller gjennomfører tidligopptaket, og det er ikke med i denne testen. Testcasen sjekker at konklusjonene lagres hver for seg. | Når gjennomføringen av tidligopptaket testes |
 
 ## Ikke med i denne testen
 

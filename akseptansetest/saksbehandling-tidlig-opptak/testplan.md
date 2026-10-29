@@ -25,7 +25,7 @@ Testplan for «Saksbehandling av tidlig opptak». Planen sier hva som testes, av
 | Scope | Ingen |
 | Saker | [sikt-no/fs#456](https://github.com/sikt-no/fs/issues/456) · [STEK-188](https://sikt.atlassian.net/browse/STEK-188), [STEK-268](https://sikt.atlassian.net/browse/STEK-268), [STEK-561](https://sikt.atlassian.net/browse/STEK-561) |
 | Berører andre team | Nei |
-| Kjente begrensninger | Kortet viser søkerens behov (teksten søkeren så, i første person) under «Begrunnelse fra søker», ikke navnet på begrunnelsen. Mangler teksten for en begrunnelse, vises «-». «Har konklusjon» i filteret tar også med en sak med konklusjon der søkeren ikke har søkt (bare mulig utenom saksbehandlingen). Begge står i verify-rapportene. |
+| Kjente begrensninger | Kortet viser søkerens behov (teksten søkeren så, i første person) under «Begrunnelse fra søker», ikke navnet på begrunnelsen. Mangler teksten for en begrunnelse, vises «-». «Har konklusjon» i filteret tar også med en sak med konklusjon der søkeren ikke har søkt (bare mulig utenom saksbehandlingen). Begge står i verify-rapportene. Etter bytte av testbruker må siden lastes inn på nytt (F5), ellers kan FS Admin oppføre seg rart. Det skyldes en kjent feil i mellomlagringen, som ikke er en del av denne leveransen. |
 
 ### Testbrukere
 
@@ -34,7 +34,7 @@ Testplan for «Saksbehandling av tidlig opptak». Planen sier hva som testes, av
 | 1 | RU BRØDSKIVE | Saksbehandler (OPPTAK_SAKSBEHANDLER) | HVL | Alle scenarioene i `@OPT-BEH-BEH-009` og `@OPT-BEH-BEH-013` |
 | 2 | KORT DOMPAP | Saksbehandler (OPPTAK_SAKSBEHANDLER) | UiT | `@OPT-BEH-BEH-013` «Konklusjon per organisasjon» |
 
-Testbrukerne finnes i minst to organisasjoner, så vi kan teste at ingen ser data de ikke skal se. Testbruker byttes i menyen øverst til høyre.
+Testbrukerne finnes i minst to organisasjoner, så vi kan teste at ingen ser data de ikke skal se. Testbruker byttes i menyen øverst til høyre. Gå så til sakslisten, og last inn siden på nytt (F5).
 
 ### Testdata
 
@@ -44,7 +44,7 @@ Testbrukerne finnes i minst to organisasjoner, så vi kan teste at ingen ser dat
 | Søker A: har søkt om tidlig opptak, uten konklusjon | Utgått Breiflabb, søknad 1000902 | [Søknaden i Min kompetanse](https://test.minkompetanse.no/nb/soknader/c29rbmFkOjdlZDAwMjljLTQ5YzctNDgwZS1hNjJhLWZlNDRjYjg2ZWVkNCwzNA) | Ja: velg «Ikke valgt» i «Konklusjon» |
 | Søker B: har søkt om tidlig opptak, uten konklusjon | Optimistisk Hest, søknad 1001008 | [Søknaden i Min kompetanse](https://test.minkompetanse.no/nb/soknader/c29rbmFkOmFmMmQ0YmMwLWNlMTktNDY4Ni1hMDA3LWU1ZWUwZDA2ODQzNCwzNA) | – (endres ikke) |
 | Søker C: har ikke søkt om tidlig opptak | Dedikert Jerv, søknad 1001012 | [Søknaden i Min kompetanse](https://test.minkompetanse.no/nb/soknader/c29rbmFkOmIwYzA4YWJlLTVkZjktNGFjNS1iY2EzLTRmMDM3YmVlZTA0ZCwzNA) | – (endres ikke) |
-| Søker D: har søkt om tidlig opptak, uten konklusjon, med søknadsalternativer ved HVL og UiT | Smart klippfisk, søknad 1000748 | [Søknaden i Min kompetanse](https://test.minkompetanse.no/nb/soknader/c29rbmFkOjI5NTNlZGEyLTU4MTUtNDEwNy1hN2ZhLWUwNjY1MGEwOTliMSwzNA) | Ja: velg «Ikke valgt» i «Konklusjon», ved begge organisasjonene |
+| Søker D: har søkt om tidlig opptak, uten konklusjon, med to saker: søknaden er delt i én sak som behandles av HVL og én som behandles av UiT | Smart klippfisk, søknad 1000748 | [Søknaden i Min kompetanse](https://test.minkompetanse.no/nb/soknader/c29rbmFkOjI5NTNlZGEyLTU4MTUtNDEwNy1hN2ZhLWUwNjY1MGEwOTliMSwzNA) | Ja: velg «Ikke valgt» i «Konklusjon» i begge sakene |
 
 ## Omfang
 
