@@ -184,7 +184,7 @@ Egenskap: Automatisk saksbehandling
       Så er søkeren plassert i "Jenter" for "Informatikk, UiO"
 
   @depends-on-OPT-BEH-BEH-031 @depends-on-OPT-REG-KVO-001 @depends-on-OPT-REG-RAN-002
-  # OPT-BEH-BEH-031: «Søkeren får en poengsum for hver kvote og hvert grunnlag kvoten er koblet til», «Poengsummen regnes ut med poengformelen til kvotetypen», «Poengsummen regnes ut på nytt når det den bygger på, endres»
+  # OPT-BEH-BEH-031: «Søkeren får en poengsum for hver kvote og hvert grunnlag kvoten er koblet til», «Poengsummen regnes ut med poengformelen til kvotetypen», «Poengsummen regnes ut på nytt når det den bygger på, endres», «Bare grunnlag søkeren er kvalifisert på, gir poengsum», «En poengsum som ikke kan regnes ut, stopper ikke de andre», «Saksbehandleren ser den høyeste poengsummen per kvote for hvert søknadsalternativ»
   # OPT-REG-KVO-001: «En kvotetype kan ha en default poengformel»
   Regel: Søkeren får poengsum per kvote når søkeren er fordelt på kvoter
     # Oppdateres automatisk ut fra kvotene og poengene.

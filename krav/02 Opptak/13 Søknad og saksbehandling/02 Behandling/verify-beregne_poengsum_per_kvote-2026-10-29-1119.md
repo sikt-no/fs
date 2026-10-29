@@ -1,12 +1,12 @@
 # Verifisering: beregne_poengsum_per_kvote.feature
 
-- **Dato:** 2026-10-29 11:04
+- **Dato:** 2026-10-29 11:19
 - **Krav:** `krav/02 Opptak/13 Søknad og saksbehandling/02 Behandling/beregne_poengsum_per_kvote.feature` (1 feature-filer)
-- **Kode:** `fs-plattform` (origin/main, lest uten å bytte fra den utsjekkede branchen mahj/STEK-632, oppdatert), `fs-admin` (main, e7c91f629, oppdatert)
+- **Kode:** `fs-plattform` (origin/main, 2538996e87, lest uten å bytte fra den utsjekkede branchen mahj/STEK-632, oppdatert), `fs-admin` (main, 7e18fcabd, oppdatert)
 - **Åpne MR-er:** 3 MR-er i fs-admin, 0 i fs-plattform (0 med kode for kravene)
 - **Omfang:** alle krav uansett status (fra prompten)
 - **Avhengigheter:** 1 nivå, bare status
-- **Kontroll:** `fs-verify-kontroll`
+- **Kontroll:** `fs-verify-kontroll` (fra kjøringen 2026-10-29 11:04; koden og scenarioene er ikke endret siden)
 - **Skjermbilder:** nei
 
 Gating-sett: alle scenarioene i scope, også `@draft` og `@planned`, minus `@demo` (verifisert uansett status).
@@ -71,7 +71,7 @@ Koden i disse er ikke merget, og regnes ikke som levert. Scenarioene som bare fi
 
 Kontrollen endret ingen resultater.
 
-Kontrollen rettet linjenumrene i bevisene for PBS, PRS og `skrivDiff`, og fant at merknaden bare skrives når poengtypen har minimum over 0.
+Kontrollen er fra kjøringen 2026-10-29 11:04. Siden da er bare taggene og kommentarene i kravet endret: det åpne spørsmålet i «Bare grunnlag søkeren er kvalifisert på, gir poengsum» er lukket, og alle reglene har fått ankeret til flyten. Scenarioene er de samme, og ingen av filene i bevisene er endret på origin/main i fs-plattform eller fs-admin.
 
 ## Forslag til endringer
 
@@ -81,7 +81,7 @@ Ingen.
 
 **Delvis levert**
 
-- `@OPT-BEH-BEH-031` — Beregne poengsum per kvote (`krav/02 Opptak/13 Søknad og saksbehandling/02 Behandling/beregne_poengsum_per_kvote.feature`, `@draft` → `@in-progress`, 12/13 funnet) — `@implemented` på: Regel: Søkeren får en poengsum for hver kvote og hvert grunnlag kvoten er koblet til (linje 22), Regel: Poengsummen regnes ut med poengformelen til kvotetypen (linje 45), Regel: Bare grunnlag søkeren er kvalifisert på, gir poengsum (linje 57), Regel: Poengsummen regnes ut på nytt når det den bygger på, endres (linje 70), Regel: Saksbehandleren ser den høyeste poengsummen per kvote for hvert søknadsalternativ (linje 115), Scenario: Poengsummen i de andre kvotene regnes ut når én kvote feiler, Scenario: Poengsummene fjernes når søkeren ikke er plassert i noen kvote, Scenario: Poengsummene fjernes når søknaden ikke har noe grunnlag
+- `@OPT-BEH-BEH-031` — Beregne poengsum per kvote (`krav/02 Opptak/13 Søknad og saksbehandling/02 Behandling/beregne_poengsum_per_kvote.feature`, `@draft` → `@in-progress`, 12/13 funnet) — `@implemented` på: Regel: Søkeren får en poengsum for hver kvote og hvert grunnlag kvoten er koblet til (linje 22), Regel: Poengsummen regnes ut med poengformelen til kvotetypen (linje 45), Regel: Bare grunnlag søkeren er kvalifisert på, gir poengsum (linje 57), Regel: Poengsummen regnes ut på nytt når det den bygger på, endres (linje 68), Regel: Saksbehandleren ser den høyeste poengsummen per kvote for hvert søknadsalternativ (linje 114), Scenario: Poengsummen i de andre kvotene regnes ut når én kvote feiler, Scenario: Poengsummene fjernes når søkeren ikke er plassert i noen kvote, Scenario: Poengsummene fjernes når søknaden ikke har noe grunnlag
 
 **Kan slettes**
 
@@ -112,5 +112,4 @@ Ingen.
 ## Oppfølging
 
 - **Merknaden skrives ikke alltid:** når poengtypen ikke har minimum over 0, regnes en manglende verdi som 0, og det skrives ingen merknad (`fs-plattform/opptak/opptak-service/src/main/java/no/sikt/fs/opptak/regelverk/poeng/PoengberegningEvaluator.java:194-198`).
-- **Åpent spørsmål:** `@OPT-BEH-BEH-031` «Bare grunnlag søkeren er kvalifisert på, gir poengsum» — Koden regner bare ut poengsum for grunnlag søkeren er kvalifisert på for kompetanseregelverket. Er det ønsket, eller skal søkeren få poengsum uansett, og kvalifiseringen avgjøre om poengsummen brukes?
 - **Ikke sjekket:** min-kompetanse er ikke blant kodeklonene. Kravet gjelder saksbehandlingen, så det har ingen betydning for resultatet.

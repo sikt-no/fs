@@ -53,6 +53,7 @@ Egenskap: Beregne poengsum per kvote
       Når poengsummen regnes ut
       Så er poengsummen i kvotetypen "ORD" 49
 
+  @ref-FLY-OPT-AUT-001
   Regel: Bare grunnlag søkeren er kvalifisert på, gir poengsum
     # Avklart 2026-10-29: søkeren får bare poengsum på grunnlag søkeren er kvalifisert på for
     # kompetanseregelverket.
@@ -84,6 +85,7 @@ Egenskap: Beregne poengsum per kvote
       Når poengsummen regnes ut på nytt uten at den endres
       Så har endringsloggen ikke fått noe nytt innslag for poengsummen
 
+  @ref-FLY-OPT-AUT-001
   Regel: En poengsum som ikke kan regnes ut, stopper ikke de andre
 
     Scenario: Poengsummen i de andre kvotene regnes ut når én kvote feiler
@@ -108,7 +110,7 @@ Egenskap: Beregne poengsum per kvote
       Når søknaden ikke lenger har noe grunnlag
       Så har søkeren ingen poengsum
 
-  @ref-OPT-PLA-TIL-002
+  @ref-OPT-PLA-TIL-002 @ref-FLY-OPT-AUT-001
   Regel: Saksbehandleren ser den høyeste poengsummen per kvote for hvert søknadsalternativ
     # Plasstildelingen bruker den samme poengsummen («Søkeren rangeres etter den høyeste
     # poengsummen i utdanningskvoten» i OPT-PLA-TIL-002).
