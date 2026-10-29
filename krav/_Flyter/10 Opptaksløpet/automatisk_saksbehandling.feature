@@ -44,7 +44,7 @@ Egenskap: Automatisk saksbehandling
 
   @depends-on-OPT-BEH-BEH-015 @depends-on-OPT-BEH-BEH-027
   # OPT-BEH-BEH-015: «Opptakssystemets påstand om GSK på vitnemålet», «Konklusjon på søknaden fra vitnemålet», «Konklusjon fra tidligere opptak», «Automatikken setter bare positive konklusjoner, og bare der ingen finnes»
-  # OPT-BEH-BEH-027: hele kravet. Påstanden om GSK beregnes med kontrollmotoren.
+  # Påstanden om GSK beregnes med kontrollmotoren, som er beskrevet i hele OPT-BEH-BEH-027.
   Regel: Søknaden får GSK-konklusjonen når vitnemålet importeres fra KREG
 
     Scenario: Søknaden får GSK-konklusjonen fra vitnemålet som er importert fra KREG
