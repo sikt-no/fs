@@ -644,7 +644,7 @@ Egenskap: Søknadsmangler
     studiekompetanse ikke fullføres i vår, slettes mangelen hvis den ikke er sjekket ut.
 
     Når saken er behandlet helautomatisk, sjekker den automatiske behandlingen ut mangelen som et
-    av de siste stegene før saken settes til «Ferdig behandlet». Saksbehandleren kan også sjekke
+    av de siste stegene før saken er ferdig behandlet. Saksbehandleren kan også sjekke
     ut mangelen, for eksempel når søkeren har dokumentert vitnemålet på annen måte.
     # I det gamle systemet het mangelkoden DUA. Eksemplene bruker den koden.
 

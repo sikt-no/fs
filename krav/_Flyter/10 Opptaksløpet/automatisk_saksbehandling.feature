@@ -186,10 +186,12 @@ Egenskap: Automatisk saksbehandling
   # OPT-BEH-BEH-008: «Mangelen for generell studiekompetanse som fullføres i vår settes og sjekkes ut automatisk»
   Regel: Mangelen for GSK som fullføres i vår sjekkes ut før saken blir ferdig behandlet
 
-    Scenario: Mangelen sjekkes ut når saken er behandlet helautomatisk
-      Gitt at saken hos "Universitetet i Oslo" har den automatiske mangelen "DUA"
+    Scenario: Saken med mangelen for GSK som fullføres i vår blir ferdig behandlet
+      Gitt at søkeren har oppgitt i søknaden at generell studiekompetanse fullføres i vår
+      Og at saken hos "Universitetet i Oslo" har den automatiske mangelen "DUA"
       Når den automatiske behandlingen har behandlet saken helautomatisk
-      Så er mangelen "DUA" sjekket ut før saken er ferdig behandlet
+      Så er saken hos "Universitetet i Oslo" ferdig behandlet
+      Og mangelen "DUA" er sjekket ut
 
   @depends-on-OPT-BEH-BEH-025 @depends-on-OPT-PLA-TIL-001
   # OPT-BEH-BEH-025: «Den automatiske behandlingen setter saken til ferdig behandlet når alt er avgjort», «Steg som bygger på et steg som ikke kan avgjøres, hoppes over»
