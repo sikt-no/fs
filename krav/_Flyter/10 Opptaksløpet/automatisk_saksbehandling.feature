@@ -3,9 +3,10 @@
 Egenskap: Automatisk saksbehandling
   Fra søknaden er blitt en sak hos den saksbehandlende organisasjonen, til saken er ferdig
   behandlet og er med i plasstildelingen, uten at en saksbehandler har gjort noe. Søkerens
-  vitnemål importeres fra KREG når saken er opprettet (OPT-BEH-BEH-030). Påstanden om GSK
-  beregnes for hvert vitnemål når vitnemålet importeres, og søknaden får GSK-konklusjonen da
-  (OPT-BEH-BEH-015).
+  vitnemål importeres fra KREG til opptakssystemet når saken er opprettet (OPT-BEH-BEH-030).
+  Påstanden om GSK beregnes for hvert vitnemål når vitnemålet importeres fra KREG, og søknaden
+  får GSK-konklusjonen da (OPT-BEH-BEH-015). «Importeres» betyr i flyten alltid at
+  opptakssystemet henter vitnemålet fra KREG, ikke at vitnemålet kommer inn i KREG.
   Den automatiske behandlingen går gjennom alle søkerne. Som første steg setter den
   GSK-konklusjonen på søknadene som ikke har en. Flyten gjelder søkere med ett vitnemål,
   med påstanden at søkeren har GSK. Andre søkere hoppes over, og behandles ikke helautomatisk
@@ -19,7 +20,7 @@ Egenskap: Automatisk saksbehandling
   # Kjent brudd: den automatiske behandlingen setter ikke saken til ferdig behandlet, og
   # plasstildelingen krever ikke at saken er ferdig behandlet (se OPT-BEH-BEH-025 og OPT-PLA-TIL-001).
   # Kjent brudd: koden beregner GSK bare i den automatiske behandlingen, ikke når vitnemålet
-  # importeres, og påstanden lagres ikke på vitnemålet (se OPT-BEH-BEH-015).
+  # importeres fra KREG, og påstanden lagres ikke på vitnemålet (se OPT-BEH-BEH-015).
   # Fasene er etter prosesstegningen for automatisk saksbehandling (2026-10-29). Kvalifiseringen,
   # kvotene, poengene per kvote og manglene er ikke egne steg: de oppdateres automatisk ut fra
   # stegene før, og er gule i tegningen. Tegningen har kravelementene før poengene. Det er
@@ -40,12 +41,12 @@ Egenskap: Automatisk saksbehandling
 
   @depends-on-OPT-BEH-BEH-015
   # OPT-BEH-BEH-015: «Opptakssystemets påstand om GSK på vitnemålet», «Konklusjon på søknaden fra vitnemålet», «Konklusjon fra tidligere opptak», «Automatikken setter bare positive konklusjoner, og bare der ingen finnes»
-  Regel: Søknaden får GSK-konklusjonen når vitnemålet importeres
+  Regel: Søknaden får GSK-konklusjonen når vitnemålet importeres fra KREG
 
-    Scenario: Søknaden får GSK-konklusjonen fra det importerte vitnemålet
+    Scenario: Søknaden får GSK-konklusjonen fra vitnemålet som er importert fra KREG
       Gitt at søknaden ikke har noen GSK-konklusjon
-      Og at "Kari Nordmann" har et vitnemål som gir generell studiekompetanse
-      Når vitnemålet importeres
+      Og at "Kari Nordmann" har et vitnemål i KREG som gir generell studiekompetanse
+      Når vitnemålet importeres fra KREG
       Så har vitnemålet påstanden at søkeren har generell studiekompetanse
       Og søknaden får en positiv GSK-konklusjon
 
