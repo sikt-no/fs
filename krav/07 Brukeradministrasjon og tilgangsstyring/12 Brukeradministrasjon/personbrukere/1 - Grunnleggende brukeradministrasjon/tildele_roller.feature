@@ -90,7 +90,6 @@ Egenskap: Tildele roller til en personbruker
       Så avvises tildelingen
       Og personbrukeren har ikke fått rollen
 
-  @draft
   Regel: Valglisten for rolle viser bare roller som er i taket til en applikasjon i valgt organisasjon og miljø
     # Taket sier, per applikasjon, organisasjon og miljø, hvilke roller applikasjonen kan bruke
     # for brukerne sine. En rolle som ikke er i taket til noen applikasjon i organisasjonen og

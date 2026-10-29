@@ -71,8 +71,10 @@ Ingen retagging. Regelen er `@draft` og står urørt, og `Egenskap:`-linja (`@BR
 
 ## Åpne spørsmål
 
-- [ ] Status: regelen er `@draft`. Skal den valideres til `@planned` (via `fs-krav`) før den bygges? Delta-en er laget med `@draft`-regelen etter beslutning fra Kjetil, men statusen er ikke endret.
-- [ ] Oppgave og scope: `tildele_roller.feature` står i scope-raden for denne oppgaven (BAT-326) i scope-restanser-etter-onboarding, men regelen er ikke en del av det scopet (PR #866). Delta-en er lagt i denne oppgaven som standardvalg. Skal scopet oppdateres med `fs-scope` (modus B), eller skal regelen få en egen oppgave og Jira-sak?
+- [x] Status: regelen er `@draft`. Skal den valideres til `@planned` (via `fs-krav`) før den bygges? Delta-en er laget med `@draft`-regelen etter beslutning fra Kjetil, men statusen er ikke endret.
+  **Beslutning 2026-10-29 (Kjetil):** Regelen er validert. `@draft` er fjernet fra regelen med `fs-krav`, så den har `@planned` fra egenskapen. Den har ikke fått en egen `@planned`-tag, fordi en del under en `@planned` egenskap ikke kan ha egen implementasjonsstatus (*Delvis utkast* i `krav/README.md`). Regelen er ikke retagget `@in-progress` ennå.
+- [x] Oppgave og scope: `tildele_roller.feature` står i scope-raden for denne oppgaven (BAT-326) i scope-restanser-etter-onboarding, men regelen er ikke en del av det scopet (PR #866). Delta-en er lagt i denne oppgaven som standardvalg. Skal scopet oppdateres med `fs-scope` (modus B), eller skal regelen få en egen oppgave og Jira-sak?
+  **Beslutning 2026-10-29 (Kjetil):** Regelen hører til denne oppgaven (BAT-326). Scopet er oppdatert med `fs-scope` (modus B): mål, kilde (#866) og kommentaren i scope-raden for `@BRU-PER-GRU-003`. Egenskapen har `@scope-restanser-etter-onboarding` fra før, så regelen har ikke fått en egen scope-tag.
 - [ ] Hvilke perioder i taket teller: bare delegeringer som gjelder nå, eller også delegeringer med en periode som starter senere? Standardvalg til det er avklart: bare de som gjelder nå.
 - [ ] Skal den tomme valglisten ha en egen tekst når ingen applikasjon har tak, så den skiller seg fra manglende rettighet? (Åpent designspørsmål i implementasjonsdetaljene.)
 
