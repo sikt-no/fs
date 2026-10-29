@@ -62,7 +62,7 @@ Egenskap: Automatisk saksbehandling
 
   @depends-on-OPT-BEH-BEH-028
   # OPT-BEH-BEH-028: «Alderspoeng regnes ut fra søkerens alder», «Kjønnspoeng regnes ut fra søkerens kjønn», «Poeng for høyere utdanning regnes ut fra søkerens studiepoeng», «Tilleggspoengene settes uansett hvem som velger grunnlaget»
-  Regel: Søknaden får tilleggspoeng fra grunnlaget
+  Regel: Søknaden får tilleggspoeng når grunnlaget er satt
 
     Scenario: Søknaden får tilleggspoengene for grunnlaget
       Gitt at søknaden har grunnlag
