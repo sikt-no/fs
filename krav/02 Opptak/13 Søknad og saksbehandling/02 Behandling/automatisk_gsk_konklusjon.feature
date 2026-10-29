@@ -46,7 +46,7 @@ Egenskap: Automatisk GSK-konklusjon
   # Det avviker fra Sikts tolkning i Confluence v2 om at GSK i fagskoleopptak ikke
   # skal lagres som konklusjon, fordi GSK der er et alternativt kompetansekrav.
 
-  @ref-FLY-OPT-AUT-001 @depends-on-OPT-BEH-BEH-027
+  @ref-FLY-OPT-AUT-001 @depends-on-OPT-BEH-BEH-027 @ref-FLY-OPT-VIT-001
   Regel: Opptakssystemets påstand om GSK på vitnemålet
     # Hvordan GSK beregnes for vitnemålet (seksfagskontrollen og grunnlagskoden), står der.
 
@@ -105,7 +105,7 @@ Egenskap: Automatisk GSK-konklusjon
       Når kompetansebeviset importeres fra KREG
       Så har kompetansebeviset ingen påstand om generell studiekompetanse
 
-  @ref-FLY-OPT-AUT-001
+  @ref-FLY-OPT-AUT-001 @ref-FLY-OPT-VIT-001
   Regel: Konklusjon på søknaden fra vitnemålet
 
     Scenario: Søknaden får konklusjonen fra vitnemålet
@@ -297,6 +297,7 @@ Egenskap: Automatisk GSK-konklusjon
       Når saksbehandleren legger til en GSK-konklusjon
       Så kan saksbehandleren bare velge positive GSK-konklusjoner
 
+  @ref-FLY-OPT-VIT-001
   Regel: Annullert vitnemål
     # Kilden: vitnemålene hentes fra KREG. Er et vitnemål annullert der, trekkes
     # konklusjonene som bygger på det, tilbake. Det gjelder bare i opptak som ikke er
