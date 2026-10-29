@@ -7,7 +7,9 @@ Egenskap: Automatisk saksbehandling
   Påstanden om GSK beregnes for hvert vitnemål når vitnemålet importeres fra KREG, og søknaden
   får GSK-konklusjonen da (OPT-BEH-BEH-015). «Importeres» betyr i flyten alltid at
   opptakssystemet henter vitnemålet fra KREG, ikke at vitnemålet kommer inn i KREG.
-  Den automatiske behandlingen går gjennom alle søkerne. Som første steg setter den
+  Den automatiske behandlingen fortsetter saksbehandlertildelingen: hver ny sak behandles når
+  vitnemålet er importert, og saken behandles igjen når jobben for nye vitnemål i KREG finner et
+  nytt vitnemål (OPT-BEH-BEH-032). Som første steg setter den
   GSK-konklusjonen på søknadene som ikke har en. Flyten gjelder søkere med ett vitnemål,
   med påstanden at søkeren har GSK. Andre søkere hoppes over, og behandles ikke helautomatisk
   (se OPT-BEH-BEH-025). For søkerne i flyten setter den automatiske behandlingen grunnlaget,
@@ -21,6 +23,8 @@ Egenskap: Automatisk saksbehandling
   # plasstildelingen krever ikke at saken er ferdig behandlet (se OPT-BEH-BEH-025 og OPT-PLA-TIL-001).
   # Kjent brudd: koden beregner GSK bare i den automatiske behandlingen, ikke når vitnemålet
   # importeres fra KREG, og påstanden lagres ikke på vitnemålet (se OPT-BEH-BEH-015).
+  # Kjent brudd: ingenting starter den automatiske behandlingen når resultatene er importert.
+  # Bare saksbehandleren starter den, for én sak om gangen (se OPT-BEH-BEH-032).
   # Fasene er etter prosesstegningen for automatisk saksbehandling (2026-10-29). Kvalifiseringen,
   # kvotene, poengene per kvote og manglene er ikke egne steg: de oppdateres automatisk ut fra
   # stegene før, og er gule i tegningen. Tegningen har kravelementene før poengene. Det er
@@ -41,6 +45,15 @@ Egenskap: Automatisk saksbehandling
       Når saken hos "Universitetet i Oslo" er opprettet
       Så er vitnemålet importert
       Og GSK kan beregnes for vitnemålet
+
+  @depends-on-OPT-BEH-BEH-032
+  # OPT-BEH-BEH-032: «Behandlingen kjører for hver ny sak saksbehandlertildelingen oppretter», «Behandlingen kjører når jobben for nye vitnemål finner et nytt vitnemål»
+  Regel: Den automatiske behandlingen starter når søkerens resultater er importert
+
+    Scenario: Søknaden behandles automatisk når vitnemålet er importert
+      Gitt at saken hos "Universitetet i Oslo" er opprettet
+      Når vitnemålet til "Kari Nordmann" er importert fra KREG
+      Så behandles søknaden automatisk
 
   @depends-on-OPT-BEH-BEH-015 @depends-on-OPT-BEH-BEH-027
   # OPT-BEH-BEH-015: «Opptakssystemets påstand om GSK på vitnemålet», «Konklusjon på søknaden fra vitnemålet», «Konklusjon fra tidligere opptak», «Automatikken setter bare positive konklusjoner, og bare der ingen finnes»
