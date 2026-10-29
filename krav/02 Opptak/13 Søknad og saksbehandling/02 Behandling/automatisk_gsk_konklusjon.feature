@@ -27,15 +27,18 @@ Egenskap: Automatisk GSK-konklusjon
   slik at jeg bare trenger å vurdere generell studiekompetanse der grunnlaget ikke er entydig.
 
   Generell studiekompetanse (GSK) er det generelle opptakskravet til høyere utdanning.
-  Når søkerens vitnemål importeres, beregner opptakssystemet sin egen påstand om GSK
-  for hvert vitnemål, uavhengig av påstanden fra KREG. Påstanden lagres på vitnemålet,
-  med grunnlagskoden og tidspunktet den ble beregnet, og gjelder i alle opptak.
+  Når søkerens vitnemål importeres fra KREG til opptakssystemet, beregner opptakssystemet
+  sin egen påstand om GSK for hvert vitnemål, uavhengig av påstanden fra KREG. Påstanden
+  lagres på vitnemålet, med grunnlagskoden og tidspunktet den ble beregnet, og gjelder i
+  alle opptak. «Importeres» betyr i dette kravet alltid at opptakssystemet henter
+  vitnemålet fra KREG (OPT-BEH-BEH-030), ikke at vitnemålet kommer inn i KREG.
   Søknader som ikke har en GSK-konklusjon, får en positiv konklusjon når et vitnemål
-  har påstanden GSK. Vitnemål importeres når søknaden opprettes, og når KREG får nye
-  vitnemål for en søker med aktive søknader. Når søknaden opprettes, importeres
-  vitnemålene først. Gir ingen av dem GSK, ser systemet etter en positiv konklusjon fra
-  et tidligere opptak. Ellers vurderes GSK manuelt. Dette er en del av
-  vitnemålsimporten, ikke av den automatiske saksbehandlingen.
+  har påstanden GSK. Vitnemål importeres fra KREG når søknaden opprettes, og når KREG får
+  nye vitnemål for en søker med aktive søknader. Når søknaden opprettes, importeres
+  vitnemålene fra KREG først. Gir ingen av dem GSK, ser systemet etter en positiv konklusjon fra
+  et tidligere opptak. Ellers vurderes GSK manuelt. Den automatiske saksbehandlingen
+  setter også konklusjonen, som første steg, på søknadene i opptaket som ikke har en.
+  Påstanden på vitnemålet beregnes ikke på nytt da.
   Automatikken setter aldri en negativ konklusjon på søknaden, og overskriver aldri en
   konklusjon som finnes. Den gjelder alle opptak, også fagskoleopptak.
 
@@ -43,7 +46,7 @@ Egenskap: Automatisk GSK-konklusjon
   # Det avviker fra Sikts tolkning i Confluence v2 om at GSK i fagskoleopptak ikke
   # skal lagres som konklusjon, fordi GSK der er et alternativt kompetansekrav.
 
-  @ref-FLY-OPT-AUT-001 @depends-on-OPT-BEH-BEH-027
+  @ref-FLY-OPT-AUT-001 @depends-on-OPT-BEH-BEH-027 @ref-FLY-OPT-VIT-001
   Regel: Opptakssystemets påstand om GSK på vitnemålet
     # Hvordan GSK beregnes for vitnemålet (seksfagskontrollen og grunnlagskoden), står der.
 
@@ -52,7 +55,7 @@ Egenskap: Automatisk GSK-konklusjon
       Og at vitnemålet har utstedelsesdato
       Og at løpet på vitnemålet gir generell studiekompetanse
       Og at vitnemålet består seksfagskontrollen
-      Når vitnemålet importeres 26.10.2026 kl. 10:14
+      Når vitnemålet importeres fra KREG 26.10.2026 kl. 10:14
       Så har vitnemålet påstanden at søkeren har generell studiekompetanse
       Og grunnlagskoden er grunnlagskoden for løpet på vitnemålet
       Og grunnlagsdatoen er utstedelsesdatoen på vitnemålet
@@ -62,17 +65,17 @@ Egenskap: Automatisk GSK-konklusjon
       # Koden (GskVedtakAutoService) krever i dag at KREG sier GSK. Det skal fjernes.
       Gitt at søkeren har et vitnemål som gir generell studiekompetanse
       Og at påstanden fra KREG er at søkeren ikke har generell studiekompetanse
-      Når vitnemålet importeres
+      Når vitnemålet importeres fra KREG
       Så har vitnemålet påstanden at søkeren har generell studiekompetanse
 
     Scenario: Hvert vitnemål får sin egen påstand
       Gitt at søkeren har to vitnemål som ikke er annullert
-      Når vitnemålene importeres
+      Når vitnemålene importeres fra KREG
       Så har begge vitnemålene en påstand om generell studiekompetanse
 
     Scenario: Grunnlagskoder som settes automatisk
       Gitt at søkeren har et vitnemål som gir generell studiekompetanse
-      Når vitnemålet importeres
+      Når vitnemålet importeres fra KREG
       Så er grunnlagskoden i påstanden på vitnemålet en av disse:
         | grunnlagskode | vitnemål                                    | reform |
         | AØA           | allmenne og økonomiske fag                  | R94    |
@@ -83,7 +86,7 @@ Egenskap: Automatisk GSK-konklusjon
 
     Scenariomal: Påstanden er at søkeren ikke har GSK når <grunn>
       Gitt at <grunn>
-      Når vitnemålet importeres
+      Når vitnemålet importeres fra KREG
       Så har vitnemålet påstanden at søkeren ikke har generell studiekompetanse
 
       Eksempler:
@@ -94,44 +97,45 @@ Egenskap: Automatisk GSK-konklusjon
 
     Scenario: Annullert vitnemål får ingen påstand
       Gitt at søkeren har et annullert vitnemål
-      Når vitnemålet importeres
+      Når vitnemålet importeres fra KREG
       Så har vitnemålet ingen påstand om generell studiekompetanse
 
     Scenario: Kompetansebevis får ingen påstand
       Gitt at søkerens eneste dokument er et kompetansebevis
-      Når kompetansebeviset importeres
+      Når kompetansebeviset importeres fra KREG
       Så har kompetansebeviset ingen påstand om generell studiekompetanse
 
+  @ref-FLY-OPT-AUT-001 @ref-FLY-OPT-VIT-001
   Regel: Konklusjon på søknaden fra vitnemålet
 
     Scenario: Søknaden får konklusjonen fra vitnemålet
       Gitt at søknaden ikke har noen GSK-konklusjon
       Og at søkeren har et vitnemål med påstanden at søkeren har GSK
-      Når vitnemålet importeres
+      Når vitnemålet importeres fra KREG
       Så får søknaden en positiv GSK-konklusjon
       Og grunnlagskoden og grunnlagsdatoen er de samme som i påstanden
 
     Scenario: Påstanden om at søkeren ikke har GSK gir ingen konklusjon
       Gitt at søknaden ikke har noen GSK-konklusjon
       Og at søkerens eneste vitnemål har påstanden at søkeren ikke har GSK
-      Når vitnemålet importeres
+      Når vitnemålet importeres fra KREG
       Så får søknaden ingen GSK-konklusjon fra vitnemålet
 
     Scenario: Vitnemålet med senest utstedelsesdato brukes
       Gitt at søkeren har to vitnemål med påstanden at søkeren har GSK
-      Når vitnemålene importeres
+      Når vitnemålene importeres fra KREG
       Så bygger søknadens GSK-konklusjon på vitnemålet med senest utstedelsesdato
 
     Scenario: Alle søknader uten konklusjon oppdateres
       Gitt at søkeren har en søknad uten GSK-konklusjon og en søknad med GSK-konklusjon
       Og at opptakene ikke er avsluttet
-      Når et vitnemål med påstanden at søkeren har GSK importeres
+      Når et vitnemål med påstanden at søkeren har GSK importeres fra KREG
       Så får søknaden uten konklusjon en positiv GSK-konklusjon
       Og GSK-konklusjonen på den andre søknaden er uendret
 
     Scenario: Søknader i avsluttede opptak oppdateres ikke
       Gitt at søkeren har en søknad uten GSK-konklusjon i et avsluttet opptak
-      Når et vitnemål med påstanden at søkeren har GSK importeres
+      Når et vitnemål med påstanden at søkeren har GSK importeres fra KREG
       Så får søknaden ingen GSK-konklusjon
 
     @openquestion
@@ -142,9 +146,10 @@ Egenskap: Automatisk GSK-konklusjon
       Gitt at søknaden ikke har noen GSK-konklusjon
       Og at opptaket ikke er avsluttet
       Når KREG får et nytt vitnemål for søkeren
-      Så importeres vitnemålet
+      Så importeres vitnemålet fra KREG
       Og GSK beregnes for vitnemålet uten at noen starter det
 
+  @ref-FLY-OPT-AUT-001
   Regel: Konklusjon fra tidligere opptak
     # Grunnlagskoder: avklart 2026-10-13 at alle positive konklusjoner kan gjenbrukes,
     # uansett grunnlagskode. Grunnlagskoden kopieres, så den kan være hvilken som helst
@@ -224,6 +229,7 @@ Egenskap: Automatisk GSK-konklusjon
       Når søknaden opprettes
       Så får søknaden ingen GSK-konklusjon fra tidligere opptak
 
+  @ref-FLY-OPT-AUT-001
   Regel: Automatikken setter bare positive konklusjoner, og bare der ingen finnes
 
     Scenario: Ingen grunnlag for generell studiekompetanse
@@ -236,13 +242,39 @@ Egenskap: Automatisk GSK-konklusjon
     Scenario: Konklusjon på søknaden overskrives ikke
       Gitt at søknaden har en GSK-konklusjon, satt av en hvilken som helst organisasjon i opptaket
       Og at søkeren har et vitnemål som gir generell studiekompetanse
-      Når vitnemålet importeres
+      Når vitnemålet importeres fra KREG
       Så er GSK-konklusjonen på søknaden uendret
 
     Scenario: Systemet setter aldri en negativ konklusjon
       Gitt at søkeren ikke har noe grunnlag for generell studiekompetanse
       Når søknaden opprettes
       Så får søknaden ingen negativ GSK-konklusjon
+
+  @ref-FLY-OPT-AUT-001
+  Regel: GSK-konklusjonen settes også når den automatiske behandlingen kjører
+    # Første steg når den automatiske behandlingen kjører for et opptak. Konklusjonen settes
+    # etter de samme reglene som når vitnemålet importeres fra KREG: vitnemålet går foran tidligere
+    # konklusjoner, bare den siste tidligere konklusjonen gjenbrukes, og en konklusjon som
+    # finnes, overskrives ikke. Påstanden på vitnemålet beregnes ikke på nytt.
+    # Etter prosesstegningen «GSK-beregning for gitt opptak» (2026-10-29).
+
+    Scenario: Søknaden får konklusjonen fra vitnemålet i den automatiske behandlingen
+      Gitt at søknaden ikke har noen GSK-konklusjon
+      Og at søkeren har et vitnemål med påstanden at søkeren har GSK
+      Når den automatiske behandlingen kjører for opptaket
+      Så får søknaden en positiv GSK-konklusjon
+
+    Scenario: Søknaden får konklusjonen fra et tidligere opptak i den automatiske behandlingen
+      Gitt at søknaden ikke har noen GSK-konklusjon
+      Og at ingen av søkerens vitnemål har påstanden at søkeren har GSK
+      Og at den siste GSK-konklusjonen søkeren har fra et tidligere opptak, er positiv
+      Når den automatiske behandlingen kjører for opptaket
+      Så får søknaden en positiv GSK-konklusjon
+
+    Scenario: Konklusjonen overskrives ikke i den automatiske behandlingen
+      Gitt at søknaden har en GSK-konklusjon
+      Når den automatiske behandlingen kjører for opptaket
+      Så er GSK-konklusjonen på søknaden uendret
 
   # Reglene for manuell endring ligger i grenselandet mellom automatisk og manuell
   # saksbehandling, og kan bli flyttet til et eget krav når kravstrukturen bygges ut.
@@ -265,6 +297,7 @@ Egenskap: Automatisk GSK-konklusjon
       Når saksbehandleren legger til en GSK-konklusjon
       Så kan saksbehandleren bare velge positive GSK-konklusjoner
 
+  @ref-FLY-OPT-VIT-001
   Regel: Annullert vitnemål
     # Kilden: vitnemålene hentes fra KREG. Er et vitnemål annullert der, trekkes
     # konklusjonene som bygger på det, tilbake. Det gjelder bare i opptak som ikke er

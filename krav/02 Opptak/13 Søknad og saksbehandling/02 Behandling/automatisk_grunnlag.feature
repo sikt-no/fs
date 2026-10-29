@@ -1,68 +1,34 @@
 # language: no
 #
-# Grovutkast 21.10.2026. Kildene er samlet, men ingen regel er gjennomgått med
-# produkteier eller Team Puff. Reglene bygger på dagens FS-klient, koden i ny
-# stack og brukerhistoriene i Confluence. Følg «Krav fra kode, skisser eller
-# FS-klienten» i krav/README.md i valideringen: for hver regel må det avklares
-# om det er ønsket atferd, eller bare slik koden er.
+# Kilder: Jira STEK-252 (automatisk setting av grunnlag, del av epic STEK-218) og
+# STEK-296. Funksjonaliteten finnes i fs-plattform (opptak-service, autosak:
+# SetteGrunnlagService), og kjøres som steg i den automatiske saksbehandlingen
+# etter GSK-konklusjonen. Det er bare koblet til automatisk behandling av
+# søknader med digitalt vitnemål fra videregående skole fra KREG.
+# Manuelt velger saksbehandleren grunnlag i steget «Grunnlag» i fs-admin
+# (leggTilGrunnlag og fjernGrunnlag).
 #
-# Føring: Det nye skal fungere slik det fungerer i FS-klienten i dag. Den
-# automatiske settingen brukes sammen med den manuelle, der saksbehandleren
-# legger til og fjerner grunnlag i steget «Grunnlag».
-#
-# ÅPNE SPØRSMÅL:
-# - Hvilket «grunnlag» gjelder saken? Kravet bygger på kvalifikasjonsgrunnlaget
-#   på saken (VOV, VES, PRA osv.), som styrer kvalifisering, rangering og
-#   kvoter. Det er det FOL-34, STEK-296 og koden kaller «automatisk setting av
-#   grunnlag». Grunnlagskoden i GSK-konklusjonen (AØA, KLS osv.) settes
-#   automatisk i automatisk_gsk_konklusjon.feature. Gjelder saken også den, er
-#   det så langt dette utkastet kom.
-#
-# KILDER
-#
-# Jira: FOL-34 (initiativet, akseptansetest 30.11.2026, peker på
-# @OPT-REG-GRU-001), STEK-296 (epic) med STEK-297 (regelen), STEK-298 (låsing
-# og endringslogg) og STEK-299 (egenskapene på grunnlaget i fs-admin),
-# STEK-514 (bare ett grunnlag, backlog), STEK-454, STEK-430, STEK-315,
-# STEK-317, STEK-505, STEK-583, STEK-280.
-#
-# Confluence PFS: 4460740612 «Brukerhistorier automatisk valg av grunnlag»,
-# 4453629977 «2026-03-11 Raffinering automatisk valg av grunnlag», 4022829198
-# «Automatisere valg av grunnlag» (eksempler for VOV, VES, VPL, PRA og BCH),
-# 4986798081 «Endring i hvordan kvote og grunnlag henger sammen», 5108858885
-# «Status søknadsbehandling – utkast 15.10.2026». «Forretningsregler –
-# Grunnlag» er en tom mal.
-#
-# GitHub: #199, kriteriet «Systemet skal automatisk velge hvilke grunnlag
-# søknaden skal behandles ut fra». Det finnes ingen egen issue.
-#
-# FS-klienten (gitlab.sikt.no/fs/fs-klient): «Godkjenn VM» i vitnemålsrammen i
-# Søknad samlebilde (w_soknad_saml.srw:5020–5118, pk_opptakvtm.p_godkjennvtm)
-# og rutinen FS158.001 (wr_fs158_001.srw, pk_fs158001) setter
-# kvalifikasjonsgrunnlaget sammen med poengene. Regelen ligger i PL/SQL.
-# Søkeren kan ha flere grunnlag (PERSONKVALGRUNNLAG), og bare noen
-# kombinasjoner er forbudt (ULOVLIGEKVALGRUNNLAG: VOV+VOT, VES+VPL). Grunnlaget
-# ligger på personen. Studieprogrammet kan ha et grunnlag som settes når
-# søknadsalternativet opprettes («Aut.kvalgrunnlag»,
-# OPPTAKSTUDIEPROGRAM.KVALGRUNNLAGKODE_AUTOMATISK). FS-klienten har ingen
-# låsing, men FS158.001 hopper over søknader der «Kan saksbehandles» er satt.
-#
-# Ny stack: SetteGrunnlagService i opptak-service (fs-plattform), kalt fra
-# behandleSakAutomatisk etter GSK-konklusjonen. Manuelt: leggTilGrunnlag og
-# fjernGrunnlag (LeggTilGrunnlagService, FjernGrunnlagService). I fs-admin er
-# steget «Grunnlag» (GrunnlagCard) en avkrysningsliste uten markering av hva
-# som er satt automatisk, og uten rollesjekk.
+# Flere kilder (fra utkastet i PR #818): Jira FOL-34, STEK-297, STEK-298,
+# STEK-299, STEK-514, STEK-454, STEK-430, STEK-315, STEK-317, STEK-505,
+# STEK-583, STEK-280. Confluence PFS 4460740612 «Brukerhistorier automatisk
+# valg av grunnlag», 4453629977 «2026-03-11 Raffinering automatisk valg av
+# grunnlag», 4022829198 «Automatisere valg av grunnlag», 4986798081 «Endring i
+# hvordan kvote og grunnlag henger sammen». GitHub #199. I FS-klienten setter
+# «Godkjenn VM» i Søknad samlebilde og rutinen FS158.001 grunnlaget sammen med
+# poengene.
 #
 # AVGRENSNING
 #
-# - Hvilke grunnlag som finnes, og egenskapene deres, settes opp i regelverket
-#   (grunnlag.feature).
+# - Hvilke grunnlag som finnes, og egenskapene de har for automatikken
+#   (aldersgrense, krever et vitnemål, krever førstegangsvitnemål), settes opp
+#   i regelverket (grunnlag.feature).
 # - GSK-konklusjonen settes i automatisk_gsk_konklusjon.feature.
-# - Poengene beregnes i automatisk_poengberegning.feature (@OPT-BEH-BEH-018).
-# - Kvoteplasseringen står i automatisk_kvoteplassering.feature.
-# - Søkere med flere vitnemål får vitnemålet valgt av saksbehandleren i
-#   vitnemålsbehandlingen.
-@OPT-BEH-BEH-019 @must @draft @ref-OPT-BEH-BEH-012 @ref-OPT-BEH-BEH-015 @ref-OPT-BEH-BEH-018
+# - Hvordan alderspoeng, kjønnspoeng og de andre tilleggspoengene beregnes, står i
+#   automatiske_tilleggspoeng.feature (@OPT-BEH-BEH-028).
+# - Vitnemålspoeng står i automatisk_poengberegning.feature (@OPT-BEH-BEH-018),
+#   og kravelementene i automatisk_kvalifisering.feature (@OPT-BEH-BEH-020).
+# - Søkere med flere vitnemål behandles i vitnemålsbehandlingen.
+@OPT-BEH-BEH-019 @must @draft @ref-OPT-BEH-BEH-012 @ref-OPT-BEH-BEH-018
 Egenskap: Automatisk grunnlag
   Som saksbehandler
   ønsker jeg at søknaden får grunnlaget sitt automatisk når søkerens vitnemål og alder avgjør det
@@ -70,11 +36,10 @@ Egenskap: Automatisk grunnlag
 
   Grunnlaget avgjør hvilke opptakskrav søknaden vurderes mot, hvordan søkeren
   rangeres, og hvilke kvoter søkeren kan plasseres i. Har søkeren ett
-  elektronisk vitnemål med påstanden at søkeren har GSK, eller har
-  saksbehandleren valgt ett av vitnemålene, velger systemet grunnlaget ut fra
-  vitnemålet og søkerens alder. Hvilke grunnlag som kan
+  elektronisk vitnemål som gir generell studiekompetanse, velger systemet
+  grunnlaget ut fra vitnemålet og alderen til søkeren. Hvilke grunnlag som kan
   velges automatisk, og hva som skal til, bestemmes av egenskapene
-  regelverksbyggeren har gitt grunnlaget i regelverket.
+  regelverket har gitt grunnlaget.
 
   Grunnlag som saksbehandleren har valgt, endres aldri av automatikken. Det
   fremgår om et grunnlag er satt automatisk eller av saksbehandleren.
@@ -84,82 +49,73 @@ Egenskap: Automatisk grunnlag
   #   personen. Spørsmålet ble tatt opp i raffineringen og med HK-dir 16.03.2026.
   # - Skal et studieønske som fjernes, også fjerne grunnlaget det ga (STEK-505)?
 
-  @depends-on-OPT-REG-GRU-001
+  @depends-on-OPT-REG-GRU-001 @ref-FLY-OPT-AUT-001
   Regel: Grunnlaget velges ut fra egenskapene regelverket har gitt det
-    # Egenskapene er aldersgrense, «krever et vitnemål» og «krever
-    # førstegangsvitnemål». Koden kjenner ingen grunnlagskoder.
+    # Regelverket kan gi et grunnlag en aldersgrense, og kreve at søkeren har et
+    # vitnemål, eller et førstegangsvitnemål. Grunnlag uten noen av disse
+    # egenskapene velges bare av saksbehandleren. Egenskapene står ikke i
+    # grunnlag.feature ennå.
 
-    @openquestion
-    Scenariomal: Grunnlag ut fra alder og førstegangsvitnemål
-      # ÅPNE SPØRSMÅL:
-      # - Hvor går aldersgrensen for VOV? Confluence (PFS 4022829198) sier at
-      #   22 år med førstegangsvitnemål gir VES. Dokumentasjonen til
-      #   FS-klienten sier at VOV gjelder til og med 22 år.
-      Gitt at søknadsalternativenes regelverk har grunnlagene "VOV" og "VES"
-      Og at grunnlaget "VOV" krever førstegangsvitnemål og har en aldersgrense
-      Og at grunnlaget "VES" krever et vitnemål
-      Og at søkeren har ett elektronisk vitnemål med påstanden at søkeren har GSK
-      Og at vitnemålet <er førstegangsvitnemål>
+    Scenariomal: Grunnlag ut fra førstegangsvitnemål og alder
+      Gitt at regelverket har et grunnlag som krever førstegangsvitnemål og har aldersgrensen under 22 år
+      Og at regelverket har et grunnlag som krever et vitnemål
+      Og at søkeren har ett elektronisk vitnemål som gir generell studiekompetanse
+      Og at vitnemålet <førstegangsvitnemål>
       Og at søkeren er <alder> år på datoen for aldersberegning
       Når søknaden behandles automatisk
-      Så får søknaden grunnlaget "<grunnlag>"
+      Så får søknaden grunnlaget som <grunnlag>
 
       Eksempler:
-        | er førstegangsvitnemål      | alder | grunnlag |
-        | er førstegangsvitnemål      | 21    | VOV      |
-        | ikke er førstegangsvitnemål | 21    | VES      |
-        | er førstegangsvitnemål      | 22    | VES      |
+        | førstegangsvitnemål         | alder | grunnlag                   |
+        | er førstegangsvitnemål      | 21    | krever førstegangsvitnemål |
+        | er førstegangsvitnemål      | 24    | krever et vitnemål         |
+        | ikke er førstegangsvitnemål | 21    | krever et vitnemål         |
 
-    Scenario: Bare grunnlag i søknadsalternativenes regelverk kan settes
-      Gitt at søkeren har ett elektronisk vitnemål med påstanden at søkeren har GSK
-      Og at et grunnlag som passer søkeren, ikke er med i regelverket til noen av søknadsalternativene
-      Når søknaden behandles automatisk
-      Så får ikke søknaden grunnlaget som ikke er med i regelverket
-
-    Scenario: Grunnlag uten egenskaper for automatikken settes ikke automatisk
-      # PRA, REA, VPL og BCH velges av saksbehandleren.
-      Gitt at søknadsalternativenes regelverk har et grunnlag uten aldersgrense, uten krav om vitnemål og uten krav om førstegangsvitnemål
-      Når søknaden behandles automatisk
-      Så får ikke søknaden grunnlaget uten egenskaper for automatikken
+    Scenario: Alderen regnes ut på datoen for aldersberegning
+      Gitt at opptaket har 31.12.2026 som dato for aldersberegning
+      Og at regelverket har et grunnlag med aldersgrensen under 22 år
+      Og at søkeren er født 15.03.2005
+      Og at søkeren har ett elektronisk vitnemål som gir generell studiekompetanse
+      Når søknaden behandles automatisk 01.09.2026
+      Så får søknaden grunnlaget med aldersgrensen under 22 år
 
     Scenario: Førstegangsvitnemål går foran
       Gitt at søkeren passer til et grunnlag som krever førstegangsvitnemål
       Og at søkeren også passer til et grunnlag som bare krever et vitnemål
       Når søknaden behandles automatisk
       Så får søknaden grunnlaget som krever førstegangsvitnemål
+      Men søknaden får ikke grunnlaget som bare krever et vitnemål
 
     @openquestion
     Scenario: Flere grunnlag passer like godt
       # ÅPNE SPØRSMÅL:
       # - Ny stack velger grunnlaget med lavest kode alfabetisk, og logger en
-      #   advarsel. Er det ønsket, eller skal ingen settes, eller alle?
+      #   advarsel. Er det ønsket, eller skal ingen settes?
       Gitt at søkeren passer like godt til to grunnlag
       Når søknaden behandles automatisk
       Så får søknaden ett av grunnlagene
 
-  @openquestion
-  Regel: Søknaden kan få flere grunnlag
-    # ÅPNE SPØRSMÅL:
-    # - FS-klienten gir søkeren flere grunnlag, og forbyr bare noen
-    #   kombinasjoner (VOV med VOT, VES med VPL). Ny stack setter alltid ett.
-    #   Fagfolkene vil at førstegangsvitnemål skal gi både VOV og VES
-    #   (STEK-514). Hvilke kombinasjoner er gyldige, og hvor settes de opp?
-    # - Svaret må stemme med «Førstegangsvitnemål går foran» og den første raden i
-    #   «Grunnlag ut fra alder og førstegangsvitnemål», som i dag gir bare VOV.
-
-    Scenario: Søker med førstegangsvitnemål får både "VOV" og "VES"
-      Gitt at søknadsalternativenes regelverk har grunnlagene "VOV" og "VES"
-      Og at søkeren har ett elektronisk førstegangsvitnemål med påstanden at søkeren har GSK
-      Og at søkeren er innenfor aldersgrensen for "VOV"
+    Scenario: Grunnlag uten egenskaper for automatikken settes ikke
+      Gitt at regelverket har et grunnlag uten aldersgrense, uten krav om vitnemål og uten krav om førstegangsvitnemål
       Når søknaden behandles automatisk
-      Så får søknaden grunnlagene "VOV" og "VES"
+      Så får ikke søknaden grunnlaget uten egenskaper for automatikken
 
-    Scenario: Grunnlag som ikke kan kombineres, settes ikke sammen
-      Gitt at to grunnlag ikke kan kombineres
+    Scenario: Bare grunnlag i regelverket til utdanningstilbudene i søknaden kan settes
+      Gitt at søkeren passer til et grunnlag som ikke er med i regelverket til noen av utdanningstilbudene i søknaden
       Når søknaden behandles automatisk
-      Så får ikke søknaden begge grunnlagene
+      Så får ikke søknaden grunnlaget
 
-  Regel: Ingen automatisk grunnlag uten ett entydig vitnemål
+    Scenario: Grunnlag som ikke er aktivt, settes ikke
+      Gitt at søkeren passer til et grunnlag som ikke er aktivt
+      Når søknaden behandles automatisk
+      Så får ikke søknaden grunnlaget
+
+  @depends-on-OPT-BEH-BEH-015 @ref-FLY-OPT-AUT-001
+  Regel: Ingen automatisk grunnlag uten ett vitnemål som gir generell studiekompetanse
+    # Ett vitnemål er nok, også når søkeren har et kompetansebevis i tillegg.
+    # Søkere med flere vitnemål behandles i vitnemålsbehandlingen, og den
+    # automatiske behandlingen stopper for dem til saksbehandleren har valgt
+    # vitnemålet.
 
     Scenariomal: Ingen grunnlag settes automatisk når <grunn>
       Gitt at <grunn>
@@ -167,67 +123,113 @@ Egenskap: Automatisk grunnlag
       Så får søknaden ingen grunnlag automatisk
 
       Eksempler:
-        | grunn                                                                                                       |
-        | søkeren har flere elektroniske vitnemål som ikke er annullert, og saksbehandleren har ikke valgt ett av dem |
-        | søkerens eneste elektroniske dokument er et kompetansebevis                                                 |
-        | vitnemålet har påstanden at søkeren ikke har GSK                                                            |
-        | søkeren ikke har noe elektronisk vitnemål                                                                   |
-        | ingen av grunnlagene i regelverket passer søkeren                                                           |
+        | grunn                                                       |
+        | søkeren ikke har noe elektronisk vitnemål                   |
+        | søkerens eneste elektroniske dokument er et kompetansebevis |
+        | vitnemålet ikke gir generell studiekompetanse               |
+        | ingen av grunnlagene i regelverket passer til søkeren       |
+
+    Scenario: Søker med flere vitnemål behandles ikke automatisk
+      Gitt at søkeren har to elektroniske vitnemål som ikke er annullert
+      Og at saksbehandleren ikke har valgt ett av vitnemålene
+      Når søknaden behandles automatisk
+      Så blir søknaden ikke behandlet automatisk
+      Og søknaden får ingen grunnlag automatisk
 
     @ref-OPT-BEH-BEH-025
     Scenario: Grunnlag fra vitnemålet saksbehandleren har valgt
-      # Avklart 2026-10-26 i review av PR #818: har saksbehandleren valgt vitnemålet, behandles
-      # saken automatisk på det.
-      Gitt at søkeren har to elektroniske vitnemål med påstanden at søkeren har GSK, ett fra 2024 og ett fra 2025
+      Gitt at søkeren har to elektroniske vitnemål som gir generell studiekompetanse, ett fra 2024 og ett fra 2025
       Og at saksbehandleren har valgt vitnemålet fra 2025
       Når søknaden behandles automatisk
       Så får søknaden grunnlaget ut fra vitnemålet fra 2025
 
-  @openquestion
-  Regel: Når grunnlaget settes
-    # ÅPNE SPØRSMÅL:
-    # - Når skal grunnlaget settes automatisk? Det kan følge de samme
-    #   anledningene som poengberegningen: når søknaden kommer inn med
-    #   elektronisk vitnemål, når søkeren får vitnemål innen
-    #   ettersendingsfristen, eller når saksbehandleren starter den automatiske
-    #   behandlingen for én eller flere søknader. I dag starter
-    #   saksbehandleren den med «Start automatisk behandling» for én søknad.
-    # - FS-klienten kan sette et grunnlag fra studieprogrammet når
-    #   søknadsalternativet opprettes («Aut.kvalgrunnlag»). Skal det
-    #   videreføres?
+    Scenario: Kompetansebevis ved siden av vitnemålet stopper ikke automatikken
+      Gitt at søkeren har ett elektronisk vitnemål som gir generell studiekompetanse
+      Og at søkeren har et elektronisk kompetansebevis
+      Når søknaden behandles automatisk
+      Så får søknaden grunnlaget ut fra vitnemålet
 
-    Scenario: Saksbehandleren starter den automatiske behandlingen
-      Gitt at søkeren har ett elektronisk vitnemål med påstanden at søkeren har GSK
-      Når saksbehandleren starter den automatiske behandlingen for søknaden
+    Scenario: Annullert vitnemål teller ikke
+      Gitt at søkeren har to elektroniske vitnemål
+      Og at det ene vitnemålet er annullert
+      Og at det andre vitnemålet gir generell studiekompetanse
+      Når søknaden behandles automatisk
+      Så får søknaden grunnlaget ut fra vitnemålet som ikke er annullert
+
+    Scenario: Grunnlaget settes etter GSK-konklusjonen
+      Gitt at søkeren har ett elektronisk vitnemål som gir generell studiekompetanse
+      Og at søknaden ikke har noen GSK-konklusjon
+      Når søknaden behandles automatisk
+      Så får søknaden GSK-konklusjonen fra vitnemålet
+      Og søknaden får grunnlaget ut fra vitnemålet
+
+  @ref-FLY-OPT-AUT-001
+  Regel: Grunnlaget settes når den automatiske behandlingen kjører
+
+    Scenario: Grunnlaget settes av den automatiske behandlingen
+      Gitt at søkeren har ett elektronisk vitnemål som gir generell studiekompetanse
+      Når den automatiske behandlingen kjøres for søknaden
       Så får søknaden grunnlaget automatisk
 
+    @openquestion
     Scenario: Grunnlag fra utdanningstilbudet når søknadsalternativet opprettes
+      # ÅPNE SPØRSMÅL:
+      # - FS-klienten kan sette et grunnlag fra studieprogrammet når
+      #   søknadsalternativet opprettes («Aut.kvalgrunnlag»). Skal det
+      #   videreføres?
       Gitt at utdanningstilbudet har et grunnlag som skal settes automatisk
       Når søkeren søker på utdanningstilbudet
       Så får søknaden grunnlaget fra utdanningstilbudet
 
   Regel: Grunnlag som saksbehandleren har valgt, endres ikke av automatikken
 
-    Scenario: Grunnlag som saksbehandleren legger til, låser grunnlagene
-      Gitt at søknaden har grunnlag som er satt automatisk
-      Når saksbehandleren legger til et grunnlag
-      Så er grunnlagene på søknaden låst mot automatikken
-
-    Scenario: Automatikken setter ikke grunnlag på en låst sak
+    Scenario: Automatikken setter ikke grunnlag når saksbehandleren har lagt til et grunnlag
       Gitt at saksbehandleren har lagt til et grunnlag på søknaden
+      Og at søkeren passer til et annet grunnlag
       Når søknaden behandles automatisk
       Så er grunnlagene på søknaden uendret
 
-    Scenario: Automatikken fjerner aldri grunnlag
-      Gitt at søknaden har et grunnlag
+    Scenario: Saksbehandleren velger et grunnlag som automatikken har satt
+      Gitt at søknaden har et grunnlag som er satt automatisk
+      Når saksbehandleren legger til grunnlaget som er satt automatisk
+      Så er grunnlaget satt av saksbehandleren
+      Og grunnlaget er ikke lenger satt automatisk
+
+    Scenario: Automatikken fjerner ikke grunnlag
+      Gitt at søknaden har et grunnlag som er satt automatisk
       Og at søkeren ikke lenger passer til grunnlaget
       Når søknaden behandles automatisk
       Så har søknaden fortsatt grunnlaget
 
-    Scenario: Saksbehandleren endrer grunnlag som er satt automatisk
+    Scenario: Saksbehandleren fjerner et grunnlag som er satt automatisk
       Gitt at søknaden har et grunnlag som er satt automatisk
       Når saksbehandleren fjerner grunnlaget
       Så har ikke søknaden lenger grunnlaget
+
+    @openquestion
+    Scenario: Automatikken setter ikke et grunnlag som saksbehandleren har fjernet
+      # ÅPNE SPØRSMÅL:
+      # - Utgangspunktet er at saken er låst for automatikken når
+      #   saksbehandleren har gjort endringer på den, men «la stå» er fjernet
+      #   fra grunnlaget. Fjerner saksbehandleren et grunnlag som er satt
+      #   automatisk, låser det i dag ikke saken, og kjøres den automatiske
+      #   behandlingen igjen, settes grunnlaget på nytt. Skal fjerningen låse
+      #   saken, så grunnlaget holdes borte?
+      Gitt at saksbehandleren har fjernet et grunnlag som var satt automatisk
+      Og at søkeren fortsatt passer til grunnlaget
+      Når søknaden behandles automatisk
+      Så får søknaden ikke grunnlaget
+
+    @openquestion
+    Scenario: Automatikken erstatter grunnlaget når søkeren passer til et annet
+      # ÅPNE SPØRSMÅL:
+      # - Har automatikken satt et grunnlag, og søkeren passer senere til et
+      #   annet (for eksempel etter nytt vitnemål), beholdes begge i dag.
+      #   Skal det nye erstatte det gamle?
+      Gitt at søknaden har et grunnlag som er satt automatisk
+      Og at søkeren nå passer til et annet grunnlag
+      Når søknaden behandles automatisk
+      Så har søknaden bare det nye grunnlaget
 
     @openquestion
     Scenario: Gjøre søknaden tilgjengelig for automatikken igjen
@@ -250,25 +252,55 @@ Egenskap: Automatisk grunnlag
       Når saksbehandleren legger til grunnlaget
       Så blir ikke grunnlaget lagt til
 
-  Regel: Når grunnlaget endres, vurderes søknaden på nytt
+  @depends-on-OPT-OVO-FRI-001
+  # Regelen «Opptaksforvalter setter dato for aldersberegning».
+  Regel: Grunnlag med aldersgrense krever dato for aldersberegning
 
-    Scenario: Kvalifisering, poeng og kvoter vurderes på nytt
+    @openquestion
+    Scenario: Opptaket mangler dato for aldersberegning
+      # ÅPNE SPØRSMÅL:
+      # - I dag stopper valget av grunnlaget med en beskjed når opptaket har
+      #   alderspoeng og verken dato for aldersberegning eller dato for
+      #   publisering av resultatet. Alderen kan da ikke fastslås. Skal grunnlag
+      #   med aldersgrense heller filtreres bort, så de ikke kan velges?
+      Gitt at regelverket har grunnlaget "VOV" med aldersgrensen under 22 år
+      Og at opptaket ikke har dato for aldersberegning eller dato for publisering av resultatet
+      Når saksbehandleren velger grunnlaget "VOV" for søknaden
+      Så får saksbehandleren beskjed om at opptaket mangler dato for aldersberegning
+      Og grunnlaget er ikke lagt til
+
+  @ref-OPT-BEH-BEH-028
+  Regel: Når grunnlaget settes, vurderes søknaden på nytt
+    # Gjelder uansett om grunnlaget er satt automatisk eller av saksbehandleren.
+    # Hvordan tilleggspoengene regnes ut, står i kravet.
+
+    Scenario: Opptakskrav, kvoter og tilleggspoeng følger grunnlaget saksbehandleren legger til
       Gitt at søknaden har et grunnlag
-      Når grunnlaget på søknaden endres
+      Når saksbehandleren legger til et annet grunnlag
       Så er opptakskravene vurdert på nytt mot grunnlagene
-      Og poengene og kvotene er oppdatert etter grunnlagene
+      Og kvotene søkeren kan plasseres i er oppdatert etter grunnlagene
+      Og tilleggspoengene er regnet ut for grunnlagene
+
+    Scenario: Opptakskrav, kvoter og tilleggspoeng følger grunnlaget som er satt automatisk
+      Gitt at søknaden ikke har noe grunnlag
+      Når søknaden får et grunnlag automatisk
+      Så er opptakskravene vurdert mot grunnlaget
+      Og kvotene søkeren kan plasseres i er oppdatert etter grunnlaget
+      Og tilleggspoengene er regnet ut for grunnlaget
 
   Regel: Sporbarhet
 
     Scenario: Se at grunnlaget er satt automatisk
-      # I fs-admin ser et grunnlag som er satt automatisk, likt ut som et
-      # grunnlag saksbehandleren har valgt.
       Gitt at søknaden har fått grunnlaget automatisk
       Når saksbehandleren ser på grunnlagene
       Så ser saksbehandleren at grunnlaget er satt automatisk
-      Og saksbehandleren ser hvorfor grunnlaget ble valgt
 
-    Scenario: Endringsloggen viser at automatikken satte grunnlaget
+    Scenario: Se hvorfor grunnlaget ble valgt
+      Gitt at søknaden har fått grunnlaget automatisk fordi søkeren har førstegangsvitnemål og er 21 år
+      Når saksbehandleren ser på grunnlagene
+      Så ser saksbehandleren at grunnlaget ble valgt på grunn av førstegangsvitnemålet og alderen på 21 år
+
+    Scenario: Endringsloggen viser at den automatiske behandlingen satte grunnlaget
       Gitt at søknaden har fått grunnlaget automatisk
-      Når saksbehandleren ser i endringsloggen
+      Når saksbehandleren ser i endringsloggen for søknaden
       Så ser saksbehandleren at grunnlaget ble satt av den automatiske behandlingen

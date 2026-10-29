@@ -112,8 +112,10 @@ Egenskap: Velge utdanningsbakgrunn i søknad
   Regel: Søkeren oppgir at norsk videregående opplæring fullføres i vår
     # Flyttet hit fra oppgi_at_generell_studiekompetanse_fullføres_i_vår.feature 2026-10-28.
     # Feature-ID-en var @OPT-SØK-SØK-013, som også brukes av finne_studier.feature.
+    # Det betyr at vitnemålet kommer senere. Alle sakene i søknaden får da automatisk mangelen
+    # for generell studiekompetanse som fullføres i vår (DUA), og mangelen sjekkes ut når saken
+    # er behandlet helautomatisk.
     # AVKLART 2026-10-28: Søkeren kan oppgi det uansett hvilken utdanningsbakgrunn som er valgt.
-    # Saken får da automatisk mangelen for generell studiekompetanse som fullføres i vår (DUA).
     # AVKLART 2026-10-28: «Norsk videregående opplæring fullføres i vår» (skissen: «Jeg fullfører
     # norsk videregående i løpet av denne våren») og «generell studiekompetanse fullføres i vår»
     # (søknadsmangler.feature) betyr det samme.

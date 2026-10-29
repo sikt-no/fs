@@ -864,7 +864,7 @@ footer .inner{padding-block:24px 48px;display:flex;flex-direction:column;gap:6px
       <div class="cols">
         <div class="box"><h3>Hva testes</h3><ul class="small"><li>Alle scenarioer som er <code>@implemented</code>, slik de står. En scenariomal gir én test per eksempel.</li><li>Testcaser agenten utleder fra reglene, også reglene fs-verify fant uten scenario.</li><li>Negativ testing: ugyldige verdier, feil format, feil rekkefølge, data som ikke finnes eller er slettet.</li><li>Hvert obligatorisk felt tomt, med bare mellomrom og med for lang verdi, og feilmeldingen kontrolleres.</li></ul></div>
         <div class="box"><h3>Teknikk og bevis</h3><ul class="small"><li>Agenten velger teknikk per regel (grenseverdier, ekvivalensklasser, beslutningstabeller, tilstandsoverganger) og skriver hvilken som er brukt.</li><li>Hver test lagrer steg, input, faktisk resultat og skjermbilde eller logg, så et menneske kan etterprøve den. Bildene ligger i <code>akseptansetest/&lt;slug&gt;/</code>, og er ignorert av git.</li></ul></div>
-        <div class="box"><h3>Testdata</h3><p class="small">Testene bruker testdataene i testplanen, i utgangstilstanden der. Hvordan de lages, er utenfor teststrategien. Dataene settes tilbake før hver kjøring, og data testen selv lager, får unike navn, så testene kan kjøres på nytt.</p></div>
+        <div class="box"><h3>Testbrukere og testdata</h3><p class="small">Testene lages fra kravene, og kjenner ikke testplanen: den velger bare hvilke krav som får tester, og hvilke tester som kjøres. Testbrukere og testdata er nøkler, slått opp i miljøfila for testmiljøet (<code>cdp-tester/_Miljøer/&lt;miljø&gt;.md</code>), som har alle personaene og rollene i FS Admin, og vedlikeholdes jevnlig. Testplanen har en kopi til testerne. Lages testene etter testplanen, synker fs-testplan den. Hvordan testdataene lages, er utenfor teststrategien. Dataene settes tilbake før hver kjøring, og data testen selv lager, får unike navn, så testene kan kjøres på nytt.</p></div>
       </div>
       <div class="box tint">
         <h3>Kravet dekker ikke</h3>
@@ -876,7 +876,7 @@ footer .inner{padding-block:24px 48px;display:flex;flex-direction:column;gap:6px
       <dl>
         <div><dt>Skills</dt><dd><div class="pills"><span class="pill">fs-testcaser-cdp</span><span class="pill">cdp</span><span class="pill">fs-testrapport</span></div></dd></div>
         <div><dt>Hvem</dt><dd>En agent kjører. Teamet og testansvarlig går gjennom testene før og funnene etterpå.</dd></div>
-        <div><dt>Filer</dt><dd><code>cdp-tester/&lt;kravets sti&gt;/&lt;navn&gt;.feature</code><br><code>kjoring-&lt;dato&gt;-&lt;HHMM&gt;/resultat.md</code><br><code>testrapport-agentisk-&lt;dato&gt;.md</code></dd></div>
+        <div><dt>Filer</dt><dd><code>cdp-tester/&lt;kravets sti&gt;/&lt;navn&gt;.feature</code><br><code>cdp-tester/_Miljøer/&lt;miljø&gt;.md</code><br><code>kjoring-&lt;dato&gt;-&lt;HHMM&gt;/resultat.md</code><br><code>testrapport-agentisk-&lt;dato&gt;.md</code></dd></div>
         <div><dt>Endrer aldri</dt><dd>Kravene i <code>krav/</code></dd></div>
       </dl>
     </aside>
