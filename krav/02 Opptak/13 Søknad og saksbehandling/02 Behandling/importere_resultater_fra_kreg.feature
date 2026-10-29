@@ -133,10 +133,10 @@ Egenskap: Importere resultater fra KREG
 
   @openquestion @ref-OPT-BEH-BEH-021 @ref-FLY-OPT-VIT-001
   Regel: Endringer i KREG importeres gjennom et abonnement
+    # Abonnementet gjelder aktive søkere: søkere med en søknad som ikke er trukket, i et opptak
+    # som ikke er avsluttet.
     # ÅPNE SPØRSMÅL:
     # - Hvordan abonnementet skal virke, er ikke avklart, og hører til KREG-teamet.
-    # - Hvilke søkere abonnerer opptaket på, og hvor lenge? Alle med aktive søknader, eller
-    #   bare til opptaket er avsluttet?
     # - Hvilke endringer skal komme: nytt vitnemål, annullering, opphevet annullering?
     # - Hva skjer med en søknad som er behandlet, når vitnemålet den er behandlet på, annulleres
     #   eller erstattes? Behandles den på nytt, varsles saksbehandleren, eller begge deler?
