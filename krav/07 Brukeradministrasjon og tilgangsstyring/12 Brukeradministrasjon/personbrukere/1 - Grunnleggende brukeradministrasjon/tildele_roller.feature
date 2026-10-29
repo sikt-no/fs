@@ -90,7 +90,7 @@ Egenskap: Tildele roller til en personbruker
       Så avvises tildelingen
       Og personbrukeren har ikke fått rollen
 
-  @draft @openquestion
+  @draft
   Regel: Valglisten for rolle viser bare roller som er i taket til en applikasjon i valgt organisasjon og miljø
     # Taket sier, per applikasjon, organisasjon og miljø, hvilke roller applikasjonen kan bruke
     # for brukerne sine. En rolle som ikke er i taket til noen applikasjon i organisasjonen og
@@ -99,8 +99,7 @@ Egenskap: Tildele roller til en personbruker
     # AVKLART 29.10.2026 (produkteier): Regelen gjelder bare forretningsroller som tildeles
     # personbrukere. Den gjelder ikke tilganger (BRU-PER-GRU-009), og ikke tildeling til
     # applikasjoner (BRU-APP-API-007). Den gjelder når roller legges til, ikke når de fjernes.
-    # ÅPNE SPØRSMÅL:
-    # - Skal tildeling av en rolle som ikke er i taket til noen applikasjon også avvises, eller gjelder regelen bare valglisten?
+    # Taket begrenser bare valglisten; en tildeling av en rolle utenfor taket avvises ikke.
 
     Scenariomal: Rollen vises bare når en applikasjon har den i taket for valgt organisasjon og miljø
       Gitt jeg har valgt organisasjonen "Universitetet i Stavanger" og miljøet "Produksjon"
