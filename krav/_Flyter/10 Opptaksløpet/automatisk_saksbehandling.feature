@@ -42,8 +42,9 @@ Egenskap: Automatisk saksbehandling
       Så er vitnemålet importert
       Og GSK kan beregnes for vitnemålet
 
-  @depends-on-OPT-BEH-BEH-015
+  @depends-on-OPT-BEH-BEH-015 @depends-on-OPT-BEH-BEH-027
   # OPT-BEH-BEH-015: «Opptakssystemets påstand om GSK på vitnemålet», «Konklusjon på søknaden fra vitnemålet», «Konklusjon fra tidligere opptak», «Automatikken setter bare positive konklusjoner, og bare der ingen finnes»
+  # Påstanden om GSK beregnes med kontrollmotoren, som er beskrevet i hele OPT-BEH-BEH-027.
   Regel: Søknaden får GSK-konklusjonen når vitnemålet importeres fra KREG
 
     Scenario: Søknaden får GSK-konklusjonen fra vitnemålet som er importert fra KREG
@@ -208,7 +209,7 @@ Egenskap: Automatisk saksbehandling
       Så har saken en automatisk mangel som viser at "Matematikk R2" ikke er oppfylt
 
   @depends-on-OPT-BEH-BEH-008
-  # OPT-BEH-BEH-008: «Mangelen for generell studiekompetanse som fullføres i vår settes og sjekkes ut automatisk»
+  # OPT-BEH-BEH-008: «Opptaksforvalteren merker én mangelkode for generell studiekompetanse som fullføres i vår», «Mangelen for generell studiekompetanse som fullføres i vår settes og sjekkes ut automatisk»
   Regel: Mangelen for GSK som fullføres i vår sjekkes ut før saken blir ferdig behandlet
 
     Scenario: Saken med mangelen for GSK som fullføres i vår blir ferdig behandlet
@@ -218,8 +219,9 @@ Egenskap: Automatisk saksbehandling
       Så er saken hos "Universitetet i Oslo" ferdig behandlet
       Og mangelen "DUA" er sjekket ut
 
-  @depends-on-OPT-BEH-BEH-025 @depends-on-OPT-PLA-TIL-001
+  @depends-on-OPT-BEH-BEH-025 @depends-on-OPT-BEH-BEH-029 @depends-on-OPT-PLA-TIL-001
   # OPT-BEH-BEH-025: «Den automatiske behandlingen setter saken til ferdig behandlet når alt er avgjort», «Steg som bygger på et steg som ikke kan avgjøres, hoppes over»
+  # OPT-BEH-BEH-029: «Saken kan bare bli Ferdig behandlet når den har minst én mangel eller ett grunnlag», «Saksloggen viser endringene i behandlingsstatusen»
   Regel: Saken blir ferdig behandlet og er med i plasstildelingen
 
     Scenario: Saken er med i plasstildelingen når den automatiske behandlingen har avgjort alt
