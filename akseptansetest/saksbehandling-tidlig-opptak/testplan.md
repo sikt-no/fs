@@ -18,7 +18,7 @@ Testplan for «Saksbehandling av tidlig opptak». Planen sier hva som testes, av
 | Felt | Innhold |
 |---|---|
 | Hva er levert | Saksbehandleren kan filtrere sakene i et opptak på om søkeren har søkt om tidlig opptak, og på om saken mangler eller har konklusjon for tidlig opptak. I saken ser saksbehandleren søkerens begrunnelse og dokumentasjonskravet for den, og velger en av opptakets konklusjoner for tidlig opptak. Konklusjonen gjelder organisasjonen som behandler saken, og kan endres også etter at tidligopptaket er gjennomført. Steget for tidlig opptak vises bare når søkeren har søkt. |
-| Versjon | [Fylles ut: versjon i test-fsadmin] (verifisert mot main: fs-plattform `97fbafa9b3`, fs-admin `2b7d1f87a`) |
+| Versjon | Ingen versjonsnummer. Testes i test-fsadmin [Fylles ut: dato for testen] (verifisert mot main: fs-plattform `97fbafa9b3`, fs-admin `2b7d1f87a`) |
 | Testmiljø | [https://test-fsadmin.sikt.no/](https://test-fsadmin.sikt.no/) |
 | Feature-flagg | Ingen |
 | Kilde | [finne_søknader_om_tidlig_opptak.feature](https://github.com/sikt-no/fs/blob/5605e7e/krav/02%20Opptak/13%20S%C3%B8knad%20og%20saksbehandling/02%20Behandling/finne_s%C3%B8knader_om_tidlig_opptak.feature), [vurdere_søknad_om_tidlig_opptak.feature](https://github.com/sikt-no/fs/blob/5605e7e/krav/02%20Opptak/13%20S%C3%B8knad%20og%20saksbehandling/02%20Behandling/vurdere_s%C3%B8knad_om_tidlig_opptak.feature) |
@@ -31,20 +31,20 @@ Testplan for «Saksbehandling av tidlig opptak». Planen sier hva som testes, av
 
 | Nr | Navn | Rolle | Organisasjon | Brukes til |
 |---|---|---|---|---|
-| 1 | [Fylles ut: navn] | Saksbehandler, med rett til å endre i søknadsbehandlingen | [Fylles ut: organisasjon A, f.eks. OsloMet] | Alle scenarioene i `@OPT-BEH-BEH-009` og `@OPT-BEH-BEH-013` |
-| 2 | [Fylles ut: navn] | Saksbehandler, med rett til å endre i søknadsbehandlingen | [Fylles ut: organisasjon B, f.eks. NTNU] | `@OPT-BEH-BEH-013` «Konklusjon per organisasjon» |
+| 1 | RU BRØDSKIVE | Saksbehandler (OPPTAK_SAKSBEHANDLER) | HVL | Alle scenarioene i `@OPT-BEH-BEH-009` og `@OPT-BEH-BEH-013` |
+| 2 | KORT DOMPAP | Saksbehandler (OPPTAK_SAKSBEHANDLER) | UiT | `@OPT-BEH-BEH-013` «Konklusjon per organisasjon» |
 
-Testbrukerne finnes i minst to organisasjoner, så vi kan teste at ingen ser data de ikke skal se.
+Testbrukerne finnes i minst to organisasjoner, så vi kan teste at ingen ser data de ikke skal se. Testbruker byttes i menyen øverst til høyre.
 
 ### Testdata
 
 | Hva | Navn | Hvor | Kan settes tilbake |
 |---|---|---|---|
-| Opptak med tidlig opptak slått på, med begrunnelser (med dokumentasjonskrav) og konklusjoner for tidlig opptak (f.eks. «KFF – Kan få tidlig opptak, har godkjent grunn» og «KIF – Kan ikke få tidlig opptak, mangler grunn») | [Fylles ut: opptak] | [Fylles ut: lenke] | [Fylles ut] |
-| Søker A: har søkt om tidlig opptak, uten konklusjon | [Fylles ut: søker] | [Fylles ut] | Ja: velg «Ikke valgt» i «Konklusjon» |
-| Søker B: har søkt om tidlig opptak, uten konklusjon | [Fylles ut: søker] | [Fylles ut] | – (endres ikke) |
-| Søker C: har ikke søkt om tidlig opptak | [Fylles ut: søker] | [Fylles ut] | – (endres ikke) |
-| Søker D: har søkt om tidlig opptak, uten konklusjon, med søknadsalternativer ved organisasjon A og organisasjon B | [Fylles ut: søker] | [Fylles ut] | Ja: velg «Ikke valgt» i «Konklusjon», ved begge organisasjonene |
+| Opptak med tidlig opptak slått på, med begrunnelser (med dokumentasjonskrav) og konklusjoner for tidlig opptak («Kan få tidligopptak, har godkjent grunn.» (KFF) og «Ikke dokumentert behov for tidligopptak» (AFH)). Søkerne har begrunnelsen «Jeg har behov for særskilt tilrettelegging på studiestedet» | Opptak 34, «Samordna UHG-simulering høsten 2026» | [test-fsadmin.sikt.no/opptak/T3BwdGFrOjM0](https://test-fsadmin.sikt.no/opptak/T3BwdGFrOjM0) | Trengs ikke: opptaket endres ikke |
+| Søker A: har søkt om tidlig opptak, uten konklusjon | Utgått Breiflabb, søknad 1000902 | [Søknaden i Min kompetanse](https://test.minkompetanse.no/nb/soknader/c29rbmFkOjdlZDAwMjljLTQ5YzctNDgwZS1hNjJhLWZlNDRjYjg2ZWVkNCwzNA) | Ja: velg «Ikke valgt» i «Konklusjon» |
+| Søker B: har søkt om tidlig opptak, uten konklusjon | Optimistisk Hest, søknad 1001008 | [Søknaden i Min kompetanse](https://test.minkompetanse.no/nb/soknader/c29rbmFkOmFmMmQ0YmMwLWNlMTktNDY4Ni1hMDA3LWU1ZWUwZDA2ODQzNCwzNA) | – (endres ikke) |
+| Søker C: har ikke søkt om tidlig opptak | Dedikert Jerv, søknad 1001012 | [Søknaden i Min kompetanse](https://test.minkompetanse.no/nb/soknader/c29rbmFkOmIwYzA4YWJlLTVkZjktNGFjNS1iY2EzLTRmMDM3YmVlZTA0ZCwzNA) | – (endres ikke) |
+| Søker D: har søkt om tidlig opptak, uten konklusjon, med søknadsalternativer ved HVL og UiT | Smart klippfisk, søknad 1000748 | [Søknaden i Min kompetanse](https://test.minkompetanse.no/nb/soknader/c29rbmFkOjI5NTNlZGEyLTU4MTUtNDEwNy1hN2ZhLWUwNjY1MGEwOTliMSwzNA) | Ja: velg «Ikke valgt» i «Konklusjon», ved begge organisasjonene |
 
 ## Omfang
 
@@ -106,10 +106,10 @@ Klart når testansvarlig har logget inn som testbruker og ser testdataene.
 
 | # | Forutsetning | Status |
 |---|---|---|
-| 1 | Leveransen er lagt ut i testmiljøet, og den virker der | [Fylles ut av teamet] |
-| 2 | Testdataene er identifisert og tilgjengelige | [Fylles ut av teamet] |
-| 3 | Testdataene kan settes tilbake eller lages på nytt | [Fylles ut av teamet] |
-| 4 | Testbrukerne finnes i rollene leveransen gjelder, i minst to organisasjoner | [Fylles ut av teamet] |
+| 1 | Leveransen er lagt ut i testmiljøet, og den virker der | Oppfylt |
+| 2 | Testdataene er identifisert og tilgjengelige | Oppfylt |
+| 3 | Testdataene kan settes tilbake eller lages på nytt | Oppfylt: velg «Ikke valgt» i «Konklusjon» i sakene som har fått konklusjon |
+| 4 | Testbrukerne finnes i rollene leveransen gjelder, i minst to organisasjoner | Oppfylt |
 | 5 | `fs-verify` har funnet alle scenarioene, og en annen person har kontrollert rapporten | Alle 15 scenarioene er funnet (2026-10-26), kontrollert av `fs-verify-kontroll`. Kontroll av en annen person: Venter |
 | 6 | Testcasene er laget og gått gjennom av testansvarlig | Laget, venter på gjennomgang av testansvarlig |
 | 7 | Testansvarlig har logget inn som testbruker og ser testdataene | [Fylles ut av testansvarlig] |
