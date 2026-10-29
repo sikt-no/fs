@@ -85,6 +85,7 @@ Egenskap: Automatisk saksbehandling
       Så behandles ikke saken hos "Universitetet i Oslo" helautomatisk
 
   @depends-on-OPT-BEH-BEH-019
+  # OPT-BEH-BEH-019: «Grunnlaget velges ut fra egenskapene regelverket har gitt det», «Ingen automatisk grunnlag uten ett vitnemål som gir generell studiekompetanse», «Grunnlaget settes når den automatiske behandlingen kjører»
   Regel: Søknaden får grunnlag fra vitnemålet
 
     Scenario: Søknaden får grunnlag
@@ -93,6 +94,7 @@ Egenskap: Automatisk saksbehandling
       Så har søknaden grunnlag
 
   @depends-on-OPT-BEH-BEH-018 @depends-on-OPT-REG-RAN-001 @depends-on-OPT-REG-RAN-002
+  # OPT-BEH-BEH-018: «Karakterpoeng, realfagspoeng og språkpoeng beregnes fra søkerens eneste vitnemål», «Skolepoeng settes sammen av karakterpoeng, realfagspoeng og språkpoeng», «Ingen automatisk beregning uten ett entydig vitnemål»
   Regel: Poengene beregnes fra grunnlaget og rangeringsregelverket
     # Overleveringen: grunnlaget avgjør hvilke poengtyper søknaden har (rangeringsregelverket
     # kobler grunnlag til poengtyper), og poengene i dem beregnes fra vitnemålet.
@@ -103,8 +105,17 @@ Egenskap: Automatisk saksbehandling
       Når søknaden behandles automatisk
       Så har "Informatikk, UiO" poengsum for søknaden
 
+  @depends-on-OPT-BEH-BEH-028
+  # OPT-BEH-BEH-028: «Alderspoeng regnes ut fra søkerens alder», «Kjønnspoeng regnes ut fra søkerens kjønn», «Poeng for høyere utdanning regnes ut fra søkerens studiepoeng», «Tilleggspoengene settes uansett hvem som velger grunnlaget»
+  Regel: Søknaden får tilleggspoeng når grunnlaget er satt
+
+    Scenario: Søknaden får tilleggspoengene for grunnlaget
+      Gitt at søknaden har grunnlag
+      Når søknaden behandles automatisk
+      Så har søknaden tilleggspoengene rangeringsregelverket gir for grunnlaget
+
   @depends-on-OPT-BEH-BEH-020
-  # OPT-BEH-BEH-020: «Kravelementer som er koblet til vitnemålet, vurderes automatisk», «Kravelementene vurderes i den automatiske behandlingen»
+  # OPT-BEH-BEH-020: «Kravelementer som er koblet til vitnemålet, vurderes automatisk», «Kravelementene vurderes bare mot ett entydig vitnemål», «Kravelementene vurderes i den automatiske behandlingen»
   Regel: Kravelementene vurderes mot vitnemålet når poengene er beregnet
 
     Scenario: Kravelementet er vurdert mot vitnemålet

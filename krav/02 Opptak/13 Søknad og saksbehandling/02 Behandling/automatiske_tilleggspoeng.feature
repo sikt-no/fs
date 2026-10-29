@@ -12,6 +12,7 @@ Egenskap: Automatiske tilleggspoeng
   poengtypen, og algoritmen regner ut poengene ut fra opplysninger om søkeren, for eksempel alder og kjønn.
   Poengene regnes ut på samme måte når saksbehandleren velger grunnlaget selv som når automatikken gjør det.
 
+  @ref-FLY-OPT-AUT-001
   Regel: Alderspoeng regnes ut fra søkerens alder
 
     @depends-on-OPT-BEH-BEH-012
@@ -49,6 +50,7 @@ Egenskap: Automatiske tilleggspoeng
       Når saksbehandleren velger grunnlaget "VES" for søknaden
       Så har søknaden 4 alderspoeng
 
+  @ref-FLY-OPT-AUT-001
   Regel: Kjønnspoeng regnes ut fra søkerens kjønn
 
     Scenariomal: Kjønnspoeng for søkerens kjønn
@@ -75,7 +77,7 @@ Egenskap: Automatiske tilleggspoeng
 
   # ÅPNE SPØRSMÅL:
   # - Hvilke studiepoeng teller med?
-  @openquestion
+  @openquestion @ref-FLY-OPT-AUT-001
   Regel: Poeng for høyere utdanning regnes ut fra søkerens studiepoeng
 
     # Studiepoengene kommer fra tjenesten for resultater fra høyere utdanning. Resultatene hentes og lagres på samme
@@ -96,6 +98,7 @@ Egenskap: Automatiske tilleggspoeng
         | 60          | 2     |
         | 120         | 2     |
 
+  @ref-FLY-OPT-AUT-001
   Regel: Tilleggspoengene settes uansett hvem som velger grunnlaget
 
     Scenario: Automatikken velger grunnlaget
