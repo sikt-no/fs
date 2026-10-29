@@ -31,6 +31,7 @@ Egenskap: Kvotetype
       Og opptaksforvalteren angir navn på bokmål, nynorsk, engelsk og samisk
       Så er navnene på kvotetypen "ORD" lagret på alle fire språk
 
+  @ref-FLY-OPT-AUT-001
   Regel: En kvotetype kan ha en default poengformel
 
     Scenario: Sette default poengformel

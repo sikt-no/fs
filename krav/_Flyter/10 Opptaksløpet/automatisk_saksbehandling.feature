@@ -61,11 +61,6 @@ Egenskap: Automatisk saksbehandling
       Når søknaden behandles automatisk
       Så får søknaden en positiv GSK-konklusjon
 
-    Scenario: GSK-konklusjonen på søknaden overskrives ikke i kjøringen
-      Gitt at søknaden har en GSK-konklusjon
-      Når søknaden behandles automatisk
-      Så er GSK-konklusjonen på søknaden uendret
-
   @depends-on-OPT-BEH-BEH-015 @depends-on-OPT-BEH-BEH-025
   # OPT-BEH-BEH-015: «Opptakssystemets påstand om GSK på vitnemålet»
   # OPT-BEH-BEH-025: «Bare saker der søkeren har ett vitnemål, med påstanden GSK, behandles helautomatisk»
@@ -194,16 +189,16 @@ Egenskap: Automatisk saksbehandling
     Scenario: Mangelen sjekkes ut når saken er behandlet helautomatisk
       Gitt at saken hos "Universitetet i Oslo" har den automatiske mangelen "DUA"
       Når den automatiske behandlingen har behandlet saken helautomatisk
-      Så er mangelen "DUA" sjekket ut før saken settes til "Ferdig behandlet"
+      Så er mangelen "DUA" sjekket ut før saken er ferdig behandlet
 
   @depends-on-OPT-BEH-BEH-025 @depends-on-OPT-PLA-TIL-001
-  # OPT-BEH-BEH-025: «Den automatiske behandlingen setter saken til ferdig behandlet når alt er avgjort»
+  # OPT-BEH-BEH-025: «Den automatiske behandlingen setter saken til ferdig behandlet når alt er avgjort», «Steg som bygger på et steg som ikke kan avgjøres, hoppes over»
   Regel: Saken blir ferdig behandlet og er med i plasstildelingen
 
     Scenario: Saken er med i plasstildelingen når den automatiske behandlingen har avgjort alt
       Gitt at søkeren er kvalifisert for "Informatikk, UiO"
       Og at "Informatikk, UiO" har poengsum for søknaden
-      Og at søkeren er plassert i kvote for "Informatikk, UiO"
+      Og at søkeren er plassert i en kvote for "Informatikk, UiO"
       Når den automatiske behandlingen er ferdig
       Så er saken hos "Universitetet i Oslo" ferdig behandlet
       Og saken hos "Universitetet i Oslo" er med når opptaksforvalteren starter en plasstildeling
