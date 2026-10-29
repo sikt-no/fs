@@ -1,5 +1,5 @@
 # language: no
-@FLY-OPT-VAL-001 @must @draft @e2e
+@FLY-OPT-VAL-001 @must @draft @e2e @ref-OPT-BEH-BEH-004
 Egenskap: Automatisk saksbehandling på vitnemålet saksbehandleren velger
   Fra saksbehandleren har valgt hvilket vitnemål saken skal behandles på, til saken er ferdig
   behandlet og er med i plasstildelingen. Søkeren har flere vitnemål med påstanden at søkeren
