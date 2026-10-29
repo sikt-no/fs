@@ -34,8 +34,9 @@ Egenskap: Automatisk GSK-konklusjon
   har påstanden GSK. Vitnemål importeres når søknaden opprettes, og når KREG får nye
   vitnemål for en søker med aktive søknader. Når søknaden opprettes, importeres
   vitnemålene først. Gir ingen av dem GSK, ser systemet etter en positiv konklusjon fra
-  et tidligere opptak. Ellers vurderes GSK manuelt. Dette er en del av
-  vitnemålsimporten, ikke av den automatiske saksbehandlingen.
+  et tidligere opptak. Ellers vurderes GSK manuelt. Den automatiske saksbehandlingen
+  setter også konklusjonen, som første steg, på søknadene i opptaket som ikke har en.
+  Påstanden på vitnemålet beregnes ikke på nytt da.
   Automatikken setter aldri en negativ konklusjon på søknaden, og overskriver aldri en
   konklusjon som finnes. Den gjelder alle opptak, også fagskoleopptak.
 
@@ -246,6 +247,32 @@ Egenskap: Automatisk GSK-konklusjon
       Gitt at søkeren ikke har noe grunnlag for generell studiekompetanse
       Når søknaden opprettes
       Så får søknaden ingen negativ GSK-konklusjon
+
+  @ref-FLY-OPT-AUT-001
+  Regel: GSK-konklusjonen settes også når den automatiske behandlingen kjører
+    # Første steg når den automatiske behandlingen kjører for et opptak. Konklusjonen settes
+    # etter de samme reglene som når vitnemålet importeres: vitnemålet går foran tidligere
+    # konklusjoner, bare den siste tidligere konklusjonen gjenbrukes, og en konklusjon som
+    # finnes, overskrives ikke. Påstanden på vitnemålet beregnes ikke på nytt.
+    # Etter prosesstegningen «GSK-beregning for gitt opptak» (2026-10-29).
+
+    Scenario: Søknaden får konklusjonen fra vitnemålet i den automatiske behandlingen
+      Gitt at søknaden ikke har noen GSK-konklusjon
+      Og at søkeren har et vitnemål med påstanden at søkeren har GSK
+      Når den automatiske behandlingen kjører for opptaket
+      Så får søknaden en positiv GSK-konklusjon
+
+    Scenario: Søknaden får konklusjonen fra et tidligere opptak i den automatiske behandlingen
+      Gitt at søknaden ikke har noen GSK-konklusjon
+      Og at ingen av søkerens vitnemål har påstanden at søkeren har GSK
+      Og at den siste GSK-konklusjonen søkeren har fra et tidligere opptak, er positiv
+      Når den automatiske behandlingen kjører for opptaket
+      Så får søknaden en positiv GSK-konklusjon
+
+    Scenario: Konklusjonen overskrives ikke i den automatiske behandlingen
+      Gitt at søknaden har en GSK-konklusjon
+      Når den automatiske behandlingen kjører for opptaket
+      Så er GSK-konklusjonen på søknaden uendret
 
   # Reglene for manuell endring ligger i grenselandet mellom automatisk og manuell
   # saksbehandling, og kan bli flyttet til et eget krav når kravstrukturen bygges ut.

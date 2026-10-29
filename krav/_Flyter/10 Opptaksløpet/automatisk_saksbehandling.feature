@@ -39,7 +39,7 @@ Egenskap: Automatisk saksbehandling
       Og GSK kan beregnes for vitnemålet
 
   @depends-on-OPT-BEH-BEH-015
-  # OPT-BEH-BEH-015: «Opptakssystemets påstand om GSK på vitnemålet», «Konklusjon på søknaden fra vitnemålet», «Konklusjon fra tidligere opptak»
+  # OPT-BEH-BEH-015: «Opptakssystemets påstand om GSK på vitnemålet», «Konklusjon på søknaden fra vitnemålet», «Konklusjon fra tidligere opptak», «Automatikken setter bare positive konklusjoner, og bare der ingen finnes»
   Regel: Søknaden får GSK-konklusjonen når vitnemålet importeres
 
     Scenario: Søknaden får GSK-konklusjonen fra det importerte vitnemålet
@@ -49,13 +49,9 @@ Egenskap: Automatisk saksbehandling
       Så har vitnemålet påstanden at søkeren har generell studiekompetanse
       Og søknaden får en positiv GSK-konklusjon
 
-  @openquestion @depends-on-OPT-BEH-BEH-015
-  # OPT-BEH-BEH-015: «Konklusjon på søknaden fra vitnemålet», «Konklusjon fra tidligere opptak», «Automatikken setter bare positive konklusjoner, og bare der ingen finnes»
+  @depends-on-OPT-BEH-BEH-015
+  # OPT-BEH-BEH-015: «GSK-konklusjonen settes også når den automatiske behandlingen kjører»
   Regel: Den automatiske behandlingen setter GSK-konklusjonen der den mangler
-    # ÅPNE SPØRSMÅL:
-    # - OPT-BEH-BEH-015 sier at GSK-konklusjonen er en del av vitnemålsimporten, ikke av den
-    #   automatiske saksbehandlingen. Kravet må også si at kjøringen setter konklusjonen der
-    #   den mangler, som første steg.
     # Påstanden på vitnemålet beregnes ikke på nytt i kjøringen.
 
     Scenario: Søknaden uten GSK-konklusjon får konklusjonen i kjøringen
