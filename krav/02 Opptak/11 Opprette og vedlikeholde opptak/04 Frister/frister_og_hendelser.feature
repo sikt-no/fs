@@ -80,18 +80,21 @@ Egenskap: Frister og hendelser for opptak
       Så er opptaket lagret
       Og opptaksforvalter ser et varsel om at fristen for å trekke utdanningstilbud er før redigeringen av utdanningstilbud stenger
 
-  @openquestion @ref-OPT-OVO-GRU-004
+  @openquestion
   Regel: Opptaksforvalter ved forvaltende organisasjon må kunne åpne for søkning
     # ÅPNE SPØRSMÅL:
     # - Virkningen står i søke_på_opptak.feature og finne_studier.feature. Skal regelen ha @ref-OPT-SØK-SØK-001
     #   og @ref-OPT-SØK-SØK-013?
 
     # AVKLART 2026-10-19 (S1, akseptansetesten): Opptaket har ingen egen dato for når utdanningstilbudene
-    # publiseres. Søkere kan ikke begynne på en søknad eller se utdanningstilbudene før søknaden åpner.
-    # AVKLART 2026-10-15 (Q15, TAKE-412): Før det ser opptaksforvaltere og saksbehandlere utdanningstilbudene,
-    # men ikke søkerne.
+    # publiseres. Søkere kan ikke begynne på en søknad før søknaden åpner.
+    # Endret 2026-10-29 (produkteier, review av PR #843): Søkerne ser utdanningstilbudene når opptaksforvalter
+    # har publisert opptaket (01 Grunnoppsett/opptaksstatus.feature), også før søknaden åpner. De kan ikke søke
+    # før søknaden åpner.
+    # AVKLART 2026-10-15 (Q15, TAKE-412): Før opptaket er publisert, ser opptaksforvaltere og saksbehandlere
+    # utdanningstilbudene, men ikke søkerne.
     # Virkningen står i 13 Søknad og saksbehandling/01 Søknad/søke_på_opptak.feature (søknaden) og
-    # finne_studier.feature (Regel «Synlighet via søknadsperioden i opptaket»).
+    # finne_studier.feature (Regel «Synlighet via publiseringen av opptaket»).
     Scenario: Sette søknadsdato
       Når opptaksforvalter setter at søknaden åpner "2027-02-01"
       Så har opptaket dato for når søknaden åpner "2027-02-01"

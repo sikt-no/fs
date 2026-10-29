@@ -156,8 +156,10 @@ Egenskap: Søke på opptak
     # Lagt til 2026-10-19 etter akseptansetesten av opprette og vedlikeholde opptak.
 
     # AVKLART 2026-10-19 (S1): Opptaket har ingen egen publiseringsdato. Søkerne kan ikke begynne på en søknad
-    # eller se utdanningstilbudene før søknaden åpner. Synligheten står i finne_studier.feature
-    # (Regel «Synlighet via søknadsperioden i opptaket»).
+    # før søknaden åpner.
+    # Endret 2026-10-29 (produkteier, review av PR #843): Søkerne ser utdanningstilbudene når opptaksforvalter
+    # har publisert opptaket, også før søknaden åpner. Synligheten står i finne_studier.feature
+    # (Regel «Synlighet via publiseringen av opptaket»).
     Scenario: Søkeren kan ikke begynne på en søknad før søknaden åpner
       Gitt at søknaden i opptaket åpner "2027-02-01"
       Når søkeren vil begynne på en søknad "2027-01-15"
@@ -183,28 +185,29 @@ Egenskap: Søke på opptak
       Så kan søkeren ikke sende inn søknaden
 
   @draft @openquestion @depends-on-OPT-OVO-GRU-004
-  Regel: Søkeren kan ikke begynne på eller endre en søknad i et avpublisert opptak
-    # Virkningen av at opptaksforvalter avpubliserer opptaket (opptaksstatus.feature).
+  Regel: Søkeren kan ikke begynne på eller endre en søknad når opptaket er avpublisert
+    # Virkningen av at opptaksforvalter avpubliserer opptaket (opptaksstatus.feature). Avpublisering setter
+    # opptaket tilbake til upublisert. Det er ikke en egen status (review av PR #843, 2026-10-29).
     # Lagt til 2026-10-28 (produkteier).
     # ÅPNE SPØRSMÅL:
     # - Avpublisering er en nødbrems. Hva skal skje med søknader som er påbegynt eller sendt inn
-    #   mens opptaket er avpublisert? Skal søkeren kunne fortsette, og hvordan får søkeren vite det?
+    #   mens opptaket er upublisert etter en avpublisering? Skal søkeren kunne fortsette, og hvordan får søkeren vite det?
     #   I Min kompetanse brukes publiseringen i dag bare i Finn studier.
 
-    Scenario: Søkeren kan ikke begynne på en søknad i et avpublisert opptak
-      Gitt at opptaket "Samordna opptak 2027" er avpublisert
+    Scenario: Søkeren kan ikke begynne på en søknad når opptaket er avpublisert
+      Gitt at opptaksforvalter har avpublisert opptaket "Samordna opptak 2027"
       Når søkeren vil begynne på en søknad i opptaket "Samordna opptak 2027"
       Så kan søkeren ikke begynne på søknaden
 
-    Scenario: Søkeren kan ikke endre søknaden i et avpublisert opptak
+    Scenario: Søkeren kan ikke endre søknaden når opptaket er avpublisert
       Gitt at søkeren har en søknad i opptaket "Samordna opptak 2027"
-      Og at opptaket "Samordna opptak 2027" er avpublisert
+      Og at opptaksforvalter har avpublisert opptaket "Samordna opptak 2027"
       Når søkeren vil endre søknaden
       Så kan søkeren ikke endre søknaden
 
-    Scenario: Søkeren ser søknaden i et avpublisert opptak
+    Scenario: Søkeren ser søknaden når opptaket er avpublisert
       Gitt at søkeren har en søknad i opptaket "Samordna opptak 2027"
-      Og at opptaket "Samordna opptak 2027" er avpublisert
+      Og at opptaksforvalter har avpublisert opptaket "Samordna opptak 2027"
       Når søkeren åpner søknaden
       Så ser søkeren søknaden
 

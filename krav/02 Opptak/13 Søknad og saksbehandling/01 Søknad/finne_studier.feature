@@ -304,22 +304,25 @@ Egenskap: Listevisning og søk i utdanningstilbud
       Så får søkeren høyst 8 forslag
 
   @depends-on-OPT-OVO-GRU-004
-  Regel: Synlighet via søknadsperioden i opptaket
-    # Opptaket er upublisert til søknaden åpner, og kan avpubliseres (opptaksstatus.feature).
+  Regel: Synlighet via publiseringen av opptaket
+    # Endret 2026-10-29 (produkteier, review av PR #843): Søkerne ser utdanningstilbudene når opptaksforvalter
+    # har publisert opptaket (opptaksstatus.feature), også før søknaden åpner. Søkeren kan ikke søke før
+    # søknaden åpner (søke_på_opptak.feature). Et avpublisert opptak er upublisert igjen.
 
-    Scenario: Søkeren ser utdanningstilbud i opptak med åpen søknadsperiode
-      Gitt at søknaden i opptaket "Samordna opptak 2027" har åpnet
+    Scenario: Søkeren ser utdanningstilbud i et publisert opptak
+      Gitt at opptaket "Samordna opptak 2027" er publisert
       Og at søknadsfristen i opptaket "Samordna opptak 2027" ikke har gått ut
       Når søkeren åpner Finn studier
       Så vises utdanningstilbudene i opptaket "Samordna opptak 2027" i listen
 
-    Scenario: Søkeren ser ikke utdanningstilbud i opptak der søknaden ikke har åpnet
-      Gitt at søknaden i opptaket "Samordna opptak 2027" ikke har åpnet
+    Scenario: Søkeren ser utdanningstilbud i et publisert opptak før søknaden åpner
+      Gitt at opptaket "Samordna opptak 2027" er publisert
+      Og at søknaden i opptaket "Samordna opptak 2027" ikke har åpnet
       Når søkeren åpner Finn studier
-      Så vises ikke utdanningstilbudene i opptaket "Samordna opptak 2027" i listen
+      Så vises utdanningstilbudene i opptaket "Samordna opptak 2027" i listen
 
-    Scenario: Søkeren ser ikke utdanningstilbud i et avpublisert opptak
-      Gitt at opptaket "Samordna opptak 2027" er avpublisert
+    Scenario: Søkeren ser ikke utdanningstilbud i et upublisert opptak
+      Gitt at opptaket "Samordna opptak 2027" er upublisert
       Når søkeren åpner Finn studier
       Så vises ikke utdanningstilbudene i opptaket "Samordna opptak 2027" i listen
 

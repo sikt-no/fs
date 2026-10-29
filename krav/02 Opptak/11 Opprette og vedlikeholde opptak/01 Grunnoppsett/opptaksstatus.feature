@@ -63,6 +63,8 @@ Egenskap: Status på opptaket
     # - Kan et historisk opptak gjøres aktivt igjen?
     # - Når er opptaket ferdig nok til å gjøres historisk: etter siste tildelingsrunde, etter siste svarfrist,
     #   eller når klagene er behandlet?
+    # - Skal statusen hete «avsluttet» i stedet for «historisk», så den ikke forveksles med arkivering etter
+    #   arkivloven? (review av PR #843)
 
     Scenario: Gjøre opptaket historisk
       Gitt at plasstildelingen i opptaket "Samordna opptak 2027" er ferdig
@@ -90,7 +92,12 @@ Egenskap: Status på opptaket
       Når opptaksforvalter åpner innstillingene for opptaket "Samordna opptak 2027"
       Så kan opptaksforvalteren ikke endre innstillingene
 
+    @openquestion
     Scenariomal: Oppgaver kan ikke utføres i et historisk opptak
+      # ÅPNE SPØRSMÅL:
+      # - Klager på vedtak kommer ofte etter at opptaket er ferdig, og fristen regnes per søker. Skal saksbehandler
+      #   kunne behandle klager i et historisk opptak, eller må alle klager være ferdige før opptaket gjøres
+      #   historisk? Hva skjer med en klage som kommer for sent? (review av PR #843)
       Gitt at opptaket "Samordna opptak 2027" er historisk
       Når <rolle> vil <oppgave> i opptaket "Samordna opptak 2027"
       Så kan oppgaven ikke utføres
@@ -101,7 +108,12 @@ Egenskap: Status på opptaket
         | saksbehandler    | behandle en søknad             |
         | opptaksforvalter | gjennomføre plasstildeling     |
 
+    @openquestion
     Scenario: Saksbehandler kan søke etter søknader i et historisk opptak
+      # ÅPNE SPØRSMÅL:
+      # - HK-9848 sier at søknadsdata ikke skal være tilgjengelige for saksbehandler i et arkivert opptak. Hva ber
+      #   HK-dir om, og når skal det gjelde? I dag søker saksbehandlere i historiske opptak for å finne vedtak og
+      #   grunnlaget for vedtak, og lærestedene har trolig også behov her (review av PR #843).
       Gitt at opptaket "Samordna opptak 2027" er historisk
       Når saksbehandler søker etter en søknad i opptaket "Samordna opptak 2027"
       Så finner saksbehandleren søknaden
