@@ -87,7 +87,7 @@ Testplanen har en tabell med fasene. `fs-testplan` fyller ut raden for verifiser
 |---|---|---|---|
 | 1. Verifisering (`fs-verify`) | <lenke> | Alt funnet / <N> ikke funnet, <N> usikker / Ikke kjørt | <dato> |
 | 1. Testrapport – verifisering | <lenke> | Klar / Ikke klar for agentisk funksjonstest | <dato> |
-| Testplan | (denne siden) | Laget | <dato> |
+| 1. Testplan | (denne siden) | Laget | <dato> |
 | 2. Agentisk funksjonstest – testcaser (`fs-testcaser-cdp`) | `cdp-tester/<sti>` | Ikke laget / Laget / Oppdatert | <dato> |
 | 2. Agentisk funksjonstest – kjøring | `kjoring-<dato>/resultat.md` | Venter / Kjørt / Kjørt med funn | <dato> |
 | 2. Testrapport – agentisk funksjonstest | <lenke> | Klar / Ikke klar for intern akseptansetest / Venter på gjennomgang | <dato> |

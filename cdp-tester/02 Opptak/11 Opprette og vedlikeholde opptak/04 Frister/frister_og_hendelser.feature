@@ -1,6 +1,6 @@
 # language: no
-# Generert av fs-testcaser-cdp 2026-10-27
-# Krav: krav/02 Opptak/11 Opprette og vedlikeholde opptak/04 Frister/frister_og_hendelser.feature @ 0f010d4 (blob 44f1a9d3e90bf5ebb2e546edea2a1f57dd3e7282)
+# Generert av fs-testcaser-cdp 2026-10-29
+# Krav: krav/02 Opptak/11 Opprette og vedlikeholde opptak/04 Frister/frister_og_hendelser.feature @ 0ec4b48 (blob 4f977a93b2f73bd3a3d521204894bf20d68d7574)
 #
 # Elleve regler har et åpent spørsmål om @ref- til kravet der fristen brukes. Spørsmålene endrer ikke hva som testes.
 #
@@ -101,19 +101,22 @@ Egenskap: Frister og hendelser for opptak
         | 06.06.2027 23:59 |
         | 20.06.2027 23:59 |
 
+    # Feil rekkefølge gir et varsel, ikke en sperre: opptaket lagres.
     @endrer-data
-    Scenario: Fristen for å trekke utdanningstilbud kan ikke være før redigeringen stenger
+    Scenario: Varsel når fristen for å trekke utdanningstilbud er før redigeringen stenger
       Gitt jeg er logget inn som «opptak-forvalter-forvaltende»
       Når jeg åpner opptaket «opptak-samordna-uten-utdanningstilbud»
       Og jeg velger «Endre innstillinger for opptaket»
       Og jeg noterer verdiene i «Redigering stenger» og «Frist for å trekke utdanningstilbud»
       Og jeg skriver «06.06.2027» i «Redigering stenger»
       Og jeg skriver «05.06.2027 23:59» i «Frist for å trekke utdanningstilbud»
-      Og jeg velger «Lagre», hvis det kan velges
-      Så blir opptaket ikke lagret
-      Og jeg ser en melding om at fristen for å trekke utdanningstilbud ikke kan være før redigeringen av utdanningstilbud stenger [Sjekk begrep: teksten]
-      # Setter tilbake (bare hvis opptaket likevel ble lagret):
-      Og ble opptaket lagret, setter jeg de to fristene tilbake til verdiene jeg noterte, og velger «Lagre»
+      Og jeg velger «Lagre»
+      Så ser jeg «Lagring vellykket»
+      Og jeg ser et varsel om at fristen for å trekke utdanningstilbud er før redigeringen av utdanningstilbud stenger [Sjekk begrep: teksten, og om varselet vises før eller etter «Lagre»]
+      Når jeg åpner opptaket igjen, og velger «Endre innstillinger for opptaket»
+      Så står «05.06.2027 23:59» i «Frist for å trekke utdanningstilbud»
+      # Setter tilbake:
+      Og jeg setter de to fristene tilbake til verdiene jeg noterte, og velger «Lagre»
 
   Regel: Opptaksforvalter ved forvaltende organisasjon må kunne åpne for søkning
 
@@ -175,10 +178,11 @@ Egenskap: Frister og hendelser for opptak
       # Setter tilbake:
       Og jeg setter «Slette søknadsalternativer» tilbake til verdien jeg noterte, og velger «Lagre»
 
-  Regel: Opptaksforvalter ved forvaltende organisasjon må kunne sette dokumentasjonsfrister
+  # Kravet kaller den ordinære datoen «informasjonsdato for dokumentasjon». Skjermen kaller feltet «Ordinær frist» i kortet «Dokumentasjon».
+  Regel: Opptaksforvalter ved forvaltende organisasjon må kunne sette informasjonsdato for dokumentasjon og ettersendingsfrist
 
     @endrer-data
-    Scenario: Sette ordinær dokumentasjonsfrist
+    Scenario: Sette informasjonsdato for dokumentasjon
       Gitt jeg er logget inn som «opptak-forvalter-forvaltende»
       Når jeg åpner opptaket «opptak-samordna-uten-utdanningstilbud»
       Og jeg velger «Endre innstillinger for opptaket»
@@ -432,6 +436,9 @@ Egenskap: Frister og hendelser for opptak
 
   Regel: De ordinære fristene må være satt for å lagre opptaket
 
+    # Et obligatorisk datofelt som tømmes på et lagret opptak, settes tilbake til forrige verdi når feltet forlates
+    # (OpptakDeadlineInput.tsx:133-136 i fs-admin). Da kan «Lagre» velges, og banneret vises ikke. Står datoen der
+    # igjen etter at feltet er forlatt, er det beskrevet i den utledede testcasen under.
     Scenariomal: Opptaket kan ikke lagres uten <frist>
       Gitt jeg er logget inn som «opptak-forvalter-forvaltende»
       Og alle de ordinære fristene er satt i opptaket «opptak-samordna-uten-utdanningstilbud»
@@ -450,10 +457,25 @@ Egenskap: Frister og hendelser for opptak
         | den ordinære søknadsfristen                            | Ordinær søknadsfrist                        | Ordinær søknadsfrist          |
         | omprioriteringsfristen                                 | Omprioriteringsfrist                        | Omprioriteringsfrist          |
         | fristen for sletting av søknadsalternativer            | Slette søknadsalternativer                  | Slette søknadsalternativer    |
-        | den ordinære dokumentasjonsfristen                     | Ordinær frist (i kortet «Dokumentasjon»)    | Ordinær frist (dokumentasjon) |
+        | informasjonsdatoen for dokumentasjon                   | Ordinær frist (i kortet «Dokumentasjon»)    | Ordinær frist (dokumentasjon) |
         | ettersendingsfristen                                   | Ettersendingsfrist                          | Ettersendingsfrist            |
         | fristen for endring av utdanningsbakgrunn              | Endre utdanningsbakgrunn                    | Endre utdanningsbakgrunn      |
         | datoen for når hovedopptaket publiseres                | Publiseringsdato                            | Publiseringsdato              |
+
+    # Teknikk: ekvivalensklasser (obligatorisk dato: gyldig dato, tømt, delvis utfylt (testet under redigering av utdanningstilbud))
+    # OpptakDeadlineInput.tsx:133-136 i fs-admin: en obligatorisk dato som tømmes, settes tilbake til forrige verdi når feltet forlates.
+    @utledet
+    Scenario: De ordinære fristene må være satt for å lagre opptaket: en obligatorisk frist kan ikke tømmes
+      Gitt jeg er logget inn som «opptak-forvalter-forvaltende»
+      Og alle de ordinære fristene er satt i opptaket «opptak-samordna-uten-utdanningstilbud»
+      Når jeg åpner opptaket «opptak-samordna-uten-utdanningstilbud»
+      Og jeg velger «Endre innstillinger for opptaket»
+      Og jeg noterer verdien i «Ordinær søknadsfrist»
+      Og jeg fjerner datoen i «Ordinær søknadsfrist»
+      Og jeg velger feltet «Omprioriteringsfrist»
+      Så står verdien jeg noterte, i «Ordinær søknadsfrist»
+      Og jeg ser ikke «Fyll ut obligatoriske felt:»
+      Og jeg velger «Avbryt»
 
     Scenariomal: Opptaket kan ikke lagres uten <frist> når ledige studieplasser er aktivert
       Gitt jeg er logget inn som «opptak-forvalter-forvaltende»

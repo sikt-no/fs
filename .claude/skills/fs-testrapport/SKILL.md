@@ -81,7 +81,7 @@ Sjekk at branchen i dette repoet er oppdatert mot origin og main, som beskrevet 
 **Intern og ekstern:**
 
 1. Tell «Status» per testcase: `Bestått`, `Ikke bestått`, `Ikke testet`, og tomt eller uklart som «ikke fylt ut». En ekstern testcase har én «Status» per scenario. Tell scenarioene.
-2. Grupper per flyt (intern: flyttestcasene, med én rad per scenario i flyten) eller per testcase (ekstern). Er det også testcaser per krav (regresjon, avhengigheter), grupper dem per oppgave, krav og regel.
+2. Grupper per flyt (intern: flyttestcasene, med én rad per scenario i flyten) eller per testcase (ekstern). Er det også testcaser per krav (regresjon, avhengigheter), grupper dem per oppgave, krav og regel. Intern har i tillegg de tre andre delene, talt for seg: det den agentiske testen ikke klarte (`C`, koblet til testen i fase 2 og kravet), høyest risiko (`H`) og opplevelse og helhet (`O`, vurderinger, der «Ikke bestått» er et funn).
 3. List funnene etter alvorlighetsgrad. Et funn uten alvorlighetsgrad står øverst med «Mangler alvorlighetsgrad». En testcase med «Ikke bestått» uten et funn, står i oppsummeringen til brukeren.
 4. Sorter oppfølgingen av hvert funn. Funnet har typen **Feil** eller **Kravet dekker ikke**, og «Fase funnet» (3 eller 4). I fase 4 er typene i stedet **Feil (avvik fra kravene våre)** (teamet lager oppgave) og **Endringsforslag (krav vi ikke har)** (går til kravarbeidet med `fs-krav`). Oppfølgingen er:
    - **Feil i løsningen / feil (avvik fra kravene våre):** teamet lager oppgave (`Sak`).
