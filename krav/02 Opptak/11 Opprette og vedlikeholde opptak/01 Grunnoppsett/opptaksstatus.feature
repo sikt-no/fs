@@ -61,14 +61,16 @@ Egenskap: Status på opptaket
   Regel: Opptaksforvalter ved forvaltende organisasjon kan gjøre opptaket historisk
     # ÅPNE SPØRSMÅL:
     # - Kan et historisk opptak gjøres aktivt igjen?
+    # - Når er opptaket ferdig nok til å gjøres historisk: etter siste tildelingsrunde, etter siste svarfrist,
+    #   eller når klagene er behandlet?
 
     Scenario: Gjøre opptaket historisk
-      Gitt at opptaket "Samordna opptak 2027" er avpublisert
+      Gitt at plasstildelingen i opptaket "Samordna opptak 2027" er ferdig
       Når opptaksforvalter ved forvaltende organisasjon gjør opptaket historisk
       Så er opptaket "Samordna opptak 2027" historisk
 
-    Scenario: Opptaket kan ikke gjøres historisk mens det er publisert
-      Gitt at opptaket "Samordna opptak 2027" er publisert
+    Scenario: Opptaket kan ikke gjøres historisk før plasstildelingen er ferdig
+      Gitt at plasstildelingen i opptaket "Samordna opptak 2027" ikke er ferdig
       Når opptaksforvalter ved forvaltende organisasjon vil gjøre opptaket historisk
       Så kan opptaket ikke gjøres historisk
 
