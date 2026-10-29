@@ -92,7 +92,7 @@ Egenskap: Automatisk vurdering av spesielle opptakskrav
   # - FS157.001 i FS-klienten beregner om søkerne er kvalifisert for et helt
   #   opptak. Trengs det tilsvarende?
 
-  @depends-on-OPT-REG-KRA-002
+  @depends-on-OPT-REG-KRA-002 @ref-FLY-OPT-AUT-001
   Regel: Kravelementer som er koblet til vitnemålet, vurderes automatisk
     # Koblingen er kravkoden for vitnemålet, som settes på kravelementet i
     # regelverket. Én kravkode sjekker vitnemål fra både R94 og Kunnskapsløftet.
@@ -157,7 +157,7 @@ Egenskap: Automatisk vurdering av spesielle opptakskrav
       Så har fagkravet Fysikk 1 ingen karakter
       Og saksbehandleren ser at fagkravet må vurderes manuelt
 
-  @depends-on-OPT-BEH-BEH-004
+  @depends-on-OPT-BEH-BEH-004 @ref-FLY-OPT-AUT-001
   Regel: Kravelementene vurderes bare mot ett entydig vitnemål
     # Har søkeren flere vitnemål, velger saksbehandleren vitnemålet først.
 
@@ -189,7 +189,7 @@ Egenskap: Automatisk vurdering av spesielle opptakskrav
       Når søknaden behandles automatisk
       Så er kravelementet vurdert mot vitnemålet
 
-  @depends-on-OPT-REG-KRA-001 @ref-OPT-BEH-BEH-015
+  @depends-on-OPT-REG-KRA-001 @ref-OPT-BEH-BEH-015 @ref-FLY-OPT-AUT-001
   Regel: Om søkeren er kvalifisert, avgjøres per grunnlag
     # Kravlistene er alternativer (ELLER), og kravelementene i en kravliste må
     # alle være oppfylt (OG), med mindre regelverket sier noe annet. Krever
@@ -234,6 +234,7 @@ Egenskap: Automatisk vurdering av spesielle opptakskrav
       Så er søkeren kvalifisert i ordinær kvote
       Og søkeren er ikke kvalifisert i kvoten for førstegangsvitnemål
 
+  @ref-FLY-OPT-AUT-001
   Regel: Kravelementene vurderes i den automatiske behandlingen
     # Vurderingen kommer etter poengberegningen og før kvalifiseringen beregnes
     # på nytt.

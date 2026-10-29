@@ -30,7 +30,7 @@ Egenskap: Automatisk beregning av vitnemålspoeng
   Bakgrunn:
     Gitt at søkeren har en søknad i opptaket
 
-  @depends-on-OPT-REG-RAN-002
+  @depends-on-OPT-REG-RAN-002 @ref-FLY-OPT-AUT-001
   Regel: Karakterpoeng, realfagspoeng og språkpoeng beregnes fra søkerens eneste vitnemål
     # Opptaksforvalteren kobler poengtypen til karakterpoeng, realfagspoeng eller språkpoeng i regelverket.
 
@@ -59,6 +59,7 @@ Egenskap: Automatisk beregning av vitnemålspoeng
       Når vitnemålspoengene beregnes automatisk
       Så har karakterpoenget ett desimal
 
+  @ref-FLY-OPT-AUT-001
   Regel: Skolepoeng settes sammen av karakterpoeng, realfagspoeng og språkpoeng
     # Skolepoeng er karakterpoeng pluss realfagspoeng og språkpoeng, der de to siste til sammen teller høyst 4.
 
@@ -74,6 +75,7 @@ Egenskap: Automatisk beregning av vitnemålspoeng
         | 45            | 3             | 2          | 49         |
         | 45            | 4             | 4          | 49         |
 
+  @ref-FLY-OPT-AUT-001
   Regel: Ingen automatisk beregning uten ett entydig vitnemål
     Søkere med flere vitnemål behandles i vitnemålsbehandlingen.
 

@@ -49,7 +49,7 @@ Egenskap: Automatisk grunnlag
   #   personen. Spørsmålet ble tatt opp i raffineringen og med HK-dir 16.03.2026.
   # - Skal et studieønske som fjernes, også fjerne grunnlaget det ga (STEK-505)?
 
-  @depends-on-OPT-REG-GRU-001
+  @depends-on-OPT-REG-GRU-001 @ref-FLY-OPT-AUT-001
   Regel: Grunnlaget velges ut fra egenskapene regelverket har gitt det
     # Regelverket kan gi et grunnlag en aldersgrense, og kreve at søkeren har et
     # vitnemål, eller et førstegangsvitnemål. Grunnlag uten noen av disse
@@ -110,7 +110,7 @@ Egenskap: Automatisk grunnlag
       Når søknaden behandles automatisk
       Så får ikke søknaden grunnlaget
 
-  @depends-on-OPT-BEH-BEH-015
+  @depends-on-OPT-BEH-BEH-015 @ref-FLY-OPT-AUT-001
   Regel: Ingen automatisk grunnlag uten ett vitnemål som gir generell studiekompetanse
     # Ett vitnemål er nok, også når søkeren har et kompetansebevis i tillegg.
     # Søkere med flere vitnemål behandles i vitnemålsbehandlingen, og den
@@ -163,6 +163,7 @@ Egenskap: Automatisk grunnlag
       Så får søknaden GSK-konklusjonen fra vitnemålet
       Og søknaden får grunnlaget ut fra vitnemålet
 
+  @ref-FLY-OPT-AUT-001
   Regel: Grunnlaget settes når den automatiske behandlingen kjører
 
     Scenario: Grunnlaget settes av den automatiske behandlingen
