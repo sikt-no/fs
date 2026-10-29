@@ -54,6 +54,7 @@ Egenskap: Behandlingsstatus
         | Ferdig behandlet | Under behandling |
         | Ferdig behandlet | Ikke behandlet   |
 
+  @ref-FLY-OPT-AUT-001
   Regel: Saken kan bare bli Ferdig behandlet når den har minst én mangel eller ett grunnlag
 
     Scenariomal: Sette saken til Ferdig behandlet fra <fra> når saken har <innhold>
@@ -107,7 +108,7 @@ Egenskap: Behandlingsstatus
       Når det kommer ny dokumentasjon i saken
       Så har saken fortsatt behandlingsstatusen "Ferdig behandlet"
 
-  @ref-OPT-BEH-BEH-016
+  @ref-OPT-BEH-BEH-016 @ref-FLY-OPT-AUT-001
   Regel: Saksloggen viser endringene i behandlingsstatusen
 
     Scenariomal: Saksloggen viser endring av behandlingsstatus når <årsak>

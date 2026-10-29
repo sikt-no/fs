@@ -79,7 +79,7 @@ Egenskap: Søknadsmangler
         | Samordna opptak 2027    | HK-dir               |
         | Lokalt opptak høst 2027 | Universitetet i Oslo |
 
-  @draft
+  @draft @ref-FLY-OPT-AUT-001
   Regel: Opptaksforvalteren merker én mangelkode for generell studiekompetanse som fullføres i vår
 
     Mangelkoden som er merket, er den saken får automatisk når søkeren oppgir at generell
