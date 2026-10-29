@@ -5,9 +5,8 @@ Egenskap: Status på opptaket
   ønsker jeg å styre når søkerne ser opptaket, og når opptaket ikke lenger er i bruk
   slik at søkerne bare ser utdanningstilbud de kan søke på, og et avsluttet opptak ikke endres.
 
-  Opptaket har to statuser. Publiseringen sier om søkerne ser utdanningstilbudene i opptaket og kan søke
-  i Min kompetanse: upublisert, publisert eller avpublisert. Aktiv eller historisk sier om opptaket er i bruk
-  for dem som jobber med opptaket.
+  Opptaksforvalter publiserer opptaket når søkerne skal se utdanningstilbudene i opptaket og kunne søke
+  i Min kompetanse, og kan avpublisere det igjen. Når opptaket er ferdig, gjør opptaksforvalter det historisk.
 
   # Kilde: produkteier 2026-10-28. Svarer til HK-9846 og HK-9847 (publisering) og HK-9848 (Arkivert, her historisk).
   # Regelen om å deaktivere opptaket er flyttet hit fra opprett_opptak.feature.
