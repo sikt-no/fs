@@ -25,6 +25,9 @@ Egenskap: Automatisk saksbehandling
   # kvotene, poengene per kvote og manglene er ikke egne steg: de oppdateres automatisk ut fra
   # stegene før, og er gule i tegningen. Tegningen har kravelementene før poengene. Det er
   # unøyaktig: poengene beregnes først (OPT-BEH-BEH-020).
+  # To faser er med i flyten, men er utenfor scope i første fase (@wont): to identiske vitnemål
+  # som reknes som ett vitnemål, og automatisk dobbeltrangering etter 23/5-regelen i 2027.
+  # De står her så de blir med i neste fase.
 
   Bakgrunn:
     Gitt at søknaden til "Kari Nordmann" har en sak hos "Universitetet i Oslo"
@@ -81,6 +84,18 @@ Egenskap: Automatisk saksbehandling
       Når søknaden behandles automatisk
       Så behandles ikke saken hos "Universitetet i Oslo" helautomatisk
 
+  @wont @openquestion
+  Regel: To identiske vitnemål reknes som ett vitnemål
+    # ÅPNE SPØRSMÅL:
+    # - Utenfor scope i første fase. Fasen er med for å huske den til neste fase.
+    # - Ingen krav beskriver når to vitnemål er identiske, eller hvilket av dem saken
+    #   behandles helautomatisk på. Hvilket krav skal eie regelen: OPT-BEH-BEH-025 eller et nytt krav?
+
+    Scenario: Saken behandles helautomatisk når søkeren har to identiske vitnemål
+      Gitt at "Kari Nordmann" har to identiske vitnemål med påstanden at søkeren har GSK
+      Når søknaden behandles automatisk
+      Så behandles saken hos "Universitetet i Oslo" helautomatisk på vitnemålet
+
   @depends-on-OPT-BEH-BEH-019
   # OPT-BEH-BEH-019: «Grunnlaget velges ut fra egenskapene regelverket har gitt det», «Ingen automatisk grunnlag uten ett vitnemål som gir generell studiekompetanse», «Grunnlaget settes når den automatiske behandlingen kjører»
   Regel: Søknaden får grunnlag fra vitnemålet
@@ -110,6 +125,16 @@ Egenskap: Automatisk saksbehandling
       Gitt at søknaden har grunnlag
       Når søknaden behandles automatisk
       Så har søknaden tilleggspoengene rangeringsregelverket gir for grunnlaget
+
+  @wont @openquestion
+  Regel: Søknaden dobbeltrangeres automatisk etter 23/5-regelen
+    # ÅPNE SPØRSMÅL:
+    # - Utenfor scope i første fase. Fasen er med for å huske den til neste fase.
+    # - Det er ikke beskrevet hvordan den automatiske dobbeltrangeringen (poengberegningen) skal
+    #   gjøres. I opptakssystemet som finnes i dag, er den en manuell operasjon. Hvilket krav
+    #   skal eie regelen: OPT-BEH-BEH-018 eller et nytt krav?
+    # - 23/5-regelen heter 23/6-regelen fra 1. januar 2027 (se OPT-BEH-BEH-022). Hvilket navn
+    #   skal fasen ha?
 
   @depends-on-OPT-BEH-BEH-020
   # OPT-BEH-BEH-020: «Kravelementer som er koblet til vitnemålet, vurderes automatisk», «Kravelementene vurderes bare mot ett entydig vitnemål», «Kravelementene vurderes i den automatiske behandlingen»
