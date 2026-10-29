@@ -1,6 +1,6 @@
 # language: no
 # GitHub: #481
-@BRU-PER-GRU-003 @must @planned @scope-restanser-etter-onboarding
+@BRU-PER-GRU-003 @must @in-progress @scope-restanser-etter-onboarding
 Egenskap: Tildele roller til en personbruker
   Som brukeradministrator
   ønsker jeg å tildele roller til en personbruker

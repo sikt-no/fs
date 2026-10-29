@@ -4,7 +4,7 @@
 
 > **Avvik fra skillen:** Regelen i denne delta-en er `@draft`. `fs-specify-delta` holder normalt `@draft`-deler utenfor. Kjetil har bestemt at den skal være med som endringen likevel, uten at statusen endres. Regelen står fortsatt som `@draft`, og ingenting er retagget. Den er ikke validert som `@planned`, så spesifikasjonen er ikke klar til utvikling før statusen er avklart.
 >
-> **Oppdatert 2026-10-29:** Regelen er senere validert, og har `@planned` fra egenskapen (se åpent spørsmål 1). Den er ikke retagget `@in-progress` ennå.
+> **Oppdatert 2026-10-29:** Regelen er senere validert, og har `@planned` fra egenskapen (se åpent spørsmål 1). Etter at alle åpne spørsmål var lukket, er egenskapen retagget `@in-progress` (se *Retagging*).
 
 ## Kilde
 
@@ -63,13 +63,18 @@ Når organisasjon og miljø er valgt i dialogen «Tildel roller», viser valglis
 - **Merknader til kode-repoene** (ikke avvik):
   - Implementasjonshint fra Kjetil: trolig et nytt filter på den eksisterende spørringen etter tildelbare roller (`mineTildelbareTilgangsroller`).
   - Bare Feide-applikasjoner har tak (`schema_delegeringstak.graphqls:11`). Maskinporten- og maskinbruker-applikasjoner bidrar derfor ikke til valglisten.
+  - Beslutning fra Kjetil 29.10.2026 (fra analysen i `backend/analysis-rolleliste-begrenset-av-tak.md`): tak til deaktiverte applikasjoner teller ikke. Tak til syntetiske applikasjoner teller når valgt miljø er syntetisk, og ikke når det er ekte. Fra et syntetisk miljø teller også tak til ekte applikasjoner, siden svaret bare inneholder rollekoder.
   - Taket er temporalt (`gyldighetsperiode`, `erAktivNaa`). Se åpent spørsmål om hvilke perioder som teller.
   - Lesing av taket er styrt av RLS (LES i organisasjonen eller i applikasjonens eierorganisasjon, `0080-delegeringstak-organisasjonssamling.sql:21`). En brukeradministrator ser ikke nødvendigvis taket, så filteret må kunne avgjøre om en rolle er i et tak uten å vise taket.
   - Dagens tomme valgliste har teksten «Ingen roller å tildele i denne kombinasjonen.», skrevet for manglende rettighet (`fs-admin/src/common/messages/nb/tilgangsstyring.json:174`).
 
 ## Retagging
 
-Ingen retagging. Regelen er `@draft` og står urørt, og `Egenskap:`-linja (`@BRU-PER-GRU-003 @must @planned @scope-restanser-etter-onboarding`) er ikke endret. Kjetil har ikke bestemt å endre statusen.
+Retagget 2026-10-29, etter beslutning fra Kjetil, da regelen var validert og alle åpne spørsmål var lukket:
+
+- `tildele_roller.feature`: `@BRU-PER-GRU-003 @must @planned @scope-restanser-etter-onboarding` → `@BRU-PER-GRU-003 @must @in-progress @scope-restanser-etter-onboarding`
+
+Hele egenskapen er retagget, fordi regelen ikke har egen statustag. Hele fila står i scope-raden for denne oppgaven. Scenarioet som er `@draft @openquestion`, er fortsatt holdt utenfor. Ingen andre tagger er endret. Da delta-en ble skrevet, var regelen `@draft`, og ingenting ble retagget.
 
 ## Åpne spørsmål
 

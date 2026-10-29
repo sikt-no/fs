@@ -167,8 +167,13 @@ From the spec:
 
 Found by this analysis:
 
-- [ ] **Synthetic and deactivated applications:** should their caps count? (a) every Feide application's cap; (b) exclude deactivated applications; (c) exclude synthetic applications too, in line with BAT-350 and the 0099 precedent; (d) exclude synthetic applications only in real environments.
-- [ ] **Exposure past RLS:** is it acceptable that an administrator without `BRUKERADMIN_WSBRUKER_LES` learns which business roles are in some cap for an organisation where they hold the right to assign, without learning which application or cap? The rule requires it; the question is whether it needs a decision from the security side, given the 0029 argument against broad DEFINER helpers.
-- [ ] **I2 for the answer:** from a synthetic environment, should caps of real applications count (cf. !6238)? The answer exposes no application, only roles.
-- [ ] **«Gi rollen til en person» on the role page (!3046):** limited by the cap too, or only «Tildel roller» as the rule says?
-- [ ] **Ordering:** build on top of the BAT-257 stack (fs-admin !3197 → !3046 …, fs-plattform !6413), or ahead of it?
+- [x] **Synthetic and deactivated applications:** should their caps count? (a) every Feide application's cap; (b) exclude deactivated applications; (c) exclude synthetic applications too, in line with BAT-350 and the 0099 precedent; (d) exclude synthetic applications only in real environments.
+  **Decision (Kjetil 29.10.2026):** caps of deactivated applications do not count. Caps of synthetic applications count when the chosen environment is synthetic, and are excluded when it is real (option b + d).
+- [x] **Exposure past RLS:** is it acceptable that an administrator without `BRUKERADMIN_WSBRUKER_LES` learns which business roles are in some cap for an organisation where they hold the right to assign, without learning which application or cap? The rule requires it; the question is whether it needs a decision from the security side, given the 0029 argument against broad DEFINER helpers.
+  **Decision (Kjetil 29.10.2026):** accepted, as a narrow SECURITY DEFINER function that returns only role codes, never applications or caps.
+- [x] **I2 for the answer:** from a synthetic environment, should caps of real applications count (cf. !6238)? The answer exposes no application, only roles.
+  **Decision (Kjetil 29.10.2026):** yes. Real applications' caps count from a synthetic environment too, since the answer contains only role codes.
+- [x] **«Gi rollen til en person» on the role page (!3046):** limited by the cap too, or only «Tildel roller» as the rule says?
+  **Decision (Kjetil 29.10.2026):** not part of this rule now. It may become a later requirement change.
+- [x] **Ordering:** build on top of the BAT-257 stack (fs-admin !3197 → !3046 …, fs-plattform !6413), or ahead of it?
+  **Decision (Kjetil 29.10.2026):** build the backend (fs-plattform) now; fs-admin after !3197.

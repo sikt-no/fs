@@ -58,6 +58,7 @@ Hjelpetekster, feilmeldinger, bekreftelser og andre tekster med variasjoner. Det
 - Tildeling av en rolle utenfor taket avvises ikke. Regelen gjelder bare hva valglisten viser.
 - Gjelder ikke valglisten for tilganger, og ikke tildeling til applikasjoner.
 - Bare tak som gjelder nå, teller: gyldighetsperioden inneholder tidspunktet nå, og taket er ikke ugyldiggjort.
+- Tak til deaktiverte applikasjoner teller ikke. Tak til syntetiske applikasjoner teller bare når valgt miljø er syntetisk. Fra et syntetisk miljø teller også tak til ekte applikasjoner.
 - Brukerveiledningen i FS Admin (`src/features/Brukerveiledninger/innhold/personbrukere.md`) har en «Under utvikling»-merknad om valglisten for rolle. Den må oppdateres når filteret er på plass.
 
 ### Scenario: En rolle som ikke er i noe tak kan fortsatt fjernes
