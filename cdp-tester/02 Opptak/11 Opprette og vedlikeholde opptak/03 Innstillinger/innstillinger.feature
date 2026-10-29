@@ -1,6 +1,6 @@
 # language: no
-# Generert av fs-testcaser-cdp 2026-10-27
-# Krav: krav/02 Opptak/11 Opprette og vedlikeholde opptak/03 Innstillinger/innstillinger.feature @ 0f010d4 (blob 045c8103c36017e82ce247206e78c26f383d4e8d)
+# Generert av fs-testcaser-cdp 2026-10-29
+# Krav: krav/02 Opptak/11 Opprette og vedlikeholde opptak/03 Innstillinger/innstillinger.feature @ 270d681 (blob 52882573877cb58be74c8f8b00d91cd020457ef5)
 #
 # {KJØRING} byttes ut med dato og klokkeslett når kjøringen starter. Opptak kan ikke slettes, så opptak testen oppretter, har {KJØRING} i navnet.
 # «Utfylling A» står øverst i ../01 Grunnoppsett/opprett_opptak.feature.
@@ -289,6 +289,50 @@ Egenskap: Innstillinger for opptak
       Så ser jeg «Lenken må være en http- eller https-adresse»
       Og jeg går til «Opptak», skriver «Samordna opptak 2027 lenke (test {KJØRING})» i «Opptaksnavn», og ser «Ingen opptak funnet»
 
+    # Teknikk: tilstandsoverganger (tidlig opptak på → av er en ugyldig overgang så lenge et utdanningstilbud i opptaket tilbyr tidlig opptak)
+    # API-et avviser endringen (OpprettOpptakMutations.java:213-219 i fs-plattform). Kravet sier ikke hva opptaksforvalteren ser.
+    @utledet
+    Scenario: Opptaksforvalter kan åpne for tidlig opptak: kan ikke slås av når et utdanningstilbud tilbyr tidlig opptak
+      Gitt jeg er logget inn som «opptak-forvalter-forvaltende»
+      Og et utdanningstilbud i opptaket «opptak-samordna-tilbud-med-tidlig-opptak» tilbyr tidlig opptak
+      Når jeg åpner opptaket «opptak-samordna-tilbud-med-tidlig-opptak»
+      Og jeg velger «Endre innstillinger for opptaket»
+      Og jeg fjerner krysset for «Kan søke på tidlig opptak» under «Valg for opptaket»
+      Og jeg velger «Slå av valget» i «Slå av valget?»
+      Og jeg velger «Lagre»
+      Så ser jeg en feilmelding om at tidlig opptak ikke kan slås av mens utdanningstilbud i opptaket tilbyr det [Sjekk begrep: teksten]
+      Når jeg åpner opptaket igjen
+      Så står «Kan søke på tidlig opptak» som aktivert under «Oppsummert»
+
+    # Teknikk: beslutningstabell (valget slås av × frister i kortet × svar i «Slå av valget?»)
+    #   | Kortet har frister | Svar i «Slå av valget?» | Resultat                                         |
+    #   | ja                 | «Avbryt»                | krysset står, kortet «Tidlig opptak» vises       | (denne)
+    #   | ja                 | «Slå av valget»         | krysset er borte, kortet vises ikke              | (denne)
+    #   | nei (nytt opptak)  | –                       | ingen spørsmål, kortet vises ikke                | («fristene vises bare når tidlig opptak er på» i frister_og_hendelser.feature)
+    # BekreftFjernFristerModal.tsx:22 i fs-admin: «Avbryt», Escape og X lar valget stå som det var.
+    @utledet @endrer-data
+    Scenario: Opptaksforvalter kan åpne for tidlig opptak: spørsmål før tidlig opptak slås av
+      Gitt jeg er logget inn som «opptak-forvalter-forvaltende»
+      Og tidlig opptak er ikke aktivert i opptaket «opptak-samordna-uten-utdanningstilbud»
+      Når jeg åpner opptaket «opptak-samordna-uten-utdanningstilbud»
+      Og jeg velger «Endre innstillinger for opptaket»
+      Og jeg krysser av for «Kan søke på tidlig opptak» under «Valg for opptaket»
+      Og jeg skriver «https://www.samordnaopptak.no/universitet-og-hogskole/slik-soker-du/tidlig-opptak.html» i «Informasjonsside tidlig opptak»
+      Og jeg fyller ut «Søknadsfrist», «Dokumentasjonsfrist» og «Frist for å sette poenggrenser» under «Tidlig opptak» med en dato 30 dager etter testdagen
+      Og jeg velger «Lagre»
+      Og jeg åpner opptaket igjen, og velger «Endre innstillinger for opptaket»
+      Og jeg fjerner krysset for «Kan søke på tidlig opptak»
+      Så ser jeg «Slå av valget?» med «Fristene for «Kan søke på tidlig opptak» blir fjernet fra opptaket når du lagrer. Slår du valget på igjen, må fristene fylles ut på nytt.»
+      Når jeg velger «Avbryt» i «Slå av valget?»
+      Så er «Kan søke på tidlig opptak» krysset av
+      Og jeg ser kortet «Tidlig opptak» i fristene
+      Når jeg fjerner krysset for «Kan søke på tidlig opptak»
+      Og jeg velger «Slå av valget» i «Slå av valget?»
+      Så er «Kan søke på tidlig opptak» ikke krysset av
+      Og jeg ser ikke kortet «Tidlig opptak» i fristene
+      # Setter tilbake (tidlig opptak er av igjen når opptaket lagres):
+      Og jeg velger «Lagre»
+
   Regel: Opptaksforvalter kan åpne for søknad på ledige studieplasser
 
     @endrer-data
@@ -374,6 +418,8 @@ Egenskap: Innstillinger for opptak
       Så står «Steinerskole» i «Godkjente utdanningsbakgrunner»
       Og jeg velger «Avbryt»
 
+    # Åpent spørsmål i kravet: skal alle opptak ha utdanningsbakgrunn, eller bare UHG-opptak (samordna opptak)?
+    # Testes som det står, på et samordna opptak.
     Scenario: Den siste utdanningsbakgrunnen kan ikke fjernes
       Gitt jeg er logget inn som «opptak-forvalter-forvaltende»
       Og «Steinerskole» er den eneste utdanningsbakgrunnen i opptaket «opptak-en-utdanningsbakgrunn»

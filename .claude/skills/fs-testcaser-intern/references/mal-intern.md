@@ -1,10 +1,10 @@
 # Mal: Intern akseptansetest
 
-For testansvarlig (domeneekspert) og de andre interne testerne. Formen er den [teststrategien (forslag)](https://sikt.atlassian.net/wiki/spaces/STUDIEADM/pages/5145100326) gir i *Fase 3* og *Testplan og sluttrapport*: én testcase per flyt (eller per oppgave uten flyt, for krav som ikke hører til en flyt), med flere scenarioer i rekkefølgen arbeidsprosessen går, og eget resultat per scenario.
+For testansvarlig (domeneekspert) og de andre interne testerne. Formen er den [teststrategien (forslag)](https://sikt.atlassian.net/wiki/spaces/STUDIEADM/pages/5145100326) gir i *Fase 3* og *Testplan og sluttrapport*, med de fire delene i *Fase 3* i `akseptansetest/README.md`: flytene (én testcase per flyt, eller per oppgave uten flyt, med flere scenarioer i rekkefølgen arbeidsprosessen går, og eget resultat per scenario), det den agentiske testen ikke klarte, det med høyest risiko, og opplevelse og helhet.
 
 Siden er for testerne. Testbeskrivelsen (miljø, versjon, flagg, testbrukere, testdata, roller) står i testplanen, og siden lenker dit i stedet for å gjenta den. Beslutningen står i testrapporten.
 
-Fase 3 tester flyter og avhengigheter. Feltvalidering, feilsituasjoner og grenseverdier er testet i fase 2, og tilgang i fase 1, og tas ikke med her. Testansvarlig kan ta stikkprøver.
+Feltvalidering, feilsituasjoner og grenseverdier som fase 2 har bestått, testes ikke på nytt, utenom det testansvarlig velger under «Høyest risiko». Tilgang er sjekket i fase 1.
 
 I fila skrives stegene i én tabellcelle, nummerert og skilt med `<br>`. Ved publisering blir de en nummerert liste i cella (se `confluence.md`).
 
@@ -102,6 +102,30 @@ Intern akseptansetest av «<leveranse>». Testbeskrivelsen, testbrukerne og test
 |---|---|---|---|---|---|
 | R<n>a | <scenariotittel> | 1. … | … | | |
 
+## Det den agentiske testen ikke klarte
+
+<Testcasene fra fase 2 som ble «Ikke testet». Utelates når alle ble testet.>
+
+| Nr | Test i fase 2 | Hvorfor agenten ikke klarte den | Steg | Forventet resultat | Faktisk resultat | Status |
+|---|---|---|---|---|---|---|
+| C1 | <scenariotittel> (`@TST-…`) | <grunnen fra resultatet: data som ikke kan lages, steg agenten ikke fikk til, ikke synlig i skjermen> | 1. Logg inn som testbruker <nr> (…). <br>2. … | … | | |
+
+## Høyest risiko
+
+<Det testansvarlig har valgt etter en risikovurdering. Utelates når ingenting er valgt.>
+
+| Nr | Hva som prøves | Hvorfor det er valgt | Steg | Forventet resultat | Faktisk resultat | Status |
+|---|---|---|---|---|---|---|
+| H1 | <med vanlige ord> | <rettet funn i fase 2 / usikker i verifiseringen / kritisk for brukerne / …> | 1. … | … | | |
+
+## Opplevelse og helhet
+
+Testeren vurderer, og skriver vurderingen i «Faktisk resultat». «Ikke bestått» betyr at testeren mener det må endres før leveransen tas i bruk. Mindre forslag står i «Andre funn».
+
+| Nr | Hva testeren vurderer | Steg | Forventet resultat | Faktisk resultat | Status |
+|---|---|---|---|---|---|
+| O1 | <forståelig og brukbar / tekster og begreper / universell utforming>: <skjermen eller oppgaven> | 1. … | <det testeren skal kunne, for eksempel «Finner «Ordinær frist» under «Dokumentasjon» uten hjelp»> | | |
+
 ## Avhengigheter som testes for seg
 
 <Bare når avhengighetskartet har avhengigheter som ikke sjekkes underveis i en flyt.>
@@ -121,7 +145,7 @@ Scenarioene er laget, men kan ikke testes i testmiljøet ennå.
 
 | Hva | Hvorfor |
 |---|---|
-| Feltvalidering, feilmeldinger og grenseverdier | Testet i den agentiske funksjonstesten (fase 2) |
+| Feltvalidering, feilmeldinger og grenseverdier | Bestått i den agentiske funksjonstesten (fase 2), og ikke valgt under «Høyest risiko» |
 | <krav som venter på en flyt, med vanlige ord> | <venter på flyt (ny flyt foreslått til kravarbeidet) / kommer senere> |
 | <med vanlige ord> | <kort, uten tagger: ikke avklart ennå / kommer senere / testes i en annen leveranse> |
 
@@ -147,6 +171,6 @@ Det du oppdager som ikke gjelder testcasene, for eksempel brukervennlighet, elle
 - Testcasene nummereres fra 1 i rekkefølgen i arbeidsprosessen, én per flyt (eller del av en flyt) og én per oppgave uten flyt. Delene (ett scenario hver) får bokstav: `1a`, `1b`, `1c`.
 - Stegene løper gjennom hele testcasen, så del `1b` fortsetter der `1a` slapp.
 - En `Scenariomal:` som brukes i flyten, gir én del per eksempelrad som er med, med verdiene fra raden i scenariotittelen og stegene.
-- Regresjonsflyter nummereres `R1`, `R2`, med delene `R1a`, `R1b`. Avhengigheter som testes for seg, nummereres `A1`, `A2`.
+- Regresjonsflyter nummereres `R1`, `R2`, med delene `R1a`, `R1b`. Avhengigheter som testes for seg, nummereres `A1`, `A2`. Det den agentiske testen ikke klarte, nummereres `C1`, `C2`, høyest risiko `H1`, `H2`, og opplevelse og helhet `O1`, `O2`.
 - Rader for opprydding («Gjør klar til neste test») har ikke nummer.
 - Sporingen i metadataene har en rad per del: testcasenummer, bokstav, Feature-ID (kravet eller flyten scenarioet står i), regel og scenario.

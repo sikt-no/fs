@@ -192,7 +192,7 @@ Agenten kan ikke ta beslutningen, og den agentiske rapporten har ingen beslutnin
 ## Neste steg
 
 <verifisering: Klar → `fs-testcaser-cdp` (testcasene for fase 2, laget etter testplanen). Ikke klar → det som mangler, per repo, tilbake til teamet.>
-<agentisk: Inngangskriteriet oppfylt → `fs-testcaser-intern` (flyttestene for fase 3). Ikke oppfylt → «Stopper»-funn tilbake til teamet og ny kjøring, og testansvarlig går gjennom rapporten. «Kravet dekker ikke»-funn → `fs-krav`, med spørsmålet.>
+<agentisk: Inngangskriteriet oppfylt → `fs-testcaser-intern` (testcasene for fase 3). Ikke oppfylt → «Stopper»-funn tilbake til teamet og ny kjøring, og testansvarlig går gjennom rapporten. «Kravet dekker ikke»-funn → `fs-krav`, med spørsmålet.>
 <intern: Godkjent → `fs-testcaser-ekstern` (eller innføring, når ekstern test ikke er aktuell). Godkjent med forbehold → retting og ny test av funnene. Ikke godkjent → tilbake til teamet.>
 <ekstern: grunnlaget for rapporten til styringsgruppen.>
 

@@ -4,7 +4,7 @@ Nøklene i testene i `cdp-tester/`, slått opp for TEST. Fila er det eneste sted
 
 - **FS Admin**: https://test-fsadmin.sikt.no
 - **Innlogging**: testansvarlig logger inn selv, i en egen Chrome-profil til testingen. Testbrukeren byttes i «Overstyrt bruker» øverst til høyre i FS Admin
-- **Kan settes tilbake**: nei. Opptak kan ikke slettes: opptakene testene oppretter, blir liggende, og har kjøringen i navnet (`{KJØRING}`)
+- **Kan settes tilbake**: nei, og data i TEST kan slettes eller nullstilles når som helst. Testene lager dataene sine selv, i oppsettet i [`../_Oppsett/`](../_Oppsett/), i hver kjøring. Opptak kan ikke slettes: opptakene testene og oppsettet oppretter, blir liggende, og har kjøringen i navnet (`{KJØRING}`)
 - **Personaer sist sjekket**: 2026-10-28, mot `TEST_PERSONAS` i fs-admin (`origin/main` `cc62931b7`). Tildelingene er bekreftet med `testpersoner` for personaene som har dato i «Bekreftet»
 
 ## Feature-flagg
@@ -80,6 +80,8 @@ Nøkkelen i testene, hva testen krever av testbrukeren (uavhengig av miljøet), 
 
 ## Testdata
 
+Bare grunndata og data testene ikke kan lage gjennom løsningen. Testdataene oppsettet lager i hver kjøring, står i oppsettet, ikke her: for opptak [`_Oppsett/02 Opptak/11 Opprette og vedlikeholde opptak/oppsett.feature`](../_Oppsett/02%20Opptak/11%20Opprette%20og%20vedlikeholde%20opptak/oppsett.feature) (`opptak-samordna-uten-utdanningstilbud`, `opptak-samordna-med-utdanningstilbud`, `opptak-samordna-tilbud-med-tidlig-opptak`, `opptak-en-utdanningsbakgrunn` og `opptak-lokalt`, og `opptak-oversikt-flere-typer` dekkes av dem).
+
 | Nøkkel | Verdi i TEST | Søk/URL | Utgangstilstand | Sjekket |
 |---|---|---|---|---|
 | `regelverkssamling-samordna` | «UHGTEST2026» | Velges i skjemaet for opptaket | Regelverkssamling som kan velges i et samordna opptak | 2026-10-26 |
@@ -88,11 +90,7 @@ Nøkkelen i testene, hva testen krever av testbrukeren (uavhengig av miljøet), 
 | `utdanningsbakgrunner-godkjente` | «Realkompetanse», «Utenlandsk utdanning» og «Steinerskole» | Velges i innstillingene | «Realkompetanse», «Utenlandsk utdanning» og «Steinerskole» står blant de godkjente utdanningsbakgrunnene | 2026-10-27 |
 | `poenglikhetsregler` | «Loddnummer, laveste nummer først» (kravet: «Loddtrekning»), «Alder, eldste først» (kravet: «Alder, eldre foran yngre»). «Alle søkere med samme poengsum får tilbud» er ikke sett | Velges i innstillingene | Poenglikhetsreglene i kravet finnes som valg | 2026-10-26 |
 | `organisasjoner-utdanningsregisteret` | Læresteder fra utdanningsregisteret, blant dem NTNU (universitet) og Fagskolen i Vestfold og Telemark (fagskole) | Søk i «Inviter» | Aktive læresteder i utdanningsregisteret: minst to av hver type (universitet, høyskole, fagskole), blant dem organisasjonene til `opptak-forvalter-deltakende` og `opptak-forvalter-ikke-deltakende` | 2026-10-27 |
+| `utdanningstilbud-deltakende` | [Fylles ut] | Velges i «Legg til utdanningstilbud» | Et utdanningstilbud i utdanningsregisteret ved organisasjonen til `opptak-forvalter-deltakende`, som kan legges til i et samordna opptak. Brukes av oppsettet | – |
 | `organisasjon-som-inviteres` | Universitetet i Oslo (UIO, 185) | Søk i «Inviter» | Et aktivt universitet eller en høyskole i utdanningsregisteret, som ikke er deltaker i testdata-opptakene og ikke er organisasjonen til en av testbrukerne | 2026-10-27 |
-| `opptak-samordna-uten-utdanningstilbud` | «Samordna opptak 2027 (test)» | Søk på navnet i «Opptak» | Samordna opptak som forvaltes av organisasjonen til `opptak-forvalter-forvaltende`. Ingen deltakere og ingen utdanningstilbud. Alle obligatoriske felt og frister er satt. Tidlig opptak og ledige studieplasser er ikke aktivert. «Realkompetanse» står i «Godkjente utdanningsbakgrunner», uten avvikende frister. Redigering av utdanningstilbud åpner 7 dager før testen og stenger 30 dager etter testen. Søknaden åpner 60 dager etter testen. URL-en til siden er kjent | 2026-10-27 |
-| `opptak-samordna-med-utdanningstilbud` | [Fylles ut] | Søk på navnet i «Opptak» | Samordna opptak som forvaltes av organisasjonen til `opptak-forvalter-forvaltende`. Organisasjonen til `opptak-forvalter-deltakende` er deltaker, og har minst ett utdanningstilbud som bruker regler fra regelverkssamlingen. Organisasjonen til `opptak-forvalter-ikke-deltakende` er ikke deltaker. Redigering av utdanningstilbud er åpen på testdagen. URL-en til siden er kjent | – |
 | `opptak-utdanningsbakgrunn-valgt-av-soker` | [Fylles ut] | Søk på navnet i «Opptak» | Samordna opptak med «Steinerskole» og minst én utdanningsbakgrunn til. En syntetisk søker har en søknad med «Steinerskole». Søknaden er åpen på testdagen | – |
-| `opptak-en-utdanningsbakgrunn` | [Fylles ut] | Søk på navnet i «Opptak» | Samordna opptak med bare «Steinerskole». Ingen søker har valgt den | – |
-| `opptak-lokalt` | «Lokalt opptak høst 2027 (test)» | Søk på navnet i «Opptak» | Lokalt opptak ved organisasjonen til `opptak-forvalter-lokalt` | 2026-10-27 |
-| `opptak-oversikt-flere-typer` | – (opptakene i TEST) | «Opptak» | Opptak av minst to opptakstyper, ved minst to organisasjoner, opprettet på ulike dager, synlige for `opptak-forvalter-forvaltende` | 2026-10-27 |
 | `opptak-oversikt-over-50` | **Finnes ikke** | «Opptak» | Minst 51 opptak synlige for `opptak-forvalter-forvaltende` | 2026-10-27 |
