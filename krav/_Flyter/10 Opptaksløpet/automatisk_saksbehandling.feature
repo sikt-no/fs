@@ -183,12 +183,10 @@ Egenskap: Automatisk saksbehandling
       Når søknaden behandles automatisk
       Så er søkeren plassert i "Jenter" for "Informatikk, UiO"
 
-  @openquestion @depends-on-OPT-REG-KVO-001 @depends-on-OPT-REG-RAN-002
+  @depends-on-OPT-BEH-BEH-031 @depends-on-OPT-REG-KVO-001 @depends-on-OPT-REG-RAN-002
+  # OPT-BEH-BEH-031: «Søkeren får en poengsum for hver kvote og hvert grunnlag kvoten er koblet til», «Poengsummen regnes ut med poengformelen til kvotetypen», «Poengsummen regnes ut på nytt når det den bygger på, endres»
   # OPT-REG-KVO-001: «En kvotetype kan ha en default poengformel»
   Regel: Søkeren får poengsum per kvote når søkeren er fordelt på kvoter
-    # ÅPNE SPØRSMÅL:
-    # - Ingen krav i behandlingen beskriver at poengsummen per kvote beregnes. Hvilket krav skal
-    #   eie regelen: OPT-BEH-BEH-012, OPT-BEH-BEH-018 eller et nytt krav?
     # Oppdateres automatisk ut fra kvotene og poengene.
 
     Scenario: Søkeren har poengsum i kvoten
