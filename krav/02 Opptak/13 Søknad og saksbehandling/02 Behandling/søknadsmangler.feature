@@ -641,8 +641,8 @@ Egenskap: Søknadsmangler
     # I det gamle systemet het mangelkoden DUA. Eksemplene bruker den koden.
 
     # ÅPNE SPØRSMÅL:
-    # - Bygger på at søkeren kan oppgi at generell studiekompetanse fullføres i vår (OPT-SØK-SØK-013).
-    #   Det kravet er ikke avklart, og ID-en brukes også i finne_studier.feature, så referansen er ikke satt som tag.
+    # - Bygger på at søkeren kan oppgi at generell studiekompetanse fullføres i vår (@OPT-SØK-SØK-017).
+    #   Det kravet er ikke avklart, så referansen er ikke satt som tag.
     # - Hvordan varsles opptaksforvalteren når ingen mangelkode er merket?
     # - Kan saksbehandleren slette mangelen, eller bare sjekke den ut? Regelen over sier at
     #   saksbehandleren kan slette en automatisk mangel.
