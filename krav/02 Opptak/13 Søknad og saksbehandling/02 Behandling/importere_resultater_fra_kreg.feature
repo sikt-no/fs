@@ -138,8 +138,10 @@ Egenskap: Importere resultater fra KREG
     # ÅPNE SPØRSMÅL:
     # - Hvordan abonnementet skal virke, er ikke avklart, og hører til KREG-teamet.
     # - Hvilke endringer skal komme: nytt vitnemål, annullering, opphevet annullering?
-    # - Hva skjer med en søknad som er behandlet, når vitnemålet den er behandlet på, annulleres
-    #   eller erstattes? Behandles den på nytt, varsles saksbehandleren, eller begge deler?
+    # - Hva skjer med en søknad som er behandlet, når vitnemålet den er behandlet på, erstattes?
+    #   Behandles den på nytt, varsles saksbehandleren, eller begge deler? Når vitnemålet
+    #   annulleres, behandles søknaden på nytt, og saksbehandleren varsles (avklart i review av
+    #   sikt-no/fs#853, se FLY-OPT-VIT-001).
     #   GSK-konklusjonen trekkes tilbake etter OPT-BEH-BEH-015, og spørsmålet står også i
     #   OPT-BEH-BEH-025.
     # Varselet til saksbehandleren om nytt vitnemål står i OPT-BEH-BEH-021.
