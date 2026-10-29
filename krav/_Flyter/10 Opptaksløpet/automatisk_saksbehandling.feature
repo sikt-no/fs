@@ -3,9 +3,11 @@
 Egenskap: Automatisk saksbehandling
   Fra søknaden er blitt en sak hos den saksbehandlende organisasjonen, til saken er ferdig
   behandlet og er med i plasstildelingen, uten at en saksbehandler har gjort noe. Søkerens
-  vitnemål importeres fra KREG når saken er opprettet (OPT-BEH-BEH-030), og påstanden om GSK
-  beregnes for hvert vitnemål når vitnemålet importeres (OPT-BEH-BEH-015).
-  Den automatiske behandlingen går gjennom alle søkerne. Flyten gjelder søkere med ett vitnemål,
+  vitnemål importeres fra KREG når saken er opprettet (OPT-BEH-BEH-030). Påstanden om GSK
+  beregnes for hvert vitnemål når vitnemålet importeres, og søknaden får GSK-konklusjonen da
+  (OPT-BEH-BEH-015).
+  Den automatiske behandlingen går gjennom alle søkerne. Som første steg setter den
+  GSK-konklusjonen på søknadene som ikke har en. Flyten gjelder søkere med ett vitnemål,
   med påstanden at søkeren har GSK. Andre søkere hoppes over, og behandles ikke helautomatisk
   (se OPT-BEH-BEH-025). For søkerne i flyten setter den automatiske behandlingen grunnlaget,
   poengene, vurderingen av kravelementene og svarene på kvotespørsmålene, i den rekkefølgen.
@@ -16,8 +18,8 @@ Egenskap: Automatisk saksbehandling
 
   # Kjent brudd: den automatiske behandlingen setter ikke saken til ferdig behandlet, og
   # plasstildelingen krever ikke at saken er ferdig behandlet (se OPT-BEH-BEH-025 og OPT-PLA-TIL-001).
-  # Kjent brudd: koden beregner GSK i den automatiske behandlingen, ikke når vitnemålet importeres,
-  # og påstanden lagres ikke på vitnemålet (se OPT-BEH-BEH-015).
+  # Kjent brudd: koden beregner GSK bare i den automatiske behandlingen, ikke når vitnemålet
+  # importeres, og påstanden lagres ikke på vitnemålet (se OPT-BEH-BEH-015).
   # Fasene er etter prosesstegningen for automatisk saksbehandling (2026-10-29). Kvalifiseringen,
   # kvotene, poengene per kvote og manglene er ikke egne steg: de oppdateres automatisk ut fra
   # stegene før, og er gule i tegningen. Tegningen har kravelementene før poengene. Det er
@@ -35,6 +37,37 @@ Egenskap: Automatisk saksbehandling
       Når saken hos "Universitetet i Oslo" er opprettet
       Så er vitnemålet importert
       Og GSK kan beregnes for vitnemålet
+
+  @depends-on-OPT-BEH-BEH-015
+  # OPT-BEH-BEH-015: «Opptakssystemets påstand om GSK på vitnemålet», «Konklusjon på søknaden fra vitnemålet», «Konklusjon fra tidligere opptak»
+  Regel: Søknaden får GSK-konklusjonen når vitnemålet importeres
+
+    Scenario: Søknaden får GSK-konklusjonen fra det importerte vitnemålet
+      Gitt at søknaden ikke har noen GSK-konklusjon
+      Og at "Kari Nordmann" har et vitnemål som gir generell studiekompetanse
+      Når vitnemålet importeres
+      Så har vitnemålet påstanden at søkeren har generell studiekompetanse
+      Og søknaden får en positiv GSK-konklusjon
+
+  @openquestion @depends-on-OPT-BEH-BEH-015
+  # OPT-BEH-BEH-015: «Konklusjon på søknaden fra vitnemålet», «Konklusjon fra tidligere opptak», «Automatikken setter bare positive konklusjoner, og bare der ingen finnes»
+  Regel: Den automatiske behandlingen setter GSK-konklusjonen der den mangler
+    # ÅPNE SPØRSMÅL:
+    # - OPT-BEH-BEH-015 sier at GSK-konklusjonen er en del av vitnemålsimporten, ikke av den
+    #   automatiske saksbehandlingen. Kravet må også si at kjøringen setter konklusjonen der
+    #   den mangler, som første steg.
+    # Påstanden på vitnemålet beregnes ikke på nytt i kjøringen.
+
+    Scenario: Søknaden uten GSK-konklusjon får konklusjonen i kjøringen
+      Gitt at søknaden ikke har noen GSK-konklusjon
+      Og at "Kari Nordmann" har ett vitnemål med påstanden at søkeren har GSK
+      Når søknaden behandles automatisk
+      Så får søknaden en positiv GSK-konklusjon
+
+    Scenario: GSK-konklusjonen på søknaden overskrives ikke i kjøringen
+      Gitt at søknaden har en GSK-konklusjon
+      Når søknaden behandles automatisk
+      Så er GSK-konklusjonen på søknaden uendret
 
   @depends-on-OPT-BEH-BEH-015 @depends-on-OPT-BEH-BEH-025
   # OPT-BEH-BEH-015: «Opptakssystemets påstand om GSK på vitnemålet»

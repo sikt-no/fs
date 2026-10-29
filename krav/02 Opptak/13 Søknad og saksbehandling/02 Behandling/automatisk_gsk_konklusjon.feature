@@ -102,6 +102,7 @@ Egenskap: Automatisk GSK-konklusjon
       Når kompetansebeviset importeres
       Så har kompetansebeviset ingen påstand om generell studiekompetanse
 
+  @ref-FLY-OPT-AUT-001
   Regel: Konklusjon på søknaden fra vitnemålet
 
     Scenario: Søknaden får konklusjonen fra vitnemålet
@@ -145,6 +146,7 @@ Egenskap: Automatisk GSK-konklusjon
       Så importeres vitnemålet
       Og GSK beregnes for vitnemålet uten at noen starter det
 
+  @ref-FLY-OPT-AUT-001
   Regel: Konklusjon fra tidligere opptak
     # Grunnlagskoder: avklart 2026-10-13 at alle positive konklusjoner kan gjenbrukes,
     # uansett grunnlagskode. Grunnlagskoden kopieres, så den kan være hvilken som helst
@@ -224,6 +226,7 @@ Egenskap: Automatisk GSK-konklusjon
       Når søknaden opprettes
       Så får søknaden ingen GSK-konklusjon fra tidligere opptak
 
+  @ref-FLY-OPT-AUT-001
   Regel: Automatikken setter bare positive konklusjoner, og bare der ingen finnes
 
     Scenario: Ingen grunnlag for generell studiekompetanse
