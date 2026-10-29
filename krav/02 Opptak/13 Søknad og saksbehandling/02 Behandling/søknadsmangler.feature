@@ -621,7 +621,7 @@ Egenskap: Søknadsmangler
         | sjekket ut | kan overskrives av automatisk behandling      | kommer tilbake      | har saken igjen en automatisk mangel som viser at "Matematikk R2" ikke er oppfylt |
         | sjekket ut | ikke kan overskrives av automatisk behandling | kommer ikke tilbake | er den automatiske mangelen for "Matematikk R2" fortsatt sjekket ut               |
 
-  @draft @openquestion
+  @draft @openquestion @ref-FLY-OPT-AUT-001
   Regel: Mangelen for generell studiekompetanse som fullføres i vår settes og sjekkes ut automatisk
 
     Søkere som fullfører videregående opplæring i vår, oppgir i søknaden at generell
@@ -643,9 +643,6 @@ Egenskap: Søknadsmangler
     # ÅPNE SPØRSMÅL:
     # - Bygger på at søkeren kan oppgi at generell studiekompetanse fullføres i vår (OPT-SØK-SØK-013).
     #   Det kravet er ikke avklart, og ID-en brukes også i finne_studier.feature, så referansen er ikke satt som tag.
-    # - Skal flyten for automatisk saksbehandling (FLY-OPT-AUT-001) få en fase for søkere som har
-    #   oppgitt at generell studiekompetanse fullføres i vår? Flyten gjelder i dag søkere som har
-    #   vitnemålet, og referansen er derfor ikke satt som tag.
     # - Hvordan varsles opptaksforvalteren når ingen mangelkode er merket?
     # - Kan saksbehandleren slette mangelen, eller bare sjekke den ut? Regelen over sier at
     #   saksbehandleren kan slette en automatisk mangel.
