@@ -15,24 +15,23 @@ Egenskap: Status på opptaket
   Bakgrunn:
     Gitt at opptaksforvalter er innlogget
 
-  @depends-on-OPT-OVO-FRI-001
-  Regel: Opptaket er upublisert til søknaden åpner
-    # Bygger på «Opptaksforvalter ved forvaltende organisasjon må kunne åpne for søkning».
+  Regel: Opptaksforvalter ved forvaltende organisasjon publiserer opptaket
     # Hva søkerne ser, står i finne_studier.feature og søke_på_opptak.feature.
 
-    Scenario: Opptaket er upublisert før søknaden åpner
-      Gitt at søknaden i opptaket "Samordna opptak 2027" åpner "2027-02-01"
-      Når det er "2027-01-31"
-      Så er opptaket "Samordna opptak 2027" upublisert
+    Scenario: Opptaket er upublisert når det er opprettet
+      Når opptaksforvalter oppretter et nytt opptak med alle obligatoriske verdier
+      Og opptaksforvalter lagrer opptaket
+      Så er opptaket upublisert
 
-    Scenario: Opptaket publiseres når søknaden åpner
-      Gitt at søknaden i opptaket "Samordna opptak 2027" åpner "2027-02-01"
-      Når det er "2027-02-01"
+    Scenario: Publisere opptaket
+      Gitt at opptaket "Samordna opptak 2027" er upublisert
+      Når opptaksforvalter ved forvaltende organisasjon publiserer opptaket
       Så er opptaket "Samordna opptak 2027" publisert
 
-    Scenario: Opptaket er upublisert når det ikke er satt når søknaden åpner
-      Gitt at det ikke er satt når søknaden i opptaket "Samordna opptak 2027" åpner
-      Så er opptaket "Samordna opptak 2027" upublisert
+    Scenario: Opptaksforvalter ved deltakende organisasjon kan ikke publisere opptaket
+      Gitt at organisasjonen "UiB" deltar i opptaket "Samordna opptak 2027"
+      Når opptaksforvalter ved "UiB" åpner opptaket "Samordna opptak 2027"
+      Så ser opptaksforvalteren ikke muligheten til å publisere opptaket
 
   Regel: Opptaksforvalter ved forvaltende organisasjon kan avpublisere opptaket
     # Avpublisering er en nødbrems hvis noe kritisk oppdages etter publisering. Opptaket blir upublisert,
