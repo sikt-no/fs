@@ -34,16 +34,14 @@ Egenskap: Status på opptaket
       Gitt at det ikke er satt når søknaden i opptaket "Samordna opptak 2027" åpner
       Så er opptaket "Samordna opptak 2027" upublisert
 
-  @openquestion
   Regel: Opptaksforvalter ved forvaltende organisasjon kan avpublisere opptaket
-    # ÅPNE SPØRSMÅL:
-    # - Avpubliseres opptaket med en gang, med en avpubliseringsdato, eller begge deler?
-    # - Kan et avpublisert opptak publiseres igjen?
+    # Avpublisering er en nødbrems hvis noe kritisk oppdages etter publisering. Opptaket blir upublisert,
+    # og kan publiseres igjen. Trengs mer tid, forlenger opptaksforvalter søknadsfristen i innstillingene.
 
     Scenario: Avpublisere opptaket
       Gitt at opptaket "Samordna opptak 2027" er publisert
       Når opptaksforvalter ved forvaltende organisasjon avpubliserer opptaket
-      Så er opptaket "Samordna opptak 2027" avpublisert
+      Så er opptaket "Samordna opptak 2027" upublisert
 
   Regel: Opptaket er aktivt når det er opprettet
 
