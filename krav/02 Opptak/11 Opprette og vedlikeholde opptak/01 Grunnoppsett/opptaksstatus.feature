@@ -1,5 +1,5 @@
 # language: no
-@OPT-OVO-GRU-004 @must @draft
+@OPT-OVO-GRU-004 @must @implemented
 Egenskap: Status på opptaket
   Som opptaksforvalter
   ønsker jeg å styre når søkerne ser opptaket, og når opptaket ikke lenger er i bruk
@@ -42,6 +42,7 @@ Egenskap: Status på opptaket
       Når opptaksforvalter ved forvaltende organisasjon avpubliserer opptaket
       Så er opptaket "Samordna opptak 2027" upublisert
 
+  @draft
   Regel: Opptaket er aktivt når det er opprettet
 
     Scenario: Opptaket er aktivt når det er lagret
@@ -57,7 +58,7 @@ Egenskap: Status på opptaket
       Når saksbehandler ved "UiB" åpner opptaksoversikten
       Så ser saksbehandleren opptaket "Samordna opptak 2027"
 
-  @openquestion
+  @draft @openquestion
   Regel: Opptaksforvalter ved forvaltende organisasjon kan gjøre opptaket historisk
     # ÅPNE SPØRSMÅL:
     # - Kan et historisk opptak gjøres aktivt igjen?
@@ -81,7 +82,7 @@ Egenskap: Status på opptaket
       Når opptaksforvalter ved "UiB" åpner opptaket "Samordna opptak 2027"
       Så ser opptaksforvalteren ikke muligheten til å gjøre opptaket historisk
 
-  @openquestion
+  @draft @openquestion
   Regel: Et historisk opptak kan bare ses og søkes i
     # ÅPNE SPØRSMÅL:
     # - Vises historiske opptak i opptaksoversikten, og skal lista kunne filtreres på aktiv og historisk?
