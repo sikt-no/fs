@@ -115,6 +115,7 @@ Egenskap: Ferdigbehandle en sak
       Og søkeren ser de automatiske manglene for "Matematikk R2" og "Fysikk 2" i Min kompetanse
       Og søkeren har mottatt én melding om mangler
 
+  @ref-FLY-OPT-AUT-001
   Regel: Steg som bygger på et steg som ikke kan avgjøres, hoppes over
 
     Bakgrunn:
