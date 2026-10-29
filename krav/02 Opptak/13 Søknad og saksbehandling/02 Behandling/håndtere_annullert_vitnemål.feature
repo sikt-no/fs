@@ -8,7 +8,8 @@ Egenskap: Håndtere annullert vitnemål
   Et vitnemål kan bli annullert etter at det er brukt i saksbehandlingen. Vitnemålet kan da
   være lagt til grunn for poengene, for vurderingen av kravelementer eller for GSK-konklusjonen
   i saken. Annulleringen kommer fra KREG når vitnemålene importeres. Løsningen sjekker da om
-  vitnemålet er i bruk i en sak. Er det i bruk, får saken en merknad og en tagg om at
+  vitnemålet er i bruk i en sak i et opptak som ikke er avsluttet. Er det i bruk, får saken
+  en merknad og en tagg om at
   vitnemålet er annullert. Er saken ferdig behandlet, settes den tilbake til under behandling,
   slik at den ikke er med i plasstildelingen før saksbehandleren har sett på den igjen.
 
@@ -22,12 +23,16 @@ Egenskap: Håndtere annullert vitnemål
   # Avklart: saksbehandleren får ikke et eget varsel. Merknaden, taggen og statusen er nok,
   # i motsetning til ved nytt vitnemål (OPT-BEH-BEH-021).
   # Avklart: bare annullering ved import fra KREG. Saksbehandleren annullerer ikke vitnemål.
+  # Avklart 29.10.2026: GSK-konklusjonen trekkes ikke tilbake automatisk. OPT-BEH-BEH-015
+  # («Annullert vitnemål») er endret til dette kravet.
+  # Avklart 29.10.2026: bare saker i opptak som ikke er avsluttet, slik som i OPT-BEH-BEH-015
+  # og importen (FLY-OPT-VIT-001).
 
   Bakgrunn:
     Gitt at søkeren har en sak hos "Universitetet i Oslo"
     Og at søkeren har et vitnemål fra 2025
 
-  @ref-FLY-OPT-AUT-001
+  @ref-FLY-OPT-VIT-001
   Regel: Saken merkes når et vitnemål som er i bruk, blir annullert
 
     Scenariomal: Vitnemålet er brukt i <bruk>
@@ -62,6 +67,14 @@ Egenskap: Håndtere annullert vitnemål
       Så får saken hos "Universitetet i Oslo" taggen "Vitnemål annullert"
       Og saken hos "Universitetet i Bergen" får taggen "Vitnemål annullert"
 
+    Scenario: Sak i avsluttet opptak blir ikke merket
+      Gitt at vitnemålet fra 2025 er brukt i saken
+      Og at opptaket saken hører til, er avsluttet
+      Når vitnemålet fra 2025 importeres fra KREG som annullert
+      Så får saken ingen merknad om at vitnemålet er annullert
+      Og saken får ikke taggen "Vitnemål annullert"
+      Og behandlingsstatusen til saken er uendret
+
   Regel: Løsningen endrer ikke det som bygger på vitnemålet
 
     Scenario: Poeng, kravelementer og GSK-konklusjon står uendret
@@ -71,7 +84,7 @@ Egenskap: Håndtere annullert vitnemål
       Og vurderingen av kravelementene i saken er uendret
       Og GSK-konklusjonen i saken er uendret
 
-  @ref-OPT-PLA-TIL-001 @ref-FLY-OPT-AUT-001
+  @ref-OPT-PLA-TIL-001 @ref-FLY-OPT-VIT-001
   Regel: En ferdig behandlet sak settes tilbake til under behandling
 
     Scenario: Ferdig behandlet sak settes tilbake til Under behandling

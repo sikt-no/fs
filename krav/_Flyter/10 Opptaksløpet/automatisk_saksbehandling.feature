@@ -15,9 +15,7 @@ Egenskap: Automatisk saksbehandling
   Det oppdaterer kvalifiseringen, kvotene, poengene per kvote og manglene. Til slutt sjekker den
   automatiske behandlingen ut mangelen for GSK som fullføres i vår, og setter saken til ferdig
   behandlet. Rettes en feil i regelverket, beregner opptaksforvalteren søknadsalternativene
-  feilen gjaldt, på nytt. Blir vitnemålet saken er behandlet på, annullert i KREG, settes
-  saken tilbake til under behandling, og er ikke med i plasstildelingen før saksbehandleren
-  har sett på den igjen.
+  feilen gjaldt, på nytt.
 
   # Kjent brudd: den automatiske behandlingen setter ikke saken til ferdig behandlet, og
   # plasstildelingen krever ikke at saken er ferdig behandlet (se OPT-BEH-BEH-025 og OPT-PLA-TIL-001).
@@ -252,14 +250,3 @@ Egenskap: Automatisk saksbehandling
       Når opptaksforvalteren beregner på nytt for søknadsalternativene med rangeringsregelverket som er rettet
       Så har "Informatikk, UiO" poengsum etter det rettede rangeringsregelverket
       Og saken hos "Universitetet i Oslo" er fortsatt ferdig behandlet
-
-  @depends-on-OPT-BEH-BEH-034
-  # OPT-BEH-BEH-034: «Saken merkes når et vitnemål som er i bruk, blir annullert», «En ferdig behandlet sak settes tilbake til under behandling»
-  Regel: Saken tas ut av plasstildelingen når vitnemålet blir annullert
-
-    Scenario: Saken er ikke med i plasstildelingen når vitnemålet er annullert
-      Gitt at saken hos "Universitetet i Oslo" er behandlet helautomatisk på vitnemålet
-      Og at saken hos "Universitetet i Oslo" er ferdig behandlet
-      Når vitnemålet importeres fra KREG som annullert
-      Så har saken hos "Universitetet i Oslo" taggen "Vitnemål annullert"
-      Og saken hos "Universitetet i Oslo" er ikke med når opptaksforvalteren starter en plasstildeling
