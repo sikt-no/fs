@@ -10,35 +10,46 @@
 # steg i den automatiske saksbehandlingen. Kravet flytter beregningen til
 # vitnemålsimporten, og lagrer opptakssystemets egen påstand om GSK på vitnemålet.
 # Påstanden fra KREG brukes ikke lenger. Dette kravet tar inn gjenbruk fra
-# tidligere samordna opptak, fra lokale opptak i FS Admin, og fra lokale opptak i
-# FS-klienten når konklusjonen er med i oversikten over kvalitetssikrede
-# GSK-konklusjoner.
+# både gamle Samordna opptak-saksbehandlinger, fra lokale opptak i FS Admin,
+# og fra lokale opptak i FS-klienten når konklusjonen er med i oversikten over
+# kvalitetssikrede GSK-konklusjoner.
 #
 # Gjenbruk i 2027-opptaket (STEK-442): det er ikke avklart hvordan gjenbruksdata skal
 # organiseres i produktområdet. For 2027 lastes GSK-konklusjonene og annulleringene
-# fra det gamle opptakssystemet (gjenbruksbasen i SODA, tabellene gskvedtak og
-# gskvedtakannullering) inn i midlertidige gjenbrukstabeller før opptaket. De er
+# fra det gamle opptakssystemet (gjenbrukstabellene i SODA, dvs tabellene gskvedtak og
+# gskvedtakannullering) inn i midlertidige gjenbrukstabeller før opptaket. De har
 # konklusjoner fra tidligere opptak i dette kravet. Tabellene fjernes etter
 # 2027-opptaket.
 @OPT-BEH-BEH-015 @must @planned
 Egenskap: Automatisk GSK-konklusjon
-  Som saksbehandler
-  ønsker jeg at søknader der søkeren åpenbart har generell studiekompetanse, får GSK-konklusjonen automatisk
-  slik at jeg bare trenger å vurdere generell studiekompetanse der grunnlaget ikke er entydig.
+  Som saksbehandler ønsker jeg at søknader der søkeren åpenbart har generell
+  studiekompetanse, får GSK-konklusjonen automatisk slik at jeg bare trenger å vurdere
+  generell studiekompetanse der grunnlaget ikke er entydig.
 
   Generell studiekompetanse (GSK) er det generelle opptakskravet til høyere utdanning.
   Når søkerens vitnemål importeres fra KREG til opptakssystemet, beregner opptakssystemet
-  sin egen påstand om GSK for hvert vitnemål, uavhengig av påstanden fra KREG. Påstanden
-  lagres på vitnemålet, med grunnlagskoden og tidspunktet den ble beregnet, og gjelder i
-  alle opptak. «Importeres» betyr i dette kravet alltid at opptakssystemet henter
-  vitnemålet fra KREG (OPT-BEH-BEH-030), ikke at vitnemålet kommer inn i KREG.
-  Søknader som ikke har en GSK-konklusjon, får en positiv konklusjon når et vitnemål
-  har påstanden GSK. Vitnemål importeres fra KREG når søknaden opprettes, og når KREG får
-  nye vitnemål for en søker med aktive søknader. Når søknaden opprettes, importeres
-  vitnemålene fra KREG først. Gir ingen av dem GSK, ser systemet etter en positiv konklusjon fra
-  et tidligere opptak. Ellers vurderes GSK manuelt. Den automatiske saksbehandlingen
-  setter også konklusjonen, som første steg, på søknadene i opptaket som ikke har en.
-  Påstanden på vitnemålet beregnes ikke på nytt da.
+  sin egen nye påstand om GSK for hvert vitnemål. Importen tar i tillegg vare på
+  påstandene/beregningene fra KREG og fra systemet i videregående skole.  Den nye
+  påstanden ja eller nei til GSK lagres i opptakssystemets kopi av vitnemålet. I tillegg
+  lagres det nye beregningstidspunktet, hvilken beregning (kontrollmotor-kravkode) som ble
+  kjørt og hvis beregningen er positiv (ja) lagres også grunnlangskoden for
+  GSK. Grunnlagskoden for GSK kan slås opp og hentes fra tabell LOEP (det som tilsvarer
+  felt NVB2.LOEP.GRUNNLAGKODE_GSK i det nye systemet).  Dette oppslaget i tabell LOEP
+  gjøres med de normalt tre programområdekodene på vitnemålet. Eventuelt vha det avledede
+  feltet VGDOK.LOEPSKODE på vitnemålet fra KREG hvis et felt som tilsvarer LOEPSKODE
+  fortsatt finnes.  LOEPSKODE er en konkatenering av de normalt tre programområdekodene, i
+  kronologisk rekkefølge iht 'programområde.nivaa' evt også år hvis flere av samme nivaa
+  finnes.
+
+  Den nye påstanden brukes i saksbehandling i alle aktive opptak. «Importeres» betyr i
+  dette kravet alltid at opptakssystemet henter vitnemålet fra KREG (OPT-BEH-BEH-030),
+  ikke at vitnemålet kommer inn i KREG.  Søknader som ikke har en GSK-konklusjon, får en
+  positiv konklusjon når et vitnemål har påstanden GSK. Vitnemål importeres fra KREG når
+  søknaden opprettes, og når KREG får nye vitnemål for en søker med aktive søknader. Når
+  søknaden opprettes, importeres vitnemålene fra KREG først. Gir ingen av dem GSK, ser
+  systemet etter en positiv konklusjon fra et tidligere opptak. Ellers vurderes GSK
+  manuelt. Den automatiske saksbehandlingen setter også konklusjonen, som første steg, på
+  søknadene i opptaket som ikke har en.  Påstanden på vitnemålet beregnes ikke på nytt da.
   Automatikken setter aldri en negativ konklusjon på søknaden, og overskriver aldri en
   konklusjon som finnes. Den gjelder alle opptak, også fagskoleopptak.
 
