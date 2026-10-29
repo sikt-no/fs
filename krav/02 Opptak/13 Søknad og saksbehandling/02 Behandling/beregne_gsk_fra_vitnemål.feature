@@ -316,7 +316,15 @@ Egenskap: Beregne GSK fra vitnemål
       Når GSK beregnes for vitnemålet
       Så er delkravet for norsk ikke oppfylt
 
+  @openquestion
   Regel: Løpet på vitnemålet gir grunnlagskoden
+    # Innspill i PR #857: grunnlagskoden slås opp i tabellen over løp (LOEP, feltet
+    # NVB2.LOEP.GRUNNLAGKODE_GSK i det gamle systemet) med programområdekodene på
+    # vitnemålet, normalt tre. Løpskoden fra KREG (VGDOK.LOEPSKODE) er programområdekodene
+    # satt sammen etter nivået på programområdet, og etter år når flere har samme nivå.
+    # ÅPNE SPØRSMÅL:
+    # - Finnes løpskoden fortsatt på vitnemålet fra KREG, eller må løpet finnes fra
+    #   programområdekodene?
 
     Scenario: Vitnemålet gir GSK med grunnlagskoden for løpet
       Gitt at vitnemålet oppfyller alle delkravene for reformen
