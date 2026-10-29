@@ -53,12 +53,9 @@ Egenskap: Beregne poengsum per kvote
       Når poengsummen regnes ut
       Så er poengsummen i kvotetypen "ORD" 49
 
-  @openquestion
   Regel: Bare grunnlag søkeren er kvalifisert på, gir poengsum
-    # ÅPNE SPØRSMÅL:
-    # - Koden regner bare ut poengsum for grunnlag søkeren er kvalifisert på for
-    #   kompetanseregelverket. Er det ønsket, eller skal søkeren få poengsum uansett, og
-    #   kvalifiseringen avgjøre om poengsummen brukes?
+    # Avklart 2026-10-29: søkeren får bare poengsum på grunnlag søkeren er kvalifisert på for
+    # kompetanseregelverket.
 
     Scenario: Grunnlag søkeren ikke er kvalifisert på, gir ingen poengsum
       Gitt at søkeren er plassert i kvotetypen "ORD"
