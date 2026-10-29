@@ -54,7 +54,7 @@ Egenskap: Importere resultater fra KREG
       Når søkeren sender inn søknaden
       Så er vitnemålet importert
 
-  @ref-FLY-OPT-AUT-001
+  @ref-FLY-OPT-AUT-001 @ref-FLY-OPT-VIT-001
   Regel: Alle vitnemål og kompetansebevis søkeren har i KREG, importeres
 
     Scenario: Det importerte vitnemålet har opplysningene saksbehandlingen trenger
@@ -87,6 +87,7 @@ Egenskap: Importere resultater fra KREG
       Så har søkeren vitnemålet én gang
       Og det importerte vitnemålet er uendret
 
+  @ref-FLY-OPT-VIT-001
   Regel: Et vitnemål som er annullert i KREG, er annullert i opptakssystemet
 
     Scenario: Annullert vitnemål importeres som annullert
@@ -130,7 +131,7 @@ Egenskap: Importere resultater fra KREG
       Når KREG svarer igjen
       Så er søkerens vitnemål importert
 
-  @openquestion @ref-OPT-BEH-BEH-021
+  @openquestion @ref-OPT-BEH-BEH-021 @ref-FLY-OPT-VIT-001
   Regel: Endringer i KREG importeres gjennom et abonnement
     # ÅPNE SPØRSMÅL:
     # - Hvordan abonnementet skal virke, er ikke avklart, og hører til KREG-teamet.
