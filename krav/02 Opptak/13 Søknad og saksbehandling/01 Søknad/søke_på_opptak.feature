@@ -182,10 +182,14 @@ Egenskap: Søke på opptak
       Når søkeren vil sende inn en ny søknad "2027-04-16"
       Så kan søkeren ikke sende inn søknaden
 
-  @draft @depends-on-OPT-OVO-GRU-004
+  @draft @openquestion @depends-on-OPT-OVO-GRU-004
   Regel: Søkeren kan ikke begynne på eller endre en søknad i et avpublisert opptak
     # Virkningen av at opptaksforvalter avpubliserer opptaket (opptaksstatus.feature).
     # Lagt til 2026-10-28 (produkteier).
+    # ÅPNE SPØRSMÅL:
+    # - Avpublisering er en nødbrems. Hva skal skje med søknader som er påbegynt eller sendt inn
+    #   mens opptaket er avpublisert? Skal søkeren kunne fortsette, og hvordan får søkeren vite det?
+    #   I Min kompetanse brukes publiseringen i dag bare i Finn studier.
 
     Scenario: Søkeren kan ikke begynne på en søknad i et avpublisert opptak
       Gitt at opptaket "Samordna opptak 2027" er avpublisert
