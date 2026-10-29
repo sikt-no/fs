@@ -23,9 +23,8 @@ Egenskap: Automatisk beregning av vitnemålspoeng
   vitnemålsbehandlingen, og den samme beregningen brukes da på vitnemålet saksbehandleren har
   valgt. Hvilke karakterer som teller, og hvordan de regnes om til poeng, er ikke beskrevet her.
 
-  # ÅPNE SPØRSMÅL:
-  # - Skal automatikken kunne skrus av etter en dato, eller bare kjøre i en periode? HK-dir ble
-  #   spurt i februar 2026, og svaret er ikke funnet.
+  # Avklart 29.10.2026: opptaksforvalteren skrur automatikken av og på for opptaket, og kan sette
+  # tidspunktet da den stopper (OPT-BEH-BEH-032).
 
   Bakgrunn:
     Gitt at søkeren har en søknad i opptaket

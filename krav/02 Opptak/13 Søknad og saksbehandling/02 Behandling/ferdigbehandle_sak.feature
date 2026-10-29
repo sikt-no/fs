@@ -30,8 +30,11 @@ Egenskap: Ferdigbehandle en sak
   #   behandlingen?
   # - Hvilke feil i regelverket kan stoppe et steg? Koden kjenner disse: poengformelen mangler,
   #   viser til seg selv eller er ugyldig, og et kvotespørsmål har en algoritme koden ikke kjenner.
-  # - Når kjører den automatiske behandlingen? Samme spørsmål står i OPT-BEH-BEH-018, -019 og -020.
-  # - Hva skjer med en sak som er ferdig behandlet, når søkeren får et nytt vitnemål?
+
+  # Avklart 29.10.2026: når den automatiske behandlingen starter, står i OPT-BEH-BEH-032. Et nytt
+  # vitnemål i en sak som er ferdig behandlet, er ny dokumentasjon. Saken behandles ikke
+  # automatisk på nytt, men saksbehandleren ser at den har fått ny dokumentasjon, og kan starte
+  # behandlingen på det nye vitnemålet.
 
   Bakgrunn:
     Gitt at søknaden til "Kari Nordmann" har en sak hos "Universitetet i Oslo"

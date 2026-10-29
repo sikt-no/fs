@@ -8,8 +8,9 @@ Egenskap: Automatisk saksbehandling
   får GSK-konklusjonen da (OPT-BEH-BEH-015). «Importeres» betyr i flyten alltid at
   opptakssystemet henter vitnemålet fra KREG, ikke at vitnemålet kommer inn i KREG.
   Den automatiske behandlingen fortsetter saksbehandlertildelingen: hver ny sak behandles når
-  vitnemålet er importert, og saken behandles igjen når jobben for nye vitnemål i KREG finner et
-  nytt vitnemål (OPT-BEH-BEH-032). Som første steg setter den
+  vitnemålet er importert, eller når jobben for nye vitnemål i KREG finner søkerens første
+  vitnemål. Opptaksforvalteren kan skru automatikken av for opptaket (OPT-BEH-BEH-032). Som
+  første steg setter den
   GSK-konklusjonen på søknadene som ikke har en. Flyten gjelder søkere med ett vitnemål,
   med påstanden at søkeren har GSK. Andre søkere hoppes over, og behandles ikke helautomatisk
   (se OPT-BEH-BEH-025). For søkerne i flyten setter den automatiske behandlingen grunnlaget,
@@ -47,7 +48,7 @@ Egenskap: Automatisk saksbehandling
       Og GSK kan beregnes for vitnemålet
 
   @depends-on-OPT-BEH-BEH-032
-  # OPT-BEH-BEH-032: «Behandlingen kjører for hver ny sak saksbehandlertildelingen oppretter», «Behandlingen kjører når jobben for nye vitnemål finner et nytt vitnemål»
+  # OPT-BEH-BEH-032: «Behandlingen kjører for hver ny sak saksbehandlertildelingen oppretter», «Behandlingen kjører når søkeren får det første vitnemålet»
   Regel: Den automatiske behandlingen starter når søkerens resultater er importert
 
     Scenario: Søknaden behandles automatisk når vitnemålet er importert
