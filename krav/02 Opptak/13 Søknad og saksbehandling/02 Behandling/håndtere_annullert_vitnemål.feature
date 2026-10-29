@@ -27,6 +27,7 @@ Egenskap: Håndtere annullert vitnemål
     Gitt at søkeren har en sak hos "Universitetet i Oslo"
     Og at søkeren har et vitnemål fra 2025
 
+  @ref-FLY-OPT-AUT-001
   Regel: Saken merkes når et vitnemål som er i bruk, blir annullert
 
     Scenariomal: Vitnemålet er brukt i <bruk>
@@ -70,7 +71,7 @@ Egenskap: Håndtere annullert vitnemål
       Og vurderingen av kravelementene i saken er uendret
       Og GSK-konklusjonen i saken er uendret
 
-  @ref-OPT-PLA-TIL-001
+  @ref-OPT-PLA-TIL-001 @ref-FLY-OPT-AUT-001
   Regel: En ferdig behandlet sak settes tilbake til under behandling
 
     Scenario: Ferdig behandlet sak settes tilbake til Under behandling
