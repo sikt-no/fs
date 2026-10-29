@@ -71,9 +71,21 @@ Egenskap: Ferdigbehandle en sak
       Når søknaden behandles automatisk
       Så behandles saken hos "Universitetet i Oslo" helautomatisk på vitnemålet med påstanden at søkeren har GSK
 
-  @ref-OPT-BEH-BEH-015
+  @openquestion @ref-OPT-BEH-BEH-015 @ref-FLY-OPT-VAL-001 @ref-FLY-OPT-SAM-001
   # OPT-BEH-BEH-015: «Konklusjon på søknaden fra vitnemålet»
   Regel: Har søkeren flere vitnemål med påstanden GSK, behandles saken automatisk på vitnemålet saksbehandleren velger
+    # ÅPNE SPØRSMÅL:
+    # - Hvordan skal saksbehandleren velge vitnemålet og starte behandlingen? Skal valget være i
+    #   dialogen bak «Start automatisk behandling», eller et eget steg før?
+    # - Hva skjer når saksbehandleren starter behandlingen uten å ha valgt vitnemål, og søkeren
+    #   har flere vitnemål med påstanden at søkeren har GSK?
+    # Avklart 2026-10-29: saksbehandleren velger vitnemålet før den automatiske behandlingen
+    # starter, og før grunnlaget velges. Det er ikke det samme valget som valget av vitnemål som
+    # grunnlag i vitnemålsbehandleren (OPT-BEH-BEH-004). Saksbehandleren velger vitnemålet og
+    # starter den automatiske behandlingen. Å starte behandlingen for én sak står i
+    # OPT-BEH-BEH-032 (PR #862, ikke merget 2026-10-29).
+    # Kode i dag: knappen «Start automatisk behandling» i FS Admin åpner en dialog som starter
+    # behandlingen for saken. Saksbehandleren velger ikke vitnemål der.
 
     Scenario: Saksbehandleren velger vitnemålet saken behandles automatisk på
       # Vitnemålet saksbehandleren velger, kan være et annet enn vitnemålet GSK-konklusjonen på
@@ -82,6 +94,21 @@ Egenskap: Ferdigbehandle en sak
       Gitt at "Kari Nordmann" har to vitnemål med påstanden at søkeren har GSK, ett fra 2024 og ett fra 2025
       Når saksbehandleren ved Universitetet i Oslo velger vitnemålet fra 2025 for automatisk behandling
       Så behandles saken hos "Universitetet i Oslo" automatisk på vitnemålet fra 2025
+
+    Scenario: Valget av vitnemål velger ikke grunnlaget
+      Gitt at "Kari Nordmann" har to vitnemål med påstanden at søkeren har GSK, ett fra 2024 og ett fra 2025
+      Og at søknaden ikke har grunnlag
+      Når saksbehandleren ved Universitetet i Oslo velger vitnemålet fra 2025 for automatisk behandling
+      Så har søknaden fortsatt ikke grunnlag
+
+    @openquestion
+    Scenario: Saken behandles automatisk på et sammensatt vitnemål
+      # ÅPNE SPØRSMÅL:
+      # - Ingen krav beskriver hva et sammensatt vitnemål er, eller hvordan saksbehandleren
+      #   setter det sammen (se FLY-OPT-SAM-001).
+      Gitt at "Kari Nordmann" har et sammensatt vitnemål
+      Når saksbehandleren ved Universitetet i Oslo velger det sammensatte vitnemålet for automatisk behandling
+      Så behandles saken hos "Universitetet i Oslo" automatisk på det sammensatte vitnemålet
 
   @ref-FLY-OPT-AUT-001
   Regel: Den automatiske behandlingen setter saken til ferdig behandlet når alt er avgjort
