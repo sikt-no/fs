@@ -9,11 +9,13 @@
 
 ## Omfang
 
-Saksbehandleren velger ett vitnemål som grunnlag for poengberegningen i hele saken, slik at søkere med flere vitnemål blir poengberegnet. Poengene beregnes når saksbehandleren velger det, og endringen lagres først når beregningen er uten feil. Saksbehandleren kan legge inn karakter-, realfags- og språkpoeng selv, og poengene låses mot automatisk reberegning. Spesifikasjonen dekker ikke fagvalg per poengvariant (L3), manuell inntasting av fag (L4), sammenligning (L5) eller varsel om nytt vitnemål (L6). Selve poengberegningen eies av Team Puff.
+Saksbehandleren velger ett vitnemål som grunnlag for poengberegningen i hele saken, slik at søkere med flere vitnemål blir poengberegnet. Poengene beregnes av kontrollmotoren i opptak, og beregnes og lagres med en gang saksbehandleren velger et vitnemål. Saksbehandleren kan legge inn karakter-, realfags- og språkpoeng selv, og poengene låses mot automatisk reberegning. Spesifikasjonen dekker ikke fagvalg per poengvariant (L3), manuell inntasting av fag (L4), sammenligning (L5) eller varsel om nytt vitnemål (L6). Å beregne først når saksbehandleren sier at grunnlaget er klart, hører til L3.
+
+**Endret 30.10.2026:** Poengberegningen er en del av opptak, ikke en ekstern tjeneste, og det finnes ikke noe eget endepunkt for den. «Endringen avvises når poengberegningen feiler» er fjernet fra kravet, og «Poengene er tomme til jeg beregner dem», «Beregne poengene fra det endrede grunnlaget» og «Advarsel om endringer som ikke er lagret» er flyttet til L3 (`velge_fag_per_poengvariant.feature`). Se 30.10.2026 i vitnemålsbehandling.md.
 
 ## Krav
 
-- **`velge_vitnemål_som_grunnlag.feature`** (`@OPT-BEH-BEH-004`, `@must`) — valg og bytte av vitnemål (endringer hører til ett vitnemål og huskes), annullerte vitnemål og HUP, beregning når saksbehandleren velger det, lagring først ved feilfri beregning, advarsel om endringer som ikke er lagret, visning av poengene per poengvariant for sakens søknadsalternativer, poeng lagt inn for hånd med validering, låsing og opplåsing, og endringsrettighet per person. 20 scenarioer. ([krav/…/velge_vitnemål_som_grunnlag.feature](../../../../krav/02%20Opptak/13%20S%C3%B8knad%20og%20saksbehandling/02%20Behandling/velge_vitnem%C3%A5l_som_grunnlag.feature))
+- **`velge_vitnemål_som_grunnlag.feature`** (`@OPT-BEH-BEH-004`, `@must`) — valg og bytte av vitnemål (endringer hører til ett vitnemål og huskes), annullerte vitnemål og HUP, poeng som beregnes og lagres med en gang vitnemålet velges, visning av poengene per poengvariant for sakens søknadsalternativer, poeng lagt inn for hånd med validering, låsing og opplåsing, og endringsrettighet per person. 16 scenarioer. ([krav/…/velge_vitnemål_som_grunnlag.feature](../../../../krav/02%20Opptak/13%20S%C3%B8knad%20og%20saksbehandling/02%20Behandling/velge_vitnem%C3%A5l_som_grunnlag.feature))
 
 Avklaringene fra gjennomgangen 21.10.2026 står som `AVKLART`-kommentarer i kravfila og i [vitnemålsbehandling.md](../../../../krav/02%20Opptak/13%20S%C3%B8knad%20og%20saksbehandling/02%20Behandling/vitnem%C3%A5lsbehandling.md). Kravet bygger på L1 ([spec-vise-elektroniske-vitnemal.md](spec-vise-elektroniske-vitnemal.md)).
 
@@ -33,10 +35,10 @@ Avklaringene fra gjennomgangen 21.10.2026 står som `AVKLART`-kommentarer i krav
 
 | # | Avvik | Beslutning | Begrunnelse / konsekvens |
 |---|---|---|---|
-| 1 | Skissen viser «Endringer er lagret: 12:53» og ingen handling for å beregne poengene. Kravet sier at poengene beregnes når saksbehandleren velger det, at endringen lagres først når beregningen er uten feil, og at saksbehandleren advares om endringer som ikke er lagret. | **Kravene er riktige. Skissen er utdatert.** | Skissen må få en handling for å beregne og advarselen om endringer som ikke er lagret. |
+| 1 | Skissen viser «Endringer er lagret: 12:53» og ingen handling for å beregne poengene. Kravet sier at poengene beregnes når saksbehandleren velger det, at endringen lagres først når beregningen er uten feil, og at saksbehandleren advares om endringer som ikke er lagret. | **Kravene er riktige. Skissen er utdatert.** | Skissen må få en handling for å beregne og advarselen om endringer som ikke er lagret. Endret 30.10.2026: skissen stemmer med L2, der valget lagres med en gang. Beregn-handlingen og advarselen hører til L3. |
 | 2 | «Poeng fra vitnemål» har feltene KAR opprinnelig, KAR med forbedring, Realfag, Språk og SUM, og de ser låst ut. Kravet sier at karakter-, realfags- og språkpoeng vises hver for seg per poengvariant, og at saksbehandleren kan legge dem inn selv. SUM og to KAR-felt står ikke i kravet. | **Vet ikke** | Åpent spørsmål. |
 
-- **Ikke skissert:** opplåsing av poeng, beskjeden om ugyldig verdi og beskjeden når poengberegningen feiler.
+- **Ikke skissert:** opplåsing av poeng og beskjeden om ugyldig verdi.
 
 ## Implementasjonsdetaljer
 
@@ -57,14 +59,13 @@ Ingen retagging i denne kjøringen. Kravet var allerede `@in-progress` (satt for
 ## Åpne spørsmål
 
 - [ ] **Skisseavvik 2, poengfeltene:** Skal «Poeng fra vitnemål» ha SUM og KAR opprinnelig/med forbedring? Skal feltene kunne redigeres der, eller per poengvariant?
-- [ ] **Skissen er utdatert (avvik 1):** Beregn-handlingen og advarselen om endringer som ikke er lagret må skisseres. Det samme gjelder opplåsing av poeng og beskjedene om ugyldig verdi og feilet beregning.
-- [ ] **Implementasjonsdetaljer mangler** for `velge_vitnemål_som_grunnlag.feature`: beregn-handlingen, advarselen, beskjeden når beregningen feiler og beskjeden om ugyldig verdi. Lages med `fs-implementasjonsdetaljer`.
-- [ ] **Poeng lagt inn for hånd og ny beregning (fra domeneekspertene 22.10.2026):** Skal en verdi saksbehandleren har lagt inn selv, overskrives når saksbehandleren senere velger å beregne poengene på nytt? Scenariomalen «Legge inn <poengtype> selv på en poengvariant» er tagget `@openquestion`, og den detaljen må avklares før den bygges.
+- [ ] **Skissen mangler opplåsing av poeng og beskjeden om ugyldig verdi.** Avvik 1 er løst 30.10.2026: beregn-handlingen og advarselen hører til L3.
+- [ ] **Implementasjonsdetaljer mangler** for `velge_vitnemål_som_grunnlag.feature`: beskjeden om ugyldig verdi. Lages med `fs-implementasjonsdetaljer`.
 - [ ] **Kravelementene:** Ingen scenarioer sier at kravelementene vurderes ut fra vitnemålet som er valgt, selv om L2 skal la `vurderKravelementerAutomatisk` kjøre for søkere med flere vitnemål.
 - [ ] **Vitnemål som annulleres etter at det er valgt:** Poengene er låst og blir utdaterte til L6 er levert. Skal saksbehandleren varsles i L2?
 - [ ] **GSK og poeng:** Må vitnemålet for GSK og vitnemålet for poengberegningen være det samme?
 - [ ] **Låse opp:** Hva låses opp (ett poeng, poengvarianten eller saken), og hva skjer med valget og endringene?
-- [ ] **Avhengigheter til Team Puff:** et endepunkt som beregner fra et utpekt vitnemål, og grensene for gyldige verdier.
+- [ ] **Grensene for gyldige verdier:** skjemaet må få grensene (for eksempel taket på realfagspoeng) fra poengtypen i opptak.
 
 ## Rute
 
