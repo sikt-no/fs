@@ -11,7 +11,7 @@
 # KREGs påstand, og vitnemålet gir GSK når minst én av dem er ja (@OPT-BEH-BEH-015).
 # Koden krever i dag at KREG sier GSK, og bruker kontrollmotoren som kryssjekk. Det er
 # et avvik fra kravet.
-@OPT-BEH-BEH-027 @must @draft
+@OPT-BEH-BEH-027 @must @planned
 Egenskap: Beregne GSK fra vitnemål
   Som saksbehandler
   ønsker jeg at opptakssystemet beregner sin egen påstand om generell studiekompetanse for et vitnemål
@@ -30,12 +30,14 @@ Egenskap: Beregne GSK fra vitnemål
   står i @OPT-BEH-BEH-015. Det gjelder også annullerte vitnemål, vitnemål uten
   utstedelsesdato og kompetansebevis.
 
-  @openquestion
+  @draft @openquestion
   Regel: Fag som saksbehandleren har tatt ut av kontrollene, telles ikke med
     # Fagresultatene på vitnemålet har en fagstatus. Saksbehandleren bruker den til å
     # angi om et fag skal være med i kontrollene av vitnemålet. Avklart 2026-10-27 at
     # fagstatusen hører til et annet krav, og at kontrollene må følge den.
     # ÅPNE SPØRSMÅL:
+    # - Hva fagstatusen er, og hvem som setter den, er uklart (30.10.2026). Regelen holdes
+    #   utenfor til det er forklart. Den gjelder ikke den helautomatiske flyten.
     # - Kravet for fagstatusen er ikke skrevet. Når det finnes, får regelen
     #   @depends-on- til det.
 
