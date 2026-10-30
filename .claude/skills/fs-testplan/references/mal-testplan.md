@@ -2,7 +2,7 @@
 
 Testplanen er hovedsiden for en leveranse i Confluence, og grunnlaget for testcasene i den agentiske funksjonstesten (fase 2), den interne akseptansetesten (fase 3) og den eksterne akseptansetesten (fase 4). Malen er utledet fra [teststrategien (forslag)](https://sikt.atlassian.net/wiki/spaces/STUDIEADM/pages/5145100326) (*Testplan og sluttrapport*, og radene for hver fase) og «Mal: Testbeskrivelse» i [rutinen](https://sikt.atlassian.net/wiki/spaces/STUDIEADM/pages/5091196953).
 
-Testplanen er fase 1 (planen), sammen med verifiseringen før den, og bygger på resultatet av verifiseringen. Testplanen planlegger: den sier hvilke krav og flyter som testes, omfanget av testcasene som skal lages (*Testcaser som skal lages*), hvilke testbrukere og testdata testene trenger, og når fasene er ferdige. Selve testcasene lages av `fs-testcaser-cdp` (fase 2) og `fs-testcaser-intern` (fase 3), og står, med resultatene, på undersider og i `cdp-tester/`. Testplanen er hovedsiden, og lenker til dem. De eneste delene andre skills endrer, er sin egen rad i «Status i flyten», «Vedlegg» og radene i «Sporbarhet per krav».
+Testplanen er fase 1 (planen), sammen med verifiseringen før den, og bygger på resultatet av verifiseringen. Testplanen planlegger: den sier hvilke krav og flyter som testes, omfanget av testcasene som skal lages (*Testcaser som skal lages*), hvilke testbrukere og testdata testene trenger, og når fasene er ferdige. Selve testcasene lages av `fs-testcaser-cdp` (fase 2) og `fs-testcaser-intern` (fase 3), og står, med resultatene, på undersider og i `cdp-tester/`. Testplanen er hovedsiden, og lenker til dem. De eneste delene andre skills endrer, er sin egen rad i «Status i flyten» og «Vedlegg». Sporbarheten per krav står på en egen underside, fordi den fylles ut i hver fase og blir stor (se *Sporbarhet per krav* nederst).
 
 Fila skrives til `akseptansetest/<testplan-slug>/testplan.md`. Alt over den første streken er metadata for repoet, og publiseres ikke.
 
@@ -270,11 +270,7 @@ Testrapportene (verifisering, agentisk, intern og ekstern) står som undersider,
 
 ## Sporbarhet per krav
 
-Fylles ut av rapportene etter hvert som fasene er ferdige. Raden følger scenarioet fra kravet til koden og til testen.
-
-| Krav | Scenario | Kode (fase 1) | Testcase, teknikk og resultat (fase 2) | Flyt (fase 3) |
-|---|---|---|---|---|
-| `@DOM-SUB-KAP-NNN` | <scenario> | `<repo>/<fil>:<linje>` | <Nr, teknikk, resultat> | <flyt og fase, eller «–»> |
+Scenarioene fra kravet til koden og til testen står på undersiden [Sporbarhet – <leveranse>](<url>) ([sporbarhet.md](sporbarhet.md)). Den fylles ut av rapportene etter hvert som fasene er ferdige.
 
 ## Læring
 
@@ -282,4 +278,25 @@ Etter hver akseptansetest tar testerne og teamlederne et kort møte:
 
 - Hvilke feil burde vært fanget tidligere?
 - Hva bør endres i testprosessen?
+```
+
+## Sporbarhet per krav
+
+En egen fil, `akseptansetest/<testplan-slug>/sporbarhet.md`, og en egen underside til testplanen i Confluence. Testplanen er hovedsiden, og skal være liten og stort sett stabil. Sporbarheten har én rad per scenario, og fylles ut i hver fase, så den holdes for seg: en ny rad eller kolonne gjør ikke at hele testplanen må skrives på nytt. Alt over den første streken er metadata for repoet, og publiseres ikke.
+
+```markdown
+# Sporbarhet – <leveranse>
+
+- **Testplan**: [testplan.md](testplan.md) · <Confluence-url>
+- **Confluence**: –
+- **Laget**: <YYYY-MM-DD> av fs-testplan
+- **Oppdatert**: <YYYY-MM-DD> av <skill> (<fasen>)
+
+---
+
+Sporbarhet per krav for «<leveranse>». Raden følger scenarioet fra kravet til koden og til testen. Kolonnen for fase 1 fylles ut av `fs-testplan` fra verify-rapporten, og resten av `fs-testrapport` etter hvert som fasene er ferdige. Testplanen: [Testplan – <leveranse>](<url>).
+
+| Krav | Scenario | Kode (fase 1) | Testcase, teknikk og resultat (fase 2) | Flyt (fase 3) |
+|---|---|---|---|---|
+| `@DOM-SUB-KAP-NNN` | <scenario> | `<repo>/<fil>:<linje>` | <Nr, teknikk, resultat> | <flyt og fase, eller «–»> |
 ```

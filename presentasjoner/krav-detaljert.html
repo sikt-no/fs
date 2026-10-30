@@ -411,7 +411,7 @@ html,body{margin:0;height:100%;background:#0E1628;color:#F7F6F2;font-family:'IBM
 </div>
 <div style="flex:1;display:flex;flex-direction:column;gap:12px;background:#FFFFFF;padding:36px;border:1px solid #E1DED6;border-radius:16px">
 <h3 style="font-size:24px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:#B4481A">Lager</h3>
-<p style="font-size:26px;line-height:1.4;color:#14213D"><span style="font-family:'IBM Plex Mono', 'Courier New', monospace;color:#2F6FB0">testplan.md</span> i <span style="font-family:'IBM Plex Mono', 'Courier New', monospace;color:#2F6FB0">akseptansetest/&lt;slug&gt;/</span>, og hovedsiden i Confluence når du sier ja.</p>
+<p style="font-size:26px;line-height:1.4;color:#14213D"><span style="font-family:'IBM Plex Mono', 'Courier New', monospace;color:#2F6FB0">testplan.md</span> og <span style="font-family:'IBM Plex Mono', 'Courier New', monospace;color:#2F6FB0">sporbarhet.md</span> i <span style="font-family:'IBM Plex Mono', 'Courier New', monospace;color:#2F6FB0">akseptansetest/&lt;slug&gt;/</span>, og hovedsiden og sporbarhetssiden i Confluence når du sier ja.</p>
 </div>
 </div>
 <div style="display:flex;align-items:center;gap:40px;background:#14213D;padding:28px 40px;border-radius:16px">
@@ -421,7 +421,7 @@ html,body{margin:0;height:100%;background:#0E1628;color:#F7F6F2;font-family:'IBM
 </div>
 <p style="flex:1;font-size:26px;line-height:1.4;color:#F7F6F2">Testplanen planlegger, men lager ikke testcasene. Kravene er kriteriene for godkjent i alle fasene.</p>
 </div>
-<aside>Kravene står med Feature-ID i «Omfang», så alle fasene tester de samme kravene, og flytene i krav/_Flyter som går gjennom kravene, står i «Flyter». Testplanen er andre del av fase 1, planen, etter /fs-verify. Testbrukerne nummereres ut fra tilgangsmatrisen fra /fs-verify. Testdataene sier testplanen bare hvilke som trengs: testene lager dem selv, i oppsettet, og bare grunndata og det testene ikke kan lage, må finnes i testmiljøet. «Testcaser som skal lages» har også de tre nye delene i fase 3. Testplanen har også avhengighetskart, åpne spørsmål per krav (de stopper ikke testen), reglene i koden uten scenario, forutsetninger, når fasene er ferdige, og «Status i flyten». Testplanen er hovedsiden i Confluence, og de andre fasene er undersider.</aside>
+<aside>Kravene står med Feature-ID i «Omfang», så alle fasene tester de samme kravene, og flytene i krav/_Flyter som går gjennom kravene, står i «Flyter». Testplanen er andre del av fase 1, planen, etter /fs-verify. Testbrukerne nummereres ut fra tilgangsmatrisen fra /fs-verify. Testdataene sier testplanen bare hvilke som trengs: testene lager dem selv, i oppsettet, og bare grunndata og det testene ikke kan lage, må finnes i testmiljøet. «Testcaser som skal lages» har også de tre nye delene i fase 3. Testplanen har også avhengighetskart, åpne spørsmål per krav (de stopper ikke testen), reglene i koden uten scenario, forutsetninger, når fasene er ferdige, og «Status i flyten». Testplanen er hovedsiden i Confluence, og de andre fasene er undersider. Sporbarheten per krav er en egen underside, «Sporbarhet – &lt;leveranse&gt;», og fila sporbarhet.md, med kolonnen for fase 1 (kode) fra verify-rapporten. Den fylles ut i hver fase og blir stor, så testplanen har bare en lenke dit, og holdes liten og stabil.</aside>
 </section>
 </div>
 <div class="slide">
@@ -595,7 +595,7 @@ html,body{margin:0;height:100%;background:#0E1628;color:#F7F6F2;font-family:'IBM
 </div>
 <div style="flex:1;display:flex;flex-direction:column;gap:12px;background:#FFFFFF;padding:36px;border:1px solid #E1DED6;border-radius:16px">
 <h3 style="font-size:24px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:#B4481A">Lager</h3>
-<p style="font-size:26px;line-height:1.4;color:#14213D">En testrapport per fase, og oppdaterer «Status i flyten» i testplanen.</p>
+<p style="font-size:26px;line-height:1.4;color:#14213D">En testrapport per fase. Oppdaterer «Status i flyten» i testplanen, og kolonnen for fasen på sporbarhetssiden.</p>
 </div>
 </div>
 <div style="display:flex;align-items:center;gap:40px;background:#14213D;padding:28px 40px;border-radius:16px">
@@ -605,7 +605,7 @@ html,body{margin:0;height:100%;background:#0E1628;color:#F7F6F2;font-family:'IBM
 </div>
 <p style="flex:1;font-size:26px;line-height:1.4;color:#F7F6F2">Godkjent, godkjent med forbehold eller ikke godkjent. Agenten kan aldri godkjenne en leveranse.</p>
 </div>
-<aside>Rapporten finnes på fire nivåer: verifisering, agentisk, intern og ekstern. Den lister også testcaser som er «Bestått» selv om faktisk resultat avviker. Etter den agentiske testen sier rapporten om inngangskriteriet til den interne testen er oppfylt: ingen åpne «Stopper»-funn, og testansvarlig har gått gjennom rapporten. Testansvarlig, eller deltakerne i den eksterne testen, skriver beslutningen. Fila heter testrapport-&lt;nivå&gt;-&lt;dato&gt;.md, i akseptansetest/&lt;slug&gt;/, og blir en underside til testplanen når du sier ja.</aside>
+<aside>Rapporten finnes på fire nivåer: verifisering, agentisk, intern og ekstern. Den lister også testcaser som er «Bestått» selv om faktisk resultat avviker. Etter den agentiske testen sier rapporten om inngangskriteriet til den interne testen er oppfylt: ingen åpne «Stopper»-funn, og testansvarlig har gått gjennom rapporten. Testansvarlig, eller deltakerne i den eksterne testen, skriver beslutningen. Fila heter testrapport-&lt;nivå&gt;-&lt;dato&gt;.md, i akseptansetest/&lt;slug&gt;/, og blir en underside til testplanen når du sier ja. Kolonnen for fasen fylles ut på sporbarhetssiden og i sporbarhet.md, ikke i testplanen: testcase, teknikk og resultat i fase 2, og flyt i fase 3. Har en eldre testplan tabellen i seg, flyttes den ut først.</aside>
 </section>
 </div>
 <div class="slide">
