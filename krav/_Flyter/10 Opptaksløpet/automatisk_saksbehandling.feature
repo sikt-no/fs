@@ -17,7 +17,7 @@ Egenskap: Automatisk saksbehandling
   hoppes over, og behandles ikke helautomatisk
   (se OPT-BEH-BEH-025). For søkerne i flyten setter den automatiske behandlingen grunnlaget,
   poengene, vurderingen av kravelementene og svarene på kvotespørsmålene, i den rekkefølgen.
-  Det oppdaterer kvalifiseringen, kvotene, poengene per kvote og manglene. Til slutt sjekker den
+  Det oppdaterer kvalifiseringen, kvotene, poengene per kvote og mangeltekstene. Til slutt sjekker den
   automatiske behandlingen ut mangelen for GSK som fullføres i vår, og setter saken til ferdig
   behandlet. Rettes en feil i regelverket, beregner opptaksforvalteren søknadsalternativene
   feilen gjaldt, på nytt.
@@ -29,7 +29,7 @@ Egenskap: Automatisk saksbehandling
   # Kjent brudd: ingenting starter den automatiske behandlingen når resultatene er importert.
   # Bare saksbehandleren starter den, for én sak om gangen (se OPT-BEH-BEH-032).
   # Fasene er etter prosesstegningen for automatisk saksbehandling (2026-10-29). Kvalifiseringen,
-  # kvotene, poengene per kvote og manglene er ikke egne steg: de oppdateres automatisk ut fra
+  # kvotene, poengene per kvote og mangeltekstene er ikke egne steg: de oppdateres automatisk ut fra
   # stegene før, og er gule i tegningen. Tegningen har kravelementene før poengene. Det er
   # unøyaktig: poengene beregnes først (OPT-BEH-BEH-020).
   # To faser er med i flyten, men er utenfor scope i første fase (@wont): to identiske vitnemål
@@ -41,7 +41,7 @@ Egenskap: Automatisk saksbehandling
 
   @depends-on-OPT-BEH-BEH-030
   # OPT-BEH-BEH-030: «Resultatene hentes når saken er opprettet», «Alle vitnemål og kompetansebevis søkeren har i KREG, importeres»
-  Regel: Søkerens resultater importeres fra KREG når søknaden kommer inn
+  Regel: Søkerens resultater importeres fra KREG når saken er opprettet
 
     Scenario: Vitnemålet fra KREG er klart for behandlingen når saken er opprettet
       Gitt at "Kari Nordmann" har et vitnemål i KREG
