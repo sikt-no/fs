@@ -165,11 +165,7 @@ Egenskap: Plasstildelingsrunder i et opptak
       Og at plasstildelingsrunden er publisert til søker
       Så ser opptaksforvalter at plasstildelingsrunden har status "Publisert for søkere"
 
-  @openquestion
   Regel: Opptaksforvalter setter tak for antall tilbud på ledige studieplasser per søker i plasstildelingsrunden
-    # ÅPNE SPØRSMÅL:
-    # - Skal søkere kunne få studieplass mer enn ett sted? (brukertesten med HK-dir 2026-10-27)
-    # - Hva er standardverdien når taket ikke er satt?
 
     # Flyttet hit 2026-10-26 fra 11 Opprette og vedlikeholde opptak/03 Innstillinger/innstillinger.feature, der
     # regelen «Opptaksforvalter setter tak for antall tilbud per tildelingsrunde» er @deprecated.
@@ -177,11 +173,20 @@ Egenskap: Plasstildelingsrunder i et opptak
     # ikke i rundetypen, og gjelder tilbud på ledige studieplasser når runden er åpnet for ledige studieplasser.
     # I UHG kan en søker få opptil 10 tilbud på ledige studieplasser. Hvordan tilbud på ledige studieplasser gis,
     # står i 03 Tildeling/gjennomføre_plasstildeling.feature.
+    # AVKLART 2026-10-30 (produkteier): Om en søker kan få studieplass mer enn ett sted, kommer an på opptaket, og
+    # henger sammen med hvor mange tilbud søkeren kan få og takke ja til. Det har ingen egen regel, men styres av taket.
     Scenario: Sette tak for antall tilbud på ledige studieplasser per søker
       Gitt at opptaket har plasstildelingsrunden "Etterfylling" med rundetype "Etterfylling"
       Og at plasstildelingsrunden "Etterfylling" er åpnet for ledige studieplasser
       Når opptaksforvalter setter taket for antall tilbud på ledige studieplasser per søker i plasstildelingsrunden "Etterfylling" til 10
       Så kan en søker få høyst 10 tilbud på ledige studieplasser i plasstildelingsrunden "Etterfylling"
+
+    # AVKLART 2026-10-30 (produkteier): Taket har ingen standardverdi, og må settes.
+    Scenario: Taket må settes når plasstildelingsrunden åpnes for ledige studieplasser
+      Gitt at opptaket har plasstildelingsrunden "Etterfylling" med rundetype "Etterfylling"
+      Når opptaksforvalter åpner plasstildelingsrunden "Etterfylling" for ledige studieplasser uten å sette taket for antall tilbud per søker
+      Så blir plasstildelingsrunden "Etterfylling" ikke åpnet for ledige studieplasser
+      Og opptaksforvalter får beskjed om at taket for antall tilbud på ledige studieplasser per søker må settes
 
   Regel: Opptaksforvalter kan åpne en plasstildelingsrunde for ledige studieplasser
 
@@ -240,6 +245,25 @@ Egenskap: Plasstildelingsrunder i et opptak
       Når opptaksforvalter endrer perioden til "2027-06-01 08:00" – "2027-07-15 16:00"
       Så kan opptaksforvalter ved lærestedene endre antall tilbud som skal gis for plasstildelingsrunden fram til "2027-07-15 16:00"
 
+  Regel: Lærestedene ser bare plasstildelingsrunden der perioden for å endre antall tilbud er åpen
+
+    # AVKLART 2026-10-30 (produkteier, etter brukertesten med HK-dir, oktober 2026): Opptaksforvalter kan legge inn
+    # alle plasstildelingsrundene på forhånd, men lærestedene ser bare én runde om gangen. I SODB fant ikke lærestedene
+    # riktig runde når alle rundene lå der. Opptaksforvalter ved organisasjonen som forvalter opptaket, ser alle rundene.
+    Scenario: Lærestedet ser plasstildelingsrunden der perioden er åpen
+      Gitt at opptaket har plasstildelingsrundene "Hovedrunde" og "Supplering 1"
+      Og at perioden for å endre antall tilbud som skal gis er åpen i plasstildelingsrunden "Supplering 1"
+      Og at perioden for å endre antall tilbud som skal gis er stengt i plasstildelingsrunden "Hovedrunde"
+      Når opptaksforvalter ved et lærested som deltar i opptaket, åpner plasstildelingsrundene i opptaket
+      Så ser opptaksforvalter ved lærestedet plasstildelingsrunden "Supplering 1"
+      Men opptaksforvalter ved lærestedet ser ikke plasstildelingsrunden "Hovedrunde"
+
+    Scenario: Opptaksforvalter ved organisasjonen som forvalter opptaket, ser alle plasstildelingsrundene
+      Gitt at opptaket har plasstildelingsrundene "Hovedrunde" og "Supplering 1"
+      Og at perioden for å endre antall tilbud som skal gis er åpen i plasstildelingsrunden "Supplering 1"
+      Når opptaksforvalter ved organisasjonen som forvalter opptaket, åpner plasstildelingsrundene i opptaket
+      Så ser opptaksforvalter plasstildelingsrundene "Hovedrunde" og "Supplering 1"
+
   Regel: Opptakets informasjonsdatoer for publisering påvirker ikke plasstildelingsrunden
 
     # Fristene for når resultatet i hovedrunden kan forventes publisert, som settes i
@@ -261,8 +285,3 @@ Egenskap: Plasstildelingsrunder i et opptak
 # - Opptaksforvalter setter ingen eksplisitt publiseringsdato. Publisering skjer når den skjer.
 # - Tidligopptak er ikke en rundetype (avklart tidligere). Bekreftet 2026-10-09: søkere som får
 #   tilsagn på søknad om tidlig opptak, får tilbudsgaranti i plasstildelingsrundene som kjøres.
-
-# ÅPNE SPØRSMÅL:
-# - Skal lærestedene bare se plasstildelingsrunden som er aktiv for dem, eller alle rundene? I SODB var det bare
-#   én runde om gangen, fordi lærestedene ikke fant riktig runde når alle rundene lå der. HK-dir vil samtidig
-#   legge inn alle rundene på forhånd. (brukertesten med HK-dir, oktober 2026)
