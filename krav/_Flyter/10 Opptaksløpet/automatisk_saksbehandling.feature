@@ -40,7 +40,7 @@ Egenskap: Automatisk saksbehandling
     Gitt at søknaden til "Kari Nordmann" har en sak hos "Universitetet i Oslo"
 
   @depends-on-OPT-BEH-BEH-030
-  # OPT-BEH-BEH-030: «Resultatene hentes når søknaden kommer inn», «Alle vitnemål og kompetansebevis søkeren har i KREG, importeres»
+  # OPT-BEH-BEH-030: «Resultatene hentes når saken er opprettet», «Alle vitnemål og kompetansebevis søkeren har i KREG, importeres»
   Regel: Søkerens resultater importeres fra KREG når søknaden kommer inn
 
     Scenario: Vitnemålet fra KREG er klart for behandlingen når saken er opprettet

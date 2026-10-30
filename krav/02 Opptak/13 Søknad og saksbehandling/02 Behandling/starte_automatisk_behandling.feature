@@ -40,7 +40,7 @@ Egenskap: Starte automatisk behandling
 
   @depends-on-OPT-BEH-BEH-011 @depends-on-OPT-BEH-BEH-030 @ref-FLY-OPT-AUT-001
   # OPT-BEH-BEH-011: «Søknadsalternativene fordeles når søknaden sendes inn eller endres, og fordelingen ligger fast»
-  # OPT-BEH-BEH-030: «Resultatene hentes når søknaden kommer inn»
+  # OPT-BEH-BEH-030: «Resultatene hentes når saken er opprettet»
   Regel: Behandlingen kjører for hver ny sak saksbehandlertildelingen oppretter
 
     Scenario: Den nye saken behandles automatisk når saksbehandlertildelingen har opprettet den
