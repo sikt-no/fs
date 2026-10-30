@@ -12,7 +12,7 @@
 # elektroniske vitnemål», 4609146881 «Forretningsregler – Poeng». GitHub #199. I FS-klienten
 # beregner «Godkjenn» i vitnemålsrammen og rutinen FS158.001 poengene, og manuell endring av
 # poeng setter «la stå».
-@OPT-BEH-BEH-018 @must @draft @depends-on-OPT-BEH-BEH-015 @depends-on-OPT-BEH-BEH-019 @ref-OPT-BEH-BEH-008
+@OPT-BEH-BEH-018 @must @draft @depends-on-OPT-BEH-BEH-015 @depends-on-OPT-BEH-BEH-019 @ref-OPT-BEH-BEH-008 @ref-OPT-BEH-BEH-032
 Egenskap: Automatisk beregning av vitnemålspoeng
   Som saksbehandler
   ønsker jeg at karakterpoeng, realfagspoeng, språkpoeng og skolepoeng beregnes automatisk fra søkerens vitnemål

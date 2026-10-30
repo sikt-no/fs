@@ -4,7 +4,7 @@
 # KregVgsParser og VgsLagringService lagrer dem i kompetanse.vgs_dokument med fag,
 # programområder og merknader. Hva som gjøres med resultatene etterpå (GSK, poeng, grunnlag og
 # kravelementer), står i kravene i @ref-taggene.
-@OPT-BEH-BEH-030 @must @draft @ref-OPT-BEH-BEH-015 @ref-OPT-BEH-BEH-018 @ref-OPT-BEH-BEH-019 @ref-OPT-BEH-BEH-020
+@OPT-BEH-BEH-030 @must @draft @ref-OPT-BEH-BEH-015 @ref-OPT-BEH-BEH-018 @ref-OPT-BEH-BEH-019 @ref-OPT-BEH-BEH-020 @ref-OPT-BEH-BEH-032
 Egenskap: Importere resultater fra KREG
   Som saksbehandler
   ønsker jeg at søkerens resultater fra videregående skole hentes fra KREG når søknaden kommer inn
@@ -22,7 +22,7 @@ Egenskap: Importere resultater fra KREG
   # - Skal resultater fra høyere utdanning (Vitnemålsportalen) importeres på samme måte?
   #   Tilleggspoeng for høyere utdanning (OPT-BEH-BEH-028) trenger dem.
 
-  @ref-FLY-OPT-AUT-001
+  @ref-FLY-OPT-AUT-001 @ref-OPT-BEH-BEH-032
   Regel: Resultatene hentes når søknaden kommer inn
 
     Scenario: Resultatene hentes når søkeren sender inn søknaden
@@ -122,6 +122,7 @@ Egenskap: Importere resultater fra KREG
       Når søkeren sender inn søknaden
       Så er ingen resultater importert fra KREG
 
+    @ref-OPT-BEH-BEH-032
     Scenario: Resultatene hentes når KREG svarer igjen
       # Avklart 29.10.2026: hentingen prøves på nytt. Hvor mange ganger, og hvor lenge, står i
       # applikasjonsinnstillingene. Feilen vises ikke for saksbehandleren, men skrives i

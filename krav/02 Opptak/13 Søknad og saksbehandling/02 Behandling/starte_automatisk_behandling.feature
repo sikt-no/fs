@@ -22,12 +22,15 @@ Egenskap: Starte automatisk behandling
   # av for et opptak.
   # Hvor ofte jobbene kjører, står i OPT-BEH-BEH-033 (PR #864).
   # Saksbehandleren velger vitnemålet når søkeren har flere vitnemål med påstanden GSK, i
-  # OPT-BEH-BEH-025 (PR #863).
+  # OPT-BEH-BEH-025.
 
   # ÅPNE SPØRSMÅL:
   # - Er «ny dokumentasjon» i sakslisten en behandlingsstatus (OPT-BEH-BEH-029), eller en egen
   #   markering ved siden av? OPT-BEH-BEH-029 sier at ny dokumentasjon ikke endrer
   #   behandlingsstatusen.
+  # - Er «ny dokumentasjon» den samme markeringen som «nye resultater» i OPT-BEH-BEH-035 og
+  #   taggen «Vitnemål annullert» i OPT-BEH-BEH-034 (PR #865)? Alle tre merker saken når
+  #   søkeren får et nytt eller annullert vitnemål.
   # - Er varselet om nytt vitnemål det samme som i OPT-BEH-BEH-021?
 
   Bakgrunn:
@@ -35,7 +38,7 @@ Egenskap: Starte automatisk behandling
     Og at "Universitetet i Oslo" deltar i opptaket
     Og at automatisk saksbehandling er skrudd på for "Samordna opptak 2027"
 
-  @depends-on-OPT-BEH-BEH-011 @depends-on-OPT-BEH-BEH-030
+  @depends-on-OPT-BEH-BEH-011 @depends-on-OPT-BEH-BEH-030 @ref-FLY-OPT-AUT-001
   # OPT-BEH-BEH-011: «Søknadsalternativene fordeles når søknaden sendes inn eller endres, og fordelingen ligger fast»
   # OPT-BEH-BEH-030: «Resultatene hentes når søknaden kommer inn»
   Regel: Behandlingen kjører for hver ny sak saksbehandlertildelingen oppretter
@@ -46,7 +49,7 @@ Egenskap: Starte automatisk behandling
       Når saksbehandlertildelingen har opprettet saken hos "Universitetet i Oslo"
       Så behandles saken hos "Universitetet i Oslo" automatisk når vitnemålet er importert
 
-  @depends-on-OPT-BEH-BEH-030 @ref-FLY-OPT-VIT-001
+  @depends-on-OPT-BEH-BEH-030 @ref-FLY-OPT-VIT-001 @ref-FLY-OPT-AUT-001
   # OPT-BEH-BEH-030: «Endringer i KREG importeres gjennom et abonnement»
   Regel: Behandlingen kjører når søkeren får det første vitnemålet
 
@@ -72,9 +75,11 @@ Egenskap: Starte automatisk behandling
       Når jobben for nye vitnemål i KREG kjører
       Så behandles ikke saken hos "Universitetet i Oslo" automatisk på nytt
 
-  @depends-on-OPT-BEH-BEH-029
+  @depends-on-OPT-BEH-BEH-029 @depends-on-OPT-BEH-BEH-025
   # OPT-BEH-BEH-029: «Saksbehandleren kan sette behandlingsstatusen», «Saken blir Under behandling når saksbehandleren endrer vurderingen eller leser et dokument»
-  Regel: Saksbehandleren velger et vitnemål og starter den automatiske behandlingen på det
+  # OPT-BEH-BEH-025: «Har søkeren flere vitnemål med påstanden GSK, behandles saken automatisk på vitnemålet saksbehandleren velger»
+  # Valget av vitnemål står i OPT-BEH-BEH-025. Dette kravet har starten av behandlingen.
+  Regel: Saksbehandleren starter den automatiske behandlingen på vitnemålet som er valgt
     # Avklart 29.10.2026: det trengs ingen mulighet til å velge flere saker i sakslisten og
     # starte behandlingen for dem. Behandlingen starter av seg selv.
 
@@ -172,6 +177,6 @@ Egenskap: Starte automatisk behandling
       Så ser saksbehandleren ingen feilmelding om KREG på saken
 
     Scenario: Sikt varsles om en teknisk feil
-      Gitt at den automatiske behandlingen feilet for saken til "Kari Nordmann" fordi KREG ikke svarte
-      Når feilen er skrevet i applikasjonsloggen
+      Gitt at saken til "Kari Nordmann" skal behandles automatisk
+      Når den automatiske behandlingen feiler fordi KREG ikke svarer
       Så får Sikt et varsel om at den automatiske behandlingen har feilet

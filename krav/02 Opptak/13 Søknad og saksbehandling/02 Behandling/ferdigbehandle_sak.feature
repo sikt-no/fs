@@ -1,5 +1,5 @@
 # language: no
-@OPT-BEH-BEH-025 @must @draft @ref-OPT-BEH-BEH-004 @ref-OPT-BEH-BEH-018 @ref-OPT-BEH-BEH-019 @ref-OPT-BEH-BEH-020
+@OPT-BEH-BEH-025 @must @draft @ref-OPT-BEH-BEH-004 @ref-OPT-BEH-BEH-018 @ref-OPT-BEH-BEH-019 @ref-OPT-BEH-BEH-020 @ref-OPT-BEH-BEH-032
 Egenskap: Ferdigbehandle en sak
   Som saksbehandler
   ønsker jeg at saker som kan behandles helt automatisk, blir ferdig behandlet uten at jeg gjør noe
@@ -74,11 +74,11 @@ Egenskap: Ferdigbehandle en sak
       Når søknaden behandles automatisk
       Så behandles saken hos "Universitetet i Oslo" helautomatisk på vitnemålet med påstanden at søkeren har GSK
 
-  @ref-OPT-BEH-BEH-015 @ref-FLY-OPT-VAL-001 @ref-FLY-OPT-SAM-001
+  @ref-OPT-BEH-BEH-015 @ref-FLY-OPT-VAL-001 @ref-FLY-OPT-SAM-001 @ref-OPT-BEH-BEH-032
   # OPT-BEH-BEH-015: «Konklusjon på søknaden fra vitnemålet»
   Regel: Har søkeren flere vitnemål med påstanden GSK, behandles saken automatisk på vitnemålet saksbehandleren velger
     # Saksbehandleren velger vitnemålet når den automatiske behandlingen startes på det. Å starte
-    # behandlingen på et vitnemål står i OPT-BEH-BEH-032 (PR #862, ikke merget 2026-10-30).
+    # behandlingen på et vitnemål står i OPT-BEH-BEH-032.
 
     Scenario: Saksbehandleren velger vitnemålet saken behandles automatisk på
       # Vitnemålet saksbehandleren velger, kan være et annet enn vitnemålet GSK-konklusjonen på
@@ -97,7 +97,7 @@ Egenskap: Ferdigbehandle en sak
       Når saksbehandleren ved Universitetet i Oslo starter den automatiske behandlingen på det sammensatte vitnemålet
       Så behandles saken hos "Universitetet i Oslo" automatisk på det sammensatte vitnemålet
 
-  @ref-FLY-OPT-AUT-001
+  @ref-FLY-OPT-AUT-001 @ref-OPT-BEH-BEH-032
   Regel: Den automatiske behandlingen setter saken til ferdig behandlet når alt er avgjort
 
     Bakgrunn:
