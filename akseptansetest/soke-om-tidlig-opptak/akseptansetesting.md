@@ -94,7 +94,8 @@ Ta testcasene i rekkefølgen de står. 2.4 står etter regel 4, fordi den sender
 
 | # | Scenario | Steg | Forventet resultat | Faktisk resultat | Bestått? |
 |---|---|---|---|---|---|
-| 2.4 | Søke om tidlig opptak med en begrunnelse | Som testbruker 1: åpne «Søknad til Samordna UHG-simulering høsten 2026», og velg «Søk om tidlig opptak». Velg «Jeg er i jobb og har oppsigelsestid, eller må søke permisjon» under «Velg et grunnlag for tidlig opptak», og «Send søknad». Åpne «Søknad til Samordna UHG-simulering høsten 2026» igjen, og den nyeste kvitteringen i «Mine meldinger» | Søknaden viser «Du har søkt om tidlig opptak.», med en påminnelse om dokumentasjonen for grunnlaget, og «Søk om tidlig opptak» er borte. Kvitteringen [Sjekk begrep: tittelen] viser bare «Psykologi profesjon» under «Du har søkt tidlig opptak til følgende studier:» | | |
+| 2.4a | Søke om tidlig opptak med en begrunnelse | Som testbruker 1: åpne «Søknad til Samordna UHG-simulering høsten 2026», og velg «Søk om tidlig opptak». Velg «Jeg er i jobb og har oppsigelsestid, eller må søke permisjon» under «Velg et grunnlag for tidlig opptak», og «Send søknad». Åpne «Søknad til Samordna UHG-simulering høsten 2026» igjen | Søknaden viser «Du har søkt om tidlig opptak.», med en påminnelse om dokumentasjonen for grunnlaget, og «Søk om tidlig opptak» er borte | | |
+| 2.4b | Søke om tidlig opptak med en begrunnelse: kvitteringen | Som testbruker 1: velg «Meny» og «Mine meldinger», og åpne den nyeste kvitteringen [Sjekk begrep: tittelen] | Kvitteringen viser bare «Psykologi profesjon» under «Du har søkt tidlig opptak til følgende studier:», ikke «Biovitenskap» | | |
 
 ### Regel 5: Søknaden om tidlig opptak gjelder hele søknaden
 
