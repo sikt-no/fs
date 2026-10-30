@@ -102,39 +102,6 @@ Egenskap: Søke på opptak
   Scenario: Søker ser oversikt over innsendte søknader
 
   @draft
-  Scenario: Søker kan se egenopplastet dokumentasjon
-    Gitt at personen har søkt på et opptak og lastet opp dokumentasjon
-    Når personen går inn på søknaden
-    Så skal personen se hvilken dokumentasjon de har lastet opp
-
-  @draft
-  Scenario: Søker kan se dokumentasjon lastet opp av saksbehandler
-    Gitt at personen har søkt på et opptak og en saksbeandler har lastet opp dokumentasjon
-    Når personen går inn på søknaden
-    Så skal personen se hvilken dokumentasjon saksbehandler har lastet opp
-
-  @draft
-  Scenario: Søker kan laste opp ytterligere dokumentasjon etter innsending av søknad
-    Gitt at personen har søkt på et opptak
-    Og personen går inn på søknaden
-    Når personen laster opp dokumentasjon
-    Så skal dokumentasjonen blir tilgjengelig for administratoren
-
-
-  @draft
-  Scenario: Person sletter opplastet dokumentasjon før innsending av søknad
-    Gitt En person har lastet opp dokumentasjon
-    Når Personen sletter et dokument
-    Så blir dokumentet fjernet fra listen
-
-  @draft
-  Scenario: Person sletter opplastet dokumentasjon etter innsending av søknad
-    Gitt En person har lastet opp dokumentasjon
-    Når Personen sletter et dokument
-    Så blir dokumentet fjernet fra listen
-    Og blir dokumentet ikke lengre tilgjengelig for administrator
-
-  @draft
   Scenario: Person kan trekke søknaden
 
   @draft
