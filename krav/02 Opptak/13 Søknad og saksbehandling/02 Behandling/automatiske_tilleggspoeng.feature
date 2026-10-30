@@ -171,11 +171,8 @@ Egenskap: Automatiske tilleggspoeng
       Når saksbehandleren velger grunnlaget "VES" for saken
       Så er alderspoengene regnet ut til 4
 
-    Scenario: Tilleggspoengene er låst for automatikken når saksbehandleren har behandlet saken
-      Gitt at saksbehandleren har behandlet saken
-      Og at saken har 4 alderspoeng
-      Når den automatiske behandlingen kjøres for søknaden
-      Så har saken fortsatt 4 alderspoeng
+    # Avklart 30.10.2026: bare tilleggspoengene saksbehandleren har endret, er låst for
+    # automatikken (se «Saksbehandleren kan overstyre poeng automatikken har satt»).
 
     @ref-OPT-BEH-BEH-004
     # Regelen «Poeng beregnes fra det valgte grunnlaget», scenarioet «Poengene er tomme til jeg beregner dem».
