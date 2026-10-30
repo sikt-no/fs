@@ -782,22 +782,23 @@ footer .inner{padding-block:24px 48px;display:flex;flex-direction:column;gap:6px
       </div>
       <div class="tablebox">
         <table>
-          <thead><tr><th>Seksjon</th><th>Innhold</th></tr></thead>
+          <thead><tr><th>Side</th><th>Seksjon</th><th>Innhold</th></tr></thead>
           <tbody>
-            <tr><td>Testbeskrivelse</td><td>Hva er levert, versjon, testmiljø, flagg, kilde, scope, saker, kjente begrensninger, avhengighetskart. Testbrukere og testdata.</td></tr>
-            <tr><td>Omfang</td><td>Kravene som er <code>@implemented</code>, per oppgave eller kapabilitet, med Feature-ID og antall scenarioer.</td></tr>
-            <tr><td>Flyter</td><td>Flytene som går gjennom kravene, om hele eller deler testes, og én rad per fase.</td></tr>
-            <tr><td>Testdata</td><td>Hvilke data hvert krav trenger, med nøkkel og utgangstilstand.</td></tr>
-            <tr><td>Åpne spørsmål</td><td>Antall regler og scenarioer med åpne spørsmål per krav, fra verify-rapporten. De stopper ikke testen.</td></tr>
-            <tr><td>Regler uten scenario</td><td>Reglene i koden som verify-rapporten fant uten scenario i kravet, som input til den agentiske testen.</td></tr>
-            <tr><td>Testcaser som skal lages</td><td>Omfanget, ikke testcasene: per regel antall scenarioer, utledede testcaser og teknikk (fase 2), og flytene og oppgavene (fase 3).</td></tr>
-            <tr><td>Venter på verifisering</td><td>Krav som er <code>@in-progress</code>, og delene som ikke er levert i et krav som er delvis levert, med det verify-rapporten sier mangler.</td></tr>
-            <tr><td>Ikke med i denne testen</td><td>Det som faller ut, med grunnen.</td></tr>
-            <tr><td>Forutsetninger</td><td>Miljø, testdata, testbrukere, verifiseringen, testcasene, innloggingen, og kjente brudd i flytene.</td></tr>
-            <tr><td>Kriterier for godkjent</td><td>Kravene er kriteriene. Tabellen sier når hver fase er ferdig.</td></tr>
-            <tr><td>Status i flyten</td><td>Én rad per fase i teststrategien, med lenke, status og dato.</td></tr>
-            <tr><td>Vedlegg</td><td>Lenker til verifiseringsrapporten, den agentiske testrapporten og testcasene.</td></tr>
-            <tr><td>Sporbarhet per krav</td><td>Lenke til undersiden «Sporbarhet – &lt;leveranse&gt;» (<code>sporbarhet.md</code>): scenario → kode (fase 1) → testcase, teknikk og resultat (fase 2) → flyt (fase 3). Den fylles ut i hver fase, og står for seg så testplanen holdes liten.</td></tr>
+            <tr><td>Testplan (hovedsiden)</td><td>Innhold</td><td>Innholdsfortegnelse, undersidene, og lenker til de tre undersidene under.</td></tr>
+            <tr><td></td><td>Testbeskrivelse</td><td>Hva er levert, versjon, testmiljø, flagg, kilde, scope, saker, kjente begrensninger.</td></tr>
+            <tr><td></td><td>Roller, tid og kanal</td><td>Hvem som tester, når, og hvor spørsmålene tas.</td></tr>
+            <tr><td></td><td>Forutsetninger</td><td>Miljø, testdata, testbrukere, verifiseringen, testcasene, innloggingen, og kjente brudd i flytene.</td></tr>
+            <tr><td></td><td>Kriterier for godkjent</td><td>Kravene er kriteriene. Tabellen sier når hver fase er ferdig.</td></tr>
+            <tr><td></td><td>Status i flyten</td><td>Én rad per fase i teststrategien, med lenke, status og dato.</td></tr>
+            <tr><td></td><td>Vedlegg</td><td>Lenker til verifiseringsrapporten, den agentiske testrapporten og testcasene.</td></tr>
+            <tr><td>Omfang (underside)</td><td>Omfang</td><td>Kravene som er <code>@implemented</code>, per oppgave eller kapabilitet, med Feature-ID og antall scenarioer, og antall åpne spørsmål per krav. De stopper ikke testen.</td></tr>
+            <tr><td></td><td>Flyter</td><td>Flytene som går gjennom kravene, om hele eller deler testes, og én rad per fase. Vurdering per krav og avhengighetskart.</td></tr>
+            <tr><td></td><td>Venter på verifisering</td><td>Krav som er <code>@in-progress</code>, og delene som ikke er levert i et krav som er delvis levert, med det verify-rapporten sier mangler.</td></tr>
+            <tr><td></td><td>Regler uten scenario</td><td>Reglene i koden som verify-rapporten fant uten scenario i kravet, som input til den agentiske testen.</td></tr>
+            <tr><td></td><td>Ikke med i denne testen</td><td>Det som faller ut, med grunnen.</td></tr>
+            <tr><td>Testcaser og testdata (underside)</td><td>Testcaser som skal lages</td><td>Omfanget, ikke testcasene: per regel antall scenarioer, utledede testcaser og teknikk (fase 2), og flytene og oppgavene (fase 3).</td></tr>
+            <tr><td></td><td>Testbrukere og testdata</td><td>Testbrukerne med tilgangsmatrisen, og dataene hvert krav trenger, med nøkkel og utgangstilstand.</td></tr>
+            <tr><td>Sporbarhet (underside)</td><td>Sporbarhet per krav</td><td>Scenario → kode (fase 1) → testcase, teknikk og resultat (fase 2) → flyt (fase 3). Fylles ut i hver fase.</td></tr>
           </tbody>
         </table>
       </div>
@@ -814,8 +815,8 @@ footer .inner{padding-block:24px 48px;display:flex;flex-direction:column;gap:6px
     <aside class="facts">
       <dl>
         <div><dt>Skill</dt><dd><span class="pill">fs-testplan</span></dd></div>
-        <div><dt>Fil</dt><dd><code>akseptansetest/&lt;slug&gt;/testplan.md</code></dd></div>
-        <div><dt>Confluence</dt><dd>«Testplan – &lt;leveranse&gt;», med verifiseringen som underside</dd></div>
+        <div><dt>Filer</dt><dd><code>akseptansetest/&lt;slug&gt;/testplan.md</code>, <code>omfang.md</code>, <code>testcaser-og-testdata.md</code> og <code>sporbarhet.md</code></dd></div>
+        <div><dt>Confluence</dt><dd>«Testplan – &lt;leveranse&gt;» som hovedside, med «Omfang», «Testcaser og testdata», «Sporbarhet» og verifiseringen som undersider</dd></div>
         <div><dt>Endrer aldri</dt><dd>Kravene, taggene, scope-fila eller <code>oppgave.md</code></dd></div>
       </dl>
     </aside>
