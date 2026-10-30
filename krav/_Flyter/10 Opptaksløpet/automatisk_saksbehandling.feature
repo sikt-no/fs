@@ -13,7 +13,7 @@ Egenskap: Automatisk saksbehandling
   vitnemålet er importert, eller når jobben for nye vitnemål i KREG finner søkerens første
   vitnemål. Opptaksforvalteren kan skru automatikken av for opptaket (OPT-BEH-BEH-032).
   Som første steg setter den GSK-konklusjonen på søknadene som ikke har en.
-  Flyten gjelder søkere med ett vitnemål som gir GSK. Andre søkere
+  Flyten gjelder søkere med ett vitnemål, der vitnemålet gir GSK. Andre søkere
   hoppes over, og behandles ikke helautomatisk
   (se OPT-BEH-BEH-025). For søkerne i flyten setter den automatiske behandlingen grunnlaget,
   poengene, vurderingen av kravelementene og svarene på kvotespørsmålene, i den rekkefølgen.
@@ -78,17 +78,17 @@ Egenskap: Automatisk saksbehandling
 
     Scenario: Søknaden uten GSK-konklusjon får konklusjonen i kjøringen
       Gitt at søknaden ikke har noen GSK-konklusjon
-      Og at "Kari Nordmann" har ett vitnemål som gir GSK
+      Og at "Kari Nordmann" har ett vitnemål, og vitnemålet gir GSK
       Når søknaden behandles automatisk
       Så får søknaden en positiv GSK-konklusjon
 
   @depends-on-OPT-BEH-BEH-015 @depends-on-OPT-BEH-BEH-025
   # OPT-BEH-BEH-015: «Vitnemålet gir GSK når minst én av de tre påstandene er ja»
-  # OPT-BEH-BEH-025: «Bare saker der søkeren har ett vitnemål som gir GSK, behandles helautomatisk»
+  # OPT-BEH-BEH-025: «Bare saker der søkeren har ett vitnemål, og vitnemålet gir GSK, behandles helautomatisk»
   Regel: Vitnemålet som gir GSK, avgjør om saken behandles helautomatisk
 
     Scenario: Saken behandles helautomatisk på vitnemålet som gir GSK
-      Gitt at "Kari Nordmann" har ett vitnemål som gir GSK
+      Gitt at "Kari Nordmann" har ett vitnemål, og vitnemålet gir GSK
       Når søknaden behandles automatisk
       Så behandles saken hos "Universitetet i Oslo" helautomatisk på vitnemålet
 
