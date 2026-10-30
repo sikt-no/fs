@@ -84,10 +84,11 @@ Egenskap: Automatisk vurdering av spesielle opptakskrav
   # Avklart 30.10.2026: vurderingen av vitnemålet og praksisautomatikken
   # (knytte_praksis_til_opptakskrav.feature, OPT-BEH-BEH-006) vurderer hver sine kravelementer,
   # og møtes ikke. Saksbehandlerens vurdering låser kravelementet i begge.
+  # Avklart 30.10.2026: fjernes et studieønske, blir kravelementene det ga, og vurderingen av
+  # dem, stående (STEK-505). Søkeren ser mangeltekstene per søknadsalternativ, og ser dem ikke
+  # lenger når søknadsalternativet er fjernet (OPT-BEH-BEH-008).
 
   # ÅPNE SPØRSMÅL:
-  # - Skal et studieønske som fjernes, også fjerne kravelementene det ga
-  #   (STEK-505)?
   # - FS157.001 i FS-klienten beregner om søkerne er kvalifisert for et helt
   #   opptak. Trengs det tilsvarende?
 
