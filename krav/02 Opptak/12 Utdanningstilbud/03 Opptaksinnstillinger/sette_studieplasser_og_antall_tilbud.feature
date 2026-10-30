@@ -1,6 +1,6 @@
 # language: no
 # GitHub: #596
-@OPT-OPT-UTD-007 @must @draft @scope-utdanningstilbud-2027
+@OPT-OPT-UTD-007 @must @in-progress @scope-utdanningstilbud-2027
 Egenskap: Sette antall studieplasser per utdanningstilbud
   Som opptaksforvalter
   ønsker jeg å sette hvor mange studieplasser vi har per utdanningstilbud
@@ -18,6 +18,7 @@ Egenskap: Sette antall studieplasser per utdanningstilbud
     Gitt at opptaksforvalter er innlogget
     Og at utdanningstilbudet "Sykepleie, høst 2027" er lagt til i opptaket "Samordna opptak 2027"
 
+  @implemented
   Regel: Opptaksforvalter setter antall studieplasser
 
     Scenario: Sette antall studieplasser
@@ -35,6 +36,7 @@ Egenskap: Sette antall studieplasser per utdanningstilbud
       Når opptaksforvalter setter tak for ja-svar til 220 for utdanningstilbudet "Sykepleie, høst 2027"
       Så gir ikke plasstildelingen nye tilbud når 220 søkere har svart ja
 
+  @implemented
   Regel: Deltakende organisasjoner kan endre antall studieplasser til første plasstildelingsrunde er publisert
     # Virkningen av når redigering av utdanningstilbud stenger, som opptaksforvalter setter i
     # 11 Opprette og vedlikeholde opptak/04 Frister/frister_og_hendelser.feature.

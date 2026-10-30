@@ -1,6 +1,6 @@
 # language: no
 # GitHub: #593
-@OPT-OPT-UTD-005 @must @draft @scope-utdanningstilbud-i-opptak-2027
+@OPT-OPT-UTD-005 @must @in-progress @scope-utdanningstilbud-i-opptak-2027
 Egenskap: Hente utdanninger fra utdanningsregisteret
   Som opptaksforvalter
   ønsker jeg at opptaket får tak i relevante utdanninger og utdanningsinstanser fra utdanningsregisteret
@@ -29,6 +29,7 @@ Egenskap: Hente utdanninger fra utdanningsregisteret
   # - Hvilke nivåer regnes som grunnstudier UHG (bachelor, årsstudium, integrert master, profesjonsstudium)?
   Regel: Utdanningsinstanser som møter opptakets kriterier blir tilgjengelige utdanningstilbud
 
+    @implemented
     Scenario: Studieprogram fra deltakende lærested blir tilgjengelig
       Gitt at utdanningsregisteret har en instans av bachelorprogrammet "Sykepleie" ved "Universitetet i Oslo" med studiestart høst 2027 på campus "Blindern"
       Når opptaket henter utdanninger fra utdanningsregisteret
@@ -56,13 +57,14 @@ Egenskap: Hente utdanninger fra utdanningsregisteret
         | har studiestart høst 2028                        |
         | er et studieprogram på masternivå                |
 
+    @implemented
     # AVKLART 2026-10-23: Hver campus blir et eget utdanningstilbud når samme studieprogram har oppstart på flere campuser.
     Scenario: Samme studieprogram på to campuser
       Gitt at utdanningsregisteret har instanser av bachelorprogrammet "Sykepleie" med studiestart høst 2027 på campusene "Blindern" og "Kjeller"
       Når opptaket henter utdanninger fra utdanningsregisteret
       Så er det ett tilgjengelig utdanningstilbud for hver campus
 
-  @openquestion
+  @implemented @openquestion
   # ÅPNE SPØRSMÅL:
   # - #398 sier at opptaksforvalter kan «legge til, og ev. korrigere, merinformasjon». Skal noe av
   #   grunndataene kunne overstyres i opptak, eller rettes alt i utdanningsregisteret?
@@ -78,7 +80,7 @@ Egenskap: Hente utdanninger fra utdanningsregisteret
         | Studiestart  |
       Og opptaksforvalter trenger ikke registrere disse opplysningene i opptaket
 
-  @openquestion @ref-FLY-OPT-KLA-001
+  @implemented @openquestion @ref-FLY-OPT-KLA-001
   # ÅPNE SPØRSMÅL:
   # - Hvor ofte hentes utdanninger fra utdanningsregisteret (fortløpende, daglig batch, ved behov)?
   # - Skal opptaksforvalter kunne be om ny henting selv?

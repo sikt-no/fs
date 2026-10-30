@@ -64,6 +64,7 @@ Egenskap: Fjerne utdanningstilbud fra opptak
       Når opptaksforvalter ser utdanningstilbudet "Sykepleie, høst 2027", som "Universitetet i Oslo" tilbyr
       Så ser ikke opptaksforvalter muligheten til å fjerne utdanningstilbudet "Sykepleie, høst 2027"
 
+    @implemented
     Scenario: Deltakende organisasjon kan ikke fjerne utdanningstilbud en annen organisasjon tilbyr
       # Jira: SHI-747
       Gitt at opptaksforvalter er ved deltakende organisasjon "Universitetet i Oslo"
