@@ -134,18 +134,22 @@ Egenskap: Importere resultater fra KREG
       Så er søkerens vitnemål importert
 
   @openquestion @ref-OPT-BEH-BEH-021 @ref-FLY-OPT-VIT-001 @ref-OPT-BEH-BEH-032
-  Regel: Endringer i KREG importeres gjennom et abonnement
-    # Abonnementet gjelder aktive søkere: søkere med en søknad som ikke er trukket, i et opptak
-    # som ikke er avsluttet.
+  Regel: Nye og annullerte vitnemål i KREG importeres for aktive søkere
+    # Gjelder aktive søkere: søkere med en søknad som ikke er trukket, i et opptak som ikke er
+    # avsluttet.
     # Avklart 29.10.2026: nytt vitnemål og annullering tas inn. Opphevet annullering og endringer i
-    # et vitnemål som er importert, tas ikke inn. På sikt abonnerer opptak på hendelsesloggen i
-    # KREG, og henter nye vitnemål for fødselsnumrene KREG varsler endringer for. Fram til da
-    # sjekker jobben for nye vitnemål (OPT-BEH-BEH-032).
+    # et vitnemål som er importert, tas ikke inn.
+    # Endret 30.10.2026: i den første versjonen går jobben for nye vitnemål (OPT-BEH-BEH-032)
+    # gjennom alle aktive søkere, og henter vitnemålene fra KREG for hver søker. Det som ikke er
+    # importert fra før, eller som er annullert i KREG, er nytt. I neste versjon abonnerer opptak
+    # på hendelsesloggen i KREG, og henter vitnemålene bare for fødselsnumrene KREG varsler
+    # endringer for. Det kommer som en endring av kravet.
     # Et nytt vitnemål i en sak som er behandlet, er ny dokumentasjon. Saken behandles ikke
     # automatisk på nytt (OPT-BEH-BEH-032). Når vitnemålet annulleres, gjelder OPT-BEH-BEH-034.
     # Varselet til saksbehandleren om nytt vitnemål står i OPT-BEH-BEH-021.
     # ÅPNE SPØRSMÅL:
-    # - Hvordan abonnementet skal virke, er ikke avklart, og hører til KREG-teamet.
+    # - Hvordan hendelsesloggen i KREG skal virke i neste versjon, er ikke avklart, og hører til
+    #   KREG-teamet.
 
     Scenario: Søkeren får vitnemålet etter at søknaden er levert
       Gitt at søkeren har levert søknaden uten å ha et vitnemål i KREG

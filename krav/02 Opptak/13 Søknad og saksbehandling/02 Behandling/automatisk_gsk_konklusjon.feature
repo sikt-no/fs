@@ -220,8 +220,8 @@ Egenskap: Automatisk GSK-konklusjon
       Så får søknaden ingen GSK-konklusjon
 
     Scenario: Nytt vitnemål fra KREG etter at søknaden er opprettet
-      # Hvordan nye vitnemål hentes, står i OPT-BEH-BEH-030 («Endringer i KREG importeres
-      # gjennom et abonnement»).
+      # Hvordan nye vitnemål hentes, står i OPT-BEH-BEH-030 («Nye og annullerte vitnemål i
+      # KREG importeres for aktive søkere»).
       Gitt at søknaden ikke har noen GSK-konklusjon
       Og at opptaket ikke er avsluttet
       Når KREG får et nytt vitnemål for søkeren

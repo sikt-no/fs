@@ -3,9 +3,9 @@
 Egenskap: Importere VGS-vitnemål fra KREG
   Fra KREG får et nytt eller annullert vitnemål fra videregående skole, til søknadene søkeren
   har i opptak som ikke er avsluttet, har fått GSK-konklusjonen fra vitnemålet, eller sakene
-  som bruker det annullerte vitnemålet, er merket for saksbehandleren. En jobbplanlegger starter importen. Importen leser
-  hendelsesloggen i KREG, og gjelder en hendelse minst én aktiv søker i opptakssystemet, leses
-  alle VGS-dokumentene søkeren har i KREG, også annulleringene. Et vitnemål som ikke finnes fra
+  som bruker det annullerte vitnemålet, er merket for saksbehandleren. En jobbplanlegger starter
+  importen. Importen går gjennom alle aktive søkere i opptakssystemet, og leser alle
+  VGS-dokumentene hver søker har i KREG, også annulleringene. Et vitnemål som ikke finnes fra
   før, importeres. Er det ikke annullert, beregnes opptakssystemets påstand om GSK for vitnemålet, og
   GSK-beregningen startes for hvert opptak søkeren har søknad i. Et vitnemål som finnes fra før
   og er annullert i KREG, oppdateres som annullert. Et annullert vitnemål håndteres etter
@@ -13,6 +13,11 @@ Egenskap: Importere VGS-vitnemål fra KREG
 
   # Fasene er etter prosesstegningen «Importer VGS-vitnemål fra KREG» (2026-10-29).
   # Underprosessen «Håndter annullert vitnemål» er ikke tegnet.
+  # Endret 30.10.2026: den første versjonen går gjennom alle aktive søkere hver gang importen
+  # kjører, og henter vitnemålene fra KREG for hver søker. Om noe er nytt eller annullert, ses
+  # ved å sammenligne med vitnemålene som er importert. I neste versjon leser importen
+  # hendelsesloggen i KREG, og henter bare vitnemålene for søkerne KREG har hendelser for.
+  # Det kommer som en endring av flyten når hendelsesloggen i KREG er klar.
   # Et vitnemål som finnes fra før og ikke er annullert i KREG, endres ikke. Det gjelder også
   # når KREG har opphevet en annullering (se OPT-BEH-BEH-030).
   # Flyten beskriver vitnemålene. Kompetansebevis søkeren har i KREG, importeres på samme
@@ -27,24 +32,31 @@ Egenskap: Importere VGS-vitnemål fra KREG
     Scenario: Importen starter når jobbplanleggeren kjører jobben
       Gitt at jobben for import av VGS-vitnemål fra KREG er satt opp i jobbplanleggeren
       Når jobbplanleggeren starter jobben
-      Så leser importen hendelsesloggen fra KREG
+      Så går importen gjennom alle aktive søkere i opptakssystemet
 
-  @depends-on-OPT-BEH-BEH-030
-  # OPT-BEH-BEH-030: «Endringer i KREG importeres gjennom et abonnement»
+  @depends-on-OPT-BEH-BEH-030 @openquestion
+  # OPT-BEH-BEH-030: «Nye og annullerte vitnemål i KREG importeres for aktive søkere»
   # En aktiv søker har en søknad som ikke er trukket, i et opptak som ikke er avsluttet.
-  Regel: Bare hendelser for aktive søkere gir import
+  # ÅPNE SPØRSMÅL:
+  # - Tåler KREG ett oppslag per aktiv søker hver gang importen kjører, i hovedopptaket med
+  #   mange søkere? Det avgjør hvor ofte jobben kan kjøre (OPT-BEH-BEH-033), og må avklares
+  #   med KREG-teamet.
+  Regel: Vitnemålene hentes fra KREG for alle aktive søkere
 
-    Scenario: Hendelsen gjelder en aktiv søker
+    Scenario: Vitnemålene hentes for den aktive søkeren
       Gitt at "Kari Nordmann" har en søknad som ikke er trukket, i et opptak som ikke er avsluttet
-      Og at hendelsesloggen i KREG har en hendelse for "Kari Nordmann"
       Når importen av VGS-vitnemål fra KREG kjører
       Så leses alle VGS-dokumentene "Kari Nordmann" har i KREG, også annulleringene
 
-    Scenario: Hendelsen gjelder ingen aktiv søker
-      Gitt at "Ola Nordmann" ikke har noen søknad som ikke er trukket, i et opptak som ikke er avsluttet
-      Og at hendelsesloggen i KREG har en hendelse for "Ola Nordmann"
+    Scenario: Vitnemålene hentes for søkeren med søknader i flere opptak bare én gang
+      Gitt at "Kari Nordmann" har søknader i to opptak som ikke er avsluttet
       Når importen av VGS-vitnemål fra KREG kjører
-      Så importeres ingen vitnemål for "Ola Nordmann"
+      Så leses VGS-dokumentene til "Kari Nordmann" i KREG én gang
+
+    Scenario: Vitnemålene hentes ikke for søkeren som ikke er aktiv
+      Gitt at "Ola Nordmann" ikke har noen søknad som ikke er trukket, i et opptak som ikke er avsluttet
+      Når importen av VGS-vitnemål fra KREG kjører
+      Så leses ingen VGS-dokumenter for "Ola Nordmann" i KREG
 
   @depends-on-OPT-BEH-BEH-030
   # OPT-BEH-BEH-030: «Alle vitnemål og kompetansebevis søkeren har i KREG, importeres»
