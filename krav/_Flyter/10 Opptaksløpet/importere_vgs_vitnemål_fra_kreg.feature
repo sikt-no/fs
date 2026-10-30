@@ -37,10 +37,12 @@ Egenskap: Importere VGS-vitnemål fra KREG
   @depends-on-OPT-BEH-BEH-030 @openquestion
   # OPT-BEH-BEH-030: «Nye og annullerte vitnemål i KREG importeres for aktive søkere»
   # En aktiv søker har en søknad som ikke er trukket, i et opptak som ikke er avsluttet.
+  # Importen gjør ett oppslag i KREG per aktiv søker hver gang den kjører. Vi har dialog med
+  # KREG-teamet om belastningen (30.10.2026).
   # ÅPNE SPØRSMÅL:
-  # - Tåler KREG ett oppslag per aktiv søker hver gang importen kjører, i hovedopptaket med
-  #   mange søkere? Det avgjør hvor ofte jobben kan kjøre (OPT-BEH-BEH-033), og må avklares
-  #   med KREG-teamet.
+  # - Hvor ofte er det ansvarlig å kjøre importen, i hovedopptaket med mange søkere? Det skal
+  #   testes sammen med KREG-teamet. Svaret settes i OPT-BEH-BEH-033, som har hvor ofte
+  #   jobbene kjører.
   Regel: Vitnemålene hentes fra KREG for alle aktive søkere
 
     Scenario: Vitnemålene hentes for den aktive søkeren
