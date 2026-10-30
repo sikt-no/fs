@@ -3,7 +3,7 @@
 Egenskap: Automatisk saksbehandling på sammensatt vitnemål
   Fra saksbehandleren har satt sammen et vitnemål i vitnemålsbehandleren, til saken er ferdig
   behandlet og er med i plasstildelingen. Saksbehandleren setter sammen vitnemålet av fag fra
-  flere av søkerens vitnemål og kompetansebevis, og starter den automatiske behandlingen med det
+  flere av søkerens vitnemål og kompetansebevis, og starter den automatiske behandlingen på det
   sammensatte vitnemålet. Resten av løpet er det samme som i den automatiske saksbehandlingen
   (FLY-OPT-AUT-001), på det sammensatte vitnemålet. Et sammensatt vitnemål er aldri et
   førstegangsvitnemål.
@@ -14,11 +14,14 @@ Egenskap: Automatisk saksbehandling på sammensatt vitnemål
 
   @openquestion
   Regel: Saksbehandleren setter sammen et vitnemål i vitnemålsbehandleren
+    # Avklart 2026-10-30: et sammensatt vitnemål er prinsipielt VPL, ulik poengsum per
+    # søknadsalternativ («Søkeren kan få ulik poengsum til ulike søknadsalternativer» i
+    # OPT-BEH-BEH-022). Det må også dekke 23/6-regelen.
     # ÅPNE SPØRSMÅL:
-    # - Kravet mangler. Hva er et sammensatt vitnemål, og hvordan løses det best? Det er
-    #   trolig ulik poengsum per søknadsalternativ (VPL i FS, «Søkeren kan få ulik poengsum til
-    #   ulike søknadsalternativer» i OPT-BEH-BEH-022), og det kan brukes til 23/6-regelen
-    #   («Hente studiekompetansefag fra flere dokumenter etter 23/6-regelen» i OPT-BEH-BEH-022).
+    # - Kravet mangler. Hvordan settes et sammensatt vitnemål sammen?
+    # - OPT-BEH-BEH-022 sier at fag bare kan hentes fra flere dokumenter etter 23/6-regelen
+    #   («Hente studiekompetansefag fra flere dokumenter etter 23/6-regelen»). Med VPL hentes fag
+    #   fra flere dokumenter også utenfor 23/6-regelen. Må OPT-BEH-BEH-022 endres?
     # - Får det sammensatte vitnemålet påstanden om GSK? Påstanden beregnes når vitnemålet
     #   importeres fra KREG (OPT-BEH-BEH-015), og det sammensatte vitnemålet importeres ikke.
     #   Svaret må kontrolleres mot kravene for GSK (OPT-BEH-BEH-015 og OPT-BEH-BEH-027). Det er
@@ -39,15 +42,15 @@ Egenskap: Automatisk saksbehandling på sammensatt vitnemål
 
   @depends-on-OPT-BEH-BEH-025
   # OPT-BEH-BEH-025: «Har søkeren flere vitnemål med påstanden GSK, behandles saken automatisk på vitnemålet saksbehandleren velger»
-  Regel: Saksbehandleren starter den automatiske behandlingen for saken
-    # Saksbehandleren må si at den automatiske behandlingen skal kjøre med det sammensatte
-    # vitnemålet (avklart 2026-10-29). Hvordan det gjøres, er et åpent spørsmål i OPT-BEH-BEH-025.
-    # Å starte behandlingen for én sak står i OPT-BEH-BEH-032 (PR #862, ikke merget 2026-10-29).
+  Regel: Saksbehandleren starter den automatiske behandlingen på det sammensatte vitnemålet
+    # Avklart 2026-10-29: saksbehandleren må si at den automatiske behandlingen skal kjøre med det
+    # sammensatte vitnemålet. Å starte behandlingen på et vitnemål står i OPT-BEH-BEH-032 (PR #862,
+    # ikke merget 2026-10-30). Fasen får @depends-on-OPT-BEH-BEH-032 når kravet er merget.
 
-    Scenario: Saken behandles helautomatisk på det sammensatte vitnemålet
+    Scenario: Saken behandles automatisk på det sammensatte vitnemålet
       Gitt at "Kari Nordmann" har et sammensatt vitnemål
-      Når saksbehandleren starter den automatiske behandlingen med det sammensatte vitnemålet for saken hos "Universitetet i Oslo"
-      Så behandles saken hos "Universitetet i Oslo" helautomatisk på det sammensatte vitnemålet
+      Når saksbehandleren ved Universitetet i Oslo starter den automatiske behandlingen på det sammensatte vitnemålet
+      Så behandles saken hos "Universitetet i Oslo" automatisk på det sammensatte vitnemålet
 
   @depends-on-OPT-BEH-BEH-019
   # OPT-BEH-BEH-019: «Grunnlaget velges ut fra egenskapene regelverket har gitt det»
@@ -56,7 +59,7 @@ Egenskap: Automatisk saksbehandling på sammensatt vitnemål
     # fordi et sammensatt vitnemål aldri er et førstegangsvitnemål.
 
     Scenario: Søknaden på det sammensatte vitnemålet får ikke grunnlaget som krever førstegangsvitnemål
-      Gitt at saken hos "Universitetet i Oslo" behandles helautomatisk på det sammensatte vitnemålet
+      Gitt at saken hos "Universitetet i Oslo" behandles automatisk på det sammensatte vitnemålet
       Og at søkeren er 21 år på datoen for aldersberegning
       Når søknaden behandles automatisk
       Så får søknaden ikke grunnlaget som krever førstegangsvitnemål
@@ -66,7 +69,7 @@ Egenskap: Automatisk saksbehandling på sammensatt vitnemål
   Regel: Resten av saken behandles som i den automatiske saksbehandlingen
 
     Scenario: Saken er ferdig behandlet på det sammensatte vitnemålet
-      Gitt at saken hos "Universitetet i Oslo" behandles helautomatisk på det sammensatte vitnemålet
+      Gitt at saken hos "Universitetet i Oslo" behandles automatisk på det sammensatte vitnemålet
       Når den automatiske behandlingen er ferdig
       Så har søknaden grunnlag fra det sammensatte vitnemålet
       Og saken hos "Universitetet i Oslo" er ferdig behandlet
