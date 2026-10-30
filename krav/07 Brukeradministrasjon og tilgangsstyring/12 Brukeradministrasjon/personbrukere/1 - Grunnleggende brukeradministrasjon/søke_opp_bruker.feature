@@ -43,10 +43,11 @@ Egenskap: Listevisning og søk i personbrukere
       Og «Hjemorganisasjon» viser <hjemorganisasjon>
 
       Eksempler:
-        | feide-brukere       | feide-id                                            | hjemorganisasjon                                           |
-        | ingen Feide-bruker  | «-»                                                 | «-»                                                        |
-        | én Feide-bruker     | Feide-ID-en til Feide-brukeren                      | hjemorganisasjonen til Feide-brukeren                      |
-        | flere Feide-brukere | Feide-ID-ene til alle Feide-brukerne, kommaseparert | hjemorganisasjonene til alle Feide-brukerne, kommaseparert |
+        | feide-brukere                         | feide-id                                            | hjemorganisasjon                                           |
+        | ingen Feide-bruker                    | «-»                                                 | «-»                                                        |
+        | én Feide-bruker                       | Feide-ID-en til Feide-brukeren                      | hjemorganisasjonen til Feide-brukeren                      |
+        | flere Feide-brukere                   | Feide-ID-ene til alle Feide-brukerne, kommaseparert | hjemorganisasjonene til alle Feide-brukerne, kommaseparert |
+        | to Feide-brukere i samme organisasjon | begge Feide-ID-ene, kommaseparert                   | hjemorganisasjonen én gang                                 |
 
     @planned
     Scenario: Se antall aktive roller per personbruker

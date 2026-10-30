@@ -8,9 +8,10 @@ Egenskap: Se detaljer for personbruker
 
   Hjemorganisasjonen er organisasjonen personbrukeren hører hjemme i, hentet fra Feide, og
   den er personbrukerens ansettelsesrelasjon. Den er noe annet enn organisasjonen en tildeling
-  gjelder for. En personbruker kan være koblet til flere Feide-brukere, og har da én
-  hjemorganisasjon for hver av dem. Tildelingene kan gjelde ved andre organisasjoner enn
-  hjemorganisasjonene. Hjemorganisasjonen til en Feide-bruker kan ikke endres.
+  gjelder for. En personbruker kan være koblet til flere Feide-brukere, og har da
+  hjemorganisasjonene til alle disse Feide-brukerne. Tildelingene kan gjelde ved andre
+  organisasjoner enn hjemorganisasjonene. Hjemorganisasjonen kommer fra Feide og kan ikke
+  endres. Bytter personen arbeidssted, får hen en ny Feide-bruker koblet til samme personbruker.
 
   Bakgrunn:
     Gitt jeg er på detaljsiden for en personbruker
@@ -26,23 +27,23 @@ Egenskap: Se detaljer for personbruker
     Scenario: Se hjemorganisasjon
       Så ser jeg personbrukerens hjemorganisasjon
 
-    @draft
+    @planned
     Scenariomal: Se <felt> for en personbruker med flere Feide-brukere
       Gitt personbrukeren er koblet til flere Feide-brukere
       Så viser «<felt>» <verdi>, kommaseparert
 
       Eksempler:
-        | felt             | verdi                                       |
-        | Feide-ID         | Feide-ID-ene til alle Feide-brukerne        |
-        | Hjemorganisasjon | hjemorganisasjonene til alle Feide-brukerne |
+        | felt             | verdi                                                                  |
+        | Feide-ID         | Feide-ID-ene til alle Feide-brukerne                                   |
+        | Hjemorganisasjon | hjemorganisasjonene til alle Feide-brukerne, hver organisasjon én gang |
 
-    @draft
+    @planned
     Scenario: Se en personbruker uten Feide-bruker
       Gitt personbrukeren ikke er koblet til noen Feide-bruker
       Så viser «Feide-ID» «-»
       Og «Hjemorganisasjon» viser «-»
 
-    @draft
+    @planned
     Scenario: Se miljø
       Så ser jeg miljøene personbrukeren har tildelinger i
 
@@ -55,7 +56,7 @@ Egenskap: Se detaljer for personbruker
     Scenario: Se status
       Så ser jeg om personbrukeren er aktiv eller deaktivert
 
-  @draft
+  @planned
   Regel: Oppsummeringen øverst på detaljsiden viser aktive roller og miljøer
     # Oppsummeringen står over fanene, og vises både i «Detaljer» og «Roller».
 
