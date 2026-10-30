@@ -615,7 +615,7 @@ Egenskap: Søknadsmangler
       Når saksbehandleren ved Universitetet i Oslo åpner manglene i saken
       Så ser ikke saksbehandleren muligheten til å kommentere, sjekke ut eller slette den automatiske mangelteksten
 
-  @draft @openquestion @ref-FLY-OPT-AUT-001 @depends-on-OPT-SØK-SØK-018
+  @draft @openquestion @ref-FLY-OPT-AUT-001 @depends-on-OPT-SØK-SØK-018 @ref-OPT-OVO-GRU-001
   Regel: Mangelen for generell studiekompetanse som fullføres i vår settes og sjekkes ut automatisk
 
     Søkere som fullfører videregående opplæring i vår, oppgir i søknaden at generell
@@ -634,8 +634,10 @@ Egenskap: Søknadsmangler
     ut mangelen, for eksempel når søkeren har dokumentert vitnemålet på annen måte.
     # I det gamle systemet het mangelkoden DUA. Eksemplene bruker den koden.
 
+    # Avklart 30.10.2026: er ingen mangelkode merket, får opptaksforvalteren et varsel første
+    # gang en søknad ikke får mangelen, og en advarsel allerede når opptaket opprettes
+    # (OPT-OVO-GRU-001).
     # ÅPNE SPØRSMÅL:
-    # - Hvordan varsles opptaksforvalteren når ingen mangelkode er merket?
     # - Kan saksbehandleren slette mangelen, eller bare sjekke den ut? Mangelen har en mangelkode,
     #   og er ikke en automatisk mangeltekst, som saksbehandleren ikke kan gjøre noe med.
     # - Skal en mangel som er sjekket ut, bli stående når søkeren endrer søknaden til at generell
@@ -653,6 +655,12 @@ Egenskap: Søknadsmangler
       Når søkeren oppgir i søknaden at generell studiekompetanse fullføres i vår
       Så har ikke saken hos "Universitetet i Oslo" en automatisk mangel for generell studiekompetanse som fullføres i vår
       Og opptaksforvalteren ved HK-dir får varsel om at ingen mangelkode er merket
+
+    Scenario: Opptaksforvalteren får varselet bare første gang
+      Gitt at ingen mangelkode i regelverkssamlingen "UHG 2027" er merket for generell studiekompetanse som fullføres i vår
+      Og at opptaksforvalteren ved HK-dir har fått varsel om at ingen mangelkode er merket
+      Når en ny søker oppgir i søknaden at generell studiekompetanse fullføres i vår
+      Så får ikke opptaksforvalteren ved HK-dir et nytt varsel
 
     Scenario: Den automatiske mangelen hindrer kvalifisering til søknadsalternativene i saken
       Gitt at saken hos "Universitetet i Oslo" har den automatiske mangelen "DUA"

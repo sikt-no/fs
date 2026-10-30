@@ -54,6 +54,19 @@ Egenskap: Opprette et opptak
       Men opptaksforvalter setter ikke opptakstype
       Så kan opptaket ikke lagres
 
+  @draft @depends-on-OPT-BEH-BEH-008
+  # OPT-BEH-BEH-008: «Mangelen for generell studiekompetanse som fullføres i vår settes og sjekkes ut automatisk»
+  # Avklart 30.10.2026: advarselen stopper ikke lagringen.
+  Regel: Opptaksforvalter får en advarsel når regelverkssamlingen mangler mangelkode for generell studiekompetanse som fullføres i vår
+
+    Scenario: Advarsel når ingen mangelkode er merket for generell studiekompetanse som fullføres i vår
+      Gitt at ingen mangelkode i regelverkssamlingen "UHG 2027" er merket for generell studiekompetanse som fullføres i vår
+      Når opptaksforvalter oppretter et nytt opptak
+      Og opptaksforvalter knytter til regelverkssamlingen "UHG 2027"
+      Og opptaksforvalter lagrer opptaket
+      Så får opptaksforvalter en advarsel om at ingen mangelkode er merket for generell studiekompetanse som fullføres i vår
+      Men opptaket er opprettet
+
   # AVKLART 2026-10-19: Utdanningsbakgrunner, poenglikhetsregel og antall søknadsalternativer
   # må være satt for å opprette et opptak. Startnummer for søknader er ikke obligatorisk,
   # se 03 Innstillinger/innstillinger.feature.
