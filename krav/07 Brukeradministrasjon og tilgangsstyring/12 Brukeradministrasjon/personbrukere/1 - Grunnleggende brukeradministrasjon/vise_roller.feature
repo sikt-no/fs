@@ -25,6 +25,22 @@ Egenskap: Se en personbrukers roller
         | Tildelt av    |
         | Tildelt dato  |
 
+    @draft
+    Scenario: Se brukerens roller
+      Når jeg ser på personbrukerens detaljside
+      Så ser jeg en seksjon med personbrukerens tildelte roller
+      Og rollene er sortert etter navn
+      Og hver rolle viser følgende informasjon:
+        | felt                     |
+        | Navn                     |
+        | Beskrivelse              |
+        | Miljø                    |
+        | Gjelder for organisasjon |
+        | Tildelt av               |
+        | Tildelt dato             |
+      Og «Navn» viser rollekoden fra rollekatalogen
+      Og «Tildelt av» viser navnet på den som tildelte rollen
+
     @draft @openquestion
     Scenario: Se tidsbegrensning på en rolle
       # ÅPNE SPØRSMÅL:
@@ -48,28 +64,6 @@ Egenskap: Se en personbrukers roller
       Når jeg skriver inn tekst i navne-filteret
       Så vises kun roller der navnet inneholder den innskrevne teksten
 
-    Scenario: Tilgjengelige organisasjoner i filter
-      Når jeg åpner organisasjonsfilteret
-      Så inneholder filteret alle organisasjoner som er representert i den ufiltrerte listen
-      Og hver organisasjon vises kun én gang
-      Og organisasjonene er sortert alfabetisk
-      Og "Alle organisasjoner" er valgt som standard
-
-    Scenario: Filtrere på organisasjon
-      Når jeg velger en organisasjon som filter
-      Så vises kun roller knyttet til den valgte organisasjonen
-
-    @planned @scope-restanser-etter-onboarding
-    Scenario: Organisasjonene i filteret vises med akronym
-      Når jeg åpner organisasjonsfilteret
-      Så vises akronymet under navnet på hver organisasjon
-      Men organisasjonskoden vises når organisasjonen ikke har akronym
-
-    @planned @scope-restanser-etter-onboarding
-    Scenario: Søke i organisasjonsfilteret
-      Når jeg skriver inn tekst i organisasjonsfilteret
-      Så viser organisasjonsfilteret bare organisasjonene der navnet eller akronymet inneholder den innskrevne teksten
-
     Scenario: Tilgjengelige miljøer i filter
       Når jeg åpner miljøfilteret
       Så inneholder filteret alle miljøer som er representert i den ufiltrerte listen
@@ -81,10 +75,32 @@ Egenskap: Se en personbrukers roller
       Når jeg velger et miljø som filter
       Så vises kun roller i det valgte miljøet
 
+    Scenario: Tilgjengelige organisasjoner i filter
+      Når jeg åpner filteret «Gjelder for organisasjon»
+      Så inneholder filteret alle organisasjoner som er representert i den ufiltrerte listen
+      Og hver organisasjon vises kun én gang
+      Og organisasjonene er sortert alfabetisk
+      Og "Alle organisasjoner" er valgt som standard
+
+    Scenario: Filtrere på organisasjon
+      Når jeg velger en organisasjon i filteret «Gjelder for organisasjon»
+      Så vises kun roller knyttet til den valgte organisasjonen
+
+    @planned @scope-restanser-etter-onboarding
+    Scenario: Organisasjonene i filteret vises med akronym
+      Når jeg åpner filteret «Gjelder for organisasjon»
+      Så vises akronymet under navnet på hver organisasjon
+      Men organisasjonskoden vises når organisasjonen ikke har akronym
+
+    @planned @scope-restanser-etter-onboarding
+    Scenario: Søke i organisasjonsfilteret
+      Når jeg skriver inn tekst i filteret «Gjelder for organisasjon»
+      Så viser filteret bare organisasjonene der navnet eller akronymet inneholder den innskrevne teksten
+
     Scenario: Kombinere filtre
       Når jeg kombinerer flere filtre
       Så vises kun roller som matcher alle kriteriene
 
 # ÅPNE SPØRSMÅL:
 # - Skal sammensatte roller kunne foldes ut for å vise hvilke tilganger rollen gir, eller henvises administrator til rolle-detaljsiden?
-# - Skal listen være sorterbar (per navn, organisasjon, tildelt dato)?
+# - Skal listen også kunne sorteres på organisasjon eller tildelt dato? Skissen viser sortering på navn, og det står i «Se brukerens roller».

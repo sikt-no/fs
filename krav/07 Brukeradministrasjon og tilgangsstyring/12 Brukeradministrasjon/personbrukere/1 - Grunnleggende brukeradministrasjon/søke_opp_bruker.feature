@@ -23,38 +23,56 @@ Egenskap: Listevisning og søk i personbrukere
         | Hjemorganisasjon |
         | Status           |
 
-    @planned @openquestion
+    @planned
     Scenario: Se liste over personbrukere
-      # ÅPNE SPØRSMÅL:
-      # - Hva står i «Feide-IDer» og «Hjemorganisasjon» for en personbruker som ikke er koblet til noen Feide-bruker?
-      # - En personbruker kan være koblet til flere Feide-brukere med ulike hjemorganisasjoner. Hvordan vises det i «Hjemorganisasjon»?
       Når jeg åpner brukeroversikten
       Så ser jeg en liste over alle personbrukere
       Og listen er sortert etter navn i stigende rekkefølge
       Og hvert innslag viser følgende informasjon:
         | felt             |
         | Navn             |
-        | Feide-IDer       |
+        | Feide-ID         |
         | Hjemorganisasjon |
-      Og «Feide-IDer» viser Feide-ID-ene til Feide-brukerne som er koblet til personbrukeren
+      Og «Feide-ID» viser Feide-ID-ene til Feide-brukerne som er koblet til personbrukeren
+
+    @planned
+    Scenariomal: Se Feide-brukerne til en personbruker i listen
+      Gitt en personbruker er koblet til <feide-brukere>
+      Når jeg åpner brukeroversikten
+      Så viser «Feide-ID» <feide-id> for personbrukeren
+      Og «Hjemorganisasjon» viser <hjemorganisasjon>
+
+      Eksempler:
+        | feide-brukere       | feide-id                                            | hjemorganisasjon                                           |
+        | ingen Feide-bruker  | «-»                                                 | «-»                                                        |
+        | én Feide-bruker     | Feide-ID-en til Feide-brukeren                      | hjemorganisasjonen til Feide-brukeren                      |
+        | flere Feide-brukere | Feide-ID-ene til alle Feide-brukerne, kommaseparert | hjemorganisasjonene til alle Feide-brukerne, kommaseparert |
 
     @planned
     Scenario: Se antall aktive roller per personbruker
       Når jeg åpner brukeroversikten
       Så viser listen kolonnen «Aktive roller» for hver personbruker
       Og kolonnen viser hvor mange aktive roller personbrukeren har
+      Og antallet vises som «1 rolle» når personbrukeren har én aktiv rolle, ellers som «N roller», også «0 roller»
       Og serveren avgjør hva som er en aktiv rolle
 
     @planned
-    Scenario: Filtrere på har aktive roller
+    Scenariomal: Filtrere på har aktive roller
       Gitt jeg ser listen over personbrukere
-      Når jeg velger filteret «har aktive roller»
-      Så vises kun personbrukere som har minst én aktiv rolle
+      Når jeg har krysset av for <avkrysning> under «Har aktive roller»
+      Så vises <personbrukere>
       Og serveren avgjør hva som er en aktiv rolle
+
+      Eksempler:
+        | avkrysning    | personbrukere                                  |
+        | «Ja»          | kun personbrukere som har minst én aktiv rolle |
+        | «Nei»         | kun personbrukere som ikke har aktive roller   |
+        | «Ja» og «Nei» | alle personbrukere                             |
+        | ingenting     | alle personbrukere                             |
 
     @draft @openquestion
     # ÅPNE SPØRSMÅL:
-    # - API-et støtter ikke sortering på navn ennå, og UI-kontrollen er derfor fjernet. Når skal dette komme på plass, og hvem følger opp på API-siden?
+    # - API-et har nå sortering på navn (`orderBy` med `NAVN` på `personbrukere`, i experimental-skjemaet), og skissen viser kontrollen «Sortering: Navn». Når skal UI-kontrollen komme tilbake i brukeroversikten?
     Scenariomal: Velge sorteringsretning for navn
       Gitt jeg ser listen over personbrukere
       Når jeg velger å sortere på navn i <retning> rekkefølge
@@ -149,6 +167,12 @@ Egenskap: Listevisning og søk i personbrukere
       Og hver rolle vises kun én gang
       Og rollene er sortert alfabetisk
       Og "Alle roller" er valgt som standard
+
+    @planned
+    Scenario: Rollene i filteret vises med rollekoden
+      Gitt jeg ser listen over personbrukere
+      Når jeg åpner rollefilteret
+      Så vises hver rolle med rollekoden fra rollekatalogen
 
     Scenario: Filtrere på rolle
       Gitt jeg ser listen over personbrukere
@@ -249,6 +273,6 @@ Egenskap: Listevisning og søk i personbrukere
 # ÅPNE SPØRSMÅL:
 # - Filnavn: bør "søke_opp_bruker.feature" omdøpes til "listevisning_og_sok.feature" for konsistens med mønsteret? Tittelendring på #479 må i så fall følges opp via fs-github.
 # - Rolle-navn: "brukeradministrator" er valgt. Sjekk at rolledefinisjonene i "4 - Opprette og administrere roller" bruker samme navn.
-# - Skal kant-tilfeller som brukere uten Feide-ID, eller brukere med flere identiteter, modelleres her — eller hører de hjemme i et eget krav? Spørsmålet omfatter nå også brukere uten hjemorganisasjon, siden kolonnen og filteret bygger på den.
+# - Hvordan behandler hjemorganisasjonsfilteret personbrukere uten hjemorganisasjon, eller med flere? Visningen i listen er avklart i «Se Feide-brukerne til en personbruker i listen».
 # - Søk på Feide-ID: skal søket finne en personbruker når søketeksten finnes i en av Feide-ID-ene til Feide-brukerne som er koblet til personbrukeren?
 # - Hva skjer med Feide-brukere som ikke er koblet til en person: skal de vises i brukeroversikten?
