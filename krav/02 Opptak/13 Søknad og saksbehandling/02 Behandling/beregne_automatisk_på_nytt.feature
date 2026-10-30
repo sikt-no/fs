@@ -27,9 +27,9 @@ Egenskap: Beregne automatisk på nytt
   # (OPT-BEH-BEH-008). Gir beregningen på nytt en ny mangeltekst i en sak som er ferdig
   # behandlet, ser søkeren den med en gang. Ingen trenger å publisere den.
 
-  # ÅPNE SPØRSMÅL:
-  # - Kjører beregningen i bakgrunnen, som plasstildelingen, og ser opptaksforvalteren når den er
-  #   ferdig?
+  # Avklart 30.10.2026: beregningen kjører som en jobb i bakgrunnen, etter det samme mønsteret
+  # som de andre jobbene i opptak (OPT-BEH-BEH-033, kjøre_jobbene_i_opptak.feature, PR #864).
+  # Når kravet er merget, får regelen «Beregningen kjører i bakgrunnen» @depends-on- til det.
 
   Bakgrunn:
     Gitt at opptaksforvalteren ved HK-dir er innlogget
@@ -104,6 +104,14 @@ Egenskap: Beregne automatisk på nytt
       Og at saksbehandleren ved Universitetet i Oslo har vurdert et kravelement i saken
       Når opptaksforvalteren beregner på nytt for søknadsalternativene med rangeringsregelverket som er rettet
       Så er saken til "Kari Nordmann" hos "Universitetet i Oslo" fortsatt under behandling
+
+  Regel: Beregningen kjører i bakgrunnen
+
+    Scenario: Opptaksforvalteren ser når beregningen er ferdig
+      Gitt at opptaksforvalteren har startet en beregning på nytt for søknadsalternativene med kravelementet "Matematikk R1"
+      Når beregningen er ferdig
+      Så ser opptaksforvalteren at beregningen er ferdig
+      Og opptaksforvalteren ser hvor mange søknadsalternativer som ble beregnet på nytt, og hvor mange som ble hoppet over
 
   @depends-on-OPT-PLA-TIL-001
   Regel: Beregningen gjelder fra neste plasstildeling
