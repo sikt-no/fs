@@ -5,7 +5,7 @@ WITH
 sokere (tb, fnr, opptak_kode) AS (
   VALUES (1, '10830798485', 34),   -- Samtidig Sild
          (2, '05849540000', 34),   -- Heidi Lykke
-         (3, '12919210263', 34),   -- Fredag Lørdag
+         (3, '05849509715', 34),   -- Frisk Frosk
          (4, '31900699630', 2)     -- Ullen Bikkje
 ),
 soker AS (
@@ -79,14 +79,14 @@ SELECT 'Testbruker 2 (Heidi Lykke): sendt søknad der ingen studieønsker tilbyr
                    FROM soknad WHERE tb = 2), 'ingen sendt søknad'),
        coalesce((SELECT tilbyr_tidlig = 0 AND tilbyr_ikke > 0 FROM soknad WHERE tb = 2), false)
 UNION ALL
--- Testbruker 3
-SELECT 'Testbruker 3 (Fredag Lørdag): søknad som ikke er sendt, og ingen sendt søknad',
+-- Testbruker 3: soker er tom når personen ikke er søker ennå, og da er sjekken også ok
+SELECT 'Testbruker 3 (Frisk Frosk): ingen søknad i opptak 34, heller ikke en som ikke er sendt',
        format('kladd=%s, sendt=%s',
               EXISTS (SELECT 1 FROM soker so JOIN soknad_v2.soknadskladd k
                         ON k.soker_id = so.soker_id AND k.opptak_kode = so.opptak_kode WHERE so.tb = 3),
               EXISTS (SELECT 1 FROM soknad WHERE tb = 3)),
-       EXISTS (SELECT 1 FROM soker so JOIN soknad_v2.soknadskladd k
-                 ON k.soker_id = so.soker_id AND k.opptak_kode = so.opptak_kode WHERE so.tb = 3)
+       NOT EXISTS (SELECT 1 FROM soker so JOIN soknad_v2.soknadskladd k
+                     ON k.soker_id = so.soker_id AND k.opptak_kode = so.opptak_kode WHERE so.tb = 3)
        AND NOT EXISTS (SELECT 1 FROM soknad WHERE tb = 3)
 UNION ALL
 -- Testbruker 4

@@ -35,7 +35,7 @@ Testbeskrivelse og testgjennomføring for akseptansetesten av «Søke om tidlig 
 |---|---|---|---|---|
 | 1 | Samtidig Sild (10830798485) | Søker med sendt søknad (1000670) der «Psykologi profesjon» tilbyr tidlig opptak og «Biovitenskap» ikke gjør det | – | Søke om tidlig opptak, se søknadsalternativene, informasjonen og begrunnelsene, legge til et søknadsalternativ etterpå |
 | 2 | Heidi Lykke (05849540000) | Søker med sendt søknad (1004306) med bare «Rettsvitenskap (jus)» ved UiO, som ikke tilbyr tidlig opptak | – | Ikke kunne søke når ingen søknadsalternativer tilbyr det |
-| 3 | Fredag Lørdag (12919210263) | Søker med en søknad som ikke er sendt | – | Ikke kunne søke før søknaden er sendt |
+| 3 | Frisk Frosk (05849509715) | Søker uten søknad i «Samordna UHG-simulering høsten 2026». Søknaden startes i testen, og sendes ikke | – | Ikke kunne søke før søknaden er sendt |
 | 4 | Ullen Bikkje (31900699630) | Søker med sendt søknad (1004225) i opptak 2, der fristen for tidlig opptak er ute | – | Ikke kunne søke etter fristen |
 
 Testbrukerne er søkere, som ikke hører til en organisasjon, så det er ingen synlighet mellom organisasjoner å teste. Bytt testbruker under «Meny» og «Velg testsøker». Viser siden «404 - Siden finnes ikke» etter byttet, velg «Til forsiden».
@@ -49,7 +49,8 @@ Testbrukerne er søkere, som ikke hører til en organisasjon, så det er ingen s
 | Grunnlaget «Avvikle virksomheten» er inaktivt i opptak 34 (3.1), og de fire andre er aktive | Settes før testen, og tilbake etterpå ([oppsett.md](https://github.com/sikt-no/fs/blob/main/akseptansetest/soke-om-tidlig-opptak/oppsett.md)) |
 | «Grunnskolelærerutdanning for trinn 5-10 (300 studiepoeng)» i Halden, som tilbyr tidlig opptak, for 5.1 | På plass |
 | «Opptak UHM 2025» (opptak 2), der søknadsfristen for tidlig opptak gikk ut 22.10.2026, for 4.1 | På plass |
-| Søknadene til testbruker 1, 2 og 3. Søknadene i testmiljøet blir ikke liggende lenge | Sjekkes dagen før testen, og gjøres klare igjen ved behov ([oppsett.md](https://github.com/sikt-no/fs/blob/main/akseptansetest/soke-om-tidlig-opptak/oppsett.md)) |
+| Søknadene til testbruker 1 og 2. Søknadene i testmiljøet blir ikke liggende lenge | Sjekkes dagen før testen, og gjøres klare igjen ved behov ([oppsett.md](https://github.com/sikt-no/fs/blob/main/akseptansetest/soke-om-tidlig-opptak/oppsett.md)) |
+| Testbruker 3 har ingen søknad i «Samordna UHG-simulering høsten 2026», heller ikke en som ikke er sendt | Sjekkes dagen før testen. Søknaden fra 1.2 slettes etter testen ([oppsett.md](https://github.com/sikt-no/fs/blob/main/akseptansetest/soke-om-tidlig-opptak/oppsett.md)) |
 | Søknaden om tidlig opptak fra testbruker 1 (2.4) | Kan ikke settes tilbake. Neste gjennomkjøring trenger en ny testbruker 1 |
 
 **NB: Sjekk at testmiljøet har dataene før testen.**
@@ -67,7 +68,7 @@ Søknadene åpnes under «Meny» øverst til høyre og «Mine søknader». Der s
 | # | Scenario | Steg | Forventet resultat | Faktisk resultat | Bestått? |
 |---|---|---|---|---|---|
 | 1.1 | Søke om tidlig opptak fra søknadsdetaljene | Som testbruker 1: åpne «Søknad til Samordna UHG-simulering høsten 2026» | Boksen «Tidlig opptak» står på søknadsdetaljene, med teksten om tidlig opptak og knappen «Søk om tidlig opptak» | | |
-| 1.2 | Kan ikke søke om tidlig opptak før søknaden er sendt | Som testbruker 3: velg «Mine søknader», og «Fortsett søknad» i boksen «Samordna UHG-simulering høsten 2026». Søknaden er ikke sendt, og står derfor ikke under «Aktive søknader». Gå gjennom stegene fram til «Send søknad», uten å sende | «Tidlig opptak» og «Søk om tidlig opptak» vises ikke noe sted | | |
+| 1.2 | Kan ikke søke om tidlig opptak før søknaden er sendt | Som testbruker 3: velg «Finn studier», skriv inn «Psykologi profesjon», velg det første av treffene med søknadsfrist 13.10.2027, og velg «Legg til» og «Til studiekurv». «Psykologi profesjon» tilbyr tidlig opptak. Gå gjennom stegene fram til «Send søknad», uten å sende. Velg «Mine søknader»: søknaden står ikke under «Aktive søknader», siden den ikke er sendt | «Tidlig opptak» og «Søk om tidlig opptak» vises ikke noe sted | | |
 
 ### Regel 2: Søkeren kan søke om tidlig opptak når opptaket tilbyr det
 
