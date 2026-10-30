@@ -10,7 +10,7 @@
 
 ## Omfang
 
-Søkeren ser i steget «Dokumentasjon» i søknadsflyten i Min kompetanse hvilke digitale resultater systemet allerede har om hen, før opplastingen. Resultatene grupperes på utdanningsnivå, med tittel, utsteder, utstedelsesdato og kompetansen eller graden vitnemålet gir, og merkelappen «Hentet automatisk». «Andre resultater» er lukket som standard, og vises ikke når søkeren ikke har andre resultater. Søkeren uten resultater, eller der hentingen feiler, får én samlet forklaring. Spesifikasjonen dekker ikke hva søkeren må laste opp (`@OPT-SØK-SØK-003`, #572), resultatvisningen i Min kompetanse, eller et resultat der bare utstederen er kjent (`@draft`).
+Søkeren ser i steget «Dokumentasjon» i søknadsflyten i Min kompetanse hvilke digitale resultater systemet allerede har om hen, før opplastingen. Resultatene grupperes på utdanningsnivå, med tittel, utsteder, semester og kompetansen eller graden vitnemålet gir, og merkelappen «Hentet automatisk». «Enkeltemner» er lukket som standard, og vises ikke når søkeren ikke har enkeltemner. Søkeren uten resultater, eller der hentingen feiler, får én samlet forklaring. Spesifikasjonen dekker ikke hva søkeren må laste opp (`@OPT-SØK-SØK-003`, #572), resultatvisningen i Min kompetanse, eller et resultat der bare utstederen er kjent (`@draft`).
 
 ## Krav
 
@@ -19,6 +19,8 @@ Søkeren ser i steget «Dokumentasjon» i søknadsflyten i Min kompetanse hvilke
 ### Endringer etter at kravet ble hentet inn
 
 - **2026-10-15:** nytt scenario `Andre resultater vises ikke uten andre resultater`. Har søkeren bare vitnemål og grader, vises ikke «Andre resultater» i steget, heller ikke som en tom accordion. Implementasjonsdetaljene er oppdatert.
+- **2026-10-26:** «Andre resultater» heter nå «Enkeltemner», og viser bare enkeltemner, ikke øvrig dokumentasjon. Scenarioene heter `Enkeltemner er lukket som standard`, `Se enkeltemnene` (med tittel, utsteder og semester) og `Enkeltemner vises ikke når søkeren ikke har enkeltemner`. Skissen (node `3920:14210`) viser kortet åpnet (node `4931:4291`), og implementasjonsdetaljene er oppdatert. Artefaktene i `krav-input/` er fra før endringen.
+- **2026-10-26:** vitnemål vises med semester, ikke utstedelsesdato (`Se opplysninger om et resultat`). Kodesjekken om `GradRad.utstedtDato` under er derfor ikke lenger relevant for visningen. Implementasjonsdetaljene er oppdatert.
 
 ### Utenfor scope (`@draft`)
 
@@ -54,7 +56,7 @@ Søkeren ser i steget «Dokumentasjon» i søknadsflyten i Min kompetanse hvilke
 
 ## Implementasjonsdetaljer
 
-- **`se_digitale_resultater_i_søknad.feature`** — [se_digitale_resultater_i_søknad.design.md](../../../../krav/02%20Opptak/13%20S%C3%B8knad%20og%20saksbehandling/01%20S%C3%B8knad/se_digitale_resultater_i_s%C3%B8knad.design.md) (4 åpne designspørsmål)
+- **`se_digitale_resultater_i_søknad.feature`** — [se_digitale_resultater_i_søknad.design.md](../../../../krav/02%20Opptak/13%20S%C3%B8knad%20og%20saksbehandling/01%20S%C3%B8knad/se_digitale_resultater_i_s%C3%B8knad.design.md) (3 åpne designspørsmål)
 
 ## Kodesjekk
 

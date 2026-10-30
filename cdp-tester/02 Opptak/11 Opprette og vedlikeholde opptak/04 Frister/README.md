@@ -7,7 +7,7 @@ Tester for kravet [frister_og_hendelser.feature](../../../../krav/02%20Opptak/11
 | Nøkkel | Type | Brukes av |
 |---|---|---|
 | `opptak-forvalter-forvaltende` | testbruker | alle scenarioer |
-| `opptak-samordna-uten-utdanningstilbud` | testdata | alle scenarioer unntatt den utledede om tidlig opptak |
+| `opptak-samordna-uten-utdanningstilbud` | testdata (oppsett) | alle scenarioer unntatt den utledede om tidlig opptak |
 | `regelverkssamling-samordna` | testdata | Utfylling A |
 | `utdanningsbakgrunner-godkjente` | testdata | «Legge til utdanningsbakgrunn med avvikende frister» («Realkompetanse») |
 | `poenglikhetsregler` | testdata | Utfylling A |

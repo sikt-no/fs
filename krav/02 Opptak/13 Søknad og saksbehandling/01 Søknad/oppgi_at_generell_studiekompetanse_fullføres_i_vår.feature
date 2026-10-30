@@ -1,7 +1,6 @@
 # language: no
-# OBS (2026-10-19): ID-en @OPT-SØK-SØK-013 brukes også i finne_studier.feature. Ikke rettet, fordi andre team jobber med kravene.
 # GitHub: #413
-@OPT-SØK-SØK-013 @must @draft
+@OPT-SØK-SØK-018 @must @draft
 Egenskap: Oppgi at generell studiekompetanse fullføres i vår
   Som søker
   ønsker jeg å oppgi i søknaden at jeg fullfører generell studiekompetanse i vår
