@@ -171,6 +171,7 @@ Egenskap: Ferdigbehandle en sak
         | poengformelen er ugyldig                          | poengene    |
         | kvotespørsmålet har en algoritme som ikke finnes  | kvoten      |
         | to grunnlag passer like godt                      | grunnlaget  |
+        | opptaket mangler dato for aldersberegning         | grunnlaget  |
 
   Regel: Saksbehandleren setter saken til ferdig behandlet når den automatiske behandlingen ikke har fullført
 
