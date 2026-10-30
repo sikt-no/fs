@@ -225,6 +225,64 @@ Egenskap: Velge fag per poengvariant
       # realfagspoeng, tatt samtidig med studiekompetansefagene, kan tas med
       # i kvoten for førstegangsvitnemål.
 
+  Regel: Poengene beregnes når grunnlaget er klart
+
+    # Poengene beregnes av kontrollmotoren i opptak, i samme løsning. Når
+    # saksbehandleren setter sammen grunnlaget (poengvariant, fag, forbedringer
+    # og tilleggsfag), beregnes og lagres poengene først når saksbehandleren
+    # sier at grunnlaget er klart, så sakens poeng aldri bygger på et grunnlag
+    # som er halvveis satt sammen.
+    #
+    # Flyttet hit fra L2 (velge_vitnemål_som_grunnlag.feature) 30.10.2026. I
+    # L2 beregnes og lagres poengene med en gang saksbehandleren velger et
+    # vitnemål.
+
+    Scenario: Poengene er tomme til jeg beregner dem
+      Gitt jeg har lagt et vitnemål til grunn
+      Når jeg endrer grunnlaget for en poengvariant
+      Så er poengene på poengvarianten ikke beregnet på nytt
+      Og poengene på poengvarianten vises tomme
+      Og endringen i grunnlaget er ikke lagret ennå
+      # AVKLART 21.10.2026: poengene beregnes ikke av seg selv når grunnlaget
+      # endres. Saksbehandleren må velge å beregne dem, og fram til da står
+      # feltene tomme. Hvordan saksbehandleren velger å beregne, hører i
+      # implementasjonsdetaljene.
+
+    Scenario: Beregne poengene fra det endrede grunnlaget
+      Gitt jeg har endret grunnlaget for en poengvariant
+      Når jeg velger å beregne poengene
+      Så er poengene på poengvarianten beregnet på nytt fra det endrede grunnlaget
+      Og endringen i grunnlaget er lagret
+
+    Scenario: Advarsel om endringer som ikke er lagret
+      Gitt jeg har endret grunnlaget for en poengvariant
+      Og jeg har ikke beregnet poengene etter endringen
+      Når jeg går fra saken
+      Så blir jeg advart om at endringen i grunnlaget ikke er lagret
+      Og jeg kan velge å bli på saken
+      # AVKLART 21.10.2026: endringen lagres først når poengene er beregnet.
+      # Saksbehandleren skal derfor advares før de forlater saken med
+      # endringer som ikke er lagret. Utformingen av advarselen hører i
+      # implementasjonsdetaljene.
+
+    @openquestion
+    Scenario: Poeng jeg har lagt inn selv, når poengene beregnes på nytt
+      Gitt jeg har lagt inn karakterpoeng selv på en poengvariant
+      Og jeg har endret grunnlaget for poengvarianten
+      Når jeg velger å beregne poengene
+      Så er poengene på poengvarianten beregnet på nytt fra det endrede grunnlaget
+      # ÅPNE SPØRSMÅL:
+      # - Skal en verdi saksbehandleren har lagt inn selv, overskrives når
+      #   saksbehandleren senere velger å beregne poengene på nytt? Låsen
+      #   gjelder den automatiske poengberegningen, ikke beregningen
+      #   saksbehandleren starter selv. Spørsmålet kom fra domeneekspertene
+      #   22.10.2026: en lagret verdi skal ikke overstyres av automatikken, men
+      #   når saksbehandleren aktivt beregner, må systemet kunne overstyre den.
+      #   Flyttet hit fra L2 30.10.2026. Så-steget er et forslag.
+      # - «Velge hvilke fag som skal telle» sier at poengene beregnes og
+      #   fagvalget lagres når fagene velges. Skal det i stedet skje når
+      #   saksbehandleren velger å beregne poengene?
+
   Regel: Saksbehandleren kan bare endre fagvalget slik en regel tillater
 
     # AVKLART 07.10.2026: vitnemålsbehandleren håndhever at grunnlaget bare
