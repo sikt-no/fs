@@ -556,10 +556,10 @@ Egenskap: Søknadsmangler
     # Avklart 30.10.2026: er søkeren ikke kvalifisert på noen kravliste, får alle kravelementene
     # som ikke er oppfylt, mangel, i alle kravlistene. Søkeren må kunne se at kravlistene er
     # alternativer. Hvordan, avgjøres i teksten til søkeren eller i designet.
+    # Avklart 30.10.2026: teksten til søkeren står på mangelkoden («Informasjon til søker i Min
+    # kompetanse»), som i dag. Kravelementene får ingen egen tekst til søkeren. Det avviker fra
+    # raffineringen, som sa at tekstene skulle hentes fra opptakskravene.
     # ÅPNE SPØRSMÅL:
-    # - Hvor kommer teksten til søkeren fra? Raffineringen sier at tekstene hentes fra
-    #   opptakskravene og forvaltes der. I dag står teksten på mangelkoden («Informasjon til søker
-    #   i Min kompetanse»), og kravelementene har ingen tekst til søkeren (@OPT-REG-KRA-002).
     # - Hva skjer når saksbehandleren har registrert en mangel med en mangelkode som kan overskrives
     #   av automatisk behandling, og den automatiske behandlingen setter en mangel med samme
     #   mangelkode? Scenariomalen om det er fjernet fordi den var for vag (review i PR #840).
