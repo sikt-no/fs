@@ -9,6 +9,13 @@ test('resolveLink: kom-i-gang.html åpnes ved siden av vieweren, ikke på GitHub
   assert.deepEqual(resolveLink('../annet.html', 'krav/README.md', none), { href: GITHUB + 'annet.html' });
 });
 
+test('resolveLink: presentasjonene åpnes ved siden av vieweren, med mappa', () => {
+  const none = () => false;
+  assert.deepEqual(resolveLink('../presentasjoner/testfasene.html', 'krav/README.md', none), {
+    href: './presentasjoner/testfasene.html',
+  });
+});
+
 test('inline: ~~tekst~~ blir gjennomstreket', () => {
   assert.deepEqual(inline('før ~~borte~~ etter'), [
     { kind: 'plain', t: 'før ' },

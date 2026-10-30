@@ -43,6 +43,7 @@ fs/
 │   └── .features-gen/             # Genererte testfiler (gitignored)
 ├── fs-kravforvaltning/            # FS Kravforvaltning: krav i nettleser og desktop-app (Vite + Preact, Electron)
 ├── kom-i-gang.html                # Innføring i kravarbeidet og akseptansetesten, steg for steg (se .claude/rules/kom-i-gang-sync.md)
+├── presentasjoner/                # De tre presentasjonene, eksportert fra artefaktene (se «Presentasjoner»)
 ├── README.md
 └── claude.md
 ```
@@ -97,6 +98,21 @@ npm run dev
 ```
 
 Hvordan appen er bygget, kommandoene, release og reglene for å jobbe i den står i [`fs-kravforvaltning/CLAUDE.md`](fs-kravforvaltning/CLAUDE.md). Claude leser den når den jobber med filer i mappa. En endring i appen som brukerne merker, skal ha en changeset i samme PR.
+
+## Presentasjoner
+
+De tre presentasjonene lages og endres som artefakter i Claude (typen Slides), og eksporteres til statiske sider i `presentasjoner/`, som publiseres med FS Kravforvaltning på GitHub Pages. Lenkene for mennesker (i `krav/README.md`) går til GitHub Pages.
+
+| Presentasjon | Artefakt (kilden) | Publisert side |
+|---|---|---|
+| Slik jobber vi med krav | <https://claude.ai/artifact/FLUQtvcNBjdeP6i7JG9CqF> | `presentasjoner/slik-jobber-vi-med-krav.html` |
+| Krav – detaljert presentasjon | <https://claude.ai/artifact/Sx4D8zmmWp8kz86Mqq88WY> | `presentasjoner/krav-detaljert.html` |
+| Testfasene | <https://claude.ai/artifact/X1axGMe6f2jTn8vpcrh4jk> | `presentasjoner/testfasene.html` |
+
+- Endre artefaktet, ikke HTML-fila. Les artefaktet med Artifact-verktøyet (`read`) før du endrer det.
+- Slide 2 («Én skill for hvert steg») er den samme i alle tre, så de alltid starter med sammenhengen. Endres den i én, endres den i alle.
+- Testfasene følger teststrategien (forslag) i Confluence (STUDIEADM, side `5145100326`). Endres strategien, sjekk presentasjonen.
+- Eksporter etter en endring: les `project/deck.json` og alle `project/slides/*.html` i hvert artefakt til `<mappe>/kort/`, `<mappe>/detaljert/` og `<mappe>/testfaser/` (med `project/` under), kjør `node presentasjoner/bygg.mjs <mappe> presentasjoner`, og ta med HTML-filene i samme PR. Skriptet kan bare tegne elementene presentasjonene bruker i dag (piler, ikonene `GraduationCap`, `Star`, `Code` og `CheckCircle`, tabeller og lister), og stopper på et ukjent ikon. Se over sidene i nettleseren etterpå.
 
 ## Teknologier
 

@@ -9,8 +9,8 @@ Egenskap: Listevisning og søk i opptak
   # Kilde: akseptansetesten 19.10.2026. Oversikten over opptak finnes i FS Admin (https://test-fsadmin.sikt.no/opptak),
   # men hadde ikke noe krav. HK-dir ba om å filtrere og sortere på opptakstype og navn, og å åpne detaljene i et opptak.
   # AVKLART 2026-10-21 (produkteier): Kravet beskriver lista slik den er bygget.
-  # AVKLART 2026-10-21 (produkteier): Status er ikke med i lista, i sorteringen eller i filtrene. Det er ennå ikke forskjell
-  # på aktive og deaktiverte opptak, og å deaktivere et opptak kommer senere (01 Grunnoppsett/opprett_opptak.feature).
+  # AVKLART 2026-10-29 (produkteier): Status er med i lista, i sorteringen og i filtrene, med statusene publisert og
+  # ikke publisert. Å gjøre et opptak historisk kommer senere (01 Grunnoppsett/opptaksstatus.feature).
   # HK-dir ønsker også å sortere på navn. Det er ikke med i kravet nå.
   # Hvilke opptak en organisasjon som ikke deltar, ser, står i samordna_opptak.feature
   # (Regel: Organisasjoner som ikke deltar, kan ikke se opptaket).
@@ -27,6 +27,7 @@ Egenskap: Listevisning og søk i opptak
         | felt                    |
         | Navn                    |
         | Type                    |
+        | Status                  |
         | Organisasjon            |
         | Opprettet               |
         | Antall utdanningstilbud |
@@ -46,6 +47,8 @@ Egenskap: Listevisning og søk i opptak
         | opprettet    | synkende |
         | type         | stigende |
         | type         | synkende |
+        | status       | stigende |
+        | status       | synkende |
         | organisasjon | stigende |
         | organisasjon | synkende |
 
@@ -90,6 +93,22 @@ Egenskap: Listevisning og søk i opptak
       Gitt opptaksforvalter ser listen over opptak
       Når opptaksforvalter velger en opptakstype som filter
       Så vises kun opptak med den valgte opptakstypen
+
+    # Som for opptakstype er ingen status valgt når filteret åpnes, og da vises opptak med alle statuser.
+    # Statusen Arkivert i løsningen hører til historiske opptak, og er ikke med i kravet nå.
+    Scenario: Tilgjengelige statuser i filter
+      Gitt opptaksforvalter ser listen over opptak
+      Når opptaksforvalter åpner status-filteret
+      Så inneholder filteret statusene:
+        | Status         |
+        | Ikke publisert |
+        | Publisert      |
+      Og ingen status er valgt som standard
+
+    Scenario: Filtrere på status
+      Gitt opptaksforvalter ser listen over opptak
+      Når opptaksforvalter velger en status som filter
+      Så vises kun opptak med den valgte statusen
 
     Scenario: Kombinere filtre
       Gitt opptaksforvalter ser listen over opptak

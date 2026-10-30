@@ -80,7 +80,7 @@ Nøkkelen i testene, hva testen krever av testbrukeren (uavhengig av miljøet), 
 
 ## Testdata
 
-Bare grunndata og data testene ikke kan lage gjennom løsningen. Testdataene oppsettet lager i hver kjøring, står i oppsettet, ikke her: for opptak [`_Oppsett/02 Opptak/11 Opprette og vedlikeholde opptak/oppsett.feature`](../_Oppsett/02%20Opptak/11%20Opprette%20og%20vedlikeholde%20opptak/oppsett.feature) (`opptak-samordna-uten-utdanningstilbud`, `opptak-samordna-med-utdanningstilbud`, `opptak-samordna-tilbud-med-tidlig-opptak`, `opptak-en-utdanningsbakgrunn` og `opptak-lokalt`, og `opptak-oversikt-flere-typer` dekkes av dem).
+Bare grunndata og data testene ikke kan lage gjennom løsningen. Testdataene oppsettet lager i hver kjøring, står i oppsettet, ikke her: for opptak [`_Oppsett/02 Opptak/11 Opprette og vedlikeholde opptak/oppsett.feature`](../_Oppsett/02%20Opptak/11%20Opprette%20og%20vedlikeholde%20opptak/oppsett.feature) (`opptak-samordna-uten-utdanningstilbud`, `opptak-samordna-med-utdanningstilbud`, `opptak-samordna-tilbud-med-tidlig-opptak`, `opptak-en-utdanningsbakgrunn` og `opptak-lokalt`, og `opptak-oversikt-flere-typer`, som er de to opptakene `opptak-samordna-uten-utdanningstilbud` og `opptak-lokalt`).
 
 | Nøkkel | Verdi i TEST | Søk/URL | Utgangstilstand | Sjekket |
 |---|---|---|---|---|

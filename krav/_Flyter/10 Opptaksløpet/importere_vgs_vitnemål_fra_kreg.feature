@@ -87,10 +87,12 @@ Egenskap: Importere VGS-vitnemål fra KREG
   @depends-on-OPT-BEH-BEH-030 @depends-on-OPT-BEH-BEH-015 @openquestion
   # OPT-BEH-BEH-030: «Et vitnemål som er annullert i KREG, er annullert i opptakssystemet»
   # OPT-BEH-BEH-015: «Annullert vitnemål»
+  # Underprosessen «Håndter annullert vitnemål» er ikke tegnet. Avklart i review av
+  # sikt-no/fs#853: søknaden behandles på nytt, og saksbehandleren varsles.
   # ÅPNE SPØRSMÅL:
-  # - Underprosessen «Håndter annullert vitnemål» er ikke tegnet. Gjør den mer enn å trekke
-  #   tilbake GSK-konklusjonen (OPT-BEH-BEH-015)? Behandles søknaden på nytt, eller varsles
-  #   saksbehandleren? Spørsmålet står også i OPT-BEH-BEH-030.
+  # - Ingen krav beskriver at søknaden behandles på nytt og saksbehandleren varsles når
+  #   vitnemålet annulleres. Hvilket krav skal eie regelen: OPT-BEH-BEH-021 (varsle om nytt
+  #   vitnemål), OPT-BEH-BEH-030 eller et nytt krav?
   Regel: Annullerte vitnemål håndteres
 
     Scenario: Vitnemålet som er annullert etter importen, blir annullert
@@ -100,6 +102,13 @@ Egenskap: Importere VGS-vitnemål fra KREG
       Når importen av VGS-vitnemål fra KREG kjører
       Så er det importerte vitnemålet annullert
       Og GSK-konklusjonen på søknaden er ikke lenger positiv
+
+    Scenario: Søknaden behandles på nytt når vitnemålet den er behandlet på, annulleres
+      Gitt at søknaden til "Kari Nordmann" er behandlet på det importerte vitnemålet
+      Og at vitnemålet er annullert i KREG etter importen
+      Når importen av VGS-vitnemål fra KREG kjører
+      Så behandles søknaden på nytt
+      Og saksbehandleren blir varslet om at vitnemålet søknaden er behandlet på, er annullert
 
     Scenario: Nytt vitnemål som er annullert, importeres uten påstand om GSK
       Gitt at "Kari Nordmann" har et annullert vitnemål i KREG som ikke er importert
