@@ -40,6 +40,7 @@ Egenskap: Behandlingsstatus
       Når søknaden blir til en sak hos "Universitetet i Oslo"
       Så har saken behandlingsstatusen "Ikke behandlet"
 
+  @ref-OPT-BEH-BEH-032
   Regel: Saksbehandleren kan sette behandlingsstatusen
 
     Scenariomal: Endre behandlingsstatus fra <fra> til <til>
@@ -75,6 +76,7 @@ Egenskap: Behandlingsstatus
       Så har saken fortsatt behandlingsstatusen "Under behandling"
       Og saksbehandleren ser at saken må ha minst én mangel eller ett grunnlag for å bli "Ferdig behandlet"
 
+  @ref-OPT-BEH-BEH-032
   Regel: Saken blir Under behandling når saksbehandleren endrer vurderingen eller leser et dokument
 
     Scenariomal: Saken blir Under behandling når saksbehandleren <handling>
