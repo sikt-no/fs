@@ -28,7 +28,7 @@
 # - Vitnemålspoeng står i automatisk_poengberegning.feature (@OPT-BEH-BEH-018),
 #   og kravelementene i automatisk_kvalifisering.feature (@OPT-BEH-BEH-020).
 # - Søkere med flere vitnemål behandles i vitnemålsbehandlingen.
-@OPT-BEH-BEH-019 @must @draft @ref-OPT-BEH-BEH-012 @ref-OPT-BEH-BEH-018
+@OPT-BEH-BEH-019 @must @planned @ref-OPT-BEH-BEH-012 @ref-OPT-BEH-BEH-018
 Egenskap: Automatisk grunnlag
   Som saksbehandler
   ønsker jeg at saken får grunnlaget sitt automatisk når søkerens vitnemål og alder avgjør det
@@ -189,13 +189,13 @@ Egenskap: Automatisk grunnlag
       Når den automatiske behandlingen kjøres for søknaden
       Så får saken grunnlaget automatisk
 
-    @openquestion
+    @draft @openquestion
     Scenario: Grunnlag fra utdanningstilbudet når søknadsalternativet opprettes
       # ÅPNE SPØRSMÅL:
       # - FS-klienten kan sette et grunnlag fra studieprogrammet når
       #   søknadsalternativet opprettes («Aut.kvalgrunnlag»). Skal det
       #   videreføres? Avgjøres når lokale opptak tas inn (30.10.2026). Gjelder ikke
-      #   den helautomatiske flyten. Blir kravet @planned før det, får scenarioet @draft.
+      #   den helautomatiske flyten.
       Gitt at utdanningstilbudet har et grunnlag som skal settes automatisk
       Når søkeren søker på utdanningstilbudet
       Så får saken grunnlaget fra utdanningstilbudet
