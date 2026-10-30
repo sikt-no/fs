@@ -99,7 +99,8 @@ Egenskap: Importere resultater fra KREG
 
     @ref-OPT-BEH-BEH-015
     Scenario: Vitnemål som annulleres etter importen, blir annullert
-      # Hva annulleringen gjør med GSK-konklusjonen, står i OPT-BEH-BEH-015.
+      # Hva annulleringen gjør med GSK-konklusjonen, står i OPT-BEH-BEH-015, og hva den gjør
+      # med saken, står i OPT-BEH-BEH-034.
       Gitt at søkerens vitnemål er importert
       Og at vitnemålet er annullert i KREG etter importen
       Når søkerens resultater importeres på nytt
@@ -141,9 +142,7 @@ Egenskap: Importere resultater fra KREG
     # KREG, og henter nye vitnemål for fødselsnumrene KREG varsler endringer for. Fram til da
     # sjekker jobben for nye vitnemål (OPT-BEH-BEH-032).
     # Et nytt vitnemål i en sak som er behandlet, er ny dokumentasjon. Saken behandles ikke
-    # automatisk på nytt (OPT-BEH-BEH-032). Når vitnemålet annulleres, behandles søknaden på nytt,
-    # og saksbehandleren varsles (avklart i review av sikt-no/fs#853, se FLY-OPT-VIT-001).
-    # GSK-konklusjonen trekkes tilbake etter OPT-BEH-BEH-015.
+    # automatisk på nytt (OPT-BEH-BEH-032). Når vitnemålet annulleres, gjelder OPT-BEH-BEH-034.
     # Varselet til saksbehandleren om nytt vitnemål står i OPT-BEH-BEH-021.
     # ÅPNE SPØRSMÅL:
     # - Hvordan abonnementet skal virke, er ikke avklart, og hører til KREG-teamet.

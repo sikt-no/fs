@@ -29,7 +29,7 @@ Egenskap: Starte automatisk behandling
   #   markering ved siden av? OPT-BEH-BEH-029 sier at ny dokumentasjon ikke endrer
   #   behandlingsstatusen.
   # - Er «ny dokumentasjon» den samme markeringen som «nye resultater» i OPT-BEH-BEH-035 og
-  #   taggen «Vitnemål annullert» i OPT-BEH-BEH-034 (PR #865)? Alle tre merker saken når
+  #   taggen «Vitnemål annullert» i OPT-BEH-BEH-034? Alle tre merker saken når
   #   søkeren får et nytt eller annullert vitnemål.
   # - Er varselet om nytt vitnemål det samme som i OPT-BEH-BEH-021?
 

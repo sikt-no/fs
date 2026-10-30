@@ -297,34 +297,33 @@ Egenskap: Automatisk GSK-konklusjon
       Når saksbehandleren legger til en GSK-konklusjon
       Så kan saksbehandleren bare velge positive GSK-konklusjoner
 
-  @ref-FLY-OPT-VIT-001
+  @ref-FLY-OPT-VIT-001 @ref-OPT-BEH-BEH-034
   Regel: Annullert vitnemål
     # Kilden: vitnemålene hentes fra KREG. Er et vitnemål annullert der, trekkes
-    # konklusjonene som bygger på det, tilbake. Det gjelder bare i opptak som ikke er
-    # avsluttet. I avsluttede opptak står konklusjonen urørt.
-    # Konklusjoner fra gjenbruksbasen (STEK-442) vet ikke hvilket vitnemål de bygger på,
-    # og trekkes ikke tilbake etter denne regelen. For dem er det annulleringene i
-    # gjenbruksbasen som gjelder.
-    # Melding til søkeren: avklart 2026-10-13 at søkeren ikke får egen beskjed om at
-    # konklusjonen er trukket tilbake. Søkeren får vite det gjennom resultatet av
-    # saksbehandlingen.
+    # konklusjonene som bygger på det, ikke tilbake automatisk. Saken får en merknad og
+    # taggen «Vitnemål annullert», og settes tilbake til under behandling hvis den er ferdig
+    # behandlet (OPT-BEH-BEH-034). Saksbehandleren vurderer konklusjonen. Det gjelder bare i
+    # opptak som ikke er avsluttet. I avsluttede opptak står saken urørt.
+    # Avklart 29.10.2026: konklusjonen trekkes ikke lenger tilbake automatisk. Før stod det
+    # at automatiske og gjenbrukte konklusjoner som bygger på vitnemålet, ikke lenger var
+    # positive. Kode i dag: GskVedtakTilbakekallingService trekker konklusjonen tilbake.
+    # Konklusjoner fra gjenbruksbasen (STEK-442) vet ikke hvilket vitnemål de bygger på.
+    # For dem er det annulleringene i gjenbruksbasen som gjelder.
 
-    Scenario: Automatisk konklusjon trekkes tilbake når vitnemålet annulleres
+    Scenario: Automatisk konklusjon står når vitnemålet annulleres
       Gitt at søknaden har en automatisk GSK-konklusjon som bygger på et vitnemål
       Og at opptaket ikke er avsluttet
-      Og at ingen har låst eller endret konklusjonen manuelt
       Når vitnemålet annulleres
-      Så er konklusjonen ikke lenger positiv
-      Og konklusjonen viser at vitnemålet den bygde på, er annullert
+      Så er GSK-konklusjonen på søknaden uendret
+      Og saken får taggen "Vitnemål annullert"
 
-    Scenario: Gjenbrukt konklusjon trekkes tilbake når vitnemålet annulleres
+    Scenario: Gjenbrukt konklusjon står når vitnemålet annulleres
       Gitt at søknaden har en GSK-konklusjon som er gjenbrukt fra et tidligere opptak
       Og at den tidligere konklusjonen bygger på et vitnemål
       Og at opptaket ikke er avsluttet
-      Og at ingen har låst eller endret den gjenbrukte konklusjonen manuelt
       Når vitnemålet annulleres
-      Så er den gjenbrukte konklusjonen ikke lenger positiv
-      Og den gjenbrukte konklusjonen viser at vitnemålet den bygde på, er annullert
+      Så er GSK-konklusjonen på søknaden uendret
+      Og saken får taggen "Vitnemål annullert"
 
     Scenario: Konklusjon i avsluttet opptak trekkes ikke tilbake
       Gitt at søknaden har en automatisk GSK-konklusjon som bygger på et vitnemål
@@ -342,7 +341,7 @@ Egenskap: Automatisk GSK-konklusjon
       Og at opptaket ikke er avsluttet
       Og at søkeren ikke har sendt inn eller endret søknaden etter at konklusjonen ble satt
       Når vitnemålet annulleres i KREG
-      Så er konklusjonen ikke lenger positiv
+      Så får saken taggen "Vitnemål annullert"
 
   Regel: Sporbarhet
     # Søkerens innsyn: avklart 2026-10-13 at det er utenfor dette kravet om søkeren
