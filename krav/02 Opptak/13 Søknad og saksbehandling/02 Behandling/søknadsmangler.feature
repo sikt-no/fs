@@ -553,10 +553,10 @@ Egenskap: Søknadsmangler
     saksbehandleren i steget «Spesielle opptakskrav». Saksbehandleren kan gjøre det samme med en
     automatisk mangel som med en mangel saksbehandleren har registrert.
 
+    # Avklart 30.10.2026: er søkeren ikke kvalifisert på noen kravliste, får alle kravelementene
+    # som ikke er oppfylt, mangel, i alle kravlistene. Søkeren må kunne se at kravlistene er
+    # alternativer. Hvordan, avgjøres i teksten til søkeren eller i designet.
     # ÅPNE SPØRSMÅL:
-    # - Er søkeren ikke kvalifisert på noen kravliste, hvilke kravelementer får mangel: alle som
-    #   ikke er oppfylt i alle kravlistene, eller bare de i kravlisten som er nærmest oppfylt? Og
-    #   hvilken kravliste gjelder når to er like nær?
     # - Hvor kommer teksten til søkeren fra? Raffineringen sier at tekstene hentes fra
     #   opptakskravene og forvaltes der. I dag står teksten på mangelkoden («Informasjon til søker
     #   i Min kompetanse»), og kravelementene har ingen tekst til søkeren (@OPT-REG-KRA-002).
@@ -580,6 +580,13 @@ Egenskap: Søknadsmangler
       Når den automatiske behandlingen vurderer kravelementene
       Så er søkeren kvalifisert for "Informatikk, UiO"
       Og saken har ikke en automatisk mangel for "Matematikk R2"
+
+    Scenario: Saken får mangler i alle kravlistene når søkeren ikke er kvalifisert på noen
+      Gitt at "Informatikk, UiO" har kravlisten "Matematikk R2" og kravlisten "Matematikk R1 og Fysikk 2"
+      Og at vitnemålet har "Matematikk R1", men ikke "Matematikk R2" og ikke "Fysikk 2"
+      Når den automatiske behandlingen vurderer kravelementene
+      Så har saken en automatisk mangel for "Matematikk R2"
+      Og saken har en automatisk mangel for "Fysikk 2"
 
     Scenariomal: Den automatiske mangelen sjekkes ut når <vurdert av> vurderer at kravelementet er oppfylt
       Gitt at saken hos "Universitetet i Oslo" har en automatisk mangel som viser at "Matematikk R2" ikke er oppfylt
