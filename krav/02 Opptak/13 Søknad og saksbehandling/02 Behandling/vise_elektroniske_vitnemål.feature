@@ -22,10 +22,11 @@
 #
 # Ny stack: VGS-resultatene kommer fra KREG/NVB — kompetansebevisByNasjonalId
 # og hentKompetansebevis. Integrasjonen finnes allerede. Poengene per
-# vitnemål (karakterpoeng, realfagspoeng og språkpoeng) kommer fra Team Puffs
-# poengberegning, som må kunne beregne poeng for hvert vitnemål, ikke bare for
-# det som er lagt til grunn. AVKLART 21.10.2026: poengene per vitnemål er med
-# i L1.
+# vitnemål (karakterpoeng, realfagspoeng og språkpoeng) beregnes av
+# poengberegningen i opptak, den samme som i den automatiske poengberegningen
+# (automatisk_poengberegning.feature). Den må kunne beregne poeng for hvert
+# vitnemål, ikke bare for det som er lagt til grunn. AVKLART 21.10.2026:
+# poengene per vitnemål er med i L1.
 #
 # AVGRENSNING MOT SENERE LEVERANSER
 #
@@ -73,8 +74,11 @@ Egenskap: Se søkerens elektroniske vitnemål
     Gitt jeg er innlogget i løsningen
     Og jeg er inne på søknaden til en søker
 
+  @ref-OPT-BEH-BEH-018
   Regel: Søkerens elektroniske vitnemål vises
+    # Poengene per vitnemål beregnes som i den automatiske poengberegningen.
 
+    @implemented
     Scenario: Se at søkeren har elektroniske vitnemål
       Gitt søkeren har elektroniske vitnemål
       Når jeg åpner grunnlaget på søknaden
@@ -124,9 +128,10 @@ Egenskap: Se søkerens elektroniske vitnemål
       #
       # Feltene fra vitnemålet er verifisert mot NVB_VGDOK og mot
       # KREG-spørringen hentKompetansebevis: datoUtstedt, foerstegangsvm og
-      # paastandOmGsk. Poengene per vitnemål kommer fra Team Puffs
-      # poengberegning, ikke fra KREG.
+      # paastandOmGsk. Poengene per vitnemål beregnes av poengberegningen i
+      # opptak, ikke hentet fra KREG.
 
+    @implemented
     Scenario: Søker uten elektroniske vitnemål
       Gitt søkeren ikke har elektroniske vitnemål
       Når jeg åpner grunnlaget på søknaden
@@ -149,24 +154,24 @@ Egenskap: Se søkerens elektroniske vitnemål
       # søkeren ikke har elektroniske vitnemål («Søker uten elektroniske
       # vitnemål»).
       #
-      # Ny stack har allerede KregUtilgjengeligFeil for denne situasjonen.
-      # Utformingen av feilmeldingen hører i
+      # Vitnemålene hentes fra KREG/NVB i en jobb når saken opprettes, ikke
+      # når saksbehandleren åpner søknaden. Feiler hentingen, må det tas vare
+      # på, så oversikten kan vise at vitnemålene ikke kunne hentes, og ikke
+      # bare at søkeren ikke har noen. Utformingen av feilmeldingen hører i
       # vise_elektroniske_vitnemål.design.md.
 
-    Scenario: Feilmelding når poengberegningen ikke svarer
-      Gitt søkeren har elektroniske vitnemål
-      Og poengberegningen feiler eller ikke svarer
+    Scenario: Poeng som ikke kan beregnes, vises tomme
+      Gitt søkeren har et elektronisk vitnemål som ikke gir poeng
       Når jeg åpner vitnemålsoversikten
-      Så ser jeg hvert vitnemål med opplysningene fra vitnemålet
-      Og jeg ser en feilmelding om at poengene ikke kunne beregnes
+      Så ser jeg vitnemålet med opplysningene fra vitnemålet
       Men karakterpoeng, realfagspoeng og språkpoeng vises tomme
-      # AVKLART 21.10.2026: når Team Puffs poengberegning ikke svarer, står
-      # poengkolonnene tomme. Vitnemålene vises likevel.
-      #
-      # AVKLART 22.10.2026: saksbehandleren får i tillegg en feilmelding, så
-      # det går fram at poengene mangler på grunn av en feil. Utformingen
-      # hører i vise_elektroniske_vitnemål.design.md.
+      # AVKLART 28.10.2026: erstatter «Feilmelding når poengberegningen ikke
+      # svarer». Poengberegningen er en del av opptak, ikke en ekstern
+      # tjeneste som kan la være å svare, så feilmeldingen er tatt ut. Et
+      # vitnemål som ikke gir poeng (f.eks. med ugyldige karakterer), vises
+      # likevel, med tomme poeng.
 
+    @implemented
     Scenario: Åpne et vitnemål i ny fane
       Gitt søkeren har elektroniske vitnemål
       Når jeg velger å åpne et vitnemål i ny fane
@@ -185,7 +190,21 @@ Egenskap: Se søkerens elektroniske vitnemål
       # At et annullert vitnemål ikke kan legges til grunn for en ny beregning
       # er en konsekvens av valget, og hører derfor i L2 (#608),
       # velge_vitnemål_som_grunnlag.feature.
+      #
+      # AVKLART 28.10.2026 (Kari): eksempel. Søkeren har ett vitnemål, og
+      # det er brukt i en beregning på saken. Senere kommer et nytt vitnemål,
+      # og det første blir annullert. Da vises det første som annullert. Et
+      # annullert vitnemål som aldri er brukt i en beregning, vises ikke.
+      #
+      # «Brukt i en beregning» betyr at vitnemålet er grunnlaget for et
+      # poeng på saken (vitnemålsnummeret på poenget), enten poenget er
+      # beregnet automatisk eller lagt til grunn av saksbehandleren.
+      #
+      # Varselet til saksbehandleren når et vitnemål som er brukt, blir
+      # annullert, er ikke med i L1. Det finnes ingen skisse for markeringen
+      # ennå. Utformingen hører i vise_elektroniske_vitnemål.design.md.
 
+    @implemented
     Scenario: Annullert vitnemål som ikke er brukt i en beregning vises ikke
       Gitt søkeren har et annullert vitnemål
       Og det annullerte vitnemålet er ikke brukt i en beregning på dette opptaket
@@ -207,6 +226,7 @@ Egenskap: Se søkerens elektroniske vitnemål
       # Regelen over holder det synlig i nettopp de tilfellene feilen kan
       # oppstå.
 
+  @implemented
   Regel: Innsyn styres av rettighet, ikke av hvem som har tatt saken
 
     Scenario: Saksbehandler med leserettighet ser søkerens vitnemål
