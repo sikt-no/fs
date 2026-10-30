@@ -23,7 +23,7 @@ Egenskap: Hente utdanninger fra utdanningsregisteret
       | Studiestart    | Høst 2027, vår 2028                           |
     Og at lærestedet "Universitetet i Oslo" deltar i opptaket
 
-  @openquestion
+  @openquestion @ref-FLY-OPT-KLA-001
   # ÅPNE SPØRSMÅL:
   # - Settes kriteriene på hvert opptak, eller er de faste for samordna opptak?
   # - Hvilke nivåer regnes som grunnstudier UHG (bachelor, årsstudium, integrert master, profesjonsstudium)?
@@ -78,7 +78,7 @@ Egenskap: Hente utdanninger fra utdanningsregisteret
         | Studiestart  |
       Og opptaksforvalter trenger ikke registrere disse opplysningene i opptaket
 
-  @openquestion
+  @openquestion @ref-FLY-OPT-KLA-001
   # ÅPNE SPØRSMÅL:
   # - Hvor ofte hentes utdanninger fra utdanningsregisteret (fortløpende, daglig batch, ved behov)?
   # - Skal opptaksforvalter kunne be om ny henting selv?

@@ -15,7 +15,7 @@ Egenskap: Frister og hendelser for opptak
     Gitt at opptaksforvalter ved forvaltende organisasjon er innlogget
     Og at opptaket "Samordna opptak 2027" er opprettet
 
-  @openquestion
+  @openquestion @ref-FLY-OPT-KLA-001
   Regel: Opptaksforvalter ved forvaltende organisasjon må kunne åpne og stenge for redigering av utdanningstilbud
     # ÅPNE SPØRSMÅL:
     # - Virkningen står i legge_til_utdanningstilbud.feature, trekke_utdanningstilbud.feature og
@@ -80,7 +80,7 @@ Egenskap: Frister og hendelser for opptak
       Så er opptaket lagret
       Og opptaksforvalter ser et varsel om at fristen for å trekke utdanningstilbud er før redigeringen av utdanningstilbud stenger
 
-  @openquestion
+  @openquestion @ref-FLY-OPT-KLA-001
   Regel: Opptaksforvalter ved forvaltende organisasjon må kunne åpne for søkning
     # ÅPNE SPØRSMÅL:
     # - Virkningen står i søke_på_opptak.feature og finne_studier.feature. Skal regelen ha @ref-OPT-SØK-SØK-001

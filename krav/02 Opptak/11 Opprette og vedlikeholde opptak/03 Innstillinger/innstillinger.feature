@@ -28,6 +28,7 @@ Egenskap: Innstillinger for opptak
       Gitt at opptaket har utdanningstilbud
       Så kan ikke opptaksforvalter endre opptakstypen
 
+  @ref-FLY-OPT-KLA-001
   Regel: Opptaksforvalter kan endre regelverkssamling så lenge ingen utdanningstilbud er knyttet til opptaket
 
     # Hvilke regler utdanningstilbudene kan bruke, står i

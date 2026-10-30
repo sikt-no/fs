@@ -23,7 +23,7 @@ Egenskap: Opptaksinnstillinger per utdanningstilbud
     Gitt at opptaksforvalter er innlogget
     Og at opptaket "Samordna opptak 2027" har utdanningstilbud
 
-  @openquestion
+  @openquestion @ref-FLY-OPT-KLA-001
   Regel: Opptaksforvalter kan sette kompetanseregelverk og rangeringsregelverk
     # ÅPNE SPØRSMÅL:
     # - Kommentaren om at regelverkssamlingen ikke kan byttes, viser til innstillinger.feature i fritekst.
@@ -64,7 +64,7 @@ Egenskap: Opptaksinnstillinger per utdanningstilbud
   # for utdanningstilbudene sine, og kan legge til og fjerne utdanningskvoter. Utdanningstilbudet får ikke alle
   # kvotetypene automatisk. Det erstatter avklaringen 2026-10-16 om at deltakende organisasjoner verken kan legge
   # til eller fjerne utdanningskvoter.
-  @openquestion
+  @openquestion @ref-FLY-OPT-KLA-001
   Regel: Lærestedet velger utdanningskvotene blant kvotetypene i regelverkssamlingen
     # ÅPNE SPØRSMÅL:
     # - Avklaringene viser til antall_tilbud_som_skal_gis.feature og plassflyt.feature i fritekst. Skal
@@ -123,7 +123,7 @@ Egenskap: Opptaksinnstillinger per utdanningstilbud
 
   # AVKLART 2026-10-21 (produkteier): Utdanningskvotene følger kvoteprioriteten og plassflyten som er satt i
   # regelverkssamlingen opptaket bruker. Lærestedet setter dem ikke selv.
-  @depends-on-OPT-REG-KVO-003 @depends-on-OPT-REG-KVO-004
+  @depends-on-OPT-REG-KVO-003 @depends-on-OPT-REG-KVO-004 @ref-FLY-OPT-KLA-001
   Regel: Utdanningskvotene følger kvoteprioriteten og plassflyten i regelverkssamlingen
 
     Scenario: Utdanningskvotene får kvoteprioriteten fra regelverkssamlingen

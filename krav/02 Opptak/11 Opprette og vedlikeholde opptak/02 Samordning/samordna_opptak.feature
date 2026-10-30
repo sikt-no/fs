@@ -9,6 +9,7 @@ Egenskap: Samordna opptak
     Gitt at opptaksforvalter ved forvaltende organisasjon er innlogget
     Og at opptaket "Samordna opptak 2027" er opprettet som samordna
 
+  @ref-FLY-OPT-KLA-001
   Regel: Opptaksforvalter ved forvaltende organisasjon kan legge til organisasjoner i et samordna opptak
 
     Scenario: Legge til lærested i samordna opptak
@@ -17,6 +18,7 @@ Egenskap: Samordna opptak
   # Følgevirkninger: Deltakende organisasjoner kan få søknader de er saksbehandlende organisasjon for etter saksbehandlertildelingen
   # Deltakende organisasjoners opptaksforvaltere kan se og vedlikeholde info på egne utdanningstilbud, og saksbehandlere kan se info om egne utdanningstilbud
 
+  @ref-FLY-OPT-KLA-001
   Regel: Kun organisasjoner som deltar i opptaket kan legge til utdanningstilbud
 
     Scenario: Organisasjon som ikke deltar kan ikke legge til utdanningstilbud

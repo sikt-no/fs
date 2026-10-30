@@ -65,7 +65,7 @@ Egenskap: Legge til utdanningstilbud i opptak
       Gitt at organisasjonen "NTNU" ikke er lagt til som deltaker i opptaket
       Så kan ikke utdanningstilbud fra NTNU legges til i opptaket
 
-  @depends-on-OPT-OPT-UTD-005
+  @depends-on-OPT-OPT-UTD-005 @ref-FLY-OPT-KLA-001
   Regel: Opptaksforvalter ser kun utdanningstilbud som matcher opptakets kriterier
 
     Scenario: Se relevante utdanningstilbud
@@ -97,7 +97,7 @@ Egenskap: Legge til utdanningstilbud i opptak
       Så vises ikke emner som mulige utdanningstilbud
       Og studieprogram på 7 masternivå vises ikke som mulige utdanningstilbud
 
-  @depends-on-OPT-OVO-FRI-001 @ref-OPT-OPT-UTD-007 @ref-OPT-OPT-UTD-003
+  @depends-on-OPT-OVO-FRI-001 @ref-OPT-OPT-UTD-007 @ref-OPT-OPT-UTD-003 @ref-FLY-OPT-KLA-001
   Regel: Deltakende organisasjoner kan knytte til og redigere utdanningstilbud bare i perioden opptaket er åpent for redigering
     # Virkningen av når redigering av utdanningstilbud åpner og stenger, som opptaksforvalter setter i fristene for opptaket.
     # Lagt til 2026-10-19 etter akseptansetesten av opprette og vedlikeholde opptak.
