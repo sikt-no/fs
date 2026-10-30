@@ -1,5 +1,5 @@
 # language: no
-@OPT-BEH-BEH-025 @must @draft @ref-OPT-BEH-BEH-004 @ref-OPT-BEH-BEH-018 @ref-OPT-BEH-BEH-019 @ref-OPT-BEH-BEH-020 @ref-OPT-BEH-BEH-032
+@OPT-BEH-BEH-025 @must @planned @ref-OPT-BEH-BEH-004 @ref-OPT-BEH-BEH-018 @ref-OPT-BEH-BEH-019 @ref-OPT-BEH-BEH-020 @ref-OPT-BEH-BEH-032
 Egenskap: Ferdigbehandle en sak
   Som saksbehandler
   ønsker jeg at saker som kan behandles helt automatisk, blir ferdig behandlet uten at jeg gjør noe
@@ -82,7 +82,7 @@ Egenskap: Ferdigbehandle en sak
       Når saksbehandleren ved Universitetet i Oslo starter den automatiske behandlingen på "Vitnemål 2025"
       Så behandles saken hos "Universitetet i Oslo" automatisk på "Vitnemål 2025"
 
-    @openquestion
+    @draft @openquestion
     Scenario: Saken behandles automatisk på et sammensatt vitnemål
       # ÅPNE SPØRSMÅL:
       # - Ingen krav beskriver hva et sammensatt vitnemål er, eller hvordan saksbehandleren
