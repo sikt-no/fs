@@ -20,14 +20,11 @@
 # - Kravet står i en egen fil, og utvider ikke OPT-BEH-BEH-021.
 # - Saken har ikke lenger nye resultater når saken er behandlet på nytt, manuelt
 #   eller automatisk.
-#
-# ÅPNE SPØRSMÅL:
-# - Fagskoleresultater og resultater fra høyere utdanning importeres ikke fra KREG i
-#   dag. Fagskoleresultatene er i #422 og #246, og resultater fra høyere utdanning
-#   kommer fra Vitnemålsportalen. Kommer alle tre gruppene fra KREG når kravet
-#   bygges, eller skal kravet gjelde de andre kildene også?
-# - Gjelder et vitnemål som annulleres i KREG, som nytt resultat? Hva annulleringen
-#   gjør med saken, står i OPT-BEH-BEH-034.
+# - Alle tre gruppene kommer fra KREG. Resultater fra fagskoler og høyere utdanning
+#   er ikke i KREG i dag, men blir tilgjengelige gjennom et felles API som KREG skal
+#   tilby (se også #422 og #246).
+# - Et vitnemål som annulleres i KREG, er også et nytt resultat. Hva annulleringen
+#   gjør med saken, står i OPT-BEH-BEH-034 (PR #865).
 #
 @OPT-BEH-BEH-035 @must @draft @ref-OPT-BEH-BEH-021
 Egenskap: Finne saker med nye resultater
@@ -35,7 +32,8 @@ Egenskap: Finne saker med nye resultater
   ønsker jeg å filtrere sakene på om søkeren har fått nye resultater fra KREG, fordelt på VGS-resultater, fagskoleresultater og resultater fra høyere utdanning
   slik at jeg finner sakene der resultatene er endret etter at saken er behandlet.
 
-  Resultatene som importeres fra KREG etter at saken er behandlet, er nye resultater.
+  Resultatene som importeres fra KREG etter at saken er behandlet, er nye resultater,
+  også når et vitnemål annulleres.
   Saken har nye resultater til den er behandlet på nytt. Saksbehandleren kan
   filtrere sakene på hvilken gruppe de nye resultatene hører til.
 
@@ -47,6 +45,12 @@ Egenskap: Finne saker med nye resultater
       Gitt at saken til "Eva Berg" er behandlet
       Når søkeren får et nytt vitnemål fra videregående skole i KREG
       Og vitnemålet er importert
+      Så har saken nye VGS-resultater
+
+    Scenario: Saken får nye resultater når vitnemålet annulleres etter behandlingen
+      Gitt at saken til "Eva Berg" er behandlet
+      Når søkerens vitnemål fra videregående skole annulleres i KREG
+      Og annulleringen er importert
       Så har saken nye VGS-resultater
 
     Scenario: Resultatene som importeres før saken er behandlet, er ikke nye resultater
