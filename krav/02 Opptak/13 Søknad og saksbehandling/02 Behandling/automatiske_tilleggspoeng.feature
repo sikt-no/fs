@@ -75,13 +75,17 @@ Egenskap: Automatiske tilleggspoeng
       Når søknaden får grunnlaget "VES"
       Så viser kjønnspoengene at de er regnet ut for kvinne
 
-  # ÅPNE SPØRSMÅL:
-  # - Hvilke studiepoeng teller med?
   @openquestion @ref-FLY-OPT-AUT-001
   Regel: Poeng for høyere utdanning regnes ut fra søkerens studiepoeng
-
+    # ÅPNE SPØRSMÅL:
+    # - Kravet til importen av resultater fra høyere utdanning er ikke skrevet. Når det finnes,
+    #   får regelen @depends-on- til det.
     # Studiepoengene kommer fra tjenesten for resultater fra høyere utdanning. Resultatene hentes og lagres på samme
     # måte som vitnemål fra videregående skole hentes og lagres via KREG.
+    # Avklart 30.10.2026: alle beståtte studiepoeng på nivå høyere utdanning teller, også studiepoeng som er
+    # brukt i grunnlaget. Fagskolepoeng teller ikke. Studiepoengene telles når poengene regnes ut, uten frist.
+    # Studiepoeng fra utenlandsk høyere utdanning teller også, når opptakssystemet har dem som data. Det har
+    # det ikke ennå.
 
     Scenariomal: Poeng for høyere utdanning
       Gitt at poengtypen for poeng for høyere utdanning er knyttet til algoritmen for høyere utdanning
@@ -97,6 +101,27 @@ Egenskap: Automatiske tilleggspoeng
         | 59          | 1     |
         | 60          | 2     |
         | 120         | 2     |
+
+    Scenario: Bare beståtte emner teller
+      Gitt at poengtypen for poeng for høyere utdanning er knyttet til algoritmen for høyere utdanning
+      Og at søkeren har bestått emner på 50 studiepoeng
+      Og at søkeren ikke har bestått et emne på 10 studiepoeng
+      Når søknaden får grunnlaget "VES"
+      Så har søknaden 1 poeng for høyere utdanning
+
+    Scenario: Fagskolepoeng teller ikke
+      Gitt at poengtypen for poeng for høyere utdanning er knyttet til algoritmen for høyere utdanning
+      Og at søkeren har bestått emner på 30 studiepoeng i høyere utdanning
+      Og at søkeren har 30 fagskolepoeng
+      Når søknaden får grunnlaget "VES"
+      Så har søknaden 1 poeng for høyere utdanning
+
+    Scenario: Studiepoengene telles når poengene regnes ut
+      Gitt at poengtypen for poeng for høyere utdanning er knyttet til algoritmen for høyere utdanning
+      Og at søkeren hadde bestått emner på 50 studiepoeng da søknaden ble sendt inn
+      Og at søkeren har bestått et emne på 10 studiepoeng etter søknadsfristen
+      Når poengene for høyere utdanning regnes ut
+      Så har søknaden 2 poeng for høyere utdanning
 
   @ref-FLY-OPT-AUT-001
   Regel: Tilleggspoengene settes uansett hvem som velger grunnlaget

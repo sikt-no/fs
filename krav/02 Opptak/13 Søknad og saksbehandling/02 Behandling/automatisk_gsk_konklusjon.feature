@@ -44,9 +44,13 @@ Egenskap: Automatisk GSK-konklusjon
   Påstandene brukes i saksbehandlingen i alle aktive opptak. «Importeres» betyr i
   dette kravet alltid at opptakssystemet henter vitnemålet fra KREG (OPT-BEH-BEH-030),
   ikke at vitnemålet kommer inn i KREG. Søknader som ikke har en GSK-konklusjon, får en
-  positiv konklusjon når et vitnemål gir GSK. Vitnemål importeres fra KREG når
+  positiv konklusjon når et vitnemål gir GSK, og løpet på vitnemålet finnes i
+  opptakssystemets liste over løp. Har løpet ingen grunnlagskode, får konklusjonen KLS for et
+  studieforberedende løp, og KLY for et yrkesfaglig løp fra Kunnskapsløftet eller RFA for et
+  yrkesfaglig løp fra Reform 94. Finnes ikke løpet i listen, settes
+  ingen konklusjon automatisk. Vitnemål importeres fra KREG når
   søknaden opprettes, og når KREG får nye vitnemål for en søker med aktive søknader. Når
-  søknaden opprettes, importeres vitnemålene fra KREG først. Gir ingen av dem GSK, ser
+  søknaden opprettes, importeres vitnemålene fra KREG først. Gir ingen av dem en konklusjon, ser
   systemet etter en positiv konklusjon fra et tidligere opptak. Ellers vurderes GSK
   manuelt. Den automatiske saksbehandlingen setter også konklusjonen, som første steg, på
   søknadene i opptaket som ikke har en. Påstandene på vitnemålet beregnes ikke på nytt da.
@@ -166,6 +170,31 @@ Egenskap: Automatisk GSK-konklusjon
       Og at løpet på vitnemålet har grunnlagskoden KLS
       Når vitnemålet importeres fra KREG
       Så får søknaden en positiv GSK-konklusjon med grunnlagskoden KLS
+
+    Scenario: Ingen automatisk konklusjon når løpet ikke finnes i opptakssystemets liste over løp
+      # Innspill i PR #878: bare når løpet mangler i listen over løp (NVB_LOEP), settes ingen
+      # konklusjon. Saksbehandleren vurderer GSK, selv om vitnemålet gir GSK.
+      Gitt at søknaden ikke har noen GSK-konklusjon
+      Og at KREGs påstand er at søkeren har generell studiekompetanse
+      Og at løpet på vitnemålet ikke finnes i opptakssystemets liste over løp
+      Når vitnemålet importeres fra KREG
+      Så får søknaden ingen GSK-konklusjon fra vitnemålet
+
+    Scenariomal: Søknaden får grunnlagskoden <grunnlagskode> når et <løpstype> løp ikke har en grunnlagskode
+      # Innspill i PR #878: finnes løpet i listen over løp, men har ingen grunnlagskode, settes
+      # konklusjonen likevel, med KLS, KLY eller RFA etter typen løp og reformen.
+      Gitt at søknaden ikke har noen GSK-konklusjon
+      Og at KREGs påstand er at søkeren har generell studiekompetanse
+      Og at løpet på vitnemålet er et <løpstype> løp
+      Og at løpet finnes i opptakssystemets liste over løp, men ikke har en grunnlagskode
+      Når vitnemålet importeres fra KREG
+      Så får søknaden en positiv GSK-konklusjon med grunnlagskoden <grunnlagskode>
+
+      Eksempler:
+        | løpstype                            | grunnlagskode |
+        | studieforberedende                  | KLS           |
+        | yrkesfaglig fra Kunnskapsløftet     | KLY           |
+        | yrkesfaglig fra Reform 94           | RFA           |
 
     Scenario: Vitnemål som ikke gir GSK, gir ingen konklusjon
       Gitt at søknaden ikke har noen GSK-konklusjon

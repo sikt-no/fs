@@ -17,17 +17,19 @@ Egenskap: Beregne automatisk på nytt
   # behandlingen én sak om gangen (AutomatiskSaksbehandlingService), og ingenting kjører den for
   # mange saker.
 
-  # ÅPNE SPØRSMÅL:
-  # - En feil i kontrollmotoren rettes av utviklerne. Hvordan får opptaksforvalteren vite hvilke
-  #   kravelementer feilen gjaldt?
-  # - En sak som var under behandling fordi et steg ikke kunne avgjøres, kan avgjøres når feilen er
-  #   rettet. Blir den ferdig behandlet, eller må saksbehandleren gjøre det (OPT-BEH-BEH-025)?
-  # - Skal søkeren få vite det når kvalifiseringen, poengene eller kvoten endres?
-  # - Når beregningen på nytt gir nye automatiske mangler i en sak som er ferdig behandlet, hvem
-  #   publiserer dem? Den automatiske behandlingen publiserer manglene når den setter saken til
-  #   ferdig behandlet (OPT-BEH-BEH-025), men her forblir saken ferdig behandlet.
-  # - Kjører beregningen i bakgrunnen, som plasstildelingen, og ser opptaksforvalteren når den er
-  #   ferdig?
+  # Avklart 30.10.2026: en feil i kontrollmotoren rettes av utviklerne, og de sier fra (for
+  # eksempel i endringsloggen) hvilke kravelementer rettingen gjelder. Løsningen viser det ikke.
+
+  # Avklart 30.10.2026: søkeren får ingen egen melding når kvalifiseringen, poengene eller kvoten
+  # endres. Søkeren ser det som er endret, i Min kompetanse.
+
+  # Avklart 30.10.2026: søkeren ser de automatiske mangeltekstene når saken er ferdig behandlet
+  # (OPT-BEH-BEH-008). Gir beregningen på nytt en ny mangeltekst i en sak som er ferdig
+  # behandlet, ser søkeren den med en gang. Ingen trenger å publisere den.
+
+  # Avklart 30.10.2026: beregningen kjører som en jobb i bakgrunnen, etter det samme mønsteret
+  # som de andre jobbene i opptak (OPT-BEH-BEH-033, kjøre_jobbene_i_opptak.feature, PR #864).
+  # Når kravet er merget, får regelen «Beregningen kjører i bakgrunnen» @depends-on- til det.
 
   Bakgrunn:
     Gitt at opptaksforvalteren ved HK-dir er innlogget
@@ -76,6 +78,40 @@ Egenskap: Beregne automatisk på nytt
       Når opptaksforvalteren beregner på nytt for søknadsalternativene med rangeringsregelverket som er rettet
       Så har "Informatikk, UiO" poengsum for "Kari Nordmann" etter det rettede rangeringsregelverket
       Og saken til "Kari Nordmann" hos "Universitetet i Oslo" er fortsatt ferdig behandlet
+
+    @depends-on-OPT-BEH-BEH-008
+    Scenario: Søkeren ser den nye mangelteksten i en sak som er ferdig behandlet
+      Gitt at saken til "Kari Nordmann" hos "Universitetet i Oslo" er ferdig behandlet
+      Og at "Kari Nordmann" er kvalifisert for "Informatikk, UiO"
+      Når opptaksforvalteren beregner på nytt for søknadsalternativene med kravelementet "Matematikk R2"
+      Og "Kari Nordmann" ikke lenger er kvalifisert for "Informatikk, UiO"
+      Så ser "Kari Nordmann" den automatiske mangelteksten for "Matematikk R2" i Min kompetanse
+      Og saken til "Kari Nordmann" hos "Universitetet i Oslo" er fortsatt ferdig behandlet
+
+  @depends-on-OPT-BEH-BEH-025
+  Regel: En sak som ble stående under behandling på grunn av feilen, blir ferdig behandlet når alt kan avgjøres
+    # Avklart 30.10.2026. Saken kunne vært behandlet helautomatisk om regelverket hadde vært
+    # riktig. Har saksbehandleren gjort noe i saken, blir den stående under behandling.
+
+    Scenario: Saken blir ferdig behandlet når feilen er rettet
+      Gitt at saken til "Kari Nordmann" hos "Universitetet i Oslo" er under behandling fordi poengene for "Informatikk, UiO" ikke kunne avgjøres på grunn av en feil i rangeringsregelverket
+      Og at saksbehandleren ikke har gjort noe i saken
+      Når opptaksforvalteren beregner på nytt for søknadsalternativene med rangeringsregelverket som er rettet
+      Så er saken til "Kari Nordmann" hos "Universitetet i Oslo" ferdig behandlet
+
+    Scenario: Saken blir stående under behandling når saksbehandleren har gjort noe i den
+      Gitt at saken til "Kari Nordmann" hos "Universitetet i Oslo" er under behandling fordi poengene for "Informatikk, UiO" ikke kunne avgjøres på grunn av en feil i rangeringsregelverket
+      Og at saksbehandleren ved Universitetet i Oslo har vurdert et kravelement i saken
+      Når opptaksforvalteren beregner på nytt for søknadsalternativene med rangeringsregelverket som er rettet
+      Så er saken til "Kari Nordmann" hos "Universitetet i Oslo" fortsatt under behandling
+
+  Regel: Beregningen kjører i bakgrunnen
+
+    Scenario: Opptaksforvalteren ser når beregningen er ferdig
+      Gitt at opptaksforvalteren har startet en beregning på nytt for søknadsalternativene med kravelementet "Matematikk R1"
+      Når beregningen er ferdig
+      Så ser opptaksforvalteren at beregningen er ferdig
+      Og opptaksforvalteren ser hvor mange søknadsalternativer som ble beregnet på nytt, og hvor mange som ble hoppet over
 
   @depends-on-OPT-PLA-TIL-001
   Regel: Beregningen gjelder fra neste plasstildeling

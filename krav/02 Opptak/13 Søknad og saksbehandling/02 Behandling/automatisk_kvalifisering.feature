@@ -222,17 +222,8 @@ Egenskap: Automatisk vurdering av spesielle opptakskrav
       Så er søkeren kvalifisert på grunnlaget "VES"
       Og søkeren er ikke kvalifisert på grunnlaget "PRA"
 
-    @openquestion
-    Scenario: Kvalifisert per poengvariant
-      # ÅPNE SPØRSMÅL:
-      # - FS-klienten avgjør om søkeren er kvalifisert per poengvariant og
-      #   spesielt krav, for eksempel for førstegangsvitnemålskvoten. Ny stack
-      #   gjør det per grunnlag. Dekker grunnlaget det samme, eller trengs
-      #   begge?
-      Gitt at søkeren har tatt et fag som privatist etter fylte 21 år
-      Når kravene er vurdert
-      Så er søkeren kvalifisert i ordinær kvote
-      Og søkeren er ikke kvalifisert i kvoten for førstegangsvitnemål
+    # Avklart 30.10.2026: i den automatiske vurderingen avgjøres kvalifiseringen per grunnlag.
+    # Om den også må avgjøres per poengvariant, er et spørsmål i OPT-BEH-BEH-022.
 
   @ref-FLY-OPT-AUT-001
   Regel: Kravelementene vurderes i den automatiske behandlingen

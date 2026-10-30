@@ -97,14 +97,13 @@ Egenskap: Automatisk grunnlag
       Så får søknaden grunnlaget som krever et vitnemål
       Men søknaden får ikke grunnlaget som krever førstegangsvitnemål
 
-    @openquestion
-    Scenario: Flere grunnlag passer like godt
-      # ÅPNE SPØRSMÅL:
-      # - Ny stack velger grunnlaget med lavest kode alfabetisk, og logger en
-      #   advarsel. Er det ønsket, eller skal ingen settes?
+    Scenario: Ingen grunnlag settes når flere grunnlag passer like godt
+      # Avklart 30.10.2026: to grunnlag med de samme egenskapene er en feil i regelverket, og
+      # regelverket må justeres så det ikke skjer. Kode i dag: grunnlaget med lavest kode
+      # velges, og det logges en advarsel.
       Gitt at søkeren passer like godt til to grunnlag
       Når søknaden behandles automatisk
-      Så får søknaden ett av grunnlagene
+      Så får søknaden ingen grunnlag automatisk
 
     Scenario: Grunnlag uten egenskaper for automatikken settes ikke
       Gitt at regelverket har et grunnlag uten aldersgrense, uten krav om vitnemål og uten krav om førstegangsvitnemål
@@ -187,7 +186,8 @@ Egenskap: Automatisk grunnlag
       # ÅPNE SPØRSMÅL:
       # - FS-klienten kan sette et grunnlag fra studieprogrammet når
       #   søknadsalternativet opprettes («Aut.kvalgrunnlag»). Skal det
-      #   videreføres?
+      #   videreføres? Avgjøres når lokale opptak tas inn (30.10.2026). Gjelder ikke
+      #   den helautomatiske flyten. Blir kravet @planned før det, får scenarioet @draft.
       Gitt at utdanningstilbudet har et grunnlag som skal settes automatisk
       Når søkeren søker på utdanningstilbudet
       Så får søknaden grunnlaget fra utdanningstilbudet
