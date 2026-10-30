@@ -13,9 +13,10 @@ Egenskap: Søknadsmangler
   meldingen til søkeren, og søkeren ser på dokumentasjonssiden i Min kompetanse hva som mangler,
   og kan laste opp dokumentasjonen der.
 
-  Mangler lages også automatisk. Når kravelementene i saken vurderes, av den automatiske
-  behandlingen eller av saksbehandleren, får saken mangler for kravelementene søkeren ikke
-  oppfyller. En automatisk mangel sjekkes ut når kravelementet er oppfylt.
+  Mangler lages også automatisk. Er søkeren ikke kvalifisert, får saken automatiske
+  mangeltekster for kravelementene søkeren ikke oppfyller, og tekstene slettes automatisk når
+  søkeren blir kvalifisert. Mangelen for generell studiekompetanse som fullføres i vår, settes og
+  sjekkes ut automatisk.
 
   Mangler hører til saken, det vil si søknadsalternativene én saksbehandlende organisasjon har
   (se @OPT-BEH-BEH-011). Hver mangelkode hører til en kategori, og kategorien avgjør hva
@@ -313,15 +314,15 @@ Egenskap: Søknadsmangler
       #   saken samlet, og søkeren får melding hver gang. Ikke gått gjennom med teamet.
       # Kode i dag: «Oppdater mangel i Min kompetanse» kan ikke brukes når saken bare har
       # automatiske mangler.
-      Gitt at saken hos "Universitetet i Oslo" bare har den automatiske mangelen for "Matematikk R2"
+      Gitt at saken hos "Universitetet i Oslo" bare har den automatiske mangelteksten for "Matematikk R2"
       Når saksbehandleren ved Universitetet i Oslo publiserer manglene i saken
-      Så ser søkeren den automatiske mangelen for "Matematikk R2" i Min kompetanse
+      Så ser søkeren den automatiske mangelteksten for "Matematikk R2" i Min kompetanse
 
     @draft @openquestion
     Scenariomal: Saksbehandleren ser at endringene ikke er publisert når <endring>
       # ÅPNE SPØRSMÅL:
       # - Må også en ny mangel, og en mangel som sjekkes ut, publiseres på nytt?
-      Gitt at saksbehandleren ved Universitetet i Oslo har publisert mangelen "KAR" og den automatiske mangelen for "Matematikk R2"
+      Gitt at saksbehandleren ved Universitetet i Oslo har publisert mangelen "KAR" og den automatiske mangelteksten for "Matematikk R2"
       Når <endring>
       Så ser saksbehandleren at endringene i manglene ikke er publisert
 
@@ -546,92 +547,73 @@ Egenskap: Søknadsmangler
 
   # ── 6. Automatikk ────────────────────────────────────────────
 
-  @draft @openquestion @depends-on-OPT-BEH-BEH-020 @ref-FLY-OPT-AUT-001 @ref-OPT-BEH-BEH-025
-  Regel: Saken får mangler for kravelementene søkeren ikke oppfyller
+  @draft @depends-on-OPT-BEH-BEH-020 @ref-FLY-OPT-AUT-001 @ref-OPT-BEH-BEH-025
+  Regel: Saken får automatiske mangeltekster når søkeren ikke er kvalifisert
 
-    Manglene lages når kravelementene i saken vurderes, av den automatiske behandlingen eller av
-    saksbehandleren i steget «Spesielle opptakskrav». Saksbehandleren kan gjøre det samme med en
-    automatisk mangel som med en mangel saksbehandleren har registrert.
+    De automatiske mangeltekstene følger kvalifiseringen. Er søkeren ikke kvalifisert på
+    kompetanseregelverket, har saken én automatisk mangeltekst for hvert kravelement som ikke er
+    oppfylt. Blir søkeren kvalifisert, slettes tekstene automatisk. Det gjelder uansett om
+    kravelementene er vurdert av den automatiske behandlingen eller av saksbehandleren i steget
+    «Spesielle opptakskrav». En automatisk mangeltekst har ingen mangelkode, og saksbehandleren
+    kan ikke gjøre noe med den. Mener saksbehandleren at søkeren oppfyller kravet, vurderer
+    saksbehandleren kravelementet som oppfylt.
 
-    # Avklart 30.10.2026: er søkeren ikke kvalifisert på noen kravliste, får alle kravelementene
-    # som ikke er oppfylt, mangel, i alle kravlistene. Søkeren må kunne se at kravlistene er
-    # alternativer. Hvordan, avgjøres i teksten til søkeren eller i designet.
     # Avklart 30.10.2026: den automatiske behandlingen lager ikke mangler med mangelkode, bare
     # automatiske mangeltekster. Teksten lages av navnet på kravelementet, etter et fast mønster
     # som står i implementasjonsdetaljene. Kravelementene får ingen egen tekst til søkeren. Det
     # avviker fra raffineringen, som sa at tekstene skulle hentes fra opptakskravene.
+    # Avklart 30.10.2026: er søkeren ikke kvalifisert på noen kravliste, får alle kravelementene
+    # som ikke er oppfylt, en mangeltekst, i alle kravlistene. Søkeren må kunne se at
+    # kravlistene er alternativer. Hvordan, avgjøres i designet.
+    # Avklart 30.10.2026: saksbehandleren kan ikke kommentere, sjekke ut eller slette en
+    # automatisk mangeltekst.
 
-    Scenariomal: Saken får mangel når <vurdert av> vurderer at et kravelement ikke er oppfylt
+    Scenariomal: Saken får en automatisk mangeltekst når <vurdert av> vurderer at et kravelement ikke er oppfylt
       Gitt at søknadsalternativene i saken hos "Universitetet i Oslo" har kravelementet "Matematikk R2"
       Når <vurdert av> vurderer at "Matematikk R2" ikke er oppfylt
-      Så har saken en automatisk mangel som viser at "Matematikk R2" ikke er oppfylt
+      Så er søkeren ikke kvalifisert
+      Og har saken en automatisk mangeltekst som viser at "Matematikk R2" ikke er oppfylt
 
       Eksempler:
         | vurdert av                               |
         | den automatiske behandlingen             |
         | saksbehandleren ved Universitetet i Oslo |
 
-    Scenario: Saken får ikke mangel når søkeren er kvalifisert på en annen kravliste
+    Scenario: Saken får ikke mangeltekst når søkeren er kvalifisert på en annen kravliste
       Gitt at "Informatikk, UiO" har kravlisten "Matematikk R2" og kravlisten "Matematikk R1 og Fysikk 2"
       Og at vitnemålet har "Matematikk R1" og "Fysikk 2", men ikke "Matematikk R2"
       Når den automatiske behandlingen vurderer kravelementene
       Så er søkeren kvalifisert for "Informatikk, UiO"
-      Og saken har ikke en automatisk mangel for "Matematikk R2"
+      Og saken har ikke en automatisk mangeltekst for "Matematikk R2"
 
-    Scenario: Saken får mangler i alle kravlistene når søkeren ikke er kvalifisert på noen
+    Scenario: Saken får mangeltekster i alle kravlistene når søkeren ikke er kvalifisert på noen
       Gitt at "Informatikk, UiO" har kravlisten "Matematikk R2" og kravlisten "Matematikk R1 og Fysikk 2"
       Og at vitnemålet har "Matematikk R1", men ikke "Matematikk R2" og ikke "Fysikk 2"
       Når den automatiske behandlingen vurderer kravelementene
-      Så har saken en automatisk mangel for "Matematikk R2"
-      Og saken har en automatisk mangel for "Fysikk 2"
+      Så har saken en automatisk mangeltekst for "Matematikk R2"
+      Og saken har en automatisk mangeltekst for "Fysikk 2"
 
-    Scenariomal: Den automatiske mangelen sjekkes ut når <vurdert av> vurderer at kravelementet er oppfylt
-      Gitt at saken hos "Universitetet i Oslo" har en automatisk mangel som viser at "Matematikk R2" ikke er oppfylt
+    Scenariomal: De automatiske mangeltekstene slettes når <vurdert av> vurderer at søkeren er kvalifisert
+      Gitt at saken hos "Universitetet i Oslo" har en automatisk mangeltekst som viser at "Matematikk R2" ikke er oppfylt
       Når <vurdert av> vurderer at "Matematikk R2" er oppfylt
-      Så er den automatiske mangelen for "Matematikk R2" sjekket ut
-      Og saken har fortsatt den automatiske mangelen for "Matematikk R2"
+      Så er søkeren kvalifisert
+      Og saken har ikke en automatisk mangeltekst for "Matematikk R2"
 
       Eksempler:
         | vurdert av                               |
         | den automatiske behandlingen             |
         | saksbehandleren ved Universitetet i Oslo |
 
-    Scenariomal: Saksbehandleren ser <mangel> sammen med de registrerte manglene
-      Gitt at saken hos "Universitetet i Oslo" har <mangel>
+    Scenario: Saksbehandleren ser de automatiske mangeltekstene sammen med de registrerte manglene
+      Gitt at saken hos "Universitetet i Oslo" har en automatisk mangeltekst for "Matematikk R2"
       Og at saksbehandleren ved Universitetet i Oslo har registrert mangelen "STEMPEL"
       Når saksbehandleren åpner manglene i saken
-      Så ser saksbehandleren <mangel> og mangelen "STEMPEL"
-      Og saksbehandleren ser teksten søkeren får for <mangel>
+      Så ser saksbehandleren den automatiske mangelteksten for "Matematikk R2" og mangelen "STEMPEL"
 
-      Eksempler:
-        | mangel                                       |
-        | den automatiske mangelen for "Matematikk R2" |
-        | den automatiske mangelen "DUA"               |
-
-    Scenariomal: Saksbehandleren kan <handling> en automatisk mangel
-      Gitt at saken hos "Universitetet i Oslo" har den automatiske mangelen for "Matematikk R2"
+    Scenario: Saksbehandleren kan ikke endre en automatisk mangeltekst
+      Gitt at saken hos "Universitetet i Oslo" har en automatisk mangeltekst for "Matematikk R2"
       Når saksbehandleren ved Universitetet i Oslo åpner manglene i saken
-      Så kan saksbehandleren <handling> den automatiske mangelen for "Matematikk R2"
-
-      Eksempler:
-        | handling   |
-        | kommentere |
-        | sjekke ut  |
-        | slette     |
-
-    Scenariomal: Automatisk mangel som er <handling>, <utfall> når mangelkoden <overskrivbar>
-      Gitt at saksbehandleren ved Universitetet i Oslo har <handling> den automatiske mangelen for "Matematikk R2"
-      Og at mangelkoden til mangelen <overskrivbar>
-      Og at "Matematikk R2" fortsatt ikke er oppfylt
-      Når kravelementene i saken vurderes på nytt
-      Så <resultat>
-
-      Eksempler:
-        | handling   | overskrivbar                                  | utfall              | resultat                                                                          |
-        | slettet    | kan overskrives av automatisk behandling      | kommer tilbake      | har saken igjen en automatisk mangel som viser at "Matematikk R2" ikke er oppfylt |
-        | slettet    | ikke kan overskrives av automatisk behandling | kommer ikke tilbake | har saken ikke en automatisk mangel for "Matematikk R2"                           |
-        | sjekket ut | kan overskrives av automatisk behandling      | kommer tilbake      | har saken igjen en automatisk mangel som viser at "Matematikk R2" ikke er oppfylt |
-        | sjekket ut | ikke kan overskrives av automatisk behandling | kommer ikke tilbake | er den automatiske mangelen for "Matematikk R2" fortsatt sjekket ut               |
+      Så ser ikke saksbehandleren muligheten til å kommentere, sjekke ut eller slette den automatiske mangelteksten
 
   @draft @openquestion @ref-FLY-OPT-AUT-001 @depends-on-OPT-SØK-SØK-018
   Regel: Mangelen for generell studiekompetanse som fullføres i vår settes og sjekkes ut automatisk
@@ -654,8 +636,8 @@ Egenskap: Søknadsmangler
 
     # ÅPNE SPØRSMÅL:
     # - Hvordan varsles opptaksforvalteren når ingen mangelkode er merket?
-    # - Kan saksbehandleren slette mangelen, eller bare sjekke den ut? Regelen over sier at
-    #   saksbehandleren kan slette en automatisk mangel.
+    # - Kan saksbehandleren slette mangelen, eller bare sjekke den ut? Mangelen har en mangelkode,
+    #   og er ikke en automatisk mangeltekst, som saksbehandleren ikke kan gjøre noe med.
     # - Skal en mangel som er sjekket ut, bli stående når søkeren endrer søknaden til at generell
     #   studiekompetanse ikke fullføres i vår?
 

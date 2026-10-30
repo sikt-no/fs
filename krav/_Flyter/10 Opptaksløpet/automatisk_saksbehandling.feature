@@ -213,15 +213,15 @@ Egenskap: Automatisk saksbehandling
       Så har søkeren poengsum etter poengformelen til "Ordinær kvote" for "Informatikk, UiO"
 
   @depends-on-OPT-BEH-BEH-008 @ref-FLY-OPT-VAL-001 @ref-FLY-OPT-SAM-001
-  # OPT-BEH-BEH-008: «Saken får mangler for kravelementene søkeren ikke oppfyller»
+  # OPT-BEH-BEH-008: «Saken får automatiske mangeltekster når søkeren ikke er kvalifisert»
   # Oppdateres automatisk ut fra vurderingen av kravelementene.
-  Regel: Saken får mangler når kravelementene er vurdert
+  Regel: Saken får mangeltekster når kravelementene er vurdert
 
-    Scenario: Saken får mangel for kravelementet vitnemålet ikke oppfyller
+    Scenario: Saken får mangeltekst for kravelementet vitnemålet ikke oppfyller
       Gitt at "Informatikk, UiO" har kravelementet "Matematikk R2"
       Og at vitnemålet saken behandles helautomatisk på, ikke har "Matematikk R2"
       Når søknaden behandles automatisk
-      Så har saken en automatisk mangel som viser at "Matematikk R2" ikke er oppfylt
+      Så har saken en automatisk mangeltekst som viser at "Matematikk R2" ikke er oppfylt
 
   @depends-on-OPT-BEH-BEH-008 @ref-FLY-OPT-VAL-001 @ref-FLY-OPT-SAM-001
   # OPT-BEH-BEH-008: «Opptaksforvalteren merker én mangelkode for generell studiekompetanse som fullføres i vår», «Mangelen for generell studiekompetanse som fullføres i vår settes og sjekkes ut automatisk»
@@ -247,11 +247,11 @@ Egenskap: Automatisk saksbehandling
       Når den automatiske behandlingen er ferdig
       Så er saken hos "Universitetet i Oslo" ferdig behandlet
 
-    Scenario: Søkeren ser mangelen fra kravelementene når saken er ferdig behandlet
-      Gitt at saken har en automatisk mangel som viser at "Matematikk R2" ikke er oppfylt
+    Scenario: Søkeren ser mangelteksten fra kravelementene når saken er ferdig behandlet
+      Gitt at saken har en automatisk mangeltekst som viser at "Matematikk R2" ikke er oppfylt
       Når den automatiske behandlingen er ferdig
       Så er saken hos "Universitetet i Oslo" ferdig behandlet
-      Og søkeren ser mangelen for "Matematikk R2" i Min kompetanse
+      Og søkeren ser mangelteksten for "Matematikk R2" i Min kompetanse
 
     Scenario: Saken blir ikke ferdig behandlet når poengene ikke kan avgjøres
       Gitt at poengene for "Informatikk, UiO" ikke kan avgjøres på grunn av en feil i regelverket

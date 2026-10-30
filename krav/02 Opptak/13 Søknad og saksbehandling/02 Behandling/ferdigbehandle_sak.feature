@@ -103,12 +103,12 @@ Egenskap: Ferdigbehandle en sak
       Så er saken hos "Universitetet i Oslo" ferdig behandlet
 
     @depends-on-OPT-BEH-BEH-008
-    # OPT-BEH-BEH-008: «Kategorien til mangelkoden avgjør hva mangelen hindrer» og «Saken får mangler for kravelementene søkeren ikke oppfyller»
-    Scenario: Saken er ferdig behandlet selv om kravelementene ga mangel
+    # OPT-BEH-BEH-008: «Kategorien til mangelkoden avgjør hva mangelen hindrer» og «Saken får automatiske mangeltekster når søkeren ikke er kvalifisert»
+    Scenario: Saken er ferdig behandlet selv om kravelementene ga mangeltekst
       Gitt at "Informatikk, UiO" har kravelementet "Matematikk R2"
       Og at vitnemålet ikke har "Matematikk R2"
       Når søknaden behandles automatisk
-      Så har saken en automatisk mangel som viser at "Matematikk R2" ikke er oppfylt
+      Så har saken en automatisk mangeltekst som viser at "Matematikk R2" ikke er oppfylt
       Og saken hos "Universitetet i Oslo" er ferdig behandlet
 
     @depends-on-OPT-BEH-BEH-008
