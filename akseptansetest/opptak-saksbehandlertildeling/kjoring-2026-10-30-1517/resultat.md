@@ -23,7 +23,7 @@ Utdanningstilbudene i opptaket er ikke de samme som i stegene, men har tilsvaren
 | 10.1 | Bestått | Opptaksforvalteren ser alle 36 sakene |
 | 8.3b | Ikke testet | Brukere ved HK-dir får ikke overstyrt (STEK-658) |
 | 8.5a | Ikke testet | Fristen kan ikke flyttes fram (STEK-659) |
-| 8.7a–c | Ikke testet | «Ingen tilgjengelige tilbudsgarantier» i opptaket |
+| 8.7a–c | Ikke testet | «Ingen tilgjengelige tilbudsgarantier» i opptaket. Typene settes per opptak, og bare en utvikler kan legge dem inn |
 | 6.2a, 6.2b, 6.5–6.8, F.1 | Ikke testet | Trenger en søker eller en søknad fra Min kompetanse |
 
 ## Endringer i opptaket
