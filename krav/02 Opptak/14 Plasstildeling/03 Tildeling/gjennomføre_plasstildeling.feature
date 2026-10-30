@@ -98,13 +98,10 @@ Egenskap: Gjennomføre plasstildeling
     # AVKLART 2026-10-14: Kvoteprioritet trengs bare når utdanningstilbudet har flere utdanningskvoter.
     # Koden prøver i dag en utdanningskvote uten kvoteprioritet først (videreført fra admissio). Det avviker
     # fra kravet, der en kvotetype uten kvoteprioritet ikke brukes i plasstildelingen (scenariomalen over).
-    @openquestion
-    Scenario: Utdanningstilbud med én utdanningskvote trenger ingen kvoteprioritet
-      # ÅPNE SPØRSMÅL:
-      # - Kvoteprioriteten settes nå for alle kvotetypene i regelverkssamlingen (avklart 2026-10-21), og en
-      #   kvotetype uten kvoteprioritet brukes ikke i plasstildelingen. Gjelder scenarioet fortsatt, eller skal
-      #   det fjernes?
-      Gitt at utdanningstilbudet "Vernepleie, høst 2027" bare har utdanningskvoten "Ordinær", uten kvoteprioritet
+    # AVKLART 2026-10-30 (produkteier): Har utdanningstilbudet bare én utdanningskvote, har kvoteprioriteten
+    # ingen betydning, fordi utdanningskvoten ikke rangeres mot en annen.
+    Scenario: Kvoteprioriteten har ingen betydning når utdanningstilbudet har én utdanningskvote
+      Gitt at utdanningstilbudet "Vernepleie, høst 2027" bare har utdanningskvoten "Ordinær"
       Og at søkeren "Kari Nordmann" er kvalifisert i "Ordinær" på "Vernepleie, høst 2027"
       Når plasstildelingen gjennomføres
       Så prøves søkeren i utdanningskvoten "Ordinær" på "Vernepleie, høst 2027"
