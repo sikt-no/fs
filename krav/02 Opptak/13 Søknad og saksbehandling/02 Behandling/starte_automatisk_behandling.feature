@@ -1,5 +1,5 @@
 # language: no
-@OPT-BEH-BEH-032 @must @draft @ref-OPT-BEH-BEH-025
+@OPT-BEH-BEH-032 @must @planned @ref-OPT-BEH-BEH-025
 Egenskap: Starte automatisk behandling
   Som saksbehandler
   ønsker jeg at den automatiske behandlingen starter av seg selv for hver ny sak
@@ -23,15 +23,6 @@ Egenskap: Starte automatisk behandling
   # Hvor ofte jobbene kjører, står i OPT-BEH-BEH-033 (PR #864).
   # Saksbehandleren velger vitnemålet når søkeren har flere vitnemål, i
   # OPT-BEH-BEH-025.
-
-  # ÅPNE SPØRSMÅL:
-  # - Er «ny dokumentasjon» i sakslisten en behandlingsstatus (OPT-BEH-BEH-029), eller en egen
-  #   markering ved siden av? OPT-BEH-BEH-029 sier at ny dokumentasjon ikke endrer
-  #   behandlingsstatusen.
-  # - Er «ny dokumentasjon» den samme markeringen som «nye resultater» i OPT-BEH-BEH-035 og
-  #   taggen «Vitnemål annullert» i OPT-BEH-BEH-034? Alle tre merker saken når
-  #   søkeren får et nytt eller annullert vitnemål.
-  # - Er varselet om nytt vitnemål det samme som i OPT-BEH-BEH-021?
 
   Bakgrunn:
     Gitt at opptaket "Samordna opptak 2027" forvaltes av HK-dir
@@ -59,9 +50,17 @@ Egenskap: Starte automatisk behandling
       Når jobben for nye vitnemål i KREG kjører
       Så behandles saken hos "Universitetet i Oslo" automatisk når vitnemålet er importert
 
-  @depends-on-OPT-BEH-BEH-030 @ref-OPT-BEH-BEH-021 @ref-OPT-BEH-BEH-029
+  @openquestion @depends-on-OPT-BEH-BEH-030 @ref-OPT-BEH-BEH-021 @ref-OPT-BEH-BEH-029
   # OPT-BEH-BEH-030: «Endringer i KREG importeres gjennom et abonnement»
   Regel: Et nytt vitnemål i en sak med vitnemål er ny dokumentasjon
+    # ÅPNE SPØRSMÅL:
+    # - Er «ny dokumentasjon» i sakslisten en behandlingsstatus (OPT-BEH-BEH-029), eller en egen
+    #   markering ved siden av? OPT-BEH-BEH-029 sier at ny dokumentasjon ikke endrer
+    #   behandlingsstatusen.
+    # - Er «ny dokumentasjon» den samme markeringen som «nye resultater» i OPT-BEH-BEH-035 og
+    #   taggen «Vitnemål annullert» i OPT-BEH-BEH-034? Alle tre merker saken når
+    #   søkeren får et nytt eller annullert vitnemål.
+    # - Er varselet om nytt vitnemål det samme som i OPT-BEH-BEH-021?
 
     Scenario: Saksbehandleren ser at saken har fått ny dokumentasjon
       Gitt at saken hos "Universitetet i Oslo" er behandlet automatisk på vitnemålet til "Kari Nordmann"
