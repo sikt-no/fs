@@ -2,7 +2,7 @@
 # Kilder: koden i fs-plattform (opptak-service: regelverk/poeng og saksbehandling), Jira STEK-68, STEK-76,
 # STEK-467 og STEK-533. Poengene fra vitnemålet er et eget krav (@OPT-BEH-BEH-018), og det samme gjelder
 # automatisk grunnlag (@OPT-BEH-BEH-019). Kravelementene står i automatisk_kvalifisering.feature (@OPT-BEH-BEH-020).
-@OPT-BEH-BEH-028 @must @draft @depends-on-OPT-REG-RAN-002
+@OPT-BEH-BEH-028 @must @planned @depends-on-OPT-REG-RAN-002
 Egenskap: Automatiske tilleggspoeng
   Som saksbehandler
   ønsker jeg at alderspoeng, kjønnspoeng og poeng for høyere utdanning settes av regelverket
