@@ -69,7 +69,7 @@ Steg 3 er viktig. Uten den kan FS Admin oppføre seg rart etter byttet, på grun
 
 | Nr | Scenario | Steg | Forventet resultat | Faktisk resultat | Status |
 |---|---|---|---|---|---|
-| 1.3 | Velge blant konklusjonene opptaket har | 1. Fortsett fra 1.2. <br>2. Åpne nedtrekkslisten «Konklusjon». | Listen inneholder «Ikke valgt», «Kan få tidligopptak, har godkjent grunn.» (KFF) og «Ikke dokumentert behov for tidligopptak» (AFH). «Ikke valgt» er valgt. | | |
+| 1.3 | Velge blant konklusjonene opptaket har | 1. Fortsett fra 1.2. <br>2. Åpne nedtrekkslisten «Konklusjon». | Listen inneholder minst «Ikke valgt», «Kan få tidligopptak, har godkjent grunn.» (KFF) og «Ikke dokumentert behov for tidligopptak» (AFH). «Ikke valgt» er valgt. | | |
 | 1.4a | Konkludere om søkeren deltar i tidligopptaket (KFF – deltar) | 1. Fortsett fra 1.3. <br>2. Velg «Kan få tidligopptak, har godkjent grunn.» (KFF) i «Konklusjon». <br>3. Gå tilbake til sakslisten. <br>4. Åpne saken til søker A (søknad 1000902) igjen, og gå til steget «Tidlig opptak». | Meldingen «Konklusjonen er lagret» vises etter steg 2. Når saken åpnes igjen, står «Kan få tidligopptak, har godkjent grunn.» (KFF) i «Konklusjon». | | |
 | 1.4b | Konkludere om søkeren deltar i tidligopptaket (AFH – ikke deltar) | 1. Fortsett fra 1.4a. <br>2. Velg «Ikke dokumentert behov for tidligopptak» (AFH) i «Konklusjon». <br>3. Gå tilbake til sakslisten. <br>4. Åpne saken til søker A (søknad 1000902) igjen, og gå til steget «Tidlig opptak». | Meldingen «Konklusjonen er lagret» vises etter steg 2. Når saken åpnes igjen, står «Ikke dokumentert behov for tidligopptak» (AFH) i «Konklusjon». Søker A har nå konklusjonen AFH, som brukes i del 2. | | |
 | 1.5 | Søknad uten ønske om tidlig opptak viser ikke tidlig opptak | 1. Gå tilbake til sakslisten. <br>2. Åpne saken til søker C (søknad 1001012). <br>3. Se på stegene i saken. | Steget «Tidlig opptak» finnes ikke i saken. | | |
@@ -86,8 +86,8 @@ Del 2 tester det saksbehandleren trenger for tidlig opptak: å finne sakene som 
 
 | Nr | Scenario | Steg | Forventet resultat | Faktisk resultat | Status |
 |---|---|---|---|---|---|
-| 2.1 | Filtrere på tidlig opptak (søkeren har søkt om tidlig opptak) | 1. Fortsett fra 1.6b, som testbruker 1. <br>2. Gå tilbake til sakslisten. <br>3. Kryss av for «Har søkt tidlig opptak» i «Tidlig opptak». | Listen inneholder søknadene til søker A (1000902), B (1001008) og D (1000748). Søknaden til søker C (1001012) er ikke med. | | |
-| 2.2 | Filtrere på tidlig opptak (konklusjonen for tidlig opptak mangler) | 1. Fortsett fra 2.1. <br>2. Fjern krysset for «Har søkt tidlig opptak». <br>3. Kryss av for «Mangler konklusjon på tidlig opptak» i «Tidlig opptak». | Listen inneholder søknaden til søker B (1001008). Søknadene til søker A (1000902) og D (1000748), som har konklusjon, og søker C (1001012), som ikke har søkt, er ikke med. | | |
+| 2.1 | Filtrere på tidlig opptak (søkeren har søkt om tidlig opptak) | 1. Fortsett fra 1.6b, som testbruker 1. <br>2. Gå tilbake til sakslisten. <br>3. Kryss av for «Har søkt tidlig opptak» i «Tidlig opptak». | Listen inneholder minst søknadene til søker A (1000902), B (1001008) og D (1000748). Søknaden til søker C (1001012) er ikke med. | | |
+| 2.2 | Filtrere på tidlig opptak (konklusjonen for tidlig opptak mangler) | 1. Fortsett fra 2.1. <br>2. Fjern krysset for «Har søkt tidlig opptak». <br>3. Kryss av for «Mangler konklusjon på tidlig opptak» i «Tidlig opptak». | Listen inneholder minst søknaden til søker B (1001008). Søknadene til søker A (1000902) og D (1000748), som har konklusjon, og søker C (1001012), som ikke har søkt, er ikke med. | | |
 | | | *Etter testen, hvis den skal kjøres på nytt: velg «Ikke valgt» i «Konklusjon» for søker A (søknad 1000902), og i begge sakene til søker D (søknad 1000748), som testbruker 1 og som testbruker 2.* | | | |
 
 ## Ikke testbart nå

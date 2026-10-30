@@ -46,6 +46,10 @@ Testbrukerne finnes i minst to organisasjoner, så vi kan teste at ingen ser dat
 | Søker C: har ikke søkt om tidlig opptak | Dedikert Jerv, søknad 1001012 | [Søknaden i Min kompetanse](https://test.minkompetanse.no/nb/soknader/c29rbmFkOmIwYzA4YWJlLTVkZjktNGFjNS1iY2EzLTRmMDM3YmVlZTA0ZCwzNA) | – (endres ikke) |
 | Søker D: har søkt om tidlig opptak, uten konklusjon, med to saker: søknaden er delt i én sak som behandles av HVL og én som behandles av UiT | Smart klippfisk, søknad 1000748 | [Søknaden i Min kompetanse](https://test.minkompetanse.no/nb/soknader/c29rbmFkOjI5NTNlZGEyLTU4MTUtNDEwNy1hN2ZhLWUwNjY1MGEwOTliMSwzNA) | Ja: velg «Ikke valgt» i «Konklusjon» i begge sakene |
 
+#### Slik lager du en søker med to saker
+
+Hvordan en søknad deles i saker, avhenger av reglene for saksbehandlertildeling i opptaket. Det enkleste og mest forutsigbare er å bruke en søker med utdanningsbakgrunn «Realkompetanse» (REA). Da blir søknadsalternativene alltid fordelt til den tilbydende organisasjonen. Søkeren må ha minst ett studieønske hos hver av de to organisasjonene. I opptak 34 kan det for eksempel være Byggingeniør (HVL, Bergen) og Paramedisin (UiT, Tromsø).
+
 ## Omfang
 
 Det som testes, er kravene som er `@implemented`, og de leverte delene i krav som er delvis levert. Feature-ID-ene her er kravene resten av testflyten bruker.
