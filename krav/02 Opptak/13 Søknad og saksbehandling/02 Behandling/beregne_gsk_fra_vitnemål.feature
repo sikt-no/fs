@@ -377,7 +377,8 @@ Egenskap: Beregne GSK fra vitnemål
     # Innspill i PR #878: sier skolen eller KREG at søkeren har GSK, men løpet finnes ikke i
     # listen over løp, settes ingen konklusjon automatisk, og saksbehandleren vurderer GSK.
     # Finnes løpet, men har ingen grunnlagskode etter reglene her, får konklusjonen KLS for et
-    # studieforberedende løp og KLY for et yrkesfaglig løp (OPT-BEH-BEH-015).
+    # studieforberedende løp, og KLY (Kunnskapsløftet) eller RFA (Reform 94) for et yrkesfaglig
+    # løp (OPT-BEH-BEH-015).
     # «Løp»: avklart 2026-10-27 at løp er et begrep saksbehandlerne kjenner.
 
     Scenariomal: Yrkesfaglig løp fra <reform> gir grunnlagskoden <grunnlagskode>

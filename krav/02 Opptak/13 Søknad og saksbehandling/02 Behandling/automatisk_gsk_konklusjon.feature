@@ -46,7 +46,8 @@ Egenskap: Automatisk GSK-konklusjon
   ikke at vitnemålet kommer inn i KREG. Søknader som ikke har en GSK-konklusjon, får en
   positiv konklusjon når et vitnemål gir GSK, og løpet på vitnemålet finnes i
   opptakssystemets liste over løp. Har løpet ingen grunnlagskode, får konklusjonen KLS for et
-  studieforberedende løp og KLY for et yrkesfaglig løp. Finnes ikke løpet i listen, settes
+  studieforberedende løp, og KLY for et yrkesfaglig løp fra Kunnskapsløftet eller RFA for et
+  yrkesfaglig løp fra Reform 94. Finnes ikke løpet i listen, settes
   ingen konklusjon automatisk. Vitnemål importeres fra KREG når
   søknaden opprettes, og når KREG får nye vitnemål for en søker med aktive søknader. Når
   søknaden opprettes, importeres vitnemålene fra KREG først. Gir ingen av dem en konklusjon, ser
@@ -181,7 +182,7 @@ Egenskap: Automatisk GSK-konklusjon
 
     Scenariomal: Søknaden får grunnlagskoden <grunnlagskode> når et <løpstype> løp ikke har en grunnlagskode
       # Innspill i PR #878: finnes løpet i listen over løp, men har ingen grunnlagskode, settes
-      # konklusjonen likevel, med KLS eller KLY etter typen løp.
+      # konklusjonen likevel, med KLS, KLY eller RFA etter typen løp og reformen.
       Gitt at søknaden ikke har noen GSK-konklusjon
       Og at KREGs påstand er at søkeren har generell studiekompetanse
       Og at løpet på vitnemålet er et <løpstype> løp
@@ -190,9 +191,10 @@ Egenskap: Automatisk GSK-konklusjon
       Så får søknaden en positiv GSK-konklusjon med grunnlagskoden <grunnlagskode>
 
       Eksempler:
-        | løpstype            | grunnlagskode |
-        | studieforberedende  | KLS           |
-        | yrkesfaglig         | KLY           |
+        | løpstype                            | grunnlagskode |
+        | studieforberedende                  | KLS           |
+        | yrkesfaglig fra Kunnskapsløftet     | KLY           |
+        | yrkesfaglig fra Reform 94           | RFA           |
 
     Scenario: Vitnemål som ikke gir GSK, gir ingen konklusjon
       Gitt at søknaden ikke har noen GSK-konklusjon
