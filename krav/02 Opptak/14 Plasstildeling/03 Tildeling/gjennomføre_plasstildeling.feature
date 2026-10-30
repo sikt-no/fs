@@ -83,9 +83,9 @@ Egenskap: Gjennomføre plasstildeling
       Og deretter i utdanningskvoten "Ordinær"
 
     # Flyttet hit 2026-10-19 fra 11 Opprette og vedlikeholde opptak/03 Innstillinger/sette_kvoteprioritet.feature.
-    # Kvoteprioriteten settes på opptaket, og lavest tall er høyest prioritet.
+    # Kvoteprioriteten settes i regelverkssamlingen (avklart 2026-10-21), og lavest tall er høyest prioritet.
     Scenario: Lavest tall gir høyest prioritet
-      Gitt at kvoteprioriteten for opptaket er 2 for "Førstegangsvitnemål (ORDF)" og 3 for "Ordinær kvote (ORD)"
+      Gitt at kvoteprioriteten i regelverkssamlingen for opptaket er 2 for "Førstegangsvitnemål (ORDF)" og 3 for "Ordinær kvote (ORD)"
       Og at søkeren "Kari Nordmann" konkurrerer i begge kvotene og har nok poeng til tilbud i begge på "Sykepleie, høst 2027"
       Når plasstildelingen gjennomføres
       Så får søkeren tilbud i "Førstegangsvitnemål (ORDF)"
@@ -96,10 +96,12 @@ Egenskap: Gjennomføre plasstildeling
       Så får kvotesøknaden i "Ordinær" på "Sykepleie, høst 2027" bortfall
 
     # AVKLART 2026-10-14: Kvoteprioritet trengs bare når utdanningstilbudet har flere utdanningskvoter.
-    # Har utdanningstilbudet flere utdanningskvoter, må alle ha kvoteprioritet. I dag prøves en
-    # utdanningskvote uten kvoteprioritet først (videreført fra admissio).
-    Scenario: Utdanningstilbud med én utdanningskvote trenger ingen kvoteprioritet
-      Gitt at utdanningstilbudet "Vernepleie, høst 2027" bare har utdanningskvoten "Ordinær", uten kvoteprioritet
+    # Koden prøver i dag en utdanningskvote uten kvoteprioritet først (videreført fra admissio). Det avviker
+    # fra kravet, der en kvotetype uten kvoteprioritet ikke brukes i plasstildelingen (scenariomalen over).
+    # AVKLART 2026-10-30 (produkteier): Har utdanningstilbudet bare én utdanningskvote, har kvoteprioriteten
+    # ingen betydning, fordi utdanningskvoten ikke rangeres mot en annen.
+    Scenario: Kvoteprioriteten har ingen betydning når utdanningstilbudet har én utdanningskvote
+      Gitt at utdanningstilbudet "Vernepleie, høst 2027" bare har utdanningskvoten "Ordinær"
       Og at søkeren "Kari Nordmann" er kvalifisert i "Ordinær" på "Vernepleie, høst 2027"
       Når plasstildelingen gjennomføres
       Så prøves søkeren i utdanningskvoten "Ordinær" på "Vernepleie, høst 2027"
@@ -195,17 +197,41 @@ Egenskap: Gjennomføre plasstildeling
 
   Regel: Søker med tilbudsgaranti får tilbud uavhengig av poengsum
 
-    @openquestion
     Scenario: Tilbudsgaranti tas fra markert utdanningskvote
-      # ÅPNE SPØRSMÅL:
-      # - Hva skjer når utdanningskvoten er full? I koden gir tilbudsgaranti alltid tilbud, også ut over
-      #   antall tilbud som skal gis («Plasstildelingsløpet i Opptak», kap. 3). Skal det gis flere tilbud
-      #   enn tallet, skal garantien fortrenge den lavest rangerte, eller skal garantien komme i tillegg?
       Gitt at tilbudsgarantier for "Sykepleie, høst 2027" tas fra utdanningskvoten "Ordinær"
       Og at søkeren "Ola Nordmann" har tilbudsgaranti på "Sykepleie, høst 2027"
       Når plasstildelingen gjennomføres
       Så får søkeren tilbud på "Sykepleie, høst 2027"
       Og tilbudet teller som ett av tilbudene i utdanningskvoten "Ordinær"
+
+    # AVKLART 2026-10-28 (produkteier, etter brukertesten med HK-dir 2026-10-27, HK-11411): «Tilbudsgaranti
+    # overkjører antall tilbud som skal gis.» Tilbudsgarantiene teller med i antall tilbud som skal gis, og gis
+    # først. De andre søkerne får tilbud på plassene som er igjen. Er det flere søkere med tilbudsgaranti enn antall
+    # tilbud som skal gis, får alle med tilbudsgaranti tilbud, og ingen andre. Koden gjør dette i dag for automatisk
+    # tilbudsgaranti (verify-2026-10-28-1645, `StudyProgrammeSm.java`), men tilbudsgaranti fra saksbehandlingen
+    # når ikke plasstildelingen.
+    Scenario: Tilbudsgaranti teller med i antall tilbud som skal gis
+      Gitt at det skal gis 30 tilbud i utdanningskvoten "Ordinær" på "Sykepleie, høst 2027"
+      Og at 30 søkere uten tilbudsgaranti er rangert foran søkeren "Ola Nordmann" i utdanningskvoten "Ordinær"
+      Og at søkeren "Ola Nordmann" har tilbudsgaranti på "Sykepleie, høst 2027"
+      Når plasstildelingen gjennomføres
+      Så får søkeren "Ola Nordmann" tilbud på "Sykepleie, høst 2027"
+      Og de 29 høyest rangerte søkerne uten tilbudsgaranti får tilbud
+      Og det er gitt 30 tilbud i utdanningskvoten "Ordinær"
+
+    Scenario: Flere søkere med tilbudsgaranti enn antall tilbud som skal gis
+      Gitt at det skal gis 2 tilbud i utdanningskvoten "Ordinær" på "Sykepleie, høst 2027"
+      Og at 3 søkere har tilbudsgaranti på "Sykepleie, høst 2027"
+      Når plasstildelingen gjennomføres
+      Så får de 3 søkerne med tilbudsgaranti tilbud på "Sykepleie, høst 2027"
+      Og ingen søkere uten tilbudsgaranti får tilbud i utdanningskvoten "Ordinær"
+
+    Scenario: Bare søkere med tilbudsgaranti får tilbud når antall tilbud er 0
+      Gitt at antall tilbud som skal gis i utdanningskvoten "Ordinær" på "Sykepleie, høst 2027" er 0
+      Og at søkeren "Ola Nordmann" har tilbudsgaranti på "Sykepleie, høst 2027"
+      Når plasstildelingen gjennomføres
+      Så får søkeren "Ola Nordmann" tilbud på "Sykepleie, høst 2027"
+      Og ingen søkere uten tilbudsgaranti får tilbud i utdanningskvoten "Ordinær"
 
     # AVKLART 2026-10-08: Søkeren med tilbudsgaranti får tilbud etter reglene for plasstildelingsrunden,
     # og trenger ingen poengsum.
@@ -261,7 +287,7 @@ Egenskap: Gjennomføre plasstildeling
 
     # Endret 2026-10-24: Plasstildelingen leser innstillingene plasstildelingsrunden har fra rundetypen,
     # og ser aldri på hvilken rundetype det er. Rundetypene i samordna opptak, med innstillingene, står i
-    # regelverkssamlingen (10 Regelverk/06 Rundetyper/forvalte_rundetyper.feature).
+    # regelverkssamlingen (10 Regelverk/06 Rundetyper/bruke_rundetyper.feature).
     # Tabellen over hva hver rundetype innebar, er flyttet dit.
     # AVKLART 2026-10-14: Tilbud, venteliste og avslag finnes alltid. Bortfall finnes bare når tilbud gir
     # bortfall på lavere prioriteter. Rangeringen er poeng og rangering i alle plasstildelingsrunder.

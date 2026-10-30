@@ -6,9 +6,10 @@ Egenskap: Se publisert resultat av plasstildelingen
   ønsker jeg å se det publiserte resultatet av plasstildelingen for søknadene organisasjonen behandler
   slik at jeg kan forklare resultatet og følge opp søkerne.
 
-  # Delt ut fra vise_resultat.feature 2026-10-14. Før publisering ser bare opptaksforvalter
-  # plasstildelingen (vise_resultat.feature). Etter publisering ser saksbehandler resultatet for
+  # Delt ut fra vise_resultat.feature 2026-10-14. Før publisering står det saksbehandler ser av
+  # plasstildelingen, i vise_resultat.feature. Etter publisering ser saksbehandler resultatet for
   # søknadene organisasjonen er saksbehandlende organisasjon for. Det søkeren ser, står i publisere_resultat.feature.
+  # Resultatet slik søkeren ser det, står i se_resultatet_som_søker.feature (@could, skilt ut 2026-10-28).
   # Status i kode: gjenstår.
 
   Bakgrunn:
