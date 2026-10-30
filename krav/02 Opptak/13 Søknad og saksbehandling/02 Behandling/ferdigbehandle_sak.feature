@@ -28,9 +28,8 @@ Egenskap: Ferdigbehandle en sak
   # Avklart 30.10.2026: opptaksforvalteren får et varsel første gang en feil i regelverket
   # stopper et steg, som for mangelkoden for GSK som fullføres i vår (OPT-BEH-BEH-008).
 
-  # ÅPNE SPØRSMÅL:
-  # - Hvilke feil i regelverket kan stoppe et steg? Koden kjenner disse: poengformelen mangler,
-  #   viser til seg selv eller er ugyldig, og et kvotespørsmål har en algoritme koden ikke kjenner.
+  # Avklart 30.10.2026: feilene i regelverket som kan stoppe et steg, står i scenariomalen
+  # «<feil i regelverket> stopper <steg>». Nye feil legges til i tabellen når de oppdages.
 
   # Avklart 29.10.2026: når den automatiske behandlingen starter, står i OPT-BEH-BEH-032. Et nytt
   # vitnemål i en sak som er ferdig behandlet, er ny dokumentasjon. Saken behandles ikke
@@ -157,6 +156,21 @@ Egenskap: Ferdigbehandle en sak
       Gitt at opptaksforvalteren ved organisasjonen som forvalter opptaket, har fått varsel om en feil i regelverket
       Når en annen søknad stoppes av den samme feilen i regelverket
       Så får ikke opptaksforvalteren et nytt varsel om feilen
+
+    @could
+    Scenariomal: <feil i regelverket> stopper <steg>
+      Gitt at <feil i regelverket> for "Informatikk, UiO"
+      Når søknaden behandles automatisk
+      Så er ikke <steg> avgjort for "Informatikk, UiO"
+      Og saken hos "Universitetet i Oslo" er under behandling
+
+      Eksempler:
+        | feil i regelverket                                | steg        |
+        | poengformelen mangler                             | poengene    |
+        | poengformelen viser til seg selv                  | poengene    |
+        | poengformelen er ugyldig                          | poengene    |
+        | kvotespørsmålet har en algoritme som ikke finnes  | kvoten      |
+        | to grunnlag passer like godt                      | grunnlaget  |
 
   Regel: Saksbehandleren setter saken til ferdig behandlet når den automatiske behandlingen ikke har fullført
 
