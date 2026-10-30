@@ -186,7 +186,8 @@ Egenskap: Automatisk grunnlag
       # ÅPNE SPØRSMÅL:
       # - FS-klienten kan sette et grunnlag fra studieprogrammet når
       #   søknadsalternativet opprettes («Aut.kvalgrunnlag»). Skal det
-      #   videreføres?
+      #   videreføres? Avgjøres når lokale opptak tas inn (30.10.2026). Gjelder ikke
+      #   den helautomatiske flyten. Blir kravet @planned før det, får scenarioet @draft.
       Gitt at utdanningstilbudet har et grunnlag som skal settes automatisk
       Når søkeren søker på utdanningstilbudet
       Så får søknaden grunnlaget fra utdanningstilbudet
