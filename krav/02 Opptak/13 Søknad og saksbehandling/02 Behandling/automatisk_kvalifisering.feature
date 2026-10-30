@@ -87,10 +87,8 @@ Egenskap: Automatisk vurdering av spesielle opptakskrav
   # Avklart 30.10.2026: fjernes et studieønske, blir kravelementene det ga, og vurderingen av
   # dem, stående (STEK-505). Søkeren ser mangeltekstene per søknadsalternativ, og ser dem ikke
   # lenger når søknadsalternativet er fjernet (OPT-BEH-BEH-008).
-
-  # ÅPNE SPØRSMÅL:
-  # - FS157.001 i FS-klienten beregner om søkerne er kvalifisert for et helt
-  #   opptak. Trengs det tilsvarende?
+  # Avklart 30.10.2026: FS157.001 i FS-klienten, som beregner om søkerne er kvalifisert for et
+  # helt opptak, dekkes av OPT-BEH-BEH-026 «Beregne automatisk på nytt».
 
   @depends-on-OPT-REG-KRA-002 @ref-FLY-OPT-AUT-001
   Regel: Kravelementer som er koblet til vitnemålet, vurderes automatisk
