@@ -32,19 +32,21 @@ Rollene og organisasjonene foreslås fra koden og miljøet, ikke fra en tidliger
 5. **Personaene som finnes.** Personaene i «Overstyrt bruker» står i «Personaer» i miljøfila, med rollene og organisasjonen (fra `TEST_PERSONAS` i fs-admin). Foreslå én persona per nøkkel derfra, med en egen organisasjon per relasjon, og som oppfyller kravene i punkt 4. Er katalogen gammel, eller finnes ingen som passer, følg *Vedlikehold av miljøfila* i `cdp-tester/README.md` først. Finnes det fortsatt ingen, si det: personaen må legges til i fs-admin, og tildelingen i tilgangsstyring.
 6. **Bekreft i miljøet.** Tildelingene bekreftes med spørringen `testpersoner`, etter *Vedlikehold av miljøfila* i `cdp-tester/README.md`, og står i «Tildelinger» og «Bekreftet» på personaen i miljøfila. Er personaen ikke bekreftet, si det. Testene kan lages likevel.
 
-Skriv koblingen fra nøkkel til persona i «Testbrukere» i miljøfila når brukeren sier ja, og i testplanen når skillen er `fs-testplan`. Fødselsnummeret skrives ikke i miljøfila eller testplanen: personaen velges i menyen.
+Skriv koblingen fra nøkkel til persona i «Testbrukere» i miljøfila når brukeren sier ja, og i testplanen («Testbrukere» i `testcaser-og-testdata.md`) når skillen er `fs-testplan`. Fødselsnummeret skrives ikke i miljøfila eller testplanen: personaen velges i menyen.
 
 ## Testdata
 
-Testplanen sier hvilke testdata testene trenger, ikke hvordan de lages. Prosessen med å lage testdataene (syntetiske data, seeding, tilbakestilling av miljøet) løses separat, og ligger utenfor teststrategien. Testene forutsetter at dataene finnes i utgangstilstanden testplanen beskriver.
+Data i testmiljøet kan slettes eller nullstilles når som helst. Derfor lager de automatiserte testene dataene sine selv, i hver kjøring, og bygger aldri på data fra en tidligere kjøring. I fase 2 gjør oppsettet det (`cdp-tester/_Oppsett/<sti>/oppsett.feature`, se *Oppsettet* i `cdp-tester/README.md`): ett scenario per testdata-nøkkel, gjennom løsningen. Testplanen sier hvilke testdata testene trenger, og at oppsettet lager dem.
+
+Bare dette står i miljøfila, og må finnes i testmiljøet før kjøringen: personaene, grunndata (kodeverk, organisasjoner, regelverkssamlinger) og data testene ikke kan lage gjennom løsningen (for eksempel en søker med søknad, når testen går i FS Admin). Det siste får en nøkkel med `[Fylles ut]`, og en kommentar i oppsettet om hvorfor oppsettet ikke lager det.
 
 For hvert krav:
 
-- **Hva scenarioene trenger** (`Gitt`-stegene og de utledede testcasene): hvert objekt får en rad, med en nøkkel og `Utgangstilstand`.
+- **Hva scenarioene trenger** (`Gitt`-stegene og de utledede testcasene): hvert objekt får en nøkkel og en utgangstilstand. Kan det lages gjennom løsningen, får det et scenario i oppsettet. Ellers får det en rad i miljøfila.
 - **Overleveringer i en flyt** (`Brukes av` er en `@FLY-`-ID, fase 3): tilstanden skal være laget gjennom løsningen i fasen før, ikke lagt inn direkte. Si hvilken fase i `Utgangstilstand`.
-- **Datoer i forhold til testdagen.** For hvert opptak eller annet objekt som må være i en bestemt tilstand, står fristene som bestemmer tilstanden, i forhold til dagen testen kjøres: `Redigering åpner: 7 dager før testen. Redigering stenger: 30 dager etter testen. Åpner for søking: 14 dager etter testen.` En snarvei som setter alle datoene til i dag (for eksempel «Fyll inn testdatoer»), brukes ikke når tilstanden forutsetter noe annet. En tilstand som bygger på datoer, sjekkes samme dag som testen kjøres.
+- **Datoer i forhold til testdagen.** For hvert opptak eller annet objekt som må være i en bestemt tilstand, står fristene som bestemmer tilstanden, i forhold til dagen testen kjøres: `{DATO:-7}` for 7 dager før og `{DATO:+30}` for 30 dager etter. En snarvei som setter alle datoene til i dag (for eksempel «Fyll inn testdatoer»), brukes ikke når tilstanden forutsetter noe annet.
 - **Data scenarioet selv lager** (for eksempel «Opprett opptak»), er ikke testdata: de lages av stegene i testcasen, og får `{KJØRING}` i navnet når de ikke kan slettes (R13 i `testcase-regler.md`).
-- At testdataene kan settes tilbake før hver kjøring, er en forutsetning i testplanen, ikke en kolonne.
+- Oppsettet kjøres først i hver kjøring. Feiler et scenario i oppsettet, blir testene som bruker nøkkelen, «Ikke testet».
 
 ## Spørsmålene
 
@@ -52,7 +54,7 @@ Still dem samlet med `AskUserQuestion`, høyst fire om gangen. Har en tidligere 
 
 1. **Roller:** list rollene kravene nevner (`Som <rolle>`, `Gitt jeg er <rolle>`, rollene i *Synlighet*-regler), og les koden og vis hva den krever, med fil:linje, og hva som avviker fra kravene (se under).
 2. **Testbrukere:** vis forslaget fra *Finne rollene og foreslå testbrukere* (nøkkel, persona, organisasjon, og om tildelingen er bekreftet), og spør om det stemmer. Nummerer dem fra 1. Testbrukerne skal finnes i rollene scenarioene nevner, ved de organisasjonene kravet gjelder. Har kravet scenarioer om synlighet (hva en rolle ser fra organisasjonene den administrerer), trengs data fra minst to organisasjoner. Antallet bestemmes per krav ut fra tilgangsmatrisen: tilgangsradene i verify-rapporten (roller × organisasjon). Scenarioene testes som de står, men det lages ikke egne testcaser for roller og tilgang (de er verifisert i koden i fase 1), så det trengs ikke testbrukere bare for å vise at en rolle mangler tilgang. Spør også etter `Innlogging` (verdien i «Overstyrt bruker», ellers Chrome-profilnavn eller Feide-ID) og eventuelt `Start-URL`.
-3. **Testdata:** for hvert krav, etter *Testdata* over: de dataene scenarioene krever, og hvor de ligger. Gi hver en nøkkel, og fyll ut `Søk/URL` (hvordan objektet åpnes), `Utgangstilstand` (hva testen forutsetter, med datoene i forhold til testdagen) og `Brukes av` (Feature-ID og scenario, eller testcase-Nr). Gjelder en testcase en flyt: hvilken fase som lager tilstanden. Spør ikke om hvordan dataene lages: det er utenfor strategien.
+3. **Testdata:** for hvert krav, etter *Testdata* over: de dataene scenarioene krever, med nøkkel, `Utgangstilstand` (med datoene i forhold til testdagen) og `Brukes av` (Feature-ID og scenario, eller testcase-Nr), og om oppsettet lager dem. Spør bare om grunndata og data oppsettet ikke kan lage: hvor de ligger, og `Søk/URL`. Gjelder en testcase en flyt: hvilken fase som lager tilstanden.
 4. **Miljøet:** URL til testmiljøet, versjon og feature-flagg. Det er alltid et testmiljø, aldri produksjon. Kan testdataene settes tilbake før hver kjøring?
 
 Det brukeren hopper over, skrives som `[Fylles ut: <hva>]`. Gjett aldri det bare teamet vet.

@@ -116,18 +116,6 @@ Egenskap: Opprette et opptak
       Når opptaksforvalter oppretter et nytt opptak basert på "Samordna opptak 2026"
       Så kopieres innstillinger fra det tidligere opptaket som utgangspunkt
 
-  @draft @openquestion
-  # ÅPNE SPØRSMÅL:
-  # - Hva skjer med søknader og vedtak i opptaket når det deaktiveres?
-  # - Skal deaktivering kunne reverseres?
-  Regel: Opptaksforvalter kan deaktivere et opptak
-
-    Scenario: Deaktivere opptak
-      Gitt at opptaket "Samordna opptak 2027" finnes
-      Når opptaksforvalter deaktiverer opptaket
-      Så settes opptaket til utløpt
-      Og det er ikke lenger mulig å gjøre endringer på opptaket
-      Og det er ikke lenger mulig å utføre søknadsbehandling eller plasstildeling i opptaket
-      Men opptaket kan brukes som grunnlag for å opprette et nytt opptak
+  # Regelen om å deaktivere et opptak er flyttet til opptaksstatus.feature (2026-10-28), der opptaket gjøres historisk.
 
   # Hendelseslogg er flyttet til 06 Hendelseslogg/hendelseslogg.feature fordi den venter på generell løsning. Må gjennomgås mht hva som logges.

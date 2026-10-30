@@ -1,6 +1,6 @@
 # Maler: CDP-tester
 
-Tre filer (fase 2, den agentiske funksjonstesten): testfila (`<test>.feature`), `README.md` i mappa («Krever»), og resultatet av en kjøring (`resultat.md`). Konvensjonene står i [`cdp-tester/README.md`](../../../../cdp-tester/README.md).
+Fire filer (fase 2, den agentiske funksjonstesten): testfila (`<test>.feature`), oppsettet (`_Oppsett/<sti>/oppsett.feature`), `README.md` i mappa («Krever»), og resultatet av en kjøring (`resultat.md`). Konvensjonene står i [`cdp-tester/README.md`](../../../../cdp-tester/README.md).
 
 ## Testfila
 
@@ -55,7 +55,7 @@ Egenskap: <tittelen i kravet>
 
 - **`@utledet`** er en testcase agenten har utledet fra regelen, ikke fra et scenario i kravet. Tittelen er regelens tittel, kolon, og hva som prøves. `# Teknikk:` over scenarioet sier hvilken teknikk som er brukt (grenseverdianalyse, ekvivalensklasser, beslutningstabell eller tilstandsoverganger). Scenarioene fra kravet har ingen `# Teknikk:`.
 - **Én feilsituasjon prøver én ting:** alle andre obligatoriske felt er fylt ut, så det er feltet testcasen handler om som stopper lagringen. Et forhåndsutfylt felt tømmes («Fjern tallet i «<felt>»»), det «står» ikke tomt.
-- **Testdata:** `Gitt` sier hvilken tilstand dataene har (utgangstilstanden i «Krever» og i miljøfila). Hvordan de lages, står ikke i testen. Data scenarioet selv lager, har et unikt navn per kjøring når de ikke kan slettes.
+- **Testdata:** `Gitt` sier hvilken tilstand dataene har, med nøkkelen. Dataene lages av oppsettet i kjøringen (eller er grunndata i miljøfila), og hvordan de lages, står ikke i testen. Data scenarioet selv lager, har `{KJØRING}` i navnet.
 - `@TST-…`: `@TST-<DOM>-<SUB>-<KAP>-NNN` for en speilet sti (neste ledige løpenummer i mappa), `@TST-<prosess>-<test>-NNN` for `_Løp`.
 - **En flyt** (`_Løp/<NN Prosess>/<samme filnavn som flyten>.feature`): `# Flyt: krav/_Flyter/<NN Prosess>/<fil>.feature @ <commit> (blob <hash>)` i stedet for `# Krav:`, `@depends-on-FLY-…` på `Egenskap:`, og fasens `@depends-on-` på hver `Regel:`. `Gitt` har tilstanden som en testdata-nøkkel: `Og søknaden «<testdata-nøkkel>» har fått tilbudsgaranti i tidligopptaket`.
 - `@depends-on-<Feature-ID>` (uten `@` i ID-en) på `Egenskap:`. Bygger en `Regel:` eller et `Scenario:` også på et annet krav, får delen en egen tagg. `@ref-<Feature-ID>` for et krav testen bare bruker som forutsetning.
@@ -63,6 +63,36 @@ Egenskap: <tittelen i kravet>
 - Ingen navn, Feide-ID, `testbruker <nr>`, passord eller URL til miljøet.
 - Organisasjoner i stegene som `{ORG:<nøkkel>}`, `{ORGNAVN:<nøkkel>}` eller `{ORGKODE:<nøkkel>}`, slått opp i miljøfila: `Og jeg velger «Fjern {ORG:opptak-forvalter-deltakende}»`.
 - Bare det som varer: ingen kravstatus, kjente mangler, saker med status, datoer fra verifiseringen eller kjøringer, henvisninger til en testplan eller testcaser i den, eller verdier fra ett miljø (se «Bare det som varer» i `cdp-tester/README.md`).
+
+## Oppsettet
+
+`cdp-tester/_Oppsett/<samme sti som testene>/oppsett.feature`. Ett scenario per testdata-nøkkel testene i mappa bruker.
+
+```gherkin
+# language: no
+# Oppsett for testene i cdp-tester/<sti>/ (samme sti under _Oppsett/)
+#
+# Kjøres først i hver kjøring. Lager testdataene gjennom løsningen, med {KJØRING} i navnene. Agenten skriver
+# navnet og URL-en til det som er laget, i «Kjøringens testdata» i resultat.md. Feiler et scenario, får nøkkelen
+# ingen verdi, og testene som bruker den, blir «Ikke testet».
+# {DATO:+N} er datoen N dager etter dagen kjøringen starter, og {DATO:-N} N dager før.
+#
+# Utfylling O: <det felles skjemaet, med alle feltene og verdiene>
+@OPPSETT-<DOM>-<SUB> @ref-<Feature-ID>
+Egenskap: Oppsett for <kapabiliteten eller sub-domenet>
+  Lager <dataene> testene for <…> bruker, i utgangstilstanden testene forutsetter.
+
+  Scenario: <testdata-nøkkel>
+    Gitt jeg er logget inn som «<testbruker-nøkkel>»
+    Når jeg fyller ut som i Utfylling O, med navnet «<navn> (test {KJØRING})»
+    Og <de andre stegene som gir utgangstilstanden>
+    Så <noe agenten ser, som viser at tilstanden er riktig>
+    Og jeg skriver navnet og URL-en i «Kjøringens testdata» for «<testdata-nøkkel>»
+```
+
+- Tittelen på scenarioet er nøkkelen. Beskrivelsen av utgangstilstanden er stegene, og står ikke i miljøfila.
+- Bytter scenarioet testbruker, bytter det tilbake til slutt.
+- Data oppsettet ikke kan lage gjennom løsningen, står som nøkkel i miljøfila (`[Fylles ut]`), med en kommentar i oppsettet om hvorfor.
 
 ## README.md i mappa
 
@@ -78,7 +108,8 @@ Tester for kravet [<fil>.feature](<relativ lenke til kravfila>) (`@<Feature-ID>`
 | Nøkkel | Type | Brukes av |
 |---|---|---|
 | `<rolle>-<relasjon>` | testbruker | alle scenarioer / «<scenario>» |
-| `<nøkkel>` | testdata | «<scenario>» |
+| `<nøkkel>` | testdata (oppsett) | «<scenario>» |
+| `<nøkkel>` | testdata | «<scenario>» (grunndata, eller data testene ikke kan lage) |
 ```
 
 ## Resultat av en kjøring
@@ -98,9 +129,17 @@ Der den som starter kjøringen sier, ellers `cdp-tester/<mappa med testene>/kjor
 - **Kjente mangler**: <sak: status sjekket <dato>, testcasene> | Ingen   (R16, bare når den som starter kjøringen har gitt en liste)
 - **Krav**: commit `<sha>`
 - **Kjørt av**: <agent> for <bruker>
-- **Testdata**: <hva som ble opprettet (manuelt/API), og at det er ryddet / satt tilbake>
+- **Oppsett**: <_Oppsett/<sti>/oppsett.feature>, kjørt <tidspunkt>. <N av N nøkler laget> | <nøkkel: feilet, grunnen>
 - **Hoppet over**: <N> `@endrer-data` (bare når miljøet ikke kan settes tilbake) | Ingen
 - **Endringer i miljøfila**: <nøkkel: verdien som ikke stemte, og forslaget> | Ingen
+
+## Kjøringens testdata
+
+Fra oppsettet. Testene i kjøringen slår opp nøklene her.
+
+| Nøkkel | Navn | URL | Laget av |
+|---|---|---|---|
+| `<testdata-nøkkel>` | «<navn> (test <KJØRING>)» | <URL> | `<testbruker-nøkkel>` |
 
 ---
 

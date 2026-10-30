@@ -25,6 +25,9 @@ Egenskap: Automatisk saksbehandling
   # kvotene, poengene per kvote og manglene er ikke egne steg: de oppdateres automatisk ut fra
   # stegene før, og er gule i tegningen. Tegningen har kravelementene før poengene. Det er
   # unøyaktig: poengene beregnes først (OPT-BEH-BEH-020).
+  # To faser er med i flyten, men er utenfor scope i første fase (@wont): to identiske vitnemål
+  # som reknes som ett vitnemål, og automatisk dobbeltrangering etter 23/5-regelen i 2027.
+  # De står her så de blir med i neste fase.
 
   Bakgrunn:
     Gitt at søknaden til "Kari Nordmann" har en sak hos "Universitetet i Oslo"
@@ -39,8 +42,9 @@ Egenskap: Automatisk saksbehandling
       Så er vitnemålet importert
       Og GSK kan beregnes for vitnemålet
 
-  @depends-on-OPT-BEH-BEH-015
+  @depends-on-OPT-BEH-BEH-015 @depends-on-OPT-BEH-BEH-027
   # OPT-BEH-BEH-015: «Opptakssystemets påstand om GSK på vitnemålet», «Konklusjon på søknaden fra vitnemålet», «Konklusjon fra tidligere opptak», «Automatikken setter bare positive konklusjoner, og bare der ingen finnes»
+  # Påstanden om GSK beregnes med kontrollmotoren, som er beskrevet i hele OPT-BEH-BEH-027.
   Regel: Søknaden får GSK-konklusjonen når vitnemålet importeres fra KREG
 
     Scenario: Søknaden får GSK-konklusjonen fra vitnemålet som er importert fra KREG
@@ -50,7 +54,7 @@ Egenskap: Automatisk saksbehandling
       Så har vitnemålet påstanden at søkeren har generell studiekompetanse
       Og søknaden får en positiv GSK-konklusjon
 
-  @depends-on-OPT-BEH-BEH-015
+  @depends-on-OPT-BEH-BEH-015 @ref-FLY-OPT-VAL-001 @ref-FLY-OPT-SAM-001
   # OPT-BEH-BEH-015: «GSK-konklusjonen settes også når den automatiske behandlingen kjører»
   Regel: Den automatiske behandlingen setter GSK-konklusjonen der den mangler
     # Påstanden på vitnemålet beregnes ikke på nytt i kjøringen.
@@ -60,11 +64,6 @@ Egenskap: Automatisk saksbehandling
       Og at "Kari Nordmann" har ett vitnemål med påstanden at søkeren har GSK
       Når søknaden behandles automatisk
       Så får søknaden en positiv GSK-konklusjon
-
-    Scenario: GSK-konklusjonen på søknaden overskrives ikke i kjøringen
-      Gitt at søknaden har en GSK-konklusjon
-      Når søknaden behandles automatisk
-      Så er GSK-konklusjonen på søknaden uendret
 
   @depends-on-OPT-BEH-BEH-015 @depends-on-OPT-BEH-BEH-025
   # OPT-BEH-BEH-015: «Opptakssystemets påstand om GSK på vitnemålet»
@@ -81,7 +80,19 @@ Egenskap: Automatisk saksbehandling
       Når søknaden behandles automatisk
       Så behandles ikke saken hos "Universitetet i Oslo" helautomatisk
 
-  @depends-on-OPT-BEH-BEH-019
+  @wont @openquestion
+  Regel: To identiske vitnemål reknes som ett vitnemål
+    # ÅPNE SPØRSMÅL:
+    # - Utenfor scope i første fase. Fasen er med for å huske den til neste fase.
+    # - Ingen krav beskriver når to vitnemål er identiske, eller hvilket av dem saken
+    #   behandles helautomatisk på. Hvilket krav skal eie regelen: OPT-BEH-BEH-025 eller et nytt krav?
+
+    Scenario: Saken behandles helautomatisk når søkeren har to identiske vitnemål
+      Gitt at "Kari Nordmann" har to identiske vitnemål med påstanden at søkeren har GSK
+      Når søknaden behandles automatisk
+      Så behandles saken hos "Universitetet i Oslo" helautomatisk på vitnemålet
+
+  @depends-on-OPT-BEH-BEH-019 @ref-FLY-OPT-VAL-001 @ref-FLY-OPT-SAM-001
   # OPT-BEH-BEH-019: «Grunnlaget velges ut fra egenskapene regelverket har gitt det», «Ingen automatisk grunnlag uten ett vitnemål som gir generell studiekompetanse», «Grunnlaget settes når den automatiske behandlingen kjører»
   Regel: Søknaden får grunnlag fra vitnemålet
 
@@ -90,7 +101,7 @@ Egenskap: Automatisk saksbehandling
       Når søknaden behandles automatisk
       Så har søknaden grunnlag
 
-  @depends-on-OPT-BEH-BEH-018 @depends-on-OPT-REG-RAN-001 @depends-on-OPT-REG-RAN-002
+  @depends-on-OPT-BEH-BEH-018 @depends-on-OPT-REG-RAN-001 @depends-on-OPT-REG-RAN-002 @ref-FLY-OPT-VAL-001 @ref-FLY-OPT-SAM-001
   # OPT-BEH-BEH-018: «Karakterpoeng, realfagspoeng og språkpoeng beregnes fra søkerens eneste vitnemål», «Skolepoeng settes sammen av karakterpoeng, realfagspoeng og språkpoeng», «Ingen automatisk beregning uten ett entydig vitnemål»
   Regel: Poengene beregnes fra grunnlaget og rangeringsregelverket
     # Overleveringen: grunnlaget avgjør hvilke poengtyper søknaden har (rangeringsregelverket
@@ -102,7 +113,7 @@ Egenskap: Automatisk saksbehandling
       Når søknaden behandles automatisk
       Så har "Informatikk, UiO" poengsum for søknaden
 
-  @depends-on-OPT-BEH-BEH-028
+  @depends-on-OPT-BEH-BEH-028 @ref-FLY-OPT-VAL-001 @ref-FLY-OPT-SAM-001
   # OPT-BEH-BEH-028: «Alderspoeng regnes ut fra søkerens alder», «Kjønnspoeng regnes ut fra søkerens kjønn», «Poeng for høyere utdanning regnes ut fra søkerens studiepoeng», «Tilleggspoengene settes uansett hvem som velger grunnlaget»
   Regel: Søknaden får tilleggspoeng når grunnlaget er satt
 
@@ -111,7 +122,17 @@ Egenskap: Automatisk saksbehandling
       Når søknaden behandles automatisk
       Så har søknaden tilleggspoengene rangeringsregelverket gir for grunnlaget
 
-  @depends-on-OPT-BEH-BEH-020
+  @wont @openquestion
+  Regel: Søknaden dobbeltrangeres automatisk etter 23/5-regelen
+    # ÅPNE SPØRSMÅL:
+    # - Utenfor scope i første fase. Fasen er med for å huske den til neste fase.
+    # - Det er ikke beskrevet hvordan den automatiske dobbeltrangeringen (poengberegningen) skal
+    #   gjøres. I opptakssystemet som finnes i dag, er den en manuell operasjon. Hvilket krav
+    #   skal eie regelen: OPT-BEH-BEH-018 eller et nytt krav?
+    # - 23/5-regelen heter 23/6-regelen fra 1. januar 2027 (se OPT-BEH-BEH-022). Hvilket navn
+    #   skal fasen ha?
+
+  @depends-on-OPT-BEH-BEH-020 @ref-FLY-OPT-VAL-001 @ref-FLY-OPT-SAM-001
   # OPT-BEH-BEH-020: «Kravelementer som er koblet til vitnemålet, vurderes automatisk», «Kravelementene vurderes bare mot ett entydig vitnemål», «Kravelementene vurderes i den automatiske behandlingen»
   Regel: Kravelementene vurderes mot vitnemålet når poengene er beregnet
 
@@ -121,7 +142,7 @@ Egenskap: Automatisk saksbehandling
       Når søknaden behandles automatisk
       Så er kravelementet vurdert mot vitnemålet
 
-  @depends-on-OPT-BEH-BEH-012 @depends-on-OPT-REG-KVO-002
+  @depends-on-OPT-BEH-BEH-012 @depends-on-OPT-REG-KVO-002 @ref-FLY-OPT-VAL-001 @ref-FLY-OPT-SAM-001
   # OPT-BEH-BEH-012: «Kvotespørsmål med algoritme besvares automatisk og kan ikke endres av saksbehandleren»
   Regel: Kvotespørsmålene med algoritme besvares automatisk
 
@@ -132,7 +153,7 @@ Egenskap: Automatisk saksbehandling
       Når søknaden behandles automatisk
       Så er kvotespørsmålet "ER-KVINNE" besvart automatisk
 
-  @depends-on-OPT-BEH-BEH-020
+  @depends-on-OPT-BEH-BEH-020 @ref-FLY-OPT-VAL-001 @ref-FLY-OPT-SAM-001
   # OPT-BEH-BEH-020: «Om søkeren er kvalifisert, avgjøres per grunnlag»
   # Oppdateres automatisk ut fra vurderingen av kravelementene.
   Regel: Kvalifiseringen oppdateres når kravelementene er vurdert
@@ -144,7 +165,7 @@ Egenskap: Automatisk saksbehandling
       Når søknaden behandles automatisk
       Så er søkeren kvalifisert for "Informatikk, UiO"
 
-  @depends-on-OPT-BEH-BEH-012
+  @depends-on-OPT-BEH-BEH-012 @ref-FLY-OPT-VAL-001 @ref-FLY-OPT-SAM-001
   # OPT-BEH-BEH-012: «Søkeren plasseres automatisk i en kvote uten kvotespørsmål», «Søkeren plasseres i en kvote med kvotespørsmål når alle kvotespørsmålene er besvart ja»
   # Oppdateres automatisk ut fra kvalifiseringen og svarene på kvotespørsmålene.
   Regel: Søkeren fordeles på kvoter når kvalifiseringen og kvotesvarene er satt
@@ -162,12 +183,10 @@ Egenskap: Automatisk saksbehandling
       Når søknaden behandles automatisk
       Så er søkeren plassert i "Jenter" for "Informatikk, UiO"
 
-  @openquestion @depends-on-OPT-REG-KVO-001 @depends-on-OPT-REG-RAN-002
+  @depends-on-OPT-BEH-BEH-031 @depends-on-OPT-REG-KVO-001 @depends-on-OPT-REG-RAN-002 @ref-FLY-OPT-VAL-001 @ref-FLY-OPT-SAM-001
+  # OPT-BEH-BEH-031: «Søkeren får en poengsum for hver kvote og hvert grunnlag kvoten er koblet til», «Poengsummen regnes ut med poengformelen til kvotetypen», «Poengsummen regnes ut på nytt når det den bygger på, endres», «Bare grunnlag søkeren er kvalifisert på, gir poengsum», «En poengsum som ikke kan regnes ut, stopper ikke de andre», «Saksbehandleren ser den høyeste poengsummen per kvote for hvert søknadsalternativ»
   # OPT-REG-KVO-001: «En kvotetype kan ha en default poengformel»
   Regel: Søkeren får poengsum per kvote når søkeren er fordelt på kvoter
-    # ÅPNE SPØRSMÅL:
-    # - Ingen krav i behandlingen beskriver at poengsummen per kvote beregnes. Hvilket krav skal
-    #   eie regelen: OPT-BEH-BEH-012, OPT-BEH-BEH-018 eller et nytt krav?
     # Oppdateres automatisk ut fra kvotene og poengene.
 
     Scenario: Søkeren har poengsum i kvoten
@@ -176,7 +195,7 @@ Egenskap: Automatisk saksbehandling
       Når søknaden behandles automatisk
       Så har søkeren poengsum etter poengformelen til "Ordinær kvote" for "Informatikk, UiO"
 
-  @depends-on-OPT-BEH-BEH-008
+  @depends-on-OPT-BEH-BEH-008 @ref-FLY-OPT-VAL-001 @ref-FLY-OPT-SAM-001
   # OPT-BEH-BEH-008: «Saken får mangler for kravelementene søkeren ikke oppfyller»
   # Oppdateres automatisk ut fra vurderingen av kravelementene.
   Regel: Saken får mangler når kravelementene er vurdert
@@ -187,23 +206,26 @@ Egenskap: Automatisk saksbehandling
       Når søknaden behandles automatisk
       Så har saken en automatisk mangel som viser at "Matematikk R2" ikke er oppfylt
 
-  @depends-on-OPT-BEH-BEH-008
-  # OPT-BEH-BEH-008: «Mangelen for generell studiekompetanse som fullføres i vår settes og sjekkes ut automatisk»
+  @depends-on-OPT-BEH-BEH-008 @ref-FLY-OPT-VAL-001 @ref-FLY-OPT-SAM-001
+  # OPT-BEH-BEH-008: «Opptaksforvalteren merker én mangelkode for generell studiekompetanse som fullføres i vår», «Mangelen for generell studiekompetanse som fullføres i vår settes og sjekkes ut automatisk»
   Regel: Mangelen for GSK som fullføres i vår sjekkes ut før saken blir ferdig behandlet
 
-    Scenario: Mangelen sjekkes ut når saken er behandlet helautomatisk
-      Gitt at saken hos "Universitetet i Oslo" har den automatiske mangelen "DUA"
+    Scenario: Saken med mangelen for GSK som fullføres i vår blir ferdig behandlet
+      Gitt at søkeren har oppgitt i søknaden at generell studiekompetanse fullføres i vår
+      Og at saken hos "Universitetet i Oslo" har den automatiske mangelen "DUA"
       Når den automatiske behandlingen har behandlet saken helautomatisk
-      Så er mangelen "DUA" sjekket ut før saken settes til "Ferdig behandlet"
+      Så er saken hos "Universitetet i Oslo" ferdig behandlet
+      Og mangelen "DUA" er sjekket ut
 
-  @depends-on-OPT-BEH-BEH-025 @depends-on-OPT-PLA-TIL-001
-  # OPT-BEH-BEH-025: «Den automatiske behandlingen setter saken til ferdig behandlet når alt er avgjort»
+  @depends-on-OPT-BEH-BEH-025 @depends-on-OPT-BEH-BEH-029 @depends-on-OPT-PLA-TIL-001 @ref-FLY-OPT-VAL-001 @ref-FLY-OPT-SAM-001
+  # OPT-BEH-BEH-025: «Den automatiske behandlingen setter saken til ferdig behandlet når alt er avgjort», «Steg som bygger på et steg som ikke kan avgjøres, hoppes over»
+  # OPT-BEH-BEH-029: «Saken kan bare bli Ferdig behandlet når den har minst én mangel eller ett grunnlag», «Saksloggen viser endringene i behandlingsstatusen»
   Regel: Saken blir ferdig behandlet og er med i plasstildelingen
 
     Scenario: Saken er med i plasstildelingen når den automatiske behandlingen har avgjort alt
       Gitt at søkeren er kvalifisert for "Informatikk, UiO"
       Og at "Informatikk, UiO" har poengsum for søknaden
-      Og at søkeren er plassert i kvote for "Informatikk, UiO"
+      Og at søkeren er plassert i en kvote for "Informatikk, UiO"
       Når den automatiske behandlingen er ferdig
       Så er saken hos "Universitetet i Oslo" ferdig behandlet
       Og saken hos "Universitetet i Oslo" er med når opptaksforvalteren starter en plasstildeling
@@ -219,7 +241,7 @@ Egenskap: Automatisk saksbehandling
       Når den automatiske behandlingen er ferdig
       Så er saken hos "Universitetet i Oslo" ikke med når opptaksforvalteren starter en plasstildeling
 
-  @depends-on-OPT-BEH-BEH-026
+  @depends-on-OPT-BEH-BEH-026 @ref-FLY-OPT-VAL-001 @ref-FLY-OPT-SAM-001
   Regel: Søknadsalternativene beregnes på nytt når regelverket er rettet
 
     Scenario: Poengene beregnes på nytt når rangeringsregelverket er rettet

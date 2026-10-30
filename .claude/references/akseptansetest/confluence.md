@@ -18,8 +18,11 @@ Bruk Atlassian-MCP-en som finnes i økta. Navnet avhenger av oppsettet, f.eks. `
 ```
 Teststrategi for FS – fra krav til akseptanse (forslag) (5145100326)
 └── Testplaner (5126062121)
-    └── Testplan – <leveranse>                                  ← fs-testplan
+    └── Testplan – <leveranse>                                  ← fs-testplan (hovedsiden)
+        ├── Omfang – <leveranse>                                ← fs-testplan
+        ├── Testcaser og testdata – <leveranse>                 ← fs-testplan (også ved synk med testene og miljøfila)
         ├── Verifisering – <leveranse> – <YYYY-MM-DD HH:MM>     ← fs-testplan (første), fs-verify (på nytt)
+        ├── Sporbarhet – <leveranse>                            ← fs-testplan (laget), fs-testrapport (fyller ut per fase)
         ├── Testrapport – verifisering – <leveranse>            ← fs-testrapport (fase 1)
         ├── Testrapport – agentisk funksjonstest – <leveranse>  ← fs-testrapport (fase 2)
         ├── Intern akseptansetest – <leveranse>                 ← fs-testcaser-intern (fase 3)
@@ -29,6 +32,8 @@ Teststrategi for FS – fra krav til akseptanse (forslag) (5145100326)
         └── Testrapport – ekstern akseptansetest – <leveranse>  ← fs-testrapport (fase 4)
 ```
 
+- **Testplanen er delt i fire sider:** hovedsiden «Testplan – <leveranse>» og undersidene «Omfang», «Testcaser og testdata» og «Sporbarhet» (*Hovedsiden og undersidene* i `mal-testplan.md` i `fs-testplan`). Verktøyet kan bare skrive en hel side om gangen, og en stor side kan bli avvist eller avkuttet, så hver del står på sin egen side, og en endring skrives bare til siden den gjelder. Seksjonsnavnene er de samme som før: «Omfang i testplanen» er seksjonen «Omfang» på undersiden «Omfang», og «Testdata» står på «Testcaser og testdata».
+- **Hovedsiden starter med «Innhold»:** makroen `toc` (overskriftene på siden, `maxLevel` 2) og makroen `children` (alle undersidene, også testrapportene og testsidene), og så tabellen over de tre undersidene fra malen, med lenker. HTML for makroene: `<div data-type="extension" data-extension-key="toc" data-extension-type="com.atlassian.confluence.macro.core" data-parameters='{"macroParams":{"maxLevel":{"value":"2"}},"macroMetadata":{"schemaVersion":{"value":"1"},"title":"Table of Contents"}}'></div>` og det samme med `data-extension-key="children"` og `"macroParams":{"all":{"value":"true"}}`.
 - **Testcasene i fase 2** ligger i repoet (`cdp-tester/`, Gherkin), og har ingen egen side. Resultatene fra kjøringen (`akseptansetest/<slug>/kjoring-<dato>/resultat.md`) står i «Testrapport – agentisk funksjonstest», med testcasene, teknikken, resultatet og funnene. Bildene ligger lokalt, ikke i git, og legges ikke i Confluence uten at brukeren ber om det.
 - **Flytbeskrivelser til partene** er flytene fra den interne testen, uten tekniske ord, og rapportene fra fase 2 og 3, slik at partene ser hva som er testet. Siden lages bare når brukeren sier ja, og bare for leveranser som er godkjent internt.
 
@@ -65,6 +70,8 @@ Ved oppdatering: vis hva som endres, og spør.
 - Lenker til krav i repoet blir lenker til GitHub: `https://github.com/sikt-no/fs/blob/<commit>/<sti>`, med mellomrom som `%20`.
 - Felt som skal fylles ut (`[Fylles ut …]`, `[Sjekk begrep]`), får gul bakgrunn i cella (`data-background="#FFF0B3"`), så de ikke blir glemt.
 - Lag ikke `@`-omtaler av personer (`data-type="mention"`) uten en ekte konto-ID. Skriv navnet som tekst.
+- Lag HTML-en med et skript fra fila, ikke for hånd, og send den i ett kall. Er siden over ca. 40 000 tegn HTML, er den for stor til å sendes trygt: et kall kan bli avvist eller avkuttet, og en avkuttet side må gjenopprettes fra versjonshistorikken (`restoreConfluenceContentVersion`). Del heller siden, som testplanen.
+- En side med en makro eller et smart-kort (for eksempel «Innhold» på testplanen) kan ikke skrives som markdown: Confluence avviser det (422). Bruk HTML.
 
 ## Strategien
 
@@ -81,13 +88,13 @@ Strategien står i Confluence: [Teststrategi for FS – fra krav til akseptanse 
 
 ## «Status i flyten» på testplanen
 
-Testplanen har en tabell med fasene. `fs-testplan` fyller ut raden for verifiseringen og raden «Testplan» når testplanen lages. Den eneste delen av testplanen de andre skillene endrer, er sin egen rad i den tabellen (og «Sporbarhet per krav» og funnene, som `fs-testrapport` og testerne fyller ut):
+Testplanen har en tabell med fasene. `fs-testplan` fyller ut raden for verifiseringen og raden «Testplan» når testplanen lages. Den eneste delen av testplanen de andre skillene endrer, er sin egen rad i den tabellen (sporbarheten står på undersiden «Sporbarhet – <leveranse>», og fylles ut der av `fs-testrapport`):
 
 | Fase | Side | Status | Dato |
 |---|---|---|---|
 | 1. Verifisering (`fs-verify`) | <lenke> | Alt funnet / <N> ikke funnet, <N> usikker / Ikke kjørt | <dato> |
 | 1. Testrapport – verifisering | <lenke> | Klar / Ikke klar for agentisk funksjonstest | <dato> |
-| Testplan | (denne siden) | Laget | <dato> |
+| 1. Testplan | (denne siden) | Laget | <dato> |
 | 2. Agentisk funksjonstest – testcaser (`fs-testcaser-cdp`) | `cdp-tester/<sti>` | Ikke laget / Laget / Oppdatert | <dato> |
 | 2. Agentisk funksjonstest – kjøring | `kjoring-<dato>/resultat.md` | Venter / Kjørt / Kjørt med funn | <dato> |
 | 2. Testrapport – agentisk funksjonstest | <lenke> | Klar / Ikke klar for intern akseptansetest / Venter på gjennomgang | <dato> |

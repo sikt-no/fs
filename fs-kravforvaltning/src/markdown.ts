@@ -254,8 +254,13 @@ export const GITHUB = 'https://github.com/sikt-no/fs/blob/main/';
 /** Den statiske versjonen på GitHub Pages */
 export const PAGES = 'https://sikt-no.github.io/fs/';
 
-/** HTML-sider i rota av repoet som publiseres ved siden av vieweren (`staticPages` i vite.config.ts) */
-export const STATIC_PAGES = ['kom-i-gang.html'];
+/** HTML-sider i repoet som publiseres ved siden av vieweren (`staticPages` i vite.config.ts), med samme sti */
+export const STATIC_PAGES = [
+  'kom-i-gang.html',
+  'presentasjoner/slik-jobber-vi-med-krav.html',
+  'presentasjoner/krav-detaljert.html',
+  'presentasjoner/testfasene.html',
+];
 
 /**
  * Relative lenker løses mot mappen til md-filen. Finnes målet i vieweren, blir det en intern lenke

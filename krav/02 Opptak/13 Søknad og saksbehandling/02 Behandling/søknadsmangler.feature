@@ -79,7 +79,7 @@ Egenskap: Søknadsmangler
         | Samordna opptak 2027    | HK-dir               |
         | Lokalt opptak høst 2027 | Universitetet i Oslo |
 
-  @draft
+  @draft @ref-FLY-OPT-AUT-001
   Regel: Opptaksforvalteren merker én mangelkode for generell studiekompetanse som fullføres i vår
 
     Mangelkoden som er merket, er den saken får automatisk når søkeren oppgir at generell
@@ -554,8 +554,9 @@ Egenskap: Søknadsmangler
     automatisk mangel som med en mangel saksbehandleren har registrert.
 
     # ÅPNE SPØRSMÅL:
-    # - Hva er én automatisk mangel: én per kravelement som ikke er oppfylt, én per
-    #   kompetanseregelverk søkeren ikke er kvalifisert til, eller én per kravliste?
+    # - Er søkeren ikke kvalifisert på noen kravliste, hvilke kravelementer får mangel: alle som
+    #   ikke er oppfylt i alle kravlistene, eller bare de i kravlisten som er nærmest oppfylt? Og
+    #   hvilken kravliste gjelder når to er like nær?
     # - Hvor kommer teksten til søkeren fra? Raffineringen sier at tekstene hentes fra
     #   opptakskravene og forvaltes der. I dag står teksten på mangelkoden («Informasjon til søker
     #   i Min kompetanse»), og kravelementene har ingen tekst til søkeren (@OPT-REG-KRA-002).
@@ -572,6 +573,13 @@ Egenskap: Søknadsmangler
         | vurdert av                               |
         | den automatiske behandlingen             |
         | saksbehandleren ved Universitetet i Oslo |
+
+    Scenario: Saken får ikke mangel når søkeren er kvalifisert på en annen kravliste
+      Gitt at "Informatikk, UiO" har kravlisten "Matematikk R2" og kravlisten "Matematikk R1 og Fysikk 2"
+      Og at vitnemålet har "Matematikk R1" og "Fysikk 2", men ikke "Matematikk R2"
+      Når den automatiske behandlingen vurderer kravelementene
+      Så er søkeren kvalifisert for "Informatikk, UiO"
+      Og saken har ikke en automatisk mangel for "Matematikk R2"
 
     Scenariomal: Den automatiske mangelen sjekkes ut når <vurdert av> vurderer at kravelementet er oppfylt
       Gitt at saken hos "Universitetet i Oslo" har en automatisk mangel som viser at "Matematikk R2" ikke er oppfylt
@@ -621,7 +629,7 @@ Egenskap: Søknadsmangler
         | sjekket ut | kan overskrives av automatisk behandling      | kommer tilbake      | har saken igjen en automatisk mangel som viser at "Matematikk R2" ikke er oppfylt |
         | sjekket ut | ikke kan overskrives av automatisk behandling | kommer ikke tilbake | er den automatiske mangelen for "Matematikk R2" fortsatt sjekket ut               |
 
-  @draft @openquestion @ref-FLY-OPT-AUT-001
+  @draft @openquestion @ref-FLY-OPT-AUT-001 @depends-on-OPT-SØK-SØK-018
   Regel: Mangelen for generell studiekompetanse som fullføres i vår settes og sjekkes ut automatisk
 
     Søkere som fullfører videregående opplæring i vår, oppgir i søknaden at generell
@@ -636,13 +644,11 @@ Egenskap: Søknadsmangler
     studiekompetanse ikke fullføres i vår, slettes mangelen hvis den ikke er sjekket ut.
 
     Når saken er behandlet helautomatisk, sjekker den automatiske behandlingen ut mangelen som et
-    av de siste stegene før saken settes til «Ferdig behandlet». Saksbehandleren kan også sjekke
+    av de siste stegene før saken er ferdig behandlet. Saksbehandleren kan også sjekke
     ut mangelen, for eksempel når søkeren har dokumentert vitnemålet på annen måte.
     # I det gamle systemet het mangelkoden DUA. Eksemplene bruker den koden.
 
     # ÅPNE SPØRSMÅL:
-    # - Bygger på at søkeren kan oppgi at generell studiekompetanse fullføres i vår (OPT-SØK-SØK-013).
-    #   Det kravet er ikke avklart, og ID-en brukes også i finne_studier.feature, så referansen er ikke satt som tag.
     # - Hvordan varsles opptaksforvalteren når ingen mangelkode er merket?
     # - Kan saksbehandleren slette mangelen, eller bare sjekke den ut? Regelen over sier at
     #   saksbehandleren kan slette en automatisk mangel.
@@ -693,7 +699,7 @@ Egenskap: Søknadsmangler
     Scenario: Mangelen sjekkes ut når saken er behandlet helautomatisk
       Gitt at saken hos "Universitetet i Oslo" har den automatiske mangelen "DUA"
       Når den automatiske behandlingen har behandlet saken helautomatisk
-      Så er mangelen "DUA" sjekket ut før saken settes til "Ferdig behandlet"
+      Så er mangelen "DUA" sjekket ut før saken er ferdig behandlet
       Og saksloggen viser at den automatiske behandlingen sjekket ut mangelen
 
     Scenario: Mangelen sjekkes ikke ut når saken ikke er behandlet helautomatisk
