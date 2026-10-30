@@ -2,7 +2,8 @@
 @FLY-OPT-AUT-001 @must @draft @e2e @depends-on-FLY-OPT-SAK-001
 Egenskap: Automatisk saksbehandling
   Fra søknaden er blitt en sak hos den saksbehandlende organisasjonen, til saken er ferdig
-  behandlet og er med i plasstildelingen, uten at en saksbehandler har gjort noe. Søkerens
+  behandlet og klar til å være med i plasstildelingen, uten at en saksbehandler har gjort noe.
+  Plasstildelingen er ikke en del av flyten. Søkerens
   vitnemål importeres fra KREG til opptakssystemet når saken er opprettet (OPT-BEH-BEH-030).
   Påstanden om GSK beregnes for hvert vitnemål når vitnemålet importeres fra KREG, og søknaden
   får GSK-konklusjonen da (OPT-BEH-BEH-015). «Importeres» betyr i flyten alltid at
@@ -17,8 +18,7 @@ Egenskap: Automatisk saksbehandling
   behandlet. Rettes en feil i regelverket, beregner opptaksforvalteren søknadsalternativene
   feilen gjaldt, på nytt.
 
-  # Kjent brudd: den automatiske behandlingen setter ikke saken til ferdig behandlet, og
-  # plasstildelingen krever ikke at saken er ferdig behandlet (se OPT-BEH-BEH-025 og OPT-PLA-TIL-001).
+  # Kjent brudd: den automatiske behandlingen setter ikke saken til ferdig behandlet (se OPT-BEH-BEH-025).
   # Kjent brudd: koden beregner GSK bare i den automatiske behandlingen, ikke når vitnemålet
   # importeres fra KREG, og påstanden lagres ikke på vitnemålet (se OPT-BEH-BEH-015).
   # Fasene er etter prosesstegningen for automatisk saksbehandling (2026-10-29). Kvalifiseringen,
@@ -217,18 +217,18 @@ Egenskap: Automatisk saksbehandling
       Så er saken hos "Universitetet i Oslo" ferdig behandlet
       Og mangelen "DUA" er sjekket ut
 
-  @depends-on-OPT-BEH-BEH-025 @depends-on-OPT-BEH-BEH-029 @depends-on-OPT-PLA-TIL-001 @ref-FLY-OPT-VAL-001 @ref-FLY-OPT-SAM-001
+  @depends-on-OPT-BEH-BEH-025 @depends-on-OPT-BEH-BEH-029 @ref-OPT-PLA-TIL-001 @ref-FLY-OPT-VAL-001 @ref-FLY-OPT-SAM-001
   # OPT-BEH-BEH-025: «Den automatiske behandlingen setter saken til ferdig behandlet når alt er avgjort», «Steg som bygger på et steg som ikke kan avgjøres, hoppes over»
   # OPT-BEH-BEH-029: «Saken kan bare bli Ferdig behandlet når den har minst én mangel eller ett grunnlag», «Saksloggen viser endringene i behandlingsstatusen»
-  Regel: Saken blir ferdig behandlet og er med i plasstildelingen
+  # Bare saker som er ferdig behandlet, er med i plasstildelingen. Det står i OPT-PLA-TIL-001.
+  Regel: Saken blir ferdig behandlet og er klar til å være med i plasstildelingen
 
-    Scenario: Saken er med i plasstildelingen når den automatiske behandlingen har avgjort alt
+    Scenario: Saken er ferdig behandlet når den automatiske behandlingen har avgjort alt
       Gitt at søkeren er kvalifisert for "Informatikk, UiO"
       Og at "Informatikk, UiO" har poengsum for søknaden
       Og at søkeren er plassert i en kvote for "Informatikk, UiO"
       Når den automatiske behandlingen er ferdig
       Så er saken hos "Universitetet i Oslo" ferdig behandlet
-      Og saken hos "Universitetet i Oslo" er med når opptaksforvalteren starter en plasstildeling
 
     Scenario: Søkeren ser mangelen fra kravelementene når saken er ferdig behandlet
       Gitt at saken har en automatisk mangel som viser at "Matematikk R2" ikke er oppfylt
@@ -236,12 +236,13 @@ Egenskap: Automatisk saksbehandling
       Så er saken hos "Universitetet i Oslo" ferdig behandlet
       Og søkeren ser mangelen for "Matematikk R2" i Min kompetanse
 
-    Scenario: Saken er ikke med i plasstildelingen når poengene ikke kan avgjøres
+    Scenario: Saken blir ikke ferdig behandlet når poengene ikke kan avgjøres
       Gitt at poengene for "Informatikk, UiO" ikke kan avgjøres på grunn av en feil i regelverket
       Når den automatiske behandlingen er ferdig
-      Så er saken hos "Universitetet i Oslo" ikke med når opptaksforvalteren starter en plasstildeling
+      Så er saken hos "Universitetet i Oslo" under behandling
 
   @depends-on-OPT-BEH-BEH-026 @ref-FLY-OPT-VAL-001 @ref-FLY-OPT-SAM-001
+  # OPT-BEH-BEH-026: «Det som ble rettet, avgjør hvilke steg som beregnes på nytt», «Det saksbehandleren har satt, endres ikke», «Saker som er ferdig behandlet, forblir ferdig behandlet»
   Regel: Søknadsalternativene beregnes på nytt når regelverket er rettet
 
     Scenario: Poengene beregnes på nytt når rangeringsregelverket er rettet
