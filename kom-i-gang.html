@@ -442,7 +442,7 @@ footer .inner{padding-block:24px 48px;display:flex;flex-direction:column;gap:6px
             <span class="pill">fs-testcaser-ekstern</span><span style="color:var(--accent)">→</span>
             <span class="pill">fs-testrapport</span>
           </div>
-          <span style="font-size:14px;line-height:1.5">Etter teststrategien (forslag) i Confluence går akseptansetesten i fire faser: planen, med verifiseringen og testplanen (fase 1), en agent som tar mesteparten av den funksjonelle testingen (fase 2), interne testere som tester det agenten ikke klarte, flytene og avhengighetene, opplevelsen og helheten, og det med høyest risiko (fase 3), og de eksterne partene som tester mot sine egne krav (fase 4). Det som testes, er det som er @implemented. Testplanen sier hvilke krav og flyter som testes. Er et krav med i en flyt, testes også overleveringene i flyten: at det ett krav lager, blir brukt av det neste. Filene ligger i akseptansetest/.</span>
+          <span style="font-size:14px;line-height:1.5">Etter teststrategien (forslag) i Confluence går akseptansetesten i fire faser: planen, med verifiseringen og testplanen (fase 1), en agent som tar mesteparten av den funksjonelle testingen (fase 2), interne testere som tester det agenten ikke klarte, flytene og avhengighetene, opplevelsen og helheten, og det med høyest risiko (fase 3), og erfarne brukere og eksterne parter som tester at de kan gjøre jobben sin i flytene, ut fra kravene våre (fase 4). Det som testes, er det som er @implemented. Testplanen sier hvilke krav og flyter som testes. Er et krav med i en flyt, testes også overleveringene i flyten: at det ett krav lager, blir brukt av det neste. Filene ligger i akseptansetest/.</span>
         </div>
       </div>
     </div>
@@ -758,7 +758,7 @@ footer .inner{padding-block:24px 48px;display:flex;flex-direction:column;gap:6px
     <span class="eyebrow">Del 2</span>
     <h2>Akseptansetest</h2>
     <p>Testingen følger «Teststrategi for FS – fra krav til akseptanse» (forslag) i Confluence (STUDIEADM), i fire faser: <b>1. verifisering</b> (steg 6), <b>2. agentisk funksjonstest</b> (steg 9), <b>3. intern akseptansetest</b> (steg 10) og <b>4. ekstern akseptansetest</b> (steg 12). Hver fase bygger på den forrige og gjentar den ikke. Filene ligger i <code>akseptansetest/&lt;slug&gt;/</code>. Testplanen er hovedsiden i Confluence, under «Testplaner», og de andre sidene er undersider til den. Ingenting publiseres i Confluence uten at du sier ja.</p>
-    <p><b>Det som testes, er det som er <code>@implemented</code>.</b> Kravene står med Feature-ID i «Omfang» i testplanen, og alle fasene tester de samme kravene (de eksterne partene bruker sine egne krav).</p>
+    <p><b>Det som testes, er det som er <code>@implemented</code>.</b> Kravene står med Feature-ID i «Omfang» i testplanen, og alle fasene bygger på de samme kravene (fase 4 tester flytene, med kravene gått gjennom med de eksterne partene).</p>
   </div>
 
   <!-- 7 -->
@@ -951,17 +951,17 @@ footer .inner{padding-block:24px 48px;display:flex;flex-direction:column;gap:6px
       <h2>Ekstern akseptansetest</h2>
     </div>
     <div class="body">
-      <p>Erfarne brukere fra lærestedene, HK-dir og andre eksterne parter bekrefter at løsningen dekker deres egne krav og behov. Bare leveranser som er godkjent internt, går hit. Sikt legger til rette og leder testen, men <b>partene har sine egne krav og akseptansekriterier og lager eller eier testcasene sine</b>. Feature-filene våre er ikke grunnlaget her. Testerne kjenner fagfeltet, men ikke løsningen og ikke kravene.</p>
+      <p>Erfarne brukere fra lærestedene, HK-dir og andre eksterne parter bekrefter at de kan gjøre jobben sin i flytene leveransen skal understøtte: at hvert steg virker, og at stegene henger sammen. Bare leveranser som er godkjent internt, går hit. <b>Grunnlaget er kravene våre for flytene</b>, som Sikt går gjennom med partene i et møte eller skriftlig før testen. Testen vurderer ikke om kravene er riktige: behov kravene ikke dekker, er endringsforslag. Partene kan legge til egne testcaser når de har egne krav, for eksempel HK-dir. Testerne får <a href="https://sikt.atlassian.net/wiki/spaces/STUDIEADM/pages/5155815432">Informasjonsskriv til eksterne testere</a>, og hver test har én kontaktperson fra Sikt, normalt testansvarlig.</p>
       <div class="cols">
-        <div class="box"><h3>Flyter som utgangspunkt</h3><p class="small">fs-testcaser-ekstern foreslår flyter satt sammen til oppgaver i arbeidsprosessen, uten tekniske ord, bygget på flyttestene fra den interne testen. Partene bestemmer hvilke scenarioer, hvor grundig og i hvilken rekkefølge. Skillen kan også ta inn partenes egne krav, og vise hva Sikt allerede har testet.</p></div>
-        <div class="box"><h3>Sikt leverer</h3><p class="small">Testmiljø, testdata og testbrukere, flytbeskrivelsene fra den interne testen (eksportert av fs-testcaser-ekstern), og rapportene fra fase 2 og 3, så partene ser hva som er testet.</p></div>
-        <div class="box"><h3>Funn i to typer</h3><p class="small"><b>Avvik fra våre krav</b> er feil. <b>Krav vi ikke har</b> er endringsforslag, og går til kravarbeidet (fs-krav). Samme maler og alvorlighetsgrader som i den interne testen.</p></div>
+        <div class="box"><h3>Flytene</h3><p class="small">Sikt velger flytene i <code>krav/_Flyter</code> sammen med partene, og fs-testcaser-ekstern lager testcasene ut fra flyttestene i den interne testen, uten tekniske ord. Testerne følger flyten steg for steg, og svarer Ja, Nei eller Delvis per steg. Enkeltfunksjoner, feltvalidering, roller og tilgang, universell utforming og regresjon testes ikke her.</p></div>
+        <div class="box"><h3>Sikt leverer</h3><p class="small">Gjennomgangen av kravene for flytene, informasjonsskrivet og testbeskrivelsen (versjon, flyter, miljø og URL, feature-flagg, testbrukere og roller, testdata og tilstanden dataene skal være i, avhengigheter). Testdataene er laget på forhånd, og testmiljøet nullstilles ikke i testperioden. I tillegg rapportene fra fase 2 og 3, så partene ser hva som er testet.</p></div>
+        <div class="box"><h3>Funn i to typer</h3><p class="small"><b>Feil</b>: flyten lar ikke testeren gjøre jobben, eller løsningen avviker fra kravene Sikt har gått gjennom. <b>Endringsforslag</b>: behov flyten ikke dekker, og går til kravarbeidet (fs-krav). Testerne trenger ikke finne årsaken. Samme maler og alvorlighetsgrader som i den interne testen.</p></div>
       </div>
     </div>
     <aside class="facts">
       <dl>
         <div><dt>Skill</dt><dd><span class="pill">fs-testcaser-ekstern</span></dd></div>
-        <div><dt>Hvem tester</dt><dd>Læresteder, HK-dir og andre eksterne parter. Sikt leder testen.</dd></div>
+        <div><dt>Hvem tester</dt><dd>Læresteder, HK-dir og andre eksterne parter. Sikt legger til rette, med én kontaktperson per test.</dd></div>
         <div><dt>Filer</dt><dd><code>testcaser-ekstern.md</code><br><code>flytbeskrivelser-ekstern.md</code></dd></div>
         <div><dt>Confluence</dt><dd>«Ekstern akseptansetest – &lt;leveranse&gt;»</dd></div>
       </dl>
@@ -976,7 +976,7 @@ footer .inner{padding-block:24px 48px;display:flex;flex-direction:column;gap:6px
       <h2>Sluttrapport og beslutning</h2>
     </div>
     <div class="body">
-      <p>Testrapporten etter den eksterne testen teller resultatene og foreslår et utfall på samme måte som etter den interne. Deltakerne bekrefter rapporten, og de eksterne partene aksepterer mot sine egne krav. Hvem som beslutter, avklares med partene. Agenten kan aldri ta beslutningen.</p>
+      <p>Testrapporten etter den eksterne testen teller resultatene og foreslår et utfall på samme måte som etter den interne. Deltakerne bekrefter rapporten, og kontaktpersonen går gjennom resultatet med partene. Utfallene er de samme som i fase 3, vurdert mot flytene og kravene, og godkjent eller godkjent med forbehold betyr at leveransen er <b>akseptert</b>. Hvem som beslutter, er avtalt med partene før testen. Agenten kan aldri ta beslutningen.</p>
       <div class="tablebox">
         <table>
           <thead><tr><th>Utfall</th><th>Hva skjer videre</th></tr></thead>

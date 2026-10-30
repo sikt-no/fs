@@ -536,20 +536,20 @@ html,body{margin:0;height:100%;background:#0E1628;color:#F7F6F2;font-family:'IBM
 <p style="font-size:24px;font-weight:600;letter-spacing:3px;text-transform:uppercase;color:#B4481A">Akseptansetesten · Fase 4 · Ekstern test</p>
 <p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:30px;font-weight:600;color:#2F6FB0">/fs-testcaser-ekstern</p>
 </div>
-<h2 style="font-family:'Source Serif 4', Georgia, serif;font-size:72px;font-weight:600;line-height:1.1;color:#14213D">HK-dir og lærestedene tester med sine egne krav</h2>
+<h2 style="font-family:'Source Serif 4', Georgia, serif;font-size:72px;font-weight:600;line-height:1.1;color:#14213D">Partene tester jobben sin i flytene</h2>
 </div>
 <div style="display:flex;gap:24px">
 <div style="flex:1;display:flex;flex-direction:column;gap:12px;background:#FFFFFF;padding:36px;border:1px solid #E1DED6;border-radius:16px">
 <h3 style="font-size:24px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:#B4481A">Tar inn</h3>
-<p style="font-size:26px;line-height:1.4;color:#14213D">Testplanen, rapporten fra den interne testen, og kravene til partene hvis de finnes.</p>
+<p style="font-size:26px;line-height:1.4;color:#14213D">Testplanen, flytene leveransen inngår i, flyttestene og rapporten fra den interne testen.</p>
 </div>
 <div style="flex:1;display:flex;flex-direction:column;gap:12px;background:#FFFFFF;padding:36px;border:1px solid #E1DED6;border-radius:16px">
 <h3 style="font-size:24px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:#B4481A">Gjør</h3>
-<p style="font-size:26px;line-height:1.4;color:#14213D">Foreslår flyter som utgangspunkt, uten tekniske ord, og viser hva som er testet i fase 1–3.</p>
+<p style="font-size:26px;line-height:1.4;color:#14213D">Lager testcasene for flytene, valgt sammen med partene, uten tekniske ord. Testerne svarer Ja, Nei eller Delvis per steg.</p>
 </div>
 <div style="flex:1;display:flex;flex-direction:column;gap:12px;background:#FFFFFF;padding:36px;border:1px solid #E1DED6;border-radius:16px">
 <h3 style="font-size:24px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:#B4481A">Lager</h3>
-<p style="font-size:26px;line-height:1.4;color:#14213D">Testcasene og flytbeskrivelsene til partene, og en underside i Confluence når du sier ja.</p>
+<p style="font-size:26px;line-height:1.4;color:#14213D">Testbeskrivelsen, testcasene, gjennomgangen av kravene og hva Sikt har testet, og en underside i Confluence når du sier ja.</p>
 </div>
 </div>
 <div style="display:flex;align-items:center;gap:40px;background:#14213D;padding:28px 40px;border-radius:16px">
@@ -557,9 +557,9 @@ html,body{margin:0;height:100%;background:#0E1628;color:#F7F6F2;font-family:'IBM
 <p style="font-size:24px;color:#C9D3E3">Funnene</p>
 <p style="font-size:28px;font-weight:600;color:#F0A070">To typer</p>
 </div>
-<p style="flex:1;font-size:26px;line-height:1.4;color:#F7F6F2">Feil er avvik fra kravene våre. Endringsforslag er krav vi ikke har, og går til kravarbeidet.</p>
+<p style="flex:1;font-size:26px;line-height:1.4;color:#F7F6F2">Feil: flyten lar ikke testeren gjøre jobben. Endringsforslag: behov flyten ikke dekker, og går til kravarbeidet.</p>
 </div>
-<aside>Partene har egne krav og akseptansekriterier, og lager eller eier testcasene sine. Sikts feature-filer er ikke grunnlaget. Bare leveranser som er godkjent i den interne testen, går til fase 4, og bare hovedflyten testes: feilsituasjonene er testet i fase 2. Skillen eksporterer også flytbeskrivelsene fra den interne testen og rapportene fra fase 2 og 3 til partene. Filene heter testcaser-ekstern.md og flytbeskrivelser-ekstern.md, i akseptansetest/&lt;slug&gt;/.</aside>
+<aside>Grunnlaget er kravene våre for flytene, som Sikt går gjennom med partene i et møte eller skriftlig før testen. Testen vurderer ikke om kravene er riktige, og partene kan legge til egne testcaser når de har egne krav. Bare leveranser som er godkjent i den interne testen, går til fase 4. Hvert steg i flyten skal virke, og stegene skal henge sammen: enkeltfunksjoner, feltvalidering, roller og tilgang, universell utforming og regresjon testes ikke her. Testdataene lages på forhånd, og testmiljøet nullstilles ikke i testperioden. Hver test har én kontaktperson fra Sikt, som fører Ja som bestått, Nei og Delvis som ikke bestått med funn. Skillen følger Informasjonsskriv til eksterne testere. Filene heter testcaser-ekstern.md og flytbeskrivelser-ekstern.md, i akseptansetest/&lt;slug&gt;/.</aside>
 </section>
 </div>
 <div class="slide">
@@ -605,7 +605,7 @@ html,body{margin:0;height:100%;background:#0E1628;color:#F7F6F2;font-family:'IBM
 </div>
 <p style="flex:1;font-size:26px;line-height:1.4;color:#F7F6F2">Godkjent, godkjent med forbehold eller ikke godkjent. Agenten kan aldri godkjenne en leveranse.</p>
 </div>
-<aside>Rapporten finnes på fire nivåer: verifisering, agentisk, intern og ekstern. Den lister også testcaser som er «Bestått» selv om faktisk resultat avviker. Etter den agentiske testen sier rapporten om inngangskriteriet til den interne testen er oppfylt: ingen åpne «Stopper»-funn, og testansvarlig har gått gjennom rapporten. Testansvarlig, eller deltakerne i den eksterne testen, skriver beslutningen. Fila heter testrapport-&lt;nivå&gt;-&lt;dato&gt;.md, i akseptansetest/&lt;slug&gt;/, og blir en underside til testplanen når du sier ja. Kolonnen for fasen fylles ut på sporbarhetssiden og i sporbarhet.md, ikke i testplanen: testcase, teknikk og resultat i fase 2, og flyt i fase 3. Har en eldre testplan tabellen i seg, flyttes den ut først.</aside>
+<aside>Rapporten finnes på fire nivåer: verifisering, agentisk, intern og ekstern. Den lister også testcaser som er «Bestått» selv om faktisk resultat avviker. Etter den agentiske testen sier rapporten om inngangskriteriet til den interne testen er oppfylt: ingen åpne «Stopper»-funn, og testansvarlig har gått gjennom rapporten. Testansvarlig, eller den som er avtalt med partene i den eksterne testen, skriver beslutningen. Fase 3 og 4 har de samme tre utfallene, og i fase 4 betyr godkjent og godkjent med forbehold at leveransen er akseptert. Fila heter testrapport-&lt;nivå&gt;-&lt;dato&gt;.md, i akseptansetest/&lt;slug&gt;/, og blir en underside til testplanen når du sier ja. Kolonnen for fasen fylles ut på sporbarhetssiden og i sporbarhet.md, ikke i testplanen: testcase, teknikk og resultat i fase 2, og flyt i fase 3. Har en eldre testplan tabellen i seg, flyttes den ut først.</aside>
 </section>
 </div>
 <div class="slide">

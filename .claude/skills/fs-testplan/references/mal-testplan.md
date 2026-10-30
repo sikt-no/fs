@@ -74,7 +74,8 @@ Testplanen er delt i hovedsiden og tre undersider, så hver del kan oppdateres f
 | Kjører av agenten | <navn> | Starter den agentiske funksjonstesten (fase 2) |
 | Kontaktperson i teamet | <navn> | Svarer på spørsmål, og har ansvaret for at feil blir rettet |
 | Andre testere | <navn> | <hvilke deler> |
-| Eksterne testere | <HK-dir, læresteder> | <bare når leveransen skal til ekstern akseptansetest> |
+| Eksterne testere | <HK-dir, læresteder> | <bare når leveransen skal til ekstern akseptansetest> Gjennomfører testen i flytene |
+| Kontaktperson i den eksterne testen | <navn, normalt testansvarlig> | <bare ved ekstern akseptansetest> Én per test. Svarer på spørsmål underveis, har ansvaret for at funnene blir fulgt opp, og går gjennom resultatet med partene |
 
 ## Tid og kanal
 
@@ -82,7 +83,7 @@ Testplanen er delt i hovedsiden og tre undersider, så hver del kan oppdateres f
 |---|---|
 | Agentisk funksjonstest | <dato for kjøringen, og hvem som kjører agenten> |
 | Intern akseptansetest | <dato og klokkeslett>. Tidsramme: 1–2 timer |
-| Ekstern akseptansetest | <dato, eller «Avklares med de eksterne partene», eller «Ikke aktuell»> |
+| Ekstern akseptansetest | <dato, eller «Avklares med de eksterne partene», eller «Ikke aktuell»>. Hvordan spørsmål tas underveis (e-post, telefon eller møte), og hvem som beslutter, avtales med testerne før testen |
 | Spørsmål underveis | Slack-tråden «Akseptansetesting <leveranse>» i <kanal> |
 
 ## Forutsetninger
@@ -111,7 +112,7 @@ Kravene i «Omfang» er kriteriene for godkjent: hvert scenario er et akseptanse
 | 1. Verifisering | Alle scenarioene er funnet, og en annen person har kontrollert rapporten. Åpne spørsmål står i testplanen, men stopper ikke |
 | 2. Agentisk funksjonstest | Alle testcasene er kjørt, ingen funn med «Stopper» står åpne, og testansvarlig har gått gjennom rapporten. Det er inngangskriteriet til intern akseptansetest |
 | 3. Intern akseptansetest | Beslutningen er tatt: godkjent, godkjent med forbehold eller ikke godkjent |
-| 4. Ekstern akseptansetest | De eksterne partene har akseptert mot sine egne krav |
+| 4. Ekstern akseptansetest | Beslutningen er tatt: godkjent, godkjent med forbehold eller ikke godkjent, vurdert mot flytene og kravene. Hvem som beslutter, er avtalt med partene før testen |
 
 ## Funn og alvorlighetsgrad
 

@@ -217,20 +217,20 @@ html,body{margin:0;height:100%;background:#0E1628;color:#F7F6F2;font-family:'IBM
 <div style="padding:14px 20px;border-top:1px solid #E1DED6"><p style="font-size:24px;line-height:1.4;color:#14213D">Finnes hvert scenario i koden, og hva skal testes, og hvordan?</p></div>
 <div style="padding:14px 20px;border-top:1px solid #E1DED6"><p style="font-size:24px;line-height:1.4;color:#14213D">Virker hver funksjon riktig, også når noe går galt?</p></div>
 <div style="padding:14px 20px;border-top:1px solid #E1DED6"><p style="font-size:24px;line-height:1.4;color:#14213D">Virker leveransen for brukeren, i arbeidsprosessen og sammen med resten av FS?</p></div>
-<div style="padding:14px 20px;border-top:1px solid #E1DED6"><p style="font-size:24px;line-height:1.4;color:#14213D">Dekker løsningen de eksterne partenes behov?</p></div>
+<div style="padding:14px 20px;border-top:1px solid #E1DED6"><p style="font-size:24px;line-height:1.4;color:#14213D">Kan de eksterne partene gjøre jobben sin i flytene leveransen skal understøtte?</p></div>
 <div style="padding:14px 20px;border-top:1px solid #E1DED6;background:#F7F6F2"><p style="font-size:24px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:#B4481A">Slik</p></div>
 <div style="padding:14px 20px;border-top:1px solid #E1DED6"><p style="font-size:24px;line-height:1.4;color:#4A5568">fs-verify leser koden mot kravet, uten å kjøre den. Så lages testplanen.</p></div>
 <div style="padding:14px 20px;border-top:1px solid #E1DED6"><p style="font-size:24px;line-height:1.4;color:#4A5568">En agent kjører testene i testmiljøet, med data testene lager selv.</p></div>
 <div style="padding:14px 20px;border-top:1px solid #E1DED6"><p style="font-size:24px;line-height:1.4;color:#4A5568">Testansvarlig og interne testere tester i arbeidsprosessen.</p></div>
-<div style="padding:14px 20px;border-top:1px solid #E1DED6"><p style="font-size:24px;line-height:1.4;color:#4A5568">Partene tester mot sine egne krav, og Sikt legger til rette.</p></div>
+<div style="padding:14px 20px;border-top:1px solid #E1DED6"><p style="font-size:24px;line-height:1.4;color:#4A5568">Partene følger flytene steg for steg, ut fra kravene Sikt har gått gjennom med dem.</p></div>
 <div style="padding:14px 20px;border-top:1px solid #E1DED6;background:#F7F6F2"><p style="font-size:24px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:#B4481A">Tester ikke</p></div>
 <div style="padding:14px 20px;border-top:1px solid #E1DED6"><p style="font-size:24px;line-height:1.4;color:#4A5568">Om løsningen virker for brukeren.</p></div>
 <div style="padding:14px 20px;border-top:1px solid #E1DED6"><p style="font-size:24px;line-height:1.4;color:#4A5568">Flyter på tvers, avhengigheter, og det en agent ikke kan vurdere.</p></div>
 <div style="padding:14px 20px;border-top:1px solid #E1DED6"><p style="font-size:24px;line-height:1.4;color:#4A5568">Feltvalidering og feilsituasjoner som fase 2 har bestått.</p></div>
-<div style="padding:14px 20px;border-top:1px solid #E1DED6"><p style="font-size:24px;line-height:1.4;color:#4A5568">Sikts detaljerte funksjonstester.</p></div>
+<div style="padding:14px 20px;border-top:1px solid #E1DED6"><p style="font-size:24px;line-height:1.4;color:#4A5568">Om kravene er riktige, enkeltfunksjoner og feltvalidering.</p></div>
 </div>
 <p style="font-size:26px;line-height:1.4;color:#4A5568">Hver fase bygger på den forrige og gjentar den ikke.</p>
-<aside>Spørsmålene og metodene er hentet fra tabellen «Flyten» i teststrategien. Alle leveranser går gjennom fase 1–3, og det som er godkjent internt, kan gå til fase 4. Fase 1 tester ikke: fs-verify verifiserer at scenarioene, rollene og tilgangene finnes i koden, ved å lese den. @implemented betyr bare at koden er funnet. Om løsningen virker, sier testene i fase 2–4. Fase 1 er white-box: koden leses, ingenting kjøres. Fase 2 er black-box: en agent kjører testene i testmiljøet. Fase 3 er testansvarlig (domeneekspert) og interne testere. Fase 4 er de eksterne partene, og Sikt legger til rette. Ikke godkjent eller ikke akseptert: leveransen går tilbake til teamet med funnene.</aside>
+<aside>Spørsmålene og metodene er hentet fra tabellen «Flyten» i teststrategien. Alle leveranser går gjennom fase 1–3, og det som er godkjent internt, kan gå til fase 4. Fase 1 tester ikke: fs-verify verifiserer at scenarioene, rollene og tilgangene finnes i koden, ved å lese den. @implemented betyr bare at koden er funnet. Om løsningen virker, sier testene i fase 2–4. Fase 1 er white-box: koden leses, ingenting kjøres. Fase 2 er black-box: en agent kjører testene i testmiljøet. Fase 3 er testansvarlig (domeneekspert) og interne testere. Fase 4 er de eksterne partene, og Sikt legger til rette, med én kontaktperson per test. Fase 4 tester heller ikke roller og tilgang, universell utforming og regresjon. Fase 3 og 4 har de samme tre utfallene. «Akseptert» er sluttilstanden: godkjent eller godkjent med forbehold i fase 4. Ikke godkjent i fase 3 eller 4: leveransen går tilbake til teamet med funnene.</aside>
 </section>
 </div>
 <div class="slide">
@@ -253,7 +253,7 @@ html,body{margin:0;height:100%;background:#0E1628;color:#F7F6F2;font-family:'IBM
       <p style="font-family:'IBM Plex Sans', Arial, sans-serif; font-size:26px; line-height:1.4; color:#4a5568">Det legges inn i kravet, ikke bare i testen. Funnet får typen «Kravet dekker ikke».</p>
     </div>
   </div>
-  <aside>Fase 1–3 bruker scenarioene i feature-filene. Fase 4 bruker de eksterne partenes egne krav. @implemented betyr bare at fs-verify har funnet koden. Om leveransen er godkjent, står i testrapporten. Kravene står med Feature-ID i «Omfang» i testplanen, så alle fasene tester de samme kravene. Også de leverte delene av et krav som er delvis levert, testes: @implemented på en regel eller et scenario under en @in-progress egenskap.</aside>
+  <aside>Alle fasene bygger på de samme kravene. Fase 1–3 tester scenarioene i feature-filene. Fase 4 tester flytene, med kravene formidlet til de eksterne partene. @implemented betyr bare at fs-verify har funnet koden. Om leveransen er godkjent, står i testrapporten. Kravene står med Feature-ID i «Omfang» i testplanen, så alle fasene tester de samme kravene. Også de leverte delene av et krav som er delvis levert, testes: @implemented på en regel eller et scenario under en @in-progress egenskap.</aside>
 </section>
 </div>
 <div class="slide">
@@ -480,35 +480,35 @@ html,body{margin:0;height:100%;background:#0E1628;color:#F7F6F2;font-family:'IBM
 <p style="font-size:24px;font-weight:600;letter-spacing:3px;text-transform:uppercase;color:#B4481A">Fase 4 · Ekstern akseptansetest</p>
 <p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:30px;font-weight:600;color:#2F6FB0">/fs-testcaser-ekstern</p>
 </div>
-<h2 style="font-family:'Source Serif 4', Georgia, serif;font-size:72px;font-weight:600;line-height:1.1;color:#14213D">Partene tester mot sine egne krav</h2>
+<h2 style="font-family:'Source Serif 4', Georgia, serif;font-size:72px;font-weight:600;line-height:1.1;color:#14213D">Partene tester jobben sin i flytene</h2>
 </div>
 <div style="display:flex;flex-direction:column">
 <div style="display:flex;gap:32px;padding:16px 0;border-top:1px solid #D6D2C7">
 <p style="width:280px;font-size:24px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:#B4481A">Hvem</p>
-<p style="flex:1;font-size:26px;line-height:1.4;color:#14213D">Erfarne brukere fra lærestedene og parter som HK-dir. Sikt legger til rette.</p>
+<p style="flex:1;font-size:26px;line-height:1.4;color:#14213D">Erfarne brukere fra lærestedene og parter som HK-dir. Sikt legger til rette, med én kontaktperson per test.</p>
 </div>
 <div style="display:flex;gap:32px;padding:16px 0;border-top:1px solid #D6D2C7">
-<p style="width:280px;font-size:24px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:#B4481A">Omfang</p>
-<p style="flex:1;font-size:26px;line-height:1.4;color:#14213D">Leveranser som er godkjent internt, ofte samlet i én testrunde før viktige tidspunkter.</p>
+<p style="width:280px;font-size:24px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:#B4481A">Hvor grundig</p>
+<p style="flex:1;font-size:26px;line-height:1.4;color:#14213D">Hvert steg i flyten virker, og stegene henger sammen. Ikke enkeltfunksjoner og feltvalidering.</p>
 </div>
 <div style="display:flex;gap:32px;padding:16px 0;border-top:1px solid #D6D2C7">
 <p style="width:280px;font-size:24px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:#B4481A">Grunnlag</p>
-<p style="flex:1;font-size:26px;line-height:1.4;color:#14213D">Partenes egne krav og testcaser, ikke feature-filene våre.</p>
+<p style="flex:1;font-size:26px;line-height:1.4;color:#14213D">Kravene våre for flytene, gått gjennom med partene før testen.</p>
 </div>
 <div style="display:flex;gap:32px;padding:16px 0;border-top:1px solid #D6D2C7">
 <p style="width:280px;font-size:24px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:#B4481A">Sikt leverer</p>
-<p style="flex:1;font-size:26px;line-height:1.4;color:#14213D">Testmiljø, testdata og testbrukere, flytbeskrivelsene, og rapportene fra fase 2 og 3.</p>
+<p style="flex:1;font-size:26px;line-height:1.4;color:#14213D">Testbeskrivelsen, flytene, testdata laget på forhånd, og rapportene fra fase 2 og 3.</p>
 </div>
 <div style="display:flex;gap:32px;padding:16px 0;border-top:1px solid #D6D2C7;border-bottom:1px solid #D6D2C7">
 <p style="width:280px;font-size:24px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:#B4481A">Funn</p>
-<p style="flex:1;font-size:26px;line-height:1.4;color:#14213D">«Feil» er avvik fra kravene våre. «Endringsforslag» går til kravarbeidet.</p>
+<p style="flex:1;font-size:26px;line-height:1.4;color:#14213D">«Feil»: flyten lar ikke testeren gjøre jobben. «Endringsforslag»: behov flyten ikke dekker.</p>
 </div>
 </div>
 <div style="display:flex;align-items:center;gap:40px;background:#14213D;padding:28px 40px;border-radius:16px">
 <p style="width:280px;font-size:28px;font-weight:600;color:#F0A070">Ferdig når</p>
-<p style="flex:1;font-size:26px;line-height:1.4;color:#F7F6F2">Partene har akseptert mot sine egne krav. Hvem som beslutter, avklares med dem.</p>
+<p style="flex:1;font-size:26px;line-height:1.4;color:#F7F6F2">Beslutningen er tatt, vurdert mot flytene og kravene. Hvem som beslutter, er avtalt før testen.</p>
 </div>
-<aside>Mål: de eksterne partene bekrefter at løsningen dekker deres egne krav og behov. Hvor mange leveranser som testes samlet, avklares med partene, for eksempel én testrunde før simulering av opptak. Partene bestemmer hvilke scenarioer, hvor grundig og i hvilken rekkefølge. Flytforslagene lages med fs-testcaser-ekstern ut fra flyttestene i fase 3, uten tekniske ord, og bare hovedflyten: feilsituasjonene er testet i fase 2. Samme maler og alvorlighetsgrader som i den interne testen, og en fast kanal for tilbakemeldinger. Sluttrapporten bekreftes av deltakerne, og er grunnlag for rapporten til styringsgruppen.</aside>
+<aside>Mål: de eksterne partene bekrefter at de kan gjøre jobben sin i flytene leveransen skal understøtte. Testerne får Informasjonsskriv til eksterne testere, og testen er Sikts side av det samme. Omfang: leveranser som er godkjent internt, ofte samlet i én testrunde før viktige tidspunkter, for eksempel simulering av opptak. Testen vurderer ikke om kravene er riktige: behov kravene ikke dekker, er endringsforslag. Partene kan legge til egne testcaser når de har egne krav, for eksempel HK-dir. Sikt velger flytene i krav/_Flyter sammen med partene, og fs-testcaser-ekstern lager dem ut fra flyttestene i fase 3, uten tekniske ord. Testbeskrivelsen sier hva som er levert, versjon, flyter, miljø og URL, feature-flagg, testbrukere og roller, testdata og tilstanden dataene skal være i, og avhengigheter. Testdataene lages på forhånd, og testmiljøet nullstilles ikke i testperioden. Klart når kontaktpersonen har logget inn som hver testbruker og ser testdataene. Testerne svarer Ja, Nei eller Delvis per steg, og kontaktpersonen fører det som bestått, ikke bestått med funn, eller ikke testet. Roller og tilgang, universell utforming og regresjon testes ikke her. Sluttrapporten bekreftes av deltakerne, kontaktpersonen går gjennom resultatet med partene, og den er grunnlag for rapporten til styringsgruppen. Godkjent og godkjent med forbehold betyr at leveransen er akseptert.</aside>
 </section>
 </div>
 <div class="slide">
@@ -549,7 +549,7 @@ html,body{margin:0;height:100%;background:#0E1628;color:#F7F6F2;font-family:'IBM
 <p style="font-size:24px;line-height:1.4;color:#4A5568">er typen når kravet ikke sier noe om tilfellet. Det avklares i kravet.</p>
 </div>
 </div>
-<aside>Funn føres med alvorlighetsgrad og fasen funnet ble gjort i, på siden for fasen, som er en underside til testplanen. Et funn beskriver hva som skjedde, hva som var forventet, steg for å gjenskape, skjermbilde og lenke til sak, etter malen for funn. Teamet lager oppgaver for det som skal rettes. Funn som kan fikses senere, legges i oppgavelista til teamet. I fase 4 sorteres funnene i «Feil (avvik fra kravene våre)» og «Endringsforslag (krav vi ikke har)».</aside>
+<aside>Funn føres med alvorlighetsgrad og fasen funnet ble gjort i, på siden for fasen, som er en underside til testplanen. Et funn beskriver hva som skjedde, hva som var forventet, steg for å gjenskape, skjermbilde og lenke til sak, etter malen for funn. Teamet lager oppgaver for det som skal rettes. Funn som kan fikses senere, legges i oppgavelista til teamet. I fase 4 heter «Kravet dekker ikke» endringsforslag: et behov flyten ikke dekker. «Feil» er at flyten ikke lar testeren gjøre jobben, eller at løsningen avviker fra kravene Sikt har gått gjennom. Testerne trenger ikke finne årsaken, og kontaktpersonen vurderer det de er usikre på.</aside>
 </section>
 </div>
 <div class="slide">
@@ -579,7 +579,7 @@ html,body{margin:0;height:100%;background:#0E1628;color:#F7F6F2;font-family:'IBM
 <td>Leveransen går tilbake til teamet med funnene.</td>
 </tr>
 </table>
-<aside>Agenten kan aldri godkjenne en leveranse eller ta beslutningen. Testansvarlig skriver beslutningen og begrunnelsen. Testrapporten lages etter hver fase, på fire nivåer: verifisering, agentisk, intern og ekstern. Den teller bestått, ikke bestått og ikke testet per krav, sorterer funnene etter alvorlighetsgrad og type, og lister testcaser som er «Bestått» selv om faktisk resultat avviker. «Ikke testet» får en kort begrunnelse, som testansvarlig vurderer før beslutningen. Rettede funn testes på nytt i versjonen som skal godkjennes. I fase 4 skriver deltakerne i den eksterne testen beslutningen, etter det som er avklart med partene.</aside>
+<aside>Agenten kan aldri godkjenne en leveranse eller ta beslutningen. Testansvarlig skriver beslutningen og begrunnelsen. Testrapporten lages etter hver fase, på fire nivåer: verifisering, agentisk, intern og ekstern. Den teller bestått, ikke bestått og ikke testet per krav, sorterer funnene etter alvorlighetsgrad og type, og lister testcaser som er «Bestått» selv om faktisk resultat avviker. «Ikke testet» får en kort begrunnelse, som testansvarlig vurderer før beslutningen. Rettede funn testes på nytt i versjonen som skal godkjennes. Fase 3 og 4 bruker de samme tre utfallene. I fase 4 tar den som er avtalt med partene før testen, beslutningen, vurdert mot flytene og kravene, og godkjent og godkjent med forbehold kalles «Akseptert».</aside>
 </section>
 </div>
 <div class="slide">
@@ -621,7 +621,7 @@ html,body{margin:0;height:100%;background:#0E1628;color:#F7F6F2;font-family:'IBM
 <td style="color:#4A5568">fs-testrapport, intern</td>
 </tr>
 </table>
-<p style="font-size:26px;line-height:1.4;color:#4A5568">Raden svarer på om scenarioet er bygget og testet, og hvor beviset er. Fase 4 har ingen kolonne: partene tester mot sine egne krav.</p>
+<p style="font-size:26px;line-height:1.4;color:#4A5568">Raden svarer på om scenarioet er bygget og testet, og hvor beviset er. Fase 4 har ingen kolonne: den tester flytene, ikke hvert scenario.</p>
 <aside>Sporbarheten er en egen underside til testplanen, «Sporbarhet – leveransen», med fila sporbarhet.md. Den har én rad per scenario i testen, og fylles ut etter hvert som fasene er ferdige. fs-testplan lager siden, og fyller ut kolonnen for fase 1 med resultatet og den første referansen fra verify-rapporten. fs-testrapport fyller ut kolonnen for fasen sin: testcase, teknikk og resultat fra den agentiske rapporten (for eksempel «2.3a, grenseverdi, Bestått»), og flyten fra den interne. Kolonnen fylles ut på sporbarhetssiden og i sporbarhet.md, ikke i testplanen. Eksempelradene er fra testplanen for Opprette og vedlikeholde opptak, versjon 4, der fase 3 ikke er kjørt ennå. Den andre raden viser hvorfor sporbarheten er nyttig: fs-verify fant ikke sperren i koden i fase 1, og den agentiske testen bekreftet det i fase 2. En organisasjon som ikke deltar i opptaket, kunne åpne det. Med sporbarheten ser man både hvilke scenarioer som mangler i koden, og hvilke som ikke er testet eller ikke bestått, uten å lete i rapportene.</aside>
 </section>
 </div>

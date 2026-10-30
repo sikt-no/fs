@@ -48,6 +48,10 @@ For hvert krav:
 - **Data scenarioet selv lager** (for eksempel «Opprett opptak»), er ikke testdata: de lages av stegene i testcasen, og får `{KJØRING}` i navnet når de ikke kan slettes (R13 i `testcase-regler.md`).
 - Oppsettet kjøres først i hver kjøring. Feiler et scenario i oppsettet, blir testene som bruker nøkkelen, «Ikke testet».
 
+### Testdata i den eksterne testen
+
+Unntak fra regelen over: i fase 4 lages testdataene på forhånd, i tilstanden flytene forutsetter, og testmiljøet nullstilles ikke i testperioden. Eksterne testere skal ikke måtte lage eller lete fram testpersoner, opptak eller søknader selv. At testmiljøet ikke nullstilles, og at testdataene ikke slettes, avtales med dem som drifter testmiljøet. Testen er klar når kontaktpersonen har logget inn som hver testbruker og ser testdataene. `fs-testcaser-ekstern` lister testdataene og tilstanden i «Testdata som må lages før testen», og lager dem ikke selv.
+
 ## Spørsmålene
 
 Still dem samlet med `AskUserQuestion`, høyst fire om gangen. Har en tidligere testplan eller miljøfila svart for de samme kravene, vis svaret og spør om det fortsatt gjelder.

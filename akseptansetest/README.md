@@ -6,14 +6,14 @@ Hele prosessen, fra kravene skrives til leveransen er godkjent, er forklart steg
 
 ## Fasene
 
-Hver leveranse går gjennom fase 1–3: planen, den agentiske testen og den interne testen. Leveranser som er godkjent internt, kan gå videre til fase 4. Hver fase bygger på den forrige og gjentar den ikke.
+Hver leveranse går gjennom fase 1–3: planen, den agentiske testen og den interne testen. Leveranser som er godkjent internt, kan gå videre til fase 4. Hver fase bygger på den forrige og gjentar den ikke. Fase 3 og 4 har de samme tre utfallene: godkjent, godkjent med forbehold og ikke godkjent. «Akseptert» er sluttilstanden: leveransen er godkjent eller godkjent med forbehold i fase 4. Ikke godkjent i fase 3 eller 4 sender leveransen tilbake til teamet med funnene.
 
 | Fase | Svarer på | Metode | Hvem | Tester ikke |
 |---|---|---|---|---|
 | 1. Plan | Hva er levert, hva testes, og hvordan? | Verifisering (white-box: kravene sjekkes mot koden, også tilgangsstyringen, uten å kjøre den), og testplanen bygget på den | Teamet og testansvarlig | Om løsningen virker for brukeren |
 | 2. Agentisk funksjonstest | Virker hver funksjon riktig, også når noe går galt? | Black-box: en agent kjører testene i testmiljøet, med data den lager selv | Teamet og testansvarlig, med agent | Flyter på tvers og avhengigheter, og det en agent ikke kan vurdere |
 | 3. Intern akseptansetest | Virker leveransen for brukeren, i arbeidsprosessen og sammen med resten av FS? | Testere tester det den agentiske testen ikke klarte, flytene og avhengighetene, opplevelsen og helheten, og det med høyest risiko | Testansvarlig (domeneekspert) og interne testere | Feltvalidering og feilsituasjoner den agentiske testen har bestått |
-| 4. Ekstern akseptansetest | Dekker løsningen de eksterne partenes behov? | Testing mot partenes egne krav | Eksterne parter, Sikt legger til rette | Sikts detaljerte funksjonstester |
+| 4. Ekstern akseptansetest | Kan de eksterne partene gjøre jobben sin i flytene leveransen skal understøtte? | Testerne følger flytene fra Sikt steg for steg, ut fra kravene Sikt har gått gjennom med dem | Eksterne parter tester. Sikt legger til rette, med én kontaktperson per test | Om kravene er riktige (behov kravene ikke dekker, er endringsforslag). Enkeltfunksjoner og feltvalidering, roller og tilgang, universell utforming og regresjon |
 
 ## Flyten
 
@@ -28,8 +28,8 @@ Hver leveranse går gjennom fase 1–3: planen, den agentiske testen og den inte
 | 2 | Testrapport etter den agentiske testen | `fs-testrapport` | `testrapport-agentisk-<dato>.md` | «Testrapport – agentisk funksjonstest – <leveranse>» |
 | 3 | Intern akseptansetest | `fs-testcaser-intern` | `testcaser-intern.md` | «Intern akseptansetest – <leveranse>» |
 | 3 | Testrapport etter den interne testen | `fs-testrapport` | `testrapport-intern-<dato>.md` | «Testrapport – intern akseptansetest – <leveranse>» |
-| 4 | Ekstern akseptansetest: flytforslag | `fs-testcaser-ekstern` | `testcaser-ekstern.md` | «Ekstern akseptansetest – <leveranse>» |
-| 4 | Ekstern akseptansetest: flytbeskrivelser til partene | `fs-testcaser-ekstern` | `flytbeskrivelser-ekstern.md` | «Flytbeskrivelser til partene – <leveranse>» (når brukeren sier ja) |
+| 4 | Ekstern akseptansetest: testbeskrivelsen og testcasene for flytene | `fs-testcaser-ekstern` | `testcaser-ekstern.md` | «Ekstern akseptansetest – <leveranse>» |
+| 4 | Ekstern akseptansetest: gjennomgangen av kravene for flytene, og hva Sikt har testet | `fs-testcaser-ekstern` | `flytbeskrivelser-ekstern.md` | «Flytbeskrivelser til partene – <leveranse>» (når brukeren sier ja) |
 | 4 | Testrapport etter den eksterne testen | `fs-testrapport` | `testrapport-ekstern-<dato>.md` | «Testrapport – ekstern akseptansetest – <leveranse>» |
 
 Planen (fase 1) starter med verifiseringen. `fs-verify` (eller `fs-verify-agent-teams` når det er mange feature-filer) setter `@implemented` på kravene der koden er funnet, og rapporten er grunnlaget for testplanen: det som er `@implemented`, er det som testes, og det verifiseringen ikke fant, står i «Venter på verifisering». `@implemented` betyr bare at koden er funnet. Om løsningen virker, sier testene i fase 2–4. Verifiseringen kjøres på leveransen (et scope, en oppgave, en mappe eller feature-filer), siden testplanen ikke finnes ennå. Rapporten har også reglene i koden som ikke har et scenario i kravet, og antall åpne spørsmål per krav.
@@ -52,7 +52,7 @@ akseptansetest/
     ├── sporbarhet.md                     # underside: sporbarhet per krav
     ├── testcaser-intern.md
     ├── testcaser-ekstern.md
-    ├── flytbeskrivelser-ekstern.md       # fase 4: flytene og rapportene til partene
+    ├── flytbeskrivelser-ekstern.md       # fase 4: flytene, kravene for flytene og rapportene til partene
     ├── verify-<YYYY-MM-DD>-<HHMM>.md     # fra fs-verify, når leveransen er et scope (mappa har scope-slugen)
     ├── kjoring-<YYYY-MM-DD>-<HHMM>/      # fase 2: resultat.md fra en kjøring (skjermbilder og annet ligger lokalt, ignorert av git)
     └── testrapport-<verifisering|agentisk|intern|ekstern>-<YYYY-MM-DD>.md
@@ -83,7 +83,7 @@ Kravene står med Feature-ID i «Omfang» i testplanen (på undersiden «Omfang�
 Mesteparten av den funksjonelle testingen skjer her. En agent kjører testene i Chrome med `cdp`-skillen, mot testmiljøet. Testene er ikke en del av testplanen: de er varige, ligger i [`cdp-tester/`](../cdp-tester/README.md), og lages og oppdateres med `fs-testcaser-cdp`, fra kravene, reglene i koden uten scenario (fra verify-rapporten) og reglene agenten utleder. Det som hører til leveransen, er kjøringene. Gherkin-testene er ikke bundet til verktøyet: andre kan bruke dem også.
 
 - **Samme grunnlag.** Omfanget av testcasene («Testcaser som skal lages»), roller, testbrukere og testdata planlegges i testplanen, med de samme spørsmålene for alle fasene (se [`.claude/references/akseptansetest/roller-og-testdata.md`](../.claude/references/akseptansetest/roller-og-testdata.md)). `fs-testplan` fyller ut kolonnene `Nøkkel`, `Innlogging`, `Start-URL`, `Søk/URL`, `Utgangstilstand` og `Brukes av`, og leser koden for å vise hva løsningen krever.
-- **Testdata.** Testplanen sier hvilke testdata testene trenger, og i hvilken tilstand. Data i testmiljøet kan slettes eller nullstilles når som helst, så de automatiserte testene lager dataene sine selv: i fase 2 lager oppsettet i `cdp-tester/_Oppsett/` dem gjennom løsningen i hver kjøring. Bare grunndata (personaer, kodeverk, organisasjoner, regelverkssamlinger) og data testene ikke kan lage, må finnes i miljøet, og står i miljøfila.
+- **Testdata.** Testplanen sier hvilke testdata testene trenger, og i hvilken tilstand. Data i testmiljøet kan slettes eller nullstilles når som helst, så de automatiserte testene lager dataene sine selv: i fase 2 lager oppsettet i `cdp-tester/_Oppsett/` dem gjennom løsningen i hver kjøring. Bare grunndata (personaer, kodeverk, organisasjoner, regelverkssamlinger) og data testene ikke kan lage, må finnes i miljøet, og står i miljøfila. Unntaket er fase 4: testdataene lages på forhånd, i tilstanden flytene forutsetter, og testmiljøet nullstilles ikke i testperioden, så eksterne testere ikke må lage eller lete fram data selv.
 - **Ingen egne testcaser for roller.** `fs-verify` har verifisert i koden at rollene og tilgangene er laget slik kravet sier (fase 1). Scenarioene i kravet, også om synlighet, testes som de står.
 - **Nøkler, ikke navn.** Testene bruker nøkler (`brukeradministrator-alle-miljoer`), som slås opp i miljøfila (`cdp-tester/_Miljøer/<miljø>.md`) ved kjøring. Testene kjenner ikke testplanen, og overlever en ny testplan med andre testbrukere. Testplanen har en kopi av testbrukerne til testerne, og `fs-testplan` holder den i synk med miljøfila og testene.
 - **Resultatet** skrives til `akseptansetest/<slug>/kjoring-<YYYY-MM-DD>-<HHMM>/resultat.md` når kjøringen er en del av testplanen, og er et forslag: en tester bekrefter statusen, og `fs-testrapport` teller først etter det. Skjermbilder og annet legges i samme mappe, men `.gitignore` holder dem utenfor git: bare `resultat.md` committes.
