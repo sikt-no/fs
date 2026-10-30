@@ -2,7 +2,7 @@
 
 Testplanen er hovedsiden for en leveranse i Confluence, og grunnlaget for testcasene i den agentiske funksjonstesten (fase 2), den interne akseptansetesten (fase 3) og den eksterne akseptansetesten (fase 4). Malen er utledet fra [teststrategien (forslag)](https://sikt.atlassian.net/wiki/spaces/STUDIEADM/pages/5145100326) (*Testplan og sluttrapport*, og radene for hver fase) og «Mal: Testbeskrivelse» i [rutinen](https://sikt.atlassian.net/wiki/spaces/STUDIEADM/pages/5091196953).
 
-Testplanen lages etter verifiseringen (fase 1), og bygger på resultatet. Testplanen planlegger: den sier hvilke krav og flyter som testes, omfanget av testcasene som skal lages (*Testcaser som skal lages*), hvilke testbrukere og testdata testene trenger, og når fasene er ferdige. Selve testcasene lages av `fs-testcaser-cdp` (fase 2) og `fs-testcaser-intern` (fase 3), og står, med resultatene, på undersider og i `cdp-tester/`. Testplanen er hovedsiden, og lenker til dem. De eneste delene andre skills endrer, er sin egen rad i «Status i flyten», «Vedlegg» og radene i «Sporbarhet per krav».
+Testplanen er fase 1 (planen), sammen med verifiseringen før den, og bygger på resultatet av verifiseringen. Testplanen planlegger: den sier hvilke krav og flyter som testes, omfanget av testcasene som skal lages (*Testcaser som skal lages*), hvilke testbrukere og testdata testene trenger, og når fasene er ferdige. Selve testcasene lages av `fs-testcaser-cdp` (fase 2) og `fs-testcaser-intern` (fase 3), og står, med resultatene, på undersider og i `cdp-tester/`. Testplanen er hovedsiden, og lenker til dem. De eneste delene andre skills endrer, er sin egen rad i «Status i flyten», «Vedlegg» og radene i «Sporbarhet per krav».
 
 Fila skrives til `akseptansetest/<testplan-slug>/testplan.md`. Alt over den første streken er metadata for repoet, og publiseres ikke.
 
@@ -50,9 +50,9 @@ Kolonnene `Nøkkel` (etter `Nr`), `Innlogging` og `Start-URL` (etter `Organisasj
 
 | Nr | Nøkkel | Navn | Rolle | Organisasjon | Innlogging | Start-URL | Brukes til |
 |---|---|---|---|---|---|---|---|
-| 1 | <nøkkel> | <navn> | <rolle fra kravene> | <organisasjon> | <verdi i «Overstyrt bruker» (ellers Chrome-profil eller Feide-ID)> | <URL> | <hvilke krav eller deler> |
+| 1 | <rolle>-<relasjon> | <navn> | <forretningsrollen fra koden> | <organisasjon> | <raden i «Overstyrt bruker»: `<NAVN> • <rolle> (<organisasjon>)` (ellers Chrome-profil eller Feide-ID)> | <URL> | <hvilke krav eller deler> |
 
-Nøkkelen er et stabilt navn i kebab-case for rollen (`brukeradministrator-alle-miljoer`), og endres ikke om navnet på testbrukeren byttes. Aldri passord i testplanen. Se [`roller-og-testdata.md`](../../../references/akseptansetest/roller-og-testdata.md).
+Nøkkelen er rollen og relasjonen scenarioet trenger (`opptak-forvalter-deltakende`), aldri organisasjonen eller personen, og endres ikke om testbrukeren eller organisasjonen byttes. Rollene foreslås fra koden (*Finne rollene og foreslå testbrukere*), og personaen og `Innlogging` kopieres fra miljøfila (`cdp-tester/_Miljøer/<miljø>.md`), som er kilden: «Fra [<miljø>.md](<lenke>), <dato>». Er de uenige, gjelder miljøfila. Aldri passord i testplanen. Se [`roller-og-testdata.md`](../../../references/akseptansetest/roller-og-testdata.md).
 
 #### Tilgangsmatrise
 
@@ -64,11 +64,11 @@ Fra tilgangsradene i verify-rapporten. Den viser hvilke roller kravet har ved hv
 
 ### Testdata
 
-Testdataene testene trenger, med nøkkel. Testplanen sier hvilke data som trengs og hvilken tilstand de skal ha, ikke hvordan de lages: det løses separat, og ligger utenfor teststrategien. Testdata er syntetiske.
+Testdataene testene trenger, med nøkkel. Data i testmiljøet kan slettes eller nullstilles når som helst, så testene lager dataene sine selv: oppsettet ([`_Oppsett/<sti>/oppsett.feature`](<lenke>)) lager dem gjennom løsningen i hver kjøring, med kjøringen i navnet. Bare grunndata og data testene ikke kan lage, må finnes i miljøet før testen, og navnet og `Søk/URL` for dem kopieres fra miljøfila: «Fra [<miljø>.md](<lenke>), <dato>». Testdata er syntetiske.
 
 | Hva | Nøkkel | Navn | Hvor | Søk/URL | Utgangstilstand | Brukes av |
 |---|---|---|---|---|---|---|
-| <opptak, søker, regelverkssamling …> | <nøkkel> | <navn> | <lenke eller sted> | <hvordan objektet åpnes> | <hva testen forutsetter, med datoene i forhold til testdagen> | <Feature-ID og scenario, eller testcase-Nr> |
+| <opptak, søker, regelverkssamling …> | <nøkkel> | <navn> / Lages av oppsettet | <lenke eller sted> | <hvordan objektet åpnes> | <hva testen forutsetter, med datoene i forhold til testdagen> | <Feature-ID og scenario, eller testcase-Nr> |
 
 Data scenarioet selv lager (for eksempel «Opprett opptak»), står ikke her: de lages av stegene i testcasen (R13 i `testcase-regler.md`).
 
@@ -159,7 +159,7 @@ Ingen.                                                                  <når ve
 
 ## Testcaser som skal lages
 
-Omfanget av testcasene, ikke testcasene selv. `fs-testcaser-cdp` lager testcasene for fase 2 ut fra tabellen, og `fs-testcaser-intern` flyttestene for fase 3. Teamet og testansvarlig går gjennom omfanget før testcasene lages.
+Omfanget av testcasene, ikke testcasene selv. `fs-testcaser-cdp` lager testcasene for fase 2 ut fra tabellen, og `fs-testcaser-intern` testcasene for fase 3. Teamet og testansvarlig går gjennom omfanget før testcasene lages.
 
 ### Fase 2: agentisk funksjonstest
 
@@ -167,7 +167,7 @@ Omfanget av testcasene, ikke testcasene selv. `fs-testcaser-cdp` lager testcasen
 |---|---|---|---|---|
 | `@DOM-SUB-KAP-NNN` | <regeltittel, eller regel i koden uten scenario> | <N> (scenariomal: <N> eksempler) | <hva som prøves: obligatoriske felt «<felt>», «<felt>» (tomt, bare mellomrom, for lang verdi), grenseverdier for «<felt>», ugyldige statusoverganger …> | grenseverdianalyse / ekvivalensklasser / beslutningstabell / tilstandsoverganger / – |
 
-Testcasene står i `cdp-tester/<kravstien>/` (lenke når de er laget). Utledede testcaser lages bare der regelen har verdier eller betingelser å teste.
+Testcasene står i `cdp-tester/<kravstien>/` (lenke når de er laget). Finnes testene fra før, står de her som de er, og lages testene etter testplanen, synkes tabellen med `fs-testplan` (*Synk med testene og miljøfila*). Utledede testcaser lages bare der regelen har verdier eller betingelser å teste.
 
 ### Fase 3: intern akseptansetest
 
@@ -176,6 +176,14 @@ Testcasene står i `cdp-tester/<kravstien>/` (lenke når de er laget). Utledede 
 | <tittel på flyten, eller «Oppgave uten flyt: <oppgave>»> | `@DOM-SUB-KAP-NNN`, … | <N> | <fra avhengighetskartet, eller «–»> | ja: <tidligere levert flyt> / nei |
 
 Krav som ikke er med i noen flyt: <N>. De testes som oppgaver uten flyt, eller står i «Ikke med i denne testen» (se *Vurdering per krav*).
+
+I tillegg til flytene har den interne testen tre deler (*Fase 3* i `akseptansetest/README.md`). Omfanget avgjøres når testcasene lages, etter kjøringen i fase 2:
+
+| Del | Omfang | Hvem velger |
+|---|---|---|
+| Det den agentiske testen ikke klarte | Testcasene fra fase 2 som blir «Ikke testet». Kjent på forhånd: <data testene ikke kan lage, for eksempel en søker med søknad, eller «–»> | Kjøringen i fase 2 |
+| Opplevelse og helhet | <skjermene eller oppgavene: forståelig og brukbar, tekster og begreper, universell utforming> | Testansvarlig |
+| Høyest risiko | <kandidater: rettede funn, usikre scenarioer i verifiseringen, regler uten scenario, kjente begrensninger> | Testansvarlig, etter en risikovurdering |
 
 ## Ikke med i denne testen
 
@@ -244,7 +252,7 @@ Kravene i «Omfang» er kriteriene for godkjent: hvert scenario er et akseptanse
 | Fase | Side | Status | Dato |
 |---|---|---|---|
 | 1. Verifisering (`fs-verify`) | <lenke til verify-rapporten> | Alt funnet / <N> ikke funnet, <N> usikker / Ikke kjørt | <dato i rapporten> |
-| Testplan | (denne siden) | Laget | <YYYY-MM-DD> |
+| 1. Testplan | (denne siden) | Laget | <YYYY-MM-DD> |
 | 2. Agentisk funksjonstest | – | Venter | |
 | 3. Intern akseptansetest | – | Venter | |
 | 4. Ekstern akseptansetest | – | Venter / Ikke aktuell | |

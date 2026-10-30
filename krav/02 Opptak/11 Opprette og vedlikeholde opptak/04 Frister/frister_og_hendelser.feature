@@ -239,7 +239,7 @@ Egenskap: Frister og hendelser for opptak
       Når opptaksforvalter setter første svarfrist til "2027-07-20 23:59"
       Så har opptaket første svarfrist "2027-07-20 23:59"
 
-  @ref-OPT-BEH-BEH-012
+  @ref-OPT-BEH-BEH-012 @ref-OPT-BEH-BEH-028
   # Selve utregningen av alderen skjer i saksbehandlingen, i regelen
   # «Søkerens alder beregnes på opptakets dato for aldersberegning».
   Regel: Opptaksforvalter setter dato for aldersberegning

@@ -9,7 +9,7 @@ Egenskap: Automatisk kvoteplassering
   Automatisk plassering i kvoter er mulig dersom kvotespørsmålet lar seg besvare automatisk,
   og dersom dokumentasjon eller data knyttet til søknaden kan leses av systemet.
 
-  @depends-on-OPT-REG-KVO-001 @depends-on-OPT-BEH-BEH-020
+  @depends-on-OPT-REG-KVO-001 @depends-on-OPT-BEH-BEH-020 @ref-FLY-OPT-AUT-001
   # OPT-REG-KVO-001: «En kvotetype gjelder for grunnlagene den er koblet til».
   # OPT-BEH-BEH-020 avgjør om søkeren er kvalifisert på grunnlaget.
   Regel: Søkeren plasseres automatisk i en kvote uten kvotespørsmål
@@ -39,7 +39,7 @@ Egenskap: Automatisk kvoteplassering
       Når saksbehandleren behandler søknaden på grunnlaget "PRA"
       Så plasseres ikke søkeren i kvotetypen "ORDF"
 
-  @depends-on-OPT-OVO-FRI-001
+  @depends-on-OPT-OVO-FRI-001 @ref-OPT-BEH-BEH-028
   # Regelen «Opptaksforvalter setter dato for aldersberegning».
   Regel: Søkerens alder beregnes på opptakets dato for aldersberegning
 
@@ -85,7 +85,7 @@ Egenskap: Automatisk kvoteplassering
       Så ser ikke saksbehandleren kvotespørsmålet "FRA-HARDANGER"
       Og søkeren er ikke plassert i kvotetypen "JENTER-HARDANGER"
 
-  @depends-on-OPT-REG-KVO-002
+  @depends-on-OPT-REG-KVO-002 @ref-FLY-OPT-AUT-001
   # Regelen «Kvotespørsmål kan knyttes til en kvotetype».
   Regel: Søkeren plasseres i en kvote med kvotespørsmål når alle kvotespørsmålene er besvart ja
 
@@ -118,7 +118,7 @@ Egenskap: Automatisk kvoteplassering
       Så vises kvotespørsmålet "FRA-HARDANGER" én gang
       Og svaret på kvotespørsmålet "FRA-HARDANGER" gjelder for begge kvotetypene
 
-  @depends-on-OPT-REG-KVO-002
+  @depends-on-OPT-REG-KVO-002 @ref-FLY-OPT-AUT-001
   # Regelen «Et kvotespørsmål kan kobles til en algoritme som besvarer det automatisk».
   Regel: Kvotespørsmål med algoritme besvares automatisk og kan ikke endres av saksbehandleren
 
