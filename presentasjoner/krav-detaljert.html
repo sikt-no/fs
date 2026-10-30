@@ -1,0 +1,948 @@
+<!doctype html>
+<!-- Eksportert fra https://claude.ai/artifact/Sx4D8zmmWp8kz86Mqq88WY med presentasjoner/bygg.mjs. Endre artefaktet og eksporter på nytt, ikke rediger denne fila. -->
+<html lang="nb">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Krav – detaljert presentasjon</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:wght@400..700&family=IBM+Plex+Sans:wght@400;600&family=IBM+Plex+Mono:wght@400;600&display=swap">
+<style>
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;background:#0E1628;color:#F7F6F2;font-family:'IBM Plex Sans',Arial,sans-serif}
+.viewport{position:fixed;inset:0 0 56px 0;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.stage{width:1920px;height:1080px;flex:none;transform-origin:center center;box-shadow:0 8px 40px rgba(0,0,0,.5)}
+.slide{display:none;width:1920px;height:1080px}
+.slide.active{display:block}
+.slide section{width:1920px;height:1080px;position:relative;overflow:hidden;font-family:'IBM Plex Sans',Arial,sans-serif}
+/* Uten display i stilen er en section eller div en kolonne, som i artefaktet. Med display:flex er retningen rad, som i CSS */
+.slide section:not([style*="display"]),.slide div:not([style*="display"]){display:flex;flex-direction:column}
+.slide div{min-width:0}
+.slide h1,.slide h2,.slide h3,.slide p,.slide ul,.slide table{margin:0}
+.slide h1{line-height:1.1}.slide h2{line-height:1.15}.slide h3{line-height:1.2}.slide p,.slide li{line-height:1.4}
+.slide ul{padding-left:1.1em}
+.slide a{color:inherit}
+.slide aside{display:none}
+.slide table{width:100%;border-collapse:collapse}
+.slide th,.slide td{padding:.35em .6em;text-align:left;vertical-align:top;border-bottom:1px solid rgba(20,33,61,.15)}
+.slide th{font-weight:600}
+.slide x-shape{display:block;flex:none}
+.slide x-shape[kind="arrow-right"]{clip-path:polygon(0 30%,60% 30%,60% 0,100% 50%,60% 100%,60% 70%,0 70%)}
+.slide svg.xi{display:block;flex:none}
+.bar{position:fixed;left:0;right:0;bottom:0;height:56px;display:flex;align-items:center;gap:16px;padding:0 16px;background:#14213D;border-top:1px solid #24345A;font-size:15px}
+.bar a{color:#C9D3E3;text-decoration:none}.bar a:hover,.bar a[aria-current]{color:#F0A070}
+.bar .decks{display:flex;gap:16px;flex:1;min-width:0;overflow-x:auto;white-space:nowrap}
+.bar button{background:#24345A;color:#F7F6F2;border:0;border-radius:6px;height:34px;min-width:34px;padding:0 10px;font:inherit;cursor:pointer}
+.bar button:hover{background:#2F4470}
+.bar .count{font-variant-numeric:tabular-nums;color:#C9D3E3;min-width:64px;text-align:center}
+.notes{position:fixed;left:0;right:0;bottom:56px;max-height:40vh;overflow:auto;padding:16px 24px;background:#F7F6F2;color:#1F2A44;font-size:17px;line-height:1.5;border-top:3px solid #B4481A;display:none}
+.notes.open{display:block}
+@media (max-width:700px){.bar .decks{display:none}}
+@media print{
+  @page{size:1920px 1080px;margin:0}
+  html,body{background:#fff;height:auto}
+  .viewport{position:static;display:block}
+  .stage{transform:none!important;box-shadow:none;height:auto}
+  .slide{display:block;break-after:page}
+  .bar,.notes{display:none!important}
+}</style>
+</head>
+<body>
+<main class="viewport"><div class="stage">
+<div class="slide">
+<section id="cover" data-transition="fade" style="background:#14213D;color:#F7F6F2;font-family:'IBM Plex Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;justify-content:space-between">
+<p style="font-size:28px;font-weight:600;letter-spacing:4px;text-transform:uppercase;color:#F0A070">Slik jobber vi med krav · detaljert presentasjon</p>
+<div style="display:flex;flex-direction:column;gap:40px">
+<h1 style="font-family:'Source Serif 4', Georgia, serif;font-size:140px;font-weight:600;line-height:1.05;color:#F7F6F2">Under panseret</h1>
+<p style="font-size:40px;line-height:1.4;color:#C9D3E3;width:1300px">Taggene, oppgavemappene, verifiseringen og testene, for utviklere og andre som vil vite hvordan det henger sammen.</p>
+</div>
+<p style="font-size:28px;color:#8E9BB3">Forutsetter «Slik jobber vi med krav» · eksempel: @OPT-OVO-GRU-001</p>
+<aside>Denne presentasjonen bygger på den korte versjonen og går i detalj. Eksempelet er fortsatt «Opprette et opptak».</aside>
+</section>
+</div>
+<div class="slide">
+<section id="prosess" data-transition="fade" style="display:flex; flex-direction:column; gap:40px; padding:128px; background:#f7f6f2">
+  <div style="display:flex; flex-direction:column; gap:16px">
+    <p style="font-family:'IBM Plex Sans', Arial, sans-serif; font-size:24px; font-weight:600; letter-spacing:3px; text-transform:uppercase; color:#b4481a">Prosessen</p>
+    <h2 style="font-family:'Source Serif 4', Georgia, serif; font-size:72px; font-weight:600; line-height:1.1; color:#14213d">Én skill for hvert steg</h2>
+  </div>
+  <div style="display:flex; flex-direction:column; gap:12px">
+    <p style="font-family:'IBM Plex Sans', Arial, sans-serif; font-size:26px; font-weight:600; color:#14213d">Livsløpet til kravet</p>
+    <div style="display:flex; flex-direction:row; gap:8px">
+      <div style="display:flex; flex-direction:column; gap:6px; flex:1; padding:20px; background:#ffffff; border:1px solid #e1ded6; border-radius:16px">
+        <p style="font-family:'IBM Plex Mono', 'Courier New', monospace; font-size:24px; color:#b4481a">@draft</p>
+        <h3 style="font-family:'IBM Plex Sans', Arial, sans-serif; font-size:28px; font-weight:600; color:#14213d">Scope</h3>
+        <p style="font-family:'IBM Plex Mono', 'Courier New', monospace; font-size:24px; font-weight:600; color:#2f6fb0">/fs-scope</p>
+        <p style="font-family:'IBM Plex Sans', Arial, sans-serif; font-size:24px; line-height:1.4; color:#4a5568">Scope-fila og skjeletter</p>
+      </div>
+      <x-shape kind="arrow-right" style="width:28px; height:18px; align-self:center; background:#c9c3b4"></x-shape>
+      <div style="display:flex; flex-direction:column; gap:6px; flex:1; padding:20px; background:#ffffff; border:1px solid #e1ded6; border-radius:16px">
+        <p style="font-family:'IBM Plex Mono', 'Courier New', monospace; font-size:24px; color:#b4481a">@planned</p>
+        <h3 style="font-family:'IBM Plex Sans', Arial, sans-serif; font-size:28px; font-weight:600; color:#14213d">Krav</h3>
+        <p style="font-family:'IBM Plex Mono', 'Courier New', monospace; font-size:24px; font-weight:600; color:#2f6fb0">/fs-krav</p>
+        <p style="font-family:'IBM Plex Sans', Arial, sans-serif; font-size:24px; line-height:1.4; color:#4a5568">Feature-filer og flyter</p>
+      </div>
+      <x-shape kind="arrow-right" style="width:28px; height:18px; align-self:center; background:#c9c3b4"></x-shape>
+      <div style="display:flex; flex-direction:column; gap:6px; flex:1; padding:20px; background:#ffffff; border:1px solid #e1ded6; border-radius:16px">
+        <p style="font-family:'IBM Plex Mono', 'Courier New', monospace; font-size:24px; color:#b4481a">@in-progress</p>
+        <h3 style="font-family:'IBM Plex Sans', Arial, sans-serif; font-size:28px; font-weight:600; color:#14213d">Spesifikasjon</h3>
+        <p style="font-family:'IBM Plex Mono', 'Courier New', monospace; font-size:24px; font-weight:600; color:#2f6fb0">/fs-specify</p>
+        <p style="font-family:'IBM Plex Sans', Arial, sans-serif; font-size:24px; line-height:1.4; color:#4a5568">spec/ og design.md</p>
+      </div>
+      <x-shape kind="arrow-right" style="width:28px; height:18px; align-self:center; background:#c9c3b4"></x-shape>
+      <div style="display:flex; flex-direction:column; gap:6px; flex:1; padding:20px; background:#ffffff; border:1px solid #e1ded6; border-radius:16px">
+        <p style="font-family:'IBM Plex Mono', 'Courier New', monospace; font-size:24px; color:#b4481a">@in-progress</p>
+        <h3 style="font-family:'IBM Plex Sans', Arial, sans-serif; font-size:28px; font-weight:600; color:#14213d">Utvikling</h3>
+        <p style="font-family:'IBM Plex Sans', Arial, sans-serif; font-size:24px; font-weight:600; color:#2f6fb0">Repoets skills</p>
+        <p style="font-family:'IBM Plex Sans', Arial, sans-serif; font-size:24px; line-height:1.4; color:#4a5568">fs-plattform, fs-admin, min-kompetanse</p>
+      </div>
+      <x-shape kind="arrow-right" style="width:28px; height:18px; align-self:center; background:#c9c3b4"></x-shape>
+      <div style="display:flex; flex-direction:column; gap:6px; flex:1; padding:20px; background:#14213d; border:1px solid #14213d; border-radius:16px">
+        <p style="font-family:'IBM Plex Mono', 'Courier New', monospace; font-size:24px; color:#f0a070">@implemented</p>
+        <h3 style="font-family:'IBM Plex Sans', Arial, sans-serif; font-size:28px; font-weight:600; color:#f7f6f2">Verifisering</h3>
+        <p style="font-family:'IBM Plex Mono', 'Courier New', monospace; font-size:24px; font-weight:600; color:#9dc1e8">/fs-verify</p>
+        <p style="font-family:'IBM Plex Sans', Arial, sans-serif; font-size:24px; line-height:1.4; color:#c9d3e3">Verify-rapporten, fase 1 (plan)</p>
+      </div>
+    </div>
+  </div>
+  <div style="display:flex; flex-direction:column; gap:12px">
+    <p style="font-family:'IBM Plex Sans', Arial, sans-serif; font-size:26px; font-weight:600; color:#14213d">Akseptansetesten <span style="color:#4a5568">· fase 1 er planen: verifiseringen og testplanen</span></p>
+    <div style="display:flex; flex-direction:row; gap:8px">
+      <div style="display:flex; flex-direction:column; gap:6px; flex:1; padding:20px; background:#ffffff; border:1px solid #e1ded6; border-radius:16px">
+        <p style="font-family:'IBM Plex Sans', Arial, sans-serif; font-size:24px; font-weight:600; color:#b4481a">Fase 1 · plan</p>
+        <h3 style="font-family:'IBM Plex Sans', Arial, sans-serif; font-size:28px; font-weight:600; color:#14213d">Testplan</h3>
+        <p style="font-family:'IBM Plex Mono', 'Courier New', monospace; font-size:24px; font-weight:600; color:#2f6fb0">/fs-testplan</p>
+        <p style="font-family:'IBM Plex Sans', Arial, sans-serif; font-size:24px; line-height:1.4; color:#4a5568">Testplanen, også i Confluence</p>
+      </div>
+      <x-shape kind="arrow-right" style="width:28px; height:18px; align-self:center; background:#c9c3b4"></x-shape>
+      <div style="display:flex; flex-direction:column; gap:6px; flex:1; padding:20px; background:#ffffff; border:1px solid #e1ded6; border-radius:16px">
+        <p style="font-family:'IBM Plex Sans', Arial, sans-serif; font-size:24px; font-weight:600; color:#b4481a">Fase 2</p>
+        <h3 style="font-family:'IBM Plex Sans', Arial, sans-serif; font-size:28px; font-weight:600; color:#14213d">Agentisk test</h3>
+        <p style="font-family:'IBM Plex Mono', 'Courier New', monospace; font-size:24px; font-weight:600; color:#2f6fb0">/fs-testcaser-<br>cdp</p>
+        <p style="font-family:'IBM Plex Sans', Arial, sans-serif; font-size:24px; line-height:1.4; color:#4a5568">cdp-tester/ og oppsettet</p>
+      </div>
+      <x-shape kind="arrow-right" style="width:28px; height:18px; align-self:center; background:#c9c3b4"></x-shape>
+      <div style="display:flex; flex-direction:column; gap:6px; flex:1; padding:20px; background:#ffffff; border:1px solid #e1ded6; border-radius:16px">
+        <p style="font-family:'IBM Plex Sans', Arial, sans-serif; font-size:24px; font-weight:600; color:#b4481a">Fase 3</p>
+        <h3 style="font-family:'IBM Plex Sans', Arial, sans-serif; font-size:28px; font-weight:600; color:#14213d">Intern test</h3>
+        <p style="font-family:'IBM Plex Mono', 'Courier New', monospace; font-size:24px; font-weight:600; color:#2f6fb0">/fs-testcaser-<br>intern</p>
+        <p style="font-family:'IBM Plex Sans', Arial, sans-serif; font-size:24px; line-height:1.4; color:#4a5568">Fire deler</p>
+      </div>
+      <x-shape kind="arrow-right" style="width:28px; height:18px; align-self:center; background:#c9c3b4"></x-shape>
+      <div style="display:flex; flex-direction:column; gap:6px; flex:1; padding:20px; background:#ffffff; border:1px solid #e1ded6; border-radius:16px">
+        <p style="font-family:'IBM Plex Sans', Arial, sans-serif; font-size:24px; font-weight:600; color:#b4481a">Fase 4</p>
+        <h3 style="font-family:'IBM Plex Sans', Arial, sans-serif; font-size:28px; font-weight:600; color:#14213d">Ekstern test</h3>
+        <p style="font-family:'IBM Plex Mono', 'Courier New', monospace; font-size:24px; font-weight:600; color:#2f6fb0">/fs-testcaser-<br>ekstern</p>
+        <p style="font-family:'IBM Plex Sans', Arial, sans-serif; font-size:24px; line-height:1.4; color:#4a5568">Underlag til partene</p>
+      </div>
+      <x-shape kind="arrow-right" style="width:28px; height:18px; align-self:center; background:#c9c3b4"></x-shape>
+      <div style="display:flex; flex-direction:column; gap:6px; flex:1; padding:20px; background:#14213d; border:1px solid #14213d; border-radius:16px">
+        <p style="font-family:'IBM Plex Sans', Arial, sans-serif; font-size:24px; font-weight:600; color:#f0a070">Etter hver fase</p>
+        <h3 style="font-family:'IBM Plex Sans', Arial, sans-serif; font-size:28px; font-weight:600; color:#f7f6f2">Beslutning</h3>
+        <p style="font-family:'IBM Plex Mono', 'Courier New', monospace; font-size:24px; font-weight:600; color:#9dc1e8">/fs-testrapport</p>
+        <p style="font-family:'IBM Plex Sans', Arial, sans-serif; font-size:24px; line-height:1.4; color:#c9d3e3">Testansvarlig beslutter</p>
+      </div>
+    </div>
+  </div>
+  <aside>Samme bilde som side 2 i den korte presentasjonen, med skillen for hvert steg og hva den skriver. Øverst er statusen kravet har etter steget. /fs-specify-delta gjør det samme som /fs-specify for en endring, og /fs-verify-agent-teams det samme som /fs-verify, parallelt, når det er mange feature-filer. /fs-krav-avvik ser etter avvik som krever skjønn, og /fs-implementasjonsdetaljer skriver design.md når /fs-specify trenger den. Fase 1 er planen: /fs-verify og så /fs-testplan. Testene i fase 2 lager testdataene sine selv, i et oppsett i cdp-tester/_Oppsett/. Fase 3 har fire deler: det agenten ikke klarte, flyter og avhengigheter, opplevelse og helhet, og det med høyest risiko. Testrapporten fra /fs-testrapport lages etter hver fase, og agenten foreslår bare et utfall. Alle fs-skillene sjekker først at branchen er oppdatert mot main, også i kodeklonene de leser.</aside>
+</section>
+</div>
+<div class="slide">
+<section id="steg-scope" data-transition="fade" style="background:#F7F6F2;color:#1F2A44;font-family:'IBM Plex Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;gap:40px">
+<div style="display:flex;gap:8px">
+<div style="flex:1;height:8px;background:#B4481A;border-radius:4px"></div>
+<div style="flex:1;height:8px;background:#E1DED6;border-radius:4px"></div>
+<div style="flex:1;height:8px;background:#E1DED6;border-radius:4px"></div>
+<div style="flex:1;height:8px;background:#E1DED6;border-radius:4px"></div>
+<div style="flex:1;height:8px;background:#E1DED6;border-radius:4px"></div>
+<div style="width:24px;height:8px"></div>
+<div style="flex:1;height:8px;background:#E1DED6;border-radius:4px"></div>
+<div style="flex:1;height:8px;background:#E1DED6;border-radius:4px"></div>
+<div style="flex:1;height:8px;background:#E1DED6;border-radius:4px"></div>
+<div style="flex:1;height:8px;background:#E1DED6;border-radius:4px"></div>
+<div style="flex:1;height:8px;background:#E1DED6;border-radius:4px"></div>
+</div>
+<div style="display:flex;flex-direction:column;gap:16px">
+<div style="display:flex;justify-content:space-between;align-items:center">
+<p style="font-size:24px;font-weight:600;letter-spacing:3px;text-transform:uppercase;color:#B4481A">Livsløpet til kravet · 1 av 5 · Scope</p>
+<p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:30px;font-weight:600;color:#2F6FB0">/fs-scope</p>
+</div>
+<h2 style="font-family:'Source Serif 4', Georgia, serif;font-size:72px;font-weight:600;line-height:1.1;color:#14213D">Initiativet avgrenses og deles i oppgaver</h2>
+</div>
+<div style="display:flex;gap:24px">
+<div style="flex:1;display:flex;flex-direction:column;gap:12px;background:#FFFFFF;padding:36px;border:1px solid #E1DED6;border-radius:16px">
+<h3 style="font-size:24px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:#B4481A">Tar inn</h3>
+<p style="font-size:26px;line-height:1.4;color:#14213D">Initiativet, og kildene hvis de finnes: GitHub, Confluence, Jira, Figma, filer og nettadresser.</p>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:12px;background:#FFFFFF;padding:36px;border:1px solid #E1DED6;border-radius:16px">
+<h3 style="font-size:24px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:#B4481A">Gjør</h3>
+<p style="font-size:26px;line-height:1.4;color:#14213D">Avklarer mål og ikke-mål, deler initiativet i oppgaver, og bestemmer hvilke krav hver oppgave har.</p>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:12px;background:#FFFFFF;padding:36px;border:1px solid #E1DED6;border-radius:16px">
+<h3 style="font-size:24px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:#B4481A">Lager</h3>
+<p style="font-size:26px;line-height:1.4;color:#14213D">Scope-fila <span style="font-family:'IBM Plex Mono', 'Courier New', monospace;color:#2F6FB0">scope-&lt;slug&gt;.md</span>, en oppgave.md per oppgave, og skjelett-krav med <span style="font-family:'IBM Plex Mono', 'Courier New', monospace;color:#2F6FB0">@scope-&lt;slug&gt;</span>.</p>
+</div>
+</div>
+<div style="display:flex;align-items:center;gap:40px;background:#14213D;padding:28px 40px;border-radius:16px">
+<div style="width:300px;display:flex;flex-direction:column;gap:4px">
+<p style="font-size:24px;color:#C9D3E3">Status etterpå</p>
+<p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:28px;font-weight:600;color:#F0A070">@draft</p>
+</div>
+<p style="flex:1;font-size:26px;line-height:1.4;color:#F7F6F2">Et skjelett har brukerhistorie og Regel:-titler, men ingen scenarioer. Scopet kan kjøres på nytt når som helst.</p>
+</div>
+<aside>Scope-fila ligger i tasks/&lt;domene&gt;/, ved siden av oppgavemappene, og har én rad per krav: oppgave, krav, MoSCoW, skisse og issue. Statusen står ikke i scope-fila, men leses fra taggene i kravene. /fs-krav og /fs-specify foreslår /fs-scope når et krav ikke passer i scopet. Med taggen kan kravene i et scope testes for seg: npx playwright test --grep @scope-&lt;slug&gt;.</aside>
+</section>
+</div>
+<div class="slide">
+<section id="steg-krav" data-transition="fade" style="background:#F7F6F2;color:#1F2A44;font-family:'IBM Plex Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;gap:40px">
+<div style="display:flex;gap:8px">
+<div style="flex:1;height:8px;background:#E1DED6;border-radius:4px"></div>
+<div style="flex:1;height:8px;background:#B4481A;border-radius:4px"></div>
+<div style="flex:1;height:8px;background:#E1DED6;border-radius:4px"></div>
+<div style="flex:1;height:8px;background:#E1DED6;border-radius:4px"></div>
+<div style="flex:1;height:8px;background:#E1DED6;border-radius:4px"></div>
+<div style="width:24px;height:8px"></div>
+<div style="flex:1;height:8px;background:#E1DED6;border-radius:4px"></div>
+<div style="flex:1;height:8px;background:#E1DED6;border-radius:4px"></div>
+<div style="flex:1;height:8px;background:#E1DED6;border-radius:4px"></div>
+<div style="flex:1;height:8px;background:#E1DED6;border-radius:4px"></div>
+<div style="flex:1;height:8px;background:#E1DED6;border-radius:4px"></div>
+</div>
+<div style="display:flex;flex-direction:column;gap:16px">
+<div style="display:flex;justify-content:space-between;align-items:center">
+<p style="font-size:24px;font-weight:600;letter-spacing:3px;text-transform:uppercase;color:#B4481A">Livsløpet til kravet · 2 av 5 · Krav</p>
+<p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:30px;font-weight:600;color:#2F6FB0">/fs-krav</p>
+</div>
+<h2 style="font-family:'Source Serif 4', Georgia, serif;font-size:72px;font-weight:600;line-height:1.1;color:#14213D">Kravene skrives og valideres</h2>
+</div>
+<div style="display:flex;gap:24px">
+<div style="flex:1;display:flex;flex-direction:column;gap:12px;background:#FFFFFF;padding:36px;border:1px solid #E1DED6;border-radius:16px">
+<h3 style="font-size:24px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:#B4481A">Tar inn</h3>
+<p style="font-size:26px;line-height:1.4;color:#14213D">Skjelettene fra scopet, en samtale, og kilder som kode, skisser eller FS-klienten.</p>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:12px;background:#FFFFFF;padding:36px;border:1px solid #E1DED6;border-radius:16px">
+<h3 style="font-size:24px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:#B4481A">Gjør</h3>
+<p style="font-size:26px;line-height:1.4;color:#14213D">Skriver regler og scenarioer, og går gjennom utkastene ett spørsmål om gangen. Skriver også flytene.</p>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:12px;background:#FFFFFF;padding:36px;border:1px solid #E1DED6;border-radius:16px">
+<h3 style="font-size:24px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:#B4481A">Lager</h3>
+<p style="font-size:26px;line-height:1.4;color:#14213D">Feature-filer i <span style="font-family:'IBM Plex Mono', 'Courier New', monospace;color:#2F6FB0">krav/</span> og flyter i <span style="font-family:'IBM Plex Mono', 'Courier New', monospace;color:#2F6FB0">krav/_Flyter</span>, med uklarhetene i <span style="font-family:'IBM Plex Mono', 'Courier New', monospace;color:#2F6FB0"># ÅPNE SPØRSMÅL:</span></p>
+</div>
+</div>
+<div style="display:flex;align-items:center;gap:40px;background:#14213D;padding:28px 40px;border-radius:16px">
+<div style="width:300px;display:flex;flex-direction:column;gap:4px">
+<p style="font-size:24px;color:#C9D3E3">Status etterpå</p>
+<p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:28px;font-weight:600;color:#F0A070">@planned</p>
+</div>
+<p style="flex:1;font-size:26px;line-height:1.4;color:#F7F6F2">Bare det som er validert, får @planned. Resten blir stående som @draft, med spørsmålene skrevet ned.</p>
+</div>
+<aside>/fs-krav fjerner også krav: krav som ikke er levert, slettes, og leverte krav får @deprecated. Et levert krav endres ikke på stedet: den nye delen legges ved siden av som @draft, får @planned når den er validert, og delen den erstatter får @deprecated. /fs-krav setter også referansene @depends-on- og @ref-. /fs-krav-avvik ser etter avvik som krever skjønn, og som appen ikke sjekker: «egne» og «dem», terminologi, listevisningsmønsteret og referansene.</aside>
+</section>
+</div>
+<div class="slide">
+<section id="steg-spesifikasjon" data-transition="fade" style="background:#F7F6F2;color:#1F2A44;font-family:'IBM Plex Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;gap:40px">
+<div style="display:flex;gap:8px">
+<div style="flex:1;height:8px;background:#E1DED6;border-radius:4px"></div>
+<div style="flex:1;height:8px;background:#E1DED6;border-radius:4px"></div>
+<div style="flex:1;height:8px;background:#B4481A;border-radius:4px"></div>
+<div style="flex:1;height:8px;background:#E1DED6;border-radius:4px"></div>
+<div style="flex:1;height:8px;background:#E1DED6;border-radius:4px"></div>
+<div style="width:24px;height:8px"></div>
+<div style="flex:1;height:8px;background:#E1DED6;border-radius:4px"></div>
+<div style="flex:1;height:8px;background:#E1DED6;border-radius:4px"></div>
+<div style="flex:1;height:8px;background:#E1DED6;border-radius:4px"></div>
+<div style="flex:1;height:8px;background:#E1DED6;border-radius:4px"></div>
+<div style="flex:1;height:8px;background:#E1DED6;border-radius:4px"></div>
+</div>
+<div style="display:flex;flex-direction:column;gap:16px">
+<div style="display:flex;justify-content:space-between;align-items:center">
+<p style="font-size:24px;font-weight:600;letter-spacing:3px;text-transform:uppercase;color:#B4481A">Livsløpet til kravet · 3 av 5 · Spesifikasjon</p>
+<p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:30px;font-weight:600;color:#2F6FB0">/fs-specify</p>
+</div>
+<h2 style="font-family:'Source Serif 4', Georgia, serif;font-size:72px;font-weight:600;line-height:1.1;color:#14213D">Kravene hentes inn i oppgaven, med skissene</h2>
+</div>
+<div style="display:flex;gap:24px">
+<div style="flex:1;display:flex;flex-direction:column;gap:12px;background:#FFFFFF;padding:36px;border:1px solid #E1DED6;border-radius:16px">
+<h3 style="font-size:24px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:#B4481A">Tar inn</h3>
+<p style="font-size:26px;line-height:1.4;color:#14213D">Kravene som er @planned eller @deprecated, og skissene fra Figma, bilder eller PDF.</p>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:12px;background:#FFFFFF;padding:36px;border:1px solid #E1DED6;border-radius:16px">
+<h3 style="font-size:24px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:#B4481A">Gjør</h3>
+<p style="font-size:26px;line-height:1.4;color:#14213D">Kobler skissene til kravene, sjekker kravene mot koden, og holder tilbake det som må endres.</p>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:12px;background:#FFFFFF;padding:36px;border:1px solid #E1DED6;border-radius:16px">
+<h3 style="font-size:24px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:#B4481A">Lager</h3>
+<p style="font-size:26px;line-height:1.4;color:#14213D">Spesifikasjonen og skissene i <span style="font-family:'IBM Plex Mono', 'Courier New', monospace;color:#2F6FB0">spec/</span>, og tekstene og UI-et i <span style="font-family:'IBM Plex Mono', 'Courier New', monospace;color:#2F6FB0">&lt;feature&gt;.design.md</span>.</p>
+</div>
+</div>
+<div style="display:flex;align-items:center;gap:40px;background:#14213D;padding:28px 40px;border-radius:16px">
+<div style="width:300px;display:flex;flex-direction:column;gap:4px">
+<p style="font-size:24px;color:#C9D3E3">Status etterpå</p>
+<p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:28px;font-weight:600;color:#F0A070">@in-progress</p>
+</div>
+<p style="flex:1;font-size:26px;line-height:1.4;color:#F7F6F2">Klar til utvikling når spesifikasjonen har tittel, omfang, skisse, ingen åpne spørsmål, og alle kravene er hentet inn.</p>
+</div>
+<aside>/fs-specify-delta gjør det samme for en endring: en commit, en branch, en test-fil eller et markdown-dokument, og viser før og etter som festede git-referanser. /fs-implementasjonsdetaljer skriver &lt;feature&gt;.design.md, og kjøres av /fs-specify når den mangler eller ikke har tekstene fra skissene. @deprecated-krav beholder taggen: de tas med for at koden skal fjernes.</aside>
+</section>
+</div>
+<div class="slide">
+<section id="steg-utvikling" data-transition="fade" style="background:#F7F6F2;color:#1F2A44;font-family:'IBM Plex Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;gap:40px">
+<div style="display:flex;gap:8px">
+<div style="flex:1;height:8px;background:#E1DED6;border-radius:4px"></div>
+<div style="flex:1;height:8px;background:#E1DED6;border-radius:4px"></div>
+<div style="flex:1;height:8px;background:#E1DED6;border-radius:4px"></div>
+<div style="flex:1;height:8px;background:#B4481A;border-radius:4px"></div>
+<div style="flex:1;height:8px;background:#E1DED6;border-radius:4px"></div>
+<div style="width:24px;height:8px"></div>
+<div style="flex:1;height:8px;background:#E1DED6;border-radius:4px"></div>
+<div style="flex:1;height:8px;background:#E1DED6;border-radius:4px"></div>
+<div style="flex:1;height:8px;background:#E1DED6;border-radius:4px"></div>
+<div style="flex:1;height:8px;background:#E1DED6;border-radius:4px"></div>
+<div style="flex:1;height:8px;background:#E1DED6;border-radius:4px"></div>
+</div>
+<div style="display:flex;flex-direction:column;gap:16px">
+<div style="display:flex;justify-content:space-between;align-items:center">
+<p style="font-size:24px;font-weight:600;letter-spacing:3px;text-transform:uppercase;color:#B4481A">Livsløpet til kravet · 4 av 5 · Utvikling</p>
+<p style="font-size:30px;font-weight:600;color:#2F6FB0">Repoets skills</p>
+</div>
+<h2 style="font-family:'Source Serif 4', Georgia, serif;font-size:72px;font-weight:600;line-height:1.1;color:#14213D">Spesifikasjonen går gjennom kode-repoene</h2>
+</div>
+<div style="display:flex;gap:24px">
+<div style="flex:1;display:flex;flex-direction:column;gap:12px;background:#FFFFFF;padding:36px;border:1px solid #E1DED6;border-radius:16px">
+<h3 style="font-size:24px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:#B4481A">Tar inn</h3>
+<p style="font-size:26px;line-height:1.4;color:#14213D">Spesifikasjonen, feature-filene, skissene, og overleveringen fra forrige repo.</p>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:12px;background:#FFFFFF;padding:36px;border:1px solid #E1DED6;border-radius:16px">
+<h3 style="font-size:24px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:#B4481A">Gjør</h3>
+<p style="font-size:26px;line-height:1.4;color:#14213D">Ett repo om gangen, typisk fs-plattform og så fs-admin eller min-kompetanse, med repoets egne skills.</p>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:12px;background:#FFFFFF;padding:36px;border:1px solid #E1DED6;border-radius:16px">
+<h3 style="font-size:24px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:#B4481A">Lager</h3>
+<p style="font-size:26px;line-height:1.4;color:#14213D">PR-er i repoene, og <span style="font-family:'IBM Plex Mono', 'Courier New', monospace;color:#2F6FB0">utforing.md</span> med status, PR og overlevering for hvert repo.</p>
+</div>
+</div>
+<div style="display:flex;align-items:center;gap:40px;background:#14213D;padding:28px 40px;border-radius:16px">
+<div style="width:300px;display:flex;flex-direction:column;gap:4px">
+<p style="font-size:24px;color:#C9D3E3">Status etterpå</p>
+<p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:28px;font-weight:600;color:#F0A070">@in-progress</p>
+</div>
+<p style="flex:1;font-size:26px;line-height:1.4;color:#F7F6F2">Tavla «Oppgaver» har én kolonne per repo. Når alle repoene har levert, står oppgaven i «Til verifisering».</p>
+</div>
+<aside>Den som utfører et steg, kan være en person, en Claude Code-økt i repoet, eller en utførekjøring fra FS Kravforvaltning («Utfør i &lt;repo&gt;»). Protokollen: hent siste main, sett Status: pågår og Tatt av i utforing.md, implementer, og sett Status: levert med PR og overlevering. Overleveringen er det neste repo trenger å vite: nye felt, queries og mutations, og kjente avvik. utforing.md merges til main med PR, som kravene.</aside>
+</section>
+</div>
+<div class="slide">
+<section id="steg-verifisering" data-transition="fade" style="background:#F7F6F2;color:#1F2A44;font-family:'IBM Plex Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;gap:40px">
+<div style="display:flex;gap:8px">
+<div style="flex:1;height:8px;background:#E1DED6;border-radius:4px"></div>
+<div style="flex:1;height:8px;background:#E1DED6;border-radius:4px"></div>
+<div style="flex:1;height:8px;background:#E1DED6;border-radius:4px"></div>
+<div style="flex:1;height:8px;background:#E1DED6;border-radius:4px"></div>
+<div style="flex:1;height:8px;background:#B4481A;border-radius:4px"></div>
+<div style="width:24px;height:8px"></div>
+<div style="flex:1;height:8px;background:#E1DED6;border-radius:4px"></div>
+<div style="flex:1;height:8px;background:#E1DED6;border-radius:4px"></div>
+<div style="flex:1;height:8px;background:#E1DED6;border-radius:4px"></div>
+<div style="flex:1;height:8px;background:#E1DED6;border-radius:4px"></div>
+<div style="flex:1;height:8px;background:#E1DED6;border-radius:4px"></div>
+</div>
+<div style="display:flex;flex-direction:column;gap:16px">
+<div style="display:flex;justify-content:space-between;align-items:center">
+<p style="font-size:24px;font-weight:600;letter-spacing:3px;text-transform:uppercase;color:#B4481A">Livsløpet til kravet · 5 av 5 · Verifisering · Fase 1, plan</p>
+<p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:30px;font-weight:600;color:#2F6FB0">/fs-verify</p>
+</div>
+<h2 style="font-family:'Source Serif 4', Georgia, serif;font-size:72px;font-weight:600;line-height:1.1;color:#14213D">Koden sjekkes mot hvert scenario</h2>
+</div>
+<div style="display:flex;gap:24px">
+<div style="flex:1;display:flex;flex-direction:column;gap:12px;background:#FFFFFF;padding:36px;border:1px solid #E1DED6;border-radius:16px">
+<h3 style="font-size:24px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:#B4481A">Tar inn</h3>
+<p style="font-size:26px;line-height:1.4;color:#14213D">En spesifikasjon, et scope, en oppgave eller en mappe, og lokale kloner av kode-repoene.</p>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:12px;background:#FFFFFF;padding:36px;border:1px solid #E1DED6;border-radius:16px">
+<h3 style="font-size:24px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:#B4481A">Gjør</h3>
+<p style="font-size:26px;line-height:1.4;color:#14213D">Finner bevis med fil og linje for hvert scenario, får funnene kontrollert, og spør deg om det som er usikkert.</p>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:12px;background:#FFFFFF;padding:36px;border:1px solid #E1DED6;border-radius:16px">
+<h3 style="font-size:24px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:#B4481A">Lager</h3>
+<p style="font-size:26px;line-height:1.4;color:#14213D">Verify-rapporten <span style="font-family:'IBM Plex Mono', 'Courier New', monospace;color:#2F6FB0">verify-&lt;dato&gt;-&lt;HHMM&gt;.md</span>, med tilgangene og reglene i koden uten scenario.</p>
+</div>
+</div>
+<div style="display:flex;align-items:center;gap:40px;background:#14213D;padding:28px 40px;border-radius:16px">
+<div style="width:300px;display:flex;flex-direction:column;gap:4px">
+<p style="font-size:24px;color:#C9D3E3">Status etterpå</p>
+<p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:28px;font-weight:600;color:#F0A070">@implemented</p>
+</div>
+<p style="flex:1;font-size:26px;line-height:1.4;color:#F7F6F2">Ingenting kjøres, og @implemented betyr at koden er funnet. Mangler noe, sendes steget tilbake til repoet der koden mangler.</p>
+</div>
+<aside>Er noe av et krav levert, men ikke alt, blir egenskapen @in-progress og de leverte delene @implemented. @deprecated-krav slettes når koden er borte, ellers viser rapporten hvor koden fortsatt finnes. /fs-verify verifiserer også flytene: at overleveringene mellom kravene virker i koden. Tilgangsradene (rolle × organisasjon × opprette, lese, endre, slette) er grunnlaget for testbrukerne i testplanen. Mange feature-filer? /fs-verify-agent-teams gjør det samme med finnere og kontrollører parallelt, men bare i en interaktiv økt i terminalen.</aside>
+</section>
+</div>
+<div class="slide">
+<section id="steg-testplan" data-transition="fade" style="background:#F7F6F2;color:#1F2A44;font-family:'IBM Plex Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;gap:40px">
+<div style="display:flex;gap:8px">
+<div style="flex:1;height:8px;background:#E1DED6;border-radius:4px"></div>
+<div style="flex:1;height:8px;background:#E1DED6;border-radius:4px"></div>
+<div style="flex:1;height:8px;background:#E1DED6;border-radius:4px"></div>
+<div style="flex:1;height:8px;background:#E1DED6;border-radius:4px"></div>
+<div style="flex:1;height:8px;background:#E1DED6;border-radius:4px"></div>
+<div style="width:24px;height:8px"></div>
+<div style="flex:1;height:8px;background:#B4481A;border-radius:4px"></div>
+<div style="flex:1;height:8px;background:#E1DED6;border-radius:4px"></div>
+<div style="flex:1;height:8px;background:#E1DED6;border-radius:4px"></div>
+<div style="flex:1;height:8px;background:#E1DED6;border-radius:4px"></div>
+<div style="flex:1;height:8px;background:#E1DED6;border-radius:4px"></div>
+</div>
+<div style="display:flex;flex-direction:column;gap:16px">
+<div style="display:flex;justify-content:space-between;align-items:center">
+<p style="font-size:24px;font-weight:600;letter-spacing:3px;text-transform:uppercase;color:#B4481A">Akseptansetesten · Fase 1 · Testplan</p>
+<p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:30px;font-weight:600;color:#2F6FB0">/fs-testplan</p>
+</div>
+<h2 style="font-family:'Source Serif 4', Georgia, serif;font-size:72px;font-weight:600;line-height:1.1;color:#14213D">Testplanen bestemmer hva som testes</h2>
+</div>
+<div style="display:flex;gap:24px">
+<div style="flex:1;display:flex;flex-direction:column;gap:12px;background:#FFFFFF;padding:36px;border:1px solid #E1DED6;border-radius:16px">
+<h3 style="font-size:24px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:#B4481A">Tar inn</h3>
+<p style="font-size:26px;line-height:1.4;color:#14213D">Verify-rapporten, og leveransen: et scope, en oppgave, en mappe eller feature-filer.</p>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:12px;background:#FFFFFF;padding:36px;border:1px solid #E1DED6;border-radius:16px">
+<h3 style="font-size:24px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:#B4481A">Gjør</h3>
+<p style="font-size:26px;line-height:1.4;color:#14213D">Velger kravene og flytene som er levert, og planlegger testcasene, testdataene og testbrukerne.</p>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:12px;background:#FFFFFF;padding:36px;border:1px solid #E1DED6;border-radius:16px">
+<h3 style="font-size:24px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:#B4481A">Lager</h3>
+<p style="font-size:26px;line-height:1.4;color:#14213D"><span style="font-family:'IBM Plex Mono', 'Courier New', monospace;color:#2F6FB0">testplan.md</span>, <span style="font-family:'IBM Plex Mono', 'Courier New', monospace;color:#2F6FB0">omfang.md</span>, <span style="font-family:'IBM Plex Mono', 'Courier New', monospace;color:#2F6FB0">testcaser-og-testdata.md</span> og <span style="font-family:'IBM Plex Mono', 'Courier New', monospace;color:#2F6FB0">sporbarhet.md</span> i <span style="font-family:'IBM Plex Mono', 'Courier New', monospace;color:#2F6FB0">akseptansetest/&lt;slug&gt;/</span>, og hovedsiden og tre undersider i Confluence når du sier ja.</p>
+</div>
+</div>
+<div style="display:flex;align-items:center;gap:40px;background:#14213D;padding:28px 40px;border-radius:16px">
+<div style="width:300px;display:flex;flex-direction:column;gap:4px">
+<p style="font-size:24px;color:#C9D3E3">I testflyten</p>
+<p style="font-size:28px;font-weight:600;color:#F0A070">Fase 1, plan</p>
+</div>
+<p style="flex:1;font-size:26px;line-height:1.4;color:#F7F6F2">Testplanen planlegger, men lager ikke testcasene. Kravene er kriteriene for godkjent i alle fasene.</p>
+</div>
+<aside>Kravene står med Feature-ID i «Omfang», så alle fasene tester de samme kravene, og flytene i krav/_Flyter som går gjennom kravene, står i «Flyter». Testplanen er andre del av fase 1, planen, etter /fs-verify. Testbrukerne nummereres ut fra tilgangsmatrisen fra /fs-verify. Testdataene sier testplanen bare hvilke som trengs: testene lager dem selv, i oppsettet, og bare grunndata og det testene ikke kan lage, må finnes i testmiljøet. «Testcaser som skal lages» har også de tre nye delene i fase 3. Testplanen er delt i hovedsiden og tre undersider, så hver del kan oppdateres for seg. Hovedsiden har testbeskrivelsen, forutsetningene, når fasene er ferdige, funn, beslutning og «Status i flyten». «Omfang» har kravene og flytene, åpne spørsmål per krav (de stopper ikke testen), avhengighetskartet og reglene i koden uten scenario. «Testcaser og testdata» har testcasene som skal lages, testbrukerne og testdataene. «Sporbarhet» har kolonnen for fase 1 (kode) fra verify-rapporten, og fylles ut i hver fase. De andre fasene er også undersider.</aside>
+</section>
+</div>
+<div class="slide">
+<section id="steg-fase2" data-transition="fade" style="background:#F7F6F2;color:#1F2A44;font-family:'IBM Plex Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;gap:40px">
+<div style="display:flex;gap:8px">
+<div style="flex:1;height:8px;background:#E1DED6;border-radius:4px"></div>
+<div style="flex:1;height:8px;background:#E1DED6;border-radius:4px"></div>
+<div style="flex:1;height:8px;background:#E1DED6;border-radius:4px"></div>
+<div style="flex:1;height:8px;background:#E1DED6;border-radius:4px"></div>
+<div style="flex:1;height:8px;background:#E1DED6;border-radius:4px"></div>
+<div style="width:24px;height:8px"></div>
+<div style="flex:1;height:8px;background:#E1DED6;border-radius:4px"></div>
+<div style="flex:1;height:8px;background:#B4481A;border-radius:4px"></div>
+<div style="flex:1;height:8px;background:#E1DED6;border-radius:4px"></div>
+<div style="flex:1;height:8px;background:#E1DED6;border-radius:4px"></div>
+<div style="flex:1;height:8px;background:#E1DED6;border-radius:4px"></div>
+</div>
+<div style="display:flex;flex-direction:column;gap:16px">
+<div style="display:flex;justify-content:space-between;align-items:center">
+<p style="font-size:24px;font-weight:600;letter-spacing:3px;text-transform:uppercase;color:#B4481A">Akseptansetesten · Fase 2 · Agentisk test</p>
+<p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:30px;font-weight:600;color:#2F6FB0">/fs-testcaser-cdp</p>
+</div>
+<h2 style="font-family:'Source Serif 4', Georgia, serif;font-size:72px;font-weight:600;line-height:1.1;color:#14213D">En agent tester i nettleseren mot testmiljøet</h2>
+</div>
+<div style="display:flex;gap:24px">
+<div style="flex:1;display:flex;flex-direction:column;gap:12px;background:#FFFFFF;padding:36px;border:1px solid #E1DED6;border-radius:16px">
+<h3 style="font-size:24px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:#B4481A">Tar inn</h3>
+<p style="font-size:26px;line-height:1.4;color:#14213D">Kravene som er @implemented, og testplanen, som bare velger hvilke krav som testes.</p>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:12px;background:#FFFFFF;padding:36px;border:1px solid #E1DED6;border-radius:16px">
+<h3 style="font-size:24px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:#B4481A">Gjør</h3>
+<p style="font-size:26px;line-height:1.4;color:#14213D">Lager en test per scenario, og flere fra reglene: positiv og negativ testing, tomme felt og grenseverdier.</p>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:12px;background:#FFFFFF;padding:36px;border:1px solid #E1DED6;border-radius:16px">
+<h3 style="font-size:24px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:#B4481A">Lager</h3>
+<p style="font-size:26px;line-height:1.4;color:#14213D">Varige tester i <span style="font-family:'IBM Plex Mono', 'Courier New', monospace;color:#2F6FB0">cdp-tester/</span>, og et oppsett som lager testdataene i hver kjøring. Kjøringen, med bevis og skjermbilder, havner i <span style="font-family:'IBM Plex Mono', 'Courier New', monospace;color:#2F6FB0">akseptansetest/</span>.</p>
+</div>
+</div>
+<div style="display:flex;align-items:center;gap:40px;background:#14213D;padding:28px 40px;border-radius:16px">
+<div style="width:300px;display:flex;flex-direction:column;gap:4px">
+<p style="font-size:24px;color:#C9D3E3">Kjøres med</p>
+<p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:28px;font-weight:600;color:#F0A070">/cdp</p>
+</div>
+<p style="flex:1;font-size:26px;line-height:1.4;color:#F7F6F2">Et tilfelle agenten finner, men som kravet ikke dekker, blir funnet «Kravet dekker ikke», og går tilbake til kravarbeidet.</p>
+</div>
+<aside>Testbrukere og testdata er nøkler, som opptak-forvalter-deltakende. Testbrukerne slås opp i miljøfila cdp-tester/_Miljøer/&lt;miljø&gt;.md. Testdataene lager testene selv: oppsettet i cdp-tester/_Oppsett/ kjøres først i hver kjøring, og lager dem gjennom løsningen, med kjøringen i navnet, fordi data i testmiljøet kan slettes når som helst. Det testene ikke kan lage, testes i fase 3. Testene har bare det som varer: ingen kravstatus, kjente mangler, testplan eller miljøverdier. Hver test har @depends-on- til kravet og en header med commit og blob-hash, så det blir en diff når kravet endres. Testteknikken velges og skrives ned per regel. Roller og tilgang får ikke egne testcaser, siden de er verifisert i koden i fase 1. Overleveringene i flytene blir tester i cdp-tester/_Løp/. /cdp er ikke i repoet, og installeres av hver bruker.</aside>
+</section>
+</div>
+<div class="slide">
+<section id="steg-fase3" data-transition="fade" style="background:#F7F6F2;color:#1F2A44;font-family:'IBM Plex Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;gap:40px">
+<div style="display:flex;gap:8px">
+<div style="flex:1;height:8px;background:#E1DED6;border-radius:4px"></div>
+<div style="flex:1;height:8px;background:#E1DED6;border-radius:4px"></div>
+<div style="flex:1;height:8px;background:#E1DED6;border-radius:4px"></div>
+<div style="flex:1;height:8px;background:#E1DED6;border-radius:4px"></div>
+<div style="flex:1;height:8px;background:#E1DED6;border-radius:4px"></div>
+<div style="width:24px;height:8px"></div>
+<div style="flex:1;height:8px;background:#E1DED6;border-radius:4px"></div>
+<div style="flex:1;height:8px;background:#E1DED6;border-radius:4px"></div>
+<div style="flex:1;height:8px;background:#B4481A;border-radius:4px"></div>
+<div style="flex:1;height:8px;background:#E1DED6;border-radius:4px"></div>
+<div style="flex:1;height:8px;background:#E1DED6;border-radius:4px"></div>
+</div>
+<div style="display:flex;flex-direction:column;gap:16px">
+<div style="display:flex;justify-content:space-between;align-items:center">
+<p style="font-size:24px;font-weight:600;letter-spacing:3px;text-transform:uppercase;color:#B4481A">Akseptansetesten · Fase 3 · Intern test</p>
+<p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:30px;font-weight:600;color:#2F6FB0">/fs-testcaser-intern</p>
+</div>
+<h2 style="font-family:'Source Serif 4', Georgia, serif;font-size:72px;font-weight:600;line-height:1.1;color:#14213D">Testerne tester det agenten ikke kan</h2>
+</div>
+<div style="display:flex;gap:24px">
+<div style="flex:1;display:flex;flex-direction:column;gap:12px;background:#FFFFFF;padding:36px;border:1px solid #E1DED6;border-radius:16px">
+<h3 style="font-size:24px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:#B4481A">Tar inn</h3>
+<p style="font-size:26px;line-height:1.4;color:#14213D">Testplanen, med kravene og flytene, og rapporten fra den agentiske testen.</p>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:12px;background:#FFFFFF;padding:36px;border:1px solid #E1DED6;border-radius:16px">
+<h3 style="font-size:24px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:#B4481A">Gjør</h3>
+<p style="font-size:26px;line-height:1.4;color:#14213D">Lager testcaser i fire deler: det agenten ikke klarte, flytene og avhengighetene, opplevelse og helhet, og det med høyest risiko.</p>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:12px;background:#FFFFFF;padding:36px;border:1px solid #E1DED6;border-radius:16px">
+<h3 style="font-size:24px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:#B4481A">Lager</h3>
+<p style="font-size:26px;line-height:1.4;color:#14213D"><span style="font-family:'IBM Plex Mono', 'Courier New', monospace;color:#2F6FB0">testcaser-intern.md</span>, og en underside til testplanen i Confluence når du sier ja.</p>
+</div>
+</div>
+<div style="display:flex;align-items:center;gap:40px;background:#14213D;padding:28px 40px;border-radius:16px">
+<div style="width:300px;display:flex;flex-direction:column;gap:4px">
+<p style="font-size:24px;color:#C9D3E3">Tester ikke på nytt</p>
+<p style="font-size:28px;font-weight:600;color:#F0A070">Det fase 2 besto</p>
+</div>
+<p style="flex:1;font-size:26px;line-height:1.4;color:#F7F6F2">Feltvalidering og feilsituasjoner fase 2 har bestått, utenom det testansvarlig velger etter en risikovurdering. Tilgangene er sjekket i fase 1.</p>
+</div>
+<aside>De fire delene: 1) testcasene fra fase 2 som ble «Ikke testet», for eksempel data testene ikke kan lage, 2) flytene og avhengighetene, med regresjon av flytene leveransen endrer, 3) opplevelse og helhet: forståelig og brukbar, tekster og fagspråk, og universell utforming, der testeren skriver vurderingen sin, og 4) det med høyest risiko, valgt av testansvarlig, også det fase 2 har bestått. For hvert krav vurderer skillen om det inngår i en flyt i krav/_Flyter, og om flyten skal testes. Krav som ikke hører til en flyt, får én testcase per oppgave. Hver testcase har hensikt, testdata, forventet resultat og avhengighetene som sjekkes underveis. Stegene har testbrukeren fra testplanen, ordene fra skjermen, alle verdiene, og en sjekk av at det er lagret. Regresjonen finnes med @depends-on-.</aside>
+</section>
+</div>
+<div class="slide">
+<section id="steg-fase4" data-transition="fade" style="background:#F7F6F2;color:#1F2A44;font-family:'IBM Plex Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;gap:40px">
+<div style="display:flex;gap:8px">
+<div style="flex:1;height:8px;background:#E1DED6;border-radius:4px"></div>
+<div style="flex:1;height:8px;background:#E1DED6;border-radius:4px"></div>
+<div style="flex:1;height:8px;background:#E1DED6;border-radius:4px"></div>
+<div style="flex:1;height:8px;background:#E1DED6;border-radius:4px"></div>
+<div style="flex:1;height:8px;background:#E1DED6;border-radius:4px"></div>
+<div style="width:24px;height:8px"></div>
+<div style="flex:1;height:8px;background:#E1DED6;border-radius:4px"></div>
+<div style="flex:1;height:8px;background:#E1DED6;border-radius:4px"></div>
+<div style="flex:1;height:8px;background:#E1DED6;border-radius:4px"></div>
+<div style="flex:1;height:8px;background:#B4481A;border-radius:4px"></div>
+<div style="flex:1;height:8px;background:#E1DED6;border-radius:4px"></div>
+</div>
+<div style="display:flex;flex-direction:column;gap:16px">
+<div style="display:flex;justify-content:space-between;align-items:center">
+<p style="font-size:24px;font-weight:600;letter-spacing:3px;text-transform:uppercase;color:#B4481A">Akseptansetesten · Fase 4 · Ekstern test</p>
+<p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:30px;font-weight:600;color:#2F6FB0">/fs-testcaser-ekstern</p>
+</div>
+<h2 style="font-family:'Source Serif 4', Georgia, serif;font-size:72px;font-weight:600;line-height:1.1;color:#14213D">HK-dir og lærestedene tester med sine egne krav</h2>
+</div>
+<div style="display:flex;gap:24px">
+<div style="flex:1;display:flex;flex-direction:column;gap:12px;background:#FFFFFF;padding:36px;border:1px solid #E1DED6;border-radius:16px">
+<h3 style="font-size:24px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:#B4481A">Tar inn</h3>
+<p style="font-size:26px;line-height:1.4;color:#14213D">Testplanen, rapporten fra den interne testen, og kravene til partene hvis de finnes.</p>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:12px;background:#FFFFFF;padding:36px;border:1px solid #E1DED6;border-radius:16px">
+<h3 style="font-size:24px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:#B4481A">Gjør</h3>
+<p style="font-size:26px;line-height:1.4;color:#14213D">Foreslår flyter som utgangspunkt, uten tekniske ord, og viser hva som er testet i fase 1–3.</p>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:12px;background:#FFFFFF;padding:36px;border:1px solid #E1DED6;border-radius:16px">
+<h3 style="font-size:24px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:#B4481A">Lager</h3>
+<p style="font-size:26px;line-height:1.4;color:#14213D">Testcasene og flytbeskrivelsene til partene, og en underside i Confluence når du sier ja.</p>
+</div>
+</div>
+<div style="display:flex;align-items:center;gap:40px;background:#14213D;padding:28px 40px;border-radius:16px">
+<div style="width:300px;display:flex;flex-direction:column;gap:4px">
+<p style="font-size:24px;color:#C9D3E3">Funnene</p>
+<p style="font-size:28px;font-weight:600;color:#F0A070">To typer</p>
+</div>
+<p style="flex:1;font-size:26px;line-height:1.4;color:#F7F6F2">Feil er avvik fra kravene våre. Endringsforslag er krav vi ikke har, og går til kravarbeidet.</p>
+</div>
+<aside>Partene har egne krav og akseptansekriterier, og lager eller eier testcasene sine. Sikts feature-filer er ikke grunnlaget. Bare leveranser som er godkjent i den interne testen, går til fase 4, og bare hovedflyten testes: feilsituasjonene er testet i fase 2. Skillen eksporterer også flytbeskrivelsene fra den interne testen og rapportene fra fase 2 og 3 til partene. Filene heter testcaser-ekstern.md og flytbeskrivelser-ekstern.md, i akseptansetest/&lt;slug&gt;/.</aside>
+</section>
+</div>
+<div class="slide">
+<section id="steg-beslutning" data-transition="fade" style="background:#F7F6F2;color:#1F2A44;font-family:'IBM Plex Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;gap:40px">
+<div style="display:flex;gap:8px">
+<div style="flex:1;height:8px;background:#E1DED6;border-radius:4px"></div>
+<div style="flex:1;height:8px;background:#E1DED6;border-radius:4px"></div>
+<div style="flex:1;height:8px;background:#E1DED6;border-radius:4px"></div>
+<div style="flex:1;height:8px;background:#E1DED6;border-radius:4px"></div>
+<div style="flex:1;height:8px;background:#E1DED6;border-radius:4px"></div>
+<div style="width:24px;height:8px"></div>
+<div style="flex:1;height:8px;background:#E1DED6;border-radius:4px"></div>
+<div style="flex:1;height:8px;background:#E1DED6;border-radius:4px"></div>
+<div style="flex:1;height:8px;background:#E1DED6;border-radius:4px"></div>
+<div style="flex:1;height:8px;background:#E1DED6;border-radius:4px"></div>
+<div style="flex:1;height:8px;background:#B4481A;border-radius:4px"></div>
+</div>
+<div style="display:flex;flex-direction:column;gap:16px">
+<div style="display:flex;justify-content:space-between;align-items:center">
+<p style="font-size:24px;font-weight:600;letter-spacing:3px;text-transform:uppercase;color:#B4481A">Akseptansetesten · Etter hver fase · Beslutning</p>
+<p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:30px;font-weight:600;color:#2F6FB0">/fs-testrapport</p>
+</div>
+<h2 style="font-family:'Source Serif 4', Georgia, serif;font-size:72px;font-weight:600;line-height:1.1;color:#14213D">Rapporten foreslår, testansvarlig beslutter</h2>
+</div>
+<div style="display:flex;gap:24px">
+<div style="flex:1;display:flex;flex-direction:column;gap:12px;background:#FFFFFF;padding:36px;border:1px solid #E1DED6;border-radius:16px">
+<h3 style="font-size:24px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:#B4481A">Tar inn</h3>
+<p style="font-size:26px;line-height:1.4;color:#14213D">Resultatene fra fasen: verify-rapporten, kjøringen i fase 2, eller testsiden i Confluence i fase 3 og 4.</p>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:12px;background:#FFFFFF;padding:36px;border:1px solid #E1DED6;border-radius:16px">
+<h3 style="font-size:24px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:#B4481A">Gjør</h3>
+<p style="font-size:26px;line-height:1.4;color:#14213D">Teller resultatene per krav, sorterer funnene etter alvorlighetsgrad og type, og foreslår et utfall.</p>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:12px;background:#FFFFFF;padding:36px;border:1px solid #E1DED6;border-radius:16px">
+<h3 style="font-size:24px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:#B4481A">Lager</h3>
+<p style="font-size:26px;line-height:1.4;color:#14213D">En testrapport per fase. Oppdaterer «Status i flyten» i testplanen, og kolonnen for fasen på sporbarhetssiden.</p>
+</div>
+</div>
+<div style="display:flex;align-items:center;gap:40px;background:#14213D;padding:28px 40px;border-radius:16px">
+<div style="width:300px;display:flex;flex-direction:column;gap:4px">
+<p style="font-size:24px;color:#C9D3E3">Utfallet</p>
+<p style="font-size:28px;font-weight:600;color:#F0A070">Et forslag</p>
+</div>
+<p style="flex:1;font-size:26px;line-height:1.4;color:#F7F6F2">Godkjent, godkjent med forbehold eller ikke godkjent. Agenten kan aldri godkjenne en leveranse.</p>
+</div>
+<aside>Rapporten finnes på fire nivåer: verifisering, agentisk, intern og ekstern. Den lister også testcaser som er «Bestått» selv om faktisk resultat avviker. Etter den agentiske testen sier rapporten om inngangskriteriet til den interne testen er oppfylt: ingen åpne «Stopper»-funn, og testansvarlig har gått gjennom rapporten. Testansvarlig, eller deltakerne i den eksterne testen, skriver beslutningen. Fila heter testrapport-&lt;nivå&gt;-&lt;dato&gt;.md, i akseptansetest/&lt;slug&gt;/, og blir en underside til testplanen når du sier ja. Kolonnen for fasen fylles ut på sporbarhetssiden og i sporbarhet.md, ikke i testplanen: testcase, teknikk og resultat i fase 2, og flyt i fase 3. Har en eldre testplan tabellen i seg, flyttes den ut først.</aside>
+</section>
+</div>
+<div class="slide">
+<section id="repo" data-transition="fade" style="background:#F7F6F2;color:#1F2A44;font-family:'IBM Plex Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;gap:40px">
+<div style="display:flex;flex-direction:column;gap:16px">
+<p style="font-size:24px;font-weight:600;letter-spacing:3px;text-transform:uppercase;color:#B4481A">Repoet sikt-no/fs</p>
+<h2 style="font-family:'Source Serif 4', Georgia, serif;font-size:72px;font-weight:600;line-height:1.1;color:#14213D">Krav, oppgaver og tester i samme repo</h2>
+</div>
+<div style="display:flex;flex-direction:column">
+<div style="display:flex;gap:48px;padding:16px 0px;border-bottom:1px solid #E1DED6">
+<p style="width:500px;font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:30px;font-weight:600;color:#14213D">krav/</p>
+<p style="flex:1;font-size:28px;line-height:1.4;color:#4A5568">Feature-filene, med &lt;feature&gt;.design.md ved siden av. Bare Gherkin, ingen kode</p>
+</div>
+<div style="display:flex;gap:48px;padding:16px 0px;border-bottom:1px solid #E1DED6">
+<p style="width:500px;font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:30px;font-weight:600;color:#14213D">tasks/</p>
+<p style="flex:1;font-size:28px;line-height:1.4;color:#4A5568">Scope-filene og én mappe per oppgave, delt av mennesker og agenter</p>
+</div>
+<div style="display:flex;gap:48px;padding:16px 0px;border-bottom:1px solid #E1DED6">
+<p style="width:500px;font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:30px;font-weight:600;color:#14213D">cdp-tester/</p>
+<p style="flex:1;font-size:28px;line-height:1.4;color:#4A5568">Varige tester for den agentiske testen, og miljøfilene</p>
+</div>
+<div style="display:flex;gap:48px;padding:16px 0px;border-bottom:1px solid #E1DED6">
+<p style="width:500px;font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:30px;font-weight:600;color:#14213D">akseptansetest/</p>
+<p style="flex:1;font-size:28px;line-height:1.4;color:#4A5568">Testplaner, testcaser, kjøringer og rapporter per leveranse</p>
+</div>
+<div style="display:flex;gap:48px;padding:16px 0px;border-bottom:1px solid #E1DED6">
+<p style="width:500px;font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:30px;font-weight:600;color:#14213D">.claude/</p>
+<p style="flex:1;font-size:28px;line-height:1.4;color:#4A5568">Skills, agenter og reglene Claude følger</p>
+</div>
+<div style="display:flex;gap:48px;padding:16px 0px">
+<p style="width:500px;font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:30px;font-weight:600;color:#14213D">fs-kravforvaltning/</p>
+<p style="flex:1;font-size:28px;line-height:1.4;color:#4A5568">Appen, og sjekkene av konvensjonene</p>
+</div>
+</div>
+<aside>Konvensjonene står i krav/README.md og tasks/README.md. Claude leser de samme filene via .claude/rules, så det finnes bare én versjon av reglene.</aside>
+</section>
+</div>
+<div class="slide">
+<section id="tagger" data-transition="fade" style="background:#F7F6F2;color:#1F2A44;font-family:'IBM Plex Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;gap:40px">
+<div style="display:flex;flex-direction:column;gap:16px">
+<p style="font-size:24px;font-weight:600;letter-spacing:3px;text-transform:uppercase;color:#B4481A">Taggene</p>
+<h2 style="font-family:'Source Serif 4', Georgia, serif;font-size:72px;font-weight:600;line-height:1.1;color:#14213D">Metadataene står i kravet</h2>
+</div>
+<table style="font-size:26px;color:#1F2A44">
+<tr><th style="width:20%">Gruppe</th><th style="width:40%">Tagger</th><th style="width:40%">Regel</th></tr>
+<tr><td><b>Feature-ID</b></td><td>@OPT-OVO-GRU-001</td><td>Påkrevd og unik. Domene, sub-domene, kapabilitet, nummer</td></tr>
+<tr style="background:#EFECE4"><td><b>Prioritet</b></td><td>@must @should @could @wont</td><td>Høyst én</td></tr>
+<tr><td><b>Status</b></td><td>@draft @planned @in-progress @implemented @deprecated</td><td>Nøyaktig én på Egenskap</td></tr>
+<tr style="background:#EFECE4"><td><b>Scope</b></td><td>@scope-opprette-opptak-2027</td><td>Høyst én. Kobler kravet til scope og oppgave</td></tr>
+<tr><td><b>Referanser</b></td><td>@depends-on-&lt;ID&gt; @ref-&lt;ID&gt;</td><td>På delen referansen gjelder</td></tr>
+<tr style="background:#EFECE4"><td><b>Oppfølging</b></td><td>@openquestion</td><td>Bare på Regel og Scenario, med # ÅPNE SPØRSMÅL:</td></tr></table>
+<p style="font-size:26px;line-height:1.4;color:#4A5568">Reglene merket «sjekkes automatisk» i krav/README.md står i <span style="color:#14213D">fs-kravforvaltning/server/parse.ts</span>, med tester. Endrer du en regel, endrer du sjekken i samme PR.</p>
+<aside>Den fullstendige beskrivelsen av taggene står i krav/README.md, under Tags.</aside>
+</section>
+</div>
+<div class="slide">
+<section id="deler" data-transition="fade" style="background:#F7F6F2;color:#1F2A44;font-family:'IBM Plex Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;gap:40px">
+<div style="display:flex;flex-direction:column;gap:16px">
+<p style="font-size:24px;font-weight:600;letter-spacing:3px;text-transform:uppercase;color:#B4481A">Status på deler</p>
+<h2 style="font-family:'Source Serif 4', Georgia, serif;font-size:72px;font-weight:600;line-height:1.1;color:#14213D">Statusen på Egenskap avgjør hva delene kan ha</h2>
+</div>
+<table style="font-size:28px;color:#1F2A44">
+<tr><th style="width:24%">Egenskap</th><th style="width:38%">Lov på Regel og Scenario</th><th style="width:38%">Betyr</th></tr>
+<tr><td><b>@draft</b></td><td>Ingen statustag</td><td>Hele kravet er utkast</td></tr>
+<tr style="background:#EFECE4"><td><b>@planned</b></td><td>@draft</td><td>Delvis utkast</td></tr>
+<tr><td><b>@in-progress</b></td><td>@draft, @implemented, @deprecated</td><td>Delvis levert</td></tr>
+<tr style="background:#EFECE4"><td><b>@implemented</b></td><td>@draft, @planned, @in-progress, @deprecated, @scope-</td><td>Levert, og endres</td></tr>
+<tr><td><b>@deprecated</b></td><td>Ingen statustag</td><td>Hele kravet skal bort</td></tr>
+</table>
+<div style="display:flex;gap:32px">
+<p style="flex:1;font-size:26px;line-height:1.4;color:#4A5568"><b>En del har høyst én statustag.</b> @draft gjelder hele regelen, også scenarioene under.</p>
+<p style="flex:1;font-size:26px;line-height:1.4;color:#4A5568"><b>I eksempelet:</b> GRU-001 er @implemented, og regelen om utdanningsbakgrunner er @in-progress.</p>
+</div>
+<aside>En del under en @implemented egenskap uten egen statustag er levert. Når fs-verify finner en @in-progress-del i koden, fjernes taggen, og delen arver @implemented. Under en @in-progress egenskap er det motsatt: de leverte delene får @implemented.</aside>
+</section>
+</div>
+<div class="slide">
+<section id="gating" data-transition="fade" style="background:#F7F6F2;color:#1F2A44;font-family:'IBM Plex Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;gap:48px">
+<div style="display:flex;flex-direction:column;gap:16px">
+<p style="font-size:24px;font-weight:600;letter-spacing:3px;text-transform:uppercase;color:#B4481A">Gating-settet</p>
+<h2 style="font-family:'Source Serif 4', Georgia, serif;font-size:72px;font-weight:600;line-height:1.1;color:#14213D">Scenarioene som må være i koden før kravet er levert</h2>
+</div>
+<div style="display:flex;gap:24px">
+<div style="flex:1;display:flex;flex-direction:column;gap:14px;background:#FFFFFF;padding:40px;border:1px solid #E1DED6;border-radius:16px">
+<h3 style="font-size:32px;font-weight:600;color:#14213D">Med</h3>
+<p style="font-size:26px;line-height:1.4;color:#4A5568">Alle Scenario og Scenariomal. Også deler med bare @openquestion: de bygges som de står.</p>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:14px;background:#FFFFFF;padding:40px;border:1px solid #E1DED6;border-radius:16px">
+<h3 style="font-size:32px;font-weight:600;color:#14213D">Ikke med</h3>
+<p style="font-size:26px;line-height:1.4;color:#4A5568">Det som er tagget @draft, @deprecated eller @demo, selv eller via Regel.</p>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:14px;background:#FFFFFF;padding:40px;border:1px solid #E1DED6;border-radius:16px">
+<h3 style="font-size:32px;font-weight:600;color:#14213D">Levert krav som endres</h3>
+<p style="font-size:26px;line-height:1.4;color:#4A5568">Bare delene som er @planned eller @in-progress. @deprecated-delene sjekkes for at koden er borte.</p>
+</div>
+</div>
+<div style="display:flex;flex-direction:column;gap:8px;background:#14213D;padding:36px 40px;border-radius:16px">
+<p style="font-size:28px;line-height:1.4;color:#F7F6F2">Den samme definisjonen brukes av fs-verify, testplanen, CDP-testene og tavla.</p>
+<p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:24px;color:#F0A070">tasks/README.md · fs-kravforvaltning/src/specboard.ts (gating)</p>
+</div>
+<aside>De to stedene holdes i synk. Endrer du definisjonen ett sted, endrer du den det andre stedet i samme PR.</aside>
+</section>
+</div>
+<div class="slide">
+<section id="referanser" data-transition="fade" style="background:#F7F6F2;color:#1F2A44;font-family:'IBM Plex Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;gap:40px">
+<div style="display:flex;flex-direction:column;gap:16px">
+<p style="font-size:24px;font-weight:600;letter-spacing:3px;text-transform:uppercase;color:#B4481A">Referanser</p>
+<h2 style="font-family:'Source Serif 4', Georgia, serif;font-size:72px;font-weight:600;line-height:1.1;color:#14213D">Må delen sjekkes når det andre kravet endres?</h2>
+</div>
+<div style="display:flex;gap:48px">
+<div style="width:900px;display:flex;flex-direction:column;gap:6px;background:#14213D;padding:36px 44px;border-radius:16px;font-family:'IBM Plex Mono', 'Courier New', monospace">
+<p style="font-size:24px;color:#8E9BB3"># Flyten FLY-OPT-SAK-001</p>
+<p style="font-size:24px;color:#F0A070">@depends-on-OPT-BEH-BEH-011</p>
+<p style="font-size:24px;color:#F7F6F2"><b>Regel:</b> Søknadsalternativene fordeles når søknaden sendes</p>
+<p style="font-size:24px;color:#8E9BB3;padding-top:20px"># Ankeret i OPT-BEH-BEH-011</p>
+<p style="font-size:24px;color:#F0A070">@ref-FLY-OPT-SAK-001</p>
+<p style="font-size:24px;color:#F7F6F2"><b>Regel:</b> …den delen flyten bygger på</p>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:24px">
+<div style="display:flex;flex-direction:column;gap:6px">
+<h3 style="font-size:30px;font-weight:600;color:#14213D">Ja: @depends-on-</h3>
+<p style="font-size:26px;line-height:1.4;color:#4A5568">Delen bygger på kravet, og kan ikke leveres før det.</p>
+</div>
+<div style="display:flex;flex-direction:column;gap:6px">
+<h3 style="font-size:30px;font-weight:600;color:#14213D">Nei: @ref-</h3>
+<p style="font-size:26px;line-height:1.4;color:#4A5568">En henvisning for den som leser.</p>
+</div>
+<div style="display:flex;flex-direction:column;gap:6px">
+<h3 style="font-size:30px;font-weight:600;color:#14213D">Ankeret</h3>
+<p style="font-size:26px;line-height:1.4;color:#4A5568">@ref- tilbake på delene som brukes, når bare noe av kravet gjelder.</p>
+</div>
+</div>
+</div>
+<p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:26px;color:#14213D">grep -rn "@depends-on-OPT-OVO-SAM-001" krav/ cdp-tester/</p>
+<aside>Den andre retningen, «hva bygger på dette kravet?», skrives ikke ned, men finnes med grep. Ring-avhengigheter, ID-er som ikke finnes, og ankre som ikke stemmer med regeltitlene, sjekkes av fs-krav-avvik, siden det krever flere filer. Eksempelet med ankeret er forenklet.</aside>
+</section>
+</div>
+<div class="slide">
+<section id="oppgavemappe" data-transition="fade" style="background:#F7F6F2;color:#1F2A44;font-family:'IBM Plex Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;gap:40px">
+<div style="display:flex;flex-direction:column;gap:16px">
+<p style="font-size:24px;font-weight:600;letter-spacing:3px;text-transform:uppercase;color:#B4481A">Scope og oppgaver · tasks/</p>
+<h2 style="font-family:'Source Serif 4', Georgia, serif;font-size:72px;font-weight:600;line-height:1.1;color:#14213D">Skillene skriver arbeidet med kravene hit</h2>
+</div>
+<div style="display:flex;gap:48px">
+<div style="width:900px;display:flex;flex-direction:column;gap:4px;background:#14213D;padding:36px 44px;border-radius:16px;font-family:'IBM Plex Mono', 'Courier New', monospace">
+<p style="font-size:24px;color:#F0A070">tasks/opptak/</p>
+<p style="font-size:24px;color:#F7F6F2;padding-left:28px">scope-opprette-opptak-2027.md</p>
+<p style="font-size:24px;color:#F7F6F2;padding-left:28px">opprette-og-vedlikeholde-opptak/</p>
+<p style="font-size:24px;color:#C9D3E3;padding-left:56px">oppgave.md</p>
+<p style="font-size:24px;color:#F7F6F2;padding-left:56px">spec/</p>
+<p style="font-size:24px;color:#C9D3E3;padding-left:84px">spec-opprette-og-vedlikeholde-opptak.md</p>
+<p style="font-size:24px;color:#C9D3E3;padding-left:84px">krav-input/ (skissene)</p>
+<p style="font-size:24px;color:#C9D3E3;padding-left:84px">questions-fs-specify-*.md</p>
+<p style="font-size:24px;color:#C9D3E3;padding-left:84px">verify-2026-10-26-0941.md</p>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:22px">
+<div style="display:flex;flex-direction:column;gap:6px">
+<h3 style="font-size:30px;font-weight:600;color:#14213D">Scope-fila</h3>
+<p style="font-size:26px;line-height:1.4;color:#4A5568">Mål, ikke-mål og oppgavene, med kravene hver oppgave har. Skrives av fs-scope.</p>
+</div>
+<div style="display:flex;flex-direction:column;gap:6px">
+<h3 style="font-size:30px;font-weight:600;color:#14213D">spec/</h3>
+<p style="font-size:26px;line-height:1.4;color:#4A5568">Spesifikasjonen, skissene, spørsmålene og verify-rapportene. Skrives av fs-specify og fs-verify.</p>
+</div>
+<div style="display:flex;flex-direction:column;gap:6px">
+<h3 style="font-size:30px;font-weight:600;color:#14213D">Tavla utledes</h3>
+<p style="font-size:26px;line-height:1.4;color:#4A5568">Kolonnen kommer fra taggene og spesifikasjonene, ikke fra et felt.</p>
+</div>
+</div>
+</div>
+<p style="font-size:26px;line-height:1.4;color:#4A5568">Én oppgave er én Jira-sak. Lag-mapper som frontend/ og backend/ er valgfrie, og brukes lite.</p>
+<aside>Mappestrukturen og reglene står i tasks/README.md, og sjekkes av fs-kravforvaltning/shared/tasks.ts. Spesifikasjonene, scope-filene og oppgave.md er de delene som brukes mest.</aside>
+</section>
+</div>
+<div class="slide">
+<section id="spesifikasjon" data-transition="fade" style="background:#F7F6F2;color:#1F2A44;font-family:'IBM Plex Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;gap:44px">
+<div style="display:flex;flex-direction:column;gap:16px">
+<p style="font-size:24px;font-weight:600;letter-spacing:3px;text-transform:uppercase;color:#B4481A">Spesifikasjonen · fs-specify</p>
+<h2 style="font-family:'Source Serif 4', Georgia, serif;font-size:72px;font-weight:600;line-height:1.1;color:#14213D">Kravene hentes inn i oppgaven, med skissene</h2>
+</div>
+<div style="display:flex;gap:20px">
+<div style="flex:1;display:flex;flex-direction:column;gap:10px;background:#FFFFFF;padding:28px;border:1px solid #E1DED6;border-radius:16px">
+<p style="font-size:24px;font-weight:600;color:#B4481A">1</p>
+<p style="font-size:26px;line-height:1.35;color:#14213D">Henter @planned- og @deprecated-krav</p>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:10px;background:#FFFFFF;padding:28px;border:1px solid #E1DED6;border-radius:16px">
+<p style="font-size:24px;font-weight:600;color:#B4481A">2</p>
+<p style="font-size:26px;line-height:1.35;color:#14213D">Lagrer skissene fra Figma i krav-input/</p>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:10px;background:#FFFFFF;padding:28px;border:1px solid #E1DED6;border-radius:16px">
+<p style="font-size:24px;font-weight:600;color:#B4481A">3</p>
+<p style="font-size:26px;line-height:1.35;color:#14213D">Sjekker kravene mot koden, og holder tilbake det som må endres</p>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:10px;background:#FFFFFF;padding:28px;border:1px solid #E1DED6;border-radius:16px">
+<p style="font-size:24px;font-weight:600;color:#B4481A">4</p>
+<p style="font-size:26px;line-height:1.35;color:#14213D">Tekster og UI i &lt;feature&gt;.design.md</p>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:10px;background:#14213D;padding:28px;border-radius:16px">
+<p style="font-size:24px;font-weight:600;color:#F0A070">5</p>
+<p style="font-size:26px;line-height:1.35;color:#F7F6F2">@planned blir @in-progress</p>
+</div>
+</div>
+<div style="display:flex;gap:32px">
+<div style="flex:1;display:flex;flex-direction:column;gap:8px">
+<h3 style="font-size:30px;font-weight:600;color:#14213D">Klar til utvikling når</h3>
+<p style="font-size:26px;line-height:1.4;color:#4A5568">den har tittel, omfang, minst én feature-fil, skisse (eller «Ingen skisse»), ingen åpne spørsmål, og alle kravene er hentet inn.</p>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:8px">
+<h3 style="font-size:30px;font-weight:600;color:#14213D">I eksempelet</h3>
+<p style="font-size:26px;line-height:1.4;color:#4A5568">Fire feature-filer, Figma-siden «Opprett nytt Samordna opptak», og regelen fra 19. oktober hentet inn etterpå.</p>
+</div>
+</div>
+<aside>fs-specify-delta gjør det samme for en endring: en commit, en branch, en test-fil eller et markdown-dokument. Den viser før og etter som festede git-referanser i stedet for å kopiere kravene.</aside>
+</section>
+</div>
+<div class="slide">
+<section id="verify" data-transition="fade" style="background:#F7F6F2;color:#1F2A44;font-family:'IBM Plex Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;gap:44px">
+<div style="display:flex;flex-direction:column;gap:16px">
+<p style="font-size:24px;font-weight:600;letter-spacing:3px;text-transform:uppercase;color:#B4481A">Verifiseringen · fs-verify</p>
+<h2 style="font-family:'Source Serif 4', Georgia, serif;font-size:72px;font-weight:600;line-height:1.1;color:#14213D">Bevis med fil og linje for hvert scenario</h2>
+</div>
+<div style="display:flex;align-items:center;gap:16px">
+<div style="flex:1;display:flex;flex-direction:column;gap:8px;background:#FFFFFF;padding:28px;border:1px solid #E1DED6;border-radius:16px">
+<h3 style="font-size:28px;font-weight:600;color:#14213D">Finner</h3>
+<p style="font-size:24px;line-height:1.4;color:#4A5568">Leter i fs-plattform og fs-admin</p>
+</div>
+<x-shape kind="arrow-right" style="background:#C9C3B4;width:48px;height:24px"></x-shape>
+<div style="flex:1;display:flex;flex-direction:column;gap:8px;background:#FFFFFF;padding:28px;border:1px solid #E1DED6;border-radius:16px">
+<h3 style="font-size:28px;font-weight:600;color:#14213D">Kontrollør</h3>
+<p style="font-size:24px;line-height:1.4;color:#4A5568">Leser hvert funn, søker på nytt</p>
+</div>
+<x-shape kind="arrow-right" style="background:#C9C3B4;width:48px;height:24px"></x-shape>
+<div style="flex:1;display:flex;flex-direction:column;gap:8px;background:#FFFFFF;padding:28px;border:1px solid #E1DED6;border-radius:16px">
+<h3 style="font-size:28px;font-weight:600;color:#14213D">Du bekrefter</h3>
+<p style="font-size:24px;line-height:1.4;color:#4A5568">Usikre og ikke funne scenarioer</p>
+</div>
+<x-shape kind="arrow-right" style="background:#C9C3B4;width:48px;height:24px"></x-shape>
+<div style="flex:1;display:flex;flex-direction:column;gap:8px;background:#14213D;padding:28px;border-radius:16px">
+<h3 style="font-size:28px;font-weight:600;color:#F7F6F2">Retagging</h3>
+<p style="font-size:24px;line-height:1.4;color:#C9D3E3">og spec/verify-&lt;dato&gt;-&lt;HHMM&gt;.md</p>
+</div>
+</div>
+<div style="display:flex;gap:32px">
+<div style="flex:1;display:flex;flex-direction:column;gap:8px">
+<h3 style="font-size:30px;font-weight:600;color:#14213D">I tillegg</h3>
+<p style="font-size:26px;line-height:1.4;color:#4A5568">Tilgangene (rolle × organisasjon × opprette, lese, endre, slette), regler i koden uten scenario, og overleveringene i flytene.</p>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:8px">
+<h3 style="font-size:30px;font-weight:600;color:#14213D">Innstillinger, 26. oktober</h3>
+<p style="font-size:26px;line-height:1.4;color:#4A5568">24 av 24 funnet. Fem regler holdes bare i fs-admin, ikke i API-et, og ble lagt til oppfølging.</p>
+</div>
+</div>
+<div style="display:flex;align-items:center;gap:32px;background:#14213D;padding:28px 40px;border-radius:16px">
+<p style="width:520px;font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:28px;font-weight:600;color:#F0A070">fs-verify-agent-teams</p>
+<p style="flex:1;font-size:26px;line-height:1.4;color:#C9D3E3">Mange feature-filer? Én finner og én kontrollør per fil, parallelt. Lead-en avgjør, spør deg og skriver rapporten.</p>
+</div>
+<aside>Dette er første del av fase 1, planen, i teststrategien: white-box, ingenting kjøres, og @implemented betyr bare at koden er funnet. Mangler noe, står det i rapporten, med hvilket repo koden mangler i. fs-verify-agent-teams stiller de samme spørsmålene og skriver rapporten i samme format. Den krever CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1, og virker bare i en interaktiv økt: i terminalen, også terminalen i FS Kravforvaltning, men ikke i Claude-panelet.</aside>
+</section>
+</div>
+<div class="slide">
+<section id="cdp" data-transition="fade" style="background:#F7F6F2;color:#1F2A44;font-family:'IBM Plex Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;gap:40px">
+<div style="display:flex;flex-direction:column;gap:16px">
+<p style="font-size:24px;font-weight:600;letter-spacing:3px;text-transform:uppercase;color:#B4481A">Agentisk test · cdp-tester/</p>
+<h2 style="font-family:'Source Serif 4', Georgia, serif;font-size:72px;font-weight:600;line-height:1.1;color:#14213D">Tester en agent kjører i Chrome mot testmiljøet</h2>
+</div>
+<div style="display:flex;gap:48px">
+<div style="width:980px;display:flex;flex-direction:column;gap:4px;background:#14213D;padding:36px 44px;border-radius:16px;font-family:'IBM Plex Mono', 'Courier New', monospace">
+<p style="font-size:24px;color:#8E9BB3"># Krav: …/opprett_opptak.feature @ 0f010d4</p>
+<p style="font-size:24px;color:#8E9BB3">#   (blob cea644ab…)</p>
+<p style="font-size:24px;color:#F0A070;padding-top:12px">@TST-OPT-OVO-GRU-001 @depends-on-OPT-OVO-GRU-001</p>
+<p style="font-size:24px;color:#F7F6F2"><b>Scenario:</b> Opprette et samordna opptak</p>
+<p style="font-size:24px;color:#C9D3E3;padding-left:28px">Gitt jeg er logget inn som</p>
+<p style="font-size:24px;color:#F0A070;padding-left:56px">«opptak-forvalter-forvaltende»</p>
+<p style="font-size:24px;color:#C9D3E3;padding-left:28px">Når jeg fyller ut som i Utfylling A</p>
+<p style="font-size:24px;color:#C9D3E3;padding-left:28px">Og jeg velger «Lagre»</p>
+<p style="font-size:24px;color:#C9D3E3;padding-left:28px">Så ser jeg «Lagring vellykket»</p>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:22px">
+<div style="display:flex;flex-direction:column;gap:6px">
+<h3 style="font-size:30px;font-weight:600;color:#14213D">Nøkler, ikke personer</h3>
+<p style="font-size:26px;line-height:1.4;color:#4A5568">Testbrukeren slås opp i miljøfila. Testdataene lager oppsettet i hver kjøring.</p>
+</div>
+<div style="display:flex;flex-direction:column;gap:6px">
+<h3 style="font-size:30px;font-weight:600;color:#14213D">Bare det som varer</h3>
+<p style="font-size:26px;line-height:1.4;color:#4A5568">Ingen status, testplan eller kjente mangler i testen.</p>
+</div>
+<div style="display:flex;flex-direction:column;gap:6px">
+<h3 style="font-size:30px;font-weight:600;color:#14213D">Commit og blob</h3>
+<p style="font-size:26px;line-height:1.4;color:#4A5568">Gir en diff når kravet endres.</p>
+</div>
+</div>
+</div>
+<p style="font-size:26px;line-height:1.4;color:#4A5568">Testcasene utledes også fra reglene: tomt felt, bare mellomrom, 100 og 101 tegn. Kjøringen 27. oktober hadde 23 testcaser.</p>
+<aside>Data i testmiljøet kan slettes når som helst, så oppsettet i cdp-tester/_Oppsett/ kjøres først og lager testdataene gjennom løsningen, med kjøringen i navnet. Navnene står i «Kjøringens testdata» i resultatet. Lages av fs-testcaser-cdp, og kjøres med cdp-skillen, som hver bruker installerer selv. Resultatet, med skjermbilder, ligger i akseptansetest/&lt;slug&gt;/kjoring-&lt;dato&gt;/. Et tilfelle agenten utleder som kravet ikke dekker, blir et funn av typen «Kravet dekker ikke», og går til kravarbeidet. Overleveringene i flytene blir tester i cdp-tester/_Løp/.</aside>
+</section>
+</div>
+<div class="slide">
+<section id="app" data-transition="fade" style="background:#14213D;color:#F7F6F2;font-family:'IBM Plex Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;justify-content:center;gap:40px">
+<p style="font-size:24px;font-weight:600;letter-spacing:3px;text-transform:uppercase;color:#F0A070">Og så har vi en app</p>
+<h2 style="font-family:'Source Serif 4', Georgia, serif;font-size:96px;font-weight:600;line-height:1.1;color:#F7F6F2">FS Kravforvaltning</h2>
+<p style="font-size:36px;line-height:1.45;color:#C9D3E3;width:1300px">Kravene, avvikene, tavla og Claude i nettleseren og som desktop-app. Den er under utvikling, så forvent at den endrer seg.</p>
+<div style="display:flex;gap:48px">
+<p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:28px;color:#F0A070">cd fs-kravforvaltning · npm run dev</p>
+<p style="font-size:28px;color:#C9D3E3"><a href="https://sikt-no.github.io/fs/">sikt-no.github.io/fs</a></p>
+</div>
+<aside>Hvordan appen er bygget, står i fs-kravforvaltning/CLAUDE.md. En endring brukerne merker, skal ha en changeset i samme PR.</aside>
+</section>
+</div>
+</div></main>
+<div class="notes" aria-live="polite"></div>
+<nav class="bar" aria-label="Presentasjonen">
+<div class="decks"><a href="../">FS Kravforvaltning</a><a href="slik-jobber-vi-med-krav.html">Slik jobber vi med krav</a><a href="krav-detaljert.html" aria-current="page">Detaljert</a><a href="testfasene.html">Testfasene</a><a href="../kom-i-gang.html">Kom i gang</a></div>
+<button class="prev" aria-label="Forrige">‹</button><span class="count"></span><button class="next" aria-label="Neste">›</button>
+<button class="tnotes" title="Notater (N)">Notater</button><button class="full" title="Fullskjerm (F)">Fullskjerm</button>
+</nav>
+<script>
+const slides=[...document.querySelectorAll('.slide')];
+const stage=document.querySelector('.stage');
+const notes=document.querySelector('.notes');
+const count=document.querySelector('.count');
+let i=0;
+function fit(){const vw=innerWidth,vh=innerHeight-56;stage.style.transform='scale('+Math.min(vw/1920,vh/1080)+')'}
+function show(n){i=Math.max(0,Math.min(slides.length-1,n));slides.forEach((s,k)=>s.classList.toggle('active',k===i));
+  count.textContent=(i+1)+' / '+slides.length;const a=slides[i].querySelector('aside');notes.innerHTML=a?a.innerHTML:'<i>Ingen notater</i>';
+  history.replaceState(null,'','#slide-'+(i+1))}
+function fromHash(){const m=location.hash.match(/^#slide-(\d+)$/);return m?+m[1]-1:0}
+document.querySelector('.prev').onclick=()=>show(i-1);
+document.querySelector('.next').onclick=()=>show(i+1);
+document.querySelector('.tnotes').onclick=()=>notes.classList.toggle('open');
+document.querySelector('.full').onclick=()=>document.fullscreenElement?document.exitFullscreen():document.documentElement.requestFullscreen();
+addEventListener('keydown',e=>{if(e.metaKey||e.ctrlKey||e.altKey)return;const k=e.key;
+  if(k==='ArrowRight'||k==='PageDown'||k===' '){e.preventDefault();show(i+1)}
+  else if(k==='ArrowLeft'||k==='PageUp'){e.preventDefault();show(i-1)}
+  else if(k==='Home')show(0);else if(k==='End')show(slides.length-1);
+  else if(k==='n'||k==='N')notes.classList.toggle('open');
+  else if(k==='f'||k==='F')document.querySelector('.full').click()});
+addEventListener('hashchange',()=>show(fromHash()));
+addEventListener('resize',fit);fit();show(fromHash());</script>
+</body>
+</html>
