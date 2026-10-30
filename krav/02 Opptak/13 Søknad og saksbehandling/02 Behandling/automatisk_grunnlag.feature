@@ -237,15 +237,10 @@ Egenskap: Automatisk grunnlag
       Når saksbehandleren fjerner grunnlaget
       Så har ikke saken lenger grunnlaget
 
-    @openquestion
     Scenario: Automatikken setter ikke et grunnlag som saksbehandleren har fjernet
-      # ÅPNE SPØRSMÅL:
-      # - Utgangspunktet er at saken er låst for automatikken når
-      #   saksbehandleren har gjort endringer på den, men «la stå» er fjernet
-      #   fra grunnlaget. Fjerner saksbehandleren et grunnlag som er satt
-      #   automatisk, låser det i dag ikke saken, og kjøres den automatiske
-      #   behandlingen igjen, settes grunnlaget på nytt. Skal fjerningen låse
-      #   saken, så grunnlaget holdes borte?
+      # Avklart 30.10.2026: bare grunnlaget saksbehandleren fjernet, holdes borte. De andre
+      # grunnlagene låses ikke. Kode i dag: grunnlaget settes på nytt når den automatiske
+      # behandlingen kjører igjen.
       Gitt at saksbehandleren har fjernet et grunnlag som var satt automatisk
       Og at søkeren fortsatt passer til grunnlaget
       Når søknaden behandles automatisk
