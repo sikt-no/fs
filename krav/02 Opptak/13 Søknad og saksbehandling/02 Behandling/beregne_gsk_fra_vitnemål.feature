@@ -6,21 +6,25 @@
 # soda.samordnaopptak.no/open/nvb/), og er AB-testet mot NVB2 på 1,43 millioner
 # vitnemål. Avvikene fra testen er rettet. NVB2 er referansen når kravet valideres.
 #
-# Påstanden fra KREG: avklart 2026-10-27 at beregningen ikke bruker påstanden fra KREG,
-# som i @OPT-BEH-BEH-015 («Påstanden fra KREG brukes ikke»). Koden krever i dag at
-# KREG sier GSK, og bruker kontrollmotoren som kryssjekk. Det er et avvik fra kravet.
+# Påstanden fra KREG: avklart 2026-10-27 at beregningen ikke bruker påstanden fra KREG.
+# Avklart 30.10.2026: beregningen gir opptakssystemets påstand, ved siden av skolens og
+# KREGs påstand, og vitnemålet gir GSK når minst én av dem er ja (@OPT-BEH-BEH-015).
+# Koden krever i dag at KREG sier GSK, og bruker kontrollmotoren som kryssjekk. Det er
+# et avvik fra kravet.
 @OPT-BEH-BEH-027 @must @draft
 Egenskap: Beregne GSK fra vitnemål
   Som saksbehandler
-  ønsker jeg at systemet beregner om et vitnemål gir generell studiekompetanse
+  ønsker jeg at opptakssystemet beregner sin egen påstand om generell studiekompetanse for et vitnemål
   slik at GSK-konklusjonen bygger på de samme reglene for alle søkere.
 
   Generell studiekompetanse (GSK) er det generelle opptakskravet til høyere utdanning.
   Systemet beregner GSK for ett vitnemål om gangen. Beregningen ser på fagene på
   vitnemålet og løpet vitnemålet er utstedt for. Seksfagskontrollen sjekker om fagene
-  oppfyller alle delkravene for reformen. Vitnemålet gir GSK når det består
-  seksfagskontrollen, og løpet gir en grunnlagskode. Resultatet
-  er at vitnemålet gir GSK med en grunnlagskode, eller at vitnemålet ikke gir GSK.
+  oppfyller alle delkravene for reformen. Resultatet er opptakssystemets påstand om GSK
+  for vitnemålet. Påstanden er GSK når vitnemålet består seksfagskontrollen, og løpet gir
+  en grunnlagskode. Ellers er påstanden ikke GSK. Har løpet en grunnlagskode, gis den
+  uansett hva påstanden er. «Påstanden» betyr i dette kravet opptakssystemets påstand. Når vitnemålet
+  gir GSK, ut fra alle tre påstandene, står i @OPT-BEH-BEH-015.
 
   Hvilke vitnemål som beregnes, når beregningen skjer, og hva resultatet brukes til,
   står i @OPT-BEH-BEH-015. Det gjelder også annullerte vitnemål, vitnemål uten
@@ -53,11 +57,11 @@ Egenskap: Beregne GSK fra vitnemål
         | Kunnskapsløftet | matematikk, naturfag, samfunnsfag, engelsk, og norsk og historie       |
         | Reform 94       | matematikk, engelsk, naturfag, nyere historie, samfunnslære og norsk   |
 
-    Scenariomal: Vitnemål fra Kunnskapsløftet uten <delkrav> gir ikke GSK
+    Scenariomal: Vitnemål fra Kunnskapsløftet uten <delkrav> får påstanden ikke GSK
       Gitt at vitnemålet er fra Kunnskapsløftet
       Og at vitnemålet oppfyller alle delkravene unntatt <delkrav>
       Når GSK beregnes for vitnemålet
-      Så gir vitnemålet ikke GSK
+      Så er påstanden ikke GSK
 
       Eksempler:
         | delkrav           |
@@ -67,11 +71,11 @@ Egenskap: Beregne GSK fra vitnemål
         | engelsk           |
         | norsk og historie |
 
-    Scenariomal: Vitnemål fra Reform 94 uten <delkrav> gir ikke GSK
+    Scenariomal: Vitnemål fra Reform 94 uten <delkrav> får påstanden ikke GSK
       Gitt at vitnemålet er fra Reform 94
       Og at vitnemålet oppfyller alle delkravene unntatt <delkrav>
       Når GSK beregnes for vitnemålet
-      Så gir vitnemålet ikke GSK
+      Så er påstanden ikke GSK
 
       Eksempler:
         | delkrav        |
@@ -185,13 +189,9 @@ Egenskap: Beregne GSK fra vitnemål
         | SPR3029 | Engelsk 1                                        |
         | SPR3031 | Engelsk 2                                        |
 
-  @openquestion
   Regel: Norsk og historie for Kunnskapsløftet
-    # ÅPNE SPØRSMÅL:
-    # - Skal fagkodene for samisk 2. språk og finsk 2. språk stå i kravet? Det er over 60
-    #   koder (FF_sf_samisk2 og FF_sf_finsk2 i krav-kl.txt). Utkastet viser til kilden.
-    # - Norsk hovedmål (NOR1049) ført som privatist med vitnemålsmerknaden VMM25 kan
-    #   erstatte hovedmålskoden. Skal regelen stå i kravet, eller er den en detalj i kilden?
+    # Fagkodene for samisk 2. språk og finsk 2. språk står ikke i kravet, men i FF_sf_samisk2
+    # og FF_sf_finsk2 i krav-kl.txt (NVB2). Avklart 30.10.2026.
     # Standard norsk er én av tre varianter: norsk hovedmål, sidemål og muntlig, norsk for
     # elever med kort botid eller som går over fra Reform 94, eller norsk for tegnspråklige.
     # Alle tre variantene gjelder der kravet sier «standard norsk».
@@ -226,6 +226,15 @@ Egenskap: Beregne GSK fra vitnemål
         | norsk for kort botid      |
         | NOR1063 og NOR1064        |
         | NOR1050 og NOR1049        |
+
+    Scenario: NOR1049 som privatist med merknaden VMM25 erstatter norsk hovedmål
+      # Avklart 30.10.2026.
+      Gitt at vitnemålet er fra Kunnskapsløftet
+      Og at vitnemålet har norsk hovedmål (NOR1049) ført som privatist
+      Og at vitnemålet har merknaden VMM25
+      Og at vitnemålet har norsk sidemål og norsk muntlig
+      Når GSK beregnes for vitnemålet
+      Så har vitnemålet standard norsk
 
     Scenariomal: Norskkravet er oppfylt med <variant>
       Gitt at vitnemålet er fra Kunnskapsløftet
@@ -316,51 +325,60 @@ Egenskap: Beregne GSK fra vitnemål
       Når GSK beregnes for vitnemålet
       Så er delkravet for norsk ikke oppfylt
 
-  @openquestion
   Regel: Løpet på vitnemålet gir grunnlagskoden
     # Innspill i PR #857: grunnlagskoden slås opp i tabellen over løp (VGS_LOEP, feltet
     # VGS_LOEP.GRUNNLAGSTYPE_KODE i det gamle systemet) med programområdekodene på
-    # vitnemålet, normalt tre. Løpskoden fra KREG (VGDOK.LOEPSKODE) er programområdekodene
-    # satt sammen etter nivået på programområdet, og etter år når flere har samme nivå.
-    # ÅPNE SPØRSMÅL:
-    # - Finnes løpskoden fortsatt på vitnemålet fra KREG, eller må løpet finnes fra
-    #   programområdekodene?
+    # vitnemålet, normalt tre.
+    # Løpet settes sammen av programområdekodene på vitnemålet, etter nivået på
+    # programområdet. Vitnemålet har alltid én programområdekode per nivå. Avklart 30.10.2026.
+    # Kode i dag: opptak setter løpskoden sammen selv (VgsDokumentVitnemaalMapper), og får den
+    # ikke fra KREG. Det må avklares i arkitekturen om det skal gjøres i KREG eller i opptak.
+    # Det er en implementasjonsdetalj, og endrer ikke regelen.
 
-    Scenario: Vitnemålet gir GSK med grunnlagskoden for løpet
+    Scenario: Løpet settes sammen av programområdene etter nivå
+      Gitt at vitnemålet har programområdet "C" på nivå 3
+      Og at vitnemålet har programområdet "A" på nivå 1
+      Og at vitnemålet har programområdet "B" på nivå 2
+      Når GSK beregnes for vitnemålet
+      Så er løpet på vitnemålet løpet med programområdene "A", "B" og "C", i den rekkefølgen
+
+    Scenario: Påstanden er GSK med grunnlagskoden for løpet
       Gitt at vitnemålet oppfyller alle delkravene for reformen
       Og at løpet på vitnemålet har grunnlagskoden KLS
       Når GSK beregnes for vitnemålet
-      Så gir vitnemålet GSK med grunnlagskoden KLS
+      Så er påstanden GSK med grunnlagskoden KLS
 
-    Scenario: Løpet gir ikke GSK når delkravene ikke er oppfylt
+    Scenario: Grunnlagskoden gis selv om påstanden ikke er GSK
+      # Avklart 30.10.2026: søknaden kan få GSK-konklusjonen fra skolens eller KREGs påstand
+      # (OPT-BEH-BEH-015), og trenger da grunnlagskoden for løpet.
       Gitt at løpet på vitnemålet har grunnlagskoden KLS
       Og at vitnemålet ikke oppfyller delkravet for matematikk
       Når GSK beregnes for vitnemålet
-      Så gir vitnemålet ikke GSK
+      Så er påstanden ikke GSK
+      Og grunnlagskoden på vitnemålet er KLS
 
     Scenario: Ukjent løp
       Gitt at løpet på vitnemålet ikke finnes i opptakssystemets liste over løp
       Når GSK beregnes for vitnemålet
-      Så gir vitnemålet ikke GSK
+      Så er påstanden ikke GSK
 
     Scenario: Påbyggingsruten PBPBY4 gir grunnlagskoden for løpet
       # PBPBY4 er en alternativ påbyggingsrute, og ikke et eget løp.
       Gitt at løpskoden på vitnemålet er løpskoden for et løp med tillegget «_PBPBY4»
       Og at vitnemålet oppfyller alle delkravene for reformen
       Når GSK beregnes for vitnemålet
-      Så gir vitnemålet GSK med grunnlagskoden for løpet uten tillegget
+      Så er påstanden GSK med grunnlagskoden for løpet uten tillegget
 
   @openquestion
   Regel: Yrkesfaglige løp uten grunnlagskode
+    # Avklart 30.10.2026: et yrkesfaglig løp uten grunnlagskode gir KLY eller RFA når
+    # vitnemålet importeres (@OPT-BEH-BEH-015), ikke bare når saksbehandleren starter
+    # kontrollen. Kode i dag: bare når saksbehandleren starter kontrollen, som i det gamle FS
+    # (FS158001).
     # ÅPNE SPØRSMÅL:
-    # - Skal et yrkesfaglig løp uten grunnlagskode gi KLY eller RFA når vitnemålet
-    #   importeres, eller bare når saksbehandleren starter kontrollen på et vitnemål?
-    #   I dag gjør koden det bare når saksbehandleren starter kontrollen, som i det
-    #   gamle FS (FS158001). Avgjøres av produkteier.
-    #   Svaret gjelder også @OPT-BEH-BEH-015, der GSK beregnes når vitnemålet importeres.
-    #   Scenariomalen «Påstanden er at søkeren ikke har GSK når <grunn>» der sier at et
-    #   løp som ikke gir GSK, gir påstanden «ikke GSK». Svaret avgjør om det gjelder et
-    #   yrkesfaglig løp uten grunnlagskode der vitnemålet består seksfagskontrollen.
+    # - Sier skolen eller KREG at søkeren har GSK, men løpet har ingen grunnlagskode eller
+    #   er ukjent, får søknaden en positiv GSK-konklusjon uten grunnlagskode (OPT-BEH-BEH-015).
+    #   Skal KLY eller RFA gis da, eller setter saksbehandleren grunnlagskoden?
     # «Løp»: avklart 2026-10-27 at løp er et begrep saksbehandlerne kjenner.
 
     Scenariomal: Yrkesfaglig løp fra <reform> gir grunnlagskoden <grunnlagskode>
@@ -369,7 +387,7 @@ Egenskap: Beregne GSK fra vitnemål
       Og at løpet er fra <reform>
       Og at vitnemålet oppfyller alle delkravene for <reform>
       Når GSK beregnes for vitnemålet
-      Så gir vitnemålet GSK med grunnlagskoden <grunnlagskode>
+      Så er påstanden GSK med grunnlagskoden <grunnlagskode>
 
       Eksempler:
         | reform          | grunnlagskode |
@@ -381,4 +399,4 @@ Egenskap: Beregne GSK fra vitnemål
       Og at løpet er fra Reform 94
       Og at vitnemålet er fra Kunnskapsløftet
       Når GSK beregnes for vitnemålet
-      Så gir vitnemålet ikke GSK
+      Så er påstanden ikke GSK

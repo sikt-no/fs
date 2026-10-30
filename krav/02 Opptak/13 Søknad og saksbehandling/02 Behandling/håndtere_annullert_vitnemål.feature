@@ -18,7 +18,7 @@ Egenskap: Håndtere annullert vitnemål
 
   # Krav fra brukeren 29.10.2026. Åpne spørsmål avklart 29.10.2026.
   # Behandlingsstatusene står i OPT-BEH-BEH-029. Bare saker som er ferdig behandlet, er med i
-  # plasstildelingen. Et annullert vitnemål får ingen påstand om GSK (OPT-BEH-BEH-015), og
+  # plasstildelingen. Et annullert vitnemål gir ikke GSK (OPT-BEH-BEH-015), og
   # teller ikke i den automatiske behandlingen (OPT-BEH-BEH-019).
   # Avklart: saksbehandleren får ikke et eget varsel. Merknaden, taggen og statusen er nok,
   # i motsetning til ved nytt vitnemål (OPT-BEH-BEH-021).

@@ -68,7 +68,8 @@ Egenskap: Importere resultater fra KREG
         | reform                                          |
         | avgangsår                                       |
         | om det er førstegangsvitnemål                   |
-        | påstanden fra KREG om generell studiekompetanse |
+        | skolens påstand om generell studiekompetanse    |
+        | KREGs påstand om generell studiekompetanse      |
         | fagene med karakterer                           |
         | programområdene                                 |
         | merknadene                                      |
