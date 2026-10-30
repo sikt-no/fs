@@ -556,13 +556,10 @@ Egenskap: Søknadsmangler
     # Avklart 30.10.2026: er søkeren ikke kvalifisert på noen kravliste, får alle kravelementene
     # som ikke er oppfylt, mangel, i alle kravlistene. Søkeren må kunne se at kravlistene er
     # alternativer. Hvordan, avgjøres i teksten til søkeren eller i designet.
-    # Avklart 30.10.2026: teksten til søkeren står på mangelkoden («Informasjon til søker i Min
-    # kompetanse»), som i dag. Kravelementene får ingen egen tekst til søkeren. Det avviker fra
-    # raffineringen, som sa at tekstene skulle hentes fra opptakskravene.
-    # ÅPNE SPØRSMÅL:
-    # - Hva skjer når saksbehandleren har registrert en mangel med en mangelkode som kan overskrives
-    #   av automatisk behandling, og den automatiske behandlingen setter en mangel med samme
-    #   mangelkode? Scenariomalen om det er fjernet fordi den var for vag (review i PR #840).
+    # Avklart 30.10.2026: den automatiske behandlingen lager ikke mangler med mangelkode, bare
+    # automatiske mangeltekster. Teksten lages av navnet på kravelementet, etter et fast mønster
+    # som står i implementasjonsdetaljene. Kravelementene får ingen egen tekst til søkeren. Det
+    # avviker fra raffineringen, som sa at tekstene skulle hentes fra opptakskravene.
 
     Scenariomal: Saken får mangel når <vurdert av> vurderer at et kravelement ikke er oppfylt
       Gitt at søknadsalternativene i saken hos "Universitetet i Oslo" har kravelementet "Matematikk R2"
