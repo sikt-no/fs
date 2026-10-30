@@ -21,7 +21,7 @@ Egenskap: Starte automatisk behandling
   # opprettet, og ingen jobb sjekker om det har kommet nye vitnemål. Automatikken kan ikke skrus
   # av for et opptak.
   # Hvor ofte jobbene kjører, står i OPT-BEH-BEH-033 (PR #864).
-  # Saksbehandleren velger vitnemålet når søkeren har flere vitnemål med påstanden GSK, i
+  # Saksbehandleren velger vitnemålet når søkeren har flere vitnemål som gir GSK, i
   # OPT-BEH-BEH-025.
 
   # ÅPNE SPØRSMÅL:
@@ -77,7 +77,7 @@ Egenskap: Starte automatisk behandling
 
   @depends-on-OPT-BEH-BEH-029 @depends-on-OPT-BEH-BEH-025
   # OPT-BEH-BEH-029: «Saksbehandleren kan sette behandlingsstatusen», «Saken blir Under behandling når saksbehandleren endrer vurderingen eller leser et dokument»
-  # OPT-BEH-BEH-025: «Har søkeren flere vitnemål med påstanden GSK, behandles saken automatisk på vitnemålet saksbehandleren velger»
+  # OPT-BEH-BEH-025: «Har søkeren flere vitnemål som gir GSK, behandles saken automatisk på vitnemålet saksbehandleren velger»
   # Valget av vitnemål står i OPT-BEH-BEH-025. Dette kravet har starten av behandlingen.
   Regel: Saksbehandleren starter den automatiske behandlingen på vitnemålet som er valgt
     # Avklart 29.10.2026: det trengs ingen mulighet til å velge flere saker i sakslisten og
@@ -130,7 +130,7 @@ Egenskap: Starte automatisk behandling
 
     Scenario: Saken som er ferdig behandlet automatisk, viser at den er behandlet automatisk
       Gitt at søknaden til "Kari Nordmann" har en sak hos "Universitetet i Oslo"
-      Og at "Kari Nordmann" har ett vitnemål med påstanden at søkeren har GSK
+      Og at "Kari Nordmann" har ett vitnemål som gir GSK
       Når søknaden behandles automatisk
       Så er saken hos "Universitetet i Oslo" ferdig behandlet
       Og saksbehandleren ved Universitetet i Oslo ser at saken er behandlet automatisk

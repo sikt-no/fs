@@ -6,9 +6,9 @@ Egenskap: Ferdigbehandle en sak
   slik at jeg bare trenger å behandle sakene den automatiske behandlingen ikke kunne fullføre.
 
   En sak er søknaden slik den ligger hos én saksbehandlende organisasjon. Saken behandles
-  helautomatisk når søkeren har ett vitnemål, og vitnemålet har påstanden at søkeren har GSK. Den automatiske
+  helautomatisk når søkeren har ett vitnemål, og vitnemålet gir GSK. Den automatiske
   behandlingen avgjør da grunnlaget, poengene, kravelementene og kvoten, og setter saken til
-  ferdig behandlet når alt er avgjort. Har søkeren flere vitnemål med påstanden GSK, velger
+  ferdig behandlet når alt er avgjort. Har søkeren flere vitnemål som gir GSK, velger
   saksbehandleren vitnemålet, og beregner poengene i vitnemålsbehandlingen (OPT-BEH-BEH-004).
   Saken behandles da automatisk på vitnemålet, og den automatiske behandlingen avgjør resten.
   Kan den automatiske behandlingen ikke avgjøre et steg, gjør den stegene
@@ -20,7 +20,7 @@ Egenskap: Ferdigbehandle en sak
   # saksbehandling gjør saken ferdig behandlet».
   # Kode i dag: den automatiske behandlingen (AutomatiskSaksbehandlingService) setter ikke saken
   # til ferdig behandlet. Bare saksbehandleren gjør det (EndreStatusService).
-  # Søkere uten et vitnemål med påstanden at søkeren har GSK, behandles ikke automatisk
+  # Søkere uten et vitnemål som gir GSK, behandles ikke automatisk
   # (OPT-BEH-BEH-015, -018, -019 og -020), og blir ferdig behandlet av saksbehandleren.
   # Kode i dag: den automatiske behandlingen setter GSK-konklusjonen selv, og stopper når
   # søkeren har flere vitnemål.
@@ -40,43 +40,43 @@ Egenskap: Ferdigbehandle en sak
     Gitt at søknaden til "Kari Nordmann" har en sak hos "Universitetet i Oslo"
 
   @depends-on-OPT-BEH-BEH-015 @ref-FLY-OPT-AUT-001
-  # OPT-BEH-BEH-015: «Opptakssystemets påstand om GSK på vitnemålet»
-  Regel: Bare saker der søkeren har ett vitnemål, med påstanden GSK, behandles helautomatisk
+  # OPT-BEH-BEH-015: «Vitnemålet gir GSK når minst én av de tre påstandene er ja»
+  Regel: Bare saker der søkeren har ett vitnemål som gir GSK, behandles helautomatisk
 
-    Scenario: Saken behandles helautomatisk når søkeren har ett vitnemål, med påstanden GSK
+    Scenario: Saken behandles helautomatisk når søkeren har ett vitnemål som gir GSK
       Gitt at "Kari Nordmann" har ett vitnemål
-      Og at vitnemålet har påstanden at søkeren har GSK
+      Og at vitnemålet gir GSK
       Når søknaden behandles automatisk
       Så behandles saken hos "Universitetet i Oslo" helautomatisk på vitnemålet
 
-    Scenario: Saken behandles ikke helautomatisk når ingen vitnemål har påstanden GSK
-      Gitt at ingen av vitnemålene til "Kari Nordmann" har påstanden at søkeren har GSK
+    Scenario: Saken behandles ikke helautomatisk når ingen vitnemål gir GSK
+      Gitt at ingen av vitnemålene til "Kari Nordmann" gir GSK
       Når søknaden behandles automatisk
       Så behandles ikke saken hos "Universitetet i Oslo" helautomatisk
 
     Scenario: Saken behandles ikke helautomatisk før saksbehandleren har valgt vitnemål
-      Gitt at "Kari Nordmann" har to vitnemål med påstanden at søkeren har GSK
+      Gitt at "Kari Nordmann" har to vitnemål som gir GSK
       Når søknaden behandles automatisk
       Så behandles ikke saken hos "Universitetet i Oslo" helautomatisk
 
     @openquestion
-    Scenario: Søker med flere vitnemål der bare ett har påstanden GSK
+    Scenario: Søker med flere vitnemål der bare ett gir GSK
       # ÅPNE SPØRSMÅL:
-      # - Hvis en søker har to eller flere vitnemål, men bare ett har påstanden at søkeren har GSK,
+      # - Hvis en søker har to eller flere vitnemål, men bare ett gir GSK,
       #   skal saken gå gjennom den helautomatiske flyten eller ikke? Søknaden får GSK-konklusjonen
-      #   fra vitnemålet med påstanden (OPT-BEH-BEH-015, «Konklusjon på søknaden fra vitnemålet»).
+      #   fra vitnemålet som gir GSK (OPT-BEH-BEH-015, «Konklusjon på søknaden fra vitnemålet»).
       #   Det som står igjen, er om grunnlaget og poengene kan bygge på det vitnemålet uten at
       #   saksbehandleren har valgt. Det andre vitnemålet kan ha fag som gir søkeren flere poeng.
       #   Svaret endrer også raden «søkeren har flere elektroniske vitnemål …» i OPT-BEH-BEH-018
       #   og OPT-BEH-BEH-019.
       Gitt at "Kari Nordmann" har to vitnemål
-      Og at bare ett av vitnemålene har påstanden at søkeren har GSK
+      Og at bare ett av vitnemålene gir GSK
       Når søknaden behandles automatisk
-      Så behandles saken hos "Universitetet i Oslo" helautomatisk på vitnemålet med påstanden at søkeren har GSK
+      Så behandles saken hos "Universitetet i Oslo" helautomatisk på vitnemålet som gir GSK
 
   @ref-OPT-BEH-BEH-015 @ref-FLY-OPT-VAL-001 @ref-FLY-OPT-SAM-001 @ref-OPT-BEH-BEH-032
   # OPT-BEH-BEH-015: «Konklusjon på søknaden fra vitnemålet»
-  Regel: Har søkeren flere vitnemål med påstanden GSK, behandles saken automatisk på vitnemålet saksbehandleren velger
+  Regel: Har søkeren flere vitnemål som gir GSK, behandles saken automatisk på vitnemålet saksbehandleren velger
     # Saksbehandleren velger vitnemålet når den automatiske behandlingen startes på det. Å starte
     # behandlingen på et vitnemål står i OPT-BEH-BEH-032.
 
@@ -84,7 +84,7 @@ Egenskap: Ferdigbehandle en sak
       # Vitnemålet saksbehandleren velger, kan være et annet enn vitnemålet GSK-konklusjonen på
       # søknaden bygger på (det med senest utstedelsesdato). Begge vitnemålene gir GSK, og
       # konklusjonen endres ikke av valget.
-      Gitt at "Kari Nordmann" har vitnemålene "Vitnemål 2024" og "Vitnemål 2025", begge med påstanden at søkeren har GSK
+      Gitt at "Kari Nordmann" har vitnemålene "Vitnemål 2024" og "Vitnemål 2025", som begge gir GSK
       Når saksbehandleren ved Universitetet i Oslo starter den automatiske behandlingen på "Vitnemål 2025"
       Så behandles saken hos "Universitetet i Oslo" automatisk på "Vitnemål 2025"
 
@@ -101,7 +101,7 @@ Egenskap: Ferdigbehandle en sak
   Regel: Den automatiske behandlingen setter saken til ferdig behandlet når alt er avgjort
 
     Bakgrunn:
-      Gitt at "Kari Nordmann" har ett vitnemål med påstanden at søkeren har GSK
+      Gitt at "Kari Nordmann" har ett vitnemål som gir GSK
 
     Scenario: Saken er ferdig behandlet når den automatiske behandlingen har avgjort alt
       Gitt at den automatiske behandlingen kan avgjøre alle stegene for saken
@@ -133,7 +133,7 @@ Egenskap: Ferdigbehandle en sak
   Regel: Steg som bygger på et steg som ikke kan avgjøres, hoppes over
 
     Bakgrunn:
-      Gitt at "Kari Nordmann" har ett vitnemål med påstanden at søkeren har GSK
+      Gitt at "Kari Nordmann" har ett vitnemål som gir GSK
 
     Scenariomal: Det som kan avgjøres, blir avgjort når <steg> ikke kan avgjøres
       Gitt at <steg> for "Informatikk, UiO" ikke kan avgjøres på grunn av en feil i regelverket
@@ -155,7 +155,7 @@ Egenskap: Ferdigbehandle en sak
   Regel: Saksbehandleren setter saken til ferdig behandlet når den automatiske behandlingen ikke har fullført
 
     Bakgrunn:
-      Gitt at "Kari Nordmann" har ett vitnemål med påstanden at søkeren har GSK
+      Gitt at "Kari Nordmann" har ett vitnemål som gir GSK
 
     Scenario: Saksbehandleren ferdigbehandler saken etter å ha gjort resten
       Gitt at saken hos "Universitetet i Oslo" er under behandling fordi poengene for "Informatikk, UiO" ikke kunne avgjøres automatisk

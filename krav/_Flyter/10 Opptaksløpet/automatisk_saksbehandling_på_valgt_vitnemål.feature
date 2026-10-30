@@ -3,7 +3,7 @@
 Egenskap: Automatisk saksbehandling på vitnemålet saksbehandleren velger
   Fra saksbehandleren starter den automatiske behandlingen på vitnemålet saksbehandleren velger,
   til saken er ferdig behandlet og klar til å være med i plasstildelingen. Søkeren har flere
-  vitnemål med påstanden at søkeren har GSK, og saken behandles derfor ikke helautomatisk
+  vitnemål som gir GSK, og saken behandles derfor ikke helautomatisk
   (FLY-OPT-AUT-001).
   Saksbehandleren starter den automatiske behandlingen på ett av vitnemålene. Resten av løpet er
   det samme som i den automatiske saksbehandlingen, på vitnemålet saksbehandleren valgte:
@@ -18,10 +18,10 @@ Egenskap: Automatisk saksbehandling på vitnemålet saksbehandleren velger
 
   Bakgrunn:
     Gitt at søknaden til "Kari Nordmann" har en sak hos "Universitetet i Oslo"
-    Og at "Kari Nordmann" har vitnemålene "Vitnemål 2024" og "Vitnemål 2025", begge med påstanden at søkeren har GSK
+    Og at "Kari Nordmann" har vitnemålene "Vitnemål 2024" og "Vitnemål 2025", som begge gir GSK
 
   @depends-on-OPT-BEH-BEH-025
-  # OPT-BEH-BEH-025: «Har søkeren flere vitnemål med påstanden GSK, behandles saken automatisk på vitnemålet saksbehandleren velger»
+  # OPT-BEH-BEH-025: «Har søkeren flere vitnemål som gir GSK, behandles saken automatisk på vitnemålet saksbehandleren velger»
   Regel: Saksbehandleren starter den automatiske behandlingen på vitnemålet saksbehandleren velger
 
     Scenario: Saken behandles automatisk på vitnemålet saksbehandleren velger

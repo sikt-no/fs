@@ -5,14 +5,15 @@ Egenskap: Automatisk saksbehandling
   behandlet og klar til å være med i plasstildelingen, uten at en saksbehandler har gjort noe.
   Plasstildelingen er ikke en del av flyten. Søkerens
   vitnemål importeres fra KREG til opptakssystemet når saken er opprettet (OPT-BEH-BEH-030).
-  Påstanden om GSK beregnes for hvert vitnemål når vitnemålet importeres fra KREG, og søknaden
-  får GSK-konklusjonen da (OPT-BEH-BEH-015). «Importeres» betyr i flyten alltid at
+  Opptakssystemets påstand om GSK beregnes for hvert vitnemål når vitnemålet importeres fra KREG.
+  Vitnemålet gir GSK når minst én av de tre påstandene, skolens, KREGs og opptakssystemets, er ja,
+  og søknaden får GSK-konklusjonen da (OPT-BEH-BEH-015). «Importeres» betyr i flyten alltid at
   opptakssystemet henter vitnemålet fra KREG, ikke at vitnemålet kommer inn i KREG.
   Den automatiske behandlingen fortsetter saksbehandlertildelingen: hver ny sak behandles når
   vitnemålet er importert, eller når jobben for nye vitnemål i KREG finner søkerens første
   vitnemål. Opptaksforvalteren kan skru automatikken av for opptaket (OPT-BEH-BEH-032).
   Som første steg setter den GSK-konklusjonen på søknadene som ikke har en.
-  Flyten gjelder søkere med ett vitnemål, med påstanden at søkeren har GSK. Andre søkere
+  Flyten gjelder søkere med ett vitnemål som gir GSK. Andre søkere
   hoppes over, og behandles ikke helautomatisk
   (se OPT-BEH-BEH-025). For søkerne i flyten setter den automatiske behandlingen grunnlaget,
   poengene, vurderingen av kravelementene og svarene på kvotespørsmålene, i den rekkefølgen.
@@ -23,7 +24,8 @@ Egenskap: Automatisk saksbehandling
 
   # Kjent brudd: den automatiske behandlingen setter ikke saken til ferdig behandlet (se OPT-BEH-BEH-025).
   # Kjent brudd: koden beregner GSK bare i den automatiske behandlingen, ikke når vitnemålet
-  # importeres fra KREG, og påstanden lagres ikke på vitnemålet (se OPT-BEH-BEH-015).
+  # importeres fra KREG, og opptakssystemets påstand lagres ikke på vitnemålet (se OPT-BEH-BEH-015).
+  # Kjent brudd: koden krever at KREG sier GSK, og bruker ikke skolens påstand (se OPT-BEH-BEH-015).
   # Kjent brudd: ingenting starter den automatiske behandlingen når resultatene er importert.
   # Bare saksbehandleren starter den, for én sak om gangen (se OPT-BEH-BEH-032).
   # Fasene er etter prosesstegningen for automatisk saksbehandling (2026-10-29). Kvalifiseringen,
@@ -57,40 +59,41 @@ Egenskap: Automatisk saksbehandling
       Så behandles saken automatisk
 
   @depends-on-OPT-BEH-BEH-015 @depends-on-OPT-BEH-BEH-027
-  # OPT-BEH-BEH-015: «Opptakssystemets påstand om GSK på vitnemålet», «Konklusjon på søknaden fra vitnemålet», «Konklusjon fra tidligere opptak», «Automatikken setter bare positive konklusjoner, og bare der ingen finnes»
-  # Påstanden om GSK beregnes med kontrollmotoren, som er beskrevet i hele OPT-BEH-BEH-027.
+  # OPT-BEH-BEH-015: «Opptakssystemets påstand om GSK på vitnemålet», «Vitnemålet gir GSK når minst én av de tre påstandene er ja», «Konklusjon på søknaden fra vitnemålet», «Konklusjon fra tidligere opptak», «Automatikken setter bare positive konklusjoner, og bare der ingen finnes»
+  # Opptakssystemets påstand om GSK beregnes med kontrollmotoren, som er beskrevet i hele OPT-BEH-BEH-027.
   Regel: Søknaden får GSK-konklusjonen når vitnemålet importeres fra KREG
 
     Scenario: Søknaden får GSK-konklusjonen fra vitnemålet som er importert fra KREG
       Gitt at søknaden ikke har noen GSK-konklusjon
-      Og at "Kari Nordmann" har et vitnemål i KREG som gir generell studiekompetanse
+      Og at "Kari Nordmann" har et vitnemål i KREG som består seksfagskontrollen
       Når vitnemålet importeres fra KREG
-      Så har vitnemålet påstanden at søkeren har generell studiekompetanse
+      Så er opptakssystemets påstand at søkeren har generell studiekompetanse
+      Og vitnemålet gir GSK
       Og søknaden får en positiv GSK-konklusjon
 
   @depends-on-OPT-BEH-BEH-015 @ref-FLY-OPT-VAL-001 @ref-FLY-OPT-SAM-001
   # OPT-BEH-BEH-015: «GSK-konklusjonen settes også når den automatiske behandlingen kjører»
   Regel: Den automatiske behandlingen setter GSK-konklusjonen der den mangler
-    # Påstanden på vitnemålet beregnes ikke på nytt i kjøringen.
+    # Påstandene på vitnemålet beregnes ikke på nytt i kjøringen.
 
     Scenario: Søknaden uten GSK-konklusjon får konklusjonen i kjøringen
       Gitt at søknaden ikke har noen GSK-konklusjon
-      Og at "Kari Nordmann" har ett vitnemål med påstanden at søkeren har GSK
+      Og at "Kari Nordmann" har ett vitnemål som gir GSK
       Når søknaden behandles automatisk
       Så får søknaden en positiv GSK-konklusjon
 
   @depends-on-OPT-BEH-BEH-015 @depends-on-OPT-BEH-BEH-025
-  # OPT-BEH-BEH-015: «Opptakssystemets påstand om GSK på vitnemålet»
-  # OPT-BEH-BEH-025: «Bare saker der søkeren har ett vitnemål, med påstanden GSK, behandles helautomatisk»
-  Regel: Vitnemålet med påstanden GSK avgjør om saken behandles helautomatisk
+  # OPT-BEH-BEH-015: «Vitnemålet gir GSK når minst én av de tre påstandene er ja»
+  # OPT-BEH-BEH-025: «Bare saker der søkeren har ett vitnemål som gir GSK, behandles helautomatisk»
+  Regel: Vitnemålet som gir GSK, avgjør om saken behandles helautomatisk
 
-    Scenario: Saken behandles helautomatisk på vitnemålet med påstanden GSK
-      Gitt at "Kari Nordmann" har ett vitnemål med påstanden at søkeren har GSK
+    Scenario: Saken behandles helautomatisk på vitnemålet som gir GSK
+      Gitt at "Kari Nordmann" har ett vitnemål som gir GSK
       Når søknaden behandles automatisk
       Så behandles saken hos "Universitetet i Oslo" helautomatisk på vitnemålet
 
-    Scenario: Søkeren hoppes over når ingen vitnemål har påstanden GSK
-      Gitt at ingen av vitnemålene til "Kari Nordmann" har påstanden at søkeren har GSK
+    Scenario: Søkeren hoppes over når ingen vitnemål gir GSK
+      Gitt at ingen av vitnemålene til "Kari Nordmann" gir GSK
       Når søknaden behandles automatisk
       Så behandles ikke saken hos "Universitetet i Oslo" helautomatisk
 
@@ -102,7 +105,7 @@ Egenskap: Automatisk saksbehandling
     #   behandles helautomatisk på. Hvilket krav skal eie regelen: OPT-BEH-BEH-025 eller et nytt krav?
 
     Scenario: Saken behandles helautomatisk når søkeren har to identiske vitnemål
-      Gitt at "Kari Nordmann" har to identiske vitnemål med påstanden at søkeren har GSK
+      Gitt at "Kari Nordmann" har to identiske vitnemål som gir GSK
       Når søknaden behandles automatisk
       Så behandles saken hos "Universitetet i Oslo" helautomatisk på vitnemålet
 

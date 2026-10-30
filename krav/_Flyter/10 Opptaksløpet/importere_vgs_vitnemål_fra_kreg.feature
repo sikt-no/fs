@@ -6,7 +6,7 @@ Egenskap: Importere VGS-vitnemål fra KREG
   som bruker det annullerte vitnemålet, er merket for saksbehandleren. En jobbplanlegger starter importen. Importen leser
   hendelsesloggen i KREG, og gjelder en hendelse minst én aktiv søker i opptakssystemet, leses
   alle VGS-dokumentene søkeren har i KREG, også annulleringene. Et vitnemål som ikke finnes fra
-  før, importeres. Er det ikke annullert, beregnes påstanden om GSK for vitnemålet, og
+  før, importeres. Er det ikke annullert, beregnes opptakssystemets påstand om GSK for vitnemålet, og
   GSK-beregningen startes for hvert opptak søkeren har søknad i. Et vitnemål som finnes fra før
   og er annullert i KREG, oppdateres som annullert. Et annullert vitnemål håndteres etter
   reglene for annullerte vitnemål.
@@ -16,7 +16,7 @@ Egenskap: Importere VGS-vitnemål fra KREG
   # Et vitnemål som finnes fra før og ikke er annullert i KREG, endres ikke. Det gjelder også
   # når KREG har opphevet en annullering (se OPT-BEH-BEH-030).
   # Flyten beskriver vitnemålene. Kompetansebevis søkeren har i KREG, importeres på samme
-  # måte (OPT-BEH-BEH-030), men får ingen påstand om GSK (OPT-BEH-BEH-015).
+  # måte (OPT-BEH-BEH-030), men får ingen påstand fra opptakssystemet om GSK (OPT-BEH-BEH-015).
 
   @openquestion
   # ÅPNE SPØRSMÅL:
@@ -66,10 +66,10 @@ Egenskap: Importere VGS-vitnemål fra KREG
   # OPT-BEH-BEH-015: «Opptakssystemets påstand om GSK på vitnemålet»
   Regel: Påstanden om GSK beregnes når det nye vitnemålet er importert
 
-    Scenario: Det nye vitnemålet får påstanden om GSK
-      Gitt at "Kari Nordmann" har fått et vitnemål i KREG som gir generell studiekompetanse
+    Scenario: Det nye vitnemålet får opptakssystemets påstand om GSK
+      Gitt at "Kari Nordmann" har fått et vitnemål i KREG som består seksfagskontrollen
       Når importen av VGS-vitnemål fra KREG har importert vitnemålet
-      Så har vitnemålet påstanden at søkeren har generell studiekompetanse
+      Så er opptakssystemets påstand at søkeren har generell studiekompetanse
 
   @depends-on-OPT-BEH-BEH-015
   # OPT-BEH-BEH-015: «Konklusjon på søknaden fra vitnemålet»
@@ -80,7 +80,7 @@ Egenskap: Importere VGS-vitnemål fra KREG
     Scenario: Hver søknad uten GSK-konklusjon får konklusjonen
       Gitt at "Kari Nordmann" har søknader i to opptak som ikke er avsluttet
       Og at ingen av søknadene har noen GSK-konklusjon
-      Og at vitnemålet til "Kari Nordmann" har påstanden at søkeren har GSK
+      Og at vitnemålet til "Kari Nordmann" gir GSK
       Når GSK-beregningen er startet for hvert opptak "Kari Nordmann" har søknad i
       Så får begge søknadene en positiv GSK-konklusjon
 
@@ -109,8 +109,8 @@ Egenskap: Importere VGS-vitnemål fra KREG
       Så har saken taggen "Vitnemål annullert"
       Og saken har behandlingsstatusen "Under behandling"
 
-    Scenario: Nytt vitnemål som er annullert, importeres uten påstand om GSK
+    Scenario: Nytt vitnemål som er annullert, importeres uten påstand fra opptakssystemet om GSK
       Gitt at "Kari Nordmann" har et annullert vitnemål i KREG som ikke er importert
       Når importen av VGS-vitnemål fra KREG kjører
       Så er vitnemålet importert som annullert
-      Og vitnemålet har ingen påstand om generell studiekompetanse
+      Og vitnemålet har ingen påstand fra opptakssystemet om generell studiekompetanse

@@ -41,7 +41,7 @@ Egenskap: Automatisk saksbehandling på sammensatt vitnemål
       Så har det sammensatte vitnemålet bare fag og karakterer fra vitnemål og kompetansebevis "Kari Nordmann" har
 
   @depends-on-OPT-BEH-BEH-025
-  # OPT-BEH-BEH-025: «Har søkeren flere vitnemål med påstanden GSK, behandles saken automatisk på vitnemålet saksbehandleren velger»
+  # OPT-BEH-BEH-025: «Har søkeren flere vitnemål som gir GSK, behandles saken automatisk på vitnemålet saksbehandleren velger»
   Regel: Saksbehandleren starter den automatiske behandlingen på det sammensatte vitnemålet
     # Avklart 2026-10-29: saksbehandleren må si at den automatiske behandlingen skal kjøre med det
     # sammensatte vitnemålet. Å starte behandlingen på et vitnemål står i OPT-BEH-BEH-032 (PR #862,
