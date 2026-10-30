@@ -99,11 +99,10 @@ Egenskap: Automatisk beregning av vitnemålspoeng
       Når vitnemålspoengene beregnes automatisk
       Så har poengtypene fått poeng beregnet fra vitnemålet alene
 
-    Scenario: Automatisk beregnede vitnemålspoeng fjernes når søkeren har to vitnemål
-      Gitt at søknaden har vitnemålspoeng som er beregnet automatisk fra et vitnemål
-      Og at søkeren har fått et vitnemål til
-      Når vitnemålspoengene beregnes automatisk
-      Så er de automatisk beregnede vitnemålspoengene fjernet
+    # Avklart 30.10.2026: får søkeren et vitnemål til, blir de automatisk beregnede
+    # vitnemålspoengene stående til saksbehandleren har valgt vitnemål og startet behandlingen på
+    # det. Et nytt vitnemål er ny dokumentasjon, og saken behandles ikke automatisk på nytt
+    # (OPT-BEH-BEH-032).
 
     @ref-OPT-BEH-BEH-025
     Scenario: Vitnemålspoeng fra vitnemålet saksbehandleren har valgt
