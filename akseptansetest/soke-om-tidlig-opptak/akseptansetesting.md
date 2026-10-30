@@ -61,47 +61,37 @@ Klart når testansvarlig har logget inn som testbruker og ser testdataene.
 
 Søknadene åpnes under «Meny» øverst til høyre og «Mine søknader». Der står søknadene med navnet på opptaket, ikke med søknadsnummeret. Testbruker 1 har søknader i flere opptak, og testen bruker søknaden i «Samordna UHG-simulering høsten 2026». Boksen «Tidlig opptak» står under «Om søknaden» på «Søknadsdetaljer».
 
-Ta testcasene i rekkefølgen de står. 2.4 står etter regel 4, fordi den sender søknaden om tidlig opptak for testbruker 1, og det kan ikke gjøres om. 1.1, 2.1, 2.2 og 3.1 trenger at testbruker 1 ikke har søkt, og 5.1 bygger på 2.4. 2.1 står før 2.2, fordi «Søk om tidlig opptak» i 2.2 går til en ny side, bort fra lenken i 2.1.
+Testcasene står i den rekkefølgen de kjøres, sortert etter testbruker, så testbrukeren byttes tre ganger. Nummeret viser regelen i kravet. 2.4a sender søknaden om tidlig opptak for testbruker 1, og det kan ikke gjøres om. Derfor står 2.4a og 2.4b etter testcasene som trenger at testbruker 1 ikke har søkt, og før 5.1, som bygger på dem. 2.1 står før 2.2, fordi «Søk om tidlig opptak» i 2.2 går til en ny side, bort fra lenken i 2.1.
 
-### Regel 1: Søkeren ber om tidlig opptak etter at søknaden er sendt
+### Testbruker 1: Samtidig Sild
 
-| # | Scenario | Steg | Forventet resultat | Faktisk resultat | Bestått? |
-|---|---|---|---|---|---|
-| 1.1 | Søke om tidlig opptak fra søknadsdetaljene | Som testbruker 1: åpne «Søknad til Samordna UHG-simulering høsten 2026» | Boksen «Tidlig opptak» står på søknadsdetaljene, med teksten om tidlig opptak og knappen «Søk om tidlig opptak» | | |
-| 1.2 | Kan ikke søke om tidlig opptak før søknaden er sendt | Som testbruker 3: velg «Finn studier», skriv inn «Psykologi profesjon», velg det første av treffene med søknadsfrist 13.10.2027, og velg «Legg til» og «Til studiekurv». «Psykologi profesjon» tilbyr tidlig opptak. Gå gjennom stegene fram til «Send søknad», uten å sende. Velg «Mine søknader»: søknaden står ikke under «Aktive søknader», siden den ikke er sendt | «Tidlig opptak» og «Søk om tidlig opptak» vises ikke noe sted | | |
+| # | Regel | Scenario | Steg | Forventet resultat | Faktisk resultat | Bestått? |
+|---|---|---|---|---|---|---|
+| 1.1 | 1: Søkeren ber om tidlig opptak etter at søknaden er sendt | Søke om tidlig opptak fra søknadsdetaljene | Som testbruker 1: åpne «Søknad til Samordna UHG-simulering høsten 2026» | Boksen «Tidlig opptak» står på søknadsdetaljene, med teksten om tidlig opptak og knappen «Søk om tidlig opptak» | | |
+| 2.1 | 2: Søkeren kan søke om tidlig opptak når opptaket tilbyr det | Se informasjon om tidlig opptak i opptaket | Som testbruker 1: åpne «Søknad til Samordna UHG-simulering høsten 2026», og velg «Les mer om tidlig opptak og hvilken dokumentasjon som kreves» i boksen «Tidlig opptak» | Lenken åpner siden opptaket har satt: <https://www.samordnaopptak.no/universitet-og-hogskole/slik-soker-du/tidlig-opptak.html> | | |
+| 2.2 | 2: Søkeren kan søke om tidlig opptak når opptaket tilbyr det | Se hvilke søknadsalternativer som tilbyr tidlig opptak | Som testbruker 1: åpne «Søknad til Samordna UHG-simulering høsten 2026», og velg «Søk om tidlig opptak». Ikke velg «Send søknad» | Boksen «Obs! Disse studieønskene tilbyr ikke tidlig opptak.» viser «Biovitenskap» ved UiO, men ikke «Psykologi profesjon» | | |
+| 3.1 | 3: Søkeren velger én begrunnelse fra opptakets liste | Se begrunnelsene søkeren kan velge | «Avvikle virksomheten» er inaktivt i opptaket. Som testbruker 1: åpne «Søknad til Samordna UHG-simulering høsten 2026», velg «Søk om tidlig opptak», og åpne «Hvem kan søke tidlig opptak?». Ikke velg «Send søknad» | Disse fire grunnlagene kan velges under «Velg et grunnlag for tidlig opptak»: «Jeg må flytte med familien på grunn av jobb, barnehageplass eller skolebytte», «Jeg er i jobb og har oppsigelsestid, eller må søke permisjon», «Jeg må søke oppholdstillatelse for å studere» og «Jeg har behov for særskilt tilrettelegging på studiestedet». «Hvem kan søke tidlig opptak?» forklarer hva som må dokumenteres for de samme fire. Ingen andre grunnlag står noen av stedene, heller ikke det inaktive grunnlaget om å avvikle virksomheten | | |
+| 2.4a | 2: Søkeren kan søke om tidlig opptak når opptaket tilbyr det | Søke om tidlig opptak med en begrunnelse | Som testbruker 1: åpne «Søknad til Samordna UHG-simulering høsten 2026», og velg «Søk om tidlig opptak». Velg «Jeg er i jobb og har oppsigelsestid, eller må søke permisjon» under «Velg et grunnlag for tidlig opptak», og «Send søknad». Åpne «Søknad til Samordna UHG-simulering høsten 2026» igjen | Søknaden viser «Du har søkt om tidlig opptak.», med en påminnelse om dokumentasjonen for grunnlaget, og «Søk om tidlig opptak» er borte | | |
+| 2.4b | 2: Søkeren kan søke om tidlig opptak når opptaket tilbyr det | Søke om tidlig opptak med en begrunnelse: kvitteringen | Som testbruker 1: velg «Meny» og «Mine meldinger», og åpne den nyeste kvitteringen [Sjekk begrep: tittelen] | Kvitteringen viser bare «Psykologi profesjon» under «Du har søkt tidlig opptak til følgende studier:», ikke «Biovitenskap» | | |
+| 5.1 | 5: Søknaden om tidlig opptak gjelder hele søknaden | Søknaden om tidlig opptak blir stående når søknadsalternativene endres | Testbruker 1 har søkt om tidlig opptak (2.4). Som testbruker 1: velg «Legg til studieønsker», legg til «Grunnskolelærerutdanning for trinn 5-10 (300 studiepoeng)» i Halden, og send søknaden [Sjekk begrep: stegene når et studieønske legges til en sendt søknad]. Åpne «Søknad til Samordna UHG-simulering høsten 2026» igjen | Det nye studieønsket står i søknaden, og boksen viser fortsatt «Du har søkt om tidlig opptak.», med påminnelsen for det samme grunnlaget som i 2.4 | | |
 
-### Regel 2: Søkeren kan søke om tidlig opptak når opptaket tilbyr det
+### Testbruker 2: Heidi Lykke
 
-| # | Scenario | Steg | Forventet resultat | Faktisk resultat | Bestått? |
-|---|---|---|---|---|---|
-| 2.1 | Se informasjon om tidlig opptak i opptaket | Som testbruker 1: åpne «Søknad til Samordna UHG-simulering høsten 2026», og velg «Les mer om tidlig opptak og hvilken dokumentasjon som kreves» i boksen «Tidlig opptak» | Lenken åpner siden opptaket har satt: <https://www.samordnaopptak.no/universitet-og-hogskole/slik-soker-du/tidlig-opptak.html> | | |
-| 2.2 | Se hvilke søknadsalternativer som tilbyr tidlig opptak | Som testbruker 1: åpne «Søknad til Samordna UHG-simulering høsten 2026», og velg «Søk om tidlig opptak». Ikke velg «Send søknad» | Boksen «Obs! Disse studieønskene tilbyr ikke tidlig opptak.» viser «Biovitenskap» ved UiO, men ikke «Psykologi profesjon» | | |
-| 2.3 | Kan ikke søke om tidlig opptak når ingen søknadsalternativer tilbyr det | Som testbruker 2: åpne «Søknad til Samordna UHG-simulering høsten 2026» | Boksen «Tidlig opptak» og knappen «Søk om tidlig opptak» vises ikke | | |
+| # | Regel | Scenario | Steg | Forventet resultat | Faktisk resultat | Bestått? |
+|---|---|---|---|---|---|---|
+| 2.3 | 2: Søkeren kan søke om tidlig opptak når opptaket tilbyr det | Kan ikke søke om tidlig opptak når ingen søknadsalternativer tilbyr det | Som testbruker 2: åpne «Søknad til Samordna UHG-simulering høsten 2026» | Boksen «Tidlig opptak» og knappen «Søk om tidlig opptak» vises ikke | | |
 
-### Regel 3: Søkeren velger én begrunnelse fra opptakets liste
+### Testbruker 3: Frisk Frosk
 
-| # | Scenario | Steg | Forventet resultat | Faktisk resultat | Bestått? |
-|---|---|---|---|---|---|
-| 3.1 | Se begrunnelsene søkeren kan velge | «Avvikle virksomheten» er inaktivt i opptaket. Som testbruker 1: åpne «Søknad til Samordna UHG-simulering høsten 2026», velg «Søk om tidlig opptak», og åpne «Hvem kan søke tidlig opptak?». Ikke velg «Send søknad» | Disse fire grunnlagene kan velges under «Velg et grunnlag for tidlig opptak»: «Jeg må flytte med familien på grunn av jobb, barnehageplass eller skolebytte», «Jeg er i jobb og har oppsigelsestid, eller må søke permisjon», «Jeg må søke oppholdstillatelse for å studere» og «Jeg har behov for særskilt tilrettelegging på studiestedet». «Hvem kan søke tidlig opptak?» forklarer hva som må dokumenteres for de samme fire. Ingen andre grunnlag står noen av stedene, heller ikke det inaktive grunnlaget om å avvikle virksomheten | | |
+| # | Regel | Scenario | Steg | Forventet resultat | Faktisk resultat | Bestått? |
+|---|---|---|---|---|---|---|
+| 1.2 | 1: Søkeren ber om tidlig opptak etter at søknaden er sendt | Kan ikke søke om tidlig opptak før søknaden er sendt | Som testbruker 3: velg «Finn studier», skriv inn «Psykologi profesjon», velg det første av treffene med søknadsfrist 13.10.2027, og velg «Legg til» og «Til studiekurv». «Psykologi profesjon» tilbyr tidlig opptak. Gå gjennom stegene fram til «Send søknad», uten å sende. Velg «Mine søknader»: søknaden står ikke under «Aktive søknader», siden den ikke er sendt | «Tidlig opptak» og «Søk om tidlig opptak» vises ikke noe sted | | |
 
-### Regel 4: Tidlig opptak kan bare søkes innen søknadsfristen for tidlig opptak
+### Testbruker 4: Ullen Bikkje
 
-| # | Scenario | Steg | Forventet resultat | Faktisk resultat | Bestått? |
-|---|---|---|---|---|---|
-| 4.1 | Kan ikke søke om tidlig opptak etter fristen | Fristen for tidlig opptak i «Opptak UHM 2025» gikk ut 22.10.2026, og minst ett av søknadsalternativene tilbyr tidlig opptak. Som testbruker 4: åpne «Søknad til Opptak UHM 2025» | Boksen «Tidlig opptak» og knappen «Søk om tidlig opptak» vises ikke | | |
-
-### Regel 2 (fortsatt): Søkeren kan søke om tidlig opptak når opptaket tilbyr det
-
-| # | Scenario | Steg | Forventet resultat | Faktisk resultat | Bestått? |
-|---|---|---|---|---|---|
-| 2.4a | Søke om tidlig opptak med en begrunnelse | Som testbruker 1: åpne «Søknad til Samordna UHG-simulering høsten 2026», og velg «Søk om tidlig opptak». Velg «Jeg er i jobb og har oppsigelsestid, eller må søke permisjon» under «Velg et grunnlag for tidlig opptak», og «Send søknad». Åpne «Søknad til Samordna UHG-simulering høsten 2026» igjen | Søknaden viser «Du har søkt om tidlig opptak.», med en påminnelse om dokumentasjonen for grunnlaget, og «Søk om tidlig opptak» er borte | | |
-| 2.4b | Søke om tidlig opptak med en begrunnelse: kvitteringen | Som testbruker 1: velg «Meny» og «Mine meldinger», og åpne den nyeste kvitteringen [Sjekk begrep: tittelen] | Kvitteringen viser bare «Psykologi profesjon» under «Du har søkt tidlig opptak til følgende studier:», ikke «Biovitenskap» | | |
-
-### Regel 5: Søknaden om tidlig opptak gjelder hele søknaden
-
-| # | Scenario | Steg | Forventet resultat | Faktisk resultat | Bestått? |
-|---|---|---|---|---|---|
-| 5.1 | Søknaden om tidlig opptak blir stående når søknadsalternativene endres | Testbruker 1 har søkt om tidlig opptak (2.4). Som testbruker 1: velg «Legg til studieønsker», legg til «Grunnskolelærerutdanning for trinn 5-10 (300 studiepoeng)» i Halden, og send søknaden [Sjekk begrep: stegene når et studieønske legges til en sendt søknad]. Åpne «Søknad til Samordna UHG-simulering høsten 2026» igjen | Det nye studieønsket står i søknaden, og boksen viser fortsatt «Du har søkt om tidlig opptak.», med påminnelsen for det samme grunnlaget som i 2.4 | | |
+| # | Regel | Scenario | Steg | Forventet resultat | Faktisk resultat | Bestått? |
+|---|---|---|---|---|---|---|
+| 4.1 | 4: Tidlig opptak kan bare søkes innen søknadsfristen for tidlig opptak | Kan ikke søke om tidlig opptak etter fristen | Fristen for tidlig opptak i «Opptak UHM 2025» gikk ut 22.10.2026, og minst ett av søknadsalternativene tilbyr tidlig opptak. Som testbruker 4: åpne «Søknad til Opptak UHM 2025» | Boksen «Tidlig opptak» og knappen «Søk om tidlig opptak» vises ikke | | |
 
 ### Ikke med i denne testen
 
