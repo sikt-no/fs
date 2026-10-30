@@ -61,7 +61,7 @@
 #   på hver sin branch.
 # - Hvordan saksbehandleren velger vitnemål for søkere med flere vitnemål,
 #   står i velge_vitnemål_som_grunnlag.feature (@OPT-BEH-BEH-004).
-@OPT-BEH-BEH-020 @must @draft
+@OPT-BEH-BEH-020 @must @planned
 Egenskap: Automatisk vurdering av spesielle opptakskrav
   Som saksbehandler
   ønsker jeg at systemet vurderer om søkerens elektroniske vitnemål oppfyller de spesielle opptakskravene
