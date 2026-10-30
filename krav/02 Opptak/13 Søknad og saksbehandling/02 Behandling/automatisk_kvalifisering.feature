@@ -61,7 +61,7 @@
 #   på hver sin branch.
 # - Hvordan saksbehandleren velger vitnemål for søkere med flere vitnemål,
 #   står i velge_vitnemål_som_grunnlag.feature (@OPT-BEH-BEH-004).
-@OPT-BEH-BEH-020 @must @draft
+@OPT-BEH-BEH-020 @must @planned
 Egenskap: Automatisk vurdering av spesielle opptakskrav
   Som saksbehandler
   ønsker jeg at systemet vurderer om søkerens elektroniske vitnemål oppfyller de spesielle opptakskravene
@@ -77,20 +77,18 @@ Egenskap: Automatisk vurdering av spesielle opptakskrav
   Vurderinger som saksbehandleren har gjort, endres aldri av automatikken. Det
   fremgår om et kravelement er vurdert automatisk eller av saksbehandleren.
 
-  # ÅPNE SPØRSMÅL:
-  # - Den automatiske vurderingen lager og sjekker ut mangler for
-  #   kravelementene (søknadsmangler.feature). Skal den også gjøre noe med
-  #   manglene saksbehandleren har registrert, slik «Godkjenn» i FS-klienten
-  #   sletter dem?
-  # - knytte_praksis_til_opptakskrav.feature (@OPT-BEH-BEH-006) setter et
-  #   kravelement automatisk oppfylt fra praksis. Hvordan virker de to
-  #   automatikkene sammen, og hvem eier låsingen?
-  # - Søknaden kan ha saker hos flere organisasjoner. Kravelementer fra de
-  #   andre sakene skal ikke vurderes på denne saken (STEK-593).
-  # - Skal et studieønske som fjernes, også fjerne kravelementene det ga
-  #   (STEK-505)?
-  # - FS157.001 i FS-klienten beregner om søkerne er kvalifisert for et helt
-  #   opptak. Trengs det tilsvarende?
+  # Avklart 30.10.2026: er søkeren ikke kvalifisert, får saken automatiske mangeltekster for
+  # kravelementene som ikke er oppfylt, og de slettes når søkeren blir kvalifisert
+  # (OPT-BEH-BEH-008). Den automatiske vurderingen gjør ikke noe med manglene saksbehandleren
+  # har registrert. I FS-klienten sletter «Godkjenn» dem.
+  # Avklart 30.10.2026: vurderingen av vitnemålet og praksisautomatikken
+  # (knytte_praksis_til_opptakskrav.feature, OPT-BEH-BEH-006) vurderer hver sine kravelementer,
+  # og møtes ikke. Saksbehandlerens vurdering låser kravelementet i begge.
+  # Avklart 30.10.2026: fjernes et studieønske, blir kravelementene det ga, og vurderingen av
+  # dem, stående (STEK-505). Søkeren ser mangeltekstene per søknadsalternativ, og ser dem ikke
+  # lenger når søknadsalternativet er fjernet (OPT-BEH-BEH-008).
+  # Avklart 30.10.2026: FS157.001 i FS-klienten, som beregner om søkerne er kvalifisert for et
+  # helt opptak, dekkes av OPT-BEH-BEH-026 «Beregne automatisk på nytt».
 
   @depends-on-OPT-REG-KRA-002 @ref-FLY-OPT-AUT-001
   Regel: Kravelementer som er koblet til vitnemålet, vurderes automatisk
@@ -143,6 +141,14 @@ Egenskap: Automatisk vurdering av spesielle opptakskrav
       Og at søknaden har et kravelement som ikke er koblet til vitnemålet
       Når søknaden behandles automatisk
       Så er kravelementet ikke vurdert
+
+    Scenario: Kravelementer fra en annen sak i søknaden vurderes ikke i saken
+      # STEK-593.
+      Gitt at søknaden har saker hos "Universitetet i Oslo" og "UiT Norges arktiske universitet"
+      Og at "Informatikk, UiO" har kravelementet "Matematikk R2"
+      Og at ingen av søknadsalternativene i saken hos "UiT Norges arktiske universitet" har kravelementet "Matematikk R2"
+      Når kravelementene i saken hos "UiT Norges arktiske universitet" vurderes automatisk
+      Så er "Matematikk R2" ikke vurdert i saken hos "UiT Norges arktiske universitet"
 
     Scenario: Kravelement vurderes mot vitnemål fra R94
       Gitt at søkeren har ett elektronisk vitnemål fra R94
@@ -216,7 +222,7 @@ Egenskap: Automatisk vurdering av spesielle opptakskrav
       Så er søkeren ikke kvalifisert på grunnlaget
 
     Scenario: Søkeren kan være kvalifisert på ett grunnlag og ikke på et annet
-      Gitt at søknaden har grunnlagene "VES" og "PRA"
+      Gitt at saken har grunnlagene "VES" og "PRA"
       Og at saksbehandleren har lagt inn et unntak for et kravelement på grunnlaget "PRA"
       Når kravene er vurdert
       Så er søkeren kvalifisert på grunnlaget "VES"
@@ -310,7 +316,7 @@ Egenskap: Automatisk vurdering av spesielle opptakskrav
 
     Scenario: Kravelementer for et nytt grunnlag vurderes
       Gitt at søkeren har ett elektronisk vitnemål som ikke er annullert
-      Når søknaden får et nytt grunnlag med kravelementer som er koblet til vitnemålet
+      Når saken får et nytt grunnlag med kravelementer som er koblet til vitnemålet
       Og søknaden behandles automatisk
       Så er kravelementene for det nye grunnlaget vurdert
 

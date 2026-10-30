@@ -1,5 +1,5 @@
 # language: no
-@FLY-OPT-AUT-001 @must @draft @e2e @depends-on-FLY-OPT-SAK-001
+@FLY-OPT-AUT-001 @must @planned @e2e @depends-on-FLY-OPT-SAK-001
 Egenskap: Automatisk saksbehandling
   Fra søknaden er blitt en sak hos den saksbehandlende organisasjonen, til saken er ferdig
   behandlet og klar til å være med i plasstildelingen, uten at en saksbehandler har gjort noe.
@@ -17,7 +17,7 @@ Egenskap: Automatisk saksbehandling
   hoppes over, og behandles ikke helautomatisk
   (se OPT-BEH-BEH-025). For søkerne i flyten setter den automatiske behandlingen grunnlaget,
   poengene, vurderingen av kravelementene og svarene på kvotespørsmålene, i den rekkefølgen.
-  Det oppdaterer kvalifiseringen, kvotene, poengene per kvote og manglene. Til slutt sjekker den
+  Det oppdaterer kvalifiseringen, kvotene, poengene per kvote og mangeltekstene. Til slutt sjekker den
   automatiske behandlingen ut mangelen for GSK som fullføres i vår, og setter saken til ferdig
   behandlet. Rettes en feil i regelverket, beregner opptaksforvalteren søknadsalternativene
   feilen gjaldt, på nytt.
@@ -29,7 +29,7 @@ Egenskap: Automatisk saksbehandling
   # Kjent brudd: ingenting starter den automatiske behandlingen når resultatene er importert.
   # Bare saksbehandleren starter den, for én sak om gangen (se OPT-BEH-BEH-032).
   # Fasene er etter prosesstegningen for automatisk saksbehandling (2026-10-29). Kvalifiseringen,
-  # kvotene, poengene per kvote og manglene er ikke egne steg: de oppdateres automatisk ut fra
+  # kvotene, poengene per kvote og mangeltekstene er ikke egne steg: de oppdateres automatisk ut fra
   # stegene før, og er gule i tegningen. Tegningen har kravelementene før poengene. Det er
   # unøyaktig: poengene beregnes først (OPT-BEH-BEH-020).
   # To faser er med i flyten, men er utenfor scope i første fase (@wont): to identiske vitnemål
@@ -40,8 +40,8 @@ Egenskap: Automatisk saksbehandling
     Gitt at søknaden til "Kari Nordmann" har en sak hos "Universitetet i Oslo"
 
   @depends-on-OPT-BEH-BEH-030
-  # OPT-BEH-BEH-030: «Resultatene hentes når søknaden kommer inn», «Alle vitnemål og kompetansebevis søkeren har i KREG, importeres»
-  Regel: Søkerens resultater importeres fra KREG når søknaden kommer inn
+  # OPT-BEH-BEH-030: «Resultatene hentes når saken er opprettet», «Alle vitnemål og kompetansebevis søkeren har i KREG, importeres»
+  Regel: Søkerens resultater importeres fra KREG når saken er opprettet
 
     Scenario: Vitnemålet fra KREG er klart for behandlingen når saken er opprettet
       Gitt at "Kari Nordmann" har et vitnemål i KREG
@@ -111,12 +111,12 @@ Egenskap: Automatisk saksbehandling
 
   @depends-on-OPT-BEH-BEH-019 @ref-FLY-OPT-VAL-001 @ref-FLY-OPT-SAM-001
   # OPT-BEH-BEH-019: «Grunnlaget velges ut fra egenskapene regelverket har gitt det», «Ingen automatisk grunnlag uten ett vitnemål som gir generell studiekompetanse», «Grunnlaget settes når den automatiske behandlingen kjører»
-  Regel: Søknaden får grunnlag fra vitnemålet
+  Regel: Saken får grunnlag fra vitnemålet
 
-    Scenario: Søknaden får grunnlag
+    Scenario: Saken får grunnlag
       Gitt at saken hos "Universitetet i Oslo" behandles helautomatisk på vitnemålet
       Når søknaden behandles automatisk
-      Så har søknaden grunnlag
+      Så har saken grunnlag
 
   @depends-on-OPT-BEH-BEH-018 @depends-on-OPT-REG-RAN-001 @depends-on-OPT-REG-RAN-002 @ref-FLY-OPT-VAL-001 @ref-FLY-OPT-SAM-001
   # OPT-BEH-BEH-018: «Karakterpoeng, realfagspoeng og språkpoeng beregnes fra søkerens eneste vitnemål», «Skolepoeng settes sammen av karakterpoeng, realfagspoeng og språkpoeng», «Ingen automatisk beregning uten ett entydig vitnemål»
@@ -126,7 +126,7 @@ Egenskap: Automatisk saksbehandling
     # Avklart 2026-10-27 i review av PR #818, fra koden i fs-plattform (PoengRadOppdateringService).
 
     Scenario: Søknadsalternativet får poengsum
-      Gitt at søknaden har grunnlag
+      Gitt at saken har grunnlag
       Når søknaden behandles automatisk
       Så har "Informatikk, UiO" poengsum for søknaden
 
@@ -135,9 +135,9 @@ Egenskap: Automatisk saksbehandling
   Regel: Søknaden får tilleggspoeng når grunnlaget er satt
 
     Scenario: Søknaden får tilleggspoengene for grunnlaget
-      Gitt at søknaden har grunnlag
+      Gitt at saken har grunnlag
       Når søknaden behandles automatisk
-      Så har søknaden tilleggspoengene rangeringsregelverket gir for grunnlaget
+      Så har saken tilleggspoengene rangeringsregelverket gir for grunnlaget
 
   @wont @openquestion
   Regel: Søknaden dobbeltrangeres automatisk etter 23/5-regelen
@@ -154,7 +154,7 @@ Egenskap: Automatisk saksbehandling
   Regel: Kravelementene vurderes mot vitnemålet når poengene er beregnet
 
     Scenario: Kravelementet er vurdert mot vitnemålet
-      Gitt at søknaden har grunnlag
+      Gitt at saken har grunnlag
       Og at "Informatikk, UiO" har kravelementet "Matematikk R1"
       Når søknaden behandles automatisk
       Så er kravelementet vurdert mot vitnemålet
@@ -164,7 +164,7 @@ Egenskap: Automatisk saksbehandling
   Regel: Kvotespørsmålene med algoritme besvares automatisk
 
     Scenario: Kvotespørsmålet er besvart automatisk
-      Gitt at søknaden har grunnlag
+      Gitt at saken har grunnlag
       Og at grunnlaget er koblet til en kvotetype med kvotespørsmålet "ER-KVINNE"
       Og at kvotespørsmålet "ER-KVINNE" er koblet til algoritmen "Er kvinne"
       Når søknaden behandles automatisk
@@ -176,7 +176,7 @@ Egenskap: Automatisk saksbehandling
   Regel: Kvalifiseringen oppdateres når kravelementene er vurdert
 
     Scenario: Søkeren er kvalifisert når vitnemålet oppfyller kravelementene
-      Gitt at søknaden har grunnlag
+      Gitt at saken har grunnlag
       Og at "Informatikk, UiO" har kravelementet "Matematikk R1"
       Og at vitnemålet saken behandles helautomatisk på, har "Matematikk R1"
       Når søknaden behandles automatisk

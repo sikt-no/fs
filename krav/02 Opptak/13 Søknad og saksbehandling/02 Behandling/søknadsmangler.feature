@@ -622,6 +622,20 @@ Egenskap: Søknadsmangler
       Når søkeren åpner dokumentasjonssiden i Min kompetanse
       Så ser ikke søkeren den automatiske mangelteksten for "Matematikk R2"
 
+    Scenario: Søkeren ser mangeltekstene per søknadsalternativ
+      Gitt at saken hos "Universitetet i Oslo" er ferdig behandlet
+      Og at saken har en automatisk mangeltekst for "Matematikk R2" for "Informatikk, UiO"
+      Når søkeren åpner dokumentasjonssiden i Min kompetanse
+      Så ser søkeren mangelteksten for "Matematikk R2" under "Informatikk, UiO"
+
+    Scenario: Søkeren ser ikke mangelteksten når søknadsalternativet er fjernet
+      # Avklart 30.10.2026: mangelteksten slettes ikke, men vises ikke lenger.
+      Gitt at saken hos "Universitetet i Oslo" har en automatisk mangeltekst for "Matematikk R2" for "Informatikk, UiO"
+      Og at ingen andre søknadsalternativer i saken har kravelementet "Matematikk R2"
+      Når søkeren fjerner "Informatikk, UiO" fra søknaden
+      Så ser ikke søkeren mangelteksten for "Matematikk R2" i Min kompetanse
+      Og saken har fortsatt den automatiske mangelteksten for "Matematikk R2"
+
     Scenario: Saksbehandleren kan ikke endre en automatisk mangeltekst
       Gitt at saken hos "Universitetet i Oslo" har en automatisk mangeltekst for "Matematikk R2"
       Når saksbehandleren ved Universitetet i Oslo åpner manglene i saken

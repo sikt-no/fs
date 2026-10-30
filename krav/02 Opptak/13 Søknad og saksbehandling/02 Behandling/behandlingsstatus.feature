@@ -1,6 +1,6 @@
 # language: no
 # Jira: STEK-253
-@OPT-BEH-BEH-029 @must @draft @ref-OPT-BEH-BEH-008 @ref-OPT-BEH-BEH-025 @ref-OPT-PLA-TIL-001
+@OPT-BEH-BEH-029 @must @planned @ref-OPT-BEH-BEH-008 @ref-OPT-BEH-BEH-025 @ref-OPT-PLA-TIL-001
 Egenskap: Behandlingsstatus
   Som saksbehandler ved saksbehandlende organisasjon
   ønsker jeg at hver sak har en behandlingsstatus
@@ -25,9 +25,8 @@ Egenskap: Behandlingsstatus
   i dokumentasjonsstatusen, er mangler i saken. Varselet om mangler som ikke er publisert når
   saken settes til «Ferdig behandlet», står i kravet til søknadsmangler.
 
-  # ÅPNE SPØRSMÅL:
-  # - Skal saksbehandleren kunne finne saker på mangelkode, slik som med dokumentasjonsstatusen
-  #   i dag? Hører det i så fall hjemme her eller i søknadsmangler?
+  # Å finne saker på mangelkode, slik som med dokumentasjonsstatusen i dag, står i
+  # OPT-BEH-BEH-008 («Saksbehandleren finner sakene med en bestemt mangelkode»). Avklart 30.10.2026.
 
   Bakgrunn:
     Gitt at opptaket "Samordna opptak 2027" forvaltes av HK-dir
