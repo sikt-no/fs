@@ -20,6 +20,7 @@ Teststrategi for FS – fra krav til akseptanse (forslag) (5145100326)
 └── Testplaner (5126062121)
     └── Testplan – <leveranse>                                  ← fs-testplan
         ├── Verifisering – <leveranse> – <YYYY-MM-DD HH:MM>     ← fs-testplan (første), fs-verify (på nytt)
+        ├── Sporbarhet – <leveranse>                            ← fs-testplan (laget), fs-testrapport (fyller ut per fase)
         ├── Testrapport – verifisering – <leveranse>            ← fs-testrapport (fase 1)
         ├── Testrapport – agentisk funksjonstest – <leveranse>  ← fs-testrapport (fase 2)
         ├── Intern akseptansetest – <leveranse>                 ← fs-testcaser-intern (fase 3)
@@ -29,6 +30,7 @@ Teststrategi for FS – fra krav til akseptanse (forslag) (5145100326)
         └── Testrapport – ekstern akseptansetest – <leveranse>  ← fs-testrapport (fase 4)
 ```
 
+- **Sporbarheten** står på en egen underside, ikke i testplanen, fordi den fylles ut i hver fase og blir stor. Verktøyet kan bare skrive en hel side om gangen, så testplanen holdes liten og stort sett stabil, og en ny kolonne i sporbarheten krever ikke at testplanen skrives på nytt.
 - **Testcasene i fase 2** ligger i repoet (`cdp-tester/`, Gherkin), og har ingen egen side. Resultatene fra kjøringen (`akseptansetest/<slug>/kjoring-<dato>/resultat.md`) står i «Testrapport – agentisk funksjonstest», med testcasene, teknikken, resultatet og funnene. Bildene ligger lokalt, ikke i git, og legges ikke i Confluence uten at brukeren ber om det.
 - **Flytbeskrivelser til partene** er flytene fra den interne testen, uten tekniske ord, og rapportene fra fase 2 og 3, slik at partene ser hva som er testet. Siden lages bare når brukeren sier ja, og bare for leveranser som er godkjent internt.
 
@@ -81,7 +83,7 @@ Strategien står i Confluence: [Teststrategi for FS – fra krav til akseptanse 
 
 ## «Status i flyten» på testplanen
 
-Testplanen har en tabell med fasene. `fs-testplan` fyller ut raden for verifiseringen og raden «Testplan» når testplanen lages. Den eneste delen av testplanen de andre skillene endrer, er sin egen rad i den tabellen (og «Sporbarhet per krav» og funnene, som `fs-testrapport` og testerne fyller ut):
+Testplanen har en tabell med fasene. `fs-testplan` fyller ut raden for verifiseringen og raden «Testplan» når testplanen lages. Den eneste delen av testplanen de andre skillene endrer, er sin egen rad i den tabellen (sporbarheten står på undersiden «Sporbarhet – <leveranse>», og fylles ut der av `fs-testrapport`):
 
 | Fase | Side | Status | Dato |
 |---|---|---|---|
