@@ -23,10 +23,11 @@ Egenskap: Beregne automatisk på nytt
   # Avklart 30.10.2026: søkeren får ingen egen melding når kvalifiseringen, poengene eller kvoten
   # endres. Søkeren ser det som er endret, i Min kompetanse.
 
+  # Avklart 30.10.2026: søkeren ser de automatiske mangeltekstene når saken er ferdig behandlet
+  # (OPT-BEH-BEH-008). Gir beregningen på nytt en ny mangeltekst i en sak som er ferdig
+  # behandlet, ser søkeren den med en gang. Ingen trenger å publisere den.
+
   # ÅPNE SPØRSMÅL:
-  # - Når beregningen på nytt gir nye automatiske mangler i en sak som er ferdig behandlet, hvem
-  #   publiserer dem? Den automatiske behandlingen publiserer manglene når den setter saken til
-  #   ferdig behandlet (OPT-BEH-BEH-025), men her forblir saken ferdig behandlet.
   # - Kjører beregningen i bakgrunnen, som plasstildelingen, og ser opptaksforvalteren når den er
   #   ferdig?
 
@@ -76,6 +77,15 @@ Egenskap: Beregne automatisk på nytt
       Gitt at saken til "Kari Nordmann" hos "Universitetet i Oslo" er ferdig behandlet
       Når opptaksforvalteren beregner på nytt for søknadsalternativene med rangeringsregelverket som er rettet
       Så har "Informatikk, UiO" poengsum for "Kari Nordmann" etter det rettede rangeringsregelverket
+      Og saken til "Kari Nordmann" hos "Universitetet i Oslo" er fortsatt ferdig behandlet
+
+    @depends-on-OPT-BEH-BEH-008
+    Scenario: Søkeren ser den nye mangelteksten i en sak som er ferdig behandlet
+      Gitt at saken til "Kari Nordmann" hos "Universitetet i Oslo" er ferdig behandlet
+      Og at "Kari Nordmann" er kvalifisert for "Informatikk, UiO"
+      Når opptaksforvalteren beregner på nytt for søknadsalternativene med kravelementet "Matematikk R2"
+      Og "Kari Nordmann" ikke lenger er kvalifisert for "Informatikk, UiO"
+      Så ser "Kari Nordmann" den automatiske mangelteksten for "Matematikk R2" i Min kompetanse
       Og saken til "Kari Nordmann" hos "Universitetet i Oslo" er fortsatt ferdig behandlet
 
   @depends-on-OPT-BEH-BEH-025

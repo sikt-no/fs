@@ -610,6 +610,18 @@ Egenskap: Søknadsmangler
       Når saksbehandleren åpner manglene i saken
       Så ser saksbehandleren den automatiske mangelteksten for "Matematikk R2" og mangelen "STEMPEL"
 
+    Scenario: Søkeren ser de automatiske mangeltekstene når saken er ferdig behandlet
+      # Avklart 30.10.2026. Ingen publiserer tekstene.
+      Gitt at saken hos "Universitetet i Oslo" har en automatisk mangeltekst for "Matematikk R2"
+      Når saken hos "Universitetet i Oslo" blir ferdig behandlet
+      Så ser søkeren den automatiske mangelteksten for "Matematikk R2" i Min kompetanse
+
+    Scenario: Søkeren ser ikke de automatiske mangeltekstene mens saken er under behandling
+      Gitt at saken hos "Universitetet i Oslo" er under behandling
+      Og at saken har en automatisk mangeltekst for "Matematikk R2"
+      Når søkeren åpner dokumentasjonssiden i Min kompetanse
+      Så ser ikke søkeren den automatiske mangelteksten for "Matematikk R2"
+
     Scenario: Saksbehandleren kan ikke endre en automatisk mangeltekst
       Gitt at saken hos "Universitetet i Oslo" har en automatisk mangeltekst for "Matematikk R2"
       Når saksbehandleren ved Universitetet i Oslo åpner manglene i saken
