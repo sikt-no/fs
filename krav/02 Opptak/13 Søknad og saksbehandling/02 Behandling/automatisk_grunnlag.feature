@@ -49,8 +49,7 @@ Egenskap: Automatisk grunnlag
   # Avklart 30.10.2026: grunnlaget ligger på saken, ikke på søknaden. FS-klienten har det på
   # personen. Spørsmålet ble tatt opp i raffineringen og med HK-dir 16.03.2026.
 
-  # ÅPNE SPØRSMÅL:
-  # - Skal et studieønske som fjernes, også fjerne grunnlaget det ga (STEK-505)?
+  # Avklart 30.10.2026: grunnlaget blir stående når studieønsket som ga det, fjernes (STEK-505).
 
   @depends-on-OPT-REG-GRU-001 @ref-FLY-OPT-AUT-001
   Regel: Grunnlaget velges ut fra egenskapene regelverket har gitt det
@@ -225,6 +224,12 @@ Egenskap: Automatisk grunnlag
       Gitt at saken har et grunnlag som er satt automatisk
       Og at søkeren ikke lenger passer til grunnlaget
       Når søknaden behandles automatisk
+      Så har saken fortsatt grunnlaget
+
+    Scenario: Grunnlaget blir stående når studieønsket som ga det, fjernes
+      Gitt at saken har et grunnlag som er satt automatisk
+      Og at grunnlaget bare finnes i regelverket til "Informatikk, UiO"
+      Når søkeren fjerner "Informatikk, UiO" fra søknaden
       Så har saken fortsatt grunnlaget
 
     Scenario: Saksbehandleren fjerner et grunnlag som er satt automatisk
