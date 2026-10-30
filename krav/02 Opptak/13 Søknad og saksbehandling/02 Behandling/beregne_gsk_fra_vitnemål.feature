@@ -374,9 +374,10 @@ Egenskap: Beregne GSK fra vitnemål
     # vitnemålet importeres (@OPT-BEH-BEH-015), ikke bare når saksbehandleren starter
     # kontrollen. Kode i dag: bare når saksbehandleren starter kontrollen, som i det gamle FS
     # (FS158001).
-    # Avklart 30.10.2026: sier skolen eller KREG at søkeren har GSK, men løpet er ukjent eller
-    # har ingen grunnlagskode etter reglene her, settes ingen konklusjon automatisk, og
-    # saksbehandleren vurderer GSK (OPT-BEH-BEH-015).
+    # Innspill i PR #878: sier skolen eller KREG at søkeren har GSK, men løpet finnes ikke i
+    # listen over løp, settes ingen konklusjon automatisk, og saksbehandleren vurderer GSK.
+    # Finnes løpet, men har ingen grunnlagskode etter reglene her, får konklusjonen KLS for et
+    # studieforberedende løp og KLY for et yrkesfaglig løp (OPT-BEH-BEH-015).
     # «Løp»: avklart 2026-10-27 at løp er et begrep saksbehandlerne kjenner.
 
     Scenariomal: Yrkesfaglig løp fra <reform> gir grunnlagskoden <grunnlagskode>
