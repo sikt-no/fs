@@ -243,6 +243,9 @@ Egenskap: Antall tilbud som skal gis per utdanningskvote (sette opptaksparameter
     # - Kanskje trengs det heller en måte for lærestedet å markere at det ikke ønsker å gi nye tilbud
     #   (produkteier 2026-10-30). Henger sammen med regelen «Et utdanningstilbud gir ingen nye tilbud når alle
     #   tilbudene som skal gis, er gitt».
+    # - Et alternativ er at lærestedet setter antall tilbud som skal gis til 0 for å ikke gi flere tilbud, og at
+    #   endringen logges, så lærestedet kan se hva tallet var før (produkteier 2026-10-30). Ulempen er at det samlede
+    #   tallet og overbookingen da ikke lenger viser det som gjelder for opptaket.
 
     # Endret 2026-10-24: Et negativt tall stopper kompensasjonstilbudene til lærestedet er nede på riktig nivå,
     # og har bare en virkning når rundetypen har kompensasjonstilbud ved opprykk. I samordna opptak er det Supplering.
