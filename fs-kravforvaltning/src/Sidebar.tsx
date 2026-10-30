@@ -143,9 +143,9 @@ export function Sidebar({ entries, tree, current, open, query, onQuery, onToggle
   // Filnavnet, og Feature-ID-en på en egen linje under (med mappa etter i søket)
   const nameCell = (name: string | JSX.Element[], id: string | null, sub?: string, idRanges: readonly RangeTuple[] = []) =>
     id ? (
-      <span class="stack">
+      <span class="namecol">
         <span class="name">{name}</span>
-        <span class="meta">
+        <span class="idline">
           <span class="id">{highlight(id, idRanges)}</span>
           {sub && ` · ${sub}`}
         </span>
