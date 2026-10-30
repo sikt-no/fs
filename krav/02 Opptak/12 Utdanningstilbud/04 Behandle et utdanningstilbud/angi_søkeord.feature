@@ -31,7 +31,7 @@ Egenskap: Angi søkeord på utdanningstilbudet
     @in-progress @openquestion
     Scenario: Søker finner utdanningstilbud via søkeord
       # ÅPNE SPØRSMÅL:
-      # - Ikke funnet i koden (verify 2026-10-22): søket for søkere matcher bare navnet, ikke søkeordene. Skal søkeordene tas med i søket i fs-plattform, og må min-kompetanse endres for det?
+      # - Søkeordene tas med i søket i fs-plattform !6482 (https://gitlab.sikt.no/fs/fs-plattform/-/merge_requests/6482), uten endring i Min kompetanse. Lukkes av fs-verify når den er merget.
       Gitt at utdanningstilbudet har søkeordet "Lege"
       Når søkeren søker på "Lege" i Min kompetanse
       Så vises utdanningstilbudet i søkeresultatet
