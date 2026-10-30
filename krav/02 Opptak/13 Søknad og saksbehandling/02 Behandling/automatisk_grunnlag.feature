@@ -258,15 +258,13 @@ Egenskap: Automatisk grunnlag
     # automatikken. Saksbehandleren fjerner grunnlaget som ble lagt til, og starter behandlingen
     # på nytt (OPT-BEH-BEH-032), eller legger selv til et grunnlag som ble fjernet.
 
-    @openquestion
     Scenario: Grunnlag utenfor aldersgrensen kan ikke velges manuelt
-      # ÅPNE SPØRSMÅL:
-      # - I dag kan saksbehandleren velge et grunnlag selv om søkeren er utenfor
-      #   aldersgrensen. Søkeren blir da ikke plassert i kvoten (STEK-583). Skal
-      #   valget hindres?
+      # Avklart 30.10.2026. Kode i dag: grunnlaget kan legges til, og søkeren blir da ikke
+      # plassert i kvoten (STEK-583).
       Gitt at søkeren er utenfor aldersgrensen til et grunnlag
       Når saksbehandleren legger til grunnlaget
       Så blir ikke grunnlaget lagt til
+      Og saksbehandleren ser at søkeren er utenfor aldersgrensen til grunnlaget
 
   @depends-on-OPT-OVO-FRI-001
   # Regelen «Opptaksforvalter setter dato for aldersberegning».
