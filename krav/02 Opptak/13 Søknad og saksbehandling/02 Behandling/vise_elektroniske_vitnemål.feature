@@ -36,10 +36,11 @@
 # fra NVB i L6 (#612).
 #
 # Tilgangsregelen er snevret til det denne leveransen kan innfri: innsyn. At
-# endringsrettighet gir mulighet til å *behandle* vitnemålet, og at
-# leserettighet skjuler den muligheten, kan ikke verifiseres før det finnes
-# noe å endre. De to scenarioene følger L2 og står i
-# velge_vitnemål_som_grunnlag.feature.
+# endringsrettighet gir mulighet til å *behandle* vitnemålet, og hva
+# leserettighet viser og skjuler, kan ikke verifiseres før det finnes noe å
+# endre. De to scenarioene følger L2 og står i
+# velge_vitnemål_som_grunnlag.feature. Regelen for leserettighet i hele
+# vitnemålsbehandlingen (avklart 28.10.2026) står i vitnemålsbehandling.md.
 #
 # Resultater fra høyere utdanning er utenfor. De finnes i dag bare som en
 # umodellert JSON-streng fra Vitnemålsportalen (Soker.vitnemal: String, i

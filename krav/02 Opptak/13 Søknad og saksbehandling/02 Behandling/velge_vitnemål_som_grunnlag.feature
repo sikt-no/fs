@@ -310,11 +310,22 @@ Egenskap: Velge vitnemål som grunnlag for poengberegningen
       Gitt jeg har rettighet til å se, men ikke til å endre, søknadsbehandling ved organisasjonen som behandler saken
       Når jeg åpner søknaden til en søker
       Så ser jeg søkerens vitnemål, det valgte grunnlaget og de beregnede poengene
-      Men jeg ser ikke muligheten til å endre dem
+      Og jeg ser hvilke valg som er gjort i grunnlaget, men kan ikke endre dem
+      Men jeg ser ikke muligheten til å beregne poengene eller legge inn poeng selv
       # At lesetilgang gir innsyn uten endringsmulighet er i tråd med
       # design-patterns-for-krav.md: det er *muligheten til å endre* som
       # skjules, ikke opplysningene. En saksbehandler som ser et poeng må
       # kunne se hva det bygger på.
+      #
+      # AVKLART 28.10.2026: valg som viser en tilstand (radioknapper og
+      # avkrysningsbokser, f.eks. valgt vitnemål, poengvariant og fag), vises
+      # for en saksbehandler med bare leserettighet, men kan ikke brukes.
+      # Handlinger og felt for å legge inn eller endre verdier skjules, og de
+      # lagrede verdiene vises som tekst. Avviker bevisst fra «manglende
+      # tilgang skjuler elementet»: valgene er informasjon (de viser hva
+      # poengene bygger på), og siden ser lik ut for alle. Gjelder hele
+      # vitnemålsbehandlingen, L1–L6, se vitnemålsbehandling.md. Utformingen
+      # står i velge_vitnemål_som_grunnlag.design.md.
 
     Scenario: Tilordning hindrer ikke at jeg behandler saken
       Gitt saken er tilordnet en annen saksbehandler
