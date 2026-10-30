@@ -14,7 +14,7 @@ Felles for skillene i testflyten. Planen (fase 1) starter med verifiseringen (`f
 |---|---|---|
 | 2. Agentisk funksjonstest | Alle scenarioer i gating-settet som er levert, pluss testcaser utledet fra reglene (også regler i koden uten scenario, fra verify-rapporten) | Testes ikke her |
 | 3. Intern akseptansetest | Scenarioene og testcasene fra fase 2 som ble «Ikke testet», scenarioene som inngår i flytene, opplevelse og helhet, og det testansvarlig velger etter en risikovurdering. Regresjon av tidligere leverte flyter når leveransen endrer noe andre bygger på | Overleveringene i flytene i «Flyter» (se *Flyter*) |
-| 4. Ekstern akseptansetest | Partene bestemmer ut fra egne krav. Sikt foreslår flyter som utgangspunkt | Flytbeskrivelsene fra fase 3 |
+| 4. Ekstern akseptansetest | Flytene i «Flyter» som leveransen inngår i, valgt sammen med partene, med kravene flytene bygger på | Flyttestene fra fase 3 |
 
 ## Leveransen
 
