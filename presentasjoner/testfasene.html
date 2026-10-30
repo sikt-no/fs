@@ -190,50 +190,50 @@ html,body{margin:0;height:100%;background:#0E1628;color:#F7F6F2;font-family:'IBM
 </section>
 </div>
 <div class="slide">
-<section id="faser" data-transition="fade" style="background:#F7F6F2;color:#1F2A44;font-family:'IBM Plex Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;gap:48px">
+<section id="faser" data-transition="fade" style="background:#F7F6F2;color:#1F2A44;font-family:'IBM Plex Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;gap:36px">
 <div style="display:flex;flex-direction:column;gap:16px">
 <p style="font-size:24px;font-weight:600;letter-spacing:3px;text-transform:uppercase;color:#B4481A">Fire faser</p>
 <h2 style="font-family:'Source Serif 4', Georgia, serif;font-size:72px;font-weight:600;line-height:1.1;color:#14213D">Hver fase svarer på sitt spørsmål</h2>
 </div>
 <div style="display:flex;gap:24px">
-<div style="flex:1;display:flex;flex-direction:column;gap:14px;background:#FFFFFF;padding:32px;border:1px solid #E1DED6;border-radius:16px">
+<div style="flex:1;display:flex;flex-direction:column;gap:10px;background:#FFFFFF;padding:32px;border:1px solid #E1DED6;border-radius:16px">
 <p style="font-size:24px;font-weight:600;color:#B4481A">Fase 1</p>
 <h3 style="font-size:32px;font-weight:600;color:#14213D">Plan</h3>
-<p style="font-size:26px;line-height:1.4;color:#14213D">Er hvert scenario laget i koden, og hva skal testes, og hvordan?</p>
+<p style="font-size:26px;line-height:1.4;color:#14213D">Finnes hvert scenario i koden, og hva skal testes, og hvordan?</p>
+<p style="font-size:24px;line-height:1.4;color:#4A5568"><b>Slik:</b> fs-verify leser koden mot kravet, uten å kjøre den. Så lages testplanen.</p>
 <div style="flex:1"></div>
-<p style="font-size:24px;font-weight:600;color:#4A5568">Tester ikke</p>
-<p style="font-size:24px;line-height:1.4;color:#4A5568">Om løsningen virker for brukeren.</p>
+<p style="font-size:24px;line-height:1.4;color:#4A5568"><b>Tester ikke:</b> om løsningen virker for brukeren.</p>
 </div>
-<div style="flex:1;display:flex;flex-direction:column;gap:14px;background:#FFFFFF;padding:32px;border:1px solid #E1DED6;border-radius:16px">
+<div style="flex:1;display:flex;flex-direction:column;gap:10px;background:#FFFFFF;padding:32px;border:1px solid #E1DED6;border-radius:16px">
 <p style="font-size:24px;font-weight:600;color:#B4481A">Fase 2</p>
 <h3 style="font-size:32px;font-weight:600;color:#14213D">Agentisk test</h3>
 <p style="font-size:26px;line-height:1.4;color:#14213D">Virker hver funksjon riktig, også når noe går galt?</p>
+<p style="font-size:24px;line-height:1.4;color:#4A5568"><b>Slik:</b> en agent kjører testene i testmiljøet, med data testene lager selv.</p>
 <div style="flex:1"></div>
-<p style="font-size:24px;font-weight:600;color:#4A5568">Tester ikke</p>
-<p style="font-size:24px;line-height:1.4;color:#4A5568">Flyter på tvers, avhengigheter, og det en agent ikke kan vurdere.</p>
+<p style="font-size:24px;line-height:1.4;color:#4A5568"><b>Tester ikke:</b> flyter på tvers, avhengigheter, og det en agent ikke kan vurdere.</p>
 </div>
-<div style="flex:1;display:flex;flex-direction:column;gap:14px;background:#FFFFFF;padding:32px;border:1px solid #E1DED6;border-radius:16px">
+<div style="flex:1;display:flex;flex-direction:column;gap:10px;background:#FFFFFF;padding:32px;border:1px solid #E1DED6;border-radius:16px">
 <p style="font-size:24px;font-weight:600;color:#B4481A">Fase 3</p>
 <h3 style="font-size:32px;font-weight:600;color:#14213D">Intern test</h3>
 <p style="font-size:26px;line-height:1.4;color:#14213D">Virker leveransen for brukeren, i arbeidsprosessen og sammen med resten av FS?</p>
+<p style="font-size:24px;line-height:1.4;color:#4A5568"><b>Slik:</b> testansvarlig og interne testere tester i arbeidsprosessen.</p>
 <div style="flex:1"></div>
-<p style="font-size:24px;font-weight:600;color:#4A5568">Tester ikke</p>
-<p style="font-size:24px;line-height:1.4;color:#4A5568">Feltvalidering og feilsituasjoner som fase 2 har bestått.</p>
+<p style="font-size:24px;line-height:1.4;color:#4A5568"><b>Tester ikke:</b> feltvalidering og feilsituasjoner som fase 2 har bestått.</p>
 </div>
-<div style="flex:1;display:flex;flex-direction:column;gap:14px;background:#FFFFFF;padding:32px;border:1px solid #E1DED6;border-radius:16px">
+<div style="flex:1;display:flex;flex-direction:column;gap:10px;background:#FFFFFF;padding:32px;border:1px solid #E1DED6;border-radius:16px">
 <p style="font-size:24px;font-weight:600;color:#B4481A">Fase 4</p>
 <h3 style="font-size:32px;font-weight:600;color:#14213D">Ekstern test</h3>
 <p style="font-size:26px;line-height:1.4;color:#14213D">Dekker løsningen de eksterne partenes behov?</p>
+<p style="font-size:24px;line-height:1.4;color:#4A5568"><b>Slik:</b> partene tester mot sine egne krav, og Sikt legger til rette.</p>
 <div style="flex:1"></div>
-<p style="font-size:24px;font-weight:600;color:#4A5568">Tester ikke</p>
-<p style="font-size:24px;line-height:1.4;color:#4A5568">Sikts detaljerte funksjonstester.</p>
+<p style="font-size:24px;line-height:1.4;color:#4A5568"><b>Tester ikke:</b> Sikts detaljerte funksjonstester.</p>
 </div>
 </div>
 <div style="display:flex;align-items:center;gap:40px;background:#14213D;padding:28px 40px;border-radius:16px">
 <p style="width:300px;font-size:28px;font-weight:600;color:#F0A070">Ingen gjentakelse</p>
-<p style="flex:1;font-size:26px;line-height:1.4;color:#F7F6F2">Hver fase bygger på den forrige og gjentar den ikke. Alle leveranser går gjennom fase 1–3, og det som er godkjent internt, kan gå til fase 4.</p>
+<p style="flex:1;font-size:26px;line-height:1.4;color:#F7F6F2">Hver fase bygger på den forrige og gjentar den ikke.</p>
 </div>
-<aside>Spørsmålene er hentet rett fra tabellen «Flyten» i teststrategien. Metode og hvem står på sidene for hver fase. Fase 1 er white-box: koden leses, ingenting kjøres. Fase 2 er black-box: en agent kjører testene i testmiljøet. Fase 3 er testansvarlig (domeneekspert) og interne testere. Fase 4 er de eksterne partene, og Sikt legger til rette. Ikke godkjent eller ikke akseptert: leveransen går tilbake til teamet med funnene.</aside>
+<aside>Spørsmålene og metodene er hentet fra tabellen «Flyten» i teststrategien. Alle leveranser går gjennom fase 1–3, og det som er godkjent internt, kan gå til fase 4. Fase 1 tester ikke: fs-verify verifiserer at scenarioene, rollene og tilgangene finnes i koden, ved å lese den. @implemented betyr bare at koden er funnet. Om løsningen virker, sier testene i fase 2–4. Fase 1 er white-box: koden leses, ingenting kjøres. Fase 2 er black-box: en agent kjører testene i testmiljøet. Fase 3 er testansvarlig (domeneekspert) og interne testere. Fase 4 er de eksterne partene, og Sikt legger til rette. Ikke godkjent eller ikke akseptert: leveransen går tilbake til teamet med funnene.</aside>
 </section>
 </div>
 <div class="slide">
