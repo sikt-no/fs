@@ -75,8 +75,11 @@ Egenskap: Automatiske tilleggspoeng
       Når søknaden får grunnlaget "VES"
       Så viser kjønnspoengene at de er regnet ut for kvinne
 
-  @ref-FLY-OPT-AUT-001
+  @openquestion @ref-FLY-OPT-AUT-001
   Regel: Poeng for høyere utdanning regnes ut fra søkerens studiepoeng
+    # ÅPNE SPØRSMÅL:
+    # - Kravet til importen av resultater fra høyere utdanning er ikke skrevet. Når det finnes,
+    #   får regelen @depends-on- til det.
     # Studiepoengene kommer fra tjenesten for resultater fra høyere utdanning. Resultatene hentes og lagres på samme
     # måte som vitnemål fra videregående skole hentes og lagres via KREG.
     # Avklart 30.10.2026: alle beståtte studiepoeng på nivå høyere utdanning teller, også studiepoeng som er
