@@ -79,14 +79,19 @@ SELECT 'Testbruker 2 (Heidi Lykke): sendt søknad der ingen studieønsker tilbyr
                    FROM soknad WHERE tb = 2), 'ingen sendt søknad'),
        coalesce((SELECT tilbyr_tidlig = 0 AND tilbyr_ikke > 0 FROM soknad WHERE tb = 2), false)
 UNION ALL
--- Testbruker 3: soker er tom når personen ikke er søker ennå, og da er sjekken også ok
+-- Testbruker 3: soker er tom når personen ikke er søker ennå, og da er sjekken også ok.
+-- Kladden blir liggende når studieønsket fjernes, men uten studieønsker vises den ikke i Min kompetanse.
 SELECT 'Testbruker 3 (Frisk Frosk): ingen søknad i opptak 34, heller ikke en som ikke er sendt',
-       format('kladd=%s, sendt=%s',
+       format('kladd=%s, studieønsker=%s, sendt=%s',
               EXISTS (SELECT 1 FROM soker so JOIN soknad_v2.soknadskladd k
                         ON k.soker_id = so.soker_id AND k.opptak_kode = so.opptak_kode WHERE so.tb = 3),
+              (SELECT count(*) FROM soker so JOIN soknad_v2.soknadsalternativ a
+                 ON a.soker_id = so.soker_id AND a.opptak_kode = so.opptak_kode
+                WHERE so.tb = 3 AND a.slettet IS NULL),
               EXISTS (SELECT 1 FROM soknad WHERE tb = 3)),
-       NOT EXISTS (SELECT 1 FROM soker so JOIN soknad_v2.soknadskladd k
-                     ON k.soker_id = so.soker_id AND k.opptak_kode = so.opptak_kode WHERE so.tb = 3)
+       NOT EXISTS (SELECT 1 FROM soker so JOIN soknad_v2.soknadsalternativ a
+                     ON a.soker_id = so.soker_id AND a.opptak_kode = so.opptak_kode
+                    WHERE so.tb = 3 AND a.slettet IS NULL)
        AND NOT EXISTS (SELECT 1 FROM soknad WHERE tb = 3)
 UNION ALL
 -- Testbruker 4
