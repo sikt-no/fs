@@ -270,16 +270,12 @@ Egenskap: Automatisk grunnlag
   # Regelen «Opptaksforvalter setter dato for aldersberegning».
   Regel: Grunnlag med aldersgrense krever dato for aldersberegning
 
-    @openquestion
     Scenario: Opptaket mangler dato for aldersberegning
-      # ÅPNE SPØRSMÅL:
-      # - I dag stopper valget av grunnlaget med en beskjed når opptaket har
-      #   alderspoeng og verken dato for aldersberegning eller dato for
-      #   publisering av resultatet. Alderen kan da ikke fastslås. Skal grunnlag
-      #   med aldersgrense heller filtreres bort, så de ikke kan velges?
+      # Avklart 30.10.2026: grunnlaget vises, men kan ikke legges til, og saksbehandleren får
+      # beskjed. Grunnlag med aldersgrense filtreres ikke bort. Koden gjør dette i dag.
       Gitt at regelverket har grunnlaget "VOV" med aldersgrensen under 22 år
       Og at opptaket ikke har dato for aldersberegning eller dato for publisering av resultatet
-      Når saksbehandleren velger grunnlaget "VOV" for søknaden
+      Når saksbehandleren velger grunnlaget "VOV" for saken
       Så får saksbehandleren beskjed om at opptaket mangler dato for aldersberegning
       Og grunnlaget er ikke lagt til
 
