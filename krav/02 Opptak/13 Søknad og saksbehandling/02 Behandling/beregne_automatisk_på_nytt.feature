@@ -1,5 +1,5 @@
 # language: no
-@OPT-BEH-BEH-026 @must @draft
+@OPT-BEH-BEH-026 @must @planned
 Egenskap: Beregne automatisk på nytt
   Som opptaksforvalter
   ønsker jeg å kjøre den automatiske behandlingen på nytt for søknadsalternativene en feil har rammet
@@ -83,9 +83,10 @@ Egenskap: Beregne automatisk på nytt
     Scenario: Søkeren ser den nye mangelteksten i en sak som er ferdig behandlet
       Gitt at saken til "Kari Nordmann" hos "Universitetet i Oslo" er ferdig behandlet
       Og at "Kari Nordmann" er kvalifisert for "Informatikk, UiO"
+      Og at en feil i kontrollmotoren er rettet, så vitnemålet til "Kari Nordmann" ikke lenger oppfyller "Matematikk R2"
       Når opptaksforvalteren beregner på nytt for søknadsalternativene med kravelementet "Matematikk R2"
-      Og "Kari Nordmann" ikke lenger er kvalifisert for "Informatikk, UiO"
-      Så ser "Kari Nordmann" den automatiske mangelteksten for "Matematikk R2" i Min kompetanse
+      Så er "Kari Nordmann" ikke lenger kvalifisert for "Informatikk, UiO"
+      Og "Kari Nordmann" ser den automatiske mangelteksten for "Matematikk R2" i Min kompetanse
       Og saken til "Kari Nordmann" hos "Universitetet i Oslo" er fortsatt ferdig behandlet
 
   @depends-on-OPT-BEH-BEH-025
