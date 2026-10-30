@@ -615,7 +615,7 @@ Egenskap: Søknadsmangler
       Når saksbehandleren ved Universitetet i Oslo åpner manglene i saken
       Så ser ikke saksbehandleren muligheten til å kommentere, sjekke ut eller slette den automatiske mangelteksten
 
-  @draft @ref-FLY-OPT-AUT-001 @depends-on-OPT-SØK-SØK-018 @ref-OPT-OVO-GRU-001
+  @ref-FLY-OPT-AUT-001 @depends-on-OPT-SØK-SØK-018 @ref-OPT-OVO-GRU-001
   Regel: Mangelen for generell studiekompetanse som fullføres i vår settes og sjekkes ut automatisk
 
     Søkere som fullfører videregående opplæring i vår, oppgir i søknaden at generell

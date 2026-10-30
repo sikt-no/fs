@@ -25,9 +25,10 @@ Egenskap: Ferdigbehandle en sak
   # Kode i dag: den automatiske behandlingen setter GSK-konklusjonen selv, og stopper når
   # søkeren har flere vitnemål.
 
+  # Avklart 30.10.2026: opptaksforvalteren får et varsel første gang en feil i regelverket
+  # stopper et steg, som for mangelkoden for GSK som fullføres i vår (OPT-BEH-BEH-008).
+
   # ÅPNE SPØRSMÅL:
-  # - Hvordan får opptaksforvalteren vite om en feil i regelverket som stopper den automatiske
-  #   behandlingen?
   # - Hvilke feil i regelverket kan stoppe et steg? Koden kjenner disse: poengformelen mangler,
   #   viser til seg selv eller er ugyldig, og et kvotespørsmål har en algoritme koden ikke kjenner.
 
@@ -145,6 +146,17 @@ Egenskap: Ferdigbehandle en sak
       Gitt at poengene for "Informatikk, UiO" ikke kan avgjøres på grunn av en feil i regelverket
       Når søknaden behandles automatisk
       Så er saken hos "Universitetet i Oslo" under behandling
+
+    Scenario: Opptaksforvalteren får varsel første gang en feil i regelverket stopper et steg
+      Gitt at poengene for "Informatikk, UiO" ikke kan avgjøres på grunn av en feil i regelverket
+      Når søknaden behandles automatisk
+      Så får opptaksforvalteren ved organisasjonen som forvalter opptaket, et varsel om feilen
+      Og varselet viser hvilken feil det er, og hvilket regelverk den gjelder
+
+    Scenario: Opptaksforvalteren får varselet om feilen bare første gang
+      Gitt at opptaksforvalteren ved organisasjonen som forvalter opptaket, har fått varsel om en feil i regelverket
+      Når en annen søknad stoppes av den samme feilen i regelverket
+      Så får ikke opptaksforvalteren et nytt varsel om feilen
 
   Regel: Saksbehandleren setter saken til ferdig behandlet når den automatiske behandlingen ikke har fullført
 
