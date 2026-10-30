@@ -216,7 +216,7 @@ Egenskap: Automatisk vurdering av spesielle opptakskrav
       Så er søkeren ikke kvalifisert på grunnlaget
 
     Scenario: Søkeren kan være kvalifisert på ett grunnlag og ikke på et annet
-      Gitt at søknaden har grunnlagene "VES" og "PRA"
+      Gitt at saken har grunnlagene "VES" og "PRA"
       Og at saksbehandleren har lagt inn et unntak for et kravelement på grunnlaget "PRA"
       Når kravene er vurdert
       Så er søkeren kvalifisert på grunnlaget "VES"
@@ -310,7 +310,7 @@ Egenskap: Automatisk vurdering av spesielle opptakskrav
 
     Scenario: Kravelementer for et nytt grunnlag vurderes
       Gitt at søkeren har ett elektronisk vitnemål som ikke er annullert
-      Når søknaden får et nytt grunnlag med kravelementer som er koblet til vitnemålet
+      Når saken får et nytt grunnlag med kravelementer som er koblet til vitnemålet
       Og søknaden behandles automatisk
       Så er kravelementene for det nye grunnlaget vurdert
 

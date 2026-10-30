@@ -23,14 +23,14 @@ Egenskap: Beregne poengsum per kvote
 
     Scenario: Poengsum for grunnlaget kvoten er koblet til
       Gitt at søkeren er plassert i kvotetypen "ORD"
-      Og at søknaden har grunnlaget "VES"
+      Og at saken har grunnlaget "VES"
       Og at kvotetypen "ORD" er koblet til grunnlaget "VES"
       Når poengsummen regnes ut
       Så har søkeren en poengsum i kvotetypen "ORD" for grunnlaget "VES"
 
     Scenario: Grunnlag kvoten ikke er koblet til, gir ingen poengsum i kvoten
       Gitt at søkeren er plassert i kvotetypen "ORD"
-      Og at søknaden har grunnlagene "VES" og "PRA"
+      Og at saken har grunnlagene "VES" og "PRA"
       Og at kvotetypen "ORD" bare er koblet til grunnlaget "VES"
       Når poengsummen regnes ut
       Så har søkeren en poengsum i kvotetypen "ORD" for grunnlaget "VES"

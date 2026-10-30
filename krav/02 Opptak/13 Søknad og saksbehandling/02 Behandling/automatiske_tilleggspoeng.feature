@@ -20,7 +20,7 @@ Egenskap: Automatiske tilleggspoeng
     Scenariomal: Alderspoeng for søkerens alder
       Gitt at poengtypen for alderspoeng er knyttet til algoritmen "<algoritme>"
       Og at søkeren er <alder> år på datoen for aldersberegning
-      Når søknaden får grunnlaget "VES"
+      Når saken får grunnlaget "VES"
       Så har søknaden <poeng> alderspoeng
 
       Eksempler:
@@ -37,7 +37,7 @@ Egenskap: Automatiske tilleggspoeng
     Scenario: Alderspoengene viser hvilken alder de er regnet ut for
       Gitt at søkeren er 22 år på datoen for aldersberegning
       Og at poengtypen for alderspoeng er knyttet til algoritmen "ALD_ALG1"
-      Når søknaden får grunnlaget "VES"
+      Når saken får grunnlaget "VES"
       Så viser alderspoengene at de er regnet ut for alderen 22 år på datoen for aldersberegning
 
     @depends-on-OPT-OVO-FRI-001
@@ -56,7 +56,7 @@ Egenskap: Automatiske tilleggspoeng
     Scenariomal: Kjønnspoeng for søkerens kjønn
       Gitt at poengtypen for kjønnspoeng er knyttet til algoritmen "<algoritme>"
       Og at søkeren er <kjønn>
-      Når søknaden får grunnlaget "VES"
+      Når saken får grunnlaget "VES"
       Så har søknaden <poeng> kjønnspoeng
 
       Eksempler:
@@ -72,7 +72,7 @@ Egenskap: Automatiske tilleggspoeng
     Scenario: Kjønnspoengene viser hvilket kjønn de er regnet ut for
       Gitt at søkeren er kvinne
       Og at poengtypen for kjønnspoeng er knyttet til algoritmen "KJONN_ALG1"
-      Når søknaden får grunnlaget "VES"
+      Når saken får grunnlaget "VES"
       Så viser kjønnspoengene at de er regnet ut for kvinne
 
   @openquestion @ref-FLY-OPT-AUT-001
@@ -90,7 +90,7 @@ Egenskap: Automatiske tilleggspoeng
     Scenariomal: Poeng for høyere utdanning
       Gitt at poengtypen for poeng for høyere utdanning er knyttet til algoritmen for høyere utdanning
       Og at tjenesten for resultater fra høyere utdanning gir søkeren <studiepoeng> studiepoeng
-      Når søknaden får grunnlaget "VES"
+      Når saken får grunnlaget "VES"
       Så har søknaden <poeng> poeng for høyere utdanning
 
       Eksempler:
@@ -106,14 +106,14 @@ Egenskap: Automatiske tilleggspoeng
       Gitt at poengtypen for poeng for høyere utdanning er knyttet til algoritmen for høyere utdanning
       Og at søkeren har bestått emner på 50 studiepoeng
       Og at søkeren ikke har bestått et emne på 10 studiepoeng
-      Når søknaden får grunnlaget "VES"
+      Når saken får grunnlaget "VES"
       Så har søknaden 1 poeng for høyere utdanning
 
     Scenario: Fagskolepoeng teller ikke
       Gitt at poengtypen for poeng for høyere utdanning er knyttet til algoritmen for høyere utdanning
       Og at søkeren har bestått emner på 30 studiepoeng i høyere utdanning
       Og at søkeren har 30 fagskolepoeng
-      Når søknaden får grunnlaget "VES"
+      Når saken får grunnlaget "VES"
       Så har søknaden 1 poeng for høyere utdanning
 
     Scenario: Studiepoengene telles når poengene regnes ut
@@ -145,13 +145,13 @@ Egenskap: Automatiske tilleggspoeng
       Så har søknaden 2 kjønnspoeng
 
     Scenario: Poengene for grunnlaget som er fjernet, vises ikke lenger
-      Gitt at søknaden har grunnlaget "VES"
+      Gitt at saken har grunnlaget "VES"
       Og at poengtypen for alderspoeng bare gjelder grunnlaget "VES"
       Når saksbehandleren fjerner grunnlaget "VES" fra søknaden
       Så ser ikke saksbehandleren alderspoengene på søknaden
 
     Scenario: Poengene regnes ut på nytt når saksbehandleren endrer grunnlaget
-      Gitt at søknaden har grunnlaget "VES"
+      Gitt at saken har grunnlaget "VES"
       Og at søkeren er 23 år på datoen for aldersberegning
       Og at poengtypen for alderspoeng er knyttet til algoritmen "ALD_ALG1"
       Og at poengtypen for alderspoeng gjelder grunnlagene "VES" og "PRA"
@@ -159,7 +159,7 @@ Egenskap: Automatiske tilleggspoeng
       Så har søknaden 4 alderspoeng
 
     Scenario: Poengene regnes ikke ut på nytt av seg selv når datoen for aldersberegning endres
-      Gitt at søknaden har grunnlaget "VES"
+      Gitt at saken har grunnlaget "VES"
       Og at søknaden har alderspoeng utregnet på datoen "2027-04-15"
       Når opptaksforvalteren endrer datoen for aldersberegning til "2027-12-31"
       Så har søknaden fortsatt alderspoeng utregnet på datoen "2027-04-15"

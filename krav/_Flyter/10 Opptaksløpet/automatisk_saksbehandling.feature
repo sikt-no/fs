@@ -111,12 +111,12 @@ Egenskap: Automatisk saksbehandling
 
   @depends-on-OPT-BEH-BEH-019 @ref-FLY-OPT-VAL-001 @ref-FLY-OPT-SAM-001
   # OPT-BEH-BEH-019: «Grunnlaget velges ut fra egenskapene regelverket har gitt det», «Ingen automatisk grunnlag uten ett vitnemål som gir generell studiekompetanse», «Grunnlaget settes når den automatiske behandlingen kjører»
-  Regel: Søknaden får grunnlag fra vitnemålet
+  Regel: Saken får grunnlag fra vitnemålet
 
-    Scenario: Søknaden får grunnlag
+    Scenario: Saken får grunnlag
       Gitt at saken hos "Universitetet i Oslo" behandles helautomatisk på vitnemålet
       Når søknaden behandles automatisk
-      Så har søknaden grunnlag
+      Så har saken grunnlag
 
   @depends-on-OPT-BEH-BEH-018 @depends-on-OPT-REG-RAN-001 @depends-on-OPT-REG-RAN-002 @ref-FLY-OPT-VAL-001 @ref-FLY-OPT-SAM-001
   # OPT-BEH-BEH-018: «Karakterpoeng, realfagspoeng og språkpoeng beregnes fra søkerens eneste vitnemål», «Skolepoeng settes sammen av karakterpoeng, realfagspoeng og språkpoeng», «Ingen automatisk beregning uten ett entydig vitnemål»
@@ -126,7 +126,7 @@ Egenskap: Automatisk saksbehandling
     # Avklart 2026-10-27 i review av PR #818, fra koden i fs-plattform (PoengRadOppdateringService).
 
     Scenario: Søknadsalternativet får poengsum
-      Gitt at søknaden har grunnlag
+      Gitt at saken har grunnlag
       Når søknaden behandles automatisk
       Så har "Informatikk, UiO" poengsum for søknaden
 
@@ -135,9 +135,9 @@ Egenskap: Automatisk saksbehandling
   Regel: Søknaden får tilleggspoeng når grunnlaget er satt
 
     Scenario: Søknaden får tilleggspoengene for grunnlaget
-      Gitt at søknaden har grunnlag
+      Gitt at saken har grunnlag
       Når søknaden behandles automatisk
-      Så har søknaden tilleggspoengene rangeringsregelverket gir for grunnlaget
+      Så har saken tilleggspoengene rangeringsregelverket gir for grunnlaget
 
   @wont @openquestion
   Regel: Søknaden dobbeltrangeres automatisk etter 23/5-regelen
@@ -154,7 +154,7 @@ Egenskap: Automatisk saksbehandling
   Regel: Kravelementene vurderes mot vitnemålet når poengene er beregnet
 
     Scenario: Kravelementet er vurdert mot vitnemålet
-      Gitt at søknaden har grunnlag
+      Gitt at saken har grunnlag
       Og at "Informatikk, UiO" har kravelementet "Matematikk R1"
       Når søknaden behandles automatisk
       Så er kravelementet vurdert mot vitnemålet
@@ -164,7 +164,7 @@ Egenskap: Automatisk saksbehandling
   Regel: Kvotespørsmålene med algoritme besvares automatisk
 
     Scenario: Kvotespørsmålet er besvart automatisk
-      Gitt at søknaden har grunnlag
+      Gitt at saken har grunnlag
       Og at grunnlaget er koblet til en kvotetype med kvotespørsmålet "ER-KVINNE"
       Og at kvotespørsmålet "ER-KVINNE" er koblet til algoritmen "Er kvinne"
       Når søknaden behandles automatisk
@@ -176,7 +176,7 @@ Egenskap: Automatisk saksbehandling
   Regel: Kvalifiseringen oppdateres når kravelementene er vurdert
 
     Scenario: Søkeren er kvalifisert når vitnemålet oppfyller kravelementene
-      Gitt at søknaden har grunnlag
+      Gitt at saken har grunnlag
       Og at "Informatikk, UiO" har kravelementet "Matematikk R1"
       Og at vitnemålet saken behandles helautomatisk på, har "Matematikk R1"
       Når søknaden behandles automatisk
