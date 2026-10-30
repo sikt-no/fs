@@ -220,8 +220,8 @@ Egenskap: Automatisk grunnlag
       Så er grunnlaget satt av saksbehandleren
       Og grunnlaget er ikke lenger satt automatisk
 
-    Scenario: Automatikken fjerner ikke grunnlag
-      Gitt at saken har et grunnlag som er satt automatisk
+    Scenario: Automatikken fjerner ikke grunnlag saksbehandleren har lagt til
+      Gitt at saksbehandleren har lagt til et grunnlag i saken
       Og at søkeren ikke lenger passer til grunnlaget
       Når søknaden behandles automatisk
       Så har saken fortsatt grunnlaget
@@ -246,12 +246,9 @@ Egenskap: Automatisk grunnlag
       Når søknaden behandles automatisk
       Så får saken ikke grunnlaget
 
-    @openquestion
     Scenario: Automatikken erstatter grunnlaget når søkeren passer til et annet
-      # ÅPNE SPØRSMÅL:
-      # - Har automatikken satt et grunnlag, og søkeren passer senere til et
-      #   annet (for eksempel etter nytt vitnemål), beholdes begge i dag.
-      #   Skal det nye erstatte det gamle?
+      # Avklart 30.10.2026: grunnlaget automatikken har satt, speiler vitnemålet saken er
+      # behandlet på. Kode i dag: begge grunnlagene beholdes.
       Gitt at saken har et grunnlag som er satt automatisk
       Og at søkeren nå passer til et annet grunnlag
       Når søknaden behandles automatisk
