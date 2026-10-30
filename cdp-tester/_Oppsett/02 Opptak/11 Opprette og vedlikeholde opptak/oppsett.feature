@@ -34,7 +34,7 @@
 #      | Publiseringsdato                               | {DATO:+150}       |
 #   8. Velg «Lagre». «Lagring vellykket» vises.
 #   Står noe under «Fyll ut obligatoriske felt:» etter steg 7, er det et funn: skriv det i «Faktisk resultat».
-@OPPSETT-OPT-OVO @ref-OPT-OVO-GRU-001 @ref-OPT-OVO-SAM-001 @ref-OPT-OVO-INN-001 @ref-OPT-OVO-FRI-001
+@OPPSETT-OPT-OVO @ref-OPT-OVO-GRU-001 @ref-OPT-OVO-SAM-001 @ref-OPT-OVO-INN-001 @ref-OPT-OVO-FRI-001 @ref-OPT-OVO-OVE-001
 Egenskap: Oppsett for opprette og vedlikeholde opptak
   Lager opptakene testene for opprette og vedlikeholde opptak bruker, i utgangstilstanden testene forutsetter.
 
@@ -96,4 +96,13 @@ Egenskap: Oppsett for opprette og vedlikeholde opptak
 
   # Teknikk: ingen. Over 50 opptak lages ikke av oppsettet (51 opptak per kjøring). «opptak-oversikt-over-50» blir stående
   # i miljøfila, og testene som bruker den, blir «Ikke testet» når det er færre enn 51 opptak.
-  # «opptak-oversikt-flere-typer» er dekket av opptakene over: to typer (UHG og lokalt), to organisasjoner, laget i denne kjøringen.
+
+  # Lager ingen nye opptak: nøkkelen er de to opptakene over med ulik type og ulik organisasjon. Kjøres etter
+  # «opptak-samordna-uten-utdanningstilbud» og «opptak-lokalt», og feiler hvis en av dem feilet.
+  Scenario: opptak-oversikt-flere-typer
+    Gitt jeg er logget inn som «opptak-forvalter-forvaltende»
+    Og «opptak-samordna-uten-utdanningstilbud» og «opptak-lokalt» har verdi i «Kjøringens testdata»
+    Når jeg går til «Opptak», og skriver «(test {KJØRING})» i «Opptaksnavn»
+    Så står både «Samordna opptak 2027 (test {KJØRING})» og «Lokalt opptak høst 2027 (test {KJØRING})» i lista
+    Og de to opptakene har ulik verdi i «Type» og i «Organisasjon»
+    Og jeg skriver navnene på de to opptakene og URL-en til «Opptak» i «Kjøringens testdata» for «opptak-oversikt-flere-typer»

@@ -10,14 +10,14 @@
 # steg i den automatiske saksbehandlingen. Kravet flytter beregningen til
 # vitnemålsimporten, og lagrer opptakssystemets egen påstand om GSK på vitnemålet.
 # Påstanden fra KREG brukes ikke lenger. Dette kravet tar inn gjenbruk fra
-# tidligere samordna opptak, fra lokale opptak i FS Admin, og fra lokale opptak i
-# FS-klienten når konklusjonen er med i oversikten over kvalitetssikrede
-# GSK-konklusjoner.
+# saksbehandlingen i tidligere samordna opptak, fra lokale opptak i FS Admin, og fra
+# lokale opptak i FS-klienten når konklusjonen er med i oversikten over
+# kvalitetssikrede GSK-konklusjoner.
 #
 # Gjenbruk i 2027-opptaket (STEK-442): det er ikke avklart hvordan gjenbruksdata skal
 # organiseres i produktområdet. For 2027 lastes GSK-konklusjonene og annulleringene
-# fra det gamle opptakssystemet (gjenbruksbasen i SODA, tabellene gskvedtak og
-# gskvedtakannullering) inn i midlertidige gjenbrukstabeller før opptaket. De er
+# fra det gamle opptakssystemet (gjenbrukstabellene i SODA, det vil si tabellene gskvedtak
+# og gskvedtakannullering) inn i midlertidige gjenbrukstabeller før opptaket. De er
 # konklusjoner fra tidligere opptak i dette kravet. Tabellene fjernes etter
 # 2027-opptaket.
 @OPT-BEH-BEH-015 @must @planned
@@ -28,17 +28,20 @@ Egenskap: Automatisk GSK-konklusjon
 
   Generell studiekompetanse (GSK) er det generelle opptakskravet til høyere utdanning.
   Når søkerens vitnemål importeres fra KREG til opptakssystemet, beregner opptakssystemet
-  sin egen påstand om GSK for hvert vitnemål, uavhengig av påstanden fra KREG. Påstanden
-  lagres på vitnemålet, med grunnlagskoden og tidspunktet den ble beregnet, og gjelder i
-  alle opptak. «Importeres» betyr i dette kravet alltid at opptakssystemet henter
-  vitnemålet fra KREG (OPT-BEH-BEH-030), ikke at vitnemålet kommer inn i KREG.
-  Søknader som ikke har en GSK-konklusjon, får en positiv konklusjon når et vitnemål
-  har påstanden GSK. Vitnemål importeres fra KREG når søknaden opprettes, og når KREG får
-  nye vitnemål for en søker med aktive søknader. Når søknaden opprettes, importeres
-  vitnemålene fra KREG først. Gir ingen av dem GSK, ser systemet etter en positiv konklusjon fra
-  et tidligere opptak. Ellers vurderes GSK manuelt. Den automatiske saksbehandlingen
-  setter også konklusjonen, som første steg, på søknadene i opptaket som ikke har en.
-  Påstanden på vitnemålet beregnes ikke på nytt da.
+  sin egen påstand om GSK for hvert vitnemål, uavhengig av påstanden fra KREG. Påstanden,
+  ja eller nei, lagres på opptakssystemets kopi av vitnemålet, sammen med tidspunktet den
+  ble beregnet og hvilken beregning som ble brukt. Er påstanden ja, lagres også
+  grunnlagskoden. Hvordan påstanden og grunnlagskoden beregnes, står i OPT-BEH-BEH-027.
+
+  Påstanden brukes i saksbehandlingen i alle aktive opptak. «Importeres» betyr i
+  dette kravet alltid at opptakssystemet henter vitnemålet fra KREG (OPT-BEH-BEH-030),
+  ikke at vitnemålet kommer inn i KREG. Søknader som ikke har en GSK-konklusjon, får en
+  positiv konklusjon når et vitnemål har påstanden GSK. Vitnemål importeres fra KREG når
+  søknaden opprettes, og når KREG får nye vitnemål for en søker med aktive søknader. Når
+  søknaden opprettes, importeres vitnemålene fra KREG først. Gir ingen av dem GSK, ser
+  systemet etter en positiv konklusjon fra et tidligere opptak. Ellers vurderes GSK
+  manuelt. Den automatiske saksbehandlingen setter også konklusjonen, som første steg, på
+  søknadene i opptaket som ikke har en. Påstanden på vitnemålet beregnes ikke på nytt da.
   Automatikken setter aldri en negativ konklusjon på søknaden, og overskriver aldri en
   konklusjon som finnes. Den gjelder alle opptak, også fagskoleopptak.
 
@@ -47,7 +50,12 @@ Egenskap: Automatisk GSK-konklusjon
   # skal lagres som konklusjon, fordi GSK der er et alternativt kompetansekrav.
 
   @ref-FLY-OPT-AUT-001 @depends-on-OPT-BEH-BEH-027 @ref-FLY-OPT-VIT-001 @ref-OPT-BEH-BEH-025
+  @openquestion
   Regel: Opptakssystemets påstand om GSK på vitnemålet
+    # ÅPNE SPØRSMÅL:
+    # - Innspill i PR #857: importen skal også ta vare på påstanden om GSK fra «systemet
+    #   i videregående skole». Hvilket system er det, og kommer påstanden fra KREG eller
+    #   fra en annen kilde? Påstanden fra KREG tas vare på i OPT-BEH-BEH-030.
     # Hvordan GSK beregnes for vitnemålet (seksfagskontrollen og grunnlagskoden), står der.
 
     Scenario: Vitnemål som gir generell studiekompetanse
@@ -60,6 +68,7 @@ Egenskap: Automatisk GSK-konklusjon
       Og grunnlagskoden er grunnlagskoden for løpet på vitnemålet
       Og grunnlagsdatoen er utstedelsesdatoen på vitnemålet
       Og påstanden er beregnet 26.10.2026 kl. 10:14
+      Og påstanden viser hvilken beregning i kontrollmotoren som ble brukt
 
     Scenario: Påstanden fra KREG brukes ikke
       # Koden (GskVedtakAutoService) krever i dag at KREG sier GSK. Det skal fjernes.
@@ -88,6 +97,7 @@ Egenskap: Automatisk GSK-konklusjon
       Gitt at <grunn>
       Når vitnemålet importeres fra KREG
       Så har vitnemålet påstanden at søkeren ikke har generell studiekompetanse
+      Og påstanden har ingen grunnlagskode
 
       Eksempler:
         | grunn                                                  |
@@ -297,34 +307,33 @@ Egenskap: Automatisk GSK-konklusjon
       Når saksbehandleren legger til en GSK-konklusjon
       Så kan saksbehandleren bare velge positive GSK-konklusjoner
 
-  @ref-FLY-OPT-VIT-001
+  @ref-FLY-OPT-VIT-001 @ref-OPT-BEH-BEH-034
   Regel: Annullert vitnemål
     # Kilden: vitnemålene hentes fra KREG. Er et vitnemål annullert der, trekkes
-    # konklusjonene som bygger på det, tilbake. Det gjelder bare i opptak som ikke er
-    # avsluttet. I avsluttede opptak står konklusjonen urørt.
-    # Konklusjoner fra gjenbruksbasen (STEK-442) vet ikke hvilket vitnemål de bygger på,
-    # og trekkes ikke tilbake etter denne regelen. For dem er det annulleringene i
-    # gjenbruksbasen som gjelder.
-    # Melding til søkeren: avklart 2026-10-13 at søkeren ikke får egen beskjed om at
-    # konklusjonen er trukket tilbake. Søkeren får vite det gjennom resultatet av
-    # saksbehandlingen.
+    # konklusjonene som bygger på det, ikke tilbake automatisk. Saken får en merknad og
+    # taggen «Vitnemål annullert», og settes tilbake til under behandling hvis den er ferdig
+    # behandlet (OPT-BEH-BEH-034). Saksbehandleren vurderer konklusjonen. Det gjelder bare i
+    # opptak som ikke er avsluttet. I avsluttede opptak står saken urørt.
+    # Avklart 29.10.2026: konklusjonen trekkes ikke lenger tilbake automatisk. Før stod det
+    # at automatiske og gjenbrukte konklusjoner som bygger på vitnemålet, ikke lenger var
+    # positive. Kode i dag: GskVedtakTilbakekallingService trekker konklusjonen tilbake.
+    # Konklusjoner fra gjenbruksbasen (STEK-442) vet ikke hvilket vitnemål de bygger på.
+    # For dem er det annulleringene i gjenbruksbasen som gjelder.
 
-    Scenario: Automatisk konklusjon trekkes tilbake når vitnemålet annulleres
+    Scenario: Automatisk konklusjon står når vitnemålet annulleres
       Gitt at søknaden har en automatisk GSK-konklusjon som bygger på et vitnemål
       Og at opptaket ikke er avsluttet
-      Og at ingen har låst eller endret konklusjonen manuelt
       Når vitnemålet annulleres
-      Så er konklusjonen ikke lenger positiv
-      Og konklusjonen viser at vitnemålet den bygde på, er annullert
+      Så er GSK-konklusjonen på søknaden uendret
+      Og saken får taggen "Vitnemål annullert"
 
-    Scenario: Gjenbrukt konklusjon trekkes tilbake når vitnemålet annulleres
+    Scenario: Gjenbrukt konklusjon står når vitnemålet annulleres
       Gitt at søknaden har en GSK-konklusjon som er gjenbrukt fra et tidligere opptak
       Og at den tidligere konklusjonen bygger på et vitnemål
       Og at opptaket ikke er avsluttet
-      Og at ingen har låst eller endret den gjenbrukte konklusjonen manuelt
       Når vitnemålet annulleres
-      Så er den gjenbrukte konklusjonen ikke lenger positiv
-      Og den gjenbrukte konklusjonen viser at vitnemålet den bygde på, er annullert
+      Så er GSK-konklusjonen på søknaden uendret
+      Og saken får taggen "Vitnemål annullert"
 
     Scenario: Konklusjon i avsluttet opptak trekkes ikke tilbake
       Gitt at søknaden har en automatisk GSK-konklusjon som bygger på et vitnemål
@@ -342,7 +351,7 @@ Egenskap: Automatisk GSK-konklusjon
       Og at opptaket ikke er avsluttet
       Og at søkeren ikke har sendt inn eller endret søknaden etter at konklusjonen ble satt
       Når vitnemålet annulleres i KREG
-      Så er konklusjonen ikke lenger positiv
+      Så får saken taggen "Vitnemål annullert"
 
   Regel: Sporbarhet
     # Søkerens innsyn: avklart 2026-10-13 at det er utenfor dette kravet om søkeren
