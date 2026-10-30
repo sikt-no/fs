@@ -615,7 +615,7 @@ Egenskap: Søknadsmangler
       Når saksbehandleren ved Universitetet i Oslo åpner manglene i saken
       Så ser ikke saksbehandleren muligheten til å kommentere, sjekke ut eller slette den automatiske mangelteksten
 
-  @draft @openquestion @ref-FLY-OPT-AUT-001 @depends-on-OPT-SØK-SØK-018 @ref-OPT-OVO-GRU-001
+  @draft @ref-FLY-OPT-AUT-001 @depends-on-OPT-SØK-SØK-018 @ref-OPT-OVO-GRU-001
   Regel: Mangelen for generell studiekompetanse som fullføres i vår settes og sjekkes ut automatisk
 
     Søkere som fullfører videregående opplæring i vår, oppgir i søknaden at generell
@@ -639,9 +639,7 @@ Egenskap: Søknadsmangler
     # (OPT-OVO-GRU-001).
     # Avklart 30.10.2026: saksbehandleren kan sjekke ut mangelen, men ikke slette den. Bare
     # automatikken sletter den, når søkeren endrer søknaden.
-    # ÅPNE SPØRSMÅL:
-    # - Skal en mangel som er sjekket ut, bli stående når søkeren endrer søknaden til at generell
-    #   studiekompetanse ikke fullføres i vår?
+    # Avklart 30.10.2026: en mangel som er sjekket ut, blir stående når søkeren endrer søknaden.
 
     Scenario: Alle sakene i søknaden får mangel når søkeren oppgir at generell studiekompetanse fullføres i vår
       Gitt at mangelkoden "DUA" i regelverkssamlingen "UHG 2027" er merket for generell studiekompetanse som fullføres i vår
