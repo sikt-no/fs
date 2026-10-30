@@ -81,11 +81,11 @@ Egenskap: Automatisk vurdering av spesielle opptakskrav
   # kravelementene som ikke er oppfylt, og de slettes når søkeren blir kvalifisert
   # (OPT-BEH-BEH-008). Den automatiske vurderingen gjør ikke noe med manglene saksbehandleren
   # har registrert. I FS-klienten sletter «Godkjenn» dem.
+  # Avklart 30.10.2026: vurderingen av vitnemålet og praksisautomatikken
+  # (knytte_praksis_til_opptakskrav.feature, OPT-BEH-BEH-006) vurderer hver sine kravelementer,
+  # og møtes ikke. Saksbehandlerens vurdering låser kravelementet i begge.
 
   # ÅPNE SPØRSMÅL:
-  # - knytte_praksis_til_opptakskrav.feature (@OPT-BEH-BEH-006) setter et
-  #   kravelement automatisk oppfylt fra praksis. Hvordan virker de to
-  #   automatikkene sammen, og hvem eier låsingen?
   # - Søknaden kan ha saker hos flere organisasjoner. Kravelementer fra de
   #   andre sakene skal ikke vurderes på denne saken (STEK-593).
   # - Skal et studieønske som fjernes, også fjerne kravelementene det ga
