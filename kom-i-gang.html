@@ -442,7 +442,7 @@ footer .inner{padding-block:24px 48px;display:flex;flex-direction:column;gap:6px
             <span class="pill">fs-testcaser-ekstern</span><span style="color:var(--accent)">→</span>
             <span class="pill">fs-testrapport</span>
           </div>
-          <span style="font-size:14px;line-height:1.5">Etter verifiseringen (fase 1) testes det som er @implemented, etter teststrategien (forslag) i Confluence, i tre faser: en agent tar mesteparten av den funksjonelle testingen (fase 2), domeneekspertene tester flyter og avhengigheter (fase 3), og de eksterne partene tester mot sine egne krav (fase 4). Testplanen sier hvilke krav og flyter som testes. Er et krav med i en flyt, testes også overleveringene i flyten: at det ett krav lager, blir brukt av det neste. Filene ligger i akseptansetest/.</span>
+          <span style="font-size:14px;line-height:1.5">Etter teststrategien (forslag) i Confluence går akseptansetesten i fire faser: planen, med verifiseringen og testplanen (fase 1), en agent som tar mesteparten av den funksjonelle testingen (fase 2), interne testere som tester det agenten ikke klarte, flytene og avhengighetene, opplevelsen og helheten, og det med høyest risiko (fase 3), og erfarne brukere og eksterne parter som tester at de kan gjøre jobben sin i flytene, ut fra kravene våre (fase 4). Det som testes, er det som er @implemented. Testplanen sier hvilke krav og flyter som testes. Er et krav med i en flyt, testes også overleveringene i flyten: at det ett krav lager, blir brukt av det neste. Filene ligger i akseptansetest/.</span>
         </div>
       </div>
     </div>
@@ -728,7 +728,7 @@ footer .inner{padding-block:24px 48px;display:flex;flex-direction:column;gap:6px
   <!-- 6 -->
   <section class="st" id="verifiser" data-step>
     <div class="st-head">
-      <div class="st-kicker"><span class="badge">Steg 6</span><span class="badge">Teststrategien: fase 1</span></div>
+      <div class="st-kicker"><span class="badge">Steg 6</span><span class="badge">Teststrategien: fase 1, plan</span></div>
       <h2>Verifiser kravene mot koden</h2>
     </div>
     <div class="body">
@@ -758,13 +758,13 @@ footer .inner{padding-block:24px 48px;display:flex;flex-direction:column;gap:6px
     <span class="eyebrow">Del 2</span>
     <h2>Akseptansetest</h2>
     <p>Testingen følger «Teststrategi for FS – fra krav til akseptanse» (forslag) i Confluence (STUDIEADM), i fire faser: <b>1. verifisering</b> (steg 6), <b>2. agentisk funksjonstest</b> (steg 9), <b>3. intern akseptansetest</b> (steg 10) og <b>4. ekstern akseptansetest</b> (steg 12). Hver fase bygger på den forrige og gjentar den ikke. Filene ligger i <code>akseptansetest/&lt;slug&gt;/</code>. Testplanen er hovedsiden i Confluence, under «Testplaner», og de andre sidene er undersider til den. Ingenting publiseres i Confluence uten at du sier ja.</p>
-    <p><b>Det som testes, er det som er <code>@implemented</code>.</b> Kravene står med Feature-ID i «Omfang» i testplanen, og alle fasene tester de samme kravene (de eksterne partene bruker sine egne krav).</p>
+    <p><b>Det som testes, er det som er <code>@implemented</code>.</b> Kravene står med Feature-ID i «Omfang» i testplanen, og alle fasene bygger på de samme kravene (fase 4 tester flytene, med kravene gått gjennom med de eksterne partene).</p>
   </div>
 
   <!-- 7 -->
   <section class="st" id="testplan" data-step>
     <div class="st-head">
-      <div class="st-kicker"><span class="badge">Steg 7</span><span class="badge">Teststrategien: testplan</span></div>
+      <div class="st-kicker"><span class="badge">Steg 7</span><span class="badge">Teststrategien: fase 1, plan</span></div>
       <h2>Lag testplanen</h2>
     </div>
     <div class="body">
@@ -774,7 +774,7 @@ footer .inner{padding-block:24px 48px;display:flex;flex-direction:column;gap:6px
         <ol class="small">
           <li><b>Leveransen:</b> navnet, versjonen, testmiljøet (alltid et testmiljø) og feature-flagg.</li>
           <li><b>Testbrukerne:</b> navn og organisasjon for rollene som utfører scenarioene, nummerert fra 1, ved organisasjonene kravet gjelder. Antallet følger av tilgangsmatrisen fra fs-verify. Det lages ikke egne testcaser for roller og tilgang, så det trengs ikke testbrukere bare for å vise at en rolle mangler tilgang.</li>
-          <li><b>Testdataene:</b> hvilke data hvert krav trenger, og i hvilken tilstand. Hvordan de lages og settes tilbake, løses separat, utenfor teststrategien.</li>
+          <li><b>Testdataene:</b> hvilke data hvert krav trenger, og i hvilken tilstand. Testene lager dem selv, i oppsettet, fordi data i testmiljøet kan slettes når som helst.</li>
           <li><b>Avhengighetskart:</b> avhengigheter utenfor brukerens flyt, som andre moduler, integrasjoner, batchjobber, rapporter og eksport, når testleder vurderer at leveransen trenger det.</li>
           <li><b>Roller og tid:</b> testansvarlig, kontaktperson, testere, tidspunkt, Slack-kanal, og om leveransen skal til ekstern test.</li>
           <li><b>Flytene:</b> hele eller deler av en lang flyt, når det trengs.</li>
@@ -782,22 +782,23 @@ footer .inner{padding-block:24px 48px;display:flex;flex-direction:column;gap:6px
       </div>
       <div class="tablebox">
         <table>
-          <thead><tr><th>Seksjon</th><th>Innhold</th></tr></thead>
+          <thead><tr><th>Side</th><th>Seksjon</th><th>Innhold</th></tr></thead>
           <tbody>
-            <tr><td>Testbeskrivelse</td><td>Hva er levert, versjon, testmiljø, flagg, kilde, scope, saker, kjente begrensninger, avhengighetskart. Testbrukere og testdata.</td></tr>
-            <tr><td>Omfang</td><td>Kravene som er <code>@implemented</code>, per oppgave eller kapabilitet, med Feature-ID og antall scenarioer.</td></tr>
-            <tr><td>Flyter</td><td>Flytene som går gjennom kravene, om hele eller deler testes, og én rad per fase.</td></tr>
-            <tr><td>Testdata</td><td>Hvilke data hvert krav trenger, med nøkkel og utgangstilstand.</td></tr>
-            <tr><td>Åpne spørsmål</td><td>Antall regler og scenarioer med åpne spørsmål per krav, fra verify-rapporten. De stopper ikke testen.</td></tr>
-            <tr><td>Regler uten scenario</td><td>Reglene i koden som verify-rapporten fant uten scenario i kravet, som input til den agentiske testen.</td></tr>
-            <tr><td>Testcaser som skal lages</td><td>Omfanget, ikke testcasene: per regel antall scenarioer, utledede testcaser og teknikk (fase 2), og flytene og oppgavene (fase 3).</td></tr>
-            <tr><td>Venter på verifisering</td><td>Krav som er <code>@in-progress</code>, og delene som ikke er levert i et krav som er delvis levert, med det verify-rapporten sier mangler.</td></tr>
-            <tr><td>Ikke med i denne testen</td><td>Det som faller ut, med grunnen.</td></tr>
-            <tr><td>Forutsetninger</td><td>Miljø, testdata, testbrukere, verifiseringen, testcasene, innloggingen, og kjente brudd i flytene.</td></tr>
-            <tr><td>Kriterier for godkjent</td><td>Kravene er kriteriene. Tabellen sier når hver fase er ferdig.</td></tr>
-            <tr><td>Status i flyten</td><td>Én rad per fase i teststrategien, med lenke, status og dato.</td></tr>
-            <tr><td>Vedlegg</td><td>Lenker til verifiseringsrapporten, den agentiske testrapporten og testcasene.</td></tr>
-            <tr><td>Sporbarhet per krav</td><td>Scenario → kode (fase 1) → testcase, teknikk og resultat (fase 2) → flyt (fase 3).</td></tr>
+            <tr><td>Testplan (hovedsiden)</td><td>Innhold</td><td>Innholdsfortegnelse, undersidene, og lenker til de tre undersidene under.</td></tr>
+            <tr><td></td><td>Testbeskrivelse</td><td>Hva er levert, versjon, testmiljø, flagg, kilde, scope, saker, kjente begrensninger.</td></tr>
+            <tr><td></td><td>Roller, tid og kanal</td><td>Hvem som tester, når, og hvor spørsmålene tas.</td></tr>
+            <tr><td></td><td>Forutsetninger</td><td>Miljø, testdata, testbrukere, verifiseringen, testcasene, innloggingen, og kjente brudd i flytene.</td></tr>
+            <tr><td></td><td>Kriterier for godkjent</td><td>Kravene er kriteriene. Tabellen sier når hver fase er ferdig.</td></tr>
+            <tr><td></td><td>Status i flyten</td><td>Én rad per fase i teststrategien, med lenke, status og dato.</td></tr>
+            <tr><td></td><td>Vedlegg</td><td>Lenker til verifiseringsrapporten, den agentiske testrapporten og testcasene.</td></tr>
+            <tr><td>Omfang (underside)</td><td>Omfang</td><td>Kravene som er <code>@implemented</code>, per oppgave eller kapabilitet, med Feature-ID og antall scenarioer, og antall åpne spørsmål per krav. De stopper ikke testen.</td></tr>
+            <tr><td></td><td>Flyter</td><td>Flytene som går gjennom kravene, om hele eller deler testes, og én rad per fase. Vurdering per krav og avhengighetskart.</td></tr>
+            <tr><td></td><td>Venter på verifisering</td><td>Krav som er <code>@in-progress</code>, og delene som ikke er levert i et krav som er delvis levert, med det verify-rapporten sier mangler.</td></tr>
+            <tr><td></td><td>Regler uten scenario</td><td>Reglene i koden som verify-rapporten fant uten scenario i kravet, som input til den agentiske testen.</td></tr>
+            <tr><td></td><td>Ikke med i denne testen</td><td>Det som faller ut, med grunnen.</td></tr>
+            <tr><td>Testcaser og testdata (underside)</td><td>Testcaser som skal lages</td><td>Omfanget, ikke testcasene: per regel antall scenarioer, utledede testcaser og teknikk (fase 2), og flytene og oppgavene (fase 3).</td></tr>
+            <tr><td></td><td>Testbrukere og testdata</td><td>Testbrukerne med tilgangsmatrisen, og dataene hvert krav trenger, med nøkkel og utgangstilstand.</td></tr>
+            <tr><td>Sporbarhet (underside)</td><td>Sporbarhet per krav</td><td>Scenario → kode (fase 1) → testcase, teknikk og resultat (fase 2) → flyt (fase 3). Fylles ut i hver fase.</td></tr>
           </tbody>
         </table>
       </div>
@@ -814,8 +815,8 @@ footer .inner{padding-block:24px 48px;display:flex;flex-direction:column;gap:6px
     <aside class="facts">
       <dl>
         <div><dt>Skill</dt><dd><span class="pill">fs-testplan</span></dd></div>
-        <div><dt>Fil</dt><dd><code>akseptansetest/&lt;slug&gt;/testplan.md</code></dd></div>
-        <div><dt>Confluence</dt><dd>«Testplan – &lt;leveranse&gt;», med verifiseringen som underside</dd></div>
+        <div><dt>Filer</dt><dd><code>akseptansetest/&lt;slug&gt;/testplan.md</code>, <code>omfang.md</code>, <code>testcaser-og-testdata.md</code> og <code>sporbarhet.md</code></dd></div>
+        <div><dt>Confluence</dt><dd>«Testplan – &lt;leveranse&gt;» som hovedside, med «Omfang», «Testcaser og testdata», «Sporbarhet» og verifiseringen som undersider</dd></div>
         <div><dt>Endrer aldri</dt><dd>Kravene, taggene, scope-fila eller <code>oppgave.md</code></dd></div>
       </dl>
     </aside>
@@ -825,7 +826,7 @@ footer .inner{padding-block:24px 48px;display:flex;flex-direction:column;gap:6px
   <!-- 8 -->
   <section class="st" id="rapport-verifisering" data-step>
     <div class="st-head">
-      <div class="st-kicker"><span class="badge">Steg 8</span><span class="badge">Teststrategien: etter fase 1</span></div>
+      <div class="st-kicker"><span class="badge">Steg 8</span><span class="badge">Teststrategien: fase 1, plan</span></div>
       <h2>Er leveransen klar for testing?</h2>
     </div>
     <div class="body">
@@ -864,7 +865,7 @@ footer .inner{padding-block:24px 48px;display:flex;flex-direction:column;gap:6px
       <div class="cols">
         <div class="box"><h3>Hva testes</h3><ul class="small"><li>Alle scenarioer som er <code>@implemented</code>, slik de står. En scenariomal gir én test per eksempel.</li><li>Testcaser agenten utleder fra reglene, også reglene fs-verify fant uten scenario.</li><li>Negativ testing: ugyldige verdier, feil format, feil rekkefølge, data som ikke finnes eller er slettet.</li><li>Hvert obligatorisk felt tomt, med bare mellomrom og med for lang verdi, og feilmeldingen kontrolleres.</li></ul></div>
         <div class="box"><h3>Teknikk og bevis</h3><ul class="small"><li>Agenten velger teknikk per regel (grenseverdier, ekvivalensklasser, beslutningstabeller, tilstandsoverganger) og skriver hvilken som er brukt.</li><li>Hver test lagrer steg, input, faktisk resultat og skjermbilde eller logg, så et menneske kan etterprøve den. Bildene ligger i <code>akseptansetest/&lt;slug&gt;/</code>, og er ignorert av git.</li></ul></div>
-        <div class="box"><h3>Testbrukere og testdata</h3><p class="small">Testene lages fra kravene, og kjenner ikke testplanen: den velger bare hvilke krav som får tester, og hvilke tester som kjøres. Testbrukere og testdata er nøkler, slått opp i miljøfila for testmiljøet (<code>cdp-tester/_Miljøer/&lt;miljø&gt;.md</code>), som har alle personaene og rollene i FS Admin, og vedlikeholdes jevnlig. Testplanen har en kopi til testerne. Lages testene etter testplanen, synker fs-testplan den. Hvordan testdataene lages, er utenfor teststrategien. Dataene settes tilbake før hver kjøring, og data testen selv lager, får unike navn, så testene kan kjøres på nytt.</p></div>
+        <div class="box"><h3>Testbrukere og testdata</h3><p class="small">Testene lages fra kravene, og kjenner ikke testplanen: den velger bare hvilke krav som får tester, og hvilke tester som kjøres. Testbrukere og testdata er nøkler. Testene lager dataene sine selv: oppsettet (<code>cdp-tester/_Oppsett/&lt;sti&gt;/oppsett.feature</code>) kjøres først i hver kjøring, og lager testdataene gjennom løsningen, med kjøringen i navnet, så testene aldri bygger på data som kan være slettet. Miljøfila for testmiljøet (<code>cdp-tester/_Miljøer/&lt;miljø&gt;.md</code>) har alle personaene og rollene i FS Admin, grunndataene og det testene ikke kan lage, og vedlikeholdes jevnlig. Testplanen har en kopi til testerne. Lages testene etter testplanen, synker fs-testplan den.</p></div>
       </div>
       <div class="box tint">
         <h3>Kravet dekker ikke</h3>
@@ -890,13 +891,13 @@ footer .inner{padding-block:24px 48px;display:flex;flex-direction:column;gap:6px
       <h2>Intern akseptansetest</h2>
     </div>
     <div class="body">
-      <p>Domeneekspertene bekrefter at leveransen virker i arbeidsprosessen og sammen med resten av FS, faglig sett. Den interne testen tester <b>flyter og avhengigheter</b>, ikke enkeltfunksjoner: feltvalidering og feilsituasjoner er testet i fase 2, og tilgang er sjekket i fase 1. fs-testcaser-intern lager flyttestene som testansvarlig kan følge uten å kjenne løsningen fra før.</p>
+      <p>Domeneekspertene og de interne testerne bekrefter at leveransen virker for brukeren, i arbeidsprosessen og sammen med resten av FS, og tester det en agent ikke kan teste eller vurdere. Testen har fire deler: <b>det den agentiske testen ikke klarte</b> (testcasene som ble «Ikke testet»), <b>flytene og avhengighetene</b>, <b>opplevelsen og helheten</b> (forståelig og brukbar, tekster og fagspråk, universell utforming) og <b>det med høyest risiko</b>, valgt av testansvarlig. Feltvalidering og feilsituasjoner fase 2 har bestått, testes ikke på nytt, og tilgang er sjekket i fase 1. fs-testcaser-intern lager testcasene, som testerne kan følge uten å kjenne løsningen fra før.</p>
       <div class="cols">
         <div class="box"><h3>Vurdering per krav</h3><ul class="small"><li>Inngår kravet i en flyt i <code>krav/_Flyter</code>? Da vurderes det om flyten skal testes.</li><li>Inngår det ikke i en flyt: skal det lages en ny flyt (fs-krav), eller kobles kravet til en eksisterende?</li><li>Bare scenarioene som inngår i flytene testes, ikke alle.</li><li>Regresjon av tidligere leverte flyter når leveransen endrer noe andre bygger på.</li></ul></div>
         <div class="box"><h3>Testcasene</h3><ul class="small"><li>Én testcase er én flyt, i rekkefølgen arbeidsprosessen går, ikke rekkefølgen i feature-fila. Et krav som ikke hører til en flyt, testes som en oppgave uten flyt.</li><li>Hensikt, testdata og forventet resultat, og avhengighetene som sjekkes underveis.</li><li>Hvert scenario i flyten får eget resultat.</li><li>Testbrukeren fra testplanen står i første steg, med ordene fra skjermen og alle verdiene, og en sjekk av at det er lagret.</li></ul></div>
         <div class="box"><h3>Avhengighetskart</h3><p class="small">Testleder vurderer om leveransen trenger et avhengighetskart: det leveransen bygger på eller påvirker utenfor brukerens flyt, som andre moduler, integrasjoner, batchjobber, rapporter, eksport og andre teams leveranser. De sjekkes underveis i flytene der det er mulig, ellers for seg.</p></div>
       </div>
-      <p class="small">Kolonnene er <b>Nr · Scenario · Steg · Forventet resultat · Faktisk resultat · Status</b>. Testerne fyller ut de to siste på siden i Confluence: <span class="sev ok">Bestått</span> <span class="sev bad">Ikke bestått</span> <span class="sev" style="background:var(--off-bg);color:var(--fg)">Ikke testet</span>. Testansvarlig kan ta stikkprøver av det som er testet i fase 2.</p>
+      <p class="small">Kolonnene er <b>Nr · Scenario · Steg · Forventet resultat · Faktisk resultat · Status</b>. Testerne fyller ut de to siste på siden i Confluence: <span class="sev ok">Bestått</span> <span class="sev bad">Ikke bestått</span> <span class="sev" style="background:var(--off-bg);color:var(--fg)">Ikke testet</span>. Det testansvarlig vil etterprøve fra fase 2, tas med under «Høyest risiko».</p>
     </div>
     <aside class="facts">
       <dl>
@@ -950,17 +951,17 @@ footer .inner{padding-block:24px 48px;display:flex;flex-direction:column;gap:6px
       <h2>Ekstern akseptansetest</h2>
     </div>
     <div class="body">
-      <p>Erfarne brukere fra lærestedene, HK-dir og andre eksterne parter bekrefter at løsningen dekker deres egne krav og behov. Bare leveranser som er godkjent internt, går hit. Sikt legger til rette og leder testen, men <b>partene har sine egne krav og akseptansekriterier og lager eller eier testcasene sine</b>. Feature-filene våre er ikke grunnlaget her. Testerne kjenner fagfeltet, men ikke løsningen og ikke kravene.</p>
+      <p>Erfarne brukere fra lærestedene, HK-dir og andre eksterne parter bekrefter at de kan gjøre jobben sin i flytene leveransen skal understøtte: at hvert steg virker, og at stegene henger sammen. Bare leveranser som er godkjent internt, går hit. <b>Grunnlaget er kravene våre for flytene</b>, som Sikt går gjennom med partene i et møte eller skriftlig før testen. Testen vurderer ikke om kravene er riktige: behov kravene ikke dekker, er endringsforslag. Partene kan legge til egne testcaser når de har egne krav, for eksempel HK-dir. Testerne får <a href="https://sikt.atlassian.net/wiki/spaces/STUDIEADM/pages/5155815432">Informasjonsskriv til eksterne testere</a>, og hver test har én kontaktperson fra Sikt, normalt testansvarlig.</p>
       <div class="cols">
-        <div class="box"><h3>Flyter som utgangspunkt</h3><p class="small">fs-testcaser-ekstern foreslår flyter satt sammen til oppgaver i arbeidsprosessen, uten tekniske ord, bygget på flyttestene fra den interne testen. Partene bestemmer hvilke scenarioer, hvor grundig og i hvilken rekkefølge. Skillen kan også ta inn partenes egne krav, og vise hva Sikt allerede har testet.</p></div>
-        <div class="box"><h3>Sikt leverer</h3><p class="small">Testmiljø, testdata og testbrukere, flytbeskrivelsene fra den interne testen (eksportert av fs-testcaser-ekstern), og rapportene fra fase 2 og 3, så partene ser hva som er testet.</p></div>
-        <div class="box"><h3>Funn i to typer</h3><p class="small"><b>Avvik fra våre krav</b> er feil. <b>Krav vi ikke har</b> er endringsforslag, og går til kravarbeidet (fs-krav). Samme maler og alvorlighetsgrader som i den interne testen.</p></div>
+        <div class="box"><h3>Flytene</h3><p class="small">Sikt velger flytene i <code>krav/_Flyter</code> sammen med partene, og fs-testcaser-ekstern lager testcasene ut fra flyttestene i den interne testen, uten tekniske ord. Testerne følger flyten steg for steg, og svarer Ja, Nei eller Delvis per steg. Enkeltfunksjoner, feltvalidering, roller og tilgang, universell utforming og regresjon testes ikke her.</p></div>
+        <div class="box"><h3>Sikt leverer</h3><p class="small">Gjennomgangen av kravene for flytene, informasjonsskrivet og testbeskrivelsen (versjon, flyter, miljø og URL, feature-flagg, testbrukere og roller, testdata og tilstanden dataene skal være i, avhengigheter). Testdataene er laget på forhånd, og testmiljøet nullstilles ikke i testperioden. I tillegg rapportene fra fase 2 og 3, så partene ser hva som er testet.</p></div>
+        <div class="box"><h3>Funn i to typer</h3><p class="small"><b>Feil</b>: flyten lar ikke testeren gjøre jobben, eller løsningen avviker fra kravene Sikt har gått gjennom. <b>Endringsforslag</b>: behov flyten ikke dekker, og går til kravarbeidet (fs-krav). Testerne trenger ikke finne årsaken. Samme maler og alvorlighetsgrader som i den interne testen.</p></div>
       </div>
     </div>
     <aside class="facts">
       <dl>
         <div><dt>Skill</dt><dd><span class="pill">fs-testcaser-ekstern</span></dd></div>
-        <div><dt>Hvem tester</dt><dd>Læresteder, HK-dir og andre eksterne parter. Sikt leder testen.</dd></div>
+        <div><dt>Hvem tester</dt><dd>Læresteder, HK-dir og andre eksterne parter. Sikt legger til rette, med én kontaktperson per test.</dd></div>
         <div><dt>Filer</dt><dd><code>testcaser-ekstern.md</code><br><code>flytbeskrivelser-ekstern.md</code></dd></div>
         <div><dt>Confluence</dt><dd>«Ekstern akseptansetest – &lt;leveranse&gt;»</dd></div>
       </dl>
@@ -975,7 +976,7 @@ footer .inner{padding-block:24px 48px;display:flex;flex-direction:column;gap:6px
       <h2>Sluttrapport og beslutning</h2>
     </div>
     <div class="body">
-      <p>Testrapporten etter den eksterne testen teller resultatene og foreslår et utfall på samme måte som etter den interne. Deltakerne bekrefter rapporten, og de eksterne partene aksepterer mot sine egne krav. Hvem som beslutter, avklares med partene. Agenten kan aldri ta beslutningen.</p>
+      <p>Testrapporten etter den eksterne testen teller resultatene og foreslår et utfall på samme måte som etter den interne. Deltakerne bekrefter rapporten, og kontaktpersonen går gjennom resultatet med partene. Utfallene er de samme som i fase 3, vurdert mot flytene og kravene, og godkjent eller godkjent med forbehold betyr at leveransen er <b>akseptert</b>. Hvem som beslutter, er avtalt med partene før testen. Agenten kan aldri ta beslutningen.</p>
       <div class="tablebox">
         <table>
           <thead><tr><th>Utfall</th><th>Hva skjer videre</th></tr></thead>

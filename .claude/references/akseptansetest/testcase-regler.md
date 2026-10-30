@@ -11,10 +11,10 @@ Hver fase bygger på den forrige og gjentar den ikke. Derfor gjelder ikke alle r
 | Fase | Hva testcasene er | Reglene |
 |---|---|---|
 | 2. Agentisk funksjonstest | Ett scenario (eller en utledet testcase) per testcase: positive og negative, med gyldige og ugyldige data, og feltvalidering | R1–R9, R12–R16 |
-| 3. Intern akseptansetest | Flyter og avhengigheter: oppgaver i arbeidsprosessen, gjennom flere scenarioer | R1–R8, R10–R16. R9 bare når en feilsituasjon er en del av flyten |
-| 4. Ekstern akseptansetest | Flytforslag til partene, som eier testcasene sine | R1–R4, R6–R8, R10, R11, R14 og R16 |
+| 3. Intern akseptansetest | Fire deler: testcasene fra fase 2 som ble «Ikke testet», flyter og avhengigheter (oppgaver i arbeidsprosessen, gjennom flere scenarioer), opplevelse og helhet, og det med høyest risiko | R1–R8, R10–R16. R9 i del 1 og 4, og når en feilsituasjon er en del av flyten |
+| 4. Ekstern akseptansetest | Én testcase per flyt leveransen inngår i, valgt sammen med partene: hvert steg virker, og stegene henger sammen. Testdataene er laget på forhånd | R1–R4, R6–R8, R10, R11, R14 (med unntaket for fase 4) og R16 |
 
-Feltvalidering, grenseverdier, obligatoriske felt og feilsituasjoner testes i fase 2, og testes ikke på nytt i fase 3 og 4. Det lages ikke egne testcaser for roller og tilganger: `fs-verify` har verifisert i koden i fase 1 at de er laget slik kravet sier, og at datakonsistensen holder. Scenarioene i kravet, også om synlighet, testes som de står.
+Feltvalidering, grenseverdier, obligatoriske felt og feilsituasjoner testes i fase 2, og testes ikke på nytt i fase 3 og 4 (i fase 4 utenom det som er en del av flyten), utenom det fase 2 ikke klarte, og det testansvarlig velger i fase 3 etter en risikovurdering. Det lages ikke egne testcaser for roller og tilganger: `fs-verify` har verifisert i koden, i planen (fase 1), at de er laget slik kravet sier, og at datakonsistensen holder. Scenarioene i kravet, også om synlighet, testes som de står.
 
 ## Kolonnene
 
@@ -22,6 +22,8 @@ Feltvalidering, grenseverdier, obligatoriske felt og feilsituasjoner testes i fa
 
 - **Faktisk resultat:** det testeren (eller agenten) så, som fritekst. Står tomt i utkastet.
 - **Status:** `Bestått`, `Ikke bestått` eller `Ikke testet`. «Ikke testet» får en kort begrunnelse i «Faktisk resultat». Står tomt i utkastet. Det er denne kolonnen `fs-testrapport` teller. Agenten i fase 2 skriver et forslag til status, og testansvarlig bekrefter (se *Menneskelig kontroll* i strategien).
+
+I fase 4 svarer testerne Ja, Nei eller Delvis per steg, og kontaktpersonen fører «Status» ut fra svaret: Ja er bestått, Nei og Delvis er ikke bestått med funn, og et steg testeren ikke kom fram til, er ikke testet, med begrunnelse. Kolonnene står i `mal-ekstern.md` (`fs-testcaser-ekstern`).
 
 ## R1. Testbrukeren står i testcasen
 
@@ -77,10 +79,14 @@ Bruker en testcase data som en tidligere testcase har laget, står det i stegene
 
 ## R11. Riktig nivå
 
-- Bare scenarioer fra kravene, og i fase 2 testcaser utledet fra reglene (også regler i koden uten scenario, fra verify-rapporten). Ingen helhetsrunde, regresjon (utenom i fase 3, se under) eller test av universell utforming. Mangler et viktig tilfelle, legges det inn i kravet med `fs-krav`, ikke bare i testen. Utleder agenten et tilfelle som kravet ikke sier noe om, og løsningen oppfører seg uventet, er det et funn av typen «Kravet dekker ikke» (`alvorlighetsgrad.md`).
+- Bare scenarioer fra kravene, og i fase 2 testcaser utledet fra reglene (også regler i koden uten scenario, fra verify-rapporten). Helhet, universell utforming og regresjon testes bare i fase 3 (se under). Mangler et viktig tilfelle, legges det inn i kravet med `fs-krav`, ikke bare i testen. Utleder agenten et tilfelle som kravet ikke sier noe om, og løsningen oppfører seg uventet, er det et funn av typen «Kravet dekker ikke» (`alvorlighetsgrad.md`).
 - **Fase 2 (agentisk):** alle scenarioer i gating-settet som er `@implemented`, og en scenariomal gir én testcase per eksempelrad (`1.3a`, `1.3b`). Pluss positive og negative testcaser utledet fra reglene (R9). Flyter på tvers og avhengigheter testes ikke her. Har scenarioet et åpent spørsmål (`@openquestion` uten `@draft`), testes det som det står.
-- **Fase 3 (intern):** flyter og avhengigheter, ikke ett scenario per testcase. Hver testcase er én flyt (oppgaver i arbeidsprosessen, i den rekkefølgen brukerne jobber, ikke i rekkefølgen i feature-fila), gjennom flere scenarioer, med hensikt, testdata og forventet resultat, og avhengighetene som sjekkes underveis. Hvert scenario i flyten får eget resultat. Bare scenarioene som inngår i flytene, ikke alle. Regresjon av tidligere leverte flyter når leveransen endrer noe andre bygger på. Feltvalidering, grenseverdier og obligatoriske felt testes ikke på nytt. Har et scenario i flyten et åpent spørsmål (`@openquestion` uten `@draft`), står spørsmålet med vanlige ord under tabellen: `Åpent spørsmål til 1.3: Løsningen godtar 0–9999. Dekker det alle utdanningstilbud?` Testeren kan svare i en kommentar, men svaret endrer ikke status på testcasen.
-- **Fase 4 (ekstern):** partene eier testcasene sine, ut fra sine egne krav. Det Sikt lager, er flytforslag: oppgaver i arbeidsprosessen, bare hovedflyten. Ingen Feature-ID-er, scope-id-er, tagger, kodeverdier, GraphQL, Jira eller feature-flagg.
+- **Fase 3 (intern):** fire deler.
+  - **Det fase 2 ikke klarte:** testcasene fra fase 2 som ble «Ikke testet», med de samme stegene, kjørt av en tester. Grunnen fra resultatet står under testcasen.
+  - **Opplevelse og helhet:** om løsningen er forståelig og brukbar i arbeidsprosessen, om tekstene og begrepene stemmer med fagspråket, og universell utforming. Testcasen sier hva testeren skal vurdere, og forventet resultat er en vurdering testeren skriver (for eksempel «Testeren finner «Ordinær frist» under «Dokumentasjon» uten hjelp»).
+  - **Høyest risiko:** det testansvarlig velger etter en risikovurdering, også det fase 2 har bestått. Grunnen til at det er valgt, står under testcasen.
+  - **Flyter og avhengigheter:** ikke ett scenario per testcase. Hver testcase er én flyt (oppgaver i arbeidsprosessen, i den rekkefølgen brukerne jobber, ikke i rekkefølgen i feature-fila), gjennom flere scenarioer, med hensikt, testdata og forventet resultat, og avhengighetene som sjekkes underveis. Hvert scenario i flyten får eget resultat. Bare scenarioene som inngår i flytene, ikke alle. Regresjon av tidligere leverte flyter når leveransen endrer noe andre bygger på. Feltvalidering, grenseverdier og obligatoriske felt testes ikke på nytt. Har et scenario i flyten et åpent spørsmål (`@openquestion` uten `@draft`), står spørsmålet med vanlige ord under tabellen: `Åpent spørsmål til 1.3: Løsningen godtar 0–9999. Dekker det alle utdanningstilbud?` Testeren kan svare i en kommentar, men svaret endrer ikke status på testcasen.
+- **Fase 4 (ekstern):** flytene i `krav/_Flyter` som leveransen inngår i, laget ut fra flyttestene i fase 3, og valgt sammen med partene. Grunnlaget er kravene for flytene, som Sikt har gått gjennom med partene. Hvert steg i flyten skal virke, og stegene skal henge sammen: endringen er lagret, står der når saken åpnes igjen, og blir brukt i neste steg. Enkeltfunksjoner, feltvalidering og feilmeldinger testes ikke, utenom det som er en del av flyten, og heller ikke roller og tilgang, universell utforming og regresjon. Partene kan legge til egne testcaser når de har egne krav. Ingen Feature-ID-er, scope-id-er, tagger, kodeverdier, GraphQL eller Jira, og feature-flagg bare i testbeskrivelsen.
 
 ## R12. Felles utfylling har navn
 
@@ -90,7 +96,8 @@ Fyller flere testcaser ut det samme skjemaet, står utfyllingen én gang, øvers
 
 Det gjelder både en ny testrunde og kjøringer med flere agenter.
 
-- **Testcasene i fase 2 er uavhengige.** Hver testcase bygger på testdataene i testplanen, i utgangstilstanden der (se *Testdata* i `roller-og-testdata.md`), og ikke på data fra en annen testcase. Hvordan testdataene lages og settes tilbake, er utenfor teststrategien. Er testcasen `@endrer-data`, eller lager scenarioet selv data som ikke kan slettes, rydder eller tilbakestiller testcasen etterpå.
+- **Testene lager dataene sine.** Data i testmiljøet kan slettes eller nullstilles når som helst. I fase 2 lager oppsettet testdataene i hver kjøring (se *Testdata* i `roller-og-testdata.md`), og testcasene bygger aldri på data fra en tidligere kjøring. Unntaket er fase 4: testdataene lages på forhånd, i tilstanden flytene forutsetter, og testmiljøet nullstilles ikke i testperioden (*Testdata i den eksterne testen* i `roller-og-testdata.md`).
+- **Testcasene i fase 2 er uavhengige.** Hver testcase bygger på oppsettet i kjøringen, i utgangstilstanden der, og ikke på data fra en annen testcase. Er testcasen `@endrer-data`, setter den dataene fra oppsettet tilbake etterpå.
 - Lager testen data som ikke kan slettes, og som finnes igjen på navn, har navnet en del som skiller kjøringene: `«Samordna opptak 2027 (test {KJØRING})»`. Øverst står det hva `{KJØRING}` byttes ut med (for eksempel dato og klokkeslett når testen starter).
 - Endrer en testcase noe som andre testcaser eller en senere kjøring bygger på, settes det tilbake, og verdien noteres i et eget steg før den endres: `sett «Planlagte studieplasser» tilbake til verdien du noterte i steg 2`. I fase 3 står det som en egen rad (R10): `Gjør klar til neste test: …`.
 - Testdata som bare kan brukes én gang (for eksempel et utdanningstilbud som legges til i et opptak), står som `[Fylles ut: …, ikke det samme som i en tidligere kjøring]`.
@@ -99,7 +106,9 @@ Det gjelder både en ny testrunde og kjøringer med flere agenter.
 
 ## R14. Følg stegene slik de står
 
-Virker ikke et steg, eller finnes ikke en verdi i testmiljøet, er det et funn. Ikke prøv deg fram en annen vei. Testcasen blir «Ikke testet», med det som ble sett i «Faktisk resultat», og det står i «Andre funn» om det er testdataene eller løsningen. Den som kjører testen kan foreslå en vei rundt i «Faktisk resultat», men går den ikke. Unntaket er når testansvarlig har sagt at nærmeste verdi kan brukes: det står da i «Faktisk resultat», og statusen settes ut fra det kravet sier, ikke ut fra verdien i stegene. Gjelder agenten i fase 2 like mye som testeren i fase 3 og 4.
+Virker ikke et steg, eller finnes ikke en verdi i testmiljøet, er det et funn. Ikke prøv deg fram en annen vei. Testcasen blir «Ikke testet», med det som ble sett i «Faktisk resultat», og det står i «Andre funn» om det er testdataene eller løsningen. Den som kjører testen kan foreslå en vei rundt i «Faktisk resultat», men går den ikke. Unntaket er når testansvarlig har sagt at nærmeste verdi kan brukes: det står da i «Faktisk resultat», og statusen settes ut fra det kravet sier, ikke ut fra verdien i stegene. Gjelder agenten i fase 2 like mye som testeren i fase 3.
+
+I fase 4 gjelder informasjonsskrivet til eksterne testere i stedet: testeren går videre til neste steg når det forrige virker, og prøver seg fram på en annen måte bare hvis det er nødvendig for å komme videre, og skriver ned det som ble gjort. Et steg som ikke virker, er fortsatt et funn, og et steg testeren ikke kom fram til, er «Ikke testet».
 
 ## R15. Testdata finnes, eller merkes
 
@@ -113,7 +122,7 @@ En testcase merket «Kjent mangel (<sak>)» har saken fra verify-rapporten eller
 
 | # | Sjekk |
 |---|---|
-| 1 | Hvert scenario i gating-settet har en testcase (fase 2), eller står i «Ikke testbart nå» eller «Ikke med i denne testen» (i `cdp-tester/` blir alle tester). I fase 3 er alle scenarioene i fasene i «Flyter» som er med i testen, dekket |
+| 1 | Hvert scenario i gating-settet har en testcase (fase 2), eller står i «Ikke testbart nå» eller «Ikke med i denne testen» (i `cdp-tester/` blir alle tester). I fase 3 er alle scenarioene i fasene i «Flyter» som er med i testen, dekket, og hver testcase fra fase 2 som ble «Ikke testet», har en testcase |
 | 2 | Ingen testcase svarer til noe som ikke står i kravene, eller (fase 2) til en utledet regel som er merket som det |
 | 3 | Reglene for fasen (tabellen over) er fulgt i hver testcase |
 | 4 | «Faktisk resultat» og «Status» er tomme |

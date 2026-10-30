@@ -54,6 +54,19 @@ Egenskap: Opprette et opptak
       Men opptaksforvalter setter ikke opptakstype
       Så kan opptaket ikke lagres
 
+  @draft @depends-on-OPT-BEH-BEH-008
+  # OPT-BEH-BEH-008: «Mangelen for generell studiekompetanse som fullføres i vår settes og sjekkes ut automatisk»
+  # Avklart 30.10.2026: advarselen stopper ikke lagringen.
+  Regel: Opptaksforvalter får en advarsel når regelverkssamlingen mangler mangelkode for generell studiekompetanse som fullføres i vår
+
+    Scenario: Advarsel når ingen mangelkode er merket for generell studiekompetanse som fullføres i vår
+      Gitt at ingen mangelkode i regelverkssamlingen "UHG 2027" er merket for generell studiekompetanse som fullføres i vår
+      Når opptaksforvalter oppretter et nytt opptak
+      Og opptaksforvalter knytter til regelverkssamlingen "UHG 2027"
+      Og opptaksforvalter lagrer opptaket
+      Så får opptaksforvalter en advarsel om at ingen mangelkode er merket for generell studiekompetanse som fullføres i vår
+      Men opptaket er opprettet
+
   # AVKLART 2026-10-19: Utdanningsbakgrunner, poenglikhetsregel og antall søknadsalternativer
   # må være satt for å opprette et opptak. Startnummer for søknader er ikke obligatorisk,
   # se 03 Innstillinger/innstillinger.feature.
@@ -116,18 +129,6 @@ Egenskap: Opprette et opptak
       Når opptaksforvalter oppretter et nytt opptak basert på "Samordna opptak 2026"
       Så kopieres innstillinger fra det tidligere opptaket som utgangspunkt
 
-  @draft @openquestion
-  # ÅPNE SPØRSMÅL:
-  # - Hva skjer med søknader og vedtak i opptaket når det deaktiveres?
-  # - Skal deaktivering kunne reverseres?
-  Regel: Opptaksforvalter kan deaktivere et opptak
-
-    Scenario: Deaktivere opptak
-      Gitt at opptaket "Samordna opptak 2027" finnes
-      Når opptaksforvalter deaktiverer opptaket
-      Så settes opptaket til utløpt
-      Og det er ikke lenger mulig å gjøre endringer på opptaket
-      Og det er ikke lenger mulig å utføre søknadsbehandling eller plasstildeling i opptaket
-      Men opptaket kan brukes som grunnlag for å opprette et nytt opptak
+  # Regelen om å deaktivere et opptak er flyttet til opptaksstatus.feature (2026-10-28), der opptaket gjøres historisk.
 
   # Hendelseslogg er flyttet til 06 Hendelseslogg/hendelseslogg.feature fordi den venter på generell løsning. Må gjennomgås mht hva som logges.

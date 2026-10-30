@@ -7,5 +7,6 @@ Tester for kravet [listevisning_og_sok_i_opptak.feature](../../../../krav/02%20O
 | Nøkkel | Type | Brukes av |
 |---|---|---|
 | `opptak-forvalter-forvaltende` | testbruker | alle scenarioer |
-| `opptak-oversikt-flere-typer` | testdata | «Se liste over opptak», sorteringen, «Filtrere på opptakstype», «Kombinere filtre» |
-| `opptak-samordna-uten-utdanningstilbud` | testdata | «Navigere til detaljside for opptak», søkene |
+| `opptak-oversikt-flere-typer` | testdata (oppsett) | «Se liste over opptak», sorteringen, «Filtrere på opptakstype», «Kombinere filtre» |
+| `opptak-samordna-uten-utdanningstilbud` | testdata (oppsett) | «Navigere til detaljside for opptak», søkene |
+| `opptak-oversikt-over-50` | testdata | «Liste viser de 50 første opptakene», «Laste inn 50 flere opptak» |

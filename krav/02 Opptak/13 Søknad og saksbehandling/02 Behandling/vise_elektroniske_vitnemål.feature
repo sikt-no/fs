@@ -84,19 +84,26 @@ Egenskap: Se søkerens elektroniske vitnemål
       Så ser jeg hvor mange elektroniske vitnemål søkeren har
       Men vitnemålsoversikten er ikke åpnet
 
-    @implemented
+    @openquestion
     Scenario: Åpne vitnemålsoversikten
+      # ÅPNE SPØRSMÅL:
+      # - Vitnemålet har tre påstander om GSK: skolens, KREGs og opptakssystemets
+      #   (OPT-BEH-BEH-015, avklart 30.10.2026), og saksbehandleren skal se alle tre. I dag
+      #   viser tabellen bare skolens påstand, i kolonnen «GSK». Hvordan skal de tre vises:
+      #   tre kolonner, én kolonne med detaljer, eller på en annen måte? Designeren avgjør.
       Gitt søkeren har to elektroniske vitnemål
       Når jeg åpner vitnemålsoversikten
       Så ser jeg hvert vitnemål med følgende opplysninger
-        | felt                |
-        | Vitnemålsnummer     |
-        | Utstedelsesdato     |
-        | GSK                 |
-        | Førstegangsvitnemål |
-        | Karakterpoeng       |
-        | Realfagspoeng       |
-        | Språkpoeng          |
+        | felt                            |
+        | Vitnemålsnummer                 |
+        | Utstedelsesdato                 |
+        | Skolens påstand om GSK          |
+        | KREGs påstand om GSK            |
+        | Opptakssystemets påstand om GSK |
+        | Førstegangsvitnemål             |
+        | Karakterpoeng                   |
+        | Realfagspoeng                   |
+        | Språkpoeng                      |
       Og vitnemålene er sortert etter utstedelsesdato, fra eldste til nyeste
       # AVKLART 22.10.2026: alle vitnemålene sorteres kronologisk, etter
       # utstedelsesdato. Erstatter avklaringen fra 21.10.2026 om at

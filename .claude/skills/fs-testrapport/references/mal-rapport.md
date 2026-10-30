@@ -53,8 +53,8 @@ Testrapport for «<leveranse>». <Én setning: hva rapporten bygger på (verifis
 <intern / ekstern>
 | Felt | Innhold |
 |---|---|
-| Testcaser | <N> bestått, <N> ikke bestått, <N> ikke testet, <N> ikke fylt ut, av <N> |
-| Funn | <N> Stopper, <N> Må fikses før innføring, <N> Kan fikses senere. Av dem <N> «Kravet dekker ikke» (intern) / <N> feil (avvik fra kravene våre) og <N> endringsforslag (krav vi ikke har) (ekstern) |
+| Testcaser | <N> bestått, <N> ikke bestått, <N> ikke testet, <N> ikke fylt ut, av <N> (ekstern: steg i flytene, og av de ikke beståtte <N> Delvis) |
+| Funn | <N> Stopper, <N> Må fikses før innføring, <N> Kan fikses senere. Av dem <N> «Kravet dekker ikke» (intern) / <N> feil og <N> endringsforslag (ekstern) |
 | Testet av | <fra testsiden> |
 | Testperiode | <dato> |
 | Forslag til utfall | Godkjent / Godkjent med forbehold / Ikke godkjent: <grunn> |
@@ -87,9 +87,9 @@ Sjekkes for seg, fordi det er inngangen til fase 3. Den agentiske rapporten har 
 | Oppgave | Krav | Regel | Bestått | Ikke bestått | Ikke testet |
 |---|---|---|---|---|---|
 
-<ekstern: per testcase (oppgave i arbeidsprosessen), og per scenario i den>
-| Testcase | Scenario | Status |
-|---|---|---|
+<ekstern: per testcase (flyt), og per steg i den, med svaret fra testeren og statusen kontaktpersonen har ført>
+| Testcase | Steg | Svar (Ja / Nei / Delvis) | Status |
+|---|---|---|---|
 
 ## Flyter                                                             [verifisering]
 
@@ -155,11 +155,11 @@ Ingen.                                                                  [når ta
 
 ## Funn                                                                [agentisk, intern, ekstern]
 
-Sortert etter alvorlighetsgrad. «Fase funnet» er 2 (agentisk), 3 (intern) eller 4 (ekstern). Typen er «Feil» eller «Kravet dekker ikke» (fase 2 og 3), og «Feil (avvik fra kravene våre)» eller «Endringsforslag (krav vi ikke har)» (fase 4). «Kravet dekker ikke» og «Endringsforslag» avklares i kravet, ikke bare i testen.
+Sortert etter alvorlighetsgrad. «Fase funnet» er 2 (agentisk), 3 (intern) eller 4 (ekstern). Typen er «Feil» eller «Kravet dekker ikke» (fase 2 og 3), og «Feil» (flyten lar ikke testeren gjøre jobben, eller løsningen avviker fra kravene Sikt har gått gjennom) eller «Endringsforslag» (behov flyten ikke dekker) (fase 4). «Kravet dekker ikke» og «Endringsforslag» avklares i kravet, ikke bare i testen.
 
 | # | Fase funnet | Testcase | Type | Hva skjedde | Alvorlighetsgrad | Sak | Oppfølging |
 |---|---|---|---|---|---|---|---|
-| | 2 / 3 / 4 | | Feil | | Stopper | | Feil i løsningen / Feil (avvik fra kravene våre): teamet lager oppgave · Kravet dekker ikke / Endringsforslag: `fs-krav`, med spørsmålet · Testcasen var feil · Utenfor testen |
+| | 2 / 3 / 4 | | Feil | | Stopper | | Feil i løsningen: teamet lager oppgave · Kravet dekker ikke / Endringsforslag: `fs-krav`, med spørsmålet · Testcasen var feil · Utenfor testen |
 
 Ingen.                                                                  [når tabellen er tom]
 
@@ -182,19 +182,20 @@ Agenten kan ikke ta beslutningen, og den agentiske rapporten har ingen beslutnin
 
 | Felt | Innhold |
 |---|---|
-| Utfall | [Fylles ut av testansvarlig] / [Fylles ut av deltakerne] |
+| Utfall | [Fylles ut av testansvarlig] / [Fylles ut av den som er avtalt med partene]  (ekstern: godkjent og godkjent med forbehold er «Akseptert») |
 | Begrunnelse | |
 | Besluttet av og dato | |
 | Bekreftet av deltakerne | [Fylles ut av deltakerne]                    [ekstern] |
+| Gjennomgått med partene | [Fylles ut av kontaktpersonen]               [ekstern] |
 
 <Tabellen «Beslutning» fra `alvorlighetsgrad.md`, ordrett, under feltene.>
 
 ## Neste steg
 
 <verifisering: Klar → `fs-testcaser-cdp` (testcasene for fase 2, laget etter testplanen). Ikke klar → det som mangler, per repo, tilbake til teamet.>
-<agentisk: Inngangskriteriet oppfylt → `fs-testcaser-intern` (flyttestene for fase 3). Ikke oppfylt → «Stopper»-funn tilbake til teamet og ny kjøring, og testansvarlig går gjennom rapporten. «Kravet dekker ikke»-funn → `fs-krav`, med spørsmålet.>
+<agentisk: Inngangskriteriet oppfylt → `fs-testcaser-intern` (testcasene for fase 3). Ikke oppfylt → «Stopper»-funn tilbake til teamet og ny kjøring, og testansvarlig går gjennom rapporten. «Kravet dekker ikke»-funn → `fs-krav`, med spørsmålet.>
 <intern: Godkjent → `fs-testcaser-ekstern` (eller innføring, når ekstern test ikke er aktuell). Godkjent med forbehold → retting og ny test av funnene. Ikke godkjent → tilbake til teamet.>
-<ekstern: grunnlaget for rapporten til styringsgruppen.>
+<ekstern: Akseptert (godkjent eller godkjent med forbehold) → grunnlaget for rapporten til styringsgruppen, og kjente mangler med ansvarlig og frist. Ikke godkjent → tilbake til teamet med funnene. Endringsforslag → `fs-krav`.>
 
 ## Læring                                                             [agentisk, intern, ekstern]
 

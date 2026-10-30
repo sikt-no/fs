@@ -1,6 +1,8 @@
 # Kravene i en testplan
 
-Felles for skillene i testflyten. Verifiseringen (fase 1: `fs-verify` eller `fs-verify-agent-teams`) kjøres først, på kilden, og setter `@implemented` på kravene der koden er funnet. `fs-testplan` finner så kravene fra den samme kilden, og skriver dem i «Omfang» i testplanen. De andre skillene (`fs-testcaser-cdp` for fase 2, `fs-testcaser-intern` for fase 3, `fs-testcaser-ekstern` for fase 4 og `fs-testrapport`) leser kravene derfra, med Feature-ID, så alle fasene tester de samme kravene, også om det kommer nye krav i mappa eller scopet etterpå.
+Felles for skillene i testflyten. Planen (fase 1) starter med verifiseringen (`fs-verify` eller `fs-verify-agent-teams`), som kjøres først, på kilden, og setter `@implemented` på kravene der koden er funnet. `fs-testplan` finner så kravene fra den samme kilden, og skriver dem i «Omfang» i testplanen. De andre skillene (`fs-testcaser-cdp` for fase 2, `fs-testcaser-intern` for fase 3, `fs-testcaser-ekstern` for fase 4 og `fs-testrapport`) leser kravene derfra, med Feature-ID, så alle fasene tester de samme kravene, også om det kommer nye krav i mappa eller scopet etterpå.
+
+**Hvor seksjonene står.** Testplanen er delt i hovedsiden og tre undersider (*Hovedsiden og undersidene* i `mal-testplan.md` i `fs-testplan`). «Omfang», «Flyter», «Venter på verifisering», «Regler uten scenario» og «Ikke med i denne testen» står i `omfang.md` (undersiden «Omfang – <leveranse>»). «Testcaser som skal lages», «Testbrukere» og «Testdata» står i `testcaser-og-testdata.md` («Testcaser og testdata – <leveranse>»). Sporbarheten står i `sporbarhet.md`. Resten, også «Status i flyten», «Forutsetninger» og «Vedlegg», står i `testplan.md`. Når en skill sier «Omfang» i testplanen, er det seksjonen i `omfang.md`. En eldre testplan har alt i `testplan.md`: les seksjonen der, og foreslå å dele den med `fs-testplan`.
 
 `@implemented` betyr bare at `fs-verify` har funnet koden. Om løsningen virker for brukeren, sier testene i fase 2–4.
 
@@ -11,8 +13,8 @@ Felles for skillene i testflyten. Verifiseringen (fase 1: `fs-verify` eller `fs-
 | Fase | Scenarioene | Flytene |
 |---|---|---|
 | 2. Agentisk funksjonstest | Alle scenarioer i gating-settet som er levert, pluss testcaser utledet fra reglene (også regler i koden uten scenario, fra verify-rapporten) | Testes ikke her |
-| 3. Intern akseptansetest | Bare scenarioene som inngår i flytene, ikke alle. Regresjon av tidligere leverte flyter når leveransen endrer noe andre bygger på | Overleveringene i flytene i «Flyter» (se *Flyter*) |
-| 4. Ekstern akseptansetest | Partene bestemmer ut fra egne krav. Sikt foreslår flyter som utgangspunkt | Flytbeskrivelsene fra fase 3 |
+| 3. Intern akseptansetest | Scenarioene og testcasene fra fase 2 som ble «Ikke testet», scenarioene som inngår i flytene, opplevelse og helhet, og det testansvarlig velger etter en risikovurdering. Regresjon av tidligere leverte flyter når leveransen endrer noe andre bygger på | Overleveringene i flytene i «Flyter» (se *Flyter*) |
+| 4. Ekstern akseptansetest | Flytene i «Flyter» som leveransen inngår i, valgt sammen med partene, med kravene flytene bygger på | Flyttestene fra fase 3 |
 
 ## Leveransen
 

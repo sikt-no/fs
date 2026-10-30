@@ -10,6 +10,8 @@ Egenskap: Publisere resultatet til søkerne
   # oppgave.md (oppgave 8) og Confluence «2026-09-08 Raffinering plasstildeling» (oppgave 7).
   # Beregning og publisering er to separate steg. Det gjør ubegrensede prøvetildelinger mulig.
   # Melding til søker: se 13 Søknad og saksbehandling/01 Søknad/mine_meldinger.feature.
+  # Meldingen ved publisering står i 05 Svar/varsler_og_meldinger_i_plasstildelingen.feature (@should), og
+  # planlagt publisering i planlegge_publisering.feature (@could). Begge er skilt ut 2026-10-28.
   # Status i kode: delvis. Ventelistenummeret når ikke fram til søkeren.
 
   Bakgrunn:
@@ -25,7 +27,6 @@ Egenskap: Publisere resultatet til søkerne
     Scenario: Publisere plasstildeling
       Når opptaksforvalter publiserer plasstildelingen
       Så ser søkerne resultatet sitt i Min kompetanse
-      Og søkere med tilbud får melding om at svar foreligger med svarfristen for plasstildelingsrunden
 
     @openquestion
     Scenario: Bare én publisert plasstildeling per plasstildelingsrunde
@@ -44,17 +45,6 @@ Egenskap: Publisere resultatet til søkerne
       Når opptaksforvalter publiserer "Prøve 2"
       Så ser søkerne resultatet fra "Prøve 2"
       Og "Prøve 1" blir ikke publisert
-
-  @openquestion
-  Regel: Opptaksforvalter velger tidspunkt for publisering
-
-    # ÅPNE SPØRSMÅL:
-    # - Automatisk publisering på tidspunkt er avgrenset bort for 2027 (oppgave.md). Confluence
-    #   «Opprette og konfigurere opptakskjøringsrunde» beskriver publisering straks eller planlagt.
-    #   Skal planlagt publisering være med?
-    Scenario: Planlagt publisering
-      Når opptaksforvalter planlegger publisering av plasstildelingen til "2027-07-15 08:00"
-      Så ser søkerne resultatet sitt fra "2027-07-15 08:00"
 
   Regel: Søkeren ser resultatet med begrunnelse
 

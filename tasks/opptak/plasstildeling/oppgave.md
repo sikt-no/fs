@@ -3,7 +3,7 @@
 ## Metadata
 
 - **Issue**: [sikt-no/fs#216](https://github.com/sikt-no/fs/issues/216)
-- **Scope**: [scope-plasstildeling-2027](../scope-plasstildeling-2027.md)
+- **Scope**: –
 - **Initiativ**: #216 Ferdigstilling av plasstildeling i opptak
 - **Domene**: opptak
 - **Slug**: plasstildeling
@@ -27,7 +27,7 @@ Ferdigstille plasstildeling i opptak slik at opptaksforvalter kan opprette runde
 
 ## Oppgaver
 
-Oppgavetabellen er flyttet til [scope-plasstildeling-2027](../scope-plasstildeling-2027.md) 2026-10-14. Scope-tabellen er kilden til kravene.
+Oppgavetabellen er flyttet til [scope-plasstildeling-2027](../scope-plasstildeling-2027.md) 2026-10-14. Scope-tabellen er kilden til kravene. 2026-10-28 ble scopet delt i tre oppgaver: [plasstildeling-rundetyper-og-runder](../plasstildeling-rundetyper-og-runder/), [gjennomfore-plasstildeling](../gjennomfore-plasstildeling/) og [publisere-og-svare-pa-tilbud](../publisere-og-svare-pa-tilbud/). Denne mappa står igjen som kilde (design.md og workshopen).
 
 ## Workshop 2026-09-14: oppgavedeling og status
 
@@ -54,6 +54,7 @@ Plasstildeling utsettes fordi opptak, regelverk og utdanningstilbud har priorite
 
 | Dato       | Hendelse                          | Av            | Lenke til review        |
 |------------|-----------------------------------|---------------|-------------------------|
+| 2026-10-28 | Tatt ut av scope-plasstildeling-2027: kravene er fordelt på tre oppgaver, og mappa står igjen som kilde | @karensikt | – |
 | 2026-10-14 | Migrert til scope-plasstildeling-2027 | @karensikt | – |
 | 2026-09-15 | Workshop: utsatt til 8. des       | @karensikt    | –                       |
 | 2026-09-09 | Tatt inn i veikart (design)       | @karensikt    | –                       |

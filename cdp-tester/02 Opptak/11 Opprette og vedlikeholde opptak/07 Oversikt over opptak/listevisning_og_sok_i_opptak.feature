@@ -1,5 +1,5 @@
 # language: no
-# Generert av fs-testcaser-cdp 2026-10-27
+# Generert av fs-testcaser-cdp 2026-10-29
 # Krav: krav/02 Opptak/11 Opprette og vedlikeholde opptak/07 Oversikt over opptak/listevisning_og_sok_i_opptak.feature @ 0f010d4 (blob d36c44ad7668865284438ddd0ffa1616503188ad)
 #
 # Lista viser også «Status», som ikke er med i kravet.
@@ -62,6 +62,23 @@ Egenskap: Listevisning og søk i opptak
       Når jeg velger «Organisasjon» i «Sorteringsfelt» under «Sortering»
       Og jeg velger «Stigende» med «Endre sorteringsretning»
       Så følger rekkefølgen i «Organisasjon» organisasjonskodene [Sjekk testdata: organisasjonskodene i «opptak-oversikt-flere-typer»], ikke forkortelsene alfabetisk
+
+    Scenario: Liste viser de 50 første opptakene
+      Gitt jeg er logget inn som «opptak-forvalter-forvaltende»
+      Og opptakene i «opptak-oversikt-over-50» finnes
+      Når jeg går til «Opptak»
+      Så ser jeg «Viser 50 av M rader», der M er større enn 50
+      Og lista under «Opptak» har 50 rader
+      Og jeg ser «Last inn flere»
+
+    Scenario: Laste inn 50 flere opptak
+      Gitt jeg er logget inn som «opptak-forvalter-forvaltende»
+      Og opptakene i «opptak-oversikt-over-50» finnes
+      Og jeg har åpnet «Opptak»
+      Og jeg ser «Viser 50 av M rader», der M er større enn 50
+      Når jeg velger «Last inn flere»
+      Så ser jeg «Viser N av M rader», der N er 100, eller M når M er mindre enn 100
+      Og lista under «Opptak» har N rader
 
     Scenario: Alle opptak er lastet inn
       Gitt jeg er logget inn som «opptak-forvalter-forvaltende»

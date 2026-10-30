@@ -57,7 +57,7 @@ Egenskap: Starte en plasstildeling
     # utdanningstilbudets kompetanseregelverk, saken har en aktiv kvote som skal kvoteplasseres og som også er
     # kvote på utdanningstilbudet, og saken har poengsum etter utdanningstilbudets rangeringsregelverk.
     # Søkeren må ha fødselsdato, ellers feiler hele plasstildelingen.
-    @depends-on-OPT-BEH-BEH-025 @ref-FLY-OPT-AUT-001
+    @depends-on-OPT-BEH-BEH-025
     Scenario: Bare saker som er ferdig behandlet, er med
       Gitt at saken til "Kari Nordmann" er ferdig behandlet
       Og at saken til "Ola Nordmann" ikke er ferdig behandlet
