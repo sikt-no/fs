@@ -223,3 +223,4 @@ Egenskap: Automatiske tilleggspoeng
       Så regnes poengene fra vitnemålet ut
       Og alderspoengene står tomme med en merknad om at algoritmen er ukjent
       Og søknaden behandles videre
+      Og saken er under behandling
