@@ -1,0 +1,76 @@
+# Spec log
+
+History of skill invocations for this spec. Append-only — never edit past entries.
+
+## Invocations
+
+- 2026-09-18 — `bat-specify` started — issue #514 (idporten-fs-admin-fase1), lokal krav-kilde `krav/07 Brukeradministrasjon og tilgangsstyring/10 Pålogging`
+- 2026-09-18 — `bat-specify` ended (aborted) — 2 .feature-filer vurdert under krav_path, 0 passerte `@planned`-filteret (idporten_pålogging.feature: `@TIL-PÅL-PÅL-002 @opptakspilot`; feide_innlogging.feature: `@DEM-INN-FEI-001 @demo @ci @smoke @nightly`). Ingen spec skrevet. Kravene må ferdigstilles via `bat-krav` først.
+- 2026-09-18 — `bat-specify` started — issue #514 (idporten-fs-admin-fase1), re-kjøring; lokal krav-kilde `krav/07 Brukeradministrasjon og tilgangsstyring/10 Pålogging`
+- 2026-09-18 — `bat-specify` started — issue #476 (idporten-fs-admin-fase1), re-kjøring etter bat-krav; lokal krav-kilde `krav/07 Brukeradministrasjon og tilgangsstyring/10 Pålogging`. Forrige `started` uten `ended` regnes som avbrutt.
+- 2026-09-18 — `bat-specify` ended (success) — wrote spec-idporten-fs-admin-fase1.md, 1 .feature-fil (`autentisere_med_idporten.feature`, TIL-PÅL-PÅL-003) av 3 passerte `@planned`-filteret, 0 skisser, 4 åpne spørsmål. Publisering er no-op: aktiv mappe er task-roten (flat pipeline uten `dir`).
+- 2026-09-21 — `bat-analyze` started
+- 2026-09-21 — `bat-analyze` ended (success) — wrote analysis-idporten-fs-admin-fase1.md, 8 funn, 7 åpne spørsmål (4 fra spec + 3 nye). Publisering er no-op: aktiv mappe er task-roten (flat pipeline uten `dir`, ingen `role`).
+- 2026-09-21 — `bat-plan` started
+- 2026-09-21 — `bat-plan` ended (success) — wrote plan-idporten-fs-admin-fase1.md, 7 tasks, ingen GraphQL-seksjon. Publisering er no-op: aktiv mappe er task-roten (flat pipeline uten `dir`, ingen `role`).
+- 2026-09-22 — `bat-execute-with-subagents` started — Task #1
+- 2026-09-22 — `bat-execute-with-subagents` ended (success) — Task #1, wrote task-1-completion.md
+- 2026-09-22 — `bat-execute-with-subagents` started — Task #2
+- 2026-09-22 — `bat-execute-with-subagents` ended (success) — Task #2, wrote task-2-completion.md
+- 2026-09-22 — `bat-execute-with-subagents` started — Task #3
+- 2026-09-22 — `bat-execute-with-subagents` ended (success) — Task #3, wrote task-3-completion.md
+- 2026-09-22 — `bat-execute-with-subagents` started — Task #4
+- 2026-09-22 — `bat-execute-with-subagents` ended (success) — Task #4, wrote task-4-completion.md
+- 2026-09-22 — `bat-execute-with-subagents` started — Task #5
+- 2026-09-22 — `bat-execute-with-subagents` ended (success) — Task #5, wrote task-5-completion.md
+- 2026-09-22 — `bat-execute-with-subagents` started — Task #6
+- 2026-09-22 — `bat-execute-with-subagents` ended (success) — Task #6, wrote task-6-completion.md
+- 2026-09-22 — `bat-execute-with-subagents` started — Task #7
+- 2026-09-22 — `bat-execute-with-subagents` ended (success) — Task #7, wrote task-7-completion.md
+- 2026-09-23 — `bat-specify-delta` started — kildevalg pågår; kandidater er dagens endringer i fs-plattform (commit bce34fbe60 BAT-243, og ucommittet 0073-personsubjekt med pgTAP 64_personsubjekt.sql)
+- 2026-09-23 — `bat-specify-delta` ended (aborted) — ingen krav-delta å hente: `autentisere_med_idporten.feature` (@TIL-PÅL-PÅL-003) er uendret siden 18.09, og workshopens personsubjekt-beslutning finnes ikke som krav. Ingen delta-spec skrevet, ingen retagging. Brukeren valgte å skrive kravet via `bat-krav` først.
+- 2026-09-23 — `bat-specify-delta` started — re-kjøring etter bat-krav; kandidater: autentisere_med_idporten.feature (endret) og opprette_person_uten_feide.feature (ny)
+- 2026-09-23 — `bat-specify-delta` ended (success) — wrote spec-changes-2026-09-23-idporten-personsubjekt.md, 2 krav (test-kilde: TIL-PÅL-PÅL-003, BRU-PER-GRU-013), 0 skisser, 4 åpne spørsmål, 2 retagget @in-progress. Publisering er no-op: aktiv mappe er task-roten (flat pipeline uten `dir`).
+- 2026-09-23 — `bat-analyze` started — delta-iterasjon mot spec-changes-2026-09-23-idporten-personsubjekt.md
+- 2026-09-23 — `bat-analyze` ended (success) — wrote analysis-idporten-fs-admin-fase1-v2.md, 11 funn, 9 åpne spørsmål. Publisering er no-op: aktiv mappe er task-roten (flat pipeline uten `dir`, ingen `role`).
+- 2026-09-24 — `bat-plan` started — delta-iterasjon mot analysis-idporten-fs-admin-fase1-v2.md
+- 2026-09-24 — `bat-graphql-dev` started — kalt fra bat-plan, IdPortenBruker-flaten i tilgangsstyring
+- 2026-09-24 — `bat-graphql-dev` ended (success) — 1 query (+1 connection-felt), 3 mutations, 3 open questions; seksjonen returnert som tekst og innebygd i plan-idporten-fs-admin-fase1-v2.md
+- 2026-09-24 — `bat-plan` ended (success) — 12 tasks, GraphQL section yes. Wrote plan-idporten-fs-admin-fase1-v2.md etter rebase på main (0075/0076 tatt inn; beslutning (c) i analysen erstattet av felles FS Admin-app). Publisering er no-op: aktiv mappe er task-roten (flat pipeline uten `dir`, ingen `role`).
+- 2026-09-24 — `bat-plan` revidert på plass (plan-idporten-fs-admin-fase1-v2.md, ikke publisert videre): ingen ID-porten-applikasjon og ingen DB-kobling. ID-porten-client_id oversettes til service_id i konfigurasjonen, og ID-porten-stien bruker appens tak som Feide. Særregelen «uregistrert får ikke gulvet» er fjernet, og taket avgjør (FS Admin: bare åpne, Min Kompetanse: gulvet). Task #5, #7, #8 og #12 er oppdatert.
+- 2026-09-24 — `bat-plan` revidert på plass igjen (plan-idporten-fs-admin-fase1-v2.md): Min Kompetanse lagt inn som tilrettelegging. Egen `idporten_applikasjon` (per app og miljø, nøklet på ID-porten-client_id) med tak i applikasjon_brukerdelegering (løsnet FK), kopiert fra Feide-appen. Ukjent klient gir bare åpne roller. Ingen vakt mot gulvroller i FS Admins tak. Én audiens. Krav for Min Kompetanse er en forutsetning (bat-krav). TODO T1 for forvaltning av to tak per app. Konfigurasjonsvarianten er forkastet. Task #5, #7, #8 og #12 er oppdatert. Spørsmål i questions-bat-plan-2026-09-24.md blokk 5–10.
+- 2026-09-24 — `bat-specify-delta` started — kildevalg pågår; kandidat er ny krav-fil autentisere_person_med_idporten.feature (@TIL-PÅL-PÅL-004, @planned) i sikt-no/fs
+- 2026-09-24 — `bat-specify-delta` ended (success) — wrote spec-changes-2026-09-24-idporten-min-kompetanse.md, 2 krav (test-kilde: TIL-PÅL-PÅL-004 ny, TIL-PÅL-PÅL-003 kontekst), 0 skisser, 5 åpne spørsmål, 1 retagget @in-progress (004). Publisering er no-op: aktiv mappe er task-roten (flat pipeline uten `dir`).
+- 2026-09-24 — `bat-specify-delta` åpne spørsmål gjennomgått — 5/5 besluttet i spec-changes-2026-09-24-idporten-min-kompetanse.md: gulv ≠ åpne roller; registrert person via Min Kompetanse får rollene begrenset av taket; 003-reglene gjelder alle ID-porten-klienter; issue for 004 venter; Digdir-registrering er ekstern forutsetning. Ordlyd og nytt scenario i 004 må inn via bat-krav.
+- 2026-09-24 — `bat-analyze` started — delta-iterasjon mot spec-changes-2026-09-24-idporten-min-kompetanse.md (TIL-PÅL-PÅL-004)
+- 2026-09-24 — `bat-analyze` ended (success) — wrote analysis-idporten-fs-admin-fase1-v3.md, 11 funn, 5 åpne spørsmål. Publisering er no-op: aktiv mappe er task-roten (flat pipeline uten `dir`, ingen `role`).
+- 2026-09-24 — `bat-analyze` åpne spørsmål gjennomgått — 5/5 besluttet i analysis-idporten-fs-admin-fase1-v3.md: deaktivert ID-porten-app gir tomt (veto i applikasjon_er_deaktivert); beslutning 2 dekkes i plan og tester, ikke i 004 ennå; tak og gulv regnes å finnes i deployerte miljø; «gulv»-kommentarene rettes i Task #7; sudo for ID-porten er utenfor scope.
+- 2026-09-24 — `bat-plan` started — delta-iterasjon mot analysis-idporten-fs-admin-fase1-v3.md (TIL-PÅL-PÅL-004)
+- 2026-09-24 — `bat-plan` ended (success) — 12 tasks, GraphQL section yes (uendret). plan-idporten-fs-admin-fase1-v2.md revidert på plass mot analyse v3: nye akseptansekriterier i Task #5, #7, #8 og #12 (samme pid via to klienter, registrert person via Min Kompetanse, deaktivert app gir tomt, audiens for alle klienter, gulv-kommentarer, sudo som kjent begrensning), 2 nye risikoer, 4 nye sporbarhetsrader, utestående kravpunkter for bat-krav. Publisering er no-op: aktiv mappe er task-roten (flat pipeline uten `dir`, ingen `role`).
+- 2026-09-24 — `bat-execute-with-subagents` started — Task #1 (plan v2, completion-dokumenter skrives som task-N-completion-v2.md for ikke å overskrive iterasjon 1)
+- 2026-09-24 — `bat-execute-with-subagents` ended (success) — Task #1, wrote task-1-completion-v2.md
+- 2026-09-24 — `bat-execute-with-subagents` started — Task #2
+- 2026-09-24 — `bat-execute-with-subagents` ended (success) — Task #2, wrote task-2-completion-v2.md
+- 2026-09-24 — `bat-execute-with-subagents` started — Task #3 (lokal base migrert og jOOQ regenerert etter Task #2)
+- 2026-09-24 — `bat-execute-with-subagents` ended (success) — Task #3, wrote task-3-completion-v2.md
+- 2026-09-24 — `bat-execute-with-subagents` started — Task #4
+- 2026-09-24 — `bat-execute-with-subagents` ended (success) — Task #4, wrote task-4-completion-v2.md
+- 2026-09-24 — `bat-execute-with-subagents` started — Task #5 (lokal base nullstilt og jOOQ regenerert av brukeren etter Task #4)
+- 2026-09-25 — `bat-execute-with-subagents` ended (success) — Task #5, wrote task-5-completion-v2.md
+- 2026-09-25 — `bat-execute-with-subagents` started — Task #6
+- 2026-09-25 — `bat-execute-with-subagents` ended (success) — Task #6, wrote task-6-completion-v2.md
+- 2026-09-25 — `bat-execute-with-subagents` started — Task #7
+- 2026-09-25 — `bat-execute-with-subagents` ended (success) — Task #7, wrote task-7-completion-v2.md
+- 2026-09-25 — `bat-execute-with-subagents` started — Task #8
+- 2026-09-25 — `bat-execute-with-subagents` ended (success) — Task #8, wrote task-8-completion-v2.md
+- 2026-09-25 — `bat-execute-with-subagents` started — Task #9
+- 2026-09-25 — `bat-execute-with-subagents` ended (success) — Task #9, wrote task-9-completion-v2.md
+- 2026-09-25 — `bat-execute-with-subagents` started — Task #10
+- 2026-09-25 — `bat-execute-with-subagents` ended (success) — Task #10, wrote task-10-completion-v2.md
+- 2026-09-25 — `bat-execute-with-subagents` started — Task #11
+- 2026-09-25 — `bat-execute-with-subagents` ended (success) — Task #11, wrote task-11-completion-v2.md (avvik: ny migrering 0086, personsynlighet bare via gjeldende tildelinger)
+- 2026-09-25 — `bat-execute-with-subagents` started — Task #12
+- 2026-09-25 — `bat-execute-with-subagents` ended (success) — Task #12, wrote task-12-completion-v2.md
+- 2026-09-25 — `bat-verify` started — 3 krav i scope (TIL-PÅL-PÅL-003, BRU-PER-GRU-013, TIL-PÅL-PÅL-004)
+- 2026-09-25 — `bat-verify` ended (success) — FEILET: 2/3 krav bestått, 2 filer retagget; TIL-PÅL-PÅL-004 ikke verifiserbar. Publisering er no-op (flat pipeline).
+- 2026-09-25 — `bat-verify` rettet — FS Admin mangler ID-porten-klient: 003 og 013 (scenario 06) ikke verifiserbare, begge tilbakestilt til @in-progress. FEILET: 0/3 krav bestått, 0 filer retagget.
