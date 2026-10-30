@@ -19,10 +19,11 @@ Egenskap: Tildele roller til en personbruker
 
   Regel: Tildelingen gjelder en organisasjon administratoren har rettighet for
 
-    Scenario: Organisasjon er implisitt når administrator administrerer kun én organisasjon
+    Scenario: Organisasjonen er forhåndsvalgt når administratoren administrerer én organisasjon
       Gitt jeg administrerer kun én organisasjon
-      Når jeg velger et miljø og en rolle jeg har rettighet til å tildele
-      Så er rollen tildelt personbrukeren i det valgte miljøet for organisasjonen jeg administrerer
+      Når jeg velger å tildele en rolle
+      Så er organisasjonen jeg administrerer valgt som organisasjon
+      Og det fremgår hvilken organisasjon tildelingen gjelder
 
     Scenario: Valglisten for organisasjon er begrenset til organisasjoner jeg administrerer
       Gitt jeg administrerer flere organisasjoner
