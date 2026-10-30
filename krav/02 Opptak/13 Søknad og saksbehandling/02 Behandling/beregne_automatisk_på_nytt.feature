@@ -21,8 +21,6 @@ Egenskap: Beregne automatisk på nytt
   # eksempel i endringsloggen) hvilke kravelementer rettingen gjelder. Løsningen viser det ikke.
 
   # ÅPNE SPØRSMÅL:
-  # - En sak som var under behandling fordi et steg ikke kunne avgjøres, kan avgjøres når feilen er
-  #   rettet. Blir den ferdig behandlet, eller må saksbehandleren gjøre det (OPT-BEH-BEH-025)?
   # - Skal søkeren få vite det når kvalifiseringen, poengene eller kvoten endres?
   # - Når beregningen på nytt gir nye automatiske mangler i en sak som er ferdig behandlet, hvem
   #   publiserer dem? Den automatiske behandlingen publiserer manglene når den setter saken til
@@ -77,6 +75,23 @@ Egenskap: Beregne automatisk på nytt
       Når opptaksforvalteren beregner på nytt for søknadsalternativene med rangeringsregelverket som er rettet
       Så har "Informatikk, UiO" poengsum for "Kari Nordmann" etter det rettede rangeringsregelverket
       Og saken til "Kari Nordmann" hos "Universitetet i Oslo" er fortsatt ferdig behandlet
+
+  @depends-on-OPT-BEH-BEH-025
+  Regel: En sak som ble stående under behandling på grunn av feilen, blir ferdig behandlet når alt kan avgjøres
+    # Avklart 30.10.2026. Saken kunne vært behandlet helautomatisk om regelverket hadde vært
+    # riktig. Har saksbehandleren gjort noe i saken, blir den stående under behandling.
+
+    Scenario: Saken blir ferdig behandlet når feilen er rettet
+      Gitt at saken til "Kari Nordmann" hos "Universitetet i Oslo" er under behandling fordi poengene for "Informatikk, UiO" ikke kunne avgjøres på grunn av en feil i rangeringsregelverket
+      Og at saksbehandleren ikke har gjort noe i saken
+      Når opptaksforvalteren beregner på nytt for søknadsalternativene med rangeringsregelverket som er rettet
+      Så er saken til "Kari Nordmann" hos "Universitetet i Oslo" ferdig behandlet
+
+    Scenario: Saken blir stående under behandling når saksbehandleren har gjort noe i den
+      Gitt at saken til "Kari Nordmann" hos "Universitetet i Oslo" er under behandling fordi poengene for "Informatikk, UiO" ikke kunne avgjøres på grunn av en feil i rangeringsregelverket
+      Og at saksbehandleren ved Universitetet i Oslo har vurdert et kravelement i saken
+      Når opptaksforvalteren beregner på nytt for søknadsalternativene med rangeringsregelverket som er rettet
+      Så er saken til "Kari Nordmann" hos "Universitetet i Oslo" fortsatt under behandling
 
   @depends-on-OPT-PLA-TIL-001
   Regel: Beregningen gjelder fra neste plasstildeling
