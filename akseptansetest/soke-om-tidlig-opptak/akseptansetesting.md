@@ -25,7 +25,7 @@ Testbeskrivelse og testgjennomføring for akseptansetesten av «Søke om tidlig 
 | Utenfor scope | Hvordan søknaden om tidlig opptak vurderes, og svaret søkeren får. Se «Ikke med i denne testen». |
 | Kjente begrensninger | Søkeren kan ikke trekke ønsket om tidlig opptak, så hver gjennomkjøring trenger en søker som ikke har søkt. Søknaden lagrer ikke når søkeren søkte: søkeren ser «Du har søkt om tidlig opptak.» uten dato, og tidspunktet står i kvitteringen. Etter fristen vises ikke boksen «Tidlig opptak» for en søker som ikke har søkt. Løsningen godtar en søknad om tidlig opptak selv om ingen av søkerens søknadsalternativer tilbyr det, men Min kompetanse viser ikke muligheten i det tilfellet. |
 | Kontaktperson i teamet | [Fylles ut] |
-| Testansvarlig | [Fylles ut] |
+| Testansvarlig | Marit Bjørnerud Rønning |
 | Dato for test | [Fylles ut] |
 | Spørsmål underveis | [Fylles ut: kanal på Slack] |
 
