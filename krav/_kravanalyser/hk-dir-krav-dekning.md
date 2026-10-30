@@ -52,7 +52,6 @@ Mye av det som er dekket, er dekket av krav som fortsatt er `@draft`.
 
 ## Funn i kravene våre
 
-- Fem Feature-ID-er brukes av to kravfiler hver: `@OPT-BEH-BEH-007`, `-008`, `-009`, `-010` og `@OPT-SØK-SØK-013`. Rettet etter analysen: ingen Feature-ID brukes av to kravfiler på `main` 30.10.2026 (`oppgi_at_generell_studiekompetanse_fullføres_i_vår.feature` er nå `@OPT-SØK-SØK-018`).
 - HK-9370 og HK-9406 er samme historie (rapportuttrekk).
 
 ## Alle historiene
