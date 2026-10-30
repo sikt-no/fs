@@ -23,7 +23,7 @@ Egenskap: Listevisning og søk i personbrukere
         | Hjemorganisasjon |
         | Status           |
 
-    @planned @openquestion
+    @openquestion
     Scenario: Se liste over personbrukere
       # ÅPNE SPØRSMÅL:
       # - Hva står i «Feide-IDer» og «Hjemorganisasjon» for en personbruker som ikke er koblet til noen Feide-bruker?
@@ -38,14 +38,12 @@ Egenskap: Listevisning og søk i personbrukere
         | Hjemorganisasjon |
       Og «Feide-IDer» viser Feide-ID-ene til Feide-brukerne som er koblet til personbrukeren
 
-    @planned
     Scenario: Se antall aktive roller per personbruker
       Når jeg åpner brukeroversikten
       Så viser listen kolonnen «Aktive roller» for hver personbruker
       Og kolonnen viser hvor mange aktive roller personbrukeren har
       Og serveren avgjør hva som er en aktiv rolle
 
-    @planned
     Scenario: Filtrere på har aktive roller
       Gitt jeg ser listen over personbrukere
       Når jeg velger filteret «har aktive roller»
@@ -129,14 +127,14 @@ Egenskap: Listevisning og søk i personbrukere
       Når jeg velger en hjemorganisasjon som filter
       Så vises kun personbrukere med den valgte hjemorganisasjonen
 
-    @planned @scope-restanser-etter-onboarding
+    @scope-restanser-etter-onboarding
     Scenario: Hjemorganisasjonene i filteret vises med akronym
       Gitt jeg ser listen over personbrukere
       Når jeg åpner hjemorganisasjonsfilteret
       Så vises akronymet under navnet på hver hjemorganisasjon
       Men organisasjonskoden vises når hjemorganisasjonen ikke har akronym
 
-    @planned @scope-restanser-etter-onboarding
+    @scope-restanser-etter-onboarding
     Scenario: Søke i hjemorganisasjonsfilteret
       Gitt jeg ser listen over personbrukere
       Når jeg skriver inn tekst i hjemorganisasjonsfilteret
@@ -203,7 +201,7 @@ Egenskap: Listevisning og søk i personbrukere
       Når jeg åpner brukeroversikten
       Så ser jeg ikke personbrukeren i listen
 
-    @planned @scope-synlighet-og-gjelder-for
+    @scope-synlighet-og-gjelder-for
     Scenario: Personbrukere med annen hjemorganisasjon er ikke synlige uten aktiv rolle i organisasjonene jeg administrerer
       Gitt jeg har brukeradministrator-rollen for én eller flere organisasjoner
       Og en personbruker har hjemorganisasjon utenfor organisasjonene jeg administrerer

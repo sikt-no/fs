@@ -59,7 +59,7 @@ Egenskap: Fjerne roller fra en personbruker
       Når jeg ser på personbrukerens roller
       Så er muligheten til å fjerne tilgjengelig kun for roller i organisasjoner jeg har brukeradministrator-rollen for
 
-  @planned @scope-restanser-etter-onboarding
+  @scope-restanser-etter-onboarding
   Regel: Valglistene følger rettigheten til å fjerne roller fra personbrukere
 
     Scenario: Valglisten for organisasjon viser bare organisasjoner der jeg kan fjerne roller fra personbrukere
