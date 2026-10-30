@@ -20,8 +20,10 @@ Egenskap: Beregne automatisk på nytt
   # Avklart 30.10.2026: en feil i kontrollmotoren rettes av utviklerne, og de sier fra (for
   # eksempel i endringsloggen) hvilke kravelementer rettingen gjelder. Løsningen viser det ikke.
 
+  # Avklart 30.10.2026: søkeren får ingen egen melding når kvalifiseringen, poengene eller kvoten
+  # endres. Søkeren ser det som er endret, i Min kompetanse.
+
   # ÅPNE SPØRSMÅL:
-  # - Skal søkeren få vite det når kvalifiseringen, poengene eller kvoten endres?
   # - Når beregningen på nytt gir nye automatiske mangler i en sak som er ferdig behandlet, hvem
   #   publiserer dem? Den automatiske behandlingen publiserer manglene når den setter saken til
   #   ferdig behandlet (OPT-BEH-BEH-025), men her forblir saken ferdig behandlet.
