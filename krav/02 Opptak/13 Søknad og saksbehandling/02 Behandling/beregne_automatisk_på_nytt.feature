@@ -17,9 +17,10 @@ Egenskap: Beregne automatisk på nytt
   # behandlingen én sak om gangen (AutomatiskSaksbehandlingService), og ingenting kjører den for
   # mange saker.
 
+  # Avklart 30.10.2026: en feil i kontrollmotoren rettes av utviklerne, og de sier fra (for
+  # eksempel i endringsloggen) hvilke kravelementer rettingen gjelder. Løsningen viser det ikke.
+
   # ÅPNE SPØRSMÅL:
-  # - En feil i kontrollmotoren rettes av utviklerne. Hvordan får opptaksforvalteren vite hvilke
-  #   kravelementer feilen gjaldt?
   # - En sak som var under behandling fordi et steg ikke kunne avgjøres, kan avgjøres når feilen er
   #   rettet. Blir den ferdig behandlet, eller må saksbehandleren gjøre det (OPT-BEH-BEH-025)?
   # - Skal søkeren få vite det når kvalifiseringen, poengene eller kvoten endres?
