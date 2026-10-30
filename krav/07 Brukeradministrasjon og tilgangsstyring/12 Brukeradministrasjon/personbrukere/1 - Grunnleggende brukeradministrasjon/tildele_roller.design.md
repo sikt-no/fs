@@ -6,13 +6,14 @@ Foreløpig dekker implementasjonsdetaljene bare valglisten for rolle, og særlig
 
 ## Overordnet UI-mønster
 
-Tildelingen skjer i dialogen «Tildel roller», som åpnes fra rollefanen på detaljsiden for personbrukeren. Dialogen har tre valg i kaskade: organisasjon, miljø og roller. Valglisten for rolle er en flervalgsliste med søk, der hver rad viser rollekoden og beskrivelsen.
+Tildelingen skjer i dialogen «Tildel roller», som åpnes fra rollefanen på detaljsiden for personbrukeren. Dialogen har tre valg i kaskade: «Gjelder for organisasjon», «Miljø» og «Navn» (rollene). Valglisten for rolle er en flervalgsliste med søk, der hver rad viser rollekoden og beskrivelsen. Rollekoden er det som heter «Navn» i FS Admin.
 
 ## Komponenter og layout
 
-- **Organisasjon:** valgliste. Én organisasjon gir et forhåndsvalgt og låst felt.
-- **Miljø:** valgliste.
-- **Roller:** flervalgsliste med søkefelt øverst. Hver rad har avkrysning, rollekode og beskrivelse. Listen er låst til organisasjon og miljø er valgt.
+- **Gjelder for organisasjon:** valgliste, med «Ikke valgt» når ingen organisasjon er valgt. Administrerer administratoren bare én organisasjon, er feltet forhåndsvalgt og låst.
+- **Miljø:** valgliste, med «Ikke valgt» når ikke noe miljø er valgt.
+- **Navn:** flervalgsliste med søkefelt øverst. Hver rad har avkrysning, rollekode og beskrivelse. De valgte rollene vises som brikker (chips) i feltet, hver med et kryss som fjerner valget. Listen er låst til organisasjon og miljø er valgt.
+- **Knapper:** «Avbryt» og primærknappen «Tildel roller».
 
 ## Interaksjonsmønstre
 
@@ -41,13 +42,13 @@ Tildel de avkryssede rollene for valgt organisasjon og miljø.
 
 ## Tekster
 
-Hjelpetekster, feilmeldinger, bekreftelser og andre tekster med variasjoner. Dette er fasiten for tekstene, også når en skisse viser noe annet.
+Hjelpetekster, feilmeldinger, bekreftelser og andre tekster med variasjoner. Skissene er fasiten for layout og feltetiketter. Tabellen er fasiten for tekstvariantene skissene ikke viser.
 
 | Hvor | Når vises den | Tekst | Variasjoner | Scenario |
 |------|---------------|-------|-------------|----------|
 | Valglisten for rolle | Listen er tom for valgt organisasjon og miljø | «Ingen roller å tildele i denne kombinasjonen.» | Teksten finnes i FS Admin i dag (`rollerIngenRettighet`, varianten for roller, i `tilgangsstyring.json`). Samme tekst uansett hvorfor listen er tom, også når ingen applikasjon har tak | Valglisten for rolle er tom når ingen applikasjon har tak i organisasjonen og miljøet |
 
-**Skisser:** [skjermbilde av dagens dialog](../../../../../tasks/brukeradministrasjon-og-tilgangsstyring/tildele-roller-forretningsroller/spec/krav-input/changes/2026-10-29-krav-rolleliste-begrenset-av-tak/sketches/dagens-tildel-roller-dialog.png) (Universitetet i Stavanger, Produksjon). Det viser dagens valgliste, med roller utenfor taket, og ingen tekster med variasjoner. Det er ikke en skisse av ønsket løsning.
+**Skisser:** [skjermbilde av dagens dialog](../../../../../tasks/brukeradministrasjon-og-tilgangsstyring/tildele-roller-forretningsroller/spec/krav-input/changes/2026-10-29-krav-rolleliste-begrenset-av-tak/sketches/dagens-tildel-roller-dialog.png) (Universitetet i Stavanger, Produksjon). Det viser dagens valgliste, med roller utenfor taket, og ingen tekster med variasjoner. Det er ikke en skisse av ønsket løsning. Ønsket løsning er skissen av dialogen «Tildel roller» i Figma-fila «FS Admin - Gjeldende skisser» (node 4551-5331), som er fasiten for layout og feltetiketter.
 
 ## Per-scenario detaljer
 
