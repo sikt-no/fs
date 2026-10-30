@@ -1,5 +1,5 @@
 # language: no
-@FLY-OPT-AUT-001 @must @draft @e2e @depends-on-FLY-OPT-SAK-001
+@FLY-OPT-AUT-001 @must @planned @e2e @depends-on-FLY-OPT-SAK-001
 Egenskap: Automatisk saksbehandling
   Fra søknaden er blitt en sak hos den saksbehandlende organisasjonen, til saken er ferdig
   behandlet og klar til å være med i plasstildelingen, uten at en saksbehandler har gjort noe.
