@@ -21,7 +21,7 @@ Egenskap: Automatiske tilleggspoeng
       Gitt at poengtypen for alderspoeng er knyttet til algoritmen "<algoritme>"
       Og at søkeren er <alder> år på datoen for aldersberegning
       Når saken får grunnlaget "VES"
-      Så har søknaden <poeng> alderspoeng
+      Så har saken <poeng> alderspoeng
 
       Eksempler:
         | algoritme | alder | poeng |
@@ -47,8 +47,8 @@ Egenskap: Automatiske tilleggspoeng
       Og at resultatet publiseres i 2027
       Og at søkeren er 23 år på datoen "2027-12-31"
       Og at poengtypen for alderspoeng er knyttet til algoritmen "ALD_ALG1"
-      Når saksbehandleren velger grunnlaget "VES" for søknaden
-      Så har søknaden 4 alderspoeng
+      Når saksbehandleren velger grunnlaget "VES" for saken
+      Så har saken 4 alderspoeng
 
   @ref-FLY-OPT-AUT-001
   Regel: Kjønnspoeng regnes ut fra søkerens kjønn
@@ -57,7 +57,7 @@ Egenskap: Automatiske tilleggspoeng
       Gitt at poengtypen for kjønnspoeng er knyttet til algoritmen "<algoritme>"
       Og at søkeren er <kjønn>
       Når saken får grunnlaget "VES"
-      Så har søknaden <poeng> kjønnspoeng
+      Så har saken <poeng> kjønnspoeng
 
       Eksempler:
         | algoritme  | kjønn  | poeng |
@@ -91,7 +91,7 @@ Egenskap: Automatiske tilleggspoeng
       Gitt at poengtypen for poeng for høyere utdanning er knyttet til algoritmen for høyere utdanning
       Og at tjenesten for resultater fra høyere utdanning gir søkeren <studiepoeng> studiepoeng
       Når saken får grunnlaget "VES"
-      Så har søknaden <poeng> poeng for høyere utdanning
+      Så har saken <poeng> poeng for høyere utdanning
 
       Eksempler:
         | studiepoeng | poeng |
@@ -107,21 +107,21 @@ Egenskap: Automatiske tilleggspoeng
       Og at søkeren har bestått emner på 50 studiepoeng
       Og at søkeren ikke har bestått et emne på 10 studiepoeng
       Når saken får grunnlaget "VES"
-      Så har søknaden 1 poeng for høyere utdanning
+      Så har saken 1 poeng for høyere utdanning
 
     Scenario: Fagskolepoeng teller ikke
       Gitt at poengtypen for poeng for høyere utdanning er knyttet til algoritmen for høyere utdanning
       Og at søkeren har bestått emner på 30 studiepoeng i høyere utdanning
       Og at søkeren har 30 fagskolepoeng
       Når saken får grunnlaget "VES"
-      Så har søknaden 1 poeng for høyere utdanning
+      Så har saken 1 poeng for høyere utdanning
 
     Scenario: Studiepoengene telles når poengene regnes ut
       Gitt at poengtypen for poeng for høyere utdanning er knyttet til algoritmen for høyere utdanning
       Og at søkeren hadde bestått emner på 50 studiepoeng da søknaden ble sendt inn
       Og at søkeren har bestått et emne på 10 studiepoeng etter søknadsfristen
       Når poengene for høyere utdanning regnes ut
-      Så har søknaden 2 poeng for høyere utdanning
+      Så har saken 2 poeng for høyere utdanning
 
   @ref-FLY-OPT-AUT-001
   Regel: Tilleggspoengene settes uansett hvem som velger grunnlaget
@@ -129,26 +129,26 @@ Egenskap: Automatiske tilleggspoeng
     Scenario: Automatikken velger grunnlaget
       Gitt at søkeren er 23 år på datoen for aldersberegning
       Og at poengtypen for alderspoeng er knyttet til algoritmen "ALD_ALG1"
-      Når automatikken velger grunnlaget "VES" for søknaden
-      Så har søknaden 4 alderspoeng
+      Når automatikken velger grunnlaget "VES" for saken
+      Så har saken 4 alderspoeng
 
     Scenario: Saksbehandleren velger grunnlaget
       Gitt at søkeren er 23 år på datoen for aldersberegning
       Og at poengtypen for alderspoeng er knyttet til algoritmen "ALD_ALG1"
-      Når saksbehandleren velger grunnlaget "VES" for søknaden
-      Så har søknaden 4 alderspoeng
+      Når saksbehandleren velger grunnlaget "VES" for saken
+      Så har saken 4 alderspoeng
 
     Scenario: Saksbehandleren får kjønnspoengene grunnlaget gir
       Gitt at søkeren er kvinne
       Og at poengtypen for kjønnspoeng er knyttet til algoritmen "KJONN_ALG2"
-      Når saksbehandleren velger grunnlaget "VES" for søknaden
-      Så har søknaden 2 kjønnspoeng
+      Når saksbehandleren velger grunnlaget "VES" for saken
+      Så har saken 2 kjønnspoeng
 
     Scenario: Poengene for grunnlaget som er fjernet, vises ikke lenger
       Gitt at saken har grunnlaget "VES"
       Og at poengtypen for alderspoeng bare gjelder grunnlaget "VES"
-      Når saksbehandleren fjerner grunnlaget "VES" fra søknaden
-      Så ser ikke saksbehandleren alderspoengene på søknaden
+      Når saksbehandleren fjerner grunnlaget "VES" fra saken
+      Så ser ikke saksbehandleren alderspoengene i saken
 
     Scenario: Poengene regnes ut på nytt når saksbehandleren endrer grunnlaget
       Gitt at saken har grunnlaget "VES"
@@ -156,26 +156,26 @@ Egenskap: Automatiske tilleggspoeng
       Og at poengtypen for alderspoeng er knyttet til algoritmen "ALD_ALG1"
       Og at poengtypen for alderspoeng gjelder grunnlagene "VES" og "PRA"
       Når saksbehandleren endrer grunnlaget til "PRA"
-      Så har søknaden 4 alderspoeng
+      Så har saken 4 alderspoeng
 
     Scenario: Poengene regnes ikke ut på nytt av seg selv når datoen for aldersberegning endres
       Gitt at saken har grunnlaget "VES"
-      Og at søknaden har alderspoeng utregnet på datoen "2027-04-15"
+      Og at saken har alderspoeng utregnet på datoen "2027-04-15"
       Når opptaksforvalteren endrer datoen for aldersberegning til "2027-12-31"
-      Så har søknaden fortsatt alderspoeng utregnet på datoen "2027-04-15"
+      Så har saken fortsatt alderspoeng utregnet på datoen "2027-04-15"
 
     Scenario: Søker uten elektronisk vitnemål får tilleggspoeng
       Gitt at søkeren ikke har noe elektronisk vitnemål
       Og at søkeren er 23 år på datoen for aldersberegning
       Og at poengtypen for alderspoeng er knyttet til algoritmen "ALD_ALG1"
-      Når saksbehandleren velger grunnlaget "VES" for søknaden
+      Når saksbehandleren velger grunnlaget "VES" for saken
       Så er alderspoengene regnet ut til 4
 
     Scenario: Tilleggspoengene er låst for automatikken når saksbehandleren har behandlet saken
       Gitt at saksbehandleren har behandlet saken
-      Og at søknaden har 4 alderspoeng
+      Og at saken har 4 alderspoeng
       Når den automatiske behandlingen kjøres for søknaden
-      Så har søknaden fortsatt 4 alderspoeng
+      Så har saken fortsatt 4 alderspoeng
 
     @ref-OPT-BEH-BEH-004
     # Regelen «Poeng beregnes fra det valgte grunnlaget», scenarioet «Poengene er tomme til jeg beregner dem».
@@ -183,26 +183,26 @@ Egenskap: Automatiske tilleggspoeng
       Gitt at søkeren er 23 år på datoen for aldersberegning
       Og at poengtypen for alderspoeng er knyttet til algoritmen "ALD_ALG1"
       Og at poengene fra vitnemålet står tomme til saksbehandleren velger å beregne dem
-      Når saksbehandleren velger grunnlaget "VES" for søknaden
-      Så har søknaden 4 alderspoeng
+      Når saksbehandleren velger grunnlaget "VES" for saken
+      Så har saken 4 alderspoeng
 
   Regel: Saksbehandleren kan overstyre poeng automatikken har satt
 
     Scenario: Poengene er satt av saksbehandleren og står
       Gitt at saksbehandleren har satt 3 alderspoeng og latt dem stå
-      Når automatikken regner ut alderspoeng for søknaden
-      Så har søknaden fortsatt 3 alderspoeng
+      Når automatikken regner ut alderspoeng for saken
+      Så har saken fortsatt 3 alderspoeng
 
     Scenario: Saksbehandleren overstyrer et alderspoeng som er regnet ut automatisk
       Gitt at søkeren er 23 år på datoen for aldersberegning
       Og at alderspoengene er regnet ut automatisk til 4
       Og at saksbehandleren har endret alderspoengene til 2
-      Når automatikken regner ut alderspoeng for søknaden
-      Så har søknaden fortsatt 2 alderspoeng
+      Når automatikken regner ut alderspoeng for saken
+      Så har saken fortsatt 2 alderspoeng
 
     Scenario: Poengene som er regnet ut automatisk, er merket som det
       Gitt at søkeren er 23 år på datoen for aldersberegning
-      Når saksbehandleren velger grunnlaget "VES" for søknaden
+      Når saksbehandleren velger grunnlaget "VES" for saken
       Så er alderspoengene merket som regnet ut automatisk
 
     Scenario: Poengene er ikke merket som automatiske etter at saksbehandleren har endret dem
@@ -214,14 +214,14 @@ Egenskap: Automatiske tilleggspoeng
 
     Scenario: Poengtypen har en algoritme som ikke kan regnes ut
       Gitt at poengtypen for kjønnspoeng er knyttet til en algoritme som ikke kan regnes ut
-      Når saksbehandleren velger grunnlaget "VES" for søknaden
+      Når saksbehandleren velger grunnlaget "VES" for saken
       Så er grunnlaget lagt til
       Og kjønnspoengene står tomme
       Og saksbehandleren ser en merknad om at algoritmen er ukjent
 
     Scenario: Automatikken fortsetter med de andre poengene når en algoritme ikke kan regnes ut
       Gitt at poengtypen for alderspoeng er knyttet til en algoritme som ikke kan regnes ut
-      Og at søknaden har poeng fra vitnemålet som kan regnes ut
+      Og at saken har poeng fra vitnemålet som kan regnes ut
       Når automatikken behandler søknaden
       Så regnes poengene fra vitnemålet ut
       Og alderspoengene står tomme med en merknad om at algoritmen er ukjent

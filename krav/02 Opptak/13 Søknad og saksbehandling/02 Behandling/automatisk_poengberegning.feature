@@ -23,6 +23,10 @@ Egenskap: Automatisk beregning av vitnemålspoeng
   vitnemålsbehandlingen, og den samme beregningen brukes da på vitnemålet saksbehandleren har
   valgt. Hvilke karakterer som teller, og hvordan de regnes om til poeng, er ikke beskrevet her.
 
+  Poengene ligger på saken, som grunnlaget (OPT-BEH-BEH-019). Automatikken beregner de samme
+  poengene i alle sakene i søknaden, men det saksbehandleren overstyrer eller låser, gjelder bare
+  saken hos organisasjonen saksbehandleren er ved. Avklart 30.10.2026.
+
   # Avklart 29.10.2026: opptaksforvalteren skrur automatikken av og på for opptaket, og kan sette
   # tidspunktet da den stopper (OPT-BEH-BEH-032).
 
@@ -36,7 +40,7 @@ Egenskap: Automatisk beregning av vitnemålspoeng
     Scenariomal: Poengtype som beregnes fra vitnemålet
       Gitt at søkeren har ett vitnemål som ikke er annullert
       Og at opptaksforvalteren har koblet poengtypen "<poengtype>" til <poeng> fra vitnemålet
-      Og at søknaden har poengtypen "<poengtype>"
+      Og at saken har poengtypen "<poengtype>"
       Når vitnemålspoengene beregnes automatisk
       Så har poengtypen fått <poeng> beregnet fra vitnemålet
 
@@ -48,7 +52,7 @@ Egenskap: Automatisk beregning av vitnemålspoeng
 
     Scenario: Poengtype uten kobling til vitnemålet beregnes ikke
       Gitt at søkeren har ett vitnemål som ikke er annullert
-      Og at søknaden har en poengtype som ikke er koblet til poeng fra vitnemålet
+      Og at saken har en poengtype som ikke er koblet til poeng fra vitnemålet
       Når vitnemålspoengene beregnes automatisk
       Så er poengtypen uendret
 
@@ -81,7 +85,7 @@ Egenskap: Automatisk beregning av vitnemålspoeng
     Scenariomal: Ingen automatiske vitnemålspoeng når <grunn>
       Gitt at <grunn>
       Når vitnemålspoengene beregnes automatisk
-      Så får søknaden ingen vitnemålspoeng beregnet automatisk
+      Så får saken ingen vitnemålspoeng beregnet automatisk
       Og det fremgår at søkeren ikke har ett entydig vitnemål
 
       Eksempler:
@@ -91,7 +95,7 @@ Egenskap: Automatisk beregning av vitnemålspoeng
         | søkerens eneste vitnemål er annullert                                                  |
         | søkeren ikke har noe vitnemål                                                          |
         | vitnemålet ikke gir generell studiekompetanse                                          |
-        | søknaden ikke har noe grunnlag                                                         |
+        | saken ikke har noe grunnlag                                                            |
 
     Scenario: Kompetansebevis ved siden av ett vitnemål hindrer ikke beregningen
       Gitt at søkeren har ett vitnemål som ikke er annullert
@@ -116,12 +120,12 @@ Egenskap: Automatisk beregning av vitnemålspoeng
     # Hvordan et poeng låses av at saksbehandleren velger grunnlag, og hvordan det låses opp, står i kravet.
 
     Scenario: Poeng som saksbehandleren endrer, blir stående
-      Gitt at søknaden har et vitnemålspoeng som er beregnet automatisk
+      Gitt at saken har et vitnemålspoeng som er beregnet automatisk
       Når saksbehandleren endrer poenget
       Så beregnes ikke poenget automatisk på nytt
 
     Scenariomal: Saksbehandleren overstyrer automatisk beregnet <poeng>
-      Gitt at søknaden har <poeng> som er beregnet automatisk
+      Gitt at saken har <poeng> som er beregnet automatisk
       Når saksbehandleren endrer <poeng>
       Så gjelder saksbehandlerens verdi
       Og den automatiske beregningen endrer ikke <poeng> senere
@@ -133,18 +137,18 @@ Egenskap: Automatisk beregning av vitnemålspoeng
         | språkpoeng    |
 
     Scenario: Låst poeng beregnes ikke på nytt
-      Gitt at søknaden har et låst vitnemålspoeng
+      Gitt at saken har et låst vitnemålspoeng
       Når vitnemålspoengene beregnes automatisk
       Så er det låste poenget uendret
 
     Scenario: Låse opp et poeng
-      Gitt at søknaden har et låst vitnemålspoeng
+      Gitt at saken har et låst vitnemålspoeng
       Når saksbehandleren låser opp poenget
       Og vitnemålspoengene beregnes automatisk
       Så er poenget beregnet automatisk på nytt
 
     Scenario: Poeng som ikke er låst, beregnes på nytt
-      Gitt at søknaden har et vitnemålspoeng som er beregnet automatisk
+      Gitt at saken har et vitnemålspoeng som er beregnet automatisk
       Og at poenget ikke er låst
       Når vitnemålspoengene beregnes automatisk
       Så er poenget erstattet med det nye beregnede poenget
@@ -157,7 +161,7 @@ Egenskap: Automatisk beregning av vitnemålspoeng
   Regel: Det fremgår hvordan et poeng er beregnet
 
     Scenario: Se at poenget er beregnet automatisk, og hvilket vitnemål det bygger på
-      Gitt at søknaden har et vitnemålspoeng som er beregnet automatisk
+      Gitt at saken har et vitnemålspoeng som er beregnet automatisk
       Når saksbehandleren ser på poengene
       Så ser saksbehandleren at poenget er beregnet automatisk
       Og saksbehandleren ser hvilket vitnemål poenget er beregnet fra
