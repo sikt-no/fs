@@ -254,16 +254,9 @@ Egenskap: Automatisk grunnlag
       Når søknaden behandles automatisk
       Så har saken bare det nye grunnlaget
 
-    @openquestion
-    Scenario: Gjøre søknaden tilgjengelig for automatikken igjen
-      # ÅPNE SPØRSMÅL:
-      # - Ny stack har ingen måte å låse opp grunnlagene på. Raffineringen
-      #   spurte hvordan en sak settes tilbake slik at den kan behandles
-      #   automatisk igjen. Trengs det?
-      Gitt at grunnlagene i saken er låst mot automatikken
-      Når saksbehandleren låser opp grunnlagene
-      Og søknaden behandles automatisk
-      Så kan søknaden få grunnlag automatisk igjen
+    # Avklart 30.10.2026: det trengs ingen egen funksjon for å låse opp grunnlagene for
+    # automatikken. Saksbehandleren fjerner grunnlaget som ble lagt til, og starter behandlingen
+    # på nytt (OPT-BEH-BEH-032), eller legger selv til et grunnlag som ble fjernet.
 
     @openquestion
     Scenario: Grunnlag utenfor aldersgrensen kan ikke velges manuelt
