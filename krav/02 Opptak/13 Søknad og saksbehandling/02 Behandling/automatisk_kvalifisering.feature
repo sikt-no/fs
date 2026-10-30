@@ -77,11 +77,12 @@ Egenskap: Automatisk vurdering av spesielle opptakskrav
   Vurderinger som saksbehandleren har gjort, endres aldri av automatikken. Det
   fremgår om et kravelement er vurdert automatisk eller av saksbehandleren.
 
+  # Avklart 30.10.2026: er søkeren ikke kvalifisert, får saken automatiske mangeltekster for
+  # kravelementene som ikke er oppfylt, og de slettes når søkeren blir kvalifisert
+  # (OPT-BEH-BEH-008). Den automatiske vurderingen gjør ikke noe med manglene saksbehandleren
+  # har registrert. I FS-klienten sletter «Godkjenn» dem.
+
   # ÅPNE SPØRSMÅL:
-  # - Den automatiske vurderingen lager og sjekker ut mangler for
-  #   kravelementene (søknadsmangler.feature). Skal den også gjøre noe med
-  #   manglene saksbehandleren har registrert, slik «Godkjenn» i FS-klienten
-  #   sletter dem?
   # - knytte_praksis_til_opptakskrav.feature (@OPT-BEH-BEH-006) setter et
   #   kravelement automatisk oppfylt fra praksis. Hvordan virker de to
   #   automatikkene sammen, og hvem eier låsingen?
