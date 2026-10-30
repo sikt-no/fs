@@ -285,7 +285,7 @@ Egenskap: Gjennomføre plasstildeling
 
     # Endret 2026-10-24: Plasstildelingen leser innstillingene plasstildelingsrunden har fra rundetypen,
     # og ser aldri på hvilken rundetype det er. Rundetypene i samordna opptak, med innstillingene, står i
-    # regelverkssamlingen (10 Regelverk/06 Rundetyper/forvalte_rundetyper.feature).
+    # regelverkssamlingen (10 Regelverk/06 Rundetyper/bruke_rundetyper.feature).
     # Tabellen over hva hver rundetype innebar, er flyttet dit.
     # AVKLART 2026-10-14: Tilbud, venteliste og avslag finnes alltid. Bortfall finnes bare når tilbud gir
     # bortfall på lavere prioriteter. Rangeringen er poeng og rangering i alle plasstildelingsrunder.

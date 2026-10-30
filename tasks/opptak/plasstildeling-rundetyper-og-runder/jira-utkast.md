@@ -12,18 +12,15 @@ Krav: [scope-plasstildeling-2027](https://github.com/sikt-no/fs/blob/main/tasks/
 
 ---
 
-## Story: Rundetyper med innstillinger i regelverkssamlingen
+## Story: Rundetypene hovedtildeling, supplering og etterfylling med innstillinger
 
-Regelverksforvalter legger til rundetypene i regelverkssamlingen, med innstillingene plasstildelingen leser. Samordna opptak får hovedtildeling, supplering og etterfylling. I dag er rundetypene et fast kodeverk uten innstillinger.
+Plasstildelingen bruker rundetypene som finnes i regelverkssamlingen. Samordna opptak får hovedtildeling, supplering og etterfylling, med innstillingene plasstildelingen leser. I dag er rundetypene et fast kodeverk uten innstillinger. Å legge til, endre og slette rundetyper er ikke med (`@OPT-REG-RUN-002`, Could).
 
 Akseptansekriterier:
 
-- Regelverksforvalter legger til rundetyper med innstillinger (`@OPT-REG-RUN-001`)
-- Regelverkssamlingene for samordna opptak har rundetypene hovedtildeling, supplering og etterfylling
-- Kompensasjonstilbud ved opprykk krever bortfall og at plasstildelingsrunden bygger på forrige
-- En rundetype kan ikke endres når en plasstildelingsrunde bruker den
+- Regelverkssamlingene for samordna opptak har rundetypene hovedtildeling, supplering og etterfylling (`@OPT-REG-RUN-001`)
 
-Krav: [forvalte_rundetyper.feature](https://github.com/sikt-no/fs/blob/main/krav/02%20Opptak/10%20Regelverk/06%20Rundetyper/forvalte_rundetyper.feature)
+Krav: [bruke_rundetyper.feature](https://github.com/sikt-no/fs/blob/main/krav/02%20Opptak/10%20Regelverk/06%20Rundetyper/bruke_rundetyper.feature)
 
 ## Story: Plasstildelingsrunder med innstillingene fra rundetypen
 

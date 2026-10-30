@@ -49,7 +49,7 @@ Egenskap: Plasstildelingsrunder i et opptak
   Regel: Rundetypene i regelverkssamlingen avgjør hvilke plasstildelingsrunder opptaket kan ha
 
     # Endret 2026-10-24: Rundetypene og innstillingene defineres i regelverkssamlingen for opptaket
-    # (10 Regelverk/06 Rundetyper/forvalte_rundetyper.feature).
+    # (10 Regelverk/06 Rundetyper/bruke_rundetyper.feature).
     # At et samordna opptak har én hovedtildeling, og at den er først, følger av innstillingene.
     # Kodeverket har også TIDLIG, LEDIGE_STUDIEPLASSER og TEST, som ikke er rundetyper i kravet,
     # og fs-admin lar bare opptaksforvalter velge HOVED (verifisert 2026-10-09).
@@ -107,7 +107,7 @@ Egenskap: Plasstildelingsrunder i et opptak
 
     # AVKLART 2026-10-24: Innstillingene kan ikke justeres på plasstildelingsrunden. Trengs en annen
     # kombinasjon, lages en ny rundetype i regelverkssamlingen
-    # (10 Regelverk/06 Rundetyper/forvalte_rundetyper.feature).
+    # (10 Regelverk/06 Rundetyper/bruke_rundetyper.feature).
     Scenario: Se innstillingene på plasstildelingsrunden
       Gitt at opptaket har plasstildelingsrunden "Suppleringsrunde" med rundetype "Supplering"
       Når opptaksforvalter ser plasstildelingsrunden "Suppleringsrunde"

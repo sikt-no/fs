@@ -3,12 +3,12 @@
 - **Slug**: plasstildeling-2027
 - **Initiativ**: [#216](https://github.com/sikt-no/fs/issues/216)
 - **Eier**: –
-- **Siste oppdatering**: 2026-10-28
+- **Siste oppdatering**: 2026-10-29
 
 ## Mål
 
 - Opptaksforvalter kan opprette plasstildelingsrunder, sette antall tilbud, starte og gjennomføre plasstildelinger, kontrollere og publisere resultatet.
-- Rundetypene er definert i regelverkssamlingen, med innstillingene plasstildelingen leser. Plasstildelingen ser aldri på hvilken rundetype det er, så andre opptak kan få egne rundetyper uten kodeendring (avklart 2026-10-24). Samordna opptak (UHG og HYU) får hovedtildeling, supplering og etterfylling med samme oppførsel som før.
+- Plasstildelingen bruker rundetypene som finnes i regelverkssamlingen: hovedtildeling, supplering og etterfylling, med innstillingene plasstildelingen leser. Plasstildelingen ser aldri på hvilken rundetype det er (avklart 2026-10-24). Samordna opptak (UHG og HYU) får de tre rundetypene med samme oppførsel som før.
 - Saksbehandler og søker ser det publiserte resultatet, og søkeren kan svare på tilbud og ventelisteplass.
 - Klar for første samordna opptak 2027. Produksjonsfrist 8. desember 2026.
 - Leveres i tre oppgaver, i denne rekkefølgen (delt 2026-10-28): rundetyper og runder, gjennomføre plasstildelingen, og publisere og svare på tilbud. Kravene med `@should` og `@could` står som «(ikke tildelt)» til de prioriteres.
@@ -21,6 +21,7 @@
 - At lærestedene melder feil i resultatet til opptakets forvalter i løsningen (Could, senere). E-post er godt nok nå, så lenge opptakets forvalter kan endre antall tilbud etter lærestedenes periode (avklart med domeneekspert 2026-10-15, og på nytt etter brukertesten med HK-dir 2026-10-28).
 - Varsler og meldinger fra løsningen i plasstildelingen. De sendes på e-post utenfor løsningen i dag (avklart 2026-10-28). Kravet står som `@should` under «(ikke tildelt)».
 - Regelverk, rangering og kvalifisering. De kommer fra søknadsbehandlingen og regelverket, ikke fra plasstildelingen. Unntaket er rundetypene (`@OPT-REG-RUN-001`), som plasstildelingen trenger nå.
+- Å forvalte rundetypene: legge til, endre og slette rundetyper i regelverkssamlingen (`@OPT-REG-RUN-002`, Could). Plasstildelingen bruker rundetypene som finnes (avklart 2026-10-29). Kravet står under «(ikke tildelt)».
 
 ## Kilder
 
@@ -39,7 +40,7 @@
 
 | Oppgave | Krav | MoSCoW | Skisse | Issue | Kommentar |
 |---|---|---|---|---|---|
-| [plasstildeling-rundetyper-og-runder](plasstildeling-rundetyper-og-runder/) | `@OPT-REG-RUN-001` [forvalte_rundetyper.feature](../../krav/02%20Opptak/10%20Regelverk/06%20Rundetyper/forvalte_rundetyper.feature) | Must | [Mockup: Rundetyper](https://claude.ai/artifact/5VkngKFsP2xtmqmCyKxcDU) | [#216](https://github.com/sikt-no/fs/issues/216) | Rundetypene og innstillingene deres i regelverkssamlingen (avklart 2026-10-24). Verify: 0/5 — rundetypene er et fast kodeverk uten innstillinger |
+| [plasstildeling-rundetyper-og-runder](plasstildeling-rundetyper-og-runder/) | `@OPT-REG-RUN-001` [bruke_rundetyper.feature](../../krav/02%20Opptak/10%20Regelverk/06%20Rundetyper/bruke_rundetyper.feature) | Must | [Mockup: Rundetyper](https://claude.ai/artifact/5VkngKFsP2xtmqmCyKxcDU) | [#216](https://github.com/sikt-no/fs/issues/216) | Hovedtildeling, supplering og etterfylling med innstillingene plasstildelingen leser. Forvaltningen er skilt ut i `@OPT-REG-RUN-002` (2026-10-29). Verify 2026-10-28: rundetypene er et fast kodeverk uten innstillinger |
 | [plasstildeling-rundetyper-og-runder](plasstildeling-rundetyper-og-runder/) | `@OPT-PLA-RUN-001` [forvalte_runder.feature](../../krav/02%20Opptak/14%20Plasstildeling/01%20Runder/forvalte_runder.feature) | Must | [Mockup: Runder](https://claude.ai/artifact/5VkngKFsP2xtmqmCyKxcDU) | [#216](https://github.com/sikt-no/fs/issues/216) | Legge til runder, med innstillingene fra rundetypen. Verify: 6/23 — bare hovedrunde kan velges i fs-admin, og redigering nullstiller publiseringen |
 | [plasstildeling-rundetyper-og-runder](plasstildeling-rundetyper-og-runder/) | `@OPT-PLA-INN-001` [antall_tilbud_som_skal_gis.feature](../../krav/02%20Opptak/14%20Plasstildeling/02%20Tildelingsinnstillinger/antall_tilbud_som_skal_gis.feature) | Must | [Mockup: Antall tilbud](https://claude.ai/artifact/5VkngKFsP2xtmqmCyKxcDU) | [#583](https://github.com/sikt-no/fs/issues/583) | Antall tilbud som skal gis per utdanningskvote i runden. Jira [TAKE-327](https://sikt.atlassian.net/browse/TAKE-327). Verify: 2/21 — settes for hele opptaket, og perioden håndheves ikke |
 | [gjennomfore-plasstildeling](gjennomfore-plasstildeling/) | `@OPT-PLA-INN-002` [plassflyt.feature](../../krav/02%20Opptak/14%20Plasstildeling/02%20Tildelingsinnstillinger/plassflyt.feature) | Must | – | [#216](https://github.com/sikt-no/fs/issues/216) | Plassflyt ved ledige plasser per utdanningskvote. Verify: 7/8 — en mottaker som mangler, stopper kjøringen |
@@ -54,6 +55,7 @@
 | (ikke tildelt) | `@OPT-PLA-SVA-002` [varsler_og_meldinger_i_plasstildelingen.feature](../../krav/02%20Opptak/14%20Plasstildeling/05%20Svar/varsler_og_meldinger_i_plasstildelingen.feature) | Should | – | – | Varsler til lærestedene og meldinger til søkerne. Skilt ut 2026-10-28, sendes på e-post i dag. Verify: 0/5 |
 | (ikke tildelt) | `@OPT-PLA-RES-004` [se_resultatet_som_søker.feature](../../krav/02%20Opptak/14%20Plasstildeling/04%20Resultat/se_resultatet_som_s%C3%B8ker.feature) | Could | – | – | Se resultatet slik søkeren ser det, før og etter publisering. Skilt ut 2026-10-28. Verify: 0/3 |
 | (ikke tildelt) | `@OPT-PLA-RES-005` [planlegge_publisering.feature](../../krav/02%20Opptak/14%20Plasstildeling/04%20Resultat/planlegge_publisering.feature) | Could | – | – | Planlagt publisering. Skilt ut 2026-10-28. Verify: 0/1 |
+| (ikke tildelt) | `@OPT-REG-RUN-002` [forvalte_rundetyper.feature](../../krav/02%20Opptak/10%20Regelverk/06%20Rundetyper/forvalte_rundetyper.feature) | Could | [Mockup: Rundetyper](https://claude.ai/artifact/5VkngKFsP2xtmqmCyKxcDU) | – | Legge til, endre og slette rundetyper i regelverkssamlingen. Skilt ut fra `@OPT-REG-RUN-001` 2026-10-29 |
 
 ## Åpne spørsmål
 
