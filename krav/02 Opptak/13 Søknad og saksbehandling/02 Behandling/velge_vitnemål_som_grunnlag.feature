@@ -19,8 +19,8 @@ Egenskap: Velge vitnemål som grunnlag for poengberegningen
 
   Den automatiske saksbehandlingen stopper når søkeren har flere vitnemål.
   Denne leveransen lar saksbehandleren peke ut ett vitnemål som grunnlag for
-  hele saken, og viser poengene poengberegningen i opptak gir tilbake. Et valgt
-  grunnlag låser poengene mot automatisk reberegning.
+  hele saken, og viser poengene som er beregnet fra det. Valget lagres med en
+  gang, og låser poengene mot automatisk reberegning.
 
   Valget gjelder ett vitnemål for hele saken. Å velge vitnemål og fag per
   poengvariant kommer i L3 (velge_fag_per_poengvariant.feature), og manuell
@@ -46,6 +46,7 @@ Egenskap: Velge vitnemål som grunnlag for poengberegningen
       Gitt søkeren har flere elektroniske vitnemål
       Når jeg velger ett av vitnemålene
       Så er det valgte vitnemålet grunnlaget for poengberegningen
+      Og poengene er beregnet fra det valgte vitnemålet
       # Skilt ut 08.10.2026: steget «Så vises fagene på det valgte vitnemålet»
       # er tatt ut her, fordi visningen av fagene hører til L3 (regelen
       # «Fagene på det valgte vitnemålet vises» i
@@ -55,11 +56,14 @@ Egenskap: Velge vitnemål som grunnlag for poengberegningen
       Gitt jeg har lagt et vitnemål til grunn
       Når jeg velger et annet vitnemål
       Så er det nye vitnemålet grunnlaget for poengberegningen
-      Og poengene vises tomme til jeg velger å beregne dem
-      # Endret 21.10.2026: poengene beregnes ikke av seg selv ved bytte, se
-      # «Poengene er tomme til jeg beregner dem». Steget «Og det fremgår
-      # hvilket vitnemål poengene nå bygger på» er tatt ut, fordi det er
-      # dekket av «Se hvilket vitnemål et poeng bygger på».
+      Og poengene er beregnet fra det nye vitnemålet
+      # Endret 30.10.2026: poengene beregnes og lagres med en gang
+      # saksbehandleren velger et vitnemål. Poengberegningen er en del av
+      # opptak, og poengene for hvert vitnemål er kjent fra vitnemålslisten
+      # (L1). Å beregne først når saksbehandleren sier at grunnlaget er klart,
+      # hører til L3, der grunnlaget settes sammen i flere steg. Steget «Og
+      # det fremgår hvilket vitnemål poengene nå bygger på» er tatt ut, fordi
+      # det er dekket av «Se hvilket vitnemål et poeng bygger på».
 
     Scenario: Endringer på et vitnemål gjelder ikke for et annet vitnemål
       Gitt jeg har lagt et vitnemål til grunn
@@ -104,68 +108,30 @@ Egenskap: Velge vitnemål som grunnlag for poengberegningen
       # ikke gjelde samtidig, se avgrensningen om valg av grunnlag i
       # vitnemålsbehandling.md.
 
-  @ref-OPT-BEH-BEH-018
+  @ref-OPT-BEH-BEH-018 @ref-OPT-BEH-BEH-005
   Regel: Poeng beregnes fra det valgte grunnlaget
 
-    # Poengene beregnes av poengberegningen i opptak, den samme som i den
-    # automatiske poengberegningen. Vitnemålsbehandleren sender grunnlaget
-    # saksbehandleren har valgt, og viser resultatet. Hvordan poengene regnes
-    # ut (hvilke karakterer som teller, avrunding, satser og tak) hører ikke
-    # til dette kravet.
+    # Poengene beregnes av kontrollmotoren i opptak, i samme løsning. Karakter-,
+    # realfags- og språkpoengene for hvert vitnemål vises i vitnemålslisten uten
+    # at noe lagres. Når saksbehandleren setter sammen grunnlaget (poengvariant,
+    # fag, forbedringer og tilleggsfag), beregnes og lagres poengene først når
+    # saksbehandleren sier at grunnlaget er klart, så sakens poeng aldri bygger
+    # på et grunnlag som er halvveis satt sammen.
     #
-    # I L2 er grunnlaget det valgte vitnemålet. L3 og L4 utvider grunnlaget
-    # med fagvalg og manuelt innlagte fag, og de samme scenarioene gjelder da
-    # for dem.
+    # I L2 er grunnlaget det valgte vitnemålet, og poengene beregnes og lagres
+    # med en gang. Å beregne når grunnlaget er klart, står i L3
+    # (velge_fag_per_poengvariant.feature). Hvordan poengene regnes ut
+    # (hvilke karakterer som teller, avrunding, satser og tak) hører ikke til
+    # dette kravet.
+    #
+    # Endret 30.10.2026: scenarioene «Poengene er tomme til jeg beregner dem»,
+    # «Beregne poengene fra det endrede grunnlaget» og «Advarsel om endringer
+    # som ikke er lagret» er flyttet til L3. «Endringen avvises når
+    # poengberegningen feiler» er fjernet: poengberegningen er ikke en ekstern
+    # tjeneste som kan la være å svare.
 
     Bakgrunn:
       Gitt jeg har rettighet til å se og endre søknadsbehandling ved organisasjonen som behandler saken
-
-    Scenario: Poengene er tomme til jeg beregner dem
-      Gitt jeg har lagt et vitnemål til grunn
-      Når jeg endrer grunnlaget
-      Så er poengene ikke beregnet på nytt
-      Og poengene vises tomme
-      Og endringen i grunnlaget er ikke lagret ennå
-      # AVKLART 21.10.2026: poengene beregnes ikke av seg selv når grunnlaget
-      # endres. Saksbehandleren må velge å beregne dem, og fram til da står
-      # feltene tomme. Endringen lagres først når poengene er beregnet uten
-      # feil. Hvordan saksbehandleren velger å beregne, hører i
-      # velge_vitnemål_som_grunnlag.design.md.
-
-    Scenario: Beregne poengene fra det endrede grunnlaget
-      Gitt jeg har lagt et vitnemål til grunn
-      Og jeg har endret grunnlaget
-      Når jeg velger å beregne poengene
-      Så er poengene beregnet på nytt fra det endrede grunnlaget
-      Og endringen i grunnlaget er lagret
-
-    Scenario: Advarsel om endringer som ikke er lagret
-      Gitt jeg har endret grunnlaget
-      Og jeg har ikke beregnet poengene etter endringen
-      Når jeg går fra saken
-      Så blir jeg advart om at endringen i grunnlaget ikke er lagret
-      Og jeg kan velge å bli på saken
-      # AVKLART 21.10.2026: endringen lagres først når poengene er beregnet
-      # uten feil. Saksbehandleren skal derfor advares før de forlater saken
-      # med endringer som ikke er lagret. Utformingen av advarselen hører i
-      # velge_vitnemål_som_grunnlag.design.md.
-
-    Scenario: Endringen avvises når poengberegningen feiler
-      Gitt jeg har lagt et vitnemål til grunn
-      Og jeg har endret grunnlaget
-      Og poengberegningen feiler eller ikke svarer
-      Når jeg velger å beregne poengene
-      Så er det lagrede grunnlaget uendret
-      Og jeg ser at endringen ikke ble gjennomført
-      # AVKLART 08.10.2026: grunnlaget lagres ikke når poengberegningen
-      # feiler. Saksbehandleren må gjøre endringen på nytt senere.
-      # Grunnlag og poeng er dermed aldri ute av takt.
-      #
-      # Endret 21.10.2026: kallet skjer når saksbehandleren velger å beregne
-      # poengene, ikke når grunnlaget endres. Samme hensyn som
-      # KregUtilgjengeligFeil i ny stack, som stopper behandlingen «for å
-      # unngå behandling på mulig utdatert grunnlag». Utformingen av
-      # beskjeden hører i velge_vitnemål_som_grunnlag.design.md.
 
     Scenario: Se de beregnede poengene
       Gitt jeg har lagt et vitnemål til grunn
@@ -189,18 +155,9 @@ Egenskap: Velge vitnemål som grunnlag for poengberegningen
       # søknadsalternativene i saken, skal vises. Simuleringen fant at poeng
       # fra andre saker i samme søknad ble vist (F1, STEK-593).
 
-    @openquestion
-    # ÅPNE SPØRSMÅL:
-    # - Skal en verdi saksbehandleren har lagt inn selv, overskrives når
-    #   saksbehandleren senere velger å beregne poengene på nytt? Låsen
-    #   gjelder den automatiske poengberegningen, ikke beregningen
-    #   saksbehandleren starter selv. Spørsmålet kom fra domeneekspertene
-    #   22.10.2026: en lagret verdi skal ikke overstyres av automatikken, men
-    #   når saksbehandleren aktivt beregner, må systemet kunne overstyre den.
     Scenariomal: Legge inn <poengtype> selv på en poengvariant
       Gitt jeg har lagt et vitnemål til grunn
-      Og jeg har lagt inn <poengtype> selv på en poengvariant
-      Når jeg velger å beregne poengene
+      Når jeg legger inn <poengtype> selv på en poengvariant
       Så er verdien jeg la inn for <poengtype>, brukt for poengvarianten
       Og alle poengene på poengvarianten er låst mot automatisk reberegning
 
@@ -215,18 +172,21 @@ Egenskap: Velge vitnemål som grunnlag for poengberegningen
       # opp med «Låse opp et poeng».
       #
       # AVKLART 21.10.2026: utvidet fra bare realfagspoeng til alle tre
-      # poengtypene som vises. Verdien saksbehandleren legger inn, er en
-      # endring i grunnlaget, og lagres først når poengene er beregnet uten
-      # feil. Det er alle poengene på poengvarianten som låses, ikke bare
+      # poengtypene som vises. Det er alle poengene på poengvarianten som låses, ikke bare
       # poengtypen saksbehandleren la inn. Steget «Og det fremgår at
       # <poengtype> er satt av en saksbehandler» er tatt ut, se «Se hvilket
       # vitnemål et poeng bygger på».
+      #
+      # Endret 30.10.2026: verdien lagres når saksbehandleren legger den inn,
+      # som valget av vitnemål. Spørsmålet om en verdi saksbehandleren har
+      # lagt inn selv, skal overskrives når poengene beregnes på nytt, er
+      # flyttet til L3, sammen med beregningen.
 
     Scenariomal: Ugyldig verdi for <poengtype> stoppes
       Gitt jeg har lagt et vitnemål til grunn
       Når jeg legger inn en ugyldig verdi for <poengtype> på en poengvariant
       Så ser jeg at verdien er ugyldig
-      Og jeg kan ikke beregne poengene før verdien er rettet
+      Og verdien er ikke lagret
 
       Eksempler:
         | poengtype     |
@@ -234,7 +194,7 @@ Egenskap: Velge vitnemål som grunnlag for poengberegningen
         | språkpoeng    |
       # AVKLART 21.10.2026: skjemaet skal stoppe ugyldige verdier, både for
       # realfagspoeng og språkpoeng. Grensene, for eksempel taket på
-      # realfagspoeng, hører til poengberegningen, så skjemaet må få dem
+      # realfagspoeng, står på poengtypen i opptak, så skjemaet må få dem
       # derfra. Utformingen av beskjeden hører i
       # velge_vitnemål_som_grunnlag.design.md.
 
