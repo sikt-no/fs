@@ -27,6 +27,10 @@ Versjonen styres med Changesets (`.changeset/`). `.github/workflows/kravforvaltn
 
 Start aldri workflowen uten at brukeren har sagt ja: en release går ut til alle som har appen, og den oppdaterer seg selv.
 
+## Design system
+
+Design systemet for appen ligger i claude.ai: <https://claude.ai/artifact/L9Arb7FBVCovbgR6YAyqsp>. Det er laget fra `src/theme.css` og `build/` (sikt-no/fs@ada2971), med fargene for lyst og mørkt tema, typografien, avstander, hjørner og skygger, 14 komponenter med statiske forhåndsvisninger, og Sikt-merket. Bruk det når nye visninger eller komponenter designes i Claude Design. Det synkes ikke fra koden: endres tokenene eller komponentene i `theme.css`, må design systemet oppdateres for hånd.
+
 ## Visningen
 
 Vieweren husker hvor brukeren var (`kravforvaltning:hash` i localStorage), og går tilbake dit når den åpnes uten hash. Det gjelder alltid når desktop-appen starter, og i en ny fane. En fil som er borte, gir forsiden.
