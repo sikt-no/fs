@@ -23,7 +23,7 @@ Du leser ikke all koden selv. Med mange filer har du ikke plass til det, og det 
 
 ## Forutsetninger (gjør dette FØRST)
 
-0. **Er input en verify-rapport** (`verify-*.md`)? Da er det *Gjennomgang av en verify-rapport* i `fs-verify`, som er en samtale med brukeren og ikke trenger et team. Følg `fs-verify` direkte, og si det.
+0. **Er input en verify-rapport** (`verify-*.md`)? Da er det *Gjennomgang av en verify-rapport* i `fs-verify`, som er en samtale med brukeren og ikke trenger et team. Følg `fs-verify` direkte, og si det. Ellers leser verken du eller teammatene tidligere verify-rapporter, heller ikke dem testplanen eller en kjøring lenker til (*Bruk bare rapportene brukeren gir deg* i `fs-verify`).
 
 1. **Agent teams må være på.** Sjekk at team-verktøyene (`SendMessage`, `TaskCreate`, `TaskList`, `TaskUpdate`) finnes i økten, og/eller `echo $CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS`. Er de ikke det, si at agent teams slås på med
 

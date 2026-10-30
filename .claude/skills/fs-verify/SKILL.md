@@ -26,6 +26,7 @@ Verifiseringen er første del av fase 1 (planen) i [teststrategien (forslag)](ht
 
 - **Ikke skriv eller rett applikasjonskode.** Mangler noe, rapporterer du det.
 - **Ikke endre kravinnhold.** Du bytter bare statustaggen på `Egenskap:`-linja, fjerner `@in-progress` fra deler i leverte krav som endres, setter og fjerner `@implemented` på deler (*Delvis levert*), sletter filer eller blokker som er `@deprecated`, og fjerner referansene (`@depends-on-`, `@ref-`) til det du sletter. I *Gjennomgang av en verify-rapport* kan du også legge til eller fjerne `@openquestion` med `# ÅPNE SPØRSMÅL:`. Steg, titler og tabeller endres bare med `fs-krav`.
+- **Bruk bare rapportene brukeren gir deg.** Let ikke etter tidligere verify-rapporter (`verify-*.md`), og les dem ikke, heller ikke rapportene testplanen, `utforing.md`, Confluence eller en kjøring lenker til. Hver kjøring verifiserer kravene mot koden slik den er nå. Gir brukeren en verify-rapport, gjelder bare den (*Gjennomgang av en verify-rapport*). Andre filer brukeren gir, som `resultat.md` fra en kjøring eller en testrapport, leser du, men ikke verify-rapportene de lenker til.
 - **Påstå aldri mer enn du har sett.** Bevis er et konkret sted i koden (`fil:linje`) som du har lest. Et søk uten treff er ikke bevis for at koden er borte, bare at du ikke fant den. Derfor bekrefter brukeren alle retagginger og slettinger.
 
 ## I FS Kravforvaltning
@@ -388,7 +389,7 @@ Rapporten skrives til fil før spørsmålene, og oppdateres med svarene i samme 
 - **Scope:** `akseptansetest/<scope-slug>/verify-<YYYY-MM-DD>-<HHMM>.md`, i mappa testplanen for scopet får (*Struktur* i [`akseptansetest/README.md`](../../../akseptansetest/README.md)). Lag mappa hvis den ikke finnes. `- **Spec:**` utelates, og `- **Krav:**` er `@scope-<slug>` (<N> feature-filer).
 - **Testplan:** gjelder testplanen én oppgave, som for en oppgave (`<oppgave>/spec/verify-…`). Ellers (et scope, en mappe eller feature-filer) i testplanmappa: `akseptansetest/<slug>/verify-<YYYY-MM-DD>-<HHMM>.md`. `- **Spec:**` utelates, og `- **Krav:**` er kilden i testplanen (`@scope-<slug>`, `krav/<sti>/` eller filene, <N> feature-filer).
 
-Skriv aldri over en tidligere rapport, og endre den ikke: den er det du sammenligner med neste gang. Rapporten fra kjøringen som pågår, oppdateres med svarene (*Rapport og endringer*, steg 5) og linja `- **Confluence:**` (*Confluence*), og ikke etter at kjøringen er ferdig. Unntaket er `- **Menneskelig kontroll:**`, som personen som kontrollerer rapporten, fyller ut etterpå (*Kontroll*). Du fyller det aldri ut.
+Skriv aldri over en tidligere rapport, og endre den ikke: den er det brukeren sammenligner med neste gang. Du leser den ikke i en senere kjøring, med mindre brukeren gir deg den. Rapporten fra kjøringen som pågår, oppdateres med svarene (*Rapport og endringer*, steg 5) og linja `- **Confluence:**` (*Confluence*), og ikke etter at kjøringen er ferdig. Unntaket er `- **Menneskelig kontroll:**`, som personen som kontrollerer rapporten, fyller ut etterpå (*Kontroll*). Du fyller det aldri ut.
 
 Skriv aldri rapporten noe annet sted under `krav/`. Ikke kall den `verification-*.md`: det mønsteret er reservert for `<lag>/` (se *Fire regler* i `tasks/README.md`).
 

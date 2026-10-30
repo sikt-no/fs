@@ -100,8 +100,8 @@ Testplanen har en tabell med fasene. `fs-testplan` fyller ut raden for verifiser
 | 2. Testrapport – agentisk funksjonstest | <lenke> | Klar / Ikke klar for intern akseptansetest / Venter på gjennomgang | <dato> |
 | 3. Intern akseptansetest | <lenke> | Klar til test / Pågår / Ferdig | <dato> |
 | 3. Testrapport – intern | <lenke> | Godkjent / Godkjent med forbehold / Ikke godkjent / Venter på beslutning | <dato> |
-| 4. Ekstern akseptansetest | <lenke> | Klar til test / Pågår / Ferdig / Ikke aktuell | <dato> |
-| 4. Testrapport – ekstern | <lenke> | Akseptert / Ikke akseptert / Venter på bekreftelse | <dato> |
+| 4. Ekstern akseptansetest | <lenke> | Venter / Forberedes / Klar til test / Pågår / Ferdig / Ikke aktuell | <dato> |
+| 4. Testrapport – ekstern | <lenke> | Akseptert (godkjent / godkjent med forbehold) / Ikke godkjent / Venter på beslutning | <dato> |
 
 Les testplanen med `contentFormat: "html"`, bytt bare cellene i raden, og oppdater siden med en `versionMessage` («Status i flyten: <steg>»). Oppdater også raden i `testplan.md`. Spør ikke en gang til om raden, når brukeren allerede har sagt ja til å publisere undersiden.
 

@@ -29,20 +29,24 @@ Et funn beskriver hva som skjedde, hva som var forventet, steg for å gjenskape,
 |---|---|---|---|
 | Feil | 1–3 | Løsningen gjør noe annet enn kravet sier | Teamet lager oppgave (`Sak`) |
 | Kravet dekker ikke | 2 og 3 | Et tilfelle som kravet ikke sier noe om, og løsningen oppfører seg uventet (for eksempel utledet av agenten fra en regel) | Avklares i kravet med `fs-krav`, ikke bare i testen |
-| Feil (avvik fra kravene våre) | 4 | Løsningen avviker fra kravene våre | Teamet lager oppgave (`Sak`) |
-| Endringsforslag (krav vi ikke har) | 4 | Et krav vi ikke har | Går til kravarbeidet (`fs-krav`) |
+| Feil | 4 | Flyten lar ikke testeren gjøre jobben, eller løsningen avviker fra kravene Sikt har gått gjennom | Teamet lager oppgave (`Sak`) |
+| Endringsforslag | 4 | Et behov flyten ikke dekker | Går til kravarbeidet (`fs-krav`), der Sikt vurderer om det skal følges opp raskt eller vente |
 
-Er typen uklar, står funnet som «Feil» (fase 1–3) eller «Feil (avvik fra kravene våre)» (fase 4) til testansvarlig har vurdert det.
+I fase 4 heter «Kravet dekker ikke» endringsforslag. Testerne trenger ikke finne årsaken: er de usikre på om noe er feil, vurderer kontaktpersonen det. Observasjoner utenfor testens omfang, for eksempel om brukervennlighet, merkes slik, og kontaktpersonen vurderer hvor de følges opp.
+
+Er typen uklar, står funnet som «Feil» til testansvarlig (i fase 4 kontaktpersonen) har vurdert det.
 
 ## Beslutning
+
+Fase 3 og 4 bruker de samme tre utfallene. I fase 4 kalles godkjent og godkjent med forbehold «Akseptert» i flyten.
 
 | Utfall | Hva skjer videre |
 | --- | --- |
 | Godkjent | Leveransen går videre til ekstern akseptansetest eller til innføring. |
 | Godkjent med forbehold | Kjente mangler listes i sluttrapporten, med ansvarlig og frist. Rettingen testes før innføring. |
-| Ikke godkjent | Leveransen går tilbake til teamet med funnene. |
+| Ikke godkjent | Leveransen går tilbake til teamet med funnene (i fase 3 og 4). |
 
-Testansvarlig skriver beslutningen og begrunnelsen i sluttrapporten. Rettede funn testes på nytt i versjonen som skal godkjennes. Hvem som beslutter etter den eksterne akseptansetesten, avklares med de eksterne partene.
+Testansvarlig skriver beslutningen og begrunnelsen i sluttrapporten. Rettede funn testes på nytt i versjonen som skal godkjennes. Etter den eksterne akseptansetesten er beslutningen vurdert mot flytene og kravene, og hvem som beslutter, er avtalt med partene før testen. Kontaktpersonen går gjennom resultatet med partene.
 
 ## Forslag til utfall
 
