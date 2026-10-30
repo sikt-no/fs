@@ -18,7 +18,7 @@ Testplan for «Saksbehandling av tidlig opptak». Planen sier hva som testes, av
 | Felt | Innhold |
 |---|---|
 | Hva er levert | Saksbehandleren kan filtrere sakene i et opptak på om søkeren har søkt om tidlig opptak, og på om saken mangler eller har konklusjon for tidlig opptak. I saken ser saksbehandleren søkerens begrunnelse og dokumentasjonskravet for den, og velger en av opptakets konklusjoner for tidlig opptak. Konklusjonen gjelder organisasjonen som behandler saken, og kan endres også etter at tidligopptaket er gjennomført. Steget for tidlig opptak vises bare når søkeren har søkt. |
-| Versjon | Ingen versjonsnummer. Testes i test-fsadmin [Fylles ut: dato for testen] (verifisert mot main: fs-plattform `97fbafa9b3`, fs-admin `2b7d1f87a`) |
+| Versjon | Ingen versjonsnummer. Testet i test-fsadmin 2026-10-30 (verifisert mot main: fs-plattform `97fbafa9b3`, fs-admin `2b7d1f87a`) |
 | Testmiljø | [https://test-fsadmin.sikt.no/](https://test-fsadmin.sikt.no/) |
 | Feature-flagg | Ingen |
 | Kilde | [finne_søknader_om_tidlig_opptak.feature](https://github.com/sikt-no/fs/blob/5605e7e/krav/02%20Opptak/13%20S%C3%B8knad%20og%20saksbehandling/02%20Behandling/finne_s%C3%B8knader_om_tidlig_opptak.feature), [vurdere_søknad_om_tidlig_opptak.feature](https://github.com/sikt-no/fs/blob/5605e7e/krav/02%20Opptak/13%20S%C3%B8knad%20og%20saksbehandling/02%20Behandling/vurdere_s%C3%B8knad_om_tidlig_opptak.feature) |
@@ -93,14 +93,14 @@ Ingen.
 |---|---|---|
 | Testansvarlig | [Fylles ut: navn] | Eier testen fra start til beslutning, og skriver beslutningen i testrapporten |
 | Kontaktperson i teamet | [Fylles ut: navn] | Svarer på spørsmål, og har ansvaret for at feil blir rettet |
-| Andre testere | [Fylles ut: navn] | [Fylles ut: hvilke deler] |
+| Andre testere | Marit Rønning (fagperson) | Alle testcasene i den interne akseptansetesten |
 | Eksterne testere | [Fylles ut: om leveransen skal til ekstern akseptansetest, og hvem] | Bare når leveransen skal til ekstern akseptansetest |
 
 ## Tid og kanal
 
 | Felt | Innhold |
 |---|---|
-| Intern akseptansetest | [Fylles ut: dato og klokkeslett]. Tidsramme: 1–2 timer |
+| Intern akseptansetest | 2026-10-30. Tidsramme: 1–2 timer |
 | Ekstern akseptansetest | Avklares med de eksterne partene |
 | Spørsmål underveis | Slack-tråden «Akseptansetesting Saksbehandling av tidlig opptak» i [Fylles ut: kanal] |
 
@@ -151,9 +151,9 @@ Testansvarlig skriver beslutningen og begrunnelsen i sluttrapporten. Rettede fun
 | 1. Verifisering (`fs-verify`) | [verify-finne_søknader_om_tidlig_opptak-2026-10-26-1441.md](../../krav/02%20Opptak/13%20S%C3%B8knad%20og%20saksbehandling/02%20Behandling/verify-finne_s%C3%B8knader_om_tidlig_opptak-2026-10-26-1441.md), [verify-vurdere_søknad_om_tidlig_opptak-2026-10-26-1441.md](../../krav/02%20Opptak/13%20S%C3%B8knad%20og%20saksbehandling/02%20Behandling/verify-vurdere_s%C3%B8knad_om_tidlig_opptak-2026-10-26-1441.md) · Confluence: [Finne søknader](https://sikt.atlassian.net/wiki/spaces/STUDIEADM/pages/5148966925), [Vurdere søknad](https://sikt.atlassian.net/wiki/spaces/STUDIEADM/pages/5148835843) | Alt funnet | 2026-10-26 |
 | 2. Testplan | (denne siden) | Laget | 2026-10-27 |
 | 3. Testrapport – verifisering | [testrapport-verifisering-2026-10-27.md](testrapport-verifisering-2026-10-27.md) · [Confluence](https://sikt.atlassian.net/wiki/spaces/STUDIEADM/pages/5148803102) | Klar | 2026-10-27 |
-| 4. Intern akseptansetest | [testcaser-intern.md](testcaser-intern.md) · [Confluence](https://sikt.atlassian.net/wiki/spaces/STUDIEADM/pages/5149065264) | Klar til test | 2026-10-27 |
+| 4. Intern akseptansetest | [testcaser-intern.md](testcaser-intern.md) · [Confluence](https://sikt.atlassian.net/wiki/spaces/STUDIEADM/pages/5149065264) | Gjennomført: 10 av 10 bestått | 2026-10-30 |
 | 4b. CDP-kjøring (valgfri) | – | Ikke aktuell | |
-| 5. Testrapport – intern | – | Venter | |
+| 5. Testrapport – intern | [testrapport-intern-2026-10-30.md](testrapport-intern-2026-10-30.md) · [Confluence](https://sikt.atlassian.net/wiki/spaces/STUDIEADM/pages/5158928698) | Venter på beslutning (forslag: Godkjent) | 2026-10-30 |
 | 6. Ekstern akseptansetest | – | Venter | |
 | 7. Testrapport – ekstern | – | Venter | |
 
