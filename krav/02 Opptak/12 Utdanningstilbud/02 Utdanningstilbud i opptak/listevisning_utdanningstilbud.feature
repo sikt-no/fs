@@ -23,6 +23,7 @@ Egenskap: Listevisning og søk i utdanningstilbud i opptaket
       Så ser opptaksforvalter grunndata fra utdanningsregisteret (navn, studiepoeng, nivå, campus)
       Og det er tydelig hvilke data som kommer fra utdanningsregisteret
 
+  @implemented
   Regel: Opptaksforvalter ser campus for utdanningstilbudene i opptaket
 
     Scenario: Se campus i listen over utdanningstilbud i opptaket
@@ -39,6 +40,7 @@ Egenskap: Listevisning og søk i utdanningstilbud i opptaket
       Når opptaksforvalter filtrerer på organisasjonen "Universitetet i Oslo"
       Så ser opptaksforvalter kun utdanningstilbud fra Universitetet i Oslo
 
+  @implemented
   Regel: Opptaksforvalter ved deltakende organisasjon ser kun utdanningstilbud organisasjonen tilbyr
 
     Scenario: Deltakende organisasjon ser kun utdanningstilbudene sine

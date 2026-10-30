@@ -1,5 +1,5 @@
 # language: no
-@OPT-OPT-UTD-032 @must @draft @scope-utdanningstilbud-2027 @depends-on-OPT-OPT-UTD-007
+@OPT-OPT-UTD-032 @must @implemented @scope-utdanningstilbud-2027 @depends-on-OPT-OPT-UTD-007
 Egenskap: Sette antall studieplasser per utdanningskvote
   Som opptaksforvalter
   ønsker jeg å fordele studieplassene på utdanningstilbudet mellom utdanningskvotene
