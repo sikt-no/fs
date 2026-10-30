@@ -314,11 +314,11 @@ html,body{margin:0;height:100%;background:#0E1628;color:#F7F6F2;font-family:'IBM
 <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:20px">
 <div style="display:flex;flex-direction:column;gap:8px;background:#FFFFFF;padding:28px;border:1px solid #E1DED6;border-radius:16px">
 <h3 style="font-size:28px;font-weight:600;color:#14213D">Testbeskrivelse</h3>
-<p style="font-size:24px;line-height:1.4;color:#4A5568">Hva som er levert, versjon, testmiljø, feature-flagg og nummererte testbrukere.</p>
+<p style="font-size:24px;line-height:1.4;color:#4A5568">Hva som er levert, versjon, testmiljø, feature-flagg og kjente begrensninger.</p>
 </div>
 <div style="display:flex;flex-direction:column;gap:8px;background:#FFFFFF;padding:28px;border:1px solid #E1DED6;border-radius:16px">
-<h3 style="font-size:28px;font-weight:600;color:#14213D">Testdata</h3>
-<p style="font-size:24px;line-height:1.4;color:#4A5568">Hvilke data testene trenger, og utgangstilstanden, med datoer i forhold til testdagen.</p>
+<h3 style="font-size:28px;font-weight:600;color:#14213D">Testbrukere og testdata</h3>
+<p style="font-size:24px;line-height:1.4;color:#4A5568">Nummererte testbrukere, og dataene testene trenger, i utgangstilstanden.</p>
 </div>
 <div style="display:flex;flex-direction:column;gap:8px;background:#FFFFFF;padding:28px;border:1px solid #E1DED6;border-radius:16px">
 <h3 style="font-size:28px;font-weight:600;color:#14213D">Åpne spørsmål</h3>
@@ -333,7 +333,7 @@ html,body{margin:0;height:100%;background:#0E1628;color:#F7F6F2;font-family:'IBM
 <p style="font-size:24px;line-height:1.4;color:#C9D3E3">Flytene og oppgavene, avhengighetene, regresjon, og de tre andre delene.</p>
 </div>
 </div>
-<aside>Dette er slide 8 i den detaljerte presentasjonen, sett fra strategien. De mørke kortene er det strategien sier at testplanen skal planlegge for testfasene: «Testcaser som skal lages». For fase 3 er de tre andre delene det som er kjent på forhånd at agenten ikke klarer, skjermene og oppgavene for opplevelse og helhet, og kandidatene til det med høyest risiko. Testbrukerne nummereres ut fra tilgangsmatrisen fra fs-verify, og testplanen kan ha et avhengighetskart. Testene lager testdataene selv: testplanen sier bare hvilke som trengs, og hvor grunndataene og det testene ikke kan lage, ligger. Vedlegg: verifiseringsrapporten og den agentiske testrapporten. Omfanget defineres etter det som er hensiktsmessig, ikke nødvendigvis per feature. Sporbarheten per krav står ikke i testplanen: fs-testplan lager sporbarhet.md og undersiden «Sporbarhet – &lt;leveranse&gt;», med kolonnen for fase 1 (kode) fra verify-rapporten, og testplanen lenker dit.</aside>
+<aside>Dette er slide 8 i den detaljerte presentasjonen, sett fra strategien. De mørke kortene er det strategien sier at testplanen skal planlegge for testfasene: «Testcaser som skal lages». For fase 3 er de tre andre delene det som er kjent på forhånd at agenten ikke klarer, skjermene og oppgavene for opplevelse og helhet, og kandidatene til det med høyest risiko. Testbrukerne nummereres ut fra tilgangsmatrisen fra fs-verify, og testplanen kan ha et avhengighetskart. Testene lager testdataene selv: testplanen sier bare hvilke som trengs, og hvor grunndataene og det testene ikke kan lage, ligger. Vedlegg: verifiseringsrapporten og den agentiske testrapporten. Omfanget defineres etter det som er hensiktsmessig, ikke nødvendigvis per feature. fs-testplan lager hovedsiden (testplan.md) og tre undersider: «Omfang» (omfang.md) med kravene, flytene, åpne spørsmål og avhengighetskartet, «Testcaser og testdata» (testcaser-og-testdata.md) med testcasene, testbrukerne og testdataene, og «Sporbarhet» (sporbarhet.md) med kolonnen for fase 1 (kode) fra verify-rapporten.</aside>
 </section>
 </div>
 <div class="slide">
@@ -599,6 +599,8 @@ html,body{margin:0;height:100%;background:#0E1628;color:#F7F6F2;font-family:'IBM
 <div style="display:flex;flex-direction:column;gap:6px;padding:0 0 0 32px">
 <p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:24px;color:#2F6FB0">verify-&lt;dato&gt;-&lt;tid&gt;.md</p>
 <p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:24px;color:#2F6FB0">testplan.md</p>
+<p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:24px;color:#2F6FB0">omfang.md</p>
+<p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:24px;color:#2F6FB0">testcaser-og-testdata.md</p>
 <p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:24px;color:#2F6FB0">sporbarhet.md</p>
 <p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:24px;color:#2F6FB0">kjoring-&lt;dato&gt;-&lt;tid&gt;/resultat.md</p>
 <p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:24px;color:#2F6FB0">testcaser-intern.md</p>
@@ -615,6 +617,8 @@ html,body{margin:0;height:100%;background:#0E1628;color:#F7F6F2;font-family:'IBM
 <div style="display:flex;flex-direction:column;gap:10px;padding:0 0 0 32px">
 <p style="font-size:26px;font-weight:600;color:#14213D">Testplan – &lt;leveranse&gt;</p>
 <div style="display:flex;flex-direction:column;gap:6px;padding:0 0 0 32px">
+<p style="font-size:24px;color:#4A5568">Omfang</p>
+<p style="font-size:24px;color:#4A5568">Testcaser og testdata</p>
 <p style="font-size:24px;color:#4A5568">Sporbarhet</p>
 <p style="font-size:24px;color:#4A5568">Verifisering</p>
 <p style="font-size:24px;color:#4A5568">Intern akseptansetest</p>
@@ -626,7 +630,7 @@ html,body{margin:0;height:100%;background:#0E1628;color:#F7F6F2;font-family:'IBM
 </div>
 </div>
 <p style="font-size:26px;line-height:1.4;color:#4A5568">Fila er utkastet til testen starter. Etter det er siden i Confluence kilden for resultatene.</p>
-<aside>Slugen er scope-slugen for et scope, domene og oppgave for en oppgave, og navnet på mappa eller fila for en mappe eller fil. Hver fil har metadata øverst, og under streken innholdet som publiseres i Confluence. Skjermbildene fra kjøringene holdes utenfor git: bare resultat.md committes. Testplanen er hovedsiden, og ligger alltid under Testplaner, som er en underside til strategien. Siden opprettes bare når du sier ja. «Status i flyten» i testplanen lenker til hver underside, og fs-testrapport oppdaterer fila fra siden. Sporbarheten er en egen underside og en egen fil, fordi den fylles ut i hver fase og blir stor: fs-testplan lager den med kolonnen for fase 1, og fs-testrapport fyller ut kolonnen for fasen sin. Testplanen har bare en lenke dit.</aside>
+<aside>Slugen er scope-slugen for et scope, domene og oppgave for en oppgave, og navnet på mappa eller fila for en mappe eller fil. Hver fil har metadata øverst, og under streken innholdet som publiseres i Confluence. Skjermbildene fra kjøringene holdes utenfor git: bare resultat.md committes. Testplanen er hovedsiden, og ligger alltid under Testplaner, som er en underside til strategien. Siden opprettes bare når du sier ja. «Status i flyten» i testplanen lenker til hver underside, og fs-testrapport oppdaterer fila fra siden. Testplanen er delt i hovedsiden og undersidene Omfang, Testcaser og testdata og Sporbarhet, med en fil for hver, så hver del kan oppdateres for seg: Confluence-verktøyet skriver en hel side om gangen. fs-testplan lager alle fire, og fs-testrapport fyller ut kolonnen for fasen sin i sporbarheten.</aside>
 </section>
 </div>
 </div></main>

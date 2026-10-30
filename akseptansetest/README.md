@@ -21,7 +21,7 @@ Hver leveranse går gjennom fase 1–3: planen, den agentiske testen og den inte
 |---|---|---|---|---|
 | 1 | Verifisering | `fs-verify` eller `fs-verify-agent-teams` | `verify-<dato>-<HHMM>.md` her for et scope, i `spec/` for en oppgave, eller ved siden av kravet for en mappe eller fil | «Verifisering – <leveranse> – <dato tid>» |
 | 1 | Testrapport etter verifiseringen | `fs-testrapport` | `testrapport-verifisering-<dato>.md` | «Testrapport – verifisering – <leveranse>» |
-| 1 | Testplan | `fs-testplan` | `testplan.md` | «Testplan – <leveranse>» |
+| 1 | Testplan: hovedsiden, og undersidene for omfanget og for testcasene og testdataene | `fs-testplan` | `testplan.md`, `omfang.md` og `testcaser-og-testdata.md` | «Testplan – <leveranse>», «Omfang – <leveranse>» og «Testcaser og testdata – <leveranse>» |
 | 1–3 | Sporbarhet per krav: scenario → kode → testcase → flyt | `fs-testplan` lager den, `fs-testrapport` fyller ut per fase | `sporbarhet.md` | «Sporbarhet – <leveranse>» |
 | 2 | Agentisk funksjonstest: testcasene | `fs-testcaser-cdp` lager testene i [`cdp-tester/`](../cdp-tester/README.md) | `cdp-tester/<kravstien>/<fil>.feature` | Ingen: testene ligger i repoet |
 | 2 | Agentisk funksjonstest: kjøringen | En agent kjører testene med `cdp`-skillen, mot testmiljøet | `kjoring-<dato>-<HHMM>/resultat.md` | Står i testrapporten |
@@ -46,8 +46,10 @@ Testplanen er hovedsiden i Confluence, og ligger alltid under [Testplaner](https
 akseptansetest/
 ├── README.md                    # dette dokumentet
 └── <testplan-slug>/             # én mappe per testplan
-    ├── testplan.md
-    ├── sporbarhet.md                     # sporbarhet per krav, egen underside til testplanen
+    ├── testplan.md                       # hovedsiden: testbeskrivelse, forutsetninger, status i flyten, vedlegg
+    ├── omfang.md                         # underside: kravene og flytene som testes, og det som ikke er med
+    ├── testcaser-og-testdata.md          # underside: testcasene som skal lages, testbrukerne og testdataene
+    ├── sporbarhet.md                     # underside: sporbarhet per krav
     ├── testcaser-intern.md
     ├── testcaser-ekstern.md
     ├── flytbeskrivelser-ekstern.md       # fase 4: flytene og rapportene til partene
@@ -74,7 +76,7 @@ Det som testes, er det som er `@implemented`, også de leverte delene i et krav 
 
 Er et krav med i en flyt i `krav/_Flyter/`, står flyten i «Flyter» i testplanen, og overleveringene i den testes også, i den interne akseptansetesten (fase 3): at det ett krav lager, blir brukt av det neste. Hele flyten testes når den er `@implemented`, ellers fasene i leveransen som er levert. Se *Flyter* i [`krav-fra-testplan.md`](../.claude/references/akseptansetest/krav-fra-testplan.md).
 
-Kravene står med Feature-ID i «Omfang» i testplanen, og alle skillene i flyten leser dem derfra, så alle fasene tester de samme kravene. Scope-id-ene kravene har, står i `- **Scope**:`. De automatiske testene av de samme kravene kjøres med `npx playwright test --grep @scope-<slug>`, eller med Feature-ID-ene når kravene ikke har scope. Reglene står i [`.claude/references/akseptansetest/krav-fra-testplan.md`](../.claude/references/akseptansetest/krav-fra-testplan.md).
+Kravene står med Feature-ID i «Omfang» i testplanen (på undersiden «Omfang», `omfang.md`), og alle skillene i flyten leser dem derfra, så alle fasene tester de samme kravene. Scope-id-ene kravene har, står i `- **Scope**:`. De automatiske testene av de samme kravene kjøres med `npx playwright test --grep @scope-<slug>`, eller med Feature-ID-ene når kravene ikke har scope. Reglene står i [`.claude/references/akseptansetest/krav-fra-testplan.md`](../.claude/references/akseptansetest/krav-fra-testplan.md).
 
 ## Fase 2: agentisk funksjonstest
 

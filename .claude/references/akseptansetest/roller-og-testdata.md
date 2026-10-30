@@ -32,7 +32,7 @@ Rollene og organisasjonene foreslås fra koden og miljøet, ikke fra en tidliger
 5. **Personaene som finnes.** Personaene i «Overstyrt bruker» står i «Personaer» i miljøfila, med rollene og organisasjonen (fra `TEST_PERSONAS` i fs-admin). Foreslå én persona per nøkkel derfra, med en egen organisasjon per relasjon, og som oppfyller kravene i punkt 4. Er katalogen gammel, eller finnes ingen som passer, følg *Vedlikehold av miljøfila* i `cdp-tester/README.md` først. Finnes det fortsatt ingen, si det: personaen må legges til i fs-admin, og tildelingen i tilgangsstyring.
 6. **Bekreft i miljøet.** Tildelingene bekreftes med spørringen `testpersoner`, etter *Vedlikehold av miljøfila* i `cdp-tester/README.md`, og står i «Tildelinger» og «Bekreftet» på personaen i miljøfila. Er personaen ikke bekreftet, si det. Testene kan lages likevel.
 
-Skriv koblingen fra nøkkel til persona i «Testbrukere» i miljøfila når brukeren sier ja, og i testplanen når skillen er `fs-testplan`. Fødselsnummeret skrives ikke i miljøfila eller testplanen: personaen velges i menyen.
+Skriv koblingen fra nøkkel til persona i «Testbrukere» i miljøfila når brukeren sier ja, og i testplanen («Testbrukere» i `testcaser-og-testdata.md`) når skillen er `fs-testplan`. Fødselsnummeret skrives ikke i miljøfila eller testplanen: personaen velges i menyen.
 
 ## Testdata
 
