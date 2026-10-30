@@ -1,19 +1,14 @@
 # language: no
 # GitHub: #216
-@OPT-REG-RUN-001 @must @draft @scope-plasstildeling-2027
+@OPT-REG-RUN-002 @could @draft
 Egenskap: Forvalte rundetyper i regelverkssamlingen
   Som regelverksforvalter ved organisasjonen som eier regelverkssamlingen
-  ønsker jeg å definere rundetypene og innstillingene deres i regelverkssamlingen
-  slik at plasstildelingsrundene i opptakene som bruker regelverkssamlingen, følger reglene for opptaket.
+  ønsker jeg å legge til, endre og slette rundetypene og innstillingene deres i regelverkssamlingen
+  slik at nye opptak kan få egne rundetyper uten kodeendring.
 
-  # AVKLART 2026-10-24 (produkteier): En rundetype er et navn og et sett med innstillinger for
-  # plasstildelingsrunder. Plasstildelingen leser innstillingene, og ser aldri på hvilken rundetype det er.
-  # Rundetypene er en del av regelverket, som kvotetypene, og gjelder alle opptak som bruker
-  # regelverkssamlingen. Nye rundetyper, for eksempel for lokale opptak, lages uten kodeendring.
-  # Løsningen dekker samordna opptak (UHG og HYU) først, men skal kunne brukes av alle opptak.
-  # Innstillingene kan ikke justeres på plasstildelingsrunden. Trengs en annen kombinasjon, lages en ny
-  # rundetype. Se 14 Plasstildeling/01 Runder/forvalte_runder.feature.
-  # Hva plasstildelingen gjør med innstillingene, står i 14 Plasstildeling/03 Tildeling/gjennomføre_plasstildeling.feature.
+  # Skilt ut fra bruke_rundetyper.feature (@OPT-REG-RUN-001) 2026-10-29. Forvaltningen er ikke med i
+  # scope-plasstildeling-2027, og plasstildelingen bruker rundetypene som finnes.
+  # Rundetypene for samordna opptak og innstillingene deres står i bruke_rundetyper.feature.
 
   Bakgrunn:
     Gitt at regelverksforvalter ved organisasjonen som eier regelverkssamlingen er innlogget
@@ -30,26 +25,6 @@ Egenskap: Forvalte rundetyper i regelverkssamlingen
         | Bare én i opptaket                                | nei   |
         | Kan åpnes for ledige studieplasser                | ja    |
       Så har regelverkssamlingen "UHG2027" rundetypen "Supplering" med innstillingene
-
-  Regel: Regelverkssamlingene for samordna opptak har rundetypene hovedtildeling, supplering og etterfylling
-
-    # Regelverkssamlingene for UHG og HYU har de samme tre rundetypene.
-    # Kodeverket har også TIDLIG, LEDIGE_STUDIEPLASSER og TEST, som ikke er rundetyper i kravet.
-    Scenariomal: Rundetypene i samordna opptak
-      Når regelverksforvalter ser rundetypen "<rundetype>" i regelverkssamlingen "UHG2027"
-      Så har rundetypen disse innstillingene
-        | Innstilling                                       | Verdi          |
-        | Tilbud gir bortfall på lavere prioriteter         | <bortfall>     |
-        | Kompensasjonstilbud ved opprykk                   | <kompensasjon> |
-        | Bygger på forrige publiserte plasstildelingsrunde | <arv>          |
-        | Bare én i opptaket                                | <én>           |
-        | Kan åpnes for ledige studieplasser                | <ledige>       |
-
-      Eksempler:
-        | rundetype      | bortfall | kompensasjon | arv | én  | ledige |
-        | Hovedtildeling | ja       | nei          | nei | ja  | ja     |
-        | Supplering     | ja       | ja           | ja  | nei | ja     |
-        | Etterfylling   | nei      | nei          | ja  | nei | ja     |
 
   Regel: Kompensasjonstilbud ved opprykk krever bortfall og at plasstildelingsrunden bygger på forrige
 
@@ -79,5 +54,19 @@ Egenskap: Forvalte rundetyper i regelverkssamlingen
       Når regelverksforvalter ser rundetypen "Hovedtildeling" i regelverkssamlingen "UHG2027"
       Så ser regelverksforvalter ikke muligheten til å endre innstillingene
 
+  Regel: En rundetype kan slettes når ingen plasstildelingsrunder bruker den
+
+    # AVKLART 2026-10-29 (produkteier).
+    Scenario: Slette en rundetype som ikke er brukt
+      Gitt at ingen plasstildelingsrunder har rundetypen "Etterfylling" i regelverkssamlingen "UHG2027"
+      Når regelverksforvalter sletter rundetypen "Etterfylling"
+      Så har regelverkssamlingen "UHG2027" ikke rundetypen "Etterfylling"
+
+    Scenario: Rundetype som er brukt, kan ikke slettes
+      Gitt at opptaket "Samordna opptak 2027" har plasstildelingsrunden "Hovedrunde" med rundetype "Hovedtildeling"
+      Når regelverksforvalter ser rundetypen "Hovedtildeling" i regelverkssamlingen "UHG2027"
+      Så ser regelverksforvalter ikke muligheten til å slette rundetypen
+
 # ÅPNE SPØRSMÅL:
-# - Kan en rundetype slettes når ingen plasstildelingsrunder bruker den?
+# - Skal rundetypene følge med, eller legges ved siden av, når regelverkssamlingen kopieres
+#   (OPT-REG-SAM-001)? Trengs et skille mellom felleskoder for opptaket og regelverket? (brukertesten med HK-dir, oktober 2026)
