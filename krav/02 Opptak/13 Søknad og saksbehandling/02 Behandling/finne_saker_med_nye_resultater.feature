@@ -53,7 +53,12 @@ Egenskap: Finne saker med nye resultater
       Og annulleringen er importert
       Så har saken nye VGS-resultater
 
+    @openquestion
     Scenario: Resultatene som importeres før saken er behandlet, er ikke nye resultater
+      # ÅPNE SPØRSMÅL:
+      # - Skal en ny sak markeres med at søkeren allerede har resultater fra VGS,
+      #   fagskole og/eller høyere utdanning når saken opprettes? Behovet må bekreftes
+      #   av brukerne før det blir en egen regel.
       Gitt at saken til "Eva Berg" ikke er behandlet
       Når søkerens resultater importeres fra KREG
       Så har saken ingen nye resultater
