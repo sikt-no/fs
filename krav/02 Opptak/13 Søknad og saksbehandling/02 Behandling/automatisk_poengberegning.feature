@@ -12,7 +12,7 @@
 # elektroniske vitnemål», 4609146881 «Forretningsregler – Poeng». GitHub #199. I FS-klienten
 # beregner «Godkjenn» i vitnemålsrammen og rutinen FS158.001 poengene, og manuell endring av
 # poeng setter «la stå».
-@OPT-BEH-BEH-018 @must @draft @depends-on-OPT-BEH-BEH-015 @depends-on-OPT-BEH-BEH-019 @ref-OPT-BEH-BEH-008 @ref-OPT-BEH-BEH-032
+@OPT-BEH-BEH-018 @must @planned @depends-on-OPT-BEH-BEH-015 @depends-on-OPT-BEH-BEH-019 @ref-OPT-BEH-BEH-008 @ref-OPT-BEH-BEH-032
 Egenskap: Automatisk beregning av vitnemålspoeng
   Som saksbehandler
   ønsker jeg at karakterpoeng, realfagspoeng, språkpoeng og skolepoeng beregnes automatisk fra søkerens vitnemål
@@ -172,11 +172,12 @@ Egenskap: Automatisk beregning av vitnemålspoeng
       Så ser saksbehandleren at vitnemålspoengene ikke er beregnet fordi søkeren ikke har ett entydig vitnemål
 
     @openquestion
-    Scenario: Finne søknader som er behandlet automatisk
+    Scenario: Finne saker som er behandlet automatisk
       # ÅPNE SPØRSMÅL:
       # - Brukerbehov fra raffineringen (PFS 4392517645): å kunne søke opp hvem som er behandlet
       #   automatisk, gjerne med skille mellom helautomatisk og halvautomatisk. FS158.001 har «Vis
-      #   tidligere behandlinger». Er det et filter i saksoversikten, en logg, eller begge?
-      Gitt at noen søknader i opptaket er behandlet automatisk
-      Når saksbehandleren ser etter søknadene som er behandlet automatisk
-      Så finner saksbehandleren søknadene som er behandlet automatisk
+      #   tidligere behandlinger». Er det et filter i saksoversikten, en logg, eller begge? Avgjøres
+      #   i designet (30.10.2026).
+      Gitt at noen saker i opptaket er behandlet automatisk
+      Når saksbehandleren ser etter sakene som er behandlet automatisk
+      Så finner saksbehandleren sakene som er behandlet automatisk
