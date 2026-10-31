@@ -51,14 +51,13 @@ Egenskap: Søknadsmangler
 
     Scenario: Opprette mangelkode
       Når opptaksforvalteren ved HK-dir oppretter en mangelkode i regelverkssamlingen "UHG 2027" med følgende opplysninger
-        | felt                                     | verdi                                    |
-        | Kode                                     | KAR                                      |
-        | Kategori                                 | Spesielle krav                           |
-        | Kort beskrivelse                         | Mangler karakter                         |
-        | Informasjon til søker i Min kompetanse   | Du mangler karakter i et fag som kreves. |
-        | Stopper for opptak                       | Nei                                      |
-        | Kan overskrives av automatisk behandling | Nei                                      |
-        | Aktiv                                    | Ja                                       |
+        | felt                                   | verdi                                    |
+        | Kode                                   | KAR                                      |
+        | Kategori                               | Spesielle krav                           |
+        | Kort beskrivelse                       | Mangler karakter                         |
+        | Informasjon til søker i Min kompetanse | Du mangler karakter i et fag som kreves. |
+        | Stopper for opptak                     | Nei                                      |
+        | Aktiv                                  | Ja                                       |
       Så finnes mangelkoden "KAR" i regelverkssamlingen "UHG 2027"
 
     Scenario: Tilgjengelige kategorier for mangelkoder
@@ -312,6 +311,13 @@ Egenskap: Søknadsmangler
       # ÅPNE SPØRSMÅL:
       # - Publiseringen er endret etter raffineringen: saksbehandleren publiserer alle manglene i
       #   saken samlet, og søkeren får melding hver gang. Ikke gått gjennom med teamet.
+      # - Skal de automatiske mangeltekstene for kompetanseregelverk publiseres på samme måte som
+      #   manglene saksbehandleren registrerer? Saksbehandleren velger da å publisere, og
+      #   publiseringen gjelder begge deler. Det er allerede et krav om at begge deler må være
+      #   publisert når saken settes til «Ferdig behandlet».
+      #   Merk: de automatiske mangeltekstene for kompetanseregelverk blir alltid publisert når
+      #   saken settes til «Ferdig behandlet» (se «Søkeren ser de automatiske mangeltekstene når
+      #   saken er ferdig behandlet»).
       # Kode i dag: «Oppdater mangel i Min kompetanse» kan ikke brukes når saken bare har
       # automatiske mangler.
       Gitt at saken hos "Universitetet i Oslo" bare har den automatiske mangelteksten for "Matematikk R2"
