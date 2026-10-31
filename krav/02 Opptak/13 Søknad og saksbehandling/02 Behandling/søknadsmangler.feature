@@ -51,14 +51,13 @@ Egenskap: Søknadsmangler
 
     Scenario: Opprette mangelkode
       Når opptaksforvalteren ved HK-dir oppretter en mangelkode i regelverkssamlingen "UHG 2027" med følgende opplysninger
-        | felt                                     | verdi                                    |
-        | Kode                                     | KAR                                      |
-        | Kategori                                 | Spesielle krav                           |
-        | Kort beskrivelse                         | Mangler karakter                         |
-        | Informasjon til søker i Min kompetanse   | Du mangler karakter i et fag som kreves. |
-        | Stopper for opptak                       | Nei                                      |
-        | Kan overskrives av automatisk behandling | Nei                                      |
-        | Aktiv                                    | Ja                                       |
+        | felt                                   | verdi                                    |
+        | Kode                                   | KAR                                      |
+        | Kategori                               | Spesielle krav                           |
+        | Kort beskrivelse                       | Mangler karakter                         |
+        | Informasjon til søker i Min kompetanse | Du mangler karakter i et fag som kreves. |
+        | Stopper for opptak                     | Nei                                      |
+        | Aktiv                                  | Ja                                       |
       Så finnes mangelkoden "KAR" i regelverkssamlingen "UHG 2027"
 
     Scenario: Tilgjengelige kategorier for mangelkoder
