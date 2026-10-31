@@ -41,7 +41,7 @@ Egenskap: Starte automatisk behandling
       Så behandles saken hos "Universitetet i Oslo" automatisk når vitnemålet er importert
 
   @depends-on-OPT-BEH-BEH-030 @ref-FLY-OPT-VIT-001 @ref-FLY-OPT-AUT-001
-  # OPT-BEH-BEH-030: «Endringer i KREG importeres gjennom et abonnement»
+  # OPT-BEH-BEH-030: «Nye og annullerte vitnemål i KREG importeres for aktive søkere»
   Regel: Behandlingen kjører når søkeren får det første vitnemålet
 
     Scenario: Saken behandles automatisk når jobben finner søkerens første vitnemål
@@ -51,7 +51,7 @@ Egenskap: Starte automatisk behandling
       Så behandles saken hos "Universitetet i Oslo" automatisk når vitnemålet er importert
 
   @openquestion @depends-on-OPT-BEH-BEH-030 @ref-OPT-BEH-BEH-021 @ref-OPT-BEH-BEH-029
-  # OPT-BEH-BEH-030: «Endringer i KREG importeres gjennom et abonnement»
+  # OPT-BEH-BEH-030: «Nye og annullerte vitnemål i KREG importeres for aktive søkere»
   Regel: Et nytt vitnemål i en sak med vitnemål er ny dokumentasjon
     # ÅPNE SPØRSMÅL:
     # - Er «ny dokumentasjon» i sakslisten en behandlingsstatus (OPT-BEH-BEH-029), eller en egen
