@@ -23,10 +23,8 @@ Egenskap: Importere VGS-vitnemål fra KREG
   # Flyten beskriver vitnemålene. Kompetansebevis søkeren har i KREG, importeres på samme
   # måte (OPT-BEH-BEH-030), men får ingen påstand fra opptakssystemet om GSK (OPT-BEH-BEH-015).
 
-  @openquestion
-  # ÅPNE SPØRSMÅL:
-  # - Kravet til jobbplanleggeren er ikke skrevet. Det kommer som et eget krav, og fasen får
-  #   @depends-on- til det.
+  @depends-on-OPT-BEH-BEH-033
+  # OPT-BEH-BEH-033: «Jobbplanleggeren starter jobbene i opptaket»
   Regel: Jobbplanleggeren starter importen av VGS-vitnemål fra KREG
 
     Scenario: Importen starter når jobbplanleggeren kjører jobben
