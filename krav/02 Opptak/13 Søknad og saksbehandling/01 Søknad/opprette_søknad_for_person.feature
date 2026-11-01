@@ -2,8 +2,17 @@
 @OPT-SØK-SØK-002 @opptak @skip @nih
 Egenskap: Opprette søknad for person
   Som saksbehandler i opptak trenger jeg av og til å kunne opprette søknader for personer som ikke klarer å opprette dette selv om de
-  er i en gruppe som skal kunne søke på aktuelle utdanningstilbud. Grunner til å ikke kunne opprette egen søknad kan være at søker ikke har
-  norsk eID eller får , eller har fått innvilget å søke opptak etter at søknadsfrist har utløpt.
+  er i en gruppe som skal kunne søke på aktuelle utdanningstilbud. Grunner til å ikke kunne opprette egen søknad kan være at søker har
+  fått innvilget å søke opptak etter at søknadsfrist har utløpt.
+  Personer uten norsk eID kan logge inn i Min kompetanse og søke selv, med e-post som selvregistrert bruker eller med eIDAS
+  (TIL-PÅL-PÅL-006). Mangel på norsk eID er derfor ikke lenger i seg selv en grunn til at saksbehandler oppretter søknaden.
+
+  # Endret 1.11.2026 (BAT-404, #262): før sto det at personer uten norsk eID ikke kan logge inn i Min kompetanse.
+  # ÅPNE SPØRSMÅL:
+  # - Når saksbehandler oppretter søknad for en person uten norsk fnr/dnr, og personen senere logger inn uten
+  #   fødselsnummer: hvordan knyttes søknaden til søkeren som innloggingen finner? Det avhenger av hva søkeren uten
+  #   fødselsnummer identifiseres med i opptak (subjekt-ID-en fra tilgangsstyringen, BAT-262, eller utstederen og
+  #   sub fra ID-porten). Se TIL-PÅL-PÅL-006.
 
   Bakgrunn:
     Gitt at administrator er saksbehandler i opptak (eller opptaksleder) for utdanningstilbud/opptaksinstans
@@ -36,7 +45,7 @@ Egenskap: Opprette søknad for person
    
     Scenario: Administrator oppretter søknad for ny person uten norsk fnr/dnr
       Gitt at personen ikke har søkt på "<utdanningstilbud>" før i denne "<opptaksperioden>"
-      Gitt at personen ikke får logget på Min kompetanse uten norsk eID
+      Gitt at personen ikke har norsk eID
       Når administrator oppretter søknad for "<ny person uten norsk fnr>" med "<individuell søknadsfrist>"
       Så mottar "<ny person uten norsk eID>" varsel om søknad til utfylling i Min kompetanse og kan levere søknad innen "<individuell søknadsfrist>"
 

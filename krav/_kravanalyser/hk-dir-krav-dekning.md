@@ -389,7 +389,7 @@ Sortert etter område, med det som ikke er dekket først.
 
 | HK-ID | Tittel | Dekning | Våre krav | Hva mangler |
 |---|---|---|---|---|
-| HK-10841 | Redigere personopplysninger på en søker (selvregistrerte) | Ikke dekket | – | Kravene i 05 Opplysninger om person lar administratoren se, ikke endre, søkerens personopplysninger; OPT-SØK-SØK-002 dekker bare registrering ved opprettelse av søknad. |
+| HK-10841 | Redigere personopplysninger på en søker (selvregistrerte) | Ikke dekket | – | Kravene i 05 Opplysninger om person lar administratoren se, ikke endre, søkerens personopplysninger; OPT-SØK-SØK-002 dekker bare registrering ved opprettelse av søknad. Står som åpent spørsmål i TIL-PÅL-PÅL-006 (1.11.2026). |
 | HK-9790 | Slå sammen brukere | Ikke dekket | – | Ingen krav om å slå sammen duplikate personer/brukere (bare duplikate organisasjoner i 09 Organisasjon, ORG-ADM-DUP-001). |
 | HK-9364 | Innhente brukerdata fra offentlige registre | Delvis | OPP-INT-FOL-001 — Integrasjon mot folkeregisteret (navn, fødselsnummer, adresse), `OPT-LÆR-POL-001 — Regel: Når søkeren har samtykket, sjekkes søkeren i registrene (Statens vegvesen)` | Mangler henting inn i søknadsbehandlingen generelt, førerrett fra Statens vegvesen utenom Politihøgskolen, og Helsepersonellregisteret. |
 | HK-9433 | Innhenting og informasjon om personopplysninger for ID-porten-søker | Delvis | OPP-INT-FOL-001, OPP-PRO-PRO-002 | Mangler henting fra KRR ved innlogging og informasjon/lenker om hvordan søkeren endrer navn, adresse, kontaktinfo og målform i FREG og KRR. |
@@ -400,11 +400,11 @@ Sortert etter område, med det som ikke er dekket først.
 | HK-ID | Tittel | Dekning | Våre krav | Hva mangler |
 |---|---|---|---|---|
 | HK-9279 | Automatisk varsling og fjerning av brukertilgang | Ikke dekket | – | Ingen automatisk deaktivering og e-postvarsel etter ett års inaktivitet (BRU-PER-ETT-005 gjelder stillingsslutt). |
-| HK-9432 | Alternativ innlogging som søker | Ikke dekket | – | Ingen krav om at søkere uten ID-porten kan registrere seg, logge inn og forvalte personopplysningene sine (bare saksbehandler som oppretter søknad for dem, OPT-SØK-SØK-002). |
+| HK-9432 | Alternativ innlogging som søker | Delvis | TIL-PÅL-PÅL-006 — Logge inn i Min kompetanse uten fødselsnummer | Innlogging med e-post (selvregistrert) og eIDAS gjennom ID-porten er beskrevet (1.11.2026). Hvilke personopplysninger søkeren registrerer og kan endre, står som åpne spørsmål. |
 | HK-12064 | Adminstrere brukere på eget lærested | Delvis | BRU-PER-GRU-001 — Listevisning og søk i personbrukere, BRU-PER-GRU-003 — Tildele roller til en personbruker, BRU-PER-GRU-012 — Fjerne roller fra en personbruker, BRU-PER-GRU-004 — Aktivere og deaktivere en personbrukers samlede tilganger | Å opprette en ny bruker ved lærestedet er ikke beskrevet. |
 | HK-14127 | Modifisere roller som administrator | Delvis | BRU-PER-OAR-001 — Opprette lokal rolle, BRU-PER-OAR-002 — Endre eller fjerne egne lokale roller, BRU-PER-OAR-003 — Se konsekvens av å fjerne en rolle | Regelen om at en rolle bare kan slettes når ingen aktive brukere har den mangler (kravet viser i stedet konsekvensen før bekreftelse). |
-| HK-9282 | Elektronisk identifikasjon | Delvis | TIL-PÅL-PÅL-002 | Bare ID-porten-pålogging er beskrevet; ingen krav om verifisering av identitet for brukere uten norsk eID. |
-| HK-9392 | Sikker og brukervennlig innlogging | Delvis | TIL-PÅL-PÅL-002, DEM-INN-FEI-001 | ID-porten og Feide finnes, men utenlandsk elektronisk innlogging og selvregistrert innlogging mangler. |
+| HK-9282 | Elektronisk identifikasjon | Delvis | TIL-PÅL-PÅL-002, TIL-PÅL-PÅL-006 | Brukere uten norsk eID logger inn med eIDAS eller som selvregistrert bruker med e-post gjennom ID-porten (TIL-PÅL-PÅL-006, 1.11.2026), men det finnes ingen krav til sikkerhetsnivå for selvregistrerte. |
+| HK-9392 | Sikker og brukervennlig innlogging | Dekket | TIL-PÅL-PÅL-002, DEM-INN-FEI-001, TIL-PÅL-PÅL-006 | – (utenlandsk elektronisk innlogging og selvregistrert innlogging står i TIL-PÅL-PÅL-006, 1.11.2026) |
 | HK-14721 | Administrere tilganger for brukere i de samordnede opptakene | Dekket | BRU-PER-GRU-003, BRU-PER-GRU-012 | – |
 
 ### annet domene: 09 Organisasjon
