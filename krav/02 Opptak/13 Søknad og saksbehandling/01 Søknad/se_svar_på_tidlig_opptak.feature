@@ -39,7 +39,7 @@ Egenskap: Se svar på søknad om tidlig opptak
 
     Scenario: Svaret blir synlig når tidlig opptak er gjennomført
       Gitt at tidlig opptak er gjennomført
-      Og at det er konkludert om søkeren deltar i tidlig opptaket i alle sakene
+      Og at det er konkludert om søkeren deltar i tidlig opptak i alle sakene
       Når søkeren åpner søknaden sin
       Så ser søkeren svar på tidlig opptak i søknaden
 
@@ -56,7 +56,7 @@ Egenskap: Se svar på søknad om tidlig opptak
 
   # Etter at hovedopptaket er publisert, er det svaret fra hovedopptaket som gjelder
   # (avklart 20.10.2026, som i koden).
-  Regel: Svaret på tidlig opptak vises frem til hovedopptaket er publisert
+  Regel: Svaret på tidlig opptak vises fram til hovedopptaket er publisert
 
     Scenario: Svaret på tidlig opptak vises ikke etter at hovedopptaket er publisert
       Gitt at tidlig opptak er gjennomført
@@ -85,7 +85,7 @@ Egenskap: Se svar på søknad om tidlig opptak
 
     Scenario: Søkeren er innvilget tidlig opptak på et søknadsalternativ
       Gitt at svaret på tidlig opptak er publisert
-      Og at søkeren har tilbudsgaranti for tidlig opptak fra opptaksforvalter på søknadsalternativet på et bestemt søknadsalternativ
+      Og at søkeren har tilbudsgaranti for tidlig opptak fra opptaksforvalter på et bestemt søknadsalternativ
       Når søkeren åpner søknaden sin
       Så ser søkeren at tidlig opptak er innvilget på det bestemte søknadsalternativet
 
@@ -99,13 +99,14 @@ Egenskap: Se svar på søknad om tidlig opptak
       Når søkeren åpner søknaden sin
       Så ser søkeren at tidlig opptak ikke er innvilget på det bestemte søknadsalternativet
 
-    Scenario: Innvilget tidlig opptak vises ikke på et søknadsalternativ med lavere prioritet enn et annet søknadsalternativ som er innvilget
+    Scenario: Innvilget tidlig opptak vises ikke på et søknadsalternativ med lavere prioritet enn et som er innvilget
       Gitt at svaret på tidlig opptak er publisert
       Og at søkeren er innvilget tidlig opptak på søknadsalternativet med prioritet 1
-      Og at et søknadsalternativet med prioritet 3 deltar i tidlig opptak
+      Og at søkeren deltok i tidlig opptak på søknadsalternativet med prioritet 3
       Og at tilbyder har gitt tilbudsgaranti for tidlig opptak på søknadsalternativet med prioritet 3
       Når søkeren åpner søknaden sin
-      Så ser søkeren innvilget tidlig opptak på søknadsalternativet med prioritet 1 men ikke på søknadsalternativet med prioritet 3
+      Så ser søkeren innvilget tidlig opptak på søknadsalternativet med prioritet 1
+      Og søkeren ser ikke innvilget tidlig opptak på søknadsalternativet med prioritet 3
 
     Scenario: Saksbehandler har konkludert med at søkeren ikke deltar i tidlig opptak
       Gitt at svaret på tidlig opptak er publisert
