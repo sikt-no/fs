@@ -47,9 +47,8 @@ Egenskap: Automatisk GSK-konklusjon
   positiv konklusjon når et vitnemål gir GSK, og løpet på vitnemålet finnes i
   opptakssystemets liste over løp. Har løpet ingen grunnlagskode, får konklusjonen KLY for et
   løp fra Kunnskapsløftet og RFA for et løp fra Reform 94, som i det gamle FS. Finnes ikke
-  løpet i listen, settes
-  ingen konklusjon automatisk, og opptaksforvalteren får beskjed om at løpet mangler.
-  Vitnemål importeres fra KREG når
+  løpet i listen, settes ingen konklusjon automatisk, og opptaksforvalteren får beskjed om
+  at løpet mangler. Vitnemål importeres fra KREG når
   søknaden opprettes, og når KREG får nye vitnemål for en søker med aktive søknader. Når
   søknaden opprettes, importeres vitnemålene fra KREG først. Gir ingen av dem en konklusjon, ser
   systemet etter en positiv konklusjon fra et tidligere opptak. Ellers vurderes GSK
@@ -145,22 +144,6 @@ Egenskap: Automatisk GSK-konklusjon
       Når vitnemålet importeres fra KREG
       Så gir ikke vitnemålet GSK
 
-    Scenariomal: Saksbehandleren ser at opptakssystemet er uenig med skolen når skolen sier <skolen>
-      # Avklart 2026-11-02: delen «Vitnemålsbehandling» i saken får et «!» ved antallet, og
-      # vitnemålstabellen viser en tekst under vitnemålsnummeret om at opptakssystemets påstand
-      # er uenig med skolens påstand om GSK. Sier skolen nei, gir vitnemålet ikke GSK, og saken
-      # behandles manuelt uansett, men varselet vises på samme måte.
-      Gitt at søkeren har et vitnemål som ikke er annullert
-      Og at skolens påstand er <skolen>
-      Og at opptakssystemets påstand er <opptakssystemet>
-      Når saksbehandleren ser på vitnemålsbehandlingen i saken
-      Så ser saksbehandleren et varsel ved vitnemålet om at opptakssystemet er uenig med skolen om GSK
-
-      Eksempler:
-        | skolen | opptakssystemet |
-        | ja     | nei             |
-        | nei    | ja              |
-
     Scenario: Uenighet med skolen stopper ikke den automatiske behandlingen
       Gitt at søkeren har et vitnemål som ikke er annullert
       Og at skolens påstand er at søkeren har generell studiekompetanse
@@ -175,6 +158,23 @@ Egenskap: Automatisk GSK-konklusjon
       Når vitnemålet importeres fra KREG
       Så gir ikke vitnemålet GSK
 
+  Regel: Saksbehandleren får varsel når opptakssystemet er uenig med skolen
+    # Avklart 2026-11-02. Sier skolen nei, gir vitnemålet ikke GSK, og saken behandles
+    # manuelt uansett, men varselet vises på samme måte. Hvordan varselet vises, står i
+    # vise_elektroniske_vitnemål.design.md.
+
+    Scenariomal: Saksbehandleren ser at opptakssystemet er uenig med skolen når skolen sier at søkeren <skolen> generell studiekompetanse
+      Gitt at søkeren har et vitnemål som ikke er annullert
+      Og at skolens påstand er at søkeren <skolen> generell studiekompetanse
+      Og at opptakssystemets påstand er at søkeren <opptakssystemet> generell studiekompetanse
+      Når saksbehandleren ser på vitnemålsbehandlingen i saken
+      Så ser saksbehandleren et varsel ved vitnemålet om at opptakssystemet er uenig med skolen om GSK
+
+      Eksempler:
+        | skolen   | opptakssystemet |
+        | har      | ikke har        |
+        | ikke har | har             |
+
   @ref-FLY-OPT-AUT-001 @ref-FLY-OPT-VIT-001
   Regel: Konklusjon på søknaden fra vitnemålet
 
@@ -185,6 +185,16 @@ Egenskap: Automatisk GSK-konklusjon
       Så får søknaden en positiv GSK-konklusjon
       Og grunnlagskoden er grunnlagskoden for løpet på vitnemålet
       Og grunnlagsdatoen er utstedelsesdatoen på vitnemålet
+
+    Scenario: Søknaden får grunnlagskoden for løpet når opptakssystemet er uenig med skolen
+      # Avklart 2026-11-02: grunnlagskoden gis fra løpet uansett hva opptakssystemets påstand er
+      # (OPT-BEH-BEH-027, «Grunnlagskoden gis selv om påstanden ikke er GSK»).
+      Gitt at søknaden ikke har noen GSK-konklusjon
+      Og at skolens påstand er at søkeren har generell studiekompetanse
+      Og at opptakssystemets påstand er at søkeren ikke har generell studiekompetanse
+      Og at løpet på vitnemålet har grunnlagskoden KLS
+      Når vitnemålet importeres fra KREG
+      Så får søknaden en positiv GSK-konklusjon med grunnlagskoden KLS
 
     Scenario: Ingen automatisk konklusjon når løpet ikke finnes i opptakssystemets liste over løp
       # Innspill i PR #878: bare når løpet mangler i listen over løp (NVB_LOEP), settes ingen

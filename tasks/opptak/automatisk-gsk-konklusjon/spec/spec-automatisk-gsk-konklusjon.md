@@ -27,7 +27,7 @@ Søknaden får GSK-konklusjonen automatisk når skolens påstand («GSK OK» fra
 - **Type:** `lokal-bilde`
 - **Referanse:** skjermdump av saken i fs-admin med påtegning, 2026-11-02
 - **Lagrede artefakter:** [varsel-uenighet-vitnemalsbehandling.png](krav-input/sketches/varsel-uenighet-vitnemalsbehandling.png)
-- **Dekker krav:** `automatisk_gsk_konklusjon.feature` (scenario: `Saksbehandleren ser at opptakssystemet er uenig med skolen når skolen sier <skolen>`)
+- **Dekker krav:** `automatisk_gsk_konklusjon.feature` (scenario: `Saksbehandleren ser at opptakssystemet er uenig med skolen når skolen sier at søkeren <skolen> generell studiekompetanse`)
 - **Valideringsstatus:** `OK` — skissen viser et «!» ved antallet på «Vitnemålsbehandling» og en tekst under vitnemålsnummeret, som kommentaren i scenarioet. Teksten i skissen er en plassholder.
 
 Ingen skisse for resten: varslene til opptaksforvalteren er ikke avklart, og resten er backend.
@@ -36,7 +36,7 @@ Ingen skisse for resten: varslene til opptaksforvalteren er ikke avklart, og res
 
 - **Sjekket:** fs-plattform (origin/main 2026-11-02), fs-admin (origin/main 2026-10-30). GSK-koden er ikke endret siden verify 2026-10-30. Alle avvikene er avklart med domeneeksperten 2026-11-02: koden skal endres.
 - `@OPT-BEH-BEH-015`: kravet sier at uenighet mellom skolen og opptakssystemet gir varsel og ikke stopper automatikken. Koden stopper automatikken uten varsel (`fs-plattform/opptak/opptak-service/src/main/java/no/sikt/fs/opptak/autosak/gsk/GskKonklusjonEvaluator.java:64-69`, `KRYSSJEKK_FEILET`). Koden skal endres.
-- `@OPT-BEH-BEH-027`: kravet sier at PBPBY4 alltid gir KLF. Koden gir grunnlagskoden for løpet uten tillegget (`GskKonklusjonEvaluator.java:43-47`, `:70-71`). Koden skal endres. Fiksen finnes i worktreen `fs-plattform-gsk-pbpby4-klf`, ikke committet.
+- `@OPT-BEH-BEH-027`: kravet sier at PBPBY4 alltid gir KLF. Koden gir grunnlagskoden for løpet uten tillegget (`GskKonklusjonEvaluator.java:43-47`, `:70-71`). Koden skal endres.
 - `@OPT-BEH-BEH-015`, `@OPT-BEH-BEH-027`: kravet sier at et løp uten grunnlagskode gir KLY eller RFA, også i den automatiske behandlingen. Koden gjør det bare når saksbehandleren starter kontrollen (`GskKonklusjonEvaluator.java:61`, `GskVedtakAutoService.java:89` sender `false`). Koden skal endres.
 - `@OPT-BEH-BEH-015`: kravet sier at opptakssystemets påstand beregnes når vitnemålet importeres, og lagres på vitnemålet med tidspunkt og beregning. Koden beregner bare i den automatiske behandlingen, og lagrer bare skolens påstand (`fs-plattform/opptak/opptak-service/src/main/java/no/sikt/fs/opptak/vgs/KregVgsParser.java:104`). Koden skal endres.
 - `@OPT-BEH-BEH-015`: kravet sier at konklusjonen står når vitnemålet annulleres. Koden trekker den tilbake, også i andre og avsluttede opptak (`fs-plattform/opptak/opptak-service/src/main/java/no/sikt/fs/opptak/autosak/gsk/GskVedtakTilbakekallingService.java:64-90`). Koden skal endres.
@@ -53,7 +53,7 @@ Ingen skisse for resten: varslene til opptaksforvalteren er ikke avklart, og res
 
 - [ ] Hvor får opptaksforvalteren varselet om et løp som mangler i listen over løp, eller mangler grunnlagskode? (`@OPT-BEH-BEH-015`)
 - [ ] Hvordan oppdager opptakssystemet at et vitnemål er annullert, når søkeren ikke endrer søknaden? Krever abonnement på endringer i KREG, i en egen sak. (`@OPT-BEH-BEH-015`)
-- [ ] Implementasjonsdetaljer mangler for `automatisk_gsk_konklusjon.feature`: teksten i varselet om uenighet.
+- [ ] Teksten i varselet om uenighet mangler (`vise_elektroniske_vitnemål.design.md`, «Varsel når opptakssystemet er uenig med skolen om GSK»). Implementasjonsdetaljer for resten av `automatisk_gsk_konklusjon.feature` mangler.
 
 ## Rute
 

@@ -368,9 +368,10 @@ Egenskap: Beregne GSK fra vitnemål
 
     Scenariomal: Påbyggingsruten PBPBY4 gir grunnlagskoden KLF
       # PBPBY4 er en alternativ påbyggingsrute, og ikke et eget løp.
-      # Avklart 30.10.2026: et vitnemål med PBPBY4 gir alltid KLF, også
-      # når løpet uten tillegget har en annen grunnlagskode, eller ingen.
-      # Det gjelder også foran regelen om løp uten grunnlagskode i listen over løp.
+      # Avklart 30.10.2026: et vitnemål med PBPBY4 gir KLF når løpet uten tillegget finnes i
+      # listen over løp, også når løpet har en annen grunnlagskode, eller ingen. Det gjelder
+      # også foran regelen om løp uten grunnlagskode i listen over løp. Finnes ikke løpet uten
+      # tillegget i listen, er det et ukjent løp (se scenarioet under).
       Gitt at løpskoden på vitnemålet er løpskoden for et løp med tillegget «_PBPBY4»
       Og at løpet uten tillegget <grunnlagskode>
       Og at vitnemålet oppfyller alle delkravene for reformen
@@ -390,21 +391,16 @@ Egenskap: Beregne GSK fra vitnemål
       Så er påstanden ikke GSK
 
   Regel: Løp uten grunnlagskode i listen over løp
-    # Opptaksforvalteren får et varsel om løpet, så grunnlagskoden kan legges inn senere
-    # (@OPT-BEH-BEH-015, avklart 2026-11-02).
     # Avklart 2026-11-02 (Ingrid Helset, etter samtale med Jøran og Geir): et løp som finnes i
-    # listen over løp, men mangler grunnlagskode, gir en grunnlagskode likevel, som i dagens FS. Et
-    # løp som ikke finnes i listen, gir ingen automatisk konklusjon (se «Ukjent løp»).
-    # Avklart 2026-11-02: som i det gamle FS gir løpet KLY for Kunnskapsløftet og RFA for
-    # Reform 94, uansett om løpet er studieforberedende eller yrkesfaglig. KLS gis ikke.
-    # Avklart 30.10.2026: et yrkesfaglig løp uten grunnlagskode gir KLY eller RFA når
-    # vitnemålet importeres (@OPT-BEH-BEH-015), ikke bare når saksbehandleren starter
-    # kontrollen. Kode i dag: bare når saksbehandleren starter kontrollen, som i det gamle FS
-    # (FS158001).
-    # Innspill i PR #878: sier skolen at søkeren har GSK, men løpet finnes ikke i
-    # listen over løp, settes ingen konklusjon automatisk, og saksbehandleren vurderer GSK.
-    # Finnes løpet, men har ingen grunnlagskode, får konklusjonen KLY (Kunnskapsløftet) eller
-    # RFA (Reform 94) (OPT-BEH-BEH-015).
+    # listen over løp, men mangler grunnlagskode, gir en grunnlagskode likevel, som i det gamle
+    # FS: KLY for Kunnskapsløftet og RFA for Reform 94, uansett om løpet er studieforberedende
+    # eller yrkesfaglig. KLS gis ikke. Opptaksforvalteren får et varsel om løpet, så
+    # grunnlagskoden kan legges inn senere (@OPT-BEH-BEH-015).
+    # Et løp som ikke finnes i listen, gir ingen automatisk konklusjon, og saksbehandleren
+    # vurderer GSK (innspill i PR #878, se «Ukjent løp»).
+    # Avklart 30.10.2026: grunnlagskoden gis når vitnemålet importeres (@OPT-BEH-BEH-015), ikke
+    # bare når saksbehandleren starter kontrollen. Kode i dag: bare når saksbehandleren starter
+    # kontrollen, som i det gamle FS (FS158001).
     # «Løp»: avklart 2026-10-27 at løp er et begrep saksbehandlerne kjenner.
 
     Scenariomal: Løp fra <reform> uten grunnlagskode gir grunnlagskoden <grunnlagskode>
