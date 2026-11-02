@@ -13,7 +13,7 @@
 # varsel, men den automatiske behandlingen stopper ikke. KREG har ingen egen påstand om GSK.
 # Koden stopper i dag automatikken når kontrollmotoren er uenig med skolen. Det er et avvik
 # fra kravet.
-@OPT-BEH-BEH-027 @must @planned
+@OPT-BEH-BEH-027 @must @in-progress
 Egenskap: Beregne GSK fra vitnemål
   Som saksbehandler
   ønsker jeg at opptakssystemet beregner sin egen påstand om generell studiekompetanse for et vitnemål

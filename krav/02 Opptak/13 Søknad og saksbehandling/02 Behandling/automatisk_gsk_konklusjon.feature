@@ -19,7 +19,7 @@
 # og gskvedtakannullering) inn i midlertidige gjenbrukstabeller før opptaket. De er
 # konklusjoner fra tidligere opptak i dette kravet. Tabellene fjernes etter
 # 2027-opptaket.
-@OPT-BEH-BEH-015 @must @planned
+@OPT-BEH-BEH-015 @must @in-progress
 Egenskap: Automatisk GSK-konklusjon
   Som saksbehandler
   ønsker jeg at søknader der søkeren åpenbart har generell studiekompetanse, får GSK-konklusjonen automatisk
