@@ -65,7 +65,7 @@ Alle personaene i «Overstyrt bruker» i TEST: `TEST_PERSONAS` i fs-admin (`src/
 | GRUNDIG PROTOKOLL • OPPTAK_SAKSBEHANDLER (HK-dir) | `OPPTAK_SAKSBEHANDLER` | Direktoratet for høyere utdanning og kompetanse | 20827 | – | – | – |
 
 - `MEDLEM_OPPTAK`, som deltakeren trenger for å legge til utdanningstilbud (fs-plattform, V469), er ikke tildelt direkte. Den må komme fra rollekatalogen (`tilgangsroller`). [Fylles ut: bekreft at `OPPTAK_FORVALTER` gir `MEDLEM_OPPTAK`]
-- Menyen viser forkortelsen fra `TEST_PERSONAS`, som kan skrives annerledes enn i organisasjonsregisteret (HK-dir og HK-DIR).
+- Menyen viser forkortelsen fra `TEST_PERSONAS`, som kan skrives annerledes enn i organisasjonsregisteret (HK-dir og HK-DIR). Organisasjonsregisteret har «HK-DIR», men skjermen viser «HK-dir» i lista over opptak og som «Administrator: HK-dir» og «Administreres av HK-dir» (sett 2026-10-29).
 
 ## Testbrukere
 
@@ -87,8 +87,8 @@ Bare grunndata og data testene ikke kan lage gjennom løsningen. Testdataene opp
 | `regelverkssamling-samordna` | «UHGTEST2026» | Velges i skjemaet for opptaket | Regelverkssamling som kan velges i et samordna opptak | 2026-10-26 |
 | `regelverkssamling-samordna-annen` | [Fylles ut] | Velges i skjemaet for opptaket | En annen regelverkssamling enn `regelverkssamling-samordna`, som kan velges i et samordna opptak | – |
 | `regelverkssamling-lokalt` | [Fylles ut] | Velges i skjemaet for opptaket | Regelverkssamling som kan velges i et lokalt opptak ved organisasjonen til `opptak-forvalter-lokalt` | – |
-| `utdanningsbakgrunner-godkjente` | «Realkompetanse», «Utenlandsk utdanning» og «Steinerskole» | Velges i innstillingene | «Realkompetanse», «Utenlandsk utdanning» og «Steinerskole» står blant de godkjente utdanningsbakgrunnene | 2026-10-27 |
-| `poenglikhetsregler` | «Loddnummer, laveste nummer først» (kravet: «Loddtrekning»), «Alder, eldste først» (kravet: «Alder, eldre foran yngre»). «Alle søkere med samme poengsum får tilbud» er ikke sett | Velges i innstillingene | Poenglikhetsreglene i kravet finnes som valg | 2026-10-26 |
+| `utdanningsbakgrunner-godkjente` | «Realkompetanse», «Utenlandsk videregående skole» og «Videregående steinerskole» (kravet: «Utenlandsk utdanning» og «Steinerskole») | Velges i innstillingene | «Realkompetanse», «Utenlandsk videregående skole» og «Videregående steinerskole» står blant de godkjente utdanningsbakgrunnene | 2026-10-29 |
+| `poenglikhetsregler` | «Loddnummer, laveste nummer først» (kravet: «Loddtrekning»), «Alder, eldste først» (kravet: «Alder, eldre foran yngre») og «Alle søkere med samme poengsum får tilbud» | Velges i innstillingene | Poenglikhetsreglene i kravet finnes som valg | 2026-10-29 |
 | `organisasjoner-utdanningsregisteret` | Læresteder fra utdanningsregisteret, blant dem NTNU (universitet) og Fagskolen i Vestfold og Telemark (fagskole) | Søk i «Inviter» | Aktive læresteder i utdanningsregisteret: minst to av hver type (universitet, høyskole, fagskole), blant dem organisasjonene til `opptak-forvalter-deltakende` og `opptak-forvalter-ikke-deltakende` | 2026-10-27 |
 | `utdanningstilbud-deltakende` | [Fylles ut] | Velges i «Legg til utdanningstilbud» | Et utdanningstilbud i utdanningsregisteret ved organisasjonen til `opptak-forvalter-deltakende`, som kan legges til i et samordna opptak. Brukes av oppsettet | – |
 | `organisasjon-som-inviteres` | Universitetet i Oslo (UIO, 185) | Søk i «Inviter» | Et aktivt universitet eller en høyskole i utdanningsregisteret, som ikke er deltaker i testdata-opptakene og ikke er organisasjonen til en av testbrukerne | 2026-10-27 |
