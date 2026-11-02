@@ -211,12 +211,13 @@ Egenskap: Automatisk GSK-konklusjon
       # domeneeksperten): vitnemål med et ukjent løp behandles manuelt, og opptaksforvalteren får
       # et varsel, så noen kan sjekke om løpet skal legges inn i listen. HK-dir eier
       # opptakskodene og bestemmer grunnlagskoden, og Sikt oppdaterer listen over løp (2027).
+      # Avklart 2026-11-02: varselet kommer bare i FS Admin, ikke på e-post eller andre steder.
       # ÅPNE SPØRSMÅL:
-      # - Hvor får opptaksforvalteren varselet: i FS Admin, på e-post eller et annet sted?
+      # - Hvor i FS Admin får opptaksforvalteren varselet?
       # - Får opptaksforvalteren ett varsel per løp, eller ett per vitnemål med løpet?
       Gitt at løpet på vitnemålet ikke finnes i opptakssystemets liste over løp
       Når vitnemålet importeres fra KREG
-      Så får opptaksforvalteren et varsel om at løpet mangler i listen over løp
+      Så får opptaksforvalteren et varsel i FS Admin om at løpet mangler i listen over løp
 
     Scenariomal: Søknaden får grunnlagskoden <grunnlagskode> når et løp fra <reform> ikke har en grunnlagskode
       # Innspill i PR #878: finnes løpet i listen over løp, men har ingen grunnlagskode, settes
@@ -237,14 +238,14 @@ Egenskap: Automatisk GSK-konklusjon
     Scenario: Opptaksforvalteren får varsel om et løp uten grunnlagskode
       # Avklart 2026-11-02: søknaden får konklusjonen med KLY eller RFA, men
       # opptaksforvalteren får et varsel, så grunnlagskoden kan legges inn i listen over løp
-      # senere. HK-dir eier opptakskodene.
+      # senere. HK-dir eier opptakskodene. Avklart 2026-11-02: varselet kommer bare i FS Admin.
       # ÅPNE SPØRSMÅL:
-      # - Hvor får opptaksforvalteren varselet? Samme sted som varselet om et løp som mangler
-      #   i listen over løp.
+      # - Hvor i FS Admin får opptaksforvalteren varselet? Samme sted som varselet om et løp som
+      #   mangler i listen over løp.
       Gitt at skolens påstand er at søkeren har generell studiekompetanse
       Og at løpet finnes i opptakssystemets liste over løp, men ikke har en grunnlagskode
       Når vitnemålet importeres fra KREG
-      Så får opptaksforvalteren et varsel om at løpet mangler grunnlagskode
+      Så får opptaksforvalteren et varsel i FS Admin om at løpet mangler grunnlagskode
 
     Scenario: Vitnemål som ikke gir GSK, gir ingen konklusjon
       Gitt at søknaden ikke har noen GSK-konklusjon
