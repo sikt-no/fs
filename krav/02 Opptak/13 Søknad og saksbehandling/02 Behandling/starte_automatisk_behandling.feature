@@ -1,5 +1,5 @@
 # language: no
-@OPT-BEH-BEH-032 @must @planned @ref-OPT-BEH-BEH-025
+@OPT-BEH-BEH-032 @must @planned @ref-OPT-BEH-BEH-025 @ref-OPT-BEH-BEH-033
 Egenskap: Starte automatisk behandling
   Som saksbehandler
   ønsker jeg at den automatiske behandlingen starter av seg selv for hver ny sak
@@ -20,7 +20,7 @@ Egenskap: Starte automatisk behandling
   # behandling» i FS Admin, uten å velge vitnemål. Ingenting starter behandlingen når saken er
   # opprettet, og ingen jobb sjekker om det har kommet nye vitnemål. Automatikken kan ikke skrus
   # av for et opptak.
-  # Hvor ofte jobbene kjører, står i OPT-BEH-BEH-033 (PR #864).
+  # Hvor ofte jobbene kjører, står i OPT-BEH-BEH-033.
   # Saksbehandleren velger vitnemålet når søkeren har flere vitnemål, i
   # OPT-BEH-BEH-025.
 

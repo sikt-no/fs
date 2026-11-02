@@ -28,7 +28,7 @@ Egenskap: Beregne automatisk på nytt
   # behandlet, ser søkeren den med en gang. Ingen trenger å publisere den.
 
   # Avklart 30.10.2026: beregningen kjører som en jobb i bakgrunnen, etter det samme mønsteret
-  # som de andre jobbene i opptak (OPT-BEH-BEH-033, kjøre_jobbene_i_opptak.feature, PR #864).
+  # som de andre jobbene i opptak (OPT-BEH-BEH-033, kjøre_jobbene_i_opptak.feature).
   # Når kravet er merget, får regelen «Beregningen kjører i bakgrunnen» @depends-on- til det.
 
   Bakgrunn:
