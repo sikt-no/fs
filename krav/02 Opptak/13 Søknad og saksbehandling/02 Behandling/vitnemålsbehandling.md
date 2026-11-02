@@ -54,7 +54,7 @@ Kravene erstatter to funksjoner i FS-klienten: vitnemålsbehandling (FS143.001 V
   - Tilleggsfag teller bare i ordinær kvote, med unntak.
   - Ulik poengsum per søknadsalternativ håndteres med fagvalget per poengvariant.
   - Søkere med HUP har ingen poeng å behandle.
-  - Endringer avvises når beregningen feiler.
+  - Endringer avvises når beregningen feiler. Fjernet 30.10.2026, se under.
   - Skjemaet håndhever ikke karaktertyper for manuelt innlagte fag.
   - Hvilken leveranse hvert scenario hører til.
 
@@ -64,10 +64,11 @@ Kravene erstatter to funksjoner i FS-klienten: vitnemålsbehandling (FS143.001 V
 - **22.10.2026:** Domeneeksperter svarte på de 20 beslutningene fra 21.10. 19 fikk bare ja. To endringer og ett nytt spørsmål:
   - Alle vitnemålene sorteres kronologisk etter utstedelsesdato. Førstegangsvitnemålet står ikke først av seg selv (L1).
   - Når poengberegningen ikke svarer, får saksbehandleren en feilmelding i tillegg til tomme poeng (L1). Erstattet 28.10.2026, se under.
-  - Åpent spørsmål (L2): Skal en verdi saksbehandleren har lagt inn selv, overskrives når saksbehandleren senere beregner poengene på nytt?
+  - Åpent spørsmål (L2, flyttet til L3 30.10.2026): Skal en verdi saksbehandleren har lagt inn selv, overskrives når saksbehandleren senere beregner poengene på nytt?
   - Poengene per vitnemål i L1 må være på plass til opptaket i 2027. Det er usikkert om poengberegningen per vitnemål blir ferdig før L1 skal akseptansetestes. Det må avtales med dem som lager poengberegningen, og det må vurderes om L1 kan akseptansetestes uten poengene.
 - **28.10.2026:** Etter verifiseringen av L1 (Kari og Christoffer). Feilmeldingen når poengberegningen ikke svarer, er tatt ut av L1. Poengberegningen er en del av opptak, ikke en ekstern tjeneste som kan la være å svare. Et vitnemål som ikke gir poeng, vises med tomme poeng, uten feilmelding.
 - **28.10.2026:** Leserettighet i hele vitnemålsbehandlingen (L1–L6), avklart med designeren. Valg som viser en tilstand (radioknapper og avkrysningsbokser, f.eks. valgt vitnemål, poengvariant, fag og «Legg inn manuelt»), vises for en saksbehandler med bare leserettighet, men kan ikke brukes. Handlinger (f.eks. beregne poengene) og felt for å legge inn eller endre verdier skjules, og de lagrede verdiene vises som tekst. Det avviker bevisst fra mønsteret «manglende tilgang skjuler elementet» i `.claude/rules/design-patterns-for-krav.md`: valgene er informasjon, fordi de viser hva poengene bygger på, og siden ser lik ut for alle. Regelen står i scenarioet «Saksbehandler med kun leserettighet ser grunnlaget» i L2, og gjelder også når L3–L6 valideres.
+- **30.10.2026:** Samme rettelse i L2 og L3 (Christoffer). Scenarioet «Endringen avvises når poengberegningen feiler» er fjernet fra L2. I L2 beregnes og lagres poengene med en gang saksbehandleren velger et vitnemål, siden poengene for hvert vitnemål er kjent fra vitnemålslisten (L1). Å beregne først når saksbehandleren sier at grunnlaget er klart, med tomme poeng og advarsel om endringer som ikke er lagret, er flyttet til L3, der grunnlaget settes sammen i flere steg (poengvariant, fag, forbedringer og tilleggsfag). Det åpne spørsmålet om poeng saksbehandleren har lagt inn selv, er flyttet til L3 sammen med beregningen.
 
 ## Avgrensninger: bevisst utenfor kravene
 
