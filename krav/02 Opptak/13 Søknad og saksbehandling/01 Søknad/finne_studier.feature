@@ -128,11 +128,8 @@ Egenskap: Listevisning og søk i utdanningstilbud
 
   Regel: Søk og filtrering av utdanningstilbud
 
-    @openquestion
     Scenario: Fritekst-søk på navn, lærested og studiested
-      # ÅPNE SPØRSMÅL:
-      # - fs-plattform !6482 søker bare i navnet (UREG-navn og opptakets navneoverstyringer) og søkeordene. Skal søket også treffe lærestedets navn og kortnavn, og studiestedet som kommune og fylke? Campusnavnet finnes ikke i opptak.
-      # - Samordna opptak søker i tillegg i studietype, studiekode, kravkode og flagg. Skal noen av dem med?
+      # Lærestedet søkes på navn og kortnavn, studiestedet på kommune og fylke.
       Når søkeren søker med fritekst på "Bergen"
       Så filtreres listen til utdanningstilbud der navnet, lærestedet eller studiestedet matcher søket
 
@@ -143,28 +140,22 @@ Egenskap: Listevisning og søk i utdanningstilbud
       Når søkeren søker med fritekst på "lege"
       Så vises utdanningstilbudet "Profesjonsstudiet i medisin, høst 2027" i listen
 
-    @openquestion
     Scenario: Treff som matcher flest ord i søket, vises først
-      # ÅPNE SPØRSMÅL:
-      # - fs-plattform !6482 krever at hvert ord i søket treffer navnet eller et søkeord, og rangerer ikke. Skal treff på bare noen av ordene vises, sortert etter antall ord, eller holder det at alle ordene må treffe?
       Når søkeren søker med fritekst på "sykepleie Bergen"
       Så vises utdanningstilbud som matcher både "sykepleie" og "Bergen" før utdanningstilbud som bare matcher ett av ordene
 
-    @openquestion
     Scenariomal: Søket tåler skrivemåter som avviker fra navnet
-      # ÅPNE SPØRSMÅL:
-      # - Hører reglene for hvordan søket matcher tekst (store og små bokstaver, æ/ø/å, bøyningsformer
-      #   og skrivefeil) hjemme i 10 Felleskrav, slik at de gjelder alle søk?
-      # - fs-plattform !6482 matcher delstreng uten hensyn til store og små bokstaver, men ikke æ/ø/å-varianter, bøyningsformer eller skrivefeil: «SYKEPLEIE» treffer, «okonomi», «sykepleier» og «sykepleir» gjør det ikke.
+      # Bøyningsformer og skrivefeil dekkes av søkeordene.
       Når søkeren søker med fritekst på "<søketekst>"
       Så vises utdanningstilbudet "<utdanningstilbud>" i listen
 
       Eksempler:
-        | søketekst  | utdanningstilbud              |
-        | SYKEPLEIE  | Sykepleie, høst 2027          |
-        | okonomi    | Økonomi og administrasjon     |
-        | sykepleier | Sykepleie, høst 2027          |
-        | sykepleir  | Sykepleie, høst 2027          |
+        | søketekst  | utdanningstilbud          |
+        | SYKEPLEIE  | Sykepleie, høst 2027      |
+        | okonomi    | Økonomi og administrasjon |
+        | oekonomi   | Økonomi og administrasjon |
+        | arstudium  | Årsstudium i historie     |
+        | aarstudium | Årsstudium i historie     |
 
     Scenario: Tomt søkefelt viser alle utdanningstilbud
       Gitt at søkeren har valgt filtre

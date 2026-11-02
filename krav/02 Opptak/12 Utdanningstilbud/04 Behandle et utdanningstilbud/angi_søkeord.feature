@@ -28,10 +28,8 @@ Egenskap: Angi søkeord på utdanningstilbudet
 
   Regel: Søkeord hjelper søkeren å finne utdanningstilbud i Min kompetanse
 
-    @in-progress @openquestion
+    @in-progress
     Scenario: Søker finner utdanningstilbud via søkeord
-      # ÅPNE SPØRSMÅL:
-      # - Søkeordene tas med i søket i fs-plattform !6482 (https://gitlab.sikt.no/fs/fs-plattform/-/merge_requests/6482), uten endring i Min kompetanse. Lukkes av fs-verify når den er merget.
       Gitt at utdanningstilbudet har søkeordet "Lege"
       Når søkeren søker på "Lege" i Min kompetanse
       Så vises utdanningstilbudet i søkeresultatet
