@@ -186,12 +186,11 @@ Egenskap: Opptaksinnstillinger per utdanningstilbud
       Når opptaksforvalter ved lærestedet ser utdanningstilbudet "Sykepleie, høst 2027"
       Så ser opptaksforvalter ikke muligheten til å endre plassflyten eller kvoteprioriteten
 
-  @depends-on-OPT-OVO-INN-001 @openquestion
+  @depends-on-OPT-OVO-INN-001 @openquestion @ref-OPT-BEH-BEH-007
   Regel: Opptaksforvalter kan markere at et utdanningstilbud tilbyr tidlig opptak
     # ÅPNE SPØRSMÅL:
-    # - Kommentarene i regelen viser til publisere_svar_på_tidlig_opptak.feature og
-    #   gi_tilbudsgaranti_ved_tidlig_opptak.feature i fritekst. Skal regelen ha @ref-OPT-BEH-BEH-014 og
-    #   @ref-OPT-BEH-BEH-007, eller skal scenarioet om poenggrensen ha @depends-on-OPT-BEH-BEH-007?
+    # - Kommentaren i regelen viser til publisere_svar_på_tidlig_opptak.feature i fritekst.
+    #   Skal regelen ha @ref-OPT-BEH-BEH-014?
 
     Scenario: Markere at utdanningstilbudet tilbyr tidlig opptak
       Gitt at opptaket åpner for tidlig opptak
@@ -268,6 +267,7 @@ Egenskap: Opptaksinnstillinger per utdanningstilbud
       Når opptaksforvalter angir at ventelistenummer skal vises for søkere på utdanningstilbudet "Sykepleie, høst 2027"
       Så kan søkere se sitt ventelistenummer for "Sykepleie, høst 2027"
 
+  @ref-OPT-BEH-BEH-007
   Regel: Opptaksforvalter kan sette opplysninger om tilbudsgaranti
 
     Scenario: Sette hvor tilbudsgarantier tas fra

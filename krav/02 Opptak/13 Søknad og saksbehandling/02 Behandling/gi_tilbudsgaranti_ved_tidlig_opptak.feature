@@ -354,13 +354,14 @@ Egenskap: Gi tilbudsgaranti ved tidlig opptak
       Og opptaksforvalter ser antall søkere som er vurdert, og antall tilbudsgarantier som er satt
       Og opptaksforvalter ser antall søknadsalternativer per utfall, og antall tilbudsgarantier per behandlende organisasjon og per utdanningstilbud
 
-    # Saker uten konklusjon telles med, også når de er ferdig behandlet: de er ikke med i
-    # tidligopptaket, og opptaksforvalteren gjør det samme med begge (avklart 13.10.2026).
-    Scenario: Se antall saker som ikke er ferdig behandlet eller mangler konklusjon
+    # Søkere med saker uten konklusjon telles med, også når sakene er ferdig behandlet:
+    # de er ikke med i tidligopptaket, og opptaksforvalteren gjør det samme med begge
+    # (avklart 13.10.2026). En søker med flere slike saker telles én gang.
+    Scenario: Se antall søkere med saker som ikke er ferdig behandlet eller mangler konklusjon
       Gitt 2 søkere som har søkt om tidlig opptak, har saker som ikke er ferdig behandlet
       Og 1 søker som har søkt om tidlig opptak, har en ferdig behandlet sak uten konklusjon
       Når opptaksforvalter prøvekjører tidligopptaket
-      Så ser opptaksforvalter at 3 saker ikke er ferdig behandlet eller mangler konklusjon
+      Så ser opptaksforvalter at 3 søkere har saker som ikke er ferdig behandlet eller mangler konklusjon
 
     Scenario: Se utdanningstilbud med mangelfulle innstillinger
       Gitt "Vernepleie, høst 2027" tilbyr tidlig opptak uten poenggrense
@@ -380,8 +381,7 @@ Egenskap: Gi tilbudsgaranti ved tidlig opptak
       Så får de 12 søkerne tilbudsgaranti på "Sykepleie, høst 2027"
       Og opptaksforvalter får varsel om at tilbudsgarantiene overskrider kvoten for "Sykepleie, høst 2027"
 
-    # Avklart 20.10.2026. Koden teller bare tilbudsgarantiene som settes i kjøringen, og må endres
-    # (STEK-623).
+    # Avklart 20.10.2026. Rettet i koden i STEK-623 (merget 29.10.2026).
     Scenario: Kvotevarselet tar med tilbudsgarantier fra en tidligere gjennomføring
       Gitt "Sykepleie, høst 2027" har 10 plasser i kvoten tilbudsgarantiene tas fra
       Og 8 søkere fikk tilbudsgaranti på "Sykepleie, høst 2027" da tidligopptaket ble gjennomført
