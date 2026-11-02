@@ -16,7 +16,7 @@ Egenskap: Planlegge publiseringen av resultatet
   Regel: Opptaksforvalter velger tidspunkt for publisering
 
     # ÅPNE SPØRSMÅL:
-    # - Automatisk publisering på tidspunkt er avgrenset bort for 2027 (oppgave.md). Confluence
+    # - Automatisk publisering på tidspunkt er avgrenset bort for 2027 (scope.md). Confluence
     #   «Opprette og konfigurere opptakskjøringsrunde» beskriver publisering straks eller planlagt.
     #   Skal planlagt publisering være med?
     Scenario: Planlagt publisering

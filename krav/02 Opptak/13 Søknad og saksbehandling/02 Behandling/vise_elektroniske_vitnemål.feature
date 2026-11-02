@@ -58,7 +58,7 @@
 # vindushåndtering hører i vise_elektroniske_vitnemål.design.md, jf.
 # fs-implementasjonsdetaljer-skillen.
 #
-@OPT-BEH-BEH-005 @must @in-progress
+@OPT-BEH-BEH-005 @must @in-progress @scope-vitnemalsbehandling
 Egenskap: Se søkerens elektroniske vitnemål
   Som saksbehandler i opptak
   ønsker jeg å se hvilke elektroniske vitnemål søkeren har

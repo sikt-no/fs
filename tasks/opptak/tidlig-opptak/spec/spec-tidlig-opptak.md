@@ -2,7 +2,7 @@
 
 ## Kilde
 
-- **Oppgave:** `tasks/opptak/tidlig-opptak/`
+- **Scope:** `tasks/opptak/tidlig-opptak/`
 - **Kilde-mappe:** `krav/02 Opptak/13 Søknad og saksbehandling/` (og før 2026-10-12 `krav/02 Opptak/11 Opptak/06 Tidlig opptak/`)
 - **GitHub:** [#456](https://github.com/sikt-no/fs/issues/456), [#525](https://github.com/sikt-no/fs/issues/525)
 - **Jira:** STEK-188 «Forvalte og behandle tidligopptak», med underoppgaver

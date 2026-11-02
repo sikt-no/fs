@@ -6,10 +6,10 @@ Egenskap: Håndtere svar fra søker
   ønsker jeg å svare på tilbud og ventelisteplass innen svarfristen
   slik at jeg sikrer meg studieplassen jeg vil ha.
 
-  # Kilde: tasks/opptak/plasstildeling/design.md (prinsipp 2, informasjonsarv, avklaring 4, 5 og 11),
-  # oppgave.md (oppgave 9) og Confluence «2026-09-08 Raffinering plasstildeling» (oppgave 8).
+  # Kilde: tasks/opptak/plasstildeling-2027/design.md (prinsipp 2, informasjonsarv, avklaring 4, 5 og 11),
+  # scope.md (oppgave 9) og Confluence «2026-09-08 Raffinering plasstildeling» (oppgave 8).
   # Svarene behandles i neste plasstildeling i opptaket. Det gis ikke automatisk nye tilbud ved
-  # nei-svar mellom plasstildelingsrundene (oppgave 10 i oppgave.md, utenfor scope 2027).
+  # nei-svar mellom plasstildelingsrundene (oppgave 10 i scope.md, utenfor scope 2027).
   # Status i kode: delvis. Ja/nei virker. Trukket ja-svar etter svarfristen og manuell overstyring mangler.
   # Svarflyten søkeren ser i Min kompetanse, står i 13 Søknad og saksbehandling/01 Søknad/svare_på_tilbud.feature
   # (levert): hva som kan besvares, svar etter fristen, svar på ventelisteplass, samlet svar og endring av svar

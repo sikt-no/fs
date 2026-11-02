@@ -6,8 +6,8 @@ Egenskap: Se resultatet av plasstildelingen før publisering
   ønsker jeg å se resultatet av en plasstildeling før den publiseres
   slik at jeg kan kvalitetssikre resultatet før søkerne får se det.
 
-  # Kilde: tasks/opptak/plasstildeling/design.md (mål, del 2 om tilgangsstyring og forklarbarhet),
-  # oppgave.md (oppgave 7) og Confluence «Opprette og konfigurere opptakskjøringsrunde» (steg 2 og 3).
+  # Kilde: tasks/opptak/plasstildeling-2027/design.md (mål, del 2 om tilgangsstyring og forklarbarhet),
+  # scope.md (oppgave 7) og Confluence «Opprette og konfigurere opptakskjøringsrunde» (steg 2 og 3).
   # AVKLART 2026-10-14: Før publisering ser bare opptaksforvalter plasstildelingen: hos opptakets
   # forvalter alle søknadene, og ved et deltakende lærested søknadene organisasjonen er saksbehandlende organisasjon for.
   # Endret 2026-10-28 (produkteier, etter brukertesten med HK-dir 2026-10-27): saksbehandlere ved lærestedet ser

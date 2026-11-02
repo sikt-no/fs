@@ -37,7 +37,7 @@
 #   som er med i tidligopptaket, avgjøres når det gjennomføres (OPT-BEH-BEH-007), og
 #   filtrene skal ikke gi det samme utvalget som prøvekjøringen.
 #
-@OPT-BEH-BEH-009 @must @implemented
+@OPT-BEH-BEH-009 @must @implemented @scope-tidlig-opptak
 Egenskap: Finne søknader om tidlig opptak
   Som saksbehandler
   ønsker jeg å filtrere sakene på om søkeren har søkt om tidlig opptak, og på om saken har konklusjon for tidlig opptak

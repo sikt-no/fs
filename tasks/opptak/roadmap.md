@@ -27,10 +27,10 @@ Dette veikartet viser oppgaver teamene aktivt jobber med eller har levert for sa
 
 | Issue | Oppgave | Initiativ | Fase | Prioritet | Eier | Reviewere | Mappe |
 |-------|---------|-----------|------|-----------|------|-----------|-------|
-| [#211](https://github.com/sikt-no/fs/issues/211) | Opprette og vedlikeholde opptak | #211 | utforskning | Must | – | – | [opprette-og-vedlikeholde-opptak](opprette-og-vedlikeholde-opptak/) |
-| [#576](https://github.com/sikt-no/fs/issues/576) | Ferdigstilling av regelverk | #576 | utvikling | Must | – | – | [regelverk](regelverk/) |
-| [#398](https://github.com/sikt-no/fs/issues/398) | Utdanningstilbud i opptak | #398 | utforskning | Must | – | – | [utdanningstilbud](utdanningstilbud/) |
-| [#216](https://github.com/sikt-no/fs/issues/216) | Ferdigstilling av plasstildeling | #216 | utforskning | Must | – | – | [plasstildeling](plasstildeling/) |
+| [#211](https://github.com/sikt-no/fs/issues/211) | Opprette og vedlikeholde opptak | #211 | utforskning | Must | – | – | [opprette-og-vedlikeholde-opptak](opprette-opptak-2027/) |
+| [#576](https://github.com/sikt-no/fs/issues/576) | Ferdigstilling av regelverk | #576 | utvikling | Must | – | – | [regelverk](regelverk-2027/) |
+| [#398](https://github.com/sikt-no/fs/issues/398) | Utdanningstilbud i opptak | #398 | utforskning | Must | – | – | [utdanningstilbud](utdanningstilbud-2027/) |
+| [#216](https://github.com/sikt-no/fs/issues/216) | Ferdigstilling av plasstildeling | #216 | utforskning | Must | – | – | [plasstildeling](plasstildeling-2027/) |
 | – | Vedtaksformidling | #216 | utforskning | Should | – | – | [vedtaksformidling](vedtaksformidling/) |
 | [#456](https://github.com/sikt-no/fs/issues/456) | Behandle søknader om tidlig opptak | #456 | utforskning | Must | @sondre-i-sikt, @JensPeterThomassen | – | [tidlig-opptak](tidlig-opptak/) |
 

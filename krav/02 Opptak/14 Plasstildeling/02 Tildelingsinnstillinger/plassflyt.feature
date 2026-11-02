@@ -22,9 +22,9 @@ Egenskap: Plassflyt mellom utdanningskvoter
   #
   # AVKLART 2026-10-15: Forgrening trengs ikke. Hver kvote har én mottaker, og flere kvoter kan ha samme
   # mottaker (sette_plassflyt.feature).
-  # Kilde: tasks/opptak/plasstildeling/design.md (prinsipp 3, oppgave 3) og oppgave.md (gap-analyse oppgave 3).
+  # Kilde: tasks/opptak/plasstildeling-2027/design.md (prinsipp 3, oppgave 3) og scope.md (gap-analyse oppgave 3).
   # Vernet mot sirkulær plassflyt kommer fra GitHub #598.
-  # Status i kode: løst (oppgave.md). Kandidat for @implemented etter verifisering.
+  # Status i kode: løst (scope.md). Kandidat for @implemented etter verifisering.
   # Begrep: «kvoteflyt» heter nå «plassflyt».
 
   Bakgrunn:
