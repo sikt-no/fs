@@ -211,7 +211,7 @@ Egenskap: Se svar på søknad om tidlig opptak
     Scenario: Innvilget tidlig opptak går foran et ubehandlet søknadsalternativ
       Gitt at svaret på tidlig opptak er publisert
       Og at søkeren er innvilget tidlig opptak på ett søknadsalternativ
-      Og at et annet søknadsalternativ ikke har behandlingsstatusen "Behandlet"
+      Og at et annet søknadsalternativ ikke er ferdig behandlet
       Når søkeren åpner søknaden sin
       Så ser søkeren det samlede svaret "Du har fått innvilget tidlig opptak" for søknaden
 

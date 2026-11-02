@@ -3,7 +3,7 @@
 Egenskap: Starte automatisk behandling
   Som saksbehandler
   ønsker jeg at den automatiske behandlingen starter av seg selv for hver ny sak
-  slik at sakene som kan behandles helautomatisk, blir behandlet uten at jeg gjør noe.
+  slik at sakene som kan behandles helautomatisk, blir ferdig behandlet uten at jeg gjør noe.
 
   Den automatiske behandlingen er en fortsettelse av saksbehandlertildelingen. Hver ny sak
   behandles automatisk når søkerens resultater er importert fra KREG. Har søkeren ikke noe
@@ -91,15 +91,15 @@ Egenskap: Starte automatisk behandling
       Når saksbehandleren ved Universitetet i Oslo starter den automatiske behandlingen på "Vitnemål 2026"
       Så behandles saken automatisk på "Vitnemål 2026"
 
-    Scenario: Saken som er behandlet, settes til Under behandling når behandlingen startes
+    Scenario: Saken som er ferdig behandlet, settes til Under behandling når behandlingen startes
       Gitt at saken har behandlingsstatusen "Behandlet"
       Og at den automatiske behandlingen ikke kan avgjøre alle stegene på "Vitnemål 2026"
       Når saksbehandleren ved Universitetet i Oslo starter den automatiske behandlingen på "Vitnemål 2026"
       Så har saken behandlingsstatusen "Under behandling"
 
     @depends-on-OPT-BEH-BEH-025
-    # OPT-BEH-BEH-025: «Den automatiske behandlingen setter saken til behandlet når alt er avgjort»
-    Scenario: Saken blir behandlet igjen når automatikken avgjør alt
+    # OPT-BEH-BEH-025: «Den automatiske behandlingen setter saken til ferdig behandlet når alt er avgjort»
+    Scenario: Saken blir ferdig behandlet igjen når automatikken avgjør alt
       Gitt at saken har behandlingsstatusen "Behandlet"
       Og at den automatiske behandlingen kan avgjøre alle stegene på "Vitnemål 2026"
       Når saksbehandleren ved Universitetet i Oslo starter den automatiske behandlingen på "Vitnemål 2026"
@@ -124,14 +124,14 @@ Egenskap: Starte automatisk behandling
       Så har saken fortsatt grunnlaget saksbehandleren valgte
 
   @depends-on-OPT-BEH-BEH-025
-  # OPT-BEH-BEH-025: «Den automatiske behandlingen setter saken til behandlet når alt er avgjort»
+  # OPT-BEH-BEH-025: «Den automatiske behandlingen setter saken til ferdig behandlet når alt er avgjort»
   Regel: Det fremgår at saken er behandlet automatisk
 
-    Scenario: Saken som er behandlet automatisk, viser at den er behandlet automatisk
+    Scenario: Saken som er ferdig behandlet automatisk, viser at den er behandlet automatisk
       Gitt at søknaden til "Kari Nordmann" har en sak hos "Universitetet i Oslo"
       Og at "Kari Nordmann" har ett vitnemål, og vitnemålet gir GSK
       Når søknaden behandles automatisk
-      Så er saken hos "Universitetet i Oslo" behandlet
+      Så er saken hos "Universitetet i Oslo" ferdig behandlet
       Og saksbehandleren ved Universitetet i Oslo ser at saken er behandlet automatisk
 
   Regel: Opptaksforvalteren skrur automatikken av og på for opptaket

@@ -4,7 +4,7 @@
 Egenskap: Behandlingsstatus
   Som saksbehandler ved saksbehandlende organisasjon
   ønsker jeg at hver sak har en behandlingsstatus
-  slik at arbeidet med sakene kan fordeles og følges opp, og bare behandlede saker er med i plasstildelingen.
+  slik at arbeidet med sakene kan fordeles og følges opp, og bare ferdig behandlede saker er med i plasstildelingen.
 
   Behandlingsstatusen viser hvor langt saksbehandlingen har kommet. En sak har én av tre
   statuser:
@@ -13,12 +13,12 @@ Egenskap: Behandlingsstatus
   - «Behandlet»: saksbehandleren har gjort det som kan gjøres i saken. Saken er enten
     ferdig, eller venter på ny informasjon fra søkeren.
 
-  Behandlingsstatusen er ikke det samme som konklusjonen i saken. En sak kan være
+  Behandlingsstatusen er ikke det samme som konklusjonen i saken. En sak kan være ferdig
   behandlet selv om søkeren ikke er kvalifisert, eller saken har mangler.
 
   Statusen viser saksbehandlerne hvilke saker ingen har begynt på, hvilke som er i arbeid, og
-  hvilke som er ferdige. Bare saker som er behandlet, er med i plasstildelingen. Det står
-  i kravet til plasstildelingen. Når den automatiske behandlingen setter saken til
+  hvilke som er ferdige. Bare saker som er ferdig behandlet, er med i plasstildelingen. Det står
+  i kravet til plasstildelingen. Når den automatiske behandlingen setter saken til ferdig
   behandlet, står i kravet om å ferdigbehandle en sak.
 
   Behandlingsstatusen erstatter dokumentasjonsstatusen i dagens løsning. Mangelkodene som lå
@@ -122,4 +122,4 @@ Egenskap: Behandlingsstatus
         | hendelse                                                                     | til              | årsak                                   |
         | saksbehandleren ved Universitetet i Oslo setter saken til "Under behandling" | Under behandling | saksbehandleren endret statusen         |
         | saksbehandleren ved Universitetet i Oslo leser et dokument i saken           | Under behandling | saksbehandleren leste et dokument       |
-        | den automatiske behandlingen setter saken til behandlet                      | Behandlet        | den automatiske behandlingen var ferdig |
+        | den automatiske behandlingen setter saken til ferdig behandlet               | Behandlet        | den automatiske behandlingen var ferdig |

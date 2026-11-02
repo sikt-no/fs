@@ -10,14 +10,14 @@ Egenskap: Håndtere annullert vitnemål
   i saken. Annulleringen kommer fra KREG når vitnemålene importeres. Løsningen sjekker da om
   vitnemålet er i bruk i en sak i et opptak som ikke er avsluttet. Er det i bruk, får saken
   en merknad og en tagg om at
-  vitnemålet er annullert. Er saken behandlet, settes den tilbake til under behandling,
+  vitnemålet er annullert. Er saken ferdig behandlet, settes den tilbake til under behandling,
   slik at den ikke er med i plasstildelingen før saksbehandleren har sett på den igjen.
 
   Løsningen endrer ikke poengene, kravelementene eller GSK-konklusjonen selv. Saksbehandleren
   vurderer saken og retter det som må rettes.
 
   # Krav fra brukeren 29.10.2026. Åpne spørsmål avklart 29.10.2026.
-  # Behandlingsstatusene står i OPT-BEH-BEH-029. Bare saker som er behandlet, er med i
+  # Behandlingsstatusene står i OPT-BEH-BEH-029. Bare saker som er ferdig behandlet, er med i
   # plasstildelingen. Et annullert vitnemål gir ikke GSK (OPT-BEH-BEH-015), og
   # teller ikke i den automatiske behandlingen (OPT-BEH-BEH-019).
   # Avklart: saksbehandleren får ikke et eget varsel. Merknaden, taggen og statusen er nok,
@@ -85,9 +85,9 @@ Egenskap: Håndtere annullert vitnemål
       Og GSK-konklusjonen i saken er uendret
 
   @ref-OPT-PLA-TIL-001 @ref-FLY-OPT-VIT-001
-  Regel: En behandlet sak settes tilbake til under behandling
+  Regel: En ferdig behandlet sak settes tilbake til under behandling
 
-    Scenario: Behandlet sak settes tilbake til Under behandling
+    Scenario: Ferdig behandlet sak settes tilbake til Under behandling
       Gitt at vitnemålet fra 2025 er brukt i saken
       Og at saken har behandlingsstatusen "Behandlet"
       Når vitnemålet fra 2025 importeres fra KREG som annullert

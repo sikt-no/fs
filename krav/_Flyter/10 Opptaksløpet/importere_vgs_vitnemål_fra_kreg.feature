@@ -101,7 +101,7 @@ Egenskap: Importere VGS-vitnemål fra KREG
   @depends-on-OPT-BEH-BEH-030 @depends-on-OPT-BEH-BEH-015 @depends-on-OPT-BEH-BEH-034
   # OPT-BEH-BEH-030: «Et vitnemål som er annullert i KREG, er annullert i opptakssystemet»
   # OPT-BEH-BEH-015: «Annullert vitnemål»
-  # OPT-BEH-BEH-034: «Saken merkes når et vitnemål som er i bruk, blir annullert», «En behandlet sak settes tilbake til under behandling»
+  # OPT-BEH-BEH-034: «Saken merkes når et vitnemål som er i bruk, blir annullert», «En ferdig behandlet sak settes tilbake til under behandling»
   # Avklart 29.10.2026: underprosessen «Håndter annullert vitnemål» er OPT-BEH-BEH-034. Saken
   # merkes og settes tilbake til under behandling. Søknaden behandles ikke på nytt, og
   # GSK-konklusjonen trekkes ikke tilbake automatisk.
@@ -115,9 +115,9 @@ Egenskap: Importere VGS-vitnemål fra KREG
       Så er det importerte vitnemålet annullert
       Og GSK-konklusjonen på søknaden er uendret
 
-    Scenario: Den behandlede saken settes tilbake når vitnemålet blir annullert
+    Scenario: Den ferdig behandlede saken settes tilbake når vitnemålet blir annullert
       Gitt at saken til "Kari Nordmann" hos "Universitetet i Oslo" er behandlet på vitnemålet
-      Og at saken er behandlet
+      Og at saken er ferdig behandlet
       Og at vitnemålet er annullert i KREG etter importen
       Når importen av VGS-vitnemål fra KREG kjører
       Så har saken taggen "Vitnemål annullert"

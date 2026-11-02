@@ -81,7 +81,7 @@ Egenskap: Finne saker med nye resultater
     Scenario: Saksbehandleren behandler saken på nytt
       # ÅPNE SPØRSMÅL:
       # - Hva er å behandle saken på nytt? Er det nok at saksbehandleren endrer noe i
-      #   saken, eller må saken settes til behandlet?
+      #   saken, eller må saken settes til ferdig behandlet?
       Gitt at saken til "Eva Berg" har nye VGS-resultater
       Når saksbehandler behandler saken på nytt
       Så har saken ingen nye resultater

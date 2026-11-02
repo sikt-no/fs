@@ -1,7 +1,7 @@
 # language: no
 @FLY-OPT-SAM-001 @must @draft @e2e
 Egenskap: Automatisk saksbehandling på sammensatt vitnemål
-  Fra saksbehandleren har satt sammen et vitnemål i vitnemålsbehandleren, til saken er
+  Fra saksbehandleren har satt sammen et vitnemål i vitnemålsbehandleren, til saken er ferdig
   behandlet og klar til å være med i plasstildelingen. Saksbehandleren setter sammen vitnemålet
   av fag fra flere av søkerens vitnemål og kompetansebevis, og starter den automatiske behandlingen på det
   sammensatte vitnemålet. Resten av løpet er det samme som i den automatiske saksbehandlingen
@@ -65,11 +65,11 @@ Egenskap: Automatisk saksbehandling på sammensatt vitnemål
       Så får søknaden ikke grunnlaget som krever førstegangsvitnemål
 
   @depends-on-FLY-OPT-AUT-001
-  # FLY-OPT-AUT-001: «Den automatiske behandlingen setter GSK-konklusjonen der den mangler», «Saken får grunnlag fra vitnemålet», «Poengene beregnes fra grunnlaget og rangeringsregelverket», «Søknaden får tilleggspoeng når grunnlaget er satt», «Kravelementene vurderes mot vitnemålet når poengene er beregnet», «Kvotespørsmålene med algoritme besvares automatisk», «Kvalifiseringen oppdateres når kravelementene er vurdert», «Søkeren fordeles på kvoter når kvalifiseringen og kvotesvarene er satt», «Søkeren får poengsum per kvote når søkeren er fordelt på kvoter», «Saken får mangeltekster når kravelementene er vurdert», «Mangelen for GSK som fullføres i vår sjekkes ut før saken blir behandlet», «Saken blir behandlet og er klar til å være med i plasstildelingen», «Søknadsalternativene beregnes på nytt når regelverket er rettet»
+  # FLY-OPT-AUT-001: «Den automatiske behandlingen setter GSK-konklusjonen der den mangler», «Saken får grunnlag fra vitnemålet», «Poengene beregnes fra grunnlaget og rangeringsregelverket», «Søknaden får tilleggspoeng når grunnlaget er satt», «Kravelementene vurderes mot vitnemålet når poengene er beregnet», «Kvotespørsmålene med algoritme besvares automatisk», «Kvalifiseringen oppdateres når kravelementene er vurdert», «Søkeren fordeles på kvoter når kvalifiseringen og kvotesvarene er satt», «Søkeren får poengsum per kvote når søkeren er fordelt på kvoter», «Saken får mangeltekster når kravelementene er vurdert», «Mangelen for GSK som fullføres i vår sjekkes ut før saken blir ferdig behandlet», «Saken blir ferdig behandlet og er klar til å være med i plasstildelingen», «Søknadsalternativene beregnes på nytt når regelverket er rettet»
   Regel: Resten av saken behandles som i den automatiske saksbehandlingen
 
-    Scenario: Saken er behandlet på det sammensatte vitnemålet
+    Scenario: Saken er ferdig behandlet på det sammensatte vitnemålet
       Gitt at saken hos "Universitetet i Oslo" behandles automatisk på det sammensatte vitnemålet
       Når den automatiske behandlingen er ferdig
       Så har søknaden grunnlag fra det sammensatte vitnemålet
-      Og saken hos "Universitetet i Oslo" er behandlet
+      Og saken hos "Universitetet i Oslo" er ferdig behandlet

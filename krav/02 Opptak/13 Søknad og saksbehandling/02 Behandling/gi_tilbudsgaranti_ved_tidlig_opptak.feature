@@ -62,7 +62,7 @@
 #
 # AVKLART I JIRA (lagt inn 07.10.2026)
 #
-# - Bare saker som er behandlet, er med (STEK-425, 01.09.2026).
+# - Bare saker som er ferdig behandlet, er med (STEK-425, 01.09.2026).
 # - Poengsummen er den høyeste søkeren har til søknadsalternativet etter tilbudets
 #   kompetanseregelverk, uansett kvote (STEK-269, 27.08.2026; STEK-582). I det gamle
 #   systemet var den hardkodet til ordinær kvote.
@@ -103,19 +103,19 @@
 #   får tidligopptakstilbud på det høyest prioriterte søknadsalternativet som
 #   enten har et tidligopptakstilbud fra før, eller oppfyller kravene. Ingen
 #   søknadsalternativer under får tilbudsgaranti. Et tidligopptakstilbud fra før
-#   gjelder uansett konklusjon, om saken er behandlet, og poengsum
+#   gjelder uansett konklusjon, om saken er ferdig behandlet, og poengsum
 #   (fagperson i STEK-269, 30.09.2026). Implementert i STEK-503.
 # - (09.10.2026) Opptaksforvalter kan gjennomføre tidligopptaket mer enn én gang. En ny
-#   gjennomføring tar med saker som er blitt behandlet, eller har fått
+#   gjennomføring tar med saker som er blitt ferdig behandlet, eller har fått
 #   konklusjon, siden forrige gjennomføring. Det er likevel lurt å prøvekjøre til
-#   ingen saker står igjen uten statusen «Behandlet» eller uten konklusjon, før
+#   ingen saker står igjen som ikke er ferdig behandlet eller mangler konklusjon, før
 #   tidligopptaket gjennomføres. (Dokumentasjonen på STEK-503 sa at det bare
 #   gjennomføres én gang. Den er rettet.)
 #   Mulig forbedring, ikke et krav: sikring mot en ny gjennomføring ved en feil
 #   etter at svarene er synlige for søkerne, se STEK-590 (13.10.2026).
 # - (09.10.2026) Har søkeren reservert studieplass på et søknadsalternativ som tilbyr
 #   tidlig opptak, får søkeren tilbudsgaranti fra tidligopptaket der uten å nå
-#   poenggrensen, når søkeren deltar og saken er behandlet. Søkeren har alt en
+#   poenggrensen, når søkeren deltar og saken er ferdig behandlet. Søkeren har alt en
 #   plass fra et tidligere opptak. Reservasjonen gir ikke i seg selv innvilget tidlig
 #   opptak (se_svar_på_tidlig_opptak.feature). Stemmer med STEK-503.
 #   (13.10.2026, foreløpig) Kvalifisering kreves heller ikke: søkeren får tilbudsgaranti
@@ -213,14 +213,14 @@ Egenskap: Gi tilbudsgaranti ved tidlig opptak
         | 50             | "Sykepleie, høst 2027"  | "Vernepleie, høst 2027" |
         | 60             | "Vernepleie, høst 2027" | "Sykepleie, høst 2027"  |
 
-    Scenario: Bare behandlede saker er med i tidligopptaket
+    Scenario: Bare ferdig behandlede saker er med i tidligopptaket
       Gitt saksbehandler har konkludert med at søkeren deltar i tidligopptaket
       Og søkeren er kvalifisert til "Sykepleie, høst 2027"
       Og søkeren har 55 poeng til "Sykepleie, høst 2027"
-      Og saken har ikke behandlingsstatusen "Behandlet"
+      Og saken er ikke ferdig behandlet
       Når opptaksforvalter gjennomfører tidligopptaket
       Så får ikke søkeren tilbudsgaranti på "Sykepleie, høst 2027"
-      Og opptaksforvalter ser at saken ikke har behandlingsstatusen "Behandlet"
+      Og opptaksforvalter ser at saken ikke er ferdig behandlet
 
     Scenario: Reservert studieplass gir tilbudsgaranti uten poenggrense
       Gitt saksbehandler har konkludert med at søkeren deltar i tidligopptaket
@@ -315,10 +315,10 @@ Egenskap: Gi tilbudsgaranti ved tidlig opptak
       Når opptaksforvalter gjennomfører tidligopptaket på nytt
       Så har søkeren fortsatt tilbudsgaranti på "Sykepleie, høst 2027"
 
-    Scenario: Ny gjennomføring tar med en sak som er blitt behandlet
-      Gitt saken til søkeren hadde ikke behandlingsstatusen "Behandlet" da tidligopptaket ble gjennomført
+    Scenario: Ny gjennomføring tar med en sak som er blitt ferdig behandlet
+      Gitt saken til søkeren var ikke ferdig behandlet da tidligopptaket ble gjennomført
       Og saksbehandler har konkludert med at søkeren deltar i tidligopptaket
-      Og saken er nå behandlet
+      Og saken er nå ferdig behandlet
       Og søkeren er kvalifisert til "Sykepleie, høst 2027"
       Og søkeren har 55 poeng til "Sykepleie, høst 2027"
       Når opptaksforvalter gjennomfører tidligopptaket på nytt
@@ -345,13 +345,13 @@ Egenskap: Gi tilbudsgaranti ved tidlig opptak
       Og opptaksforvalter ser antall søkere som er vurdert, og antall tilbudsgarantier som er satt
       Og opptaksforvalter ser antall søknadsalternativer per utfall, og antall tilbudsgarantier per behandlende organisasjon og per utdanningstilbud
 
-    # Saker uten konklusjon telles med, også når de er behandlet: de er ikke med i
+    # Saker uten konklusjon telles med, også når de er ferdig behandlet: de er ikke med i
     # tidligopptaket, og opptaksforvalteren gjør det samme med begge (avklart 13.10.2026).
-    Scenario: Se antall saker uten statusen Behandlet eller uten konklusjon
-      Gitt 2 søkere som har søkt om tidlig opptak, har saker som ikke har behandlingsstatusen "Behandlet"
-      Og 1 søker som har søkt om tidlig opptak, har en behandlet sak uten konklusjon
+    Scenario: Se antall saker som ikke er ferdig behandlet eller mangler konklusjon
+      Gitt 2 søkere som har søkt om tidlig opptak, har saker som ikke er ferdig behandlet
+      Og 1 søker som har søkt om tidlig opptak, har en ferdig behandlet sak uten konklusjon
       Når opptaksforvalter prøvekjører tidligopptaket
-      Så ser opptaksforvalter at 3 saker ikke har behandlingsstatusen "Behandlet" eller mangler konklusjon
+      Så ser opptaksforvalter at 3 saker ikke er ferdig behandlet eller mangler konklusjon
 
     Scenario: Se utdanningstilbud med mangelfulle innstillinger
       Gitt "Vernepleie, høst 2027" tilbyr tidlig opptak uten poenggrense
