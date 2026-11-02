@@ -28,7 +28,7 @@
 # - Vitnemålspoeng står i automatisk_poengberegning.feature (@OPT-BEH-BEH-018),
 #   og kravelementene i automatisk_kvalifisering.feature (@OPT-BEH-BEH-020).
 # - Søkere med flere vitnemål behandles i vitnemålsbehandlingen.
-@OPT-BEH-BEH-019 @must @planned @ref-OPT-BEH-BEH-012 @ref-OPT-BEH-BEH-018
+@OPT-BEH-BEH-019 @must @planned @scope-automatisk-grunnlag-og-poeng @ref-OPT-BEH-BEH-012 @ref-OPT-BEH-BEH-018
 Egenskap: Automatisk grunnlag
   Som saksbehandler
   ønsker jeg at saken får grunnlaget sitt automatisk når søkerens vitnemål og alder avgjør det

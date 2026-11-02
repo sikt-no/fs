@@ -1,5 +1,5 @@
 # language: no
-@OPT-BEH-BEH-032 @must @planned @ref-OPT-BEH-BEH-025
+@OPT-BEH-BEH-032 @must @planned @scope-automatisk-import-og-start @ref-OPT-BEH-BEH-025
 Egenskap: Starte automatisk behandling
   Som saksbehandler
   ønsker jeg at den automatiske behandlingen starter av seg selv for hver ny sak
