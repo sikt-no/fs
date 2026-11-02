@@ -8,3 +8,5 @@ History of skill invocations for this spec. Append-only — never edit past entr
 - 2026-10-08 — `fs-specify` ended (success) — wrote spec-tidlig-opptak.md, 6 .feature files, 6 retagged @in-progress, 3 Figma sketches persisted (3 avvik avklart, 011 og 008 endret før retagging), 0 helt implementert i fs-plattform main, implementasjonsdetaljer utsatt
 - 2026-10-30 — `fs-specify-delta` started — branch krav/sok-011-kvittering-tidlig-opptak (a91ce8e, PR #890)
 - 2026-10-30 — `fs-specify-delta` ended (success) — wrote spec-changes-2026-10-30-krav-sok-011-kvittering-tidlig-opptak.md, 2 lagt til / 0 endret / 0 fjernet / 1 skal fjernes, 2 scenarioer retagget @in-progress, ingen skisse, ingen implementasjonsdetaljer
+- 2026-11-02 — `fs-verify` started — 2 @in-progress (deler), 1 @deprecated (del) i @OPT-SØK-SØK-011 · omfang: @in-progress, @deprecated · avhengigheter: 1 nivå, bare status
+- 2026-11-02 — `fs-verify` ended (success) — 2 deler levert (@in-progress fjernet), 1 scenario slettet (@deprecated), 0 @deprecated finnes fortsatt i koden · verify-2026-11-02-1236.md

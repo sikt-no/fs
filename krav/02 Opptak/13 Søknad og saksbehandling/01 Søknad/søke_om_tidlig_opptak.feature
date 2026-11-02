@@ -118,7 +118,6 @@ Egenskap: Søke om tidlig opptak
       Så har søkeren søkt om tidlig opptak med begrunnelsen "Fullført videregående opplæring"
       Og søkeren får kvittering for søknaden om tidlig opptak
 
-    @in-progress
     Scenario: Kvitteringen viser søknadsalternativene som tilbyr tidlig opptak
       Gitt søknaden har følgende søknadsalternativer:
         | søknadsalternativ    | tilbyr tidlig opptak |
@@ -142,14 +141,6 @@ Egenskap: Søke om tidlig opptak
       Når søkeren ser på søknaden
       Så ser søkeren lenken til informasjon om tidlig opptak
 
-    @deprecated
-    Scenario: Kan ikke søke om tidlig opptak når ingen søknadsalternativer tilbyr det (avvikles)
-      Gitt opptaket "Samordna opptak 2027" tilbyr ikke tidlig opptak
-      Og ingen av søknadsalternativene tilbyr tidlig opptak
-      Når søkeren ser på søknaden
-      Så ser ikke søkeren muligheten til å søke om tidlig opptak
-
-    @in-progress
     Scenario: Kan ikke søke om tidlig opptak når ingen søknadsalternativer tilbyr det
       Gitt opptaket "Samordna opptak 2027" har tidlig opptak
       Og ingen av søknadsalternativene tilbyr tidlig opptak
