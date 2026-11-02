@@ -156,26 +156,12 @@ Egenskap: Starte automatisk behandling
       Når saksbehandlertildelingen har opprettet en sak i "Lokalt opptak UiO 2027"
       Så behandles saken automatisk
 
-  Regel: Feil i saken vises på saken, og tekniske feil prøves på nytt
-    # Hvor mange ganger behandlingen prøves på nytt, og hvor lenge, står i
-    # applikasjonsinnstillingene. Hvordan jobbene vises, avklares senere.
+  @ref-OPT-BEH-BEH-030
+  Regel: Saken viser hvorfor den ikke kunne behandles automatisk
+    # Den automatiske behandlingen henter ikke vitnemål fra KREG, men bruker vitnemålene som er
+    # importert. Når KREG ikke svarer, prøves importen på nytt (OPT-BEH-BEH-030).
 
     Scenario: Saken viser at den ikke kunne behandles automatisk fordi søkeren ikke har vitnemål
       Gitt at "Kari Nordmann" ikke har noe vitnemål i KREG
       Når saksbehandlertildelingen har opprettet saken hos "Universitetet i Oslo"
       Så ser saksbehandleren ved Universitetet i Oslo på saken at den ikke kunne behandles automatisk fordi søkeren ikke har vitnemål
-
-    Scenario: Behandlingen prøves på nytt når KREG ikke svarer
-      Gitt at den automatiske behandlingen feilet for saken til "Kari Nordmann" fordi KREG ikke svarte
-      Når KREG svarer igjen innenfor tiden i applikasjonsinnstillingene
-      Så behandles saken hos "Universitetet i Oslo" automatisk
-
-    Scenario: Saksbehandleren ser ikke tekniske feil på saken
-      Gitt at den automatiske behandlingen feilet for saken til "Kari Nordmann" fordi KREG ikke svarte
-      Når saksbehandleren ved Universitetet i Oslo ser på saken
-      Så ser saksbehandleren ingen feilmelding om KREG på saken
-
-    Scenario: Sikt varsles om en teknisk feil
-      Gitt at saken til "Kari Nordmann" skal behandles automatisk
-      Når den automatiske behandlingen feiler fordi KREG ikke svarer
-      Så får Sikt et varsel om at den automatiske behandlingen har feilet

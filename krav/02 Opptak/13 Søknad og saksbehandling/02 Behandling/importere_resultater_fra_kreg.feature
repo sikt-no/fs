@@ -34,9 +34,14 @@ Egenskap: Importere resultater fra KREG
       Når saksbehandleren registrerer søknaden på vegne av søkeren
       Så er vitnemålet importert
 
+    @openquestion
     Scenario: Resultatene hentes når en endring av søknaden gir en ny sak
       # Avklart 29.10.2026. Kode i dag: resultatene hentes på nytt hver gang søknaden fordeles på
       # nytt, også når endringen ikke gir en ny sak.
+      # ÅPNE SPØRSMÅL:
+      # - Må vitnemålene fra videregående hentes på nytt når en endring av søknaden gir en ny sak?
+      #   Jobben i FLY-OPT-VIT-001 henter nye og annullerte vitnemål for alle aktive søkere jevnlig,
+      #   og er kanskje nok.
       Gitt at søkerens vitnemål fra 2024 er importert
       Og at søkeren har fått et vitnemål fra 2025 i KREG
       Når søkeren legger til et studieønske som saksbehandles hos en ny organisasjon
@@ -123,12 +128,11 @@ Egenskap: Importere resultater fra KREG
       Når søkeren sender inn søknaden
       Så er ingen resultater importert fra KREG
 
-    @ref-OPT-BEH-BEH-032
     Scenario: Resultatene hentes når KREG svarer igjen
       # Avklart 29.10.2026: hentingen prøves på nytt. Hvor mange ganger, og hvor lenge, står i
       # applikasjonsinnstillingene. Feilen vises ikke for saksbehandleren, men skrives i
-      # applikasjonsloggen, og Sikt varsles (OPT-BEH-BEH-032). Kode i dag: feilen logges, og
-      # hentingen prøves ikke igjen før søknaden endres.
+      # applikasjonsloggen, og Sikt varsles. Kode i dag: feilen logges, og hentingen prøves ikke
+      # igjen før søknaden endres.
       Gitt at KREG ikke svarte da søkeren sendte inn søknaden
       Når KREG svarer igjen innenfor tiden i applikasjonsinnstillingene
       Så er søkerens vitnemål importert
