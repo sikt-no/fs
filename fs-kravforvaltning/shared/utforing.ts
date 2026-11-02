@@ -1,4 +1,4 @@
-// Tilstandsfila `tasks/<d>/<s>/utforing.md`: hvor hver spesifikasjon i oppgaven er på veien gjennom
+// Tilstandsfila `tasks/<d>/<s>/utforing.md`: hvor hver spesifikasjon i scopet er på veien gjennom
 // kode-repoene (rute, steg, hvem som har steget, PR, overlevering, blokkering) og en logg. Formatet står i
 // tasks/README.md. Rene funksjoner, testet i utforing.test.ts.
 
@@ -111,7 +111,7 @@ export function parseUtforing(text: string): Utforing {
 const HEADER = [
   '# Utføring',
   '',
-  'Hvor spesifikasjonene i denne oppgaven er på veien gjennom kode-repoene. Formatet og protokollen står i [tasks/README.md](../../README.md#utføring).',
+  'Hvor spesifikasjonene i dette scopet er på veien gjennom kode-repoene. Formatet og protokollen står i [tasks/README.md](../../README.md#utføring).',
   '',
 ];
 

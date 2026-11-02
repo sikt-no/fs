@@ -1,16 +1,16 @@
 <!--
 Mal for lagplan. Kopier til tasks/<domene>/<slug>/<lag>/plan-<slug>.md
-— altså INNE i lagets egen undermappe, ikke i oppgave-rota.
+— altså INNE i lagets egen undermappe, ikke i scope-rota.
 Eksempler på lag: spec (krav), tester, backend, frontend, subgraph, db, dokumentasjon.
 
-Hvorfor undermappe: BAT-verktøyene globber `plan-*.md` i oppgave-rota for å avgjøre
+Hvorfor undermappe: BAT-verktøyene globber `plan-*.md` i scope-rota for å avgjøre
 om plansteget er ferdig. En plan som ligger i rota blir lest som et fullført BAT-steg.
 Se ../../README.md, regel 1 og 2.
 -->
 
-# Plan (<lag>): <Oppgavetittel>
+# Plan (<lag>): <Scopetittel>
 
-Lenker: [oppgave.md](../oppgave.md) · [design.md](../design.md) · [issue](https://github.com/sikt-no/fs/issues/NNNN)
+Lenker: [scope.md](../scope.md) · [design.md](../design.md) · [issue](https://github.com/sikt-no/fs/issues/NNNN)
 
 ## Omfang for dette laget
 
