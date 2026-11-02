@@ -92,7 +92,7 @@ Egenskap: Starte automatisk behandling
       Så behandles saken automatisk på "Vitnemål 2026"
 
     Scenario: Saken som er ferdig behandlet, settes til Under behandling når behandlingen startes
-      Gitt at saken har behandlingsstatusen "Ferdig behandlet"
+      Gitt at saken har behandlingsstatusen "Behandlet"
       Og at den automatiske behandlingen ikke kan avgjøre alle stegene på "Vitnemål 2026"
       Når saksbehandleren ved Universitetet i Oslo starter den automatiske behandlingen på "Vitnemål 2026"
       Så har saken behandlingsstatusen "Under behandling"
@@ -100,10 +100,10 @@ Egenskap: Starte automatisk behandling
     @depends-on-OPT-BEH-BEH-025
     # OPT-BEH-BEH-025: «Den automatiske behandlingen setter saken til ferdig behandlet når alt er avgjort»
     Scenario: Saken blir ferdig behandlet igjen når automatikken avgjør alt
-      Gitt at saken har behandlingsstatusen "Ferdig behandlet"
+      Gitt at saken har behandlingsstatusen "Behandlet"
       Og at den automatiske behandlingen kan avgjøre alle stegene på "Vitnemål 2026"
       Når saksbehandleren ved Universitetet i Oslo starter den automatiske behandlingen på "Vitnemål 2026"
-      Så har saken behandlingsstatusen "Ferdig behandlet"
+      Så har saken behandlingsstatusen "Behandlet"
       Og saksbehandleren ser at saken er behandlet automatisk
 
     @depends-on-OPT-BEH-BEH-011

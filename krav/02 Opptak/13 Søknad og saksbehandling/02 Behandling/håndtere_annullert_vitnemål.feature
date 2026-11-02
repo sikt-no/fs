@@ -89,7 +89,7 @@ Egenskap: Håndtere annullert vitnemål
 
     Scenario: Ferdig behandlet sak settes tilbake til Under behandling
       Gitt at vitnemålet fra 2025 er brukt i saken
-      Og at saken har behandlingsstatusen "Ferdig behandlet"
+      Og at saken har behandlingsstatusen "Behandlet"
       Når vitnemålet fra 2025 importeres fra KREG som annullert
       Så har saken behandlingsstatusen "Under behandling"
 

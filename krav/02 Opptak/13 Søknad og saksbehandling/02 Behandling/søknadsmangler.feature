@@ -144,7 +144,7 @@ Egenskap: Søknadsmangler
     Scenario: Saken kan behandles ferdig selv om den har mangler
       Gitt at saken hos "Universitetet i Oslo" har mangelen "KAR"
       Når saksbehandleren ved Universitetet i Oslo har behandlet saken så langt dokumentasjonen rekker
-      Så kan saksbehandleren sette saken til "Ferdig behandlet"
+      Så kan saksbehandleren sette saken til "Behandlet"
 
     @draft @openquestion
     Scenario: Mangel som sperrer opptak holder søkeren utenfor tilbudskjøringen
@@ -314,9 +314,9 @@ Egenskap: Søknadsmangler
       # - Skal de automatiske mangeltekstene for kompetanseregelverk publiseres på samme måte som
       #   manglene saksbehandleren registrerer? Saksbehandleren velger da å publisere, og
       #   publiseringen gjelder begge deler. Det er allerede et krav om at begge deler må være
-      #   publisert når saken settes til «Ferdig behandlet».
+      #   publisert når saken settes til «Behandlet».
       #   Merk: de automatiske mangeltekstene for kompetanseregelverk blir alltid publisert når
-      #   saken settes til «Ferdig behandlet» (se «Søkeren ser de automatiske mangeltekstene når
+      #   saken settes til «Behandlet» (se «Søkeren ser de automatiske mangeltekstene når
       #   saken er ferdig behandlet»).
       # Kode i dag: «Oppdater mangel i Min kompetanse» kan ikke brukes når saken bare har
       # automatiske mangler.
@@ -340,32 +340,32 @@ Egenskap: Søknadsmangler
 
     Scenario: Saksbehandleren blir advart om mangler som ikke er publisert
       Gitt at saken hos "Universitetet i Oslo" har mangelen "KNN" som ikke er publisert
-      Når saksbehandleren ved Universitetet i Oslo setter saken til "Ferdig behandlet"
+      Når saksbehandleren ved Universitetet i Oslo setter saken til "Behandlet"
       Så ser saksbehandleren at søkeren ikke ser mangelen "KNN" i Min kompetanse
 
     @draft @openquestion
     Scenario: Publisere manglene når saken settes til ferdig behandlet
       # ÅPNE SPØRSMÅL:
       # - Publiseringen er endret etter raffineringen: saksbehandleren publiserer alle manglene i
-      #   saken samlet, og søkeren får melding hver gang. Settes saken til «Ferdig behandlet»,
+      #   saken samlet, og søkeren får melding hver gang. Settes saken til «Behandlet»,
       #   publiseres manglene, med mindre saksbehandleren velger å la være. Ikke gått gjennom med teamet.
       Gitt at saksbehandleren ved Universitetet i Oslo er advart om at mangelen "KNN" ikke er publisert
-      Når saksbehandleren velger å publisere manglene og sette saken til "Ferdig behandlet"
-      Så er saken "Ferdig behandlet"
+      Når saksbehandleren velger å publisere manglene og sette saken til "Behandlet"
+      Så er saken "Behandlet"
       Og søkeren ser mangelen "KNN" i Min kompetanse
       Og søkeren har mottatt en melding om mangler
 
     Scenario: Sette saken til ferdig behandlet uten å publisere manglene
       Gitt at saksbehandleren ved Universitetet i Oslo er advart om at mangelen "KNN" ikke er publisert
-      Når saksbehandleren velger å sette saken til "Ferdig behandlet" uten å varsle søkeren
-      Så er saken "Ferdig behandlet"
+      Når saksbehandleren velger å sette saken til "Behandlet" uten å varsle søkeren
+      Så er saken "Behandlet"
       Og søkeren ser ikke mangelen "KNN" i Min kompetanse
       Og søkeren har ikke mottatt en melding om mangler
 
     Scenario: Avbryte når saken har mangler som ikke er publisert
       Gitt at saksbehandleren ved Universitetet i Oslo er advart om at mangelen "KNN" ikke er publisert
       Når saksbehandleren avbryter
-      Så er ikke saken satt til "Ferdig behandlet"
+      Så er ikke saken satt til "Behandlet"
 
     Scenario: Søkeren får én melding om manglene som publiseres i saken
       Gitt at saken hos "Universitetet i Oslo" har manglene "KAR" og "STEMPEL"

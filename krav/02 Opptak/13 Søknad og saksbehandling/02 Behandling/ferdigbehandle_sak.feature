@@ -182,7 +182,7 @@ Egenskap: Ferdigbehandle en sak
     Scenario: Saksbehandleren ferdigbehandler saken etter å ha gjort resten
       Gitt at saken hos "Universitetet i Oslo" er under behandling fordi poengene for "Informatikk, UiO" ikke kunne avgjøres automatisk
       Og at saksbehandleren ved Universitetet i Oslo har satt poengene for "Informatikk, UiO"
-      Når saksbehandleren setter saken til "Ferdig behandlet"
+      Når saksbehandleren setter saken til "Behandlet"
       Så er saken hos "Universitetet i Oslo" ferdig behandlet
 
     Scenario: Saken blir ikke ferdig behandlet av seg selv når saksbehandleren har gjort resten
