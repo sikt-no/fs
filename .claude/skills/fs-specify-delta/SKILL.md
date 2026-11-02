@@ -1,6 +1,6 @@
 ---
 name: fs-specify-delta
-description: Spec / kravarbeid der inputen er en endring, ikke greenfield krav. Tar inn én av fire kildetyper — test-fil(er) (typisk `.feature`), markdown-dokument(er), én commit eller to (`A...B`), eller en branch (diffet mot main) — og henter diff og filinnhold med lokal `git`. For commit/branch utledes `Lagt til` / `Endret` / `Fjernet` direkte fra diff-status. Tar med `@planned`/`@in-progress`-krav og retagger `@planned` → `@in-progress` i `krav/` der fila ligger på disk, også `@planned`-deler (`Regel:`/`Scenario:`) i leverte krav som endres. Tar også med `@deprecated`-krav og -deler i endringen, under «Skal fjernes», uten å bytte taggen, så spec-en kan brukes til å fjerne avviklede krav fra koden sammen med endringene rundt. Samme tag-regler som `fs-specify`; forskjellen er inputen (en endring i stedet for en mappe) og at spec-en viser før og etter. Spør om skisser og persisterer Figma-artefakter via Figma MCP, og kjører `fs-implementasjonsdetaljer` når implementasjonsdetaljene (`<feature>.design.md`) mangler eller ikke har tekstene fra skissene. Kopierer ikke kravene: før og etter er git-referanser (festede SHA-er) med lenker til GitHub. Skriver `spec-changes-<YYYY-MM-DD>-<ref>.md` og `krav-input/changes/<YYYY-MM-DD>-<ref>/` (manifest og skisser) i oppgavemappas krav-undermappe `tasks/<domene>/<slug>/spec/` (én fil per kjøring, ingen overskriving). Leser ingen tidligere spec — kilden er autoritativ; eksisterende krav som ikke nevnes i delta-en forblir gjeldende. Trigges av "kravendring fra commit <sha>", "krav fra A...B", "fang endringene på branch <navn>", "krav fra denne markdown", "krav fra denne test-fila", "delta-spec for <noe>", "fjern avviklede krav på branch <navn>".
+description: Spec / kravarbeid der inputen er en endring, ikke greenfield krav. Tar inn én av fire kildetyper — test-fil(er) (typisk `.feature`), markdown-dokument(er), én commit eller to (`A...B`), eller en branch (diffet mot main) — og henter diff og filinnhold med lokal `git`. For commit/branch utledes `Lagt til` / `Endret` / `Fjernet` direkte fra diff-status. Tar med `@planned`/`@in-progress`-krav og retagger `@planned` → `@in-progress` i `krav/` der fila ligger på disk, også `@planned`-deler (`Regel:`/`Scenario:`) i leverte krav som endres. Tar også med `@deprecated`-krav og -deler i endringen, under «Skal fjernes», uten å bytte taggen, så spec-en kan brukes til å fjerne avviklede krav fra koden sammen med endringene rundt. Samme tag-regler som `fs-specify`; forskjellen er inputen (en endring i stedet for en mappe) og at spec-en viser før og etter. Spør om skisser og persisterer Figma-artefakter via Figma MCP, og kjører `fs-implementasjonsdetaljer` når implementasjonsdetaljene (`<feature>.design.md`) mangler eller ikke har tekstene fra skissene. Kopierer ikke kravene: før og etter er git-referanser (festede SHA-er) med lenker til GitHub. Skriver `spec-changes-<YYYY-MM-DD>-<ref>.md` og `krav-input/changes/<YYYY-MM-DD>-<ref>/` (manifest og skisser) i scope-mappas krav-undermappe `tasks/<domene>/<slug>/spec/` (én fil per kjøring, ingen overskriving). Leser ingen tidligere spec — kilden er autoritativ; eksisterende krav som ikke nevnes i delta-en forblir gjeldende. Trigges av "kravendring fra commit <sha>", "krav fra A...B", "fang endringene på branch <navn>", "krav fra denne markdown", "krav fra denne test-fila", "delta-spec for <noe>", "fjern avviklede krav på branch <navn>".
 allowed-tools: Read, Write, Edit, Grep, Glob, Bash, WebFetch, AskUserQuestion, Skill
 ---
 
@@ -23,13 +23,13 @@ Brukeren har en **endring** — en commit, to commits, en branch, en test-fil el
 
 Før du leser eller skriver krav: sjekk at branchen i dette repoet er oppdatert mot origin og main, som beskrevet i [`.claude/references/oppdatert-branch.md`](../../references/oppdatert-branch.md). Er den bak, spør du før du henter. I Claude-panelet i FS Kravforvaltning (uten Bash) hoppes sjekken over. Sjekken gjøres før SHA-ene festes, så `origin/main` og branchen er hentet. Kodeklonene sjekkes på samme måte når kravene sjekkes mot koden.
 
-## Finn oppgavemappa (gjør dette FØRST)
+## Finn scope-mappa (gjør dette FØRST)
 
-Samme prosedyre som [`fs-specify` → _Finn oppgavemappa_](../fs-specify/SKILL.md#finn-oppgavemappa-gjør-dette-først): resultatet er **`<spec>/` = `tasks/<domene>/<slug>/spec/`**, og reglene i `tasks/README.md` gjelder (ingen `spec-*.md` i oppgave-rota, `spec/` er reservert for krav). «Ny oppgave» skriver en minimal `oppgave.md`, som i `fs-specify`.
+Samme prosedyre som [`fs-specify` → _Finn scope-mappa_](../fs-specify/SKILL.md#finn-scope-mappa-gjør-dette-først): resultatet er **`<spec>/` = `tasks/<domene>/<slug>/spec/`**, og reglene i `tasks/README.md` gjelder (ingen `spec-*.md` i scope-rota, `spec/` er reservert for krav). Har kravet ikke scope, foreslås `fs-scope`, og «Nytt scope» skriver en minimal `scope.md`, som i `fs-specify`.
 
-En delta hører normalt til en oppgave som finnes fra før. Foreslå derfor eksisterende oppgaver først; «Ny oppgave» er fortsatt et gyldig valg.
+En delta hører normalt til et scope som finnes fra før. Foreslå derfor scopet til kravene i endringen (`@scope-<slug>`), eller eksisterende scopes, først; «Nytt scope» er fortsatt et gyldig valg.
 
-**Scope.** Har `oppgave.md` feltet `Scope:`, les scope-fila. Står et `@planned`-krav i endringen ikke i scope-raden for oppgaven, eller står det i en annen oppgave eller et annet scope (`@scope-*`), ta det med som vanlig, men nevn det, og foreslå `fs-scope` (modus B) for å oppdatere scopet. Endre ikke scope-fila eller taggen selv. Skisselenkene i scope-raden brukes som i `fs-specify` (*Skisser fra scopet*).
+**Scope.** Les `scope.md`. Står et `@planned`-krav i endringen ikke i `## Krav`, eller har det et annet scope (`@scope-*`), ta det med som vanlig, men nevn det, og foreslå `fs-scope` (modus B) for å oppdatere scopet. Endre ikke `scope.md` eller taggen selv. Skisselenkene i `## Krav` brukes som i `fs-specify` (*Skisser fra scopet*).
 
 ## Logg kjøringen
 
@@ -205,8 +205,7 @@ Følg [`fs-specify` → _Implementasjonsdetaljer_](../fs-specify/SKILL.md#implem
 
 ## Kilde
 
-- **Oppgave:** `tasks/<domene>/<slug>/`
-- **Scope:** scope-<slug> (utelat linja når oppgaven ikke har scope)
+- **Scope:** `tasks/<domene>/<slug>/`
 - **Type:** `test` / `markdown` / `commit` / `commits` / `branch`
 - **Test/markdown:** kildefiler (lenker til fila i repoet, eller til kopien under `krav-input/changes/<YYYY-MM-DD>-<ref>/` for filer utenfor repoet), HEAD-SHA, og om filene har endringer som ikke er committet
 - **Commit:** full SHA (lenke til `https://github.com/sikt-no/fs/commit/<sha>`), parent-SHA
@@ -309,7 +308,7 @@ Minn brukeren på at endringene i `tasks/` og `krav/` ikke er committet.
 - Leser eller sammenligner ikke tidligere `spec-*.md`.
 - Oppretter, endrer eller lukker ikke GitHub-issues.
 - Kjører aldri git-kommandoer som endrer tilstand (`add`, `commit`, `push`, `checkout`, `fetch`, `stash`).
-- Skriver ikke utenfor `<spec>/` og `Egenskap:`-tag-linjene under `krav/`, bortsett fra implementasjonsdetaljene (`<feature-navn>.design.md`), som `fs-implementasjonsdetaljer` skriver, og en minimal `oppgave.md` ved «Ny oppgave». Skriver ikke scope-fila, `@scope-*`-taggene eller referansetaggene (`@depends-on-`, `@ref-`). Fjerner aldri `@draft` fra en `Regel:`/`Scenario:`.
+- Skriver ikke utenfor `<spec>/` og `Egenskap:`-tag-linjene under `krav/`, bortsett fra implementasjonsdetaljene (`<feature-navn>.design.md`), som `fs-implementasjonsdetaljer` skriver, og en minimal `scope.md` ved «Nytt scope». Skriver ikke `scope.md` ellers, `@scope-*`-taggene eller referansetaggene (`@depends-on-`, `@ref-`). Fjerner aldri `@draft` fra en `Regel:`/`Scenario:`.
 
 ## Retningslinjer
 

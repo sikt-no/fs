@@ -6,7 +6,7 @@ Rapporten fra `fs-verify` og `fs-verify-agent-teams` følger denne malen, så to
 
 - **Alle seksjonene står med, i rekkefølgen under.** Fase 1 i teststrategien (forslag) gir tre seksjoner i tillegg til scenarioene: `## Tilgang og datakonsistens`, `## Regler uten scenario` og `## Åpne spørsmål`. `- **Menneskelig kontroll:**` fylles aldri ut av skillen. En seksjon uten innhold får teksten som står i malen (f.eks. «Ingen.»). Ta aldri ut en seksjon, og legg ikke til egne seksjoner. Det som ikke passer noe sted, står under `## Oppfølging`.
 - **Varianter** er merket med `[…]` i malen. En linje eller seksjon med et merke er med bare når merket gjelder. Merket skrives ikke i rapporten.
-  - `[oppgave]`: scope er en oppgave eller en spesifikasjon.
+  - `[spesifikasjon]`: scope er en spesifikasjon (`spec/spec-*.md` i et scope).
   - `[agent team]`: kjørt med `fs-verify-agent-teams`.
   - `[per repo]`: repoene er vurdert hver for seg. Bokstavene står i *Kodeklonene* i `fs-verify`: P = fs-plattform, A = fs-admin, M = min-kompetanse. Bare repoene som er med i kjøringen, står i rapporten.
   - `[uansett status]`: brukeren ba om å verifisere uansett status (*Verifisere uansett status* i `fs-verify`). `[ikke uansett status]` er det motsatte.
@@ -28,8 +28,8 @@ Rapporten fra `fs-verify` og `fs-verify-agent-teams` følger denne malen, så to
 # Verifisering: <scope>
 
 - **Dato:** YYYY-MM-DD HH:MM
-- **Krav:** `<krav-sti, oppgave eller @scope-<slug>>` (<N> feature-filer)
-- **Spec:** `spec/spec-<x>.md`                                         [oppgave, bare når scope er en spesifikasjon]
+- **Krav:** `<krav-sti eller @scope-<slug>>` (<N> feature-filer)
+- **Spec:** `spec/spec-<x>.md`                                         [spesifikasjon]
 - **Kode:** `<repo>` (<branch>, <kort sha>, <oppdatert | N bak origin | N bak main | ikke sjekket (Claude-panelet)>), `<repo>` (…)
 - **Åpne MR-er:** ingen funnet | <N> MR-er i <repo>, <N> i <repo> (<N> med kode for kravene) | ikke sjekket (Claude-panelet)
 - **Omfang:** <`@in-progress` | `@deprecated` | flyter | alle krav uansett status | <det brukeren skrev>, skilt med komma> (<valgt | standard, ikke valgt | fra prompten>)
@@ -251,7 +251,7 @@ Ingen.                                                                  [når de
 - **`## Regler uten scenario`**: én rad per regel, krav for krav. Radene er input til testplanen og fase 2, og endrer ikke kravet.
 - **`## Åpne spørsmål`**: én rad per krav med minst ett `@openquestion`, ellers teksten «Ingen åpne spørsmål.». `Regler` og `Scenarioer` er antall med åpne spørsmål av totalt i gating-settet (`<n> av <N>`), og `Utenfor gating` er antall regler og scenarioer med `@draft @openquestion`. `fs-testplan` leser tallene.
 - **`## Fremdrift for flyter`** `[flyt]`: én rad per fase, i rekkefølgen i flyten. En fase er levert når delen av hvert krav den bygger på, er levert: delene med ankeret (`@ref-<flytens ID>`) innenfor reglene i «…» under taggen (alle ankrene når ingen ligger i dem), ellers reglene i «…», ellers hele kravet (`@implemented`). En flyt den bygger på, må være `@implemented`. Bygger fasen på en del, står delen og statusen på den i `Bygger på`. `mangler krav` når fasen ikke har `@depends-on-`. Linja under tabellen står én gang per flyt.
-- **`## Avhengigheter`** `[avhengigheter]`: én rad per par (krav i scope, avhengighet), sortert på krav i scope og så nivå. På nivå 2 og lenger er `Krav i scope` kravet i scope kjeden starter i. `Funnet` er `<n>/<N>` av gating-settet (som *uansett status*) når avhengighetene er verifisert i koden, ellers `–`. Merknaden «kan ikke leveres før dette» står bare på nivå 1, når avhengigheten ikke er `@implemented`. Avhengighetene teller ikke i `## Oppsummering`, og radene deres står aldri i `## Scenarioer`, fordi tavla «Oppgaver», `fs-testplan` og `fs-testrapport` leser den tabellen.
+- **`## Avhengigheter`** `[avhengigheter]`: én rad per par (krav i scope, avhengighet), sortert på krav i scope og så nivå. På nivå 2 og lenger er `Krav i scope` kravet i scope kjeden starter i. `Funnet` er `<n>/<N>` av gating-settet (som *uansett status*) når avhengighetene er verifisert i koden, ellers `–`. Merknaden «kan ikke leveres før dette» står bare på nivå 1, når avhengigheten ikke er `@implemented`. Avhengighetene teller ikke i `## Oppsummering`, og radene deres står aldri i `## Scenarioer`, fordi tavla «Scopes», `fs-testplan` og `fs-testrapport` leser den tabellen.
 - **`## Forslag til endringer`**: det som ble foreslått før brukeren svarte, med stiene til kravene, så forslaget kan leses i fila mens spørsmålene stilles. Står uendret når svarene er gitt; det som faktisk ble gjort, står i `## Levert`, `## Ikke levert` og `## Slettet`.
 - **«Venter på svar.»** står i `## Levert`, `## Ikke levert` og `## Slettet` bare mellom at fila skrives og at brukeren har svart. Når kjøringen er ferdig, står det aldri igjen.
 - **`## Avklaringer`** `[gjennomgang]`: ett punkt per spørsmål i gjennomgangen, i rekkefølgen de ble stilt. `Endring` sier hva som ble gjort i kravfila eller i resultatet.

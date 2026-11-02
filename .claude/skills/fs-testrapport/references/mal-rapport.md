@@ -72,20 +72,20 @@ Sjekkes for seg, fordi det er inngangen til fase 3. Den agentiske rapporten har 
 ## Resultat per krav
 
 <verifisering: fra «Oversikt per krav» eller «Scenarioer» i verify-rapporten>
-| Oppgave | Krav | Funnet | Ikke funnet | Usikker | Status |
+| Jira-sak | Krav | Funnet | Ikke funnet | Usikker | Status |
 |---|---|---|---|---|---|
-| <oppgave> | [<tittel>](<lenke>) | <n> | <n> | <n> | `@implemented` / `@in-progress` (delvis levert) / `@in-progress` |
+| <Jira-sak fra `## Krav` i `scope.md`, eller «–»> | [<tittel>](<lenke>) | <n> | <n> | <n> | `@implemented` / `@in-progress` (delvis levert) / `@in-progress` |
 
 <agentisk: per krav og regel, med teknikken agenten brukte>
 | Krav | Regel | Teknikk | Bestått | Ikke bestått | Ikke testet |
 |---|---|---|---|---|---|
 | [<tittel>](<lenke>) | <regel, eller «Uten scenario: <regel i koden>»> | Positiv / Grenseverdi / Ekvivalensklasse / Beslutningstabell / Tilstandsovergang / Obligatorisk felt | <n> | <n> | <n> |
 
-<intern: per flyt, med én rad per scenario i flyten (flyttestcasene). Testcaser for regresjon og avhengigheter står for seg, per oppgave, krav og regel>
+<intern: per flyt, med én rad per scenario i flyten (flyttestcasene). Testcaser for regresjon og avhengigheter står for seg, per krav og regel>
 | Flyt | Scenario i flyten | Bestått | Ikke bestått | Ikke testet |
 |---|---|---|---|---|
-| Oppgave | Krav | Regel | Bestått | Ikke bestått | Ikke testet |
-|---|---|---|---|---|---|
+| Krav | Regel | Bestått | Ikke bestått | Ikke testet |
+|---|---|---|---|---|
 
 <ekstern: per testcase (flyt), og per steg i den, med svaret fra testeren og statusen kontaktpersonen har ført>
 | Testcase | Steg | Svar (Ja / Nei / Delvis) | Status |
