@@ -33,4 +33,4 @@ Append-only. Ny linje på toppen ved hver hendelse.
 
 ## Åpne punkter
 
-- [ ] Oppgaven har ingen Jira-sak. STEK-650 dekker bare en del av `@OPT-BEH-BEH-031` (vise hvorfor poengsummen ikke kan regnes ut), og STEK-640 gjelder utfall per kravlisteelement. FOL-35 og FOL-38 er initiativene i milepælsplanen.
+- [ ] Oppgaven har ingen Jira-sak. STEK-650 dekker bare en del av `@OPT-BEH-BEH-031` (vise hvorfor poengsummen ikke kan regnes ut), og STEK-640 gjelder utfall per kravlisteelement. FOL-35 er initiativet i milepælsplanen. Kvoteplasseringen (FOL-38) er levert.

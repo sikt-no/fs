@@ -18,8 +18,13 @@
 - Plasstildelingen (`@OPT-PLA-TIL-001`, [scope-plasstildeling-2027](scope-plasstildeling-2027.md)).
 - Forutsetninger som ikke endres i scopet:
   - Saksbehandlertildelingen (`@FLY-OPT-SAK-001`, `@OPT-BEH-BEH-011`): flyten starter når saken er opprettet.
-  - Kvotespørsmålene med algoritme og fordelingen på kvoter (`@OPT-BEH-BEH-012`, `@implemented`).
   - Regelverket flyten bygger på: `@OPT-REG-RAN-001`, `@OPT-REG-RAN-002`, `@OPT-REG-KVO-001` og `@OPT-REG-KVO-002`, alle `@implemented` i [scope-regelverk-2027](scope-regelverk-2027.md).
+
+## Levert fra før
+
+Faser i flyten som er levert, og som ikke har oppgaver i scopet. Kravene har ikke scope-taggen, fordi ingenting i dem endres.
+
+- `@OPT-BEH-BEH-012` [automatisk_kvoteplassering.feature](../../krav/02%20Opptak/13%20S%C3%B8knad%20og%20saksbehandling/02%20Behandling/automatisk_kvoteplassering.feature) (`@implemented`, 16 av 16 scenarioer funnet i `verify-automatisk_kvoteplassering-2026-10-22-1233.md`) dekker fasene «Kvotespørsmålene med algoritme besvares automatisk» og «Søkeren fordeles på kvoter når kvalifiseringen og kvotesvarene er satt». Begge fasene er levert i verify-rapporten for flyten fra 2026-10-30. Initiativ [FOL-38](https://sikt.atlassian.net/browse/FOL-38) «Automatisk plassering i kvote».
 
 ## Kilder
 
@@ -44,7 +49,7 @@
 | [automatisk-grunnlag-og-poeng](automatisk-grunnlag-og-poeng/) | `@OPT-BEH-BEH-018` [automatisk_poengberegning.feature](../../krav/02%20Opptak/13%20S%C3%B8knad%20og%20saksbehandling/02%20Behandling/automatisk_poengberegning.feature) | Must | – | – | Initiativ FOL-36 |
 | [automatisk-grunnlag-og-poeng](automatisk-grunnlag-og-poeng/) | `@OPT-BEH-BEH-028` [automatiske_tilleggspoeng.feature](../../krav/02%20Opptak/13%20S%C3%B8knad%20og%20saksbehandling/02%20Behandling/automatiske_tilleggspoeng.feature) | Must | – | – | Feil: STEK-507. Gjenbruk: STEK-250. Initiativ FOL-39 |
 | [automatisk-kvalifisering-og-poengsum](automatisk-kvalifisering-og-poengsum/) | `@OPT-BEH-BEH-020` [automatisk_kvalifisering.feature](../../krav/02%20Opptak/13%20S%C3%B8knad%20og%20saksbehandling/02%20Behandling/automatisk_kvalifisering.feature) | Must | – | – | Også STEK-640. Initiativ FOL-35 |
-| [automatisk-kvalifisering-og-poengsum](automatisk-kvalifisering-og-poengsum/) | `@OPT-BEH-BEH-031` [beregne_poengsum_per_kvote.feature](../../krav/02%20Opptak/13%20S%C3%B8knad%20og%20saksbehandling/02%20Behandling/beregne_poengsum_per_kvote.feature) | Must | – | – | STEK-650 dekker bare at det vises hvorfor poengsummen ikke kan regnes ut. Initiativ FOL-38 (kvoteplasseringen er levert i `@OPT-BEH-BEH-012`) |
+| [automatisk-kvalifisering-og-poengsum](automatisk-kvalifisering-og-poengsum/) | `@OPT-BEH-BEH-031` [beregne_poengsum_per_kvote.feature](../../krav/02%20Opptak/13%20S%C3%B8knad%20og%20saksbehandling/02%20Behandling/beregne_poengsum_per_kvote.feature) | Must | – | – | STEK-650 dekker bare at det vises hvorfor poengsummen ikke kan regnes ut. Kvoteplasseringen er levert (se *Levert fra før*) |
 | [automatisk-ferdigbehandling](automatisk-ferdigbehandling/) | `@OPT-BEH-BEH-008` [søknadsmangler.feature](../../krav/02%20Opptak/13%20S%C3%B8knad%20og%20saksbehandling/02%20Behandling/s%C3%B8knadsmangler.feature) | Must | – | – | Bare de automatiske mangeltekstene og mangelen for GSK som fullføres i vår er med i flyten |
 | [automatisk-ferdigbehandling](automatisk-ferdigbehandling/) | `@OPT-BEH-BEH-029` [behandlingsstatus.feature](../../krav/02%20Opptak/13%20S%C3%B8knad%20og%20saksbehandling/02%20Behandling/behandlingsstatus.feature) | Must | – | [STEK-253](https://sikt.atlassian.net/browse/STEK-253) | Initiativ FOL-40 |
 | [automatisk-ferdigbehandling](automatisk-ferdigbehandling/) | `@OPT-BEH-BEH-025` [ferdigbehandle_sak.feature](../../krav/02%20Opptak/13%20S%C3%B8knad%20og%20saksbehandling/02%20Behandling/ferdigbehandle_sak.feature) | Must | – | [STEK-253](https://sikt.atlassian.net/browse/STEK-253) | Initiativ FOL-40 |
@@ -54,4 +59,6 @@
 
 - [ ] `@OPT-BEH-BEH-008` (søknadsmangler) er et stort krav, og bare to regler er med i flyten. Skal hele kravet være i scopet, eller bare delene flyten bygger på?
 - [ ] Oppgavene `automatisk-grunnlag-og-poeng` og `automatisk-kvalifisering-og-poengsum` har ingen Jira-sak, og `@OPT-BEH-BEH-032` har ingen sak. Skal Puff lage saker, eller skal oppgavene kobles til de eksisterende? Jira endres ikke før det er avtalt.
+- [ ] [STEK-540](https://sikt.atlassian.net/browse/STEK-540) «avvis manuell lagring av svar på kvotespørsmål med koblet algoritme» er åpen (Backlog), mens STEK-538 om det samme er Done, og verify fant regelen i `@OPT-BEH-BEH-012` i koden. Er STEK-540 en rest som kan lukkes, eller mangler sperren i backend? Ikke sjekket i koden.
+- [ ] FOL-38 «Automatisk plassering i kvote» står i milepælsplanen med akseptansetest, men kravet er levert. Skal initiativet lukkes, eller bare testes sammen med flyten?
 - [ ] FOL-33 lenker til `@OPT-REG-KRA-001`, og FOL-40 lenker til `@OPT-BEH-BEH-001`, ikke til kravene i dette scopet. Skal lenkene i Jira rettes?
