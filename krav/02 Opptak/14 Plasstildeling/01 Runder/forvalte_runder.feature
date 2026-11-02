@@ -165,13 +165,41 @@ Egenskap: Plasstildelingsrunder i et opptak
       Og at plasstildelingsrunden er publisert til søker
       Så ser opptaksforvalter at plasstildelingsrunden har status "Publisert for søkere"
 
+  @openquestion
+  Regel: Opptaksforvalter setter tak for antall tilbud per søker i plasstildelingsrunden
+
+    # ÅPNE SPØRSMÅL:
+    # - Har taket en standardverdi, for eksempel 1, eller må det settes når plasstildelingsrunden legges til?
+    # AVKLART 2026-11-02 (domeneekspert): Taket gjelder de ordinære tilbudene, og vises og kan endres på alle
+    # plasstildelingsrunder. Tilbud på ledige studieplasser kommer i tillegg, med eget tak (regelen under).
+    # I samordna opptak er taket 1 i hovedtildeling og supplering, og opptil 10 i etterfylling.
+    # Søkeren kan likevel bare ha ett ja-svar om gangen, og får bare én studieplass i et samordna opptak
+    # (05 Svar/håndtere_svar_fra_søker.feature).
+    # Til senere: søkere kan få trenge flere studieplasser, for eksempel på deltidsstudier, PPU og enkeltemner.
+    Scenariomal: Sette tak for antall tilbud per søker
+      Gitt at opptaket har plasstildelingsrunden "<plasstildelingsrunde>" med rundetype "<rundetype>"
+      Når opptaksforvalter setter taket for antall tilbud per søker i plasstildelingsrunden "<plasstildelingsrunde>" til <tak>
+      Så kan en søker få høyst <tak> tilbud i plasstildelingsrunden "<plasstildelingsrunde>"
+
+      Eksempler:
+        | plasstildelingsrunde | rundetype      | tak |
+        | Hovedrunde           | Hovedtildeling | 1   |
+        | Suppleringsrunde     | Supplering     | 1   |
+        | Etterfylling         | Etterfylling   | 10  |
+
+    Scenario: Endre taket for antall tilbud per søker
+      Gitt at taket for antall tilbud per søker i plasstildelingsrunden "Etterfylling" er 10
+      Når opptaksforvalter endrer taket for antall tilbud per søker i plasstildelingsrunden "Etterfylling" til 5
+      Så kan en søker få høyst 5 tilbud i plasstildelingsrunden "Etterfylling"
+
   Regel: Opptaksforvalter setter tak for antall tilbud på ledige studieplasser per søker i plasstildelingsrunden
 
     # Flyttet hit 2026-10-26 fra 11 Opprette og vedlikeholde opptak/03 Innstillinger/innstillinger.feature, der
     # regelen «Opptaksforvalter setter tak for antall tilbud per tildelingsrunde» er @deprecated.
     # AVKLART 2026-10-28 (produkteier, etter brukertesten med HK-dir 2026-10-27): Taket settes på plasstildelingsrunden,
     # ikke i rundetypen, og gjelder tilbud på ledige studieplasser når runden er åpnet for ledige studieplasser.
-    # I UHG kan en søker få opptil 10 tilbud på ledige studieplasser. Hvordan tilbud på ledige studieplasser gis,
+    # I samordna opptak kan en søker få opptil 10 tilbud på ledige studieplasser i supplering og etterfylling, i tillegg
+    # til de ordinære tilbudene (domeneekspert 2026-11-02). Hvordan tilbud på ledige studieplasser gis,
     # står i 03 Tildeling/gjennomføre_plasstildeling.feature.
     # AVKLART 2026-10-30 (produkteier): Om en søker kan få studieplass mer enn ett sted, kommer an på opptaket, og
     # henger sammen med hvor mange tilbud søkeren kan få og takke ja til. Det har ingen egen regel, men styres av taket.
@@ -245,18 +273,51 @@ Egenskap: Plasstildelingsrunder i et opptak
       Når opptaksforvalter endrer perioden til "2027-06-01 08:00" – "2027-07-15 16:00"
       Så kan opptaksforvalter ved lærestedene endre antall tilbud som skal gis for plasstildelingsrunden fram til "2027-07-15 16:00"
 
-  Regel: Lærestedene ser bare plasstildelingsrunden der perioden for å endre antall tilbud er åpen
+    # AVKLART 2026-11-02 (produkteier, prototypen v88): Svarfristen må komme etter at perioden for lærestedene er slutt.
+    Scenario: Svarfristen kommer før perioden er slutt
+      Gitt at plasstildelingsrunden "Hovedrunde" har svarfrist "2027-07-20 23:59"
+      Når opptaksforvalter setter perioden for å endre antall tilbud som skal gis i plasstildelingsrunden "Hovedrunde" til "2027-06-01 08:00" – "2027-07-25 16:00"
+      Så blir perioden ikke lagret
+      Og opptaksforvalter får beskjed om at svarfristen må komme etter at perioden for å endre antall tilbud er slutt
 
-    # AVKLART 2026-10-30 (produkteier, etter brukertesten med HK-dir, oktober 2026): Opptaksforvalter kan legge inn
-    # alle plasstildelingsrundene på forhånd, men lærestedene ser bare én runde om gangen. I SODB fant ikke lærestedene
-    # riktig runde når alle rundene lå der. Opptaksforvalter ved organisasjonen som forvalter opptaket, ser alle rundene.
-    Scenario: Lærestedet ser plasstildelingsrunden der perioden er åpen
+  Regel: Lærestedene kan bare åpne plasstildelingsrunden der perioden for å endre antall tilbud er åpen
+
+    # AVKLART 2026-11-02 (produkteier, prototypen v88): Lærestedet ser alle plasstildelingsrundene, og hva det skal
+    # gjøre i hver av dem, men kan bare åpne runden der perioden er åpen. Da finner lærestedet riktig runde, som det
+    # ikke gjorde i SODB. Erstatter avklaringen fra 2026-10-30 om at lærestedet bare ser én runde.
+    # Hvordan en runde som ikke kan åpnes, vises, står i implementasjonsdetaljene.
+    Scenario: Lærestedet ser alle plasstildelingsrundene
       Gitt at opptaket har plasstildelingsrundene "Hovedrunde" og "Supplering 1"
-      Og at perioden for å endre antall tilbud som skal gis er åpen i plasstildelingsrunden "Supplering 1"
+      Når opptaksforvalter ved et lærested som deltar i opptaket, åpner plasstildelingsrundene i opptaket
+      Så ser opptaksforvalter ved lærestedet plasstildelingsrundene "Hovedrunde" og "Supplering 1"
+
+    Scenario: Lærestedet kan åpne plasstildelingsrunden der perioden er åpen
+      Gitt at perioden for å endre antall tilbud som skal gis er åpen i plasstildelingsrunden "Supplering 1"
+      Når opptaksforvalter ved et lærested som deltar i opptaket, åpner plasstildelingsrundene i opptaket
+      Så kan opptaksforvalter ved lærestedet åpne plasstildelingsrunden "Supplering 1"
+
+    Scenario: Lærestedet kan ikke åpne plasstildelingsrunden der perioden er stengt
+      Gitt at perioden for å endre antall tilbud som skal gis er stengt i plasstildelingsrunden "Hovedrunde"
+      Når opptaksforvalter ved et lærested som deltar i opptaket, åpner plasstildelingsrundene i opptaket
+      Så kan opptaksforvalter ved lærestedet ikke åpne plasstildelingsrunden "Hovedrunde"
+
+    Scenariomal: Lærestedet ser hva det skal gjøre i plasstildelingsrunden
+      Gitt at perioden for å endre antall tilbud som skal gis i plasstildelingsrunden "Hovedrunde" <periode>
+      Når opptaksforvalter ved et lærested som deltar i opptaket, åpner plasstildelingsrundene i opptaket
+      Så ser opptaksforvalter ved lærestedet oppgaven "<oppgave>" for plasstildelingsrunden "Hovedrunde"
+
+      Eksempler:
+        | periode        | oppgave                                           |
+        | ikke er satt   | Perioden er ikke satt ennå                        |
+        | ikke har åpnet | Perioden åpner                                    |
+        | er åpen        | Gå gjennom antall tilbud                          |
+        | er utløpt      | Perioden for å gå gjennom antall tilbud er utløpt |
+
+    Scenario: Lærestedet ser plasstildelingsrundene det har en oppgave i
+      Gitt at perioden for å endre antall tilbud som skal gis er åpen i plasstildelingsrunden "Supplering 1"
       Og at perioden for å endre antall tilbud som skal gis er stengt i plasstildelingsrunden "Hovedrunde"
       Når opptaksforvalter ved et lærested som deltar i opptaket, åpner plasstildelingsrundene i opptaket
-      Så ser opptaksforvalter ved lærestedet plasstildelingsrunden "Supplering 1"
-      Men opptaksforvalter ved lærestedet ser ikke plasstildelingsrunden "Hovedrunde"
+      Så ser opptaksforvalter ved lærestedet at det har en oppgave i plasstildelingsrunden "Supplering 1"
 
     Scenario: Opptaksforvalter ved organisasjonen som forvalter opptaket, ser alle plasstildelingsrundene
       Gitt at opptaket har plasstildelingsrundene "Hovedrunde" og "Supplering 1"

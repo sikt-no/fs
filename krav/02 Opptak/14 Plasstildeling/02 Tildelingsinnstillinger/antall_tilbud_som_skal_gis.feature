@@ -20,7 +20,8 @@ Egenskap: Antall tilbud som skal gis per utdanningskvote (sette opptaksparameter
   # én ting som settes, nemlig antall tilbud som skal gis. Det står derfor bare i parentes i tittelen
   # og i denne kommentaren, og brukes ikke i scenarioene.
   # Søk, sortering, varsel ved overskridelse og opptakets forvalters kontroll står i kontrollere_antall_tilbud.feature
-  # (@should). Varselet til lærestedene når perioden åpner, står i 05 Svar/varsler_og_meldinger_i_plasstildelingen.feature.
+  # (@should). Varselet til lærestedene og markeringen av at de har gått gjennom antall tilbud, står i
+  # følge_opp_lærestedenes_gjennomgang.feature (@could).
   # AVKLART 2026-10-28 (produkteier, spørsmål fra brukertesten med HK-dir 2026-10-27): Også antall tilbud som skal
   # gis i hovedtildelingen settes i perioden for å endre antall tilbud på plasstildelingsrunden. Det hentes ikke
   # fra utdanningstilbudet, som bare har studieplassene og kvoteplassene (12 Utdanningstilbud/03 Opptaksinnstillinger).
@@ -67,11 +68,21 @@ Egenskap: Antall tilbud som skal gis per utdanningskvote (sette opptaksparameter
       Og plasstildelingen i "Suppleringsrunde" gjennomføres
       Så gir plasstildelingen inntil 10 nye tilbud i utdanningskvoten "Ordinær"
 
-    # Gap mot koden («Plasstildelingsløpet i Opptak», kap. 1 og 3): mangler tallet, bruker koden
-    # kvotens «ønsket antall deltakere» (kvoteplassene) i stedet for 0. Bekreftet 2026-10-08 at kravet gjelder.
-    Scenario: Default er null
-      Gitt at opptaksforvalter ikke har satt antall tilbud som skal gis i utdanningskvotene
-      Så er antall tilbud som skal gis i hver utdanningskvote 0
+    # AVKLART 2026-11-02 (produkteier, prototypen v88): Antall tilbud som skal gis er fylt ut med kvoteplassene,
+    # og lærestedet bekrefter eller endrer tallet. Koden gjør det samme («Plasstildelingsløpet i Opptak», kap. 1 og 3).
+    # Erstatter avklaringen fra 2026-10-08 om at standardverdien er 0.
+    Scenario: Antall tilbud er fylt ut med kvoteplassene
+      Gitt at utdanningskvoten "Ordinær" på "Sykepleie, høst 2027" har 60 kvoteplasser
+      Og at opptaksforvalter ved lærestedet ikke har endret antall tilbud som skal gis i utdanningskvoten "Ordinær"
+      Når opptaksforvalter ser antall tilbud som skal gis for utdanningstilbudet "Sykepleie, høst 2027"
+      Så er antall tilbud som skal gis i utdanningskvoten "Ordinær" 60
+
+    # En utdanningskvote mangler antall tilbud når lærestedet har fjernet tallet. Det er filteret
+    # «Mangler antall tilbud i utdanningskvotene» til for.
+    Scenario: Utdanningskvote uten antall tilbud gir ingen tilbud
+      Gitt at opptaksforvalter ved lærestedet har fjernet antall tilbud som skal gis i utdanningskvoten "Ordinær"
+      Når plasstildelingen i "Hovedrunde" gjennomføres
+      Så gir plasstildelingen ingen tilbud i utdanningskvoten "Ordinær"
 
   Regel: Opptaksforvalter kan filtrere utdanningstilbudene på om antall tilbud er satt
 
@@ -182,19 +193,51 @@ Egenskap: Antall tilbud som skal gis per utdanningskvote (sette opptaksparameter
       Når opptaksforvalter ved lærestedet setter antall tilbud som skal gis i utdanningskvoten "Ordinær kvote (ORD)" til 50
       Så er overbookingen i utdanningskvoten "Ordinær kvote (ORD)" 35
 
+    # Endret 2026-11-02 (produkteier, prototypen v88): Før plasstildelingen er kjørt, ser lærestedet planlagte
+    # studieplasser, ledige plasser å gi tilbud til og totalt antall tilbud som skal gis, for hvert utdanningstilbud
+    # og summert for utdanningstilbudene lærestedet tilbyr. Tilbudene som er gitt, står i regelen under.
     Scenario: Se grunnlag for utdanningstilbudet
       Når opptaksforvalter ser antall tilbud som skal gis for utdanningstilbudet "Sykepleie, høst 2027"
       Så ser opptaksforvalter disse opplysningene for utdanningstilbudet
-        | Opplysning                                 |
-        | Antall studieplasser                       |
-        | Totalt antall tilbud som skal gis          |
-        | Totalt antall tilbud gitt i opptaket       |
-        | Antall tilbud akseptert                    |
-        | Antall tilbud som venter på svar           |
-        | Netto tilbud                               |
-        | Ledige plasser å gi tilbud til             |
-        | Antall søkere på venteliste                |
-        | Antall søkere med tilbudsgaranti           |
+        | Opplysning                        |
+        | Planlagte studieplasser           |
+        | Ledige plasser å gi tilbud til    |
+        | Totalt antall tilbud som skal gis |
+
+    Scenario: Se summen for utdanningstilbudene lærestedet tilbyr
+      Gitt at "Universitetet i Bergen" tilbyr utdanningstilbudene "Sykepleie, høst 2027" og "Kunsthistorie, høst 2027" i opptaket
+      Når opptaksforvalter ved "Universitetet i Bergen" ser antall tilbud som skal gis i plasstildelingsrunden "Hovedrunde"
+      Så ser opptaksforvalter summen for utdanningstilbudene "Universitetet i Bergen" tilbyr
+        | Opplysning                        |
+        | Planlagte studieplasser           |
+        | Ledige plasser å gi tilbud til    |
+        | Totalt antall tilbud som skal gis |
+
+    # AVKLART 2026-10-14 (designarbeidet i FS-Admin): Ledige plasser å gi tilbud til er en avledet verdi:
+    # studieplasser minus netto tilbud (akseptert og venter på svar).
+    # AVKLART 2026-10-30 (produkteier, åpne spørsmål fra designarbeidet nr. 7): Søkere med tilbudsgaranti som ikke har
+    # fått tilbud ennå, trekkes også fra, fordi de skal ha plass. Bekreftet 2026-11-02, også før plasstildelingen.
+    Scenario: Ledige plasser å gi tilbud til før plasstildelingen
+      Gitt at "Sykepleie, høst 2027" har 100 planlagte studieplasser
+      Og at 4 søkere har tilbudsgaranti på "Sykepleie, høst 2027"
+      Og at det ikke er gitt tilbud på "Sykepleie, høst 2027"
+      Når opptaksforvalter ser antall tilbud som skal gis for utdanningstilbudet "Sykepleie, høst 2027"
+      Så er ledige plasser å gi tilbud til 96
+
+  Regel: Opptaksforvalter ser tilbudene som er gitt i tidligere plasstildelingsrunder
+
+    # Skilt ut 2026-11-02 (produkteier): Tallene er 0 før den første plasstildelingen, og hører til oppgaven
+    # «Gjennomføre plasstildelingen» i scopet.
+    Scenario: Se tilbudene som er gitt for utdanningstilbudet
+      Når opptaksforvalter ser antall tilbud som skal gis for utdanningstilbudet "Sykepleie, høst 2027"
+      Så ser opptaksforvalter disse opplysningene for utdanningstilbudet
+        | Opplysning                                  |
+        | Totalt antall tilbud gitt i opptaket        |
+        | Antall tilbud akseptert                     |
+        | Antall tilbud som venter på svar            |
+        | Netto tilbud                                |
+        | Antall søkere på venteliste                 |
+        | Antall søkere med tilbudsgaranti            |
         | Antall tilbudsgarantier som har gitt tilbud |
 
     # Antall tilbud gitt, antall aksepterte, netto tilbud og antall på venteliste oppdateres
@@ -214,12 +257,8 @@ Egenskap: Antall tilbud som skal gis per utdanningskvote (sette opptaksparameter
       Når opptaksforvalter ser antall tilbud som skal gis for utdanningstilbudet "Sykepleie, høst 2027"
       Så er netto tilbud 58
 
-    # AVKLART 2026-10-14 (designarbeidet i FS-Admin): Ledige plasser å gi tilbud til er en avledet verdi:
-    # studieplasser minus netto tilbud (akseptert og venter på svar).
-    # AVKLART 2026-10-30 (produkteier, åpne spørsmål fra designarbeidet nr. 7): Søkere med tilbudsgaranti som ikke har
-    # fått tilbud ennå, trekkes også fra, fordi de skal ha plass.
-    Scenario: Ledige plasser å gi tilbud til
-      Gitt at "Sykepleie, høst 2027" har 100 studieplasser
+    Scenario: Ledige plasser å gi tilbud til etter en plasstildeling
+      Gitt at "Sykepleie, høst 2027" har 100 planlagte studieplasser
       Og at netto tilbud for "Sykepleie, høst 2027" er 58
       Og at 4 søkere med tilbudsgaranti på "Sykepleie, høst 2027" ikke har fått tilbud ennå
       Når opptaksforvalter ser antall tilbud som skal gis for utdanningstilbudet "Sykepleie, høst 2027"
@@ -300,7 +339,7 @@ Egenskap: Antall tilbud som skal gis per utdanningskvote (sette opptaksparameter
 # - Antall tilbud som skal gis settes direkte per utdanningskvote.
 #   Totalt antall tilbud er utledet (summen av utdanningskvotene), ikke satt eksplisitt.
 # - Default i utdanningskvotene er null. Endret 2026-10-08: ikke varsel, men filter på
-#   utdanningstilbud som har eller mangler antall tilbud.
+#   utdanningstilbud som har eller mangler antall tilbud. Endret 2026-11-02: fylt ut med kvoteplassene.
 # - Avklart 2026-10-08: Antall tilbud som skal gis gjelder bare plasstildelingsrunden det er satt for.
 #   Endret 2026-10-30: tallet er et samlet tall for opptaket, og følger med til neste plasstildelingsrunde.
 # - Avklart 2026-10-08: Antall tilbud settes som hele tall per utdanningskvote. Det utledes ikke fra
