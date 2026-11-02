@@ -9,7 +9,7 @@
 
 ## Omfang
 
-Søknaden får GSK-konklusjonen automatisk når skolens påstand («GSK OK» fra KREG) er ja, og løpet på vitnemålet finnes i listen over løp. Grunnlagskoden kommer fra løpet: PBPBY4 gir KLF, og et løp uten grunnlagskode gir KLY eller RFA etter reformen, som i det gamle FS. Opptakssystemet beregner sin egen påstand med kontrollmotoren når vitnemålet importeres, og lagrer den på vitnemålet. Er den uenig med skolen, ser saksbehandleren et varsel, men automatikken stopper ikke. Løp som mangler i listen, eller mangler grunnlagskode, gir varsel til opptaksforvalteren i FS Admin. Et annullert vitnemål trekker ikke tilbake konklusjonen. Taggen «Vitnemål annullert» hører til `@OPT-BEH-BEH-034`, og konklusjonene fra tidligere opptak bygger på importtabellen i STEK-442.
+Søknaden får GSK-konklusjonen automatisk når skolens påstand («GSK OK» fra KREG) er ja, og løpet på vitnemålet finnes i listen over løp. Grunnlagskoden kommer fra løpet: PBPBY4 gir KLF, og et løp uten grunnlagskode gir KLY eller RFA etter reformen, som i det gamle FS. Opptakssystemet beregner sin egen påstand med kontrollmotoren når vitnemålet importeres, og lagrer den på vitnemålet. Er den uenig med skolen, ser saksbehandleren et varsel, men automatikken stopper ikke. Varslene i FS Admin til opptaksforvalteren om løp som mangler i listen, eller mangler grunnlagskode, er utkast og ikke med i leveransen. Et annullert vitnemål trekker ikke tilbake konklusjonen. Taggen «Vitnemål annullert» hører til `@OPT-BEH-BEH-034`, og konklusjonene fra tidligere opptak bygger på importtabellen i STEK-442.
 
 ## Krav
 
@@ -19,6 +19,8 @@ Søknaden får GSK-konklusjonen automatisk når skolens påstand («GSK OK» fra
 ### Utenfor scope (`@draft`)
 
 - **`beregne_gsk_fra_vitnemål.feature` — regel `Fag som saksbehandleren har tatt ut av kontrollene, telles ikke med`** — venter på: hva fagstatusen er, og hvem som setter den. Kravet for fagstatusen er ikke skrevet.
+- **`automatisk_gsk_konklusjon.feature` — scenario `Opptaksforvalteren får varsel om et løp som mangler i listen over løp`** — venter på: hvor i FS Admin opptaksforvalteren får varselet, og om det er ett varsel per løp eller ett per vitnemål med løpet.
+- **`automatisk_gsk_konklusjon.feature` — scenario `Opptaksforvalteren får varsel om et løp uten grunnlagskode`** — venter på: hvor i FS Admin opptaksforvalteren får varselet.
 
 ## Skisser
 
@@ -51,7 +53,6 @@ Ingen skisse for resten: varslene til opptaksforvalteren er ikke avklart, og res
 
 ## Åpne spørsmål
 
-- [ ] Hvor i FS Admin får opptaksforvalteren varselet om et løp som mangler i listen over løp, eller mangler grunnlagskode? Avklart 2026-11-02 at varselet bare kommer i FS Admin. (`@OPT-BEH-BEH-015`)
 - [ ] Hvordan oppdager opptakssystemet at et vitnemål er annullert, når søkeren ikke endrer søknaden? Krever abonnement på endringer i KREG, i en egen sak. (`@OPT-BEH-BEH-015`)
 - [ ] Teksten i varselet om uenighet mangler (`vise_elektroniske_vitnemål.design.md`, «Varsel når opptakssystemet er uenig med skolen om GSK»). Implementasjonsdetaljer for resten av `automatisk_gsk_konklusjon.feature` mangler.
 

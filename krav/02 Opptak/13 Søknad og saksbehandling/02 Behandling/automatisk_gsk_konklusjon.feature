@@ -47,8 +47,8 @@ Egenskap: Automatisk GSK-konklusjon
   positiv konklusjon når et vitnemål gir GSK, og løpet på vitnemålet finnes i
   opptakssystemets liste over løp. Har løpet ingen grunnlagskode, får konklusjonen KLY for et
   løp fra Kunnskapsløftet og RFA for et løp fra Reform 94, som i det gamle FS. Finnes ikke
-  løpet i listen, settes ingen konklusjon automatisk, og opptaksforvalteren får beskjed om
-  at løpet mangler. Vitnemål importeres fra KREG når
+  løpet i listen, settes ingen konklusjon automatisk, og opptaksforvalteren får et varsel i
+  FS Admin om at løpet mangler. Vitnemål importeres fra KREG når
   søknaden opprettes, og når KREG får nye vitnemål for en søker med aktive søknader. Når
   søknaden opprettes, importeres vitnemålene fra KREG først. Gir ingen av dem en konklusjon, ser
   systemet etter en positiv konklusjon fra et tidligere opptak. Ellers vurderes GSK
@@ -100,6 +100,7 @@ Egenskap: Automatisk GSK-konklusjon
         | TEK           | teknisk fagskole fra og med 2000            | R94    |
         | KLS           | studieforberedende vitnemål                 | KL     |
         | KLY           | yrkesfaglige vitnemål                       | KL     |
+        | KLF           | påbygging på VG4 (PBPBY4)                   | KL     |
 
     Scenariomal: Opptakssystemets påstand er at søkeren ikke har GSK når <grunn>
       Gitt at <grunn>
@@ -205,7 +206,7 @@ Egenskap: Automatisk GSK-konklusjon
       Når vitnemålet importeres fra KREG
       Så får søknaden ingen GSK-konklusjon fra vitnemålet
 
-    @openquestion
+    @draft @openquestion
     Scenario: Opptaksforvalteren får varsel om et løp som mangler i listen over løp
       # Avklart 2026-11-02 (Ingrid Helset, etter samtale med Jøran og Geir, og bekreftet av
       # domeneeksperten): vitnemål med et ukjent løp behandles manuelt, og opptaksforvalteren får
@@ -234,7 +235,7 @@ Egenskap: Automatisk GSK-konklusjon
         | Kunnskapsløftet | KLY           |
         | Reform 94       | RFA           |
 
-    @openquestion
+    @draft @openquestion
     Scenario: Opptaksforvalteren får varsel om et løp uten grunnlagskode
       # Avklart 2026-11-02: søknaden får konklusjonen med KLY eller RFA, men
       # opptaksforvalteren får et varsel, så grunnlagskoden kan legges inn i listen over løp
@@ -284,7 +285,7 @@ Egenskap: Automatisk GSK-konklusjon
     # Grunnlagskoder: avklart 2026-10-13 at alle positive konklusjoner kan gjenbrukes,
     # uansett grunnlagskode. Grunnlagskoden kopieres, så den kan være hvilken som helst
     # av kodene i bruk (f.eks. IB, HUT, UTA), også koder som er satt manuelt. Tabellen
-    # med fem koder under «Opptakssystemets påstand om GSK på vitnemålet» gjelder bare
+    # med seks koder under «Opptakssystemets påstand om GSK på vitnemålet» gjelder bare
     # vitnemål.
 
     # Kildekoder: avklart 2026-10-27 at alle rader i gjenbruksbasen kan gjenbrukes i 2027,
