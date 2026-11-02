@@ -27,9 +27,9 @@ Egenskap: Trekke egen søknad
       Når søkeren velger å trekke søknaden
       Så opplyses søkeren om søknadsfristen i bekreftelsen
 
-  Regel: En ferdigbehandlet søknad kan ikke trekkes
+  Regel: En behandlet søknad kan ikke trekkes
 
-    Scenario: Søknaden er ferdigbehandlet
+    Scenario: Søknaden er behandlet
       Gitt at søknaden har status BEHANDLET
       Når søkeren åpner søknaden
       Så tilbys ikke søkeren å trekke søknaden

@@ -1,7 +1,7 @@
 # language: no
 @FLY-OPT-AUT-001 @must @planned @e2e @depends-on-FLY-OPT-SAK-001
 Egenskap: Automatisk saksbehandling
-  Fra søknaden er blitt en sak hos den saksbehandlende organisasjonen, til saken er ferdig
+  Fra søknaden er blitt en sak hos den saksbehandlende organisasjonen, til saken er
   behandlet og klar til å være med i plasstildelingen, uten at en saksbehandler har gjort noe.
   Plasstildelingen er ikke en del av flyten. Søkerens
   vitnemål importeres fra KREG til opptakssystemet når saken er opprettet (OPT-BEH-BEH-030).
@@ -18,11 +18,11 @@ Egenskap: Automatisk saksbehandling
   (se OPT-BEH-BEH-025). For søkerne i flyten setter den automatiske behandlingen grunnlaget,
   poengene, vurderingen av kravelementene og svarene på kvotespørsmålene, i den rekkefølgen.
   Det oppdaterer kvalifiseringen, kvotene, poengene per kvote og mangeltekstene. Til slutt sjekker den
-  automatiske behandlingen ut mangelen for GSK som fullføres i vår, og setter saken til ferdig
+  automatiske behandlingen ut mangelen for GSK som fullføres i vår, og setter saken til
   behandlet. Rettes en feil i regelverket, beregner opptaksforvalteren søknadsalternativene
   feilen gjaldt, på nytt.
 
-  # Kjent brudd: den automatiske behandlingen setter ikke saken til ferdig behandlet (se OPT-BEH-BEH-025).
+  # Kjent brudd: den automatiske behandlingen setter ikke saken til behandlet (se OPT-BEH-BEH-025).
   # Kjent brudd: koden beregner GSK bare i den automatiske behandlingen, ikke når vitnemålet
   # importeres fra KREG, og opptakssystemets påstand lagres ikke på vitnemålet (se OPT-BEH-BEH-015).
   # Kjent brudd: koden krever at KREG sier GSK, og bruker ikke skolens påstand (se OPT-BEH-BEH-015).
@@ -225,46 +225,46 @@ Egenskap: Automatisk saksbehandling
 
   @depends-on-OPT-BEH-BEH-008 @ref-FLY-OPT-VAL-001 @ref-FLY-OPT-SAM-001
   # OPT-BEH-BEH-008: «Opptaksforvalteren merker én mangelkode for generell studiekompetanse som fullføres i vår», «Mangelen for generell studiekompetanse som fullføres i vår settes og sjekkes ut automatisk»
-  Regel: Mangelen for GSK som fullføres i vår sjekkes ut før saken blir ferdig behandlet
+  Regel: Mangelen for GSK som fullføres i vår sjekkes ut før saken blir behandlet
 
-    Scenario: Saken med mangelen for GSK som fullføres i vår blir ferdig behandlet
+    Scenario: Saken med mangelen for GSK som fullføres i vår blir behandlet
       Gitt at søkeren har oppgitt i søknaden at generell studiekompetanse fullføres i vår
       Og at saken hos "Universitetet i Oslo" har den automatiske mangelen "DUA"
       Når den automatiske behandlingen har behandlet saken helautomatisk
-      Så er saken hos "Universitetet i Oslo" ferdig behandlet
+      Så er saken hos "Universitetet i Oslo" behandlet
       Og mangelen "DUA" er sjekket ut
 
   @depends-on-OPT-BEH-BEH-025 @depends-on-OPT-BEH-BEH-029 @ref-OPT-PLA-TIL-001 @ref-FLY-OPT-VAL-001 @ref-FLY-OPT-SAM-001
-  # OPT-BEH-BEH-025: «Den automatiske behandlingen setter saken til ferdig behandlet når alt er avgjort», «Steg som bygger på et steg som ikke kan avgjøres, hoppes over»
-  # OPT-BEH-BEH-029: «Saken kan bare bli Ferdig behandlet når den har minst én mangel eller ett grunnlag», «Saksloggen viser endringene i behandlingsstatusen»
-  # Bare saker som er ferdig behandlet, er med i plasstildelingen. Det står i OPT-PLA-TIL-001.
-  Regel: Saken blir ferdig behandlet og er klar til å være med i plasstildelingen
+  # OPT-BEH-BEH-025: «Den automatiske behandlingen setter saken til behandlet når alt er avgjort», «Steg som bygger på et steg som ikke kan avgjøres, hoppes over»
+  # OPT-BEH-BEH-029: «Saken kan bare bli Behandlet når den har minst én mangel eller ett grunnlag», «Saksloggen viser endringene i behandlingsstatusen»
+  # Bare saker som er behandlet, er med i plasstildelingen. Det står i OPT-PLA-TIL-001.
+  Regel: Saken blir behandlet og er klar til å være med i plasstildelingen
 
-    Scenario: Saken er ferdig behandlet når den automatiske behandlingen har avgjort alt
+    Scenario: Saken er behandlet når den automatiske behandlingen har avgjort alt
       Gitt at søkeren er kvalifisert for "Informatikk, UiO"
       Og at "Informatikk, UiO" har poengsum for søknaden
       Og at søkeren er plassert i en kvote for "Informatikk, UiO"
       Når den automatiske behandlingen er ferdig
-      Så er saken hos "Universitetet i Oslo" ferdig behandlet
+      Så er saken hos "Universitetet i Oslo" behandlet
 
-    Scenario: Søkeren ser mangelteksten fra kravelementene når saken er ferdig behandlet
+    Scenario: Søkeren ser mangelteksten fra kravelementene når saken er behandlet
       Gitt at saken har en automatisk mangeltekst som viser at "Matematikk R2" ikke er oppfylt
       Når den automatiske behandlingen er ferdig
-      Så er saken hos "Universitetet i Oslo" ferdig behandlet
+      Så er saken hos "Universitetet i Oslo" behandlet
       Og søkeren ser mangelteksten for "Matematikk R2" i Min kompetanse
 
-    Scenario: Saken blir ikke ferdig behandlet når poengene ikke kan avgjøres
+    Scenario: Saken blir ikke behandlet når poengene ikke kan avgjøres
       Gitt at poengene for "Informatikk, UiO" ikke kan avgjøres på grunn av en feil i regelverket
       Når den automatiske behandlingen er ferdig
       Så er saken hos "Universitetet i Oslo" under behandling
 
   @depends-on-OPT-BEH-BEH-026 @ref-FLY-OPT-VAL-001 @ref-FLY-OPT-SAM-001
-  # OPT-BEH-BEH-026: «Det som ble rettet, avgjør hvilke steg som beregnes på nytt», «Det saksbehandleren har satt, endres ikke», «Saker som er ferdig behandlet, forblir ferdig behandlet»
+  # OPT-BEH-BEH-026: «Det som ble rettet, avgjør hvilke steg som beregnes på nytt», «Det saksbehandleren har satt, endres ikke», «Saker som er behandlet, forblir behandlet»
   Regel: Søknadsalternativene beregnes på nytt når regelverket er rettet
 
     Scenario: Poengene beregnes på nytt når rangeringsregelverket er rettet
-      Gitt at saken hos "Universitetet i Oslo" er ferdig behandlet
+      Gitt at saken hos "Universitetet i Oslo" er behandlet
       Og at opptaksforvalteren har rettet en feil i rangeringsregelverket
       Når opptaksforvalteren beregner på nytt for søknadsalternativene med rangeringsregelverket som er rettet
       Så har "Informatikk, UiO" poengsum etter det rettede rangeringsregelverket
-      Og saken hos "Universitetet i Oslo" er fortsatt ferdig behandlet
+      Og saken hos "Universitetet i Oslo" er fortsatt behandlet

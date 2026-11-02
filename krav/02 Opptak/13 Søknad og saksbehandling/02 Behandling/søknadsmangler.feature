@@ -144,7 +144,7 @@ Egenskap: Søknadsmangler
     Scenario: Saken kan behandles ferdig selv om den har mangler
       Gitt at saken hos "Universitetet i Oslo" har mangelen "KAR"
       Når saksbehandleren ved Universitetet i Oslo har behandlet saken så langt dokumentasjonen rekker
-      Så kan saksbehandleren sette saken til "Ferdig behandlet"
+      Så kan saksbehandleren sette saken til "Behandlet"
 
     @draft @openquestion
     Scenario: Mangel som sperrer opptak holder søkeren utenfor tilbudskjøringen
@@ -314,10 +314,10 @@ Egenskap: Søknadsmangler
       # - Skal de automatiske mangeltekstene for kompetanseregelverk publiseres på samme måte som
       #   manglene saksbehandleren registrerer? Saksbehandleren velger da å publisere, og
       #   publiseringen gjelder begge deler. Det er allerede et krav om at begge deler må være
-      #   publisert når saken settes til «Ferdig behandlet».
+      #   publisert når saken settes til «Behandlet».
       #   Merk: de automatiske mangeltekstene for kompetanseregelverk blir alltid publisert når
-      #   saken settes til «Ferdig behandlet» (se «Søkeren ser de automatiske mangeltekstene når
-      #   saken er ferdig behandlet»).
+      #   saken settes til «Behandlet» (se «Søkeren ser de automatiske mangeltekstene når
+      #   saken er behandlet»).
       # Kode i dag: «Oppdater mangel i Min kompetanse» kan ikke brukes når saken bare har
       # automatiske mangler.
       Gitt at saken hos "Universitetet i Oslo" bare har den automatiske mangelteksten for "Matematikk R2"
@@ -340,32 +340,32 @@ Egenskap: Søknadsmangler
 
     Scenario: Saksbehandleren blir advart om mangler som ikke er publisert
       Gitt at saken hos "Universitetet i Oslo" har mangelen "KNN" som ikke er publisert
-      Når saksbehandleren ved Universitetet i Oslo setter saken til "Ferdig behandlet"
+      Når saksbehandleren ved Universitetet i Oslo setter saken til "Behandlet"
       Så ser saksbehandleren at søkeren ikke ser mangelen "KNN" i Min kompetanse
 
     @draft @openquestion
-    Scenario: Publisere manglene når saken settes til ferdig behandlet
+    Scenario: Publisere manglene når saken settes til behandlet
       # ÅPNE SPØRSMÅL:
       # - Publiseringen er endret etter raffineringen: saksbehandleren publiserer alle manglene i
-      #   saken samlet, og søkeren får melding hver gang. Settes saken til «Ferdig behandlet»,
+      #   saken samlet, og søkeren får melding hver gang. Settes saken til «Behandlet»,
       #   publiseres manglene, med mindre saksbehandleren velger å la være. Ikke gått gjennom med teamet.
       Gitt at saksbehandleren ved Universitetet i Oslo er advart om at mangelen "KNN" ikke er publisert
-      Når saksbehandleren velger å publisere manglene og sette saken til "Ferdig behandlet"
-      Så er saken "Ferdig behandlet"
+      Når saksbehandleren velger å publisere manglene og sette saken til "Behandlet"
+      Så er saken "Behandlet"
       Og søkeren ser mangelen "KNN" i Min kompetanse
       Og søkeren har mottatt en melding om mangler
 
-    Scenario: Sette saken til ferdig behandlet uten å publisere manglene
+    Scenario: Sette saken til behandlet uten å publisere manglene
       Gitt at saksbehandleren ved Universitetet i Oslo er advart om at mangelen "KNN" ikke er publisert
-      Når saksbehandleren velger å sette saken til "Ferdig behandlet" uten å varsle søkeren
-      Så er saken "Ferdig behandlet"
+      Når saksbehandleren velger å sette saken til "Behandlet" uten å varsle søkeren
+      Så er saken "Behandlet"
       Og søkeren ser ikke mangelen "KNN" i Min kompetanse
       Og søkeren har ikke mottatt en melding om mangler
 
     Scenario: Avbryte når saken har mangler som ikke er publisert
       Gitt at saksbehandleren ved Universitetet i Oslo er advart om at mangelen "KNN" ikke er publisert
       Når saksbehandleren avbryter
-      Så er ikke saken satt til "Ferdig behandlet"
+      Så er ikke saken satt til "Behandlet"
 
     Scenario: Søkeren får én melding om manglene som publiseres i saken
       Gitt at saken hos "Universitetet i Oslo" har manglene "KAR" og "STEMPEL"
@@ -616,10 +616,10 @@ Egenskap: Søknadsmangler
       Når saksbehandleren åpner manglene i saken
       Så ser saksbehandleren den automatiske mangelteksten for "Matematikk R2" og mangelen "STEMPEL"
 
-    Scenario: Søkeren ser de automatiske mangeltekstene når saken er ferdig behandlet
+    Scenario: Søkeren ser de automatiske mangeltekstene når saken er behandlet
       # Avklart 30.10.2026. Ingen publiserer tekstene.
       Gitt at saken hos "Universitetet i Oslo" har en automatisk mangeltekst for "Matematikk R2"
-      Når saken hos "Universitetet i Oslo" blir ferdig behandlet
+      Når saken hos "Universitetet i Oslo" blir behandlet
       Så ser søkeren den automatiske mangelteksten for "Matematikk R2" i Min kompetanse
 
     Scenario: Søkeren ser ikke de automatiske mangeltekstene mens saken er under behandling
@@ -629,7 +629,7 @@ Egenskap: Søknadsmangler
       Så ser ikke søkeren den automatiske mangelteksten for "Matematikk R2"
 
     Scenario: Søkeren ser mangeltekstene per søknadsalternativ
-      Gitt at saken hos "Universitetet i Oslo" er ferdig behandlet
+      Gitt at saken hos "Universitetet i Oslo" er behandlet
       Og at saken har en automatisk mangeltekst for "Matematikk R2" for "Informatikk, UiO"
       Når søkeren åpner dokumentasjonssiden i Min kompetanse
       Så ser søkeren mangelteksten for "Matematikk R2" under "Informatikk, UiO"
@@ -662,7 +662,7 @@ Egenskap: Søknadsmangler
     studiekompetanse ikke fullføres i vår, slettes mangelen hvis den ikke er sjekket ut.
 
     Når saken er behandlet helautomatisk, sjekker den automatiske behandlingen ut mangelen som et
-    av de siste stegene før saken er ferdig behandlet. Saksbehandleren kan også sjekke
+    av de siste stegene før saken er behandlet. Saksbehandleren kan også sjekke
     ut mangelen, for eksempel når søkeren har dokumentert vitnemålet på annen måte.
     # I det gamle systemet het mangelkoden DUA. Eksemplene bruker den koden.
 
@@ -729,7 +729,7 @@ Egenskap: Søknadsmangler
     Scenario: Mangelen sjekkes ut når saken er behandlet helautomatisk
       Gitt at saken hos "Universitetet i Oslo" har den automatiske mangelen "DUA"
       Når den automatiske behandlingen har behandlet saken helautomatisk
-      Så er mangelen "DUA" sjekket ut før saken er ferdig behandlet
+      Så er mangelen "DUA" sjekket ut før saken er behandlet
       Og saksloggen viser at den automatiske behandlingen sjekket ut mangelen
 
     Scenario: Mangelen sjekkes ikke ut når saken ikke er behandlet helautomatisk

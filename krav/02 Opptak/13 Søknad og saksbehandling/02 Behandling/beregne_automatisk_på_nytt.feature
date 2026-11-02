@@ -10,7 +10,7 @@ Egenskap: Beregne automatisk på nytt
   opptaksforvalteren hva som ble rettet, og den automatiske behandlingen kjøres på nytt for
   søknadsalternativene feilen gjaldt. Det som ble rettet, avgjør hvilke steg som beregnes på nytt,
   og stegene som bygger på dem, beregnes også på nytt. Det saksbehandleren har satt, endres ikke.
-  Saker som er ferdig behandlet, forblir ferdig behandlet. Beregningen gjelder fra neste
+  Saker som er behandlet, forblir behandlet. Beregningen gjelder fra neste
   plasstildeling.
 
   # I FS-klienten gjøres dette med rutinen FS158.001. I fs-plattform kjører den automatiske
@@ -23,7 +23,7 @@ Egenskap: Beregne automatisk på nytt
   # Avklart 30.10.2026: søkeren får ingen egen melding når kvalifiseringen, poengene eller kvoten
   # endres. Søkeren ser det som er endret, i Min kompetanse.
 
-  # Avklart 30.10.2026: søkeren ser de automatiske mangeltekstene når saken er ferdig behandlet
+  # Avklart 30.10.2026: søkeren ser de automatiske mangeltekstene når saken er behandlet
   # (OPT-BEH-BEH-008). Gir beregningen på nytt en ny mangeltekst i en sak som er ferdig
   # behandlet, ser søkeren den med en gang. Ingen trenger å publisere den.
 
@@ -71,34 +71,34 @@ Egenskap: Beregne automatisk på nytt
       Så ser opptaksforvalteren at 1 søknadsalternativ ikke ble beregnet på nytt fordi saksbehandleren har vurdert det
 
   @depends-on-OPT-BEH-BEH-025
-  Regel: Saker som er ferdig behandlet, forblir ferdig behandlet
+  Regel: Saker som er behandlet, forblir behandlet
 
-    Scenario: Saken er fortsatt ferdig behandlet etter at poengene er beregnet på nytt
-      Gitt at saken til "Kari Nordmann" hos "Universitetet i Oslo" er ferdig behandlet
+    Scenario: Saken er fortsatt behandlet etter at poengene er beregnet på nytt
+      Gitt at saken til "Kari Nordmann" hos "Universitetet i Oslo" er behandlet
       Når opptaksforvalteren beregner på nytt for søknadsalternativene med rangeringsregelverket som er rettet
       Så har "Informatikk, UiO" poengsum for "Kari Nordmann" etter det rettede rangeringsregelverket
-      Og saken til "Kari Nordmann" hos "Universitetet i Oslo" er fortsatt ferdig behandlet
+      Og saken til "Kari Nordmann" hos "Universitetet i Oslo" er fortsatt behandlet
 
     @depends-on-OPT-BEH-BEH-008
-    Scenario: Søkeren ser den nye mangelteksten i en sak som er ferdig behandlet
-      Gitt at saken til "Kari Nordmann" hos "Universitetet i Oslo" er ferdig behandlet
+    Scenario: Søkeren ser den nye mangelteksten i en sak som er behandlet
+      Gitt at saken til "Kari Nordmann" hos "Universitetet i Oslo" er behandlet
       Og at "Kari Nordmann" er kvalifisert for "Informatikk, UiO"
       Og at en feil i kontrollmotoren er rettet, så vitnemålet til "Kari Nordmann" ikke lenger oppfyller "Matematikk R2"
       Når opptaksforvalteren beregner på nytt for søknadsalternativene med kravelementet "Matematikk R2"
       Så er "Kari Nordmann" ikke lenger kvalifisert for "Informatikk, UiO"
       Og "Kari Nordmann" ser den automatiske mangelteksten for "Matematikk R2" i Min kompetanse
-      Og saken til "Kari Nordmann" hos "Universitetet i Oslo" er fortsatt ferdig behandlet
+      Og saken til "Kari Nordmann" hos "Universitetet i Oslo" er fortsatt behandlet
 
   @depends-on-OPT-BEH-BEH-025
-  Regel: En sak som ble stående under behandling på grunn av feilen, blir ferdig behandlet når alt kan avgjøres
+  Regel: En sak som ble stående under behandling på grunn av feilen, blir behandlet når alt kan avgjøres
     # Avklart 30.10.2026. Saken kunne vært behandlet helautomatisk om regelverket hadde vært
     # riktig. Har saksbehandleren gjort noe i saken, blir den stående under behandling.
 
-    Scenario: Saken blir ferdig behandlet når feilen er rettet
+    Scenario: Saken blir behandlet når feilen er rettet
       Gitt at saken til "Kari Nordmann" hos "Universitetet i Oslo" er under behandling fordi poengene for "Informatikk, UiO" ikke kunne avgjøres på grunn av en feil i rangeringsregelverket
       Og at saksbehandleren ikke har gjort noe i saken
       Når opptaksforvalteren beregner på nytt for søknadsalternativene med rangeringsregelverket som er rettet
-      Så er saken til "Kari Nordmann" hos "Universitetet i Oslo" ferdig behandlet
+      Så er saken til "Kari Nordmann" hos "Universitetet i Oslo" behandlet
 
     Scenario: Saken blir stående under behandling når saksbehandleren har gjort noe i den
       Gitt at saken til "Kari Nordmann" hos "Universitetet i Oslo" er under behandling fordi poengene for "Informatikk, UiO" ikke kunne avgjøres på grunn av en feil i rangeringsregelverket
