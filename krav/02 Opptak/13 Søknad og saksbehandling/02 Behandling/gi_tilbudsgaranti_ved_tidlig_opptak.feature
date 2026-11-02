@@ -340,7 +340,7 @@ Egenskap: Gi tilbudsgaranti ved tidlig opptak
       Så får søkeren tilbudsgaranti på "Sykepleie, høst 2027"
       Og søkeren har ikke lenger tilbudsgaranti på "Vernepleie, høst 2027"
 
-    @ref-OPT-PLA-TIL-002
+    @ref-OPT-PLA-TIL-002 @implemented
     Scenario: Søknadsalternativ uten tilbudsgaranti går videre til ordinært opptak
       Gitt søkeren fikk ikke tilbudsgaranti på "Sykepleie, høst 2027" i tidligopptaket
       Når hovedopptaket kjøres
@@ -415,6 +415,7 @@ Egenskap: Gi tilbudsgaranti ved tidlig opptak
   # 14 Plasstildeling/03 Tildeling/gjennomføre_plasstildeling.feature. Reglene er flyttet
   # 14.10.2026, fordi de gjelder alle tilbudsgarantier, ikke bare tidlig opptak
   # (STEK-241, STEK-188).
+  @implemented
   Regel: Manuell tilbudsgaranti krever ikke deltakelse i tidligopptaket
 
     Scenario: Sette tilbudsgaranti når søkeren ikke deltar i tidligopptaket
