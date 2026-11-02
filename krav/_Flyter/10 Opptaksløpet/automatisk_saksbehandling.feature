@@ -212,8 +212,8 @@ Egenskap: Automatisk saksbehandling
       Når søknaden behandles automatisk
       Så har søkeren poengsum etter poengformelen til "Ordinær kvote" for "Informatikk, UiO"
 
-  @depends-on-OPT-BEH-BEH-008 @ref-FLY-OPT-VAL-001 @ref-FLY-OPT-SAM-001
-  # OPT-BEH-BEH-008: «Saken får automatiske mangeltekster når søkeren ikke er kvalifisert»
+  @depends-on-OPT-BEH-BEH-036 @ref-FLY-OPT-VAL-001 @ref-FLY-OPT-SAM-001
+  # OPT-BEH-BEH-036: «Saken får automatiske mangeltekster når søkeren ikke er kvalifisert»
   # Oppdateres automatisk ut fra vurderingen av kravelementene.
   Regel: Saken får mangeltekster når kravelementene er vurdert
 
@@ -223,8 +223,8 @@ Egenskap: Automatisk saksbehandling
       Når søknaden behandles automatisk
       Så har saken en automatisk mangeltekst som viser at "Matematikk R2" ikke er oppfylt
 
-  @depends-on-OPT-BEH-BEH-008 @ref-FLY-OPT-VAL-001 @ref-FLY-OPT-SAM-001
-  # OPT-BEH-BEH-008: «Opptaksforvalteren merker én mangelkode for generell studiekompetanse som fullføres i vår», «Mangelen for generell studiekompetanse som fullføres i vår settes og sjekkes ut automatisk»
+  @depends-on-OPT-BEH-BEH-036 @ref-FLY-OPT-VAL-001 @ref-FLY-OPT-SAM-001
+  # OPT-BEH-BEH-036: «Opptaksforvalteren merker én mangelkode for generell studiekompetanse som fullføres i vår», «Mangelen for generell studiekompetanse som fullføres i vår settes og sjekkes ut automatisk»
   Regel: Mangelen for GSK som fullføres i vår sjekkes ut før saken blir ferdig behandlet
 
     Scenario: Saken med mangelen for GSK som fullføres i vår blir ferdig behandlet

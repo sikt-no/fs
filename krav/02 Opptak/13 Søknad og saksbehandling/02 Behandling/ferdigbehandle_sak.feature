@@ -26,7 +26,7 @@ Egenskap: Ferdigbehandle en sak
   # søkeren har flere vitnemål.
 
   # Avklart 30.10.2026: opptaksforvalteren får et varsel første gang en feil i regelverket
-  # stopper et steg, som for mangelkoden for GSK som fullføres i vår (OPT-BEH-BEH-008).
+  # stopper et steg, som for mangelkoden for GSK som fullføres i vår (OPT-BEH-BEH-036).
 
   # Avklart 30.10.2026: feilene i regelverket som kan stoppe et steg, står i scenariomalen
   # «<feil i regelverket> stopper <steg>». Nye feil legges til i tabellen når de oppdages.
@@ -102,8 +102,9 @@ Egenskap: Ferdigbehandle en sak
       Når søknaden behandles automatisk
       Så er saken hos "Universitetet i Oslo" ferdig behandlet
 
-    @depends-on-OPT-BEH-BEH-008
-    # OPT-BEH-BEH-008: «Kategorien til mangelkoden avgjør hva mangelen hindrer» og «Saken får automatiske mangeltekster når søkeren ikke er kvalifisert»
+    @depends-on-OPT-BEH-BEH-008 @depends-on-OPT-BEH-BEH-036
+    # OPT-BEH-BEH-008: «Kategorien til mangelkoden avgjør hva mangelen hindrer»
+    # OPT-BEH-BEH-036: «Saken får automatiske mangeltekster når søkeren ikke er kvalifisert»
     Scenario: Saken er ferdig behandlet selv om kravelementene ga mangeltekst
       Gitt at "Informatikk, UiO" har kravelementet "Matematikk R2"
       Og at vitnemålet ikke har "Matematikk R2"

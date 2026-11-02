@@ -79,14 +79,14 @@ Egenskap: Automatisk vurdering av spesielle opptakskrav
 
   # Avklart 30.10.2026: er søkeren ikke kvalifisert, får saken automatiske mangeltekster for
   # kravelementene som ikke er oppfylt, og de slettes når søkeren blir kvalifisert
-  # (OPT-BEH-BEH-008). Den automatiske vurderingen gjør ikke noe med manglene saksbehandleren
+  # (OPT-BEH-BEH-036). Den automatiske vurderingen gjør ikke noe med manglene saksbehandleren
   # har registrert. I FS-klienten sletter «Godkjenn» dem.
   # Avklart 30.10.2026: vurderingen av vitnemålet og praksisautomatikken
   # (knytte_praksis_til_opptakskrav.feature, OPT-BEH-BEH-006) vurderer hver sine kravelementer,
   # og møtes ikke. Saksbehandlerens vurdering låser kravelementet i begge.
   # Avklart 30.10.2026: fjernes et studieønske, blir kravelementene det ga, og vurderingen av
   # dem, stående (STEK-505). Søkeren ser mangeltekstene per søknadsalternativ, og ser dem ikke
-  # lenger når søknadsalternativet er fjernet (OPT-BEH-BEH-008).
+  # lenger når søknadsalternativet er fjernet (OPT-BEH-BEH-036).
   # Avklart 30.10.2026: FS157.001 i FS-klienten, som beregner om søkerne er kvalifisert for et
   # helt opptak, dekkes av OPT-BEH-BEH-026 «Beregne automatisk på nytt».
 

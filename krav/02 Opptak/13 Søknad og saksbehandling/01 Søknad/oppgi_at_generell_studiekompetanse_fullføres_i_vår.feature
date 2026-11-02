@@ -10,7 +10,7 @@ Egenskap: Oppgi at generell studiekompetanse fullføres i vår
   når de sender inn søknaden. Søkeren oppgir da i søknaden at generell studiekompetanse fullføres
   i vår, det vil si at vitnemålet kommer senere. Alle sakene i søknaden får automatisk en mangel
   for generell studiekompetanse, og mangelen sjekkes ut når saken er behandlet helautomatisk
-  (se @OPT-BEH-BEH-008).
+  (se @OPT-BEH-BEH-036).
 
   Regel: Søkeren oppgir i søknaden at generell studiekompetanse fullføres i vår
 
