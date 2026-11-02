@@ -1,58 +1,59 @@
-# Utkast til Jira: Rundetyper og plasstildelingsrunder
+# Utkast til Jira: Forberede plasstildeling
 
-Utkast 2026-10-28, ikke opprettet. Kravene er `@draft`, og lenkene går til `main` (kravene kommer dit når PR #850 er merget).
+Utkast 2026-10-28, skrevet om 2026-11-02 etter gjennomgangen av prototypen v88 ([PR #907](https://github.com/sikt-no/fs/pull/907)). Ikke opprettet eller endret i Jira ennå. Kravene er `@draft`, og lenkene går til `main` (kravene kommer dit når PR #907 er merget).
 
-## Epic: Rundetyper og plasstildelingsrunder
+Forvaltning av rundetyper (`@OPT-REG-RUN-002`, Could) er ikke med. Varsling av lærestedene og markering av gjennomgang (`@OPT-PLA-INN-004`, Could) og kontrollen av antall tilbud (`@OPT-PLA-INN-003`, Should) er heller ikke med.
 
-Opptaksforvalter kan legge til plasstildelingsrundene i opptaket, med innstillingene fra rundetypene i regelverkssamlingen, og sette antall tilbud som skal gis per utdanningskvote i runden. Første leveranse i plasstildelingen: det plasstildelingen leser.
+## Epic (TAKE-3, skrives om): Forberede plasstildeling
 
-Verifisering 2026-10-28: 8 av 49 scenarioer finnes i koden.
+Opptaksforvalter legger til plasstildelingsrundene i opptaket, med rundetypene og innstillingene fra regelverkssamlingen. Lærestedene setter antall tilbud som skal gis per utdanningskvote i runden, og ser opplysningene de trenger for å sette tallene. Første leveranse i plasstildelingen: det plasstildelingen leser.
+
+Krav: [scope-plasstildeling-2027](https://github.com/sikt-no/fs/blob/main/tasks/opptak/plasstildeling-2027/scope.md)
+
+## Ny epic: Gjennomføre og publisere plasstildeling
+
+Starte og gjennomføre plasstildelingen etter innstillingene i runden, se resultatet før det publiseres, publisere resultatet til søkerne og håndtere svarene. Oppgavene «Gjennomføre plasstildelingen» og «Publisere resultatet og svare på tilbud» i scopet. Bygger på «Forberede plasstildeling».
+
+Flyttes hit fra TAKE-3: TAKE-328, TAKE-329, TAKE-330, TAKE-331, TAKE-265, TAKE-267, TAKE-268, TAKE-278, TAKE-288, TAKE-74, TAKE-156, TAKE-159 og TAKE-165.
 
 Krav: [scope-plasstildeling-2027](https://github.com/sikt-no/fs/blob/main/tasks/opptak/plasstildeling-2027/scope.md)
 
 ---
 
-## Story: Rundetypene hovedtildeling, supplering og etterfylling med innstillinger
+## Story: Opprette plasstildelingsrunder med rundetyper og innstillinger
 
-Plasstildelingen bruker rundetypene som finnes i regelverkssamlingen. Samordna opptak får hovedtildeling, supplering og etterfylling, med innstillingene plasstildelingen leser. I dag er rundetypene et fast kodeverk uten innstillinger. Å legge til, endre og slette rundetyper er ikke med (`@OPT-REG-RUN-002`, Could).
-
-Akseptansekriterier:
-
-- Regelverkssamlingene for samordna opptak har rundetypene hovedtildeling, supplering og etterfylling (`@OPT-REG-RUN-001`)
-
-Krav: [bruke_rundetyper.feature](https://github.com/sikt-no/fs/blob/main/krav/02%20Opptak/10%20Regelverk/06%20Rundetyper/bruke_rundetyper.feature)
-
-## Story: Plasstildelingsrunder med innstillingene fra rundetypen
-
-Opptaksforvalter legger til runder av alle rundetypene i regelverkssamlingen, ser innstillingene fra rundetypen, og kan åpne runden for ledige studieplasser. I dag kan bare hovedrunde velges i fs-admin.
+Opptaksforvalter legger til runder av rundetypene i regelverkssamlingen (hovedtildeling, supplering og etterfylling i samordna opptak), og runden får innstillingene fra rundetypen. I dag kan bare hovedrunde velges i fs-admin, og rundetypene er et fast kodeverk uten innstillinger.
 
 Akseptansekriterier:
 
-- Rundetypene i regelverkssamlingen avgjør hvilke plasstildelingsrunder opptaket kan ha (`@OPT-PLA-RUN-001`)
-- Plasstildelingsrunden har innstillingene fra rundetypen
-- En plasstildelingsrunde kan slettes så lenge den ikke er publisert til søker
-- Opptaksforvalter kan åpne en plasstildelingsrunde for ledige studieplasser
-- Opptaksforvalter setter tak for antall tilbud på ledige studieplasser per søker i plasstildelingsrunden
-- Opptaksforvalter setter periode for når lærestedene kan endre antall tilbud som skal gis (med klokkeslett, og kan endres)
+- Regelverkssamlingene for samordna opptak har rundetypene hovedtildeling, supplering og etterfylling, med innstillingene plasstildelingen leser (`@OPT-REG-RUN-001`)
+- Opptaksforvalter legger til en runde med navn, rundetype og svarfrist, og rundetypene i regelverkssamlingen avgjør hvilke runder opptaket kan ha (`@OPT-PLA-RUN-001`)
+- Runden har innstillingene fra rundetypen, og de kan ikke endres på runden. Rundetypen kan ikke endres etter at runden er lagt til
+- Navn og svarfrist kan alltid endres, og en runde kan slettes så lenge den ikke er publisert til søker
+- Opptaksforvalter setter tak for antall tilbud per søker i runden, som vises og kan endres. I samordna opptak: 1 i hovedtildeling og supplering, opptil 10 i etterfylling
+- Opptaksforvalter kan åpne runden for ledige studieplasser, og setter da tak for antall tilbud på ledige studieplasser per søker (opptil 10 i supplering og etterfylling i samordna opptak, i tillegg til de ordinære tilbudene)
+- Opptaksforvalter setter periode for når lærestedene kan endre antall tilbud (dato og klokkeslett, kan alltid endres). Svarfristen må komme etter at perioden er slutt
+- Lærestedet ser alle rundene og hva det skal gjøre i hver, men kan bare åpne runden der perioden er åpen
 
-Krav: [forvalte_runder.feature](https://github.com/sikt-no/fs/blob/main/krav/02%20Opptak/14%20Plasstildeling/01%20Runder/forvalte_runder.feature)
+Krav: [forvalte_runder.feature](https://github.com/sikt-no/fs/blob/main/krav/02%20Opptak/14%20Plasstildeling/01%20Runder/forvalte_runder.feature) · [bruke_rundetyper.feature](https://github.com/sikt-no/fs/blob/main/krav/02%20Opptak/10%20Regelverk/06%20Rundetyper/bruke_rundetyper.feature)
 
-## Story (TAKE-327, skrives om): Antall tilbud som skal gis per utdanningskvote i plasstildelingsrunden
+## Story (TAKE-327, skrives om): Lærestedet setter antall tilbud som skal gis per utdanningskvote
 
-Ny tittel og beskrivelse. Fordelingen i prosent er ikke med.
+Ny tittel og beskrivelse. Fordelingen i prosent er forkastet.
 
-Lærestedene setter antall tilbud som skal gis per utdanningskvote for hver runde, innenfor perioden på runden. Opptakets forvalter kan endre tallene når som helst før runden er publisert. I dag settes ett tall for hele opptaket, og perioden håndheves ikke.
+Lærestedet setter antall tilbud som skal gis per utdanningskvote, eller at utdanningstilbudet gir tilbud til alle kvalifiserte, innenfor perioden på runden. Lærestedet ser opplysningene det trenger for å sette tallene. Opptakets forvalter kan endre tallene også utenfor perioden. I dag settes ett tall for hele opptaket, og perioden håndheves ikke.
 
 Akseptansekriterier:
 
-- Opptaksforvalter setter antall tilbud som skal gis per utdanningskvote for plasstildelingsrunden (`@OPT-PLA-INN-001`)
-- Et utdanningstilbud uten antall tilbud som skal gis, gir ingen nye tilbud i plasstildelingsrunden
-- Lærestedene kan endre antall tilbud bare innenfor perioden som er satt på plasstildelingsrunden
-- Antall tilbud kan ikke endres når plasstildelingsrunden er publisert
-- Opptaksforvalter ser grunnlaget for å sette antall tilbud
-- Opptaksforvalter kan filtrere utdanningstilbudene på om antall tilbud er satt
-- Et utdanningstilbud kan gi tilbud til alle kvalifiserte
-- Antall tilbud kan være negativt når rundetypen har kompensasjonstilbud ved opprykk
+- Lærestedet setter antall tilbud som skal gis per utdanningskvote, og totalt antall tilbud for utdanningstilbudet er summen (`@OPT-PLA-INN-001`)
+- Tallene er fylt ut med kvoteplassene, og lærestedet bekrefter eller endrer dem. En utdanningskvote der tallet er fjernet, gir ingen tilbud
+- Et utdanningstilbud kan gi tilbud til alle kvalifiserte i stedet for tall i utdanningskvotene
+- Per utdanningskvote ser lærestedet kvoteplassene, antall tilbud som skal gis og overbookingen (antall tilbud minus kvoteplassene)
+- Per utdanningstilbud, og summert for utdanningstilbudene lærestedet tilbyr, ser lærestedet planlagte studieplasser, ledige plasser å gi tilbud til og totalt antall tilbud som skal gis
+- Ledige plasser å gi tilbud til trekker fra søkere med tilbudsgaranti som ikke har fått tilbud
+- Lærestedet kan bare endre tallene innenfor perioden på runden. Opptakets forvalter kan alltid endre dem, og siste lagrede tall gjelder
+- Tallene kan ikke endres når runden er publisert, og kan ikke settes før opptaket har en runde
+- Utdanningstilbudene kan filtreres på om antall tilbud er satt i alle utdanningskvotene
 
 Krav: [antall_tilbud_som_skal_gis.feature](https://github.com/sikt-no/fs/blob/main/krav/02%20Opptak/14%20Plasstildeling/02%20Tildelingsinnstillinger/antall_tilbud_som_skal_gis.feature)
 
