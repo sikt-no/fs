@@ -92,16 +92,11 @@ Egenskap: Listevisning og søk i utdanningstilbud i opptaket
 
     # AVKLART 08.10.2026: Fristene for tidlig opptak er felles for opptaket, og svaret på
     # tidlig opptak publiseres for hele opptaket. Utdanningstilbudet har derfor ingen egen
-    # dato for tidlig opptak. Det som kan mangle på et utdanningstilbud som tilbyr tidlig
-    # opptak, er poenggrensen. Tidlig søknadsfrist settes fritt per utdanningstilbud.
+    # dato for tidlig opptak. Tidlig søknadsfrist settes fritt per utdanningstilbud.
+    # AVKLART 2026-11-02: Poenggrensen for tidlig opptak settes ikke på utdanningstilbudet, og kan derfor
+    # ikke mangle der.
     @depends-on-OPT-OPT-UTD-025 @ref-OPT-OVO-FRI-001
     Scenario: Filtrere på utdanningstilbud som mangler dato for tidlig søknadsfrist
       Gitt at et utdanningstilbud er markert med tidlig søknadsfrist
       Når opptaksforvalter filtrerer på utdanningstilbud med ufullstendige opplysninger
       Så ser opptaksforvalter utdanningstilbud der dato for tidlig søknadsfrist ikke er satt
-
-    @depends-on-OPT-OPT-UTD-010 @ref-OPT-BEH-BEH-014
-    Scenario: Filtrere på utdanningstilbud som mangler poenggrense for tidlig opptak
-      Gitt at et utdanningstilbud tilbyr tidlig opptak
-      Når opptaksforvalter filtrerer på utdanningstilbud med ufullstendige opplysninger
-      Så ser opptaksforvalter utdanningstilbud der poenggrensen for tidlig opptak ikke er satt

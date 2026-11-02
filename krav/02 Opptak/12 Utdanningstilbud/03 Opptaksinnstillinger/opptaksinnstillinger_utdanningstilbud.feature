@@ -16,7 +16,7 @@ Egenskap: Opptaksinnstillinger per utdanningstilbud
   #   @ref-OPT-OPT-UTD-008 (sette_innstillinger_for_flere_utdanningstilbud.feature),
   #   @ref-OPT-OPT-UTD-007 (sette_studieplasser_og_antall_tilbud.feature) og
   #   @ref-OPT-OPT-UTD-025 (sette_tidlig_søknadsfrist.feature)?
-  # - Kommentaren mellom regelen om poenggrensen og regelen om saksbehandlertildelingsregel viser til
+  # - Kommentaren foran regelen om saksbehandlertildelingsregel viser til
   #   antall_tilbud_som_skal_gis.feature. Skal den bli @ref-OPT-PLA-INN-001, og på hvilken del?
 
   Bakgrunn:
@@ -215,9 +215,11 @@ Egenskap: Opptaksinnstillinger per utdanningstilbud
   @depends-on-OPT-OVO-INN-001 @openquestion
   Regel: Opptaksforvalter kan markere at et utdanningstilbud tilbyr tidlig opptak
     # ÅPNE SPØRSMÅL:
-    # - Kommentarene i regelen viser til publisere_svar_på_tidlig_opptak.feature og
-    #   gi_tilbudsgaranti_ved_tidlig_opptak.feature i fritekst. Skal regelen ha @ref-OPT-BEH-BEH-014 og
-    #   @ref-OPT-BEH-BEH-007, eller skal scenarioet om poenggrensen ha @depends-on-OPT-BEH-BEH-007?
+    # - Kommentaren i regelen viser til publisere_svar_på_tidlig_opptak.feature i fritekst.
+    #   Skal regelen ha @ref-OPT-BEH-BEH-014?
+    # AVKLART 2026-11-02: Poenggrensen for tidlig opptak settes ikke på utdanningstilbudet, og det er ikke
+    # påkrevd å angi en poenggrense når utdanningstilbudet tilbyr tidlig opptak. Poenggrensen behandles et
+    # annet sted (tilbakemelding fra intern akseptansetest, SHI-791).
 
     Scenario: Markere at utdanningstilbudet tilbyr tidlig opptak
       Gitt at opptaket åpner for tidlig opptak
@@ -227,36 +229,9 @@ Egenskap: Opptaksinnstillinger per utdanningstilbud
       # gjennomføres, ikke per utdanningstilbud, se publisere_svar_på_tidlig_opptak.feature
       # (avklart 25.09.2026, uten egen publiseringsdato fra 09.10.2026).
 
-    Scenario: Sette poenggrense for tidlig opptak
-      Gitt utdanningstilbudet "Sykepleie, høst 2027" tilbyr tidlig opptak
-      Når opptaksforvalter setter poenggrensen for tidlig opptak til 50 for utdanningstilbudet "Sykepleie, høst 2027"
-      Så får søkere som deltar i tidligopptaket og har minst 50 poeng, tilbudsgaranti på "Sykepleie, høst 2027"
-      # Se gi_tilbudsgaranti_ved_tidlig_opptak.feature. En egen verdi beregnet fra fjorårets
-      # opptak kommer eventuelt senere (STEK-352).
-
     # Lenken til informasjon om tidlig opptak settes per opptak, ikke per
     # utdanningstilbud, se 11 Opprette og vedlikeholde opptak/03 Innstillinger/
     # innstillinger.feature (avklart 09.10.2026, review av PR #654).
-
-  @openquestion
-  Regel: Deltakende organisasjon kan ikke endre poenggrensen for tidlig opptak etter fristen
-    # ÅPNE SPØRSMÅL:
-    # - Regelen bruker fristen for å sette poenggrenser fra frister_og_hendelser.feature. Skal den ha
-    #   @depends-on-OPT-OVO-FRI-001?
-
-    # Virkningen av fristen for å sette poenggrenser for tidlig opptak, som opptaksforvalter setter i
-    # 11 Opprette og vedlikeholde opptak/04 Frister/frister_og_hendelser.feature.
-    # Lagt til 2026-10-19 etter akseptansetesten av opprette og vedlikeholde opptak.
-    # AVKLART 2026-10-15 (Q12, TAKE-409): Fristen hindrer deltakende organisasjoner i å endre poenggrensene
-    # etter fristen. Forvaltende organisasjon kan fortsatt endre poenggrensene.
-
-    Scenario: Lærestedet kan ikke endre poenggrensen for tidlig opptak etter fristen
-      Gitt at opptaket har aktivert tidlig opptak
-      Og at fristen for å sette poenggrenser for tidlig opptak er "2027-02-15 23:59"
-      Og at fristen er ute
-      Når opptaksforvalter ved deltakende organisasjon vil endre poenggrensen for tidlig opptak på "Sykepleie, høst 2027"
-      Så kan opptaksforvalter ved deltakende organisasjon ikke endre poenggrensen
-      Men opptaksforvalter ved forvaltende organisasjon kan fortsatt endre poenggrensen
 
   # AVKLART 2026-10-08: Det finnes ingen innstilling for hvilke plasstildelingsrunder utdanningstilbudet deltar i.
   # Et utdanningstilbud er ute av en plasstildelingsrunde når det ikke er satt antall tilbud som skal gis for plasstildelingsrunden,

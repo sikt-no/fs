@@ -19,8 +19,11 @@ Egenskap: Registrere poengopplysninger for utdanningstilbudet
       Gitt at utdanningstilbudet har en median poengsum fra fjorårets opptak
       Så vises median poengsum for fjorårets opptatte
 
+  @deprecated
   Regel: Poenggrense for årets tidligopptak kan registreres og vises
     # AVKLART 2026-10-22: Det er én poenggrense per utdanningstilbud, ikke per kvote.
+    # Avvikles 2026-11-02: Poenggrensen for tidlig opptak settes ikke på utdanningstilbudet, men behandles
+    # et annet sted (SHI-791).
 
     Scenario: Registrere poenggrense for tidligopptak
       Når opptaksforvalter registrerer poenggrensen for årets tidligopptak
