@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from 'preact/hooks';
 import type { GitInfo, Snapshot } from '../shared/model';
 import { isSpecPath } from '../shared/paths';
 import { applySpec, newSpecText, parseSpec, slugify, type Sketch, type SpecDoc } from '../shared/spec';
-import { DOMAINS, newOppgaveText, type IssueRef, type RawTask, type TasksSnapshot } from '../shared/tasks';
+import { DOMAINS, newScopeText, type IssueRef, type RawTask, type TasksSnapshot } from '../shared/tasks';
 import { parseUtforing, serializeUtforing, withRun, type SpecRun, type Utforing } from '../shared/utforing';
 import { SpecDetail, type SpecActions } from './SpecDetail';
 import {
@@ -102,17 +102,12 @@ const emptyDoc = (): SpecDoc => ({ title: '', delta: false, omfang: '', krav: []
 /** Teksten i filene slik de er etter lagring, til watcheren har sendt den nye tilstanden */
 type Overrides = Record<string, string>;
 
-/** Legger filer som er lagret (men ikke lest inn igjen ennå) over snapshotet, også nye filer, oppgavemapper og scope-filer */
+/** Legger filer som er lagret (men ikke lest inn igjen ennå) over snapshotet, også nye filer og scope-mapper */
 function withOverrides(snap: TasksSnapshot, over: Overrides): TasksSnapshot {
   const paths = Object.keys(over);
   if (!paths.length) return snap;
   const tasks: RawTask[] = snap.tasks.map(t => ({ ...t, files: [...t.files], sources: { ...t.sources } }));
-  const scopes = { ...(snap.scopes ?? {}) };
   for (const p of paths) {
-    if (/^tasks\/[^/]+\/scope-[^/]+\.md$/.test(p)) {
-      scopes[p] = over[p];
-      continue;
-    }
     const m = p.match(/^tasks\/([^/]+)\/([^/]+)\/(.+)$/);
     if (!m) continue;
     let t = tasks.find(x => x.dom === m[1] && x.slug === m[2]);
@@ -120,11 +115,10 @@ function withOverrides(snap: TasksSnapshot, over: Overrides): TasksSnapshot {
     if (!t.files.includes(m[3])) t.files.push(m[3]);
     t.sources[m[3]] = over[p];
   }
-  return { ...snap, tasks, scopes };
+  return { ...snap, tasks };
 }
 
 const sourceOf = (snap: TasksSnapshot, path: string) => {
-  if (snap.scopes?.[path] !== undefined) return snap.scopes[path];
   const m = path.match(/^tasks\/([^/]+)\/([^/]+)\/(.+)$/);
   return m ? snap.tasks.find(t => t.dom === m[1] && t.slug === m[2])?.sources[m[3]] : undefined;
 };
@@ -208,7 +202,7 @@ export function Tavle({ snap, entries, git, editable, sel, onSel, onOpenKrav, me
 
   const changed = useMemo(() => new Set(git ? [...git.uncommitted, ...git.committed].map(c => c.path).filter(isSpecPath) : []), [git]);
   const specDirty = (c: Card) => c.key.endsWith('/' + NEW_KEY) || changed.has(c.path) || changed.has(`${c.dir}/utforing.md`);
-  const taskDirty = (t: TaskCard) => t.specs.some(specDirty) || changed.has(`${t.dir}/oppgave.md`) || (!!t.scope && changed.has(t.scope.path));
+  const taskDirty = (t: TaskCard) => t.specs.some(specDirty) || changed.has(`${t.dir}/scope.md`);
 
   const cols = columns(conf, BOARD_REPOS, specs.map(c => c.run.route));
   const order = cols.map(c => c.key);
@@ -246,8 +240,7 @@ export function Tavle({ snap, entries, git, editable, sel, onSel, onOpenKrav, me
     let file = `spec-${base}.md`;
     for (let i = 2; t?.files.includes(`spec/${file}`); i++) file = `spec-${base}-${i}.md`;
     const dir = `tasks/${d.dom}/${d.slug}`;
-    const scope = cards.find(c => c.key === `${d.dom}/${d.slug}`)?.scope?.slug ?? null;
-    const skeleton = newSpecText(d.doc.title, dir, today(), scope);
+    const skeleton = newSpecText(d.doc.title, dir, today());
     save(`${dir}/spec/${file}`, applySpec(skeleton, parseSpec(skeleton), d.doc, titles, `${dir}/spec`));
     const utf = t?.sources['utforing.md'];
     const run: SpecRun = { spec: `spec/${file}`, route: [], steps: [], log: [{ d: today(), who: me, t: 'opprettet spesifikasjonen' }] };
@@ -276,12 +269,12 @@ export function Tavle({ snap, entries, git, editable, sel, onSel, onOpenKrav, me
     writeRun(c, run, log ?? null);
   };
 
-  /** «+ Ny spesifikasjon» i oppgaven: kravene uten spesifikasjon som kan plukkes, og skissene fra scope-raden */
+  /** «+ Ny spesifikasjon» i scopet: kravene uten spesifikasjon som kan plukkes, og skissene fra scope.md */
   const newSpec = (t: TaskCard) => {
     if (ro) return;
     const doc = emptyDoc();
     for (const k of t.unspecced) if (k.entry && k.path && pickable(k.entry).ok) doc.krav.push({ file: k.file, id: k.id ?? '', path: k.path, remove: k.status === 'deprecated' });
-    const rows = t.scope?.rows.filter(r => r.task === t.slug) ?? [];
+    const rows = t.scope?.rows ?? [];
     for (const sk of rows.flatMap(r => r.sketches)) {
       if (doc.skisser.some(x => x.url === sk.url)) continue;
       const s: Sketch = { name: sk.name, url: sk.url, kind: 'Uavklart', note: '', dekker: '', fields: [] };
@@ -291,12 +284,12 @@ export function Tavle({ snap, entries, git, editable, sel, onSel, onOpenKrav, me
     onSel(`${t.key}/${NEW_KEY}`);
   };
 
-  /** «+ Ny oppgave»: en minimal oppgave.md fra malen */
-  const createTask = (o: { title: string; dom: string; issue: IssueRef | null; owner: string | null }) => {
+  /** «+ Nytt scope»: en minimal scope.md fra malen. Slugen er unik på tvers av domener, fordi @scope-<slug> ikke har domene */
+  const createTask = (o: { title: string; dom: string; jira: IssueRef[]; owner: string | null; mal: string }) => {
     let slug = slugify(o.title);
     const base = slug;
-    for (let i = 2; merged.tasks.some(t => t.dom === o.dom && t.slug === slug); i++) slug = `${base}-${i}`;
-    save(`tasks/${o.dom}/${slug}/oppgave.md`, newOppgaveText({ ...o, slug, date: today(), via: 'Opprettet i FS Kravforvaltning («+ Ny oppgave»)' }));
+    for (let i = 2; merged.tasks.some(t => t.slug === slug); i++) slug = `${base}-${i}`;
+    save(`tasks/${o.dom}/${slug}/scope.md`, newScopeText({ ...o, slug, date: today(), via: 'Opprettet i FS Kravforvaltning («+ Nytt scope»)' }));
     onSel(`${o.dom}/${slug}`);
   };
 
@@ -359,7 +352,7 @@ export function Tavle({ snap, entries, git, editable, sel, onSel, onOpenKrav, me
     <div class={'spwrap' + (open ? ' open' : '')}>
       <div class="spboard">
         <div class="sphead">
-          <h1>Oppgaver</h1>
+          <h1>Scopes</h1>
           <div class="spchips">
             <button class={'spchip' + (!dom ? ' on' : '')} onClick={() => setDom(null)}>
               Alle<span class="mono">{cards.length}</span>
@@ -430,7 +423,7 @@ export function Tavle({ snap, entries, git, editable, sel, onSel, onOpenKrav, me
                   onSel(NEW_TASK);
                 }}
               >
-                + Ny oppgave
+                + Nytt scope
               </button>
             </div>
           )}
@@ -565,7 +558,7 @@ export function Tavle({ snap, entries, git, editable, sel, onSel, onOpenKrav, me
                     );
                   })}
                   {!colCards.length && (
-                    <span class="spcol-empty">{!cards.length && col.key === 'scope' ? 'Ingen oppgaver ennå. Avgrens et initiativ med fs-scope, eller lag en oppgave med «+ Ny oppgave».' : 'Ingen oppgaver'}</span>
+                    <span class="spcol-empty">{!cards.length && col.key === 'scope' ? 'Ingen scopes ennå. Avgrens et initiativ med fs-scope, eller lag et scope med «+ Nytt scope».' : 'Ingen scopes'}</span>
                   )}
                 </div>
               </div>
@@ -685,7 +678,7 @@ function TaskCardView({ t, col, sel, dirty, repoName, me, draggable, dragging, o
       onDragStart={onDragStart}
       onDragEnd={onDragEnd}
       onClick={onClick}
-      title={draggable ? undefined : activeSpecs(t).length > 1 ? 'Oppgaven har flere spesifikasjoner: flytt dem i detaljpanelet' : undefined}
+      title={draggable ? undefined : activeSpecs(t).length > 1 ? 'Scopet har flere spesifikasjoner: flytt dem i detaljpanelet' : undefined}
     >
       <div class="spcard-top mono">
         <span class="ell">{domShort(t.dom)}</span>

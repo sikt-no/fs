@@ -645,7 +645,7 @@ export function ClaudePanel({ status, width, onWidth, allowedSkills: modeSkills,
             {running && <div class="cdone muted">Claude jobber …</div>}
           </div>
 
-          {/* Kravene, og det fs-specify og fs-verify skriver i oppgavemappa (spec/, utforing.md), kan sendes med «Lag PR» */}
+          {/* Kravene, og det fs-specify og fs-verify skriver i scope-mappa (spec/, utforing.md og scope.md), kan sendes med «Lag PR» */}
           {edited.length > 0 && (
             <div class="ctouched">
               <span class="muted">Endret i samtalen:</span>

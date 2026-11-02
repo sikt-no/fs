@@ -237,10 +237,9 @@ test('prShort', () => {
   assert.equal(prShort('noe annet'), 'noe annet');
 });
 
-// —— Oppgavekortene ——
+// —— Kortene (én per scope-mappe) ——
 
 const DOM = 'brukeradministrasjon-og-tilgangsstyring';
-const oppg = (slug: string, scope?: string) => `# Oppgave ${slug}\n\n- **Slug**: ${slug}\n- **Domene**: ${DOM}\n${scope ? `- **Scope**: [scope-${scope}](../scope-${scope}.md)\n` : ''}`;
 const skjelett = (id: string, tag = '@draft') => `# language: no
 ${id} @must ${tag} @scope-roller
 Egenskap: Skjelett ${id}
@@ -250,28 +249,35 @@ Egenskap: Skjelett ${id}
 
   Regel: Kommer
 `;
+/** scope.md for scopet roller. Radene skrives `| [roller](roller/) | krav | … |`, som i tabellen «Oppgaver» før scope og oppgave
+ * ble slått sammen: rader for en annen mappe tas ikke med, og den første kolonnen fjernes */
 const scopeFile = (rows: string) => `# Scope: Roller
 
 - **Slug**: roller
+- **Domene**: ${DOM}
 
-## Oppgaver
+## Krav
 
-| Oppgave | Krav | MoSCoW | Skisse | Issue | Kommentar |
-|---|---|---|---|---|---|
-${rows}
+| Krav | MoSCoW | Skisse | Jira | Kommentar |
+|---|---|---|---|---|
+${rows
+  .split('\n')
+  .filter(r => r.startsWith('| [roller]'))
+  .map(r => '|' + r.split('|').slice(2).join('|'))
+  .join('\n')}
 `;
 
-/** Tavla for én oppgave med scope: kravene i scope-raden, og spesifikasjonene i oppgaven */
+/** Tavla for scopet roller: kravene i scope.md, og spesifikasjonene i scopet */
 function board(krav: Record<string, string>, row: string, specs: Record<string, string> = {}) {
   const ents: Snapshot = { ...entries };
   for (const [p, src] of Object.entries(krav)) ents[p] = buildEntry(p, src, 0);
-  const t: RawTask = { dom: DOM, slug: 'roller', files: ['oppgave.md', ...Object.keys(specs)], sources: { 'oppgave.md': oppg('roller', 'roller'), ...specs }, mtimes: {} };
-  const sn: TasksSnapshot = { domains: { [DOM]: null }, tasks: [t], scopes: { [`tasks/${DOM}/scope-roller.md`]: scopeFile(row) } };
+  const t: RawTask = { dom: DOM, slug: 'roller', files: ['scope.md', ...Object.keys(specs)], sources: { 'scope.md': scopeFile(row), ...specs }, mtimes: {} };
+  const sn: TasksSnapshot = { domains: { [DOM]: null }, tasks: [t] };
   const scopes = buildScopes(sn);
-  return buildTaskCards(buildTasks(sn, scopes), scopes, buildCards(sn, ents), ents)[0];
+  return buildTaskCards(buildTasks(sn), scopes, buildCards(sn, ents), ents)[0];
 }
 
-test('oppgavekort: I scope, Kravarbeid og Spesifiseres utledes fra kravene i scope-raden', () => {
+test('kort: Avgrenset, Kravarbeid og Spesifiseres utledes fra kravene i scope.md', () => {
   const a = 'krav/07 Bru/11 Til/02 Ny/ny_a.feature';
   const b = 'krav/07 Bru/11 Til/02 Ny/ny_b.feature';
   const row = '| [roller](roller/) | `@BRU-TIL-NYA-001` `@BRU-TIL-NYB-002` | Must | – | – | |';
@@ -290,7 +296,7 @@ test('oppgavekort: I scope, Kravarbeid og Spesifiseres utledes fra kravene i sco
   assert.equal(taskColOf(board({}, '| [annen](annen/) | `@BRU-TIL-NYC-003` | Must | – | – | |')), 'scope', 'ingen krav');
 });
 
-test('oppgavekort: tidligste aktive spesifikasjon, flagg for krav uten spesifikasjon, og verifisert', () => {
+test('kort: tidligste aktive spesifikasjon, flagg for krav uten spesifikasjon, og verifisert', () => {
   const row = '| [roller](roller/) | `@BRU-TIL-ROL-001` `@BRU-TIL-ROL-003` | Must | – | – | |';
   const t = board({}, row, { 'spec/spec-roller.md': spec() });
   assert.equal(t.specs.length, 1);
@@ -298,7 +304,7 @@ test('oppgavekort: tidligste aktive spesifikasjon, flagg for krav uten spesifika
   assert.deepEqual(t.unspecced.map(k => k.id), ['@BRU-TIL-ROL-003']);
   assert.ok(taskFlags(t, false).some(f => f.t === '1 krav uten spesifikasjon'));
   assert.equal(dragSpec(t)?.file, 'spec-roller.md');
-  // To spesifikasjoner: oppgaven står i den tidligste, og kortet kan ikke dras
+  // To spesifikasjoner: scopet står i den tidligste, og kortet kan ikke dras
   const to = board({}, row, { 'spec/spec-roller.md': spec(), 'spec/spec-utkast.md': spec({ skisse: false, krav: ['planlagt.feature:@BRU-TIL-ROL-003'] }) });
   assert.equal(taskColOf(to), 'spesifiseres');
   assert.equal(dragSpec(to), null);
@@ -309,8 +315,8 @@ test('oppgavekort: tidligste aktive spesifikasjon, flagg for krav uten spesifika
   assert.equal(wont.unspecced.length, 0);
 });
 
-test('oppgavekort uten scope: kravene fra spesifikasjonene, og uten noe står oppgaven i I scope', () => {
-  const sn: TasksSnapshot = { domains: { [DOM]: null }, tasks: [{ dom: DOM, slug: 'roller', files: ['oppgave.md', 'spec/spec-roller.md'], sources: { 'oppgave.md': oppg('roller'), 'spec/spec-roller.md': spec() }, mtimes: {} }, { dom: DOM, slug: 'tom', files: ['oppgave.md'], sources: { 'oppgave.md': oppg('tom') } }] };
+test('kort uten krav-rader: kravene fra spesifikasjonene, og uten noe står scopet i Avgrenset', () => {
+  const sn: TasksSnapshot = { domains: { [DOM]: null }, tasks: [{ dom: DOM, slug: 'roller', files: ['scope.md', 'spec/spec-roller.md'], sources: { 'scope.md': scopeFile(''), 'spec/spec-roller.md': spec() }, mtimes: {} }, { dom: DOM, slug: 'tom', files: ['design.md'], sources: {} }] };
   const cards = buildTaskCards(buildTasks(sn), [], buildCards(sn, entries), entries);
   const roller = cards.find(c => c.slug === 'roller')!;
   assert.equal(roller.kravFrom, 'spec');
@@ -318,7 +324,7 @@ test('oppgavekort uten scope: kravene fra spesifikasjonene, og uten noe står op
   assert.equal(taskColOf(cards.find(c => c.slug === 'tom')!), 'scope');
 });
 
-test('nextStep: fra kravene når oppgaven ikke har spesifikasjon', () => {
+test('nextStep: fra kravene når scopet ikke har spesifikasjon', () => {
   const a = 'krav/07 Bru/11 Til/02 Ny/ny_a.feature';
   const b = 'krav/07 Bru/11 Til/02 Ny/ny_b.feature';
   const row = '| [roller](roller/) | `@BRU-TIL-NYA-001` `@BRU-TIL-NYB-002` | Must | – | – | |';
@@ -340,7 +346,7 @@ test('nextStep: fra kravene når oppgaven ikke har spesifikasjon', () => {
   assert.deepEqual([nextStep(levert, taskColOf(levert)).kind, nextStep(levert, taskColOf(levert)).tone], ['verifisert', 'ok']);
 });
 
-test('nextStep: den ledende spesifikasjonen, de andre i oppgaven og krav uten spesifikasjon', () => {
+test('nextStep: den ledende spesifikasjonen, de andre i scopet og krav uten spesifikasjon', () => {
   const row = '| [roller](roller/) | `@BRU-TIL-ROL-001` `@BRU-TIL-ROL-003` | Must | – | – | |';
   const klar = board({}, row, { 'spec/spec-roller.md': spec() });
   const n = nextStep(klar, taskColOf(klar));
@@ -353,7 +359,7 @@ test('nextStep: den ledende spesifikasjonen, de andre i oppgaven og krav uten sp
   assert.equal(m.spec?.file, 'spec-utkast.md');
   assert.equal(leadSpec(to, 'spesifiseres')?.file, 'spec-utkast.md');
   assert.ok(m.lines.some(l => l.t === 'Ingen skisse' && l.mark === 'err'));
-  assert.deepEqual(m.lines.find(l => l.mark === 'col'), { t: 'Også i oppgaven: Roller', mark: 'col', col: 'klar' });
+  assert.deepEqual(m.lines.find(l => l.mark === 'col'), { t: 'Også i scopet: Roller', mark: 'col', col: 'klar' });
 });
 
 test('nextStep: steget i repoet, med overlevering, blokkert og sendt tilbake', () => {

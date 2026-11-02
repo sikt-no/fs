@@ -26,7 +26,7 @@ export interface LogLine {
 }
 
 export interface SpecRun {
-  /** Stien til spesifikasjonen, relativt til oppgavemappa: `spec/spec-x.md` */
+  /** Stien til spesifikasjonen, relativt til scope-mappa: `spec/spec-x.md` */
   spec: string;
   route: string[];
   steps: StepState[];

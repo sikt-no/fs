@@ -102,7 +102,7 @@ export class Workspace {
     if (abs.startsWith(this.tasksDir + sep)) this.refreshTasks();
   }
 
-  /** Oppgavemappene er små, så hele tasks/ leses på nytt ved hver endring */
+  /** Scope-mappene er små, så hele tasks/ leses på nytt ved hver endring */
   refreshTasks() {
     clearTimeout(this.tasksTimer);
     this.tasksTimer = setTimeout(() => {

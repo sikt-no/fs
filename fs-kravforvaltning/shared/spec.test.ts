@@ -93,8 +93,8 @@ test('parseSpec: delta med før og etter på GitHub og lenke til krav/ til slutt
   );
 });
 
-test('parseSpec leser spesifikasjonen til opptaksoppgaven', () => {
-  const text = readFileSync(new URL('../../tasks/opptak/opprette-og-vedlikeholde-opptak/spec/spec-opprette-og-vedlikeholde-opptak.md', import.meta.url), 'utf8');
+test('parseSpec leser spesifikasjonen i scopet opprette-opptak-2027', () => {
+  const text = readFileSync(new URL('../../tasks/opptak/opprette-opptak-2027/spec/spec-opprette-og-vedlikeholde-opptak.md', import.meta.url), 'utf8');
   const d = parseSpec(text, 'spec-opprette-og-vedlikeholde-opptak.md');
   assert.equal(d.title, 'Opprette og vedlikeholde opptak');
   assert.deepEqual(d.krav.map(k => k.id), ['@OPT-OVO-GRU-001', '@OPT-OVO-SAM-001', '@OPT-OVO-INN-001', '@OPT-OVO-FRI-001']);
@@ -183,6 +183,7 @@ test('setSection legger en manglende seksjon på riktig plass', () => {
 
 test('setKrav i en tom spesifikasjon', () => {
   const text = newSpecText('Ny', 'tasks/opptak/ny', '2026-10-04');
+  assert.match(text, /^- \*\*Scope:\*\* `tasks\/opptak\/ny\/`$/m, 'spesifikasjonen peker på scope-mappa');
   const out = setKrav(text, [{ file: 'a.feature', id: '@OPT-OVO-AAA-001', path: 'krav/02 Opptak/a.feature', remove: false }], { '@OPT-OVO-AAA-001': 'A' }, 'tasks/opptak/ny/spec');
   assert.deepEqual(parseSpec(out).krav.map(k => k.id), ['@OPT-OVO-AAA-001']);
   assert.match(out, /## Krav\n\n- \*\*`a\.feature`\*\*/);
