@@ -29,7 +29,7 @@ Søknaden får GSK-konklusjonen automatisk når skolens påstand («GSK OK» fra
 - **Type:** `lokal-bilde`
 - **Referanse:** skjermdump av saken i fs-admin med påtegning, 2026-11-02
 - **Lagrede artefakter:** [varsel-uenighet-vitnemalsbehandling.png](krav-input/sketches/varsel-uenighet-vitnemalsbehandling.png)
-- **Dekker krav:** `automatisk_gsk_konklusjon.feature` (scenario: `Saksbehandleren ser at opptakssystemet er uenig med skolen når skolen sier at søkeren <skolen> generell studiekompetanse`)
+- **Dekker krav:** `automatisk_gsk_konklusjon.feature` (scenario: `Saksbehandleren ser at opptakssystemet er uenig med skolen når vitnemålet <skolen> «GSK OK» fra KREG`)
 - **Valideringsstatus:** `OK` — skissen viser et «!» ved antallet på «Vitnemålsbehandling» og en tekst under vitnemålsnummeret, som kommentaren i scenarioet. Teksten i skissen er en plassholder.
 
 Ingen skisse for resten: varslene til opptaksforvalteren er ikke avklart, og resten er backend.
