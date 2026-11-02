@@ -3,8 +3,8 @@
 - **Leveranse**: mappe
 - **Kilde**: `krav/02 Opptak/12 Utdanningstilbud/02 Utdanningstilbud i opptak/`, `krav/02 Opptak/12 Utdanningstilbud/04 Behandle et utdanningstilbud/`
 - **Scope**: @scope-utdanningstilbud-i-opptak-2027, @scope-utdanningstilbud-2027
-- **Scope-fil**: [scope-utdanningstilbud-i-opptak-2027](../../tasks/opptak/scope-utdanningstilbud-i-opptak-2027.md), [scope-utdanningstilbud-2027](../../tasks/opptak/scope-utdanningstilbud-2027.md)
-- **Oppgaver**: [opptak/utdanningstilbud-i-opptak](../../tasks/opptak/utdanningstilbud-i-opptak/oppgave.md), [opptak/behandle-utdanningstilbud](../../tasks/opptak/behandle-utdanningstilbud/oppgave.md)
+- **Scope-fil**: [scope-utdanningstilbud-i-opptak-2027](../../tasks/opptak/utdanningstilbud-i-opptak-2027/scope.md), [scope-utdanningstilbud-2027](../../tasks/opptak/utdanningstilbud-2027/scope.md)
+- **Oppgaver**: [opptak/utdanningstilbud-i-opptak](../../tasks/opptak/utdanningstilbud-i-opptak-2027/scope.md), [opptak/behandle-utdanningstilbud](../../tasks/opptak/utdanningstilbud-2027/scope.md)
 - **Krav**: 21 feature-filer, 10 `@implemented`, 5 delvis levert, 0 flyter, commit `b67676a` (2026-10-23)
 - **Verifisering**: [verify-02 Utdanningstilbud i opptak-2026-10-22-1915.md](../../krav/02%20Opptak/12%20Utdanningstilbud/02%20Utdanningstilbud%20i%20opptak/verify-02%20Utdanningstilbud%20i%20opptak-2026-10-22-1915.md), [verify-04 Behandle et utdanningstilbud-2026-10-22-1915.md](../../krav/02%20Opptak/12%20Utdanningstilbud/04%20Behandle%20et%20utdanningstilbud/verify-04%20Behandle%20et%20utdanningstilbud-2026-10-22-1915.md). Rapportene er eldre enn commit `01eea94` (2026-10-23, SHI-747), som la til tre scenarioer i UTD-026, UTD-002 og UTD-003. Teamet har bekreftet at de tre ikke er levert.
 - **Confluence**: https://sikt.atlassian.net/wiki/spaces/STUDIEADM/pages/5137235987/Testplan+Utdanningstilbud+i+samordna+opptak+2027

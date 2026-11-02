@@ -32,7 +32,7 @@ Rollene og organisasjonene foreslås fra koden og miljøet, ikke fra en tidliger
 5. **Personaene som finnes.** Personaene i «Overstyrt bruker» står i «Personaer» i miljøfila, med rollene og organisasjonen (fra `TEST_PERSONAS` i fs-admin). Foreslå én persona per nøkkel derfra, med en egen organisasjon per relasjon, og som oppfyller kravene i punkt 4. Er katalogen gammel, eller finnes ingen som passer, følg *Vedlikehold av miljøfila* i `cdp-tester/README.md` først. Finnes det fortsatt ingen, si det: personaen må legges til i fs-admin, og tildelingen i tilgangsstyring.
 6. **Bekreft i miljøet.** Tildelingene bekreftes med spørringen `testpersoner`, etter *Vedlikehold av miljøfila* i `cdp-tester/README.md`, og står i «Tildelinger» og «Bekreftet» på personaen i miljøfila. Er personaen ikke bekreftet, si det. Testene kan lages likevel.
 
-Skriv koblingen fra nøkkel til persona i «Testbrukere» i miljøfila når brukeren sier ja, og i testplanen når skillen er `fs-testplan`. Fødselsnummeret skrives ikke i miljøfila eller testplanen: personaen velges i menyen.
+Skriv koblingen fra nøkkel til persona i «Testbrukere» i miljøfila når brukeren sier ja, og i testplanen («Testbrukere» i `testcaser-og-testdata.md`) når skillen er `fs-testplan`. Fødselsnummeret skrives ikke i miljøfila eller testplanen: personaen velges i menyen.
 
 ## Testdata
 
@@ -47,6 +47,10 @@ For hvert krav:
 - **Datoer i forhold til testdagen.** For hvert opptak eller annet objekt som må være i en bestemt tilstand, står fristene som bestemmer tilstanden, i forhold til dagen testen kjøres: `{DATO:-7}` for 7 dager før og `{DATO:+30}` for 30 dager etter. En snarvei som setter alle datoene til i dag (for eksempel «Fyll inn testdatoer»), brukes ikke når tilstanden forutsetter noe annet.
 - **Data scenarioet selv lager** (for eksempel «Opprett opptak»), er ikke testdata: de lages av stegene i testcasen, og får `{KJØRING}` i navnet når de ikke kan slettes (R13 i `testcase-regler.md`).
 - Oppsettet kjøres først i hver kjøring. Feiler et scenario i oppsettet, blir testene som bruker nøkkelen, «Ikke testet».
+
+### Testdata i den eksterne testen
+
+Unntak fra regelen over: i fase 4 lages testdataene på forhånd, i tilstanden flytene forutsetter, og testmiljøet nullstilles ikke i testperioden. Eksterne testere skal ikke måtte lage eller lete fram testpersoner, opptak eller søknader selv. At testmiljøet ikke nullstilles, og at testdataene ikke slettes, avtales med dem som drifter testmiljøet. Testen er klar når kontaktpersonen har logget inn som hver testbruker og ser testdataene. `fs-testcaser-ekstern` lister testdataene og tilstanden i «Testdata som må lages før testen», og lager dem ikke selv.
 
 ## Spørsmålene
 

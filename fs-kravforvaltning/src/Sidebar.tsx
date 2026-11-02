@@ -2,7 +2,7 @@ import type { JSX } from 'preact';
 import { useMemo, useState } from 'preact/hooks';
 import type { RangeTuple } from 'fuse.js';
 import { DISPLAY_STATUSES, STATUS_LABEL, displayStatus, type DisplayStatus, type Entry, type GitChange, type GitCode, type GitInfo, type Snapshot } from '../shared/model';
-import { baseName, makeIndex, parentName, search } from './search';
+import { baseName, kravId, makeIndex, parentName, search } from './search';
 import { ResizeHandle } from './ResizeHandle';
 
 export type TreeMode = 'files' | 'changes';
@@ -140,16 +140,34 @@ export function Sidebar({ entries, tree, current, open, query, onQuery, onToggle
   const rows: JSX.Element[] = [];
   const pad = (depth: number) => ({ paddingLeft: `${8 + depth * 14}px` });
 
-  const fileRow = (e: Entry, depth: number, sub?: string, label?: string | JSX.Element[]) => {
+  // Filnavnet, og Feature-ID-en på en egen linje under (med mappa etter i søket)
+  const nameCell = (name: string | JSX.Element[], id: string | null, sub?: string, idRanges: readonly RangeTuple[] = []) =>
+    id ? (
+      <span class="namecol">
+        <span class="name">{name}</span>
+        <span class="idline">
+          <span class="id">{highlight(id, idRanges)}</span>
+          {sub && ` · ${sub}`}
+        </span>
+      </span>
+    ) : (
+      <>
+        <span class="name">{name}</span>
+        {sub && <span class="sub">{sub}</span>}
+      </>
+    );
+
+  const fileRow = (e: Entry, depth: number, sub?: string, label?: string | JSX.Element[], idRanges?: readonly RangeTuple[]) => {
     const st = e.kind === 'feature' ? displayStatus(e) : null;
+    const id = kravId(e);
     return (
       <div
         key={e.path}
-        class={'row' + (e.path === current ? ' sel' : '')}
+        class={'row' + (id ? ' two' : '') + (e.path === current ? ' sel' : '')}
         style={pad(depth)}
         onClick={() => onSelect(e.path)}
-        title={st ? `${e.path} · ${STATUS_LABEL[st]}` : e.path}
-        aria-label={st ? `${baseName(e.path)}, ${STATUS_LABEL[st]}` : undefined}
+        title={st ? `${id ? id + ' · ' : ''}${e.path} · ${STATUS_LABEL[st]}` : e.path}
+        aria-label={st ? `${baseName(e.path)}${id ? ', ' + id : ''}, ${STATUS_LABEL[st]}` : undefined}
       >
         <span class="chev" />
         {st ? (
@@ -157,8 +175,7 @@ export function Sidebar({ entries, tree, current, open, query, onQuery, onToggle
         ) : (
           <span class="md">md</span>
         )}
-        <span class="name">{label ?? baseName(e.path)}</span>
-        {sub && <span class="sub">{sub}</span>}
+        {nameCell(label ?? baseName(e.path), id, sub, idRanges)}
         {e.error ? <span class="err">feil</span> : e.lint ? <span class="warn" title={`${e.lint} avvik fra konvensjoner`}>!</span> : null}
       </div>
     );
@@ -167,10 +184,11 @@ export function Sidebar({ entries, tree, current, open, query, onQuery, onToggle
   const changeRow = (c: GitChange, depth: number, key: string) => {
     const e = entries[c.path];
     const st = c.path.endsWith('.feature') ? displayStatus(e ?? { status: null }) : null;
+    const id = e ? kravId(e) : null;
     return (
       <div
         key={key}
-        class={'row' + (c.path === current ? ' sel' : '') + (c.code === 'D' ? ' del' : '') + (e ? '' : ' gone')}
+        class={'row' + (id ? ' two' : '') + (c.path === current ? ' sel' : '') + (c.code === 'D' ? ' del' : '') + (e ? '' : ' gone')}
         style={pad(depth)}
         onClick={e ? () => onSelect(c.path) : undefined}
         title={st ? `${c.path} · ${STATUS_LABEL[st]}` : c.path}
@@ -182,7 +200,7 @@ export function Sidebar({ entries, tree, current, open, query, onQuery, onToggle
         ) : (
           <span class="md">md</span>
         )}
-        <span class="name">{baseName(c.path)}</span>
+        {nameCell(baseName(c.path), id)}
         <span class="gitstat">
           {c.plus > 0 && <span class="plus">+{c.plus}</span>}
           {c.minus > 0 && <span class="minus">−{c.minus}</span>}
@@ -237,8 +255,8 @@ export function Sidebar({ entries, tree, current, open, query, onQuery, onToggle
     }
   } else if (q) {
     const hits = search(index, entries, query.trim());
-    for (const { entry: e, nameRanges, scens } of hits) {
-      rows.push(fileRow(e, 0, parentName(e.path), highlight(baseName(e.path), nameRanges) as JSX.Element[]));
+    for (const { entry: e, nameRanges, idRanges, scens } of hits) {
+      rows.push(fileRow(e, 0, parentName(e.path), highlight(baseName(e.path), nameRanges) as JSX.Element[], idRanges));
       for (const s of scens) {
         rows.push(
           <div key={e.path + ':' + s.ln} class="row scen" style={pad(1)} onClick={() => onSelect(e.path, s.ln)} title={s.name}>
@@ -328,8 +346,8 @@ export function Sidebar({ entries, tree, current, open, query, onQuery, onToggle
           type="search"
           value={query}
           onInput={e => onQuery((e.target as HTMLInputElement).value)}
-          placeholder="Søk i filer, Egenskap og scenarioer…"
-          aria-label="Søk i filer, Egenskap og scenarioer"
+          placeholder="Søk i filer, ID, Egenskap og scenarioer…"
+          aria-label="Søk i filer, Feature-ID, Egenskap og scenarioer"
         />
       </div>
       <div class="tree">{rows}</div>

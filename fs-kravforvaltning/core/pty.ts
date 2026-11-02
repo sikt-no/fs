@@ -63,7 +63,7 @@ export function executeTeamPrompt(target: ExecuteTarget, repoRoot: string): stri
   return [
     ...TERMINAL_LINES,
     timeLine(),
-    `Du implementerer i repoet ${target.repo} (arbeidsmappa). Kravrepoet sikt-no/fs ligger i ${resolve(repoRoot)} (lagt til med --add-dir). Der kan du lese alt, men bare endre utforing.md i oppgavemappa.`,
+    `Du implementerer i repoet ${target.repo} (arbeidsmappa). Kravrepoet sikt-no/fs ligger i ${resolve(repoRoot)} (lagt til med --add-dir). Der kan du lese alt, men bare endre utforing.md i scope-mappa.`,
     spec ? `Spesifikasjonen: ${join(resolve(repoRoot), spec)}. Les den, feature-filene den peker på og implementasjonsdetaljene (<feature>.design.md ved siden av feature-fila) før du begynner.` : '',
     'Bruk repoets egne skills og konvensjoner (CLAUDE.md).',
     'Dekker spesifikasjonen flere lag (f.eks. frontend, tester), del arbeidet i et agent team: én teammate per lag, med oppgavelista. Du (lead) koordinerer og oppdaterer utforing.md selv.',

@@ -35,7 +35,7 @@
 # «relevant» om det samme valget. Praksistype er fortsatt en del av denne
 # kapabiliteten (besluttet i teamet 06.10.2026).
 #
-@OPT-BEH-BEH-003 @must @in-progress
+@OPT-BEH-BEH-003 @must @in-progress @scope-registrere-praksis
 Egenskap: Registrere og beregne praksis for søker
   Som saksbehandler i opptak
   ønsker jeg å registrere søkerens praksisperioder og få dem summert

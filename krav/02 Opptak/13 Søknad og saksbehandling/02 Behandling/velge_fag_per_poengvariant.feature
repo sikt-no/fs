@@ -27,6 +27,14 @@ Egenskap: Velge fag per poengvariant
   Hvilken poengvariant som hører til hvilken kvote og hvilket
   søknadsalternativ, står i regelverket.
 
+  # ÅPNE SPØRSMÅL:
+  # - FS-klienten avgjør om søkeren er kvalifisert per poengvariant og spesielt krav, for
+  #   eksempel for kvoten for førstegangsvitnemål: et fag søkeren har tatt som privatist etter
+  #   fylte 21 år, kan oppfylle et kravelement i ordinær kvote, men ikke i kvoten for
+  #   førstegangsvitnemål. Ny stack avgjør kvalifiseringen per grunnlag (OPT-BEH-BEH-020).
+  #   Trengs kvalifisering per poengvariant når saksbehandleren har valgt fag per poengvariant?
+  #   Flyttet hit fra OPT-BEH-BEH-020 30.10.2026.
+
   Bakgrunn:
     Gitt jeg er innlogget i løsningen
     Og jeg kan se og endre søknadsbehandling for organisasjonen som behandler saken

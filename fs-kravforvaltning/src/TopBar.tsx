@@ -2,11 +2,17 @@ import { useEffect, useRef, useState } from 'preact/hooks';
 import { vscodeUrl } from './vscode';
 
 export type Theme = 'light' | 'dark';
-export type Mode = 'krav' | 'avvik' | 'oppgaver' | 'flyter';
-/** Visningene som kan vises i menyen (designet «Menyvalg»). Krav og Flyter er alltid med, Avvik og Oppgaver er skjult til de velges */
-export type Optional = 'avvik' | 'oppgaver';
+export type Mode = 'krav' | 'avvik' | 'scopes' | 'flyter';
+/** Visningene som kan vises i menyen (designet «Menyvalg»). Krav og Flyter er alltid med, Avvik og Scopes er skjult til de velges */
+export type Optional = 'avvik' | 'scopes';
 export type MenuShow = Record<Optional, boolean>;
-export const MENU_DEFAULT: MenuShow = { avvik: false, oppgaver: false };
+export const MENU_DEFAULT: MenuShow = { avvik: false, scopes: false };
+
+/** Menyvalgene som er lagret, også fra før Oppgaver het Scopes (`oppgaver`) */
+export const migrateMenu = (saved: Record<string, boolean>): MenuShow => ({
+  avvik: saved.avvik ?? MENU_DEFAULT.avvik,
+  scopes: saved.scopes ?? saved.oppgaver ?? MENU_DEFAULT.scopes,
+});
 
 interface Props {
   path: string;
@@ -23,21 +29,21 @@ interface Props {
   onMode: (m: Mode) => void;
   /** Antall filer med avvik, vist på Avvik-knappen */
   nBad: number;
-  /** Antall oppgaver som ikke er verifisert, vist på Oppgaver-knappen */
+  /** Antall scopes som ikke er verifisert, vist på Scopes-knappen */
   nActive: number;
-  /** Brødsmulen i Oppgaver-modus */
+  /** Brødsmulen i Scopes-modus */
   oCrumbs: string[];
   /** Flyten som er valgt i Flyter, `null` på startsiden */
   flowPath: string | null;
   /** Antall flyter i krav/_Flyter, vist på Flyter-knappen */
   nFlows: number;
-  /** Hvilke av Avvik og Oppgaver som vises i menyen, og tannhjulet som endrer det */
+  /** Hvilke av Avvik og Scopes som vises i menyen, og tannhjulet som endrer det */
   menu: MenuShow;
   onMenu: (m: MenuShow) => void;
   /** Claude-panelet: `null` når Claude Code ikke er tilgjengelig, ellers om panelet er åpent */
   claude: boolean | null;
   onClaude: () => void;
-  /** Oppgaver: skrivebeskyttet (statisk bygg), antall endrede filer under tasks/, og «Lag PR» */
+  /** Scopes: skrivebeskyttet (statisk bygg), antall endrede filer under tasks/, og «Lag PR» */
   specState: { ro: boolean; dirty: number; onPr: (() => void) | null };
   /** Desktop-appen: main på GitHub er nyere enn klonen; knappen henter siste. `null`: ingenting å hente */
   onUpdate: (() => void) | null;
@@ -51,11 +57,11 @@ interface Props {
 
 export function TopBar({ path, connected, theme, onTheme, treeHidden, onToggleTree, tocHidden, onToggleToc, onHome, mode, onMode, nBad, nActive, oCrumbs, flowPath, nFlows, menu, onMenu, specState, claude, onClaude, onUpdate, pulling, appUpdate, repoRoot }: Props) {
   const parts =
-    mode === 'avvik' ? ['krav', '#/avvik'] : mode === 'oppgaver' ? oCrumbs : mode === 'flyter' ? (flowPath ? flowPath.split('/') : ['krav', '#/flyter']) : path ? path.split('/') : [];
+    mode === 'avvik' ? ['krav', '#/avvik'] : mode === 'scopes' ? oCrumbs : mode === 'flyter' ? (flowPath ? flowPath.split('/') : ['krav', '#/flyter']) : path ? path.split('/') : [];
   return (
     <header class="topbar">
       {/* Venstrepanelet: filtreet i Krav, mappene med avvik i Avvik, flytene i Flyter */}
-      {mode !== 'oppgaver' && (
+      {mode !== 'scopes' && (
         <button
           class="treebtn"
           title={treeHidden ? 'Vis filtre' : 'Skjul filtre'}
@@ -76,9 +82,9 @@ export function TopBar({ path, connected, theme, onTheme, treeHidden, onToggleTr
             Avvik{nBad > 0 && <span class="badge">{nBad}</span>}
           </button>
         )}
-        {menu.oppgaver && (
-          <button aria-pressed={mode === 'oppgaver'} onClick={() => onMode('oppgaver')} title={`${nActive} oppgaver i tasks/ som ikke er verifisert`}>
-            Oppgaver<span class="badge neutral">{nActive}</span>
+        {menu.scopes && (
+          <button aria-pressed={mode === 'scopes'} onClick={() => onMode('scopes')} title={`${nActive} scopes i tasks/ som ikke er verifisert`}>
+            Scopes<span class="badge neutral">{nActive}</span>
           </button>
         )}
         <button aria-pressed={mode === 'flyter'} onClick={() => onMode('flyter')} title={`${nFlows} flyter i krav/_Flyter`}>
@@ -95,7 +101,7 @@ export function TopBar({ path, connected, theme, onTheme, treeHidden, onToggleTr
         ))}
       </nav>
       <div class="topbar-right">
-        {mode === 'oppgaver' && (
+        {mode === 'scopes' && (
           <span class="spstate mono">
             {specState.ro ? (
               <>
@@ -190,7 +196,7 @@ export function TopBar({ path, connected, theme, onTheme, treeHidden, onToggleTr
 const MENU_ITEMS: { key: Mode; label: string; locked?: boolean }[] = [
   { key: 'krav', label: 'Krav', locked: true },
   { key: 'avvik', label: 'Avvik' },
-  { key: 'oppgaver', label: 'Oppgaver' },
+  { key: 'scopes', label: 'Scopes' },
   { key: 'flyter', label: 'Flyter', locked: true },
 ];
 

@@ -6,11 +6,11 @@ Egenskap: Starte en plasstildeling
   ønsker jeg å starte en plasstildeling i en plasstildelingsrunde
   slik at studieplassene fordeles ut fra rangeringen og innstillingene i opptaket.
 
-  # Kilde: tasks/opptak/plasstildeling/design.md (beslutning 3, oppgave 4), oppgave.md (oppgave 4) og
+  # Kilde: tasks/opptak/plasstildeling-2027/design.md (beslutning 3, oppgave 4), scope.md (oppgave 4) og
   # Confluence «Fra saksbehandling til plasstildeling» (2026-09-04).
   # Plasstildelingen utføres som en bestilling og kjører i bakgrunnen. Én plasstildelingsrunde kan ha mange
   # plasstildelinger: prøvetildelinger som ikke publiseres, og til slutt én som publiseres.
-  # Status i kode: løst (oppgave.md). Kandidat for @implemented etter verifisering.
+  # Status i kode: løst (scope.md). Kandidat for @implemented etter verifisering.
 
   Bakgrunn:
     Gitt at opptakets forvalter er innlogget
@@ -57,7 +57,7 @@ Egenskap: Starte en plasstildeling
     # utdanningstilbudets kompetanseregelverk, saken har en aktiv kvote som skal kvoteplasseres og som også er
     # kvote på utdanningstilbudet, og saken har poengsum etter utdanningstilbudets rangeringsregelverk.
     # Søkeren må ha fødselsdato, ellers feiler hele plasstildelingen.
-    @depends-on-OPT-BEH-BEH-025 @ref-FLY-OPT-AUT-001
+    @depends-on-OPT-BEH-BEH-025
     Scenario: Bare saker som er ferdig behandlet, er med
       Gitt at saken til "Kari Nordmann" er ferdig behandlet
       Og at saken til "Ola Nordmann" ikke er ferdig behandlet

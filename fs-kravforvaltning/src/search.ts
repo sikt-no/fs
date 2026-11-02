@@ -10,6 +10,7 @@ interface Doc {
   kind: 'file' | 'scen';
   name: string; // filnavn eller scenarionavn
   title: string; // Egenskap-tittel (kun fil)
+  id: string; // Feature-ID uten @ (kun fil)
   rule: string; // Regel-navn (kun scenario)
   folder: string; // kun fil, ellers matcher alle scenarioer i mappen
   tags: string;
@@ -26,21 +27,34 @@ export interface FileHit {
   entry: Entry;
   score: number;
   nameRanges: readonly RangeTuple[];
+  /** Treffet i Feature-ID-en, som `kravId` gir den */
+  idRanges: readonly RangeTuple[];
   scens: ScenHit[];
 }
 
 const MAX_SCENS = 5;
+
+const FEATURE_ID = /^@([A-ZÆØÅ]{3}-[A-ZÆØÅ]{3}-[A-ZÆØÅ]{3}-\d{3})$/;
+
+/** Feature-ID-en til kravet, uten @ (`OPT-OVO-GRU-001`), eller null */
+export function kravId(e: Entry): string | null {
+  for (const t of e.model?.tags ?? []) {
+    const m = FEATURE_ID.exec(t);
+    if (m) return m[1];
+  }
+  return null;
+}
 
 function buildDocs(entries: Snapshot): Doc[] {
   const docs: Doc[] = [];
   for (const e of Object.values(entries)) {
     const m = e.model;
     const folder = parentName(e.path);
-    docs.push({ path: e.path, kind: 'file', name: baseName(e.path), title: m?.title ?? '', rule: '', folder, tags: m?.tags.join(' ') ?? '', ln: 0 });
+    docs.push({ path: e.path, kind: 'file', name: baseName(e.path), title: m?.title ?? '', id: kravId(e) ?? '', rule: '', folder, tags: m?.tags.join(' ') ?? '', ln: 0 });
     m?.rules.forEach(r =>
       r.scenarios.forEach(s => {
         if (!s.name) return; // navnløs Bakgrunn
-        docs.push({ path: e.path, kind: 'scen', name: s.name, title: '', rule: r.name ?? '', folder: '', tags: s.tags.join(' '), ln: s.ln });
+        docs.push({ path: e.path, kind: 'scen', name: s.name, title: '', id: '', rule: r.name ?? '', folder: '', tags: s.tags.join(' '), ln: s.ln });
       }),
     );
   }
@@ -61,6 +75,7 @@ export function makeIndex(entries: Snapshot) {
     ...FUSE_OPTS,
     keys: [
       { name: 'name', weight: 3 },
+      { name: 'id', weight: 3 },
       { name: 'title', weight: 2 },
       { name: 'rule', weight: 1 },
       { name: 'folder', weight: 1 },
@@ -72,8 +87,29 @@ export function makeIndex(entries: Snapshot) {
 const rangesFor = (matches: readonly FuseResultMatch[] | undefined, key: string) =>
   matches?.find(m => m.key === key)?.indices ?? [];
 
+/**
+ * Søket ser ut som en del av en Feature-ID når det har bindestrek eller tall, ingen mellomrom,
+ * og finnes i minst én ID (`GRU-00`, `OPT-OVO`, `@OPT-OVO-GRU-001`). Da er det bare kravene
+ * med ID-en som treffer, ikke fuzzy-treff i scenarioene.
+ */
+export function idQuery(entries: Snapshot, q: string): string | null {
+  const t = q.trim().replace(/^@/, '').toUpperCase();
+  if (t.length < 2 || !/[-\d]/.test(t) || !/^[A-ZÆØÅ0-9-]+$/.test(t)) return null;
+  return Object.values(entries).some(e => kravId(e)?.includes(t)) ? t : null;
+}
+
 /** Søker og grupperer treffene per fil, sortert på beste score (lavest er best) */
 export function search(index: Fuse<Doc>, entries: Snapshot, q: string): FileHit[] {
+  const id = idQuery(entries, q);
+  if (id) {
+    const hits: FileHit[] = [];
+    for (const e of Object.values(entries)) {
+      const kid = kravId(e);
+      const at = kid ? kid.indexOf(id) : -1;
+      if (at >= 0) hits.push({ entry: e, score: 0, nameRanges: [], idRanges: [[at, at + id.length - 1]], scens: [] });
+    }
+    return hits.sort((a, b) => kravId(a.entry)!.localeCompare(kravId(b.entry)!, 'nb'));
+  }
   const byPath = new Map<string, FileHit>();
   for (const r of index.search(q, { limit: 300 })) {
     const d = r.item;
@@ -81,12 +117,14 @@ export function search(index: Fuse<Doc>, entries: Snapshot, q: string): FileHit[
     if (!entry) continue;
     let hit = byPath.get(d.path);
     if (!hit) {
-      hit = { entry, score: r.score ?? 1, nameRanges: [], scens: [] };
+      hit = { entry, score: r.score ?? 1, nameRanges: [], idRanges: [], scens: [] };
       byPath.set(d.path, hit);
     }
     hit.score = Math.min(hit.score, r.score ?? 1);
-    if (d.kind === 'file') hit.nameRanges = rangesFor(r.matches, 'name');
-    else if (hit.scens.length < MAX_SCENS) hit.scens.push({ name: d.name, ln: d.ln, ranges: rangesFor(r.matches, 'name') });
+    if (d.kind === 'file') {
+      hit.nameRanges = rangesFor(r.matches, 'name');
+      hit.idRanges = rangesFor(r.matches, 'id');
+    } else if (hit.scens.length < MAX_SCENS) hit.scens.push({ name: d.name, ln: d.ln, ranges: rangesFor(r.matches, 'name') });
   }
   return [...byPath.values()].sort((a, b) => a.score - b.score);
 }

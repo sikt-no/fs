@@ -1,6 +1,6 @@
 # Utføring
 
-Hvor spesifikasjonene i denne oppgaven er på veien gjennom kode-repoene. Formatet og protokollen står i [tasks/README.md](../../README.md#utføring).
+Hvor spesifikasjonene i dette scopet er på veien gjennom kode-repoene. Formatet og protokollen står i [tasks/README.md](../../README.md#utføring).
 
 ## spec/spec-grunnleggende-brukeradministrasjon.md
 

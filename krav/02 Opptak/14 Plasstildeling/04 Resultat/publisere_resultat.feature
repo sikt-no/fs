@@ -6,10 +6,12 @@ Egenskap: Publisere resultatet til søkerne
   ønsker jeg å bestemme når resultatet av en plasstildeling blir synlig for søkerne
   slik at resultatet kan kvalitetssikres før søkerne får svar.
 
-  # Kilde: tasks/opptak/plasstildeling/design.md (beslutning 2, prinsipp 4, del 2 «Søkeren skal kunne forstå svaret sitt»),
-  # oppgave.md (oppgave 8) og Confluence «2026-09-08 Raffinering plasstildeling» (oppgave 7).
+  # Kilde: tasks/opptak/plasstildeling-2027/design.md (beslutning 2, prinsipp 4, del 2 «Søkeren skal kunne forstå svaret sitt»),
+  # scope.md (oppgave 8) og Confluence «2026-09-08 Raffinering plasstildeling» (oppgave 7).
   # Beregning og publisering er to separate steg. Det gjør ubegrensede prøvetildelinger mulig.
   # Melding til søker: se 13 Søknad og saksbehandling/01 Søknad/mine_meldinger.feature.
+  # Meldingen ved publisering står i 05 Svar/varsler_og_meldinger_i_plasstildelingen.feature (@should), og
+  # planlagt publisering i planlegge_publisering.feature (@could). Begge er skilt ut 2026-10-28.
   # Status i kode: delvis. Ventelistenummeret når ikke fram til søkeren.
 
   Bakgrunn:
@@ -25,7 +27,6 @@ Egenskap: Publisere resultatet til søkerne
     Scenario: Publisere plasstildeling
       Når opptaksforvalter publiserer plasstildelingen
       Så ser søkerne resultatet sitt i Min kompetanse
-      Og søkere med tilbud får melding om at svar foreligger med svarfristen for plasstildelingsrunden
 
     @openquestion
     Scenario: Bare én publisert plasstildeling per plasstildelingsrunde
@@ -44,17 +45,6 @@ Egenskap: Publisere resultatet til søkerne
       Når opptaksforvalter publiserer "Prøve 2"
       Så ser søkerne resultatet fra "Prøve 2"
       Og "Prøve 1" blir ikke publisert
-
-  @openquestion
-  Regel: Opptaksforvalter velger tidspunkt for publisering
-
-    # ÅPNE SPØRSMÅL:
-    # - Automatisk publisering på tidspunkt er avgrenset bort for 2027 (oppgave.md). Confluence
-    #   «Opprette og konfigurere opptakskjøringsrunde» beskriver publisering straks eller planlagt.
-    #   Skal planlagt publisering være med?
-    Scenario: Planlagt publisering
-      Når opptaksforvalter planlegger publisering av plasstildelingen til "2027-07-15 08:00"
-      Så ser søkerne resultatet sitt fra "2027-07-15 08:00"
 
   Regel: Søkeren ser resultatet med begrunnelse
 
@@ -95,7 +85,7 @@ Egenskap: Publisere resultatet til søkerne
 # ÅPNE SPØRSMÅL:
 # - Poenggrensen søkeren ser i dag kommer fra en annen kilde enn plasstildelingen. Vedtaket må
 #   begrunnes med poenggrensen fra plasstildelingen (se gjennomføre_plasstildeling.feature).
-# - Arv av svartype ved publisering er uavklart (oppgave.md, gap-analyse oppgave 7).
+# - Arv av svartype ved publisering er uavklart (scope.md, gap-analyse oppgave 7).
 # - Skal søkere få varsel på e-post/SMS ved publisering, og påminnelse før svarfristen? Hører det hjemme i 13 Søknad og saksbehandling/01 Søknad/mine_meldinger.feature?
 # - Vedtaksbrev med klagerett: se Confluence «Vedtaksbrev og svar på opptaket». Hvor skal kravet ligge?
 # - Hvilke søkere får melding: bare de med tilbud, eller også de på venteliste og med avslag?

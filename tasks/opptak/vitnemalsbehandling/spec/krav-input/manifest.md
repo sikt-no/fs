@@ -1,8 +1,8 @@
 # Manifest — krav-input
 
 - **Kildemappe:** `krav/02 Opptak/13 Søknad og saksbehandling/02 Behandling/`
-- **Hentet:** 2026-10-21
-- **HEAD:** `ccafff0b5cc1705af39114091855491a19485982` (branch `vitnemalsbehandling-spec`)
+- **Hentet:** 2026-10-28
+- **HEAD:** `ef68c3a` (branch `main`)
 
 ## Filer med i scope
 
@@ -19,21 +19,24 @@ Begge ble satt til `@in-progress` for hånd 21.10.2026 (commit `ccafff0`), etter
 
 ## Skisser
 
-### Figma: Gjeldende skisser, steg 2 (brukes fra 2026-10-21)
+### Figma: Gjeldende skisser, «Nyeste skisser» (brukes fra 2026-10-21)
 
 - **URL:** https://www.figma.com/design/dlG13wATArPvG69oePHPeL/FS-Admin---Gjeldende-skisser?node-id=5163-45344
 - **fileKey:** `dlG13wATArPvG69oePHPeL`
-- **Node:** `5163:45344` (seksjon med fire rammer, 14697×7672)
-- **Hentet:** 2026-10-21
+- **Node:** `5163:45344`, seksjonen «Nyeste skisser» på siden «Vitnemålsbehandler» (14697×7672)
+- **Hentet:** 2026-10-28 (første gang 2026-10-21; rammene er hentet på nytt per node, og de gamle utklippene er erstattet)
 - **Lagrede artefakter** (`sketches/figma/gjeldende-skisser/`):
   - `screenshot.png`: hele seksjonen (3000×1574)
-  - `sub-frames/01-steg-2-grunnlag-vitnemalsbehandling.png`: steg 2 «Grunnlag» med vitnemålsbehandlingen
-  - `sub-frames/02-vitnemal-i-ny-fane.png`: et vitnemål åpnet i ny fane
-  - `sub-frames/03-sammenligne-vitnemal.png`: sammenligning av vitnemål (L5, utenfor scope)
-  - `sub-frames/04-fs-klienten-i-dag.png`: skjermbilde av FS-klienten (referanse, utenfor scope)
+  - `sub-frames/01-steg-2-grunnlag-behandle-e-vitnemal.png` (node `5163:50347`)
+  - `sub-frames/02-visning-av-vitnemal.png` (node `5179:22607`): et vitnemål åpnet i ny fane
+  - `sub-frames/03-annullert-vitnemal.png` (node `5836:22668`)
+  - `sub-frames/04-annullert-vitnemal-lagt-til-grunn-fra-for.png` (node `5836:23318`)
+  - `sub-frames/05-annullert-vitnemal-lagt-til-grunn-fra-for-kun-leserettighet.png` (node `5836:23547`)
+  - `sub-frames/06-outer-frame-sammenligne-vitnemal.png` (node `5163:49881`): sammenligning av vitnemål (L5, utenfor scope)
 - **Hoppet over:**
-  - `get_metadata`: feilet fordi svaret var for stort. Rammene er klippet ut av et fullskala skjermbilde av seksjonen (14777×7752), ikke hentet per node, så node-ID-ene til rammene er ikke kjent.
-  - `get_design_context`, `get_variable_defs` og `download_assets`: valideringen gjelder innhold, ikke kode eller designvariabler.
+  - «bilde 1» (`5163:50346`): et bilde av FS-klienten, ikke en ramme.
+  - `get_metadata` og `get_design_context`: svaret er for stort. Rammene er listet med et lesende Plugin API-kall.
+  - `get_variable_defs` og `download_assets`: valideringen gjelder innhold, ikke designvariabler.
 
 ### Figma: Målbilde vitnemålsbehandleren, steg 2 (erstattet)
 

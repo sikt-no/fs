@@ -34,7 +34,7 @@ import { CLAUDE_WIDTH, ClaudePanel } from './ClaudePanel';
 import { refreshSkills } from './ClaudeSkills';
 import { buildTree, Sidebar, TREE_WIDTH, type TreeMode } from './Sidebar';
 import { StatusBar } from './StatusBar';
-import { MENU_DEFAULT, TopBar, type MenuShow, type Mode, type Theme } from './TopBar';
+import { migrateMenu, TopBar, type MenuShow, type Mode, type Theme } from './TopBar';
 import { transport } from './transport';
 import './theme.css';
 
@@ -46,20 +46,20 @@ const initialTasks = boot.tasks;
 /**
  * Skillene Claude kan bruke i hver visning. Krav: fs-krav (standard), fs-krav-avvik, fs-implementasjonsdetaljer og fs-verify.
  * Avvik: fs-krav (standard) og fs-krav-avvik. fs-specify og fs-specify-delta kjører fs-implementasjonsdetaljer, så den er
- * tillatt der de er. fs-scope (initiativ, oppgaver og hvilke krav hver oppgave har) er tillatt i Krav og Oppgaver.
- * I Oppgaver er ingen valgt på forhånd, og uten valg kan Claude bruke alle som er tillatt der. `codeDirs`: Claude
+ * tillatt der de er. fs-scope (initiativ, scopes og hvilke krav hvert scope har) er tillatt i Krav og Scopes.
+ * I Scopes er ingen valgt på forhånd, og uten valg kan Claude bruke alle som er tillatt der. `codeDirs`: Claude
  * kan lese kodeklonene (fs-admin, fs-plattform, min-kompetanse), som fs-verify trenger. fs-krav-avvik, fs-specify og fs-specify-delta vises
  * ikke i skillvelgeren (`CLAUDE_SKILLS_SHOWN`), men Claude kan bruke dem der de er tillatt.
  */
 const CLAUDE_SKILLS_BY_MODE: Record<Mode, { allowed: string[]; preselect: boolean; codeDirs: boolean }> = {
   krav: { allowed: ['fs-krav', 'fs-scope', 'fs-krav-avvik', 'fs-implementasjonsdetaljer', 'fs-verify'], preselect: true, codeDirs: true },
   avvik: { allowed: ['fs-krav', 'fs-krav-avvik'], preselect: true, codeDirs: false },
-  oppgaver: { allowed: ['fs-scope', 'fs-krav', 'fs-specify', 'fs-specify-delta', 'fs-implementasjonsdetaljer', 'fs-verify'], preselect: false, codeDirs: true },
+  scopes: { allowed: ['fs-scope', 'fs-krav', 'fs-specify', 'fs-specify-delta', 'fs-implementasjonsdetaljer', 'fs-verify'], preselect: false, codeDirs: true },
   // Flyter: fs-krav skriver flytene, fs-krav-avvik finner faser uten krav, og fs-verify verifiserer overleveringene
   flyter: { allowed: ['fs-krav', 'fs-scope', 'fs-krav-avvik', 'fs-verify'], preselect: true, codeDirs: true },
 };
-const MODE_LABEL: Record<Mode, string> = { krav: 'Krav', avvik: 'Avvik', oppgaver: 'Oppgaver', flyter: 'Flyter' };
-/** Hvorfor en skill ikke kan velges i `mode`: «brukes i Krav og Oppgaver, ikke i Avvik» */
+const MODE_LABEL: Record<Mode, string> = { krav: 'Krav', avvik: 'Avvik', scopes: 'Scopes', flyter: 'Flyter' };
+/** Hvorfor en skill ikke kan velges i `mode`: «brukes i Krav og Scopes, ikke i Avvik» */
 const skillHint = (mode: Mode) => (skill: string) => {
   const where = (Object.keys(CLAUDE_SKILLS_BY_MODE) as Mode[]).filter(m => CLAUDE_SKILLS_BY_MODE[m].allowed.includes(skill)).map(m => MODE_LABEL[m]);
   return `brukes i ${where.join(' og ') || 'ingen visninger'}, ikke i ${MODE_LABEL[mode]}`;
@@ -91,7 +91,7 @@ const fromHash = () => decodeURIComponent(location.hash.replace(/^#\/?/, ''));
 
 // Uten hash (desktop-appen starter alltid slik, og en ny fane i nettleseren) går vieweren tilbake dit
 // brukeren var sist: fila, avviksdashbordet eller oppgaven. En fil som er borte, gir forsiden som før.
-// Lenker til de gamle visningene (`#/spesifikasjoner/…`, `#/oppgaver/tavle/…`) gjøres om til tavla.
+// Lenker til de gamle visningene (`#/spesifikasjoner/…`, `#/oppgaver…`) gjøres om til tavla (`#/scopes…`).
 if (!location.hash) {
   const last = load<string | null>('hash', null);
   if (last?.startsWith('#/')) history.replaceState(null, '', normalizeHash(last));
@@ -121,7 +121,7 @@ function asCompact<T>(main: HTMLElement, fn: (offset: number) => T): T {
 }
 
 /** Valget på tavla fra hashen (se tavleHash.ts), eller `undefined` når hashen ikke er tavla */
-const parseOppgaverHash = parseTavleHash;
+const parseScopesHash = parseTavleHash;
 
 /** Antall nivåer med @depends-on- i Flyter: fra hashen når den har det, ellers det brukeren valgte sist */
 const savedDepth = (): Depth => {
@@ -168,18 +168,18 @@ function App() {
   const startFlow = parseFlyterHash(fromHash());
   const startFlowPath = startFlow?.path && initial[startFlow.path] ? startFlow.path : null;
   const [current, setCurrent] = useState(() => startFlowPath ?? (initial[fromHash()] ? fromHash() : defaultPath(initial)));
-  // #/avvik er avviksdashbordet, #/oppgaver… er oppgavene, #/flyter… er flytene; alle andre hasher er en fil
+  // #/avvik er avviksdashbordet, #/scopes… er scopene, #/flyter… er flytene; alle andre hasher er en fil
   const [mode, setMode] = useState<Mode>(() =>
-    fromHash() === 'avvik' ? 'avvik' : parseOppgaverHash(fromHash()) ? 'oppgaver' : startFlow ? 'flyter' : 'krav',
+    fromHash() === 'avvik' ? 'avvik' : parseScopesHash(fromHash()) ? 'scopes' : startFlow ? 'flyter' : 'krav',
   );
   // Flyten som er valgt i Flyter (null: startsiden), og hvor mange nivåer med @depends-on- som vises
   const [flowPath, setFlowPath] = useState<string | null>(startFlowPath);
   // Fasen Flyter skal vise når flyten åpnes fra en regel eller et scenario i Krav
   const [flowPhase, setFlowPhase] = useState<{ n: number; seq: number } | null>(null);
   const [flowDepth, setFlowDepth] = useState<Depth>(() => startFlow?.depth ?? savedDepth());
-  // Hvilke av Avvik og Oppgaver som vises i menyen (tannhjulet etter menyen)
-  const [menu, setMenu] = useState<MenuShow>(() => ({ ...MENU_DEFAULT, ...load<Partial<MenuShow>>('menu', {}) }));
-  const [tavleSel, setTavleSel] = useState<string | null>(() => parseOppgaverHash(fromHash())?.sel ?? null);
+  // Hvilke av Avvik og Scopes som vises i menyen (tannhjulet etter menyen)
+  const [menu, setMenu] = useState<MenuShow>(() => migrateMenu(load<Record<string, boolean>>('menu', {})));
+  const [tavleSel, setTavleSel] = useState<string | null>(() => parseScopesHash(fromHash())?.sel ?? null);
   // Oppgaven et krav ble åpnet fra på tavla, til båndet «← <oppgave>» i Krav
   const [kravFrom, setKravFrom] = useState<KravFrom | null>(null);
   const [tasksSnap, setTasksSnap] = useState<TasksSnapshot>(initialTasks ?? { domains: {}, tasks: [] });
@@ -272,7 +272,7 @@ function App() {
   useEffect(() => save('flowDepth', flowDepth === Infinity ? 'alle' : flowDepth), [flowDepth]);
   // Tilbake på tavla trengs ikke båndet lenger
   useEffect(() => {
-    if (mode === 'oppgaver') setKravFrom(null);
+    if (mode === 'scopes') setKravFrom(null);
   }, [mode]);
 
   // Følg markøren i VS Code: scroll til regelen/scenarioet som inneholder linjen
@@ -384,7 +384,7 @@ function App() {
   useEffect(() => {
     const onHash = () => {
       const p = fromHash();
-      const o = parseOppgaverHash(p);
+      const o = parseScopesHash(p);
       const fl = parseFlyterHash(p);
       if (fl) {
         setMode('flyter');
@@ -394,7 +394,7 @@ function App() {
         setFlowDepth(fl.depth ?? 1);
       } else if (p === 'avvik') setMode('avvik');
       else if (o) {
-        setMode('oppgaver');
+        setMode('scopes');
         setTavleSel(o.sel);
         // De gamle formene (`#/spesifikasjoner/…`) byttes ut med den nye
         if (normalizeHash(location.hash) !== location.hash) history.replaceState(null, '', normalizeHash(location.hash));
@@ -610,8 +610,8 @@ function App() {
     if (m === 'avvik') {
       setMode('avvik');
       history.pushState(null, '', '#/avvik');
-    } else if (m === 'oppgaver') {
-      setMode('oppgaver');
+    } else if (m === 'scopes') {
+      setMode('scopes');
       history.pushState(null, '', tavleHash(tavleSel));
     } else if (m === 'flyter') {
       // Fila i Krav når den er en flyt, ellers flyten som var valgt sist
@@ -682,7 +682,7 @@ function App() {
     setTavleSel(sel);
     history.pushState(null, '', tavleHash(sel));
   };
-  // Filene under tasks/ som er endret (spesifikasjonene, utforing.md, oppgave.md og scope-filene), til «N endret · ikke merget» og «Lag PR»
+  // Filene under tasks/ som er endret (spesifikasjonene, utforing.md og scope.md), til «N endret · ikke merget» og «Lag PR»
   const specDirty = git ? [...new Set([...git.uncommitted, ...git.committed].map(c => c.path).filter(isSpecPath))] : [];
   // «Utfør i <repo>»: utførekjøring i Claude-panelet, i den lokale klonen av repoet (Kodemapper i panelet)
   const codeDirList = useCodeDirs();
@@ -750,7 +750,7 @@ function App() {
   // Claude-panelet: samme samtale i alle visningene, med skills og fil-kontekst for visningen man er i
   const claudeShown = !!claude && claudeOpen;
   const claudeSkills = CLAUDE_SKILLS_BY_MODE[mode];
-  // I Oppgaver: spesifikasjonen som er valgt, ellers oppgavemappa
+  // I Scopes: spesifikasjonen som er valgt, ellers scope-mappa
   const specCard = shownTask && tavlePick.spec && tavlePick.spec !== 'ny' ? shownTask.specs.find(c => c.file === tavlePick.spec) : undefined;
   const claudePath =
     mode === 'krav' ? (entry ? current : null)
@@ -790,7 +790,7 @@ function App() {
           setMenu(m);
           save('menu', m);
           // Skjules visningen brukeren står i, går visningen til Krav
-          if ((mode === 'avvik' || mode === 'oppgaver') && !m[mode]) void changeMode('krav');
+          if ((mode === 'avvik' || mode === 'scopes') && !m[mode]) void changeMode('krav');
         }}
         specState={{ ro: !EDITABLE, dirty: specDirty.length, onPr: EDITABLE && git ? specPr : null }}
         claude={claude ? claudeOpen : null}
@@ -806,7 +806,7 @@ function App() {
         // Et smalere vindu enn sist: panelet tar aldri mer enn 70 % av bredden
         style={claudeShown ? { '--claude-w': `min(${claudeWidth}px, 70vw)` } : undefined}
       >
-        {mode === 'oppgaver' ? (
+        {mode === 'scopes' ? (
           <Tavle
             snap={tasksSnap}
             entries={entries}
@@ -880,7 +880,7 @@ function App() {
                   from={kravFrom}
                   onBack={() => {
                     setTavleSel(kravFrom.sel);
-                    setMode('oppgaver');
+                    setMode('scopes');
                     history.pushState(null, '', tavleHash(kravFrom.sel));
                   }}
                 />
@@ -967,7 +967,7 @@ function App() {
           </div>
         )}
         {claude && claudeShown && (
-          // Panelet ligger utenfor visningene, så samtalen følger med mellom Krav, Avvik og Oppgaver
+          // Panelet ligger utenfor visningene, så samtalen følger med mellom Krav, Avvik og Scopes
           <ClaudePanel
             status={claude}
             width={claudeWidth}

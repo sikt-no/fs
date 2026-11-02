@@ -1,22 +1,33 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
-import { buildScopes, buildTasks, metadata, newOppgaveText, parseIssue, parseScope, parseTask, taskLint, type RawTask, type TasksSnapshot } from './tasks.ts';
+import { buildScopes, buildTasks, metadata, newScopeText, parseIssue, parseIssues, parseScope, parseTask, taskLint, type RawTask, type TasksSnapshot } from './tasks.ts';
 
-const oppgave = (o: { fase?: string; slug?: string; dom?: string; eier?: string; krav?: string; prs?: string; scope?: string } = {}) => `# Søk på fødselsnummer
+const DOM = 'brukeradministrasjon-og-tilgangsstyring';
 
-## Metadata
+const scope = (o: { fase?: string; slug?: string; dom?: string; eier?: string; prs?: string; jira?: string; rows?: string } = {}) => `# Scope: Søk på fødselsnummer
 
-- **Issue**: [sikt-no/fs#41](https://github.com/sikt-no/fs/issues/41)
+- **Slug**: ${o.slug ?? 'sok'} (= navnet på mappa og taggen \`@scope-sok\`)
+- **Domene**: ${o.dom ?? DOM} (se [\`../../README.md\`](../../README.md#domener))
 - **Initiativ**: #31 Paraplyen
-- **Domene**: ${o.dom ?? 'brukeradministrasjon-og-tilgangsstyring'} (se [\`../../README.md\`](../../README.md#domener))
-- **Slug**: ${o.slug ?? 'sok'}
+- **Jira**: ${o.jira ?? '[sikt-no/fs#41](https://github.com/sikt-no/fs/issues/41)'}
+- **Eier**: ${o.eier ?? '–'}
 - **Fase**: ${o.fase ?? 'utforskning'}
 - **Prioritet**: Must
-${o.scope ? `- **Scope**: ${o.scope}\n` : ''}- **Eier**: ${o.eier ?? '–'}
-- **Lenker**:
-  - design: [design.md](design.md)
-  - PRs: ${o.prs ?? '–'}
-- **Krav (Gherkin)**: ${o.krav ?? '[`krav/07 Brukeradministrasjon og tilgangsstyring/12 Brukeradministrasjon/`](../../../krav/07%20Brukeradministrasjon%20og%20tilgangsstyring/12%20Brukeradministrasjon/)'}
+- **PRs**: ${o.prs ?? '–'}
+- **Siste oppdatering**: 2026-10-01
+
+## Mål
+
+Finne brukere raskt.
+
+## Krav
+
+| Krav | MoSCoW | Skisse | Jira | Kommentar |
+|---|---|---|---|---|
+${o.rows ?? `| \`@BRU-BRU-SOK-001\` [sok.feature](../../../krav/07%20Bru/12%20Bru/01%20S%C3%B8k/sok.feature), \`@BRU-BRU-SOK-002\` | Must | [Søk](https://www.figma.com/design/abc/x?node-id=1-2) | BAT-41 | |
+| \`@BRU-BRU-SOK-003\` | Could | – | – | senere |`}
+
+## Åpne spørsmål
 
 ## Statuslogg
 
@@ -26,27 +37,29 @@ ${o.scope ? `- **Scope**: ${o.scope}\n` : ''}- **Eier**: ${o.eier ?? '–'}
 | 2026-08-01 | Tatt inn i veikart (\`prioritert\`) | @jonas      | –                |
 `;
 
-const raw = (files: string[], sources: Record<string, string> = {}, o: Parameters<typeof oppgave>[0] = {}): RawTask => ({
-  dom: 'brukeradministrasjon-og-tilgangsstyring',
+const raw = (files: string[], sources: Record<string, string> = {}, o: Parameters<typeof scope>[0] = {}): RawTask => ({
+  dom: DOM,
   slug: 'sok',
-  files: ['oppgave.md', ...files].sort(),
-  sources: { 'oppgave.md': oppgave(o), ...sources },
+  files: ['scope.md', ...files].sort(),
+  sources: { 'scope.md': scope(o), ...sources },
 });
 
 const rules = (r: RawTask) => taskLint(parseTask(r)).map(l => l.rule);
 
-test('metadata leser nøkkel/verdi-linjene og lenke-underpunktene', () => {
-  const m = metadata(oppgave({ prs: '[#12](https://github.com/sikt-no/fs/pull/12)' }));
+test('metadata leser nøkkel/verdi-linjene', () => {
+  const m = metadata(scope({ prs: '[#12](https://github.com/sikt-no/fs/pull/12)' }));
   assert.equal(m['Fase'], 'utforskning');
   assert.equal(m['Prioritet'], 'Must');
-  assert.equal(m['lenke:PRs'], '[#12](https://github.com/sikt-no/fs/pull/12)');
+  assert.equal(m['PRs'], '[#12](https://github.com/sikt-no/fs/pull/12)');
 });
 
-test('parseTask tolker oppgave.md', () => {
+test('parseTask tolker scope.md', () => {
   const t = parseTask(raw([]));
-  assert.equal(t.title, 'Søk på fødselsnummer');
+  assert.equal(t.title, 'Søk på fødselsnummer', 'uten «Scope:» foran');
+  assert.equal(t.hasScope, true);
   assert.deepEqual(t.issue, { key: '#41', url: 'https://github.com/sikt-no/fs/issues/41' });
-  assert.equal(t.scope, null);
+  assert.deepEqual(t.issues, [t.issue]);
+  assert.equal(t.scope, 'sok', 'scopet er mappa');
   assert.equal(t.prio, 'Must');
   assert.equal(t.metaDom, 'brukeradministrasjon-og-tilgangsstyring');
   assert.equal(t.metaSlug, 'sok');
@@ -60,12 +73,6 @@ test('eier «–» og plassholderen @brukernavn blir null', () => {
   assert.equal(parseTask(raw([])).owner, null);
   assert.equal(parseTask(raw([], {}, { eier: '@brukernavn' })).owner, null);
   assert.equal(parseTask(raw([], {}, { eier: '@kari' })).owner, '@kari');
-});
-
-test('Krav-lenken løses opp fra oppgavemappa, og kodespenn godtas', () => {
-  assert.equal(parseTask(raw([])).kravLink, 'krav/07 Brukeradministrasjon og tilgangsstyring/12 Brukeradministrasjon');
-  assert.equal(parseTask(raw([], {}, { krav: '`krav/02 Opptak/11 Opptak/` (skal utarbeides)' })).kravLink, 'krav/02 Opptak/11 Opptak');
-  assert.equal(parseTask(raw([], {}, { krav: '(skal utarbeides)' })).kravLink, null);
 });
 
 test('PR-lenker telles', () => {
@@ -104,7 +111,7 @@ test('specKrav: kravene under ## Krav i spesifikasjonene, også fra eldre lenker
   assert.deepEqual(parseTask(raw([])).specKrav, []);
 });
 
-test('regel 1: BAT-filer i oppgave-rota', () => {
+test('regel 1: BAT-filer i scope-rota', () => {
   assert.deepEqual(rules(raw(['plan-krav.md'])), ['r1']);
   assert.match(taskLint(parseTask(raw(['plan-krav.md'])))[0].hint, /<lag>\/plan-sok\.md/);
   assert.deepEqual(rules(raw(['analysis-sok.md'])), ['r1']);
@@ -132,86 +139,62 @@ test('regel 4: mappe under mal/ eller domene som ikke finnes', () => {
   assert.deepEqual(rules(raw([])), []);
 });
 
-test('metadata: oppgave.md mangler, feil slug og feil domene; Fase leses ikke', () => {
+test('metadata: scope.md mangler, feil slug og feil domene; Fase leses ikke', () => {
   assert.deepEqual(rules(raw([], {}, { fase: 'prioritert | utforskning | utvikling' })), []);
   assert.deepEqual(rules(raw([], {}, { fase: 'ferdig' })), []);
   assert.deepEqual(rules(raw([], {}, { slug: 'noe-annet' })), ['slug']);
   assert.deepEqual(rules(raw([], {}, { dom: 'opptak' })), ['domene']);
-  assert.deepEqual(rules({ ...raw([]), files: ['design.md'], sources: {} }), ['oppgave']);
+  assert.deepEqual(rules({ ...raw([]), files: ['design.md'], sources: {} }), ['scopefil']);
+  assert.match(taskLint(parseTask({ ...raw([]), files: ['design.md'], sources: {} }))[0].title, /scope\.md mangler/);
   assert.match(taskLint(parseTask({ ...raw([]), files: ['design.md'], sources: {} }))[0].hint, /fs-scope/);
+  // En mappe med bare oppgave.md (fra før scope og oppgave ble slått sammen) har ikke scope
+  assert.equal(parseTask({ ...raw([]), files: ['oppgave.md'], sources: { 'oppgave.md': '# X\n' } }).scope, null);
 });
 
-const DOM = 'brukeradministrasjon-og-tilgangsstyring';
-const scopeSrc = (o: { slug?: string; rows?: string } = {}) => `# Scope: Søk og filter
-
-- **Slug**: ${o.slug ?? 'sok-iterasjon-2'}
-- **Initiativ**: [#31](https://github.com/sikt-no/fs/issues/31)
-- **Eier**: @kari
-- **Siste oppdatering**: 2026-10-01
-
-## Mål
-
-Finne brukere raskt.
-
-## Oppgaver
-
-| Oppgave | Krav | MoSCoW | Skisse | Issue | Kommentar |
-|---|---|---|---|---|---|
-${o.rows ?? `| [sok](sok/) | \`@BRU-BRU-SOK-001\` [sok.feature](../../krav/07%20Bru/12%20Bru/01%20S%C3%B8k/sok.feature), \`@BRU-BRU-SOK-002\` | Must | [Søk](https://www.figma.com/design/abc/x?node-id=1-2) | #41 | |
-| (ikke tildelt) | \`@BRU-BRU-SOK-003\` | Could | – | – | senere |`}
-
-## Åpne spørsmål
-`;
-
-test('parseScope leser metadata og tabellen Oppgaver', () => {
-  const sc = parseScope(`tasks/${DOM}/scope-sok-iterasjon-2.md`, scopeSrc())!;
-  assert.equal(sc.slug, 'sok-iterasjon-2');
-  assert.equal(sc.title, 'Søk og filter');
-  assert.equal(sc.metaSlug, 'sok-iterasjon-2');
-  assert.equal(sc.owner, '@kari');
+test('parseScope leser metadata og tabellen Krav i scope.md', () => {
+  const sc = parseScope(`tasks/${DOM}/sok/scope.md`, scope({ jira: '[BAT-41](https://sikt.atlassian.net/browse/BAT-41), [BAT-42](https://sikt.atlassian.net/browse/BAT-42)' }))!;
+  assert.equal(sc.slug, 'sok');
+  assert.equal(sc.dom, DOM);
+  assert.equal(sc.title, 'Søk på fødselsnummer');
   assert.equal(sc.updated, '2026-10-01');
+  assert.deepEqual(sc.issues.map(i => i.key), ['BAT-41', 'BAT-42']);
   assert.equal(sc.rows.length, 2);
   assert.deepEqual(sc.rows[0].ids, ['@BRU-BRU-SOK-001', '@BRU-BRU-SOK-002']);
-  assert.deepEqual(sc.rows[0].paths, ['krav/07 Bru/12 Bru/01 Søk/sok.feature']);
-  assert.equal(sc.rows[0].task, 'sok');
+  assert.deepEqual(sc.rows[0].paths, ['krav/07 Bru/12 Bru/01 Søk/sok.feature'], 'lenken løses opp fra scope-mappa');
+  assert.equal(sc.rows[0].task, 'sok', 'alle radene hører til mappa');
   assert.equal(sc.rows[0].moscow, 'Must');
   assert.deepEqual(sc.rows[0].sketches, [{ name: 'Søk', url: 'https://www.figma.com/design/abc/x?node-id=1-2' }]);
-  assert.equal(sc.rows[0].issue?.key, '#41');
-  assert.equal(sc.rows[1].task, null, '(ikke tildelt)');
+  assert.equal(sc.rows[0].issue?.key, 'BAT-41', 'kolonnen Jira sier hvilken sak kravet hører til');
+  assert.equal(sc.rows[1].issue, null);
   assert.equal(sc.rows[1].comment, 'senere');
-  assert.equal(parseScope(`tasks/${DOM}/sok/scope-x.md`, scopeSrc()), null);
+  assert.equal(parseScope(`tasks/${DOM}/scope-sok.md`, scope()), null, 'scope-<slug>.md på domenenivå leses ikke lenger');
 });
 
-const snapWith = (scopes: Record<string, string>, tasks: RawTask[] = [raw([])]): TasksSnapshot => ({ domains: { [DOM]: null }, tasks, scopes });
+const snap = (tasks: RawTask[]): TasksSnapshot => ({ domains: { [DOM]: null, opptak: null }, tasks });
 
-test('scope: slugen i fila er lik filnavnet, unik på tvers av domener, og oppgavene finnes i domenet', () => {
-  const lint = (scopes: Record<string, string>) => buildScopes(snapWith(scopes)).flatMap(s => s.lint.map(l => l.title));
-  assert.deepEqual(lint({ [`tasks/${DOM}/scope-sok-iterasjon-2.md`]: scopeSrc() }), []);
-  assert.match(lint({ [`tasks/${DOM}/scope-sok-iterasjon-2.md`]: scopeSrc({ slug: 'annet' }) })[0], /Slug er annet/);
-  assert.match(lint({ [`tasks/${DOM}/scope-sok-iterasjon-2.md`]: scopeSrc({ rows: '| [finnes-ikke](finnes-ikke/) | `@BRU-BRU-SOK-001` | Must | – | – | |' }) })[0], /finnes-ikke finnes ikke/);
-  const twice = lint({ [`tasks/${DOM}/scope-sok-iterasjon-2.md`]: scopeSrc(), 'tasks/opptak/scope-sok-iterasjon-2.md': scopeSrc({ rows: '' }) });
+test('scope: buildScopes leser scope.md i mappene, og slugen er unik på tvers av domener', () => {
+  const lint = (tasks: RawTask[]) => buildScopes(snap(tasks)).flatMap(s => s.lint.map(l => l.title));
+  assert.deepEqual(
+    buildScopes(snap([raw([]), { ...raw([]), slug: 'uten', files: ['design.md'], sources: {} }])).map(s => s.path),
+    [`tasks/${DOM}/sok/scope.md`],
+  );
+  assert.deepEqual(lint([raw([])]), []);
+  const twice = lint([raw([]), { ...raw([], {}, { dom: 'opptak' }), dom: 'opptak' }]);
   assert.equal(twice.filter(t => /finnes også i/.test(t)).length, 2);
+  assert.deepEqual(buildScopes(snap([{ ...raw([]), dom: 'mal' }])), [], 'mal/ er ikke et scope');
 });
 
-test('Scope i oppgave.md: scopet finnes, og oppgaven står i tabellen', () => {
-  const lint = (scope: string, scopes: Record<string, string>) => {
-    const r = raw([], {}, { scope });
-    return buildTasks(snapWith(scopes, [r]))[0].lint.map(l => l.rule + ':' + l.title);
-  };
-  const ok = { [`tasks/${DOM}/scope-sok-iterasjon-2.md`]: scopeSrc() };
-  assert.equal(parseTask(raw([], {}, { scope: '[scope-sok-iterasjon-2](../scope-sok-iterasjon-2.md)' })).scope, 'sok-iterasjon-2');
-  assert.deepEqual(lint('[scope-sok-iterasjon-2](../scope-sok-iterasjon-2.md)', ok), []);
-  assert.match(lint('[scope-borte](../scope-borte.md)', ok)[0], /^scope:scope-borte finnes ikke/);
-  const without = { [`tasks/${DOM}/scope-sok-iterasjon-2.md`]: scopeSrc({ rows: '| [annen](annen/) | `@BRU-BRU-SOK-001` | Must | – | – | |' }) };
-  assert.ok(lint('[scope-sok-iterasjon-2](../scope-sok-iterasjon-2.md)', without).some(l => /Står ikke i scope-sok-iterasjon-2/.test(l)));
-  assert.equal(parseTask(raw([], {}, { scope: '–' })).scope, null);
+test('scope.md: slugen må være navnet på mappa', () => {
+  const t = buildTasks(snap([raw([], {}, { slug: 'annet' })]))[0];
+  assert.deepEqual(t.lint.map(l => l.rule + ':' + l.title), ['slug:Slug er annet, men mappa heter sok']);
+  assert.equal(t.lint[0].file, 'scope.md');
 });
 
 test('buildTasks sorterer på domene og tittel og legger på regelsjekk', () => {
   const a = { ...raw([], {}, { fase: 'utvikling' }), slug: 'a' };
-  a.sources = { 'oppgave.md': oppgave({ fase: 'utvikling', slug: 'a' }).replace('# Søk på fødselsnummer', '# Vis brukere') };
+  a.sources = { 'scope.md': scope({ fase: 'utvikling', slug: 'a' }).replace('# Scope: Søk på fødselsnummer', '# Scope: Vis brukere') };
   const b = { ...raw(['plan-krav.md'], {}, { slug: 'b' }), slug: 'b' };
-  b.sources = { 'oppgave.md': oppgave({ slug: 'b' }) };
+  b.sources = { 'scope.md': scope({ slug: 'b' }) };
   const out = buildTasks({ domains: { 'brukeradministrasjon-og-tilgangsstyring': null }, tasks: [a, b] });
   assert.deepEqual(
     out.map(t => t.slug),
@@ -223,19 +206,32 @@ test('buildTasks sorterer på domene og tittel og legger på regelsjekk', () => 
   );
 });
 
-test('newOppgaveText: minimal oppgave.md som leses tilbake uten avvik', () => {
-  const src = newOppgaveText({ title: 'Søk på fødselsnummer', dom: DOM, slug: 'sok', issue: parseIssue('BAT-268'), owner: '@kari', date: '2026-10-12', via: 'Opprettet i FS Kravforvaltning' });
-  assert.match(src, /- \*\*Issue\*\*: \[BAT-268\]\(https:\/\/sikt\.atlassian\.net\/browse\/BAT-268\)/);
-  const t = parseTask({ dom: DOM, slug: 'sok', files: ['oppgave.md'], sources: { 'oppgave.md': src } });
-  assert.deepEqual([t.title, t.issue, t.metaDom, t.metaSlug, t.owner, t.scope], ['Søk på fødselsnummer', { key: 'BAT-268', url: 'https://sikt.atlassian.net/browse/BAT-268' }, DOM, 'sok', '@kari', null]);
+test('newScopeText: minimal scope.md som leses tilbake uten avvik', () => {
+  const src = newScopeText({ title: 'Søk på fødselsnummer', dom: DOM, slug: 'sok', jira: parseIssues('BAT-268, BAT-269'), owner: '@kari', mal: 'Finne brukere raskt.', date: '2026-10-12', via: 'Opprettet i FS Kravforvaltning' });
+  assert.match(src, /- \*\*Jira\*\*: \[BAT-268\]\(https:\/\/sikt\.atlassian\.net\/browse\/BAT-268\), \[BAT-269\]/);
+  const r: RawTask = { dom: DOM, slug: 'sok', files: ['scope.md'], sources: { 'scope.md': src } };
+  const t = parseTask(r);
+  assert.deepEqual(
+    [t.title, t.issues.map(i => i.key), t.metaDom, t.metaSlug, t.owner, t.scope],
+    ['Søk på fødselsnummer', ['BAT-268', 'BAT-269'], DOM, 'sok', '@kari', 'sok'],
+  );
   assert.deepEqual(t.log, [{ d: '2026-10-12', t: 'Opprettet i FS Kravforvaltning', who: '@kari' }]);
   assert.deepEqual(taskLint(t), []);
-  const uten = newOppgaveText({ title: 'X', dom: DOM, slug: 'x', scope: 'sok-iterasjon-2', date: '2026-10-12', via: 'Opprettet' });
-  assert.match(uten, /Oppgaven har ikke en Jira-sak ennå/);
-  assert.equal(parseTask({ dom: DOM, slug: 'x', files: ['oppgave.md'], sources: { 'oppgave.md': uten } }).scope, 'sok-iterasjon-2');
+  const sc = buildScopes(snap([r]))[0];
+  assert.deepEqual([sc.rows, sc.lint], [[], []]);
+  assert.match(src, /## Mål\n\nFinne brukere raskt\./);
+  const uten = newScopeText({ title: 'X', dom: DOM, slug: 'x', date: '2026-10-12', via: 'Opprettet' });
+  assert.match(uten, /Scopet har ikke en Jira-sak ennå/);
+  assert.deepEqual(parseTask({ dom: DOM, slug: 'x', files: ['scope.md'], sources: { 'scope.md': uten } }).issues, []);
 });
 
-test('parseIssue: Jira-sak, eller GitHub issue i oppgaver fra før', () => {
+test('parseIssues: én eller flere saker, i rekkefølge, uten dubletter', () => {
+  assert.deepEqual(parseIssues('[BAT-1](https://sikt.atlassian.net/browse/BAT-1), [#143](https://github.com/sikt-no/fs/issues/143)').map(i => i.key), ['BAT-1', '#143']);
+  assert.deepEqual(parseIssues('BAT-1 og BAT-2, BAT-1').map(i => i.key), ['BAT-1', 'BAT-2']);
+  for (const v of [undefined, '', '–']) assert.deepEqual(parseIssues(v), [], String(v));
+});
+
+test('parseIssue: Jira-sak, eller GitHub issue i scopes fra før', () => {
   const jira = { key: 'BAT-268', url: 'https://sikt.atlassian.net/browse/BAT-268' };
   assert.deepEqual(parseIssue('BAT-268'), jira);
   assert.deepEqual(parseIssue('[BAT-268](https://sikt.atlassian.net/browse/BAT-268)'), jira);

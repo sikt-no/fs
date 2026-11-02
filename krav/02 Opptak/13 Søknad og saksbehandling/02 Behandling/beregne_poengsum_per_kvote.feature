@@ -4,7 +4,7 @@
 # KvotesumV2Service viser den høyeste poengsummen per kvote i saksbehandlingen (kvotesummerV2 i
 # fs-admin). Poengtypene og poengene i dem står i OPT-BEH-BEH-018 og OPT-BEH-BEH-028, og
 # kvoteplasseringen i OPT-BEH-BEH-012.
-@OPT-BEH-BEH-031 @must @draft @ref-OPT-BEH-BEH-012 @ref-OPT-BEH-BEH-018 @ref-OPT-BEH-BEH-028
+@OPT-BEH-BEH-031 @must @planned @ref-OPT-BEH-BEH-012 @ref-OPT-BEH-BEH-018 @ref-OPT-BEH-BEH-028
 Egenskap: Beregne poengsum per kvote
   Som saksbehandler
   ønsker jeg at søkerens poengsum regnes ut for hver kvote søkeren er plassert i
@@ -23,14 +23,14 @@ Egenskap: Beregne poengsum per kvote
 
     Scenario: Poengsum for grunnlaget kvoten er koblet til
       Gitt at søkeren er plassert i kvotetypen "ORD"
-      Og at søknaden har grunnlaget "VES"
+      Og at saken har grunnlaget "VES"
       Og at kvotetypen "ORD" er koblet til grunnlaget "VES"
       Når poengsummen regnes ut
       Så har søkeren en poengsum i kvotetypen "ORD" for grunnlaget "VES"
 
     Scenario: Grunnlag kvoten ikke er koblet til, gir ingen poengsum i kvoten
       Gitt at søkeren er plassert i kvotetypen "ORD"
-      Og at søknaden har grunnlagene "VES" og "PRA"
+      Og at saken har grunnlagene "VES" og "PRA"
       Og at kvotetypen "ORD" bare er koblet til grunnlaget "VES"
       Når poengsummen regnes ut
       Så har søkeren en poengsum i kvotetypen "ORD" for grunnlaget "VES"
@@ -105,9 +105,9 @@ Egenskap: Beregne poengsum per kvote
       Når søkeren ikke lenger er plassert i noen kvote
       Så har søkeren ingen poengsum
 
-    Scenario: Poengsummene fjernes når søknaden ikke har noe grunnlag
+    Scenario: Poengsummene fjernes når saken ikke har noe grunnlag
       Gitt at søkeren har en poengsum i kvotetypen "ORD"
-      Når søknaden ikke lenger har noe grunnlag
+      Når saken ikke lenger har noe grunnlag
       Så har søkeren ingen poengsum
 
   @ref-OPT-PLA-TIL-002 @ref-FLY-OPT-AUT-001

@@ -1,5 +1,5 @@
 import { useState } from 'preact/hooks';
-import { DOMAINS, parseIssue, type IssueRef } from '../shared/tasks';
+import { DOMAINS, parseIssues, type IssueRef } from '../shared/tasks';
 import { ClaudeAction, isNewSpec, type SpecActions } from './SpecDetail';
 import { StatusIcon } from './Sidebar';
 import {
@@ -29,9 +29,8 @@ import { useVerifyScreenshots } from './verifyScreenshots';
 const MAX_KRAV = 12;
 
 const KRAV_FROM: Record<string, string> = {
-  scope: 'fra scope-raden',
+  scope: 'fra scope.md',
   spec: 'fra spesifikasjonene',
-  lenke: 'fra «Krav (Gherkin)»',
 };
 
 const KRAV_LABEL: Record<KravKey, string> = {
@@ -119,23 +118,24 @@ export function TaskDetail({ t, col, open, ro, dirty, colName, repoName, actions
           </div>
           <div class="spd-meta mono">
             {t.scope ? (
-              <span class="sptag acc" title={t.scope.title}>
-                scope-{t.scope.slug}
-              </span>
-            ) : task.scope ? (
-              <span class="sptag err" title="Scope-fila finnes ikke">
-                scope-{task.scope} (finnes ikke)
+              <span class="sptag acc" title={t.scope.path}>
+                @scope-{t.scope.slug}
               </span>
             ) : (
-              <span class="sptag" title="Opprett med fs-scope">
-                uten scope
+              <span class="sptag err" title="Lag scope.md med fs-scope">
+                scope.md mangler
               </span>
             )}
             <span class="omuted">·</span>
-            {task.issue ? (
-              <a href={task.issue.url} target="_blank" rel="noreferrer">
-                {task.issue.key}
-              </a>
+            {task.issues.length ? (
+              task.issues.map((i, n) => (
+                <span key={i.key}>
+                  {n > 0 && ', '}
+                  <a href={i.url} target="_blank" rel="noreferrer">
+                    {i.key}
+                  </a>
+                </span>
+              ))
             ) : (
               <span class="omuted">ingen Jira-sak</span>
             )}
@@ -223,7 +223,7 @@ export function TaskDetail({ t, col, open, ro, dirty, colName, repoName, actions
               <span class="mono">{m} finnes ikke under krav/</span>
             </div>
           ))}
-          {!t.krav.length && !t.kravMissing.length && <span class="omuted">Ingen krav er koblet til oppgaven. Legg dem i scope-raden med fs-scope, eller i en spesifikasjon.</span>}
+          {!t.krav.length && !t.kravMissing.length && <span class="omuted">Ingen krav er koblet til scopet. Legg dem i krav-tabellen i scope.md med fs-scope, eller i en spesifikasjon.</span>}
         </section>
 
         <section class="spd-sec">
@@ -299,7 +299,7 @@ export function TaskDetail({ t, col, open, ro, dirty, colName, repoName, actions
               <button class="spfold-h" onClick={() => setShowLog(v => !v)}>
                 <span class={'spchev' + (showLog ? ' up' : '')} />
                 <span>Statuslogg</span>
-                <span class="push mono omuted small">oppgave.md · {task.log.length}</span>
+                <span class="push mono omuted small">scope.md · {task.log.length}</span>
               </button>
               {showLog && (
                 <div class="splog mono">
@@ -349,7 +349,7 @@ function NextStepBox({ t, col, ro, colName, repoName, actions, onSpec, onNewSpec
   const btns = (() => {
     switch (n.kind) {
       case 'scope-tom':
-        return <ClaudeAction label="Kjør fs-scope" skill="fs-scope" solid prompt={() => `Revider scopet for oppgaven ${t.dir}/ (${t.task.title}) med fs-scope: hvilke krav skal oppgaven ha?`} />;
+        return <ClaudeAction label="Kjør fs-scope" skill="fs-scope" solid prompt={() => `Revider scopet ${t.dir}/ (${t.task.title}) med fs-scope: hvilke krav skal scopet ha, og hvilken Jira-sak hører hvert krav til?`} />;
       case 'skjelett':
       case 'kravarbeid':
         return <ClaudeAction label="Kjør fs-krav" skill="fs-krav" solid prompt={() => kravPrompt(t)} />;
@@ -459,10 +459,19 @@ function NextStepBox({ t, col, ro, colName, repoName, actions, onSpec, onNewSpec
   );
 }
 
-/** «+ Ny oppgave»: tittel, domene, Jira-sak og eier. Skriver en minimal oppgave.md fra malen. */
-export function NewTaskForm({ me, onClose, onCreate }: { me: string; onClose: () => void; onCreate: (o: { title: string; dom: string; issue: IssueRef | null; owner: string | null }) => void }) {
+/** «+ Nytt scope»: tittel, domene, mål, Jira-saker og eier. Skriver en minimal scope.md fra malen. */
+export function NewTaskForm({
+  me,
+  onClose,
+  onCreate,
+}: {
+  me: string;
+  onClose: () => void;
+  onCreate: (o: { title: string; dom: string; mal: string; jira: IssueRef[]; owner: string | null }) => void;
+}) {
   const [title, setTitle] = useState('');
   const [dom, setDom] = useState('');
+  const [mal, setMal] = useState('');
   const [issue, setIssue] = useState('');
   const [owner, setOwner] = useState(me.startsWith('@') ? me : '');
   const ok = !!title.trim() && !!dom;
@@ -470,21 +479,21 @@ export function NewTaskForm({ me, onClose, onCreate }: { me: string; onClose: ()
     <aside class="spdetail">
       <div class="spd">
         <div class="spd-path mono">
-          <span class="ell">tasks/{dom || '‹domene›'}/…/oppgave.md</span>
+          <span class="ell">tasks/{dom || '‹domene›'}/…/scope.md</span>
           <button class="spbtn small" onClick={onClose}>
             Lukk ×
           </button>
         </div>
         <div class="spd-head">
-          <h2 class="spd-title static">Ny oppgave</h2>
+          <h2 class="spd-title static">Nytt scope</h2>
           <span class="omuted spd-lead">
-            En oppgave i et initiativ opprettes med fs-scope, som også bestemmer kravene. Her lages en oppgave uten scope, med en minimal oppgave.md.
+            Et scope lages helst med fs-scope, som også finner kildene og bestemmer kravene. Her lages en minimal scope.md uten krav. Slugen lages av tittelen.
           </span>
         </div>
         <section class="spd-sec">
           <div class="spmeta form">
             <span class="omuted">Tittel</span>
-            <input class="spinl strong" value={title} placeholder="Hva oppgaven leverer" onInput={e => setTitle((e.target as HTMLInputElement).value)} />
+            <input class="spinl strong" value={title} placeholder="Hva scopet leverer" onInput={e => setTitle((e.target as HTMLInputElement).value)} />
             <span class="omuted">Domene</span>
             <select value={dom} onChange={e => setDom((e.target as HTMLSelectElement).value)}>
               <option value="">velg …</option>
@@ -494,8 +503,10 @@ export function NewTaskForm({ me, onClose, onCreate }: { me: string; onClose: ()
                 </option>
               ))}
             </select>
-            <span class="omuted">Issue</span>
-            <input class="spinl mono" value={issue} placeholder="BAT-1234 (valgfri)" onInput={e => setIssue((e.target as HTMLInputElement).value)} />
+            <span class="omuted">Mål</span>
+            <textarea class="spinl" rows={3} value={mal} placeholder="Hva scopet skal oppnå (valgfri)" onInput={e => setMal((e.target as HTMLTextAreaElement).value)} />
+            <span class="omuted">Jira</span>
+            <input class="spinl mono" value={issue} placeholder="BAT-1234, BAT-1235 (valgfri)" onInput={e => setIssue((e.target as HTMLInputElement).value)} />
             <span class="omuted">Eier</span>
             <input class="spinl mono" value={owner} placeholder="@brukernavn" onInput={e => setOwner((e.target as HTMLInputElement).value)} />
           </div>
@@ -504,9 +515,9 @@ export function NewTaskForm({ me, onClose, onCreate }: { me: string; onClose: ()
           <button
             class="spbtn solid"
             disabled={!ok}
-            onClick={() => onCreate({ title: title.trim(), dom, issue: parseIssue(issue.trim()), owner: owner.trim() || null })}
+            onClick={() => onCreate({ title: title.trim(), dom, mal: mal.trim(), jira: parseIssues(issue), owner: owner.trim() || null })}
           >
-            Opprett oppgave
+            Opprett scope
           </button>
         </div>
       </div>

@@ -14,14 +14,17 @@ Egenskap: Plassflyt mellom utdanningskvoter
   #
   # ÅPNE SPØRSMÅL:
   # - Å flytte bare noen av de ledige plassene («flytt N av M») er ikke støttet. Trengs det?
-  # - Flyter flere utdanningskvoter til samme mottaker, avgjør kvoteprioriteten rekkefølgen
-  #   («Plasstildelingsløpet i Opptak», kap. 4). Skal det stå som et scenario?
+  #
+  # AVKLART 2026-10-30 (produkteier): Plassflyten avgjør hvor ledige plasser flyter. Kvoteprioriteten sier bare
+  # hvilken utdanningskvote søkeren får tilbud i når søkeren er kvalifisert i flere, og påvirker ikke plassflyten.
+  # Det erstatter at kvoteprioriteten avgjør rekkefølgen når flere utdanningskvoter flyter til samme mottaker
+  # («Plasstildelingsløpet i Opptak», kap. 4).
   #
   # AVKLART 2026-10-15: Forgrening trengs ikke. Hver kvote har én mottaker, og flere kvoter kan ha samme
   # mottaker (sette_plassflyt.feature).
-  # Kilde: tasks/opptak/plasstildeling/design.md (prinsipp 3, oppgave 3) og oppgave.md (gap-analyse oppgave 3).
+  # Kilde: tasks/opptak/plasstildeling-2027/design.md (prinsipp 3, oppgave 3) og scope.md (gap-analyse oppgave 3).
   # Vernet mot sirkulær plassflyt kommer fra GitHub #598.
-  # Status i kode: løst (oppgave.md). Kandidat for @implemented etter verifisering.
+  # Status i kode: løst (scope.md). Kandidat for @implemented etter verifisering.
   # Begrep: «kvoteflyt» heter nå «plassflyt».
 
   Bakgrunn:
@@ -89,13 +92,13 @@ Egenskap: Plassflyt mellom utdanningskvoter
   Regel: Plassflyt går i en kjede innenfor utdanningstilbudet
 
     Scenario: Vanligste kjede i UHG
-      Gitt at standard plassflyt for opptaket er "Førstegangsvitnemål" til "Ordinær"
+      Gitt at standard plassflyt i regelverkssamlingen er "Førstegangsvitnemål" til "Ordinær"
       Og at "Ordinær" er hovedkvote
       Når plasstildelingen gjennomføres for et utdanningstilbud med utdanningskvotene "Førstegangsvitnemål" og "Ordinær"
       Så flyter ledige plasser i "Førstegangsvitnemål" til "Ordinær"
 
     Scenario: Plassflyt mellom utdanningstilbud
-      Gitt at standard plassflyt for opptaket er satt
+      Gitt at standard plassflyt i regelverkssamlingen er satt
       Når plasstildelingen gjennomføres
       Så flyter ledige plasser bare mellom utdanningskvoter på samme utdanningstilbud
 

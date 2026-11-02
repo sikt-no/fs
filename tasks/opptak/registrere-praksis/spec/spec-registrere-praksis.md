@@ -2,7 +2,7 @@
 
 ## Kilde
 
-- **Oppgave:** `tasks/opptak/registrere-praksis/`
+- **Scope:** `tasks/opptak/registrere-praksis/`
 - **Kilde-mappe:** `krav/02 Opptak/13 Søknad og saksbehandling/02 Behandling/`
 - **GitHub:** [#560](https://github.com/sikt-no/fs/issues/560)
 - **Hentet:** `2026-10-07 09:29`

@@ -299,7 +299,7 @@ Egenskap: Tildele saksbehandlende organisasjon
 
   # ── 3. Endring ───────────────────────────────────────────────
 
-  @ref-FLY-OPT-SAK-001
+  @ref-FLY-OPT-SAK-001 @ref-OPT-BEH-BEH-032
   Regel: Søknadsalternativene fordeles når søknaden sendes inn eller endres, og fordelingen ligger fast
 
     Scenariomal: Søknadsalternativene fordeles når <hendelse>
@@ -435,7 +435,7 @@ Egenskap: Tildele saksbehandlende organisasjon
 
   # ── 4. Innsyn ────────────────────────────────────────────────
 
-  @ref-FLY-OPT-SAK-001
+  @ref-FLY-OPT-SAK-001 @ref-OPT-BEH-BEH-032
   Regel: Saksbehandlende organisasjon ser bare saker hos organisasjonen
 
     Scenario: Saksbehandleren ser bare saken hos organisasjonen sin
