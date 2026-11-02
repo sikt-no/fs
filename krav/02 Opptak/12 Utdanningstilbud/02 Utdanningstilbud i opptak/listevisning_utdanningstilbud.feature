@@ -68,6 +68,70 @@ Egenskap: Listevisning og søk i utdanningstilbud i opptaket
       Når opptaksforvalter søker på "sykepleie"
       Så filtreres listen til utdanningstilbud som matcher søket
 
+  Regel: Opptaksforvalter kan filtrere på om utdanningstilbudet tilbyr tidlig opptak
+    # Tilbakemelding fra intern akseptansetest (SHI-791).
+
+    Scenario: Filtrere på utdanningstilbud som tilbyr tidlig opptak
+      Når opptaksforvalter filtrerer på utdanningstilbud som tilbyr tidlig opptak
+      Så ser opptaksforvalter kun utdanningstilbud som tilbyr tidlig opptak
+
+    Scenario: Filtrere på utdanningstilbud som ikke tilbyr tidlig opptak
+      Når opptaksforvalter filtrerer på utdanningstilbud som ikke tilbyr tidlig opptak
+      Så ser opptaksforvalter kun utdanningstilbud som ikke tilbyr tidlig opptak
+
+  Regel: Opptaksforvalter kan filtrere på saksbehandlertildelingsregel
+    # Tilbakemelding fra intern akseptansetest (SHI-791).
+
+    Scenario: Tilgjengelige saksbehandlertildelingsregler i filter
+      Når opptaksforvalter åpner saksbehandlertildelingsregel-filteret
+      Så inneholder filteret saksbehandlertildelingsreglene som utdanningstilbudene i opptaket har
+      Og filteret inneholder valget "Følger opptakets standardregel"
+      Og saksbehandlertildelingsreglene er sortert alfabetisk
+      Og "Alle saksbehandlertildelingsregler" er valgt som standard
+
+    Scenario: Filtrere på saksbehandlertildelingsregel
+      Gitt at utdanningstilbudet "Sykepleie, høst 2027" har saksbehandlertildelingsregelen "TRA"
+      Når opptaksforvalter velger "TRA" som filter
+      Så ser opptaksforvalter kun utdanningstilbud med saksbehandlertildelingsregelen "TRA"
+
+    Scenario: Filtrere på utdanningstilbud som følger opptakets standardregel
+      Gitt at utdanningstilbudet "Vernepleie, høst 2027" ikke har en egen saksbehandlertildelingsregel
+      Når opptaksforvalter velger "Følger opptakets standardregel" som filter
+      Så ser opptaksforvalter kun utdanningstilbud som følger opptakets standardregel
+
+  @depends-on-OPT-OPT-UTD-022
+  Regel: Opptaksforvalter kan filtrere på studieavgift
+    # AVKLART 2026-11-02: Filteret bruker feltet på utdanningstilbudet som sier om utdanningstilbudet har
+    # studieavgift (ja eller nei), se angi_studieavgift.feature. Tilbakemelding fra intern akseptansetest (SHI-791).
+
+    Scenario: Tilgjengelige valg for studieavgift i filter
+      Når opptaksforvalter åpner studieavgift-filteret
+      Så inneholder filteret valgene
+        | Studieavgift          |
+        | Alle utdanningstilbud |
+        | Har studieavgift      |
+        | Har ikke studieavgift |
+      Og "Alle utdanningstilbud" er valgt som standard
+
+    Scenario: Filtrere på utdanningstilbud som har studieavgift
+      Gitt at utdanningstilbudet "Medisin, høst 2027" har studieavgift
+      Når opptaksforvalter velger "Har studieavgift" som filter
+      Så ser opptaksforvalter kun utdanningstilbud som har studieavgift
+
+    Scenario: Filtrere på utdanningstilbud som ikke har studieavgift
+      Gitt at utdanningstilbudet "Sykepleie, høst 2027" ikke har studieavgift
+      Når opptaksforvalter velger "Har ikke studieavgift" som filter
+      Så ser opptaksforvalter kun utdanningstilbud som ikke har studieavgift
+
+  Regel: Opptaksforvalter kan filtrere på utdanningstilbud som tilbys for første gang
+    # Filteret bruker feltet «Tilbys utdanningen for første gang?» på utdanningstilbudet.
+    # Tilbakemelding fra intern akseptansetest (SHI-791).
+
+    Scenario: Filtrere på utdanningstilbud som tilbys for første gang
+      Gitt at utdanningstilbudet "Sykepleie, høst 2027" tilbys for første gang
+      Når opptaksforvalter filtrerer på utdanningstilbud som tilbys for første gang
+      Så ser opptaksforvalter kun utdanningstilbud som tilbys for første gang
+
   Regel: Opptaksforvalter kan filtrere på utdanningstilbud med ufullstendige opplysninger
 
     @implemented
