@@ -1,6 +1,6 @@
 # language: no
 # GitHub: #262, #40, #82
-@TIL-PÅL-PÅL-006 @must @draft @depends-on-TIL-PÅL-PÅL-002
+@TIL-PÅL-PÅL-006 @must @planned @depends-on-TIL-PÅL-PÅL-002
 Egenskap: Logge inn i Min kompetanse uten fødselsnummer
   Som en søker uten norsk eID eller norsk fødselsnummer
   ønsker jeg å logge inn i Min kompetanse

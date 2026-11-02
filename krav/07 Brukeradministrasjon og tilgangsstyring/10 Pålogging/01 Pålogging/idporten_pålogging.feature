@@ -1,5 +1,5 @@
 # language: no
-@TIL-PÅL-PÅL-002 @opptakspilot
+@TIL-PÅL-PÅL-002 @opptakspilot @planned
 Egenskap: ID-porten
 Brukere skal kunne logge på med ID-porten i alle nye brukerflater
 
@@ -19,7 +19,6 @@ Så skal personen være innlogget med ID-porten
 
 # Min kompetanse (personflaten): beslutninger 22.09.2026 og 1.11.2026 (BAT-404, #262).
 
-@draft
 Regel: Personen logger inn i Min kompetanse direkte med ID-porten
   # Min kompetanse har sin egen klient hos Digdir. Innloggingen går ikke via Feide (beslutning 22.09.2026).
 
@@ -29,7 +28,6 @@ Regel: Personen logger inn i Min kompetanse direkte med ID-porten
     Så er personen innlogget i Min kompetanse med ID-porten
     Og personen har ikke logget inn med Feide
 
-@draft
 Regel: Søkeren innlogget med ID-porten får tilgangene til Min kompetanse
   # Tilgangene er gulvet snittet med taket til Min kompetanse, de samme som ved Feide-innlogging gjennom
   # Min kompetanse. Søkeren får ikke bare de åpne rollene.
@@ -44,7 +42,7 @@ Regel: Søkeren innlogget med ID-porten får tilgangene til Min kompetanse
     Når søkeren bruker Min kompetanse
     Så er fødselsnummeret til søkeren ikke lagret i tilgangsstyringen
 
-@draft @ref-TIL-PÅL-PÅL-006
+@ref-TIL-PÅL-PÅL-006
 Regel: Søkere uten norsk eID logger inn gjennom den samme klienten
   # Innlogging med e-post som selvregistrert bruker og med eIDAS går gjennom Min kompetanses klient hos Digdir.
   # Sikt har ingen egen identitetsleverandør for dette. Kravet står i TIL-PÅL-PÅL-006.
