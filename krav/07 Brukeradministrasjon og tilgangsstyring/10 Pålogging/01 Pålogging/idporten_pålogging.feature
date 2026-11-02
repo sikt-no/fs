@@ -20,13 +20,15 @@ Så skal personen være innlogget med ID-porten
 # Min kompetanse (personflaten): beslutninger 22.09.2026 og 1.11.2026 (BAT-404, #262).
 
 Regel: Personen logger inn i Min kompetanse direkte med ID-porten
-  # Min kompetanse har sin egen klient hos Digdir. Innloggingen går ikke via Feide (beslutning 22.09.2026).
+  # Min kompetanse har sin egen klient hos Digdir. Innloggingen med ID-porten går ikke via Feide (beslutning 22.09.2026).
+  # Bare den gamle ruten, der ID-porten-valget gikk gjennom Feide, erstattes. Søkere kan fortsatt logge inn med Feide
+  # i Min kompetanse (DEM-INN-FEI-001), også for å registrere søknader (avklart 2.11.2026).
 
-  Scenario: Personen logger inn i Min kompetanse med ID-porten uten Feide
+  Scenario: Personen logger inn i Min kompetanse direkte med ID-porten
     Gitt at personen er på innloggingssiden til Min kompetanse
     Når personen logger inn med ID-porten
     Så er personen innlogget i Min kompetanse med ID-porten
-    Og personen har ikke logget inn med Feide
+    Og innloggingen med ID-porten har ikke gått via Feide
 
 Regel: Søkeren innlogget med ID-porten får tilgangene til Min kompetanse
   # Tilgangene er gulvet snittet med taket til Min kompetanse, de samme som ved Feide-innlogging gjennom

@@ -10,6 +10,8 @@ Egenskap: Logge inn i Min kompetanse uten fødselsnummer
   # som Min kompetanse bruker for ID-porten (TIL-PÅL-PÅL-002), ikke via Feide (beslutning 22.09.2026). Det finnes to måter:
   # - selvregistrert bruker med e-post (acr «selfregistered-email» hos Digdir)
   # - eIDAS, europeisk eID (acr «eidas-loa-substantial»)
+  # Dette kommer i tillegg til innlogging med Feide (DEM-INN-FEI-001) og med ID-porten (TIL-PÅL-PÅL-002), som søkere
+  # fortsatt kan bruke i Min kompetanse.
   # Sikt har ingen egen identitetsleverandør for søkere uten norsk eID.
   # Ingen av innloggingene gir fødselsnummer. Om e-postadressen kommer med fra ID-porten, er ikke dokumentert.
   # Det testes i BAT-400 (#82).
