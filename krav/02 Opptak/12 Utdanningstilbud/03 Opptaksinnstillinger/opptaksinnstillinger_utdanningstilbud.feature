@@ -229,6 +229,11 @@ Egenskap: Opptaksinnstillinger per utdanningstilbud
       # gjennomføres, ikke per utdanningstilbud, se publisere_svar_på_tidlig_opptak.feature
       # (avklart 25.09.2026, uten egen publiseringsdato fra 09.10.2026).
 
+    Scenario: Utdanningstilbudet kan ikke tilby tidlig opptak når opptaket ikke åpner for det
+      Gitt at opptaket ikke åpner for tidlig opptak
+      Når opptaksforvalter åpner utdanningstilbudet "Sykepleie, høst 2027"
+      Så ser opptaksforvalter ikke muligheten til å markere at utdanningstilbudet tilbyr tidlig opptak
+
     # Lenken til informasjon om tidlig opptak settes per opptak, ikke per
     # utdanningstilbud, se 11 Opprette og vedlikeholde opptak/03 Innstillinger/
     # innstillinger.feature (avklart 09.10.2026, review av PR #654).
