@@ -4,7 +4,7 @@
 # KregVgsParser og VgsLagringService lagrer dem i kompetanse.vgs_dokument med fag,
 # programområder og merknader. Hva som gjøres med resultatene etterpå (GSK, poeng, grunnlag og
 # kravelementer), står i kravene i @ref-taggene.
-@OPT-BEH-BEH-030 @must @planned @ref-OPT-BEH-BEH-015 @ref-OPT-BEH-BEH-018 @ref-OPT-BEH-BEH-019 @ref-OPT-BEH-BEH-020 @ref-OPT-BEH-BEH-032
+@OPT-BEH-BEH-030 @must @planned @scope-automatisk-saksbehandling @ref-OPT-BEH-BEH-015 @ref-OPT-BEH-BEH-018 @ref-OPT-BEH-BEH-019 @ref-OPT-BEH-BEH-020 @ref-OPT-BEH-BEH-032
 Egenskap: Importere resultater fra KREG
   Som saksbehandler
   ønsker jeg at søkerens resultater fra videregående skole hentes fra KREG når saken er opprettet

@@ -1,5 +1,5 @@
 # language: no
-@OPT-BEH-BEH-026 @must @planned
+@OPT-BEH-BEH-026 @must @planned @scope-automatisk-saksbehandling
 Egenskap: Beregne automatisk på nytt
   Som opptaksforvalter
   ønsker jeg å kjøre den automatiske behandlingen på nytt for søknadsalternativene en feil har rammet
