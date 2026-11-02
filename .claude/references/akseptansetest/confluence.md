@@ -28,7 +28,7 @@ Teststrategi for FS – fra krav til akseptanse (forslag) (5145100326)
         ├── Intern akseptansetest – <leveranse>                 ← fs-testcaser-intern (fase 3)
         ├── Testrapport – intern akseptansetest – <leveranse>   ← fs-testrapport (fase 3)
         ├── Ekstern akseptansetest – <leveranse>                ← fs-testcaser-ekstern (fase 4)
-        ├── Flytbeskrivelser til partene – <leveranse>          ← fs-testcaser-ekstern (fase 4, valgfri)
+        ├── Flytbeskrivelser til partene – <leveranse>          ← fs-testcaser-ekstern (fase 4)
         └── Testrapport – ekstern akseptansetest – <leveranse>  ← fs-testrapport (fase 4)
 ```
 

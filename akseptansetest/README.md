@@ -6,7 +6,7 @@ Hele prosessen, fra kravene skrives til leveransen er godkjent, er forklart steg
 
 ## Fasene
 
-Hver leveranse går gjennom fase 1–3: planen, den agentiske testen og den interne testen. Leveranser som er godkjent internt, kan gå videre til fase 4. Hver fase bygger på den forrige og gjentar den ikke. Fase 3 og 4 har de samme tre utfallene: godkjent, godkjent med forbehold og ikke godkjent. «Akseptert» er sluttilstanden: leveransen er godkjent eller godkjent med forbehold i fase 4. Ikke godkjent i fase 3 eller 4 sender leveransen tilbake til teamet med funnene.
+Hver leveranse går gjennom fase 1–3: planen, den agentiske testen og den interne testen. Fase 4 er ikke valgfri, men omfanget vurderes per leveranse, og ikke alle leveranser får fase 4. Leveransene som går dit, er godkjent internt. Hver fase bygger på den forrige og gjentar den ikke. Fase 3 og 4 har de samme tre utfallene: godkjent, godkjent med forbehold og ikke godkjent. «Akseptert» er sluttilstanden: leveransen er godkjent eller godkjent med forbehold i fase 4. Ikke godkjent i fase 3 eller 4 sender leveransen tilbake til teamet med funnene.
 
 | Fase | Svarer på | Metode | Hvem | Tester ikke |
 |---|---|---|---|---|
