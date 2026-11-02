@@ -116,7 +116,8 @@
 # - (09.10.2026) Har søkeren reservert studieplass på et søknadsalternativ som tilbyr
 #   tidlig opptak, får søkeren tilbudsgaranti fra tidligopptaket der uten å nå
 #   poenggrensen, når søkeren deltar og saken er ferdig behandlet. Søkeren har alt en
-#   plass fra et tidligere opptak. Reservasjonen gir ikke i seg selv innvilget tidlig
+#   plass fra et tidligere opptak. Uten de to betingelsene får søkeren ingen
+#   tilbudsgaranti fra tidligopptaket, og reservasjonen vises ikke som innvilget tidlig
 #   opptak (se_svar_på_tidlig_opptak.feature). Stemmer med STEK-503.
 #   (13.10.2026, foreløpig) Kvalifisering kreves heller ikke: søkeren får tilbudsgaranti
 #   med reservert studieplass (RSO eller RES) også når søkeren ikke er kvalifisert, eller

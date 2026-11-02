@@ -3,8 +3,8 @@
 @OPT-SØK-SØK-012 @must @in-progress
 Egenskap: Se svar på søknad om tidlig opptak
   Som søker
-  ønsker jeg å se utfallet av tidlig opptak for hvert av søknadsalternativene mine
-  slik at jeg tidlig vet hvilke studier jeg er sikret plass på, og rekker å omprioritere søknaden min.
+  ønsker jeg å se utfallet av tidlig opptak og hvilket søknadsalternativ som er innvilget
+  slik at jeg tidlig vet hvilket studie jeg er sikret plass på, og rekker å omprioritere søknaden min.
 
   # Kravet forutsetter at søkeren har søkt om tidlig opptak, at saksbehandler har konkludert,
   # og at tilbudsgarantier for tidlig opptak er tildelt. Vurderingen, konklusjonen og
@@ -16,8 +16,7 @@ Egenskap: Se svar på søknad om tidlig opptak
   #
   # Avgrensning: Kravet gjelder kun svaret på tidlig opptak. Andre tilbudsgarantier —
   # særlig reservert studieplass — kommer fra en annen kilde og vises uavhengig av dette
-  # svaret. En søker kan derfor se "ikke innvilget" på tidlig opptak og samtidig ha
-  # reservert studieplass på samme søknadsalternativ.
+  # svaret.
   #
   # Svaret bygger kun på tilbudsgarantien for tidlig opptak fra opptaksforvalter, som
   # gjennomføringen setter. En tilbudsgaranti gitt av tilbyder vises ikke i seg selv som
@@ -39,7 +38,7 @@ Egenskap: Se svar på søknad om tidlig opptak
 
     Scenario: Svaret blir synlig når tidlig opptak er gjennomført
       Gitt at tidlig opptak er gjennomført
-      Og at det er konkludert om søkeren deltar i tidlig opptak i alle sakene
+      Og at det er konkludert om søkeren deltar i tidlig opptak i minst én sak
       Når søkeren åpner søknaden sin
       Så ser søkeren svar på tidlig opptak i søknaden
 
@@ -50,9 +49,9 @@ Egenskap: Se svar på søknad om tidlig opptak
     Scenario: Søkeren ser ikke svar på tidlig opptak der saken ikke har konklusjon
       Gitt at tidlig opptak er gjennomført
       Og at søkeren har søkt om tidlig opptak
-      Men det er ikke konkludert om søkeren deltar i tidlig opptak i saken som gjelder et bestemt søknadsalternativ
+      Men det er ikke konkludert om søkeren deltar i tidlig opptak i saken som gjelder "Sykepleie, høst 2027"
       Når søkeren åpner søknaden sin
-      Så ser ikke søkeren svar på tidlig opptak for det bestemte søknadsalternativet
+      Så ser ikke søkeren svar på tidlig opptak på "Sykepleie, høst 2027"
 
   # Etter at hovedopptaket er publisert, er det svaret fra hovedopptaket som gjelder
   # (avklart 20.10.2026, som i koden).
@@ -79,25 +78,24 @@ Egenskap: Se svar på søknad om tidlig opptak
       Gitt at svaret på tidlig opptak er publisert
       Og at søkeren deltar i tidlig opptak på flere av søknadsalternativene sine
       Når søkeren åpner søknaden sin
-      Så ser søkeren at tidlig opptak er innvilget for høyst ett søknadsalternativ
+      Så ser søkeren at tidlig opptak er innvilget på høyst ett søknadsalternativ
 
-  Regel: Søkeren ser utfallet av tidlig opptak per søknadsalternativ
+  Regel: Søkeren ser hvilket søknadsalternativ som er innvilget, og om tidlig opptak ikke er innvilget
 
     Scenario: Søkeren er innvilget tidlig opptak på et søknadsalternativ
       Gitt at svaret på tidlig opptak er publisert
-      Og at søkeren har tilbudsgaranti for tidlig opptak fra opptaksforvalter på et bestemt søknadsalternativ
+      Og at søkeren har tilbudsgaranti for tidlig opptak fra opptaksforvalter på søknadsalternativet "Sykepleie, høst 2027"
       Når søkeren åpner søknaden sin
-      Så ser søkeren at tidlig opptak er innvilget på det bestemte søknadsalternativet
+      Så ser søkeren at tidlig opptak er innvilget på "Sykepleie, høst 2027"
 
     # Dekker også søknadsalternativer der det ligger en tilbudsgaranti som ikke gir tilbud,
     # for eksempel et registrert avslag på tidlig opptak. Utfallet for søkeren er det samme.
     Scenario: Søkeren deltok, men nådde ikke opp på et søknadsalternativ
       Gitt at svaret på tidlig opptak er publisert
-      Og at et bestemt søknadsalternativ tilbyr tidlig opptak
-      Og at søkeren deltok i tidlig opptak på dette søknadsalternativet
+      Og at søkeren deltok i tidlig opptak
       Men søkeren er ikke innvilget tidlig opptak på noen av søknadsalternativene sine
       Når søkeren åpner søknaden sin
-      Så ser søkeren at tidlig opptak ikke er innvilget på det bestemte søknadsalternativet
+      Så ser søkeren at tidlig opptak ikke er innvilget
 
     Scenario: Innvilget tidlig opptak vises ikke på et søknadsalternativ med lavere prioritet enn et som er innvilget
       Gitt at svaret på tidlig opptak er publisert
@@ -105,8 +103,8 @@ Egenskap: Se svar på søknad om tidlig opptak
       Og at søkeren deltok i tidlig opptak på søknadsalternativet med prioritet 3
       Og at tilbyder har gitt tilbudsgaranti for tidlig opptak på søknadsalternativet med prioritet 3
       Når søkeren åpner søknaden sin
-      Så ser søkeren innvilget tidlig opptak på søknadsalternativet med prioritet 1
-      Og søkeren ser ikke innvilget tidlig opptak på søknadsalternativet med prioritet 3
+      Så ser søkeren at tidlig opptak er innvilget på søknadsalternativet med prioritet 1
+      Og søkeren ser ikke svar på tidlig opptak på søknadsalternativet med prioritet 3
 
     Scenario: Saksbehandler har konkludert med at søkeren ikke deltar i tidlig opptak
       Gitt at svaret på tidlig opptak er publisert
@@ -114,54 +112,72 @@ Egenskap: Se svar på søknad om tidlig opptak
       Når søkeren åpner søknaden sin
       Så ser søkeren at tidlig opptak ikke er innvilget
 
-    Scenario: Søknadsalternativ lagt til etter fristen for søknad om tidlig opptak
+    Scenario: Reservert studieplass uten tilbudsgaranti for tidlig opptak vises ikke som innvilget tidlig opptak
       Gitt at svaret på tidlig opptak er publisert
-      Og at søkeren la til et bestemt søknadsalternativ etter fristen for søknad om tidlig opptak, men før opptaket stengte
+      Og at søkeren har reservert studieplass på søknadsalternativet "Sykepleie, høst 2027"
+      Men søkeren har ikke tilbudsgaranti for tidlig opptak fra opptaksforvalter på "Sykepleie, høst 2027"
       Når søkeren åpner søknaden sin
-      Så ser søkeren svar på tidlig opptak for det bestemte søknadsalternativet på lik linje med de andre søknadsalternativene
+      Så ser ikke søkeren at tidlig opptak er innvilget på "Sykepleie, høst 2027"
+
+    @draft @openquestion
+    Scenario: Reservert studieplass og innvilget tidlig opptak
+      Gitt at svaret på tidlig opptak er publisert
+      Og at søkeren har reservert studieplass på søknadsalternativet "Sykepleie, høst 2027"
+      Og at søkeren er innvilget tidlig opptak på søknadsalternativet "Sykepleie, høst 2027"
+      Når søkeren åpner søknaden sin
+      Så ser søkeren at tidlig opptak er innvilget på "Sykepleie, høst 2027"
+
+    # Et søknadsalternativ lagt til etter at tidlig opptak er gjennomført, er i praksis
+    # utelukket: gjennomføringen skjer omtrent en måned etter at opptaket har stengt.
+    Scenario: Søknadsalternativ lagt til etter fristen for søknad om tidlig opptak kan være innvilget
+      Gitt at svaret på tidlig opptak er publisert
+      Og at søkeren la til søknadsalternativet "Masterstudiet i rettsvitenskap, høst 2027" etter fristen for søknad om tidlig opptak, men før opptaket stengte
+      Og at søkeren er innvilget tidlig opptak på søknadsalternativet "Masterstudiet i rettsvitenskap, høst 2027"
+      Når søkeren åpner søknaden sin
+      Så ser søkeren at tidlig opptak er innvilget på "Masterstudiet i rettsvitenskap, høst 2027"
 
   Regel: Søkeren ser egen poengsum og poenggrense der søkeren deltok uten å nå opp
 
     Scenario: Poengsum og poenggrense vises når søkeren deltok og ikke nådde opp
       Gitt at svaret på tidlig opptak er publisert
-      Og at søkeren deltok i tidlig opptak på et bestemt søknadsalternativ
+      Og at søkeren deltok i tidlig opptak på søknadsalternativet "Profesjonsstudiet i medisin, høst 2027"
       Men søkeren er ikke innvilget tidlig opptak på noen av søknadsalternativene sine
       Når søkeren åpner søknaden sin
-      Så ser søkeren sin egen poengsum for det bestemte søknadsalternativet
-      Og søkeren ser poenggrensen for tidlig opptak for det bestemte søknadsalternativet
+      Så ser søkeren sin egen poengsum på "Profesjonsstudiet i medisin, høst 2027"
+      Og søkeren ser poenggrensen for tidlig opptak på "Profesjonsstudiet i medisin, høst 2027"
 
     Scenario: Poengsum og poenggrense vises ikke når søkeren er innvilget
       Gitt at svaret på tidlig opptak er publisert
-      Og at søkeren er innvilget tidlig opptak på et bestemt søknadsalternativ
+      Og at søkeren er innvilget tidlig opptak på søknadsalternativet "Sykepleie, høst 2027"
       Når søkeren åpner søknaden sin
-      Så ser ikke søkeren poengsum og poenggrense for det bestemte søknadsalternativet
+      Så ser ikke søkeren poengsum og poenggrense på "Sykepleie, høst 2027"
 
     Scenario: Poengsum og poenggrense vises ikke når søkeren er innvilget på høyere prioritet
       Gitt at svaret på tidlig opptak er publisert
       Og at søkeren er innvilget tidlig opptak på søknadsalternativet med prioritet 1
       Og at søkeren deltok i tidlig opptak på søknadsalternativet med prioritet 3
       Når søkeren åpner søknaden sin
-      Så ser ikke søkeren poengsum og poenggrense for søknadsalternativet med prioritet 3
+      Så ser ikke søkeren poengsum og poenggrense på søknadsalternativet med prioritet 3
 
     Scenario: Poengsum og poenggrense vises ikke når søkeren ikke deltar i tidlig opptak
       Gitt at svaret på tidlig opptak er publisert
       Og at saksbehandler har konkludert med at søkeren ikke deltar i tidlig opptak
       Når søkeren åpner søknaden sin
-      Så ser ikke søkeren poengsum og poenggrense for noen av søknadsalternativene
+      Så ser ikke søkeren poengsum og poenggrense på noen av søknadsalternativene
 
     # Avklart 20.10.2026, som i koden (STEK-582).
     Scenario: Poengsum og poenggrense vises ikke når søkeren ikke er kvalifisert
       Gitt at svaret på tidlig opptak er publisert
-      Og at søkeren deltok i tidlig opptak på et bestemt søknadsalternativ
-      Men søkeren er ikke kvalifisert til det bestemte søknadsalternativet
+      Og at søkeren deltok i tidlig opptak på søknadsalternativet "Profesjonsstudiet i medisin, høst 2027"
+      Men søkeren er ikke kvalifisert til "Profesjonsstudiet i medisin, høst 2027"
       Når søkeren åpner søknaden sin
-      Så ser ikke søkeren poengsum og poenggrense for det bestemte søknadsalternativet
+      Så ser ikke søkeren poengsum og poenggrense på "Profesjonsstudiet i medisin, høst 2027"
 
     Scenario: Poengsum og poenggrense vises ikke på søknadsalternativer uten tidlig opptak
       Gitt at svaret på tidlig opptak er publisert
-      Og at et bestemt utdanningstilbud ikke deltar i tidlig opptak
+      Og at utdanningstilbudet "Historie, høst 2027" ikke deltar i tidlig opptak
       Når søkeren åpner søknaden sin
-      Så ser ikke søkeren poengsum og poenggrense for det bestemte utdanningstilbudet
+      Så ser ikke søkeren poengsum og poenggrense på "Historie, høst 2027"
 
   # Teksten er utledet av utfallene i søknaden, ikke en tekst saksbehandler skriver.
   Regel: Søkeren ser et samlet svar for hele søknaden
