@@ -90,12 +90,14 @@ Egenskap: Beregne automatisk på nytt
       Og saken til "Kari Nordmann" hos "Universitetet i Oslo" er fortsatt ferdig behandlet
 
   @depends-on-OPT-BEH-BEH-025
-  Regel: En sak som ble stående under behandling på grunn av feilen, blir ferdig behandlet når alt kan avgjøres
+  Regel: En sak som ikke ble ferdig behandlet på grunn av feilen, blir ferdig behandlet når alt kan avgjøres
     # Avklart 30.10.2026. Saken kunne vært behandlet helautomatisk om regelverket hadde vært
     # riktig. Har saksbehandleren gjort noe i saken, blir den stående under behandling.
+    # Avklart 2026-11-02: saken står som ikke behandlet når den automatiske behandlingen ikke
+    # fullførte (OPT-BEH-BEH-025).
 
     Scenario: Saken blir ferdig behandlet når feilen er rettet
-      Gitt at saken til "Kari Nordmann" hos "Universitetet i Oslo" er under behandling fordi poengene for "Informatikk, UiO" ikke kunne avgjøres på grunn av en feil i rangeringsregelverket
+      Gitt at saken til "Kari Nordmann" hos "Universitetet i Oslo" har behandlingsstatusen "Ikke behandlet" fordi poengene for "Informatikk, UiO" ikke kunne avgjøres på grunn av en feil i rangeringsregelverket
       Og at saksbehandleren ikke har gjort noe i saken
       Når opptaksforvalteren beregner på nytt for søknadsalternativene med rangeringsregelverket som er rettet
       Så er saken til "Kari Nordmann" hos "Universitetet i Oslo" ferdig behandlet

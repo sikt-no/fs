@@ -8,7 +8,9 @@ Egenskap: Behandlingsstatus
 
   Behandlingsstatusen viser hvor langt saksbehandlingen har kommet. En sak har én av tre
   statuser:
-  - «Ikke behandlet»: ingen har sett på eller gjort noe med saken ennå.
+  - «Ikke behandlet»: ingen saksbehandler har sett på eller gjort noe med saken ennå. Den
+    automatiske behandlingen endrer ikke statusen, bortsett fra å sette saken til ferdig
+    behandlet.
   - «Under behandling»: noen har sett på eller gjort noe med saken.
   - «Behandlet»: saksbehandleren har gjort det som kan gjøres i saken. Saken er enten
     ferdig, eller venter på ny informasjon fra søkeren.
