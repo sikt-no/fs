@@ -16,12 +16,14 @@ Egenskap: Listevisning og søk i utdanningstilbud
   # - Jira: TOT-2286
   #
   # GJENNOMGANG (fs-krav, påbegynt 2026-10-08):
-  # Gjennomgått: synlighet, innlogging og studiekurv, feltene i listen, sortering, sideinndeling.
-  # Ikke gjennomgått ennå: tidligere poenggrenser, forklaring av forkortelser, fritekst-søk,
+  # Gjennomgått: synlighet, innlogging og studiekurv, feltene i listen, sortering, sideinndeling, fritekst-søk.
+  # Ikke gjennomgått ennå: tidligere poenggrenser, forklaring av forkortelser,
   # søkeforslag, filtrene, nullstilling, ingen treff og deling av søket. Scenarioene for disse
   # bygger på Confluence og skissen, og skal gjennomgås før kravet kan bli @planned.
   # Neste spørsmål: hvilke poenggrenser vises (kvoter, år, plasstildelingsrunde)?
   # Avklart 2026-10-23: studiested-filteret er kommune, utledet fra campus på utdanningstilbudet (OPT-OPT-UTD-005).
+  # Avklart 2026-11-02 (TOT-2505): fritekst-søket treffer navn, søkeord, lærested og studiested, rangerer
+  # etter antall ord som treffer, og tåler æ/ø/å skrevet som ae/o/a. Ikke campusnavn eller felt fra Samordna opptak.
 
   Regel: Liste over alle utdanningstilbud
 
@@ -144,6 +146,7 @@ Egenskap: Listevisning og søk i utdanningstilbud
       Når søkeren søker med fritekst på "sykepleie Bergen"
       Så vises utdanningstilbud som matcher både "sykepleie" og "Bergen" før utdanningstilbud som bare matcher ett av ordene
 
+    @ref-OPT-OPT-UTD-017
     Scenariomal: Søket tåler skrivemåter som avviker fra navnet
       # Bøyningsformer og skrivefeil dekkes av søkeordene.
       Når søkeren søker med fritekst på "<søketekst>"
