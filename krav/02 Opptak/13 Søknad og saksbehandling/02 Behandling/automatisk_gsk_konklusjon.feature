@@ -45,9 +45,9 @@ Egenskap: Automatisk GSK-konklusjon
   dette kravet alltid at opptakssystemet henter vitnemålet fra KREG (OPT-BEH-BEH-030),
   ikke at vitnemålet kommer inn i KREG. Søknader som ikke har en GSK-konklusjon, får en
   positiv konklusjon når et vitnemål gir GSK, og løpet på vitnemålet finnes i
-  opptakssystemets liste over løp. Har løpet ingen grunnlagskode, får konklusjonen KLS for et
-  studieforberedende løp, og KLY for et yrkesfaglig løp fra Kunnskapsløftet eller RFA for et
-  yrkesfaglig løp fra Reform 94. Finnes ikke løpet i listen, settes
+  opptakssystemets liste over løp. Har løpet ingen grunnlagskode, får konklusjonen KLY for et
+  løp fra Kunnskapsløftet og RFA for et løp fra Reform 94, som i det gamle FS. Finnes ikke
+  løpet i listen, settes
   ingen konklusjon automatisk, og opptaksforvalteren får beskjed om at løpet mangler.
   Vitnemål importeres fra KREG når
   søknaden opprettes, og når KREG får nye vitnemål for en søker med aktive søknader. Når
@@ -208,25 +208,24 @@ Egenskap: Automatisk GSK-konklusjon
       Når vitnemålet importeres fra KREG
       Så får opptaksforvalteren et varsel om at løpet mangler i listen over løp
 
-    Scenariomal: Søknaden får grunnlagskoden <grunnlagskode> når et <løpstype> løp ikke har en grunnlagskode
+    Scenariomal: Søknaden får grunnlagskoden <grunnlagskode> når et løp fra <reform> ikke har en grunnlagskode
       # Innspill i PR #878: finnes løpet i listen over løp, men har ingen grunnlagskode, settes
-      # konklusjonen likevel, med KLS, KLY eller RFA etter typen løp og reformen.
+      # konklusjonen likevel. Avklart 2026-11-02: som i det gamle FS, KLY eller RFA etter reformen.
       Gitt at søknaden ikke har noen GSK-konklusjon
       Og at skolens påstand er at søkeren har generell studiekompetanse
-      Og at løpet på vitnemålet er et <løpstype> løp
+      Og at løpet på vitnemålet er fra <reform>
       Og at løpet finnes i opptakssystemets liste over løp, men ikke har en grunnlagskode
       Når vitnemålet importeres fra KREG
       Så får søknaden en positiv GSK-konklusjon med grunnlagskoden <grunnlagskode>
 
       Eksempler:
-        | løpstype                            | grunnlagskode |
-        | studieforberedende                  | KLS           |
-        | yrkesfaglig fra Kunnskapsløftet     | KLY           |
-        | yrkesfaglig fra Reform 94           | RFA           |
+        | reform          | grunnlagskode |
+        | Kunnskapsløftet | KLY           |
+        | Reform 94       | RFA           |
 
     @openquestion
     Scenario: Opptaksforvalteren får varsel om et løp uten grunnlagskode
-      # Avklart 2026-11-02: søknaden får konklusjonen med KLS, KLY eller RFA, men
+      # Avklart 2026-11-02: søknaden får konklusjonen med KLY eller RFA, men
       # opptaksforvalteren får et varsel, så grunnlagskoden kan legges inn i listen over løp
       # senere. HK-dir eier opptakskodene.
       # ÅPNE SPØRSMÅL:

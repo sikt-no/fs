@@ -393,20 +393,21 @@ Egenskap: Beregne GSK fra vitnemål
     # Opptaksforvalteren får et varsel om løpet, så grunnlagskoden kan legges inn senere
     # (@OPT-BEH-BEH-015, avklart 2026-11-02).
     # Avklart 2026-11-02 (Ingrid Helset, etter samtale med Jøran og Geir): et løp som finnes i
-    # listen over løp, men mangler grunnlagskode, gir KLS, KLY eller RFA, som i dagens FS. Et løp
-    # som ikke finnes i listen, gir ingen automatisk konklusjon (se «Ukjent løp»).
+    # listen over løp, men mangler grunnlagskode, gir en grunnlagskode likevel, som i dagens FS. Et
+    # løp som ikke finnes i listen, gir ingen automatisk konklusjon (se «Ukjent løp»).
+    # Avklart 2026-11-02: som i det gamle FS gir løpet KLY for Kunnskapsløftet og RFA for
+    # Reform 94, uansett om løpet er studieforberedende eller yrkesfaglig. KLS gis ikke.
     # Avklart 30.10.2026: et yrkesfaglig løp uten grunnlagskode gir KLY eller RFA når
     # vitnemålet importeres (@OPT-BEH-BEH-015), ikke bare når saksbehandleren starter
     # kontrollen. Kode i dag: bare når saksbehandleren starter kontrollen, som i det gamle FS
     # (FS158001).
     # Innspill i PR #878: sier skolen at søkeren har GSK, men løpet finnes ikke i
     # listen over løp, settes ingen konklusjon automatisk, og saksbehandleren vurderer GSK.
-    # Finnes løpet, men har ingen grunnlagskode etter reglene her, får konklusjonen KLS for et
-    # studieforberedende løp, og KLY (Kunnskapsløftet) eller RFA (Reform 94) for et yrkesfaglig
-    # løp (OPT-BEH-BEH-015).
+    # Finnes løpet, men har ingen grunnlagskode, får konklusjonen KLY (Kunnskapsløftet) eller
+    # RFA (Reform 94) (OPT-BEH-BEH-015).
     # «Løp»: avklart 2026-10-27 at løp er et begrep saksbehandlerne kjenner.
 
-    Scenariomal: Yrkesfaglig løp fra <reform> gir grunnlagskoden <grunnlagskode>
+    Scenariomal: Løp fra <reform> uten grunnlagskode gir grunnlagskoden <grunnlagskode>
       Gitt at vitnemålet er fra <reform>
       Og at løpet på vitnemålet ikke har en grunnlagskode
       Og at løpet er fra <reform>
@@ -418,13 +419,6 @@ Egenskap: Beregne GSK fra vitnemål
         | reform          | grunnlagskode |
         | Kunnskapsløftet | KLY           |
         | Reform 94       | RFA           |
-
-    Scenario: Studieforberedende løp gir grunnlagskoden KLS
-      Gitt at løpet på vitnemålet er et studieforberedende løp
-      Og at løpet finnes i listen over løp, men ikke har en grunnlagskode
-      Og at vitnemålet oppfyller alle delkravene for reformen
-      Når GSK beregnes for vitnemålet
-      Så er påstanden GSK med grunnlagskoden KLS
 
     Scenario: Løp og vitnemål fra ulike reformer
       Gitt at løpet på vitnemålet ikke har en grunnlagskode
