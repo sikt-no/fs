@@ -36,7 +36,12 @@ Egenskap: Listevisning og søk i opptak
       Når opptaksforvalter åpner opptaksoversikten
       Så vises opptakene sortert etter opprettet i synkende rekkefølge
 
+    @openquestion
     Scenariomal: Velge sorteringsretning for <felt>
+      # ÅPNE SPØRSMÅL:
+      # - Løsningen sorterer status og organisasjon på koden, ikke på teksten som vises. Stigende status gir
+      #   «Arkivert», «Publisert», «Ikke publisert», og organisasjonene står ikke alfabetisk etter forkortelsen.
+      #   Skal lista sorteres på teksten som vises?
       Gitt opptaksforvalter ser listen over opptak
       Når opptaksforvalter velger å sortere på <felt> i <retning> rekkefølge
       Så vises opptakene sortert etter <felt> i <retning> rekkefølge
@@ -96,7 +101,11 @@ Egenskap: Listevisning og søk i opptak
 
     # Som for opptakstype er ingen status valgt når filteret åpnes, og da vises opptak med alle statuser.
     # Statusen Arkivert i løsningen hører til historiske opptak, og er ikke med i kravet nå.
+    @openquestion
     Scenario: Tilgjengelige statuser i filter
+      # ÅPNE SPØRSMÅL:
+      # - Status-filteret i løsningen har også «Arkivert». Skal «Arkivert» skjules til historiske opptak er avklart
+      #   (01 Grunnoppsett/opptaksstatus.feature), eller tas med i kravet nå?
       Gitt opptaksforvalter ser listen over opptak
       Når opptaksforvalter åpner status-filteret
       Så inneholder filteret statusene:
