@@ -302,7 +302,7 @@ Egenskap: Listevisning og søk i utdanningstilbud
       Når søkeren skriver "sy" i søkefeltet
       Så får søkeren høyst 8 forslag
 
-  @depends-on-OPT-OVO-GRU-004
+  @depends-on-OPT-OVO-GRU-004 @ref-FLY-OPT-KLA-001
   Regel: Synlighet via publiseringen av opptaket
     # Endret 2026-10-29 (produkteier, review av PR #843): Søkerne ser utdanningstilbudene når opptaksforvalter
     # har publisert opptaket (opptaksstatus.feature), også før søknaden åpner. Søkeren kan ikke søke før

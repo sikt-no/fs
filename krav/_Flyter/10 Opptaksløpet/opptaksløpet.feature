@@ -4,9 +4,7 @@ Egenskap: Opptaksløpet
   Hele opptaksløpet, fra opptaket klargjøres før søknadsåpning, til søkeren har fått studieplass
   og endringene etter søknadsåpningen er gjort. Hver fase peker på flyten som beskriver den.
 
-  @openquestion
-  # ÅPNE SPØRSMÅL:
-  # - Flyten for fasen er ikke skrevet (forslaget: klargjøre_opptaket.feature).
+  @depends-on-FLY-OPT-KLA-001
   Regel: Opptaket klargjøres før søknadsåpning
 
   @openquestion

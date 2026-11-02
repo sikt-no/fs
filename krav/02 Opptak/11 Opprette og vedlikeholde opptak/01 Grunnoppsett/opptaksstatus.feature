@@ -15,6 +15,7 @@ Egenskap: Status på opptaket
   Bakgrunn:
     Gitt at opptaksforvalter er innlogget
 
+  @ref-FLY-OPT-KLA-001
   Regel: Opptaksforvalter ved forvaltende organisasjon publiserer opptaket
     # Hva søkerne ser, står i finne_studier.feature og søke_på_opptak.feature.
 

@@ -34,7 +34,7 @@ Egenskap: Legge til utdanningstilbud i opptak
       Når opptaksforvalter velger alle utdanningstilbudene i listen og legger dem til i opptaket
       Så legges alle utdanningstilbudene i den filtrerte listen til i opptaket
 
-  @depends-on-OPT-OPT-UTD-005
+  @implemented @depends-on-OPT-OPT-UTD-005
   Regel: Opptaksforvalter ser campus for utdanningstilbudene som kan legges til
 
     Scenario: Se campus i listen over utdanningstilbud som kan legges til
@@ -65,7 +65,7 @@ Egenskap: Legge til utdanningstilbud i opptak
       Gitt at organisasjonen "NTNU" ikke er lagt til som deltaker i opptaket
       Så kan ikke utdanningstilbud fra NTNU legges til i opptaket
 
-  @depends-on-OPT-OPT-UTD-005
+  @depends-on-OPT-OPT-UTD-005 @ref-FLY-OPT-KLA-001
   Regel: Opptaksforvalter ser kun utdanningstilbud som matcher opptakets kriterier
 
     Scenario: Se relevante utdanningstilbud
@@ -97,7 +97,7 @@ Egenskap: Legge til utdanningstilbud i opptak
       Så vises ikke emner som mulige utdanningstilbud
       Og studieprogram på 7 masternivå vises ikke som mulige utdanningstilbud
 
-  @depends-on-OPT-OVO-FRI-001 @ref-OPT-OPT-UTD-007 @ref-OPT-OPT-UTD-003
+  @depends-on-OPT-OVO-FRI-001 @ref-OPT-OPT-UTD-007 @ref-OPT-OPT-UTD-003 @ref-FLY-OPT-KLA-001
   Regel: Deltakende organisasjoner kan knytte til og redigere utdanningstilbud bare i perioden opptaket er åpent for redigering
     # Virkningen av når redigering av utdanningstilbud åpner og stenger, som opptaksforvalter setter i fristene for opptaket.
     # Lagt til 2026-10-19 etter akseptansetesten av opprette og vedlikeholde opptak.
@@ -154,6 +154,7 @@ Egenskap: Legge til utdanningstilbud i opptak
       Når utdanningen til "Sykepleie, høst 2027" endres i utdanningsregisteret "2027-06-10"
       Så oppdateres utdanningstilbudet "Sykepleie, høst 2027" i opptaket med endringen
 
+  @implemented
   Regel: Opptaksforvalter ved deltakende organisasjon kan bare redigere utdanningstilbud organisasjonen tilbyr
     # Jira: SHI-747
 

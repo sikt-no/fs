@@ -27,7 +27,7 @@ Egenskap: Fjerne utdanningstilbud fra opptak
       Når opptaksforvalter fjerner utdanningstilbudene "Sykepleie, høst 2027" og "Vernepleie, høst 2027" fra opptaket
       Så er begge utdanningstilbudene ikke lenger med i opptaket
 
-  @ref-OPT-OPT-UTD-003
+  @ref-OPT-OPT-UTD-003 @ref-FLY-OPT-KLA-001
   Regel: Utdanningstilbud kan ikke fjernes etter at opptaket har åpnet for søknad
 
     Scenario: Muligheten til å fjerne utdanningstilbud vises ikke etter søknadsåpning
@@ -64,6 +64,7 @@ Egenskap: Fjerne utdanningstilbud fra opptak
       Når opptaksforvalter ser utdanningstilbudet "Sykepleie, høst 2027", som "Universitetet i Oslo" tilbyr
       Så ser ikke opptaksforvalter muligheten til å fjerne utdanningstilbudet "Sykepleie, høst 2027"
 
+    @implemented
     Scenario: Deltakende organisasjon kan ikke fjerne utdanningstilbud en annen organisasjon tilbyr
       # Jira: SHI-747
       Gitt at opptaksforvalter er ved deltakende organisasjon "Universitetet i Oslo"
