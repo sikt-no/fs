@@ -3,7 +3,7 @@
 - **Leveranse**: feature-fil
 - **Kilde**: `krav/02 Opptak/13 Søknad og saksbehandling/02 Behandling/finne_søknader_om_tidlig_opptak.feature`, `krav/02 Opptak/13 Søknad og saksbehandling/02 Behandling/vurdere_søknad_om_tidlig_opptak.feature`
 - **Scope**: –
-- **Oppgaver**: [opptak/tidlig-opptak](../../tasks/opptak/tidlig-opptak/oppgave.md)
+- **Oppgaver**: [opptak/tidlig-opptak](../../tasks/opptak/tidlig-opptak/scope.md)
 - **Krav**: 2 feature-filer, 2 `@implemented`, 0 delvis levert, 0 flyter, commit `5605e7e` (2026-10-27)
 - **Verifisering**: [verify-finne_søknader_om_tidlig_opptak-2026-10-26-1441.md](../../krav/02%20Opptak/13%20S%C3%B8knad%20og%20saksbehandling/02%20Behandling/verify-finne_s%C3%B8knader_om_tidlig_opptak-2026-10-26-1441.md), [verify-vurdere_søknad_om_tidlig_opptak-2026-10-26-1441.md](../../krav/02%20Opptak/13%20S%C3%B8knad%20og%20saksbehandling/02%20Behandling/verify-vurdere_s%C3%B8knad_om_tidlig_opptak-2026-10-26-1441.md)
 - **Confluence**: https://sikt.atlassian.net/wiki/spaces/STUDIEADM/pages/5147721786

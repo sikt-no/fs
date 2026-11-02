@@ -1,6 +1,5 @@
-// Koblingen mellom kravene, scopene og oppgavene: kravene et scope har (fra taggen @scope-<slug>), kravene hver
-// oppgave har (fra tabellen «Oppgaver» i scope-fila), og avvikene mellom dem. Uten scope: kravene i spesifikasjonene,
-// eller mappa «Krav (Gherkin)» i oppgave.md lenker til. Rene funksjoner, testet i scope.test.ts.
+// Koblingen mellom kravene og scopene: kravene som har taggen @scope-<slug>, kravene i tabellen «Krav» i scope.md,
+// og avvikene mellom dem. Uten krav-rader: kravene i spesifikasjonene. Rene funksjoner, testet i scope.test.ts.
 import { displayStatus, scopeOf, type DisplayStatus, type Entry, type Snapshot, type Status } from '../shared/model.ts';
 import type { Scope, Task } from '../shared/tasks.ts';
 import { featureId, idIndex } from './specboard.ts';
@@ -87,7 +86,7 @@ function rowKrav(row: Scope['rows'][number], entries: Snapshot, ids: Map<string,
 
 export interface ScopeLinks {
   scope: Scope;
-  /** Kravene per oppgave i tabellen; `null` er «ikke tildelt» */
+  /** Kravene i tabellen, nøklet på mappa (alle radene i en scope.md har samme nøkkel) */
   byTask: Map<string | null, KravRow[]>;
   /** Krav med `@scope-<slug>` som ikke står i tabellen */
   notInTable: KravRow[];
@@ -126,16 +125,16 @@ export interface KravLinks {
   items: KravRow[];
   /** Krav i spesifikasjonene eller scope-raden som ikke finnes i krav/ lenger (omdøpt eller slettet) */
   missing: string[];
-  /** Hvor koblingen kom fra: scope-raden, `## Krav` i spesifikasjonene, eller mappa i «Krav (Gherkin)» */
-  from: 'scope' | 'spec' | 'lenke' | null;
+  /** Hvor koblingen kom fra: krav-radene i scope.md, eller `## Krav` i spesifikasjonene */
+  from: 'scope' | 'spec' | null;
 }
 
 /**
- * Kravene oppgaven gjelder: scope-raden når oppgaven har scope, ellers kravene i spesifikasjonene, ellers
- * feature-filene under mappa i «Krav (Gherkin)». Hele lista, uten tak; detaljpanelet viser de første.
+ * Kravene scopet gjelder: krav-radene i scope.md, ellers kravene i spesifikasjonene. Hele lista, uten tak;
+ * detaljpanelet viser de første.
  */
 export function kravFor(t: Task, scope: Scope | null, entries: Snapshot, ids = idIndex(entries)): KravLinks {
-  if (scope && t.scope === scope.slug) {
+  if (scope && t.scope === scope.slug && scope.rows.length) {
     const items: KravRow[] = [];
     const missing: string[] = [];
     for (const row of scope.rows.filter(r => r.task === t.slug))
@@ -146,8 +145,7 @@ export function kravFor(t: Task, scope: Scope | null, entries: Snapshot, ids = i
     return { items, missing, from: 'scope' };
   }
   const feats = kravEntries(entries);
-  const inLink = (p: string) => !!t.kravLink && (p === t.kravLink || p.startsWith(t.kravLink + '/'));
-  // 1. Kravene under «## Krav» i spesifikasjonene, slått opp på Feature-ID, så stien i lenken, så filnavnet
+  // Kravene under «## Krav» i spesifikasjonene, slått opp på Feature-ID, så stien i lenken, så filnavnet
   const found = new Set<string>();
   const missing = new Set<string>();
   for (const k of t.specKrav) {
@@ -158,16 +156,9 @@ export function kravFor(t: Task, scope: Scope | null, entries: Snapshot, ids = i
     }
     const hits = feats.filter(e => base(e.path) === k.file).map(e => e.path);
     if (!hits.length) missing.add(k.file);
-    const narrowed = hits.filter(inLink);
-    (narrowed.length ? narrowed : hits).forEach(h => found.add(h));
+    hits.forEach(h => found.add(h));
   }
-  let paths = [...found];
-  let from: KravLinks['from'] = paths.length ? 'spec' : null;
-  // 2. Ellers: feature-filene under mappa oppgave.md lenker til. En lenke til et helt domene (`krav/07 …/`) sier ikke
-  // hvilke krav oppgaven har, og brukes ikke
-  if (!paths.length && t.kravLink && t.kravLink.split('/').length >= 3) {
-    paths = feats.map(e => e.path).filter(inLink);
-    if (paths.length) from = 'lenke';
-  }
+  const paths = [...found];
+  const from: KravLinks['from'] = paths.length ? 'spec' : null;
   return { items: paths.sort().map(p => kravRow(entries[p])), missing: [...missing].sort(), from };
 }

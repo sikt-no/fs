@@ -4,7 +4,7 @@ import type { RawTask, TasksSnapshot } from '../shared/tasks.ts';
 
 /** Filene serveren sender innholdet til (for planer bare boks-linjene); resten sendes bare som stier */
 const withSource = (f: string) =>
-  f === 'oppgave.md' || f === 'utforing.md' || /^[^/]+\/plan-[^/]+\.md$/.test(f) || isSpecDoc(f) || /^spec\/verify-[^/]+\.md$/.test(f);
+  f === 'scope.md' || f === 'utforing.md' || /^[^/]+\/plan-[^/]+\.md$/.test(f) || isSpecDoc(f) || /^spec\/verify-[^/]+\.md$/.test(f);
 /** Spesifikasjonene fra fs-specify og fs-specify-delta */
 const isSpecDoc = (f: string) => /^spec\/spec-[^/]+\.md$/.test(f);
 
@@ -21,7 +21,7 @@ function readTask(abs: string, dom: string, slug: string): RawTask {
     .sort();
   const sources: Record<string, string> = {};
   const mtimes: Record<string, number> = {};
-  for (const f of files.filter(isSpecDoc)) mtimes[f] = statSync(join(abs, f)).mtimeMs;
+  for (const f of files.filter(f => isSpecDoc(f) || f === 'scope.md')) mtimes[f] = statSync(join(abs, f)).mtimeMs;
   for (const f of files.filter(withSource)) {
     const src = readFileSync(join(abs, f), 'utf8');
     // Av planene trengs bare avkrysningsboksene; resten av teksten ville bare gjort bygget større
@@ -31,28 +31,23 @@ function readTask(abs: string, dom: string, slug: string): RawTask {
 }
 
 /**
- * Leser tasks/: én oppføring per domenemappe (med roadmap.md), scope-filene (`scope-*.md`) og én per oppgavemappe under den.
+ * Leser tasks/: én oppføring per domenemappe (med roadmap.md), og én per scope-mappe under den.
  * Undermapper i mal/ tas med som oppgaver i domenet «mal», slik at regel 4 kan slå ut på dem. Mapper uten filer tas ikke med.
  * Tolkningen skjer i shared/tasks.ts.
  */
 export function readTasks(repoRoot: string): TasksSnapshot {
   const root = join(repoRoot, 'tasks');
-  const snap: TasksSnapshot = { domains: {}, tasks: [], scopes: {}, scopeMtimes: {} };
+  const snap: TasksSnapshot = { domains: {}, tasks: [] };
   if (!existsSync(root)) return snap;
   for (const dom of dirs(root)) {
     const domAbs = join(root, dom);
     if (dom !== 'mal') {
       const roadmap = join(domAbs, 'roadmap.md');
       snap.domains[dom] = existsSync(roadmap) ? readFileSync(roadmap, 'utf8') : null;
-      for (const f of readdirSync(domAbs).filter(f => /^scope-[^/]+\.md$/.test(f)).sort()) {
-        const path = `tasks/${dom}/${f}`;
-        snap.scopes![path] = readFileSync(join(domAbs, f), 'utf8');
-        snap.scopeMtimes![path] = statSync(join(domAbs, f)).mtimeMs;
-      }
     }
     for (const slug of dirs(domAbs)) {
       const task = readTask(join(domAbs, slug), dom, slug);
-      // Git har ikke tomme mapper: en mappe uten filer er en rest etter en oppgave som er slettet på main
+      // Git har ikke tomme mapper: en mappe uten filer er en rest etter et scope som er slettet på main
       if (task.files.length) snap.tasks.push(task);
     }
   }

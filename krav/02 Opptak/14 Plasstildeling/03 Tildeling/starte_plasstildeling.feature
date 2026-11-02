@@ -6,11 +6,11 @@ Egenskap: Starte en plasstildeling
   ønsker jeg å starte en plasstildeling i en plasstildelingsrunde
   slik at studieplassene fordeles ut fra rangeringen og innstillingene i opptaket.
 
-  # Kilde: tasks/opptak/plasstildeling/design.md (beslutning 3, oppgave 4), oppgave.md (oppgave 4) og
+  # Kilde: tasks/opptak/plasstildeling-2027/design.md (beslutning 3, oppgave 4), scope.md (oppgave 4) og
   # Confluence «Fra saksbehandling til plasstildeling» (2026-09-04).
   # Plasstildelingen utføres som en bestilling og kjører i bakgrunnen. Én plasstildelingsrunde kan ha mange
   # plasstildelinger: prøvetildelinger som ikke publiseres, og til slutt én som publiseres.
-  # Status i kode: løst (oppgave.md). Kandidat for @implemented etter verifisering.
+  # Status i kode: løst (scope.md). Kandidat for @implemented etter verifisering.
 
   Bakgrunn:
     Gitt at opptakets forvalter er innlogget

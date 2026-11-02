@@ -6,7 +6,7 @@ Egenskap: Plasstildelingsrunder i et opptak
   ønsker jeg å legge til og forvalte plasstildelingsrunder i et opptak
   slik at studieplasser kan fordeles i flere omganger med riktige regler for hver plasstildelingsrunde.
 
-  # Kilde: tasks/opptak/plasstildeling/design.md (oppgave 1) og Confluence
+  # Kilde: tasks/opptak/plasstildeling-2027/design.md (oppgave 1) og Confluence
   # «2026-09-08 Raffinering plasstildeling», «Opprette og konfigurere opptakskjøringsrunde»
   # og raffinering 2026-10-07.
   # Opptakets forvalter legger til plasstildelingsrunder. I samordna opptak er det

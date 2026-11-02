@@ -29,7 +29,7 @@ npm run dev   # åpner http://localhost:5173
 
 En statisk versjon publiseres til GitHub Pages på <https://sikt-no.github.io/fs/> hver gang `krav/` eller `fs-kravforvaltning/` endres på `main` (`.github/workflows/deploy-viewer.yml`). Den viser kravene slik de ligger på `main`, uten live-oppdatering og uten «Endringer». Bygg og se den lokalt med `npm run build && npx vite preview`.
 
-Tavla «Oppgaver» viser hver oppgave i `tasks/` fra den opprettes til kravene er verifisert: I scope → Kravarbeid → Spesifiseres → Klart til utvikling → repoene → Til verifisering → Verifisert. Kolonnen utledes av kravene og spesifikasjonene. Den er alltid med i FS Kravforvaltning, ved siden av Krav og Avvik. Oppgavene opprettes med skillen `fs-scope`, som deler et initiativ i oppgaver og bestemmer kravene hver oppgave har (se [`tasks/README.md`](tasks/README.md)).
+Tavla «Scopes» viser hvert scope i `tasks/` fra det opprettes til kravene er verifisert: Avgrenset → Kravarbeid → Spesifiseres → Klart til utvikling → repoene → Til verifisering → Verifisert. Kolonnen utledes av kravene og spesifikasjonene. Den er alltid med i FS Kravforvaltning, ved siden av Krav og Avvik. Scopene opprettes med skillen `fs-scope`, som avgrenser et initiativ og bestemmer kravene og Jira-sakene som hører til (se [`tasks/README.md`](tasks/README.md)).
 
 Bryteren «Endringer» over treet viser bare filene i `krav/` som er endret, både det som ikke er committet og det som er committet på branchen siden den gikk ut fra `main`.
 

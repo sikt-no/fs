@@ -30,18 +30,19 @@ const entries: Snapshot = Object.fromEntries(
 const scopeSrc = `# Scope: Plasstildeling
 
 - **Slug**: plass
+- **Jira**: [BAT-1](https://sikt.atlassian.net/browse/BAT-1), [BAT-2](https://sikt.atlassian.net/browse/BAT-2)
 
-## Oppgaver
+## Krav
 
-| Oppgave | Krav | MoSCoW | Skisse | Issue | Kommentar |
-|---|---|---|---|---|---|
-| [runder](runder/) | \`@OPT-PLA-RUN-001\` [runder.feature](../../krav/02%20Opptak/14%20Plasstildeling/01%20Runder/runder.feature) | Must | – | – | |
-| [runder](runder/) | \`@OPT-PLA-RUN-002\` | Should | – | – | |
-| [tilbud](tilbud/) | \`@OPT-PLA-RUN-004\` \`@OPT-PLA-RUN-099\` | Could | – | – | |
-| (ikke tildelt) | \`@OPT-PLA-RUN-005\` | Must | – | – | |
+| Krav | MoSCoW | Skisse | Jira | Kommentar |
+|---|---|---|---|---|
+| \`@OPT-PLA-RUN-001\` [runder.feature](../../../krav/02%20Opptak/14%20Plasstildeling/01%20Runder/runder.feature) | Must | – | BAT-1 | |
+| \`@OPT-PLA-RUN-002\` | Should | – | BAT-1 | |
+| \`@OPT-PLA-RUN-004\` \`@OPT-PLA-RUN-099\` | Could | – | BAT-2 | |
+| \`@OPT-PLA-RUN-005\` | Must | – | – | Ikke tildelt en sak |
 `;
-const snap = { domains: { [DOM]: null }, tasks: [] as RawTask[], scopes: { [`tasks/${DOM}/scope-plass.md`]: scopeSrc } };
-const scope = buildScopes(snap)[0];
+const raw: RawTask = { dom: DOM, slug: 'plass', files: ['scope.md'], sources: { 'scope.md': scopeSrc } };
+const scope = buildScopes({ domains: { [DOM]: null }, tasks: [raw] })[0];
 
 test('scopesIn: scope-taggen på egenskapen og på delene', () => {
   assert.deepEqual(scopesIn(entries[P('runder')]), ['plass']);
@@ -49,32 +50,41 @@ test('scopesIn: scope-taggen på egenskapen og på delene', () => {
   assert.deepEqual(scopesIn(entries[P('tilbud')]), []);
 });
 
-test('scopeLinks: krav per oppgave, tagget men ikke i tabellen, i tabellen uten tag, og ID-er som ikke finnes', () => {
+test('scopeLinks: kravene i tabellen, tagget men ikke i tabellen, i tabellen uten tag, og ID-er som ikke finnes', () => {
   const l = scopeLinks(scope, entries);
-  assert.deepEqual(l.byTask.get('runder')!.map(k => k.path), [P('runder'), P('tilbud')], 'ID og lenke til samme krav gir én rad');
+  assert.deepEqual(
+    l.byTask.get('plass')!.map(k => k.path),
+    [P('runder'), P('tilbud'), P('annet'), null, P('endres')],
+    'ID og lenke til samme krav gir én rad',
+  );
   assert.deepEqual(l.notInTable.map(k => k.path), [P('ekstra')]);
   assert.deepEqual(l.untagged.map(k => k.path), [P('tilbud'), P('annet')]);
   assert.deepEqual(l.missing, ['@OPT-PLA-RUN-099']);
-  assert.equal(l.byTask.get(null)![0].path, P('endres'), 'del i et levert krav hører til scopet');
 });
 
-test('kravFor: scope-raden når oppgaven har scope, med skjelett og MoSCoW', () => {
-  const t = parseTask({ dom: DOM, slug: 'runder', files: ['oppgave.md'], sources: { 'oppgave.md': '# Runder\n\n- **Scope**: [scope-plass](../scope-plass.md)\n' } });
+test('kravFor: krav-radene i scope.md, med skjelett, MoSCoW og krav som ikke finnes', () => {
+  const t = parseTask(raw);
   const k = kravFor(t, scope, entries);
   assert.equal(k.from, 'scope');
   assert.deepEqual(k.items.map(i => [i.id, i.status, i.skeleton]), [
     ['@OPT-PLA-RUN-001', 'planned', false],
     ['@OPT-PLA-RUN-002', 'draft', false],
+    ['@OPT-PLA-RUN-004', 'planned', false],
+    ['@OPT-PLA-RUN-005', 'implemented', false],
   ]);
-  const tilbud = parseTask({ dom: DOM, slug: 'tilbud', files: ['oppgave.md'], sources: { 'oppgave.md': '# Tilbud\n\n- **Scope**: [scope-plass](../scope-plass.md)\n' } });
-  const kt = kravFor(tilbud, scope, entries);
-  assert.deepEqual(kt.missing, ['@OPT-PLA-RUN-099']);
-  assert.equal(kt.items[0].wont, false);
-  // Uten scope: krav-lenken i oppgave.md
-  const uten = parseTask({ dom: DOM, slug: 'x', files: ['oppgave.md'], sources: { 'oppgave.md': '# X\n\n- **Krav (Gherkin)**: `krav/02 Opptak/14 Plasstildeling/01 Runder/`\n' } });
-  const ku = kravFor(uten, null, entries);
-  assert.equal(ku.from, 'lenke');
-  assert.equal(ku.items.length, 5);
-  const domene = parseTask({ dom: DOM, slug: 'x', files: ['oppgave.md'], sources: { 'oppgave.md': '# X\n\n- **Krav (Gherkin)**: `krav/02 Opptak/`\n' } });
-  assert.deepEqual(kravFor(domene, null, entries), { items: [], missing: [], from: null }, 'en lenke til hele domenet');
+  assert.deepEqual(k.missing, ['@OPT-PLA-RUN-099']);
+  assert.equal(k.items[0].wont, false);
+});
+
+test('kravFor: uten krav-rader, eller uten scope.md, kommer kravene fra spesifikasjonene', () => {
+  const spec = '# Spec: X\n\n## Krav\n\n- **`runder.feature`** (`@OPT-PLA-RUN-001`) — runder.\n';
+  const tom = scopeSrc.replace(/\| `@OPT[^\n]*\n/g, '');
+  const medSpec: RawTask = { dom: DOM, slug: 'plass', files: ['scope.md', 'spec/spec-x.md'], sources: { 'scope.md': tom, 'spec/spec-x.md': spec } };
+  const sc = buildScopes({ domains: { [DOM]: null }, tasks: [medSpec] })[0];
+  assert.equal(sc.rows.length, 0);
+  const k = kravFor(parseTask(medSpec), sc, entries);
+  assert.equal(k.from, 'spec');
+  assert.deepEqual(k.items.map(i => i.id), ['@OPT-PLA-RUN-001']);
+  const uten = parseTask({ dom: DOM, slug: 'x', files: ['design.md'], sources: {} });
+  assert.deepEqual(kravFor(uten, null, entries), { items: [], missing: [], from: null });
 });

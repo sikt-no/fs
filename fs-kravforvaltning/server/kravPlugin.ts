@@ -21,7 +21,7 @@ const RESOLVED_ROOT = '\0' + VIRTUAL_ROOT;
  * Leser alle .feature- og .md-filer under krav/ (krav/README.md er forsiden), parser dem
  * og eksponerer dem som `virtual:krav`. I dev-server pushes endringer som `krav:update`-hendelser over websocket.
  * Git-endringer under krav/ eksponeres som `virtual:krav-git` og pushes som `krav:git`.
- * Oppgavemappene i tasks/ eksponeres som `virtual:krav-tasks` og pushes som `krav:tasks`, til tavla «Oppgaver».
+ * Scope-mappene i tasks/ eksponeres som `virtual:krav-tasks` og pushes som `krav:tasks`, til tavla «Scopes».
  * `virtual:krav-root` er den absolutte stien til repoet («Åpne i VS Code»), bare i dev-serveren; i et statisk bygg er den `null`.
  *
  * Logikken står i core/ (felles med desktop-appen); pluginen kobler den til Vites watcher, websocket og

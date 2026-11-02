@@ -48,9 +48,9 @@ interface Props {
   siblings: Card[];
   /** Bytter til en annen spesifikasjon i oppgaven */
   onPick: (c: Card) => void;
-  /** Kravene i oppgavens scope-rad, som foreslås først i «+ Legg til krav» */
+  /** Kravene i scope.md, som foreslås først i «+ Legg til krav» */
   prefer?: string[];
-  /** Scopet oppgaven hører til; krav med et annet `@scope-*` merkes i velgeren */
+  /** Scopet spesifikasjonen hører til; krav med et annet `@scope-*` merkes i velgeren */
   scope?: string | null;
 }
 
@@ -784,12 +784,12 @@ function Drawer({ taskTitle, siblings, current, onPick, onClose, children }: Dra
   }, [onClose]);
   return (
     <div class="spdrawer-wrap">
-      <div class="spdrawer-scrim" title="Tilbake til oppgaven" onClick={onClose} />
+      <div class="spdrawer-scrim" title="Tilbake til scopet" onClick={onClose} />
       <aside class="spdrawer" aria-label="Spesifikasjon">
         <div class="spdrawer-h">
           <span class="spdrawer-kind mono">SPESIFIKASJON</span>
           <span class="spdrawer-task ell">
-            i oppgaven{' '}
+            i scopet{' '}
             <a
               href="#"
               onClick={e => {
@@ -874,7 +874,7 @@ function KravPicker({ c, cards, entries, prefer = [], scope = null, onAdd }: Pic
   const all = filter === 'all';
   const dA = filter === 'file' ? [] : hits.filter(i => i.dir);
   const fA = filter === 'dir' ? [] : hits.filter(i => !i.dir);
-  // Uten søk: kravene i scope-raden først
+  // Uten søk: kravene i scope.md først
   const fromScope = query || filter === 'dir' ? [] : prefer.map(p => items.get(p)).filter((i): i is MentionItem => !!i && !i.dir);
   const dirs = dA.slice(0, all ? 5 : 14);
   const files = [...fromScope, ...fA.filter(i => !fromScope.includes(i))].slice(0, all ? Math.max(7, fromScope.length) : 14);
@@ -1004,7 +1004,7 @@ function KravPicker({ c, cards, entries, prefer = [], scope = null, onAdd }: Pic
             {dirs.length > 0 && <div class="cmsec mono">{query ? 'Mapper' : 'Foreslått · mapper'}</div>}
             {dirs.map(row)}
             {dA.length > dirs.length && <div class="cmmore">+ {dA.length - dirs.length} flere mapper</div>}
-            {files.length > 0 && <div class="cmsec mono">{fromScope.length ? 'Fra scope-raden · filer' : 'Filer'}</div>}
+            {files.length > 0 && <div class="cmsec mono">{fromScope.length ? 'Fra scope.md · filer' : 'Filer'}</div>}
             {files.map(row)}
             {fA.length > files.length && <div class="cmmore">+ {fA.length - files.length} flere filer</div>}
           </div>

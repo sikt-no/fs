@@ -6,7 +6,7 @@ Egenskap: Antall tilbud som skal gis per utdanningskvote (sette opptaksparameter
   ønsker jeg å bestemme hvor mange tilbud som skal gis i hver utdanningskvote i en plasstildelingsrunde
   slik at plasstildelingen fyller studieplassene uten å gi for mange eller for få tilbud.
 
-  # Kilde: tasks/opptak/plasstildeling/oppgave.md (oppgave 2), design.md (begrepsforklaringer),
+  # Kilde: tasks/opptak/plasstildeling-2027/scope.md (oppgave 2), design.md (begrepsforklaringer),
   # Confluence «2026-09-08 Raffinering plasstildeling» (oppgave 2) og raffinering 2026-10-07.
   # Antall tilbud som skal gis settes per utdanningskvote, og er et samlet tall for opptaket (endret 2026-10-30).
   # Opptaksforvalter ved lærestedet setter tallene for egne utdanningstilbud innenfor perioden

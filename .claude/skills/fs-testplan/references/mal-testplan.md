@@ -24,11 +24,10 @@ Fila skrives til `akseptansetest/<testplan-slug>/testplan.md`.
 ```markdown
 # Testplan – <leveranse>
 
-- **Leveranse**: scope | oppgave | mappe | feature-fil
+- **Leveranse**: scope | mappe | feature-fil
 - **Kilde**: `@scope-<slug>` | `tasks/<domene>/<slug>` | `krav/<sti>/` | `krav/<sti>/<fil>.feature`[, …]
 - **Scope**: @scope-<slug>[, @scope-<slug> …] | –   (scope-id-ene kravene har)
-- **Scope-fil**: [scope-<slug>](../../tasks/<domene>/scope-<slug>.md)[, …]   (når kravene har scope)
-- **Oppgaver**: [<domene>/<slug>](../../tasks/<domene>/<slug>/oppgave.md)[, …]   (når det finnes oppgaver)
+- **Scope-fil**: [<domene>/<slug>](../../tasks/<domene>/<slug>/scope.md)[, …]   (når kravene har scope)
 - **Krav**: <N> feature-filer, <N> `@implemented`, <N> delvis levert, <N> flyter, commit `<sha>` (<YYYY-MM-DD>)
 - **Verifisering**: [verify-<YYYY-MM-DD>-<HHMM>.md](<sti til rapporten>)[, …] | –   (verify-rapportene testplanen bygger på)
 - **Confluence**: –
@@ -59,9 +58,9 @@ Testplanen er delt i hovedsiden og tre undersider, så hver del kan oppdateres f
 | Versjon | <versjon, release eller dato for deploy> |
 | Testmiljø | [<url>](<url>) (alltid et testmiljø, aldri produksjon) |
 | Feature-flagg | <flagg som må være på, eller «Ingen»> |
-| Kilde | <scopet, oppgaven, mappa eller filene, med lenke til GitHub> |
-| Scope | `@scope-<slug>` · [scope-fila på GitHub](<lenke>), eller «Ingen» |
-| Saker | <GitHub-issue> · <Jira> |
+| Kilde | <scopet, mappa eller filene, med lenke til GitHub> |
+| Scope | `@scope-<slug>` · [`scope.md` på GitHub](<lenke>), eller «Ingen» |
+| Saker | <GitHub-issue> · <Jira-sakene fra `scope.md`> |
 | Berører andre team | <fra `design.md` / `utforing.md`, eller «Nei»> |
 | Kjente begrensninger | <det som ikke virker eller ikke kan testes i miljøet> |
 | Avhengighetskart | Under «Flyter» på [Omfang – <leveranse>](<url>), eller «Ikke aktuelt» |
@@ -170,9 +169,9 @@ Omfanget for «<leveranse>»: kravene og flytene som testes, og det som ikke er 
 
 Det som testes, er kravene som er `@implemented`, og de leverte delene i krav som er delvis levert. Feature-ID-ene her er kravene resten av testflyten bruker.
 
-<Én underseksjon per gruppe: per oppgave i scope-tabellen (scope), per kapabilitetsmappe i rekkefølgen i `krav/` (mappe). Én oppgave eller enkeltfiler: bare tabellen, uten underseksjon.>
+<Én underseksjon per gruppe: per Jira-sak i `## Krav` i `scope.md` (scope med flere saker), per kapabilitetsmappe i rekkefølgen i `krav/` (mappe). Scope med én sak eller enkeltfiler: bare tabellen, uten underseksjon.>
 
-### <Oppgave eller kapabilitet>
+### <Jira-sak eller kapabilitet>
 
 | Krav | Feature-ID | Status | Scenarioer i testen |
 |---|---|---|---|

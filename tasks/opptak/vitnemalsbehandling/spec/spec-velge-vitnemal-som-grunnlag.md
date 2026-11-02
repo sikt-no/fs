@@ -2,7 +2,7 @@
 
 ## Kilde
 
-- **Oppgave:** `tasks/opptak/vitnemalsbehandling/`
+- **Scope:** `tasks/opptak/vitnemalsbehandling/`
 - **Kilde-mappe:** `krav/02 Opptak/13 Søknad og saksbehandling/02 Behandling/`
 - **GitHub:** [#608](https://github.com/sikt-no/fs/issues/608) (leveranse L2 i initiativet [#607](https://github.com/sikt-no/fs/issues/607))
 - **Hentet:** 2026-10-28 (HEAD `ef68c3a`)

@@ -2,9 +2,8 @@
 
 ## Kilde
 
-- **Oppgave:** `tasks/opptak/digitale-resultater-i-soknad/`
+- **Scope:** `tasks/opptak/digitale-resultater-i-soknad/`
 - **Kilde-mappe:** `krav/02 Opptak/13 Søknad og saksbehandling/01 Søknad/`
-- **Scope:** scope-digitale-resultater-i-soknad
 - **GitHub:** [#604](https://github.com/sikt-no/fs/issues/604)
 - **Hentet:** `2026-10-14 16:01`
 

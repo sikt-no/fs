@@ -19,7 +19,7 @@ Hver leveranse går gjennom fase 1–3: planen, den agentiske testen og den inte
 
 | Fase | Hva | Skill | Fil | Side i Confluence |
 |---|---|---|---|---|
-| 1 | Verifisering | `fs-verify` eller `fs-verify-agent-teams` | `verify-<dato>-<HHMM>.md` her for et scope, i `spec/` for en oppgave, eller ved siden av kravet for en mappe eller fil | «Verifisering – <leveranse> – <dato tid>» |
+| 1 | Verifisering | `fs-verify` eller `fs-verify-agent-teams` | `verify-<dato>-<HHMM>.md` her for et scope, i `spec/` i scope-mappa for en spesifikasjon, eller ved siden av kravet for en mappe eller fil | «Verifisering – <leveranse> – <dato tid>» |
 | 1 | Testrapport etter verifiseringen | `fs-testrapport` | `testrapport-verifisering-<dato>.md` | «Testrapport – verifisering – <leveranse>» |
 | 1 | Testplan: hovedsiden, og undersidene for omfanget og for testcasene og testdataene | `fs-testplan` | `testplan.md`, `omfang.md` og `testcaser-og-testdata.md` | «Testplan – <leveranse>», «Omfang – <leveranse>» og «Testcaser og testdata – <leveranse>» |
 | 1–3 | Sporbarhet per krav: scenario → kode → testcase → flyt | `fs-testplan` lager den, `fs-testrapport` fyller ut per fase | `sporbarhet.md` | «Sporbarhet – <leveranse>» |

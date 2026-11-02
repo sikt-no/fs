@@ -69,7 +69,7 @@ Dette er fasiten for tekstene, også når en skisse viser noe annet. Feilmelding
 
 Felles med kvoteprioriteten: taggen «Lesevisning» og feilen ved henting, se [`sette_kvoteprioritet.design.md`](./sette_kvoteprioritet.design.md).
 
-**Skisser:** tekstene er sjekket mot utkastet i fs-admin (branchen `poc-pattern-skills`, `266400461`, `src/common/messages/nb/regelverk.json`), som er gjeldende design, og mot Figma-skissen «Kvoter» ([`screenshot.png`](../../../../tasks/opptak/kvoter-i-opptaket/spec/krav-input/sketches/figma/kvoter-gjeldende/screenshot.png)).
+**Skisser:** tekstene er sjekket mot utkastet i fs-admin (branchen `poc-pattern-skills`, `266400461`, `src/common/messages/nb/regelverk.json`), som er gjeldende design, og mot Figma-skissen «Kvoter» ([`screenshot.png`](../../../../tasks/opptak/kvoter-i-opptaket-2027/spec/krav-input/sketches/figma/kvoter-gjeldende/screenshot.png)).
 
 Avvik fra utkastet, avklart 2026-10-26:
 - Forklaringen under overskriften og hjelpeteksten under «Hovedkvote» er nye, med ordene fra Figma-skissen tilpasset kravet («mottaker», ikke «mål»).

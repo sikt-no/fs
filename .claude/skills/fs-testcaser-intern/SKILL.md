@@ -109,7 +109,7 @@ Vis oversikten (krav → flyt eller oppgave uten flyt → testes/ikke testes, og
 For hvert krav som er med, les:
 
 - `<feature>.design.md` ved siden av kravet: tekstene, feltene og feilmeldingene
-- skissene i `spec/krav-input/**/sketches/` i oppgaven
+- skissene i `spec/krav-input/**/sketches/` i scope-mappa
 - kodeklonene (fs-admin for saksbehandlere og forvaltere, min-kompetanse for søkeren): menyene, rutene, knappene, feltene, hvilke felt som er obligatoriske, og forhåndsutfylte verdier. Spør om stien til klonene hvis de mangler (som i *Kodeklonene* i `fs-verify`).
 - **lista over obligatoriske felt**, laget eksplisitt per skjema, fra koden (for opptak: `missingFields` i `src/common/messages/nb/opptak.json` i fs-admin), med standardverdiene (R5). Den brukes i steg 4 (svakheter i kravet) og i sjekk 6 i `testcase-regler.md`.
 - stegene og ordene i den agentiske testen (`cdp-tester/`, og `kjoring-*/resultat.md`) når den finnes: de er sjekket mot skjermen.
@@ -143,7 +143,7 @@ Avhengigheter er det leveransen bygger på eller påvirker utenfor brukerens fly
 Følg `testcase-regler.md` for hver testcase, og malen for formen:
 
 - **Rekkefølgen på siden:** del 2 (flytene og oppgavene uten flyt, så regresjonen og avhengighetene som testes for seg), del 1 (det fase 2 ikke klarte), del 4 (høyest risiko) og del 3 (opplevelse og helhet), så testerne går gjennom arbeidsprosessen først, og vurderer helheten til slutt.
-- **Én testcase per flyt** (eller per del av flyten som testes, når hele flyten blir for lang: da bruker den neste testcasen dataene fra den første), og én per oppgave uten flyt. Rekkefølgen er arbeidsprosessen, og med flere flyter den rekkefølgen brukerne møter dem. Med scope: oppgavene i rekkefølgen i scope-tabellen bare der det ikke strider mot arbeidsprosessen.
+- **Én testcase per flyt** (eller per del av flyten som testes, når hele flyten blir for lang: da bruker den neste testcasen dataene fra den første), og én per oppgave uten flyt. Rekkefølgen er arbeidsprosessen, og med flere flyter den rekkefølgen brukerne møter dem. Med scope: kravene i rekkefølgen i `## Krav` i `scope.md` bare der det ikke strider mot arbeidsprosessen.
 - «Hensikt» og «Testdata» over tabellen, og «Avhengigheter som sjekkes» når flyten har noen.
 - **Hvert scenario i flyten er en rad** (en del), med scenariotittelen fra kravet eller flyten, og eget «Faktisk resultat» og «Status». Ved en scenariomal: én rad per eksempelrad som brukes i flyten.
 - Stegene løper gjennom hele testcasen, bruker testbrukerne og testdataene fra testplanen, og ordene fra skjermen. Tilstanden fra en tidligere fase lages gjennom løsningen i fasen før, ikke settes direkte (R10: «Bruk søknaden fra 1.2»).

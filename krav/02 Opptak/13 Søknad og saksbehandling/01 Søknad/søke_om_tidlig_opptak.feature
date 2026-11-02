@@ -77,7 +77,7 @@
 #   ikke tilbyr tidlig opptak (se_svar_på_tidlig_opptak.feature). Det er ingen
 #   egen regel for det.
 #
-@OPT-SØK-SØK-011 @must @implemented
+@OPT-SØK-SØK-011 @must @implemented @scope-tidlig-opptak
 Egenskap: Søke om tidlig opptak
   Som søker
   ønsker jeg å søke om tidlig opptak med en begrunnelse

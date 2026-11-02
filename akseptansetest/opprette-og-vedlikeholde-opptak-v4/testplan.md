@@ -3,8 +3,8 @@
 - **Leveranse**: scope
 - **Kilde**: `@scope-opprette-opptak-2027`
 - **Scope**: @scope-opprette-opptak-2027
-- **Scope-fil**: [scope-opprette-opptak-2027](../../tasks/opptak/scope-opprette-opptak-2027.md)
-- **Oppgaver**: [opptak/opprette-og-vedlikeholde-opptak](../../tasks/opptak/opprette-og-vedlikeholde-opptak/oppgave.md)
+- **Scope-fil**: [scope-opprette-opptak-2027](../../tasks/opptak/opprette-opptak-2027/scope.md)
+- **Oppgaver**: [opptak/opprette-og-vedlikeholde-opptak](../../tasks/opptak/opprette-opptak-2027/scope.md)
 - **Krav**: 8 feature-filer i scopet, 5 i testen (3 `@implemented`, 2 `@in-progress`), 1 flyt (ingen faser levert), commit `3d8fba3` (2026-10-29). Kravene i testen er uendret siden 28.10 (Innstillinger `270d681`, Frister `0ec4b48`)
 - **Verifisering**: [verify-2026-10-28-1238.md](../opprette-opptak-2027/verify-2026-10-28-1238.md) (alle fem kravene, uansett status, med agent team)
 - **Forrige testplan**: [Testplan – Opprette og vedlikeholde opptak v3](https://sikt.atlassian.net/wiki/spaces/STUDIEADM/pages/5150965860) (28.10.2026, [testplan.md](../opprette-og-vedlikeholde-opptak-v3/testplan.md)). Versjon 1 (21.10.2026) står i Confluence, og versjon 2 (27.10.2026) er arkivert
