@@ -108,7 +108,7 @@
 # - (09.10.2026) Opptaksforvalter kan gjennomføre tidligopptaket mer enn én gang. En ny
 #   gjennomføring tar med saker som er blitt behandlet, eller har fått
 #   konklusjon, siden forrige gjennomføring. Det er likevel lurt å prøvekjøre til
-#   ingen saker står igjen som ikke er behandlet eller mangler konklusjon, før
+#   ingen saker står igjen uten statusen «Behandlet» eller uten konklusjon, før
 #   tidligopptaket gjennomføres. (Dokumentasjonen på STEK-503 sa at det bare
 #   gjennomføres én gang. Den er rettet.)
 #   Mulig forbedring, ikke et krav: sikring mot en ny gjennomføring ved en feil
@@ -217,10 +217,10 @@ Egenskap: Gi tilbudsgaranti ved tidlig opptak
       Gitt saksbehandler har konkludert med at søkeren deltar i tidligopptaket
       Og søkeren er kvalifisert til "Sykepleie, høst 2027"
       Og søkeren har 55 poeng til "Sykepleie, høst 2027"
-      Og saken er ikke behandlet
+      Og saken har ikke behandlingsstatusen "Behandlet"
       Når opptaksforvalter gjennomfører tidligopptaket
       Så får ikke søkeren tilbudsgaranti på "Sykepleie, høst 2027"
-      Og opptaksforvalter ser at saken ikke er behandlet
+      Og opptaksforvalter ser at saken ikke har behandlingsstatusen "Behandlet"
 
     Scenario: Reservert studieplass gir tilbudsgaranti uten poenggrense
       Gitt saksbehandler har konkludert med at søkeren deltar i tidligopptaket
@@ -316,7 +316,7 @@ Egenskap: Gi tilbudsgaranti ved tidlig opptak
       Så har søkeren fortsatt tilbudsgaranti på "Sykepleie, høst 2027"
 
     Scenario: Ny gjennomføring tar med en sak som er blitt behandlet
-      Gitt saken til søkeren var ikke behandlet da tidligopptaket ble gjennomført
+      Gitt saken til søkeren hadde ikke behandlingsstatusen "Behandlet" da tidligopptaket ble gjennomført
       Og saksbehandler har konkludert med at søkeren deltar i tidligopptaket
       Og saken er nå behandlet
       Og søkeren er kvalifisert til "Sykepleie, høst 2027"
@@ -347,11 +347,11 @@ Egenskap: Gi tilbudsgaranti ved tidlig opptak
 
     # Saker uten konklusjon telles med, også når de er behandlet: de er ikke med i
     # tidligopptaket, og opptaksforvalteren gjør det samme med begge (avklart 13.10.2026).
-    Scenario: Se antall saker som ikke er behandlet eller mangler konklusjon
-      Gitt 2 søkere som har søkt om tidlig opptak, har saker som ikke er behandlet
+    Scenario: Se antall saker uten statusen Behandlet eller uten konklusjon
+      Gitt 2 søkere som har søkt om tidlig opptak, har saker som ikke har behandlingsstatusen "Behandlet"
       Og 1 søker som har søkt om tidlig opptak, har en behandlet sak uten konklusjon
       Når opptaksforvalter prøvekjører tidligopptaket
-      Så ser opptaksforvalter at 3 saker ikke er behandlet eller mangler konklusjon
+      Så ser opptaksforvalter at 3 saker ikke har behandlingsstatusen "Behandlet" eller mangler konklusjon
 
     Scenario: Se utdanningstilbud med mangelfulle innstillinger
       Gitt "Vernepleie, høst 2027" tilbyr tidlig opptak uten poenggrense

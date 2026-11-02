@@ -253,7 +253,7 @@ Egenskap: Automatisk saksbehandling
       Så er saken hos "Universitetet i Oslo" behandlet
       Og søkeren ser mangelteksten for "Matematikk R2" i Min kompetanse
 
-    Scenario: Saken blir ikke behandlet når poengene ikke kan avgjøres
+    Scenario: Saken blir ikke satt til Behandlet når poengene ikke kan avgjøres
       Gitt at poengene for "Informatikk, UiO" ikke kan avgjøres på grunn av en feil i regelverket
       Når den automatiske behandlingen er ferdig
       Så er saken hos "Universitetet i Oslo" under behandling

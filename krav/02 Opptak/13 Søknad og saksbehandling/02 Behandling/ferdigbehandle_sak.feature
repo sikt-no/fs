@@ -185,7 +185,7 @@ Egenskap: Ferdigbehandle en sak
       Når saksbehandleren setter saken til "Behandlet"
       Så er saken hos "Universitetet i Oslo" behandlet
 
-    Scenario: Saken blir ikke behandlet av seg selv når saksbehandleren har gjort resten
+    Scenario: Saken blir ikke satt til Behandlet av seg selv når saksbehandleren har gjort resten
       Gitt at saken hos "Universitetet i Oslo" er under behandling fordi poengene for "Informatikk, UiO" ikke kunne avgjøres automatisk
       Når saksbehandleren ved Universitetet i Oslo setter poengene for "Informatikk, UiO"
       Så er saken hos "Universitetet i Oslo" fortsatt under behandling

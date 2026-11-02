@@ -60,7 +60,7 @@ Egenskap: Starte en plasstildeling
     @depends-on-OPT-BEH-BEH-025
     Scenario: Bare saker som er behandlet, er med
       Gitt at saken til "Kari Nordmann" er behandlet
-      Og at saken til "Ola Nordmann" ikke er behandlet
+      Og at saken til "Ola Nordmann" ikke har behandlingsstatusen "Behandlet"
       Når opptaksforvalter starter en plasstildeling i "Hovedrunde"
       Så er saken til "Kari Nordmann" med i plasstildelingen
       Men saken til "Ola Nordmann" er ikke med i plasstildelingen
