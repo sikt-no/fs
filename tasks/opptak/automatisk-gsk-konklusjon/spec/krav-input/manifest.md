@@ -11,4 +11,4 @@
 
 ## Skisser
 
-- `sketches/varsel-uenighet-vitnemalsbehandling.png` — lokal skjermdump med påtegning fra Sondre Løvhaug, 2026-11-02. Dekker `@OPT-BEH-BEH-015`, «Saksbehandleren ser at opptakssystemet er uenig med skolen når vitnemålet <skolen> «GSK OK» fra KREG».
+- `sketches/varsel-uenighet-vitnemalsbehandling.png` — lokal skjermdump med påtegning fra Sondre Løvhaug, 2026-11-02. Dekker `@OPT-BEH-BEH-015`, «Saksbehandleren ser at opptakssystemet er uenig med skolen når vitnemålet <skolen> GSK OK fra KREG».

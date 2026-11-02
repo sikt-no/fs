@@ -9,7 +9,7 @@
 
 ## Omfang
 
-Søknaden får GSK-konklusjonen automatisk når skolens påstand («GSK OK» fra KREG) er ja, og løpet på vitnemålet finnes i listen over løp. Grunnlagskoden kommer fra løpet: PBPBY4 gir KLF, og et løp uten grunnlagskode gir KLY eller RFA etter reformen, som i det gamle FS. Opptakssystemet beregner sin egen påstand med kontrollmotoren når vitnemålet importeres, og lagrer den på vitnemålet. Er den uenig med skolen, ser saksbehandleren et varsel, men automatikken stopper ikke. Varslene i FS Admin til opptaksforvalteren om løp som mangler i listen, eller mangler grunnlagskode, er utkast og ikke med i leveransen. Et annullert vitnemål trekker ikke tilbake konklusjonen. Taggen «Vitnemål annullert» hører til `@OPT-BEH-BEH-034`, og konklusjonene fra tidligere opptak bygger på importtabellen i STEK-442.
+Søknaden får GSK-konklusjonen automatisk når vitnemålet har «GSK OK» fra KREG, og løpet på vitnemålet finnes i listen over løp. Grunnlagskoden kommer fra løpet: PBPBY4 gir KLF, og et løp uten grunnlagskode gir KLY eller RFA etter reformen, som i det gamle FS. fs-opptaks kontrollmotor beregner opptakssystemets påstand når vitnemålet importeres, og lagrer den på vitnemålet. Er den uenig med «GSK OK» fra KREG, ser saksbehandleren et varsel, men automatikken stopper ikke. Varslene i FS Admin til opptaksforvalteren om løp som mangler i listen, eller mangler grunnlagskode, er utkast og ikke med i leveransen. Et annullert vitnemål trekker ikke tilbake konklusjonen. Taggen «Vitnemål annullert» hører til `@OPT-BEH-BEH-034`, og konklusjonene fra tidligere opptak bygger på importtabellen i STEK-442.
 
 ## Krav
 
@@ -29,7 +29,7 @@ Søknaden får GSK-konklusjonen automatisk når skolens påstand («GSK OK» fra
 - **Type:** `lokal-bilde`
 - **Referanse:** skjermdump av saken i fs-admin med påtegning, 2026-11-02
 - **Lagrede artefakter:** [varsel-uenighet-vitnemalsbehandling.png](krav-input/sketches/varsel-uenighet-vitnemalsbehandling.png)
-- **Dekker krav:** `automatisk_gsk_konklusjon.feature` (scenario: `Saksbehandleren ser at opptakssystemet er uenig med skolen når vitnemålet <skolen> «GSK OK» fra KREG`)
+- **Dekker krav:** `automatisk_gsk_konklusjon.feature` (scenario: `Saksbehandleren ser at opptakssystemet er uenig med skolen når vitnemålet <skolen> GSK OK fra KREG`)
 - **Valideringsstatus:** `OK` — skissen viser et «!» ved antallet på «Vitnemålsbehandling» og en tekst under vitnemålsnummeret, som kommentaren i scenarioet. Teksten i skissen er en plassholder.
 
 Ingen skisse for resten: varslene til opptaksforvalteren er ikke avklart, og resten er backend.

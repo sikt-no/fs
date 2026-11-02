@@ -17,7 +17,7 @@
 Egenskap: Beregne GSK fra vitnemål
   Som saksbehandler
   ønsker jeg at opptakssystemet beregner sin egen påstand om generell studiekompetanse for et vitnemål
-  slik at skolens påstand blir kontrollert, og vitnemålet får grunnlagskoden for løpet.
+  slik at «GSK OK» fra KREG blir kontrollert, og vitnemålet får grunnlagskoden for løpet.
 
   Generell studiekompetanse (GSK) er det generelle opptakskravet til høyere utdanning.
   Systemet beregner GSK for ett vitnemål om gangen. Beregningen ser på fagene på

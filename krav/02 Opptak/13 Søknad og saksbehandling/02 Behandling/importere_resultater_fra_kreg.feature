@@ -72,7 +72,7 @@ Egenskap: Importere resultater fra KREG
         | reform                                          |
         | avgangsår                                       |
         | om det er førstegangsvitnemål                   |
-        | skolens påstand om generell studiekompetanse    |
+        | «GSK OK» fra KREG (skolens påstand om GSK)      |
         | fagene med karakterer                           |
         | programområdene                                 |
         | merknadene                                      |

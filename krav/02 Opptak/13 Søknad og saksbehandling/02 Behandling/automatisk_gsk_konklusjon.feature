@@ -26,20 +26,21 @@ Egenskap: Automatisk GSK-konklusjon
   slik at jeg bare trenger å vurdere generell studiekompetanse der grunnlaget ikke er entydig.
 
   Generell studiekompetanse (GSK) er det generelle opptakskravet til høyere utdanning.
-  Et vitnemål har to påstander om GSK, ja eller nei: skolens påstand og opptakssystemets
-  påstand. Skolens påstand er «GSK OK», som skolen setter når vitnemålet legges inn i KREG.
-  Den kommer fra KREG sammen med vitnemålet (OPT-BEH-BEH-030). KREG beregner ikke en egen
-  påstand. Opptakssystemet forholder seg bare til KREG, ikke til skolenes systemer. Når søkerens
-  vitnemål importeres fra KREG til opptakssystemet, beregner fs-opptaks kontrollmotor
-  opptakssystemets påstand for hvert vitnemål med seksfagskontrollen, som en kontroll av skolens påstand. Den lagres på opptakssystemets
+  Et vitnemål har to svar på om søkeren har GSK, ja eller nei: «GSK OK» fra KREG og
+  opptakssystemets påstand. «GSK OK» setter skolen når vitnemålet legges inn i KREG, og det
+  kommer fra KREG sammen med vitnemålet (OPT-BEH-BEH-030). KREG beregner ikke GSK selv.
+  Opptakssystemet forholder seg bare til KREG, ikke til skolenes systemer. Når søkerens
+  vitnemål importeres fra KREG til opptakssystemet, kjører fs-opptaks kontrollmotor
+  seksfagskontrollen på hvert vitnemål, som en kontroll av «GSK OK» fra KREG. Resultatet er
+  opptakssystemets påstand. Den lagres på opptakssystemets
   kopi av vitnemålet, sammen med tidspunktet den ble beregnet og hvilken beregning som
   ble brukt. Grunnlagskoden for løpet lagres også, uansett hva påstandene er.
   Hvordan påstanden og grunnlagskoden beregnes, står i OPT-BEH-BEH-027.
 
-  Vitnemålet gir GSK når skolens påstand er ja. Skolens påstand er fasit. Er opptakssystemets
-  påstand en annen, får saksbehandleren et varsel, men den automatiske behandlingen stopper
+  Vitnemålet gir GSK når det har «GSK OK» fra KREG. «GSK OK» fra KREG er fasit. Sier fs-opptaks
+  kontrollmotor noe annet, får saksbehandleren et varsel, men den automatiske behandlingen stopper
   ikke. «Gir GSK» betyr det i kravene om automatisk saksbehandling. Saksbehandleren ser
-  begge påstandene i vitnemålsbehandlingen (OPT-BEH-BEH-005).
+  både «GSK OK» fra KREG og opptakssystemets påstand i vitnemålsbehandlingen (OPT-BEH-BEH-005).
 
   Påstandene brukes i saksbehandlingen i alle aktive opptak. «Importeres» betyr i
   dette kravet alltid at opptakssystemet henter vitnemålet fra KREG (OPT-BEH-BEH-030),
@@ -79,7 +80,7 @@ Egenskap: Automatisk GSK-konklusjon
       Og påstanden er beregnet 26.10.2026 kl. 10:14
       Og påstanden viser hvilken beregning i kontrollmotoren som ble brukt
 
-    Scenario: Opptakssystemets påstand beregnes uavhengig av skolens påstand
+    Scenario: Opptakssystemets påstand beregnes uavhengig av GSK OK fra KREG
       Gitt at søkeren har et vitnemål som består seksfagskontrollen
       Og at vitnemålet ikke har «GSK OK» fra KREG
       Når vitnemålet importeres fra KREG
@@ -124,7 +125,7 @@ Egenskap: Automatisk GSK-konklusjon
       Så har kompetansebeviset ingen påstand fra opptakssystemet om generell studiekompetanse
 
   @ref-FLY-OPT-AUT-001 @ref-OPT-BEH-BEH-025
-  Regel: Vitnemålet gir GSK når skolens påstand er ja
+  Regel: Vitnemålet gir GSK når det har GSK OK fra KREG
     # Avklart 2026-11-02 med domeneeksperten: skolens påstand («GSK OK» fra KREG) er fasit.
     # Opptakssystemets påstand er en kontroll. Er den uenig, får saksbehandleren et varsel,
     # men den automatiske behandlingen stopper ikke. KREG har ingen egen påstand om GSK, bare
@@ -132,13 +133,13 @@ Egenskap: Automatisk GSK-konklusjon
     # Kode i dag: GskKonklusjonEvaluator stopper automatikken når kontrollmotoren er uenig med
     # skolen (KRYSSJEKK_FEILET), og gir ikke noe varsel.
 
-    Scenario: Vitnemålet gir GSK når skolens påstand er ja
+    Scenario: Vitnemålet gir GSK når det har GSK OK fra KREG
       Gitt at søkeren har et vitnemål som ikke er annullert
       Og at vitnemålet har «GSK OK» fra KREG
       Når vitnemålet importeres fra KREG
       Så gir vitnemålet GSK
 
-    Scenario: Vitnemålet gir ikke GSK når skolens påstand er nei
+    Scenario: Vitnemålet gir ikke GSK når det ikke har GSK OK fra KREG
       Gitt at søkeren har et vitnemål som ikke er annullert
       Og at vitnemålet ikke har «GSK OK» fra KREG
       Og at fs-opptaks kontrollmotor sier at vitnemålet består seksfagskontrollen
@@ -164,7 +165,7 @@ Egenskap: Automatisk GSK-konklusjon
     # manuelt uansett, men varselet vises på samme måte. Hvordan varselet vises, står i
     # vise_elektroniske_vitnemål.design.md.
 
-    Scenariomal: Saksbehandleren ser at opptakssystemet er uenig med skolen når vitnemålet <skolen> «GSK OK» fra KREG
+    Scenariomal: Saksbehandleren ser at opptakssystemet er uenig med skolen når vitnemålet <skolen> GSK OK fra KREG
       Gitt at søkeren har et vitnemål som ikke er annullert
       Og at vitnemålet <skolen> «GSK OK» fra KREG
       Og at fs-opptaks kontrollmotor sier at vitnemålet <kontrollmotoren> seksfagskontrollen

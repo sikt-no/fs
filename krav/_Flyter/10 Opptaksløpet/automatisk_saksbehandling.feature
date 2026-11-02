@@ -6,8 +6,8 @@ Egenskap: Automatisk saksbehandling
   Plasstildelingen er ikke en del av flyten. Søkerens
   vitnemål importeres fra KREG til opptakssystemet når saken er opprettet (OPT-BEH-BEH-030).
   Opptakssystemets påstand om GSK beregnes for hvert vitnemål når vitnemålet importeres fra KREG.
-  Vitnemålet gir GSK når skolens påstand er ja, og søknaden får GSK-konklusjonen da. Opptakssystemets
-  påstand er en kontroll: er den uenig med skolen, får saksbehandleren et varsel, men flyten
+  Vitnemålet gir GSK når det har «GSK OK» fra KREG, og søknaden får GSK-konklusjonen da.
+  Opptakssystemets påstand fra fs-opptaks kontrollmotor er en kontroll: er den uenig, får saksbehandleren et varsel, men flyten
   stopper ikke (OPT-BEH-BEH-015). «Importeres» betyr i flyten alltid at
   opptakssystemet henter vitnemålet fra KREG, ikke at vitnemålet kommer inn i KREG.
   Den automatiske behandlingen fortsetter saksbehandlertildelingen: hver ny sak behandles når
@@ -60,13 +60,13 @@ Egenskap: Automatisk saksbehandling
       Så behandles saken automatisk
 
   @depends-on-OPT-BEH-BEH-015 @depends-on-OPT-BEH-BEH-027
-  # OPT-BEH-BEH-015: «Opptakssystemets påstand om GSK på vitnemålet», «Vitnemålet gir GSK når skolens påstand er ja», «Konklusjon på søknaden fra vitnemålet», «Konklusjon fra tidligere opptak», «Automatikken setter bare positive konklusjoner, og bare der ingen finnes»
+  # OPT-BEH-BEH-015: «Opptakssystemets påstand om GSK på vitnemålet», «Vitnemålet gir GSK når det har GSK OK fra KREG», «Konklusjon på søknaden fra vitnemålet», «Konklusjon fra tidligere opptak», «Automatikken setter bare positive konklusjoner, og bare der ingen finnes»
   # Opptakssystemets påstand om GSK beregnes med kontrollmotoren, som er beskrevet i hele OPT-BEH-BEH-027.
   Regel: Søknaden får GSK-konklusjonen når vitnemålet importeres fra KREG
 
     Scenario: Søknaden får GSK-konklusjonen fra vitnemålet som er importert fra KREG
       Gitt at søknaden ikke har noen GSK-konklusjon
-      Og at "Kari Nordmann" har et vitnemål i KREG der skolens påstand er at søkeren har generell studiekompetanse
+      Og at "Kari Nordmann" har et vitnemål med «GSK OK» fra KREG
       Når vitnemålet importeres fra KREG
       Så gir vitnemålet GSK
       Og søknaden får en positiv GSK-konklusjon
@@ -83,7 +83,7 @@ Egenskap: Automatisk saksbehandling
       Så får søknaden en positiv GSK-konklusjon
 
   @depends-on-OPT-BEH-BEH-015 @depends-on-OPT-BEH-BEH-025
-  # OPT-BEH-BEH-015: «Vitnemålet gir GSK når skolens påstand er ja»
+  # OPT-BEH-BEH-015: «Vitnemålet gir GSK når det har GSK OK fra KREG»
   # OPT-BEH-BEH-025: «Bare saker der søkeren har ett vitnemål, og vitnemålet gir GSK, behandles helautomatisk»
   Regel: Vitnemålet som gir GSK, avgjør om saken behandles helautomatisk
 

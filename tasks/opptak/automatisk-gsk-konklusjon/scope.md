@@ -9,8 +9,8 @@
 
 ## Mål
 
-- Søknaden får GSK-konklusjonen automatisk når skolens påstand er ja og løpet finnes i listen over løp (`@OPT-BEH-BEH-015`, `@OPT-BEH-BEH-027`).
-- Opptakssystemets egen påstand kontrollerer skolens påstand, og uenighet gir varsel uten å stoppe automatikken.
+- Søknaden får GSK-konklusjonen automatisk når vitnemålet har «GSK OK» fra KREG og løpet finnes i listen over løp (`@OPT-BEH-BEH-015`, `@OPT-BEH-BEH-027`).
+- Opptakssystemets påstand fra fs-opptaks kontrollmotor kontrollerer «GSK OK» fra KREG, og uenighet gir varsel uten å stoppe automatikken.
 
 ## Ikke-mål
 

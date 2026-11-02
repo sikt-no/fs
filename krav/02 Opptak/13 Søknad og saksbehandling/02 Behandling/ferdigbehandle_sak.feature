@@ -40,7 +40,7 @@ Egenskap: Ferdigbehandle en sak
     Gitt at søknaden til "Kari Nordmann" har en sak hos "Universitetet i Oslo"
 
   @depends-on-OPT-BEH-BEH-015 @ref-FLY-OPT-AUT-001
-  # OPT-BEH-BEH-015: «Vitnemålet gir GSK når skolens påstand er ja»
+  # OPT-BEH-BEH-015: «Vitnemålet gir GSK når det har GSK OK fra KREG»
   Regel: Bare saker der søkeren har ett vitnemål, og vitnemålet gir GSK, behandles helautomatisk
 
     Scenario: Saken behandles helautomatisk når søkeren har ett vitnemål, og vitnemålet gir GSK
