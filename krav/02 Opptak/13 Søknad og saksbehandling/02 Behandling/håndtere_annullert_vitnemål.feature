@@ -1,5 +1,5 @@
 # language: no
-@OPT-BEH-BEH-034 @must @planned@ref-OPT-BEH-BEH-004 @ref-OPT-BEH-BEH-015 @ref-OPT-BEH-BEH-021 @ref-OPT-BEH-BEH-029
+@OPT-BEH-BEH-034 @must @planned @ref-OPT-BEH-BEH-004 @ref-OPT-BEH-BEH-015 @ref-OPT-BEH-BEH-021 @ref-OPT-BEH-BEH-029
 Egenskap: Håndtere annullert vitnemål
   Som saksbehandler
   ønsker jeg å bli gjort oppmerksom på saker der et vitnemål som er i bruk, blir annullert
