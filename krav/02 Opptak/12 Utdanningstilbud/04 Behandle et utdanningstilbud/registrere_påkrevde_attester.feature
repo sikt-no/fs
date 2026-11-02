@@ -25,3 +25,17 @@ Egenskap: Registrere påkrevde attester på utdanningstilbudet
     Scenario: Registrere krav om medisinsk attest
       Når opptaksforvalter registrerer krav om medisinsk attest
       Så lagres kravet om medisinsk attest på utdanningstilbudet
+
+  @planned
+  Regel: Attestene vises med kode og navn
+    # Tilbakemelding fra intern akseptansetest (SHI-791): lærestedene vil se kodene for å være sikre på
+    # at attestkravet er helt riktig.
+
+    Scenario: Se kode og navn når attestene velges
+      Når opptaksforvalter velger attester for utdanningstilbudet
+      Så ser opptaksforvalter koden og navnet på hver attest
+
+    Scenario: Se kode og navn på attestene utdanningstilbudet krever
+      Gitt at det er registrert krav om politiattest og medisinsk attest på utdanningstilbudet
+      Når opptaksforvalter ser attestene utdanningstilbudet krever
+      Så ser opptaksforvalter koden og navnet på hver attest
