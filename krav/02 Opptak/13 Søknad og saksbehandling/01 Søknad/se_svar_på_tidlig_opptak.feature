@@ -121,6 +121,8 @@ Egenskap: Se svar på søknad om tidlig opptak
 
     @draft @openquestion
     Scenario: Reservert studieplass og innvilget tidlig opptak
+      # ÅPNE SPØRSMÅL:
+      # - Skal søkeren se at tidlig opptak er innvilget på et søknadsalternativ der søkeren også har reservert studieplass?
       Gitt at svaret på tidlig opptak er publisert
       Og at søkeren har reservert studieplass på søknadsalternativet "Sykepleie, høst 2027"
       Og at søkeren er innvilget tidlig opptak på søknadsalternativet "Sykepleie, høst 2027"
