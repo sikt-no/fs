@@ -80,12 +80,11 @@ Egenskap: Listevisning og søk i utdanningstilbud i opptaket
       Når opptaksforvalter filtrerer på utdanningstilbud med ufullstendige opplysninger
       Så ser opptaksforvalter utdanningstilbud som mangler rangeringsregelverk
 
-    @openquestion
-    Scenario: Filtrere på utdanningstilbud som mangler kvoter, kvoteprioritet eller plassflyt
-      # ÅPNE SPØRSMÅL:
-      # - Delvis levert (verify 2026-10-22): «Har mangler» tar med utdanningstilbud uten kvoter, men ikke dem som mangler kvoteprioritet eller plassflyt. Skal kvoteprioritet og plassflyt tas med i «Har mangler»?
+    # AVKLART 2026-10-28: Kvoteprioriteten og plassflyten kommer fra regelverkssamlingen opptaket bruker,
+    # så et utdanningstilbud kan ikke mangle dem.
+    Scenario: Filtrere på utdanningstilbud som mangler kvoter
       Når opptaksforvalter filtrerer på utdanningstilbud med ufullstendige opplysninger
-      Så ser opptaksforvalter utdanningstilbud som mangler kvoter, kvoteprioritet eller plassflyt
+      Så ser opptaksforvalter utdanningstilbud som mangler kvoter
 
     Scenario: Filtrere på utdanningstilbud som mangler opplysninger om tilbudsgaranti
       Når opptaksforvalter filtrerer på utdanningstilbud med ufullstendige opplysninger

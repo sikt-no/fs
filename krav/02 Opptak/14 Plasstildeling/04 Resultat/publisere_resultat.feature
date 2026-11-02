@@ -60,12 +60,14 @@ Egenskap: Publisere resultatet til søkerne
         | Organisasjonen som har behandlet søknaden     |
         | Svarfrist                                     |
 
+    @depends-on-OPT-OPT-UTD-029
     Scenario: Søker ser ventelistenummer
       Gitt at utdanningstilbudet "Sykepleie, høst 2027" viser ventelistenummer for søkere
       Og at søkeren "Kari Nordmann" står som nummer 12 på ventelisten
       Når plasstildelingen er publisert
       Så ser søkeren at søkeren står som nummer 12 på ventelisten til "Sykepleie, høst 2027"
 
+    @depends-on-OPT-OPT-UTD-029
     Scenario: Poenggrense skjult for søker
       Gitt at utdanningstilbudet "Sykepleie, høst 2027" ikke viser poenggrense for søkere
       Når plasstildelingen er publisert

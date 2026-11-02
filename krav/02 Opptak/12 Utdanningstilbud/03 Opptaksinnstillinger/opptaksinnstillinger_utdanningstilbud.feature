@@ -135,11 +135,37 @@ Egenskap: Opptaksinnstillinger per utdanningstilbud
         | Førstegangsvitnemål (ORDF) | 2              |
         | Ordinær kvote (ORD)        | 3              |
 
+    # AVKLART 2026-10-28: Kvoteprioriteten settes ikke ut fra rekkefølgen utdanningskvotene legges til i.
+    # Utdanningstilbudet har ikke en egen kopi av kvoteprioriteten og plassflyten, og følger regelverkssamlingen
+    # også når de endres der.
+    Scenario: Kvoteprioriteten avhenger ikke av rekkefølgen utdanningskvotene legges til i
+      Gitt at kvoteprioriteten i regelverkssamlingen "UHG 2027" er 2 for "Førstegangsvitnemål (ORDF)" og 3 for "Ordinær kvote (ORD)"
+      Og at opptaket bruker regelverkssamlingen "UHG 2027"
+      Og at utdanningstilbudet "Sykepleie, høst 2027" har utdanningskvoten "Ordinær kvote (ORD)"
+      Når opptaksforvalter ved lærestedet legger til "Førstegangsvitnemål (ORDF)" på utdanningstilbudet "Sykepleie, høst 2027"
+      Så har utdanningskvotene på utdanningstilbudet kvoteprioriteten fra regelverkssamlingen
+        | utdanningskvote            | kvoteprioritet |
+        | Førstegangsvitnemål (ORDF) | 2              |
+        | Ordinær kvote (ORD)        | 3              |
+
+    Scenario: Endret kvoteprioritet i regelverkssamlingen gjelder for utdanningstilbudet
+      Gitt at opptaket bruker regelverkssamlingen "UHG 2027"
+      Og at utdanningstilbudet "Sykepleie, høst 2027" har utdanningskvoten "Førstegangsvitnemål (ORDF)" med kvoteprioritet 2
+      Når regelverksforvalter endrer kvoteprioriteten for "Førstegangsvitnemål (ORDF)" i regelverkssamlingen "UHG 2027" til 5
+      Så har utdanningskvoten "Førstegangsvitnemål (ORDF)" kvoteprioritet 5 på utdanningstilbudet "Sykepleie, høst 2027"
+
     Scenario: Utdanningskvotene følger plassflyten i regelverkssamlingen
       Gitt at standard plassflyt i regelverkssamlingen "UHG 2027" sender "Førstegangsvitnemål (ORDF)" til "Ordinær kvote (ORD)"
       Og at opptaket bruker regelverkssamlingen "UHG 2027"
       Når opptaksforvalter ved lærestedet legger til "Førstegangsvitnemål (ORDF)" og "Ordinær kvote (ORD)" på utdanningstilbudet "Sykepleie, høst 2027"
       Så går ledige plasser i "Førstegangsvitnemål (ORDF)" til "Ordinær kvote (ORD)" på utdanningstilbudet
+
+    Scenario: Endret plassflyt i regelverkssamlingen gjelder for utdanningstilbudet
+      Gitt at opptaket bruker regelverkssamlingen "UHG 2027"
+      Og at utdanningstilbudet "Sykepleie, høst 2027" har utdanningskvotene "Samisk førstegangsvitnemål (SAMF)", "Førstegangsvitnemål (ORDF)" og "Ordinær kvote (ORD)"
+      Og at standard plassflyt i regelverkssamlingen "UHG 2027" sender "Samisk førstegangsvitnemål (SAMF)" til "Ordinær kvote (ORD)"
+      Når regelverksforvalter endrer plassflyten i regelverkssamlingen "UHG 2027" slik at "Samisk førstegangsvitnemål (SAMF)" sendes til "Førstegangsvitnemål (ORDF)"
+      Så går ledige plasser i "Samisk førstegangsvitnemål (SAMF)" til "Førstegangsvitnemål (ORDF)" på utdanningstilbudet "Sykepleie, høst 2027"
 
   # Hva plasstildelingen gjør med plassflyten, og vernet mot sirkulær plassflyt (#598), står i
   # 14 Plasstildeling/02 Tildelingsinnstillinger/plassflyt.feature.
@@ -254,19 +280,7 @@ Egenskap: Opptaksinnstillinger per utdanningstilbud
       Så kan opptaksforvalter kun velge blant de aktive saksbehandlertildelingsreglene i opptaket
       Men opptaksforvalter ser ikke "TRA" blant valgene
 
-  @openquestion
-  # ÅPNE SPØRSMÅL:
-  # - Er det lov å overstyre visning av poenggrenser og ventelistenummer
-  #   for søkere i samordna opptak? Bør dette være opptaksinnstillinger i stedet?
-  Regel: Opptaksforvalter kan styre visning av poenggrense og ventelistenummer
-
-    Scenario: Velge å vise poenggrense for søker
-      Når opptaksforvalter angir at poenggrense skal vises for søkere på utdanningstilbudet "Sykepleie, høst 2027"
-      Så kan søkere se poenggrensen for "Sykepleie, høst 2027"
-
-    Scenario: Velge å vise ventelistenummer for søker
-      Når opptaksforvalter angir at ventelistenummer skal vises for søkere på utdanningstilbudet "Sykepleie, høst 2027"
-      Så kan søkere se sitt ventelistenummer for "Sykepleie, høst 2027"
+  # Om søkerne ser poenggrensen og ventelistenummeret, står i OPT-OPT-UTD-029.
 
   Regel: Opptaksforvalter kan sette opplysninger om tilbudsgaranti
 
