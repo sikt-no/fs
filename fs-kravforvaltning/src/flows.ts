@@ -621,7 +621,7 @@ export interface FlatKrav {
   rules: Set<string>;
   /** Minst én referanse til kravet sier ikke hvilken regel den gjelder */
   whole: boolean;
-  /** Fasene der delen som følges (eller hele kravet, med `follow: 'whole'`), ikke er levert: kravet gjenstår der */
+  /** Fasene der delen som følges (eller hele kravet, med `follow: 'whole'`), ikke er levert ennå */
   open: Set<number>;
   /**
    * Delene flyten bygger på, på linja i kravet, med fasene de er med i: delen som følges med `follow: 'part'`
