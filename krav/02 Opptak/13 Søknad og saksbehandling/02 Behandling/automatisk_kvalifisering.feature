@@ -61,7 +61,7 @@
 #   på hver sin branch.
 # - Hvordan saksbehandleren velger vitnemål for søkere med flere vitnemål,
 #   står i velge_vitnemål_som_grunnlag.feature (@OPT-BEH-BEH-004).
-@OPT-BEH-BEH-020 @must @in-progress @scope-automatisk-kvalifisering-og-poengsum
+@OPT-BEH-BEH-020 @must @in-progress @scope-automatisk-kvalifisering-og-poengsum @ref-OPT-BEH-BEH-025
 Egenskap: Automatisk vurdering av spesielle opptakskrav
   Som saksbehandler
   ønsker jeg at systemet vurderer om søkerens elektroniske vitnemål oppfyller de spesielle opptakskravene
@@ -89,6 +89,9 @@ Egenskap: Automatisk vurdering av spesielle opptakskrav
   # lenger når søknadsalternativet er fjernet (OPT-BEH-BEH-036).
   # Avklart 30.10.2026: FS157.001 i FS-klienten, som beregner om søkerne er kvalifisert for et
   # helt opptak, dekkes av OPT-BEH-BEH-026 «Beregne automatisk på nytt».
+  # Avklart 03.11.2026: vurderingen krever ikke GSK, så saksbehandleren kan få kravelementene
+  # vurdert før GSK er satt. Om saken behandles helautomatisk, og stopper uten GSK, avgjøres i
+  # OPT-BEH-BEH-025.
 
   @depends-on-OPT-REG-KRA-002 @ref-FLY-OPT-AUT-001
   Regel: Kravelementer som er koblet til vitnemålet, vurderes automatisk
