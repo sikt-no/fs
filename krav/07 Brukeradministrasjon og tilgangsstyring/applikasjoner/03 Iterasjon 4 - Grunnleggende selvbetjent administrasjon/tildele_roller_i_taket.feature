@@ -10,10 +10,15 @@ Egenskap: Forvalte roller i taket til en Feide-applikasjon
   # og tilgangsstyring/docs/tilgangsmodell.md i fs-plattform.
   # Innspill 03.11.2026: to nye faner på applikasjonssiden for Feide-applikasjoner,
   # én for taket og én for gulvet (gulvet: BRU-APP-API-019).
+  # Implementasjonsdetaljer: tildele_roller_i_taket.design.md.
   # AVKLART 03.11.2026: Syntetiske og ekte miljøer, test og demo behandles som ved tildeling av
   # roller til personbrukere (BRU-PER-GRU-003). Nekt og endringslogg er utenfor kravet foreløpig.
   # AVKLART 03.11.2026: Bare Feide-applikasjoner har fanen for taket. Fanen skal også la
-  # applikasjonsadministratoren fjerne roller og sette gyldighetsperiode.
+  # applikasjonsadministratoren fjerne roller.
+  # AVKLART 04.11.2026: Gyldighetsperioden er skopet ned til det vi har for personbrukere og
+  # applikasjoner. Vi har den i databasen, men FS Admin kan ikke sette den for personbrukere eller
+  # applikasjoner (BRU-PER-GRU-006 er @draft). Fanen setter derfor ikke gyldighetsperiode, men viser
+  # gyldighetstidsrommet slik rollelisten for personbrukere gjør (BRU-PER-GRU-008).
 
   Bakgrunn:
     Gitt jeg er innlogget i løsningen
@@ -40,19 +45,17 @@ Egenskap: Forvalte roller i taket til en Feide-applikasjon
       Så vises fanen for taket
 
   Regel: Fanen for taket viser rollene i taket til applikasjonen som gjelder nå
-    # Et tak gjelder nå når gyldighetsperioden inneholder tidspunktet nå, og taket ikke er ugyldiggjort
-    # (jf. tildele_roller.design.md for personbrukere). Tak som er avsluttet eller starter senere,
-    # filtreres bort i spørringen, ikke med RLS, slik som for personbrukere og applikasjoner.
 
     Scenario: Se rollene i taket til applikasjonen
       Gitt applikasjonen har Feide som identitetsleverandør
       Og jeg har åpnet fanen for taket
       Så ser jeg en liste over rollene i taket til applikasjonen
       Og hvert innslag viser følgende informasjon:
-        | felt         |
-        | Rolle        |
-        | Organisasjon |
-        | Miljø        |
+        | felt              |
+        | Rolle             |
+        | Organisasjon      |
+        | Miljø             |
+        | Gyldighetstidsrom |
 
     Scenariomal: Bare tak som gjelder nå, vises
       Gitt applikasjonen har Feide som identitetsleverandør
@@ -65,6 +68,13 @@ Egenskap: Forvalte roller i taket til en Feide-applikasjon
         | gjelder nå     | vises      |
         | er avsluttet   | vises ikke |
         | starter senere | vises ikke |
+
+    @ref-BRU-PER-GRU-008
+    Scenario: Se gyldighetstidsrommet for en rolle i taket
+      Gitt applikasjonen har Feide som identitetsleverandør
+      Og applikasjonen har en rolle i taket med et sluttidspunkt
+      Når jeg åpner fanen for taket
+      Så ser jeg gyldighetstidsrommet for rollen
 
   Regel: Tak for en organisasjonssamling vises som tak for hver organisasjon i samlingen
     # AVKLART 03.11.2026: Tak for organisasjonssamlinger vises, men kan ikke administreres ennå. En rolle
@@ -87,9 +97,9 @@ Egenskap: Forvalte roller i taket til en Feide-applikasjon
       Så fremgår det at taket for "Universitetet i Stavanger" kommer fra <kilde>
 
       Eksempler:
-        | tildelt for                 | kilde                         |
-        | "Universitetet i Stavanger" | organisasjonen selv           |
-        | organisasjonssamlingen      | organisasjonssamlingen        |
+        | tildelt for                 | kilde                  |
+        | "Universitetet i Stavanger" | organisasjonen selv    |
+        | organisasjonssamlingen      | organisasjonssamlingen |
 
     Scenario: Organisasjonssamling kan ikke velges ved tildeling i taket
       Gitt applikasjonen har Feide som identitetsleverandør
@@ -128,14 +138,12 @@ Egenskap: Forvalte roller i taket til en Feide-applikasjon
       Så er rollene i taket til applikasjonen for den valgte kombinasjonen av organisasjon og miljø
 
     Scenario: Delvis suksess ved samtidig tildeling av roller i taket
-      # Samme mønster som ved tildeling av roller til personbrukere (BRU-PER-GRU-003).
       Gitt jeg har valgt flere roller å tildele i taket
       Når noen av tildelingene ikke kan gjennomføres
       Så gjennomføres de tildelingene som er gyldige
       Og jeg ser tydelig hvilke tildelinger som ikke ble gjennomført, og hvorfor
 
   Regel: En fjerning fra taket gjelder én rolle for en organisasjon og et miljø
-    # Samme mønster som ved fjerning av roller fra personbrukere (BRU-PER-GRU-012).
 
     Scenario: Fjerne en rolle fra taket for valgt organisasjon og miljø
       Gitt applikasjonen har Feide som identitetsleverandør
@@ -152,45 +160,6 @@ Egenskap: Forvalte roller i taket til en Feide-applikasjon
       Når jeg velger flere roller og fjerner dem fra taket i én operasjon
       Så er alle de valgte rollene fjernet fra taket
 
-  Regel: Applikasjonsadministratoren kan sette gyldighetsperiode for en rolle i taket
-    # Samme mønster som for tildelinger til personbrukere (BRU-PER-GRU-006). Start- og sluttidspunkt
-    # angis med dato og tidspunkt (minutt-oppløsning) i tidssonen Europe/Oslo.
-
-    Scenario: Sette sluttidspunkt på en rolle i taket
-      Gitt applikasjonen har Feide som identitetsleverandør
-      Og jeg har åpnet fanen for taket
-      Når jeg setter et sluttidspunkt fram i tid på en rolle i taket
-      Så er rollen i taket fram til sluttidspunktet
-      Og rollen er automatisk ute av taket etter sluttidspunktet
-
-    Scenario: Sette starttidspunkt fram i tid på en rolle i taket
-      Gitt applikasjonen har Feide som identitetsleverandør
-      Og jeg har åpnet fanen for taket
-      Når jeg tildeler en rolle i taket med et starttidspunkt fram i tid
-      Så er rollen ikke i taket fram til starttidspunktet
-      Og rollen er automatisk i taket fra starttidspunktet
-
-    Scenario: Sette både start- og sluttidspunkt på en rolle i taket
-      Gitt applikasjonen har Feide som identitetsleverandør
-      Og jeg har åpnet fanen for taket
-      Når jeg tildeler en rolle i taket med både et starttidspunkt og et sluttidspunkt fram i tid
-      Så er rollen i taket kun innenfor det angitte tidsrommet
-
-    Scenario: Sluttidspunkt i fortiden avvises for en rolle i taket
-      Gitt applikasjonen har Feide som identitetsleverandør
-      Og jeg har åpnet fanen for taket
-      Når jeg forsøker å sette et sluttidspunkt som ligger i fortiden på en rolle i taket
-      Så lagres ikke endringen
-      Og jeg ser en feilmelding som sier at sluttidspunkt ikke kan ligge i fortiden
-
-    Scenario: Sluttidspunkt før starttidspunkt avvises for en rolle i taket
-      Gitt applikasjonen har Feide som identitetsleverandør
-      Og jeg har åpnet fanen for taket
-      Og jeg setter både et starttidspunkt og et sluttidspunkt på en rolle i taket
-      Når sluttidspunktet ligger før starttidspunktet
-      Så lagres ikke endringen
-      Og jeg ser en feilmelding som sier at sluttidspunkt må ligge etter starttidspunkt
-
   Regel: Bare forretningsroller kan tildeles i taket
 
     Scenario: Valglisten for rolle i taket viser bare forretningsroller
@@ -201,10 +170,31 @@ Egenskap: Forvalte roller i taket til en Feide-applikasjon
       Så vises bare forretningsroller
       Men brukerflateroller og privilegier vises ikke
 
-  Regel: Forvaltning av taket krever applikasjonsadministrator-rollen for applikasjonseieren og for organisasjonen taket gjelder
-    # Applikasjonseieren forvalter taket til applikasjonen sin. Gjelder taket en annen organisasjon
-    # enn applikasjonseieren, må applikasjonsadministratoren ha rollen for begge, i samme miljø.
-    # Det gjelder tildeling, fjerning og gyldighetsperiode (kan_forvalte_delegering i fs-plattform).
+  Regel: Forvaltning av taket krever applikasjonsadministrator-rollen for applikasjonseieren og for organisasjonen taket gjelder, i samme miljø
+
+    Scenariomal: Tildeling og fjerning i taket krever applikasjonsadministrator-rollen for begge organisasjonene i samme miljø
+      Gitt applikasjonen har Feide som identitetsleverandør
+      Og "Universitetet i Stavanger" er applikasjonseier
+      Og jeg har applikasjonsadministrator-rollen for "Universitetet i Stavanger" i miljøet <miljø for applikasjonseieren>
+      Og jeg har applikasjonsadministrator-rollen for "Universitetet i Bergen" i miljøet <miljø for organisasjonen>
+      Når jeg vil <handling> en rolle i taket for "Universitetet i Bergen" i miljøet "Produksjon"
+      Så <kan> jeg <handling> rollen
+
+      Eksempler:
+        | handling | miljø for applikasjonseieren | miljø for organisasjonen | kan      |
+        | tildele  | "Produksjon"                 | "Produksjon"             | kan      |
+        | tildele  | "Produksjon"                 | "Test"                   | kan ikke |
+        | tildele  | "Test"                       | "Produksjon"             | kan ikke |
+        | fjerne   | "Produksjon"                 | "Produksjon"             | kan      |
+        | fjerne   | "Produksjon"                 | "Test"                   | kan ikke |
+        | fjerne   | "Test"                       | "Produksjon"             | kan ikke |
+
+    Scenario: Tak for applikasjonseieren selv krever bare rollen for applikasjonseieren
+      Gitt applikasjonen har Feide som identitetsleverandør
+      Og "Universitetet i Stavanger" er applikasjonseier
+      Og jeg har applikasjonsadministrator-rollen for "Universitetet i Stavanger" i miljøet "Produksjon"
+      Når jeg vil tildele en rolle i taket for "Universitetet i Stavanger" i miljøet "Produksjon"
+      Så kan jeg tildele rollen
 
     Scenario: Valglisten for organisasjon er begrenset til organisasjoner jeg administrerer
       Gitt applikasjonen har Feide som identitetsleverandør
@@ -247,9 +237,6 @@ Egenskap: Forvalte roller i taket til en Feide-applikasjon
 
   @ref-BRU-PER-GRU-003
   Regel: Taket begrenser hvilke av personbrukerens roller brukeren får gjennom applikasjonen
-    # Effektiv tilgang gjennom applikasjonen er ((personbrukerens roller ∩ taket) ∪ gulvet ∪ åpne roller)
-    # minus nekt (kombiner_tildelinger, 0099 i fs-plattform). Taket brukes også i valglisten for rolle
-    # på personbrukere.
 
     Scenariomal: Personbrukerens rolle gjelder gjennom applikasjonen bare når rollen er i taket
       Gitt applikasjonen har Feide som identitetsleverandør
