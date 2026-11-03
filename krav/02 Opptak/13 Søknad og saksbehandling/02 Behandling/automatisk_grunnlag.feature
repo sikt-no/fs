@@ -28,7 +28,7 @@
 # - Vitnemålspoeng står i automatisk_poengberegning.feature (@OPT-BEH-BEH-018),
 #   og kravelementene i automatisk_kvalifisering.feature (@OPT-BEH-BEH-020).
 # - Søkere med flere vitnemål behandles i vitnemålsbehandlingen.
-@OPT-BEH-BEH-019 @must @planned @scope-automatisk-grunnlag-og-poeng @ref-OPT-BEH-BEH-012 @ref-OPT-BEH-BEH-018
+@OPT-BEH-BEH-019 @must @in-progress @scope-automatisk-grunnlag-og-poeng @ref-OPT-BEH-BEH-012 @ref-OPT-BEH-BEH-018
 Egenskap: Automatisk grunnlag
   Som saksbehandler
   ønsker jeg at saken får grunnlaget sitt automatisk når søkerens vitnemål og alder avgjør det
@@ -58,6 +58,7 @@ Egenskap: Automatisk grunnlag
     # egenskapene velges bare av saksbehandleren. Egenskapene står ikke i
     # grunnlag.feature ennå.
 
+    @implemented
     Scenariomal: Grunnlag ut fra førstegangsvitnemål og alder
       Gitt at regelverket har et grunnlag som krever førstegangsvitnemål og har aldersgrensen under 22 år
       Og at regelverket har et grunnlag som krever et vitnemål
@@ -73,6 +74,7 @@ Egenskap: Automatisk grunnlag
         | er førstegangsvitnemål      | 24    | krever et vitnemål         |
         | ikke er førstegangsvitnemål | 21    | krever et vitnemål         |
 
+    @implemented
     Scenario: Alderen regnes ut på datoen for aldersberegning
       Gitt at opptaket har 31.12.2026 som dato for aldersberegning
       Og at regelverket har et grunnlag med aldersgrensen under 22 år
@@ -81,6 +83,7 @@ Egenskap: Automatisk grunnlag
       Når søknaden behandles automatisk 01.09.2026
       Så får saken grunnlaget med aldersgrensen under 22 år
 
+    @implemented
     Scenario: Førstegangsvitnemål går foran
       Gitt at søkeren passer til et grunnlag som krever førstegangsvitnemål
       Og at søkeren også passer til et grunnlag som bare krever et vitnemål
@@ -107,16 +110,19 @@ Egenskap: Automatisk grunnlag
       Når søknaden behandles automatisk
       Så får saken ingen grunnlag automatisk
 
+    @implemented
     Scenario: Grunnlag uten egenskaper for automatikken settes ikke
       Gitt at regelverket har et grunnlag uten aldersgrense, uten krav om vitnemål og uten krav om førstegangsvitnemål
       Når søknaden behandles automatisk
       Så får ikke saken grunnlaget uten egenskaper for automatikken
 
+    @implemented
     Scenario: Bare grunnlag i regelverket til utdanningstilbudene i søknaden kan settes
       Gitt at søkeren passer til et grunnlag som ikke er med i regelverket til noen av utdanningstilbudene i søknaden
       Når søknaden behandles automatisk
       Så får ikke saken grunnlaget
 
+    @implemented
     Scenario: Grunnlag som ikke er aktivt, settes ikke
       Gitt at søkeren passer til et grunnlag som ikke er aktivt
       Når søknaden behandles automatisk
@@ -129,6 +135,7 @@ Egenskap: Automatisk grunnlag
     # automatiske behandlingen stopper for dem til saksbehandleren har valgt
     # vitnemålet.
 
+    @implemented
     Scenariomal: Ingen grunnlag settes automatisk når <grunn>
       Gitt at <grunn>
       Når søknaden behandles automatisk
@@ -141,6 +148,7 @@ Egenskap: Automatisk grunnlag
         | vitnemålet ikke gir generell studiekompetanse               |
         | ingen av grunnlagene i regelverket passer til søkeren       |
 
+    @implemented
     Scenario: Søker med flere vitnemål behandles ikke automatisk
       Gitt at søkeren har to elektroniske vitnemål som ikke er annullert
       Og at saksbehandleren ikke har valgt ett av vitnemålene
@@ -161,6 +169,7 @@ Egenskap: Automatisk grunnlag
       Når søknaden behandles automatisk
       Så får saken grunnlaget ut fra vitnemålet
 
+    @implemented
     Scenario: Annullert vitnemål teller ikke
       Gitt at søkeren har to elektroniske vitnemål
       Og at det ene vitnemålet er annullert
@@ -168,6 +177,7 @@ Egenskap: Automatisk grunnlag
       Når søknaden behandles automatisk
       Så får saken grunnlaget ut fra vitnemålet som ikke er annullert
 
+    @implemented
     Scenario: Grunnlaget settes etter GSK-konklusjonen
       Gitt at søkeren har ett elektronisk vitnemål som gir generell studiekompetanse
       Og at søknaden ikke har noen GSK-konklusjon
@@ -184,6 +194,7 @@ Egenskap: Automatisk grunnlag
       Når søknaden behandles automatisk
       Så har sakene hos "Universitetet i Oslo" og "UiT Norges arktiske universitet" det samme grunnlaget
 
+    @implemented
     Scenario: Grunnlaget settes av den automatiske behandlingen
       Gitt at søkeren har ett elektronisk vitnemål som gir generell studiekompetanse
       Når den automatiske behandlingen kjøres for søknaden
@@ -202,12 +213,14 @@ Egenskap: Automatisk grunnlag
 
   Regel: Grunnlag som saksbehandleren har valgt, endres ikke av automatikken
 
+    @implemented
     Scenario: Automatikken setter ikke grunnlag når saksbehandleren har lagt til et grunnlag
       Gitt at saksbehandleren har lagt til et grunnlag i saken
       Og at søkeren passer til et annet grunnlag
       Når søknaden behandles automatisk
       Så er grunnlagene i saken uendret
 
+    @implemented
     Scenario: Grunnlaget saksbehandleren legger til, gjelder bare saken hos organisasjonen
       Gitt at søknaden har saker hos "Universitetet i Oslo" og "UiT Norges arktiske universitet"
       Når saksbehandleren ved Universitetet i Oslo legger til grunnlaget "PRA"
@@ -220,18 +233,21 @@ Egenskap: Automatisk grunnlag
       Så er grunnlaget satt av saksbehandleren
       Og grunnlaget er ikke lenger satt automatisk
 
+    @implemented
     Scenario: Automatikken fjerner ikke grunnlag saksbehandleren har lagt til
       Gitt at saksbehandleren har lagt til et grunnlag i saken
       Og at søkeren ikke lenger passer til grunnlaget
       Når søknaden behandles automatisk
       Så har saken fortsatt grunnlaget
 
+    @implemented
     Scenario: Grunnlaget blir stående når studieønsket som ga det, fjernes
       Gitt at saken har et grunnlag som er satt automatisk
       Og at grunnlaget bare finnes i regelverket til "Informatikk, UiO"
       Når søkeren fjerner "Informatikk, UiO" fra søknaden
       Så har saken fortsatt grunnlaget
 
+    @implemented
     Scenario: Saksbehandleren fjerner et grunnlag som er satt automatisk
       Gitt at saken har et grunnlag som er satt automatisk
       Når saksbehandleren fjerner grunnlaget
@@ -291,6 +307,7 @@ Egenskap: Automatisk grunnlag
       Og kvotene søkeren kan plasseres i er oppdatert etter grunnlagene
       Og tilleggspoengene er regnet ut for grunnlagene
 
+    @implemented
     Scenario: Opptakskrav, kvoter og tilleggspoeng følger grunnlaget som er satt automatisk
       Gitt at søknaden ikke har noe grunnlag
       Når saken får et grunnlag automatisk

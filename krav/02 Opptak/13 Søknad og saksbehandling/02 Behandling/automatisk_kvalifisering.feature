@@ -61,7 +61,7 @@
 #   på hver sin branch.
 # - Hvordan saksbehandleren velger vitnemål for søkere med flere vitnemål,
 #   står i velge_vitnemål_som_grunnlag.feature (@OPT-BEH-BEH-004).
-@OPT-BEH-BEH-020 @must @planned @scope-automatisk-kvalifisering-og-poengsum
+@OPT-BEH-BEH-020 @must @in-progress @scope-automatisk-kvalifisering-og-poengsum
 Egenskap: Automatisk vurdering av spesielle opptakskrav
   Som saksbehandler
   ønsker jeg at systemet vurderer om søkerens elektroniske vitnemål oppfyller de spesielle opptakskravene
@@ -95,6 +95,7 @@ Egenskap: Automatisk vurdering av spesielle opptakskrav
     # Koblingen er kravkoden for vitnemålet, som settes på kravelementet i
     # regelverket. Én kravkode sjekker vitnemål fra både R94 og Kunnskapsløftet.
 
+    @implemented
     Scenario: Fagkrav som er oppfylt på vitnemålet
       Gitt at søkeren har ett elektronisk vitnemål som ikke er annullert
       Og at vitnemålet har Matematikk R1
@@ -102,6 +103,7 @@ Egenskap: Automatisk vurdering av spesielle opptakskrav
       Når søknaden behandles automatisk
       Så er fagkravet Matematikk R1 oppfylt
 
+    @implemented
     Scenario: Fagkrav som ikke er oppfylt på vitnemålet
       Gitt at søkeren har ett elektronisk vitnemål som ikke er annullert
       Og at vitnemålet ikke har Matematikk R1
@@ -109,6 +111,7 @@ Egenskap: Automatisk vurdering av spesielle opptakskrav
       Når søknaden behandles automatisk
       Så er fagkravet Matematikk R1 ikke oppfylt
 
+    @implemented
     Scenario: Karakteren fra vitnemålet registreres på fagkravet
       Gitt at søkeren har ett elektronisk vitnemål med karakteren 5 i Fysikk 1
       Og at søknaden har fagkravet Fysikk 1, koblet til vitnemålet
@@ -116,6 +119,7 @@ Egenskap: Automatisk vurdering av spesielle opptakskrav
       Så er fagkravet Fysikk 1 oppfylt
       Og fagkravet Fysikk 1 har karakteren 5
 
+    @implemented
     Scenario: Fagkrav uten karakter oppfylles uten karakter
       Gitt at søkeren har ett elektronisk vitnemål som ikke er annullert
       Og at vitnemålet har faget som fagkravet krever, uten tallkarakter
@@ -124,24 +128,28 @@ Egenskap: Automatisk vurdering av spesielle opptakskrav
       Så er fagkravet oppfylt
       Og fagkravet har ingen karakter
 
+    @implemented
     Scenario: Karakterkrav får karakteren fra vitnemålet
       Gitt at søkeren har ett elektronisk vitnemål med karakteren 4 i engelsk
       Og at søknaden har karakterkravet engelsk, koblet til vitnemålet
       Når søknaden behandles automatisk
       Så har karakterkravet engelsk karakteren 4
 
+    @implemented
     Scenario: Beste karakter gjelder for programfag matematikk
       Gitt at søkeren har ett elektronisk vitnemål med karakteren 5 i Matematikk R1 og karakteren 3 i Matematikk S1
       Og at søknaden har kravelementet programfag matematikk, koblet til vitnemålet
       Når søknaden behandles automatisk
       Så har kravelementet programfag matematikk karakteren 5
 
+    @implemented
     Scenario: Kravelement som ikke er koblet til vitnemålet, vurderes ikke
       Gitt at søkeren har ett elektronisk vitnemål som ikke er annullert
       Og at søknaden har et kravelement som ikke er koblet til vitnemålet
       Når søknaden behandles automatisk
       Så er kravelementet ikke vurdert
 
+    @implemented
     Scenario: Kravelementer fra en annen sak i søknaden vurderes ikke i saken
       # STEK-593.
       Gitt at søknaden har saker hos "Universitetet i Oslo" og "UiT Norges arktiske universitet"
@@ -150,6 +158,7 @@ Egenskap: Automatisk vurdering av spesielle opptakskrav
       Når kravelementene i saken hos "UiT Norges arktiske universitet" vurderes automatisk
       Så er "Matematikk R2" ikke vurdert i saken hos "UiT Norges arktiske universitet"
 
+    @implemented
     Scenario: Kravelement vurderes mot vitnemål fra R94
       Gitt at søkeren har ett elektronisk vitnemål fra R94
       Og at søknaden har et kravelement som er koblet til vitnemålet
@@ -167,6 +176,7 @@ Egenskap: Automatisk vurdering av spesielle opptakskrav
   Regel: Kravelementene vurderes bare mot ett entydig vitnemål
     # Har søkeren flere vitnemål, velger saksbehandleren vitnemålet først.
 
+    @implemented
     Scenariomal: Ingen automatisk vurdering når <grunn>
       Gitt at <grunn>
       Og at søknaden har et kravelement som er koblet til vitnemålet
@@ -195,7 +205,7 @@ Egenskap: Automatisk vurdering av spesielle opptakskrav
       Når søknaden behandles automatisk
       Så er kravelementet vurdert mot vitnemålet
 
-  @depends-on-OPT-REG-KRA-001 @ref-OPT-BEH-BEH-015 @ref-FLY-OPT-AUT-001
+  @depends-on-OPT-REG-KRA-001 @ref-OPT-BEH-BEH-015 @ref-FLY-OPT-AUT-001 @implemented
   Regel: Om søkeren er kvalifisert, avgjøres per grunnlag
     # Kravlistene er alternativer (ELLER), og kravelementene i en kravliste må
     # alle være oppfylt (OG), med mindre regelverket sier noe annet. Krever
@@ -231,7 +241,7 @@ Egenskap: Automatisk vurdering av spesielle opptakskrav
     # Avklart 30.10.2026: i den automatiske vurderingen avgjøres kvalifiseringen per grunnlag.
     # Om den også må avgjøres per poengvariant, er et spørsmål i OPT-BEH-BEH-022.
 
-  @ref-FLY-OPT-AUT-001
+  @ref-FLY-OPT-AUT-001 @implemented
   Regel: Kravelementene vurderes i den automatiske behandlingen
     # Vurderingen kommer etter poengberegningen og før kvalifiseringen beregnes
     # på nytt.
@@ -254,18 +264,21 @@ Egenskap: Automatisk vurdering av spesielle opptakskrav
     # saksbehandleren bare ser på, er ikke låst. Låsen gjelder ett kravelement,
     # ikke hele saken.
 
+    @implemented
     Scenario: Saksbehandleren overstyrer vurderingen automatikken har satt
       Gitt at søknaden har fagkravet Fysikk 1, vurdert automatisk som ikke oppfylt
       Når saksbehandleren setter at fagkravet Fysikk 1 er oppfylt
       Så er fagkravet Fysikk 1 oppfylt
       Og fagkravet Fysikk 1 er låst mot automatisk vurdering
 
+    @implemented
     Scenario: Saksbehandleren overstyrer karakteren som automatikken har satt
       Gitt at søknaden har fagkravet Fysikk 1, vurdert automatisk med karakteren 4
       Når saksbehandleren setter karakteren 5 på fagkravet Fysikk 1
       Så har fagkravet Fysikk 1 karakteren 5
       Og fagkravet Fysikk 1 er låst mot automatisk vurdering
 
+    @implemented
     Scenario: Kravelement som saksbehandleren vurderer, låses
       Gitt at søknaden har et kravelement som er vurdert automatisk
       Når saksbehandleren endrer vurderingen av kravelementet
@@ -277,17 +290,20 @@ Egenskap: Automatisk vurdering av spesielle opptakskrav
       Så er kravelementet låst mot automatisk vurdering
       Og vurderingen av kravelementet er som før
 
+    @implemented
     Scenario: Kravelement som saksbehandleren bare ser på, vurderes automatisk igjen
       Gitt at søknaden har et kravelement som er vurdert automatisk
       Og at saksbehandleren har sett på kravelementet uten å endre vurderingen eller velge "la stå"
       Når søknaden behandles automatisk
       Så er kravelementet vurdert automatisk på nytt
 
+    @implemented
     Scenario: Låst kravelement vurderes ikke på nytt
       Gitt at søknaden har et kravelement som er låst mot automatisk vurdering
       Når søknaden behandles automatisk
       Så er vurderingen av kravelementet uendret
 
+    @implemented
     Scenario: Andre kravelementer vurderes selv om saksbehandleren har vurdert ett
       Gitt at saksbehandleren har vurdert Matematikk R1 på søknaden
       Og at søknaden har fagkravet Fysikk 1, koblet til en kravkode som kan vurderes automatisk
@@ -301,11 +317,13 @@ Egenskap: Automatisk vurdering av spesielle opptakskrav
       Og søknaden behandles automatisk
       Så er kravelementet vurdert automatisk på nytt
 
+    @implemented
     Scenario: Unntak per grunnlag endres ikke
       Gitt at saksbehandleren har lagt inn et unntak for et kravelement på et grunnlag
       Når søknaden behandles automatisk
       Så er unntaket uendret
 
+  @implemented
   Regel: Når grunnlaget endres, vurderes kravene på nytt
 
     Scenario: Kravelementer for et grunnlag som fjernes, beholder vurderingen
@@ -338,7 +356,7 @@ Egenskap: Automatisk vurdering av spesielle opptakskrav
       Når saksbehandleren ser i endringsloggen
       Så ser saksbehandleren at kravelementet ble vurdert av den automatiske behandlingen
 
-    @openquestion
+    @openquestion @implemented
     Scenario: Finne søkere som ikke er kvalifisert
       # ÅPNE SPØRSMÅL:
       # - FS-klienten har rapporten FS102.004 «Ikke-kvalifiserte søkere –

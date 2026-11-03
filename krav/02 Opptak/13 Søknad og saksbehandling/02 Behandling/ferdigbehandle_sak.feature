@@ -1,5 +1,5 @@
 # language: no
-@OPT-BEH-BEH-025 @must @planned @scope-automatisk-ferdigbehandling @ref-OPT-BEH-BEH-004 @ref-OPT-BEH-BEH-018 @ref-OPT-BEH-BEH-019 @ref-OPT-BEH-BEH-020 @ref-OPT-BEH-BEH-032
+@OPT-BEH-BEH-025 @must @in-progress @scope-automatisk-ferdigbehandling @ref-OPT-BEH-BEH-004 @ref-OPT-BEH-BEH-018 @ref-OPT-BEH-BEH-019 @ref-OPT-BEH-BEH-020 @ref-OPT-BEH-BEH-032
 Egenskap: Ferdigbehandle en sak
   Som saksbehandler
   ønsker jeg at saker som kan behandles helt automatisk, blir ferdig behandlet uten at jeg gjør noe
@@ -54,11 +54,13 @@ Egenskap: Ferdigbehandle en sak
       Når søknaden behandles automatisk
       Så behandles ikke saken hos "Universitetet i Oslo" helautomatisk
 
+    @implemented
     Scenario: Saken behandles ikke helautomatisk før saksbehandleren har valgt vitnemål
       Gitt at "Kari Nordmann" har to vitnemål som gir GSK
       Når søknaden behandles automatisk
       Så behandles ikke saken hos "Universitetet i Oslo" helautomatisk
 
+    @implemented
     Scenario: Saken behandles ikke helautomatisk når søkeren har flere vitnemål, og bare ett gir GSK
       # Avklart 30.10.2026: det andre vitnemålet kan ha fag som gir søkeren flere poeng, så
       # saksbehandleren velger vitnemålet. Søknaden får likevel GSK-konklusjonen fra vitnemålet
@@ -175,6 +177,7 @@ Egenskap: Ferdigbehandle en sak
         | to grunnlag passer like godt                      | grunnlaget  |
         | opptaket mangler dato for aldersberegning         | grunnlaget  |
 
+  @implemented
   Regel: Saksbehandleren setter saken til ferdig behandlet når den automatiske behandlingen ikke har fullført
 
     Bakgrunn:

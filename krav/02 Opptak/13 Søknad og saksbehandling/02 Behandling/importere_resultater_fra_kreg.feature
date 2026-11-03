@@ -4,7 +4,7 @@
 # KregVgsParser og VgsLagringService lagrer dem i kompetanse.vgs_dokument med fag,
 # programområder og merknader. Hva som gjøres med resultatene etterpå (GSK, poeng, grunnlag og
 # kravelementer), står i kravene i @ref-taggene.
-@OPT-BEH-BEH-030 @must @planned @scope-automatisk-import-og-start @ref-OPT-BEH-BEH-015 @ref-OPT-BEH-BEH-018 @ref-OPT-BEH-BEH-019 @ref-OPT-BEH-BEH-020 @ref-OPT-BEH-BEH-032
+@OPT-BEH-BEH-030 @must @in-progress @scope-automatisk-import-og-start @ref-OPT-BEH-BEH-015 @ref-OPT-BEH-BEH-018 @ref-OPT-BEH-BEH-019 @ref-OPT-BEH-BEH-020 @ref-OPT-BEH-BEH-032
 Egenskap: Importere resultater fra KREG
   Som saksbehandler
   ønsker jeg at søkerens resultater fra videregående skole hentes fra KREG når saken er opprettet
@@ -24,17 +24,19 @@ Egenskap: Importere resultater fra KREG
   @ref-FLY-OPT-AUT-001 @ref-OPT-BEH-BEH-032
   Regel: Resultatene hentes når saken er opprettet
 
+    @implemented
     Scenario: Resultatene hentes når søkeren sender inn søknaden
       Gitt at søkeren har et vitnemål i KREG
       Når søkeren sender inn søknaden
       Så er vitnemålet importert
 
+    @implemented
     Scenario: Resultatene hentes når søknaden registreres på vegne av søkeren
       Gitt at søkeren har et vitnemål i KREG
       Når saksbehandleren registrerer søknaden på vegne av søkeren
       Så er vitnemålet importert
 
-    @openquestion
+    @openquestion @implemented
     Scenario: Resultatene hentes når en endring av søknaden gir en ny sak
       # Avklart 29.10.2026. Kode i dag: resultatene hentes på nytt hver gang søknaden fordeles på
       # nytt, også når endringen ikke gir en ny sak.
@@ -53,6 +55,7 @@ Egenskap: Importere resultater fra KREG
       Når søkeren endrer rekkefølgen på studieønskene
       Så er vitnemålet fra 2025 ikke importert
 
+    @implemented
     Scenario: Resultatene hentes først når saken er opprettet
       # Avklart 29.10.2026: uten sak er det ikke noe å behandle. Koden gjør dette i dag.
       Gitt at opptaket mangler saksbehandlertildelingsregel
@@ -77,23 +80,26 @@ Egenskap: Importere resultater fra KREG
         | programområdene                                 |
         | merknadene                                      |
 
+    @implemented
     Scenario: Søker med flere vitnemål får alle importert
       Gitt at søkeren har to vitnemål i KREG, ett fra 2024 og ett fra 2025
       Når søkerens resultater importeres
       Så er begge vitnemålene importert
 
+    @implemented
     Scenario: Kompetansebevis importeres
       Gitt at søkeren har et kompetansebevis i KREG
       Når søkerens resultater importeres
       Så er kompetansebeviset importert
 
+    @implemented
     Scenario: Vitnemål som er importert fra før, importeres ikke på nytt
       Gitt at søkerens vitnemål er importert
       Når søkerens resultater importeres på nytt
       Så har søkeren vitnemålet én gang
       Og det importerte vitnemålet er uendret
 
-  @ref-FLY-OPT-VIT-001
+  @ref-FLY-OPT-VIT-001 @implemented
   Regel: Et vitnemål som er annullert i KREG, er annullert i opptakssystemet
 
     Scenario: Annullert vitnemål importeres som annullert
@@ -119,7 +125,7 @@ Egenskap: Importere resultater fra KREG
 
   Regel: Søknaden behandles videre når resultatene ikke kan hentes
 
-    @openquestion
+    @openquestion @implemented
     Scenario: Søker uten fødselsnummer får ingen resultater importert
       # ÅPNE SPØRSMÅL:
       # - Skal søkere med D-nummer slås opp i KREG?

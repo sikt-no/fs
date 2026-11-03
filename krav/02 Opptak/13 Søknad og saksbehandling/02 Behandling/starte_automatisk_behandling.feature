@@ -1,5 +1,5 @@
 # language: no
-@OPT-BEH-BEH-032 @must @planned @scope-automatisk-import-og-start @ref-OPT-BEH-BEH-025
+@OPT-BEH-BEH-032 @must @in-progress @scope-automatisk-import-og-start @ref-OPT-BEH-BEH-025
 Egenskap: Starte automatisk behandling
   Som saksbehandler
   ønsker jeg at den automatiske behandlingen starter av seg selv for hver ny sak
@@ -106,14 +106,14 @@ Egenskap: Starte automatisk behandling
       Så har saken behandlingsstatusen "Behandlet"
       Og saksbehandleren ser at saken er behandlet automatisk
 
-    @depends-on-OPT-BEH-BEH-011
+    @depends-on-OPT-BEH-BEH-011 @implemented
     # OPT-BEH-BEH-011: «Saksbehandlende organisasjon ser bare saker hos organisasjonen»
     Scenario: Saksbehandleren starter bare behandlingen for saker hos organisasjonen
       Gitt at søknaden til "Kari Nordmann" har en sak hos "Universitetet i Bergen"
       Når saksbehandleren ved Universitetet i Oslo vil starte den automatiske behandlingen
       Så kan saksbehandleren ikke starte behandlingen for saken hos "Universitetet i Bergen"
 
-  @ref-OPT-BEH-BEH-019 @ref-OPT-BEH-BEH-020 @ref-OPT-BEH-BEH-018
+  @ref-OPT-BEH-BEH-019 @ref-OPT-BEH-BEH-020 @ref-OPT-BEH-BEH-018 @implemented
   Regel: Det saksbehandleren har gjort, endres ikke av automatikken
     # Reglene for hvert steg står i kravene til grunnlaget, poengene og kravelementene.
 

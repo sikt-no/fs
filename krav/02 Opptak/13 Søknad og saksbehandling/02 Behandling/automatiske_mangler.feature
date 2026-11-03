@@ -2,7 +2,7 @@
 # GitHub: #413
 # Reglene er skilt ut fra OPT-BEH-BEH-008 (søknadsmangler.feature) 2026-11-02, så de kan leveres
 # med den automatiske saksbehandlingen uten resten av søknadsmangler.
-@OPT-BEH-BEH-036 @must @planned @scope-automatisk-ferdigbehandling
+@OPT-BEH-BEH-036 @must @in-progress @scope-automatisk-ferdigbehandling
 Egenskap: Automatiske mangler
   Som saksbehandler ved saksbehandlende organisasjon
   ønsker jeg at saken får mangler automatisk når søkeren ikke er kvalifisert, eller når generell studiekompetanse fullføres i vår
@@ -40,6 +40,7 @@ Egenskap: Automatiske mangler
     # Avklart 30.10.2026: saksbehandleren kan ikke kommentere, sjekke ut eller slette en
     # automatisk mangeltekst.
 
+    @implemented
     Scenariomal: Saken får en automatisk mangeltekst når <vurdert av> vurderer at et kravelement ikke er oppfylt
       Gitt at søknadsalternativene i saken hos "Universitetet i Oslo" har kravelementet "Matematikk R2"
       Når <vurdert av> vurderer at "Matematikk R2" ikke er oppfylt
@@ -51,6 +52,7 @@ Egenskap: Automatiske mangler
         | den automatiske behandlingen             |
         | saksbehandleren ved Universitetet i Oslo |
 
+    @implemented
     Scenario: Saken får ikke mangeltekst når søkeren er kvalifisert på en annen kravliste
       Gitt at "Informatikk, UiO" har kravlisten "Matematikk R2" og kravlisten "Matematikk R1 og Fysikk 2"
       Og at vitnemålet har "Matematikk R1" og "Fysikk 2", men ikke "Matematikk R2"
@@ -58,6 +60,7 @@ Egenskap: Automatiske mangler
       Så er søkeren kvalifisert for "Informatikk, UiO"
       Og saken har ikke en automatisk mangeltekst for "Matematikk R2"
 
+    @implemented
     Scenario: Saken får mangeltekster i alle kravlistene når søkeren ikke er kvalifisert på noen
       Gitt at "Informatikk, UiO" har kravlisten "Matematikk R2" og kravlisten "Matematikk R1 og Fysikk 2"
       Og at vitnemålet har "Matematikk R1", men ikke "Matematikk R2" og ikke "Fysikk 2"
@@ -65,6 +68,7 @@ Egenskap: Automatiske mangler
       Så har saken en automatisk mangeltekst for "Matematikk R2"
       Og saken har en automatisk mangeltekst for "Fysikk 2"
 
+    @implemented
     Scenariomal: De automatiske mangeltekstene slettes når <vurdert av> vurderer at søkeren er kvalifisert
       Gitt at saken hos "Universitetet i Oslo" har en automatisk mangeltekst som viser at "Matematikk R2" ikke er oppfylt
       Når <vurdert av> vurderer at "Matematikk R2" er oppfylt
@@ -100,6 +104,7 @@ Egenskap: Automatiske mangler
       Når søkeren åpner dokumentasjonssiden i Min kompetanse
       Så ser søkeren mangelteksten for "Matematikk R2" under "Informatikk, UiO"
 
+    @implemented
     Scenario: Søkeren ser ikke mangelteksten når søknadsalternativet er fjernet
       # Avklart 30.10.2026: mangelteksten slettes ikke, men vises ikke lenger.
       Gitt at saken hos "Universitetet i Oslo" har en automatisk mangeltekst for "Matematikk R2" for "Informatikk, UiO"
@@ -108,6 +113,7 @@ Egenskap: Automatiske mangler
       Så ser ikke søkeren mangelteksten for "Matematikk R2" i Min kompetanse
       Og saken har fortsatt den automatiske mangelteksten for "Matematikk R2"
 
+    @implemented
     Scenario: Saksbehandleren kan ikke endre en automatisk mangeltekst
       Gitt at saken hos "Universitetet i Oslo" har en automatisk mangeltekst for "Matematikk R2"
       Når saksbehandleren ved Universitetet i Oslo åpner manglene i saken
