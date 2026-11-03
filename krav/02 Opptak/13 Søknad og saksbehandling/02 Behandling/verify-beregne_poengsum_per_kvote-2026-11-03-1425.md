@@ -21,7 +21,7 @@ Stiene er forkortet:
 
 ## Oppsummering
 
-- Scenarioer: 12 funnet, 0 ikke funnet, 1 usikker, av 13
+- Scenarioer: 11 funnet, 0 ikke funnet, 2 usikker, av 13
 - Krav levert (status satt til `@implemented`): 0
 - Deler levert (status fjernet fra delen): 0
 - Krav og deler som ikke er levert: 1
@@ -52,7 +52,7 @@ Avhengigheter: 2 på nivå 1, 0 av dem ikke `@implemented`.
 | `@OPT-BEH-BEH-031` | Poengsummen følger poengformelen til kvotetypen | funnet | `P-poeng/PoengberegningService.java:362-388` — formelen fra `KVOTETYPE.POENGFORMEL_KODE_DEFAULT`; `P-poeng/PoengberegningEvaluator.java:119-122` summerer |
 | `@OPT-BEH-BEH-031` | Grunnlag søkeren ikke er kvalifisert på, gir ingen poengsum | funnet | `P-poeng/PoengsumService.java:164-167, 205-215` — grunnlag uten kvalifisering gir ingen rad |
 | `@OPT-BEH-BEH-031` | Poengsummen regnes ut på nytt når <endring> | funnet | `P-sak/PropageringService.java:52-112, 170-174` — `oppdaterPoengsumIsolert` fra alle inngangene; kalt ved grunnlag (`LeggTilGrunnlagService.java:48`), poeng (`SettPoengService.java:46`), kravelement (`KvalifiserKravelementV4Service.java:63`) og kvoteplassering (`EndreKvoteplasseringService.java:51`), også fra `AutomatiskSaksbehandlingService.java:117, 135` |
-| `@OPT-BEH-BEH-031` | Uendret poengsum gir ikke nytt innslag i endringsloggen | funnet | `P-poeng/PoengsumService.java:332-372` — `skrivDiff` skriver bare rader som er endret (`compareTo != 0`), og ingen setning når ingenting er endret; endringsloggen er `audit_table('saksbehandling.sak_poengsum')` i `P-mig/V291__saksbehandling_skjema.sql:1498` |
+| `@OPT-BEH-BEH-031` | Uendret poengsum gir ikke nytt innslag i endringsloggen | usikker | `P-poeng/PoengsumService.java:332-372` — `skrivDiff` skriver bare rader som er endret (`compareTo != 0`), og ingen setning når ingenting er endret. Endringsloggen på `sak_poengsum` (`P-mig/V291__saksbehandling_skjema.sql:1498`) er stoppet: `P-mig/V480__stopp_endringslogg.sql:13-28` fjernet audit-triggerne i `saksbehandling`, så endringsloggen får ingen innslag i det hele tatt. Rettet etter verifiseringen av OPT-BEH-BEH-020 samme dag |
 | `@OPT-BEH-BEH-031` | Poengsummen i de andre kvotene regnes ut når én kvote feiler | funnet | `P-poeng/PoengberegningService.java:146-188` — try/catch per (kvote × grunnlag), løkka går videre |
 | `@OPT-BEH-BEH-031` | Poengtypen viser hvorfor poengsummen ikke kan regnes ut | usikker | Årsaken lagres per kvote i `sak_poengsum_merknad` (`P-poeng/PoengsumService.java:186-187, 217-253`, `P-mig/V497__sak_poengsum_merknad.sql`), og vises i oppsummeringen under poengtabellen som «<vitnemålsnr>: <årsak> (<grunnlag>)» (`A-opps/components/PoengsumMerknader/PoengsumMerknader.tsx:16-31`, `A-opps/OppsummeringsCardNy/OppsummeringsCardNy.tsx:201-211, 320`). På poengtypen skrives «Poengberegning feilet: Mangler poeng for X/Y» bare for `ManglerPoeng` (`P-poeng/PoengService.java:141-156`), og fs-admin viser det ikke: `PoengberegningCard.tsx:15-40` spør ikke etter `merknadAutomatisk`. En poengtype uten poeng gir bare feil når minimum > 0, ellers regnes den som 0 (`P-poeng/PoengberegningEvaluator.java:193-200`). Årsaken vises altså per kvote, ikke på poengtypen. Avgjort av brukeren: vet ikke |
 | `@OPT-BEH-BEH-031` | Poengsummene fjernes når søkeren ikke er plassert i noen kvote | funnet | `P-poeng/PoengsumService.java:76-79` — `slettAlle`, også merknadene |
@@ -115,7 +115,7 @@ Ingen.
 
 **Delvis levert**
 
-- `@OPT-BEH-BEH-031` — Beregne poengsum per kvote (`krav/02 Opptak/13 Søknad og saksbehandling/02 Behandling/beregne_poengsum_per_kvote.feature`, `@in-progress` → `@in-progress`, 12/13 funnet) — `@implemented` på: Regel: Poengsummen regnes ut på nytt når det den bygger på, endres (linje 68, og `@implemented` fjernes fra Scenariomal på linje 70)
+Ingen. (Forslaget om `@implemented` på Regel: Poengsummen regnes ut på nytt når det den bygger på, endres, er trukket: «Uendret poengsum gir ikke nytt innslag i endringsloggen» er usikker.)
 
 **Kan slettes**
 
@@ -123,7 +123,7 @@ Ingen.
 
 **Blir stående**
 
-- `@OPT-BEH-BEH-031` — Beregne poengsum per kvote (`@in-progress`, 12/13 funnet) — «Poengtypen viser hvorfor poengsummen ikke kan regnes ut» er usikker: årsaken vises per kvote i oppsummeringen, ikke på poengtypen
+- `@OPT-BEH-BEH-031` — Beregne poengsum per kvote (`@in-progress`, 11/13 funnet) — «Poengtypen viser hvorfor poengsummen ikke kan regnes ut» er usikker: årsaken vises per kvote i oppsummeringen, ikke på poengtypen. «Uendret poengsum gir ikke nytt innslag i endringsloggen» er usikker: endringsloggen er stoppet (V480)
 
 ## Levert
 
@@ -133,7 +133,7 @@ Ingen.
 
 | Feature-ID | Egenskap eller del | Status | Gating funnet | Hvorfor |
 | --- | --- | --- | --- | --- |
-| `@OPT-BEH-BEH-031` | Beregne poengsum per kvote | `@in-progress` | 12/13 | 0 ikke funnet, 1 usikker. Brukeren sa nei til `@implemented` på Regel: Poengsummen regnes ut på nytt når det den bygger på, endres |
+| `@OPT-BEH-BEH-031` | Beregne poengsum per kvote | `@in-progress` | 11/13 | 0 ikke funnet, 2 usikker. Brukeren sa nei til `@implemented` på Regel: Poengsummen regnes ut på nytt når det den bygger på, endres |
 
 ## Slettet
 
@@ -145,6 +145,7 @@ Ingen.
 
 ## Oppfølging
 
+- **Endringsloggen er stoppet:** `P-mig/V480__stopp_endringslogg.sql:13-28` fjernet audit-triggerne i `saksbehandling`. «Uendret poengsum gir ikke nytt innslag i endringsloggen» kan ikke verifiseres før det finnes en erstatning (sporingsloggen). Resultatet ble rettet fra `funnet` til `usikker` etter at rapporten først ble skrevet.
 - **Tilgang uten organisasjonsgrense:** `sak_poengsum_merknad` sjekker bare handlingen, ikke organisasjonen, i motsetning til `sak_poengsum` (`P-mig/V497__sak_poengsum_merknad.sql:61-79` mot `P-mig/V493__tilbyder_ser_saksbehandlingen.sql:134-141`). En saksbehandler med `MODIFISERE_SØKNADSBEHANDLING` i én organisasjon kan potensielt skrive årsaker i en sak hos en annen. Bør rettes i fs-plattform med en ny migrering.
 - **Feil i merknadsskrivingen kan velte transaksjonen:** `registrerPoengberegningsfeilPaRad` fanger `RuntimeException` i samme transaksjon uten savepoint (`P-poeng/PoengberegningService.java:267-277`). En SQL-feil der setter Postgres-transaksjonen i aborted-tilstand, så kommentaren «skal ikke velte beregningen» holder sannsynligvis ikke.
 - **Bruddet i flyten:** `@FLY-OPT-AUT-001` (fasen «Søkeren får poengsum per kvote …») bygger på kravet. Scenarioet «Saken blir ikke ferdig behandlet når poengene ikke kan avgjøres» der får nå en synlig årsak i oppsummeringen.
