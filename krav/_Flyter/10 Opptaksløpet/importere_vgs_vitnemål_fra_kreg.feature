@@ -13,11 +13,8 @@ Egenskap: Importere VGS-vitnemål fra KREG
 
   # Fasene er etter prosesstegningen «Importer VGS-vitnemål fra KREG» (2026-10-29).
   # Underprosessen «Håndter annullert vitnemål» er ikke tegnet.
-  # Endret 30.10.2026: den første versjonen går gjennom alle aktive søkere hver gang importen
-  # kjører, og henter vitnemålene fra KREG for hver søker. Om noe er nytt eller annullert, ses
-  # ved å sammenligne med vitnemålene som er importert. I neste versjon leser importen
-  # hendelsesloggen i KREG, og henter bare vitnemålene for søkerne KREG har hendelser for.
-  # Det kommer som en endring av flyten når hendelsesloggen i KREG er klar.
+  # Om et vitnemål er nytt eller annullert, ses ved å sammenligne med vitnemålene som er
+  # importert.
   # Et vitnemål som finnes fra før og ikke er annullert i KREG, endres ikke. Det gjelder også
   # når KREG har opphevet en annullering (se OPT-BEH-BEH-030).
   # Flyten beskriver vitnemålene. Kompetansebevis søkeren har i KREG, importeres på samme
