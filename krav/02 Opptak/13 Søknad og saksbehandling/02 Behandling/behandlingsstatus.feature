@@ -8,10 +8,10 @@ Egenskap: Behandlingsstatus
 
   Behandlingsstatusen viser hvor langt saksbehandlingen har kommet. En sak har én av tre
   statuser:
-  - «Ikke behandlet»: ingen saksbehandler har sett på eller gjort noe med saken ennå. Den
+  - «Ikke behandlet»: ingen saksbehandler har gjort noe med saken ennå. Den
     automatiske behandlingen endrer ikke statusen, bortsett fra å sette saken til ferdig
     behandlet.
-  - «Under behandling»: noen har sett på eller gjort noe med saken.
+  - «Under behandling»: noen har gjort noe med saken.
   - «Behandlet»: saksbehandleren har gjort det som kan gjøres i saken. Saken er enten
     ferdig, eller venter på ny informasjon fra søkeren.
 
@@ -80,7 +80,11 @@ Egenskap: Behandlingsstatus
       Og saksbehandleren ser at saken må ha minst én mangel eller ett grunnlag for å bli "Behandlet"
 
   @ref-OPT-BEH-BEH-032
-  Regel: Saken blir Under behandling når saksbehandleren endrer vurderingen eller leser et dokument
+  Regel: Saken blir Under behandling når saksbehandleren endrer vurderingen eller markerer et dokument som lest
+    # Avklart 2026-11-03: behandlingsstatusen endres ikke før saksbehandleren gjør en endring i
+    # saken. Å se på saken eller et dokument er ikke en endring. Å markere et dokument som lest er
+    # det. Før stod det at saken ble Under behandling fra Behandlet når saksbehandleren leste et
+    # dokument. Kode i dag: SettSaksdokumentErLestService endrer bare statusen fra Ikke behandlet.
 
     Scenariomal: Saken blir Under behandling når saksbehandleren <handling>
       Gitt at saken har behandlingsstatusen "<fra>"
@@ -89,14 +93,13 @@ Egenskap: Behandlingsstatus
       Og saksbehandleren ser at behandlingsstatusen er endret til "Under behandling"
 
       Eksempler:
-        | fra            | handling                  |
-        | Ikke behandlet | registrerer et grunnlag   |
-        | Behandlet      | endrer kvalifiseringen    |
-        | Behandlet      | endrer poengene           |
-        | Behandlet      | endrer kvoteplasseringen  |
-        | Ikke behandlet | registrerer en mangel     |
-        | Ikke behandlet | leser et dokument i saken |
-        | Behandlet      | leser et dokument i saken |
+        | fra            | handling                              |
+        | Ikke behandlet | registrerer et grunnlag               |
+        | Behandlet      | endrer kvalifiseringen                |
+        | Behandlet      | endrer poengene                       |
+        | Behandlet      | endrer kvoteplasseringen              |
+        | Ikke behandlet | registrerer en mangel                 |
+        | Ikke behandlet | markerer et dokument i saken som lest |
 
     @implemented
     Scenariomal: Behandlingsstatusen endres ikke når saksbehandleren <handling>
@@ -108,6 +111,21 @@ Egenskap: Behandlingsstatus
         | handling                                   |
         | skriver en merknad                         |
         | tilordner saken til en annen saksbehandler |
+
+    Scenario: Å markere et dokument som lest endrer ikke statusen på en sak som er Behandlet
+      Gitt at saken har behandlingsstatusen "Behandlet"
+      Når saksbehandleren ved Universitetet i Oslo markerer et dokument i saken som lest
+      Så har saken fortsatt behandlingsstatusen "Behandlet"
+
+    Scenariomal: Behandlingsstatusen <status> endres ikke når saksbehandleren åpner saken
+      Gitt at saken har behandlingsstatusen "<status>"
+      Når saksbehandleren ved Universitetet i Oslo åpner saken
+      Så har saken fortsatt behandlingsstatusen "<status>"
+
+      Eksempler:
+        | status         |
+        | Ikke behandlet |
+        | Behandlet      |
 
     @implemented
     Scenario: Ny dokumentasjon endrer ikke behandlingsstatusen
@@ -125,7 +143,7 @@ Egenskap: Behandlingsstatus
       Og saksloggen viser når endringen skjedde, og at årsaken var at <årsak>
 
       Eksempler:
-        | hendelse                                                                     | til              | årsak                                   |
-        | saksbehandleren ved Universitetet i Oslo setter saken til "Under behandling" | Under behandling | saksbehandleren endret statusen         |
-        | saksbehandleren ved Universitetet i Oslo leser et dokument i saken           | Under behandling | saksbehandleren leste et dokument       |
-        | den automatiske behandlingen setter saken til ferdig behandlet               | Behandlet        | den automatiske behandlingen var ferdig |
+        | hendelse                                                                       | til              | årsak                                         |
+        | saksbehandleren ved Universitetet i Oslo setter saken til "Under behandling"   | Under behandling | saksbehandleren endret statusen               |
+        | saksbehandleren ved Universitetet i Oslo markerer et dokument i saken som lest | Under behandling | saksbehandleren markerte et dokument som lest |
+        | den automatiske behandlingen setter saken til ferdig behandlet                 | Behandlet        | den automatiske behandlingen var ferdig       |

@@ -133,7 +133,10 @@ Egenskap: Ferdigbehandle en sak
     # automatisk, og se hva den automatiske behandlingen har gjort, og når. Saksbehandleren skal
     # ikke måtte ta stilling til noe, og det skal ikke stoppe noe. Det gjelder også varselet om at
     # opptakssystemet er uenig med skolen om GSK.
-    # At GSK-konklusjonen er satt automatisk, står i OPT-BEH-BEH-015 («Sporbarhet»).
+    # At GSK-konklusjonen er satt automatisk, står i OPT-BEH-BEH-015 («Sporbarhet»). At den
+    # automatiske behandlingen satte saken til ferdig behandlet, og når, står i OPT-BEH-BEH-029
+    # («Saksloggen viser endringene i behandlingsstatusen»). At statusen ikke endres når
+    # saksbehandleren åpner saken, står også i OPT-BEH-BEH-029.
     # Avklart 2026-11-03: hvor saksbehandleren ser det (hendelsesloggen for saken i
     # OPT-BEH-BEH-016, ved hvert steg i saken, eller begge steder), er et designspørsmål, og
     # hører hjemme i implementasjonsdetaljene.
@@ -144,16 +147,12 @@ Egenskap: Ferdigbehandle en sak
 
     Scenario: Saksbehandleren ser hva den automatiske behandlingen har avgjort
       Når saksbehandleren ved Universitetet i Oslo åpner saken
-      Så ser saksbehandleren at GSK-konklusjonen, grunnlaget, poengene, kravelementene og kvoten er avgjort av den automatiske behandlingen
-      Og saksbehandleren ser at den automatiske behandlingen satte saken til ferdig behandlet
+      Så ser saksbehandleren at grunnlaget, poengene, kravelementene og kvoten er avgjort av den automatiske behandlingen
       Og saksbehandleren ser når den automatiske behandlingen avgjorde hvert steg
 
-    Scenario: Saken er fortsatt ferdig behandlet når saksbehandleren har sett på saken
-      Når saksbehandleren ved Universitetet i Oslo åpner saken
-      Så er saken hos "Universitetet i Oslo" fortsatt ferdig behandlet
-
-    @depends-on-OPT-BEH-BEH-015
+    @depends-on-OPT-BEH-BEH-015 @depends-on-OPT-BEH-BEH-029
     # OPT-BEH-BEH-015: «Saksbehandleren får varsel når opptakssystemet er uenig med skolen»
+    # OPT-BEH-BEH-029: «Saken blir Under behandling når saksbehandleren endrer vurderingen eller markerer et dokument som lest»
     Scenario: Varselet om uenighet om GSK krever ikke at saksbehandleren gjør noe
       Gitt at opptakssystemet er uenig med skolen om GSK for vitnemålet
       Når saksbehandleren ved Universitetet i Oslo åpner saken
