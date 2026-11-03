@@ -1,6 +1,6 @@
 # language: no
 # GitHub: #591, #592
-@OPT-OPT-UTD-006 @must @draft @scope-utdanningstilbud-i-opptak-2027
+@OPT-OPT-UTD-006 @must @in-progress @scope-utdanningstilbud-i-opptak-2027
 Egenskap: Fange opp endringer fra utdanningsregisteret
   Som opptaksforvalter
   ønsker jeg at endringer på utdanninger i utdanningsregisteret kommer med over i opptaket
@@ -31,7 +31,7 @@ Egenskap: Fange opp endringer fra utdanningsregisteret
       Når opptaksforvalter søker på "Bachelor i sykepleie"
       Så finner opptaksforvalter utdanningstilbudet "Bachelor i sykepleie, høst 2027"
 
-  @openquestion
+  @implemented @openquestion
   # ÅPNE SPØRSMÅL:
   # - Trekkes utdanningstilbudet automatisk, eller må opptaksforvalter trekke det selv?
   # - Hvem får beskjed: opptaksforvalter ved lærestedet, ved forvaltende organisasjon, eller begge?
@@ -51,6 +51,7 @@ Egenskap: Fange opp endringer fra utdanningsregisteret
 
   Regel: Reaktivering i utdanningsregisteret fanges opp i opptaket (#592)
 
+    @implemented
     Scenario: Reaktivert utdanningsinstans blir tilgjengelig igjen
       Gitt at utdanningsinstansen for "Vernepleie, høst 2027" er deaktivert i utdanningsregisteret
       Og at utdanningstilbudet ikke er lagt til i opptaket

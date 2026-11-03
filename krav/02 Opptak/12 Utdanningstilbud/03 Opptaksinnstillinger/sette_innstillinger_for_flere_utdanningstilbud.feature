@@ -1,6 +1,6 @@
 # language: no
 # GitHub: #599
-@OPT-OPT-UTD-008 @must @draft @scope-innstillinger-for-flere-utdanningstilbud
+@OPT-OPT-UTD-008 @must @implemented @scope-innstillinger-for-flere-utdanningstilbud
 Egenskap: Sette innstillinger for flere utdanningstilbud
   Som opptaksforvalter
   ønsker jeg å sette innstillinger som gjelder for flere utdanningstilbud av gangen

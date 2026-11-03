@@ -34,7 +34,7 @@ Egenskap: Legge til utdanningstilbud i opptak
       Når opptaksforvalter velger alle utdanningstilbudene i listen og legger dem til i opptaket
       Så legges alle utdanningstilbudene i den filtrerte listen til i opptaket
 
-  @depends-on-OPT-OPT-UTD-005
+  @implemented @depends-on-OPT-OPT-UTD-005
   Regel: Opptaksforvalter ser campus for utdanningstilbudene som kan legges til
 
     Scenario: Se campus i listen over utdanningstilbud som kan legges til
@@ -154,6 +154,7 @@ Egenskap: Legge til utdanningstilbud i opptak
       Når utdanningen til "Sykepleie, høst 2027" endres i utdanningsregisteret "2027-06-10"
       Så oppdateres utdanningstilbudet "Sykepleie, høst 2027" i opptaket med endringen
 
+  @implemented
   Regel: Opptaksforvalter ved deltakende organisasjon kan bare redigere utdanningstilbud organisasjonen tilbyr
     # Jira: SHI-747
 

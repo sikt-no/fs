@@ -1,6 +1,6 @@
 # language: no
 # Jira: SHI-780
-@OPT-OPT-UTD-033 @must @draft @scope-utdanningstilbud-2027
+@OPT-OPT-UTD-033 @must @in-progress @scope-utdanningstilbud-2027
 Egenskap: Angi alternativt visningsnavn til Min kompetanse
   Som opptaksforvalter
   ønsker jeg å angi et alternativt navn på utdanningstilbudet på flere språk
@@ -12,6 +12,7 @@ Egenskap: Angi alternativt visningsnavn til Min kompetanse
   Bakgrunn:
     Gitt at opptaksforvalter har åpnet et utdanningstilbud
 
+  @implemented
   Regel: Alternativt visningsnavn kan angis per språk
 
     Scenariomal: Angi alternativt visningsnavn på <språk>
@@ -25,6 +26,7 @@ Egenskap: Angi alternativt visningsnavn til Min kompetanse
         | engelsk    |
         | nordsamisk |
 
+  @implemented
   Regel: Utdanningstilbudet viser både navnet fra utdanningsregisteret og det alternative visningsnavnet
 
     Scenario: Se navnet fra utdanningsregisteret og det alternative visningsnavnet
@@ -38,7 +40,7 @@ Egenskap: Angi alternativt visningsnavn til Min kompetanse
       Så kan opptaksforvalter endre det alternative visningsnavnet
       Men opptaksforvalter kan ikke endre navnet fra utdanningsregisteret
 
-  @depends-on-OPT-OVO-FRI-001 @depends-on-OPT-OPT-UTD-002
+  @implemented @depends-on-OPT-OVO-FRI-001 @depends-on-OPT-OPT-UTD-002
   Regel: Deltakende organisasjoner kan endre det alternative visningsnavnet bare i perioden opptaket er åpent for redigering
     # Når redigering av utdanningstilbud åpner og stenger, settes i fristene for opptaket.
     # Bygger på «Deltakende organisasjoner kan knytte til og redigere utdanningstilbud bare i perioden opptaket er åpent for redigering» i OPT-OPT-UTD-002.
@@ -81,6 +83,7 @@ Egenskap: Angi alternativt visningsnavn til Min kompetanse
         | engelsk    | Nursing, part-time Gjøvik        |
         | nordsamisk | Buohccidivššár, oasseáigi Gjøvik |
 
+    @implemented
     Scenario: Søkeren ser navnet fra utdanningsregisteret når det alternative visningsnavnet ikke er angitt
       Gitt at utdanningstilbudet ikke har noe alternativt visningsnavn
       Og at utdanningstilbudet har navnet "Bachelor i sykepleie" fra utdanningsregisteret

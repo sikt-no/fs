@@ -35,6 +35,7 @@ Egenskap: Trekke utdanningstilbud fra opptak
       Så varsles opptaksforvalter om konsekvensen av å trekke
       Og utdanningstilbudet trekkes fra opptaket
 
+    @implemented
     Scenario: Deltakende organisasjon kan ikke trekke utdanningstilbud en annen organisasjon tilbyr
       # Jira: SHI-747
       Gitt at opptaksforvalter er ved deltakende organisasjon "Universitetet i Oslo"
