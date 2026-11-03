@@ -23,8 +23,9 @@ Egenskap: Velge vitnemål som grunnlag for poengberegningen
   grunnlag låser poengene mot automatisk reberegning.
 
   Valget gjelder ett vitnemål for hele saken. Å velge vitnemål og fag per
-  poengvariant kommer i L3 (velge_fag_per_poengvariant.feature), og manuell
-  inntasting av fag i L4 (legge_inn_og_endre_fag.feature). Visningen av
+  poengvariant kommer i L3 (velge_fag_per_poengvariant.feature), endring av
+  fag i L4a (endre_fag_i_grunnlaget.feature), og manuell inntasting av fag i
+  L4b (legge_inn_vitnemål_manuelt.feature). Visningen av
   vitnemålene er L1 (vise_elektroniske_vitnemål.feature).
 
   Bakgrunn:
@@ -120,6 +121,13 @@ Egenskap: Velge vitnemål som grunnlag for poengberegningen
     Bakgrunn:
       Gitt jeg har rettighet til å se og endre søknadsbehandling ved organisasjonen som behandler saken
 
+    @openquestion
+    # ÅPNE SPØRSMÅL:
+    # - Skal vitnemålsbehandleren ha en egen handling for å beregne poengene,
+    #   en egen handling for å lagre, eller begge? Uten en handling for å
+    #   beregne blir poengene beregnet automatisk på nytt hver gang grunnlaget
+    #   endres. Spørsmålet gjelder også fagvalget i L3, endringene i L4a og
+    #   kalkulatoren i L4b. (Fra gjennomgangen av L3 og L4, 03.11.2026.)
     Scenario: Poengene er tomme til jeg beregner dem
       Gitt jeg har lagt et vitnemål til grunn
       Når jeg endrer grunnlaget

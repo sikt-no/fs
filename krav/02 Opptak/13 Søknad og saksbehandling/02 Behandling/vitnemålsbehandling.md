@@ -11,7 +11,8 @@ Kravet var én fil (`vitnemålsbehandling.feature`, `@OPT-BEH-BEH-004`) fram til
 | L1 Vise vitnemålene | [vise_elektroniske_vitnemål.feature](vise_elektroniske_vitnemål.feature) | `@OPT-BEH-BEH-005` | #613 | — | liten | `@in-progress` |
 | L2 Velge ett vitnemål for hele saken | [velge_vitnemål_som_grunnlag.feature](velge_vitnemål_som_grunnlag.feature) | `@OPT-BEH-BEH-004` | #608 | L1 | middels | `@in-progress` |
 | L3 Fagvalg per poengvariant | [velge_fag_per_poengvariant.feature](velge_fag_per_poengvariant.feature) | `@OPT-BEH-BEH-022` | #609 | L2 | middels | `@draft` |
-| L4 Manuell inntasting og endring av fag | [legge_inn_og_endre_fag.feature](legge_inn_og_endre_fag.feature) | `@OPT-BEH-BEH-023` | #610 | L2, L3 | stor | `@draft` |
+| L4a Endre fag | [endre_fag_i_grunnlaget.feature](endre_fag_i_grunnlaget.feature) | `@OPT-BEH-BEH-023` | #610 | L2, L3 | middels | `@planned` |
+| L4b Legge inn vitnemål manuelt | [legge_inn_vitnemål_manuelt.feature](legge_inn_vitnemål_manuelt.feature) | `@OPT-BEH-BEH-037` | #610 | L2, L3, L4a | stor | `@draft` |
 | L5 Sammenligning av vitnemål | [sammenligne_vitnemål.feature](sammenligne_vitnemål.feature) | `@OPT-BEH-BEH-024` | #611 | L1 | liten | `@draft` |
 | L6 Varsel ved nytt vitnemål fra NVB | [varsle_om_nytt_vitnemål.feature](varsle_om_nytt_vitnemål.feature) | `@OPT-BEH-BEH-021` | #612 | L2 | liten | `@draft` |
 
@@ -21,12 +22,11 @@ Kuttet er gjort etter avhengighet og risiko, ikke etter hvilke skjermbilder som 
 
 **MVP: L1 + L2.** Det er alt som trengs for at automatikken slutter å stoppe.
 
-### Hvis tiden blir knapp, kutt L4 og L5, i den rekkefølgen
+### Hvis tiden blir knapp, kutt L5
 
-- **L4** har en fungerende reserveløsning allerede i drift: `lagreVitnemalUtregning` med fagløse karakterrader. Den dekker karakterpoeng, men ikke realfagspoeng, språkpoeng eller kravelementer. Saksbehandleren må da sette de tre siste for hånd. Det er tungvint, men mulig, og det er slik det gjøres i dag.
 - **L5** er ren gevinst. Ingenting er avhengig av den, og designet er det minst modne i initiativet. Confluence har «1. versjon av design».
 
-L1, L2, L3 og L6 bør ikke kuttes. L1 og L2 er selve hullet. Uten L3 er fagvalget borte, og da er det lite igjen av vitnemålsbehandlingen. L6 er liten, og uten den kan et låst grunnlag bli stille utdatert. Det er en feil som rammer søkeren, og som ingen oppdager.
+L1, L2, L3, L4a, L4b og L6 bør ikke kuttes. L1 og L2 er selve hullet. Uten L3 er fagvalget borte, og da er det lite igjen av vitnemålsbehandlingen. L4a og L4b må leveres til opptaket i 2027 (avklart 03.11.2026). Reserveløsningen i drift, `lagreVitnemalUtregning` med fagløse karakterrader, dekker karakterpoeng, men ikke realfagspoeng, språkpoeng eller kravelementer, og er ikke god nok for søkere uten elektronisk vitnemål. L6 er liten, og uten den kan et låst grunnlag bli stille utdatert. Det er en feil som rammer søkeren, og som ingen oppdager.
 
 ## Hvorfor kravet trengs
 
@@ -34,7 +34,7 @@ Den automatiske saksbehandlingen stopper når søkeren har flere vitnemål. `vur
 
 Vitnemålsbehandling er ikke nødvendig for alle søknader. Har søkeren ett elektronisk vitnemål uten forbedringer, klarer automatikken seg selv. Behovet oppstår når søkeren har flere vitnemål, har forbedret fag, eller har dokumentert fag som ikke finnes elektronisk.
 
-Saksbehandlingen består av tre valg som henger sammen: hvilket vitnemål som legges til grunn (L2, L3), hvilke fag på det vitnemålet som skal telle (L3), og hvilke fag som må legges inn eller endres fordi de ikke står riktig på det elektroniske vitnemålet (L4). Til sammen utgjør de tre valgene beregningsgrunnlaget. Der reglene gir et valg, skal saksbehandleren velge det som gir søkeren best uttelling. Saksbehandleren kan ikke sette sammen et vitnemål søkeren ikke har.
+Saksbehandlingen består av tre valg som henger sammen: hvilket vitnemål som legges til grunn (L2, L3), hvilke fag på det vitnemålet som skal telle (L3), og hvilke fag som må endres fordi de ikke står riktig på det elektroniske vitnemålet (L4a), eller legges inn fordi søkeren ikke har det elektronisk (L4b). Til sammen utgjør de tre valgene beregningsgrunnlaget. Der reglene gir et valg, skal saksbehandleren velge det som gir søkeren best uttelling. Saksbehandleren kan ikke sette sammen et vitnemål søkeren ikke har.
 
 ## Kilder og etterprøvbarhet
 
@@ -68,6 +68,7 @@ Kravene erstatter to funksjoner i FS-klienten: vitnemålsbehandling (FS143.001 V
   - Poengene per vitnemål i L1 må være på plass til opptaket i 2027. Det er usikkert om poengberegningen per vitnemål blir ferdig før L1 skal akseptansetestes. Det må avtales med dem som lager poengberegningen, og det må vurderes om L1 kan akseptansetestes uten poengene.
 - **28.10.2026:** Etter verifiseringen av L1 (Kari og Christoffer). Feilmeldingen når poengberegningen ikke svarer, er tatt ut av L1. Poengberegningen er en del av opptak, ikke en ekstern tjeneste som kan la være å svare. Et vitnemål som ikke gir poeng, vises med tomme poeng, uten feilmelding.
 - **28.10.2026:** Leserettighet i hele vitnemålsbehandlingen (L1–L6), avklart med designeren. Valg som viser en tilstand (radioknapper og avkrysningsbokser, f.eks. valgt vitnemål, poengvariant, fag og «Legg inn manuelt»), vises for en saksbehandler med bare leserettighet, men kan ikke brukes. Handlinger (f.eks. beregne poengene) og felt for å legge inn eller endre verdier skjules, og de lagrede verdiene vises som tekst. Det avviker bevisst fra mønsteret «manglende tilgang skjuler elementet» i `.claude/rules/design-patterns-for-krav.md`: valgene er informasjon, fordi de viser hva poengene bygger på, og siden ser lik ut for alle. Regelen står i scenarioet «Saksbehandler med kun leserettighet ser grunnlaget» i L2, og gjelder også når L3–L6 valideres.
+- **03.11.2026:** Gjennomgang av L3 og L4 med teamet (`fs-krav`). L4 er delt i to: L4a «Endre fag» (`endre_fag_i_grunnlaget.feature`, beholder `@OPT-BEH-BEH-023`) leveres først, og L4b «Legge inn vitnemål manuelt» (`legge_inn_vitnemål_manuelt.feature`, `@OPT-BEH-BEH-037`) etter. Ingen av dem kan kuttes, bare L5. L4b er en kalkulator, ikke et komplett vitnemål: saksbehandleren legger inn omfang, fag, fagnavn, standpunkt- og eksamenskarakter og forbedrede karakterer, ingen felt er påkrevd, og kravelementene vurderes under spesielle opptakskrav. Kalkulatoren legges til grunn per poengvariant, som et elektronisk vitnemål i L3. Karakterer legges bare inn som heltall fra 1 til 6, også i L4a, og saksbehandleren regner om utenlandske karakterer selv. Reglene for beregning og lagring fra L2 gjelder i L3, L4a og L4b. Når L3 er levert, velges vitnemålet alltid per poengvariant, og kravelementene vurderes per poengvariant. Åpne spørsmål: fag med bestått/ikke bestått uten tallkarakter (L4b), og om det skal være en egen handling for å beregne poengene, for å lagre, eller begge. Uten en handling for å beregne blir poengene beregnet automatisk på nytt hver gang grunnlaget endres. Spørsmålet står i L2 («Poengene er tomme til jeg beregner dem»), og gjelder også L3, L4a og L4b.
 
 ## Avgrensninger: bevisst utenfor kravene
 
