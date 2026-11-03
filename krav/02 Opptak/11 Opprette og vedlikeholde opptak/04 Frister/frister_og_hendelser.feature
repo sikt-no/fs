@@ -256,6 +256,26 @@ Egenskap: Frister og hendelser for opptak
       Når opptaksforvalter ikke setter dato for aldersberegning
       Så er opptakets dato for aldersberegning "2027-12-31"
 
+  @draft @ref-OPT-BEH-BEH-015 @ref-OPT-BEH-BEH-032
+  # Hva hendelsene gjør med den automatiske saksbehandlingen, står i OPT-BEH-BEH-015 og OPT-BEH-BEH-032.
+  Regel: Opptaksforvalter kan sette når den automatiske saksbehandlingen starter og avsluttes
+    # Avklart 2026-11-03: begge hendelsene er valgfrie. Er ingen av dem satt, pågår den automatiske
+    # saksbehandlingen fra opptaket er opprettet til opptaket er historisk (01 Grunnoppsett/opptaksstatus.feature).
+    # Avklart 2026-11-03: hendelsene har dato og klokkeslett, som de andre hendelsene på opptaket.
+
+    Scenario: Sette når den automatiske saksbehandlingen starter
+      Når opptaksforvalter setter «Automatisk saksbehandling starter» til "2027-04-16 08:00"
+      Så har opptaket hendelsen «Automatisk saksbehandling starter» "2027-04-16 08:00"
+
+    Scenario: Sette når den automatiske saksbehandlingen avsluttes
+      Når opptaksforvalter setter «Automatisk saksbehandling avsluttes» til "2027-07-15 12:00"
+      Så har opptaket hendelsen «Automatisk saksbehandling avsluttes» "2027-07-15 12:00"
+
+    Scenario: Opptaket kan lagres uten hendelsene for den automatiske saksbehandlingen
+      Gitt at «Automatisk saksbehandling starter» og «Automatisk saksbehandling avsluttes» ikke er satt
+      Når opptaksforvalter lagrer opptaket
+      Så er opptaket lagret
+
   @openquestion @ref-FLY-OPT-SAK-001
   Regel: Opptaksforvalter ved forvaltende organisasjon må kunne sette frist for endring av utdanningsbakgrunn
     # ÅPNE SPØRSMÅL:

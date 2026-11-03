@@ -13,7 +13,8 @@ Egenskap: Automatisk saksbehandling
   opptakssystemet henter vitnemålet fra KREG, ikke at vitnemålet kommer inn i KREG.
   Den automatiske behandlingen fortsetter saksbehandlertildelingen: hver ny sak behandles når
   vitnemålet er importert, eller når jobben for nye vitnemål i KREG finner søkerens første
-  vitnemål. Opptaksforvalteren kan skru automatikken av for opptaket (OPT-BEH-BEH-032).
+  vitnemål. Opptaksforvalteren kan sette når den automatiske saksbehandlingen starter og avsluttes
+  i opptaket (OPT-BEH-BEH-032).
   Som første steg setter den GSK-konklusjonen på søknadene som ikke har en.
   Flyten gjelder søkere med ett vitnemål, der vitnemålet gir GSK. Andre søkere
   hoppes over, og behandles ikke helautomatisk

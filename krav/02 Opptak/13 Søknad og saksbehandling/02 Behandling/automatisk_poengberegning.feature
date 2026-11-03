@@ -27,8 +27,8 @@ Egenskap: Automatisk beregning av vitnemålspoeng
   poengene i alle sakene i søknaden, men det saksbehandleren overstyrer eller låser, gjelder bare
   saken hos organisasjonen saksbehandleren er ved. Avklart 30.10.2026.
 
-  # Avklart 29.10.2026: opptaksforvalteren skrur automatikken av og på for opptaket, og kan sette
-  # tidspunktet da den stopper (OPT-BEH-BEH-032).
+  # Avklart 29.10.2026, endret 2026-11-03: opptaksforvalteren kan sette når den automatiske
+  # saksbehandlingen starter og avsluttes i opptaket (OPT-BEH-BEH-032, OPT-OVO-FRI-001).
 
   Bakgrunn:
     Gitt at søkeren har en søknad i opptaket

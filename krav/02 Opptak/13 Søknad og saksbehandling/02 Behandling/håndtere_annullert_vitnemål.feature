@@ -65,10 +65,14 @@ Egenskap: Håndtere annullert vitnemål
       Og saken hos "Universitetet i Bergen" får taggen "Vitnemål annullert"
 
     Scenario: Saken får taggen også når søkeren er med i en publisert plasstildelingsrunde
+      # Avklart 2026-11-03: dette gjelder også når søkeren kan være med i en ny plasstildelingsrunde,
+      # for eksempel med ledige studieplasser. Statusen endres ikke, men saksbehandleren ser taggen i
+      # sakslisten og avgjør selv hva som skal gjøres.
       Gitt at vitnemålet fra 2025 er brukt i saken
       Og at søkeren er med i en plasstildelingsrunde som er publisert
       Når vitnemålet fra 2025 importeres fra KREG som annullert
       Så får saken taggen "Vitnemål annullert"
+      Og saksbehandleren ser taggen "Vitnemål annullert" på saken i sakslisten
 
   @draft @openquestion
   Regel: Saken får en merknad om det annullerte vitnemålet
