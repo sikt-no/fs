@@ -1,25 +1,27 @@
 # language: no
 @BRU-APP-API-019 @must @draft
-Egenskap: Tildele roller i gulvet til en Feide-applikasjon
+Egenskap: Forvalte roller i gulvet til en Feide-applikasjon
   Som bruker med applikasjonsadministrator-rollen
-  ønsker jeg å tildele roller i gulvet til en Feide-applikasjon for et miljø
+  ønsker jeg å tildele og fjerne roller i gulvet til en Feide-applikasjon for en organisasjon og et miljø
   slik at alle brukerne av applikasjonen får de rollene de skal ha, også brukere uten egne roller.
 
   # Gulvet er det applikasjonen gir alle brukere, også ukjente. Se tilgangsstyring/docs/malarkitektur.md
   # og tilgangsstyring/docs/tilgangsmodell.md i fs-plattform.
   # Innspill 03.11.2026: to nye faner på applikasjonssiden for Feide-applikasjoner, én for taket
   # (BRU-APP-API-018) og én for gulvet.
-  # AVKLART 03.11.2026: Gulvet er per applikasjon og miljø, uten organisasjon, slik målarkitekturen sier.
-  # Applikasjonsadministrator-rollen for applikasjonseieren er nok til å tildele, uten eget privilegium.
-  # Bare Feide-applikasjoner har fanen for gulvet. Syntetiske og ekte miljøer, test og demo behandles som
-  # ved tildeling av roller til personbrukere (BRU-PER-GRU-003). Nekt og endringslogg er utenfor kravet
-  # foreløpig.
+  # AVKLART 03.11.2026 (koden er fasit): Gulvet er per applikasjon, organisasjon og miljø. Hver rad i
+  # applikasjon_brukergrunntilgang (0099 i fs-plattform) har applikasjon, rolle, organisasjon, miljø og
+  # gyldighetsperiode, og raa_grunntilganger(miljø, applikasjon) gir brukerne rollen for organisasjonen
+  # på raden. Det erstatter det tidligere svaret om at gulvet ikke har organisasjon. For en bruker med
+  # FS-fiktivt fødselsnummer begrenses gulvet til hjemorganisasjonen (tilganger_for_bruker).
+  # AVKLART 03.11.2026: Applikasjonsadministrator-rollen for applikasjonseieren er nok til å forvalte gulvet,
+  # uten eget privilegium. Bare forretningsroller. Bare Feide-applikasjoner har fanen for gulvet. Fanen skal
+  # også la applikasjonsadministratoren fjerne roller og sette gyldighetsperiode. Syntetiske og ekte miljøer,
+  # test og demo behandles som ved tildeling av roller til personbrukere (BRU-PER-GRU-003). Nekt og
+  # endringslogg er utenfor kravet foreløpig.
 
   # ÅPNE SPØRSMÅL:
-  # - Gulvet har ingen organisasjon, men en rolle gjelder alltid for en organisasjon. For hvilken organisasjon får brukerne rollen i gulvet: applikasjonseieren, alle organisasjoner, eller organisasjonene der applikasjonen har tak?
-  # - I dag er gulvet per organisasjon og miljø, uten applikasjon, og ligger inne i snittet med taket (tilgangsmodell.md). Gulvet per applikasjon, ved siden av snittet, må bygges først. Hva skjer med gulvet som finnes i dag?
-  # - Skal applikasjonsadministratoren også kunne fjerne roller fra gulvet? Innspillet sier tildele, og brukerne mister tilgangen når en rolle tas ut av gulvet. For personbrukere og applikasjoner er tildeling og fjerning egne krav (BRU-PER-GRU-012, BRU-APP-API-008).
-  # - Skal applikasjonsadministratoren kunne sette en gyldighetsperiode når en rolle tildeles i gulvet?
+  # - Koden har ingen skriveflate for gulvet ennå: lesepolicyen er den eneste policyen, og 0099 sier at gulvet skal ha et eget privilegium fordi en rad i gulvet gir applikasjonen like mye makt som en åpen rolle. Svaret er at applikasjonsadministrator-rollen for applikasjonseieren er nok. Skal skriveflaten bygges slik, i strid med kommentaren i 0099?
 
   Bakgrunn:
     Gitt jeg er innlogget i løsningen
@@ -55,9 +57,10 @@ Egenskap: Tildele roller i gulvet til en Feide-applikasjon
       Og jeg har åpnet fanen for gulvet
       Så ser jeg en liste over rollene i gulvet til applikasjonen
       Og hvert innslag viser følgende informasjon:
-        | felt  |
-        | Rolle |
-        | Miljø |
+        | felt         |
+        | Rolle        |
+        | Organisasjon |
+        | Miljø        |
 
     Scenariomal: Bare gulv som gjelder nå, vises
       Gitt applikasjonen har Feide som identitetsleverandør
@@ -71,26 +74,20 @@ Egenskap: Tildele roller i gulvet til en Feide-applikasjon
         | er avsluttet   | vises ikke |
         | starter senere | vises ikke |
 
-  Regel: En tildeling i gulvet gjelder én rolle for et miljø
+  Regel: En tildeling i gulvet gjelder én rolle for en organisasjon og et miljø
 
-    Scenario: Tildele en rolle i gulvet for valgt miljø
+    Scenario: Tildele en rolle i gulvet for valgt organisasjon og miljø
       Gitt applikasjonen har Feide som identitetsleverandør
       Og jeg har åpnet fanen for gulvet
-      Når jeg velger et miljø og en rolle jeg har rettighet til å tildele i gulvet
-      Så er rollen i gulvet til applikasjonen for det valgte miljøet
-      Og det fremgår hvilket miljø tildelingen gjelder
-
-    Scenario: Organisasjon velges ikke ved tildeling i gulvet
-      Gitt applikasjonen har Feide som identitetsleverandør
-      Og jeg har åpnet fanen for gulvet
-      Når jeg velger å tildele roller i gulvet
-      Så er det ingen valgliste for organisasjon
+      Når jeg velger en organisasjon, et miljø og en rolle jeg har rettighet til å tildele i gulvet
+      Så er rollen i gulvet til applikasjonen for den valgte kombinasjonen av organisasjon og miljø
+      Og det fremgår hvilken organisasjon og hvilket miljø tildelingen gjelder
 
     Scenario: Tildele flere roller i gulvet samtidig
       Gitt applikasjonen har Feide som identitetsleverandør
       Og jeg har åpnet fanen for gulvet
-      Når jeg velger et miljø og flere roller jeg har rettighet til å tildele i gulvet
-      Så er rollene i gulvet til applikasjonen for det valgte miljøet
+      Når jeg velger en organisasjon, et miljø og flere roller jeg har rettighet til å tildele i gulvet
+      Så er rollene i gulvet til applikasjonen for den valgte kombinasjonen av organisasjon og miljø
 
     Scenario: Delvis suksess ved samtidig tildeling av roller i gulvet
       # Samme mønster som ved tildeling av roller til personbrukere (BRU-PER-GRU-003).
@@ -99,17 +96,81 @@ Egenskap: Tildele roller i gulvet til en Feide-applikasjon
       Så gjennomføres de tildelingene som er gyldige
       Og jeg ser tydelig hvilke tildelinger som ikke ble gjennomført, og hvorfor
 
+  Regel: En fjerning fra gulvet gjelder én rolle for en organisasjon og et miljø
+    # Samme mønster som ved fjerning av roller fra personbrukere (BRU-PER-GRU-012).
+
+    Scenario: Fjerne en rolle fra gulvet for valgt organisasjon og miljø
+      Gitt applikasjonen har Feide som identitetsleverandør
+      Og applikasjonen har den samme rollen i gulvet for flere kombinasjoner av organisasjon og miljø
+      Og jeg har åpnet fanen for gulvet
+      Når jeg fjerner rollen fra gulvet for én av kombinasjonene
+      Så er rollen ikke lenger i gulvet til applikasjonen for den kombinasjonen
+      Og rollen består i gulvet for de øvrige kombinasjonene
+
+    Scenario: Fjerne flere roller fra gulvet samtidig
+      Gitt applikasjonen har Feide som identitetsleverandør
+      Og applikasjonen har flere roller i gulvet
+      Og jeg har åpnet fanen for gulvet
+      Når jeg velger flere roller og fjerner dem fra gulvet i én operasjon
+      Så er alle de valgte rollene fjernet fra gulvet
+
+  Regel: Applikasjonsadministratoren kan sette gyldighetsperiode for en rolle i gulvet
+    # Samme mønster som for tildelinger til personbrukere (BRU-PER-GRU-006). Start- og sluttidspunkt
+    # angis med dato og tidspunkt (minutt-oppløsning) i tidssonen Europe/Oslo.
+
+    Scenario: Sette sluttidspunkt på en rolle i gulvet
+      Gitt applikasjonen har Feide som identitetsleverandør
+      Og jeg har åpnet fanen for gulvet
+      Når jeg setter et sluttidspunkt fram i tid på en rolle i gulvet
+      Så er rollen i gulvet fram til sluttidspunktet
+      Og rollen er automatisk ute av gulvet etter sluttidspunktet
+
+    Scenario: Sette starttidspunkt fram i tid på en rolle i gulvet
+      Gitt applikasjonen har Feide som identitetsleverandør
+      Og jeg har åpnet fanen for gulvet
+      Når jeg tildeler en rolle i gulvet med et starttidspunkt fram i tid
+      Så er rollen ikke i gulvet fram til starttidspunktet
+      Og rollen er automatisk i gulvet fra starttidspunktet
+
+    Scenario: Sette både start- og sluttidspunkt på en rolle i gulvet
+      Gitt applikasjonen har Feide som identitetsleverandør
+      Og jeg har åpnet fanen for gulvet
+      Når jeg tildeler en rolle i gulvet med både et starttidspunkt og et sluttidspunkt fram i tid
+      Så er rollen i gulvet kun innenfor det angitte tidsrommet
+
+    Scenario: Sluttidspunkt i fortiden avvises for en rolle i gulvet
+      Gitt applikasjonen har Feide som identitetsleverandør
+      Og jeg har åpnet fanen for gulvet
+      Når jeg forsøker å sette et sluttidspunkt som ligger i fortiden på en rolle i gulvet
+      Så lagres ikke endringen
+      Og jeg ser en feilmelding som sier at sluttidspunkt ikke kan ligge i fortiden
+
+    Scenario: Sluttidspunkt før starttidspunkt avvises for en rolle i gulvet
+      Gitt applikasjonen har Feide som identitetsleverandør
+      Og jeg har åpnet fanen for gulvet
+      Og jeg setter både et starttidspunkt og et sluttidspunkt på en rolle i gulvet
+      Når sluttidspunktet ligger før starttidspunktet
+      Så lagres ikke endringen
+      Og jeg ser en feilmelding som sier at sluttidspunkt må ligge etter starttidspunkt
+
   Regel: Bare forretningsroller kan tildeles i gulvet
 
     Scenario: Valglisten for rolle i gulvet viser bare forretningsroller
       Gitt applikasjonen har Feide som identitetsleverandør
       Og jeg har åpnet fanen for gulvet
-      Og jeg har valgt miljø
+      Og jeg har valgt organisasjon og miljø
       Når jeg åpner valglisten for roller
       Så vises bare forretningsroller
       Men brukerflateroller og privilegier vises ikke
 
-  Regel: Tildelingen krever applikasjonsadministrator-rollen for applikasjonseieren
+  Regel: Forvaltning av gulvet krever applikasjonsadministrator-rollen for applikasjonseieren
+
+    Scenario: Forvaltning av gulvet er ikke tilgjengelig uten applikasjonsadministrator-rollen for applikasjonseieren
+      Gitt applikasjonen har Feide som identitetsleverandør
+      Og jeg har ikke applikasjonsadministrator-rollen for applikasjonseieren
+      Og jeg har applikasjonsadministrator-rollen for en annen organisasjon
+      Når jeg åpner fanen for gulvet
+      Så er muligheten til å tildele og fjerne roller i gulvet ikke tilgjengelig
 
     Scenario: Valglisten for miljø viser miljøene der jeg administrerer applikasjonseieren
       Gitt applikasjonen har Feide som identitetsleverandør
@@ -117,48 +178,59 @@ Egenskap: Tildele roller i gulvet til en Feide-applikasjon
       Når jeg åpner valglisten for miljø
       Så ser jeg bare miljøene der jeg har applikasjonsadministrator-rollen for applikasjonseieren
 
-    Scenario: Tildeling i gulvet er ikke tilgjengelig uten applikasjonsadministrator-rollen for applikasjonseieren
+    @openquestion
+    Scenario: Valglisten for organisasjon i gulvet
+      # ÅPNE SPØRSMÅL:
+      # - Gulvet har organisasjon, og svaret er at rollen for applikasjonseieren er nok. Hvilke organisasjoner kan applikasjonsadministratoren da velge: alle, bare applikasjonseieren, eller bare organisasjoner hen også har applikasjonsadministrator-rollen for, slik som for taket?
       Gitt applikasjonen har Feide som identitetsleverandør
-      Og jeg har ikke applikasjonsadministrator-rollen for applikasjonseieren
-      Og jeg har applikasjonsadministrator-rollen for en annen organisasjon
-      Når jeg åpner fanen for gulvet
-      Så er muligheten til å tildele roller i gulvet ikke tilgjengelig
+      Og jeg har applikasjonsadministrator-rollen for applikasjonseieren
+      Og jeg har åpnet fanen for gulvet
+      Når jeg åpner valglisten for organisasjon
+      Så ser jeg organisasjonene jeg kan tildele roller i gulvet for
 
-  Regel: En rolle som allerede er i gulvet for samme miljø kan ikke tildeles på nytt
+  Regel: En rolle som allerede er i gulvet for samme organisasjon og miljø kan ikke tildeles på nytt
 
     Scenario: Rolle som allerede er i gulvet vises som ikke-valgbar
       Gitt applikasjonen har Feide som identitetsleverandør
-      Og applikasjonen har en rolle i gulvet for et miljø
+      Og applikasjonen har en rolle i gulvet for en kombinasjon av organisasjon og miljø
       Og jeg har åpnet fanen for gulvet
-      Når jeg velger roller å tildele i gulvet for samme miljø
+      Når jeg velger roller å tildele i gulvet for samme kombinasjon av organisasjon og miljø
       Så vises rollen som allerede er i gulvet, som ikke valgbar
       Og det fremgår at rollen allerede er i gulvet
 
-  Regel: Alle brukere av applikasjonen får rollene i gulvet
-    # Effektiv tilgang gjennom applikasjonen er (personbrukerens roller ∩ taket) ∪ gulvet ∪ åpne roller,
-    # minus nekt (malarkitektur.md). Hvilken organisasjon rollen gjelder for, er et åpent spørsmål.
+  Regel: Alle brukere av applikasjonen får rollene i gulvet for organisasjonen og miljøet i gulvet
+    # Effektiv tilgang gjennom applikasjonen er ((personbrukerens roller ∩ taket) ∪ gulvet ∪ åpne roller)
+    # minus nekt (kombiner_tildelinger, 0099 i fs-plattform). Gulvet ligger utenfor taket.
 
-    Scenariomal: Bruker uten egne roller får rollene i gulvet for miljøet i gulvet
+    Scenariomal: Bruker uten egne roller får rollen i gulvet
       Gitt applikasjonen har Feide som identitetsleverandør
-      Og forretningsrollen "OPPTAK_SAKSBEHANDLER" er i gulvet til applikasjonen i miljøet "Produksjon"
+      Og forretningsrollen "OPPTAK_SAKSBEHANDLER" er i gulvet til applikasjonen for "Universitetet i Stavanger" i miljøet "Produksjon"
       Og en bruker har ingen roller
       Når brukeren bruker applikasjonen i miljøet <miljø>
-      Så <får> brukeren forretningsrollen "OPPTAK_SAKSBEHANDLER"
+      Så <får> brukeren forretningsrollen "OPPTAK_SAKSBEHANDLER" for <organisasjon>
 
       Eksempler:
-        | miljø        | får      |
-        | "Produksjon" | får      |
-        | "Test"       | får ikke |
+        | organisasjon                | miljø        | får      |
+        | "Universitetet i Stavanger" | "Produksjon" | får      |
+        | "Universitetet i Stavanger" | "Test"       | får ikke |
+        | "Universitetet i Bergen"    | "Produksjon" | får ikke |
+
+    Scenario: Rollen i gulvet gjelder selv om rollen ikke er i taket
+      Gitt applikasjonen har Feide som identitetsleverandør
+      Og forretningsrollen "OPPTAK_SAKSBEHANDLER" er i gulvet til applikasjonen for "Universitetet i Stavanger" i miljøet "Produksjon"
+      Og forretningsrollen "OPPTAK_SAKSBEHANDLER" er ikke i taket til applikasjonen for "Universitetet i Stavanger" i miljøet "Produksjon"
+      Når en bruker bruker applikasjonen i miljøet "Produksjon"
+      Så får brukeren forretningsrollen "OPPTAK_SAKSBEHANDLER" for "Universitetet i Stavanger"
 
     Scenariomal: Brukeren mister rollen når rollen ikke lenger er i gulvet
       Gitt applikasjonen har Feide som identitetsleverandør
-      Og forretningsrollen "OPPTAK_SAKSBEHANDLER" er i gulvet til applikasjonen i miljøet "Produksjon"
+      Og forretningsrollen "OPPTAK_SAKSBEHANDLER" er i gulvet til applikasjonen for "Universitetet i Stavanger" i miljøet "Produksjon"
       Og en bruker har ingen roller
       Når <hendelse>
       Og brukeren bruker applikasjonen i miljøet "Produksjon"
-      Så får brukeren ikke forretningsrollen "OPPTAK_SAKSBEHANDLER"
+      Så får brukeren ikke forretningsrollen "OPPTAK_SAKSBEHANDLER" for "Universitetet i Stavanger"
 
       Eksempler:
         | hendelse                                          |
-        | rollen tas ut av gulvet                           |
+        | rollen fjernes fra gulvet                         |
         | gyldighetsperioden for rollen i gulvet avsluttes |
