@@ -141,7 +141,7 @@ Testansvarlig skriver beslutningen og begrunnelsen i sluttrapporten. Rettede fun
 
 | Fase | Side | Status | Dato |
 |---|---|---|---|
-| 1. Verifisering (`fs-verify`) | [Verifisering – Opprette og vedlikeholde opptak v3 – 2026-10-28 12:38](https://sikt.atlassian.net/wiki/spaces/STUDIEADM/pages/5153554433) · [verify-2026-10-28-1238.md](../opprette-opptak-2027/verify-2026-10-28-1238.md) | 5 ikke funnet, 3 usikker | 2026-10-28 |
+| 1. Verifisering (`fs-verify`) | [Verifisering – Opprette og vedlikeholde opptak v3 – 2026-10-28 12:38](https://sikt.atlassian.net/wiki/spaces/STUDIEADM/pages/5153554433) · [verify-2026-10-28-1238.md](../opprette-opptak-2027/verify-2026-10-28-1238.md) · på nytt for det som ikke besto 29.10: [Verifisering – Opprette og vedlikeholde opptak v4 – 2026-10-30 13:34](https://sikt.atlassian.net/wiki/spaces/STUDIEADM/pages/5159092247) (utkast) · [verify-2026-10-30-1334.md](verify-2026-10-30-1334.md) | 5 ikke funnet, 3 usikker (28.10). Det som ikke besto 29.10: 3 ikke funnet, 2 usikker, av 7 (30.10) | 2026-10-28, 2026-10-30 |
 | 1. Testplan | (denne siden) | Laget, versjon 4 | 2026-10-29 |
 | 2. Agentisk funksjonstest | [Testrapport – agentisk funksjonstest – Opprette og vedlikeholde opptak v4](https://sikt.atlassian.net/wiki/spaces/STUDIEADM/pages/5158567942) · [testrapport-agentisk-2026-10-30.md](testrapport-agentisk-2026-10-30.md) · kjøringen [kjoring-2026-10-29-1322/resultat.md](kjoring-2026-10-29-1322/resultat.md) | Venter på gjennomgang (96 bestått, 23 ikke bestått, 28 ikke testet, av 147) | 2026-10-30 |
 | 3. Intern akseptansetest | – | Venter | |

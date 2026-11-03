@@ -118,6 +118,15 @@ Egenskap: Søke om tidlig opptak
       Så har søkeren søkt om tidlig opptak med begrunnelsen "Fullført videregående opplæring"
       Og søkeren får kvittering for søknaden om tidlig opptak
 
+    Scenario: Kvitteringen viser søknadsalternativene som tilbyr tidlig opptak
+      Gitt søknaden har følgende søknadsalternativer:
+        | søknadsalternativ    | tilbyr tidlig opptak |
+        | Sykepleie, høst 2027 | ja                   |
+        | Historie, høst 2027  | nei                  |
+      Når søkeren søker om tidlig opptak med begrunnelsen "Fullført videregående opplæring"
+      Så viser kvitteringen for søknaden om tidlig opptak "Sykepleie, høst 2027"
+      Men kvitteringen viser ikke "Historie, høst 2027"
+
     Scenario: Se hvilke søknadsalternativer som tilbyr tidlig opptak
       Gitt søknaden har følgende søknadsalternativer:
         | søknadsalternativ    | tilbyr tidlig opptak |
@@ -133,7 +142,7 @@ Egenskap: Søke om tidlig opptak
       Så ser søkeren lenken til informasjon om tidlig opptak
 
     Scenario: Kan ikke søke om tidlig opptak når ingen søknadsalternativer tilbyr det
-      Gitt opptaket "Samordna opptak 2027" tilbyr ikke tidlig opptak
+      Gitt opptaket "Samordna opptak 2027" har tidlig opptak
       Og ingen av søknadsalternativene tilbyr tidlig opptak
       Når søkeren ser på søknaden
       Så ser ikke søkeren muligheten til å søke om tidlig opptak

@@ -7,15 +7,17 @@
 # vitnemål. Avvikene fra testen er rettet. NVB2 er referansen når kravet valideres.
 #
 # Påstanden fra KREG: avklart 2026-10-27 at beregningen ikke bruker påstanden fra KREG.
-# Avklart 30.10.2026: beregningen gir opptakssystemets påstand, ved siden av skolens og
-# KREGs påstand, og vitnemålet gir GSK når minst én av dem er ja (@OPT-BEH-BEH-015).
-# Koden krever i dag at KREG sier GSK, og bruker kontrollmotoren som kryssjekk. Det er
-# et avvik fra kravet.
-@OPT-BEH-BEH-027 @must @planned
+# Avklart 2026-11-02 med domeneeksperten: skolens påstand («GSK OK» fra KREG) er fasit, og
+# vitnemålet gir GSK når den er ja (@OPT-BEH-BEH-015). Beregningen her er en kontroll av
+# skolens påstand, og gir grunnlagskoden. Er den uenig med skolen, får saksbehandleren et
+# varsel, men den automatiske behandlingen stopper ikke. KREG har ingen egen påstand om GSK.
+# Koden stopper i dag automatikken når kontrollmotoren er uenig med skolen. Det er et avvik
+# fra kravet.
+@OPT-BEH-BEH-027 @must @in-progress @scope-automatisk-gsk-konklusjon @ref-OPT-BEH-BEH-015
 Egenskap: Beregne GSK fra vitnemål
   Som saksbehandler
   ønsker jeg at opptakssystemet beregner sin egen påstand om generell studiekompetanse for et vitnemål
-  slik at GSK-konklusjonen bygger på de samme reglene for alle søkere.
+  slik at «GSK OK» fra KREG blir kontrollert, og vitnemålet får grunnlagskoden for løpet.
 
   Generell studiekompetanse (GSK) er det generelle opptakskravet til høyere utdanning.
   Systemet beregner GSK for ett vitnemål om gangen. Beregningen ser på fagene på
@@ -23,8 +25,8 @@ Egenskap: Beregne GSK fra vitnemål
   oppfyller alle delkravene for reformen. Resultatet er opptakssystemets påstand om GSK
   for vitnemålet. Påstanden er GSK når vitnemålet består seksfagskontrollen, og løpet gir
   en grunnlagskode. Ellers er påstanden ikke GSK. Har løpet en grunnlagskode, gis den
-  uansett hva påstanden er. «Påstanden» betyr i dette kravet opptakssystemets påstand. Når vitnemålet
-  gir GSK, ut fra alle tre påstandene, står i @OPT-BEH-BEH-015.
+  uansett hva påstanden er. «Påstanden» betyr i dette kravet opptakssystemets påstand.
+  Når vitnemålet gir GSK, står i @OPT-BEH-BEH-015.
 
   Hvilke vitnemål som beregnes, når beregningen skjer, og hva resultatet brukes til,
   står i @OPT-BEH-BEH-015. Det gjelder også annullerte vitnemål, vitnemål uten
@@ -351,8 +353,8 @@ Egenskap: Beregne GSK fra vitnemål
       Så er påstanden GSK med grunnlagskoden KLS
 
     Scenario: Grunnlagskoden gis selv om påstanden ikke er GSK
-      # Avklart 30.10.2026: søknaden kan få GSK-konklusjonen fra skolens eller KREGs påstand
-      # (OPT-BEH-BEH-015), og trenger da grunnlagskoden for løpet.
+      # Avklart 2026-11-02: søknaden får GSK-konklusjonen fra skolens påstand (OPT-BEH-BEH-015),
+      # og trenger grunnlagskoden for løpet også når opptakssystemet er uenig med skolen.
       Gitt at løpet på vitnemålet har grunnlagskoden KLS
       Og at vitnemålet ikke oppfyller delkravet for matematikk
       Når GSK beregnes for vitnemålet
@@ -364,26 +366,44 @@ Egenskap: Beregne GSK fra vitnemål
       Når GSK beregnes for vitnemålet
       Så er påstanden ikke GSK
 
-    Scenario: Påbyggingsruten PBPBY4 gir grunnlagskoden for løpet
+    Scenariomal: Påbyggingsruten PBPBY4 gir grunnlagskoden KLF
       # PBPBY4 er en alternativ påbyggingsrute, og ikke et eget løp.
+      # Avklart 30.10.2026: et vitnemål med PBPBY4 gir KLF når løpet uten tillegget finnes i
+      # listen over løp, også når løpet har en annen grunnlagskode, eller ingen. Det gjelder
+      # også foran regelen om løp uten grunnlagskode i listen over løp. Finnes ikke løpet uten
+      # tillegget i listen, er det et ukjent løp (se scenarioet under).
       Gitt at løpskoden på vitnemålet er løpskoden for et løp med tillegget «_PBPBY4»
+      Og at løpet uten tillegget <grunnlagskode>
       Og at vitnemålet oppfyller alle delkravene for reformen
       Når GSK beregnes for vitnemålet
-      Så er påstanden GSK med grunnlagskoden for løpet uten tillegget
+      Så er påstanden GSK med grunnlagskoden KLF
 
-  Regel: Yrkesfaglige løp uten grunnlagskode
-    # Avklart 30.10.2026: et yrkesfaglig løp uten grunnlagskode gir KLY eller RFA når
-    # vitnemålet importeres (@OPT-BEH-BEH-015), ikke bare når saksbehandleren starter
-    # kontrollen. Kode i dag: bare når saksbehandleren starter kontrollen, som i det gamle FS
-    # (FS158001).
-    # Innspill i PR #878: sier skolen eller KREG at søkeren har GSK, men løpet finnes ikke i
-    # listen over løp, settes ingen konklusjon automatisk, og saksbehandleren vurderer GSK.
-    # Finnes løpet, men har ingen grunnlagskode etter reglene her, får konklusjonen KLS for et
-    # studieforberedende løp, og KLY (Kunnskapsløftet) eller RFA (Reform 94) for et yrkesfaglig
-    # løp (OPT-BEH-BEH-015).
+      Eksempler:
+        | grunnlagskode             |
+        | har grunnlagskoden KLS    |
+        | har grunnlagskoden KLY    |
+        | ikke har en grunnlagskode |
+
+    Scenario: Påbyggingsruten PBPBY4 på et ukjent løp
+      Gitt at løpskoden på vitnemålet er løpskoden for et løp med tillegget «_PBPBY4»
+      Og at løpet uten tillegget ikke finnes i opptakssystemets liste over løp
+      Når GSK beregnes for vitnemålet
+      Så er påstanden ikke GSK
+
+  Regel: Løp uten grunnlagskode i listen over løp
+    # Avklart 2026-11-02 (Ingrid Helset, etter samtale med Jøran og Geir): et løp som finnes i
+    # listen over løp, men mangler grunnlagskode, gir en grunnlagskode likevel, som i det gamle
+    # FS: KLY for Kunnskapsløftet og RFA for Reform 94, uansett om løpet er studieforberedende
+    # eller yrkesfaglig. KLS gis ikke. Opptaksforvalteren får et varsel om løpet, så
+    # grunnlagskoden kan legges inn senere (@OPT-BEH-BEH-015).
+    # Et løp som ikke finnes i listen, gir ingen automatisk konklusjon, og saksbehandleren
+    # vurderer GSK (innspill i PR #878, se «Ukjent løp»).
+    # Avklart 30.10.2026: grunnlagskoden gis når vitnemålet importeres (@OPT-BEH-BEH-015), ikke
+    # bare når saksbehandleren starter kontrollen. Kode i dag: bare når saksbehandleren starter
+    # kontrollen, som i det gamle FS (FS158001).
     # «Løp»: avklart 2026-10-27 at løp er et begrep saksbehandlerne kjenner.
 
-    Scenariomal: Yrkesfaglig løp fra <reform> gir grunnlagskoden <grunnlagskode>
+    Scenariomal: Løp fra <reform> uten grunnlagskode gir grunnlagskoden <grunnlagskode>
       Gitt at vitnemålet er fra <reform>
       Og at løpet på vitnemålet ikke har en grunnlagskode
       Og at løpet er fra <reform>

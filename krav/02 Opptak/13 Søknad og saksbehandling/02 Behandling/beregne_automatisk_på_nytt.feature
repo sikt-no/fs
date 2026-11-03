@@ -1,5 +1,5 @@
 # language: no
-@OPT-BEH-BEH-026 @must @planned
+@OPT-BEH-BEH-026 @must @planned @scope-beregne-automatisk-pa-nytt
 Egenskap: Beregne automatisk på nytt
   Som opptaksforvalter
   ønsker jeg å kjøre den automatiske behandlingen på nytt for søknadsalternativene en feil har rammet
@@ -24,7 +24,7 @@ Egenskap: Beregne automatisk på nytt
   # endres. Søkeren ser det som er endret, i Min kompetanse.
 
   # Avklart 30.10.2026: søkeren ser de automatiske mangeltekstene når saken er ferdig behandlet
-  # (OPT-BEH-BEH-008). Gir beregningen på nytt en ny mangeltekst i en sak som er ferdig
+  # (OPT-BEH-BEH-036). Gir beregningen på nytt en ny mangeltekst i en sak som er ferdig
   # behandlet, ser søkeren den med en gang. Ingen trenger å publisere den.
 
   # Avklart 30.10.2026: beregningen kjører som en jobb i bakgrunnen, etter det samme mønsteret
@@ -79,7 +79,8 @@ Egenskap: Beregne automatisk på nytt
       Så har "Informatikk, UiO" poengsum for "Kari Nordmann" etter det rettede rangeringsregelverket
       Og saken til "Kari Nordmann" hos "Universitetet i Oslo" er fortsatt ferdig behandlet
 
-    @depends-on-OPT-BEH-BEH-008
+    @depends-on-OPT-BEH-BEH-036
+    # OPT-BEH-BEH-036: «Saken får automatiske mangeltekster når søkeren ikke er kvalifisert»
     Scenario: Søkeren ser den nye mangelteksten i en sak som er ferdig behandlet
       Gitt at saken til "Kari Nordmann" hos "Universitetet i Oslo" er ferdig behandlet
       Og at "Kari Nordmann" er kvalifisert for "Informatikk, UiO"
@@ -90,12 +91,14 @@ Egenskap: Beregne automatisk på nytt
       Og saken til "Kari Nordmann" hos "Universitetet i Oslo" er fortsatt ferdig behandlet
 
   @depends-on-OPT-BEH-BEH-025
-  Regel: En sak som ble stående under behandling på grunn av feilen, blir ferdig behandlet når alt kan avgjøres
+  Regel: En sak som ikke ble ferdig behandlet på grunn av feilen, blir ferdig behandlet når alt kan avgjøres
     # Avklart 30.10.2026. Saken kunne vært behandlet helautomatisk om regelverket hadde vært
     # riktig. Har saksbehandleren gjort noe i saken, blir den stående under behandling.
+    # Avklart 2026-11-02: saken står som ikke behandlet når den automatiske behandlingen ikke
+    # fullførte (OPT-BEH-BEH-025).
 
     Scenario: Saken blir ferdig behandlet når feilen er rettet
-      Gitt at saken til "Kari Nordmann" hos "Universitetet i Oslo" er under behandling fordi poengene for "Informatikk, UiO" ikke kunne avgjøres på grunn av en feil i rangeringsregelverket
+      Gitt at saken til "Kari Nordmann" hos "Universitetet i Oslo" har behandlingsstatusen "Ikke behandlet" fordi poengene for "Informatikk, UiO" ikke kunne avgjøres på grunn av en feil i rangeringsregelverket
       Og at saksbehandleren ikke har gjort noe i saken
       Når opptaksforvalteren beregner på nytt for søknadsalternativene med rangeringsregelverket som er rettet
       Så er saken til "Kari Nordmann" hos "Universitetet i Oslo" ferdig behandlet

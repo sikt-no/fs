@@ -13,32 +13,27 @@ Egenskap: Søknadsmangler
   meldingen til søkeren, og søkeren ser på dokumentasjonssiden i Min kompetanse hva som mangler,
   og kan laste opp dokumentasjonen der.
 
-  Mangler lages også automatisk. Er søkeren ikke kvalifisert, får saken automatiske
-  mangeltekster for kravelementene søkeren ikke oppfyller, og tekstene slettes automatisk når
-  søkeren blir kvalifisert. Mangelen for generell studiekompetanse som fullføres i vår, settes og
-  sjekkes ut automatisk.
+  Mangler lages også automatisk: de automatiske mangeltekstene og mangelen for generell
+  studiekompetanse som fullføres i vår. De står i automatiske mangler (se @OPT-BEH-BEH-036).
 
   Mangler hører til saken, det vil si søknadsalternativene én saksbehandlende organisasjon har
-  (se @OPT-BEH-BEH-011). Hver mangelkode hører til en kategori, og kategorien avgjør hva
-  mangelen hindrer:
-  - Generelle krav: saksbehandleren kan ikke sette søkeren som kvalifisert til noen av
-    søknadsalternativene i saken.
-  - Spesielle krav: mangelen knyttes til et kompetanseregelverk, og saksbehandleren kan ikke
-    sette søkeren som kvalifisert til søknadsalternativene med kompetanseregelverket.
-  - Poeng: hindrer ikke kvalifisering.
-  - Kvote: mangelen knyttes til et kvotespørsmål, og hindrer ikke kvalifisering.
+  (se @OPT-BEH-BEH-011). Hver mangelkode hører til en kategori:
+  - Generelle krav: mangelen gjelder alle søknadsalternativene i saken.
+  - Spesielle krav: mangelen knyttes til et kompetanseregelverk.
+  - Poeng: mangelen gjelder grunnlag for poeng.
+  - Kvote: mangelen knyttes til et kvotespørsmål.
 
-  Uansett kategori kan en mangelkode også stoppe for opptak.
+  En mangel hindrer ikke at søkeren blir kvalifisert. Kvalifiseringen beregnes fra
+  kravelementene. En mangelkode kan stoppe for opptak, og da får ikke søkeren tilbud om
+  studieplass. Det står i OPT-PLA-TIL-001.
 
-  Kravet har seks deler:
-  1. Mangelkoder – opptaksforvalteren forvalter mangelkodene og tekstene, og merker mangelkoden
-     for generell studiekompetanse som fullføres i vår.
+  Kravet har fem deler:
+  1. Mangelkoder – opptaksforvalteren forvalter mangelkodene og tekstene.
   2. Registrering – saksbehandleren registrerer, sjekker ut og sletter mangler i saken.
   3. Publisering og melding – søkeren får se manglene og får melding om dem, med frist.
   4. Søkerens visning – søkeren ser manglene og laster opp dokumentasjon på dokumentasjonssiden.
   5. Innsyn – hvem som ser manglene i sakene, og hvordan saksbehandleren finner sakene med en
      bestemt mangelkode.
-  6. Automatikk – mangler som settes og sjekkes ut automatisk.
 
   Bakgrunn:
     Gitt at opptaket "Samordna opptak 2027" forvaltes av HK-dir
@@ -79,82 +74,31 @@ Egenskap: Søknadsmangler
         | Samordna opptak 2027    | HK-dir               |
         | Lokalt opptak høst 2027 | Universitetet i Oslo |
 
-  @draft @ref-FLY-OPT-AUT-001
-  Regel: Opptaksforvalteren merker én mangelkode for generell studiekompetanse som fullføres i vår
-
-    Mangelkoden som er merket, er den saken får automatisk når søkeren oppgir at generell
-    studiekompetanse fullføres i vår (se «6. Automatikk»). Bare én mangelkode i
-    regelverkssamlingen kan være merket, og den må være i kategorien «Generelle krav» og stoppe
-    for opptak.
-    # I det gamle systemet het mangelkoden DUA. Eksemplene bruker den koden.
-
-    Scenario: Opptaksforvalteren merker mangelkoden for generell studiekompetanse som fullføres i vår
-      Gitt at regelverkssamlingen "UHG 2027" har mangelkoden "DUA" i kategorien "Generelle krav", som stopper for opptak
-      Når opptaksforvalteren ved HK-dir merker mangelkoden "DUA" for generell studiekompetanse som fullføres i vår
-      Så er "DUA" mangelkoden for generell studiekompetanse som fullføres i vår i regelverkssamlingen "UHG 2027"
-
-    Scenario: Bare én mangelkode i regelverkssamlingen kan være merket for generell studiekompetanse som fullføres i vår
-      Gitt at regelverkssamlingen "UHG 2027" har mangelkodene "DUA" og "VIT"
-      Og at mangelkoden "DUA" er merket for generell studiekompetanse som fullføres i vår
-      Når opptaksforvalteren ved HK-dir merker mangelkoden "VIT" for generell studiekompetanse som fullføres i vår
-      Så avvises endringen med melding om at mangelkoden "DUA" allerede er merket
-
-    Scenariomal: Mangelkoden kan ikke merkes når den <avvik>
-      Gitt at regelverkssamlingen "UHG 2027" har mangelkoden "VIT", som <avvik>
-      Når opptaksforvalteren ved HK-dir merker mangelkoden "VIT" for generell studiekompetanse som fullføres i vår
-      Så avvises endringen
-
-      Eksempler:
-        | avvik                            |
-        | er i kategorien "Spesielle krav" |
-        | ikke stopper for opptak          |
-
   # ── 2. Registrering ──────────────────────────────────────────
 
-  Regel: Kategorien til mangelkoden avgjør hva mangelen hindrer
+  Regel: Mangler hindrer ikke kvalifiseringen eller at saken blir ferdig behandlet
+    # Avklart 2026-11-02 i gjennomgangen av flyten automatisk saksbehandling: kvalifiseringen
+    # beregnes fra kravelementene, og leser ikke manglene. At en mangelkode som stopper for
+    # opptak hindrer tilbud om studieplass, står i OPT-PLA-TIL-001.
 
-    Scenario: Mangel på generelle krav hindrer kvalifisering til alle søknadsalternativene i saken
-      Gitt at saken hos "Universitetet i Oslo" har søknadsalternativene "Informatikk, UiO" og "Historie, UiO"
-      Og at saken har en mangel i kategorien "Generelle krav"
-      Når saksbehandleren ved Universitetet i Oslo vurderer kvalifiseringen
-      Så kan ikke saksbehandleren sette søkeren som kvalifisert til noen av søknadsalternativene i saken
-
-    Scenario: Mangel på spesielle krav hindrer kvalifisering bare til søknadsalternativene med kompetanseregelverket
-      Gitt at saken hos "Universitetet i Oslo" har følgende søknadsalternativer
-        | søknadsalternativ | kompetanseregelverk      |
-        | Informatikk, UiO  | Regelverk A, Regelverk B |
-        | Historie, UiO     | Regelverk A              |
-      Og at saken har en mangel i kategorien "Spesielle krav" på kompetanseregelverket "Regelverk B"
-      Når saksbehandleren ved Universitetet i Oslo vurderer kvalifiseringen
-      Så kan ikke saksbehandleren sette søkeren som kvalifisert til "Informatikk, UiO"
-      Men saksbehandleren kan sette søkeren som kvalifisert til "Historie, UiO"
-
-    Scenariomal: Mangel på <kategori> hindrer ikke kvalifisering
-      Gitt at saken hos "Universitetet i Oslo" har en mangel i kategorien "<kategori>"
-      Og at saken ikke har mangler i kategoriene "Generelle krav" eller "Spesielle krav"
-      Når saksbehandleren ved Universitetet i Oslo vurderer kvalifiseringen
-      Så kan saksbehandleren sette søkeren som kvalifisert til søknadsalternativene i saken
+    Scenariomal: Søkeren er kvalifisert selv om saken har en mangel i kategorien <kategori>
+      Gitt at søkeren oppfyller kravelementene til "Informatikk, UiO"
+      Og at saken hos "Universitetet i Oslo" har en mangel i kategorien "<kategori>"
+      Når kvalifiseringen beregnes
+      Så er søkeren kvalifisert til "Informatikk, UiO"
 
       Eksempler:
-        | kategori |
-        | Poeng    |
-        | Kvote    |
+        | kategori       |
+        | Generelle krav |
+        | Spesielle krav |
+        | Poeng          |
+        | Kvote          |
 
     @ref-OPT-BEH-BEH-025
     Scenario: Saken kan behandles ferdig selv om den har mangler
       Gitt at saken hos "Universitetet i Oslo" har mangelen "KAR"
       Når saksbehandleren ved Universitetet i Oslo har behandlet saken så langt dokumentasjonen rekker
-      Så kan saksbehandleren sette saken til "Ferdig behandlet"
-
-    @draft @openquestion
-    Scenario: Mangel som sperrer opptak holder søkeren utenfor tilbudskjøringen
-      # ÅPNE SPØRSMÅL:
-      # - Hva gjør «Stopper for opptak»? Søkere med mangler er med i tilbudskjøringen, med
-      #   status «ikke kvalifisert» (review i PR #700), og koden leser ikke `sperrer_opptak` i
-      #   plasstildelingen eller tilbudskjøringen (verify 2026-10-08).
-      Gitt at saken hos "Universitetet i Oslo" har en mangel med en mangelkode som sperrer opptak
-      Når tilbudskjøringen kjøres
-      Så deltar ikke søkeren i tilbudskjøringen
+      Så kan saksbehandleren sette saken til "Behandlet"
 
   Regel: Saksbehandlende organisasjon registrerer mangler i saken sin
 
@@ -255,12 +199,6 @@ Egenskap: Søknadsmangler
       Så er mangelen "KAR" sjekket ut
       Og saken har fortsatt mangelen "KAR"
 
-    Scenario: Mangel som er sjekket ut hindrer ikke kvalifisering
-      Gitt at saken hos "Universitetet i Oslo" har mangelen "KAR" på kompetanseregelverket "Regelverk B"
-      Og at mangelen "KAR" er sjekket ut
-      Når saksbehandleren ved Universitetet i Oslo vurderer kvalifiseringen
-      Så kan saksbehandleren sette søkeren som kvalifisert til søknadsalternativene med "Regelverk B"
-
     Scenario: Saksbehandleren ser om søkeren har lest mangelen
       Gitt at mangelen "KAR" er publisert
       Og at søkeren har åpnet mangelen "KAR" i Min kompetanse
@@ -273,6 +211,14 @@ Egenskap: Søknadsmangler
   Regel: Søkeren ser bare manglene som er publisert, og får melding om dem
     # Den automatiske behandlingen publiserer manglene når den setter saken til ferdig
     # behandlet. Det står i OPT-BEH-BEH-025.
+    # Avklart 2026-11-02:
+    # - Manglene saksbehandleren registrerer, publiserer saksbehandleren når saksbehandleren
+    #   vil. Saken kan ikke settes til «Behandlet» uten at manglene publiseres.
+    # - De automatiske mangeltekstene fra kompetanseregelverket publiseres når saken settes til
+    #   «Behandlet», eller når saksbehandleren publiserer manglene.
+    # - Mangelen for generell studiekompetanse som fullføres i vår, publiseres alltid
+    #   automatisk, uten egen melding (se «Mangelen for generell studiekompetanse som fullføres
+    #   i vår settes og sjekkes ut automatisk»).
 
     Scenario: Registrering av mangel publiserer ikke mangelen
       Når saksbehandleren ved Universitetet i Oslo registrerer mangelen "KAR"
@@ -311,13 +257,8 @@ Egenskap: Søknadsmangler
       # ÅPNE SPØRSMÅL:
       # - Publiseringen er endret etter raffineringen: saksbehandleren publiserer alle manglene i
       #   saken samlet, og søkeren får melding hver gang. Ikke gått gjennom med teamet.
-      # - Skal de automatiske mangeltekstene for kompetanseregelverk publiseres på samme måte som
-      #   manglene saksbehandleren registrerer? Saksbehandleren velger da å publisere, og
-      #   publiseringen gjelder begge deler. Det er allerede et krav om at begge deler må være
-      #   publisert når saken settes til «Ferdig behandlet».
-      #   Merk: de automatiske mangeltekstene for kompetanseregelverk blir alltid publisert når
-      #   saken settes til «Ferdig behandlet» (se «Søkeren ser de automatiske mangeltekstene når
-      #   saken er ferdig behandlet»).
+      # Avklart 2026-11-02: de automatiske mangeltekstene publiseres når saksbehandleren
+      # publiserer manglene, og ellers når saken settes til «Behandlet».
       # Kode i dag: «Oppdater mangel i Min kompetanse» kan ikke brukes når saken bare har
       # automatiske mangler.
       Gitt at saken hos "Universitetet i Oslo" bare har den automatiske mangelteksten for "Matematikk R2"
@@ -340,32 +281,20 @@ Egenskap: Søknadsmangler
 
     Scenario: Saksbehandleren blir advart om mangler som ikke er publisert
       Gitt at saken hos "Universitetet i Oslo" har mangelen "KNN" som ikke er publisert
-      Når saksbehandleren ved Universitetet i Oslo setter saken til "Ferdig behandlet"
+      Når saksbehandleren ved Universitetet i Oslo setter saken til "Behandlet"
       Så ser saksbehandleren at søkeren ikke ser mangelen "KNN" i Min kompetanse
 
-    @draft @openquestion
     Scenario: Publisere manglene når saken settes til ferdig behandlet
-      # ÅPNE SPØRSMÅL:
-      # - Publiseringen er endret etter raffineringen: saksbehandleren publiserer alle manglene i
-      #   saken samlet, og søkeren får melding hver gang. Settes saken til «Ferdig behandlet»,
-      #   publiseres manglene, med mindre saksbehandleren velger å la være. Ikke gått gjennom med teamet.
       Gitt at saksbehandleren ved Universitetet i Oslo er advart om at mangelen "KNN" ikke er publisert
-      Når saksbehandleren velger å publisere manglene og sette saken til "Ferdig behandlet"
-      Så er saken "Ferdig behandlet"
+      Når saksbehandleren velger å publisere manglene og sette saken til "Behandlet"
+      Så er saken "Behandlet"
       Og søkeren ser mangelen "KNN" i Min kompetanse
       Og søkeren har mottatt en melding om mangler
-
-    Scenario: Sette saken til ferdig behandlet uten å publisere manglene
-      Gitt at saksbehandleren ved Universitetet i Oslo er advart om at mangelen "KNN" ikke er publisert
-      Når saksbehandleren velger å sette saken til "Ferdig behandlet" uten å varsle søkeren
-      Så er saken "Ferdig behandlet"
-      Og søkeren ser ikke mangelen "KNN" i Min kompetanse
-      Og søkeren har ikke mottatt en melding om mangler
 
     Scenario: Avbryte når saken har mangler som ikke er publisert
       Gitt at saksbehandleren ved Universitetet i Oslo er advart om at mangelen "KNN" ikke er publisert
       Når saksbehandleren avbryter
-      Så er ikke saken satt til "Ferdig behandlet"
+      Så er ikke saken satt til "Behandlet"
 
     Scenario: Søkeren får én melding om manglene som publiseres i saken
       Gitt at saken hos "Universitetet i Oslo" har manglene "KAR" og "STEMPEL"
@@ -550,196 +479,3 @@ Egenskap: Søknadsmangler
       Når saksbehandleren ved Universitetet i Oslo velger "DUA" som filter i listen over saker
       Så vises saken til "Kari Nordmann"
       Men saken til "Ola Nordmann" vises ikke
-
-  # ── 6. Automatikk ────────────────────────────────────────────
-
-  @depends-on-OPT-BEH-BEH-020 @ref-FLY-OPT-AUT-001 @ref-OPT-BEH-BEH-025
-  Regel: Saken får automatiske mangeltekster når søkeren ikke er kvalifisert
-
-    De automatiske mangeltekstene følger kvalifiseringen. Er søkeren ikke kvalifisert på
-    kompetanseregelverket, har saken én automatisk mangeltekst for hvert kravelement som ikke er
-    oppfylt. Blir søkeren kvalifisert, slettes tekstene automatisk. Det gjelder uansett om
-    kravelementene er vurdert av den automatiske behandlingen eller av saksbehandleren i steget
-    «Spesielle opptakskrav». En automatisk mangeltekst har ingen mangelkode, og saksbehandleren
-    kan ikke gjøre noe med den. Mener saksbehandleren at søkeren oppfyller kravet, vurderer
-    saksbehandleren kravelementet som oppfylt.
-
-    # Avklart 30.10.2026: den automatiske behandlingen lager ikke mangler med mangelkode, bare
-    # automatiske mangeltekster. Teksten lages av navnet på kravelementet, etter et fast mønster
-    # som står i implementasjonsdetaljene. Kravelementene får ingen egen tekst til søkeren. Det
-    # avviker fra raffineringen, som sa at tekstene skulle hentes fra opptakskravene.
-    # Avklart 30.10.2026: er søkeren ikke kvalifisert på noen kravliste, får alle kravelementene
-    # som ikke er oppfylt, en mangeltekst, i alle kravlistene. Søkeren må kunne se at
-    # kravlistene er alternativer. Hvordan, avgjøres i designet.
-    # Avklart 30.10.2026: saksbehandleren kan ikke kommentere, sjekke ut eller slette en
-    # automatisk mangeltekst.
-
-    Scenariomal: Saken får en automatisk mangeltekst når <vurdert av> vurderer at et kravelement ikke er oppfylt
-      Gitt at søknadsalternativene i saken hos "Universitetet i Oslo" har kravelementet "Matematikk R2"
-      Når <vurdert av> vurderer at "Matematikk R2" ikke er oppfylt
-      Så er søkeren ikke kvalifisert
-      Og har saken en automatisk mangeltekst som viser at "Matematikk R2" ikke er oppfylt
-
-      Eksempler:
-        | vurdert av                               |
-        | den automatiske behandlingen             |
-        | saksbehandleren ved Universitetet i Oslo |
-
-    Scenario: Saken får ikke mangeltekst når søkeren er kvalifisert på en annen kravliste
-      Gitt at "Informatikk, UiO" har kravlisten "Matematikk R2" og kravlisten "Matematikk R1 og Fysikk 2"
-      Og at vitnemålet har "Matematikk R1" og "Fysikk 2", men ikke "Matematikk R2"
-      Når den automatiske behandlingen vurderer kravelementene
-      Så er søkeren kvalifisert for "Informatikk, UiO"
-      Og saken har ikke en automatisk mangeltekst for "Matematikk R2"
-
-    Scenario: Saken får mangeltekster i alle kravlistene når søkeren ikke er kvalifisert på noen
-      Gitt at "Informatikk, UiO" har kravlisten "Matematikk R2" og kravlisten "Matematikk R1 og Fysikk 2"
-      Og at vitnemålet har "Matematikk R1", men ikke "Matematikk R2" og ikke "Fysikk 2"
-      Når den automatiske behandlingen vurderer kravelementene
-      Så har saken en automatisk mangeltekst for "Matematikk R2"
-      Og saken har en automatisk mangeltekst for "Fysikk 2"
-
-    Scenariomal: De automatiske mangeltekstene slettes når <vurdert av> vurderer at søkeren er kvalifisert
-      Gitt at saken hos "Universitetet i Oslo" har en automatisk mangeltekst som viser at "Matematikk R2" ikke er oppfylt
-      Når <vurdert av> vurderer at "Matematikk R2" er oppfylt
-      Så er søkeren kvalifisert
-      Og saken har ikke en automatisk mangeltekst for "Matematikk R2"
-
-      Eksempler:
-        | vurdert av                               |
-        | den automatiske behandlingen             |
-        | saksbehandleren ved Universitetet i Oslo |
-
-    Scenario: Saksbehandleren ser de automatiske mangeltekstene sammen med de registrerte manglene
-      Gitt at saken hos "Universitetet i Oslo" har en automatisk mangeltekst for "Matematikk R2"
-      Og at saksbehandleren ved Universitetet i Oslo har registrert mangelen "STEMPEL"
-      Når saksbehandleren åpner manglene i saken
-      Så ser saksbehandleren den automatiske mangelteksten for "Matematikk R2" og mangelen "STEMPEL"
-
-    Scenario: Søkeren ser de automatiske mangeltekstene når saken er ferdig behandlet
-      # Avklart 30.10.2026. Ingen publiserer tekstene.
-      Gitt at saken hos "Universitetet i Oslo" har en automatisk mangeltekst for "Matematikk R2"
-      Når saken hos "Universitetet i Oslo" blir ferdig behandlet
-      Så ser søkeren den automatiske mangelteksten for "Matematikk R2" i Min kompetanse
-
-    Scenario: Søkeren ser ikke de automatiske mangeltekstene mens saken er under behandling
-      Gitt at saken hos "Universitetet i Oslo" er under behandling
-      Og at saken har en automatisk mangeltekst for "Matematikk R2"
-      Når søkeren åpner dokumentasjonssiden i Min kompetanse
-      Så ser ikke søkeren den automatiske mangelteksten for "Matematikk R2"
-
-    Scenario: Søkeren ser mangeltekstene per søknadsalternativ
-      Gitt at saken hos "Universitetet i Oslo" er ferdig behandlet
-      Og at saken har en automatisk mangeltekst for "Matematikk R2" for "Informatikk, UiO"
-      Når søkeren åpner dokumentasjonssiden i Min kompetanse
-      Så ser søkeren mangelteksten for "Matematikk R2" under "Informatikk, UiO"
-
-    Scenario: Søkeren ser ikke mangelteksten når søknadsalternativet er fjernet
-      # Avklart 30.10.2026: mangelteksten slettes ikke, men vises ikke lenger.
-      Gitt at saken hos "Universitetet i Oslo" har en automatisk mangeltekst for "Matematikk R2" for "Informatikk, UiO"
-      Og at ingen andre søknadsalternativer i saken har kravelementet "Matematikk R2"
-      Når søkeren fjerner "Informatikk, UiO" fra søknaden
-      Så ser ikke søkeren mangelteksten for "Matematikk R2" i Min kompetanse
-      Og saken har fortsatt den automatiske mangelteksten for "Matematikk R2"
-
-    Scenario: Saksbehandleren kan ikke endre en automatisk mangeltekst
-      Gitt at saken hos "Universitetet i Oslo" har en automatisk mangeltekst for "Matematikk R2"
-      Når saksbehandleren ved Universitetet i Oslo åpner manglene i saken
-      Så ser ikke saksbehandleren muligheten til å kommentere, sjekke ut eller slette den automatiske mangelteksten
-
-  @ref-FLY-OPT-AUT-001 @depends-on-OPT-SØK-SØK-018 @ref-OPT-OVO-GRU-001
-  Regel: Mangelen for generell studiekompetanse som fullføres i vår settes og sjekkes ut automatisk
-
-    Søkere som fullfører videregående opplæring i vår, oppgir i søknaden at generell
-    studiekompetanse fullføres i vår, det vil si at vitnemålet kommer senere. Alle sakene i
-    søknaden får da automatisk en mangel med mangelkoden opptaksforvalteren har merket i
-    regelverkssamlingen (se «1. Mangelkoder»). Mangelkoden er i kategorien «Generelle krav» og
-    stopper for opptak. «Stopper for opptak» virker som for andre mangelkoder, og er ikke avklart
-    ennå (se «Mangel som sperrer opptak holder søkeren utenfor tilbudskjøringen»).
-
-    Mangelen er klar til publisering når den settes, så søkeren ser den i Min kompetanse, men
-    søkeren får ikke egen melding om den. Endrer søkeren søknaden til at generell
-    studiekompetanse ikke fullføres i vår, slettes mangelen hvis den ikke er sjekket ut.
-
-    Når saken er behandlet helautomatisk, sjekker den automatiske behandlingen ut mangelen som et
-    av de siste stegene før saken er ferdig behandlet. Saksbehandleren kan også sjekke
-    ut mangelen, for eksempel når søkeren har dokumentert vitnemålet på annen måte.
-    # I det gamle systemet het mangelkoden DUA. Eksemplene bruker den koden.
-
-    # Avklart 30.10.2026: er ingen mangelkode merket, får opptaksforvalteren et varsel første
-    # gang en søknad ikke får mangelen, og en advarsel allerede når opptaket opprettes
-    # (OPT-OVO-GRU-001).
-    # Avklart 30.10.2026: saksbehandleren kan sjekke ut mangelen, men ikke slette den. Bare
-    # automatikken sletter den, når søkeren endrer søknaden.
-    # Avklart 30.10.2026: en mangel som er sjekket ut, blir stående når søkeren endrer søknaden.
-
-    Scenario: Alle sakene i søknaden får mangel når søkeren oppgir at generell studiekompetanse fullføres i vår
-      Gitt at mangelkoden "DUA" i regelverkssamlingen "UHG 2027" er merket for generell studiekompetanse som fullføres i vår
-      Og at søknaden har saker hos "Universitetet i Oslo" og "UiT Norges arktiske universitet"
-      Når søkeren oppgir i søknaden at generell studiekompetanse fullføres i vår
-      Så har sakene hos "Universitetet i Oslo" og "UiT Norges arktiske universitet" den automatiske mangelen "DUA"
-      Og saksloggen viser at mangelen ble registrert fordi søkeren oppga at generell studiekompetanse fullføres i vår
-
-    Scenario: Saken får ikke mangel når ingen mangelkode er merket
-      Gitt at ingen mangelkode i regelverkssamlingen "UHG 2027" er merket for generell studiekompetanse som fullføres i vår
-      Når søkeren oppgir i søknaden at generell studiekompetanse fullføres i vår
-      Så har ikke saken hos "Universitetet i Oslo" en automatisk mangel for generell studiekompetanse som fullføres i vår
-      Og opptaksforvalteren ved HK-dir får varsel om at ingen mangelkode er merket
-
-    Scenario: Opptaksforvalteren får varselet bare første gang
-      Gitt at ingen mangelkode i regelverkssamlingen "UHG 2027" er merket for generell studiekompetanse som fullføres i vår
-      Og at opptaksforvalteren ved HK-dir har fått varsel om at ingen mangelkode er merket
-      Når en ny søker oppgir i søknaden at generell studiekompetanse fullføres i vår
-      Så får ikke opptaksforvalteren ved HK-dir et nytt varsel
-
-    Scenario: Den automatiske mangelen hindrer kvalifisering til søknadsalternativene i saken
-      Gitt at saken hos "Universitetet i Oslo" har den automatiske mangelen "DUA"
-      Når saksbehandleren ved Universitetet i Oslo vurderer kvalifiseringen
-      Så kan ikke saksbehandleren sette søkeren som kvalifisert til noen av søknadsalternativene i saken
-
-    Scenario: Søkeren ser den automatiske mangelen i Min kompetanse
-      Gitt at mangelkoden "DUA" i regelverkssamlingen "UHG 2027" er merket for generell studiekompetanse som fullføres i vår
-      Når søkeren oppgir i søknaden at generell studiekompetanse fullføres i vår
-      Så ser søkeren mangelen "DUA" i Min kompetanse
-
-    Scenario: Søkeren får ikke egen melding om den automatiske mangelen
-      Gitt at mangelkoden "DUA" i regelverkssamlingen "UHG 2027" er merket for generell studiekompetanse som fullføres i vår
-      Når søkeren oppgir i søknaden at generell studiekompetanse fullføres i vår
-      Så har søkeren ikke mottatt en melding om mangler
-
-    Scenario: Mangelen slettes når søkeren endrer søknaden
-      Gitt at saken hos "Universitetet i Oslo" har den automatiske mangelen "DUA"
-      Og at mangelen "DUA" ikke er sjekket ut
-      Når søkeren endrer søknaden til at generell studiekompetanse ikke fullføres i vår
-      Så har ikke saken mangelen "DUA"
-      Og saksloggen viser at mangelen ble slettet fordi søkeren endret søknaden
-
-    Scenario: Mangel som er sjekket ut slettes ikke når søkeren endrer søknaden
-      Gitt at saken hos "Universitetet i Oslo" har den automatiske mangelen "DUA"
-      Og at mangelen "DUA" er sjekket ut
-      Når søkeren endrer søknaden til at generell studiekompetanse ikke fullføres i vår
-      Så har saken fortsatt mangelen "DUA"
-
-    Scenario: Saksbehandleren kan sjekke ut mangelen, men ikke slette den
-      Gitt at saken hos "Universitetet i Oslo" har den automatiske mangelen "DUA"
-      Når saksbehandleren ved Universitetet i Oslo åpner manglene i saken
-      Så kan saksbehandleren sjekke ut mangelen "DUA"
-      Men saksbehandleren ser ikke muligheten til å slette mangelen "DUA"
-
-    Scenario: Mangelen sjekkes ut når saken er behandlet helautomatisk
-      Gitt at saken hos "Universitetet i Oslo" har den automatiske mangelen "DUA"
-      Når den automatiske behandlingen har behandlet saken helautomatisk
-      Så er mangelen "DUA" sjekket ut før saken er ferdig behandlet
-      Og saksloggen viser at den automatiske behandlingen sjekket ut mangelen
-
-    Scenario: Mangelen sjekkes ikke ut når saken ikke er behandlet helautomatisk
-      Gitt at saken hos "Universitetet i Oslo" har den automatiske mangelen "DUA"
-      Når den automatiske behandlingen sender saken til saksbehandleren
-      Så er ikke mangelen "DUA" sjekket ut
-
-    Scenario: Saksbehandleren sjekker ut mangelen når søkeren har dokumentert vitnemålet
-      Gitt at saken hos "Universitetet i Oslo" har den automatiske mangelen "DUA"
-      Og at søkeren har lastet opp vitnemålet
-      Når saksbehandleren ved Universitetet i Oslo sjekker ut mangelen "DUA"
-      Så er mangelen "DUA" sjekket ut
-      Og saken har fortsatt mangelen "DUA"
