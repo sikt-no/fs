@@ -1,5 +1,5 @@
 # language: no
-@OPT-BEH-BEH-026 @must @planned
+@OPT-BEH-BEH-026 @must @planned @scope-beregne-automatisk-pa-nytt
 Egenskap: Beregne automatisk på nytt
   Som opptaksforvalter
   ønsker jeg å kjøre den automatiske behandlingen på nytt for søknadsalternativene en feil har rammet
@@ -24,7 +24,7 @@ Egenskap: Beregne automatisk på nytt
   # endres. Søkeren ser det som er endret, i Min kompetanse.
 
   # Avklart 30.10.2026: søkeren ser de automatiske mangeltekstene når saken er ferdig behandlet
-  # (OPT-BEH-BEH-008). Gir beregningen på nytt en ny mangeltekst i en sak som er ferdig
+  # (OPT-BEH-BEH-036). Gir beregningen på nytt en ny mangeltekst i en sak som er ferdig
   # behandlet, ser søkeren den med en gang. Ingen trenger å publisere den.
 
   # Avklart 30.10.2026: beregningen kjører som en jobb i bakgrunnen, etter det samme mønsteret
@@ -79,7 +79,8 @@ Egenskap: Beregne automatisk på nytt
       Så har "Informatikk, UiO" poengsum for "Kari Nordmann" etter det rettede rangeringsregelverket
       Og saken til "Kari Nordmann" hos "Universitetet i Oslo" er fortsatt ferdig behandlet
 
-    @depends-on-OPT-BEH-BEH-008
+    @depends-on-OPT-BEH-BEH-036
+    # OPT-BEH-BEH-036: «Saken får automatiske mangeltekster når søkeren ikke er kvalifisert»
     Scenario: Søkeren ser den nye mangelteksten i en sak som er ferdig behandlet
       Gitt at saken til "Kari Nordmann" hos "Universitetet i Oslo" er ferdig behandlet
       Og at "Kari Nordmann" er kvalifisert for "Informatikk, UiO"

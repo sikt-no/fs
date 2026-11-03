@@ -1,5 +1,5 @@
 # language: no
-@OPT-BEH-BEH-025 @must @planned @ref-OPT-BEH-BEH-004 @ref-OPT-BEH-BEH-018 @ref-OPT-BEH-BEH-019 @ref-OPT-BEH-BEH-020 @ref-OPT-BEH-BEH-032
+@OPT-BEH-BEH-025 @must @in-progress @scope-automatisk-ferdigbehandling @ref-OPT-BEH-BEH-004 @ref-OPT-BEH-BEH-018 @ref-OPT-BEH-BEH-019 @ref-OPT-BEH-BEH-020 @ref-OPT-BEH-BEH-032
 Egenskap: Ferdigbehandle en sak
   Som saksbehandler
   ønsker jeg at saker som kan behandles helt automatisk, blir ferdig behandlet uten at jeg gjør noe
@@ -26,7 +26,7 @@ Egenskap: Ferdigbehandle en sak
   # søkeren har flere vitnemål.
 
   # Avklart 30.10.2026: opptaksforvalteren får et varsel første gang en feil i regelverket
-  # stopper et steg, som for mangelkoden for GSK som fullføres i vår (OPT-BEH-BEH-008).
+  # stopper et steg, som for mangelkoden for GSK som fullføres i vår (OPT-BEH-BEH-036).
 
   # Avklart 30.10.2026: feilene i regelverket som kan stoppe et steg, står i scenariomalen
   # «<feil i regelverket> stopper <steg>». Nye feil legges til i tabellen når de oppdages.
@@ -55,11 +55,13 @@ Egenskap: Ferdigbehandle en sak
       Når søknaden behandles automatisk
       Så behandles ikke saken hos "Universitetet i Oslo" helautomatisk
 
+    @implemented
     Scenario: Saken behandles ikke helautomatisk før saksbehandleren har valgt vitnemål
       Gitt at "Kari Nordmann" har to vitnemål som gir GSK
       Når søknaden behandles automatisk
       Så behandles ikke saken hos "Universitetet i Oslo" helautomatisk
 
+    @implemented
     Scenario: Saken behandles ikke helautomatisk når søkeren har flere vitnemål, og bare ett gir GSK
       # Avklart 30.10.2026: det andre vitnemålet kan ha fag som gir søkeren flere poeng, så
       # saksbehandleren velger vitnemålet. Søknaden får likevel GSK-konklusjonen fra vitnemålet
@@ -103,8 +105,9 @@ Egenskap: Ferdigbehandle en sak
       Når søknaden behandles automatisk
       Så er saken hos "Universitetet i Oslo" ferdig behandlet
 
-    @depends-on-OPT-BEH-BEH-008
-    # OPT-BEH-BEH-008: «Mangler hindrer ikke kvalifiseringen eller at saken blir ferdig behandlet» og «Saken får automatiske mangeltekster når søkeren ikke er kvalifisert»
+    @depends-on-OPT-BEH-BEH-008 @depends-on-OPT-BEH-BEH-036
+    # OPT-BEH-BEH-008: «Mangler hindrer ikke kvalifiseringen eller at saken blir ferdig behandlet»
+    # OPT-BEH-BEH-036: «Saken får automatiske mangeltekster når søkeren ikke er kvalifisert»
     Scenario: Saken er ferdig behandlet selv om kravelementene ga mangeltekst
       Gitt at "Informatikk, UiO" har kravelementet "Matematikk R2"
       Og at vitnemålet ikke har "Matematikk R2"
@@ -178,6 +181,7 @@ Egenskap: Ferdigbehandle en sak
         | to grunnlag passer like godt                      | grunnlaget  |
         | opptaket mangler dato for aldersberegning         | grunnlaget  |
 
+  @implemented
   Regel: Saksbehandleren setter saken til ferdig behandlet når den automatiske behandlingen ikke har fullført
 
     Bakgrunn:
