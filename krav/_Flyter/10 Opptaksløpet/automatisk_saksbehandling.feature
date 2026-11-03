@@ -5,8 +5,8 @@ Egenskap: Automatisk saksbehandling
   behandlet og klar til å være med i plasstildelingen, uten at en saksbehandler har gjort noe.
   Plasstildelingen er ikke en del av flyten. Søkerens
   vitnemål importeres fra KREG til opptakssystemet når saken er opprettet (OPT-BEH-BEH-030).
-  GSK-vitnemålsberegningen kjører for hvert vitnemål når vitnemålet importeres fra KREG, og gir
-  opptakssystemets påstand om GSK.
+  GSK-vitnemålsberegningen, opptakssystemets påstand om GSK, kjører for hvert vitnemål når
+  vitnemålet importeres fra KREG.
   Vitnemålet gir GSK når det har «GSK OK» fra KREG, og søknaden får GSK-konklusjonen da.
   Opptakssystemets påstand fra fs-opptaks kontrollmotor er en kontroll: er den uenig, får saksbehandleren et varsel, men flyten
   stopper ikke (OPT-BEH-BEH-015). «Importeres» betyr i flyten alltid at

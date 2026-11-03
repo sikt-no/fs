@@ -12,7 +12,7 @@ Egenskap: Importere VGS-vitnemål fra KREG
   håndteres etter reglene for annullerte vitnemål.
 
   # Fasene er etter prosesstegningen «Importer VGS-vitnemål fra KREG» (2026-10-29).
-  # Avklart 2026-11-03: GSK-vitnemålsberegningen gir opptakssystemets påstand om GSK for ett
+  # Avklart 2026-11-03: GSK-vitnemålsberegningen er opptakssystemets påstand om GSK for ett
   # vitnemål, og krever ingen sak. GSK-konklusjonen gjelder søknaden i ett opptak, og krever en
   # sak. Se begreper.md.
   # Underprosessen «Håndter annullert vitnemål» er ikke tegnet.
