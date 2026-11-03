@@ -87,7 +87,8 @@ Egenskap: Automatiske mangler
       Så ser saksbehandleren den automatiske mangelteksten for "Matematikk R2" og mangelen "STEMPEL"
 
     Scenario: Søkeren ser de automatiske mangeltekstene når saken er ferdig behandlet
-      # Avklart 30.10.2026. Ingen publiserer tekstene.
+      # Avklart 2026-11-02: tekstene publiseres når saken blir ferdig behandlet, hvis
+      # saksbehandleren ikke har publisert dem før.
       Gitt at saken hos "Universitetet i Oslo" har en automatisk mangeltekst for "Matematikk R2"
       Når saken hos "Universitetet i Oslo" blir ferdig behandlet
       Så ser søkeren den automatiske mangelteksten for "Matematikk R2" i Min kompetanse
@@ -120,7 +121,7 @@ Egenskap: Automatiske mangler
       Så ser ikke saksbehandleren muligheten til å kommentere, sjekke ut eller slette den automatiske mangelteksten
 
   @draft @ref-FLY-OPT-AUT-001 @depends-on-OPT-BEH-BEH-008
-  # OPT-BEH-BEH-008: «Opptaksforvalteren forvalter mangelkodene i regelverkssamlingen», «Kategorien til mangelkoden avgjør hva mangelen hindrer»
+  # OPT-BEH-BEH-008: «Opptaksforvalteren forvalter mangelkodene i regelverkssamlingen»
   Regel: Opptaksforvalteren merker én mangelkode for generell studiekompetanse som fullføres i vår
 
     Mangelkoden som er merket, er den saken får automatisk når søkeren oppgir at generell
@@ -152,7 +153,7 @@ Egenskap: Automatiske mangler
         | ikke stopper for opptak          |
 
   @ref-FLY-OPT-AUT-001 @depends-on-OPT-SØK-SØK-018 @ref-OPT-OVO-GRU-001 @depends-on-OPT-BEH-BEH-008
-  # OPT-BEH-BEH-008: «Kategorien til mangelkoden avgjør hva mangelen hindrer», «Saksbehandleren sjekker ut mangelen når søkeren har dokumentert på nytt»
+  # OPT-BEH-BEH-008: «Mangler hindrer ikke kvalifiseringen eller at saken blir ferdig behandlet», «Saksbehandleren sjekker ut mangelen når søkeren har dokumentert på nytt»
   Regel: Mangelen for generell studiekompetanse som fullføres i vår settes og sjekkes ut automatisk
 
     Søkere som fullfører videregående opplæring i vår, oppgir i søknaden at generell
@@ -160,8 +161,8 @@ Egenskap: Automatiske mangler
     søknaden får da automatisk en mangel med mangelkoden opptaksforvalteren har merket i
     regelverkssamlingen (se «Opptaksforvalteren merker én mangelkode for generell studiekompetanse
     som fullføres i vår»). Mangelkoden er i kategorien «Generelle krav» og
-    stopper for opptak. «Stopper for opptak» virker som for andre mangelkoder, og er ikke avklart
-    ennå (se «Mangel som sperrer opptak holder søkeren utenfor tilbudskjøringen» i OPT-BEH-BEH-008).
+    stopper for opptak. «Stopper for opptak» virker som for andre mangelkoder, og står i
+    OPT-PLA-TIL-001.
 
     Mangelen er klar til publisering når den settes, så søkeren ser den i Min kompetanse, men
     søkeren får ikke egen melding om den. Endrer søkeren søknaden til at generell
@@ -197,11 +198,6 @@ Egenskap: Automatiske mangler
       Og at opptaksforvalteren ved HK-dir har fått varsel om at ingen mangelkode er merket
       Når en ny søker oppgir i søknaden at generell studiekompetanse fullføres i vår
       Så får ikke opptaksforvalteren ved HK-dir et nytt varsel
-
-    Scenario: Den automatiske mangelen hindrer kvalifisering til søknadsalternativene i saken
-      Gitt at saken hos "Universitetet i Oslo" har den automatiske mangelen "DUA"
-      Når saksbehandleren ved Universitetet i Oslo vurderer kvalifiseringen
-      Så kan ikke saksbehandleren sette søkeren som kvalifisert til noen av søknadsalternativene i saken
 
     Scenario: Søkeren ser den automatiske mangelen i Min kompetanse
       Gitt at mangelkoden "DUA" i regelverkssamlingen "UHG 2027" er merket for generell studiekompetanse som fullføres i vår

@@ -50,6 +50,22 @@ Egenskap: Starte automatisk behandling
       Når jobben for nye vitnemål i KREG kjører
       Så behandles saken hos "Universitetet i Oslo" automatisk når vitnemålet er importert
 
+  Regel: Behandlingen starter av seg selv bare for saker som ikke er behandlet
+    # Avklart 2026-11-02: har saksbehandleren begynt på saken, eller er saken ferdig behandlet,
+    # starter ikke behandlingen av seg selv. Saksbehandleren kan starte den (se «Saksbehandleren
+    # starter den automatiske behandlingen på vitnemålet som er valgt»).
+
+    Scenariomal: Saken med behandlingsstatusen <status> behandles ikke automatisk når søkeren får det første vitnemålet
+      Gitt at saken hos "Universitetet i Oslo" har behandlingsstatusen "<status>"
+      Og at "Kari Nordmann" har fått det første vitnemålet i KREG
+      Når jobben for nye vitnemål i KREG kjører
+      Så behandles ikke saken hos "Universitetet i Oslo" automatisk
+
+      Eksempler:
+        | status           |
+        | Under behandling |
+        | Behandlet        |
+
   @openquestion @depends-on-OPT-BEH-BEH-030 @ref-OPT-BEH-BEH-021 @ref-OPT-BEH-BEH-029
   # OPT-BEH-BEH-030: «Nye og annullerte vitnemål i KREG importeres for aktive søkere»
   Regel: Et nytt vitnemål i en sak med vitnemål er ny dokumentasjon
@@ -91,20 +107,8 @@ Egenskap: Starte automatisk behandling
       Når saksbehandleren ved Universitetet i Oslo starter den automatiske behandlingen på "Vitnemål 2026"
       Så behandles saken automatisk på "Vitnemål 2026"
 
-    Scenario: Saken som er ferdig behandlet, settes til Under behandling når behandlingen startes
-      Gitt at saken har behandlingsstatusen "Behandlet"
-      Og at den automatiske behandlingen ikke kan avgjøre alle stegene på "Vitnemål 2026"
-      Når saksbehandleren ved Universitetet i Oslo starter den automatiske behandlingen på "Vitnemål 2026"
-      Så har saken behandlingsstatusen "Under behandling"
-
-    @depends-on-OPT-BEH-BEH-025
-    # OPT-BEH-BEH-025: «Den automatiske behandlingen setter saken til ferdig behandlet når alt er avgjort»
-    Scenario: Saken blir ferdig behandlet igjen når automatikken avgjør alt
-      Gitt at saken har behandlingsstatusen "Behandlet"
-      Og at den automatiske behandlingen kan avgjøre alle stegene på "Vitnemål 2026"
-      Når saksbehandleren ved Universitetet i Oslo starter den automatiske behandlingen på "Vitnemål 2026"
-      Så har saken behandlingsstatusen "Behandlet"
-      Og saksbehandleren ser at saken er behandlet automatisk
+    # Avklart 2026-11-02: den automatiske behandlingen starter ikke på en sak som er ferdig
+    # behandlet.
 
     @depends-on-OPT-BEH-BEH-011 @implemented
     # OPT-BEH-BEH-011: «Saksbehandlende organisasjon ser bare saker hos organisasjonen»
