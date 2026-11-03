@@ -16,7 +16,7 @@ Egenskap: Opptaksinnstillinger per utdanningstilbud
   #   @ref-OPT-OPT-UTD-008 (sette_innstillinger_for_flere_utdanningstilbud.feature),
   #   @ref-OPT-OPT-UTD-007 (sette_studieplasser_og_antall_tilbud.feature) og
   #   @ref-OPT-OPT-UTD-025 (sette_tidlig_søknadsfrist.feature)?
-  # - Kommentaren mellom regelen om poenggrensen og regelen om saksbehandlertildelingsregel viser til
+  # - Kommentaren foran regelen om saksbehandlertildelingsregel viser til
   #   antall_tilbud_som_skal_gis.feature. Skal den bli @ref-OPT-PLA-INN-001, og på hvilken del?
 
   Bakgrunn:
@@ -135,11 +135,37 @@ Egenskap: Opptaksinnstillinger per utdanningstilbud
         | Førstegangsvitnemål (ORDF) | 2              |
         | Ordinær kvote (ORD)        | 3              |
 
+    # AVKLART 2026-10-28: Kvoteprioriteten settes ikke ut fra rekkefølgen utdanningskvotene legges til i.
+    # Utdanningstilbudet har ikke en egen kopi av kvoteprioriteten og plassflyten, og følger regelverkssamlingen
+    # også når de endres der.
+    Scenario: Kvoteprioriteten avhenger ikke av rekkefølgen utdanningskvotene legges til i
+      Gitt at kvoteprioriteten i regelverkssamlingen "UHG 2027" er 2 for "Førstegangsvitnemål (ORDF)" og 3 for "Ordinær kvote (ORD)"
+      Og at opptaket bruker regelverkssamlingen "UHG 2027"
+      Og at utdanningstilbudet "Sykepleie, høst 2027" har utdanningskvoten "Ordinær kvote (ORD)"
+      Når opptaksforvalter ved lærestedet legger til "Førstegangsvitnemål (ORDF)" på utdanningstilbudet "Sykepleie, høst 2027"
+      Så har utdanningskvotene på utdanningstilbudet kvoteprioriteten fra regelverkssamlingen
+        | utdanningskvote            | kvoteprioritet |
+        | Førstegangsvitnemål (ORDF) | 2              |
+        | Ordinær kvote (ORD)        | 3              |
+
+    Scenario: Endret kvoteprioritet i regelverkssamlingen gjelder for utdanningstilbudet
+      Gitt at opptaket bruker regelverkssamlingen "UHG 2027"
+      Og at utdanningstilbudet "Sykepleie, høst 2027" har utdanningskvoten "Førstegangsvitnemål (ORDF)" med kvoteprioritet 2
+      Når regelverksforvalter endrer kvoteprioriteten for "Førstegangsvitnemål (ORDF)" i regelverkssamlingen "UHG 2027" til 5
+      Så har utdanningskvoten "Førstegangsvitnemål (ORDF)" kvoteprioritet 5 på utdanningstilbudet "Sykepleie, høst 2027"
+
     Scenario: Utdanningskvotene følger plassflyten i regelverkssamlingen
       Gitt at standard plassflyt i regelverkssamlingen "UHG 2027" sender "Førstegangsvitnemål (ORDF)" til "Ordinær kvote (ORD)"
       Og at opptaket bruker regelverkssamlingen "UHG 2027"
       Når opptaksforvalter ved lærestedet legger til "Førstegangsvitnemål (ORDF)" og "Ordinær kvote (ORD)" på utdanningstilbudet "Sykepleie, høst 2027"
       Så går ledige plasser i "Førstegangsvitnemål (ORDF)" til "Ordinær kvote (ORD)" på utdanningstilbudet
+
+    Scenario: Endret plassflyt i regelverkssamlingen gjelder for utdanningstilbudet
+      Gitt at opptaket bruker regelverkssamlingen "UHG 2027"
+      Og at utdanningstilbudet "Sykepleie, høst 2027" har utdanningskvotene "Samisk førstegangsvitnemål (SAMF)", "Førstegangsvitnemål (ORDF)" og "Ordinær kvote (ORD)"
+      Og at standard plassflyt i regelverkssamlingen "UHG 2027" sender "Samisk førstegangsvitnemål (SAMF)" til "Ordinær kvote (ORD)"
+      Når regelverksforvalter endrer plassflyten i regelverkssamlingen "UHG 2027" slik at "Samisk førstegangsvitnemål (SAMF)" sendes til "Førstegangsvitnemål (ORDF)"
+      Så går ledige plasser i "Samisk førstegangsvitnemål (SAMF)" til "Førstegangsvitnemål (ORDF)" på utdanningstilbudet "Sykepleie, høst 2027"
 
   # Hva plasstildelingen gjør med plassflyten, og vernet mot sirkulær plassflyt (#598), står i
   # 14 Plasstildeling/02 Tildelingsinnstillinger/plassflyt.feature.
@@ -189,9 +215,11 @@ Egenskap: Opptaksinnstillinger per utdanningstilbud
   @depends-on-OPT-OVO-INN-001 @openquestion
   Regel: Opptaksforvalter kan markere at et utdanningstilbud tilbyr tidlig opptak
     # ÅPNE SPØRSMÅL:
-    # - Kommentarene i regelen viser til publisere_svar_på_tidlig_opptak.feature og
-    #   gi_tilbudsgaranti_ved_tidlig_opptak.feature i fritekst. Skal regelen ha @ref-OPT-BEH-BEH-014 og
-    #   @ref-OPT-BEH-BEH-007, eller skal scenarioet om poenggrensen ha @depends-on-OPT-BEH-BEH-007?
+    # - Kommentaren i regelen viser til publisere_svar_på_tidlig_opptak.feature i fritekst.
+    #   Skal regelen ha @ref-OPT-BEH-BEH-014?
+    # AVKLART 2026-11-02: Poenggrensen for tidlig opptak settes ikke på utdanningstilbudet, og det er ikke
+    # påkrevd å angi en poenggrense når utdanningstilbudet tilbyr tidlig opptak. Poenggrensen behandles et
+    # annet sted (tilbakemelding fra intern akseptansetest, SHI-791).
 
     Scenario: Markere at utdanningstilbudet tilbyr tidlig opptak
       Gitt at opptaket åpner for tidlig opptak
@@ -201,36 +229,14 @@ Egenskap: Opptaksinnstillinger per utdanningstilbud
       # gjennomføres, ikke per utdanningstilbud, se publisere_svar_på_tidlig_opptak.feature
       # (avklart 25.09.2026, uten egen publiseringsdato fra 09.10.2026).
 
-    Scenario: Sette poenggrense for tidlig opptak
-      Gitt utdanningstilbudet "Sykepleie, høst 2027" tilbyr tidlig opptak
-      Når opptaksforvalter setter poenggrensen for tidlig opptak til 50 for utdanningstilbudet "Sykepleie, høst 2027"
-      Så får søkere som deltar i tidligopptaket og har minst 50 poeng, tilbudsgaranti på "Sykepleie, høst 2027"
-      # Se gi_tilbudsgaranti_ved_tidlig_opptak.feature. En egen verdi beregnet fra fjorårets
-      # opptak kommer eventuelt senere (STEK-352).
+    Scenario: Utdanningstilbudet kan ikke tilby tidlig opptak når opptaket ikke åpner for det
+      Gitt at opptaket ikke åpner for tidlig opptak
+      Når opptaksforvalter åpner utdanningstilbudet "Sykepleie, høst 2027"
+      Så ser opptaksforvalter ikke muligheten til å markere at utdanningstilbudet tilbyr tidlig opptak
 
     # Lenken til informasjon om tidlig opptak settes per opptak, ikke per
     # utdanningstilbud, se 11 Opprette og vedlikeholde opptak/03 Innstillinger/
     # innstillinger.feature (avklart 09.10.2026, review av PR #654).
-
-  @openquestion
-  Regel: Deltakende organisasjon kan ikke endre poenggrensen for tidlig opptak etter fristen
-    # ÅPNE SPØRSMÅL:
-    # - Regelen bruker fristen for å sette poenggrenser fra frister_og_hendelser.feature. Skal den ha
-    #   @depends-on-OPT-OVO-FRI-001?
-
-    # Virkningen av fristen for å sette poenggrenser for tidlig opptak, som opptaksforvalter setter i
-    # 11 Opprette og vedlikeholde opptak/04 Frister/frister_og_hendelser.feature.
-    # Lagt til 2026-10-19 etter akseptansetesten av opprette og vedlikeholde opptak.
-    # AVKLART 2026-10-15 (Q12, TAKE-409): Fristen hindrer deltakende organisasjoner i å endre poenggrensene
-    # etter fristen. Forvaltende organisasjon kan fortsatt endre poenggrensene.
-
-    Scenario: Lærestedet kan ikke endre poenggrensen for tidlig opptak etter fristen
-      Gitt at opptaket har aktivert tidlig opptak
-      Og at fristen for å sette poenggrenser for tidlig opptak er "2027-02-15 23:59"
-      Og at fristen er ute
-      Når opptaksforvalter ved deltakende organisasjon vil endre poenggrensen for tidlig opptak på "Sykepleie, høst 2027"
-      Så kan opptaksforvalter ved deltakende organisasjon ikke endre poenggrensen
-      Men opptaksforvalter ved forvaltende organisasjon kan fortsatt endre poenggrensen
 
   # AVKLART 2026-10-08: Det finnes ingen innstilling for hvilke plasstildelingsrunder utdanningstilbudet deltar i.
   # Et utdanningstilbud er ute av en plasstildelingsrunde når det ikke er satt antall tilbud som skal gis for plasstildelingsrunden,
@@ -254,19 +260,7 @@ Egenskap: Opptaksinnstillinger per utdanningstilbud
       Så kan opptaksforvalter kun velge blant de aktive saksbehandlertildelingsreglene i opptaket
       Men opptaksforvalter ser ikke "TRA" blant valgene
 
-  @openquestion
-  # ÅPNE SPØRSMÅL:
-  # - Er det lov å overstyre visning av poenggrenser og ventelistenummer
-  #   for søkere i samordna opptak? Bør dette være opptaksinnstillinger i stedet?
-  Regel: Opptaksforvalter kan styre visning av poenggrense og ventelistenummer
-
-    Scenario: Velge å vise poenggrense for søker
-      Når opptaksforvalter angir at poenggrense skal vises for søkere på utdanningstilbudet "Sykepleie, høst 2027"
-      Så kan søkere se poenggrensen for "Sykepleie, høst 2027"
-
-    Scenario: Velge å vise ventelistenummer for søker
-      Når opptaksforvalter angir at ventelistenummer skal vises for søkere på utdanningstilbudet "Sykepleie, høst 2027"
-      Så kan søkere se sitt ventelistenummer for "Sykepleie, høst 2027"
+  # Om søkerne ser poenggrensen og ventelistenummeret, står i OPT-OPT-UTD-029.
 
   Regel: Opptaksforvalter kan sette opplysninger om tilbudsgaranti
 

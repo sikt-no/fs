@@ -68,6 +68,70 @@ Egenskap: Listevisning og søk i utdanningstilbud i opptaket
       Når opptaksforvalter søker på "sykepleie"
       Så filtreres listen til utdanningstilbud som matcher søket
 
+  Regel: Opptaksforvalter kan filtrere på om utdanningstilbudet tilbyr tidlig opptak
+    # Tilbakemelding fra intern akseptansetest (SHI-791).
+
+    Scenario: Filtrere på utdanningstilbud som tilbyr tidlig opptak
+      Når opptaksforvalter filtrerer på utdanningstilbud som tilbyr tidlig opptak
+      Så ser opptaksforvalter kun utdanningstilbud som tilbyr tidlig opptak
+
+    Scenario: Filtrere på utdanningstilbud som ikke tilbyr tidlig opptak
+      Når opptaksforvalter filtrerer på utdanningstilbud som ikke tilbyr tidlig opptak
+      Så ser opptaksforvalter kun utdanningstilbud som ikke tilbyr tidlig opptak
+
+  Regel: Opptaksforvalter kan filtrere på saksbehandlertildelingsregel
+    # Tilbakemelding fra intern akseptansetest (SHI-791).
+
+    Scenario: Tilgjengelige saksbehandlertildelingsregler i filter
+      Når opptaksforvalter åpner saksbehandlertildelingsregel-filteret
+      Så inneholder filteret saksbehandlertildelingsreglene som utdanningstilbudene i opptaket har
+      Og filteret inneholder valget "Følger opptakets standardregel"
+      Og saksbehandlertildelingsreglene er sortert alfabetisk
+      Og "Alle saksbehandlertildelingsregler" er valgt som standard
+
+    Scenario: Filtrere på saksbehandlertildelingsregel
+      Gitt at utdanningstilbudet "Sykepleie, høst 2027" har saksbehandlertildelingsregelen "TRA"
+      Når opptaksforvalter velger "TRA" som filter
+      Så ser opptaksforvalter kun utdanningstilbud med saksbehandlertildelingsregelen "TRA"
+
+    Scenario: Filtrere på utdanningstilbud som følger opptakets standardregel
+      Gitt at utdanningstilbudet "Vernepleie, høst 2027" ikke har en egen saksbehandlertildelingsregel
+      Når opptaksforvalter velger "Følger opptakets standardregel" som filter
+      Så ser opptaksforvalter kun utdanningstilbud som følger opptakets standardregel
+
+  @depends-on-OPT-OPT-UTD-022
+  Regel: Opptaksforvalter kan filtrere på studieavgift
+    # AVKLART 2026-11-02: Filteret bruker feltet på utdanningstilbudet som sier om utdanningstilbudet har
+    # studieavgift (ja eller nei), se angi_studieavgift.feature. Tilbakemelding fra intern akseptansetest (SHI-791).
+
+    Scenario: Tilgjengelige valg for studieavgift i filter
+      Når opptaksforvalter åpner studieavgift-filteret
+      Så inneholder filteret valgene
+        | Studieavgift          |
+        | Alle utdanningstilbud |
+        | Har studieavgift      |
+        | Har ikke studieavgift |
+      Og "Alle utdanningstilbud" er valgt som standard
+
+    Scenario: Filtrere på utdanningstilbud som har studieavgift
+      Gitt at utdanningstilbudet "Medisin, høst 2027" har studieavgift
+      Når opptaksforvalter velger "Har studieavgift" som filter
+      Så ser opptaksforvalter kun utdanningstilbud som har studieavgift
+
+    Scenario: Filtrere på utdanningstilbud som ikke har studieavgift
+      Gitt at utdanningstilbudet "Sykepleie, høst 2027" ikke har studieavgift
+      Når opptaksforvalter velger "Har ikke studieavgift" som filter
+      Så ser opptaksforvalter kun utdanningstilbud som ikke har studieavgift
+
+  Regel: Opptaksforvalter kan filtrere på utdanningstilbud som tilbys for første gang
+    # Filteret bruker feltet «Tilbys utdanningen for første gang?» på utdanningstilbudet.
+    # Tilbakemelding fra intern akseptansetest (SHI-791).
+
+    Scenario: Filtrere på utdanningstilbud som tilbys for første gang
+      Gitt at utdanningstilbudet "Sykepleie, høst 2027" tilbys for første gang
+      Når opptaksforvalter filtrerer på utdanningstilbud som tilbys for første gang
+      Så ser opptaksforvalter kun utdanningstilbud som tilbys for første gang
+
   Regel: Opptaksforvalter kan filtrere på utdanningstilbud med ufullstendige opplysninger
 
     @implemented
@@ -80,12 +144,11 @@ Egenskap: Listevisning og søk i utdanningstilbud i opptaket
       Når opptaksforvalter filtrerer på utdanningstilbud med ufullstendige opplysninger
       Så ser opptaksforvalter utdanningstilbud som mangler rangeringsregelverk
 
-    @openquestion
-    Scenario: Filtrere på utdanningstilbud som mangler kvoter, kvoteprioritet eller plassflyt
-      # ÅPNE SPØRSMÅL:
-      # - Delvis levert (verify 2026-10-22): «Har mangler» tar med utdanningstilbud uten kvoter, men ikke dem som mangler kvoteprioritet eller plassflyt. Skal kvoteprioritet og plassflyt tas med i «Har mangler»?
+    # AVKLART 2026-10-28: Kvoteprioriteten og plassflyten kommer fra regelverkssamlingen opptaket bruker,
+    # så et utdanningstilbud kan ikke mangle dem.
+    Scenario: Filtrere på utdanningstilbud som mangler kvoter
       Når opptaksforvalter filtrerer på utdanningstilbud med ufullstendige opplysninger
-      Så ser opptaksforvalter utdanningstilbud som mangler kvoter, kvoteprioritet eller plassflyt
+      Så ser opptaksforvalter utdanningstilbud som mangler kvoter
 
     Scenario: Filtrere på utdanningstilbud som mangler opplysninger om tilbudsgaranti
       Når opptaksforvalter filtrerer på utdanningstilbud med ufullstendige opplysninger
@@ -93,16 +156,11 @@ Egenskap: Listevisning og søk i utdanningstilbud i opptaket
 
     # AVKLART 08.10.2026: Fristene for tidlig opptak er felles for opptaket, og svaret på
     # tidlig opptak publiseres for hele opptaket. Utdanningstilbudet har derfor ingen egen
-    # dato for tidlig opptak. Det som kan mangle på et utdanningstilbud som tilbyr tidlig
-    # opptak, er poenggrensen. Tidlig søknadsfrist settes fritt per utdanningstilbud.
+    # dato for tidlig opptak. Tidlig søknadsfrist settes fritt per utdanningstilbud.
+    # AVKLART 2026-11-02: Poenggrensen for tidlig opptak settes ikke på utdanningstilbudet, og kan derfor
+    # ikke mangle der.
     @depends-on-OPT-OPT-UTD-025 @ref-OPT-OVO-FRI-001
     Scenario: Filtrere på utdanningstilbud som mangler dato for tidlig søknadsfrist
       Gitt at et utdanningstilbud er markert med tidlig søknadsfrist
       Når opptaksforvalter filtrerer på utdanningstilbud med ufullstendige opplysninger
       Så ser opptaksforvalter utdanningstilbud der dato for tidlig søknadsfrist ikke er satt
-
-    @depends-on-OPT-OPT-UTD-010 @ref-OPT-BEH-BEH-014
-    Scenario: Filtrere på utdanningstilbud som mangler poenggrense for tidlig opptak
-      Gitt at et utdanningstilbud tilbyr tidlig opptak
-      Når opptaksforvalter filtrerer på utdanningstilbud med ufullstendige opplysninger
-      Så ser opptaksforvalter utdanningstilbud der poenggrensen for tidlig opptak ikke er satt

@@ -73,6 +73,18 @@ Egenskap: Legge til utdanningstilbud i opptak
       Når opptaksforvalter åpner listen over utdanningstilbud som kan legges til i opptaket
       Så ser opptaksforvalter kun studieprogram på bachelornivå fra deltakende organisasjoner
 
+    Scenario: Kun utdanningstilbud med oppstart fram i tid kan legges til
+      # Tilbakemelding fra intern akseptansetest (SHI-791).
+      # AVKLART 2026-11-02: Oppstart fram i tid betyr at studiestarten er etter dagens dato. Et utdanningstilbud
+      # som allerede har startet, kan ikke legges til.
+      # Opptaket er ikke begrenset til hovedterminen: i et opptak som i hovedsak tar opp studenter til høsten 2027,
+      # kan det også legges til et utdanningstilbud som starter våren 2028.
+      Gitt at utdanningsregisteret har bachelorprogrammet "Sykepleie" med studiestart høst 2026 og høst 2027
+      Og at dagens dato er "2026-11-02"
+      Når opptaksforvalter åpner listen over utdanningstilbud som kan legges til i opptaket
+      Så ser opptaksforvalter utdanningstilbudet "Sykepleie, høst 2027"
+      Men opptaksforvalter ser ikke utdanningstilbudet "Sykepleie, høst 2026"
+
   @openquestion
   Regel: Opptaksforvalter kan filtrere på utdanningstype og studienivå når utdanningstilbud legges til
     # ÅPNE SPØRSMÅL:

@@ -26,7 +26,10 @@ Egenskap: Se detaljer om et utdanningstilbud
       Når søkeren ser detaljsiden for utdanningstilbudet "Sykepleie, høst 2027"
       Så ser søkeren at utdanningstilbudet har studieavgift
 
+# AVKLART 2026-11-02: Poenggrensen og ventelistenummeret (UTD-029) står ikke i dette kravet. Søkeren ser dem
+# bare i resultatet etter at plasstildelingen er publisert (OPT-PLA-RES-002).
+
 # ÅPNE SPØRSMÅL:
 # - Hva vises når utdanningstilbudet ikke krever attest, eller ikke har studieavgift?
-# - Skal beskrivelsen (UTD-016) og poenggrensen og ventelistenummeret (UTD-029) også stå i dette kravet?
+# - Skal beskrivelsen (UTD-016) også stå i dette kravet?
 # - Hvilket scope hører kravet til?
