@@ -115,6 +115,51 @@ Egenskap: Endre fag i grunnlaget
       # forbedring på et fag på vitnemålet»). Teksten på beskjeden hører i
       # endre_fag_i_grunnlaget.design.md.
 
+    @draft @openquestion
+    # ÅPNE SPØRSMÅL:
+    # - Skal saksbehandleren kunne hente et fag fra søkerens andre
+    #   elektroniske vitnemål, i stedet for å legge det inn for hånd?
+    #   FS-klienten kan det (tillegg fra «Vg.dok fag», uten annullerte
+    #   vitnemål, og med et valg for å skjule fag med samme resultat).
+    #   Kilde: teknisk beskrivelse av vitnemålsbehandling, G. M. Vangen, lest
+    #   03.11.2026. Ikke avklart med teamet.
+    Scenario: Hente et tilleggsfag fra et annet elektronisk vitnemål
+      Gitt jeg har lagt et vitnemål til grunn
+      Og søkeren har et annet elektronisk vitnemål som ikke er annullert
+      Når jeg velger et fag fra det andre vitnemålet som tilleggsfag
+      Så er faget et tilleggsfag på vitnemålet med karakterene fra det andre vitnemålet
+      Og tilleggsfaget kan velges per poengvariant
+
+    @draft @openquestion
+    # ÅPNE SPØRSMÅL:
+    # - Må et tilleggsfag være fra samme reform som vitnemålet, slik
+    #   FS-klienten krever («Faget må ha samme reformkode som vitnemålet»)?
+    # - Skal fag fra en tidligere reform kunne konverteres til et fag i
+    #   reformen vitnemålet er fra? FS-klienten har en fagkonverterer for
+    #   dette (R94 til Kunnskapsløftet). Også åpent i den tekniske
+    #   beskrivelsen. Spørsmålet gjelder også L4b («Velge et utgått fag»).
+    #   Kilde: teknisk beskrivelse av vitnemålsbehandling, G. M. Vangen, lest
+    #   03.11.2026.
+    Scenario: Et tilleggsfag må være fra samme reform som vitnemålet
+      Gitt jeg har lagt et vitnemål fra Kunnskapsløftet til grunn
+      Når jeg legger til et fag fra R94 som tilleggsfag
+      Så ser jeg at faget må være fra samme reform som vitnemålet
+      Og tilleggsfaget er ikke lagt til
+
+    @draft @openquestion
+    # ÅPNE SPØRSMÅL:
+    # - Skal saksbehandleren advares når en forbedring legges inn på et
+    #   grunnlag som ikke tillater forbedringer? FS-klienten gir advarselen
+    #   «Søker har ikke grunnlag som tillater forbedringer», men stopper ikke
+    #   (teknisk beskrivelse av vitnemålsbehandling, G. M. Vangen, lest
+    #   03.11.2026). Henger sammen med kvoteregelen i L3 («Tilleggsfag kan
+    #   ikke velges i poengvarianten for førstegangsvitnemål»).
+    Scenario: Advarsel når grunnlaget ikke tillater forbedringer
+      Gitt søkeren har bare grunnlag som ikke tillater forbedringer
+      Når jeg legger inn en forbedring på et fag på vitnemålet
+      Så ser jeg at søkeren ikke har grunnlag som tillater forbedringer
+      Men forbedringen kan legges inn
+
     Scenario: Privatisteksamen erstatter både standpunkt- og eksamenskarakter
       Gitt søkeren har tatt et fag på nytt som privatist
       Og jeg har vurdert at den nye karakteren lønner seg for søkeren

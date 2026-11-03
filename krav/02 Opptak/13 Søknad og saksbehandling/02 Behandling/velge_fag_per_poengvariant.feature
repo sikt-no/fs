@@ -118,6 +118,14 @@ Egenskap: Velge fag per poengvariant
     #   for), eller begge deler? I FS-klienten står det i en egen tabell
     #   (POENGVARIANTVITNEMAL), som ikke føres for hånd i nye FS.
     #   (Fra gjennomgangen 03.11.2026.)
+    # - Ifølge den tekniske beskrivelsen av vitnemålsbehandling i
+    #   FS-klienten (G. M. Vangen, lest 03.11.2026) lagrer
+    #   POENGVARIANTVITNEMAL bare hvilket vitnemål saksbehandleren har valgt
+    #   for hver poengvariant. Tabellen er altså ikke en regel for hvilke
+    #   vitnemål som er gyldige, og kommentaren under scenarioet bygger
+    #   trolig på en feiltolkning. Skal scenarioet fjernes, eller skrives om
+    #   til bare kvoteregelen (se «Tilleggsfag kan ikke velges i
+    #   poengvarianten for førstegangsvitnemål»)?
     Scenario: Et vitnemål gjelder ikke alle poengvarianter
       Gitt søkeren har et vitnemål som ikke er gyldig for alle poengvarianter
       Når jeg velger vitnemålet
@@ -189,6 +197,35 @@ Egenskap: Velge fag per poengvariant
 
     @openquestion
     # ÅPNE SPØRSMÅL:
+    # - Skal poengene lagres for en poengvariant der søkeren ikke oppfyller
+    #   de spesielle opptakskravene? FS-klienten lagrer ikke poeng for
+    #   poengvarianten, og gir en advarsel (teknisk beskrivelse av
+    #   vitnemålsbehandling, G. M. Vangen, lest 03.11.2026). Ikke avklart
+    #   med teamet.
+    Scenario: Ingen poeng lagres for en poengvariant der søkeren ikke er kvalifisert
+      Gitt søkeren oppfyller ikke de spesielle opptakskravene i en poengvariant
+      Når jeg velger å beregne poengene
+      Så ser jeg at søkeren ikke er kvalifisert i poengvarianten
+      Og poengene for poengvarianten er ikke lagret
+
+    @openquestion
+    # ÅPNE SPØRSMÅL:
+    # - Skal saksbehandleren kunne bruke fagvalget fra én poengvariant i
+    #   andre poengvarianter, så det ikke må gjøres på nytt i hver av dem?
+    #   FS-klienten har et valg for å kopiere en beregning til andre
+    #   poengvarianter og grunnlag (teknisk beskrivelse av
+    #   vitnemålsbehandling, G. M. Vangen, lest 03.11.2026). Gjelder
+    #   kvoteregelen da også (ingen tilleggsfag i kvoten for
+    #   førstegangsvitnemål)?
+    Scenario: Bruke fagvalget fra én poengvariant i andre poengvarianter
+      Gitt jeg har valgt fagene i én poengvariant
+      Når jeg velger å bruke det samme fagvalget i de andre poengvariantene
+      Og jeg velger å beregne poengene
+      Så har de andre poengvariantene det samme fagvalget
+      Men tilleggsfag er ikke valgt i poengvarianten for kvoten for førstegangsvitnemål
+
+    @openquestion
+    # ÅPNE SPØRSMÅL:
     # - Følger tilleggsfag som saksbehandleren legger til for hånd (L4a,
     #   «Legge til et nytt fag under tilleggsfag»), de samme reglene som
     #   tilleggsfagene som står på vitnemålet, også i kvoten for
@@ -233,6 +270,11 @@ Egenskap: Velge fag per poengvariant
       # Et vitnemål med forbedringer kan ikke legges til grunn for
       # poengvarianten for førstegangsvitnemål. Det dekkes av «Et vitnemål
       # gjelder ikke alle poengvarianter».
+      #
+      # Bekreftet i den tekniske beskrivelsen av vitnemålsbehandling i
+      # FS-klienten (G. M. Vangen, lest 03.11.2026): grunnlaget VOV tillater
+      # ikke tillegg («Det er ikke anledning å velge tillegg for grunnlag
+      # VOV»).
 
     Scenario: Tilleggsfag kan velges i ordinær kvote
       Gitt søkeren har et førstegangsvitnemål med et tilleggsfag
@@ -312,6 +354,12 @@ Egenskap: Velge fag per poengvariant
     #   saksbehandleren punsje alle studiekompetansefagene i kalkulatoren
     #   (L4b), eller velge ett vitnemål og legge til fagene fra de andre
     #   dokumentene under tilleggsfag (L4a)?
+    #   Innspill fra FS-klienten (teknisk beskrivelse av vitnemålsbehandling,
+    #   G. M. Vangen, lest 03.11.2026): i grunnlaget for 23/5-regelen (PRA)
+    #   velger saksbehandleren fagene på det elektroniske vitnemålet, og
+    #   legger til fag fra søkerens andre elektroniske vitnemål som tillegg.
+    #   Det taler for det andre alternativet (L4a), se «Hente et tilleggsfag
+    #   fra et annet elektronisk vitnemål» i endre_fag_i_grunnlaget.feature.
     Scenario: Hente studiekompetansefag fra flere dokumenter etter 23/6-regelen
       Gitt søkeren rangeres etter 23/6-regelen
       Og studiekompetansefagene er dokumentert på flere vitnemål og kompetansebevis

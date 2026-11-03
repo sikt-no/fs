@@ -90,6 +90,13 @@ Egenskap: Legge inn vitnemål manuelt
       # AVKLART 03.11.2026: fagnavnet fylles ut fra fagkodeverket når
       # fagkoden er valgt.
 
+    @openquestion
+    # ÅPNE SPØRSMÅL:
+    # - Skal fagkonvertereren fra FS-klienten videreføres, så et fag fra en
+    #   tidligere reform kan konverteres til et fag i en nyere reform? Også
+    #   åpent i den tekniske beskrivelsen av vitnemålsbehandling
+    #   (G. M. Vangen, lest 03.11.2026). Samme spørsmål står i L4a («Et
+    #   tilleggsfag må være fra samme reform som vitnemålet»).
     Scenario: Velge et utgått fag
       Gitt søkeren har dokumentasjon på et fag fra en tidligere reform
       Når jeg velger faget fra fagkodeverket

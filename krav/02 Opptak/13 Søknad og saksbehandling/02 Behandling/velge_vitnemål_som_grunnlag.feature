@@ -128,6 +128,12 @@ Egenskap: Velge vitnemål som grunnlag for poengberegningen
     #   beregne blir poengene beregnet automatisk på nytt hver gang grunnlaget
     #   endres. Spørsmålet gjelder også fagvalget i L3, endringene i L4a og
     #   kalkulatoren i L4b. (Fra gjennomgangen av L3 og L4, 03.11.2026.)
+    #   Innspill fra FS-klienten (teknisk beskrivelse av vitnemålsbehandling,
+    #   G. M. Vangen, lest 03.11.2026): klienten har to handlinger. «Beregn»
+    #   beregner poengene og lagrer valgene i grunnlaget, og «Bruk BeregnP»
+    #   kontrollerer vitnemålet mot vitnemålskravene og lagrer poengene på
+    #   personen. Det er altså et skille mellom å beregne og å ta poengene i
+    #   bruk.
     Scenario: Poengene er tomme til jeg beregner dem
       Gitt jeg har lagt et vitnemål til grunn
       Når jeg endrer grunnlaget
@@ -175,6 +181,48 @@ Egenskap: Velge vitnemål som grunnlag for poengberegningen
       # unngå behandling på mulig utdatert grunnlag». Utformingen av
       # beskjeden hører i velge_vitnemål_som_grunnlag.design.md.
 
+    @draft @openquestion
+    # ÅPNE SPØRSMÅL:
+    # - Skal grunnlaget saksbehandleren har endret, kontrolleres mot
+    #   vitnemålskravene før poengene lagres, slik FS-klienten gjør? Og skal
+    #   saksbehandleren da kunne velge å lagre poengene likevel, når
+    #   kontrollen feiler?
+    # - Skal saksbehandleren kunne se resultatet av kontrollen uten å lagre?
+    #   FS-klienten har en egen handling for det («NVB-kontroll»).
+    Scenario: Grunnlaget kontrolleres mot vitnemålskravene før poengene lagres
+      Gitt jeg har endret grunnlaget
+      Og grunnlaget oppfyller ikke vitnemålskravene
+      Når jeg velger å beregne poengene
+      Så ser jeg at grunnlaget ikke oppfyller vitnemålskravene
+      Og jeg kan velge om poengene skal lagres likevel
+      # Forslag fra FS-klienten (teknisk beskrivelse av vitnemålsbehandling,
+      # G. M. Vangen, lest 03.11.2026): «Bruk BeregnP» kjører NVB-kontrollen
+      # på vitnemålet slik saksbehandleren har endret det, og spør om
+      # poengene skal lagres når kontrollen feiler. Ikke avklart med teamet.
+
+    @draft @openquestion
+    # ÅPNE SPØRSMÅL:
+    # - Skal saksbehandleren advares når vitnemålet er utstedt med
+    #   dispensasjon, slik FS-klienten gjør? Og skal advarselen stoppe noe,
+    #   eller bare informere?
+    Scenario: Advarsel om vitnemål med dispensasjon
+      Gitt søkeren har et vitnemål som er utstedt med dispensasjon
+      Når jeg legger vitnemålet til grunn
+      Så ser jeg at vitnemålet er utstedt med dispensasjon
+      Og jeg kan beregne poengene
+      # Forslag fra FS-klienten (samme kilde): et vitnemål med dispensasjon
+      # gir advarselen «Dette er et vitnemål med dispensasjon», og
+      # behandlingen fortsetter. Ikke avklart med teamet.
+
+    @openquestion
+    # ÅPNE SPØRSMÅL:
+    # - FS-klienten viser både karakterpoeng og karakterpoeng med
+    #   forbedring, når søkeren konkurrerer både med det opprinnelige og det
+    #   forbedrede vitnemålet (teknisk beskrivelse av vitnemålsbehandling,
+    #   G. M. Vangen). Er det dekket av at hver poengvariant har sine egne
+    #   poeng, eller skal karakterpoeng med forbedring vises som eget felt?
+    #   Svaret avgjør også avviket mot feltene «Poeng fra vitnemål» i
+    #   skissen.
     Scenario: Se de beregnede poengene
       Gitt jeg har lagt et vitnemål til grunn
       Og poengene er beregnet
