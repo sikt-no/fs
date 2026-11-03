@@ -5,7 +5,7 @@
 - **Initiativ**: [#199](https://github.com/sikt-no/fs/issues/199)
 - **Jira**: –
 - **Eier**: –
-- **Siste oppdatering**: 2026-11-02
+- **Siste oppdatering**: 2026-11-03
 
 ## Mål
 
@@ -30,7 +30,7 @@
 
 | Krav | MoSCoW | Skisse | Jira | Kommentar |
 |---|---|---|---|---|
-| `@OPT-BEH-BEH-019` [automatisk_grunnlag.feature](../../../krav/02%20Opptak/13%20S%C3%B8knad%20og%20saksbehandling/02%20Behandling/automatisk_grunnlag.feature) | Must | – | – | |
+| `@OPT-BEH-BEH-019` [automatisk_grunnlag.feature](../../../krav/02%20Opptak/13%20S%C3%B8knad%20og%20saksbehandling/02%20Behandling/automatisk_grunnlag.feature) | Must | – | – | Scenarioet om endringsloggen kan ikke leveres før den nye sporingsloggen finnes. Endringsloggen er stoppet (BAT-324, 29.10.2026) |
 | `@OPT-BEH-BEH-018` [automatisk_poengberegning.feature](../../../krav/02%20Opptak/13%20S%C3%B8knad%20og%20saksbehandling/02%20Behandling/automatisk_poengberegning.feature) | Must | – | – | |
 | `@OPT-BEH-BEH-028` [automatiske_tilleggspoeng.feature](../../../krav/02%20Opptak/13%20S%C3%B8knad%20og%20saksbehandling/02%20Behandling/automatiske_tilleggspoeng.feature) | Must | – | – | |
 
@@ -44,4 +44,5 @@ Append-only. Ny linje på toppen ved hver hendelse.
 
 | Dato       | Hendelse | Av | Lenke til review |
 |------------|----------|----|------------------|
+| 2026-11-03 | Scenarioene om endringsloggen og saksloggen i `@OPT-BEH-BEH-019` er blokkert til den nye sporingsloggen finnes. Endringsloggen i opptak er stoppet (BAT-324, V480 i fs-plattform), så kravene blir ikke `@implemented` før da | @JøranIndseth | – |
 | 2026-11-02 | Opprettet med fs-scope, som leveranse 3 av 6 i flyten automatisk saksbehandling | @JøranIndseth | – |
