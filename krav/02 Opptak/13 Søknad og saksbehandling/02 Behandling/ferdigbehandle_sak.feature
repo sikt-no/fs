@@ -12,7 +12,7 @@ Egenskap: Ferdigbehandle en sak
   saksbehandleren vitnemålet, og beregner poengene i vitnemålsbehandlingen (OPT-BEH-BEH-004).
   Saken behandles da automatisk på vitnemålet, og den automatiske behandlingen avgjør resten.
   Kan den automatiske behandlingen ikke avgjøre et steg, gjør den stegene
-  som ikke bygger på det, og saken blir stående under behandling. Saksbehandleren gjør resten,
+  som ikke bygger på det, og saken blir stående som ikke behandlet. Saksbehandleren gjør resten,
   og setter saken til ferdig behandlet. Bare saker som er ferdig behandlet, er med i
   plasstildelingen.
 
@@ -42,6 +42,7 @@ Egenskap: Ferdigbehandle en sak
   @depends-on-OPT-BEH-BEH-015 @ref-FLY-OPT-AUT-001
   # OPT-BEH-BEH-015: «Vitnemålet gir GSK når det har GSK OK fra KREG»
   Regel: Bare saker der søkeren har ett vitnemål, og vitnemålet gir GSK, behandles helautomatisk
+    # Et kompetansebevis teller ikke som vitnemål (se OPT-BEH-BEH-019).
 
     Scenario: Saken behandles helautomatisk når søkeren har ett vitnemål, og vitnemålet gir GSK
       Gitt at "Kari Nordmann" har ett vitnemål
@@ -103,7 +104,7 @@ Egenskap: Ferdigbehandle en sak
       Så er saken hos "Universitetet i Oslo" ferdig behandlet
 
     @depends-on-OPT-BEH-BEH-008
-    # OPT-BEH-BEH-008: «Kategorien til mangelkoden avgjør hva mangelen hindrer» og «Saken får automatiske mangeltekster når søkeren ikke er kvalifisert»
+    # OPT-BEH-BEH-008: «Mangler hindrer ikke kvalifiseringen eller at saken blir ferdig behandlet» og «Saken får automatiske mangeltekster når søkeren ikke er kvalifisert»
     Scenario: Saken er ferdig behandlet selv om kravelementene ga mangeltekst
       Gitt at "Informatikk, UiO" har kravelementet "Matematikk R2"
       Og at vitnemålet ikke har "Matematikk R2"
@@ -141,10 +142,13 @@ Egenskap: Ferdigbehandle en sak
         | kravelementene | grunnlaget og poengene                                  | kravelementene, kvalifiseringen og kvoten |
         | kvoten         | grunnlaget, poengene, kravelementene og kvalifiseringen | kvoten                                    |
 
-    Scenario: Saken blir stående under behandling når et steg ikke kan avgjøres
+    Scenario: Saken blir stående som ikke behandlet når et steg ikke kan avgjøres
+      # Avklart 2026-11-02: den automatiske behandlingen endrer ikke behandlingsstatusen, bortsett
+      # fra å sette saken til ferdig behandlet. Saken blir Under behandling når saksbehandleren
+      # gjør noe med den (OPT-BEH-BEH-029).
       Gitt at poengene for "Informatikk, UiO" ikke kan avgjøres på grunn av en feil i regelverket
       Når søknaden behandles automatisk
-      Så er saken hos "Universitetet i Oslo" under behandling
+      Så har saken hos "Universitetet i Oslo" behandlingsstatusen "Ikke behandlet"
 
     Scenario: Opptaksforvalteren får varsel første gang en feil i regelverket stopper et steg
       Gitt at poengene for "Informatikk, UiO" ikke kan avgjøres på grunn av en feil i regelverket
@@ -162,7 +166,7 @@ Egenskap: Ferdigbehandle en sak
       Gitt at <feil i regelverket> for "Informatikk, UiO"
       Når søknaden behandles automatisk
       Så er ikke <steg> avgjort for "Informatikk, UiO"
-      Og saken hos "Universitetet i Oslo" er under behandling
+      Og saken hos "Universitetet i Oslo" har behandlingsstatusen "Ikke behandlet"
 
       Eksempler:
         | feil i regelverket                                | steg        |
@@ -180,12 +184,12 @@ Egenskap: Ferdigbehandle en sak
       Gitt at "Kari Nordmann" har ett vitnemål, og vitnemålet gir GSK
 
     Scenario: Saksbehandleren ferdigbehandler saken etter å ha gjort resten
-      Gitt at saken hos "Universitetet i Oslo" er under behandling fordi poengene for "Informatikk, UiO" ikke kunne avgjøres automatisk
+      Gitt at saken hos "Universitetet i Oslo" ikke er ferdig behandlet fordi poengene for "Informatikk, UiO" ikke kunne avgjøres automatisk
       Og at saksbehandleren ved Universitetet i Oslo har satt poengene for "Informatikk, UiO"
       Når saksbehandleren setter saken til "Behandlet"
       Så er saken hos "Universitetet i Oslo" ferdig behandlet
 
     Scenario: Saken blir ikke ferdig behandlet av seg selv når saksbehandleren har gjort resten
-      Gitt at saken hos "Universitetet i Oslo" er under behandling fordi poengene for "Informatikk, UiO" ikke kunne avgjøres automatisk
+      Gitt at saken hos "Universitetet i Oslo" ikke er ferdig behandlet fordi poengene for "Informatikk, UiO" ikke kunne avgjøres automatisk
       Når saksbehandleren ved Universitetet i Oslo setter poengene for "Informatikk, UiO"
-      Så er saken hos "Universitetet i Oslo" fortsatt under behandling
+      Så har saken hos "Universitetet i Oslo" behandlingsstatusen "Under behandling"
