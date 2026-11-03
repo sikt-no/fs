@@ -153,7 +153,7 @@ Egenskap: Automatiske mangler
         | ikke stopper for opptak          |
 
   @ref-FLY-OPT-AUT-001 @depends-on-OPT-SØK-SØK-018 @ref-OPT-OVO-GRU-001 @depends-on-OPT-BEH-BEH-008
-  # OPT-BEH-BEH-008: «Mangler hindrer ikke kvalifiseringen eller at saken blir ferdig behandlet», «Saksbehandleren sjekker ut mangelen når søkeren har dokumentert på nytt»
+  # OPT-BEH-BEH-008: «Saksbehandleren sjekker ut mangelen når søkeren har dokumentert på nytt»
   Regel: Mangelen for generell studiekompetanse som fullføres i vår settes og sjekkes ut automatisk
 
     Søkere som fullfører videregående opplæring i vår, oppgir i søknaden at generell
