@@ -1,5 +1,11 @@
 # krav-viewer
 
+## 1.11.1
+
+### Patch Changes
+
+- 9a69abd: Matrisen i Flyter viser hvor mye som er levert per sub-domene og fase, i stedet for hvor mye som gjenstår.
+
 ## 1.11.0
 
 ### Minor Changes

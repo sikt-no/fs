@@ -128,7 +128,7 @@ Egenskap: Velge utdanningsbakgrunn i søknad
     # utdanningsbakgrunn, er en forretningsregel som ligger fast i backend. Opptaksforvalteren
     # bestemmer det ikke.
     # ÅPNE SPØRSMÅL:
-    # - Trengs preutfylling fra vitnemål, når GSK beregnes ved vitnemålsimport
+    # - Trengs preutfylling fra vitnemål, når GSK-vitnemålsberegningen kjører ved vitnemålsimport
     #   (@OPT-BEH-BEH-027) og steget da hoppes over?
 
     Scenario: Utdanningsbakgrunn preutfylles fra vitnemål

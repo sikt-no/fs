@@ -1,12 +1,12 @@
 # language: no
-# Generert av fs-testcaser-cdp 2026-10-29
-# Krav: krav/02 Opptak/11 Opprette og vedlikeholde opptak/07 Oversikt over opptak/listevisning_og_sok_i_opptak.feature @ 0f010d4 (blob d36c44ad7668865284438ddd0ffa1616503188ad)
+# Generert av fs-testcaser-cdp 2026-10-29, oppdatert 2026-11-02
+# Krav: krav/02 Opptak/11 Opprette og vedlikeholde opptak/07 Oversikt over opptak/listevisning_og_sok_i_opptak.feature @ 13b6fd83 (blob e52dde99406564f7c286439d1069a908eca25abf)
 #
-# Lista viser også «Status», som ikke er med i kravet.
+# «Status»-filteret har også «Arkivert», som ikke er med i kravet.
 # Hvilke opptak testbrukeren ser, avhenger av flagget «opptak-filter-organisasjon» (se miljøfila).
 @TST-OPT-OVO-OVE-001 @depends-on-OPT-OVO-OVE-001
 Egenskap: Listevisning og søk i opptak
-  Opptaksforvalteren ser en liste over opptakene på «Opptak», kan søke på navn, filtrere på type, sortere og
+  Opptaksforvalteren ser en liste over opptakene på «Opptak», kan søke på navn, filtrere på type og status, sortere og
   åpne et opptak.
 
   Regel: Liste over alle opptak
@@ -20,6 +20,7 @@ Egenskap: Listevisning og søk i opptak
         | Kolonne         |
         | Navn            |
         | Type            |
+        | Status          |
         | Organisasjon    |
         | Opprettet       |
         | Utdanningstilbud |
@@ -34,6 +35,7 @@ Egenskap: Listevisning og søk i opptak
 
     # «Sortering» åpner «Sorteringsfelt» med «Opprettet», «Status», «Type» og «Organisasjon». «Endre sorteringsretning» bytter mellom «Stigende» og «Synkende».
     # Organisasjon sorteres på organisasjonskoden, ikke forkortelsen som vises. Se den utledede testcasen.
+    # Status sorteres på statuskoden, ikke teksten som vises: stigende er «Arkivert», «Publisert», «Ikke publisert».
     Scenariomal: Velge sorteringsretning for <felt>
       Gitt jeg er logget inn som «opptak-forvalter-forvaltende»
       Og opptakene i «opptak-oversikt-flere-typer» finnes
@@ -49,6 +51,8 @@ Egenskap: Listevisning og søk i opptak
         | opprettet    | synkende | Opprettet    | Synkende            | (nyeste først)                                |
         | type         | stigende | Type         | Stigende            | (alfabetisk)                                  |
         | type         | synkende | Type         | Synkende            | (omvendt alfabetisk)                          |
+        | status       | stigende | Status       | Stigende            | (etter statuskoden, se kommentaren)           |
+        | status       | synkende | Status       | Synkende            | (etter statuskoden, se kommentaren)           |
         | organisasjon | stigende | Organisasjon | Stigende            | (etter organisasjonskoden, se kommentaren)    |
         | organisasjon | synkende | Organisasjon | Synkende            | (etter organisasjonskoden, se kommentaren)    |
 
@@ -141,6 +145,22 @@ Egenskap: Listevisning og søk i opptak
       Og jeg har åpnet «Opptak»
       Når jeg velger «Samordna opptak til universiteter og høgskoler» i «Type»-filteret
       Så har hver rad i lista samme type i «Type» [Sjekk begrep: lista viser koden «UHG»]
+      Og lista har minst én rad
+
+    # Kravet har ikke «Arkivert». Det hører til historiske opptak, som ikke er med i kravet.
+    Scenario: Tilgjengelige statuser i filter
+      Gitt jeg er logget inn som «opptak-forvalter-forvaltende»
+      Og jeg har åpnet «Opptak»
+      Når jeg åpner «Status»-filteret
+      Så er valgene «Ikke publisert» og «Publisert», og i tillegg «Arkivert» (se kommentaren)
+      Og ingen av valgene er valgt
+
+    Scenario: Filtrere på status
+      Gitt jeg er logget inn som «opptak-forvalter-forvaltende»
+      Og opptakene i «opptak-oversikt-flere-typer» finnes
+      Og jeg har åpnet «Opptak»
+      Når jeg velger «Ikke publisert» i «Status»-filteret
+      Så har hver rad i lista «Ikke publisert» i «Status»
       Og lista har minst én rad
 
     Scenario: Kombinere filtre

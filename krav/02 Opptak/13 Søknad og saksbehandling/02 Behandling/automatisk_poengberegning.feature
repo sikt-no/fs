@@ -12,7 +12,7 @@
 # elektroniske vitnemål», 4609146881 «Forretningsregler – Poeng». GitHub #199. I FS-klienten
 # beregner «Godkjenn» i vitnemålsrammen og rutinen FS158.001 poengene, og manuell endring av
 # poeng setter «la stå».
-@OPT-BEH-BEH-018 @must @planned @depends-on-OPT-BEH-BEH-015 @depends-on-OPT-BEH-BEH-019 @ref-OPT-BEH-BEH-008 @ref-OPT-BEH-BEH-032
+@OPT-BEH-BEH-018 @must @in-progress @scope-automatisk-grunnlag-og-poeng @depends-on-OPT-BEH-BEH-015 @depends-on-OPT-BEH-BEH-019 @ref-OPT-BEH-BEH-008 @ref-OPT-BEH-BEH-032
 Egenskap: Automatisk beregning av vitnemålspoeng
   Som saksbehandler
   ønsker jeg at karakterpoeng, realfagspoeng, språkpoeng og skolepoeng beregnes automatisk fra søkerens vitnemål
@@ -33,7 +33,7 @@ Egenskap: Automatisk beregning av vitnemålspoeng
   Bakgrunn:
     Gitt at søkeren har en søknad i opptaket
 
-  @depends-on-OPT-REG-RAN-002 @ref-FLY-OPT-AUT-001
+  @depends-on-OPT-REG-RAN-002 @ref-FLY-OPT-AUT-001 @implemented
   Regel: Karakterpoeng, realfagspoeng og språkpoeng beregnes fra søkerens eneste vitnemål
     # Opptaksforvalteren kobler poengtypen til karakterpoeng, realfagspoeng eller språkpoeng i regelverket.
 
@@ -115,7 +115,7 @@ Egenskap: Automatisk beregning av vitnemålspoeng
       Når vitnemålspoengene beregnes automatisk
       Så har poengtypene fått poeng beregnet fra vitnemålet fra 2025
 
-  @ref-OPT-BEH-BEH-004
+  @ref-OPT-BEH-BEH-004 @implemented
   Regel: Poeng som saksbehandleren har låst, beregnes ikke på nytt
     # Hvordan et poeng låses av at saksbehandleren velger grunnlag, og hvordan det låses opp, står i kravet.
 

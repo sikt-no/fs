@@ -54,8 +54,8 @@ Egenskap: Opprette et opptak
       Men opptaksforvalter setter ikke opptakstype
       Så kan opptaket ikke lagres
 
-  @draft @depends-on-OPT-BEH-BEH-008
-  # OPT-BEH-BEH-008: «Mangelen for generell studiekompetanse som fullføres i vår settes og sjekkes ut automatisk»
+  @draft @depends-on-OPT-BEH-BEH-036
+  # OPT-BEH-BEH-036: «Mangelen for generell studiekompetanse som fullføres i vår settes og sjekkes ut automatisk»
   # Avklart 30.10.2026: advarselen stopper ikke lagringen.
   Regel: Opptaksforvalter får en advarsel når regelverkssamlingen mangler mangelkode for generell studiekompetanse som fullføres i vår
 

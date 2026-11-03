@@ -96,12 +96,12 @@ Egenskap: Finne saker med nye resultater
     Bakgrunn:
       Gitt saksbehandler er innlogget i løsningen
       Og opptaket "Samordna opptak 2027" har følgende saker:
-        | søker         | nye resultater                         | saksbehandlingsstatus |
-        | Kari Nordmann | VGS-resultater                         | ferdig behandlet      |
-        | Per Hansen    | fagskoleresultater                     | under behandling      |
-        | Anne Lie      | resultater fra høyere utdanning        | ferdig behandlet      |
-        | Lise Berg     | VGS-resultater og fagskoleresultater   | ferdig behandlet      |
-        | Ola Nordmann  | ingen                                  | ferdig behandlet      |
+        | søker         | nye resultater                       | saksbehandlingsstatus |
+        | Kari Nordmann | VGS-resultater                       | behandlet             |
+        | Per Hansen    | fagskoleresultater                   | under behandling      |
+        | Anne Lie      | resultater fra høyere utdanning      | behandlet             |
+        | Lise Berg     | VGS-resultater og fagskoleresultater | behandlet             |
+        | Ola Nordmann  | ingen                                | behandlet             |
 
     Scenario: Filteret for nye resultater er ikke i bruk som standard
       Når saksbehandler åpner sakslisten i opptaket "Samordna opptak 2027"

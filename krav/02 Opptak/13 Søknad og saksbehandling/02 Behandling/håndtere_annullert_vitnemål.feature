@@ -1,5 +1,5 @@
 # language: no
-@OPT-BEH-BEH-034 @must @planned@ref-OPT-BEH-BEH-004 @ref-OPT-BEH-BEH-015 @ref-OPT-BEH-BEH-021 @ref-OPT-BEH-BEH-029
+@OPT-BEH-BEH-034 @must @in-progress @ref-OPT-BEH-BEH-004 @ref-OPT-BEH-BEH-015 @ref-OPT-BEH-BEH-021 @ref-OPT-BEH-BEH-029
 Egenskap: Håndtere annullert vitnemål
   Som saksbehandler
   ønsker jeg å bli gjort oppmerksom på saker der et vitnemål som er i bruk, blir annullert
@@ -8,10 +8,10 @@ Egenskap: Håndtere annullert vitnemål
   Et vitnemål kan bli annullert etter at det er brukt i saksbehandlingen. Vitnemålet kan da
   være lagt til grunn for poengene, for vurderingen av kravelementer eller for GSK-konklusjonen
   i saken. Annulleringen kommer fra KREG når vitnemålene importeres. Løsningen sjekker da om
-  vitnemålet er i bruk i en sak i et opptak som ikke er avsluttet. Er det i bruk, får saken
-  en merknad og en tagg om at
-  vitnemålet er annullert. Er saken ferdig behandlet, settes den tilbake til under behandling,
-  slik at den ikke er med i plasstildelingen før saksbehandleren har sett på den igjen.
+  vitnemålet er i bruk i en sak. Er det i bruk, får saken en tagg om at vitnemålet er
+  annullert. Er saken ferdig behandlet, og søkeren ikke er med i en plasstildelingsrunde som er
+  publisert, settes den tilbake til under behandling, slik at den ikke er med i
+  plasstildelingen før saksbehandleren har sett på den igjen.
 
   Løsningen endrer ikke poengene, kravelementene eller GSK-konklusjonen selv. Saksbehandleren
   vurderer saken og retter det som må rettes.
@@ -27,6 +27,11 @@ Egenskap: Håndtere annullert vitnemål
   # («Annullert vitnemål») er endret til dette kravet.
   # Avklart 29.10.2026: bare saker i opptak som ikke er avsluttet, slik som i OPT-BEH-BEH-015
   # og importen (FLY-OPT-VIT-001).
+  # Avklart 2026-11-02: er søkeren med i en plasstildelingsrunde som er publisert, har søkeren
+  # fått resultatet, og historiske data endres ikke. Saken får taggen, men behandlingsstatusen
+  # endres ikke. Erstatter avklaringen 29.10.2026 om at saker i avsluttede opptak ikke merkes.
+  # Avklart 2026-11-02: merknaden kommer senere. I dag kan bare en innlogget person skrive en
+  # merknad på saken, ikke systemet. Taggen og statusen bygges først.
 
   Bakgrunn:
     Gitt at søkeren har en sak hos "Universitetet i Oslo"
@@ -38,8 +43,7 @@ Egenskap: Håndtere annullert vitnemål
     Scenariomal: Vitnemålet er brukt i <bruk>
       Gitt at vitnemålet fra 2025 er brukt i <bruk> i saken
       Når vitnemålet fra 2025 importeres fra KREG som annullert
-      Så får saken en merknad om at vitnemålet er annullert
-      Og saken får taggen "Vitnemål annullert"
+      Så får saken taggen "Vitnemål annullert"
 
       Eksempler:
         | bruk                          |
@@ -47,17 +51,10 @@ Egenskap: Håndtere annullert vitnemål
         | vurderingen av et kravelement |
         | GSK-konklusjonen              |
 
-    Scenario: Merknaden viser vitnemålet og hva det er brukt til
-      Gitt at vitnemålet fra 2025 er brukt i poengene og GSK-konklusjonen i saken
-      Når vitnemålet fra 2025 importeres fra KREG som annullert
-      Så viser merknaden på saken at vitnemålet fra 2025 er annullert
-      Og merknaden viser at vitnemålet er brukt i poengene og GSK-konklusjonen
-
     Scenario: Vitnemål som ikke er i bruk, endrer ikke saken
       Gitt at vitnemålet fra 2025 ikke er brukt i saken
       Når vitnemålet fra 2025 importeres fra KREG som annullert
-      Så får saken ingen merknad om at vitnemålet er annullert
-      Og saken får ikke taggen "Vitnemål annullert"
+      Så får saken ikke taggen "Vitnemål annullert"
       Og behandlingsstatusen til saken er uendret
 
     Scenario: Alle sakene som bruker vitnemålet, blir merket
@@ -67,13 +64,23 @@ Egenskap: Håndtere annullert vitnemål
       Så får saken hos "Universitetet i Oslo" taggen "Vitnemål annullert"
       Og saken hos "Universitetet i Bergen" får taggen "Vitnemål annullert"
 
-    Scenario: Sak i avsluttet opptak blir ikke merket
+    Scenario: Saken får taggen også når søkeren er med i en publisert plasstildelingsrunde
       Gitt at vitnemålet fra 2025 er brukt i saken
-      Og at opptaket saken hører til, er avsluttet
+      Og at søkeren er med i en plasstildelingsrunde som er publisert
       Når vitnemålet fra 2025 importeres fra KREG som annullert
-      Så får saken ingen merknad om at vitnemålet er annullert
-      Og saken får ikke taggen "Vitnemål annullert"
-      Og behandlingsstatusen til saken er uendret
+      Så får saken taggen "Vitnemål annullert"
+
+  @draft @openquestion
+  Regel: Saken får en merknad om det annullerte vitnemålet
+    # ÅPNE SPØRSMÅL:
+    # - Hvordan skal systemet skrive en merknad på saken? I dag kan bare en innlogget person
+    #   skrive merknader. Skal merknaden vises som skrevet av «Opptakssystemet»?
+
+    Scenario: Merknaden viser vitnemålet og hva det er brukt til
+      Gitt at vitnemålet fra 2025 er brukt i poengene og GSK-konklusjonen i saken
+      Når vitnemålet fra 2025 importeres fra KREG som annullert
+      Så viser merknaden på saken at vitnemålet fra 2025 er annullert
+      Og merknaden viser at vitnemålet er brukt i poengene og GSK-konklusjonen
 
   Regel: Løsningen endrer ikke det som bygger på vitnemålet
 
@@ -89,9 +96,17 @@ Egenskap: Håndtere annullert vitnemål
 
     Scenario: Ferdig behandlet sak settes tilbake til Under behandling
       Gitt at vitnemålet fra 2025 er brukt i saken
-      Og at saken har behandlingsstatusen "Ferdig behandlet"
+      Og at saken har behandlingsstatusen "Behandlet"
+      Og at søkeren ikke er med i en plasstildelingsrunde som er publisert
       Når vitnemålet fra 2025 importeres fra KREG som annullert
       Så har saken behandlingsstatusen "Under behandling"
+
+    Scenario: Saken beholder statusen når søkeren er med i en publisert plasstildelingsrunde
+      Gitt at vitnemålet fra 2025 er brukt i saken
+      Og at saken har behandlingsstatusen "Behandlet"
+      Og at søkeren er med i en plasstildelingsrunde som er publisert
+      Når vitnemålet fra 2025 importeres fra KREG som annullert
+      Så har saken behandlingsstatusen "Behandlet"
 
     Scenario: Sak under behandling beholder statusen
       Gitt at vitnemålet fra 2025 er brukt i saken
@@ -99,13 +114,6 @@ Egenskap: Håndtere annullert vitnemål
       Når vitnemålet fra 2025 importeres fra KREG som annullert
       Så har saken behandlingsstatusen "Under behandling"
 
-    Scenario: Søkeren med tilbud får saken satt tilbake til Under behandling
-      Gitt at vitnemålet fra 2025 er brukt i saken
-      Og at søkeren har fått tilbud på et søknadsalternativ i saken
-      Når vitnemålet fra 2025 importeres fra KREG som annullert
-      Så har saken behandlingsstatusen "Under behandling"
-      Og saken får taggen "Vitnemål annullert"
-      Og tilbudet til søkeren er uendret
 
   Regel: Saksbehandleren fjerner taggen
 
@@ -113,7 +121,6 @@ Egenskap: Håndtere annullert vitnemål
       Gitt at saken har taggen "Vitnemål annullert"
       Når saksbehandleren ved Universitetet i Oslo fjerner taggen "Vitnemål annullert"
       Så har saken ikke taggen "Vitnemål annullert"
-      Og saken har fortsatt merknaden om at vitnemålet er annullert
 
     Scenario: Taggen blir stående til saksbehandleren fjerner den
       Gitt at saken har taggen "Vitnemål annullert"

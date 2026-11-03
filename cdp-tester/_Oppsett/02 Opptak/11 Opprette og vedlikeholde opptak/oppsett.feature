@@ -105,4 +105,5 @@ Egenskap: Oppsett for opprette og vedlikeholde opptak
     Når jeg går til «Opptak», og skriver «(test {KJØRING})» i «Opptaksnavn»
     Så står både «Samordna opptak 2027 (test {KJØRING})» og «Lokalt opptak høst 2027 (test {KJØRING})» i lista
     Og de to opptakene har ulik verdi i «Type» og i «Organisasjon»
+    Og begge opptakene har «Ikke publisert» i «Status»
     Og jeg skriver navnene på de to opptakene og URL-en til «Opptak» i «Kjøringens testdata» for «opptak-oversikt-flere-typer»

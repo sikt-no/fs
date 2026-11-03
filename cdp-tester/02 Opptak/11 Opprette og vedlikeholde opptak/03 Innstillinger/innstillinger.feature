@@ -367,6 +367,7 @@ Egenskap: Innstillinger for opptak
       Og jeg velger «Avbryt»
 
   Regel: Opptaksforvalter kan legge til utdanningsbakgrunner som gjelder for opptaket
+    # Skjermen kaller utdanningsbakgrunnene «Utenlandsk videregående skole» og «Videregående steinerskole». Kravet sier «Utenlandsk utdanning» og «Steinerskole».
 
     Scenario: Legge til utdanningsbakgrunner fra godkjent liste
       Gitt jeg er logget inn som «opptak-forvalter-forvaltende»
@@ -374,7 +375,7 @@ Egenskap: Innstillinger for opptak
       Når jeg åpner opptaket «opptak-samordna-uten-utdanningstilbud»
       Og jeg velger «Endre innstillinger for opptaket»
       Og jeg åpner «Godkjente utdanningsbakgrunner»
-      Så er «Realkompetanse», «Utenlandsk utdanning» og «Steinerskole» blant valgene
+      Så er «Realkompetanse», «Utenlandsk videregående skole» og «Videregående steinerskole» blant valgene
       Og jeg velger «Avbryt»
 
     @endrer-data
@@ -383,10 +384,10 @@ Egenskap: Innstillinger for opptak
       Når jeg åpner opptaket «opptak-samordna-uten-utdanningstilbud»
       Og jeg velger «Endre innstillinger for opptaket»
       Og jeg noterer hvilke utdanningsbakgrunner som står i «Godkjente utdanningsbakgrunner»
-      Og jeg velger «Realkompetanse», «Utenlandsk utdanning» og «Steinerskole» i «Godkjente utdanningsbakgrunner», de som ikke står der fra før
+      Og jeg velger «Realkompetanse», «Utenlandsk videregående skole» og «Videregående steinerskole» i «Godkjente utdanningsbakgrunner», de som ikke står der fra før
       Og jeg velger «Lagre»
       Og jeg åpner opptaket igjen, og velger «Endre innstillinger for opptaket»
-      Så står «Realkompetanse», «Utenlandsk utdanning» og «Steinerskole» i «Godkjente utdanningsbakgrunner»
+      Så står «Realkompetanse», «Utenlandsk videregående skole» og «Videregående steinerskole» i «Godkjente utdanningsbakgrunner»
       # Setter tilbake:
       Og jeg fjerner de utdanningsbakgrunnene som ikke stod der fra før, og velger «Lagre»
 
@@ -396,36 +397,36 @@ Egenskap: Innstillinger for opptak
       Når jeg åpner opptaket «opptak-samordna-uten-utdanningstilbud»
       Og jeg velger «Endre innstillinger for opptaket»
       Og jeg noterer hvilke utdanningsbakgrunner som står i «Godkjente utdanningsbakgrunner»
-      Og jeg velger «Steinerskole» og «Realkompetanse» i «Godkjente utdanningsbakgrunner», de som ikke står der fra før, og velger «Lagre»
+      Og jeg velger «Videregående steinerskole» og «Realkompetanse» i «Godkjente utdanningsbakgrunner», de som ikke står der fra før, og velger «Lagre»
       Og jeg åpner opptaket igjen, og velger «Endre innstillinger for opptaket»
-      Og jeg fjerner «Steinerskole» fra «Godkjente utdanningsbakgrunner»
+      Og jeg fjerner «Videregående steinerskole» fra «Godkjente utdanningsbakgrunner»
       Og jeg velger «Lagre»
       Og jeg åpner opptaket igjen, og velger «Endre innstillinger for opptaket»
-      Så står «Steinerskole» ikke i «Godkjente utdanningsbakgrunner»
+      Så står «Videregående steinerskole» ikke i «Godkjente utdanningsbakgrunner»
       Og «Realkompetanse» står der
       # Setter tilbake:
       Og jeg setter «Godkjente utdanningsbakgrunner» tilbake til de jeg noterte, og velger «Lagre»
 
     Scenario: Utdanningsbakgrunn som søkere har valgt, kan ikke fjernes
       Gitt jeg er logget inn som «opptak-forvalter-forvaltende»
-      Og en søker har valgt «Steinerskole» i opptaket «opptak-utdanningsbakgrunn-valgt-av-soker»
+      Og en søker har valgt «Videregående steinerskole» i opptaket «opptak-utdanningsbakgrunn-valgt-av-soker»
       Når jeg åpner opptaket «opptak-utdanningsbakgrunn-valgt-av-soker»
       Og jeg velger «Endre innstillinger for opptaket»
-      Og jeg fjerner «Steinerskole» fra «Godkjente utdanningsbakgrunner»
+      Og jeg fjerner «Videregående steinerskole» fra «Godkjente utdanningsbakgrunner»
       Og jeg velger «Lagre»
       Så ser jeg «Utdanningsbakgrunnen er valgt av en søker og kan ikke fjernes fra opptaket»
       Når jeg åpner opptaket igjen, og velger «Endre innstillinger for opptaket»
-      Så står «Steinerskole» i «Godkjente utdanningsbakgrunner»
+      Så står «Videregående steinerskole» i «Godkjente utdanningsbakgrunner»
       Og jeg velger «Avbryt»
 
     # Åpent spørsmål i kravet: skal alle opptak ha utdanningsbakgrunn, eller bare UHG-opptak (samordna opptak)?
     # Testes som det står, på et samordna opptak.
     Scenario: Den siste utdanningsbakgrunnen kan ikke fjernes
       Gitt jeg er logget inn som «opptak-forvalter-forvaltende»
-      Og «Steinerskole» er den eneste utdanningsbakgrunnen i opptaket «opptak-en-utdanningsbakgrunn»
+      Og «Videregående steinerskole» er den eneste utdanningsbakgrunnen i opptaket «opptak-en-utdanningsbakgrunn»
       Når jeg åpner opptaket «opptak-en-utdanningsbakgrunn»
       Og jeg velger «Endre innstillinger for opptaket»
-      Og jeg fjerner «Steinerskole» fra «Godkjente utdanningsbakgrunner»
+      Og jeg fjerner «Videregående steinerskole» fra «Godkjente utdanningsbakgrunner»
       Så ser jeg «Velg minst én utdanningsbakgrunn.» ved «Godkjente utdanningsbakgrunner»
       Og kan «Lagre» ikke velges
       Og «Godkjente utdanningsbakgrunner» er det eneste feltet under «Fyll ut obligatoriske felt:»
