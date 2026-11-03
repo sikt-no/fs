@@ -11,9 +11,9 @@ Egenskap: Importere resultater fra KREG
   slik at søknaden behandles på resultatene søkeren har, uten at jeg må hente dem selv.
 
   KREG (Nasjonal vitnemålsdatabase) har søkerens vitnemål og kompetansebevis fra videregående
-  skole. Opptakssystemet henter dem med søkerens fødselsnummer og lagrer dem på søkeren, så de gjelder
-  alle søknadene søkeren har. Saksbehandlingen og den automatiske behandlingen bygger på det
-  som er lagret.
+  skole. Opptakssystemet henter dem med søkerens fødselsnummer, eller D-nummer når søkeren ikke
+  har fødselsnummer, og lagrer dem på søkeren, så de gjelder alle søknadene søkeren har.
+  Saksbehandlingen og den automatiske behandlingen bygger på det som er lagret.
 
   # Avklart 29.10.2026: saksbehandleren henter ikke resultatene på nytt for én søker. Jobben for
   # nye vitnemål (OPT-BEH-BEH-032) er nok.
@@ -36,24 +36,15 @@ Egenskap: Importere resultater fra KREG
       Når saksbehandleren registrerer søknaden på vegne av søkeren
       Så er vitnemålet importert
 
-    @openquestion @implemented
+    @implemented
     Scenario: Resultatene hentes når en endring av søknaden gir en ny sak
-      # Avklart 29.10.2026. Kode i dag: resultatene hentes på nytt hver gang søknaden fordeles på
-      # nytt, også når endringen ikke gir en ny sak.
-      # ÅPNE SPØRSMÅL:
-      # - Må vitnemålene fra videregående hentes på nytt når en endring av søknaden gir en ny sak?
-      #   Jobben i FLY-OPT-VIT-001 henter nye og annullerte vitnemål for alle aktive søkere jevnlig,
-      #   og er kanskje nok.
+      # Avklart 03.11.2026: resultatene hentes på nytt hver gang søknaden endres, også når
+      # endringen ikke gir en ny sak. Det dekker hullet til jobben for nye vitnemål
+      # (OPT-BEH-BEH-032) er levert.
       Gitt at søkerens vitnemål fra 2024 er importert
       Og at søkeren har fått et vitnemål fra 2025 i KREG
       Når søkeren legger til et studieønske som saksbehandles hos en ny organisasjon
       Så er vitnemålet fra 2025 importert
-
-    Scenario: Resultatene hentes ikke på nytt når en endring av søknaden ikke gir en ny sak
-      Gitt at søkerens vitnemål fra 2024 er importert
-      Og at søkeren har fått et vitnemål fra 2025 i KREG
-      Når søkeren endrer rekkefølgen på studieønskene
-      Så er vitnemålet fra 2025 ikke importert
 
     @implemented
     Scenario: Resultatene hentes først når saken er opprettet
@@ -62,6 +53,15 @@ Egenskap: Importere resultater fra KREG
       Og at søkeren har et vitnemål i KREG
       Når søkeren sender inn søknaden
       Så er vitnemålet ikke importert før saken er opprettet
+
+    Scenario: Resultatene hentes med D-nummer når søkeren ikke har fødselsnummer
+      # Avklart 03.11.2026. Kode i dag: bare fødselsnummer slås opp. KREG tar imot D-nummer.
+      # D-nummeret brukes også når resultatene hentes på nytt, i jobben for nye vitnemål
+      # (OPT-BEH-BEH-032).
+      Gitt at søkeren har D-nummer og ikke fødselsnummer
+      Og at søkeren har et vitnemål i KREG
+      Når søkeren sender inn søknaden
+      Så er vitnemålet importert
 
   @ref-FLY-OPT-AUT-001 @ref-FLY-OPT-VIT-001
   Regel: Alle vitnemål og kompetansebevis søkeren har i KREG, importeres
@@ -125,11 +125,14 @@ Egenskap: Importere resultater fra KREG
 
   Regel: Søknaden behandles videre når resultatene ikke kan hentes
 
-    @openquestion @implemented
+    @deprecated
     Scenario: Søker uten fødselsnummer får ingen resultater importert
-      # ÅPNE SPØRSMÅL:
-      # - Skal søkere med D-nummer slås opp i KREG?
       Gitt at søkeren ikke har fødselsnummer
+      Når søkeren sender inn søknaden
+      Så er ingen resultater importert fra KREG
+
+    Scenario: Søker uten fødselsnummer og D-nummer får ingen resultater importert
+      Gitt at søkeren verken har fødselsnummer eller D-nummer
       Når søkeren sender inn søknaden
       Så er ingen resultater importert fra KREG
 
@@ -142,23 +145,18 @@ Egenskap: Importere resultater fra KREG
       Når KREG svarer igjen innenfor tiden i applikasjonsinnstillingene
       Så er søkerens vitnemål importert
 
-  @openquestion @ref-OPT-BEH-BEH-021 @ref-FLY-OPT-VIT-001 @ref-OPT-BEH-BEH-032
+  @ref-OPT-BEH-BEH-021 @ref-FLY-OPT-VIT-001 @ref-OPT-BEH-BEH-032
   Regel: Nye og annullerte vitnemål i KREG importeres for aktive søkere
     # Gjelder aktive søkere: søkere med en søknad som ikke er trukket, i et opptak som ikke er
     # avsluttet.
     # Avklart 29.10.2026: nytt vitnemål og annullering tas inn. Opphevet annullering og endringer i
     # et vitnemål som er importert, tas ikke inn.
-    # Endret 30.10.2026: i den første versjonen går jobben for nye vitnemål (OPT-BEH-BEH-032)
-    # gjennom alle aktive søkere, og henter vitnemålene fra KREG for hver søker. Det som ikke er
-    # importert fra før, eller som er annullert i KREG, er nytt. I neste versjon abonnerer opptak
-    # på hendelsesloggen i KREG, og henter vitnemålene bare for fødselsnumrene KREG varsler
-    # endringer for. Det kommer som en endring av kravet.
+    # Jobben for nye vitnemål (OPT-BEH-BEH-032) går gjennom alle aktive søkere, og henter
+    # vitnemålene fra KREG for hver søker. Det som ikke er importert fra før, eller som er
+    # annullert i KREG, er nytt.
     # Et nytt vitnemål i en sak som er behandlet, er ny dokumentasjon. Saken behandles ikke
     # automatisk på nytt (OPT-BEH-BEH-032). Når vitnemålet annulleres, gjelder OPT-BEH-BEH-034.
     # Varselet til saksbehandleren om nytt vitnemål står i OPT-BEH-BEH-021.
-    # ÅPNE SPØRSMÅL:
-    # - Hvordan hendelsesloggen i KREG skal virke i neste versjon, er ikke avklart, og hører til
-    #   KREG-teamet.
 
     Scenario: Søkeren får vitnemålet etter at søknaden er levert
       Gitt at søkeren har levert søknaden uten å ha et vitnemål i KREG
