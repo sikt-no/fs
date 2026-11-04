@@ -57,13 +57,9 @@ Egenskap: Saksbehandlertildeling
       Og "NTNU" er saksbehandlende organisasjon for "Utøvende musikk, NTNU"
       Og søknaden har én sak hos "Universitetet i Oslo" og én sak hos "NTNU"
 
-    @openquestion
     Scenario: Organisasjonen som saksbehandler på vegne av lærestedet får saken
-      # ÅPNE SPØRSMÅL:
-      # - "Arkitektur- og designhøgskolen i Oslo" og "OsloMet" deltar ikke i opptaket i bakgrunnen, og
-      #   OPT-BEH-BEH-011 krever at organisasjonen som saksbehandler på vegne av lærestedet, deltar. Skal
-      #   scenarioet få steget `Gitt at "Arkitektur- og designhøgskolen i Oslo" og "OsloMet" deltar i opptaket`?
-      Gitt at "OsloMet" saksbehandler på vegne av "Arkitektur- og designhøgskolen i Oslo" i opptaket
+      Gitt at "Arkitektur- og designhøgskolen i Oslo" og "OsloMet" deltar i opptaket
+      Og at standardregelen har unntak for lærested der "OsloMet" saksbehandler på vegne av "Arkitektur- og designhøgskolen i Oslo"
       Når søkeren sender inn søknaden med "Arkitektur, AHO"
       Så har søknaden én sak hos "OsloMet"
 
