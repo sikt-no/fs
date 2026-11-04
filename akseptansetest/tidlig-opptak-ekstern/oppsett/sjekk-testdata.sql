@@ -52,9 +52,9 @@ frist AS (
    WHERE opptak_kode = 34
 ),
 tilbud (navn, organisasjonskode, tidlig) AS (
-  VALUES ('Automasjon, ingeniør - bachelor (ordinær, y-vei)', 186, true),       -- UiT
-         ('Elektronisk systemingeniør - bachelor i ingeniørfag', 194, true),    -- NTNU
-         ('Bachelor i ingeniørfag, allmenn maskinteknikk', 203, false)          -- HVL
+  VALUES ('Automasjon, ingeniør - bachelor (ordinær, y-vei)', '186', true),       -- UiT
+         ('Elektronisk systemingeniør - bachelor i ingeniørfag', '194', true),    -- NTNU
+         ('Bachelor i ingeniørfag, allmenn maskinteknikk', '203', false)          -- HVL
 )
 -- Opptaket
 SELECT 'Opptak 34: tidlig opptak er slått på, og lenken er satt' AS sjekk,
@@ -123,11 +123,11 @@ SELECT 'Opptak 34: «' || t.navn || '» finnes én gang, ' || CASE WHEN t.tidlig
        coalesce((SELECT string_agg(format('nr %s, tidlig=%s', u.utdanningstilbudsnr, u.tilbyr_tidlig_opptak), '; ')
                    FROM opptak_v2.utdanningstilbud u
                   WHERE u.opptak_kode = 34 AND NOT u.er_kansellert
-                    AND u.studieprogram_navn = t.navn AND u.organisasjonskode = t.organisasjonskode), 'finnes ikke'),
+                    AND u.studieprogram_navn = t.navn AND u.organisasjonskode::text = t.organisasjonskode), 'finnes ikke'),
        (SELECT count(*) = 1 AND bool_and(u.tilbyr_tidlig_opptak = t.tidlig)
           FROM opptak_v2.utdanningstilbud u
          WHERE u.opptak_kode = 34 AND NOT u.er_kansellert
-           AND u.studieprogram_navn = t.navn AND u.organisasjonskode = t.organisasjonskode)
+           AND u.studieprogram_navn = t.navn AND u.organisasjonskode::text = t.organisasjonskode)
   FROM tilbud t
 UNION ALL
 -- Søkerne: før testen «ikke brukt». Etter testcase 0 skal saken behandles av UiT (186).

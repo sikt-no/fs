@@ -3,7 +3,7 @@
 - **Nivå**: ekstern (fase 4), vedlegg til [testcaser-ekstern.md](testcaser-ekstern.md)
 - **Testplan**: ingen felles testplan, se metadataene i [testcaser-ekstern.md](testcaser-ekstern.md)
 - **Bygger på**: de interne testene ([søke om tidlig opptak](../soke-om-tidlig-opptak/akseptansetesting.md), [saksbehandling](../saksbehandling-tidlig-opptak/testcaser-intern.md), tilbudsgaranti på PR #787), kravene `@OPT-SØK-SØK-011`, `@OPT-BEH-BEH-009`, `@OPT-BEH-BEH-013` og `@OPT-BEH-BEH-010` (commit `990afe3f`), og rapportene: verifisering ([søke](../soke-om-tidlig-opptak/testrapport-verifisering-2026-10-26.md), [saksbehandling](../saksbehandling-tidlig-opptak/testrapport-verifisering-2026-10-27.md), tilbudsgaranti på PR #787), [intern, saksbehandling](../saksbehandling-tidlig-opptak/testrapport-intern-2026-10-30.md). Ingen agentisk funksjonstest
-- **Confluence**: https://sikt.atlassian.net/wiki/spaces/STUDIEADM/pages/5165383733 (underside til testsiden, publisert 2026-11-03)
+- **Confluence**: https://sikt.atlassian.net/wiki/spaces/STUDIEADM/pages/5165383733 (underside til testsiden, publisert 2026-11-03; v2: endringsloggen)
 - **Laget**: 2026-11-03 av fs-testcaser-ekstern
 - **Sporing**:
 
@@ -51,7 +51,7 @@ Flytbeskrivelser og krav for tidlig opptak og tilbudsgaranti. Her ser du hvilke 
 **Dette kan du ikke gjøre i testen:**
 
 - Gjennomføre tidligopptaket, så søkerne med konklusjon får tilbudsgaranti fra tidligopptaket. Det kommer senere, og i testen settes tilbudsgarantien for hånd.
-- Se hvem som har satt eller fjernet en tilbudsgaranti. Endringsloggen er tatt ut av løsningen inntil videre.
+- Se hvem som har satt eller fjernet en tilbudsgaranti. Knappen «Endringslogg» i saken viser «Ingen endringer» inntil videre.
 - Sette tilbudsgaranti som tilbyder når saken behandles av et annet lærested. Det er en kjent mangel som rettes.
 - Trekke søknaden om tidlig opptak. Søkeren ser heller ikke når søknaden om tidlig opptak ble sendt (det står i kvitteringen).
 
