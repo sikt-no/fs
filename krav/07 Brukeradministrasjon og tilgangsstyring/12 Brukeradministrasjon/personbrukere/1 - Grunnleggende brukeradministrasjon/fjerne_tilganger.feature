@@ -58,7 +58,6 @@ Egenskap: Fjerne tilganger fra en personbruker (planlagt etter v1)
       Og tilgangen vises ikke lenger med "Tildelt direkte" som rolle
 
 # ÅPNE SPØRSMÅL:
-# - Kan en brukeradministrator fjerne tilganger fra en deaktivert personbruker? BRU-APP-API-008 tillater det for deaktiverte applikasjoner, og BRU-PER-GRU-004 sier at deaktivering fryser tildelingene uten å fjerne dem — men det er ikke avklart om en tildeling kan fjernes permanent mens personbrukeren er deaktivert, eller hva som da skjer ved reaktivering.
 # - Autorisasjon: regelen sier at brukeren kun kan fjerne tilganger de har rettighet til å fjerne, men ikke hva rettigheten består i. Forslag: bare tilganger som (a) gjelder ved en organisasjon administratoren administrerer, og (b) administratoren selv har eller kan administrere. Henger sammen med rolledefinisjons-arbeidet i "4 - Opprette og administrere roller".
 # - UX ved fjerning: skal det være bekreftelsesdialog ved hver fjerning, eller en angre-mulighet etterpå? Avklares i designfasen. Merk at BRU-APP-API-008 allerede har besluttet bekreftelsesdialog for applikasjoner — de to bør samkjøres.
 # - Hva skjer med data personbrukeren har opprettet, hvis tilgangen fjernes? (Eierskap, sletting, anonymisering — sannsynligvis utenfor scope for dette kravet og dekkes av separat krav om persondata.)

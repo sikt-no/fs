@@ -31,6 +31,7 @@ Egenskap: Kvotetype
       Og opptaksforvalteren angir navn på bokmål, nynorsk, engelsk og samisk
       Så er navnene på kvotetypen "ORD" lagret på alle fire språk
 
+  @ref-FLY-OPT-AUT-001
   Regel: En kvotetype kan ha en default poengformel
 
     Scenario: Sette default poengformel
@@ -42,6 +43,7 @@ Egenskap: Kvotetype
   # fs-admin har dem ikke på kvotetypen. Kvoteprioriteten og standard plassflyt settes for hele
   # regelverkssamlingen (avklart 2026-10-21), se sette_kvoteprioritet.feature og sette_plassflyt.feature.
 
+  @ref-OPT-BEH-BEH-012
   Regel: En kvotetype gjelder for grunnlagene den er koblet til
 
     Scenario: Koble grunnlag til kvotetype

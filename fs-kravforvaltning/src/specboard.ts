@@ -1,5 +1,5 @@
-// Tavla «Oppgaver» (portet fra designet «Spesifikasjoner», runde 1): ett kort per oppgave, med spesifikasjonene i
-// oppgaven, kolonnen hvert kort står i, hva som mangler, dra og slipp, og promptene til Claude. Bygget fra oppgavene
+// Tavla «Scopes» (portet fra designet «Spesifikasjoner», runde 1): ett kort per scope, med spesifikasjonene i
+// scopet, kolonnen hvert kort står i, hva som mangler, dra og slipp, og promptene til Claude. Bygget fra oppgavene
 // og scopene (shared/tasks.ts), spesifikasjonene (spec/spec-*.md), tilstandsfila (utforing.md), verifiseringsrapportene
 // (spec/verify-*.md) og de parsede kravene i krav/. Rene funksjoner, testet i specboard.test.ts.
 import type { Entry, Scen, Snapshot, Status } from '../shared/model.ts';
@@ -254,7 +254,7 @@ function card(t: RawTask, f: string, utforing: Utforing, reports: VerifyReport[]
 // —— Kolonner ——
 
 /**
- * Kolonnene: I scope (`scope`), Kravarbeid (`kravarbeid`) og Spesifiseres (`spesifiseres`) svarer til fs-scope, fs-krav og
+ * Kolonnene: Avgrenset (`scope`), Kravarbeid (`kravarbeid`) og Spesifiseres (`spesifiseres`) svarer til fs-scope, fs-krav og
  * fs-specify, og utledes fra kravene. Så Klart til utvikling, repoene, Til verifisering og Verifisert.
  */
 export type ColKey = 'scope' | 'kravarbeid' | 'spesifiseres' | 'klar' | 'verifisering' | 'verifisert' | `repo:${string}`;
@@ -315,7 +315,7 @@ export const currentRepo = (c: Pick<Card, 'doc' | 'feats' | 'run'>) => {
 };
 
 /**
- * Kan spesifikasjonen slippes i kolonnen? Som i designet, med ett unntak: I scope, Kravarbeid, Spesifiseres og
+ * Kan spesifikasjonen slippes i kolonnen? Som i designet, med ett unntak: Avgrenset, Kravarbeid, Spesifiseres og
  * Verifisert utledes fra kravene, spesifikasjonen og verifiseringsrapporten, så de kan ikke settes for hånd.
  */
 export function canDrop(c: Pick<Card, 'doc' | 'feats' | 'run'>, key: ColKey): boolean {
@@ -479,7 +479,7 @@ export interface ColConf {
 }
 
 export const FIXED_COLS: ColConf[] = [
-  { key: 'scope', name: 'I scope' },
+  { key: 'scope', name: 'Avgrenset' },
   { key: 'kravarbeid', name: 'Kravarbeid' },
   { key: 'spesifiseres', name: 'Spesifiseres' },
   { key: 'klar', name: 'Klart til utvikling' },
@@ -503,7 +503,7 @@ export const COL_WHY: Record<string, string> = {
 export const BOARD_REPOS = ['fs-plattform', 'fs-admin', 'min-kompetanse'];
 
 /**
- * Kolonnene i rekkefølge: I scope, Kravarbeid, Spesifiseres og Klart til utvikling, repo-kolonnene, Til verifisering og Verifisert.
+ * Kolonnene i rekkefølge: Avgrenset, Kravarbeid, Spesifiseres og Klart til utvikling, repo-kolonnene, Til verifisering og Verifisert.
  * Repoene er de lagrede (med rekkefølge, navn og skjult), pluss standardrepoene og repoene som står i en rute.
  */
 export function columns(saved: ColConf[], defaults: string[], routes: string[][]): ColConf[] {
@@ -526,7 +526,7 @@ export function columns(saved: ColConf[], defaults: string[], routes: string[][]
 
 // —— Oppgavekortene ——
 
-/** Ett kort per oppgave: oppgaven, scopet, kravene og spesifikasjonene i oppgaven */
+/** Ett kort per scope-mappe: mappa (`task`), scope.md (`scope`), kravene og spesifikasjonene i scopet */
 export interface TaskCard {
   /** `<dom>/<slug>` */
   key: string;
@@ -537,10 +537,10 @@ export interface TaskCard {
   task: Task;
   scope: Scope | null;
   specs: Card[];
-  /** Kravene oppgaven har (scope-raden, ellers spesifikasjonene, ellers krav-lenken) */
+  /** Kravene scopet har (krav-radene i scope.md, ellers spesifikasjonene) */
   krav: KravRow[];
-  kravFrom: 'scope' | 'spec' | 'lenke' | null;
-  /** Feature-ID-er og filer i scope-raden eller spesifikasjonene som ikke finnes i krav/ */
+  kravFrom: 'scope' | 'spec' | null;
+  /** Feature-ID-er og filer i krav-radene eller spesifikasjonene som ikke finnes i krav/ */
   kravMissing: string[];
   /** Krav i oppgaven (unntatt `@wont`) som ikke står i noen spesifikasjon, og som ikke er levert */
   unspecced: KravRow[];
@@ -548,7 +548,7 @@ export interface TaskCard {
 
 const inSpec = (k: KravRow, specs: Card[]) => specs.some(s => s.feats.some(f => (k.id && f.id === k.id) || (k.path && f.path === k.path)));
 
-/** Oppgavekortene: alle oppgavemappene (unntatt mal/), med spesifikasjonene fra `specCards` */
+/** Kortene: alle scope-mappene (unntatt mal/), med spesifikasjonene fra `specCards` */
 export function buildTaskCards(tasks: Task[], scopes: Scope[], specCards: Card[], entries: Snapshot): TaskCard[] {
   const ids = idIndex(entries);
   return tasks
@@ -574,7 +574,7 @@ export function buildTaskCards(tasks: Task[], scopes: Scope[], specCards: Card[]
     .sort((a, b) => a.dom.localeCompare(b.dom, 'nb') || a.task.title.localeCompare(b.task.title, 'nb'));
 }
 
-/** Kolonnen for kravene uten spesifikasjon: skjeletter → I scope, utkast → Kravarbeid, ellers Spesifiseres */
+/** Kolonnen for kravene uten spesifikasjon: skjeletter → Avgrenset, utkast → Kravarbeid, ellers Spesifiseres */
 export function kravCol(krav: KravRow[]): ColKey {
   if (krav.every(k => k.skeleton)) return 'scope';
   if (krav.some(k => k.skeleton || k.status === 'draft' || k.status === null)) return 'kravarbeid';
@@ -630,7 +630,7 @@ export function taskFlags(t: TaskCard, dirty: boolean): Flag[] {
   if (t.scope) {
     const row = new Set(t.krav.map(k => k.id ?? k.path));
     const outside = t.specs.flatMap(s => s.feats).filter(f => !row.has(f.id) && !row.has(f.path) && !f.remove);
-    if (outside.length) out.push({ t: `${outside.length} krav utenfor scope-raden`, kind: 'warn' });
+    if (outside.length) out.push({ t: `${outside.length} krav ikke i scope.md`, kind: 'warn' });
     const other = t.krav.filter(k => k.scope && k.scope !== t.scope!.slug);
     if (other.length) out.push({ t: `${other.length} krav i et annet scope`, kind: 'warn' });
     const notTagged = t.krav.filter(k => k.entry && !k.scope);
@@ -686,8 +686,8 @@ export function nextStep(t: TaskCard, col: ColKey): NextStep {
   if (!s) {
     if (col === 'scope' && !live.length) {
       out.kind = 'scope-tom';
-      out.ctx = scopeName || 'scope-fila';
-      out.lines.push({ t: 'Ingen krav er koblet til oppgaven', mark: 'err', sub: t.scope ? undefined : 'Oppgaven har heller ikke scope' });
+      out.ctx = scopeName || 'scope.md';
+      out.lines.push({ t: 'Ingen krav er koblet til scopet', mark: 'err', sub: t.scope ? undefined : 'Mappa har heller ikke scope.md' });
     } else if (col === 'scope') {
       out.kind = 'skjelett';
       out.ctx = scopeName;
@@ -753,7 +753,7 @@ export function nextStep(t: TaskCard, col: ColKey): NextStep {
       out.lines.push({ t: 'Alle steg på ruta er levert', sub: prs.join(' · ') || undefined, mark: 'ok' });
     }
   }
-  for (const o of activeSpecs(t).filter(x => x !== s)) out.lines.push({ t: `Også i oppgaven: ${o.doc.title || o.file}`, mark: 'col', col: colOf(o) });
+  for (const o of activeSpecs(t).filter(x => x !== s)) out.lines.push({ t: `Også i scopet: ${o.doc.title || o.file}`, mark: 'col', col: colOf(o) });
   if (t.specs.length && t.unspecced.length) out.lines.push({ t: `${t.unspecced.length} krav uten spesifikasjon`, sub: t.unspecced.map(k => k.file).join(', '), mark: 'warn' });
   return out;
 }
@@ -768,37 +768,37 @@ export function kravSummary(t: Pick<TaskCard, 'krav'>): { k: KravKey; n: number 
   return KRAV_ORDER.map(k => ({ k, n: t.krav.filter(r => kravKey(r) === k).length })).filter(x => x.n);
 }
 
-/** Alt tavla bygges av: scopene, oppgavene, spesifikasjonene og oppgavekortene */
+/** Alt tavla bygges av: scopene (scope.md), mappene, spesifikasjonene og kortene */
 export function buildBoard(snap: TasksSnapshot, entries: Snapshot, extraSpecs: Card[] = []) {
   const scopes = buildScopes(snap);
-  const tasks = buildTasks(snap, scopes);
+  const tasks = buildTasks(snap);
   const specs = [...buildCards(snap, entries), ...extraSpecs];
   return { scopes, tasks, specs, cards: buildTaskCards(tasks, scopes, specs, entries) };
 }
 
 const kravList = (ks: KravRow[]) => ks.map(k => `- ${k.path ?? k.file}${k.id ? ` (${k.id})` : ''}${k.status ? ` · @${k.status}` : ' · finnes ikke'}${k.skeleton && k.path ? ' · skjelett' : ''}`);
 
-/** fs-krav på kravene i oppgaven som ikke er @planned ennå (I scope og Kravarbeid) */
+/** fs-krav på kravene i scopet som ikke er @planned ennå (Avgrenset og Kravarbeid) */
 export function kravPrompt(t: TaskCard): string {
   const open = t.unspecced.filter(k => k.skeleton || k.status === 'draft' || k.status === null);
   return [
-    `Skriv og valider kravene i oppgaven ${t.dir}/ (${t.task.title}) med fs-krav.`,
-    ...(t.scope ? [`Oppgaven hører til scopet ${t.scope.path}: les mål, ikke-mål og kilder der, og ikke spør om det på nytt.`] : []),
+    `Skriv og valider kravene i scopet ${t.dir}/ (${t.task.title}) med fs-krav.`,
+    ...(t.scope ? [`Les mål, ikke-mål og kilder i ${t.scope.path}, og ikke spør om det på nytt.`] : []),
     '',
     'Krav som ikke er @planned:',
     ...kravList(open.length ? open : t.unspecced),
   ].join('\n');
 }
 
-/** fs-specify på oppgaven, med kravene og skissene fra scope-raden */
+/** fs-specify på scopet, med kravene og skissene fra krav-radene i scope.md */
 export function taskSpecifyPrompt(t: TaskCard): string {
-  const sketches = t.scope ? t.scope.rows.filter(r => r.task === t.slug).flatMap(r => r.sketches) : [];
+  const sketches = t.scope ? t.scope.rows.flatMap(r => r.sketches) : [];
   return [
-    `Kjør fs-specify for oppgaven ${t.dir}/ (${t.task.title}).`,
-    ...(t.scope ? [`Oppgaven hører til scopet ${t.scope.path}. Bruk kravene og skisselenkene i scope-raden som utgangspunkt.`] : []),
+    `Kjør fs-specify for scopet ${t.dir}/ (${t.task.title}).`,
+    ...(t.scope ? [`Bruk kravene og skisselenkene i krav-tabellen i ${t.scope.path} som utgangspunkt.`] : []),
     '',
     'Krav uten spesifikasjon:',
     ...kravList(t.unspecced),
-    ...(sketches.length ? ['', 'Skisser fra scope-raden:', ...sketches.map(k => `- ${k.name}: ${k.url}`)] : []),
+    ...(sketches.length ? ['', 'Skisser fra scope.md:', ...sketches.map(k => `- ${k.name}: ${k.url}`)] : []),
   ].join('\n');
 }

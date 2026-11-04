@@ -1,6 +1,6 @@
 # language: no
 # Jira: SHI-689
-@OPT-OPT-UTD-011 @must @planned @scope-utdanningstilbud-2027
+@OPT-OPT-UTD-011 @must @implemented @scope-utdanningstilbud-2027
 Egenskap: Registrere studietypenummer på utdanningstilbudet
   Som opptaksforvalter
   ønsker jeg å påføre utdanningstilbudet et studietypenummer

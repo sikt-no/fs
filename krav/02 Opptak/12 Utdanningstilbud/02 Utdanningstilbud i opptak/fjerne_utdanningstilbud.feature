@@ -1,6 +1,6 @@
 # language: no
 # Jira: SHI-710
-@OPT-OPT-UTD-026 @must @implemented @scope-utdanningstilbud-i-opptak-2027
+@OPT-OPT-UTD-026 @must @in-progress @scope-utdanningstilbud-i-opptak-2027
 Egenskap: Fjerne utdanningstilbud fra opptak
   Som opptaksforvalter
   ønsker jeg å fjerne utdanningstilbud som er lagt til i opptaket ved en feil, før opptaket åpner for søknad
@@ -14,6 +14,7 @@ Egenskap: Fjerne utdanningstilbud fra opptak
     Gitt at opptaksforvalter er innlogget
     Og at opptaket "Samordna opptak 2027" har utdanningstilbud
 
+  @implemented
   Regel: Utdanningstilbud kan fjernes før opptaket åpner for søknad
 
     Scenario: Fjerne utdanningstilbud før søknadsåpning
@@ -29,12 +30,12 @@ Egenskap: Fjerne utdanningstilbud fra opptak
   @ref-OPT-OPT-UTD-003
   Regel: Utdanningstilbud kan ikke fjernes etter at opptaket har åpnet for søknad
 
-    @in-progress
     Scenario: Muligheten til å fjerne utdanningstilbud vises ikke etter søknadsåpning
       Gitt at opptaket har åpnet for søknad
       Når opptaksforvalter ser listen over utdanningstilbud i opptaket
       Så ser ikke opptaksforvalter muligheten til å fjerne utdanningstilbud
 
+    @implemented
     Scenario: Fjerning av utdanningstilbud etter søknadsåpning avvises
       Gitt at opptaket har åpnet for søknad
       Når det sendes en forespørsel om å fjerne utdanningstilbudet "Sykepleie, høst 2027" fra opptaket
@@ -49,20 +50,20 @@ Egenskap: Fjerne utdanningstilbud fra opptak
   Regel: Opptaksforvalter ved deltakende organisasjon kan fjerne utdanningstilbud organisasjonen tilbyr, fram til redigeringsfristen
     # Opptaksforvalter ved deltakende organisasjon ser ikke utdanningstilbud en annen organisasjon tilbyr.
 
+    @implemented
     Scenario: Deltakende organisasjon fjerner eget utdanningstilbud før redigeringsfristen
       Gitt at opptaksforvalter er ved deltakende organisasjon "Universitetet i Oslo"
       Og at redigering av utdanningstilbud er åpen i opptaket
       Når opptaksforvalter fjerner utdanningstilbudet "Sykepleie, høst 2027", som "Universitetet i Oslo" tilbyr
       Så er utdanningstilbudet ikke lenger med i opptaket
 
-    @in-progress
+    @implemented
     Scenario: Deltakende organisasjon kan ikke fjerne eget utdanningstilbud etter redigeringsfristen
       Gitt at opptaksforvalter er ved deltakende organisasjon "Universitetet i Oslo"
       Og at redigering av utdanningstilbud er stengt i opptaket
       Når opptaksforvalter ser utdanningstilbudet "Sykepleie, høst 2027", som "Universitetet i Oslo" tilbyr
       Så ser ikke opptaksforvalter muligheten til å fjerne utdanningstilbudet "Sykepleie, høst 2027"
 
-    @planned
     Scenario: Deltakende organisasjon kan ikke fjerne utdanningstilbud en annen organisasjon tilbyr
       # Jira: SHI-747
       Gitt at opptaksforvalter er ved deltakende organisasjon "Universitetet i Oslo"
@@ -73,8 +74,10 @@ Egenskap: Fjerne utdanningstilbud fra opptak
 
   Regel: Opptaksforvalter ved forvaltende organisasjon kan fjerne utdanningstilbud etter redigeringsfristen
 
-    @in-progress
+    @openquestion
     Scenario: Forvaltende organisasjon fjerner utdanningstilbud etter redigeringsfristen
+      # ÅPNE SPØRSMÅL:
+      # - Delvis levert (verify 2026-10-22): fs-plattform lar forvaltende organisasjon fjerne etter redigeringsfristen, men fs-admin skjuler «Fjern» for alle når redigeringsfristen er passert. Skal fs-admin vise «Fjern» for forvaltende organisasjon fram til søknadsåpning?
       Gitt at opptaksforvalter er ved forvaltende organisasjon "HK-dir"
       Og at redigering av utdanningstilbud er stengt i opptaket
       Og at opptaket ikke har åpnet for søknad

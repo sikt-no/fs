@@ -56,7 +56,6 @@ Egenskap: Hendelseslogg for opptak
         | endrer opptakstype                                    | opptaket                  |
         | endrer regelverkssamlingen                            | opptaket                  |
         | endrer standard poenglikhetsregel                     | opptaket                  |
-        | endrer tak for antall tilbud per tildelingsrunde      | opptaket                  |
         | endrer maks antall søknadsalternativer                | opptaket                  |
         | endrer innstillingen for tidlig opptak                | opptaket                  |
         | endrer innstillingen for ledige studieplasser         | opptaket                  |

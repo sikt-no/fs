@@ -157,7 +157,7 @@ export function ChatMarkdown({ text, has, onOpen, onPr, change, onSummary, skill
             </div>
           );
         }
-        // utforing.md i oppgavemappa kommer med når den er endret (tavla skriver den, ikke Claude)
+        // utforing.md i scope-mappa kommer med når den er endret (tavla skriver den, ikke Claude)
         const parsed = b.lang === PR_LANG ? parsePrProposal(b.body.join('\n')) : null;
         const pr = parsed && withTaskState(parsed, p => !!change?.(p));
         if (pr) {
@@ -195,7 +195,7 @@ export function ChatMarkdown({ text, has, onOpen, onPr, change, onSummary, skill
                   })}
                   {pr.skipped.length > 0 && (
                     <div class="cmd-pr-skipped">
-                      Kan ikke tas med i PR-en herfra (bare krav/, og spec/ og utforing.md i en oppgavemappe): {pr.skipped.map((p, j) => <code key={j}>{p}</code>)}
+                      Kan ikke tas med i PR-en herfra (bare krav/, og spec/, utforing.md og scope.md i en scope-mappe): {pr.skipped.map((p, j) => <code key={j}>{p}</code>)}
                     </div>
                   )}
                 </div>

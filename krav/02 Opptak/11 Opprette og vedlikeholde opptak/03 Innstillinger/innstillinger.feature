@@ -1,5 +1,5 @@
 # language: no
-@OPT-OVO-INN-001 @must @in-progress @scope-opprette-opptak-2027
+@OPT-OVO-INN-001 @must @implemented @scope-opprette-opptak-2027
 Egenskap: Innstillinger for opptak
   Som opptaksforvalter ved forvaltende organisasjon
   ønsker jeg å sette innstillinger for opptaket
@@ -79,6 +79,10 @@ Egenskap: Innstillinger for opptak
   Regel: Opptaksforvalter setter tak for antall søknadsalternativer
 
     # Virkningen står i 13 Søknad og saksbehandling/01 Søknad/studiekurv.feature.
+    # AVKLART 2026-10-26 (ekstern akseptansetest, HK-dir): Når opptaket åpner for søknad på
+    # ledige studieplasser, gjelder taket for den ordinære søknaden og for søknaden til ledige
+    # studieplasser hver for seg. Med maks 10 kan søkeren ha opptil 10 søknadsalternativer i den
+    # ordinære søknaden og opptil 10 i søknaden til ledige studieplasser.
     Scenario: Sette maks antall søknadsalternativer
       Når opptaksforvalter setter maks antall søknadsalternativer til 10
       Så har opptaket maks 10 søknadsalternativer
@@ -88,7 +92,7 @@ Egenskap: Innstillinger for opptak
   # Det erstatter regelen fra 2026-10-14 om hvor mange utdanningstilbud en søker kan få opptak til.
   # Taket er obligatorisk, er forhåndsutfylt med 1, og kan endres etter at opptaket er opprettet.
   # Virkningen i plasstildelingen står i 14 Plasstildeling/03 Tildeling/gjennomføre_plasstildeling.feature.
-  @ref-OPT-PLA-TIL-002
+  @ref-OPT-PLA-TIL-002 @deprecated
   Regel: Opptaksforvalter setter tak for antall tilbud per tildelingsrunde
 
     Scenario: Sette tak for antall tilbud per tildelingsrunde
@@ -149,12 +153,13 @@ Egenskap: Innstillinger for opptak
       Så er ledige studieplasser aktivert for opptaket
       Og opptaket har datoene for ledige studieplasser
 
+  @ref-OPT-SØK-SØK-017
   Regel: Opptaksforvalter kan legge til utdanningsbakgrunner som gjelder for opptaket
 
     # Opptaksforvalter velger blant godkjente utdanningsbakgrunner fra utdanningsbakgrunn-tabellen.
     # Avvikende søknads- og dokumentasjonsfrister per utdanningsbakgrunn settes i
     # 04 Frister/frister_og_hendelser.feature.
-    # Søkerens valg av utdanningsbakgrunn står i 13 Søknad og saksbehandling/01 Søknad/søke_på_opptak.feature.
+    # Søkerens valg av utdanningsbakgrunn står i OPT-SØK-SØK-017.
 
     Scenario: Legge til utdanningsbakgrunner fra godkjent liste
       Når opptaksforvalter legger til utdanningsbakgrunner i opptaket
@@ -178,7 +183,12 @@ Egenskap: Innstillinger for opptak
       Og opptaksforvalter ser at søkere har valgt utdanningsbakgrunnen
 
     # AVKLART 2026-10-19: Et opprettet opptak skal alltid ha minst én utdanningsbakgrunn.
+    @openquestion
     Scenario: Den siste utdanningsbakgrunnen kan ikke fjernes
+      # ÅPNE SPØRSMÅL:
+      # - Skal alle opptak ha utdanningsbakgrunn, eller bare UHG-opptak (samordna opptak)?
+      #   Avklares i TOT-2586. Gjelder det bare UHG, skal andre opptak kunne være uten
+      #   utdanningsbakgrunn.
       Gitt at "Steinerskole" er den eneste utdanningsbakgrunnen i opptaket
       Når opptaksforvalter vil fjerne "Steinerskole" fra opptaket
       Så blir "Steinerskole" ikke fjernet
@@ -203,6 +213,25 @@ Egenskap: Innstillinger for opptak
     Scenario: Stenge for dokumentasjonsopplasting
       Når opptaksforvalter angir at søkere ikke kan laste opp dokumentasjon
       Så er opptaket stengt for at søkere kan laste opp dokumentasjon
+
+  @draft @openquestion
+  Regel: Opptaksforvalter får et varsel når opplasting av dokumentasjon stenges
+    # ÅPNE SPØRSMÅL:
+    # - Skal informasjonsdatoen for dokumentasjon og ettersendingsfristen fjernes fra opptaket, eller bare skjules,
+    #   når opplasting stenges?
+
+    # Lagt til 2026-10-27 etter akseptansetesten: Som for de andre innstillingene med frister (tidlig opptak og
+    # ledige studieplasser) skal opptaksforvalter få et varsel før innstillingen slås av. Datoene for
+    # dokumentasjon skal ikke stå og kunne fylles ut når søkerne ikke kan laste opp dokumentasjon.
+    Scenario: Varsel før opplasting av dokumentasjon stenges
+      Gitt at opptaket har informasjonsdato for dokumentasjon "2027-04-15 23:59"
+      Når opptaksforvalter angir at søkere ikke kan laste opp dokumentasjon
+      Så ser opptaksforvalter et varsel om at datoene for dokumentasjon ikke lenger gjelder
+
+    Scenario: Datoene for dokumentasjon vises ikke når opplasting er stengt
+      Gitt at opptaket er stengt for at søkere kan laste opp dokumentasjon
+      Når opptaksforvalter ser fristene for opptaket
+      Så ser opptaksforvalter ikke informasjonsdatoen for dokumentasjon eller ettersendingsfristen
 
   @draft
   # Ikke relevant for samordna opptak

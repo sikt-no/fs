@@ -332,8 +332,8 @@ export function parseFeature(source: string, path?: string): FeatureModel {
       if (!n) push('folder-numbering', `Prosessen «${seg[2]}» mangler nummer (fra 10)`, 1);
       else if (+n[1] < 10) push('folder-numbering', `Prosessen «${seg[2]}» er nummerert under 10`, 1);
     }
-    // _Interne prosesser og 99 Demo følger ikke nummereringen
-    if (seg.length === 5 && !/^(_|99 )/.test(seg[1])) {
+    // 99 Demo følger ikke nummereringen
+    if (seg.length === 5 && !/^99 /.test(seg[1])) {
       const [sub, kap] = [seg[2], seg[3]];
       const n = sub.match(/^(\d+) /);
       if (!n) push('folder-numbering', `Sub-domenet «${sub}» mangler nummer (fra 10)`, 1);

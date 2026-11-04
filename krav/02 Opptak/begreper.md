@@ -1,6 +1,6 @@
 # Begrepsliste — Opptak
 
-Siste oppdatering: 2026-10-09
+Siste oppdatering: 2026-11-03
 
 Denne listen sammenstiller begreper brukt i kravene (`krav/02 Opptak/`), design-filene og begrepskatalogen på [fs.sikt.no](https://fs.sikt.no/domenekunnskap/begreper/). Målet er konsistent begrepsbruk på tvers av krav, kode, API og brukergrensesnitt.
 
@@ -16,10 +16,12 @@ Denne listen sammenstiller begreper brukt i kravene (`krav/02 Opptak/`), design-
 
 | Begrep i krav | Definisjon | Begrepskatalog | Gammel FS | Merknad |
 |---------------|------------|----------------|-----------|---------|
-| opptaksforvalter | Rollen som setter opp og forvalter et opptak: innstillinger, frister, runder, antall tilbud som skal gis og plasstildeling | – | – | Ny rolle i nytt opptak. Ikke i begrepskatalogen enda |
+| opptaksforvalter | Rollen som får lov til å opprette og vedlikeholde opptak og opptaksinnstillinger for en organisasjon | – | – | Ny rolle i nytt opptak. Heter opptaksforvalter i koden. Ikke i begrepskatalogen enda |
+| opptakets forvalter | Erstatter «forvaltende organisasjon» og «opptaksforvalter ved forvaltende organisasjon»: den som forvalter opptaket. I samordna opptak HK-dir, i lokale opptak lærestedet selv | – | – | Ny term 2026-10-24, foreløpig bare i `14 Plasstildeling`. ⚠️ `@openquestion`, se *Åpne spørsmål* nederst |
 | opptaksforvalter ved forvaltende organisasjon | Opptaksforvalter i organisasjonen som eier opptaket. I samordna opptak HK-dir, i lokale opptak lærestedet selv | – | – | Spesifisering av opptaksforvalter |
 | opptaksforvalter ved deltakende organisasjon | Opptaksforvalter ved et lærested som deltar i et opptak som en annen organisasjon forvalter. Setter opp egne utdanningstilbud, for eksempel antall tilbud som skal gis | – | – | Spesifisering av opptaksforvalter |
-| opptakseier | Organisasjonen som oppretter og vedlikeholder (forvalter) et opptak. Opptakseieren har ansatte som er opptaksforvaltere | – | – | ✅ Avklart 2026-10-09. Samme organisasjon som «forvaltende organisasjon» |
+| regelverksforvalter | Forretningsrolle: regelverksforvalter ved organisasjonen som eier regelverkssamlingen. Forvalter regelverket i regelverkssamlingen, for eksempel kvotetyper, kvoteprioritet, plassflyt og rundetyper. Bare organisasjonen som har opprettet regelverket, kan endre det | – | – | Ny term 2026-10-24. Definisjonen er den samme som i kvotekravene (`sette_kvoteprioritet.feature`, `sette_plassflyt.feature`) og i `forvalte_rundetyper.feature` |
+| opptakseier | Organisasjonen som oppretter og vedlikeholder (forvalter) et opptak. Opptakseieren har ansatte som er opptaksforvaltere | – | – | ✅ Avklart 2026-10-09. Samme organisasjon som «forvaltende organisasjon». ⚠️ Se «opptakets forvalter» |
 | saksbehandler | Person som behandler søknader: vurderer dokumentasjon, setter grunnlag og regner ut poeng. Kvalitetssikrer også resultatet av plasstildelingen | – | Saksbehandler | Brukes generelt i kravene; bør presiseres |
 | saksbehandlende organisasjon | Organisasjonen som har ansvaret for å saksbehandle et søknadsalternativ, og som får tilgang til saken. Er organisasjonen med behandlerrolle for søknadsalternativet (i koden og tilbudsgaranti-kravet også «B-rolle»). Søknaden blir til én sak hos hver saksbehandlende organisasjon | – | – | Ny term (`tildele_saksbehandlende_organisasjon.feature`). Ansvaret ligger hos organisasjonen, ikke hos en enkelt saksbehandler |
 | tilbyder | Lærestedet som tilbyr utdanningstilbudet søknadsalternativet gjelder | – | – | Ny term (`tildele_saksbehandlende_organisasjon.feature`) |
@@ -34,7 +36,7 @@ Denne listen sammenstiller begreper brukt i kravene (`krav/02 Opptak/`), design-
 | lokalt opptak | Opptak som et lærested forvalter selv, der lærestedet er den eneste organisasjonen | – | Lokalt opptak | OK |
 | opptakstype | «Kategorisering av opptak med utdanningstilbud som har relativt like opptaksregler» | [opptakstype](https://fs.sikt.no/domenekunnskap/begreper/opptakstype/) | Opptakstype | OK |
 | tidlig opptak | Tidlig behandling av og tilbud til søkere i et opptak. Søkerne får ikke tildelt studierett tidligere enn andre søkere av den grunn: det reelle opptaket til utdanningen er ikke gjennomført. Løses med tilbudsgaranti i rundene som kjøres, ikke som en egen runde | – | Tidligopptak | ✅ Avklart: «tidlig opptak» (to ord) er riktig. ✅ Avklart 2026-10-09: definisjonen, og at det ikke er en rundetype |
-| forvaltende organisasjon | Organisasjonen som forvalter og eier opptaket, altså opptakseieren | – | – | Ny term. Se «opptakseier» |
+| forvaltende organisasjon | Organisasjonen som forvalter og eier opptaket, altså opptakseieren | – | – | ⚠️ Utgår 2026-10-24: for tungt. Erstattes av «opptakets forvalter». Rettet i `14 Plasstildeling`, resten venter på det åpne spørsmålet |
 | deltakende organisasjon | Organisasjon som deltar i et opptak som en annen organisasjon forvalter, med egne utdanningstilbud | – | – | ✅ Avklart: «deltakende» er riktig. Krav som bruker «deltagende» bør rettes |
 | lærested | «Organisasjon som tilbyr utdanning» | [lærested](https://fs.sikt.no/domenekunnskap/begreper/larested/) (aktiv) | Institusjon / Lærested | OK |
 | organisasjon | Generelt begrep for alle typer registrerte enheter | – | Institusjon | Nytt generelt begrep som erstatter «institusjon» (se `krav/README.md` terminologi) |
@@ -52,6 +54,7 @@ Denne listen sammenstiller begreper brukt i kravene (`krav/02 Opptak/`), design-
 | påbegynt søknad | Søknad som er opprettet, men ikke levert. Kan endres fram til søknadsfristen | Tilstand i [søknad](https://fs.sikt.no/domenekunnskap/begreper/soknad/) | – | ✅ Avklart: «påbegynt søknad» er riktig, ikke «søknadskladd» |
 | studierett | Retten en søker får til å studere på et utdanningstilbud etter opptak | – | Studierett | Mangler i begrepskatalogen |
 | antall studieplasser | Hvor mange studieplasser utdanningstilbudet har. Settes på utdanningstilbudet, og vises som grunnlag når antall tilbud som skal gis settes | Se [kapasitet](https://fs.sikt.no/domenekunnskap/begreper/kapasitet/) | – | ✅ Avklart 2026-10-09: «antall studieplasser» er vår term. ⚠️ Katalogen kaller det «kapasitet» |
+| kvoteplasser | Hvor mange av studieplassene på utdanningstilbudet som hører til en utdanningskvote. Settes på utdanningstilbudet, og er måltallet for utdanningskvoten. Vises når antall tilbud som skal gis settes | – | Ant. kvoteplasser | ✅ Ny term 2026-10-30 (produkteier). I koden: «ønsket antall deltakere» på kvoten |
 | tidlig tilbud | Markering på et utdanningstilbud om at det gir tilbud ved tidlig opptak | – | – | Brukes i `opptaksinnstillinger_utdanningstilbud.feature`. Se «tidlig opptak» |
 
 ## Regelverk
@@ -109,13 +112,14 @@ Denne listen sammenstiller begreper brukt i kravene (`krav/02 Opptak/`), design-
 | plasstildeling | «Bestemt utfall av søknadsbehandling i opptak som får virkning for alle søknader i ett opptak, i én av tre former»: tilbud om studieplass, venteliste eller avslag | [plasstildeling](https://fs.sikt.no/domenekunnskap/begreper/plasstildeling/) (utkast) | Opptakskjøring | OK. Erstatter «opptakskjøring». I kravene: beregningen som gjøres i en runde. Én runde kan ha flere plasstildelinger |
 | prøvetildeling | Plasstildeling som ikke publiseres, brukt til å kvalitetssikre resultatet før den som publiseres | – | – | Ny term i kravene |
 | plasstildelingsrunde | Vinduet i et opptak der plasser fordeles og søkerne får svar, med egen svarfrist. Et opptak kan ha flere plasstildelingsrunder | [opptaksrunde](https://fs.sikt.no/domenekunnskap/begreper/opptaksrunde/) (aktiv) | Kvoterunde / Opptaksrunde | ✅ Avklart 2026-09-30, bekreftet 2026-10-09: «plasstildelingsrunde». Rettet i kravene 2026-10-09. ⚠️ Katalogen har «opptaksrunde» |
-| rundetype | Hva slags runde det er: hovedtildeling, supplering eller etterfylling. Settes når runden legges til, og kan ikke endres | – | – | ✅ Avklart 2026-10-09: tre rundetyper. Ledige studieplasser og tidlig opptak er ikke rundetyper. ⚠️ Kodeverket har også TIDLIG, LEDIGE_STUDIEPLASSER og TEST |
-| hovedtildeling | Den første runden i et opptak. Søkeren får tilbud på høyest mulige prioritet, og lavere prioriteter faller bort | – | Hovedopptak | Et opptak har én hovedtildeling. Kodeverket kaller den «Hovedopptak» |
-| supplering | Runde etter hovedtildelingen som bygger på forrige publiserte runde, med bortfall og kompensasjonstilbud ved opprykk | – | Suppleringsopptak | Kodeverket kaller den «Suppleringsopptak» |
-| etterfylling | «En ny plasstildelingsrunde som fyller opp plasser som ble ledige etter at søkere svarte nei eller ikke svarte innen svarfristen». Uten bortfall: søkeren kan ha flere tilbud og må velge ett | [etterfylling](https://fs.sikt.no/domenekunnskap/begreper/etterfylling/) (utkast) | Etterfyllingsopptak | OK. Sto som manglende i forrige versjon av lista, men finnes nå i katalogen |
-| ledige studieplasser | Egenskap opptaksforvalter kan sette på en runde av alle rundetyper, når opptaket tilbyr søknad på ledige studieplasser. Søkere innen ordinær frist får plass først etter poeng, deretter søkere på ledige studieplasser etter søknadstidspunkt | – | – | ✅ Avklart 2026-10-08: en egenskap ved runden, ikke en rundetype |
+| rundetype | Et navn og et sett med rundeinnstillinger for plasstildelingsrunder, definert i regelverkssamlingen. Velges når runden legges til, og kan ikke endres. Plasstildelingen leser innstillingene, ikke rundetypen | – | – | ✅ Avklart 2026-10-24: rundetypene defineres i regelverkssamlingen, og nye kan lages uten kodeendring. I samordna opptak: hovedtildeling, supplering og etterfylling. ✅ Avklart 2026-10-09: tre rundetyper. Ledige studieplasser og tidlig opptak er ikke rundetyper. ⚠️ Kodeverket har også TIDLIG, LEDIGE_STUDIEPLASSER og TEST |
+| rundeinnstilling | En innstilling i rundetypen som plasstildelingen leser: tilbud gir bortfall på lavere prioriteter, kompensasjonstilbud ved opprykk, bygger på forrige publiserte plasstildelingsrunde, bare én i opptaket, og kan åpnes for ledige studieplasser. Kan ikke justeres på plasstildelingsrunden | – | – | Ny term 2026-10-24 (`bruke_rundetyper.feature`, `forvalte_runder.feature`). Kompensasjonstilbud krever bortfall og arv |
+| hovedtildeling | Rundetype i samordna opptak: tilbud gir bortfall på lavere prioriteter, bygger ikke på forrige runde, og er bare én i opptaket. Blir derfor den første runden | – | Hovedopptak | Kodeverket kaller den «Hovedopptak» |
+| supplering | Rundetype i samordna opptak som bygger på forrige publiserte runde, med bortfall og kompensasjonstilbud ved opprykk | – | Suppleringsopptak | Kodeverket kaller den «Suppleringsopptak» |
+| etterfylling | «En ny plasstildelingsrunde som fyller opp plasser som ble ledige etter at søkere svarte nei eller ikke svarte innen svarfristen». Rundetype i samordna opptak som bygger på forrige publiserte runde, uten bortfall: søkeren kan ha flere tilbud og må velge ett | [etterfylling](https://fs.sikt.no/domenekunnskap/begreper/etterfylling/) (utkast) | Etterfyllingsopptak | OK. Sto som manglende i forrige versjon av lista, men finnes nå i katalogen |
+| ledige studieplasser | Egenskap opptaksforvalter kan sette på en runde når rundetypen kan åpnes for ledige studieplasser, og opptaket tilbyr søknad på ledige studieplasser. Søkere innen ordinær frist får plass først etter poeng, deretter søkere på ledige studieplasser etter søknadstidspunkt | – | – | ✅ Avklart 2026-10-08: en egenskap ved runden, ikke en rundetype. Endret 2026-10-24: rundetypen sier om runden kan åpnes |
 | informasjonsarv | At en plasstildeling bygger videre på forrige publiserte runde: tidligere tilbud, ventelister og svar, slik at en ny plasstildeling ikke begynner på blanke ark | – | – | Brukes i design.md og kravene. Er ikke plassflyt |
-| antall tilbud som skal gis | Hvor mange nye tilbud som skal gis i en utdanningskvote på et utdanningstilbud i en runde. Settes som hele tall per utdanningskvote og runde. Kan være negativt i supplering | Se [antall plasser](https://fs.sikt.no/domenekunnskap/begreper/antall_plasser/) og [overbooking](https://fs.sikt.no/domenekunnskap/begreper/overbooking/) | Tilbud ønsket / Tilbud maks | ✅ Avklart 2026-10-08, bekreftet 2026-10-09: «antall tilbud som skal gis». Brukerne sier «sette opptaksparametere». ⚠️ Katalogen har «antall plasser» for det samme |
+| antall tilbud som skal gis | Hvor mange tilbud en utdanningskvote på et utdanningstilbud skal gi i opptaket. Settes som hele tall per utdanningskvote, og følger med til neste runde, som gir det som gjenstår (endret 2026-10-30) | Se [antall plasser](https://fs.sikt.no/domenekunnskap/begreper/antall_plasser/) og [overbooking](https://fs.sikt.no/domenekunnskap/begreper/overbooking/) | Tilbud ønsket / Tilbud maks | ✅ Avklart 2026-10-08, bekreftet 2026-10-09: «antall tilbud som skal gis». Brukerne sier «sette opptaksparametere». ⚠️ Katalogen har «antall plasser» for det samme |
 | periode for å endre antall tilbud som skal gis | Tidsrommet, satt på runden, der lærestedene kan endre antall tilbud som skal gis | – | – | Ny term (`forvalte_runder.feature`) |
 | netto tilbud | Aksepterte tilbud pluss gitte tilbud der svarfristen ikke er ute | – | – | Ny term (`antall_tilbud_som_skal_gis.feature`) |
 | svar på søknad | Resultatet søkeren får per søknadsalternativ: tilbud, ventelisteplass eller avslag | – | – | Resultatet av plasstildelingen |
@@ -131,18 +135,18 @@ Denne listen sammenstiller begreper brukt i kravene (`krav/02 Opptak/`), design-
 | publisere | Gjøre resultatet av en plasstildeling synlig for søkerne. Tidspunktet settes når opptaksforvalter publiserer | – | – | En runde har én publisert plasstildeling |
 | antall plasser | «Antall plasser forteller hvor mange tilbud som skal gis og setter begrensinger for hvor mange som kan motta et tilbud» | [antall plasser](https://fs.sikt.no/domenekunnskap/begreper/antall_plasser/) (aktiv) | Tilbud ønsket / Tilbud maks | ⚠️ Brukes ikke i kravene. Se «antall tilbud som skal gis» |
 | kapasitet | «Kapasiteten beskriver det faktiske antall plasser som finnes på utdanningstilbudet. Det antallet studenter som utdanningstilbudet er dimensjonert for» | [kapasitet](https://fs.sikt.no/domenekunnskap/begreper/kapasitet/) (aktiv) | – | ⚠️ Brukes ikke i kravene. Se «antall studieplasser» |
-| overbooking | Totalt antall tilbud som gis minus antall studieplasser | [overbooking](https://fs.sikt.no/domenekunnskap/begreper/overbooking/) (aktiv) | – | ✅ Avklart 2026-10-09: definisjonen. Er ikke noe som settes, og brukes ikke i kravene. ⚠️ I koden er det feltnavnet for antall tilbud som skal gis |
+| overbooking | Antall tilbud som skal gis minus studieplassene, per utdanningskvote (minus kvoteplassene) eller for utdanningstilbudet | [overbooking](https://fs.sikt.no/domenekunnskap/begreper/overbooking/) (aktiv) | – | ✅ Avklart 2026-10-09: definisjonen. Er ikke noe som settes. Endret 2026-10-30: vises for lærestedet per utdanningskvote, og brukes i kravene. ⚠️ I koden er det feltnavnet for antall tilbud som skal gis |
 
 ## Frister og datoer
 
 | Begrep i krav | Definisjon | Begrepskatalog | Merknad |
 |---------------|------------|----------------|---------|
 | søknadsfrist | Fristen for å levere søknad i opptaket | Referert i [søknad](https://fs.sikt.no/domenekunnskap/begreper/soknad/) | OK |
-| dokumentasjonsfrist | Fristen for å laste opp dokumentasjon | – | OK |
+| informasjonsdato for dokumentasjon | Datoen dokumentasjonen bør være lastet opp innen. Stenger ikke for opplasting: det gjør bare innstillingen «Søker kan laste opp dokumenter» | – | ✅ Avklart 2026-10-27: erstatter «ordinær dokumentasjonsfrist» |
 | omprioriteringsfrist | Fristen for å endre rekkefølgen på søknadsalternativene | Referert i [søknad](https://fs.sikt.no/domenekunnskap/begreper/soknad/) | OK |
-| ettersendingsfrist | Fristen for å ettersende dokumentasjon | Referert i [søknad](https://fs.sikt.no/domenekunnskap/begreper/soknad/) | OK |
+| ettersendingsfrist | Datoen for å ettersende dokumentasjon. Stenger ikke for opplasting | Referert i [søknad](https://fs.sikt.no/domenekunnskap/begreper/soknad/) | ⚠️ Åpent spørsmål: frist for mangler, eller informasjonsdato? |
 | frist for poenggrenser | Frist ved tidlig opptak | – | Ny i kravene, for tidlig opptak |
-| informasjonsdato | Dato på opptaket som bare er informasjon til søker, for eksempel når resultatet kan forventes publisert | – | OK |
+| informasjonsdato | Dato på opptaket som bare er informasjon til søker, for eksempel når resultatet kan forventes publisert | – | ✅ Avklart 2026-10-27: brukes om datoer uten virkning. «Frist» brukes bare om datoer som har en virkning, for eksempel en sperre. Datoen for publisering av hovedopptaket er en informasjonsdato |
 | publiseringsdato | – | – | ⚠️ Avklart 2026-10-07: runden har ingen publiseringsdato som settes. Publiseringstidspunktet er når opptaksforvalter publiserer. Bør tas ut som eget begrep |
 
 ## Kvalifisering og vurdering
@@ -151,8 +155,10 @@ Denne listen sammenstiller begreper brukt i kravene (`krav/02 Opptak/`), design-
 |---------------|------------|----------------|---------|
 | kvalifisering | Prosessen der søkerens kompetanse sjekkes mot kompetansekravene | – | OK |
 | kvalifisert søker | «Søker som oppfyller alle formelle krav for opptak til et utdanningstilbud» | [kvalifisert søker](https://fs.sikt.no/domenekunnskap/begreper/kvalifisert_soker/) (utkast) | OK. Om søknaden også må være ferdigbehandlet for å være med i plasstildelingen, er uavklart |
-| ferdigbehandlet | Status på en sak (søknaden hos én saksbehandlende organisasjon) når saksbehandlingen er ferdig (FERDIG_BEHANDLET). Ved automatisk saksbehandling settes den når den automatiske behandlingen er ferdig | – | Brukes i `trekke_søknad.feature`, tidligopptaket og plasstildelingen. Avklart 2026-10-15: bare saker som er ferdig behandlet, er med i plasstildelingen |
+| ferdigbehandlet | Status på en sak (søknaden hos én saksbehandlende organisasjon) når saksbehandlingen er ferdig (FERDIG_BEHANDLET). Ved automatisk saksbehandling settes den når den automatiske behandlingen er ferdig | – | Brukes i `trekke_søknad.feature`, tidligopptaket og plasstildelingen. Avklart 2026-10-15: bare saker som er ferdig behandlet, er med i plasstildelingen. Avklart 2026-11-02: statusen heter «Behandlet» (OPT-BEH-BEH-029), men teksten i kravene kan si «ferdig behandlet». Koden heter fortsatt FERDIG_BEHANDLET til fs-plattform er endret. Ikke det samme som søknaden som er behandlet (søkeren har fått svar) |
 | generell studiekompetanse (GSK) | Det generelle kompetansekravet for opptak til høyere utdanning | – | OK. Gammel FS: GSK |
+| GSK-vitnemålsberegning | Opptakssystemets påstand om GSK for ett vitnemål, beregnet med seksfagskontrollen. Lagres på vitnemålet hver gang vitnemålet importeres fra KREG. Krever ingen sak. Står ved siden av skolens påstand, «GSK OK» fra KREG, som er fasit | – | ✅ Avklart 2026-11-03. Samme som «opptakssystemets påstand om GSK». Ikke det samme som GSK-konklusjon. Bruk ikke «GSK-beregning» alene (OPT-BEH-BEH-015, OPT-BEH-BEH-027) |
+| GSK-konklusjon | Konklusjonen om søkeren har GSK, for søknaden i ett opptak. Krever en sak. Settes automatisk eller av saksbehandleren. Den automatiske behandlingen av saken starter med å sette GSK-konklusjonen | – | ✅ Avklart 2026-11-03. Ikke det samme som GSK-vitnemålsberegning. Prosesstegningen «GSK-beregning for gitt opptak» er GSK-konklusjonen (OPT-BEH-BEH-015) |
 | realkompetanse | Kompetanse fra arbeid og annen erfaring som vurderes i stedet for formell utdanning | – | OK |
 | fagprofil | Søkerens registrerte fag og karakterer | – | Gammel FS: Fagprofil |
 | utdanningsbakgrunn | Gruppe søkere med samme type utdanning, med egne frister i opptaket | – | ⚠️ Brukes i kravene for frister. Relatert til «kvalifikasjonsgrunnlag» i gammel FS, men bredere |
@@ -195,6 +201,9 @@ Denne listen sammenstiller begreper brukt i kravene (`krav/02 Opptak/`), design-
 | 18 | tidlig opptak | – | Tidlig behandling og tilbud, uten tidligere studierett | 2026-10-09 |
 | 19 | plassflyt | plassflyt mellom runder | Plassflyt er mellom kvoter. Det som går mellom runder, er informasjonsarv | 2026-10-09 |
 | 20 | avslag / bortfall | – | To ulike svar: avslag = ikke kvalifisert eller ikke nådd opp. Bortfall = mister tilbud på lavere prioritet | 2026-10-09 |
+| 21 | rundetype = navn og rundeinnstillinger i regelverkssamlingen | rundetype som styrer plasstildelingen | Plasstildelingen leser innstillingene, og ser aldri på rundetypen. Innstillingene kan ikke justeres på runden | 2026-10-24 |
+| 22 | frist (datoer med virkning) / informasjonsdato (datoer uten virkning) | dokumentasjonsfrist om datoen dokumentasjonen bør være lastet opp innen | Ordet sier hva datoen gjør. Den ordinære dokumentasjonsfristen heter informasjonsdato for dokumentasjon | 2026-10-27 |
+| 23 | GSK-vitnemålsberegning / GSK-konklusjon | GSK-beregning | To ulike begreper: **GSK-vitnemålsberegning** = opptakssystemets påstand om GSK for ett vitnemål, uten sak. Begge navnene betyr det samme. **GSK-konklusjon** = konklusjonen for søknaden i ett opptak, krever en sak | 2026-11-03 |
 
 ---
 
@@ -219,7 +228,7 @@ Denne listen sammenstiller begreper brukt i kravene (`krav/02 Opptak/`), design-
 
 Følgende begreper brukes i kravene, men finnes ikke (enda) i begrepskatalogen på fs.sikt.no:
 
-- opptaksforvalter (ny rolle), opptakseier
+- opptaksforvalter (ny rolle), opptakets forvalter, opptakseier, regelverksforvalter (forretningsrolle)
 - forvaltende organisasjon / deltakende organisasjon
 - saksbehandlende organisasjon, tilbyder
 - studierett
@@ -227,12 +236,13 @@ Følgende begreper brukes i kravene, men finnes ikke (enda) i begrepskatalogen p
 - kravelement
 - kvotetype, utdanningskvote, kvotesøknad
 - kvalifikasjonsgrunnlag (som eget begrep)
-- plasstildelingsrunde, rundetype, hovedtildeling, supplering (etterfylling finnes)
+- plasstildelingsrunde, rundetype, rundeinnstilling, hovedtildeling, supplering (etterfylling finnes)
 - ledige studieplasser (som egenskap ved runden)
 - antall tilbud som skal gis, netto tilbud
 - tilbudsgaranti, kompensasjonstilbud
 - bortfall, opprykk, avslag
 - behandlertildelingsregel
+- GSK-vitnemålsberegning (opptakssystemets påstand om GSK), GSK-konklusjon
 - antall studieplasser
 - prøvetildeling
 - hendelseslogg
@@ -240,3 +250,15 @@ Følgende begreper brukes i kravene, men finnes ikke (enda) i begrepskatalogen p
 - utdanningsbakgrunn (i kontekst av frister)
 
 Sto som manglende i forrige versjon av lista, men finnes nå i katalogen: opptak, etterfylling, kvoteprioritet, plassflyt, opptaksrunde, poenggrense, kapasitet, antall plasser, overbooking, kvalifisert søker.
+
+## Åpne spørsmål
+
+### Opptakets forvalter `@openquestion`
+
+«Forvaltende organisasjon» er for tungt, og skal ikke brukes videre (2026-10-24). Det erstattes av «opptakets forvalter». «Opptakets eier» er mer selvforklarende, men «forvalter» ligger nærmere rollen i koden, opptaksforvalter.
+
+ÅPNE SPØRSMÅL:
+
+- Er «opptakets forvalter» organisasjonen som forvalter opptaket, eller opptaksforvalteren der? Svaret avgjør hvordan «opptaksforvalter ved forvaltende organisasjon» skrives om i resten av opptakskravene: «opptaksforvalter ved opptakets forvalter» (organisasjonen) eller «opptakets forvalter» (personen).
+- Skal «opptakseier» (avklart 2026-10-09) utgå når «opptakets forvalter» er avklart?
+- Endringen er gjort i `14 Plasstildeling`, der «opptakets forvalter» kan leses begge veier. «Forvaltende organisasjon» står fortsatt i 17 kravfiler i `11 Opprette og vedlikeholde opptak`, `12 Utdanningstilbud`, `13 Søknad og saksbehandling` og `krav/_Flyter/10 Opptaksløpet/saksbehandlertildeling.feature`. De rettes når spørsmålet er besvart.

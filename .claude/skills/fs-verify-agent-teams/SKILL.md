@@ -1,6 +1,6 @@
 ---
 name: fs-verify-agent-teams
-description: Kjører `fs-verify` med et agent team (Claude Code agent teams, `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1`), med to roller. Finnerne (agenttypen `fs-verify-krav`) leter i koden og gir bevis (`fil:linje`) per scenario, én per feature-fil (eller én per gruppe av filer), parallelt. Kontrollørene (agenttypen `fs-verify-kontroll`) sjekker hvert svar uavhengig: leser hvert `funnet`, og søker på nytt etter hvert `ikke funnet`. Tar det samme scopet som `fs-verify` (en spesifikasjon, en `krav/`-sti, et scope `@scope-<slug>`, en oppgave `tasks/<domene>/<slug>` eller en testplan `akseptansetest/<slug>`) og lokale kloner av kode-repoene. Lead-en spør først, som `fs-verify`, hva som skal verifiseres (`@in-progress`, `@deprecated`, flyter, alle krav uansett status, eller noe annet), og hvor mange nivåer med `@depends-on-` som skal følges, med status fra taggene eller verifisert i koden. Lead-en avgjør der finner og kontrollør er uenige, spør brukeren, retagger `@in-progress` → `@implemented`, fjerner `@in-progress` fra deler, sletter `@deprecated`-krav (og referansene til dem) når koden er borte, verifiserer flyter i `krav/_Flyter/`, og skriver rapporten i samme format som `fs-verify`, eventuelt med hva som gjenstår i hvert repo (fs-plattform, fs-admin og min-kompetanse). Bare i en interaktiv økt (terminalen, også terminalen i FS Kravforvaltning), ikke i Claude-panelet. Kjører aldri git add/commit/push. Trigges av "verifiser kravene med agent team", "fs-verify med agent teams", "fs-verify parallelt", "verifiser mange krav samtidig", "fs-verify-agent-teams".
+description: Kjører `fs-verify` med et agent team (Claude Code agent teams, `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1`), med to roller. Finnerne (agenttypen `fs-verify-krav`) leter i koden og gir bevis (`fil:linje`) per scenario, én per feature-fil (eller én per gruppe av filer), parallelt. Kontrollørene (agenttypen `fs-verify-kontroll`) sjekker hvert svar uavhengig: leser hvert `funnet`, og søker på nytt etter hvert `ikke funnet`. Tar det samme scopet som `fs-verify` (en spesifikasjon, en `krav/`-sti, et scope `@scope-<slug>` eller `tasks/<domene>/<slug>`, eller en testplan `akseptansetest/<slug>`) og lokale kloner av kode-repoene. Lead-en spør først, som `fs-verify`, hva som skal verifiseres (`@in-progress`, `@deprecated`, flyter, alle krav uansett status, eller noe annet), og hvor mange nivåer med `@depends-on-` som skal følges, med status fra taggene eller verifisert i koden. Lead-en avgjør der finner og kontrollør er uenige, spør brukeren, retagger `@in-progress` → `@implemented`, fjerner `@in-progress` fra deler, sletter `@deprecated`-krav (og referansene til dem) når koden er borte, verifiserer flyter i `krav/_Flyter/`, og skriver rapporten i samme format som `fs-verify`, eventuelt med hva som gjenstår i hvert repo (fs-plattform, fs-admin og min-kompetanse). Bare i en interaktiv økt (terminalen, også terminalen i FS Kravforvaltning), ikke i Claude-panelet. Kjører aldri git add/commit/push. Trigges av "verifiser kravene med agent team", "fs-verify med agent teams", "fs-verify parallelt", "verifiser mange krav samtidig", "fs-verify-agent-teams".
 allowed-tools: Read, Write, Edit, Grep, Glob, Bash, AskUserQuestion, Agent, SendMessage, TaskCreate, TaskList, TaskGet, TaskUpdate
 ---
 
@@ -14,7 +14,7 @@ $ARGUMENTS
 
 Du er lead i et agent team, og gjør det samme som `fs-verify`, men lar teammates gjøre letingen og kontrollen, parallelt. Reglene står i [`fs-verify/SKILL.md`](../fs-verify/SKILL.md), og gjelder uendret, også *Negative søk* og *Kontroll*. Les den før du starter. Denne skillen sier bare hvordan arbeidet deles.
 
-- **Finnerne** (agenttypen `fs-verify-krav`, `.claude/agents/fs-verify-krav.md`) leser feature-filene sine, leter i koden og gir bevis.
+- **Finnerne** (agenttypen `fs-verify-krav`, `.claude/agents/fs-verify-krav.md`) leser feature-filene sine, leter i koden og gir bevis. De rapporterer også tilgang og datakonsistens, regler uten scenario og tallene for åpne spørsmål, per krav (fase 1 i teststrategien (forslag), se *Tilgang og datakonsistens*, *Regler uten scenario* og *Åpne spørsmål* i `fs-verify`).
 - **Kontrollørene** (agenttypen `fs-verify-kontroll`, `.claude/agents/fs-verify-kontroll.md`) får svaret fra en finner for én feature-fil, og sjekker det mot koden uten å vite hvordan finneren lette.
 - **Du** klassifiserer, starter teamet, sender hvert svar til kontroll, avgjør der finner og kontrollør er uenige, spør brukeren, retagger, sletter, skriver rapport og logg, og rydder opp i teamet.
 - Teammatene endrer ingen filer og spør ikke brukeren. De samme forbudene som i `fs-verify` gjelder alle: ikke skriv eller rett applikasjonskode, ikke endre kravinnhold, ingen `git add`/`commit`/`push`/`checkout`/`stash`.
@@ -23,7 +23,7 @@ Du leser ikke all koden selv. Med mange filer har du ikke plass til det, og det 
 
 ## Forutsetninger (gjør dette FØRST)
 
-0. **Er input en verify-rapport** (`verify-*.md`)? Da er det *Gjennomgang av en verify-rapport* i `fs-verify`, som er en samtale med brukeren og ikke trenger et team. Følg `fs-verify` direkte, og si det.
+0. **Er input en verify-rapport** (`verify-*.md`)? Da er det *Gjennomgang av en verify-rapport* i `fs-verify`, som er en samtale med brukeren og ikke trenger et team. Følg `fs-verify` direkte, og si det. Ellers leser verken du eller teammatene tidligere verify-rapporter, heller ikke dem testplanen eller en kjøring lenker til (*Bruk bare rapportene brukeren gir deg* i `fs-verify`).
 
 1. **Agent teams må være på.** Sjekk at team-verktøyene (`SendMessage`, `TaskCreate`, `TaskList`, `TaskUpdate`) finnes i økten, og/eller `echo $CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS`. Er de ikke det, si at agent teams slås på med
 
@@ -36,7 +36,7 @@ Du leser ikke all koden selv. Med mange filer har du ikke plass til det, og det 
 
 ## Finn scope og kode
 
-Som *Finn scope og kode* i `fs-verify`: branchen i dette repoet og i hver kodeklone sjekkes mot origin og main ([`.claude/references/oppdatert-branch.md`](../../references/oppdatert-branch.md)) av deg, før teamet startes (finnerne og kontrollørene sjekker ikke selv), kravene (spesifikasjon, `krav/`-sti, scope, oppgave eller testplan, slått opp på feature-ID), kodeklonene (spør med `AskUserQuestion`, sjekk at stiene finnes), om det skal tas skjermbilder fra `https://test-fsadmin.sikt.no/` (spør med `AskUserQuestion` før teamet startes, når prompten ikke sier det) og hintene fra oppgaven (`design.md`, `<lag>/plan-*.md`, `<lag>/task-*-completion.md`). Ligger mappa i scope under et domene med en oppgave som handler om den (`tasks/<domene>/*/oppgave.md` som peker dit), les hintene derfra også.
+Som *Finn scope og kode* i `fs-verify`: branchen i dette repoet og i hver kodeklone sjekkes mot origin og main ([`.claude/references/oppdatert-branch.md`](../../references/oppdatert-branch.md)) av deg, før teamet startes (finnerne og kontrollørene sjekker ikke selv), kravene (spesifikasjon, `krav/`-sti, scope eller testplan, slått opp på feature-ID), kodeklonene (spør med `AskUserQuestion`, sjekk at stiene finnes), om det skal tas skjermbilder fra `https://test-fsadmin.sikt.no/` (spør med `AskUserQuestion` før teamet startes, når prompten ikke sier det) og hintene fra scope-mappa (`design.md`, `<lag>/plan-*.md`, `<lag>/task-*-completion.md`). **Åpne MR-er og brancher.** Du finner dem selv før teamet startes, som steg 2b i `fs-verify` (*Åpne MR-er og brancher*), og gir listen (repo, MR, branch, krav) til finnerne og kontrollørene i spawn-prompten. Rapporten får `- **Åpne MR-er:**` og `## Åpne MR-er og brancher`. Ligger mappa i scope under et domene med et scope som har kravene i den (`tasks/<domene>/*/scope.md` med kravene i `## Krav`), les hintene derfra også.
 
 **Omfang og avhengigheter.** Spør hva som skal verifiseres, og hvor langt `@depends-on-` skal følges, som i *Omfang og avhengigheter* i `fs-verify`: de samme spørsmålene, i det samme `AskUserQuestion`-kallet som skjermbildene, før teamet startes, og ikke når prompten allerede svarer.
 
@@ -57,14 +57,14 @@ Som *Logg kjøringen* i `fs-verify`, med skillnavnet `fs-verify-agent-teams`:
 - 2026-10-07 — `fs-verify-agent-teams` ended (success) — 3 retagget @implemented, 1 regel slettet, 1 fortsatt @in-progress, kontrollen endret 2 resultater
 ```
 
-`AskUserQuestion`-kall logges til `<oppgave>/spec/questions-fs-verify-agent-teams-<YYYY-MM-DD>.md`.
+`AskUserQuestion`-kall logges til `spec/questions-fs-verify-agent-teams-<YYYY-MM-DD>.md` i scope-mappa.
 
 ## Klassifiser
 
 Les hver feature-fil i scope selv, og klassifiser etter tabellen i *Klassifiser* i `fs-verify`. Vis oversikten før du starter teamet.
 
 - Bare filer med noe å verifisere i omfanget brukeren valgte (`@in-progress` eller `@deprecated` på egenskapen eller på en del, eller alle filene i scope når det skal verifiseres *uansett status*) får en finner. Det som ikke er valgt, rapporteres som «ikke valgt i denne kjøringen».
-- En flyt (`krav/_Flyter/`) med `@planned` eller `@in-progress` får en finner når flyter er valgt, som en feature-fil, også flytene et scope, en oppgave eller en testplan tar med (*Finn scope og kode* i `fs-verify`). Fremdriften (*Verifisere flyt*, steg 1) leser bare tagger, og den slår du opp selv. Si til finneren hvilke faser som er levert: scenarioene i de andre fasene er `ikke funnet` med «fasen er ikke levert», og leter ikke finneren etter.
+- En flyt (`krav/_Flyter/`) med `@planned` eller `@in-progress` får en finner når flyter er valgt, som en feature-fil, også flytene et scope eller en testplan tar med (*Finn scope og kode* i `fs-verify`). Fremdriften (*Verifisere flyt*, steg 1) leser bare tagger, og den slår du opp selv. Si til finneren hvilke faser som er levert: scenarioene i de andre fasene er `ikke funnet` med «fasen er ikke levert», og leter ikke finneren etter.
 - Resten (allerede levert, `@draft`, `@planned`, to statustagger) rapporteres som i `fs-verify`, uten finner.
 - **Avhengigheter** (*Avhengigheter* i `fs-verify`): du finner dem og leser statusen selv, som fremdriften for flyter. Skal de verifiseres i koden, får hver avhengighet en finner og en kontrollør som en feature-fil, med modusen «avhengighet» i spawn-prompten: gating-settet som *uansett status*, og resultatet bare til rapporten. En avhengighet foreslås aldri retagget eller slettet.
 - **Én fil å verifisere:** ikke start et team. Følg `fs-verify` direkte (med kontrolløren som subagent).
@@ -87,16 +87,16 @@ Vent på svarene. De kommer som meldinger; ikke poll oppgavelista i en løkke. B
 
 **Svar fra en finner:**
 
-1. **Sjekk formatet.** Mangler tabellen, scenarioer i gating-settet, bevis eller (når det er bedt om) repoene, be finneren rette det med `SendMessage`.
+1. **Sjekk formatet.** Mangler tabellen, scenarioer i gating-settet, bevis, tilgangsradene (for krav som har roller, organisasjoner eller data som endres) eller (når det er bedt om) repoene, be finneren rette det med `SendMessage`. Send tilgangsradene og reglene uten scenario til kontrolløren sammen med scenariotabellen.
 2. **Send det til kontroll** (*Start teamet*, steg 4).
 
 **Svar fra en kontrollør:**
 
 1. **`bekreftet`:** resultatet står.
-2. **`avkreftet` eller `usikker`:** les det kontrolløren viser til, og det finneren viste til. Har kontrolløren rett, bruk det nye resultatet. Er det fortsatt uklart, blir resultatet `usikker`, med begge synene i beviset. Noter raden for `## Kontroll` i rapporten.
+2. **`avkreftet` eller `usikker`:** les det kontrolløren viser til, og det finneren viste til. Har kontrolløren rett, bruk det nye resultatet. Er det fortsatt uklart, blir resultatet `usikker`, med begge synene i beviset. Noter raden for `## Kontroll` i rapporten, med `Type` (scenario, tilgang eller regel).
 3. **Et `funnet` som kontrollen avkrefter, kan aldri brukes til retagging**, selv om du er enig med finneren. Da blir det `usikker`, og brukeren avgjør.
 
-Før du foreslår retagging eller sletting av et krav, les `fil:linje` for bevisene til det kravet selv. Du står ansvarlig for det du viser brukeren.
+Før du foreslår retagging eller sletting av et krav, les `fil:linje` for bevisene til det kravet selv. Tilgangsradene og reglene uten scenario slår du sammen på samme måte, og du regner ut `## Åpne spørsmål` selv fra `@openquestion` i kravfilene (finnernes tall er en kontroll, ikke kilden). `- **Menneskelig kontroll:**` i rapporten fyller du aldri ut: kontrollørene er ikke den andre personen (*Kontroll* i `fs-verify`). Du står ansvarlig for det du viser brukeren.
 
 ## Skjermbilder
 
@@ -131,4 +131,4 @@ Når rapporten er skrevet (også etter **Avbryt** eller en feil): be hver teamma
 - **`.claude/agents/fs-verify-krav.md`** — finneren og svarformatet.
 - **`.claude/agents/fs-verify-kontroll.md`** — kontrolløren og svarformatet.
 - **`krav/README.md`** — statusaksen, *Delvis utkast*, *Avvikling* og *Endring av levert krav*.
-- **[`tasks/README.md`](../../../tasks/README.md)** — oppgavestrukturen, `spec/` og *Utføring*.
+- **[`tasks/README.md`](../../../tasks/README.md)** — scope-mappa, `scope.md`, `spec/` og *Utføring*.

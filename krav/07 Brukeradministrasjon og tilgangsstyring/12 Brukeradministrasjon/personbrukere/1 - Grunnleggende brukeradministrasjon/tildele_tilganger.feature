@@ -89,7 +89,6 @@ Egenskap: Tildele tilganger til en personbruker (planlagt etter v1)
       Og tilgangen vises deretter med rollene den kommer fra, etterfulgt av "Tildelt direkte"
 
 # ÅPNE SPØRSMÅL:
-# - Kan en brukeradministrator tildele tilganger til en deaktivert personbruker, og er tilgangen i så fall inaktiv inntil reaktivering? BRU-APP-API-007 tillater tildeling til deaktiverte applikasjoner, og BRU-PER-GRU-004 sier at deaktivering fryser tildelingene uten å fjerne dem — men det er ikke avklart om nye tildelinger kan legges til mens personbrukeren er deaktivert.
 # - Autorisasjon: regelen sier at brukeren kun kan tildele tilganger de har rettighet til å tildele, men ikke hva rettigheten består i. Forslag: bare tilganger som (a) gjelder ved en organisasjon administratoren administrerer, og (b) administratoren selv har eller kan administrere. Henger sammen med rolledefinisjons-arbeidet i "4 - Opprette og administrere roller".
 # - Når bør en tilgang tildeles direkte fremfor gjennom en rolle? Skal direkte tildeling være et unntak som krever begrunnelse, eller en likestilt måte å tildele på?
 # - Skal varsel sendes til personbrukeren ved endringer i tilganger? Avklares sammen med BRU-PER-HIS-003.

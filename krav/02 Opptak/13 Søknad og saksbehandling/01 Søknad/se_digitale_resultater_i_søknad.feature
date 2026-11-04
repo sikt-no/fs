@@ -60,11 +60,12 @@
 # «Digitale resultater» brukes gjennomgående, også i @OPT-BEH-BEH-005.
 # Sub-domenet hadde tidligere fire ord for overlappende ting.
 #
-# «Andre resultater» er alt som ikke er et vitnemål eller en grad —
-# enkeltemner og øvrig dokumentasjon samlet. Det avviker bevisst fra
-# @OPT-BEH-BEH-005, der saksbehandleren får enkeltemner i resultatoversikten
-# og øvrig dokumentasjon som egen seksjon. Søkeren trenger mindre finkorning.
-# Avviket skal ikke «harmoniseres» bort uten en ny beslutning.
+# «Enkeltemner» er resultatene som verken er vitnemål eller grad.
+#
+# Avklart 26.10.2026: delen het «Andre resultater», og skulle samle
+# enkeltemner og øvrig dokumentasjon. Den heter nå «Enkeltemner», og viser
+# i første omgang bare enkeltemner. Øvrig dokumentasjon er ikke med.
+# Figma: rammen «Enkeltemner» (node 4931:4291) i «Konsept dokumentopplastning».
 #
 # UI-detaljer. Ordlyd, plassering, ikoner og hvordan seksjoner utvides hører i
 # se_digitale_resultater_i_søknad.design.md, jf. fs-implementasjonsdetaljer.
@@ -104,10 +105,12 @@ Egenskap: Se digitale resultater i søknaden
       Gitt at søkeren har et vitnemål
       Når søkeren kommer til steget «Dokumentasjon» i søknaden
       Så ser søkeren vitnemålet med følgende opplysninger
-        | felt            |
-        | Tittel          |
-        | Utsteder        |
-        | Utstedelsesdato |
+        | felt     |
+        | Tittel   |
+        | Utsteder |
+        | Semester |
+      # Avklart 26.10.2026: vitnemål vises med semester, ikke utstedelsesdato,
+      # som i skissen («Byåsen videregående skole, 2020 Vår»).
 
     Scenariomal: Se tilleggsopplysning for et resultat fra <nivå>
       Gitt at søkeren har et vitnemål fra <nivå>
@@ -138,26 +141,30 @@ Egenskap: Se digitale resultater i søknaden
       # Søkeren trenger å vite at hen ikke må laste det opp selv; hvilken
       # kilde det stammer fra er ikke søkerens sak.
 
-    Scenario: Andre resultater er lukket som standard
-      Gitt at søkeren har resultater som verken er vitnemål eller grad
+    Scenario: Enkeltemner er lukket som standard
+      Gitt at søkeren har enkeltemner
       Når søkeren kommer til steget «Dokumentasjon» i søknaden
-      Så ser søkeren at det finnes andre resultater
-      Men de andre resultatene vises ikke før søkeren velger å se dem
+      Så ser søkeren at det finnes enkeltemner
+      Men enkeltemnene vises ikke før søkeren velger å se dem
       # Lukket fordi de sjelden er avgjørende for søkeren.
 
-    Scenario: Se andre resultater
-      Gitt at søkeren har resultater som verken er vitnemål eller grad
+    Scenario: Se enkeltemnene
+      Gitt at søkeren har enkeltemner
       Og søkeren er i steget «Dokumentasjon» i søknaden
-      Når søkeren velger å se andre resultater
-      Så ser søkeren enkeltemnene og den øvrige dokumentasjonen
-      # «Andre resultater» samler enkeltemner og øvrig dokumentasjon.
+      Når søkeren velger å se enkeltemnene
+      Så ser søkeren hvert enkeltemne med følgende opplysninger
+        | felt     |
+        | Tittel   |
+        | Utsteder |
+        | Semester |
+      # Avklart 26.10.2026: enkeltemner vises med semester, som vitnemålene.
 
-    Scenario: Andre resultater vises ikke uten andre resultater
+    Scenario: Enkeltemner vises ikke når søkeren ikke har enkeltemner
       Gitt at søkeren bare har resultater som er vitnemål eller grad
       Når søkeren kommer til steget «Dokumentasjon» i søknaden
-      Så vises ikke andre resultater i steget
-      # Avklart 15.10.2026: ingen tom seksjon. Har søkeren ingen andre
-      # resultater, finnes ikke «Andre resultater» i steget.
+      Så vises ikke enkeltemner i steget
+      # Avklart 15.10.2026: ingen tom seksjon. Har søkeren ingen enkeltemner,
+      # finnes ikke «Enkeltemner» i steget.
 
     Scenariomal: Samme forklaring vises uansett årsak til manglende resultater
       Gitt at <årsak>

@@ -11,7 +11,8 @@ Egenskap: Listevisning og søk i personbrukere
 
   Regel: Liste over alle personbrukere
 
-    Scenario: Se liste over personbrukere
+    @deprecated
+    Scenario: Se liste over personbrukere (avvikles)
       Når jeg åpner brukeroversikten
       Så ser jeg en liste over alle personbrukere
       Og listen er sortert etter navn i stigende rekkefølge
@@ -21,6 +22,35 @@ Egenskap: Listevisning og søk i personbrukere
         | Feide-ID         |
         | Hjemorganisasjon |
         | Status           |
+
+    @planned @openquestion
+    Scenario: Se liste over personbrukere
+      # ÅPNE SPØRSMÅL:
+      # - Hva står i «Feide-IDer» og «Hjemorganisasjon» for en personbruker som ikke er koblet til noen Feide-bruker?
+      # - En personbruker kan være koblet til flere Feide-brukere med ulike hjemorganisasjoner. Hvordan vises det i «Hjemorganisasjon»?
+      Når jeg åpner brukeroversikten
+      Så ser jeg en liste over alle personbrukere
+      Og listen er sortert etter navn i stigende rekkefølge
+      Og hvert innslag viser følgende informasjon:
+        | felt             |
+        | Navn             |
+        | Feide-IDer       |
+        | Hjemorganisasjon |
+      Og «Feide-IDer» viser Feide-ID-ene til Feide-brukerne som er koblet til personbrukeren
+
+    @planned
+    Scenario: Se antall aktive roller per personbruker
+      Når jeg åpner brukeroversikten
+      Så viser listen kolonnen «Aktive roller» for hver personbruker
+      Og kolonnen viser hvor mange aktive roller personbrukeren har
+      Og serveren avgjør hva som er en aktiv rolle
+
+    @planned
+    Scenario: Filtrere på har aktive roller
+      Gitt jeg ser listen over personbrukere
+      Når jeg velger filteret «har aktive roller»
+      Så vises kun personbrukere som har minst én aktiv rolle
+      Og serveren avgjør hva som er en aktiv rolle
 
     @draft @openquestion
     # ÅPNE SPØRSMÅL:
@@ -68,6 +98,8 @@ Egenskap: Listevisning og søk i personbrukere
       Når jeg søker med fritekst på Feide-ID
       Så filtreres listen til personbrukere der Feide-ID inneholder søketeksten
 
+    # Status for brukere avvikles (beslutning 26.10.2026), så statusfilteret avvikles.
+    @deprecated
     Scenario: Tilgjengelige statuser i filter
       Gitt jeg ser listen over personbrukere
       Når jeg åpner statusfilteret
@@ -78,6 +110,7 @@ Egenskap: Listevisning og søk i personbrukere
         | Deaktivert    |
       Og "Alle statuser" er valgt som standard
 
+    @deprecated
     Scenario: Filtrere på status
       Gitt jeg ser listen over personbrukere
       Når jeg velger en status som filter
@@ -217,3 +250,5 @@ Egenskap: Listevisning og søk i personbrukere
 # - Filnavn: bør "søke_opp_bruker.feature" omdøpes til "listevisning_og_sok.feature" for konsistens med mønsteret? Tittelendring på #479 må i så fall følges opp via fs-github.
 # - Rolle-navn: "brukeradministrator" er valgt. Sjekk at rolledefinisjonene i "4 - Opprette og administrere roller" bruker samme navn.
 # - Skal kant-tilfeller som brukere uten Feide-ID, eller brukere med flere identiteter, modelleres her — eller hører de hjemme i et eget krav? Spørsmålet omfatter nå også brukere uten hjemorganisasjon, siden kolonnen og filteret bygger på den.
+# - Søk på Feide-ID: skal søket finne en personbruker når søketeksten finnes i en av Feide-ID-ene til Feide-brukerne som er koblet til personbrukeren?
+# - Hva skjer med Feide-brukere som ikke er koblet til en person: skal de vises i brukeroversikten?

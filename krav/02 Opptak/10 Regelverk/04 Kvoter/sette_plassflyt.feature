@@ -1,6 +1,6 @@
 # language: no
 # GitHub: #216, #598
-@OPT-REG-KVO-003 @must @planned @scope-kvoter-i-opptaket-2027 @ref-OPT-PLA-INN-002 @ref-OPT-OPT-UTD-004
+@OPT-REG-KVO-003 @must @in-progress @scope-kvoter-i-opptaket-2027 @ref-OPT-PLA-INN-002 @ref-OPT-OPT-UTD-004
 Egenskap: Sette standard plassflyt i regelverkssamlingen
   Som regelverksforvalter ved organisasjonen som eier regelverkssamlingen
   ønsker jeg å sette én standard plassflyt i regelverkssamlingen
@@ -95,13 +95,27 @@ Egenskap: Sette standard plassflyt i regelverkssamlingen
       Så kan regelverksforvalter ikke koble "Spesiell vurdering (SPEV)" til "Førstegangsvitnemål (ORDF)"
       Og regelverksforvalter ser at en SPEV-kvote bare kan kobles til hovedkvoten
 
+  # AVKLART 2026-10-26 (produkteier): En SPEV-kvote har ingen egne plasser, og tilbudene i den tas fra
+  # hovedkvoten. Den kan derfor ikke være hovedkvote, og ingen kvote kan sende ledige plasser til den.
+  Regel: En SPEV-kvote kan ikke være hovedkvote eller mottaker for andre kvoter
+
+    Scenario: En SPEV-kvote kan ikke velges som hovedkvote
+      Gitt at kvotetypen "Spesiell vurdering (SPEV)" har rangeringsmetoden SPEV
+      Når regelverksforvalter velger hovedkvote i standard plassflyt i regelverkssamlingen
+      Så kan regelverksforvalter ikke velge "Spesiell vurdering (SPEV)" som hovedkvote
+
+    Scenario: En kvote kan ikke sende ledige plasser til en SPEV-kvote
+      Gitt at kvotetypen "Spesiell vurdering (SPEV)" har rangeringsmetoden SPEV
+      Når regelverksforvalter velger mottaker for "Førstegangsvitnemål (ORDF)" i standard plassflyt
+      Så kan regelverksforvalter ikke velge "Spesiell vurdering (SPEV)" som mottaker
+
   Regel: Plassflyten kan ikke gå i ring
 
     # AVKLART 2026-10-15: Scenarioet blir stående, fordi det er mulig å lage en ring i dag. Kravet om én
     # hovedkvote, som alle kjeder ender i, skal utelukke at ringen oppstår.
 
     Scenario: Sirkulær plassflyt
-      Gitt at ledige plasser i "Førstegangsvitnemål (ORDF)" flyter til "Ordinær kvote (ORD)" i standard plassflyt i regelverkssamlingen
-      Når regelverksforvalter setter at ledige plasser i "Ordinær kvote (ORD)" skal flyte til "Førstegangsvitnemål (ORDF)"
+      Gitt at ledige plasser i "Samisk språkkompetanse (SAM)" flyter til "Nordnorsk kvote (NN)" i standard plassflyt i regelverkssamlingen
+      Når regelverksforvalter setter at ledige plasser i "Nordnorsk kvote (NN)" skal flyte til "Samisk språkkompetanse (SAM)"
       Så blir plassflyten ikke lagret
       Og regelverksforvalter får beskjed om at plassflyten ikke kan gå i ring

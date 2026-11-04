@@ -1,7 +1,7 @@
 # language: no
 # GitHub: #595
 # Jira: SHI-709
-@OPT-OPT-UTD-003 @must @implemented @scope-utdanningstilbud-2027 @ref-OPT-OPT-UTD-006
+@OPT-OPT-UTD-003 @must @in-progress @scope-utdanningstilbud-2027 @ref-OPT-OPT-UTD-006
 Egenskap: Trekke utdanningstilbud fra opptak
   Som opptaksforvalter
   ønsker jeg å kunne trekke utdanningstilbud fra opptaket
@@ -19,20 +19,22 @@ Egenskap: Trekke utdanningstilbud fra opptak
 
   Regel: Opptaksforvalter ved deltakende organisasjon eller forvaltende organisasjon kan trekke utdanningstilbud
 
-    @in-progress
+    @openquestion
     Scenario: Opptaksforvalter ved deltakende organisasjon trekker utdanningstilbud organisasjonen tilbyr
+      # ÅPNE SPØRSMÅL:
+      # - Delvis levert (verify 2026-10-22): fs-plattform lar deltakende organisasjon trekke bare mens redigeringen er åpen, mens fs-admin viser trekk-knappen bare for forvaltende organisasjon og bare når redigeringen er stengt. Når skal deltakende organisasjon kunne trekke, og skal fs-admin og fs-plattform endres?
       Gitt at opptaksforvalter er ved en deltakende organisasjon
       Når opptaksforvalter velger å trekke utdanningstilbudet "Sykepleie, høst 2027"
       Så varsles opptaksforvalter om konsekvensen av å trekke
       Og utdanningstilbudet trekkes fra opptaket
 
+    @implemented
     Scenario: Opptaksforvalter ved forvaltende organisasjon trekker utdanningstilbud
       Gitt at opptaksforvalter er ved forvaltende organisasjon
       Når opptaksforvalter velger å trekke utdanningstilbudet "Sykepleie, UiO, høst 2027"
       Så varsles opptaksforvalter om konsekvensen av å trekke
       Og utdanningstilbudet trekkes fra opptaket
 
-    @planned
     Scenario: Deltakende organisasjon kan ikke trekke utdanningstilbud en annen organisasjon tilbyr
       # Jira: SHI-747
       Gitt at opptaksforvalter er ved deltakende organisasjon "Universitetet i Oslo"
@@ -42,8 +44,10 @@ Egenskap: Trekke utdanningstilbud fra opptak
 
   Regel: Utdanningstilbud som trekkes etter søknadsåpning, blir liggende på opptaket
 
-    @in-progress
+    @openquestion
     Scenario: Trekke utdanningstilbud etter søknadsåpning
+      # ÅPNE SPØRSMÅL:
+      # - Delvis levert (verify 2026-10-22): utdanningstilbudet blir liggende på opptaket, markert som trukket, men fs-plattform krever at opptaket er publisert, og fs-admin viser trekk-knappen når redigeringen er stengt, ikke ut fra søknadsåpningen. Skal muligheten til å trekke styres av søknadsåpningen?
       Gitt at opptaket har åpnet for søknad
       Når opptaksforvalter velger å trekke utdanningstilbudet "Sykepleie, høst 2027"
       Så varsles opptaksforvalter om konsekvensen av å trekke
@@ -60,9 +64,34 @@ Egenskap: Trekke utdanningstilbud fra opptak
       Så får opptaksforvalter et tydelig varsel om konsekvensen for søkere som har søkt
       Og søkere som har søkt på utdanningstilbudet "Sykepleie, høst 2027", varsles
 
+  @implemented
   Regel: Trekking er ikke mulig etter trekkfristen for deltakende organisasjoner
 
     Scenario: Opptaksforvalter ved deltakende organisasjon forsøker å trekke etter trekkfristen
       Gitt at trekkfristen for utdanningstilbud er passert
       Og at opptaksforvalter er ved en deltakende organisasjon
       Så kan opptaksforvalter ikke trekke utdanningstilbud fra opptaket
+
+  @depends-on-OPT-OVO-FRI-001
+  Regel: Opptaksforvalter ved deltakende organisasjon kan trekke fram til trekkfristen, også etter at redigeringen har stengt
+
+    # AVKLART 2026-10-26 (produkteier): Trekkfristen er uavhengig av redigeringsfristen.
+    Scenario: Deltakende organisasjon trekker utdanningstilbud etter at redigeringen har stengt
+      Gitt at redigering av utdanningstilbud har stengt
+      Og at trekkfristen for utdanningstilbud ikke er passert
+      Og at opptaksforvalter er ved deltakende organisasjon "Universitetet i Oslo"
+      Når opptaksforvalter velger å trekke utdanningstilbudet "Sykepleie, høst 2027", som "Universitetet i Oslo" tilbyr
+      Så varsles opptaksforvalter om konsekvensen av å trekke
+      Og utdanningstilbudet trekkes fra opptaket
+
+  @depends-on-OPT-OVO-FRI-001
+  Regel: Opptaksforvalter ved forvaltende organisasjon kan trekke utdanningstilbud etter trekkfristen
+
+    # Lagt til 2026-10-26: Trekkfristen virker som redigeringsfristen. Den stenger for deltakende organisasjoner,
+    # men ikke for forvaltende organisasjon.
+    Scenario: Forvaltende organisasjon trekker utdanningstilbud etter trekkfristen
+      Gitt at trekkfristen for utdanningstilbud er passert
+      Og at opptaksforvalter er ved forvaltende organisasjon
+      Når opptaksforvalter velger å trekke utdanningstilbudet "Sykepleie, høst 2027"
+      Så varsles opptaksforvalter om konsekvensen av å trekke
+      Og utdanningstilbudet trekkes fra opptaket

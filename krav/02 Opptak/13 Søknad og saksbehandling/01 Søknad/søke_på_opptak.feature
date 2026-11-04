@@ -102,43 +102,7 @@ Egenskap: Søke på opptak
   Scenario: Søker ser oversikt over innsendte søknader
 
   @draft
-  Scenario: Søker kan se egenopplastet dokumentasjon
-    Gitt at personen har søkt på et opptak og lastet opp dokumentasjon
-    Når personen går inn på søknaden
-    Så skal personen se hvilken dokumentasjon de har lastet opp
-
-  @draft
-  Scenario: Søker kan se dokumentasjon lastet opp av saksbehandler
-    Gitt at personen har søkt på et opptak og en saksbeandler har lastet opp dokumentasjon
-    Når personen går inn på søknaden
-    Så skal personen se hvilken dokumentasjon saksbehandler har lastet opp
-
-  @draft
-  Scenario: Søker kan laste opp ytterligere dokumentasjon etter innsending av søknad
-    Gitt at personen har søkt på et opptak
-    Og personen går inn på søknaden
-    Når personen laster opp dokumentasjon
-    Så skal dokumentasjonen blir tilgjengelig for administratoren
-
-
-  @draft
-  Scenario: Person sletter opplastet dokumentasjon før innsending av søknad
-    Gitt En person har lastet opp dokumentasjon
-    Når Personen sletter et dokument
-    Så blir dokumentet fjernet fra listen
-
-  @draft
-  Scenario: Person sletter opplastet dokumentasjon etter innsending av søknad
-    Gitt En person har lastet opp dokumentasjon
-    Når Personen sletter et dokument
-    Så blir dokumentet fjernet fra listen
-    Og blir dokumentet ikke lengre tilgjengelig for administrator
-
-  @draft
   Scenario: Person kan trekke søknaden
-
-  @draft
-  Scenario: Søker oppgir om de søker på grunnlag av realkompetanse
 
   @draft
   Scenario: Person kan svare på tilbud om studieplass
@@ -156,8 +120,10 @@ Egenskap: Søke på opptak
     # Lagt til 2026-10-19 etter akseptansetesten av opprette og vedlikeholde opptak.
 
     # AVKLART 2026-10-19 (S1): Opptaket har ingen egen publiseringsdato. Søkerne kan ikke begynne på en søknad
-    # eller se utdanningstilbudene før søknaden åpner. Synligheten står i finne_studier.feature
-    # (Regel «Synlighet via søknadsperioden i opptaket»).
+    # før søknaden åpner.
+    # Endret 2026-10-29 (produkteier, review av PR #843): Søkerne ser utdanningstilbudene når opptaksforvalter
+    # har publisert opptaket, også før søknaden åpner. Synligheten står i finne_studier.feature
+    # (Regel «Synlighet via publiseringen av opptaket»).
     Scenario: Søkeren kan ikke begynne på en søknad før søknaden åpner
       Gitt at søknaden i opptaket åpner "2027-02-01"
       Når søkeren vil begynne på en søknad "2027-01-15"
@@ -181,6 +147,33 @@ Egenskap: Søke på opptak
       Og at søkeren har en utdanningsbakgrunn uten avvikende frister
       Når søkeren vil sende inn en ny søknad "2027-04-16"
       Så kan søkeren ikke sende inn søknaden
+
+  @draft @openquestion @depends-on-OPT-OVO-GRU-004
+  Regel: Søkeren kan ikke begynne på eller endre en søknad når opptaket er avpublisert
+    # Virkningen av at opptaksforvalter avpubliserer opptaket (opptaksstatus.feature). Avpublisering setter
+    # opptaket tilbake til upublisert. Det er ikke en egen status (review av PR #843, 2026-10-29).
+    # Lagt til 2026-10-28 (produkteier).
+    # ÅPNE SPØRSMÅL:
+    # - Avpublisering er en nødbrems. Hva skal skje med søknader som er påbegynt eller sendt inn
+    #   mens opptaket er upublisert etter en avpublisering? Skal søkeren kunne fortsette, og hvordan får søkeren vite det?
+    #   I Min kompetanse brukes publiseringen i dag bare i Finn studier.
+
+    Scenario: Søkeren kan ikke begynne på en søknad når opptaket er avpublisert
+      Gitt at opptaksforvalter har avpublisert opptaket "Samordna opptak 2027"
+      Når søkeren vil begynne på en søknad i opptaket "Samordna opptak 2027"
+      Så kan søkeren ikke begynne på søknaden
+
+    Scenario: Søkeren kan ikke endre søknaden når opptaket er avpublisert
+      Gitt at søkeren har en søknad i opptaket "Samordna opptak 2027"
+      Og at opptaksforvalter har avpublisert opptaket "Samordna opptak 2027"
+      Når søkeren vil endre søknaden
+      Så kan søkeren ikke endre søknaden
+
+    Scenario: Søkeren ser søknaden når opptaket er avpublisert
+      Gitt at søkeren har en søknad i opptaket "Samordna opptak 2027"
+      Og at opptaksforvalter har avpublisert opptaket "Samordna opptak 2027"
+      Når søkeren åpner søknaden
+      Så ser søkeren søknaden
 
   @draft
   Regel: Søknadsfristen og dokumentasjonsfristen følger søkerens utdanningsbakgrunn
@@ -215,29 +208,6 @@ Egenskap: Søke på opptak
       Og at søkeren har valgt utdanningsbakgrunnen "Realkompetanse"
       Når søkeren bytter til utdanningsbakgrunnen "Norsk videregående skole" "2027-03-20"
       Så kan søkeren sende inn søknaden fram til "2027-04-15 23:59"
-
-  @draft
-  Regel: Søkeren velger utdanningsbakgrunn blant utdanningsbakgrunnene i opptaket
-    # Virkningen av utdanningsbakgrunnene som opptaksforvalter legger til i
-    # 11 Opprette og vedlikeholde opptak/03 Innstillinger/innstillinger.feature.
-    # Lagt til 2026-10-19 etter akseptansetesten av opprette og vedlikeholde opptak.
-
-    Scenario: Søkeren velger blant utdanningsbakgrunnene i opptaket
-      Gitt at opptaket har utdanningsbakgrunnene "Realkompetanse", "Utenlandsk utdanning" og "Steinerskole"
-      Når søkeren skal velge utdanningsbakgrunn i søknaden
-      Så kan søkeren velge mellom "Realkompetanse", "Utenlandsk utdanning" og "Steinerskole"
-
-    Scenario: En utdanningsbakgrunn som er fjernet fra opptaket, kan ikke velges
-      Gitt at opptaksforvalter har fjernet utdanningsbakgrunnen "Steinerskole" fra opptaket
-      Når søkeren skal velge utdanningsbakgrunn i søknaden
-      Så kan søkeren ikke velge "Steinerskole"
-
-    # AVKLART 2026-10-19 (S4): Det skal ikke være mulig å registrere en søknad uten utdanningsbakgrunn.
-    Scenario: Søknaden kan ikke sendes inn uten utdanningsbakgrunn
-      Gitt at søkeren ikke har valgt utdanningsbakgrunn i søknaden
-      Når søkeren vil sende inn søknaden
-      Så kan søkeren ikke sende inn søknaden
-      Og søkeren får beskjed om å velge utdanningsbakgrunn
 
   @draft
   Regel: Søknadsnummeret følger startnummeret i opptaket

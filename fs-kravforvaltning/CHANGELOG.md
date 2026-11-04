@@ -1,5 +1,23 @@
 # krav-viewer
 
+## 1.11.1
+
+### Patch Changes
+
+- 9a69abd: Matrisen i Flyter viser hvor mye som er levert per sub-domene og fase, i stedet for hvor mye som gjenstår.
+
+## 1.11.0
+
+### Minor Changes
+
+- 008d374: Tavla «Oppgaver» heter nå «Scopes», og et scope er én mappe, `tasks/<domene>/<slug>/scope.md`, i stedet for `scope-<slug>.md` og en eller flere mapper med `oppgave.md`. Kortene, kravene og avvikene leses fra `scope.md`, og et scope kan ha flere Jira-saker. Kolonnen «I scope» heter «Avgrenset». «+ Ny oppgave» heter «+ Nytt scope», og ber om tittel, domene, mål, Jira-saker og eier. Lenker til `#/oppgaver/…` sendes videre til `#/scopes/…`, også til scopet en oppgave ble slått inn i, og valget i menyen er beholdt.
+
+## 1.10.0
+
+### Minor Changes
+
+- ada2971: Krav: filtreet viser Feature-ID-en under filnavnet, og i søket står mappa etter ID-en. Et søk som er en del av en ID (`GRU-00`, `OPT-OVO`, `@OPT-OVO-GRU-001`), gir bare kravene med ID-en, med treffet markert. Søk på filnavn, Egenskap og scenarioer virker som før.
+
 ## 1.9.0
 
 ### Minor Changes

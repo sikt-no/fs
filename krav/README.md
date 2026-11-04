@@ -4,6 +4,8 @@ Denne mappa inneholder akseptansekravene for løsningene som lages av studieadmi
 
 Er du ny? [Kom i gang med krav og akseptansetest i FS](../kom-i-gang.html) er en innføring i hvor kravene ligger, hvordan en kravfil ser ut, og hele prosessen steg for steg, fra kravene skrives til leveransen er godkjent i akseptansetesten.
 
+Det finnes også tre presentasjoner. [Slik jobber vi med krav](https://sikt-no.github.io/fs/presentasjoner/slik-jobber-vi-med-krav.html) er for alle, [Krav – detaljert presentasjon](https://sikt-no.github.io/fs/presentasjoner/krav-detaljert.html) går i detalj på taggene, skillene, verifiseringen og testene, og [Testfasene](https://sikt-no.github.io/fs/presentasjoner/testfasene.html) går gjennom fasene i akseptansetesten, etter teststrategien.
+
 Dette dokumentet er de gjeldende konvensjonene for alle kravfiler. Claude leser den samme fila (via `.claude/rules/gherkin-conventions.md`), så det finnes bare én versjon av reglene.
 
 FS Kravforvaltning sjekker noen av reglene i dette dokumentet automatisk, og viser brudd som «Avvik fra konvensjoner». Reglene som sjekkes er merket med *(sjekkes automatisk)*. Sjekkene står i `fs-kravforvaltning/server/parse.ts` og er testet i `fs-kravforvaltning/server/parse.test.ts`. Endrer du en merket regel, eller legger du til en regel som kan sjekkes, må `parse.ts` og testene oppdateres i samme endring.
@@ -41,7 +43,7 @@ Egenskap: Regelverkssamling
 ```
 
 - `# GitHub:` er valgfri, og peker på issuet kravet hører til. Den står rett over tag-linja.
-- Taggene er en unik ID (`@DOM-SUB-KAP-NNN`), prioritet (`@must`, `@should`, `@could` eller `@wont`) og status, og eventuelt `@scope-<slug>`, som kobler kravet til et scope og en oppgave. Se *Tags*.
+- Taggene er en unik ID (`@DOM-SUB-KAP-NNN`), prioritet (`@must`, `@should`, `@could` eller `@wont`) og status, og eventuelt `@scope-<slug>`, som kobler kravet til et scope. Se *Tags*.
 - Et krav som bygger på et annet krav, får `@depends-on-<Feature-ID>`, og en henvisning får `@ref-<Feature-ID>`. Se *Referanser*.
 - **Gitt** er forutsetningene, **Når** er handlingen, og **Så** er det forventede resultatet. Se *Gode scenarioer*.
 - Uklarheter gjettes ikke. De skrives i en `# ÅPNE SPØRSMÅL:`-kommentar, og en `Regel:` eller et `Scenario:` med spørsmål tagges `@openquestion`. Se *Åpne spørsmål*.
@@ -52,7 +54,7 @@ Egenskap: Regelverkssamling
 |---|---|---|
 | `@draft` | Utkast, ikke validert. Alle nye krav starter her, eventuelt som skjelett | `fs-scope` / `fs-krav` |
 | `@planned` | Validert og klart til å bygges | `fs-krav`, etter en gjennomgang, eller når det er sagt at kravet skal ha `@planned` |
-| `@in-progress` | Hentet inn i en oppgave, eller delvis levert | `fs-specify` / `fs-specify-delta`, eller `fs-verify` når noe av kravet er levert |
+| `@in-progress` | Hentet inn i scopet, eller delvis levert | `fs-specify` / `fs-specify-delta`, eller `fs-verify` når noe av kravet er levert |
 | `@implemented` | Bygget, og verifisert mot koden | `fs-verify` (også direkte fra `@draft` eller `@planned`, med «Verifiser» uansett status) |
 | `@deprecated` | Levert, men skal fjernes | `fs-krav`. `fs-verify` sletter fila (eller blokken, for en del) når koden er borte |
 
@@ -60,7 +62,7 @@ Se *Kravstatus* og *Implementasjonsstatus*.
 
 ### Skills for kravarbeid
 
-`fs-scope` brukes før kravene skrives: initiativet avgrenses og deles i oppgaver, og det bestemmes hvilke krav hver oppgave har. Den skriver scope-fila (`tasks/<domene>/scope-<slug>.md`), oppretter oppgavene, lager skjelett-krav (`@draft`, brukerhistorie og `Regel:`-titler uten scenarioer) og setter `@scope-<slug>` på kravene. Den kan kjøres på nytt når som helst. Se *Scope*.
+`fs-scope` brukes før kravene skrives: initiativet avgrenses, og det bestemmes hvilke krav som hører til, og hvilken Jira-sak hvert krav hører til. Den lager scope-mappa med `scope.md` (`tasks/<domene>/<slug>/scope.md`), lager skjelett-krav (`@draft`, brukerhistorie og `Regel:`-titler uten scenarioer) og setter `@scope-<slug>` på kravene. Den kan kjøres på nytt når som helst. Se *Scope*.
 
 `fs-krav` brukes til:
 
@@ -129,7 +131,7 @@ Gherkin er et språk som alle andre, og må skrives godt for å være nyttig og 
 
 Tre nivåer: **Domene → Sub-domene → Kapabilitet**
 
-Feature-filer skal **kun** ligge på kapabilitetsnivå (nivå 3). *(sjekkes automatisk)* Sub-domener nummereres fra `10`, kapabiliteter fra `01`. `_Interne prosesser` og `99 Demo` følger ikke nummereringen. *(sjekkes automatisk)* Unntaket er `_Flyter`, som har ett nivå: `krav/_Flyter/<NN Prosess>/flyt.feature`, med prosessene nummerert fra `10`. *(sjekkes automatisk)* Se *Flyter*.
+Feature-filer skal **kun** ligge på kapabilitetsnivå (nivå 3). *(sjekkes automatisk)* Sub-domener nummereres fra `10`, kapabiliteter fra `01`. `99 Demo` følger ikke nummereringen. *(sjekkes automatisk)* Unntaket er `_Flyter`, som har ett nivå: `krav/_Flyter/<NN Prosess>/flyt.feature`, med prosessene nummerert fra `10`. *(sjekkes automatisk)* Se *Flyter*.
 
 ```
 krav/
@@ -161,7 +163,6 @@ krav/
 - `09 Organisasjon` – organisasjonsforvaltning
 - `10 Felleskrav` – tverrgående funksjonalitet
 - `99 Demo` – demo og testing
-- `_Interne prosesser` – egne arbeidsprosesser (f.eks. GitHub-automatisering)
 - `_Flyter` – løp på tvers av domener (se *Flyter*)
 
 ### Tverrgående kapabiliteter: hva vs. hvordan
@@ -238,7 +239,7 @@ Unntaket er «Verifiser» på en egenskap eller en regel i FS Kravforvaltning: b
 
 Det andre unntaket er et krav som er delvis levert: `fs-verify` gir en `@draft`- eller `@planned`-egenskap statusen `@in-progress` når noe av den finnes i koden, også når kravet ikke er i en spesifikasjon. Se *Delvis levert*.
 
-En flyt i `krav/_Flyter` hentes ikke inn i en oppgave, og hopper over `@in-progress`: `fs-verify` gir en `@planned` flyt statusen `@implemented`. Se *Flyter*.
+En flyt i `krav/_Flyter` hentes ikke inn i et scope, og hopper over `@in-progress`: `fs-verify` gir en `@planned` flyt statusen `@implemented`. Se *Flyter*.
 
 Et krav skal ha nøyaktig én av disse på `Egenskap:`-tag-linja. Ikke sett to samtidig, og ikke la et krav stå uten status. På `Regel:`/`Scenario:` brukes `@draft` og `@deprecated`. `@planned` og `@in-progress` er bare lov på en del under en `@implemented` egenskap, når et levert krav endres (se *Endring av levert krav*). `@implemented` på en del er bare lov under en `@in-progress` egenskap, for en del som er levert (se *Delvis levert*). Under en `@implemented` egenskap har en levert del ingen egen statustag. *(sjekkes automatisk)*
 
@@ -312,7 +313,7 @@ Et krav som er levert (`@implemented`), endres ikke på stedet. Den leverte teks
 - Den nye delen får den tittelen kravet skal ha, ikke en tittel som beskriver endringen. Blir den lik tittelen på den gamle delen, får den gamle ` (avvikles)` bak tittelen, så titlene er unike: `Scenario: Se brukerens roller (avvikles)`. Ellers står den gamle delen urørt så lenge den nye er utkast. Forkastes den nye delen, fjernes ` (avvikles)` igjen.
 - Når den nye delen er validert (`fs-krav`), byttes `@draft` med `@planned`, og delen den erstatter, får `@deprecated` i samme endring. En del som bare fjernes, får `@deprecated` (se *Avvikling*). Et rent tillegg har ingen gammel del.
 - Delen går deretter langs samme akse som en egenskap: `@planned` →(`fs-specify` / `fs-specify-delta`)→ `@in-progress` →(`fs-verify`)→ levert. Når `fs-verify` har funnet koden, fjernes `@in-progress` fra delen, og delen arver `@implemented` fra egenskapen. `@deprecated`-delen slettes av `fs-verify` når koden er borte.
-- En `@planned`- eller `@in-progress`-del er ikke levert, og endres på stedet, uten ny blokk og uten `@deprecated`. Statustaggen blir stående. Er delen `@in-progress`, skal oppgaven som har hentet den inn, vite om endringen, og det noteres i spesifikasjonen.
+- En `@planned`- eller `@in-progress`-del er ikke levert, og endres på stedet, uten ny blokk og uten `@deprecated`. Statustaggen blir stående. Er delen `@in-progress`, skal scopet som har hentet den inn, vite om endringen, og det noteres i spesifikasjonen.
 - `@planned` og `@in-progress` på en del er bare lov under en `@implemented` egenskap. Under `@draft`, `@planned` eller `@in-progress` er ingenting levert, så delen endres på stedet. *(sjekkes automatisk)*
 - En del har høyst én statustag. `@planned` og `@in-progress` kombineres ikke med hverandre, med `@draft` eller med `@deprecated`. *(sjekkes automatisk)*
 
@@ -351,7 +352,7 @@ Er noe av et krav levert, men ikke alt, er egenskapen `@in-progress`, og delene 
 - `@implemented` står på `Regel:` når alle scenarioene i regelen er funnet, ellers på hvert `Scenario:`/`Scenariomal:` som er funnet. På et scenario under en `@implemented` regel er taggen overflødig. *(sjekkes automatisk)*
 - `@implemented` på en del er bare lov under en `@in-progress` egenskap. *(sjekkes automatisk)* Delen kombineres ikke med en annen statustag. *(sjekkes automatisk)*
 - En del som ikke er levert, har ingen statustag. Er det uklart om den skal bygges, endres eller fjernes, får den `@openquestion` og en `# ÅPNE SPØRSMÅL:` (se *Oppfølging*). `@draft`-deler står urørt.
-- Var egenskapen `@draft` eller `@planned`, setter `fs-verify` den til `@in-progress`, også når kravet ikke er i en spesifikasjon. Det står i verify-rapporten, så kravet kan hentes inn i en oppgave med `fs-specify`.
+- Var egenskapen `@draft` eller `@planned`, setter `fs-verify` den til `@in-progress`, også når kravet ikke er i en spesifikasjon. Det står i verify-rapporten, så kravet kan hentes inn i scopet med `fs-specify`.
 - Når resten er levert, gir `fs-verify` egenskapen `@implemented`, og fjerner `@implemented` fra delene i samme endring.
 - En `@implemented` egenskap settes aldri tilbake til `@in-progress`. Mangler noe i et levert krav, står det i verify-rapporten.
 - En `@implemented` del er levert, og endres ikke på stedet. Skal den bort, byttes `@implemented` med `@deprecated` (*Avvikling*). Skal den endres, legges den nye delen ved siden av som `@draft`, som i *Endring av levert krav*. Når den er validert, fjernes `@draft` (delen skal bygges, som resten av egenskapen), og den gamle delen får `@deprecated`.
@@ -379,17 +380,17 @@ Egenskap: ...
 
 ### Scope
 
-Sier hvilket scope (og dermed hvilken oppgave) kravet hører til. Scopet er planen for et initiativ: mål, avgrensning, og oppgavene initiativet deles i, med kravene hver oppgave har. Det står i `tasks/<domene>/scope-<slug>.md` (se *Scope* i [`tasks/README.md`](../tasks/README.md)), og lages og endres med `fs-scope`.
+Sier hvilket scope kravet hører til. Scopet er planen for et initiativ: mål, avgrensning, Jira-sakene og kravene som hører til. Det er én mappe, `tasks/<domene>/<slug>/`, med `scope.md` (se *Scope* i [`tasks/README.md`](../tasks/README.md)), og lages og endres med `fs-scope`.
 
 ```
 @BRU-APP-API-001 @must @draft @scope-applikasjoner-iterasjon-3
 ```
 
 - Formatet er `@scope-<slug>`, der `<slug>` er kebab-case: små bokstaver a–z, tall og `-`, og starter med bokstav eller tall. *(sjekkes automatisk)*
-- Slugen er den samme som i `scope-<slug>.md`, og unik på tvers av domener (det siste sjekkes på scope-fila, se *Scope* i `tasks/README.md`).
+- Slugen er navnet på scope-mappa (`tasks/<domene>/<slug>/`), og unik på tvers av domener (det siste sjekkes på scope-mappa, se *Domener* i `tasks/README.md`).
 - Taggen står på `Egenskap:`-tag-linja, og et krav har høyst én. Det samme gjelder en del. *(sjekkes automatisk)*
 - På `Regel:` eller `Scenario:`/`Scenariomal:` er taggen bare lov under en `@implemented` egenskap, for en del som endres i et nytt scope (se *Endring av levert krav*). Delen hører da til det nye scopet, og resten av egenskapen til det gamle. *(sjekkes automatisk)*
-- Taggen er ikke en statustag, og endrer ikke livsløpet. Statusen leses fra statustaggene, ikke fra scope-fila.
+- Taggen er ikke en statustag, og endrer ikke livsløpet. Statusen leses fra statustaggene, ikke fra `scope.md`.
 - Taggen settes av `fs-scope`, og av `fs-krav` når et nytt krav skrives i et scope. `fs-krav` og `fs-specify` endrer den ellers ikke, men foreslår `fs-scope` når et krav ikke passer i scopet.
 - Kravene i et scope kan testes for seg: `npx playwright test --grep @scope-<slug>`.
 
@@ -556,7 +557,7 @@ En fase er levert når delen av hvert krav den bygger på, er levert, og flytene
 
 En flyt kan derfor være `@implemented` selv om et krav den bygger på, ikke er levert som helhet. Endres delen flyten bygger på, er fasen ikke levert lenger, og FS Kravforvaltning varsler at flyten er bak kravene.
 
-Flytens egen status går `@draft` →(`fs-krav`)→ `@planned` →(`fs-verify`)→ `@implemented`. Den hentes ikke inn i en oppgave, og hopper over `@in-progress`. `fs-verify` setter `@implemented` når alle fasene er levert, og den har funnet i koden både stedet der hver overlevering lages og stedet der den brukes.
+Flytens egen status går `@draft` →(`fs-krav`)→ `@planned` →(`fs-verify`)→ `@implemented`. Den hentes ikke inn i et scope, og hopper over `@in-progress`. `fs-verify` setter `@implemented` når alle fasene er levert, og den har funnet i koden både stedet der hver overlevering lages og stedet der den brukes.
 
 I akseptansetesten tas flytene som går gjennom kravene i leveransen, med (`fs-testplan`), og overleveringene testes: hele flyten når den er `@implemented`, ellers de leverte fasene i leveransen.
 

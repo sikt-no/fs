@@ -1266,8 +1266,8 @@ function DomTab({ ix, list, follow, intro, onOpen }: { ix: FlowIndex; list: Flat
 // Matrise --------------------------------------------------------------------------------------
 
 function MatrixTab({ ix, flow, list, toPhase, depth, follow }: { ix: FlowIndex; flow: Flow; list: FlatKrav[]; toPhase: (n: number) => void; depth: Depth; follow: Follow }) {
-  // Enheten er kravet eller delene: et krav gjenstår i fasen til delen fasen bygger på, er levert (hele kravet med
-  // «Følg: Hele kravet»), og en del (regel eller scenario) til den selv er levert
+  // Enheten er kravet eller delene: et krav er levert i fasen når delen fasen bygger på, er levert (hele kravet med
+  // «Følg: Hele kravet»), og en del (regel eller scenario) når den selv er levert. Tallet er levert = tot − rem
   const [unit, setUnit] = useState<'krav' | 'deler'>('krav');
   const unitT = unit === 'krav' ? 'krav' : follow === 'part' ? 'deler' : 'regler';
   const val = (arr: FlatKrav[], phase?: number) => (unit === 'krav' ? arr.length : partCount(arr, phase).total);
@@ -1288,14 +1288,12 @@ function MatrixTab({ ix, flow, list, toPhase, depth, follow }: { ix: FlowIndex; 
           .join('\n');
   const intro =
     unit === 'krav'
-      ? `Hvor mange krav som gjenstår per sub-domene i hver fase, til ${depthText(depth)}${follow === 'part' ? ', bare delen fasen bygger på' : ''}. Tallet er kravene der ${follow === 'part' ? 'delen fasen bygger på' : 'hele kravet'} ikke er levert, av alle kravene sub-domenet leverer til fasen.`
+      ? `Hvor mange krav som er levert per sub-domene i hver fase, til ${depthText(depth)}${follow === 'part' ? ', bare delen fasen bygger på' : ''}. Tallet er kravene der ${follow === 'part' ? 'delen fasen bygger på' : 'hele kravet'} er levert, av alle kravene sub-domenet leverer til fasen.`
       : follow === 'part'
-        ? `Hvor mange deler som gjenstår per sub-domene i hver fase, til ${depthText(depth)}. En del er en regel eller et scenario fasen bygger på (ankeret, ellers regelen i «…»), eller reglene i kravet når fasen bygger på hele kravet. Tallet er delene som ikke er levert, av alle delene sub-domenet leverer til fasen.`
-        : `Hvor mange regler som gjenstår per sub-domene i hver fase, til ${depthText(depth)}. Tallet er reglene i kravene som ikke er levert, av alle reglene (unntatt utkast og avviklede) sub-domenet leverer til fasen.`;
+        ? `Hvor mange deler som er levert per sub-domene i hver fase, til ${depthText(depth)}. En del er en regel eller et scenario fasen bygger på (ankeret, ellers regelen i «…»), eller reglene i kravet når fasen bygger på hele kravet. Tallet er delene som er levert, av alle delene sub-domenet leverer til fasen.`
+        : `Hvor mange regler som er levert per sub-domene i hver fase, til ${depthText(depth)}. Tallet er reglene i kravene som er levert, av alle reglene (unntatt utkast og avviklede) sub-domenet leverer til fasen.`;
   const groups = byDomain(ix, list);
   const rows = groups.flatMap(({ dom, subs }) => [{ name: dom, isDom: true, arr: subs.flatMap(s => s[1]) }, ...subs.map(([sub, arr]) => ({ name: sub, isDom: false, arr }))]);
-  let maxRem = 1;
-  rows.forEach(r => !r.isDom && cellsFor(r.arr).forEach(c => (maxRem = Math.max(maxRem, c.rem))));
   const cols = `minmax(190px,1.6fr) repeat(${flow.phases.length}, minmax(84px,1fr)) 92px`;
   const cell = (c: { tot: number; rem: number; inP: FlatKrav[]; phase: number }, strong: boolean, key: number) => {
     if (!c.tot)
@@ -1305,19 +1303,20 @@ function MatrixTab({ ix, flow, list, toPhase, depth, follow }: { ix: FlowIndex; 
         </div>
       );
     const done = c.rem === 0;
-    const pct = Math.round(6 + (26 * Math.min(c.rem, maxRem)) / maxRem);
+    const lev = c.tot - c.rem;
+    const pct = Math.round(6 + (26 * lev) / c.tot);
     return (
       <div
         key={key}
         role="cell"
         class="mxc"
-        aria-label={done ? `alt levert, ${c.tot} ${unitT}` : `${c.rem} av ${c.tot} ${unitT} gjenstår`}
+        aria-label={done ? `alt levert, ${c.tot} ${unitT}` : `${lev} av ${c.tot} ${unitT} levert`}
         title={tip(c.inP, c.phase)}
-        style={{ background: done ? 'transparent' : `color-mix(in oklch, var(--warn) ${pct}%, var(--surface))` }}
+        style={{ background: done ? 'transparent' : `color-mix(in oklch, var(--st-implemented) ${pct}%, var(--surface))` }}
       >
         <span class="v">
           <span class="mono" style={{ color: done ? 'var(--st-implemented)' : 'var(--ink)', fontWeight: strong ? 600 : 500 }}>
-            {done ? '✓' : c.rem}
+            {done ? '✓' : lev}
           </span>
           <span class="of">av {c.tot}</span>
         </span>
@@ -1345,7 +1344,7 @@ function MatrixTab({ ix, flow, list, toPhase, depth, follow }: { ix: FlowIndex; 
       </div>
       {list.length ? (
         <div class="fl-mxwrap">
-          <div class="fl-mx" role="table" aria-label="Gjenstår per sub-domene og fase" style={{ minWidth: 190 + flow.phases.length * 84 + 92 + 'px' }}>
+          <div class="fl-mx" role="table" aria-label="Levert per sub-domene og fase" style={{ minWidth: 190 + flow.phases.length * 84 + 92 + 'px' }}>
             <div role="row" class="hd" style={{ gridTemplateColumns: cols }}>
               <span role="columnheader" class="mono lbl">DOMENE / SUB-DOMENE</span>
               {flow.phases.map(ph => {
@@ -1360,7 +1359,7 @@ function MatrixTab({ ix, flow, list, toPhase, depth, follow }: { ix: FlowIndex; 
                   </button>
                 );
               })}
-              <span role="columnheader" class="mono lbl last">GJENSTÅR</span>
+              <span role="columnheader" class="mono lbl last">LEVERT</span>
             </div>
             {rows.map(r => {
               const tot = val(r.arr);
@@ -1374,7 +1373,7 @@ function MatrixTab({ ix, flow, list, toPhase, depth, follow }: { ix: FlowIndex; 
                   <div role="cell" class="mxc last">
                     <span class="v">
                       <span class="mono bold" style={{ color: rem ? 'var(--ink)' : 'var(--st-implemented)' }}>
-                        {rem || '✓'}
+                        {rem ? tot - rem : '✓'}
                       </span>
                       <span class="of">av {tot}</span>
                     </span>
@@ -1383,7 +1382,7 @@ function MatrixTab({ ix, flow, list, toPhase, depth, follow }: { ix: FlowIndex; 
               );
             })}
             <div role="row" class="tr foot" style={{ gridTemplateColumns: cols }}>
-              <span role="rowheader" class="rh">Gjenstår per fase</span>
+              <span role="rowheader" class="rh">Levert per fase</span>
               {flow.phases.map(ph => {
                 const inP = list.filter(k => k.phases.has(ph.n));
                 const tot = val(inP, ph.n);
@@ -1398,7 +1397,7 @@ function MatrixTab({ ix, flow, list, toPhase, depth, follow }: { ix: FlowIndex; 
                       <>
                         <span class="v">
                           <span class="mono bold" style={{ color: rem ? 'var(--ink)' : 'var(--st-implemented)' }}>
-                            {rem || '✓'}
+                            {rem ? tot - rem : '✓'}
                           </span>
                           <span class="of">av {tot}</span>
                         </span>
@@ -1410,7 +1409,7 @@ function MatrixTab({ ix, flow, list, toPhase, depth, follow }: { ix: FlowIndex; 
               })}
               <div role="cell" class="mxc last">
                 <span class="v">
-                  <span class="mono bold">{totRem || '✓'}</span>
+                  <span class="mono bold">{totRem ? val(list) - totRem : '✓'}</span>
                   <span class="of">av {val(list)}</span>
                 </span>
               </div>
@@ -1422,20 +1421,20 @@ function MatrixTab({ ix, flow, list, toPhase, depth, follow }: { ix: FlowIndex; 
       )}
       <div class="fl-mxlegend">
         <span>
-          <span class="sw" style={{ background: 'color-mix(in oklch, var(--warn) 32%, var(--surface))' }} />
-          mest som gjenstår
+          <span class="sw" style={{ background: 'color-mix(in oklch, var(--st-implemented) 32%, var(--surface))' }} />
+          mest levert
         </span>
         <span>
-          <span class="sw" style={{ background: 'color-mix(in oklch, var(--warn) 8%, var(--surface))' }} />
-          lite
+          <span class="sw" style={{ background: 'color-mix(in oklch, var(--st-implemented) 8%, var(--surface))' }} />
+          lite levert
         </span>
         <span>
           <span class="mono" style={{ color: 'var(--st-implemented)' }}>✓</span>alt levert
         </span>
         <span>
           {unit === 'krav'
-            ? `Et krav gjenstår til ${follow === 'part' ? 'delen fasen bygger på' : 'hele kravet'} er levert. Gjenstår-kolonnen teller hvert krav én gang, selv om det er med i flere faser. Hold over en celle for å se kravene.`
-            : `En ${follow === 'part' ? 'del' : 'regel'} gjenstår til den selv er levert. Gjenstår-kolonnen teller hver ${follow === 'part' ? 'del' : 'regel'} én gang, selv om den er med i flere faser. Hold over en celle for å se ${follow === 'part' ? 'delene' : 'reglene'}.`}
+            ? `Et krav er levert når ${follow === 'part' ? 'delen fasen bygger på' : 'hele kravet'} er levert. Levert-kolonnen teller hvert krav én gang, selv om det er med i flere faser. Hold over en celle for å se kravene.`
+            : `En ${follow === 'part' ? 'del' : 'regel'} er levert når den selv er levert. Levert-kolonnen teller hver ${follow === 'part' ? 'del' : 'regel'} én gang, selv om den er med i flere faser. Hold over en celle for å se ${follow === 'part' ? 'delene' : 'reglene'}.`}
         </span>
       </div>
     </div>

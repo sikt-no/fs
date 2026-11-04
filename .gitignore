@@ -45,7 +45,7 @@ npm-debug.log*
 fs-kravforvaltning/out/
 fs-kravforvaltning/release/
 
-# CDP-kjøringer: bare resultat.md går i git. Skjermbilder og annet ligger lokalt
+# Agentisk funksjonstest (fase 2): bare resultat.md går i git. Skjermbilder og annet ligger lokalt
 akseptansetest/**/kjoring-*/*
 !akseptansetest/**/kjoring-*/resultat.md
 cdp-tester/**/kjoring-*/*
