@@ -12,7 +12,7 @@
 - **Flytbeskrivelser og krav**: [flytbeskrivelser-ekstern.md](flytbeskrivelser-ekstern.md)
 - **Gjennomgang av kravene**: [Fylles ut: møte <dato> eller skriftlig, sendt <dato>]
 - **Testere**: [Fylles ut]
-- **Kontaktperson**: [Fylles ut]
+- **Kontaktperson**: Tina Lund Ravndal
 - **Hvem beslutter**: [Fylles ut: hvem beslutter, avtales med partene før testen]
 - **Testmiljøet**: [Fylles ut: nullstilles ikke i testperioden <fra–til>, avtalt med drift]
 - **Ordene fra skjermen**: fra de interne testene (Min kompetanse og fs-admin, oktober 2026). «Legg til studieønsker» er avgrenset til opptaket til søknaden (min-kompetanse `src/app/[locale]/soknader/[soknadId]/studies/page.tsx`), «Finn studier» viser ikke opptaket
@@ -37,7 +37,7 @@
   - [ ] Hvem som beslutter, er avtalt med partene
   - [ ] Kontaktpersonen har logget inn som hver testbruker og ser testdataene
   - [ ] Kontaktpersonen har kjørt punkt 0 med én søker, og sett at saken havner hos UiT og vises for testbruker 2
-- **Confluence**: https://sikt.atlassian.net/wiki/spaces/STUDIEADM/pages/5166825479 (publisert 2026-11-03, under Testplaner; v3: 2a med filteret først)
+- **Confluence**: https://sikt.atlassian.net/wiki/spaces/STUDIEADM/pages/5166825479 (publisert 2026-11-03, under Testplaner; v4: endringer fra Jens Thomassens gjennomkjøring 2026-11-04, v5: rettet etter kommentarene)
 - **Laget**: 2026-11-03 av fs-testcaser-ekstern
 - **Generalprøve**: [kjoring-2026-11-03-1442/resultat.md](kjoring-2026-11-03-1442/resultat.md) (agent, søker ØKOLOGISK BADERING). Stegene er rettet etter den samme dag
 - **Sporing**:
@@ -48,7 +48,7 @@
   | 1 | a | `@OPT-SØK-SØK-011` | Søke om tidlig opptak fra søknadsdetaljene; Se informasjon om tidlig opptak i opptaket; Se hvilke søknadsalternativer som tilbyr tidlig opptak | 1.1, 2.1, 2.2 |
   | 1 | b | `@OPT-SØK-SØK-011` | Søke om tidlig opptak med en begrunnelse | 2.4a |
   | 1 | c | `@OPT-SØK-SØK-011` | Kvitteringen viser søknadsalternativene som tilbyr tidlig opptak | 2.4b |
-  | 2 | a | `@OPT-BEH-BEH-009` | Filtrere på tidlig opptak (søkeren har søkt om tidlig opptak) | 2.1 |
+  | 2 | a | `@OPT-BEH-BEH-009` | Filtrere på tidlig opptak (konklusjonen mangler) | 2.1, 2.2 |
   | 2 | b | `@OPT-BEH-BEH-013` | Se søkerens begrunnelse for tidlig opptak; Se dokumentasjonskrav for begrunnelsen | 1.1, 1.2 |
   | 2 | c | `@OPT-BEH-BEH-013` | Konkludere om søkeren deltar i tidligopptaket (deltar) | 1.4a |
   | 2 | d | `@OPT-BEH-BEH-009` | Filtrere på tidlig opptak (konklusjonen mangler, og søkeren har søkt) | 2.1, 2.2 |
@@ -69,23 +69,23 @@
 
 ---
 
-Velkommen til akseptansetesten av tidlig opptak og tilbudsgaranti. I testen sjekker du om du kan gjøre jobben din i flytene løsningen skal understøtte: at hvert steg virker, og at stegene henger sammen. Les [Informasjonsskriv til eksterne testere](https://sikt.atlassian.net/wiki/spaces/STUDIEADM/pages/5155815432) før du starter. Hva løsningen skal gjøre, står i «Flytbeskrivelser til partene – Tilbudsgaranti / Tidlig opptak 2026-11-05», som Sikt har gått gjennom med dere.
+Velkommen til akseptansetesten av tidlig opptak og tilbudsgaranti. I testen sjekker du om du kan gjøre jobben din i flytene løsningen skal understøtte: at hvert steg virker, og at stegene henger sammen. Les [Informasjonsskriv til eksterne testere](https://sikt.atlassian.net/wiki/spaces/STUDIEADM/pages/5155815432) før du starter. Hva løsningen skal gjøre, står i [Flytbeskrivelser til partene – Tilbudsgaranti / Tidlig opptak 2026-11-05](https://sikt.atlassian.net/wiki/spaces/STUDIEADM/pages/5165383733).
 
 ## Testbeskrivelse
 
 | Felt | Innhold |
 |---|---|
 | Hva er levert | Søkeren kan søke om tidlig opptak i Min kompetanse etter at søknaden er sendt, med ett grunnlag, og får kvittering. Saksbehandleren finner søknadene om tidlig opptak i FS Admin, ser søkerens grunnlag og hva som må dokumenteres, og setter en konklusjon. Saksbehandler, tilbyder og opptaksforvalter kan gi søkeren tilbudsgaranti på et studieønske, og tilbudsgarantien følger studieønsket når søkeren endrer rekkefølgen. |
-| Versjon | [Fylles ut: versjonen i testmiljøet] |
-| Flytene som testes | - Fra søknad til søknad om tidlig opptak (søkeren) <br>- Fra søknad om tidlig opptak til konklusjon (saksbehandleren) <br>- Fra konklusjon til tilbudsgaranti (saksbehandleren og opptaksforvalteren) <br>- Søkeren endrer søknaden etterpå |
+| Versjon | Slik testmiljøet er 5. november 2026 |
+| Flytene som testes | - Fra søknad til søknad om tidlig opptak (søkeren) <br>- Fra søknad om tidlig opptak til konklusjon (saksbehandleren) <br>- Manuelle tilbudsgarantier (saksbehandleren og opptaksforvalteren) <br>- Søkeren endrer søknaden etterpå |
 | Hvor du tester | Min kompetanse: [https://test.minkompetanse.no/](https://test.minkompetanse.no/) · FS Admin: [https://test-fsadmin.sikt.no/](https://test-fsadmin.sikt.no/) |
 | Feature-flagg som er slått på | Tidlig opptak i Min kompetanse (slått på for testen) |
-| Testbrukere og roller | - Testbruker 1: søkeren du får fra kontaktpersonen (se «Søkere til testerne»), søker i Min kompetanse <br>- Testbruker 2: KORT DOMPAP, saksbehandler ved UiT, i FS Admin <br>- Testbruker 3: Ordentlig Rundskriv, opptaksforvalter ved HK-dir, i FS Admin |
+| Testbrukere og roller | - Testbruker 1: søkeren du får fra kontaktpersonen (se «Søkere til testerne»), søker i Min kompetanse <br>- Testbruker 2: KORT DOMPAP • OPPTAK_SAKSBEHANDLER (UIT), i FS Admin <br>- Testbruker 3: ORDENTLIG RUNDSKRIV • OPPTAK_FORVALTER (HK-DIR), i FS Admin |
 | Testdata | - Opptaket «Samordna UHG-simulering høsten 2026», med tidlig opptak. Søknadsfristen for tidlig opptak er 6.10.2027 <br>- Tre studier i opptaket: «Automasjon, ingeniør - bachelor (ordinær, y-vei)» ved UiT og «Elektronisk systemingeniør - bachelor i ingeniørfag» ved NTNU tilbyr tidlig opptak. «Bachelor i ingeniørfag, allmenn maskinteknikk» ved HVL gjør det ikke <br>- Søkeren din har ingen søknad i opptaket når du starter. Du lager søknaden selv i testcase 0, og resten av testen bruker den. Søknaden behandles av UiT |
 | Avhengigheter | Ingen |
 | Dette kan du ikke gjøre i testen | - Gjennomføre tidligopptaket, så søkerne får tilbudsgaranti fra tidligopptaket. Det kommer senere, og tilbudsgarantien settes for hånd i testen <br>- Se hvem som har satt eller fjernet en tilbudsgaranti. Knappen «Endringslogg» i saken viser «Ingen endringer» inntil videre <br>- Sette tilbudsgaranti som tilbyder når saken behandles av et annet lærested. Det er en kjent mangel som rettes <br>- Trekke søknaden om tidlig opptak. Det finnes ikke i løsningen, så hver tester har sin egen søker |
-| Tid | Ca. 60 minutter. Frist: [Fylles ut] |
-| Kontaktperson | [Fylles ut]. Spørsmål underveis tas på [Fylles ut: hvordan spørsmål tas, avtales med testerne] |
+| Tid | Ca. 60 minutter. |
+| Kontaktperson | Tina Lund Ravndal. Spørsmål underveis tas på [Fylles ut: hvordan spørsmål tas, avtales med testerne] |
 | Hvem beslutter | [Fylles ut: hvem beslutter, avtales med partene før testen] |
 
 Mangler en testbruker eller testdata, si fra til kontaktpersonen før du starter.
@@ -94,10 +94,10 @@ Mangler en testbruker eller testdata, si fra til kontaktpersonen før du starter
 
 Hver tester bruker sin egen søker, så dere ikke forstyrrer hverandre. Søknaden om tidlig opptak kan ikke trekkes, så en søker kan bare brukes én gang. Kontaktpersonen fyller ut hvem som har hvilken søker.
 
-| Søker | Fødselsnummer | Tester |
+| Søker | Fødselsnummer | Brukt av |
 |---|---|---|
-| ØKOLOGISK BADERING | 22820998719 | Generalprøve (agent) 2026-11-03 |
-| GRETTEN PEDAL | 15841298656 | [Fylles ut] |
+| ØKOLOGISK BADERING | 22820998719 | Agentisk testing 2026-11-03 |
+| GRETTEN PEDAL | 15841298656 | SIKT internt 2026-11-04 |
 | TRIST RYGG | 21921199411 | [Fylles ut] |
 | FORMBAR JUICE | 16870999619 | [Fylles ut] |
 | TRU KJETTING | 04811199368 | [Fylles ut] |
@@ -137,7 +137,7 @@ Testcasene bygger på hverandre: alle bruker søknaden du lager i testcase 0. Ta
 
 | Steg | Hva du gjør | Slik gjør du det | Forventet resultat | Fungerte det? (Ja / Nei / Delvis) | Hva du gjorde og så | Status |
 |---|---|---|---|---|---|---|
-| 0a | Søk på det første studiet, og send søknaden | 1. Gå til [https://test.minkompetanse.no/](https://test.minkompetanse.no/), og velg søkeren din under «Meny» og «Velg testsøker» (testbruker 1, søker). <br>2. Velg «Finn studier», og skriv inn «Automasjon, ingeniør». <br>3. Velg «Legg til» på «Automasjon, ingeniør - bachelor (ordinær, y-vei)» ved UIT, Tromsø, med søknadsfrist «13. oktober 2027». Treff med en annen søknadsfrist hører til andre opptak. <br>4. Velg «Til studiekurv». <br>5. Velg «Start søknad», og gå gjennom «Prioritering», «Dokumentasjon» og «Oppsummering». <br>6. Velg «Send søknad». <br>7. Skriv ned søknadsnummeret i kvitteringen («Søknadsnummer»), og klokkeslettet. Du kan trenge dem for å finne søknaden i testcase 2. <br>8. Velg «Gå til min oversikt». | Kvitteringen viser «Søknaden er sendt inn», med søknadsnummeret. Under «Aktive søknader» i oversikten står «Søknad til Samordna UHG-simulering høsten 2026», med «Søknaden er innsendt» | | | |
+| 0a | Søk på det første studiet, og send søknaden | 1. Gå til [https://test.minkompetanse.no/](https://test.minkompetanse.no/), og velg søkeren din under «Meny» og «Velg testsøker» (testbruker 1, søker). <br>2. Velg «Finn studier», og skriv inn «Automasjon, ingeniør». <br>3. Velg «Legg til» på «Automasjon, ingeniør - bachelor (ordinær, y-vei)» ved UIT, Tromsø, med søknadsfrist «13. oktober 2027». Treff med en annen søknadsfrist hører til andre opptak. <br>4. Velg «Til studiekurv». <br>5. Velg «Start søknad», og gå gjennom «Prioritering», «Dokumentasjon» og «Oppsummering». <br>6. Velg «Send søknad». <br>7. Skriv ned søknadsnummeret i kvitteringen («Søknadsnummer»). Du trenger det i testcase 2–4. <br>8. Velg «Gå til min oversikt». | Kvitteringen viser «Søknaden er sendt inn», med søknadsnummeret. Under «Aktive søknader» i oversikten står «Søknad til Samordna UHG-simulering høsten 2026», med «Søknaden er innsendt» | | | |
 | 0b | Legg til to studier til | 9. Velg «Til søknad» under «Søknad til Samordna UHG-simulering høsten 2026». <br>10. Velg «Legg til studieønsker». Lista viser bare studiene i opptaket. <br>11. Skriv «Elektronisk systemingeniør» i søkefeltet, og velg «Legg til» på «Elektronisk systemingeniør - bachelor i ingeniørfag» ved NTNU, Trondheim. <br>12. Skriv «allmenn maskinteknikk» i søkefeltet, og velg «Legg til» på «Bachelor i ingeniørfag, allmenn maskinteknikk» ved HVL, Bergen. <br>13. Velg «Prioritering». Står studiene i en annen rekkefølge enn i forventet resultat, flytt dem med pilene. <br>14. Velg «Dokumentasjon», «Oppsummering» og «Lagre endringer». | Søknaden vises igjen, med tre studieønsker: 1. «Automasjon, ingeniør …», 2. «Elektronisk systemingeniør …», 3. «Bachelor i ingeniørfag, allmenn maskinteknikk». Boksen «Tidlig opptak» står i søknaden, med «Søk om tidlig opptak» | | | |
 
 ### 1. Søk om tidlig opptak (ca. 10 minutter)
@@ -156,36 +156,36 @@ Testcasene bygger på hverandre: alle bruker søknaden du lager i testcase 0. Ta
 
 **Hensikt:** saksbehandleren finner søknadene som venter på vurdering, vurderer grunnlaget og setter en konklusjon, så det er tydelig hvilke saker som er ferdige.
 
-**Testdata:** testbruker 2 (KORT DOMPAP, saksbehandler ved UiT). Finnes fra før: søknaden om tidlig opptak fra testcase 1. Lager: konklusjonen på saken.
+**Testdata:** testbruker 2 (KORT DOMPAP • OPPTAK_SAKSBEHANDLER (UIT)). Finnes fra før: søknaden om tidlig opptak fra testcase 1. Lager: konklusjonen på saken.
 
 | Steg | Hva du gjør | Slik gjør du det | Forventet resultat | Fungerte det? (Ja / Nei / Delvis) | Hva du gjorde og så | Status |
 |---|---|---|---|---|---|---|
-| 2a | Finn søknaden om tidlig opptak | 1. Gå til [https://test-fsadmin.sikt.no/](https://test-fsadmin.sikt.no/), og velg testbruker 2 (KORT DOMPAP, saksbehandler ved UiT), som i «Slik bytter du testbruker». <br>2. Velg «Opptak», skriv «Samordna UHG-simulering» i «Opptaksnavn», og åpne «Samordna UHG-simulering høsten 2026» med pila. <br>3. Velg «Gå til søknader» under «Søknader». <br>4. Kryss av for «Har søkt tidlig opptak» under «Hurtigfilter». <br>5. Finn søknaden du sendte i 0a ved å se på «Levert tidspunkt». Er det fortsatt vanskelig å skille søknadene, skriv søknadsnummeret fra 0a i «Søknadsnummer». | Lista viser bare søknadene der søkeren har søkt om tidlig opptak. Søknaden din står der, med «Ikke behandlet» | | | |
-| 2b | Se grunnlaget og hva som må dokumenteres | 6. Åpne saken med pila. | Saken åpner på «1. Tidlig opptak». Under «Begrunnelse fra søker» står «Jeg er i jobb og har oppsigelsestid, eller må søke permisjon». Under «Dokumentasjonskrav» står hva søkeren må dokumentere for grunnlaget | | | |
-| 2c | Sett konklusjon | 7. Velg «Kan få tidligopptak, har godkjent grunn.» i «Konklusjon». <br>8. Velg «Saker» i stien øverst. Filtrene er nullstilt, så finn søknaden igjen som i 2a (steg 4–5). <br>9. Åpne saken med pila. | Meldingen «Konklusjonen er lagret» vises etter steg 7. Når saken åpnes igjen, står «Kan få tidligopptak, har godkjent grunn.» i «Konklusjon» | | | |
-| 2d | Se at saken er ferdig vurdert | 10. Velg «Saker» i stien øverst. Åpne «Tidlig opptak» nederst i filtrene, og kryss av for «Mangler konklusjon på tidlig opptak». <br>11. Fjern krysset, og kryss av for «Har søkt tidlig opptak». | Med «Mangler konklusjon på tidlig opptak» er søknaden din ikke i lista. Med «Har søkt tidlig opptak» står den der igjen. Se etter «Levert tidspunkt», eller skriv søknadsnummeret fra 0a i «Søknadsnummer» | | | |
+| 2a | Finn søknadene som mangler konklusjon | 1. Gå til [https://test-fsadmin.sikt.no/](https://test-fsadmin.sikt.no/), og velg testbruker 2 (KORT DOMPAP • OPPTAK_SAKSBEHANDLER (UIT)), som i «Slik bytter du testbruker». <br>2. Velg «Opptak», skriv «Samordna UHG-simulering» i «Opptaksnavn», og åpne «Samordna UHG-simulering høsten 2026» med pila. <br>3. Velg «Gå til søknader» under «Søknader». <br>4. Åpne «Tidlig opptak» nederst i filtrene, og kryss av for «Mangler konklusjon på tidlig opptak». | Lista viser bare søknadene som mangler konklusjon på tidlig opptak. Søknaden din står der, med «Ikke behandlet» | | | |
+| 2b | Se grunnlaget og hva som må dokumenteres | 5. Åpne saken med pila. Er det flere saker i lista, åpne den med søknadsnummeret fra 0a. | Saken åpner på «1. Tidlig opptak». Under «Begrunnelse fra søker» står «Jeg er i jobb og har oppsigelsestid, eller må søke permisjon». Under «Dokumentasjonskrav» står hva søkeren må dokumentere for grunnlaget | | | |
+| 2c | Sett konklusjon | 6. Velg «Kan få tidligopptak, har godkjent grunn.» i «Konklusjon». <br>7. Velg «Saker» i stien øverst. Filtrene er nullstilt, så skriv søknadsnummeret fra 0a i «Søknadsnummer». Ofte holder det med en del av nummeret, for eksempel de fire siste sifrene. <br>8. Åpne saken med pila. | Meldingen «Konklusjonen er lagret» vises etter steg 6. Når saken åpnes igjen, står «Kan få tidligopptak, har godkjent grunn.» i «Konklusjon» | | | |
+| 2d | Se at saken er ferdig vurdert | 9. Velg «Saker» i stien øverst. Skriv søknadsnummeret i «Søknadsnummer», og kryss av for «Mangler konklusjon på tidlig opptak» under «Tidlig opptak». <br>10. Fjern krysset, og kryss av for «Har søkt tidlig opptak». | Med «Mangler konklusjon på tidlig opptak» viser lista «Ingen resultater». Med «Har søkt tidlig opptak» står søknaden i lista | | | |
 
 ### 3. Gi tilbudsgaranti (ca. 10 minutter)
 
 **Hensikt:** saksbehandleren og opptaksforvalteren gir søkeren tilbudsgaranti på et studieønske, hver i sitt felt, og ser hverandres tilbudsgaranti.
 
-**Testdata:** testbruker 2 (KORT DOMPAP, saksbehandler ved UiT) og testbruker 3 (Ordentlig Rundskriv, opptaksforvalter ved HK-dir). Finnes fra før: saken fra testcase 2. Lager: to tilbudsgarantier på «Elektronisk systemingeniør …», som testcase 4 bruker.
+**Testdata:** testbruker 2 (KORT DOMPAP • OPPTAK_SAKSBEHANDLER (UIT)) og testbruker 3 (ORDENTLIG RUNDSKRIV • OPPTAK_FORVALTER (HK-DIR)). Finnes fra før: saken fra testcase 2. Lager: to tilbudsgarantier på «Elektronisk systemingeniør …», som testcase 4 bruker.
 
 | Steg | Hva du gjør | Slik gjør du det | Forventet resultat | Fungerte det? (Ja / Nei / Delvis) | Hva du gjorde og så | Status |
 |---|---|---|---|---|---|---|
 | 3a | Gi tilbudsgaranti som saksbehandler | 1. Fortsett som testbruker 2, og åpne saken med pila i lista fra 2d. <br>2. Velg «Søknadsalternativer» til høyre, og åpne «Elektronisk systemingeniør - bachelor i ingeniørfag» med pila. <br>3. Velg «Tilbudsgaranti etter ny vurdering» i «Tilbudsgaranti fra behandler». <br>4. Last inn siden på nytt (F5, eller Cmd+R på Mac), og åpne søknadsalternativet igjen. | Meldingen «Tilbudsgaranti lagret» vises etter steg 3. Når siden er lastet på nytt, viser «Tilbudsgaranti fra behandler» «Tilbudsgaranti etter ny vurdering» | | | |
-| 3b | Gi tilbudsgaranti som opptaksforvalter | 5. Bytt til testbruker 3 (Ordentlig Rundskriv, opptaksforvalter ved HK-dir), som i «Slik bytter du testbruker». <br>6. Gå til sakslisten, og finn søknaden som i 2a (steg 2–5). Åpne saken med pila. <br>7. Velg «Søknadsalternativer» til høyre, og åpne «Elektronisk systemingeniør …» med pila. <br>8. Velg «Tilbudsgaranti, forhåndsløfte» i «Tilbudsgaranti fra forvalter». <br>9. Last inn siden på nytt, og åpne søknadsalternativet igjen. | Meldingen «Tilbudsgaranti lagret» vises etter steg 8. «Tilbudsgaranti fra forvalter» viser «Tilbudsgaranti, forhåndsløfte». «Tilbudsgaranti fra behandler» viser fortsatt «Tilbudsgaranti etter ny vurdering» fra 3a, men kan ikke endres av deg | | | |
+| 3b | Gi tilbudsgaranti som opptaksforvalter | 5. Bytt til testbruker 3 (ORDENTLIG RUNDSKRIV • OPPTAK_FORVALTER (HK-DIR)), som i «Slik bytter du testbruker». <br>6. Gå til sakslisten som i 2a (steg 2–3), skriv søknadsnummeret fra 0a i «Søknadsnummer», og åpne saken med pila. <br>7. Velg «Søknadsalternativer» til høyre, og åpne «Elektronisk systemingeniør …» med pila. <br>8. Velg «Tilbudsgaranti, forhåndsløfte» i «Tilbudsgaranti fra forvalter». <br>9. Last inn siden på nytt, og åpne søknadsalternativet igjen. | Meldingen «Tilbudsgaranti lagret» vises etter steg 8. «Tilbudsgaranti fra forvalter» viser «Tilbudsgaranti, forhåndsløfte». «Tilbudsgaranti fra behandler» viser fortsatt «Tilbudsgaranti etter ny vurdering» fra 3a, men kan ikke endres av deg | | | |
 
 ### 4. Søkeren endrer søknaden (ca. 10 minutter)
 
 **Hensikt:** når søkeren endrer rekkefølgen på studiene, blir søknaden om tidlig opptak og tilbudsgarantiene stående.
 
-**Testdata:** testbruker 1 (søkeren din) og testbruker 2 (KORT DOMPAP, saksbehandler ved UiT). Finnes fra før: søknaden om tidlig opptak fra testcase 1, og tilbudsgarantiene fra testcase 3.
+**Testdata:** testbruker 1 (søkeren din) og testbruker 2 (KORT DOMPAP • OPPTAK_SAKSBEHANDLER (UIT)). Finnes fra før: søknaden om tidlig opptak fra testcase 1, og tilbudsgarantiene fra testcase 3.
 
 | Steg | Hva du gjør | Slik gjør du det | Forventet resultat | Fungerte det? (Ja / Nei / Delvis) | Hva du gjorde og så | Status |
 |---|---|---|---|---|---|---|
 | 4a | Endre rekkefølgen som søker | 1. Gå til [https://test.minkompetanse.no/](https://test.minkompetanse.no/), og velg søkeren din under «Meny» og «Velg testsøker» (testbruker 1). <br>2. Velg «Meny» og «Mine søknader», og «Vis søknad» under «Samordna UHG-simulering høsten 2026». <br>3. Velg «Rediger studieønsker», og pila ned på «Elektronisk systemingeniør …». <br>4. Velg «Lagre endringer». | Søknaden vises igjen, med «Elektronisk systemingeniør …» som prioritet 3. Boksen «Tidlig opptak» viser fortsatt «Du har søkt om tidlig opptak.», med påminnelsen for det samme grunnlaget som i 1b | | | |
-| 4b | Se at tilbudsgarantiene fulgte med | 5. Gå til [https://test-fsadmin.sikt.no/](https://test-fsadmin.sikt.no/), og velg testbruker 2 (KORT DOMPAP, saksbehandler ved UiT), som i «Slik bytter du testbruker». <br>6. Gå til sakslisten, og finn søknaden som i 2a (steg 2–5). Åpne saken med pila. <br>7. Velg «Søknadsalternativer» til høyre, og åpne «Elektronisk systemingeniør …» med pila. | «Elektronisk systemingeniør …» står som nummer 3. «Tilbudsgaranti fra behandler» viser fortsatt «Tilbudsgaranti etter ny vurdering», og «Tilbudsgaranti fra forvalter» viser «Tilbudsgaranti, forhåndsløfte». «Konklusjon» viser fortsatt «Kan få tidligopptak, har godkjent grunn.» | | | |
+| 4b | Se at tilbudsgarantiene fulgte med | 5. Gå til [https://test-fsadmin.sikt.no/](https://test-fsadmin.sikt.no/), og velg testbruker 2 (KORT DOMPAP • OPPTAK_SAKSBEHANDLER (UIT)), som i «Slik bytter du testbruker». <br>6. Gå til sakslisten som i 2a (steg 2–3), skriv søknadsnummeret fra 0a i «Søknadsnummer», og åpne saken med pila. <br>7. Velg «Søknadsalternativer» til høyre, og åpne «Elektronisk systemingeniør …» med pila. | «Elektronisk systemingeniør …» står som nummer 3. «Tilbudsgaranti fra behandler» viser fortsatt «Tilbudsgaranti etter ny vurdering», og «Tilbudsgaranti fra forvalter» viser «Tilbudsgaranti, forhåndsløfte». «Konklusjon» viser fortsatt «Kan få tidligopptak, har godkjent grunn.» | | | |
 
 ## Testcaser fra partene
 
