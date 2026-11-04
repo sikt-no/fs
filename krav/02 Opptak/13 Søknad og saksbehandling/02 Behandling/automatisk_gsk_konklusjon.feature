@@ -417,6 +417,8 @@ Egenskap: Automatisk GSK-konklusjon
     # Avklart 2026-11-03. Er hendelsene ikke satt, pågår den automatiske saksbehandlingen til opptaket er
     # historisk. Hendelsene er de samme som i OPT-BEH-BEH-032. Importen av vitnemålet og
     # GSK-vitnemålsberegningen kjører uansett.
+    # Avklart 2026-11-03: når saksbehandleren starter den automatiske behandlingen selv, settes
+    # GSK-konklusjonen også utenfor perioden (OPT-BEH-BEH-032).
 
     Scenario: Ingen automatisk konklusjon før den automatiske saksbehandlingen starter
       Gitt at «Automatisk saksbehandling starter» er "2027-04-16 08:00" i opptaket
