@@ -39,7 +39,7 @@ Egenskap: Ferdigbehandle en sak
   Bakgrunn:
     Gitt at søknaden til "Kari Nordmann" har en sak hos "Universitetet i Oslo"
 
-  @depends-on-OPT-BEH-BEH-015 @ref-FLY-OPT-AUT-001
+  @depends-on-OPT-BEH-BEH-015 @ref-FLY-OPT-AUT-001 @implemented
   # OPT-BEH-BEH-015: «Vitnemålet gir GSK når det har GSK OK fra KREG»
   Regel: Bare saker der søkeren har ett vitnemål, og vitnemålet gir GSK, behandles helautomatisk
     # Et kompetansebevis teller ikke som vitnemål (se OPT-BEH-BEH-019).
@@ -55,13 +55,11 @@ Egenskap: Ferdigbehandle en sak
       Når søknaden behandles automatisk
       Så behandles ikke saken hos "Universitetet i Oslo" helautomatisk
 
-    @implemented
     Scenario: Saken behandles ikke helautomatisk før saksbehandleren har valgt vitnemål
       Gitt at "Kari Nordmann" har to vitnemål som gir GSK
       Når søknaden behandles automatisk
       Så behandles ikke saken hos "Universitetet i Oslo" helautomatisk
 
-    @implemented
     Scenario: Saken behandles ikke helautomatisk når søkeren har flere vitnemål, og bare ett gir GSK
       # Avklart 30.10.2026: det andre vitnemålet kan ha fag som gir søkeren flere poeng, så
       # saksbehandleren velger vitnemålet. Søknaden får likevel GSK-konklusjonen fra vitnemålet
@@ -100,12 +98,13 @@ Egenskap: Ferdigbehandle en sak
     Bakgrunn:
       Gitt at "Kari Nordmann" har ett vitnemål, og vitnemålet gir GSK
 
+    @implemented
     Scenario: Saken er ferdig behandlet når den automatiske behandlingen har avgjort alt
       Gitt at den automatiske behandlingen kan avgjøre alle stegene for saken
       Når søknaden behandles automatisk
       Så er saken hos "Universitetet i Oslo" ferdig behandlet
 
-    @depends-on-OPT-BEH-BEH-008 @depends-on-OPT-BEH-BEH-036
+    @depends-on-OPT-BEH-BEH-008 @depends-on-OPT-BEH-BEH-036 @implemented
     # OPT-BEH-BEH-008: «Mangler hindrer ikke kvalifiseringen eller at saken blir ferdig behandlet»
     # OPT-BEH-BEH-036: «Saken får automatiske mangeltekster når søkeren ikke er kvalifisert»
     Scenario: Saken er ferdig behandlet selv om kravelementene ga mangeltekst
@@ -145,6 +144,7 @@ Egenskap: Ferdigbehandle en sak
         | kravelementene | grunnlaget og poengene                                  | kravelementene, kvalifiseringen og kvoten |
         | kvoten         | grunnlaget, poengene, kravelementene og kvalifiseringen | kvoten                                    |
 
+    @implemented
     Scenario: Saken blir stående som ikke behandlet når et steg ikke kan avgjøres
       # Avklart 2026-11-02: den automatiske behandlingen endrer ikke behandlingsstatusen, bortsett
       # fra å sette saken til ferdig behandlet. Saken blir Under behandling når saksbehandleren

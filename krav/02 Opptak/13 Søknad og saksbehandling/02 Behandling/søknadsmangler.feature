@@ -1,6 +1,6 @@
 # language: no
 # GitHub: #413
-@OPT-BEH-BEH-008 @must @planned
+@OPT-BEH-BEH-008 @must @in-progress
 Egenskap: Søknadsmangler
   Som saksbehandler ved saksbehandlende organisasjon
   ønsker jeg å registrere mangler i saken og gi søkeren beskjed om manglene
@@ -42,6 +42,7 @@ Egenskap: Søknadsmangler
 
   # ── 1. Mangelkoder ───────────────────────────────────────────
 
+  @implemented
   Regel: Opptaksforvalteren forvalter mangelkodene i regelverkssamlingen
 
     Scenario: Opprette mangelkode
@@ -76,6 +77,7 @@ Egenskap: Søknadsmangler
 
   # ── 2. Registrering ──────────────────────────────────────────
 
+  @implemented
   Regel: Mangler hindrer ikke kvalifiseringen eller at saken blir ferdig behandlet
     # Avklart 2026-11-02 i gjennomgangen av flyten automatisk saksbehandling: kvalifiseringen
     # beregnes fra kravelementene, og leser ikke manglene. At en mangelkode som stopper for
@@ -102,6 +104,7 @@ Egenskap: Søknadsmangler
 
   Regel: Saksbehandlende organisasjon registrerer mangler i saken sin
 
+    @implemented
     Scenario: Registrere mangel på spesielle krav
       Når saksbehandleren ved Universitetet i Oslo registrerer en mangel i saken med følgende opplysninger
         | felt                | verdi                                                      |
@@ -110,6 +113,7 @@ Egenskap: Søknadsmangler
         | Kommentar           | Du mangler karakter i R2. Dokumenter ett av kravene under. |
       Så har saken mangelen "KAR" på kompetanseregelverket "Regelverk B"
 
+    @implemented
     Scenario: Saksbehandleren velger blant mangelkodene i regelverkssamlingen til opptaket
       Gitt at regelverkssamlingen "UHG 2027" har mangelkodene "KAR" og "STEMPEL"
       Og at en annen regelverkssamling har mangelkoden "ATT"
@@ -117,6 +121,7 @@ Egenskap: Søknadsmangler
       Så kan saksbehandleren velge "KAR" og "STEMPEL"
       Og saksbehandleren kan ikke velge "ATT"
 
+    @implemented
     Scenario: Saksbehandleren velger blant kompetanseregelverkene til søknadsalternativene i saken
       Gitt at søknadsalternativene i saken hos "Universitetet i Oslo" har kompetanseregelverkene "Regelverk A" og "Regelverk B"
       Når saksbehandleren ved Universitetet i Oslo velger kompetanseregelverk for en mangel
@@ -144,10 +149,12 @@ Egenskap: Søknadsmangler
         | Poeng          | kan ikke mangelen knyttes til et kompetanseregelverk eller kvotespørsmål |
         | Kvote          | knyttes mangelen til et kvotespørsmål                                 |
 
+    @implemented
     Scenario: Kommentaren til søkeren er valgfri
       Når saksbehandleren ved Universitetet i Oslo registrerer en mangel uten kommentar
       Så har saken mangelen
 
+    @implemented
     Scenario: En sak kan ha flere mangler
       Gitt at saken hos "Universitetet i Oslo" har mangelen "KAR"
       Når saksbehandleren ved Universitetet i Oslo registrerer mangelen "STEMPEL"
@@ -165,6 +172,7 @@ Egenskap: Søknadsmangler
         | Generelle krav | GSK     | ikke    | avvises mangelen                                            |
         | Poeng          | STEMPEL | ikke    | avvises mangelen                                            |
 
+    @implemented
     Scenario: Slette mangel som er registrert ved en feil
       Gitt at saken hos "Universitetet i Oslo" har mangelen "KAR"
       Når saksbehandleren ved Universitetet i Oslo sletter mangelen "KAR"
@@ -187,6 +195,7 @@ Egenskap: Søknadsmangler
     saksbehandleren ut mangelen. En mangel som er sjekket ut, står fortsatt i saken, så det
     går an å se hva som har manglet, men den hindrer ikke lenger noe og vises ikke for søkeren.
 
+    @implemented
     Scenario: Saksbehandleren ser at søkeren har lastet opp ny dokumentasjon
       Gitt at saken hos "Universitetet i Oslo" har mangelen "KAR"
       Når søkeren laster opp dokumentasjon
@@ -441,6 +450,7 @@ Egenskap: Søknadsmangler
       Når saksbehandleren ved Universitetet i Oslo ser mangelen "KAR"
       Så ser ikke saksbehandleren muligheten til å endre, sjekke ut eller slette mangelen "KAR"
 
+    @implemented
     Scenario: Opptaksforvalteren ved forvaltende organisasjon ser manglene i alle sakene
       Gitt at sakene hos "Universitetet i Oslo" og "UiT Norges arktiske universitet" har mangler
       Når opptaksforvalteren ved HK-dir åpner søknaden
