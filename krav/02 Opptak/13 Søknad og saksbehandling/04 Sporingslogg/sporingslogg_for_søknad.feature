@@ -92,12 +92,18 @@ Egenskap: Sporingslogg for søknad
       Så logges en hendelse i hendelsesloggen med om generell studiekompetanse ble godkjent
       Og hendelsen har begrunnelsen saksbehandleren oppga
 
+    @openquestion
     Scenario: Saksbehandleren registrerer grunnlaget
+      # ÅPNE SPØRSMÅL:
+      # - Gjelder det kvalifikasjonsgrunnlaget, rangeringsgrunnlaget eller begge?
       Når saksbehandleren registrerer grunnlaget for søkeren
       Så logges en hendelse i hendelsesloggen med grunnlaget som ble registrert
       Og hendelsen har begrunnelsen saksbehandleren oppga
 
+    @openquestion
     Scenario: Saksbehandleren justerer grunnlaget
+      # ÅPNE SPØRSMÅL:
+      # - Gjelder det kvalifikasjonsgrunnlaget, rangeringsgrunnlaget eller begge?
       Når saksbehandleren justerer grunnlaget for søkeren
       Så logges en hendelse i hendelsesloggen med grunnlaget før og etter
       Og hendelsen har begrunnelsen saksbehandleren oppga
@@ -134,6 +140,7 @@ Egenskap: Sporingslogg for søknad
     Scenario: Saksbehandleren vurderer en kvote
       # ÅPNE SPØRSMÅL:
       # - Noen kvoter, som samisk kvote, kan si noe om etnisk tilhørighet. Gjør det denne delen av loggen til en behandling av særlige kategorier personopplysninger?
+      # - Gjelder det en utdanningskvote, og at søkeren får en kvotesøknad i den?
       Når saksbehandleren vurderer om søkeren skal være med i en kvote
       Så logges en hendelse i hendelsesloggen med kvoten, og om søkeren er med i kvoten
       Og hendelsen har begrunnelsen saksbehandleren oppga
@@ -145,7 +152,10 @@ Egenskap: Sporingslogg for søknad
       Så logges en hendelse i hendelsesloggen med statusen før og etter
       Og hendelsen har begrunnelsen saksbehandleren oppga
 
+    @openquestion
     Scenario: Saksbehandleren fordeler søknaden til en annen organisasjon
+      # ÅPNE SPØRSMÅL:
+      # - Er det et søknadsalternativ som får en annen saksbehandlende organisasjon, saken som får en annen saksbehandler, eller begge?
       Når saksbehandleren fordeler søknaden til en annen organisasjon
       Så logges en hendelse i hendelsesloggen med organisasjonen før og etter
       Og hendelsen har begrunnelsen saksbehandleren oppga
@@ -246,6 +256,7 @@ Egenskap: Sporingslogg for søknad
     # ÅPNE SPØRSMÅL:
     # - Dette er forslaget fra innsiktsarbeidet, og det er ikke avklart. Ser lærestedet bare søknadene det behandler?
     # - Hva gjelder i lokale opptak, der lærestedet også er opptakets forvalter?
+    # - Er «organisasjonen som behandler søknaden» den saksbehandlende organisasjonen? En søknad kan ha flere, én per søknadsalternativ.
 
     Scenario: Saksbehandler ved organisasjonen som behandler søknaden ser hendelsene i søknaden
       Gitt at saksbehandleren er saksbehandler ved organisasjonen som behandler søknaden
@@ -302,6 +313,8 @@ Egenskap: Sporingslogg for søknad
       Så logges det i innsynsloggen hvilken saksbehandler som åpnet dokumentet, og når
 
 # ÅPNE SPØRSMÅL:
+# - Gjelder hendelsesloggen hele søknaden, eller én sak (søknaden slik den ligger hos én saksbehandlende organisasjon)?
+#   Er «statusen på søknaden» behandlingsstatusen til saken?
 # - Kan ansatte lagres med navn, eller bare med rolle og organisasjon? Opptaket har avklart (2026-10-09)
 #   at navnet lagres, men bare vises for noen få. Juristene vurderer om det gjelder søknaden også.
 # - Skal svar på tilbud og påbegynte endringer som ikke ble sendt inn, logges?
