@@ -9,10 +9,9 @@
 #
 # Slik leses stegene:
 #   «Søknaden «<nøkkel>» er sendt inn og fordelt» er søknaden oppsettet har sendt (nøkkelen er i «Kjøringens testdata»).
-#   «Søkeren «soker-N» har sendt inn søknad med studieønskene … og utdanningsbakgrunnen …» betyr: agenten bytter til søkeren i Min kompetanse
-#     (testansvarlig logger inn, se oppsettet), velger «Trekk søknad» hvis søkeren har en søknad i opptaket, og sender en ny med studieønskene
-#     i rekkefølgen som står, og utdanningsbakgrunnen. Søkeren «soker-5» er arbeidssøknaden: hvert scenario sender den på nytt først, så den trenger
-#     ingen opprydding. Utdanningsbakgrunnene heter «Norsk videregående skole» [Sjekk begrep], «Utenlandsk videregående skole», «Videregående steinerskole», «Realkompetanse» og «Dispensasjon» [Sjekk begrep].
+#   «Søkeren «soker-N» har sendt inn søknad med studieønskene … og utdanningsbakgrunnen …» betyr: søknaden er opprettet eller endret på vegne av
+#     søkeren i FS Admin (Utfylling S i oppsettet). Bare «soker-1» logger inn selv i Min kompetanse (TestID), fordi søkerens visning må ses der.
+#     Søkeren «soker-5» er arbeidssøknaden: hvert scenario endrer den først med «Endre søknad», så den trenger ingen opprydding. Utdanningsbakgrunnene heter «Norsk videregående skole» [Sjekk begrep], «Utenlandsk videregående skole», «Videregående steinerskole», «Realkompetanse» og «Dispensasjon» [Sjekk begrep].
 #   «Og fordelingen har kjørt (opptil 2 minutter)»: fordelingen skjer i tildelingsjobben. Agenten åpner siden på nytt omtrent hvert 30. sekund til
 #     hvert studieønske i søknaden har en «B-rolle», og ellers i inntil 2 minutter. Er den ikke satt da, er testcasen «Ikke testet».
 #   «Åpner sakene til søknaden i «Saker i opptak»» betyr: «Søknadsbehandling», «Behandle» ved opptaket, og «Gå til sak» for hver rad med søknadens
@@ -545,7 +544,7 @@ Egenskap: Tildele saksbehandlende organisasjon
       Gitt jeg er logget inn som «opptak-forvalter-forvaltende»
       Og ledige studieplasser i opptaket har åpnet, og «tilbud-saksbehandlende-tilbyder» tilbyr ledige studieplasser
       Og søkeren «soker-5» har sendt inn søknad med studieønsket «tilbud-saksbehandlende-uten-regel» og utdanningsbakgrunnen «Norsk videregående skole»
-      Når søkeren «soker-5» søker ledig studieplass på «tilbud-saksbehandlende-tilbyder» i Min kompetanse
+      Når søkeren «soker-5» søker ledig studieplass på «tilbud-saksbehandlende-tilbyder» (lagt til på vegne av søkeren med «Endre søknad»)
       Og fordelingen har kjørt (opptil 2 minutter)
       Og jeg åpner sakene til søknaden i «Saker i opptak»
       Så står {ORG:opptak-saksbehandler-saksbehandlende} som «B-rolle» på studieønsket «tilbud-saksbehandlende-tilbyder»
@@ -557,7 +556,7 @@ Egenskap: Tildele saksbehandlende organisasjon
       Gitt jeg er logget inn som «opptak-forvalter-forvaltende»
       Og ledige studieplasser i opptaket har åpnet, og «tilbud-saksbehandlende-tilbyder» tilbyr ledige studieplasser
       Og søkeren «soker-2» har søknaden «soknad-utenlandsk» med utdanningsbakgrunnen «Utenlandsk videregående skole»
-      Når søkeren «soker-2» søker ledig studieplass på «tilbud-saksbehandlende-tilbyder» i Min kompetanse
+      Når søkeren «soker-2» søker ledig studieplass på «tilbud-saksbehandlende-tilbyder» (lagt til på vegne av søkeren med «Endre søknad»)
       Og fordelingen har kjørt (opptil 2 minutter)
       Og jeg åpner sakene til søknaden i «Saker i opptak»
       Så står {ORG:opptak-saksbehandler-saksbehandlende} som «B-rolle» på studieønsket «tilbud-saksbehandlende-tilbyder»
@@ -643,7 +642,7 @@ Egenskap: Tildele saksbehandlende organisasjon
         | tilfelle                        | soknad                | forutsetning | tilbake |
         | bare tilbyderen saksbehandler   | soknad-norsk          | «tilbud-deltakende-laerested» med regelen «K{KJØRING}-LAE» («Bare tilbyderen – bare dette studieønsket») | søknaden er uendret |
         | søkeren har realkompetanse      | soknad-realkompetanse | utdanningsbakgrunnen «Realkompetanse» | søknaden er uendret |
-        | søkeren søker ledig studieplass | soknad-endring-og-flytting | ledig studieplass på «tilbud-deltakende-laerested» lagt til av søkeren «soker-5» i Min kompetanse | søkeren fjerner ledig studieplass «tilbud-deltakende-laerested» fra søknaden |
+        | søkeren søker ledig studieplass | soknad-endring-og-flytting | ledig studieplass på «tilbud-deltakende-laerested» lagt til på vegne av søkeren «soker-5» med «Endre søknad» | søkeren fjerner ledig studieplass «tilbud-deltakende-laerested» fra søknaden |
 
     Scenariomal: Organisasjonene i unntaket for lærested må delta i opptaket
       Gitt jeg er logget inn som «opptak-forvalter-forvaltende»
@@ -1004,13 +1003,13 @@ Egenskap: Tildele saksbehandlende organisasjon
     # Teknikk: tilstandsoverganger (sendt, fordelt)
     @utledet @endrer-data
     Scenario: Saksbehandlende organisasjon ser bare saker hos organisasjonen: søkeren ser opptakets organisasjon som kontakt før søknadsalternativet er fordelt
-      Gitt jeg er logget inn i Min kompetanse (test) som søkeren «soker-5»
-      Og jeg har en søknad med studieønsket «tilbud-saksbehandlende-uten-regel», fordelt til {ORG:opptak-saksbehandler-saksbehandlende}
-      Når jeg velger «Endre søknad» og «Legg til studieønsker», legger til «tilbud-tilbyder-uten-regel», og sender inn søknaden
+      Gitt jeg er logget inn i Min kompetanse (test) som søkeren «soker-1»
+      Og søknaden «soknad-norsk» er sendt inn og fordelt
+      Når jeg velger «Endre søknad» og «Legg til studieønsker», legger til «tilbud-tilbyder-sektor», og sender inn søknaden
       Og jeg åpner «Kontakt saksbehandler» med en gang, før fordelingen har kjørt [Sjekk begrep: tildelingsjobben tar ca. 30 sekunder, så vinduet er kort]
-      Så står {ORG:opptak-forvalter-forvaltende} i boksen for studieønsket «tilbud-tilbyder-uten-regel»
+      Så står {ORG:opptak-forvalter-forvaltende} i boksen for studieønsket «tilbud-tilbyder-sektor»
       # Setter tilbake:
-      Og jeg fjerner «tilbud-tilbyder-uten-regel» med «Fjern»
+      Og jeg fjerner «tilbud-tilbyder-sektor» med «Fjern», og sender inn søknaden
 
 
   Regel: Opptaksforvalteren ved forvaltende organisasjon ser alle sakene i opptaket
