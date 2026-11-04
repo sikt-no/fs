@@ -13,7 +13,7 @@
 - **Gjennomgang av kravene**: [Fylles ut: møte <dato> eller skriftlig, sendt <dato>]
 - **Testere**: [Fylles ut]
 - **Kontaktperson**: Tina Lund Ravndal
-- **Testmiljøet**: [Fylles ut: nullstilles ikke i testperioden <fra–til>, avtalt med drift]
+- **Testmiljøet**: må ikke nullstilles 2026-11-05 (testdagen)
 - **Ordene fra skjermen**: fra de interne testene (Min kompetanse og fs-admin, oktober 2026). «Legg til studieønsker» er avgrenset til opptaket til søknaden (min-kompetanse `src/app/[locale]/soknader/[soknadId]/studies/page.tsx`), «Finn studier» viser ikke opptaket
 - **Testdata som må lages før testen**:
 
@@ -29,12 +29,12 @@
   | Opptak 108 «Nord Test» | Fem treff på «Automasjon, ingeniør …» har søknadsfrist «11. november» (2026). Etter fristen er treffet i opptak 34 det eneste | 0a | Finnes | |
 
 - **Klar til test** (krysses av av kontaktpersonen):
-  - [ ] Leveransen er godkjent internt og lagt ut i testmiljøet (alle tre: søke om tidlig opptak, saksbehandling og tilbudsgaranti)
+  - [x] Leveransen er godkjent internt og lagt ut i testmiljøet (alle tre: søke om tidlig opptak, saksbehandling og tilbudsgaranti)
   - [ ] Kravene er gått gjennom med partene
   - [ ] Testbeskrivelsen er klar
-  - [ ] Testdataene er laget, og testmiljøet nullstilles ikke i testperioden
+  - [x] Testdataene er laget, og testmiljøet nullstilles ikke i testperioden
   - [ ] Kontaktpersonen har logget inn som hver testbruker og ser testdataene
-  - [ ] Kontaktpersonen har kjørt punkt 0 med én søker, og sett at saken havner hos UiT og vises for testbruker 2
+  - [x] Kontaktpersonen har kjørt punkt 0 med én søker, og sett at saken havner hos UiT og vises for testbruker 2
 - **Confluence**: https://sikt.atlassian.net/wiki/spaces/STUDIEADM/pages/5166825479 (publisert 2026-11-03, under Testplaner; v4: endringer fra Jens Thomassens gjennomkjøring 2026-11-04, v5: rettet etter kommentarene, v6: innlogging med Feide, v7: Jens Thomassen tok ut spørsmål underveis og «Hvem beslutter» fra testbeskrivelsen)
 - **Laget**: 2026-11-03 av fs-testcaser-ekstern
 - **Generalprøve**: [kjoring-2026-11-03-1442/resultat.md](kjoring-2026-11-03-1442/resultat.md) (agent, søker ØKOLOGISK BADERING). Stegene er rettet etter den samme dag
