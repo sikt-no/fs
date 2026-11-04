@@ -178,8 +178,8 @@ Egenskap: Automatiske tilleggspoeng
     # Avklart 30.10.2026: bare tilleggspoengene saksbehandleren har endret, er låst for
     # automatikken (se «Saksbehandleren kan overstyre poeng automatikken har satt»).
 
-    @ref-OPT-BEH-BEH-004
-    # Regelen «Poeng beregnes fra det valgte grunnlaget», scenarioet «Poengene er tomme til jeg beregner dem».
+    @ref-OPT-BEH-BEH-022
+    # Regelen «Poengene beregnes fortløpende og lagres når grunnlaget er klart» (flyttet fra OPT-BEH-BEH-004 30.10.2026).
     Scenario: Tilleggspoengene regnes ut selv om poengene fra vitnemålet står tomme
       Gitt at søkeren er 23 år på datoen for aldersberegning
       Og at poengtypen for alderspoeng er knyttet til algoritmen "ALD_ALG1"
