@@ -1,5 +1,5 @@
 # language: no
-@BRU-APP-API-018 @must @planned @scope-tak-og-gulv-for-feide-applikasjoner
+@BRU-APP-API-018 @must @in-progress @scope-tak-og-gulv-for-feide-applikasjoner
 Egenskap: Forvalte roller i taket til en Feide-applikasjon
   Som bruker med applikasjonsadministrator-rollen
   ønsker jeg å tildele og fjerne roller i taket til en Feide-applikasjon for en organisasjon og et miljø
