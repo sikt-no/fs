@@ -461,7 +461,7 @@ Egenskap: Tildele saksbehandlende organisasjon
       Når "Informatikk, UiO" flyttes fra "Universitetet i Oslo" til "HK-dir"
       Så har søknaden en ubehandlet sak hos "HK-dir" med "Informatikk, UiO"
       # AVKLART 04.11.2026: status «Overført» og uleste dokumenter (workshoprapporten 29.05.2026)
-      # er ikke med her. Ønsket følges opp i STEK-667.
+      # er tatt ut av kravet. Det tas opp igjen hvis det meldes behov.
 
     Scenario: Interne merknader blir igjen hos organisasjonen søknadsalternativet flyttes fra
       Gitt at saksbehandleren ved Universitetet i Oslo har skrevet en intern merknad i saken
