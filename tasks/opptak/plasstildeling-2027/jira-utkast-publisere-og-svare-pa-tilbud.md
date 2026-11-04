@@ -1,12 +1,14 @@
 # Utkast til Jira: Publisere resultatet og svare på tilbud
 
-Utkast 2026-10-28, ikke opprettet. Kravene er `@draft`, og lenkene går til `main` (kravene kommer dit når PR #850 er merget).
+Utkast 2026-10-28, oppdatert 2026-11-04 (én epic). Ikke opprettet. Kravene er `@draft`, og lenkene går til `main` (kravene kommer dit når PR #850 er merget).
 
-## Epic: Publisere resultatet og svare på tilbud
+## Leveransedel under TAKE-3: Publisere resultatet og svare på tilbud
+
+Endret 2026-11-04: TAKE-3 beholdes som den eneste epicen for plasstildelingen, og leveransedelene legges under den som stories (se [jira-utkast-plasstildeling-rundetyper-og-runder.md](jira-utkast-plasstildeling-rundetyper-og-runder.md)). Det lages ingen egen epic for denne delen, og ingen saker flyttes.
 
 Opptaksforvalter publiserer resultatet til søkerne, saksbehandlerne ser det publiserte resultatet, og søkerne svarer på tilbud og ventelisteplass, så svarene brukes i neste runde. Bygger på at plasstildelingen er gjennomført.
 
-Saker som flyttes hit fra TAKE-3: TAKE-156, TAKE-268, TAKE-288, TAKE-329, TAKE-330, TAKE-331.
+Saker i TAKE-3 som hører til denne delen: TAKE-156, TAKE-268, TAKE-288, TAKE-329, TAKE-330, TAKE-331.
 
 Verifisering 2026-10-28: 14 av 26 scenarioer finnes i koden.
 
@@ -40,7 +42,7 @@ Krav: [publisere_resultat.feature](https://github.com/sikt-no/fs/blob/main/krav/
 
 ## Story (TAKE-329, skrives om): Saksbehandler ser det publiserte resultatet
 
-Ny tittel og beskrivelse. Resultatet før publisering er en egen story i epicen for gjennomføringen.
+Ny tittel og beskrivelse. Resultatet før publisering er en egen story i leveransedelen for gjennomføringen.
 
 Saksbehandler ser det publiserte resultatet per søknad og per utdanningskvote, med poenggrense og totaltall, for søknadene organisasjonen saksbehandler eller tilbyr.
 
