@@ -13,7 +13,6 @@
 - **Gjennomgang av kravene**: [Fylles ut: møte <dato> eller skriftlig, sendt <dato>]
 - **Testere**: [Fylles ut]
 - **Kontaktperson**: Tina Lund Ravndal
-- **Hvem beslutter**: [Fylles ut: hvem beslutter, avtales med partene før testen]
 - **Testmiljøet**: [Fylles ut: nullstilles ikke i testperioden <fra–til>, avtalt med drift]
 - **Ordene fra skjermen**: fra de interne testene (Min kompetanse og fs-admin, oktober 2026). «Legg til studieønsker» er avgrenset til opptaket til søknaden (min-kompetanse `src/app/[locale]/soknader/[soknadId]/studies/page.tsx`), «Finn studier» viser ikke opptaket
 - **Testdata som må lages før testen**:
@@ -34,7 +33,6 @@
   - [ ] Kravene er gått gjennom med partene
   - [ ] Testbeskrivelsen er klar
   - [ ] Testdataene er laget, og testmiljøet nullstilles ikke i testperioden
-  - [ ] Hvem som beslutter, er avtalt med partene
   - [ ] Kontaktpersonen har logget inn som hver testbruker og ser testdataene
   - [ ] Kontaktpersonen har kjørt punkt 0 med én søker, og sett at saken havner hos UiT og vises for testbruker 2
 - **Confluence**: https://sikt.atlassian.net/wiki/spaces/STUDIEADM/pages/5166825479 (publisert 2026-11-03, under Testplaner; v4: endringer fra Jens Thomassens gjennomkjøring 2026-11-04, v5: rettet etter kommentarene, v6: innlogging med Feide, v7: Jens Thomassen tok ut spørsmål underveis og «Hvem beslutter» fra testbeskrivelsen)
