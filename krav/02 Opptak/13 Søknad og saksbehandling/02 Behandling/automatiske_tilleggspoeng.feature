@@ -76,17 +76,16 @@ Egenskap: Automatiske tilleggspoeng
       Når saken får grunnlaget "VES"
       Så viser kjønnspoengene at de er regnet ut for kvinne
 
-  @openquestion @ref-FLY-OPT-AUT-001
+  @ref-FLY-OPT-AUT-001 @depends-on-OPT-BEH-BEH-038
   Regel: Poeng for høyere utdanning regnes ut fra søkerens studiepoeng
-    # ÅPNE SPØRSMÅL:
-    # - Kravet til importen av resultater fra høyere utdanning er ikke skrevet. Når det finnes,
-    #   får regelen @depends-on- til det.
     # Studiepoengene kommer fra tjenesten for resultater fra høyere utdanning. Resultatene hentes og lagres på samme
     # måte som vitnemål fra videregående skole hentes og lagres via KREG.
     # Avklart 30.10.2026: alle beståtte studiepoeng på nivå høyere utdanning teller, også studiepoeng som er
     # brukt i grunnlaget. Fagskolepoeng teller ikke. Studiepoengene telles når poengene regnes ut, uten frist.
     # Studiepoeng fra utenlandsk høyere utdanning teller også, når opptakssystemet har dem som data. Det har
     # det ikke ennå.
+    # Avklart 04.11.2026: resultatene merker et innpasset emne som innpasset, med lærestedet det kommer fra,
+    # så emnet telles bare én gang, med studiepoengene fra lærestedet der det ble tatt.
 
     Scenariomal: Poeng for høyere utdanning
       Gitt at poengtypen for poeng for høyere utdanning er knyttet til algoritmen for høyere utdanning
@@ -103,6 +102,18 @@ Egenskap: Automatiske tilleggspoeng
         | 60          | 2     |
         | 120         | 2     |
 
+    Scenario: Poengene for høyere utdanning viser hvor mange studiepoeng de er regnet ut for
+      Gitt at søkeren har bestått emner på 45 studiepoeng
+      Og at poengtypen for poeng for høyere utdanning er knyttet til algoritmen for høyere utdanning
+      Når saken får grunnlaget "VES"
+      Så viser poengene for høyere utdanning at de er regnet ut for 45 studiepoeng
+
+    Scenario: Søker uten resultater fra høyere utdanning får 0 poeng
+      Gitt at poengtypen for poeng for høyere utdanning er knyttet til algoritmen for høyere utdanning
+      Og at søkeren ikke har resultater fra høyere utdanning
+      Når saken får grunnlaget "VES"
+      Så har saken 0 poeng for høyere utdanning
+
     Scenario: Bare beståtte emner teller
       Gitt at poengtypen for poeng for høyere utdanning er knyttet til algoritmen for høyere utdanning
       Og at søkeren har bestått emner på 50 studiepoeng
@@ -117,12 +128,63 @@ Egenskap: Automatiske tilleggspoeng
       Når saken får grunnlaget "VES"
       Så har saken 1 poeng for høyere utdanning
 
+    Scenario: Innpassede emner telles bare én gang
+      Gitt at poengtypen for poeng for høyere utdanning er knyttet til algoritmen for høyere utdanning
+      Og at søkeren har bestått emner på 40 studiepoeng ved UiB
+      Og at emner på 30 studiepoeng fra UiB er innpasset ved NTNU
+      Og at resultatene fra høyere utdanning viser emnene på 30 studiepoeng både ved UiB og ved NTNU
+      Når saken får grunnlaget "VES"
+      Så har saken 1 poeng for høyere utdanning
+
+    Scenario: Innpassede emner telles med studiepoengene fra lærestedet der de ble tatt
+      Gitt at poengtypen for poeng for høyere utdanning er knyttet til algoritmen for høyere utdanning
+      Og at søkeren har bestått emner på 30 studiepoeng ved UiB
+      Og at et emne på 10 studiepoeng fra UiB er innpasset ved NTNU med 7,5 studiepoeng
+      Når saken får grunnlaget "VES"
+      Så har saken 1 poeng for høyere utdanning
+
     Scenario: Studiepoengene telles når poengene regnes ut
       Gitt at poengtypen for poeng for høyere utdanning er knyttet til algoritmen for høyere utdanning
       Og at søkeren hadde bestått emner på 50 studiepoeng da søknaden ble sendt inn
       Og at søkeren har bestått et emne på 10 studiepoeng etter søknadsfristen
       Når poengene for høyere utdanning regnes ut
       Så har saken 2 poeng for høyere utdanning
+
+  @draft @depends-on-OPT-BEH-BEH-038
+  Regel: Poengene for høyere utdanning regnes ut på nytt når søkeren får nye resultater
+    # Avklart 04.11.2026: motsatt av nye vitnemål fra KREG, som ikke gir ny behandling
+    # (OPT-BEH-BEH-032). Resultatene fra høyere utdanning gir bare et tilleggspoeng.
+    # Avklart 04.11.2026: gjelder også saker som er ferdig behandlet, men ikke etter at
+    # opptaket er avsluttet. Hendelsene for den automatiske saksbehandlingen gjelder ikke.
+
+    Scenario: Poengene for høyere utdanning regnes ut på nytt
+      Gitt at saken har 1 poeng for høyere utdanning, regnet ut for 50 studiepoeng
+      Når søkeren får et nytt resultat fra høyere utdanning på 10 studiepoeng
+      Så har saken 2 poeng for høyere utdanning
+
+    Scenario: Poengene regnes ut på nytt i en sak som er ferdig behandlet
+      Gitt at saken er ferdig behandlet
+      Og at saken har 1 poeng for høyere utdanning, regnet ut for 50 studiepoeng
+      Når søkeren får et nytt resultat fra høyere utdanning på 10 studiepoeng
+      Så har saken 2 poeng for høyere utdanning
+
+    Scenario: Poengene regnes ikke ut på nytt etter at opptaket er avsluttet
+      Gitt at opptaket er avsluttet
+      Og at saken har 1 poeng for høyere utdanning, regnet ut for 50 studiepoeng
+      Når søkeren får et nytt resultat fra høyere utdanning på 10 studiepoeng
+      Så har saken fortsatt 1 poeng for høyere utdanning
+
+    @depends-on-OPT-BEH-BEH-031
+    Scenario: Poengsummen regnes ut på nytt når poengene for høyere utdanning endres
+      Gitt at saken har 1 poeng for høyere utdanning, regnet ut for 50 studiepoeng
+      Og at søkeren har en poengsum i kvotetypen "ORD"
+      Når søkeren får et nytt resultat fra høyere utdanning på 10 studiepoeng
+      Så er poengsummen i kvotetypen "ORD" regnet ut på nytt
+
+    Scenario: Poengene står når saksbehandleren har endret dem
+      Gitt at saksbehandleren har endret poengene for høyere utdanning til 1
+      Når søkeren får et nytt resultat fra høyere utdanning på 60 studiepoeng
+      Så har saken fortsatt 1 poeng for høyere utdanning
 
   @ref-FLY-OPT-AUT-001
   Regel: Tilleggspoengene settes uansett hvem som velger grunnlaget
