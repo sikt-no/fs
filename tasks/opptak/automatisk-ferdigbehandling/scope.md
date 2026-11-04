@@ -5,7 +5,7 @@
 - **Initiativ**: [#199](https://github.com/sikt-no/fs/issues/199)
 - **Jira**: [STEK-253](https://sikt.atlassian.net/browse/STEK-253)
 - **Eier**: –
-- **Siste oppdatering**: 2026-11-03
+- **Siste oppdatering**: 2026-11-04
 
 ## Mål
 
@@ -19,6 +19,7 @@
 - De andre leveransene i flyten: `automatisk-import-og-start`, `automatisk-gsk-konklusjon`, `automatisk-grunnlag-og-poeng`, `automatisk-kvalifisering-og-poengsum` og `beregne-automatisk-pa-nytt`.
 - De to `@wont`-fasene i flyten: to identiske vitnemål som regnes som ett, og automatisk dobbeltrangering.
 - Plasstildelingen (`@OPT-PLA-TIL-001`, scopet `plasstildeling-2027`).
+- Søkere med flere vitnemål behandles manuelt, og tas ut av scopet (statusmøtet 2026-11-04). Det gjelder regelen «Har søkeren flere vitnemål, behandles saken automatisk på vitnemålet saksbehandleren velger» i `@OPT-BEH-BEH-025`. Valget av vitnemål hører til `vitnemalsbehandling` (`@OPT-BEH-BEH-004`).
 
 ## Kilder
 
@@ -27,6 +28,7 @@
 - [GitHub #413](https://github.com/sikt-no/fs/issues/413) — issuet til søknadsmangler
 - [FOL-40](https://sikt.atlassian.net/browse/FOL-40) — behandlingsstatus «Behandlet», initiativet i milepælsplanen
 - [Oppdelingen av flyten](https://claude.ai/artifact/XSScgR8ixj1HJ8kFK5fyso) — alternativ 1, besluttet 2026-11-02
+- [Status per 4. november 2026](https://sikt.atlassian.net/wiki/spaces/STUDIEADM/pages/5169545237) — status for leveransene i flyten, med kommentarene fra statusmøtet
 
 ## Krav
 
@@ -47,6 +49,7 @@ Append-only. Ny linje på toppen ved hver hendelse.
 
 | Dato       | Hendelse | Av | Lenke til review |
 |------------|----------|----|------------------|
+| 2026-11-04 | Søkere med flere vitnemål tatt ut av scopet (statusmøtet, se Kilder) | @JøranIndseth | – |
 | 2026-11-03 | Scenarioene om endringsloggen og saksloggen i `@OPT-BEH-BEH-029` og `@OPT-BEH-BEH-036` er blokkert til den nye sporingsloggen finnes. Endringsloggen i opptak er stoppet (BAT-324, V480 i fs-plattform), så kravene blir ikke `@implemented` før da | @JøranIndseth | – |
 | 2026-11-02 | `@OPT-BEH-BEH-036` fylt ut med fs-krav: tre regler skilt ut fra `@OPT-BEH-BEH-008`, og flyten bygger på 036 | @JøranIndseth | – |
 | 2026-11-02 | Opprettet med fs-scope, som leveranse 5 av 6 i flyten automatisk saksbehandling | @JøranIndseth | – |

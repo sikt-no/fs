@@ -97,10 +97,13 @@ Egenskap: Beregne poengsum per kvote
       Så har søkeren en poengsum i kvotetypen "ORD"
       Men søkeren har ingen poengsum i kvotetypen "ORD-F"
 
-    Scenario: Poengtypen viser hvorfor poengsummen ikke kan regnes ut
+    Scenario: Saksbehandleren ser hvorfor poengsummen ikke kan regnes ut
+      # Avklart 4.11.2026: årsaken vises per kvote og grunnlag i oppsummeringen av saken, ikke på
+      # poengtypen (STEK-650).
       Gitt at poengformelen til kvotetypen "ORD" bruker en poengtype søkeren ikke har poeng i
-      Når poengsummen regnes ut
-      Så viser poengtypen hvorfor poengsummen ikke kan regnes ut
+      Og at poengsummen for grunnlaget "VES" i kvotetypen "ORD" ikke kan regnes ut
+      Når saksbehandleren ser oppsummeringen av saken
+      Så ser saksbehandleren hvorfor poengsummen for grunnlaget "VES" i kvotetypen "ORD" ikke kan regnes ut
 
     @implemented
     Scenario: Poengsummene fjernes når søkeren ikke er plassert i noen kvote
