@@ -20,8 +20,8 @@ Egenskap: Automatisk saksbehandling på vitnemålet saksbehandleren velger
     Gitt at søknaden til "Kari Nordmann" har en sak hos "Universitetet i Oslo"
     Og at "Kari Nordmann" har vitnemålene "Vitnemål 2024" og "Vitnemål 2025", som begge gir GSK
 
-  @depends-on-OPT-BEH-BEH-025
-  # OPT-BEH-BEH-025: «Har søkeren flere vitnemål, behandles saken automatisk på vitnemålet saksbehandleren velger»
+  @depends-on-OPT-BEH-BEH-039
+  # OPT-BEH-BEH-039: «Har søkeren flere vitnemål, behandles saken automatisk på vitnemålet saksbehandleren velger»
   Regel: Saksbehandleren starter den automatiske behandlingen på vitnemålet saksbehandleren velger
 
     Scenario: Saken behandles automatisk på vitnemålet saksbehandleren velger

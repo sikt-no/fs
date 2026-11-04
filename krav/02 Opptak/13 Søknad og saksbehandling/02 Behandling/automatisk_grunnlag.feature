@@ -27,7 +27,8 @@
 #   automatiske_tilleggspoeng.feature (@OPT-BEH-BEH-028).
 # - Vitnemålspoeng står i automatisk_poengberegning.feature (@OPT-BEH-BEH-018),
 #   og kravelementene i automatisk_kvalifisering.feature (@OPT-BEH-BEH-020).
-# - Søkere med flere vitnemål behandles i vitnemålsbehandlingen.
+# - Søkere med flere vitnemål: grunnlaget fra vitnemålet saksbehandleren har valgt, står i
+#   behandle_automatisk_på_valgt_vitnemål.feature (@OPT-BEH-BEH-039).
 @OPT-BEH-BEH-019 @must @in-progress @scope-automatisk-grunnlag-og-poeng @ref-OPT-BEH-BEH-012 @ref-OPT-BEH-BEH-018
 Egenskap: Automatisk grunnlag
   Som saksbehandler
@@ -131,9 +132,8 @@ Egenskap: Automatisk grunnlag
   @depends-on-OPT-BEH-BEH-015 @ref-FLY-OPT-AUT-001
   Regel: Ingen automatisk grunnlag uten ett vitnemål som gir generell studiekompetanse
     # Ett vitnemål er nok, også når søkeren har et kompetansebevis i tillegg.
-    # Søkere med flere vitnemål behandles i vitnemålsbehandlingen, og den
-    # automatiske behandlingen stopper for dem til saksbehandleren har valgt
-    # vitnemålet.
+    # Har søkeren flere vitnemål, stopper den automatiske behandlingen til
+    # saksbehandleren har valgt vitnemålet (OPT-BEH-BEH-039).
 
     @implemented
     Scenariomal: Ingen grunnlag settes automatisk når <grunn>
@@ -155,13 +155,6 @@ Egenskap: Automatisk grunnlag
       Når søknaden behandles automatisk
       Så blir søknaden ikke behandlet automatisk
       Og saken får ingen grunnlag automatisk
-
-    @ref-OPT-BEH-BEH-025
-    Scenario: Grunnlag fra vitnemålet saksbehandleren har valgt
-      Gitt at søkeren har to elektroniske vitnemål som gir generell studiekompetanse, ett fra 2024 og ett fra 2025
-      Og at saksbehandleren har valgt vitnemålet fra 2025
-      Når søknaden behandles automatisk
-      Så får saken grunnlaget ut fra vitnemålet fra 2025
 
     Scenario: Kompetansebevis ved siden av vitnemålet stopper ikke automatikken
       Gitt at søkeren har ett elektronisk vitnemål som gir generell studiekompetanse

@@ -5,7 +5,7 @@
 - **Initiativ**: [#199](https://github.com/sikt-no/fs/issues/199)
 - **Jira**: [STEK-330](https://sikt.atlassian.net/browse/STEK-330)
 - **Eier**: –
-- **Siste oppdatering**: 2026-11-02
+- **Siste oppdatering**: 2026-11-04
 
 ## Mål
 
@@ -18,6 +18,7 @@
 - De andre leveransene i flyten: `automatisk-gsk-konklusjon`, `automatisk-grunnlag-og-poeng`, `automatisk-kvalifisering-og-poengsum`, `automatisk-ferdigbehandling` og `beregne-automatisk-pa-nytt`.
 - De to `@wont`-fasene i flyten: to identiske vitnemål som regnes som ett, og automatisk dobbeltrangering.
 - Saksbehandlertildelingen (`@FLY-OPT-SAK-001`, `@OPT-BEH-BEH-011`). Flyten starter når saken er opprettet.
+- Søkere med flere vitnemål behandles manuelt, og tas ut av scopet (statusmøtet 2026-11-04). Scenarioet «Saken som er under behandling, behandles automatisk på vitnemålet saksbehandleren velger» er flyttet fra `@OPT-BEH-BEH-032`. Saken behandles automatisk på vitnemålet saksbehandleren velger. Det er skilt ut i `@OPT-BEH-BEH-039` [behandle_automatisk_på_valgt_vitnemål.feature](../../../krav/02%20Opptak/13%20S%C3%B8knad%20og%20saksbehandling/02%20Behandling/behandle_automatisk_p%C3%A5_valgt_vitnem%C3%A5l.feature), som er `@must` og ikke har scope ennå. Valget av vitnemål som grunnlag for poengberegningen i vitnemålsbehandleren (`@OPT-BEH-BEH-004`) er et annet valg.
 
 ## Kilder
 
@@ -43,4 +44,5 @@ Append-only. Ny linje på toppen ved hver hendelse.
 
 | Dato       | Hendelse | Av | Lenke til review |
 |------------|----------|----|------------------|
+| 2026-11-04 | Scenarioet om å starte på valgt vitnemål i `@OPT-BEH-BEH-032` er skilt ut i `@OPT-BEH-BEH-039` (Behandle automatisk på vitnemålet saksbehandleren velger), `@must` uten scope. Fra reviewen av PR #931 | @JøranIndseth | [#931](https://github.com/sikt-no/fs/pull/931) |
 | 2026-11-02 | Opprettet med fs-scope, som leveranse 1 av 6 i flyten automatisk saksbehandling | @JøranIndseth | – |

@@ -19,7 +19,7 @@
 - De andre leveransene i flyten: `automatisk-import-og-start`, `automatisk-gsk-konklusjon`, `automatisk-grunnlag-og-poeng`, `automatisk-kvalifisering-og-poengsum` og `beregne-automatisk-pa-nytt`.
 - De to `@wont`-fasene i flyten: to identiske vitnemål som regnes som ett, og automatisk dobbeltrangering.
 - Plasstildelingen (`@OPT-PLA-TIL-001`, scopet `plasstildeling-2027`).
-- Søkere med flere vitnemål behandles manuelt, og tas ut av scopet (statusmøtet 2026-11-04). Det gjelder regelen «Har søkeren flere vitnemål, behandles saken automatisk på vitnemålet saksbehandleren velger» i `@OPT-BEH-BEH-025`. Valget av vitnemål hører til `vitnemalsbehandling` (`@OPT-BEH-BEH-004`).
+- Søkere med flere vitnemål behandles manuelt, og tas ut av scopet (statusmøtet 2026-11-04). Regelen «Har søkeren flere vitnemål, behandles saken automatisk på vitnemålet saksbehandleren velger» er flyttet fra `@OPT-BEH-BEH-025`. Saken behandles automatisk på vitnemålet saksbehandleren velger. Det er skilt ut i `@OPT-BEH-BEH-039` [behandle_automatisk_på_valgt_vitnemål.feature](../../../krav/02%20Opptak/13%20S%C3%B8knad%20og%20saksbehandling/02%20Behandling/behandle_automatisk_p%C3%A5_valgt_vitnem%C3%A5l.feature), som er `@must` og ikke har scope ennå. Valget av vitnemål som grunnlag for poengberegningen i vitnemålsbehandleren (`@OPT-BEH-BEH-004`) er et annet valg.
 
 ## Kilder
 
@@ -49,6 +49,7 @@ Append-only. Ny linje på toppen ved hver hendelse.
 
 | Dato       | Hendelse | Av | Lenke til review |
 |------------|----------|----|------------------|
+| 2026-11-04 | Regelen om flere vitnemål i `@OPT-BEH-BEH-025` er skilt ut i `@OPT-BEH-BEH-039` (Behandle automatisk på vitnemålet saksbehandleren velger), `@must` uten scope. Fra reviewen av PR #931 | @JøranIndseth | [#931](https://github.com/sikt-no/fs/pull/931) |
 | 2026-11-04 | Søkere med flere vitnemål tatt ut av scopet (statusmøtet, se Kilder) | @JøranIndseth | – |
 | 2026-11-03 | Scenarioene om endringsloggen og saksloggen i `@OPT-BEH-BEH-029` og `@OPT-BEH-BEH-036` er blokkert til den nye sporingsloggen finnes. Endringsloggen i opptak er stoppet (BAT-324, V480 i fs-plattform), så kravene blir ikke `@implemented` før da | @JøranIndseth | – |
 | 2026-11-02 | `@OPT-BEH-BEH-036` fylt ut med fs-krav: tre regler skilt ut fra `@OPT-BEH-BEH-008`, og flyten bygger på 036 | @JøranIndseth | – |
