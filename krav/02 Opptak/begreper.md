@@ -1,6 +1,6 @@
 # Begrepsliste — Opptak
 
-Siste oppdatering: 2026-10-24
+Siste oppdatering: 2026-11-03
 
 Denne listen sammenstiller begreper brukt i kravene (`krav/02 Opptak/`), design-filene og begrepskatalogen på [fs.sikt.no](https://fs.sikt.no/domenekunnskap/begreper/). Målet er konsistent begrepsbruk på tvers av krav, kode, API og brukergrensesnitt.
 
@@ -40,8 +40,12 @@ Denne listen sammenstiller begreper brukt i kravene (`krav/02 Opptak/`), design-
 | deltakende organisasjon | Organisasjon som deltar i et opptak som en annen organisasjon forvalter, med egne utdanningstilbud | – | – | ✅ Avklart: «deltakende» er riktig. Krav som bruker «deltagende» bør rettes |
 | lærested | «Organisasjon som tilbyr utdanning» | [lærested](https://fs.sikt.no/domenekunnskap/begreper/larested/) (aktiv) | Institusjon / Lærested | OK |
 | organisasjon | Generelt begrep for alle typer registrerte enheter | – | Institusjon | Nytt generelt begrep som erstatter «institusjon» (se `krav/README.md` terminologi) |
-| hendelseslogg | Logg over endringer på opptaket og det som hører til det, med hvem (rolle og organisasjon), hva, når, og verdien før og etter | – | – | Ny term (`hendelseslogg.feature`) |
-| hendelse | Én loggført endring i hendelsesloggen, med fast minimumsinnhold | – | – | Ny term (`hendelseslogg.feature`) |
+| sporingslogg | Fellesbegrep for hendelsesloggen og innsynsloggen: det som logges om hva som er gjort, og hvem som har sett hva | – | – | ✅ Avklart 2026-11-03. Ny term fra innsiktsarbeidet for sporingslogg (PFS i Confluence) |
+| hendelseslogg | Den delen av sporingsloggen som gjelder hva som er gjort: endringer og andre handlinger på opptaket, søknaden eller annet, med hvem (rolle og organisasjon), hva, når, og verdien før og etter | – | – | ✅ Avklart 2026-11-03: gjelder alle objekter, ikke bare opptaket (`hendelseslogg.feature`). Erstatter «endringslogg» og «sakslogg» |
+| hendelse | Én loggført handling i hendelsesloggen, med fast minimumsinnhold. Kan være en endring, eller en handling som ikke endrer noe, som innlogging eller å åpne en melding | – | – | Ny term (`hendelseslogg.feature`). Utvidet 2026-11-03 |
+| innsynslogg | Den delen av sporingsloggen som gjelder hvem som har sett personopplysninger | – | – | ✅ Avklart 2026-11-03. Får ikke skjermbilde i første versjon (innsiktsarbeidet for sporingslogg) |
+| endringslogg | Se hendelseslogg | – | – | ⚠️ Utgår 2026-11-03: bruk «hendelseslogg». Brukes i `vise_endringslogg.feature` og i flere krav i `13 Søknad og saksbehandling/02 Behandling` (bl.a. `automatisk_kvoteplassering`, `automatisk_grunnlag`, `automatisk_kvalifisering`, `beregne_poengsum_per_kvote`) |
+| sakslogg | Se hendelseslogg | – | – | ⚠️ Utgår 2026-11-03: bruk «hendelseslogg». Brukes i `søknadsmangler`, `automatiske_mangler` og `behandlingsstatus` |
 | standardinnstilling | Innstilling som settes for flere utdanningstilbud av gangen | – | – | Brukes ikke (2026-10-12). Kravet heter «Sette innstillinger for flere utdanningstilbud» (`sette_innstillinger_for_flere_utdanningstilbud.feature`). Om innstillingene er en mal som arves, er uavklart |
 
 ## Utdanningstilbud og søknad
@@ -240,7 +244,7 @@ Følgende begreper brukes i kravene, men finnes ikke (enda) i begrepskatalogen p
 - saksbehandlertildelingsregel
 - antall studieplasser
 - prøvetildeling
-- hendelseslogg
+- sporingslogg, hendelseslogg, innsynslogg
 - opptaksprøver
 - utdanningsbakgrunn (i kontekst av frister)
 
