@@ -15,9 +15,12 @@
 # SØKERNE. Høyst fem søkere i hele kjøringen: «soker-1» (norsk utdanningsbakgrunn), «soker-2» (utenlandsk), «soker-3» (steinerskole),
 # «soker-4» (realkompetanse) og «soker-5» (endring og flytting). En søker har høyst én søknad i opptaket.
 #   Søknadene opprettes i FS Admin på vegne av søkeren (Utfylling S), som «opptak-forvalter-forvaltende». Søkeren er en ny person med
-#   fornavn «Test{KJØRING}» og etternavn etter nøkkelen (for eksempel «Soker1»), ID-type «Passnummer» og et passnummer som begynner med
-#   «TST» og har {KJØRING} uten tegn. Aldri fødselsnummer. Agenten noterer navnet og søknadsnummeret i «Kjøringens testdata».
-#   Bare «soker-1» logger inn selv og sender søknaden i Min kompetanse, fordi søkerens visning må ses der:
+#   fornavn «Testsøker» og etternavn med bare bokstaver: utdanningsbakgrunnen og et kjøringsord (for eksempel «Utenlandsk Kveld»), ID-type
+#   «Passnummer» og et passnummer som begynner med «TST» og har {KJØRING} uten tegn. Navnefeltene godtar ikke tall eller bindestrek. Aldri
+#   fødselsnummer. Agenten noterer navnet og søknadsnummeret i «Kjøringens testdata».
+#   Bare søkeren til «soknad-visning» logger inn selv og sender søknaden i Min kompetanse, fordi søkerens visning må ses der (Mine søknader →
+#   Ny søknad → Finn studier → «Legg til» → «Til studiekurv» → send inn). Bruk utdanningstilbud som har vært i opptaket en stund; et tilbud som
+#   nettopp er lagt til, kan mangle i Min kompetanse. Innloggingen:
 #   «Logg inn med ID-porten» → «TestID» → «Hent tilfeldig person» → «Autentiser» på https://test.minkompetanse.no, og søknaden sendes der.
 # Søknadene til «soker-1» til «soker-4» opprettes bare her, og er bare lest av testene (noen scenarioer endrer og setter tilbake). «soker-5»
 # endres i hvert scenario som trenger en annen fordeling («Endre søknad» på saken), og er derfor den eneste søkeren som endrer og flytter.
@@ -25,8 +28,8 @@
 # Utfylling S: søknad på vegne av søkeren i FS Admin (som «opptak-forvalter-forvaltende»)
 #   1. Fra opptaket: «Gå til søknader» → «Opprett søknad».
 #   2. Under «Søker»: fyll inn fornavn, etternavn, fødselsdato (01.01.2000), kjønn, nasjonalitet «Norge», «ID-type» «Passnummer», «ID-nummer»,
-#      adresse, postnummer «0001», poststed «Oslo», land «Norge», e-post «test{KJØRING}@example.invalid» og telefonnummer «99999999».
-#   3. «Utdanningsbakgrunn»: utdanningsbakgrunnen oppsettet sier.
+#      adresse, postnummer «0001», poststed «Oslo», land «Norge», e-post «test{KJØRING}@example.invalid» og telefonnummer «+4799999999».
+#   3. «Utdanningsbakgrunn»: utdanningsbakgrunnen oppsettet sier, og «Land for utdanningen» («Norge», eller «Sverige» for utenlandsk).
 #   4. «Nytt søknadsalternativ»: legg til utdanningstilbudene i rekkefølgen oppsettet sier (første er prioritet 1).
 #   5. Velg «Opprett søknad».
 #   En søknad som skal endres, endres med «Endre søknad» på saken («Nytt søknadsalternativ», slett, «Lagre endringer»).
@@ -36,7 +39,8 @@
 # til hvert studieønske i søknaden har en «B-rolle» i saken, og ellers gir opp etter 2 minutter.
 #
 # Utfylling R: behandlertildelingsregel i FS Admin (som «opptak-forvalter-forvaltende»)
-#   Fra opptaket: «Samordning» → «Saksbehandlertildelingsregler» → «Opprett».
+#   Fra opptaket: «Handlinger» → «Endre innstillinger» → «Samordning» → «Saksbehandlertildelingsregler» (siden «Behandlertildelingsregler») →
+#   «Opprett behandlertildelingsregel».
 #   «Kode», «Navn», «Status» («Aktiv» eller «Inaktiv»), «Hvem skal saksbehandle?» («Alle som deltar i opptaket», «Bare tilbyderen – også for
 #   studieønsker uten egen regel», «Bare tilbyderen – bare dette studieønsket» eller «Tilbydere i samme sektor», og «Velg organisasjon» for sektor),
 #   «Legg til unntak» under «Unntak for utdanningsbakgrunn» («Utdanningsbakgrunn», «Fordeles til») og under «Unntak for lærested» («Saksbehandles av»,
@@ -75,7 +79,7 @@ Egenskap: Oppsett for tildele saksbehandlende organisasjon
       | tilbud-deltakende-tilbyder                             | TIL             |
       | tilbud-deltakende-sektor                               | SEK             |
       | tilbud-deltakende-laerested                            | LAE             |
-    Og jeg setter «Endre utdanningsbakgrunn» til {DATO:+30} 23:59 under «Rediger opptak» → «Saksbehandling», og velger «Lagre»
+    Og jeg setter «Endre utdanningsbakgrunn» til {DATO:+30} 23:59 under «Rediger opptak» → «Saksbehandling», fyller ut «Automatisk saksbehandling starter» med 20.12.2026 00:00 og «Automatisk saksbehandling avsluttes» med 21.12.2026 00:00 hvis de er tomme (de er påkrevd for å lagre), og velger «Lagre»
     Så står reglene i tabellen i lista over regler, med «Antall studier» 1 for «ISO», «SEO», «LAE» og «LAF», 2 for «TIL» og «SEK», og 0 for de andre
     Og standardregelen har «Alle i opptaket» i «Behandles av»
     Og jeg skriver koden til hver regel og navnet på standardregelen i «Kjøringens testdata» for «behandlertildelingsregler-i-opptaket»
@@ -85,8 +89,8 @@ Egenskap: Oppsett for tildele saksbehandlende organisasjon
   # {ORG:opptak-forvalter-forvaltende} (unntak for lærested).
   Scenario: soknad-norsk
     Gitt «behandlertildelingsregler-i-opptaket» har verdi i «Kjøringens testdata»
-    Og jeg er innlogget i Min kompetanse (test) som søkeren «soker-1» med TestID («Hent tilfeldig person»), og har skrevet navnet på testpersonen i «Kjøringens testdata»
-    Når jeg sender søknaden i Min kompetanse: velg opptaket, «Velg utdanningsbakgrunn», «Legg til studieønsker» og send inn [Sjekk begrep: knappene i Min kompetanse], med utdanningsbakgrunnen «Norsk videregående skole» [Sjekk begrep], og studieønskene «tilbud-deltakende-isolert», «tilbud-saksbehandlende-uten-regel», «tilbud-tilbyder-uten-regel», «tilbud-deltakende-laerested» og «tilbud-saksbehandlende-laerested» i den rekkefølgen
+    Og jeg er logget inn som «opptak-forvalter-forvaltende», og har skrevet navnet på søkeren «soker-1» i «Kjøringens testdata»
+    Når jeg sender søknaden etter Utfylling S, med utdanningsbakgrunnen «Norsk videregående skole» [Sjekk begrep], og studieønskene «tilbud-deltakende-isolert», «tilbud-saksbehandlende-uten-regel», «tilbud-tilbyder-uten-regel», «tilbud-deltakende-laerested» og «tilbud-saksbehandlende-laerested» i den rekkefølgen
     Og fordelingen har kjørt (opptil 2 minutter)
     Og jeg bytter testbruker til «opptak-forvalter-forvaltende», og åpner sakene til søknaden i «Saker i opptak»
     Så står {ORG:opptak-forvalter-deltakende} som «B-rolle» på «tilbud-deltakende-isolert»
@@ -134,3 +138,13 @@ Egenskap: Oppsett for tildele saksbehandlende organisasjon
     Og jeg bytter testbruker til «opptak-forvalter-forvaltende», og åpner sakene til søknaden i «Saker i opptak»
     Så står {ORG:opptak-saksbehandler-saksbehandlende} som «B-rolle» på «tilbud-saksbehandlende-uten-regel» og «tilbud-tilbyder-uten-regel»
     Og jeg skriver søknadsnummeret i «Kjøringens testdata» for «soknad-endring-og-flytting»
+
+  # Søknaden søkeren selv ser i Min kompetanse. Bruker bare utdanningstilbud som fantes i opptaket før kjøringen.
+  Scenario: soknad-visning
+    Gitt «behandlertildelingsregler-i-opptaket» har verdi i «Kjøringens testdata»
+    Og jeg er innlogget i Min kompetanse (test) som søkeren «soker-visning» med TestID («Hent tilfeldig person»), og har skrevet navnet på testpersonen i «Kjøringens testdata»
+    Når jeg sender søknaden i Min kompetanse med studieønskene «tilbud-tilbyder-uten-regel», «tilbud-deltakende-laerested» og «tilbud-saksbehandlende-laerested» i den rekkefølgen, og norsk utdanningsbakgrunn
+    Og fordelingen har kjørt (opptil 2 minutter)
+    Og jeg bytter testbruker til «opptak-forvalter-forvaltende», og åpner sakene til søknaden i «Saker i opptak»
+    Så har søknaden saker hos minst to organisasjoner
+    Og jeg skriver søknadsnummeret og hvilken organisasjon som er «B-rolle» på hvert studieønske i «Kjøringens testdata» for «soknad-visning»

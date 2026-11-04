@@ -10,7 +10,7 @@
 # Slik leses stegene:
 #   «Søknaden «<nøkkel>» er sendt inn og fordelt» er søknaden oppsettet har sendt (nøkkelen er i «Kjøringens testdata»).
 #   «Søkeren «soker-N» har sendt inn søknad med studieønskene … og utdanningsbakgrunnen …» betyr: søknaden er opprettet eller endret på vegne av
-#     søkeren i FS Admin (Utfylling S i oppsettet). Bare «soker-1» logger inn selv i Min kompetanse (TestID), fordi søkerens visning må ses der.
+#     søkeren i FS Admin (Utfylling S i oppsettet). Bare «soker-visning» logger inn selv i Min kompetanse (TestID), fordi søkerens visning må ses der.
 #     Søkeren «soker-5» er arbeidssøknaden: hvert scenario endrer den først med «Endre søknad», så den trenger ingen opprydding. Utdanningsbakgrunnene heter «Norsk videregående skole» [Sjekk begrep], «Utenlandsk videregående skole», «Videregående steinerskole», «Realkompetanse» og «Dispensasjon» [Sjekk begrep].
 #   «Og fordelingen har kjørt (opptil 2 minutter)»: fordelingen skjer i tildelingsjobben. Agenten åpner siden på nytt omtrent hvert 30. sekund til
 #     hvert studieønske i søknaden har en «B-rolle», og ellers i inntil 2 minutter. Er den ikke satt da, er testcasen «Ikke testet».
@@ -986,11 +986,11 @@ Egenskap: Tildele saksbehandlende organisasjon
       Og jeg ser ikke «tilbud-deltakende-isolert», «tilbud-deltakende-laerested» eller «tilbud-saksbehandlende-laerested» i saken
 
     Scenario: Søkeren ser saksbehandlende organisasjon, men ikke sakene
-      Gitt jeg er logget inn i Min kompetanse (test) som søkeren «soker-1»
-      Og søknaden «soknad-norsk» er sendt inn og fordelt
+      Gitt jeg er logget inn i Min kompetanse (test) som søkeren «soker-visning»
+      Og søknaden «soknad-visning» er sendt inn og fordelt
       Når jeg åpner søknaden min, og ser «Kontakt saksbehandler»
       Så ser jeg «Har du spørsmål angående søknaden, må det rettes til lærestedet det gjelder.»
-      Og jeg ser fire bokser, én per saksbehandlende organisasjon ({ORG:opptak-forvalter-deltakende}, {ORG:opptak-saksbehandler-saksbehandlende}, {ORG:opptak-saksbehandler-tilbyder} og {ORG:opptak-forvalter-forvaltende}), med studiene hver organisasjon saksbehandler
+      Og jeg ser én boks per saksbehandlende organisasjon i «Kjøringens testdata» for «soknad-visning», med studiene hver organisasjon saksbehandler
       Men jeg ser ingen saker, saksnummer eller saksbehandlere
 
     Scenario: Saksbehandleren ved forvaltende organisasjon ser bare saken hos forvaltende organisasjon
@@ -1003,8 +1003,8 @@ Egenskap: Tildele saksbehandlende organisasjon
     # Teknikk: tilstandsoverganger (sendt, fordelt)
     @utledet @endrer-data
     Scenario: Saksbehandlende organisasjon ser bare saker hos organisasjonen: søkeren ser opptakets organisasjon som kontakt før søknadsalternativet er fordelt
-      Gitt jeg er logget inn i Min kompetanse (test) som søkeren «soker-1»
-      Og søknaden «soknad-norsk» er sendt inn og fordelt
+      Gitt jeg er logget inn i Min kompetanse (test) som søkeren «soker-visning»
+      Og søknaden «soknad-visning» er sendt inn og fordelt
       Når jeg velger «Endre søknad» og «Legg til studieønsker», legger til «tilbud-tilbyder-sektor», og sender inn søknaden
       Og jeg åpner «Kontakt saksbehandler» med en gang, før fordelingen har kjørt [Sjekk begrep: tildelingsjobben tar ca. 30 sekunder, så vinduet er kort]
       Så står {ORG:opptak-forvalter-forvaltende} i boksen for studieønsket «tilbud-tilbyder-sektor»

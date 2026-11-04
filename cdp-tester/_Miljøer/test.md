@@ -4,7 +4,7 @@ Nøklene i testene i `cdp-tester/`, slått opp for TEST. Fila er det eneste sted
 
 - **FS Admin**: https://test-fsadmin.sikt.no
 - **Innlogging**: testansvarlig logger inn selv, i en egen Chrome-profil til testingen. Testbrukeren byttes i «Overstyrt bruker» øverst til høyre i FS Admin
-- **Min kompetanse (test)**: https://test.minkompetanse.no. Søkeren `soker-1` logger agenten inn slik: «Logg inn med ID-porten» → «TestID» → «Hent tilfeldig person» → «Autentiser». Det gir en ny syntetisk testperson, uten passord, hver gang. Fødselsnummeret skrives aldri ned
+- **Min kompetanse (test)**: https://test.minkompetanse.no. Søkeren `soker-visning` logger agenten inn slik: «Logg inn med ID-porten» → «TestID» → «Hent tilfeldig person» → «Autentiser». Det gir en ny syntetisk testperson, uten passord, hver gang. Fødselsnummeret skrives aldri ned
 - **Kan settes tilbake**: nei, og data i TEST kan slettes eller nullstilles når som helst. Testene lager dataene sine selv, i oppsettet i [`../_Oppsett/`](../_Oppsett/), i hver kjøring. Opptak kan ikke slettes: opptakene testene og oppsettet oppretter, blir liggende, og har kjøringen i navnet (`{KJØRING}`)
 - **Personaer sist sjekket**: 2026-10-28, mot `TEST_PERSONAS` i fs-admin (`origin/main` `cc62931b7`). Tildelingene er bekreftet med `testpersoner` for personaene som har dato i «Bekreftet»
 
@@ -83,11 +83,12 @@ Nøkkelen i testene, hva testen krever av testbrukeren (uavhengig av miljøet), 
 | `opptak-saksbehandler-forvaltende` | `OPPTAK_SAKSBEHANDLER`, uten `OPPTAK_FORVALTER`, ved organisasjonen som forvalter `opptak-samordna-saksbehandlertildeling` | GRUNDIG PROTOKOLL • OPPTAK_SAKSBEHANDLER (HK-DIR) |
 | `opptak-saksbehandler-tilbyder` | `OPPTAK_SAKSBEHANDLER` ved et annet lærested som er deltaker i `opptak-samordna-saksbehandlertildeling`, og som tilbyr et utdanningstilbud en annen organisasjon saksbehandler | KORT DOMPAP • OPPTAK_SAKSBEHANDLER (UiT) |
 | `opptak-forvalter-deltakende-annen` | `OPPTAK_FORVALTER` ved en annen deltaker i `opptak-samordna-saksbehandlertildeling` enn `opptak-forvalter-deltakende`. Brukes bare som organisasjon (`{ORG:…}`) | RU BRØDSKIVE • OPPTAK_FORVALTER (HVL) |
-| `soker-1` | En syntetisk testperson i Min kompetanse (test), logget inn med ID-porten. Brukes til søknaden med norsk utdanningsbakgrunn. Høyst fem søkere i hele kjøringen | Ny tilfeldig person i TestID (ID-porten test), hentet i kjøringen |
+| `soker-1` | En ny person, opprettet med søknaden på vegne av søkeren i FS Admin («Opprett søknad»), med ID-type «Passnummer». Aldri fødselsnummer. Brukes til søknaden med norsk utdanningsbakgrunn. Høyst fem søkere i hele kjøringen | Ny person «Testsøker Norsk …», opprettet i kjøringen |
 | `soker-2` | En ny person, opprettet med søknaden på vegne av søkeren i FS Admin («Opprett søknad»), med ID-type «Passnummer». Aldri fødselsnummer. Brukes til søknaden med utenlandsk utdanningsbakgrunn. Høyst fem søkere i hele kjøringen | Ny person «Test{KJØRING} Soker2», opprettet i kjøringen |
 | `soker-3` | En ny person, opprettet med søknaden på vegne av søkeren i FS Admin («Opprett søknad»), med ID-type «Passnummer». Aldri fødselsnummer. Brukes til søknaden med steinerskole. Høyst fem søkere i hele kjøringen | Ny person «Test{KJØRING} Soker3», opprettet i kjøringen |
 | `soker-4` | En ny person, opprettet med søknaden på vegne av søkeren i FS Admin («Opprett søknad»), med ID-type «Passnummer». Aldri fødselsnummer. Brukes til søknaden med realkompetanse. Høyst fem søkere i hele kjøringen | Ny person «Test{KJØRING} Soker4», opprettet i kjøringen |
 | `soker-5` | En ny person, opprettet med søknaden på vegne av søkeren i FS Admin («Opprett søknad»), med ID-type «Passnummer». Aldri fødselsnummer. Brukes til endring og flytting, og sender søknaden på nytt i scenarioene. Høyst fem søkere i hele kjøringen | Ny person «Test{KJØRING} Soker5», opprettet i kjøringen |
+| `soker-visning` | En syntetisk testperson som logger inn selv i Min kompetanse (test) med ID-porten, og sender søknaden der. Brukes bare til søkerens visning av saksbehandlende organisasjon | Ny tilfeldig person i TestID (ID-porten test), hentet i kjøringen |
 
 ## Testdata
 
