@@ -68,19 +68,20 @@ SELECT 'Opptak 34: søknadsfristen for tidlig opptak og den ordinære fristen er
        (SELECT count(*) = 2 AND bool_and(hendelse_tidspunkt > now()) FROM frist
          WHERE opptakshendelsestype_kode IN ('SØKNADSFRIST_TIDLIG_OPPTAK', 'SØKNADSFRIST_ORDINÆR'))
 UNION ALL
-SELECT 'Opptak 34: grunnlaget «Jeg er i jobb og har oppsigelsestid …» er aktivt (1b)',
-       (SELECT string_agg(b.tidligopptak_begrunnelsetype_kode || ' aktiv=' || b.er_aktiv, ', ')
+-- Grunnlaget søkeren velger i 1b («Jeg er i jobb og har oppsigelsestid, eller må søke permisjon»).
+-- Den teksten er det søkeren ser, ikke navnet på grunnlaget, så sjekken bruker koden.
+SELECT 'Opptak 34: grunnlaget søkeren velger i 1b (I_JOBB) er aktivt',
+       coalesce((SELECT string_agg(b.tidligopptak_begrunnelsetype_kode || ' aktiv=' || b.er_aktiv
+                                   || coalesce(' «' || s.navn || '»', ''), ', ')
           FROM opptak_v2.tidligopptak_begrunnelsetype b
-          JOIN opptak_v2.tidligopptak_begrunnelsetype_sprak s
+          LEFT JOIN opptak_v2.tidligopptak_begrunnelsetype_sprak s
             ON s.opptak_kode = b.opptak_kode
            AND s.tidligopptak_begrunnelsetype_kode = b.tidligopptak_begrunnelsetype_kode
-         WHERE b.opptak_kode = 34 AND s.navn ILIKE 'Jeg er i jobb%'),
+           AND s.sprakkode IN ('nb', 'nob')
+         WHERE b.opptak_kode = 34 AND b.tidligopptak_begrunnelsetype_kode = 'I_JOBB'), 'finnes ikke'),
        coalesce((SELECT bool_or(b.er_aktiv)
           FROM opptak_v2.tidligopptak_begrunnelsetype b
-          JOIN opptak_v2.tidligopptak_begrunnelsetype_sprak s
-            ON s.opptak_kode = b.opptak_kode
-           AND s.tidligopptak_begrunnelsetype_kode = b.tidligopptak_begrunnelsetype_kode
-         WHERE b.opptak_kode = 34 AND s.navn ILIKE 'Jeg er i jobb%'), false)
+         WHERE b.opptak_kode = 34 AND b.tidligopptak_begrunnelsetype_kode = 'I_JOBB'), false)
 UNION ALL
 SELECT 'Opptak 34: konklusjonen «Kan få tidligopptak, har godkjent grunn.» er aktiv (2c)',
        (SELECT string_agg(k.tidligopptak_konklusjon_kode || ' aktiv=' || k.er_aktiv, ', ')
