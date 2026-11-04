@@ -1,6 +1,6 @@
 # language: no
 # GitHub: #216
-@OPT-PLA-RUN-002 @must @draft @scope-plasstildeling-2027 @depends-on-OPT-PLA-RUN-001
+@OPT-PLA-RUN-002 @must @in-progress @scope-plasstildeling-2027 @depends-on-OPT-PLA-RUN-001
 Egenskap: Listevisning og søk i plasstildelingsrunder
   Som opptaksforvalter
   ønsker jeg en oversikt over plasstildelingsrundene i opptaket, med mulighet for søk og filtrering
@@ -131,3 +131,24 @@ Egenskap: Listevisning og søk i plasstildelingsrunder
     Scenario: Kombinere filtre
       Når opptaksforvalter kombinerer fritekst-søk med ett eller flere filter
       Så vises bare plasstildelingsrundene som matcher alle kriteriene
+
+  Regel: Opptakets forvalter kan slette flere plasstildelingsrunder samtidig
+
+    # AVKLART 2026-11-04 (produkteier, prototypen v88 i fs-specify): Opptaksforvalter ved organisasjonen som
+    # forvalter opptaket, kan velge flere plasstildelingsrunder i oversikten og slette dem samtidig. En
+    # plasstildelingsrunde som er publisert til søker, kan ikke slettes (forvalte_runder.feature).
+    Scenario: Slette flere plasstildelingsrunder
+      Gitt at plasstildelingsrundene "Supplering 1" og "Etterfylling 1" ikke er publisert til søker
+      Når opptaksforvalter ved organisasjonen som forvalter opptaket, velger "Supplering 1" og "Etterfylling 1" og sletter dem i én operasjon
+      Så har opptaket ikke lenger plasstildelingsrundene "Supplering 1" og "Etterfylling 1"
+
+    Scenario: Publiserte plasstildelingsrunder slettes ikke
+      Gitt at plasstildelingsrunden "Hovedrunde" er publisert til søker
+      Og at plasstildelingsrunden "Supplering 1" ikke er publisert til søker
+      Når opptaksforvalter ved organisasjonen som forvalter opptaket, velger "Hovedrunde" og "Supplering 1" og sletter dem i én operasjon
+      Så har opptaket ikke lenger plasstildelingsrunden "Supplering 1"
+      Men opptaket har fortsatt plasstildelingsrunden "Hovedrunde"
+
+    Scenario: Lærestedet kan ikke slette plasstildelingsrunder
+      Når opptaksforvalter ved et lærested som deltar i opptaket, åpner oversikten over plasstildelingsrunder
+      Så ser opptaksforvalter ved lærestedet ikke muligheten til å slette plasstildelingsrunder

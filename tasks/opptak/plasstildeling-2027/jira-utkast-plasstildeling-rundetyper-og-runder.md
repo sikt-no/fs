@@ -28,8 +28,9 @@ Ikke med: å legge til, endre eller slette rundetyper (`@OPT-REG-RUN-002`, Could
 
 Akseptansekriterier:
 
-- Rundetypene hovedtildeling, supplering og etterfylling finnes for samordna opptak (UHG og HYU), hver med faste innstillinger plasstildelingen leser: bortfall på lavere prioriteter, kompensasjonstilbud ved opprykk, bygger på forrige publiserte runde, bare én i opptaket og kan åpnes for ledige studieplasser (`@OPT-REG-RUN-001`)
+- Rundetypene hovedtildeling, supplering og etterfylling er felles for alle opptak, ikke en del av regelverkssamlingen, hver med faste innstillinger plasstildelingen leser: bortfall på lavere prioriteter, kompensasjonstilbud ved opprykk, bygger på forrige publiserte runde, bare én i opptaket og kan åpnes for ledige studieplasser (`@OPT-REG-RUN-001`)
 - Opptaksforvalter legger til en runde med navn, rundetype og svarfrist (`@OPT-PLA-RUN-001`). Opptaket kan bare ha én hovedtildeling, og supplering og etterfylling kan ikke være den første runden
+- Navnet på runden er unikt i opptaket, uten hensyn til store og små bokstaver, og er høyst 100 tegn
 - Runden har innstillingene fra rundetypen, og opptaksforvalter ser dem, men kan ikke endre dem på runden. Rundetypen kan ikke endres etter at runden er lagt til
 - Navn og svarfrist kan alltid endres, og en runde kan slettes så lenge den ikke er publisert til søker
 - Taket for antall tilbud per søker har en standardverdi per rundetype når runden legges til, og opptaksforvalter kan endre det. I samordna opptak: 1 i hovedtildeling og supplering, 10 i etterfylling
@@ -37,8 +38,11 @@ Akseptansekriterier:
 - Opptaksforvalter setter periode for når lærestedene kan endre antall tilbud (dato og klokkeslett, kan alltid endres). Svarfristen må komme etter at perioden er slutt
 - Lærestedet ser alle rundene og hva det skal gjøre i hver, men kan bare åpne runden der perioden er åpen
 - Oversikten over rundene viser navn, rundetype, perioden for lærestedene, svarfristen for søkerne, om runden er publisert og om lærestedet har en oppgave. Rundene kan søkes etter på navn, filtreres på rundetype, status og periode, og sorteres på svarfrist (tidligste først som standard), status og periode, 50 om gangen (`@OPT-PLA-RUN-002`)
+- Opptakets forvalter kan velge flere runder i oversikten og slette dem samtidig. Publiserte runder slettes ikke, og lærestedet kan ikke slette runder
 
 Krav: [forvalte_runder.feature](https://github.com/sikt-no/fs/blob/main/krav/02%20Opptak/14%20Plasstildeling/01%20Runder/forvalte_runder.feature) · [listevisning_og_søk_i_plasstildelingsrunder.feature](https://github.com/sikt-no/fs/blob/main/krav/02%20Opptak/14%20Plasstildeling/01%20Runder/listevisning_og_s%C3%B8k_i_plasstildelingsrunder.feature) · [bruke_rundetyper.feature](https://github.com/sikt-no/fs/blob/main/krav/02%20Opptak/10%20Regelverk/06%20Rundetyper/bruke_rundetyper.feature)
+
+Spesifikasjon: [spec-rundetyper-og-plasstildelingsrunder.md](https://github.com/sikt-no/fs/blob/main/tasks/opptak/plasstildeling-2027/spec/spec-rundetyper-og-plasstildelingsrunder.md), med implementasjonsdetaljene og tekstene i `forvalte_runder.design.md` og `listevisning_og_søk_i_plasstildelingsrunder.design.md`.
 
 ## Story (TAKE-327, skrives om): Lærestedet setter antall tilbud som skal gis per utdanningskvote
 

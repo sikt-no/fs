@@ -1,6 +1,6 @@
 # language: no
 # GitHub: #216
-@OPT-PLA-RUN-001 @must@draft @scope-plasstildeling-2027
+@OPT-PLA-RUN-001 @must @in-progress @scope-plasstildeling-2027
 Egenskap: Plasstildelingsrunder i et opptak
   Som opptaksforvalter
   ønsker jeg å legge til og forvalte plasstildelingsrunder i et opptak
@@ -45,18 +45,37 @@ Egenskap: Plasstildelingsrunder i et opptak
         | rundetype  |
         | svarfrist  |
 
-  @depends-on-OPT-REG-RUN-001
-  Regel: Rundetypene i regelverkssamlingen avgjør hvilke plasstildelingsrunder opptaket kan ha
+  Regel: Navnet på plasstildelingsrunden er unikt i opptaket
 
-    # Endret 2026-10-24: Rundetypene og innstillingene defineres i regelverkssamlingen for opptaket
-    # (10 Regelverk/06 Rundetyper/bruke_rundetyper.feature).
+    # AVKLART 2026-11-04 (produkteier, kodesjekken i fs-specify): Navnet er unikt i opptaket uten hensyn til
+    # store og små bokstaver, og er høyst 100 tegn. Gjelder også når navnet endres.
+    Scenario: Navnet er brukt i opptaket fra før
+      Gitt at opptaket har plasstildelingsrunden "Hovedrunde" med rundetype "Hovedtildeling"
+      Når opptaksforvalter legger til plasstildelingsrunden "hovedrunde" med rundetype "Supplering" og svarfrist "2027-08-10 23:59"
+      Så blir plasstildelingsrunden ikke lagt til
+      Og opptaksforvalter får beskjed om at opptaket allerede har en plasstildelingsrunde med navnet "hovedrunde"
+
+    Scenario: Samme navn i et annet opptak
+      Gitt at opptaket "Samordna opptak 2026" har plasstildelingsrunden "Hovedrunde"
+      Når opptaksforvalter legger til plasstildelingsrunden "Hovedrunde" med rundetype "Hovedtildeling" og svarfrist "2027-07-20 23:59"
+      Så har opptaket "Samordna opptak 2027" plasstildelingsrunden "Hovedrunde"
+
+    Scenario: Navnet er for langt
+      Når opptaksforvalter legger til en plasstildelingsrunde med et navn på 101 tegn
+      Så blir plasstildelingsrunden ikke lagt til
+      Og opptaksforvalter får beskjed om at navnet kan være høyst 100 tegn
+
+  @depends-on-OPT-REG-RUN-001
+  Regel: Rundetypene avgjør hvilke plasstildelingsrunder opptaket kan ha
+
+    # Endret 2026-11-04: Rundetypene og innstillingene er felles for alle opptak, og ikke en del av
+    # regelverkssamlingen (10 Regelverk/06 Rundetyper/bruke_rundetyper.feature).
     # At et samordna opptak har én hovedtildeling, og at den er først, følger av innstillingene.
     # Kodeverket har også TIDLIG, LEDIGE_STUDIEPLASSER og TEST, som ikke er rundetyper i kravet,
     # og fs-admin lar bare opptaksforvalter velge HOVED (verifisert 2026-10-09).
     Scenario: Tilgjengelige rundetyper
-      Gitt at opptaket har regelverkssamlingen "UHG2027"
       Når opptaksforvalter legger til en plasstildelingsrunde
-      Så kan opptaksforvalter velge mellom rundetypene i regelverkssamlingen "UHG2027"
+      Så kan opptaksforvalter velge mellom rundetypene
         | Rundetype      |
         | Hovedtildeling |
         | Supplering     |
