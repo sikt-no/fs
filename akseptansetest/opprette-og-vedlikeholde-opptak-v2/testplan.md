@@ -47,7 +47,7 @@ Testplanen følger den nye teststrategien med fire faser: verifisering, agentisk
 
 | Nr | Nøkkel | Navn | Rolle | Organisasjon | Innlogging | Start-URL | Brukes til |
 |---|---|---|---|---|---|---|---|
-| 1 | `opptak-forvalter-forvaltende` | Ordentlig rundskriv | Opptaksforvalter og saksbehandler ved forvaltende organisasjon | HK-dir | «Overstyrt bruker»: Ordentlig rundskriv | https://test-fsadmin.sikt.no/opptak | Opprette samordna opptak, innstillinger, frister, samordning (forvaltende organisasjon), oversikten over opptak |
+| 1 | `opptak-forvalter-forvaltende` | Ordentlig rundskriv | Opptaksforvalter ved forvaltende organisasjon | HK-dir | «Overstyrt bruker»: ORDENTLIG RUNDSKRIV • OPPTAK_FORVALTER (HK-DIR) | https://test-fsadmin.sikt.no/opptak | Opprette samordna opptak, innstillinger, frister, samordning (forvaltende organisasjon), oversikten over opptak |
 | 2 | `opptak-forvalter-deltakende` | Ansvarsfull Fotkrem | Opptaksforvalter ved deltakende organisasjon | NTNU | «Overstyrt bruker»: Ansvarsfull Fotkrem | https://test-fsadmin.sikt.no/opptak | Samordna opptak: deltaker som legger til utdanningstilbud, og som ser, men ikke endrer, innstillingene. Trenger rollen `MEDLEM_OPPTAK` når TAKE-423 er merget |
 | 3 | `opptak-forvalter-ikke-deltakende` | Talefør Elv | Opptaksforvalter ved organisasjon som ikke deltar | Fagskolen Vestfold og Telemark | «Overstyrt bruker»: Talefør Elv | https://test-fsadmin.sikt.no/opptak | Samordna opptak: organisasjon som ikke deltar |
 | 4 | `opptak-forvalter-lokalt` | Ru Brødskive | Opptaksforvalter ved lærested med lokalt opptak | HVL | «Overstyrt bruker»: Ru Brødskive | https://test-fsadmin.sikt.no/opptak | Opprette lokalt opptak, lokalt opptak i Samordna opptak |
