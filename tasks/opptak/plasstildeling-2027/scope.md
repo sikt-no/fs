@@ -12,7 +12,7 @@
 - Opptaksforvalter kan opprette plasstildelingsrunder, sette antall tilbud, starte og gjennomføre plasstildelinger, kontrollere og publisere resultatet.
 - Plasstildelingen bruker rundetypene hovedtildeling, supplering og etterfylling, som er felles for alle opptak (avklart 2026-11-04, ikke en del av regelverkssamlingen), med innstillingene plasstildelingen leser. Plasstildelingen ser aldri på hvilken rundetype det er (avklart 2026-10-24). Samordna opptak (UHG og HYU) får de tre rundetypene med samme oppførsel som før.
 - Saksbehandler og søker ser det publiserte resultatet, og søkeren kan svare på tilbud og ventelisteplass.
-- Klar for første samordna opptak 2027. Produksjonsfrist 8. desember 2026.
+- Klar for de samordna opptakene 2027. Produksjonsfrist januar 2027 (endret 2026-11-04, var 8. desember 2026).
 - Leveres i tre oppgaver, i denne rekkefølgen (delt 2026-10-28): rundetyper og runder, gjennomføre plasstildelingen, og publisere og svare på tilbud. Kravene med `@should` og `@could` står som «(ikke tildelt)» til de prioriteres.
 
 ## Ikke-mål
@@ -373,6 +373,7 @@ Append-only. Ny linje på toppen ved hver hendelse.
 
 | Dato       | Hendelse | Av | Lenke til review |
 |------------|----------|----|------------------|
+| 2026-11-04 | Produksjonsfristen er flyttet til januar 2027. Beskrivelsen av TAKE-3 er oppdatert i Jira | – | – |
 | 2026-11-04 | Nytt krav `@OPT-PLA-RUN-002` (oversikten over plasstildelingsrunder, søk og filter), Must i første leveranse | – | [PR #907](https://github.com/sikt-no/fs/pull/907) |
 | 2026-11-02 | Kravene gått gjennom mot prototypen v88 ([PR #907](https://github.com/sikt-no/fs/pull/907)): `@OPT-PLA-INN-004` lagt til (Could), varslingen av lærestedene flyttet fra `@OPT-PLA-SVA-002`, skisselenkene byttet til prototypen v88 | @karensikt | – |
 | 2026-11-02 | Oppgave og scope slått sammen til scope.md (fra plasstildeling-rundetyper-og-runder, gjennomfore-plasstildeling, publisere-og-svare-pa-tilbud, plasstildeling) | – | – |
