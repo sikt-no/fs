@@ -25,9 +25,25 @@ Forvaltning av rundetyper (`@OPT-REG-RUN-002`, Could) er ikke med: ingen kan leg
 
 ## Epic (TAKE-3, beholdes): Ferdigstilling av plasstildeling i opptak
 
-Epicen beholdes for hele plasstildelingen, og leveransedelene legges under den som stories. Første leveranse er å forberede plasstildelingen: rundetypene (TAKE-484), plasstildelingsrundene (ny story) og antall tilbud som skal gis (TAKE-327). Sakene for å gjennomføre og publisere plasstildelingen blir under epicen.
+Tittelen beholdes. Beskrivelsen byttes med teksten under. Epicen er den eneste for plasstildelingen, og leveransedelene legges under den som stories (besluttet i teamet 2026-11-04). Utkastene for de to andre leveransedelene står i [jira-utkast-gjennomfore-plasstildeling.md](jira-utkast-gjennomfore-plasstildeling.md) og [jira-utkast-publisere-og-svare-pa-tilbud.md](jira-utkast-publisere-og-svare-pa-tilbud.md).
 
-Krav: [scope-plasstildeling-2027](https://github.com/sikt-no/fs/blob/main/tasks/opptak/plasstildeling-2027/scope.md)
+> **Beskrivelse til TAKE-3:**
+>
+> Plasstildelingen i FS Opptak gjøres ferdig til første samordna opptak 2027 (produksjonsfrist 8. desember 2026). Opptaksforvalter legger til plasstildelingsrundene, lærestedene setter antall tilbud som skal gis, plasstildelingen gjennomføres etter innstillingene i runden, og resultatet publiseres til søkerne, som svarer på tilbud og ventelisteplass.
+>
+> **Hvor kravene bor**
+>
+> - Scopet: [plasstildeling-2027](https://github.com/sikt-no/fs/blob/main/tasks/opptak/plasstildeling-2027/scope.md) — mål, avgrensning og alle kravene, med hvilken sak hvert krav hører til.
+> - Kravene: [krav/02 Opptak/14 Plasstildeling](https://github.com/sikt-no/fs/tree/main/krav/02%20Opptak/14%20Plasstildeling) og rundetypene i [10 Regelverk/06 Rundetyper](https://github.com/sikt-no/fs/tree/main/krav/02%20Opptak/10%20Regelverk/06%20Rundetyper). Lesbare i [FS Kravforvaltning](https://sikt-no.github.io/fs/).
+> - Spesifikasjonene: [tasks/opptak/plasstildeling-2027/spec](https://github.com/sikt-no/fs/tree/main/tasks/opptak/plasstildeling-2027/spec).
+>
+> **Leveransedeler i scopet** (i denne rekkefølgen, som stories under epicen)
+>
+> 1. **Forberede plasstildelingen:** rundetypene med innstillinger (TAKE-484), plasstildelingsrundene med oversikt (ny story), og antall tilbud som skal gis per utdanningskvote (TAKE-327). Spesifisert: [spec-rundetyper-og-plasstildelingsrunder.md](https://github.com/sikt-no/fs/blob/main/tasks/opptak/plasstildeling-2027/spec/spec-rundetyper-og-plasstildelingsrunder.md).
+> 2. **Gjennomføre plasstildelingen:** kjøringen etter innstillingene i runden, plassflyt, kompensasjonstilbud (TAKE-328), tilbudsgaranti og resultatet før publisering, med de tekniske sakene om kjøringen (TAKE-74, TAKE-159, TAKE-165, TAKE-265, TAKE-267, TAKE-278).
+> 3. **Publisere resultatet og svare på tilbud:** publisering (TAKE-330), ventelistenummeret (TAKE-288), det publiserte resultatet (TAKE-329) og svar fra søker (TAKE-331), med TAKE-156 og TAKE-268.
+>
+> **Ikke med:** forvaltning av rundetyper, vedtaksformidling (eget scope senere), og standard plassflyt og kvoteprioritet, som settes i regelverkssamlingen (scope [kvoter-i-opptaket-2027](https://github.com/sikt-no/fs/blob/main/tasks/opptak/kvoter-i-opptaket-2027/scope.md)).
 
 ---
 
