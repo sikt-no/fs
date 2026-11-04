@@ -32,6 +32,11 @@ Egenskap: Håndtere annullert vitnemål
   # endres ikke. Erstatter avklaringen 29.10.2026 om at saker i avsluttede opptak ikke merkes.
   # Avklart 2026-11-02: merknaden kommer senere. I dag kan bare en innlogget person skrive en
   # merknad på saken, ikke systemet. Taggen og statusen bygges først.
+  # Avklart 2026-11-04: poengene og vurderingen av et kravelement hører til én sak. Da får bare
+  # saken hos samme organisasjon taggen. GSK-konklusjonen gjelder hele opptaket. Da får alle
+  # søkerens saker i opptaket taggen.
+  # Avklart 2026-11-04: saker på trukne søknader får også taggen. Da står taggen klar hvis
+  # søknaden blir gjenopprettet.
 
   Bakgrunn:
     Gitt at søkeren har en sak hos "Universitetet i Oslo"
