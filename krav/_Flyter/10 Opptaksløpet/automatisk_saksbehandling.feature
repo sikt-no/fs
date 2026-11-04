@@ -5,14 +5,16 @@ Egenskap: Automatisk saksbehandling
   behandlet og klar til å være med i plasstildelingen, uten at en saksbehandler har gjort noe.
   Plasstildelingen er ikke en del av flyten. Søkerens
   vitnemål importeres fra KREG til opptakssystemet når saken er opprettet (OPT-BEH-BEH-030).
-  Opptakssystemets påstand om GSK beregnes for hvert vitnemål når vitnemålet importeres fra KREG.
+  GSK-vitnemålsberegningen, opptakssystemets påstand om GSK, kjører for hvert vitnemål når
+  vitnemålet importeres fra KREG.
   Vitnemålet gir GSK når det har «GSK OK» fra KREG, og søknaden får GSK-konklusjonen da.
   Opptakssystemets påstand fra fs-opptaks kontrollmotor er en kontroll: er den uenig, får saksbehandleren et varsel, men flyten
   stopper ikke (OPT-BEH-BEH-015). «Importeres» betyr i flyten alltid at
   opptakssystemet henter vitnemålet fra KREG, ikke at vitnemålet kommer inn i KREG.
   Den automatiske behandlingen fortsetter saksbehandlertildelingen: hver ny sak behandles når
   vitnemålet er importert, eller når jobben for nye vitnemål i KREG finner søkerens første
-  vitnemål. Opptaksforvalteren kan skru automatikken av for opptaket (OPT-BEH-BEH-032).
+  vitnemål. Opptaksforvalteren kan sette når den automatiske saksbehandlingen starter og avsluttes
+  i opptaket (OPT-BEH-BEH-032).
   Som første steg setter den GSK-konklusjonen på søknadene som ikke har en.
   Flyten gjelder søkere med ett vitnemål, der vitnemålet gir GSK. Andre søkere
   hoppes over, og behandles ikke helautomatisk
@@ -24,7 +26,7 @@ Egenskap: Automatisk saksbehandling
   feilen gjaldt, på nytt.
 
   # Kjent brudd: den automatiske behandlingen setter ikke saken til ferdig behandlet (se OPT-BEH-BEH-025).
-  # Kjent brudd: koden beregner GSK bare i den automatiske behandlingen, ikke når vitnemålet
+  # Kjent brudd: GSK-vitnemålsberegningen kjører bare i den automatiske behandlingen, ikke når vitnemålet
   # importeres fra KREG, og opptakssystemets påstand lagres ikke på vitnemålet (se OPT-BEH-BEH-015).
   # Kjent brudd: koden stopper automatikken når opptakssystemets beregning er uenig med skolen, og gir ikke varsel (se OPT-BEH-BEH-015).
   # Kjent brudd: ingenting starter den automatiske behandlingen når resultatene er importert.
@@ -61,7 +63,7 @@ Egenskap: Automatisk saksbehandling
 
   @depends-on-OPT-BEH-BEH-015 @depends-on-OPT-BEH-BEH-027
   # OPT-BEH-BEH-015: «Opptakssystemets påstand om GSK på vitnemålet», «Vitnemålet gir GSK når det har GSK OK fra KREG», «Konklusjon på søknaden fra vitnemålet», «Konklusjon fra tidligere opptak», «Automatikken setter bare positive konklusjoner, og bare der ingen finnes»
-  # Opptakssystemets påstand om GSK beregnes med kontrollmotoren, som er beskrevet i hele OPT-BEH-BEH-027.
+  # GSK-vitnemålsberegningen bruker kontrollmotoren, som er beskrevet i hele OPT-BEH-BEH-027.
   Regel: Søknaden får GSK-konklusjonen når vitnemålet importeres fra KREG
 
     Scenario: Søknaden får GSK-konklusjonen fra vitnemålet som er importert fra KREG
@@ -259,7 +261,7 @@ Egenskap: Automatisk saksbehandling
       Så har saken hos "Universitetet i Oslo" behandlingsstatusen "Ikke behandlet"
 
   @depends-on-OPT-BEH-BEH-026 @ref-FLY-OPT-VAL-001 @ref-FLY-OPT-SAM-001
-  # OPT-BEH-BEH-026: «Det som ble rettet, avgjør hvilke steg som beregnes på nytt», «Det saksbehandleren har satt, endres ikke», «Saker som er ferdig behandlet, forblir ferdig behandlet»
+  # OPT-BEH-BEH-026: «Hele den automatiske behandlingen kjøres på nytt i saker saksbehandleren ikke har endret», «I saker saksbehandleren har endret, regnes bare kvalifiseringen, poengsummen og kvoten ut på nytt», «Saker som er ferdig behandlet, forblir ferdig behandlet»
   Regel: Søknadsalternativene beregnes på nytt når regelverket er rettet
 
     Scenario: Poengene beregnes på nytt når rangeringsregelverket er rettet

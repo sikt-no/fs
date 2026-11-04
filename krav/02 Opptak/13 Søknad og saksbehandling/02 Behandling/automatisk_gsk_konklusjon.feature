@@ -64,7 +64,7 @@ Egenskap: Automatisk GSK-konklusjon
 
   @ref-FLY-OPT-AUT-001 @depends-on-OPT-BEH-BEH-027 @ref-FLY-OPT-VIT-001
   Regel: Opptakssystemets påstand om GSK på vitnemålet
-    # Hvordan GSK beregnes for vitnemålet (seksfagskontrollen og grunnlagskoden), står der.
+    # Hvordan GSK-vitnemålsberegningen virker (seksfagskontrollen og grunnlagskoden), står der.
     # Avklart 30.10.2026: «systemet i videregående skole» fra innspillet i PR #857 er skolens
     # påstand, som kommer fra KREG.
 
@@ -279,7 +279,7 @@ Egenskap: Automatisk GSK-konklusjon
       Og at opptaket ikke er avsluttet
       Når KREG får et nytt vitnemål for søkeren
       Så importeres vitnemålet fra KREG
-      Og GSK beregnes for vitnemålet uten at noen starter det
+      Og GSK-vitnemålsberegningen kjører for vitnemålet uten at noen starter den
 
   @ref-FLY-OPT-AUT-001
   Regel: Konklusjon fra tidligere opptak
@@ -384,13 +384,43 @@ Egenskap: Automatisk GSK-konklusjon
       Når søknaden opprettes
       Så får søknaden ingen negativ GSK-konklusjon
 
+  @draft @depends-on-OPT-OVO-FRI-001
+  # OPT-OVO-FRI-001: «Opptaksforvalter kan sette når den automatiske saksbehandlingen starter og avsluttes»
+  Regel: Automatikken setter GSK-konklusjonen bare mens den automatiske saksbehandlingen pågår
+    # Avklart 2026-11-03. Er hendelsene ikke satt, pågår den automatiske saksbehandlingen til opptaket er
+    # historisk. Hendelsene er de samme som i OPT-BEH-BEH-032. Importen av vitnemålet og
+    # GSK-vitnemålsberegningen kjører uansett.
+
+    Scenario: Ingen automatisk konklusjon før den automatiske saksbehandlingen starter
+      Gitt at «Automatisk saksbehandling starter» er "2027-04-16 08:00" i opptaket
+      Og at søknaden ikke har noen GSK-konklusjon
+      Og at søkeren har et vitnemål som gir GSK
+      Når vitnemålet importeres fra KREG 2027-04-15 kl. 10:00
+      Så får søknaden ingen GSK-konklusjon fra vitnemålet
+
+    Scenario: Ingen automatisk konklusjon etter at den automatiske saksbehandlingen er avsluttet
+      Gitt at «Automatisk saksbehandling avsluttes» er "2027-07-15 12:00" i opptaket
+      Og at søknaden ikke har noen GSK-konklusjon
+      Og at søkeren har et vitnemål som gir GSK
+      Når vitnemålet importeres fra KREG 2027-07-15 kl. 12:01
+      Så får søknaden ingen GSK-konklusjon fra vitnemålet
+
+    Scenario: Den automatiske saksbehandlingen pågår til opptaket er historisk når hendelsene ikke er satt
+      Gitt at opptaket ikke har hendelsene for den automatiske saksbehandlingen
+      Og at opptaket ikke er historisk
+      Og at søknaden ikke har noen GSK-konklusjon
+      Og at søkeren har et vitnemål som gir GSK
+      Når vitnemålet importeres fra KREG
+      Så får søknaden en positiv GSK-konklusjon
+
   @ref-FLY-OPT-AUT-001
   Regel: GSK-konklusjonen settes også når den automatiske behandlingen kjører
     # Første steg når den automatiske behandlingen kjører for et opptak. Konklusjonen settes
     # etter de samme reglene som når vitnemålet importeres fra KREG: vitnemålet går foran tidligere
     # konklusjoner, bare den siste tidligere konklusjonen gjenbrukes, og en konklusjon som
-    # finnes, overskrives ikke. Påstandene på vitnemålet beregnes ikke på nytt.
-    # Etter prosesstegningen «GSK-beregning for gitt opptak» (2026-10-29).
+    # finnes, overskrives ikke. GSK-vitnemålsberegningen kjøres ikke på nytt.
+    # Etter prosesstegningen «GSK-beregning for gitt opptak» (2026-10-29). Tegningen kaller
+    # GSK-konklusjonen «GSK-beregning». Begrepet er avklart 2026-11-03, se begreper.md.
 
     Scenario: Søknaden får konklusjonen fra vitnemålet i den automatiske behandlingen
       Gitt at søknaden ikke har noen GSK-konklusjon
