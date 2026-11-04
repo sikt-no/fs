@@ -126,11 +126,11 @@ Begrepene følger `tilgangsstyring/docs/tilgangsmodell.md` og `malarkitektur.md`
 - **Spec-dokument:** [`spec-tak-og-gulv-for-feide-applikasjoner.md`](../spec/spec-tak-og-gulv-for-feide-applikasjoner.md)
 - **Krav-input-manifest:** [`krav-input/manifest.md`](../spec/krav-input/manifest.md)
 
-## Åpne spørsmål
+## Avklarte spørsmål (Kjetil, 04.11.2026)
 
-- [ ] **Bare forretningsroller: håndheves det på serveren?** (a) Bare valglisten filtrerer. (b) Basen eller servicen avviser andre navneromstyper i tak og gulv. (c) Bare for gulvet. Hva med eksisterende rader som ikke er forretningsroller (funn 10)?
-- [ ] **Synlighet av samlingstak per organisasjon:** (a) Som 0104/0107. (b) Behold full dekning fra `kan_lese_delegering_samling`.
-- [ ] **Valglisten for organisasjon og miljø:** (a) Utledes i klienten fra `mineTilganger`. (b) Ny serverkilde.
-- [ ] **`local` og `test`:** speiles skriving i `test` til `local`, eller holder varselet i `tilgangsmodell.md`?
-- [ ] **I2 for taket:** innenfor eller utenfor dette arbeidet?
-- [ ] **Direkte tildeling når rollen alt er i taket via samling:** holder det at klienten hindrer det, eller skal serveren avvise?
+- [x] **Bare forretningsroller:** (a) bare valglisten i FS Admin filtrerer. Ingen avgrensning på serveren, og eksisterende rader røres ikke.
+- [x] **Synlighet av samlingstak per organisasjon:** (a) som 0104/0107 – samlingstaket vises der en direkte takrad ville vært synlig.
+- [x] **Valglisten for organisasjon og miljø:** (a) utledes i klienten fra `mineTilganger`.
+- [x] **`local` og `test`:** varselet i `tilgangsmodell.md` holder; skriving speiles ikke.
+- [x] **I2 for taket:** innenfor dette arbeidet.
+- [x] **Direkte tildeling når rollen alt er i taket via samling:** klienten hindrer det; serveren avviser ikke.
