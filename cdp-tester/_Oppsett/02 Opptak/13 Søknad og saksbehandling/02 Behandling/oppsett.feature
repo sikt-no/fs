@@ -25,10 +25,15 @@
 # Søknadene til «soker-1» til «soker-4» opprettes bare her, og er bare lest av testene (noen scenarioer endrer og setter tilbake). «soker-5»
 # endres i hvert scenario som trenger en annen fordeling («Endre søknad» på saken), og er derfor den eneste søkeren som endrer og flytter.
 #
-# Utfylling S: søknad på vegne av søkeren i FS Admin (som «opptak-forvalter-forvaltende»)
+# Ledige studieplasser må ikke ha åpnet når søknadene opprettes. Har de åpnet, blir hvert søknadsalternativ til et utdanningstilbud som tilbyr
+# ledige studieplasser, en søknad på ledig studieplass, og da saksbehandler tilbyderen det uansett behandlertildelingsregel. Scenarioene om
+# ledig studieplass åpner dem selv, og setter fristen tilbake.
+# Søknadene opprettes av «opptak-saksbehandler-saksbehandlende»: «Opprett søknad» krever saksbehandlertilgang i en organisasjon i opptaket.
+#
+# Utfylling S: søknad på vegne av søkeren i FS Admin (som «opptak-saksbehandler-saksbehandlende»)
 #   1. Fra opptaket: «Gå til søknader» → «Opprett søknad».
 #   2. Under «Søker»: fyll inn fornavn, etternavn, fødselsdato (01.01.2000), kjønn, nasjonalitet «Norge», «ID-type» «Passnummer», «ID-nummer»,
-#      adresse, postnummer «0001», poststed «Oslo», land «Norge», e-post «test{KJØRING}@example.invalid» og telefonnummer «+4799999999».
+#      adresse, postnummer «0001», poststed «Oslo», land «Norge», e-post «test{KJØRING}-<nr>@example.invalid» (unik per søker) og telefonnummer «+4799999999».
 #   3. «Utdanningsbakgrunn»: utdanningsbakgrunnen oppsettet sier, og «Land for utdanningen» («Norge», eller «Sverige» for utenlandsk).
 #   4. «Nytt søknadsalternativ»: legg til utdanningstilbudene i rekkefølgen oppsettet sier (første er prioritet 1).
 #   5. Velg «Opprett søknad».
