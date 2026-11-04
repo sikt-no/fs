@@ -1,6 +1,6 @@
 ---
 name: fs-verify-agent-teams
-description: Kjører `fs-verify` med et agent team (Claude Code agent teams, `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1`), med to roller. Finnerne (agenttypen `fs-verify-krav`) leter i koden og gir bevis (`fil:linje`) per scenario, én per feature-fil (eller én per gruppe av filer), parallelt. Kontrollørene (agenttypen `fs-verify-kontroll`) sjekker hvert svar uavhengig: leser hvert `funnet`, og søker på nytt etter hvert `ikke funnet`. Tar det samme scopet som `fs-verify` (en spesifikasjon, en `krav/`-sti, et scope `@scope-<slug>` eller `tasks/<domene>/<slug>`, eller en testplan `akseptansetest/<slug>`) og lokale kloner av kode-repoene. Lead-en spør først, som `fs-verify`, hva som skal verifiseres (`@in-progress`, `@deprecated`, flyter, alle krav uansett status, eller noe annet), og hvor mange nivåer med `@depends-on-` som skal følges, med status fra taggene eller verifisert i koden. Lead-en avgjør der finner og kontrollør er uenige, spør brukeren, retagger `@in-progress` → `@implemented`, fjerner `@in-progress` fra deler, sletter `@deprecated`-krav (og referansene til dem) når koden er borte, verifiserer flyter i `krav/_Flyter/`, og skriver rapporten i samme format som `fs-verify`, eventuelt med hva som gjenstår i hvert repo (fs-plattform, fs-admin og min-kompetanse). Bare i en interaktiv økt (terminalen, også terminalen i FS Kravforvaltning), ikke i Claude-panelet. Kjører aldri git add/commit/push. Trigges av "verifiser kravene med agent team", "fs-verify med agent teams", "fs-verify parallelt", "verifiser mange krav samtidig", "fs-verify-agent-teams".
+description: Kjører `fs-verify` med et agent team (Claude Code agent teams, `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1`), med to roller. Finnerne (agenttypen `fs-verify-krav`) leter i koden og gir bevis (`fil:linje`) per scenario, én per feature-fil (eller én per gruppe av filer), parallelt. Kontrollørene (agenttypen `fs-verify-kontroll`) sjekker hvert svar uavhengig: leser hvert `funnet`, og søker på nytt etter hvert `ikke funnet`. Tar det samme scopet som `fs-verify` (en spesifikasjon, en `krav/`-sti, et scope `@scope-<slug>` eller `tasks/<domene>/<slug>`, eller en testplan `akseptansetest/<slug>`) og lokale kloner av kode-repoene. Lead-en spør først, som `fs-verify`, hva som skal verifiseres (`@in-progress`, `@deprecated`, flyter, alle krav uansett status, eller noe annet), og hvor mange nivåer med `@depends-on-` som skal følges, med status fra taggene eller verifisert i koden. Lead-en avgjør der finner og kontrollør er uenige, skriver rapporten og ber brukeren gå gjennom den, spør bare om det sikre (alt funnet og bekreftet) skal bli `@implemented`, fjerner `@in-progress` fra deler, sletter `@deprecated`-krav (og referansene til dem) når koden er borte, verifiserer flyter i `krav/_Flyter/`, og skriver rapporten i samme format som `fs-verify`, eventuelt med hva som gjenstår i hvert repo (fs-plattform, fs-admin og min-kompetanse). Bare i en interaktiv økt (terminalen, også terminalen i FS Kravforvaltning), ikke i Claude-panelet. Kjører aldri git add/commit/push. Trigges av "verifiser kravene med agent team", "fs-verify med agent teams", "fs-verify parallelt", "verifiser mange krav samtidig", "fs-verify-agent-teams".
 allowed-tools: Read, Write, Edit, Grep, Glob, Bash, AskUserQuestion, Agent, SendMessage, TaskCreate, TaskList, TaskGet, TaskUpdate
 ---
 
@@ -93,7 +93,7 @@ Vent på svarene. De kommer som meldinger; ikke poll oppgavelista i en løkke. B
 **Svar fra en kontrollør:**
 
 1. **`bekreftet`:** resultatet står.
-2. **`avkreftet` eller `usikker`:** les det kontrolløren viser til, og det finneren viste til. Har kontrolløren rett, bruk det nye resultatet. Er det fortsatt uklart, blir resultatet `usikker`, med begge synene i beviset. Noter raden for `## Kontroll` i rapporten, med `Type` (scenario, tilgang eller regel).
+2. **`avkreftet` eller `usikker`:** les det kontrolløren viser til, og det finneren viste til. Har kontrolløren rett, bruk det nye resultatet. Er det fortsatt uklart, blir resultatet `usikker`, med begge synene i beviset. Noter raden for **Kontrollen endret** i `## Oppfølging` i rapporten.
 3. **Et `funnet` som kontrollen avkrefter, kan aldri brukes til retagging**, selv om du er enig med finneren. Da blir det `usikker`, og brukeren avgjør.
 
 Før du foreslår retagging eller sletting av et krav, les `fil:linje` for bevisene til det kravet selv. Tilgangsradene og reglene uten scenario slår du sammen på samme måte, og du regner ut `## Åpne spørsmål` selv fra `@openquestion` i kravfilene (finnernes tall er en kontroll, ikke kilden). `- **Menneskelig kontroll:**` i rapporten fyller du aldri ut: kontrollørene er ikke den andre personen (*Kontroll* i `fs-verify`). Du står ansvarlig for det du viser brukeren.
@@ -104,7 +104,7 @@ Bare når brukeren har sagt ja (*Finn scope og kode*), og bare du tar dem, etter
 
 ## Bekreft og endre
 
-Vent til alle svarene er kontrollert (og skjermbildene tatt), og spør ikke underveis. Følg så *Rapport og endringer* i `fs-verify`: skriv rapporten til fil først, med `## Forslag til endringer`, gi bare et kort sammendrag og lenken i chat, og still oppfølgingsspørsmålene etterpå, der hvert spørsmål har med referansene det gjelder (`krav/…:<linje>` og `<repo>/<fil>:<linje>`). Oppdater rapportfila med svarene. Hva som kan leveres og slettes, står i `fs-verify`:
+Vent til alle svarene er kontrollert (og skjermbildene tatt), og spør ikke underveis. Følg så *Rapport og oppsummering* i `fs-verify`: skriv rapporten til fil, med `## Forslag til endringer`, gi et kort sammendrag i chat (lenken, forslaget og det som er usikkert, med `krav/…:<linje>` og `<repo>/<fil>:<linje>`), og be brukeren gå gjennom rapporten. Spør bare om de sikre (alt funnet, og bekreftet av kontrollørene) skal bli `@implemented`, og skriv svaret i `## Endringer`. Det usikre og slettingene avgjøres i gjennomgangen av rapporten. Hva som kan leveres og slettes, står i `fs-verify` (sletting bare i gjennomgangen):
 
 - `@in-progress`: *Verifisere implementasjon* (alt i gating-settet er `funnet` etter kontrollen).
 - Deler i leverte krav: *Deler i leverte krav som endres* (fjern `@in-progress` fra delen).
@@ -112,7 +112,7 @@ Vent til alle svarene er kontrollert (og skjermbildene tatt), og spør ikke unde
 - `@deprecated`: *Verifisere at koden er borte* (ingen spor funnet).
 - *Uansett status*: bare kravene der hele gating-settet er `funnet`. For de andre blir statusen stående, og resultatet står i rapporten.
 
-Svarer brukeren **Avbryt** i gjennomgangen, stopp, oppdater rapportfila med det som er gjort, og rydd opp i teamet.
+Kontrollørene og finnerne trengs ikke mens brukeren svarer: rydd opp i teamet (*Rydd opp*) når rapporten er skrevet, før spørsmålet.
 
 ## Rapport
 
@@ -122,7 +122,7 @@ Når rapporten er skrevet, gjør du *Confluence* i `fs-verify`: finnes ingen tes
 
 ## Rydd opp
 
-Når rapporten er skrevet (også etter **Avbryt** eller en feil): be hver teammate som ikke har stengt, om å stenge, og vent til de har stengt. Er alle stengt, rydd opp i teamet.
+Når rapporten er skrevet (også etter en feil): be hver teammate som ikke har stengt, om å stenge, og vent til de har stengt. Er alle stengt, rydd opp i teamet.
 
 ## Referanser
 

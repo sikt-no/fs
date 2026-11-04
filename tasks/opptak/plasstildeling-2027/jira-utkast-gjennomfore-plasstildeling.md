@@ -1,10 +1,10 @@
 # Utkast til Jira: Gjennomføre plasstildelingen
 
-Utkast 2026-10-28, ikke opprettet. Kravene er `@draft`, og lenkene går til `main` (kravene kommer dit når PR #850 er merget).
+Utkast 2026-10-28, oppdatert 2026-11-04 (én epic). Ikke opprettet. Kravene er `@draft`, og lenkene går til `main` (kravene kommer dit når PR #850 er merget).
 
-## Epic (TAKE-3, ny tittel): Gjennomføre plasstildelingen
+## Leveransedel under TAKE-3: Gjennomføre plasstildelingen
 
-Ny tittel og beskrivelse. TAKE-3 beholder de tekniske sakene om kjøringen og snapshotet (TAKE-159, TAKE-165, TAKE-265, TAKE-267, TAKE-278) og TAKE-74. TAKE-327 flyttes til epicen for rundetyper og runder, og TAKE-156, TAKE-268, TAKE-288, TAKE-330 og TAKE-331 til epicen for publisering og svar.
+Endret 2026-11-04: TAKE-3 beholdes som den eneste epicen for plasstildelingen, med tittelen den har, og leveransedelene legges under den som stories (se [jira-utkast-plasstildeling-rundetyper-og-runder.md](jira-utkast-plasstildeling-rundetyper-og-runder.md)). Det lages ingen egen epic for denne delen, og ingen saker flyttes. Storyene under legges i TAKE-3.
 
 Opptaksforvalter starter plasstildelingen i en runde, og den gjennomføres etter innstillingene i runden, med plassflyt, kompensasjonstilbud og tilbudsgaranti. Opptaksforvalter og lærestedene ser resultatet før det publiseres. Bygger på rundetyper og runder.
 
@@ -84,7 +84,7 @@ Krav: [kompensasjonstilbud_ved_opprykk.feature](https://github.com/sikt-no/fs/bl
 
 ## Story (TAKE-329 deles, ny sak): Resultatet før publisering
 
-Opptaksforvalter og lærestedene ser resultatet av plasstildelingen før det publiseres, avgrenset til søknadene organisasjonen saksbehandler eller tilbyr, og kan sammenligne plasstildelinger i runden. TAKE-329 blir saken for det publiserte resultatet (epicen for publisering og svar).
+Opptaksforvalter og lærestedene ser resultatet av plasstildelingen før det publiseres, avgrenset til søknadene organisasjonen saksbehandler eller tilbyr, og kan sammenligne plasstildelinger i runden. TAKE-329 blir saken for det publiserte resultatet (leveransedelen for publisering og svar).
 
 Akseptansekriterier:
 

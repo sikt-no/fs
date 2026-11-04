@@ -34,7 +34,7 @@ Den første akseptansetesten ble gjennomført 19.10.2026 ([Akseptansetest – Op
 
 | Nr | Navn | Rolle | Organisasjon | Brukes til |
 |---|---|---|---|---|
-| 1 | Ordentlig rundskriv | Opptaksforvalter og saksbehandler ved forvaltende organisasjon | HK-dir | Opprette samordna opptak, innstillinger, frister, samordning, oversikten over opptak |
+| 1 | Ordentlig rundskriv («Overstyrt bruker»: ORDENTLIG RUNDSKRIV • OPPTAK_FORVALTER (HK-DIR)) | Opptaksforvalter ved forvaltende organisasjon | HK-dir | Opprette samordna opptak, innstillinger, frister, samordning, oversikten over opptak |
 | 2 | Ansvarsfull Fotkrem | Opptaksforvalter ved deltakende organisasjon | NTNU | Samordna opptak: deltaker. Trenger rollen `MEDLEM_OPPTAK` når TAKE-423 er merget |
 | 3 | Talefør Elv | Opptaksforvalter ved organisasjon som ikke deltar | Fagskolen Vestfold og Telemark | Samordna opptak: organisasjon som ikke deltar |
 
