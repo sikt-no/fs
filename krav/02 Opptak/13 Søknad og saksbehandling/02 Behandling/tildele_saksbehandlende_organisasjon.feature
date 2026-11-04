@@ -284,6 +284,7 @@ Egenskap: Tildele saksbehandlende organisasjon
       # AVKLART 07.10.2026 i PR #684: valget gjelder ett bestemt opptak, og gjøres når organisasjonene
       # som deltar i opptaket settes opp (opptak.opptak_samordna_organisasjon).
 
+    @implemented
     Scenario: Organisasjonen som saksbehandler på vegne av lærestedet får søknadsalternativene
       Gitt at "Arkitektur- og designhøgskolen i Oslo" og "OsloMet" deltar i opptaket
       Og at "OsloMet" saksbehandler på vegne av "Arkitektur- og designhøgskolen i Oslo"
@@ -291,11 +292,13 @@ Egenskap: Tildele saksbehandlende organisasjon
       Når søknadsalternativene fordeles
       Så er "OsloMet" saksbehandlende organisasjon for "Arkitektur, AHO"
 
+    @implemented
     Scenario: Organisasjonen som saksbehandler på vegne av lærestedet må delta i opptaket
       Gitt at "Universitetet i Bergen" ikke deltar i opptaket
       Når opptaksforvalteren ved HK-dir velger "Universitetet i Bergen" til å saksbehandle på vegne av "Arkitektur- og designhøgskolen i Oslo"
       Så avvises valget
 
+    @implemented
     Scenario: Endret valg gjelder bare søknadsalternativer som ikke er fordelt
       Gitt at "Arkitektur, AHO" er fordelt til "Arkitektur- og designhøgskolen i Oslo"
       Når opptaksforvalteren ved HK-dir velger "OsloMet" til å saksbehandle på vegne av "Arkitektur- og designhøgskolen i Oslo"
@@ -472,7 +475,7 @@ Egenskap: Tildele saksbehandlende organisasjon
       Når opptaksforvalteren ved HK-dir åpner søknaden
       Så ser opptaksforvalteren sakene hos "Universitetet i Oslo" og "UiT Norges arktiske universitet"
 
-  @ref-FLY-OPT-SAK-001
+  @ref-FLY-OPT-SAK-001 @implemented
   Regel: Tilbyderen ser saksbehandlingen når en annen organisasjon saksbehandler utdanningstilbudet
 
     Scenario: Tilbyderen ser søknadsalternativ som en annen organisasjon saksbehandler
