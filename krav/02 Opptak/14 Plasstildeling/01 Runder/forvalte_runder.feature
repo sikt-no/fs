@@ -298,7 +298,10 @@ Egenskap: Plasstildelingsrunder i et opptak
 
     # AVKLART 2026-11-02 (produkteier, prototypen v88): Lærestedet ser alle plasstildelingsrundene, og hva det skal
     # gjøre i hver av dem, men kan bare åpne runden der perioden er åpen. Da finner lærestedet riktig runde, som det
-    # ikke gjorde i SODB. Erstatter avklaringen fra 2026-10-30 om at lærestedet bare ser én runde.
+    # ikke gjorde i SODB.
+    # AVKLART 2026-11-04 (produkteier): Runder der perioden er stengt, forblir stengt for lærestedet. I runden der
+    # perioden er åpen, kan lærestedet sammenligne med tidligere plasstildelingsrunder. Endringer mellom rundene blir
+    # synlige for brukerne når løsningen får endringslogg.
     # Hvordan en runde som ikke kan åpnes, vises, står i implementasjonsdetaljene.
     Scenario: Lærestedet ser alle plasstildelingsrundene
       Gitt at opptaket har plasstildelingsrundene "Hovedrunde" og "Supplering 1"
