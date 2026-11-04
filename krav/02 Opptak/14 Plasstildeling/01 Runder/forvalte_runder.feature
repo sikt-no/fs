@@ -172,21 +172,20 @@ Egenskap: Plasstildelingsrunder i et opptak
       Og at plasstildelingsrunden er publisert til søker
       Så ser opptaksforvalter at plasstildelingsrunden har status "Publisert for søkere"
 
-  @openquestion
   Regel: Opptaksforvalter setter tak for antall tilbud per søker i plasstildelingsrunden
 
-    # ÅPNE SPØRSMÅL:
-    # - Har taket en standardverdi, for eksempel 1, eller må det settes når plasstildelingsrunden legges til?
+    # AVKLART 2026-11-04 (produkteier): Taket har en standardverdi per rundetype når plasstildelingsrunden legges til,
+    # og opptaksforvalter kan endre den.
     # AVKLART 2026-11-02 (domeneekspert): Taket gjelder de ordinære tilbudene, og vises og kan endres på alle
     # plasstildelingsrunder. Tilbud på ledige studieplasser kommer i tillegg, med eget tak (regelen under).
     # I samordna opptak er taket 1 i hovedtildeling og supplering, og opptil 10 i etterfylling.
     # Søkeren kan likevel bare ha ett ja-svar om gangen, og får bare én studieplass i et samordna opptak
     # (05 Svar/håndtere_svar_fra_søker.feature).
     # Til senere: søkere kan få trenge flere studieplasser, for eksempel på deltidsstudier, PPU og enkeltemner.
-    Scenariomal: Sette tak for antall tilbud per søker
-      Gitt at opptaket har plasstildelingsrunden "<plasstildelingsrunde>" med rundetype "<rundetype>"
-      Når opptaksforvalter setter taket for antall tilbud per søker i plasstildelingsrunden "<plasstildelingsrunde>" til <tak>
-      Så kan en søker få høyst <tak> tilbud i plasstildelingsrunden "<plasstildelingsrunde>"
+    Scenariomal: Standardverdi for taket for antall tilbud per søker
+      Når opptaksforvalter legger til plasstildelingsrunden "<plasstildelingsrunde>" med rundetype "<rundetype>"
+      Så er taket for antall tilbud per søker i plasstildelingsrunden "<plasstildelingsrunde>" <tak>
+      Og kan en søker få høyst <tak> tilbud i plasstildelingsrunden "<plasstildelingsrunde>"
 
       Eksempler:
         | plasstildelingsrunde | rundetype      | tak |
@@ -210,18 +209,26 @@ Egenskap: Plasstildelingsrunder i et opptak
     # står i 03 Tildeling/gjennomføre_plasstildeling.feature.
     # AVKLART 2026-10-30 (produkteier): Om en søker kan få studieplass mer enn ett sted, kommer an på opptaket, og
     # henger sammen med hvor mange tilbud søkeren kan få og takke ja til. Det har ingen egen regel, men styres av taket.
-    Scenario: Sette tak for antall tilbud på ledige studieplasser per søker
-      Gitt at opptaket har plasstildelingsrunden "Etterfylling" med rundetype "Etterfylling"
-      Og at plasstildelingsrunden "Etterfylling" er åpnet for ledige studieplasser
-      Når opptaksforvalter setter taket for antall tilbud på ledige studieplasser per søker i plasstildelingsrunden "Etterfylling" til 10
-      Så kan en søker få høyst 10 tilbud på ledige studieplasser i plasstildelingsrunden "Etterfylling"
+    # AVKLART 2026-11-04 (produkteier): Taket har standardverdien 10 når plasstildelingsrunden åpnes for ledige
+    # studieplasser, og opptaksforvalter kan endre den. Erstatter avklaringen fra 2026-10-30 om at taket ikke har
+    # en standardverdi og må settes.
+    Scenariomal: Standardverdi for taket for antall tilbud på ledige studieplasser per søker
+      Gitt at opptaket har plasstildelingsrunden "<plasstildelingsrunde>" med rundetype "<rundetype>"
+      Når opptaksforvalter åpner plasstildelingsrunden "<plasstildelingsrunde>" for ledige studieplasser
+      Så er taket for antall tilbud på ledige studieplasser per søker i plasstildelingsrunden "<plasstildelingsrunde>" 10
+      Og kan en søker få høyst 10 tilbud på ledige studieplasser i plasstildelingsrunden "<plasstildelingsrunde>"
 
-    # AVKLART 2026-10-30 (produkteier): Taket har ingen standardverdi, og må settes.
-    Scenario: Taket må settes når plasstildelingsrunden åpnes for ledige studieplasser
-      Gitt at opptaket har plasstildelingsrunden "Etterfylling" med rundetype "Etterfylling"
-      Når opptaksforvalter åpner plasstildelingsrunden "Etterfylling" for ledige studieplasser uten å sette taket for antall tilbud per søker
-      Så blir plasstildelingsrunden "Etterfylling" ikke åpnet for ledige studieplasser
-      Og opptaksforvalter får beskjed om at taket for antall tilbud på ledige studieplasser per søker må settes
+      Eksempler:
+        | plasstildelingsrunde | rundetype      |
+        | Hovedrunde           | Hovedtildeling |
+        | Suppleringsrunde     | Supplering     |
+        | Etterfylling         | Etterfylling   |
+
+    Scenario: Endre taket for antall tilbud på ledige studieplasser per søker
+      Gitt at plasstildelingsrunden "Etterfylling" er åpnet for ledige studieplasser
+      Og at taket for antall tilbud på ledige studieplasser per søker i plasstildelingsrunden "Etterfylling" er 10
+      Når opptaksforvalter endrer taket for antall tilbud på ledige studieplasser per søker i plasstildelingsrunden "Etterfylling" til 5
+      Så kan en søker få høyst 5 tilbud på ledige studieplasser i plasstildelingsrunden "Etterfylling"
 
   Regel: Opptaksforvalter kan åpne en plasstildelingsrunde for ledige studieplasser
 

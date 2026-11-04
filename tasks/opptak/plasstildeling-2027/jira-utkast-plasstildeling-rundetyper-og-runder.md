@@ -32,8 +32,8 @@ Akseptansekriterier:
 - Opptaksforvalter legger til en runde med navn, rundetype og svarfrist (`@OPT-PLA-RUN-001`). Opptaket kan bare ha én hovedtildeling, og supplering og etterfylling kan ikke være den første runden
 - Runden har innstillingene fra rundetypen, og opptaksforvalter ser dem, men kan ikke endre dem på runden. Rundetypen kan ikke endres etter at runden er lagt til
 - Navn og svarfrist kan alltid endres, og en runde kan slettes så lenge den ikke er publisert til søker
-- Opptaksforvalter setter tak for antall tilbud per søker i runden, som vises og kan endres. I samordna opptak: 1 i hovedtildeling og supplering, opptil 10 i etterfylling
-- Opptaksforvalter kan åpne runden for ledige studieplasser når opptaket tilbyr søknad på ledige studieplasser, og setter da tak for antall tilbud på ledige studieplasser per søker. Taket har ingen standardverdi og må settes (opptil 10 i supplering og etterfylling i samordna opptak, i tillegg til de ordinære tilbudene)
+- Taket for antall tilbud per søker har en standardverdi per rundetype når runden legges til, og opptaksforvalter kan endre det. I samordna opptak: 1 i hovedtildeling og supplering, 10 i etterfylling
+- Opptaksforvalter kan åpne runden for ledige studieplasser når opptaket tilbyr søknad på ledige studieplasser. Runden får da tak for antall tilbud på ledige studieplasser per søker, med standardverdien 10, og opptaksforvalter kan endre det. Tilbudene på ledige studieplasser kommer i tillegg til de ordinære tilbudene
 - Opptaksforvalter setter periode for når lærestedene kan endre antall tilbud (dato og klokkeslett, kan alltid endres). Svarfristen må komme etter at perioden er slutt
 - Lærestedet ser alle rundene og hva det skal gjøre i hver, men kan bare åpne runden der perioden er åpen
 
