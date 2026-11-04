@@ -5,7 +5,7 @@
 - **Scope**: –
 - **Krav**: 2 feature-filer, 1 `@implemented`, 0 delvis levert, 1 flyt (`@planned`, testes delvis), commit `7d4ee5d1` (2026-11-04)
 - **Verifisering**: [verify-tildele_saksbehandlende_organisasjon-2026-11-04-1317.md](../../krav/02%20Opptak/13%20S%C3%B8knad%20og%20saksbehandling/02%20Behandling/verify-tildele_saksbehandlende_organisasjon-2026-11-04-1317.md)
-- **Confluence**: –
+- **Confluence**: https://sikt.atlassian.net/wiki/spaces/STUDIEADM/pages/5170495530/Testplan+Saksbehandlertildeling+runde+2 (utkast)
 - **Laget**: 2026-11-04 av fs-testplan
 - **GitHub-lenker**: gjelder branchen `krav/saksbehandlertildeling-v2` til PR-en er merget. Kravene og verify-rapporten ligger ikke på `main` ennå
 - **Runde 1**: [Akseptansetesting saksbehandlertildeling](https://sikt.atlassian.net/wiki/spaces/STUDIEADM/pages/5130911779/Akseptansetesting+saksbehandlertildeling) (Confluence) og [`akseptansetest/opptak-saksbehandlertildeling/`](../opptak-saksbehandlertildeling/)
@@ -23,9 +23,9 @@ Testplanen er delt i hovedsiden og tre undersider, så hver del kan oppdateres f
 | Side | Innhold | Fil |
 |---|---|---|
 | Testplan (denne siden) | Testbeskrivelse, roller, tid og kanal, forutsetninger, kriterier for godkjent, funn, beslutning, status i flyten og vedlegg | `testplan.md` |
-| [Omfang – Saksbehandlertildeling, runde 2](omfang.md) | Kravene og flytene som testes, åpne spørsmål, avhengighetene, det som venter på verifisering, regler uten scenario og det som ikke er med | `omfang.md` |
-| [Testcaser og testdata – Saksbehandlertildeling, runde 2](testcaser-og-testdata.md) | Omfanget av testcasene som skal lages, testbrukerne, tilgangsmatrisen og testdataene | `testcaser-og-testdata.md` |
-| [Sporbarhet – Saksbehandlertildeling, runde 2](sporbarhet.md) | Scenarioene fra kravet til koden og til testen | `sporbarhet.md` |
+| [Omfang – Saksbehandlertildeling, runde 2](https://sikt.atlassian.net/wiki/spaces/STUDIEADM/pages/5169872955/Omfang+Saksbehandlertildeling+runde+2) | Kravene og flytene som testes, åpne spørsmål, avhengighetene, det som venter på verifisering, regler uten scenario og det som ikke er med | `omfang.md` |
+| [Testcaser og testdata – Saksbehandlertildeling, runde 2](https://sikt.atlassian.net/wiki/spaces/STUDIEADM/pages/5170364449/Testcaser+og+testdata+Saksbehandlertildeling+runde+2) | Omfanget av testcasene som skal lages, testbrukerne, tilgangsmatrisen og testdataene | `testcaser-og-testdata.md` |
+| [Sporbarhet – Saksbehandlertildeling, runde 2](https://sikt.atlassian.net/wiki/spaces/STUDIEADM/pages/5169250346/Sporbarhet+Saksbehandlertildeling+runde+2) | Scenarioene fra kravet til koden og til testen | `sporbarhet.md` |
 
 ## Testbeskrivelse
 
@@ -114,7 +114,7 @@ Et funn med alvorlighetsgraden «Stopper» gir ikke godkjent, men resten av test
 
 | Fase | Side | Status | Dato |
 |---|---|---|---|
-| 1. Verifisering (`fs-verify`) | [verify-tildele_saksbehandlende_organisasjon-2026-11-04-1317.md](../../krav/02%20Opptak/13%20S%C3%B8knad%20og%20saksbehandling/02%20Behandling/verify-tildele_saksbehandlende_organisasjon-2026-11-04-1317.md) | Kravet: alt funnet (62/62). Flyten: 3 ikke funnet (faser som ikke er levert) | 2026-11-04 |
+| 1. Verifisering (`fs-verify`) | [Verifisering – Saksbehandlertildeling, runde 2 – 2026-11-04 13:17](https://sikt.atlassian.net/wiki/spaces/STUDIEADM/pages/5170364465/Verifisering+Saksbehandlertildeling+runde+2+2026-11-04+13+17) | Kravet: alt funnet (62/62). Flyten: 3 ikke funnet (faser som ikke er levert) | 2026-11-04 |
 | 1. Testplan | (denne siden) | Laget | 2026-11-04 |
 | 2. Agentisk funksjonstest | – | Venter | |
 | 3. Intern akseptansetest | – | Venter | |

@@ -1,7 +1,7 @@
 # Sporbarhet – Saksbehandlertildeling, runde 2
 
-- **Testplan**: [testplan.md](testplan.md) · Confluence: ikke opprettet ennå
-- **Confluence**: –
+- **Testplan**: [testplan.md](testplan.md) · Confluence: [utkast](https://sikt.atlassian.net/wiki/spaces/STUDIEADM/pages/5170495530/Testplan+Saksbehandlertildeling+runde+2)
+- **Confluence**: https://sikt.atlassian.net/wiki/spaces/STUDIEADM/pages/5169250346/Sporbarhet+Saksbehandlertildeling+runde+2 (utkast)
 - **Laget**: 2026-11-04 av fs-testplan
 - **Oppdatert**: 2026-11-04 av fs-testplan (fase 1)
 

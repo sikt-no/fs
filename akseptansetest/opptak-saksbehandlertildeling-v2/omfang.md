@@ -1,7 +1,7 @@
 # Omfang – Saksbehandlertildeling, runde 2
 
-- **Testplan**: [testplan.md](testplan.md) · Confluence: ikke opprettet ennå
-- **Confluence**: –
+- **Testplan**: [testplan.md](testplan.md) · Confluence: [utkast](https://sikt.atlassian.net/wiki/spaces/STUDIEADM/pages/5170495530/Testplan+Saksbehandlertildeling+runde+2)
+- **Confluence**: https://sikt.atlassian.net/wiki/spaces/STUDIEADM/pages/5169872955/Omfang+Saksbehandlertildeling+runde+2 (utkast)
 - **Laget**: 2026-11-04 av fs-testplan
 
 ---
@@ -137,6 +137,7 @@ Ingen.
 | `@OPT-BEH-BEH-011` | Opptaksforvalteren ved forvaltende organisasjon ser de interne merknadene hos alle organisasjonene i opptaket, også etter flytting | `fs-plattform/…/V493__tilbyder_ser_saksbehandlingen.sql:69-87` | nei: uklart om ønsket, avklares først | avklares først |
 | `@OPT-BEH-BEH-011` | Tilbyderen ser praksisperiodene i saken | `fs-plattform/…/V501__tilbyderoppslag_per_sak.sql:75-90` | ja | nei |
 | `@OPT-BEH-BEH-011` | Tilbyderen ser bare sakene der den har et søknadsalternativ, ikke de andre sakene i søknaden | `fs-plattform/…/V501__tilbyderoppslag_per_sak.sql:22-35` | ja | nei |
+
 ## Ikke med i denne testen
 
 | Hva | Hvorfor |
