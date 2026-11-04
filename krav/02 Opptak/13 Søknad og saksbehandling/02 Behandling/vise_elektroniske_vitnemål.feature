@@ -142,9 +142,9 @@ Egenskap: Se søkerens elektroniske vitnemål
       # også skjemaet for manuell utfylling alltid vises.»
       #
       # Andre halvdel av kravet er holdt utenfor denne leveransen: skjemaet for
-      # å legge inn fag manuelt bygges i L4 (#610). Kravet om at skjemaet da
-      # alltid skal være åpent står i legge_inn_og_endre_fag.feature, og må
-      # innfris sammen med skjemaet.
+      # å legge inn fag manuelt bygges i L4b (#610). Kravet om at skjemaet da
+      # alltid skal være åpent står i legge_inn_vitnemål_manuelt.feature, og
+      # må innfris sammen med skjemaet.
 
     Scenario: Vitnemålene kan ikke hentes
       Gitt søkerens elektroniske vitnemål ikke kan hentes fra NVB

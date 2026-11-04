@@ -32,7 +32,7 @@
 | Krav | MoSCoW | Skisse | Jira | Kommentar |
 |---|---|---|---|---|
 | `@OPT-OPT-UTD-003` [trekke_utdanningstilbud.feature](../../../krav/02%20Opptak/12%20Utdanningstilbud/02%20Utdanningstilbud%20i%20opptak/trekke_utdanningstilbud.feature) | Must | [Detaljside](https://www.figma.com/design/LmoNQlmAuE2FlE0fUo5GoO/FS-Admin---Seksjon-Opptak?node-id=18797-108875) | [#595](https://github.com/sikt-no/fs/issues/595) | Jira SHI-709. «Trekk studiet fra opptaket» |
-| `@OPT-OPT-UTD-004` [opptaksinnstillinger_utdanningstilbud.feature](../../../krav/02%20Opptak/12%20Utdanningstilbud/03%20Opptaksinnstillinger/opptaksinnstillinger_utdanningstilbud.feature) | Must | [Detaljside](https://www.figma.com/design/LmoNQlmAuE2FlE0fUo5GoO/FS-Admin---Seksjon-Opptak?node-id=18797-108875) | [#597](https://github.com/sikt-no/fs/issues/597) | «Regelverk og kvoter», «Tidlig opptak», «Saksbehandlertildelingsregel» (overtatt fra 028) |
+| `@OPT-OPT-UTD-004` [opptaksinnstillinger_utdanningstilbud.feature](../../../krav/02%20Opptak/12%20Utdanningstilbud/03%20Opptaksinnstillinger/opptaksinnstillinger_utdanningstilbud.feature) | Must | [Detaljside](https://www.figma.com/design/LmoNQlmAuE2FlE0fUo5GoO/FS-Admin---Seksjon-Opptak?node-id=18797-108875) | [#597](https://github.com/sikt-no/fs/issues/597) | «Regelverk og kvoter», «Tidlig opptak», «Behandlertildelingsregel» (overtatt fra 028) |
 | `@OPT-OPT-UTD-007` [sette_studieplasser_og_antall_tilbud.feature](../../../krav/02%20Opptak/12%20Utdanningstilbud/03%20Opptaksinnstillinger/sette_studieplasser_og_antall_tilbud.feature) | Must | [Detaljside](https://www.figma.com/design/LmoNQlmAuE2FlE0fUo5GoO/FS-Admin---Seksjon-Opptak?node-id=18797-108875) | [#596](https://github.com/sikt-no/fs/issues/596) | Se åpent spørsmål om antall studieplasser |
 | `@OPT-OPT-UTD-032` [sette_antall_studieplasser_per_kvote.feature](../../../krav/02%20Opptak/12%20Utdanningstilbud/03%20Opptaksinnstillinger/sette_antall_studieplasser_per_kvote.feature) | Must | [Detaljside](https://www.figma.com/design/LmoNQlmAuE2FlE0fUo5GoO/FS-Admin---Seksjon-Opptak?node-id=18797-108875) | – | Skrevet fra koden («Ant. kvoteplasser» i fs-admin) |
 | `@OPT-OPT-UTD-009` [vise_beskrivelses_url.feature](../../../krav/02%20Opptak/12%20Utdanningstilbud/04%20Behandle%20et%20utdanningstilbud/vise_beskrivelses_url.feature) | Must | – | – | Jira SHI-687. Usikkert om det finnes skisse |
@@ -70,7 +70,7 @@
 ## Behandle et utdanningstilbud (fra oppgaven behandle-utdanningstilbud)
 
 
-Detaljsiden for ett utdanningstilbud i FS Admin: opplysninger fra utdanningsregisteret, opplysningene opptaksforvalter registrerer (attester, poengopplysninger, beskrivelse og søkeord til Min kompetanse, kjønnspoeng, saksbehandlertildelingsregel og mer), endringslogg og tidligere utdanningstilbud, og å trekke utdanningstilbudet fra opptaket (#595). Jira: [SHI-686](https://sikt.atlassian.net/browse/SHI-686).
+Detaljsiden for ett utdanningstilbud i FS Admin: opplysninger fra utdanningsregisteret, opplysningene opptaksforvalter registrerer (attester, poengopplysninger, beskrivelse og søkeord til Min kompetanse, kjønnspoeng, behandlertildelingsregel og mer), endringslogg og tidligere utdanningstilbud, og å trekke utdanningstilbudet fra opptaket (#595). Jira: [SHI-686](https://sikt.atlassian.net/browse/SHI-686).
 
 ### Åpne punkter
 

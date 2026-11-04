@@ -1,5 +1,5 @@
 # language: no
-@OPT-BEH-BEH-032 @must @planned @ref-OPT-BEH-BEH-025
+@OPT-BEH-BEH-032 @must @in-progress @scope-automatisk-import-og-start @ref-OPT-BEH-BEH-025 @ref-OPT-BEH-BEH-033
 Egenskap: Starte automatisk behandling
   Som saksbehandler
   ønsker jeg at den automatiske behandlingen starter av seg selv for hver ny sak
@@ -12,22 +12,22 @@ Egenskap: Starte automatisk behandling
   dokumentasjon: behandlingen starter ikke av seg selv, og saksbehandleren ser at saken har fått
   ny dokumentasjon. Saksbehandleren kan velge et vitnemål og starte den automatiske behandlingen
   på det. Det saksbehandleren har gjort i saken, endres aldri av automatikken. Opptaksforvalteren
-  skrur automatikken av og på for opptaket, og kan sette tidspunktet da automatikken stopper.
+  kan sette når den automatiske saksbehandlingen starter og avsluttes i opptaket.
   Hva behandlingen gjør med saken, står i kravene flyten FLY-OPT-AUT-001 bygger på.
 
   # Avklart med domeneeksperten 29.10.2026.
   # Kode i dag: saksbehandleren kan starte behandlingen for én sak med knappen «Start automatisk
   # behandling» i FS Admin, uten å velge vitnemål. Ingenting starter behandlingen når saken er
-  # opprettet, og ingen jobb sjekker om det har kommet nye vitnemål. Automatikken kan ikke skrus
-  # av for et opptak.
-  # Hvor ofte jobbene kjører, står i OPT-BEH-BEH-033 (PR #864).
+  # opprettet, og ingen jobb sjekker om det har kommet nye vitnemål. Opptaket har ingen hendelser for
+  # når den automatiske saksbehandlingen starter og avsluttes.
+  # Hvor ofte jobbene kjører, står i OPT-BEH-BEH-033.
   # Saksbehandleren velger vitnemålet når søkeren har flere vitnemål, i
   # OPT-BEH-BEH-025.
 
   Bakgrunn:
     Gitt at opptaket "Samordna opptak 2027" forvaltes av HK-dir
     Og at "Universitetet i Oslo" deltar i opptaket
-    Og at automatisk saksbehandling er skrudd på for "Samordna opptak 2027"
+    Og at den automatiske saksbehandlingen pågår i "Samordna opptak 2027"
 
   @depends-on-OPT-BEH-BEH-011 @depends-on-OPT-BEH-BEH-030 @ref-FLY-OPT-AUT-001
   # OPT-BEH-BEH-011: «Søknadsalternativene fordeles når søknaden sendes inn eller endres, og fordelingen ligger fast»
@@ -49,6 +49,22 @@ Egenskap: Starte automatisk behandling
       Og at "Kari Nordmann" har fått et vitnemål i KREG
       Når jobben for nye vitnemål i KREG kjører
       Så behandles saken hos "Universitetet i Oslo" automatisk når vitnemålet er importert
+
+  Regel: Behandlingen starter av seg selv bare for saker som ikke er behandlet
+    # Avklart 2026-11-02: har saksbehandleren begynt på saken, eller er saken ferdig behandlet,
+    # starter ikke behandlingen av seg selv. Saksbehandleren kan starte den (se «Saksbehandleren
+    # starter den automatiske behandlingen på vitnemålet som er valgt»).
+
+    Scenariomal: Saken med behandlingsstatusen <status> behandles ikke automatisk når søkeren får det første vitnemålet
+      Gitt at saken hos "Universitetet i Oslo" har behandlingsstatusen "<status>"
+      Og at "Kari Nordmann" har fått det første vitnemålet i KREG
+      Når jobben for nye vitnemål i KREG kjører
+      Så behandles ikke saken hos "Universitetet i Oslo" automatisk
+
+      Eksempler:
+        | status           |
+        | Under behandling |
+        | Behandlet        |
 
   @openquestion @depends-on-OPT-BEH-BEH-030 @ref-OPT-BEH-BEH-021 @ref-OPT-BEH-BEH-029
   # OPT-BEH-BEH-030: «Nye og annullerte vitnemål i KREG importeres for aktive søkere»
@@ -91,29 +107,17 @@ Egenskap: Starte automatisk behandling
       Når saksbehandleren ved Universitetet i Oslo starter den automatiske behandlingen på "Vitnemål 2026"
       Så behandles saken automatisk på "Vitnemål 2026"
 
-    Scenario: Saken som er ferdig behandlet, settes til Under behandling når behandlingen startes
-      Gitt at saken har behandlingsstatusen "Behandlet"
-      Og at den automatiske behandlingen ikke kan avgjøre alle stegene på "Vitnemål 2026"
-      Når saksbehandleren ved Universitetet i Oslo starter den automatiske behandlingen på "Vitnemål 2026"
-      Så har saken behandlingsstatusen "Under behandling"
+    # Avklart 2026-11-02: den automatiske behandlingen starter ikke på en sak som er ferdig
+    # behandlet.
 
-    @depends-on-OPT-BEH-BEH-025
-    # OPT-BEH-BEH-025: «Den automatiske behandlingen setter saken til ferdig behandlet når alt er avgjort»
-    Scenario: Saken blir ferdig behandlet igjen når automatikken avgjør alt
-      Gitt at saken har behandlingsstatusen "Behandlet"
-      Og at den automatiske behandlingen kan avgjøre alle stegene på "Vitnemål 2026"
-      Når saksbehandleren ved Universitetet i Oslo starter den automatiske behandlingen på "Vitnemål 2026"
-      Så har saken behandlingsstatusen "Behandlet"
-      Og saksbehandleren ser at saken er behandlet automatisk
-
-    @depends-on-OPT-BEH-BEH-011
+    @depends-on-OPT-BEH-BEH-011 @implemented
     # OPT-BEH-BEH-011: «Saksbehandlende organisasjon ser bare saker hos organisasjonen»
     Scenario: Saksbehandleren starter bare behandlingen for saker hos organisasjonen
       Gitt at søknaden til "Kari Nordmann" har en sak hos "Universitetet i Bergen"
       Når saksbehandleren ved Universitetet i Oslo vil starte den automatiske behandlingen
       Så kan saksbehandleren ikke starte behandlingen for saken hos "Universitetet i Bergen"
 
-  @ref-OPT-BEH-BEH-019 @ref-OPT-BEH-BEH-020 @ref-OPT-BEH-BEH-018
+  @ref-OPT-BEH-BEH-019 @ref-OPT-BEH-BEH-020 @ref-OPT-BEH-BEH-018 @implemented
   Regel: Det saksbehandleren har gjort, endres ikke av automatikken
     # Reglene for hvert steg står i kravene til grunnlaget, poengene og kravelementene.
 
@@ -134,25 +138,41 @@ Egenskap: Starte automatisk behandling
       Så er saken hos "Universitetet i Oslo" ferdig behandlet
       Og saksbehandleren ved Universitetet i Oslo ser at saken er behandlet automatisk
 
-  Regel: Opptaksforvalteren skrur automatikken av og på for opptaket
-    # Gjelder for ett opptak, ikke for hele systemet. Kode i dag: det finnes ingen innstilling for
-    # dette.
+  @draft @depends-on-OPT-OVO-FRI-001
+  # OPT-OVO-FRI-001: «Opptaksforvalter kan sette når den automatiske saksbehandlingen starter og avsluttes»
+  Regel: Saken behandles automatisk bare mens den automatiske saksbehandlingen pågår i opptaket
+    # Avklart 2026-11-03: hendelsene «Automatisk saksbehandling starter» og «Automatisk saksbehandling
+    # avsluttes» settes på opptaket, og er valgfrie. Er de ikke satt, pågår den automatiske
+    # saksbehandlingen til opptaket er historisk. Hendelsene er de samme som i OPT-BEH-BEH-015.
+    # Erstatter at opptaksforvalteren skrur automatikken av og på. Gjelder for ett opptak, ikke for
+    # hele systemet.
+    # Avklart 2026-11-03: hendelsene gjelder ikke importen av vitnemål. Importen kjører uansett
+    # (OPT-BEH-BEH-030, OPT-BEH-BEH-033).
 
-    Scenario: Saken behandles ikke automatisk når automatikken er skrudd av
-      Gitt at opptaksforvalteren ved HK-dir har skrudd av automatisk saksbehandling for "Samordna opptak 2027"
+    Scenario: Saken behandles ikke automatisk før den automatiske saksbehandlingen starter
+      Gitt at «Automatisk saksbehandling starter» er "2027-04-16 08:00" i "Samordna opptak 2027"
+      Og at klokken er 2027-04-15 kl. 10:00
       Og at "Kari Nordmann" har et vitnemål i KREG
       Når saksbehandlertildelingen har opprettet saken hos "Universitetet i Oslo"
       Så behandles ikke saken hos "Universitetet i Oslo" automatisk
 
-    Scenario: Automatikken stopper på tidspunktet opptaksforvalteren har satt
-      Gitt at opptaksforvalteren ved HK-dir har satt at automatisk saksbehandling stopper 15.07.2027 kl. 12.00 for "Samordna opptak 2027"
-      Og at klokken er 15.07.2027 kl. 12.01
+    Scenario: Saken behandles ikke automatisk etter at den automatiske saksbehandlingen er avsluttet
+      Gitt at «Automatisk saksbehandling avsluttes» er "2027-07-15 12:00" i "Samordna opptak 2027"
+      Og at klokken er 2027-07-15 kl. 12:01
       Når saksbehandlertildelingen har opprettet saken hos "Universitetet i Oslo"
       Så behandles ikke saken hos "Universitetet i Oslo" automatisk
 
-    Scenario: Automatikken i ett opptak påvirker ikke andre opptak
-      Gitt at opptaksforvalteren ved HK-dir har skrudd av automatisk saksbehandling for "Samordna opptak 2027"
-      Og at automatisk saksbehandling er skrudd på for "Lokalt opptak UiO 2027"
+    Scenario: Den automatiske saksbehandlingen pågår til opptaket er historisk når hendelsene ikke er satt
+      Gitt at "Samordna opptak 2027" ikke har hendelsene for den automatiske saksbehandlingen
+      Og at "Samordna opptak 2027" ikke er historisk
+      Og at "Kari Nordmann" har et vitnemål i KREG
+      Når saksbehandlertildelingen har opprettet saken hos "Universitetet i Oslo"
+      Så behandles saken hos "Universitetet i Oslo" automatisk når vitnemålet er importert
+
+    Scenario: Hendelsene i ett opptak påvirker ikke andre opptak
+      Gitt at «Automatisk saksbehandling avsluttes» er "2027-07-15 12:00" i "Samordna opptak 2027"
+      Og at "Lokalt opptak UiO 2027" ikke har hendelsene for den automatiske saksbehandlingen
+      Og at klokken er 2027-07-15 kl. 12:01
       Når saksbehandlertildelingen har opprettet en sak i "Lokalt opptak UiO 2027"
       Så behandles saken automatisk
 

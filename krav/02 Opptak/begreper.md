@@ -1,6 +1,6 @@
 # Begrepsliste — Opptak
 
-Siste oppdatering: 2026-10-24
+Siste oppdatering: 2026-11-03
 
 Denne listen sammenstiller begreper brukt i kravene (`krav/02 Opptak/`), design-filene og begrepskatalogen på [fs.sikt.no](https://fs.sikt.no/domenekunnskap/begreper/). Målet er konsistent begrepsbruk på tvers av krav, kode, API og brukergrensesnitt.
 
@@ -157,6 +157,8 @@ Denne listen sammenstiller begreper brukt i kravene (`krav/02 Opptak/`), design-
 | kvalifisert søker | «Søker som oppfyller alle formelle krav for opptak til et utdanningstilbud» | [kvalifisert søker](https://fs.sikt.no/domenekunnskap/begreper/kvalifisert_soker/) (utkast) | OK. Om søknaden også må være ferdigbehandlet for å være med i plasstildelingen, er uavklart |
 | ferdigbehandlet | Status på en sak (søknaden hos én saksbehandlende organisasjon) når saksbehandlingen er ferdig (FERDIG_BEHANDLET). Ved automatisk saksbehandling settes den når den automatiske behandlingen er ferdig | – | Brukes i `trekke_søknad.feature`, tidligopptaket og plasstildelingen. Avklart 2026-10-15: bare saker som er ferdig behandlet, er med i plasstildelingen. Avklart 2026-11-02: statusen heter «Behandlet» (OPT-BEH-BEH-029), men teksten i kravene kan si «ferdig behandlet». Koden heter fortsatt FERDIG_BEHANDLET til fs-plattform er endret. Ikke det samme som søknaden som er behandlet (søkeren har fått svar) |
 | generell studiekompetanse (GSK) | Det generelle kompetansekravet for opptak til høyere utdanning | – | OK. Gammel FS: GSK |
+| GSK-vitnemålsberegning | Opptakssystemets påstand om GSK for ett vitnemål, beregnet med seksfagskontrollen. Lagres på vitnemålet hver gang vitnemålet importeres fra KREG. Krever ingen sak. Står ved siden av skolens påstand, «GSK OK» fra KREG, som er fasit | – | ✅ Avklart 2026-11-03. Samme som «opptakssystemets påstand om GSK». Ikke det samme som GSK-konklusjon. Bruk ikke «GSK-beregning» alene (OPT-BEH-BEH-015, OPT-BEH-BEH-027) |
+| GSK-konklusjon | Konklusjonen om søkeren har GSK, for søknaden i ett opptak. Krever en sak. Settes automatisk eller av saksbehandleren. Den automatiske behandlingen av saken starter med å sette GSK-konklusjonen | – | ✅ Avklart 2026-11-03. Ikke det samme som GSK-vitnemålsberegning. Prosesstegningen «GSK-beregning for gitt opptak» er GSK-konklusjonen (OPT-BEH-BEH-015) |
 | realkompetanse | Kompetanse fra arbeid og annen erfaring som vurderes i stedet for formell utdanning | – | OK |
 | fagprofil | Søkerens registrerte fag og karakterer | – | Gammel FS: Fagprofil |
 | utdanningsbakgrunn | Gruppe søkere med samme type utdanning, med egne frister i opptaket | – | ⚠️ Brukes i kravene for frister. Relatert til «kvalifikasjonsgrunnlag» i gammel FS, men bredere |
@@ -169,7 +171,7 @@ Denne listen sammenstiller begreper brukt i kravene (`krav/02 Opptak/`), design-
 |---------------|------------|----------------|---------|
 | saksbehandling | Behandlingen av søknaden: vurdering av dokumentasjon, grunnlag og poeng | – | OK |
 | sak | Søknaden slik den ligger hos én saksbehandlende organisasjon | – | Ny i `tildele_saksbehandlende_organisasjon.feature` |
-| saksbehandlertildelingsregel | En eller flere regler for hvordan søknader skal fordeles til saksbehandlende organisasjoner i et samordna opptak | – | ✅ Avklart 2026-10-09: «saksbehandlertildelingsregel». Rettet i kravene |
+| behandlertildelingsregel | En eller flere regler for hvordan søknader skal fordeles til saksbehandlende organisasjoner i et samordna opptak | – | ✅ Avklart 2026-10-22: «behandlertildelingsregel», som i FS Admin. Erstatter «saksbehandlertildelingsregel» (avklart 2026-10-09). Rettet i kravene |
 | vedtak / vedtaksbrev | Den formelle avgjørelsen på søknaden, og brevet søkeren får med den | – | OK |
 | mangelkode | Kode for hva søkeren mangler for å være kvalifisert | – | Gammel FS: Kompetansemangler (SFA, SNU, SÆR) |
 
@@ -195,12 +197,13 @@ Denne listen sammenstiller begreper brukt i kravene (`krav/02 Opptak/`), design-
 | 14 | antall studieplasser | kapasitet | Vår term for hvor mange studieplasser utdanningstilbudet har | 2026-10-09 |
 | 15 | overbooking = totalt antall tilbud som gis − antall studieplasser | overbooking som tallet som settes | Det som settes, er antall tilbud som skal gis | 2026-10-09 |
 | 16 | opptakseier | – | Organisasjonen som oppretter og forvalter opptaket. Opptaksforvalterne er ansatte der | 2026-10-09 |
-| 17 | saksbehandlertildelingsregel | tildelingsregel | «Tildelingsregel» er rettet i kravene | 2026-10-09 |
+| 17 | behandlertildelingsregel | tildelingsregel, saksbehandlertildelingsregel | Rettet i kravene. «Saksbehandlertildelingsregel» ble brukt fra 2026-10-09 til 2026-10-22 | 2026-10-09 og 2026-10-22 |
 | 18 | tidlig opptak | – | Tidlig behandling og tilbud, uten tidligere studierett | 2026-10-09 |
 | 19 | plassflyt | plassflyt mellom runder | Plassflyt er mellom kvoter. Det som går mellom runder, er informasjonsarv | 2026-10-09 |
 | 20 | avslag / bortfall | – | To ulike svar: avslag = ikke kvalifisert eller ikke nådd opp. Bortfall = mister tilbud på lavere prioritet | 2026-10-09 |
 | 21 | rundetype = navn og rundeinnstillinger (i regelverkssamlingen til 2026-11-04, nå felles for alle opptak) | rundetype som styrer plasstildelingen | Plasstildelingen leser innstillingene, og ser aldri på rundetypen. Innstillingene kan ikke justeres på runden | 2026-10-24 |
 | 22 | frist (datoer med virkning) / informasjonsdato (datoer uten virkning) | dokumentasjonsfrist om datoen dokumentasjonen bør være lastet opp innen | Ordet sier hva datoen gjør. Den ordinære dokumentasjonsfristen heter informasjonsdato for dokumentasjon | 2026-10-27 |
+| 23 | GSK-vitnemålsberegning / GSK-konklusjon | GSK-beregning | To ulike begreper: **GSK-vitnemålsberegning** = opptakssystemets påstand om GSK for ett vitnemål, uten sak. Begge navnene betyr det samme. **GSK-konklusjon** = konklusjonen for søknaden i ett opptak, krever en sak | 2026-11-03 |
 
 ---
 
@@ -209,6 +212,7 @@ Denne listen sammenstiller begreper brukt i kravene (`krav/02 Opptak/`), design-
 - «Opptaksrunde» → «plasstildelingsrunde»: `se_egen_søknad.feature`, `svare_på_tilbud.feature`, `frister_og_hendelser.feature`
 - «Tildelingsregel» → «saksbehandlertildelingsregel», og «samordnet» → «samordna»: `tildele_saksbehandlende_organisasjon.feature`, `opptaksinnstillinger_utdanningstilbud.feature`
 - Det åpne spørsmålet om plassflyt mellom plasstildelinger i `plassflyt.feature` er lukket
+- 2026-10-22: «Saksbehandlertildelingsregel» og «tildelingsreglene» → «behandlertildelingsregel»: `tildele_saksbehandlende_organisasjon.feature`, `opptaksinnstillinger_utdanningstilbud.feature`, `_Flyter/10 Opptaksløpet/saksbehandlertildeling.feature`
 
 - «Samordnet opptak» → «samordna opptak» i alle opptakskrav. `samordnet_opptak.feature` heter nå `samordna_opptak.feature`
 - «Runde» → «plasstildelingsrunde» i alle opptakskrav, også i scenariotitler og steg. `forvalte_runder.feature` har tittelen «Plasstildelingsrunder i et opptak». Navn på runder i anførselstegn («Hovedrunde», «Suppleringsrunde») og mappenavnet `01 Runder` er ikke endret
@@ -237,7 +241,8 @@ Følgende begreper brukes i kravene, men finnes ikke (enda) i begrepskatalogen p
 - antall tilbud som skal gis, netto tilbud
 - tilbudsgaranti, kompensasjonstilbud
 - bortfall, opprykk, avslag
-- saksbehandlertildelingsregel
+- behandlertildelingsregel
+- GSK-vitnemålsberegning (opptakssystemets påstand om GSK), GSK-konklusjon
 - antall studieplasser
 - prøvetildeling
 - hendelseslogg

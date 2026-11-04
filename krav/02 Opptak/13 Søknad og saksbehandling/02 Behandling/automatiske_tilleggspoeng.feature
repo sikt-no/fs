@@ -2,7 +2,7 @@
 # Kilder: koden i fs-plattform (opptak-service: regelverk/poeng og saksbehandling), Jira STEK-68, STEK-76,
 # STEK-467 og STEK-533. Poengene fra vitnemålet er et eget krav (@OPT-BEH-BEH-018), og det samme gjelder
 # automatisk grunnlag (@OPT-BEH-BEH-019). Kravelementene står i automatisk_kvalifisering.feature (@OPT-BEH-BEH-020).
-@OPT-BEH-BEH-028 @must @planned @depends-on-OPT-REG-RAN-002
+@OPT-BEH-BEH-028 @must @in-progress @scope-automatisk-grunnlag-og-poeng @depends-on-OPT-REG-RAN-002
 Egenskap: Automatiske tilleggspoeng
   Som saksbehandler
   ønsker jeg at alderspoeng, kjønnspoeng og poeng for høyere utdanning settes av regelverket
@@ -15,7 +15,7 @@ Egenskap: Automatiske tilleggspoeng
   @ref-FLY-OPT-AUT-001
   Regel: Alderspoeng regnes ut fra søkerens alder
 
-    @depends-on-OPT-BEH-BEH-012
+    @depends-on-OPT-BEH-BEH-012 @implemented
     # Regelen «Søkerens alder beregnes på opptakets dato for aldersberegning».
     Scenariomal: Alderspoeng for søkerens alder
       Gitt at poengtypen for alderspoeng er knyttet til algoritmen "<algoritme>"
@@ -53,6 +53,7 @@ Egenskap: Automatiske tilleggspoeng
   @ref-FLY-OPT-AUT-001
   Regel: Kjønnspoeng regnes ut fra søkerens kjønn
 
+    @implemented
     Scenariomal: Kjønnspoeng for søkerens kjønn
       Gitt at poengtypen for kjønnspoeng er knyttet til algoritmen "<algoritme>"
       Og at søkeren er <kjønn>
@@ -126,6 +127,7 @@ Egenskap: Automatiske tilleggspoeng
   @ref-FLY-OPT-AUT-001
   Regel: Tilleggspoengene settes uansett hvem som velger grunnlaget
 
+    @implemented
     Scenario: Automatikken velger grunnlaget
       Gitt at søkeren er 23 år på datoen for aldersberegning
       Og at poengtypen for alderspoeng er knyttet til algoritmen "ALD_ALG1"
@@ -144,6 +146,7 @@ Egenskap: Automatiske tilleggspoeng
       Når saksbehandleren velger grunnlaget "VES" for saken
       Så har saken 2 kjønnspoeng
 
+    @implemented
     Scenario: Poengene for grunnlaget som er fjernet, vises ikke lenger
       Gitt at saken har grunnlaget "VES"
       Og at poengtypen for alderspoeng bare gjelder grunnlaget "VES"
@@ -158,6 +161,7 @@ Egenskap: Automatiske tilleggspoeng
       Når saksbehandleren endrer grunnlaget til "PRA"
       Så har saken 4 alderspoeng
 
+    @implemented
     Scenario: Poengene regnes ikke ut på nytt av seg selv når datoen for aldersberegning endres
       Gitt at saken har grunnlaget "VES"
       Og at saken har alderspoeng utregnet på datoen "2027-04-15"
@@ -185,11 +189,13 @@ Egenskap: Automatiske tilleggspoeng
 
   Regel: Saksbehandleren kan overstyre poeng automatikken har satt
 
+    @implemented
     Scenario: Poengene er satt av saksbehandleren og står
       Gitt at saksbehandleren har satt 3 alderspoeng og latt dem stå
       Når automatikken regner ut alderspoeng for saken
       Så har saken fortsatt 3 alderspoeng
 
+    @implemented
     Scenario: Saksbehandleren overstyrer et alderspoeng som er regnet ut automatisk
       Gitt at søkeren er 23 år på datoen for aldersberegning
       Og at alderspoengene er regnet ut automatisk til 4
@@ -202,6 +208,7 @@ Egenskap: Automatiske tilleggspoeng
       Når saksbehandleren velger grunnlaget "VES" for saken
       Så er alderspoengene merket som regnet ut automatisk
 
+    @implemented
     Scenario: Poengene er ikke merket som automatiske etter at saksbehandleren har endret dem
       Gitt at alderspoengene er regnet ut automatisk
       Når saksbehandleren endrer alderspoengene til 2

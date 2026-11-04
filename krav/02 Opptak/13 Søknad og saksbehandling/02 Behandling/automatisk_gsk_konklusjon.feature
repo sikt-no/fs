@@ -19,7 +19,7 @@
 # og gskvedtakannullering) inn i midlertidige gjenbrukstabeller før opptaket. De er
 # konklusjoner fra tidligere opptak i dette kravet. Tabellene fjernes etter
 # 2027-opptaket.
-@OPT-BEH-BEH-015 @must @in-progress
+@OPT-BEH-BEH-015 @must @in-progress @scope-automatisk-gsk-konklusjon
 Egenskap: Automatisk GSK-konklusjon
   Som saksbehandler
   ønsker jeg at søknader der søkeren åpenbart har generell studiekompetanse, får GSK-konklusjonen automatisk
@@ -48,8 +48,9 @@ Egenskap: Automatisk GSK-konklusjon
   positiv konklusjon når et vitnemål gir GSK, og løpet på vitnemålet finnes i
   opptakssystemets liste over løp. Har løpet ingen grunnlagskode, får konklusjonen KLY for et
   løp fra Kunnskapsløftet og RFA for et løp fra Reform 94, som i det gamle FS. Finnes ikke
-  løpet i listen, settes ingen konklusjon automatisk, og opptaksforvalteren får et varsel i
-  FS Admin om at løpet mangler. Vitnemål importeres fra KREG når
+  løpet i listen, får konklusjonen også KLY eller RFA, og opptaksforvalteren får et varsel i
+  FS Admin om at løpet mangler. Et vitnemål med et løp i listen brukes før et vitnemål med et
+  løp som ikke finnes i listen. Vitnemål importeres fra KREG når
   søknaden opprettes, og når KREG får nye vitnemål for en søker med aktive søknader. Når
   søknaden opprettes, importeres vitnemålene fra KREG først. Gir ingen av dem en konklusjon, ser
   systemet etter en positiv konklusjon fra et tidligere opptak. Ellers vurderes GSK
@@ -64,7 +65,7 @@ Egenskap: Automatisk GSK-konklusjon
 
   @ref-FLY-OPT-AUT-001 @depends-on-OPT-BEH-BEH-027 @ref-FLY-OPT-VIT-001
   Regel: Opptakssystemets påstand om GSK på vitnemålet
-    # Hvordan GSK beregnes for vitnemålet (seksfagskontrollen og grunnlagskoden), står der.
+    # Hvordan GSK-vitnemålsberegningen virker (seksfagskontrollen og grunnlagskoden), står der.
     # Avklart 30.10.2026: «systemet i videregående skole» fra innspillet i PR #857 er skolens
     # påstand, som kommer fra KREG.
 
@@ -198,19 +199,45 @@ Egenskap: Automatisk GSK-konklusjon
       Når vitnemålet importeres fra KREG
       Så får søknaden en positiv GSK-konklusjon med grunnlagskoden KLS
 
-    Scenario: Ingen automatisk konklusjon når løpet ikke finnes i opptakssystemets liste over løp
-      # Innspill i PR #878: bare når løpet mangler i listen over løp (NVB_LOEP), settes ingen
-      # konklusjon. Saksbehandleren vurderer GSK, selv om vitnemålet gir GSK.
+    Scenariomal: Søknaden får grunnlagskoden <grunnlagskode> når et løp fra <reform> ikke finnes i opptakssystemets liste over løp
+      # Avklart 2026-11-04 (Sondre): som i det gamle FS gir et løp som ikke finnes i listen, KLY
+      # eller RFA etter reformen. Løpene som har manglet i listen, har stort sett vært yrkesfaglige.
+      # Erstatter innspillet i PR #878 om at et ukjent løp ikke gir noen konklusjon.
       Gitt at søknaden ikke har noen GSK-konklusjon
       Og at vitnemålet har «GSK OK» fra KREG
+      Og at løpet på vitnemålet er fra <reform>
       Og at løpet på vitnemålet ikke finnes i opptakssystemets liste over løp
       Når vitnemålet importeres fra KREG
-      Så får søknaden ingen GSK-konklusjon fra vitnemålet
+      Så får søknaden en positiv GSK-konklusjon med grunnlagskoden <grunnlagskode>
+
+      Eksempler:
+        | reform          | grunnlagskode |
+        | Kunnskapsløftet | KLY           |
+        | Reform 94       | RFA           |
+
+    Scenario: Et vitnemål med et løp i listen brukes før et nyere vitnemål med et ukjent løp
+      # Avklart 2026-11-04 (Sondre).
+      Gitt at søknaden ikke har noen GSK-konklusjon
+      Og at søkeren har to vitnemål som gir GSK
+      Og at løpet på det nyeste vitnemålet ikke finnes i opptakssystemets liste over løp
+      Og at løpet på det eldste vitnemålet finnes i listen med grunnlagskoden KLS
+      Når vitnemålene importeres fra KREG
+      Så bygger søknadens GSK-konklusjon på det eldste vitnemålet
+      Og grunnlagskoden er KLS
+
+    Scenario: Det nyeste vitnemålet brukes når ingen av løpene finnes i listen
+      # Avklart 2026-11-04 (Sondre).
+      Gitt at søknaden ikke har noen GSK-konklusjon
+      Og at søkeren har to vitnemål fra Kunnskapsløftet som gir GSK
+      Og at ingen av løpene på vitnemålene finnes i opptakssystemets liste over løp
+      Når vitnemålene importeres fra KREG
+      Så bygger søknadens GSK-konklusjon på vitnemålet med senest utstedelsesdato
+      Og grunnlagskoden er KLY
 
     @draft @openquestion
     Scenario: Opptaksforvalteren får varsel om et løp som mangler i listen over løp
       # Avklart 2026-11-02 (Ingrid Helset, etter samtale med Jøran og Geir, og bekreftet av
-      # domeneeksperten): vitnemål med et ukjent løp behandles manuelt, og opptaksforvalteren får
+      # domeneeksperten): opptaksforvalteren får
       # et varsel, så noen kan sjekke om løpet skal legges inn i listen. HK-dir eier
       # opptakskodene og bestemmer grunnlagskoden, og Sikt oppdaterer listen over løp (2027).
       # Avklart 2026-11-02: varselet kommer bare i FS Admin, ikke på e-post eller andre steder.
@@ -279,7 +306,7 @@ Egenskap: Automatisk GSK-konklusjon
       Og at opptaket ikke er avsluttet
       Når KREG får et nytt vitnemål for søkeren
       Så importeres vitnemålet fra KREG
-      Og GSK beregnes for vitnemålet uten at noen starter det
+      Og GSK-vitnemålsberegningen kjører for vitnemålet uten at noen starter den
 
   @ref-FLY-OPT-AUT-001
   Regel: Konklusjon fra tidligere opptak
@@ -384,13 +411,43 @@ Egenskap: Automatisk GSK-konklusjon
       Når søknaden opprettes
       Så får søknaden ingen negativ GSK-konklusjon
 
+  @draft @depends-on-OPT-OVO-FRI-001
+  # OPT-OVO-FRI-001: «Opptaksforvalter kan sette når den automatiske saksbehandlingen starter og avsluttes»
+  Regel: Automatikken setter GSK-konklusjonen bare mens den automatiske saksbehandlingen pågår
+    # Avklart 2026-11-03. Er hendelsene ikke satt, pågår den automatiske saksbehandlingen til opptaket er
+    # historisk. Hendelsene er de samme som i OPT-BEH-BEH-032. Importen av vitnemålet og
+    # GSK-vitnemålsberegningen kjører uansett.
+
+    Scenario: Ingen automatisk konklusjon før den automatiske saksbehandlingen starter
+      Gitt at «Automatisk saksbehandling starter» er "2027-04-16 08:00" i opptaket
+      Og at søknaden ikke har noen GSK-konklusjon
+      Og at søkeren har et vitnemål som gir GSK
+      Når vitnemålet importeres fra KREG 2027-04-15 kl. 10:00
+      Så får søknaden ingen GSK-konklusjon fra vitnemålet
+
+    Scenario: Ingen automatisk konklusjon etter at den automatiske saksbehandlingen er avsluttet
+      Gitt at «Automatisk saksbehandling avsluttes» er "2027-07-15 12:00" i opptaket
+      Og at søknaden ikke har noen GSK-konklusjon
+      Og at søkeren har et vitnemål som gir GSK
+      Når vitnemålet importeres fra KREG 2027-07-15 kl. 12:01
+      Så får søknaden ingen GSK-konklusjon fra vitnemålet
+
+    Scenario: Den automatiske saksbehandlingen pågår til opptaket er historisk når hendelsene ikke er satt
+      Gitt at opptaket ikke har hendelsene for den automatiske saksbehandlingen
+      Og at opptaket ikke er historisk
+      Og at søknaden ikke har noen GSK-konklusjon
+      Og at søkeren har et vitnemål som gir GSK
+      Når vitnemålet importeres fra KREG
+      Så får søknaden en positiv GSK-konklusjon
+
   @ref-FLY-OPT-AUT-001
   Regel: GSK-konklusjonen settes også når den automatiske behandlingen kjører
     # Første steg når den automatiske behandlingen kjører for et opptak. Konklusjonen settes
     # etter de samme reglene som når vitnemålet importeres fra KREG: vitnemålet går foran tidligere
     # konklusjoner, bare den siste tidligere konklusjonen gjenbrukes, og en konklusjon som
-    # finnes, overskrives ikke. Påstandene på vitnemålet beregnes ikke på nytt.
-    # Etter prosesstegningen «GSK-beregning for gitt opptak» (2026-10-29).
+    # finnes, overskrives ikke. GSK-vitnemålsberegningen kjøres ikke på nytt.
+    # Etter prosesstegningen «GSK-beregning for gitt opptak» (2026-10-29). Tegningen kaller
+    # GSK-konklusjonen «GSK-beregning». Begrepet er avklart 2026-11-03, se begreper.md.
 
     Scenario: Søknaden får konklusjonen fra vitnemålet i den automatiske behandlingen
       Gitt at søknaden ikke har noen GSK-konklusjon
