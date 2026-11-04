@@ -92,17 +92,6 @@ Egenskap: Automatisk grunnlag
       Så får saken grunnlaget som krever førstegangsvitnemål
       Men saken får ikke grunnlaget som bare krever et vitnemål
 
-    @ref-FLY-OPT-SAM-001
-    Scenario: Sammensatt vitnemål gir ikke grunnlaget som krever førstegangsvitnemål
-      # Avklart 2026-10-29: et sammensatt vitnemål er aldri et førstegangsvitnemål.
-      Gitt at regelverket har et grunnlag som krever førstegangsvitnemål og har aldersgrensen under 22 år
-      Og at regelverket har et grunnlag som krever et vitnemål
-      Og at søkeren er 21 år på datoen for aldersberegning
-      Og at saken behandles automatisk på et sammensatt vitnemål
-      Når søknaden behandles automatisk
-      Så får saken grunnlaget som krever et vitnemål
-      Men saken får ikke grunnlaget som krever førstegangsvitnemål
-
     Scenario: Ingen grunnlag settes når flere grunnlag passer like godt
       # Avklart 30.10.2026: to grunnlag med de samme egenskapene er en feil i regelverket, og
       # regelverket må justeres så det ikke skjer. Kode i dag: grunnlaget med lavest kode

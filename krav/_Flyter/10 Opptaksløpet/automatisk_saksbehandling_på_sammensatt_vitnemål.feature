@@ -52,8 +52,9 @@ Egenskap: Automatisk saksbehandling på sammensatt vitnemål
       Når saksbehandleren ved Universitetet i Oslo starter den automatiske behandlingen på det sammensatte vitnemålet
       Så behandles saken hos "Universitetet i Oslo" automatisk på det sammensatte vitnemålet
 
-  @depends-on-OPT-BEH-BEH-019
+  @depends-on-OPT-BEH-BEH-019 @depends-on-OPT-BEH-BEH-039
   # OPT-BEH-BEH-019: «Grunnlaget velges ut fra egenskapene regelverket har gitt det»
+  # OPT-BEH-BEH-039: «Grunnlaget og kravelementene avgjøres på vitnemålet saksbehandleren har valgt»
   Regel: Søknaden får ikke grunnlaget for førstegangsvitnemål på det sammensatte vitnemålet
     # Fasen er en del av «Saken får grunnlag fra vitnemålet» i FLY-OPT-AUT-001, og står for seg
     # fordi et sammensatt vitnemål aldri er et førstegangsvitnemål.

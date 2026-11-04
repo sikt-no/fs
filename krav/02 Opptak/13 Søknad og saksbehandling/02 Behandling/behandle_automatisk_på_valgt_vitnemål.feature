@@ -3,7 +3,8 @@
 #
 # Skilt ut 04.11.2026 fra OPT-BEH-BEH-025 (regelen «Har søkeren flere vitnemål, behandles saken
 # automatisk på vitnemålet saksbehandleren velger»), OPT-BEH-BEH-019 («Grunnlag fra vitnemålet
-# saksbehandleren har valgt»), OPT-BEH-BEH-020 («Kravelementene vurderes mot vitnemålet
+# saksbehandleren har valgt» og «Sammensatt vitnemål gir ikke grunnlaget som krever
+# førstegangsvitnemål»), OPT-BEH-BEH-020 («Kravelementene vurderes mot vitnemålet
 # saksbehandleren har valgt») og OPT-BEH-BEH-032 («Saken som er under behandling, behandles
 # automatisk på vitnemålet saksbehandleren velger»). Delene var validert, og er samlet her
 # uendret.
@@ -72,3 +73,14 @@ Egenskap: Behandle automatisk på vitnemålet saksbehandleren velger
       Og at søknaden har et kravelement som er koblet til vitnemålet
       Når søknaden behandles automatisk
       Så er kravelementet vurdert mot "Vitnemål 2025"
+
+    @ref-FLY-OPT-SAM-001
+    Scenario: Sammensatt vitnemål gir ikke grunnlaget som krever førstegangsvitnemål
+      # Avklart 2026-10-29: et sammensatt vitnemål er aldri et førstegangsvitnemål.
+      Gitt at regelverket har et grunnlag som krever førstegangsvitnemål og har aldersgrensen under 22 år
+      Og at regelverket har et grunnlag som krever et vitnemål
+      Og at søkeren er 21 år på datoen for aldersberegning
+      Og at saken behandles automatisk på et sammensatt vitnemål
+      Når søknaden behandles automatisk
+      Så får saken grunnlaget som krever et vitnemål
+      Men saken får ikke grunnlaget som krever førstegangsvitnemål
