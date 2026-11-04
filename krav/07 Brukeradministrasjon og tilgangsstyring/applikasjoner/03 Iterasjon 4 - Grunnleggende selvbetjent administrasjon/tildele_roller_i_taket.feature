@@ -1,5 +1,5 @@
 # language: no
-@BRU-APP-API-018 @must @draft
+@BRU-APP-API-018 @must @planned
 Egenskap: Forvalte roller i taket til en Feide-applikasjon
   Som bruker med applikasjonsadministrator-rollen
   ønsker jeg å tildele og fjerne roller i taket til en Feide-applikasjon for en organisasjon og et miljø
