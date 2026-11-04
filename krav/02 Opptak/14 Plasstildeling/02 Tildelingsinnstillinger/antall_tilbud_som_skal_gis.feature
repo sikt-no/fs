@@ -2,7 +2,7 @@
 # GitHub: #583
 @OPT-PLA-INN-001 @must @draft @scope-plasstildeling-2027
 Egenskap: Antall tilbud som skal gis per utdanningskvote (sette opptaksparametere)
-  Som opptaksforvalter
+  Som opptaksforvalter ved lærested
   ønsker jeg å bestemme hvor mange tilbud som skal gis i hver utdanningskvote i en plasstildelingsrunde
   slik at plasstildelingen fyller studieplassene uten å gi for mange eller for få tilbud.
 

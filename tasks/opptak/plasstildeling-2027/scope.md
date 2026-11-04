@@ -5,7 +5,7 @@
 - **Initiativ**: [#216](https://github.com/sikt-no/fs/issues/216)
 - **Jira**: [sikt-no/fs#216](https://github.com/sikt-no/fs/issues/216)
 - **Eier**: –
-- **Siste oppdatering**: 2026-11-02
+- **Siste oppdatering**: 2026-11-04
 
 ## Mål
 
@@ -45,6 +45,7 @@
 |---|---|---|---|---|
 | `@OPT-REG-RUN-001` [bruke_rundetyper.feature](../../../krav/02%20Opptak/10%20Regelverk/06%20Rundetyper/bruke_rundetyper.feature) | Must | [Mockup: Rundetyper](https://claude.ai/artifact/5VkngKFsP2xtmqmCyKxcDU) | [#216](https://github.com/sikt-no/fs/issues/216) | Hovedtildeling, supplering og etterfylling med innstillingene plasstildelingen leser. Forvaltningen er skilt ut i `@OPT-REG-RUN-002` (2026-10-29). Verify 2026-10-28: rundetypene er et fast kodeverk uten innstillinger |
 | `@OPT-PLA-RUN-001` [forvalte_runder.feature](../../../krav/02%20Opptak/14%20Plasstildeling/01%20Runder/forvalte_runder.feature) | Must | [Prototype v88: Runder](https://claude.ai/artifact/PtEVDPyFrsWodTZPu9mfA9?sk=ZdIKzCJG4Uc0TFPmwraDxQ) | [#216](https://github.com/sikt-no/fs/issues/216) | Legge til runder, med innstillingene fra rundetypen. Verify: 6/23 — bare hovedrunde kan velges i fs-admin, og redigering nullstiller publiseringen |
+| `@OPT-PLA-RUN-002` [listevisning_og_søk_i_plasstildelingsrunder.feature](../../../krav/02%20Opptak/14%20Plasstildeling/01%20Runder/listevisning_og_s%C3%B8k_i_plasstildelingsrunder.feature) | Must | [Prototype v88: Runder](https://claude.ai/artifact/PtEVDPyFrsWodTZPu9mfA9?sk=ZdIKzCJG4Uc0TFPmwraDxQ) | [#216](https://github.com/sikt-no/fs/issues/216) | Oversikten over plasstildelingsrundene med søk og filter på rundetype, status og periode. Ny 2026-11-04 |
 | `@OPT-PLA-INN-001` [antall_tilbud_som_skal_gis.feature](../../../krav/02%20Opptak/14%20Plasstildeling/02%20Tildelingsinnstillinger/antall_tilbud_som_skal_gis.feature) | Must | [Prototype v88: Antall tilbud](https://claude.ai/artifact/PtEVDPyFrsWodTZPu9mfA9?sk=ZdIKzCJG4Uc0TFPmwraDxQ) | [#583](https://github.com/sikt-no/fs/issues/583) | Antall tilbud som skal gis per utdanningskvote i runden. Jira [TAKE-327](https://sikt.atlassian.net/browse/TAKE-327). Verify: 2/21 — settes for hele opptaket, og perioden håndheves ikke |
 | `@OPT-PLA-INN-002` [plassflyt.feature](../../../krav/02%20Opptak/14%20Plasstildeling/02%20Tildelingsinnstillinger/plassflyt.feature) | Must | – | [#216](https://github.com/sikt-no/fs/issues/216) | Plassflyt ved ledige plasser per utdanningskvote. Verify: 7/8 — en mottaker som mangler, stopper kjøringen |
 | `@OPT-PLA-TIL-001` [starte_plasstildeling.feature](../../../krav/02%20Opptak/14%20Plasstildeling/03%20Tildeling/starte_plasstildeling.feature) | Must | [Mockup: Plasstildeling](https://claude.ai/artifact/5VkngKFsP2xtmqmCyKxcDU) | [#216](https://github.com/sikt-no/fs/issues/216) | Starte en plasstildeling. Verify: 3/12 — ikke styrt av rundetypen, og ingen filter på ferdig behandlet |
@@ -372,6 +373,7 @@ Append-only. Ny linje på toppen ved hver hendelse.
 
 | Dato       | Hendelse | Av | Lenke til review |
 |------------|----------|----|------------------|
+| 2026-11-04 | Nytt krav `@OPT-PLA-RUN-002` (oversikten over plasstildelingsrunder, søk og filter), Must i første leveranse | – | [PR #907](https://github.com/sikt-no/fs/pull/907) |
 | 2026-11-02 | Kravene gått gjennom mot prototypen v88 ([PR #907](https://github.com/sikt-no/fs/pull/907)): `@OPT-PLA-INN-004` lagt til (Could), varslingen av lærestedene flyttet fra `@OPT-PLA-SVA-002`, skisselenkene byttet til prototypen v88 | @karensikt | – |
 | 2026-11-02 | Oppgave og scope slått sammen til scope.md (fra plasstildeling-rundetyper-og-runder, gjennomfore-plasstildeling, publisere-og-svare-pa-tilbud, plasstildeling) | – | – |
 | 2026-10-28 | [plasstildeling-rundetyper-og-runder] Opprettet i scope-plasstildeling-2027 | @karensikt | – |
