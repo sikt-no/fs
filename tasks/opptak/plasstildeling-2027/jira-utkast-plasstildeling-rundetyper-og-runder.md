@@ -27,14 +27,14 @@ Forvaltning av rundetyper (`@OPT-REG-RUN-002`, Could) er ikke med: ingen kan leg
 
 Tittelen beholdes. Beskrivelsen byttes med teksten under. Epicen er den eneste for plasstildelingen, og leveransedelene legges under den som stories (besluttet i teamet 2026-11-04). Utkastene for de to andre leveransedelene står i [jira-utkast-gjennomfore-plasstildeling.md](jira-utkast-gjennomfore-plasstildeling.md) og [jira-utkast-publisere-og-svare-pa-tilbud.md](jira-utkast-publisere-og-svare-pa-tilbud.md).
 
-> **Beskrivelse til TAKE-3:**
+> **Beskrivelse til TAKE-3** (lagt inn i Jira av produkteier 2026-11-04):
 >
-> Plasstildelingen i FS Opptak gjøres ferdig til første samordna opptak 2027 (produksjonsfrist 8. desember 2026). Opptaksforvalter legger til plasstildelingsrundene, lærestedene setter antall tilbud som skal gis, plasstildelingen gjennomføres etter innstillingene i runden, og resultatet publiseres til søkerne, som svarer på tilbud og ventelisteplass.
+> Andre versjon av plasstildeling i FS Opptak skal inneholde nødvendig funksjonalitet for de samordna opptakene i 2027 (produksjonsfrist januar 2027). Opptaksforvalter legger til plasstildelingsrundene, lærestedene setter antall tilbud som skal gis, plasstildelingen gjennomføres etter innstillingene i runden, og resultatet publiseres til søkerne, som svarer på tilbud og ventelisteplass.
 >
 > **Hvor kravene bor**
 >
 > - Scopet: [plasstildeling-2027](https://github.com/sikt-no/fs/blob/main/tasks/opptak/plasstildeling-2027/scope.md) — mål, avgrensning og alle kravene, med hvilken sak hvert krav hører til.
-> - Kravene: [krav/02 Opptak/14 Plasstildeling](https://github.com/sikt-no/fs/tree/main/krav/02%20Opptak/14%20Plasstildeling) og rundetypene i [10 Regelverk/06 Rundetyper](https://github.com/sikt-no/fs/tree/main/krav/02%20Opptak/10%20Regelverk/06%20Rundetyper). Lesbare i [FS Kravforvaltning](https://sikt-no.github.io/fs/).
+> - Kravene: [krav/02 Opptak/14 Plasstildeling](https://github.com/sikt-no/fs/tree/main/krav/02%20Opptak/14%20Plasstildeling). Lesbare i [FS Kravforvaltning](https://sikt-no.github.io/fs/).
 > - Spesifikasjonene: [tasks/opptak/plasstildeling-2027/spec](https://github.com/sikt-no/fs/tree/main/tasks/opptak/plasstildeling-2027/spec).
 >
 > **Leveransedeler i scopet** (i denne rekkefølgen, som stories under epicen)
