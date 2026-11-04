@@ -22,8 +22,8 @@ Opptaksforvalter legger til plasstildelingsrunder i opptaket av rundetypene hove
 ### Skisse: Prototype v88
 
 - **Type:** `annet` (HTML-prototype)
-- **Referanse:** https://claude.ai/artifact/PtEVDPyFrsWodTZPu9mfA9?sk=ZdIKzCJG4Uc0TFPmwraDxQ (artefakt i en annen organisasjon)
-- **Lagrede artefakter:** [plasstildeling-prototype-v88.html](krav-input/sketches/plasstildeling-prototype-v88.html)
+- **Referanse:** https://claude.ai/artifact/PtEVDPyFrsWodTZPu9mfA9 (artefakt i en annen organisasjon)
+- **Lagrede artefakter:** ingen. Prototypen er fra en annen organisasjon, og lagres ikke i det offentlige repoet (tilbakemelding på PR #907). Tekstene er skrevet inn i implementasjonsdetaljene
 - **Dekker krav:** `forvalte_runder.feature`, `listevisning_og_søk_i_plasstildelingsrunder.feature`
 - **Valideringsstatus:** Avvik:
   - Taket for antall tilbud per søker vises bare for rundetyper der søkeren kan ha flere tilbud. Kravet sier at det vises og kan endres på alle runder.
@@ -65,6 +65,11 @@ Første kjøring holdt alle tre kravene tilbake. De ble rettet med `fs-krav`, og
 | `krav/02 Opptak/10 Regelverk/06 Rundetyper/bruke_rundetyper.feature` | `@OPT-REG-RUN-001 @must @planned` | `@OPT-REG-RUN-001 @must @in-progress` |
 | `krav/02 Opptak/14 Plasstildeling/01 Runder/forvalte_runder.feature` | `@OPT-PLA-RUN-001 @must @planned` | `@OPT-PLA-RUN-001 @must @in-progress` |
 | `krav/02 Opptak/14 Plasstildeling/01 Runder/listevisning_og_søk_i_plasstildelingsrunder.feature` | `@OPT-PLA-RUN-002 @must @planned` | `@OPT-PLA-RUN-002 @must @in-progress` |
+
+## Endringer etter at kravene ble hentet inn
+
+- 2026-11-04 (tilbakemelding på PR #907): I `forvalte_runder.feature` er scenarioet «Rundetypen kan ikke åpnes for ledige studieplasser» fjernet, fordi alle tre rundetypene har innstillingen. Taket for antall tilbud per søker gjelder også med bortfall: bortfallet gjelder prioritetene under det laveste tilbudet (virkningen står i `gjennomføre_plasstildeling.feature`). Standardverdien 10 for taket på ledige studieplasser gjelder alle tre rundetypene. Aktøren i bakgrunnen er «opptakets forvalter». Hvor lærestedet ser resultatet etter perioden, er et åpent spørsmål i `vise_resultat.feature`.
+- Prototypen v88 er ikke lagret i repoet (tilbakemelding på PR #907: repoet er offentlig).
 
 ## Åpne spørsmål
 

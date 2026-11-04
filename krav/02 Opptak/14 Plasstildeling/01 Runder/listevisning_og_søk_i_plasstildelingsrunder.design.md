@@ -66,7 +66,7 @@ Oversikten åpnes fra opptaket. Herfra går brukeren til rundesiden.
 | Dialog for sletting | Noen av de valgte rundene er publisert | «{kan} av {valgte} valgte kan slettes. Publiserte runder kan ikke slettes.» | `{kan}`, `{valgte}` | Publiserte plasstildelingsrunder slettes ikke |
 | Kvittering | Rundene er slettet | «{n} runder er slettet.» | Én runde: «Runden «{navn}» er slettet.» | Slette flere plasstildelingsrunder |
 
-**Skisser:** prototypen v88, [`tasks/opptak/plasstildeling-2027/spec/krav-input/sketches/plasstildeling-prototype-v88.html`](../../../../tasks/opptak/plasstildeling-2027/spec/krav-input/sketches/plasstildeling-prototype-v88.html). Tekstene er sjekket mot den 2026-11-04.
+**Skisser:** prototypen v88 (<https://claude.ai/artifact/PtEVDPyFrsWodTZPu9mfA9>, artefakt i en annen organisasjon, ikke lagret i repoet). Tekstene er sjekket mot den 2026-11-04.
 
 Avvik fra prototypen, der kravet gjelder:
 - Statusen heter «Publisert for søkere», ikke «Publisert» (prototypen har det bare som verktøytips).

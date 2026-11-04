@@ -62,6 +62,9 @@ Egenskap: Kontrollere antall tilbud som skal gis
     # Endret 2026-11-02 (produkteier): Varselet gjelder hver utdanningskvote, og sammenligner med kvoteplassene,
     # ikke med utdanningstilbudet samlet. Det er overbookingen i antall_tilbud_som_skal_gis.feature.
     # Varselet stopper ikke lagringen: et lærested kan ha grunn til å gi flere tilbud enn kvoteplassene.
+    # AVKLART 2026-11-04 (produkteier, tilbakemelding på PR #907): Varselet sammenligner med kvoteplassene, ikke med
+    # ledige plasser i kvoten, som i prototypen v88. At varselet kommer i de fleste kvotene i samordna opptak, er bevisst:
+    # det viser overbookingen.
 
     Scenario: Varsel når antall tilbud er høyere enn kvoteplassene
       Gitt at utdanningskvoten "Ordinær" på "Sykepleie, høst 2027" har 42 kvoteplasser

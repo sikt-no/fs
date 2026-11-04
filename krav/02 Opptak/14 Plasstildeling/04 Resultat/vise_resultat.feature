@@ -143,6 +143,10 @@ Egenskap: Se resultatet av plasstildelingen før publisering
     #   «Har du oppdaget feil, kontakt HK-dir på … innen …»? Hva trenger HK-dir å vite for å være trygge før publisering? I brukertesten med HK-dir 2026-10-27 (HK-10162): «markere enkeltforekomster
     #   mer enn melde som kontrollert», «se igjennom innen frist, gi tilbakemelding om noe er galt», «kan meldes på
     #   e-post i verste fall». Inntil videre melder lærestedene feil på e-post (avklart 2026-10-28).
+    # - Hvor ser lærestedet resultatet etter perioden (tilbakemelding på PR #907, 2026-11-04)? forvalte_runder.feature
+    #   sier at lærestedet ikke kan åpne en plasstildelingsrunde der perioden for å endre antall tilbud er stengt. Skal
+    #   runden kunne åpnes igjen for å kontrollere resultatet (uten å endre antall tilbud), eller vises resultatet et
+    #   annet sted?
 
 
     # AVKLART 2026-10-14 (domeneekspert): Kontrollen er at lærestedene og opptakets

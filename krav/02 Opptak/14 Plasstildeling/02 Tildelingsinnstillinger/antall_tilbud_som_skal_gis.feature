@@ -71,11 +71,21 @@ Egenskap: Antall tilbud som skal gis per utdanningskvote (sette opptaksparameter
     # AVKLART 2026-11-02 (produkteier, prototypen v88): Antall tilbud som skal gis er fylt ut med kvoteplassene,
     # og lærestedet bekrefter eller endrer tallet. Koden gjør det samme («Plasstildelingsløpet i Opptak», kap. 1 og 3).
     # Erstatter avklaringen fra 2026-10-08 om at standardverdien er 0.
+    # AVKLART 2026-11-04 (produkteier, tilbakemelding på PR #907): Tallet fylles ut med kvoteplassene bare før den
+    # første plasstildelingsrunden. Det følger med uendret til neste runde, og lærestedet trenger ikke fylle ut på nytt.
+    # Lærestedet kan justere tallet i en senere runde, men overbookingen er i utgangspunktet satt i den første runden.
     Scenario: Antall tilbud er fylt ut med kvoteplassene
       Gitt at utdanningskvoten "Ordinær" på "Sykepleie, høst 2027" har 60 kvoteplasser
       Og at opptaksforvalter ved lærestedet ikke har endret antall tilbud som skal gis i utdanningskvoten "Ordinær"
       Når opptaksforvalter ser antall tilbud som skal gis for utdanningstilbudet "Sykepleie, høst 2027"
       Så er antall tilbud som skal gis i utdanningskvoten "Ordinær" 60
+
+    Scenario: Antall tilbud fylles ikke ut på nytt i neste plasstildelingsrunde
+      Gitt at utdanningskvoten "Ordinær" på "Sykepleie, høst 2027" har 60 kvoteplasser
+      Og at lærestedet satte antall tilbud som skal gis i utdanningskvoten "Ordinær" til 70 i "Hovedrunde"
+      Og at opptaket har plasstildelingsrunden "Suppleringsrunde" med rundetype "Supplering"
+      Når opptaksforvalter ser antall tilbud som skal gis for utdanningstilbudet "Sykepleie, høst 2027" i "Suppleringsrunde"
+      Så er antall tilbud som skal gis i utdanningskvoten "Ordinær" 70
 
     # En utdanningskvote mangler antall tilbud når lærestedet har fjernet tallet. Det er filteret
     # «Mangler antall tilbud i utdanningskvotene» til for.

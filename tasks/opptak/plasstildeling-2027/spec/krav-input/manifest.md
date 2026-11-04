@@ -16,4 +16,4 @@
 
 | Skisse | Kilde | Lagret |
 |---|---|---|
-| Prototype: Plasstildeling – følger STA-92 (v88) | https://claude.ai/artifact/PtEVDPyFrsWodTZPu9mfA9?sk=ZdIKzCJG4Uc0TFPmwraDxQ (artefakt i en annen organisasjon), nedlastet til `~/Downloads` | `sketches/plasstildeling-prototype-v88.html` |
+| Prototype: Plasstildeling – følger STA-92 (v88) | https://claude.ai/artifact/PtEVDPyFrsWodTZPu9mfA9 (artefakt i en annen organisasjon), nedlastet til `~/Downloads` | Ikke lagret (artefakt i en annen organisasjon, og repoet er offentlig) |

@@ -1,38 +1,63 @@
 # Utkast til Jira: Forberede plasstildeling
 
-Utkast 2026-10-28, skrevet om 2026-11-02 etter gjennomgangen av prototypen v88 ([PR #907](https://github.com/sikt-no/fs/pull/907)), og oppdatert 2026-11-03: rundetypene forvaltes ikke i første leveranse. Ikke opprettet eller endret i Jira ennå. Kravene er `@draft`, og lenkene går til `main` (kravene kommer dit når PR #907 er merget).
+Utkast 2026-10-28, skrevet om 2026-11-02 etter gjennomgangen av prototypen v88 ([PR #907](https://github.com/sikt-no/fs/pull/907)), oppdatert 2026-11-03: rundetypene forvaltes ikke i første leveranse, og 2026-11-04 mot sakene i TAKE og beslutningene i teamet. Ikke opprettet eller endret i Jira ennå. Kravene for runder og rundetyper er `@in-progress`, og antall tilbud er `@draft`. Lenkene går til `main` (kravene kommer dit når PR #907 er merget).
 
 Forvaltning av rundetyper (`@OPT-REG-RUN-002`, Could) er ikke med: ingen kan legge til, endre eller slette rundetyper i regelverkssamlingen. Plasstildelingen bruker de tre rundetypene som finnes. Varsling av lærestedene og markering av gjennomgang (`@OPT-PLA-INN-004`, Could) og kontrollen av antall tilbud (`@OPT-PLA-INN-003`, Should) er heller ikke med.
 
-## Epic (TAKE-3, skrives om): Forberede plasstildeling
+## Sakene i Jira nå (TAKE, hentet 2026-11-04)
 
-Opptaksforvalter legger til plasstildelingsrundene i opptaket, av rundetypene hovedtildeling, supplering og etterfylling, og runden får innstillingene fra rundetypen. Lærestedene setter antall tilbud som skal gis per utdanningskvote i runden, og ser opplysningene de trenger for å sette tallene. Første leveranse i plasstildelingen: det plasstildelingen leser.
+| Sak | I Jira nå | I utkastet |
+|---|---|---|
+| [TAKE-3](https://sikt.atlassian.net/browse/TAKE-3) | Epic «Ferdigstilling av plasstildeling i opptak», In progress, med alle plasstildelingssakene | Beholdes. Leveransedelene legges under den som stories (besluttet i teamet 2026-11-04) |
+| [TAKE-484](https://sikt.atlassian.net/browse/TAKE-484) | Story «Attributter på rundetype», To Do, uten epic og bare med et bilde. Sub-task [TAKE-485](https://sikt.atlassian.net/browse/TAKE-485) «BE: flyway og støtte i grafen for nye felter» | Brukes for innstillingene på rundetypene (`@OPT-REG-RUN-001`). Flyttes til TAKE-3 og får beskrivelse og akseptansekriterier |
+| [TAKE-327](https://sikt.atlassian.net/browse/TAKE-327) | Story «Beregne antall tilbud per utdanningskvote fra relativ fordeling», Backlog | Skrives om til «Lærestedet setter antall tilbud som skal gis per utdanningskvote» |
+| [TAKE-450](https://sikt.atlassian.net/browse/TAKE-450) | Task «Fjerne sette antall tilbud som skal gis» (opptaksinnstillingen), Won't do, under [TAKE-318](https://sikt.atlassian.net/browse/TAKE-318) | Ingen endring. Feltet er fjernet fra opptaksinnstillingene, og hører ikke med i TAKE-327 |
+| TAKE-74, 156, 159, 165, 265, 267, 268, 278, 288, 328, 329, 330 og 331 | Under TAKE-3, Backlog | Blir under TAKE-3 |
+| – | Ingen story for runder eller oversikten over runder | Ny story «Opprette plasstildelingsrunder» under TAKE-3 |
+| – | Ingen sak for feilen der redigering nullstiller publiseringen og perioden | Ny bug under TAKE-3 |
 
-Krav: [scope-plasstildeling-2027](https://github.com/sikt-no/fs/blob/main/tasks/opptak/plasstildeling-2027/scope.md)
+### Avklart med teamet (2026-11-04)
 
-## Ny epic: Gjennomføre og publisere plasstildeling
+- TAKE-3 beholdes som epic for hele plasstildelingen, og leveransedelene legges under den som stories. Det lages ingen ny epic.
+- Feltet for antall tilbud som skal gis er fjernet fra opptaksinnstillingene, og trenger ikke stå i TAKE-327.
+- Taket for antall tilbud per søker er antall tilbud søkeren kan få i runden, og hører til plasstildelingsrunden. Det er ikke det samme som maks antall søknadsalternativer, som hører til opptaket (`innstillinger.feature`). I koden ligger taket på opptaket (`maks_antall_tilbud`, «maksimalt antall tilbud som kan gis i dette opptaket»), og regelen i `innstillinger.feature` er `@deprecated`. Å flytte taket til runden hører til storyen «Opprette plasstildelingsrunder».
+- Bildet i TAKE-484 viser de samme innstillingene som `@OPT-REG-RUN-001`. TAKE-484 gjelder bare innstillingene på rundetypen. Svarfrist, periode, tak og ledige studieplasser på runden hører til storyen «Opprette plasstildelingsrunder», og antall tilbud som skal gis til TAKE-327.
 
-Starte og gjennomføre plasstildelingen etter innstillingene i runden, se resultatet før det publiseres, publisere resultatet til søkerne og håndtere svarene. Oppgavene «Gjennomføre plasstildelingen» og «Publisere resultatet og svare på tilbud» i scopet. Bygger på «Forberede plasstildeling».
+## Epic (TAKE-3, beholdes): Ferdigstilling av plasstildeling i opptak
 
-Flyttes hit fra TAKE-3: TAKE-328, TAKE-329, TAKE-330, TAKE-331, TAKE-265, TAKE-267, TAKE-268, TAKE-278, TAKE-288, TAKE-74, TAKE-156, TAKE-159 og TAKE-165.
+Epicen beholdes for hele plasstildelingen, og leveransedelene legges under den som stories. Første leveranse er å forberede plasstildelingen: rundetypene (TAKE-484), plasstildelingsrundene (ny story) og antall tilbud som skal gis (TAKE-327). Sakene for å gjennomføre og publisere plasstildelingen blir under epicen.
 
 Krav: [scope-plasstildeling-2027](https://github.com/sikt-no/fs/blob/main/tasks/opptak/plasstildeling-2027/scope.md)
 
 ---
 
+## Story (TAKE-484, utvides): Innstillinger på rundetypene
+
+Ny beskrivelse og akseptansekriterier. Flyttes til TAKE-3. Sub-tasken TAKE-485 (backend) beholdes.
+
+Rundetypene hovedtildeling, supplering og etterfylling får de faste innstillingene plasstildelingen leser. Rundetypene er felles for alle opptak, og er ikke en del av regelverkssamlingen. I dag er rundetypene et kodeverk uten innstillinger.
+
+Akseptansekriterier:
+
+- Hovedtildeling, supplering og etterfylling har innstillingene bortfall på lavere prioriteter, kompensasjonstilbud ved opprykk, bygger på forrige publiserte runde, bare én i opptaket og kan åpnes for ledige studieplasser, med verdiene i kravet (`@OPT-REG-RUN-001`)
+- Rundetypene er felles for alle opptak. TIDLIG, LEDIGE_STUDIEPLASSER og TEST i kodeverket er ikke rundetyper i kravet
+- Innstillingene kan ikke endres i løsningen. Forvaltning av rundetyper (`@OPT-REG-RUN-002`) er ikke med
+
+Krav: [bruke_rundetyper.feature](https://github.com/sikt-no/fs/blob/main/krav/02%20Opptak/10%20Regelverk/06%20Rundetyper/bruke_rundetyper.feature)
+
 ## Story: Opprette plasstildelingsrunder
 
-Opptaksforvalter legger til plasstildelingsrunder i opptaket av rundetypene hovedtildeling, supplering og etterfylling, og setter innstillingene som hører til runden: svarfrist, tak for antall tilbud per søker, ledige studieplasser og perioden for lærestedene. Runden får de faste innstillingene fra rundetypen. I dag kan bare hovedrunde velges i fs-admin, og rundetypene er et fast kodeverk uten innstillinger.
+Opptaksforvalter legger til plasstildelingsrunder i opptaket av rundetypene hovedtildeling, supplering og etterfylling, og setter innstillingene som hører til runden: svarfrist, tak for antall tilbud per søker, ledige studieplasser og perioden for lærestedene. Runden får de faste innstillingene fra rundetypen. I dag kan bare hovedrunde velges i fs-admin, og taket for antall tilbud per søker ligger på opptaket (`maks_antall_tilbud`). Bygger på TAKE-484 (innstillingene på rundetypene).
 
 Ikke med: å legge til, endre eller slette rundetyper (`@OPT-REG-RUN-002`, Could).
 
 Akseptansekriterier:
 
-- Rundetypene hovedtildeling, supplering og etterfylling er felles for alle opptak, ikke en del av regelverkssamlingen, hver med faste innstillinger plasstildelingen leser: bortfall på lavere prioriteter, kompensasjonstilbud ved opprykk, bygger på forrige publiserte runde, bare én i opptaket og kan åpnes for ledige studieplasser (`@OPT-REG-RUN-001`)
 - Opptaksforvalter legger til en runde med navn, rundetype og svarfrist (`@OPT-PLA-RUN-001`). Opptaket kan bare ha én hovedtildeling, og supplering og etterfylling kan ikke være den første runden
 - Navnet på runden er unikt i opptaket, uten hensyn til store og små bokstaver, og er høyst 100 tegn
 - Runden har innstillingene fra rundetypen, og opptaksforvalter ser dem, men kan ikke endre dem på runden. Rundetypen kan ikke endres etter at runden er lagt til
 - Navn og svarfrist kan alltid endres, og en runde kan slettes så lenge den ikke er publisert til søker
+- Taket for antall tilbud per søker flyttes fra opptaket til runden. Maks antall søknadsalternativer blir på opptaket
 - Taket for antall tilbud per søker har en standardverdi per rundetype når runden legges til, og opptaksforvalter kan endre det. I samordna opptak: 1 i hovedtildeling og supplering, 10 i etterfylling
 - Opptaksforvalter kan åpne runden for ledige studieplasser når opptaket tilbyr søknad på ledige studieplasser. Runden får da tak for antall tilbud på ledige studieplasser per søker, med standardverdien 10, og opptaksforvalter kan endre det. Tilbudene på ledige studieplasser kommer i tillegg til de ordinære tilbudene
 - Opptaksforvalter setter periode for når lærestedene kan endre antall tilbud (dato og klokkeslett, kan alltid endres). Svarfristen må komme etter at perioden er slutt
@@ -40,13 +65,13 @@ Akseptansekriterier:
 - Oversikten over rundene viser navn, rundetype, perioden for lærestedene, svarfristen for søkerne, om runden er publisert og om lærestedet har en oppgave. Rundene kan søkes etter på navn, filtreres på rundetype, status og periode, og sorteres på svarfrist (tidligste først som standard), status og periode, 50 om gangen (`@OPT-PLA-RUN-002`)
 - Opptakets forvalter kan velge flere runder i oversikten og slette dem samtidig. Publiserte runder slettes ikke, og lærestedet kan ikke slette runder
 
-Krav: [forvalte_runder.feature](https://github.com/sikt-no/fs/blob/main/krav/02%20Opptak/14%20Plasstildeling/01%20Runder/forvalte_runder.feature) · [listevisning_og_søk_i_plasstildelingsrunder.feature](https://github.com/sikt-no/fs/blob/main/krav/02%20Opptak/14%20Plasstildeling/01%20Runder/listevisning_og_s%C3%B8k_i_plasstildelingsrunder.feature) · [bruke_rundetyper.feature](https://github.com/sikt-no/fs/blob/main/krav/02%20Opptak/10%20Regelverk/06%20Rundetyper/bruke_rundetyper.feature)
+Krav: [forvalte_runder.feature](https://github.com/sikt-no/fs/blob/main/krav/02%20Opptak/14%20Plasstildeling/01%20Runder/forvalte_runder.feature) · [listevisning_og_søk_i_plasstildelingsrunder.feature](https://github.com/sikt-no/fs/blob/main/krav/02%20Opptak/14%20Plasstildeling/01%20Runder/listevisning_og_s%C3%B8k_i_plasstildelingsrunder.feature)
 
 Spesifikasjon: [spec-rundetyper-og-plasstildelingsrunder.md](https://github.com/sikt-no/fs/blob/main/tasks/opptak/plasstildeling-2027/spec/spec-rundetyper-og-plasstildelingsrunder.md), med implementasjonsdetaljene og tekstene i `forvalte_runder.design.md` og `listevisning_og_søk_i_plasstildelingsrunder.design.md`.
 
 ## Story (TAKE-327, skrives om): Lærestedet setter antall tilbud som skal gis per utdanningskvote
 
-Ny tittel og beskrivelse. Fordelingen i prosent er forkastet.
+Ny tittel og beskrivelse. Fordelingen i prosent er forkastet. Feltet i opptaksinnstillingene er allerede fjernet (TAKE-450).
 
 Lærestedet setter antall tilbud som skal gis per utdanningskvote, eller at utdanningstilbudet gir tilbud til alle kvalifiserte, innenfor perioden på runden. Lærestedet ser opplysningene det trenger for å sette tallene. Opptakets forvalter kan endre tallene også utenfor perioden. I dag håndheves ikke perioden.
 

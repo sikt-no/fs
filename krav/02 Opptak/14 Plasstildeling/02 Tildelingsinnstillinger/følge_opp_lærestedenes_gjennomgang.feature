@@ -48,5 +48,12 @@ Egenskap: Følge opp lærestedenes gjennomgang av antall tilbud
   Regel: Opptakets forvalter ser status for gjennomgangen per lærested
 
     Scenario: Se status for gjennomgangen
+      Gitt at "Universitetet i Bergen" er varslet, og har markert at antall tilbud i "Hovedrunde" er gått gjennom
+      Og at "NTNU" er varslet, men ikke har markert at antall tilbud i "Hovedrunde" er gått gjennom
+      Og at "Universitetet i Oslo" ikke er varslet om antall tilbud i "Hovedrunde"
       Når opptakets forvalter ser antall tilbud som skal gis i "Hovedrunde"
-      Så ser opptakets forvalter for hvert lærested om det er varslet, og om det har gått gjennom antall tilbud
+      Så ser opptakets forvalter denne statusen for lærestedene
+        | Lærested               | Varslet | Gått gjennom |
+        | Universitetet i Bergen | ja      | ja           |
+        | NTNU                   | ja      | nei          |
+        | Universitetet i Oslo   | nei     | nei          |

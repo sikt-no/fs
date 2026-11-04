@@ -76,7 +76,7 @@ Fra oversikten over plasstildelingsrunder til rundesiden. Lærestedet kan bare �
 | Låst runde, forklaring | Lærestedet prøver å åpne en runde der perioden er stengt | «Perioden for å endre antall tilbud er ikke satt ennå.» / «Perioden for å endre antall tilbud er ikke åpnet ennå.» / «Perioden for å endre antall tilbud er utløpt. Du kan ikke se detaljene i runden.» | Etter perioden | Lærestedet kan ikke åpne plasstildelingsrunden der perioden er stengt |
 | Låst runde, skjermleser | Navigasjonen i en stengt runde | «Runden er ikke åpen: {navn}» | `{navn}` | Lærestedet kan ikke åpne plasstildelingsrunden der perioden er stengt |
 
-**Skisser:** prototypen v88, [`tasks/opptak/plasstildeling-2027/spec/krav-input/sketches/plasstildeling-prototype-v88.html`](../../../../tasks/opptak/plasstildeling-2027/spec/krav-input/sketches/plasstildeling-prototype-v88.html). Tekstene er sjekket mot den 2026-11-04.
+**Skisser:** prototypen v88 (<https://claude.ai/artifact/PtEVDPyFrsWodTZPu9mfA9>, artefakt i en annen organisasjon, ikke lagret i repoet). Tekstene er sjekket mot den 2026-11-04.
 
 Tekster som ikke står i prototypen, og som er lagt til her:
 - Feilmeldingene for navnet (avklart med produkteier 2026-11-04).

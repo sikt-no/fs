@@ -15,7 +15,7 @@ Egenskap: Plasstildelingsrunder i et opptak
   # og én plasstildelingsrunde kan ha mange plasstildelinger (se 03 Tildeling).
 
   Bakgrunn:
-    Gitt at opptaksforvalter ved eierorganisasjon er innlogget
+    Gitt at opptakets forvalter er innlogget
     Og at opptaket "Samordna opptak 2027" er opprettet
 
   Regel: Opptaksforvalter legger til en plasstildelingsrunde med navn, rundetype og svarfrist
@@ -200,7 +200,10 @@ Egenskap: Plasstildelingsrunder i et opptak
     # I samordna opptak er taket 1 i hovedtildeling og supplering, og opptil 10 i etterfylling.
     # Søkeren kan likevel bare ha ett ja-svar om gangen, og får bare én studieplass i et samordna opptak
     # (05 Svar/håndtere_svar_fra_søker.feature).
-    # Til senere: søkere kan få trenge flere studieplasser, for eksempel på deltidsstudier, PPU og enkeltemner.
+    # Til senere: søkere kan trenge flere studieplasser, for eksempel på deltidsstudier, PPU og enkeltemner.
+    # AVKLART 2026-11-04 (produkteier, tilbakemelding på PR #907): Taket gjelder også i rundetyper der tilbud gir bortfall.
+    # Bortfallet gjelder da prioritetene under det laveste tilbudet når søkeren har fått så mange tilbud som taket sier
+    # (03 Tildeling/gjennomføre_plasstildeling.feature).
     Scenariomal: Standardverdi for taket for antall tilbud per søker
       Når opptaksforvalter legger til plasstildelingsrunden "<plasstildelingsrunde>" med rundetype "<rundetype>"
       Så er taket for antall tilbud per søker i plasstildelingsrunden "<plasstildelingsrunde>" <tak>
@@ -231,6 +234,9 @@ Egenskap: Plasstildelingsrunder i et opptak
     # AVKLART 2026-11-04 (produkteier): Taket har standardverdien 10 når plasstildelingsrunden åpnes for ledige
     # studieplasser, og opptaksforvalter kan endre den. Erstatter avklaringen fra 2026-10-30 om at taket ikke har
     # en standardverdi og må settes.
+    # AVKLART 2026-11-04 (produkteier, tilbakemelding på PR #907): Standardverdien er 10 i alle tre rundetypene, også
+    # hovedtildelingen, som kan åpnes for ledige studieplasser (regelen under). Domeneeksperten nevnte bare supplering
+    # og etterfylling 2026-11-02.
     Scenariomal: Standardverdi for taket for antall tilbud på ledige studieplasser per søker
       Gitt at opptaket har plasstildelingsrunden "<plasstildelingsrunde>" med rundetype "<rundetype>"
       Når opptaksforvalter åpner plasstildelingsrunden "<plasstildelingsrunde>" for ledige studieplasser
@@ -280,12 +286,9 @@ Egenskap: Plasstildelingsrunder i et opptak
       Når opptaksforvalter endrer plasstildelingsrunden "Etterfylling"
       Så ser opptaksforvalter ikke muligheten til å åpne plasstildelingsrunden for ledige studieplasser
 
-    Scenario: Rundetypen kan ikke åpnes for ledige studieplasser
-      Gitt at opptaket tilbyr søknad på ledige studieplasser
-      Og at rundetypen "Etterfylling" ikke har innstillingen "Kan åpnes for ledige studieplasser"
-      Og at opptaket har plasstildelingsrunden "Etterfylling" med rundetype "Etterfylling"
-      Når opptaksforvalter endrer plasstildelingsrunden "Etterfylling"
-      Så ser opptaksforvalter ikke muligheten til å åpne plasstildelingsrunden for ledige studieplasser
+    # Fjernet 2026-11-04 (tilbakemelding på PR #907): scenarioet «Rundetypen kan ikke åpnes for ledige studieplasser».
+    # Alle tre rundetypene har innstillingen, og innstillingene kan ikke endres. Det kommer tilbake når rundetypene
+    # kan forvaltes (10 Regelverk/06 Rundetyper/forvalte_rundetyper.feature).
 
   Regel: Opptaksforvalter setter periode for når lærestedene kan endre antall tilbud som skal gis
 
@@ -318,6 +321,8 @@ Egenskap: Plasstildelingsrunder i et opptak
     # AVKLART 2026-11-02 (produkteier, prototypen v88): Lærestedet ser alle plasstildelingsrundene, og hva det skal
     # gjøre i hver av dem, men kan bare åpne runden der perioden er åpen. Da finner lærestedet riktig runde, som det
     # ikke gjorde i SODB.
+    # Hvor lærestedet ser resultatet av plasstildelingen etter perioden, er et åpent spørsmål i
+    # 04 Resultat/vise_resultat.feature (tilbakemelding på PR #907, 2026-11-04).
     # AVKLART 2026-11-04 (produkteier): Runder der perioden er stengt, forblir stengt for lærestedet. I runden der
     # perioden er åpen, kan lærestedet sammenligne med tidligere plasstildelingsrunder. Endringer mellom rundene blir
     # synlige for brukerne når løsningen får endringslogg.
