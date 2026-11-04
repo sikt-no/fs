@@ -49,7 +49,7 @@ Egenskap: Importere resultater fra KREG
     @implemented
     Scenario: Resultatene hentes først når saken er opprettet
       # Avklart 29.10.2026: uten sak er det ikke noe å behandle. Koden gjør dette i dag.
-      Gitt at opptaket mangler saksbehandlertildelingsregel
+      Gitt at opptaket mangler behandlertildelingsregel
       Og at søkeren har et vitnemål i KREG
       Når søkeren sender inn søknaden
       Så er vitnemålet ikke importert før saken er opprettet
