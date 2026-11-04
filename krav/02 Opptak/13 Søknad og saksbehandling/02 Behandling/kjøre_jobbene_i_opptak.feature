@@ -1,5 +1,5 @@
 # language: no
-@OPT-BEH-BEH-033 @must @draft @ref-OPT-BEH-BEH-011 @ref-OPT-BEH-BEH-030 @ref-OPT-BEH-BEH-032
+@OPT-BEH-BEH-033 @must @draft @scope-automatisk-import-og-start @ref-OPT-BEH-BEH-011 @ref-OPT-BEH-BEH-030 @ref-OPT-BEH-BEH-032
 Egenskap: Kjøre jobbene i opptak
   Som opptaksforvalter
   ønsker jeg at jobbene i opptaket kjører av seg selv
