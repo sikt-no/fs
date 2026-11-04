@@ -1,6 +1,6 @@
 # language: no
 # GitHub: #207
-@OPT-BEH-BEH-011 @must @in-progress
+@OPT-BEH-BEH-011 @must @implemented
 Egenskap: Tildele saksbehandlende organisasjon
   Som opptaksforvalter ved forvaltende organisasjon
   ønsker jeg å bestemme hvilken organisasjon som saksbehandler hvert søknadsalternativ
@@ -32,7 +32,7 @@ Egenskap: Tildele saksbehandlende organisasjon
 
   # ── 1. Oppsett ───────────────────────────────────────────────
 
-  @ref-OPT-OPT-UTD-004 @ref-FLY-OPT-SAK-001 @implemented
+  @ref-OPT-OPT-UTD-004 @ref-FLY-OPT-SAK-001
   Regel: Opptaksforvalteren ved forvaltende organisasjon setter opp behandlertildelingsreglene for opptaket
     # Lærestedets valg av behandlertildelingsregel per utdanningstilbud står der.
 
@@ -95,7 +95,6 @@ Egenskap: Tildele saksbehandlende organisasjon
 
   # ── 2. Fordeling ─────────────────────────────────────────────
 
-  @implemented
   Regel: Ved «Alle som deltar i opptaket» saksbehandler lærestedet søkeren har prioritert høyest
 
     Scenario: Lærestedet på første prioritet saksbehandler hele søknaden
@@ -112,7 +111,6 @@ Egenskap: Tildele saksbehandlende organisasjon
       Så er "NTNU" saksbehandlende organisasjon for "Utøvende musikk, NTNU"
       Og "UiT Norges arktiske universitet" er saksbehandlende organisasjon for "Historie, UiT" og "Informatikk, UiO"
 
-  @implemented
   Regel: Ved «Bare tilbyderen – også for studieønsker uten egen regel» saksbehandler tilbyderen også søknadsalternativene uten egen behandlertildelingsregel
 
     Scenario: Tilbyderen saksbehandler søknadsalternativene uten egen behandlertildelingsregel
@@ -128,7 +126,6 @@ Egenskap: Tildele saksbehandlende organisasjon
       Så er "Høgskulen på Vestlandet" saksbehandlende organisasjon for "Musikkpedagogikk, HVL" og "Informatikk, UiO"
       Og "NTNU" er saksbehandlende organisasjon for "Utøvende musikk, NTNU"
 
-  @implemented
   Regel: Ved «Bare tilbyderen – bare dette studieønsket» saksbehandler tilbyderen bare søknadsalternativet med behandlertildelingsregelen
 
     Scenario: Tilbyderen saksbehandler ikke søkerens andre søknadsalternativer
@@ -145,7 +142,6 @@ Egenskap: Tildele saksbehandlende organisasjon
       Så er "Fagskolen Innlandet" saksbehandlende organisasjon for "Elektrofag, Fagskolen Innlandet"
       Og "Fagskolen i Viken" er saksbehandlende organisasjon for "Helsefag, Fagskolen i Viken"
 
-  @implemented
   Regel: Ved «Tilbydere i samme sektor» saksbehandler én organisasjon alle søknadsalternativene i sektoren
 
     Scenario: Tilbyderen søkeren har prioritert høyest i sektoren saksbehandler hele sektoren
@@ -182,8 +178,7 @@ Egenskap: Tildele saksbehandlende organisasjon
       Så er "Høgskulen på Vestlandet" saksbehandlende organisasjon for "Journalistikk, HVL" og "Informatikk, UiO"
       Og "NTNU" er saksbehandlende organisasjon for "Utøvende musikk, NTNU"
       # AVKLART 08.10.2026 med domeneekspert: verken SPE eller JOU sier at tilbyderen bare skal
-      # saksbehandle sine egne søknadsalternativer, så søkerens prioritering avgjør. Koden gir i dag
-      # SPE forrang uansett prioritering.
+      # saksbehandle sine egne søknadsalternativer, så søkerens prioritering avgjør.
 
     Scenariomal: Opptaksforvalteren kan velge <organisasjon> som organisasjon for sektoren
       Når opptaksforvalteren ved HK-dir velger "<organisasjon>" som organisasjon på "JOU"
@@ -199,7 +194,6 @@ Egenskap: Tildele saksbehandlende organisasjon
       Når opptaksforvalteren ved HK-dir velger organisasjon på "JOU"
       Så ser ikke opptaksforvalteren "Universitetet i Bergen" blant valgene
 
-  @implemented
   Regel: Unntak for utdanningsbakgrunn og ledige studieplasser overstyrer behandlertildelingsregelen
 
     Scenario: Legge til unntak for utdanningsbakgrunn
@@ -324,7 +318,7 @@ Egenskap: Tildele saksbehandlende organisasjon
     Scenario: Lærestedet kan bare ha ett unntak for lærested per behandlertildelingsregel
       Gitt at standardregelen har unntak for lærested der "OsloMet" saksbehandler på vegne av "Arkitektur- og designhøgskolen i Oslo"
       Når opptaksforvalteren ved HK-dir legger til et nytt unntak for lærested på standardregelen
-      Så ser ikke opptaksforvalteren "Arkitektur- og designhøgskolen i Oslo" blant valgene i «På vegne av»
+      Så kan ikke opptaksforvalteren velge "Arkitektur- og designhøgskolen i Oslo" i «På vegne av»
 
     Scenario: Nytt unntak for lærested gjelder bare søknadsalternativer som ikke er fordelt
       Gitt at "Arkitektur, AHO" er fordelt til "Arkitektur- og designhøgskolen i Oslo"
@@ -338,7 +332,7 @@ Egenskap: Tildele saksbehandlende organisasjon
 
   # ── 3. Endring ───────────────────────────────────────────────
 
-  @ref-FLY-OPT-SAK-001 @ref-OPT-BEH-BEH-032 @implemented
+  @ref-FLY-OPT-SAK-001 @ref-OPT-BEH-BEH-032
   Regel: Søknadsalternativene fordeles når søknaden sendes inn eller endres, og fordelingen ligger fast
 
     Scenariomal: Søknadsalternativene fordeles når <hendelse>
@@ -388,7 +382,7 @@ Egenskap: Tildele saksbehandlende organisasjon
       # sendte inn først. Som hovedregel endres den ikke når søkeren sender inn på nytt, endrer
       # prioriteringen, sletter eller legger til søknadsalternativer.
 
-  @depends-on-OPT-OVO-FRI-001 @ref-FLY-OPT-SAK-001 @implemented
+  @depends-on-OPT-OVO-FRI-001 @ref-FLY-OPT-SAK-001
   # OPT-OVO-FRI-001: «Opptaksforvalter ved forvaltende organisasjon må kunne sette frist for endring av utdanningsbakgrunn»
   Regel: Søknadsalternativene flyttes når utdanningsbakgrunnen endres til en bakgrunn med unntak
     # AVKLART 22.10.2026: Fristen for endring av utdanningsbakgrunn gjelder bare saksbehandlerens endring.
@@ -479,7 +473,6 @@ Egenskap: Tildele saksbehandlende organisasjon
   @ref-FLY-OPT-SAK-001 @ref-OPT-BEH-BEH-032
   Regel: Saksbehandlende organisasjon ser bare saker hos organisasjonen
 
-    @implemented
     Scenario: Saksbehandleren ser bare saken hos organisasjonen sin
       Gitt at søknaden har saker hos "Universitetet i Oslo" og "UiT Norges arktiske universitet"
       Når saksbehandleren ved Universitetet i Oslo åpner søknaden
@@ -491,13 +484,11 @@ Egenskap: Tildele saksbehandlende organisasjon
       Så ser søkeren saksbehandlende organisasjon for hvert søknadsalternativ
       Men søkeren ser ikke sakene
 
-    @implemented
     Scenario: Saksbehandleren ved forvaltende organisasjon ser bare saken hos forvaltende organisasjon
       Gitt at søknaden har saker hos "HK-dir" og "Universitetet i Oslo"
       Når saksbehandleren ved HK-dir åpner søknaden
       Så ser saksbehandleren bare saken hos "HK-dir"
 
-  @implemented
   Regel: Opptaksforvalteren ved forvaltende organisasjon ser alle sakene i opptaket
 
     Scenario: Opptaksforvalteren ved HK-dir ser sakene hos alle saksbehandlende organisasjoner
@@ -524,5 +515,5 @@ Egenskap: Tildele saksbehandlende organisasjon
       Når saksbehandleren ved UiT Norges arktiske universitet ser "Historie, UiT"
       Så ser ikke saksbehandleren de interne merknadene til "Universitetet i Oslo"
       Og saksbehandleren ser ikke muligheten til å endre grunnlaget eller poengene
-      # AVKLART 08.10.2026 i PR #684: tilbyderen ser alt unntatt de interne merknadene, og kan bare
-      # sette tilbudsgaranti.
+      # AVKLART 08.10.2026 i PR #684: tilbyderen ser saken, men ikke de interne merknadene, og kan bare
+      # sette tilbudsgaranti. AVKLART 04.11.2026: tilbyderen ser ikke dokumentene i saken.
