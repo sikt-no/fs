@@ -1,6 +1,6 @@
 # language: no
 # GitHub: #216
-@OPT-PLA-RUN-001 @must @draft @scope-plasstildeling-2027
+@OPT-PLA-RUN-001 @must@draft @scope-plasstildeling-2027
 Egenskap: Plasstildelingsrunder i et opptak
   Som opptaksforvalter
   ønsker jeg å legge til og forvalte plasstildelingsrunder i et opptak
@@ -15,7 +15,7 @@ Egenskap: Plasstildelingsrunder i et opptak
   # og én plasstildelingsrunde kan ha mange plasstildelinger (se 03 Tildeling).
 
   Bakgrunn:
-    Gitt at opptakets forvalter er innlogget
+    Gitt at opptaksforvalter ved eierorganisasjon er innlogget
     Og at opptaket "Samordna opptak 2027" er opprettet
 
   Regel: Opptaksforvalter legger til en plasstildelingsrunde med navn, rundetype og svarfrist
@@ -105,19 +105,26 @@ Egenskap: Plasstildelingsrunder i et opptak
   @depends-on-OPT-REG-RUN-001
   Regel: Plasstildelingsrunden har innstillingene fra rundetypen
 
-    # AVKLART 2026-10-24: Innstillingene kan ikke justeres på plasstildelingsrunden. Trengs en annen
-    # kombinasjon, lages en ny rundetype i regelverkssamlingen
-    # (10 Regelverk/06 Rundetyper/bruke_rundetyper.feature).
-    Scenario: Se innstillingene på plasstildelingsrunden
-      Gitt at opptaket har plasstildelingsrunden "Suppleringsrunde" med rundetype "Supplering"
-      Når opptaksforvalter ser plasstildelingsrunden "Suppleringsrunde"
-      Så ser opptaksforvalter innstillingene fra rundetypen "Supplering"
-        | Innstilling                                       | Verdi |
-        | Tilbud gir bortfall på lavere prioriteter         | ja    |
-        | Kompensasjonstilbud ved opprykk                   | ja    |
-        | Bygger på forrige publiserte plasstildelingsrunde | ja    |
-        | Bare én i opptaket                                | nei   |
-        | Kan åpnes for ledige studieplasser                | ja    |
+    # AVKLART 2026-10-24: Innstillingene kan ikke justeres på plasstildelingsrunden.
+    # AVKLART 2026-11-04 (produkteier): Hovedtildeling, supplering og etterfylling er tilgjengelige for brukerne fra
+    # start (10 Regelverk/06 Rundetyper/bruke_rundetyper.feature). Å forvalte rundetypene er foreløpig ute av scopet
+    # (10 Regelverk/06 Rundetyper/forvalte_rundetyper.feature, @could).
+    Scenariomal: Se innstillingene på plasstildelingsrunden
+      Gitt at opptaket har plasstildelingsrunden "<plasstildelingsrunde>" med rundetype "<rundetype>"
+      Når opptaksforvalter ser plasstildelingsrunden "<plasstildelingsrunde>"
+      Så ser opptaksforvalter innstillingene fra rundetypen "<rundetype>"
+        | Innstilling                                       | Verdi          |
+        | Tilbud gir bortfall på lavere prioriteter         | <bortfall>     |
+        | Kompensasjonstilbud ved opprykk                   | <kompensasjon> |
+        | Bygger på forrige publiserte plasstildelingsrunde | <arv>          |
+        | Bare én i opptaket                                | <én>           |
+        | Kan åpnes for ledige studieplasser                | <ledige>       |
+
+      Eksempler:
+        | plasstildelingsrunde | rundetype      | bortfall | kompensasjon | arv | én  | ledige |
+        | Hovedrunde           | Hovedtildeling | ja       | nei          | nei | ja  | ja     |
+        | Suppleringsrunde     | Supplering     | ja       | ja           | ja  | nei | ja     |
+        | Etterfylling         | Etterfylling   | nei      | nei          | ja  | nei | ja     |
 
     Scenario: Innstillingene kan ikke endres på plasstildelingsrunden
       Gitt at opptaket har plasstildelingsrunden "Suppleringsrunde" med rundetype "Supplering"
