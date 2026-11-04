@@ -16,14 +16,12 @@ Egenskap: Listevisning og søk i plasstildelingsrunder
     Gitt at opptaksforvalter er innlogget
     Og at opptaket "Samordna opptak 2027" har plasstildelingsrundene "Hovedrunde", "Supplering 1" og "Etterfylling 1"
 
-  @openquestion
   Regel: Liste over alle plasstildelingsrunder
 
-    # ÅPNE SPØRSMÅL:
-    # - Hvilken rekkefølge har plasstildelingsrundene, og skal listen kunne sorteres? Rekkefølgen de er lagt til i,
-    #   eller etter perioden eller svarfristen?
-    # - Et opptak har få plasstildelingsrunder. Kan alle vises uten «last inn flere» (mønsteret har 50 per side)?
-    # - Ser opptakets forvalter oppgaven til lærestedene i oversikten, eller er den bare for lærestedet?
+    # AVKLART 2026-11-04 (produkteier): Listen er sortert etter svarfristen, tidligste først, når oversikten åpnes,
+    # og kan sorteres på svarfristen, statusen for publisering og perioden for å endre antall tilbud. Statusene
+    # sorteres i rekkefølgen i filteret. Listen viser 50 plasstildelingsrunder om gangen, som mønsteret.
+    # Opptakets forvalter og lærestedene ser oppgaven for lærestedet.
     Scenario: Se liste over plasstildelingsrunder
       Når opptaksforvalter åpner oversikten over plasstildelingsrunder
       Så ser opptaksforvalter disse opplysningene for hver plasstildelingsrunde
@@ -34,6 +32,47 @@ Egenskap: Listevisning og søk i plasstildelingsrunder
         | Svarfrist for søkere                |
         | Status                              |
         | Oppgave for lærestedet              |
+
+    Scenario: Opptakets forvalter ser oppgaven for lærestedet
+      Gitt at perioden for å endre antall tilbud som skal gis er åpen i plasstildelingsrunden "Supplering 1"
+      Når opptaksforvalter ved organisasjonen som forvalter opptaket, åpner oversikten over plasstildelingsrunder
+      Så ser opptaksforvalter oppgaven "Gå gjennom antall tilbud" for plasstildelingsrunden "Supplering 1"
+
+    Scenario: Listen er sortert etter svarfristen
+      Gitt at plasstildelingsrunden "Hovedrunde" har svarfrist "2027-07-20 23:59"
+      Og at plasstildelingsrunden "Supplering 1" har svarfrist "2027-08-10 23:59"
+      Når opptaksforvalter åpner oversikten over plasstildelingsrunder
+      Så vises plasstildelingsrundene sortert etter svarfrist for søkere i stigende rekkefølge
+
+    Scenariomal: Velge sorteringsretning for <felt>
+      Gitt at opptaksforvalter ser listen over plasstildelingsrunder
+      Når opptaksforvalter velger å sortere på <felt> i <retning> rekkefølge
+      Så vises plasstildelingsrundene sortert etter <felt> i <retning> rekkefølge
+
+      Eksempler:
+        | felt                              | retning  |
+        | svarfrist for søkere              | stigende |
+        | svarfrist for søkere              | synkende |
+        | status                            | stigende |
+        | status                            | synkende |
+        | periode for å endre antall tilbud | stigende |
+        | periode for å endre antall tilbud | synkende |
+
+    Scenario: Liste viser de 50 første plasstildelingsrunder
+      Gitt at opptaket har 60 plasstildelingsrunder
+      Når opptaksforvalter åpner oversikten over plasstildelingsrunder
+      Så ser opptaksforvalter totalt antall treff og antall som er lastet
+      Og listen viser de 50 første plasstildelingsrundene
+
+    Scenario: Laste inn 50 flere plasstildelingsrunder
+      Gitt at opptaket har 120 plasstildelingsrunder
+      Og at opptaksforvalter ser listen over plasstildelingsrunder
+      Når opptaksforvalter velger å laste inn flere
+      Så lastes de neste 50 plasstildelingsrundene inn i listen
+
+    Scenario: Alle plasstildelingsrunder er lastet inn
+      Gitt at alle plasstildelingsrundene i opptaket er lastet inn i listen
+      Så er muligheten til å laste inn flere ikke tilgjengelig
 
     Scenario: Navigere til detaljside for plasstildelingsrunde
       Gitt at opptaksforvalter ser listen over plasstildelingsrunder
