@@ -8,7 +8,7 @@
 - **Scope**: @scope-tidlig-opptak, @scope-tilbudsgaranti-2027
 - **Krav**: 4 feature-filer, commit `990afe3f` (2026-11-03): `@OPT-SØK-SØK-011`, `@OPT-BEH-BEH-009`, `@OPT-BEH-BEH-013`, `@OPT-BEH-BEH-010`
 - **Flyter**: ingen. Flyten for tidlig opptak er ikke skrevet (åpent spørsmål i `@FLY-OPT-OPT-001`). Rekkefølgen er arbeidsprosessen, valgt av Jens Thomassen 2026-11-03: søkeren søker, søker om tidlig opptak, saksbehandler konkluderer, tilbudsgaranti settes, søkeren endrer søknaden
-- **Bygger på**: de interne testene over. Testrapporter: [saksbehandling, intern](../saksbehandling-tidlig-opptak/testrapport-intern-2026-10-30.md): venter på beslutning (forslag: godkjent). Søke om tidlig opptak: beslutning ikke ført, 2.4b kjøres på nytt etter rettingen (TOT-2556). Tilbudsgaranti: godkjent 2026-10-28 (muntlig), ingen testrapport. Ingen agentisk funksjonstest (fase 2) for noen av dem
+- **Bygger på**: de interne testene over. Testrapporter: [saksbehandling, intern](../saksbehandling-tidlig-opptak/testrapport-intern-2026-10-30.md): godkjent. Søke om tidlig opptak: godkjent med forbehold om at innhold i kvittering rettes (TOT-2556; rettingen er sjekket av Jens Thomassen i gjennomkjøringen 2026-11-04). Beslutningene ført av Jens Thomassen 2026-11-04. Tilbudsgaranti: godkjent 2026-10-28 (muntlig), ingen testrapport. Ingen agentisk funksjonstest (fase 2) for noen av dem
 - **Flytbeskrivelser og krav**: [flytbeskrivelser-ekstern.md](flytbeskrivelser-ekstern.md)
 - **Gjennomgang av kravene**: [Fylles ut: møte <dato> eller skriftlig, sendt <dato>]
 - **Testere**: [Fylles ut]
@@ -37,7 +37,7 @@
   - [ ] Hvem som beslutter, er avtalt med partene
   - [ ] Kontaktpersonen har logget inn som hver testbruker og ser testdataene
   - [ ] Kontaktpersonen har kjørt punkt 0 med én søker, og sett at saken havner hos UiT og vises for testbruker 2
-- **Confluence**: https://sikt.atlassian.net/wiki/spaces/STUDIEADM/pages/5166825479 (publisert 2026-11-03, under Testplaner; v4: endringer fra Jens Thomassens gjennomkjøring 2026-11-04, v5: rettet etter kommentarene, v6: innlogging med Feide)
+- **Confluence**: https://sikt.atlassian.net/wiki/spaces/STUDIEADM/pages/5166825479 (publisert 2026-11-03, under Testplaner; v4: endringer fra Jens Thomassens gjennomkjøring 2026-11-04, v5: rettet etter kommentarene, v6: innlogging med Feide, v7: Jens Thomassen tok ut spørsmål underveis og «Hvem beslutter» fra testbeskrivelsen)
 - **Laget**: 2026-11-03 av fs-testcaser-ekstern
 - **Generalprøve**: [kjoring-2026-11-03-1442/resultat.md](kjoring-2026-11-03-1442/resultat.md) (agent, søker ØKOLOGISK BADERING). Stegene er rettet etter den samme dag
 - **Sporing**:
@@ -85,8 +85,7 @@ Velkommen til akseptansetesten av tidlig opptak og tilbudsgaranti. I testen sjek
 | Avhengigheter | Ingen |
 | Dette kan du ikke gjøre i testen | - Gjennomføre tidligopptaket, så søkerne får tilbudsgaranti fra tidligopptaket. Det kommer senere, og tilbudsgarantien settes for hånd i testen <br>- Se hvem som har satt eller fjernet en tilbudsgaranti. Knappen «Endringslogg» i saken viser «Ingen endringer» inntil videre <br>- Sette tilbudsgaranti som tilbyder når saken behandles av et annet lærested. Det er en kjent mangel som rettes <br>- Trekke søknaden om tidlig opptak. Det finnes ikke i løsningen, så hver tester har sin egen søker |
 | Tid | Ca. 60 minutter. |
-| Kontaktperson | Tina Lund Ravndal. Spørsmål underveis tas på [Fylles ut: hvordan spørsmål tas, avtales med testerne] |
-| Hvem beslutter | [Fylles ut: hvem beslutter, avtales med partene før testen] |
+| Kontaktperson | Tina Lund Ravndal. |
 
 Mangler en testbruker eller testdata, si fra til kontaktpersonen før du starter.
 

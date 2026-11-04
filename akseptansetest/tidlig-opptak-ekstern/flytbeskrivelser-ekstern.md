@@ -3,7 +3,7 @@
 - **Nivå**: ekstern (fase 4), vedlegg til [testcaser-ekstern.md](testcaser-ekstern.md)
 - **Testplan**: ingen felles testplan, se metadataene i [testcaser-ekstern.md](testcaser-ekstern.md)
 - **Bygger på**: de interne testene ([søke om tidlig opptak](../soke-om-tidlig-opptak/akseptansetesting.md), [saksbehandling](../saksbehandling-tidlig-opptak/testcaser-intern.md), tilbudsgaranti på PR #787), kravene `@OPT-SØK-SØK-011`, `@OPT-BEH-BEH-009`, `@OPT-BEH-BEH-013` og `@OPT-BEH-BEH-010` (commit `990afe3f`), og rapportene: verifisering ([søke](../soke-om-tidlig-opptak/testrapport-verifisering-2026-10-26.md), [saksbehandling](../saksbehandling-tidlig-opptak/testrapport-verifisering-2026-10-27.md), tilbudsgaranti på PR #787), [intern, saksbehandling](../saksbehandling-tidlig-opptak/testrapport-intern-2026-10-30.md). Ingen agentisk funksjonstest
-- **Confluence**: https://sikt.atlassian.net/wiki/spaces/STUDIEADM/pages/5165383733 (underside til testsiden, publisert 2026-11-03; v2: endringsloggen)
+- **Confluence**: https://sikt.atlassian.net/wiki/spaces/STUDIEADM/pages/5165383733 (underside til testsiden, publisert 2026-11-03; v2: endringsloggen, v3: beslutningene for de interne testene, ført av Jens Thomassen 2026-11-04, v4: kvitteringen er testet på nytt)
 - **Laget**: 2026-11-03 av fs-testcaser-ekstern
 - **Sporing**:
 
@@ -61,6 +61,6 @@ Flytbeskrivelser og krav for tidlig opptak og tilbudsgaranti. Her ser du hvilke 
 |---|---|---|---|
 | Kontroll av at alt er laget | Alle 42 funksjonene i de fire kravene er funnet i løsningen, og roller og tilganger er kontrollert | Klar | Ingen |
 | Funksjonstest (agent) | Ikke gjennomført for disse leveransene | – | – |
-| Intern akseptansetest | Søke om tidlig opptak: 9 testcaser. Saksbehandling: 10 testcaser. Tilbudsgaranti: 18 testcaser. Testet av domeneekspertene | Søke om tidlig opptak: [Fylles ut: beslutning]. Saksbehandling: [Fylles ut: beslutning]. Tilbudsgaranti: godkjent | Kvitteringen viste også studier uten tidlig opptak. Det er rettet, og testes på nytt før testen. Ønske: siden for tidlig opptak viser også studieønskene som tilbyr tidlig opptak, ikke bare dem som ikke gjør det (kan fikses senere) |
+| Intern akseptansetest | Søke om tidlig opptak: 9 testcaser. Saksbehandling: 10 testcaser. Tilbudsgaranti: 18 testcaser. Testet av domeneekspertene | Søke om tidlig opptak: godkjent med forbehold om at innhold i kvittering rettes. Saksbehandling: godkjent. Tilbudsgaranti: godkjent | Kvitteringen viste også studier uten tidlig opptak. Det er rettet, og testet på nytt. Ønske: siden for tidlig opptak viser også studieønskene som tilbyr tidlig opptak, ikke bare dem som ikke gjør det (kan fikses senere) |
 
 Rapportene: [Fylles ut: lenker til rapportene som kan deles med partene]

@@ -54,9 +54,8 @@
 
 | # | Testcase | Fase funnet | Funntype | Hva skjedde | Hva var forventet | Steg for å gjenskape | Skjermbilde | Alvorlighetsgrad | Sak |
 |---|---|---|---|---|---|---|---|---|---|
-| 1 | 0a | Generalprøve | Feil (til vurdering) | Min kompetanse sier under «Kontakt saksbehandler» at «Direktoratet for høyere utdanning og kompetanse» er «lærestedet som behandler hele søknaden din». Saken behandles av UiT i FS Admin | At søkeren får lærestedet som behandler saken (UiT) | Søknad 34-1004359: «Kontakt saksbehandler» i søknadsdetaljene, og saken i FS Admin (186 i adressen) | `0a.jpg`, `2b.jpg` | – | – |
-| 2 | 4b | Generalprøve | Observasjon | «Endringslogg» i saken viser «Ingen endringer» etter at konklusjonen og to tilbudsgarantier er satt | Kjent: endringsloggen er tatt ut (2026-10-30). Knappen står likevel | Saken til søknad 34-1004359, «Endringslogg» nederst til venstre | `endringslogg.jpg` | – | – |
-| 3 | 3a | Generalprøve | Observasjon | Alle tre studieønskene står som «Ikke kvalifisert», og «Spesielle opptakskrav» sier «Opptakskrav finnes, men saken har ingen grunnlag å vurdere dem mot» | Ikke en del av testen. Testerne kan spørre om det | Saken til søknad 34-1004359 | `3a.jpg` | – | – |
+| 1 | 4b | Generalprøve | Observasjon | «Endringslogg» i saken viser «Ingen endringer» etter at konklusjonen og to tilbudsgarantier er satt | Kjent: endringsloggen er tatt ut (2026-10-30). Knappen står likevel | Saken til søknad 34-1004359, «Endringslogg» nederst til venstre | `endringslogg.jpg` | – | – |
+| 2 | 3a | Generalprøve | Observasjon | Alle tre studieønskene står som «Ikke kvalifisert», og «Spesielle opptakskrav» sier «Opptakskrav finnes, men saken har ingen grunnlag å vurdere dem mot» | Ikke en del av testen. Testerne kan spørre om det | Saken til søknad 34-1004359 | `3a.jpg` | – | – |
 
 ## Tid
 
