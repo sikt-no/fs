@@ -431,9 +431,14 @@ Egenskap: Automatisk GSK-konklusjon
   @draft @depends-on-OPT-OVO-FRI-001
   # OPT-OVO-FRI-001: «Opptaksforvalter kan sette når den automatiske saksbehandlingen starter og avsluttes»
   Regel: Automatikken setter GSK-konklusjonen bare mens den automatiske saksbehandlingen pågår
-    # Avklart 2026-11-03. Er hendelsene ikke satt, pågår den automatiske saksbehandlingen til opptaket er
-    # historisk. Hendelsene er de samme som i OPT-BEH-BEH-032. Importen av vitnemålet og
+    # Avklart 2026-11-03. Hendelsene er de samme som i OPT-BEH-BEH-032. Importen av vitnemålet og
     # GSK-vitnemålsberegningen kjører uansett.
+    # Avklart 2026-11-05: den automatiske saksbehandlingen pågår bare mens opptaket er publisert.
+    # Hendelsene avgrenser perioden. Er de ikke satt, pågår den så lenge opptaket er publisert. Et
+    # upublisert eller historisk opptak behandles ikke automatisk.
+    # Avklart 2026-11-05: publiseres opptaket igjen etter at det er avpublisert, behandles sakene
+    # automatisk (OPT-BEH-BEH-032), og GSK-konklusjonen settes da etter regelen «GSK-konklusjonen
+    # settes også når den automatiske behandlingen kjører».
     # Avklart 2026-11-03: når saksbehandleren starter den automatiske behandlingen selv, settes
     # GSK-konklusjonen også utenfor perioden (OPT-BEH-BEH-032).
 
@@ -451,13 +456,21 @@ Egenskap: Automatisk GSK-konklusjon
       Når vitnemålet importeres fra KREG 2027-07-15 kl. 12:01
       Så får søknaden ingen GSK-konklusjon fra vitnemålet
 
-    Scenario: Den automatiske saksbehandlingen pågår til opptaket er historisk når hendelsene ikke er satt
+    Scenario: Den automatiske saksbehandlingen pågår mens opptaket er publisert når hendelsene ikke er satt
       Gitt at opptaket ikke har hendelsene for den automatiske saksbehandlingen
-      Og at opptaket ikke er historisk
+      Og at opptaket er publisert
       Og at søknaden ikke har noen GSK-konklusjon
       Og at søkeren har et vitnemål som gir GSK
       Når vitnemålet importeres fra KREG
       Så får søknaden en positiv GSK-konklusjon
+
+    Scenario: Ingen automatisk konklusjon når opptaket er upublisert
+      Gitt at opptaket ikke har hendelsene for den automatiske saksbehandlingen
+      Og at opptaket er upublisert
+      Og at søknaden ikke har noen GSK-konklusjon
+      Og at søkeren har et vitnemål som gir GSK
+      Når vitnemålet importeres fra KREG
+      Så får søknaden ingen GSK-konklusjon fra vitnemålet
 
   @ref-FLY-OPT-AUT-001
   Regel: GSK-konklusjonen settes også når den automatiske behandlingen kjører
