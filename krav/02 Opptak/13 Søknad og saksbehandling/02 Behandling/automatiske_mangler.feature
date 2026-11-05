@@ -130,9 +130,14 @@ Egenskap: Automatiske mangler
       Når saksbehandleren ved Universitetet i Oslo åpner manglene i saken
       Så ser ikke saksbehandleren muligheten til å kommentere, sjekke ut eller slette den automatiske mangelteksten
 
-  @draft @ref-FLY-OPT-AUT-001 @depends-on-OPT-BEH-BEH-008
+  @openquestion @ref-FLY-OPT-AUT-001 @depends-on-OPT-BEH-BEH-008
   # OPT-BEH-BEH-008: «Opptaksforvalteren forvalter mangelkodene i regelverkssamlingen»
   Regel: Opptaksforvalteren merker én mangelkode for generell studiekompetanse som fullføres i vår
+    # ÅPNE SPØRSMÅL:
+    # - Koden gir ikke søknadene som finnes fra før, mangelen når en mangelkode merkes. De får den
+    #   først når søknaden endres. Skal de få mangelen når mangelkoden merkes?
+    # - Koden lar mangler som finnes fra før, bli stående når merkingen fjernes. Skal de slettes?
+    # Begge er funnet i verify 2026-11-04 (regler i koden uten scenario).
 
     Mangelkoden som er merket, er den saken får automatisk når søkeren oppgir at generell
     studiekompetanse fullføres i vår (se «Mangelen for generell studiekompetanse som fullføres i

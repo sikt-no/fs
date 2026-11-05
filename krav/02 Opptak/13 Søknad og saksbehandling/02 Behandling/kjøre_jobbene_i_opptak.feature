@@ -1,5 +1,5 @@
 # language: no
-@OPT-BEH-BEH-033 @must @draft @scope-automatisk-import-og-start @ref-OPT-BEH-BEH-011 @ref-OPT-BEH-BEH-030 @ref-OPT-BEH-BEH-032 @ref-OPT-BEH-BEH-038
+@OPT-BEH-BEH-033 @must @planned @scope-automatisk-import-og-start @ref-OPT-BEH-BEH-011 @ref-OPT-BEH-BEH-030 @ref-OPT-BEH-BEH-032 @ref-OPT-BEH-BEH-038
 Egenskap: Kjøre jobbene i opptak
   Som opptaksforvalter
   ønsker jeg at jobbene i opptaket kjører av seg selv
@@ -71,10 +71,15 @@ Egenskap: Kjøre jobbene i opptak
       Når jobbplanleggeren starter importen av VGS-vitnemål fra KREG
       Så importeres ingen vitnemål for søknadene i "Samordna opptak 2026"
 
-  @openquestion @ref-OPT-BEH-BEH-030
+  @ref-OPT-BEH-BEH-030
   Regel: En søker jobben feilet for, prøves på nytt
-    # ÅPNE SPØRSMÅL:
-    # - Fortsetter jobben med de andre søkerne når den feiler for én søker?
+    # Avklart 05.11.2026: jobben fortsetter med de andre søkerne når den feiler for én søker.
+
+    Scenario: Importen fortsetter med de andre søkerne når den feiler for én søker
+      Gitt at importen av VGS-vitnemål fra KREG feiler for "Kari Nordmann"
+      Og at "Ola Nordmann" har fått et vitnemål i KREG som ikke er importert
+      Når importen av VGS-vitnemål fra KREG kjører
+      Så er vitnemålet til "Ola Nordmann" importert
 
     Scenario: Vitnemålene importeres når KREG svarer igjen
       Gitt at importen av VGS-vitnemål fra KREG feilet for "Kari Nordmann" fordi KREG ikke svarte
@@ -97,7 +102,7 @@ Egenskap: Kjøre jobbene i opptak
       Når saksbehandleren ved Universitetet i Oslo åpner saken til "Kari Nordmann"
       Så ser saksbehandleren ingen feilmelding om KREG på saken
 
-  @openquestion
+  @draft @openquestion
   Regel: Det fremgår at jobbene kjører
     # ÅPNE SPØRSMÅL:
     # - Hvordan, og for hvem, det fremgår at jobbene kjører? Avklart 29.10.2026 at det tas
@@ -109,7 +114,7 @@ Egenskap: Kjøre jobbene i opptak
       Når opptaksforvalteren ved HK-dir ser på jobbene i "Samordna opptak 2027"
       Så ser opptaksforvalteren at importen kjørte sist 29.10.2026 kl. 10.15
 
-  @openquestion
+  @draft @openquestion
   Regel: Opptaksforvalteren starter en jobb uten å vente på neste kjøring
     # ÅPNE SPØRSMÅL:
     # - Skal opptaksforvalteren kunne starte en jobb med en gang, for eksempel etter at KREG har
