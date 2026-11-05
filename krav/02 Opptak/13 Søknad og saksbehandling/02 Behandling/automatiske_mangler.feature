@@ -173,7 +173,7 @@ Egenskap: Automatiske mangler
       Når opptaksforvalteren ved HK-dir åpner mangelkodene i regelverkssamlingen "UHG 2027"
       Så ser opptaksforvalteren en advarsel om at ingen mangelkode er merket for generell studiekompetanse som fullføres i vår
 
-    Scenario: Søknadene som finnes fra før, får mangelen når mangelkoden merkes
+    Scenario: Sakene i søknadene som finnes fra før, får mangelen når mangelkoden merkes
       Gitt at ingen mangelkode i regelverkssamlingen "UHG 2027" er merket for generell studiekompetanse som fullføres i vår
       Og at søkeren har oppgitt i søknaden at generell studiekompetanse fullføres i vår
       Og at søknaden har saker hos "Universitetet i Oslo" og "UiT Norges arktiske universitet"
