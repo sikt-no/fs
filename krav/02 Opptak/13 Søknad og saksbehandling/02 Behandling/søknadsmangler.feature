@@ -229,11 +229,13 @@ Egenskap: Søknadsmangler
     #   automatisk, uten egen melding (se «Mangelen for generell studiekompetanse som fullføres
     #   i vår settes og sjekkes ut automatisk»).
 
+    @implemented
     Scenario: Registrering av mangel publiserer ikke mangelen
       Når saksbehandleren ved Universitetet i Oslo registrerer mangelen "KAR"
       Så ser ikke søkeren mangelen "KAR" i Min kompetanse
       Og søkeren har ikke mottatt en melding om mangler
 
+    @implemented
     Scenario: Saksbehandleren publiserer mangelen
       Gitt at saken hos "Universitetet i Oslo" har mangelen "KAR"
       Når saksbehandleren ved Universitetet i Oslo markerer mangelen "KAR" som klar til publisering
@@ -305,11 +307,13 @@ Egenskap: Søknadsmangler
       Når saksbehandleren avbryter
       Så er ikke saken satt til "Behandlet"
 
+    @implemented
     Scenario: Søkeren får én melding om manglene som publiseres i saken
       Gitt at saken hos "Universitetet i Oslo" har manglene "KAR" og "STEMPEL"
       Når manglene "KAR" og "STEMPEL" publiseres
       Så mottar søkeren én melding om mangler
 
+    @implemented
     Scenario: Søkeren får melding fra hver saksbehandlende organisasjon som publiserer mangler
       Gitt at saksbehandleren ved Universitetet i Oslo har publisert mangelen "KAR"
       Når saksbehandleren ved UiT Norges arktiske universitet publiserer mangelen "STEMPEL"
@@ -378,6 +382,7 @@ Egenskap: Søknadsmangler
     Dokumentasjonssiden er siden i Min kompetanse der søkeren ser hvilken dokumentasjon som
     mangler for søknadsalternativene, og laster opp dokumentasjonen.
 
+    @implemented
     Scenario: Mangel på spesielle krav vises under søknadsalternativene med kompetanseregelverket
       Gitt at "Informatikk, UiO" har kompetanseregelverket "Regelverk B"
       Og at "Historie, UiO" ikke har kompetanseregelverket "Regelverk B"
@@ -392,6 +397,7 @@ Egenskap: Søknadsmangler
       Så ser søkeren informasjonen til søker for mangelkoden "KAR"
       Og søkeren ser kravelementene i "Regelverk B"
 
+    @implemented
     Scenario: Søkeren ser kommentaren fra saksbehandleren
       Gitt at den publiserte mangelen "KAR" har en kommentar fra saksbehandleren
       Når søkeren ser manglene for "Informatikk, UiO"
@@ -412,6 +418,7 @@ Egenskap: Søknadsmangler
         | Poeng    |
         | Kvote    |
 
+    @implemented
     Scenario: Mangel som er sjekket ut vises ikke for søkeren
       Gitt at den publiserte mangelen "KAR" er sjekket ut
       Når søkeren åpner dokumentasjonssiden
