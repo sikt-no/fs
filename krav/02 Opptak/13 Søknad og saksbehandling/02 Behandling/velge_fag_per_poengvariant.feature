@@ -160,7 +160,8 @@ Egenskap: Velge fag per poengvariant
     # ÅPNE SPØRSMÅL:
     # - Fagene velges per poengvariant, men kravelementene vurderes per
     #   grunnlag. Hvilke fag legges til grunn for vurderingen når
-    #   poengvariantene på samme grunnlag har ulikt fagvalg?
+    #   poengvariantene på samme grunnlag har ulikt fagvalg? Spørsmålet står
+    #   også i OPT-BEH-BEH-020, som eier vurderingen av kravelementene.
     Scenario: Kravelementene vurderes per grunnlag
       Gitt søkeren har tatt et fag som privatist etter fylte 21 år
       Og faget dekker et kravelement
@@ -287,42 +288,6 @@ Egenskap: Velge fag per poengvariant
       # Samordna opptaks wiki, «Kvoter»: fag som gir språk- eller
       # realfagspoeng, tatt samtidig med studiekompetansefagene, kan tas med
       # i kvoten for førstegangsvitnemål.
-
-  @draft @openquestion
-  Regel: Kravelementene vurderes i samme bilde som fagene
-    # ÅPNE SPØRSMÅL:
-    # - Er scenarioene riktige? Regelen er skrevet etter avklaringen
-    #   05.11.2026, og er ikke gått gjennom ennå.
-    # - Skissen «Steg 2 Grunnlag – behandle e-vitnemål» har allerede en
-    #   seksjon «Spesielle opptakskrav» nederst i steg 2, med kravelement,
-    #   grunnlag, «Dekker kravet?», «La stå», resultat og «Vis per grunnlag».
-    #   Den er grå i skissen. Betyr det at den ikke er med, eller at den er
-    #   deaktivert? Avklares med designeren.
-
-    # AVKLART 05.11.2026: kravelementene vurderes i samme bilde som fagene,
-    # under «2. Grunnlag», både for elektroniske og manuelt innlagte
-    # vitnemål, så saksbehandleren slipper å klikke fram og tilbake.
-    # «3. Spesielle opptakskrav» viser det som er vurdert i steg 2. Innspill
-    # fra Ingrid Grimstad Helset på siden med åpne spørsmål 05.11.2026.
-    # Erstatter avklaringen 03.11.2026 om at kravelementene bare vurderes
-    # under spesielle opptakskrav. Hvordan saksbehandleren overstyrer
-    # vurderingen, står i automatisk_kvalifisering.feature
-    # (@OPT-BEH-BEH-020) og i L4a («Saksbehandleren kan overstyre
-    # kontrollmotoren for et fag»).
-
-    Bakgrunn:
-      Gitt jeg har rettighet til å se og endre søknadsbehandling ved organisasjonen som behandler saken
-
-    Scenario: Vurdere kravelementene i grunnlaget
-      Gitt jeg har lagt et vitnemål til grunn
-      Når jeg ser grunnlaget på søknaden
-      Så ser jeg kravelementene for hvert grunnlag sammen med fagene
-      Og jeg kan vurdere kravelementene uten å gå til spesielle opptakskrav
-
-    Scenario: Spesielle opptakskrav viser vurderingen fra grunnlaget
-      Gitt jeg har vurdert et kravelement i grunnlaget
-      Når jeg går til spesielle opptakskrav
-      Så ser jeg vurderingen jeg gjorde i grunnlaget
 
   Regel: Poengene beregnes fortløpende og lagres når grunnlaget er klart
 

@@ -27,8 +27,9 @@ Egenskap: Legge inn vitnemål manuelt
 
   Saksbehandleren legger inn fagene i en kalkulator. Kalkulatoren er ikke et
   komplett vitnemål: den har bare fagene og karakterene som trengs for å
-  beregne poengene, og ingen av opplysningene er påkrevd. Kravelementene
-  vurderes i samme bilde, sammen med fagene i kalkulatoren.
+  beregne poengene, og ingen av opplysningene er påkrevd. Når vitnemålet er
+  lagt inn, ligger det under vitnemålene og behandles som et elektronisk
+  vitnemål. Kravelementene vurderes under spesielle opptakskrav.
 
   Bakgrunn:
     Gitt jeg er innlogget i løsningen
@@ -56,25 +57,9 @@ Egenskap: Legge inn vitnemål manuelt
       # Saksbehandleren registrerer ingen opplysninger om selve vitnemålet
       # (utstedt dato, førstegangsvitnemål, GSK), og ingen av feltene er
       # påkrevd. Feltene er de samme som i skissen «Steg 2 Grunnlag – Legg inn
-      # vitnemål manuelt».
-      #
-      # Endret 05.11.2026: kravelementene vurderes i samme bilde som fagene,
-      # også for et vitnemål som er lagt inn manuelt (se «Vurdere
-      # kravelementene for et vitnemål som er lagt inn manuelt»).
-
-    @ref-OPT-BEH-BEH-022 @openquestion
-    # ÅPNE SPØRSMÅL:
-    # - Er scenarioet riktig? Det er skrevet etter avklaringen 05.11.2026,
-    #   og er ikke gått gjennom ennå. Finnes det en skisse for kravelementene
-    #   sammen med kalkulatoren?
-    Scenario: Vurdere kravelementene for et vitnemål som er lagt inn manuelt
-      Gitt jeg har lagt inn vitnemålet manuelt
-      Når jeg ser grunnlaget på søknaden
-      Så kan jeg vurdere kravelementene sammen med fagene i kalkulatoren
-      # AVKLART 05.11.2026: kravelementene vurderes i samme bilde som fagene,
-      # både for elektroniske og manuelt innlagte vitnemål (L3, «Kravelementene
-      # vurderes i samme bilde som fagene»). Innspill fra Ingrid Grimstad
-      # Helset 05.11.2026.
+      # vitnemål manuelt». Kravelementer er ikke en del av kalkulatoren, men
+      # vurderes under spesielle opptakskrav, som for et elektronisk
+      # vitnemål.
 
     Scenario: Legge inn vitnemålet uten at søkeren har elektronisk vitnemål
       Gitt søkeren ikke har elektroniske vitnemål
