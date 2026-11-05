@@ -42,7 +42,7 @@ Som *Finn scope og kode* i `fs-verify`: branchen i dette repoet og i hver kodekl
 
 Ber prompten om å verifisere en egenskap eller en regel *uansett status*, gjelder *Verifisere uansett status* i `fs-verify`: scope, gating-settet og hvilken ny status du kan tilby. Ber prompten om å verifisere en mappe *uansett status*, eller er *alle krav uansett status* valgt, gjelder det samme for hver feature-fil i scope.
 
-**Per repo.** Er mer enn én kodeklone med, eller ber brukeren om å få vite hva som mangler i hvert repo, skal finnerne vurdere hvert repo for seg (se *Start teamet*), og rapporten få variantene `[per repo]` i rapportmalen (se *Rapport*). Repoene, bokstavene og merkene (✓ ✗ ~ –) står i *Per repo* under *Kodeklonene* i `fs-verify`. Gi finnerne og kontrollørene tabellen over de repoene som er med.
+**Per repo.** Ber brukeren om å få vite hva som gjenstår i hvert repo, eller er det mer enn én kodeklone og brukeren vil ha en oversikt over hva som gjenstår, skal finnerne vurdere hvert repo for seg (se *Start teamet*), og rapporten få `## Oversikt per krav` (variantene `[per repo]` i rapportmalen, se *Rapport*). Repoene og bokstavene står i *Kodeklonene* i `fs-verify`. Gi finnerne og kontrollørene tabellen over de repoene som er med.
 
 Ta tidspunktet for kjøringen før teamet startes (*Tidspunkt* i `fs-verify`). Det gir navnet på rapporten (`verify-…-<YYYY-MM-DD>-<HHMM>.md`), `- **Dato:**` og mappa med skjermbilder, også om kjøringen tar lang tid.
 
@@ -93,7 +93,7 @@ Vent på svarene. De kommer som meldinger; ikke poll oppgavelista i en løkke. B
 **Svar fra en kontrollør:**
 
 1. **`bekreftet`:** resultatet står.
-2. **`avkreftet` eller `usikker`:** les det kontrolløren viser til, og det finneren viste til. Har kontrolløren rett, bruk det nye resultatet. Er det fortsatt uklart, blir resultatet `usikker`, med begge synene i beviset. Noter raden for **Kontrollen endret** i `## Andre funn` i rapporten.
+2. **`avkreftet` eller `usikker`:** les det kontrolløren viser til, og det finneren viste til. Har kontrolløren rett, bruk det nye resultatet. Er det fortsatt uklart, blir resultatet `usikker`, med begge synene i beviset. Noter raden for **Kontrollen endret** i `## Oppfølging` i rapporten.
 3. **Et `funnet` som kontrollen avkrefter, kan aldri brukes til retagging**, selv om du er enig med finneren. Da blir det `usikker`, og brukeren avgjør.
 
 Før du foreslår retagging eller sletting av et krav, les `fil:linje` for bevisene til det kravet selv. Tilgangsradene og reglene uten scenario slår du sammen på samme måte, og du regner ut `## Åpne spørsmål` selv fra `@openquestion` i kravfilene (finnernes tall er en kontroll, ikke kilden). `- **Menneskelig kontroll:**` i rapporten fyller du aldri ut: kontrollørene er ikke den andre personen (*Kontroll* i `fs-verify`). Du står ansvarlig for det du viser brukeren.
@@ -116,7 +116,7 @@ Kontrollørene og finnerne trengs ikke mens brukeren svarer: rydd opp i teamet (
 
 ## Rapport
 
-Som *Etter endringene* og *Rapport* i `fs-verify`, med samme filnavn, oppdatering av `utforing.md` og malen i [`fs-verify/references/rapportmal.md`](../fs-verify/references/rapportmal.md). Les malen før du skriver rapporten, og følg den nøyaktig. Med agent team gjelder alltid variantene merket `[agent team]` (linja `Team`), og når repoene er vurdert hver for seg (*Finn scope og kode*), også `[per repo]`: linja `Repoer`, `Mangler` i `## Oppsummering`, merket på linjene i `## Forslag til endringer`, `## Oversikt per krav` med `Mangler i`-kolonnene, og merket først i `Bevis`. Tallene regnes ut fra `## Scenarioer` (se *Rapport* i `fs-verify`).
+Som *Etter endringene* og *Rapport* i `fs-verify`, med samme filnavn, oppdatering av `utforing.md` og malen i [`fs-verify/references/rapportmal.md`](../fs-verify/references/rapportmal.md). Les malen før du skriver rapporten, og følg den nøyaktig. Med agent team gjelder alltid variantene merket `[agent team]` (linja `Team`), og når repoene er vurdert hver for seg (*Finn scope og kode*), også `[per repo]`: `## Oversikt per krav` og repoene først i `Bevis`. Tallene regnes ut fra `## Scenarioer` (se *Rapport* i `fs-verify`).
 
 Når rapporten er skrevet, gjør du *Confluence* i `fs-verify`: finnes ingen testplan ennå, er neste steg `fs-testplan`, som bygger på rapporten. Finnes testplanen, spør om resultatet skal legges som en underside til den, og gjør det bare når brukeren sier ja. Du gjør det selv, ikke teammatene.
 

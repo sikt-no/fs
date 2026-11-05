@@ -23,7 +23,7 @@ Det du **ikke** gjør:
 
 For hver rad i tabellen:
 
-1. **`funnet`:** les `fil:linje` i beviset, og koden rundt. Gjør koden det scenarioet beskriver (`Når` og `Så`, og alle radene i `Eksempler:` for en `Scenariomal:`)? Har raden merker per repo (P/A/M med ✓ ✗ ~ –), sjekk hvert repo for seg, også at – (ikke relevant) stemmer.
+1. **`funnet`:** les `fil:linje` i beviset, og koden rundt. Gjør koden det scenarioet beskriver (`Når` og `Så`, og alle radene i `Eksempler:` for en `Scenariomal:`)? Står det repoer (fs-plattform/fs-admin/min-kompetanse) i raden, sjekk hvert repo for seg.
    - `bekreftet`: koden gjør det.
    - `avkreftet`: koden gjør noe annet, gjør bare en del, eller finnes ikke på linja. Si hva den gjør.
    - `usikker`: du kan ikke avgjøre det fra koden. Si hvorfor.
@@ -31,7 +31,6 @@ For hver rad i tabellen:
    - `bekreftet`: du fant heller ingenting. List søkeordene og stedene.
    - `avkreftet`: du fant kode som dekker scenarioet, helt eller delvis. Gi `fil:linje` og hva den gjør.
 3. **`delvis`:** sjekk både det som er funnet og det som mangler.
-   **Merker per repo:** et ✗ i ett repo kontrolleres som `ikke funnet` (søk selv i det repoet), og et ✓ som `funnet`, også når raden som helhet er `ikke funnet` eller `usikker`.
 4. **Flyt** (fila ligger under `krav/_Flyter/`): et `funnet` har to bevis, `lages` og `brukes`. Les begge, og sjekk at det som brukes, er det samme som det som lages (samme tabell, felt, hendelse eller API). Er det ikke det, er raden `avkreftet`, selv om begge stedene finnes hver for seg.
 
 Les alltid koden du viser til. Et søkeord med treff er ikke bevis før du har lest treffet.
@@ -71,4 +70,4 @@ Send svaret til den som startet deg (`SendMessage` når du er teammate, ellers s
 - **Søkt i tillegg:** <søkeord og steder du brukte som ikke stod i bevisene>
 ```
 
-`Foreslått` er resultatet du mener scenarioet skal ha (`funnet`, `ikke funnet` eller `usikker`). Har du fått merker per repo, skriv merkene du foreslår først i `Begrunnelse` (`P ✓ · A ✗ — …`), og si hvilket repo du er uenig om. Én rad per rad i tabellene du fikk. Seksjonene for tilgang og regler utelater du hvis du ikke har fått dem.
+`Foreslått` er resultatet du mener scenarioet skal ha (`funnet`, `ikke funnet` eller `usikker`). Én rad per rad i tabellene du fikk. Seksjonene for tilgang og regler utelater du hvis du ikke har fått dem.
