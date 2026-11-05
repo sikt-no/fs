@@ -5,7 +5,7 @@
 - **Initiativ**: [#199](https://github.com/sikt-no/fs/issues/199)
 - **Jira**: [STEK-253](https://sikt.atlassian.net/browse/STEK-253)
 - **Eier**: –
-- **Siste oppdatering**: 2026-11-03
+- **Siste oppdatering**: 2026-11-04
 
 ## Mål
 
@@ -34,7 +34,7 @@
 |---|---|---|---|---|
 | `@OPT-BEH-BEH-036` [automatiske_mangler.feature](../../../krav/02%20Opptak/13%20S%C3%B8knad%20og%20saksbehandling/02%20Behandling/automatiske_mangler.feature) | Must | – | – | Skilt ut fra `@OPT-BEH-BEH-008`. Regelen om merking av mangelkoden er `@draft`. Scenarioene om saksloggen kan ikke leveres før den nye sporingsloggen finnes. Endringsloggen er stoppet (BAT-324, 29.10.2026) |
 | `@OPT-BEH-BEH-029` [behandlingsstatus.feature](../../../krav/02%20Opptak/13%20S%C3%B8knad%20og%20saksbehandling/02%20Behandling/behandlingsstatus.feature) | Must | – | [STEK-253](https://sikt.atlassian.net/browse/STEK-253) | Regelen «Saksloggen viser endringene i behandlingsstatusen» kan ikke leveres før den nye sporingsloggen finnes. Endringsloggen er stoppet (BAT-324, 29.10.2026) |
-| `@OPT-BEH-BEH-025` [ferdigbehandle_sak.feature](../../../krav/02%20Opptak/13%20S%C3%B8knad%20og%20saksbehandling/02%20Behandling/ferdigbehandle_sak.feature) | Must | – | [STEK-253](https://sikt.atlassian.net/browse/STEK-253) | |
+| `@OPT-BEH-BEH-025` [ferdigbehandle_sak.feature](../../../krav/02%20Opptak/13%20S%C3%B8knad%20og%20saksbehandling/02%20Behandling/ferdigbehandle_sak.feature) | Must | – | [STEK-253](https://sikt.atlassian.net/browse/STEK-253) | Scenarioet «Saksbehandleren ser når den automatiske behandlingen avgjorde hvert steg» kan ikke leveres før den nye sporingsloggen finnes. Endringsloggen er stoppet (BAT-324, 29.10.2026) |
 
 ## Åpne spørsmål
 
@@ -47,6 +47,7 @@ Append-only. Ny linje på toppen ved hver hendelse.
 
 | Dato       | Hendelse | Av | Lenke til review |
 |------------|----------|----|------------------|
+| 2026-11-04 | Scenarioet om når den automatiske behandlingen avgjorde hvert steg i `@OPT-BEH-BEH-025` er skilt ut, og er blokkert til den nye sporingsloggen finnes. Tidspunktet finnes bare i endringsloggen, som er stoppet (BAT-324, V480 i fs-plattform). Fra reviewen av PR #921 | @JøranIndseth | [#921](https://github.com/sikt-no/fs/pull/921) |
 | 2026-11-03 | Scenarioene om endringsloggen og saksloggen i `@OPT-BEH-BEH-029` og `@OPT-BEH-BEH-036` er blokkert til den nye sporingsloggen finnes. Endringsloggen i opptak er stoppet (BAT-324, V480 i fs-plattform), så kravene blir ikke `@implemented` før da | @JøranIndseth | – |
 | 2026-11-02 | `@OPT-BEH-BEH-036` fylt ut med fs-krav: tre regler skilt ut fra `@OPT-BEH-BEH-008`, og flyten bygger på 036 | @JøranIndseth | – |
 | 2026-11-02 | Opprettet med fs-scope, som leveranse 5 av 6 i flyten automatisk saksbehandling | @JøranIndseth | – |

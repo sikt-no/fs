@@ -91,7 +91,7 @@ Egenskap: Starte automatisk behandling
       Så behandles ikke saken hos "Universitetet i Oslo" automatisk på nytt
 
   @depends-on-OPT-BEH-BEH-029 @depends-on-OPT-BEH-BEH-025
-  # OPT-BEH-BEH-029: «Saksbehandleren kan sette behandlingsstatusen», «Saken blir Under behandling når saksbehandleren endrer vurderingen eller leser et dokument»
+  # OPT-BEH-BEH-029: «Saksbehandleren kan sette behandlingsstatusen», «Saken blir Under behandling når saksbehandleren endrer vurderingen eller markerer et dokument som lest»
   # OPT-BEH-BEH-025: «Har søkeren flere vitnemål, behandles saken automatisk på vitnemålet saksbehandleren velger»
   # Valget av vitnemål står i OPT-BEH-BEH-025. Dette kravet har starten av behandlingen.
   Regel: Saksbehandleren starter den automatiske behandlingen på vitnemålet som er valgt
