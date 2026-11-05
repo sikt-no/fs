@@ -16,7 +16,13 @@ Egenskap: Rundetyper for plasstildelingsrunder
   # AVKLART 2026-10-29 (produkteier): Å forvalte rundetypene (legge til, endre og slette) er ikke med nå, og står i
   # forvalte_rundetyper.feature (@could). Plasstildelingen bruker rundetypene som finnes, og hovedtildeling, supplering
   # og etterfylling, med innstillingene under, er de som trengs i første omgang.
-  # Innstillingene kan ikke justeres på plasstildelingsrunden. Se 14 Plasstildeling/01 Runder/forvalte_runder.feature.
+  # AVKLART 2026-11-04: Standardverdien for taket for antall tilbud per søker er en innstilling på rundetypen.
+  # AVKLART 2026-11-05: Standardverdien for taket for antall tilbud på ledige studieplasser per søker er også en
+  # innstilling på rundetypen.
+  # Plasstildelingsrunden får taket for antall tilbud per søker når den legges til, og taket for antall tilbud på ledige
+  # studieplasser per søker når den åpnes for ledige studieplasser, med standardverdiene fra rundetypen. Opptaksforvalter
+  # kan endre takene på runden. De andre innstillingene kan ikke justeres på plasstildelingsrunden.
+  # Se 14 Plasstildeling/01 Runder/forvalte_runder.feature.
   # Hva plasstildelingen gjør med innstillingene, står i 14 Plasstildeling/03 Tildeling/gjennomføre_plasstildeling.feature.
 
   Regel: Opptakene har rundetypene hovedtildeling, supplering og etterfylling
@@ -26,15 +32,17 @@ Egenskap: Rundetyper for plasstildelingsrunder
       Gitt at opptaket "Samordna opptak 2027" er opprettet
       Når opptaksforvalter legger til en plasstildelingsrunde med rundetypen "<rundetype>" i opptaket
       Så har plasstildelingsrunden disse innstillingene
-        | Innstilling                                       | Verdi          |
-        | Tilbud gir bortfall på lavere prioriteter         | <bortfall>     |
-        | Kompensasjonstilbud ved opprykk                   | <kompensasjon> |
-        | Bygger på forrige publiserte plasstildelingsrunde | <arv>          |
-        | Bare én i opptaket                                | <én>           |
-        | Kan åpnes for ledige studieplasser                | <ledige>       |
+        | Innstilling                                                                 | Verdi          |
+        | Tilbud gir bortfall på lavere prioriteter                                   | <bortfall>     |
+        | Kompensasjonstilbud ved opprykk                                             | <kompensasjon> |
+        | Bygger på forrige publiserte plasstildelingsrunde                           | <arv>          |
+        | Bare én i opptaket                                                          | <én>           |
+        | Kan åpnes for ledige studieplasser                                          | <ledige>       |
+        | Standardverdi for taket for antall tilbud per søker                         | <tak>          |
+        | Standardverdi for taket for antall tilbud på ledige studieplasser per søker | <tak_ledige>   |
 
       Eksempler:
-        | rundetype      | bortfall | kompensasjon | arv | én  | ledige |
-        | Hovedtildeling | ja       | nei          | nei | ja  | ja     |
-        | Supplering     | ja       | ja           | ja  | nei | ja     |
-        | Etterfylling   | nei      | nei          | ja  | nei | ja     |
+        | rundetype      | bortfall | kompensasjon | arv | én  | ledige | tak | tak_ledige |
+        | Hovedtildeling | ja       | nei          | nei | ja  | ja     | 1   | 10         |
+        | Supplering     | ja       | ja           | ja  | nei | ja     | 1   | 10         |
+        | Etterfylling   | nei      | nei          | ja  | nei | ja     | 10  | 10         |

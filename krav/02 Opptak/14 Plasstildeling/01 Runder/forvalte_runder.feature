@@ -191,10 +191,12 @@ Egenskap: Plasstildelingsrunder i et opptak
       Og at plasstildelingsrunden er publisert til søker
       Så ser opptaksforvalter at plasstildelingsrunden har status "Publisert for søkere"
 
+  @depends-on-OPT-REG-RUN-001
   Regel: Opptaksforvalter setter tak for antall tilbud per søker i plasstildelingsrunden
 
     # AVKLART 2026-11-04 (produkteier): Taket har en standardverdi per rundetype når plasstildelingsrunden legges til,
     # og opptaksforvalter kan endre den.
+    # Standardverdien er en innstilling på rundetypen (endret 2026-11-04).
     # AVKLART 2026-11-02 (domeneekspert): Taket gjelder de ordinære tilbudene, og vises og kan endres på alle
     # plasstildelingsrunder. Tilbud på ledige studieplasser kommer i tillegg, med eget tak (regelen under).
     # I samordna opptak er taket 1 i hovedtildeling og supplering, og opptil 10 i etterfylling.
@@ -220,6 +222,7 @@ Egenskap: Plasstildelingsrunder i et opptak
       Når opptaksforvalter endrer taket for antall tilbud per søker i plasstildelingsrunden "Etterfylling" til 5
       Så kan en søker få høyst 5 tilbud i plasstildelingsrunden "Etterfylling"
 
+  @depends-on-OPT-REG-RUN-001
   Regel: Opptaksforvalter setter tak for antall tilbud på ledige studieplasser per søker i plasstildelingsrunden
 
     # Flyttet hit 2026-10-26 fra 11 Opprette og vedlikeholde opptak/03 Innstillinger/innstillinger.feature, der
@@ -234,6 +237,7 @@ Egenskap: Plasstildelingsrunder i et opptak
     # AVKLART 2026-11-04 (produkteier): Taket har standardverdien 10 når plasstildelingsrunden åpnes for ledige
     # studieplasser, og opptaksforvalter kan endre den. Erstatter avklaringen fra 2026-10-30 om at taket ikke har
     # en standardverdi og må settes.
+    # Standardverdien er en innstilling på rundetypen (endret 2026-11-05).
     # AVKLART 2026-11-04 (produkteier, tilbakemelding på PR #907): Standardverdien er 10 i alle tre rundetypene, også
     # hovedtildelingen, som kan åpnes for ledige studieplasser (regelen under). Domeneeksperten nevnte bare supplering
     # og etterfylling 2026-11-02.
