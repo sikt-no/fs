@@ -98,7 +98,7 @@ Egenskap: Importere VGS-vitnemål fra KREG
     # Avklart 05.11.2026 (Geir, #951): behandlingen starter først når importen har hentet alle
     # vitnemålene søkeren har i KREG.
 
-    Scenario: Saken behandles automatisk når importen har hentet søkerens vitnemål
+    Scenario: Saken importen har hentet vitnemålet til, blir behandlet automatisk
       Gitt at "Kari Nordmann" har levert søknaden uten å ha et vitnemål i KREG
       Og at søknaden har en sak hos "Universitetet i Oslo"
       Og at "Kari Nordmann" har fått et vitnemål i KREG som ikke er importert
