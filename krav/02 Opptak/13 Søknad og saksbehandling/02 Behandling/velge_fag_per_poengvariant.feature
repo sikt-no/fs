@@ -156,7 +156,13 @@ Egenskap: Velge fag per poengvariant
       # plass til andre poenggivende fag. Når taket er nådd, kan ikke flere
       # karakterer tas med.
 
-    @ref-OPT-BEH-BEH-020
+    @ref-OPT-BEH-BEH-020 @openquestion
+    # ÅPNE SPØRSMÅL:
+    # - Skal kravelementene vurderes per poengvariant, som avklart
+    #   03.11.2026, eller per grunnlag? Marit Bjørnerud Rønning skrev på siden
+    #   med åpne spørsmål 04.11.2026 at det er gjort om til å vurderes per
+    #   grunnlag, ikke per poengvariant. I OPT-BEH-BEH-020 avgjøres
+    #   kvalifiseringen per grunnlag i den automatiske vurderingen.
     Scenario: Kravelementene vurderes per poengvariant
       Gitt søkeren har tatt et fag som privatist etter fylte 21 år
       Og faget dekker et kravelement
@@ -169,18 +175,16 @@ Egenskap: Velge fag per poengvariant
       # den automatiske kvalifiseringen må følge med. Spørsmålet ble flyttet
       # hit fra OPT-BEH-BEH-020 30.10.2026.
 
-    @draft @openquestion
-    # ÅPNE SPØRSMÅL:
-    # - Skal poengene lagres for en poengvariant der søkeren ikke oppfyller
-    #   de spesielle opptakskravene? FS-klienten lagrer ikke poeng for
-    #   poengvarianten, og gir en advarsel (teknisk beskrivelse av
-    #   vitnemålsbehandling, G. M. Vangen, lest 03.11.2026). Ikke avklart
-    #   med teamet.
     Scenario: Ingen poeng lagres for en poengvariant der søkeren ikke er kvalifisert
       Gitt søkeren oppfyller ikke de spesielle opptakskravene i en poengvariant
       Når jeg velger å lagre grunnlaget
       Så ser jeg at søkeren ikke er kvalifisert i poengvarianten
       Og poengene for poengvarianten er ikke lagret
+      # AVKLART 05.11.2026: poengene lagres ikke for en poengvariant der
+      # søkeren ikke oppfyller de spesielle opptakskravene, slik FS-klienten
+      # gjør (teknisk beskrivelse av vitnemålsbehandling, G. M. Vangen).
+      # Besvart av Marit Bjørnerud Rønning og Ingrid Grimstad Helset på siden
+      # med åpne spørsmål 04.11.2026.
 
     Scenario: Bruke fagvalget fra én poengvariant i andre poengvarianter
       Gitt jeg har valgt fagene i én poengvariant

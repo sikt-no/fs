@@ -39,6 +39,16 @@ Egenskap: Legge inn vitnemål manuelt
     Bakgrunn:
       Gitt jeg har rettighet til å se og endre søknadsbehandling ved organisasjonen som behandler saken
 
+    @openquestion
+    # ÅPNE SPØRSMÅL:
+    # - Skal kravelementene kunne vurderes i samme bilde som fagene
+    #   (under «2. Grunnlag»), og ikke bare under spesielle opptakskrav?
+    #   Ingrid Grimstad Helset skrev på siden med åpne spørsmål 05.11.2026 at
+    #   saksbehandleren ellers må klikke mye fram og tilbake, både for
+    #   elektroniske og manuelt innlagte vitnemål, og at «3. Spesielle
+    #   opptakskrav» må være oppdatert med det som er registrert i «2.
+    #   Grunnlag». Avklart 03.11.2026 var at kravelementene vurderes under
+    #   spesielle opptakskrav, ikke i kalkulatoren.
     Scenario: Legge inn vitnemålet manuelt
       Gitt søkeren har dokumentasjon på et vitnemål som ikke finnes elektronisk
       Når jeg velger å legge inn vitnemålet manuelt
@@ -125,6 +135,17 @@ Egenskap: Legge inn vitnemål manuelt
     #   Begge spørsmålene sjekkes med Geir Magne Vangen, som skrev den
     #   tekniske beskrivelsen av FS-klienten, eller i FS-klientens kode
     #   (w_fagkonverterer). Avtalt 04.11.2026.
+    #   Innspill på siden med åpne spørsmål 04.–05.11.2026, ikke avklart:
+    #   Geir Magne Vangen skriver at tabellen nvb_fagekv (fagkode, faggruppe)
+    #   lar saksbehandleren legge inn fag fra én reform som tillegg på et
+    #   dokument fra en annen, at dataene kommer med NVB-importen fra SODA,
+    #   og at den neppe er vedlikeholdt på lenge. Ingrid Grimstad Helset
+    #   skriver at kontrollmotoren i NVB (som Team Puff bygger på nytt) har
+    #   lister over fagkoder som dekker fagkrav og studiekompetansekrav, at
+    #   Sikt vedlikeholder listene og HK-dir bestemmer innholdet, og at det
+    #   ikke er det samme som hvilke fag som tilsvarer hverandre på tvers av
+    #   reformer. Det har Utdanningsdirektoratet oversikter over. Ellers
+    #   vurderer saksbehandleren selv hvilke fag som tilsvarer hverandre.
     Scenario: Konvertere et utgått fag til faget i en nyere reform
       Gitt jeg har lagt inn et fag fra en tidligere reform manuelt
       Og faget har et tilsvarende fag i en nyere reform
@@ -152,6 +173,13 @@ Egenskap: Legge inn vitnemål manuelt
       # NVB_FAG har både omfang og omfang_overstyrbart. Kodeverket sier altså
       # selv om saksbehandleren har lov til å avvike fra standardomfanget.
 
+    @openquestion
+    # ÅPNE SPØRSMÅL:
+    # - Ingrid Grimstad Helset skrev på siden med åpne spørsmål 05.11.2026
+    #   at det også må gå an å legge inn ukjente fagkoder. Er det dekket av
+    #   dette scenarioet (fagnavn og karakter uten fagkode), eller skal
+    #   saksbehandleren kunne skrive inn en fagkode som ikke finnes i
+    #   fagkodeverket?
     Scenario: Legge inn et fag som ikke finnes i fagkodeverket
       Gitt søkeren har dokumentasjon på et fag som ikke finnes i fagkodeverket
       Når jeg legger inn fagnavn og karakter uten fagkode
