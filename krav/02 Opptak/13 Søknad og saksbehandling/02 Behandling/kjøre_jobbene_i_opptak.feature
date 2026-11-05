@@ -1,5 +1,5 @@
 # language: no
-@OPT-BEH-BEH-033 @must @draft @ref-OPT-BEH-BEH-011 @ref-OPT-BEH-BEH-030 @ref-OPT-BEH-BEH-032 @ref-OPT-BEH-BEH-038
+@OPT-BEH-BEH-033 @must @draft @scope-automatisk-import-og-start @ref-OPT-BEH-BEH-011 @ref-OPT-BEH-BEH-030 @ref-OPT-BEH-BEH-032 @ref-OPT-BEH-BEH-038
 Egenskap: Kjøre jobbene i opptak
   Som opptaksforvalter
   ønsker jeg at jobbene i opptaket kjører av seg selv
@@ -42,7 +42,13 @@ Egenskap: Kjøre jobbene i opptak
         | importen av VGS-vitnemål fra KREG           |
         | importen av resultater fra høyere utdanning |
 
+  @openquestion
   Regel: Hvor ofte en jobb kjører, står i applikasjonsinnstillingene
+    # Importen av VGS-vitnemål fra KREG gjør ett oppslag i KREG per aktiv søker hver gang den
+    # kjører. Vi har dialog med KREG-teamet om belastningen (30.10.2026).
+    # ÅPNE SPØRSMÅL:
+    # - Hvor ofte er det ansvarlig å kjøre importen av VGS-vitnemål fra KREG, i hovedopptaket
+    #   med mange søkere? Det skal testes sammen med KREG-teamet.
 
     Scenario: Jobben kjører så ofte som applikasjonsinnstillingene sier
       Gitt at applikasjonsinnstillingene sier hvor ofte importen av VGS-vitnemål fra KREG kjører
