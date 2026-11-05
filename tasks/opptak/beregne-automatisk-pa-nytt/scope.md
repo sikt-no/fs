@@ -5,7 +5,7 @@
 - **Initiativ**: [#199](https://github.com/sikt-no/fs/issues/199)
 - **Jira**: [STEK-651](https://sikt.atlassian.net/browse/STEK-651)
 - **Eier**: –
-- **Siste oppdatering**: 2026-11-04
+- **Siste oppdatering**: 2026-11-05
 
 ## Mål
 
@@ -41,5 +41,6 @@ Append-only. Ny linje på toppen ved hver hendelse.
 
 | Dato       | Hendelse | Av | Lenke til review |
 |------------|----------|----|------------------|
+| 2026-11-05 | De åpne spørsmålene i `@OPT-BEH-BEH-026` er lukket: bare én beregning eller plasstildeling i opptaket om gangen, ingen beregning etter at resultatet av siste runde er publisert, saksloggen viser den automatiske behandlingen og hvem som startet beregningen, og alle regelverkene velges når en kvotetype er rettet. Fra gjennomgangen av flyten automatisk saksbehandling | @JøranIndseth | – |
 | 2026-11-04 | Hvem som kan beregne på nytt, er et åpent spørsmål, og testkjøring er notert som ikke-mål (statusmøtet, se Kilder) | @JøranIndseth | – |
 | 2026-11-02 | Opprettet med fs-scope, som leveranse 6 av 6 i flyten automatisk saksbehandling | @JøranIndseth | – |

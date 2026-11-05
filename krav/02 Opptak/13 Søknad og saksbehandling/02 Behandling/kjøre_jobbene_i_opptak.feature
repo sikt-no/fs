@@ -49,6 +49,8 @@ Egenskap: Kjøre jobbene i opptak
     # kjører. Vi har dialog med KREG-teamet om belastningen (30.10.2026).
     # Avklart 05.11.2026: KREG synkroniseres med Nasjonal vitnemålsdatabase (NVB) bare én gang i
     # døgnet, i en nattjobb. Importen trenger derfor ikke kjøre oftere enn én gang i døgnet.
+    # Avklart 05.11.2026: opptaksforvalteren starter ikke jobbene selv. Har KREG vært nede, holder
+    # det at importen kjører neste natt.
     # ÅPNE SPØRSMÅL:
     # - Holder det å kjøre importen én gang i døgnet, etter nattjobben i KREG, eller må den kjøre
     #   oftere for annulleringer? Belastningen testes med KREG-teamet.
@@ -87,16 +89,15 @@ Egenskap: Kjøre jobbene i opptak
       Når importen av VGS-vitnemål fra KREG kjører
       Så er vitnemålet til "Ola Nordmann" importert
 
-  @openquestion
   Regel: Tekniske feil skrives i applikasjonsloggen, og Sikt får et varsel
-    # ÅPNE SPØRSMÅL:
-    # - Får Sikt et varsel for hver feil, eller først når samme søker har feilet flere ganger?
+    # Avklart 05.11.2026: Sikt får ett samlet varsel per kjøring, ikke ett per søker. Er KREG
+    # nede, kan importen feile for titusenvis av søkere i hovedopptaket.
 
-    Scenario: Sikt får et varsel når importen feiler
+    Scenario: Sikt får ett varsel per kjøring når importen feiler
       Gitt at KREG ikke svarer
       Når importen av VGS-vitnemål fra KREG kjører
-      Så er feilen skrevet i applikasjonsloggen
-      Og Sikt får et varsel om at importen har feilet
+      Så er feilen for hver søker skrevet i applikasjonsloggen
+      Og Sikt får ett varsel med antall søkere importen feilet for
 
     Scenario: Saksbehandleren ser ikke tekniske feil
       Gitt at importen av VGS-vitnemål fra KREG feilet for "Kari Nordmann" fordi KREG ikke svarte
@@ -114,14 +115,3 @@ Egenskap: Kjøre jobbene i opptak
       Gitt at importen av VGS-vitnemål fra KREG kjørte sist 29.10.2026 kl. 10.15
       Når opptaksforvalteren ved HK-dir ser på jobbene i "Samordna opptak 2027"
       Så ser opptaksforvalteren at importen kjørte sist 29.10.2026 kl. 10.15
-
-  @draft @openquestion
-  Regel: Opptaksforvalteren starter en jobb uten å vente på neste kjøring
-    # ÅPNE SPØRSMÅL:
-    # - Skal opptaksforvalteren kunne starte en jobb med en gang, for eksempel etter at KREG har
-    #   vært nede? Bare saksbehandleren starter den automatiske behandlingen, for én sak
-    #   (OPT-BEH-BEH-032).
-
-    Scenario: Opptaksforvalteren starter importen med en gang
-      Når opptaksforvalteren ved HK-dir starter importen av VGS-vitnemål fra KREG
-      Så starter importen uten å vente på neste kjøring

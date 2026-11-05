@@ -35,13 +35,13 @@ Egenskap: Beregne automatisk på nytt
     Gitt at opptaksforvalteren ved HK-dir er innlogget
     Og at "Informatikk, UiO" og "Historie, UiT" er med i opptaket "Samordna opptak 2027"
 
-  @openquestion
   Regel: Opptaksforvalteren velger regelverkene feilen gjaldt
     # Utvalget er regelverkene i regelverkssamlingen på opptaket. En sak er med når minst ett av
     # søknadsalternativene i saken har ett av regelverkene opptaksforvalteren har valgt.
-    # ÅPNE SPØRSMÅL:
-    # - Hører kvotetypene og kvotespørsmålene til et kompetanse- eller rangeringsregelverk? Hvis
-    #   ikke, må opptaksforvalteren velge alle regelverkene når en kvotetype er endret.
+    # Avklart 05.11.2026: kvotetypene og kvotespørsmålene hører ikke til et kompetanse- eller
+    # rangeringsregelverk, men ligger i regelverkssamlingen (OPT-REG-SAM-001). Er en
+    # kvotetype eller et kvotespørsmål rettet, velger opptaksforvalteren alle regelverkene.
+    # Kvotetypen er ikke et eget utvalg.
 
     Scenariomal: Opptaksforvalteren beregner på nytt for søknadsalternativene med <utvalg>
       Når opptaksforvalteren beregner på nytt for søknadsalternativene med <utvalg>
@@ -53,6 +53,11 @@ Egenskap: Beregne automatisk på nytt
         | rangeringsregelverket "Ordinær rangering" |
         | alle kompetanseregelverkene               |
         | alle rangeringsregelverkene               |
+
+    Scenario: Alle sakene beregnes på nytt når en kvotetype er rettet
+      Gitt at opptaksforvalteren har rettet kvotetypen "ORDF" i regelverkssamlingen
+      Når opptaksforvalteren beregner på nytt for søknadsalternativene med alle kompetanseregelverkene og alle rangeringsregelverkene
+      Så er alle sakene i "Samordna opptak 2027" beregnet på nytt
 
     Scenario: Saker med søknadsalternativer med andre regelverk, beregnes ikke på nytt
       Gitt at "Informatikk, UiO" har rangeringsregelverket "Ordinær rangering"
@@ -179,22 +184,52 @@ Egenskap: Beregne automatisk på nytt
       Og "Kari Nordmann" ser ikke lenger den automatiske mangelteksten for "Matematikk R2" i Min kompetanse
       Og saken til "Kari Nordmann" hos "Universitetet i Oslo" er fortsatt ferdig behandlet
 
-  @openquestion @depends-on-OPT-BEH-BEH-033
+  @depends-on-OPT-BEH-BEH-033
   Regel: Beregningen kjører i bakgrunnen
-    # ÅPNE SPØRSMÅL:
-    # - Hva skjer når opptaksforvalteren starter en ny beregning før den forrige er ferdig, eller
-    #   starter en beregning mens en plasstildeling kjører? Forslag: bare én beregning per opptak
-    #   om gangen, og ingen beregning mens en plasstildeling kjører.
-    # - Kan opptaksforvalteren beregne på nytt etter siste plasstildelingsrunde, eller etter at
-    #   resultatet er publisert?
-    # - Opptaksforvalteren ved HK-dir starter beregningen, men sakene er hos andre organisasjoner.
-    #   Hvem står som den som endret, i endringsloggen? Forslag: den automatiske behandlingen, og
-    #   det lagres hvem som startet beregningen.
+    # Avklart 05.11.2026: bare én beregning per opptak om gangen, ingen beregning mens en
+    # plasstildeling kjører, og ingen plasstildeling mens en beregning kjører. Den som prøver å
+    # starte noe som ikke kan kjøre, får beskjed om hvorfor.
+    # Avklart 05.11.2026: etter at resultatet av siste plasstildelingsrunde er publisert, kan
+    # opptaksforvalteren ikke beregne på nytt. Da finnes ingen neste plasstildeling, og
+    # saksbehandleren retter enkeltsakene.
+    # Avklart 05.11.2026: i saksloggen står den automatiske behandlingen som den som endret saken,
+    # og det står hvem som startet beregningen. Endringsloggen i opptak er stoppet (BAT-324), så
+    # scenarioet kan ikke leveres før den nye sporingsloggen finnes.
 
     Scenario: Opptaksforvalteren ser når beregningen er ferdig
       Gitt at opptaksforvalteren har startet en beregning på nytt for søknadsalternativene med rangeringsregelverket "Ordinær rangering"
       Når beregningen er ferdig
       Så ser opptaksforvalteren at beregningen er ferdig
+
+    Scenario: Opptaksforvalteren kan ikke starte en ny beregning før den forrige er ferdig
+      Gitt at en beregning på nytt i "Samordna opptak 2027" ikke er ferdig
+      Når opptaksforvalteren starter en ny beregning på nytt i "Samordna opptak 2027"
+      Så starter ikke beregningen
+      Og opptaksforvalteren får beskjed om at en beregning allerede kjører
+
+    Scenario: Opptaksforvalteren kan ikke beregne på nytt mens en plasstildeling kjører
+      Gitt at en plasstildeling i "Samordna opptak 2027" kjører
+      Når opptaksforvalteren starter en beregning på nytt i "Samordna opptak 2027"
+      Så starter ikke beregningen
+      Og opptaksforvalteren får beskjed om at en plasstildeling kjører
+
+    Scenario: Opptaksforvalteren kan ikke starte en plasstildeling mens en beregning på nytt kjører
+      Gitt at en beregning på nytt i "Samordna opptak 2027" ikke er ferdig
+      Når opptaksforvalteren starter en plasstildeling i plasstildelingsrunden "Hovedrunde"
+      Så starter ikke plasstildelingen
+      Og opptaksforvalteren får beskjed om at en beregning på nytt kjører
+
+    Scenario: Opptaksforvalteren kan ikke beregne på nytt etter at resultatet av siste plasstildelingsrunde er publisert
+      Gitt at resultatet av siste plasstildelingsrunde i "Samordna opptak 2027" er publisert
+      Når opptaksforvalteren starter en beregning på nytt i "Samordna opptak 2027"
+      Så starter ikke beregningen
+      Og opptaksforvalteren får beskjed om at resultatet av siste plasstildelingsrunde er publisert
+
+    Scenario: Saksloggen viser at den automatiske behandlingen endret saken, og hvem som startet beregningen
+      Gitt at opptaksforvalteren ved HK-dir har startet en beregning på nytt i "Samordna opptak 2027"
+      Når beregningen endrer poengsummen i saken hos "Universitetet i Oslo"
+      Så viser saksloggen at den automatiske behandlingen endret saken
+      Og saksloggen viser at opptaksforvalteren ved HK-dir startet beregningen
 
   @depends-on-OPT-PLA-TIL-001
   Regel: Beregningen gjelder fra neste plasstildeling
