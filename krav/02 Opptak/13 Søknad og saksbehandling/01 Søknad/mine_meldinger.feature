@@ -179,7 +179,7 @@ Egenskap: Se meldinger om egne søknader
     # - Skal varselet gå på e-post, SMS eller begge deler? Møtet ønsker mulighet for begge.
     # - Hvor lenge etter en ny melding sendes varselet? Varselet er ikke tidskritisk, og kan gå ut dagen etter.
     # - Varselet sendes ikke i stilletid. Når er stilletid?
-    # - Hva skal standardteksten i varselet være? Den vises på søkerens foretrukne språk.
+    # - Hva skal standardteksten i varselet være? Den vises på språket søkeren har valgt.
     # - Hører regelen hjemme her, i en egen feature-fil, eller i 10 Felleskrav sammen med andre varsler (BRU-PER-ETT-004, OPT-PLA-SVA-002)? Gjelder samlingen også påminnelser om svarfrist?
 
     # Varselet går til søkeren utenfor Min kompetanse. Antallet i Min kompetanse står i «Søkeren ser antall uleste meldinger».
