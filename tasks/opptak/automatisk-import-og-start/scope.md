@@ -5,7 +5,7 @@
 - **Initiativ**: [#199](https://github.com/sikt-no/fs/issues/199)
 - **Jira**: [STEK-330](https://sikt.atlassian.net/browse/STEK-330)
 - **Eier**: –
-- **Siste oppdatering**: 2026-11-04
+- **Siste oppdatering**: 2026-11-05
 
 ## Mål
 
@@ -34,11 +34,13 @@
 | `@OPT-BEH-BEH-030` [importere_resultater_fra_kreg.feature](../../../krav/02%20Opptak/13%20S%C3%B8knad%20og%20saksbehandling/02%20Behandling/importere_resultater_fra_kreg.feature) | Must | – | [STEK-330](https://sikt.atlassian.net/browse/STEK-330) | |
 | `@OPT-BEH-BEH-032` [starte_automatisk_behandling.feature](../../../krav/02%20Opptak/13%20S%C3%B8knad%20og%20saksbehandling/02%20Behandling/starte_automatisk_behandling.feature) | Must | – | – | |
 | `@OPT-BEH-BEH-033` [kjøre_jobbene_i_opptak.feature](../../../krav/02%20Opptak/13%20S%C3%B8knad%20og%20saksbehandling/02%20Behandling/kj%C3%B8re_jobbene_i_opptak.feature) | Must | – | – | Jobbplanleggeren og importjobben for nye vitnemål, som `@OPT-BEH-BEH-032` og fase 1 i `@FLY-OPT-VIT-001` bygger på. Kravet har også saksbehandlertildelingen og importen av resultater fra høyere utdanning (`@OPT-BEH-BEH-038`, PR #937), som `@OPT-BEH-BEH-028` i `automatisk-grunnlag-og-poeng` trenger. Kravet er `@draft`, med åpne spørsmål |
+| `@OPT-BEH-BEH-038` [importere_resultater_fra_høyere_utdanning.feature](../../../krav/02%20Opptak/13%20S%C3%B8knad%20og%20saksbehandling/02%20Behandling/importere_resultater_fra_h%C3%B8yere_utdanning.feature) | Must | – | – | Importen av resultater fra høyere utdanning, fra en annen tjeneste enn KREG. Poeng for høyere utdanning i `@OPT-BEH-BEH-028` (scopet `automatisk-grunnlag-og-poeng`) kan ikke leveres før importen. Kravet er `@draft` |
 
 ## Åpne spørsmål
 
 - [ ] `@OPT-BEH-BEH-032` har ingen Jira-sak. Avklares senere.
 - [ ] `@OPT-BEH-BEH-033` har ingen Jira-sak, og må valideres med `fs-krav` før scopet kan spesifiseres.
+- [ ] `@OPT-BEH-BEH-038` har ingen Jira-sak, og må valideres med `fs-krav`.
 
 ## Statuslogg
 
@@ -46,6 +48,7 @@ Append-only. Ny linje på toppen ved hver hendelse.
 
 | Dato       | Hendelse | Av | Lenke til review |
 |------------|----------|----|------------------|
+| 2026-11-05 | `@OPT-BEH-BEH-038` er tatt inn i scopet. Fasen om tilleggspoeng i `@FLY-OPT-AUT-001` bygger på kravet gjennom `@OPT-BEH-BEH-028`, og kravet hørte ikke til noe scope. Fra gjennomgangen av flyten automatisk saksbehandling | @JøranIndseth | – |
 | 2026-11-04 | Scenarioet om å starte på valgt vitnemål i `@OPT-BEH-BEH-032` er skilt ut i `@OPT-BEH-BEH-039` (Behandle automatisk på vitnemålet saksbehandleren velger), `@must` uten scope. Fra reviewen av PR #931 | @JøranIndseth | [#931](https://github.com/sikt-no/fs/pull/931) |
 | 2026-11-04 | `@OPT-BEH-BEH-033` er tatt inn i scopet. `@OPT-BEH-BEH-032` og fase 1 i `@FLY-OPT-VIT-001` bygger på jobbene, og kravet hørte ikke til noe scope. Fra reviewen av PR #925 | @JøranIndseth | [#925](https://github.com/sikt-no/fs/pull/925) |
 | 2026-11-02 | Opprettet med fs-scope, som leveranse 1 av 6 i flyten automatisk saksbehandling | @JøranIndseth | – |

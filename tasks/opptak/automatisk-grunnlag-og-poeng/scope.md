@@ -34,7 +34,7 @@
 |---|---|---|---|---|
 | `@OPT-BEH-BEH-019` [automatisk_grunnlag.feature](../../../krav/02%20Opptak/13%20S%C3%B8knad%20og%20saksbehandling/02%20Behandling/automatisk_grunnlag.feature) | Must | – | – | Scenarioet om endringsloggen kan ikke leveres før den nye sporingsloggen finnes. Endringsloggen er stoppet (BAT-324, 29.10.2026) |
 | `@OPT-BEH-BEH-018` [automatisk_poengberegning.feature](../../../krav/02%20Opptak/13%20S%C3%B8knad%20og%20saksbehandling/02%20Behandling/automatisk_poengberegning.feature) | Must | – | – | |
-| `@OPT-BEH-BEH-028` [automatiske_tilleggspoeng.feature](../../../krav/02%20Opptak/13%20S%C3%B8knad%20og%20saksbehandling/02%20Behandling/automatiske_tilleggspoeng.feature) | Must | – | – | Poeng for høyere utdanning kan bygges med mocket input, men kan ikke leveres før importen av resultater fra høyere utdanning (`@OPT-BEH-BEH-038`, PR #937) er levert (2026-11-04) |
+| `@OPT-BEH-BEH-028` [automatiske_tilleggspoeng.feature](../../../krav/02%20Opptak/13%20S%C3%B8knad%20og%20saksbehandling/02%20Behandling/automatiske_tilleggspoeng.feature) | Must | – | – | Poeng for høyere utdanning kan bygges med mocket input, men kan ikke leveres før importen av resultater fra høyere utdanning (`@OPT-BEH-BEH-038`, PR #937, i scopet `automatisk-import-og-start`) er levert (2026-11-04) |
 
 ## Åpne spørsmål
 
