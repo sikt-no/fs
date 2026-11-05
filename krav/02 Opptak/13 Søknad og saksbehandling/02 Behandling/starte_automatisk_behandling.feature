@@ -131,8 +131,9 @@ Egenskap: Starte automatisk behandling
   # OPT-OVO-FRI-001: «Opptaksforvalter kan sette når den automatiske saksbehandlingen starter og avsluttes»
   Regel: Saken behandles automatisk bare mens den automatiske saksbehandlingen pågår i opptaket
     # Avklart 2026-11-03: hendelsene «Automatisk saksbehandling starter» og «Automatisk saksbehandling
-    # avsluttes» settes på opptaket, og er valgfrie. Er de ikke satt, pågår den automatiske
-    # saksbehandlingen til opptaket er historisk. Hendelsene er de samme som i OPT-BEH-BEH-015.
+    # avsluttes» settes på opptaket, og er valgfrie. Hendelsene er de samme som i OPT-BEH-BEH-015.
+    # Avklart 2026-11-05: er de ikke satt, pågår den automatiske saksbehandlingen fra opptaket er
+    # publisert til opptaket er historisk.
     # Erstatter at opptaksforvalteren skrur automatikken av og på. Gjelder for ett opptak, ikke for
     # hele systemet.
     # Avklart 2026-11-03: hendelsene gjelder ikke importen av vitnemål. Importen kjører uansett
@@ -154,8 +155,9 @@ Egenskap: Starte automatisk behandling
       Når saksbehandlertildelingen har opprettet saken hos "Universitetet i Oslo"
       Så behandles ikke saken hos "Universitetet i Oslo" automatisk
 
-    Scenario: Den automatiske saksbehandlingen pågår til opptaket er historisk når hendelsene ikke er satt
+    Scenario: Den automatiske saksbehandlingen pågår fra publisering til opptaket er historisk når hendelsene ikke er satt
       Gitt at "Samordna opptak 2027" ikke har hendelsene for den automatiske saksbehandlingen
+      Og at "Samordna opptak 2027" er publisert
       Og at "Samordna opptak 2027" ikke er historisk
       Og at "Kari Nordmann" har et vitnemål i KREG
       Når saksbehandlertildelingen har opprettet saken hos "Universitetet i Oslo"
