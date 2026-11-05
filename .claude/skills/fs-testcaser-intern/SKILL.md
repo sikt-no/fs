@@ -157,11 +157,22 @@ Følg `testcase-regler.md` for hver testcase, og malen for formen:
 
 1. Gå gjennom sjekklista i `testcase-regler.md`, og rett det du kan selv. Sjekk 6 gjøres med lista over obligatoriske felt fra steg 5 ved siden av. Det som krever teamet, står igjen som `[Fylles ut …]`, `[Sjekk begrep]` eller `[Sjekk testdata]`.
 2. Vis oppsummeringen: antall testcaser per del (det fase 2 ikke klarte, flyter og oppgaver uten flyt, opplevelse og helhet, høyest risiko) og deler (scenarioer), regresjonsflytene, beregnet tid (2–4 minutter per del), hvor mange krav som ikke er i noen flyt, og hvordan de testes (oppgave uten flyt, eller venter på flyt, med forslaget om ny flyt), avhengighetene, det teamet må fylle ut, testdata som ikke fantes i miljøet, og «Til fs-krav»: svakhetene i kravene, med `fil:linje`. Er testen lengre enn 2 timer (tidsrammen i rutinen), foreslå å dele den i to økter.
-3. Spør om siden skal opprettes i Confluence, som underside til testplanen (`confluence.md`, *Før du skriver*). Finnes siden fra før, og testerne har begynt, følg *Oppdatere en side som finnes*: det som er fylt ut, skrives aldri over.
-4. Oppdater raden «3. Intern akseptansetest» i «Status i flyten» («Klar til test»), og forutsetningen om at testansvarlig har gått gjennom testcasene («Laget, venter på gjennomgang av testansvarlig») i testplanen.
-5. Skriv lenken i metadataene, og foreslå teksten til Slack-tråden.
+3. Lag teamvisningen (*Teamvisning*), og gi lenken i chat.
+4. Spør om siden skal opprettes i Confluence, som underside til testplanen (`confluence.md`, *Før du skriver*). Finnes siden fra før, og testerne har begynt, følg *Oppdatere en side som finnes*: det som er fylt ut, skrives aldri over.
+5. Oppdater raden «3. Intern akseptansetest» i «Status i flyten» («Klar til test»), og forutsetningen om at testansvarlig har gått gjennom testcasene («Laget, venter på gjennomgang av testansvarlig») i testplanen.
+6. Skriv lenken i metadataene, og foreslå teksten til Slack-tråden, med lenken til teamvisningen.
 
 Gjennomføringen: testansvarlig følger testcasene, og fører resultat og funn (med funntype og «Fase funnet») i testsiden. Sluttrapporten lages med `fs-testrapport` (intern), og beslutningen tas av testansvarlig.
+
+## Teamvisning
+
+Testcasene får en teamvisning: én HTML-side med testcasene per del, der stegene, forventet resultat og faktisk resultat vises når en testcase velges, og «Før du starter», det som ikke kan testes nå, det som ikke er med, og funnene. Er statusene fylt ut i fila, viser siden hvor mange som er bestått, ikke bestått og ikke fylt ut, og kan filtrere på dem. Designet er det samme som for verifiseringen ([`.claude/references/teamvisning/`](../../references/teamvisning/README.md)).
+
+1. **Bygg** fra rota av repoet: `node .claude/skills/fs-testcaser-intern/references/teamvisning/bygg.mjs akseptansetest/<slug>/testcaser-intern.md`. Skriptet skriver `testcaser-intern.html` ved siden av fila.
+2. **Publiser** HTML-fila med Artifact-verktøyet: `icon` er `checklist`, og `description` er «Testcasene for den interne akseptansetesten av <leveranse>.». Endres testcasene i samme kjøring, bygg og publiser den samme fila igjen, så lenken er den samme.
+3. **Uten Bash** (Claude-panelet): si det, med kommandoen. **Uten Artifact-verktøyet**: gi stien til HTML-fila.
+
+Skriv aldri HTML-en selv. Endres formatet i `references/mal-intern.md`, sjekkes `references/teamvisning/mal.html` i samme endring. HTML-fila tas med i samme PR som testcasene.
 
 ## Hva skillen ikke gjør
 

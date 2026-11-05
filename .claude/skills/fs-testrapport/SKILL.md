@@ -98,10 +98,21 @@ Fyll ut malen for nivået (`verifisering`, `agentisk`, `intern` eller `ekstern`)
 ## 5. Vis fram og publiser
 
 1. Vis oppsummeringen i chat: tallene, forslaget til utfall med grunnen, funnene etter alvorlighetsgrad, og det som må fylles ut.
-2. Spør om rapporten skal opprettes i Confluence, som underside til testplanen (`confluence.md`, *Før du skriver*). Finnes en testrapport for samme nivå fra før, er det en oppdatering, med ny dato i tittelen hvis testen er kjørt på nytt.
-3. Oppdater raden for fasen i «Status i flyten» i testplanen og i `testplan.md`: «Klar» / «Ikke klar for agentisk funksjonstest» (verifisering), «Venter på gjennomgang» / «Klar for intern akseptansetest» (agentisk: den siste når inngangskriteriet er oppfylt, også at testansvarlig har gått gjennom), «Venter på beslutning» (intern og ekstern). Når beslutningen er skrevet, og skillen kjøres på nytt, blir statusen utfallet. I fase 4 er godkjent og godkjent med forbehold «Akseptert (godkjent)» og «Akseptert (godkjent med forbehold)». Fyll også ut kolonnen for fasen i sporbarheten: i `sporbarhet.md` og på undersiden «Sporbarhet – <leveranse>», ikke i testplanen. Kolonnen for fase 2 (testcase, teknikk og resultat, for eksempel «2.3a, grenseverdi, Bestått») fra den agentiske rapporten, og kolonnen for fase 3 (flyt) fra den interne. Finnes ikke `sporbarhet.md` (eldre testplaner har tabellen i testplanen), flytt tabellen dit først, og erstatt seksjonen i testplanen med lenken, som i malen i `fs-testplan`.
-4. Skriv lenken i metadataene (`- **Confluence**:`).
-5. Si hva som er neste steg (seksjonen «Neste steg» i malen).
+2. Lag teamvisningen når nivået er `intern` (*Teamvisning*), og gi lenken i chat.
+3. Spør om rapporten skal opprettes i Confluence, som underside til testplanen (`confluence.md`, *Før du skriver*). Finnes en testrapport for samme nivå fra før, er det en oppdatering, med ny dato i tittelen hvis testen er kjørt på nytt.
+4. Oppdater raden for fasen i «Status i flyten» i testplanen og i `testplan.md`: «Klar» / «Ikke klar for agentisk funksjonstest» (verifisering), «Venter på gjennomgang» / «Klar for intern akseptansetest» (agentisk: den siste når inngangskriteriet er oppfylt, også at testansvarlig har gått gjennom), «Venter på beslutning» (intern og ekstern). Når beslutningen er skrevet, og skillen kjøres på nytt, blir statusen utfallet. I fase 4 er godkjent og godkjent med forbehold «Akseptert (godkjent)» og «Akseptert (godkjent med forbehold)». Fyll også ut kolonnen for fasen i sporbarheten: i `sporbarhet.md` og på undersiden «Sporbarhet – <leveranse>», ikke i testplanen. Kolonnen for fase 2 (testcase, teknikk og resultat, for eksempel «2.3a, grenseverdi, Bestått») fra den agentiske rapporten, og kolonnen for fase 3 (flyt) fra den interne. Finnes ikke `sporbarhet.md` (eldre testplaner har tabellen i testplanen), flytt tabellen dit først, og erstatt seksjonen i testplanen med lenken, som i malen i `fs-testplan`.
+5. Skriv lenken i metadataene (`- **Confluence**:`).
+6. Si hva som er neste steg (seksjonen «Neste steg» i malen).
+
+## Teamvisning
+
+Testrapporten for den interne akseptansetesten får en teamvisning: én HTML-side med forslaget til utfall og tallene øverst, resultatet per krav, flyt eller oppgave som søyler, det som ikke er bestått, det som er bestått men avviker, det som ikke er testet, funnene gruppert etter alvorlighetsgrad, og beslutningen (med «Ikke besluttet ennå» til testansvarlig har skrevet den). Designet er det samme som for verifiseringen ([`.claude/references/teamvisning/`](../../references/teamvisning/README.md)).
+
+1. **Bygg** fra rota av repoet: `node .claude/skills/fs-testrapport/references/teamvisning/bygg.mjs akseptansetest/<slug>/testrapport-intern-<YYYY-MM-DD>.md`. Skriptet skriver `testrapport-intern-<YYYY-MM-DD>.html` ved siden av rapporten.
+2. **Publiser** HTML-fila med Artifact-verktøyet: `icon` er `checklist`, og `description` er «Testrapporten for den interne akseptansetesten av <leveranse>, <dato>.». Endres rapporten i samme kjøring, bygg og publiser den samme fila igjen, så lenken er den samme.
+3. **Uten Bash** (Claude-panelet): si det, med kommandoen. **Uten Artifact-verktøyet**: gi stien til HTML-fila.
+
+Skriv aldri HTML-en selv. Endres malen for den interne rapporten i `references/mal-rapport.md`, sjekkes `references/teamvisning/mal.html` i samme endring. HTML-fila tas med i samme PR som rapporten. De andre nivåene (verifisering, agentisk og ekstern) har ingen teamvisning ennå. Verifiseringen har sin egen i `fs-verify`.
 
 ## Hva skillen ikke gjør
 

@@ -1,0 +1,197 @@
+<title>__TITLE__</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+__STIL__
+</style>
+
+<header class="top">
+  <div class="wrap">
+    <div class="eyebrow" id="eyebrow">Testrapport · intern akseptansetest</div>
+    <h1 id="title"></h1>
+    <div class="metaline" id="metaline"></div>
+    <div class="verdict" id="verdict"></div>
+    <div class="stats" id="stats"></div>
+  </div>
+</header>
+
+<nav class="bar" aria-label="Seksjoner">
+  <div class="wrap">
+    <div class="links" id="links"></div>
+  </div>
+</nav>
+
+<main>
+  <div class="wrap" id="content"></div>
+</main>
+
+<footer>
+  <div class="wrap">
+    <dl id="meta"></dl>
+  </div>
+</footer>
+
+<script>
+__FELLES__
+</script>
+<script id="data" type="application/json">__DATA__</script>
+<script>
+(function () {
+  var D = JSON.parse(document.getElementById('data').textContent);
+  var T = TV, esc = T.esc, inl = T.inl;
+  var title = D.h1.replace(/^Testrapport\s*[–-]\s*[^–-]+[–-]\s*/i, '') || D.h1;
+  var nivaa = (D.h1.match(/^Testrapport\s*[–-]\s*([^–-]+?)\s*[–-]/i) || [])[1] || 'intern akseptansetest';
+  document.getElementById('title').textContent = title;
+
+  // —— Oppsummering ——
+  var O = {};
+  var os = T.section(D, /^Oppsummering$/i);
+  T.tables(os).forEach(function (tb) { if (/^felt$/i.test(tb.head[0])) tb.rows.forEach(function (r) { O[r[0].replace(/\*/g, '').trim()] = r[1] || ''; }); });
+  function num(s, re) { var m = String(s || '').match(re); return m ? +m[1] : null; }
+  var tc = O['Testcaser'] || '';
+  var n = {
+    ok: num(tc, /(\d+)\s+bestått/i), ikke: num(tc, /(\d+)\s+ikke bestått/i), ikketestet: num(tc, /(\d+)\s+ikke testet/i),
+    tom: num(tc, /(\d+)\s+ikke fylt ut/i), av: num(tc, /av\s+(\d+)/i)
+  };
+  document.getElementById('eyebrow').textContent = 'Testrapport · ' + nivaa + (O['Testperiode'] ? ' · ' + O['Testperiode'] : '');
+  document.getElementById('metaline').innerHTML = [['Testet av', O['Testet av']], ['Testperiode', O['Testperiode']], ['Testplan', D.meta['Testplan']]]
+    .filter(function (x) { return x[1]; }).map(function (x) { return '<span><b>' + x[0] + '</b> ' + (/\[Fylles ut/.test(x[1]) ? '<span class="warnbox">ikke fylt ut</span>' : inl(x[1])) + '</span>'; }).join('');
+
+  // —— Funn, gruppert etter alvorlighetsgrad ——
+  var fs = T.section(D, /^Funn$/i);
+  var ftb = T.tables(fs).filter(function (t) { return T.col(t.head, /^alvorlighetsgrad$/i) >= 0 && !/^alvorlighetsgrad$/i.test(t.head[0]); })[0];
+  var funn = ftb ? ftb.rows.filter(function (r) { return !T.emptyRow(r); }) : [];
+  var fi = ftb ? { nr: T.col(ftb.head, /^(#|nr)$/i), tc: T.col(ftb.head, /^testcase/i), hva: T.col(ftb.head, /^hva skjedde/i), grad: T.col(ftb.head, /^alvorlighetsgrad$/i), sak: T.col(ftb.head, /^sak$/i), opp: T.col(ftb.head, /^oppfølging/i), type: T.col(ftb.head, /^type$/i), fase: T.col(ftb.head, /^fase/i) } : {};
+  function grad(r) { return T.cell(r, fi.grad); }
+  var cStop = funn.filter(function (r) { return /^stopper/i.test(grad(r)); }).length;
+  var cMaa = funn.filter(function (r) { return /^må fikses/i.test(grad(r)); }).length;
+  var cKan = funn.filter(function (r) { return /^kan fikses/i.test(grad(r)); }).length;
+  var cUten = funn.length - cStop - cMaa - cKan;
+
+  // —— Konklusjon ——
+  var forslag = O['Forslag til utfall'] || '';
+  var v = document.getElementById('verdict');
+  var head = forslag.split(':')[0].trim() || 'Ingen forslag til utfall';
+  var rest = forslag.indexOf(':') >= 0 ? forslag.slice(forslag.indexOf(':') + 1).trim() : '';
+  v.className = /^godkjent med forbehold/i.test(head) ? 'verdict warn' : /^(godkjent|akseptert)/i.test(head) ? 'verdict good' : 'verdict';
+  v.innerHTML = '<span class="dot"></span><div><h2>Forslag: ' + esc(head) + '</h2><p>' + (rest ? inl(T.cap(rest)) + ' ' : '') + 'Testansvarlig skriver beslutningen. Agenten kan ikke godkjenne leveransen.</p></div>';
+  var st = [];
+  if (n.av != null) st.push(['Bestått', (n.ok || 0) + ' <small>/ ' + n.av + '</small>', n.ok === n.av ? '' : '']);
+  if (n.ikke != null) st.push(['Ikke bestått', n.ikke, n.ikke ? 'bad' : '']);
+  if (n.ikketestet != null) st.push(['Ikke testet', n.ikketestet, n.ikketestet ? 'warn' : '']);
+  if (n.tom != null) st.push(['Ikke fylt ut', n.tom, n.tom ? 'warn' : '']);
+  st.push(['Funn som stopper', cStop, cStop ? 'bad' : '']);
+  st.push(['Må fikses før innføring', cMaa, cMaa ? 'warn' : '']);
+  if (cUten) st.push(['Funn uten alvorlighetsgrad', cUten, 'warn']);
+  document.getElementById('stats').innerHTML = T.stats(st);
+
+  var html = '', links = [], used = {};
+  function sec(id, title, lede, body, count) {
+    links.push([id, title]);
+    html += '<section id="' + id + '"><div class="sechead"><h2>' + esc(title) + '</h2>' + (count != null ? '<span class="count">' + count + '</span>' : '') + '</div>' + (lede ? '<p class="lede">' + lede + '</p>' : '') + body + '</section>';
+  }
+  function prose(blocks) { return blocks && blocks.length ? '<div class="prose">' + T.blocks(blocks) + '</div>' : ''; }
+  function isNone(s) { return s && !T.tables(s).length && T.texts(s).length && /^ingen\b/i.test((T.texts(s)[0].text || '').trim()); }
+  function mark(s) { if (s) used[s.title] = 1; return s; }
+
+  // Resultat per krav / flyt / oppgave: én rad per linje med søyle
+  D.sections.forEach(function (s) {
+    if (s.level !== 2 || !/^Resultat per/i.test(s.title)) return;
+    mark(s);
+    var body = T.tables(s).map(function (tb) {
+      var ix = { ok: T.col(tb.head, /^bestått$/i), ikke: T.col(tb.head, /^ikke bestått$/i), it: T.col(tb.head, /^ikke testet$/i), tom: T.col(tb.head, /^ikke fylt ut$/i) };
+      if (ix.ok < 0) return T.table(tb);
+      var numCols = [ix.ok, ix.ikke, ix.it, ix.tom];
+      var rows = tb.rows.filter(function (r) { return !T.emptyRow(r) && !/totalt/i.test(r.join(' ')); });
+      return '<div class="krav">' + rows.map(function (r) {
+        var lbl = r.map(function (c, i) { return numCols.indexOf(i) < 0 && c && c !== '–' ? c : null; }).filter(Boolean);
+        var main = lbl.length > 1 ? lbl.slice(1).join(' · ') : lbl[0] || '';
+        var sub = lbl.length > 1 ? lbl[0] : '';
+        var a = +T.cell(r, ix.ok) || 0, b = +T.cell(r, ix.ikke) || 0, c = +T.cell(r, ix.it) || 0, d = +T.cell(r, ix.tom) || 0, sum = a + b + c + d || 1;
+        function seg(x, cls) { return x ? '<i class="' + cls + '" style="width:' + (100 * x / sum) + '%"></i>' : ''; }
+        return '<div class="resrow"><div class="lbl">' + inl(main) + (sub ? '<small>' + inl(sub) + '</small>' : '') + '</div><div class="stack" aria-hidden="true">' + seg(a, 's-ok') + seg(b, 's-miss') + seg(c, 's-part') + seg(d, 's-na') + '</div>' +
+          '<div class="nums">' + a + ' ✓ · ' + b + ' ✗' + (c ? ' · ' + c + ' ikke testet' : '') + (d ? ' · ' + d + ' ikke fylt ut' : '') + '</div></div>';
+      }).join('') + '</div>';
+    }).join('');
+    var legend = '<div class="legend"><span><i class="sw" style="background:var(--ok)"></i>Bestått</span><span><i class="sw" style="background:var(--miss)"></i>Ikke bestått</span><span><i class="sw" style="background:var(--part)"></i>Ikke testet</span><span><i class="sw" style="background:var(--na)"></i>Ikke fylt ut</span></div>';
+    var id = 'resultat-' + s.title.replace(/^Resultat per\s*/i, '').toLowerCase().replace(/[^a-zæøå0-9]+/g, '-');
+    sec(id, s.title, '', legend + body + prose(T.texts(s)));
+  });
+
+  function rowList(s, cls, gtitle, gtext, main, extra) {
+    var tb = T.tables(s)[0];
+    if (!tb) return prose(s.blocks);
+    var items = tb.rows.filter(function (r) { return !T.emptyRow(r); });
+    return T.group(cls, gtitle, gtext, items, function (r) {
+      var m = main(tb, r);
+      return '<li><div class="rmain">' + m + '</div>' + extra(tb, r) + '</li>';
+    }) + prose(T.texts(s));
+  }
+  function field(tb, r, re, label) { var i = T.col(tb.head, re); var x = T.cell(r, i); return x ? '<div class="rtext">' + (label ? '<span class="kid">' + esc(label) + ':</span> ' : '') + inl(x) + '</div>' : ''; }
+  function nrSc(tb, r) { var nr = T.cell(r, T.col(tb.head, /^(nr|#|testcase)$/i)), sc = T.cell(r, T.col(tb.head, /^scenario/i)); return (nr ? '<span class="scline" style="margin:0 8px 0 0">' + esc(nr) + '</span>' : '') + inl(sc); }
+
+  var s1 = mark(T.section(D, /^Ikke bestått$/i));
+  if (s1) sec('ikke-bestatt', 'Ikke bestått', '', isNone(s1) ? '<p class="empty">Ingen.</p>' : rowList(s1, 'bad', 'Testcaser som ikke er bestått', 'Det testeren så. Hver av dem skal ha et funn.', nrSc, function (tb, r) { return field(tb, r, /^faktisk/i, 'Faktisk resultat') + field(tb, r, /^funn$/i, 'Funn'); }));
+  var s2 = mark(T.section(D, /^Bestått, men/i));
+  if (s2) sec('avviker', s2.title, '', isNone(s2) ? '<p class="empty">Ingen.</p>' : rowList(s2, 'decide', 'Testansvarlig avgjør status', 'Testcasen er satt til bestått, men det testeren skrev, avviker fra forventet resultat.', nrSc, function (tb, r) { return field(tb, r, /^forventet/i, 'Forventet') + field(tb, r, /^faktisk/i, 'Faktisk'); }));
+  var s3 = mark(T.section(D, /^Ikke testet$/i));
+  if (s3) sec('ikke-testet', 'Ikke testet', '', isNone(s3) ? '<p class="empty">Ingen.</p>' : rowList(s3, 'info', 'Testcaser som ikke er testet', '', nrSc, function (tb, r) { return field(tb, r, /^begrunnelse|^hvorfor/i, 'Begrunnelse'); }));
+
+  mark(fs);
+  if (fs) {
+    var GR = [
+      ['bad', 'Stopper', 'Gir ikke godkjent.', function (g) { return /^stopper/i.test(g); }],
+      ['decide', 'Må fikses før innføring', 'Gir godkjent med forbehold.', function (g) { return /^må fikses/i.test(g); }],
+      ['info', 'Kan fikses senere', 'Legges i oppgavelista til teamet.', function (g) { return /^kan fikses/i.test(g); }],
+      ['decide', 'Uten alvorlighetsgrad', 'Testansvarlig setter alvorlighetsgraden.', function (g) { return !/^(stopper|må fikses|kan fikses)/i.test(g); }]
+    ];
+    var fbody = funn.length ? GR.map(function (g) {
+      return T.group(g[0], g[1], g[2], funn.filter(function (r) { return g[3](grad(r)); }), function (r) {
+        var meta = [];
+        var tcs = T.cell(r, fi.tc); if (tcs) meta.push('<span>Testcase ' + inl(tcs) + '</span>');
+        var sak = T.cell(r, fi.sak); if (sak && sak !== '–') meta.push('<span>' + inl(sak) + '</span>');
+        var ty = T.cell(r, fi.type); if (ty) meta.push(T.chip('na', ty));
+        return '<li><div class="rmain">' + inl(T.cell(r, fi.hva)) + '</div>' + (T.cell(r, fi.opp) ? '<div class="rtext"><span class="kid">Oppfølging:</span> ' + inl(T.cell(r, fi.opp)) + '</div>' : '') + (meta.length ? '<div class="rmeta">' + meta.join('') + '</div>' : '') + '</li>';
+      });
+    }).join('') : '<p class="empty">Ingen.</p>';
+    sec('funn', 'Funn', T.texts(fs).length ? T.blocks(T.texts(fs).slice(0, 1)).replace(/<\/?p>/g, '') : '', fbody, funn.length || null);
+  }
+
+  [['andre-funn', /^Andre funn$/i], ['kjente-mangler', /^Kjente mangler$/i]].forEach(function (x) {
+    var s = mark(T.section(D, x[1])); if (!s) return;
+    sec(x[0], s.title, '', isNone(s) ? '<p class="empty">Ingen.</p>' : '<div class="prosecard"><div class="prose">' + T.blocks(s.blocks) + '</div></div>');
+  });
+
+  var sb = mark(T.section(D, /^Beslutning$/i));
+  if (sb) {
+    var B = {}; var tbs = T.tables(sb);
+    if (tbs[0] && /^felt$/i.test(tbs[0].head[0])) tbs[0].rows.forEach(function (r) { B[r[0].trim()] = r[1] || ''; });
+    var u = B['Utfall'] || '';
+    var undecided = !u || /\[Fylles ut/.test(u);
+    var body = '<div class="decision"><h3>' + (undecided ? '<span class="warnbox">Ikke besluttet ennå</span>' : inl(u)) + '</h3>' +
+      (B['Begrunnelse'] ? '<div class="prose">' + inl(B['Begrunnelse']) + '</div>' : '') + (B['Besluttet av og dato'] ? '<div class="kid">' + inl(B['Besluttet av og dato']) + '</div>' : '') +
+      (tbs[1] ? '<details class="more"><summary>Hva utfallene betyr</summary><div class="in">' + T.table(tbs[1]) + '</div></details>' : '') + '</div>' + prose(T.texts(sb));
+    sec('beslutning', 'Beslutning', 'Testansvarlig skriver beslutningen og begrunnelsen. Agenten kan ikke ta den.', body);
+  }
+
+  // Resten (Neste steg, Læring, og seksjoner rapporten har i tillegg)
+  D.sections.forEach(function (s, i) {
+    if (s.level !== 2 || used[s.title] || /^Oppsummering$/i.test(s.title)) return;
+    var kids = [];
+    for (var j = i + 1; j < D.sections.length && D.sections[j].level > 2; j++) kids = kids.concat([{ t: 'p', text: '**' + D.sections[j].title + '**' }], D.sections[j].blocks);
+    var id = s.title.toLowerCase().replace(/[^a-zæøå0-9]+/g, '-').replace(/^-|-$/g, '');
+    sec(id, s.title, '', '<div class="prosecard"><div class="prose">' + T.blocks(s.blocks.concat(kids)) + '</div></div>');
+  });
+  // Det som står under oppsummeringen, utenom tabellen
+  var intro = D.sections.filter(function (s) { return s.level === 0; }).reduce(function (a, s) { return a.concat(s.blocks); }, []).concat(T.texts(os));
+  if (intro.length) html = '<section id="om"><div class="prosecard"><div class="prose">' + T.blocks(intro) + '</div></div></section>' + html;
+
+  document.getElementById('content').innerHTML = html;
+  document.getElementById('links').innerHTML = T.nav(links);
+  var extra = Object.keys(O).filter(function (k) { return ['Testcaser', 'Funn', 'Testet av', 'Testperiode', 'Forslag til utfall'].indexOf(k) < 0; }).map(function (k) { return [k, inl(O[k])]; });
+  document.getElementById('meta').innerHTML = T.meta(['Nivå', 'Fase', 'Testplan', 'Scope', 'Grunnlag', 'Confluence', 'Laget'], D.meta,
+    extra.concat([['Fil', '<code>' + esc(D.kilde) + '</code>'], ['Visningen laget', esc(D.laget)]]));
+})();
+</script>
