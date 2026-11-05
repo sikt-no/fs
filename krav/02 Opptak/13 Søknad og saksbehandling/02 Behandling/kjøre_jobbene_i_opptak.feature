@@ -46,6 +46,8 @@ Egenskap: Kjøre jobbene i opptak
   Regel: Hvor ofte en jobb kjører, står i applikasjonsinnstillingene
     # Importen av VGS-vitnemål fra KREG gjør ett oppslag i KREG per aktiv søker hver gang den
     # kjører. Vi har dialog med KREG-teamet om belastningen (30.10.2026).
+    # Avklart 05.11.2026: KREG synkroniseres med Nasjonal vitnemålsdatabase (NVB) bare én gang i
+    # døgnet, i en nattjobb. Importen trenger derfor ikke kjøre oftere enn én gang i døgnet.
     # ÅPNE SPØRSMÅL:
     # - Hvor ofte er det ansvarlig å kjøre importen av VGS-vitnemål fra KREG, i hovedopptaket
     #   med mange søkere? Det skal testes sammen med KREG-teamet.
