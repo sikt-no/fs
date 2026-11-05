@@ -260,8 +260,9 @@ Egenskap: Frister og hendelser for opptak
   # Hva hendelsene gjør med den automatiske saksbehandlingen, står i OPT-BEH-BEH-015 og OPT-BEH-BEH-032.
   Regel: Opptaksforvalter kan sette når den automatiske saksbehandlingen starter og avsluttes
     # Avklart 2026-11-03: begge hendelsene er valgfrie.
-    # Avklart 2026-11-05: er ingen av dem satt, pågår den automatiske saksbehandlingen fra opptaket er
-    # publisert til opptaket er historisk (01 Grunnoppsett/opptaksstatus.feature).
+    # Avklart 2026-11-05: den automatiske saksbehandlingen pågår bare mens opptaket er publisert
+    # (01 Grunnoppsett/opptaksstatus.feature). Hendelsene avgrenser perioden. Er ingen av dem satt, pågår
+    # den så lenge opptaket er publisert. Et upublisert eller historisk opptak behandles ikke automatisk.
     # Avklart 2026-11-03: hendelsene har dato og klokkeslett, som de andre hendelsene på opptaket.
 
     Scenario: Sette når den automatiske saksbehandlingen starter
