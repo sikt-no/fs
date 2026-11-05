@@ -8,7 +8,7 @@
 - **Fase**: utforskning
 - **Prioritet**: Must
 - **Type**: feature
-- **Siste oppdatering**: 2026-11-02
+- **Siste oppdatering**: 2026-11-05
 
 ## Mål
 
@@ -43,6 +43,7 @@ Append-only. Ny linje på toppen ved hver hendelse.
 
 | Dato       | Hendelse | Av | Lenke til review |
 |------------|----------|----|------------------|
+| 2026-11-05 | Ny regel i `@OPT-BEH-BEH-007`: fjorårets median poengsum brukes når poenggrensen ikke er satt (avklart i møte 04.11.2026). Notert i spesifikasjonen, koden må endres | Daniel Sachse, @JensPeterThomassen | – |
 | 2026-11-02 | Oppgave og scope slått sammen til scope.md | – | – |
 | 2026-10-08 | prioritert → utforskning (uten review). `fs-specify` er kjørt, og kravene er `@in-progress` | @sondre-i-sikt | – |
 | 2026-10-08 | Tatt inn i veikart (prioritert) | @sondre-i-sikt, @JensPeterThomassen | – |

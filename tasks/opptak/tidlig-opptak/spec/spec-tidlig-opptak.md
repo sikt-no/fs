@@ -88,7 +88,7 @@ Det som gjenstår i backend:
 
 ### Avvik der koden skal endres
 
-Ingen.
+- `@OPT-BEH-BEH-007` (ny regel 2026-11-05, ikke med i tellingen over): gjennomføringen bruker ikke fjorårets median når poenggrensen ikke er satt. Se _Endringer etter innhenting_.
 
 ### Avvik som må avklares
 
@@ -185,6 +185,9 @@ Kravene er `@in-progress`, og endres på stedet. Endringene står her, så den s
 - **2026-10-27, `@OPT-BEH-BEH-009`:** Valget søkt om tidlig opptak kombineres med valgene for konklusjon med «og», som i koden fra STEK-561 (`toSakFilterInput.ts`, `SakFilterConditions.harTidligopptakKonklusjon`). De to valgene for konklusjon kombineres fortsatt med «eller». Scenariomalen «Valg i filteret for tidlig opptak kombineres med eller» er erstattet av «Valgene for konklusjon kombineres med eller» og «Søkt om tidlig opptak kombineres med valgene for konklusjon med og».
 - **2026-11-02, `@OPT-BEH-BEH-007`:** Opptaksforvalter ser antall søkere, ikke saker, som har saker som ikke er ferdig behandlet eller mangler konklusjon. En søker med flere slike saker telles én gang. «Se antall saker som ikke er ferdig behandlet eller mangler konklusjon» heter nå «Se antall søkere med saker som ikke er ferdig behandlet eller mangler konklusjon». API-et har tallet (`sokereMedSakerIkkeBehandletFerdig`), og fs-admin MR !3226 viser det. Endret etter `fs-verify` (`krav/…/verify-gi_tilbudsgaranti_ved_tidlig_opptak-2026-11-02-1513.md`).
 - **2026-11-02, `@OPT-BEH-BEH-007`:** Kravet bygger bare på to regler i `@OPT-OPT-UTD-004`, som har fått ankeret `@ref-OPT-BEH-BEH-007`: «Opptaksforvalter kan markere at et utdanningstilbud tilbyr tidlig opptak» og «Opptaksforvalter kan sette opplysninger om tilbudsgaranti» (se _Avhengigheter_). Ingen endring i det som skal bygges.
+- **2026-11-05, `@OPT-BEH-BEH-007`:** Ny regel «Fjorårets median poengsum brukes når poenggrensen ikke er satt» (avklart i møte 04.11.2026). Er poenggrensen for tidlig opptak ikke satt på utdanningstilbudet, gir gjennomføringen tilbudsgaranti ut fra fjorårets median poengsum (poeng lik medianen gir tilbudsgaranti). Poenggrensen går foran medianen. Bare medianen fra opptaket året før brukes, og mangler den, for eksempel fordi utdanningstilbudet er nytt, gis ingen tilbudsgaranti, og utdanningstilbudet vises som at det mangler poenggrense ved prøvekjøring. Opptaksforvalter ser ikke om poenggrensen eller medianen ble brukt. Fire nye scenarioer, og «Se utdanningstilbud med mangelfulle innstillinger» har fått steget om at medianen mangler. Regelen bygger på medianen i `@OPT-OPT-UTD-010`.
+  - Hint til fs-plattform: medianen finnes som `fjoraretsMedianPoengsum` (`utdanningstilbudV2.graphqls:203-208`, `UtdanningstilbudV2Service.java:46-66`), men er den nyeste årgangen som er lastet inn for opptakstypen, ikke nødvendigvis året før.
+  - Søkeren som deltok uten å nå opp, ser poenggrensen som ble brukt, også når det er medianen (`@OPT-SØK-SØK-012`, «Søkeren ser egen poengsum og poenggrense der søkeren deltok uten å nå opp»). Kravet er ikke endret, men koden må gi medianen som poenggrense når den er brukt.
 
 ## Åpne spørsmål
 
