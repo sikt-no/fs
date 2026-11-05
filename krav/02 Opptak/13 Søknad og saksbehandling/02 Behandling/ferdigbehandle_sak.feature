@@ -8,9 +8,8 @@ Egenskap: Ferdigbehandle en sak
   En sak er søknaden slik den ligger hos én saksbehandlende organisasjon. Saken behandles
   helautomatisk når søkeren har ett vitnemål, og vitnemålet gir GSK. Den automatiske
   behandlingen avgjør da grunnlaget, poengene, kravelementene og kvoten, og setter saken til
-  ferdig behandlet når alt er avgjort. Har søkeren flere vitnemål, velger
-  saksbehandleren vitnemålet, og beregner poengene i vitnemålsbehandlingen (OPT-BEH-BEH-004).
-  Saken behandles da automatisk på vitnemålet, og den automatiske behandlingen avgjør resten.
+  ferdig behandlet når alt er avgjort. Har søkeren flere vitnemål, behandles saken automatisk på
+  vitnemålet saksbehandleren velger (OPT-BEH-BEH-039).
   Kan den automatiske behandlingen ikke avgjøre et steg, gjør den stegene
   som ikke bygger på det, og saken blir stående som ikke behandlet. Saksbehandleren gjør resten,
   og setter saken til ferdig behandlet. Bare saker som er ferdig behandlet, er med i
@@ -68,29 +67,6 @@ Egenskap: Ferdigbehandle en sak
       Og at bare ett av vitnemålene gir GSK
       Når søknaden behandles automatisk
       Så behandles ikke saken hos "Universitetet i Oslo" helautomatisk
-
-  @ref-OPT-BEH-BEH-015 @ref-FLY-OPT-VAL-001 @ref-FLY-OPT-SAM-001 @ref-OPT-BEH-BEH-032
-  # OPT-BEH-BEH-015: «Konklusjon på søknaden fra vitnemålet»
-  Regel: Har søkeren flere vitnemål, behandles saken automatisk på vitnemålet saksbehandleren velger
-    # Saksbehandleren velger vitnemålet når den automatiske behandlingen startes på det. Å starte
-    # behandlingen på et vitnemål står i OPT-BEH-BEH-032.
-
-    Scenario: Saksbehandleren velger vitnemålet saken behandles automatisk på
-      # Vitnemålet saksbehandleren velger, kan være et annet enn vitnemålet GSK-konklusjonen på
-      # søknaden bygger på (det med senest utstedelsesdato). Begge vitnemålene gir GSK, og
-      # konklusjonen endres ikke av valget.
-      Gitt at "Kari Nordmann" har vitnemålene "Vitnemål 2024" og "Vitnemål 2025", som begge gir GSK
-      Når saksbehandleren ved Universitetet i Oslo starter den automatiske behandlingen på "Vitnemål 2025"
-      Så behandles saken hos "Universitetet i Oslo" automatisk på "Vitnemål 2025"
-
-    @draft @openquestion
-    Scenario: Saken behandles automatisk på et sammensatt vitnemål
-      # ÅPNE SPØRSMÅL:
-      # - Ingen krav beskriver hva et sammensatt vitnemål er, eller hvordan saksbehandleren
-      #   setter det sammen (se FLY-OPT-SAM-001).
-      Gitt at "Kari Nordmann" har et sammensatt vitnemål
-      Når saksbehandleren ved Universitetet i Oslo starter den automatiske behandlingen på det sammensatte vitnemålet
-      Så behandles saken hos "Universitetet i Oslo" automatisk på det sammensatte vitnemålet
 
   @ref-FLY-OPT-AUT-001 @ref-OPT-BEH-BEH-032
   Regel: Den automatiske behandlingen setter saken til ferdig behandlet når alt er avgjort

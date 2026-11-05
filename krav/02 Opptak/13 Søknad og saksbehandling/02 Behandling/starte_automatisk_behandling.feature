@@ -10,8 +10,8 @@ Egenskap: Starte automatisk behandling
   vitnemål når saken opprettes, starter behandlingen når jobben for nye vitnemål finner det
   første vitnemålet i KREG. Et nytt vitnemål i en sak som har vitnemål fra før, er ny
   dokumentasjon: behandlingen starter ikke av seg selv, og saksbehandleren ser at saken har fått
-  ny dokumentasjon. Saksbehandleren kan velge et vitnemål og starte den automatiske behandlingen
-  på det. Det saksbehandleren har gjort i saken, endres aldri av automatikken. Opptaksforvalteren
+  ny dokumentasjon. Saksbehandleren kan starte den automatiske behandlingen for en sak, også på
+  vitnemålet saksbehandleren velger når søkeren har flere vitnemål (OPT-BEH-BEH-039). Det saksbehandleren har gjort i saken, endres aldri av automatikken. Opptaksforvalteren
   kan sette når den automatiske saksbehandlingen starter og avsluttes i opptaket.
   Hva behandlingen gjør med saken, står i kravene flyten FLY-OPT-AUT-001 bygger på.
 
@@ -22,7 +22,7 @@ Egenskap: Starte automatisk behandling
   # når den automatiske saksbehandlingen starter og avsluttes.
   # Hvor ofte jobbene kjører, står i OPT-BEH-BEH-033.
   # Saksbehandleren velger vitnemålet når søkeren har flere vitnemål, i
-  # OPT-BEH-BEH-025.
+  # OPT-BEH-BEH-039.
 
   Bakgrunn:
     Gitt at opptaket "Samordna opptak 2027" forvaltes av HK-dir
@@ -53,7 +53,7 @@ Egenskap: Starte automatisk behandling
   Regel: Behandlingen starter av seg selv bare for saker som ikke er behandlet
     # Avklart 2026-11-02: har saksbehandleren begynt på saken, eller er saken ferdig behandlet,
     # starter ikke behandlingen av seg selv. Saksbehandleren kan starte den (se «Saksbehandleren
-    # starter den automatiske behandlingen på vitnemålet som er valgt»).
+    # starter den automatiske behandlingen for en sak»).
 
     Scenariomal: Saken med behandlingsstatusen <status> behandles ikke automatisk når søkeren får det første vitnemålet
       Gitt at saken hos "Universitetet i Oslo" har behandlingsstatusen "<status>"
@@ -90,22 +90,11 @@ Egenskap: Starte automatisk behandling
       Når jobben for nye vitnemål i KREG kjører
       Så behandles ikke saken hos "Universitetet i Oslo" automatisk på nytt
 
-  @depends-on-OPT-BEH-BEH-029 @depends-on-OPT-BEH-BEH-025
-  # OPT-BEH-BEH-029: «Saksbehandleren kan sette behandlingsstatusen», «Saken blir Under behandling når saksbehandleren endrer vurderingen eller markerer et dokument som lest»
-  # OPT-BEH-BEH-025: «Har søkeren flere vitnemål, behandles saken automatisk på vitnemålet saksbehandleren velger»
-  # Valget av vitnemål står i OPT-BEH-BEH-025. Dette kravet har starten av behandlingen.
-  Regel: Saksbehandleren starter den automatiske behandlingen på vitnemålet som er valgt
+  Regel: Saksbehandleren starter den automatiske behandlingen for en sak
     # Avklart 29.10.2026: det trengs ingen mulighet til å velge flere saker i sakslisten og
     # starte behandlingen for dem. Behandlingen starter av seg selv.
-
-    Bakgrunn:
-      Gitt at søknaden til "Kari Nordmann" har en sak hos "Universitetet i Oslo"
-      Og at "Kari Nordmann" har vitnemålene "Vitnemål 2025" og "Vitnemål 2026"
-
-    Scenario: Saken som er under behandling, behandles automatisk på vitnemålet saksbehandleren velger
-      Gitt at saken har behandlingsstatusen "Under behandling"
-      Når saksbehandleren ved Universitetet i Oslo starter den automatiske behandlingen på "Vitnemål 2026"
-      Så behandles saken automatisk på "Vitnemål 2026"
+    # Å starte behandlingen på vitnemålet saksbehandleren velger når søkeren har flere vitnemål,
+    # står i OPT-BEH-BEH-039 (skilt ut 04.11.2026).
 
     # Avklart 2026-11-02: den automatiske behandlingen starter ikke på en sak som er ferdig
     # behandlet.
