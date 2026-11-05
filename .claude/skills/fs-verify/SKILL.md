@@ -414,13 +414,13 @@ Skriv aldri rapporten noe annet sted under `krav/`. Ikke kall den `verification-
 
 Hver rapport får en teamvisning: én HTML-side med det samme innholdet, laget for at et team kan gå gjennom resultatet sammen. Den har konklusjonen og nøkkeltallene øverst, kravene som scenario × repo (klikk viser beviset), det som mangler per repo, tilgang og datakonsistens, regler uten scenario og andre funn gruppert etter hva teamet skal gjøre, og de åpne MR-ene. Repoet og «Bare det som mangler» kan velges øverst.
 
-Designet er felles for alle teamvisningene, og står i [`.claude/references/teamvisning/stil.css`](../../references/teamvisning/README.md). Siden for verify-rapporten står i [`references/teamvisning/mal.html`](references/teamvisning/mal.html), og lages alltid med skriptet, så den ser lik ut hver gang:
+Designet står bare i [`references/teamvisning/mal.html`](references/teamvisning/mal.html), og siden lages alltid med skriptet, så den ser lik ut hver gang:
 
 1. **Bygg** fra rota av repoet: `node .claude/skills/fs-verify/references/teamvisning/bygg.mjs <rapport.md>`. Skriptet leser rapporten og kravfilene (reglene og linjene til scenarioene), og skriver `<rapport>.html` ved siden av rapporten (`verify-2026-11-05-0935.md` → `verify-2026-11-05-0935.html`). Skriver det at en kravfil ikke er funnet, si det i chat.
 2. **Publiser** HTML-fila med Artifact-verktøyet: `file_path` er HTML-fila, `icon` er `checklist`, og `description` er «Teamvisning av verify-rapporten for <scope>, <dato>.». Bygges siden på nytt i samme kjøring (etter `## Endringer`), publiseres den samme fila igjen, så lenken er den samme. Gi lenken i chat, og si at artefaktet er privat til brukeren deler det.
 3. **Uten Bash** (Claude-panelet) kan siden ikke bygges: si det i chat, med kommandoen brukeren kan kjøre. **Uten Artifact-verktøyet**: gi stien til HTML-fila, som kan åpnes i nettleseren.
 
-Skriv aldri HTML-en selv, og endre ikke en generert fil: den skrives over neste gang. Endringer i designet gjøres i `stil.css` (alle teamvisningene) eller `mal.html`, og endringer i hva som leses fra rapporten, i `bygg.mjs`. Skriptet leser seksjonene og tabellene i [`references/rapportmal.md`](references/rapportmal.md), så endres malen, sjekkes `bygg.mjs` i samme endring.
+Skriv aldri HTML-en selv, og endre ikke en generert fil: den skrives over neste gang. Endringer i designet gjøres i `mal.html`, og endringer i hva som leses fra rapporten, i `bygg.mjs`. Skriptet leser seksjonene og tabellene i [`references/rapportmal.md`](references/rapportmal.md), så endres malen, sjekkes `bygg.mjs` i samme endring.
 
 HTML-fila hører til rapporten: den skrives aldri over av en ny kjøring (rapporten har nytt tidspunkt), og tas med i samme commit og PR som rapporten.
 

@@ -2,8 +2,7 @@
 // Lager teamvisningen av en verify-rapport: én HTML-fil ved siden av rapporten, med designet i mal.html.
 // Bruk (fra rota av repoet): node .claude/skills/fs-verify/references/teamvisning/bygg.mjs <verify-rapport.md>
 // Skriver <rapport>.html (samme navn, .html i stedet for .md) og skriver stien til stdout.
-// Designet (stilarket) er felles for alle teamvisningene: .claude/references/teamvisning/stil.css.
-// Siden for verify-rapporten står i mal.html. Endre der, ikke i de genererte filene.
+// Designet ligger bare i mal.html. Endre det der, ikke i de genererte filene.
 import { readFileSync, writeFileSync, readdirSync, existsSync } from 'node:fs';
 import { dirname, join, relative, resolve, basename } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -174,8 +173,7 @@ const data = {
   laget: new Date().toISOString().slice(0, 16).replace('T', ' '),
 };
 
-const tpl = readFileSync(join(here, 'mal.html'), 'utf8')
-  .replace('__STIL__', () => readFileSync(join(root, '.claude/references/teamvisning/stil.css'), 'utf8'));
+const tpl = readFileSync(join(here, 'mal.html'), 'utf8');
 const esc = s => s.replace(/&/g, '&amp;').replace(/</g, '&lt;');
 const html = tpl
   .replace('__TITLE__', () => esc('Verifisering · ' + title))
