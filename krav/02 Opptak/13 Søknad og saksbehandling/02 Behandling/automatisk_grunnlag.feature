@@ -52,7 +52,7 @@ Egenskap: Automatisk grunnlag
 
   # Avklart 30.10.2026: grunnlaget blir stående når studieønsket som ga det, fjernes (STEK-505).
 
-  @depends-on-OPT-REG-GRU-001 @ref-FLY-OPT-AUT-001
+  @depends-on-OPT-REG-GRU-001 @ref-FLY-OPT-AUT-001 @ref-FLY-OPT-SAM-001
   Regel: Grunnlaget velges ut fra egenskapene regelverket har gitt det
     # Regelverket kan gi et grunnlag en aldersgrense, og kreve at søkeren har et
     # vitnemål, eller et førstegangsvitnemål. Grunnlag uten noen av disse

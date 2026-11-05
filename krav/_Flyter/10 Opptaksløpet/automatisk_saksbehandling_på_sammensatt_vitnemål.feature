@@ -46,8 +46,7 @@ Egenskap: Automatisk saksbehandling på sammensatt vitnemål
   # OPT-BEH-BEH-039: «Har søkeren flere vitnemål, behandles saken automatisk på vitnemålet saksbehandleren velger»
   Regel: Saksbehandleren starter den automatiske behandlingen på det sammensatte vitnemålet
     # Avklart 2026-10-29: saksbehandleren må si at den automatiske behandlingen skal kjøre med det
-    # sammensatte vitnemålet. Å starte behandlingen på et vitnemål står i OPT-BEH-BEH-032 (PR #862,
-    # ikke merget 2026-10-30). Fasen får @depends-on-OPT-BEH-BEH-032 når kravet er merget.
+    # sammensatte vitnemålet.
 
     Scenario: Saken behandles automatisk på det sammensatte vitnemålet
       Gitt at "Kari Nordmann" har et sammensatt vitnemål
