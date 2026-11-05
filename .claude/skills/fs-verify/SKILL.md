@@ -65,6 +65,21 @@ Hvert kode-repo har en bokstav som brukes i `Bevis` i rapporten (se `references/
 
 Let etter hvert scenario i repoet det gjelder: et scenario der søkeren ser eller gjør noe, finnes i min-kompetanse (og i fs-plattform), ikke i fs-admin. Mangler klonen et scenario trenger, er det repoet ikke sjekket: skriv det under *Ikke sjekket* i `## Oppfølging`, og resultatet er `usikker`, ikke `ikke funnet`.
 
+**Per repo.** Er mer enn én kodeklone med i kjøringen, eller ber brukeren om å få vite hva som mangler i hvert repo, vurderes hvert scenario i hvert repo for seg, og rapporten får variantene `[per repo]` i rapportmalen. For hvert scenario og repo:
+
+| Merke | Betyr |
+| --- | --- |
+| ✓ | funnet i repoet |
+| ✗ | mangler i repoet (`ikke funnet`) |
+| ~ | delvis, eller usikker |
+| – | ikke relevant: scenarioet gjelder ikke repoet (f.eks. fs-admin for et scenario der søkeren gjør noe, eller en ren synkjobb) |
+
+- Et scenario er `funnet` bare når det er ✓ i alle repoene som er relevante.
+- Et scenario **mangler i** et repo når det har ✗ eller ~ der. Et scenario som mangler i flere repoer, telles i hvert av dem.
+- Merket står først i `Bevis` på alle radene i `## Scenarioer` (`P ✓ · A ✗ — …`), og i hakeparentes på linjene om krav og scenarioer i `## Forslag til endringer` og `## Oppfølging` (`[P ✓ · A ✗]`). Bare repoene som er med i kjøringen, står i merket.
+- `## Oversikt per krav` har én kolonne per repo, `Mangler i P`, `Mangler i A` og `Mangler i M`: antall scenarioer i kravet som mangler i repoet, `0` når ingenting mangler, og `–` når ingen scenarioer i kravet gjelder repoet. Er noen av dem usikre, står det i parentes: `2 (1 usikker)`.
+- Gi kontrolløren merkene per repo sammen med resultattabellen, så den sjekker hvert repo for seg (*Kontroll*).
+
 ### Omfang og avhengigheter
 
 Skillen brukes ofte til å sjekke om et scope er levert, ikke bare til å flytte `@in-progress` → `@implemented`. Spør derfor hva som skal verifiseres, og hvor langt avhengighetene skal følges, før du leter. Still spørsmålene i ett `AskUserQuestion`-kall (høyst 4 spørsmål, også spørsmålet om skjermbilder):
@@ -300,7 +315,7 @@ En MR eller branch er kandidat når nøkkelen står i branchnavnet, tittelen ell
 
 Den som har lett, ser lett det den venter å se. Før resultatet vises til brukeren, kontrolleres det av en som ikke har lett.
 
-**Med Agent-verktøyet** (Claude Code i terminalen, også terminalen i FS Kravforvaltning): start subagenten `fs-verify-kontroll` (`.claude/agents/fs-verify-kontroll.md`) for hver feature-fil, gjerne flere parallelt. Gi den stien til feature-fila, kodeklonene og resultattabellen, tilgangsradene og reglene uten scenario, ikke hvordan du lette. Den svarer med `bekreftet` / `avkreftet` / `usikker` per rad og et forslag til resultat.
+**Med Agent-verktøyet** (Claude Code i terminalen, også terminalen i FS Kravforvaltning): start subagenten `fs-verify-kontroll` (`.claude/agents/fs-verify-kontroll.md`) for hver feature-fil, gjerne flere parallelt. Gi den stien til feature-fila, kodeklonene og resultattabellen (med merkene per repo, *Per repo* i *Kodeklonene*), tilgangsradene og reglene uten scenario, ikke hvordan du lette. Den svarer med `bekreftet` / `avkreftet` / `usikker` per rad og et forslag til resultat.
 
 **Uten Agent-verktøyet** (Claude-panelet i FS Kravforvaltning): gjør kontrollen selv, og si til brukeren at den er manuell (se *I FS Kravforvaltning*):
 
@@ -387,7 +402,7 @@ Skriv aldri rapporten noe annet sted under `krav/`. Ikke kall den `verification-
 
 **Formatet står i [`references/rapportmal.md`](references/rapportmal.md).** Les malen før du skriver rapporten, og følg den nøyaktig: alle seksjonene, i samme rekkefølge, med de faste tekstene. Det er det som gjør at to kjøringer kan sammenlignes. FS Kravforvaltning leser `- **Dato:**`, `- **Spec:**` og tabellen `## Scenarioer`, og viser resultatet på kortet i Spesifikasjoner.
 
-**Tall regnes ut, de telles ikke.** Alle tall i rapporten (scenarioer funnet per krav, i alt, og i *Oppsummering*, og tallene i `## Åpne spørsmål`) regnes ut fra tabellen `## Scenarioer`, fra `@openquestion`-taggene i kravfilene og fra endringene du har gjort, f.eks. med `awk` på rapportfila når du har Bash. Uten Bash: tell radene i tabellen én gang til, krav for krav, før du skriver tallene.
+**Tall regnes ut, de telles ikke.** Alle tall i rapporten (scenarioer funnet per krav, i alt, og i *Oppsummering*, det som mangler i hvert repo, og tallene i `## Åpne spørsmål`) regnes ut fra tabellen `## Scenarioer`, fra `@openquestion`-taggene i kravfilene og fra endringene du har gjort, f.eks. med `awk` på rapportfila når du har Bash. Uten Bash: tell radene i tabellen én gang til, krav for krav, før du skriver tallene.
 
 `- **Kontroll:**` sier hvem som kontrollerte: `fs-verify-kontroll` (uavhengig) eller `manuell (Claude-panelet)`. Radene der kontrollen endret resultatet, står som **Kontrollen endret** i `## Oppfølging`, så leseren ser hva den første letingen bommet på.
 

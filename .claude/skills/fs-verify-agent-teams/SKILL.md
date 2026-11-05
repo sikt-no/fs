@@ -42,7 +42,7 @@ Som *Finn scope og kode* i `fs-verify`: branchen i dette repoet og i hver kodekl
 
 Ber prompten om å verifisere en egenskap eller en regel *uansett status*, gjelder *Verifisere uansett status* i `fs-verify`: scope, gating-settet og hvilken ny status du kan tilby. Ber prompten om å verifisere en mappe *uansett status*, eller er *alle krav uansett status* valgt, gjelder det samme for hver feature-fil i scope.
 
-**Per repo.** Ber brukeren om å få vite hva som gjenstår i hvert repo, eller er det mer enn én kodeklone og brukeren vil ha en oversikt over hva som gjenstår, skal finnerne vurdere hvert repo for seg (se *Start teamet*), og rapporten få `## Oversikt per krav` (variantene `[per repo]` i rapportmalen, se *Rapport*). Repoene og bokstavene står i *Kodeklonene* i `fs-verify`. Gi finnerne og kontrollørene tabellen over de repoene som er med.
+**Per repo.** Er mer enn én kodeklone med, eller ber brukeren om å få vite hva som mangler i hvert repo, skal finnerne vurdere hvert repo for seg (se *Start teamet*), og rapporten få variantene `[per repo]` i rapportmalen (se *Rapport*). Repoene, bokstavene og merkene (✓ ✗ ~ –) står i *Per repo* under *Kodeklonene* i `fs-verify`. Gi finnerne og kontrollørene tabellen over de repoene som er med.
 
 Ta tidspunktet for kjøringen før teamet startes (*Tidspunkt* i `fs-verify`). Det gir navnet på rapporten (`verify-…-<YYYY-MM-DD>-<HHMM>.md`), `- **Dato:**` og mappa med skjermbilder, også om kjøringen tar lang tid.
 
@@ -116,7 +116,7 @@ Kontrollørene og finnerne trengs ikke mens brukeren svarer: rydd opp i teamet (
 
 ## Rapport
 
-Som *Etter endringene* og *Rapport* i `fs-verify`, med samme filnavn, oppdatering av `utforing.md` og malen i [`fs-verify/references/rapportmal.md`](../fs-verify/references/rapportmal.md). Les malen før du skriver rapporten, og følg den nøyaktig. Med agent team gjelder alltid variantene merket `[agent team]` (linja `Team`), og når repoene er vurdert hver for seg (*Finn scope og kode*), også `[per repo]`: `## Oversikt per krav` og repoene først i `Bevis`. Tallene regnes ut fra `## Scenarioer` (se *Rapport* i `fs-verify`).
+Som *Etter endringene* og *Rapport* i `fs-verify`, med samme filnavn, oppdatering av `utforing.md` og malen i [`fs-verify/references/rapportmal.md`](../fs-verify/references/rapportmal.md). Les malen før du skriver rapporten, og følg den nøyaktig. Med agent team gjelder alltid variantene merket `[agent team]` (linja `Team`), og når repoene er vurdert hver for seg (*Finn scope og kode*), også `[per repo]`: linja `Repoer`, `Mangler` i `## Oppsummering`, merket på linjene i `## Forslag til endringer` og `## Oppfølging`, `## Oversikt per krav` med `Mangler i`-kolonnene, og merket først i `Bevis`. Tallene regnes ut fra `## Scenarioer` (se *Rapport* i `fs-verify`).
 
 Når rapporten er skrevet, gjør du *Confluence* i `fs-verify`: finnes ingen testplan ennå, er neste steg `fs-testplan`, som bygger på rapporten. Finnes testplanen, spør om resultatet skal legges som en underside til den, og gjør det bare når brukeren sier ja. Du gjør det selv, ikke teammatene.
 
