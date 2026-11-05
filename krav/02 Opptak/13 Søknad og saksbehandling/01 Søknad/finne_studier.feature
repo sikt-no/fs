@@ -23,7 +23,8 @@ Egenskap: Listevisning og søk i utdanningstilbud
   # Neste spørsmål: hvilke poenggrenser vises (kvoter, år, plasstildelingsrunde)?
   # Avklart 2026-10-23: studiested-filteret er kommune, utledet fra campus på utdanningstilbudet (OPT-OPT-UTD-005).
   # Avklart 2026-11-02 (TOT-2505): fritekst-søket treffer navn, søkeord, lærested og studiested, rangerer
-  # etter antall ord som treffer, og tåler æ/ø/å skrevet som ae/o/a. Ikke campusnavn eller felt fra Samordna opptak.
+  # etter antall ord som treffer, og tåler å/æ/ø skrevet som aa/ae/oe og omvendt (ICAO Doc 9303).
+  # Ikke æ/ø/å skrevet som a/o/a, og ikke campusnavn eller felt fra Samordna opptak.
 
   Regel: Liste over alle utdanningstilbud
 
@@ -149,16 +150,16 @@ Egenskap: Listevisning og søk i utdanningstilbud
     @ref-OPT-OPT-UTD-017
     Scenariomal: Søket tåler skrivemåter som avviker fra navnet
       # Bøyningsformer og skrivefeil dekkes av søkeordene.
+      # å/æ/ø ↔ aa/ae/oe begge veier er standard translitterasjon etter ICAO Doc 9303.
       Når søkeren søker med fritekst på "<søketekst>"
       Så vises utdanningstilbudet "<utdanningstilbud>" i listen
 
       Eksempler:
-        | søketekst  | utdanningstilbud          |
-        | SYKEPLEIE  | Sykepleie, høst 2027      |
-        | okonomi    | Økonomi og administrasjon |
-        | oekonomi   | Økonomi og administrasjon |
-        | arstudium  | Årsstudium i historie     |
-        | aarstudium | Årsstudium i historie     |
+        | søketekst   | utdanningstilbud          |
+        | SYKEPLEIE   | Sykepleie, høst 2027      |
+        | oekonomi    | Økonomi og administrasjon |
+        | aarsstudium | Årsstudium i historie     |
+        | ålesund     | Sykepleie, Aalesund       |
 
     Scenario: Tomt søkefelt viser alle utdanningstilbud
       Gitt at søkeren har valgt filtre
