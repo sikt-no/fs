@@ -168,6 +168,11 @@ Egenskap: Automatiske mangler
         | er i kategorien "Spesielle krav" |
         | ikke stopper for opptak          |
 
+    Scenario: Opptaksforvalteren ser en advarsel på mangelkodene når ingen mangelkode er merket
+      Gitt at ingen mangelkode i regelverkssamlingen "UHG 2027" er merket for generell studiekompetanse som fullføres i vår
+      Når opptaksforvalteren ved HK-dir åpner mangelkodene i regelverkssamlingen "UHG 2027"
+      Så ser opptaksforvalteren en advarsel om at ingen mangelkode er merket for generell studiekompetanse som fullføres i vår
+
     Scenario: Søknadene som finnes fra før, får mangelen når mangelkoden merkes
       Gitt at ingen mangelkode i regelverkssamlingen "UHG 2027" er merket for generell studiekompetanse som fullføres i vår
       Og at søkeren har oppgitt i søknaden at generell studiekompetanse fullføres i vår
