@@ -75,7 +75,7 @@ Egenskap: Beregne automatisk på nytt
       Når opptaksforvalteren velger regelverkene feilen gjaldt
       Så kan opptaksforvalteren bare velge regelverkene i regelverkssamlingen på opptaket "Samordna opptak 2027"
 
-  @depends-on-OPT-BEH-BEH-018 @depends-on-OPT-BEH-BEH-020
+  @depends-on-OPT-BEH-BEH-018 @depends-on-OPT-BEH-BEH-020 @ref-FLY-OPT-AUT-001
   Regel: I saker den automatiske behandlingen har behandlet, beregnes kravelementene og poengene på nytt
     # Saken er behandlet av den automatiske behandlingen når den automatiske behandlingen har kjørt
     # på saken, også når saksbehandleren har endret saken etterpå. Kravelementene saksbehandleren
@@ -101,7 +101,7 @@ Egenskap: Beregne automatisk på nytt
       Når opptaksforvalteren beregner på nytt for søknadsalternativene med rangeringsregelverket "Ordinær rangering"
       Så er poengene saksbehandleren ved Universitetet i Oslo har satt for "Kari Nordmann", uendret
 
-  @depends-on-OPT-BEH-BEH-018 @depends-on-OPT-BEH-BEH-020
+  @depends-on-OPT-BEH-BEH-018 @depends-on-OPT-BEH-BEH-020 @ref-FLY-OPT-AUT-001
   Regel: Saker saksbehandleren har behandlet, får regnet ut kvalifiseringen, poengsummen og kvoten på nytt og blir merket
     # Saken er behandlet av saksbehandleren når den automatiske behandlingen ikke har kjørt på
     # saken. Kvalifiseringen, poengsummen og kvoten regnes ut på nytt fra det som står i saken.
@@ -136,7 +136,7 @@ Egenskap: Beregne automatisk på nytt
       Når saksbehandleren ved Universitetet i Oslo filtrerer sakene på taggen "Regelverk endret"
       Så ser saksbehandleren ved Universitetet i Oslo saken til "Kari Nordmann"
 
-  @depends-on-OPT-BEH-BEH-025
+  @depends-on-OPT-BEH-BEH-025 @ref-FLY-OPT-AUT-001
   Regel: Bare saker som er ferdig behandlet, beregnes på nytt
     # Saker som ikke er behandlet eller er under behandling, beregnes ikke på nytt. De blir
     # beregnet når de blir behandlet. Saker som er ferdig behandlet, forblir ferdig behandlet.

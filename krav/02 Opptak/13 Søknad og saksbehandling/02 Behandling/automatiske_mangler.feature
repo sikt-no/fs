@@ -23,20 +23,21 @@ Egenskap: Automatiske mangler
   Regel: Saken får automatiske mangeltekster når søkeren ikke er kvalifisert
 
     De automatiske mangeltekstene følger kvalifiseringen. Er søkeren ikke kvalifisert på
-    kompetanseregelverket, har saken én automatisk mangeltekst for hvert kravelement som ikke er
-    oppfylt. Blir søkeren kvalifisert, slettes tekstene automatisk. Det gjelder uansett om
-    kravelementene er vurdert av den automatiske behandlingen eller av saksbehandleren i steget
-    «Spesielle opptakskrav». En automatisk mangeltekst har ingen mangelkode, og saksbehandleren
-    kan ikke gjøre noe med den. Mener saksbehandleren at søkeren oppfyller kravet, vurderer
-    saksbehandleren kravelementet som oppfylt.
+    kompetanseregelverket, har saken én automatisk mangeltekst for kompetanseregelverket. Teksten
+    viser kravelementene som ikke er oppfylt, ordnet etter kravlistene, så søkeren ser at
+    kravlistene er alternativer. Blir søkeren kvalifisert, slettes teksten automatisk. Det
+    gjelder uansett om kravelementene er vurdert av den automatiske behandlingen eller av
+    saksbehandleren i steget «Spesielle opptakskrav». En automatisk mangeltekst har ingen
+    mangelkode, og saksbehandleren kan ikke gjøre noe med den. Mener saksbehandleren at søkeren
+    oppfyller kravet, vurderer saksbehandleren kravelementet som oppfylt.
 
     # Avklart 30.10.2026: den automatiske behandlingen lager ikke mangler med mangelkode, bare
     # automatiske mangeltekster. Teksten lages av navnet på kravelementet, etter et fast mønster
     # som står i implementasjonsdetaljene. Kravelementene får ingen egen tekst til søkeren. Det
     # avviker fra raffineringen, som sa at tekstene skulle hentes fra opptakskravene.
-    # Avklart 30.10.2026: er søkeren ikke kvalifisert på noen kravliste, får alle kravelementene
-    # som ikke er oppfylt, en mangeltekst, i alle kravlistene. Søkeren må kunne se at
-    # kravlistene er alternativer. Hvordan, avgjøres i designet.
+    # Avklart 30.10.2026, endret 03.11.2026: er søkeren ikke kvalifisert på noen kravliste, får
+    # kompetanseregelverket én samlet mangeltekst. Teksten har navnet på hvert kravelement som
+    # ikke er oppfylt, gruppert per kravliste. Hvordan teksten ser ut, avgjøres i designet.
     # Avklart 30.10.2026: saksbehandleren kan ikke kommentere, sjekke ut eller slette en
     # automatisk mangeltekst.
 
@@ -67,6 +68,15 @@ Egenskap: Automatiske mangler
       Når den automatiske behandlingen vurderer kravelementene
       Så har saken en automatisk mangeltekst for "Matematikk R2"
       Og saken har en automatisk mangeltekst for "Fysikk 2"
+
+    Scenario: Mangelteksten viser kravelementene som ikke er oppfylt, ordnet etter kravlistene
+      Gitt at "Informatikk, UiO" har kravlisten "Matematikk R2" og kravlisten "Matematikk R1 og Fysikk 2"
+      Og at vitnemålet har "Matematikk R1", men ikke "Matematikk R2" og ikke "Fysikk 2"
+      Når den automatiske behandlingen vurderer kravelementene
+      Så har saken én automatisk mangeltekst for kompetanseregelverket
+      Og mangelteksten viser "Matematikk R2" under kravlisten "Matematikk R2"
+      Og mangelteksten viser "Fysikk 2" under kravlisten "Matematikk R1 og Fysikk 2"
+      Men mangelteksten viser ikke "Matematikk R1"
 
     @implemented
     Scenariomal: De automatiske mangeltekstene slettes når <vurdert av> vurderer at søkeren er kvalifisert

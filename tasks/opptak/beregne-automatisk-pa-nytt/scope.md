@@ -5,7 +5,7 @@
 - **Initiativ**: [#199](https://github.com/sikt-no/fs/issues/199)
 - **Jira**: [STEK-651](https://sikt.atlassian.net/browse/STEK-651)
 - **Eier**: –
-- **Siste oppdatering**: 2026-11-02
+- **Siste oppdatering**: 2026-11-04
 
 ## Mål
 
@@ -16,12 +16,14 @@
 
 - De andre leveransene i flyten: `automatisk-import-og-start`, `automatisk-gsk-konklusjon`, `automatisk-grunnlag-og-poeng`, `automatisk-kvalifisering-og-poengsum` og `automatisk-ferdigbehandling`.
 - De to `@wont`-fasene i flyten: to identiske vitnemål som regnes som ett, og automatisk dobbeltrangering.
+- Testkjøring: en beregning på nytt som ikke oppdaterer databasen, men gir en rapport over hva som ville blitt endret. Notert i statusmøtet 2026-11-04 for en senere versjon.
 
 ## Kilder
 
 - `@FLY-OPT-AUT-001` [automatisk_saksbehandling.feature](../../../krav/_Flyter/10%20Opptaksl%C3%B8pet/automatisk_saksbehandling.feature) — flyten
 - [GitHub #199](https://github.com/sikt-no/fs/issues/199) — initiativet «Automatisk saksbehandling av søknader om opptak til grunnutdanning»
 - [Oppdelingen av flyten](https://claude.ai/artifact/XSScgR8ixj1HJ8kFK5fyso) — alternativ 1, besluttet 2026-11-02
+- [Status per 4. november 2026](https://sikt.atlassian.net/wiki/spaces/STUDIEADM/pages/5169545237) — status for leveransene i flyten, med kommentarene fra statusmøtet
 
 ## Krav
 
@@ -31,7 +33,7 @@
 
 ## Åpne spørsmål
 
-–
+- [ ] Hvem kan beregne på nytt? I kravet er det opptaksforvalteren ved organisasjonen som eier opptaket (HK-dir i `Bakgrunn:`), og det er greit i første versjon. Forslag fra statusmøtet 2026-11-04: opptaksforvalteren ved organisasjonen som eier opptaket, beregner på nytt for hele opptaket, og opptaksforvalteren ved et lærested for sakene lærestedet har ansvar for. Avklares i `@OPT-BEH-BEH-026` med fs-krav.
 
 ## Statuslogg
 
@@ -39,4 +41,5 @@ Append-only. Ny linje på toppen ved hver hendelse.
 
 | Dato       | Hendelse | Av | Lenke til review |
 |------------|----------|----|------------------|
+| 2026-11-04 | Hvem som kan beregne på nytt, er et åpent spørsmål, og testkjøring er notert som ikke-mål (statusmøtet, se Kilder) | @JøranIndseth | – |
 | 2026-11-02 | Opprettet med fs-scope, som leveranse 6 av 6 i flyten automatisk saksbehandling | @JøranIndseth | – |

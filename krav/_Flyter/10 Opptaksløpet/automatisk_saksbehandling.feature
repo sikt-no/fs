@@ -25,7 +25,8 @@ Egenskap: Automatisk saksbehandling
   behandlet. Rettes en feil i regelverket, beregner opptaksforvalteren søknadsalternativene
   feilen gjaldt, på nytt.
 
-  # Kjent brudd: den automatiske behandlingen setter ikke saken til ferdig behandlet (se OPT-BEH-BEH-025).
+  # Kjent brudd: den automatiske behandlingen publiserer ikke manglene når saken blir ferdig behandlet,
+  # så søkeren ser ikke mangelteksten i Min kompetanse (se OPT-BEH-BEH-025 og OPT-BEH-BEH-036).
   # Kjent brudd: GSK-vitnemålsberegningen kjører bare i den automatiske behandlingen, ikke når vitnemålet
   # importeres fra KREG, og opptakssystemets påstand lagres ikke på vitnemålet (se OPT-BEH-BEH-015).
   # Kjent brudd: koden stopper automatikken når opptakssystemets beregning er uenig med skolen, og gir ikke varsel (se OPT-BEH-BEH-015).

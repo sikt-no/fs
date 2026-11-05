@@ -8,9 +8,8 @@ Egenskap: Ferdigbehandle en sak
   En sak er søknaden slik den ligger hos én saksbehandlende organisasjon. Saken behandles
   helautomatisk når søkeren har ett vitnemål, og vitnemålet gir GSK. Den automatiske
   behandlingen avgjør da grunnlaget, poengene, kravelementene og kvoten, og setter saken til
-  ferdig behandlet når alt er avgjort. Har søkeren flere vitnemål, velger
-  saksbehandleren vitnemålet, og beregner poengene i vitnemålsbehandlingen (OPT-BEH-BEH-004).
-  Saken behandles da automatisk på vitnemålet, og den automatiske behandlingen avgjør resten.
+  ferdig behandlet når alt er avgjort. Har søkeren flere vitnemål, behandles saken automatisk på
+  vitnemålet saksbehandleren velger (OPT-BEH-BEH-039).
   Kan den automatiske behandlingen ikke avgjøre et steg, gjør den stegene
   som ikke bygger på det, og saken blir stående som ikke behandlet. Saksbehandleren gjør resten,
   og setter saken til ferdig behandlet. Bare saker som er ferdig behandlet, er med i
@@ -69,29 +68,6 @@ Egenskap: Ferdigbehandle en sak
       Når søknaden behandles automatisk
       Så behandles ikke saken hos "Universitetet i Oslo" helautomatisk
 
-  @ref-OPT-BEH-BEH-015 @ref-FLY-OPT-VAL-001 @ref-FLY-OPT-SAM-001 @ref-OPT-BEH-BEH-032
-  # OPT-BEH-BEH-015: «Konklusjon på søknaden fra vitnemålet»
-  Regel: Har søkeren flere vitnemål, behandles saken automatisk på vitnemålet saksbehandleren velger
-    # Saksbehandleren velger vitnemålet når den automatiske behandlingen startes på det. Å starte
-    # behandlingen på et vitnemål står i OPT-BEH-BEH-032.
-
-    Scenario: Saksbehandleren velger vitnemålet saken behandles automatisk på
-      # Vitnemålet saksbehandleren velger, kan være et annet enn vitnemålet GSK-konklusjonen på
-      # søknaden bygger på (det med senest utstedelsesdato). Begge vitnemålene gir GSK, og
-      # konklusjonen endres ikke av valget.
-      Gitt at "Kari Nordmann" har vitnemålene "Vitnemål 2024" og "Vitnemål 2025", som begge gir GSK
-      Når saksbehandleren ved Universitetet i Oslo starter den automatiske behandlingen på "Vitnemål 2025"
-      Så behandles saken hos "Universitetet i Oslo" automatisk på "Vitnemål 2025"
-
-    @draft @openquestion
-    Scenario: Saken behandles automatisk på et sammensatt vitnemål
-      # ÅPNE SPØRSMÅL:
-      # - Ingen krav beskriver hva et sammensatt vitnemål er, eller hvordan saksbehandleren
-      #   setter det sammen (se FLY-OPT-SAM-001).
-      Gitt at "Kari Nordmann" har et sammensatt vitnemål
-      Når saksbehandleren ved Universitetet i Oslo starter den automatiske behandlingen på det sammensatte vitnemålet
-      Så behandles saken hos "Universitetet i Oslo" automatisk på det sammensatte vitnemålet
-
   @ref-FLY-OPT-AUT-001 @ref-OPT-BEH-BEH-032
   Regel: Den automatiske behandlingen setter saken til ferdig behandlet når alt er avgjort
 
@@ -125,6 +101,44 @@ Egenskap: Ferdigbehandle en sak
       Så er saken hos "Universitetet i Oslo" ferdig behandlet
       Og søkeren ser de automatiske manglene for "Matematikk R2" og "Fysikk 2" i Min kompetanse
       Og søkeren har mottatt én melding om mangler
+
+  @ref-OPT-BEH-BEH-016
+  Regel: Saksbehandleren ser hva den automatiske behandlingen har gjort i saken
+    # Avklart 2026-11-03: saksbehandleren skal alltid kunne åpne en sak som er behandlet
+    # automatisk, og se hva den automatiske behandlingen har gjort, og når. Saksbehandleren skal
+    # ikke måtte ta stilling til noe, og det skal ikke stoppe noe. Det gjelder også varselet om at
+    # opptakssystemet er uenig med skolen om GSK.
+    # At GSK-konklusjonen er satt automatisk, står i OPT-BEH-BEH-015 («Sporbarhet»). At den
+    # automatiske behandlingen satte saken til ferdig behandlet, og når, står i OPT-BEH-BEH-029
+    # («Saksloggen viser endringene i behandlingsstatusen»). At statusen ikke endres når
+    # saksbehandleren åpner saken, står også i OPT-BEH-BEH-029.
+    # Avklart 2026-11-03: hvor saksbehandleren ser det (hendelsesloggen for saken i
+    # OPT-BEH-BEH-016, ved hvert steg i saken, eller begge steder), er et designspørsmål, og
+    # hører hjemme i implementasjonsdetaljene.
+    # Når den automatiske behandlingen avgjorde hvert steg, finnes bare i endringsloggen. Scenarioet
+    # om tidspunktet kan ikke leveres før den nye sporingsloggen finnes. Endringsloggen er stoppet
+    # (BAT-324, 29.10.2026).
+
+    Bakgrunn:
+      Gitt at "Kari Nordmann" har ett vitnemål, og vitnemålet gir GSK
+      Og at saken hos "Universitetet i Oslo" er satt til ferdig behandlet av den automatiske behandlingen
+
+    Scenario: Saksbehandleren ser hva den automatiske behandlingen har avgjort
+      Når saksbehandleren ved Universitetet i Oslo åpner saken
+      Så ser saksbehandleren at grunnlaget, poengene, kravelementene og kvoten er avgjort av den automatiske behandlingen
+
+    Scenario: Saksbehandleren ser når den automatiske behandlingen avgjorde hvert steg
+      Når saksbehandleren ved Universitetet i Oslo åpner saken
+      Så ser saksbehandleren når den automatiske behandlingen avgjorde hvert steg
+
+    @depends-on-OPT-BEH-BEH-015 @depends-on-OPT-BEH-BEH-029
+    # OPT-BEH-BEH-015: «Saksbehandleren får varsel når opptakssystemet er uenig med skolen»
+    # OPT-BEH-BEH-029: «Saken blir Under behandling når saksbehandleren endrer vurderingen eller markerer et dokument som lest»
+    Scenario: Varselet om uenighet om GSK krever ikke at saksbehandleren gjør noe
+      Gitt at opptakssystemet er uenig med skolen om GSK for vitnemålet
+      Når saksbehandleren ved Universitetet i Oslo åpner saken
+      Så ser saksbehandleren et varsel ved vitnemålet om at opptakssystemet er uenig med skolen om GSK
+      Og saken hos "Universitetet i Oslo" er fortsatt ferdig behandlet
 
   @ref-FLY-OPT-AUT-001
   Regel: Steg som bygger på et steg som ikke kan avgjøres, hoppes over
