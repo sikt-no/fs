@@ -63,7 +63,22 @@ Hvert kode-repo har en bokstav som brukes i `Bevis` i rapporten (se `references/
 | `fs-admin` | A | Det saksbehandlere og forvaltere ser og gjør |
 | `min-kompetanse` | M | Det søkeren ser og gjør: søknaden, Min kompetanse |
 
-Let etter hvert scenario i repoet det gjelder: et scenario der søkeren ser eller gjør noe, finnes i min-kompetanse (og i fs-plattform), ikke i fs-admin. Mangler klonen et scenario trenger, er det repoet ikke sjekket: skriv det under *Ikke sjekket* i `## Oppfølging`, og resultatet er `usikker`, ikke `ikke funnet`.
+Let etter hvert scenario i repoet det gjelder: et scenario der søkeren ser eller gjør noe, finnes i min-kompetanse (og i fs-plattform), ikke i fs-admin. Mangler klonen et scenario trenger, er det repoet ikke sjekket: skriv det under *Ikke sjekket* i `## Andre funn`, og resultatet er `usikker`, ikke `ikke funnet`.
+
+**Per repo.** Er mer enn én kodeklone med i kjøringen, eller ber brukeren om å få vite hva som mangler i hvert repo, vurderes hvert scenario i hvert repo for seg, og rapporten får variantene `[per repo]` i rapportmalen. For hvert scenario og repo:
+
+| Merke | Betyr |
+| --- | --- |
+| ✓ | funnet i repoet |
+| ✗ | mangler i repoet (`ikke funnet`) |
+| ~ | delvis, eller usikker |
+| – | ikke relevant: scenarioet gjelder ikke repoet (f.eks. fs-admin for et scenario der søkeren gjør noe, eller en ren synkjobb) |
+
+- Et scenario er `funnet` bare når det er ✓ i alle repoene som er relevante.
+- Et scenario **mangler i** et repo når det har ✗ eller ~ der. Et scenario som mangler i flere repoer, telles i hvert av dem.
+- Merket står først i `Bevis` på alle radene i `## Scenarioer` (`P ✓ · A ✗ — …`), og i hakeparentes på linjene om krav og scenarioer i `## Forslag til endringer` (`[P ✓ · A ✗]`). Bare repoene som er med i kjøringen, står i merket.
+- `## Oversikt per krav` har én kolonne per repo, `Mangler i P`, `Mangler i A` og `Mangler i M`: antall scenarioer i kravet som mangler i repoet, `0` når ingenting mangler, og `–` når ingen scenarioer i kravet gjelder repoet. Er noen av dem usikre, står det i parentes: `2 (1 usikker)`.
+- Gi kontrolløren merkene per repo sammen med resultattabellen, så den sjekker hvert repo for seg (*Kontroll*).
 
 ### Omfang og avhengigheter
 
@@ -115,7 +130,7 @@ Les hver `.feature`-fil i scope og sorter:
 | Flyt (`krav/_Flyter/`) med `@planned` eller `@in-progress` | *Verifisere flyt* |
 | Flyt med `@draft` | Bare fremdriften (*Verifisere flyt*, steg 1). Henvis til `fs-krav` for validering |
 
-Tabellen gjelder det som er valgt i *Omfang og avhengigheter*. En rad som ikke er valgt (f.eks. `@deprecated` når bare `@in-progress` er valgt), verifiseres ikke, og står i oversikten og i `## Oppfølging` som «ikke valgt i denne kjøringen». Er *alle krav uansett status* valgt, eller ber prompten om å verifisere *uansett status*, gjelder ikke tabellen for egenskapene og reglene i scope: se *Verifisere uansett status*.
+Tabellen gjelder det som er valgt i *Omfang og avhengigheter*. En rad som ikke er valgt (f.eks. `@deprecated` når bare `@in-progress` er valgt), verifiseres ikke, og står i oversikten og i `## Andre funn` som «ikke valgt i denne kjøringen». Er *alle krav uansett status* valgt, eller ber prompten om å verifisere *uansett status*, gjelder ikke tabellen for egenskapene og reglene i scope: se *Verifisere uansett status*.
 
 Vis oversikten til brukeren før du gjør noe, med avhengighetene (*Avhengigheter*) når de skal følges.
 
@@ -131,7 +146,7 @@ For hvert krav:
 
 Spør ikke underveis. Når alle kravene i scope er kontrollert, går du videre til *Rapport og oppsummering*: rapporten skrives til fil, og du spør bare om det som er sikkert.
 
-**Kan leveres** når gating-settet ikke er tomt, **alle** gating-scenarioer er `funnet` etter kontrollen, og kontrollen har bekreftet hver rad. Det er det som er sikkert, og som brukeren blir spurt om i kjøringen (*Rapport og oppsummering*). Er alt `funnet`, men en rad ble avgjort mellom finner og kontroll, står kravet under *Kan leveres når det er avklart*. Tilgangsavvik (*Tilgang og datakonsistens*) og regler uten scenario hindrer ikke forslaget, men står i `## Oppfølging`. Åpne spørsmål stopper ikke leveransen: `@openquestion` på et scenario i gating-settet står i `## Oppfølging` med spørsmålet, og `@draft @openquestion`-deler er ikke levert (de er utenfor gating-settet). Retaggingen er én `Edit` på `Egenskap:`-tag-linja; bare statustaggen byttes: `@OPT-SOK-VIS-001 @must @in-progress` → `@OPT-SOK-VIS-001 @must @implemented`. `@draft`- og `@deprecated`-deler står urørt.
+**Kan leveres** når gating-settet ikke er tomt, **alle** gating-scenarioer er `funnet` etter kontrollen, og kontrollen har bekreftet hver rad. Det er det som er sikkert, og som brukeren blir spurt om i kjøringen (*Rapport og oppsummering*). Er alt `funnet`, men en rad ble avgjort mellom finner og kontroll, står kravet under *Kan leveres når det er avklart*. Tilgangsavvik (*Tilgang og datakonsistens*) og regler uten scenario hindrer ikke forslaget, men står i tabellene sine. Åpne spørsmål stopper ikke leveransen: `@openquestion` på et scenario i gating-settet står i `## Andre funn` med spørsmålet, og `@draft @openquestion`-deler er ikke levert (de er utenfor gating-settet). Retaggingen er én `Edit` på `Egenskap:`-tag-linja; bare statustaggen byttes: `@OPT-SOK-VIS-001 @must @in-progress` → `@OPT-SOK-VIS-001 @must @implemented`. `@draft`- og `@deprecated`-deler står urørt.
 
 Ellers står kravet som `@in-progress`, og det som mangler, står i rapporten. Er noe av kravet funnet, foreslår du `@implemented` på delene som er levert (*Delvis levert*).
 
@@ -139,12 +154,12 @@ Ellers står kravet som `@in-progress`, og det som mangler, står i rapporten. E
 
 Er noen av scenarioene i gating-settet `funnet` etter kontrollen, men ikke alle, er kravet delvis levert (*Delvis levert* i `krav/README.md`):
 
-- **Egenskapen** blir `@in-progress`. Var den `@draft` eller `@planned` (bare med *uansett status*), byttes statustaggen. Er kravet ikke i en spesifikasjon, står det i `## Oppfølging`: «delvis levert, men ikke i en spesifikasjon — hent det inn med `fs-specify`».
+- **Egenskapen** blir `@in-progress`. Var den `@draft` eller `@planned` (bare med *uansett status*), byttes statustaggen. Er kravet ikke i en spesifikasjon, står det i `## Andre funn`: «delvis levert, men ikke i en spesifikasjon — hent det inn med `fs-specify`».
 - **Delene som er levert,** får `@implemented`: på `Regel:` når alle gating-scenarioene i regelen er `funnet`, ellers på hvert scenario som er `funnet`. Har et scenario `@implemented` fra før under en regel som nå blir `@implemented`, fjernes det fra scenarioet. Andre tagger på linja står urørt.
 - **Delene som ikke er levert,** får ingen statustag. I *Gjennomgang av en verify-rapport* spør du om de skal bygges, eller om de er uklare og skal få `@openquestion`.
 - `@draft`-, `@deprecated`- og `@demo`-deler står urørt.
 - **Når hele gating-settet er funnet,** blir egenskapen `@implemented`, og `@implemented` fjernes fra alle delene i samme endring (*Kan leveres*).
-- En `@implemented` egenskap settes aldri tilbake til `@in-progress`. Mangler noe der, står det i `## Oppfølging`.
+- En `@implemented` egenskap settes aldri tilbake til `@in-progress`. Mangler noe der, står det i `## Andre funn`.
 
 Delvis levert står i forslaget under *Delvis levert*, og gjøres bare når brukeren har sagt ja (*Rapport og oppsummering* når alle delene er sikre, ellers *Gjennomgang av en verify-rapport*).
 
@@ -166,7 +181,7 @@ Skjermbilder av appen som kjører, er ekstra bevis for scenarioer som har en skj
 
 Når et levert krav endres, står egenskapen som `@implemented`, og statusen på delen (se *Endring av levert krav* i `krav/README.md`). En `@in-progress`-del verifiseres som et krav, med disse forskjellene:
 
-- **Gating-sett** = scenarioene i delen (for en `Regel:`: alle scenarioene under den), minus de som er tagget `@demo`. `@openquestion` på et scenario i delen står i `## Oppfølging`, som for et krav.
+- **Gating-sett** = scenarioene i delen (for en `Regel:`: alle scenarioene under den), minus de som er tagget `@demo`. `@openquestion` på et scenario i delen står i `## Andre funn`, som for et krav.
 - I forslaget og spørsmålene står delen med tittel: `<feature-ID> — Regel: <tittel>`.
 - **Når delen kan leveres og brukeren har sagt ja:** fjern `@in-progress` fra `Regel:`-/`Scenario:`-linja med én `Edit`. Andre tagger på linja står urørt. Blir linja tom, fjern hele linja. Delen arver da `@implemented` fra egenskapen. `Egenskap:`-linja endres ikke.
 - Erstatter delen en `@deprecated`-del, verifiser den `@deprecated`-delen i samme kjøring (*Verifisere at koden er borte*). Den nye koden kan være på plass selv om den gamle ikke er fjernet enda, og da blir den `@deprecated`-delen stående.
@@ -178,9 +193,9 @@ Når et levert krav endres, står egenskapen som `@implemented`, og statusen på
 - **Scope** er egenskapen eller regelen, ikke resten av fila. Er *alle krav uansett status* valgt, er scope hver egenskap i scope, med alle reglene.
 - **Gating-sett** = scenarioene i scope, også det som er `@draft` eller `@planned`, minus `@demo`. `@deprecated`-deler følger *Verifisere at koden er borte*.
 - Let og kontroller som i *Verifisere implementasjon*, steg 1–3. Rapporten og spørsmålet om de sikre kommer etterpå (*Rapport og oppsummering*).
-- **Ny status foreslås** bare når hele gating-settet er `funnet`. `@openquestion` i scope står i `## Oppfølging`, og stopper ikke den nye statusen. Endringen gjøres bare når brukeren har sagt ja (*Rapport og oppsummering*, eller *Gjennomgang av en verify-rapport*):
+- **Ny status foreslås** bare når hele gating-settet er `funnet`. `@openquestion` i scope står i `## Andre funn`, og stopper ikke den nye statusen. Endringen gjøres bare når brukeren har sagt ja (*Rapport og oppsummering*, eller *Gjennomgang av en verify-rapport*):
   - **Egenskap** med `@draft`, `@planned` eller `@in-progress`: bytt statustaggen på `Egenskap:`-linja med `@implemented`, og fjern `@implemented` fra delene. `@draft`-deler under den står urørt, og er fortsatt ikke levert.
-  - **Egenskap** som er `@implemented`: ingen endring. Har den `@draft`-, `@planned`- eller `@in-progress`-deler, si at de verifiseres hver for seg. Mangler et scenario som er levert, står det i `## Oppfølging` som «levert, men ikke funnet i koden», så teamet kan se på det.
+  - **Egenskap** som er `@implemented`: ingen endring. Har den `@draft`-, `@planned`- eller `@in-progress`-deler, si at de verifiseres hver for seg. Mangler et scenario som er levert, står det i `## Andre funn` som «levert, men ikke funnet i koden», så teamet kan se på det.
   - **Regel** under en `@implemented` egenskap, med `@draft`, `@planned` eller `@in-progress`: fjern statustaggen fra `Regel:`-linja, som i *Deler i leverte krav som endres*. Regelen arver `@implemented`. Erstatter regelen en `@deprecated`-del, verifiser den også.
   - **Regel** uten egen status under en `@implemented` egenskap: den er allerede levert, ingen endring.
   - **Regel** under en egenskap som ikke er `@implemented`: ingen endring. En del kan ikke være levert når egenskapen ikke er det. Si at hele egenskapen må verifiseres.
@@ -190,9 +205,9 @@ Når et levert krav endres, står egenskapen som `@implemented`, og statusen på
 
 En flyt (`krav/_Flyter/`, se *Flyter* i `krav/README.md`) beskriver et løp på tvers av domener. Hver `Regel:` er en fase, og `@depends-on-` på fasen peker på kravene den bygger på. Flyten har to statuser: fremdriften, som kommer fra kravene, og sin egen status, som sier at overleveringene mellom kravene virker. Testene for hvert krav setter opp tilstanden selv, så de kan gå grønt selv om det ene kravet aldri får det det andre lager. Det er det du ser etter her.
 
-1. **Fremdrift.** For hver fase: slå opp hver `@depends-on-<ID>` (`Grep "^\s*@(.*\s@)?<ID>\b"` i `krav/**/*.feature`), finn delen fasen bygger på, og les statusen på den. Delen er regler og scenarioer i kravet med `@ref-<flytens ID>` (ankeret) som ligger i reglene i «…» i kommentaren under taggen i fasen (et scenario hører til regelen over). Står det ingen regeltitler fra kravet i «…», eller ligger ingen av ankrene i dem, er delen alle ankrene. Uten anker er delen reglene i «…» (alle, når det står flere), ellers hele kravet (*Anker* og *Flyter* i `krav/README.md`). Bygger flere faser på samme krav, er det «…» som skiller hvilke av ankrene hver fase venter på. Fasen er levert når delen av hvert krav er levert (for en `@depends-on-FLY-…`: når den flyten er `@implemented`). Hele kravet er levert når det er `@implemented`. En del er levert når kravet er `@in-progress` og delen er `@implemented` (en regel: alle scenarioene i den), eller når kravet er `@implemented` og delen ikke er `@planned` eller `@in-progress`. En `@draft`- eller `@deprecated`-del blir ikke levert: står ankeret på en slik del, er fasen ikke levert, og det står i `## Oppfølging`. Med flere deler med ankeret må alle være levert. En fase uten `@depends-on-` er `mangler krav`. Dette leser bare tagger, og endrer ingenting.
+1. **Fremdrift.** For hver fase: slå opp hver `@depends-on-<ID>` (`Grep "^\s*@(.*\s@)?<ID>\b"` i `krav/**/*.feature`), finn delen fasen bygger på, og les statusen på den. Delen er regler og scenarioer i kravet med `@ref-<flytens ID>` (ankeret) som ligger i reglene i «…» i kommentaren under taggen i fasen (et scenario hører til regelen over). Står det ingen regeltitler fra kravet i «…», eller ligger ingen av ankrene i dem, er delen alle ankrene. Uten anker er delen reglene i «…» (alle, når det står flere), ellers hele kravet (*Anker* og *Flyter* i `krav/README.md`). Bygger flere faser på samme krav, er det «…» som skiller hvilke av ankrene hver fase venter på. Fasen er levert når delen av hvert krav er levert (for en `@depends-on-FLY-…`: når den flyten er `@implemented`). Hele kravet er levert når det er `@implemented`. En del er levert når kravet er `@in-progress` og delen er `@implemented` (en regel: alle scenarioene i den), eller når kravet er `@implemented` og delen ikke er `@planned` eller `@in-progress`. En `@draft`- eller `@deprecated`-del blir ikke levert: står ankeret på en slik del, er fasen ikke levert, og det står i `## Andre funn`. Med flere deler med ankeret må alle være levert. En fase uten `@depends-on-` er `mangler krav`. Dette leser bare tagger, og endrer ingenting.
 2. **Overleveringene.** Gating-settet er som i *Verifisere implementasjon*. Et scenario i en fase som ikke er levert (eller mangler krav), er `ikke funnet` uten søk, med «fasen er ikke levert» i `Bevis`: det er ingenting å finne før kravene er levert, og testplanen leser grunnen derfra. For de andre scenarioene: finn i koden både stedet der tilstanden i `Gitt` lages, og stedet der den brukes til det `Så` sier. Scenarioet er **funnet** bare når du har lest begge (to `fil:linje`, i samme repo eller i forskjellige), og det som brukes, er det samme som det som lages: samme tabell, felt, hendelse eller API. At kravene i fasene er levert hver for seg, er ikke bevis. Eksempel: tilbudsgarantien lages i tidligopptaket, men plasstildelingen i hovedopptaket leser den ikke. Da er scenarioet `ikke funnet`, selv om begge kravene er `@implemented`. *Negative søk* og *Kontroll* gjelder som ellers. Finnes en `@e2e`-test for flyten, nevn den i chat.
-3. **Ny status** foreslås bare når alle fasene er levert og hele gating-settet er `funnet`: `@planned` eller `@in-progress` → `@implemented` på `Egenskap:`-linja, når brukeren sier ja (*Rapport og oppsummering*, eller *Gjennomgang av en verify-rapport*). Er en fase ikke levert, står flyten under *Blir stående*, med fasene som mangler. Mangler en overlevering i en levert fase, foreslå i `## Oppfølging` at bruddet skrives som kjent brudd i flyten med `fs-krav` (modus E). Du skriver ikke kommentaren selv.
+3. **Ny status** foreslås bare når alle fasene er levert og hele gating-settet er `funnet`: `@planned` eller `@in-progress` → `@implemented` på `Egenskap:`-linja, når brukeren sier ja (*Rapport og oppsummering*, eller *Gjennomgang av en verify-rapport*). Er en fase ikke levert, står flyten under *Blir stående*, med fasene som mangler. Mangler en overlevering i en levert fase, foreslå i `## Andre funn` at bruddet skrives som kjent brudd i flyten med `fs-krav` (modus E). Du skriver ikke kommentaren selv.
 
 Rapporten får `## Fremdrift for flyter` (se `[flyt]` i [`references/rapportmal.md`](references/rapportmal.md)), og scenarioene står i `## Scenarioer` med begge bevisene.
 
@@ -210,7 +225,7 @@ For hvert slikt krav, sjekk i koden (fs-plattform for tilgangssjekken i subgraph
 
 Resultatet per sjekk er `stemmer` (koden gjør det kravet sier, lest på `fil:linje`), `avviker` (koden gjør noe annet, og hva), `ikke beskrevet` (kravet sier ikke noe om tilgangen, og koden har en regel: den er også en rad i *Regler uten scenario*), `ikke funnet` (ingen tilgangssjekk funnet, etter *Negative søk*) eller `usikker`. Kontrolløren sjekker radene på samme måte som scenarioene (*Kontroll*).
 
-Radene står i `## Tilgang og datakonsistens` i rapporten, ikke i `## Scenarioer`: FS Kravforvaltning leser den tabellen som scenarioer. Et avvik endrer ikke kravet og stopper ikke forslaget i *Rapport og oppsummering*, men står i `## Oppfølging` og i sammendraget i chat. Foreslå `fs-krav` når kravet bør si noe om tilgangen.
+Radene står i `## Tilgang og datakonsistens` i rapporten, delt i `### Avvik` (alt som ikke er `stemmer`) og `### Stemmer`, ikke i `## Scenarioer`: FS Kravforvaltning leser den tabellen som scenarioer. Et avvik endrer ikke kravet og stopper ikke forslaget i *Rapport og oppsummering*, men står under `### Avvik` og i sammendraget i chat. Foreslå `fs-krav` når kravet bør si noe om tilgangen.
 
 ## Regler uten scenario
 
@@ -230,7 +245,7 @@ For hvert krav i scope, tell fra feature-fila (ikke fra koden):
 - **Scenarioer** med åpne spørsmål: `@openquestion` på scenarioet selv eller på regelen over, i gating-settet
 - **Utenfor gating:** regler og scenarioer med `@draft @openquestion`
 
-Tallene står i `## Åpne spørsmål`, og spørsmålene (fra `# ÅPNE SPØRSMÅL:`) i `## Oppfølging`. Tallene regnes ut, de telles ikke på øyemål (*Rapport*).
+Tallene står i `## Åpne spørsmål`, og spørsmålene (fra `# ÅPNE SPØRSMÅL:`) i `## Andre funn`. Tallene regnes ut, de telles ikke på øyemål (*Rapport*).
 
 ## Avhengigheter
 
@@ -238,11 +253,11 @@ Antall nivåer og om avhengighetene letes etter i koden, står i svaret på *Omf
 
 1. **Finn avhengighetene.** Nivå 1 er `@depends-on-<ID>` på kravene i scope: på `Egenskap:`, `Regel:` og `Scenario:`/`Scenariomal:`, men bare på delene som er med i verifiseringen. Nivå 2 er det kravene på nivå 1 bygger på, og så videre. Slå opp ID-en som i *Verifisere flyt*, steg 1 (`Grep "^\s*@(.*\s@)?<ID>\b"` i `krav/**/*.feature`). `@ref-` følges ikke: det er bare en henvisning (*Referanser* i `krav/README.md`).
    - Hvert krav tas med én gang, på det laveste nivået det finnes på. Et krav som er i scope, er ikke en avhengighet.
-   - En ring (A → B → A) stopper der, og står i `## Oppfølging` som avvik (sjekk med `fs-krav-avvik`). En ID som ikke finnes, står med «finnes ikke».
+   - En ring (A → B → A) stopper der, og står i `## Andre funn` som avvik (sjekk med `fs-krav-avvik`). En ID som ikke finnes, står med «finnes ikke».
    - For en flyt er nivå 1 kravene fasene bygger på, og statusen deres står allerede i fremdriften (*Verifisere flyt*, steg 1). Bruk den. En `@depends-on-FLY-…` er også et nivå.
 2. **Bare status** (standard): les statusen på `Egenskap:`, og på delen referansen gjelder når kommentaren under taggen sier hvilken regel det er. Dette leser bare tagger.
 3. **Verifisert i koden:** let og kontroller etter *Verifisere uansett status* (gating-settet, *Negative søk* og *Kontroll*), med hele egenskapen som scope. Resultatet står bare i rapporten (`### Scenarioer i avhengighetene`). Foreslå aldri ny status for en avhengighet, og slett ingenting. Skal avhengigheten få ny status, må den verifiseres med seg selv i scope.
-4. **Levering mot avhengighetene.** En del som bygger på et krav, kan ikke leveres før kravet (*Referanser* i `krav/README.md`). Står et krav eller en del under *Kan leveres*, og bygger det (på nivå 1) på et krav som ikke er `@implemented`, skriv det bak kravet i forslaget («bygger på `@X`, som er `@planned`»), og i `## Oppfølging`. Det stopper ikke forslaget. Brukeren avgjør.
+4. **Levering mot avhengighetene.** En del som bygger på et krav, kan ikke leveres før kravet (*Referanser* i `krav/README.md`). Står et krav eller en del under *Kan leveres*, og bygger det (på nivå 1) på et krav som ikke er `@implemented`, skriv det bak kravet i forslaget («bygger på `@X`, som er `@planned`»), og i `## Andre funn`. Det stopper ikke forslaget. Brukeren avgjør.
 
 Rapporten får `## Avhengigheter` (se `[avhengigheter]` i [`references/rapportmal.md`](references/rapportmal.md)). `## Scenarioer` og `## Oppsummering` gjelder bare kravene i scope: tavla «Scopes», `fs-testplan` og `fs-testrapport` leser dem, og avhengighetene skal ikke telle med.
 
@@ -256,7 +271,7 @@ For hvert krav eller hver del:
 4. **Ingen spor funnet:** kravet (eller delen) **kan slettes**. Det slettes bare i *Gjennomgang av en verify-rapport*, når brukeren har sagt ja:
    - `@deprecated` på `Egenskap:` → slett fila (`rm "<sti>"`). Blir kapabilitetsmappa tom, si fra (ikke slett mappa).
    - `@deprecated` på `Regel:`/`Scenario:` → fjern blokken med én `Edit`: tag-linja, kommentarene rett over og under nøkkelordlinja, og alt til neste blokk på samme eller høyere nivå. Resten av fila står urørt. Les fila etterpå og sjekk at den fortsatt er gyldig Gherkin.
-   - **Referansene til kravet:** `Grep "@(depends-on|ref)-<ID>\b"` i `krav/` (også `krav/_Flyter/`). Slettes hele fila, gjelder alle treffene. Slettes en del, gjelder de som handler om delen, ut fra kommentaren under taggen. Er det uklart, spør. Referansene står med i forslaget under *Kan slettes*, og fjernes i samme endring: taggen tas bort fra tag-linja (står den alene, hele linja), og en kommentar under taggen som bare forklarer referansen, tas bort. Krav og flyter med `@depends-on-` til kravet listes i `## Oppfølging` med «sjekk med `fs-krav`»: de bygde på noe som nå er borte.
+   - **Referansene til kravet:** `Grep "@(depends-on|ref)-<ID>\b"` i `krav/` (også `krav/_Flyter/`). Slettes hele fila, gjelder alle treffene. Slettes en del, gjelder de som handler om delen, ut fra kommentaren under taggen. Er det uklart, spør. Referansene står med i forslaget under *Kan slettes*, og fjernes i samme endring: taggen tas bort fra tag-linja (står den alene, hele linja), og en kommentar under taggen som bare forklarer referansen, tas bort. Krav og flyter med `@depends-on-` til kravet listes i `## Andre funn` med «sjekk med `fs-krav`»: de bygde på noe som nå er borte.
 5. **Finnes fortsatt:** kravet blir stående. Det kommer på lista over `@deprecated` som fortsatt finnes i koden.
 
 ## Negative søk
@@ -300,14 +315,14 @@ En MR eller branch er kandidat når nøkkelen står i branchnavnet, tittelen ell
 
 Den som har lett, ser lett det den venter å se. Før resultatet vises til brukeren, kontrolleres det av en som ikke har lett.
 
-**Med Agent-verktøyet** (Claude Code i terminalen, også terminalen i FS Kravforvaltning): start subagenten `fs-verify-kontroll` (`.claude/agents/fs-verify-kontroll.md`) for hver feature-fil, gjerne flere parallelt. Gi den stien til feature-fila, kodeklonene og resultattabellen, tilgangsradene og reglene uten scenario, ikke hvordan du lette. Den svarer med `bekreftet` / `avkreftet` / `usikker` per rad og et forslag til resultat.
+**Med Agent-verktøyet** (Claude Code i terminalen, også terminalen i FS Kravforvaltning): start subagenten `fs-verify-kontroll` (`.claude/agents/fs-verify-kontroll.md`) for hver feature-fil, gjerne flere parallelt. Gi den stien til feature-fila, kodeklonene og resultattabellen (med merkene per repo, *Per repo* i *Kodeklonene*), tilgangsradene og reglene uten scenario, ikke hvordan du lette. Den svarer med `bekreftet` / `avkreftet` / `usikker` per rad og et forslag til resultat.
 
 **Uten Agent-verktøyet** (Claude-panelet i FS Kravforvaltning): gjør kontrollen selv, og si til brukeren at den er manuell (se *I FS Kravforvaltning*):
 
 1. Les `fil:linje` på nytt for hvert `funnet`, og sjekk koden mot `Når` og `Så`, ikke mot det du skrev.
 2. Søk på nytt for hvert `ikke funnet` med søkeord du ikke har brukt, etter *Negative søk*.
 
-Kontrollen gjelder også radene i `## Tilgang og datakonsistens` (leses på `fil:linje`, og `ikke funnet` søkes etter på nytt) og `## Regler uten scenario` (finnes regelen, og dekker et scenario i kravet den likevel? har kontrolløren funnet regler som mangler?). Det kontrollen endrer, står som **Kontrollen endret** i `## Oppfølging`.
+Kontrollen gjelder også radene i `## Tilgang og datakonsistens` (leses på `fil:linje`, og `ikke funnet` søkes etter på nytt) og `## Regler uten scenario` (finnes regelen, og dekker et scenario i kravet den likevel? har kontrolløren funnet regler som mangler?). Det kontrollen endrer, står som **Kontrollen endret** i `## Andre funn`.
 
 **Kontroll er ikke menneskelig kontroll.** `fs-verify-kontroll` er en uavhengig agent, og «ferdig når» i fase 1 krever i tillegg at en annen person enn den som kjørte verifiseringen, har lest rapporten og bevisene. Det er et felt i rapporten (`- **Menneskelig kontroll:**`) som du aldri fyller ut: det står som `[Fylles ut: navn og dato]` til personen har skrevet det selv, i rapportfila (og på siden i Confluence når den finnes), og `fs-testrapport` (verifisering) leser det.
 
@@ -344,13 +359,13 @@ Rapporten er resultatet. Når alle kravene i scope er kontrollert, skriver du ra
 
 Gir brukeren en verify-rapport (`…/verify-*.md`), er målet å gjøre resultatet bedre sammen med brukeren: avklare det som er usikkert eller ikke funnet, sette status på det som er levert eller delvis levert, og få avklart de åpne spørsmålene. Du verifiserer ikke alt på nytt, men går gjennom det som ikke er avgjort.
 
-1. **Les rapporten:** kravene (`- **Krav:**`, `- **Spec:**`), kodeklonene (`- **Kode:**`), `- **Omfang:**`, `- **Avhengigheter:**`, `## Scenarioer`, `## Avhengigheter`, `## Oppfølging` og hva som ble levert. Omfang og avhengigheter tas fra rapporten, så du spør ikke om dem på nytt.
+1. **Les rapporten:** kravene (`- **Krav:**`, `- **Spec:**`), kodeklonene (`- **Kode:**`), `- **Omfang:**`, `- **Avhengigheter:**`, `## Scenarioer`, `## Avhengigheter`, `## Andre funn` og hva som ble levert. Omfang og avhengigheter tas fra rapporten, så du spør ikke om dem på nytt.
 2. **Sjekk at grunnlaget fortsatt gjelder.** Sjekk branchen i kravrepoet og i klonene (*Finn scope og kode*, steg 0 og 2). Spør om kodeklonene bare når stiene i rapporten ikke finnes. Les kravfilene på nytt: er statusen endret, eller er det scenarioer som er nye, borte eller har fått ny tittel siden rapporten, si det, og ta de nye scenarioene med som ikke verifisert. Er koden endret siden commiten i `- **Kode:**` (`git -C <repo> log <sha>..HEAD --oneline`), si det, og les bevisene på nytt for radene som skal avklares.
 3. **Lag lista over det som skal avklares,** i rekkefølgen i rapporten, og vis den kort i chat: antallet av hver type, med lenken til rapporten.
    - a. `usikker` og `ikke funnet` i `## Scenarioer`
    - b. det som står i `## Forslag til endringer`, men ikke i `## Endringer`: *Kan leveres* og *Delvis levert* som brukeren sa nei til, *Kan slettes*, og *Kan leveres når det er avklart*: punktene som venter på et scenario i a, når svarene gjør det mulig, og de andre (kontrollen endret en rad, deler uten statustag) direkte
    - c. scenarioer som ikke er funnet i et krav som er delvis levert
-   - d. åpne spørsmål: `@openquestion` i kravene i scope, og *Åpent spørsmål* i `## Oppfølging`
+   - d. åpne spørsmål: `@openquestion` i kravene i scope, og *Åpent spørsmål* i `## Andre funn`
 4. **Gå gjennom lista** med `AskUserQuestion`, høyst 4 spørsmål per kall. Hvert spørsmål skal kunne leses alene: kravet med `krav/…:<linje>`, koden med `<repo>/<fil>:<linje>`, og aldri «se rapporten». Er det mer enn spørsmålsteksten rommer, legg resultattabellen for kravet i `preview` på det første valget. Ta a først, siden svarene endrer b og c.
    - **a. Usikker eller ikke funnet:** «`<feature-ID>` «<scenario>» (`krav/…:<linje>`): <beviset eller søket fra rapporten>. Vet du hvor koden er?» — **Søk på nytt** (med søkeord som ikke står i beviset, etter *Negative søk*) / **Ikke bygget** (blir `ikke funnet`) / **Den er her** (stien, komponenten eller ruta skrives i «Annet»). Les det brukeren peker på, og vurder koden mot `Når` og `Så`. Et nytt `funnet` kontrolleres (*Kontroll*) før det brukes.
    - **b. Kan leveres eller delvis levert:** ett spørsmål per krav eller del: «`<feature-ID> — <tittel>` (`krav/…:<linje>`): <n>/<n> scenarioer funnet, bl.a. «<scenario>» i `<repo>/<fil>:<linje>`. Skal kravet bli `@implemented`?» (for en del: «Skal delen leveres?», for delvis levert: «Skal egenskapen bli `@in-progress`, og <delene> `@implemented`?»). Bygger kravet på et krav som ikke er levert, står det i spørsmålet. — **Ja** / **Nei, noe mangler** (spør hva i fritekst) / **Avbryt** (stopp, og la resten stå).
@@ -387,9 +402,9 @@ Skriv aldri rapporten noe annet sted under `krav/`. Ikke kall den `verification-
 
 **Formatet står i [`references/rapportmal.md`](references/rapportmal.md).** Les malen før du skriver rapporten, og følg den nøyaktig: alle seksjonene, i samme rekkefølge, med de faste tekstene. Det er det som gjør at to kjøringer kan sammenlignes. FS Kravforvaltning leser `- **Dato:**`, `- **Spec:**` og tabellen `## Scenarioer`, og viser resultatet på kortet i Spesifikasjoner.
 
-**Tall regnes ut, de telles ikke.** Alle tall i rapporten (scenarioer funnet per krav, i alt, og i *Oppsummering*, og tallene i `## Åpne spørsmål`) regnes ut fra tabellen `## Scenarioer`, fra `@openquestion`-taggene i kravfilene og fra endringene du har gjort, f.eks. med `awk` på rapportfila når du har Bash. Uten Bash: tell radene i tabellen én gang til, krav for krav, før du skriver tallene.
+**Tall regnes ut, de telles ikke.** Alle tall i rapporten (scenarioer funnet per krav, i alt, og i *Oppsummering*, det som mangler i hvert repo, og tallene i `## Åpne spørsmål`) regnes ut fra tabellen `## Scenarioer`, fra `@openquestion`-taggene i kravfilene og fra endringene du har gjort, f.eks. med `awk` på rapportfila når du har Bash. Uten Bash: tell radene i tabellen én gang til, krav for krav, før du skriver tallene.
 
-`- **Kontroll:**` sier hvem som kontrollerte: `fs-verify-kontroll` (uavhengig) eller `manuell (Claude-panelet)`. Radene der kontrollen endret resultatet, står som **Kontrollen endret** i `## Oppfølging`, så leseren ser hva den første letingen bommet på.
+`- **Kontroll:**` sier hvem som kontrollerte: `fs-verify-kontroll` (uavhengig) eller `manuell (Claude-panelet)`. Radene der kontrollen endret resultatet, står som **Kontrollen endret** i `## Andre funn`, så leseren ser hva den første letingen bommet på.
 
 **`utforing.md`.** Når scope er en spesifikasjon som er sendt (har en seksjon i `utforing.md` i scope-rota, se *Utføring* i `tasks/README.md`): mangler noe (`ikke funnet` eller `usikker` etter kontrollen, eller brukeren har sagt at noe mangler), sett steget i repoet der koden mangler, tilbake til `- **Status**: pågår`, legg til `- **Tilbake**: <YYYY-MM-DD>`, og en linje i `Logg` (`<dato> — fs-verify — <n> ikke funnet, <n> usikker · tilbake til <repo>`). Er alt funnet, legg bare til en linje i `Logg` (`alt funnet · verifisert`); kortet står i «Verifisert» når kravene er `@implemented`.
 
