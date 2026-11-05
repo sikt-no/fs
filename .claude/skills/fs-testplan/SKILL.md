@@ -67,7 +67,7 @@ Finn så flytene som går gjennom kravene, fasene i hver flyt, og om hele flyten
 
 ### Tilgangsradene
 
-Les tilgangsradene fra `## Tilgang og datakonsistens` i verify-rapporten (rolle × organisasjon × opprette/lese/endre/slette). De er tilgangsmatrisen testbrukerne foreslås fra (steg 3).
+Les tilgangsradene fra `## Tilgang og datakonsistens` i verify-rapporten, fra begge tabellene (`### Avvik` og `### Stemmer`; eldre rapporter har én tabell) (rolle × organisasjon × opprette/lese/endre/slette). De er tilgangsmatrisen testbrukerne foreslås fra (steg 3).
 
 ### Verifiseringen
 

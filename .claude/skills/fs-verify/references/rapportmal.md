@@ -177,10 +177,25 @@ Resultatet for hvert scenario i gating-settet etter kontrollen, med beviset i ko
 
 Om koden gir rollene tilgang slik kravet sier, holder data fra andre organisasjoner utenfor, og ikke gir foreldreløse eller motstridende data ved sletting og endring. Sjekket på kodenivå, ikke testet. Radene er grunnlaget for testbrukerne i testplanen.
 
+### Avvik
+
+Sjekkene der koden ikke gjør det kravet sier, kravet ikke sier noe, eller tilgangssjekken ikke er funnet. Det som avviker, ikke er funnet eller er usikkert, står også i `## Oppfølging`, og det kravet ikke beskriver, i `## Regler uten scenario`.
+
+| Feature-ID | Sjekk | Rolle og handling | Resultat | Bevis |
+| --- | --- | --- | --- | --- |
+| `@DOM-SUB-KAP-NNN` | tilgang \| organisasjon \| konsistens | <rolle> <handling> <hva> | avviker \| ikke beskrevet \| ikke funnet \| usikker | kravet sier <…> (<scenario eller regel> \| ikke beskrevet), koden gjør <…> — `<repo>/<fil>:<linje>` |
+
+Ingen.   [når alle sjekkene stemmer, i stedet for tabellen]
+
+### Stemmer
+
+Sjekkene der koden gjør det kravet sier.
+
 | Feature-ID | Sjekk | Rolle og handling | Resultat | Bevis |
 | --- | --- | --- | --- | --- |
 | `@DOM-SUB-KAP-NNN` | tilgang \| organisasjon \| konsistens | <rolle> <oppretter \| leser \| endrer \| sletter> <hva> | stemmer | `<repo>/<fil>:<linje>` |
-| `@DOM-SUB-KAP-NNN` | tilgang \| organisasjon \| konsistens | <rolle> <handling> <hva> | avviker \| ikke beskrevet \| ikke funnet \| usikker | kravet sier <…> (<scenario eller regel> \| ikke beskrevet), koden gjør <…> — `<repo>/<fil>:<linje>` |
+
+Ingen.   [når ingen sjekker stemmer, i stedet for tabellen]
 
 ## Regler uten scenario
 
@@ -216,5 +231,5 @@ MR-er og brancher som ser ut til å levere kravene. Koden i disse er ikke merget
 - **`## Oversikt per krav`** `[per repo]`: én rad per krav, og én `Mangler i`-kolonne per repo som er med i kjøringen. Tallene regnes ut fra merkene i `Bevis` i `## Scenarioer`: ✗ og ~ i repoet. Summeringslinja under tabellen og linja `Mangler` i `## Oppsummering` regnes ut fra de samme merkene. I tekst skrives repoene med navn (fs-plattform, fs-admin, min-kompetanse). Skriv aldri «backend», «frontend» eller «begge».
 - **`## Fremdrift for flyter`** `[flyt]`: én rad per fase, i rekkefølgen i flyten. En fase er levert når delen av hvert krav den bygger på, er levert (*To statuser* i `krav/README.md`). `mangler krav` når fasen ikke har `@depends-on-`.
 - **`## Avhengigheter`** `[avhengigheter]`: én rad per par (krav i scope, avhengighet). Avhengighetene teller ikke i `## Oppsummering`, og radene deres står aldri i `## Scenarioer`, fordi tavla «Scopes», `fs-testplan` og `fs-testrapport` leser den tabellen.
-- **`## Tilgang og datakonsistens`**: én rad per sjekk (rolle × handling × organisasjon), også de som stemmer, fordi `fs-testplan` lager testbrukerne fra radene. `organisasjon` gjelder at data fra en annen organisasjon verken kan ses eller endres, og `konsistens` at sletting og endring ikke gir foreldreløse eller motstridende data.
+- **`## Tilgang og datakonsistens`**: én rad per sjekk (rolle × handling × organisasjon), også de som stemmer, fordi `fs-testplan` lager testbrukerne fra radene. Radene deles i to tabeller: `### Avvik` først (`avviker`, `ikke beskrevet`, `ikke funnet` og `usikker`), så `### Stemmer`. Begge har de samme kolonnene, og rekkefølgen på kravene er den samme i begge. `organisasjon` gjelder at data fra en annen organisasjon verken kan ses eller endres, og `konsistens` at sletting og endring ikke gir foreldreløse eller motstridende data.
 - **`## Regler uten scenario`** og **`## Åpne spørsmål`**: leses av `fs-testplan`. `Regler` og `Scenarioer` i `## Åpne spørsmål` er antall med åpne spørsmål av totalt i gating-settet (`<n> av <N>`).

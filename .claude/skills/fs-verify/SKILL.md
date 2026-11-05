@@ -225,7 +225,7 @@ For hvert slikt krav, sjekk i koden (fs-plattform for tilgangssjekken i subgraph
 
 Resultatet per sjekk er `stemmer` (koden gjør det kravet sier, lest på `fil:linje`), `avviker` (koden gjør noe annet, og hva), `ikke beskrevet` (kravet sier ikke noe om tilgangen, og koden har en regel: den er også en rad i *Regler uten scenario*), `ikke funnet` (ingen tilgangssjekk funnet, etter *Negative søk*) eller `usikker`. Kontrolløren sjekker radene på samme måte som scenarioene (*Kontroll*).
 
-Radene står i `## Tilgang og datakonsistens` i rapporten, ikke i `## Scenarioer`: FS Kravforvaltning leser den tabellen som scenarioer. Et avvik endrer ikke kravet og stopper ikke forslaget i *Rapport og oppsummering*, men står i `## Oppfølging` og i sammendraget i chat. Foreslå `fs-krav` når kravet bør si noe om tilgangen.
+Radene står i `## Tilgang og datakonsistens` i rapporten, delt i `### Avvik` (alt som ikke er `stemmer`) og `### Stemmer`, ikke i `## Scenarioer`: FS Kravforvaltning leser den tabellen som scenarioer. Et avvik endrer ikke kravet og stopper ikke forslaget i *Rapport og oppsummering*, men står i `## Oppfølging` og i sammendraget i chat. Foreslå `fs-krav` når kravet bør si noe om tilgangen.
 
 ## Regler uten scenario
 
