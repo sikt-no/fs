@@ -1,6 +1,6 @@
 # language: no
 # GitHub: #481
-@BRU-PER-GRU-003 @must @planned @scope-restanser-etter-onboarding
+@BRU-PER-GRU-003 @must @in-progress @scope-restanser-etter-onboarding
 Egenskap: Tildele roller til en personbruker
   Som brukeradministrator
   ønsker jeg å tildele roller til en personbruker
@@ -90,6 +90,62 @@ Egenskap: Tildele roller til en personbruker
       Så avvises tildelingen
       Og personbrukeren har ikke fått rollen
 
+  Regel: Valglisten for rolle viser bare roller som er i taket til en applikasjon i valgt organisasjon og miljø
+    # Taket sier, per applikasjon, organisasjon og miljø, hvilke roller applikasjonen kan bruke
+    # for brukerne sine. En rolle som ikke er i taket til noen applikasjon i organisasjonen og
+    # miljøet, får ingen effekt for personbrukeren der. Brukere har meldt at de ser slike roller
+    # i tildelingsdialogen (produkteier, 29.10.2026).
+    # AVKLART 29.10.2026 (produkteier): Regelen gjelder bare forretningsroller som tildeles
+    # personbrukere. Den gjelder ikke tilganger (BRU-PER-GRU-009), og ikke tildeling til
+    # applikasjoner (BRU-APP-API-007). Den gjelder når roller legges til, ikke når de fjernes.
+    # Taket begrenser bare valglisten; en tildeling av en rolle utenfor taket avvises ikke.
+
+    Scenariomal: Rollen vises bare når en applikasjon har den i taket for valgt organisasjon og miljø
+      Gitt jeg har valgt organisasjonen "Universitetet i Stavanger" og miljøet "Produksjon"
+      Og forretningsrollen "OPPTAK_SAKSBEHANDLER" er i taket til en applikasjon for <organisasjon> i miljøet <miljø>
+      Når jeg åpner valglisten for roller
+      Så <vises> forretningsrollen "OPPTAK_SAKSBEHANDLER"
+
+      Eksempler:
+        | organisasjon                | miljø        | vises      |
+        | "Universitetet i Stavanger" | "Produksjon" | vises      |
+        | "Universitetet i Stavanger" | "Test"       | vises ikke |
+        | "Universitetet i Bergen"    | "Produksjon" | vises ikke |
+
+    Scenario: Rolle som ikke er i taket til noen applikasjon vises ikke
+      Gitt jeg har valgt organisasjon og miljø
+      Og ingen applikasjon har forretningsrollen i taket for den valgte organisasjonen og miljøet
+      Når jeg åpner valglisten for roller
+      Så vises ikke forretningsrollen
+
+    Scenario: Taket for en organisasjonssamling gjelder organisasjonene i samlingen
+      Gitt jeg har valgt organisasjonen "Universitetet i Stavanger" og miljøet "Produksjon"
+      Og "Universitetet i Stavanger" er med i en organisasjonssamling
+      Og forretningsrollen "OPPTAK_SAKSBEHANDLER" er i taket til en applikasjon for organisasjonssamlingen i miljøet "Produksjon"
+      Når jeg åpner valglisten for roller
+      Så vises forretningsrollen "OPPTAK_SAKSBEHANDLER"
+
+    Scenario: En rolle som en rolle i taket gir, vises
+      Gitt jeg har valgt organisasjon og miljø
+      Og en applikasjon har en forretningsrolle i taket for den valgte organisasjonen og miljøet
+      Og forretningsrollen i taket gir en annen forretningsrolle
+      Når jeg åpner valglisten for roller
+      Så vises forretningsrollen som rollen i taket gir
+
+    Scenario: Valglisten for rolle er tom når ingen applikasjon har tak i organisasjonen og miljøet
+      Gitt jeg har valgt organisasjon og miljø
+      Og ingen applikasjon har tak for den valgte organisasjonen og miljøet
+      Når jeg åpner valglisten for roller
+      Så er valglisten for roller tom
+
+    @ref-BRU-PER-GRU-012
+    Scenario: En rolle som ikke er i noe tak kan fortsatt fjernes
+      # Taket begrenser bare hvilke roller som kan legges til.
+      Gitt personbrukeren har en forretningsrolle for en organisasjon og et miljø
+      Og ingen applikasjon har forretningsrollen i taket for organisasjonen og miljøet
+      Når jeg fjerner forretningsrollen fra personbrukeren
+      Så er forretningsrollen fjernet fra personbrukeren
+
   Regel: Utgåtte roller kan ikke tildeles
 
     Scenario: Utgåtte roller vises ikke i valglisten for rolle
@@ -106,7 +162,6 @@ Egenskap: Tildele roller til en personbruker
       Og det fremgår at rollen allerede er tildelt
 
 # ÅPNE SPØRSMÅL:
-# - Kan en brukeradministrator tildele roller til en deaktivert personbruker, og er rollen i så fall inaktiv inntil reaktivering? BRU-PER-GRU-004 sier at deaktivering fryser tildelingene uten å fjerne dem, men det er ikke avklart om nye tildelinger kan legges til mens personbrukeren er deaktivert.
 # - Autorisasjon: regelen sier at brukeren kun kan tildele roller de har rettighet til å tildele, men ikke hva rettigheten består i. Forslag: bare roller som (a) gjelder ved en organisasjon administratoren administrerer, og (b) administratoren selv har eller kan administrere. Henger sammen med rolledefinisjons-arbeidet i "4 - Opprette og administrere roller".
 # - Skal varsel sendes til personbrukeren ved endringer i roller? Avklares sammen med BRU-PER-HIS-003.
 # - Krever tildeling at brukeren har godkjent bruksvilkår / signert taushetserklæring først? Henger sammen med "1 - Bruksvilkår".

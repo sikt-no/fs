@@ -7,15 +7,15 @@ Egenskap: Samordna opptak
 
   Bakgrunn:
     Gitt at opptaksforvalter ved forvaltende organisasjon er innlogget
-    Og at opptaket "Samordna opptak 2027" er opprettet som samordnet
+    Og at opptaket "Samordna opptak 2027" er opprettet som samordna
 
   Regel: Opptaksforvalter ved forvaltende organisasjon kan legge til organisasjoner i et samordna opptak
 
     Scenario: Legge til lærested i samordna opptak
       Når opptaksforvalter ved forvaltende organisasjon legger til organisasjonen "Universitetet i Oslo" som deltaker i opptaket
       Så kan opptaksforvalter ved Universitetet i Oslo knytte utdanningstilbud ved Universitetet i Oslo til opptaket
-  # Følgevirkninger: Deltagende organisasjoner kan få søknader de er saksbehandlende organisasjon for etter saksbehandlertildelingen
-  # Deltagende organisasjoners opptaksforvaltere kan se og vedlikeholde info på egne utdanningstilbud, og saksbehandlere kan se info om egne utdanningstilbud
+  # Følgevirkninger: Deltakende organisasjoner kan få søknader de er saksbehandlende organisasjon for etter saksbehandlertildelingen
+  # Deltakende organisasjoners opptaksforvaltere kan se og vedlikeholde info på egne utdanningstilbud, og saksbehandlere kan se info om egne utdanningstilbud
 
   Regel: Kun organisasjoner som deltar i opptaket kan legge til utdanningstilbud
 
@@ -24,7 +24,11 @@ Egenskap: Samordna opptak
       Så kan ikke NTNU knytte utdanningstilbud til opptaket
 
   # AVKLART 2026-10-16 (produktleder)
+  @openquestion
   Regel: Organisasjoner som ikke deltar, kan ikke se opptaket
+    # ÅPNE SPØRSMÅL:
+    # - Kommentaren etter regelen viser til listevisning_utdanningstilbud.feature i fritekst. Skal regelen
+    #   ha @ref-OPT-OPT-UTD-001?
 
     Scenario: Organisasjon som ikke deltar, ser ikke opptaket
       Gitt at organisasjonen "NTNU" ikke er lagt til som deltaker i opptaket
@@ -46,7 +50,11 @@ Egenskap: Samordna opptak
   # (12 Utdanningstilbud/02 Utdanningstilbud i opptak/fjerne_utdanningstilbud.feature). En deltaker med
   # utdanningstilbud kan derfor ikke fjernes fra opptaket etter søknadsåpning, fordi søknadene gjelder
   # utdanningstilbudene.
+  @openquestion
   Regel: En deltakende organisasjon kan ikke fjernes fra opptaket så lenge den har utdanningstilbud i det
+    # ÅPNE SPØRSMÅL:
+    # - Avklaringen viser til fjerne_utdanningstilbud.feature i fritekst. Skal regelen ha
+    #   @ref-OPT-OPT-UTD-026?
 
     Scenario: Fjerne en deltakende organisasjon som har utdanningstilbud i opptaket
       Gitt at "Universitetet i Oslo" har knyttet utdanningstilbudet "Sykepleie, høst 2027" til opptaket
@@ -59,20 +67,23 @@ Egenskap: Samordna opptak
       Når opptaksforvalter ved forvaltende organisasjon fjerner "Universitetet i Oslo" som deltaker i opptaket
       Så er "Universitetet i Oslo" ikke lenger deltaker i opptaket
 
+  @openquestion
   Regel: Det er kun opptaksforvalter ved forvaltende organisasjon som kan endre innstillinger i opptaket
-    # forvaltende organisasjon = eierorganisasjon for det samordna opptaket. Vurder om ordlyden som den er, er utvetydig nok mht tilgangstyring og roller.
+    # ÅPNE SPØRSMÅL:
+    # - Forvaltende organisasjon = eierorganisasjon for det samordna opptaket. Er ordlyden utvetydig nok
+    #   når det gjelder tilgangsstyring og roller? Er spørsmålet besvart, fjernes det.
 
     Scenario: Opptaksforvalter ved forvaltende organisasjon kan endre innstillinger
       Gitt at HK-dir har opprettet og dermed er forvalter av opptaket "Samordna opptak 2027"
       Når opptaksforvalter ved HK-dir åpner opptaket
-      Så kan hen endre innstillinger, frister og regelverk
+      Så kan opptaksforvalter ved HK-dir endre innstillinger, frister og regelverk
 
     # AVKLART 2026-10-19: Opptaksforvalter ved deltakende organisasjon skal ha innsyn i alle frister og innstillinger på opptaket.
     Scenario: Opptaksforvalter ved deltakende organisasjon kan se, men ikke endre innstillinger
       Gitt at organisasjonen "Universitetet i Oslo" er lagt til som deltaker
       Når opptaksforvalter ved Universitetet i Oslo åpner opptaket
-      Så kan hen se alle innstillinger og frister som er satt på opptaket
-      Men hen kan ikke endre frister, regelverk eller andre innstillinger
+      Så kan opptaksforvalter ved Universitetet i Oslo se alle innstillinger og frister som er satt på opptaket
+      Men opptaksforvalter ved Universitetet i Oslo kan ikke endre frister, regelverk eller andre innstillinger
 
   # AVKLART 2026-10-12: Det er ikke gitt at skillet mellom samordna og lokale opptak skal bevares.
   # Det er derfor nok at brukergrensesnittet ikke gjør det mulig å legge til andre organisasjoner
@@ -111,7 +122,11 @@ Egenskap: Samordna opptak
   # skal opptaksforvalter kunne se saksbehandlertildelingen for opptaket og navigere dit.
   # At feltet «Saksbehandlertildeling» vises skrivebeskyttet på utdanningstilbud i lokale opptak, er ikke
   # prioritert (akseptansetesten 2.11).
+  @openquestion
   Regel: Opptaksforvalter ved forvaltende organisasjon kan se og navigere til saksbehandlertildelingen i samordna opptak
+    # ÅPNE SPØRSMÅL:
+    # - Kommentaren over regelen viser til tildele_saksbehandlende_organisasjon.feature (OPT-BEH-BEH-011) i
+    #   fritekst. Skal regelen ha @ref-OPT-BEH-BEH-011?
 
     Scenario: Se og navigere til saksbehandlertildelingen for opptaket
       Gitt at opptaket "Samordna opptak 2027" er samordna

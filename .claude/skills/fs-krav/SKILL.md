@@ -2,7 +2,7 @@
 name: fs-krav
 description: >
   Kravarbeid på feature-fil-nivå i `krav/`-treet i dette repoet: regler og
-  scenarioer. Å avgrense et initiativ og dele det i oppgaver gjøres med
+  scenarioer. Å avgrense et initiativ i et scope gjøres med
   `fs-scope` først. Trigges av: "skrive krav", "lage feature-fil",
   "skrive BDD-scenario", "fylle ut skjelett", "fullføre krav i mappe",
   "få krav klare til planning", "tagge med planned",
@@ -10,7 +10,7 @@ description: >
   `@draft`), fyller ut skjelett-filer fra `fs-scope`, ELLER fasiliterer en valideringsgjennomgang av kravene i en
   eksisterende mappe. Bare krav som valideres i gjennomgangen, eller som brukeren
   eksplisitt sier er klare, får `@planned` på `Egenskap:`. Resten forblir
-  `@draft` med åpne spørsmål dokumentert. Leser scope-fila når kravet har
+  `@draft` med åpne spørsmål dokumentert. Leser `scope.md` når kravet har
   `@scope-<slug>`, og foreslår `fs-scope` når et krav ikke passer i scopet.
   Fjerner også krav: ikke-leverte krav slettes, leverte krav (`@implemented`)
   tagges `@deprecated` til `fs-verify` har vist at koden er borte. Endrer
@@ -30,7 +30,7 @@ Spesifisere funksjonelle krav ved hjelp av brukerhistorier og Gherkin-scenarios 
 
 **Alle nye krav får `@draft`** og blir stående slik til de er validert.
 
-Hvilke krav et initiativ har, og hvilken oppgave de hører til, bestemmes med `fs-scope` (scope-fila `tasks/<domene>/scope-<slug>.md` og taggen `@scope-<slug>`). Denne skillen skriver hvordan kravene oppfører seg, og endrer ikke scopet. Se *Utenfor scopet*.
+Hvilke krav et initiativ har, og hvilken Jira-sak de hører til, bestemmes med `fs-scope` (`tasks/<domene>/<slug>/scope.md` og taggen `@scope-<slug>`). Denne skillen skriver hvordan kravene oppfører seg, og endrer ikke scopet. Se *Utenfor scopet*.
 
 Skillen fasiliterer derfor også **validering** av skisserte krav (modus B): Gå gjennom kravene i en mappe sammen med brukeren, lukk åpne spørsmål og konkretiser scenarioene. **`@planned` settes bare på krav som er validert i gjennomgangen, eller som brukeren eksplisitt sier skal ha `@planned`.** Skillen setter aldri `@planned` på eget skjønn, og aldri bare fordi innholdet «ser ferdig ut». En egenskap kan bli `@planned` selv om enkelte regler eller scenarioer bevisst står igjen som `@draft @openquestion` (se *Delvis utkast* i `krav/README.md`). Krav som mangler status regnes som ikke validert, og behandles som `@draft`.
 
@@ -64,7 +64,7 @@ Modusene kan kjedes: fullføring avdekker ofte behov for nye scenarios eller nye
 
 ### A1. Forstå initiativet
 
-**Scope først.** Har kravet `@scope-<slug>` (eller skal det skrives i et scope brukeren nevner), les `tasks/*/scope-<slug>.md`: mål, ikke-mål, kilder, og raden kravet står i (oppgave, MoSCoW, skisse, issue). Hent kildene som står der, når de trengs. Det som står i scopet, spørres det ikke om på nytt. Er initiativet ikke avgrenset ennå, og brukeren vil dele det i oppgaver, foreslå `fs-scope` først.
+**Scope først.** Har kravet `@scope-<slug>` (eller skal det skrives i et scope brukeren nevner), les `tasks/*/<slug>/scope.md`: mål, ikke-mål, kilder, og raden kravet står i under `## Krav` (MoSCoW, skisse, Jira). Hent kildene som står der, når de trengs. Det som står i scopet, spørres det ikke om på nytt. Er initiativet ikke avgrenset ennå, foreslå `fs-scope` først.
 
 Hvis brukeren allerede har jobbet med et initiativ i denne samtalen, bruk det uten å spørre på nytt. Ellers, spør brukeren om det scopet ikke svarer på:
 
@@ -221,11 +221,11 @@ Vis brukeren:
 - Antall scenarios og prioritet
 - Åpne spørsmål som gjenstår
 - At kravet står som `@draft`
-- Neste steg: valider kravet gjennom modus B (*Fullføre krav i mappe*). Først når det er validert og har fått `@planned`, kan `fs-specify` hente det inn i en oppgavemappe og `lage-steps` implementere step-definitions
+- Neste steg: valider kravet gjennom modus B (*Fullføre krav i mappe*). Først når det er validert og har fått `@planned`, kan `fs-specify` hente det inn i et scope og `lage-steps` implementere step-definitions
 
 ### Utenfor scopet
 
-Skriver du et nytt krav som ikke står i scopet, eller hører kravet til en annen oppgave enn den det står i, skriv det som før, men si fra, og foreslå `fs-scope` (modus B) for å oppdatere scopet. Endre ikke scope-fila, `oppgave.md` eller `@scope-*`-taggene selv, bortsett fra å sette scope-taggen på et nytt krav som skrives i et scope (A6).
+Skriver du et nytt krav som ikke står i scopet, eller hører kravet til et annet scope eller en annen Jira-sak enn den det står med, skriv det som før, men si fra, og foreslå `fs-scope` (modus B) for å oppdatere scopet. Endre ikke `scope.md` eller `@scope-*`-taggene selv, bortsett fra å sette scope-taggen på et nytt krav som skrives i et scope (A6).
 
 ## Prosess: Fullføre krav i mappe
 
@@ -248,7 +248,7 @@ Skillen foreslår aldri `@planned` ut fra egen vurdering av at innholdet «ser f
 
 Bakgrunnen: `@draft` markerer at *kravteksten* er utkast (kravstatus), og `@planned` markerer at *kravet er klart til implementasjon* (implementasjonsstatus). Når et draft er ferdigstilt, fjernes `@draft` og erstattes av `@planned` på `Egenskap:` — vi beholder ikke begge samtidig på samme linje, og vi lar ikke krav stå uten status. `@draft` kan likevel stå igjen på enkelt-`Regel:`/`Scenario:` under en `@planned` egenskap når det er en bevisst beslutning. Se `krav/README.md` (*Kravstatus* og *Delvis utkast*) for den autoritative definisjonen.
 
-**Denne skillen eier overgangene `@draft` → `@planned` og `@implemented` → `@deprecated` (modus C), på egenskaper og, når et levert krav endres, på deler (modus D).** Resten av implementasjonsaksen (`@in-progress`, `@implemented`, og slettingen av `@deprecated`-krav) er beskrevet i `krav/README.md` og settes ikke her. Et krav du finner som `@in-progress` er plukket inn i en oppgave, og skal stå urørt.
+**Denne skillen eier overgangene `@draft` → `@planned` og `@implemented` → `@deprecated` (modus C), på egenskaper og, når et levert krav endres, på deler (modus D).** Resten av implementasjonsaksen (`@in-progress`, `@implemented`, og slettingen av `@deprecated`-krav) er beskrevet i `krav/README.md` og settes ikke her. Et krav du finner som `@in-progress` er hentet inn i et scope, og skal stå urørt.
 
 ### Interaksjonsprinsipp: ett spørsmål om gangen
 
@@ -352,7 +352,7 @@ Når hele mappen er gjennomgått, rapportér til brukeren:
 - `@planned`-krav med `@draft`-deler: hvilke regler/scenarioer som venter, og hvorfor
 - Antall krav som var `@planned`/`@in-progress`/`@implemented`/`@deprecated` fra før og ikke ble endret
 - Samlet liste over gjenstående `# ÅPNE SPØRSMÅL:` på tvers av filer — som en enkelt punktliste brukeren kan ta med inn i neste avklaringsrunde
-- Forslag til neste steg: `lage-steps` for `@planned`-krav, eller `fs-specify` for å hente dem inn i en oppgavemappe
+- Forslag til neste steg: `lage-steps` for `@planned`-krav, eller `fs-specify` for å hente dem inn i et scope
 
 ## Prosess: Fjerne krav
 
@@ -368,10 +368,10 @@ Finn fila, og eventuelt regelen eller scenarioet, som skal bort. Er det uklart, 
 |---------------|------------------------|------------|
 | Hele kravet | `@draft`, `@planned` eller ingen status | Ikke levert. Slett fila. |
 | Hele kravet | `@implemented` | Bytt `@implemented` med `@deprecated` på `Egenskap:`-tag-linja. Fjern eventuelle `@deprecated` på deler (de er dekket av egenskapen). |
-| Hele kravet | `@in-progress` | Spør om noe av kravet allerede er levert (fra en tidligere iterasjon). Ja → som `@implemented`. Nei → slett fila, og si fra at oppgaven som har hentet kravet inn, må oppdateres. |
+| Hele kravet | `@in-progress` | Har kravet `@implemented`-deler, er det delvis levert (*Delvis levert* i `krav/README.md`): bytt `@in-progress` med `@deprecated` på `Egenskap:`, og fjern `@implemented` og `@deprecated` fra delene. Ellers: spør om noe av kravet allerede er levert (fra en tidligere iterasjon). Ja → som `@implemented`. Nei → slett fila, og si fra at spesifikasjonen i scopet som har hentet kravet inn, må oppdateres. |
 | Hele kravet | `@deprecated` | Allerede avviklet. Ingen endring. |
 | En regel/et scenario | `@draft` eller `@planned` | Ikke levert. Slett blokken (med tagger og kommentarer). |
-| En regel/et scenario | `@implemented` eller `@in-progress` | Er delen `@draft`, `@planned` eller `@in-progress`, er den ikke levert: slett blokken (erstatter den en `@deprecated`-del, spør om den gamle delen skal gjelde igjen, og fjern i så fall `@deprecated` og ` (avvikles)` i tittelen fra den). Ellers: legg `@deprecated` på `Regel:`-/`Scenario:`-linja. `Egenskap:`-taggen endres ikke. |
+| En regel/et scenario | `@implemented` eller `@in-progress` | Er delen `@draft`, `@planned` eller `@in-progress`, er den ikke levert: slett blokken (erstatter den en `@deprecated`-del, spør om den gamle delen skal gjelde igjen, og fjern i så fall `@deprecated` og ` (avvikles)` i tittelen fra den). Er delen `@implemented` (delvis levert, under `@in-progress`), er den levert: bytt `@implemented` med `@deprecated`. Er delen uten status under `@in-progress`, spør om den er levert fra en tidligere iterasjon (ja → `@deprecated`, nei → slett blokken). Ellers: legg `@deprecated` på `Regel:`-/`Scenario:`-linja. `Egenskap:`-taggen endres ikke. |
 
 **Mekanikk:** én `Edit` på tag-linja. Bare statustaggen byttes; feature-ID, MoSCoW og andre tagger står urørt: `@BRU-APP-API-001 @must @implemented` → `@BRU-APP-API-001 @must @deprecated`. Mangler delen en tag-linje, legg en ny linje med `@deprecated` rett over `Regel:`/`Scenario:`, med samme innrykk.
 
@@ -404,12 +404,12 @@ Finn fila og regelen eller scenarioet som skal endres. Er det uklart, spør. Les
 |------------------------|------------|
 | `@implemented` | Fortsett med D2. |
 | `@draft` eller `@planned` | Ingenting er levert. Endre delen på stedet (modus A/B). |
-| `@in-progress` | Spør om delen som endres, allerede er levert (fra en tidligere iterasjon). Nei → endre på stedet, og si fra at oppgaven som har hentet kravet inn, må oppdateres. Ja → si at dette ikke støttes: vent til egenskapen er `@implemented`, eller avklar med brukeren. |
+| `@in-progress` | Er delen `@implemented` (delvis levert, *Delvis levert* i `krav/README.md`), er den levert: legg den nye delen ved siden av som `@draft` (D2). Når den er validert, fjernes `@draft`, og den gamle delen får `@deprecated` i stedet for `@implemented`. Er delen uten status, spør om den allerede er levert (fra en tidligere iterasjon). Nei → endre på stedet, og si fra at spesifikasjonen i scopet som har hentet kravet inn, må oppdateres. Ja → som en `@implemented` del. |
 | `@deprecated` | Kravet er avviklet. Skal det gjelde igjen, er det et nytt krav (modus A). |
 
 Hvilke deler endringen gjelder, avklares med brukeren, én om gangen: endres, fjernes eller legges til?
 
-Les så taggene på delen som endres. Er den `@draft`, `@planned` eller `@in-progress`, er den ikke levert. Endre den på stedet, uten ny blokk og uten `@deprecated`, og behold statustaggen. En `@draft`-del valideres som i D3, og en `@planned`-del som i modus B. Er delen `@in-progress`, si fra at spesifikasjonen i oppgaven som har hentet den inn, må oppdateres med endringen. Ny blokk (D2) lages bare for deler som er levert, det vil si deler uten egen statustag.
+Les så taggene på delen som endres. Er den `@draft`, `@planned` eller `@in-progress`, er den ikke levert. Endre den på stedet, uten ny blokk og uten `@deprecated`, og behold statustaggen. En `@draft`-del valideres som i D3, og en `@planned`-del som i modus B. Er delen `@in-progress`, si fra at spesifikasjonen i scopet som har hentet den inn, må oppdateres med endringen. Ny blokk (D2) lages bare for deler som er levert, det vil si deler uten egen statustag.
 
 Finn kravene som bygger på kravet: `Grep "@depends-on-<ID>"` i `krav/`. List dem for brukeren, med delen taggen står på, og spør om noen av dem må endres sammen med kravet.
 
@@ -446,7 +446,7 @@ Setter brukeren eksplisitt at delen skal ha `@planned`, gjelder det samme unntak
 - Koden for den leverte delen (`fil:linje`), eller at den ikke ble sjekket fordi brukeren ikke hadde kodeklonene
 - Kravene med `@depends-on-` til kravet, og om de må endres
 - Step definitions i `tester/steps/` som hører til `@deprecated`-delene (listes, slettes ikke)
-- Neste steg: `fs-specify` / `fs-specify-delta` henter `@planned`-delene inn i en oppgave (`@planned` → `@in-progress` på delen), og `fs-verify` fjerner `@in-progress` når koden er på plass og sletter `@deprecated`-delene når den gamle koden er borte
+- Neste steg: `fs-specify` / `fs-specify-delta` henter `@planned`-delene inn i et scope (`@planned` → `@in-progress` på delen), og `fs-verify` fjerner `@in-progress` når koden er på plass og sletter `@deprecated`-delene når den gamle koden er borte
 
 ## Prosess: Skrive flyt
 
@@ -478,7 +478,7 @@ Finn fasene sammen med brukeren, i den rekkefølgen løpet går. Hver fase blir 
 For hver fase:
 
 1. **Finn kravene** fasen går gjennom: søk i `krav/` etter begrepene, og les kravene. Les statusen. Les ikke bare tittelen: kravet skal faktisk beskrive det som skjer i fasen.
-2. **Sett `@depends-on-<ID>`** på `Regel:`-linja for hvert krav (*Referanser mellom krav*). En fase kan bygge på en annen flyt i samme prosess med `@depends-on-FLY-…`. Gjelder referansen én regel i et stort krav, skriv regeltittelen i en kommentar under taggen.
+2. **Sett `@depends-on-<ID>`** på `Regel:`-linja for hvert krav (*Referanser mellom krav*). En fase kan bygge på en annen flyt i samme prosess med `@depends-on-FLY-…`. Bygger fasen bare på noen regler eller scenarioer i et stort krav, sett ankeret `@ref-<flytens ID>` på de delene i kravet (*Anker* i `krav/README.md`, og *Referanser mellom krav* under).
 3. **Fase uten krav:** finnes ikke kravet, skriv fasen uten `@depends-on-`, tagg den `@openquestion`, og skriv en `# ÅPNE SPØRSMÅL:` som sier hvilket krav som mangler, og hvor det kan høre hjemme. Noter det til oppsummeringen. Kravet skrives med `fs-scope` (når det hører til et initiativ) eller modus A.
 4. **Overlapp:** beskriver to eller flere krav den samme regelen, si fra. Spør hvilket krav som skal eie regelen. Ryddingen gjøres i kravene (modus B for `@draft`/`@planned`, modus D for leverte krav), ikke i flyten.
 
@@ -499,10 +499,10 @@ Fila følger malen i *Flyter* i `krav/README.md`: `# language: no`, tag-linja `@
 Oppsummer:
 
 - Stien og ID-en, og fasen i oversiktsflyten
-- **Fremdriften:** hver fase med kravene og statusen deres. En fase er levert når alle kravene er `@implemented`
+- **Fremdriften:** hver fase med kravene og statusen deres. En fase er levert når delen den bygger på, er levert: ankrene innenfor reglene i «…» (alle ankrene når ingen ligger i dem), ellers reglene i «…», ellers hele kravet (*Anker* og *Flyter* i `krav/README.md`). Bygger flere faser på samme krav, skriv regeltitlene i «…» under taggen i hver fase, så fasene venter på hver sine deler
 - Faser uten krav, med forslag til `fs-scope` eller modus A
 - Overlapp som ble funnet, og kjente brudd
-- Neste steg: valider flyten med modus B (`@draft` → `@planned`). Når kravene er levert, verifiserer `fs-verify` flyten (overleveringene i koden), og setter `@implemented`. Flyten hentes ikke inn i en oppgave med `fs-specify`
+- Neste steg: valider flyten med modus B (`@draft` → `@planned`). Når kravene er levert, verifiserer `fs-verify` flyten (overleveringene i koden), og setter `@implemented`. Flyten hentes ikke inn i et scope med `fs-specify`
 
 ## Referanser mellom krav
 
@@ -510,7 +510,9 @@ Et krav peker på et annet krav med `@depends-on-<Feature-ID>` eller `@ref-<Feat
 
 - **Testen for typen:** Må denne delen sjekkes hvis kravet det pekes på, endres? Ja gir `@depends-on-`, nei gir `@ref-`. Bruker et scenario i delen en verdi eller en innstilling fra kravet («settes i X»), er det `@depends-on-`. Er du i tvil, spør.
 - **Plassering:** på delen referansen gjelder. Bygger hele kravet på et annet krav, står taggen sist på `Egenskap:`-tag-linja, etter `@scope-<slug>`. På en `Regel:` eller et `Scenario:` uten tagger lager du en ny tag-linje rett over, med samme innrykk. Har delen tagger fra før, legges referansen til sist på samme linje.
-- **Kommentaren:** stien eller filnavnet tas bort når taggen sier det samme. Det som forklarer referansen, blir stående: «Etter at opptaket er publisert, kan utdanningstilbud bare trekkes.» Gjelder referansen én regel i kravet, står regeltittelen i kommentaren.
+- **Kommentaren:** stien eller filnavnet tas bort når taggen sier det samme. Det som forklarer referansen, blir stående: «Etter at opptaket er publisert, kan utdanningstilbud bare trekkes.»
+- **Anker:** bygger delen bare på noen regler eller scenarioer i kravet B det pekes på, får de delene i B `@ref-<ID til kravet med @depends-on->` (*Anker* i `krav/README.md`). Spør brukeren hvilke deler det gjelder, og vis endringen i B før du skriver den. Ankeret settes i samme endring som `@depends-on-`, og fjernes når `@depends-on-` fjernes. Har kravet flere deler med `@depends-on-B` som bygger på ulike deler av B, skriv regeltittelen i «…» i kommentaren under hver tag i tillegg.
+- **Når en del med anker endres eller slettes** (modus B, C og D): `@ref-<ID>` på delen sier hvilke krav som bygger på den. List dem, som for `@depends-on-` på hele kravet. Flyttes eller deles delen, følger ankeret med til delen som har innholdet.
 - **Blir stående som kommentar:** historikk («flyttet hit», «skilt ut fra», «Feature-ID-en var»), krav som nevnes i `# ÅPNE SPØRSMÅL:`, og henvisninger til en mappe. Peker en historikk-kommentar på en ID som nå tilhører et annet krav, settes aldri en tag.
 - **Sjekk at ID-en finnes** før du setter taggen: `Grep "^\s*@(.*\s@)?<ID>\b"` i `krav/**/*.feature`. Har to filer samme ID, si fra, og sett ikke taggen før det er ryddet.
 - **Statusen endres ikke** av en referanse. En referanse kan settes på en levert del uten at delen får `@draft`, siden atferden er den samme.
@@ -530,6 +532,6 @@ Et krav peker på et annet krav med `@depends-on-<Feature-ID>` eller `@ref-<Feat
 - **`references/eksempel-feature.feature`** — gullstandard-eksempel på en ferdigstilt (`@planned`) `.feature`-fil med `# GitHub:` (valgfri), MoSCoW-tag, `Bakgrunn`, flere `Regel`-blokker, `Scenariomal` med `Eksempler`, `@openquestion`-tag på ett scenario, en `Regel` som bevisst står som `@draft @openquestion`, og `# ÅPNE SPØRSMÅL:`-kommentarer. Et nytt krav fra modus A ser likt ut, men med `@draft` i stedet for `@planned` og uten `@draft` på enkeltdeler
 - **`krav/krav-oversikt.md`** — generert oversikt over alle eksisterende features
 - **`lage-steps`** — søsken-skill i dette repoet. Implementerer step-definitions i `tester/steps/` for `@planned`-krav (ikke for `@draft`-deler)
-- **`fs-specify`** / **`fs-specify-delta`** — søsken-skills i dette repoet. Henter `@planned`-krav, og `@planned`-deler i leverte krav, inn i en oppgavemappe under `tasks/`
+- **`fs-specify`** / **`fs-specify-delta`** — søsken-skills i dette repoet. Henter `@planned`-krav, og `@planned`-deler i leverte krav, inn i et scope under `tasks/`
 - **`fs-verify`** — søsken-skill i dette repoet. Verifiserer leverte krav, og flytene: fremdriften fra kravene, og at overleveringene virker i koden
-- **`fs-scope`** — søsken-skill i dette repoet. Avgrenser initiativet, deler det i oppgaver, lager skjelett-filene og setter `@scope-<slug>`. Kjøres før denne skillen, og på nytt når et krav ikke passer i scopet
+- **`fs-scope`** — søsken-skill i dette repoet. Avgrenser initiativet i et scope (`scope.md`), lager skjelett-filene og setter `@scope-<slug>`. Kjøres før denne skillen, og på nytt når et krav ikke passer i scopet

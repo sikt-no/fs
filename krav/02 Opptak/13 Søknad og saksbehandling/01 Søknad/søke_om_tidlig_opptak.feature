@@ -77,7 +77,7 @@
 #   ikke tilbyr tidlig opptak (se_svar_på_tidlig_opptak.feature). Det er ingen
 #   egen regel for det.
 #
-@OPT-SØK-SØK-011 @must @in-progress
+@OPT-SØK-SØK-011 @must @implemented @scope-tidlig-opptak
 Egenskap: Søke om tidlig opptak
   Som søker
   ønsker jeg å søke om tidlig opptak med en begrunnelse
@@ -118,6 +118,15 @@ Egenskap: Søke om tidlig opptak
       Så har søkeren søkt om tidlig opptak med begrunnelsen "Fullført videregående opplæring"
       Og søkeren får kvittering for søknaden om tidlig opptak
 
+    Scenario: Kvitteringen viser søknadsalternativene som tilbyr tidlig opptak
+      Gitt søknaden har følgende søknadsalternativer:
+        | søknadsalternativ    | tilbyr tidlig opptak |
+        | Sykepleie, høst 2027 | ja                   |
+        | Historie, høst 2027  | nei                  |
+      Når søkeren søker om tidlig opptak med begrunnelsen "Fullført videregående opplæring"
+      Så viser kvitteringen for søknaden om tidlig opptak "Sykepleie, høst 2027"
+      Men kvitteringen viser ikke "Historie, høst 2027"
+
     Scenario: Se hvilke søknadsalternativer som tilbyr tidlig opptak
       Gitt søknaden har følgende søknadsalternativer:
         | søknadsalternativ    | tilbyr tidlig opptak |
@@ -133,7 +142,7 @@ Egenskap: Søke om tidlig opptak
       Så ser søkeren lenken til informasjon om tidlig opptak
 
     Scenario: Kan ikke søke om tidlig opptak når ingen søknadsalternativer tilbyr det
-      Gitt opptaket "Samordna opptak 2027" tilbyr ikke tidlig opptak
+      Gitt opptaket "Samordna opptak 2027" har tidlig opptak
       Og ingen av søknadsalternativene tilbyr tidlig opptak
       Når søkeren ser på søknaden
       Så ser ikke søkeren muligheten til å søke om tidlig opptak
@@ -151,7 +160,12 @@ Egenskap: Søke om tidlig opptak
       Og søkeren ser hva som må dokumenteres for hver av begrunnelsene
       Og søkeren kan ikke velge "Gammel begrunnelse"
 
+    @draft @openquestion
     Scenario: Se når søkeren søkte om tidlig opptak
+      # ÅPNE SPØRSMÅL:
+      # - Når skal dette bygges? Det er en fin utvidelse, men ikke prioritert nå (2026-10-26).
+      #   Søknaden lagrer ikke når søkeren søkte, bare begrunnelsen. Søkeren ser tidspunktet
+      #   i kvitteringen i Mine meldinger.
       Gitt søkeren søkte om tidlig opptak med begrunnelsen "Fullført fagskole" "2027-01-15"
       Når søkeren ser på søknaden
       Så ser søkeren at søknaden om tidlig opptak ble sendt "2027-01-15"
@@ -165,9 +179,9 @@ Egenskap: Søke om tidlig opptak
 
     Scenario: Kan ikke søke om tidlig opptak etter fristen
       Gitt søknadsfristen for tidlig opptak er "2027-03-01 23:59"
-      Når søkeren prøver å søke om tidlig opptak "2027-03-02"
-      Så har ikke søkeren søkt om tidlig opptak
-      Og søkeren ser at fristen for å søke om tidlig opptak er ute
+      Og søkeren har ikke søkt om tidlig opptak
+      Når søkeren ser på søknaden "2027-03-02"
+      Så kan ikke søkeren søke om tidlig opptak
 
   Regel: Søknaden om tidlig opptak gjelder hele søknaden
 

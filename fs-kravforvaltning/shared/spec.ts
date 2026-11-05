@@ -350,14 +350,13 @@ export function applySpec(text: string, prev: SpecDoc, next: SpecDoc, titles: Re
 }
 
 /** Skjelettet for en ny spesifikasjon som lages i vieweren */
-export function newSpecText(title: string, dir: string, date: string, scope?: string | null): string {
+export function newSpecText(title: string, dir: string, date: string): string {
   return [
     `# Spec: ${title}`,
     '',
     '## Kilde',
     '',
-    `- **Oppgave:** \`${dir}/\``,
-    ...(scope ? [`- **Scope:** scope-${scope}`] : []),
+    `- **Scope:** \`${dir}/\``,
     `- **Opprettet:** ${date} i FS Kravforvaltning`,
     '',
     '## Omfang',

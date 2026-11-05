@@ -214,8 +214,9 @@ test('sub-domener nummereres fra 10, kapabiliteter har nummer', () => {
   assert.ok(hasRule(feature(), 'folder-numbering', 'krav/02 Opptak/05 Regelverk/02 Krav/lage_opptak.feature'));
   assert.ok(hasRule(feature(), 'folder-numbering', 'krav/02 Opptak/10 Regelverk/Krav/lage_opptak.feature'));
   assert.ok(!hasRule(feature(), 'folder-numbering'));
-  // Demo og interne prosesser følger ikke nummereringen
+  // Demo følger ikke nummereringen, men andre mapper med _ gjør det
   assert.ok(!hasRule(feature(), 'folder-numbering', 'krav/99 Demo/01 Studiekatalog/01 Søk/lage_opptak.feature'));
+  assert.ok(hasRule(feature(), 'folder-numbering', 'krav/_Andre/Studiekatalog/Søk/lage_opptak.feature'));
 });
 
 test('flyter ligger rett under en nummerert prosess i _Flyter', () => {
@@ -337,11 +338,21 @@ test('@planned og @in-progress på del er bare lov under en @implemented egenska
   assert.equal(parseFeature(feature({ tags: '@OPT-REG-KRA-001 @must @implemented' }), PATH).partialChange, false);
 });
 
-test('@implemented settes aldri på en del', () => {
+test('@implemented på en del bare under en @in-progress egenskap (delvis levert)', () => {
   const body = `  @implemented
   Scenario: Opprette et opptak
     Gitt jeg er innlogget`;
-  assert.ok(hasRule(feature({ tags: '@OPT-REG-KRA-001 @must @implemented', body }), 'status-on-part'));
+  for (const fst of ['@implemented', '@planned', '@draft', '@deprecated'])
+    assert.ok(hasRule(feature({ tags: `@OPT-REG-KRA-001 @must ${fst}`, body }), 'status-on-part'), fst);
+  assert.deepEqual(rules(feature({ tags: '@OPT-REG-KRA-001 @must @in-progress', body })), []);
+  const rule = (scTags: string) => `  @implemented
+  Regel: Opprette opptak
+    ${scTags}
+    Scenario: Opprette et opptak
+      Gitt jeg er innlogget`;
+  assert.deepEqual(rules(feature({ tags: '@OPT-REG-KRA-001 @must @in-progress', body: rule('') })), []);
+  // overflødig på et scenario når regelen er @implemented
+  assert.ok(hasRule(feature({ tags: '@OPT-REG-KRA-001 @must @in-progress', body: rule('@implemented') }), 'status-on-part'));
 });
 
 test('en del har høyst én statustag', () => {
@@ -353,6 +364,8 @@ test('en del har høyst én statustag', () => {
   const impl = '@OPT-REG-KRA-001 @must @implemented';
   for (const t of ['@planned @in-progress', '@planned @draft @openquestion', '@in-progress @deprecated'])
     assert.ok(hasRule(feature({ tags: impl, body: part(t) }), 'part-multiple-statuses'), t);
+  for (const t of ['@implemented @deprecated', '@implemented @draft @openquestion'])
+    assert.ok(hasRule(feature({ tags: '@OPT-REG-KRA-001 @must @in-progress', body: part(t) }), 'part-multiple-statuses'), t);
   assert.ok(!hasRule(feature({ tags: impl, body: part('@planned @openquestion') }), 'part-multiple-statuses'));
   // @draft + @deprecated har sin egen regel
   assert.ok(!hasRule(feature({ tags: impl, body: part('@draft @deprecated @openquestion') }), 'part-multiple-statuses'));

@@ -26,6 +26,7 @@ Egenskap: Kvotespørsmål
       Og opptaksforvalteren angir navn og spørsmålstekst på bokmål, nynorsk, engelsk og samisk
       Så er tekstene lagret på alle fire språk
 
+  @ref-OPT-BEH-BEH-012
   Regel: Et kvotespørsmål kan kobles til en algoritme som besvarer det automatisk
 
     # Justert etter koden 2026-10-14 (retrofitting): nedtrekket viser algoritmekodene.
@@ -41,6 +42,7 @@ Egenskap: Kvotespørsmål
       Når opptaksforvalteren kobler kvotespørsmålet "ER-KVINNE" til algoritmen "Er kvinne"
       Så besvares kvotespørsmålet "ER-KVINNE" automatisk for hver søker ut fra algoritmen
 
+  @ref-OPT-BEH-BEH-012
   Regel: Kvotespørsmål kan knyttes til en kvotetype
 
     Scenario: Knytte kvotespørsmål til kvotetype

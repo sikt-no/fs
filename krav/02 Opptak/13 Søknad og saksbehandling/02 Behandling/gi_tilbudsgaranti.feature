@@ -65,7 +65,12 @@ Egenskap: Gi tilbudsgaranti
   ønsker jeg å gi søkeren tilbudsgaranti på et søknadsalternativ etter en individuell vurdering
   slik at søkeren får tilbud på søknadsalternativet uavhengig av den ordinære rangeringen.
 
+  @openquestion
   Regel: Saksbehandler, tilbyder og opptaksforvalter kan sette tilbudsgaranti manuelt
+    # ÅPNE SPØRSMÅL:
+    # - Kommentarene øverst viser til gi_tilbudsgaranti_ved_tidlig_opptak.feature (OPT-BEH-BEH-007) i
+    #   fritekst, som avgrensning og som unntaket fra manuell tilbudsgaranti. Skal kravet ha
+    #   @ref-OPT-BEH-BEH-007 på Egenskap-linja?
 
     Scenariomal: Sette tilbudsgaranti i feltet for rollen
       Gitt tilbudsgarantitypen "<type>" kan brukes av <rolle>
@@ -160,7 +165,11 @@ Egenskap: Gi tilbudsgaranti
   # Hva plasstildelingen gjør med tilbudsgarantien, i alle plasstildelingsrunder, står i
   # regelen «Søker med tilbudsgaranti får tilbud uavhengig av poengsum» i
   # 14 Plasstildeling/03 Tildeling/gjennomføre_plasstildeling.feature.
+  @openquestion
   Regel: Tilbudsgarantien følger søknadsalternativet
+    # ÅPNE SPØRSMÅL:
+    # - Kommentaren over regelen (og avgrensningen øverst) viser til gjennomføre_plasstildeling.feature i
+    #   fritekst. Skal regelen ha @ref-OPT-PLA-TIL-002?
 
     Scenariomal: Tilbudsgarantien følger søknadsalternativet når prioriteten endres
       Gitt søkeren har tilbudsgaranti på "Sykepleie, høst 2027" som prioritet 2
@@ -178,7 +187,11 @@ Egenskap: Gi tilbudsgaranti
     # saksbehandlingen starter på nytt der (tildele_saksbehandlende_organisasjon.feature).
     # Koden kopierer i dag bare tilbudsgarantien fra tilbyder og opptaksforvalter, og må
     # endres (STEK-626).
+    @openquestion
     Scenariomal: Tilbudsgarantien følger søknadsalternativet når det flyttes til en annen saksbehandlende organisasjon
+      # ÅPNE SPØRSMÅL:
+      # - Scenarioet bygger på at søknadsalternativer flyttes i tildele_saksbehandlende_organisasjon.feature,
+      #   som bare står i fritekst. Skal det ha @depends-on-OPT-BEH-BEH-011?
       Gitt søkeren har tilbudsgaranti fra <rolle> på "Informatikk, UiO"
       Når "Informatikk, UiO" flyttes fra "Universitetet i Oslo" til "HK-dir"
       Så har søkeren fortsatt tilbudsgaranti fra <rolle> på "Informatikk, UiO"

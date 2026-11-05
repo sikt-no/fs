@@ -1,14 +1,14 @@
 <!--
 Mal for design.md. Kopier til tasks/<domene>/<slug>/design.md.
 Opprettes ved overgang prioritert → utforskning.
-Oppgaven må bestå review-for-improvement før den kan gå videre til utvikling.
+Scopet må bestå review-for-improvement før det kan gå videre til utvikling.
 -->
 
-# Design: <Oppgavetittel>
+# Design: <Scopetittel>
 
 *Designfilen gir en teknisk-funksjonell beskrivelse av et konsept: hvordan det er ment å fungere, hvilke beslutninger som er tatt, hvor data kommer fra og hva som gjenstår. Den er skrevet for å skape forståelse på tvers av roller. Den svarer på hva og hvorfor — ikke på hvordan noe skal implementeres eller se ut.*
 
-Lenker: [oppgave.md](oppgave.md) · [issue](https://github.com/sikt-no/fs/issues/NNNN)
+Lenker: [scope.md](scope.md) · [issue](https://github.com/sikt-no/fs/issues/NNNN)
 
 ## Problem
 
@@ -24,7 +24,7 @@ Hvordan ser løsningen ut på overordnet nivå? Inkluder skisser, domenemodell, 
 
 ## Avgrensning
 
-Hva er *ikke* med i denne oppgaven, og hvorfor.
+Hva er *ikke* med i dette scopet, og hvorfor.
 
 ## Vurderte alternativer
 

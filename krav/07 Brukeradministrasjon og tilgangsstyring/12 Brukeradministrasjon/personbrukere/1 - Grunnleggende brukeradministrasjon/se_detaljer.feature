@@ -26,11 +26,16 @@ Egenskap: Se detaljer for personbruker
     Scenario: Se hjemorganisasjon
       Så ser jeg personbrukerens hjemorganisasjon
 
+    @openquestion
     Scenario: Hjemorganisasjonen er ukjent
+      # ÅPNE SPØRSMÅL:
+      # - Er hjemorganisasjonen også ukjent for en personbruker som ikke er koblet til noen Feide-bruker?
+      # - Hva vises for en personbruker som er koblet til flere Feide-brukere med ulike hjemorganisasjoner?
       Gitt domenet i personbrukerens Feide-ID ikke er registrert på noen organisasjon
       Så ser jeg at personbrukeren ikke har en hjemorganisasjon
       Men organisasjonene personbrukerens tildelinger gjelder for, vises ikke som hjemorganisasjon
 
+    @deprecated
     Scenario: Se status
       Så ser jeg om personbrukeren er aktiv eller deaktivert
 

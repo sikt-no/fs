@@ -1,6 +1,6 @@
 # language: no
 # GitHub: #413
-@OPT-BEH-BEH-008 @must @planned
+@OPT-BEH-BEH-008 @must @in-progress
 Egenskap: Søknadsmangler
   Som saksbehandler ved saksbehandlende organisasjon
   ønsker jeg å registrere mangler i saken og gi søkeren beskjed om manglene
@@ -13,25 +13,27 @@ Egenskap: Søknadsmangler
   meldingen til søkeren, og søkeren ser på dokumentasjonssiden i Min kompetanse hva som mangler,
   og kan laste opp dokumentasjonen der.
 
+  Mangler lages også automatisk: de automatiske mangeltekstene og mangelen for generell
+  studiekompetanse som fullføres i vår. De står i automatiske mangler (se @OPT-BEH-BEH-036).
+
   Mangler hører til saken, det vil si søknadsalternativene én saksbehandlende organisasjon har
-  (se @OPT-BEH-BEH-011). Hver mangelkode hører til en kategori, og kategorien avgjør hva
-  mangelen hindrer:
-  - Generelle krav: saksbehandleren kan ikke sette søkeren som kvalifisert til noen av
-    søknadsalternativene i saken.
-  - Spesielle krav: mangelen knyttes til et kompetanseregelverk, og saksbehandleren kan ikke
-    sette søkeren som kvalifisert til søknadsalternativene med kompetanseregelverket.
-  - Poeng: hindrer ikke kvalifisering.
-  - Kvote: mangelen knyttes til et kvotespørsmål, og hindrer ikke kvalifisering.
+  (se @OPT-BEH-BEH-011). Hver mangelkode hører til en kategori:
+  - Generelle krav: mangelen gjelder alle søknadsalternativene i saken.
+  - Spesielle krav: mangelen knyttes til et kompetanseregelverk.
+  - Poeng: mangelen gjelder grunnlag for poeng.
+  - Kvote: mangelen knyttes til et kvotespørsmål.
 
-  Uansett kategori kan en mangelkode også stoppe for opptak.
+  En mangel hindrer ikke at søkeren blir kvalifisert. Kvalifiseringen beregnes fra
+  kravelementene. En mangelkode kan stoppe for opptak, og da får ikke søkeren tilbud om
+  studieplass. Det står i OPT-PLA-TIL-001.
 
-  Kravet har seks deler:
+  Kravet har fem deler:
   1. Mangelkoder – opptaksforvalteren forvalter mangelkodene og tekstene.
   2. Registrering – saksbehandleren registrerer, sjekker ut og sletter mangler i saken.
   3. Publisering og melding – søkeren får se manglene og får melding om dem, med frist.
   4. Søkerens visning – søkeren ser manglene og laster opp dokumentasjon på dokumentasjonssiden.
-  5. Innsyn – hvem som ser manglene i sakene.
-  6. Automatikk – mangler som settes og sjekkes ut automatisk.
+  5. Innsyn – hvem som ser manglene i sakene, og hvordan saksbehandleren finner sakene med en
+     bestemt mangelkode.
 
   Bakgrunn:
     Gitt at opptaket "Samordna opptak 2027" forvaltes av HK-dir
@@ -40,18 +42,18 @@ Egenskap: Søknadsmangler
 
   # ── 1. Mangelkoder ───────────────────────────────────────────
 
+  @implemented
   Regel: Opptaksforvalteren forvalter mangelkodene i regelverkssamlingen
 
     Scenario: Opprette mangelkode
       Når opptaksforvalteren ved HK-dir oppretter en mangelkode i regelverkssamlingen "UHG 2027" med følgende opplysninger
-        | felt                                     | verdi                                    |
-        | Kode                                     | KAR                                      |
-        | Kategori                                 | Spesielle krav                           |
-        | Kort beskrivelse                         | Mangler karakter                         |
-        | Informasjon til søker i Min kompetanse   | Du mangler karakter i et fag som kreves. |
-        | Stopper for opptak                       | Nei                                      |
-        | Kan overskrives av automatisk behandling | Nei                                      |
-        | Aktiv                                    | Ja                                       |
+        | felt                                   | verdi                                    |
+        | Kode                                   | KAR                                      |
+        | Kategori                               | Spesielle krav                           |
+        | Kort beskrivelse                       | Mangler karakter                         |
+        | Informasjon til søker i Min kompetanse | Du mangler karakter i et fag som kreves. |
+        | Stopper for opptak                     | Nei                                      |
+        | Aktiv                                  | Ja                                       |
       Så finnes mangelkoden "KAR" i regelverkssamlingen "UHG 2027"
 
     Scenario: Tilgjengelige kategorier for mangelkoder
@@ -75,52 +77,34 @@ Egenskap: Søknadsmangler
 
   # ── 2. Registrering ──────────────────────────────────────────
 
-  Regel: Kategorien til mangelkoden avgjør hva mangelen hindrer
+  @implemented
+  Regel: Mangler hindrer ikke kvalifiseringen eller at saken blir ferdig behandlet
+    # Avklart 2026-11-02 i gjennomgangen av flyten automatisk saksbehandling: kvalifiseringen
+    # beregnes fra kravelementene, og leser ikke manglene. At en mangelkode som stopper for
+    # opptak hindrer tilbud om studieplass, står i OPT-PLA-TIL-001.
 
-    Scenario: Mangel på generelle krav hindrer kvalifisering til alle søknadsalternativene i saken
-      Gitt at saken hos "Universitetet i Oslo" har søknadsalternativene "Informatikk, UiO" og "Historie, UiO"
-      Og at saken har en mangel i kategorien "Generelle krav"
-      Når saksbehandleren ved Universitetet i Oslo vurderer kvalifiseringen
-      Så kan ikke saksbehandleren sette søkeren som kvalifisert til noen av søknadsalternativene i saken
-
-    Scenario: Mangel på spesielle krav hindrer kvalifisering bare til søknadsalternativene med kompetanseregelverket
-      Gitt at saken hos "Universitetet i Oslo" har følgende søknadsalternativer
-        | søknadsalternativ | kompetanseregelverk      |
-        | Informatikk, UiO  | Regelverk A, Regelverk B |
-        | Historie, UiO     | Regelverk A              |
-      Og at saken har en mangel i kategorien "Spesielle krav" på kompetanseregelverket "Regelverk B"
-      Når saksbehandleren ved Universitetet i Oslo vurderer kvalifiseringen
-      Så kan ikke saksbehandleren sette søkeren som kvalifisert til "Informatikk, UiO"
-      Men saksbehandleren kan sette søkeren som kvalifisert til "Historie, UiO"
-
-    Scenariomal: Mangel på <kategori> hindrer ikke kvalifisering
-      Gitt at saken hos "Universitetet i Oslo" har en mangel i kategorien "<kategori>"
-      Og at saken ikke har mangler i kategoriene "Generelle krav" eller "Spesielle krav"
-      Når saksbehandleren ved Universitetet i Oslo vurderer kvalifiseringen
-      Så kan saksbehandleren sette søkeren som kvalifisert til søknadsalternativene i saken
+    Scenariomal: Søkeren er kvalifisert selv om saken har en mangel i kategorien <kategori>
+      Gitt at søkeren oppfyller kravelementene til "Informatikk, UiO"
+      Og at saken hos "Universitetet i Oslo" har en mangel i kategorien "<kategori>"
+      Når kvalifiseringen beregnes
+      Så er søkeren kvalifisert til "Informatikk, UiO"
 
       Eksempler:
-        | kategori |
-        | Poeng    |
-        | Kvote    |
+        | kategori       |
+        | Generelle krav |
+        | Spesielle krav |
+        | Poeng          |
+        | Kvote          |
 
+    @ref-OPT-BEH-BEH-025
     Scenario: Saken kan behandles ferdig selv om den har mangler
       Gitt at saken hos "Universitetet i Oslo" har mangelen "KAR"
       Når saksbehandleren ved Universitetet i Oslo har behandlet saken så langt dokumentasjonen rekker
-      Så kan saksbehandleren sette saken til "Ferdig behandlet"
-
-    @draft @openquestion
-    Scenario: Mangel som sperrer opptak holder søkeren utenfor tilbudskjøringen
-      # ÅPNE SPØRSMÅL:
-      # - Hva gjør «Stopper for opptak»? Søkere med mangler er med i tilbudskjøringen, med
-      #   status «ikke kvalifisert» (review i PR #700), og koden leser ikke `sperrer_opptak` i
-      #   plasstildelingen eller tilbudskjøringen (verify 2026-10-08).
-      Gitt at saken hos "Universitetet i Oslo" har en mangel med en mangelkode som sperrer opptak
-      Når tilbudskjøringen kjøres
-      Så deltar ikke søkeren i tilbudskjøringen
+      Så kan saksbehandleren sette saken til "Behandlet"
 
   Regel: Saksbehandlende organisasjon registrerer mangler i saken sin
 
+    @implemented
     Scenario: Registrere mangel på spesielle krav
       Når saksbehandleren ved Universitetet i Oslo registrerer en mangel i saken med følgende opplysninger
         | felt                | verdi                                                      |
@@ -129,6 +113,7 @@ Egenskap: Søknadsmangler
         | Kommentar           | Du mangler karakter i R2. Dokumenter ett av kravene under. |
       Så har saken mangelen "KAR" på kompetanseregelverket "Regelverk B"
 
+    @implemented
     Scenario: Saksbehandleren velger blant mangelkodene i regelverkssamlingen til opptaket
       Gitt at regelverkssamlingen "UHG 2027" har mangelkodene "KAR" og "STEMPEL"
       Og at en annen regelverkssamling har mangelkoden "ATT"
@@ -136,6 +121,7 @@ Egenskap: Søknadsmangler
       Så kan saksbehandleren velge "KAR" og "STEMPEL"
       Og saksbehandleren kan ikke velge "ATT"
 
+    @implemented
     Scenario: Saksbehandleren velger blant kompetanseregelverkene til søknadsalternativene i saken
       Gitt at søknadsalternativene i saken hos "Universitetet i Oslo" har kompetanseregelverkene "Regelverk A" og "Regelverk B"
       Når saksbehandleren ved Universitetet i Oslo velger kompetanseregelverk for en mangel
@@ -163,10 +149,12 @@ Egenskap: Søknadsmangler
         | Poeng          | kan ikke mangelen knyttes til et kompetanseregelverk eller kvotespørsmål |
         | Kvote          | knyttes mangelen til et kvotespørsmål                                 |
 
+    @implemented
     Scenario: Kommentaren til søkeren er valgfri
       Når saksbehandleren ved Universitetet i Oslo registrerer en mangel uten kommentar
       Så har saken mangelen
 
+    @implemented
     Scenario: En sak kan ha flere mangler
       Gitt at saken hos "Universitetet i Oslo" har mangelen "KAR"
       Når saksbehandleren ved Universitetet i Oslo registrerer mangelen "STEMPEL"
@@ -184,6 +172,7 @@ Egenskap: Søknadsmangler
         | Generelle krav | GSK     | ikke    | avvises mangelen                                            |
         | Poeng          | STEMPEL | ikke    | avvises mangelen                                            |
 
+    @implemented
     Scenario: Slette mangel som er registrert ved en feil
       Gitt at saken hos "Universitetet i Oslo" har mangelen "KAR"
       Når saksbehandleren ved Universitetet i Oslo sletter mangelen "KAR"
@@ -206,6 +195,7 @@ Egenskap: Søknadsmangler
     saksbehandleren ut mangelen. En mangel som er sjekket ut, står fortsatt i saken, så det
     går an å se hva som har manglet, men den hindrer ikke lenger noe og vises ikke for søkeren.
 
+    @implemented
     Scenario: Saksbehandleren ser at søkeren har lastet opp ny dokumentasjon
       Gitt at saken hos "Universitetet i Oslo" har mangelen "KAR"
       Når søkeren laster opp dokumentasjon
@@ -218,12 +208,6 @@ Egenskap: Søknadsmangler
       Så er mangelen "KAR" sjekket ut
       Og saken har fortsatt mangelen "KAR"
 
-    Scenario: Mangel som er sjekket ut hindrer ikke kvalifisering
-      Gitt at saken hos "Universitetet i Oslo" har mangelen "KAR" på kompetanseregelverket "Regelverk B"
-      Og at mangelen "KAR" er sjekket ut
-      Når saksbehandleren ved Universitetet i Oslo vurderer kvalifiseringen
-      Så kan saksbehandleren sette søkeren som kvalifisert til søknadsalternativene med "Regelverk B"
-
     Scenario: Saksbehandleren ser om søkeren har lest mangelen
       Gitt at mangelen "KAR" er publisert
       Og at søkeren har åpnet mangelen "KAR" i Min kompetanse
@@ -232,47 +216,107 @@ Egenskap: Søknadsmangler
 
   # ── 3. Publisering og melding ────────────────────────────────
 
-  Regel: Søkeren ser bare manglene saksbehandleren har publisert, og får melding om dem
+  @ref-OPT-BEH-BEH-025
+  Regel: Søkeren ser bare manglene som er publisert, og får melding om dem
+    # Den automatiske behandlingen publiserer manglene når den setter saken til ferdig
+    # behandlet. Det står i OPT-BEH-BEH-025.
+    # Avklart 2026-11-02:
+    # - Manglene saksbehandleren registrerer, publiserer saksbehandleren når saksbehandleren
+    #   vil. Saken kan ikke settes til «Behandlet» uten at manglene publiseres.
+    # - De automatiske mangeltekstene fra kompetanseregelverket publiseres når saken settes til
+    #   «Behandlet», eller når saksbehandleren publiserer manglene.
+    # - Mangelen for generell studiekompetanse som fullføres i vår, publiseres alltid
+    #   automatisk, uten egen melding (se «Mangelen for generell studiekompetanse som fullføres
+    #   i vår settes og sjekkes ut automatisk»).
 
     Scenario: Registrering av mangel publiserer ikke mangelen
       Når saksbehandleren ved Universitetet i Oslo registrerer mangelen "KAR"
       Så ser ikke søkeren mangelen "KAR" i Min kompetanse
-      Og søkeren har ikke mottatt en melding av typen MANGEL
+      Og søkeren har ikke mottatt en melding om mangler
 
     Scenario: Saksbehandleren publiserer mangelen
       Gitt at saken hos "Universitetet i Oslo" har mangelen "KAR"
       Når saksbehandleren ved Universitetet i Oslo markerer mangelen "KAR" som klar til publisering
       Så ser søkeren mangelen "KAR" i Min kompetanse
 
+    @draft @openquestion
+    Scenario: Saksbehandleren publiserer manglene i saken
+      # ÅPNE SPØRSMÅL:
+      # - Publiseringen er endret etter raffineringen: saksbehandleren publiserer alle manglene i
+      #   saken samlet, og søkeren får melding hver gang. Ikke gått gjennom med teamet.
+      # - Når publiseringen av hele saken er validert, fjernes «Saksbehandleren publiserer
+      #   mangelen» og «Søkeren får én melding om manglene som publiseres i saken» i samme endring.
+      Gitt at saken hos "Universitetet i Oslo" har manglene "KAR" og "STEMPEL"
+      Når saksbehandleren ved Universitetet i Oslo publiserer manglene i saken
+      Så ser søkeren manglene "KAR" og "STEMPEL" i Min kompetanse
+      Og søkeren mottar én melding om mangler
+
+    @draft @openquestion
+    Scenario: Søkeren får melding hver gang saksbehandleren publiserer manglene
+      # ÅPNE SPØRSMÅL:
+      # - Publiseringen er endret etter raffineringen: saksbehandleren publiserer alle manglene i
+      #   saken samlet, og søkeren får melding hver gang. Ikke gått gjennom med teamet.
+      Gitt at saksbehandleren ved Universitetet i Oslo har publisert mangelen "KAR"
+      Og at saksbehandleren har registrert mangelen "STEMPEL"
+      Når saksbehandleren publiserer manglene i saken
+      Så mottar søkeren en ny melding om mangler
+
+    @draft @openquestion
+    Scenario: Saksbehandleren publiserer en sak som bare har automatiske mangler
+      # ÅPNE SPØRSMÅL:
+      # - Publiseringen er endret etter raffineringen: saksbehandleren publiserer alle manglene i
+      #   saken samlet, og søkeren får melding hver gang. Ikke gått gjennom med teamet.
+      # Avklart 2026-11-02: de automatiske mangeltekstene publiseres når saksbehandleren
+      # publiserer manglene, og ellers når saken settes til «Behandlet».
+      # Kode i dag: «Oppdater mangel i Min kompetanse» kan ikke brukes når saken bare har
+      # automatiske mangler.
+      Gitt at saken hos "Universitetet i Oslo" bare har den automatiske mangelteksten for "Matematikk R2"
+      Når saksbehandleren ved Universitetet i Oslo publiserer manglene i saken
+      Så ser søkeren den automatiske mangelteksten for "Matematikk R2" i Min kompetanse
+
+    @draft @openquestion
+    Scenariomal: Saksbehandleren ser at endringene ikke er publisert når <endring>
+      # ÅPNE SPØRSMÅL:
+      # - Må også en ny mangel, og en mangel som sjekkes ut, publiseres på nytt?
+      Gitt at saksbehandleren ved Universitetet i Oslo har publisert mangelen "KAR" og den automatiske mangelteksten for "Matematikk R2"
+      Når <endring>
+      Så ser saksbehandleren at endringene i manglene ikke er publisert
+
+      Eksempler:
+        | endring                                                          |
+        | saksbehandleren sletter mangelen "KAR"                           |
+        | saksbehandleren lagrer en kommentar på mangelen "KAR"            |
+        | saksbehandleren vurderer at "Matematikk R2" er oppfylt           |
+
     Scenario: Saksbehandleren blir advart om mangler som ikke er publisert
       Gitt at saken hos "Universitetet i Oslo" har mangelen "KNN" som ikke er publisert
-      Når saksbehandleren ved Universitetet i Oslo setter saken til "Ferdig behandlet"
+      Når saksbehandleren ved Universitetet i Oslo setter saken til "Behandlet"
       Så ser saksbehandleren at søkeren ikke ser mangelen "KNN" i Min kompetanse
 
-    Scenario: Sette saken til ferdig behandlet uten å publisere manglene
+    Scenario: Publisere manglene når saken settes til ferdig behandlet
       Gitt at saksbehandleren ved Universitetet i Oslo er advart om at mangelen "KNN" ikke er publisert
-      Når saksbehandleren velger å sette saken til "Ferdig behandlet" uten å varsle søkeren
-      Så er saken "Ferdig behandlet"
-      Og søkeren ser ikke mangelen "KNN" i Min kompetanse
-      Og søkeren har ikke mottatt en melding av typen MANGEL
+      Når saksbehandleren velger å publisere manglene og sette saken til "Behandlet"
+      Så er saken "Behandlet"
+      Og søkeren ser mangelen "KNN" i Min kompetanse
+      Og søkeren har mottatt en melding om mangler
 
     Scenario: Avbryte når saken har mangler som ikke er publisert
       Gitt at saksbehandleren ved Universitetet i Oslo er advart om at mangelen "KNN" ikke er publisert
       Når saksbehandleren avbryter
-      Så er ikke saken satt til "Ferdig behandlet"
+      Så er ikke saken satt til "Behandlet"
 
     Scenario: Søkeren får én melding om manglene som publiseres i saken
       Gitt at saken hos "Universitetet i Oslo" har manglene "KAR" og "STEMPEL"
       Når manglene "KAR" og "STEMPEL" publiseres
-      Så mottar søkeren én melding av typen MANGEL
+      Så mottar søkeren én melding om mangler
 
     Scenario: Søkeren får melding fra hver saksbehandlende organisasjon som publiserer mangler
       Gitt at saksbehandleren ved Universitetet i Oslo har publisert mangelen "KAR"
       Når saksbehandleren ved UiT Norges arktiske universitet publiserer mangelen "STEMPEL"
-      Så mottar søkeren en ny melding av typen MANGEL om mangelen "STEMPEL"
+      Så mottar søkeren en ny melding om mangelen "STEMPEL"
 
     Scenario: Søkeren åpner meldingen om mangel
-      Gitt at søkeren har mottatt en melding av typen MANGEL
+      Gitt at søkeren har mottatt en melding om mangler
       Når søkeren åpner meldingen
       Så ser søkeren at det er registrert mangler i søknaden
       Og søkeren ser fristen for å laste opp dokumentasjon
@@ -406,6 +450,7 @@ Egenskap: Søknadsmangler
       Når saksbehandleren ved Universitetet i Oslo ser mangelen "KAR"
       Så ser ikke saksbehandleren muligheten til å endre, sjekke ut eller slette mangelen "KAR"
 
+    @implemented
     Scenario: Opptaksforvalteren ved forvaltende organisasjon ser manglene i alle sakene
       Gitt at sakene hos "Universitetet i Oslo" og "UiT Norges arktiske universitet" har mangler
       Når opptaksforvalteren ved HK-dir åpner søknaden
@@ -418,53 +463,29 @@ Egenskap: Søknadsmangler
       Så ser saksbehandleren mangelen "KAR"
       Men saksbehandleren ser ikke muligheten til å endre mangelen "KAR"
 
-  # ── 6. Automatikk ────────────────────────────────────────────
-
   @draft @openquestion
-  Regel: Mangelen for generell studiekompetanse som fullføres i vår settes og sjekkes ut automatisk
+  Regel: Saksbehandleren finner sakene med en bestemt mangelkode
 
-    Den automatiske mangelen gjelder bare søkere som oppgir at generell studiekompetanse fullføres
-    i vår. Den sjekkes ut når vitnemålet behandles automatisk, eller av saksbehandleren når søkeren
-    har dokumentert vitnemålet på annen måte, for eksempel ved å laste det opp. Oppgir ikke søkeren
-    at generell studiekompetanse fullføres i vår, kontrollerer saksbehandleren vitnemålet i
-    søknaden og registrerer en mangel hvis det mangler, som for de andre opptakskravene.
+    Saksbehandleren må kunne finne sakene som har en bestemt mangel, for eksempel alle sakene
+    der vitnemålet kommer senere, for å følge dem opp.
 
     # ÅPNE SPØRSMÅL:
-    # - Hvilken mangelkode og hvilket kompetanseregelverk får den automatiske mangelen, og gjelder
-    #   den alle sakene i søknaden? Trolig begge deler: en mangel i kategorien «Generelle krav» i alle
-    #   sakene (uten kompetanseregelverk), og en mangel i kategorien «Spesielle krav» på
-    #   kompetanseregelverket for generell studiekompetanse i sakene som har det. Ikke bekreftet.
-    #   Koden har ikke den automatiske mangelen (sjekket 2026-10-09).
-    # - Hvem setter opp mangelkoden som settes automatisk, og hvordan vet løsningen hvilken
-    #   mangelkode det er? Opptaksforvalteren i regelverkssamlingen, eller et fast valg fra Sikt?
-    # - Regelen bygger på at søkeren kan oppgi at generell studiekompetanse fullføres i vår (@OPT-SØK-SØK-013),
-    #   og det kravet er ikke avklart.
-    # - Skal søkeren få melding når den automatiske mangelen er publisert, og slettes fordi søkeren
-    #   endrer søknaden?
+    # - Det finnes ikke noe krav for listen over saker ennå. Filteret står her til det kravet er skrevet.
+    # - Skal filteret ta med saker der mangelen er sjekket ut, eller bare saker der mangelen gjelder?
+    # - Kan saksbehandleren velge flere mangelkoder samtidig?
 
-    Scenario: Saken får mangel når søkeren oppgir at generell studiekompetanse fullføres i vår
-      Når søkeren oppgir i søknaden at generell studiekompetanse fullføres i vår
-      Så får saken automatisk mangelen for generell studiekompetanse som fullføres i vår
+    Scenario: Tilgjengelige mangelkoder i filter
+      Gitt at regelverkssamlingen "UHG 2027" har mangelkodene "STEMPEL", "DUA" og "KAR"
+      Og at mangelkoden "KAR" ikke er aktiv
+      Når saksbehandleren ved Universitetet i Oslo åpner mangelkodefilteret i listen over saker i "Samordna opptak 2027"
+      Så inneholder filteret mangelkodene i regelverkssamlingen "UHG 2027"
+      Og filteret inneholder også mangelkoden "KAR", som ikke er aktiv
+      Og mangelkodene er sortert alfabetisk
+      Og "Alle mangelkoder" er valgt som standard
 
-    Scenario: Mangelen slettes når søkeren endrer søknaden før søknadsfristen
-      Gitt at saken har den automatiske mangelen for generell studiekompetanse som fullføres i vår
-      Og at søknadsfristen i "Samordna opptak 2027" ikke har gått ut
-      Når søkeren endrer søknaden til at generell studiekompetanse ikke fullføres i vår
-      Så har saken ikke lenger mangelen for generell studiekompetanse som fullføres i vår
-      Og saksloggen viser at mangelen ble slettet fordi søkeren endret søknaden
-
-    Scenario: Mangelen sjekkes ut når vitnemålet behandles automatisk
-      Gitt at saken har den automatiske mangelen for generell studiekompetanse som fullføres i vår
-      Når vitnemålet behandles automatisk
-      Så er mangelen sjekket ut
-      Og saksloggen viser at mangelen ble sjekket ut av automatisk behandling
-
-    Scenariomal: Automatisk behandling overskriver manuelt satt mangel når mangelkoden <overskrivbar>
-      Gitt at saksbehandleren har registrert en mangel med en mangelkode som <overskrivbar>
-      Når automatisk behandling setter en mangel i saken
-      Så <resultat>
-
-      Eksempler:
-        | overskrivbar         | resultat                          |
-        | kan overskrives      | overskrives mangelen              |
-        | ikke kan overskrives | står mangelen fra saksbehandleren |
+    Scenario: Filtrere på mangelkode
+      Gitt at saken til søkeren "Kari Nordmann" hos "Universitetet i Oslo" har mangelen "DUA"
+      Og at saken til søkeren "Ola Nordmann" hos "Universitetet i Oslo" ikke har mangelen "DUA"
+      Når saksbehandleren ved Universitetet i Oslo velger "DUA" som filter i listen over saker
+      Så vises saken til "Kari Nordmann"
+      Men saken til "Ola Nordmann" vises ikke

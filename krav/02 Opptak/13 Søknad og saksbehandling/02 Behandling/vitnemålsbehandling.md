@@ -1,6 +1,6 @@
 # Vitnemålsbehandling
 
-Initiativ [#607](https://github.com/sikt-no/fs/issues/607). Felles bakgrunn for de seks kravspesifikasjonene som til sammen utgjør vitnemålsbehandleren i FS Admin. Team overkomplisert lager vitnemålsbehandleren. Team Puff eier poengberegningen, og vitnemålsbehandleren kaller endepunktene deres.
+Initiativ [#607](https://github.com/sikt-no/fs/issues/607). Felles bakgrunn for de seks kravspesifikasjonene som til sammen utgjør vitnemålsbehandleren i FS Admin. Team overkomplisert lager vitnemålsbehandleren. Poengene beregnes av poengberegningen i opptak, den samme som i den automatiske poengberegningen ([automatisk_poengberegning.feature](automatisk_poengberegning.feature), `@OPT-BEH-BEH-018`), og vitnemålsbehandleren bygger på den.
 
 Kravet var én fil (`vitnemålsbehandling.feature`, `@OPT-BEH-BEH-004`) fram til 08.10.2026. Da var oppdelingen i leveranser besluttet, og hver leveranse fikk sin egen kravspesifikasjon.
 
@@ -10,10 +10,11 @@ Kravet var én fil (`vitnemålsbehandling.feature`, `@OPT-BEH-BEH-004`) fram til
 |---|---|---|---|---|---|---|
 | L1 Vise vitnemålene | [vise_elektroniske_vitnemål.feature](vise_elektroniske_vitnemål.feature) | `@OPT-BEH-BEH-005` | #613 | — | liten | `@in-progress` |
 | L2 Velge ett vitnemål for hele saken | [velge_vitnemål_som_grunnlag.feature](velge_vitnemål_som_grunnlag.feature) | `@OPT-BEH-BEH-004` | #608 | L1 | middels | `@in-progress` |
-| L3 Fagvalg per poengvariant | [velge_fag_per_poengvariant.feature](velge_fag_per_poengvariant.feature) | `@OPT-BEH-BEH-007` | #609 | L2 | middels | `@draft` |
-| L4 Manuell inntasting og endring av fag | [legge_inn_og_endre_fag.feature](legge_inn_og_endre_fag.feature) | `@OPT-BEH-BEH-008` | #610 | L2, L3 | stor | `@draft` |
-| L5 Sammenligning av vitnemål | [sammenligne_vitnemål.feature](sammenligne_vitnemål.feature) | `@OPT-BEH-BEH-009` | #611 | L1 | liten | `@draft` |
-| L6 Varsel ved nytt vitnemål fra NVB | [varsle_om_nytt_vitnemål.feature](varsle_om_nytt_vitnemål.feature) | `@OPT-BEH-BEH-010` | #612 | L2 | liten | `@draft` |
+| L3 Fagvalg per poengvariant | [velge_fag_per_poengvariant.feature](velge_fag_per_poengvariant.feature) | `@OPT-BEH-BEH-022` | #609 | L2 | middels | `@draft` |
+| L4a Endre fag | [endre_fag_i_grunnlaget.feature](endre_fag_i_grunnlaget.feature) | `@OPT-BEH-BEH-023` | #610 | L2, L3 | middels | `@planned` |
+| L4b Legge inn vitnemål manuelt | [legge_inn_vitnemål_manuelt.feature](legge_inn_vitnemål_manuelt.feature) | `@OPT-BEH-BEH-037` | #610 | L2, L3, L4a | stor | `@draft` |
+| L5 Sammenligning av vitnemål | [sammenligne_vitnemål.feature](sammenligne_vitnemål.feature) | `@OPT-BEH-BEH-024` | #611 | L1 | liten | `@draft` |
+| L6 Varsel ved nytt vitnemål fra NVB | [varsle_om_nytt_vitnemål.feature](varsle_om_nytt_vitnemål.feature) | `@OPT-BEH-BEH-021` | #612 | L2 | liten | `@draft` |
 
 L2 beholder Feature-ID-en til den opprinnelige fila, fordi den er kjernen i initiativet.
 
@@ -21,12 +22,11 @@ Kuttet er gjort etter avhengighet og risiko, ikke etter hvilke skjermbilder som 
 
 **MVP: L1 + L2.** Det er alt som trengs for at automatikken slutter å stoppe.
 
-### Hvis tiden blir knapp, kutt L4 og L5, i den rekkefølgen
+### Hvis tiden blir knapp, kutt L5
 
-- **L4** har en fungerende reserveløsning allerede i drift: `lagreVitnemalUtregning` med fagløse karakterrader. Den dekker karakterpoeng, men ikke realfagspoeng, språkpoeng eller kravelementer. Saksbehandleren må da sette de tre siste for hånd. Det er tungvint, men mulig, og det er slik det gjøres i dag.
 - **L5** er ren gevinst. Ingenting er avhengig av den, og designet er det minst modne i initiativet. Confluence har «1. versjon av design».
 
-L1, L2, L3 og L6 bør ikke kuttes. L1 og L2 er selve hullet. Uten L3 er fagvalget borte, og da er det lite igjen av vitnemålsbehandlingen. L6 er liten, og uten den kan et låst grunnlag bli stille utdatert. Det er en feil som rammer søkeren, og som ingen oppdager.
+L1, L2, L3, L4a, L4b og L6 bør ikke kuttes. L1 og L2 er selve hullet. Uten L3 er fagvalget borte, og da er det lite igjen av vitnemålsbehandlingen. L4a og L4b må leveres til opptaket i 2027 (avklart 03.11.2026). Reserveløsningen i drift, `lagreVitnemalUtregning` med fagløse karakterrader, dekker karakterpoeng, men ikke realfagspoeng, språkpoeng eller kravelementer, og er ikke god nok for søkere uten elektronisk vitnemål. L6 er liten, og uten den kan et låst grunnlag bli stille utdatert. Det er en feil som rammer søkeren, og som ingen oppdager.
 
 ## Hvorfor kravet trengs
 
@@ -34,42 +34,47 @@ Den automatiske saksbehandlingen stopper når søkeren har flere vitnemål. `vur
 
 Vitnemålsbehandling er ikke nødvendig for alle søknader. Har søkeren ett elektronisk vitnemål uten forbedringer, klarer automatikken seg selv. Behovet oppstår når søkeren har flere vitnemål, har forbedret fag, eller har dokumentert fag som ikke finnes elektronisk.
 
-Saksbehandlingen består av tre valg som henger sammen: hvilket vitnemål som legges til grunn (L2, L3), hvilke fag på det vitnemålet som skal telle (L3), og hvilke fag som må legges inn eller endres fordi de ikke står riktig på det elektroniske vitnemålet (L4). Til sammen utgjør de tre valgene beregningsgrunnlaget. Der reglene gir et valg, skal saksbehandleren velge det som gir søkeren best uttelling. Saksbehandleren kan ikke sette sammen et vitnemål søkeren ikke har.
+Saksbehandlingen består av tre valg som henger sammen: hvilket vitnemål som legges til grunn (L2, L3), hvilke fag på det vitnemålet som skal telle (L3), og hvilke fag som må endres fordi de ikke står riktig på det elektroniske vitnemålet (L4a), eller legges inn fordi søkeren ikke har det elektronisk (L4b). Til sammen utgjør de tre valgene beregningsgrunnlaget. Der reglene gir et valg, skal saksbehandleren velge det som gir søkeren best uttelling. Saksbehandleren kan ikke sette sammen et vitnemål søkeren ikke har.
 
 ## Kilder og etterprøvbarhet
 
 Kravene erstatter to funksjoner i FS-klienten: vitnemålsbehandling (FS143.001 Vg.dokument, `w_vitnemalsbehandling.srw`) og vitnemålskalkulatoren (`w_vitnemalskalkulatur.srw`), begge i fsb10c, gitlab.sikt.no/fs/fs-klient. Referanser til tabeller, kolonner og tjenesteklasser står i kravene for at påstandene skal kunne etterprøves, aldri som føring for datamodell eller teknologi. Ny funksjonalitet bygges i FS Admin.
 
+- **Teknisk beskrivelse av vitnemålsbehandling i FS-klienten** (Geir Magne Vangen, PDF, lest 03.11.2026): handlingene «Beregn», «Bruk BeregnP» og «NVB-kontroll», grunnlagene (VOV, VOT, VES, VPL, PRA), tillegg fra fagkodeverket og fra søkerens andre elektroniske vitnemål, reformkrav og fagkonvertering, advarslene om dispensasjon, forbedringer og kvalifisering. Funnene står som forslag og åpne spørsmål i L2, L3, L4a og L4b. Åpne spørsmål i selve beskrivelsen: om fagkonverteringen skal videreføres, og fagstatus på fagene fra andre vitnemål.
 - **Designgrunnlag:** Confluence PFS 4582014995 «Vitnemål og kvalifikasjoner (Steg 2 - sekvensiell saksbehandling)», med designskisser i Figma (FS-Admin - Seksjon Opptak, node 10119-38734). Jira-initiativ SOPP-184.
 - **Ny stack:** opptak-subgraph (experimental) har allerede `beregnPoengAutomatisk`, `vurderKravelementerAutomatisk`, `settGskKonklusjonFraVitnemaal` og `lagreVitnemalUtregning`. VGS-resultatene kommer fra KREG/NVB (`kompetansebevisByNasjonalId`).
-- **Team Puff (07.10.2026):** Når en sak opprettes, hentes vitnemålet fra KREG, og vitnemålsnummeret og alle fagene lagres i tabellen `vgs_dokument_fag` i Team Puffs database. Fagene sendes ett og ett til kontrollmotoren. En rad har blant annet `terminkode`, `aar`, `fagstatuskode`, `fordypningsfag`, `kilde_kode` (f.eks. `KREG`), `tid_registrert` og `tid_oppdatert`.
+- **Vitnemålene i opptak (07.10.2026):** Når en sak opprettes, hentes vitnemålet fra KREG, og vitnemålsnummeret og alle fagene lagres i tabellen `kompetanse.vgs_dokument_fag` i opptak. Fagene sendes ett og ett til kontrollmotoren. En rad har blant annet `terminkode`, `aar`, `fagstatuskode`, `fordypningsfag`, `kilde_kode` (f.eks. `KREG`), `tid_registrert` og `tid_oppdatert`.
 - **Samordna opptaks wiki** (lest 07.10.2026): sidene «Poengberegning norske søkere», «Realfagspoeng», «Språkpoeng», «Tilleggspoeng», «Kvoter», «Spesielle opptakskrav», «Forkurs» og «Individuell vurdering (HUP)». Brukt til å avgjøre hva saksbehandleren må kunne velge, legge til og endre, ikke som beregningsregler.
 
 ## Avklaringer
 
 - **21.09.2026:** Ti åpne spørsmål ble besluttet i gjennomgang med produkteier. Beslutningene står som `AVKLART`-kommentarer ved scenarioet de gjelder.
-- **07.–08.10.2026:** Input fra Samordna opptaks wiki og Team Puff ble gått gjennom. Avklart:
-  - Poengberegningen eies av Team Puff.
+- **07.–08.10.2026:** Input fra Samordna opptaks wiki og om poengberegningen i opptak ble gått gjennom. Avklart:
+  - Selve poengberegningen er utenfor kravene til vitnemålsbehandleren (se *Avgrensninger*).
   - Saksbehandleren kan bare endre grunnlaget slik en regel tillater.
   - Tilleggsfag teller bare i ordinær kvote, med unntak.
   - Ulik poengsum per søknadsalternativ håndteres med fagvalget per poengvariant.
   - Søkere med HUP har ingen poeng å behandle.
-  - Endringer avvises når beregningen feiler.
+  - Endringer avvises når beregningen feiler. Fjernet 30.10.2026, se under.
   - Skjemaet håndhever ikke karaktertyper for manuelt innlagte fag.
   - Hvilken leveranse hvert scenario hører til.
 
   Ingen spørsmål står åpne.
 - **08.10.2026:** Oppdelingen i leveranser er besluttet, og hver leveranse har fått sin egen kravspesifikasjon.
-- **21.10.2026:** Gjennomgang av L1 og L2 i teamet. Vitnemålsoversikten i L1 viser karakterpoeng, realfagspoeng og språkpoeng per vitnemål. L1 er dermed ikke lenger bare visning: den er avhengig av at Team Puff kan beregne poeng for hvert vitnemål. Scenarioet «Automatikken har ikke beregnet poeng når søkeren har flere vitnemål» er fjernet fra L2. Når saksbehandleren er i vitnemålsbehandleren, vet de allerede at saken er manuell og ikke kan gjøres automatisk, så en egen forklaring trengs ikke.
+- **21.10.2026:** Gjennomgang av L1 og L2 i teamet. Vitnemålsoversikten i L1 viser karakterpoeng, realfagspoeng og språkpoeng per vitnemål. L1 er dermed ikke lenger bare visning: den er avhengig av at poengberegningen i opptak kan beregne poeng for hvert vitnemål. Scenarioet «Automatikken har ikke beregnet poeng når søkeren har flere vitnemål» er fjernet fra L2. Når saksbehandleren er i vitnemålsbehandleren, vet de allerede at saken er manuell og ikke kan gjøres automatisk, så en egen forklaring trengs ikke.
 - **22.10.2026:** Domeneeksperter svarte på de 20 beslutningene fra 21.10. 19 fikk bare ja. To endringer og ett nytt spørsmål:
   - Alle vitnemålene sorteres kronologisk etter utstedelsesdato. Førstegangsvitnemålet står ikke først av seg selv (L1).
-  - Når poengberegningen ikke svarer, får saksbehandleren en feilmelding i tillegg til tomme poeng (L1).
-  - Åpent spørsmål (L2): Skal en verdi saksbehandleren har lagt inn selv, overskrives når saksbehandleren senere beregner poengene på nytt?
-  - Poengene per vitnemål i L1 må være på plass til opptaket i 2027. Det er usikkert om Team Puff blir ferdig før L1 skal akseptansetestes. Det må avtales med Puff, og det må vurderes om L1 kan akseptansetestes uten poengene.
+  - Når poengberegningen ikke svarer, får saksbehandleren en feilmelding i tillegg til tomme poeng (L1). Erstattet 28.10.2026, se under.
+  - Åpent spørsmål (L2, flyttet til L3 30.10.2026): Skal en verdi saksbehandleren har lagt inn selv, overskrives når saksbehandleren senere beregner poengene på nytt?
+  - Poengene per vitnemål i L1 må være på plass til opptaket i 2027. Det er usikkert om poengberegningen per vitnemål blir ferdig før L1 skal akseptansetestes. Det må avtales med dem som lager poengberegningen, og det må vurderes om L1 kan akseptansetestes uten poengene.
+- **28.10.2026:** Etter verifiseringen av L1 (Kari og Christoffer). Feilmeldingen når poengberegningen ikke svarer, er tatt ut av L1. Poengberegningen er en del av opptak, ikke en ekstern tjeneste som kan la være å svare. Et vitnemål som ikke gir poeng, vises med tomme poeng, uten feilmelding.
+- **28.10.2026:** Leserettighet i hele vitnemålsbehandlingen (L1–L6), avklart med designeren. Valg som viser en tilstand (radioknapper og avkrysningsbokser, f.eks. valgt vitnemål, poengvariant, fag og «Legg inn manuelt»), vises for en saksbehandler med bare leserettighet, men kan ikke brukes. Handlinger (f.eks. beregne poengene) og felt for å legge inn eller endre verdier skjules, og de lagrede verdiene vises som tekst. Det avviker bevisst fra mønsteret «manglende tilgang skjuler elementet» i `.claude/rules/design-patterns-for-krav.md`: valgene er informasjon, fordi de viser hva poengene bygger på, og siden ser lik ut for alle. Regelen står i scenarioet «Saksbehandler med kun leserettighet ser grunnlaget» i L2, og gjelder også når L3–L6 valideres.
+- **30.10.2026:** Samme rettelse i L2 og L3 (Christoffer). Scenarioet «Endringen avvises når poengberegningen feiler» er fjernet fra L2. I L2 beregnes og lagres poengene med en gang saksbehandleren velger et vitnemål, siden poengene for hvert vitnemål er kjent fra vitnemålslisten (L1). Å beregne først når saksbehandleren sier at grunnlaget er klart, med tomme poeng og advarsel om endringer som ikke er lagret, er flyttet til L3, der grunnlaget settes sammen i flere steg (poengvariant, fag, forbedringer og tilleggsfag). Det åpne spørsmålet om poeng saksbehandleren har lagt inn selv, er flyttet til L3 sammen med beregningen.
+- **03.11.2026:** Gjennomgang av L3 og L4 med teamet (`fs-krav`). L4 er delt i to: L4a «Endre fag» (`endre_fag_i_grunnlaget.feature`, beholder `@OPT-BEH-BEH-023`) leveres først, og L4b «Legge inn vitnemål manuelt» (`legge_inn_vitnemål_manuelt.feature`, `@OPT-BEH-BEH-037`) etter. Ingen av dem kan kuttes, bare L5. L4b er en kalkulator, ikke et komplett vitnemål: saksbehandleren legger inn omfang, fag, fagnavn, standpunkt- og eksamenskarakter og forbedrede karakterer, ingen felt er påkrevd, og kravelementene vurderes under spesielle opptakskrav. Kalkulatoren legges til grunn per poengvariant, som et elektronisk vitnemål i L3. Karakterer legges bare inn som heltall fra 1 til 6, også i L4a, og saksbehandleren regner om utenlandske karakterer selv. Reglene for beregning og lagring fra L2 gjelder i L3, L4a og L4b. Når L3 er levert, velges vitnemålet alltid per poengvariant, og kravelementene vurderes per poengvariant. Åpne spørsmål: fag med bestått/ikke bestått uten tallkarakter (L4b), og om det skal være en egen handling for å beregne poengene, for å lagre, eller begge. Uten en handling for å beregne blir poengene beregnet automatisk på nytt hver gang grunnlaget endres. Spørsmålet står i L2 («Poengene er tomme til jeg beregner dem»), og gjelder også L3, L4a og L4b.
 
 ## Avgrensninger: bevisst utenfor kravene
 
-- **Poengberegningen.** Selve beregningen eies av Team Puff, og vitnemålsbehandleren kaller endepunktene deres. Kravene dekker grunnlaget saksbehandleren velger, legger til og endrer, og visningen av resultatet. Hvilke karakterer som teller, avrunding, satser for realfags- og språkpoeng, tak og kvotetilhørighet hører hos Team Puff.
+- **Poengberegningen.** Selve beregningen er poengberegningen i opptak, og reglene for den hører i den automatiske poengberegningen (`@OPT-BEH-BEH-018`). Kravene dekker grunnlaget saksbehandleren velger, legger til og endrer, og visningen av resultatet. Hvilke karakterer som teller, avrunding, satser for realfags- og språkpoeng, tak og kvotetilhørighet hører til poengberegningen, ikke til vitnemålsbehandleren.
 - **Resultater fra høyere utdanning.** Kravene dekker bare VGS-resultater fra KREG/NVB. Resultater fra høyere utdanning finnes i dag bare som en umodellert JSON-streng fra Vitnemålsportalen (`Soker.vitnemal: String`, i ELMO-format, se `VitnemalService` i opptak-service). Å vise fag derfra, og la dem telle, forutsetter at ELMO modelleres i GraphQL først. Initiativ #319 slår fast at «høyere utdanning er ikke viktig for 2026».
 - **Kobling mellom manuelt innlagt fag og opplastet dokumentasjon.** Besluttet 21.09.2026 å holdes utenfor første leveranse. Behovet er reelt: et manuelt innlagt fag bygger på saksbehandlerens vurdering av et dokument, og med fagkode teller det også i realfagspoeng og kravelementer. Men koblingen belaster ikke 2026-leveransen. Samme spørsmål står åpent for praksisperioder i `registrere_praksis.feature` (Jira ADMI-45). De to bør løses sammen når de tas.
 - **Valg av grunnlag (GSK).** Valg av kvalifikasjonsgrunnlag er en egen kapabilitet med eget API (`gsk.graphqls`: `opprettGskVedtakV3`, `endreGskVedtakV3`, `settGskKonklusjonFraVitnemaal`). Vitnemålsbehandleren forutsetter grunnlaget som gitt.

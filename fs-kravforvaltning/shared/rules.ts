@@ -20,7 +20,7 @@ export const RULES: RuleDef[] = [
   { id: 'multiple-statuses', label: 'Flere statustagger', short: 'Flere statuser', sev: 'error', section: 'Implementasjonsstatus',
     desc: 'En Egenskap har nøyaktig én statustag. Ikke sett to samtidig.' },
   { id: 'status-on-part', label: 'Statustag på del', short: 'Status på del', sev: 'warning', section: 'Implementasjonsstatus',
-    desc: 'Status settes på Egenskap. På Regel og Scenario brukes @draft, for deler som ikke er avklart, og @deprecated, for leverte deler som skal fjernes. Under en @implemented egenskap kan en ny eller endret del også være @planned eller @in-progress. @implemented settes aldri på en del.' },
+    desc: 'Status settes på Egenskap. På Regel og Scenario brukes @draft, for deler som ikke er avklart, og @deprecated, for leverte deler som skal fjernes. Under en @implemented egenskap kan en ny eller endret del også være @planned eller @in-progress. @implemented på en del er bare lov under en @in-progress egenskap, for en del som er levert (delvis levert).' },
   { id: 'retired-levert', label: '@levert (utgått)', short: '@levert', sev: 'error', section: 'Implementasjonsstatus',
     desc: 'Taggen @levert er erstattet av @implemented.' },
   { id: 'wrong-level', label: 'Feil mappenivå', short: 'Feil mappe\u00adnivå', sev: 'error', section: 'Mappestruktur',

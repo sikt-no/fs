@@ -13,7 +13,11 @@
       "Bash(git symbolic-ref --short refs/remotes/origin/HEAD)",
       "Bash(git -C * symbolic-ref --short refs/remotes/origin/HEAD)",
       "Bash(git log *)",
-      "Bash(git -C * log *)"
+      "Bash(git -C * log *)",
+      "mcp__claude_ai_Atlassian_Rovo__getAccessibleAtlassianResources",
+      "mcp__claude_ai_Atlassian_Rovo__searchJiraIssuesUsingJql",
+      "mcp__plugin_atlassian_atlassian__getAccessibleAtlassianResources",
+      "mcp__plugin_atlassian_atlassian__searchJiraIssuesUsingJql"
     ]
   }
 }

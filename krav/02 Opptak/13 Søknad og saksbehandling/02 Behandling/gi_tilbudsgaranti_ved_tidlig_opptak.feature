@@ -145,7 +145,7 @@
 #   opptak som gir tilbud: den gjennomføringen setter (FOR), eller den tilbyder
 #   setter manuelt (FOP), f.eks. når søkeren ikke kan poengberegnes.
 #
-@OPT-BEH-BEH-007 @must @in-progress
+@OPT-BEH-BEH-007 @must @in-progress @scope-tidlig-opptak
 Egenskap: Gi tilbudsgaranti ved tidlig opptak
   Som opptaksforvalter
   ønsker jeg å gjennomføre tidligopptaket

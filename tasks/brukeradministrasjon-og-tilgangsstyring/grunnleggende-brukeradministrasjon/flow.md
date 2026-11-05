@@ -20,4 +20,4 @@ Greenfield-feature for grunnleggende brukeradministrasjon av personbrukere
 i fs-admin, med subgraph-halespor i fs-plattform for schema-endringene.
 
 Artefaktene ligger delt etter produsent: krav i `spec/`, fs-admin-arbeidet i `frontend/`.
-Menneske-artefaktene (`oppgave.md`, `design.md`, `reviews/`) ligger i task-rota.
+Menneske-artefaktene (`scope.md`, `design.md`, `reviews/`) ligger i task-rota.
