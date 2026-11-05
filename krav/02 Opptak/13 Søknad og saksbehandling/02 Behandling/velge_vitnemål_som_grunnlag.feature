@@ -316,7 +316,7 @@ Egenskap: Velge vitnemål som grunnlag for poengberegningen
       # om poenget er beregnet automatisk eller satt av en saksbehandler» er
       # tatt ut.
 
-    Scenario: Valget av vitnemål låser poenget mot automatisk reberegning
+    Scenario: Valget av vitnemål låser poengene på poengvariantene mot automatisk reberegning
       Gitt jeg har lagt et vitnemål til grunn
       Når den automatiske poengberegningen kjøres
       Så beregnes ikke poenget på nytt
