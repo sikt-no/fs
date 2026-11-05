@@ -4,7 +4,7 @@
 - **Testplan**: [testplan.md](testplan.md) · https://sikt.atlassian.net/wiki/spaces/STUDIEADM/pages/5130158105
 - **Scope**: @scope-tilbudsgaranti-2027
 - **Krav**: 1 feature-fil, commit `6478bee` (2026-10-22)
-- **Verifisering**: [verify-2026-10-22-0850.md](../../tasks/opptak/tilbudsgaranti/spec/verify-2026-10-22-0850.md), 17 av 17 funnet
+- **Verifisering**: [verify-2026-10-22-0850.md](../../tasks/opptak/tilbudsgaranti-2027/spec/verify-2026-10-22-0850.md), 17 av 17 funnet
 - **Ordene fra skjermen**: fs-admin `ba0ec3ef70` (de 8 nyere commitene på main rører ikke saksbehandlingen), endringsloggen fra fs-plattform `0229f59fb3`. Min kompetanse er ikke lest. Ordene derfra er lagt inn av teamet 2026-10-23
 - **Confluence**: https://sikt.atlassian.net/wiki/spaces/STUDIEADM/pages/5130289193
 - **Laget**: 2026-10-22 av fs-testcaser-intern
