@@ -48,8 +48,9 @@ Egenskap: Automatisk GSK-konklusjon
   positiv konklusjon når et vitnemål gir GSK, og løpet på vitnemålet finnes i
   opptakssystemets liste over løp. Har løpet ingen grunnlagskode, får konklusjonen KLY for et
   løp fra Kunnskapsløftet og RFA for et løp fra Reform 94, som i det gamle FS. Finnes ikke
-  løpet i listen, settes ingen konklusjon automatisk, og opptaksforvalteren får et varsel i
-  FS Admin om at løpet mangler. Vitnemål importeres fra KREG når
+  løpet i listen, får konklusjonen også KLY eller RFA, og opptaksforvalteren får et varsel i
+  FS Admin om at løpet mangler. Et vitnemål med et løp i listen brukes før et vitnemål med et
+  løp som ikke finnes i listen. Vitnemål importeres fra KREG når
   søknaden opprettes, og når KREG får nye vitnemål for en søker med aktive søknader. Når
   søknaden opprettes, importeres vitnemålene fra KREG først. Gir ingen av dem en konklusjon, ser
   systemet etter en positiv konklusjon fra et tidligere opptak. Ellers vurderes GSK
@@ -198,19 +199,45 @@ Egenskap: Automatisk GSK-konklusjon
       Når vitnemålet importeres fra KREG
       Så får søknaden en positiv GSK-konklusjon med grunnlagskoden KLS
 
-    Scenario: Ingen automatisk konklusjon når løpet ikke finnes i opptakssystemets liste over løp
-      # Innspill i PR #878: bare når løpet mangler i listen over løp (NVB_LOEP), settes ingen
-      # konklusjon. Saksbehandleren vurderer GSK, selv om vitnemålet gir GSK.
+    Scenariomal: Søknaden får grunnlagskoden <grunnlagskode> når et løp fra <reform> ikke finnes i opptakssystemets liste over løp
+      # Avklart 2026-11-04 (Sondre): som i det gamle FS gir et løp som ikke finnes i listen, KLY
+      # eller RFA etter reformen. Løpene som har manglet i listen, har stort sett vært yrkesfaglige.
+      # Erstatter innspillet i PR #878 om at et ukjent løp ikke gir noen konklusjon.
       Gitt at søknaden ikke har noen GSK-konklusjon
       Og at vitnemålet har «GSK OK» fra KREG
+      Og at løpet på vitnemålet er fra <reform>
       Og at løpet på vitnemålet ikke finnes i opptakssystemets liste over løp
       Når vitnemålet importeres fra KREG
-      Så får søknaden ingen GSK-konklusjon fra vitnemålet
+      Så får søknaden en positiv GSK-konklusjon med grunnlagskoden <grunnlagskode>
+
+      Eksempler:
+        | reform          | grunnlagskode |
+        | Kunnskapsløftet | KLY           |
+        | Reform 94       | RFA           |
+
+    Scenario: Et vitnemål med et løp i listen brukes før et nyere vitnemål med et ukjent løp
+      # Avklart 2026-11-04 (Sondre).
+      Gitt at søknaden ikke har noen GSK-konklusjon
+      Og at søkeren har to vitnemål som gir GSK
+      Og at løpet på det nyeste vitnemålet ikke finnes i opptakssystemets liste over løp
+      Og at løpet på det eldste vitnemålet finnes i listen med grunnlagskoden KLS
+      Når vitnemålene importeres fra KREG
+      Så bygger søknadens GSK-konklusjon på det eldste vitnemålet
+      Og grunnlagskoden er KLS
+
+    Scenario: Det nyeste vitnemålet brukes når ingen av løpene finnes i listen
+      # Avklart 2026-11-04 (Sondre).
+      Gitt at søknaden ikke har noen GSK-konklusjon
+      Og at søkeren har to vitnemål fra Kunnskapsløftet som gir GSK
+      Og at ingen av løpene på vitnemålene finnes i opptakssystemets liste over løp
+      Når vitnemålene importeres fra KREG
+      Så bygger søknadens GSK-konklusjon på vitnemålet med senest utstedelsesdato
+      Og grunnlagskoden er KLY
 
     @draft @openquestion
     Scenario: Opptaksforvalteren får varsel om et løp som mangler i listen over løp
       # Avklart 2026-11-02 (Ingrid Helset, etter samtale med Jøran og Geir, og bekreftet av
-      # domeneeksperten): vitnemål med et ukjent løp behandles manuelt, og opptaksforvalteren får
+      # domeneeksperten): opptaksforvalteren får
       # et varsel, så noen kan sjekke om løpet skal legges inn i listen. HK-dir eier
       # opptakskodene og bestemmer grunnlagskoden, og Sikt oppdaterer listen over løp (2027).
       # Avklart 2026-11-02: varselet kommer bare i FS Admin, ikke på e-post eller andre steder.
@@ -390,6 +417,8 @@ Egenskap: Automatisk GSK-konklusjon
     # Avklart 2026-11-03. Er hendelsene ikke satt, pågår den automatiske saksbehandlingen til opptaket er
     # historisk. Hendelsene er de samme som i OPT-BEH-BEH-032. Importen av vitnemålet og
     # GSK-vitnemålsberegningen kjører uansett.
+    # Avklart 2026-11-03: når saksbehandleren starter den automatiske behandlingen selv, settes
+    # GSK-konklusjonen også utenfor perioden (OPT-BEH-BEH-032).
 
     Scenario: Ingen automatisk konklusjon før den automatiske saksbehandlingen starter
       Gitt at «Automatisk saksbehandling starter» er "2027-04-16 08:00" i opptaket

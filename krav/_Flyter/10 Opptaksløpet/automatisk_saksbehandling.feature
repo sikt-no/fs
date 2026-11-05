@@ -261,7 +261,7 @@ Egenskap: Automatisk saksbehandling
       Så har saken hos "Universitetet i Oslo" behandlingsstatusen "Ikke behandlet"
 
   @depends-on-OPT-BEH-BEH-026 @ref-FLY-OPT-VAL-001 @ref-FLY-OPT-SAM-001
-  # OPT-BEH-BEH-026: «Hele den automatiske behandlingen kjøres på nytt i saker saksbehandleren ikke har endret», «I saker saksbehandleren har endret, regnes bare kvalifiseringen, poengsummen og kvoten ut på nytt», «Saker som er ferdig behandlet, forblir ferdig behandlet»
+  # OPT-BEH-BEH-026: «I saker den automatiske behandlingen har behandlet, beregnes kravelementene og poengene på nytt», «Saker saksbehandleren har behandlet, får regnet ut kvalifiseringen, poengsummen og kvoten på nytt og blir merket», «Bare saker som er ferdig behandlet, beregnes på nytt»
   Regel: Søknadsalternativene beregnes på nytt når regelverket er rettet
 
     Scenario: Poengene beregnes på nytt når rangeringsregelverket er rettet

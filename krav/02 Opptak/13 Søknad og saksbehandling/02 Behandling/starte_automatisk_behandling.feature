@@ -91,7 +91,7 @@ Egenskap: Starte automatisk behandling
       Så behandles ikke saken hos "Universitetet i Oslo" automatisk på nytt
 
   @depends-on-OPT-BEH-BEH-029 @depends-on-OPT-BEH-BEH-025
-  # OPT-BEH-BEH-029: «Saksbehandleren kan sette behandlingsstatusen», «Saken blir Under behandling når saksbehandleren endrer vurderingen eller leser et dokument»
+  # OPT-BEH-BEH-029: «Saksbehandleren kan sette behandlingsstatusen», «Saken blir Under behandling når saksbehandleren endrer vurderingen eller markerer et dokument som lest»
   # OPT-BEH-BEH-025: «Har søkeren flere vitnemål, behandles saken automatisk på vitnemålet saksbehandleren velger»
   # Valget av vitnemål står i OPT-BEH-BEH-025. Dette kravet har starten av behandlingen.
   Regel: Saksbehandleren starter den automatiske behandlingen på vitnemålet som er valgt
@@ -148,6 +148,9 @@ Egenskap: Starte automatisk behandling
     # hele systemet.
     # Avklart 2026-11-03: hendelsene gjelder ikke importen av vitnemål. Importen kjører uansett
     # (OPT-BEH-BEH-030, OPT-BEH-BEH-033).
+    # Avklart 2026-11-03: hendelsene gjelder bare når behandlingen starter av seg selv. Saksbehandleren
+    # kan starte behandlingen, med knappen eller ved å velge vitnemålet som skal brukes, også utenfor
+    # perioden.
 
     Scenario: Saken behandles ikke automatisk før den automatiske saksbehandlingen starter
       Gitt at «Automatisk saksbehandling starter» er "2027-04-16 08:00" i "Samordna opptak 2027"
@@ -175,6 +178,13 @@ Egenskap: Starte automatisk behandling
       Og at klokken er 2027-07-15 kl. 12:01
       Når saksbehandlertildelingen har opprettet en sak i "Lokalt opptak UiO 2027"
       Så behandles saken automatisk
+
+    Scenario: Saksbehandleren starter den automatiske behandlingen etter at den automatiske saksbehandlingen er avsluttet
+      Gitt at «Automatisk saksbehandling avsluttes» er "2027-07-15 12:00" i "Samordna opptak 2027"
+      Og at klokken er 2027-07-15 kl. 12:01
+      Og at saken hos "Universitetet i Oslo" er under behandling
+      Når saksbehandleren ved Universitetet i Oslo starter den automatiske behandlingen
+      Så behandles saken hos "Universitetet i Oslo" automatisk
 
   @ref-OPT-BEH-BEH-030
   Regel: Saken viser hvorfor den ikke kunne behandles automatisk

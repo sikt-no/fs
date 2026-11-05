@@ -1,12 +1,13 @@
 # language: no
-@OPT-BEH-BEH-033 @must @draft @scope-automatisk-import-og-start @ref-OPT-BEH-BEH-011 @ref-OPT-BEH-BEH-030 @ref-OPT-BEH-BEH-032
+@OPT-BEH-BEH-033 @must @draft @scope-automatisk-import-og-start @ref-OPT-BEH-BEH-011 @ref-OPT-BEH-BEH-030 @ref-OPT-BEH-BEH-032 @ref-OPT-BEH-BEH-038
 Egenskap: Kjøre jobbene i opptak
   Som opptaksforvalter
   ønsker jeg at jobbene i opptaket kjører av seg selv
   slik at søknadene blir fordelt, vitnemålene importert og sakene behandlet uten at noen starter det.
 
-  To jobber kjører fast i opptaket: saksbehandlertildelingen og importen av VGS-vitnemål fra
-  KREG. Importen er jobben for nye vitnemål i OPT-BEH-BEH-032. En jobbplanlegger starter
+  Tre jobber kjører fast i opptaket: saksbehandlertildelingen, importen av VGS-vitnemål fra
+  KREG og importen av resultater fra høyere utdanning, som hentes fra en annen tjeneste enn KREG
+  (OPT-BEH-BEH-038). Importen fra KREG er jobben for nye vitnemål i OPT-BEH-BEH-032. En jobbplanlegger starter
   jobbene. Hvor ofte hver jobb kjører, står i applikasjonsinnstillingene. Ingen bruker endrer det
   i FS Admin. Feiler en jobb for en søker fordi KREG ikke svarer, prøves den på nytt. Hvor mange
   ganger, og hvor lenge, står også i applikasjonsinnstillingene. Feilen skrives i
@@ -18,6 +19,10 @@ Egenskap: Kjøre jobbene i opptak
   # Kode i dag: saksbehandlertildelingen kjører som en jobb. Vitnemålene hentes fra KREG etter
   # tildelingen, og en feil blir ikke prøvd igjen. Det finnes ingen jobb som importerer nye
   # vitnemål fra KREG.
+  # Avklart 04.11.2026: resultatene fra høyere utdanning hentes fra en annen tjeneste enn KREG,
+  # med en egen jobb. Det erstatter at to jobber dekker alt.
+  # ÅPNE SPØRSMÅL:
+  # - Hva heter tjenesten for resultater fra høyere utdanning?
 
   Bakgrunn:
     Gitt at opptaket "Samordna opptak 2027" forvaltes av HK-dir
@@ -32,9 +37,10 @@ Egenskap: Kjøre jobbene i opptak
       Så starter jobbplanleggeren <jobb>
 
       Eksempler:
-        | jobb                              |
-        | saksbehandlertildelingen          |
-        | importen av VGS-vitnemål fra KREG |
+        | jobb                                        |
+        | saksbehandlertildelingen                    |
+        | importen av VGS-vitnemål fra KREG           |
+        | importen av resultater fra høyere utdanning |
 
   @openquestion
   Regel: Hvor ofte en jobb kjører, står i applikasjonsinnstillingene

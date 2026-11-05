@@ -396,8 +396,9 @@ Egenskap: Beregne GSK fra vitnemål
     # FS: KLY for Kunnskapsløftet og RFA for Reform 94, uansett om løpet er studieforberedende
     # eller yrkesfaglig. KLS gis ikke. Opptaksforvalteren får et varsel om løpet, så
     # grunnlagskoden kan legges inn senere (@OPT-BEH-BEH-015).
-    # Et løp som ikke finnes i listen, gir ingen automatisk konklusjon, og saksbehandleren
-    # vurderer GSK (innspill i PR #878, se «Ukjent løp»).
+    # Et løp som ikke finnes i listen, gir påstanden «ikke GSK» (se «Ukjent løp»). Søknaden får
+    # likevel KLY eller RFA når vitnemålet har «GSK OK» fra KREG (avklart 2026-11-04, se
+    # @OPT-BEH-BEH-015).
     # Avklart 30.10.2026: grunnlagskoden gis når vitnemålet importeres (@OPT-BEH-BEH-015), ikke
     # bare når saksbehandleren starter kontrollen. Kode i dag: bare når saksbehandleren starter
     # kontrollen, som i det gamle FS (FS158001).

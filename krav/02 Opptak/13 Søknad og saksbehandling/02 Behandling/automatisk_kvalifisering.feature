@@ -168,6 +168,7 @@ Egenskap: Automatisk vurdering av spesielle opptakskrav
       Når søknaden behandles automatisk
       Så er kravelementet vurdert mot vitnemålet fra R94
 
+    @implemented
     Scenario: Ugyldig karakter må vurderes manuelt
       Gitt at søkeren har ett elektronisk vitnemål med en ugyldig karakter i Fysikk 1
       Og at søknaden har fagkravet Fysikk 1, koblet til vitnemålet
@@ -343,12 +344,14 @@ Egenskap: Automatisk vurdering av spesielle opptakskrav
 
   Regel: Det fremgår at kravelementet er vurdert automatisk
 
+    @implemented
     Scenario: Se at kravelementet er vurdert automatisk
       Gitt at et kravelement er vurdert automatisk
       Når saksbehandleren ser på de spesielle opptakskravene
       Så ser saksbehandleren at kravelementet er vurdert automatisk
       Og saksbehandleren ser hvilket vitnemål vurderingen bygger på
 
+    @implemented
     Scenario: Manuell endring fjerner markeringen som automatisk vurdert
       Gitt at et kravelement er vurdert automatisk
       Når saksbehandleren endrer vurderingen av kravelementet

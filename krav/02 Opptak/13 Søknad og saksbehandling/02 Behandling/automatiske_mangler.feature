@@ -204,6 +204,7 @@ Egenskap: Automatiske mangler
       Når søkeren oppgir i søknaden at generell studiekompetanse fullføres i vår
       Så ser søkeren mangelen "DUA" i Min kompetanse
 
+    @implemented
     Scenario: Søkeren får ikke egen melding om den automatiske mangelen
       Gitt at mangelkoden "DUA" i regelverkssamlingen "UHG 2027" er merket for generell studiekompetanse som fullføres i vår
       Når søkeren oppgir i søknaden at generell studiekompetanse fullføres i vår
@@ -216,6 +217,7 @@ Egenskap: Automatiske mangler
       Så har ikke saken mangelen "DUA"
       Og saksloggen viser at mangelen ble slettet fordi søkeren endret søknaden
 
+    @implemented
     Scenario: Mangel som er sjekket ut slettes ikke når søkeren endrer søknaden
       Gitt at saken hos "Universitetet i Oslo" har den automatiske mangelen "DUA"
       Og at mangelen "DUA" er sjekket ut
@@ -234,6 +236,7 @@ Egenskap: Automatiske mangler
       Så er mangelen "DUA" sjekket ut før saken er ferdig behandlet
       Og saksloggen viser at den automatiske behandlingen sjekket ut mangelen
 
+    @implemented
     Scenario: Mangelen sjekkes ikke ut når saken ikke er behandlet helautomatisk
       Gitt at saken hos "Universitetet i Oslo" har den automatiske mangelen "DUA"
       Når den automatiske behandlingen sender saken til saksbehandleren

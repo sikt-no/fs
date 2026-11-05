@@ -18,8 +18,8 @@ Egenskap: Importere resultater fra KREG
   # Avklart 29.10.2026: saksbehandleren henter ikke resultatene på nytt for én søker. Jobben for
   # nye vitnemål (OPT-BEH-BEH-032) er nok.
 
-  # Avklart 30.10.2026: resultater fra høyere utdanning importeres også, men i et eget krav,
-  # som ikke er skrevet ennå. Tilleggspoeng for høyere utdanning (OPT-BEH-BEH-028) trenger dem.
+  # Avklart 30.10.2026: resultater fra høyere utdanning importeres også, men i et eget krav
+  # (OPT-BEH-BEH-038). Tilleggspoeng for høyere utdanning (OPT-BEH-BEH-028) trenger dem.
 
   @ref-FLY-OPT-AUT-001 @ref-OPT-BEH-BEH-032
   Regel: Resultatene hentes når saken er opprettet
@@ -49,7 +49,7 @@ Egenskap: Importere resultater fra KREG
     @implemented
     Scenario: Resultatene hentes først når saken er opprettet
       # Avklart 29.10.2026: uten sak er det ikke noe å behandle. Koden gjør dette i dag.
-      Gitt at opptaket mangler saksbehandlertildelingsregel
+      Gitt at opptaket mangler behandlertildelingsregel
       Og at søkeren har et vitnemål i KREG
       Når søkeren sender inn søknaden
       Så er vitnemålet ikke importert før saken er opprettet
