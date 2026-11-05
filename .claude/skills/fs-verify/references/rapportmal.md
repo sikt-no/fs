@@ -120,7 +120,7 @@ Ingen endringer. Brukeren sa nei. | Ingen endringer. Ikke besvart.   [når det v
 | --- | --- | --- | --- | --- | --- | --- |
 | `@DOM-SUB-KAP-NNN` | <tittel> | <n>/<N> | <n> \| <n> (<n> usikker) \| 0 \| – | <…> | <…> | <én setning, tom når ingenting mangler> |
 
-Mangler: fs-plattform <n> scenarioer i <n> krav, fs-admin <n> i <n> krav, min-kompetanse <n> i <n> krav (<n> usikker). <n> av <N> krav mangler ingenting.
+Mangler: fs-plattform <n> scenarioer i <n> krav, fs-admin <n> i <n> krav, min-kompetanse <n> i <n> krav (<n> usikker). <n> av <N> krav er funnet i alle repoene. | Alle kravene mangler noe. | Ingen av kravene mangler noe.
 
 `Funnet` er scenarioene som er funnet i alle repoene de gjelder, av alle scenarioene i kravet. `Mangler i P`, `A` og `M` er scenarioene som ikke er funnet i repoet (`ikke funnet` eller `usikker`). Et scenario som mangler i flere repoer, telles i hvert av dem. `–` betyr at ingen scenarioer i kravet gjelder repoet.
 
