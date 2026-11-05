@@ -56,7 +56,7 @@ Testplanen er delt i hovedsiden og tre undersider, så hver del kan oppdateres f
 
 | Felt | Innhold |
 |---|---|
-| Agentisk funksjonstest | [Fylles ut: dato for kjøringen]. Kjøres av Håkon Medhus Fornes |
+| Agentisk funksjonstest | 04.–05.11.2026. Kjørt av Håkon Medhus Fornes (agentene i Claude Code) |
 | Intern akseptansetest | [Fylles ut: dato og klokkeslett]. Tidsramme: 1–2 timer |
 | Ekstern akseptansetest | Ikke aktuell |
 | Spørsmål underveis | Slack-tråden «Akseptansetesting saksbehandlertildeling, runde 2» i #søknadsbehandling-team-puff |
@@ -72,7 +72,7 @@ Klart når testansvarlig har logget inn som testbruker og ser testdataene.
 | 3 | Testdataene kan settes tilbake før hver kjøring | [Fylles ut av teamet] |
 | 4 | Testbrukerne finnes i rollene ved organisasjonene kravene gjelder (tilgangsmatrisen) | [Fylles ut av teamet] |
 | 5 | `fs-verify` har funnet alle scenarioene, og en annen person har kontrollert rapporten. Åpne spørsmål stopper ikke, og står i «Åpne spørsmål» | 62 av 62 scenarioer i kravet er funnet. I flyten er 3 av 7 funnet (de tre som ikke er levert, er ikke funnet), og 1 var usikker fordi flyten brukte «SPE». Flyten bruker nå «UVH». Kontrollert av `fs-verify-kontroll` 04.11.2026. Venter på kontroll av en person |
-| 6 | De agentiske testcasene (`fs-testcaser-cdp`) er laget, og testansvarlig og teamet har gått gjennom dem før kjøringen | Venter |
+| 6 | De agentiske testcasene (`fs-testcaser-cdp`) er laget, og testansvarlig og teamet har gått gjennom dem før kjøringen | Laget 04.11.2026 (`cdp-tester/02 Opptak/13 Søknad og saksbehandling/02 Behandling/`), ikke gått gjennom før kjøringen |
 | 7 | Flyttestcasene for den interne akseptansetesten (`fs-testcaser-intern`) er laget og gått gjennom av testansvarlig | Venter |
 | 8 | Testansvarlig er logget inn i FS Admin i en egen Chrome-profil til testingen, CDP-agenten kan bytte til hver testbruker i «Overstyrt bruker», og nøklene i testbrukere og testdata er utfylt | [Fylles ut av teamet] |
 | 9 | Testansvarlig har logget inn som testbruker og ser testdataene | [Fylles ut av testansvarlig] |
@@ -116,7 +116,7 @@ Et funn med alvorlighetsgraden «Stopper» gir ikke godkjent, men resten av test
 |---|---|---|---|
 | 1. Verifisering (`fs-verify`) | [Verifisering – Saksbehandlertildeling, runde 2 – 2026-11-04 13:17](https://sikt.atlassian.net/wiki/spaces/STUDIEADM/pages/5170364465/Verifisering+Saksbehandlertildeling+runde+2+2026-11-04+13+17) | Kravet: alt funnet (62/62). Flyten: 3 ikke funnet (faser som ikke er levert) | 2026-11-04 |
 | 1. Testplan | (denne siden) | Laget | 2026-11-04 |
-| 2. Agentisk funksjonstest | – | Venter | |
+| 2. Agentisk funksjonstest | [testrapport-agentisk-2026-11-05.md](testrapport-agentisk-2026-11-05.md), [kjøringen](kjoring-2026-11-04-1510/resultat.md) | Venter på gjennomgang (89 bestått, 5 ikke bestått, 11 ikke testet av 105) | 2026-11-05 |
 | 3. Intern akseptansetest | – | Venter | |
 | 4. Ekstern akseptansetest | – | Ikke aktuell | |
 
@@ -128,7 +128,7 @@ Testrapportene (verifisering, agentisk, intern og ekstern) står som undersider,
 |---|---|
 | Verifiseringsrapporten (fase 1) | [verify-tildele_saksbehandlende_organisasjon-2026-11-04-1317.md](../../krav/02%20Opptak/13%20S%C3%B8knad%20og%20saksbehandling/02%20Behandling/verify-tildele_saksbehandlende_organisasjon-2026-11-04-1317.md) |
 | Runde 1 | [Akseptansetesting saksbehandlertildeling](https://sikt.atlassian.net/wiki/spaces/STUDIEADM/pages/5130911779/Akseptansetesting+saksbehandlertildeling) (Confluence 5130911779), [`akseptansetest/opptak-saksbehandlertildeling/`](../opptak-saksbehandlertildeling/) |
-| Agentisk testrapport (fase 2) | – |
+| Agentisk testrapport (fase 2) | [testrapport-agentisk-2026-11-05.md](testrapport-agentisk-2026-11-05.md) |
 | Testcasene for fase 2 | – |
 | Testcasene for fase 3 | – |
 
