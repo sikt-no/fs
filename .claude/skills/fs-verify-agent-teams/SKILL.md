@@ -118,6 +118,8 @@ Kontrollørene og finnerne trengs ikke mens brukeren svarer: rydd opp i teamet (
 
 Som *Etter endringene* og *Rapport* i `fs-verify`, med samme filnavn, oppdatering av `utforing.md` og malen i [`fs-verify/references/rapportmal.md`](../fs-verify/references/rapportmal.md). Les malen før du skriver rapporten, og følg den nøyaktig. Med agent team gjelder alltid variantene merket `[agent team]` (linja `Team`), og når repoene er vurdert hver for seg (*Finn scope og kode*), også `[per repo]`: linja `Repoer`, `Mangler` i `## Oppsummering`, merket på linjene i `## Forslag til endringer`, `## Oversikt per krav` med `Mangler i`-kolonnene, og merket først i `Bevis`. Tallene regnes ut fra `## Scenarioer` (se *Rapport* i `fs-verify`).
 
+Når rapporten er skrevet, lager du teamvisningen som i *Teamvisning* i `fs-verify`: bygg HTML-siden med skriptet, publiser den som artefakt, og gi lenken i chat. Du gjør det selv, ikke teammatene. Bygg og publiser på nytt når rapporten er oppdatert med svaret.
+
 Når rapporten er skrevet, gjør du *Confluence* i `fs-verify`: finnes ingen testplan ennå, er neste steg `fs-testplan`, som bygger på rapporten. Finnes testplanen, spør om resultatet skal legges som en underside til den, og gjør det bare når brukeren sier ja. Du gjør det selv, ikke teammatene.
 
 ## Rydd opp
