@@ -176,9 +176,10 @@ Egenskap: Se meldinger om egne søknader
   @draft @openquestion @ref-OPT-PLA-SVA-002
   Regel: Søkeren får ett samlet varsel om uleste meldinger
     # ÅPNE SPØRSMÅL:
-    # - Skal varselet gå på e-post, SMS eller begge deler?
-    # - Hvor lenge etter en ny melding sendes varselet?
-    # - Hva skal det stå i varselet?
+    # - Skal varselet gå på e-post, SMS eller begge deler? Møtet ønsker mulighet for begge.
+    # - Hvor lenge etter en ny melding sendes varselet? Varselet er ikke tidskritisk, og kan gå ut dagen etter.
+    # - Varselet sendes ikke i stilletid. Når er stilletid?
+    # - Hva skal standardteksten i varselet være? Den vises på søkerens foretrukne språk.
 
     # Varselet går til søkeren utenfor Min kompetanse. Antallet i Min kompetanse står i «Søkeren ser antall uleste meldinger».
     # Påminnelse om svarfrist står i varsler_og_meldinger_i_plasstildelingen.feature.
