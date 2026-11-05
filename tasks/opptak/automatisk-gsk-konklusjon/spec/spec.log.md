@@ -12,3 +12,4 @@ History of skill invocations for this spec. Append-only — never edit past entr
 - 2026-11-02 — `fs-specify` ended (success) — 034: «ikke avsluttet» = søkeren er ikke med i en publisert plasstildelingsrunde, scenarioet om søker med tilbud fjernet
 - 2026-11-02 — `fs-specify` started — 034: grensen rettet igjen
 - 2026-11-02 — `fs-specify` ended (success) — 034: taggen settes alltid, statusen endres bare før en publisert plasstildelingsrunde
+- 2026-11-05 — kravendring (PR #940) — OPT-BEH-BEH-015: ny scenariomal «Søknaden får konklusjonen fra vitnemålet når saken er <status>» i «Konklusjon på søknaden fra vitnemålet». Behandlingsstatusen spiller ingen rolle, og endres ikke (avklart 2026-11-04, opptak !6566). Koden gjør dette allerede (fs-plattform 7372ec88ca, STEK-249)

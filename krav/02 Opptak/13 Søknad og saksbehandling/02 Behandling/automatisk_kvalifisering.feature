@@ -60,7 +60,9 @@
 #   automatisk_poengberegning.feature (@OPT-BEH-BEH-018), som ennå bare ligger
 #   på hver sin branch.
 # - Hvordan saksbehandleren velger vitnemål for søkere med flere vitnemål,
-#   står i velge_vitnemål_som_grunnlag.feature (@OPT-BEH-BEH-004).
+#   står i velge_vitnemål_som_grunnlag.feature (@OPT-BEH-BEH-004). At
+#   kravelementene vurderes automatisk mot vitnemålet saksbehandleren har
+#   valgt, står i behandle_automatisk_på_valgt_vitnemål.feature (@OPT-BEH-BEH-039).
 @OPT-BEH-BEH-020 @must @in-progress @scope-automatisk-kvalifisering-og-poengsum @ref-OPT-BEH-BEH-025
 Egenskap: Automatisk vurdering av spesielle opptakskrav
   Som saksbehandler
@@ -178,7 +180,7 @@ Egenskap: Automatisk vurdering av spesielle opptakskrav
 
   @depends-on-OPT-BEH-BEH-004 @ref-FLY-OPT-AUT-001
   Regel: Kravelementene vurderes bare mot ett entydig vitnemål
-    # Har søkeren flere vitnemål, velger saksbehandleren vitnemålet først.
+    # Har søkeren flere vitnemål, velger saksbehandleren vitnemålet først (OPT-BEH-BEH-039).
 
     @implemented
     Scenariomal: Ingen automatisk vurdering når <grunn>
@@ -192,14 +194,6 @@ Egenskap: Automatisk vurdering av spesielle opptakskrav
         | søkeren har flere elektroniske vitnemål som ikke er annullert, og saksbehandleren ikke har valgt vitnemål |
         | søkerens eneste elektroniske dokument er et kompetansebevis                                              |
         | søkeren ikke har noe elektronisk vitnemål                                                                |
-
-    Scenario: Kravelementene vurderes mot vitnemålet saksbehandleren har valgt
-      # Ikke bygget i dag: koden vurderer bare når søkeren har ett vitnemål.
-      Gitt at søkeren har flere elektroniske vitnemål som ikke er annullert
-      Og at saksbehandleren har valgt ett av vitnemålene som grunnlag
-      Og at søknaden har et kravelement som er koblet til vitnemålet
-      Når søknaden behandles automatisk
-      Så er kravelementet vurdert mot vitnemålet saksbehandleren har valgt
 
     Scenario: Kompetansebevis ved siden av vitnemålet stopper ikke vurderingen
       # Ikke bygget i dag: koden krever at vitnemålet er søkerens eneste dokument.

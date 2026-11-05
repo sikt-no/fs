@@ -92,7 +92,7 @@ Alle scenarioene i gating-settet blir tester. Mangler testdataene i et miljø, e
 
 - **Øverst:** URL-en til FS Admin, hvordan testbrukeren byttes, om testdataene kan settes tilbake, og når personaene sist ble sjekket.
 - **Feature-flagg:** `Flagg | Står | Sjekket`.
-- **Personaer:** `Rad i «Overstyrt bruker» | Deklarerte roller | Organisasjon | Organisasjonskode | Forkortelse | Tildelinger i <miljø> | Bekreftet`. Alle personaene i menyen, ikke bare dem testene bruker. Raden skrives nøyaktig som i menyen, og forkortelsen og organisasjonen som i organisasjonsregisteret (`testpersoner`).
+- **Personaer:** `Rad i «Overstyrt bruker» | Rolle | Organisasjon | Organisasjonskode | Forkortelse`. Alle radene i menyen, ikke bare dem testene bruker. Menyen har én rad per tildeling i `testpersoner` (person, rolle og organisasjon). Raden skrives nøyaktig som i menyen, og forkortelsen og organisasjonen som i organisasjonsregisteret.
 - **Testbrukere:** `Nøkkel | Krever | Persona (rad i «Overstyrt bruker»)`. Hva testen krever av testbrukeren, og koblingen til en persona. Organisasjonen til testbrukeren (`{ORG:<nøkkel>}`) er organisasjonen til personaen. Byttes personaen, endres bare denne raden.
 - **Testdata:** `Nøkkel | Verdi i <miljø> | Søk/URL | Utgangstilstand | Sjekket`. Bare grunndata (kodeverk, organisasjoner, regelverkssamlinger) og data testene ikke kan lage gjennom løsningen. Verdien er det testen skriver eller søker på i miljøet, og utgangstilstanden er det testen forutsetter. Testdataene oppsettet lager, står ikke her, men i oppsettet.
 - Ingen passord, hemmeligheter eller fødselsnumre, og bare Feide testbrukere og syntetiske personer.
@@ -103,8 +103,7 @@ Alle scenarioene i gating-settet blir tester. Mangler testdataene i et miljø, e
 
 Personaene og tildelingene endres i fs-admin og tilgangsstyring, uavhengig av testene. Sjekk fila jevnlig, og alltid før en kjøring når «Personaer sist sjekket» er mer enn en måned gammel:
 
-1. **Personaene.** Les `TEST_PERSONAS` i fs-admin (`git show origin/main:src/common/lib/persona/constants/testPersonas.ts`). Menyraden er `<FORNAVN> <ETTERNAVN> • <beskrivelse> (<organisasjonForkortelse, ellers organisasjonNavn>)`. Legg til nye personaer, og fjern dem som er borte.
-2. **Tildelingene.** Kjør spørringen `testpersoner` i miljøet (for eksempel i GraphiQL i FS Admin), og fyll ut «Tildelinger», «Organisasjon», «Forkortelse» og «Bekreftet» for personaene. Tildelingene er rollene etter utvidelsen i rollekatalogen (`tilgangsroller`, som `GET_ROLLEHIERARKI` i fs-admin).
+1. **Personaene.** Kjør spørringen `testpersoner` i miljøet (for eksempel i GraphiQL i FS Admin), eller kopier svaret fra nettverksfanen når «Overstyrt bruker» åpnes. Personavelgeren i fs-admin lager én rad per tildeling (`useTestpersonaer.ts` og `personaOption.ts` under `src/features/EnvironmentIndicator/Personas/`): `<FORNAVN> <ETTERNAVN> • <tilgangskode> (<forkortelse, ellers navnet på organisasjonen>)`. Lag tabellen på nytt fra svaret: legg til nye rader, og fjern dem som er borte.
 
    ```graphql
    query GetTestpersoner {
@@ -120,9 +119,10 @@ Personaene og tildelingene endres i fs-admin og tilgangsstyring, uavhengig av te
    }
    ```
 
-3. **Testbrukerne.** Hver nøkkel peker på en persona som finnes, og har tildelingene beskrivelsen i «Krever» sier. Er personaen borte, eller har den mistet en tildeling, foreslå en annen persona fra tabellen, eller si at en persona må legges til i fs-admin og tildelingen i tilgangsstyring.
+2. **Rollene.** Hver rad gir bare den ene rollen, og rollene den gir i rollekatalogen (`tilgangsroller`, som `GET_ROLLEHIERARKI` i fs-admin). En testbruker som trenger to roller, må ha en rolle som gir den andre.
+3. **Testbrukerne.** Hver nøkkel peker på en persona som finnes, og har tildelingene beskrivelsen i «Krever» sier. Er raden borte, eller gir den ikke rollene, foreslå en annen persona fra tabellen, eller si at en persona må legges til i fs-admin og tildelingen i tilgangsstyring.
 4. **Grunndataene og flaggene.** Sjekk at verdiene finnes, i utgangstilstanden.
-5. Oppdater «Personaer sist sjekket» med datoen og commiten i fs-admin, og «Sjekket» på radene som er sjekket.
+5. Oppdater «Personaer sist sjekket» med datoen, og «Sjekket» på testdataene og flaggene som er sjekket.
 
 Skriv aldri fødselsnummeret i fila: personaen velges i menyen.
 
