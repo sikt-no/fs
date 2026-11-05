@@ -84,6 +84,14 @@ Egenskap: Starte en plasstildeling
       Så beregnes en ny plasstildeling fra oppdatert grunnlag
       Og den forrige plasstildelingen er fortsatt tilgjengelig
 
+    # Avklart 05.11.2026 (gjennomgangen av flyten automatisk saksbehandling): bare én beregning på
+    # nytt eller plasstildeling i opptaket om gangen.
+    Scenario: Opptaksforvalter kan ikke starte en plasstildeling mens en beregning på nytt kjører
+      Gitt at en beregning på nytt i "Samordna opptak 2027" ikke er ferdig
+      Når opptaksforvalter starter en plasstildeling i "Hovedrunde"
+      Så starter ikke plasstildelingen
+      Og opptaksforvalter får beskjed om at en beregning på nytt kjører
+
   # Flyttet hit fra OPT-BEH-BEH-008 2026-11-02: mangler hindrer ikke kvalifiseringen, men noen
   # mangler skal hindre at søkeren får tilbud om studieplass.
   @depends-on-OPT-BEH-BEH-008 @openquestion

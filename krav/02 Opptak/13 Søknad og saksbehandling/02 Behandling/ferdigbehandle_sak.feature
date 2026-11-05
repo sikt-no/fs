@@ -115,9 +115,6 @@ Egenskap: Ferdigbehandle en sak
     # Avklart 2026-11-03: hvor saksbehandleren ser det (hendelsesloggen for saken i
     # OPT-BEH-BEH-016, ved hvert steg i saken, eller begge steder), er et designspørsmål, og
     # hører hjemme i implementasjonsdetaljene.
-    # Når den automatiske behandlingen avgjorde hvert steg, finnes bare i endringsloggen. Scenarioet
-    # om tidspunktet kan ikke leveres før den nye sporingsloggen finnes. Endringsloggen er stoppet
-    # (BAT-324, 29.10.2026).
 
     Bakgrunn:
       Gitt at "Kari Nordmann" har ett vitnemål, og vitnemålet gir GSK

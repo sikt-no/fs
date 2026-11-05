@@ -33,7 +33,7 @@
 |---|---|---|---|---|
 | `@OPT-BEH-BEH-030` [importere_resultater_fra_kreg.feature](../../../krav/02%20Opptak/13%20S%C3%B8knad%20og%20saksbehandling/02%20Behandling/importere_resultater_fra_kreg.feature) | Must | – | [STEK-330](https://sikt.atlassian.net/browse/STEK-330) | |
 | `@OPT-BEH-BEH-032` [starte_automatisk_behandling.feature](../../../krav/02%20Opptak/13%20S%C3%B8knad%20og%20saksbehandling/02%20Behandling/starte_automatisk_behandling.feature) | Must | – | – | |
-| `@OPT-BEH-BEH-033` [kjøre_jobbene_i_opptak.feature](../../../krav/02%20Opptak/13%20S%C3%B8knad%20og%20saksbehandling/02%20Behandling/kj%C3%B8re_jobbene_i_opptak.feature) | Must | – | – | Jobbplanleggeren og importjobben for nye vitnemål, som `@OPT-BEH-BEH-032` og fase 1 i `@FLY-OPT-VIT-001` bygger på. Kravet har også saksbehandlertildelingen og importen av resultater fra høyere utdanning (`@OPT-BEH-BEH-038`, i scopet `automatisk-grunnlag-og-poeng`), som `@OPT-BEH-BEH-028` i `automatisk-grunnlag-og-poeng` trenger. Kravet er `@planned`. «Det fremgår at jobbene kjører» og «Opptaksforvalteren starter en jobb uten å vente på neste kjøring» venter (`@draft @openquestion`) |
+| `@OPT-BEH-BEH-033` [kjøre_jobbene_i_opptak.feature](../../../krav/02%20Opptak/13%20S%C3%B8knad%20og%20saksbehandling/02%20Behandling/kj%C3%B8re_jobbene_i_opptak.feature) | Must | – | – | Jobbplanleggeren og importjobben for nye vitnemål, som `@OPT-BEH-BEH-032` og fase 1 i `@FLY-OPT-VIT-001` bygger på. Kravet har også saksbehandlertildelingen og importen av resultater fra høyere utdanning (`@OPT-BEH-BEH-038`, i scopet `automatisk-grunnlag-og-poeng`), som `@OPT-BEH-BEH-028` i `automatisk-grunnlag-og-poeng` trenger. Kravet er `@planned`. «Det fremgår at jobbene kjører» venter (`@draft @openquestion`) |
 
 ## Åpne spørsmål
 
@@ -47,6 +47,7 @@ Append-only. Ny linje på toppen ved hver hendelse.
 
 | Dato       | Hendelse | Av | Lenke til review |
 |------------|----------|----|------------------|
+| 2026-11-05 | `@OPT-BEH-BEH-033`: Sikt får ett samlet varsel per kjøring når importen feiler, og regelen om at opptaksforvalteren starter en jobb selv er slettet (importen kjører neste natt). Fra gjennomgangen av flyten automatisk saksbehandling | @JøranIndseth | – |
 | 2026-11-05 | `@OPT-BEH-BEH-033` er validert og `@planned`. «Det fremgår at jobbene kjører» og «Opptaksforvalteren starter en jobb uten å vente på neste kjøring» venter (`@draft @openquestion`). `@FLY-OPT-VIT-001` har fått fasen om at behandlingen starter når importen har hentet vitnemålene til en søker uten vitnemål (avklart med Geir i #951). Fra gjennomgangen av flyten automatisk saksbehandling | @JøranIndseth | – |
 | 2026-11-05 | Raden for `@OPT-BEH-BEH-033` viser til scopet for `@OPT-BEH-BEH-038` i stedet for PR #937. Fra reviewen av PR #948 | @JøranIndseth | [#948](https://github.com/sikt-no/fs/pull/948) |
 | 2026-11-04 | Scenarioet om å starte på valgt vitnemål i `@OPT-BEH-BEH-032` er skilt ut i `@OPT-BEH-BEH-039` (Behandle automatisk på vitnemålet saksbehandleren velger), `@must` uten scope. Fra reviewen av PR #931 | @JøranIndseth | [#931](https://github.com/sikt-no/fs/pull/931) |
