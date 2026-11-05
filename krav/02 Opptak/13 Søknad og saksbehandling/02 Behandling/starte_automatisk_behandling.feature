@@ -131,8 +131,13 @@ Egenskap: Starte automatisk behandling
   # OPT-OVO-FRI-001: «Opptaksforvalter kan sette når den automatiske saksbehandlingen starter og avsluttes»
   Regel: Saken behandles automatisk bare mens den automatiske saksbehandlingen pågår i opptaket
     # Avklart 2026-11-03: hendelsene «Automatisk saksbehandling starter» og «Automatisk saksbehandling
-    # avsluttes» settes på opptaket, og er valgfrie. Er de ikke satt, pågår den automatiske
-    # saksbehandlingen til opptaket er historisk. Hendelsene er de samme som i OPT-BEH-BEH-015.
+    # avsluttes» settes på opptaket, og er valgfrie. Hendelsene er de samme som i OPT-BEH-BEH-015.
+    # Avklart 2026-11-05: den automatiske saksbehandlingen pågår bare mens opptaket er publisert.
+    # Hendelsene avgrenser perioden. Er de ikke satt, pågår den så lenge opptaket er publisert. Et
+    # upublisert eller historisk opptak behandles ikke automatisk.
+    # Avklart 2026-11-05: publiseres opptaket igjen etter at det er avpublisert, behandles sakene som
+    # skulle vært behandlet automatisk mens opptaket var upublisert, når den automatiske
+    # saksbehandlingen pågår etter hendelsene (eller hendelsene ikke er satt).
     # Erstatter at opptaksforvalteren skrur automatikken av og på. Gjelder for ett opptak, ikke for
     # hele systemet.
     # Avklart 2026-11-03: hendelsene gjelder ikke importen av vitnemål. Importen kjører uansett
@@ -154,16 +159,47 @@ Egenskap: Starte automatisk behandling
       Når saksbehandlertildelingen har opprettet saken hos "Universitetet i Oslo"
       Så behandles ikke saken hos "Universitetet i Oslo" automatisk
 
-    Scenario: Den automatiske saksbehandlingen pågår til opptaket er historisk når hendelsene ikke er satt
+    Scenario: Den automatiske saksbehandlingen pågår mens opptaket er publisert når hendelsene ikke er satt
       Gitt at "Samordna opptak 2027" ikke har hendelsene for den automatiske saksbehandlingen
-      Og at "Samordna opptak 2027" ikke er historisk
+      Og at opptaket "Samordna opptak 2027" er publisert
       Og at "Kari Nordmann" har et vitnemål i KREG
       Når saksbehandlertildelingen har opprettet saken hos "Universitetet i Oslo"
       Så behandles saken hos "Universitetet i Oslo" automatisk når vitnemålet er importert
 
+    Scenario: Saken behandles ikke automatisk når opptaket er upublisert
+      Gitt at "Samordna opptak 2027" ikke har hendelsene for den automatiske saksbehandlingen
+      Og at opptaket "Samordna opptak 2027" er upublisert
+      Og at "Kari Nordmann" har et vitnemål i KREG
+      Når saksbehandlertildelingen har opprettet saken hos "Universitetet i Oslo"
+      Så behandles ikke saken hos "Universitetet i Oslo" automatisk
+
+    Scenario: Saken behandles ikke automatisk når opptaket er historisk
+      Gitt at "Samordna opptak 2027" ikke har hendelsene for den automatiske saksbehandlingen
+      Og at opptaket "Samordna opptak 2027" er historisk
+      Og at "Kari Nordmann" har et vitnemål i KREG
+      Når saksbehandlertildelingen har opprettet saken hos "Universitetet i Oslo"
+      Så behandles ikke saken hos "Universitetet i Oslo" automatisk
+
+    Scenario: Saken behandles automatisk når opptaket publiseres igjen
+      Gitt at "Samordna opptak 2027" ikke har hendelsene for den automatiske saksbehandlingen
+      Og at opptaket "Samordna opptak 2027" er avpublisert
+      Og at saksbehandlertildelingen har opprettet saken hos "Universitetet i Oslo" mens opptaket var upublisert
+      Og at "Kari Nordmann" har et vitnemål i KREG
+      Når opptaksforvalter ved forvaltende organisasjon publiserer opptaket
+      Så behandles saken hos "Universitetet i Oslo" automatisk
+
+    Scenario: Saken behandles ikke automatisk når opptaket publiseres igjen etter at den automatiske saksbehandlingen er avsluttet
+      Gitt at «Automatisk saksbehandling avsluttes» er "2027-07-15 12:00" i "Samordna opptak 2027"
+      Og at opptaket "Samordna opptak 2027" er avpublisert
+      Og at saksbehandlertildelingen har opprettet saken hos "Universitetet i Oslo" mens opptaket var upublisert
+      Og at klokken er 2027-07-15 kl. 12:01
+      Når opptaksforvalter ved forvaltende organisasjon publiserer opptaket
+      Så behandles ikke saken hos "Universitetet i Oslo" automatisk
+
     Scenario: Hendelsene i ett opptak påvirker ikke andre opptak
       Gitt at «Automatisk saksbehandling avsluttes» er "2027-07-15 12:00" i "Samordna opptak 2027"
       Og at "Lokalt opptak UiO 2027" ikke har hendelsene for den automatiske saksbehandlingen
+      Og at opptaket "Lokalt opptak UiO 2027" er publisert
       Og at klokken er 2027-07-15 kl. 12:01
       Når saksbehandlertildelingen har opprettet en sak i "Lokalt opptak UiO 2027"
       Så behandles saken automatisk

@@ -1,5 +1,11 @@
 # krav-viewer
 
+## 1.12.0
+
+### Minor Changes
+
+- 7c392f0: Ny visning, Verifisering: verify-rapportene i krav/, tasks/ og akseptansetest/ i et eget filtre, med rapportvisningen (HTML-fila ved siden av rapporten) eller markdown. Verify-rapportene vises ikke lenger i Krav.
+
 ## 1.11.1
 
 ### Patch Changes

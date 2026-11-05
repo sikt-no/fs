@@ -89,7 +89,7 @@ cd tester
 
 ## FS Kravforvaltning
 
-`fs-kravforvaltning/` (**FS Kravforvaltning**) viser hele `krav/`-treet i nettleseren og som desktop-app, med avvik fra konvensjonene, redigering og PR, scopene i `tasks/`, spesifikasjonene og et Claude-panel. Den statiske versjonen publiseres til GitHub Pages (<https://sikt-no.github.io/fs/>) ved push til `main`.
+`fs-kravforvaltning/` (**FS Kravforvaltning**) viser hele `krav/`-treet i nettleseren og som desktop-app, med avvik fra konvensjonene, redigering og PR, scopene i `tasks/`, spesifikasjonene, verify-rapportene (Verifisering, med rapportvisningen når HTML-fila finnes) og et Claude-panel. Den statiske versjonen publiseres til GitHub Pages (<https://sikt-no.github.io/fs/>) ved push til `main`.
 
 ```bash
 cd fs-kravforvaltning
