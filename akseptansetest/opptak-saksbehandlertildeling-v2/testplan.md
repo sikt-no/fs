@@ -73,7 +73,7 @@ Klart når testansvarlig har logget inn som testbruker og ser testdataene.
 | 4 | Testbrukerne finnes i rollene ved organisasjonene kravene gjelder (tilgangsmatrisen) | [Fylles ut av teamet] |
 | 5 | `fs-verify` har funnet alle scenarioene, og en annen person har kontrollert rapporten. Åpne spørsmål stopper ikke, og står i «Åpne spørsmål» | 62 av 62 scenarioer i kravet er funnet. I flyten er 3 av 7 funnet (de tre som ikke er levert, er ikke funnet), og 1 var usikker fordi flyten brukte «SPE». Flyten bruker nå «UVH». Kontrollert av `fs-verify-kontroll` 04.11.2026. Venter på kontroll av en person |
 | 6 | De agentiske testcasene (`fs-testcaser-cdp`) er laget, og testansvarlig og teamet har gått gjennom dem før kjøringen | Laget 04.11.2026 (`cdp-tester/02 Opptak/13 Søknad og saksbehandling/02 Behandling/`), ikke gått gjennom før kjøringen |
-| 7 | Flyttestcasene for den interne akseptansetesten (`fs-testcaser-intern`) er laget og gått gjennom av testansvarlig | Venter |
+| 7 | Flyttestcasene for den interne akseptansetesten (`fs-testcaser-intern`) er laget og gått gjennom av testansvarlig | Laget 05.11.2026, venter på gjennomgang av testansvarlig |
 | 8 | Testansvarlig er logget inn i FS Admin i en egen Chrome-profil til testingen, CDP-agenten kan bytte til hver testbruker i «Overstyrt bruker», og nøklene i testbrukere og testdata er utfylt | [Fylles ut av teamet] |
 | 9 | Testansvarlig har logget inn som testbruker og ser testdataene | [Fylles ut av testansvarlig] |
 | 10 | Tilbudsgarantityper finnes i opptaket (`tilbudsgarantityper`). Bare en utvikler kan legge dem inn. Uten dem kan ikke tilbudsgaranti ved flytting og tilbyderens tilbudsgaranti testes | [Fylles ut av teamet] |
@@ -117,7 +117,7 @@ Et funn med alvorlighetsgraden «Stopper» gir ikke godkjent, men resten av test
 | 1. Verifisering (`fs-verify`) | [Verifisering – Saksbehandlertildeling, runde 2 – 2026-11-04 13:17](https://sikt.atlassian.net/wiki/spaces/STUDIEADM/pages/5170364465/Verifisering+Saksbehandlertildeling+runde+2+2026-11-04+13+17) | Kravet: alt funnet (62/62). Flyten: 3 ikke funnet (faser som ikke er levert) | 2026-11-04 |
 | 1. Testplan | (denne siden) | Laget | 2026-11-04 |
 | 2. Agentisk funksjonstest | [testrapport-agentisk-2026-11-05.md](testrapport-agentisk-2026-11-05.md), [kjøringen](kjoring-2026-11-04-1510/resultat.md) | Venter på gjennomgang (89 bestått, 5 ikke bestått, 11 ikke testet av 105) | 2026-11-05 |
-| 3. Intern akseptansetest | – | Venter | |
+| 3. Intern akseptansetest | [testcaser-intern.md](testcaser-intern.md) | Klar til test (når testrapporten for fase 2 er gått gjennom) | 2026-11-05 |
 | 4. Ekstern akseptansetest | – | Ikke aktuell | |
 
 Testrapportene (verifisering, agentisk, intern og ekstern) står som undersider, og lenken står i raden for fasen.
