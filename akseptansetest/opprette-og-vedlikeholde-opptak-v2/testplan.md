@@ -3,10 +3,10 @@
 - **Leveranse**: scope
 - **Kilde**: `@scope-opprette-opptak-2027`
 - **Scope**: @scope-opprette-opptak-2027
-- **Scope-fil**: [scope-opprette-opptak-2027](../../tasks/opptak/scope-opprette-opptak-2027.md)
-- **Oppgaver**: [opptak/opprette-og-vedlikeholde-opptak](../../tasks/opptak/opprette-og-vedlikeholde-opptak/oppgave.md)
+- **Scope-fil**: [scope-opprette-opptak-2027](../../tasks/opptak/opprette-opptak-2027/scope.md)
+- **Oppgaver**: [opptak/opprette-og-vedlikeholde-opptak](../../tasks/opptak/opprette-opptak-2027/scope.md)
 - **Krav**: 8 feature-filer i scopet, 5 i testen (3 `@implemented`, 2 `@in-progress`), 1 flyt (ingen faser levert), commit `9a112c6` (2026-10-26)
-- **Verifisering**: [verify-2026-10-26-0941.md](../../tasks/opptak/opprette-og-vedlikeholde-opptak/spec/verify-2026-10-26-0941.md) (`@OPT-OVO-INN-001`), [verify-saksbehandlertildeling-2026-10-22-1419.md](../../krav/_Flyter/10%20Opptaksl%C3%B8pet/verify-saksbehandlertildeling-2026-10-22-1419.md) (`@OPT-OVO-SAM-001`, `@OPT-OVO-FRI-001`), [verify-2026-10-21-2142.md](../../tasks/opptak/opprette-og-vedlikeholde-opptak/spec/verify-2026-10-21-2142.md) (`@OPT-OVO-OVE-001`), verify-2026-10-21-1442.md (`@OPT-OVO-GRU-001`, regelen som er `@in-progress`. Ligger bare på branchen `akseptansetest/opprette-opptak-2027-ekstern`)
+- **Verifisering**: [verify-2026-10-26-0941.md](../../tasks/opptak/opprette-opptak-2027/spec/verify-2026-10-26-0941.md) (`@OPT-OVO-INN-001`), [verify-saksbehandlertildeling-2026-10-22-1419.md](../../krav/_Flyter/10%20Opptaksl%C3%B8pet/verify-saksbehandlertildeling-2026-10-22-1419.md) (`@OPT-OVO-SAM-001`, `@OPT-OVO-FRI-001`), [verify-2026-10-21-2142.md](../../tasks/opptak/opprette-opptak-2027/spec/verify-2026-10-21-2142.md) (`@OPT-OVO-OVE-001`), verify-2026-10-21-1442.md (`@OPT-OVO-GRU-001`, regelen som er `@in-progress`. Ligger bare på branchen `akseptansetest/opprette-opptak-2027-ekstern`)
 - **Forrige testplan**: [Testplan – Opprette og vedlikeholde opptak](https://sikt.atlassian.net/wiki/spaces/STUDIEADM/pages/5128028165) (21.10.2026, `akseptansetest/opprette-opptak-2027/testplan.md` på branchen `akseptansetest/opprette-opptak-2027-ekstern`)
 - **Confluence**: https://sikt.atlassian.net/wiki/spaces/STUDIEADM/pages/5148147753 (utkast), under [Testplaner](https://sikt.atlassian.net/wiki/spaces/STUDIEADM/pages/5126062121/Testplaner)
 - **Laget**: 2026-10-27 av fs-testplan. Omfanget er som i forrige testplan: hele scopet, også det som ikke er levert (avvik fra teststrategien, avgjort av produkteier 21.10.2026 og beholdt 27.10.2026)
@@ -47,7 +47,7 @@ Testplanen følger den nye teststrategien med fire faser: verifisering, agentisk
 
 | Nr | Nøkkel | Navn | Rolle | Organisasjon | Innlogging | Start-URL | Brukes til |
 |---|---|---|---|---|---|---|---|
-| 1 | `opptak-forvalter-forvaltende` | Ordentlig rundskriv | Opptaksforvalter og saksbehandler ved forvaltende organisasjon | HK-dir | «Overstyrt bruker»: Ordentlig rundskriv | https://test-fsadmin.sikt.no/opptak | Opprette samordna opptak, innstillinger, frister, samordning (forvaltende organisasjon), oversikten over opptak |
+| 1 | `opptak-forvalter-forvaltende` | Ordentlig rundskriv | Opptaksforvalter ved forvaltende organisasjon | HK-dir | «Overstyrt bruker»: ORDENTLIG RUNDSKRIV • OPPTAK_FORVALTER (HK-DIR) | https://test-fsadmin.sikt.no/opptak | Opprette samordna opptak, innstillinger, frister, samordning (forvaltende organisasjon), oversikten over opptak |
 | 2 | `opptak-forvalter-deltakende` | Ansvarsfull Fotkrem | Opptaksforvalter ved deltakende organisasjon | NTNU | «Overstyrt bruker»: Ansvarsfull Fotkrem | https://test-fsadmin.sikt.no/opptak | Samordna opptak: deltaker som legger til utdanningstilbud, og som ser, men ikke endrer, innstillingene. Trenger rollen `MEDLEM_OPPTAK` når TAKE-423 er merget |
 | 3 | `opptak-forvalter-ikke-deltakende` | Talefør Elv | Opptaksforvalter ved organisasjon som ikke deltar | Fagskolen Vestfold og Telemark | «Overstyrt bruker»: Talefør Elv | https://test-fsadmin.sikt.no/opptak | Samordna opptak: organisasjon som ikke deltar |
 | 4 | `opptak-forvalter-lokalt` | Ru Brødskive | Opptaksforvalter ved lærested med lokalt opptak | HVL | «Overstyrt bruker»: Ru Brødskive | https://test-fsadmin.sikt.no/opptak | Opprette lokalt opptak, lokalt opptak i Samordna opptak |
@@ -345,7 +345,7 @@ Testansvarlig skriver beslutningen og begrunnelsen i sluttrapporten. Rettede fun
 
 | Fase | Side | Status | Dato |
 |---|---|---|---|
-| 1. Verifisering (`fs-verify`) | [Verifisering – … v2 – 2026-10-26 09:41](https://sikt.atlassian.net/wiki/spaces/STUDIEADM/pages/5148540945) (utkast), [Verifisering – … – 2026-10-21 14:42](https://sikt.atlassian.net/wiki/spaces/STUDIEADM/pages/5127045158), [Verifisering – … – 2026-10-21 21:42](https://sikt.atlassian.net/wiki/spaces/STUDIEADM/pages/5128650825) · [verify-2026-10-26-0941.md](../../tasks/opptak/opprette-og-vedlikeholde-opptak/spec/verify-2026-10-26-0941.md) · [verify-saksbehandlertildeling-2026-10-22-1419.md](../../krav/_Flyter/10%20Opptaksl%C3%B8pet/verify-saksbehandlertildeling-2026-10-22-1419.md) (flytrapport, bare referanse) | 4 ikke funnet, 3 usikker (Opprette et opptak, delen: 1 ikke funnet. Samordna opptak: 3 ikke funnet, 2 usikker. Frister: 1 usikker. Innstillinger og oversikten: alt funnet). Regelen om trekkfrist er ikke verifisert | 2026-10-26 |
+| 1. Verifisering (`fs-verify`) | [Verifisering – … v2 – 2026-10-26 09:41](https://sikt.atlassian.net/wiki/spaces/STUDIEADM/pages/5148540945) (utkast), [Verifisering – … – 2026-10-21 14:42](https://sikt.atlassian.net/wiki/spaces/STUDIEADM/pages/5127045158), [Verifisering – … – 2026-10-21 21:42](https://sikt.atlassian.net/wiki/spaces/STUDIEADM/pages/5128650825) · [verify-2026-10-26-0941.md](../../tasks/opptak/opprette-opptak-2027/spec/verify-2026-10-26-0941.md) · [verify-saksbehandlertildeling-2026-10-22-1419.md](../../krav/_Flyter/10%20Opptaksl%C3%B8pet/verify-saksbehandlertildeling-2026-10-22-1419.md) (flytrapport, bare referanse) | 4 ikke funnet, 3 usikker (Opprette et opptak, delen: 1 ikke funnet. Samordna opptak: 3 ikke funnet, 2 usikker. Frister: 1 usikker. Innstillinger og oversikten: alt funnet). Regelen om trekkfrist er ikke verifisert | 2026-10-26 |
 | Testplan | (denne siden) | Laget, versjon 2 | 2026-10-27 |
 | 2. Agentisk funksjonstest | – | Venter | |
 | 3. Intern akseptansetest | – | Venter | |

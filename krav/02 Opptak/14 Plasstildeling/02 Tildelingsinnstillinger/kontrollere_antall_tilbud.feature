@@ -57,26 +57,32 @@ Egenskap: Kontrollere antall tilbud som skal gis
       Når opptaksforvalter kombinerer filteret for antall tilbud med tilbyderfilteret
       Så vises kun utdanningstilbud som matcher alle kriteriene
 
-  Regel: Opptaksforvalter varsles når antall tilbud som skal gis er høyere enn ledige plasser
+  Regel: Opptaksforvalter varsles når antall tilbud som skal gis er høyere enn kvoteplassene
     # Lagt til 2026-10-28 etter brukertesten med HK-dir 2026-10-27 («varsel om overskredet antall plasser»).
-    # Varselet stopper ikke lagringen: et lærested kan ha grunn til å gi flere tilbud enn ledige plasser.
+    # Endret 2026-11-02 (produkteier): Varselet gjelder hver utdanningskvote, og sammenligner med kvoteplassene,
+    # ikke med utdanningstilbudet samlet. Det er overbookingen i antall_tilbud_som_skal_gis.feature.
+    # Varselet stopper ikke lagringen: et lærested kan ha grunn til å gi flere tilbud enn kvoteplassene.
+    # AVKLART 2026-11-04 (produkteier, tilbakemelding på PR #907): Varselet sammenligner med kvoteplassene, ikke med
+    # ledige plasser i kvoten, som i prototypen v88. At varselet kommer i de fleste kvotene i samordna opptak, er bevisst:
+    # det viser overbookingen.
 
-    Scenario: Varsel når antall tilbud er høyere enn ledige plasser
-      Gitt at ledige plasser å gi tilbud til for "Sykepleie, høst 2027" er 42
-      Når opptaksforvalter setter totalt antall tilbud som skal gis i plasstildelingsrunden "Hovedrunde" for "Sykepleie, høst 2027" til 50
-      Så får utdanningstilbudet "Sykepleie, høst 2027" et varsel om at antall tilbud som skal gis er høyere enn ledige plasser
+    Scenario: Varsel når antall tilbud er høyere enn kvoteplassene
+      Gitt at utdanningskvoten "Ordinær" på "Sykepleie, høst 2027" har 42 kvoteplasser
+      Når opptaksforvalter setter antall tilbud som skal gis i utdanningskvoten "Ordinær" på "Sykepleie, høst 2027" til 50
+      Så får utdanningskvoten "Ordinær" på "Sykepleie, høst 2027" et varsel om at antall tilbud som skal gis er høyere enn kvoteplassene
       Men antall tilbud som skal gis er lagret
 
-    Scenario: Ingen varsel når antall tilbud er innenfor ledige plasser
-      Gitt at ledige plasser å gi tilbud til for "Sykepleie, høst 2027" er 42
-      Når opptaksforvalter setter totalt antall tilbud som skal gis i plasstildelingsrunden "Hovedrunde" for "Sykepleie, høst 2027" til 40
-      Så får utdanningstilbudet "Sykepleie, høst 2027" ikke varsel om antall tilbud
+    Scenario: Ingen varsel når antall tilbud er innenfor kvoteplassene
+      Gitt at utdanningskvoten "Ordinær" på "Sykepleie, høst 2027" har 42 kvoteplasser
+      Når opptaksforvalter setter antall tilbud som skal gis i utdanningskvoten "Ordinær" på "Sykepleie, høst 2027" til 40
+      Så får utdanningskvoten "Ordinær" på "Sykepleie, høst 2027" ikke varsel om antall tilbud
 
   @openquestion
   Regel: Opptakets forvalter kontrollerer antall tilbud lærestedene har satt før plasstildelingen
     # ÅPNE SPØRSMÅL:
     # - Hvilken terskel skal antall tilbud som skal gis sammenlignes med studieplassene etter?
-    # - Hva skal antall tilbud sammenlignes med for å vurdere overbooking? HK-10169 (statistikk for overbooking
+    # - Overbookingen regnes mot kvoteplassene i hver utdanningskvote (produkteier 2026-11-02). Trengs det i tillegg
+    #   en sammenligning med tidligere år? HK-10169 (statistikk for overbooking
     #   fra tidligere år) er ikke dekket.
     # Lagt til 2026-10-28 etter brukertesten med HK-dir 2026-10-27: HK-dir kontrollerer det lærestedene har satt:
     # «ønska tilbud opp mot planlagte studieplasser (terskelverdi?), alle kvalifiserte tilbud, mangler antall tilbud

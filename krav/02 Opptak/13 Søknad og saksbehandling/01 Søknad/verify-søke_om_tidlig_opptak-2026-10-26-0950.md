@@ -7,6 +7,7 @@
 - **Avhengigheter:** 1 nivå, bare status
 - **Kontroll:** `fs-verify-kontroll`
 - **Skjermbilder:** nei (SØK-011 er Min kompetanse, ikke fs-admin)
+- **Confluence:** https://sikt.atlassian.net/wiki/spaces/STUDIEADM/pages/5143887891
 
 Gating-sett: scenarioene som ikke er tagget `@draft`, `@deprecated` eller `@demo` (`@openquestion` alene er med).
 

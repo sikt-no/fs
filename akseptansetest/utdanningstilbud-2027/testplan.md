@@ -3,8 +3,8 @@
 - **Leveranse**: mappe
 - **Kilde**: `krav/02 Opptak/12 Utdanningstilbud/02 Utdanningstilbud i opptak/`, `krav/02 Opptak/12 Utdanningstilbud/04 Behandle et utdanningstilbud/`
 - **Scope**: @scope-utdanningstilbud-i-opptak-2027, @scope-utdanningstilbud-2027
-- **Scope-fil**: [scope-utdanningstilbud-i-opptak-2027](../../tasks/opptak/scope-utdanningstilbud-i-opptak-2027.md), [scope-utdanningstilbud-2027](../../tasks/opptak/scope-utdanningstilbud-2027.md)
-- **Oppgaver**: [opptak/utdanningstilbud-i-opptak](../../tasks/opptak/utdanningstilbud-i-opptak/oppgave.md), [opptak/behandle-utdanningstilbud](../../tasks/opptak/behandle-utdanningstilbud/oppgave.md)
+- **Scope-fil**: [scope-utdanningstilbud-i-opptak-2027](../../tasks/opptak/utdanningstilbud-i-opptak-2027/scope.md), [scope-utdanningstilbud-2027](../../tasks/opptak/utdanningstilbud-2027/scope.md)
+- **Oppgaver**: [opptak/utdanningstilbud-i-opptak](../../tasks/opptak/utdanningstilbud-i-opptak-2027/scope.md), [opptak/behandle-utdanningstilbud](../../tasks/opptak/utdanningstilbud-2027/scope.md)
 - **Krav**: 21 feature-filer, 10 `@implemented`, 5 delvis levert, 0 flyter, commit `b67676a` (2026-10-23)
 - **Verifisering**: [verify-02 Utdanningstilbud i opptak-2026-10-22-1915.md](../../krav/02%20Opptak/12%20Utdanningstilbud/02%20Utdanningstilbud%20i%20opptak/verify-02%20Utdanningstilbud%20i%20opptak-2026-10-22-1915.md), [verify-04 Behandle et utdanningstilbud-2026-10-22-1915.md](../../krav/02%20Opptak/12%20Utdanningstilbud/04%20Behandle%20et%20utdanningstilbud/verify-04%20Behandle%20et%20utdanningstilbud-2026-10-22-1915.md). Rapportene er eldre enn commit `01eea94` (2026-10-23, SHI-747), som la til tre scenarioer i UTD-026, UTD-002 og UTD-003. Teamet har bekreftet at de tre ikke er levert.
 - **Confluence**: https://sikt.atlassian.net/wiki/spaces/STUDIEADM/pages/5137235987/Testplan+Utdanningstilbud+i+samordna+opptak+2027
@@ -32,7 +32,7 @@ Testplan for «Utdanningstilbud i samordna opptak 2027». Planen sier hva som te
 
 | Nr | Navn | Rolle | Organisasjon | Brukes til |
 |---|---|---|---|---|
-| 1 | ORDENTLIG RUNDSKRIV | Opptaksforvalter ved forvaltende organisasjon | Sikt | Legge til for en annen organisasjon, fjerne, trekke, redigere etter redigeringsfristen, filtrere på organisasjon, og detaljsiden (UTD-001, 002, 003, 026 og 04 Behandle et utdanningstilbud) |
+| 1 | ORDENTLIG RUNDSKRIV • OPPTAK_FORVALTER (HK-DIR) | Opptaksforvalter ved forvaltende organisasjon | HK-dir | Legge til for en annen organisasjon, fjerne, trekke, redigere etter redigeringsfristen, filtrere på organisasjon, og detaljsiden (UTD-001, 002, 003, 026 og 04 Behandle et utdanningstilbud) |
 | 2 | KORT DOMPAPP UiT | Opptaksforvalter ved deltakende organisasjon | UiT Norges arktiske universitet | Legge til og fjerne tilbud organisasjonen tilbyr innenfor redigeringsperioden, og trekkfristen (UTD-002, 003, 026) |
 | 3 | KORT DOMPAPP UIO | Opptaksforvalter ved deltakende organisasjon | Universitetet i Oslo | Den andre deltakende organisasjonen: ser bare utdanningstilbudene til UiO (UTD-001, testcase 3.7 og 3.8 i den interne akseptansetesten, som kjent mangel) |
 | 4 | VENNLIG SKOG HiØ | Opptaksforvalter ved organisasjon som ikke deltar i opptaket | Høgskolen i Østfold | Ser verken opptaket eller utdanningstilbudene i det (`@OPT-OVO-SAM-001`, testcase 3.9 og 3.10 i den interne akseptansetesten, som kjent mangel) |

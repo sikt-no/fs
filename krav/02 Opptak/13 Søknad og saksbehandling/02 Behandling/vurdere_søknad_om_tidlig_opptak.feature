@@ -92,7 +92,7 @@
 # - Feature-ID-en er endret fra @OPT-BEH-BEH-008 til @OPT-BEH-BEH-013, fordi
 #   søknadsmangler.feature også bruker 008 (09.10.2026).
 #
-@OPT-BEH-BEH-013 @must @implemented
+@OPT-BEH-BEH-013 @must @implemented @scope-tidlig-opptak
 Egenskap: Vurdere søknad om tidlig opptak
   Som saksbehandler
   ønsker jeg å vurdere søkerens begrunnelse for tidlig opptak og konkludere om søkeren deltar i tidligopptaket

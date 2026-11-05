@@ -69,7 +69,7 @@ const ready = (async () => {
   }
   const ws = new Workspace(dir, isoVcs(dir));
   await ws.readAll();
-  for (const event of ['krav:update', 'krav:git', 'krav:tasks'] as WorkspaceEvent[]) ws.on(event, data => send(event, data));
+  for (const event of ['krav:update', 'krav:git', 'krav:tasks', 'krav:verify'] as WorkspaceEvent[]) ws.on(event, data => send(event, data));
   ws.watch();
   // Repoet er appens egen klone, så kodeklonene ligger ikke ved siden av; brukeren velger dem under «Kodemapper»
   const claude = new ClaudeRunner(dir, { siblingDirs: false, onSaved: () => ws.refreshGit(), onDone: () => ws.refreshGit() });

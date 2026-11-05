@@ -6,8 +6,8 @@ Egenskap: Se resultatet av plasstildelingen før publisering
   ønsker jeg å se resultatet av en plasstildeling før den publiseres
   slik at jeg kan kvalitetssikre resultatet før søkerne får se det.
 
-  # Kilde: tasks/opptak/plasstildeling/design.md (mål, del 2 om tilgangsstyring og forklarbarhet),
-  # oppgave.md (oppgave 7) og Confluence «Opprette og konfigurere opptakskjøringsrunde» (steg 2 og 3).
+  # Kilde: tasks/opptak/plasstildeling-2027/design.md (mål, del 2 om tilgangsstyring og forklarbarhet),
+  # scope.md (oppgave 7) og Confluence «Opprette og konfigurere opptakskjøringsrunde» (steg 2 og 3).
   # AVKLART 2026-10-14: Før publisering ser bare opptaksforvalter plasstildelingen: hos opptakets
   # forvalter alle søknadene, og ved et deltakende lærested søknadene organisasjonen er saksbehandlende organisasjon for.
   # Endret 2026-10-28 (produkteier, etter brukertesten med HK-dir 2026-10-27): saksbehandlere ved lærestedet ser
@@ -143,6 +143,10 @@ Egenskap: Se resultatet av plasstildelingen før publisering
     #   «Har du oppdaget feil, kontakt HK-dir på … innen …»? Hva trenger HK-dir å vite for å være trygge før publisering? I brukertesten med HK-dir 2026-10-27 (HK-10162): «markere enkeltforekomster
     #   mer enn melde som kontrollert», «se igjennom innen frist, gi tilbakemelding om noe er galt», «kan meldes på
     #   e-post i verste fall». Inntil videre melder lærestedene feil på e-post (avklart 2026-10-28).
+    # - Hvor ser lærestedet resultatet etter perioden (tilbakemelding på PR #907, 2026-11-04)? forvalte_runder.feature
+    #   sier at lærestedet ikke kan åpne en plasstildelingsrunde der perioden for å endre antall tilbud er stengt. Skal
+    #   runden kunne åpnes igjen for å kontrollere resultatet (uten å endre antall tilbud), eller vises resultatet et
+    #   annet sted?
 
 
     # AVKLART 2026-10-14 (domeneekspert): Kontrollen er at lærestedene og opptakets

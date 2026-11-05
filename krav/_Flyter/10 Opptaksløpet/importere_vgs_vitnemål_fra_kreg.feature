@@ -1,50 +1,51 @@
 # language: no
-@FLY-OPT-VIT-001 @must @draft @e2e
+@FLY-OPT-VIT-001 @must @planned @e2e
 Egenskap: Importere VGS-vitnemål fra KREG
-  Fra KREG får et nytt eller annullert vitnemål fra videregående skole, til søknadene søkeren
-  har i opptak som ikke er avsluttet, har fått GSK-konklusjonen fra vitnemålet, eller sakene
-  som bruker det annullerte vitnemålet, er merket for saksbehandleren. En jobbplanlegger starter importen. Importen leser
-  hendelsesloggen i KREG, og gjelder en hendelse minst én aktiv søker i opptakssystemet, leses
-  alle VGS-dokumentene søkeren har i KREG, også annulleringene. Et vitnemål som ikke finnes fra
-  før, importeres. Er det ikke annullert, beregnes opptakssystemets påstand om GSK for vitnemålet, og
-  GSK-beregningen startes for hvert opptak søkeren har søknad i. Et vitnemål som finnes fra før
-  og er annullert i KREG, oppdateres som annullert. Et annullert vitnemål håndteres etter
-  reglene for annullerte vitnemål.
+  Fra KREG får et nytt eller annullert vitnemål fra videregående skole, til søknadene med sak
+  i opptak som ikke er avsluttet, har fått GSK-konklusjonen fra vitnemålet, eller
+  sakene som bruker det annullerte vitnemålet, er merket for saksbehandleren. En jobbplanlegger
+  starter importen. Importen går gjennom alle aktive søkere i opptakssystemet, og leser alle
+  VGS-dokumentene hver søker har i KREG, også annulleringene. Et vitnemål som ikke finnes fra
+  før, importeres. Er det ikke annullert, kjører GSK-vitnemålsberegningen for vitnemålet, og den
+  automatiske GSK-konklusjonen startes for hvert opptak der søkeren har en sak. Hadde søkeren
+  ingen vitnemål fra før, startes den automatiske behandlingen av sakene når importen har
+  hentet alle vitnemålene søkeren har i KREG. Et vitnemål som
+  finnes fra før og er annullert i KREG, oppdateres som annullert. Et annullert vitnemål
+  håndteres etter reglene for annullerte vitnemål.
 
   # Fasene er etter prosesstegningen «Importer VGS-vitnemål fra KREG» (2026-10-29).
-  # Underprosessen «Håndter annullert vitnemål» er ikke tegnet.
+  # Avklart 2026-11-03: GSK-vitnemålsberegningen er opptakssystemets påstand om GSK for ett
+  # vitnemål, og krever ingen sak. GSK-konklusjonen gjelder søknaden i ett opptak, og krever en
+  # sak. Se begreper.md.
+  # Underprosessen «Håndter annullert vitnemål» er ikke tegnet, og er OPT-BEH-BEH-034.
+  # Om et vitnemål er nytt eller annullert, ses ved å sammenligne med vitnemålene som er
+  # importert.
   # Et vitnemål som finnes fra før og ikke er annullert i KREG, endres ikke. Det gjelder også
   # når KREG har opphevet en annullering (se OPT-BEH-BEH-030).
   # Flyten beskriver vitnemålene. Kompetansebevis søkeren har i KREG, importeres på samme
   # måte (OPT-BEH-BEH-030), men får ingen påstand fra opptakssystemet om GSK (OPT-BEH-BEH-015).
 
-  @openquestion
-  # ÅPNE SPØRSMÅL:
-  # - Kravet til jobbplanleggeren er ikke skrevet. Det kommer som et eget krav, og fasen får
-  #   @depends-on- til det.
+  @depends-on-OPT-BEH-BEH-033
+  # OPT-BEH-BEH-033: «Jobbplanleggeren starter jobbene i opptaket»
   Regel: Jobbplanleggeren starter importen av VGS-vitnemål fra KREG
 
     Scenario: Importen starter når jobbplanleggeren kjører jobben
       Gitt at jobben for import av VGS-vitnemål fra KREG er satt opp i jobbplanleggeren
       Når jobbplanleggeren starter jobben
-      Så leser importen hendelsesloggen fra KREG
+      Så går importen gjennom alle aktive søkere i opptakssystemet
 
   @depends-on-OPT-BEH-BEH-030
-  # OPT-BEH-BEH-030: «Endringer i KREG importeres gjennom et abonnement»
+  # OPT-BEH-BEH-030: «Nye og annullerte vitnemål i KREG importeres for aktive søkere»
   # En aktiv søker har en søknad som ikke er trukket, i et opptak som ikke er avsluttet.
-  Regel: Bare hendelser for aktive søkere gir import
+  # Importen gjør ett oppslag i KREG per aktiv søker hver gang den kjører. Vi har dialog med
+  # KREG-teamet om belastningen (30.10.2026). Hvor ofte importen kjører, avklares i
+  # OPT-BEH-BEH-033.
+  Regel: Vitnemålene hentes fra KREG for alle aktive søkere
 
-    Scenario: Hendelsen gjelder en aktiv søker
+    Scenario: Vitnemålene hentes for den aktive søkeren
       Gitt at "Kari Nordmann" har en søknad som ikke er trukket, i et opptak som ikke er avsluttet
-      Og at hendelsesloggen i KREG har en hendelse for "Kari Nordmann"
       Når importen av VGS-vitnemål fra KREG kjører
       Så leses alle VGS-dokumentene "Kari Nordmann" har i KREG, også annulleringene
-
-    Scenario: Hendelsen gjelder ingen aktiv søker
-      Gitt at "Ola Nordmann" ikke har noen søknad som ikke er trukket, i et opptak som ikke er avsluttet
-      Og at hendelsesloggen i KREG har en hendelse for "Ola Nordmann"
-      Når importen av VGS-vitnemål fra KREG kjører
-      Så importeres ingen vitnemål for "Ola Nordmann"
 
   @depends-on-OPT-BEH-BEH-030
   # OPT-BEH-BEH-030: «Alle vitnemål og kompetansebevis søkeren har i KREG, importeres»
@@ -56,15 +57,9 @@ Egenskap: Importere VGS-vitnemål fra KREG
       Når importen av VGS-vitnemål fra KREG kjører
       Så er vitnemålet importert
 
-    Scenario: Vitnemål som finnes fra før, er uendret
-      Gitt at vitnemålet til "Kari Nordmann" er importert
-      Og at vitnemålet ikke er annullert i KREG
-      Når importen av VGS-vitnemål fra KREG kjører
-      Så er det importerte vitnemålet uendret
-
   @depends-on-OPT-BEH-BEH-015
   # OPT-BEH-BEH-015: «Opptakssystemets påstand om GSK på vitnemålet»
-  Regel: Påstanden om GSK beregnes når det nye vitnemålet er importert
+  Regel: GSK-vitnemålsberegningen kjører når det nye vitnemålet er importert
 
     Scenario: Det nye vitnemålet får opptakssystemets påstand om GSK
       Gitt at "Kari Nordmann" har fått et vitnemål i KREG som består seksfagskontrollen
@@ -74,15 +69,41 @@ Egenskap: Importere VGS-vitnemål fra KREG
   @depends-on-OPT-BEH-BEH-015
   # OPT-BEH-BEH-015: «Konklusjon på søknaden fra vitnemålet»
   # Tegningen starter underprosessen «GSK-beregning for gitt opptak» for hvert opptak søkeren
-  # har søknad i.
-  Regel: Søknadene til søkeren får GSK-konklusjonen fra det nye vitnemålet
+  # har søknad i. Underprosessen er den automatiske GSK-konklusjonen.
+  # Avklart 2026-11-03: GSK-konklusjonen krever en sak. Den automatiske GSK-konklusjonen startes
+  # bare for opptak der søkeren har en sak.
+  # Avklart 2026-11-04: behandlingsstatusen på saken spiller ingen rolle. Står i OPT-BEH-BEH-015,
+  # «Konklusjon på søknaden fra vitnemålet».
+  Regel: Den automatiske GSK-konklusjonen startes for hvert opptak der søkeren har en sak
 
-    Scenario: Hver søknad uten GSK-konklusjon får konklusjonen
-      Gitt at "Kari Nordmann" har søknader i to opptak som ikke er avsluttet
+    Scenario: Hver søknad med sak får GSK-konklusjonen
+      Gitt at "Kari Nordmann" har saker i to opptak som ikke er avsluttet
       Og at ingen av søknadene har noen GSK-konklusjon
-      Og at vitnemålet til "Kari Nordmann" gir GSK
-      Når GSK-beregningen er startet for hvert opptak "Kari Nordmann" har søknad i
+      Og at "Kari Nordmann" har fått et vitnemål i KREG som gir GSK
+      Når importen av VGS-vitnemål fra KREG kjører
       Så får begge søknadene en positiv GSK-konklusjon
+
+    Scenario: Søknaden uten sak får ingen GSK-konklusjon fra importen
+      Gitt at "Kari Nordmann" har en søknad i et opptak som ikke er avsluttet
+      Og at søknaden ikke har noen sak
+      Og at "Kari Nordmann" har fått et vitnemål i KREG som gir GSK
+      Når importen av VGS-vitnemål fra KREG kjører
+      Så har søknaden ingen GSK-konklusjon
+
+  @depends-on-OPT-BEH-BEH-032 @ref-FLY-OPT-AUT-001
+  # OPT-BEH-BEH-032: «Behandlingen kjører når importen har hentet vitnemålene til en søker uten vitnemål»
+  # Importens side av overleveringen. Behandlingens side er fase 2 i FLY-OPT-AUT-001,
+  # «Den automatiske behandlingen starter når søkerens resultater er importert».
+  Regel: Den automatiske behandlingen starter når importen har hentet vitnemålene til en søker uten vitnemål
+    # Avklart 05.11.2026 (Geir, #951): behandlingen starter først når importen har hentet alle
+    # vitnemålene søkeren har i KREG.
+
+    Scenario: Saken importen har hentet vitnemålet til, blir behandlet automatisk
+      Gitt at "Kari Nordmann" har levert søknaden uten å ha et vitnemål i KREG
+      Og at søknaden har en sak hos "Universitetet i Oslo"
+      Og at "Kari Nordmann" har fått et vitnemål i KREG som ikke er importert
+      Når importen av VGS-vitnemål fra KREG kjører
+      Så behandles saken hos "Universitetet i Oslo" automatisk når vitnemålet er importert
 
   @depends-on-OPT-BEH-BEH-030 @depends-on-OPT-BEH-BEH-015 @depends-on-OPT-BEH-BEH-034
   # OPT-BEH-BEH-030: «Et vitnemål som er annullert i KREG, er annullert i opptakssystemet»
@@ -108,9 +129,3 @@ Egenskap: Importere VGS-vitnemål fra KREG
       Når importen av VGS-vitnemål fra KREG kjører
       Så har saken taggen "Vitnemål annullert"
       Og saken har behandlingsstatusen "Under behandling"
-
-    Scenario: Nytt vitnemål som er annullert, importeres uten påstand fra opptakssystemet om GSK
-      Gitt at "Kari Nordmann" har et annullert vitnemål i KREG som ikke er importert
-      Når importen av VGS-vitnemål fra KREG kjører
-      Så er vitnemålet importert som annullert
-      Og vitnemålet har ingen påstand fra opptakssystemet om generell studiekompetanse

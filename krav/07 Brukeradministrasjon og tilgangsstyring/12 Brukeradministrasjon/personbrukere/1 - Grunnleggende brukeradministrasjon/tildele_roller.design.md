@@ -47,7 +47,7 @@ Hjelpetekster, feilmeldinger, bekreftelser og andre tekster med variasjoner. Det
 |------|---------------|-------|-------------|----------|
 | Valglisten for rolle | Listen er tom for valgt organisasjon og miljø | «Ingen roller å tildele i denne kombinasjonen.» | Teksten finnes i FS Admin i dag (`rollerIngenRettighet`, varianten for roller, i `tilgangsstyring.json`). Samme tekst uansett hvorfor listen er tom, også når ingen applikasjon har tak | Valglisten for rolle er tom når ingen applikasjon har tak i organisasjonen og miljøet |
 
-**Skisser:** [skjermbilde av dagens dialog](../../../../../tasks/brukeradministrasjon-og-tilgangsstyring/tildele-roller-forretningsroller/spec/krav-input/changes/2026-10-29-krav-rolleliste-begrenset-av-tak/sketches/dagens-tildel-roller-dialog.png) (Universitetet i Stavanger, Produksjon). Det viser dagens valgliste, med roller utenfor taket, og ingen tekster med variasjoner. Det er ikke en skisse av ønsket løsning.
+**Skisser:** [skjermbilde av dagens dialog](../../../../../tasks/brukeradministrasjon-og-tilgangsstyring/restanser-etter-onboarding/spec/krav-input/changes/2026-10-29-krav-rolleliste-begrenset-av-tak/sketches/dagens-tildel-roller-dialog.png) (Universitetet i Stavanger, Produksjon). Det viser dagens valgliste, med roller utenfor taket, og ingen tekster med variasjoner. Det er ikke en skisse av ønsket løsning.
 
 ## Per-scenario detaljer
 

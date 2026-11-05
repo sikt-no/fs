@@ -1,6 +1,6 @@
 # language: no
 # GitHub: #456
-@OPT-BEH-BEH-014 @must @in-progress
+@OPT-BEH-BEH-014 @must @in-progress @scope-tidlig-opptak
 Egenskap: Publisere svar på tidlig opptak
   Som opptaksforvalter ved forvaltende organisasjon
   ønsker jeg at svaret på tidlig opptak blir synlig for søkerne når jeg gjennomfører tidligopptaket, og å sende dem melding om utfallet

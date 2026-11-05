@@ -117,7 +117,7 @@ export function implementPrompt(target: { repo: string; spec: string }, repoRoot
   const dir = spec ? spec.replace(/\/spec\/[^/]+$/, '') : null;
   return [
     `Du kjører en utførekjøring fra FS Kravforvaltning i repoet ${target.repo} (arbeidsmappa). Svar kort og på norsk.`,
-    `Kravrepoet sikt-no/fs ligger i ${resolve(repoRoot)} (lagt til med --add-dir). Der kan du lese alt, men bare endre utforing.md i oppgavemappa.`,
+    `Kravrepoet sikt-no/fs ligger i ${resolve(repoRoot)} (lagt til med --add-dir). Der kan du lese alt, men bare endre utforing.md i scope-mappa.`,
     spec ? `Spesifikasjonen som skal implementeres: ${join(resolve(repoRoot), spec)}. Les den, feature-filene den peker på og implementasjonsdetaljene (<feature>.design.md ved siden av feature-fila, når den finnes) før du begynner. Tekstene i implementasjonsdetaljene er fasiten, også når en skisse viser noe annet.` : '',
     'Bruk repoets egne skills og konvensjoner (CLAUDE.md) når du implementerer.',
     `Du kan bygge, teste og committe lokalt (${EXECUTE_BASH.map(b => b.slice(5, -1).replace(/:\*$/, '')).join(', ')}), men ikke pushe eller lage PR: det gjør brukeren.`,
@@ -440,8 +440,8 @@ export function contextPrompt(
       '{"title": "Krav: …", "branch": "kort-slug-uten-prefiks", "body": "Kort beskrivelse på norsk av hva som er endret og hvorfor", "paths": ["krav/…"]}. ' +
       'Blokken er slik PR lages her: brukeren får et kort med «Åpne i «Lag PR»», som åpner «Lag PR» ferdig utfylt. Si ikke at du ikke kan lage PR, og be ikke brukeren fylle ut «Lag PR» for hånd. ' +
       'Foreslå ikke PR på eget initiativ når du har endret filer: brukeren har knappen «Lag forslag til PR» i panelet. ' +
-      'paths er filene som er endret i samtalen: .feature- og .md-filene under krav/, og i oppgavemappa (tasks/<domene>/<slug>/) alt under spec/ (spesifikasjonen, spec.log.md, questions-*.md, verify-*.md, krav-input/ med manifest, Figma-artefakter og skisser) og utforing.md. ' +
-      'Ta med alt fs-specify, fs-specify-delta og fs-verify har skrevet der. Andre filer (f.eks. oppgave.md, roadmap.md) kan ikke sendes fra FS Kravforvaltning: ta dem ikke med i paths, men si fra om dem i teksten.',
+      'paths er filene som er endret i samtalen: .feature- og .md-filene under krav/, og i scope-mappa (tasks/<domene>/<slug>/) alt under spec/ (spesifikasjonen, spec.log.md, questions-*.md, verify-*.md, krav-input/ med manifest, Figma-artefakter og skisser), utforing.md og scope.md. ' +
+      'Ta med alt fs-specify, fs-specify-delta og fs-verify har skrevet der. Andre filer (f.eks. design.md, roadmap.md) kan ikke sendes fra FS Kravforvaltning: ta dem ikke med i paths, men si fra om dem i teksten.',
     'Ber brukeren om en oppsummering av samtalen, så den kan brukes i en ny samtale, svarer du med en kodeblokk med språket krav-oppsummering og JSON: ' +
       '{"mal": "…", "gjort": "…", "beslutninger": "…", "apneSporsmal": "…", "nesteSteg": "…", "paths": ["…"]}. ' +
       'Feltene er korte setninger på norsk; la et felt være tomt når det ikke er noe å si. paths er filene som er lest eller endret i samtalen og er viktige for å fortsette, relative til repoet. ' +

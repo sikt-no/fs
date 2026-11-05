@@ -16,7 +16,7 @@ Egenskap: Opptaksinnstillinger per utdanningstilbud
   #   @ref-OPT-OPT-UTD-008 (sette_innstillinger_for_flere_utdanningstilbud.feature),
   #   @ref-OPT-OPT-UTD-007 (sette_studieplasser_og_antall_tilbud.feature) og
   #   @ref-OPT-OPT-UTD-025 (sette_tidlig_søknadsfrist.feature)?
-  # - Kommentaren mellom regelen om poenggrensen og regelen om saksbehandlertildelingsregel viser til
+  # - Kommentaren mellom regelen om poenggrensen og regelen om behandlertildelingsregel viser til
   #   antall_tilbud_som_skal_gis.feature. Skal den bli @ref-OPT-PLA-INN-001, og på hvilken del?
 
   Bakgrunn:
@@ -186,12 +186,11 @@ Egenskap: Opptaksinnstillinger per utdanningstilbud
       Når opptaksforvalter ved lærestedet ser utdanningstilbudet "Sykepleie, høst 2027"
       Så ser opptaksforvalter ikke muligheten til å endre plassflyten eller kvoteprioriteten
 
-  @depends-on-OPT-OVO-INN-001 @openquestion
+  @depends-on-OPT-OVO-INN-001 @openquestion @ref-OPT-BEH-BEH-007
   Regel: Opptaksforvalter kan markere at et utdanningstilbud tilbyr tidlig opptak
     # ÅPNE SPØRSMÅL:
-    # - Kommentarene i regelen viser til publisere_svar_på_tidlig_opptak.feature og
-    #   gi_tilbudsgaranti_ved_tidlig_opptak.feature i fritekst. Skal regelen ha @ref-OPT-BEH-BEH-014 og
-    #   @ref-OPT-BEH-BEH-007, eller skal scenarioet om poenggrensen ha @depends-on-OPT-BEH-BEH-007?
+    # - Kommentaren i regelen viser til publisere_svar_på_tidlig_opptak.feature i fritekst.
+    #   Skal regelen ha @ref-OPT-BEH-BEH-014?
 
     Scenario: Markere at utdanningstilbudet tilbyr tidlig opptak
       Gitt at opptaket åpner for tidlig opptak
@@ -237,21 +236,21 @@ Egenskap: Opptaksinnstillinger per utdanningstilbud
   # se 14 Plasstildeling/02 Tildelingsinnstillinger/antall_tilbud_som_skal_gis.feature.
 
   @depends-on-OPT-BEH-BEH-011 @ref-FLY-OPT-SAK-001
-  Regel: Opptaksforvalter kan velge saksbehandlertildelingsregel per utdanningstilbud
+  Regel: Opptaksforvalter kan velge behandlertildelingsregel per utdanningstilbud
     # Reglene, og om de er aktive, settes der. Hvordan søknadsalternativene fordeles etter regelen, står også der.
 
-    Scenario: Velge saksbehandlertildelingsregel for et utdanningstilbud
-      Når opptaksforvalter velger saksbehandlertildelingsregelen "SPE" for utdanningstilbudet "Sykepleie, høst 2027"
+    Scenario: Velge behandlertildelingsregel for et utdanningstilbud
+      Når opptaksforvalter velger behandlertildelingsregelen "SPE" for utdanningstilbudet "Sykepleie, høst 2027"
       Så fordeles søknadsalternativene til "Sykepleie, høst 2027" etter "SPE"
 
-    Scenario: Utdanningstilbud uten egen saksbehandlertildelingsregel følger opptakets standardregel
-      Når opptaksforvalter lagrer utdanningstilbudet "Sykepleie, høst 2027" uten å velge saksbehandlertildelingsregel
-      Så fordeles søknadsalternativene til "Sykepleie, høst 2027" etter opptakets standard saksbehandlertildelingsregel
+    Scenario: Utdanningstilbud uten egen behandlertildelingsregel følger opptakets standardregel
+      Når opptaksforvalter lagrer utdanningstilbudet "Sykepleie, høst 2027" uten å velge behandlertildelingsregel
+      Så fordeles søknadsalternativene til "Sykepleie, høst 2027" etter opptakets standard behandlertildelingsregel
 
-    Scenario: Kun aktive saksbehandlertildelingsregler i opptaket kan velges
-      Gitt at saksbehandlertildelingsregelen "TRA" er inaktiv
-      Når opptaksforvalter velger saksbehandlertildelingsregel for utdanningstilbudet "Sykepleie, høst 2027"
-      Så kan opptaksforvalter kun velge blant de aktive saksbehandlertildelingsreglene i opptaket
+    Scenario: Kun aktive behandlertildelingsregler i opptaket kan velges
+      Gitt at behandlertildelingsregelen "TRA" er inaktiv
+      Når opptaksforvalter velger behandlertildelingsregel for utdanningstilbudet "Sykepleie, høst 2027"
+      Så kan opptaksforvalter kun velge blant de aktive behandlertildelingsreglene i opptaket
       Men opptaksforvalter ser ikke "TRA" blant valgene
 
   @openquestion
@@ -268,6 +267,7 @@ Egenskap: Opptaksinnstillinger per utdanningstilbud
       Når opptaksforvalter angir at ventelistenummer skal vises for søkere på utdanningstilbudet "Sykepleie, høst 2027"
       Så kan søkere se sitt ventelistenummer for "Sykepleie, høst 2027"
 
+  @ref-OPT-BEH-BEH-007
   Regel: Opptaksforvalter kan sette opplysninger om tilbudsgaranti
 
     Scenario: Sette hvor tilbudsgarantier tas fra

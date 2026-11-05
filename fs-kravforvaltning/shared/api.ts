@@ -1,12 +1,15 @@
 import type { GitInfo, Snapshot } from './model.ts';
 import type { TasksSnapshot } from './tasks.ts';
 import type { Answers, Question } from './question.ts';
+import type { VerifySnapshot } from './verify.ts';
 
 /** Det rendereren trenger ved oppstart, uansett transport */
 export interface Boot {
   entries: Snapshot;
   git: GitInfo | null;
   tasks: TasksSnapshot | null;
+  /** Verify-rapportene i krav/, tasks/ og akseptansetest/ (Verifisering). `null` i eldre bygg */
+  verify: VerifySnapshot | null;
   /** Redigering og PR er tilgjengelig (dev-server og desktop-app, ikke statisk bygg) */
   editable: boolean;
   /** Absolutt sti til repoet appen jobber i (for «Åpne i VS Code»). `null` i statisk bygg */
@@ -236,6 +239,8 @@ export interface Api {
   save(req: SaveRequest): Promise<void>;
   /** Sletter en krav-fil fra disk */
   remove(path: string): Promise<void>;
+  /** Rapportvisningen (`verify-*.html`) ved siden av en verify-rapport, slik den er på disk */
+  readReport(path: string): Promise<string>;
   publish(req: PublishRequest): Promise<PublishResult>;
   authStatus(): Promise<AuthStatus>;
   authStart(): Promise<AuthStatus>;
@@ -275,4 +280,4 @@ export interface Api {
   pickDir(): Promise<string | null>;
 }
 export type ApiMethod = keyof Api;
-export const API_METHODS: ApiMethod[] = ['read', 'save', 'remove', 'publish', 'authStatus', 'authStart', 'authPoll', 'authLogout', 'pull', 'mainStatus', 'claudeStatus', 'claudeRun', 'claudeCancel', 'claudeActive', 'claudeApprove', 'claudeAnswer', 'claudePending', 'claudeSkills', 'claudeDirs', 'ptyStart', 'ptyWrite', 'ptyResize', 'ptyKill', 'ptyActive', 'ptyBuffer', 'pickDir'];
+export const API_METHODS: ApiMethod[] = ['read', 'save', 'remove', 'readReport', 'publish', 'authStatus', 'authStart', 'authPoll', 'authLogout', 'pull', 'mainStatus', 'claudeStatus', 'claudeRun', 'claudeCancel', 'claudeActive', 'claudeApprove', 'claudeAnswer', 'claudePending', 'claudeSkills', 'claudeDirs', 'ptyStart', 'ptyWrite', 'ptyResize', 'ptyKill', 'ptyActive', 'ptyBuffer', 'pickDir'];

@@ -1,19 +1,20 @@
-// Oppgavemappene i tasks/<domene>/<slug>/ (se tasks/README.md). Serveren leser rådata (server/tasks.ts),
-// og her tolkes de til en modell og sjekkes mot reglene i README-en. Rene funksjoner, testet i tasks.test.ts.
+// Scope-mappene i tasks/<domene>/<slug>/ med scope.md (se tasks/README.md). Serveren leser rådata (server/tasks.ts),
+// og her tolkes de til en modell og sjekkes mot reglene i README-en. Typenavnene `Task` (mappa) og `Scope` (scope.md)
+// er beholdt fra da oppgave og scope var to begreper. Rene funksjoner, testet i tasks.test.ts.
 import { parseSpec, type KravRef } from './spec.ts';
 
-/** Rådata for én oppgavemappe, slik serveren leser den */
+/** Rådata for én scope-mappe, slik serveren leser den */
 export interface RawTask {
   dom: string;
   slug: string;
   /** Alle filer i mappa, relativt til mappa (`frontend/plan-x.md`) */
   files: string[];
   /**
-   * Innholdet i `oppgave.md`, `utforing.md` og `spec/spec-*.md` / `spec/verify-*.md`,
+   * Innholdet i `scope.md`, `utforing.md` og `spec/spec-*.md` / `spec/verify-*.md`,
    * og boks-linjene i `<lag>/plan-*.md`, nøklet på relativ sti
    */
   sources: Record<string, string>;
-  /** Endringstidspunkt (ms) for spesifikasjonene, til «spec endret etter at den ble sendt» */
+  /** Endringstidspunkt (ms) for spesifikasjonene og scope.md, til «spec endret etter at den ble sendt» og «scope endret» */
   mtimes?: Record<string, number>;
 }
 
@@ -21,10 +22,6 @@ export interface TasksSnapshot {
   /** Domenemappene under tasks/, med innholdet i roadmap.md (null hvis den mangler). Appen leser ikke roadmap.md lenger. */
   domains: Record<string, string | null>;
   tasks: RawTask[];
-  /** Scope-filene på domenenivå, `tasks/<domene>/scope-<slug>.md` → innholdet */
-  scopes?: Record<string, string>;
-  /** Endringstidspunkt (ms) for scope-filene, til «scope endret» */
-  scopeMtimes?: Record<string, number>;
 }
 
 /** Domenetabellen i tasks/README.md: slug → toppnivå i krav/ */
@@ -46,17 +43,17 @@ export const KNOWN_LAG = ['spec', 'frontend', 'backend', 'subgraph', 'tester', '
 /** Filene BAT globber etter (regel 1) */
 const BAT_GLOB = /^(spec|analysis|plan|verification)-.+\.md$/;
 const COMPLETION = /^task-\d+-completion\.md$/;
-/** Mapper i oppgave-rota som ikke er lag */
+/** Mapper i scope-rota som ikke er lag */
 const NOT_LAG = new Set(['spec', 'reviews']);
 
-export type TaskRule = 'r1' | 'r2' | 'r3' | 'r4' | 'oppgave' | 'slug' | 'domene' | 'scope';
+export type TaskRule = 'r1' | 'r2' | 'r3' | 'r4' | 'scopefil' | 'slug' | 'domene' | 'scope';
 
 export const TASK_RULE: Record<TaskRule, string> = {
   r1: 'Regel 1',
   r2: 'Regel 2',
   r3: 'Regel 3',
   r4: 'Regel 4',
-  oppgave: 'Metadata',
+  scopefil: 'Metadata',
   slug: 'Metadata',
   domene: 'Metadata',
   scope: 'Scope',
@@ -66,7 +63,7 @@ export interface TaskLint {
   rule: TaskRule;
   title: string;
   hint: string;
-  /** Fila avviket gjelder, relativt til oppgavemappa */
+  /** Fila avviket gjelder, relativt til scope-mappa */
   file: string | null;
 }
 
@@ -85,7 +82,7 @@ export interface LogRow {
   who: string;
 }
 
-/** Saken oppgaven løses i: en Jira-sak (`BAT-268`), eller et GitHub issue (`#143`) i oppgaver fra før */
+/** En sak scopet løses i: en Jira-sak (`BAT-268`), eller et GitHub issue (`#143`) i scopes fra før */
 export interface IssueRef {
   /** `BAT-268` eller `#143` */
   key: string;
@@ -95,7 +92,7 @@ export interface IssueRef {
 export const JIRA_BROWSE = 'https://sikt.atlassian.net/browse/';
 const GITHUB_ISSUES = 'https://github.com/sikt-no/fs/issues/';
 
-/** Saken i `Issue` i oppgave.md eller scope-tabellen, eller det brukeren skriver i «+ Ny oppgave»: en Jira-nøkkel eller -lenke, ellers `#<nr>` for GitHub */
+/** Saken i en krav-rad i scope.md, eller det brukeren skriver i «+ Nytt scope»: en Jira-nøkkel eller -lenke, ellers `#<nr>` for GitHub */
 export function parseIssue(v: string | undefined): IssueRef | null {
   if (!v) return null;
   const jira = /(?:^|[^A-Za-z0-9])([A-Z][A-Z0-9]+-\d+)\b/.exec(v);
@@ -104,24 +101,37 @@ export function parseIssue(v: string | undefined): IssueRef | null {
   return gh ? { key: '#' + gh[1], url: GITHUB_ISSUES + gh[1] } : null;
 }
 
+/** Alle sakene i `Jira` i scope.md (`[BAT-1](…), [#143](…)`) eller i «+ Nytt scope» (`BAT-1, BAT-2`), i rekkefølge */
+export function parseIssues(v: string | undefined): IssueRef[] {
+  if (!v) return [];
+  const out: IssueRef[] = [];
+  for (const part of v.split(/,|\s+og\s+/)) {
+    const r = parseIssue(part);
+    if (r && !out.some(o => o.key === r.key)) out.push(r);
+  }
+  return out;
+}
+
 export interface Task {
   dom: string;
   slug: string;
   /** tasks/<dom>/<slug> */
   dir: string;
   files: string[];
-  hasOppgave: boolean;
+  /** Mappa har scope.md */
+  hasScope: boolean;
   title: string;
+  /** Sakene i `Jira`, i rekkefølge */
+  issues: IssueRef[];
+  /** Den første saken, eller null */
   issue: IssueRef | null;
   initiativ: string | null;
-  /** Slugen i `Scope:` i oppgave.md (`[scope-<slug>](../scope-<slug>.md)`), eller null */
+  /** Slugen til scopet (= mappa) når mappa har scope.md, ellers null */
   scope: string | null;
   prio: string | null;
   owner: string | null;
   metaDom: string | null;
   metaSlug: string | null;
-  /** Sti under krav/ fra «Krav (Gherkin)», uten skråstrek til slutt */
-  kravLink: string | null;
   /** Kravene under `## Krav` i spesifikasjonene (`spec/spec-*.md`), uten det som er utenfor scope */
   specKrav: KravRef[];
   prs: number;
@@ -176,32 +186,6 @@ export function tableAfter(src: string, heading: RegExp): string[][] {
   return rows.filter((r, i) => i > 0 && !r.every(c => /^:?-+:?$/.test(c)));
 }
 
-function kravPath(value: string | undefined, dir: string): string | null {
-  if (!value) return null;
-  const link = /\]\(([^)]+)\)/.exec(value);
-  let path: string | null = null;
-  if (link && !/^[a-z]+:/i.test(link[1])) {
-    let href = link[1];
-    try {
-      href = decodeURIComponent(href);
-    } catch {
-      /* behold som den er */
-    }
-    const parts = (dir + '/oppgave.md').split('/').slice(0, -1);
-    for (const p of href.split('/')) {
-      if (p === '..') parts.pop();
-      else if (p && p !== '.') parts.push(p);
-    }
-    path = parts.join('/');
-  } else {
-    const code = /`([^`]+)`/.exec(value);
-    if (code) path = code[1];
-  }
-  if (!path) return null;
-  path = path.replace(/\/+$/, '');
-  return path === 'krav' || path.startsWith('krav/') ? path : null;
-}
-
 const countBoxes = (src: string): [number, number] => {
   let done = 0;
   let all = 0;
@@ -212,19 +196,13 @@ const countBoxes = (src: string): [number, number] => {
   return [done, all];
 };
 
-/** `[scope-x](../scope-x.md)`, `scope-x` eller `x` → `x` */
-const scopeSlug = (v: string | undefined) => {
-  if (!v || !none(v)) return null;
-  const m = /scope-([a-z0-9][a-z0-9-]*?)(?:\.md)?(?=[\])`\s]|$)/.exec(v) ?? /^`?([a-z0-9][a-z0-9-]*)`?$/.exec(clean(v));
-  return m?.[1] ?? null;
-};
-
-/** Tolker rådataene for én oppgavemappe (uten regelsjekk) */
+/** Tolker rådataene for én scope-mappe (uten regelsjekk) */
 export function parseTask(raw: RawTask): Task {
   const dir = `tasks/${raw.dom}/${raw.slug}`;
-  const src = raw.sources['oppgave.md'];
+  const src = raw.sources['scope.md'];
   const meta = metadata(src ?? '');
-  const title = /^#\s+(.+)$/m.exec(src ?? '')?.[1].trim() ?? raw.slug;
+  const title = (/^#\s+(.+)$/m.exec(src ?? '')?.[1].trim() ?? raw.slug).replace(/^Scope:\s*/i, '');
+  const issues = parseIssues(meta['Jira']);
   const firstWord = (k: string) => none(meta[k])?.split(/\s/)[0] ?? null;
   const prsVal = meta['lenke:PRs'] ?? meta['PRs'];
   const prs = prsVal && none(prsVal) ? Math.max(1, new Set([...prsVal.matchAll(/(?:#|\/pull\/)(\d+)/g)].map(m => m[1])).size) : 0;
@@ -261,16 +239,16 @@ export function parseTask(raw: RawTask): Task {
     slug: raw.slug,
     dir,
     files: raw.files,
-    hasOppgave: src !== undefined,
+    hasScope: src !== undefined,
     title,
-    issue: parseIssue(meta['Issue']),
+    issues,
+    issue: issues[0] ?? null,
     initiativ: none(meta['Initiativ']),
-    scope: scopeSlug(meta['Scope']),
+    scope: src !== undefined ? raw.slug : null,
     prio: firstWord('Prioritet'),
     owner: none(meta['Eier']),
     metaDom: firstWord('Domene'),
     metaSlug: firstWord('Slug'),
-    kravLink: kravPath(meta['Krav (Gherkin)'], dir),
     specKrav,
     prs,
     design: raw.files.includes('design.md'),
@@ -284,8 +262,8 @@ export function parseTask(raw: RawTask): Task {
   };
 }
 
-/** Sjekker oppgavemappa mot de fire reglene i tasks/README.md, mot metadata, og mot scopet den peker på */
-export function taskLint(t: Task, scopes: Scope[] = []): TaskLint[] {
+/** Sjekker scope-mappa mot de fire reglene i tasks/README.md og mot metadata i scope.md */
+export function taskLint(t: Task): TaskLint[] {
   const out: TaskLint[] = [];
   const root = t.files.filter(f => !f.includes('/'));
 
@@ -294,14 +272,14 @@ export function taskLint(t: Task, scopes: Scope[] = []): TaskLint[] {
     if (lag && KNOWN_LAG.includes(lag))
       out.push({
         rule: 'r2',
-        title: `${f} ligger i oppgave-rota`,
+        title: `${f} ligger i scope-rota`,
         hint: `En plan for et lag hører hjemme i lagets egen undermappe. Flytt den til ${lag}/plan-${t.slug}.md.`,
         file: f,
       });
     else
       out.push({
         rule: 'r1',
-        title: `${f} ligger i oppgave-rota`,
+        title: `${f} ligger i scope-rota`,
         hint: `BAT leser den som et fullført steg og hopper over resten av flyten. Flytt den til <lag>/${f.split('-')[0]}-${t.slug}.md.`,
         file: f,
       });
@@ -321,50 +299,42 @@ export function taskLint(t: Task, scopes: Scope[] = []): TaskLint[] {
   }
 
   if (t.dom === 'mal')
-    out.push({ rule: 'r4', title: 'Oppgavemappe under mal/', hint: 'mal/ er reservert for malene og er ikke et domene. Flytt oppgaven til riktig domene.', file: null });
+    out.push({ rule: 'r4', title: 'Scope-mappe under mal/', hint: 'mal/ er reservert for malene og er ikke et domene. Flytt scopet til riktig domene.', file: null });
   else if (!DOMAINS[t.dom])
     out.push({
       rule: 'r4',
       title: `${t.dom} er ikke et domene`,
-      hint: 'Domenet finnes ikke i domenetabellen i tasks/README.md. Legg det til der først, eller flytt oppgaven.',
+      hint: 'Domenet finnes ikke i domenetabellen i tasks/README.md. Legg det til der først, eller flytt scopet.',
       file: null,
     });
 
-  if (!t.hasOppgave) {
-    out.push({ rule: 'oppgave', title: 'oppgave.md mangler', hint: 'Hver oppgavemappe skal ha en oppgave.md. Opprett oppgaven med fs-scope, eller med «+ Ny oppgave» på tavla.', file: null });
+  if (!t.hasScope) {
+    out.push({ rule: 'scopefil', title: 'scope.md mangler', hint: 'Hver scope-mappe skal ha en scope.md. Lag scopet med fs-scope, eller med «+ Nytt scope» på tavla.', file: null });
     return out;
   }
   if (t.metaSlug && t.metaSlug !== t.slug)
-    out.push({ rule: 'slug', title: `Slug er ${t.metaSlug}, men mappa heter ${t.slug}`, hint: 'Slug i oppgave.md skal være navnet på mappa.', file: 'oppgave.md' });
+    out.push({ rule: 'slug', title: `Slug er ${t.metaSlug}, men mappa heter ${t.slug}`, hint: 'Slug i scope.md skal være navnet på mappa, og det samme som i taggen @scope-<slug>.', file: 'scope.md' });
   if (t.metaDom && t.metaDom !== t.dom)
-    out.push({ rule: 'domene', title: `Domene er ${t.metaDom}, men mappa ligger i ${t.dom}`, hint: 'Domene i oppgave.md skal være domenemappa.', file: 'oppgave.md' });
-  if (t.scope) {
-    const sc = scopes.find(s => s.slug === t.scope);
-    if (!sc)
-      out.push({ rule: 'scope', title: `scope-${t.scope} finnes ikke`, hint: `Scope i oppgave.md peker på tasks/${t.dom}/scope-${t.scope}.md, som ikke finnes. Opprett scopet med fs-scope, eller fjern feltet.`, file: 'oppgave.md' });
-    else if (sc.dom !== t.dom)
-      out.push({ rule: 'scope', title: `scope-${t.scope} ligger i ${sc.dom}`, hint: 'Oppgavene i et scope ligger i samme domene som scope-fila.', file: 'oppgave.md' });
-    else if (!sc.rows.some(r => r.task === t.slug))
-      out.push({ rule: 'scope', title: `Står ikke i scope-${t.scope}`, hint: `Oppgaven har Scope: scope-${t.scope}, men står ikke i tabellen «Oppgaver» i scopet. Legg den til med fs-scope, eller fjern feltet.`, file: 'oppgave.md' });
-  }
+    out.push({ rule: 'domene', title: `Domene er ${t.metaDom}, men mappa ligger i ${t.dom}`, hint: 'Domene i scope.md skal være domenemappa.', file: 'scope.md' });
   return out;
 }
 
-/** Hele oppgavelista med regelsjekk, sortert på domene og tittel */
-export function buildTasks(snap: TasksSnapshot, scopes: Scope[] = buildScopes(snap)): Task[] {
+/** Hele lista over scope-mappene med regelsjekk, sortert på domene og tittel */
+export function buildTasks(snap: TasksSnapshot): Task[] {
   return snap.tasks
     .map(raw => {
       const t = parseTask(raw);
-      t.lint = taskLint(t, scopes);
+      t.lint = taskLint(t);
       return t;
     })
     .sort((a, b) => a.dom.localeCompare(b.dom) || a.title.localeCompare(b.title, 'nb'));
 }
 
-// —— Scope (tasks/<domene>/scope-<slug>.md) ——
+// —— Scope (tasks/<domene>/<slug>/scope.md) ——
 
-/** Én rad i tabellen «Oppgaver» i scopet: oppgaven (null for «ikke tildelt») og kravene den har */
+/** Én rad i tabellen «Krav» i scope.md */
 export interface ScopeRow {
+  /** Scope-mappa raden hører til (alle radene i en scope.md hører til mappa) */
   task: string | null;
   /** Feature-ID-ene i Krav-kolonnen, med @ (`@OPT-PLA-RUN-001`) */
   ids: string[];
@@ -372,20 +342,23 @@ export interface ScopeRow {
   paths: string[];
   moscow: string | null;
   sketches: { name: string; url: string }[];
+  /** Saken kravet hører til (kolonnen «Jira») */
   issue: IssueRef | null;
   comment: string;
 }
 
 export interface Scope {
   dom: string;
-  /** Slugen i filnavnet (`scope-<slug>.md`) */
+  /** Navnet på mappa, og slugen i `@scope-<slug>` */
   slug: string;
-  /** `tasks/<dom>/scope-<slug>.md` */
+  /** `tasks/<dom>/<slug>/scope.md` */
   path: string;
   title: string;
   /** Slug-feltet i fila, når det står */
   metaSlug: string | null;
   initiativ: string | null;
+  /** Sakene i `Jira`, i rekkefølge */
+  issues: IssueRef[];
   owner: string | null;
   updated: string | null;
   rows: ScopeRow[];
@@ -393,7 +366,7 @@ export interface Scope {
   lint: TaskLint[];
 }
 
-const SCOPE_FILE = /^tasks\/([^/]+)\/scope-([^/]+)\.md$/;
+const SCOPE_FILE = /^tasks\/([^/]+)\/([^/]+)\/scope\.md$/;
 const FEATURE_ID = /@?([A-ZÆØÅ]{2,4}-[A-ZÆØÅ]{2,4}-[A-ZÆØÅ]{2,4}-\d{3})/g;
 
 /** `**Nøkkel**: verdi`-parene i metadatalinjene, også flere på samme linje */
@@ -427,7 +400,7 @@ function namedTable(src: string, heading: RegExp): Record<string, string>[] {
   return body.filter(r => !r.every(c => /^:?-+:?$/.test(c))).map(r => Object.fromEntries(keys.map((k, i) => [k, r[i] ?? ''])));
 }
 
-/** Relativ lenke fra `tasks/<dom>/` til krav/ → stien under krav/ */
+/** Relativ lenke fra `tasks/<dom>/<slug>/` til krav/ → stien under krav/ */
 function linkTarget(href: string, from: string): string | null {
   if (/^[a-z]+:/i.test(href)) return null;
   let h = href;
@@ -446,32 +419,28 @@ function linkTarget(href: string, from: string): string | null {
 
 const links = (cell: string) => [...cell.matchAll(/\[([^\]]*)\]\(([^)\s]+)\)/g)].map(m => ({ text: m[1].trim(), href: m[2] }));
 
-/** Tolker én scope-fil (uten sjekkene på tvers av scopene) */
+/** Tolker én scope.md (uten sjekkene på tvers av scopene) */
 export function parseScope(path: string, src: string, mtime: number | null = null): Scope | null {
   const m = SCOPE_FILE.exec(path);
   if (!m) return null;
   const [, dom, slug] = m;
   const meta = inlineMeta(src);
   const title = (/^#\s+(.+)$/m.exec(src)?.[1].trim() ?? slug).replace(/^Scope:\s*/i, '');
-  const domDir = `tasks/${dom}`;
-  const rows: ScopeRow[] = namedTable(src, /^#{1,6}\s+Oppgaver\b/).map(r => {
-    const oppg = r['oppgave'] ?? '';
-    const ol = links(oppg)[0];
-    const taskVal = ol ? (ol.href.replace(/\/+$/, '').split('/').pop() || ol.text) : clean(oppg);
-    const task = /^[a-z0-9][a-z0-9-]*$/.test(taskVal) ? taskVal : null;
+  const dir = `tasks/${dom}/${slug}`;
+  const rows: ScopeRow[] = namedTable(src, /^#{1,6}\s+Krav\b/).map(r => {
     const krav = r['krav'] ?? '';
     const ids = [...new Set([...krav.matchAll(FEATURE_ID)].map(x => '@' + x[1]))];
     const paths = links(krav)
-      .map(l => linkTarget(l.href, domDir))
+      .map(l => linkTarget(l.href, dir))
       .filter((p): p is string => !!p && p.startsWith('krav/'));
     const sk = r['skisse'] ?? '';
     return {
-      task,
+      task: slug,
       ids,
       paths,
       moscow: none(r['moscow'])?.split(/\s/)[0] ?? null,
       sketches: links(sk).map(l => ({ name: l.text || l.href, url: l.href })),
-      issue: parseIssue(r['issue']),
+      issue: parseIssue(r['jira']),
       comment: clean(r['kommentar'] ?? ''),
     };
   });
@@ -482,6 +451,7 @@ export function parseScope(path: string, src: string, mtime: number | null = nul
     title,
     metaSlug: none(meta['Slug'])?.split(/\s/)[0] ?? null,
     initiativ: none(meta['Initiativ']),
+    issues: parseIssues(meta['Jira']),
     owner: none(meta['Eier']),
     updated: none(meta['Siste oppdatering']),
     rows,
@@ -491,53 +461,64 @@ export function parseScope(path: string, src: string, mtime: number | null = nul
   return scope;
 }
 
-/** Sjekker scopet mot reglene i tasks/README.md: slugen, unik på tvers av domener, og at oppgavene finnes */
-export function scopeLint(sc: Scope, all: Scope[], snap: TasksSnapshot): TaskLint[] {
+/** Sjekker scopet mot reglene i tasks/README.md: slugen, og at den er unik på tvers av domener (slug og domene i scope.md sjekkes i `taskLint`) */
+export function scopeLint(sc: Scope, all: Scope[]): TaskLint[] {
   const out: TaskLint[] = [];
-  const file = sc.path.split('/').pop()!;
   if (!/^[a-z0-9][a-z0-9-]*$/.test(sc.slug))
-    out.push({ rule: 'scope', title: `${file}: ugyldig slug`, hint: 'Slugen i scope-<slug>.md skrives i kebab-case: små bokstaver (a–z), tall og bindestrek.', file });
-  if (sc.metaSlug && sc.metaSlug !== sc.slug)
-    out.push({ rule: 'scope', title: `Slug er ${sc.metaSlug}, men fila heter scope-${sc.slug}.md`, hint: 'Slug i scope-fila skal være lik slugen i filnavnet.', file });
+    out.push({ rule: 'scope', title: `${sc.slug}: ugyldig slug`, hint: 'Slugen (navnet på mappa) skrives i kebab-case: små bokstaver (a–z), tall og bindestrek.', file: 'scope.md' });
   const twins = all.filter(o => o !== sc && o.slug === sc.slug);
   if (twins.length)
-    out.push({ rule: 'scope', title: `scope-${sc.slug} finnes også i ${twins.map(o => o.dom).join(', ')}`, hint: 'Scope-slugen er unik på tvers av domener, fordi @scope-<slug> ikke har domene.', file });
-  if (!DOMAINS[sc.dom])
-    out.push({ rule: 'r4', title: `${sc.dom} er ikke et domene`, hint: 'Domenet finnes ikke i domenetabellen i tasks/README.md.', file });
-  for (const r of sc.rows) {
-    if (r.task && !snap.tasks.some(t => t.dom === sc.dom && t.slug === r.task))
-      out.push({ rule: 'scope', title: `Oppgaven ${r.task} finnes ikke i ${sc.dom}`, hint: `Tabellen «Oppgaver» i scopet viser til tasks/${sc.dom}/${r.task}/, som ikke finnes. Oppgavene i et scope ligger i samme domene som scope-fila.`, file });
-  }
+    out.push({ rule: 'scope', title: `Scopet ${sc.slug} finnes også i ${twins.map(o => o.dom).join(', ')}`, hint: 'Slugen er unik på tvers av domener, fordi @scope-<slug> ikke har domene.', file: 'scope.md' });
   return out;
 }
 
-/** Alle scopene med regelsjekk, sortert på domene og tittel */
+/** Alle scopene (scope.md i scope-mappene) med regelsjekk, sortert på domene og tittel */
 export function buildScopes(snap: TasksSnapshot): Scope[] {
-  const all = Object.entries(snap.scopes ?? {})
-    .map(([p, src]) => parseScope(p, src, snap.scopeMtimes?.[p] ?? null))
+  const all = snap.tasks
+    .filter(t => t.dom !== 'mal' && t.sources['scope.md'] !== undefined)
+    .map(t => parseScope(`tasks/${t.dom}/${t.slug}/scope.md`, t.sources['scope.md'], t.mtimes?.['scope.md'] ?? null))
     .filter((s): s is Scope => !!s);
-  for (const sc of all) sc.lint = scopeLint(sc, all, snap);
+  for (const sc of all) sc.lint = scopeLint(sc, all);
   return all.sort((a, b) => a.dom.localeCompare(b.dom) || a.title.localeCompare(b.title, 'nb'));
 }
 
 /**
- * En minimal oppgave.md fra malen (tasks/mal/oppgave.md), til «+ Ny oppgave» på tavla: tittel, Jira-sak, domene, slug,
- * scope og eier, uten malkommentar og plassholdere, og én linje i statusloggen.
+ * En minimal scope.md fra malen (tasks/mal/scope.md), til «+ Nytt scope» på tavla: tittel, domene, slug, Jira-saker, eier
+ * og mål, uten malkommentar og plassholdere, en tom krav-tabell, og én linje i statusloggen.
  */
-export function newOppgaveText(o: { title: string; dom: string; slug: string; issue?: IssueRef | null; owner?: string | null; scope?: string | null; date: string; via: string }): string {
-  const issue = o.issue ? `[${o.issue.key}](${o.issue.url})` : '–';
+export function newScopeText(o: { title: string; dom: string; slug: string; jira?: IssueRef[]; owner?: string | null; mal?: string; date: string; via: string }): string {
+  const jira = o.jira?.length ? o.jira.map(i => `[${i.key}](${i.url})`).join(', ') : '–';
   return [
-    `# ${o.title}`,
+    `# Scope: ${o.title}`,
     '',
-    '## Metadata',
-    '',
-    `- **Issue**: ${issue}`,
-    `- **Domene**: ${o.dom} (se [\`../../README.md\`](../../README.md#domener))`,
     `- **Slug**: ${o.slug}`,
-    `- **Scope**: ${o.scope ? `[scope-${o.scope}](../scope-${o.scope}.md)` : '–'}`,
+    `- **Domene**: ${o.dom} (se [\`../../README.md\`](../../README.md#domener))`,
+    '- **Initiativ**: –',
+    `- **Jira**: ${jira}`,
     `- **Eier**: ${o.owner || '–'}`,
+    `- **Siste oppdatering**: ${o.date}`,
     '',
-    ...(o.issue ? [] : ['## Åpne punkter', '', '- Oppgaven har ikke en Jira-sak ennå.', '']),
+    '## Mål',
+    '',
+    o.mal?.trim() || '–',
+    '',
+    '## Ikke-mål',
+    '',
+    '–',
+    '',
+    '## Kilder',
+    '',
+    '–',
+    '',
+    '## Krav',
+    '',
+    '| Krav | MoSCoW | Skisse | Jira | Kommentar |',
+    '|---|---|---|---|---|',
+    '',
+    '## Åpne spørsmål',
+    '',
+    ...(o.jira?.length ? ['–'] : ['- [ ] Scopet har ikke en Jira-sak ennå.']),
+    '',
     '## Statuslogg',
     '',
     'Append-only. Ny linje på toppen ved hver hendelse.',

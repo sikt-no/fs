@@ -28,7 +28,7 @@ Teststrategi for FS – fra krav til akseptanse (forslag) (5145100326)
         ├── Intern akseptansetest – <leveranse>                 ← fs-testcaser-intern (fase 3)
         ├── Testrapport – intern akseptansetest – <leveranse>   ← fs-testrapport (fase 3)
         ├── Ekstern akseptansetest – <leveranse>                ← fs-testcaser-ekstern (fase 4)
-        ├── Flytbeskrivelser til partene – <leveranse>          ← fs-testcaser-ekstern (fase 4, valgfri)
+        ├── Flytbeskrivelser til partene – <leveranse>          ← fs-testcaser-ekstern (fase 4)
         └── Testrapport – ekstern akseptansetest – <leveranse>  ← fs-testrapport (fase 4)
 ```
 
@@ -46,7 +46,7 @@ Teststrategi for FS – fra krav til akseptanse (forslag) (5145100326)
 Skillene etter `fs-testplan`, og `fs-verify` når den skal legge resultatet i Confluence, starter med testplanen:
 
 1. Oppga brukeren en testplan (`akseptansetest/<slug>`, eller `testplan.md` i den), bruk den.
-2. Oppga brukeren et scope, en oppgave, en mappe eller en feature-fil: `Grep` etter den (`@scope-<slug>`, `tasks/<domene>/<slug>`, `krav/<sti>`) i `- **Kilde**:` i `akseptansetest/*/testplan.md`. For en feature-fil: søk også etter Feature-ID-en i «Omfang». Ett treff er testplanen. Flere treff: spør hvilken.
+2. Oppga brukeren et scope, en mappe eller en feature-fil: `Grep` etter den (`@scope-<slug>`, `tasks/<domene>/<slug>`, `krav/<sti>`) i `- **Kilde**:` i `akseptansetest/*/testplan.md`. For en feature-fil: søk også etter Feature-ID-en i «Omfang». Ett treff er testplanen. Flere treff: spør hvilken.
 3. Oppga brukeren en Confluence-URL, les siden. Lenken til fila står ikke på siden, så finn fila med samme `- **Confluence**:`.
 4. Ellers: spør. Finnes ingen testplan, tilby å kjøre `fs-testplan` først.
 

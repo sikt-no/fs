@@ -65,12 +65,7 @@ Egenskap: Gi tilbudsgaranti
   ønsker jeg å gi søkeren tilbudsgaranti på et søknadsalternativ etter en individuell vurdering
   slik at søkeren får tilbud på søknadsalternativet uavhengig av den ordinære rangeringen.
 
-  @openquestion
   Regel: Saksbehandler, tilbyder og opptaksforvalter kan sette tilbudsgaranti manuelt
-    # ÅPNE SPØRSMÅL:
-    # - Kommentarene øverst viser til gi_tilbudsgaranti_ved_tidlig_opptak.feature (OPT-BEH-BEH-007) i
-    #   fritekst, som avgrensning og som unntaket fra manuell tilbudsgaranti. Skal kravet ha
-    #   @ref-OPT-BEH-BEH-007 på Egenskap-linja?
 
     Scenariomal: Sette tilbudsgaranti i feltet for rollen
       Gitt tilbudsgarantitypen "<type>" kan brukes av <rolle>

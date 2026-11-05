@@ -6,11 +6,11 @@ Egenskap: Starte en plasstildeling
   ønsker jeg å starte en plasstildeling i en plasstildelingsrunde
   slik at studieplassene fordeles ut fra rangeringen og innstillingene i opptaket.
 
-  # Kilde: tasks/opptak/plasstildeling/design.md (beslutning 3, oppgave 4), oppgave.md (oppgave 4) og
+  # Kilde: tasks/opptak/plasstildeling-2027/design.md (beslutning 3, oppgave 4), scope.md (oppgave 4) og
   # Confluence «Fra saksbehandling til plasstildeling» (2026-09-04).
   # Plasstildelingen utføres som en bestilling og kjører i bakgrunnen. Én plasstildelingsrunde kan ha mange
   # plasstildelinger: prøvetildelinger som ikke publiseres, og til slutt én som publiseres.
-  # Status i kode: løst (oppgave.md). Kandidat for @implemented etter verifisering.
+  # Status i kode: løst (scope.md). Kandidat for @implemented etter verifisering.
 
   Bakgrunn:
     Gitt at opptakets forvalter er innlogget
@@ -83,6 +83,26 @@ Egenskap: Starte en plasstildeling
       Når opptaksforvalter starter en ny plasstildeling i "Hovedrunde"
       Så beregnes en ny plasstildeling fra oppdatert grunnlag
       Og den forrige plasstildelingen er fortsatt tilgjengelig
+
+  # Flyttet hit fra OPT-BEH-BEH-008 2026-11-02: mangler hindrer ikke kvalifiseringen, men noen
+  # mangler skal hindre at søkeren får tilbud om studieplass.
+  @depends-on-OPT-BEH-BEH-008 @openquestion
+  Regel: Søkeren får ikke tilbud når saken har en mangel som stopper for opptak
+    # ÅPNE SPØRSMÅL:
+    # - Ikke raffinert. Er det «Stopper for opptak» på mangelkoden som avgjør hvilke mangler som
+    #   hindrer tilbud, eller kategorien?
+    # - Er søkeren med i plasstildelingen og rangert, men uten tilbud, eller er saken holdt utenfor?
+    #   Får søkeren plass på venteliste?
+    # - Gjelder en mangel på spesielle krav bare søknadsalternativene med kompetanseregelverket?
+    # - Stopper en mangel som er sjekket ut, ikke lenger for opptak?
+    # - Koden leser ikke `sperrer_opptak` i plasstildelingen (verify 2026-10-08 og 2026-10-30).
+
+    Scenario: Søknadsalternativ med mangel som stopper for opptak får ikke tilbud
+      Gitt at saken til "Kari Nordmann" er ferdig behandlet
+      Og at søknadsalternativet "Sykepleie, høst 2027" er kvalifisert og poengberegnet
+      Og at saken til "Kari Nordmann" har en mangel med en mangelkode som stopper for opptak
+      Når opptaksforvalter starter en plasstildeling i "Hovedrunde"
+      Så kan ikke søknadsalternativet få tilbud
 
   @depends-on-OPT-REG-RUN-001
   Regel: En plasstildeling bygger på forrige publiserte plasstildelingsrunde når rundetypen sier det

@@ -18,16 +18,15 @@ Felles for skillene i testflyten. Planen (fase 1) starter med verifiseringen (`f
 
 ## Leveransen
 
-En testplan gjelder én av fire kilder. En testplan kan ha flere kilder av samme slag (flere scope, mapper eller filer):
+En testplan gjelder én av tre kilder. En testplan kan ha flere kilder av samme slag (flere scope, mapper eller filer):
 
 | Leveranse | Input | Kravene |
 |---|---|---|
-| Scope | `scope-<slug>`, `@scope-<slug>`, eller `tasks/<domene>/scope-<slug>.md` | Alle krav og deler med taggen `@scope-<slug>` |
-| Oppgave | `tasks/<domene>/<slug>`, eller bare slug (`Glob` `tasks/*/<slug>/`) | Oppgavens rader i scope-tabellen. Uten scope: `## Krav` i `spec/spec-*.md` i oppgaven |
+| Scope | `@scope-<slug>`, `tasks/<domene>/<slug>` (eller `scope.md` i mappa), eller bare slug (`Glob` `tasks/*/<slug>/scope.md`) | Alle krav og deler med taggen `@scope-<slug>`, og radene i `## Krav` i `scope.md` |
 | Mappe | En mappe under `krav/` (domene, sub-domene eller kapabilitet) | Alle `.feature`-filer under mappa |
 | Feature-fil | Én eller flere `.feature`-filer under `krav/` | Filene |
 
-Er det uklart hva brukeren mener (for eksempel en slug som både er et scope og en oppgave), spør.
+Er det uklart hva brukeren mener, spør.
 
 En flyt i `krav/_Flyter/` er ikke en egen leveranse. Flytene som går gjennom kravene, kommer med i tillegg, uansett kilde (se *Flyter*).
 
@@ -37,17 +36,13 @@ En flyt i `krav/_Flyter/` er ikke en egen leveranse. Flytene som går gjennom kr
 
 1. `grep -rl "@scope-<slug>" krav/ --include=*.feature`. Uten Bash: `Grep` med samme mønster.
 2. Les hver fil. Taggen står på `Egenskap:`-linja (hele kravet hører til scopet), eller på en `Regel:` / `Scenario:` under en `@implemented` egenskap (bare den delen hører til scopet, se *Scope* i `krav/README.md`).
-3. Sjekk mot oppgavetabellen i `tasks/<domene>/scope-<slug>.md`. Kravene i tabellen og kravene med taggen skal være de samme:
-   - **Krav i tabellen uten taggen:** si fra, og ta det med (tabellen er kilden til hvilke krav oppgaven har).
+3. Sjekk mot tabellen under `## Krav` i `tasks/<domene>/<slug>/scope.md`. Kravene i tabellen og kravene med taggen skal være de samme:
+   - **Krav i tabellen uten taggen:** si fra, og ta det med (tabellen er kilden til hvilke krav scopet har).
    - **Krav med taggen som ikke er i tabellen:** si fra, og ta det med. Foreslå `fs-scope`.
    - **Krav i tabellen som ikke finnes under `krav/`:** list det i «Ikke med i denne testen» med grunnen «Kravet finnes ikke ennå».
-4. Grupper kravene per oppgave, i den rekkefølgen oppgavene står i tabellen. `(ikke tildelt)` er en egen gruppe til slutt.
+4. Har scopet flere Jira-saker (`Jira` i metadataene), grupper kravene per sak (kolonnen `Jira` i tabellen), i den rekkefølgen sakene står i metadataene. Krav uten sak er en egen gruppe til slutt. Har scopet én sak eller ingen, er det én gruppe, i rekkefølgen i tabellen.
 
 Et initiativ som går over flere domener, har ett scope per domene. Da har testplanen flere scope-id-er, og kravene er alle kravene med en av dem.
-
-### Oppgave
-
-Oppgavens rader i scope-tabellen, slått opp på Feature-ID under `krav/`. Uten `Scope:` i `oppgave.md`: Feature-ID-ene under `## Krav` i `spec/spec-*.md` (ikke det som står under *Utenfor scope*). Les ikke kopiene i `spec/krav-input/`.
 
 ### Mappe
 
@@ -70,7 +65,7 @@ Filene brukeren oppga, i den rekkefølgen brukeren oppga dem. Én gruppe.
 
 **Åpne spørsmål.** `@openquestion` er ingen gating: verken verifiseringen eller testene stopper på den. En del med bare `@openquestion` (uten `@draft`) er klar til implementasjon (*Oppfølging* i `krav/README.md`), og er i gating-settet. Er den levert, testes den som det står, og spørsmålet står som merknad: i «Omfang» i testplanen, og under tabellen for regelen i testcasene. En del med `@draft @openquestion` er utkast, og er ikke med.
 
-Tallene skal frem, så åpne spørsmål ikke blir glemt. Verify-rapporten har dem per krav (`## Oppfølging`), og testplanen har en oversikt, per krav og til sammen:
+Tallene skal frem, så åpne spørsmål ikke blir glemt. Verify-rapporten har dem per krav (`## Andre funn`), og testplanen har en oversikt, per krav og til sammen:
 
 | Krav | Regler med åpne spørsmål | Scenarioer med åpne spørsmål | Av dem i testen | Utkast (`@draft @openquestion`, ikke med) |
 |---|---|---|---|---|
@@ -89,7 +84,7 @@ Regn ut tallene med `Grep` etter `@openquestion` i kravene i «Omfang». En `@op
 | `@deprecated` (egenskap eller del) | «Ikke med i denne testen» («skal fjernes») | Ikke med |
 | `@wont` på `Egenskap:` | «Ikke med i denne testen» («skal ikke lages») | Ikke med |
 
-**Endrede krav i et scope.** Er leveransen et scope eller en oppgave med scope, og har et `@implemented` krav taggen `@scope-<slug>` bare på enkelte deler, er det bare de delene som testes (delene som er levert i scopet). Resten av kravet ble levert og testet før. Ved en mappe eller fil testes hele det leverte kravet, med mindre brukeren sier noe annet.
+**Endrede krav i et scope.** Er leveransen et scope, og har et `@implemented` krav taggen `@scope-<slug>` bare på enkelte deler, er det bare de delene som testes (delene som er levert i scopet). Resten av kravet ble levert og testet før. Ved en mappe eller fil testes hele det leverte kravet, med mindre brukeren sier noe annet.
 
 Er ingen av kravene `@implemented`, og ingen delvis levert, si det før testplanen skrives: testplanen kan lages, men det er ingenting å lage testcaser for ennå. Er verifiseringen ikke kjørt, foreslå `fs-verify` på kilden først.
 

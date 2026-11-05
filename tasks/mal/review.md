@@ -5,21 +5,21 @@ Eksempel: reviews/r01-prioritert-til-utforskning.md
 
 # Review: <fra-fase> → <til-fase>
 
-Lenker: [oppgave.md](../oppgave.md) · [issue](https://github.com/sikt-no/fs/issues/NNNN)
+Lenker: [scope.md](../scope.md) · [issue](https://github.com/sikt-no/fs/issues/NNNN)
 
 ## Metadata
 
 - **Reviewer**: @brukernavn
 - **Dato**: ÅÅÅÅ-MM-DD
-- **Tidligere reviewere på denne oppgaven**: (ingen / @x, @y)
+- **Tidligere reviewere på dette scopet**: (ingen / @x, @y)
 - **PR**: sikt-no/fs#NNNN
 
 ## Utfall
 
 Velg én:
 
-- [ ] **Ingen verdifulle forbedringer** — oppgaven kan gå videre til neste fase.
-- [ ] **Forbedringer foreslått** — oppgaven blir i samme fase; neste review må gjøres av en annen person.
+- [ ] **Ingen verdifulle forbedringer** — scopet kan gå videre til neste fase.
+- [ ] **Forbedringer foreslått** — scopet blir i samme fase; neste review må gjøres av en annen person.
 
 ## Observasjoner
 

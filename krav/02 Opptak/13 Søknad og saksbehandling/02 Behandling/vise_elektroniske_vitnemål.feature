@@ -58,7 +58,7 @@
 # vindushåndtering hører i vise_elektroniske_vitnemål.design.md, jf.
 # fs-implementasjonsdetaljer-skillen.
 #
-@OPT-BEH-BEH-005 @must @in-progress
+@OPT-BEH-BEH-005 @must @in-progress @scope-vitnemalsbehandling
 Egenskap: Se søkerens elektroniske vitnemål
   Som saksbehandler i opptak
   ønsker jeg å se hvilke elektroniske vitnemål søkeren har
@@ -88,10 +88,12 @@ Egenskap: Se søkerens elektroniske vitnemål
     @openquestion
     Scenario: Åpne vitnemålsoversikten
       # ÅPNE SPØRSMÅL:
-      # - Vitnemålet har tre påstander om GSK: skolens, KREGs og opptakssystemets
-      #   (OPT-BEH-BEH-015, avklart 30.10.2026), og saksbehandleren skal se alle tre. I dag
-      #   viser tabellen bare skolens påstand, i kolonnen «GSK». Hvordan skal de tre vises:
-      #   tre kolonner, én kolonne med detaljer, eller på en annen måte? Designeren avgjør.
+      # - Vitnemålet har to påstander om GSK: skolens («GSK OK» fra KREG), som er fasit, og
+      #   opptakssystemets, som er en kontroll (OPT-BEH-BEH-015, avklart 2026-11-02). KREG har
+      #   ingen egen påstand. Saksbehandleren skal se begge. I dag viser tabellen bare skolens
+      #   påstand, i kolonnen «GSK». Hvordan skal opptakssystemets påstand vises? Designeren
+      #   avgjør. Er de uenige, vises en tekst under vitnemålsnummeret og et «!» ved delen
+      #   «Vitnemålsbehandling» (OPT-BEH-BEH-015, avklart 2026-11-02).
       Gitt søkeren har to elektroniske vitnemål
       Når jeg åpner vitnemålsoversikten
       Så ser jeg hvert vitnemål med følgende opplysninger
@@ -99,7 +101,6 @@ Egenskap: Se søkerens elektroniske vitnemål
         | Vitnemålsnummer                 |
         | Utstedelsesdato                 |
         | Skolens påstand om GSK          |
-        | KREGs påstand om GSK            |
         | Opptakssystemets påstand om GSK |
         | Førstegangsvitnemål             |
         | Karakterpoeng                   |
@@ -141,9 +142,9 @@ Egenskap: Se søkerens elektroniske vitnemål
       # også skjemaet for manuell utfylling alltid vises.»
       #
       # Andre halvdel av kravet er holdt utenfor denne leveransen: skjemaet for
-      # å legge inn fag manuelt bygges i L4 (#610). Kravet om at skjemaet da
-      # alltid skal være åpent står i legge_inn_og_endre_fag.feature, og må
-      # innfris sammen med skjemaet.
+      # å legge inn fag manuelt bygges i L4b (#610). Kravet om at skjemaet da
+      # alltid skal være åpent står i legge_inn_vitnemål_manuelt.feature, og
+      # må innfris sammen med skjemaet.
 
     Scenario: Vitnemålene kan ikke hentes
       Gitt søkerens elektroniske vitnemål ikke kan hentes fra NVB

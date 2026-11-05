@@ -1,6 +1,6 @@
 # language: no
 # GitHub: #456
-@OPT-SØK-SØK-012 @must @in-progress
+@OPT-SØK-SØK-012 @must @in-progress @scope-tidlig-opptak
 Egenskap: Se svar på søknad om tidlig opptak
   Som søker
   ønsker jeg å se utfallet av tidlig opptak og hvilket søknadsalternativ som er innvilget

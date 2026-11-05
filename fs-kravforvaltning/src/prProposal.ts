@@ -15,7 +15,7 @@ export const PR_LANG = 'krav-pr';
 
 /** Den faste meldingen bak «Lag forslag til PR» */
 export const PR_PROMPT =
-  'Lag et forslag til PR for endringene i denne samtalen, under krav/ og i oppgavemappa under tasks/ (spec/ og utforing.md). Svar kort, og avslutt med PR-forslaget i en kodeblokk med språket krav-pr.';
+  'Lag et forslag til PR for endringene i denne samtalen, under krav/ og i scope-mappa under tasks/ (spec/, utforing.md og scope.md). Svar kort, og avslutt med PR-forslaget i en kodeblokk med språket krav-pr.';
 
 /** Det brukeren ser i stedet for `PR_PROMPT` i samtalen */
 export const PR_PROMPT_SHORT = 'PR-forslag for filene som er endret i samtalen.';
@@ -24,7 +24,7 @@ const str = (v: unknown) => (typeof v === 'string' ? v.trim() : '');
 
 /**
  * Samme krav til stiene som `publish` (`checkPaths` i `core/vcs.ts`): kravene under krav/, og spesifikasjonene,
- * skissene og resten av `spec/` og `utforing.md` i en oppgavemappe under tasks/
+ * skissene og resten av `spec/` og `utforing.md` i en scope-mappe under tasks/
  */
 const sendable = isEditablePath;
 
@@ -50,7 +50,7 @@ export function parsePrProposal(text: string): PrProposal | null {
 }
 
 /**
- * Legger `utforing.md` til i forslaget for hver oppgavemappe forslaget har filer fra, når fila har endringer (`changed`).
+ * Legger `utforing.md` til i forslaget for hver scope-mappe forslaget har filer fra, når fila har endringer (`changed`).
  * Den skrives av tavla «Oppgaver» (rute og steg), ikke av Claude, så Claude vet ikke at den er endret.
  */
 export function withTaskState(pr: PrProposal, changed: (path: string) => boolean): PrProposal {

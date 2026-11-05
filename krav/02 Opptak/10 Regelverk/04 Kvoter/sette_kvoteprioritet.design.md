@@ -66,7 +66,7 @@ Dette er fasiten for tekstene, også når en skisse viser noe annet.
 | Tagg ved overskriften | Uten redigeringstilgang | «Lesevisning» | Forklaring: «Endringer kan kun utføres av bruker med redigeringstilgang og tilhørighet til organisasjonen som opprettet innholdet» | – |
 | Feil ved henting | Siden kan ikke hentes | «Kunne ikke hente kvoteprioritet og plassflyt» | Beskrivelse: «Prøv å laste siden på nytt. Hvis feilen vedvarer, ta kontakt med brukerstøtte.» | – |
 
-**Skisser:** tekstene er sjekket mot utkastet i fs-admin (branchen `poc-pattern-skills`, `266400461`, `src/common/messages/nb/regelverk.json` og `common.json`), som er gjeldende design, og mot Figma-skissen «Kvoteprioritet» ([`screenshot.png`](../../../../tasks/opptak/kvoter-i-opptaket/spec/krav-input/sketches/figma/kvoteprioritet/screenshot.png)).
+**Skisser:** tekstene er sjekket mot utkastet i fs-admin (branchen `poc-pattern-skills`, `266400461`, `src/common/messages/nb/regelverk.json` og `common.json`), som er gjeldende design, og mot Figma-skissen «Kvoteprioritet» ([`screenshot.png`](../../../../tasks/opptak/kvoter-i-opptaket-2027/spec/krav-input/sketches/figma/kvoteprioritet/screenshot.png)).
 
 Avvik fra utkastet, avklart 2026-10-26:
 - Forklaringen under overskriften er ny. Den erstatter teksten i Figma-skissen.

@@ -5,13 +5,16 @@ Egenskap: Automatisk saksbehandling
   behandlet og klar til å være med i plasstildelingen, uten at en saksbehandler har gjort noe.
   Plasstildelingen er ikke en del av flyten. Søkerens
   vitnemål importeres fra KREG til opptakssystemet når saken er opprettet (OPT-BEH-BEH-030).
-  Opptakssystemets påstand om GSK beregnes for hvert vitnemål når vitnemålet importeres fra KREG.
-  Vitnemålet gir GSK når minst én av de tre påstandene, skolens, KREGs og opptakssystemets, er ja,
-  og søknaden får GSK-konklusjonen da (OPT-BEH-BEH-015). «Importeres» betyr i flyten alltid at
+  GSK-vitnemålsberegningen, opptakssystemets påstand om GSK, kjører for hvert vitnemål når
+  vitnemålet importeres fra KREG.
+  Vitnemålet gir GSK når det har «GSK OK» fra KREG, og søknaden får GSK-konklusjonen da.
+  Opptakssystemets påstand fra fs-opptaks kontrollmotor er en kontroll: er den uenig, får saksbehandleren et varsel, men flyten
+  stopper ikke (OPT-BEH-BEH-015). «Importeres» betyr i flyten alltid at
   opptakssystemet henter vitnemålet fra KREG, ikke at vitnemålet kommer inn i KREG.
   Den automatiske behandlingen fortsetter saksbehandlertildelingen: hver ny sak behandles når
-  vitnemålet er importert, eller når jobben for nye vitnemål i KREG finner søkerens første
-  vitnemål. Opptaksforvalteren kan skru automatikken av for opptaket (OPT-BEH-BEH-032).
+  vitnemålet er importert, eller når importen av VGS-vitnemål fra KREG finner søkerens første
+  vitnemål. Opptaksforvalteren kan sette når den automatiske saksbehandlingen starter og avsluttes
+  i opptaket (OPT-BEH-BEH-032).
   Som første steg setter den GSK-konklusjonen på søknadene som ikke har en.
   Flyten gjelder søkere med ett vitnemål, der vitnemålet gir GSK. Andre søkere
   hoppes over, og behandles ikke helautomatisk
@@ -22,10 +25,11 @@ Egenskap: Automatisk saksbehandling
   behandlet. Rettes en feil i regelverket, beregner opptaksforvalteren søknadsalternativene
   feilen gjaldt, på nytt.
 
-  # Kjent brudd: den automatiske behandlingen setter ikke saken til ferdig behandlet (se OPT-BEH-BEH-025).
-  # Kjent brudd: koden beregner GSK bare i den automatiske behandlingen, ikke når vitnemålet
+  # Kjent brudd: den automatiske behandlingen publiserer ikke manglene når saken blir ferdig behandlet,
+  # så søkeren ser ikke mangelteksten i Min kompetanse (se OPT-BEH-BEH-025 og OPT-BEH-BEH-036).
+  # Kjent brudd: GSK-vitnemålsberegningen kjører bare i den automatiske behandlingen, ikke når vitnemålet
   # importeres fra KREG, og opptakssystemets påstand lagres ikke på vitnemålet (se OPT-BEH-BEH-015).
-  # Kjent brudd: koden krever at KREG sier GSK, og bruker ikke skolens påstand (se OPT-BEH-BEH-015).
+  # Kjent brudd: koden stopper automatikken når opptakssystemets beregning er uenig med skolen, og gir ikke varsel (se OPT-BEH-BEH-015).
   # Kjent brudd: ingenting starter den automatiske behandlingen når resultatene er importert.
   # Bare saksbehandleren starter den, for én sak om gangen (se OPT-BEH-BEH-032).
   # Fasene er etter prosesstegningen for automatisk saksbehandling (2026-10-29). Kvalifiseringen,
@@ -50,7 +54,7 @@ Egenskap: Automatisk saksbehandling
       Og GSK kan beregnes for vitnemålet
 
   @depends-on-OPT-BEH-BEH-032
-  # OPT-BEH-BEH-032: «Behandlingen kjører for hver ny sak saksbehandlertildelingen oppretter», «Behandlingen kjører når søkeren får det første vitnemålet»
+  # OPT-BEH-BEH-032: «Behandlingen kjører for hver ny sak saksbehandlertildelingen oppretter», «Behandlingen kjører når importen har hentet vitnemålene til en søker uten vitnemål»
   Regel: Den automatiske behandlingen starter når søkerens resultater er importert
 
     Scenario: Saken behandles automatisk når vitnemålet er importert
@@ -59,16 +63,15 @@ Egenskap: Automatisk saksbehandling
       Så behandles saken automatisk
 
   @depends-on-OPT-BEH-BEH-015 @depends-on-OPT-BEH-BEH-027
-  # OPT-BEH-BEH-015: «Opptakssystemets påstand om GSK på vitnemålet», «Vitnemålet gir GSK når minst én av de tre påstandene er ja», «Konklusjon på søknaden fra vitnemålet», «Konklusjon fra tidligere opptak», «Automatikken setter bare positive konklusjoner, og bare der ingen finnes»
-  # Opptakssystemets påstand om GSK beregnes med kontrollmotoren, som er beskrevet i hele OPT-BEH-BEH-027.
+  # OPT-BEH-BEH-015: «Opptakssystemets påstand om GSK på vitnemålet», «Vitnemålet gir GSK når det har GSK OK fra KREG», «Konklusjon på søknaden fra vitnemålet», «Konklusjon fra tidligere opptak», «Automatikken setter bare positive konklusjoner, og bare der ingen finnes»
+  # GSK-vitnemålsberegningen bruker kontrollmotoren, som er beskrevet i hele OPT-BEH-BEH-027.
   Regel: Søknaden får GSK-konklusjonen når vitnemålet importeres fra KREG
 
     Scenario: Søknaden får GSK-konklusjonen fra vitnemålet som er importert fra KREG
       Gitt at søknaden ikke har noen GSK-konklusjon
-      Og at "Kari Nordmann" har et vitnemål i KREG som består seksfagskontrollen
+      Og at "Kari Nordmann" har et vitnemål med «GSK OK» fra KREG
       Når vitnemålet importeres fra KREG
-      Så er opptakssystemets påstand at søkeren har generell studiekompetanse
-      Og vitnemålet gir GSK
+      Så gir vitnemålet GSK
       Og søknaden får en positiv GSK-konklusjon
 
   @depends-on-OPT-BEH-BEH-015 @ref-FLY-OPT-VAL-001 @ref-FLY-OPT-SAM-001
@@ -83,7 +86,7 @@ Egenskap: Automatisk saksbehandling
       Så får søknaden en positiv GSK-konklusjon
 
   @depends-on-OPT-BEH-BEH-015 @depends-on-OPT-BEH-BEH-025
-  # OPT-BEH-BEH-015: «Vitnemålet gir GSK når minst én av de tre påstandene er ja»
+  # OPT-BEH-BEH-015: «Vitnemålet gir GSK når det har GSK OK fra KREG»
   # OPT-BEH-BEH-025: «Bare saker der søkeren har ett vitnemål, og vitnemålet gir GSK, behandles helautomatisk»
   Regel: Vitnemålet som gir GSK, avgjør om saken behandles helautomatisk
 
@@ -212,8 +215,8 @@ Egenskap: Automatisk saksbehandling
       Når søknaden behandles automatisk
       Så har søkeren poengsum etter poengformelen til "Ordinær kvote" for "Informatikk, UiO"
 
-  @depends-on-OPT-BEH-BEH-008 @ref-FLY-OPT-VAL-001 @ref-FLY-OPT-SAM-001
-  # OPT-BEH-BEH-008: «Saken får automatiske mangeltekster når søkeren ikke er kvalifisert»
+  @depends-on-OPT-BEH-BEH-036 @ref-FLY-OPT-VAL-001 @ref-FLY-OPT-SAM-001
+  # OPT-BEH-BEH-036: «Saken får automatiske mangeltekster når søkeren ikke er kvalifisert»
   # Oppdateres automatisk ut fra vurderingen av kravelementene.
   Regel: Saken får mangeltekster når kravelementene er vurdert
 
@@ -223,8 +226,8 @@ Egenskap: Automatisk saksbehandling
       Når søknaden behandles automatisk
       Så har saken en automatisk mangeltekst som viser at "Matematikk R2" ikke er oppfylt
 
-  @depends-on-OPT-BEH-BEH-008 @ref-FLY-OPT-VAL-001 @ref-FLY-OPT-SAM-001
-  # OPT-BEH-BEH-008: «Opptaksforvalteren merker én mangelkode for generell studiekompetanse som fullføres i vår», «Mangelen for generell studiekompetanse som fullføres i vår settes og sjekkes ut automatisk»
+  @depends-on-OPT-BEH-BEH-036 @ref-FLY-OPT-VAL-001 @ref-FLY-OPT-SAM-001
+  # OPT-BEH-BEH-036: «Opptaksforvalteren merker én mangelkode for generell studiekompetanse som fullføres i vår», «Mangelen for generell studiekompetanse som fullføres i vår settes og sjekkes ut automatisk»
   Regel: Mangelen for GSK som fullføres i vår sjekkes ut før saken blir ferdig behandlet
 
     Scenario: Saken med mangelen for GSK som fullføres i vår blir ferdig behandlet
@@ -236,7 +239,7 @@ Egenskap: Automatisk saksbehandling
 
   @depends-on-OPT-BEH-BEH-025 @depends-on-OPT-BEH-BEH-029 @ref-OPT-PLA-TIL-001 @ref-FLY-OPT-VAL-001 @ref-FLY-OPT-SAM-001
   # OPT-BEH-BEH-025: «Den automatiske behandlingen setter saken til ferdig behandlet når alt er avgjort», «Steg som bygger på et steg som ikke kan avgjøres, hoppes over»
-  # OPT-BEH-BEH-029: «Saken kan bare bli Ferdig behandlet når den har minst én mangel eller ett grunnlag», «Saksloggen viser endringene i behandlingsstatusen»
+  # OPT-BEH-BEH-029: «Saken kan bare bli Behandlet når den har minst én mangel eller ett grunnlag», «Saksloggen viser endringene i behandlingsstatusen»
   # Bare saker som er ferdig behandlet, er med i plasstildelingen. Det står i OPT-PLA-TIL-001.
   Regel: Saken blir ferdig behandlet og er klar til å være med i plasstildelingen
 
@@ -256,10 +259,10 @@ Egenskap: Automatisk saksbehandling
     Scenario: Saken blir ikke ferdig behandlet når poengene ikke kan avgjøres
       Gitt at poengene for "Informatikk, UiO" ikke kan avgjøres på grunn av en feil i regelverket
       Når den automatiske behandlingen er ferdig
-      Så er saken hos "Universitetet i Oslo" under behandling
+      Så har saken hos "Universitetet i Oslo" behandlingsstatusen "Ikke behandlet"
 
   @depends-on-OPT-BEH-BEH-026 @ref-FLY-OPT-VAL-001 @ref-FLY-OPT-SAM-001
-  # OPT-BEH-BEH-026: «Det som ble rettet, avgjør hvilke steg som beregnes på nytt», «Det saksbehandleren har satt, endres ikke», «Saker som er ferdig behandlet, forblir ferdig behandlet»
+  # OPT-BEH-BEH-026: «I saker den automatiske behandlingen har behandlet, beregnes kravelementene og poengene på nytt», «Saker saksbehandleren har behandlet, får regnet ut kvalifiseringen, poengsummen og kvoten på nytt og blir merket», «Bare saker som er ferdig behandlet, beregnes på nytt»
   Regel: Søknadsalternativene beregnes på nytt når regelverket er rettet
 
     Scenario: Poengene beregnes på nytt når rangeringsregelverket er rettet

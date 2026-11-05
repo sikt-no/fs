@@ -18,7 +18,14 @@ declare module 'virtual:krav-root' {
 
 declare module 'virtual:krav-tasks' {
   import type { TasksSnapshot } from '../shared/tasks';
-  /** Oppgavemappene og scope-filene i tasks/ (null i eldre bygg) */
+  /** Scope-mappene i tasks/ (null i eldre bygg) */
   const tasks: TasksSnapshot | null;
   export default tasks;
+}
+
+declare module 'virtual:krav-verify' {
+  import type { VerifySnapshot } from '../shared/verify';
+  /** Verify-rapportene i krav/, tasks/ og akseptansetest/ (null i eldre bygg og i desktop-appen) */
+  const verify: VerifySnapshot | null;
+  export default verify;
 }

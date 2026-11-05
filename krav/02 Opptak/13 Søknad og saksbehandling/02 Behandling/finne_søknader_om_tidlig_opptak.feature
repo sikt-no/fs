@@ -37,7 +37,7 @@
 #   som er med i tidligopptaket, avgjøres når det gjennomføres (OPT-BEH-BEH-007), og
 #   filtrene skal ikke gi det samme utvalget som prøvekjøringen.
 #
-@OPT-BEH-BEH-009 @must @implemented
+@OPT-BEH-BEH-009 @must @implemented @scope-tidlig-opptak
 Egenskap: Finne søknader om tidlig opptak
   Som saksbehandler
   ønsker jeg å filtrere sakene på om søkeren har søkt om tidlig opptak, og på om saken har konklusjon for tidlig opptak
@@ -47,7 +47,7 @@ Egenskap: Finne søknader om tidlig opptak
     Gitt saksbehandler er innlogget i løsningen
     Og opptaket "Samordna opptak 2027" har følgende saker:
       | søker         | søkt om tidlig opptak | konklusjon for tidlig opptak                   | saksbehandlingsstatus |
-      | Kari Nordmann | ja                    | KFF – Kan få tidlig opptak, har godkjent grunn | ferdig behandlet      |
+      | Kari Nordmann | ja                    | KFF – Kan få tidlig opptak, har godkjent grunn | behandlet             |
       | Per Hansen    | ja                    | ingen                                          | ubehandlet            |
       | Anne Lie      | ja                    | KIF – Kan ikke få tidlig opptak, mangler grunn | under behandling      |
       | Ola Nordmann  | nei                   | ingen                                          | ubehandlet            |

@@ -6,7 +6,7 @@ Hele prosessen, fra kravene skrives til leveransen er godkjent, er forklart steg
 
 ## Fasene
 
-Hver leveranse går gjennom fase 1–3: planen, den agentiske testen og den interne testen. Leveranser som er godkjent internt, kan gå videre til fase 4. Hver fase bygger på den forrige og gjentar den ikke. Fase 3 og 4 har de samme tre utfallene: godkjent, godkjent med forbehold og ikke godkjent. «Akseptert» er sluttilstanden: leveransen er godkjent eller godkjent med forbehold i fase 4. Ikke godkjent i fase 3 eller 4 sender leveransen tilbake til teamet med funnene.
+Hver leveranse går gjennom fase 1–3: planen, den agentiske testen og den interne testen. Fase 4 er ikke valgfri, men omfanget vurderes per leveranse, og ikke alle leveranser får fase 4. Leveransene som går dit, er godkjent internt. Hver fase bygger på den forrige og gjentar den ikke. Fase 3 og 4 har de samme tre utfallene: godkjent, godkjent med forbehold og ikke godkjent. «Akseptert» er sluttilstanden: leveransen er godkjent eller godkjent med forbehold i fase 4. Ikke godkjent i fase 3 eller 4 sender leveransen tilbake til teamet med funnene.
 
 | Fase | Svarer på | Metode | Hvem | Tester ikke |
 |---|---|---|---|---|
@@ -19,7 +19,7 @@ Hver leveranse går gjennom fase 1–3: planen, den agentiske testen og den inte
 
 | Fase | Hva | Skill | Fil | Side i Confluence |
 |---|---|---|---|---|
-| 1 | Verifisering | `fs-verify` eller `fs-verify-agent-teams` | `verify-<dato>-<HHMM>.md` her for et scope, i `spec/` for en oppgave, eller ved siden av kravet for en mappe eller fil | «Verifisering – <leveranse> – <dato tid>» |
+| 1 | Verifisering | `fs-verify` eller `fs-verify-agent-teams` | `verify-<dato>-<HHMM>.md` her for et scope, i `spec/` i scope-mappa for en spesifikasjon, eller ved siden av kravet for en mappe eller fil | «Verifisering – <leveranse> – <dato tid>» |
 | 1 | Testrapport etter verifiseringen | `fs-testrapport` | `testrapport-verifisering-<dato>.md` | «Testrapport – verifisering – <leveranse>» |
 | 1 | Testplan: hovedsiden, og undersidene for omfanget og for testcasene og testdataene | `fs-testplan` | `testplan.md`, `omfang.md` og `testcaser-og-testdata.md` | «Testplan – <leveranse>», «Omfang – <leveranse>» og «Testcaser og testdata – <leveranse>» |
 | 1–3 | Sporbarhet per krav: scenario → kode → testcase → flyt | `fs-testplan` lager den, `fs-testrapport` fyller ut per fase | `sporbarhet.md` | «Sporbarhet – <leveranse>» |
@@ -55,7 +55,9 @@ akseptansetest/
     ├── flytbeskrivelser-ekstern.md       # fase 4: flytene, kravene for flytene og rapportene til partene
     ├── verify-<YYYY-MM-DD>-<HHMM>.md     # fra fs-verify, når leveransen er et scope (mappa har scope-slugen)
     ├── kjoring-<YYYY-MM-DD>-<HHMM>/      # fase 2: resultat.md fra en kjøring (skjermbilder og annet ligger lokalt, ignorert av git)
-    └── testrapport-<verifisering|agentisk|intern|ekstern>-<YYYY-MM-DD>.md
+    ├── testrapport-<verifisering|agentisk|intern|ekstern>-<YYYY-MM-DD>.md
+    ├── oppsett.md                    # forslag: hva som gjøres i testmiljøet før og etter testen (se «Oppsett av testmiljøet»)
+    └── oppsett/                      # forslag: skriptene oppsett.md viser til
 ```
 
 - **Testplan-slugen** er scope-slugen for et scope, `<domene>-<oppgave-slug>` for en oppgave (en oppgave-slug er bare unik innenfor domenet), og navnet på mappa eller fila i kebab-case for en mappe eller fil.
@@ -111,3 +113,17 @@ Kolonnene er `Nr | Scenario | Steg | Forventet resultat | Faktisk resultat | Sta
 Testcasene i fase 2 er Gherkin i `cdp-tester/`, og i fase 3 og 4 tabeller på testsiden. Fase 3 har de fire delene over: flytene har én testcase per flyt, med eget resultat per scenario.
 
 Reglene for testcasene står i [`.claude/references/akseptansetest/testcase-regler.md`](../.claude/references/akseptansetest/testcase-regler.md).
+
+## Oppsett av testmiljøet (forslag)
+
+> Dette er et forslag fra opptaksteamet, prøvd ut i [`soke-om-tidlig-opptak/`](soke-om-tidlig-opptak/oppsett.md). Det er ikke avtalt på tvers av teamene ennå. Si fra hvis dere gjør det annerledes, eller har et bedre sted.
+
+Mange tester trenger at noe gjøres i testmiljøet først, for eksempel at en innstilling endres, eller at en søknad gjøres klar, og at det settes tilbake etterpå. Uten et felles sted ligger slike skript lokalt hos den som skrev dem, og de andre i teamet finner dem ikke.
+
+- **`oppsett.md`** ligger ved siden av testplanen, og har tre deler: *Før testen* (hva, hvordan og hvem), *Sjekk* (hvordan man ser at alt er klart), og *Etter testen* (hva som settes tilbake, og hva som ikke kan settes tilbake).
+- **Løsningen først.** Det som kan gjøres i løsningen, beskrives som steg der, gjerne de samme som «Gjør klar»-stegene i testcasene. SQL brukes bare der løsningen ikke kan gjøre det.
+- **`oppsett/`** har skriptene. Vi tar vare på tre slags: de som setter opp før testen, de som sjekker at oppsettet er riktig, og de som setter tilbake etterpå. Engangsspørringer for å finne testdata tas ikke med.
+- **Sjekkskriptet** bare leser, og gir én tabell med én rad per sjekk og en kolonne `ok`, så alt kan ses i ett resultat. Det kjøres dagen før testen, siden data i testmiljøet ikke alltid blir liggende.
+- **Hvert skript** sier i en kommentar øverst hva det gjør, hvilket skript som setter det tilbake, og at det kjøres som superbruker når tabellene har RLS. `oppsett.md` sier hvilken versjon av fs-plattform skriptene er skrevet mot, siden skjemaet kan endres av migreringene der.
+- **Testplanen** viser til `oppsett.md` i tabellen «Testdata», i kolonnen «Kan settes tilbake» eller der det passer.
+- **Ingen hemmeligheter.** Ingen passord, tokens eller ekte personopplysninger i skriptene. Testpersonene i testmiljøet er syntetiske.

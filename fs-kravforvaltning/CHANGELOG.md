@@ -1,5 +1,23 @@
 # krav-viewer
 
+## 1.12.0
+
+### Minor Changes
+
+- 7c392f0: Ny visning, Verifisering: verify-rapportene i krav/, tasks/ og akseptansetest/ i et eget filtre, med rapportvisningen (HTML-fila ved siden av rapporten) eller markdown. Verify-rapportene vises ikke lenger i Krav.
+
+## 1.11.1
+
+### Patch Changes
+
+- 9a69abd: Matrisen i Flyter viser hvor mye som er levert per sub-domene og fase, i stedet for hvor mye som gjenstår.
+
+## 1.11.0
+
+### Minor Changes
+
+- 008d374: Tavla «Oppgaver» heter nå «Scopes», og et scope er én mappe, `tasks/<domene>/<slug>/scope.md`, i stedet for `scope-<slug>.md` og en eller flere mapper med `oppgave.md`. Kortene, kravene og avvikene leses fra `scope.md`, og et scope kan ha flere Jira-saker. Kolonnen «I scope» heter «Avgrenset». «+ Ny oppgave» heter «+ Nytt scope», og ber om tittel, domene, mål, Jira-saker og eier. Lenker til `#/oppgaver/…` sendes videre til `#/scopes/…`, også til scopet en oppgave ble slått inn i, og valget i menyen er beholdt.
+
 ## 1.10.0
 
 ### Minor Changes

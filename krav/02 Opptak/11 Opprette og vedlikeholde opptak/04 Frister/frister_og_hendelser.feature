@@ -256,17 +256,35 @@ Egenskap: Frister og hendelser for opptak
       Når opptaksforvalter ikke setter dato for aldersberegning
       Så er opptakets dato for aldersberegning "2027-12-31"
 
-  @openquestion @ref-FLY-OPT-SAK-001
-  Regel: Opptaksforvalter ved forvaltende organisasjon må kunne sette frist for endring av utdanningsbakgrunn
-    # ÅPNE SPØRSMÅL:
-    # - Virkningen står i tildele_saksbehandlende_organisasjon.feature. Skal regelen ha @ref-OPT-BEH-BEH-011?
+  @draft @ref-OPT-BEH-BEH-015 @ref-OPT-BEH-BEH-032
+  # Hva hendelsene gjør med den automatiske saksbehandlingen, står i OPT-BEH-BEH-015 og OPT-BEH-BEH-032.
+  Regel: Opptaksforvalter kan sette når den automatiske saksbehandlingen starter og avsluttes
+    # Avklart 2026-11-03: begge hendelsene er valgfrie.
+    # Avklart 2026-11-05: den automatiske saksbehandlingen pågår bare mens opptaket er publisert
+    # (01 Grunnoppsett/opptaksstatus.feature). Hendelsene avgrenser perioden. Er ingen av dem satt, pågår
+    # den så lenge opptaket er publisert. Et upublisert eller historisk opptak behandles ikke automatisk.
+    # Avklart 2026-11-03: hendelsene har dato og klokkeslett, som de andre hendelsene på opptaket.
 
+    Scenario: Sette når den automatiske saksbehandlingen starter
+      Når opptaksforvalter setter «Automatisk saksbehandling starter» til "2027-04-16 08:00"
+      Så har opptaket hendelsen «Automatisk saksbehandling starter» "2027-04-16 08:00"
+
+    Scenario: Sette når den automatiske saksbehandlingen avsluttes
+      Når opptaksforvalter setter «Automatisk saksbehandling avsluttes» til "2027-07-15 12:00"
+      Så har opptaket hendelsen «Automatisk saksbehandling avsluttes» "2027-07-15 12:00"
+
+    Scenario: Opptaket kan lagres uten hendelsene for den automatiske saksbehandlingen
+      Gitt at «Automatisk saksbehandling starter» og «Automatisk saksbehandling avsluttes» ikke er satt
+      Når opptaksforvalter lagrer opptaket
+      Så er opptaket lagret
+
+  @ref-OPT-BEH-BEH-011 @ref-FLY-OPT-SAK-001
+  # OPT-BEH-BEH-011: virkningen av fristen står i regelen «Søknadsalternativene flyttes når utdanningsbakgrunnen endres til en bakgrunn med unntak».
+  Regel: Opptaksforvalter ved forvaltende organisasjon må kunne sette frist for endring av utdanningsbakgrunn
     # AVKLART 2026-10-19 (S3, akseptansetesten): Opptaket setter fristen, og saksbehandlertildelingen bruker den.
     # En endring av utdanningsbakgrunnen etter fristen flytter ikke søknaden til en annen saksbehandlende
     # organisasjon. Utdanningsbakgrunnen kan fortsatt endres, men bare opptaksforvalter ved forvaltende
     # organisasjon kan endre hvem som saksbehandler søknaden.
-    # Virkningen står i 13 Søknad og saksbehandling/02 Behandling/tildele_saksbehandlende_organisasjon.feature
-    # (Regel «Søknadsalternativene flyttes når utdanningsbakgrunnen endres til en bakgrunn med unntak»).
     Scenario: Sette frist for endring av utdanningsbakgrunn
       Når opptaksforvalter setter frist for endring av utdanningsbakgrunn til "2027-05-01 23:59"
       Så har opptaket frist for endring av utdanningsbakgrunn "2027-05-01 23:59"

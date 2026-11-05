@@ -31,14 +31,14 @@ Egenskap: Gjennomføre plasstildeling
   # AVKLART 08.10.2026: Tilbudsgaranti fra tidligopptaket hører med, og gir tilbud i hovedtildelingen,
   # se regelen «Søker med tilbudsgaranti får tilbud uavhengig av poengsum» under.
   #
-  # Kilde: tasks/opptak/plasstildeling/design.md (prinsipp 1–3, rundetyper, del 2), oppgave.md (oppgave 5),
+  # Kilde: tasks/opptak/plasstildeling-2027/design.md (prinsipp 1–3, rundetyper, del 2), scope.md (oppgave 5),
   # Confluence «2026-09-08 Raffinering plasstildeling», «Fra saksbehandling til plasstildeling»,
   # «Plasstildelingsløpet i Opptak» og «Samordnet plasstildeling» (akseptansekriterier for algoritme).
   # Plasstildelingen eier fordelingen, ikke poengberegningen. Rangering og kvalifisering kommer fra
   # søknadsbehandlingen (se 10 Regelverk/03 Rangering).
   # Hva innstillingene for plasstildelingsrunden innebærer, står i regelen «Innstillingene for plasstildelingsrunden
   # avgjør hva som skjer med lavere prioriteter og tidligere tilbud».
-  # Status i kode: løst, men poenggrense lagres ikke og tapt kvalifisering gir stille bortfall (oppgave.md).
+  # Status i kode: løst, men poenggrense lagres ikke og tapt kvalifisering gir stille bortfall (scope.md).
 
   Bakgrunn:
     Gitt at opptaket "Samordna opptak 2027" har plasstildelingsrunden "Hovedrunde" med rundetype "Hovedtildeling"
@@ -286,8 +286,8 @@ Egenskap: Gjennomføre plasstildeling
   Regel: Innstillingene for plasstildelingsrunden avgjør hva som skjer med lavere prioriteter og tidligere tilbud
 
     # Endret 2026-10-24: Plasstildelingen leser innstillingene plasstildelingsrunden har fra rundetypen,
-    # og ser aldri på hvilken rundetype det er. Rundetypene i samordna opptak, med innstillingene, står i
-    # regelverkssamlingen (10 Regelverk/06 Rundetyper/bruke_rundetyper.feature).
+    # og ser aldri på hvilken rundetype det er. Rundetypene, med innstillingene, er felles for alle opptak
+    # (10 Regelverk/06 Rundetyper/bruke_rundetyper.feature, endret 2026-11-04).
     # Tabellen over hva hver rundetype innebar, er flyttet dit.
     # AVKLART 2026-10-14: Tilbud, venteliste og avslag finnes alltid. Bortfall finnes bare når tilbud gir
     # bortfall på lavere prioriteter. Rangeringen er poeng og rangering i alle plasstildelingsrunder.
@@ -307,9 +307,24 @@ Egenskap: Gjennomføre plasstildeling
 
     Scenario: Tilbud gir bortfall på lavere prioriteter
       Gitt at plasstildelingsrunden har innstillingen "Tilbud gir bortfall på lavere prioriteter"
+      Og at taket for antall tilbud per søker i plasstildelingsrunden er 1
       Og at søkeren "Kari Nordmann" får tilbud på prioritet 1
       Når plasstildelingen gjennomføres
       Så får søkeren bortfall på alle lavere prioriteter
+
+    # AVKLART 2026-11-04 (produkteier, tilbakemelding på PR #907): Er taket for antall tilbud per søker høyere enn 1,
+    # kan søkeren få så mange ordinære tilbud som taket sier, også når tilbud gir bortfall. Bortfallet gjelder da
+    # prioritetene under det laveste tilbudet når søkeren har fått så mange tilbud som taket sier. Prioriteter over det
+    # laveste tilbudet, der søkeren står på venteliste, beholdes. Taket settes på plasstildelingsrunden
+    # (01 Runder/forvalte_runder.feature).
+    Scenario: Bortfall under det siste tilbudet søkeren kan få
+      Gitt at plasstildelingsrunden har innstillingen "Tilbud gir bortfall på lavere prioriteter"
+      Og at taket for antall tilbud per søker i plasstildelingsrunden er 3
+      Og at søkeren "Kari Nordmann" får tilbud på prioritet 1, 2 og 4, og står på venteliste til prioritet 3
+      Når plasstildelingen gjennomføres
+      Så har søkeren tilbud på prioritet 1, 2 og 4
+      Og søkeren står fortsatt på venteliste til prioritet 3
+      Og søkeren får bortfall på prioritet 5 og alle lavere prioriteter
 
     # AVKLART 2026-10-14: Uten bortfall kan søkeren ha flere ordinære tilbud, og må velge ett.
     Scenario: Søkeren kan ha flere ordinære tilbud uten bortfall

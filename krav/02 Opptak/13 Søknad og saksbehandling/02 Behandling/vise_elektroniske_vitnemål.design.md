@@ -80,7 +80,13 @@ Vitnemålene vises som vanlig. Bare KAR, REA og SPR står tomme. Feilmeldingen s
 
 Raden er grå, men lenken på vitnemålsnummeret virker, så vitnemålet kan åpnes. Poengene står, fordi de forklarer tallene i beregningen vitnemålet er brukt i.
 
+### Varsel når opptakssystemet er uenig med skolen om GSK
+
+Fra `@OPT-BEH-BEH-015`, «Saksbehandleren får varsel når opptakssystemet er uenig med skolen» (avklart 2026-11-02). Seksjonsoverskriften «Vitnemålsbehandling» får et «!» ved telleren, og tabellen viser en tekst under vitnemålsnummeret om at opptakssystemets påstand er uenig med skolens påstand om GSK. Varselet vises likt om skolen sier ja eller nei. Skissen er `tasks/opptak/automatisk-gsk-konklusjon/spec/krav-input/sketches/varsel-uenighet-vitnemalsbehandling.png`.
+
 ## Åpne designspørsmål
+
+- [ ] **Teksten i varselet om uenighet om GSK:** teksten i skissen er en plassholder.
 
 - [ ] **Søker uten elektroniske vitnemål:** Målbildet fra 30.09 viste seksjonen lukket også når søkeren ikke har elektroniske vitnemål. Kravet sier at seksjonen ikke vises. Gjeldende skisser har ingen ramme for dette.
 - [ ] **Telleren og annullerte vitnemål:** Skal telleren telle et annullert vitnemål som ikke vises?

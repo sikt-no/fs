@@ -361,7 +361,7 @@ html,body{margin:0;height:100%;background:#0E1628;color:#F7F6F2;font-family:'IBM
 </div>
 <div style="flex:1;display:flex;flex-direction:column;gap:12px;background:#FFFFFF;padding:36px;border:1px solid #E1DED6;border-radius:16px">
 <h3 style="font-size:24px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:#B4481A">Gjør</h3>
-<p style="font-size:26px;line-height:1.4;color:#14213D">Finner bevis med fil og linje for hvert scenario, får funnene kontrollert, og spør deg om det som er usikkert.</p>
+<p style="font-size:26px;line-height:1.4;color:#14213D">Finner bevis med fil og linje for hvert scenario, får funnene kontrollert, og skriver rapporten med forslag til endringer og det som er usikkert.</p>
 </div>
 <div style="flex:1;display:flex;flex-direction:column;gap:12px;background:#FFFFFF;padding:36px;border:1px solid #E1DED6;border-radius:16px">
 <h3 style="font-size:24px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:#B4481A">Lager</h3>
@@ -375,7 +375,7 @@ html,body{margin:0;height:100%;background:#0E1628;color:#F7F6F2;font-family:'IBM
 </div>
 <p style="flex:1;font-size:26px;line-height:1.4;color:#F7F6F2">Ingenting kjøres, og @implemented betyr at koden er funnet. Mangler noe, sendes steget tilbake til repoet der koden mangler.</p>
 </div>
-<aside>Er noe av et krav levert, men ikke alt, blir egenskapen @in-progress og de leverte delene @implemented. @deprecated-krav slettes når koden er borte, ellers viser rapporten hvor koden fortsatt finnes. /fs-verify verifiserer også flytene: at overleveringene mellom kravene virker i koden. Tilgangsradene (rolle × organisasjon × opprette, lese, endre, slette) er grunnlaget for testbrukerne i testplanen. Mange feature-filer? /fs-verify-agent-teams gjør det samme med finnere og kontrollører parallelt, men bare i en interaktiv økt i terminalen.</aside>
+<aside>Du går gjennom rapporten. Det som er sikkert (alt funnet, og bekreftet av kontrolløren), settes til @implemented med ett ja. Det usikre avklares når du gir rapporten tilbake til /fs-verify. Er noe av et krav levert, men ikke alt, blir egenskapen @in-progress og de leverte delene @implemented. @deprecated-krav slettes når koden er borte, ellers viser rapporten hvor koden fortsatt finnes. /fs-verify verifiserer også flytene: at overleveringene mellom kravene virker i koden. Tilgangsradene (rolle × organisasjon × opprette, lese, endre, slette) er grunnlaget for testbrukerne i testplanen. Mange feature-filer? /fs-verify-agent-teams gjør det samme med finnere og kontrollører parallelt, men bare i en interaktiv økt i terminalen.</aside>
 </section>
 </div>
 <div class="slide">
@@ -839,13 +839,13 @@ html,body{margin:0;height:100%;background:#0E1628;color:#F7F6F2;font-family:'IBM
 </div>
 <x-shape kind="arrow-right" style="background:#C9C3B4;width:48px;height:24px"></x-shape>
 <div style="flex:1;display:flex;flex-direction:column;gap:8px;background:#FFFFFF;padding:28px;border:1px solid #E1DED6;border-radius:16px">
-<h3 style="font-size:28px;font-weight:600;color:#14213D">Du bekrefter</h3>
-<p style="font-size:24px;line-height:1.4;color:#4A5568">Usikre og ikke funne scenarioer</p>
+<h3 style="font-size:28px;font-weight:600;color:#14213D">Rapporten</h3>
+<p style="font-size:24px;line-height:1.4;color:#4A5568">Forslaget og det usikre først</p>
 </div>
 <x-shape kind="arrow-right" style="background:#C9C3B4;width:48px;height:24px"></x-shape>
 <div style="flex:1;display:flex;flex-direction:column;gap:8px;background:#14213D;padding:28px;border-radius:16px">
-<h3 style="font-size:28px;font-weight:600;color:#F7F6F2">Retagging</h3>
-<p style="font-size:24px;line-height:1.4;color:#C9D3E3">og spec/verify-&lt;dato&gt;-&lt;HHMM&gt;.md</p>
+<h3 style="font-size:28px;font-weight:600;color:#F7F6F2">Du går gjennom</h3>
+<p style="font-size:24px;line-height:1.4;color:#C9D3E3">Det sikre settes med ett ja, resten avklares i rapporten</p>
 </div>
 </div>
 <div style="display:flex;gap:32px">
@@ -860,9 +860,9 @@ html,body{margin:0;height:100%;background:#0E1628;color:#F7F6F2;font-family:'IBM
 </div>
 <div style="display:flex;align-items:center;gap:32px;background:#14213D;padding:28px 40px;border-radius:16px">
 <p style="width:520px;font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:28px;font-weight:600;color:#F0A070">fs-verify-agent-teams</p>
-<p style="flex:1;font-size:26px;line-height:1.4;color:#C9D3E3">Mange feature-filer? Én finner og én kontrollør per fil, parallelt. Lead-en avgjør, spør deg og skriver rapporten.</p>
+<p style="flex:1;font-size:26px;line-height:1.4;color:#C9D3E3">Mange feature-filer? Én finner og én kontrollør per fil, parallelt. Lead-en avgjør og skriver rapporten.</p>
 </div>
-<aside>Dette er første del av fase 1, planen, i teststrategien: white-box, ingenting kjøres, og @implemented betyr bare at koden er funnet. Mangler noe, står det i rapporten, med hvilket repo koden mangler i. fs-verify-agent-teams stiller de samme spørsmålene og skriver rapporten i samme format. Den krever CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1, og virker bare i en interaktiv økt: i terminalen, også terminalen i FS Kravforvaltning, men ikke i Claude-panelet.</aside>
+<aside>Dette er første del av fase 1, planen, i teststrategien: white-box, ingenting kjøres, og @implemented betyr bare at koden er funnet. Rapporten er resultatet: forslaget til endringer og det som er usikkert står først, og det som stemmer, får én linje. Mangler noe, står det i rapporten, med hvilket repo koden mangler i. Skillen spør bare om det sikre (alt funnet, og bekreftet av kontrolløren) skal bli @implemented. Det usikre og slettingen av @deprecated avklares når du gir rapporten tilbake til fs-verify. fs-verify-agent-teams gjør det samme, og skriver rapporten i samme format. Den krever CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1, og virker bare i en interaktiv økt: i terminalen, også terminalen i FS Kravforvaltning, men ikke i Claude-panelet.</aside>
 </section>
 </div>
 <div class="slide">

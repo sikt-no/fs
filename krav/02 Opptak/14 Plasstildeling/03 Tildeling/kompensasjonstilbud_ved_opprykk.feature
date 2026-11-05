@@ -6,8 +6,8 @@ Egenskap: Kompensasjonstilbud ved opprykk
   ønsker jeg at plasser som frigjøres ved opprykk gis videre automatisk i plasstildelingsrunder med kompensasjonstilbud ved opprykk
   slik at kapasiteten på utdanningstilbudet utnyttes best mulig uten manuell oppfølging.
 
-  # Kilde: tasks/opptak/plasstildeling/design.md (rundetyper, informasjonsarv, avklaring 3 og 8) og
-  # oppgave.md (oppgave 6).
+  # Kilde: tasks/opptak/plasstildeling-2027/design.md (rundetyper, informasjonsarv, avklaring 3 og 8) og
+  # scope.md (oppgave 6).
   # Kompensasjonstilbud gjelder plasstildelingsrunder der rundetypen har innstillingen «Kompensasjonstilbud ved
   # opprykk» (endret 2026-10-24). I samordna opptak er det Supplering. Antall tilbud som skal gis settes per
   # plasstildelingsrunde (se 02 Tildelingsinnstillinger/antall_tilbud_som_skal_gis.feature).
@@ -60,7 +60,7 @@ Egenskap: Kompensasjonstilbud ved opprykk
 #   til kompensasjonstilbud? I dag frigjøres den aldri. Innen svarfristen kan søkeren endre ja til nei.
 # - Skal det finnes en «topp opp til ønsket nivå»-funksjon de første ukene, i stedet for manuell overvåking?
 #   Lærestedene har bedt om det (design.md avklaring 9).
-# - Automatiske nye tilbud ved nei-svar utenfor plasstildelingsrundene er utenfor scope for 2027 (oppgave.md, oppgave 10).
+# - Automatiske nye tilbud ved nei-svar utenfor plasstildelingsrundene er utenfor scope for 2027 (scope.md, oppgave 10).
 # - Kompensasjonstilbud innenfor samme kjøring: hvis to søkere rykker opp i samme plasstildeling,
 #   kan plassene deres gis videre i samme kjøring (flere ledd)?
 # - I koden gis en plass som frigjøres ved opprykk, videre bare når antall tilbud ikke allerede er nådd.

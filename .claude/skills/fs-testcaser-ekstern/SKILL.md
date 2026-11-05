@@ -43,7 +43,7 @@ Sjekk at branchen i dette repoet er oppdatert mot origin og main, som beskrevet 
 
 ## 1. Les testplanen, den interne testen og rapportene
 
-1. Finn testplanen etter *Finn testplanen* i `confluence.md`. Fra den trenger du kravene i «Omfang», flytene i «Flyter», kilden og scope-id-ene, oppgavene, testbrukerne, testdataene, testmiljøet, kontaktpersonen og de eksterne testerne.
+1. Finn testplanen etter *Finn testplanen* i `confluence.md`. Fra den trenger du kravene i «Omfang», flytene i «Flyter», kilden og scope-id-ene, Jira-sakene, testbrukerne, testdataene, testmiljøet, kontaktpersonen og de eksterne testerne.
 2. **Er leveransen godkjent internt?** Les den nyeste `testrapport-intern-*.md`, eller siden «Testrapport – intern akseptansetest – …». Er utfallet ikke fylt ut, eller er det «Ikke godkjent», si det, og spør om du skal fortsette. Ved «Godkjent med forbehold»: ta med de kjente manglene i «Dette kan du ikke gjøre i testen» når de berører testcasene.
 3. Les også den agentiske testrapporten (`testrapport-agentisk-*.md`): partene skal få den, og den viser hva som er testet i fase 2.
 4. Les `testcaser-intern.md`: flyttestene, stegene, ordene fra skjermen og testdataene kan gjenbrukes. Det er den beste kilden til stegene og til flytbeskrivelsene.
@@ -51,7 +51,7 @@ Sjekk at branchen i dette repoet er oppdatert mot origin og main, som beskrevet 
 
 ## 2. Velg flytene sammen med partene
 
-1. **Flytene leveransen inngår i:** flytene i «Flyter» i testplanen, og flyttestene i `testcaser-intern.md` (også oppgavene uten flyt). Fasene i flyten er rekkefølgen. Mangler flyttestene, bruk rekkefølgen oppgavene står i scope-tabellen, brukerhistoriene, og hvilke data et scenario lager som et annet bruker (opprette et opptak → registrere en søknad → behandle den), og si det i oppsummeringen. Går leveransen over flere domener, følger rekkefølgen arbeidsprosessen, ikke domenene.
+1. **Flytene leveransen inngår i:** flytene i «Flyter» i testplanen, og flyttestene i `testcaser-intern.md` (også oppgavene uten flyt). Fasene i flyten er rekkefølgen. Mangler flyttestene, bruk rekkefølgen kravene står i `## Krav` i `scope.md`, brukerhistoriene, og hvilke data et scenario lager som et annet bruker (opprette et opptak → registrere en søknad → behandle den), og si det i oppsummeringen. Går leveransen over flere domener, følger rekkefølgen arbeidsprosessen, ikke domenene.
 2. **Spør (`AskUserQuestion`, `multiSelect`) hvilke flyter som testes**, med forslaget ditt først. Er flytene allerede avtalt med partene, bruk dem. Eksterne tester bare det de skal bruke: i et samordna opptak er det flytene for samordna opptak, ikke for lokale opptak.
 3. **Hvem testerne er, og hvem som beslutter:** les testplanen. Mangler kontaktpersonen, testerne eller hvem som beslutter, spør. Hvem som beslutter, skal være avtalt med partene før testen. Er det ikke avtalt, skriv `[Fylles ut: hvem beslutter, avtales med partene før testen]`.
 4. **Partenes egne krav:** spør (`AskUserQuestion`) om partene har egne krav, for eksempel HK-dir. Har de det, kan de legge til egne testcaser i «Testcaser fra partene». Passer et av partenes krav ikke med kravene våre, er det ikke noe du retter: det er et mulig endringsforslag, og står i oppsummeringen med forslag om `fs-krav`.
