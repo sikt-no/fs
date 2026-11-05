@@ -18,8 +18,8 @@ Egenskap: Importere resultater fra KREG
   # Avklart 29.10.2026: saksbehandleren henter ikke resultatene på nytt for én søker. Jobben for
   # nye vitnemål (OPT-BEH-BEH-032) er nok.
 
-  # Avklart 30.10.2026: resultater fra høyere utdanning importeres også, men i et eget krav,
-  # som ikke er skrevet ennå. Tilleggspoeng for høyere utdanning (OPT-BEH-BEH-028) trenger dem.
+  # Avklart 30.10.2026: resultater fra høyere utdanning importeres også, men i et eget krav
+  # (OPT-BEH-BEH-038). Tilleggspoeng for høyere utdanning (OPT-BEH-BEH-028) trenger dem.
 
   @ref-FLY-OPT-AUT-001 @ref-OPT-BEH-BEH-032
   Regel: Resultatene hentes når saken er opprettet
@@ -163,6 +163,16 @@ Egenskap: Importere resultater fra KREG
       Og at opptaket ikke er avsluttet
       Når KREG får et vitnemål for søkeren
       Så er vitnemålet importert uten at søkeren har endret søknaden
+
+    Scenario: Vitnemålene hentes én gang for søkeren med søknader i flere opptak
+      Gitt at søkeren har søknader i to opptak som ikke er avsluttet
+      Når importen av VGS-vitnemål fra KREG kjører
+      Så hentes søkerens VGS-dokumenter fra KREG én gang
+
+    Scenario: Vitnemålene hentes ikke for søkeren som ikke er aktiv
+      Gitt at søkeren ikke har noen søknad som ikke er trukket, i et opptak som ikke er avsluttet
+      Når importen av VGS-vitnemål fra KREG kjører
+      Så hentes ingen VGS-dokumenter for søkeren fra KREG
 
     Scenario: Vitnemålet annulleres og erstattes av et nytt etter at opptakssystemet har behandlet søknaden
       Gitt at opptakssystemet har behandlet søknaden på søkerens importerte vitnemål
