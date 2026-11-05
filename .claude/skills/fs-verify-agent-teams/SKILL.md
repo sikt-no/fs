@@ -93,7 +93,7 @@ Vent på svarene. De kommer som meldinger; ikke poll oppgavelista i en løkke. B
 **Svar fra en kontrollør:**
 
 1. **`bekreftet`:** resultatet står.
-2. **`avkreftet` eller `usikker`:** les det kontrolløren viser til, og det finneren viste til. Har kontrolløren rett, bruk det nye resultatet. Er det fortsatt uklart, blir resultatet `usikker`, med begge synene i beviset. Noter raden for **Kontrollen endret** i `## Oppfølging` i rapporten.
+2. **`avkreftet` eller `usikker`:** les det kontrolløren viser til, og det finneren viste til. Har kontrolløren rett, bruk det nye resultatet. Er det fortsatt uklart, blir resultatet `usikker`, med begge synene i beviset. Noter raden for **Kontrollen endret** i `## Oppfølging oppsummert` i rapporten.
 3. **Et `funnet` som kontrollen avkrefter, kan aldri brukes til retagging**, selv om du er enig med finneren. Da blir det `usikker`, og brukeren avgjør.
 
 Før du foreslår retagging eller sletting av et krav, les `fil:linje` for bevisene til det kravet selv. Tilgangsradene og reglene uten scenario slår du sammen på samme måte, og du regner ut `## Åpne spørsmål` selv fra `@openquestion` i kravfilene (finnernes tall er en kontroll, ikke kilden). `- **Menneskelig kontroll:**` i rapporten fyller du aldri ut: kontrollørene er ikke den andre personen (*Kontroll* i `fs-verify`). Du står ansvarlig for det du viser brukeren.
@@ -116,7 +116,7 @@ Kontrollørene og finnerne trengs ikke mens brukeren svarer: rydd opp i teamet (
 
 ## Rapport
 
-Som *Etter endringene* og *Rapport* i `fs-verify`, med samme filnavn, oppdatering av `utforing.md` og malen i [`fs-verify/references/rapportmal.md`](../fs-verify/references/rapportmal.md). Les malen før du skriver rapporten, og følg den nøyaktig. Med agent team gjelder alltid variantene merket `[agent team]` (linja `Team`), og når repoene er vurdert hver for seg (*Finn scope og kode*), også `[per repo]`: linja `Repoer`, `Mangler` i `## Oppsummering`, merket på linjene i `## Forslag til endringer` og `## Oppfølging`, `## Oversikt per krav` med `Mangler i`-kolonnene, og merket først i `Bevis`. Tallene regnes ut fra `## Scenarioer` (se *Rapport* i `fs-verify`).
+Som *Etter endringene* og *Rapport* i `fs-verify`, med samme filnavn, oppdatering av `utforing.md` og malen i [`fs-verify/references/rapportmal.md`](../fs-verify/references/rapportmal.md). Les malen før du skriver rapporten, og følg den nøyaktig. Med agent team gjelder alltid variantene merket `[agent team]` (linja `Team`), og når repoene er vurdert hver for seg (*Finn scope og kode*), også `[per repo]`: linja `Repoer`, `Mangler` i `## Oppsummering`, merket på linjene i `## Forslag til endringer` og `## Oppfølging oppsummert`, `## Oversikt per krav` med `Mangler i`-kolonnene, og merket først i `Bevis`. Tallene regnes ut fra `## Scenarioer` (se *Rapport* i `fs-verify`).
 
 Når rapporten er skrevet, gjør du *Confluence* i `fs-verify`: finnes ingen testplan ennå, er neste steg `fs-testplan`, som bygger på rapporten. Finnes testplanen, spør om resultatet skal legges som en underside til den, og gjør det bare når brukeren sier ja. Du gjør det selv, ikke teammatene.
 

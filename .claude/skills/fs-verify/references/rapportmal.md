@@ -4,8 +4,8 @@ Rapporten fra `fs-verify` og `fs-verify-agent-teams` følger denne malen, så to
 
 ## Regler
 
-- **Avvikene først, det som stemmer kort.** Det leseren skal ta stilling til, står øverst: forslaget, det som er usikkert og avvikene. Tabellene står etter forslaget, som grunnlag, og `## Oppfølging` står til slutt, som en samlet liste over alt som må følges opp. En rad som er som forventet (`funnet`, `stemmer`), har bare `fil:linje` som bevis, uten forklaring. Forklaringen står på radene som avviker (`ikke funnet`, `usikker`, `avviker`).
-- **Seksjonene står i rekkefølgen under.** `## Oppsummering`, `## Forslag til endringer` og `## Scenarioer` er alltid med. De andre seksjonene tas bare med når de har innhold. Legg ikke til egne seksjoner: det som ikke passer noe sted, er en rad i `## Oppfølging`.
+- **Avvikene først, det som stemmer kort.** Det leseren skal ta stilling til, står øverst: forslaget, det som er usikkert og avvikene. Tabellene står etter forslaget, som grunnlag, og `## Oppfølging oppsummert` står til slutt, som en samlet liste over alt som må følges opp. En rad som er som forventet (`funnet`, `stemmer`), har bare `fil:linje` som bevis, uten forklaring. Forklaringen står på radene som avviker (`ikke funnet`, `usikker`, `avviker`).
+- **Seksjonene står i rekkefølgen under.** `## Oppsummering`, `## Forslag til endringer` og `## Scenarioer` er alltid med. De andre seksjonene tas bare med når de har innhold. Legg ikke til egne seksjoner: det som ikke passer noe sted, er en rad i `## Oppfølging oppsummert`.
 - **Varianter** er merket med `[…]` i malen. En linje eller seksjon med et merke er med bare når merket gjelder. Merket skrives ikke i rapporten.
   - `[spesifikasjon]`: scope er en spesifikasjon (`spec/spec-*.md` i et scope).
   - `[agent team]`: kjørt med `fs-verify-agent-teams`.
@@ -163,7 +163,7 @@ Om koden gir rollene tilgang slik kravet sier, holder data fra andre organisasjo
 
 ### Avvik
 
-Sjekkene der koden ikke gjør det kravet sier, kravet ikke sier noe, eller tilgangssjekken ikke er funnet. Det som avviker, ikke er funnet eller er usikkert, står også i `## Oppfølging`, og det kravet ikke beskriver, i `## Regler uten scenario`.
+Sjekkene der koden ikke gjør det kravet sier, kravet ikke sier noe, eller tilgangssjekken ikke er funnet. Det som avviker, ikke er funnet eller er usikkert, står også i `## Oppfølging oppsummert`, og det kravet ikke beskriver, i `## Regler uten scenario`.
 
 | Feature-ID | Sjekk | Rolle og handling | Resultat | Bevis |
 | --- | --- | --- | --- | --- |
@@ -205,7 +205,7 @@ MR-er og brancher som ser ut til å levere kravene. Koden i disse er ikke merget
 | --- | --- | --- | --- | --- | --- |
 | `<repo>` | [!<iid> <tittel>](<web_url>) (`<source_branch>`) | åpen \| utkast \| branch uten MR | `@DOM-SUB-KAP-NNN` | <n>/<N> | <tom \| bak main \| konflikter \| usikker kobling> |
 
-## Oppfølging
+## Oppfølging oppsummert
 
 Alt som ikke er som forventet, og som ikke står i forslaget, med referansene, så leseren ikke må lete i tabellene over. Én rad per punkt, sortert etter type og så i rekkefølgen kravene står i.
 
@@ -236,4 +236,4 @@ Alt som ikke er som forventet, og som ikke står i forslaget, med referansene, s
 - **`## Avhengigheter`** `[avhengigheter]`: én rad per par (krav i scope, avhengighet). Avhengighetene teller ikke i `## Oppsummering`, og radene deres står aldri i `## Scenarioer`, fordi tavla «Scopes», `fs-testplan` og `fs-testrapport` leser den tabellen.
 - **`## Tilgang og datakonsistens`**: én rad per sjekk (rolle × handling × organisasjon), også de som stemmer, fordi `fs-testplan` lager testbrukerne fra radene. Radene deles i to tabeller: `### Avvik` først (`avviker`, `ikke beskrevet`, `ikke funnet` og `usikker`), så `### Stemmer`. Begge har de samme kolonnene, og rekkefølgen på kravene er den samme i begge. `organisasjon` gjelder at data fra en annen organisasjon verken kan ses eller endres, og `konsistens` at sletting og endring ikke gir foreldreløse eller motstridende data.
 - **`## Regler uten scenario`** og **`## Åpne spørsmål`**: leses av `fs-testplan`. `Regler` og `Scenarioer` i `## Åpne spørsmål` er antall med åpne spørsmål av totalt i gating-settet (`<n> av <N>`).
-- **`## Oppfølging`**: står til slutt, som en samlet tabell over alt som avviker, og som ikke står i forslaget. Det som stemmer, står ikke her. Kolonnen `Type` er den faste teksten i malen (Usikker, Ikke funnet, Tilgang avviker, …), og radene sorteres i den rekkefølgen typene står i malen, og så i rekkefølgen kravene står i. `Gjelder` har referansen til kravet (`krav/…:<linje>`), og `Hva` til koden (`<repo>/<fil>:<linje>`). `fs-testplan` leser radene for kravene som venter på verifisering.
+- **`## Oppfølging oppsummert`**: står til slutt, som en samlet tabell over alt som avviker, og som ikke står i forslaget. Det som stemmer, står ikke her. Kolonnen `Type` er den faste teksten i malen (Usikker, Ikke funnet, Tilgang avviker, …), og radene sorteres i den rekkefølgen typene står i malen, og så i rekkefølgen kravene står i. `Gjelder` har referansen til kravet (`krav/…:<linje>`), og `Hva` til koden (`<repo>/<fil>:<linje>`). `fs-testplan` leser radene for kravene som venter på verifisering.
