@@ -7,7 +7,7 @@ Egenskap: Starte automatisk behandling
 
   Den automatiske behandlingen er en fortsettelse av saksbehandlertildelingen. Hver ny sak
   behandles automatisk når søkerens resultater er importert fra KREG. Har søkeren ikke noe
-  vitnemål når saken opprettes, starter behandlingen når jobben for nye vitnemål finner det
+  vitnemål når saken opprettes, starter behandlingen når importen av VGS-vitnemål fra KREG finner det
   første vitnemålet i KREG. Et nytt vitnemål i en sak som har vitnemål fra før, er ny
   dokumentasjon: behandlingen starter ikke av seg selv, og saksbehandleren ser at saken har fått
   ny dokumentasjon. Saksbehandleren kan starte den automatiske behandlingen for en sak, også på
@@ -47,7 +47,7 @@ Egenskap: Starte automatisk behandling
     Scenario: Saken behandles automatisk når jobben finner søkerens første vitnemål
       Gitt at "Kari Nordmann" har levert søknaden uten å ha et vitnemål i KREG
       Og at "Kari Nordmann" har fått et vitnemål i KREG
-      Når jobben for nye vitnemål i KREG kjører
+      Når importen av VGS-vitnemål fra KREG kjører
       Så behandles saken hos "Universitetet i Oslo" automatisk når vitnemålet er importert
 
   Regel: Behandlingen starter av seg selv bare for saker som ikke er behandlet
@@ -58,7 +58,7 @@ Egenskap: Starte automatisk behandling
     Scenariomal: Saken med behandlingsstatusen <status> behandles ikke automatisk når søkeren får det første vitnemålet
       Gitt at saken hos "Universitetet i Oslo" har behandlingsstatusen "<status>"
       Og at "Kari Nordmann" har fått det første vitnemålet i KREG
-      Når jobben for nye vitnemål i KREG kjører
+      Når importen av VGS-vitnemål fra KREG kjører
       Så behandles ikke saken hos "Universitetet i Oslo" automatisk
 
       Eksempler:
@@ -81,13 +81,13 @@ Egenskap: Starte automatisk behandling
     Scenario: Saksbehandleren ser at saken har fått ny dokumentasjon
       Gitt at saken hos "Universitetet i Oslo" er behandlet automatisk på vitnemålet til "Kari Nordmann"
       Og at "Kari Nordmann" har fått et nytt vitnemål i KREG
-      Når jobben for nye vitnemål i KREG kjører
+      Når importen av VGS-vitnemål fra KREG kjører
       Så ser saksbehandleren ved Universitetet i Oslo «Ny dokumentasjon» på saken i sakslisten
 
     Scenario: Saken behandles ikke automatisk på nytt når det kommer et nytt vitnemål
       Gitt at saken hos "Universitetet i Oslo" er behandlet automatisk på vitnemålet til "Kari Nordmann"
       Og at "Kari Nordmann" har fått et nytt vitnemål i KREG
-      Når jobben for nye vitnemål i KREG kjører
+      Når importen av VGS-vitnemål fra KREG kjører
       Så behandles ikke saken hos "Universitetet i Oslo" automatisk på nytt
 
   Regel: Saksbehandleren starter den automatiske behandlingen for en sak
