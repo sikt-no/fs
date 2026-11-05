@@ -16,6 +16,7 @@ Rapporten fra `fs-verify` og `fs-verify-agent-teams` følger denne malen, så to
   - `[gjennomgang]`: en gjennomgang av en tidligere rapport (*Gjennomgang av en verify-rapport* i `fs-verify`).
   - `[confluence]`: resultatet er lagt i Confluence (*Confluence* i `fs-verify`).
 - **Hver seksjon starter med en kort beskrivelse** av hva den inneholder, rett under overskriften: den faste teksten i malen, én eller to setninger. Den står også i en seksjon uten innhold, men ikke i metadataene øverst.
+- **Teamvisningen** (*Teamvisning* i `fs-verify`) lages fra rapporten med `references/teamvisning/bygg.mjs`, som leser metadataene, seksjonene og tabellene i denne malen. Endres en seksjon, en kolonne eller en fast tekst som skriptet leser (f.eks. `Repoer`, merkene i `Bevis`, `### Avvik` og `### Stemmer`), oppdateres `bygg.mjs` i samme endring.
 - **Faste tekster** står uten `<…>` og skrives som de står. Det i `<…>` fylles inn. Der det står `a | b`, velges én.
 - **Tallene regnes ut** fra tabellen `## Scenarioer` (se *Rapport* i `fs-verify`). Tallene i `## Oppsummering`, `## Oversikt per krav` og `## Forslag til endringer` skal stemme med tabellen.
 - **`## Scenarioer` leses av FS Kravforvaltning.** Fire kolonner, Feature-ID med `@`, scenariotittelen slik den står i fila, og `Resultat` med små bokstaver: `funnet`, `ikke funnet` eller `usikker`. Resultatet er det som gjelder etter kontrollen. Alle scenarioene i gating-settet har en rad, også de som er funnet.
