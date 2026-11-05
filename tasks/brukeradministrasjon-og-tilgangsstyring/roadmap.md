@@ -16,9 +16,7 @@ Initiativer er overordnede sakskomplekser teamets oppgaver bidrar til. De eier p
 
 ## Aktive oppgaver
 
-| Issue | Oppgave | Initiativ | Fase | Prioritet | Eier | Reviewere | Mappe |
-|-------|---------|-----------|------|-----------|------|-----------|-------|
-| [#143](https://github.com/sikt-no/fs/issues/143) | Grunnleggende brukeradministrasjon i FS Admin | #350 | utvikling | Should | – | – | [grunnleggende-brukeradministrasjon](grunnleggende-brukeradministrasjon/) |
+Ingen.
 
 ## Ferdig
 

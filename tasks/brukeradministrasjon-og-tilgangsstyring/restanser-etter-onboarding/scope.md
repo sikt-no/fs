@@ -17,7 +17,7 @@
 
 - Endringer i leverte krav som erstatter `@deprecated`-deler (synlighet via aktiv rolle, «Gjelder for»): eget scope, [scope-synlighet-og-gjelder-for](../synlighet-og-gjelder-for/scope.md).
 - Oppgaver som bare gjelder applikasjonskrav: eget scope, [scope-applikasjoner-etter-design-review](../applikasjoner-etter-design-review/scope.md).
-- Reaktivering av personbrukere (`@BRU-PER-GRU-004`): [scope-grunnleggende-brukeradministrasjon](../grunnleggende-brukeradministrasjon/scope.md).
+- Reaktivering av personbrukere (`@BRU-PER-GRU-004`).
 - Organisasjonsvalget i dialogene for å tildele og fjerne tilganger til en applikasjon (`@BRU-APP-API-007`, `-008`): kravet beskriver det koden gjør i dag.
 - Tilganger for personbrukere (`@BRU-PER-GRU-002`, `-009`), som er planlagt etter v1.
 
