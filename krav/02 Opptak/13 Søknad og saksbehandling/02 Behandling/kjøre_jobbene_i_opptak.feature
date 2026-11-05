@@ -49,8 +49,8 @@ Egenskap: Kjøre jobbene i opptak
     # Avklart 05.11.2026: KREG synkroniseres med Nasjonal vitnemålsdatabase (NVB) bare én gang i
     # døgnet, i en nattjobb. Importen trenger derfor ikke kjøre oftere enn én gang i døgnet.
     # ÅPNE SPØRSMÅL:
-    # - Hvor ofte er det ansvarlig å kjøre importen av VGS-vitnemål fra KREG, i hovedopptaket
-    #   med mange søkere? Det skal testes sammen med KREG-teamet.
+    # - Holder det å kjøre importen én gang i døgnet, etter nattjobben i KREG, eller må den kjøre
+    #   oftere for annulleringer? Belastningen testes med KREG-teamet.
 
     Scenario: Jobben kjører så ofte som applikasjonsinnstillingene sier
       Gitt at applikasjonsinnstillingene sier hvor ofte importen av VGS-vitnemål fra KREG kjører
@@ -61,12 +61,9 @@ Egenskap: Kjøre jobbene i opptak
       Når opptaksforvalteren ved HK-dir ser på jobbene i "Samordna opptak 2027"
       Så kan opptaksforvalteren ikke endre hvor ofte jobbene kjører
 
-  @openquestion
   Regel: Jobbene kjører så lenge opptaket er i gang
-    # ÅPNE SPØRSMÅL:
-    # - Når slutter jobbene å kjøre for et opptak? FLY-OPT-VIT-001 sier at importen gjelder
-    #   opptak som ikke er avsluttet. OPT-BEH-BEH-032 sier at opptaksforvalteren kan skru av
-    #   automatikken og sette tidspunktet da den stopper. Gjelder det tidspunktet også jobbene?
+    # Avklart 2026-11-03 (OPT-BEH-BEH-032): hendelsene for den automatiske saksbehandlingen gjelder
+    # ikke jobbene. Jobbene kjører til opptaket er avsluttet.
 
     Scenario: Jobbene kjører ikke for et avsluttet opptak
       Gitt at "Samordna opptak 2026" er avsluttet
@@ -75,18 +72,20 @@ Egenskap: Kjøre jobbene i opptak
 
   @ref-OPT-BEH-BEH-030
   Regel: En søker jobben feilet for, prøves på nytt
-    # Avklart 05.11.2026: jobben fortsetter med de andre søkerne når den feiler for én søker.
+
+    Scenario: Vitnemålene importeres når KREG svarer igjen
+      Gitt at importen av VGS-vitnemål fra KREG feilet for "Kari Nordmann" fordi KREG ikke svarte
+      Når KREG svarer igjen innenfor tiden i applikasjonsinnstillingene
+      Så er vitnemålene til "Kari Nordmann" importert
+
+  Regel: Jobben fortsetter med de andre søkerne når den feiler for én søker
+    # Avklart 05.11.2026.
 
     Scenario: Importen fortsetter med de andre søkerne når den feiler for én søker
       Gitt at importen av VGS-vitnemål fra KREG feiler for "Kari Nordmann"
       Og at "Ola Nordmann" har fått et vitnemål i KREG som ikke er importert
       Når importen av VGS-vitnemål fra KREG kjører
       Så er vitnemålet til "Ola Nordmann" importert
-
-    Scenario: Vitnemålene importeres når KREG svarer igjen
-      Gitt at importen av VGS-vitnemål fra KREG feilet for "Kari Nordmann" fordi KREG ikke svarte
-      Når KREG svarer igjen innenfor tiden i applikasjonsinnstillingene
-      Så er vitnemålene til "Kari Nordmann" importert
 
   @openquestion
   Regel: Tekniske feil skrives i applikasjonsloggen, og Sikt får et varsel

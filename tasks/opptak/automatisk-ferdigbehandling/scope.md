@@ -10,7 +10,7 @@
 ## Mål
 
 - Leveranse 5 av 6 i flyten `@FLY-OPT-AUT-001` [automatisk saksbehandling](../../../krav/_Flyter/10%20Opptaksl%C3%B8pet/automatisk_saksbehandling.feature): saken får automatiske mangeltekster, mangelen for generell studiekompetanse som fullføres i vår sjekkes ut, og den automatiske behandlingen setter saken til ferdig behandlet, så den kan være med i plasstildelingen.
-- Verify 2026-11-04 fant koden for fasene «Saken får mangeltekster når kravelementene er vurdert», «Mangelen for GSK som fullføres i vår sjekkes ut før saken blir ferdig behandlet» og «Saken blir ferdig behandlet og er klar til å være med i plasstildelingen». Fasen om mangelen for GSK som fullføres i vår er ikke levert før regelen om å merke mangelkoden i `@OPT-BEH-BEH-036` er verifisert.
+- Fasene «Saken får mangeltekster når kravelementene er vurdert», «Mangelen for GSK som fullføres i vår sjekkes ut før saken blir ferdig behandlet» og «Saken blir ferdig behandlet og er klar til å være med i plasstildelingen» er levert.
 - Det kjente bruddet i flyten lukkes: den automatiske behandlingen setter i dag ikke saken til ferdig behandlet.
 
 ## Ikke-mål
@@ -41,6 +41,7 @@
 ## Åpne spørsmål
 
 - [ ] `@OPT-BEH-BEH-036` har ingen Jira-sak. Avklares senere.
+- [ ] Fasen om mangelen for GSK som fullføres i vår er ikke levert før regelen om å merke mangelkoden i `@OPT-BEH-BEH-036` er verifisert.
 - [x] Regelen «Opptaksforvalteren merker én mangelkode for generell studiekompetanse som fullføres i vår» i `@OPT-BEH-BEH-036` er `@draft`, og må valideres med fs-krav før fasen «Mangelen for GSK som fullføres i vår sjekkes ut før saken blir ferdig behandlet» kan leveres. Validert 2026-11-05: `@draft` er fjernet, og regelen har to åpne spørsmål fra koden.
 
 ## Statuslogg

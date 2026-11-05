@@ -89,9 +89,10 @@ Egenskap: Importere VGS-vitnemål fra KREG
       Når importen av VGS-vitnemål fra KREG kjører
       Så har søknaden ingen GSK-konklusjon
 
-  @depends-on-OPT-BEH-BEH-032
+  @depends-on-OPT-BEH-BEH-032 @ref-FLY-OPT-AUT-001
   # OPT-BEH-BEH-032: «Behandlingen kjører når søkeren får det første vitnemålet»
-  # Overleveringen til flyten for automatisk saksbehandling (FLY-OPT-AUT-001).
+  # Importens side av overleveringen. Behandlingens side er fase 2 i FLY-OPT-AUT-001,
+  # «Den automatiske behandlingen starter når søkerens resultater er importert».
   Regel: Den automatiske behandlingen starter når søkeren får det første vitnemålet
 
     Scenario: Saken behandles automatisk når importen finner søkerens første vitnemål
