@@ -12,7 +12,7 @@ Egenskap: Automatisk saksbehandling
   stopper ikke (OPT-BEH-BEH-015). «Importeres» betyr i flyten alltid at
   opptakssystemet henter vitnemålet fra KREG, ikke at vitnemålet kommer inn i KREG.
   Den automatiske behandlingen fortsetter saksbehandlertildelingen: hver ny sak behandles når
-  vitnemålet er importert, eller når jobben for nye vitnemål i KREG finner søkerens første
+  vitnemålet er importert, eller når importen av VGS-vitnemål fra KREG finner søkerens første
   vitnemål. Opptaksforvalteren kan sette når den automatiske saksbehandlingen starter og avsluttes
   i opptaket (OPT-BEH-BEH-032).
   Som første steg setter den GSK-konklusjonen på søknadene som ikke har en.

@@ -39,7 +39,7 @@ Egenskap: Importere resultater fra KREG
     @implemented
     Scenario: Resultatene hentes når en endring av søknaden gir en ny sak
       # Avklart 03.11.2026: resultatene hentes på nytt hver gang søknaden endres, også når
-      # endringen ikke gir en ny sak. Det dekker hullet til jobben for nye vitnemål
+      # endringen ikke gir en ny sak. Det dekker hullet til importen av VGS-vitnemål fra KREG
       # (OPT-BEH-BEH-032) er levert.
       Gitt at søkerens vitnemål fra 2024 er importert
       Og at søkeren har fått et vitnemål fra 2025 i KREG
@@ -56,7 +56,7 @@ Egenskap: Importere resultater fra KREG
 
     Scenario: Resultatene hentes med D-nummer når søkeren ikke har fødselsnummer
       # Avklart 03.11.2026. Kode i dag: bare fødselsnummer slås opp. KREG tar imot D-nummer.
-      # D-nummeret brukes også når resultatene hentes på nytt, i jobben for nye vitnemål
+      # D-nummeret brukes også når resultatene hentes på nytt, i importen av VGS-vitnemål fra KREG
       # (OPT-BEH-BEH-032).
       Gitt at søkeren har D-nummer og ikke fødselsnummer
       Og at søkeren har et vitnemål i KREG
