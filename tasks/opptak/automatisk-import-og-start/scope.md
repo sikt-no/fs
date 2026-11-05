@@ -47,7 +47,7 @@ Append-only. Ny linje på toppen ved hver hendelse.
 
 | Dato       | Hendelse | Av | Lenke til review |
 |------------|----------|----|------------------|
-| 2026-11-05 | `@OPT-BEH-BEH-033` er validert og `@planned`. «Det fremgår at jobbene kjører» og «Opptaksforvalteren starter en jobb uten å vente på neste kjøring» venter (`@draft @openquestion`). `@FLY-OPT-VIT-001` har fått fasen om at behandlingen starter når søkeren får det første vitnemålet. Fra gjennomgangen av flyten automatisk saksbehandling | @JøranIndseth | – |
+| 2026-11-05 | `@OPT-BEH-BEH-033` er validert og `@planned`. «Det fremgår at jobbene kjører» og «Opptaksforvalteren starter en jobb uten å vente på neste kjøring» venter (`@draft @openquestion`). `@FLY-OPT-VIT-001` har fått fasen om at behandlingen starter når importen har hentet vitnemålene til en søker uten vitnemål (avklart med Geir i #951). Fra gjennomgangen av flyten automatisk saksbehandling | @JøranIndseth | – |
 | 2026-11-05 | Raden for `@OPT-BEH-BEH-033` viser til scopet for `@OPT-BEH-BEH-038` i stedet for PR #937. Fra reviewen av PR #948 | @JøranIndseth | [#948](https://github.com/sikt-no/fs/pull/948) |
 | 2026-11-04 | Scenarioet om å starte på valgt vitnemål i `@OPT-BEH-BEH-032` er skilt ut i `@OPT-BEH-BEH-039` (Behandle automatisk på vitnemålet saksbehandleren velger), `@must` uten scope. Fra reviewen av PR #931 | @JøranIndseth | [#931](https://github.com/sikt-no/fs/pull/931) |
 | 2026-11-04 | `@OPT-BEH-BEH-033` er tatt inn i scopet. `@OPT-BEH-BEH-032` og fase 1 i `@FLY-OPT-VIT-001` bygger på jobbene, og kravet hørte ikke til noe scope. Fra reviewen av PR #925 | @JøranIndseth | [#925](https://github.com/sikt-no/fs/pull/925) |

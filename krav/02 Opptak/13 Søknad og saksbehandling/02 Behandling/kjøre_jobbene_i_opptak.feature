@@ -7,8 +7,8 @@ Egenskap: Kjøre jobbene i opptak
 
   Tre jobber kjører fast i opptaket: saksbehandlertildelingen, importen av VGS-vitnemål fra
   KREG og importen av resultater fra høyere utdanning, som hentes fra en annen tjeneste enn KREG
-  (OPT-BEH-BEH-038). Finner importen fra KREG søkerens første vitnemål, starter den automatiske
-  behandlingen (OPT-BEH-BEH-032). En jobbplanlegger starter
+  (OPT-BEH-BEH-038). Har importen fra KREG hentet vitnemålene til en søker som ikke hadde
+  vitnemål, starter den automatiske behandlingen (OPT-BEH-BEH-032). En jobbplanlegger starter
   jobbene. Hvor ofte hver jobb kjører, står i applikasjonsinnstillingene. Ingen bruker endrer det
   i FS Admin. Feiler en jobb for en søker fordi KREG ikke svarer, prøves den på nytt. Hvor mange
   ganger, og hvor lenge, står også i applikasjonsinnstillingene. Feilen skrives i
@@ -80,7 +80,6 @@ Egenskap: Kjøre jobbene i opptak
       Så er vitnemålene til "Kari Nordmann" importert
 
   Regel: Jobben fortsetter med de andre søkerne når den feiler for én søker
-    # Avklart 05.11.2026.
 
     Scenario: Importen fortsetter med de andre søkerne når den feiler for én søker
       Gitt at importen av VGS-vitnemål fra KREG feiler for "Kari Nordmann"

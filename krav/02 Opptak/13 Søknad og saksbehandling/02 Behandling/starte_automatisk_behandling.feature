@@ -7,8 +7,8 @@ Egenskap: Starte automatisk behandling
 
   Den automatiske behandlingen er en fortsettelse av saksbehandlertildelingen. Hver ny sak
   behandles automatisk når søkerens resultater er importert fra KREG. Har søkeren ikke noe
-  vitnemål når saken opprettes, starter behandlingen når importen av VGS-vitnemål fra KREG finner det
-  første vitnemålet i KREG. Et nytt vitnemål i en sak som har vitnemål fra før, er ny
+  vitnemål når saken opprettes, starter behandlingen når importen av VGS-vitnemål fra KREG har hentet
+  alle vitnemålene søkeren har fått i KREG. Et nytt vitnemål i en sak som har vitnemål fra før, er ny
   dokumentasjon: behandlingen starter ikke av seg selv, og saksbehandleren ser at saken har fått
   ny dokumentasjon. Saksbehandleren kan starte den automatiske behandlingen for en sak, også på
   vitnemålet saksbehandleren velger når søkeren har flere vitnemål (OPT-BEH-BEH-039). Det saksbehandleren har gjort i saken, endres aldri av automatikken. Opptaksforvalteren
@@ -38,26 +38,38 @@ Egenskap: Starte automatisk behandling
       Gitt at "Kari Nordmann" har sendt inn søknaden
       Og at "Kari Nordmann" har et vitnemål i KREG
       Når saksbehandlertildelingen har opprettet saken hos "Universitetet i Oslo"
-      Så behandles saken hos "Universitetet i Oslo" automatisk når vitnemålet er importert
+      Så behandles saken hos "Universitetet i Oslo" automatisk når resultatene er importert
 
-  @depends-on-OPT-BEH-BEH-030 @ref-FLY-OPT-VIT-001 @ref-FLY-OPT-AUT-001
+  @depends-on-OPT-BEH-BEH-030 @ref-FLY-OPT-VIT-001 @ref-FLY-OPT-AUT-001 @ref-OPT-BEH-BEH-025
   # OPT-BEH-BEH-030: «Nye og annullerte vitnemål i KREG importeres for aktive søkere»
-  Regel: Behandlingen kjører når søkeren får det første vitnemålet
+  Regel: Behandlingen kjører når importen har hentet vitnemålene til en søker uten vitnemål
+    # Avklart 05.11.2026 (Geir, #951): behandlingen starter når importen har hentet alle
+    # vitnemålene søkeren har i KREG, ikke ved det første vitnemålet. Den bruker vitnemålene
+    # som finnes i KREG når importen kjører. Har søkeren to eller flere vitnemål, uansett om de
+    # gir GSK, behandles saken ikke helautomatisk (OPT-BEH-BEH-025). Et vitnemål som kommer
+    # etter at saken er behandlet, er ny dokumentasjon.
 
-    Scenario: Saken behandles automatisk når jobben finner søkerens første vitnemål
+    Scenario: Saken behandles automatisk når importen har hentet søkerens vitnemål
       Gitt at "Kari Nordmann" har levert søknaden uten å ha et vitnemål i KREG
       Og at "Kari Nordmann" har fått et vitnemål i KREG
       Når importen av VGS-vitnemål fra KREG kjører
       Så behandles saken hos "Universitetet i Oslo" automatisk når vitnemålet er importert
+
+    Scenario: Saken behandles ikke helautomatisk når importen henter to vitnemål for søkeren
+      Gitt at "Kari Nordmann" har levert søknaden uten å ha et vitnemål i KREG
+      Og at "Kari Nordmann" har fått to vitnemål i KREG
+      Når importen av VGS-vitnemål fra KREG kjører
+      Så behandles saken hos "Universitetet i Oslo" automatisk når begge vitnemålene er importert
+      Men saken hos "Universitetet i Oslo" behandles ikke helautomatisk
 
   Regel: Behandlingen starter av seg selv bare for saker som ikke er behandlet
     # Avklart 2026-11-02: har saksbehandleren begynt på saken, eller er saken ferdig behandlet,
     # starter ikke behandlingen av seg selv. Saksbehandleren kan starte den (se «Saksbehandleren
     # starter den automatiske behandlingen for en sak»).
 
-    Scenariomal: Saken med behandlingsstatusen <status> behandles ikke automatisk når søkeren får det første vitnemålet
+    Scenariomal: Saken med behandlingsstatusen <status> behandles ikke automatisk når importen henter søkerens vitnemål
       Gitt at saken hos "Universitetet i Oslo" har behandlingsstatusen "<status>"
-      Og at "Kari Nordmann" har fått det første vitnemålet i KREG
+      Og at "Kari Nordmann" har fått et vitnemål i KREG
       Når importen av VGS-vitnemål fra KREG kjører
       Så behandles ikke saken hos "Universitetet i Oslo" automatisk
 

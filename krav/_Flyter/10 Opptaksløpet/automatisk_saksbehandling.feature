@@ -54,7 +54,7 @@ Egenskap: Automatisk saksbehandling
       Og GSK kan beregnes for vitnemålet
 
   @depends-on-OPT-BEH-BEH-032
-  # OPT-BEH-BEH-032: «Behandlingen kjører for hver ny sak saksbehandlertildelingen oppretter», «Behandlingen kjører når søkeren får det første vitnemålet»
+  # OPT-BEH-BEH-032: «Behandlingen kjører for hver ny sak saksbehandlertildelingen oppretter», «Behandlingen kjører når importen har hentet vitnemålene til en søker uten vitnemål»
   Regel: Den automatiske behandlingen starter når søkerens resultater er importert
 
     Scenario: Saken behandles automatisk når vitnemålet er importert
