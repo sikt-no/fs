@@ -189,6 +189,23 @@ Egenskap: Automatisk GSK-konklusjon
       Og grunnlagskoden er grunnlagskoden for løpet på vitnemålet
       Og grunnlagsdatoen er utstedelsesdatoen på vitnemålet
 
+    Scenariomal: Søknaden får konklusjonen fra vitnemålet når saken er <status>
+      # Avklart 2026-11-04 (Sondre, opptak !6566): behandlingsstatusen på saken spiller ingen
+      # rolle. Statusen endres ikke av konklusjonen, som for resten av den automatiske
+      # behandlingen (OPT-BEH-BEH-029).
+      Gitt at saken har behandlingsstatusen "<status>"
+      Og at søknaden ikke har noen GSK-konklusjon
+      Og at søkeren har et vitnemål som gir GSK
+      Når vitnemålet importeres fra KREG
+      Så får søknaden en positiv GSK-konklusjon
+      Og saken har fortsatt behandlingsstatusen "<status>"
+
+      Eksempler:
+        | status           |
+        | Ikke behandlet   |
+        | Under behandling |
+        | Behandlet        |
+
     Scenario: Søknaden får grunnlagskoden for løpet når opptakssystemet er uenig med skolen
       # Avklart 2026-11-02: grunnlagskoden gis fra løpet uansett hva opptakssystemets påstand er
       # (OPT-BEH-BEH-027, «Grunnlagskoden gis selv om påstanden ikke er GSK»).

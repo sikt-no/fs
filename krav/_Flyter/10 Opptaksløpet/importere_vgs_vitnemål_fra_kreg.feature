@@ -89,8 +89,8 @@ Egenskap: Importere VGS-vitnemål fra KREG
   # har søknad i. Underprosessen er den automatiske GSK-konklusjonen.
   # Avklart 2026-11-03: GSK-konklusjonen krever en sak. Den automatiske GSK-konklusjonen startes
   # bare for opptak der søkeren har en sak.
-  # Avklart 2026-11-04 (Sondre): behandlingsstatusen på saken spiller ingen rolle. Kan
-  # GSK-konklusjonen settes automatisk, settes den. En konklusjon som finnes, endres ikke.
+  # Avklart 2026-11-04: behandlingsstatusen på saken spiller ingen rolle. Står i OPT-BEH-BEH-015,
+  # «Konklusjon på søknaden fra vitnemålet».
   Regel: Den automatiske GSK-konklusjonen startes for hvert opptak der søkeren har en sak
 
     Scenario: Hver søknad med sak får GSK-konklusjonen
