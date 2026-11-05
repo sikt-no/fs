@@ -1,5 +1,5 @@
 # language: no
-@OPT-BEH-BEH-038 @must @draft @scope-automatisk-import-og-start @ref-OPT-BEH-BEH-030 @ref-OPT-BEH-BEH-033
+@OPT-BEH-BEH-038 @must @draft @scope-automatisk-grunnlag-og-poeng @ref-OPT-BEH-BEH-030 @ref-OPT-BEH-BEH-033
 Egenskap: Importere resultater fra høyere utdanning
   Som saksbehandler
   ønsker jeg at søkerens resultater fra høyere utdanning importeres av seg selv

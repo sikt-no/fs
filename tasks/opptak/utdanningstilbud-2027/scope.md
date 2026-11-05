@@ -65,7 +65,7 @@
 - [ ] Finnes det skisse for alternativt visningsnavn (033)? Det er ikke i rammen.
 - [ ] Finnes det skisse for å overstyre regler for poenglikhet (015)? Den er ikke i rammen.
 - [ ] Det ryktes at overstyring av regler for poenglikhet (015) er levert. Stemmer det? I så fall kan kravet verifiseres med `fs-verify`.
-- [ ] Fasen «Utdanningstilbudet får behandlertildelingsregel» i flyten Saksbehandlertildeling (`@FLY-OPT-SAK-001`, `@planned`) bygger på regelen «Opptaksforvalter kan velge behandlertildelingsregel per utdanningstilbud» i `@OPT-OPT-UTD-004`, som er `@draft`. Fasen kan ikke leveres før kravet er validert.
+- [ ] Fasen «Utdanningstilbudet får behandlertildelingsregel» i flyten Saksbehandlertildeling (`@FLY-OPT-SAK-001`, `@planned`) bygger på regelen «Opptaksforvalter kan velge behandlertildelingsregel per utdanningstilbud» i `@OPT-OPT-UTD-004`. Fasen kan ikke leveres før regelen er levert, og kravet er `@draft`.
 - [ ] Skal oppgavene ha hver sin GitHub-issue? opptaksinnstillinger dekker #596 og #597, og behandle-utdanningstilbud har bare Jira SHI-686 og #595 (003).
 
 ## Behandle et utdanningstilbud (fra oppgaven behandle-utdanningstilbud)
