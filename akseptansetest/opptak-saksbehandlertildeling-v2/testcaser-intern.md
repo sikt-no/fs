@@ -6,7 +6,7 @@
 - **Krav**: 1 feature-fil og 1 flyt, branchen `krav/saksbehandlertildeling-v2` (PR #936), 2026-11-05
 - **Verifisering**: [verify-tildele_saksbehandlende_organisasjon-2026-11-04-1317.md](../../krav/02%20Opptak/13%20S%C3%B8knad%20og%20saksbehandling/02%20Behandling/verify-tildele_saksbehandlende_organisasjon-2026-11-04-1317.md), 62 av 62 funnet i kravet
 - **Agentisk funksjonstest**: [testrapport-agentisk-2026-11-05.md](testrapport-agentisk-2026-11-05.md), gjennomgått av testansvarlig: [Fylles ut av testansvarlig], åpne funn med «Stopper»: 0
-- **Confluence**: –
+- **Confluence**: https://sikt.atlassian.net/wiki/spaces/STUDIEADM/pages/5173018630/Intern+akseptansetest+Saksbehandlertildeling+runde+2
 - **Laget**: 2026-11-05 av fs-testcaser-intern. Testansvarlig ba om få og åpne testcaser: fagpersonen får en oppgave og hva som skal vurderes, ikke et klikk for klikk-oppskrift. Fordelingen er testet i detalj i fase 2.
 - **Sporing**:
 

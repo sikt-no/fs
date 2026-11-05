@@ -5,7 +5,7 @@
 - **Scope**: –
 - **Krav**: 2 feature-filer, 1 `@implemented`, 0 delvis levert, 1 flyt (`@planned`, testes delvis), commit `7d4ee5d1` (2026-11-04)
 - **Verifisering**: [verify-tildele_saksbehandlende_organisasjon-2026-11-04-1317.md](../../krav/02%20Opptak/13%20S%C3%B8knad%20og%20saksbehandling/02%20Behandling/verify-tildele_saksbehandlende_organisasjon-2026-11-04-1317.md)
-- **Confluence**: https://sikt.atlassian.net/wiki/spaces/STUDIEADM/pages/5170495530/Testplan+Saksbehandlertildeling+runde+2 (utkast)
+- **Confluence**: https://sikt.atlassian.net/wiki/spaces/STUDIEADM/pages/5170495530/Testplan+Saksbehandlertildeling+runde+2
 - **Laget**: 2026-11-04 av fs-testplan
 - **GitHub-lenker**: gjelder branchen `krav/saksbehandlertildeling-v2` til PR-en er merget. Kravene og verify-rapporten ligger ikke på `main` ennå
 - **Runde 1**: [Akseptansetesting saksbehandlertildeling](https://sikt.atlassian.net/wiki/spaces/STUDIEADM/pages/5130911779/Akseptansetesting+saksbehandlertildeling) (Confluence) og [`akseptansetest/opptak-saksbehandlertildeling/`](../opptak-saksbehandlertildeling/)
@@ -116,8 +116,8 @@ Et funn med alvorlighetsgraden «Stopper» gir ikke godkjent, men resten av test
 |---|---|---|---|
 | 1. Verifisering (`fs-verify`) | [Verifisering – Saksbehandlertildeling, runde 2 – 2026-11-04 13:17](https://sikt.atlassian.net/wiki/spaces/STUDIEADM/pages/5170364465/Verifisering+Saksbehandlertildeling+runde+2+2026-11-04+13+17) | Kravet: alt funnet (62/62). Flyten: 3 ikke funnet (faser som ikke er levert) | 2026-11-04 |
 | 1. Testplan | (denne siden) | Laget | 2026-11-04 |
-| 2. Agentisk funksjonstest | [testrapport-agentisk-2026-11-05.md](testrapport-agentisk-2026-11-05.md), [kjøringen](kjoring-2026-11-04-1510/resultat.md) | Venter på gjennomgang (89 bestått, 5 ikke bestått, 11 ikke testet av 105) | 2026-11-05 |
-| 3. Intern akseptansetest | [testcaser-intern.md](testcaser-intern.md) | Klar til test (når testrapporten for fase 2 er gått gjennom) | 2026-11-05 |
+| 2. Agentisk funksjonstest | [testrapport-agentisk-2026-11-05.md](https://sikt.atlassian.net/wiki/spaces/STUDIEADM/pages/5173837827/Testrapport+agentisk+funksjonstest+Saksbehandlertildeling+runde+2+2026-11-05), [kjøringen](kjoring-2026-11-04-1510/resultat.md) | Venter på gjennomgang (89 bestått, 5 ikke bestått, 11 ikke testet av 105) | 2026-11-05 |
+| 3. Intern akseptansetest | [testcaser-intern.md](https://sikt.atlassian.net/wiki/spaces/STUDIEADM/pages/5173018630/Intern+akseptansetest+Saksbehandlertildeling+runde+2) | Klar til test (når testrapporten for fase 2 er gått gjennom) | 2026-11-05 |
 | 4. Ekstern akseptansetest | – | Ikke aktuell | |
 
 Testrapportene (verifisering, agentisk, intern og ekstern) står som undersider, og lenken står i raden for fasen.
@@ -128,9 +128,9 @@ Testrapportene (verifisering, agentisk, intern og ekstern) står som undersider,
 |---|---|
 | Verifiseringsrapporten (fase 1) | [verify-tildele_saksbehandlende_organisasjon-2026-11-04-1317.md](../../krav/02%20Opptak/13%20S%C3%B8knad%20og%20saksbehandling/02%20Behandling/verify-tildele_saksbehandlende_organisasjon-2026-11-04-1317.md) |
 | Runde 1 | [Akseptansetesting saksbehandlertildeling](https://sikt.atlassian.net/wiki/spaces/STUDIEADM/pages/5130911779/Akseptansetesting+saksbehandlertildeling) (Confluence 5130911779), [`akseptansetest/opptak-saksbehandlertildeling/`](../opptak-saksbehandlertildeling/) |
-| Agentisk testrapport (fase 2) | [testrapport-agentisk-2026-11-05.md](testrapport-agentisk-2026-11-05.md) |
-| Testcasene for fase 2 | – |
-| Testcasene for fase 3 | – |
+| Agentisk testrapport (fase 2) | [testrapport-agentisk-2026-11-05.md](https://sikt.atlassian.net/wiki/spaces/STUDIEADM/pages/5173837827/Testrapport+agentisk+funksjonstest+Saksbehandlertildeling+runde+2+2026-11-05) |
+| Testcasene for fase 2 | [`cdp-tester/02 Opptak/13 Søknad og saksbehandling/02 Behandling/`](../../cdp-tester/02%20Opptak/13%20S%C3%B8knad%20og%20saksbehandling/02%20Behandling/) |
+| Testcasene for fase 3 | [testcaser-intern.md](https://sikt.atlassian.net/wiki/spaces/STUDIEADM/pages/5173018630/Intern+akseptansetest+Saksbehandlertildeling+runde+2) |
 
 ## Læring
 

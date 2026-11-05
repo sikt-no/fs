@@ -2,10 +2,10 @@
 
 - **Nivå**: agentisk
 - **Fase**: 2
-- **Testplan**: [testplan.md](testplan.md) · https://sikt.atlassian.net/wiki/spaces/STUDIEADM/pages/5170495530/Testplan+Saksbehandlertildeling+runde+2 (utkast)
+- **Testplan**: [testplan.md](testplan.md) · https://sikt.atlassian.net/wiki/spaces/STUDIEADM/pages/5170495530/Testplan+Saksbehandlertildeling+runde+2
 - **Scope**: –
 - **Grunnlag**: `kjoring-2026-11-04-1510/resultat.md`, lest 2026-11-05 01:03
-- **Confluence**: –
+- **Confluence**: https://sikt.atlassian.net/wiki/spaces/STUDIEADM/pages/5173837827/Testrapport+agentisk+funksjonstest+Saksbehandlertildeling+runde+2+2026-11-05
 - **Laget**: 2026-11-05 av fs-testrapport
 
 ---
@@ -221,7 +221,7 @@ Sortert etter alvorlighetsgrad. Alvorlighetsgraden er foreslått, og testansvarl
 
 ## Neste steg
 
-Inngangskriteriet er ikke oppfylt ennå, fordi testansvarlig ikke har gått gjennom rapporten. Testansvarlig går gjennom rapporten, funnene og stikkprøven av de beståtte, og avgjør statusen på R1-74 og FOR-120 og alvorlighetsgradene. Når det er gjort og ingen funn er «Stopper», går leveransen videre til `fs-testcaser-intern` (testcasene for fase 3), med de 11 «ikke testet» som første del. F-INN-1 går til `fs-krav` med spørsmålet hvis testansvarlig vil følge det opp. F-END-5, F-INN-2 og F1 med F-INN-3 går til teamet for oppgaver. Oppdateringen av «Status i flyten» i testplanen og publiseringen i Confluence er ikke gjort.
+Inngangskriteriet er ikke oppfylt ennå, fordi testansvarlig ikke har gått gjennom rapporten. Testansvarlig går gjennom rapporten, funnene og stikkprøven av de beståtte, og avgjør statusen på R1-74 og FOR-120 og alvorlighetsgradene. Når det er gjort og ingen funn er «Stopper», går leveransen videre til `fs-testcaser-intern` (testcasene for fase 3), med de 11 «ikke testet» som første del. F-INN-1 går til `fs-krav` med spørsmålet hvis testansvarlig vil følge det opp. F-END-5, F-INN-2 og F1 med F-INN-3 går til teamet for oppgaver. Testcasene for fase 3 er laget («Intern akseptansetest – Saksbehandlertildeling, runde 2»).
 
 ## Læring
 

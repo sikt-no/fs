@@ -1,7 +1,7 @@
 # Testcaser og testdata – Saksbehandlertildeling, runde 2
 
-- **Testplan**: [testplan.md](testplan.md) · Confluence: [utkast](https://sikt.atlassian.net/wiki/spaces/STUDIEADM/pages/5170495530/Testplan+Saksbehandlertildeling+runde+2)
-- **Confluence**: https://sikt.atlassian.net/wiki/spaces/STUDIEADM/pages/5170364449/Testcaser+og+testdata+Saksbehandlertildeling+runde+2 (utkast)
+- **Testplan**: [testplan.md](testplan.md) · Confluence: https://sikt.atlassian.net/wiki/spaces/STUDIEADM/pages/5170495530/Testplan+Saksbehandlertildeling+runde+2
+- **Confluence**: https://sikt.atlassian.net/wiki/spaces/STUDIEADM/pages/5170364449/Testcaser+og+testdata+Saksbehandlertildeling+runde+2
 - **Laget**: 2026-11-04 av fs-testplan
 
 ---
