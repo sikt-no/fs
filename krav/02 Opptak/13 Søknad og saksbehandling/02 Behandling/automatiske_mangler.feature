@@ -141,8 +141,8 @@ Egenskap: Automatiske mangler
     # (OPT-OVO-GRU-001).
     # Bør ses på: rutiner som retter opp søknadene og saksbehandlingen når regelverket eller
     # innstillingene endres etter at opptaket er åpnet. Problemer som dette håndteres der.
-    # Kode i dag: sakene i søknadene som fantes fra før, får mangelen når søknaden endres etter
-    # merkingen.
+    # Avklart 05.11.2026 (#951): endrer søkeren søknaden etter merkingen, får sakene mangelen. Det
+    # er søkerens endring, ikke merkingen, som setter den.
 
     Mangelkoden som er merket, er den saken får automatisk når søkeren oppgir at generell
     studiekompetanse fullføres i vår (se «Mangelen for generell studiekompetanse som fullføres i
@@ -183,6 +183,13 @@ Egenskap: Automatiske mangler
       Og at søknaden har saker hos "Universitetet i Oslo" og "UiT Norges arktiske universitet"
       Når opptaksforvalteren ved HK-dir merker mangelkoden "DUA" for generell studiekompetanse som fullføres i vår
       Så har ikke sakene hos "Universitetet i Oslo" og "UiT Norges arktiske universitet" den automatiske mangelen "DUA"
+
+    Scenario: Saken får mangelen når søkeren endrer søknaden etter at mangelkoden er merket
+      Gitt at søkeren har oppgitt i søknaden at generell studiekompetanse fullføres i vår før mangelkoden "DUA" ble merket
+      Og at saken hos "Universitetet i Oslo" ikke har den automatiske mangelen "DUA"
+      Og at mangelkoden "DUA" i regelverkssamlingen "UHG 2027" er merket for generell studiekompetanse som fullføres i vår
+      Når søkeren endrer søknaden
+      Så har saken hos "Universitetet i Oslo" den automatiske mangelen "DUA"
 
     Scenario: Manglene som finnes fra før, blir stående når merkingen fjernes
       Gitt at mangelkoden "DUA" i regelverkssamlingen "UHG 2027" er merket for generell studiekompetanse som fullføres i vår
