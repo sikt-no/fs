@@ -5,7 +5,7 @@
 - **Initiativ**: [#398](https://github.com/sikt-no/fs/issues/398)
 - **Jira**: [sikt-no/fs#597](https://github.com/sikt-no/fs/issues/597), [sikt-no/fs#398](https://github.com/sikt-no/fs/issues/398)
 - **Eier**: –
-- **Siste oppdatering**: 2026-11-02
+- **Siste oppdatering**: 2026-11-05
 
 ## Mål
 
@@ -65,6 +65,7 @@
 - [ ] Finnes det skisse for alternativt visningsnavn (033)? Det er ikke i rammen.
 - [ ] Finnes det skisse for å overstyre regler for poenglikhet (015)? Den er ikke i rammen.
 - [ ] Det ryktes at overstyring av regler for poenglikhet (015) er levert. Stemmer det? I så fall kan kravet verifiseres med `fs-verify`.
+- [ ] Fasen «Utdanningstilbudet får behandlertildelingsregel» i flyten Saksbehandlertildeling (`@FLY-OPT-SAK-001`, `@planned`) bygger på regelen «Opptaksforvalter kan velge behandlertildelingsregel per utdanningstilbud» i `@OPT-OPT-UTD-004`. Fasen kan ikke leveres før regelen er levert, og kravet er `@draft`.
 - [ ] Skal oppgavene ha hver sin GitHub-issue? opptaksinnstillinger dekker #596 og #597, og behandle-utdanningstilbud har bare Jira SHI-686 og #595 (003).
 
 ## Behandle et utdanningstilbud (fra oppgaven behandle-utdanningstilbud)
@@ -134,6 +135,7 @@ Append-only. Ny linje på toppen ved hver hendelse.
 
 | Dato       | Hendelse | Av | Lenke til review |
 |------------|----------|----|------------------|
+| 2026-11-05 | Åpent spørsmål: fasen i flyten Saksbehandlertildeling venter på `@OPT-OPT-UTD-004`. Fra gjennomgangen av flyten automatisk saksbehandling | @JøranIndseth | – |
 | 2026-11-02 | Oppgave og scope slått sammen til scope.md (fra behandle-utdanningstilbud, opptaksinnstillinger, utdanningstilbud) | – | – |
 | 2026-10-12 | [behandle-utdanningstilbud] Opprettet i scope-utdanningstilbud-2027 | – | – |
 | 2026-10-12 | [opptaksinnstillinger] Opprettet i scope-utdanningstilbud-2027 | – | – |
