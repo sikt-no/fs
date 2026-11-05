@@ -1,4 +1,4 @@
-// Felles for teamvisningene (verify, testcasene og testrapporten for den interne testen).
+// Felles for teamvisningene av testrapportene (den interne testen).
 // Leser markdown-fila til en enkel struktur, og skriver HTML-siden fra malen med det felles stilarket.
 import { readFileSync, writeFileSync, existsSync } from 'node:fs';
 import { dirname, join, relative } from 'node:path';

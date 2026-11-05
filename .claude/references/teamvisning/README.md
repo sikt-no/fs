@@ -5,14 +5,13 @@ En teamvisning er én HTML-side som viser en fil fra kravarbeidet eller akseptan
 | Side | Fila den viser | Byggeskript |
 | --- | --- | --- |
 | Verifisering | `verify-*.md` fra `fs-verify` og `fs-verify-agent-teams` | `.claude/skills/fs-verify/references/teamvisning/bygg.mjs` |
-| Testcasene i den interne testen | `testcaser-intern.md` fra `fs-testcaser-intern` | `.claude/skills/fs-testcaser-intern/references/teamvisning/bygg.mjs` |
 | Testrapporten for den interne testen | `testrapport-intern-*.md` fra `fs-testrapport` | `.claude/skills/fs-testrapport/references/teamvisning/bygg.mjs` |
 
 ## Samme design hver gang
 
 - **Designet** står bare i `stil.css` i denne mappa, og er felles for alle sidene: farger (lyst og mørkt tema), skrift, kort, tabeller, merkene ✓ ✗ ~ – og gruppene med farget hode.
-- **Hver side** har sin `mal.html` ved siden av byggeskriptet, med oppsettet og skriptet for siden. Malene bruker stilarket, og `felles.js` (hjelpefunksjonene i nettleseren) for testsidene.
-- **Byggeskriptet** leser markdown-fila (med `felles.mjs` for testsidene), og skriver `<fil>.html` ved siden av den. Skillene skriver aldri HTML-en selv, og endrer ikke en generert fil: den skrives over neste gang.
+- **Hver side** har sin `mal.html` ved siden av byggeskriptet, med oppsettet og skriptet for siden. Malene bruker stilarket, og `felles.js` (hjelpefunksjonene i nettleseren) for testrapporten.
+- **Byggeskriptet** leser markdown-fila (med `felles.mjs` for testrapporten), og skriver `<fil>.html` ved siden av den. Skillene skriver aldri HTML-en selv, og endrer ikke en generert fil: den skrives over neste gang.
 
 Kjør fra rota av repoet:
 
