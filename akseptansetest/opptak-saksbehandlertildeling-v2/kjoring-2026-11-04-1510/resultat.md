@@ -39,6 +39,14 @@ Utdanningstilbudene har fått reglene (kontrollert mot «Antall studier» i rege
 - Søknader: 32 søknader laget av kjøringen, 91-1004368 til 91-1004399 (inkludert de forkastede). Ingen er slettet.
 - Personaen i «Overstyrt bruker» står på «ORDENTLIG RUNDSKRIV • OPPTAK_FORVALTER (HK-DIR)».
 
+### Rydding 2026-11-05
+
+- Søknader: alle 32 testsøknadene (91-1004368 til 91-1004399, søker «Testsøker …») er trukket med «Endre søknad» → «Trekk søknad» («Søknaden er trukket»). 91-1004389 og 91-1004390 ble trukket som UiT-saksbehandleren, 91-1004377 som NTNU-saksbehandleren, resten som UiO-saksbehandleren. «Saker i opptak» har 39 rader igjen, ingen av dem fra kjøringen. De eldre søknadene er urørt.
+- Utdanningstilbud: reglene `K20261104-1510-ISO`, `-LAE`, `-LAF`, `-SEK`, `-SEO` og `-TIL` er fjernet fra 8 tilbud med «Fjern regelverk og saksbehandlertildeling» (bare saksbehandlertildeling avkrysset, «fjernet fra 8 utdanningstilbud»). Filteret «Saksbehandlertildelingsregel» viser nå bare JOU (Bachelor i ingeniørfag, automatisering med robotikk, HVL) og SPE (Praktiske musikkaktiviteter, HVL).
+- Regler slettet: `K20261104-1510-ALLE`, `-FRI`, `-INA`, `-ISO`, `-LAE`, `-LAF`, samt de eldre `ING` og `TESTEWST`.
+- Ikke slettet («Tildelingsregelen er i bruk og kan ikke slettes.», selv om «Antall studier» er 0): `K20261104-1510-SEK`, `-SEO`, `-TIL` og den eldre `INF`.
+- Står igjen: INF (INF, samme sektor, 0 studier), JOU (JOU med unntak, samme sektor, 1), `K20261104-1510-SEK` (samme sektor, 0), `-SEO` (samme sektor, 0), `-TIL` (tilbyderen, også andre, 0), MARITSTEST (Marits test, tilbyderen, også andre, 0; ikke laget av kjøringen), ORD (standard, alle i opptaket, 0), PAP (Paramedisin, samme sektor, 0), SPE (tilbyderen, også andre, 1), UVH (tilbyderen, dette studieønsket, 0).
+
 ---
 
 | Test | Regel | Scenario | Teknikk | Foreslått status | Input | Faktisk resultat | Steg tatt | Bevis |
