@@ -65,7 +65,7 @@ Filene brukeren oppga, i den rekkefølgen brukeren oppga dem. Én gruppe.
 
 **Åpne spørsmål.** `@openquestion` er ingen gating: verken verifiseringen eller testene stopper på den. En del med bare `@openquestion` (uten `@draft`) er klar til implementasjon (*Oppfølging* i `krav/README.md`), og er i gating-settet. Er den levert, testes den som det står, og spørsmålet står som merknad: i «Omfang» i testplanen, og under tabellen for regelen i testcasene. En del med `@draft @openquestion` er utkast, og er ikke med.
 
-Tallene skal frem, så åpne spørsmål ikke blir glemt. Verify-rapporten har dem per krav (`## Oppfølging oppsummert`), og testplanen har en oversikt, per krav og til sammen:
+Tallene skal frem, så åpne spørsmål ikke blir glemt. Verify-rapporten har dem per krav (`## Andre funn`), og testplanen har en oversikt, per krav og til sammen:
 
 | Krav | Regler med åpne spørsmål | Scenarioer med åpne spørsmål | Av dem i testen | Utkast (`@draft @openquestion`, ikke med) |
 |---|---|---|---|---|
