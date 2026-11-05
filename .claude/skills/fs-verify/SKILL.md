@@ -76,7 +76,7 @@ Let etter hvert scenario i repoet det gjelder: et scenario der søkeren ser elle
 
 - Et scenario er `funnet` bare når det er ✓ i alle repoene som er relevante.
 - Et scenario **mangler i** et repo når det har ✗ eller ~ der. Et scenario som mangler i flere repoer, telles i hvert av dem.
-- Merket står først i `Bevis` på alle radene i `## Scenarioer` (`P ✓ · A ✗ — …`), og i hakeparentes på linjene om krav og scenarioer i `## Forslag til endringer` og `## Oppfølging` (`[P ✓ · A ✗]`). Bare repoene som er med i kjøringen, står i merket.
+- Merket står først i `Bevis` på alle radene i `## Scenarioer` (`P ✓ · A ✗ — …`), i hakeparentes på linjene om krav og scenarioer i `## Forslag til endringer` (`[P ✓ · A ✗]`), og i kolonnen `Repoer` i `## Oppfølging`. Bare repoene som er med i kjøringen, står i merket.
 - `## Oversikt per krav` har én kolonne per repo, `Mangler i P`, `Mangler i A` og `Mangler i M`: antall scenarioer i kravet som mangler i repoet, `0` når ingenting mangler, og `–` når ingen scenarioer i kravet gjelder repoet. Er noen av dem usikre, står det i parentes: `2 (1 usikker)`.
 - Gi kontrolløren merkene per repo sammen med resultattabellen, så den sjekker hvert repo for seg (*Kontroll*).
 

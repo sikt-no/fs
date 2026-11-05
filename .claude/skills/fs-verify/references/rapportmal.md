@@ -4,8 +4,8 @@ Rapporten fra `fs-verify` og `fs-verify-agent-teams` følger denne malen, så to
 
 ## Regler
 
-- **Avvikene først, det som stemmer kort.** Det leseren skal ta stilling til, står øverst: forslaget, det som er usikkert og avvikene. Tabellene står til slutt, som grunnlag. En rad som er som forventet (`funnet`, `stemmer`), har bare `fil:linje` som bevis, uten forklaring. Forklaringen står på radene som avviker (`ikke funnet`, `usikker`, `avviker`).
-- **Seksjonene står i rekkefølgen under.** `## Oppsummering`, `## Forslag til endringer` og `## Scenarioer` er alltid med. De andre seksjonene tas bare med når de har innhold. Legg ikke til egne seksjoner: det som ikke passer noe sted, står under `## Oppfølging`.
+- **Avvikene først, det som stemmer kort.** Det leseren skal ta stilling til, står øverst: forslaget, det som er usikkert og avvikene. Tabellene står etter forslaget, som grunnlag, og `## Oppfølging` står til slutt, som en samlet liste over alt som må følges opp. En rad som er som forventet (`funnet`, `stemmer`), har bare `fil:linje` som bevis, uten forklaring. Forklaringen står på radene som avviker (`ikke funnet`, `usikker`, `avviker`).
+- **Seksjonene står i rekkefølgen under.** `## Oppsummering`, `## Forslag til endringer` og `## Scenarioer` er alltid med. De andre seksjonene tas bare med når de har innhold. Legg ikke til egne seksjoner: det som ikke passer noe sted, er en rad i `## Oppfølging`.
 - **Varianter** er merket med `[…]` i malen. En linje eller seksjon med et merke er med bare når merket gjelder. Merket skrives ikke i rapporten.
   - `[spesifikasjon]`: scope er en spesifikasjon (`spec/spec-*.md` i et scope).
   - `[agent team]`: kjørt med `fs-verify-agent-teams`.
@@ -92,22 +92,6 @@ Hva som kan endres i kravene, ut fra resultatene. *Kan leveres* og *Delvis lever
 - `@DOM-SUB-KAP-NNN` — <tittel eller del> (`@deprecated`): finnes fortsatt i `<repo>/<fil>:<linje>` — <hva som finnes>
 
                                                                         [en liste uten punkter tas bort, med overskriften]
-
-## Oppfølging
-
-Alt som ikke er som forventet, og som ikke står i forslaget. Én linje per punkt, med en kort overskrift i fet skrift og referansene (`krav/…:<linje>`, `<repo>/<fil>:<linje>`).
-
-- **Usikker:** `<@DOM-SUB-KAP-NNN>` «<scenario>» (`krav/…:<linje>`) `[P ✓ · M ~]` — `<repo>/<fil>:<linje>` <hva koden gjør>. Kontrollen: <hvorfor det er uklart>   [per repo: merket]
-- **Ikke funnet:** `<@DOM-SUB-KAP-NNN>` «<scenario>» (`krav/…:<linje>`) `[P ✓ · A ✗]` — søkt etter «<ord>» i <repoer> | finnes i MR !<iid>   [per repo: merket]
-- **Tilgang avviker:** `<@DOM-SUB-KAP-NNN>` <rolle og handling> — kravet sier <…>, koden gjør <…>, `<repo>/<fil>:<linje>`   [ett punkt per rad med `avviker`, `ikke funnet` eller `usikker` i `## Tilgang og datakonsistens`]
-- **Kravet er bak koden:** `<@DOM-SUB-KAP-NNN>` <hva koden gjør som kravet ikke sier>, `<repo>/<fil>:<linje>`
-- **Kontrollen endret:** `<@DOM-SUB-KAP-NNN>` «<scenario eller rad>» — <før> → <etter>: <hva kontrollen fant>   [ett punkt per resultat kontrollen endret]
-- **Åpent spørsmål:** `<@DOM-SUB-KAP-NNN>` «<scenario eller regel>» (`krav/…:<linje>`) — <spørsmålet fra `# ÅPNE SPØRSMÅL:`>
-- **Bygger på krav som ikke er levert:** `<@DOM-SUB-KAP-NNN>` bygger på `<@DOM-SUB-KAP-NNN>` (`<status>`)   [avhengigheter]
-- **Levert, men ikke funnet i koden:** `<@DOM-SUB-KAP-NNN>` «<scenario>» — <hva som mangler>   [uansett status, for `@implemented` krav]
-- **Ikke sjekket:** <det som ikke kunne sjekkes, og hvorfor>
-- **Ikke valgt i denne kjøringen:** `<fil>` (`<status>`) — <det som ikke var med i `Omfang`>
-- **Krav utenfor scope:** `<fil>` (`<status>`) — <henvisning til `fs-krav` / `fs-specify`>
 
 ## Endringer
 
@@ -220,16 +204,36 @@ MR-er og brancher som ser ut til å levere kravene. Koden i disse er ikke merget
 | Repo | MR / branch | Status | Krav den ser ut til å levere | Funnet der | Merknad |
 | --- | --- | --- | --- | --- | --- |
 | `<repo>` | [!<iid> <tittel>](<web_url>) (`<source_branch>`) | åpen \| utkast \| branch uten MR | `@DOM-SUB-KAP-NNN` | <n>/<N> | <tom \| bak main \| konflikter \| usikker kobling> |
+
+## Oppfølging
+
+Alt som ikke er som forventet, og som ikke står i forslaget, med referansene, så leseren ikke må lete i tabellene over. Én rad per punkt, sortert etter type og så i rekkefølgen kravene står i.
+
+| Type | Feature-ID | Gjelder | Repoer | Hva |
+| --- | --- | --- | --- | --- |
+| Usikker | `@DOM-SUB-KAP-NNN` | «<scenario>» (`krav/…:<linje>`) | P ✓ · M ~ | `<repo>/<fil>:<linje>` <hva koden gjør>. Kontrollen: <hvorfor det er uklart> |
+| Ikke funnet | `@DOM-SUB-KAP-NNN` | «<scenario>» (`krav/…:<linje>`) | P ✓ · A ✗ | søkt etter «<ord>» i <repoer> \| finnes i MR !<iid> |
+| Tilgang avviker | `@DOM-SUB-KAP-NNN` | <rolle og handling> | | kravet sier <…>, koden gjør <…>, `<repo>/<fil>:<linje>` |   [én rad per rad med `avviker`, `ikke funnet` eller `usikker` i `## Tilgang og datakonsistens`]
+| Kravet er bak koden | `@DOM-SUB-KAP-NNN` | <regel, scenario eller –> | | <hva koden gjør som kravet ikke sier>, `<repo>/<fil>:<linje>` |
+| Kontrollen endret | `@DOM-SUB-KAP-NNN` | «<scenario eller rad>» | | <før> → <etter>: <hva kontrollen fant> |   [én rad per resultat kontrollen endret]
+| Åpent spørsmål | `@DOM-SUB-KAP-NNN` | «<scenario eller regel>» (`krav/…:<linje>`) | | <spørsmålet fra `# ÅPNE SPØRSMÅL:`> |
+| Bygger på krav som ikke er levert | `@DOM-SUB-KAP-NNN` | – | | bygger på `@DOM-SUB-KAP-NNN` (`<status>`) |   [avhengigheter]
+| Levert, men ikke funnet i koden | `@DOM-SUB-KAP-NNN` | «<scenario>» | | <hva som mangler> |   [uansett status, for `@implemented` krav]
+| Ikke sjekket | – | <repo eller det som ikke kunne sjekkes> | | <hvorfor> |
+| Ikke valgt i denne kjøringen | `@DOM-SUB-KAP-NNN` | `<fil>` (`<status>`) | | <det som ikke var med i `Omfang`> |
+| Krav utenfor scope | `@DOM-SUB-KAP-NNN` | `<fil>` (`<status>`) | | <henvisning til `fs-krav` / `fs-specify`> |
+
+`Repoer` er med bare når repoene er vurdert hver for seg (`[per repo]`), og er tom på radene som ikke gjelder et scenario.
 ````
 
 ## Om seksjonene
 
 - **`## Oppsummering`**: tallene for hele kjøringen. `Forslag` teller punktene i hver liste i `## Forslag til endringer`. Linja `Endringer gjort` står når noe er endret.
 - **`## Forslag til endringer`**: hva som kan endres i kravene, ut fra resultatene. Står uendret etter at brukeren har svart: det som faktisk ble gjort, står i `## Endringer`. Et punkt er sikkert (*Kan leveres*, *Delvis levert*) bare når alle scenarioene i kravet eller delen er `funnet`, og kontrollen har bekreftet hver rad uten å endre den. Med manuell kontroll (Claude-panelet) står det i spørsmålet. *Kan slettes* er aldri sikkert, fordi et søk uten treff ikke er bevis, og gjøres i gjennomgangen. *Kan leveres når det er avklart* er kravene og delene som kan få ny status når et usikkert eller ikke funnet scenario er avklart, krav der alt er `funnet`, men kontrollen endret en rad (det som må avklares, er «bekreft raden kontrollen endret»), og deler som er funnet i koden, men ikke har statustag (også i avhengighetene, som bare kan få ny status når de verifiseres med seg selv i scope). Et krav kan stå både her og under *Blir stående*: her med det som må avklares, der med resten.
-- **`## Oppfølging`**: alt som avviker, og som ikke står i forslaget. Det som stemmer, står ikke her. Usikre og ikke funne scenarioer står med referansene, så leseren ikke må lete i tabellen. `fs-testplan` leser punktene for kravene som venter på verifisering.
 - **`## Endringer`**: det som ble gjort i kravfilene og i resultatet: i kjøringen (de sikre, `Avklart` er «ja i kjøringen»), og i gjennomgangen, i rekkefølgen spørsmålene ble stilt. Seksjonen er med når det var noe å sette eller avklare.
 - **`## Oversikt per krav`** `[per repo]`: én rad per krav, og én `Mangler i`-kolonne per repo som er med i kjøringen. Tallene regnes ut fra merkene i `Bevis` i `## Scenarioer`: ✗ og ~ i repoet. Summeringslinja under tabellen og linja `Mangler` i `## Oppsummering` regnes ut fra de samme merkene. I tekst skrives repoene med navn (fs-plattform, fs-admin, min-kompetanse). Skriv aldri «backend», «frontend» eller «begge».
 - **`## Fremdrift for flyter`** `[flyt]`: én rad per fase, i rekkefølgen i flyten. En fase er levert når delen av hvert krav den bygger på, er levert (*To statuser* i `krav/README.md`). `mangler krav` når fasen ikke har `@depends-on-`.
 - **`## Avhengigheter`** `[avhengigheter]`: én rad per par (krav i scope, avhengighet). Avhengighetene teller ikke i `## Oppsummering`, og radene deres står aldri i `## Scenarioer`, fordi tavla «Scopes», `fs-testplan` og `fs-testrapport` leser den tabellen.
 - **`## Tilgang og datakonsistens`**: én rad per sjekk (rolle × handling × organisasjon), også de som stemmer, fordi `fs-testplan` lager testbrukerne fra radene. Radene deles i to tabeller: `### Avvik` først (`avviker`, `ikke beskrevet`, `ikke funnet` og `usikker`), så `### Stemmer`. Begge har de samme kolonnene, og rekkefølgen på kravene er den samme i begge. `organisasjon` gjelder at data fra en annen organisasjon verken kan ses eller endres, og `konsistens` at sletting og endring ikke gir foreldreløse eller motstridende data.
 - **`## Regler uten scenario`** og **`## Åpne spørsmål`**: leses av `fs-testplan`. `Regler` og `Scenarioer` i `## Åpne spørsmål` er antall med åpne spørsmål av totalt i gating-settet (`<n> av <N>`).
+- **`## Oppfølging`**: står til slutt, som en samlet tabell over alt som avviker, og som ikke står i forslaget. Det som stemmer, står ikke her. Kolonnen `Type` er den faste teksten i malen (Usikker, Ikke funnet, Tilgang avviker, …), og radene sorteres i den rekkefølgen typene står i malen, og så i rekkefølgen kravene står i. `Gjelder` har referansen til kravet (`krav/…:<linje>`), og `Hva` til koden (`<repo>/<fil>:<linje>`). `fs-testplan` leser radene for kravene som venter på verifisering.
