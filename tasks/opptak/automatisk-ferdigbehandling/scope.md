@@ -42,7 +42,7 @@
 
 - [ ] `@OPT-BEH-BEH-036` har ingen Jira-sak. Avklares senere.
 - [ ] Fasen om mangelen for GSK som fullføres i vår er ikke levert før regelen om å merke mangelkoden i `@OPT-BEH-BEH-036` er verifisert.
-- [x] Regelen «Opptaksforvalteren merker én mangelkode for generell studiekompetanse som fullføres i vår» i `@OPT-BEH-BEH-036` er `@draft`, og må valideres med fs-krav før fasen «Mangelen for GSK som fullføres i vår sjekkes ut før saken blir ferdig behandlet» kan leveres. Validert 2026-11-05: `@draft` er fjernet, og regelen har to åpne spørsmål fra koden.
+- [x] Regelen «Opptaksforvalteren merker én mangelkode for generell studiekompetanse som fullføres i vår» i `@OPT-BEH-BEH-036` er `@draft`, og må valideres med fs-krav før fasen «Mangelen for GSK som fullføres i vår sjekkes ut før saken blir ferdig behandlet» kan leveres. Validert 2026-11-05: `@draft` er fjernet, og de to spørsmålene fra koden er besvart i #951.
 
 ## Statuslogg
 
@@ -50,7 +50,7 @@ Append-only. Ny linje på toppen ved hver hendelse.
 
 | Dato       | Hendelse | Av | Lenke til review |
 |------------|----------|----|------------------|
-| 2026-11-05 | Regelen om å merke mangelkoden i `@OPT-BEH-BEH-036` er validert (`@draft` fjernet, `@openquestion` med to spørsmål fra koden). Fra gjennomgangen av flyten automatisk saksbehandling | @JøranIndseth | – |
+| 2026-11-05 | Regelen om å merke mangelkoden i `@OPT-BEH-BEH-036` er validert (`@draft` fjernet). Søknadene som finnes fra før, får mangelen når mangelkoden merkes, og manglene blir stående når merkingen fjernes (#951). Fra gjennomgangen av flyten automatisk saksbehandling | @JøranIndseth | – |
 | 2026-11-04 | Regelen om flere vitnemål i `@OPT-BEH-BEH-025` er skilt ut i `@OPT-BEH-BEH-039` (Behandle automatisk på vitnemålet saksbehandleren velger), `@must` uten scope. Fra reviewen av PR #931 | @JøranIndseth | [#931](https://github.com/sikt-no/fs/pull/931) |
 | 2026-11-04 | Søkere med flere vitnemål tatt ut av scopet (statusmøtet, se Kilder) | @JøranIndseth | – |
 | 2026-11-04 | Scenarioet om når den automatiske behandlingen avgjorde hvert steg i `@OPT-BEH-BEH-025` er skilt ut, og er blokkert til den nye sporingsloggen finnes. Tidspunktet finnes bare i endringsloggen, som er stoppet (BAT-324, V480 i fs-plattform). Fra reviewen av PR #921 | @JøranIndseth | [#921](https://github.com/sikt-no/fs/pull/921) |

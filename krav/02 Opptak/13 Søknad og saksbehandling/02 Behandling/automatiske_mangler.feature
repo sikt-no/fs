@@ -130,14 +130,15 @@ Egenskap: Automatiske mangler
       Når saksbehandleren ved Universitetet i Oslo åpner manglene i saken
       Så ser ikke saksbehandleren muligheten til å kommentere, sjekke ut eller slette den automatiske mangelteksten
 
-  @openquestion @ref-FLY-OPT-AUT-001 @depends-on-OPT-BEH-BEH-008
+  @ref-FLY-OPT-AUT-001 @depends-on-OPT-BEH-BEH-008
   # OPT-BEH-BEH-008: «Opptaksforvalteren forvalter mangelkodene i regelverkssamlingen»
   Regel: Opptaksforvalteren merker én mangelkode for generell studiekompetanse som fullføres i vår
-    # ÅPNE SPØRSMÅL:
-    # - Koden gir ikke søknadene som finnes fra før, mangelen når en mangelkode merkes. De får den
-    #   først når søknaden endres. Skal de få mangelen når mangelkoden merkes?
-    # - Koden lar mangler som finnes fra før, bli stående når merkingen fjernes. Skal de slettes?
-    # Begge er funnet i verify 2026-11-04 (regler i koden uten scenario).
+    # Avklart 05.11.2026 (#951): merkes mangelkoden etter at søknadene er kommet inn, får alle
+    # sakene der søkeren har oppgitt at generell studiekompetanse fullføres i vår, mangelen med
+    # en gang. Koden gir dem mangelen først når søknaden endres. Det skal ikke skje i praksis,
+    # fordi opptaksforvalteren får en advarsel når opptaket opprettes uten merket mangelkode
+    # (OPT-OVO-GRU-001).
+    # Avklart 05.11.2026 (Geir, #951): mangler som finnes, blir stående når merkingen fjernes.
 
     Mangelkoden som er merket, er den saken får automatisk når søkeren oppgir at generell
     studiekompetanse fullføres i vår (se «Mangelen for generell studiekompetanse som fullføres i
@@ -166,6 +167,19 @@ Egenskap: Automatiske mangler
         | avvik                            |
         | er i kategorien "Spesielle krav" |
         | ikke stopper for opptak          |
+
+    Scenario: Søknadene som finnes fra før, får mangelen når mangelkoden merkes
+      Gitt at ingen mangelkode i regelverkssamlingen "UHG 2027" er merket for generell studiekompetanse som fullføres i vår
+      Og at søkeren har oppgitt i søknaden at generell studiekompetanse fullføres i vår
+      Og at søknaden har saker hos "Universitetet i Oslo" og "UiT Norges arktiske universitet"
+      Når opptaksforvalteren ved HK-dir merker mangelkoden "DUA" for generell studiekompetanse som fullføres i vår
+      Så har sakene hos "Universitetet i Oslo" og "UiT Norges arktiske universitet" den automatiske mangelen "DUA"
+
+    Scenario: Manglene som finnes fra før, blir stående når merkingen fjernes
+      Gitt at mangelkoden "DUA" i regelverkssamlingen "UHG 2027" er merket for generell studiekompetanse som fullføres i vår
+      Og at saken hos "Universitetet i Oslo" har den automatiske mangelen "DUA"
+      Når opptaksforvalteren ved HK-dir fjerner merkingen av mangelkoden "DUA"
+      Så har saken hos "Universitetet i Oslo" fortsatt den automatiske mangelen "DUA"
 
   @ref-FLY-OPT-AUT-001 @depends-on-OPT-SØK-SØK-018 @ref-OPT-OVO-GRU-001 @depends-on-OPT-BEH-BEH-008
   # OPT-BEH-BEH-008: «Saksbehandleren sjekker ut mangelen når søkeren har dokumentert på nytt»
