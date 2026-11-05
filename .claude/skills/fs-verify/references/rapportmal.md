@@ -15,6 +15,7 @@ Rapporten fra `fs-verify` og `fs-verify-agent-teams` følger denne malen, så to
   - `[avhengigheter]`: `@depends-on-` er fulgt minst ett nivå (*Avhengigheter* i `fs-verify`). `[avhengigheter i koden]`: avhengighetene er også verifisert i koden.
   - `[gjennomgang]`: en gjennomgang av en tidligere rapport (*Gjennomgang av en verify-rapport* i `fs-verify`).
   - `[confluence]`: resultatet er lagt i Confluence (*Confluence* i `fs-verify`).
+- **Hver seksjon starter med en kort beskrivelse** av hva den inneholder, rett under overskriften: den faste teksten i malen, én eller to setninger. Den står også i en seksjon uten innhold, men ikke i metadataene øverst.
 - **Faste tekster** står uten `<…>` og skrives som de står. Det i `<…>` fylles inn. Der det står `a | b`, velges én.
 - **Tallene regnes ut** fra tabellen `## Scenarioer` (se *Rapport* i `fs-verify`). Tallene i `## Oppsummering`, `## Oversikt per krav` og `## Forslag til endringer` skal stemme med tabellen.
 - **`## Scenarioer` leses av FS Kravforvaltning.** Fire kolonner, Feature-ID med `@`, scenariotittelen slik den står i fila, og `Resultat` med små bokstaver: `funnet`, `ikke funnet` eller `usikker`. Resultatet er det som gjelder etter kontrollen. Alle scenarioene i gating-settet har en rad, også de som er funnet.
@@ -52,6 +53,8 @@ Stiene er forkortet:                                                    [bare n�
 
 ## Oppsummering
 
+Tallene for hele kjøringen, regnet ut fra tabellene under.
+
 - Scenarioer: <N> funnet, <N> ikke funnet, <N> usikker, av <N>
 - Mangler: fs-plattform <N> scenarioer, fs-admin <N>, min-kompetanse <N> (<N> usikker)   [per repo]
 - Forslag: <N> kan leveres, <N> delvis levert, <N> kan slettes, <N> kan leveres når det er avklart, <N> blir stående
@@ -62,7 +65,7 @@ Stiene er forkortet:                                                    [bare n�
 
 ## Forslag til endringer
 
-*Kan leveres* og *Delvis levert* er sikre: alle scenarioene er funnet, og kontrollen har bekreftet hver rad. De settes i kjøringen når brukeren sier ja (se `## Endringer`). Resten må avklares: gi rapporten tilbake til `fs-verify`.
+Hva som kan endres i kravene, ut fra resultatene. *Kan leveres* og *Delvis levert* er sikre: alle scenarioene er funnet, og kontrollen har bekreftet hver rad. De settes i kjøringen når brukeren sier ja (se `## Endringer`). Resten må avklares: gi rapporten tilbake til `fs-verify`.
 
 **Kan leveres**
 
@@ -108,6 +111,8 @@ Alt som ikke er som forventet, og som ikke står i forslaget. Én linje per punk
 
 ## Endringer
 
+Det som er endret i kravfilene og i resultatet: i kjøringen (det sikre, når brukeren sa ja) og i gjennomgangen av rapporten.
+
 | Feature-ID | Egenskap eller del | Endring | Avklart |
 | --- | --- | --- | --- |
 | `@DOM-SUB-KAP-NNN` | <tittel> \| Regel: <tittel> \| Scenario: <tittel> | `@in-progress` → `@implemented` \| `@in-progress` fjernet \| `@implemented` på delen \| slettet \| referanse fjernet i `<fil>` \| `@openquestion` lagt til \| spørsmål fjernet \| `ikke funnet` → `funnet` \| ingen | <spørsmålet og svaret, kort> \| ja i kjøringen |
@@ -115,6 +120,8 @@ Alt som ikke er som forventet, og som ikke står i forslaget. Én linje per punk
 Ingen endringer. Brukeren sa nei. | Ingen endringer. Ikke besvart.   [når det var noe å sette, men brukeren ikke sa ja, i stedet for tabellen]
 
 ## Oversikt per krav                                                   [per repo]
+
+Hvor mange scenarioer som er funnet i hvert krav, og hvor mange som mangler i hvert repo.
 
 | Feature-ID | Egenskap | Funnet | Mangler i P | Mangler i A | Mangler i M | Hva som gjenstår |
 | --- | --- | --- | --- | --- | --- | --- |
@@ -126,6 +133,8 @@ Mangler: fs-plattform <n> scenarioer i <n> krav, fs-admin <n> i <n> krav, min-ko
 
 ## Fremdrift for flyter                                                [flyt]
 
+Hvilke faser i flyten som er levert, ut fra statusen på delene av kravene fasen bygger på.
+
 | Flyt | Fase | Bygger på | Fase levert |
 | --- | --- | --- | --- |
 | `@FLY-PRO-FLY-NNN` | <regeltittel> | `@DOM-SUB-KAP-NNN` (`@implemented`), `@DOM-SUB-KAP-NNN` (`@in-progress`, Regel: <tittel> levert) | ja \| nei \| mangler krav |
@@ -134,7 +143,7 @@ Mangler: fs-plattform <n> scenarioer i <n> krav, fs-admin <n> i <n> krav, min-ko
 
 ## Avhengigheter                                                       [avhengigheter]
 
-Avhengighetene får aldri ny status i denne kjøringen.
+Kravene som kravene i scope bygger på (`@depends-on-`), med statusen deres. Avhengighetene får aldri ny status i denne kjøringen.
 
 | Krav i scope | Bygger på | Nivå | Status | Funnet | Merknad |
 | --- | --- | --- | --- | --- | --- |
@@ -142,11 +151,15 @@ Avhengighetene får aldri ny status i denne kjøringen.
 
 ### Scenarioer i avhengighetene                                         [avhengigheter i koden]
 
+Resultatet for scenarioene i avhengighetene, verifisert i koden. De teller ikke i `## Oppsummering`.
+
 | Feature-ID | Scenario | Resultat | Bevis |
 | --- | --- | --- | --- |
 | `@DOM-SUB-KAP-NNN` | <scenariotittel> | funnet \| ikke funnet \| usikker | <som i `## Scenarioer`> |
 
 ## Scenarioer
+
+Resultatet for hvert scenario i gating-settet etter kontrollen, med beviset i koden. Tallene i rapporten regnes ut herfra, og FS Kravforvaltning leser tabellen.
 
 | Feature-ID | Scenario | Resultat | Bevis |
 | --- | --- | --- | --- |
@@ -162,7 +175,7 @@ Avhengighetene får aldri ny status i denne kjøringen.
 
 ## Tilgang og datakonsistens
 
-Sjekket på kodenivå, ikke testet. Radene er grunnlaget for testbrukerne i testplanen.
+Om koden gir rollene tilgang slik kravet sier, holder data fra andre organisasjoner utenfor, og ikke gir foreldreløse eller motstridende data ved sletting og endring. Sjekket på kodenivå, ikke testet. Radene er grunnlaget for testbrukerne i testplanen.
 
 | Feature-ID | Sjekk | Rolle og handling | Resultat | Bevis |
 | --- | --- | --- | --- | --- |
@@ -179,13 +192,15 @@ Regler i koden som ingen scenario i kravet dekker. Input til testplanen og den a
 
 ## Åpne spørsmål
 
+Hvor mange regler og scenarioer i hvert krav som har `@openquestion`. Spørsmålene stopper ikke leveransen, men står i testplanen til de er besvart.
+
 | Feature-ID | Egenskap | Regler | Scenarioer | Utenfor gating (`@draft`) |
 | --- | --- | --- | --- | --- |
 | `@DOM-SUB-KAP-NNN` | <tittel> | <n> av <N> | <n> av <N> | <n> |
 
 ## Åpne MR-er og brancher
 
-Koden i disse er ikke merget, og regnes ikke som levert.
+MR-er og brancher som ser ut til å levere kravene. Koden i disse er ikke merget, og regnes ikke som levert.
 
 | Repo | MR / branch | Status | Krav den ser ut til å levere | Funnet der | Merknad |
 | --- | --- | --- | --- | --- | --- |
