@@ -119,15 +119,13 @@ Egenskap: Se svar på søknad om tidlig opptak
       Når søkeren åpner søknaden sin
       Så ser ikke søkeren at tidlig opptak er innvilget på "Sykepleie, høst 2027"
 
-    @draft @openquestion
-    Scenario: Reservert studieplass og innvilget tidlig opptak
-      # ÅPNE SPØRSMÅL:
-      # - Skal søkeren se at tidlig opptak er innvilget på et søknadsalternativ der søkeren også har reservert studieplass?
+    # Søkeren ser bare én tilbudsgaranti per søknadsalternativ (avklart 05.11.2026, review av PR #887).
+    Scenario: Reservert studieplass vises i stedet for innvilget tidlig opptak
       Gitt at svaret på tidlig opptak er publisert
       Og at søkeren har reservert studieplass på søknadsalternativet "Sykepleie, høst 2027"
       Og at søkeren er innvilget tidlig opptak på søknadsalternativet "Sykepleie, høst 2027"
       Når søkeren åpner søknaden sin
-      Så ser søkeren at tidlig opptak er innvilget på "Sykepleie, høst 2027"
+      Så ser ikke søkeren at tidlig opptak er innvilget på "Sykepleie, høst 2027"
 
     # Et søknadsalternativ lagt til etter at tidlig opptak er gjennomført, er i praksis
     # utelukket: gjennomføringen skjer omtrent en måned etter at opptaket har stengt.
