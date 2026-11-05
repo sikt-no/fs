@@ -20,9 +20,11 @@ interface Props {
   onEdit?: () => void;
   /** «Lag PR» med fila; bare når fila har endringer og redigering er tilgjengelig */
   onPr?: () => void;
+  /** Egen bryter i stedet for «Visning | Markdown» (Verifisering, med «Rapportvisning» i tillegg) */
+  toggle?: ComponentChildren;
 }
 
-export function MarkdownView({ entry, blocks, mode, onMode, has, onNavigate, onEdit, onPr }: Props) {
+export function MarkdownView({ entry, blocks, mode, onMode, has, onNavigate, onEdit, onPr, toggle }: Props) {
   const [copied, setCopied] = useState<number | null>(null);
   const timer = useRef<ReturnType<typeof setTimeout>>();
   useEffect(() => () => clearTimeout(timer.current), []);
@@ -178,10 +180,12 @@ export function MarkdownView({ entry, blocks, mode, onMode, has, onNavigate, onE
         <span>{lines.length} linjer</span>
         {onEdit && <button class="smallbtn editbtn" onClick={onEdit}>Rediger</button>}
         {onPr && <button class="smallbtn editbtn" onClick={onPr}>Lag PR</button>}
-        <div class="seg" role="group" aria-label="Visning av markdown">
-          <button aria-pressed={mode === 'pretty'} onClick={() => onMode('pretty')}>Visning</button>
-          <button aria-pressed={mode === 'raw'} onClick={() => onMode('raw')}>Markdown</button>
-        </div>
+        {toggle ?? (
+          <div class="seg" role="group" aria-label="Visning av markdown">
+            <button aria-pressed={mode === 'pretty'} onClick={() => onMode('pretty')}>Visning</button>
+            <button aria-pressed={mode === 'raw'} onClick={() => onMode('raw')}>Markdown</button>
+          </div>
+        )}
       </div>
       {mode === 'pretty' ? (
         <div class="md-body">{blocks.map((b, i) => block(b, i))}</div>

@@ -5,15 +5,19 @@ import type { Entry, GitInfo, Snapshot, UpdateEvent } from '../shared/model.ts';
 import type { TasksSnapshot } from '../shared/tasks.ts';
 import { buildEntry } from '../server/parse.ts';
 import { readTasks } from '../server/tasks.ts';
+import { readVerify } from '../server/verify.ts';
+import { isVerifyFile, isVerifyName, type VerifySnapshot } from '../shared/verify.ts';
 import type { Vcs } from './vcs.ts';
 
-export const isKravFile = (p: string) => p.endsWith('.feature') || p.endsWith('.md');
+/** En krav-fil: `.feature` eller `.md`, men ikke verify-rapportene, som vises i Verifisering */
+export const isKravFile = (p: string) => (p.endsWith('.feature') || p.endsWith('.md')) && !isVerifyName(p);
 
 /** Hendelsene en arbeidsflate sender. Navnene er de samme som over Vites websocket og Electrons IPC. */
 export interface WorkspaceEvents {
   'krav:update': UpdateEvent;
   'krav:git': GitInfo | null;
   'krav:tasks': TasksSnapshot;
+  'krav:verify': VerifySnapshot;
 }
 export type WorkspaceEvent = keyof WorkspaceEvents;
 
@@ -25,12 +29,16 @@ export type WorkspaceEvent = keyof WorkspaceEvents;
 export class Workspace {
   readonly kravDir: string;
   readonly tasksDir: string;
+  readonly aksDir: string;
   readonly entries: Snapshot = {};
   git: GitInfo | null = null;
   tasks: TasksSnapshot | null = null;
+  /** Verify-rapportene i krav/, tasks/ og akseptansetest/ */
+  verify: VerifySnapshot = {};
   private readonly emitter = new EventEmitter();
   private gitTimer: ReturnType<typeof setTimeout> | undefined;
   private tasksTimer: ReturnType<typeof setTimeout> | undefined;
+  private verifyTimer: ReturnType<typeof setTimeout> | undefined;
   private watchers: FSWatcher[] = [];
 
   readonly repoRoot: string;
@@ -41,6 +49,7 @@ export class Workspace {
     this.vcs = vcs;
     this.kravDir = join(repoRoot, 'krav');
     this.tasksDir = join(repoRoot, 'tasks');
+    this.aksDir = join(repoRoot, 'akseptansetest');
   }
 
   rel(abs: string) {
@@ -71,16 +80,20 @@ export class Workspace {
       }
     }
     this.tasks = readTasks(this.repoRoot);
+    this.verify = readVerify(this.repoRoot);
     this.git = withGit && this.vcs ? await this.vcs.info() : null;
   }
 
   /** En fil under repoet er lagt til, endret eller slettet */
   onFs(event: 'add' | 'change' | 'unlink', abs: string) {
+    const verify = isVerifyFile(this.rel(abs));
+    if (verify) this.refreshVerify();
     if (abs.startsWith(this.tasksDir + sep)) {
       this.refreshTasks();
       // Spesifikasjonene og utforing.md vises i «Endringer» og kan sendes med «Lag PR»
       return this.refreshGit();
     }
+    if (verify) return this.refreshGit();
     if (!abs.startsWith(this.kravDir + sep) || !isKravFile(abs)) return;
     let data: UpdateEvent;
     if (event === 'unlink') {
@@ -100,6 +113,19 @@ export class Workspace {
   /** En mappe under tasks/ er lagt til eller fjernet */
   onDir(abs: string) {
     if (abs.startsWith(this.tasksDir + sep)) this.refreshTasks();
+    // En mappe med rapporter kan være flyttet eller slettet
+    if ([this.kravDir, this.tasksDir, this.aksDir].some(d => abs.startsWith(d + sep))) this.refreshVerify();
+  }
+
+  /** Verify-rapportene leses på nytt ved hver endring i dem (de er få) */
+  refreshVerify() {
+    clearTimeout(this.verifyTimer);
+    this.verifyTimer = setTimeout(() => {
+      const next = readVerify(this.repoRoot);
+      if (JSON.stringify(next) === JSON.stringify(this.verify)) return;
+      this.verify = next;
+      this.emit('krav:verify', this.verify);
+    }, 300);
   }
 
   /** Scope-mappene er små, så hele tasks/ leses på nytt ved hver endring */
@@ -149,7 +175,7 @@ export class Workspace {
 
   /** Egen filovervåking for når ingen Vite-server gjør det (Electron) */
   watch() {
-    const dirs = [this.kravDir, this.tasksDir];
+    const dirs = [this.kravDir, this.tasksDir, this.aksDir];
     for (const dir of dirs) {
       if (!existsSync(dir)) continue;
       this.watchers.push(
@@ -176,5 +202,6 @@ export class Workspace {
     this.watchers = [];
     clearTimeout(this.gitTimer);
     clearTimeout(this.tasksTimer);
+    clearTimeout(this.verifyTimer);
   }
 }

@@ -1,3 +1,5 @@
+import { readFileSync } from 'node:fs';
+import { join } from 'node:path';
 import type { Plugin } from 'vite';
 import type { FocusEvent } from '../shared/model.ts';
 import { createApi, dispatch } from '../core/api.ts';
@@ -14,6 +16,8 @@ const VIRTUAL_GIT = 'virtual:krav-git';
 const RESOLVED_GIT = '\0' + VIRTUAL_GIT;
 const VIRTUAL_TASKS = 'virtual:krav-tasks';
 const RESOLVED_TASKS = '\0' + VIRTUAL_TASKS;
+const VIRTUAL_VERIFY = 'virtual:krav-verify';
+const RESOLVED_VERIFY = '\0' + VIRTUAL_VERIFY;
 const VIRTUAL_ROOT = 'virtual:krav-root';
 const RESOLVED_ROOT = '\0' + VIRTUAL_ROOT;
 
@@ -22,6 +26,8 @@ const RESOLVED_ROOT = '\0' + VIRTUAL_ROOT;
  * og eksponerer dem som `virtual:krav`. I dev-server pushes endringer som `krav:update`-hendelser over websocket.
  * Git-endringer under krav/ eksponeres som `virtual:krav-git` og pushes som `krav:git`.
  * Scope-mappene i tasks/ eksponeres som `virtual:krav-tasks` og pushes som `krav:tasks`, til tavla «Scopes».
+ * Verify-rapportene i krav/, tasks/ og akseptansetest/ eksponeres som `virtual:krav-verify` og pushes som `krav:verify`,
+ * til Verifisering. I et statisk bygg legges rapportvisningene (`verify-*.html`) ved siden av index.html, med samme sti.
  * `virtual:krav-root` er den absolutte stien til repoet («Åpne i VS Code»), bare i dev-serveren; i et statisk bygg er den `null`.
  *
  * Logikken står i core/ (felles med desktop-appen); pluginen kobler den til Vites watcher, websocket og
@@ -49,6 +55,7 @@ export function kravPlugin(repoRoot: string): Plugin {
       if (id === VIRTUAL) return RESOLVED;
       if (id === VIRTUAL_GIT) return RESOLVED_GIT;
       if (id === VIRTUAL_TASKS) return RESOLVED_TASKS;
+      if (id === VIRTUAL_VERIFY) return RESOLVED_VERIFY;
       if (id === VIRTUAL_ROOT) return RESOLVED_ROOT;
     },
 
@@ -56,7 +63,16 @@ export function kravPlugin(repoRoot: string): Plugin {
       if (id === RESOLVED) return `export default ${JSON.stringify(ws.entries)};`;
       if (id === RESOLVED_GIT) return `export default ${JSON.stringify(ws.git)};`;
       if (id === RESOLVED_TASKS) return `export default ${JSON.stringify(ws.tasks)};`;
+      if (id === RESOLVED_VERIFY) return `export default ${JSON.stringify(ws.verify)};`;
       if (id === RESOLVED_ROOT) return `export default ${JSON.stringify(serve ? ws.repoRoot : null)};`;
+    },
+
+    // Statisk bygg: rapportvisningene hentes med fetch fra samme sti som i repoet
+    generateBundle() {
+      if (serve) return;
+      for (const r of Object.values(ws.verify)) {
+        if (r.html) this.emitFile({ type: 'asset', fileName: r.html, source: readFileSync(join(repoRoot, r.html)) });
+      }
     },
 
     configureServer(server) {
@@ -68,6 +84,7 @@ export function kravPlugin(repoRoot: string): Plugin {
       pty.on(data => server.ws.send({ type: 'custom', event: 'krav:pty', data }));
       server.watcher.add(ws.kravDir);
       server.watcher.add(ws.tasksDir);
+      server.watcher.add(ws.aksDir);
 
       // Hendelsene fra arbeidsflaten går ut over websocket; en manuell reload skal få ferskt innhold
       const invalidate = (id: string) => {
@@ -85,6 +102,10 @@ export function kravPlugin(repoRoot: string): Plugin {
       ws.on('krav:tasks', data => {
         invalidate(RESOLVED_TASKS);
         server.ws.send({ type: 'custom', event: 'krav:tasks', data });
+      });
+      ws.on('krav:verify', data => {
+        invalidate(RESOLVED_VERIFY);
+        server.ws.send({ type: 'custom', event: 'krav:verify', data });
       });
       void ws.watchGit();
       server.httpServer?.on('close', () => {
