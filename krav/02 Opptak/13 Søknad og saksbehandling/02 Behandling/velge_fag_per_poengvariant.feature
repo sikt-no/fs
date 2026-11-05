@@ -158,33 +158,34 @@ Egenskap: Velge fag per poengvariant
 
     @ref-OPT-BEH-BEH-020 @openquestion
     # ÅPNE SPØRSMÅL:
-    # - Skal kravelementene vurderes per poengvariant, som avklart
-    #   03.11.2026, eller per grunnlag? Marit Bjørnerud Rønning skrev på siden
-    #   med åpne spørsmål 04.11.2026 at det er gjort om til å vurderes per
-    #   grunnlag, ikke per poengvariant. I OPT-BEH-BEH-020 avgjøres
-    #   kvalifiseringen per grunnlag i den automatiske vurderingen.
-    Scenario: Kravelementene vurderes per poengvariant
+    # - Fagene velges per poengvariant, men kravelementene vurderes per
+    #   grunnlag. Hvilke fag legges til grunn for vurderingen når
+    #   poengvariantene på samme grunnlag har ulikt fagvalg?
+    Scenario: Kravelementene vurderes per grunnlag
       Gitt søkeren har tatt et fag som privatist etter fylte 21 år
       Og faget dekker et kravelement
-      Når jeg velger faget i poengvariantene for ordinær kvote og for kvoten for førstegangsvitnemål
-      Så oppfyller faget kravelementet i poengvarianten for ordinær kvote
-      Men faget oppfyller ikke kravelementet i poengvarianten for kvoten for førstegangsvitnemål
-      # AVKLART 03.11.2026: kvalifiseringen vurderes per poengvariant, ut fra
-      # vitnemålet og fagene som er valgt for den, slik FS-klienten gjør. Ny
-      # stack avgjør i dag kvalifiseringen per grunnlag (OPT-BEH-BEH-020), og
-      # den automatiske kvalifiseringen må følge med. Spørsmålet ble flyttet
-      # hit fra OPT-BEH-BEH-020 30.10.2026.
+      Når kravelementene vurderes
+      Så oppfyller faget kravelementet på grunnlaget for ordinær kvote
+      Men faget oppfyller ikke kravelementet på grunnlaget for kvoten for førstegangsvitnemål
+      # AVKLART 05.11.2026: kravelementene og kvalifiseringen vurderes per
+      # grunnlag, ikke per poengvariant, også i vitnemålsbehandleren. Det er
+      # det samme som i den automatiske vurderingen (OPT-BEH-BEH-020,
+      # «Om søkeren er kvalifisert, avgjøres per grunnlag»). Marit Bjørnerud
+      # Rønning skrev på siden med åpne spørsmål 04.11.2026 at det er gjort om
+      # til per grunnlag. Erstatter avklaringen 03.11.2026 og scenarioet
+      # «Kravelementene vurderes per poengvariant».
 
     Scenario: Ingen poeng lagres for en poengvariant der søkeren ikke er kvalifisert
-      Gitt søkeren oppfyller ikke de spesielle opptakskravene i en poengvariant
+      Gitt søkeren oppfyller ikke de spesielle opptakskravene på grunnlaget en poengvariant hører til
       Når jeg velger å lagre grunnlaget
-      Så ser jeg at søkeren ikke er kvalifisert i poengvarianten
+      Så ser jeg at søkeren ikke er kvalifisert på grunnlaget
       Og poengene for poengvarianten er ikke lagret
       # AVKLART 05.11.2026: poengene lagres ikke for en poengvariant der
       # søkeren ikke oppfyller de spesielle opptakskravene, slik FS-klienten
       # gjør (teknisk beskrivelse av vitnemålsbehandling, G. M. Vangen).
       # Besvart av Marit Bjørnerud Rønning og Ingrid Grimstad Helset på siden
-      # med åpne spørsmål 04.11.2026.
+      # med åpne spørsmål 04.11.2026. Kvalifiseringen avgjøres per grunnlag
+      # (avklart 05.11.2026, «Kravelementene vurderes per grunnlag»).
 
     Scenario: Bruke fagvalget fra én poengvariant i andre poengvarianter
       Gitt jeg har valgt fagene i én poengvariant
@@ -286,6 +287,42 @@ Egenskap: Velge fag per poengvariant
       # Samordna opptaks wiki, «Kvoter»: fag som gir språk- eller
       # realfagspoeng, tatt samtidig med studiekompetansefagene, kan tas med
       # i kvoten for førstegangsvitnemål.
+
+  @draft @openquestion
+  Regel: Kravelementene vurderes i samme bilde som fagene
+    # ÅPNE SPØRSMÅL:
+    # - Er scenarioene riktige? Regelen er skrevet etter avklaringen
+    #   05.11.2026, og er ikke gått gjennom ennå.
+    # - Skissen «Steg 2 Grunnlag – behandle e-vitnemål» har allerede en
+    #   seksjon «Spesielle opptakskrav» nederst i steg 2, med kravelement,
+    #   grunnlag, «Dekker kravet?», «La stå», resultat og «Vis per grunnlag».
+    #   Den er grå i skissen. Betyr det at den ikke er med, eller at den er
+    #   deaktivert? Avklares med designeren.
+
+    # AVKLART 05.11.2026: kravelementene vurderes i samme bilde som fagene,
+    # under «2. Grunnlag», både for elektroniske og manuelt innlagte
+    # vitnemål, så saksbehandleren slipper å klikke fram og tilbake.
+    # «3. Spesielle opptakskrav» viser det som er vurdert i steg 2. Innspill
+    # fra Ingrid Grimstad Helset på siden med åpne spørsmål 05.11.2026.
+    # Erstatter avklaringen 03.11.2026 om at kravelementene bare vurderes
+    # under spesielle opptakskrav. Hvordan saksbehandleren overstyrer
+    # vurderingen, står i automatisk_kvalifisering.feature
+    # (@OPT-BEH-BEH-020) og i L4a («Saksbehandleren kan overstyre
+    # kontrollmotoren for et fag»).
+
+    Bakgrunn:
+      Gitt jeg har rettighet til å se og endre søknadsbehandling ved organisasjonen som behandler saken
+
+    Scenario: Vurdere kravelementene i grunnlaget
+      Gitt jeg har lagt et vitnemål til grunn
+      Når jeg ser grunnlaget på søknaden
+      Så ser jeg kravelementene for hvert grunnlag sammen med fagene
+      Og jeg kan vurdere kravelementene uten å gå til spesielle opptakskrav
+
+    Scenario: Spesielle opptakskrav viser vurderingen fra grunnlaget
+      Gitt jeg har vurdert et kravelement i grunnlaget
+      Når jeg går til spesielle opptakskrav
+      Så ser jeg vurderingen jeg gjorde i grunnlaget
 
   Regel: Poengene beregnes fortløpende og lagres når grunnlaget er klart
 

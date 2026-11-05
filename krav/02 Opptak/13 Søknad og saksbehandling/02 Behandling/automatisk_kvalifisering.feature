@@ -237,7 +237,8 @@ Egenskap: Automatisk vurdering av spesielle opptakskrav
       Og søkeren er ikke kvalifisert på grunnlaget "PRA"
 
     # Avklart 30.10.2026: i den automatiske vurderingen avgjøres kvalifiseringen per grunnlag.
-    # Om den også må avgjøres per poengvariant, er et spørsmål i OPT-BEH-BEH-022.
+    # Avklart 05.11.2026: også i vitnemålsbehandleren avgjøres kvalifiseringen per grunnlag,
+    # ikke per poengvariant (OPT-BEH-BEH-022, «Kravelementene vurderes per grunnlag»).
 
   @ref-FLY-OPT-AUT-001 @implemented
   Regel: Kravelementene vurderes i den automatiske behandlingen

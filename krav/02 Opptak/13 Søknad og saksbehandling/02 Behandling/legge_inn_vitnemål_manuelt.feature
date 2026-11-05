@@ -28,7 +28,7 @@ Egenskap: Legge inn vitnemål manuelt
   Saksbehandleren legger inn fagene i en kalkulator. Kalkulatoren er ikke et
   komplett vitnemål: den har bare fagene og karakterene som trengs for å
   beregne poengene, og ingen av opplysningene er påkrevd. Kravelementene
-  vurderes under spesielle opptakskrav, ikke i kalkulatoren.
+  vurderes i samme bilde, sammen med fagene i kalkulatoren.
 
   Bakgrunn:
     Gitt jeg er innlogget i løsningen
@@ -39,16 +39,6 @@ Egenskap: Legge inn vitnemål manuelt
     Bakgrunn:
       Gitt jeg har rettighet til å se og endre søknadsbehandling ved organisasjonen som behandler saken
 
-    @openquestion
-    # ÅPNE SPØRSMÅL:
-    # - Skal kravelementene kunne vurderes i samme bilde som fagene
-    #   (under «2. Grunnlag»), og ikke bare under spesielle opptakskrav?
-    #   Ingrid Grimstad Helset skrev på siden med åpne spørsmål 05.11.2026 at
-    #   saksbehandleren ellers må klikke mye fram og tilbake, både for
-    #   elektroniske og manuelt innlagte vitnemål, og at «3. Spesielle
-    #   opptakskrav» må være oppdatert med det som er registrert i «2.
-    #   Grunnlag». Avklart 03.11.2026 var at kravelementene vurderes under
-    #   spesielle opptakskrav, ikke i kalkulatoren.
     Scenario: Legge inn vitnemålet manuelt
       Gitt søkeren har dokumentasjon på et vitnemål som ikke finnes elektronisk
       Når jeg velger å legge inn vitnemålet manuelt
@@ -66,8 +56,25 @@ Egenskap: Legge inn vitnemål manuelt
       # Saksbehandleren registrerer ingen opplysninger om selve vitnemålet
       # (utstedt dato, førstegangsvitnemål, GSK), og ingen av feltene er
       # påkrevd. Feltene er de samme som i skissen «Steg 2 Grunnlag – Legg inn
-      # vitnemål manuelt». Kravelementer er ikke en del av kalkulatoren, men
-      # vurderes under spesielle opptakskrav.
+      # vitnemål manuelt».
+      #
+      # Endret 05.11.2026: kravelementene vurderes i samme bilde som fagene,
+      # også for et vitnemål som er lagt inn manuelt (se «Vurdere
+      # kravelementene for et vitnemål som er lagt inn manuelt»).
+
+    @ref-OPT-BEH-BEH-022 @openquestion
+    # ÅPNE SPØRSMÅL:
+    # - Er scenarioet riktig? Det er skrevet etter avklaringen 05.11.2026,
+    #   og er ikke gått gjennom ennå. Finnes det en skisse for kravelementene
+    #   sammen med kalkulatoren?
+    Scenario: Vurdere kravelementene for et vitnemål som er lagt inn manuelt
+      Gitt jeg har lagt inn vitnemålet manuelt
+      Når jeg ser grunnlaget på søknaden
+      Så kan jeg vurdere kravelementene sammen med fagene i kalkulatoren
+      # AVKLART 05.11.2026: kravelementene vurderes i samme bilde som fagene,
+      # både for elektroniske og manuelt innlagte vitnemål (L3, «Kravelementene
+      # vurderes i samme bilde som fagene»). Innspill fra Ingrid Grimstad
+      # Helset 05.11.2026.
 
     Scenario: Legge inn vitnemålet uten at søkeren har elektronisk vitnemål
       Gitt søkeren ikke har elektroniske vitnemål
@@ -173,13 +180,6 @@ Egenskap: Legge inn vitnemål manuelt
       # NVB_FAG har både omfang og omfang_overstyrbart. Kodeverket sier altså
       # selv om saksbehandleren har lov til å avvike fra standardomfanget.
 
-    @openquestion
-    # ÅPNE SPØRSMÅL:
-    # - Ingrid Grimstad Helset skrev på siden med åpne spørsmål 05.11.2026
-    #   at det også må gå an å legge inn ukjente fagkoder. Er det dekket av
-    #   dette scenarioet (fagnavn og karakter uten fagkode), eller skal
-    #   saksbehandleren kunne skrive inn en fagkode som ikke finnes i
-    #   fagkodeverket?
     Scenario: Legge inn et fag som ikke finnes i fagkodeverket
       Gitt søkeren har dokumentasjon på et fag som ikke finnes i fagkodeverket
       Når jeg legger inn fagnavn og karakter uten fagkode
@@ -191,6 +191,21 @@ Egenskap: Legge inn vitnemål manuelt
       # bare legge karakteren i snittet. Begrensningen skal være synlig i
       # øyeblikket saksbehandleren velger fritekst, ikke oppdages senere når
       # et poeng mangler.
+
+    Scenario: Legge inn en fagkode som ikke finnes i fagkodeverket
+      Gitt søkeren har dokumentasjon på et fag med en fagkode som ikke finnes i fagkodeverket
+      Når jeg legger inn fagkoden, fagnavnet og karakteren
+      Så er faget lagt inn med fagkoden
+      Og faget inngår i snittet
+      Men faget inngår ikke i realfagspoeng, språkpoeng eller kravelementvurdering
+      Og det fremgår for meg at fagkoden ikke finnes i fagkodeverket
+      # AVKLART 05.11.2026: saksbehandleren kan legge inn ukjente fagkoder.
+      # Innspill fra Ingrid Grimstad Helset på siden med åpne spørsmål
+      # 05.11.2026. Kontrollmotoren kjenner ikke fagkoden, så faget har den
+      # samme begrensningen som et fag uten fagkode. Saksbehandleren kan
+      # markere at faget gir realfagspoeng eller språkpoeng, eller dekker et
+      # kravelement (L4a, «Saksbehandleren kan overstyre kontrollmotoren for
+      # et fag»).
 
     Scenario: Manuelt innlagte fag skilles fra elektroniske
       Gitt jeg har lagt inn et fag manuelt
