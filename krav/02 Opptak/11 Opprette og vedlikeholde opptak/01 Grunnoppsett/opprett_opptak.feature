@@ -54,7 +54,7 @@ Egenskap: Opprette et opptak
       Men opptaksforvalter setter ikke opptakstype
       Så kan opptaket ikke lagres
 
-  @planned @depends-on-OPT-BEH-BEH-036
+  @planned @scope-automatisk-ferdigbehandling @depends-on-OPT-BEH-BEH-036
   # OPT-BEH-BEH-036: «Mangelen for generell studiekompetanse som fullføres i vår settes og sjekkes ut automatisk»
   # Avklart 30.10.2026: advarselen stopper ikke lagringen.
   # Avklart 05.11.2026 (#951): advarselen på oversikten over mangelkodene (OPT-BEH-BEH-036) holder
