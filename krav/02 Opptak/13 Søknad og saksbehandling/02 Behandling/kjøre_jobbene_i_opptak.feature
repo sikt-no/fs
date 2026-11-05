@@ -12,7 +12,8 @@ Egenskap: Kjøre jobbene i opptak
   jobbene. Hvor ofte hver jobb kjører, står i applikasjonsinnstillingene. Ingen bruker endrer det
   i FS Admin. Feiler en jobb for en søker fordi KREG ikke svarer, prøves den på nytt. Hvor mange
   ganger, og hvor lenge, står også i applikasjonsinnstillingene. Feilen skrives i
-  applikasjonsloggen, og Sikt får et varsel. Saksbehandleren ser ikke tekniske feil.
+  applikasjonsloggen, og Sikt får ett samlet varsel per kjøring. Saksbehandleren ser ikke tekniske
+  feil.
 
   # Avklart med domeneeksperten 29.10.2026: to jobber dekker alt. Tekniske feil vises ikke for
   # brukerne, men skrives i applikasjonsloggen, og Sikt får et varsel. Hvordan det fremgår at

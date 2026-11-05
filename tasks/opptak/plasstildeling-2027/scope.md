@@ -5,7 +5,7 @@
 - **Initiativ**: [#216](https://github.com/sikt-no/fs/issues/216)
 - **Jira**: [sikt-no/fs#216](https://github.com/sikt-no/fs/issues/216)
 - **Eier**: –
-- **Siste oppdatering**: 2026-11-04
+- **Siste oppdatering**: 2026-11-05
 
 ## Mål
 
@@ -373,6 +373,7 @@ Append-only. Ny linje på toppen ved hver hendelse.
 
 | Dato       | Hendelse | Av | Lenke til review |
 |------------|----------|----|------------------|
+| 2026-11-05 | `@OPT-PLA-TIL-001`: plasstildelingen starter ikke mens en beregning på nytt kjører (`@OPT-BEH-BEH-026`). Fra gjennomgangen av flyten automatisk saksbehandling | @JøranIndseth | [#960](https://github.com/sikt-no/fs/pull/960) |
 | 2026-11-04 | Nytt krav `@OPT-PLA-RUN-002` (oversikten over plasstildelingsrunder, søk og filter), Must i første leveranse | – | [PR #907](https://github.com/sikt-no/fs/pull/907) |
 | 2026-11-02 | Kravene gått gjennom mot prototypen v88 ([PR #907](https://github.com/sikt-no/fs/pull/907)): `@OPT-PLA-INN-004` lagt til (Could), varslingen av lærestedene flyttet fra `@OPT-PLA-SVA-002`, skisselenkene byttet til prototypen v88 | @karensikt | – |
 | 2026-11-02 | Oppgave og scope slått sammen til scope.md (fra plasstildeling-rundetyper-og-runder, gjennomfore-plasstildeling, publisere-og-svare-pa-tilbud, plasstildeling) | – | – |

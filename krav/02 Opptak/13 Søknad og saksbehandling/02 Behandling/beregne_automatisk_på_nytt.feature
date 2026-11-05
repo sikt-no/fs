@@ -54,11 +54,6 @@ Egenskap: Beregne automatisk på nytt
         | alle kompetanseregelverkene               |
         | alle rangeringsregelverkene               |
 
-    Scenario: Alle sakene beregnes på nytt når en kvotetype er rettet
-      Gitt at opptaksforvalteren har rettet kvotetypen "ORDF" i regelverkssamlingen
-      Når opptaksforvalteren beregner på nytt for søknadsalternativene med alle kompetanseregelverkene og alle rangeringsregelverkene
-      Så er alle sakene i "Samordna opptak 2027" beregnet på nytt
-
     Scenario: Saker med søknadsalternativer med andre regelverk, beregnes ikke på nytt
       Gitt at "Informatikk, UiO" har rangeringsregelverket "Ordinær rangering"
       Og at "Historie, UiT" har rangeringsregelverket "Rangering etter opptaksprøve"
@@ -186,26 +181,24 @@ Egenskap: Beregne automatisk på nytt
 
   @depends-on-OPT-BEH-BEH-033
   Regel: Beregningen kjører i bakgrunnen
-    # Avklart 05.11.2026: bare én beregning per opptak om gangen, ingen beregning mens en
-    # plasstildeling kjører, og ingen plasstildeling mens en beregning kjører. Den som prøver å
-    # starte noe som ikke kan kjøre, får beskjed om hvorfor.
-    # Avklart 05.11.2026: etter at resultatet av siste plasstildelingsrunde er publisert, kan
-    # opptaksforvalteren ikke beregne på nytt. Da finnes ingen neste plasstildeling, og
-    # saksbehandleren retter enkeltsakene.
-    # Avklart 05.11.2026: i saksloggen står den automatiske behandlingen som den som endret saken,
-    # og det står hvem som startet beregningen. Endringsloggen i opptak er stoppet (BAT-324), så
-    # scenarioet kan ikke leveres før den nye sporingsloggen finnes.
 
     Scenario: Opptaksforvalteren ser når beregningen er ferdig
       Gitt at opptaksforvalteren har startet en beregning på nytt for søknadsalternativene med rangeringsregelverket "Ordinær rangering"
       Når beregningen er ferdig
       Så ser opptaksforvalteren at beregningen er ferdig
 
+  @ref-OPT-PLA-TIL-001
+  Regel: Bare én beregning eller plasstildeling i opptaket om gangen
+    # Avklart 05.11.2026: bare én beregning per opptak om gangen, ingen beregning mens en
+    # plasstildeling kjører, og ingen plasstildeling mens en beregning kjører. Den som prøver å
+    # starte noe som ikke kan kjøre, får beskjed om hvorfor. At plasstildelingen ikke starter mens
+    # en beregning kjører, står i kravet taggen peker på.
+
     Scenario: Opptaksforvalteren kan ikke starte en ny beregning før den forrige er ferdig
       Gitt at en beregning på nytt i "Samordna opptak 2027" ikke er ferdig
       Når opptaksforvalteren starter en ny beregning på nytt i "Samordna opptak 2027"
       Så starter ikke beregningen
-      Og opptaksforvalteren får beskjed om at en beregning allerede kjører
+      Og opptaksforvalteren får beskjed om at en beregning på nytt kjører
 
     Scenario: Opptaksforvalteren kan ikke beregne på nytt mens en plasstildeling kjører
       Gitt at en plasstildeling i "Samordna opptak 2027" kjører
@@ -213,17 +206,9 @@ Egenskap: Beregne automatisk på nytt
       Så starter ikke beregningen
       Og opptaksforvalteren får beskjed om at en plasstildeling kjører
 
-    Scenario: Opptaksforvalteren kan ikke starte en plasstildeling mens en beregning på nytt kjører
-      Gitt at en beregning på nytt i "Samordna opptak 2027" ikke er ferdig
-      Når opptaksforvalteren starter en plasstildeling i plasstildelingsrunden "Hovedrunde"
-      Så starter ikke plasstildelingen
-      Og opptaksforvalteren får beskjed om at en beregning på nytt kjører
-
-    Scenario: Opptaksforvalteren kan ikke beregne på nytt etter at resultatet av siste plasstildelingsrunde er publisert
-      Gitt at resultatet av siste plasstildelingsrunde i "Samordna opptak 2027" er publisert
-      Når opptaksforvalteren starter en beregning på nytt i "Samordna opptak 2027"
-      Så starter ikke beregningen
-      Og opptaksforvalteren får beskjed om at resultatet av siste plasstildelingsrunde er publisert
+  Regel: Saksloggen viser at den automatiske behandlingen endret saken
+    # Avklart 05.11.2026: i saksloggen står den automatiske behandlingen som den som endret saken,
+    # og det står hvem som startet beregningen.
 
     Scenario: Saksloggen viser at den automatiske behandlingen endret saken, og hvem som startet beregningen
       Gitt at opptaksforvalteren ved HK-dir har startet en beregning på nytt i "Samordna opptak 2027"
@@ -233,6 +218,9 @@ Egenskap: Beregne automatisk på nytt
 
   @depends-on-OPT-PLA-TIL-001
   Regel: Beregningen gjelder fra neste plasstildeling
+    # Avklart 05.11.2026: etter at resultatet av siste plasstildelingsrunde er publisert, kan
+    # opptaksforvalteren ikke beregne på nytt. Da finnes ingen neste plasstildeling, og
+    # saksbehandleren retter enkeltsakene.
 
     Scenario: En plasstildeling som er kjørt, endres ikke
       Gitt at en plasstildeling i plasstildelingsrunden "Hovedrunde" er kjørt
@@ -243,3 +231,9 @@ Egenskap: Beregne automatisk på nytt
       Gitt at opptaksforvalteren har beregnet på nytt for søknadsalternativene med rangeringsregelverket "Ordinær rangering"
       Når opptaksforvalteren starter en plasstildeling i plasstildelingsrunden "Hovedrunde"
       Så bruker plasstildelingen poengsummene som er beregnet på nytt
+
+    Scenario: Opptaksforvalteren kan ikke beregne på nytt etter at resultatet av siste plasstildelingsrunde er publisert
+      Gitt at resultatet av siste plasstildelingsrunde i "Samordna opptak 2027" er publisert
+      Når opptaksforvalteren starter en beregning på nytt i "Samordna opptak 2027"
+      Så starter ikke beregningen
+      Og opptaksforvalteren får beskjed om at resultatet av siste plasstildelingsrunde er publisert

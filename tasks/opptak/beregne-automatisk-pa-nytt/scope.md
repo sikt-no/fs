@@ -29,7 +29,7 @@
 
 | Krav | MoSCoW | Skisse | Jira | Kommentar |
 |---|---|---|---|---|
-| `@OPT-BEH-BEH-026` [beregne_automatisk_på_nytt.feature](../../../krav/02%20Opptak/13%20S%C3%B8knad%20og%20saksbehandling/02%20Behandling/beregne_automatisk_p%C3%A5_nytt.feature) | Must | – | [STEK-651](https://sikt.atlassian.net/browse/STEK-651) | Bygger på `@OPT-PLA-TIL-001`, som er `@draft` |
+| `@OPT-BEH-BEH-026` [beregne_automatisk_på_nytt.feature](../../../krav/02%20Opptak/13%20S%C3%B8knad%20og%20saksbehandling/02%20Behandling/beregne_automatisk_p%C3%A5_nytt.feature) | Must | – | [STEK-651](https://sikt.atlassian.net/browse/STEK-651) | Bygger på `@OPT-PLA-TIL-001`, som er `@draft`. Regelen «Saksloggen viser at den automatiske behandlingen endret saken» kan ikke leveres før den nye sporingsloggen finnes. Endringsloggen er stoppet (BAT-324, 29.10.2026) |
 
 ## Åpne spørsmål
 
@@ -41,6 +41,6 @@ Append-only. Ny linje på toppen ved hver hendelse.
 
 | Dato       | Hendelse | Av | Lenke til review |
 |------------|----------|----|------------------|
-| 2026-11-05 | De åpne spørsmålene i `@OPT-BEH-BEH-026` er lukket: bare én beregning eller plasstildeling i opptaket om gangen, ingen beregning etter at resultatet av siste runde er publisert, saksloggen viser den automatiske behandlingen og hvem som startet beregningen, og alle regelverkene velges når en kvotetype er rettet. Fra gjennomgangen av flyten automatisk saksbehandling | @JøranIndseth | – |
+| 2026-11-05 | De åpne spørsmålene i `@OPT-BEH-BEH-026` er lukket: bare én beregning eller plasstildeling i opptaket om gangen, ingen beregning etter at resultatet av siste runde er publisert, saksloggen viser den automatiske behandlingen og hvem som startet beregningen, og alle regelverkene velges når en kvotetype er rettet. At plasstildelingen ikke starter mens en beregning kjører, står i `@OPT-PLA-TIL-001`. Hvem som kan beregne på nytt, er fortsatt åpent. Fra gjennomgangen av flyten automatisk saksbehandling | @JøranIndseth | – |
 | 2026-11-04 | Hvem som kan beregne på nytt, er et åpent spørsmål, og testkjøring er notert som ikke-mål (statusmøtet, se Kilder) | @JøranIndseth | – |
 | 2026-11-02 | Opprettet med fs-scope, som leveranse 6 av 6 i flyten automatisk saksbehandling | @JøranIndseth | – |
