@@ -22,3 +22,10 @@ declare module 'virtual:krav-tasks' {
   const tasks: TasksSnapshot | null;
   export default tasks;
 }
+
+declare module 'virtual:krav-verify' {
+  import type { VerifySnapshot } from '../shared/verify';
+  /** Verify-rapportene i krav/, tasks/ og akseptansetest/ (null i eldre bygg og i desktop-appen) */
+  const verify: VerifySnapshot | null;
+  export default verify;
+}

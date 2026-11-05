@@ -136,6 +136,36 @@ test('Workspace leser tasks/, også scope.md', async () => {
   assert.equal(på.tasks?.tasks[0].sources['spec/spec-x.md'], '# Spec: X\n');
 });
 
+test('Workspace leser verify-rapportene i krav/, tasks/ og akseptansetest/, og holder dem utenfor kravene', async () => {
+  const { Workspace } = await import('./workspace.ts');
+  const { createApi } = await import('./api.ts');
+  const root = join(tmp, 'ws-verify');
+  mkdirSync(join(root, 'krav', 'a', 'b', 'c'), { recursive: true });
+  mkdirSync(join(root, 'tasks', 'opptak', 'x', 'spec'), { recursive: true });
+  mkdirSync(join(root, 'akseptansetest', 'y'), { recursive: true });
+  writeFileSync(join(root, 'krav', 'a', 'b', 'c', 'x.feature'), '# language: no\nEgenskap: X\n');
+  writeFileSync(join(root, 'krav', 'a', 'b', 'c', 'verify-x-2026-11-03-1519.md'), '# Verifisering: x.feature\n');
+  writeFileSync(join(root, 'tasks', 'opptak', 'x', 'spec', 'verify-2026-11-02-1236.md'), '# Verifisering: X\n');
+  writeFileSync(join(root, 'akseptansetest', 'y', 'verify-2026-11-05-0935.md'), '# Verifisering: Y\n');
+  writeFileSync(join(root, 'akseptansetest', 'y', 'verify-2026-11-05-0935.html'), '<!doctype html><p>Y</p>');
+  const ws = new Workspace(root, null);
+  await ws.readAll();
+  assert.deepEqual(Object.keys(ws.entries), ['krav/a/b/c/x.feature']);
+  assert.deepEqual(Object.keys(ws.verify).sort(), [
+    'akseptansetest/y/verify-2026-11-05-0935.md',
+    'krav/a/b/c/verify-x-2026-11-03-1519.md',
+    'tasks/opptak/x/spec/verify-2026-11-02-1236.md',
+  ]);
+  assert.equal(ws.verify['akseptansetest/y/verify-2026-11-05-0935.md'].html, 'akseptansetest/y/verify-2026-11-05-0935.html');
+  assert.equal(ws.verify['krav/a/b/c/verify-x-2026-11-03-1519.md'].html, null);
+  // Specboard leser fortsatt rapportene i spec/ fra tasks/
+  assert.equal(ws.tasks?.tasks[0].sources['spec/verify-2026-11-02-1236.md'], '# Verifisering: X\n');
+  const api = createApi(ws, {} as never, {} as never, {} as never);
+  assert.equal(await api.readReport('akseptansetest/y/verify-2026-11-05-0935.html'), '<!doctype html><p>Y</p>');
+  await assert.rejects(api.readReport('akseptansetest/y/../../krav/a/b/c/x.feature'), /Ikke en rapportvisning/);
+  await assert.rejects(api.readReport('akseptansetest/y/verify-2026-11-05-0935.md'), /Ikke en rapportvisning/);
+});
+
 test('skisser (isSketchPath) kan sendes med «Lag PR», men ikke skrives som tekst; saveSketch skriver bare der', async () => {
   const sketch = 'tasks/opptak/x/spec/krav-input/sketches/figma/a/sub-frames/01-liste.png';
   const delta = 'tasks/opptak/x/spec/krav-input/changes/2026-10-05-abc/sketches/b.jpg';
