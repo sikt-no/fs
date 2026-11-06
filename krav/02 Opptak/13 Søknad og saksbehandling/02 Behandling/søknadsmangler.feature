@@ -128,10 +128,12 @@ Egenskap: Søknadsmangler
       Så kan saksbehandleren velge "Regelverk A" og "Regelverk B"
       Og saksbehandleren kan ikke velge andre kompetanseregelverk
 
+    # Ikke implementert
     Scenario: Registrere mangel på kvote
       Når saksbehandleren ved Universitetet i Oslo registrerer mangelen "BOS" i kategorien "Kvote" på kvotespørsmålet "Bosted i Nord-Norge"
       Så har saken mangelen "BOS" på kvotespørsmålet "Bosted i Nord-Norge"
 
+    # Ikke implementert
     Scenario: Saksbehandleren velger blant kvotespørsmålene til søknadsalternativene i saken
       Gitt at kvotene til søknadsalternativene i saken hos "Universitetet i Oslo" har kvotespørsmålene "Bosted i Nord-Norge" og "Samisk tilhørighet"
       Når saksbehandleren ved Universitetet i Oslo velger kvotespørsmål for en mangel
@@ -202,12 +204,14 @@ Egenskap: Søknadsmangler
       Så ser saksbehandleren ved Universitetet i Oslo at det er kommet ny dokumentasjon i saken
       Og mangelen "KAR" er ikke sjekket ut
 
+    # Ikke implementert
     Scenario: Saksbehandleren sjekker ut mangelen
       Gitt at saken hos "Universitetet i Oslo" har mangelen "KAR"
       Når saksbehandleren ved Universitetet i Oslo sjekker ut mangelen "KAR"
       Så er mangelen "KAR" sjekket ut
       Og saken har fortsatt mangelen "KAR"
 
+    # Ikke implementert
     Scenario: Saksbehandleren ser om søkeren har lest mangelen
       Gitt at mangelen "KAR" er publisert
       Og at søkeren har åpnet mangelen "KAR" i Min kompetanse
@@ -290,11 +294,13 @@ Egenskap: Søknadsmangler
         | saksbehandleren lagrer en kommentar på mangelen "KAR"            |
         | saksbehandleren vurderer at "Matematikk R2" er oppfylt           |
 
+    # Ikke implementert
     Scenario: Saksbehandleren blir advart om mangler som ikke er publisert
       Gitt at saken hos "Universitetet i Oslo" har mangelen "KNN" som ikke er publisert
       Når saksbehandleren ved Universitetet i Oslo setter saken til "Behandlet"
       Så ser saksbehandleren at søkeren ikke ser mangelen "KNN" i Min kompetanse
 
+    # Ikke implementert
     Scenario: Publisere manglene når saken settes til ferdig behandlet
       Gitt at saksbehandleren ved Universitetet i Oslo er advart om at mangelen "KNN" ikke er publisert
       Når saksbehandleren velger å publisere manglene og sette saken til "Behandlet"
@@ -302,6 +308,7 @@ Egenskap: Søknadsmangler
       Og søkeren ser mangelen "KNN" i Min kompetanse
       Og søkeren har mottatt en melding om mangler
 
+    # Ikke implementert
     Scenario: Avbryte når saken har mangler som ikke er publisert
       Gitt at saksbehandleren ved Universitetet i Oslo er advart om at mangelen "KNN" ikke er publisert
       Når saksbehandleren avbryter
@@ -326,6 +333,14 @@ Egenskap: Søknadsmangler
       Så ser søkeren at det er registrert mangler i søknaden
       Og søkeren ser fristen for å laste opp dokumentasjon
       Og søkeren kan gå til dokumentasjonssiden
+
+    @draft
+    Scenario: Meldingen om mangel viser alle fristene
+      Gitt at søkeren har mottatt en melding om mangler
+      Og at manglene i meldingen har fristene "2027-03-20 23:59" og "2027-07-01 23:59"
+      Når søkeren åpner meldingen
+      Så ser søkeren fristen "2027-03-20 23:59"
+      Og søkeren ser fristen "2027-07-01 23:59"
 
   Regel: Fristen for en mangel er ettersendingsfristen, med mindre en tidligere dokumentasjonsfrist ikke har gått ut
 
@@ -357,15 +372,6 @@ Egenskap: Søknadsmangler
       Når søkeren åpner meldingen om mangel
       Så ser søkeren fristen "2027-03-20 23:59" for "Lektorutdanning, UiO"
       Og søkeren ser fristen "2027-07-01 23:59" for "Informatikk, UiO"
-
-    # Ikke implementert
-    Scenario: Mangel på spesielle krav gir frist bare for søknadsalternativene med kompetanseregelverket
-      Gitt at "Informatikk, UiO" har kompetanseregelverket "Regelverk B"
-      Og at "Lektorutdanning, UiO" ikke har kompetanseregelverket "Regelverk B"
-      Og at saken har en mangel i kategorien "Spesielle krav" på kompetanseregelverket "Regelverk B"
-      Når søkeren åpner meldingen om mangel
-      Så ser søkeren fristen for "Informatikk, UiO"
-      Men søkeren ser ikke en frist for "Lektorutdanning, UiO"
 
     Scenariomal: Mangel på <kategori> har ettersendingsfristen
       Gitt at ettersendingsfristen i opptaket er "2027-07-01 23:59"
@@ -450,12 +456,14 @@ Egenskap: Søknadsmangler
 
   Regel: Organisasjonene som behandler søknaden ser manglene i alle sakene, men endrer bare manglene i saken sin
 
+    # Ikke implementert
     Scenario: Saksbehandlende organisasjon ser manglene i saken hos en annen organisasjon
       Gitt at søknaden har saker hos "Universitetet i Oslo" og "UiT Norges arktiske universitet"
       Og at saken hos "UiT Norges arktiske universitet" har mangelen "KAR"
       Når saksbehandleren ved Universitetet i Oslo åpner søknaden
       Så ser saksbehandleren mangelen "KAR" i saken hos "UiT Norges arktiske universitet"
 
+    # Ikke implementert
     Scenario: Saksbehandlende organisasjon kan ikke endre manglene i saken hos en annen organisasjon
       Gitt at saken hos "UiT Norges arktiske universitet" har mangelen "KAR"
       Når saksbehandleren ved Universitetet i Oslo ser mangelen "KAR"
@@ -467,6 +475,7 @@ Egenskap: Søknadsmangler
       Når opptaksforvalteren ved HK-dir åpner søknaden
       Så ser opptaksforvalteren manglene i sakene hos "Universitetet i Oslo" og "UiT Norges arktiske universitet"
 
+    # Ikke implementert
     Scenario: Tilbyderen ser manglene når en annen organisasjon saksbehandler utdanningstilbudet
       Gitt at "Historie, UiT" er fordelt til "Universitetet i Oslo"
       Og at saken hos "Universitetet i Oslo" har mangelen "KAR"
