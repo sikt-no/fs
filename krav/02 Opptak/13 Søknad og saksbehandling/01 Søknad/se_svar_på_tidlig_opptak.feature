@@ -146,6 +146,10 @@ Egenskap: Se svar på søknad om tidlig opptak
       Så ser søkeren svar på tidlig opptak på "Masterstudiet i rettsvitenskap, høst 2027" på lik linje med de andre søknadsalternativene
 
   Regel: Søkeren ser egen poengsum og poenggrense der søkeren deltok uten å nå opp
+    # Poenggrensen er den som ble brukt i tidligopptaket: poenggrensen for tidlig opptak
+    # når den er satt, ellers median poengsum fra forrige opptak (se regelen «Median
+    # poengsum fra forrige opptak brukes når poenggrensen ikke er satt» i
+    # gi_tilbudsgaranti_ved_tidlig_opptak.feature). Søkeren ser ikke hvilken av dem det var.
 
     Scenario: Poengsum og poenggrense vises når søkeren deltok og ikke nådde opp
       Gitt at svaret på tidlig opptak er publisert
@@ -153,7 +157,7 @@ Egenskap: Se svar på søknad om tidlig opptak
       Men søkeren er ikke innvilget tidlig opptak på noen av søknadsalternativene sine
       Når søkeren åpner søknaden sin
       Så ser søkeren sin egen poengsum på "Profesjonsstudiet i medisin, høst 2027"
-      Og søkeren ser poenggrensen for tidlig opptak på "Profesjonsstudiet i medisin, høst 2027"
+      Og søkeren ser poenggrensen som ble brukt i tidligopptaket på "Profesjonsstudiet i medisin, høst 2027"
 
     Scenario: Poengsum og poenggrense vises ikke når søkeren er innvilget
       Gitt at svaret på tidlig opptak er publisert
