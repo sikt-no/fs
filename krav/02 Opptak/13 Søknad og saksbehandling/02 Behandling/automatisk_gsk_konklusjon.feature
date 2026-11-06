@@ -125,7 +125,8 @@ Egenskap: Automatisk GSK-konklusjon
       Når vitnemålet importeres fra KREG
       Så har vitnemålet ingen påstand fra opptakssystemet om generell studiekompetanse
 
-    @implemented
+    @deprecated
+    # Avklart 06.11.2026: kompetansebevis kommer ikke fra KREG. Koden som importerer dem, skal bort.
     Scenario: Kompetansebevis får ingen påstand fra opptakssystemet
       Gitt at søkerens eneste dokument er et kompetansebevis
       Når kompetansebeviset importeres fra KREG
