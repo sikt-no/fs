@@ -103,12 +103,14 @@ Egenskap: Automatiske mangler
       Når saken hos "Universitetet i Oslo" blir ferdig behandlet
       Så ser søkeren den automatiske mangelteksten for "Matematikk R2" i Min kompetanse
 
+    @implemented
     Scenario: Søkeren ser ikke de automatiske mangeltekstene mens saken er under behandling
       Gitt at saken hos "Universitetet i Oslo" er under behandling
       Og at saken har en automatisk mangeltekst for "Matematikk R2"
       Når søkeren åpner dokumentasjonssiden i Min kompetanse
       Så ser ikke søkeren den automatiske mangelteksten for "Matematikk R2"
 
+    @implemented
     Scenario: Søkeren ser mangeltekstene per søknadsalternativ
       Gitt at saken hos "Universitetet i Oslo" er ferdig behandlet
       Og at saken har en automatisk mangeltekst for "Matematikk R2" for "Informatikk, UiO"
@@ -130,7 +132,7 @@ Egenskap: Automatiske mangler
       Når saksbehandleren ved Universitetet i Oslo åpner manglene i saken
       Så ser ikke saksbehandleren muligheten til å kommentere, sjekke ut eller slette den automatiske mangelteksten
 
-  @ref-FLY-OPT-AUT-001 @depends-on-OPT-BEH-BEH-008
+  @ref-FLY-OPT-AUT-001 @depends-on-OPT-BEH-BEH-008 @implemented
   # OPT-BEH-BEH-008: «Opptaksforvalteren forvalter mangelkodene i regelverkssamlingen»
   Regel: Opptaksforvalteren merker én mangelkode for generell studiekompetanse som fullføres i vår
     # Avklart 05.11.2026 (Jøran og Geir, #951): ingen automatikk setter mangler på søknadene som

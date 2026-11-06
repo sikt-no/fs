@@ -53,6 +53,7 @@ Egenskap: Beregne GSK fra vitnemål
       Når GSK-vitnemålsberegningen kjører for vitnemålet
       Så er delkravet for samfunnsfag ikke oppfylt
 
+  @implemented
   Regel: Reformen på vitnemålet avgjør hvilke delkrav som gjelder
 
     Scenariomal: Delkravene for <reform>
@@ -94,6 +95,7 @@ Egenskap: Beregne GSK fra vitnemål
         | samfunnslære   |
         | norsk          |
 
+  @implemented
   Regel: Matematikk for Kunnskapsløftet
     # Fagkoder fra Kunnskapsløftet 2006 som er ført som erstatning for et fag fra
     # Reform 94 (merknadkode FAM13), teller bare når de erstatter et fag fra Reform 94
@@ -131,6 +133,7 @@ Egenskap: Beregne GSK fra vitnemål
       Når GSK-vitnemålsberegningen kjører for vitnemålet
       Så er delkravet for matematikk ikke oppfylt
 
+  @implemented
   Regel: Naturfag for Kunnskapsløftet
 
     Scenariomal: Naturfagkravet er oppfylt med <alternativ>
@@ -158,6 +161,7 @@ Egenskap: Beregne GSK fra vitnemål
         | standard plan | samisk plan   |
         | samisk plan   | standard plan |
 
+  @implemented
   Regel: Samfunnsfag for Kunnskapsløftet
 
     Scenariomal: Samfunnsfagkravet er oppfylt med <fagkode>
@@ -173,6 +177,7 @@ Egenskap: Beregne GSK fra vitnemål
         | SAK1001 | Samfunnskunnskap                                   |
         | SAK1002 | Samfunnskunnskap, samisk plan                      |
 
+  @implemented
   Regel: Engelsk for Kunnskapsløftet
 
     Scenariomal: Engelskkravet er oppfylt med <fagkode>
@@ -197,6 +202,7 @@ Egenskap: Beregne GSK fra vitnemål
         | SPR3029 | Engelsk 1                                        |
         | SPR3031 | Engelsk 2                                        |
 
+  @implemented
   Regel: Norsk og historie for Kunnskapsløftet
     # Fagkodene for samisk 2. språk og finsk 2. språk står ikke i kravet, men i FF_sf_samisk2
     # og FF_sf_finsk2 i krav-kl.txt (NVB2). Avklart 30.10.2026.
@@ -300,6 +306,7 @@ Egenskap: Beregne GSK fra vitnemål
         | samisk 1. språk             |
         | samisk eller finsk 2. språk |
 
+  @implemented
   Regel: Delkravene for Reform 94
 
     Scenariomal: Delkravet for <delkrav> er oppfylt med <alternativ>
@@ -333,6 +340,7 @@ Egenskap: Beregne GSK fra vitnemål
       Når GSK-vitnemålsberegningen kjører for vitnemålet
       Så er delkravet for norsk ikke oppfylt
 
+  @implemented
   Regel: Løpet på vitnemålet gir grunnlagskoden
     # Innspill i PR #857: grunnlagskoden slås opp i tabellen over løp (VGS_LOEP, feltet
     # VGS_LOEP.GRUNNLAGSTYPE_KODE i det gamle systemet) med programområdekodene på
@@ -394,6 +402,7 @@ Egenskap: Beregne GSK fra vitnemål
       Når GSK-vitnemålsberegningen kjører for vitnemålet
       Så er påstanden ikke GSK
 
+  @implemented
   Regel: Løp uten grunnlagskode i listen over løp
     # Avklart 2026-11-02 (Ingrid Helset, etter samtale med Jøran og Geir): et løp som finnes i
     # listen over løp, men mangler grunnlagskode, gir en grunnlagskode likevel, som i det gamle

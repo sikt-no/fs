@@ -42,7 +42,7 @@ Egenskap: Håndtere annullert vitnemål
     Gitt at søkeren har en sak hos "Universitetet i Oslo"
     Og at søkeren har et vitnemål fra 2025
 
-  @ref-FLY-OPT-VIT-001
+  @ref-FLY-OPT-VIT-001 @implemented
   Regel: Saken merkes når et vitnemål som er i bruk, blir annullert
 
     Scenariomal: Vitnemålet er brukt i <bruk>
@@ -91,6 +91,7 @@ Egenskap: Håndtere annullert vitnemål
       Så viser merknaden på saken at vitnemålet fra 2025 er annullert
       Og merknaden viser at vitnemålet er brukt i poengene og GSK-konklusjonen
 
+  @implemented
   Regel: Løsningen endrer ikke det som bygger på vitnemålet
 
     Scenario: Poeng, kravelementer og GSK-konklusjon står uendret
@@ -100,7 +101,7 @@ Egenskap: Håndtere annullert vitnemål
       Og vurderingen av kravelementene i saken er uendret
       Og GSK-konklusjonen i saken er uendret
 
-  @ref-OPT-PLA-TIL-001 @ref-FLY-OPT-VIT-001
+  @ref-OPT-PLA-TIL-001 @ref-FLY-OPT-VIT-001 @implemented
   Regel: En ferdig behandlet sak settes tilbake til under behandling
 
     Scenario: Ferdig behandlet sak settes tilbake til Under behandling
@@ -124,6 +125,7 @@ Egenskap: Håndtere annullert vitnemål
       Så har saken behandlingsstatusen "Under behandling"
 
 
+  @implemented
   Regel: Saksbehandleren fjerner taggen
 
     Scenario: Saksbehandleren fjerner taggen etter at saken er sett på

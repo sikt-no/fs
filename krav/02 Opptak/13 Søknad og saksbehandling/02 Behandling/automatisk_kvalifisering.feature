@@ -96,12 +96,11 @@ Egenskap: Automatisk vurdering av spesielle opptakskrav
   # vurdert før GSK er satt. Om saken behandles helautomatisk, og stopper uten GSK, avgjøres i
   # OPT-BEH-BEH-025.
 
-  @depends-on-OPT-REG-KRA-002 @ref-FLY-OPT-AUT-001
+  @depends-on-OPT-REG-KRA-002 @ref-FLY-OPT-AUT-001 @implemented
   Regel: Kravelementer som er koblet til vitnemålet, vurderes automatisk
     # Koblingen er kravkoden for vitnemålet, som settes på kravelementet i
     # regelverket. Én kravkode sjekker vitnemål fra både R94 og Kunnskapsløftet.
 
-    @implemented
     Scenario: Fagkrav som er oppfylt på vitnemålet
       Gitt at søkeren har ett elektronisk vitnemål som ikke er annullert
       Og at vitnemålet har Matematikk R1
@@ -109,7 +108,6 @@ Egenskap: Automatisk vurdering av spesielle opptakskrav
       Når søknaden behandles automatisk
       Så er fagkravet Matematikk R1 oppfylt
 
-    @implemented
     Scenario: Fagkrav som ikke er oppfylt på vitnemålet
       Gitt at søkeren har ett elektronisk vitnemål som ikke er annullert
       Og at vitnemålet ikke har Matematikk R1
@@ -117,7 +115,6 @@ Egenskap: Automatisk vurdering av spesielle opptakskrav
       Når søknaden behandles automatisk
       Så er fagkravet Matematikk R1 ikke oppfylt
 
-    @implemented
     Scenario: Karakteren fra vitnemålet registreres på fagkravet
       Gitt at søkeren har ett elektronisk vitnemål med karakteren 5 i Fysikk 1
       Og at søknaden har fagkravet Fysikk 1, koblet til vitnemålet
@@ -125,7 +122,6 @@ Egenskap: Automatisk vurdering av spesielle opptakskrav
       Så er fagkravet Fysikk 1 oppfylt
       Og fagkravet Fysikk 1 har karakteren 5
 
-    @implemented
     Scenario: Fagkrav uten karakter oppfylles uten karakter
       Gitt at søkeren har ett elektronisk vitnemål som ikke er annullert
       Og at vitnemålet har faget som fagkravet krever, uten tallkarakter
@@ -134,28 +130,24 @@ Egenskap: Automatisk vurdering av spesielle opptakskrav
       Så er fagkravet oppfylt
       Og fagkravet har ingen karakter
 
-    @implemented
     Scenario: Karakterkrav får karakteren fra vitnemålet
       Gitt at søkeren har ett elektronisk vitnemål med karakteren 4 i engelsk
       Og at søknaden har karakterkravet engelsk, koblet til vitnemålet
       Når søknaden behandles automatisk
       Så har karakterkravet engelsk karakteren 4
 
-    @implemented
     Scenario: Beste karakter gjelder for programfag matematikk
       Gitt at søkeren har ett elektronisk vitnemål med karakteren 5 i Matematikk R1 og karakteren 3 i Matematikk S1
       Og at søknaden har kravelementet programfag matematikk, koblet til vitnemålet
       Når søknaden behandles automatisk
       Så har kravelementet programfag matematikk karakteren 5
 
-    @implemented
     Scenario: Kravelement som ikke er koblet til vitnemålet, vurderes ikke
       Gitt at søkeren har ett elektronisk vitnemål som ikke er annullert
       Og at søknaden har et kravelement som ikke er koblet til vitnemålet
       Når søknaden behandles automatisk
       Så er kravelementet ikke vurdert
 
-    @implemented
     Scenario: Kravelementer fra en annen sak i søknaden vurderes ikke i saken
       # STEK-593.
       Gitt at søknaden har saker hos "Universitetet i Oslo" og "UiT Norges arktiske universitet"
@@ -164,14 +156,12 @@ Egenskap: Automatisk vurdering av spesielle opptakskrav
       Når kravelementene i saken hos "UiT Norges arktiske universitet" vurderes automatisk
       Så er "Matematikk R2" ikke vurdert i saken hos "UiT Norges arktiske universitet"
 
-    @implemented
     Scenario: Kravelement vurderes mot vitnemål fra R94
       Gitt at søkeren har ett elektronisk vitnemål fra R94
       Og at søknaden har et kravelement som er koblet til vitnemålet
       Når søknaden behandles automatisk
       Så er kravelementet vurdert mot vitnemålet fra R94
 
-    @implemented
     Scenario: Ugyldig karakter må vurderes manuelt
       Gitt at søkeren har ett elektronisk vitnemål med en ugyldig karakter i Fysikk 1
       Og at søknaden har fagkravet Fysikk 1, koblet til vitnemålet
