@@ -129,10 +129,12 @@ Egenskap: Søknadsmangler
       Så kan saksbehandleren velge "Regelverk A" og "Regelverk B"
       Og saksbehandleren kan ikke velge andre kompetanseregelverk
 
+    @depends-on-OPT-REG-KVO-002
     Scenario: Registrere mangel på kvote
       Når saksbehandleren ved Universitetet i Oslo registrerer mangelen "BOS" i kategorien "Kvote" på kvotespørsmålet "Bosted i Nord-Norge"
       Så har saken mangelen "BOS" på kvotespørsmålet "Bosted i Nord-Norge"
 
+    @depends-on-OPT-REG-KVO-002
     Scenario: Saksbehandleren velger blant kvotespørsmålene til søknadsalternativene i saken
       Gitt at kvotene til søknadsalternativene i saken hos "Universitetet i Oslo" har kvotespørsmålene "Bosted i Nord-Norge" og "Samisk tilhørighet"
       Når saksbehandleren ved Universitetet i Oslo velger kvotespørsmål for en mangel
@@ -328,6 +330,9 @@ Egenskap: Søknadsmangler
       Og søkeren ser fristen for å laste opp dokumentasjon
       Og søkeren kan gå til dokumentasjonssiden
 
+  @depends-on-OPT-OVO-FRI-001 @depends-on-OPT-OPT-UTD-025
+  # OPT-OVO-FRI-001: «Opptaksforvalter ved forvaltende organisasjon må kunne sette informasjonsdato for dokumentasjon og ettersendingsfrist», «Opptaksforvalter ved forvaltende organisasjon må kunne sette frister for tidlig opptak», «Opptaksforvalter kan legge til utdanningsbakgrunner med avvikende frister»
+  # OPT-OPT-UTD-025: «Opptaksforvalter kan sette tidlig søknadsfrist per utdanningstilbud»
   Regel: Fristen for en mangel er ettersendingsfristen, med mindre en tidligere dokumentasjonsfrist ikke har gått ut
 
     Scenariomal: Fristen for en mangel publisert <publisert> når <situasjon>
@@ -371,6 +376,7 @@ Egenskap: Søknadsmangler
 
   # ── 4. Søkerens visning ──────────────────────────────────────
 
+  @depends-on-OPT-BEH-BEH-011
   Regel: Søkeren ser manglene på dokumentasjonssiden
 
     Dokumentasjonssiden er siden i Min kompetanse der søkeren ser hvilken dokumentasjon som
@@ -410,6 +416,7 @@ Egenskap: Søknadsmangler
         | Generelle krav |
         | Poeng          |
 
+    @depends-on-OPT-REG-KVO-002
     Scenario: Mangel på kvote vises under søknadsalternativene med kvoten
       Gitt at kvotene til "Informatikk, UiO" har kvotespørsmålet "Bosted i Nord-Norge"
       Og at kvotene til "Historie, UiO" ikke har kvotespørsmålet "Bosted i Nord-Norge"
