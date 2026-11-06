@@ -186,6 +186,7 @@ Egenskap: Automatisk vurdering av spesielle opptakskrav
         | søkerens eneste elektroniske dokument er et kompetansebevis                                              |
         | søkeren ikke har noe elektronisk vitnemål                                                                |
 
+    @implemented
     # Avklart 06.11.2026: kompetansebevis kommer ikke fra KREG, så raden om kompetansebevis er tatt ut.
     Scenariomal: Ingen automatisk vurdering når <grunn>
       Gitt at <grunn>
@@ -198,6 +199,7 @@ Egenskap: Automatisk vurdering av spesielle opptakskrav
         | søkeren har flere elektroniske vitnemål som ikke er annullert, og saksbehandleren ikke har valgt vitnemål |
         | søkeren ikke har noe elektronisk vitnemål                                                                |
 
+    @implemented
     Scenario: Opplastet kompetansebevis stopper ikke vurderingen
       # Avklart 06.11.2026: kompetansebevis kommer bare som dokumenter søkeren laster opp, ikke
       # fra KREG. Saksbehandleren finner sakene med filteret «Ubehandlet opplastet dok.» i

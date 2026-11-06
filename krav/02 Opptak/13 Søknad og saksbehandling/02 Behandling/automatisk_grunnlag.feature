@@ -139,6 +139,7 @@ Egenskap: Automatisk grunnlag
         | vitnemålet ikke gir generell studiekompetanse               |
         | ingen av grunnlagene i regelverket passer til søkeren       |
 
+    @implemented
     # Avklart 06.11.2026: kompetansebevis kommer ikke fra KREG, så raden om kompetansebevis er tatt ut.
     Scenariomal: Ingen grunnlag settes automatisk når <grunn>
       Gitt at <grunn>
@@ -159,6 +160,7 @@ Egenskap: Automatisk grunnlag
       Så blir søknaden ikke behandlet automatisk
       Og saken får ingen grunnlag automatisk
 
+    @implemented
     Scenario: Opplastet kompetansebevis stopper ikke automatikken
       # Avklart 06.11.2026: kompetansebevis kommer bare som dokumenter søkeren laster opp, ikke
       # fra KREG. Saksbehandleren finner sakene med filteret «Ubehandlet opplastet dok.» i
@@ -187,6 +189,7 @@ Egenskap: Automatisk grunnlag
   @ref-FLY-OPT-AUT-001
   Regel: Grunnlaget settes når den automatiske behandlingen kjører
 
+    @implemented
     Scenario: Hver sak i søknaden får grunnlaget når den automatiske behandlingen kjører for saken
       # Avklart 06.11.2026: erstatter «Automatikken setter grunnlaget i alle sakene i søknaden».
       Gitt at søknaden har saker hos "Universitetet i Oslo" og "UiT Norges arktiske universitet"
