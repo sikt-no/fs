@@ -101,8 +101,12 @@ Egenskap: Listevisning og søk i utdanningstilbud i opptaket
       Når opptaksforvalter filtrerer på utdanningstilbud med ufullstendige opplysninger
       Så ser opptaksforvalter utdanningstilbud der dato for tidlig søknadsfrist ikke er satt
 
-    @depends-on-OPT-OPT-UTD-010 @ref-OPT-BEH-BEH-014
+    # Er poenggrensen ikke satt, brukes median poengsum fra forrige opptak i tidligopptaket
+    # (regelen «Median poengsum fra forrige opptak brukes når poenggrensen ikke er satt»).
+    # Utdanningstilbudet mangler derfor poenggrense bare når begge mangler.
+    @depends-on-OPT-OPT-UTD-010 @ref-OPT-BEH-BEH-007
     Scenario: Filtrere på utdanningstilbud som mangler poenggrense for tidlig opptak
-      Gitt at et utdanningstilbud tilbyr tidlig opptak
+      Gitt at et utdanningstilbud tilbyr tidlig opptak uten poenggrense
+      Og at utdanningstilbudet ikke har median poengsum fra forrige opptak
       Når opptaksforvalter filtrerer på utdanningstilbud med ufullstendige opplysninger
-      Så ser opptaksforvalter utdanningstilbud der poenggrensen for tidlig opptak ikke er satt
+      Så ser opptaksforvalter utdanningstilbud der verken poenggrensen for tidlig opptak er satt eller median poengsum fra forrige opptak finnes
