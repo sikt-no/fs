@@ -360,9 +360,11 @@ Egenskap: Gi tilbudsgaranti ved tidlig opptak
     # Opptaksforvalter ser ikke om det var poenggrensen eller medianen som ble brukt.
     # Medianen kommer fra Samordna opptak, og registreres ikke av opptaksforvalter.
 
-    Scenariomal: Tilbudsgaranti ut fra medianen fra forrige opptak når poenggrensen ikke er satt
-      Gitt "Vernepleie, høst 2027" tilbyr tidlig opptak uten poenggrense
-      Og median poengsum fra forrige opptak for "Vernepleie, høst 2027" er 48
+    # Poenggrensen går foran medianen, både når den er høyere og når den er lavere.
+    Scenariomal: Tilbudsgaranti ut fra poenggrensen eller medianen fra forrige opptak
+      Gitt "Vernepleie, høst 2027" tilbyr tidlig opptak
+      Og poenggrensen for tidlig opptak på "Vernepleie, høst 2027" er <poenggrense>
+      Og median poengsum fra forrige opptak for "Vernepleie, høst 2027" er <median>
       Og saksbehandler har konkludert med at søkeren deltar i tidligopptaket
       Og søkeren er kvalifisert til "Vernepleie, høst 2027"
       Og søkeren har <poeng> poeng til "Vernepleie, høst 2027"
@@ -370,19 +372,12 @@ Egenskap: Gi tilbudsgaranti ved tidlig opptak
       Så <garanti> søkeren tilbudsgaranti på "Vernepleie, høst 2027"
 
       Eksempler:
-        | poeng | garanti  |
-        | 50    | får      |
-        | 48    | får      |
-        | 46    | får ikke |
-
-    Scenario: Poenggrensen går foran medianen fra forrige opptak
-      Gitt "Sykepleie, høst 2027" tilbyr tidlig opptak med poenggrense 50
-      Og median poengsum fra forrige opptak for "Sykepleie, høst 2027" er 45
-      Og saksbehandler har konkludert med at søkeren deltar i tidligopptaket
-      Og søkeren er kvalifisert til "Sykepleie, høst 2027"
-      Og søkeren har 47 poeng til "Sykepleie, høst 2027"
-      Når opptaksforvalter gjennomfører tidligopptaket
-      Så får ikke søkeren tilbudsgaranti på "Sykepleie, høst 2027"
+        | poenggrense | median | poeng | garanti  |
+        | ikke satt   | 48     | 50    | får      |
+        | ikke satt   | 48     | 48    | får      |
+        | ikke satt   | 48     | 46    | får ikke |
+        | 50          | 45     | 47    | får ikke |
+        | 45          | 50     | 48    | får      |
 
     Scenario: Ingen tilbudsgaranti uten poenggrense og uten median fra forrige opptak
       Gitt "Vernepleie, høst 2027" tilbyr tidlig opptak uten poenggrense
