@@ -373,13 +373,11 @@ Egenskap: Listevisning og søk i utdanningstilbud
     # ved første «Legg til», ikke ved innlogging (OPT-SØK-SØK-020). Med fødselsnummer eller eIDAS gjelder
     # scenarioene over uendret. Den selvregistrerte søkeren uten fødselsnummer og eIDAS oppgir navn og fødselsdato
     # på en egen side først (scenarioene under).
-    @depends-on-OPT-SØK-SØK-020 @openquestion
+    # Avklart (Kjetil 06.11.2026): skjemaet kommer ved første «Legg til», ikke ved første innlogging, som BAT-405
+    # sier. Til min-kompetanse !993 er ferdig, gir «Legg til» feil for den selvregistrerte søkeren. Det er
+    # akseptert, og fs-plattform !6554 venter ikke på !993 (se bli_søker.design.md).
+    @depends-on-OPT-SØK-SØK-020
     Scenario: Den selvregistrerte søkeren oppgir navn og fødselsdato ved første «Legg til»
-      # ÅPNE SPØRSMÅL:
-      # - BAT-405 sier at skjemaet kommer ved første innlogging, beslutningen 04.11.2026 ved første «Legg til».
-      #   Hva gjelder?
-      # - Til min-kompetanse !993 er ute, gir «Legg til» en feil for den selvregistrerte søkeren i stedet for å legge
-      #   utdanningstilbudet i studiekurven (Håkon Wold, review av !6554). Skal fs-plattform !6554 vente på !993?
       Gitt at søkeren er innlogget med e-post som selvregistrert bruker
       Og at søkeren ikke har oppgitt navn og fødselsdato
       Når søkeren velger å legge utdanningstilbudet "Sykepleie, høst 2027" i studiekurven

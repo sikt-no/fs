@@ -2,7 +2,11 @@
 
 **Relatert feature:** [`bli_søker.feature`](./bli_søker.feature)
 
-> Utkast (Kjetil/Claude 06.11.2026), ikke avklart med produkteier. Beskriver prototypen i min-kompetanse !993 (stablet på !987, ikke merget) og kontrakten i fs-plattform !6546 og !6554. Tekstene er utkast til designerne.
+> Utkast (Kjetil/Claude 06.11.2026), ikke avklart med produkteier. Beskriver prototypen i min-kompetanse !993 (stablet på !987, ikke merget) og kontrakten i fs-plattform !6546 og !6554. Tekstene er utkast til designerne. Kjetils svar 06.11.2026 er innarbeidet.
+
+## Leveranserekkefølge
+
+fs-plattform !6554 venter ikke på min-kompetanse !993 (Kjetil 06.11.2026). !993 er foreløpig en prototype. Til den er ferdig, får den selvregistrerte søkeren en feil på «Legg til» i stedet for siden for personopplysninger, og det er akseptert. Søkere med fødselsnummer eller eIDAS merker ingenting.
 
 ## Overordnet UI-mønster
 
@@ -30,7 +34,7 @@
 |----------|---------------|
 | Ugyldig felt (i skjemaet) | Feiloppsummering over skjemaet (SDS `ErrorSummary`), med lenker som flytter fokus til feltet. Oppsummeringen får fokus |
 | Opptak avviser opplysningene | Generell melding på skjemaet. Ingenting lagres |
-| Personen er registrert fra før | Regnes som registrert. Studiet legges i studiekurven med de lagrede opplysningene. Personen merker ingenting (åpent spørsmål i kravet) |
+| Personen er registrert fra før | Regnes som registrert. Studiet legges i studiekurven med de lagrede opplysningene. Personen får beskjed om at opplysningene som ble oppgitt nå, ikke er brukt (avklart 06.11.2026, mangler i !993) |
 | «Legg til» krever fortsatt opplysninger etter lagring | Generell feil på siden. Skjemaet vises ikke igjen i samme fane |
 | Innlogging ikke tillatt (fødselsnummer, eIDAS, annen person) | Generell melding på skjemaet |
 
@@ -52,6 +56,8 @@ Utkast fra !993, på bokmål (nynorsk og engelsk finnes i prototypen). Designern
 | Knapp uten studium | «Lagre» |
 | Feiloppsummering | «Rett opp dette før du går videre:» |
 | Forklaring (hvorfor vi spør, HK-9433) | Utkast i !993. Skal si hvorfor opptaket trenger navn og fødselsdato, og hvordan opplysningene brukes. Endelig tekst mangler |
+| Informasjon om riktige opplysninger | Skal si at opplysningene må være riktige, fordi fødselsdatoen brukes i behandlingen av søknaden og i plasstildelingen, og at feil opplysninger kan føre til at søkeren mister studieplassen. Endelig tekst mangler |
+| Melding når opplysningene ikke er brukt | Skal si at personen er registrert fra før, og at opplysningene som ble oppgitt nå, ikke er brukt. Endelig tekst mangler |
 
 ### Feilmeldinger fra opptak (én per felt)
 
@@ -59,9 +65,13 @@ Utkast fra !993, på bokmål (nynorsk og engelsk finnes i prototypen). Designern
 |------|---------|
 | Fornavn | «Fornavnet må ha 1 til 100 tegn uten kontrolltegn.» |
 | Etternavn | Tilsvarende for etternavnet |
-| Fødselsdato | Fødselsdatoen må være tilbake i tid |
-| Alder | «Fødselsdatoen må gi en alder fra 12 til 120 år.» |
+| Fødselsdato | Fødselsdatoen må være en gyldig dato tilbake i tid |
 | Registrert fra før | «Du er allerede registrert.» (vises ikke til personen i !993) |
+
+## Tekniske begrensninger
+
+- Navn kan ha høyst 100 tegn. Det er en teknisk grense (fra !6554), ikke en besluttet regel for produktet.
+- Det er ingen aldersgrense (avklart 06.11.2026). Grensen på 12–120 år i !6554 og !993 skal fjernes.
 
 ## Åpne designspørsmål
 

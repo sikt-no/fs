@@ -1,5 +1,5 @@
 # language: no
-# Utkast (Kjetil/Claude 06.11.2026), ikke avklart med produkteier.
+# Utkast (Kjetil/Claude 06.11.2026), ikke avklart med produkteier. Kjetils svar 06.11.2026 er innarbeidet.
 @OPT-SØK-SØK-020 @must @draft @depends-on-OPT-SØK-SØK-005
 Egenskap: Bli søker ved første «Legg til»
   Som en person som er innlogget i Min kompetanse
@@ -24,15 +24,17 @@ Egenskap: Bli søker ved første «Legg til»
   #   HK-9432 lister også kjønn, telefonnummer, e-postadresse og postadresse. Det kravet dekker ikke.
   # - HK-9433 Innhenting og informasjon om personopplysninger for ID-porten-søker (Delvis, OPP-INT-FOL-001 og
   #   OPP-PRO-PRO-002): den selvregistrerte søkeren oppgir navn og fødselsdato selv, og siden sier hvorfor vi spør og
-  #   hvordan opplysningene brukes. Søkeren med eIDAS får dem fra innloggingen. Henting fra KRR ved innlogging, og
-  #   lenkene om hvordan søkeren endrer opplysningene i Folkeregisteret og KRR, dekker kravet ikke (åpent spørsmål).
+  #   hvordan opplysningene brukes. Søkeren med eIDAS får dem fra innloggingen.
+  #   Utenfor denne iterasjonen (Kjetil 06.11.2026): henting fra KRR ved innlogging, og lenkene om hvordan søkeren
+  #   endrer opplysningene i Folkeregisteret og KRR. Det tas i neste iterasjon.
   #
   # Forholdet til andre krav:
   # - Innloggingen står i TIL-PÅL-PÅL-002 (ID-porten) og DEM-INN-FEI-001 (Feide). Innlogging uten fødselsnummer
   #   (egenregistrert med e-post og eIDAS) er TIL-PÅL-PÅL-006 i den åpne PR-en sikt-no/fs#894, som ikke er på main.
-  # - KONFLIKT: TIL-PÅL-PÅL-006 (#894, @planned) har regelen «Første innlogging oppretter søkeren», og sier at
-  #   søkeren registrerer personopplysningene ved første innlogging. Det samme sier BAT-405. Beslutningen 04.11.2026,
-  #   og MR-ene, oppretter søkeren ved første «Legg til». Ett av kravene må rettes, før eller etter at #894 merges.
+  # - Avklart (Kjetil 06.11.2026): søkeren opprettes, og skjemaet for navn og fødselsdato kommer, ved første
+  #   skriving («Legg til» eller opplasting), ikke ved innlogging. TIL-PÅL-PÅL-006 i #894 (@planned) har regelen
+  #   «Første innlogging oppretter søkeren», og sier at søkeren registrerer personopplysningene ved første
+  #   innlogging. Den regelen må rettes så den stemmer med dette kravet. BAT-405 sier også første innlogging.
   # - Studiekurven står i OPT-SØK-SØK-005, og «Legg til» i Finn studier i OPT-SØK-SØK-013 (finne_studier.feature).
   # - Opplasting av dokumenter (håndtere_dokumentasjon_i_søknad.feature) oppretter også søkeren, som et
   #   sikkerhetsnett. I Min kompetanse kommer søkeren dit først etter at studiekurven har et utdanningstilbud,
@@ -40,14 +42,8 @@ Egenskap: Bli søker ved første «Legg til»
   # - To personer for samme menneske, når personen først blir søker uten fødselsnummer og senere logger inn med
   #   fødselsnummer, er ikke løst. Sammenslåing er sikt-no/fs#565.
   #
-  # ÅPNE SPØRSMÅL:
-  # - Kommer skjemaet for navn og fødselsdato ved første innlogging (BAT-405, TIL-PÅL-PÅL-006) eller ved første
-  #   «Legg til» (beslutningen 04.11.2026, !993)? Kravet er skrevet for første «Legg til».
-  # - Skal plasstildelingen og det automatiske grunnlaget bruke en fødselsdato søkeren har tastet inn selv? Eller
-  #   skal den merkes som oppgitt av søkeren, så saksbehandleren kan kontrollere den?
-  # - HK-9433: Skal kontaktopplysningene hentes fra KRR når søkeren logger inn, eller når søkeren blir søker ved
-  #   første «Legg til»? Gjelder det bare søkeren med fødselsnummer, siden KRR slår opp på fødselsnummer?
-  #   Kravet beskriver ingen henting fra KRR.
+  # - fs-plattform !6554 venter ikke på min-kompetanse !993 (Kjetil 06.11.2026). Til !993 er ferdig, får den
+  #   selvregistrerte søkeren feil på «Legg til». Det er akseptert, se bli_søker.design.md.
 
   Regel: Personen blir søker første gang personen legger et utdanningstilbud i studiekurven
 
@@ -88,9 +84,9 @@ Egenskap: Bli søker ved første «Legg til»
     @openquestion
     Scenario: Personen innlogget med Feide uten fødselsnummer blir ikke søker
       # ÅPNE SPØRSMÅL:
-      # - Feide-brukere uten fødselsnummer (gjestebrukere, utenlandske studenter, organisasjoner som ikke deler
-      #   fødselsnummeret) får ikke søker i dag (kjent mangel i tokenkrav-subgraf.md). Skal de få det, for eksempel
-      #   med det samme skjemaet som den egenregistrerte søkeren, eller skal de bes logge inn med ID-porten?
+      # - Må bekreftes: Kjetil (06.11.2026) tror Feide-brukere uten fødselsnummer (gjestebrukere, utenlandske
+      #   studenter, organisasjoner som ikke deler fødselsnummeret) skal avvises, så det ikke opprettes søker.
+      #   Det er slik !6546 virker. Bekreft med produkteier.
       # - Hva skal personen få se? I dag gir «Legg til» en feil uten forklaring.
       Gitt at personen er innlogget i Min kompetanse med Feide uten fødselsnummer
       Når personen legger utdanningstilbudet "Sykepleie, høst 2027" i studiekurven
@@ -101,7 +97,8 @@ Egenskap: Bli søker ved første «Legg til»
   Regel: Navnet og fødselsdatoen til søkeren kommer fra innloggingen når innloggingen har dem
     # Med fødselsnummer kommer navnet fra innloggingen og fødselsdatoen fra fødselsnummeret.
     # Med eIDAS kommer navnet og fødselsdatoen fra eIDAS, og søkeren kjennes igjen på eIDAS-identifikatoren.
-    # Har innloggingen både fødselsnummer og eIDAS-identifikator, er det fødselsnummeret som gjelder.
+    # Har innloggingen både fødselsnummer og eIDAS-identifikator, er det fødselsnummeret som gjelder (avklart
+    # av Kjetil 06.11.2026).
 
     Scenario: Søkeren med fødselsnummer får navnet fra innloggingen og fødselsdatoen fra fødselsnummeret
       Gitt at personen er innlogget med ID-porten med fødselsnummeret til en person født 15.03.2005
@@ -123,15 +120,14 @@ Egenskap: Bli søker ved første «Legg til»
       Så er personen den samme søkeren som før
       Og ligger utdanningstilbudet fortsatt i studiekurven
 
-    @openquestion
-    Scenario: Innloggingen har både fødselsnummer og eIDAS-identifikator
-      # ÅPNE SPØRSMÅL:
-      # - Ifølge Digdir kan ID-porten gi fødselsnummer ved eIDAS-innlogging når personen finnes i Folkeregisteret
-      #   (åpent spørsmål i TIL-PÅL-PÅL-006, #894). !6546 lar fødselsnummeret gjelde. Er det riktig?
+    Scenario: Fødselsnummeret gjelder når innloggingen har både fødselsnummer og eIDAS-identifikator
+      # ID-porten kan gi fødselsnummer ved eIDAS-innlogging når personen finnes i Folkeregisteret. Dette svarer på
+      # det åpne spørsmålet om det samme i TIL-PÅL-PÅL-006 (#894).
       Gitt at personen er innlogget med eIDAS
       Og at innloggingen også har fødselsnummer
       Når personen blir søker ved første «Legg til»
       Så er søkeren registrert med fødselsnummeret
+      Og navnet og fødselsdatoen er de samme som for en søker innlogget med fødselsnummer
 
     @openquestion
     Scenario: eIDAS-identifikatoren er en annen enn den som er lagret på søkeren
@@ -190,12 +186,13 @@ Egenskap: Bli søker ved første «Legg til»
       Så ser personen en melding om at navn og fødselsdato må legges inn før studier kan legges i studiekurven
       Og personen kan gå til siden for å legge inn opplysningene uten å velge et utdanningstilbud
 
-    Scenario: Siden forklarer hvorfor vi spør og hvordan opplysningene brukes
-      # HK-9433. Teksten står i bli_søker.design.md.
+    Scenario: Siden forklarer hvorfor vi spør, hvordan opplysningene brukes, og at de må være riktige
+      # HK-9433 (informasjon om bruk). Teksten står i bli_søker.design.md.
       Gitt at personen er innlogget med e-post som selvregistrert bruker
       Når personen kommer til siden for å legge inn opplysninger om seg selv
       Så ser personen hvorfor navn og fødselsdato trengs for å søke opptak
-      Og personen ser hvordan opplysningene brukes i opptaket
+      Og personen ser at fødselsdatoen brukes i behandlingen av søknaden og i plasstildelingen
+      Og personen ser at opplysningene må være riktige, fordi feil opplysninger kan føre til at personen mister studieplassen
 
     Scenario: Personen går tilbake uten å lagre
       Gitt at personen er på siden for å legge inn opplysninger etter å ha valgt «Legg til» på "Sykepleie, høst 2027"
@@ -225,12 +222,13 @@ Egenskap: Bli søker ved første «Legg til»
   @openquestion
   Regel: Navnet og fødselsdatoen søkeren oppgir, må være gyldige
     # ÅPNE SPØRSMÅL:
-    # - Er grensene besluttet, eller er de bare slik koden er: navn 1–100 tegn, fødselsdato tilbake i tid og alder
-    #   12–120 år? Hvorfor 12 år?
     # - Skal søkeren kunne rette navnet og fødselsdatoen etterpå (HK-9432)? Skal saksbehandleren kunne det (HK-10841)?
     #
     # Reglene er de samme i skjemaet og i opptak. Opptak avgjør, og skjemaet viser feilene før innsending.
     # Mellomrom før og etter navnet fjernes før det lagres, også harde mellomrom.
+    # Det er ingen nedre eller øvre aldersgrense for å søke opptak (Kjetil 06.11.2026). Fødselsdatoen må bare være
+    # en gyldig dato tilbake i tid. Til informasjon, ikke en regel: søkere under 17 år er sjeldne.
+    # Grensen på 100 tegn for navn er en teknisk grense, ikke en besluttet regel (se bli_søker.design.md).
     # Feilmeldingene står i bli_søker.design.md.
 
     Scenariomal: Fornavnet "<fornavn>" er <resultat>
@@ -242,8 +240,6 @@ Egenskap: Bli søker ved første «Legg til»
         | fornavn                        | resultat                             |
         | Kari                           | gyldig                               |
         | K                              | gyldig                               |
-        | 100 tegn                       | gyldig                               |
-        | 101 tegn                       | ugyldig                              |
         | tomt                           | ugyldig                              |
         | bare mellomrom                 | ugyldig                              |
         | bare harde mellomrom           | ugyldig                              |
@@ -252,22 +248,29 @@ Egenskap: Bli søker ved første «Legg til»
 
     Scenario: Etternavnet følger de samme reglene som fornavnet
       Gitt at personen er på siden for å legge inn opplysninger
-      Når personen lagrer med etternavn av 101 tegn
+      Når personen lagrer med et etternavn av bare mellomrom
       Så er etternavnet ugyldig
 
-    Scenariomal: Fødselsdatoen til en person som <alder>, er <resultat>
+    Scenariomal: Fødselsdatoen <fødselsdato> er <resultat>
       Gitt at personen er på siden for å legge inn opplysninger
-      Når personen lagrer med fødselsdatoen til en person som <alder>
+      Når personen lagrer med fødselsdatoen <fødselsdato>
       Så er fødselsdatoen <resultat>
 
       Eksempler:
-        | alder                    | resultat |
-        | er født i morgen         | ugyldig  |
-        | er født i dag            | ugyldig  |
-        | fyller 12 år i morgen    | ugyldig  |
-        | fylte 12 år i dag        | gyldig   |
-        | fylte 120 år i dag       | gyldig   |
-        | fylte 121 år i dag       | ugyldig  |
+        | fødselsdato                 | resultat |
+        | i går                       | gyldig   |
+        | for 10 år siden             | gyldig   |
+        | for 90 år siden             | gyldig   |
+        | i dag                       | ugyldig  |
+        | i morgen                    | ugyldig  |
+        | 30.02.2005, som ikke finnes | ugyldig  |
+
+    Scenario: Den oppgitte fødselsdatoen brukes i behandlingen av søknaden og i plasstildelingen
+      # Avklart (Kjetil 06.11.2026): fødselsdatoen søkeren har oppgitt selv, brukes som annen fødselsdato.
+      # Har søkeren oppgitt feil, kan søkeren miste studieplassen. Derfor sier siden at opplysningene må være riktige.
+      Gitt at søkeren har oppgitt fødselsdatoen 15.03.2005 selv
+      Når søknaden behandles og plasstildelingen gjennomføres
+      Så brukes fødselsdatoen 15.03.2005 som for andre søkere
 
     Scenario: Ingenting lagres når en opplysning er ugyldig
       Gitt at personen er på siden for å legge inn opplysninger etter å ha valgt «Legg til» på "Sykepleie, høst 2027"
@@ -276,12 +279,9 @@ Egenskap: Bli søker ved første «Legg til»
       Og personen er ikke opprettet som søker i opptak
       Og utdanningstilbudet "Sykepleie, høst 2027" ligger ikke i studiekurven
 
-  @openquestion
   Regel: Personen som allerede er registrert, registreres ikke på nytt
-    # ÅPNE SPØRSMÅL:
-    # - Skal personen få vite at opplysningene som ble oppgitt nå, ikke er brukt fordi personen var registrert fra
-    #   før? I !993 merker personen ingenting, og utdanningstilbudet legges i studiekurven.
-    #
+    # Personen skal få vite at opplysningene som ble oppgitt nå, ikke er brukt (Kjetil 06.11.2026). !993 viser
+    # ikke dette ennå.
     # Opplysningene registreres én gang. Er personen registrert fra før (en tidligere innlogging, en annen fane eller
     # et dobbeltklikk), brukes de lagrede opplysningene, og det som er oppgitt nå, legges ikke over dem.
 
@@ -292,6 +292,7 @@ Egenskap: Bli søker ved første «Legg til»
       Når personen lagrer med fornavn "Karianne", etternavn "Nordmann" og fødselsdato 15.03.2005
       Så ligger utdanningstilbudet "Sykepleie, høst 2027" i studiekurven
       Og søkeren er registrert med fornavn "Kari"
+      Og personen får beskjed om at opplysningene som ble oppgitt nå, ikke er brukt fordi personen var registrert fra før
 
     Scenario: Personen sender inn skjemaet to ganger samtidig
       Gitt at personen er på siden for å legge inn opplysninger
