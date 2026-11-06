@@ -9,7 +9,8 @@
 # Det finnes ikke noen mekanisme for å merke en sak med nye resultater i dag
 # (sjekket i fs-plattform og fs-admin på main 30.10.2026). Filteret for saker har
 # ikke noe valg for nye resultater, og resultatene hentes bare når saken fordeles.
-# Abonnementet på endringer i KREG er ikke avklart (OPT-BEH-BEH-030).
+# Avklart 06.11.2026: importen fra KREG spør om alle aktive søkere én gang i døgnet
+# (OPT-BEH-BEH-030, OPT-BEH-BEH-033). Det er ikke noe abonnement på endringer.
 #
 # Varselet til saksbehandleren når det valgte grunnlaget blir utdatert, står i
 # varsle_om_nytt_vitnemål.feature (OPT-BEH-BEH-021). Dette kravet handler om å finne
@@ -37,9 +38,10 @@ Egenskap: Finne saker med nye resultater
   Saken har nye resultater til den er behandlet på nytt. Saksbehandleren kan
   filtrere sakene på hvilken gruppe de nye resultatene hører til.
 
-  @depends-on-OPT-BEH-BEH-030 @ref-OPT-BEH-BEH-032
+  @depends-on-OPT-BEH-BEH-030
+  # OPT-BEH-BEH-030: «Nye og annullerte vitnemål i KREG importeres for aktive søkere»
   Regel: Saken har nye resultater når resultater importeres etter at saken er behandlet
-    # Hvordan resultatene importeres, også gjennom abonnementet, står i OPT-BEH-BEH-030.
+    # Hvordan resultatene importeres, står i OPT-BEH-BEH-030.
 
     Scenario: Saken får nye resultater når søkeren får et nytt vitnemål etter behandlingen
       Gitt at saken til "Eva Berg" er behandlet

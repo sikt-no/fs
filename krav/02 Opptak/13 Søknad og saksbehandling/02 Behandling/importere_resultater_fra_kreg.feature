@@ -145,7 +145,7 @@ Egenskap: Importere resultater fra KREG
       Når KREG svarer igjen innenfor tiden i applikasjonsinnstillingene
       Så er søkerens vitnemål importert
 
-  @ref-OPT-BEH-BEH-021 @ref-FLY-OPT-VIT-001 @ref-OPT-BEH-BEH-032
+  @ref-OPT-BEH-BEH-021 @ref-FLY-OPT-VIT-001 @ref-OPT-BEH-BEH-032 @ref-OPT-BEH-BEH-035 @ref-OPT-BEH-BEH-015
   Regel: Nye og annullerte vitnemål i KREG importeres for aktive søkere
     # Gjelder aktive søkere: søkere med en søknad som ikke er trukket, i et opptak som ikke er
     # avsluttet.

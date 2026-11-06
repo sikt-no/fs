@@ -38,8 +38,9 @@
 # Fagprofilen har «La stå», og hvilket vitnemål automatikken brukte. Manuell
 # og beregnet vurdering står i egne felt for kompetansekravet og
 # søknadsalternativet, og beregningen rører ikke de manuelle feltene. Regelen
-# ligger i PL/SQL. Oppfølging: FS102.004 «Ikke-kvalifiserte søkere – spesielle
-# opptakskrav» og FS120.002 «Brev til søkere med manglende fagkrav».
+# ligger i PL/SQL. FS-klienten har også FS102.004 «Ikke-kvalifiserte søkere – spesielle
+# opptakskrav» og FS120.002 «Brev til søkere med manglende fagkrav». Avklart 06.11.2026: et
+# filter i saksoversikten holder (scenarioet «Finne søkere som ikke er kvalifisert»).
 #
 # Ny stack: AutomatiskKravelementVurderingService (kontrollmotoren) og
 # KvalifiseringEvaluator i opptak-service (fs-plattform), kalt fra

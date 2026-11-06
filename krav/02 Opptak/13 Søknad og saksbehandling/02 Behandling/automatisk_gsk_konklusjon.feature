@@ -48,8 +48,8 @@ Egenskap: Automatisk GSK-konklusjon
   positiv konklusjon når et vitnemål gir GSK, og løpet på vitnemålet finnes i
   opptakssystemets liste over løp. Har løpet ingen grunnlagskode, får konklusjonen KLY for et
   løp fra Kunnskapsløftet og RFA for et løp fra Reform 94, som i det gamle FS. Finnes ikke
-  løpet i listen, får konklusjonen også KLY eller RFA, og opptakets forvalter får et varsel i
-  FS Admin om at løpet mangler. Et vitnemål med et løp i listen brukes før et vitnemål med et
+  løpet i listen, får konklusjonen også KLY eller RFA, og opptaksforvalteren ved organisasjonen
+  som forvalter opptaket, får et varsel i FS Admin om at løpet mangler. Et vitnemål med et løp i listen brukes før et vitnemål med et
   løp som ikke finnes i listen. Vitnemål importeres fra KREG når
   søknaden opprettes, og når KREG får nye vitnemål for en søker med aktive søknader. Når
   søknaden opprettes, importeres vitnemålene fra KREG først. Gir ingen av dem en konklusjon, ser
@@ -252,30 +252,32 @@ Egenskap: Automatisk GSK-konklusjon
       Og grunnlagskoden er KLY
 
     @draft @openquestion
-    Scenario: Opptakets forvalter får varsel om et løp som mangler i listen over løp
+    Scenario: Opptaksforvalteren ved organisasjonen som forvalter opptaket, får varsel om et løp som mangler i listen over løp
       # Avklart 2026-11-02 (Ingrid Helset, etter samtale med Jøran og Geir, og bekreftet av
       # domeneeksperten): opptaksforvalteren får
       # et varsel, så noen kan sjekke om løpet skal legges inn i listen. HK-dir eier
       # opptakskodene og bestemmer grunnlagskoden, og Sikt oppdaterer listen over løp (2027).
       # Avklart 2026-11-02: varselet kommer bare i FS Admin, ikke på e-post eller andre steder.
-      # Avklart 06.11.2026 (økt med fagfolk): varselet går til opptakets forvalter (HK-dir i
-      # samordna opptak), ikke til lærestedene som deltar. HK-dir avgjør grunnlagskoden, og
-      # lærestedene kan ikke rette listen over løp. Opptakets forvalter får ett varsel per løp,
-      # med antall vitnemål med løpet, ikke ett varsel per vitnemål.
+      # Avklart 06.11.2026 (økt med fagfolk): varselet går til opptaksforvalteren ved
+      # organisasjonen som forvalter opptaket (HK-dir i samordna opptak), ikke til lærestedene som
+      # deltar. HK-dir avgjør grunnlagskoden, og lærestedene kan ikke rette listen over løp.
+      # Opptaksforvalteren får ett varsel per løp, med antall vitnemål med løpet, ikke ett varsel
+      # per vitnemål.
       # ÅPNE SPØRSMÅL:
-      # - Hvor i FS Admin får opptakets forvalter varselet?
+      # - Hvor i FS Admin får opptaksforvalteren varselet?
       Gitt at løpet på vitnemålet ikke finnes i opptakssystemets liste over løp
       Når vitnemålet importeres fra KREG
-      Så får opptakets forvalter et varsel i FS Admin om at løpet mangler i listen over løp
+      Så får opptaksforvalteren ved organisasjonen som forvalter opptaket et varsel i FS Admin om at løpet mangler i listen over løp
 
     @draft @openquestion
-    Scenario: Opptakets forvalter får ett varsel per løp som mangler i listen over løp
+    Scenario: Opptaksforvalteren ved organisasjonen som forvalter opptaket, får ett varsel per løp som mangler i listen over løp
       # ÅPNE SPØRSMÅL:
-      # - Hvor i FS Admin får opptakets forvalter varselet?
+      # - Hvor i FS Admin får opptaksforvalteren varselet?
       Gitt at løpet "Studiespesialisering med toppidrett" ikke finnes i opptakssystemets liste over løp
-      Og at opptakets forvalter har fått et varsel om at løpet mangler i listen over løp
+      Og at ett vitnemål med løpet er importert fra KREG
+      Og at opptaksforvalteren ved organisasjonen som forvalter opptaket, har fått et varsel om at løpet mangler i listen over løp
       Når et vitnemål til med løpet importeres fra KREG
-      Så har opptakets forvalter fortsatt ett varsel om løpet
+      Så har opptaksforvalteren ved organisasjonen som forvalter opptaket fortsatt ett varsel om løpet
       Og varselet viser at to vitnemål har løpet
 
     Scenariomal: Søknaden får grunnlagskoden <grunnlagskode> når et løp fra <reform> ikke har en grunnlagskode
@@ -294,19 +296,20 @@ Egenskap: Automatisk GSK-konklusjon
         | Reform 94       | RFA           |
 
     @draft @openquestion
-    Scenario: Opptakets forvalter får varsel om et løp uten grunnlagskode
+    Scenario: Opptaksforvalteren ved organisasjonen som forvalter opptaket, får varsel om et løp uten grunnlagskode
       # Avklart 2026-11-02: søknaden får konklusjonen med KLY eller RFA, men
-      # opptakets forvalter får et varsel, så grunnlagskoden kan legges inn i listen over løp
+      # opptaksforvalteren får et varsel, så grunnlagskoden kan legges inn i listen over løp
       # senere. HK-dir eier opptakskodene. Avklart 2026-11-02: varselet kommer bare i FS Admin.
       # Avklart 06.11.2026 (økt med fagfolk): som varselet om et løp som mangler i listen over løp,
-      # går varselet til opptakets forvalter, med ett varsel per løp.
+      # går varselet til opptaksforvalteren ved organisasjonen som forvalter opptaket, med ett
+      # varsel per løp.
       # ÅPNE SPØRSMÅL:
-      # - Hvor i FS Admin får opptakets forvalter varselet? Samme sted som varselet om et løp som
+      # - Hvor i FS Admin får opptaksforvalteren varselet? Samme sted som varselet om et løp som
       #   mangler i listen over løp.
       Gitt at vitnemålet har «GSK OK» fra KREG
       Og at løpet finnes i opptakssystemets liste over løp, men ikke har en grunnlagskode
       Når vitnemålet importeres fra KREG
-      Så får opptakets forvalter et varsel i FS Admin om at løpet mangler grunnlagskode
+      Så får opptaksforvalteren ved organisasjonen som forvalter opptaket et varsel i FS Admin om at løpet mangler grunnlagskode
 
     Scenario: Vitnemål som ikke gir GSK, gir ingen konklusjon
       Gitt at søknaden ikke har noen GSK-konklusjon
@@ -569,9 +572,12 @@ Egenskap: Automatisk GSK-konklusjon
       Når vitnemålet annulleres
       Så er GSK-konklusjonen på søknaden uendret
 
+    @depends-on-OPT-BEH-BEH-030 @ref-OPT-BEH-BEH-033
+    # OPT-BEH-BEH-030: «Nye og annullerte vitnemål i KREG importeres for aktive søkere»
     Scenario: Annulleringen oppdages uten at søkeren endrer søknaden
-      # Avklart 06.11.2026 (økt med fagfolk): importen av VGS-vitnemål fra KREG spør KREG hver
-      # natt for alle aktive søkere (OPT-BEH-BEH-030, OPT-BEH-BEH-033). Annulleringen oppdages da.
+      # Avklart 06.11.2026 (økt med fagfolk): importen av VGS-vitnemål fra KREG spør KREG om alle
+      # aktive søkere så ofte som applikasjonsinnstillingene sier, én gang i døgnet
+      # (OPT-BEH-BEH-033). Annulleringen oppdages da.
       # Kode i dag: vitnemålene hentes bare når en søknadshendelse behandles.
       Gitt at søknaden har en automatisk GSK-konklusjon som bygger på et vitnemål
       Og at opptaket ikke er avsluttet

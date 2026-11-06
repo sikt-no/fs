@@ -1,5 +1,5 @@
 # language: no
-@OPT-BEH-BEH-032 @must @in-progress @scope-automatisk-import-og-start @ref-OPT-BEH-BEH-025 @ref-OPT-BEH-BEH-033
+@OPT-BEH-BEH-032 @must @in-progress @scope-automatisk-import-og-start @ref-OPT-BEH-BEH-025 @ref-OPT-BEH-BEH-033 @ref-OPT-BEH-BEH-035
 Egenskap: Starte automatisk behandling
   Som saksbehandler
   ønsker jeg at den automatiske behandlingen starter av seg selv for hver ny sak
@@ -8,9 +8,9 @@ Egenskap: Starte automatisk behandling
   Den automatiske behandlingen er en fortsettelse av saksbehandlertildelingen. Hver ny sak
   behandles automatisk når søkerens resultater er importert fra KREG. Har søkeren ikke noe
   vitnemål når saken opprettes, starter behandlingen når importen av VGS-vitnemål fra KREG har hentet
-  alle vitnemålene søkeren har fått i KREG. Et nytt vitnemål i en sak som har vitnemål fra før, gir
-  saken nye resultater (OPT-BEH-BEH-035): behandlingen starter ikke av seg selv, og saksbehandleren
-  finner saken blant sakene med nye resultater. Saksbehandleren kan starte den automatiske behandlingen for en sak, også på
+  alle vitnemålene søkeren har fått i KREG. Et nytt vitnemål etter at saken er behandlet, gir
+  saken nye resultater (OPT-BEH-BEH-035): behandlingen starter ikke av seg selv, og
+  saksbehandleren finner saken blant sakene med nye resultater. Saksbehandleren kan starte den automatiske behandlingen for en sak, også på
   vitnemålet saksbehandleren velger når søkeren har flere vitnemål (OPT-BEH-BEH-039). Det saksbehandleren har gjort i saken, endres aldri av automatikken. Opptaksforvalteren
   kan sette når den automatiske saksbehandlingen starter og avsluttes i opptaket.
   Hva behandlingen gjør med saken, står i kravene flyten FLY-OPT-AUT-001 bygger på.
@@ -78,21 +78,15 @@ Egenskap: Starte automatisk behandling
         | Under behandling |
         | Behandlet        |
 
-  @depends-on-OPT-BEH-BEH-030 @depends-on-OPT-BEH-BEH-035 @ref-OPT-BEH-BEH-021 @ref-OPT-BEH-BEH-029
+  @depends-on-OPT-BEH-BEH-030 @ref-OPT-BEH-BEH-021 @ref-OPT-BEH-BEH-029 @ref-OPT-BEH-BEH-035
   # OPT-BEH-BEH-030: «Nye og annullerte vitnemål i KREG importeres for aktive søkere»
   # OPT-BEH-BEH-035: «Saken har nye resultater når resultater importeres etter at saken er behandlet»
-  Regel: Et nytt vitnemål i en sak med vitnemål gir saken nye resultater
+  Regel: Et nytt vitnemål etter at saken er behandlet, gir saken nye resultater
     # Avklart 06.11.2026 (økt med fagfolk): saken får nye resultater (OPT-BEH-BEH-035), ikke en egen
     # markering. «Ny dokumentasjon» i sakslisten gjelder dokumentene søkeren laster opp
-    # (OPT-BEH-BEH-008), og behandlingsstatusen endres ikke (OPT-BEH-BEH-029). Taggen «Vitnemål
+    # (OPT-BEH-BEH-008). Taggen «Vitnemål
     # annullert» (OPT-BEH-BEH-034) og varselet om at grunnlaget saksbehandleren har valgt, er
     # utdatert (OPT-BEH-BEH-021), kommer i tillegg, fordi de sier noe mer.
-
-    Scenario: Saken får nye resultater når det kommer et nytt vitnemål
-      Gitt at saken hos "Universitetet i Oslo" er behandlet automatisk på vitnemålet til "Kari Nordmann"
-      Og at "Kari Nordmann" har fått et nytt vitnemål i KREG
-      Når importen av VGS-vitnemål fra KREG kjører
-      Så har saken hos "Universitetet i Oslo" nye VGS-resultater
 
     Scenario: Saken behandles ikke automatisk på nytt når det kommer et nytt vitnemål
       Gitt at saken hos "Universitetet i Oslo" er behandlet automatisk på vitnemålet til "Kari Nordmann"

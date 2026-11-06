@@ -5,7 +5,7 @@
 - **Initiativ**: [#199](https://github.com/sikt-no/fs/issues/199)
 - **Jira**: [STEK-330](https://sikt.atlassian.net/browse/STEK-330)
 - **Eier**: –
-- **Siste oppdatering**: 2026-11-05
+- **Siste oppdatering**: 2026-11-06
 
 ## Mål
 
@@ -47,6 +47,7 @@ Append-only. Ny linje på toppen ved hver hendelse.
 
 | Dato       | Hendelse | Av | Lenke til review |
 |------------|----------|----|------------------|
+| 2026-11-06 | `@OPT-BEH-BEH-032`: et nytt vitnemål etter at saken er behandlet, gir saken nye resultater (`@OPT-BEH-BEH-035`, henvisning, ikke avhengighet). `@OPT-BEH-BEH-033`: importen én gang i døgnet holder også for annulleringer. Fra økta med fagfolk 06.11.2026 (PR #966) | @JøranIndseth | – |
 | 2026-11-05 | `@OPT-BEH-BEH-033`: Sikt får ett samlet varsel per kjøring når importen feiler, og regelen om at opptaksforvalteren starter en jobb selv er slettet (importen kjører neste natt). Fra gjennomgangen av flyten automatisk saksbehandling | @JøranIndseth | – |
 | 2026-11-05 | `@OPT-BEH-BEH-033` er validert og `@planned`. «Det fremgår at jobbene kjører» og «Opptaksforvalteren starter en jobb uten å vente på neste kjøring» venter (`@draft @openquestion`). `@FLY-OPT-VIT-001` har fått fasen om at behandlingen starter når importen har hentet vitnemålene til en søker uten vitnemål (avklart med Geir i #951). Fra gjennomgangen av flyten automatisk saksbehandling | @JøranIndseth | – |
 | 2026-11-05 | Raden for `@OPT-BEH-BEH-033` viser til scopet for `@OPT-BEH-BEH-038` i stedet for PR #937. Fra reviewen av PR #948 | @JøranIndseth | [#948](https://github.com/sikt-no/fs/pull/948) |
