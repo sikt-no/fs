@@ -205,8 +205,8 @@ Egenskap: Opptaksinnstillinger per utdanningstilbud
       Når opptaksforvalter setter poenggrensen for tidlig opptak til 50 for utdanningstilbudet "Sykepleie, høst 2027"
       Så får søkere som deltar i tidligopptaket og har minst 50 poeng, tilbudsgaranti på "Sykepleie, høst 2027"
       # Se gi_tilbudsgaranti_ved_tidlig_opptak.feature. Er poenggrensen ikke satt, brukes
-      # fjorårets median poengsum (regelen «Fjorårets median poengsum brukes når
-      # poenggrensen ikke er satt», avklart 04.11.2026).
+      # median poengsum fra forrige opptak (regelen «Median poengsum fra forrige opptak
+      # brukes når poenggrensen ikke er satt», avklart 04.11.2026).
 
     # Lenken til informasjon om tidlig opptak settes per opptak, ikke per
     # utdanningstilbud, se 11 Opprette og vedlikeholde opptak/03 Innstillinger/

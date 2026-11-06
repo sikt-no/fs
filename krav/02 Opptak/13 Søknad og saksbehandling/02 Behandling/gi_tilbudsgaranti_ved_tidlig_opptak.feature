@@ -16,8 +16,8 @@
 # Vurderingen og konklusjonen står i vurdere_søknad_om_tidlig_opptak.feature.
 # Poenggrensen for tidlig opptak settes per utdanningstilbud, se
 # opptaksinnstillinger_utdanningstilbud.feature.
-# Er poenggrensen ikke satt, brukes fjorårets median poengsum, se regelen
-# «Fjorårets median poengsum brukes når poenggrensen ikke er satt».
+# Er poenggrensen ikke satt, brukes median poengsum fra forrige opptak, se regelen
+# «Median poengsum fra forrige opptak brukes når poenggrensen ikke er satt».
 #
 # Featuren slutter når tilbudsgarantiene er tildelt. Publiseringen og
 # meldingen til søkerne står i publisere_svar_på_tidlig_opptak.feature
@@ -154,8 +154,8 @@
 # - OPT-BEH-BEH-010: bygger på «Saksbehandler, tilbyder og opptaksforvalter kan sette
 #   tilbudsgaranti manuelt» og «Tilbudsgarantien følger søknadsalternativet».
 # - OPT-BEH-BEH-014: publiseringen av svaret til søkerne står der.
-# - OPT-OPT-UTD-010: regelen «Fjorårets median poengsum brukes når poenggrensen ikke
-#   er satt» bygger på fjorårets median poengsum, som vises på utdanningstilbudet der.
+# - OPT-OPT-UTD-010: regelen «Median poengsum fra forrige opptak brukes når poenggrensen
+#   ikke er satt» bygger på medianen, som vises på utdanningstilbudet der.
 @OPT-BEH-BEH-007 @must @in-progress @scope-tidlig-opptak @depends-on-OPT-BEH-BEH-013 @depends-on-OPT-OPT-UTD-004 @depends-on-OPT-BEH-BEH-010 @ref-OPT-BEH-BEH-014
 Egenskap: Gi tilbudsgaranti ved tidlig opptak
   Som opptaksforvalter
@@ -351,18 +351,18 @@ Egenskap: Gi tilbudsgaranti ved tidlig opptak
       Så behandles "Sykepleie, høst 2027" i det ordinære opptaket
 
   @depends-on-OPT-OPT-UTD-010
-  Regel: Fjorårets median poengsum brukes når poenggrensen ikke er satt
-    # Avklart 04.11.2026: poenggrensen går foran, og fjorårets median brukes når
+  Regel: Median poengsum fra forrige opptak brukes når poenggrensen ikke er satt
+    # Avklart 04.11.2026: poenggrensen går foran, og medianen brukes når
     # poenggrensen ikke er satt.
-    # Avklart 05.11.2026: bare medianen fra opptaket året før brukes. Mangler den,
-    # for eksempel fordi utdanningstilbudet er nytt, regnes medianen som manglende,
-    # også når en eldre median finnes. Heller for få tilbudsgarantier enn for mange.
+    # Avklart 05.11.2026 (Marit): medianen fra forrige opptak brukes, uansett hvor lenge
+    # siden det var. Mangler utdanningstilbudet median fra forrige opptak, for eksempel
+    # fordi det er nytt, regnes medianen som manglende, også når en eldre median finnes.
     # Opptaksforvalter ser ikke om det var poenggrensen eller medianen som ble brukt.
     # Medianen kommer fra Samordna opptak, og registreres ikke av opptaksforvalter.
 
-    Scenariomal: Tilbudsgaranti ut fra fjorårets median når poenggrensen ikke er satt
+    Scenariomal: Tilbudsgaranti ut fra medianen fra forrige opptak når poenggrensen ikke er satt
       Gitt "Vernepleie, høst 2027" tilbyr tidlig opptak uten poenggrense
-      Og fjorårets median poengsum for "Vernepleie, høst 2027" er 48
+      Og median poengsum fra forrige opptak for "Vernepleie, høst 2027" er 48
       Og saksbehandler har konkludert med at søkeren deltar i tidligopptaket
       Og søkeren er kvalifisert til "Vernepleie, høst 2027"
       Og søkeren har <poeng> poeng til "Vernepleie, høst 2027"
@@ -375,27 +375,27 @@ Egenskap: Gi tilbudsgaranti ved tidlig opptak
         | 48    | får      |
         | 46    | får ikke |
 
-    Scenario: Poenggrensen går foran fjorårets median
+    Scenario: Poenggrensen går foran medianen fra forrige opptak
       Gitt "Sykepleie, høst 2027" tilbyr tidlig opptak med poenggrense 50
-      Og fjorårets median poengsum for "Sykepleie, høst 2027" er 45
+      Og median poengsum fra forrige opptak for "Sykepleie, høst 2027" er 45
       Og saksbehandler har konkludert med at søkeren deltar i tidligopptaket
       Og søkeren er kvalifisert til "Sykepleie, høst 2027"
       Og søkeren har 47 poeng til "Sykepleie, høst 2027"
       Når opptaksforvalter gjennomfører tidligopptaket
       Så får ikke søkeren tilbudsgaranti på "Sykepleie, høst 2027"
 
-    Scenario: Ingen tilbudsgaranti uten poenggrense og uten fjorårets median
+    Scenario: Ingen tilbudsgaranti uten poenggrense og uten median fra forrige opptak
       Gitt "Vernepleie, høst 2027" tilbyr tidlig opptak uten poenggrense
-      Og "Vernepleie, høst 2027" har ingen median poengsum fra fjorårets opptak
+      Og "Vernepleie, høst 2027" har ingen median poengsum fra forrige opptak
       Og saksbehandler har konkludert med at søkeren deltar i tidligopptaket
       Og søkeren er kvalifisert til "Vernepleie, høst 2027"
       Og søkeren har 70 poeng til "Vernepleie, høst 2027"
       Når opptaksforvalter gjennomfører tidligopptaket
       Så får ikke søkeren tilbudsgaranti på "Vernepleie, høst 2027"
 
-    Scenario: Utdanningstilbud med fjorårets median mangler ikke poenggrense
+    Scenario: Utdanningstilbud med median fra forrige opptak mangler ikke poenggrense
       Gitt "Vernepleie, høst 2027" tilbyr tidlig opptak uten poenggrense
-      Og fjorårets median poengsum for "Vernepleie, høst 2027" er 48
+      Og median poengsum fra forrige opptak for "Vernepleie, høst 2027" er 48
       Når opptaksforvalter prøvekjører tidligopptaket
       Så ser ikke opptaksforvalter at "Vernepleie, høst 2027" mangler poenggrense
 
@@ -418,16 +418,15 @@ Egenskap: Gi tilbudsgaranti ved tidlig opptak
 
     Scenario: Se utdanningstilbud med mangelfulle innstillinger
       Gitt "Vernepleie, høst 2027" tilbyr tidlig opptak uten poenggrense
-      Og "Vernepleie, høst 2027" har ingen median poengsum fra fjorårets opptak
+      Og "Vernepleie, høst 2027" har ingen median poengsum fra forrige opptak
       Når opptaksforvalter prøvekjører tidligopptaket
       Så ser opptaksforvalter at "Vernepleie, høst 2027" mangler poenggrense
 
     # Varselet er et sikkerhetsnett (avklart 08.10.2026). Opptaksforvalter setter
     # poenggrensen høyt nok til at tilbudsgarantiene ikke bruker opp kvoten. Er den
-    # ikke satt, brukes fjorårets median poengsum. Systemet beregner ikke grensen
-    # selv. Det er ingen sperre mot at
-    # tilbudsgarantiene overskrider kvoten, så plasstildelingen må likevel håndtere
-    # det (se gjennomføre_plasstildeling.feature).
+    # ikke satt, brukes median poengsum fra forrige opptak. Systemet beregner ikke
+    # grensen selv. Det er ingen sperre mot at tilbudsgarantiene overskrider kvoten,
+    # så plasstildelingen må likevel håndtere det (se gjennomføre_plasstildeling.feature).
     Scenario: Varsel når tilbudsgarantiene overskrider kvoten
       Gitt "Sykepleie, høst 2027" har 10 plasser i kvoten tilbudsgarantiene tas fra
       Og 12 søkere oppfyller kravene til tilbudsgaranti på "Sykepleie, høst 2027"
