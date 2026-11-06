@@ -82,13 +82,13 @@ Egenskap: Opprette ventekvote for søkere uten poeng
       Så følger "Ventekvote (VENT)" standardoppsettet for kvotetyper
       Og kan "Ventekvote (VENT)" legges på utdanningstilbudene i opptaket
 
-  Regel: Ventekvoten er standard for alle utdanningstilbud og kan ikke fjernes av lærestedet
+  Regel: Ventekvoten er standard for alle utdanningstilbud og stengt for fjerning
     # Hva innstillingene gjør hver for seg, står i kvoterregelverk.feature.
 
-    Scenario: Gjøre ventekvoten til standardkvote som lærestedet ikke kan fjerne
+    Scenario: Gjøre ventekvoten til standardkvote som er stengt for fjerning
       Gitt at kvotetypen "Ventekvote (VENT)" er opprettet uten plasser
       Og at opptaket "Samordna opptak 2027" bruker regelverkssamlingen "UHG2027"
       Når opptaksforvalteren setter kvotetypen "Ventekvote (VENT)" som standardkvote
-      Og opptaksforvalteren setter at lærestedet ikke kan fjerne kvotetypen "Ventekvote (VENT)"
+      Og opptaksforvalteren stenger kvotetypen "Ventekvote (VENT)" for fjerning fra utdanningstilbudene
       Så har alle utdanningstilbudene i opptaket "Samordna opptak 2027" utdanningskvoten "Ventekvote (VENT)"
-      Og lærestedet kan ikke fjerne "Ventekvote (VENT)" fra utdanningstilbudene sine
+      Og "Ventekvote (VENT)" kan ikke fjernes fra utdanningstilbudene

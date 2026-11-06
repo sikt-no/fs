@@ -114,23 +114,25 @@ Egenskap: Kvotetype
       Og opptaksforvalteren ser at kvoten er i bruk på utdanningstilbudet "Sykepleie, høst 2027"
 
   @planned @scope-spesialvurdering-2027
-  Regel: Lærestedet kan hindres i å fjerne en kvotetype fra utdanningstilbudet
-    # Ny regel 2026-11-06 (TAKE-492). At lærestedet ikke kan fjerne kvoten fra utdanningstilbudet, står i
+  Regel: En kvotetype kan stenges for fjerning fra utdanningstilbudet
+    # Ny regel 2026-11-06 (TAKE-492). At kvoten ikke kan fjernes fra utdanningstilbudet, står i
     # opptaksinnstillinger_utdanningstilbud.feature.
+    # AVKLART 2026-11-06 (produkteier): Innstillingen gjelder alle. Kvotetypen er enten stengt eller åpen for
+    # fjerning, og opptaksforvalter ved organisasjonen som eier opptaket, kan ikke overstyre den.
 
-    Scenario: Lærestedet kan fjerne kvotetypen som standard
+    Scenario: Kvotetypen er åpen for fjerning som standard
       Når opptaksforvalteren oppretter kvotetypen "Førstegangsvitnemål (ORDF)"
-      Så kan lærestedet fjerne kvotetypen "Førstegangsvitnemål (ORDF)" fra utdanningstilbudene sine
+      Så kan kvotetypen "Førstegangsvitnemål (ORDF)" fjernes fra utdanningstilbudene
 
-    Scenario: Sette at lærestedet ikke kan fjerne kvotetypen
-      Når opptaksforvalteren setter at lærestedet ikke kan fjerne kvotetypen "Ventekvote (VENT)"
-      Så kan lærestedet ikke fjerne kvotetypen "Ventekvote (VENT)" fra utdanningstilbudene sine
+    Scenario: Stenge kvotetypen for fjerning
+      Når opptaksforvalteren stenger kvotetypen "Ventekvote (VENT)" for fjerning fra utdanningstilbudene
+      Så kan kvotetypen "Ventekvote (VENT)" ikke fjernes fra utdanningstilbudene
 
-    Scenario: Opptaksforvalter ved organisasjonen som eier opptaket, kan fjerne kvoten
-      Gitt at lærestedet ikke kan fjerne kvotetypen "Ventekvote (VENT)"
+    Scenario: Organisasjonen som eier opptaket, kan ikke overstyre stengingen
+      Gitt at kvotetypen "Ventekvote (VENT)" er stengt for fjerning fra utdanningstilbudene
       Og at utdanningstilbudet "Sykepleie, høst 2027" har utdanningskvoten "Ventekvote (VENT)"
-      Når opptaksforvalter ved organisasjonen som eier opptaket fjerner "Ventekvote (VENT)" fra "Sykepleie, høst 2027"
-      Så har utdanningstilbudet "Sykepleie, høst 2027" ikke utdanningskvoten "Ventekvote (VENT)"
+      Når opptaksforvalter ved organisasjonen som eier opptaket vil fjerne "Ventekvote (VENT)" fra "Sykepleie, høst 2027"
+      Så har utdanningstilbudet "Sykepleie, høst 2027" fortsatt utdanningskvoten "Ventekvote (VENT)"
 
   @draft @openquestion
   Regel: En kvotetype kan ha fire ulike rangeringsmetoder
