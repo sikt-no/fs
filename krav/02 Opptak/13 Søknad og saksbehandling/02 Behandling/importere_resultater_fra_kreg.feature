@@ -10,8 +10,8 @@ Egenskap: Importere resultater fra KREG
   ønsker jeg at søkerens resultater fra videregående skole hentes fra KREG når saken er opprettet
   slik at søknaden behandles på resultatene søkeren har, uten at jeg må hente dem selv.
 
-  KREG (Nasjonal vitnemålsdatabase) har søkerens vitnemål og kompetansebevis fra videregående
-  skole. Opptakssystemet henter dem med søkerens fødselsnummer, eller D-nummer når søkeren ikke
+  KREG (Nasjonal vitnemålsdatabase) har søkerens vitnemål fra videregående skole. Kompetansebevis
+  kommer ikke fra KREG, bare som dokumenter søkeren laster opp (avklart 06.11.2026). Opptakssystemet henter dem med søkerens fødselsnummer, eller D-nummer når søkeren ikke
   har fødselsnummer, og lagrer dem på søkeren, så de gjelder alle søknadene søkeren har.
   Saksbehandlingen og den automatiske behandlingen bygger på det som er lagret.
 
@@ -63,7 +63,7 @@ Egenskap: Importere resultater fra KREG
       Når søkeren sender inn søknaden
       Så er vitnemålet importert
 
-  @ref-FLY-OPT-AUT-001 @ref-FLY-OPT-VIT-001
+  @ref-FLY-OPT-AUT-001 @ref-FLY-OPT-VIT-001 @implemented
   Regel: Alle vitnemål og kompetansebevis søkeren har i KREG, importeres
 
     Scenario: Det importerte vitnemålet har opplysningene saksbehandlingen trenger
@@ -80,19 +80,18 @@ Egenskap: Importere resultater fra KREG
         | programområdene                                 |
         | merknadene                                      |
 
-    @implemented
     Scenario: Søker med flere vitnemål får alle importert
       Gitt at søkeren har to vitnemål i KREG, ett fra 2024 og ett fra 2025
       Når søkerens resultater importeres
       Så er begge vitnemålene importert
 
-    @implemented
+    @deprecated
+    # Avklart 06.11.2026: kompetansebevis kommer ikke fra KREG. Koden som importerer dem, skal bort.
     Scenario: Kompetansebevis importeres
       Gitt at søkeren har et kompetansebevis i KREG
       Når søkerens resultater importeres
       Så er kompetansebeviset importert
 
-    @implemented
     Scenario: Vitnemål som er importert fra før, importeres ikke på nytt
       Gitt at søkerens vitnemål er importert
       Når søkerens resultater importeres på nytt
@@ -131,6 +130,7 @@ Egenskap: Importere resultater fra KREG
       Når søkeren sender inn søknaden
       Så er ingen resultater importert fra KREG
 
+    @implemented
     Scenario: Søker uten fødselsnummer og D-nummer får ingen resultater importert
       Gitt at søkeren verken har fødselsnummer eller D-nummer
       Når søkeren sender inn søknaden
@@ -145,7 +145,7 @@ Egenskap: Importere resultater fra KREG
       Når KREG svarer igjen innenfor tiden i applikasjonsinnstillingene
       Så er søkerens vitnemål importert
 
-  @ref-OPT-BEH-BEH-021 @ref-FLY-OPT-VIT-001 @ref-OPT-BEH-BEH-032
+  @ref-OPT-BEH-BEH-021 @ref-FLY-OPT-VIT-001 @ref-OPT-BEH-BEH-032 @ref-OPT-BEH-BEH-035 @ref-OPT-BEH-BEH-015
   Regel: Nye og annullerte vitnemål i KREG importeres for aktive søkere
     # Gjelder aktive søkere: søkere med en søknad som ikke er trukket, i et opptak som ikke er
     # avsluttet.
@@ -154,8 +154,8 @@ Egenskap: Importere resultater fra KREG
     # Jobben for nye vitnemål (OPT-BEH-BEH-032) går gjennom alle aktive søkere, og henter
     # vitnemålene fra KREG for hver søker. Det som ikke er importert fra før, eller som er
     # annullert i KREG, er nytt.
-    # Et nytt vitnemål i en sak som er behandlet, er ny dokumentasjon. Saken behandles ikke
-    # automatisk på nytt (OPT-BEH-BEH-032). Når vitnemålet annulleres, gjelder OPT-BEH-BEH-034.
+    # Et nytt vitnemål i en sak som er behandlet, gir saken nye resultater (OPT-BEH-BEH-035).
+    # Saken behandles ikke automatisk på nytt (OPT-BEH-BEH-032). Når vitnemålet annulleres, gjelder OPT-BEH-BEH-034.
     # Varselet til saksbehandleren om nytt vitnemål står i OPT-BEH-BEH-021.
 
     Scenario: Søkeren får vitnemålet etter at søknaden er levert

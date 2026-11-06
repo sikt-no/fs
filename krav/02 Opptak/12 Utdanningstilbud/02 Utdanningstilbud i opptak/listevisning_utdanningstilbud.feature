@@ -101,8 +101,27 @@ Egenskap: Listevisning og søk i utdanningstilbud i opptaket
       Når opptaksforvalter filtrerer på utdanningstilbud med ufullstendige opplysninger
       Så ser opptaksforvalter utdanningstilbud der dato for tidlig søknadsfrist ikke er satt
 
-    @depends-on-OPT-OPT-UTD-010 @ref-OPT-BEH-BEH-014
+    # Er poenggrensen ikke satt, brukes median poengsum fra forrige opptak i tidligopptaket
+    # (regelen «Median poengsum fra forrige opptak brukes når poenggrensen ikke er satt»).
+    # Utdanningstilbudet mangler derfor poenggrense bare når begge mangler.
+    @depends-on-OPT-OPT-UTD-010 @ref-OPT-BEH-BEH-007
     Scenario: Filtrere på utdanningstilbud som mangler poenggrense for tidlig opptak
-      Gitt at et utdanningstilbud tilbyr tidlig opptak
+      Gitt at et utdanningstilbud tilbyr tidlig opptak uten poenggrense
+      Og at utdanningstilbudet ikke har median poengsum fra forrige opptak
       Når opptaksforvalter filtrerer på utdanningstilbud med ufullstendige opplysninger
-      Så ser opptaksforvalter utdanningstilbud der poenggrensen for tidlig opptak ikke er satt
+      Så ser opptaksforvalter utdanningstilbud der verken poenggrensen for tidlig opptak er satt eller median poengsum fra forrige opptak finnes
+
+  @draft @openquestion @ref-OPT-BEH-BEH-007
+  Regel: Opptaksforvalter kan filtrere på utdanningstilbud med poenggrense for tidlig opptak
+    # Ønsket av fagperson Marit 06.11.2026: finne utdanningstilbudene der opptaksforvalter
+    # har satt en poenggrense, som går foran median poengsum fra forrige opptak i
+    # tidligopptaket (se @OPT-BEH-BEH-007).
+    # ÅPNE SPØRSMÅL:
+    # - Er det et eget filter, eller et valg i samme filter som «ufullstendige opplysninger»?
+
+    Scenario: Filtrere på utdanningstilbud med poenggrense for tidlig opptak
+      Gitt at utdanningstilbudet "Sykepleie, høst 2027" tilbyr tidlig opptak med poenggrense 50
+      Og at utdanningstilbudet "Vernepleie, høst 2027" tilbyr tidlig opptak uten poenggrense
+      Når opptaksforvalter filtrerer på utdanningstilbud med poenggrense for tidlig opptak
+      Så ser opptaksforvalter utdanningstilbudet "Sykepleie, høst 2027"
+      Men opptaksforvalter ser ikke utdanningstilbudet "Vernepleie, høst 2027"

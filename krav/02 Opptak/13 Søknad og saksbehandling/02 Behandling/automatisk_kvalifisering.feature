@@ -38,8 +38,9 @@
 # Fagprofilen har «La stå», og hvilket vitnemål automatikken brukte. Manuell
 # og beregnet vurdering står i egne felt for kompetansekravet og
 # søknadsalternativet, og beregningen rører ikke de manuelle feltene. Regelen
-# ligger i PL/SQL. Oppfølging: FS102.004 «Ikke-kvalifiserte søkere – spesielle
-# opptakskrav» og FS120.002 «Brev til søkere med manglende fagkrav».
+# ligger i PL/SQL. FS-klienten har også FS102.004 «Ikke-kvalifiserte søkere – spesielle
+# opptakskrav» og FS120.002 «Brev til søkere med manglende fagkrav». Avklart 06.11.2026: et
+# filter i saksoversikten holder (scenarioet «Finne søkere som ikke er kvalifisert»).
 #
 # Ny stack: AutomatiskKravelementVurderingService (kontrollmotoren) og
 # KvalifiseringEvaluator i opptak-service (fs-plattform), kalt fra
@@ -95,12 +96,11 @@ Egenskap: Automatisk vurdering av spesielle opptakskrav
   # vurdert før GSK er satt. Om saken behandles helautomatisk, og stopper uten GSK, avgjøres i
   # OPT-BEH-BEH-025.
 
-  @depends-on-OPT-REG-KRA-002 @ref-FLY-OPT-AUT-001
+  @depends-on-OPT-REG-KRA-002 @ref-FLY-OPT-AUT-001 @implemented
   Regel: Kravelementer som er koblet til vitnemålet, vurderes automatisk
     # Koblingen er kravkoden for vitnemålet, som settes på kravelementet i
     # regelverket. Én kravkode sjekker vitnemål fra både R94 og Kunnskapsløftet.
 
-    @implemented
     Scenario: Fagkrav som er oppfylt på vitnemålet
       Gitt at søkeren har ett elektronisk vitnemål som ikke er annullert
       Og at vitnemålet har Matematikk R1
@@ -108,7 +108,6 @@ Egenskap: Automatisk vurdering av spesielle opptakskrav
       Når søknaden behandles automatisk
       Så er fagkravet Matematikk R1 oppfylt
 
-    @implemented
     Scenario: Fagkrav som ikke er oppfylt på vitnemålet
       Gitt at søkeren har ett elektronisk vitnemål som ikke er annullert
       Og at vitnemålet ikke har Matematikk R1
@@ -116,7 +115,6 @@ Egenskap: Automatisk vurdering av spesielle opptakskrav
       Når søknaden behandles automatisk
       Så er fagkravet Matematikk R1 ikke oppfylt
 
-    @implemented
     Scenario: Karakteren fra vitnemålet registreres på fagkravet
       Gitt at søkeren har ett elektronisk vitnemål med karakteren 5 i Fysikk 1
       Og at søknaden har fagkravet Fysikk 1, koblet til vitnemålet
@@ -124,7 +122,6 @@ Egenskap: Automatisk vurdering av spesielle opptakskrav
       Så er fagkravet Fysikk 1 oppfylt
       Og fagkravet Fysikk 1 har karakteren 5
 
-    @implemented
     Scenario: Fagkrav uten karakter oppfylles uten karakter
       Gitt at søkeren har ett elektronisk vitnemål som ikke er annullert
       Og at vitnemålet har faget som fagkravet krever, uten tallkarakter
@@ -133,28 +130,24 @@ Egenskap: Automatisk vurdering av spesielle opptakskrav
       Så er fagkravet oppfylt
       Og fagkravet har ingen karakter
 
-    @implemented
     Scenario: Karakterkrav får karakteren fra vitnemålet
       Gitt at søkeren har ett elektronisk vitnemål med karakteren 4 i engelsk
       Og at søknaden har karakterkravet engelsk, koblet til vitnemålet
       Når søknaden behandles automatisk
       Så har karakterkravet engelsk karakteren 4
 
-    @implemented
     Scenario: Beste karakter gjelder for programfag matematikk
       Gitt at søkeren har ett elektronisk vitnemål med karakteren 5 i Matematikk R1 og karakteren 3 i Matematikk S1
       Og at søknaden har kravelementet programfag matematikk, koblet til vitnemålet
       Når søknaden behandles automatisk
       Så har kravelementet programfag matematikk karakteren 5
 
-    @implemented
     Scenario: Kravelement som ikke er koblet til vitnemålet, vurderes ikke
       Gitt at søkeren har ett elektronisk vitnemål som ikke er annullert
       Og at søknaden har et kravelement som ikke er koblet til vitnemålet
       Når søknaden behandles automatisk
       Så er kravelementet ikke vurdert
 
-    @implemented
     Scenario: Kravelementer fra en annen sak i søknaden vurderes ikke i saken
       # STEK-593.
       Gitt at søknaden har saker hos "Universitetet i Oslo" og "UiT Norges arktiske universitet"
@@ -163,14 +156,12 @@ Egenskap: Automatisk vurdering av spesielle opptakskrav
       Når kravelementene i saken hos "UiT Norges arktiske universitet" vurderes automatisk
       Så er "Matematikk R2" ikke vurdert i saken hos "UiT Norges arktiske universitet"
 
-    @implemented
     Scenario: Kravelement vurderes mot vitnemål fra R94
       Gitt at søkeren har ett elektronisk vitnemål fra R94
       Og at søknaden har et kravelement som er koblet til vitnemålet
       Når søknaden behandles automatisk
       Så er kravelementet vurdert mot vitnemålet fra R94
 
-    @implemented
     Scenario: Ugyldig karakter må vurderes manuelt
       Gitt at søkeren har ett elektronisk vitnemål med en ugyldig karakter i Fysikk 1
       Og at søknaden har fagkravet Fysikk 1, koblet til vitnemålet
@@ -182,8 +173,8 @@ Egenskap: Automatisk vurdering av spesielle opptakskrav
   Regel: Kravelementene vurderes bare mot ett entydig vitnemål
     # Har søkeren flere vitnemål, velger saksbehandleren vitnemålet først (OPT-BEH-BEH-039).
 
-    @implemented
-    Scenariomal: Ingen automatisk vurdering når <grunn>
+    @deprecated
+    Scenariomal: Ingen automatisk vurdering når <grunn> (avvikles)
       Gitt at <grunn>
       Og at søknaden har et kravelement som er koblet til vitnemålet
       Når søknaden behandles automatisk
@@ -195,10 +186,26 @@ Egenskap: Automatisk vurdering av spesielle opptakskrav
         | søkerens eneste elektroniske dokument er et kompetansebevis                                              |
         | søkeren ikke har noe elektronisk vitnemål                                                                |
 
-    Scenario: Kompetansebevis ved siden av vitnemålet stopper ikke vurderingen
-      # Ikke bygget i dag: koden krever at vitnemålet er søkerens eneste dokument.
+    @implemented
+    # Avklart 06.11.2026: kompetansebevis kommer ikke fra KREG, så raden om kompetansebevis er tatt ut.
+    Scenariomal: Ingen automatisk vurdering når <grunn>
+      Gitt at <grunn>
+      Og at søknaden har et kravelement som er koblet til vitnemålet
+      Når søknaden behandles automatisk
+      Så er kravelementet ikke vurdert
+
+      Eksempler:
+        | grunn                                                                                                    |
+        | søkeren har flere elektroniske vitnemål som ikke er annullert, og saksbehandleren ikke har valgt vitnemål |
+        | søkeren ikke har noe elektronisk vitnemål                                                                |
+
+    @implemented
+    Scenario: Opplastet kompetansebevis stopper ikke vurderingen
+      # Avklart 06.11.2026: kompetansebevis kommer bare som dokumenter søkeren laster opp, ikke
+      # fra KREG. Saksbehandleren finner sakene med filteret «Ubehandlet opplastet dok.» i
+      # saksoversikten. Filteret er ikke beskrevet i et krav ennå.
       Gitt at søkeren har ett elektronisk vitnemål som ikke er annullert
-      Og at søkeren har et elektronisk kompetansebevis
+      Og at søkeren har lastet opp et kompetansebevis
       Og at søknaden har et kravelement som er koblet til vitnemålet
       Når søknaden behandles automatisk
       Så er kravelementet vurdert mot vitnemålet
@@ -356,13 +363,14 @@ Egenskap: Automatisk vurdering av spesielle opptakskrav
       Når saksbehandleren ser i endringsloggen
       Så ser saksbehandleren at kravelementet ble vurdert av den automatiske behandlingen
 
-    @openquestion @implemented
+    @implemented
     Scenario: Finne søkere som ikke er kvalifisert
-      # ÅPNE SPØRSMÅL:
-      # - FS-klienten har rapporten FS102.004 «Ikke-kvalifiserte søkere –
-      #   spesielle opptakskrav» og brevet FS120.002 til søkere med manglende
-      #   fagkrav. Hva trengs i ny stack: et filter i saksoversikten, en
-      #   rapport eller begge?
+      # Avklart 06.11.2026 (økt med fagfolk): et filter i saksoversikten holder. Rapporten
+      # FS102.004 «Ikke-kvalifiserte søkere – spesielle opptakskrav» og brevet FS120.002 fra
+      # FS-klienten trengs ikke i denne flyten.
+      # Avklart 06.11.2026 (Jøran, PR #966): filteret «Ikke kvalifiserte» holder, selv om det ikke
+      # skiller spesielle opptakskrav fra generell studiekompetanse. Saksbehandleren ser grunnen i
+      # saken.
       Gitt at noen søkere i opptaket ikke er kvalifisert på de spesielle opptakskravene
       Når saksbehandleren ser etter søkerne som ikke er kvalifisert
       Så finner saksbehandleren søkerne som ikke er kvalifisert

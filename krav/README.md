@@ -114,6 +114,9 @@ Gherkin er et språk som alle andre, og må skrives godt for å være nyttig og 
   - **Så**: forventet resultat
 - Det er lov med flere av hvert nøkkelord etter hverandre (med `Og`/`Men`), men aldri i en annen rekkefølge. *(sjekkes automatisk)*
 - Bruk datatabeller og `Scenariomal:` med `Eksempler:` for datadrevne scenarioer.
+- Ta med konkrete verdier (navn på organisasjoner og opptak, datoer, tall, statuser) når de avgjør utfallet, altså når en annen verdi ville gitt et annet resultat. Ellers skrives rollen eller relasjonen: `saksbehandleren ved den saksbehandlende organisasjonen`, ikke `saksbehandleren ved Universitetet i Oslo`. En verdi som ikke betyr noe for regelen, får leseren til å lete etter hvorfor den står der, og knytter stegene til ett tilfelle.
+  - I `behandlingsstatus.feature` er statusene («Ikke behandlet», «Behandlet») det som skiller eksemplene, mens det er likegyldig hvilken organisasjon saken ligger hos. Statusene står konkret, og organisasjonen som en relasjon.
+  - I flyten `saksbehandlertildeling.feature` gir organisasjonene ulike utfall (hvem som får hvilket søknadsalternativ), og der står navnene.
 - Bruk for det meste bestemt form på roller når handlinger utføres: «personen», «administratoren».
 
 ### Krav fra kode, skisser eller FS-klienten

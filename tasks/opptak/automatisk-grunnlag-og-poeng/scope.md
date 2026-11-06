@@ -5,7 +5,7 @@
 - **Initiativ**: [#199](https://github.com/sikt-no/fs/issues/199)
 - **Jira**: –
 - **Eier**: –
-- **Siste oppdatering**: 2026-11-05
+- **Siste oppdatering**: 2026-11-06
 
 ## Mål
 
@@ -48,6 +48,7 @@ Append-only. Ny linje på toppen ved hver hendelse.
 
 | Dato       | Hendelse | Av | Lenke til review |
 |------------|----------|----|------------------|
+| 2026-11-06 | `@OPT-BEH-BEH-018`: et filter i saksoversikten holder for å finne saker som er behandlet automatisk. Om filteret skal skille helautomatisk behandling, er åpent. Fra økta med fagfolk 06.11.2026 (PR #966) | @JøranIndseth | – |
 | 2026-11-05 | `@OPT-BEH-BEH-038` er tatt inn i scopet. `@OPT-BEH-BEH-028` trenger importen for poeng for høyere utdanning, og fasen om tilleggspoeng i `@FLY-OPT-AUT-001` bygger på kravet gjennom 028. Kravet hørte ikke til noe scope. Fra gjennomgangen av flyten automatisk saksbehandling og reviewen av PR #948 | @JøranIndseth | [#948](https://github.com/sikt-no/fs/pull/948) |
 | 2026-11-04 | Scenarioene om grunnlag fra valgt vitnemål og fra sammensatt vitnemål i `@OPT-BEH-BEH-019` er skilt ut i `@OPT-BEH-BEH-039` (Behandle automatisk på vitnemålet saksbehandleren velger), `@must` uten scope. Fra reviewen av PR #931 | @JøranIndseth | [#931](https://github.com/sikt-no/fs/pull/931) |
 | 2026-11-04 | Søkere med flere vitnemål tatt ut av scopet, og poeng for høyere utdanning kan bygges med mocket input (statusmøtet, se Kilder) | @JøranIndseth | – |

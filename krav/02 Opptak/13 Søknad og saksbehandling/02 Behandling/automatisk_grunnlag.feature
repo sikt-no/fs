@@ -42,11 +42,13 @@ Egenskap: Automatisk grunnlag
   velges automatisk, og hva som skal til, bestemmes av egenskapene
   regelverket har gitt grunnlaget.
 
-  Grunnlaget ligger på saken. Automatikken setter det samme grunnlaget i alle sakene i
-  søknaden, men det saksbehandleren gjør, gjelder bare saken hos organisasjonen
+  Grunnlaget ligger på saken, og settes når den automatiske behandlingen kjører for saken.
+  Hver sak behandles for seg (OPT-BEH-BEH-032), ut fra utdanningstilbudene organisasjonen
+  behandler i saken. Det saksbehandleren gjør, gjelder bare saken hos organisasjonen
   saksbehandleren er ved. Grunnlag som saksbehandleren har valgt, endres aldri av
   automatikken. Det fremgår om et grunnlag er satt automatisk eller av saksbehandleren.
 
+  # Avklart 06.11.2026: grunnlaget settes per sak, ikke i alle sakene i søknaden samtidig.
   # Avklart 30.10.2026: grunnlaget ligger på saken, ikke på søknaden. FS-klienten har det på
   # personen. Spørsmålet ble tatt opp i raffineringen og med HK-dir 16.03.2026.
 
@@ -120,12 +122,12 @@ Egenskap: Automatisk grunnlag
 
   @depends-on-OPT-BEH-BEH-015 @ref-FLY-OPT-AUT-001
   Regel: Ingen automatisk grunnlag uten ett vitnemål som gir generell studiekompetanse
-    # Ett vitnemål er nok, også når søkeren har et kompetansebevis i tillegg.
+    # Ett vitnemål er nok, også når søkeren har lastet opp et kompetansebevis.
     # Har søkeren flere vitnemål, stopper den automatiske behandlingen til
     # saksbehandleren har valgt vitnemålet (OPT-BEH-BEH-039).
 
-    @implemented
-    Scenariomal: Ingen grunnlag settes automatisk når <grunn>
+    @deprecated
+    Scenariomal: Ingen grunnlag settes automatisk når <grunn> (avvikles)
       Gitt at <grunn>
       Når søknaden behandles automatisk
       Så får saken ingen grunnlag automatisk
@@ -138,6 +140,19 @@ Egenskap: Automatisk grunnlag
         | ingen av grunnlagene i regelverket passer til søkeren       |
 
     @implemented
+    # Avklart 06.11.2026: kompetansebevis kommer ikke fra KREG, så raden om kompetansebevis er tatt ut.
+    Scenariomal: Ingen grunnlag settes automatisk når <grunn>
+      Gitt at <grunn>
+      Når søknaden behandles automatisk
+      Så får saken ingen grunnlag automatisk
+
+      Eksempler:
+        | grunn                                                 |
+        | søkeren ikke har noe elektronisk vitnemål             |
+        | vitnemålet ikke gir generell studiekompetanse         |
+        | ingen av grunnlagene i regelverket passer til søkeren |
+
+    @implemented
     Scenario: Søker med flere vitnemål behandles ikke automatisk
       Gitt at søkeren har to elektroniske vitnemål som ikke er annullert
       Og at saksbehandleren ikke har valgt ett av vitnemålene
@@ -145,9 +160,13 @@ Egenskap: Automatisk grunnlag
       Så blir søknaden ikke behandlet automatisk
       Og saken får ingen grunnlag automatisk
 
-    Scenario: Kompetansebevis ved siden av vitnemålet stopper ikke automatikken
+    @implemented
+    Scenario: Opplastet kompetansebevis stopper ikke automatikken
+      # Avklart 06.11.2026: kompetansebevis kommer bare som dokumenter søkeren laster opp, ikke
+      # fra KREG. Saksbehandleren finner sakene med filteret «Ubehandlet opplastet dok.» i
+      # saksoversikten. Filteret er ikke beskrevet i et krav ennå.
       Gitt at søkeren har ett elektronisk vitnemål som gir generell studiekompetanse
-      Og at søkeren har et elektronisk kompetansebevis
+      Og at søkeren har lastet opp et kompetansebevis
       Når søknaden behandles automatisk
       Så får saken grunnlaget ut fra vitnemålet
 
@@ -170,11 +189,14 @@ Egenskap: Automatisk grunnlag
   @ref-FLY-OPT-AUT-001
   Regel: Grunnlaget settes når den automatiske behandlingen kjører
 
-    Scenario: Automatikken setter grunnlaget i alle sakene i søknaden
+    @implemented
+    Scenario: Hver sak i søknaden får grunnlaget når den automatiske behandlingen kjører for saken
+      # Avklart 06.11.2026: erstatter «Automatikken setter grunnlaget i alle sakene i søknaden».
       Gitt at søknaden har saker hos "Universitetet i Oslo" og "UiT Norges arktiske universitet"
       Og at søkeren har ett elektronisk vitnemål som gir generell studiekompetanse
-      Når søknaden behandles automatisk
-      Så har sakene hos "Universitetet i Oslo" og "UiT Norges arktiske universitet" det samme grunnlaget
+      Når den automatiske behandlingen kjører for saken hos "Universitetet i Oslo"
+      Så får saken hos "Universitetet i Oslo" grunnlaget automatisk
+      Men saken hos "UiT Norges arktiske universitet" får ikke grunnlaget før den automatiske behandlingen kjører for den saken
 
     @implemented
     Scenario: Grunnlaget settes av den automatiske behandlingen
@@ -277,7 +299,7 @@ Egenskap: Automatisk grunnlag
       Så får saksbehandleren beskjed om at opptaket mangler dato for aldersberegning
       Og grunnlaget er ikke lagt til
 
-  @ref-OPT-BEH-BEH-028
+  @ref-OPT-BEH-BEH-028 @implemented
   Regel: Når grunnlaget settes, vurderes søknaden på nytt
     # Gjelder uansett om grunnlaget er satt automatisk eller av saksbehandleren.
     # Hvordan tilleggspoengene regnes ut, står i kravet.
@@ -289,7 +311,6 @@ Egenskap: Automatisk grunnlag
       Og kvotene søkeren kan plasseres i er oppdatert etter grunnlagene
       Og tilleggspoengene er regnet ut for grunnlagene
 
-    @implemented
     Scenario: Opptakskrav, kvoter og tilleggspoeng følger grunnlaget som er satt automatisk
       Gitt at søknaden ikke har noe grunnlag
       Når saken får et grunnlag automatisk

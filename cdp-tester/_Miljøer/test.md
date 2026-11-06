@@ -85,6 +85,9 @@ Nøkkelen i testene, hva testen krever av testbrukeren (uavhengig av miljøet), 
 | `opptak-forvalter-deltakende` | `OPPTAK_FORVALTER` ved et universitet eller en høyskole som er deltaker i `opptak-samordna-med-utdanningstilbud`. Trenger `MEDLEM_OPPTAK` for å legge til utdanningstilbud (fs-plattform, V469). Den er ikke tildelt direkte, og må komme fra rollekatalogen (se under «Personaer») | ANSVARSFULL FOTKREM • OPPTAK_FORVALTER (NTNU) |
 | `opptak-forvalter-ikke-deltakende` | `OPPTAK_FORVALTER` ved en organisasjon som ikke er deltaker i testdata-opptakene | TALEFØR ELV • OPPTAK_FORVALTER (FVT) |
 | `opptak-forvalter-lokalt` | `OPPTAK_FORVALTER` ved et lærested med lokalt opptak | RU BRØDSKIVE • OPPTAK_FORVALTER (HVL) |
+| `opptak-saksbehandler-behandlende` | `OPPTAK_SAKSBEHANDLER` med SE- eller MODIFISERE_SØKNADSBEHANDLING ved organisasjonen som behandler sakene i `opptak-vitnemalsbehandling`. [Fylles ut: bekreft at sakene behandles av NTNU, og at `OPPTAK_SAKSBEHANDLER` gir SE_SØKNADSBEHANDLING i rollekatalogen] | KORT DOMPAP • OPPTAK_SAKSBEHANDLER (NTNU) |
+| `opptak-saksbehandler-behandlende-annen` | En annen `OPPTAK_SAKSBEHANDLER` ved samme organisasjon som `opptak-saksbehandler-behandlende`, som saken kan tilordnes | NØYE TANNHJUL • OPPTAK_SAKSBEHANDLER (NTNU) |
+| `opptak-saksbehandler-annen-organisasjon` | `OPPTAK_SAKSBEHANDLER` ved en organisasjon som ikke behandler sakene i `opptak-vitnemalsbehandling`, og som verken er opptaksforvalter for opptaket eller tilbyder av et søknadsalternativ | GLIMRENDE ELG • OPPTAK_SAKSBEHANDLER (FSGJØVIK) |
 
 ## Testdata
 
@@ -102,3 +105,9 @@ Bare grunndata og data testene ikke kan lage gjennom løsningen. Testdataene opp
 | `organisasjon-som-inviteres` | Universitetet i Oslo (UIO, 185) | Søk i «Inviter» | Et aktivt universitet eller en høyskole i utdanningsregisteret, som ikke er deltaker i testdata-opptakene og ikke er organisasjonen til en av testbrukerne | 2026-10-27 |
 | `opptak-utdanningsbakgrunn-valgt-av-soker` | [Fylles ut] | Søk på navnet i «Opptak» | Samordna opptak med «Steinerskole» og minst én utdanningsbakgrunn til. En syntetisk søker har en søknad med «Steinerskole». Søknaden er åpen på testdagen | – |
 | `opptak-oversikt-over-50` | **Finnes ikke** | «Opptak» | Minst 51 opptak synlige for `opptak-forvalter-forvaltende` | 2026-10-27 |
+| `opptak-vitnemalsbehandling` | Opptaket `T3BwdGFrOjYy` (opptak 62) | https://test-fsadmin.sikt.no/opptak/T3BwdGFrOjYy | Opptak med saker der søkerne har elektroniske vitnemål fra KREG. [Fylles ut: navnet på opptaket og organisasjonen som behandler sakene] | 2026-11-05 |
+| `sak-to-elektroniske-vitnemal` | Sak 1004255-1 i `opptak-vitnemalsbehandling` | Søk på søknadskoden i «Søknadsbehandling» | Søkeren har to elektroniske vitnemål (ett førstegangsvitnemål) | 2026-11-05 |
+| `sak-uten-elektroniske-vitnemal` | Sak 1004221-1 i `opptak-vitnemalsbehandling` | Søk på søknadskoden i «Søknadsbehandling» | Søkeren har ingen elektroniske vitnemål | 2026-11-05 |
+| `sak-vitnemal-uten-poeng` | [Fylles ut] | Søk på søknadskoden i «Søknadsbehandling» | Søkeren har et elektronisk vitnemål som poengberegningen ikke kan gi karakter-, realfags- eller språkpoeng for (f.eks. et kompetansebevis eller et vitnemål med ugyldige karakterer) | – |
+| `sak-annullert-vitnemal-brukt` | **Finnes ikke** | Søk på søknadskoden i «Søknadsbehandling» | Søkeren har et annullert vitnemål som er grunnlaget for et poeng på saken i opptaket | 2026-11-05 |
+| `sak-annullert-vitnemal-ikke-brukt` | Sak 1004220-1 i `opptak-vitnemalsbehandling` (ikke bekreftet at vitnemålet er annullert) | Søk på søknadskoden i «Søknadsbehandling» | Søkeren har et annullert vitnemål som ikke er brukt i en beregning på opptaket | – |

@@ -37,9 +37,13 @@ Egenskap: Beregne GSK fra vitnemål
     # Fagresultatene på vitnemålet har en fagstatus. Saksbehandleren bruker den til å
     # angi om et fag skal være med i kontrollene av vitnemålet. Avklart 2026-10-27 at
     # fagstatusen hører til et annet krav, og at kontrollene må følge den.
+    # Avklart 06.11.2026 (økt med fagfolk): regelen er utenfor flyten for automatisk
+    # saksbehandling (FLY-OPT-AUT-001). En sak som behandles helautomatisk, har ingen
+    # saksbehandler som kan ta et fag ut av kontrollene. Regelen hører til manuell behandling.
+    # Kode i dag: saksbehandleren kan sette GSK-konklusjonen selv (ikke sjekket 06.11.2026).
     # ÅPNE SPØRSMÅL:
     # - Hva fagstatusen er, og hvem som setter den, er uklart (30.10.2026). Regelen holdes
-    #   utenfor til det er forklart. Den gjelder ikke den helautomatiske flyten.
+    #   utenfor til det er forklart.
     # - Kravet for fagstatusen er ikke skrevet. Når det finnes, får regelen
     #   @depends-on- til det.
 
@@ -49,6 +53,7 @@ Egenskap: Beregne GSK fra vitnemål
       Når GSK-vitnemålsberegningen kjører for vitnemålet
       Så er delkravet for samfunnsfag ikke oppfylt
 
+  @implemented
   Regel: Reformen på vitnemålet avgjør hvilke delkrav som gjelder
 
     Scenariomal: Delkravene for <reform>
@@ -90,6 +95,7 @@ Egenskap: Beregne GSK fra vitnemål
         | samfunnslære   |
         | norsk          |
 
+  @implemented
   Regel: Matematikk for Kunnskapsløftet
     # Fagkoder fra Kunnskapsløftet 2006 som er ført som erstatning for et fag fra
     # Reform 94 (merknadkode FAM13), teller bare når de erstatter et fag fra Reform 94
@@ -127,6 +133,7 @@ Egenskap: Beregne GSK fra vitnemål
       Når GSK-vitnemålsberegningen kjører for vitnemålet
       Så er delkravet for matematikk ikke oppfylt
 
+  @implemented
   Regel: Naturfag for Kunnskapsløftet
 
     Scenariomal: Naturfagkravet er oppfylt med <alternativ>
@@ -154,6 +161,7 @@ Egenskap: Beregne GSK fra vitnemål
         | standard plan | samisk plan   |
         | samisk plan   | standard plan |
 
+  @implemented
   Regel: Samfunnsfag for Kunnskapsløftet
 
     Scenariomal: Samfunnsfagkravet er oppfylt med <fagkode>
@@ -169,6 +177,7 @@ Egenskap: Beregne GSK fra vitnemål
         | SAK1001 | Samfunnskunnskap                                   |
         | SAK1002 | Samfunnskunnskap, samisk plan                      |
 
+  @implemented
   Regel: Engelsk for Kunnskapsløftet
 
     Scenariomal: Engelskkravet er oppfylt med <fagkode>
@@ -193,6 +202,7 @@ Egenskap: Beregne GSK fra vitnemål
         | SPR3029 | Engelsk 1                                        |
         | SPR3031 | Engelsk 2                                        |
 
+  @implemented
   Regel: Norsk og historie for Kunnskapsløftet
     # Fagkodene for samisk 2. språk og finsk 2. språk står ikke i kravet, men i FF_sf_samisk2
     # og FF_sf_finsk2 i krav-kl.txt (NVB2). Avklart 30.10.2026.
@@ -296,6 +306,7 @@ Egenskap: Beregne GSK fra vitnemål
         | samisk 1. språk             |
         | samisk eller finsk 2. språk |
 
+  @implemented
   Regel: Delkravene for Reform 94
 
     Scenariomal: Delkravet for <delkrav> er oppfylt med <alternativ>
@@ -329,6 +340,7 @@ Egenskap: Beregne GSK fra vitnemål
       Når GSK-vitnemålsberegningen kjører for vitnemålet
       Så er delkravet for norsk ikke oppfylt
 
+  @implemented
   Regel: Løpet på vitnemålet gir grunnlagskoden
     # Innspill i PR #857: grunnlagskoden slås opp i tabellen over løp (VGS_LOEP, feltet
     # VGS_LOEP.GRUNNLAGSTYPE_KODE i det gamle systemet) med programområdekodene på
@@ -390,6 +402,7 @@ Egenskap: Beregne GSK fra vitnemål
       Når GSK-vitnemålsberegningen kjører for vitnemålet
       Så er påstanden ikke GSK
 
+  @implemented
   Regel: Løp uten grunnlagskode i listen over løp
     # Avklart 2026-11-02 (Ingrid Helset, etter samtale med Jøran og Geir): et løp som finnes i
     # listen over løp, men mangler grunnlagskode, gir en grunnlagskode likevel, som i det gamle

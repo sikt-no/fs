@@ -22,8 +22,8 @@ Egenskap: Importere VGS-vitnemål fra KREG
   # importert.
   # Et vitnemål som finnes fra før og ikke er annullert i KREG, endres ikke. Det gjelder også
   # når KREG har opphevet en annullering (se OPT-BEH-BEH-030).
-  # Flyten beskriver vitnemålene. Kompetansebevis søkeren har i KREG, importeres på samme
-  # måte (OPT-BEH-BEH-030), men får ingen påstand fra opptakssystemet om GSK (OPT-BEH-BEH-015).
+  # Kompetansebevis kommer ikke fra KREG, bare som dokumenter søkeren laster opp
+  # (avklart 06.11.2026).
 
   @depends-on-OPT-BEH-BEH-033
   # OPT-BEH-BEH-033: «Jobbplanleggeren starter jobbene i opptaket»

@@ -8,7 +8,7 @@ Egenskap: Automatisk saksbehandling
   GSK-vitnemålsberegningen, opptakssystemets påstand om GSK, kjører for hvert vitnemål når
   vitnemålet importeres fra KREG.
   Vitnemålet gir GSK når det har «GSK OK» fra KREG, og søknaden får GSK-konklusjonen da.
-  Opptakssystemets påstand fra fs-opptaks kontrollmotor er en kontroll: er den uenig, får saksbehandleren et varsel, men flyten
+  Opptakssystemets påstand er en kontroll: er den uenig, får saksbehandleren et varsel, men flyten
   stopper ikke (OPT-BEH-BEH-015). «Importeres» betyr i flyten alltid at
   opptakssystemet henter vitnemålet fra KREG, ikke at vitnemålet kommer inn i KREG.
   Den automatiske behandlingen fortsetter saksbehandlertildelingen: hver ny sak behandles når
