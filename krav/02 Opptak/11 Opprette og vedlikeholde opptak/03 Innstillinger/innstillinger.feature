@@ -41,6 +41,17 @@ Egenskap: Innstillinger for opptak
       Gitt at opptaket har utdanningstilbud som bruker regler fra gjeldende regelverkssamling
       Så kan ikke opptaksforvalter endre regelverkssamlingen
 
+    @draft @openquestion @ref-OPT-REG-SAM-001
+    # ÅPNE SPØRSMÅL:
+    # - De samme spørsmålene som regelen om tilgang til regelverket i opprett_opptak.feature (OPT-OVO-GRU-001).
+    #   Avklares de der, gjelder svarene her.
+    # Kilde: MR !3361 i fs-admin (TAKE-474).
+    Scenario: Regelverkssamlinger fra en organisasjon uten tilgang til regelverket kan ikke velges
+      Gitt at opptaket ikke har noen utdanningstilbud
+      Og at opptaksforvalter ikke har tilgang til regelverket ved organisasjonen som eier regelverkssamlingen "Annet regelverk"
+      Når opptaksforvalter endrer regelverkssamlingen
+      Så kan opptaksforvalter ikke velge regelverkssamlingen "Annet regelverk"
+
   # Poenglikhetsregel for ledige studieplasser styres av rundetypen i plasstildelingen,
   # ikke av opptakets standard poenglikhetsregel. Se krav/02 Opptak/14 Plasstildeling/.
   # Virkningen står i 12 Utdanningstilbud/04 Behandle et utdanningstilbud/overstyre_regler_for_poenglikhet.feature
