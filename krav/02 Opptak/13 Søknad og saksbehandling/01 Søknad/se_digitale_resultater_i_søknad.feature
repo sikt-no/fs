@@ -27,9 +27,7 @@
 #   @could er nå hovedflyten.
 # - Kladd-scenarioet utgår med navigeringen. Kladd-bevaring er en generell
 #   egenskap ved søknaden, ikke noe dette kravet eier.
-# - Resultatene grupperes på utdanningsnivå, videregående først. Samme
-#   struktur og rekkefølge som @OPT-BEH-BEH-005 på saksbehandlersiden — de to
-#   ble besluttet uavhengig og landet likt.
+# - Resultatene grupperes på utdanningsnivå, videregående først.
 #
 # Avklart 01.10.2026 — raffinering med utviklere (se Confluence):
 # - Regelen «Det fremgår når grunnlaget er ufullstendig» utgår. Kompetanse-
@@ -57,8 +55,8 @@
 #
 # BEGREPSBRUK
 #
-# «Digitale resultater» brukes gjennomgående, også i @OPT-BEH-BEH-005.
-# Sub-domenet hadde tidligere fire ord for overlappende ting.
+# «Digitale resultater» brukes gjennomgående. @OPT-BEH-BEH-005 sier «elektroniske
+# vitnemål», fordi saksbehandleren der bare ser vitnemål fra videregående. Sub-domenet hadde tidligere fire ord for overlappende ting.
 #
 # «Enkeltemner» er resultatene som verken er vitnemål eller grad.
 #
@@ -85,6 +83,7 @@ Egenskap: Se digitale resultater i søknaden
 
   Regel: Søkeren ser de digitale resultatene i steget «Dokumentasjon»
 
+    @depends-on-OPT-BEH-BEH-005
     Scenario: Se at dokumentasjonen er hentet automatisk
       Gitt at søkeren har digitale resultater
       Når søkeren kommer til steget «Dokumentasjon» i søknaden
@@ -93,7 +92,8 @@ Egenskap: Se digitale resultater i søknaden
       Og søkeren får vite at saksbehandleren ser dokumentasjonen når søknaden behandles
       # AVKLART 25.09.2026: siste ledd er nytt. Søkeren skal vite at det hen
       # ser her er det samme saksbehandleren får se — det er en opplysning om
-      # innsyn, ikke en UI-detalj. Speiler @OPT-BEH-BEH-005.
+      # innsyn, ikke en UI-detalj. Det saksbehandleren ser, står i kravet i
+      # @depends-on-taggen. Endres det, må dette scenarioet sjekkes.
 
     Scenario: Resultatene vises gruppert på nivå
       Gitt at søkeren har resultater fra videregående opplæring og høyere utdanning
@@ -176,3 +176,25 @@ Egenskap: Se digitale resultater i søknaden
         | årsak                                    |
         | søkeren ikke har digitale resultater      |
         | henting av søkerens resultater har feilet |
+
+  @depends-on-OPT-BEH-BEH-005 @openquestion
+  Regel: Resultater fra høyere utdanning vises først når saksbehandleren kan se dem
+    # AVKLART 2026-10-30: Søkeren skal ikke få vite at saksbehandleren ser noe saksbehandleren
+    # ikke ser. I dag dekker @OPT-BEH-BEH-005 bare vitnemål fra videregående opplæring.
+    # Kilde: Slack-trådene i #fs-fremtidens-opptak 2026-10-29.
+    # ÅPNE SPØRSMÅL:
+    # - Når skal saksbehandleren se resultatene fra høyere utdanning: til fristen 30.11, eller
+    #   senere? Automatisk saksbehandling trenger studiepoengene til tilleggspoeng
+    #   (@OPT-BEH-BEH-028), og avhengigheten avklares i et eget møte (Jøran Indseth).
+    # - Hvor skal saksbehandleren hente resultatene fra høyere utdanning fra? Opptakssubgrafen
+    #   har dem ikke i dag, men kompetansesubgrafen har dem.
+    # - Gjelder regelen også enkeltemnene? Saksbehandleren ser ikke dem i @OPT-BEH-BEH-005 heller.
+    # - Hva ser søkeren som bare har resultater fra høyere utdanning: forklaringen på at systemet
+    #   ikke har digitale resultater om søkeren?
+
+    Scenario: Søkeren ser ikke resultater fra høyere utdanning før saksbehandleren kan se dem
+      Gitt at søkeren har resultater fra videregående opplæring og høyere utdanning
+      Og at saksbehandleren ikke kan se resultater fra høyere utdanning
+      Når søkeren kommer til steget «Dokumentasjon» i søknaden
+      Så ser søkeren resultatene fra videregående opplæring
+      Men søkeren ser ikke resultatene fra høyere utdanning
