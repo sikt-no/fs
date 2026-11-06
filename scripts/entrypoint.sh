@@ -10,20 +10,6 @@ RETENTION_DAYS="${RETENTION_DAYS:-2}"
 
 echo "Starting report deployment..."
 
-# Copy new reports from staging to persistent volume
-if [ -d "$STAGING_DIR" ]; then
-  for dir in "$STAGING_DIR"/*/; do
-    [ -d "$dir" ] || continue
-    dirname=$(basename "$dir")
-    echo "Deploying report: $dirname"
-    rm -rf "${REPORTS_DIR:?}/${dirname:?}"
-    cp -r "$dir" "${REPORTS_DIR}/${dirname}"
-  done
-
-  # Copy index file
-  [ -f "$STAGING_DIR/reports-index.json" ] && cp "$STAGING_DIR/reports-index.json" "$REPORTS_DIR/"
-fi
-
 # Clean up reports older than retention period
 echo "Cleaning reports older than $RETENTION_DAYS days..."
 # Calculate cutoff using seconds (works with BusyBox)
@@ -43,6 +29,20 @@ for dir in "${REPORTS_DIR}"/*/; do
     fi
   fi
 done
+
+# Copy new reports from staging to persistent volume
+if [ -d "$STAGING_DIR" ]; then
+  for dir in "$STAGING_DIR"/*/; do
+    [ -d "$dir" ] || continue
+    dirname=$(basename "$dir")
+    echo "Deploying report: $dirname"
+    rm -rf "${REPORTS_DIR:?}/${dirname:?}"
+    cp -r "$dir" "${REPORTS_DIR}/${dirname}"
+  done
+
+  # Copy index file
+  [ -f "$STAGING_DIR/reports-index.json" ] && cp "$STAGING_DIR/reports-index.json" "$REPORTS_DIR/"
+fi
 
 # Update reports index
 echo "Updating reports index..."
