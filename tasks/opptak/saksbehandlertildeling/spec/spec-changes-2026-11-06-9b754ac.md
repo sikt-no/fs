@@ -54,7 +54,7 @@ Ingen krav er holdt tilbake.
 - **[STEK-612](https://sikt.atlassian.net/browse/STEK-612)** (T-rollen skal se saker i sakerV2) har beslutning 1 og 2: om tilbyderen skal se søkerens andre søknadsalternativer, og hvilke detaljer (vitnemål, poeng, kvoter, mangler, dokumentasjon). Kravet svarer nå: tilbyderen ser alle søknadsalternativene (ikke saksbehandlingen av de andre), og dokumentene søkeren har lastet opp. At tilbyderen ser saken, er levert i STEK-576.
 - **[STEK-662](https://sikt.atlassian.net/browse/STEK-662)** (propager sakene når tildelingsjobben flytter et søknadsalternativ) gjelder samme flytting, men kompetanseregelverk, kravelementer og kvoter, ikke dokumentene.
 - **[STEK-672](https://sikt.atlassian.net/browse/STEK-672)** (lesemodus i saken) er ikke med i denne spesifikasjonen, men berører de samme skjermene.
-- Nytt, uten Jira-sak: saksbehandleren ser alle søknadsalternativene, og den nye organisasjonen ser dokumentene etter flytting.
+- **[STEK-675](https://sikt.atlassian.net/browse/STEK-675)** (laget 06.11.2026): saksbehandleren ser alle søknadsalternativene og dokumentene på søknaden, også etter flytting.
 
 ## Retagging
 
