@@ -413,20 +413,27 @@ Egenskap: Søknadsmangler
       Når søkeren ser manglene for "Informatikk, UiO"
       Så ser søkeren kommentaren fra saksbehandleren
 
-    @draft @openquestion
-    Scenariomal: Mangel på <kategori> gjelder ikke et bestemt søknadsalternativ
-      # ÅPNE SPØRSMÅL:
-      # - Gjelder mangler i kategoriene «Poeng» og «Kvote» søknaden som helhet, eller skal en
-      #   kvotemangel gjelde søknadsalternativene med kvoten (forslag fra review i PR #700)?
-      Gitt at saken har en publisert mangel i kategorien "<kategori>"
+    Scenariomal: Mangel på <kategori> vises under alle søknadsalternativene i saken
+      Gitt at saken hos "Universitetet i Oslo" har søknadsalternativene "Informatikk, UiO" og "Historie, UiO"
+      Og at saken hos "UiT Norges arktiske universitet" har søknadsalternativet "Fiskeri, UiT"
+      Og at saken hos "Universitetet i Oslo" har en publisert mangel i kategorien "<kategori>"
       Når søkeren åpner dokumentasjonssiden
-      Så ser søkeren mangelen
-      Men ingen av søknadsalternativene er merket med at dokumentasjon mangler
+      Så er "Informatikk, UiO" og "Historie, UiO" merket med at dokumentasjon mangler
+      Og "Fiskeri, UiT" er ikke merket med at dokumentasjon mangler
 
       Eksempler:
-        | kategori |
-        | Poeng    |
-        | Kvote    |
+        | kategori       |
+        | Generelle krav |
+        | Poeng          |
+
+    # Ikke implementert
+    Scenario: Mangel på kvote vises under søknadsalternativene med kvoten
+      Gitt at "Informatikk, UiO" har kvotespørsmålet "Bosted i Nord-Norge"
+      Og at "Historie, UiO" ikke har kvotespørsmålet "Bosted i Nord-Norge"
+      Og at saken har den publiserte mangelen "BOS" på kvotespørsmålet "Bosted i Nord-Norge"
+      Når søkeren åpner dokumentasjonssiden
+      Så er "Informatikk, UiO" merket med at dokumentasjon mangler
+      Og "Historie, UiO" er ikke merket med at dokumentasjon mangler
 
     @implemented
     Scenario: Mangel som er sjekket ut vises ikke for søkeren
