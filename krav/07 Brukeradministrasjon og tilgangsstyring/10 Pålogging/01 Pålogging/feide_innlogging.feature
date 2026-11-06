@@ -25,6 +25,9 @@ Egenskap: Feide-innlogging
       Og innloggingstilstanden skal lagres for personsøk-adminflaten
 
   Regel: Person må kunne logge inn i MinKompetanse med Feide
+    # Søkere kan logge inn i Min kompetanse med Feide, også for å registrere søknader. Feide er en innloggingsmåte
+    # ved siden av ID-porten direkte (TIL-PÅL-PÅL-002), og e-post som selvregistrert bruker og eIDAS (TIL-PÅL-PÅL-006).
+    # Avklart 2.11.2026 (BAT-404).
 
     Scenario: Person logger inn med Feide og velger testsøker
       Gitt at personen er på innloggingssiden til MinKompetanse
