@@ -142,17 +142,22 @@ Egenskap: Kvotetype
     # ÅPNE SPØRSMÅL:
     # - Kvoterangeringen lagres, men brukes ikke i rangeringen (verifisert 2026-10-14). Skal den brukes?
     # - IH betyr «Sivilingeniør, ingeniørhøgskole» i kodeverket, ikke «individuell helhetsvurdering». Hva er riktig?
+    # - Koden for «individuell vurdering (uten poengberegning)» er ikke bestemt (IV i eksempelet). Erstatter den
+    #   SPEV («Spesiell vurdering/ikke poengberegning») i kodeverket, eller er den en ny kode?
+    # AVKLART 2026-11-06 (produkteier): SPEV erstattes av rangeringsmetoden «individuell vurdering (uten
+    # poengberegning)», for søkere som ikke har vanlige konkurransepoeng. Funksjonen SPEV-kvoten har hatt, er en
+    # kvotetype uten plasser med skjulte poeng, se opprette_ventekvote.feature.
 
     Scenariomal: Kvoterangering
       Når opptaksforvalteren oppretter en kvotetype med kvoterangering "<metode>"
       Så rangeres søkere i kvoten etter <beskrivelse>
 
       Eksempler:
-        | metode | beskrivelse                  |
-        | KP     | konkurransepoeng             |
-        | SP     | skolepoeng                   |
-        | SPEV   | spesiell vurdering           |
-        | IH     | individuell helhetsvurdering |
+        | metode | beskrivelse                                 |
+        | KP     | konkurransepoeng                            |
+        | SP     | skolepoeng                                  |
+        | IV     | individuell vurdering (uten poengberegning) |
+        | IH     | individuell helhetsvurdering                |
 
   Regel: En kvotetype kan slettes når den ikke er i bruk
 
