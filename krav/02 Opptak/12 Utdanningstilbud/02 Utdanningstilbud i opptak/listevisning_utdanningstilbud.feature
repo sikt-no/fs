@@ -118,8 +118,6 @@ Egenskap: Listevisning og søk i utdanningstilbud i opptaket
     # tidligopptaket (se @OPT-BEH-BEH-007).
     # ÅPNE SPØRSMÅL:
     # - Er det et eget filter, eller et valg i samme filter som «ufullstendige opplysninger»?
-    # - Skal bare utdanningstilbud som tilbyr tidlig opptak tas med, eller også dem som har en poenggrense uten å tilby tidlig opptak?
-    # - Skal listen vise poenggrensen og medianen fra forrige opptak, så opptaksforvalter kan sammenligne dem?
 
     Scenario: Filtrere på utdanningstilbud med poenggrense for tidlig opptak
       Gitt at utdanningstilbudet "Sykepleie, høst 2027" tilbyr tidlig opptak med poenggrense 50
