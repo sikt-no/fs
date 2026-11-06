@@ -263,6 +263,10 @@ Egenskap: Automatisk GSK-konklusjon
       # deltar. HK-dir avgjør grunnlagskoden, og lærestedene kan ikke rette listen over løp.
       # Opptaksforvalteren får ett varsel per løp, med antall vitnemål med løpet, ikke ett varsel
       # per vitnemål.
+      # Avklart 06.11.2026 (Jøran, PR #966): HK-dir gir Sikt beskjed om grunnlagskoden, og Sikt
+      # ser også løpet i applikasjonsloggen. Sikt legger løpet inn i listen over løp. Søknadene
+      # som har fått KLY eller RFA, rettes etter regelen «Grunnlagskoden rettes når løpet er lagt
+      # inn i listen over løp».
       # ÅPNE SPØRSMÅL:
       # - Hvor i FS Admin får opptaksforvalteren varselet?
       Gitt at løpet på vitnemålet ikke finnes i opptakssystemets liste over løp
@@ -427,6 +431,9 @@ Egenskap: Automatisk GSK-konklusjon
 
   @ref-FLY-OPT-AUT-001
   Regel: Automatikken setter bare positive konklusjoner, og bare der ingen finnes
+    # Unntaket er grunnlagskoden på en konklusjon automatikken selv satte med KLY eller RFA fordi
+    # løpet manglet i listen over løp. Se regelen «Grunnlagskoden rettes når løpet er lagt inn i
+    # listen over løp».
 
     Scenario: Ingen grunnlag for generell studiekompetanse
       Gitt at søknaden ikke får GSK-konklusjon fra vitnemålet
@@ -445,6 +452,34 @@ Egenskap: Automatisk GSK-konklusjon
       Gitt at søkeren ikke har noe grunnlag for generell studiekompetanse
       Når søknaden opprettes
       Så får søknaden ingen negativ GSK-konklusjon
+
+  @openquestion
+  Regel: Grunnlagskoden rettes når løpet er lagt inn i listen over løp
+    # Avklart 06.11.2026 (Jøran, PR #966): har automatikken satt konklusjonen med KLY eller RFA
+    # fordi løpet manglet i listen over løp, får konklusjonen grunnlagskoden fra listen når løpet
+    # er lagt inn. Opptaksforvalteren ved organisasjonen som forvalter opptaket, starter det. En
+    # konklusjon saksbehandleren har satt eller endret, rettes aldri.
+    # ÅPNE SPØRSMÅL:
+    # - Rettes grunnlagskoden også i saker som er ferdig behandlet, og etter at resultatet av en
+    #   plasstildelingsrunde er publisert (se OPT-BEH-BEH-026)?
+    # - Ser opptaksforvalteren hvilke søknader som får grunnlagskoden rettet, før det startes?
+
+    Scenario: Grunnlagskoden rettes når opptaksforvalteren starter det
+      Gitt at søknaden har fått en positiv GSK-konklusjon med grunnlagskoden KLY fordi løpet manglet i listen over løp
+      Og at løpet er lagt inn i listen over løp med grunnlagskoden KLS
+      Når opptaksforvalteren ved organisasjonen som forvalter opptaket, starter rettingen av grunnlagskoden for løpet
+      Så har GSK-konklusjonen på søknaden grunnlagskoden KLS
+
+    Scenario: Grunnlagskoden rettes ikke før opptaksforvalteren starter det
+      Gitt at søknaden har fått en positiv GSK-konklusjon med grunnlagskoden KLY fordi løpet manglet i listen over løp
+      Når løpet legges inn i listen over løp med grunnlagskoden KLS
+      Så har GSK-konklusjonen på søknaden fortsatt grunnlagskoden KLY
+
+    Scenario: En konklusjon saksbehandleren har satt, rettes ikke
+      Gitt at saksbehandleren har satt en positiv GSK-konklusjon med grunnlagskoden KLY på søknaden
+      Og at løpet på vitnemålet er lagt inn i listen over løp med grunnlagskoden KLS
+      Når opptaksforvalteren ved organisasjonen som forvalter opptaket, starter rettingen av grunnlagskoden for løpet
+      Så har GSK-konklusjonen på søknaden fortsatt grunnlagskoden KLY
 
   @draft @depends-on-OPT-OVO-FRI-001
   # OPT-OVO-FRI-001: «Opptaksforvalter kan sette når den automatiske saksbehandlingen starter og avsluttes»
