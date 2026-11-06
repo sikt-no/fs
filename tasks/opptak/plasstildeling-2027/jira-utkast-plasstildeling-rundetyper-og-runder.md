@@ -1,15 +1,15 @@
 # Utkast til Jira: Forberede plasstildeling
 
-Utkast 2026-10-28, skrevet om 2026-11-02 etter gjennomgangen av prototypen v88 ([PR #907](https://github.com/sikt-no/fs/pull/907)), oppdatert 2026-11-03: rundetypene forvaltes ikke i første leveranse, og 2026-11-04 mot sakene i TAKE og beslutningene i teamet. Ikke opprettet eller endret i Jira ennå. Kravene for runder og rundetyper er `@in-progress`, og antall tilbud er `@draft`. Lenkene går til `main` (kravene kommer dit når PR #907 er merget).
+Utkast 2026-10-28, skrevet om 2026-11-02 etter gjennomgangen av prototypen v88 ([PR #907](https://github.com/sikt-no/fs/pull/907)), oppdatert 2026-11-03: rundetypene forvaltes ikke i første leveranse, 2026-11-04 mot sakene i TAKE og beslutningene i teamet, og 2026-11-05: TAKE-484 har fått underoppgavene TAKE-487 og TAKE-488, og standardverdiene for takene er innstillinger på rundetypen. I Jira er bare underoppgavene til TAKE-484 opprettet eller endret. Resten er ikke opprettet eller endret ennå. Kravene for runder og rundetyper er `@in-progress`, og antall tilbud er `@draft`. Lenkene går til `main`.
 
 Forvaltning av rundetyper (`@OPT-REG-RUN-002`, Could) er ikke med: ingen kan legge til, endre eller slette rundetyper i regelverkssamlingen. Plasstildelingen bruker de tre rundetypene som finnes. Varsling av lærestedene og markering av gjennomgang (`@OPT-PLA-INN-004`, Could) og kontrollen av antall tilbud (`@OPT-PLA-INN-003`, Should) er heller ikke med.
 
-## Sakene i Jira nå (TAKE, hentet 2026-11-04)
+## Sakene i Jira nå (TAKE, hentet 2026-11-04, TAKE-484 oppdatert 2026-11-05)
 
 | Sak | I Jira nå | I utkastet |
 |---|---|---|
 | [TAKE-3](https://sikt.atlassian.net/browse/TAKE-3) | Epic «Ferdigstilling av plasstildeling i opptak», In progress, med alle plasstildelingssakene | Beholdes. Leveransedelene legges under den som stories (besluttet i teamet 2026-11-04) |
-| [TAKE-484](https://sikt.atlassian.net/browse/TAKE-484) | Story «Attributter på rundetype», To Do, uten epic og bare med et bilde. Sub-task [TAKE-485](https://sikt.atlassian.net/browse/TAKE-485) «BE: flyway og støtte i grafen for nye felter» | Brukes for innstillingene på rundetypene (`@OPT-REG-RUN-001`). Flyttes til TAKE-3 og får beskrivelse og akseptansekriterier |
+| [TAKE-484](https://sikt.atlassian.net/browse/TAKE-484) | Story «Attributter på rundetype», To Do, uten epic og bare med et bilde. Sub-tasks [TAKE-485](https://sikt.atlassian.net/browse/TAKE-485) «BE: flyway og støtte i grafen for nye felter» (beskrivelse lagt inn 2026-11-04, oppdatert 2026-11-05), [TAKE-487](https://sikt.atlassian.net/browse/TAKE-487) «BE: regler for ny runde fra innstillingene på rundetypen» og [TAKE-488](https://sikt.atlassian.net/browse/TAKE-488) «FE: velge rundetype og se innstillingene» (opprettet 2026-11-05) | Brukes for innstillingene på rundetypene (`@OPT-REG-RUN-001`) og reglene i `@OPT-PLA-RUN-001` som bygger på dem. Flyttes til TAKE-3 og får beskrivelse og akseptansekriterier |
 | [TAKE-327](https://sikt.atlassian.net/browse/TAKE-327) | Story «Beregne antall tilbud per utdanningskvote fra relativ fordeling», Backlog | Skrives om til «Lærestedet setter antall tilbud som skal gis per utdanningskvote» |
 | [TAKE-450](https://sikt.atlassian.net/browse/TAKE-450) | Task «Fjerne sette antall tilbud som skal gis» (opptaksinnstillingen), Won't do, under [TAKE-318](https://sikt.atlassian.net/browse/TAKE-318) | Ingen endring. Feltet er fjernet fra opptaksinnstillingene, og hører ikke med i TAKE-327 |
 | TAKE-74, 156, 159, 165, 265, 267, 268, 278, 288, 328, 329, 330 og 331 | Under TAKE-3, Backlog | Blir under TAKE-3 |
@@ -22,6 +22,11 @@ Forvaltning av rundetyper (`@OPT-REG-RUN-002`, Could) er ikke med: ingen kan leg
 - Feltet for antall tilbud som skal gis er fjernet fra opptaksinnstillingene, og trenger ikke stå i TAKE-327.
 - Taket for antall tilbud per søker er antall tilbud søkeren kan få i runden, og hører til plasstildelingsrunden. Det er ikke det samme som maks antall søknadsalternativer, som hører til opptaket (`innstillinger.feature`). I koden ligger taket på opptaket (`maks_antall_tilbud`, «maksimalt antall tilbud som kan gis i dette opptaket»), og regelen i `innstillinger.feature` er `@deprecated`. Å flytte taket til runden hører til storyen «Opprette plasstildelingsrunder».
 - Bildet i TAKE-484 viser de samme innstillingene som `@OPT-REG-RUN-001`. TAKE-484 gjelder bare innstillingene på rundetypen. Svarfrist, periode, tak og ledige studieplasser på runden hører til storyen «Opprette plasstildelingsrunder», og antall tilbud som skal gis til TAKE-327.
+
+### Endret 2026-11-05
+
+- TAKE-484 omfatter også reglene i `@OPT-PLA-RUN-001` som bygger på innstillingene (`@depends-on-OPT-REG-RUN-001`): valget av rundetype, at opptaket bare kan ha én hovedtildeling, at supplering og etterfylling ikke kan være den første runden, og at runden viser innstillingene. De er underoppgavene TAKE-487 (BE) og TAKE-488 (FE), og er tatt ut av storyen «Opprette plasstildelingsrunder».
+- Standardverdiene for taket for antall tilbud per søker og for taket for antall tilbud på ledige studieplasser per søker er innstillinger på rundetypen (`@OPT-REG-RUN-001`), ikke verdier i koden. Rundetypene har nå sju innstillinger. Å flytte takene til runden og fylle dem ut med standardverdiene hører fortsatt til «Opprette plasstildelingsrunder».
 
 ## Epic (TAKE-3, beholdes): Ferdigstilling av plasstildeling i opptak
 
@@ -49,33 +54,36 @@ Tittelen beholdes. Beskrivelsen byttes med teksten under. Epicen er den eneste f
 
 ## Story (TAKE-484, utvides): Innstillinger på rundetypene
 
-Ny beskrivelse og akseptansekriterier. Flyttes til TAKE-3. Sub-tasken TAKE-485 (backend) beholdes.
+Ny beskrivelse og akseptansekriterier. Flyttes til TAKE-3. Underoppgavene er TAKE-485 (BE: innstillingene i databasen og grafen), TAKE-487 (BE: reglene for ny runde) og TAKE-488 (FE: velge rundetype og se innstillingene).
 
-Rundetypene hovedtildeling, supplering og etterfylling får de faste innstillingene plasstildelingen leser. Rundetypene er felles for alle opptak, og er ikke en del av regelverkssamlingen. I dag er rundetypene et kodeverk uten innstillinger.
+Rundetypene hovedtildeling, supplering og etterfylling får de faste innstillingene plasstildelingen leser, og standardverdiene for takene på runden. Rundetypene er felles for alle opptak, og er ikke en del av regelverkssamlingen. Når en runde legges til, avgjør innstillingene hvilke rundetyper som kan velges, og opptaksforvalter ser innstillingene på runden. I dag er rundetypene et kodeverk uten innstillinger, og fs-admin lar bare opptaksforvalter velge hovedtildeling.
 
 Akseptansekriterier:
 
-- Hovedtildeling, supplering og etterfylling har innstillingene bortfall på lavere prioriteter, kompensasjonstilbud ved opprykk, bygger på forrige publiserte runde, bare én i opptaket og kan åpnes for ledige studieplasser, med verdiene i kravet (`@OPT-REG-RUN-001`)
-- Rundetypene er felles for alle opptak. TIDLIG, LEDIGE_STUDIEPLASSER og TEST i kodeverket er ikke rundetyper i kravet
+- Hovedtildeling, supplering og etterfylling har de sju innstillingene med verdiene i kravet (`@OPT-REG-RUN-001`): bortfall på lavere prioriteter, kompensasjonstilbud ved opprykk, bygger på forrige publiserte runde, bare én i opptaket, kan åpnes for ledige studieplasser, og standardverdiene for taket for antall tilbud per søker og for taket for antall tilbud på ledige studieplasser per søker
+- Rundetypene er felles for alle opptak. TIDLIG, LEDIGE_STUDIEPLASSER og TEST i kodeverket er ikke rundetyper i kravet, og kan ikke velges
+- Opptaksforvalter velger mellom hovedtildeling, supplering og etterfylling når en runde legges til
+- En rundetype med «Bare én i opptaket» kan ikke velges når opptaket har en runde med den rundetypen fra før, og en rundetype som bygger på forrige publiserte runde, kan ikke være den første runden. Reglene leser innstillingene, ikke rundetypekoden
+- Opptaksforvalter ser innstillingene fra rundetypen i skjemaet og på runden, og kan ikke endre dem
 - Innstillingene kan ikke endres i løsningen. Forvaltning av rundetyper (`@OPT-REG-RUN-002`) er ikke med
 
-Krav: [bruke_rundetyper.feature](https://github.com/sikt-no/fs/blob/main/krav/02%20Opptak/10%20Regelverk/06%20Rundetyper/bruke_rundetyper.feature)
+Krav: [bruke_rundetyper.feature](https://github.com/sikt-no/fs/blob/main/krav/02%20Opptak/10%20Regelverk/06%20Rundetyper/bruke_rundetyper.feature) · [forvalte_runder.feature](https://github.com/sikt-no/fs/blob/main/krav/02%20Opptak/14%20Plasstildeling/01%20Runder/forvalte_runder.feature), reglene «Rundetypene avgjør hvilke plasstildelingsrunder opptaket kan ha» og «Plasstildelingsrunden har innstillingene fra rundetypen»
 
 ## Story: Opprette plasstildelingsrunder
 
-Opptaksforvalter legger til plasstildelingsrunder i opptaket av rundetypene hovedtildeling, supplering og etterfylling, og setter innstillingene som hører til runden: svarfrist, tak for antall tilbud per søker, ledige studieplasser og perioden for lærestedene. Runden får de faste innstillingene fra rundetypen. I dag kan bare hovedrunde velges i fs-admin, og taket for antall tilbud per søker ligger på opptaket (`maks_antall_tilbud`). Bygger på TAKE-484 (innstillingene på rundetypene).
+Opptaksforvalter legger til plasstildelingsrunder i opptaket av rundetypene hovedtildeling, supplering og etterfylling, og setter innstillingene som hører til runden: svarfrist, tak for antall tilbud per søker, ledige studieplasser og perioden for lærestedene. Runden får de faste innstillingene og standardverdiene for takene fra rundetypen. I dag ligger taket for antall tilbud per søker på opptaket (`maks_antall_tilbud`). Bygger på TAKE-484 (innstillingene på rundetypene, valget av rundetype og reglene for hvilke runder opptaket kan ha).
 
-Ikke med: å legge til, endre eller slette rundetyper (`@OPT-REG-RUN-002`, Could).
+Ikke med: å legge til, endre eller slette rundetyper (`@OPT-REG-RUN-002`, Could), og valget av rundetype, reglene for hvilke rundetyper opptaket kan ha og visningen av innstillingene på runden (TAKE-484, med TAKE-487 og TAKE-488).
 
 Akseptansekriterier:
 
-- Opptaksforvalter legger til en runde med navn, rundetype og svarfrist (`@OPT-PLA-RUN-001`). Opptaket kan bare ha én hovedtildeling, og supplering og etterfylling kan ikke være den første runden
+- Opptaksforvalter legger til en runde med navn, rundetype og svarfrist (`@OPT-PLA-RUN-001`)
 - Navnet på runden er unikt i opptaket, uten hensyn til store og små bokstaver, og er høyst 100 tegn
-- Runden har innstillingene fra rundetypen, og opptaksforvalter ser dem, men kan ikke endre dem på runden. Rundetypen kan ikke endres etter at runden er lagt til
+- Rundetypen kan ikke endres etter at runden er lagt til
 - Navn og svarfrist kan alltid endres, og en runde kan slettes så lenge den ikke er publisert til søker
 - Taket for antall tilbud per søker flyttes fra opptaket til runden. Maks antall søknadsalternativer blir på opptaket
-- Taket for antall tilbud per søker har en standardverdi per rundetype når runden legges til, og opptaksforvalter kan endre det. I samordna opptak: 1 i hovedtildeling og supplering, 10 i etterfylling
-- Opptaksforvalter kan åpne runden for ledige studieplasser når opptaket tilbyr søknad på ledige studieplasser. Runden får da tak for antall tilbud på ledige studieplasser per søker, med standardverdien 10, og opptaksforvalter kan endre det. Tilbudene på ledige studieplasser kommer i tillegg til de ordinære tilbudene
+- Taket for antall tilbud per søker fylles ut med standardverdien fra rundetypen når runden legges til, og opptaksforvalter kan endre det. I samordna opptak: 1 i hovedtildeling og supplering, 10 i etterfylling
+- Opptaksforvalter kan åpne runden for ledige studieplasser når opptaket tilbyr søknad på ledige studieplasser. Runden får da tak for antall tilbud på ledige studieplasser per søker, med standardverdien fra rundetypen (10 i alle tre), og opptaksforvalter kan endre det. Tilbudene på ledige studieplasser kommer i tillegg til de ordinære tilbudene
 - Opptaksforvalter setter periode for når lærestedene kan endre antall tilbud (dato og klokkeslett, kan alltid endres). Svarfristen må komme etter at perioden er slutt
 - Lærestedet ser alle rundene og hva det skal gjøre i hver, men kan bare åpne runden der perioden er åpen
 - Oversikten over rundene viser navn, rundetype, perioden for lærestedene, svarfristen for søkerne, om runden er publisert og om lærestedet har en oppgave. Rundene kan søkes etter på navn, filtreres på rundetype, status og periode, og sorteres på svarfrist (tidligste først som standard), status og periode, 50 om gangen (`@OPT-PLA-RUN-002`)
