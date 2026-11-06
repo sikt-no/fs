@@ -8,9 +8,9 @@ Egenskap: Starte automatisk behandling
   Den automatiske behandlingen er en fortsettelse av saksbehandlertildelingen. Hver ny sak
   behandles automatisk når søkerens resultater er importert fra KREG. Har søkeren ikke noe
   vitnemål når saken opprettes, starter behandlingen når importen av VGS-vitnemål fra KREG har hentet
-  alle vitnemålene søkeren har fått i KREG. Et nytt vitnemål i en sak som har vitnemål fra før, er ny
-  dokumentasjon: behandlingen starter ikke av seg selv, og saksbehandleren ser at saken har fått
-  ny dokumentasjon. Saksbehandleren kan starte den automatiske behandlingen for en sak, også på
+  alle vitnemålene søkeren har fått i KREG. Et nytt vitnemål i en sak som har vitnemål fra før, gir
+  saken nye resultater (OPT-BEH-BEH-035): behandlingen starter ikke av seg selv, og saksbehandleren
+  finner saken blant sakene med nye resultater. Saksbehandleren kan starte den automatiske behandlingen for en sak, også på
   vitnemålet saksbehandleren velger når søkeren har flere vitnemål (OPT-BEH-BEH-039). Det saksbehandleren har gjort i saken, endres aldri av automatikken. Opptaksforvalteren
   kan sette når den automatiske saksbehandlingen starter og avsluttes i opptaket.
   Hva behandlingen gjør med saken, står i kravene flyten FLY-OPT-AUT-001 bygger på.
@@ -47,7 +47,7 @@ Egenskap: Starte automatisk behandling
     # vitnemålene søkeren har i KREG, ikke ved det første vitnemålet. Den bruker vitnemålene
     # som finnes i KREG når importen kjører. Har søkeren to eller flere vitnemål, uansett om de
     # gir GSK, behandles saken ikke helautomatisk (OPT-BEH-BEH-025). Et vitnemål som kommer
-    # etter at saken er behandlet, er ny dokumentasjon.
+    # etter at saken er behandlet, gir saken nye resultater (OPT-BEH-BEH-035).
 
     Scenario: Saken behandles automatisk når importen har hentet søkerens vitnemål
       Gitt at "Kari Nordmann" har levert søknaden uten å ha et vitnemål i KREG
@@ -78,23 +78,21 @@ Egenskap: Starte automatisk behandling
         | Under behandling |
         | Behandlet        |
 
-  @openquestion @depends-on-OPT-BEH-BEH-030 @ref-OPT-BEH-BEH-021 @ref-OPT-BEH-BEH-029
+  @depends-on-OPT-BEH-BEH-030 @depends-on-OPT-BEH-BEH-035 @ref-OPT-BEH-BEH-021 @ref-OPT-BEH-BEH-029
   # OPT-BEH-BEH-030: «Nye og annullerte vitnemål i KREG importeres for aktive søkere»
-  Regel: Et nytt vitnemål i en sak med vitnemål er ny dokumentasjon
-    # ÅPNE SPØRSMÅL:
-    # - Er «ny dokumentasjon» i sakslisten en behandlingsstatus (OPT-BEH-BEH-029), eller en egen
-    #   markering ved siden av? OPT-BEH-BEH-029 sier at ny dokumentasjon ikke endrer
-    #   behandlingsstatusen.
-    # - Er «ny dokumentasjon» den samme markeringen som «nye resultater» i OPT-BEH-BEH-035 og
-    #   taggen «Vitnemål annullert» i OPT-BEH-BEH-034? Alle tre merker saken når
-    #   søkeren får et nytt eller annullert vitnemål.
-    # - Er varselet om nytt vitnemål det samme som i OPT-BEH-BEH-021?
+  # OPT-BEH-BEH-035: «Saken har nye resultater når resultater importeres etter at saken er behandlet»
+  Regel: Et nytt vitnemål i en sak med vitnemål gir saken nye resultater
+    # Avklart 06.11.2026 (økt med fagfolk): saken får nye resultater (OPT-BEH-BEH-035), ikke en egen
+    # markering. «Ny dokumentasjon» i sakslisten gjelder dokumentene søkeren laster opp
+    # (OPT-BEH-BEH-008), og behandlingsstatusen endres ikke (OPT-BEH-BEH-029). Taggen «Vitnemål
+    # annullert» (OPT-BEH-BEH-034) og varselet om at grunnlaget saksbehandleren har valgt, er
+    # utdatert (OPT-BEH-BEH-021), kommer i tillegg, fordi de sier noe mer.
 
-    Scenario: Saksbehandleren ser at saken har fått ny dokumentasjon
+    Scenario: Saken får nye resultater når det kommer et nytt vitnemål
       Gitt at saken hos "Universitetet i Oslo" er behandlet automatisk på vitnemålet til "Kari Nordmann"
       Og at "Kari Nordmann" har fått et nytt vitnemål i KREG
       Når importen av VGS-vitnemål fra KREG kjører
-      Så ser saksbehandleren ved Universitetet i Oslo «Ny dokumentasjon» på saken i sakslisten
+      Så har saken hos "Universitetet i Oslo" nye VGS-resultater
 
     Scenario: Saken behandles ikke automatisk på nytt når det kommer et nytt vitnemål
       Gitt at saken hos "Universitetet i Oslo" er behandlet automatisk på vitnemålet til "Kari Nordmann"

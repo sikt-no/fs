@@ -154,8 +154,8 @@ Egenskap: Importere resultater fra KREG
     # Jobben for nye vitnemål (OPT-BEH-BEH-032) går gjennom alle aktive søkere, og henter
     # vitnemålene fra KREG for hver søker. Det som ikke er importert fra før, eller som er
     # annullert i KREG, er nytt.
-    # Et nytt vitnemål i en sak som er behandlet, er ny dokumentasjon. Saken behandles ikke
-    # automatisk på nytt (OPT-BEH-BEH-032). Når vitnemålet annulleres, gjelder OPT-BEH-BEH-034.
+    # Et nytt vitnemål i en sak som er behandlet, gir saken nye resultater (OPT-BEH-BEH-035).
+    # Saken behandles ikke automatisk på nytt (OPT-BEH-BEH-032). Når vitnemålet annulleres, gjelder OPT-BEH-BEH-034.
     # Varselet til saksbehandleren om nytt vitnemål står i OPT-BEH-BEH-021.
 
     Scenario: Søkeren får vitnemålet etter at søknaden er levert

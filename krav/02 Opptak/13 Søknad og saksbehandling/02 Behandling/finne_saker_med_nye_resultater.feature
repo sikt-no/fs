@@ -37,7 +37,7 @@ Egenskap: Finne saker med nye resultater
   Saken har nye resultater til den er behandlet på nytt. Saksbehandleren kan
   filtrere sakene på hvilken gruppe de nye resultatene hører til.
 
-  @depends-on-OPT-BEH-BEH-030
+  @depends-on-OPT-BEH-BEH-030 @ref-OPT-BEH-BEH-032
   Regel: Saken har nye resultater når resultater importeres etter at saken er behandlet
     # Hvordan resultatene importeres, også gjennom abonnementet, står i OPT-BEH-BEH-030.
 

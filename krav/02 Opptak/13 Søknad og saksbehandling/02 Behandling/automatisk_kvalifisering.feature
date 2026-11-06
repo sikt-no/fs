@@ -356,13 +356,11 @@ Egenskap: Automatisk vurdering av spesielle opptakskrav
       Når saksbehandleren ser i endringsloggen
       Så ser saksbehandleren at kravelementet ble vurdert av den automatiske behandlingen
 
-    @openquestion @implemented
+    @implemented
     Scenario: Finne søkere som ikke er kvalifisert
-      # ÅPNE SPØRSMÅL:
-      # - FS-klienten har rapporten FS102.004 «Ikke-kvalifiserte søkere –
-      #   spesielle opptakskrav» og brevet FS120.002 til søkere med manglende
-      #   fagkrav. Hva trengs i ny stack: et filter i saksoversikten, en
-      #   rapport eller begge?
+      # Avklart 06.11.2026 (økt med fagfolk): et filter i saksoversikten holder. Rapporten
+      # FS102.004 «Ikke-kvalifiserte søkere – spesielle opptakskrav» og brevet FS120.002 fra
+      # FS-klienten trengs ikke i denne flyten.
       Gitt at noen søkere i opptaket ikke er kvalifisert på de spesielle opptakskravene
       Når saksbehandleren ser etter søkerne som ikke er kvalifisert
       Så finner saksbehandleren søkerne som ikke er kvalifisert

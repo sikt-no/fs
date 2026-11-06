@@ -31,9 +31,9 @@ Egenskap: Ferdigbehandle en sak
   # «<feil i regelverket> stopper <steg>». Nye feil legges til i tabellen når de oppdages.
 
   # Avklart 29.10.2026: når den automatiske behandlingen starter, står i OPT-BEH-BEH-032. Et nytt
-  # vitnemål i en sak som er ferdig behandlet, er ny dokumentasjon. Saken behandles ikke
-  # automatisk på nytt, men saksbehandleren ser at den har fått ny dokumentasjon, og kan starte
-  # behandlingen på det nye vitnemålet.
+  # vitnemål i en sak som er ferdig behandlet, gir saken nye resultater (OPT-BEH-BEH-035). Saken
+  # behandles ikke automatisk på nytt, men saksbehandleren finner den blant sakene med nye
+  # resultater, og kan starte behandlingen på det nye vitnemålet.
 
   Bakgrunn:
     Gitt at søknaden til "Kari Nordmann" har en sak hos "Universitetet i Oslo"

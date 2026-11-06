@@ -37,6 +37,10 @@ Egenskap: Beregne GSK fra vitnemål
     # Fagresultatene på vitnemålet har en fagstatus. Saksbehandleren bruker den til å
     # angi om et fag skal være med i kontrollene av vitnemålet. Avklart 2026-10-27 at
     # fagstatusen hører til et annet krav, og at kontrollene må følge den.
+    # Avklart 06.11.2026 (økt med fagfolk): regelen er utenfor flyten for automatisk
+    # saksbehandling (FLY-OPT-AUT-001). En sak som behandles helautomatisk, har ingen
+    # saksbehandler som kan ta et fag ut av kontrollene. Regelen hører til manuell behandling,
+    # der saksbehandleren i dag kan sette GSK-konklusjonen selv.
     # ÅPNE SPØRSMÅL:
     # - Hva fagstatusen er, og hvem som setter den, er uklart (30.10.2026). Regelen holdes
     #   utenfor til det er forklart. Den gjelder ikke den helautomatiske flyten.

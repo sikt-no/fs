@@ -105,8 +105,8 @@ Egenskap: Automatisk beregning av vitnemålspoeng
 
     # Avklart 30.10.2026: får søkeren et vitnemål til, blir de automatisk beregnede
     # vitnemålspoengene stående til saksbehandleren har valgt vitnemål og startet behandlingen på
-    # det. Et nytt vitnemål er ny dokumentasjon, og saken behandles ikke automatisk på nytt
-    # (OPT-BEH-BEH-032).
+    # det. Et nytt vitnemål gir saken nye resultater (OPT-BEH-BEH-035), og saken behandles ikke
+    # automatisk på nytt (OPT-BEH-BEH-032).
 
     @ref-OPT-BEH-BEH-025
     Scenario: Vitnemålspoeng fra vitnemålet saksbehandleren har valgt
@@ -171,13 +171,11 @@ Egenskap: Automatisk beregning av vitnemålspoeng
       Når saksbehandleren ser på poengene
       Så ser saksbehandleren at vitnemålspoengene ikke er beregnet fordi søkeren ikke har ett entydig vitnemål
 
-    @openquestion
     Scenario: Finne saker som er behandlet automatisk
-      # ÅPNE SPØRSMÅL:
-      # - Brukerbehov fra raffineringen (PFS 4392517645): å kunne søke opp hvem som er behandlet
-      #   automatisk, gjerne med skille mellom helautomatisk og halvautomatisk. FS158.001 har «Vis
-      #   tidligere behandlinger». Er det et filter i saksoversikten, en logg, eller begge? Avgjøres
-      #   i designet (30.10.2026).
+      # Brukerbehov fra raffineringen (PFS 4392517645): å kunne søke opp hvem som er behandlet
+      # automatisk. FS158.001 har «Vis tidligere behandlinger».
+      # Avklart 06.11.2026 (økt med fagfolk): et filter i saksoversikten holder. Det trengs ingen
+      # logg eller rapport i denne flyten.
       Gitt at noen saker i opptaket er behandlet automatisk
-      Når saksbehandleren ser etter sakene som er behandlet automatisk
-      Så finner saksbehandleren sakene som er behandlet automatisk
+      Når saksbehandleren filtrerer sakene på saker som er behandlet automatisk
+      Så ser saksbehandleren bare sakene som er behandlet automatisk
