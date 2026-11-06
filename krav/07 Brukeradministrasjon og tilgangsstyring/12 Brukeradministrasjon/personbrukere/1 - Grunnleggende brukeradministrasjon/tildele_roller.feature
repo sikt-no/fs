@@ -47,6 +47,18 @@ Egenskap: Tildele roller til en personbruker
         | ukjent                                           |
         | ikke blant organisasjonene jeg administrerer     |
 
+    Scenario: Organisasjonen jeg administrerer er forhåndsvalgt for en personbruker uten Feide-ID
+      Gitt jeg administrerer kun én organisasjon
+      Og personbrukeren ikke har Feide-ID
+      Når jeg velger å tildele en rolle
+      Så er organisasjonen jeg administrerer valgt som organisasjon
+
+    Scenario: Ingen organisasjon er forhåndsvalgt for en personbruker uten Feide-ID
+      Gitt jeg administrerer flere organisasjoner
+      Og personbrukeren ikke har Feide-ID
+      Når jeg velger å tildele en rolle
+      Så er ingen organisasjon valgt
+
   Regel: En eller flere roller kan tildeles i én operasjon
 
     Scenario: Tildele en rolle til en personbruker
