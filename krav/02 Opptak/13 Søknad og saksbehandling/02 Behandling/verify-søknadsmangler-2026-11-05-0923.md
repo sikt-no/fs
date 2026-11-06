@@ -70,6 +70,41 @@ Stiene er forkortet:
 - **Åpent spørsmål:** `@OPT-BEH-BEH-008` «Saksbehandleren finner sakene med en bestemt mangelkode» (`:467`, `@draft`) — skal utsjekkede tas med, og kan flere mangelkoder velges?
 - **Ikke sjekket:** skjermbilder, fordi chrome-devtools-MCP ikke er installert
 - **Delvis levert, men ikke i en spesifikasjon:** `@OPT-BEH-BEH-008` — hent det inn med `fs-specify`
+- **Kan ikke testes fra start til slutt:** `@OPT-BEH-BEH-008` «Mangel som er sjekket ut vises ikke for søkeren» — koden som skjuler mangelen finnes, men utsjekking er ikke laget i fs-admin (STEK-567)
+- **I arbeid:** `@OPT-BEH-BEH-008` advarselen og publiseringen ved «Behandlet» — branchen `mahj/behandlet-statuskode` i fs-plattform og fs-admin (STEK-253)
+
+## Kravet er endret etter kjøringen
+
+Endret 2026-11-06 i samme PR, før akseptansetesten. Endringene er ikke verifisert.
+
+- «Mangel på spesielle krav gir frist bare for søknadsalternativene med kompetanseregelverket» er slettet. Den dekkes av de andre frist-scenarioene.
+- «Meldingen viser fristen for hvert søknadsalternativ med mangler» heter nå «Meldingen viser ettersendingsfristen og de tidligere fristene som gjelder manglene», og skiller ettersendingsfristen fra den tidlige dokumentasjonsfristen.
+- Alle mangler vises under søknadsalternativene (Ingrid Grimstad Helset, 2026-11-05): ny scenariomal «Mangel på <kategori> vises under alle søknadsalternativene i saken» (Generelle krav, Poeng) og nytt scenario «Mangel på kvote vises under søknadsalternativene med kvoten». Scenariomalen «Mangel på <kategori> gjelder ikke et bestemt søknadsalternativ» (`@draft`) er slettet. Dette er en endring i koden: i dag gjelder mangler uten kompetanseregelverk hele søknaden (`MIG/V457__soknadsmangel_bare_publiserte.sql:51-93`).
+
+## Jira-sakene for det som ikke er levert
+
+| Scenario | Jira |
+| --- | --- |
+| Søkeren åpner meldingen om mangel | [TOT-2223](https://sikt.atlassian.net/browse/TOT-2223) Avklare hvordan vi skal håndheve frister relatert til studiekurv/søknadakladder |
+| Fristen for en mangel publisert <publisert> når <situasjon> | [TOT-2223](https://sikt.atlassian.net/browse/TOT-2223) |
+| Meldingen viser ettersendingsfristen og de tidligere fristene som gjelder manglene | [TOT-2223](https://sikt.atlassian.net/browse/TOT-2223) |
+| Mangel på <kategori> har ettersendingsfristen | [TOT-2223](https://sikt.atlassian.net/browse/TOT-2223) |
+| Søkeren ser kravene i kompetanseregelverket mangelen gjelder | [TOT-2469](https://sikt.atlassian.net/browse/TOT-2469) Finne ut av hvordan vi skal presentere krav og mangler per studiealternativ |
+| Mangel på <kategori> vises under alle søknadsalternativene i saken | ---- Task ikke Funnet ----- |
+| Mangel på kvote vises under søknadsalternativene med kvoten | ---- Task ikke Funnet ----- |
+| Saksbehandleren blir advart om mangler som ikke er publisert | [STEK-253](https://sikt.atlassian.net/browse/STEK-253) (Automatisk) setting av behandlingsstatus (behandlet) |
+| Publisere manglene når saken settes til ferdig behandlet | [STEK-253](https://sikt.atlassian.net/browse/STEK-253) |
+| Avbryte når saken har mangler som ikke er publisert | [STEK-253](https://sikt.atlassian.net/browse/STEK-253) |
+| Registrere mangel på kvote | ---- Task ikke Funnet ----- |
+| Saksbehandleren velger blant kvotespørsmålene til søknadsalternativene i saken | ---- Task ikke Funnet ----- |
+| En mangel i kategorien <kategori> <kobling> | ---- Task ikke Funnet ----- |
+| Samme mangelkode i kategorien <kategori> kan <tillatt> registreres flere ganger i saken | ---- Task ikke Funnet ----- |
+| Saksbehandleren sjekker ut mangelen | [STEK-567](https://sikt.atlassian.net/browse/STEK-567) Flagg bare mangler som fantes da søkeren fikk dem presentert |
+| Saksbehandleren ser om søkeren har lest mangelen | [STEK-421](https://sikt.atlassian.net/browse/STEK-421) Håndtere ny hendelse «Søker har lest mangler» |
+| Saksbehandlende organisasjon ser manglene i saken hos en annen organisasjon | ---- Task ikke Funnet ----- |
+| Saksbehandlende organisasjon kan ikke endre manglene i saken hos en annen organisasjon | [STEK-672](https://sikt.atlassian.net/browse/STEK-672) Lesemodus i saken: skjul det brukeren ikke har lov til å gjøre |
+| Tilbyderen ser manglene når en annen organisasjon saksbehandler utdanningstilbudet | [STEK-672](https://sikt.atlassian.net/browse/STEK-672) |
+| Saksloggen viser at saksbehandleren <hendelse> | ---- Task ikke Funnet ----- (BAT) |
 
 ## Endringer
 
