@@ -262,7 +262,8 @@ Egenskap: Automatisk GSK-konklusjon
       # organisasjonen som forvalter opptaket (HK-dir i samordna opptak), ikke til lærestedene som
       # deltar. HK-dir avgjør grunnlagskoden, og lærestedene kan ikke rette listen over løp.
       # Opptaksforvalteren får ett varsel per løp, med antall vitnemål med løpet, ikke ett varsel
-      # per vitnemål.
+      # per vitnemål. Avklart 06.11.2026 (Jøran, PR #966): varselet gjelder opptaket. Har søkere i
+      # flere opptak vitnemål med løpet, får forvalteren av hvert opptak sitt eget varsel.
       # Avklart 06.11.2026 (Jøran, PR #966): HK-dir gir Sikt beskjed om grunnlagskoden, og Sikt
       # ser også løpet i applikasjonsloggen. Sikt legger løpet inn i listen over løp. Søknadene
       # som har fått KLY eller RFA, rettes etter regelen «Grunnlagskoden rettes når løpet er lagt
@@ -453,16 +454,16 @@ Egenskap: Automatisk GSK-konklusjon
       Når søknaden opprettes
       Så får søknaden ingen negativ GSK-konklusjon
 
-  @openquestion
+  @ref-OPT-BEH-BEH-026
   Regel: Grunnlagskoden rettes når løpet er lagt inn i listen over løp
     # Avklart 06.11.2026 (Jøran, PR #966): har automatikken satt konklusjonen med KLY eller RFA
     # fordi løpet manglet i listen over løp, får konklusjonen grunnlagskoden fra listen når løpet
     # er lagt inn. Opptaksforvalteren ved organisasjonen som forvalter opptaket, starter det. En
     # konklusjon saksbehandleren har satt eller endret, rettes aldri.
-    # ÅPNE SPØRSMÅL:
-    # - Rettes grunnlagskoden også i saker som er ferdig behandlet, og etter at resultatet av en
-    #   plasstildelingsrunde er publisert (se OPT-BEH-BEH-026)?
-    # - Ser opptaksforvalteren hvilke søknader som får grunnlagskoden rettet, før det startes?
+    # Avklart 06.11.2026 (Jøran, PR #966): grunnlagskoden rettes også i saker som er ferdig
+    # behandlet, men ikke etter at resultatet av siste plasstildelingsrunde er publisert, som
+    # når kravelementene og poengene beregnes på nytt (OPT-BEH-BEH-026). Opptaksforvalteren ser
+    # hvilke søknader som får grunnlagskoden rettet, før rettingen startes.
 
     Scenario: Grunnlagskoden rettes når opptaksforvalteren starter det
       Gitt at søknaden har fått en positiv GSK-konklusjon med grunnlagskoden KLY fordi løpet manglet i listen over løp
@@ -474,6 +475,28 @@ Egenskap: Automatisk GSK-konklusjon
       Gitt at søknaden har fått en positiv GSK-konklusjon med grunnlagskoden KLY fordi løpet manglet i listen over løp
       Når løpet legges inn i listen over løp med grunnlagskoden KLS
       Så har GSK-konklusjonen på søknaden fortsatt grunnlagskoden KLY
+
+    Scenario: Grunnlagskoden rettes også i en sak som er ferdig behandlet
+      Gitt at søknaden har fått en positiv GSK-konklusjon med grunnlagskoden KLY fordi løpet manglet i listen over løp
+      Og at saken er ferdig behandlet
+      Og at løpet er lagt inn i listen over løp med grunnlagskoden KLS
+      Når opptaksforvalteren ved organisasjonen som forvalter opptaket, starter rettingen av grunnlagskoden for løpet
+      Så har GSK-konklusjonen på søknaden grunnlagskoden KLS
+
+    Scenario: Grunnlagskoden rettes ikke etter at resultatet av siste plasstildelingsrunde er publisert
+      Gitt at søknaden har fått en positiv GSK-konklusjon med grunnlagskoden KLY fordi løpet manglet i listen over løp
+      Og at resultatet av siste plasstildelingsrunde i "Samordna opptak 2027" er publisert
+      Og at løpet er lagt inn i listen over løp med grunnlagskoden KLS
+      Når opptaksforvalteren ved organisasjonen som forvalter opptaket, vil starte rettingen av grunnlagskoden for løpet
+      Så kan opptaksforvalteren ikke starte rettingen
+      Og GSK-konklusjonen på søknaden har fortsatt grunnlagskoden KLY
+
+    Scenario: Opptaksforvalteren ser søknadene som får grunnlagskoden rettet, før rettingen startes
+      Gitt at 400 søknader har fått en positiv GSK-konklusjon med grunnlagskoden KLY fordi løpet manglet i listen over løp
+      Og at løpet er lagt inn i listen over løp med grunnlagskoden KLS
+      Når opptaksforvalteren ved organisasjonen som forvalter opptaket, velger å rette grunnlagskoden for løpet
+      Så ser opptaksforvalteren de 400 søknadene som får grunnlagskoden rettet
+      Og rettingen er ikke startet
 
     Scenario: En konklusjon saksbehandleren har satt, rettes ikke
       Gitt at saksbehandleren har satt en positiv GSK-konklusjon med grunnlagskoden KLY på søknaden

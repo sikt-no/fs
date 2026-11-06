@@ -362,6 +362,9 @@ Egenskap: Automatisk vurdering av spesielle opptakskrav
       # Avklart 06.11.2026 (økt med fagfolk): et filter i saksoversikten holder. Rapporten
       # FS102.004 «Ikke-kvalifiserte søkere – spesielle opptakskrav» og brevet FS120.002 fra
       # FS-klienten trengs ikke i denne flyten.
+      # Avklart 06.11.2026 (Jøran, PR #966): filteret «Ikke kvalifiserte» holder, selv om det ikke
+      # skiller spesielle opptakskrav fra generell studiekompetanse. Saksbehandleren ser grunnen i
+      # saken.
       Gitt at noen søkere i opptaket ikke er kvalifisert på de spesielle opptakskravene
       Når saksbehandleren ser etter søkerne som ikke er kvalifisert
       Så finner saksbehandleren søkerne som ikke er kvalifisert
