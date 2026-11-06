@@ -1,5 +1,5 @@
 # language: no
-@OPT-REG-KVO-005 @must @draft @scope-spesialvurdering-2027 @depends-on-OPT-REG-KVO-001 @depends-on-OPT-REG-GRU-001 @depends-on-OPT-REG-RAN-001 @depends-on-OPT-REG-RAN-002
+@OPT-REG-KVO-005 @must @planned @scope-spesialvurdering-2027 @depends-on-OPT-REG-KVO-001 @depends-on-OPT-REG-GRU-001 @depends-on-OPT-REG-RAN-001 @depends-on-OPT-REG-RAN-002
 Egenskap: Opprette ventekvote for søkere uten poeng
   Som opptaksforvalter
   ønsker jeg å sette opp en ventekvote for søkere uten poeng i regelverkssamlingen
@@ -15,10 +15,80 @@ Egenskap: Opprette ventekvote for søkere uten poeng
   # internt i saksbehandlingen, for å avgjøre om søkeren når opp i konkurransen uten vanlige konkurransepoeng.
   # AVKLART 2026-11-06 (produkteier): Opptaksforvalter setter opp ventekvoten og innstillingene på kvotetypen.
 
+  # Navnene og kodene i scenarioene er bare eksempler.
+
+  Bakgrunn:
+    Gitt at opptaksforvalteren er innlogget
+    Og at regelverkssamlingen "UHG2027" er opprettet
+
   Regel: Grunnlagene for søkere uten vanlige konkurransepoeng har skjulte poeng
+
+    Scenariomal: Opprette grunnlag med skjulte poeng
+      Når opptaksforvalteren oppretter grunnlaget "<grunnlag>"
+      Og opptaksforvalteren angir at grunnlaget brukes i kvalifisering og rangering
+      Og opptaksforvalteren angir at poeng skal skjules for søker
+      Så er grunnlaget "<grunnlag>" opprettet med skjulte poeng
+
+      Eksempler:
+        | grunnlag              |
+        | Realkompetanse (REAL) |
+        | Uten poeng (HUP)      |
 
   Regel: Interne poeng settes opp i rangeringsregelverket med egne poengklasser og poengtyper
 
+    Scenario: Opprette poengtype for interne poeng
+      Gitt at poengklassen "Intern stipulering (INTSTIP)" og poengvarianten "NOM" finnes
+      Når opptaksforvalteren oppretter en poengtype for "INTSTIP" + "NOM"
+      Og opptaksforvalteren setter minimum til 0, maksimum til 999,99 og antall desimaler til 2
+      Og opptaksforvalteren knytter ingen poengalgoritme til poengtypen
+      Så er poengtypen "INTSTIP-NOM" opprettet uten automatisk beregning
+
+    Scenario: Opprette poengformel for interne poeng
+      Når opptaksforvalteren oppretter poengformelen "Interne poeng (INTERN)" med uttrykket "INTSTIP"
+      Så er poengformelen "Interne poeng (INTERN)" opprettet
+
+    Scenario: Koble grunnlagene til poengtypen for interne poeng
+      Gitt at rangeringsregelverket "ORD-RANG" brukes i opptaket
+      Når opptaksforvalteren kobler grunnlagene "Realkompetanse (REAL)" og "Uten poeng (HUP)" til poengtypen "INTSTIP-NOM" i rangeringsregelverket
+      Så kan saksbehandler sette interne poeng på søkere med grunnlaget "Realkompetanse (REAL)" eller "Uten poeng (HUP)"
+
+  @ref-OPT-BEH-BEH-012
   Regel: Ventekvoten er en kvotetype uten plasser og uten kvotespørsmål
+    # At søkerne plasseres automatisk i ventekvoten ut fra grunnlaget, står i automatisk_kvoteplassering.feature.
+
+    Scenario: Opprette ventekvoten
+      Gitt at grunnlagene "Realkompetanse (REAL)" og "Uten poeng (HUP)" har skjulte poeng
+      Og at poengformelen "Interne poeng (INTERN)" finnes
+      Når opptaksforvalteren oppretter kvotetypen "Ventekvote (VENT)" med
+        | innstilling         | verdi                                   |
+        | Default poengformel | Interne poeng (INTERN)                  |
+        | Grunnlag            | Realkompetanse (REAL), Uten poeng (HUP) |
+        | Kvotespørsmål       | ingen                                   |
+        | Plasser             | uten plasser                            |
+      Så er kvotetypen "Ventekvote (VENT)" opprettet uten plasser
+      Og søkere med grunnlaget "Realkompetanse (REAL)" eller "Uten poeng (HUP)" kan plasseres i "Ventekvote (VENT)"
+
+  @depends-on-OPT-REG-KVO-003 @depends-on-OPT-REG-KVO-004
+  Regel: Ventekvoten får kvoteprioritet og kobles til hovedkvoten i plassflyten
+    # AVKLART 2026-11-06 (produkteier): Ventekvoten har ingen plasser, så kvoteprioriteten og koblingen til
+    # hovedkvoten i plassflyten har ingen annen virkning enn at kvotetypen følger standardoppsettet for
+    # kvotetyper. En kvotetype kan ikke legges på utdanningstilbud før den har begge.
+
+    Scenario: Gi ventekvoten kvoteprioritet og koble den til hovedkvoten
+      Gitt at "Ordinær kvote (ORD)" er hovedkvoten i standard plassflyt i regelverkssamlingen
+      Og at kvotetypen "Ventekvote (VENT)" er opprettet uten plasser
+      Når opptaksforvalteren gir "Ventekvote (VENT)" kvoteprioritet 4 i regelverkssamlingen
+      Og opptaksforvalteren kobler "Ventekvote (VENT)" til "Ordinær kvote (ORD)" i standard plassflyt
+      Så følger "Ventekvote (VENT)" standardoppsettet for kvotetyper
+      Og kan "Ventekvote (VENT)" legges på utdanningstilbudene i opptaket
 
   Regel: Ventekvoten er standard for alle utdanningstilbud og kan ikke fjernes av lærestedet
+    # Hva innstillingene gjør hver for seg, står i kvoterregelverk.feature.
+
+    Scenario: Gjøre ventekvoten til standardkvote som lærestedet ikke kan fjerne
+      Gitt at kvotetypen "Ventekvote (VENT)" er opprettet uten plasser
+      Og at opptaket "Samordna opptak 2027" bruker regelverkssamlingen "UHG2027"
+      Når opptaksforvalteren setter kvotetypen "Ventekvote (VENT)" som standardkvote
+      Og opptaksforvalteren setter at lærestedet ikke kan fjerne kvotetypen "Ventekvote (VENT)"
+      Så har alle utdanningstilbudene i opptaket "Samordna opptak 2027" utdanningskvoten "Ventekvote (VENT)"
+      Og lærestedet kan ikke fjerne "Ventekvote (VENT)" fra utdanningstilbudene sine
