@@ -165,9 +165,23 @@ Egenskap: Listevisning og søk i personbrukere
     Scenario: Brukeradministrator ser personbrukere med hjemorganisasjon i organisasjonene jeg administrerer
       Gitt jeg har brukeradministrator-rollen for én eller flere organisasjoner
       Og en personbruker har hjemorganisasjon i en av organisasjonene jeg administrerer
+      Og administrasjonsrettigheten min for organisasjonen gjelder i et miljø med samme klassifisering som personbrukeren, syntetisk eller ekte
       Når jeg åpner brukeroversikten
       Så ser jeg personbrukeren i listen
-      Og jeg ser personbrukeren uavhengig av hvilket miljø administrasjonsrettigheten min gjelder for
+      Og jeg ser personbrukeren uavhengig av hvilket av miljøene med den klassifiseringen administrasjonsrettigheten min gjelder for
+
+    @implemented
+    Scenariomal: Personbrukere med hjemorganisasjon i organisasjonene jeg administrerer er ikke synlige fra et miljø med annen klassifisering
+      Gitt jeg har brukeradministrator-rollen for en organisasjon bare i <miljøklassifisering> miljøer
+      Og en <personklassifisering> personbruker har hjemorganisasjon i organisasjonen jeg administrerer
+      Og personbrukeren har ingen aktive roller i organisasjonen jeg administrerer
+      Når jeg åpner brukeroversikten
+      Så ser jeg ikke personbrukeren i listen
+
+      Eksempler:
+        | miljøklassifisering | personklassifisering |
+        | syntetiske          | ekte                 |
+        | ekte                | syntetisk            |
 
     @deprecated @scope-synlighet-og-gjelder-for
     Scenario: Brukeradministrator ser personbrukere med datatilgang fra egne organisasjoner
@@ -210,6 +224,23 @@ Egenskap: Listevisning og søk i personbrukere
       Og personbrukeren har ingen aktive roller i organisasjonene jeg administrerer
       Når jeg åpner brukeroversikten
       Så ser jeg ikke personbrukeren i listen
+
+    # Å kunne se saksbehandlerne gir innsyn i personen, ikke i rollene til personen (besluttet 27.10.2026).
+    @implemented
+    Scenario: Saksbehandlere i en organisasjon der jeg kan se saksbehandlerne er synlige uten aktiv rolle
+      Gitt jeg kan se saksbehandlerne i en organisasjon for å delegere saker til dem
+      Og en personbruker er saksbehandler i organisasjonen, i et miljø der jeg kan se saksbehandlerne
+      Og personbrukeren har ingen aktive roller i organisasjonene jeg administrerer
+      Når jeg åpner brukeroversikten
+      Så ser jeg personbrukeren i listen
+
+    @implemented
+    Scenario: Brukeradministrator ser seg selv uten aktiv rolle
+      Gitt jeg har brukeradministrator-rollen for én eller flere organisasjoner
+      Og jeg har hjemorganisasjon utenfor organisasjonene jeg administrerer
+      Og jeg har ingen aktive roller i organisasjonene jeg administrerer
+      Når jeg åpner brukeroversikten
+      Så ser jeg meg selv i listen
 
     @deprecated @scope-synlighet-og-gjelder-for
     Scenario: Personbrukere med datatilgang i et miljø jeg ikke administrerer er ikke synlige
