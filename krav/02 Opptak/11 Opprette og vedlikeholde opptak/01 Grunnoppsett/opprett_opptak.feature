@@ -54,6 +54,23 @@ Egenskap: Opprette et opptak
       Men opptaksforvalter setter ikke opptakstype
       Så kan opptaket ikke lagres
 
+  @draft @openquestion @ref-OPT-REG-SAM-001
+  # ÅPNE SPØRSMÅL:
+  # - Skal en opptaksforvalter alltid ha tilgang til regelverket ved organisasjonen sin? Uten den kan
+  #   opptaksforvalteren ikke opprette opptak, fordi regelverkssamlingen er obligatorisk.
+  # - Skal opptaksforvalteren uten tilgang til regelverket få en forklaring, eller bare se at regelverkssamlingen ikke kan velges?
+  #   Koden i MR-en sperrer feltet, mens mønsteret i design-patterns-for-krav er at det som mangler tilgang, skjules.
+  #   Feltet er obligatorisk, så det kan ikke bare skjules.
+  # - Skal avgrensningen til organisasjonen opptaket opprettes for også stå i kravet?
+  #   (Regel i koden uten scenario i verify-rapporten 2026-10-28, «uklart om ønsket».)
+  # Kilde: MR !3361 i fs-admin (TAKE-474). Det samme gjelder når regelverkssamlingen endres, se innstillinger.feature.
+  Regel: Opptaksforvalter kan bare knytte til regelverkssamlinger fra organisasjonene opptaksforvalteren har tilgang til regelverket i
+
+    Scenario: Regelverkssamlinger fra en organisasjon uten tilgang til regelverket kan ikke knyttes til opptaket
+      Gitt at opptaksforvalter ikke har tilgang til regelverket ved organisasjonen som eier regelverkssamlingen "Annet regelverk"
+      Når opptaksforvalter oppretter et nytt opptak
+      Så kan opptaksforvalter ikke knytte til regelverkssamlingen "Annet regelverk"
+
   @planned @scope-automatisk-ferdigbehandling @depends-on-OPT-BEH-BEH-036
   # OPT-BEH-BEH-036: «Mangelen for generell studiekompetanse som fullføres i vår settes og sjekkes ut automatisk»
   # Avklart 30.10.2026: advarselen stopper ikke lagringen.
