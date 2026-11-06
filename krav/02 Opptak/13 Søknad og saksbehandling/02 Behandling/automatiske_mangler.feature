@@ -271,6 +271,7 @@ Egenskap: Automatiske mangler
       Når søkeren endrer søknaden til at generell studiekompetanse ikke fullføres i vår
       Så har saken fortsatt mangelen "DUA"
 
+    @implemented
     Scenario: Saksbehandleren kan ikke slette den automatiske mangelen
       # Avklart 06.11.2026: å sjekke ut mangelen står i OPT-BEH-BEH-008 («Saksbehandleren sjekker
       # ut mangelen når søkeren har dokumentert på nytt»), og gjentas ikke her.

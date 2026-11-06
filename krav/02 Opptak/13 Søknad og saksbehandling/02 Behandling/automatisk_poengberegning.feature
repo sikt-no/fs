@@ -96,6 +96,7 @@ Egenskap: Automatisk beregning av vitnemålspoeng
         | vitnemålet ikke gir generell studiekompetanse                                          |
         | saken ikke har noe grunnlag                                                            |
 
+    @implemented
     Scenario: Opplastet kompetansebevis hindrer ikke beregningen
       # Avklart 06.11.2026: kompetansebevis kommer bare som dokumenter søkeren laster opp, ikke
       # fra KREG. Saksbehandleren finner sakene med filteret «Ubehandlet opplastet dok.» i
