@@ -335,12 +335,13 @@ Egenskap: Søknadsmangler
       Og søkeren kan gå til dokumentasjonssiden
 
     @draft
-    Scenario: Meldingen om mangel viser alle fristene
-      Gitt at søkeren har mottatt en melding om mangler
-      Og at manglene i meldingen har fristene "2027-03-20 23:59" og "2027-07-01 23:59"
-      Når søkeren åpner meldingen
-      Så ser søkeren fristen "2027-03-20 23:59"
-      Og søkeren ser fristen "2027-07-01 23:59"
+    Scenario: Meldingen om mangel viser ettersendingsfristen og de tidligere fristene som gjelder manglene
+      Gitt at ettersendingsfristen i opptaket er "2027-07-01 23:59"
+      Og at "Lektorutdanning, UiO" har tidlig dokumentasjonsfrist "2027-03-20 23:59"
+      Og at saken har mangler for "Lektorutdanning, UiO" og "Informatikk, UiO" som ble publisert 2027-03-10
+      Når søkeren åpner meldingen om mangel
+      Så ser søkeren ettersendingsfristen "2027-07-01 23:59"
+      Og søkeren ser den tidlige dokumentasjonsfristen "2027-03-20 23:59"
 
   Regel: Fristen for en mangel er ettersendingsfristen, med mindre en tidligere dokumentasjonsfrist ikke har gått ut
 
