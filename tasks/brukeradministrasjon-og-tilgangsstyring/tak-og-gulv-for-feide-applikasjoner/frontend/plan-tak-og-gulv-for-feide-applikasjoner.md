@@ -204,7 +204,9 @@ Nye filer (under `src/domains/tilgangsstyring/`):
 
 Rekkefølge: felles grunnmur (#1–#4), grunntilgang (#5–#7), delegeringstak (#8–#9), avslutning (#10), fase 2 (#11). #1, #2, #3 og #4 er uavhengige av hverandre og kan gjøres parallelt.
 
-### Task #1: Flytt alias-batchen og gjør feilsettet til et argument
+### Task #1: ✅ Flytt alias-batchen og gjør feilsettet til et argument
+
+**Status**: ✅ Fullført 2026-11-06, se [task-1-completion.md](./task-1-completion.md).
 
 **Priority**: High
 **Size**: S
@@ -222,7 +224,9 @@ Rekkefølge: felles grunnmur (#1–#4), grunntilgang (#5–#7), delegeringstak (
 **Implementation Notes**:
 Ren refaktorering, eget commit. JSDoc-en i filen forklarer hvorfor alias og ikke liste-input. Den skal følge med uendret. Typen `OpprettApplikasjonFeil` kan stå. Det er nok å nevne i JSDoc at den brukes som generell feiltype.
 
-### Task #2: Herd `DetailPageTabbedContent` for vilkårsfaner og dyplenke
+### Task #2: ✅ Herd `DetailPageTabbedContent` for vilkårsfaner og dyplenke
+
+**Status**: ✅ Fullført 2026-11-06, se [task-2-completion.md](./task-2-completion.md).
 
 **Priority**: High
 **Size**: M
@@ -240,7 +244,9 @@ Ren refaktorering, eget commit. JSDoc-en i filen forklarer hvorfor alias og ikke
 **Implementation Notes**:
 Sjekk andre detaljsider som bruker komponenten (`git grep DetailPageTabbedContent`), og kjør testene deres. Se `fs-admin-detail-pages`-skillen. Ikke legg fanene inn i `ApplikasjonDetails` i denne tasken. Det skjer i #5 og #8, så ingen tom fane kommer på `main`.
 
-### Task #3: Gating per miljø, `useForvaltningsrettPerMiljo`
+### Task #3: ✅ Gating per miljø, `useForvaltningsrettPerMiljo`
+
+**Status**: ✅ Fullført 2026-11-06, se [task-3-completion.md](./task-3-completion.md).
 
 **Priority**: High
 **Size**: L
@@ -271,7 +277,9 @@ Bruk `useApolloClient().query` i `Promise.all` per miljø, med `fetchPolicy: 'ca
 
 Hooken kalles én gang per fane og sendes ned som props, så dialogene ikke henter på nytt.
 
-### Task #4: Cache-policy og felles verktøy for delegeringstak og grunntilgang
+### Task #4: ✅ Cache-policy og felles verktøy for delegeringstak og grunntilgang
+
+**Status**: ✅ Fullført 2026-11-06, se [task-4-completion.md](./task-4-completion.md).
 
 **Priority**: High
 **Size**: S
@@ -288,7 +296,9 @@ Hooken kalles én gang per fane og sendes ned som props, så dialogene ikke hent
 **Implementation Notes**:
 Ikke rør mock-API-et i `src/mocks/applikasjoner/`. Det er dødt (`teardown-applikasjoner.md`: «Status: hele mocken er død») og fjernes i en egen MR. Testdata for delegeringstak og grunntilgang lages som fixtures ved komponenttestene (se Testing Requirements).
 
-### Task #5: Fanen «Grunntilgang» med liste
+### Task #5: ✅ Fanen «Grunntilgang» med liste
+
+**Status**: ✅ Fullført 2026-11-06, se [task-5-completion.md](./task-5-completion.md).
 
 **Priority**: High
 **Size**: M
@@ -329,7 +339,9 @@ Ikke rør mock-API-et i `src/mocks/applikasjoner/`. Det er dødt (`teardown-appl
 **Implementation Notes**:
 Følg `fs-admin-list-results`. `ActionList`-resultatlister er unntatt kravet om egen a11y-test, men fanen er det ikke. Plasser `actionsElement` nå (tom til #6), eller legg den til i #6.
 
-### Task #6: Tildel grunntilgang
+### Task #6: ✅ Tildel grunntilgang
+
+**Status**: ✅ Fullført 2026-11-06, se [task-6-completion.md](./task-6-completion.md).
 
 **Priority**: High
 **Size**: L
@@ -357,7 +369,9 @@ Følg `fs-admin-list-results`. `ActionList`-resultatlister er unntatt kravet om 
 **Implementation Notes**:
 Bruk `TildelRolleAction` som mønster for delvis suksess (JSDoc `:90-104`), og `TildelTilgangAction` for menyen og kaskaden. Følg `fs-admin-modal` og `fs-admin-inputs`. Ikke importer kaskade-hookene fra Tilganger-fanen.
 
-### Task #7: Fjern grunntilgang
+### Task #7: ✅ Fjern grunntilgang
+
+**Status**: ✅ Fullført 2026-11-06, se [task-7-completion.md](./task-7-completion.md).
 
 **Priority**: High
 **Size**: M
@@ -377,7 +391,9 @@ Bruk `TildelRolleAction` som mønster for delvis suksess (JSDoc `:90-104`), og `
 **Implementation Notes**:
 Mønster: `FjernRolleAction`. `BrukergrunntilgangErPlanlagt` ved fjerning betyr at innslaget ikke har begynt å gjelde. Raden vises ikke i listen, men kan finnes for samme kombinasjon.
 
-### Task #8: Fanen «Delegeringstak» med liste (direkte rader)
+### Task #8: ✅ Fanen «Delegeringstak» med liste (direkte rader)
+
+**Status**: ✅ Fullført 2026-11-06, se [task-8-completion.md](./task-8-completion.md).
 
 **Priority**: High
 **Size**: M
@@ -395,7 +411,9 @@ Mønster: `FjernRolleAction`. `BrukergrunntilgangErPlanlagt` ved fjerning betyr 
 **Implementation Notes**:
 Kopier fra grunntilgang. Ikke lag en felles generisk liste (beslutning 3). Fanen viser bare direkte rader til fase 2. Det er ikke nødvendig med en tekst om det.
 
-### Task #9: Tildel og fjern delegeringstak (direkte rader)
+### Task #9: ✅ Tildel og fjern delegeringstak (direkte rader)
+
+**Status**: ✅ Fullført 2026-11-06, se [task-9-completion.md](./task-9-completion.md).
 
 **Priority**: High
 **Size**: L
@@ -414,7 +432,9 @@ Kopier fra grunntilgang. Ikke lag en felles generisk liste (beslutning 3). Fanen
 **Implementation Notes**:
 Kan deles i to commits (tildel, fjern). Feilsettene står i «Rettelser til analysen».
 
-### Task #10: Changeset, brukerveiledning og sluttsjekk for fase 1
+### Task #10: ✅ Changeset, brukerveiledning og sluttsjekk for fase 1
+
+**Status**: ✅ Fullført 2026-11-06, unntatt manuell sjekk i review-miljøet. Se [task-10-completion.md](./task-10-completion.md).
 
 **Priority**: Medium
 **Size**: S

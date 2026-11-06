@@ -1,0 +1,22 @@
+# spec.log
+
+- 2026-11-06 — `bat-execute` started — Task #1
+- 2026-11-06 — `bat-execute` ended (success) — Task #1, wrote task-1-completion.md
+- 2026-11-06 — `bat-execute` started — Task #2
+- 2026-11-06 — `bat-execute` ended (success) — Task #2, wrote task-2-completion.md
+- 2026-11-06 — `bat-execute` started — Task #3
+- 2026-11-06 — `bat-execute` ended (success) — Task #3, wrote task-3-completion.md
+- 2026-11-06 — `bat-execute` started — Task #4
+- 2026-11-06 — `bat-execute` ended (success) — Task #4, wrote task-4-completion.md
+- 2026-11-06 — `bat-execute` started — Task #5
+- 2026-11-06 — `bat-execute` ended (success) — Task #5, wrote task-5-completion.md
+- 2026-11-06 — `bat-execute` started — Task #6
+- 2026-11-06 — `bat-execute` ended (success) — Task #6, wrote task-6-completion.md
+- 2026-11-06 — `bat-execute` started — Task #7
+- 2026-11-06 — `bat-execute` ended (success) — Task #7, wrote task-7-completion.md
+- 2026-11-06 — `bat-execute` started — Task #8
+- 2026-11-06 — `bat-execute` ended (success) — Task #8, wrote task-8-completion.md
+- 2026-11-06 — `bat-execute` started — Task #9
+- 2026-11-06 — `bat-execute` ended (success) — Task #9, wrote task-9-completion.md
+- 2026-11-06 — `bat-execute` started — Task #10
+- 2026-11-06 — `bat-execute` ended (success) — Task #10, wrote task-10-completion.md (manuell sjekk i review-miljøet gjenstår)
