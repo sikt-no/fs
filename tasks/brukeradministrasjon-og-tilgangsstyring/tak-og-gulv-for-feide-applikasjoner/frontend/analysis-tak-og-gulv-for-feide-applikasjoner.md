@@ -148,7 +148,7 @@ Design-dokumentene peker på `TildelRolleAction` og `FjernRolleAction` for perso
 - **Cross-contributor:**
   - **backend (fs-plattform), T5 / !6576, delegeringstak gjennom en organisasjonssamling:**
     - Behov: samlingsrader i listen over delegeringstak med kilde (DIREKTE/SAMLING og hvilken samling), og en entydig radform.
-    - Hvorfor det blokkerer: tre krav i `@BRU-APP-API-018` kan ikke oppfylles uten det: «Delegeringstak gjennom en organisasjonssamling vises per organisasjon», «Listen viser hvor delegeringstaket kommer fra» og «Rolle i delegeringstaket gjennom en organisasjonssamling regnes som allerede i delegeringstaket». «Delegeringstak gjennom en organisasjonssamling kan ikke fjernes» er trivielt oppfylt så lenge samlingsrader ikke vises.
+    - Hvorfor det blokkerer: tre krav i `@BRU-APP-API-018` kan ikke oppfylles uten det: «Tak for en organisasjonssamling vises per organisasjon», «Listen viser hvor taket kommer fra» og «Rolle i taket gjennom en organisasjonssamling regnes som allerede i taket». «Tak fra en organisasjonssamling kan ikke fjernes» er trivielt oppfylt så lenge samlingsrader ikke vises.
     - Formen er åpen til 06.11. Klientpunkter som avhenger av den:
       - feltnavn og enum
       - én eller flere samlinger per rad
@@ -165,19 +165,19 @@ Design-dokumentene peker på `TildelRolleAction` og `FjernRolleAction` for perso
 
 **Kan oppfylles med det som finnes i fs-admin og grafen nå:**
 
-- *Fanen for delegeringstaket/grunntilgangen vises bare for Feide-applikasjoner* (018, 019): identitetsleverandøren finnes i adapteren. Vilkårsfaner og dyplenke må håndteres (funn 5).
-- *Alle som kan se applikasjonen, ser fanene* (018, 019): lesingen følger lesereglene på serveren. Ingen gating på visning.
-- *Listen viser Rolle, Organisasjon, Miljø, Gyldighetstidsrom, og bare det som gjelder nå* (018, 019): `erAktivNaa: true` og `gyldighetsperiode` finnes. Formatet finnes i personbrukerlisten.
-- *Tildele og fjerne én eller flere roller for én organisasjon og ett miljø* (018, 019): mutasjonene finnes for begge.
-- *Delvis suksess* (018, 019): alias-batch finnes som mønster (funn 6). Feiltypene for delegeringstak og grunntilgang må mappes.
-- *En rolle som allerede er i delegeringstaket/grunntilgangen for samme kombinasjon kan ikke velges* (018 direkte, 019): kan utledes fra listene (`filter: { organisasjoner, miljoer, erAktivNaa }`), som `useFjernbareBrukerTilganger` gjør for personbrukere.
-- *Bare forretningsroller i valglisten* (018, 019): klientfilter over `tilgangsroller` med `fs`-navnerommet (funn 4).
+- *Fanen for taket vises ut fra identitetsleverandøren* (018), *Fanen for gulvet vises ut fra identitetsleverandøren* (019): identitetsleverandøren finnes i adapteren. Vilkårsfaner og dyplenke må håndteres (funn 5).
+- *Alle som kan se applikasjonen, ser fanen for taket* (018), *Alle som kan se applikasjonen, ser fanen for gulvet* (019): lesingen følger lesereglene på serveren. Ingen gating på visning.
+- *Se rollene i taket til applikasjonen*, *Bare tak som gjelder nå, vises*, *Se gyldighetstidsrommet for en rolle i taket* (018), *Se rollene i gulvet til applikasjonen*, *Bare gulv som gjelder nå, vises*, *Se gyldighetstidsrommet for en rolle i gulvet* (019): `erAktivNaa: true` og `gyldighetsperiode` finnes. Formatet finnes i personbrukerlisten.
+- *Tildele flere roller i taket samtidig*, *Fjerne flere roller fra taket samtidig* (018), *Tildele flere roller i gulvet samtidig*, *Fjerne flere roller fra gulvet samtidig* (019): mutasjonene finnes for begge.
+- *Delvis suksess ved samtidig tildeling av roller i taket* (018), *Delvis suksess ved samtidig tildeling av roller i gulvet* (019): alias-batch finnes som mønster (funn 6). Feiltypene for delegeringstak og grunntilgang må mappes.
+- *Rolle som allerede er i taket vises som ikke-valgbar* (018, direkte), *Rolle som allerede er i gulvet vises som ikke-valgbar* (019): kan utledes fra listene (`filter: { organisasjoner, miljoer, erAktivNaa }`), som `useFjernbareBrukerTilganger` gjør for personbrukere.
+- *Valglisten for rolle i taket viser bare forretningsroller* (018), *Valglisten for rolle i gulvet viser bare forretningsroller* (019): klientfilter over `tilgangsroller` med `fs`-navnerommet (funn 4).
 
 **I fare:**
 
-- *Forvaltning krever applikasjonsadministrator-rollen for eier og radens organisasjon i samme miljø*, *Valglisten for organisasjon er begrenset*, *Valglisten for miljø avhenger av valgt organisasjon*, *Forvaltning ikke tilgjengelig uten rollen for eieren*, *Fjerning begrenset til organisasjoner jeg administrerer* (018, 019): krever `mineTilganger` per miljø, og det henter fs-admin ikke i dag (funn 3). Gjenbruk av tildelings-hookene gir feil svar. Serveren håndhever uansett, så risikoen gjelder UI-et, ikke sikkerheten.
-- *Delegeringstak gjennom en organisasjonssamling vises per organisasjon*, *Listen viser hvor delegeringstaket kommer fra*, *Rolle i delegeringstaket gjennom en organisasjonssamling regnes som allerede i delegeringstaket* (018): blokkert av T5 (funn 2).
-- *Organisasjonssamling kan ikke velges ved tildeling i delegeringstaket* (018): valglisten for organisasjon bygges av organisasjoner, så dette er oppfylt så lenge kilden ikke inneholder samlinger.
+- *Tildeling og fjerning i taket krever applikasjonsadministrator-rollen for begge organisasjonene i samme miljø*, *Valglisten for organisasjon er begrenset til organisasjoner jeg administrerer*, *Valglisten for miljø avhenger av valgt organisasjon*, *Forvaltning av taket er ikke tilgjengelig uten applikasjonsadministrator-rollen for applikasjonseieren*, *Fjerning fra taket er begrenset til organisasjoner jeg administrerer* (018), og de tilsvarende scenarioene i 019: krever `mineTilganger` per miljø, og det henter fs-admin ikke i dag (funn 3). Gjenbruk av tildelings-hookene gir feil svar. Serveren håndhever uansett, så risikoen gjelder UI-et, ikke sikkerheten.
+- *Tak for en organisasjonssamling vises per organisasjon*, *Listen viser hvor taket kommer fra*, *Rolle i taket gjennom en organisasjonssamling regnes som allerede i taket* (018): blokkert av T5 (funn 2).
+- *Organisasjonssamling kan ikke velges ved tildeling i taket* (018): valglisten for organisasjon bygges av organisasjoner, så dette er oppfylt så lenge kilden ikke inneholder samlinger.
 
 **Mangler eller uklart, oppdaget i analysen:**
 

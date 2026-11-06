@@ -228,7 +228,7 @@ Ren refaktorering, eget commit. JSDoc-en i filen forklarer hvorfor alias og ikke
 **Priority**: High
 **Size**: M
 **Dependencies**: None
-**Addresses Requirements**: «Fanen vises bare for Feide-applikasjoner» (018, 019)
+**Addresses Requirements**: «Fanen for taket vises ut fra identitetsleverandøren» (018), «Fanen for gulvet vises ut fra identitetsleverandøren» (019)
 
 **Acceptance Criteria**:
 
@@ -246,7 +246,7 @@ Sjekk andre detaljsider som bruker komponenten (`git grep DetailPageTabbedConten
 **Priority**: High
 **Size**: L
 **Dependencies**: None
-**Addresses Requirements**: «Forvaltning krever applikasjonsadministrator-rollen for eier og radens organisasjon i samme miljø», «Valglisten for organisasjon er begrenset», «Valglisten for miljø avhenger av valgt organisasjon», «Forvaltning ikke tilgjengelig uten rollen for eieren», «Fjerning begrenset til organisasjoner jeg administrerer» (018, 019)
+**Addresses Requirements**: «Tildeling og fjerning i taket krever applikasjonsadministrator-rollen for begge organisasjonene i samme miljø», «Valglisten for organisasjon er begrenset til organisasjoner jeg administrerer», «Valglisten for miljø avhenger av valgt organisasjon», «Forvaltning av taket er ikke tilgjengelig uten applikasjonsadministrator-rollen for applikasjonseieren», «Fjerning fra taket er begrenset til organisasjoner jeg administrerer» (018); «Tildeling og fjerning i gulvet krever applikasjonsadministrator-rollen for begge organisasjonene i samme miljø», «Valglisten for organisasjon i gulvet er begrenset til organisasjoner jeg administrerer», «Valglisten for miljø i gulvet avhenger av valgt organisasjon», «Forvaltning av gulvet er ikke tilgjengelig uten applikasjonsadministrator-rollen for applikasjonseieren», «Fjerning fra gulvet er begrenset til organisasjoner jeg administrerer» (019)
 
 **Acceptance Criteria**:
 
@@ -295,7 +295,7 @@ Les `src/mocks/applikasjoner/teardown-applikasjoner.md` før du endrer mocken. H
 **Priority**: High
 **Size**: M
 **Dependencies**: Task #2, Task #4
-**Addresses Requirements**: «Fanen for grunntilgang vises bare for Feide-applikasjoner», «Alle som kan se applikasjonen, ser fanen», «Listen viser Rolle, Organisasjon, Miljø, Gyldighetstidsrom, og bare det som gjelder nå» (019)
+**Addresses Requirements**: «Fanen for gulvet vises ut fra identitetsleverandøren», «Bruker uten applikasjonsadministrator-rollen ser fanen for gulvet», «Se rollene i gulvet til applikasjonen», «Bare gulv som gjelder nå, vises», «Se gyldighetstidsrommet for en rolle i gulvet» (019)
 
 **Acceptance Criteria**:
 
@@ -336,7 +336,7 @@ Følg `fs-admin-list-results`. `ActionList`-resultatlister er unntatt kravet om 
 **Priority**: High
 **Size**: L
 **Dependencies**: Task #1, Task #3, Task #4, Task #5
-**Addresses Requirements**: «Tildele én eller flere roller for én organisasjon og ett miljø», «Delvis suksess», «En rolle som allerede er i grunntilgangen kan ikke velges», «Bare forretningsroller i valglisten», gating (019)
+**Addresses Requirements**: «Tildele en rolle i gulvet for valgt organisasjon og miljø», «Tildele flere roller i gulvet samtidig», «Delvis suksess ved samtidig tildeling av roller i gulvet», «Rolle som allerede er i gulvet vises som ikke-valgbar», «Valglisten for rolle i gulvet viser bare forretningsroller», gating (019)
 
 **Acceptance Criteria**:
 
@@ -364,7 +364,7 @@ Bruk `TildelRolleAction` som mønster for delvis suksess (JSDoc `:90-104`), og `
 **Priority**: High
 **Size**: M
 **Dependencies**: Task #6
-**Addresses Requirements**: «Fjerne én eller flere roller», «Fjerning begrenset til organisasjoner jeg administrerer», «Delvis suksess» (019)
+**Addresses Requirements**: «Fjerne en rolle fra gulvet for valgt organisasjon og miljø», «Fjerne flere roller fra gulvet samtidig», «Fjerning fra gulvet er begrenset til organisasjoner jeg administrerer», delvis suksess som i #6 (019)
 
 **Acceptance Criteria**:
 
@@ -384,7 +384,7 @@ Mønster: `FjernRolleAction`. `BrukergrunntilgangErPlanlagt` ved fjerning betyr 
 **Priority**: High
 **Size**: M
 **Dependencies**: Task #2, Task #4 (og #5 for mønsteret)
-**Addresses Requirements**: «Fanen for delegeringstak vises bare for Feide-applikasjoner», «Alle som kan se applikasjonen, ser fanen», «Listen viser Rolle, Organisasjon, Miljø, Gyldighetstidsrom, og bare det som gjelder nå» (018, direkte rader)
+**Addresses Requirements**: «Fanen for taket vises ut fra identitetsleverandøren», «Bruker uten applikasjonsadministrator-rollen ser fanen for taket», «Se rollene i taket til applikasjonen», «Bare tak som gjelder nå, vises», «Se gyldighetstidsrommet for en rolle i taket» (018, direkte rader)
 
 **Acceptance Criteria**:
 
@@ -402,7 +402,7 @@ Kopier fra grunntilgang. Ikke lag en felles generisk liste (beslutning 3). Fanen
 **Priority**: High
 **Size**: L
 **Dependencies**: Task #1, Task #3, Task #8 (og #6/#7 for mønsteret)
-**Addresses Requirements**: «Tildele og fjerne én eller flere roller», «Delvis suksess», «En rolle som allerede er i delegeringstaket kan ikke velges» (direkte), «Organisasjonssamling kan ikke velges», gating (018)
+**Addresses Requirements**: «Tildele en rolle i taket for valgt organisasjon og miljø», «Tildele flere roller i taket samtidig», «Delvis suksess ved samtidig tildeling av roller i taket», «Fjerne en rolle fra taket for valgt organisasjon og miljø», «Fjerne flere roller fra taket samtidig», «Rolle som allerede er i taket vises som ikke-valgbar» (direkte), «Valglisten for rolle i taket viser bare forretningsroller», «Organisasjonssamling kan ikke velges ved tildeling i taket», gating (018)
 
 **Acceptance Criteria**:
 
@@ -440,7 +440,7 @@ Kan deles i to commits (tildel, fjern). Feilsettene står i «Rettelser til anal
 **Priority**: Medium
 **Size**: M (anslag, settes når kontrakten er kjent)
 **Dependencies**: fs-plattform T5/T6 (!6576) i **produksjons**-SDL. Task #8, Task #9.
-**Addresses Requirements**: «Delegeringstak gjennom en organisasjonssamling vises per organisasjon», «Listen viser hvor delegeringstaket kommer fra», «Rolle i delegeringstaket gjennom en organisasjonssamling regnes som allerede i delegeringstaket», «Delegeringstak gjennom en organisasjonssamling kan ikke fjernes» (018)
+**Addresses Requirements**: «Tak for en organisasjonssamling vises per organisasjon», «Listen viser hvor taket kommer fra», «Rolle i taket gjennom en organisasjonssamling regnes som allerede i taket», «Tak fra en organisasjonssamling kan ikke fjernes» (018)
 
 **Blokkert.** Kontrakten redesignes. Den sannsynlige formen er én `Brukerdelegering` med `tilknytning` (DIREKTE/SAMLING) over en Graphitron-`@routine`, men det er ikke avgjort. Branchen `tilgangsstyring/BAT-411-tak-gulv-t6-samlingstak-i-grafen` er en kandidat, ikke kontrakten. Planen designer ikke mot den.
 
@@ -532,4 +532,5 @@ Codegen leser produksjons-SDL, så koden kan ikke på `main` før feltene er i p
 
 - **backend (fs-plattform), T5/T6 (!6576), delegeringstak gjennom en organisasjonssamling:** trengs for Task #11. Blokkerer tre krav i 018. De fem klientpunktene under Task #11 må besvares i kontrakten.
 - **backend (fs-plattform), BAT-416 steg 2 (pågår):** trengs bare hvis aktør skal vises senere (A6). Blokkerer ikke fase 1.
+- **krav (feature-filene, sikt-no/fs#914):** kravene sier fortsatt «tak»/«gulv», også i scenarionavnene som er sitert i denne planen. Kjetil vil kanskje rette dem til «delegeringstak»/«grunntilgang».
 - **krav og design (sikt-no/fs#914):** A1 (fanenavn), A2 (kilde for delegeringstak gjennom en organisasjonssamling) og A3 (advarsel for grunntilgang) er avklart av Kjetil 06.11.2026. Ingenting står åpent for fs-admin. Design-dokumentene kan oppdateres med fanenavnene.
