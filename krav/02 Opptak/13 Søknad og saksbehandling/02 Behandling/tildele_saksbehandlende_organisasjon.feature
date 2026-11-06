@@ -468,7 +468,7 @@ Egenskap: Tildele saksbehandlende organisasjon
       Når "Informatikk, UiO" flyttes fra "Universitetet i Oslo" til "HK-dir"
       Så ser ikke saksbehandleren ved HK-dir den interne merknaden
 
-    @planned
+    @in-progress
     Scenario: Organisasjonen søknadsalternativet flyttes til, ser dokumentene søkeren har lastet opp
       Gitt at søkeren har lastet opp et vitnemål til søknaden
       Og at "Informatikk, UiO" er fordelt til "Universitetet i Oslo"
@@ -496,7 +496,7 @@ Egenskap: Tildele saksbehandlende organisasjon
       Når saksbehandleren ved HK-dir åpner søknaden
       Så ser saksbehandleren bare saken hos "HK-dir"
 
-    @planned
+    @in-progress
     Scenario: Saksbehandleren ser alle søknadsalternativene på søknaden
       Gitt at søkeren har søkt "Informatikk, UiO" og "Historie, UiT" i den rekkefølgen
       Og at "Informatikk, UiO" er fordelt til "Universitetet i Oslo" og "Historie, UiT" til "UiT Norges arktiske universitet"
@@ -506,7 +506,7 @@ Egenskap: Tildele saksbehandlende organisasjon
       # AVKLART 05.11.2026 i den interne akseptansetesten: saksbehandleren skal se hele søknaden når hen står
       # i en sak. Saksbehandlingen av søknadsalternativene i andre saker vises ikke.
 
-    @planned
+    @in-progress
     Scenario: Saksbehandleren ser dokumentene søkeren har lastet opp
       Gitt at søkeren har lastet opp et vitnemål til søknaden
       Når saksbehandleren ved Universitetet i Oslo åpner saken hos "Universitetet i Oslo"
@@ -542,7 +542,7 @@ Egenskap: Tildele saksbehandlende organisasjon
       # sette tilbudsgaranti. AVKLART 04.11.2026: tilbyderen ser ikke dokumentene i saken. Endres 05.11.2026:
       # tilbyderen skal se dokumentene søkeren har lastet opp (se «Tilbyderen ser dokumentene søkeren har lastet opp»).
 
-    @planned
+    @in-progress
     Scenario: Tilbyderen ser alle søknadsalternativene på søknaden
       Gitt at søkeren har søkt "Informatikk, UiO", "Historie, UiT" og "Sykepleie, NTNU" i den rekkefølgen
       Og at alle søknadsalternativene er fordelt til "Universitetet i Oslo"
@@ -552,7 +552,7 @@ Egenskap: Tildele saksbehandlende organisasjon
       # AVKLART 05.11.2026 i den interne akseptansetesten: tilbyderen skal se hele søknaden, men saksbehandlingen
       # bare for søknadsalternativene til utdanningstilbudene sine.
 
-    @planned
+    @in-progress
     Scenario: Tilbyderen ser dokumentene søkeren har lastet opp
       Gitt at "Historie, UiT" er fordelt til "Universitetet i Oslo"
       Og at søkeren har lastet opp et vitnemål til søknaden
