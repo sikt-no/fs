@@ -60,6 +60,78 @@ Egenskap: Kvotetype
       Når søknadene i opptaket behandles
       Så plasseres ingen søkere automatisk i kvotetypen "TestKvote"
 
+  @planned @scope-spesialvurdering-2027
+  Regel: En kvotetype kan være uten plasser
+    # Ny regel 2026-11-06 (TAKE-492). At kvotetypen ikke kan være hovedkvote, motta plassflyt eller få
+    # antall studieplasser, står i sette_plassflyt.feature og sette_antall_studieplasser_per_kvote.feature.
+
+    Scenario: Kvotetypen har plasser som standard
+      Når opptaksforvalteren oppretter kvotetypen "Ordinær kvote (ORD)"
+      Så har kvotetypen "Ordinær kvote (ORD)" plasser
+
+    Scenario: Opprette kvotetype uten plasser
+      Når opptaksforvalteren oppretter kvotetypen "Ventekvote (VENT)" uten plasser
+      Så har kvotetypen "Ventekvote (VENT)" ikke plasser
+
+    Scenario: Hovedkvoten kan ikke være uten plasser
+      Gitt at "Ordinær kvote (ORD)" er hovedkvoten i standard plassflyt i regelverkssamlingen
+      Når opptaksforvalteren vil sette kvotetypen "Ordinær kvote (ORD)" til å være uten plasser
+      Så blir kvotetypen "Ordinær kvote (ORD)" ikke endret
+      Og opptaksforvalteren ser at hovedkvoten må ha plasser
+
+    Scenario: En kvotetype som mottar plassflyt, kan ikke være uten plasser
+      Gitt at "Samisk førstegangsvitnemål (SAMF)" sender ledige plasser til "Førstegangsvitnemål (ORDF)" i standard plassflyt
+      Når opptaksforvalteren vil sette kvotetypen "Førstegangsvitnemål (ORDF)" til å være uten plasser
+      Så blir kvotetypen "Førstegangsvitnemål (ORDF)" ikke endret
+      Og opptaksforvalteren ser at en kvotetype som mottar plassflyt, må ha plasser
+
+  @planned @scope-spesialvurdering-2027
+  Regel: En kvotetype kan være standardkvote for utdanningstilbudene
+    # Ny regel 2026-11-06 (TAKE-492). At nye utdanningstilbud får standardkvoten, står i
+    # opptaksinnstillinger_utdanningstilbud.feature.
+
+    Scenario: Kvotetypen er ikke standardkvote som standard
+      Når opptaksforvalteren oppretter kvotetypen "Førstegangsvitnemål (ORDF)"
+      Så er kvotetypen "Førstegangsvitnemål (ORDF)" ikke standardkvote
+
+    Scenario: Standardkvoten legges på utdanningstilbudene som finnes
+      Gitt at opptaket "Samordna opptak 2027" bruker regelverkssamlingen "UHG2027"
+      Og at utdanningstilbudet "Sykepleie, høst 2027" i opptaket ikke har utdanningskvoten "Ventekvote (VENT)"
+      Når opptaksforvalteren setter kvotetypen "Ventekvote (VENT)" som standardkvote
+      Så har utdanningstilbudet "Sykepleie, høst 2027" utdanningskvoten "Ventekvote (VENT)"
+
+    Scenario: Kvoten fjernes fra utdanningstilbudene når kvotetypen ikke lenger er standardkvote
+      Gitt at kvotetypen "Ventekvote (VENT)" er standardkvote
+      Og at utdanningstilbudet "Sykepleie, høst 2027" har utdanningskvoten "Ventekvote (VENT)"
+      Når opptaksforvalteren setter at kvotetypen "Ventekvote (VENT)" ikke er standardkvote
+      Så har utdanningstilbudet "Sykepleie, høst 2027" ikke utdanningskvoten "Ventekvote (VENT)"
+
+    Scenario: Standardkvoten kan ikke slås av når kvoten er i bruk
+      Gitt at kvotetypen "Ventekvote (VENT)" er standardkvote
+      Og at søkere er plassert i utdanningskvoten "Ventekvote (VENT)" på "Sykepleie, høst 2027"
+      Når opptaksforvalteren setter at kvotetypen "Ventekvote (VENT)" ikke er standardkvote
+      Så er kvotetypen "Ventekvote (VENT)" fortsatt standardkvote
+      Og opptaksforvalteren ser at kvoten er i bruk på utdanningstilbudet "Sykepleie, høst 2027"
+
+  @planned @scope-spesialvurdering-2027
+  Regel: Lærestedet kan hindres i å fjerne en kvotetype fra utdanningstilbudet
+    # Ny regel 2026-11-06 (TAKE-492). At lærestedet ikke kan fjerne kvoten fra utdanningstilbudet, står i
+    # opptaksinnstillinger_utdanningstilbud.feature.
+
+    Scenario: Lærestedet kan fjerne kvotetypen som standard
+      Når opptaksforvalteren oppretter kvotetypen "Førstegangsvitnemål (ORDF)"
+      Så kan lærestedet fjerne kvotetypen "Førstegangsvitnemål (ORDF)" fra utdanningstilbudene sine
+
+    Scenario: Sette at lærestedet ikke kan fjerne kvotetypen
+      Når opptaksforvalteren setter at lærestedet ikke kan fjerne kvotetypen "Ventekvote (VENT)"
+      Så kan lærestedet ikke fjerne kvotetypen "Ventekvote (VENT)" fra utdanningstilbudene sine
+
+    Scenario: Opptaksforvalter ved organisasjonen som eier opptaket, kan fjerne kvoten
+      Gitt at lærestedet ikke kan fjerne kvotetypen "Ventekvote (VENT)"
+      Og at utdanningstilbudet "Sykepleie, høst 2027" har utdanningskvoten "Ventekvote (VENT)"
+      Når opptaksforvalter ved organisasjonen som eier opptaket fjerner "Ventekvote (VENT)" fra "Sykepleie, høst 2027"
+      Så har utdanningstilbudet "Sykepleie, høst 2027" ikke utdanningskvoten "Ventekvote (VENT)"
+
   @draft @openquestion
   Regel: En kvotetype kan ha fire ulike rangeringsmetoder
     # ÅPNE SPØRSMÅL:
