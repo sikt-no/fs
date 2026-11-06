@@ -468,6 +468,13 @@ Egenskap: Tildele saksbehandlende organisasjon
       Når "Informatikk, UiO" flyttes fra "Universitetet i Oslo" til "HK-dir"
       Så ser ikke saksbehandleren ved HK-dir den interne merknaden
 
+    @planned
+    Scenario: Organisasjonen søknadsalternativet flyttes til, ser dokumentene søkeren har lastet opp
+      Gitt at søkeren har lastet opp et vitnemål til søknaden
+      Og at "Informatikk, UiO" er fordelt til "Universitetet i Oslo"
+      Når "Informatikk, UiO" flyttes fra "Universitetet i Oslo" til "HK-dir"
+      Så ser saksbehandleren ved HK-dir vitnemålet
+
   # ── 4. Innsyn ────────────────────────────────────────────────
 
   @ref-FLY-OPT-SAK-001 @ref-OPT-BEH-BEH-032
@@ -488,6 +495,22 @@ Egenskap: Tildele saksbehandlende organisasjon
       Gitt at søknaden har saker hos "HK-dir" og "Universitetet i Oslo"
       Når saksbehandleren ved HK-dir åpner søknaden
       Så ser saksbehandleren bare saken hos "HK-dir"
+
+    @planned
+    Scenario: Saksbehandleren ser alle søknadsalternativene på søknaden
+      Gitt at søkeren har søkt "Informatikk, UiO" og "Historie, UiT" i den rekkefølgen
+      Og at "Informatikk, UiO" er fordelt til "Universitetet i Oslo" og "Historie, UiT" til "UiT Norges arktiske universitet"
+      Når saksbehandleren ved Universitetet i Oslo åpner saken hos "Universitetet i Oslo"
+      Så ser saksbehandleren "Informatikk, UiO" og "Historie, UiT" med prioritet, tilbyder og saksbehandlende organisasjon
+      Men saksbehandleren ser ikke saksbehandlingen av "Historie, UiT"
+      # AVKLART 05.11.2026 i den interne akseptansetesten: saksbehandleren skal se hele søknaden når hen står
+      # i en sak. Saksbehandlingen av søknadsalternativene i andre saker vises ikke.
+
+    @planned
+    Scenario: Saksbehandleren ser dokumentene søkeren har lastet opp
+      Gitt at søkeren har lastet opp et vitnemål til søknaden
+      Når saksbehandleren ved Universitetet i Oslo åpner saken hos "Universitetet i Oslo"
+      Så ser saksbehandleren vitnemålet
 
   Regel: Opptaksforvalteren ved forvaltende organisasjon ser alle sakene i opptaket
 
@@ -516,4 +539,23 @@ Egenskap: Tildele saksbehandlende organisasjon
       Så ser ikke saksbehandleren de interne merknadene til "Universitetet i Oslo"
       Og saksbehandleren ser ikke muligheten til å endre grunnlaget eller poengene
       # AVKLART 08.10.2026 i PR #684: tilbyderen ser saken, men ikke de interne merknadene, og kan bare
-      # sette tilbudsgaranti. AVKLART 04.11.2026: tilbyderen ser ikke dokumentene i saken.
+      # sette tilbudsgaranti. AVKLART 04.11.2026: tilbyderen ser ikke dokumentene i saken. Endres 05.11.2026:
+      # tilbyderen skal se dokumentene søkeren har lastet opp (se «Tilbyderen ser dokumentene søkeren har lastet opp»).
+
+    @planned
+    Scenario: Tilbyderen ser alle søknadsalternativene på søknaden
+      Gitt at søkeren har søkt "Informatikk, UiO", "Historie, UiT" og "Sykepleie, NTNU" i den rekkefølgen
+      Og at alle søknadsalternativene er fordelt til "Universitetet i Oslo"
+      Når saksbehandleren ved UiT Norges arktiske universitet åpner saken med "Historie, UiT"
+      Så ser saksbehandleren "Informatikk, UiO", "Historie, UiT" og "Sykepleie, NTNU" med prioritet, tilbyder og saksbehandlende organisasjon
+      Men saksbehandleren ser ikke saksbehandlingen av "Informatikk, UiO" og "Sykepleie, NTNU"
+      # AVKLART 05.11.2026 i den interne akseptansetesten: tilbyderen skal se hele søknaden, men saksbehandlingen
+      # bare for søknadsalternativene til utdanningstilbudene sine.
+
+    @planned
+    Scenario: Tilbyderen ser dokumentene søkeren har lastet opp
+      Gitt at "Historie, UiT" er fordelt til "Universitetet i Oslo"
+      Og at søkeren har lastet opp et vitnemål til søknaden
+      Når saksbehandleren ved UiT Norges arktiske universitet åpner saken med "Historie, UiT"
+      Så ser saksbehandleren vitnemålet
+      Men saksbehandleren kan ikke endre eller slette vitnemålet
