@@ -71,7 +71,7 @@ Utkast fra !993, på bokmål (nynorsk og engelsk finnes i prototypen). Designern
 ## Tekniske begrensninger
 
 - Navn kan ha høyst 100 tegn. Det er en teknisk grense (fra !6554), ikke en besluttet regel for produktet.
-- Det er ingen aldersgrense (avklart 06.11.2026). Grensen på 12–120 år i !6554 og !993 skal fjernes.
+- Det er ingen aldersgrense (avklart 06.11.2026). Grensen på 12–120 år er fjernet i !6554 og skal fjernes i !993.
 
 ## Åpne designspørsmål
 
