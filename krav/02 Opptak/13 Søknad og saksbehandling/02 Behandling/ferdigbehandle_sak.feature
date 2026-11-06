@@ -128,7 +128,7 @@ Egenskap: Ferdigbehandle en sak
       Når saksbehandleren ved Universitetet i Oslo åpner saken
       Så ser saksbehandleren når den automatiske behandlingen avgjorde hvert steg
 
-    @depends-on-OPT-BEH-BEH-015 @depends-on-OPT-BEH-BEH-029
+    @depends-on-OPT-BEH-BEH-015 @depends-on-OPT-BEH-BEH-029 @implemented
     # OPT-BEH-BEH-015: «Saksbehandleren får varsel når opptakssystemet er uenig med skolen»
     # OPT-BEH-BEH-029: «Saken blir Under behandling når saksbehandleren endrer vurderingen eller markerer et dokument som lest»
     Scenario: Varselet om uenighet om GSK krever ikke at saksbehandleren gjør noe

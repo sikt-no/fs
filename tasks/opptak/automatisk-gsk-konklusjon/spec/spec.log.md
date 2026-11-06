@@ -13,3 +13,5 @@ History of skill invocations for this spec. Append-only — never edit past entr
 - 2026-11-02 — `fs-specify` started — 034: grensen rettet igjen
 - 2026-11-02 — `fs-specify` ended (success) — 034: taggen settes alltid, statusen endres bare før en publisert plasstildelingsrunde
 - 2026-11-05 — kravendring (PR #940) — OPT-BEH-BEH-015: ny scenariomal «Søknaden får konklusjonen fra vitnemålet når saken er <status>» i «Konklusjon på søknaden fra vitnemålet». Behandlingsstatusen spiller ingen rolle, og endres ikke (avklart 2026-11-04, opptak !6566). Koden gjør dette allerede (fs-plattform 7372ec88ca, STEK-249)
+- 2026-11-06 — `fs-verify-agent-teams` started — 17 krav (13 @in-progress, 2 @planned, 1 @draft, 1 @planned-regel), 1 @deprecated-regel, 3 flyter, 5 finnere · omfang: @in-progress, @deprecated, flyter, alle krav uansett status · avhengigheter: 1 nivå, bare status
+- 2026-11-06 — `fs-verify-agent-teams` ended (success) — 0 krav og 47 deler retagget (015, 027, 034 delvis levert), kontrollen endret 5 resultater · rapport: akseptansetest/automatisk-gsk-konklusjon/verify-2026-11-06-1128.md

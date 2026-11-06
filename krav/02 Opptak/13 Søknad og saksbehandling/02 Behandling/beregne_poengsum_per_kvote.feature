@@ -86,10 +86,9 @@ Egenskap: Beregne poengsum per kvote
       Når poengsummen regnes ut på nytt uten at den endres
       Så har endringsloggen ikke fått noe nytt innslag for poengsummen
 
-  @ref-FLY-OPT-AUT-001
+  @ref-FLY-OPT-AUT-001 @implemented
   Regel: En poengsum som ikke kan regnes ut, stopper ikke de andre
 
-    @implemented
     Scenario: Poengsummen i de andre kvotene regnes ut når én kvote feiler
       Gitt at søkeren er plassert i kvotetypene "ORD" og "ORD-F"
       Og at poengformelen til kvotetypen "ORD-F" ikke kan regnes ut
@@ -105,13 +104,11 @@ Egenskap: Beregne poengsum per kvote
       Når saksbehandleren ser oppsummeringen av saken
       Så ser saksbehandleren hvorfor poengsummen for grunnlaget "VES" i kvotetypen "ORD" ikke kan regnes ut
 
-    @implemented
     Scenario: Poengsummene fjernes når søkeren ikke er plassert i noen kvote
       Gitt at søkeren har en poengsum i kvotetypen "ORD"
       Når søkeren ikke lenger er plassert i noen kvote
       Så har søkeren ingen poengsum
 
-    @implemented
     Scenario: Poengsummene fjernes når saken ikke har noe grunnlag
       Gitt at søkeren har en poengsum i kvotetypen "ORD"
       Når saken ikke lenger har noe grunnlag

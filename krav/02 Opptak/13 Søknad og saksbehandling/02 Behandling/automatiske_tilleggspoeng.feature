@@ -40,7 +40,7 @@ Egenskap: Automatiske tilleggspoeng
       Når saken får grunnlaget "VES"
       Så viser alderspoengene at de er regnet ut for alderen 22 år på datoen for aldersberegning
 
-    @depends-on-OPT-OVO-FRI-001
+    @depends-on-OPT-OVO-FRI-001 @implemented
     # Regelen «Opptaksforvalter setter dato for aldersberegning».
     Scenario: Standarddatoen brukes når datoen for aldersberegning ikke er satt
       Gitt at opptaket ikke har dato for aldersberegning
@@ -186,10 +186,9 @@ Egenskap: Automatiske tilleggspoeng
       Når søkeren får et nytt resultat fra høyere utdanning på 60 studiepoeng
       Så har saken fortsatt 1 poeng for høyere utdanning
 
-  @ref-FLY-OPT-AUT-001
+  @ref-FLY-OPT-AUT-001 @implemented
   Regel: Tilleggspoengene settes uansett hvem som velger grunnlaget
 
-    @implemented
     Scenario: Automatikken velger grunnlaget
       Gitt at søkeren er 23 år på datoen for aldersberegning
       Og at poengtypen for alderspoeng er knyttet til algoritmen "ALD_ALG1"
@@ -208,7 +207,6 @@ Egenskap: Automatiske tilleggspoeng
       Når saksbehandleren velger grunnlaget "VES" for saken
       Så har saken 2 kjønnspoeng
 
-    @implemented
     Scenario: Poengene for grunnlaget som er fjernet, vises ikke lenger
       Gitt at saken har grunnlaget "VES"
       Og at poengtypen for alderspoeng bare gjelder grunnlaget "VES"
@@ -223,7 +221,6 @@ Egenskap: Automatiske tilleggspoeng
       Når saksbehandleren endrer grunnlaget til "PRA"
       Så har saken 4 alderspoeng
 
-    @implemented
     Scenario: Poengene regnes ikke ut på nytt av seg selv når datoen for aldersberegning endres
       Gitt at saken har grunnlaget "VES"
       Og at saken har alderspoeng utregnet på datoen "2027-04-15"
@@ -246,15 +243,14 @@ Egenskap: Automatiske tilleggspoeng
     # saksbehandleren beregner dem. At tilleggspoengene ikke avhenger av poengene fra
     # vitnemålet, er dekket av «Søker uten elektronisk vitnemål får tilleggspoeng».
 
+  @implemented
   Regel: Saksbehandleren kan overstyre poeng automatikken har satt
 
-    @implemented
     Scenario: Poengene er satt av saksbehandleren og står
       Gitt at saksbehandleren har satt 3 alderspoeng og latt dem stå
       Når automatikken regner ut alderspoeng for saken
       Så har saken fortsatt 3 alderspoeng
 
-    @implemented
     Scenario: Saksbehandleren overstyrer et alderspoeng som er regnet ut automatisk
       Gitt at søkeren er 23 år på datoen for aldersberegning
       Og at alderspoengene er regnet ut automatisk til 4
@@ -267,7 +263,6 @@ Egenskap: Automatiske tilleggspoeng
       Når saksbehandleren velger grunnlaget "VES" for saken
       Så er alderspoengene merket som regnet ut automatisk
 
-    @implemented
     Scenario: Poengene er ikke merket som automatiske etter at saksbehandleren har endret dem
       Gitt at alderspoengene er regnet ut automatisk
       Når saksbehandleren endrer alderspoengene til 2

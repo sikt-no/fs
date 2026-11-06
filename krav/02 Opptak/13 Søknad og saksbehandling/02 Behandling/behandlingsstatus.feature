@@ -112,11 +112,13 @@ Egenskap: Behandlingsstatus
         | skriver en merknad                         |
         | tilordner saken til en annen saksbehandler |
 
+    @implemented
     Scenario: Å markere et dokument som lest endrer ikke statusen på en sak som er Behandlet
       Gitt at saken har behandlingsstatusen "Behandlet"
       Når saksbehandleren ved Universitetet i Oslo markerer et dokument i saken som lest
       Så har saken fortsatt behandlingsstatusen "Behandlet"
 
+    @implemented
     Scenariomal: Behandlingsstatusen <status> endres ikke når saksbehandleren åpner saken
       Gitt at saken har behandlingsstatusen "<status>"
       Når saksbehandleren ved Universitetet i Oslo åpner saken

@@ -277,7 +277,7 @@ Egenskap: Automatisk grunnlag
       Så får saksbehandleren beskjed om at opptaket mangler dato for aldersberegning
       Og grunnlaget er ikke lagt til
 
-  @ref-OPT-BEH-BEH-028
+  @ref-OPT-BEH-BEH-028 @implemented
   Regel: Når grunnlaget settes, vurderes søknaden på nytt
     # Gjelder uansett om grunnlaget er satt automatisk eller av saksbehandleren.
     # Hvordan tilleggspoengene regnes ut, står i kravet.
@@ -289,7 +289,6 @@ Egenskap: Automatisk grunnlag
       Og kvotene søkeren kan plasseres i er oppdatert etter grunnlagene
       Og tilleggspoengene er regnet ut for grunnlagene
 
-    @implemented
     Scenario: Opptakskrav, kvoter og tilleggspoeng følger grunnlaget som er satt automatisk
       Gitt at søknaden ikke har noe grunnlag
       Når saken får et grunnlag automatisk

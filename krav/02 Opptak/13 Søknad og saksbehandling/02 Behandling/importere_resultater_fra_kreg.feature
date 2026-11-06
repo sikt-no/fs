@@ -63,7 +63,7 @@ Egenskap: Importere resultater fra KREG
       Når søkeren sender inn søknaden
       Så er vitnemålet importert
 
-  @ref-FLY-OPT-AUT-001 @ref-FLY-OPT-VIT-001
+  @ref-FLY-OPT-AUT-001 @ref-FLY-OPT-VIT-001 @implemented
   Regel: Alle vitnemål og kompetansebevis søkeren har i KREG, importeres
 
     Scenario: Det importerte vitnemålet har opplysningene saksbehandlingen trenger
@@ -80,19 +80,16 @@ Egenskap: Importere resultater fra KREG
         | programområdene                                 |
         | merknadene                                      |
 
-    @implemented
     Scenario: Søker med flere vitnemål får alle importert
       Gitt at søkeren har to vitnemål i KREG, ett fra 2024 og ett fra 2025
       Når søkerens resultater importeres
       Så er begge vitnemålene importert
 
-    @implemented
     Scenario: Kompetansebevis importeres
       Gitt at søkeren har et kompetansebevis i KREG
       Når søkerens resultater importeres
       Så er kompetansebeviset importert
 
-    @implemented
     Scenario: Vitnemål som er importert fra før, importeres ikke på nytt
       Gitt at søkerens vitnemål er importert
       Når søkerens resultater importeres på nytt
@@ -131,6 +128,7 @@ Egenskap: Importere resultater fra KREG
       Når søkeren sender inn søknaden
       Så er ingen resultater importert fra KREG
 
+    @implemented
     Scenario: Søker uten fødselsnummer og D-nummer får ingen resultater importert
       Gitt at søkeren verken har fødselsnummer eller D-nummer
       Når søkeren sender inn søknaden
