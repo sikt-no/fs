@@ -10,7 +10,7 @@
 ## Mål
 
 - Kvalifiserte søkere som ikke kan få vanlige rangeringspoeng, kan skjønnsvurderes i en egen kvote, og få eller ikke få tilbudsgaranti (TAKE-493).
-- Opptaksforvalter (avklart 2026-11-06) kan opprette en ventekvote for søkere uten poeng (tidligere kalt SPEV-kvote). Kvotetypen kan settes til å ikke ha plasser, til å være standard for alle utdanningstilbud i opptak som bruker kvotetypen, og til å være stengt for fjerning fra utdanningstilbudene (TAKE-492). Innstillingen gjelder alle, også organisasjonen som eier opptaket (avklart 2026-11-06).
+- Opptaksforvalter (avklart 2026-11-06) kan opprette en ventekvote for søkere uten poeng (tidligere kalt SPEV-kvote). Kvotetypen kan settes til å ikke ha plasser, til å være standardkvote, som legges på utdanningstilbudet når det legges til i opptaket (avklart 2026-11-06), og til å være stengt for fjerning fra utdanningstilbudene (TAKE-492). Innstillingen gjelder alle, også organisasjonen som eier opptaket (avklart 2026-11-06).
 - Saksbehandler kan sette interne poeng (stipulering) på søkere i ventekvoten, og søkeren ser ikke poengene.
 - Opptaksforvalter ser, før plasstildelingen, søkere i ventekvoten uten tilbudsgaranti og kvalifiserte søkere uten kvote.
 - Ventekvoten er en kvotetype uten plasser, og et venterom for søkere som søker på grunnlag av realkompetanse og søkere helt uten poeng. Kravene gir ikke kvotetypen eller grunnlagene konkrete navn eller koder, men legger til rette for at funksjonen SPEV-kvoten har hatt, også finnes i det nye opptaket (avklart 2026-11-06).
@@ -36,7 +36,7 @@
 | Krav | MoSCoW | Skisse | Jira | Kommentar |
 |---|---|---|---|---|
 | `@OPT-REG-KVO-001` — Regel: En kvotetype kan være uten plasser | Must | – | [TAKE-492](https://sikt.atlassian.net/browse/TAKE-492) | Ny regel i [kvoterregelverk.feature](../../../krav/02%20Opptak/10%20Regelverk/04%20Kvoter/kvoterregelverk.feature) (levert, regelverk-2027). Finnes i koden på fs-plattform-branchen `feature/take-492-kvotetype-innstillinger` |
-| `@OPT-REG-KVO-001` — Regel: En kvotetype kan være standardkvote for utdanningstilbudene | Must | – | [TAKE-492](https://sikt.atlassian.net/browse/TAKE-492) | Avvik fra koden på TAKE-492-branchen: koden legger standardkvoten bare på nye utdanningstilbud, og fjerner den ikke når innstillingen slås av. Kravet sier at den også legges på utdanningstilbudene som finnes, og fjernes når den slås av (avklart 2026-11-06) |
+| `@OPT-REG-KVO-001` — Regel: En kvotetype kan være standardkvote for utdanningstilbudene | Must | – | [TAKE-492](https://sikt.atlassian.net/browse/TAKE-492) | Standardkvoten legges på utdanningstilbudet når det legges til i opptaket, ikke på utdanningstilbud som allerede er i opptaket, og blir stående når innstillingen slås av (avklart 2026-11-06). Stemmer med koden på TAKE-492-branchen |
 | `@OPT-REG-KVO-001` — Regel: En kvotetype kan stenges for fjerning fra utdanningstilbudet | Must | – | [TAKE-492](https://sikt.atlassian.net/browse/TAKE-492) | Avvik fra koden på TAKE-492-branchen: koden lar organisasjonen som eier opptaket, alltid fjerne kvoten (`kan_fjernes_av_deltaker` gjelder bare deltakende organisasjoner). Kravet sier at innstillingen gjelder alle, og ikke kan overstyres (avklart 2026-11-06) |
 | `@OPT-REG-KVO-005` [opprette_ventekvote.feature](../../../krav/02%20Opptak/10%20Regelverk/04%20Kvoter/opprette_ventekvote.feature) | Must | – | [TAKE-492](https://sikt.atlassian.net/browse/TAKE-492) | Hele oppsettet av ventekvoten, som grunnlag for brukerveiledningen i fs-admin |
 | `@OPT-BEH-BEH-040` [sette_interne_poeng.feature](../../../krav/02%20Opptak/13%20S%C3%B8knad%20og%20saksbehandling/02%20Behandling/sette_interne_poeng.feature) | Must | – | [TAKE-493](https://sikt.atlassian.net/browse/TAKE-493) | Intern stipulering, høyst 999,99 |
@@ -46,7 +46,7 @@
 
 Disse kravene må endres for at scopet kan leveres, men blir i scopet de hører til:
 
-- `@OPT-OPT-UTD-004` [opptaksinnstillinger_utdanningstilbud.feature](../../../krav/02%20Opptak/12%20Utdanningstilbud/03%20Opptaksinnstillinger/opptaksinnstillinger_utdanningstilbud.feature) (utdanningstilbud-2027): standardkvoten legges på utdanningstilbudene automatisk, og en kvote som er stengt for fjerning, kan ikke fjernes, heller ikke av organisasjonen som eier opptaket. Endrer avklaringen 2026-10-21 om at utdanningstilbudet ikke får kvotetypene automatisk.
+- `@OPT-OPT-UTD-004` [opptaksinnstillinger_utdanningstilbud.feature](../../../krav/02%20Opptak/12%20Utdanningstilbud/03%20Opptaksinnstillinger/opptaksinnstillinger_utdanningstilbud.feature) (utdanningstilbud-2027): standardkvoten legges på utdanningstilbudet når det legges til i opptaket, og en kvote som er stengt for fjerning, kan ikke fjernes, heller ikke av organisasjonen som eier opptaket. Endrer avklaringen 2026-10-21 om at utdanningstilbudet ikke får kvotetypene automatisk.
 - `@OPT-OPT-UTD-032` [sette_antall_studieplasser_per_kvote.feature](../../../krav/02%20Opptak/12%20Utdanningstilbud/03%20Opptaksinnstillinger/sette_antall_studieplasser_per_kvote.feature) (utdanningstilbud-2027): en kvote uten plasser får ingen studieplasser, og telles ikke med i summen.
 - `@OPT-REG-KVO-003` [sette_plassflyt.feature](../../../krav/02%20Opptak/10%20Regelverk/04%20Kvoter/sette_plassflyt.feature) (kvoter-i-opptaket-2027, `@in-progress`) og [gjennomføre_plasstildeling.feature](../../../krav/02%20Opptak/14%20Plasstildeling/03%20Tildeling/gjennomf%C3%B8re_plasstildeling.feature) (plasstildeling-2027): «SPEV-kvote» skrives om til ventekvote (kvotetype uten plasser).
 
@@ -62,5 +62,6 @@ Rangeringsmetodene på kvotetypen (åpent spørsmål i `kvoterregelverk.feature`
 
 | Dato | Hendelse | Av | Lenke til review |
 |------|----------|----|------------------|
+| 2026-11-06 | Standardkvoten gjelder bare utdanningstilbud som legges til i opptaket, og blir stående når den slås av | – | – |
 | 2026-11-06 | Stengt for fjerning gjelder alle, og kan ikke overstyres av organisasjonen som eier opptaket | – | – |
 | 2026-11-06 | Opprettet med fs-scope | – | – |

@@ -89,29 +89,32 @@ Egenskap: Kvotetype
   Regel: En kvotetype kan være standardkvote for utdanningstilbudene
     # Ny regel 2026-11-06 (TAKE-492). At nye utdanningstilbud får standardkvoten, står i
     # opptaksinnstillinger_utdanningstilbud.feature.
+    # AVKLART 2026-11-06 (produkteier): Standardkvoten legges på utdanningstilbudet når det legges til i
+    # opptaket. Utdanningstilbud som allerede er i opptaket, får den ikke. Når kvotetypen ikke lenger er
+    # standardkvote, blir kvoten stående på utdanningstilbudene som har den.
 
     Scenario: Kvotetypen er ikke standardkvote som standard
       Når opptaksforvalteren oppretter kvotetypen "Førstegangsvitnemål (ORDF)"
       Så er kvotetypen "Førstegangsvitnemål (ORDF)" ikke standardkvote
 
-    Scenario: Standardkvoten legges på utdanningstilbudene som finnes
-      Gitt at opptaket "Samordna opptak 2027" bruker regelverkssamlingen "UHG2027"
-      Og at utdanningstilbudet "Sykepleie, høst 2027" i opptaket ikke har utdanningskvoten "Ventekvote (VENT)"
-      Når opptaksforvalteren setter kvotetypen "Ventekvote (VENT)" som standardkvote
+    Scenario: Utdanningstilbud som legges til i opptaket, får standardkvoten
+      Gitt at kvotetypen "Ventekvote (VENT)" er standardkvote
+      Og at opptaket "Samordna opptak 2027" bruker regelverkssamlingen "UHG2027"
+      Når utdanningstilbudet "Sykepleie, høst 2027" legges til i opptaket "Samordna opptak 2027"
       Så har utdanningstilbudet "Sykepleie, høst 2027" utdanningskvoten "Ventekvote (VENT)"
 
-    Scenario: Kvoten fjernes fra utdanningstilbudene når kvotetypen ikke lenger er standardkvote
+    Scenario: Utdanningstilbud som allerede er i opptaket, får ikke standardkvoten
+      Gitt at opptaket "Samordna opptak 2027" bruker regelverkssamlingen "UHG2027"
+      Og at utdanningstilbudet "Sykepleie, høst 2027" er i opptaket uten utdanningskvoten "Ventekvote (VENT)"
+      Når opptaksforvalteren setter kvotetypen "Ventekvote (VENT)" som standardkvote
+      Så har utdanningstilbudet "Sykepleie, høst 2027" fortsatt ikke utdanningskvoten "Ventekvote (VENT)"
+
+    Scenario: Kvoten blir stående når kvotetypen ikke lenger er standardkvote
       Gitt at kvotetypen "Ventekvote (VENT)" er standardkvote
       Og at utdanningstilbudet "Sykepleie, høst 2027" har utdanningskvoten "Ventekvote (VENT)"
       Når opptaksforvalteren setter at kvotetypen "Ventekvote (VENT)" ikke er standardkvote
-      Så har utdanningstilbudet "Sykepleie, høst 2027" ikke utdanningskvoten "Ventekvote (VENT)"
-
-    Scenario: Standardkvoten kan ikke slås av når kvoten er i bruk
-      Gitt at kvotetypen "Ventekvote (VENT)" er standardkvote
-      Og at søkere er plassert i utdanningskvoten "Ventekvote (VENT)" på "Sykepleie, høst 2027"
-      Når opptaksforvalteren setter at kvotetypen "Ventekvote (VENT)" ikke er standardkvote
-      Så er kvotetypen "Ventekvote (VENT)" fortsatt standardkvote
-      Og opptaksforvalteren ser at kvoten er i bruk på utdanningstilbudet "Sykepleie, høst 2027"
+      Så har utdanningstilbudet "Sykepleie, høst 2027" fortsatt utdanningskvoten "Ventekvote (VENT)"
+      Men utdanningstilbud som legges til i opptaket etterpå, får ikke utdanningskvoten "Ventekvote (VENT)"
 
   @planned @scope-spesialvurdering-2027
   Regel: En kvotetype kan stenges for fjerning fra utdanningstilbudet
