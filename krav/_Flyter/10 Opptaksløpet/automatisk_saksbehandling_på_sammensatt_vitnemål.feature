@@ -20,7 +20,9 @@ Egenskap: Automatisk saksbehandling på sammensatt vitnemål
     # ÅPNE SPØRSMÅL:
     # - Kravet mangler. Hvordan settes et sammensatt vitnemål sammen?
     # - OPT-BEH-BEH-022 sier at fag bare kan hentes fra flere dokumenter etter 23/6-regelen
-    #   («Hente studiekompetansefag fra flere dokumenter etter 23/6-regelen»). Med VPL hentes fag
+    #   («Studiekompetansefag fra andre dokumenter legges inn under tilleggsfag etter 23/6-regelen»,
+    #   avklart 04.11.2026: et elektronisk vitnemål legges til grunn, og fagene fra de andre
+    #   dokumentene legges inn manuelt under tilleggsfag). Med VPL hentes fag
     #   fra flere dokumenter også utenfor 23/6-regelen. Må OPT-BEH-BEH-022 endres?
     # - Får det sammensatte vitnemålet påstanden om GSK? Påstanden beregnes når vitnemålet
     #   importeres fra KREG (OPT-BEH-BEH-015), og det sammensatte vitnemålet importeres ikke.
@@ -44,8 +46,7 @@ Egenskap: Automatisk saksbehandling på sammensatt vitnemål
   # OPT-BEH-BEH-039: «Har søkeren flere vitnemål, behandles saken automatisk på vitnemålet saksbehandleren velger»
   Regel: Saksbehandleren starter den automatiske behandlingen på det sammensatte vitnemålet
     # Avklart 2026-10-29: saksbehandleren må si at den automatiske behandlingen skal kjøre med det
-    # sammensatte vitnemålet. Å starte behandlingen på et vitnemål står i OPT-BEH-BEH-032 (PR #862,
-    # ikke merget 2026-10-30). Fasen får @depends-on-OPT-BEH-BEH-032 når kravet er merget.
+    # sammensatte vitnemålet.
 
     Scenario: Saken behandles automatisk på det sammensatte vitnemålet
       Gitt at "Kari Nordmann" har et sammensatt vitnemål

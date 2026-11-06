@@ -39,7 +39,7 @@ Egenskap: Importere resultater fra KREG
     @implemented
     Scenario: Resultatene hentes når en endring av søknaden gir en ny sak
       # Avklart 03.11.2026: resultatene hentes på nytt hver gang søknaden endres, også når
-      # endringen ikke gir en ny sak. Det dekker hullet til jobben for nye vitnemål
+      # endringen ikke gir en ny sak. Det dekker hullet til importen av VGS-vitnemål fra KREG
       # (OPT-BEH-BEH-032) er levert.
       Gitt at søkerens vitnemål fra 2024 er importert
       Og at søkeren har fått et vitnemål fra 2025 i KREG
@@ -56,7 +56,7 @@ Egenskap: Importere resultater fra KREG
 
     Scenario: Resultatene hentes med D-nummer når søkeren ikke har fødselsnummer
       # Avklart 03.11.2026. Kode i dag: bare fødselsnummer slås opp. KREG tar imot D-nummer.
-      # D-nummeret brukes også når resultatene hentes på nytt, i jobben for nye vitnemål
+      # D-nummeret brukes også når resultatene hentes på nytt, i importen av VGS-vitnemål fra KREG
       # (OPT-BEH-BEH-032).
       Gitt at søkeren har D-nummer og ikke fødselsnummer
       Og at søkeren har et vitnemål i KREG
@@ -145,7 +145,7 @@ Egenskap: Importere resultater fra KREG
       Når KREG svarer igjen innenfor tiden i applikasjonsinnstillingene
       Så er søkerens vitnemål importert
 
-  @ref-OPT-BEH-BEH-021 @ref-FLY-OPT-VIT-001 @ref-OPT-BEH-BEH-032
+  @ref-OPT-BEH-BEH-021 @ref-FLY-OPT-VIT-001 @ref-OPT-BEH-BEH-032 @ref-OPT-BEH-BEH-035 @ref-OPT-BEH-BEH-015
   Regel: Nye og annullerte vitnemål i KREG importeres for aktive søkere
     # Gjelder aktive søkere: søkere med en søknad som ikke er trukket, i et opptak som ikke er
     # avsluttet.
@@ -154,8 +154,8 @@ Egenskap: Importere resultater fra KREG
     # Jobben for nye vitnemål (OPT-BEH-BEH-032) går gjennom alle aktive søkere, og henter
     # vitnemålene fra KREG for hver søker. Det som ikke er importert fra før, eller som er
     # annullert i KREG, er nytt.
-    # Et nytt vitnemål i en sak som er behandlet, er ny dokumentasjon. Saken behandles ikke
-    # automatisk på nytt (OPT-BEH-BEH-032). Når vitnemålet annulleres, gjelder OPT-BEH-BEH-034.
+    # Et nytt vitnemål i en sak som er behandlet, gir saken nye resultater (OPT-BEH-BEH-035).
+    # Saken behandles ikke automatisk på nytt (OPT-BEH-BEH-032). Når vitnemålet annulleres, gjelder OPT-BEH-BEH-034.
     # Varselet til saksbehandleren om nytt vitnemål står i OPT-BEH-BEH-021.
 
     Scenario: Søkeren får vitnemålet etter at søknaden er levert

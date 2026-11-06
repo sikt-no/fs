@@ -29,7 +29,7 @@ Egenskap: Behandle automatisk på vitnemålet saksbehandleren velger
     Gitt at søknaden til "Kari Nordmann" har en sak hos "Universitetet i Oslo"
     Og at "Kari Nordmann" har vitnemålene "Vitnemål 2024" og "Vitnemål 2025", som begge gir GSK
 
-  @ref-OPT-BEH-BEH-015 @ref-FLY-OPT-VAL-001 @ref-FLY-OPT-SAM-001
+  @ref-OPT-BEH-BEH-015 @ref-FLY-OPT-VAL-001
   # OPT-BEH-BEH-015: «Konklusjon på søknaden fra vitnemålet»
   Regel: Har søkeren flere vitnemål, behandles saken automatisk på vitnemålet saksbehandleren velger
     # Saksbehandleren velger vitnemålet når den automatiske behandlingen startes på det.
@@ -48,7 +48,7 @@ Egenskap: Behandle automatisk på vitnemålet saksbehandleren velger
       Når saksbehandleren ved Universitetet i Oslo starter den automatiske behandlingen på "Vitnemål 2025"
       Så behandles saken automatisk på "Vitnemål 2025"
 
-    @draft @openquestion
+    @draft @openquestion @ref-FLY-OPT-SAM-001
     Scenario: Saken behandles automatisk på et sammensatt vitnemål
       # ÅPNE SPØRSMÅL:
       # - Ingen krav beskriver hva et sammensatt vitnemål er, eller hvordan saksbehandleren

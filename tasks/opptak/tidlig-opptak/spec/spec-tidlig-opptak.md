@@ -21,6 +21,12 @@ Hele prosessen for tidlig opptak: søkeren ber om tidlig opptak med en begrunnel
 - **`publisere_svar_på_tidlig_opptak.feature`** (`@OPT-BEH-BEH-014`) — svaret publiseres når tidligopptaket gjennomføres, uten egen publiseringsdato (endret etter innhentingen, se _Endringer etter innhenting_), og én melding til søkerne med forhåndsvisning. ([krav/…/publisere_svar_på_tidlig_opptak.feature](../../../../krav/02%20Opptak/13%20S%C3%B8knad%20og%20saksbehandling/02%20Behandling/publisere_svar_p%C3%A5_tidlig_opptak.feature))
 - **`se_svar_på_tidlig_opptak.feature`** (`@OPT-SØK-SØK-012`) — søkeren ser utfallet per søknadsalternativ og et samlet svar, på språket søkeren har valgt. ([krav/…/se_svar_på_tidlig_opptak.feature](../../../../krav/02%20Opptak/13%20S%C3%B8knad%20og%20saksbehandling/01%20S%C3%B8knad/se_svar_p%C3%A5_tidlig_opptak.feature))
 
+## Avhengigheter
+
+- **`@OPT-OPT-UTD-004`** `opptaksinnstillinger_utdanningstilbud.feature` — `@draft`. Brukes av `søke_om_tidlig_opptak.feature` (Regel: Søkeren kan søke om tidlig opptak når opptaket tilbyr det) og `gi_tilbudsgaranti_ved_tidlig_opptak.feature`. `@OPT-BEH-BEH-007` bygger bare på reglene med ankeret `@ref-OPT-BEH-BEH-007`: «Opptaksforvalter kan markere at et utdanningstilbud tilbyr tidlig opptak» og «Opptaksforvalter kan sette opplysninger om tilbudsgaranti». Ikke validert: kan ikke leveres før kravet er avklart. ([krav/…/opptaksinnstillinger_utdanningstilbud.feature](../../../../krav/02%20Opptak/12%20Utdanningstilbud/03%20Opptaksinnstillinger/opptaksinnstillinger_utdanningstilbud.feature))
+- **`@OPT-OVO-INN-001`** `innstillinger.feature` — `@implemented`. Brukes av `søke_om_tidlig_opptak.feature` (Regel: Søkeren kan søke om tidlig opptak når opptaket tilbyr det). ([krav/…/innstillinger.feature](../../../../krav/02%20Opptak/11%20Opprette%20og%20vedlikeholde%20opptak/03%20Innstillinger/innstillinger.feature))
+- **`@OPT-BEH-BEH-010`** `gi_tilbudsgaranti.feature` — `@implemented`. Brukes av `gi_tilbudsgaranti_ved_tidlig_opptak.feature`. ([krav/…/gi_tilbudsgaranti.feature](../../../../krav/02%20Opptak/13%20S%C3%B8knad%20og%20saksbehandling/02%20Behandling/gi_tilbudsgaranti.feature))
+
 ## Skisser
 
 ### Skisse: Min kompetanse – tidlig opptak
@@ -82,7 +88,7 @@ Det som gjenstår i backend:
 
 ### Avvik der koden skal endres
 
-- `@OPT-BEH-BEH-007` (avklart 2026-10-20): kvotevarselet skal regne med alle tilbudsgarantiene fra tidligopptaket på utdanningstilbudet, også dem fra en tidligere gjennomføring. Koden teller bare tilbudsgarantiene som settes i kjøringen. En garanti som står fra før (`ALLEREDE_SATT_POSITIV`), telles ikke (`TidligopptakTilbudsgarantiService.java:966-968, 1163-1166`). Nytt scenario «Kvotevarselet tar med tilbudsgarantier fra en tidligere gjennomføring». Jira: STEK-623.
+Ingen.
 
 ### Avvik som må avklares
 
@@ -92,6 +98,7 @@ Koden gjør noe annet enn kravet. Det er ikke bestemt om kravet eller koden skal
 
 ### Løst siden 2026-10-08
 
+- `@OPT-BEH-BEH-007`, kvotevarselet (avklart 2026-10-20, rettet i koden): varselet regner med alle tilbudsgarantiene fra tidligopptaket på utdanningstilbudet, også dem fra en tidligere gjennomføring. Rettet i STEK-623 (fs-plattform `e3d57129e8`, merget 2026-10-29, `TidligopptakTilbudsgarantiService.java:1195-1200`).
 - `@OPT-BEH-BEH-007`, annen tilbudsgaranti fra opptaksforvalter (avklart 2026-10-20, kravet følger koden): bare tilbudsgaranti for tidlig opptak (kategori F) og reservert studieplass (kategori S) påvirker gjennomføringen. En annen kode fra opptaksforvalter, også en som gir tilbud, stopper ikke søkeren lavere ned, og overskrives på søknadsalternativet som får garantien (`SATT_OVERSKREV_POSITIV`, `TidligopptakTilbudsgarantiService.java:196-199, 1040-1050`, testen `TidligopptakTilbudsgarantiIT.overskriverAnnenPositivVerdi`).
 - `@OPT-BEH-BEH-013`, konklusjon når søkeren ikke har søkt (avklart 2026-10-20, kravet følger koden): backend godtar en konklusjon i alle saker (`SettTidligopptakKonklusjonService.java:29-65`). Det holder at steget er skjult i saksbehandlingen, og at gjennomføringen bare tar med søkere som har søkt (`TidligopptakTilbudsgarantiService.java:453-459`).
 - `@OPT-SØK-SØK-012`, poeng når søkeren ikke er kvalifisert (avklart 2026-10-20, kravet følger koden): søkeren ser ikke poengsum og poenggrense (`TidligopptakTilbudsgarantiService.java:655-663`). Nytt scenario i kravet.
@@ -176,6 +183,8 @@ Kravene er `@in-progress`, og endres på stedet. Endringene står her, så den s
 - **2026-10-26, `@OPT-SØK-SØK-011`:** «Se når søkeren søkte om tidlig opptak» er `@draft @openquestion`, en utvidelse for senere. Ikke bygg den nå. Søknaden lagrer ikke når søkeren søkte (bare `soknad_v2.soknad.tidligopptak_begrunnelsetype_kode`), og Min kompetanse viser «Du har søkt om tidlig opptak.» uten dato. Tidspunktet står i kvitteringen i Mine meldinger.
 - **2026-10-26, `@OPT-SØK-SØK-011`:** «Kan ikke søke om tidlig opptak etter fristen» sier bare at søkeren ikke kan søke etter fristen. Kravet sier ikke lenger at søkeren ser at fristen er ute, og ikke hvordan søkeren hindres. Min kompetanse skjuler boksen «Tidlig opptak» etter fristen når søkeren ikke har søkt (`use-is-tidlig-opptak-visible.ts`), og det oppfyller kravet.
 - **2026-10-27, `@OPT-BEH-BEH-009`:** Valget søkt om tidlig opptak kombineres med valgene for konklusjon med «og», som i koden fra STEK-561 (`toSakFilterInput.ts`, `SakFilterConditions.harTidligopptakKonklusjon`). De to valgene for konklusjon kombineres fortsatt med «eller». Scenariomalen «Valg i filteret for tidlig opptak kombineres med eller» er erstattet av «Valgene for konklusjon kombineres med eller» og «Søkt om tidlig opptak kombineres med valgene for konklusjon med og».
+- **2026-11-02, `@OPT-BEH-BEH-007`:** Opptaksforvalter ser antall søkere, ikke saker, som har saker som ikke er ferdig behandlet eller mangler konklusjon. En søker med flere slike saker telles én gang. «Se antall saker som ikke er ferdig behandlet eller mangler konklusjon» heter nå «Se antall søkere med saker som ikke er ferdig behandlet eller mangler konklusjon». API-et har tallet (`sokereMedSakerIkkeBehandletFerdig`), og fs-admin MR !3226 viser det. Endret etter `fs-verify` (`krav/…/verify-gi_tilbudsgaranti_ved_tidlig_opptak-2026-11-02-1513.md`).
+- **2026-11-02, `@OPT-BEH-BEH-007`:** Kravet bygger bare på to regler i `@OPT-OPT-UTD-004`, som har fått ankeret `@ref-OPT-BEH-BEH-007`: «Opptaksforvalter kan markere at et utdanningstilbud tilbyr tidlig opptak» og «Opptaksforvalter kan sette opplysninger om tilbudsgaranti» (se _Avhengigheter_). Ingen endring i det som skal bygges.
 
 ## Åpne spørsmål
 

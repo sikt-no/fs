@@ -1,5 +1,5 @@
 # language: no
-@OPT-BEH-BEH-025 @must @in-progress @scope-automatisk-ferdigbehandling @ref-OPT-BEH-BEH-004 @ref-OPT-BEH-BEH-018 @ref-OPT-BEH-BEH-019 @ref-OPT-BEH-BEH-020 @ref-OPT-BEH-BEH-032
+@OPT-BEH-BEH-025 @must @in-progress @scope-automatisk-ferdigbehandling @ref-OPT-BEH-BEH-004 @ref-OPT-BEH-BEH-018 @ref-OPT-BEH-BEH-019 @ref-OPT-BEH-BEH-020 @ref-OPT-BEH-BEH-032 @ref-OPT-BEH-BEH-035
 Egenskap: Ferdigbehandle en sak
   Som saksbehandler
   ønsker jeg at saker som kan behandles helt automatisk, blir ferdig behandlet uten at jeg gjør noe
@@ -31,9 +31,9 @@ Egenskap: Ferdigbehandle en sak
   # «<feil i regelverket> stopper <steg>». Nye feil legges til i tabellen når de oppdages.
 
   # Avklart 29.10.2026: når den automatiske behandlingen starter, står i OPT-BEH-BEH-032. Et nytt
-  # vitnemål i en sak som er ferdig behandlet, er ny dokumentasjon. Saken behandles ikke
-  # automatisk på nytt, men saksbehandleren ser at den har fått ny dokumentasjon, og kan starte
-  # behandlingen på det nye vitnemålet.
+  # vitnemål i en sak som er ferdig behandlet, gir saken nye resultater (OPT-BEH-BEH-035). Saken
+  # behandles ikke automatisk på nytt, men saksbehandleren finner den blant sakene med nye
+  # resultater, og kan starte behandlingen på det nye vitnemålet.
 
   Bakgrunn:
     Gitt at søknaden til "Kari Nordmann" har en sak hos "Universitetet i Oslo"
@@ -115,9 +115,6 @@ Egenskap: Ferdigbehandle en sak
     # Avklart 2026-11-03: hvor saksbehandleren ser det (hendelsesloggen for saken i
     # OPT-BEH-BEH-016, ved hvert steg i saken, eller begge steder), er et designspørsmål, og
     # hører hjemme i implementasjonsdetaljene.
-    # Når den automatiske behandlingen avgjorde hvert steg, finnes bare i endringsloggen. Scenarioet
-    # om tidspunktet kan ikke leveres før den nye sporingsloggen finnes. Endringsloggen er stoppet
-    # (BAT-324, 29.10.2026).
 
     Bakgrunn:
       Gitt at "Kari Nordmann" har ett vitnemål, og vitnemålet gir GSK

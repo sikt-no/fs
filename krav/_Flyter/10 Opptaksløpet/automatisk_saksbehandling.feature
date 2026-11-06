@@ -8,11 +8,11 @@ Egenskap: Automatisk saksbehandling
   GSK-vitnemålsberegningen, opptakssystemets påstand om GSK, kjører for hvert vitnemål når
   vitnemålet importeres fra KREG.
   Vitnemålet gir GSK når det har «GSK OK» fra KREG, og søknaden får GSK-konklusjonen da.
-  Opptakssystemets påstand fra fs-opptaks kontrollmotor er en kontroll: er den uenig, får saksbehandleren et varsel, men flyten
+  Opptakssystemets påstand er en kontroll: er den uenig, får saksbehandleren et varsel, men flyten
   stopper ikke (OPT-BEH-BEH-015). «Importeres» betyr i flyten alltid at
   opptakssystemet henter vitnemålet fra KREG, ikke at vitnemålet kommer inn i KREG.
   Den automatiske behandlingen fortsetter saksbehandlertildelingen: hver ny sak behandles når
-  vitnemålet er importert, eller når jobben for nye vitnemål i KREG finner søkerens første
+  vitnemålet er importert, eller når importen av VGS-vitnemål fra KREG finner søkerens første
   vitnemål. Opptaksforvalteren kan sette når den automatiske saksbehandlingen starter og avsluttes
   i opptaket (OPT-BEH-BEH-032).
   Som første steg setter den GSK-konklusjonen på søknadene som ikke har en.
@@ -25,7 +25,8 @@ Egenskap: Automatisk saksbehandling
   behandlet. Rettes en feil i regelverket, beregner opptaksforvalteren søknadsalternativene
   feilen gjaldt, på nytt.
 
-  # Kjent brudd: den automatiske behandlingen setter ikke saken til ferdig behandlet (se OPT-BEH-BEH-025).
+  # Kjent brudd: den automatiske behandlingen publiserer ikke manglene når saken blir ferdig behandlet,
+  # så søkeren ser ikke mangelteksten i Min kompetanse (se OPT-BEH-BEH-025 og OPT-BEH-BEH-036).
   # Kjent brudd: GSK-vitnemålsberegningen kjører bare i den automatiske behandlingen, ikke når vitnemålet
   # importeres fra KREG, og opptakssystemets påstand lagres ikke på vitnemålet (se OPT-BEH-BEH-015).
   # Kjent brudd: koden stopper automatikken når opptakssystemets beregning er uenig med skolen, og gir ikke varsel (se OPT-BEH-BEH-015).
@@ -53,7 +54,7 @@ Egenskap: Automatisk saksbehandling
       Og GSK kan beregnes for vitnemålet
 
   @depends-on-OPT-BEH-BEH-032
-  # OPT-BEH-BEH-032: «Behandlingen kjører for hver ny sak saksbehandlertildelingen oppretter», «Behandlingen kjører når søkeren får det første vitnemålet»
+  # OPT-BEH-BEH-032: «Behandlingen kjører for hver ny sak saksbehandlertildelingen oppretter», «Behandlingen kjører når importen har hentet vitnemålene til en søker uten vitnemål»
   Regel: Den automatiske behandlingen starter når søkerens resultater er importert
 
     Scenario: Saken behandles automatisk når vitnemålet er importert

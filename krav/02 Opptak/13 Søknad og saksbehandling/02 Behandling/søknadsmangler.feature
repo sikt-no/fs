@@ -43,7 +43,7 @@ Egenskap: Søknadsmangler
 
   # ── 1. Mangelkoder ───────────────────────────────────────────
 
-  @implemented
+  @implemented @ref-OPT-BEH-BEH-036
   Regel: Opptaksforvalteren forvalter mangelkodene i regelverkssamlingen
 
     Scenario: Opprette mangelkode
@@ -190,6 +190,7 @@ Egenskap: Søknadsmangler
         | sjekker ut en mangel  |
         | sletter en mangel     |
 
+  @ref-OPT-BEH-BEH-036
   Regel: Saksbehandleren sjekker ut mangelen når søkeren har dokumentert på nytt
 
     Når saksbehandleren har vurdert ny dokumentasjon og mener at mangelen er løst, sjekker

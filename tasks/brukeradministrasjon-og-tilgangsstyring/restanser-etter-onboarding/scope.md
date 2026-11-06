@@ -17,14 +17,14 @@
 
 - Endringer i leverte krav som erstatter `@deprecated`-deler (synlighet via aktiv rolle, «Gjelder for»): eget scope, [scope-synlighet-og-gjelder-for](../synlighet-og-gjelder-for/scope.md).
 - Oppgaver som bare gjelder applikasjonskrav: eget scope, [scope-applikasjoner-etter-design-review](../applikasjoner-etter-design-review/scope.md).
-- Reaktivering av personbrukere (`@BRU-PER-GRU-004`): [scope-grunnleggende-brukeradministrasjon](../grunnleggende-brukeradministrasjon/scope.md).
+- Reaktivering av personbrukere (`@BRU-PER-GRU-004`).
 - Organisasjonsvalget i dialogene for å tildele og fjerne tilganger til en applikasjon (`@BRU-APP-API-007`, `-008`): kravet beskriver det koden gjør i dag.
 - Tilganger for personbrukere (`@BRU-PER-GRU-002`, `-009`), som er planlagt etter v1.
 
 ## Kilder
 
 - [#743](https://github.com/sikt-no/fs/pull/743) — krav-PR-en med restansene: akronym i organisasjonsvalg, bare forretningsroller og forhåndsvalgt hjemorganisasjon
-- [Verifisering 2026-10-14](../../../krav/07%20Brukeradministrasjon%20og%20tilgangsstyring/12%20Brukeradministrasjon/personbrukere/1%20-%20Grunnleggende%20brukeradministrasjon/verify-1%20-%20Grunnleggende%20brukeradministrasjon-2026-10-14-1544.md) — hva som gjenstår i fs-plattform og fs-admin per krav
+- [Verifisering 2026-10-14](https://github.com/sikt-no/fs/blob/58b2807625e1509db236be28b4f16ff753b6858d/krav/07%20Brukeradministrasjon%20og%20tilgangsstyring/12%20Brukeradministrasjon/personbrukere/1%20-%20Grunnleggende%20brukeradministrasjon/verify-1%20-%20Grunnleggende%20brukeradministrasjon-2026-10-14-1544.md) — hva som gjenstår i fs-plattform og fs-admin per krav (slettet fra repoet, lenken går til siste versjon i git)
 - [FS-Admin – Målbilde, node 4551:5331](https://www.figma.com/design/dlG13wATArPvG69oePHPeL/FS-Admin---M%C3%A5lbilde?node-id=4551-5331) — «Brukeradministrasjon v 1.0»
 - [FS-Admin – Målbilde, node 4949:50600](https://www.figma.com/design/dlG13wATArPvG69oePHPeL/FS-Admin---M%C3%A5lbilde?node-id=4949-50600) — «Applikasjoner v2.2»
 - [#866](https://github.com/sikt-no/fs/pull/866) — krav-PR-en med regelen om at valglisten for rolle bare viser roller som er i taket til en applikasjon i valgt organisasjon og miljø

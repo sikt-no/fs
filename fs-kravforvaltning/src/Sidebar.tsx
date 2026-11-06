@@ -123,6 +123,8 @@ interface Props {
   onPull?: () => void;
   /** «Hent siste» pågår */
   pulling?: boolean;
+  /** En endret fil som ikke er et krav, men kan åpnes et annet sted (verify-rapportene i Verifisering) */
+  canOpen?: (path: string) => boolean;
   /** Bredden på treet, som kan dras i høyre kant */
   width: number;
   onWidth: (w: number) => void;
@@ -133,7 +135,7 @@ export const TREE_WIDTH = 300;
 const TREE_MIN = 200;
 const treeMax = () => Math.max(TREE_MIN, Math.min(640, Math.round(innerWidth * 0.5)));
 
-export function Sidebar({ entries, tree, current, open, query, onQuery, onToggle, onSelect, mode, onMode, git, onPr, onPull, pulling, width, onWidth }: Props) {
+export function Sidebar({ entries, tree, current, open, query, onQuery, onToggle, onSelect, mode, onMode, git, onPr, onPull, pulling, canOpen, width, onWidth }: Props) {
   // Lukkede mapper i endringstreet; alle er åpne som standard
   const [closed, setClosed] = useState<Record<string, boolean>>({});
   const index = useMemo(() => makeIndex(entries), [entries]);
@@ -185,12 +187,13 @@ export function Sidebar({ entries, tree, current, open, query, onQuery, onToggle
     const e = entries[c.path];
     const st = c.path.endsWith('.feature') ? displayStatus(e ?? { status: null }) : null;
     const id = e ? kravId(e) : null;
+    const opens = !!e || !!canOpen?.(c.path);
     return (
       <div
         key={key}
-        class={'row' + (id ? ' two' : '') + (c.path === current ? ' sel' : '') + (c.code === 'D' ? ' del' : '') + (e ? '' : ' gone')}
+        class={'row' + (id ? ' two' : '') + (c.path === current ? ' sel' : '') + (c.code === 'D' ? ' del' : '') + (opens ? '' : ' gone')}
         style={pad(depth)}
-        onClick={e ? () => onSelect(c.path) : undefined}
+        onClick={opens ? () => onSelect(c.path) : undefined}
         title={st ? `${c.path} · ${STATUS_LABEL[st]}` : c.path}
         aria-label={st ? `${baseName(c.path)}, ${STATUS_LABEL[st]}` : undefined}
       >
