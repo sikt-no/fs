@@ -1,5 +1,5 @@
 # language: no
-@OPT-REG-KVO-005 @must @planned @scope-spesialvurdering-2027 @depends-on-OPT-REG-KVO-001 @depends-on-OPT-REG-GRU-001 @depends-on-OPT-REG-RAN-001 @depends-on-OPT-REG-RAN-002
+@OPT-REG-KVO-005 @must @in-progress @scope-spesialvurdering-2027 @depends-on-OPT-REG-KVO-001 @depends-on-OPT-REG-GRU-001 @depends-on-OPT-REG-RAN-001 @depends-on-OPT-REG-RAN-002
 Egenskap: Opprette ventekvote for søkere uten poeng
   Som opptaksforvalter
   ønsker jeg å sette opp en ventekvote for søkere uten poeng i regelverkssamlingen
@@ -21,6 +21,7 @@ Egenskap: Opprette ventekvote for søkere uten poeng
     Gitt at opptaksforvalteren er innlogget
     Og at regelverkssamlingen "UHG2027" er opprettet
 
+  @implemented
   Regel: Grunnlagene for søkere uten vanlige konkurransepoeng har skjulte poeng
 
     Scenariomal: Opprette grunnlag med skjulte poeng
@@ -34,6 +35,7 @@ Egenskap: Opprette ventekvote for søkere uten poeng
         | Realkompetanse (REAL) |
         | Uten poeng (HUP)      |
 
+  @implemented
   Regel: Interne poeng settes opp i rangeringsregelverket med egne poengklasser og poengtyper
 
     Scenario: Opprette poengtype for interne poeng
@@ -82,13 +84,16 @@ Egenskap: Opprette ventekvote for søkere uten poeng
       Så følger "Ventekvote (VENT)" standardoppsettet for kvotetyper
       Og kan "Ventekvote (VENT)" legges på utdanningstilbudene i opptaket
 
-  Regel: Ventekvoten er standard for alle utdanningstilbud og stengt for fjerning
+  Regel: Ventekvoten er standardkvote og stengt for fjerning
     # Hva innstillingene gjør hver for seg, står i kvoterregelverk.feature.
+    # AVKLART 2026-11-06 (produkteier): Standardkvoten legges på utdanningstilbudet når det legges til i
+    # opptaket. Ventekvoten må derfor være standardkvote før utdanningstilbudene legges til.
 
     Scenario: Gjøre ventekvoten til standardkvote som er stengt for fjerning
       Gitt at kvotetypen "Ventekvote (VENT)" er opprettet uten plasser
       Og at opptaket "Samordna opptak 2027" bruker regelverkssamlingen "UHG2027"
       Når opptaksforvalteren setter kvotetypen "Ventekvote (VENT)" som standardkvote
       Og opptaksforvalteren stenger kvotetypen "Ventekvote (VENT)" for fjerning fra utdanningstilbudene
-      Så har alle utdanningstilbudene i opptaket "Samordna opptak 2027" utdanningskvoten "Ventekvote (VENT)"
-      Og "Ventekvote (VENT)" kan ikke fjernes fra utdanningstilbudene
+      Og utdanningstilbudet "Sykepleie, høst 2027" legges til i opptaket "Samordna opptak 2027"
+      Så har utdanningstilbudet "Sykepleie, høst 2027" utdanningskvoten "Ventekvote (VENT)"
+      Og "Ventekvote (VENT)" kan ikke fjernes fra utdanningstilbudet "Sykepleie, høst 2027"
