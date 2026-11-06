@@ -181,7 +181,6 @@ Endres:
 - `src/domains/tilgangsstyring/features/PersonbrukerDetails/components/PersonbrukerRoller/components/PersonbrukerRollerResultList/PersonbrukerRollerResultList.tsx`: bruker den flyttede `formatGyldighetstidsrom`.
 - `src/common/lib/apollo/cacheConfig.ts`: `FeideApplikasjon.brukerdelegeringer` og `brukergrunntilganger`.
 - `src/common/messages/nb/tilgangsstyring.json`: nye nøkler under `ApplikasjonDetails` (`delegeringstakTab`, `grunntilgangTab`), `ApplikasjonDelegeringstak.*` og `ApplikasjonGrunntilgang.*` (bare nb).
-- `src/mocks/applikasjoner/{fixtures,handlers,schema,store}`: delegeringstak, grunntilgang og de fire mutasjonene.
 
 Nye filer (under `src/domains/tilgangsstyring/`):
 
@@ -272,10 +271,10 @@ Bruk `useApolloClient().query` i `Promise.all` per miljø, med `fetchPolicy: 'ca
 
 Hooken kalles én gang per fane og sendes ned som props, så dialogene ikke henter på nytt.
 
-### Task #4: Cache-policy, felles verktøy og mock-API for delegeringstak og grunntilgang
+### Task #4: Cache-policy og felles verktøy for delegeringstak og grunntilgang
 
 **Priority**: High
-**Size**: M
+**Size**: S
 **Dependencies**: None
 **Addresses Requirements**: forutsetning for #5–#9
 
@@ -285,10 +284,9 @@ Hooken kalles én gang per fane og sendes ned som props, så dialogene ikke hent
 - [ ] `formatGyldighetstidsrom` er flyttet til `utils/gyldighetstidsrom/` med tester for de fire tilfellene («01.05.2026 –», «– 01.08.2026», «01.05.2026 – 01.08.2026», `ingenVerdi`). `PersonbrukerRollerResultList` bruker den. Typen tar `{ fraTidspunkt?, tilTidspunkt? }`, så den passer både `BrukerdelegeringGyldighetsperiode` og `BrukergrunntilgangGyldighetsperiode`.
 - [ ] `useForretningsroller()` henter `tilgangsroller(filter: { navnerom: [<id for "fs">] })` med `id kode beskrivelse utgattTidspunkt`, og filtrerer bort utgåtte. Navnerom-id-en slås opp på kode.
 - [ ] `AliasBatchUtfall` viser utfallet per rad (rolle, vellykket/feilet, melding) i `FSModalFeedback`, med a11y-test. Lages ut fra visningen i `TildelRolleAction`, ikke en kopi av hele modalen.
-- [ ] Mock-API (`fs-admin-mock-api-with-data`): fixtures for delegeringstak og grunntilgang på minst én Feide-applikasjon, resolvere for begge listefeltene med `erAktivNaa`/`organisasjoner`/`miljoer`, og de fire mutasjonene. Mocken kan gi `…ErPlanlagt` for en bestemt rolle og `Mangler…forvaltning` for en bestemt organisasjon, så delvis suksess og samlet feil kan testes og vises lokalt.
 
 **Implementation Notes**:
-Les `src/mocks/applikasjoner/teardown-applikasjoner.md` før du endrer mocken. Hvis mock-skjemaet er generert fra SDL-en, holder det å legge til resolvere.
+Ikke rør mock-API-et i `src/mocks/applikasjoner/`. Det er dødt (`teardown-applikasjoner.md`: «Status: hele mocken er død») og fjernes i en egen MR. Testdata for delegeringstak og grunntilgang lages som fixtures ved komponenttestene (se Testing Requirements).
 
 ### Task #5: Fanen «Grunntilgang» med liste
 
@@ -429,7 +427,7 @@ Kan deles i to commits (tildel, fjern). Feilsettene står i «Rettelser til anal
 - [ ] Brukerveiledninger sjekket (`fs-admin-brukerveiledninger`). Det finnes ingen for applikasjoner. Notér i MR-en om en bør lages, ikke lag den her.
 - [ ] Alle nye komponenter har `.a11y.test.tsx` (unntatt `ActionList`-resultatlister). Komponentene er `function` i PascalCase. Ingen `__typename` i lesespørringer.
 - [ ] Bare nb-meldinger. Ingen hardkodede norske strenger i komponentene.
-- [ ] Manuell sjekk lokalt mot mock: dyplenke `?tab=delegeringstak` og `?tab=grunntilgang`, Maskinporten-applikasjon uten fanene, delvis suksess, og at handlingsmenyen bare vises med `APPLIKASJONSADMINISTRASJON_SKRIV` for eierorganisasjonen.
+- [ ] Manuell sjekk i review-miljøet mot test: dyplenke `?tab=delegeringstak` og `?tab=grunntilgang`, Maskinporten-applikasjon uten fanene, delvis suksess, og at handlingsmenyen bare vises med `APPLIKASJONSADMINISTRASJON_SKRIV` for eierorganisasjonen.
 - [ ] `npm run lint`, `tsc`, jest og a11y grønt.
 
 **Implementation Notes**:
@@ -482,6 +480,8 @@ Codegen leser produksjons-SDL, så koden kan ikke på `main` før feltene er i p
   - **Mitigation**: verifiser i #4. Fallback: registrer feltene på `Applikasjon` (de finnes bare på `FeideApplikasjon`, men policyen gjør ingen skade).
 - **Risk**: «allerede i delegeringstaket/grunntilgangen» henter `first: 100` for én (org, miljø). Flere enn 100 aktive roller i én kombinasjon er usannsynlig, men mulig.
   - **Mitigation**: følg `hasNextPage` også her, eller vis en advarsel. Bestemmes i #6.
+- **Risk**: noen utvider mock-API-et i `src/mocks/applikasjoner/`. Det er dødt og fjernes i en egen MR.
+  - **Mitigation**: ikke legg til noe der. Testdata ligger som fixtures ved komponenttestene (#4, Testing Requirements).
 - **Risk**: T5-kontrakten lander med en form som krever endringer i listen fra #8 (f.eks. nytt felt i stedet for utvidet `brukerdelegeringer`).
   - **Mitigation**: radnøkkel og «allerede i delegeringstaket» er isolert i hver sin funksjon (#8, #9). Fase 2 er en egen task.
 - **Risk**: et avklart valg (A1–A7) endres etter at koden er skrevet.
@@ -493,7 +493,8 @@ Codegen leser produksjons-SDL, så koden kan ikke på `main` før feltene er i p
 - Komponenttester: `DetailPageTabbedContent` (falske barn, `pending`, dyplenke), begge listene, alle fire dialogene (kaskade, disabled-roller, delvis suksess, samlet feil, alt vellykket, tom payload).
 - `.a11y.test.tsx`: `ApplikasjonDetails`, `ApplikasjonDelegeringstak`, `ApplikasjonGrunntilgang`, begge `…Actions`, alle fire dialogene, `AliasBatchUtfall`.
 - Eksisterende tester for personbrukerrollene, Tilganger-fanen og `useWithRole` går uendret etter #1, #3 og #4.
-- Manuell test mot mock-API-et (#10).
+- Delvis suksess, samlet feil og tilfellene `…ErPlanlagt` og `Mangler…forvaltning` dekkes av jest-tester med mockede GraphQL-svar (`MockedProvider` og fixtures i komponenttestene), ikke av mock-API-et.
+- Manuell test i review-miljøet mot test (#10).
 
 ## Success Criteria
 
