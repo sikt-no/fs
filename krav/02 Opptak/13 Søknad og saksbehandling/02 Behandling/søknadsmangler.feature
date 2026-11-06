@@ -319,6 +319,7 @@ Egenskap: Søknadsmangler
       Når saksbehandleren ved UiT Norges arktiske universitet publiserer mangelen "STEMPEL"
       Så mottar søkeren en ny melding om mangelen "STEMPEL"
 
+    # Ikke implementert
     Scenario: Søkeren åpner meldingen om mangel
       Gitt at søkeren har mottatt en melding om mangler
       Når søkeren åpner meldingen
@@ -347,6 +348,7 @@ Egenskap: Søknadsmangler
         | "Informatikk, UiO" er i tidlig opptak med dokumentasjonsfrist "2027-03-20 23:59"                                                                                       | Informatikk, UiO     | 2027-05-10 | 2027-07-01 23:59 |
         | søkeren har utdanningsbakgrunnen "Realkompetanse" med dokumentasjonsfrist "2027-03-20 23:59", og "Sykepleie, OsloMet" har tidlig dokumentasjonsfrist "2027-03-10 23:59" | Sykepleie, OsloMet   | 2027-03-05 | 2027-03-10 23:59 |
 
+    # Ikke implementert
     Scenario: Meldingen viser fristen for hvert søknadsalternativ med mangler
       Gitt at ettersendingsfristen i opptaket er "2027-07-01 23:59"
       Og at "Lektorutdanning, UiO" har tidlig dokumentasjonsfrist "2027-03-20 23:59"
@@ -356,6 +358,7 @@ Egenskap: Søknadsmangler
       Så ser søkeren fristen "2027-03-20 23:59" for "Lektorutdanning, UiO"
       Og søkeren ser fristen "2027-07-01 23:59" for "Informatikk, UiO"
 
+    # Ikke implementert
     Scenario: Mangel på spesielle krav gir frist bare for søknadsalternativene med kompetanseregelverket
       Gitt at "Informatikk, UiO" har kompetanseregelverket "Regelverk B"
       Og at "Lektorutdanning, UiO" ikke har kompetanseregelverket "Regelverk B"
@@ -391,6 +394,7 @@ Egenskap: Søknadsmangler
       Så er "Informatikk, UiO" merket med at dokumentasjon mangler
       Og "Historie, UiO" er ikke merket med at dokumentasjon mangler
 
+    # Ikke implementert
     Scenario: Søkeren ser kravene i kompetanseregelverket mangelen gjelder
       Gitt at saken har den publiserte mangelen "KAR" på kompetanseregelverket "Regelverk B"
       Når søkeren ser manglene for "Informatikk, UiO"
