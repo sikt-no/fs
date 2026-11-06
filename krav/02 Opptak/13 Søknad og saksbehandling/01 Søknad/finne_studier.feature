@@ -368,6 +368,31 @@ Egenskap: Listevisning og søk i utdanningstilbud
       Så ligger utdanningstilbudet "Sykepleie, høst 2027" i studiekurven
       Og søkeren er tilbake på Finn studier med samme søk, filtre og side som før
 
+    # Utkast (Kjetil/Claude 06.11.2026), ikke avklart med produkteier.
+    # Etter BAT-405 (beslutning 04.11.2026, fs-plattform !6546/!6554, min-kompetanse !993) blir personen søker
+    # ved første «Legg til», ikke ved innlogging (OPT-SØK-SØK-020). Med fødselsnummer eller eIDAS gjelder
+    # scenarioene over uendret. Den selvregistrerte søkeren uten fødselsnummer og eIDAS oppgir navn og fødselsdato
+    # på en egen side først (scenarioene under).
+    # Avklart (Kjetil 06.11.2026): skjemaet kommer ved første «Legg til», ikke ved første innlogging, som BAT-405
+    # sier. Til min-kompetanse !993 er ferdig, gir «Legg til» feil for den selvregistrerte søkeren. Det er
+    # akseptert, og fs-plattform !6554 venter ikke på !993 (se bli_søker.design.md).
+    @depends-on-OPT-SØK-SØK-020
+    Scenario: Den selvregistrerte søkeren oppgir navn og fødselsdato ved første «Legg til»
+      Gitt at søkeren er innlogget med e-post som selvregistrert bruker
+      Og at søkeren ikke har oppgitt navn og fødselsdato
+      Når søkeren velger å legge utdanningstilbudet "Sykepleie, høst 2027" i studiekurven
+      Så kommer søkeren til en egen side for å legge inn navn og fødselsdato
+      Og når søkeren har lagret opplysningene, ligger utdanningstilbudet "Sykepleie, høst 2027" i studiekurven
+      Og søkeren er tilbake på Finn studier med samme søk, filtre og side som før
+
+    # Utkast (Kjetil/Claude 06.11.2026), ikke avklart med produkteier.
+    @depends-on-OPT-SØK-SØK-020
+    Scenario: Den selvregistrerte søkeren som ikke var innlogget, oppgir navn og fødselsdato etter innloggingen
+      Gitt at søkeren ikke er innlogget
+      Og at søkeren har valgt å legge utdanningstilbudet "Sykepleie, høst 2027" i studiekurven
+      Når søkeren logger inn med e-post som selvregistrert bruker for første gang
+      Så kommer søkeren til en egen side for å legge inn navn og fødselsdato før utdanningstilbudet legges i studiekurven
+
   # Deling av søket er et bør-krav i #603 (FK-22).
   Regel: Søket kan deles og bokmerkes
 
