@@ -1,12 +1,10 @@
 # language: no
 # GitHub: #482
-@BRU-PER-GRU-004 @must @deprecated
+@BRU-PER-GRU-004 @must @implemented
 Egenskap: Aktivere og deaktivere en personbrukers samlede tilganger
   Som brukeradministrator
   ønsker jeg å deaktivere og senere reaktivere en personbrukers samlede tilganger og roller
   slik at personbrukeren ikke har tilgang på FS-data i deaktivert tilstand, uten at jeg må fjerne tildelingene enkeltvis.
-
-  Status, aktivering og deaktivering av brukere avvikles, for både personbrukere og Feide-brukere (beslutning 26.10.2026).
 
   Bakgrunn:
     Gitt jeg er innlogget i løsningen
@@ -23,14 +21,13 @@ Egenskap: Aktivere og deaktivere en personbrukers samlede tilganger
       Og personbrukeren kan ikke nå FS-data ved neste innloggingsforsøk
       Og det lagres når deaktiveringen skjedde og hvem som gjorde den
 
+    @scope-grunnleggende-brukeradministrasjon
     Scenario: Reaktivere en deaktivert personbruker
       Gitt en personbruker er deaktivert
       Når jeg reaktiverer personbrukeren
       Så blir personbrukerens status «Aktiv»
       Og de tidligere tildelte tilgangene og rollene blir aktive igjen
       Og tildelinger som hadde utløpt på grunn av tidsbegrensning før deaktiveringen, blir ikke automatisk aktive
-      Og det lagres når reaktiveringen skjedde og hvem som gjorde den
-      Og det som ble lagret om den tidligere deaktiveringen, beholdes
 
   Regel: Skille mellom deaktivering og fjerning
 
@@ -39,3 +36,9 @@ Egenskap: Aktivere og deaktivere en personbrukers samlede tilganger
       Når jeg deaktiverer personbrukeren i stedet for å fjerne tildelingene enkeltvis
       Så beholdes alle tildelingene knyttet til personbrukeren
       Og tildelingene blir aktive igjen ved reaktivering uten at jeg må tildele dem på nytt
+
+# ÅPNE SPØRSMÅL:
+# - Skal aktive sesjoner termineres umiddelbart ved deaktivering, eller utløpe naturlig? (Sikkerhetsbeslutning.)
+# - Skal det være tidsbegrenset deaktivering (suspender til dato), eller kun manuell reaktivering?
+# - Hvordan forholder manuell deaktivering seg til automatisk deaktivering ved stillingsslutt (BRU-PER-ETT-005)? Skal de vises likt i historikk, og kan en automatisk deaktivert bruker reaktiveres manuelt?
+# - Skal brukeradministrator varsles når en bruker de har deaktivert prøver å logge inn?
