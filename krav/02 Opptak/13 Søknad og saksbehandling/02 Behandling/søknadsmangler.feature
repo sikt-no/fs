@@ -128,12 +128,10 @@ Egenskap: Søknadsmangler
       Så kan saksbehandleren velge "Regelverk A" og "Regelverk B"
       Og saksbehandleren kan ikke velge andre kompetanseregelverk
 
-    # Ikke implementert
     Scenario: Registrere mangel på kvote
       Når saksbehandleren ved Universitetet i Oslo registrerer mangelen "BOS" i kategorien "Kvote" på kvotespørsmålet "Bosted i Nord-Norge"
       Så har saken mangelen "BOS" på kvotespørsmålet "Bosted i Nord-Norge"
 
-    # Ikke implementert
     Scenario: Saksbehandleren velger blant kvotespørsmålene til søknadsalternativene i saken
       Gitt at kvotene til søknadsalternativene i saken hos "Universitetet i Oslo" har kvotespørsmålene "Bosted i Nord-Norge" og "Samisk tilhørighet"
       Når saksbehandleren ved Universitetet i Oslo velger kvotespørsmål for en mangel
@@ -204,14 +202,12 @@ Egenskap: Søknadsmangler
       Så ser saksbehandleren ved Universitetet i Oslo at det er kommet ny dokumentasjon i saken
       Og mangelen "KAR" er ikke sjekket ut
 
-    # Ikke implementert
     Scenario: Saksbehandleren sjekker ut mangelen
       Gitt at saken hos "Universitetet i Oslo" har mangelen "KAR"
       Når saksbehandleren ved Universitetet i Oslo sjekker ut mangelen "KAR"
       Så er mangelen "KAR" sjekket ut
       Og saken har fortsatt mangelen "KAR"
 
-    # Ikke implementert
     Scenario: Saksbehandleren ser om søkeren har lest mangelen
       Gitt at mangelen "KAR" er publisert
       Og at søkeren har åpnet mangelen "KAR" i Min kompetanse
@@ -294,13 +290,11 @@ Egenskap: Søknadsmangler
         | saksbehandleren lagrer en kommentar på mangelen "KAR"            |
         | saksbehandleren vurderer at "Matematikk R2" er oppfylt           |
 
-    # Ikke implementert
     Scenario: Saksbehandleren blir advart om mangler som ikke er publisert
       Gitt at saken hos "Universitetet i Oslo" har mangelen "KNN" som ikke er publisert
       Når saksbehandleren ved Universitetet i Oslo setter saken til "Behandlet"
       Så ser saksbehandleren at søkeren ikke ser mangelen "KNN" i Min kompetanse
 
-    # Ikke implementert
     Scenario: Publisere manglene når saken settes til ferdig behandlet
       Gitt at saksbehandleren ved Universitetet i Oslo er advart om at mangelen "KNN" ikke er publisert
       Når saksbehandleren velger å publisere manglene og sette saken til "Behandlet"
@@ -308,7 +302,6 @@ Egenskap: Søknadsmangler
       Og søkeren ser mangelen "KNN" i Min kompetanse
       Og søkeren har mottatt en melding om mangler
 
-    # Ikke implementert
     Scenario: Avbryte når saken har mangler som ikke er publisert
       Gitt at saksbehandleren ved Universitetet i Oslo er advart om at mangelen "KNN" ikke er publisert
       Når saksbehandleren avbryter
@@ -326,7 +319,6 @@ Egenskap: Søknadsmangler
       Når saksbehandleren ved UiT Norges arktiske universitet publiserer mangelen "STEMPEL"
       Så mottar søkeren en ny melding om mangelen "STEMPEL"
 
-    # Ikke implementert
     Scenario: Søkeren åpner meldingen om mangel
       Gitt at søkeren har mottatt en melding om mangler
       Når søkeren åpner meldingen
@@ -364,7 +356,6 @@ Egenskap: Søknadsmangler
         | "Informatikk, UiO" er i tidlig opptak med dokumentasjonsfrist "2027-03-20 23:59"                                                                                       | Informatikk, UiO     | 2027-05-10 | 2027-07-01 23:59 |
         | søkeren har utdanningsbakgrunnen "Realkompetanse" med dokumentasjonsfrist "2027-03-20 23:59", og "Sykepleie, OsloMet" har tidlig dokumentasjonsfrist "2027-03-10 23:59" | Sykepleie, OsloMet   | 2027-03-05 | 2027-03-10 23:59 |
 
-    # Ikke implementert
     Scenario: Meldingen viser fristen for hvert søknadsalternativ med mangler
       Gitt at ettersendingsfristen i opptaket er "2027-07-01 23:59"
       Og at "Lektorutdanning, UiO" har tidlig dokumentasjonsfrist "2027-03-20 23:59"
@@ -401,7 +392,6 @@ Egenskap: Søknadsmangler
       Så er "Informatikk, UiO" merket med at dokumentasjon mangler
       Og "Historie, UiO" er ikke merket med at dokumentasjon mangler
 
-    # Ikke implementert
     Scenario: Søkeren ser kravene i kompetanseregelverket mangelen gjelder
       Gitt at saken har den publiserte mangelen "KAR" på kompetanseregelverket "Regelverk B"
       Når søkeren ser manglene for "Informatikk, UiO"
@@ -427,7 +417,6 @@ Egenskap: Søknadsmangler
         | Generelle krav |
         | Poeng          |
 
-    # Ikke implementert
     Scenario: Mangel på kvote vises under søknadsalternativene med kvoten
       Gitt at "Informatikk, UiO" har kvotespørsmålet "Bosted i Nord-Norge"
       Og at "Historie, UiO" ikke har kvotespørsmålet "Bosted i Nord-Norge"
@@ -464,14 +453,12 @@ Egenskap: Søknadsmangler
 
   Regel: Organisasjonene som behandler søknaden ser manglene i alle sakene, men endrer bare manglene i saken sin
 
-    # Ikke implementert
     Scenario: Saksbehandlende organisasjon ser manglene i saken hos en annen organisasjon
       Gitt at søknaden har saker hos "Universitetet i Oslo" og "UiT Norges arktiske universitet"
       Og at saken hos "UiT Norges arktiske universitet" har mangelen "KAR"
       Når saksbehandleren ved Universitetet i Oslo åpner søknaden
       Så ser saksbehandleren mangelen "KAR" i saken hos "UiT Norges arktiske universitet"
 
-    # Ikke implementert
     Scenario: Saksbehandlende organisasjon kan ikke endre manglene i saken hos en annen organisasjon
       Gitt at saken hos "UiT Norges arktiske universitet" har mangelen "KAR"
       Når saksbehandleren ved Universitetet i Oslo ser mangelen "KAR"
@@ -483,7 +470,6 @@ Egenskap: Søknadsmangler
       Når opptaksforvalteren ved HK-dir åpner søknaden
       Så ser opptaksforvalteren manglene i sakene hos "Universitetet i Oslo" og "UiT Norges arktiske universitet"
 
-    # Ikke implementert
     Scenario: Tilbyderen ser manglene når en annen organisasjon saksbehandler utdanningstilbudet
       Gitt at "Historie, UiT" er fordelt til "Universitetet i Oslo"
       Og at saken hos "Universitetet i Oslo" har mangelen "KAR"
