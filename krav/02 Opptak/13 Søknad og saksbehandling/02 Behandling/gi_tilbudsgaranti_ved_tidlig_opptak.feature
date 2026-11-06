@@ -164,6 +164,7 @@ Egenskap: Gi tilbudsgaranti ved tidlig opptak
 
   Regel: Opptaksforvalter gjennomfører tidligopptaket
 
+    @implemented
     Scenariomal: Tilbudsgaranti ut fra poenggrensen
       Gitt saksbehandler har konkludert med at søkeren deltar i tidligopptaket
       Og søkeren er kvalifisert til "Sykepleie, høst 2027"
@@ -177,6 +178,7 @@ Egenskap: Gi tilbudsgaranti ved tidlig opptak
         | 50    | får      |
         | 45    | får ikke |
 
+    @implemented
     Scenario: Søkere som ikke deltar får ikke tilbudsgaranti
       Gitt saksbehandler har konkludert med at søkeren ikke deltar i tidligopptaket
       Og søkeren er kvalifisert til "Sykepleie, høst 2027"
@@ -184,12 +186,14 @@ Egenskap: Gi tilbudsgaranti ved tidlig opptak
       Når opptaksforvalter gjennomfører tidligopptaket
       Så får ikke søkeren tilbudsgaranti på "Sykepleie, høst 2027"
 
+    @implemented
     Scenario: Søknader uten konklusjon er ikke med i tidligopptaket
       Gitt det er ikke konkludert om søkeren deltar i tidligopptaket
       Og søkeren har 55 poeng til "Sykepleie, høst 2027"
       Når opptaksforvalter gjennomfører tidligopptaket
       Så får ikke søkeren tilbudsgaranti på "Sykepleie, høst 2027"
 
+    @implemented
     Scenario: Søkere som ikke er kvalifisert får ikke tilbudsgaranti
       Gitt saksbehandler har konkludert med at søkeren deltar i tidligopptaket
       Og søkeren er ikke kvalifisert til "Sykepleie, høst 2027"
@@ -205,6 +209,7 @@ Egenskap: Gi tilbudsgaranti ved tidlig opptak
       Så får ikke søkeren tilbudsgaranti på "Sykepleie, høst 2027"
       Og opptaksforvalter ser at kvalifiseringen ikke er vurdert for søkeren
 
+    @implemented
     Scenariomal: Tilbudsgaranti på det høyest prioriterte søknadsalternativet
       Gitt saksbehandler har konkludert med at søkeren deltar i tidligopptaket
       Og søknaden har følgende søknadsalternativer:
@@ -220,6 +225,7 @@ Egenskap: Gi tilbudsgaranti ved tidlig opptak
         | 50             | "Sykepleie, høst 2027"  | "Vernepleie, høst 2027" |
         | 60             | "Vernepleie, høst 2027" | "Sykepleie, høst 2027"  |
 
+    @implemented
     Scenario: Bare ferdig behandlede saker er med i tidligopptaket
       Gitt saksbehandler har konkludert med at søkeren deltar i tidligopptaket
       Og søkeren er kvalifisert til "Sykepleie, høst 2027"
@@ -229,7 +235,7 @@ Egenskap: Gi tilbudsgaranti ved tidlig opptak
       Så får ikke søkeren tilbudsgaranti på "Sykepleie, høst 2027"
       Og opptaksforvalter ser at saken ikke er ferdig behandlet
 
-    @ref-OPT-SØK-SØK-016
+    @ref-OPT-SØK-SØK-016 @implemented
     Scenario: Reservert studieplass gir tilbudsgaranti uten poenggrense
       Gitt saksbehandler har konkludert med at søkeren deltar i tidligopptaket
       Og søkeren har reservert studieplass på "Sykepleie, høst 2027"
@@ -238,7 +244,7 @@ Egenskap: Gi tilbudsgaranti ved tidlig opptak
       Når opptaksforvalter gjennomfører tidligopptaket
       Så får søkeren tilbudsgaranti på "Sykepleie, høst 2027"
 
-    @openquestion @ref-OPT-SØK-SØK-016
+    @openquestion @ref-OPT-SØK-SØK-016 @implemented
     Scenario: Reservert studieplass gir tilbudsgaranti uten kvalifisering
       # ÅPNE SPØRSMÅL:
       # - Gir reservert studieplass (RSO eller RES) tilbudsgaranti også når søkeren ikke er
@@ -251,6 +257,7 @@ Egenskap: Gi tilbudsgaranti ved tidlig opptak
       Når opptaksforvalter gjennomfører tidligopptaket
       Så får søkeren tilbudsgaranti på "Sykepleie, høst 2027"
 
+    @implemented
     Scenario: Den høyeste poengsummen til søknadsalternativet gjelder
       Gitt saksbehandler har konkludert med at søkeren deltar i tidligopptaket
       Og søkeren er kvalifisert til "Sykepleie, høst 2027"
@@ -261,6 +268,7 @@ Egenskap: Gi tilbudsgaranti ved tidlig opptak
       Når opptaksforvalter gjennomfører tidligopptaket
       Så får søkeren tilbudsgaranti på "Sykepleie, høst 2027"
 
+    @implemented
     Scenario: Tilbudsgaranti fra opptaksforvalter som ikke gir tilbud blir erstattet
       Gitt saksbehandler har konkludert med at søkeren deltar i tidligopptaket
       Og søkeren er kvalifisert til "Sykepleie, høst 2027"
@@ -269,6 +277,7 @@ Egenskap: Gi tilbudsgaranti ved tidlig opptak
       Når opptaksforvalter gjennomfører tidligopptaket
       Så får søkeren tilbudsgaranti for tidlig opptak på "Sykepleie, høst 2027"
 
+    @implemented
     Scenario: Tilbudsgaranti fra opptaksforvalter som gir tilbud blir erstattet
       Gitt saksbehandler har konkludert med at søkeren deltar i tidligopptaket
       Og søkeren er kvalifisert til "Sykepleie, høst 2027"
@@ -278,6 +287,7 @@ Egenskap: Gi tilbudsgaranti ved tidlig opptak
       Når opptaksforvalter gjennomfører tidligopptaket
       Så får søkeren tilbudsgaranti for tidlig opptak på "Sykepleie, høst 2027"
 
+    @implemented
     Scenario: Annen tilbudsgaranti på et høyere prioritert søknadsalternativ stopper ikke tidligopptaket
       Gitt saksbehandler har konkludert med at søkeren deltar i tidligopptaket
       Og søknaden har følgende søknadsalternativer:
@@ -290,6 +300,7 @@ Egenskap: Gi tilbudsgaranti ved tidlig opptak
       Når opptaksforvalter gjennomfører tidligopptaket
       Så får søkeren tilbudsgaranti på "Sykepleie, høst 2027"
 
+    @implemented
     Scenario: Tidligopptakstilbud fra tilbyder går foran poengsummen
       Gitt saksbehandler har konkludert med at søkeren deltar i tidligopptaket
       Og søknaden har følgende søknadsalternativer:
@@ -316,6 +327,7 @@ Egenskap: Gi tilbudsgaranti ved tidlig opptak
       Så ser opptaksforvalter at søkeren ville fått tilbudsgaranti på "Sykepleie, høst 2027"
       Men søkeren har ikke tilbudsgaranti på "Sykepleie, høst 2027"
 
+    @implemented
     Scenario: En ny gjennomføring fjerner ikke tilbudsgarantien
       Gitt søkeren fikk tilbudsgaranti på "Sykepleie, høst 2027" da tidligopptaket ble gjennomført
       Og søkeren har 55 poeng til "Sykepleie, høst 2027"
@@ -323,6 +335,7 @@ Egenskap: Gi tilbudsgaranti ved tidlig opptak
       Når opptaksforvalter gjennomfører tidligopptaket på nytt
       Så har søkeren fortsatt tilbudsgaranti på "Sykepleie, høst 2027"
 
+    @implemented
     Scenario: Ny gjennomføring tar med en sak som er blitt ferdig behandlet
       Gitt saken til søkeren var ikke ferdig behandlet da tidligopptaket ble gjennomført
       Og saksbehandler har konkludert med at søkeren deltar i tidligopptaket
@@ -332,6 +345,7 @@ Egenskap: Gi tilbudsgaranti ved tidlig opptak
       Når opptaksforvalter gjennomfører tidligopptaket på nytt
       Så får søkeren tilbudsgaranti på "Sykepleie, høst 2027"
 
+    @implemented
     Scenario: Tilbudsgarantien flyttes til et høyere prioritert søknadsalternativ ved ny gjennomføring
       Gitt saksbehandler har konkludert med at søkeren deltar i tidligopptaket
       Og søkeren fikk tilbudsgaranti på "Vernepleie, høst 2027" som prioritet 2 da tidligopptaket ble gjennomført
@@ -357,6 +371,7 @@ Egenskap: Gi tilbudsgaranti ved tidlig opptak
     # Søkere med saker uten konklusjon telles med, også når sakene er ferdig behandlet:
     # de er ikke med i tidligopptaket, og opptaksforvalteren gjør det samme med begge
     # (avklart 13.10.2026). En søker med flere slike saker telles én gang.
+    @implemented
     Scenario: Se antall søkere med saker som ikke er ferdig behandlet eller mangler konklusjon
       Gitt 2 søkere som har søkt om tidlig opptak, har saker som ikke er ferdig behandlet
       Og 1 søker som har søkt om tidlig opptak, har en ferdig behandlet sak uten konklusjon
@@ -402,7 +417,7 @@ Egenskap: Gi tilbudsgaranti ved tidlig opptak
       Når opptaksforvalter prøvekjører tidligopptaket med varsel når mer enn 50 prosent av kvoten får tilbudsgaranti
       Så får opptaksforvalter varsel om at tilbudsgarantiene overskrider 50 prosent av kvoten for "Sykepleie, høst 2027"
 
-    @ref-OPT-OVO-INN-004
+    @ref-OPT-OVO-INN-004 @implemented
     Scenario: Tidligopptaket stopper uten én tilbudsgarantitype for tidlig opptak
       Gitt opptaket har ikke nøyaktig én aktiv tilbudsgarantitype for tidlig opptak som gir tilbud
       Når opptaksforvalter gjennomfører tidligopptaket
