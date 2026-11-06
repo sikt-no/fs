@@ -271,11 +271,12 @@ Egenskap: Automatiske mangler
       Når søkeren endrer søknaden til at generell studiekompetanse ikke fullføres i vår
       Så har saken fortsatt mangelen "DUA"
 
-    Scenario: Saksbehandleren kan sjekke ut mangelen, men ikke slette den
+    Scenario: Saksbehandleren kan ikke slette den automatiske mangelen
+      # Avklart 06.11.2026: å sjekke ut mangelen står i OPT-BEH-BEH-008 («Saksbehandleren sjekker
+      # ut mangelen når søkeren har dokumentert på nytt»), og gjentas ikke her.
       Gitt at saken hos "Universitetet i Oslo" har den automatiske mangelen "DUA"
       Når saksbehandleren ved Universitetet i Oslo åpner manglene i saken
-      Så kan saksbehandleren sjekke ut mangelen "DUA"
-      Men saksbehandleren ser ikke muligheten til å slette mangelen "DUA"
+      Så ser saksbehandleren ikke muligheten til å slette mangelen "DUA"
 
     Scenario: Mangelen sjekkes ut når saken er behandlet helautomatisk
       Gitt at saken hos "Universitetet i Oslo" har den automatiske mangelen "DUA"
@@ -288,10 +289,3 @@ Egenskap: Automatiske mangler
       Gitt at saken hos "Universitetet i Oslo" har den automatiske mangelen "DUA"
       Når den automatiske behandlingen sender saken til saksbehandleren
       Så er ikke mangelen "DUA" sjekket ut
-
-    Scenario: Saksbehandleren sjekker ut mangelen når søkeren har dokumentert vitnemålet
-      Gitt at saken hos "Universitetet i Oslo" har den automatiske mangelen "DUA"
-      Og at søkeren har lastet opp vitnemålet
-      Når saksbehandleren ved Universitetet i Oslo sjekker ut mangelen "DUA"
-      Så er mangelen "DUA" sjekket ut
-      Og saken har fortsatt mangelen "DUA"

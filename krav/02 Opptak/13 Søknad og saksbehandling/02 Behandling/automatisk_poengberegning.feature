@@ -23,9 +23,9 @@ Egenskap: Automatisk beregning av vitnemålspoeng
   saksbehandleren velger (OPT-BEH-BEH-039). Hvilke karakterer som teller, og hvordan de regnes om
   til poeng, er ikke beskrevet her.
 
-  Poengene ligger på saken, som grunnlaget (OPT-BEH-BEH-019). Automatikken beregner de samme
-  poengene i alle sakene i søknaden, men det saksbehandleren overstyrer eller låser, gjelder bare
-  saken hos organisasjonen saksbehandleren er ved. Avklart 30.10.2026.
+  Poengene ligger på saken, som grunnlaget (OPT-BEH-BEH-019), og beregnes når den automatiske
+  behandlingen kjører for saken. Det saksbehandleren overstyrer eller låser, gjelder bare saken
+  hos organisasjonen saksbehandleren er ved. Avklart 30.10.2026, endret 06.11.2026.
 
   # Avklart 29.10.2026, endret 2026-11-03: opptaksforvalteren kan sette når den automatiske
   # saksbehandlingen starter og avsluttes i opptaket (OPT-BEH-BEH-032, OPT-OVO-FRI-001).

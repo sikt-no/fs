@@ -42,11 +42,13 @@ Egenskap: Automatisk grunnlag
   velges automatisk, og hva som skal til, bestemmes av egenskapene
   regelverket har gitt grunnlaget.
 
-  Grunnlaget ligger på saken. Automatikken setter det samme grunnlaget i alle sakene i
-  søknaden, men det saksbehandleren gjør, gjelder bare saken hos organisasjonen
+  Grunnlaget ligger på saken, og settes når den automatiske behandlingen kjører for saken.
+  Hver sak behandles for seg (OPT-BEH-BEH-032), ut fra utdanningstilbudene organisasjonen
+  behandler i saken. Det saksbehandleren gjør, gjelder bare saken hos organisasjonen
   saksbehandleren er ved. Grunnlag som saksbehandleren har valgt, endres aldri av
   automatikken. Det fremgår om et grunnlag er satt automatisk eller av saksbehandleren.
 
+  # Avklart 06.11.2026: grunnlaget settes per sak, ikke i alle sakene i søknaden samtidig.
   # Avklart 30.10.2026: grunnlaget ligger på saken, ikke på søknaden. FS-klienten har det på
   # personen. Spørsmålet ble tatt opp i raffineringen og med HK-dir 16.03.2026.
 
@@ -185,11 +187,13 @@ Egenskap: Automatisk grunnlag
   @ref-FLY-OPT-AUT-001
   Regel: Grunnlaget settes når den automatiske behandlingen kjører
 
-    Scenario: Automatikken setter grunnlaget i alle sakene i søknaden
+    Scenario: Hver sak i søknaden får grunnlaget når den automatiske behandlingen kjører for saken
+      # Avklart 06.11.2026: erstatter «Automatikken setter grunnlaget i alle sakene i søknaden».
       Gitt at søknaden har saker hos "Universitetet i Oslo" og "UiT Norges arktiske universitet"
       Og at søkeren har ett elektronisk vitnemål som gir generell studiekompetanse
-      Når søknaden behandles automatisk
-      Så har sakene hos "Universitetet i Oslo" og "UiT Norges arktiske universitet" det samme grunnlaget
+      Når den automatiske behandlingen kjører for saken hos "Universitetet i Oslo"
+      Så får saken hos "Universitetet i Oslo" grunnlaget automatisk
+      Men saken hos "UiT Norges arktiske universitet" får ikke grunnlaget før den automatiske behandlingen kjører for den saken
 
     @implemented
     Scenario: Grunnlaget settes av den automatiske behandlingen
