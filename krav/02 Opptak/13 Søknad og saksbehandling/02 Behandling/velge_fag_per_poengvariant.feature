@@ -123,8 +123,8 @@ Egenskap: Velge fag per poengvariant
       Så er poengene for den poengvarianten beregnet fra de valgte fagene
       Og fagvalget er lagret på poengvarianten
       # Fagvalget låser poenget mot automatisk reberegning på samme måte som
-      # valget av vitnemål i L2 («Valget av grunnlag låser poenget mot
-      # automatisk reberegning»).
+      # valget av vitnemål i L2 («Valget av vitnemål låser poengene på
+      # poengvariantene mot automatisk reberegning»).
 
     Scenario: Fagvalget i én poengvariant påvirker ikke en annen
       Gitt jeg har valgt et tilleggsfag i én poengvariant
