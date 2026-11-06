@@ -88,7 +88,7 @@ Det som gjenstår i backend:
 
 ### Avvik der koden skal endres
 
-- `@OPT-BEH-BEH-007`, ny regel 2026-11-05: gjennomføringen skal bruke medianen fra forrige opptak når poenggrensen ikke er satt, og gjør det ikke ennå. Se _Endringer etter innhenting_.
+- `@OPT-BEH-BEH-007`, ny regel 2026-11-05: gjennomføringen skal bruke medianen fra forrige opptak når poenggrensen ikke er satt, og gjør det ikke ennå ([STEK-676](https://sikt.atlassian.net/browse/STEK-676)). Se _Endringer etter innhenting_.
 
 ### Avvik som må avklares
 
