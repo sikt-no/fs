@@ -712,11 +712,13 @@ footer .inner{padding-block:24px 48px;display:flex;flex-direction:column;gap:6px
         </ol>
       </div>
       <p class="note">De automatiske testene lages med lage-steps: step definitions i <code>tester/steps/</code> som kobler scenarioene til Playwright. Kjør kravene i et scope med <code>npx playwright test --grep @scope-&lt;slug&gt;</code>.</p>
+      <p class="note">Hvilke krav treffer en MR eller branch? fs-branch-krav leser endringen og finner kravene den implementerer, endrer eller kan bryte, og atferd ingen krav beskriver. Det siste blir forslag til regler for fs-krav.</p>
     </div>
     <aside class="facts">
       <dl>
         <div><dt>Hvem</dt><dd>En person, en Claude Code-økt i repoet, eller «Utfør i &lt;repo&gt;» fra FS Kravforvaltning</dd></div>
         <div><dt>Skill for testene</dt><dd><span class="pill">lage-steps</span></dd></div>
+        <div><dt>Krav for en MR</dt><dd><span class="pill">fs-branch-krav</span></dd></div>
         <div><dt>Status</dt><dd><span class="trans"><span class="s">@in-progress</span></span></dd></div>
         <div><dt>Filer</dt><dd><code>tasks/&lt;d&gt;/&lt;s&gt;/utforing.md</code></dd></div>
         <div><dt>Tavla</dt><dd>fs-plattform, fs-admin, … → Til verifisering</dd></div>
