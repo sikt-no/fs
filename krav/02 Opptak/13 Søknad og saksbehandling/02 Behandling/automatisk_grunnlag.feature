@@ -120,12 +120,12 @@ Egenskap: Automatisk grunnlag
 
   @depends-on-OPT-BEH-BEH-015 @ref-FLY-OPT-AUT-001
   Regel: Ingen automatisk grunnlag uten ett vitnemål som gir generell studiekompetanse
-    # Ett vitnemål er nok, også når søkeren har et kompetansebevis i tillegg.
+    # Ett vitnemål er nok, også når søkeren har lastet opp et kompetansebevis.
     # Har søkeren flere vitnemål, stopper den automatiske behandlingen til
     # saksbehandleren har valgt vitnemålet (OPT-BEH-BEH-039).
 
-    @implemented
-    Scenariomal: Ingen grunnlag settes automatisk når <grunn>
+    @deprecated
+    Scenariomal: Ingen grunnlag settes automatisk når <grunn> (avvikles)
       Gitt at <grunn>
       Når søknaden behandles automatisk
       Så får saken ingen grunnlag automatisk
@@ -137,6 +137,18 @@ Egenskap: Automatisk grunnlag
         | vitnemålet ikke gir generell studiekompetanse               |
         | ingen av grunnlagene i regelverket passer til søkeren       |
 
+    # Avklart 06.11.2026: kompetansebevis kommer ikke fra KREG, så raden om kompetansebevis er tatt ut.
+    Scenariomal: Ingen grunnlag settes automatisk når <grunn>
+      Gitt at <grunn>
+      Når søknaden behandles automatisk
+      Så får saken ingen grunnlag automatisk
+
+      Eksempler:
+        | grunn                                                 |
+        | søkeren ikke har noe elektronisk vitnemål             |
+        | vitnemålet ikke gir generell studiekompetanse         |
+        | ingen av grunnlagene i regelverket passer til søkeren |
+
     @implemented
     Scenario: Søker med flere vitnemål behandles ikke automatisk
       Gitt at søkeren har to elektroniske vitnemål som ikke er annullert
@@ -145,9 +157,12 @@ Egenskap: Automatisk grunnlag
       Så blir søknaden ikke behandlet automatisk
       Og saken får ingen grunnlag automatisk
 
-    Scenario: Kompetansebevis ved siden av vitnemålet stopper ikke automatikken
+    Scenario: Opplastet kompetansebevis stopper ikke automatikken
+      # Avklart 06.11.2026: kompetansebevis kommer bare som dokumenter søkeren laster opp, ikke
+      # fra KREG. Saksbehandleren finner sakene med filteret «Ubehandlet opplastet dok.» i
+      # saksoversikten. Filteret er ikke beskrevet i et krav ennå.
       Gitt at søkeren har ett elektronisk vitnemål som gir generell studiekompetanse
-      Og at søkeren har et elektronisk kompetansebevis
+      Og at søkeren har lastet opp et kompetansebevis
       Når søknaden behandles automatisk
       Så får saken grunnlaget ut fra vitnemålet
 

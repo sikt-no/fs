@@ -10,8 +10,8 @@ Egenskap: Importere resultater fra KREG
   ønsker jeg at søkerens resultater fra videregående skole hentes fra KREG når saken er opprettet
   slik at søknaden behandles på resultatene søkeren har, uten at jeg må hente dem selv.
 
-  KREG (Nasjonal vitnemålsdatabase) har søkerens vitnemål og kompetansebevis fra videregående
-  skole. Opptakssystemet henter dem med søkerens fødselsnummer, eller D-nummer når søkeren ikke
+  KREG (Nasjonal vitnemålsdatabase) har søkerens vitnemål fra videregående skole. Kompetansebevis
+  kommer ikke fra KREG, bare som dokumenter søkeren laster opp (avklart 06.11.2026). Opptakssystemet henter dem med søkerens fødselsnummer, eller D-nummer når søkeren ikke
   har fødselsnummer, og lagrer dem på søkeren, så de gjelder alle søknadene søkeren har.
   Saksbehandlingen og den automatiske behandlingen bygger på det som er lagret.
 
@@ -85,6 +85,8 @@ Egenskap: Importere resultater fra KREG
       Når søkerens resultater importeres
       Så er begge vitnemålene importert
 
+    @deprecated
+    # Avklart 06.11.2026: kompetansebevis kommer ikke fra KREG. Koden som importerer dem, skal bort.
     Scenario: Kompetansebevis importeres
       Gitt at søkeren har et kompetansebevis i KREG
       Når søkerens resultater importeres

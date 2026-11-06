@@ -173,8 +173,8 @@ Egenskap: Automatisk vurdering av spesielle opptakskrav
   Regel: Kravelementene vurderes bare mot ett entydig vitnemål
     # Har søkeren flere vitnemål, velger saksbehandleren vitnemålet først (OPT-BEH-BEH-039).
 
-    @implemented
-    Scenariomal: Ingen automatisk vurdering når <grunn>
+    @deprecated
+    Scenariomal: Ingen automatisk vurdering når <grunn> (avvikles)
       Gitt at <grunn>
       Og at søknaden har et kravelement som er koblet til vitnemålet
       Når søknaden behandles automatisk
@@ -186,10 +186,24 @@ Egenskap: Automatisk vurdering av spesielle opptakskrav
         | søkerens eneste elektroniske dokument er et kompetansebevis                                              |
         | søkeren ikke har noe elektronisk vitnemål                                                                |
 
-    Scenario: Kompetansebevis ved siden av vitnemålet stopper ikke vurderingen
-      # Ikke bygget i dag: koden krever at vitnemålet er søkerens eneste dokument.
+    # Avklart 06.11.2026: kompetansebevis kommer ikke fra KREG, så raden om kompetansebevis er tatt ut.
+    Scenariomal: Ingen automatisk vurdering når <grunn>
+      Gitt at <grunn>
+      Og at søknaden har et kravelement som er koblet til vitnemålet
+      Når søknaden behandles automatisk
+      Så er kravelementet ikke vurdert
+
+      Eksempler:
+        | grunn                                                                                                    |
+        | søkeren har flere elektroniske vitnemål som ikke er annullert, og saksbehandleren ikke har valgt vitnemål |
+        | søkeren ikke har noe elektronisk vitnemål                                                                |
+
+    Scenario: Opplastet kompetansebevis stopper ikke vurderingen
+      # Avklart 06.11.2026: kompetansebevis kommer bare som dokumenter søkeren laster opp, ikke
+      # fra KREG. Saksbehandleren finner sakene med filteret «Ubehandlet opplastet dok.» i
+      # saksoversikten. Filteret er ikke beskrevet i et krav ennå.
       Gitt at søkeren har ett elektronisk vitnemål som ikke er annullert
-      Og at søkeren har et elektronisk kompetansebevis
+      Og at søkeren har lastet opp et kompetansebevis
       Og at søknaden har et kravelement som er koblet til vitnemålet
       Når søknaden behandles automatisk
       Så er kravelementet vurdert mot vitnemålet

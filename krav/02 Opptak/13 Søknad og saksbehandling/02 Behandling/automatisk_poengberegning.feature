@@ -19,9 +19,9 @@ Egenskap: Automatisk beregning av vitnemålspoeng
   slik at jeg bare trenger å behandle poengene der grunnlaget ikke er entydig.
 
   Beregningen bruker søkerens eneste vitnemål, og er bare mulig når søkeren har ett elektronisk
-  vitnemål. Har søkeren flere vitnemål, velger saksbehandleren vitnemålet i
-  vitnemålsbehandlingen, og den samme beregningen brukes da på vitnemålet saksbehandleren har
-  valgt. Hvilke karakterer som teller, og hvordan de regnes om til poeng, er ikke beskrevet her.
+  vitnemål. Søkere med flere vitnemål behandles manuelt, eller automatisk på vitnemålet
+  saksbehandleren velger (OPT-BEH-BEH-039). Hvilke karakterer som teller, og hvordan de regnes om
+  til poeng, er ikke beskrevet her.
 
   Poengene ligger på saken, som grunnlaget (OPT-BEH-BEH-019). Automatikken beregner de samme
   poengene i alle sakene i søknaden, men det saksbehandleren overstyrer eller låser, gjelder bare
@@ -91,29 +91,22 @@ Egenskap: Automatisk beregning av vitnemålspoeng
       Eksempler:
         | grunn                                                                                  |
         | søkeren har flere vitnemål som ikke er annullert, og saksbehandleren har ikke valgt ett |
-        | søkerens eneste dokument er et kompetansebevis                                         |
         | søkerens eneste vitnemål er annullert                                                  |
         | søkeren ikke har noe vitnemål                                                          |
         | vitnemålet ikke gir generell studiekompetanse                                          |
         | saken ikke har noe grunnlag                                                            |
 
-    Scenario: Kompetansebevis ved siden av ett vitnemål hindrer ikke beregningen
+    Scenario: Opplastet kompetansebevis hindrer ikke beregningen
+      # Avklart 06.11.2026: kompetansebevis kommer bare som dokumenter søkeren laster opp, ikke
+      # fra KREG. Saksbehandleren finner sakene med filteret «Ubehandlet opplastet dok.» i
+      # saksoversikten. Filteret er ikke beskrevet i et krav ennå.
       Gitt at søkeren har ett vitnemål som ikke er annullert
-      Og at søkeren har et kompetansebevis
+      Og at søkeren har lastet opp et kompetansebevis
       Når vitnemålspoengene beregnes automatisk
       Så har poengtypene fått poeng beregnet fra vitnemålet alene
 
-    # Avklart 30.10.2026: får søkeren et vitnemål til, blir de automatisk beregnede
-    # vitnemålspoengene stående til saksbehandleren har valgt vitnemål og startet behandlingen på
-    # det. Et nytt vitnemål gir saken nye resultater (OPT-BEH-BEH-035), og saken behandles ikke
-    # automatisk på nytt (OPT-BEH-BEH-032).
-
-    @ref-OPT-BEH-BEH-025
-    Scenario: Vitnemålspoeng fra vitnemålet saksbehandleren har valgt
-      Gitt at søkeren har to vitnemål som ikke er annullert, ett fra 2024 og ett fra 2025
-      Og at saksbehandleren har valgt vitnemålet fra 2025
-      Når vitnemålspoengene beregnes automatisk
-      Så har poengtypene fått poeng beregnet fra vitnemålet fra 2025
+    # Scenarioet «Vitnemålspoeng fra vitnemålet saksbehandleren har valgt» er flyttet til
+    # OPT-BEH-BEH-039 (06.11.2026). Søkere med flere vitnemål behandles manuelt.
 
   @ref-OPT-BEH-BEH-004 @implemented
   Regel: Poeng som saksbehandleren har låst, beregnes ikke på nytt
