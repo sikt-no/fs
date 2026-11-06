@@ -4,9 +4,9 @@
 - **Kilde**: `krav/02 Opptak/13 Søknad og saksbehandling/02 Behandling/vise_elektroniske_vitnemål.feature`
 - **Scope**: @scope-vitnemalsbehandling
 - **Scope-fil**: [opptak/vitnemalsbehandling](../../tasks/opptak/vitnemalsbehandling/scope.md)
-- **Krav**: 1 feature-fil, 0 `@implemented`, 1 delvis levert, 0 flyter, commit `e66cf6bb` (2026-11-05). Taggene `@implemented` på linje 164 og 187 er ikke committet
+- **Krav**: 1 feature-fil, 0 `@implemented`, 1 delvis levert, 0 flyter, commit `09c88041` (2026-11-06)
 - **Verifisering**: [verify-vise_elektroniske_vitnemål-2026-11-05-1242.md](../../krav/02%20Opptak/13%20S%C3%B8knad%20og%20saksbehandling/02%20Behandling/verify-vise_elektroniske_vitnem%C3%A5l-2026-11-05-1242.md)
-- **Confluence**: –
+- **Confluence**: https://sikt.atlassian.net/wiki/spaces/STUDIEADM/pages/5174001685 (utkast)
 - **Laget**: 2026-11-05 av fs-testplan
 
 - **Undersider**: [omfang.md](omfang.md), [testcaser-og-testdata.md](testcaser-og-testdata.md), [sporbarhet.md](sporbarhet.md)
@@ -22,9 +22,9 @@ Testplanen er delt i hovedsiden og tre undersider, så hver del kan oppdateres f
 | Side | Innhold | Fil |
 |---|---|---|
 | Testplan (denne siden) | Testbeskrivelse, roller, tid og kanal, forutsetninger, kriterier for godkjent, funn, beslutning, status i flyten og vedlegg | `testplan.md` |
-| Omfang – Se søkerens elektroniske vitnemål | Kravene og flytene som testes, åpne spørsmål, avhengighetskart, det som venter på verifisering, regler uten scenario og det som ikke er med | `omfang.md` |
-| Testcaser og testdata – Se søkerens elektroniske vitnemål | Omfanget av testcasene som skal lages, testbrukerne, tilgangsmatrisen og testdataene | `testcaser-og-testdata.md` |
-| Sporbarhet – Se søkerens elektroniske vitnemål | Scenarioene fra kravet til koden og til testen | `sporbarhet.md` |
+| [Omfang – Se søkerens elektroniske vitnemål](https://sikt.atlassian.net/wiki/spaces/STUDIEADM/pages/5173018678) | Kravene og flytene som testes, åpne spørsmål, avhengighetskart, det som venter på verifisering, regler uten scenario og det som ikke er med | `omfang.md` |
+| [Testcaser og testdata – Se søkerens elektroniske vitnemål](https://sikt.atlassian.net/wiki/spaces/STUDIEADM/pages/5174067232) | Omfanget av testcasene som skal lages, testbrukerne, tilgangsmatrisen og testdataene | `testcaser-og-testdata.md` |
+| [Sporbarhet – Se søkerens elektroniske vitnemål](https://sikt.atlassian.net/wiki/spaces/STUDIEADM/pages/5174132758) | Scenarioene fra kravet til koden og til testen | `sporbarhet.md` |
 
 ## Testbeskrivelse
 
@@ -34,8 +34,8 @@ Testplanen er delt i hovedsiden og tre undersider, så hver del kan oppdateres f
 | Versjon | main 2026-11-05: fs-plattform `e2ed43b3ce`, fs-admin `f1d15446a` |
 | Testmiljø | [https://test-fsadmin.sikt.no](https://test-fsadmin.sikt.no) |
 | Feature-flagg | Ingen |
-| Kilde | [vise_elektroniske_vitnemål.feature](https://github.com/sikt-no/fs/blob/e66cf6bb/krav/02%20Opptak/13%20S%C3%B8knad%20og%20saksbehandling/02%20Behandling/vise_elektroniske_vitnem%C3%A5l.feature) |
-| Scope | `@scope-vitnemalsbehandling` · [`scope.md` på GitHub](https://github.com/sikt-no/fs/blob/e66cf6bb/tasks/opptak/vitnemalsbehandling/scope.md) |
+| Kilde | [vise_elektroniske_vitnemål.feature](https://github.com/sikt-no/fs/blob/09c88041/krav/02%20Opptak/13%20S%C3%B8knad%20og%20saksbehandling/02%20Behandling/vise_elektroniske_vitnem%C3%A5l.feature) |
+| Scope | `@scope-vitnemalsbehandling` · [`scope.md` på GitHub](https://github.com/sikt-no/fs/blob/09c88041/tasks/opptak/vitnemalsbehandling/scope.md) |
 | Saker | GitHub #613 (L1) · initiativ #607 |
 | Berører andre team | Nei. Leveransen bygger på importen fra KREG og poengberegningen i opptak (se avhengighetskartet) |
 | Kjente begrensninger | «Vitnemålene kan ikke hentes» er ikke laget: en feilet henting fra KREG lagres ikke, og seksjonen skjules. «Åpne vitnemålsoversikten» testes ikke: opptakssystemets påstand om GSK vises bare som en tekst ved uenighet. «Bruker uten lesetilgang ser ikke vitnemålsoversikten» er usikker i verifiseringen: opptaksforvalteren og tilbyderen ser også vitnemålene. Et vitnemål fra en annen organisasjon kan hentes direkte i API-et på id-en (MR !3337 retter fs-admin, ikke API-et). Fs-admin viser i tillegg et varsel over tabellen når et annullert vitnemål vises, som kravet sier hører til L2. Testdata for «Poeng som ikke kan beregnes» og «Annullert vitnemål som er brukt i en beregning» finnes ikke ennå |
