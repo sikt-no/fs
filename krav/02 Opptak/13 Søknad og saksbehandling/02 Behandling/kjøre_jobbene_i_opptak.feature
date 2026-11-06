@@ -44,7 +44,6 @@ Egenskap: Kjøre jobbene i opptak
         | importen av VGS-vitnemål fra KREG           |
         | importen av resultater fra høyere utdanning |
 
-  @openquestion
   Regel: Hvor ofte en jobb kjører, står i applikasjonsinnstillingene
     # Importen av VGS-vitnemål fra KREG gjør ett oppslag i KREG per aktiv søker hver gang den
     # kjører. Vi har dialog med KREG-teamet om belastningen (30.10.2026).
@@ -52,9 +51,8 @@ Egenskap: Kjøre jobbene i opptak
     # døgnet, i en nattjobb. Importen trenger derfor ikke kjøre oftere enn én gang i døgnet.
     # Avklart 05.11.2026: opptaksforvalteren starter ikke jobbene selv. Har KREG vært nede, holder
     # det at importen kjører neste natt.
-    # ÅPNE SPØRSMÅL:
-    # - Holder det å kjøre importen én gang i døgnet, etter nattjobben i KREG, eller må den kjøre
-    #   oftere for annulleringer? Belastningen testes med KREG-teamet.
+    # Avklart 06.11.2026 (økt med fagfolk): én gang i døgnet holder også for annulleringer. KREG
+    # oppdateres ikke oftere enn i nattjobben. Belastningen testes med KREG-teamet.
 
     Scenario: Jobben kjører så ofte som applikasjonsinnstillingene sier
       Gitt at applikasjonsinnstillingene sier hvor ofte importen av VGS-vitnemål fra KREG kjører

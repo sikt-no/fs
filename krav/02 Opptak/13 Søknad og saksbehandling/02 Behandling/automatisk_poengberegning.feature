@@ -12,7 +12,7 @@
 # elektroniske vitnemål», 4609146881 «Forretningsregler – Poeng». GitHub #199. I FS-klienten
 # beregner «Godkjenn» i vitnemålsrammen og rutinen FS158.001 poengene, og manuell endring av
 # poeng setter «la stå».
-@OPT-BEH-BEH-018 @must @in-progress @scope-automatisk-grunnlag-og-poeng @depends-on-OPT-BEH-BEH-015 @depends-on-OPT-BEH-BEH-019 @ref-OPT-BEH-BEH-008 @ref-OPT-BEH-BEH-032
+@OPT-BEH-BEH-018 @must @in-progress @scope-automatisk-grunnlag-og-poeng @depends-on-OPT-BEH-BEH-015 @depends-on-OPT-BEH-BEH-019 @ref-OPT-BEH-BEH-008 @ref-OPT-BEH-BEH-032 @ref-OPT-BEH-BEH-035
 Egenskap: Automatisk beregning av vitnemålspoeng
   Som saksbehandler
   ønsker jeg at karakterpoeng, realfagspoeng, språkpoeng og skolepoeng beregnes automatisk fra søkerens vitnemål
@@ -105,8 +105,8 @@ Egenskap: Automatisk beregning av vitnemålspoeng
 
     # Avklart 30.10.2026: får søkeren et vitnemål til, blir de automatisk beregnede
     # vitnemålspoengene stående til saksbehandleren har valgt vitnemål og startet behandlingen på
-    # det. Et nytt vitnemål er ny dokumentasjon, og saken behandles ikke automatisk på nytt
-    # (OPT-BEH-BEH-032).
+    # det. Et nytt vitnemål gir saken nye resultater (OPT-BEH-BEH-035), og saken behandles ikke
+    # automatisk på nytt (OPT-BEH-BEH-032).
 
     @ref-OPT-BEH-BEH-025
     Scenario: Vitnemålspoeng fra vitnemålet saksbehandleren har valgt
@@ -173,11 +173,13 @@ Egenskap: Automatisk beregning av vitnemålspoeng
 
     @openquestion
     Scenario: Finne saker som er behandlet automatisk
+      # Brukerbehov fra raffineringen (PFS 4392517645): å kunne søke opp hvem som er behandlet
+      # automatisk. FS158.001 har «Vis tidligere behandlinger».
+      # Avklart 06.11.2026 (økt med fagfolk): et filter i saksoversikten holder. Det trengs ingen
+      # logg eller rapport i denne flyten.
       # ÅPNE SPØRSMÅL:
-      # - Brukerbehov fra raffineringen (PFS 4392517645): å kunne søke opp hvem som er behandlet
-      #   automatisk, gjerne med skille mellom helautomatisk og halvautomatisk. FS158.001 har «Vis
-      #   tidligere behandlinger». Er det et filter i saksoversikten, en logg, eller begge? Avgjøres
-      #   i designet (30.10.2026).
+      # - Raffineringen ønsket å skille sakene som er behandlet helautomatisk fra dem der
+      #   saksbehandleren har startet den automatiske behandlingen. Skal filteret skille dem?
       Gitt at noen saker i opptaket er behandlet automatisk
-      Når saksbehandleren ser etter sakene som er behandlet automatisk
-      Så finner saksbehandleren sakene som er behandlet automatisk
+      Når saksbehandleren filtrerer på saker som er behandlet automatisk
+      Så ser saksbehandleren bare sakene som er behandlet automatisk
