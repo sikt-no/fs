@@ -1,7 +1,7 @@
 # Testcaser og testdata – Se søkerens elektroniske vitnemål
 
 - **Testplan**: [testplan.md](testplan.md)
-- **Confluence**: –
+- **Confluence**: https://sikt.atlassian.net/wiki/spaces/STUDIEADM/pages/5174067232 (utkast)
 - **Laget**: 2026-11-05 av fs-testplan
 
 ---

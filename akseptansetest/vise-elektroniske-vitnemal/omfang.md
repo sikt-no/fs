@@ -1,7 +1,7 @@
 # Omfang – Se søkerens elektroniske vitnemål
 
 - **Testplan**: [testplan.md](testplan.md)
-- **Confluence**: –
+- **Confluence**: https://sikt.atlassian.net/wiki/spaces/STUDIEADM/pages/5173018678 (utkast)
 - **Laget**: 2026-11-05 av fs-testplan
 
 ---
@@ -14,7 +14,7 @@ Det som testes, er kravene som er `@implemented`, og de leverte delene i krav so
 
 | Krav | Feature-ID | Status | Scenarioer i testen |
 |---|---|---|---|
-| [Se søkerens elektroniske vitnemål](https://github.com/sikt-no/fs/blob/e66cf6bb/krav/02%20Opptak/13%20S%C3%B8knad%20og%20saksbehandling/02%20Behandling/vise_elektroniske_vitnem%C3%A5l.feature) | `@OPT-BEH-BEH-005` | `@in-progress` (delvis levert) | 9 |
+| [Se søkerens elektroniske vitnemål](https://github.com/sikt-no/fs/blob/09c88041/krav/02%20Opptak/13%20S%C3%B8knad%20og%20saksbehandling/02%20Behandling/vise_elektroniske_vitnem%C3%A5l.feature) | `@OPT-BEH-BEH-005` | `@in-progress` (delvis levert) | 9 |
 
 Scenarioene i testen:
 
@@ -33,7 +33,7 @@ De automatiske testene av det samme kravet: `npx playwright test --grep "@OPT-BE
 
 | Krav | Feature-ID | Regler med åpent spørsmål | Scenarioer med åpent spørsmål | Scenarioer i testen |
 |---|---|---|---|---|
-| [Se søkerens elektroniske vitnemål](https://github.com/sikt-no/fs/blob/e66cf6bb/krav/02%20Opptak/13%20S%C3%B8knad%20og%20saksbehandling/02%20Behandling/vise_elektroniske_vitnem%C3%A5l.feature) | `@OPT-BEH-BEH-005` | 0 av 2 | 1 av 11 | 0 |
+| [Se søkerens elektroniske vitnemål](https://github.com/sikt-no/fs/blob/09c88041/krav/02%20Opptak/13%20S%C3%B8knad%20og%20saksbehandling/02%20Behandling/vise_elektroniske_vitnem%C3%A5l.feature) | `@OPT-BEH-BEH-005` | 0 av 2 | 1 av 11 | 0 |
 
 Scenarioet med åpent spørsmål, «Åpne vitnemålsoversikten», er ikke levert, og står i «Venter på verifisering».
 
@@ -69,8 +69,8 @@ Kravene er laget, men `fs-verify` har ikke funnet alt ennå. De tas med i testen
 
 | Krav | Feature-ID | Status | Hva som venter |
 |---|---|---|---|
-| [Se søkerens elektroniske vitnemål](https://github.com/sikt-no/fs/blob/e66cf6bb/krav/02%20Opptak/13%20S%C3%B8knad%20og%20saksbehandling/02%20Behandling/vise_elektroniske_vitnem%C3%A5l.feature) | `@OPT-BEH-BEH-005` | `@in-progress` | Scenario «Åpne vitnemålsoversikten» (usikker): opptakssystemets påstand om GSK vises bare som en tekst ved uenighet, ikke som egen opplysning (fs-admin `VitnemalsbehandlingSection.tsx:173-177`). Avhenger av det åpne spørsmålet til designeren |
-| [Se søkerens elektroniske vitnemål](https://github.com/sikt-no/fs/blob/e66cf6bb/krav/02%20Opptak/13%20S%C3%B8knad%20og%20saksbehandling/02%20Behandling/vise_elektroniske_vitnem%C3%A5l.feature) | `@OPT-BEH-BEH-005` | `@in-progress` | Scenario «Vitnemålene kan ikke hentes» (ikke funnet): en feilet henting fra KREG bare logges (fs-plattform `SoknadshendelseJobb.java:395-417`), og seksjonen skjules |
+| [Se søkerens elektroniske vitnemål](https://github.com/sikt-no/fs/blob/09c88041/krav/02%20Opptak/13%20S%C3%B8knad%20og%20saksbehandling/02%20Behandling/vise_elektroniske_vitnem%C3%A5l.feature) | `@OPT-BEH-BEH-005` | `@in-progress` | Scenario «Åpne vitnemålsoversikten» (usikker): opptakssystemets påstand om GSK vises bare som en tekst ved uenighet, ikke som egen opplysning (fs-admin `VitnemalsbehandlingSection.tsx:173-177`). Avhenger av det åpne spørsmålet til designeren |
+| [Se søkerens elektroniske vitnemål](https://github.com/sikt-no/fs/blob/09c88041/krav/02%20Opptak/13%20S%C3%B8knad%20og%20saksbehandling/02%20Behandling/vise_elektroniske_vitnem%C3%A5l.feature) | `@OPT-BEH-BEH-005` | `@in-progress` | Scenario «Vitnemålene kan ikke hentes» (ikke funnet): en feilet henting fra KREG bare logges (fs-plattform `SoknadshendelseJobb.java:395-417`), og seksjonen skjules |
 
 ## Regler uten scenario
 
