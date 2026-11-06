@@ -285,8 +285,8 @@ Egenskap: Bli søker ved første «Legg til»
     # Opplysningene registreres én gang. Er personen registrert fra før (en tidligere innlogging, en annen fane eller
     # et dobbeltklikk), brukes de lagrede opplysningene, og det som er oppgitt nå, legges ikke over dem.
 
-    Scenario: Personen som er registrert fra en tidligere innlogging, får utdanningstilbudet i studiekurven
-      Gitt at personen har oppgitt fornavn "Kari", etternavn "Nordmann" og fødselsdato 15.03.2005 før
+    Scenario: Personen som er registrert fra før, får utdanningstilbudet i studiekurven med de lagrede opplysningene
+      Gitt at personen er registrert fra før med fornavn "Kari", etternavn "Nordmann" og fødselsdato 15.03.2005, men ikke har blitt søker ennå
       Og at personen ikke har et utdanningstilbud i studiekurven
       Og at personen er på siden for å legge inn opplysninger etter å ha valgt «Legg til» på "Sykepleie, høst 2027"
       Når personen lagrer med fornavn "Karianne", etternavn "Nordmann" og fødselsdato 15.03.2005
