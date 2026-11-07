@@ -14,9 +14,9 @@ Standard plassflyt er den andre seksjonen i fanen «Kvoteprioritet og plassflyt�
 - **Lista «Kvotetyper»** (h3), med kolonnene Kode, Navn og Mottaker.
   - Lesevisning: Mottaker er «Hovedkvote» for hovedkvoten, «Sender ledige plasser til {kvotetype}» for en koblet kvote, eller taggen «Ikke koblet til plassflyten» (advarsel).
   - Redigering: ett nedtrekk per kvotetype, med «Ikke valgt» som første valg. Hovedkvoten har ikke noe nedtrekk. Taggen «Ikke koblet til plassflyten» vises også i redigering når mottaker ikke er valgt.
-- **SPEV-kvoter** (kvotetyper med rangeringsmetoden SPEV):
+- **Kvotetyper uten plasser** (som ventekvoten):
   - Nedtrekket har bare hovedkvoten som valg, med hjelpeteksten under. Er hovedkvoten ikke valgt, er nedtrekket deaktivert.
-  - En SPEV-kvote står ikke blant valgene i «Hovedkvote», og ikke blant mottakerne til andre kvoter.
+  - En kvotetype uten plasser står ikke blant valgene i «Hovedkvote», og ikke blant mottakerne til andre kvoter.
 
 ## Interaksjonsmønstre
 
@@ -59,8 +59,8 @@ Dette er fasiten for tekstene, også når en skisse viser noe annet. Feilmelding
 | Tagg på raden | Kvotetypen er ikke koblet, i lese- og redigeringsmodus | «Ikke koblet til plassflyten» | – | Varsel om kvotetyper som ikke er koblet til plassflyten |
 | Varsel øverst i seksjonen | Kvotetyper er ikke koblet | «Disse kvotetypene er ikke koblet til plassflyten: {kvotetyper}.» | `{kvotetyper}` = kodene, skilt med komma | Varsel om kvotetyper som ikke er koblet til plassflyten |
 | Mottakerfeltet, skjermleser | Redigering | «Mottaker for {kode}» | – | – |
-| Under mottakerfeltet for en SPEV-kvote | Redigering | «Kan bare kobles til hovedkvoten.» | – | Koble en SPEV-kvote til hovedkvoten, En SPEV-kvote kan ikke kobles til en annen kvote enn hovedkvoten |
-| Alert og feltfeil på raden | API-et avviser en SPEV-kvote med en annen mottaker enn hovedkvoten | «En kvote med spesiell vurdering kan bare sende ledige plasser til hovedkvoten.» | – | En SPEV-kvote kan ikke kobles til en annen kvote enn hovedkvoten |
+| Under mottakerfeltet for en kvotetype uten plasser | Redigering | «Kan bare kobles til hovedkvoten.» | – | Koble en kvotetype uten plasser til hovedkvoten, En kvotetype uten plasser kan ikke kobles til en annen kvote enn hovedkvoten |
+| Alert og feltfeil på raden | API-et avviser en kvotetype uten plasser med en annen mottaker enn hovedkvoten | «En kvotetype uten plasser kan bare sende ledige plasser til hovedkvoten.» | – | En kvotetype uten plasser kan ikke kobles til en annen kvote enn hovedkvoten |
 | Alert | Plassflyten går i ring | «Plassflyten kan ikke gå i ring: {kvotetyper}.» | `{kvotetyper}` = kjeden, f.eks. «SAM → NN → SAM». Uten kjede: «Plassflyten kan ikke gå i ring.» | Sirkulær plassflyt |
 | Feltfeil på hver rad i ringen | Plassflyten går i ring | «Inngår i en ring.» | – | Sirkulær plassflyt |
 | Tom liste | Ingen kvotetyper | «Ingen kvotetyper funnet» | – | – |
@@ -74,7 +74,7 @@ Felles med kvoteprioriteten: taggen «Lesevisning» og feilen ved henting, se [`
 Avvik fra utkastet, avklart 2026-10-26:
 - Forklaringen under overskriften og hjelpeteksten under «Hovedkvote» er nye, med ordene fra Figma-skissen tilpasset kravet («mottaker», ikke «mål»).
 - Taggen «Ikke koblet til plassflyten» vises også i redigering.
-- En SPEV-kvote kan ikke velges som hovedkvote eller som mottaker for andre kvoter.
+- En kvotetype uten plasser kan ikke velges som hovedkvote eller som mottaker for andre kvoter (2026-10-26 for SPEV-kvoten, skrevet om til kvotetype uten plasser 2026-11-06).
 - Feilene vises med tekstene her, ikke med meldingen fra serveren (utkastet viser `error.message` først, `PlassflytSection.tsx:173-181`).
 
 Utdatert i Figma-skissen: innstillingen på opptaket (den er i regelverkssamlingen), og teksten «Ledige plasser i disse kvotene flyttes ikke til andre kvoter.» (feil, avklart 2026-10-19).
@@ -87,8 +87,8 @@ Hovedkvoten har ikke noe mottakerfelt i lista, og vises med «Hovedkvote» i mot
 ### Scenario: Sirkulær plassflyt
 Siden hovedkvoten ikke har mottaker, kan en ring bare oppstå mellom kvoter som ikke er hovedkvote. Ringen oppdages før lagring, og API-et avviser den også.
 
-### Regel: En SPEV-kvote kan ikke være hovedkvote eller mottaker for andre kvoter
-SPEV-kvoter filtreres bort fra valgene i «Hovedkvote» og i mottakerfeltet til andre kvoter. API-et avviser det også.
+### Regel: En kvotetype uten plasser kan ikke være hovedkvote eller mottaker for andre kvoter
+Kvotetyper uten plasser filtreres bort fra valgene i «Hovedkvote» og i mottakerfeltet til andre kvoter. API-et avviser det også.
 
 ## Åpne designspørsmål
 
