@@ -17,3 +17,5 @@ History of skill invocations for this spec. Append-only — never edit past entr
 - 2026-11-06 — `fs-verify-agent-teams` ended (success) — 0 krav og 47 deler retagget (015, 027, 034 delvis levert), kontrollen endret 5 resultater · rapport: akseptansetest/automatisk-gsk-konklusjon/verify-2026-11-06-1128.md
 - 2026-11-06 — `fs-verify-agent-teams` started — bare delene endret i PR #970 og #971 (7 feature-filer, 9 scenarioer, 5 @deprecated-deler), 2 finnere
 - 2026-11-06 — `fs-verify-agent-teams` ended (success) — 7 funnet, 1 usikker (018), 1 ikke funnet (039), @deprecated om kompetansebevis finnes fortsatt, kontrollen endret 6 resultater, 7 deler retagget @implemented (018, 019, 020, 036) · rapport: akseptansetest/automatisk-grunnlag-og-poeng/verify-endrede-krav-2026-11-06-1345.md
+- 2026-11-09 — `fs-verify` started — 3 @in-progress (015, 027, 034) · omfang: @in-progress, flyter · avhengigheter: 1 nivå, bare status
+- 2026-11-09 — `fs-verify` ended (success) — 027 og 034 retagget @implemented, 1 regel i 015 @implemented (015 delvis levert 41/53), kontrollen endret 0 resultater · rapport: akseptansetest/automatisk-gsk-konklusjon/verify-2026-11-09-0944.md
