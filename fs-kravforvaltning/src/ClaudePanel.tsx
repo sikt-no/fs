@@ -21,6 +21,8 @@ import {
   toolLabel,
   allowAlways,
   needsAuth,
+  needsLogin,
+  isLoginCommand,
   pendingPermissions,
   pendingQuestions,
   createTerminalConversation,
@@ -215,6 +217,8 @@ function LongText({ text }: { text: string }) {
 
 interface Props {
   status: ClaudeStatus;
+  /** Leser statusen på nytt (etter innloggingen) */
+  onStatus: () => void;
   /** Bredden i piksler, styrt av App og husket mellom øktene */
   width: number;
   onWidth: (w: number) => void;
@@ -247,7 +251,7 @@ interface Props {
  * Claude kan lese og endre filer, men ikke kjøre kommandoer. Endringene vises i vieweren med én gang,
  * og sendes som PR med «Lag PR» som vanlig. Foreslår Claude en PR (`krav-pr`-blokk), åpner kortet «Lag PR» utfylt.
  */
-export function ClaudePanel({ status, width, onWidth, allowedSkills: modeSkills, skillHint: modeHint, preselect, codeDirs, path, entries, has, onOpen, onReveal, onPr, change, onClose }: Props) {
+export function ClaudePanel({ status, onStatus, width, onWidth, allowedSkills: modeSkills, skillHint: modeHint, preselect, codeDirs, path, entries, has, onOpen, onReveal, onPr, change, onClose }: Props) {
   // Desktop-appen: uten valgte kodemapper finnes det ingen kode å verifisere mot, så fs-verify gråtones
   const dirs = useCodeDirs();
   const noCode = transport.kind === 'electron' && codeDirs && !!dirs && !dirs.some(d => d.exists);
@@ -296,6 +300,13 @@ export function ClaudePanel({ status, width, onWidth, allowedSkills: modeSkills,
   // Lukkes panelet, avvises spørsmålene som venter
   useEffect(() => denyAllPending, []);
   const auth = needsAuth(c);
+  // Claude Code er ikke logget inn: fra `claude auth status`, eller fordi svaret på siste melding sa det
+  // (`auth status` vinner når den sier innlogget, så båndet forsvinner i samtalen etter innloggingen)
+  const loginHint = !c.terminal && needsLogin(c);
+  const loginNeeded = status.loggedIn === false || (loginHint && status.loggedIn !== true);
+  useEffect(() => {
+    if (loginHint) onStatus();
+  }, [loginHint]);
   const edited = editedFiles(c).filter(isEditablePath);
 
   useEffect(() => {
@@ -355,6 +366,11 @@ export function ClaudePanel({ status, width, onWidth, allowedSkills: modeSkills,
   const submit = async () => {
     const text = input.trim();
     if (!text || running) return;
+    // `/login` finnes ikke i `claude -p`; innloggingen kjøres i terminalen
+    if (isLoginCommand(text)) {
+      setInput('');
+      return login();
+    }
     const mentions = mention.mentions;
     setInput('');
     mention.clear();
@@ -409,6 +425,8 @@ export function ClaudePanel({ status, width, onWidth, allowedSkills: modeSkills,
       setStarting(null);
     }
   };
+  // «Logg inn»: `claude auth login` i terminalen, der nettleseren åpnes og koden kan limes inn
+  const login = () => terminalText('', { mode: 'login' }, 'Logg inn på Claude Code');
   const insertRef = useRef(insertText);
   insertRef.current = insertText;
   useEffect(() => {
@@ -579,7 +597,32 @@ export function ClaudePanel({ status, width, onWidth, allowedSkills: modeSkills,
       ) : c.terminal ? (
         <>
           {error && <div class="edwarn err" role="alert">{error}</div>}
-          <TerminalView key={c.terminal.id} session={c.terminal} onExit={code => conv && set(updateConversation(convs, conv.id, ch => terminalExited(ch, code), Date.now()))} />
+          <TerminalView
+            key={c.terminal.id}
+            session={c.terminal}
+            onExit={code => {
+              if (conv) set(updateConversation(convs, conv.id, ch => terminalExited(ch, code), Date.now()));
+              if (c.terminal?.mode === 'login') onStatus();
+            }}
+          />
+          {c.terminal.mode === 'login' && c.terminal.exited && (
+            <div class="cstale compact" role="status">
+              <div class="cstale-text">
+                {status.loggedIn ? <>Logget inn{status.account ? <> som <b>{status.account}</b></> : ''}. Start en ny samtale for å fortsette.</> : 'Innloggingen ble ikke fullført.'}
+              </div>
+              <div class="cstale-btns">
+                {status.loggedIn ? (
+                  <button class="primbtn" onClick={() => set(createConversation(convs, newId(), Date.now(), effectiveSkill(null, choosable, preselect)))}>
+                    Ny samtale
+                  </button>
+                ) : (
+                  <button class="primbtn" onClick={() => void login()}>
+                    Prøv igjen
+                  </button>
+                )}
+              </div>
+            </div>
+          )}
         </>
       ) : (
         <>
@@ -700,6 +743,19 @@ export function ClaudePanel({ status, width, onWidth, allowedSkills: modeSkills,
                   </span>
                 ))}{' '}
                 er ikke logget inn. Kjør <code>claude</code> i terminalen og <code>/mcp</code> én gang for å logge inn; det kan ikke gjøres herfra.
+              </div>
+            </div>
+          )}
+          {loginNeeded && !running && (
+            <div class="cstale compact" role="status">
+              <span class="cstale-tri" aria-hidden="true" />
+              <div class="cstale-text">
+                Claude Code er ikke logget inn. Logg inn med Claude-kontoen din; nettleseren åpnes, og innloggingen gjelder også Claude Code i terminalen.
+              </div>
+              <div class="cstale-btns">
+                <button class="primbtn" onClick={() => void login()}>
+                  Logg inn
+                </button>
               </div>
             </div>
           )}

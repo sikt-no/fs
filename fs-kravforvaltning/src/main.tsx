@@ -224,9 +224,16 @@ function App() {
   useEffect(() => save('claudeWidth', claudeWidth), [claudeWidth]);
   const [treeWidth, setTreeWidth] = useState(() => load('treeWidth', TREE_WIDTH));
   useEffect(() => save('treeWidth', treeWidth), [treeWidth]);
-  useEffect(() => {
+  const refreshClaude = () => {
     if (EDITABLE) transport.call('claudeStatus').then(setClaude, () => setClaude(null));
-  }, []);
+  };
+  useEffect(refreshClaude, []);
+  // Ikke logget inn: statusen leses på nytt når vinduet får fokus, i tilfelle brukeren logget inn i en annen terminal
+  useEffect(() => {
+    if (claude?.loggedIn !== false) return;
+    window.addEventListener('focus', refreshClaude);
+    return () => window.removeEventListener('focus', refreshClaude);
+  }, [claude?.loggedIn]);
   const [treeMode, setTreeMode] = useState<TreeMode>(() => load('treeMode', 'files'));
   const [mdMode, setMdMode] = useState<MdMode>(() => load('mdMode', 'pretty'));
   const [git, setGit] = useState<GitInfo | null>(initialGit);
@@ -1022,6 +1029,7 @@ function App() {
           // Panelet ligger utenfor visningene, så samtalen følger med mellom Krav, Avvik og Scopes
           <ClaudePanel
             status={claude}
+            onStatus={refreshClaude}
             width={claudeWidth}
             onWidth={setClaudeWidth}
             allowedSkills={claudeSkills.allowed}

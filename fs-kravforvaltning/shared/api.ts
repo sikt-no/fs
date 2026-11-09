@@ -45,6 +45,10 @@ export interface ClaudeStatus {
   available: boolean;
   path: string | null;
   version: string | null;
+  /** Fra `claude auth status --json`; `null` når det ikke kan leses */
+  loggedIn: boolean | null;
+  /** E-posten brukeren er logget inn med */
+  account: string | null;
 }
 
 export interface ClaudeRunRequest {
@@ -130,8 +134,9 @@ export interface ExecuteTarget {
  * («Utfør med team i <repo>»). `verify`: i kravrepoet, med kodemappene («Verifiser … i terminal med agent team»).
  */
 export interface PtyStartRequest {
-  mode: 'execute' | 'verify';
-  /** Første melding; skal ikke begynne med `-` */
+  /** `login` kjører `claude auth login`, uten prompt */
+  mode: 'execute' | 'verify' | 'login';
+  /** Første melding; skal ikke begynne med `-` (tom for `login`) */
   prompt: string;
   /** `execute`: repoet, klonen og spesifikasjonen */
   target?: ExecuteTarget;

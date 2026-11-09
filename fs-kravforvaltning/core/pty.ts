@@ -94,6 +94,8 @@ export function terminalArgs(
   req: PtyStartRequest,
   ctx: { repoRoot: string; mcpFile: string; settingsFile: string; kravSkills: string[] },
 ): { cwd: string; args: string[] } {
+  // Innloggingen: `/login` finnes ikke i `claude -p` (panelet), så den kjøres interaktivt her
+  if (req?.mode === 'login') return { cwd: resolve(ctx.repoRoot), args: ['auth', 'login'] };
   const prompt = typeof req?.prompt === 'string' ? req.prompt.trim() : '';
   if (!prompt) throw new Error('Skriv en melding først');
   if (prompt.startsWith('-')) throw new Error('Meldingen kan ikke begynne med «-»');
@@ -238,12 +240,18 @@ export class PtyRunner {
     const bin = await this.opts.bin();
     if (!bin) throw new Error('Fant ikke Claude Code (claude) på maskinen');
     const id = `t${Date.now().toString(36)}-${++this.seq}`;
-    const cwdFor = req?.mode === 'execute' ? executeArgs(this.repoRoot, req.target, []).cwd : this.repoRoot;
-    const dirs = req?.mode === 'verify' ? dirArgs(req.dirs).paths : [];
-    const mcpFile = writeMcpConfig(id, readMcpServers(cwdFor, dirs, this.opts.home ?? homedir()));
-    const settingsFile = join(tmpdir(), `krav-settings-${process.pid}-${id}.json`);
-    writeFileSync(settingsFile, TERMINAL_SETTINGS, { mode: 0o600 });
-    const files = [mcpFile, settingsFile];
+    const files: string[] = [];
+    let mcpFile = '';
+    let settingsFile = '';
+    // Innloggingen trenger verken MCP-serverne eller innstillingene
+    if (req?.mode !== 'login') {
+      const cwdFor = req?.mode === 'execute' ? executeArgs(this.repoRoot, req.target, []).cwd : this.repoRoot;
+      const dirs = req?.mode === 'verify' ? dirArgs(req.dirs).paths : [];
+      mcpFile = writeMcpConfig(id, readMcpServers(cwdFor, dirs, this.opts.home ?? homedir()));
+      settingsFile = join(tmpdir(), `krav-settings-${process.pid}-${id}.json`);
+      writeFileSync(settingsFile, TERMINAL_SETTINGS, { mode: 0o600 });
+      files.push(mcpFile, settingsFile);
+    }
     const cleanup = () => files.forEach(f => rmSync(f, { force: true }));
     let cwd: string;
     let args: string[];
