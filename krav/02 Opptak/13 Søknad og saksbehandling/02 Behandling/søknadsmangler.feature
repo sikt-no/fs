@@ -1,6 +1,6 @@
 # language: no
 # GitHub: #413
-@OPT-BEH-BEH-008 @must @in-progress
+@OPT-BEH-BEH-008 @must @in-progress @scope-meldinger-varslinger-og-oppgaver
 Egenskap: Søknadsmangler
   Som saksbehandler ved saksbehandlende organisasjon
   ønsker jeg å registrere mangler i saken og gi søkeren beskjed om manglene
