@@ -17,7 +17,7 @@ Egenskap: Automatiske mangler
   Bakgrunn:
     Gitt at opptaket bruker regelverkssamlingen "UHG 2027"
 
-  @depends-on-OPT-BEH-BEH-020 @ref-FLY-OPT-AUT-001 @ref-OPT-BEH-BEH-025
+  @depends-on-OPT-BEH-BEH-020 @ref-FLY-OPT-AUT-001 @ref-OPT-BEH-BEH-025 @ref-OPT-BEH-BEH-026
   Regel: Saken får automatiske mangeltekster når søkeren ikke er kvalifisert
 
     De automatiske mangeltekstene følger kvalifiseringen. Er søkeren ikke kvalifisert på
