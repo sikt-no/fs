@@ -117,11 +117,6 @@ Egenskap: Velge utdanningsbakgrunn i søknad
       Når søkeren går gjennom søknaden
       Så blir søkeren ikke spurt om utdanningsbakgrunn
 
-    Scenario: Søknaden får utdanningsbakgrunnen fra GSK-konklusjonen
-      Gitt at søkeren har en positiv GSK-konklusjon fra et tidligere opptak
-      Når søkeren sender inn søknaden
-      Så har søknaden utdanningsbakgrunnen fra GSK-konklusjonen
-
   @openquestion
   Regel: Utdanningsbakgrunn preutfylles fra søkerens vitnemål
     # AVKLART 2026-10-27 (planleggingsmøte): Hvilke vitnemålstyper som gir hvilken
