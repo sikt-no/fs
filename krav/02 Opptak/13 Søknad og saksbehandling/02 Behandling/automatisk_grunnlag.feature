@@ -94,13 +94,14 @@ Egenskap: Automatisk grunnlag
       Så får saken grunnlaget som krever førstegangsvitnemål
       Men saken får ikke grunnlaget som bare krever et vitnemål
 
-    Scenario: Ingen grunnlag settes når flere grunnlag passer like godt
-      # Avklart 30.10.2026: to grunnlag med de samme egenskapene er en feil i regelverket, og
-      # regelverket må justeres så det ikke skjer. Kode i dag: grunnlaget med lavest kode
-      # velges, og det logges en advarsel.
+    Scenario: Grunnlaget med lavest kode settes når flere grunnlag passer like godt
+      # Avklart 09.11.2026: to grunnlag med de samme egenskapene er en feil i regelverket.
+      # Automatikken velger grunnlaget med lavest kode, og logger en advarsel, så regelverket
+      # kan rettes. Erstatter avklaringen fra 30.10.2026 om at ingen grunnlag settes.
       Gitt at søkeren passer like godt til to grunnlag
       Når søknaden behandles automatisk
-      Så får saken ingen grunnlag automatisk
+      Så får saken automatisk grunnlaget med lavest kode
+      Men saken får ikke grunnlaget med høyest kode
 
     @implemented
     Scenario: Grunnlag uten egenskaper for automatikken settes ikke
@@ -279,10 +280,18 @@ Egenskap: Automatisk grunnlag
     # på nytt (OPT-BEH-BEH-032), eller legger selv til et grunnlag som ble fjernet.
 
     Scenario: Grunnlag utenfor aldersgrensen kan ikke velges manuelt
-      # Avklart 30.10.2026. Kode i dag: grunnlaget kan legges til, og søkeren blir da ikke
-      # plassert i kvoten (STEK-583).
-      Gitt at søkeren er utenfor aldersgrensen til et grunnlag
-      Når saksbehandleren legger til grunnlaget
+      # Avklart 09.11.2026: når opptaket har dato for aldersberegning, tilbys ikke grunnlag der
+      # søkeren er utenfor aldersgrensen. Erstatter avklaringen fra 30.10.2026. Kode i dag:
+      # grunnlaget kan legges til, og søkeren blir da ikke plassert i kvoten (STEK-583).
+      Gitt at opptaket har dato for aldersberegning
+      Og at søkeren er utenfor aldersgrensen til et grunnlag
+      Når saksbehandleren velger grunnlag for saken
+      Så kan ikke saksbehandleren velge grunnlaget utenfor aldersgrensen
+
+    Scenario: Grunnlag utenfor aldersgrensen blir ikke lagt til
+      Gitt at opptaket har dato for aldersberegning
+      Og at søkeren er utenfor aldersgrensen til et grunnlag
+      Når grunnlaget utenfor aldersgrensen legges til i saken
       Så blir ikke grunnlaget lagt til
       Og saksbehandleren ser at søkeren er utenfor aldersgrensen til grunnlaget
 
@@ -292,12 +301,20 @@ Egenskap: Automatisk grunnlag
 
     Scenario: Opptaket mangler dato for aldersberegning
       # Avklart 30.10.2026: grunnlaget vises, men kan ikke legges til, og saksbehandleren får
-      # beskjed. Grunnlag med aldersgrense filtreres ikke bort. Koden gjør dette i dag.
+      # beskjed. Grunnlag med aldersgrense filtreres ikke bort. Kode i dag: grunnlaget avvises,
+      # men FS Admin viser bare at grunnlaget ikke kunne endres.
       Gitt at regelverket har grunnlaget "VOV" med aldersgrensen under 22 år
       Og at opptaket ikke har dato for aldersberegning eller dato for publisering av resultatet
       Når saksbehandleren velger grunnlaget "VOV" for saken
       Så får saksbehandleren beskjed om at opptaket mangler dato for aldersberegning
       Og grunnlaget er ikke lagt til
+
+    Scenario: Grunnlag uten aldersgrense kan legges til når opptaket mangler dato for aldersberegning
+      # Avklart 09.11.2026: datoen kreves bare når grunnlaget som velges, har aldersgrense.
+      # Kode i dag: datoen kreves så snart ett grunnlag i opptaket har aldersgrense.
+      Gitt at opptaket ikke har dato for aldersberegning eller dato for publisering av resultatet
+      Når saksbehandleren velger et grunnlag uten aldersgrense for saken
+      Så er grunnlaget lagt til
 
   @ref-OPT-BEH-BEH-028 @implemented
   Regel: Når grunnlaget settes, vurderes søknaden på nytt
