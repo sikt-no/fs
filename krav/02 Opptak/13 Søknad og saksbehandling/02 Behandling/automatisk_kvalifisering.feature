@@ -150,10 +150,10 @@ Egenskap: Automatisk vurdering av spesielle opptakskrav
     Scenario: Kravelementer fra en annen sak i søknaden vurderes ikke i saken
       # STEK-593.
       Gitt at søknaden har saker hos to saksbehandlende organisasjoner
-      Og at et søknadsalternativ i saken hos den ene saksbehandlende organisasjonen har kravelementet "Matematikk R2"
-      Og at ingen av søknadsalternativene i saken hos den andre saksbehandlende organisasjonen har kravelementet "Matematikk R2"
+      Og at et søknadsalternativ i saken hos den ene saksbehandlende organisasjonen har et kravelement
+      Og at ingen av søknadsalternativene i saken hos den andre saksbehandlende organisasjonen har kravelementet
       Når kravelementene i saken hos den andre saksbehandlende organisasjonen vurderes automatisk
-      Så er "Matematikk R2" ikke vurdert i saken hos den andre saksbehandlende organisasjonen
+      Så er kravelementet ikke vurdert i saken hos den andre saksbehandlende organisasjonen
 
     Scenario: Kravelement vurderes mot vitnemål fra R94
       Gitt at søkeren har ett elektronisk vitnemål fra R94

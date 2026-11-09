@@ -68,7 +68,7 @@ Egenskap: Beregne automatisk på nytt
       Så er sakene beregnet på nytt for begge søknadsalternativene
 
     Scenario: Opptaksforvalteren ser hvor mange saker som beregnes på nytt, før beregningen starter
-      Når opptaksforvalteren velger rangeringsregelverket "Ordinær rangering"
+      Når opptaksforvalteren velger et rangeringsregelverk
       Så ser opptaksforvalteren hvor mange saker som blir beregnet på nytt
 
     Scenario: Regelverkene opptaksforvalteren kan velge, er regelverkene i opptaket
@@ -84,21 +84,21 @@ Egenskap: Beregne automatisk på nytt
 
     Scenario: Kravelementene og poengene beregnes på nytt i en sak den automatiske behandlingen har behandlet
       Gitt at den automatiske behandlingen har behandlet saken
-      Og at opptaksforvalteren har rettet en feil i kompetanseregelverket "Informatikk"
-      Når opptaksforvalteren beregner på nytt for søknadsalternativene med kompetanseregelverket "Informatikk"
+      Og at opptaksforvalteren har rettet en feil i kompetanseregelverket
+      Når opptaksforvalteren beregner på nytt for søknadsalternativene med kompetanseregelverket som er rettet
       Så er kravelementene og poengene for søkeren på søknadsalternativet beregnet på nytt etter det rettede kompetanseregelverket
       Og kvalifiseringen, poengsummen og kvoten for søkeren på søknadsalternativet er regnet ut på nytt
 
     Scenario: Kravelementet saksbehandleren har vurdert, beregnes ikke på nytt
       Gitt at den automatiske behandlingen har behandlet saken
-      Og at saksbehandleren har vurdert "Matematikk R1" for søkeren på søknadsalternativet
-      Når opptaksforvalteren beregner på nytt for søknadsalternativene med kompetanseregelverket "Informatikk"
-      Så er vurderingen saksbehandleren har gjort av "Matematikk R1" for søkeren, uendret
+      Og at saksbehandleren har vurdert et kravelement for søkeren på søknadsalternativet
+      Når opptaksforvalteren beregner på nytt for søknadsalternativene med kompetanseregelverket som er rettet
+      Så er vurderingen saksbehandleren har gjort av kravelementet for søkeren, uendret
 
     Scenario: Poengene saksbehandleren har satt, beregnes ikke på nytt
       Gitt at den automatiske behandlingen har behandlet saken
       Og at saksbehandleren har satt poengene for søkeren på søknadsalternativet
-      Når opptaksforvalteren beregner på nytt for søknadsalternativene med rangeringsregelverket "Ordinær rangering"
+      Når opptaksforvalteren beregner på nytt for søknadsalternativene med rangeringsregelverket som er rettet
       Så er poengene saksbehandleren har satt for søkeren, uendret
 
   @depends-on-OPT-BEH-BEH-018 @depends-on-OPT-BEH-BEH-020 @ref-FLY-OPT-AUT-001 @implemented
@@ -111,24 +111,24 @@ Egenskap: Beregne automatisk på nytt
 
     Scenario: Poengsummen regnes ut på nytt i en sak saksbehandleren har behandlet
       Gitt at saksbehandleren har behandlet saken
-      Og at opptaksforvalteren har rettet en feil i rangeringsregelverket "Ordinær rangering"
-      Når opptaksforvalteren beregner på nytt for søknadsalternativene med rangeringsregelverket "Ordinær rangering"
+      Og at opptaksforvalteren har rettet en feil i rangeringsregelverket
+      Når opptaksforvalteren beregner på nytt for søknadsalternativene med rangeringsregelverket som er rettet
       Så har søknadsalternativet poengsum for søkeren etter det rettede rangeringsregelverket
 
     Scenario: Kravelementet saksbehandleren har vurdert, er uendret
       Gitt at saksbehandleren har behandlet saken
-      Og at saksbehandleren har vurdert "Matematikk R1" for søkeren på søknadsalternativet
-      Når opptaksforvalteren beregner på nytt for søknadsalternativene med kompetanseregelverket "Informatikk"
-      Så er vurderingen saksbehandleren har gjort av "Matematikk R1" for søkeren, uendret
+      Og at saksbehandleren har vurdert et kravelement for søkeren på søknadsalternativet
+      Når opptaksforvalteren beregner på nytt for søknadsalternativene med kompetanseregelverket som er rettet
+      Så er vurderingen saksbehandleren har gjort av kravelementet for søkeren, uendret
 
     Scenario: Saken saksbehandleren har behandlet, får taggen "Regelverk endret"
       Gitt at saksbehandleren har behandlet saken
-      Når opptaksforvalteren beregner på nytt for søknadsalternativene med kompetanseregelverket "Informatikk"
+      Når opptaksforvalteren beregner på nytt for søknadsalternativene med kompetanseregelverket som er rettet
       Så får saken taggen "Regelverk endret"
 
     Scenario: Saken den automatiske behandlingen har behandlet, får ikke taggen "Regelverk endret"
       Gitt at den automatiske behandlingen har behandlet saken
-      Når opptaksforvalteren beregner på nytt for søknadsalternativene med kompetanseregelverket "Informatikk"
+      Når opptaksforvalteren beregner på nytt for søknadsalternativene med kompetanseregelverket som er rettet
       Så får saken ikke taggen "Regelverk endret"
 
     Scenario: Saksbehandleren finner sakene med taggen "Regelverk endret"
@@ -144,14 +144,14 @@ Egenskap: Beregne automatisk på nytt
     @implemented
     Scenario: Saken er fortsatt ferdig behandlet etter at poengene er beregnet på nytt
       Gitt at saken er ferdig behandlet
-      Når opptaksforvalteren beregner på nytt for søknadsalternativene med rangeringsregelverket "Ordinær rangering"
+      Når opptaksforvalteren beregner på nytt for søknadsalternativene med rangeringsregelverket som er rettet
       Så har søknadsalternativet poengsum for søkeren etter det rettede rangeringsregelverket
       Og saken er fortsatt ferdig behandlet
 
     @implemented
     Scenariomal: En sak med behandlingsstatusen "<status>" beregnes ikke på nytt
       Gitt at saken har behandlingsstatusen "<status>"
-      Når opptaksforvalteren beregner på nytt for søknadsalternativene med rangeringsregelverket "Ordinær rangering"
+      Når opptaksforvalteren beregner på nytt for søknadsalternativene med rangeringsregelverket som er rettet
       Så er saken ikke beregnet på nytt
 
       Eksempler:
@@ -164,28 +164,28 @@ Egenskap: Beregne automatisk på nytt
     Scenario: Søkeren ser den nye mangelteksten i en sak som er ferdig behandlet
       Gitt at saken er ferdig behandlet
       Og at søkeren er kvalifisert for søknadsalternativet
-      Og at en feil i kontrollmotoren er rettet, så vitnemålet til søkeren ikke lenger oppfyller "Matematikk R2"
-      Når opptaksforvalteren beregner på nytt for søknadsalternativene med kravelementet "Matematikk R2"
+      Og at en feil i kontrollmotoren er rettet, så vitnemålet til søkeren ikke lenger oppfyller et kravelement
+      Når opptaksforvalteren beregner på nytt for søknadsalternativene med kravelementet
       Så er søkeren ikke lenger kvalifisert for søknadsalternativet
-      Og søkeren ser den automatiske mangelteksten for "Matematikk R2" i Min kompetanse
+      Og søkeren ser den automatiske mangelteksten for kravelementet i Min kompetanse
       Og saken er fortsatt ferdig behandlet
 
     @depends-on-OPT-BEH-BEH-036 @implemented
     # OPT-BEH-BEH-036: «Saken får automatiske mangeltekster når søkeren ikke er kvalifisert»
     Scenario: Den automatiske mangelteksten slettes når søkeren blir kvalifisert etter beregningen
       Gitt at saken er ferdig behandlet
-      Og at saken har en automatisk mangeltekst for "Matematikk R2" fordi søkeren ikke er kvalifisert for søknadsalternativet
-      Og at en feil i kontrollmotoren er rettet, så vitnemålet til søkeren oppfyller "Matematikk R2"
-      Når opptaksforvalteren beregner på nytt for søknadsalternativene med kravelementet "Matematikk R2"
+      Og at saken har en automatisk mangeltekst for et kravelement fordi søkeren ikke er kvalifisert for søknadsalternativet
+      Og at en feil i kontrollmotoren er rettet, så vitnemålet til søkeren oppfyller kravelementet
+      Når opptaksforvalteren beregner på nytt for søknadsalternativene med kravelementet
       Så er søkeren kvalifisert for søknadsalternativet
-      Og søkeren ser ikke lenger den automatiske mangelteksten for "Matematikk R2" i Min kompetanse
+      Og søkeren ser ikke lenger den automatiske mangelteksten for kravelementet i Min kompetanse
       Og saken er fortsatt ferdig behandlet
 
   @depends-on-OPT-BEH-BEH-033 @implemented
   Regel: Beregningen kjører i bakgrunnen
 
     Scenario: Opptaksforvalteren ser når beregningen er ferdig
-      Gitt at opptaksforvalteren har startet en beregning på nytt for søknadsalternativene med rangeringsregelverket "Ordinær rangering"
+      Gitt at opptaksforvalteren har startet en beregning på nytt for søknadsalternativene med rangeringsregelverket som er rettet
       Når beregningen er ferdig
       Så ser opptaksforvalteren at beregningen er ferdig
 
@@ -228,12 +228,12 @@ Egenskap: Beregne automatisk på nytt
     @implemented
     Scenario: En plasstildeling som er kjørt, endres ikke
       Gitt at en plasstildeling er kjørt
-      Når opptaksforvalteren beregner på nytt for søknadsalternativene med rangeringsregelverket "Ordinær rangering"
+      Når opptaksforvalteren beregner på nytt for søknadsalternativene med rangeringsregelverket som er rettet
       Så er resultatet av plasstildelingen som er kjørt, uendret
 
     @implemented
     Scenario: Neste plasstildeling bruker det som er beregnet på nytt
-      Gitt at opptaksforvalteren har beregnet på nytt for søknadsalternativene med rangeringsregelverket "Ordinær rangering"
+      Gitt at opptaksforvalteren har beregnet på nytt for søknadsalternativene med rangeringsregelverket som er rettet
       Når opptaksforvalteren starter en plasstildeling
       Så bruker plasstildelingen poengsummene som er beregnet på nytt
 
