@@ -84,6 +84,7 @@ Egenskap: Behandlingsstatus
     # Avklart 09.11.2026: å markere et dokument som lest er heller ikke en endring. FS Admin
     # markerer dokumentet som lest når saksbehandleren åpner det. Kode i dag:
     # SettSaksdokumentErLestService endrer statusen fra Ikke behandlet til Under behandling.
+    # Avklart 09.11.2026: saksbehandleren endrer kvoteplasseringen ved å svare på kvotespørsmålene.
 
     Scenariomal: Saken blir Under behandling når saksbehandleren <handling>
       Gitt at saken har behandlingsstatusen "<fra>"
@@ -96,7 +97,7 @@ Egenskap: Behandlingsstatus
         | Ikke behandlet | registrerer et grunnlag               |
         | Behandlet      | endrer kvalifiseringen                |
         | Behandlet      | endrer poengene                       |
-        | Behandlet      | endrer kvoteplasseringen              |
+        | Behandlet      | endrer svaret på et kvotespørsmål     |
         | Ikke behandlet | registrerer en mangel                 |
 
     @implemented
