@@ -33,7 +33,6 @@ Egenskap: Beregne automatisk på nytt
 
   Bakgrunn:
     Gitt at opptaksforvalteren er innlogget
-    Og at "Informatikk, UiO" og "Historie, UiT" er med i opptaket
 
   @implemented
   Regel: Opptaksforvalteren velger regelverkene feilen gjaldt
@@ -56,17 +55,17 @@ Egenskap: Beregne automatisk på nytt
         | alle rangeringsregelverkene               |
 
     Scenario: Saker med søknadsalternativer med andre regelverk, beregnes ikke på nytt
-      Gitt at "Informatikk, UiO" har rangeringsregelverket "Ordinær rangering"
-      Og at "Historie, UiT" har rangeringsregelverket "Rangering etter opptaksprøve"
+      Gitt at det ene søknadsalternativet har rangeringsregelverket "Ordinær rangering"
+      Og at det andre søknadsalternativet har rangeringsregelverket "Rangering etter opptaksprøve"
       Når opptaksforvalteren beregner på nytt for søknadsalternativene med rangeringsregelverket "Ordinær rangering"
-      Så er sakene beregnet på nytt for "Informatikk, UiO"
-      Men sakene er ikke beregnet på nytt for "Historie, UiT"
+      Så er sakene beregnet på nytt for det ene søknadsalternativet
+      Men sakene er ikke beregnet på nytt for det andre søknadsalternativet
 
     Scenario: Saker med ett av regelverkene som er valgt, beregnes på nytt
-      Gitt at "Informatikk, UiO" har kompetanseregelverket "Informatikk"
-      Og at "Historie, UiT" har rangeringsregelverket "Ordinær rangering"
+      Gitt at det ene søknadsalternativet har kompetanseregelverket "Informatikk"
+      Og at det andre søknadsalternativet har rangeringsregelverket "Ordinær rangering"
       Når opptaksforvalteren beregner på nytt for søknadsalternativene med kompetanseregelverket "Informatikk" og rangeringsregelverket "Ordinær rangering"
-      Så er sakene beregnet på nytt for "Informatikk, UiO" og "Historie, UiT"
+      Så er sakene beregnet på nytt for begge søknadsalternativene
 
     Scenario: Opptaksforvalteren ser hvor mange saker som beregnes på nytt, før beregningen starter
       Når opptaksforvalteren velger rangeringsregelverket "Ordinær rangering"
@@ -87,18 +86,18 @@ Egenskap: Beregne automatisk på nytt
       Gitt at den automatiske behandlingen har behandlet saken
       Og at opptaksforvalteren har rettet en feil i kompetanseregelverket "Informatikk"
       Når opptaksforvalteren beregner på nytt for søknadsalternativene med kompetanseregelverket "Informatikk"
-      Så er kravelementene og poengene for søkeren på "Informatikk, UiO" beregnet på nytt etter det rettede kompetanseregelverket
-      Og kvalifiseringen, poengsummen og kvoten for søkeren på "Informatikk, UiO" er regnet ut på nytt
+      Så er kravelementene og poengene for søkeren på søknadsalternativet beregnet på nytt etter det rettede kompetanseregelverket
+      Og kvalifiseringen, poengsummen og kvoten for søkeren på søknadsalternativet er regnet ut på nytt
 
     Scenario: Kravelementet saksbehandleren har vurdert, beregnes ikke på nytt
       Gitt at den automatiske behandlingen har behandlet saken
-      Og at saksbehandleren har vurdert "Matematikk R1" for søkeren på "Informatikk, UiO"
+      Og at saksbehandleren har vurdert "Matematikk R1" for søkeren på søknadsalternativet
       Når opptaksforvalteren beregner på nytt for søknadsalternativene med kompetanseregelverket "Informatikk"
       Så er vurderingen saksbehandleren har gjort av "Matematikk R1" for søkeren, uendret
 
     Scenario: Poengene saksbehandleren har satt, beregnes ikke på nytt
       Gitt at den automatiske behandlingen har behandlet saken
-      Og at saksbehandleren har satt poengene for søkeren på "Informatikk, UiO"
+      Og at saksbehandleren har satt poengene for søkeren på søknadsalternativet
       Når opptaksforvalteren beregner på nytt for søknadsalternativene med rangeringsregelverket "Ordinær rangering"
       Så er poengene saksbehandleren har satt for søkeren, uendret
 
@@ -114,11 +113,11 @@ Egenskap: Beregne automatisk på nytt
       Gitt at saksbehandleren har behandlet saken
       Og at opptaksforvalteren har rettet en feil i rangeringsregelverket "Ordinær rangering"
       Når opptaksforvalteren beregner på nytt for søknadsalternativene med rangeringsregelverket "Ordinær rangering"
-      Så har "Informatikk, UiO" poengsum for søkeren etter det rettede rangeringsregelverket
+      Så har søknadsalternativet poengsum for søkeren etter det rettede rangeringsregelverket
 
     Scenario: Kravelementet saksbehandleren har vurdert, er uendret
       Gitt at saksbehandleren har behandlet saken
-      Og at saksbehandleren har vurdert "Matematikk R1" for søkeren på "Informatikk, UiO"
+      Og at saksbehandleren har vurdert "Matematikk R1" for søkeren på søknadsalternativet
       Når opptaksforvalteren beregner på nytt for søknadsalternativene med kompetanseregelverket "Informatikk"
       Så er vurderingen saksbehandleren har gjort av "Matematikk R1" for søkeren, uendret
 
@@ -146,7 +145,7 @@ Egenskap: Beregne automatisk på nytt
     Scenario: Saken er fortsatt ferdig behandlet etter at poengene er beregnet på nytt
       Gitt at saken er ferdig behandlet
       Når opptaksforvalteren beregner på nytt for søknadsalternativene med rangeringsregelverket "Ordinær rangering"
-      Så har "Informatikk, UiO" poengsum for søkeren etter det rettede rangeringsregelverket
+      Så har søknadsalternativet poengsum for søkeren etter det rettede rangeringsregelverket
       Og saken er fortsatt ferdig behandlet
 
     @implemented
@@ -164,10 +163,10 @@ Egenskap: Beregne automatisk på nytt
     # OPT-BEH-BEH-036: «Saken får automatiske mangeltekster når søkeren ikke er kvalifisert»
     Scenario: Søkeren ser den nye mangelteksten i en sak som er ferdig behandlet
       Gitt at saken er ferdig behandlet
-      Og at søkeren er kvalifisert for "Informatikk, UiO"
+      Og at søkeren er kvalifisert for søknadsalternativet
       Og at en feil i kontrollmotoren er rettet, så vitnemålet til søkeren ikke lenger oppfyller "Matematikk R2"
       Når opptaksforvalteren beregner på nytt for søknadsalternativene med kravelementet "Matematikk R2"
-      Så er søkeren ikke lenger kvalifisert for "Informatikk, UiO"
+      Så er søkeren ikke lenger kvalifisert for søknadsalternativet
       Og søkeren ser den automatiske mangelteksten for "Matematikk R2" i Min kompetanse
       Og saken er fortsatt ferdig behandlet
 
@@ -175,10 +174,10 @@ Egenskap: Beregne automatisk på nytt
     # OPT-BEH-BEH-036: «Saken får automatiske mangeltekster når søkeren ikke er kvalifisert»
     Scenario: Den automatiske mangelteksten slettes når søkeren blir kvalifisert etter beregningen
       Gitt at saken er ferdig behandlet
-      Og at saken har en automatisk mangeltekst for "Matematikk R2" fordi søkeren ikke er kvalifisert for "Informatikk, UiO"
+      Og at saken har en automatisk mangeltekst for "Matematikk R2" fordi søkeren ikke er kvalifisert for søknadsalternativet
       Og at en feil i kontrollmotoren er rettet, så vitnemålet til søkeren oppfyller "Matematikk R2"
       Når opptaksforvalteren beregner på nytt for søknadsalternativene med kravelementet "Matematikk R2"
-      Så er søkeren kvalifisert for "Informatikk, UiO"
+      Så er søkeren kvalifisert for søknadsalternativet
       Og søkeren ser ikke lenger den automatiske mangelteksten for "Matematikk R2" i Min kompetanse
       Og saken er fortsatt ferdig behandlet
 
@@ -215,10 +214,10 @@ Egenskap: Beregne automatisk på nytt
     # og det står hvem som startet beregningen.
 
     Scenario: Saksloggen viser at den automatiske behandlingen endret saken, og hvem som startet beregningen
-      Gitt at opptaksforvalteren ved HK-dir har startet en beregning på nytt i "Samordna opptak 2027"
-      Når beregningen endrer poengsummen i saken hos "Universitetet i Oslo"
+      Gitt at opptaksforvalteren har startet en beregning på nytt i opptaket
+      Når beregningen endrer poengsummen i saken
       Så viser saksloggen at den automatiske behandlingen endret saken
-      Og saksloggen viser at opptaksforvalteren ved HK-dir startet beregningen
+      Og saksloggen viser hvilken opptaksforvalter som startet beregningen
 
   @depends-on-OPT-PLA-TIL-001
   Regel: Beregningen gjelder fra neste plasstildeling

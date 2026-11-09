@@ -168,7 +168,7 @@ Egenskap: Automatisk GSK-konklusjon
       Når vitnemålet importeres fra KREG
       Så gir ikke vitnemålet GSK
 
-  @implemented
+  @implemented @ref-OPT-BEH-BEH-025
   Regel: Saksbehandleren får varsel når opptakssystemet er uenig med skolen
     # Avklart 2026-11-02. Sier skolen nei, gir vitnemålet ikke GSK, og saken behandles
     # manuelt uansett, men varselet vises på samme måte. Hvordan varselet vises, står i

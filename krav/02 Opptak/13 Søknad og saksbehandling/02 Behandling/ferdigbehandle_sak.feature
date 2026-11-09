@@ -84,7 +84,7 @@ Egenskap: Ferdigbehandle en sak
     # OPT-BEH-BEH-008: «Mangler hindrer ikke kvalifiseringen eller at saken blir ferdig behandlet»
     # OPT-BEH-BEH-036: «Saken får automatiske mangeltekster når søkeren ikke er kvalifisert»
     Scenario: Saken er ferdig behandlet selv om kravelementene ga mangeltekst
-      Gitt at "Informatikk, UiO" har kravelementet "Matematikk R2"
+      Gitt at søknadsalternativet har kravelementet "Matematikk R2"
       Og at vitnemålet ikke har "Matematikk R2"
       Når søknaden behandles automatisk
       Så har saken en automatisk mangeltekst som viser at "Matematikk R2" ikke er oppfylt
@@ -95,7 +95,7 @@ Egenskap: Ferdigbehandle en sak
     Scenario: Den automatiske behandlingen publiserer manglene når saken blir ferdig behandlet
       # Avklart 2026-10-26 i review av PR #818: saksbehandleren gjør ingenting i saken, så
       # automatikken publiserer manglene når den setter saken til ferdig behandlet.
-      Gitt at "Informatikk, UiO" har kravelementene "Matematikk R2" og "Fysikk 2"
+      Gitt at søknadsalternativet har kravelementene "Matematikk R2" og "Fysikk 2"
       Og at vitnemålet verken har "Matematikk R2" eller "Fysikk 2"
       Når søknaden behandles automatisk
       Så er saken ferdig behandlet
@@ -137,17 +137,16 @@ Egenskap: Ferdigbehandle en sak
       Så ser saksbehandleren et varsel ved vitnemålet om at opptakssystemet er uenig med skolen om GSK
       Og saken er fortsatt ferdig behandlet
 
-  @ref-FLY-OPT-AUT-001
   Regel: Steg som bygger på et steg som ikke kan avgjøres, hoppes over
 
     Bakgrunn:
       Gitt at søkeren har ett vitnemål, og vitnemålet gir GSK
 
     Scenariomal: Det som kan avgjøres, blir avgjort når <steg> ikke kan avgjøres
-      Gitt at <steg> for "Informatikk, UiO" ikke kan avgjøres på grunn av en feil i regelverket
+      Gitt at <steg> for søknadsalternativet ikke kan avgjøres på grunn av en feil i regelverket
       Når søknaden behandles automatisk
-      Så er <avgjort> avgjort for "Informatikk, UiO"
-      Men <ikke avgjort> er ikke avgjort for "Informatikk, UiO"
+      Så er <avgjort> avgjort for søknadsalternativet
+      Men <ikke avgjort> er ikke avgjort for søknadsalternativet
 
       Eksempler:
         | steg           | avgjort                                                 | ikke avgjort                              |
@@ -160,12 +159,12 @@ Egenskap: Ferdigbehandle en sak
       # Avklart 2026-11-02: den automatiske behandlingen endrer ikke behandlingsstatusen, bortsett
       # fra å sette saken til ferdig behandlet. Saken blir Under behandling når saksbehandleren
       # gjør noe med den (OPT-BEH-BEH-029).
-      Gitt at poengene for "Informatikk, UiO" ikke kan avgjøres på grunn av en feil i regelverket
+      Gitt at poengene for søknadsalternativet ikke kan avgjøres på grunn av en feil i regelverket
       Når søknaden behandles automatisk
       Så har saken behandlingsstatusen "Ikke behandlet"
 
     Scenario: Opptaksforvalteren får varsel første gang en feil i regelverket stopper et steg
-      Gitt at poengene for "Informatikk, UiO" ikke kan avgjøres på grunn av en feil i regelverket
+      Gitt at poengene for søknadsalternativet ikke kan avgjøres på grunn av en feil i regelverket
       Når søknaden behandles automatisk
       Så får opptaksforvalteren ved organisasjonen som forvalter opptaket, et varsel om feilen
       Og varselet viser hvilken feil det er, og hvilket regelverk den gjelder
@@ -175,11 +174,10 @@ Egenskap: Ferdigbehandle en sak
       Når en annen søknad stoppes av den samme feilen i regelverket
       Så får ikke opptaksforvalteren et nytt varsel om feilen
 
-    @could
     Scenariomal: <feil i regelverket> stopper <steg>
-      Gitt at <feil i regelverket> for "Informatikk, UiO"
+      Gitt at <feil i regelverket> for søknadsalternativet
       Når søknaden behandles automatisk
-      Så er ikke <steg> avgjort for "Informatikk, UiO"
+      Så er ikke <steg> avgjort for søknadsalternativet
       Og saken har behandlingsstatusen "Ikke behandlet"
 
       Eksempler:
@@ -198,12 +196,12 @@ Egenskap: Ferdigbehandle en sak
       Gitt at søkeren har ett vitnemål, og vitnemålet gir GSK
 
     Scenario: Saksbehandleren ferdigbehandler saken etter å ha gjort resten
-      Gitt at saken ikke er ferdig behandlet fordi poengene for "Informatikk, UiO" ikke kunne avgjøres automatisk
-      Og at saksbehandleren har satt poengene for "Informatikk, UiO"
+      Gitt at saken ikke er ferdig behandlet fordi poengene for søknadsalternativet ikke kunne avgjøres automatisk
+      Og at saksbehandleren har satt poengene for søknadsalternativet
       Når saksbehandleren setter saken til "Behandlet"
       Så er saken ferdig behandlet
 
     Scenario: Saken blir ikke ferdig behandlet av seg selv når saksbehandleren har gjort resten
-      Gitt at saken ikke er ferdig behandlet fordi poengene for "Informatikk, UiO" ikke kunne avgjøres automatisk
-      Når saksbehandleren setter poengene for "Informatikk, UiO"
+      Gitt at saken ikke er ferdig behandlet fordi poengene for søknadsalternativet ikke kunne avgjøres automatisk
+      Når saksbehandleren setter poengene for søknadsalternativet
       Så har saken behandlingsstatusen "Under behandling"
