@@ -54,7 +54,7 @@ Alle i to steg: søknaden i Min kompetanse (søkeren), og kvalifiseringen og poe
 
 ## Det som må avklares
 
-- **`to-saker`:** en søker har høyst én sak per organisasjon i et opptak (`saksbehandling.sak`, primærnøkkel søker, opptak og organisasjon). Utgangstilstanden i miljøfila er rettet 2026-11-09: én sak hos UiT og én hos NTNU. Testen gjør begge sakene klare som i Klargjøring K, men saken hos NTNU kan ikke gjøres klar av saksbehandleren ved UiT. Testen må få en testbruker for saksbehandleren ved NTNU, eller bare gjøre saken hos UiT klar.
+- **`to-saker`:** en søker har høyst én sak per organisasjon i et opptak (`saksbehandling.sak`, primærnøkkel søker, opptak og organisasjon). Utgangstilstanden i miljøfila er rettet 2026-11-09: én sak hos UiT og én hos NTNU. Testen gjør begge sakene klare som i Klargjøring K, og saken hos NTNU gjøres klar av `opptak-saksbehandler-behandlende-tidlig-opptak-andre` (KORT DOMPAP • OPPTAK_SAKSBEHANDLER (NTNU)).
 - **`prioritet-1-uten-tidlig-opptak`:** «Bachelorstudium i arbeids- og velferdsfag» finnes ikke i eksempeldataene, og forsvinner ved neste resett av TEST.
 - **Hvem gjør det:** 62 søknader i Min kompetanse og like mange saker i FS Admin er mye arbeid for hånd. Agenten kan gjøre søknadene i Chrome. Poengsummen kan ikke settes for hånd (se under).
 
