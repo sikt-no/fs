@@ -23,7 +23,7 @@ De leverte delene:
 - Regel: Opptaksforvalter ser utfallet av tidligopptaket: «Se antall søkere med saker som ikke er ferdig behandlet eller mangler konklusjon» og «Tidligopptaket stopper uten én tilbudsgarantitype for tidlig opptak»
 - Regel: Manuell tilbudsgaranti krever ikke deltakelse i tidligopptaket (1 scenario)
 
-Åpent spørsmål: `@OPT-BEH-BEH-007` «Reservert studieplass gir tilbudsgaranti uten kvalifisering»: Gir reservert studieplass (RSO eller RES) tilbudsgaranti også når søkeren ikke er kvalifisert, eller kvalifiseringen ikke er vurdert? Fagperson svarte ja 13.10.2026, men har sendt spørsmålet videre til en annen domeneekspert, så svaret er foreløpig. Testes som det står.
+Ingen av scenarioene i testen har et åpent spørsmål. Spørsmålet om «Reservert studieplass gir tilbudsgaranti uten kvalifisering» ble lukket 09.11.2026, etter verifiseringen: tilbudsgaranti er tilbudsgaranti, uansett kvalifisering.
 
 Scenarioene i testen er de leverte scenarioene i gating-settet: alle scenarioene som ikke er utkast, avviklet eller demo, og som ikke er under endring. Et levert scenario med et åpent spørsmål testes som det står, og spørsmålet står under tabellen. Er kilden et scope, og kravet ble levert før, er det bare delene som er levert i scopet.
 
@@ -35,7 +35,7 @@ De automatiske testene av de samme kravene: `npx playwright test --grep "@OPT-BE
 
 | Krav | Feature-ID | Regler med åpent spørsmål | Scenarioer med åpent spørsmål | Scenarioer i testen |
 |---|---|---|---|---|
-| [Gi tilbudsgaranti ved tidlig opptak](https://github.com/sikt-no/fs/blob/072f40ee/krav/02%20Opptak/13%20S%C3%B8knad%20og%20saksbehandling/02%20Behandling/gi_tilbudsgaranti_ved_tidlig_opptak.feature) | `@OPT-BEH-BEH-007` | 0 av 4 | 1 av 27 | 25 |
+| [Gi tilbudsgaranti ved tidlig opptak](https://github.com/sikt-no/fs/blob/072f40ee/krav/02%20Opptak/13%20S%C3%B8knad%20og%20saksbehandling/02%20Behandling/gi_tilbudsgaranti_ved_tidlig_opptak.feature) | `@OPT-BEH-BEH-007` | 0 av 4 | 0 av 27 | 25 |
 
 I tillegg har 6 utsatte scenarioer (`@draft @openquestion`) spørsmålet «Utsatt fra første leveranse (09.11.2026). Om og hvordan dette skal bygges, avgjøres etter testen av første leveranse: trenger sjekken av innstillingene og prøvekjøringen en grundig gjennomgang?». De er ikke med i testen. Testen av denne leveransen er derfor også grunnlaget for det spørsmålet.
 

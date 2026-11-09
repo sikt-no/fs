@@ -46,9 +46,9 @@
 # - Poeng lik poenggrensen gir tilbudsgaranti.
 # - Søkeren får tilbudsgaranti bare på søknadsalternativer der søkeren er
 #   kvalifisert. Er kvalifiseringen ikke vurdert, gis det ikke garanti, og
-#   opptaksforvalteren ser det i utfallet. (Unntak 13.10.2026, foreløpig: reservert
-#   studieplass gir tilbudsgaranti uten at søkeren er kvalifisert, se notatet om
-#   reservert studieplass under.)
+#   opptaksforvalteren ser det i utfallet. (Unntak, avklart 13.10.2026 og bekreftet
+#   09.11.2026: reservert studieplass gir tilbudsgaranti uten at søkeren er kvalifisert,
+#   se notatet om reservert studieplass under.)
 # - Søkeren får tilbudsgaranti på høyst ett søknadsalternativ: det høyest
 #   prioriterte som oppfyller kravene (som i se_svar_på_tidlig_opptak.feature).
 # - En søknad som ikke er konkludert, er ikke med i tidligopptaket.
@@ -119,10 +119,11 @@
 #   plass fra et tidligere opptak. Uten de to betingelsene får søkeren ingen
 #   tilbudsgaranti fra tidligopptaket, og reservasjonen vises ikke som innvilget tidlig
 #   opptak (se_svar_på_tidlig_opptak.feature). Stemmer med STEK-503.
-#   (13.10.2026, foreløpig) Kvalifisering kreves heller ikke: søkeren får tilbudsgaranti
-#   med reservert studieplass (RSO eller RES) også når søkeren ikke er kvalifisert, eller
-#   kvalifiseringen ikke er vurdert. Fagperson avklarte dette, men har sendt spørsmålet
-#   videre til en annen domeneekspert, så avklaringen er foreløpig.
+#   (13.10.2026, bekreftet 09.11.2026) Kvalifisering kreves heller ikke: søkeren får
+#   tilbudsgaranti med reservert studieplass (RSO eller RES) også når søkeren ikke er
+#   kvalifisert, eller kvalifiseringen ikke er vurdert. Tilbudsgaranti er tilbudsgaranti.
+#   Fagperson avklarte dette, sendte spørsmålet videre til en annen domeneekspert, og har
+#   ikke fått innsigelser.
 # - Manuell tilbudsgaranti har ingen betingelser knyttet til tidlig opptak, heller
 #   ikke for typer som gjelder tidlig opptak. Tilbudsgaranti er generell, og gis av
 #   flere grunner enn tidlig opptak. Betingelsen fra dagens løsning (tidligsvar bare
@@ -242,13 +243,10 @@ Egenskap: Gi tilbudsgaranti ved tidlig opptak
       Når opptaksforvalter gjennomfører tidligopptaket
       Så får søkeren tilbudsgaranti på "Sykepleie, høst 2027"
 
-    @openquestion @ref-OPT-SØK-SØK-016
+    @ref-OPT-SØK-SØK-016
     Scenario: Reservert studieplass gir tilbudsgaranti uten kvalifisering
-      # ÅPNE SPØRSMÅL:
-      # - Gir reservert studieplass (RSO eller RES) tilbudsgaranti også når søkeren ikke er
-      #   kvalifisert, eller kvalifiseringen ikke er vurdert? Fagperson svarte ja 13.10.2026, men
-      #   har sendt spørsmålet videre til en annen domeneekspert, så svaret er foreløpig. Koden
-      #   gjør det (STEK-582). Se notatet om reservert studieplass øverst i fila.
+      # Avklart 13.10.2026, bekreftet 09.11.2026: tilbudsgaranti er tilbudsgaranti, og gjelder
+      # uansett kvalifisering. Se notatet om reservert studieplass øverst i fila.
       Gitt saksbehandler har konkludert med at søkeren deltar i tidligopptaket
       Og søkeren har reservert studieplass på "Sykepleie, høst 2027"
       Og søkeren er ikke kvalifisert til "Sykepleie, høst 2027"
