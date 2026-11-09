@@ -54,12 +54,7 @@ Egenskap: Opprette et opptak
       Men opptaksforvalter setter ikke opptakstype
       Så kan opptaket ikke lagres
 
-  @draft @openquestion @ref-OPT-REG-SAM-001
-  # ÅPNE SPØRSMÅL:
-  # - Skal avgrensningen til organisasjonen opptaket opprettes for også stå i kravet?
-  #   (Regel i koden uten scenario i verify-rapporten 2026-10-28, «uklart om ønsket».)
-  # AVKLART 2026-11-09: Opptaksforvalter har tilgang til regelverket ved organisasjonen opptaksforvalteren
-  # er opptaksforvalter ved.
+  @planned @ref-OPT-REG-SAM-001
   # Kilde: MR !3361 i fs-admin (TAKE-474). Det samme gjelder når regelverkssamlingen endres, se innstillinger.feature.
   Regel: Opptaksforvalter kan bare knytte til regelverkssamlinger fra organisasjonen opptaksforvalteren er opptaksforvalter ved
 

@@ -41,10 +41,7 @@ Egenskap: Innstillinger for opptak
       Gitt at opptaket har utdanningstilbud som bruker regler fra gjeldende regelverkssamling
       Så kan ikke opptaksforvalter endre regelverkssamlingen
 
-    @draft @openquestion @ref-OPT-REG-SAM-001
-    # ÅPNE SPØRSMÅL:
-    # - Det samme spørsmålet som regelen om regelverkssamlinger fra organisasjonen opptaksforvalteren
-    #   er opptaksforvalter ved i opprett_opptak.feature (OPT-OVO-GRU-001). Avklares det der, gjelder svaret her.
+    @planned @ref-OPT-REG-SAM-001
     # Kilde: MR !3361 i fs-admin (TAKE-474).
     Scenario: Regelverkssamlinger fra andre organisasjoner kan ikke velges
       Gitt at opptaket ikke har noen utdanningstilbud
