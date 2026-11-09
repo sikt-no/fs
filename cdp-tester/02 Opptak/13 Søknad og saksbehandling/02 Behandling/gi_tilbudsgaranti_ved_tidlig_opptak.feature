@@ -154,7 +154,7 @@ Egenskap: Gi tilbudsgaranti ved tidlig opptak
     Scenario: Reservert studieplass gir tilbudsgaranti uten poenggrense
       Gitt jeg tar en ubrukt søker fra «sak-tidlig-opptak-kvalifisert»
       Og jeg leser søkerens poengsum P til «utdanningstilbud-tidlig-opptak» i saken
-      Og jeg velger «tilbudsgarantitype-reservert-studieplass» i «Tilbudsgaranti fra behandler» for «utdanningstilbud-tidlig-opptak», og «Tilbudsgaranti lagret» vises
+      Og jeg velger «tilbudsgarantitype-reservert-studieplass-behandler» i «Tilbudsgaranti fra behandler» for «utdanningstilbud-tidlig-opptak», og «Tilbudsgaranti lagret» vises
       Og jeg er logget inn som «opptak-forvalter-forvaltende»
       Og jeg har åpnet fanen «Tidlig opptak» under «Plasstildeling» i «opptak-tidlig-opptak»
       Og jeg noterer verdien i «Poenggrense tidlig opptak for <utdanningstilbud-tidlig-opptak>», skriver P + 5 der, og velger «Lagre poenggrenser»
@@ -167,7 +167,7 @@ Egenskap: Gi tilbudsgaranti ved tidlig opptak
     @ref-OPT-SØK-SØK-016
     Scenario: Reservert studieplass gir tilbudsgaranti uten kvalifisering
       Gitt jeg tar en ubrukt søker fra «sak-tidlig-opptak-ikke-kvalifisert»
-      Og jeg velger «tilbudsgarantitype-reservert-studieplass» i «Tilbudsgaranti fra behandler» for «utdanningstilbud-tidlig-opptak», og «Tilbudsgaranti lagret» vises
+      Og jeg velger «tilbudsgarantitype-reservert-studieplass-behandler» i «Tilbudsgaranti fra behandler» for «utdanningstilbud-tidlig-opptak», og «Tilbudsgaranti lagret» vises
       Og jeg gjør søkerens sak klar som i Klargjøring K
       Når jeg gjennomfører tidligopptaket som i Gjennomføring G
       Så står «tilbudsgarantitype-tidlig-opptak» under «Tilbudsgaranti fra forvalter» for «utdanningstilbud-tidlig-opptak» i saken til søkeren (som i S)
@@ -179,7 +179,7 @@ Egenskap: Gi tilbudsgaranti ved tidlig opptak
     @utledet
     Scenario: Opptaksforvalter gjennomfører tidligopptaket: reservert studieplass når søkeren ikke deltar
       Gitt jeg tar en ubrukt søker fra «sak-tidlig-opptak-kvalifisert»
-      Og jeg velger «tilbudsgarantitype-reservert-studieplass» i «Tilbudsgaranti fra behandler» for «utdanningstilbud-tidlig-opptak», og «Tilbudsgaranti lagret» vises
+      Og jeg velger «tilbudsgarantitype-reservert-studieplass-behandler» i «Tilbudsgaranti fra behandler» for «utdanningstilbud-tidlig-opptak», og «Tilbudsgaranti lagret» vises
       Og jeg gjør søkerens sak klar som i Klargjøring K, men velger konklusjonen der søkeren ikke deltar i «Konklusjon»
       Når jeg gjennomfører tidligopptaket som i Gjennomføring G
       Så står ikke «tilbudsgarantitype-tidlig-opptak» under «Tilbudsgaranti fra forvalter» for noen av søknadsalternativene i saken til søkeren (som i S)
@@ -190,11 +190,11 @@ Egenskap: Gi tilbudsgaranti ved tidlig opptak
     Scenario: Opptaksforvalter gjennomfører tidligopptaket: reservert studieplass fra opptaksforvalter blir erstattet
       Gitt jeg tar en ubrukt søker fra «sak-tidlig-opptak-kvalifisert»
       Og jeg er logget inn som «opptak-forvalter-forvaltende»
-      Og jeg velger «tilbudsgarantitype-reservert-studieplass» i «Tilbudsgaranti fra forvalter» for «utdanningstilbud-tidlig-opptak» i saken til søkeren, og «Tilbudsgaranti lagret» vises
+      Og jeg velger «tilbudsgarantitype-reservert-studieplass-forvalter» i «Tilbudsgaranti fra forvalter» for «utdanningstilbud-tidlig-opptak» i saken til søkeren, og «Tilbudsgaranti lagret» vises
       Og jeg gjør søkerens sak klar som i Klargjøring K
       Når jeg gjennomfører tidligopptaket som i Gjennomføring G
       Så står «tilbudsgarantitype-tidlig-opptak» under «Tilbudsgaranti fra forvalter» for «utdanningstilbud-tidlig-opptak» i saken til søkeren (som i S)
-      Og står ikke «tilbudsgarantitype-reservert-studieplass» der
+      Og står ikke «tilbudsgarantitype-reservert-studieplass-forvalter» der
 
     Scenario: Den høyeste poengsummen til søknadsalternativet gjelder
       Gitt jeg tar en ubrukt søker fra «sak-tidlig-opptak-to-kvoter»

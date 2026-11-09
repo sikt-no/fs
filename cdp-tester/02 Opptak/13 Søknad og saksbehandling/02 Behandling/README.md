@@ -21,7 +21,8 @@ Tester for kravet [gi_tilbudsgaranti_ved_tidlig_opptak.feature](../../../../krav
 | `tilbudsgarantitype-tilbyder-tidligopptakstilbud` | testdata | scenarioene med tidligopptakstilbud fra tilbyder |
 | `tilbudsgarantitype-forvalter-gir-tilbud` | testdata | «Tilbudsgaranti fra opptaksforvalter som gir tilbud blir erstattet», «Annen tilbudsgaranti på et høyere prioritert søknadsalternativ …» |
 | `tilbudsgarantitype-forvalter-gir-ikke-tilbud` | testdata | «Tilbudsgaranti fra opptaksforvalter som ikke gir tilbud blir erstattet» |
-| `tilbudsgarantitype-reservert-studieplass` | testdata | scenarioene med reservert studieplass |
+| `tilbudsgarantitype-reservert-studieplass-behandler` | testdata | scenarioene med reservert studieplass fra behandler |
+| `tilbudsgarantitype-reservert-studieplass-forvalter` | testdata | «Reservert studieplass fra opptaksforvalter blir erstattet» (utledet) |
 | `opptak-tidlig-opptak-uten-tilbudsgarantitype` | testdata | «Tidligopptaket stopper uten én tilbudsgarantitype for tidlig opptak» |
 | `opptak-tidlig-opptak-to-tilbudsgarantityper` | testdata | «Tidligopptaket stopper uten én tilbudsgarantitype for tidlig opptak» |
 | `sak-tidlig-opptak-kvalifisert` | testdata | de fleste scenarioene (én søker per scenario) |
