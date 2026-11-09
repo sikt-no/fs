@@ -108,6 +108,9 @@ Egenskap: Velge utdanningsbakgrunn i søknad
     # Søkeren med GSK-konklusjon får ikke automatisk «Norsk videregående skole», siden søknaden
     # da havner feil i saksbehandlertildelingen.
     # ÅPNE SPØRSMÅL:
+    # - Skal søkeren alltid velge utdanningsbakgrunn blant utdanningsbakgrunnene i opptaket,
+    #   også med GSK-konklusjon, så steget aldri hoppes over (Karen 2026-11-09)?
+    # - Skal en utdanningsbakgrunn være valgt på forhånd i søknaden?
     # - Hvilken utdanningsbakgrunn registreres i søknaden når steget hoppes over? Forslag:
     #   opptaksforvalter kobler GSK-konklusjoner til utdanningsbakgrunner i opptaket, eller
     #   opptaket har en standard utdanningsbakgrunn. «Norsk videregående skole» passer ikke
