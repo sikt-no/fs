@@ -11,7 +11,7 @@
 # vitnemålsimporten, og lagrer opptakssystemets egen påstand om GSK på vitnemålet,
 # ved siden av skolens påstand, som kontroll. Dette kravet tar inn gjenbruk fra
 # saksbehandlingen i tidligere samordna opptak, fra lokale opptak i FS Admin, og fra
-# lokale opptak i FS-klienten når konklusjonen er kvalitetssikret.
+# lokale opptak i FS-klienten.
 #
 # Gjenbruk i 2027-opptaket (STEK-442): det er ikke avklart hvordan gjenbruksdata skal
 # organiseres i produktområdet. For 2027 lastes GSK-konklusjonene og annulleringene
@@ -63,13 +63,12 @@ Egenskap: Automatisk GSK-konklusjon
   # Det avviker fra Sikts tolkning i Confluence v2 om at GSK i fagskoleopptak ikke
   # skal lagres som konklusjon, fordi GSK der er et alternativt kompetansekrav.
 
-  @ref-FLY-OPT-AUT-001 @depends-on-OPT-BEH-BEH-027 @ref-FLY-OPT-VIT-001
+  @ref-FLY-OPT-AUT-001 @depends-on-OPT-BEH-BEH-027 @ref-FLY-OPT-VIT-001 @implemented
   Regel: Opptakssystemets påstand om GSK på vitnemålet
     # Hvordan GSK-vitnemålsberegningen virker (seksfagskontrollen og grunnlagskoden), står der.
     # Avklart 30.10.2026: «systemet i videregående skole» fra innspillet i PR #857 er skolens
     # påstand, som kommer fra KREG.
 
-    @implemented
     Scenario: Opptakssystemets påstand er at søkeren har generell studiekompetanse
       Gitt at søkeren har et vitnemål som ikke er annullert
       Og at vitnemålet har utstedelsesdato
@@ -82,20 +81,17 @@ Egenskap: Automatisk GSK-konklusjon
       Og påstanden er beregnet da vitnemålet ble importert
       Og påstanden viser hvilken beregning i kontrollmotoren som ble brukt
 
-    @implemented
     Scenario: Opptakssystemets påstand beregnes uavhengig av GSK OK fra KREG
       Gitt at søkeren har et vitnemål som består seksfagskontrollen
       Og at vitnemålet ikke har «GSK OK» fra KREG
       Når vitnemålet importeres fra KREG
       Så er opptakssystemets påstand at søkeren har generell studiekompetanse
 
-    @implemented
     Scenario: Hvert vitnemål får sin egen påstand
       Gitt at søkeren har to vitnemål som ikke er annullert
       Når vitnemålene importeres fra KREG
       Så har begge vitnemålene en påstand fra opptakssystemet om generell studiekompetanse
 
-    @implemented
     Scenario: Grunnlagskoder som settes automatisk
       Gitt at søkeren har et vitnemål som består seksfagskontrollen
       Når vitnemålet importeres fra KREG
@@ -119,7 +115,6 @@ Egenskap: Automatisk GSK-konklusjon
         | løpet på vitnemålet ikke gir generell studiekompetanse |
         | vitnemålet ikke består seksfagskontrollen              |
 
-    @implemented
     Scenario: Annullert vitnemål får ingen påstand fra opptakssystemet
       Gitt at søkeren har et annullert vitnemål
       Når vitnemålet importeres fra KREG
@@ -279,9 +274,9 @@ Egenskap: Automatisk GSK-konklusjon
       # per vitnemål. Avklart 06.11.2026 (Jøran, PR #966): varselet gjelder opptaket. Har søkere i
       # flere opptak vitnemål med løpet, får forvalteren av hvert opptak sitt eget varsel.
       # Avklart 06.11.2026 (Jøran, PR #966): HK-dir gir Sikt beskjed om grunnlagskoden, og Sikt
-      # ser også løpet i applikasjonsloggen. Sikt legger løpet inn i listen over løp. Søknadene
-      # som har fått KLY eller RFA, rettes etter regelen «Grunnlagskoden rettes når løpet er lagt
-      # inn i listen over løp».
+      # ser også løpet i applikasjonsloggen. Sikt legger løpet inn i listen over løp.
+      # Om søknadene som har fått KLY eller RFA, skal rettes, er åpent (se regelen «Grunnlagskoden
+      # rettes når løpet er lagt inn i listen over løp»).
       # ÅPNE SPØRSMÅL:
       # - Hvor i FS Admin får opptaksforvalteren varselet?
       Gitt at løpet på vitnemålet ikke finnes i opptakssystemets liste over løp
@@ -367,7 +362,7 @@ Egenskap: Automatisk GSK-konklusjon
       Så importeres vitnemålet fra KREG
       Og GSK-vitnemålsberegningen kjører for vitnemålet uten at noen starter den
 
-  @ref-FLY-OPT-AUT-001
+  @ref-FLY-OPT-AUT-001 @implemented
   Regel: Konklusjon fra tidligere opptak
     # Grunnlagskoder: avklart 2026-10-13 at alle positive konklusjoner kan gjenbrukes,
     # uansett grunnlagskode. Grunnlagskoden kopieres, så den kan være hvilken som helst
@@ -377,7 +372,10 @@ Egenskap: Automatisk GSK-konklusjon
 
     # Kildekoder: avklart 2026-10-27 at alle rader i gjenbruksbasen kan gjenbrukes i 2027,
     # både NOM (samordna opptak, 1997–2026) og IMM (1907–2001).
-    @implemented
+    # Konklusjonene fra tidligere opptak kan komme fra flere kilder (samordna opptak, lokale opptak
+    # i FS-klienten). De kvalitetssikres og importeres én gang til gjenbrukstabellene før opptaket
+    # (STEK-442). Kravet er at konklusjonene i tabellene brukes, uansett kilde.
+
     Scenario: Gjenbruke positiv konklusjon fra tidligere samordna opptak
       Gitt at søknaden ikke får GSK-konklusjon fra vitnemålet
       Og at søkeren har en positiv GSK-konklusjon fra et tidligere samordna opptak
@@ -385,7 +383,6 @@ Egenskap: Automatisk GSK-konklusjon
       Så får søknaden en positiv GSK-konklusjon
       Og grunnlagskoden og grunnlagsdatoen er de samme som i den tidligere konklusjonen
 
-    @implemented
     Scenario: Vitnemålet går foran tidligere konklusjon
       Gitt at søkeren har et vitnemål som gir generell studiekompetanse
       Og at søkeren har en positiv GSK-konklusjon fra et tidligere opptak
@@ -400,7 +397,6 @@ Egenskap: Automatisk GSK-konklusjon
     # Den siste konklusjonen: avklart 2026-10-26 at det er konklusjonen som ble satt
     # sist, også når søkeren har flere konklusjoner fra samme år og termin, fra ulike
     # organisasjoner.
-    @implemented
     Scenario: Bare den siste tidligere konklusjonen gjenbrukes
       Gitt at søknaden ikke får GSK-konklusjon fra vitnemålet
       Og at søkeren har en positiv GSK-konklusjon fra et opptak i 2024
@@ -408,13 +404,11 @@ Egenskap: Automatisk GSK-konklusjon
       Når søknaden opprettes
       Så får søknaden ingen GSK-konklusjon fra tidligere opptak
 
-    @implemented
     Scenario: Negative konklusjoner gjenbrukes ikke
       Gitt at søkeren bare har negative GSK-konklusjoner fra tidligere opptak
       Når søknaden opprettes
       Så får søknaden ingen GSK-konklusjon fra tidligere opptak
 
-    @implemented
     Scenario: Gjenbruke positiv konklusjon fra lokalt opptak
       Gitt at søknaden ikke får GSK-konklusjon fra vitnemålet
       Og at søkerens eneste positive GSK-konklusjon er satt i FS Admin i et lokalt opptak
@@ -422,24 +416,12 @@ Egenskap: Automatisk GSK-konklusjon
       Så får søknaden en positiv GSK-konklusjon
       Og grunnlagskoden og grunnlagsdatoen er de samme som i den tidligere konklusjonen
 
-    Scenario: Gjenbruke kvalitetssikret konklusjon fra FS-klienten
-      # Avklart 30.10.2026: de tidligere GSK-konklusjonene importeres til opptakssystemet med en
-      # batch-jobb. Hvor de kommer fra, står ikke i kravet.
-      Gitt at søknaden ikke får GSK-konklusjon fra vitnemålet
-      Og at søkerens eneste positive GSK-konklusjon er satt i FS-klienten i et lokalt opptak
-      Og at konklusjonen er kvalitetssikret
-      Når søknaden opprettes
-      Så får søknaden en positiv GSK-konklusjon
-      Og grunnlagskoden og grunnlagsdatoen er de samme som i den tidligere konklusjonen
-
-    @implemented
     Scenario: Annullert konklusjon gjenbrukes ikke
       Gitt at søknaden ikke får GSK-konklusjon fra vitnemålet
       Og at søkerens eneste positive GSK-konklusjon fra et tidligere opptak er annullert
       Når søknaden opprettes
       Så får søknaden ingen GSK-konklusjon fra tidligere opptak
 
-    @implemented
     Scenario: Konklusjon med annullering fram i tid gjenbrukes ikke
       # Avklart 30.10.2026: en annullering stopper gjenbruken uansett dato.
       Gitt at søknaden ikke får GSK-konklusjon fra vitnemålet
@@ -450,7 +432,6 @@ Egenskap: Automatisk GSK-konklusjon
     # Gjelder bare konklusjoner som vet hvilket vitnemål de bygger på. Konklusjonene fra
     # gjenbruksbasen gjør ikke det. For dem er det annulleringene i gjenbruksbasen som
     # gjelder (se «Annullert konklusjon gjenbrukes ikke»).
-    @implemented
     Scenario: Konklusjon som bygger på et annullert vitnemål gjenbrukes ikke
       Gitt at søkeren har en positiv GSK-konklusjon fra et avsluttet opptak
       Og at vitnemålet konklusjonen bygger på, er annullert
@@ -459,9 +440,9 @@ Egenskap: Automatisk GSK-konklusjon
 
   @ref-FLY-OPT-AUT-001 @implemented
   Regel: Automatikken setter bare positive konklusjoner, og bare der ingen finnes
-    # Unntaket er grunnlagskoden på en konklusjon automatikken selv satte med KLY eller RFA fordi
-    # løpet manglet i listen over løp. Se regelen «Grunnlagskoden rettes når løpet er lagt inn i
-    # listen over løp».
+    # Om en konklusjon automatikken satte med KLY eller RFA fordi løpet manglet i listen over løp,
+    # skal rettes når løpet legges inn, er åpent. Se regelen «Grunnlagskoden rettes når løpet er
+    # lagt inn i listen over løp».
 
     Scenario: Ingen grunnlag for generell studiekompetanse
       Gitt at søknaden ikke får GSK-konklusjon fra vitnemålet
@@ -481,8 +462,11 @@ Egenskap: Automatisk GSK-konklusjon
       Når søknaden opprettes
       Så får søknaden ingen negativ GSK-konklusjon
 
-  @ref-OPT-BEH-BEH-026
+  @ref-OPT-BEH-BEH-026 @draft @openquestion
   Regel: Grunnlagskoden rettes når løpet er lagt inn i listen over løp
+    # ÅPNE SPØRSMÅL:
+    # - Parkert 2026-11-09: det gamle systemet retter aldri en konklusjon når et løp legges inn
+    #   i listen over løp. Skal opptakssystemet gjøre det i en senere fase?
     # Avklart 06.11.2026 (Jøran, PR #966): har automatikken satt konklusjonen med KLY eller RFA
     # fordi løpet manglet i listen over løp, får konklusjonen grunnlagskoden fra listen når løpet
     # er lagt inn. Opptaksforvalteren ved organisasjonen som forvalter opptaket, starter det. En
@@ -685,9 +669,4 @@ Egenskap: Automatisk GSK-konklusjon
       Når saksbehandleren ser på GSK-konklusjonen
       Så ser saksbehandleren at konklusjonen er satt automatisk
       Og saksbehandleren ser om konklusjonen bygger på et vitnemål eller et tidligere opptak
-
-    Scenario: Se hvilket opptak en gjenbrukt konklusjon kommer fra
-      Gitt at søknaden har fått en GSK-konklusjon som er gjenbrukt fra et tidligere opptak
-      Når saksbehandleren ser på GSK-konklusjonen
-      Så ser saksbehandleren hvilket opptak konklusjonen kommer fra
 

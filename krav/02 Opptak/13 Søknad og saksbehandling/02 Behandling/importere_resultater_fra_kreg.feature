@@ -136,13 +136,14 @@ Egenskap: Importere resultater fra KREG
       Når søkeren sender inn søknaden
       Så er ingen resultater importert fra KREG
 
+    @depends-on-OPT-BEH-BEH-033
     Scenario: Resultatene hentes når KREG svarer igjen
-      # Avklart 29.10.2026: hentingen prøves på nytt. Hvor mange ganger, og hvor lenge, står i
-      # applikasjonsinnstillingene. Feilen vises ikke for saksbehandleren, men skrives i
-      # applikasjonsloggen, og Sikt varsles. Kode i dag: feilen logges, og hentingen prøves ikke
-      # igjen før søknaden endres.
+      # Avklart 29.10.2026: hentingen prøves på nytt. Feilen vises ikke for saksbehandleren, men
+      # skrives i applikasjonsloggen, og Sikt varsles.
+      # Avklart 2026-11-09: hentingen prøves på nytt neste gang importjobben for aktive søkere
+      # kjører, så ofte som applikasjonsinnstillingene sier (for eksempel én gang i døgnet).
       Gitt at KREG ikke svarte da søkeren sendte inn søknaden
-      Når KREG svarer igjen innenfor tiden i applikasjonsinnstillingene
+      Når importen av VGS-vitnemål fra KREG kjører etter at KREG svarer igjen
       Så er søkerens vitnemål importert
 
   @ref-OPT-BEH-BEH-021 @ref-FLY-OPT-VIT-001 @ref-OPT-BEH-BEH-032 @ref-OPT-BEH-BEH-035 @ref-OPT-BEH-BEH-015
@@ -151,7 +152,7 @@ Egenskap: Importere resultater fra KREG
     # avsluttet.
     # Avklart 29.10.2026: nytt vitnemål og annullering tas inn. Opphevet annullering og endringer i
     # et vitnemål som er importert, tas ikke inn.
-    # Jobben for nye vitnemål (OPT-BEH-BEH-032) går gjennom alle aktive søkere, og henter
+    # Jobben for nye vitnemål (OPT-BEH-BEH-033) går gjennom alle aktive søkere, og henter
     # vitnemålene fra KREG for hver søker. Det som ikke er importert fra før, eller som er
     # annullert i KREG, er nytt.
     # Et nytt vitnemål i en sak som er behandlet, gir saken nye resultater (OPT-BEH-BEH-035).

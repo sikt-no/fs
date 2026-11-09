@@ -1,5 +1,5 @@
 # language: no
-@OPT-BEH-BEH-034 @must @in-progress @scope-automatisk-gsk-konklusjon @ref-OPT-BEH-BEH-004 @ref-OPT-BEH-BEH-015 @ref-OPT-BEH-BEH-021 @ref-OPT-BEH-BEH-029
+@OPT-BEH-BEH-034 @must @implemented @scope-automatisk-gsk-konklusjon @ref-OPT-BEH-BEH-004 @ref-OPT-BEH-BEH-015 @ref-OPT-BEH-BEH-021 @ref-OPT-BEH-BEH-029
 Egenskap: Håndtere annullert vitnemål
   Som saksbehandler
   ønsker jeg å bli gjort oppmerksom på saker der et vitnemål som er i bruk, blir annullert
@@ -42,7 +42,7 @@ Egenskap: Håndtere annullert vitnemål
     Gitt at søkeren har en sak
     Og at søkeren har et vitnemål
 
-  @ref-FLY-OPT-VIT-001 @implemented
+  @ref-FLY-OPT-VIT-001
   Regel: Saken merkes når et vitnemål som er i bruk, blir annullert
 
     Scenariomal: Vitnemålet er brukt i <bruk>
@@ -90,7 +90,6 @@ Egenskap: Håndtere annullert vitnemål
       Så viser merknaden på saken at vitnemålet er annullert
       Og merknaden viser at vitnemålet er brukt i poengene og GSK-konklusjonen
 
-  @implemented
   Regel: Løsningen endrer ikke det som bygger på vitnemålet
 
     Scenario: Poeng, kravelementer og GSK-konklusjon står uendret
@@ -100,7 +99,7 @@ Egenskap: Håndtere annullert vitnemål
       Og vurderingen av kravelementene i saken er uendret
       Og GSK-konklusjonen i saken er uendret
 
-  @ref-OPT-PLA-TIL-001 @ref-FLY-OPT-VIT-001 @implemented
+  @ref-OPT-PLA-TIL-001 @ref-FLY-OPT-VIT-001
   Regel: En ferdig behandlet sak settes tilbake til under behandling
 
     Scenario: Ferdig behandlet sak settes tilbake til Under behandling
@@ -124,7 +123,6 @@ Egenskap: Håndtere annullert vitnemål
       Så har saken behandlingsstatusen "Under behandling"
 
 
-  @implemented
   Regel: Saksbehandleren fjerner taggen
 
     Scenario: Saksbehandleren fjerner taggen etter at saken er sett på

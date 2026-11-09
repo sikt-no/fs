@@ -60,6 +60,7 @@ Egenskap: Starte automatisk behandling
       Så behandles saken automatisk når begge vitnemålene er importert
       Men saken behandles ikke helautomatisk
 
+  @implemented
   Regel: Behandlingen starter av seg selv bare for saker som ikke er behandlet
     # Avklart 2026-11-02: har saksbehandleren begynt på saken, eller er saken ferdig behandlet,
     # starter ikke behandlingen av seg selv. Saksbehandleren kan starte den (se «Saksbehandleren
@@ -94,6 +95,7 @@ Egenskap: Starte automatisk behandling
       Når importen av VGS-vitnemål fra KREG kjører
       Så behandles ikke saken automatisk på nytt
 
+  @implemented
   Regel: Saksbehandleren starter den automatiske behandlingen for en sak
     # Avklart 29.10.2026: det trengs ingen mulighet til å velge flere saker i sakslisten og
     # starte behandlingen for dem. Behandlingen starter av seg selv.
@@ -103,7 +105,7 @@ Egenskap: Starte automatisk behandling
     # Avklart 2026-11-02: den automatiske behandlingen starter ikke på en sak som er ferdig
     # behandlet.
 
-    @depends-on-OPT-BEH-BEH-011 @implemented
+    @depends-on-OPT-BEH-BEH-011
     # OPT-BEH-BEH-011: «Saksbehandlende organisasjon ser bare saker hos organisasjonen»
     Scenario: Saksbehandleren starter bare behandlingen for saker hos organisasjonen
       Gitt at søknaden har en sak hos en organisasjon saksbehandleren ikke er ved
@@ -214,14 +216,3 @@ Egenskap: Starte automatisk behandling
       Og at saken er under behandling
       Når saksbehandleren starter den automatiske behandlingen
       Så behandles saken automatisk
-
-  @ref-OPT-BEH-BEH-030
-  Regel: Saken viser hvorfor den ikke kunne behandles automatisk
-    # Den automatiske behandlingen henter ikke vitnemål fra KREG, men bruker vitnemålene som er
-    # importert. Når KREG ikke svarer, prøves importen på nytt (OPT-BEH-BEH-030).
-
-    Scenario: Saken viser at den ikke kunne behandles automatisk fordi søkeren ikke har vitnemål
-      Gitt at den automatiske saksbehandlingen pågår i opptaket
-      Og at søkeren ikke har noe vitnemål i KREG
-      Når saksbehandlertildelingen har opprettet saken
-      Så ser saksbehandleren på saken at den ikke kunne behandles automatisk fordi søkeren ikke har vitnemål
