@@ -8,6 +8,7 @@ Tester for kravet [gi_tilbudsgaranti_ved_tidlig_opptak.feature](../../../../krav
 |---|---|---|
 | `opptak-forvalter-forvaltende` | testbruker | alle scenarioer (gjennomføring og prøvekjøring) |
 | `opptak-saksbehandler-behandlende-tidlig-opptak` | testbruker | alle scenarioer (Klargjøring K og S) |
+| `opptak-saksbehandler-behandlende-tidlig-opptak-andre` | testbruker | den utledede om en søker med to saker (saken hos NTNU) |
 | `opptak-tilbyder-behandlende` | testbruker | «Tidligopptakstilbud fra tilbyder går foran poengsummen», «Tidligopptakstilbud fra tilbyder gjelder uansett konklusjon og poengsum», «Sette tilbudsgaranti når søkeren ikke deltar i tidligopptaket», og den utledede om tidligopptakstilbud uten søknad om tidlig opptak |
 | `soker-tidlig-opptak` | testbruker | den utledede om et trukket søknadsalternativ |
 | `poenggrenser-tidlig-opptak` | testdata (oppsett) | alle scenarioer |

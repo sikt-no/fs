@@ -54,10 +54,11 @@ Personaene er fra [test.md](../../cdp-tester/_Miljøer/test.md), 2026-11-09, og 
 | 2 | `opptak-saksbehandler-behandlende-tidlig-opptak` | KORT DOMPAP | `OPPTAK_SAKSBEHANDLER` | UiT | KORT DOMPAP • OPPTAK_SAKSBEHANDLER (UIT) | https://test-fsadmin.sikt.no/opptak/T3BwdGFrOjM0/soknadsbehandling | Konklusjon, kvalifisering, poeng og ferdigbehandling i sakene (testdata) |
 | 3 | `opptak-tilbyder-behandlende` | KORT DOMPAP | `OPPTAK_FORVALTER` [Fylles ut: bekreft at rollen gir `OPPTAK_TILBGARANTI_GI_VIA_UTDTILBUD` ved UiT] | UiT | KORT DOMPAP • OPPTAK_FORVALTER (UIT) | https://test-fsadmin.sikt.no/opptak/T3BwdGFrOjM0/soknadsbehandling | Tidligopptakstilbud og manuell tilbudsgaranti fra tilbyder |
 | 4 | `soker-tidlig-opptak` | Søkerne i «Søkere til testerne» i den eksterne testen som ikke er brukt | Søker | – | «Velg testsøker» i Min kompetanse | https://test.minkompetanse.no/ | Søknaden og søknaden om tidlig opptak (testdata), og svaret etter gjennomføringen |
+| 5 | `opptak-saksbehandler-behandlende-tidlig-opptak-andre` | KORT DOMPAP | `OPPTAK_SAKSBEHANDLER` | NTNU | KORT DOMPAP • OPPTAK_SAKSBEHANDLER (NTNU) | https://test-fsadmin.sikt.no/opptak/T3BwdGFrOjM0/soknadsbehandling | Gjør den andre saken klar i testen om en søker med to saker (testdata) |
 
 Testbrukerne finnes i rollene scenarioene nevner, ved organisasjonene kravet gjelder. Antallet bestemmes per krav ut fra tilgangsmatrisen. Det lages ikke egne testcaser for roller og tilgang i fase 2: `fs-verify` har verifisert i koden at de er laget slik kravet sier (fase 1). Scenarioene i kravet, også om synlighet, testes som de står.
 
-Nøkkel 2, 3 og 4 er lagt inn i miljøfila 2026-11-09. Tilbyderrollen for nøkkel 3 er ikke bekreftet.
+Nøkkel 2, 3, 4 og 5 er lagt inn i miljøfila 2026-11-09. Tilbyderrollen for nøkkel 3 er ikke bekreftet.
 
 ### Tilgangsmatrise
 

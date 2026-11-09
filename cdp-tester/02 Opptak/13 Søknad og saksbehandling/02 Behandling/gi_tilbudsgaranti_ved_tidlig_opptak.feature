@@ -448,7 +448,8 @@ Egenskap: Gi tilbudsgaranti ved tidlig opptak
       Og jeg har åpnet fanen «Tidlig opptak» under «Plasstildeling» i «opptak-tidlig-opptak»
       Og jeg velger «Kjør tidligopptak», og noterer tallet ved «Har saker som ikke er behandlet» i dialogen «Kjøre tidligopptak?»
       Og jeg lukker dialogen uten å velge «Kjør tidligopptak»
-      Og jeg gjør begge sakene til søkeren klar som i Klargjøring K
+      Og jeg gjør søkerens sak hos organisasjonen til «opptak-saksbehandler-behandlende-tidlig-opptak» klar som i Klargjøring K
+      Og jeg gjør søkerens sak hos organisasjonen til «opptak-saksbehandler-behandlende-tidlig-opptak-andre» klar som i Klargjøring K, med «opptak-saksbehandler-behandlende-tidlig-opptak-andre» i steg 1
       Når jeg bytter til «opptak-forvalter-forvaltende», åpner fanen «Tidlig opptak» på nytt og velger «Kjør tidligopptak»
       Så viser «Har saker som ikke er behandlet» i dialogen 1 mindre enn tallet jeg noterte
       Og jeg lukker dialogen uten å velge «Kjør tidligopptak»
