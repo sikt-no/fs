@@ -280,17 +280,25 @@ Egenskap: Automatisk grunnlag
     # automatikken. Saksbehandleren fjerner grunnlaget som ble lagt til, og starter behandlingen
     # på nytt (OPT-BEH-BEH-032), eller legger selv til et grunnlag som ble fjernet.
 
+    @depends-on-OPT-OVO-FRI-001
+    # Regelen «Opptaksforvalter setter dato for aldersberegning».
     Scenario: Grunnlag utenfor aldersgrensen kan ikke velges manuelt
       # Avklart 09.11.2026: når opptaket har dato for aldersberegning, tilbys ikke grunnlag der
       # søkeren er utenfor aldersgrensen. Erstatter avklaringen fra 30.10.2026. Kode i dag:
       # grunnlaget kan legges til, og søkeren blir da ikke plassert i kvoten (STEK-583).
-      Gitt at opptaket har dato for aldersberegning
+      # Uten dato kan ikke alderen regnes ut, så da vises grunnlaget, og avvises når det velges
+      # («Opptaket mangler dato for aldersberegning»).
+      Gitt at opptaket har dato for aldersberegning eller dato for publisering av resultatet
       Og at søkeren er utenfor aldersgrensen til et grunnlag
       Når saksbehandleren velger grunnlag for saken
       Så kan ikke saksbehandleren velge grunnlaget utenfor aldersgrensen
 
+    @depends-on-OPT-OVO-FRI-001
+    # Regelen «Opptaksforvalter setter dato for aldersberegning».
     Scenario: Grunnlag utenfor aldersgrensen blir ikke lagt til
-      Gitt at opptaket har dato for aldersberegning
+      # Grunnlaget tilbys ikke i FS Admin (scenarioet over). Scenarioet gjelder når grunnlaget legges
+      # til gjennom API-et.
+      Gitt at opptaket har dato for aldersberegning eller dato for publisering av resultatet
       Og at søkeren er utenfor aldersgrensen til et grunnlag
       Når grunnlaget utenfor aldersgrensen legges til i saken
       Så blir ikke grunnlaget lagt til
