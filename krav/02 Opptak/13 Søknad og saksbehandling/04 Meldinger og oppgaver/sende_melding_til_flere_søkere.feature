@@ -5,12 +5,14 @@ Egenskap: Sende melding til flere søkere
   ønsker jeg å sende en melding til et utvalg av søkerne eller til alle søkerne
   slik at søkerne som berøres, får vite det i tide.
 
-  Saksbehandleren og tilbyderen kan også sende til et utvalg av søkerne. Meldingen til én
+  Saksbehandleren og de ansatte ved tilbyderen kan også sende til et utvalg av søkerne. Meldingen til én
   søker står i sende_melding_til_søker.feature.
 
   # Kilde: workshop om meldinger 2026-11-09 (Miro), K6, K7, K9, K10, K11 og beslutning 6.
 
   # ÅPNE SPØRSMÅL:
+  # - Tilbyderen er lærestedet som tilbyr utdanningstilbudet (begreper.md), ikke en rolle.
+  #   Hvilken rolle har de ansatte ved tilbyderen som sender meldinger?
   # - Er et avlyst studium det samme som et trukket utdanningstilbud
   #   (12 Utdanningstilbud/02 Utdanningstilbud i opptak/trekke_utdanningstilbud.feature)?
   # - K7: workshopen ville se på andre måter å løse dokumentasjonskravene på.
@@ -20,7 +22,7 @@ Egenskap: Sende melding til flere søkere
 
   Regel: Opptaksforvalteren sender melding til et utvalg av søkerne eller til alle søkerne i opptaket
 
-  Regel: Saksbehandleren og tilbyderen sender melding til et utvalg av søkerne, men ikke til alle
+  Regel: Saksbehandleren og de ansatte ved tilbyderen sender melding til et utvalg av søkerne, men ikke til alle
 
   Regel: Søkerne til et utdanningstilbud med opptaksprøve får informasjon om opptaksprøven
 
