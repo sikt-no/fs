@@ -77,6 +77,16 @@ Egenskap: Automatisk grunnlag
         | er førstegangsvitnemål      | 24    | krever et vitnemål         |
         | ikke er førstegangsvitnemål | 21    | krever et vitnemål         |
 
+    Scenario: Søkeren som er akkurat 22 år, får grunnlaget som krever et vitnemål
+      Gitt at regelverket har et grunnlag som krever førstegangsvitnemål og har aldersgrensen under 22 år
+      Og at regelverket har et grunnlag som krever et vitnemål
+      Og at søkeren har ett elektronisk vitnemål som gir generell studiekompetanse
+      Og at vitnemålet er førstegangsvitnemål
+      Og at søkeren er 22 år på datoen for aldersberegning
+      Når søknaden behandles automatisk
+      Så får saken grunnlaget som krever et vitnemål
+      Men saken får ikke grunnlaget som krever førstegangsvitnemål
+
     @implemented
     Scenario: Alderen regnes ut på datoen for aldersberegning
       Gitt at opptaket har 31.12.2026 som dato for aldersberegning
