@@ -75,7 +75,7 @@ Klart når testansvarlig har logget inn som testbruker og ser testdataene.
 | 7 | Flyttestcasene for den interne akseptansetesten (`fs-testcaser-intern`) er laget og gått gjennom av testansvarlig | Venter |
 | 8 | Testansvarlig er logget inn i FS Admin i en egen Chrome-profil til testingen, CDP-agenten kan bytte til hver testbruker i «Overstyrt bruker», og nøklene i testbrukere og testdata er utfylt | [Fylles ut av teamet] |
 | 9 | Testansvarlig har logget inn som testbruker og ser testdataene | [Fylles ut av testansvarlig] |
-| 10 | Opptak 34 har nøyaktig én aktiv tilbudsgarantitype for tidlig opptak som gir tilbud og kan brukes av opptaksforvalteren. Ellers stopper gjennomføringen | [Fylles ut av teamet] |
+| 10 | Opptak 34 har nøyaktig én aktiv tilbudsgarantitype for tidlig opptak som gir tilbud og kan brukes av opptaksforvalteren. Ellers stopper gjennomføringen | Ja. FOR («Tilbudsgaranti, forhåndsløfte»). En prøvekjøring i opptak 34 som opptaksforvalter gikk gjennom uten feil 2026-11-09, og den stopper når det ikke er nøyaktig én slik type. Prøvekjør på nytt samme dag som testen |
 
 ## Kriterier for godkjent
 
