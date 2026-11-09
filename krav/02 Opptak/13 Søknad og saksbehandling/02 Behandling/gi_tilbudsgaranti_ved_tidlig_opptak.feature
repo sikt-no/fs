@@ -167,6 +167,7 @@ Egenskap: Gi tilbudsgaranti ved tidlig opptak
     Gitt søkeren har søkt om tidlig opptak
     Og "Sykepleie, høst 2027" tilbyr tidlig opptak med poenggrense 50
 
+  @implemented
   Regel: Opptaksforvalter gjennomfører tidligopptaket
 
     Scenariomal: Tilbudsgaranti ut fra poenggrensen
@@ -208,7 +209,6 @@ Egenskap: Gi tilbudsgaranti ved tidlig opptak
       Og søkeren har 55 poeng til "Sykepleie, høst 2027"
       Når opptaksforvalter gjennomfører tidligopptaket
       Så får ikke søkeren tilbudsgaranti på "Sykepleie, høst 2027"
-      Og opptaksforvalter ser at kvalifiseringen ikke er vurdert for søkeren
 
     Scenariomal: Tilbudsgaranti på det høyest prioriterte søknadsalternativet
       Gitt saksbehandler har konkludert med at søkeren deltar i tidligopptaket
@@ -232,7 +232,6 @@ Egenskap: Gi tilbudsgaranti ved tidlig opptak
       Og saken er ikke ferdig behandlet
       Når opptaksforvalter gjennomfører tidligopptaket
       Så får ikke søkeren tilbudsgaranti på "Sykepleie, høst 2027"
-      Og opptaksforvalter ser at saken ikke er ferdig behandlet
 
     @ref-OPT-SØK-SØK-016
     Scenario: Reservert studieplass gir tilbudsgaranti uten poenggrense
@@ -311,14 +310,13 @@ Egenskap: Gi tilbudsgaranti ved tidlig opptak
       Og tilbyder har gitt tidligopptakstilbud på "Sykepleie, høst 2027"
       Når opptaksforvalter gjennomfører tidligopptaket
       Så har søkeren fortsatt tidligopptakstilbud på "Sykepleie, høst 2027"
-      Og opptaksforvalter ser at søkeren har tidligopptakstilbud på "Sykepleie, høst 2027"
 
     Scenario: Prøvekjøre tidligopptaket
       Gitt saksbehandler har konkludert med at søkeren deltar i tidligopptaket
       Og søkeren er kvalifisert til "Sykepleie, høst 2027"
       Og søkeren har 55 poeng til "Sykepleie, høst 2027"
       Når opptaksforvalter prøvekjører tidligopptaket
-      Så ser opptaksforvalter at søkeren ville fått tilbudsgaranti på "Sykepleie, høst 2027"
+      Så ser opptaksforvalter at 1 tilbudsgaranti ville blitt satt
       Men søkeren har ikke tilbudsgaranti på "Sykepleie, høst 2027"
 
     Scenario: En ny gjennomføring fjerner ikke tilbudsgarantien
@@ -345,7 +343,7 @@ Egenskap: Gi tilbudsgaranti ved tidlig opptak
       Så får søkeren tilbudsgaranti på "Sykepleie, høst 2027"
       Og søkeren har ikke lenger tilbudsgaranti på "Vernepleie, høst 2027"
 
-    @ref-OPT-PLA-TIL-002 @implemented
+    @ref-OPT-PLA-TIL-002
     Scenario: Søknadsalternativ uten tilbudsgaranti går videre til ordinært opptak
       Gitt søkeren fikk ikke tilbudsgaranti på "Sykepleie, høst 2027" i tidligopptaket
       Når hovedopptaket kjøres
@@ -362,6 +360,7 @@ Egenskap: Gi tilbudsgaranti ved tidlig opptak
     # Medianen kommer fra Samordna opptak, og registreres ikke av opptaksforvalter.
 
     # Poenggrensen går foran medianen, både når den er høyere og når den er lavere.
+    @implemented
     Scenariomal: Tilbudsgaranti ut fra poenggrensen eller medianen fra forrige opptak
       Gitt "Vernepleie, høst 2027" tilbyr tidlig opptak
       Og poenggrensen for tidlig opptak på "Vernepleie, høst 2027" er <poenggrense>
@@ -380,6 +379,7 @@ Egenskap: Gi tilbudsgaranti ved tidlig opptak
         | 50          | 45     | 47    | får ikke |
         | 45          | 50     | 48    | får      |
 
+    @implemented
     Scenario: Ingen tilbudsgaranti uten poenggrense og uten median fra forrige opptak
       Gitt "Vernepleie, høst 2027" tilbyr tidlig opptak uten poenggrense
       Og "Vernepleie, høst 2027" har ingen median poengsum fra forrige opptak
@@ -392,12 +392,21 @@ Egenskap: Gi tilbudsgaranti ved tidlig opptak
     Scenario: Utdanningstilbud med median fra forrige opptak mangler ikke poenggrense
       Gitt "Vernepleie, høst 2027" tilbyr tidlig opptak uten poenggrense
       Og median poengsum fra forrige opptak for "Vernepleie, høst 2027" er 48
+      Og ingen andre utdanningstilbud i opptaket har mangelfulle innstillinger
       Når opptaksforvalter prøvekjører tidligopptaket
-      Så ser ikke opptaksforvalter at "Vernepleie, høst 2027" mangler poenggrense
+      Så ser opptaksforvalter at 0 utdanningstilbud har mangelfulle innstillinger
 
   Regel: Opptaksforvalter ser utfallet av tidligopptaket
+    # Flere av scenarioene under er utsatt (09.11.2026). Erfaringene fra testen av første
+    # leveranse avgjør om sjekken av innstillingene og prøvekjøringen trenger en grundig
+    # gjennomgang før de bygges.
 
+    @draft @openquestion
     Scenario: Se utfallet for hver søker
+      # ÅPNE SPØRSMÅL:
+      # - Utsatt fra første leveranse (09.11.2026). Om og hvordan dette skal bygges,
+      #   avgjøres etter testen av første leveranse: trenger sjekken av innstillingene
+      #   og prøvekjøringen en grundig gjennomgang?
       Når opptaksforvalter gjennomfører tidligopptaket
       Så ser opptaksforvalter utfallet for hvert søknadsalternativ som er vurdert
       Og opptaksforvalter ser antall søkere som er vurdert, og antall tilbudsgarantier som er satt
@@ -406,24 +415,49 @@ Egenskap: Gi tilbudsgaranti ved tidlig opptak
     # Søkere med saker uten konklusjon telles med, også når sakene er ferdig behandlet:
     # de er ikke med i tidligopptaket, og opptaksforvalteren gjør det samme med begge
     # (avklart 13.10.2026). En søker med flere slike saker telles én gang.
+    @implemented
     Scenario: Se antall søkere med saker som ikke er ferdig behandlet eller mangler konklusjon
       Gitt 2 søkere som har søkt om tidlig opptak, har saker som ikke er ferdig behandlet
       Og 1 søker som har søkt om tidlig opptak, har en ferdig behandlet sak uten konklusjon
       Når opptaksforvalter prøvekjører tidligopptaket
       Så ser opptaksforvalter at 3 søkere har saker som ikke er ferdig behandlet eller mangler konklusjon
 
-    Scenario: Se utdanningstilbud med mangelfulle innstillinger
+    Scenario: Se antall utdanningstilbud med mangelfulle innstillinger
       Gitt "Vernepleie, høst 2027" tilbyr tidlig opptak uten poenggrense
       Og "Vernepleie, høst 2027" har ingen median poengsum fra forrige opptak
+      Og ingen andre utdanningstilbud i opptaket har mangelfulle innstillinger
       Når opptaksforvalter prøvekjører tidligopptaket
-      Så ser opptaksforvalter at "Vernepleie, høst 2027" mangler poenggrense
+      Så ser opptaksforvalter at 1 utdanningstilbud har mangelfulle innstillinger
+
+    @draft @openquestion
+    Scenariomal: Se hva som mangler for hvert utdanningstilbud med mangelfulle innstillinger
+      # ÅPNE SPØRSMÅL:
+      # - Utsatt fra første leveranse (09.11.2026). Om og hvordan dette skal bygges,
+      #   avgjøres etter testen av første leveranse: trenger sjekken av innstillingene
+      #   og prøvekjøringen en grundig gjennomgang?
+      Gitt "Vernepleie, høst 2027" tilbyr tidlig opptak
+      Og "Vernepleie, høst 2027" mangler <innstilling>
+      Når opptaksforvalter prøvekjører tidligopptaket
+      Så ser opptaksforvalter at "Vernepleie, høst 2027" mangler <innstilling>
+
+      Eksempler:
+        | innstilling                                       |
+        | poenggrense og median poengsum fra forrige opptak |
+        | rangeringsregelverk                               |
+        | kvoter                                            |
+        | kompetanseregelverk                               |
 
     # Varselet er et sikkerhetsnett (avklart 08.10.2026). Opptaksforvalter setter
     # poenggrensen høyt nok til at tilbudsgarantiene ikke bruker opp kvoten. Er den
     # ikke satt, brukes median poengsum fra forrige opptak. Systemet beregner ikke
     # grensen selv. Det er ingen sperre mot at tilbudsgarantiene overskrider kvoten,
     # så plasstildelingen må likevel håndtere det (se gjennomføre_plasstildeling.feature).
+    @draft @openquestion
     Scenario: Varsel når tilbudsgarantiene overskrider kvoten
+      # ÅPNE SPØRSMÅL:
+      # - Utsatt fra første leveranse (09.11.2026). Om og hvordan dette skal bygges,
+      #   avgjøres etter testen av første leveranse: trenger sjekken av innstillingene
+      #   og prøvekjøringen en grundig gjennomgang?
       Gitt "Sykepleie, høst 2027" har 10 plasser i kvoten tilbudsgarantiene tas fra
       Og 12 søkere oppfyller kravene til tilbudsgaranti på "Sykepleie, høst 2027"
       Når opptaksforvalter gjennomfører tidligopptaket
@@ -431,7 +465,12 @@ Egenskap: Gi tilbudsgaranti ved tidlig opptak
       Og opptaksforvalter får varsel om at tilbudsgarantiene overskrider kvoten for "Sykepleie, høst 2027"
 
     # Avklart 20.10.2026. Rettet i koden i STEK-623 (merget 29.10.2026).
+    @draft @openquestion
     Scenario: Kvotevarselet tar med tilbudsgarantier fra en tidligere gjennomføring
+      # ÅPNE SPØRSMÅL:
+      # - Utsatt fra første leveranse (09.11.2026). Om og hvordan dette skal bygges,
+      #   avgjøres etter testen av første leveranse: trenger sjekken av innstillingene
+      #   og prøvekjøringen en grundig gjennomgang?
       Gitt "Sykepleie, høst 2027" har 10 plasser i kvoten tilbudsgarantiene tas fra
       Og 8 søkere fikk tilbudsgaranti på "Sykepleie, høst 2027" da tidligopptaket ble gjennomført
       Og 4 andre søkere oppfyller nå kravene til tilbudsgaranti på "Sykepleie, høst 2027"
@@ -439,19 +478,29 @@ Egenskap: Gi tilbudsgaranti ved tidlig opptak
       Så har 12 søkere tilbudsgaranti på "Sykepleie, høst 2027"
       Og opptaksforvalter får varsel om at tilbudsgarantiene overskrider kvoten for "Sykepleie, høst 2027"
 
+    @draft @openquestion
     Scenario: Kvotevarsel ved 30 prosent når grensen ikke er angitt
+      # ÅPNE SPØRSMÅL:
+      # - Utsatt fra første leveranse (09.11.2026). Om og hvordan dette skal bygges,
+      #   avgjøres etter testen av første leveranse: trenger sjekken av innstillingene
+      #   og prøvekjøringen en grundig gjennomgang?
       Gitt "Sykepleie, høst 2027" har 10 plasser i kvoten tilbudsgarantiene tas fra
       Og 4 søkere oppfyller kravene til tilbudsgaranti på "Sykepleie, høst 2027"
       Når opptaksforvalter prøvekjører tidligopptaket uten å angi grensen for kvotevarsel
       Så får opptaksforvalter varsel om at tilbudsgarantiene overskrider 30 prosent av kvoten for "Sykepleie, høst 2027"
 
+    @draft @openquestion
     Scenario: Angi grensen for kvotevarsel
+      # ÅPNE SPØRSMÅL:
+      # - Utsatt fra første leveranse (09.11.2026). Om og hvordan dette skal bygges,
+      #   avgjøres etter testen av første leveranse: trenger sjekken av innstillingene
+      #   og prøvekjøringen en grundig gjennomgang?
       Gitt "Sykepleie, høst 2027" har 10 plasser i kvoten tilbudsgarantiene tas fra
       Og 6 søkere oppfyller kravene til tilbudsgaranti på "Sykepleie, høst 2027"
       Når opptaksforvalter prøvekjører tidligopptaket med varsel når mer enn 50 prosent av kvoten får tilbudsgaranti
       Så får opptaksforvalter varsel om at tilbudsgarantiene overskrider 50 prosent av kvoten for "Sykepleie, høst 2027"
 
-    @ref-OPT-OVO-INN-004
+    @ref-OPT-OVO-INN-004 @implemented
     Scenario: Tidligopptaket stopper uten én tilbudsgarantitype for tidlig opptak
       Gitt opptaket har ikke nøyaktig én aktiv tilbudsgarantitype for tidlig opptak som gir tilbud
       Når opptaksforvalter gjennomfører tidligopptaket
