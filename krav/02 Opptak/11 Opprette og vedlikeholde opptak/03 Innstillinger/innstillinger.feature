@@ -43,14 +43,14 @@ Egenskap: Innstillinger for opptak
 
     @draft @openquestion @ref-OPT-REG-SAM-001
     # ÅPNE SPØRSMÅL:
-    # - De samme spørsmålene som regelen om tilgang til regelverket i opprett_opptak.feature (OPT-OVO-GRU-001).
-    #   Avklares de der, gjelder svarene her.
+    # - Det samme spørsmålet som regelen om regelverkssamlinger fra organisasjonen opptaksforvalteren
+    #   er opptaksforvalter ved i opprett_opptak.feature (OPT-OVO-GRU-001). Avklares det der, gjelder svaret her.
     # Kilde: MR !3361 i fs-admin (TAKE-474).
-    Scenario: Regelverkssamlinger fra en organisasjon uten tilgang til regelverket kan ikke velges
+    Scenario: Regelverkssamlinger fra andre organisasjoner kan ikke velges
       Gitt at opptaket ikke har noen utdanningstilbud
-      Og at opptaksforvalter ikke har tilgang til regelverket ved organisasjonen som eier regelverkssamlingen "Annet regelverk"
+      Og at det finnes en regelverkssamling ved en annen organisasjon enn organisasjonen opptaksforvalter er opptaksforvalter ved
       Når opptaksforvalter endrer regelverkssamlingen
-      Så kan opptaksforvalter ikke velge regelverkssamlingen "Annet regelverk"
+      Så kan opptaksforvalter ikke velge regelverkssamlingen ved den andre organisasjonen
 
   # Poenglikhetsregel for ledige studieplasser styres av rundetypen i plasstildelingen,
   # ikke av opptakets standard poenglikhetsregel. Se krav/02 Opptak/14 Plasstildeling/.
