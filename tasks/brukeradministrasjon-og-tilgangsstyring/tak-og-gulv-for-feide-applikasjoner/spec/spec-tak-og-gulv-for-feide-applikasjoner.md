@@ -9,7 +9,7 @@
 
 ## Omfang
 
-To nye faner på detaljsiden for Feide-applikasjoner i FS Admin, én for taket og én for gulvet. Applikasjonsadministratoren ser rollene som gjelder nå, med gyldighetstidsrommet, og tildeler og fjerner forretningsroller per organisasjon og miljø. Forvaltningen krever applikasjonsadministrator-rollen både for applikasjonseieren og for organisasjonen på raden, i samme miljø. Tak fra organisasjonssamlinger vises med kilde, men forvaltes ikke her. Nekt, endringslogg og å sette gyldighetsperioden er ikke med.
+To nye faner på detaljsiden for Feide-applikasjoner i FS Admin, én for taket og én for gulvet. Applikasjonsadministratoren ser rollene som gjelder nå, med de samme kolonnene som rollelisten for personbrukere, og tildeler og fjerner forretningsroller per organisasjon og miljø. Forvaltningen krever applikasjonsadministrator-rollen både for applikasjonseieren og for organisasjonen på raden, i samme miljø. Tak fra organisasjonssamlinger vises med kilde, men forvaltes ikke her. Nekt, endringslogg og å sette gyldighetsperioden er ikke med.
 
 ## Krav
 
@@ -30,7 +30,7 @@ Ingen skisse: fanene for tak og gulv følger mønsteret fra rollefanen for perso
 - **Sjekket:** fs-plattform (origin/main e70cfb4fa3), fs-admin (origin/main 6816bd2d6)
 - `@BRU-APP-API-019`: kravet sier at applikasjonsadministratoren tildeler og fjerner roller i gulvet. Koden har bare lesepolicyen på `applikasjon_brukergrunntilgang`, app-rollen kan ikke skrive, og kommentaren sier at gulvet skal få et eget privilegium (`fs-plattform/tilgangsstyring/tilgangsstyring-new-db/src/main/resources/db/changelog/0099-gulv-per-applikasjon.sql:12`, `:99`, `:101`). Grafen har ingen typer eller mutasjoner for gulvet. **Koden skal endres:** skrivemuligheten bygges med applikasjonsadministrator-rollen både for applikasjonseieren og for organisasjonen på raden, i samme miljø, som for taket (`kan_forvalte_delegering`). Kommentaren i 0099 om eget privilegium følges ikke.
 - `@BRU-APP-API-018`: kravet sier at tak fra en organisasjonssamling vises per organisasjon, med kilde. Grafen leser og skriver bare direkte rader i `applikasjon_brukerdelegering`, så samlingstak er ikke synlige (`fs-plattform/tilgangsstyring/docs/tilgangsmodell.md:627`, `FeideApplikasjon.brukerdelegeringer` i `schema_delegeringstak.graphqls:169`). **Koden skal endres:** grafen må vise samlingstak per medlemsorganisasjon, med kilde. Forvaltning av samlingstak er ikke med.
-- Gyldighetstidsrommet: FS Admin viser det med dato i rollelisten for personbrukere (`fs-admin/src/domains/tilgangsstyring/features/PersonbrukerDetails/components/PersonbrukerRoller/components/PersonbrukerRollerResultList/PersonbrukerRollerResultList.tsx:133`), og kan ikke sette det. Kravene følger det. Ingen avvik.
+- Listekolonnene (endret 09.11.2026): Roller-fanen for personbrukere viser Rolle, Miljø, Gjelder for organisasjon, Tildelt av og Tildelt dato, og ikke gyldighetstidsrom. Det vises bare i Tilganger-fanen (`fs-admin/src/domains/tilgangsstyring/features/PersonbrukerDetails/components/PersonbrukerRoller/components/PersonbrukerRollerResultList/PersonbrukerRollerResultList.tsx`). Kravene er endret til de samme kolonnene, og scenarioene om gyldighetstidsrommet er fjernet. Den tidligere linjen her sa at rollelisten viser gyldighetstidsrom, og det var feil.
 
 ## Retagging
 

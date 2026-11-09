@@ -8,7 +8,7 @@ En egen fane for taket på detaljsiden for applikasjonen, ved siden av fanen for
 
 ## Komponenter og layout
 
-- **Listen:** rolle, organisasjon, miljø, gyldighetstidsrom, og om taket gjelder organisasjonen selv eller kommer fra en organisasjonssamling.
+- **Listen:** rolle, miljø, gjelder for organisasjon, tildelt av og tildelt dato, som rollelisten for personbrukere (BRU-PER-GRU-008), og om taket gjelder organisasjonen selv eller kommer fra en organisasjonssamling.
 - **Tildel-dialogen:** valgliste for organisasjon, valgliste for miljø og flervalgsliste for roller, som «Tildel roller» for personbrukere ([`tildele_roller.design.md`](../../12%20Brukeradministrasjon/personbrukere/1%20-%20Grunnleggende%20brukeradministrasjon/tildele_roller.design.md)).
 - **Fjern-dialogen:** som «Fjern roller» for personbrukere (BRU-PER-GRU-012).
 
@@ -30,7 +30,7 @@ Ingen tekster med variasjoner er bestemt ennå.
 
 - Et tak gjelder nå når gyldighetsperioden inneholder tidspunktet nå, og taket ikke er ugyldiggjort (jf. `tildele_roller.design.md` for personbrukere).
 - Tak som er avsluttet eller starter senere, filtreres bort i spørringen (filteret `erAktivNaa` på `brukerdelegeringer`), ikke med RLS, slik som for personbrukere og applikasjoner.
-- Gyldighetstidsrommet vises med dato, som i rollelisten for personbrukere (`formatGyldighetstidsrom` i `PersonbrukerRollerResultList`): «01.05.2026 –», «– 01.08.2026», «01.05.2026 – 01.08.2026», og ingen verdi uten tidsbegrensning. Gyldighetsperioden kan ikke settes i fanen.
+- «Tildelt av» og «Tildelt dato» vises som i rollelisten for personbrukere: navnet på personbrukeren som la inn rollen, og datoen, med «–» når de mangler. Rollelisten viser ikke gyldighetstidsrom, så listen gjør det ikke heller. Gyldighetsperioden kan ikke settes i fanen.
 
 ### Regel: Tak for en organisasjonssamling vises som tak for hver organisasjon i samlingen
 

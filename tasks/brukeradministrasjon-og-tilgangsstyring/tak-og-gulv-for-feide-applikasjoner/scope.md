@@ -16,13 +16,13 @@ To nye faner på applikasjonssiden for Feide-applikasjoner i FS Admin, én for t
 - Applikasjonsadministratoren kan se, tildele og fjerne forretningsroller i taket til en Feide-applikasjon, per organisasjon og miljø (`@BRU-APP-API-018`).
 - Applikasjonsadministratoren kan se, tildele og fjerne forretningsroller i gulvet til en Feide-applikasjon, per organisasjon og miljø (`@BRU-APP-API-019`).
 - Forvaltningen krever applikasjonsadministrator-rollen både for applikasjonseieren og for organisasjonen taket eller gulvet gjelder, i samme miljø.
-- Fanene viser bare tak og gulv som gjelder nå, med gyldighetstidsrommet, og tak fra organisasjonssamlinger vises med kilde.
+- Fanene viser bare delegeringstak og grunntilgang som gjelder nå, med de samme kolonnene som rollelisten for personbrukere (rolle, miljø, gjelder for organisasjon, tildelt av og tildelt dato), og delegeringstak fra organisasjonssamlinger vises med kilde.
 
 ## Ikke-mål
 
 - Nekt.
 - Endringslogg for tak og gulv.
-- Å sette gyldighetsperioden. Den vises, men settes ikke, som for personbrukere og applikasjoner i dag (BRU-PER-GRU-006 er `@draft`).
+- Å sette eller vise gyldighetsperioden. Den settes ikke, som for personbrukere og applikasjoner i dag (BRU-PER-GRU-006 er `@draft`), og rollelisten for personbrukere viser den ikke.
 - Å forvalte tak fra en organisasjonssamling. Det vises, men kan ikke tildeles eller fjernes her.
 - Gulv for applikasjoner brukerne logger inn i med ID-porten.
 

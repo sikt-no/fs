@@ -17,8 +17,10 @@ Egenskap: Forvalte roller i taket til en Feide-applikasjon
   # applikasjonsadministratoren fjerne roller.
   # AVKLART 04.11.2026: Gyldighetsperioden er skopet ned til det vi har for personbrukere og
   # applikasjoner. Vi har den i databasen, men FS Admin kan ikke sette den for personbrukere eller
-  # applikasjoner (BRU-PER-GRU-006 er @draft). Fanen setter derfor ikke gyldighetsperiode, men viser
-  # gyldighetstidsrommet slik rollelisten for personbrukere gjør (BRU-PER-GRU-008).
+  # applikasjoner (BRU-PER-GRU-006 er @draft). Fanen setter derfor ikke gyldighetsperiode.
+  # AVKLART 09.11.2026: Listen har de samme kolonnene som rollelisten for personbrukere
+  # (BRU-PER-GRU-008): Rolle, Miljø, Gjelder for organisasjon, Tildelt av og Tildelt dato. Rollelisten
+  # viser ikke gyldighetstidsrom, så det gjør ikke denne listen heller.
 
   Bakgrunn:
     Gitt jeg er innlogget i løsningen
@@ -46,16 +48,18 @@ Egenskap: Forvalte roller i taket til en Feide-applikasjon
 
   Regel: Fanen for taket viser rollene i taket til applikasjonen som gjelder nå
 
+    @ref-BRU-PER-GRU-008
     Scenario: Se rollene i taket til applikasjonen
       Gitt applikasjonen har Feide som identitetsleverandør
       Og jeg har åpnet fanen for taket
       Så ser jeg en liste over rollene i taket til applikasjonen
       Og hvert innslag viser følgende informasjon:
-        | felt              |
-        | Rolle             |
-        | Organisasjon      |
-        | Miljø             |
-        | Gyldighetstidsrom |
+        | felt                     |
+        | Rolle                    |
+        | Miljø                    |
+        | Gjelder for organisasjon |
+        | Tildelt av               |
+        | Tildelt dato             |
 
     Scenariomal: Bare tak som gjelder nå, vises
       Gitt applikasjonen har Feide som identitetsleverandør
@@ -68,13 +72,6 @@ Egenskap: Forvalte roller i taket til en Feide-applikasjon
         | gjelder nå     | vises      |
         | er avsluttet   | vises ikke |
         | starter senere | vises ikke |
-
-    @ref-BRU-PER-GRU-008
-    Scenario: Se gyldighetstidsrommet for en rolle i taket
-      Gitt applikasjonen har Feide som identitetsleverandør
-      Og applikasjonen har en rolle i taket med et sluttidspunkt
-      Når jeg åpner fanen for taket
-      Så ser jeg gyldighetstidsrommet for rollen
 
   Regel: Tak for en organisasjonssamling vises som tak for hver organisasjon i samlingen
     # AVKLART 03.11.2026: Tak for organisasjonssamlinger vises, men kan ikke administreres ennå. En rolle
