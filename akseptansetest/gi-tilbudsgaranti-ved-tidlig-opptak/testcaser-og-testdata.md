@@ -1,7 +1,7 @@
 # Testcaser og testdata – Gi tilbudsgaranti ved tidlig opptak
 
 - **Testplan**: [testplan.md](testplan.md) · https://sikt.atlassian.net/wiki/spaces/STUDIEADM/pages/5181997074
-- **Confluence**: https://sikt.atlassian.net/wiki/spaces/STUDIEADM/pages/5181505546 (utkast)
+- **Confluence**: https://sikt.atlassian.net/wiki/spaces/STUDIEADM/pages/5181505546
 - **Laget**: 2026-11-09 av fs-testplan
 
 ---

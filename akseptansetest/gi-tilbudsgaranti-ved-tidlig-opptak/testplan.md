@@ -6,7 +6,7 @@
 - **Scope-fil**: [opptak/tidlig-opptak](../../tasks/opptak/tidlig-opptak/scope.md)
 - **Krav**: 1 feature-fil, 0 `@implemented`, 1 delvis levert, 0 flyter, commit `072f40ee` (2026-11-09, main etter PR #986)
 - **Verifisering**: [verify-gi_tilbudsgaranti_ved_tidlig_opptak-2026-11-09-1136.md](../../krav/02%20Opptak/13%20S%C3%B8knad%20og%20saksbehandling/02%20Behandling/verify-gi_tilbudsgaranti_ved_tidlig_opptak-2026-11-09-1136.md)
-- **Confluence**: https://sikt.atlassian.net/wiki/spaces/STUDIEADM/pages/5181997074 (utkast)
+- **Confluence**: https://sikt.atlassian.net/wiki/spaces/STUDIEADM/pages/5181997074
 - **Laget**: 2026-11-09 av fs-testplan
 
 - **Undersider**: [omfang.md](omfang.md), [testcaser-og-testdata.md](testcaser-og-testdata.md), [sporbarhet.md](sporbarhet.md)
@@ -112,7 +112,7 @@ Testansvarlig skriver beslutningen og begrunnelsen i sluttrapporten. Rettede fun
 
 | Fase | Side | Status | Dato |
 |---|---|---|---|
-| 1. Verifisering (`fs-verify`) | [verify-gi_tilbudsgaranti_ved_tidlig_opptak-2026-11-09-1136.md](../../krav/02%20Opptak/13%20S%C3%B8knad%20og%20saksbehandling/02%20Behandling/verify-gi_tilbudsgaranti_ved_tidlig_opptak-2026-11-09-1136.md) | 2 ikke funnet, 0 usikker | 2026-11-09 |
+| 1. Verifisering (`fs-verify`) | [verify-gi_tilbudsgaranti_ved_tidlig_opptak-2026-11-09-1136.md](../../krav/02%20Opptak/13%20S%C3%B8knad%20og%20saksbehandling/02%20Behandling/verify-gi_tilbudsgaranti_ved_tidlig_opptak-2026-11-09-1136.md) · [Confluence](https://sikt.atlassian.net/wiki/spaces/STUDIEADM/pages/5180653598) | 2 ikke funnet, 0 usikker | 2026-11-09 |
 | 1. Testplan | (denne siden) | Laget | 2026-11-09 |
 | 2. Agentisk funksjonstest | – | Venter | |
 | 3. Intern akseptansetest | – | Venter | |
@@ -124,7 +124,7 @@ Testrapportene (verifisering, agentisk, intern og ekstern) står som undersider,
 
 | Vedlegg | Lenke |
 |---|---|
-| Verifiseringsrapporten (fase 1) | [verify-gi_tilbudsgaranti_ved_tidlig_opptak-2026-11-09-1136.md](../../krav/02%20Opptak/13%20S%C3%B8knad%20og%20saksbehandling/02%20Behandling/verify-gi_tilbudsgaranti_ved_tidlig_opptak-2026-11-09-1136.md) · [teamvisning](https://claude.ai/artifact/GBzMJsMvjP5xXAUvb6MCKE) |
+| Verifiseringsrapporten (fase 1) | [Verifisering – Gi tilbudsgaranti ved tidlig opptak – 2026-11-09 11:36](https://sikt.atlassian.net/wiki/spaces/STUDIEADM/pages/5180653598) · [verify-gi_tilbudsgaranti_ved_tidlig_opptak-2026-11-09-1136.md](../../krav/02%20Opptak/13%20S%C3%B8knad%20og%20saksbehandling/02%20Behandling/verify-gi_tilbudsgaranti_ved_tidlig_opptak-2026-11-09-1136.md) · [teamvisning](https://claude.ai/artifact/GBzMJsMvjP5xXAUvb6MCKE) |
 | Agentisk testrapport (fase 2) | – |
 | Testcasene for fase 2 | – |
 | Testcasene for fase 3 | – |

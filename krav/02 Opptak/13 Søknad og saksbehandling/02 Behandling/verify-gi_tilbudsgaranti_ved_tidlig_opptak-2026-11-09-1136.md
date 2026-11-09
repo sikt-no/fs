@@ -10,6 +10,7 @@
 - **Kontroll:** `fs-verify-kontroll`
 - **Menneskelig kontroll:** [Fylles ut: navn og dato for personen som har kontrollert rapporten]
 - **Skjermbilder:** nei (spørsmålet ble hoppet over)
+- **Confluence:** https://sikt.atlassian.net/wiki/spaces/STUDIEADM/pages/5180653598
 
 Gating-sett: scenarioene som ikke er tagget `@draft`, `@deprecated` eller `@demo` (`@openquestion` alene er med).
 
