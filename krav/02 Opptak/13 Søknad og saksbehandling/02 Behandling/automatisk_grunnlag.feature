@@ -116,7 +116,7 @@ Egenskap: Automatisk grunnlag
       Når søknaden behandles automatisk
       Så får ikke saken grunnlaget
 
-  @depends-on-OPT-BEH-BEH-015 @ref-FLY-OPT-AUT-001
+  @depends-on-OPT-BEH-BEH-015 @ref-FLY-OPT-AUT-001 @implemented
   Regel: Ingen automatisk grunnlag uten ett vitnemål som gir generell studiekompetanse
     # Ett vitnemål er nok, også når søkeren har lastet opp et kompetansebevis.
     # Har søkeren flere vitnemål, stopper den automatiske behandlingen til
@@ -135,7 +135,6 @@ Egenskap: Automatisk grunnlag
         | vitnemålet ikke gir generell studiekompetanse               |
         | ingen av grunnlagene i regelverket passer til søkeren       |
 
-    @implemented
     # Avklart 06.11.2026: kompetansebevis kommer ikke fra KREG, så raden om kompetansebevis er tatt ut.
     Scenariomal: Ingen grunnlag settes automatisk når <grunn>
       Gitt at <grunn>
@@ -148,7 +147,6 @@ Egenskap: Automatisk grunnlag
         | vitnemålet ikke gir generell studiekompetanse         |
         | ingen av grunnlagene i regelverket passer til søkeren |
 
-    @implemented
     Scenario: Søker med flere vitnemål behandles ikke automatisk
       Gitt at søkeren har to elektroniske vitnemål som ikke er annullert
       Og at saksbehandleren ikke har valgt ett av vitnemålene
@@ -156,7 +154,6 @@ Egenskap: Automatisk grunnlag
       Så blir søknaden ikke behandlet automatisk
       Og saken får ingen grunnlag automatisk
 
-    @implemented
     Scenario: Opplastet kompetansebevis stopper ikke automatikken
       # Avklart 06.11.2026: kompetansebevis kommer bare som dokumenter søkeren laster opp, ikke
       # fra KREG. Saksbehandleren finner sakene med filteret «Ubehandlet opplastet dok.» i
@@ -166,7 +163,6 @@ Egenskap: Automatisk grunnlag
       Når søknaden behandles automatisk
       Så får saken grunnlaget ut fra vitnemålet
 
-    @implemented
     Scenario: Annullert vitnemål teller ikke
       Gitt at søkeren har to elektroniske vitnemål
       Og at det ene vitnemålet er annullert
@@ -174,7 +170,6 @@ Egenskap: Automatisk grunnlag
       Når søknaden behandles automatisk
       Så får saken grunnlaget ut fra vitnemålet som ikke er annullert
 
-    @implemented
     Scenario: Grunnlaget settes etter GSK-konklusjonen
       Gitt at søkeren har ett elektronisk vitnemål som gir generell studiekompetanse
       Og at søknaden ikke har noen GSK-konklusjon
