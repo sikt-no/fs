@@ -323,6 +323,20 @@ Egenskap: Søknadsmangler
       Og søkeren ser fristen for å laste opp dokumentasjon
       Og søkeren kan gå til dokumentasjonssiden
 
+  @draft @openquestion
+  Regel: Søkeren får melding når en mangel er sjekket ut
+    # ÅPNE SPØRSMÅL:
+    # - Hva skal meldingen si? En mangel som er sjekket ut, vises ikke for søkeren
+    #   («Mangel som er sjekket ut vises ikke for søkeren»), så meldingen er det eneste søkeren
+    #   ser av at mangelen er løst.
+    # - Sendes meldingen når mangelen sjekkes ut, eller når saksbehandleren publiserer manglene
+    #   på nytt? Henger sammen med spørsmålet i «Saksbehandleren ser at endringene ikke er
+    #   publisert når <endring>» om en mangel som sjekkes ut, må publiseres på nytt.
+    # - Hører regelen hjemme her, eller i sende_melding_til_søker.feature (@OPT-SØK-MEL-001)?
+    #   Det avgjør om søknadsmangler skal være i scopet meldinger-varslinger-og-oppgaver
+    #   (se åpne spørsmål i scope.md).
+    # Kilde: workshop om meldinger 2026-11-09 (Miro), K5-2.
+
   Regel: Fristen for en mangel er ettersendingsfristen, med mindre en tidligere dokumentasjonsfrist ikke har gått ut
 
     Scenariomal: Fristen for en mangel publisert <publisert> når <situasjon>
