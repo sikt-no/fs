@@ -217,7 +217,7 @@ test('editedFiles: filene Claude har endret, relative til repoet, også under ta
   assert.deepEqual(editedFiles(c), ['tasks/brukere/spec/verify-2026-09-29.md', 'krav/b.feature']);
 });
 
-import { allowAlways, needsAuth, pendingPermissions, pendingQuestions, toolLabel } from './claudeChat.ts';
+import { allowAlways, type Chat, isLoginCommand, needsAuth, needsLogin, pendingPermissions, pendingQuestions, toolLabel } from './claudeChat.ts';
 
 test('spørsmål om lov: kortet legges til én gang, og svaret oppdaterer det', () => {
   let c = started(EMPTY_CHAT, 'r');
@@ -263,6 +263,19 @@ test('tillat alltid lagres på samtalen, og MCP-servere som må logges inn', () 
   const i = apply(started(EMPTY_CHAT, 'r'), 'r', { kind: 'init', sessionId: 's', model: null, skills: [], mcp: [{ name: 'figma', status: 'needs-auth' }, { name: 'neon', status: 'connected' }] });
   assert.deepEqual(needsAuth(i), ['figma']);
   assert.deepEqual(needsAuth(apply(started(EMPTY_CHAT, 'r'), 'r', { kind: 'init', sessionId: 's', model: null, skills: [] })), []);
+});
+
+test('needsLogin: svaret på siste melding sier at Claude Code ikke er logget inn', () => {
+  const user = { kind: 'user' as const, text: 'hei', path: null };
+  const chat = (items: Chat['items']) => ({ ...EMPTY_CHAT, items });
+  assert.ok(needsLogin(chat([user, { kind: 'assistant', text: 'Not logged in · Please run /login' }, { kind: 'done', ok: false, text: 'Not logged in · Please run /login' }])));
+  assert.ok(needsLogin(chat([user, { kind: 'assistant', text: "/login isn't available in this environment." }, { kind: 'done', ok: true, text: 'Ferdig' }])));
+  assert.ok(needsLogin(chat([user, { kind: 'done', ok: false, text: 'OAuth token has expired' }])));
+  assert.ok(!needsLogin(chat([user, { kind: 'done', ok: false, text: 'Not logged in' }, user, { kind: 'done', ok: true, text: 'Ferdig' }])), 'bare svaret på siste melding');
+  assert.ok(!needsLogin(chat([user, { kind: 'assistant', text: 'Not logged in. ' + 'x'.repeat(400) }])), 'et langt svar teller ikke');
+  assert.ok(!needsLogin(EMPTY_CHAT));
+  assert.ok(isLoginCommand(' /login ') && isLoginCommand('/LOGIN'));
+  assert.ok(!isLoginCommand('/login nå') && !isLoginCommand('logg inn'));
 });
 
 test('gamle samtaler uten alwaysAllowed og mcp kan leses, og ventende spørsmål avsluttes', () => {
