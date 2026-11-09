@@ -263,8 +263,9 @@ Egenskap: Automatisk vurdering av spesielle opptakskrav
       Og resten av den automatiske behandlingen er gjennomført
 
   Regel: Saksbehandlerens vurdering av et kravelement endres ikke av automatikken
-    # Saksbehandleren kan også velge "la stå" på kravelementet uten å endre
-    # vurderingen, og det er da låst på samme måte. Et kravelement som
+    # Kravelementet låses når saksbehandleren registrerer en karakter eller en
+    # vurdering på det. Det finnes ikke et eget valg for å låse kravelementet
+    # uten å registrere noe (avklart 09.11.2026). Et kravelement som
     # saksbehandleren bare ser på, er ikke låst. Låsen gjelder ett kravelement,
     # ikke hele saken.
 
@@ -288,12 +289,6 @@ Egenskap: Automatisk vurdering av spesielle opptakskrav
       Når saksbehandleren endrer vurderingen av kravelementet
       Så er kravelementet låst mot automatisk vurdering
 
-    Scenario: Saksbehandleren velger "la stå" på kravelementet
-      Gitt at søknaden har et kravelement som er vurdert automatisk
-      Når saksbehandleren velger "la stå" på kravelementet
-      Så er kravelementet låst mot automatisk vurdering
-      Og vurderingen av kravelementet er som før
-
     @implemented
     Scenario: Kravelement som saksbehandleren bare ser på, vurderes automatisk igjen
       Gitt at søknaden har et kravelement som er vurdert automatisk
@@ -316,10 +311,24 @@ Egenskap: Automatisk vurdering av spesielle opptakskrav
       Og vurderingen av Matematikk R1 er uendret
 
     Scenario: Nullstilt kravelement kan vurderes automatisk igjen
-      Gitt at søknaden har et kravelement som er låst mot automatisk vurdering
-      Når saksbehandleren nullstiller vurderingen av kravelementet
+      Gitt at saksbehandleren har satt at fagkravet Norsk er oppfylt, med karakteren 4
+      Når saksbehandleren nullstiller karakteren og vurderingen av fagkravet Norsk
       Og søknaden behandles automatisk
-      Så er kravelementet vurdert automatisk på nytt
+      Så er fagkravet Norsk vurdert automatisk på nytt
+
+    Scenario: Nullstilt karakter beregnes automatisk igjen
+      Gitt at saksbehandleren har satt at fagkravet Norsk er oppfylt, med karakteren 4
+      Når saksbehandleren nullstiller karakteren på fagkravet Norsk
+      Og søknaden behandles automatisk
+      Så har fagkravet Norsk karakteren fra vitnemålet
+      Og fagkravet Norsk er oppfylt, som saksbehandleren satte
+
+    Scenario: Nullstilt vurdering settes automatisk igjen
+      Gitt at saksbehandleren har satt at fagkravet Norsk er oppfylt, med karakteren 4
+      Når saksbehandleren nullstiller vurderingen av fagkravet Norsk
+      Og søknaden behandles automatisk
+      Så er det vurdert automatisk om fagkravet Norsk er oppfylt
+      Og fagkravet Norsk har karakteren 4, som saksbehandleren satte
 
     @implemented
     Scenario: Unntak per grunnlag endres ikke
