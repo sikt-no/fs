@@ -81,10 +81,10 @@ Egenskap: Automatisk grunnlag
     Scenario: Alderen regnes ut på datoen for aldersberegning
       Gitt at opptaket har 31.12.2026 som dato for aldersberegning
       Og at regelverket har et grunnlag med aldersgrensen under 22 år
-      Og at søkeren er født 15.03.2005
+      Og at søkeren er født 15.10.2004
       Og at søkeren har ett elektronisk vitnemål som gir generell studiekompetanse
       Når søknaden behandles automatisk 01.09.2026
-      Så får saken grunnlaget med aldersgrensen under 22 år
+      Så får ikke saken grunnlaget med aldersgrensen under 22 år
 
     @implemented
     Scenario: Førstegangsvitnemål går foran
