@@ -23,8 +23,6 @@ Egenskap: Kjøre jobbene i opptak
   # vitnemål fra KREG.
   # Avklart 04.11.2026: resultatene fra høyere utdanning hentes fra en annen tjeneste enn KREG,
   # med en egen jobb. Det erstatter at to jobber dekker alt.
-  # ÅPNE SPØRSMÅL:
-  # - Hva heter tjenesten for resultater fra høyere utdanning?
 
   @ref-FLY-OPT-VIT-001
   Regel: Jobbplanleggeren starter jobbene i opptaket

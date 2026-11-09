@@ -24,16 +24,14 @@ Egenskap: Starte automatisk behandling
   # Saksbehandleren velger vitnemålet når søkeren har flere vitnemål, i
   # OPT-BEH-BEH-039.
 
-  Bakgrunn:
-    Gitt at den automatiske saksbehandlingen pågår i opptaket
-
   @depends-on-OPT-BEH-BEH-011 @depends-on-OPT-BEH-BEH-030 @ref-FLY-OPT-AUT-001
   # OPT-BEH-BEH-011: «Søknadsalternativene fordeles når søknaden sendes inn eller endres, og fordelingen ligger fast»
   # OPT-BEH-BEH-030: «Resultatene hentes når saken er opprettet»
   Regel: Behandlingen kjører for hver ny sak saksbehandlertildelingen oppretter
 
     Scenario: Den nye saken behandles automatisk når saksbehandlertildelingen har opprettet den
-      Gitt at søkeren har sendt inn søknaden
+      Gitt at den automatiske saksbehandlingen pågår i opptaket
+      Og at søkeren har sendt inn søknaden
       Og at søkeren har et vitnemål i KREG
       Når saksbehandlertildelingen har opprettet saken
       Så behandles saken automatisk når resultatene er importert
@@ -48,13 +46,15 @@ Egenskap: Starte automatisk behandling
     # etter at saken er behandlet, gir saken nye resultater (OPT-BEH-BEH-035).
 
     Scenario: Saken behandles automatisk når importen har hentet søkerens vitnemål
-      Gitt at søkeren har levert søknaden uten å ha et vitnemål i KREG
+      Gitt at den automatiske saksbehandlingen pågår i opptaket
+      Og at søkeren har levert søknaden uten å ha et vitnemål i KREG
       Og at søkeren har fått et vitnemål i KREG
       Når importen av VGS-vitnemål fra KREG kjører
       Så behandles saken automatisk når vitnemålet er importert
 
     Scenario: Saken behandles ikke helautomatisk når importen henter to vitnemål for søkeren
-      Gitt at søkeren har levert søknaden uten å ha et vitnemål i KREG
+      Gitt at den automatiske saksbehandlingen pågår i opptaket
+      Og at søkeren har levert søknaden uten å ha et vitnemål i KREG
       Og at søkeren har fått to vitnemål i KREG
       Når importen av VGS-vitnemål fra KREG kjører
       Så behandles saken automatisk når begge vitnemålene er importert
@@ -66,7 +66,8 @@ Egenskap: Starte automatisk behandling
     # starter den automatiske behandlingen for en sak»).
 
     Scenariomal: Saken med behandlingsstatusen <status> behandles ikke automatisk når importen henter søkerens vitnemål
-      Gitt at saken har behandlingsstatusen "<status>"
+      Gitt at den automatiske saksbehandlingen pågår i opptaket
+      Og at saken har behandlingsstatusen "<status>"
       Og at søkeren har fått et vitnemål i KREG
       Når importen av VGS-vitnemål fra KREG kjører
       Så behandles ikke saken automatisk
@@ -87,7 +88,8 @@ Egenskap: Starte automatisk behandling
     # utdatert (OPT-BEH-BEH-021), kommer i tillegg, fordi de sier noe mer.
 
     Scenario: Saken behandles ikke automatisk på nytt når det kommer et nytt vitnemål
-      Gitt at saken er behandlet automatisk på søkerens vitnemål
+      Gitt at den automatiske saksbehandlingen pågår i opptaket
+      Og at saken er behandlet automatisk på søkerens vitnemål
       Og at søkeren har fått et nytt vitnemål i KREG
       Når importen av VGS-vitnemål fra KREG kjører
       Så behandles ikke saken automatisk på nytt
@@ -219,6 +221,7 @@ Egenskap: Starte automatisk behandling
     # importert. Når KREG ikke svarer, prøves importen på nytt (OPT-BEH-BEH-030).
 
     Scenario: Saken viser at den ikke kunne behandles automatisk fordi søkeren ikke har vitnemål
-      Gitt at søkeren ikke har noe vitnemål i KREG
+      Gitt at den automatiske saksbehandlingen pågår i opptaket
+      Og at søkeren ikke har noe vitnemål i KREG
       Når saksbehandlertildelingen har opprettet saken
       Så ser saksbehandleren på saken at den ikke kunne behandles automatisk fordi søkeren ikke har vitnemål
