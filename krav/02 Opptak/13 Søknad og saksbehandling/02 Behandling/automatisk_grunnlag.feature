@@ -94,14 +94,17 @@ Egenskap: Automatisk grunnlag
       Så får saken grunnlaget som krever førstegangsvitnemål
       Men saken får ikke grunnlaget som bare krever et vitnemål
 
-    Scenario: Grunnlaget med lavest kode settes når flere grunnlag passer like godt
-      # Avklart 09.11.2026: to grunnlag med de samme egenskapene er en feil i regelverket.
-      # Automatikken velger grunnlaget med lavest kode, og logger en advarsel, så regelverket
-      # kan rettes. Erstatter avklaringen fra 30.10.2026 om at ingen grunnlag settes.
-      Gitt at søkeren passer like godt til to grunnlag
+    Scenario: Grunnlagskoden som kommer først alfabetisk settes når to grunnlag har de samme egenskapene
+      # Avklart 09.11.2026: grunnlag for førstegangsvitnemål går foran grunnlag for et vitnemål
+      # («Førstegangsvitnemål går foran»). To grunnlag med de samme egenskapene er en feil i
+      # regelverket. Automatikken velger da grunnlagskoden som kommer først alfabetisk, og logger
+      # en advarsel, så regelverket kan rettes. Erstatter avklaringen fra 30.10.2026 om at ingen
+      # grunnlag settes.
+      Gitt at regelverket har grunnlagene "FGV1" og "FGV2", som begge krever førstegangsvitnemål
+      Og at søkeren passer til grunnlagene "FGV1" og "FGV2"
       Når søknaden behandles automatisk
-      Så får saken automatisk grunnlaget med lavest kode
-      Men saken får ikke grunnlaget med høyest kode
+      Så får saken automatisk grunnlaget "FGV1"
+      Men saken får ikke grunnlaget "FGV2"
 
     @implemented
     Scenario: Grunnlag uten egenskaper for automatikken settes ikke

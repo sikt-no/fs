@@ -189,7 +189,6 @@ Egenskap: Ferdigbehandle en sak
         | poengformelen er ugyldig                          | poengene    |
         | kvotespørsmålet har en algoritme som ikke finnes  | kvoten      |
         | poengtypen har en algoritme som ikke finnes       | poengene    |
-        | to grunnlag passer like godt                      | grunnlaget  |
         | opptaket mangler dato for aldersberegning         | grunnlaget  |
 
   @implemented
