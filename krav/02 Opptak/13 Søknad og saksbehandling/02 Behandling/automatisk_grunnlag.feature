@@ -54,14 +54,13 @@ Egenskap: Automatisk grunnlag
 
   # Avklart 30.10.2026: grunnlaget blir stående når studieønsket som ga det, fjernes (STEK-505).
 
-  @depends-on-OPT-REG-GRU-001 @ref-FLY-OPT-AUT-001 @ref-FLY-OPT-SAM-001
+  @depends-on-OPT-REG-GRU-001 @ref-FLY-OPT-AUT-001 @ref-FLY-OPT-SAM-001 @implemented
   Regel: Grunnlaget velges ut fra egenskapene regelverket har gitt det
     # Regelverket kan gi et grunnlag en aldersgrense, og kreve at søkeren har et
     # vitnemål, eller et førstegangsvitnemål. Grunnlag uten noen av disse
     # egenskapene velges bare av saksbehandleren. Egenskapene står ikke i
     # grunnlag.feature ennå.
 
-    @implemented
     Scenariomal: Grunnlag ut fra førstegangsvitnemål og alder
       Gitt at regelverket har et grunnlag som krever førstegangsvitnemål og har aldersgrensen under 22 år
       Og at regelverket har et grunnlag som krever et vitnemål
@@ -87,7 +86,6 @@ Egenskap: Automatisk grunnlag
       Så får saken grunnlaget som krever et vitnemål
       Men saken får ikke grunnlaget som krever førstegangsvitnemål
 
-    @implemented
     Scenario: Alderen regnes ut på datoen for aldersberegning
       Gitt at opptaket har 31.12.2026 som dato for aldersberegning
       Og at regelverket har et grunnlag med aldersgrensen under 22 år
@@ -96,7 +94,6 @@ Egenskap: Automatisk grunnlag
       Når søknaden behandles automatisk 01.09.2026
       Så får ikke saken grunnlaget med aldersgrensen under 22 år
 
-    @implemented
     Scenario: Førstegangsvitnemål går foran
       Gitt at søkeren passer til et grunnlag som krever førstegangsvitnemål
       Og at søkeren også passer til et grunnlag som bare krever et vitnemål
@@ -104,19 +101,16 @@ Egenskap: Automatisk grunnlag
       Så får saken grunnlaget som krever førstegangsvitnemål
       Men saken får ikke grunnlaget som bare krever et vitnemål
 
-    @implemented
     Scenario: Grunnlag uten egenskaper for automatikken settes ikke
       Gitt at regelverket har et grunnlag uten aldersgrense, uten krav om vitnemål og uten krav om førstegangsvitnemål
       Når søknaden behandles automatisk
       Så får ikke saken grunnlaget uten egenskaper for automatikken
 
-    @implemented
     Scenario: Bare grunnlag i regelverket til utdanningstilbudene i søknaden kan settes
       Gitt at søkeren passer til et grunnlag som ikke er med i regelverket til noen av utdanningstilbudene i søknaden
       Når søknaden behandles automatisk
       Så får ikke saken grunnlaget
 
-    @implemented
     Scenario: Grunnlag som ikke er aktivt, settes ikke
       Gitt at søkeren passer til et grunnlag som ikke er aktivt
       Når søknaden behandles automatisk

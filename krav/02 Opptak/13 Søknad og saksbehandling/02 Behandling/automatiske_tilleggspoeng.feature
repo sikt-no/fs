@@ -12,10 +12,10 @@ Egenskap: Automatiske tilleggspoeng
   poengtypen, og algoritmen regner ut poengene ut fra opplysninger om søkeren, for eksempel alder og kjønn.
   Poengene regnes ut på samme måte når saksbehandleren velger grunnlaget selv som når automatikken gjør det.
 
-  @ref-FLY-OPT-AUT-001
+  @ref-FLY-OPT-AUT-001 @implemented
   Regel: Alderspoeng regnes ut fra søkerens alder
 
-    @depends-on-OPT-BEH-BEH-012 @implemented
+    @depends-on-OPT-BEH-BEH-012
     # Regelen «Søkerens alder beregnes på opptakets dato for aldersberegning».
     Scenariomal: Alderspoeng for søkerens alder
       Gitt at poengtypen for alderspoeng er knyttet til algoritmen "<algoritme>"
@@ -40,7 +40,7 @@ Egenskap: Automatiske tilleggspoeng
       Når saken får et grunnlag
       Så viser alderspoengene at de er regnet ut for alderen 22 år på datoen for aldersberegning
 
-    @depends-on-OPT-OVO-FRI-001 @implemented
+    @depends-on-OPT-OVO-FRI-001
     # Regelen «Opptaksforvalter setter dato for aldersberegning».
     Scenario: Standarddatoen brukes når datoen for aldersberegning ikke er satt
       Gitt at opptaket ikke har dato for aldersberegning
@@ -50,10 +50,9 @@ Egenskap: Automatiske tilleggspoeng
       Når saksbehandleren velger et grunnlag for saken
       Så har saken 4 alderspoeng
 
-  @ref-FLY-OPT-AUT-001
+  @ref-FLY-OPT-AUT-001 @implemented
   Regel: Kjønnspoeng regnes ut fra søkerens kjønn
 
-    @implemented
     Scenariomal: Kjønnspoeng for søkerens kjønn
       Gitt at poengtypen for kjønnspoeng er knyttet til algoritmen "<algoritme>"
       Og at søkeren er <kjønn>
