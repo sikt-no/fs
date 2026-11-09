@@ -137,7 +137,6 @@ Egenskap: Ferdigbehandle en sak
       Så ser saksbehandleren et varsel ved vitnemålet om at opptakssystemet er uenig med skolen om GSK
       Og saken er fortsatt ferdig behandlet
 
-  @ref-FLY-OPT-AUT-001
   Regel: Steg som bygger på et steg som ikke kan avgjøres, hoppes over
 
     Bakgrunn:

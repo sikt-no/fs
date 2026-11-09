@@ -95,11 +95,6 @@ Egenskap: Automatisk saksbehandling
       Når søknaden behandles automatisk
       Så behandles saken helautomatisk på vitnemålet
 
-    Scenario: Søkeren hoppes over når ingen vitnemål gir GSK
-      Gitt at ingen av vitnemålene til søkeren gir GSK
-      Når søknaden behandles automatisk
-      Så behandles ikke saken helautomatisk
-
   @wont @openquestion
   Regel: To identiske vitnemål reknes som ett vitnemål
     # ÅPNE SPØRSMÅL:
@@ -238,7 +233,7 @@ Egenskap: Automatisk saksbehandling
       Og mangelen "DUA" er sjekket ut
 
   @depends-on-OPT-BEH-BEH-025 @depends-on-OPT-BEH-BEH-029 @ref-OPT-PLA-TIL-001 @ref-FLY-OPT-VAL-001 @ref-FLY-OPT-SAM-001
-  # OPT-BEH-BEH-025: «Den automatiske behandlingen setter saken til ferdig behandlet når alt er avgjort», «Steg som bygger på et steg som ikke kan avgjøres, hoppes over»
+  # OPT-BEH-BEH-025: «Den automatiske behandlingen setter saken til ferdig behandlet når alt er avgjort»
   # OPT-BEH-BEH-029: «Saken kan bare bli Behandlet når den har minst én mangel eller ett grunnlag», «Saksloggen viser endringene i behandlingsstatusen»
   # Bare saker som er ferdig behandlet, er med i plasstildelingen. Det står i OPT-PLA-TIL-001.
   Regel: Saken blir ferdig behandlet og er klar til å være med i plasstildelingen
@@ -255,11 +250,6 @@ Egenskap: Automatisk saksbehandling
       Når den automatiske behandlingen er ferdig
       Så er saken ferdig behandlet
       Og søkeren ser mangelteksten for "Matematikk R2" i Min kompetanse
-
-    Scenario: Saken blir ikke ferdig behandlet når poengene ikke kan avgjøres
-      Gitt at poengene for "Informatikk, UiO" ikke kan avgjøres på grunn av en feil i regelverket
-      Når den automatiske behandlingen er ferdig
-      Så har saken behandlingsstatusen "Ikke behandlet"
 
   @depends-on-OPT-BEH-BEH-026 @ref-FLY-OPT-VAL-001 @ref-FLY-OPT-SAM-001
   # OPT-BEH-BEH-026: «I saker den automatiske behandlingen har behandlet, beregnes kravelementene og poengene på nytt», «Saker saksbehandleren har behandlet, får regnet ut kvalifiseringen, poengsummen og kvoten på nytt og blir merket», «Bare saker som er ferdig behandlet, beregnes på nytt»
