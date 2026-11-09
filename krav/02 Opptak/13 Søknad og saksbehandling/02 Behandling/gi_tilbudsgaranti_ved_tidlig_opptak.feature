@@ -397,11 +397,16 @@ Egenskap: Gi tilbudsgaranti ved tidlig opptak
       Så ser opptaksforvalter at 0 utdanningstilbud har mangelfulle innstillinger
 
   Regel: Opptaksforvalter ser utfallet av tidligopptaket
+    # Flere av scenarioene under er utsatt (09.11.2026). Erfaringene fra testen av første
+    # leveranse avgjør om sjekken av innstillingene og prøvekjøringen trenger en grundig
+    # gjennomgang før de bygges.
 
     @draft @openquestion
     Scenario: Se utfallet for hver søker
       # ÅPNE SPØRSMÅL:
-      # - Utsatt fra første leveranse (09.11.2026). Når skal dette bygges?
+      # - Utsatt fra første leveranse (09.11.2026). Om og hvordan dette skal bygges,
+      #   avgjøres etter testen av første leveranse: trenger sjekken av innstillingene
+      #   og prøvekjøringen en grundig gjennomgang?
       Når opptaksforvalter gjennomfører tidligopptaket
       Så ser opptaksforvalter utfallet for hvert søknadsalternativ som er vurdert
       Og opptaksforvalter ser antall søkere som er vurdert, og antall tilbudsgarantier som er satt
@@ -427,7 +432,9 @@ Egenskap: Gi tilbudsgaranti ved tidlig opptak
     @draft @openquestion
     Scenariomal: Se hva som mangler for hvert utdanningstilbud med mangelfulle innstillinger
       # ÅPNE SPØRSMÅL:
-      # - Utsatt fra første leveranse (09.11.2026). Når skal dette bygges?
+      # - Utsatt fra første leveranse (09.11.2026). Om og hvordan dette skal bygges,
+      #   avgjøres etter testen av første leveranse: trenger sjekken av innstillingene
+      #   og prøvekjøringen en grundig gjennomgang?
       Gitt "Vernepleie, høst 2027" tilbyr tidlig opptak
       Og "Vernepleie, høst 2027" mangler <innstilling>
       Når opptaksforvalter prøvekjører tidligopptaket
@@ -448,7 +455,9 @@ Egenskap: Gi tilbudsgaranti ved tidlig opptak
     @draft @openquestion
     Scenario: Varsel når tilbudsgarantiene overskrider kvoten
       # ÅPNE SPØRSMÅL:
-      # - Utsatt fra første leveranse (09.11.2026). Når skal dette bygges?
+      # - Utsatt fra første leveranse (09.11.2026). Om og hvordan dette skal bygges,
+      #   avgjøres etter testen av første leveranse: trenger sjekken av innstillingene
+      #   og prøvekjøringen en grundig gjennomgang?
       Gitt "Sykepleie, høst 2027" har 10 plasser i kvoten tilbudsgarantiene tas fra
       Og 12 søkere oppfyller kravene til tilbudsgaranti på "Sykepleie, høst 2027"
       Når opptaksforvalter gjennomfører tidligopptaket
@@ -459,7 +468,9 @@ Egenskap: Gi tilbudsgaranti ved tidlig opptak
     @draft @openquestion
     Scenario: Kvotevarselet tar med tilbudsgarantier fra en tidligere gjennomføring
       # ÅPNE SPØRSMÅL:
-      # - Utsatt fra første leveranse (09.11.2026). Når skal dette bygges?
+      # - Utsatt fra første leveranse (09.11.2026). Om og hvordan dette skal bygges,
+      #   avgjøres etter testen av første leveranse: trenger sjekken av innstillingene
+      #   og prøvekjøringen en grundig gjennomgang?
       Gitt "Sykepleie, høst 2027" har 10 plasser i kvoten tilbudsgarantiene tas fra
       Og 8 søkere fikk tilbudsgaranti på "Sykepleie, høst 2027" da tidligopptaket ble gjennomført
       Og 4 andre søkere oppfyller nå kravene til tilbudsgaranti på "Sykepleie, høst 2027"
@@ -470,7 +481,9 @@ Egenskap: Gi tilbudsgaranti ved tidlig opptak
     @draft @openquestion
     Scenario: Kvotevarsel ved 30 prosent når grensen ikke er angitt
       # ÅPNE SPØRSMÅL:
-      # - Utsatt fra første leveranse (09.11.2026). Når skal dette bygges?
+      # - Utsatt fra første leveranse (09.11.2026). Om og hvordan dette skal bygges,
+      #   avgjøres etter testen av første leveranse: trenger sjekken av innstillingene
+      #   og prøvekjøringen en grundig gjennomgang?
       Gitt "Sykepleie, høst 2027" har 10 plasser i kvoten tilbudsgarantiene tas fra
       Og 4 søkere oppfyller kravene til tilbudsgaranti på "Sykepleie, høst 2027"
       Når opptaksforvalter prøvekjører tidligopptaket uten å angi grensen for kvotevarsel
@@ -479,7 +492,9 @@ Egenskap: Gi tilbudsgaranti ved tidlig opptak
     @draft @openquestion
     Scenario: Angi grensen for kvotevarsel
       # ÅPNE SPØRSMÅL:
-      # - Utsatt fra første leveranse (09.11.2026). Når skal dette bygges?
+      # - Utsatt fra første leveranse (09.11.2026). Om og hvordan dette skal bygges,
+      #   avgjøres etter testen av første leveranse: trenger sjekken av innstillingene
+      #   og prøvekjøringen en grundig gjennomgang?
       Gitt "Sykepleie, høst 2027" har 10 plasser i kvoten tilbudsgarantiene tas fra
       Og 6 søkere oppfyller kravene til tilbudsgaranti på "Sykepleie, høst 2027"
       Når opptaksforvalter prøvekjører tidligopptaket med varsel når mer enn 50 prosent av kvoten får tilbudsgaranti
