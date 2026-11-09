@@ -130,7 +130,7 @@ Egenskap: Ferdigbehandle en sak
 
     @depends-on-OPT-BEH-BEH-015 @depends-on-OPT-BEH-BEH-029 @implemented
     # OPT-BEH-BEH-015: «Saksbehandleren får varsel når opptakssystemet er uenig med skolen»
-    # OPT-BEH-BEH-029: «Saken blir Under behandling når saksbehandleren endrer vurderingen eller markerer et dokument som lest»
+    # OPT-BEH-BEH-029: «Saken blir Under behandling når saksbehandleren endrer vurderingen»
     Scenario: Varselet om uenighet om GSK krever ikke at saksbehandleren gjør noe
       Gitt at opptakssystemet er uenig med skolen om GSK for vitnemålet
       Når saksbehandleren åpner saken
@@ -187,7 +187,6 @@ Egenskap: Ferdigbehandle en sak
         | poengformelen er ugyldig                          | poengene    |
         | kvotespørsmålet har en algoritme som ikke finnes  | kvoten      |
         | poengtypen har en algoritme som ikke finnes       | poengene    |
-        | to grunnlag passer like godt                      | grunnlaget  |
         | opptaket mangler dato for aldersberegning         | grunnlaget  |
 
   @implemented

@@ -78,11 +78,13 @@ Egenskap: Behandlingsstatus
       Og saksbehandleren ser at saken må ha minst én mangel eller ett grunnlag for å bli "Behandlet"
 
   @ref-OPT-BEH-BEH-032 @ref-OPT-BEH-BEH-025
-  Regel: Saken blir Under behandling når saksbehandleren endrer vurderingen eller markerer et dokument som lest
+  Regel: Saken blir Under behandling når saksbehandleren endrer vurderingen
     # Avklart 2026-11-03: behandlingsstatusen endres ikke før saksbehandleren gjør en endring i
-    # saken. Å se på saken eller et dokument er ikke en endring. Å markere et dokument som lest er
-    # det. Før stod det at saken ble Under behandling fra Behandlet når saksbehandleren leste et
-    # dokument. Kode i dag: SettSaksdokumentErLestService endrer bare statusen fra Ikke behandlet.
+    # saken. Å se på saken eller et dokument er ikke en endring.
+    # Avklart 09.11.2026: å markere et dokument som lest er heller ikke en endring. FS Admin
+    # markerer dokumentet som lest når saksbehandleren åpner det. Kode i dag:
+    # SettSaksdokumentErLestService endrer statusen fra Ikke behandlet til Under behandling.
+    # Avklart 09.11.2026: saksbehandleren endrer kvoteplasseringen ved å svare på kvotespørsmålene.
 
     Scenariomal: Saken blir Under behandling når saksbehandleren <handling>
       Gitt at saken har behandlingsstatusen "<fra>"
@@ -95,9 +97,8 @@ Egenskap: Behandlingsstatus
         | Ikke behandlet | registrerer et grunnlag               |
         | Behandlet      | endrer kvalifiseringen                |
         | Behandlet      | endrer poengene                       |
-        | Behandlet      | endrer kvoteplasseringen              |
+        | Behandlet      | endrer svaret på et kvotespørsmål     |
         | Ikke behandlet | registrerer en mangel                 |
-        | Ikke behandlet | markerer et dokument i saken som lest |
 
     @implemented
     Scenariomal: Behandlingsstatusen endres ikke når saksbehandleren <handling>
@@ -115,6 +116,11 @@ Egenskap: Behandlingsstatus
       Gitt at saken har behandlingsstatusen "Behandlet"
       Når saksbehandleren markerer et dokument i saken som lest
       Så har saken fortsatt behandlingsstatusen "Behandlet"
+
+    Scenario: Å markere et dokument som lest endrer ikke statusen på en sak som ikke er behandlet
+      Gitt at saken har behandlingsstatusen "Ikke behandlet"
+      Når saksbehandleren markerer et dokument i saken som lest
+      Så har saken fortsatt behandlingsstatusen "Ikke behandlet"
 
     @implemented
     Scenariomal: Behandlingsstatusen <status> endres ikke når saksbehandleren åpner saken
@@ -145,5 +151,4 @@ Egenskap: Behandlingsstatus
       Eksempler:
         | hendelse                                                       | til              | årsak                                         |
         | saksbehandleren setter saken til "Under behandling"            | Under behandling | saksbehandleren endret statusen               |
-        | saksbehandleren markerer et dokument i saken som lest          | Under behandling | saksbehandleren markerte et dokument som lest |
         | den automatiske behandlingen setter saken til ferdig behandlet | Behandlet        | den automatiske behandlingen var ferdig       |
