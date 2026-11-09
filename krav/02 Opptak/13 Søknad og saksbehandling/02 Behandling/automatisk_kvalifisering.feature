@@ -58,8 +58,7 @@
 #   teller, snitt eller beste karakter), eies av Team Puff.
 # - GSK-konklusjonen settes i automatisk_gsk_konklusjon.feature. Grunnlaget og
 #   poengene settes i automatisk_grunnlag.feature (@OPT-BEH-BEH-019) og
-#   automatisk_poengberegning.feature (@OPT-BEH-BEH-018), som ennå bare ligger
-#   på hver sin branch.
+#   automatisk_poengberegning.feature (@OPT-BEH-BEH-018).
 # - Hvordan saksbehandleren velger vitnemål for søkere med flere vitnemål,
 #   står i velge_vitnemål_som_grunnlag.feature (@OPT-BEH-BEH-004). At
 #   kravelementene vurderes automatisk mot vitnemålet saksbehandleren har
