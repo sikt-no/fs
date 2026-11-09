@@ -1,6 +1,6 @@
 # language: no
 # GitHub: #413
-@OPT-BEH-BEH-008 @must @in-progress
+@OPT-BEH-BEH-008 @must @in-progress @depends-on-OPT-BEH-BEH-011
 Egenskap: Søknadsmangler
   Som saksbehandler ved saksbehandlende organisasjon
   ønsker jeg å registrere mangler i saken og gi søkeren beskjed om manglene
@@ -19,9 +19,10 @@ Egenskap: Søknadsmangler
   Mangler hører til saken, det vil si søknadsalternativene én saksbehandlende organisasjon har
   (se @OPT-BEH-BEH-011). Hver mangelkode hører til en kategori:
   - Generelle krav: mangelen gjelder alle søknadsalternativene i saken.
-  - Spesielle krav: mangelen knyttes til et kompetanseregelverk.
-  - Poeng: mangelen gjelder grunnlag for poeng.
-  - Kvote: mangelen knyttes til et kvotespørsmål.
+  - Spesielle krav: mangelen knyttes til et kompetanseregelverk, og gjelder søknadsalternativene
+    med kompetanseregelverket.
+  - Poeng: mangelen gjelder grunnlag for poeng, og gjelder alle søknadsalternativene i saken.
+  - Kvote: mangelen knyttes til et kvotespørsmål, og gjelder søknadsalternativene med kvoten.
 
   En mangel hindrer ikke at søkeren blir kvalifisert. Kvalifiseringen beregnes fra
   kravelementene. En mangelkode kan stoppe for opptak, og da får ikke søkeren tilbud om
@@ -230,11 +231,13 @@ Egenskap: Søknadsmangler
     #   automatisk, uten egen melding (se «Mangelen for generell studiekompetanse som fullføres
     #   i vår settes og sjekkes ut automatisk»).
 
+    @implemented
     Scenario: Registrering av mangel publiserer ikke mangelen
       Når saksbehandleren ved Universitetet i Oslo registrerer mangelen "KAR"
       Så ser ikke søkeren mangelen "KAR" i Min kompetanse
       Og søkeren har ikke mottatt en melding om mangler
 
+    @implemented
     Scenario: Saksbehandleren publiserer mangelen
       Gitt at saken hos "Universitetet i Oslo" har mangelen "KAR"
       Når saksbehandleren ved Universitetet i Oslo markerer mangelen "KAR" som klar til publisering
@@ -306,11 +309,13 @@ Egenskap: Søknadsmangler
       Når saksbehandleren avbryter
       Så er ikke saken satt til "Behandlet"
 
+    @implemented
     Scenario: Søkeren får én melding om manglene som publiseres i saken
       Gitt at saken hos "Universitetet i Oslo" har manglene "KAR" og "STEMPEL"
       Når manglene "KAR" og "STEMPEL" publiseres
       Så mottar søkeren én melding om mangler
 
+    @implemented
     Scenario: Søkeren får melding fra hver saksbehandlende organisasjon som publiserer mangler
       Gitt at saksbehandleren ved Universitetet i Oslo har publisert mangelen "KAR"
       Når saksbehandleren ved UiT Norges arktiske universitet publiserer mangelen "STEMPEL"
@@ -323,6 +328,9 @@ Egenskap: Søknadsmangler
       Og søkeren ser fristen for å laste opp dokumentasjon
       Og søkeren kan gå til dokumentasjonssiden
 
+  @depends-on-OPT-OVO-FRI-001 @depends-on-OPT-OPT-UTD-025
+  # OPT-OVO-FRI-001: «Opptaksforvalter ved forvaltende organisasjon må kunne sette informasjonsdato for dokumentasjon og ettersendingsfrist», «Opptaksforvalter ved forvaltende organisasjon må kunne sette frister for tidlig opptak», «Opptaksforvalter kan legge til utdanningsbakgrunner med avvikende frister»
+  # OPT-OPT-UTD-025: «Opptaksforvalter kan sette tidlig søknadsfrist per utdanningstilbud»
   Regel: Fristen for en mangel er ettersendingsfristen, med mindre en tidligere dokumentasjonsfrist ikke har gått ut
 
     Scenariomal: Fristen for en mangel publisert <publisert> når <situasjon>
@@ -344,22 +352,14 @@ Egenskap: Søknadsmangler
         | "Informatikk, UiO" er i tidlig opptak med dokumentasjonsfrist "2027-03-20 23:59"                                                                                       | Informatikk, UiO     | 2027-05-10 | 2027-07-01 23:59 |
         | søkeren har utdanningsbakgrunnen "Realkompetanse" med dokumentasjonsfrist "2027-03-20 23:59", og "Sykepleie, OsloMet" har tidlig dokumentasjonsfrist "2027-03-10 23:59" | Sykepleie, OsloMet   | 2027-03-05 | 2027-03-10 23:59 |
 
-    Scenario: Meldingen viser fristen for hvert søknadsalternativ med mangler
+    Scenario: Meldingen viser ettersendingsfristen og de tidligere fristene som gjelder manglene
       Gitt at ettersendingsfristen i opptaket er "2027-07-01 23:59"
       Og at "Lektorutdanning, UiO" har tidlig dokumentasjonsfrist "2027-03-20 23:59"
       Og at saken hos "Universitetet i Oslo" har søknadsalternativene "Lektorutdanning, UiO" og "Informatikk, UiO"
       Og at saken har en mangel i kategorien "Generelle krav" som ble publisert 2027-03-10
       Når søkeren åpner meldingen om mangel
-      Så ser søkeren fristen "2027-03-20 23:59" for "Lektorutdanning, UiO"
-      Og søkeren ser fristen "2027-07-01 23:59" for "Informatikk, UiO"
-
-    Scenario: Mangel på spesielle krav gir frist bare for søknadsalternativene med kompetanseregelverket
-      Gitt at "Informatikk, UiO" har kompetanseregelverket "Regelverk B"
-      Og at "Lektorutdanning, UiO" ikke har kompetanseregelverket "Regelverk B"
-      Og at saken har en mangel i kategorien "Spesielle krav" på kompetanseregelverket "Regelverk B"
-      Når søkeren åpner meldingen om mangel
-      Så ser søkeren fristen for "Informatikk, UiO"
-      Men søkeren ser ikke en frist for "Lektorutdanning, UiO"
+      Så ser søkeren den tidlige dokumentasjonsfristen "2027-03-20 23:59" for "Lektorutdanning, UiO"
+      Og søkeren ser ettersendingsfristen "2027-07-01 23:59" for "Informatikk, UiO"
 
     Scenariomal: Mangel på <kategori> har ettersendingsfristen
       Gitt at ettersendingsfristen i opptaket er "2027-07-01 23:59"
@@ -379,6 +379,7 @@ Egenskap: Søknadsmangler
     Dokumentasjonssiden er siden i Min kompetanse der søkeren ser hvilken dokumentasjon som
     mangler for søknadsalternativene, og laster opp dokumentasjonen.
 
+    @implemented
     Scenario: Mangel på spesielle krav vises under søknadsalternativene med kompetanseregelverket
       Gitt at "Informatikk, UiO" har kompetanseregelverket "Regelverk B"
       Og at "Historie, UiO" ikke har kompetanseregelverket "Regelverk B"
@@ -393,26 +394,34 @@ Egenskap: Søknadsmangler
       Så ser søkeren informasjonen til søker for mangelkoden "KAR"
       Og søkeren ser kravelementene i "Regelverk B"
 
+    @implemented
     Scenario: Søkeren ser kommentaren fra saksbehandleren
       Gitt at den publiserte mangelen "KAR" har en kommentar fra saksbehandleren
       Når søkeren ser manglene for "Informatikk, UiO"
       Så ser søkeren kommentaren fra saksbehandleren
 
-    @draft @openquestion
-    Scenariomal: Mangel på <kategori> gjelder ikke et bestemt søknadsalternativ
-      # ÅPNE SPØRSMÅL:
-      # - Gjelder mangler i kategoriene «Poeng» og «Kvote» søknaden som helhet, eller skal en
-      #   kvotemangel gjelde søknadsalternativene med kvoten (forslag fra review i PR #700)?
-      Gitt at saken har en publisert mangel i kategorien "<kategori>"
+    Scenariomal: Mangel på <kategori> vises under alle søknadsalternativene i saken
+      Gitt at saken hos "Universitetet i Oslo" har søknadsalternativene "Informatikk, UiO" og "Historie, UiO"
+      Og at saken hos "UiT Norges arktiske universitet" har søknadsalternativet "Fiskeri, UiT"
+      Og at saken hos "Universitetet i Oslo" har en publisert mangel i kategorien "<kategori>"
       Når søkeren åpner dokumentasjonssiden
-      Så ser søkeren mangelen
-      Men ingen av søknadsalternativene er merket med at dokumentasjon mangler
+      Så er "Informatikk, UiO" og "Historie, UiO" merket med at dokumentasjon mangler
+      Og "Fiskeri, UiT" er ikke merket med at dokumentasjon mangler
 
       Eksempler:
-        | kategori |
-        | Poeng    |
-        | Kvote    |
+        | kategori       |
+        | Generelle krav |
+        | Poeng          |
 
+    Scenario: Mangel på kvote vises under søknadsalternativene med kvoten
+      Gitt at kvotene til "Informatikk, UiO" har kvotespørsmålet "Bosted i Nord-Norge"
+      Og at kvotene til "Historie, UiO" ikke har kvotespørsmålet "Bosted i Nord-Norge"
+      Og at saken har den publiserte mangelen "BOS" på kvotespørsmålet "Bosted i Nord-Norge"
+      Når søkeren åpner dokumentasjonssiden
+      Så er "Informatikk, UiO" merket med at dokumentasjon mangler
+      Og "Historie, UiO" er ikke merket med at dokumentasjon mangler
+
+    @implemented
     Scenario: Mangel som er sjekket ut vises ikke for søkeren
       Gitt at den publiserte mangelen "KAR" er sjekket ut
       Når søkeren åpner dokumentasjonssiden
