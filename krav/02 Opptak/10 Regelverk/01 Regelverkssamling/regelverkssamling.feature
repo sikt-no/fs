@@ -18,6 +18,12 @@ Egenskap: Regelverkssamling
       Så er regelverkssamlingen opprettet
       Og den eies av organisasjonen jeg er opptaksforvalter ved
 
+    # Avklart av produkteier 2026-11-09. Hvem som kan opprette, står i tilgang_til_regelverk.feature.
+    @draft @ref-OPT-REG-SAM-002
+    Scenario: Kan ikke opprette regelverkssamling for en annen organisasjon
+      Når opptaksforvalter oppretter en ny regelverkssamling
+      Så kan regelverkssamlingen ikke eies av en annen organisasjon enn organisasjonen opptaksforvalter er opptaksforvalter ved
+
   Regel: En regelverkssamling er bundet til én organisasjon
 
     Scenario: Regelverkssamling eies av organisasjonen som opprettet den
