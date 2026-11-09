@@ -174,7 +174,6 @@ Egenskap: Ferdigbehandle en sak
       Når en annen søknad stoppes av den samme feilen i regelverket
       Så får ikke opptaksforvalteren et nytt varsel om feilen
 
-    @could
     Scenariomal: <feil i regelverket> stopper <steg>
       Gitt at <feil i regelverket> for søknadsalternativet
       Når søknaden behandles automatisk
