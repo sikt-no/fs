@@ -5,7 +5,7 @@
 - **Initiativ**: [#199](https://github.com/sikt-no/fs/issues/199)
 - **Jira**: –
 - **Eier**: –
-- **Siste oppdatering**: 2026-11-04
+- **Siste oppdatering**: 2026-11-06
 
 ## Mål
 
@@ -45,6 +45,7 @@ Append-only. Ny linje på toppen ved hver hendelse.
 
 | Dato       | Hendelse | Av | Lenke til review |
 |------------|----------|----|------------------|
+| 2026-11-06 | `@OPT-BEH-BEH-020`: et filter i saksoversikten holder for å finne søkere som ikke er kvalifisert. Om filteret som finnes, holder for spesielle opptakskrav, er spurt på Confluence. Fra økta med fagfolk 06.11.2026 (PR #966) | @JøranIndseth | – |
 | 2026-11-04 | Scenarioet om kravelementer mot valgt vitnemål i `@OPT-BEH-BEH-020` er skilt ut i `@OPT-BEH-BEH-039` (Behandle automatisk på vitnemålet saksbehandleren velger), `@must` uten scope. Fra reviewen av PR #931 | @JøranIndseth | [#931](https://github.com/sikt-no/fs/pull/931) |
 | 2026-11-04 | Søkere med flere vitnemål tatt ut av scopet, og forslaget til hvor årsaken vises når poengsummen ikke kan regnes ut (STEK-650), er tatt inn i `@OPT-BEH-BEH-031` (statusmøtet, se Kilder) | @JøranIndseth | – |
 | 2026-11-03 | Scenarioene om endringsloggen og saksloggen i `@OPT-BEH-BEH-020` og `@OPT-BEH-BEH-031` er blokkert til den nye sporingsloggen finnes. Endringsloggen i opptak er stoppet (BAT-324, V480 i fs-plattform), så kravene blir ikke `@implemented` før da | @JøranIndseth | – |

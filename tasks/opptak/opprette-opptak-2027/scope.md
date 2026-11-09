@@ -8,7 +8,7 @@
 - **Fase**: utforskning
 - **Prioritet**: Must
 - **Type**: feature
-- **Siste oppdatering**: 2026-11-02
+- **Siste oppdatering**: 2026-11-09
 
 Opptaksforvalter skal kunne opprette et opptak — samordnet eller lokalt — med alle nødvendige innstillinger, frister og fellestekster, og knytte utdanningstilbud til opptaket. Opptakstype som eget konsept utgår; egenskapene til opptaket fremgår av innstillingene.
 
@@ -45,6 +45,8 @@ Opptaksforvalter skal kunne opprette et opptak — samordnet eller lokalt — me
 | `@OPT-OVO-LOG-001` [hendelseslogg.feature](../../../krav/02%20Opptak/11%20Opprette%20og%20vedlikeholde%20opptak/06%20Hendelseslogg/hendelseslogg.feature) | Should | – | – | Ikke tildelt en sak. Oppgave 10: hendelseslogg for opptak. Venter på en generell løsning |
 | `@OPT-OVO-TEK-001` [fellestekster.feature](../../../krav/02%20Opptak/11%20Opprette%20og%20vedlikeholde%20opptak/05%20Tekster/fellestekster.feature) | Won't | – | [#214](https://github.com/sikt-no/fs/issues/214) | Ikke tildelt en sak. Oppgave 11: fellestekster som blir synlige for søkere. Informasjonen utledes fra innstillingene, og tekstene forvaltes i repo. Jira [TAKE-322](https://sikt.atlassian.net/browse/TAKE-322) |
 | `@OPT-OVO-TEK-002` [svarmeldingsmal.feature](../../../krav/02%20Opptak/11%20Opprette%20og%20vedlikeholde%20opptak/05%20Tekster/svarmeldingsmal.feature) | Won't | – | [#214](https://github.com/sikt-no/fs/issues/214) | Ikke tildelt en sak. Oppgave 12: svarmeldingsmal (juridisk kjerne, parametere og valgfritt tillegg). Utsatt til senere iterasjon, ses i sammenheng med tekstforvaltning. Jira [TAKE-323](https://sikt.atlassian.net/browse/TAKE-323) |
+| `@OPT-OVO-GRU-001` — Regel: Opptaksforvalter kan bare knytte til regelverkssamlinger fra organisasjonen opptaksforvalteren er opptaksforvalter ved | Must | – | [TAKE-474](https://sikt.atlassian.net/browse/TAKE-474) | Regelverkssamlingene i skjemaet avgrenses til organisasjonen opptaksforvalteren er opptaksforvalter ved. Fra MR !3361 i fs-admin |
+| `@OPT-OVO-INN-001` — Scenario: Regelverkssamlinger fra andre organisasjoner kan ikke velges | Must | – | [TAKE-474](https://sikt.atlassian.net/browse/TAKE-474) | Det samme når regelverkssamlingen endres. Fra MR !3361 i fs-admin |
 | `@OPT-OVO-GRU-001` — Regel: Det skal være mulig å gjenbruke innstillinger fra et tidligere opptak | Won't | – | – | Ikke tildelt en sak. Oppgave 13: utsatt til senere iterasjon. Åpent spørsmål: hva kopieres, og hva kopieres ikke? |
 | `@OPT-OVO-GRU-001` — Regel: Opptaksforvalter kan deaktivere et opptak | Won't | – | – | Ikke tildelt en sak. Oppgave 14: utsatt til senere iterasjon |
 
@@ -114,6 +116,7 @@ Append-only. Ny linje på toppen ved hver hendelse.
 
 | Dato       | Hendelse | Av | Lenke til review |
 |------------|----------|----|------------------|
+| 2026-11-09 | TAKE-474 lagt til: regelverkssamlingene i opptaket avgrenses til organisasjonen opptaksforvalteren er opptaksforvalter ved (`@OPT-OVO-GRU-001`, `@OPT-OVO-INN-001`) | @karensikt | [#975](https://github.com/sikt-no/fs/pull/975) |
 | 2026-11-02 | Oppgave og scope slått sammen til scope.md (fra opprette-og-vedlikeholde-opptak) | – | – |
 | 2026-10-12 | Knyttet til scope-opprette-opptak-2027 | – | – |
 | 2026-09-15 | Workshop: oppgavedeling avklart | @karensikt | – |

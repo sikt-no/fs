@@ -54,9 +54,20 @@ Egenskap: Opprette et opptak
       Men opptaksforvalter setter ikke opptakstype
       Så kan opptaket ikke lagres
 
-  @draft @depends-on-OPT-BEH-BEH-036
+  @planned @ref-OPT-REG-SAM-001
+  # Kilde: MR !3361 i fs-admin (TAKE-474). Det samme gjelder når regelverkssamlingen endres, se innstillinger.feature.
+  Regel: Opptaksforvalter kan bare knytte til regelverkssamlinger fra organisasjonen opptaksforvalteren er opptaksforvalter ved
+
+    Scenario: Regelverkssamlinger fra andre organisasjoner kan ikke knyttes til opptaket
+      Gitt at det finnes en regelverkssamling ved en annen organisasjon enn organisasjonen opptaksforvalter er opptaksforvalter ved
+      Når opptaksforvalter oppretter et nytt opptak
+      Så kan opptaksforvalter ikke knytte regelverkssamlingen ved den andre organisasjonen til opptaket
+
+  @planned @scope-automatisk-ferdigbehandling @depends-on-OPT-BEH-BEH-036
   # OPT-BEH-BEH-036: «Mangelen for generell studiekompetanse som fullføres i vår settes og sjekkes ut automatisk»
   # Avklart 30.10.2026: advarselen stopper ikke lagringen.
+  # Avklart 05.11.2026 (#951): advarselen på oversikten over mangelkodene (OPT-BEH-BEH-036) holder
+  # ikke alene. Den som har glemt å merke mangelkoden, åpner neppe den oversikten.
   Regel: Opptaksforvalter får en advarsel når regelverkssamlingen mangler mangelkode for generell studiekompetanse som fullføres i vår
 
     Scenario: Advarsel når ingen mangelkode er merket for generell studiekompetanse som fullføres i vår

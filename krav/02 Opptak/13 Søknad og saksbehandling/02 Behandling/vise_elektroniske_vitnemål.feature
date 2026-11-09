@@ -161,6 +161,7 @@ Egenskap: Se søkerens elektroniske vitnemål
       # bare at søkeren ikke har noen. Utformingen av feilmeldingen hører i
       # vise_elektroniske_vitnemål.design.md.
 
+    @implemented
     Scenario: Poeng som ikke kan beregnes, vises tomme
       Gitt søkeren har et elektronisk vitnemål som ikke gir poeng
       Når jeg åpner vitnemålsoversikten
@@ -183,6 +184,7 @@ Egenskap: Se søkerens elektroniske vitnemål
       # AVKLART 21.10.2026: vitnemålet åpnes i en ny fane, ikke i et eget
       # vindu ved siden av saksbehandlingen.
 
+    @implemented
     Scenario: Annullert vitnemål som er brukt i en beregning vises
       Gitt søkeren har et annullert vitnemål
       Og det annullerte vitnemålet er brukt i en beregning på dette opptaket

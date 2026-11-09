@@ -11,9 +11,7 @@
 # vitnemålet gir GSK når den er ja (@OPT-BEH-BEH-015). Beregningen her er en kontroll av
 # skolens påstand, og gir grunnlagskoden. Er den uenig med skolen, får saksbehandleren et
 # varsel, men den automatiske behandlingen stopper ikke. KREG har ingen egen påstand om GSK.
-# Koden stopper i dag automatikken når kontrollmotoren er uenig med skolen. Det er et avvik
-# fra kravet.
-@OPT-BEH-BEH-027 @must @in-progress @scope-automatisk-gsk-konklusjon @ref-OPT-BEH-BEH-015
+@OPT-BEH-BEH-027 @must @implemented @scope-automatisk-gsk-konklusjon @ref-OPT-BEH-BEH-015
 Egenskap: Beregne GSK fra vitnemål
   Som saksbehandler
   ønsker jeg at opptakssystemet beregner sin egen påstand om generell studiekompetanse for et vitnemål
@@ -37,9 +35,13 @@ Egenskap: Beregne GSK fra vitnemål
     # Fagresultatene på vitnemålet har en fagstatus. Saksbehandleren bruker den til å
     # angi om et fag skal være med i kontrollene av vitnemålet. Avklart 2026-10-27 at
     # fagstatusen hører til et annet krav, og at kontrollene må følge den.
+    # Avklart 06.11.2026 (økt med fagfolk): regelen er utenfor flyten for automatisk
+    # saksbehandling (FLY-OPT-AUT-001). En sak som behandles helautomatisk, har ingen
+    # saksbehandler som kan ta et fag ut av kontrollene. Regelen hører til manuell behandling.
+    # Kode i dag: saksbehandleren kan sette GSK-konklusjonen selv (ikke sjekket 06.11.2026).
     # ÅPNE SPØRSMÅL:
     # - Hva fagstatusen er, og hvem som setter den, er uklart (30.10.2026). Regelen holdes
-    #   utenfor til det er forklart. Den gjelder ikke den helautomatiske flyten.
+    #   utenfor til det er forklart.
     # - Kravet for fagstatusen er ikke skrevet. Når det finnes, får regelen
     #   @depends-on- til det.
 

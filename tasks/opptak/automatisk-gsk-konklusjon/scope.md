@@ -5,7 +5,7 @@
 - **Initiativ**: [#723](https://github.com/sikt-no/fs/issues/723)
 - **Jira**: [STEK-249](https://sikt.atlassian.net/browse/STEK-249)
 - **Eier**: –
-- **Siste oppdatering**: 2026-11-05
+- **Siste oppdatering**: 2026-11-06
 
 ## Mål
 
@@ -41,6 +41,9 @@ Append-only. Ny linje på toppen ved hver hendelse.
 
 | Dato       | Hendelse | Av | Lenke til review |
 |------------|----------|----|------------------|
+| 2026-11-09 | `@OPT-BEH-BEH-015`: regelen «Grunnlagskoden rettes når løpet er lagt inn i listen over løp» er parkert (`@draft @openquestion`), fordi det gamle systemet aldri retter en konklusjon når et løp legges inn. Scenarioet om gjenbruk fra FS-klienten er slettet: konklusjonene fra tidligere opptak kvalitetssikres og importeres én gang til gjenbrukstabellene, og brukes uansett kilde (review i PR #983). Scenarioet «Se hvilket opptak en gjenbrukt konklusjon kommer fra» er slettet: det har aldri vært et behov | @sondre-i-sikt | – |
+| 2026-11-06 | `@OPT-BEH-BEH-015`: ny regel «Grunnlagskoden rettes når løpet er lagt inn i listen over løp». Konklusjoner automatikken satte med KLY eller RFA fordi løpet manglet, får grunnlagskoden fra listen når opptaksforvalteren starter rettingen. Sikt legger løpet inn i listen (PR #966) | @JøranIndseth | – |
+| 2026-11-06 | `@OPT-BEH-BEH-015`: varselet om løp går til opptaksforvalteren ved organisasjonen som forvalter opptaket, ett varsel per løp (hvor i FS Admin er åpent). Annulleringen oppdages av importen (`@OPT-BEH-BEH-030`). `@OPT-BEH-BEH-027`: regelen om fagstatus er utenfor flyten. Fra økta med fagfolk 06.11.2026 (PR #966) | @JøranIndseth | – |
 | 2026-11-05 | `@OPT-BEH-BEH-034` er tatt inn i scopet med `@scope-automatisk-gsk-konklusjon` og en rad i tabellen. Kravet var hentet inn i spesifikasjonen 2026-11-02, men sto ikke i `scope.md`. Fra gjennomgangen av flyten automatisk saksbehandling | @JøranIndseth | – |
 | 2026-11-03 | Revidert med fs-scope: leveranse 2 av 6 i flyten automatisk saksbehandling, `@scope-automatisk-gsk-konklusjon` på 015 og 027, og krav-tabellen fylt ut | @JøranIndseth | – |
 | 2026-11-02 | Opprettet med fs-specify | – | – |

@@ -239,7 +239,7 @@ Egenskap: Frister og hendelser for opptak
       Når opptaksforvalter setter første svarfrist til "2027-07-20 23:59"
       Så har opptaket første svarfrist "2027-07-20 23:59"
 
-  @ref-OPT-BEH-BEH-012 @ref-OPT-BEH-BEH-028
+  @ref-OPT-BEH-BEH-012 @ref-OPT-BEH-BEH-028 @ref-OPT-BEH-BEH-019
   # Selve utregningen av alderen skjer i saksbehandlingen, i regelen
   # «Søkerens alder beregnes på opptakets dato for aldersberegning».
   Regel: Opptaksforvalter setter dato for aldersberegning
@@ -259,8 +259,10 @@ Egenskap: Frister og hendelser for opptak
   @draft @ref-OPT-BEH-BEH-015 @ref-OPT-BEH-BEH-032
   # Hva hendelsene gjør med den automatiske saksbehandlingen, står i OPT-BEH-BEH-015 og OPT-BEH-BEH-032.
   Regel: Opptaksforvalter kan sette når den automatiske saksbehandlingen starter og avsluttes
-    # Avklart 2026-11-03: begge hendelsene er valgfrie. Er ingen av dem satt, pågår den automatiske
-    # saksbehandlingen fra opptaket er opprettet til opptaket er historisk (01 Grunnoppsett/opptaksstatus.feature).
+    # Avklart 2026-11-03: begge hendelsene er valgfrie.
+    # Avklart 2026-11-05: den automatiske saksbehandlingen pågår bare mens opptaket er publisert
+    # (01 Grunnoppsett/opptaksstatus.feature). Hendelsene avgrenser perioden. Er ingen av dem satt, pågår
+    # den så lenge opptaket er publisert. Et upublisert eller historisk opptak behandles ikke automatisk.
     # Avklart 2026-11-03: hendelsene har dato og klokkeslett, som de andre hendelsene på opptaket.
 
     Scenario: Sette når den automatiske saksbehandlingen starter
