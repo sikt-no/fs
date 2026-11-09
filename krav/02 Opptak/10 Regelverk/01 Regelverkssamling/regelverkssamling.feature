@@ -33,6 +33,40 @@ Egenskap: Regelverkssamling
       Så får organisasjonen jeg er opptaksforvalter ved en egen kopi av regelverkssamlingen med alt innhold
       Og endringer i originalen påvirker ikke kopien
 
+  @planned
+  Regel: Opptaksforvalter ved flere organisasjoner velger organisasjonen som skal eie regelverkssamlingen
+
+    Scenariomal: Velge organisasjonen som skal eie regelverkssamlingen
+      Gitt at jeg er opptaksforvalter ved flere organisasjoner
+      Når jeg <handling>
+      Så må jeg velge hvilken av organisasjonene jeg er opptaksforvalter ved, som skal eie regelverkssamlingen
+
+      Eksempler:
+        | handling                               |
+        | oppretter en ny regelverkssamling      |
+        | kopierer regelverkssamlingen "UHG2027" |
+
+    Scenariomal: Valgt lærested er forhåndsvalgt som eier
+      Gitt at jeg er opptaksforvalter ved flere organisasjoner
+      Og lærestedet jeg har valgt, er en av organisasjonene jeg er opptaksforvalter ved
+      Når jeg <handling>
+      Så er lærestedet jeg har valgt, forhåndsvalgt som eier av regelverkssamlingen
+
+      Eksempler:
+        | handling                               |
+        | oppretter en ny regelverkssamling      |
+        | kopierer regelverkssamlingen "UHG2027" |
+
+    Scenariomal: Organisasjonen som skal eie regelverkssamlingen, vises
+      Gitt at jeg er opptaksforvalter ved én organisasjon
+      Når jeg <handling>
+      Så ser jeg at organisasjonen jeg er opptaksforvalter ved, blir eier av regelverkssamlingen
+
+      Eksempler:
+        | handling                               |
+        | oppretter en ny regelverkssamling      |
+        | kopierer regelverkssamlingen "UHG2027" |
+
   @draft @openquestion
   Regel: En regelverkssamling kan deaktiveres
     # ÅPNE SPØRSMÅL:
