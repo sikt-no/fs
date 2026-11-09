@@ -292,7 +292,7 @@ Egenskap: Automatisk vurdering av spesielle opptakskrav
     @implemented
     Scenario: Kravelement som saksbehandleren bare ser på, vurderes automatisk igjen
       Gitt at søknaden har et kravelement som er vurdert automatisk
-      Og at saksbehandleren har sett på kravelementet uten å endre vurderingen eller velge "la stå"
+      Og at saksbehandleren har sett på kravelementet uten å endre vurderingen
       Når søknaden behandles automatisk
       Så er kravelementet vurdert automatisk på nytt
 
