@@ -104,19 +104,16 @@ Egenskap: Velge utdanningsbakgrunn i søknad
   Regel: Søkeren med GSK-konklusjon velger ikke utdanningsbakgrunn
     # AVKLART 2026-10-27 (planleggingsmøte): Steget hoppes over når søkeren har GSK-konklusjon.
     # Søkeren får ingen forklaring, siden steget ikke vises.
-    # AVKLART 2026-11-09 (TOT-2586): GSK-konklusjonen er konklusjonen søknaden får fra et
-    # tidligere opptak (gjenbruksbasen) når søknaden opprettes, se «Konklusjon fra tidligere opptak».
+    # AVKLART 2026-11-09 (TOT-2586): GSK-konklusjonen er en konklusjon fra et tidligere opptak
+    # i gjenbruksbasen, se «Konklusjon fra tidligere opptak».
     # Søkere med utenlandsk utdanning kan ha GSK-konklusjon, og søkeren med GSK-konklusjon får
     # ikke automatisk «Norsk videregående skole», siden søknaden da havner feil i
     # saksbehandlertildelingen.
     # ÅPNE SPØRSMÅL:
-    # - Hvilken utdanningsbakgrunn registreres i søknaden når steget hoppes over? Forslag:
-    #   grunnlagskoden i GSK-konklusjonen (f.eks. IB, UTA) kobles til en utdanningsbakgrunn,
-    #   fast i backend eller satt av opptaksforvalter i opptaket.
     # - Skal en utdanningsbakgrunn være valgt på forhånd i søknaden når søkeren blir spurt?
 
     Scenario: Søkeren med GSK-konklusjon blir ikke spurt om utdanningsbakgrunn
-      Gitt at søknaden har fått en positiv GSK-konklusjon fra et tidligere opptak
+      Gitt at søkeren har en positiv GSK-konklusjon fra et tidligere opptak
       Når søkeren går gjennom søknaden
       Så blir søkeren ikke spurt om utdanningsbakgrunn
 
