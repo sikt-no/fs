@@ -130,16 +130,16 @@ Egenskap: Automatiske tilleggspoeng
 
     Scenario: Innpassede emner telles bare én gang
       Gitt at poengtypen for poeng for høyere utdanning er knyttet til algoritmen for høyere utdanning
-      Og at søkeren har bestått emner på 40 studiepoeng ved UiB
-      Og at emner på 30 studiepoeng fra UiB er innpasset ved NTNU
-      Og at resultatene fra høyere utdanning viser emnene på 30 studiepoeng både ved UiB og ved NTNU
+      Og at søkeren har bestått emner på 40 studiepoeng ved lærestedet der emnene ble tatt
+      Og at emner på 30 studiepoeng fra lærestedet der emnene ble tatt, er innpasset ved et annet lærested
+      Og at resultatene fra høyere utdanning viser emnene på 30 studiepoeng både ved lærestedet der emnene ble tatt, og ved lærestedet der emnene er innpasset
       Når saken får grunnlaget "VES"
       Så har saken 1 poeng for høyere utdanning
 
     Scenario: Innpassede emner telles med studiepoengene fra lærestedet der de ble tatt
       Gitt at poengtypen for poeng for høyere utdanning er knyttet til algoritmen for høyere utdanning
-      Og at søkeren har bestått emner på 30 studiepoeng ved UiB
-      Og at et emne på 10 studiepoeng fra UiB er innpasset ved NTNU med 7,5 studiepoeng
+      Og at søkeren har bestått emner på 30 studiepoeng ved lærestedet der emnene ble tatt
+      Og at et emne på 10 studiepoeng fra lærestedet der emnet ble tatt, er innpasset ved et annet lærested med 7,5 studiepoeng
       Når saken får grunnlaget "VES"
       Så har saken 1 poeng for høyere utdanning
 

@@ -32,8 +32,8 @@ Egenskap: Beregne automatisk på nytt
   # som de andre jobbene i opptak.
 
   Bakgrunn:
-    Gitt at opptaksforvalteren ved HK-dir er innlogget
-    Og at "Informatikk, UiO" og "Historie, UiT" er med i opptaket "Samordna opptak 2027"
+    Gitt at opptaksforvalteren er innlogget
+    Og at "Informatikk, UiO" og "Historie, UiT" er med i opptaket
 
   @implemented
   Regel: Opptaksforvalteren velger regelverkene feilen gjaldt
@@ -74,7 +74,7 @@ Egenskap: Beregne automatisk på nytt
 
     Scenario: Regelverkene opptaksforvalteren kan velge, er regelverkene i opptaket
       Når opptaksforvalteren velger regelverkene feilen gjaldt
-      Så kan opptaksforvalteren bare velge regelverkene i regelverkssamlingen på opptaket "Samordna opptak 2027"
+      Så kan opptaksforvalteren bare velge regelverkene i regelverkssamlingen på opptaket
 
   @depends-on-OPT-BEH-BEH-018 @depends-on-OPT-BEH-BEH-020 @ref-FLY-OPT-AUT-001 @implemented
   Regel: I saker den automatiske behandlingen har behandlet, beregnes kravelementene og poengene på nytt
@@ -84,23 +84,23 @@ Egenskap: Beregne automatisk på nytt
     # Grunnlaget velges ikke på nytt.
 
     Scenario: Kravelementene og poengene beregnes på nytt i en sak den automatiske behandlingen har behandlet
-      Gitt at den automatiske behandlingen har behandlet saken til "Kari Nordmann" hos "Universitetet i Oslo"
+      Gitt at den automatiske behandlingen har behandlet saken
       Og at opptaksforvalteren har rettet en feil i kompetanseregelverket "Informatikk"
       Når opptaksforvalteren beregner på nytt for søknadsalternativene med kompetanseregelverket "Informatikk"
-      Så er kravelementene og poengene for "Kari Nordmann" på "Informatikk, UiO" beregnet på nytt etter det rettede kompetanseregelverket
-      Og kvalifiseringen, poengsummen og kvoten for "Kari Nordmann" på "Informatikk, UiO" er regnet ut på nytt
+      Så er kravelementene og poengene for søkeren på "Informatikk, UiO" beregnet på nytt etter det rettede kompetanseregelverket
+      Og kvalifiseringen, poengsummen og kvoten for søkeren på "Informatikk, UiO" er regnet ut på nytt
 
     Scenario: Kravelementet saksbehandleren har vurdert, beregnes ikke på nytt
-      Gitt at den automatiske behandlingen har behandlet saken til "Kari Nordmann" hos "Universitetet i Oslo"
-      Og at saksbehandleren ved Universitetet i Oslo har vurdert "Matematikk R1" for "Kari Nordmann" på "Informatikk, UiO"
+      Gitt at den automatiske behandlingen har behandlet saken
+      Og at saksbehandleren har vurdert "Matematikk R1" for søkeren på "Informatikk, UiO"
       Når opptaksforvalteren beregner på nytt for søknadsalternativene med kompetanseregelverket "Informatikk"
-      Så er vurderingen saksbehandleren ved Universitetet i Oslo har gjort av "Matematikk R1" for "Kari Nordmann", uendret
+      Så er vurderingen saksbehandleren har gjort av "Matematikk R1" for søkeren, uendret
 
     Scenario: Poengene saksbehandleren har satt, beregnes ikke på nytt
-      Gitt at den automatiske behandlingen har behandlet saken til "Kari Nordmann" hos "Universitetet i Oslo"
-      Og at saksbehandleren ved Universitetet i Oslo har satt poengene for "Kari Nordmann" på "Informatikk, UiO"
+      Gitt at den automatiske behandlingen har behandlet saken
+      Og at saksbehandleren har satt poengene for søkeren på "Informatikk, UiO"
       Når opptaksforvalteren beregner på nytt for søknadsalternativene med rangeringsregelverket "Ordinær rangering"
-      Så er poengene saksbehandleren ved Universitetet i Oslo har satt for "Kari Nordmann", uendret
+      Så er poengene saksbehandleren har satt for søkeren, uendret
 
   @depends-on-OPT-BEH-BEH-018 @depends-on-OPT-BEH-BEH-020 @ref-FLY-OPT-AUT-001 @implemented
   Regel: Saker saksbehandleren har behandlet, får regnet ut kvalifiseringen, poengsummen og kvoten på nytt og blir merket
@@ -111,31 +111,31 @@ Egenskap: Beregne automatisk på nytt
     # når saken er sett på.
 
     Scenario: Poengsummen regnes ut på nytt i en sak saksbehandleren har behandlet
-      Gitt at saksbehandleren ved Universitetet i Oslo har behandlet saken til "Kari Nordmann"
+      Gitt at saksbehandleren har behandlet saken
       Og at opptaksforvalteren har rettet en feil i rangeringsregelverket "Ordinær rangering"
       Når opptaksforvalteren beregner på nytt for søknadsalternativene med rangeringsregelverket "Ordinær rangering"
-      Så har "Informatikk, UiO" poengsum for "Kari Nordmann" etter det rettede rangeringsregelverket
+      Så har "Informatikk, UiO" poengsum for søkeren etter det rettede rangeringsregelverket
 
     Scenario: Kravelementet saksbehandleren har vurdert, er uendret
-      Gitt at saksbehandleren ved Universitetet i Oslo har behandlet saken til "Kari Nordmann"
-      Og at saksbehandleren ved Universitetet i Oslo har vurdert "Matematikk R1" for "Kari Nordmann" på "Informatikk, UiO"
+      Gitt at saksbehandleren har behandlet saken
+      Og at saksbehandleren har vurdert "Matematikk R1" for søkeren på "Informatikk, UiO"
       Når opptaksforvalteren beregner på nytt for søknadsalternativene med kompetanseregelverket "Informatikk"
-      Så er vurderingen saksbehandleren ved Universitetet i Oslo har gjort av "Matematikk R1" for "Kari Nordmann", uendret
+      Så er vurderingen saksbehandleren har gjort av "Matematikk R1" for søkeren, uendret
 
     Scenario: Saken saksbehandleren har behandlet, får taggen "Regelverk endret"
-      Gitt at saksbehandleren ved Universitetet i Oslo har behandlet saken til "Kari Nordmann"
+      Gitt at saksbehandleren har behandlet saken
       Når opptaksforvalteren beregner på nytt for søknadsalternativene med kompetanseregelverket "Informatikk"
-      Så får saken til "Kari Nordmann" hos "Universitetet i Oslo" taggen "Regelverk endret"
+      Så får saken taggen "Regelverk endret"
 
     Scenario: Saken den automatiske behandlingen har behandlet, får ikke taggen "Regelverk endret"
-      Gitt at den automatiske behandlingen har behandlet saken til "Kari Nordmann" hos "Universitetet i Oslo"
+      Gitt at den automatiske behandlingen har behandlet saken
       Når opptaksforvalteren beregner på nytt for søknadsalternativene med kompetanseregelverket "Informatikk"
-      Så får saken til "Kari Nordmann" hos "Universitetet i Oslo" ikke taggen "Regelverk endret"
+      Så får saken ikke taggen "Regelverk endret"
 
     Scenario: Saksbehandleren finner sakene med taggen "Regelverk endret"
-      Gitt at saken til "Kari Nordmann" hos "Universitetet i Oslo" har taggen "Regelverk endret"
-      Når saksbehandleren ved Universitetet i Oslo filtrerer sakene på taggen "Regelverk endret"
-      Så ser saksbehandleren ved Universitetet i Oslo saken til "Kari Nordmann"
+      Gitt at saken har taggen "Regelverk endret"
+      Når saksbehandleren filtrerer sakene på taggen "Regelverk endret"
+      Så ser saksbehandleren saken
 
   @depends-on-OPT-BEH-BEH-025 @ref-FLY-OPT-AUT-001
   Regel: Bare saker som er ferdig behandlet, beregnes på nytt
@@ -144,16 +144,16 @@ Egenskap: Beregne automatisk på nytt
 
     @implemented
     Scenario: Saken er fortsatt ferdig behandlet etter at poengene er beregnet på nytt
-      Gitt at saken til "Kari Nordmann" hos "Universitetet i Oslo" er ferdig behandlet
+      Gitt at saken er ferdig behandlet
       Når opptaksforvalteren beregner på nytt for søknadsalternativene med rangeringsregelverket "Ordinær rangering"
-      Så har "Informatikk, UiO" poengsum for "Kari Nordmann" etter det rettede rangeringsregelverket
-      Og saken til "Kari Nordmann" hos "Universitetet i Oslo" er fortsatt ferdig behandlet
+      Så har "Informatikk, UiO" poengsum for søkeren etter det rettede rangeringsregelverket
+      Og saken er fortsatt ferdig behandlet
 
     @implemented
     Scenariomal: En sak med behandlingsstatusen "<status>" beregnes ikke på nytt
-      Gitt at saken til "Kari Nordmann" hos "Universitetet i Oslo" har behandlingsstatusen "<status>"
+      Gitt at saken har behandlingsstatusen "<status>"
       Når opptaksforvalteren beregner på nytt for søknadsalternativene med rangeringsregelverket "Ordinær rangering"
-      Så er saken til "Kari Nordmann" hos "Universitetet i Oslo" ikke beregnet på nytt
+      Så er saken ikke beregnet på nytt
 
       Eksempler:
         | status           |
@@ -163,24 +163,24 @@ Egenskap: Beregne automatisk på nytt
     @depends-on-OPT-BEH-BEH-036
     # OPT-BEH-BEH-036: «Saken får automatiske mangeltekster når søkeren ikke er kvalifisert»
     Scenario: Søkeren ser den nye mangelteksten i en sak som er ferdig behandlet
-      Gitt at saken til "Kari Nordmann" hos "Universitetet i Oslo" er ferdig behandlet
-      Og at "Kari Nordmann" er kvalifisert for "Informatikk, UiO"
-      Og at en feil i kontrollmotoren er rettet, så vitnemålet til "Kari Nordmann" ikke lenger oppfyller "Matematikk R2"
+      Gitt at saken er ferdig behandlet
+      Og at søkeren er kvalifisert for "Informatikk, UiO"
+      Og at en feil i kontrollmotoren er rettet, så vitnemålet til søkeren ikke lenger oppfyller "Matematikk R2"
       Når opptaksforvalteren beregner på nytt for søknadsalternativene med kravelementet "Matematikk R2"
-      Så er "Kari Nordmann" ikke lenger kvalifisert for "Informatikk, UiO"
-      Og "Kari Nordmann" ser den automatiske mangelteksten for "Matematikk R2" i Min kompetanse
-      Og saken til "Kari Nordmann" hos "Universitetet i Oslo" er fortsatt ferdig behandlet
+      Så er søkeren ikke lenger kvalifisert for "Informatikk, UiO"
+      Og søkeren ser den automatiske mangelteksten for "Matematikk R2" i Min kompetanse
+      Og saken er fortsatt ferdig behandlet
 
     @depends-on-OPT-BEH-BEH-036 @implemented
     # OPT-BEH-BEH-036: «Saken får automatiske mangeltekster når søkeren ikke er kvalifisert»
     Scenario: Den automatiske mangelteksten slettes når søkeren blir kvalifisert etter beregningen
-      Gitt at saken til "Kari Nordmann" hos "Universitetet i Oslo" er ferdig behandlet
-      Og at saken har en automatisk mangeltekst for "Matematikk R2" fordi "Kari Nordmann" ikke er kvalifisert for "Informatikk, UiO"
-      Og at en feil i kontrollmotoren er rettet, så vitnemålet til "Kari Nordmann" oppfyller "Matematikk R2"
+      Gitt at saken er ferdig behandlet
+      Og at saken har en automatisk mangeltekst for "Matematikk R2" fordi søkeren ikke er kvalifisert for "Informatikk, UiO"
+      Og at en feil i kontrollmotoren er rettet, så vitnemålet til søkeren oppfyller "Matematikk R2"
       Når opptaksforvalteren beregner på nytt for søknadsalternativene med kravelementet "Matematikk R2"
-      Så er "Kari Nordmann" kvalifisert for "Informatikk, UiO"
-      Og "Kari Nordmann" ser ikke lenger den automatiske mangelteksten for "Matematikk R2" i Min kompetanse
-      Og saken til "Kari Nordmann" hos "Universitetet i Oslo" er fortsatt ferdig behandlet
+      Så er søkeren kvalifisert for "Informatikk, UiO"
+      Og søkeren ser ikke lenger den automatiske mangelteksten for "Matematikk R2" i Min kompetanse
+      Og saken er fortsatt ferdig behandlet
 
   @depends-on-OPT-BEH-BEH-033 @implemented
   Regel: Beregningen kjører i bakgrunnen
@@ -199,14 +199,14 @@ Egenskap: Beregne automatisk på nytt
 
     @implemented
     Scenario: Opptaksforvalteren kan ikke starte en ny beregning før den forrige er ferdig
-      Gitt at en beregning på nytt i "Samordna opptak 2027" ikke er ferdig
-      Når opptaksforvalteren starter en ny beregning på nytt i "Samordna opptak 2027"
+      Gitt at en beregning på nytt i opptaket ikke er ferdig
+      Når opptaksforvalteren starter en ny beregning på nytt i opptaket
       Så starter ikke beregningen
       Og opptaksforvalteren får beskjed om at en beregning på nytt kjører
 
     Scenario: Opptaksforvalteren kan ikke beregne på nytt mens en plasstildeling kjører
-      Gitt at en plasstildeling i "Samordna opptak 2027" kjører
-      Når opptaksforvalteren starter en beregning på nytt i "Samordna opptak 2027"
+      Gitt at en plasstildeling i opptaket kjører
+      Når opptaksforvalteren starter en beregning på nytt i opptaket
       Så starter ikke beregningen
       Og opptaksforvalteren får beskjed om at en plasstildeling kjører
 
@@ -228,18 +228,18 @@ Egenskap: Beregne automatisk på nytt
 
     @implemented
     Scenario: En plasstildeling som er kjørt, endres ikke
-      Gitt at en plasstildeling i plasstildelingsrunden "Hovedrunde" er kjørt
+      Gitt at en plasstildeling er kjørt
       Når opptaksforvalteren beregner på nytt for søknadsalternativene med rangeringsregelverket "Ordinær rangering"
       Så er resultatet av plasstildelingen som er kjørt, uendret
 
     @implemented
     Scenario: Neste plasstildeling bruker det som er beregnet på nytt
       Gitt at opptaksforvalteren har beregnet på nytt for søknadsalternativene med rangeringsregelverket "Ordinær rangering"
-      Når opptaksforvalteren starter en plasstildeling i plasstildelingsrunden "Hovedrunde"
+      Når opptaksforvalteren starter en plasstildeling
       Så bruker plasstildelingen poengsummene som er beregnet på nytt
 
     Scenario: Opptaksforvalteren kan ikke beregne på nytt etter at resultatet av siste plasstildelingsrunde er publisert
-      Gitt at resultatet av siste plasstildelingsrunde i "Samordna opptak 2027" er publisert
-      Når opptaksforvalteren starter en beregning på nytt i "Samordna opptak 2027"
+      Gitt at resultatet av siste plasstildelingsrunde i opptaket er publisert
+      Når opptaksforvalteren starter en beregning på nytt i opptaket
       Så starter ikke beregningen
       Og opptaksforvalteren får beskjed om at resultatet av siste plasstildelingsrunde er publisert

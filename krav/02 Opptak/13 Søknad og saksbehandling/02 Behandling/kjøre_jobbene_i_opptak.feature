@@ -26,10 +26,6 @@ Egenskap: Kjøre jobbene i opptak
   # ÅPNE SPØRSMÅL:
   # - Hva heter tjenesten for resultater fra høyere utdanning?
 
-  Bakgrunn:
-    Gitt at opptaket "Samordna opptak 2027" forvaltes av HK-dir
-    Og at "Universitetet i Oslo" deltar i opptaket
-
   @ref-FLY-OPT-VIT-001
   Regel: Jobbplanleggeren starter jobbene i opptaket
 
@@ -60,7 +56,7 @@ Egenskap: Kjøre jobbene i opptak
       Så starter jobbplanleggeren importen av VGS-vitnemål fra KREG
 
     Scenario: Opptaksforvalteren endrer ikke hvor ofte jobben kjører
-      Når opptaksforvalteren ved HK-dir ser på jobbene i "Samordna opptak 2027"
+      Når opptaksforvalteren ser på jobbene i opptaket
       Så kan opptaksforvalteren ikke endre hvor ofte jobbene kjører
 
   Regel: Jobbene kjører så lenge opptaket er i gang
@@ -68,25 +64,25 @@ Egenskap: Kjøre jobbene i opptak
     # ikke jobbene. Jobbene kjører til opptaket er avsluttet.
 
     Scenario: Jobbene kjører ikke for et avsluttet opptak
-      Gitt at "Samordna opptak 2026" er avsluttet
+      Gitt at et opptak er avsluttet
       Når jobbplanleggeren starter importen av VGS-vitnemål fra KREG
-      Så importeres ingen vitnemål for søknadene i "Samordna opptak 2026"
+      Så importeres ingen vitnemål for søknadene i det avsluttede opptaket
 
   @ref-OPT-BEH-BEH-030
   Regel: En søker jobben feilet for, prøves på nytt
 
     Scenario: Vitnemålene importeres når KREG svarer igjen
-      Gitt at importen av VGS-vitnemål fra KREG feilet for "Kari Nordmann" fordi KREG ikke svarte
+      Gitt at importen av VGS-vitnemål fra KREG feilet for søkeren fordi KREG ikke svarte
       Når KREG svarer igjen innenfor tiden i applikasjonsinnstillingene
-      Så er vitnemålene til "Kari Nordmann" importert
+      Så er søkerens vitnemål importert
 
   Regel: Jobben fortsetter med de andre søkerne når den feiler for én søker
 
     Scenario: Importen fortsetter med de andre søkerne når den feiler for én søker
-      Gitt at importen av VGS-vitnemål fra KREG feiler for "Kari Nordmann"
-      Og at "Ola Nordmann" har fått et vitnemål i KREG som ikke er importert
+      Gitt at importen av VGS-vitnemål fra KREG feiler for én søker
+      Og at en annen søker har fått et vitnemål i KREG som ikke er importert
       Når importen av VGS-vitnemål fra KREG kjører
-      Så er vitnemålet til "Ola Nordmann" importert
+      Så er vitnemålet til den andre søkeren importert
 
   Regel: Tekniske feil skrives i applikasjonsloggen, og Sikt får et varsel
     # Avklart 05.11.2026: Sikt får ett samlet varsel per kjøring, ikke ett per søker. Er KREG
@@ -99,8 +95,8 @@ Egenskap: Kjøre jobbene i opptak
       Og Sikt får ett varsel med antall søkere importen feilet for
 
     Scenario: Saksbehandleren ser ikke tekniske feil
-      Gitt at importen av VGS-vitnemål fra KREG feilet for "Kari Nordmann" fordi KREG ikke svarte
-      Når saksbehandleren ved Universitetet i Oslo åpner saken til "Kari Nordmann"
+      Gitt at importen av VGS-vitnemål fra KREG feilet for søkeren fordi KREG ikke svarte
+      Når saksbehandleren åpner søkerens sak
       Så ser saksbehandleren ingen feilmelding om KREG på saken
 
   @draft @openquestion
@@ -111,6 +107,6 @@ Egenskap: Kjøre jobbene i opptak
     # - Ser opptaksforvalteren ved en deltakende organisasjon også status for jobbene?
 
     Scenario: Opptaksforvalteren ser når jobben kjørte sist
-      Gitt at importen av VGS-vitnemål fra KREG kjørte sist 29.10.2026 kl. 10.15
-      Når opptaksforvalteren ved HK-dir ser på jobbene i "Samordna opptak 2027"
-      Så ser opptaksforvalteren at importen kjørte sist 29.10.2026 kl. 10.15
+      Gitt at importen av VGS-vitnemål fra KREG har kjørt
+      Når opptaksforvalteren ser på jobbene i opptaket
+      Så ser opptaksforvalteren når importen kjørte sist

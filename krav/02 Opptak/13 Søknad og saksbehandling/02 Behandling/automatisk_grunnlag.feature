@@ -192,11 +192,11 @@ Egenskap: Automatisk grunnlag
     @implemented
     Scenario: Hver sak i søknaden får grunnlaget når den automatiske behandlingen kjører for saken
       # Avklart 06.11.2026: erstatter «Automatikken setter grunnlaget i alle sakene i søknaden».
-      Gitt at søknaden har saker hos "Universitetet i Oslo" og "UiT Norges arktiske universitet"
+      Gitt at søknaden har saker hos to saksbehandlende organisasjoner
       Og at søkeren har ett elektronisk vitnemål som gir generell studiekompetanse
-      Når den automatiske behandlingen kjører for saken hos "Universitetet i Oslo"
-      Så får saken hos "Universitetet i Oslo" grunnlaget automatisk
-      Men saken hos "UiT Norges arktiske universitet" får ikke grunnlaget før den automatiske behandlingen kjører for den saken
+      Når den automatiske behandlingen kjører for saken hos den ene saksbehandlende organisasjonen
+      Så får saken hos den ene saksbehandlende organisasjonen grunnlaget automatisk
+      Men saken hos den andre saksbehandlende organisasjonen får ikke grunnlaget før den automatiske behandlingen kjører for den saken
 
     @implemented
     Scenario: Grunnlaget settes av den automatiske behandlingen
@@ -226,10 +226,10 @@ Egenskap: Automatisk grunnlag
 
     @implemented
     Scenario: Grunnlaget saksbehandleren legger til, gjelder bare saken hos organisasjonen
-      Gitt at søknaden har saker hos "Universitetet i Oslo" og "UiT Norges arktiske universitet"
-      Når saksbehandleren ved Universitetet i Oslo legger til grunnlaget "PRA"
-      Så har saken hos "Universitetet i Oslo" grunnlaget "PRA"
-      Og saken hos "UiT Norges arktiske universitet" har ikke grunnlaget "PRA"
+      Gitt at søknaden har saker hos to saksbehandlende organisasjoner
+      Når saksbehandleren ved den ene saksbehandlende organisasjonen legger til grunnlaget "PRA"
+      Så har saken hos den ene saksbehandlende organisasjonen grunnlaget "PRA"
+      Og saken hos den andre saksbehandlende organisasjonen har ikke grunnlaget "PRA"
 
     Scenario: Saksbehandleren velger et grunnlag som automatikken har satt
       Gitt at saken har et grunnlag som er satt automatisk
