@@ -168,6 +168,9 @@ Egenskap: Innstillinger for opptak
     # Avvikende søknads- og dokumentasjonsfrister per utdanningsbakgrunn settes i
     # 04 Frister/frister_og_hendelser.feature.
     # Søkerens valg av utdanningsbakgrunn står i OPT-SØK-SØK-017.
+    # AVKLART 2026-11-09 (TOT-2586): Opptaksforvalter velger fritt hvilke utdanningsbakgrunner
+    # opptaket har. Ingen utdanningsbakgrunn er obligatorisk, heller ikke «Norsk videregående skole».
+    # Senere behov: opptaksforvalter lager egne utdanningsbakgrunner.
 
     Scenario: Legge til utdanningsbakgrunner fra godkjent liste
       Når opptaksforvalter legger til utdanningsbakgrunner i opptaket
@@ -191,12 +194,8 @@ Egenskap: Innstillinger for opptak
       Og opptaksforvalter ser at søkere har valgt utdanningsbakgrunnen
 
     # AVKLART 2026-10-19: Et opprettet opptak skal alltid ha minst én utdanningsbakgrunn.
-    @openquestion
+    # AVKLART 2026-11-09 (TOT-2586): Det gjelder alle opptak, ikke bare samordna opptak.
     Scenario: Den siste utdanningsbakgrunnen kan ikke fjernes
-      # ÅPNE SPØRSMÅL:
-      # - Skal alle opptak ha utdanningsbakgrunn, eller bare UHG-opptak (samordna opptak)?
-      #   Avklares i TOT-2586. Gjelder det bare UHG, skal andre opptak kunne være uten
-      #   utdanningsbakgrunn.
       Gitt at "Steinerskole" er den eneste utdanningsbakgrunnen i opptaket
       Når opptaksforvalter vil fjerne "Steinerskole" fra opptaket
       Så blir "Steinerskole" ikke fjernet
