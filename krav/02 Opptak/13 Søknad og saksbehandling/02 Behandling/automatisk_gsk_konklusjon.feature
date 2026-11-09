@@ -274,9 +274,9 @@ Egenskap: Automatisk GSK-konklusjon
       # per vitnemål. Avklart 06.11.2026 (Jøran, PR #966): varselet gjelder opptaket. Har søkere i
       # flere opptak vitnemål med løpet, får forvalteren av hvert opptak sitt eget varsel.
       # Avklart 06.11.2026 (Jøran, PR #966): HK-dir gir Sikt beskjed om grunnlagskoden, og Sikt
-      # ser også løpet i applikasjonsloggen. Sikt legger løpet inn i listen over løp. Søknadene
-      # som har fått KLY eller RFA, rettes ikke (regelen «Grunnlagskoden rettes når løpet er lagt
-      # inn i listen over løp» er parkert 2026-11-09).
+      # ser også løpet i applikasjonsloggen. Sikt legger løpet inn i listen over løp.
+      # Om søknadene som har fått KLY eller RFA, skal rettes, er åpent (se regelen «Grunnlagskoden
+      # rettes når løpet er lagt inn i listen over løp»).
       # ÅPNE SPØRSMÅL:
       # - Hvor i FS Admin får opptaksforvalteren varselet?
       Gitt at løpet på vitnemålet ikke finnes i opptakssystemets liste over løp
@@ -362,7 +362,7 @@ Egenskap: Automatisk GSK-konklusjon
       Så importeres vitnemålet fra KREG
       Og GSK-vitnemålsberegningen kjører for vitnemålet uten at noen starter den
 
-  @ref-FLY-OPT-AUT-001
+  @ref-FLY-OPT-AUT-001 @implemented
   Regel: Konklusjon fra tidligere opptak
     # Grunnlagskoder: avklart 2026-10-13 at alle positive konklusjoner kan gjenbrukes,
     # uansett grunnlagskode. Grunnlagskoden kopieres, så den kan være hvilken som helst
@@ -372,7 +372,10 @@ Egenskap: Automatisk GSK-konklusjon
 
     # Kildekoder: avklart 2026-10-27 at alle rader i gjenbruksbasen kan gjenbrukes i 2027,
     # både NOM (samordna opptak, 1997–2026) og IMM (1907–2001).
-    @implemented
+    # Konklusjonene fra tidligere opptak kan komme fra flere kilder (samordna opptak, lokale opptak
+    # i FS-klienten). De kvalitetssikres og importeres én gang til gjenbrukstabellene før opptaket
+    # (STEK-442). Kravet er at konklusjonene i tabellene brukes, uansett kilde.
+
     Scenario: Gjenbruke positiv konklusjon fra tidligere samordna opptak
       Gitt at søknaden ikke får GSK-konklusjon fra vitnemålet
       Og at søkeren har en positiv GSK-konklusjon fra et tidligere samordna opptak
@@ -380,7 +383,6 @@ Egenskap: Automatisk GSK-konklusjon
       Så får søknaden en positiv GSK-konklusjon
       Og grunnlagskoden og grunnlagsdatoen er de samme som i den tidligere konklusjonen
 
-    @implemented
     Scenario: Vitnemålet går foran tidligere konklusjon
       Gitt at søkeren har et vitnemål som gir generell studiekompetanse
       Og at søkeren har en positiv GSK-konklusjon fra et tidligere opptak
@@ -395,7 +397,6 @@ Egenskap: Automatisk GSK-konklusjon
     # Den siste konklusjonen: avklart 2026-10-26 at det er konklusjonen som ble satt
     # sist, også når søkeren har flere konklusjoner fra samme år og termin, fra ulike
     # organisasjoner.
-    @implemented
     Scenario: Bare den siste tidligere konklusjonen gjenbrukes
       Gitt at søknaden ikke får GSK-konklusjon fra vitnemålet
       Og at søkeren har en positiv GSK-konklusjon fra et opptak i 2024
@@ -403,13 +404,11 @@ Egenskap: Automatisk GSK-konklusjon
       Når søknaden opprettes
       Så får søknaden ingen GSK-konklusjon fra tidligere opptak
 
-    @implemented
     Scenario: Negative konklusjoner gjenbrukes ikke
       Gitt at søkeren bare har negative GSK-konklusjoner fra tidligere opptak
       Når søknaden opprettes
       Så får søknaden ingen GSK-konklusjon fra tidligere opptak
 
-    @implemented
     Scenario: Gjenbruke positiv konklusjon fra lokalt opptak
       Gitt at søknaden ikke får GSK-konklusjon fra vitnemålet
       Og at søkerens eneste positive GSK-konklusjon er satt i FS Admin i et lokalt opptak
@@ -417,25 +416,12 @@ Egenskap: Automatisk GSK-konklusjon
       Så får søknaden en positiv GSK-konklusjon
       Og grunnlagskoden og grunnlagsdatoen er de samme som i den tidligere konklusjonen
 
-    Scenario: Gjenbruke positiv konklusjon fra FS-klienten
-      # Avklart 30.10.2026: de tidligere GSK-konklusjonene importeres til opptakssystemet med en
-      # batch-jobb. Hvor de kommer fra, står ikke i kravet.
-      # Avklart 2026-11-09: en positiv konklusjon fra historikken gjenbrukes når
-      # opptakssystemet ikke kan sette konklusjonen selv.
-      Gitt at søknaden ikke får GSK-konklusjon fra vitnemålet
-      Og at søkerens eneste positive GSK-konklusjon er satt i FS-klienten i et lokalt opptak
-      Når søknaden opprettes
-      Så får søknaden en positiv GSK-konklusjon
-      Og grunnlagskoden og grunnlagsdatoen er de samme som i den tidligere konklusjonen
-
-    @implemented
     Scenario: Annullert konklusjon gjenbrukes ikke
       Gitt at søknaden ikke får GSK-konklusjon fra vitnemålet
       Og at søkerens eneste positive GSK-konklusjon fra et tidligere opptak er annullert
       Når søknaden opprettes
       Så får søknaden ingen GSK-konklusjon fra tidligere opptak
 
-    @implemented
     Scenario: Konklusjon med annullering fram i tid gjenbrukes ikke
       # Avklart 30.10.2026: en annullering stopper gjenbruken uansett dato.
       Gitt at søknaden ikke får GSK-konklusjon fra vitnemålet
@@ -446,7 +432,6 @@ Egenskap: Automatisk GSK-konklusjon
     # Gjelder bare konklusjoner som vet hvilket vitnemål de bygger på. Konklusjonene fra
     # gjenbruksbasen gjør ikke det. For dem er det annulleringene i gjenbruksbasen som
     # gjelder (se «Annullert konklusjon gjenbrukes ikke»).
-    @implemented
     Scenario: Konklusjon som bygger på et annullert vitnemål gjenbrukes ikke
       Gitt at søkeren har en positiv GSK-konklusjon fra et avsluttet opptak
       Og at vitnemålet konklusjonen bygger på, er annullert
@@ -455,9 +440,9 @@ Egenskap: Automatisk GSK-konklusjon
 
   @ref-FLY-OPT-AUT-001 @implemented
   Regel: Automatikken setter bare positive konklusjoner, og bare der ingen finnes
-    # En konklusjon automatikken satte med KLY eller RFA fordi løpet manglet i listen over løp,
-    # rettes heller ikke når løpet legges inn. Regelen «Grunnlagskoden rettes når løpet er lagt
-    # inn i listen over løp» er parkert 2026-11-09.
+    # Om en konklusjon automatikken satte med KLY eller RFA fordi løpet manglet i listen over løp,
+    # skal rettes når løpet legges inn, er åpent. Se regelen «Grunnlagskoden rettes når løpet er
+    # lagt inn i listen over løp».
 
     Scenario: Ingen grunnlag for generell studiekompetanse
       Gitt at søknaden ikke får GSK-konklusjon fra vitnemålet

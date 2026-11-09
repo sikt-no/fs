@@ -11,8 +11,6 @@
 # vitnemålet gir GSK når den er ja (@OPT-BEH-BEH-015). Beregningen her er en kontroll av
 # skolens påstand, og gir grunnlagskoden. Er den uenig med skolen, får saksbehandleren et
 # varsel, men den automatiske behandlingen stopper ikke. KREG har ingen egen påstand om GSK.
-# Koden stopper i dag automatikken når kontrollmotoren er uenig med skolen. Det er et avvik
-# fra kravet.
 @OPT-BEH-BEH-027 @must @implemented @scope-automatisk-gsk-konklusjon @ref-OPT-BEH-BEH-015
 Egenskap: Beregne GSK fra vitnemål
   Som saksbehandler

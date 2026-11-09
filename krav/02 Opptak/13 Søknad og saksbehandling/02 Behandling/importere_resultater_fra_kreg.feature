@@ -136,14 +136,14 @@ Egenskap: Importere resultater fra KREG
       Når søkeren sender inn søknaden
       Så er ingen resultater importert fra KREG
 
+    @depends-on-OPT-BEH-BEH-033
     Scenario: Resultatene hentes når KREG svarer igjen
       # Avklart 29.10.2026: hentingen prøves på nytt. Feilen vises ikke for saksbehandleren, men
       # skrives i applikasjonsloggen, og Sikt varsles.
       # Avklart 2026-11-09: hentingen prøves på nytt neste gang importjobben for aktive søkere
-      # kjører, så ofte som applikasjonsinnstillingene sier (for eksempel én gang i døgnet). Får
-      # jobbkjøreren egen håndtering av nye forsøk og feil senere, gjelder den.
+      # kjører, så ofte som applikasjonsinnstillingene sier (for eksempel én gang i døgnet).
       Gitt at KREG ikke svarte da søkeren sendte inn søknaden
-      Når KREG svarer igjen innenfor tiden i applikasjonsinnstillingene
+      Når importen av VGS-vitnemål fra KREG kjører etter at KREG svarer igjen
       Så er søkerens vitnemål importert
 
   @ref-OPT-BEH-BEH-021 @ref-FLY-OPT-VIT-001 @ref-OPT-BEH-BEH-032 @ref-OPT-BEH-BEH-035 @ref-OPT-BEH-BEH-015

@@ -24,7 +24,7 @@ Egenskap: Starte automatisk behandling
   # Saksbehandleren velger vitnemålet når søkeren har flere vitnemål, i
   # OPT-BEH-BEH-039.
 
-  @depends-on-OPT-BEH-BEH-011 @depends-on-OPT-BEH-BEH-030 @ref-FLY-OPT-AUT-001 @implemented
+  @depends-on-OPT-BEH-BEH-011 @depends-on-OPT-BEH-BEH-030 @ref-FLY-OPT-AUT-001
   # OPT-BEH-BEH-011: «Søknadsalternativene fordeles når søknaden sendes inn eller endres, og fordelingen ligger fast»
   # OPT-BEH-BEH-030: «Resultatene hentes når saken er opprettet»
   Regel: Behandlingen kjører for hver ny sak saksbehandlertildelingen oppretter
@@ -78,7 +78,7 @@ Egenskap: Starte automatisk behandling
         | Under behandling |
         | Behandlet        |
 
-  @depends-on-OPT-BEH-BEH-030 @ref-OPT-BEH-BEH-021 @ref-OPT-BEH-BEH-029 @ref-OPT-BEH-BEH-035 @implemented
+  @depends-on-OPT-BEH-BEH-030 @ref-OPT-BEH-BEH-021 @ref-OPT-BEH-BEH-029 @ref-OPT-BEH-BEH-035
   # OPT-BEH-BEH-030: «Nye og annullerte vitnemål i KREG importeres for aktive søkere»
   # OPT-BEH-BEH-035: «Saken har nye resultater når resultater importeres etter at saken er behandlet»
   Regel: Et nytt vitnemål etter at saken er behandlet, gir saken nye resultater
