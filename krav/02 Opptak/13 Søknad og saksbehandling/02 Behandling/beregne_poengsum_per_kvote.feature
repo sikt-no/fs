@@ -22,24 +22,24 @@ Egenskap: Beregne poengsum per kvote
   Regel: Søkeren får en poengsum for hver kvote og hvert grunnlag kvoten er koblet til
 
     Scenario: Poengsum for grunnlaget kvoten er koblet til
-      Gitt at søkeren er plassert i kvotetypen "ORD"
-      Og at saken har grunnlaget "VES"
-      Og at kvotetypen "ORD" er koblet til grunnlaget "VES"
+      Gitt at søkeren er plassert i en kvotetype
+      Og at saken har et grunnlag
+      Og at kvotetypen er koblet til grunnlaget
       Når poengsummen regnes ut
-      Så har søkeren en poengsum i kvotetypen "ORD" for grunnlaget "VES"
+      Så har søkeren en poengsum i kvotetypen for grunnlaget
 
     Scenario: Grunnlag kvoten ikke er koblet til, gir ingen poengsum i kvoten
-      Gitt at søkeren er plassert i kvotetypen "ORD"
+      Gitt at søkeren er plassert i en kvotetype
       Og at saken har grunnlagene "VES" og "PRA"
-      Og at kvotetypen "ORD" bare er koblet til grunnlaget "VES"
+      Og at kvotetypen bare er koblet til grunnlaget "VES"
       Når poengsummen regnes ut
-      Så har søkeren en poengsum i kvotetypen "ORD" for grunnlaget "VES"
-      Men søkeren har ingen poengsum i kvotetypen "ORD" for grunnlaget "PRA"
+      Så har søkeren en poengsum i kvotetypen for grunnlaget "VES"
+      Men søkeren har ingen poengsum i kvotetypen for grunnlaget "PRA"
 
     Scenario: Kvote søkeren ikke er plassert i, gir ingen poengsum
-      Gitt at søkeren ikke er plassert i kvotetypen "ORD"
+      Gitt at det finnes en kvotetype søkeren ikke er plassert i
       Når poengsummen regnes ut
-      Så har søkeren ingen poengsum i kvotetypen "ORD"
+      Så har søkeren ingen poengsum i kvotetypen søkeren ikke er plassert i
 
   @depends-on-OPT-REG-KVO-001 @depends-on-OPT-REG-RAN-002 @ref-FLY-OPT-AUT-001 @implemented
   Regel: Poengsummen regnes ut med poengformelen til kvotetypen
@@ -47,11 +47,10 @@ Egenskap: Beregne poengsum per kvote
     # poengformel» i OPT-REG-KVO-001), og poengformlene opprettes i OPT-REG-RAN-002.
 
     Scenario: Poengsummen følger poengformelen til kvotetypen
-      Gitt at kvotetypen "ORD" har poengformelen "KONKURRANSEPOENG"
-      Og at poengformelen "KONKURRANSEPOENG" har uttrykket "KAR + ALD"
+      Gitt at poengformelen til kvotetypen har uttrykket "KAR + ALD"
       Og at søkeren har 45 karakterpoeng og 4 alderspoeng
       Når poengsummen regnes ut
-      Så er poengsummen i kvotetypen "ORD" 49
+      Så er poengsummen i kvotetypen 49
 
   @ref-FLY-OPT-AUT-001 @implemented
   Regel: Bare grunnlag søkeren er kvalifisert på, gir poengsum
@@ -59,19 +58,19 @@ Egenskap: Beregne poengsum per kvote
     # kompetanseregelverket.
 
     Scenario: Grunnlag søkeren ikke er kvalifisert på, gir ingen poengsum
-      Gitt at søkeren er plassert i kvotetypen "ORD"
-      Og at søkeren ikke er kvalifisert på grunnlaget "VES"
+      Gitt at søkeren er plassert i en kvotetype
+      Og at søkeren ikke er kvalifisert på grunnlaget
       Når poengsummen regnes ut
-      Så har søkeren ingen poengsum i kvotetypen "ORD" for grunnlaget "VES"
+      Så har søkeren ingen poengsum i kvotetypen for grunnlaget
 
   @ref-FLY-OPT-AUT-001
   Regel: Poengsummen regnes ut på nytt når det den bygger på, endres
 
     @implemented
     Scenariomal: Poengsummen regnes ut på nytt når <endring>
-      Gitt at søkeren har en poengsum i kvotetypen "ORD"
+      Gitt at søkeren har en poengsum i en kvotetype
       Når <endring>
-      Så er poengsummen i kvotetypen "ORD" regnet ut på nytt
+      Så er poengsummen i kvotetypen regnet ut på nytt
 
       Eksempler:
         | endring                                |
@@ -82,7 +81,7 @@ Egenskap: Beregne poengsum per kvote
 
     @ref-OPT-BEH-BEH-016
     Scenario: Uendret poengsum gir ikke nytt innslag i endringsloggen
-      Gitt at søkeren har en poengsum i kvotetypen "ORD"
+      Gitt at søkeren har en poengsum i en kvotetype
       Når poengsummen regnes ut på nytt uten at den endres
       Så har endringsloggen ikke fått noe nytt innslag for poengsummen
 
@@ -99,18 +98,18 @@ Egenskap: Beregne poengsum per kvote
     Scenario: Saksbehandleren ser hvorfor poengsummen ikke kan regnes ut
       # Avklart 4.11.2026: årsaken vises per kvote og grunnlag i oppsummeringen av saken, ikke på
       # poengtypen (STEK-650).
-      Gitt at poengformelen til kvotetypen "ORD" bruker en poengtype søkeren ikke har poeng i
-      Og at poengsummen for grunnlaget "VES" i kvotetypen "ORD" ikke kan regnes ut
+      Gitt at poengformelen til kvotetypen bruker en poengtype søkeren ikke har poeng i
+      Og at poengsummen for grunnlaget i kvotetypen ikke kan regnes ut
       Når saksbehandleren ser oppsummeringen av saken
-      Så ser saksbehandleren hvorfor poengsummen for grunnlaget "VES" i kvotetypen "ORD" ikke kan regnes ut
+      Så ser saksbehandleren hvorfor poengsummen for grunnlaget i kvotetypen ikke kan regnes ut
 
     Scenario: Poengsummene fjernes når søkeren ikke er plassert i noen kvote
-      Gitt at søkeren har en poengsum i kvotetypen "ORD"
+      Gitt at søkeren har en poengsum i en kvotetype
       Når søkeren ikke lenger er plassert i noen kvote
       Så har søkeren ingen poengsum
 
     Scenario: Poengsummene fjernes når saken ikke har noe grunnlag
-      Gitt at søkeren har en poengsum i kvotetypen "ORD"
+      Gitt at søkeren har en poengsum i en kvotetype
       Når saken ikke lenger har noe grunnlag
       Så har søkeren ingen poengsum
 
@@ -120,11 +119,11 @@ Egenskap: Beregne poengsum per kvote
     # poengsummen i utdanningskvoten» i OPT-PLA-TIL-002).
 
     Scenario: Den høyeste poengsummen i kvoten vises
-      Gitt at søkeren har poengsummen 48,5 for grunnlaget "VES" og 52,3 for grunnlaget "PRA" i kvotetypen "ORD" for søknadsalternativet "Informatikk, UiO"
+      Gitt at søkeren har poengsummen 48,5 for grunnlaget "VES" og 52,3 for grunnlaget "PRA" i en kvotetype for søknadsalternativet
       Når saksbehandleren ser oppsummeringen av saken
-      Så ser saksbehandleren poengsummen 52,3 i kvotetypen "ORD" for "Informatikk, UiO"
+      Så ser saksbehandleren poengsummen 52,3 i kvotetypen for søknadsalternativet
 
     Scenario: Søknadsalternativ søkeren ikke er kvalifisert til, viser ingen poengsum
-      Gitt at søkeren ikke er kvalifisert til søknadsalternativet "Informatikk, UiO"
+      Gitt at søkeren ikke er kvalifisert til søknadsalternativet
       Når saksbehandleren ser oppsummeringen av saken
-      Så ser saksbehandleren ingen poengsum for "Informatikk, UiO"
+      Så ser saksbehandleren ingen poengsum for søknadsalternativet

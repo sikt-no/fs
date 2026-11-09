@@ -227,9 +227,9 @@ Egenskap: Automatisk grunnlag
     @implemented
     Scenario: Grunnlaget saksbehandleren legger til, gjelder bare saken hos organisasjonen
       Gitt at søknaden har saker hos to saksbehandlende organisasjoner
-      Når saksbehandleren ved den ene saksbehandlende organisasjonen legger til grunnlaget "PRA"
-      Så har saken hos den ene saksbehandlende organisasjonen grunnlaget "PRA"
-      Og saken hos den andre saksbehandlende organisasjonen har ikke grunnlaget "PRA"
+      Når saksbehandleren ved den ene saksbehandlende organisasjonen legger til et grunnlag
+      Så har saken hos den ene saksbehandlende organisasjonen grunnlaget
+      Og saken hos den andre saksbehandlende organisasjonen har ikke grunnlaget
 
     Scenario: Saksbehandleren velger et grunnlag som automatikken har satt
       Gitt at saken har et grunnlag som er satt automatisk
@@ -247,8 +247,8 @@ Egenskap: Automatisk grunnlag
     @implemented
     Scenario: Grunnlaget blir stående når studieønsket som ga det, fjernes
       Gitt at saken har et grunnlag som er satt automatisk
-      Og at grunnlaget bare finnes i regelverket til "Informatikk, UiO"
-      Når søkeren fjerner "Informatikk, UiO" fra søknaden
+      Og at grunnlaget bare finnes i regelverket til søknadsalternativet
+      Når søkeren fjerner søknadsalternativet fra søknaden
       Så har saken fortsatt grunnlaget
 
     @implemented
@@ -293,9 +293,9 @@ Egenskap: Automatisk grunnlag
     Scenario: Opptaket mangler dato for aldersberegning
       # Avklart 30.10.2026: grunnlaget vises, men kan ikke legges til, og saksbehandleren får
       # beskjed. Grunnlag med aldersgrense filtreres ikke bort. Koden gjør dette i dag.
-      Gitt at regelverket har grunnlaget "VOV" med aldersgrensen under 22 år
+      Gitt at regelverket har et grunnlag med aldersgrensen under 22 år
       Og at opptaket ikke har dato for aldersberegning eller dato for publisering av resultatet
-      Når saksbehandleren velger grunnlaget "VOV" for saken
+      Når saksbehandleren velger grunnlaget for saken
       Så får saksbehandleren beskjed om at opptaket mangler dato for aldersberegning
       Og grunnlaget er ikke lagt til
 
