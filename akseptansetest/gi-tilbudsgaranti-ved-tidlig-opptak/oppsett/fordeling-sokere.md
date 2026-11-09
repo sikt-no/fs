@@ -70,5 +70,5 @@ Prøvd med Øvrige Edelstein (fra «Til overs»): søknad 34-1004196 i opptak 34
 
 Veiene videre:
 
-1. **SQL-skript (anbefalt for poengsum og kvalifisering):** teamet legger inn kvalifiseringen og poengsummene i databasen, som tilbudsgarantitypene ble lagt inn for testen av tilbudsgaranti. Søknadene og søknadene om tidlig opptak lages i Min kompetanse, så det søkeren gjør, går gjennom løsningen.
+1. **SQL-skript (anbefalt for poengsum og kvalifisering):** utkastet er [`for-kjoringen-kvalifisering-og-poengsum.sql`](for-kjoringen-kvalifisering-og-poengsum.sql) (prøvd lokalt med ROLLBACK 2026-11-09, ikke kjørt i TEST). Teamet legger inn kvalifiseringen og poengsummene i databasen, som tilbudsgarantitypene ble lagt inn for testen av tilbudsgaranti. Søknadene og søknadene om tidlig opptak lages i Min kompetanse, så det søkeren gjør, går gjennom løsningen.
 2. **Søkere med elektroniske vitnemål:** automatisk behandling lager poengradene, og poengene justeres og låses for hånd. Krever at vi finner søkere med vitnemål som gir poeng, og at de ikke er brukt.
