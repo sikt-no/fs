@@ -100,24 +100,23 @@ Egenskap: Velge utdanningsbakgrunn i søknad
       Så kan søkeren ikke sende inn søknaden
       Og søkeren får beskjed om å oppgi utdanningsland
 
-  @openquestion
+  @openquestion @depends-on-OPT-BEH-BEH-015
   Regel: Søkeren med GSK-konklusjon velger ikke utdanningsbakgrunn
     # AVKLART 2026-10-27 (planleggingsmøte): Steget hoppes over når søkeren har GSK-konklusjon.
     # Søkeren får ingen forklaring, siden steget ikke vises.
-    # AVKLART 2026-11-09 (TOT-2586): Søkere med utenlandsk utdanning kan ha GSK-konklusjon.
-    # Søkeren med GSK-konklusjon får ikke automatisk «Norsk videregående skole», siden søknaden
-    # da havner feil i saksbehandlertildelingen.
+    # AVKLART 2026-11-09 (TOT-2586): GSK-konklusjonen er konklusjonen søknaden får fra et
+    # tidligere opptak (gjenbruksbasen) når søknaden opprettes, se «Konklusjon fra tidligere opptak».
+    # Søkere med utenlandsk utdanning kan ha GSK-konklusjon, og søkeren med GSK-konklusjon får
+    # ikke automatisk «Norsk videregående skole», siden søknaden da havner feil i
+    # saksbehandlertildelingen.
     # ÅPNE SPØRSMÅL:
-    # - Skal søkeren alltid velge utdanningsbakgrunn blant utdanningsbakgrunnene i opptaket,
-    #   også med GSK-konklusjon, så steget aldri hoppes over (Karen 2026-11-09)?
-    # - Skal en utdanningsbakgrunn være valgt på forhånd i søknaden?
     # - Hvilken utdanningsbakgrunn registreres i søknaden når steget hoppes over? Forslag:
-    #   opptaksforvalter kobler GSK-konklusjoner til utdanningsbakgrunner i opptaket, eller
-    #   opptaket har en standard utdanningsbakgrunn. «Norsk videregående skole» passer ikke
-    #   som standard i alle opptak, for eksempel masteropptak.
+    #   grunnlagskoden i GSK-konklusjonen (f.eks. IB, UTA) kobles til en utdanningsbakgrunn,
+    #   fast i backend eller satt av opptaksforvalter i opptaket.
+    # - Skal en utdanningsbakgrunn være valgt på forhånd i søknaden når søkeren blir spurt?
 
     Scenario: Søkeren med GSK-konklusjon blir ikke spurt om utdanningsbakgrunn
-      Gitt at søkeren har en GSK-konklusjon fra et tidligere opptak
+      Gitt at søknaden har fått en positiv GSK-konklusjon fra et tidligere opptak
       Når søkeren går gjennom søknaden
       Så blir søkeren ikke spurt om utdanningsbakgrunn
 
