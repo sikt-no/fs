@@ -42,9 +42,9 @@ Egenskap: Beregne poengsum per kvote
       Så har søkeren ingen poengsum i kvotetypen "ORD"
 
   @depends-on-OPT-REG-KVO-001 @depends-on-OPT-REG-RAN-002 @ref-FLY-OPT-AUT-001 @implemented
+  # OPT-REG-KVO-001: «En kvotetype kan ha en default poengformel»
   Regel: Poengsummen regnes ut med poengformelen til kvotetypen
-    # Poengformelen til kvotetypen settes i regelverket («En kvotetype kan ha en default
-    # poengformel» i OPT-REG-KVO-001), og poengformlene opprettes i OPT-REG-RAN-002.
+    # Poengformelen til kvotetypen settes i regelverket, og poengformlene opprettes i OPT-REG-RAN-002.
 
     Scenario: Poengsummen følger poengformelen til kvotetypen
       Gitt at kvotetypen "ORD" har poengformelen "KONKURRANSEPOENG"

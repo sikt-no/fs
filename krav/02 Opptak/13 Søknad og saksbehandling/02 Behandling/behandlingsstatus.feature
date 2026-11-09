@@ -1,6 +1,6 @@
 # language: no
 # Jira: STEK-253
-@OPT-BEH-BEH-029 @must @in-progress @scope-automatisk-ferdigbehandling @ref-OPT-BEH-BEH-008 @ref-OPT-BEH-BEH-025 @ref-OPT-PLA-TIL-001
+@OPT-BEH-BEH-029 @must @in-progress @scope-automatisk-ferdigbehandling @ref-OPT-BEH-BEH-008 @ref-OPT-PLA-TIL-001
 Egenskap: Behandlingsstatus
   Som saksbehandler ved saksbehandlende organisasjon
   ønsker jeg at hver sak har en behandlingsstatus
@@ -77,7 +77,7 @@ Egenskap: Behandlingsstatus
       Så har saken fortsatt behandlingsstatusen "Under behandling"
       Og saksbehandleren ser at saken må ha minst én mangel eller ett grunnlag for å bli "Behandlet"
 
-  @ref-OPT-BEH-BEH-032
+  @ref-OPT-BEH-BEH-032 @ref-OPT-BEH-BEH-025
   Regel: Saken blir Under behandling når saksbehandleren endrer vurderingen eller markerer et dokument som lest
     # Avklart 2026-11-03: behandlingsstatusen endres ikke før saksbehandleren gjør en endring i
     # saken. Å se på saken eller et dokument er ikke en endring. Å markere et dokument som lest er
