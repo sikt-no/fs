@@ -41,10 +41,10 @@ Egenskap: Importere resultater fra KREG
       # Avklart 03.11.2026: resultatene hentes på nytt hver gang søknaden endres, også når
       # endringen ikke gir en ny sak. Det dekker hullet til importen av VGS-vitnemål fra KREG
       # (OPT-BEH-BEH-032) er levert.
-      Gitt at søkerens vitnemål fra 2024 er importert
-      Og at søkeren har fått et vitnemål fra 2025 i KREG
+      Gitt at søkerens vitnemål er importert
+      Og at søkeren har fått et nytt vitnemål i KREG
       Når søkeren legger til et studieønske som saksbehandles hos en ny organisasjon
-      Så er vitnemålet fra 2025 importert
+      Så er det nye vitnemålet importert
 
     @implemented
     Scenario: Resultatene hentes først når saken er opprettet
@@ -81,7 +81,7 @@ Egenskap: Importere resultater fra KREG
         | merknadene                                      |
 
     Scenario: Søker med flere vitnemål får alle importert
-      Gitt at søkeren har to vitnemål i KREG, ett fra 2024 og ett fra 2025
+      Gitt at søkeren har to vitnemål i KREG
       Når søkerens resultater importeres
       Så er begge vitnemålene importert
 

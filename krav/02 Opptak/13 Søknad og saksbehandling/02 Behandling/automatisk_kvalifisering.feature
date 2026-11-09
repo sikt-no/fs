@@ -150,11 +150,11 @@ Egenskap: Automatisk vurdering av spesielle opptakskrav
 
     Scenario: Kravelementer fra en annen sak i søknaden vurderes ikke i saken
       # STEK-593.
-      Gitt at søknaden har saker hos "Universitetet i Oslo" og "UiT Norges arktiske universitet"
-      Og at "Informatikk, UiO" har kravelementet "Matematikk R2"
-      Og at ingen av søknadsalternativene i saken hos "UiT Norges arktiske universitet" har kravelementet "Matematikk R2"
-      Når kravelementene i saken hos "UiT Norges arktiske universitet" vurderes automatisk
-      Så er "Matematikk R2" ikke vurdert i saken hos "UiT Norges arktiske universitet"
+      Gitt at søknaden har saker hos to saksbehandlende organisasjoner
+      Og at et søknadsalternativ i saken hos den ene saksbehandlende organisasjonen har kravelementet "Matematikk R2"
+      Og at ingen av søknadsalternativene i saken hos den andre saksbehandlende organisasjonen har kravelementet "Matematikk R2"
+      Når kravelementene i saken hos den andre saksbehandlende organisasjonen vurderes automatisk
+      Så er "Matematikk R2" ikke vurdert i saken hos den andre saksbehandlende organisasjonen
 
     Scenario: Kravelement vurderes mot vitnemål fra R94
       Gitt at søkeren har ett elektronisk vitnemål fra R94

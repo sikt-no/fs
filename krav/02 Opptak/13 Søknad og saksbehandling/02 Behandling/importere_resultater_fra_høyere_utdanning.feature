@@ -48,7 +48,7 @@ Egenskap: Importere resultater fra høyere utdanning
   Regel: Opplysningene poengene for høyere utdanning trenger, importeres
 
     Scenario: Opplysningene om et emne importeres
-      Gitt at søkeren har bestått et emne ved UiB
+      Gitt at søkeren har bestått et emne ved et lærested
       Når importen av resultater fra høyere utdanning kjører
       Så er disse opplysningene om emnet importert:
         | opplysning                                     |

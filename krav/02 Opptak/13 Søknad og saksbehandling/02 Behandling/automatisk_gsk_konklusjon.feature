@@ -75,11 +75,11 @@ Egenskap: Automatisk GSK-konklusjon
       Og at vitnemålet har utstedelsesdato
       Og at løpet på vitnemålet gir generell studiekompetanse
       Og at vitnemålet består seksfagskontrollen
-      Når vitnemålet importeres fra KREG 26.10.2026 kl. 10:14
+      Når vitnemålet importeres fra KREG
       Så er opptakssystemets påstand at søkeren har generell studiekompetanse
       Og grunnlagskoden er grunnlagskoden for løpet på vitnemålet
       Og grunnlagsdatoen er utstedelsesdatoen på vitnemålet
-      Og påstanden er beregnet 26.10.2026 kl. 10:14
+      Og påstanden er beregnet da vitnemålet ble importert
       Og påstanden viser hvilken beregning i kontrollmotoren som ble brukt
 
     @implemented
@@ -292,7 +292,7 @@ Egenskap: Automatisk GSK-konklusjon
     Scenario: Opptaksforvalteren ved organisasjonen som forvalter opptaket, får ett varsel per løp som mangler i listen over løp
       # ÅPNE SPØRSMÅL:
       # - Hvor i FS Admin får opptaksforvalteren varselet?
-      Gitt at løpet "Studiespesialisering med toppidrett" ikke finnes i opptakssystemets liste over løp
+      Gitt at et løp ikke finnes i opptakssystemets liste over løp
       Og at ett vitnemål med løpet er importert fra KREG
       Og at opptaksforvalteren ved organisasjonen som forvalter opptaket, har fått et varsel om at løpet mangler i listen over løp
       Når et vitnemål til med løpet importeres fra KREG
@@ -512,17 +512,17 @@ Egenskap: Automatisk GSK-konklusjon
 
     Scenario: Grunnlagskoden rettes ikke etter at resultatet av siste plasstildelingsrunde er publisert
       Gitt at søknaden har fått en positiv GSK-konklusjon med grunnlagskoden KLY fordi løpet manglet i listen over løp
-      Og at resultatet av siste plasstildelingsrunde i "Samordna opptak 2027" er publisert
+      Og at resultatet av siste plasstildelingsrunde i opptaket er publisert
       Og at løpet er lagt inn i listen over løp med grunnlagskoden KLS
       Når opptaksforvalteren ved organisasjonen som forvalter opptaket, vil starte rettingen av grunnlagskoden for løpet
       Så kan opptaksforvalteren ikke starte rettingen
       Og GSK-konklusjonen på søknaden har fortsatt grunnlagskoden KLY
 
     Scenario: Opptaksforvalteren ser søknadene som får grunnlagskoden rettet, før rettingen startes
-      Gitt at 400 søknader har fått en positiv GSK-konklusjon med grunnlagskoden KLY fordi løpet manglet i listen over løp
+      Gitt at flere søknader har fått en positiv GSK-konklusjon med grunnlagskoden KLY fordi løpet manglet i listen over løp
       Og at løpet er lagt inn i listen over løp med grunnlagskoden KLS
       Når opptaksforvalteren ved organisasjonen som forvalter opptaket, velger å rette grunnlagskoden for løpet
-      Så ser opptaksforvalteren de 400 søknadene som får grunnlagskoden rettet
+      Så ser opptaksforvalteren søknadene som får grunnlagskoden rettet
       Og rettingen er ikke startet
 
     Scenario: En konklusjon saksbehandleren har satt, rettes ikke
