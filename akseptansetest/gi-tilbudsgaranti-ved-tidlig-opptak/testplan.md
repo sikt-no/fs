@@ -70,7 +70,7 @@ Klart når testansvarlig har logget inn som testbruker og ser testdataene.
 | 2 | Testdataene i «Testdata» finnes i testmiljøet, i utgangstilstanden der. Tilstander som bygger på datoer, er sjekket samme dag som testen | [Fylles ut av teamet] |
 | 3 | Testdataene kan settes tilbake før hver kjøring | Nei. Gjennomføringen kan ikke settes tilbake, og søkerne med søknad om tidlig opptak kan ikke brukes på nytt. En ny kjøring trenger nye søkere |
 | 4 | Testbrukerne finnes i rollene ved organisasjonene kravene gjelder (tilgangsmatrisen) | [Fylles ut av teamet: bekreft at ORDENTLIG RUNDSKRIV • OPPTAK_FORVALTER (HK-DIR) har alle de fire tilgangene fs-admin krever, og at KORT DOMPAP • OPPTAK_FORVALTER (UIT) gir tilbyderrollen] |
-| 5 | `fs-verify` har funnet alle scenarioene, og en annen person har kontrollert rapporten. Åpne spørsmål stopper ikke, og står i «Åpne spørsmål» | 25 av 27 scenarioer er funnet (2026-11-09), kontrollert av `fs-verify-kontroll`. De 2 som mangler, venter på verifisering. Kontroll av en annen person: Venter |
+| 5 | `fs-verify` har funnet alle scenarioene, og en annen person har kontrollert rapporten. Åpne spørsmål stopper ikke, og står i «Åpne spørsmål» | 25 av 27 scenarioer er funnet (2026-11-09), kontrollert av `fs-verify-kontroll`. De 2 som mangler, venter på verifisering. Kontroll av en annen person: Daniel Sachse, 2026-11-09 |
 | 6 | De agentiske testcasene (`fs-testcaser-cdp`) er laget, og testansvarlig og teamet har gått gjennom dem før kjøringen | Venter |
 | 7 | Flyttestcasene for den interne akseptansetesten (`fs-testcaser-intern`) er laget og gått gjennom av testansvarlig | Venter |
 | 8 | Testansvarlig er logget inn i FS Admin i en egen Chrome-profil til testingen, CDP-agenten kan bytte til hver testbruker i «Overstyrt bruker», og nøklene i testbrukere og testdata er utfylt | [Fylles ut av teamet] |
@@ -113,6 +113,7 @@ Testansvarlig skriver beslutningen og begrunnelsen i sluttrapporten. Rettede fun
 | Fase | Side | Status | Dato |
 |---|---|---|---|
 | 1. Verifisering (`fs-verify`) | [verify-gi_tilbudsgaranti_ved_tidlig_opptak-2026-11-09-1136.md](../../krav/02%20Opptak/13%20S%C3%B8knad%20og%20saksbehandling/02%20Behandling/verify-gi_tilbudsgaranti_ved_tidlig_opptak-2026-11-09-1136.md) · [Confluence](https://sikt.atlassian.net/wiki/spaces/STUDIEADM/pages/5180653598) | 2 ikke funnet, 0 usikker | 2026-11-09 |
+| 1. Testrapport – verifisering | [testrapport-verifisering-2026-11-09.md](testrapport-verifisering-2026-11-09.md) · [Confluence](https://sikt.atlassian.net/wiki/spaces/STUDIEADM/pages/5181767779) | Klar, med forbehold: de 25 leverte scenarioene kan testes | 2026-11-09 |
 | 1. Testplan | (denne siden) | Laget | 2026-11-09 |
 | 2. Agentisk funksjonstest | – | Venter | |
 | 3. Intern akseptansetest | – | Venter | |
