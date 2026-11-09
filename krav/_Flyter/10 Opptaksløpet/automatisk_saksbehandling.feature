@@ -126,7 +126,7 @@ Egenskap: Automatisk saksbehandling
     Scenario: Søknadsalternativet får poengsum
       Gitt at saken har grunnlag
       Når søknaden behandles automatisk
-      Så har "Informatikk, UiO" poengsum for søknaden
+      Så har søknadsalternativet poengsum for søknaden
 
   @depends-on-OPT-BEH-BEH-028 @ref-FLY-OPT-VAL-001 @ref-FLY-OPT-SAM-001
   # OPT-BEH-BEH-028: «Alderspoeng regnes ut fra søkerens alder», «Kjønnspoeng regnes ut fra søkerens kjønn», «Poeng for høyere utdanning regnes ut fra søkerens studiepoeng», «Tilleggspoengene settes uansett hvem som velger grunnlaget»
@@ -153,7 +153,7 @@ Egenskap: Automatisk saksbehandling
 
     Scenario: Kravelementet er vurdert mot vitnemålet
       Gitt at saken har grunnlag
-      Og at "Informatikk, UiO" har kravelementet "Matematikk R1"
+      Og at søknadsalternativet har kravelementet "Matematikk R1"
       Når søknaden behandles automatisk
       Så er kravelementet vurdert mot vitnemålet
 
@@ -163,10 +163,10 @@ Egenskap: Automatisk saksbehandling
 
     Scenario: Kvotespørsmålet er besvart automatisk
       Gitt at saken har grunnlag
-      Og at grunnlaget er koblet til en kvotetype med kvotespørsmålet "ER-KVINNE"
-      Og at kvotespørsmålet "ER-KVINNE" er koblet til algoritmen "Er kvinne"
+      Og at grunnlaget er koblet til en kvotetype med et kvotespørsmål
+      Og at kvotespørsmålet er koblet til en algoritme
       Når søknaden behandles automatisk
-      Så er kvotespørsmålet "ER-KVINNE" besvart automatisk
+      Så er kvotespørsmålet besvart automatisk
 
   @depends-on-OPT-BEH-BEH-020 @ref-FLY-OPT-VAL-001 @ref-FLY-OPT-SAM-001
   # OPT-BEH-BEH-020: «Om søkeren er kvalifisert, avgjøres per grunnlag»
@@ -175,10 +175,10 @@ Egenskap: Automatisk saksbehandling
 
     Scenario: Søkeren er kvalifisert når vitnemålet oppfyller kravelementene
       Gitt at saken har grunnlag
-      Og at "Informatikk, UiO" har kravelementet "Matematikk R1"
+      Og at søknadsalternativet har kravelementet "Matematikk R1"
       Og at vitnemålet saken behandles helautomatisk på, har "Matematikk R1"
       Når søknaden behandles automatisk
-      Så er søkeren kvalifisert for "Informatikk, UiO"
+      Så er søkeren kvalifisert for søknadsalternativet
 
   @depends-on-OPT-BEH-BEH-012 @ref-FLY-OPT-VAL-001 @ref-FLY-OPT-SAM-001
   # OPT-BEH-BEH-012: «Søkeren plasseres automatisk i en kvote uten kvotespørsmål», «Søkeren plasseres i en kvote med kvotespørsmål når alle kvotespørsmålene er besvart ja»
@@ -186,17 +186,17 @@ Egenskap: Automatisk saksbehandling
   Regel: Søkeren fordeles på kvoter når kvalifiseringen og kvotesvarene er satt
 
     Scenario: Den kvalifiserte søkeren plasseres i kvoten grunnlaget er koblet til
-      Gitt at søkeren er kvalifisert for "Informatikk, UiO"
-      Og at grunnlaget er koblet til kvotetypen "Ordinær kvote"
+      Gitt at søkeren er kvalifisert for søknadsalternativet
+      Og at grunnlaget er koblet til en kvotetype
       Når søknaden behandles automatisk
-      Så er søkeren plassert i "Ordinær kvote" for "Informatikk, UiO"
+      Så er søkeren plassert i kvoten grunnlaget er koblet til, for søknadsalternativet
 
     Scenario: Søkeren plasseres i kvoten når kvotespørsmålet er besvart ja automatisk
-      Gitt at søkeren er kvalifisert for "Informatikk, UiO"
-      Og at grunnlaget er koblet til kvotetypen "Jenter" med kvotespørsmålet "ER-KVINNE"
-      Og at kvotespørsmålet "ER-KVINNE" er besvart ja automatisk
+      Gitt at søkeren er kvalifisert for søknadsalternativet
+      Og at grunnlaget er koblet til en kvotetype med et kvotespørsmål
+      Og at kvotespørsmålet er besvart ja automatisk
       Når søknaden behandles automatisk
-      Så er søkeren plassert i "Jenter" for "Informatikk, UiO"
+      Så er søkeren plassert i kvoten med kvotespørsmålet for søknadsalternativet
 
   @depends-on-OPT-BEH-BEH-031 @depends-on-OPT-REG-KVO-001 @depends-on-OPT-REG-RAN-002 @ref-FLY-OPT-VAL-001 @ref-FLY-OPT-SAM-001
   # OPT-BEH-BEH-031: «Søkeren får en poengsum for hver kvote og hvert grunnlag kvoten er koblet til», «Poengsummen regnes ut med poengformelen til kvotetypen», «Poengsummen regnes ut på nytt når det den bygger på, endres», «Bare grunnlag søkeren er kvalifisert på, gir poengsum», «En poengsum som ikke kan regnes ut, stopper ikke de andre», «Saksbehandleren ser den høyeste poengsummen per kvote for hvert søknadsalternativ»
@@ -205,10 +205,10 @@ Egenskap: Automatisk saksbehandling
     # Oppdateres automatisk ut fra kvotene og poengene.
 
     Scenario: Søkeren har poengsum i kvoten
-      Gitt at søkeren er plassert i "Ordinær kvote" for "Informatikk, UiO"
-      Og at "Informatikk, UiO" har poengsum for søknaden
+      Gitt at søkeren er plassert i en kvote for søknadsalternativet
+      Og at søknadsalternativet har poengsum for søknaden
       Når søknaden behandles automatisk
-      Så har søkeren poengsum etter poengformelen til "Ordinær kvote" for "Informatikk, UiO"
+      Så har søkeren poengsum etter poengformelen til kvoten for søknadsalternativet
 
   @depends-on-OPT-BEH-BEH-036 @ref-FLY-OPT-VAL-001 @ref-FLY-OPT-SAM-001
   # OPT-BEH-BEH-036: «Saken får automatiske mangeltekster når søkeren ikke er kvalifisert»
@@ -216,7 +216,7 @@ Egenskap: Automatisk saksbehandling
   Regel: Saken får mangeltekster når kravelementene er vurdert
 
     Scenario: Saken får mangeltekst for kravelementet vitnemålet ikke oppfyller
-      Gitt at "Informatikk, UiO" har kravelementet "Matematikk R2"
+      Gitt at søknadsalternativet har kravelementet "Matematikk R2"
       Og at vitnemålet saken behandles helautomatisk på, ikke har "Matematikk R2"
       Når søknaden behandles automatisk
       Så har saken en automatisk mangeltekst som viser at "Matematikk R2" ikke er oppfylt
@@ -227,10 +227,10 @@ Egenskap: Automatisk saksbehandling
 
     Scenario: Saken med mangelen for GSK som fullføres i vår blir ferdig behandlet
       Gitt at søkeren har oppgitt i søknaden at generell studiekompetanse fullføres i vår
-      Og at saken har den automatiske mangelen "DUA"
+      Og at saken har den automatiske mangelen for generell studiekompetanse som fullføres i vår
       Når den automatiske behandlingen har behandlet saken helautomatisk
       Så er saken ferdig behandlet
-      Og mangelen "DUA" er sjekket ut
+      Og mangelen for generell studiekompetanse som fullføres i vår er sjekket ut
 
   @depends-on-OPT-BEH-BEH-025 @depends-on-OPT-BEH-BEH-029 @ref-OPT-PLA-TIL-001 @ref-FLY-OPT-VAL-001 @ref-FLY-OPT-SAM-001
   # OPT-BEH-BEH-025: «Den automatiske behandlingen setter saken til ferdig behandlet når alt er avgjort»
@@ -239,9 +239,9 @@ Egenskap: Automatisk saksbehandling
   Regel: Saken blir ferdig behandlet og er klar til å være med i plasstildelingen
 
     Scenario: Saken er ferdig behandlet når den automatiske behandlingen har avgjort alt
-      Gitt at søkeren er kvalifisert for "Informatikk, UiO"
-      Og at "Informatikk, UiO" har poengsum for søknaden
-      Og at søkeren er plassert i en kvote for "Informatikk, UiO"
+      Gitt at søkeren er kvalifisert for søknadsalternativet
+      Og at søknadsalternativet har poengsum for søknaden
+      Og at søkeren er plassert i en kvote for søknadsalternativet
       Når den automatiske behandlingen er ferdig
       Så er saken ferdig behandlet
 
@@ -259,5 +259,5 @@ Egenskap: Automatisk saksbehandling
       Gitt at saken er ferdig behandlet
       Og at opptaksforvalteren har rettet en feil i rangeringsregelverket
       Når opptaksforvalteren beregner på nytt for søknadsalternativene med rangeringsregelverket som er rettet
-      Så har "Informatikk, UiO" poengsum etter det rettede rangeringsregelverket
+      Så har søknadsalternativet poengsum etter det rettede rangeringsregelverket
       Og saken er fortsatt ferdig behandlet
