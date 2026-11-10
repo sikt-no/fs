@@ -161,8 +161,8 @@ Egenskap: Sette GSK-konklusjon manuelt
   Regel: Organisasjonen som satte konklusjonen, og HK-dir kan annullere den
     # Akseptansekrav 5: annulleringen skal kreve aktiv bekreftelse, men være enklere enn i dagens
     # løsning. Avklart 10.11.2026: årsaken velges fra en liste (kodeverket for annulleringsårsaker
-    # i SODA, som kanskje må gjenskapes), og er påkrevd. Det er ingen begrunnelse i fritekst, så
-    # fritekstfeltet «Begrunnelse» i skissen skal ikke være med.
+    # i SODA, som kanskje må gjenskapes), og er påkrevd. Begrunnelsen skrives i fritekst, som i
+    # skissen, og er ikke påkrevd.
 
     Scenario: Annullere konklusjonen
       Gitt at saksbehandleren ved organisasjonen som satte GSK-konklusjonen, ser på konklusjonen
@@ -204,6 +204,18 @@ Egenskap: Sette GSK-konklusjon manuelt
       Gitt at saksbehandleren ved organisasjonen som satte GSK-konklusjonen, ser på konklusjonen
       Når saksbehandleren vil annullere konklusjonen uten å velge en årsak til annullering
       Så kan saksbehandleren ikke bekrefte annulleringen
+
+    Scenario: Annullere uten begrunnelse
+      Gitt at saksbehandleren ved organisasjonen som satte GSK-konklusjonen, ser på konklusjonen
+      Når saksbehandleren annullerer konklusjonen med en årsak til annullering, uten begrunnelse
+      Og saksbehandleren bekrefter annulleringen
+      Så er GSK-konklusjonen annullert
+
+    Scenario: Begrunnelsen bevares med den annullerte konklusjonen
+      Gitt at saksbehandleren ved organisasjonen som satte GSK-konklusjonen, ser på konklusjonen
+      Når saksbehandleren annullerer konklusjonen med en årsak til annullering og en begrunnelse
+      Og saksbehandleren bekrefter annulleringen
+      Så er årsaken og begrunnelsen bevart med den annullerte konklusjonen
 
     Scenario: Ny konklusjon etter annulleringen
       # Avklart 10.11.2026: både saksbehandleren og automatikken kan sette en ny konklusjon.
