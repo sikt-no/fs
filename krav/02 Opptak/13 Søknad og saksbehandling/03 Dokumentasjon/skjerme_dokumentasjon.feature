@@ -9,23 +9,24 @@ Egenskap: Skjerme dokumentasjon med særlige kategorier av personopplysninger
   Bakgrunn:
     Gitt jeg er innlogget i FS Admin
 
-  Regel: Tilgang til søknadsdokumentasjon krever tjenstlig behov
+  # Avklart 2026-11-10 (R1, R4 og svar 15): dokumentasjonen følger søknaden. Rollene gis per organisasjon, ikke per
+  # opptak, så scenarioet «Saksbehandler uten tilknytning til opptaket ser ikke dokumentasjonen» er tatt ut.
+  Regel: Dokumentasjonen ses bare av organisasjonene som er forvalter, tilbyder eller behandler på søknaden
 
-    Scenario: Saksbehandler på opptaket ser dokumentasjonen
-      Gitt jeg er saksbehandler for opptaket søknaden gjelder
+    Scenariomal: Se dokumentasjonen ut fra organisasjonens rolle i opptaket
+      Gitt søkeren har lastet opp et dokument av typen "Vitnemål eller karakterutskrift"
+      Og søknaden er i et samordna opptak der tilbyderen og behandleren er ulike organisasjoner
+      Og jeg er <rolle> ved <organisasjon>
       Når jeg åpner søknaden
-      Så ser jeg dokumentasjonen som er lastet opp på søknaden
+      Så <ser> jeg dokumentasjonen som er lastet opp på søknaden
 
-    Scenario: Saksbehandler uten tilknytning til opptaket ser ikke dokumentasjonen
-      Gitt jeg er saksbehandler ved organisasjonen som behandler søknaden
-      Men jeg er ikke saksbehandler for opptaket søknaden gjelder
-      Når jeg åpner søknaden
-      Så ser jeg ikke dokumentasjonen som er lastet opp på søknaden
-
-    Scenario: Bruker ved annen organisasjon ser ikke dokumentasjonen
-      Gitt jeg er saksbehandler ved en annen organisasjon enn den som behandler søknaden
-      Når jeg åpner søknaden
-      Så ser jeg ikke dokumentasjonen som er lastet opp på søknaden
+      Eksempler:
+        | rolle             | organisasjon                          | ser      |
+        | saksbehandler     | behandleren av søknadsalternativet    | ser      |
+        | saksbehandler     | tilbyderen av søknadsalternativet     | ser      |
+        | opptaksforvalter  | forvalteren av opptaket               | ser      |
+        | opptaksinformatør | forvalteren av opptaket               | ser      |
+        | saksbehandler     | en organisasjon uten rolle i opptaket | ser ikke |
 
   Regel: Dokumenttype følger dokumentet
 
@@ -44,11 +45,18 @@ Egenskap: Skjerme dokumentasjon med særlige kategorier av personopplysninger
 
   Regel: Saksbehandler kan markere dokumentasjon som sensitiv
 
+    # Avklart (spørsmål 11 i spec-en «Krav til RLS»): markeringen styrer sletting, ikke hvem som ser dokumentet.
     Scenario: Saksbehandler markerer et dokument som sensitivt
       Gitt søkeren har lastet opp et dokument av typen "Annen dokumentasjon"
       Og jeg er saksbehandler for opptaket søknaden gjelder
       Når jeg markerer dokumentet som sensitivt
       Så er dokumentet markert som sensitivt for alle som behandler søknaden
+
+    Scenario: Markeringen endrer ikke hvem som ser dokumentet
+      Gitt et dokument er markert som sensitivt
+      Og jeg er saksbehandler ved tilbyderen av søknadsalternativet
+      Når jeg åpner søknaden
+      Så ser jeg dokumentet
 
     @openquestion
     Scenario: Feilaktig markering kan fjernes
@@ -59,20 +67,45 @@ Egenskap: Skjerme dokumentasjon med særlige kategorier av personopplysninger
       # - Skal markeringen kunne fjernes, og av hvem? Å fjerne en markering
       #   svekker vernet, så det bør kanskje kreve samme rolle som sletting.
 
+  # Avklart 2026-11-10 (svar 12 og 28): innholdet i politiattesten ser bare behandleren, og tilbyderen der søkeren har
+  # takket ja, fra ja-svaret er gitt. Opptaksforvalteren og opptaksinformatøren ser bare at den er levert.
   Regel: Politiattest skal oppbevares utilgjengelig for uvedkommende
 
-    @openquestion
-    Scenario: Politiattest er skjermet også fra saksbehandlere på opptaket
+    Scenariomal: Se politiattesten ut fra rollen og organisasjonens rolle
       Gitt søkeren har lastet opp et dokument av typen "Politiattest"
-      Og jeg er saksbehandler for opptaket søknaden gjelder
+      Og søknaden er i et samordna opptak der tilbyderen og behandleren er ulike organisasjoner
+      Og søkeren har <svar>
+      Og jeg er <rolle> ved <organisasjon>
       Når jeg åpner søknaden
       Så ser jeg at en politiattest er levert
-      Men jeg ser ikke innholdet i politiattesten
-      # ÅPNE SPØRSMÅL:
-      # - Politiregisterforskriften § 37-2 krever at attesten oppbevares
-      #   utilgjengelig for uvedkommende. Er en saksbehandler på opptaket
-      #   "vedkommende", eller skal kun den som gjennomfører vandelskontroll
-      #   se innholdet? Juristen navngir ikke rollen.
+      Og <innhold>
+
+      Eksempler:
+        | svar                          | rolle             | organisasjon                       | innhold                                       |
+        | ikke svart på tilbud          | saksbehandler     | behandleren av søknadsalternativet | ser jeg innholdet i politiattesten            |
+        | ikke svart på tilbud          | saksbehandler     | tilbyderen av søknadsalternativet  | ser jeg ikke innholdet i politiattesten       |
+        | takket ja til tilbudet        | saksbehandler     | tilbyderen av søknadsalternativet  | ser jeg innholdet i politiattesten            |
+        | takket ja til tilbudet        | opptaksforvalter  | forvalteren av opptaket            | ser jeg ikke innholdet i politiattesten       |
+        | takket ja til tilbudet        | opptaksinformatør | behandleren av søknadsalternativet | ser jeg ikke innholdet i politiattesten       |
+
+  Regel: Bare dokumentforvalteren hos forvalteren laster opp og sletter dokumentasjon på søkerens vegne
+
+    # Avklart 2026-11-10 (svar 21, TAKE-470): dokumentforvalter er rollen OPPTAK_DOKUMENTASJON.
+    Scenariomal: Laste opp dokumentasjon på søkerens vegne
+      Gitt jeg er <rolle> ved <organisasjon>
+      Når jeg vil laste opp et dokument på søknaden på søkerens vegne
+      Så <utfall>
+
+      Eksempler:
+        | rolle             | organisasjon                       | utfall                                               |
+        | dokumentforvalter | forvalteren av opptaket            | kan jeg laste opp dokumentet                         |
+        | saksbehandler     | behandleren av søknadsalternativet | ser jeg ikke muligheten til å laste opp dokumentet   |
+        | opptaksforvalter  | forvalteren av opptaket            | ser jeg ikke muligheten til å laste opp dokumentet   |
+
+    Scenario: Søkeren ser dokumentet dokumentforvalteren har lastet opp
+      Gitt dokumentforvalteren ved forvalteren av opptaket har lastet opp et dokument på søknaden
+      Når søkeren åpner søknaden i Min kompetanse
+      Så ser søkeren dokumentet
 
   Regel: Innsyn i dokumentasjon logges
 

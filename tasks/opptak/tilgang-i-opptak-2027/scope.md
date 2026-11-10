@@ -40,15 +40,15 @@ MoSCoW er et forslag ut fra møtet 2026-11-10 og må bekreftes av produkteier. M
 | Nytt krav, ikke skrevet: tilgang til søknaden | Must | – | – | R1. En organisasjon ser søknaden bare når den er forvalter, tilbyder eller behandler på den. Gjelder også integrasjoner (svar 19). Bølge 1 |
 | Nytt krav, ikke skrevet: tilgang til personopplysninger | Must | – | – | R2. Personer bare med tilknytning. Personsøk uten søknad bare for opptaksforvalter hos forvalteren (svar 2, 6). Fortrolig adresse bare for søkeren (svar 3). Kontaktinformasjon fra Folkeregisteret og KRR (svar 5). Bølge 1 |
 | `@OPT-SØK-SØK-002` [opprette_søknad_for_person.feature](../../../krav/02%20Opptak/13%20S%C3%B8knad%20og%20saksbehandling/01%20S%C3%B8knad/opprette_s%C3%B8knad_for_person.feature) | Must | – | – | Bare opptaksforvalter hos forvalteren oppretter søknad på søkerens vegne (svar 1). Kravet er `@skip` |
-| `@OPT-SØK-SØK-008` [trekke_søknad.feature](../../../krav/02%20Opptak/13%20S%C3%B8knad%20og%20saksbehandling/01%20S%C3%B8knad/trekke_s%C3%B8knad.feature) | Must | – | – | Ny regel: bare opptaksforvalter hos forvalteren trekker på søkerens vegne (svar 1) |
-| `@OPT-BEH-BEH-043` [se_søknader_som_opptaksinformatør.feature](../../../krav/02%20Opptak/13%20S%C3%B8knad%20og%20saksbehandling/02%20Behandling/se_s%C3%B8knader_som_opptaksinformat%C3%B8r.feature) | Must | – | [TAKE-469](https://sikt.atlassian.net/browse/TAKE-469) | Opptaksinformatør (OPPTAK_INNSYN), for førstelinjen |
+| `@OPT-SØK-SØK-008` [trekke_søknad.feature](../../../krav/02%20Opptak/13%20S%C3%B8knad%20og%20saksbehandling/01%20S%C3%B8knad/trekke_s%C3%B8knad.feature) | Should | – | – | Søkerens egen trekking (R12). Trekking på søkerens vegne står i `@OPT-SØK-SØK-002` |
+| `@OPT-BEH-BEH-043` [se_søknaden_til_en_søker.feature](../../../krav/02%20Opptak/13%20S%C3%B8knad%20og%20saksbehandling/02%20Behandling/se_s%C3%B8knaden_til_en_s%C3%B8ker.feature) | Must | – | [TAKE-469](https://sikt.atlassian.net/browse/TAKE-469) | Se søknaden til en søker: R1 og R2 for opptaksforvalter, saksbehandler og opptaksinformatør (OPPTAK_INNSYN), med organisasjonens rolle i eksemplene. Skrevet 2026-11-10 |
 | `@OPT-BEH-BEH-011` — Regel: Tilbyderen ser saksbehandlingen når en annen organisasjon saksbehandler utdanningstilbudet [tildele_saksbehandlende_organisasjon.feature](../../../krav/02%20Opptak/13%20S%C3%B8knad%20og%20saksbehandling/02%20Behandling/tildele_saksbehandlende_organisasjon.feature) | Must | – | – | R3. Ny regel ved siden av: organisasjoner uten tilknytning ser ikke saken. Forvalteren ser alle saker (svar 9) |
 | `@OPT-BEH-DOK-001` [skjerme_dokumentasjon.feature](../../../krav/02%20Opptak/13%20S%C3%B8knad%20og%20saksbehandling/03%20Dokumentasjon/skjerme_dokumentasjon.feature) | Must | – | – | R4. Dokumenter følger søknaden. Politiattest: innholdet ser bare behandleren, og tilbyderen etter ja-svar. Andre ser at den er levert (svar 12, 28) |
 | `@OPT-BEH-BEH-001` [behandle_søknad.feature](../../../krav/02%20Opptak/13%20S%C3%B8knad%20og%20saksbehandling/02%20Behandling/behandle_s%C3%B8knad.feature) | Must | – | [TAKE-470](https://sikt.atlassian.net/browse/TAKE-470) | Rettes: bare dokumentforvalter (OPPTAK_DOKUMENTASJON) hos forvalteren laster opp på søkerens vegne (svar 21) |
 | `@OPT-SØK-SØK-010` [mine_meldinger.feature](../../../krav/02%20Opptak/13%20S%C3%B8knad%20og%20saksbehandling/01%20S%C3%B8knad/mine_meldinger.feature) | Must | – | – | R5. Meldinger til søkeren ses bare av organisasjoner med tilknytning |
 | `@OPT-BEH-BEH-016` [hendelseslogg_for_saksbehandling.feature](../../../krav/02%20Opptak/13%20S%C3%B8knad%20og%20saksbehandling/02%20Behandling/hendelseslogg_for_saksbehandling.feature) | Must | – | – | R13. Loggen har samme grense som det den logger. Ingen, heller ikke API-et, kan endre eller slette den |
 | `@OPT-OVO-LOG-001` [hendelseslogg.feature](../../../krav/02%20Opptak/11%20Opprette%20og%20vedlikeholde%20opptak/06%20Hendelseslogg/hendelseslogg.feature) | Must | – | – | R13. Som over, for opptaket |
-| `@OPT-PLA-RES-003` — Regel: Saksbehandler ser søknadene organisasjonen er saksbehandlende organisasjon for og søknadene til utdanningstilbudene organisasjonen tilbyr [se_publisert_resultat.feature](../../../krav/02%20Opptak/14%20Plasstildeling/04%20Resultat/se_publisert_resultat.feature) | Must | – | – | R10. Rettes: saksbehandler ser resultatet også før publisering (svar 23). Søkertall bare for tilbud organisasjonen har (svar 26) |
+| `@OPT-PLA-RES-003` — Regel: Saksbehandler ser søknadene organisasjonen er saksbehandlende organisasjon for og søknadene til utdanningstilbudene organisasjonen tilbyr [se_publisert_resultat.feature](../../../krav/02%20Opptak/14%20Plasstildeling/04%20Resultat/se_publisert_resultat.feature) | Must | – | – | R10. At saksbehandler ser resultatet før publisering (svar 23), står allerede i `@OPT-PLA-RES-001` (endret 2026-10-28). Lagt til: søkertallene følger tilknytningen (svar 26) |
 | `@OPT-OVO-SAM-001` — Regel: I et lokalt opptak kan ikke andre organisasjoner legges til [samordna_opptak.feature](../../../krav/02%20Opptak/11%20Opprette%20og%20vedlikeholde%20opptak/02%20Samordning/samordna_opptak.feature) | Should | – | – | R7. API-et skal avvise det samme som FS Admin (svar 19, K1-081). Opptaket er lukket for andre til det er publisert |
 | Nytt krav, ikke skrevet: brukere og integrasjoner uten roller | Should | – | – | R15. Bare publiserte data (svar 18). Bølge 2 |
 | `@OPT-OPT-UTD-001` — Regel: Opptaksforvalter ved deltakende organisasjon ser kun utdanningstilbud organisasjonen tilbyr [listevisning_utdanningstilbud.feature](../../../krav/02%20Opptak/12%20Utdanningstilbud/02%20Utdanningstilbud%20i%20opptak/listevisning_utdanningstilbud.feature) | Should | – | – | R8. Behandleren leser krav, poeng og kvoter på tilbudene den behandler. Ingen ser upubliserte tilbud uten tilknytning |
@@ -129,22 +129,22 @@ Flere av kravene hører til andre scopes. Reglene legges inn der, og scopet her 
 
 | Regel | Kravfil | Hva som legges inn | MoSCoW |
 |---|---|---|---|
-| R1 | `@OPT-BEH-BEH-043` se_søknader_som_opptaksinformatør.feature | Utvides til alle rollene som ser søknaden (opptaksforvalter, saksbehandler, opptaksinformatør), med organisasjonens rolle i eksemplene. Eller nytt krav for å se søknaden, se *Åpne spørsmål* | Must |
-| R1 | `@OPT-SØK-SØK-002` opprette_søknad_for_person.feature | Bare opptaksforvalter hos forvalteren oppretter søknad på søkerens vegne | Must |
-| R1 | `@OPT-SØK-SØK-008` trekke_søknad.feature | Bare opptaksforvalter hos forvalteren trekker på søkerens vegne | Must |
-| R2 | `@OPT-SØK-SØK-002` opprette_søknad_for_person.feature | Personsøk og oppslag i Folkeregisteret bare for opptaksforvalter hos forvalteren. Hva søket viser | Must |
-| R2 | `@OPT-BEH-BEH-043` (eller kravet for å se søknaden) | Personopplysninger bare med tilknytning. Fortrolig adresse bare for søkeren. Kontaktinformasjon fra Folkeregisteret og KRR | Must |
-| R3 | `@OPT-BEH-BEH-011` tildele_saksbehandlende_organisasjon.feature | Andre organisasjoner ser ikke saken. Forvalteren ser alle saker. Den gamle behandleren mister innsynet når saken flyttes, med mindre den er tilbyder | Must |
-| R3 | `@OPT-BEH-BEH-004` velge_vitnemål_som_grunnlag.feature | Rettes: behandlerne ser poengene i hverandres saker på samme søknad | Must |
-| R3 | `@OPT-BEH-BEH-003` registrere_praksis.feature | Tilbyderen ser praksiskalkulatoren | Must |
-| R3 | `@OPT-BEH-BEH-010` gi_tilbudsgaranti.feature | Forvalterens tilbudsgaranti settes bare maskinelt | Must |
+| R1 | `@OPT-BEH-BEH-043` se_søknaden_til_en_søker.feature | Gjort om fra OPPTAK_INNSYN-kravet til «Se søknaden til en søker» for alle rollene, med organisasjonens rolle i eksemplene. ✅ Skrevet | Must |
+| R1 | `@OPT-SØK-SØK-002` opprette_søknad_for_person.feature | Bare opptaksforvalter hos forvalteren oppretter søknad på søkerens vegne. ✅ Skrevet | Must |
+| R1 | `@OPT-SØK-SØK-002` opprette_søknad_for_person.feature | Bare opptaksforvalter hos forvalteren trekker på søkerens vegne. Kravet heter nå «Opprette, endre og trekke søknad på søkerens vegne», fordi `@OPT-SØK-SØK-008` handler om søkeren selv. ✅ Skrevet | Must |
+| R2 | `@OPT-SØK-SØK-002` opprette_søknad_for_person.feature | Personsøk og oppslag i Folkeregisteret bare for opptaksforvalter hos forvalteren. Hva søket viser. ✅ Skrevet | Must |
+| R2 | `@OPT-BEH-BEH-043` se_søknaden_til_en_søker.feature | Personopplysninger bare med tilknytning. Fortrolig adresse bare for søkeren. Kontaktinformasjon fra Folkeregisteret og KRR. ✅ Skrevet | Must |
+| R3 | `@OPT-BEH-BEH-011` tildele_saksbehandlende_organisasjon.feature | Andre organisasjoner ser ikke saken. Forvalteren ser alle saker. Den gamle behandleren mister innsynet når saken flyttes, med mindre den er tilbyder. ✅ Skrevet | Must |
+| R3 | `@OPT-BEH-BEH-004` velge_vitnemål_som_grunnlag.feature | Ingen motstrid: grunnlaget i egen sak viser bare egne poengvarianter, og innsynet i de andre sakene står i `@OPT-BEH-BEH-011`. Kommentar lagt inn. ✅ Skrevet | Must |
+| R3 | `@OPT-BEH-BEH-003` registrere_praksis.feature | Tilbyderen ser praksiskalkulatoren. ✅ Skrevet | Must |
+| R3 | `@OPT-BEH-BEH-010` gi_tilbudsgaranti.feature | Forvalterens tilbudsgaranti settes bare maskinelt. ✅ Skrevet | Must |
 | R3 | `@OPT-BEH-BEH-042` (PR 1003) | Én GSK-konklusjon per søker. Alle behandlere kan endre den, og endringen logges | Must |
-| R4 | `@OPT-BEH-DOK-001` skjerme_dokumentasjon.feature | Dokumentene følger søknaden. Politiattesten: innholdet bare for behandleren og tilbyderen etter ja-svar | Must |
-| R4 | `@OPT-BEH-BEH-001` behandle_søknad.feature | Rettes: bare dokumentforvalter hos forvalteren laster opp på søkerens vegne | Must |
-| R5 | `@OPT-SØK-MEL-004` se_kommunikasjon_med_søker.feature | Meldinger ses bare med tilknytning, interne bare av avsenderen | Must |
-| R5 | `@OPT-SØK-SØK-010` mine_meldinger.feature | Søkeren leser meldingene, men endrer dem ikke | Must |
-| R10 | `@OPT-PLA-RES-003` se_publisert_resultat.feature | Rettes: saksbehandler ser resultatet før publisering. Søkertall følger tilknytningen | Must |
-| R13 | `@OPT-BEH-BEH-016` hendelseslogg_for_saksbehandling.feature, `@OPT-OVO-LOG-001` hendelseslogg.feature | Loggen har samme grense som det den logger. Ingen kan endre eller slette den. Søkeren ser organisasjonen, ikke saksbehandleren | Must |
+| R4 | `@OPT-BEH-DOK-001` skjerme_dokumentasjon.feature | Dokumentene følger søknaden. Politiattesten: innholdet bare for behandleren og tilbyderen etter ja-svar. ✅ Skrevet | Must |
+| R4 | `@OPT-BEH-BEH-001` behandle_søknad.feature | Rettes: bare dokumentforvalter hos forvalteren laster opp på søkerens vegne. ✅ Skrevet | Must |
+| R5 | `@OPT-SØK-MEL-004` se_kommunikasjon_med_søker.feature | Meldinger ses bare med tilknytning, interne bare av avsenderen. ✅ Skrevet | Must |
+| R5 | `@OPT-SØK-SØK-010` mine_meldinger.feature | Søkeren leser meldingene, men endrer dem ikke. ✅ Skrevet | Must |
+| R10 | `@OPT-PLA-RES-003` se_publisert_resultat.feature | Søkertallene følger tilknytningen. Resultatet før publisering står allerede i `@OPT-PLA-RES-001`. ✅ Skrevet | Must |
+| R13 | `@OPT-BEH-BEH-016` hendelseslogg_for_saksbehandling.feature, `@OPT-OVO-LOG-001` hendelseslogg.feature | Loggen har samme grense som det den logger. Ingen kan endre eller slette den. Søkeren ser organisasjonen, ikke saksbehandleren. ✅ Skrevet | Must |
 | R5 | `@OPT-SØK-MEL-001` sende_melding_til_søker.feature | Avsenderen velger per melding om den er intern. Delt er standard | Should |
 | R6 | Nytt krav: merknader i saken | Delte og interne merknader. Interne bare for organisasjonen som skrev dem | Should |
 | R6 | `@OPT-BEH-BEH-008` søknadsmangler.feature | Rettes: interne og delte mangler | Should |
@@ -170,7 +170,7 @@ Flere av kravene hører til andre scopes. Reglene legges inn der, og scopet her 
 - [ ] Hvilke integrasjoner bruker den åpne tilgangen i dag (Politihøgskolen, NetNordic, analyseplattformen, utdanning.no), og hva slutter å virke når tilgangen strammes inn?
 - [ ] Er tilgangene (grants) i RLS-oversikten de samme i produksjon?
 - [ ] Skal personvernombudet vurdere om lekkasjen mellom læresteder i dag er et avvik?
-- [ ] Skal `@OPT-BEH-BEH-043` utvides til alle rollene som ser søknaden, eller skal det bli et nytt krav for å se søknaden, der opptaksinformatøren er én av rollene? Det siste stemmer best med at tilgang ikke er en egen kategori.
+- [x] `@OPT-BEH-BEH-043` er gjort om til «Se søknaden til en søker», for alle rollene som ser søknaden (2026-11-10).
 - [ ] Hvor lenge kan søkeren slette et opplastet dokument (R12)? I dag to timer, kanskje én.
 - [ ] Hvilke handlingskoder gir rollene i tilgangsstyring i test og produksjon? Tabellen *Brukerroller i opptak* i `begreper.md` har bare MODIFISERE_REGELVERK (opptaksforvalter) og SE_SØKNAD (opptaksinformatør, foreløpig).
 - [ ] Rollekatalogen: OPPTAK_INNSYN for opptaksinformatør (TAKE-469), OPPTAK_DOKUMENTASJON (TAKE-470), MODIFISERE_REGELVERK for opptaksforvalter, og egen lesekode hvis TAKE-360 blir valgt.
@@ -184,6 +184,7 @@ Append-only. Ny linje på toppen ved hver hendelse.
 
 | Dato       | Hendelse | Av | Lenke til review |
 |------------|----------|----|------------------|
+| 2026-11-10 | Reglene for Must er skrevet inn i kravfilene (`@draft`), unntatt GSK-konklusjonen, som hører til PR 1003 | @karensikt | – |
 | 2026-11-10 | *Mangler* følger nå R1–R16 i spec-en, med endringene 10.11. Ny *Plan*, med kravene som skal inn i krav-repoet | @karensikt | – |
 | 2026-11-10 | Lagt til *Mangler i krav, RLS og tilgangsstyring* som grunnlag for scopediskusjon | @karensikt | – |
 | 2026-11-10 | Rollen OPPTAK_INNSYN heter «opptaksinformatør» i kravene. Stegene bruker begrepet, rollekoden står i begrepslista | @karensikt | – |
