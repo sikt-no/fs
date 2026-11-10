@@ -177,10 +177,9 @@ Egenskap: Automatisk grunnlag
       Så får søknaden GSK-konklusjonen fra vitnemålet
       Og saken får grunnlaget ut fra vitnemålet
 
-  @ref-FLY-OPT-AUT-001
+  @ref-FLY-OPT-AUT-001 @implemented
   Regel: Grunnlaget settes når den automatiske behandlingen kjører
 
-    @implemented
     Scenario: Hver sak i søknaden får grunnlaget når den automatiske behandlingen kjører for saken
       # Avklart 06.11.2026: erstatter «Automatikken setter grunnlaget i alle sakene i søknaden».
       Gitt at søknaden har saker hos to saksbehandlende organisasjoner
@@ -189,19 +188,20 @@ Egenskap: Automatisk grunnlag
       Så får saken hos den ene saksbehandlende organisasjonen grunnlaget automatisk
       Men saken hos den andre saksbehandlende organisasjonen får ikke grunnlaget før den automatiske behandlingen kjører for den saken
 
-    @implemented
     Scenario: Grunnlaget settes av den automatiske behandlingen
       Gitt at søkeren har ett elektronisk vitnemål som gir generell studiekompetanse
       Når den automatiske behandlingen kjøres for søknaden
       Så får saken grunnlaget automatisk
 
-    @draft @openquestion
+  @draft @openquestion
+  Regel: Grunnlaget kan settes fra utdanningstilbudet når søknadsalternativet opprettes
+    # ÅPNE SPØRSMÅL:
+    # - FS-klienten kan sette et grunnlag fra studieprogrammet når
+    #   søknadsalternativet opprettes («Aut.kvalgrunnlag»). Skal det
+    #   videreføres? Avgjøres når lokale opptak tas inn (30.10.2026). Gjelder ikke
+    #   den automatiske behandlingen.
+
     Scenario: Grunnlag fra utdanningstilbudet når søknadsalternativet opprettes
-      # ÅPNE SPØRSMÅL:
-      # - FS-klienten kan sette et grunnlag fra studieprogrammet når
-      #   søknadsalternativet opprettes («Aut.kvalgrunnlag»). Skal det
-      #   videreføres? Avgjøres når lokale opptak tas inn (30.10.2026). Gjelder ikke
-      #   den helautomatiske flyten.
       Gitt at utdanningstilbudet har et grunnlag som skal settes automatisk
       Når søkeren søker på utdanningstilbudet
       Så får saken grunnlaget fra utdanningstilbudet

@@ -308,6 +308,7 @@ Egenskap: Automatisk vurdering av spesielle opptakskrav
       Så er fagkravet Fysikk 1 vurdert automatisk
       Og vurderingen av Matematikk R1 er uendret
 
+    @implemented
     Scenario: Nullstilt kravelement kan vurderes automatisk igjen
       Gitt at saksbehandleren har satt at fagkravet Norsk er oppfylt, med karakteren 4
       Når saksbehandleren nullstiller karakteren og vurderingen av fagkravet Norsk
