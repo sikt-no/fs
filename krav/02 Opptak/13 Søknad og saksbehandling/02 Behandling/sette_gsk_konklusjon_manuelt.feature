@@ -14,7 +14,7 @@
 # og opptak, og en endring overskriver raden, så tidligere versjoner bevares ikke. Saksbehandleren
 # kan sette «Ikke kvalifisert» med mangelkode, og kan ikke annullere en konklusjon i FS Admin.
 # Bare organisasjonen som endret sist, lagres. Tilgangen følger saken, ikke personen.
-@OPT-BEH-BEH-042 @must @draft @ref-OPT-BEH-BEH-015
+@OPT-BEH-BEH-042 @must @planned @ref-OPT-BEH-BEH-015
 Egenskap: Sette GSK-konklusjon manuelt
   Som saksbehandler
   ønsker jeg å vurdere, sette og rette GSK-konklusjonen når den ikke er satt automatisk, eller er feil
@@ -35,14 +35,13 @@ Egenskap: Sette GSK-konklusjon manuelt
   studiekompetanse, registrerer saksbehandleren en mangel, som andre mangler
   (OPT-BEH-BEH-008).
 
-  # ÅPNE SPØRSMÅL:
-  # - Grunnlagskodene for GSK settes i regelverkssamlingen (OPT-REG-GRU-001). Det blir feil når
-  #   konklusjonen deles på tvers av opptak og år, og tidligere konklusjoner vises i dag selv om
-  #   grunnlagskoden ikke er i regelverkssamlingen opptaket bruker. Hvor skal grunnlagskodene for
-  #   GSK ligge, og hvilke kan saksbehandleren velge?
-
-  @ref-OPT-REG-GRU-001
+  @openquestion @ref-OPT-REG-GRU-001
   Regel: Saksbehandleren setter GSK-konklusjonen med en grunnlagskode
+    # ÅPNE SPØRSMÅL:
+    # - Grunnlagskodene for GSK settes i regelverkssamlingen (OPT-REG-GRU-001). Det blir feil når
+    #   konklusjonen deles på tvers av opptak og år, og tidligere konklusjoner vises i dag selv om
+    #   grunnlagskoden ikke er i regelverkssamlingen opptaket bruker. Hvor skal grunnlagskodene for
+    #   GSK ligge, og hvilke kan saksbehandleren velge?
 
     Scenario: Sette GSK-konklusjon
       Gitt at søkeren ikke har noen GSK-konklusjon
