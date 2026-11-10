@@ -17,34 +17,33 @@ Egenskap: Se søknader med OPPTAK_INNSYN
   Regel: Brukeren med OPPTAK_INNSYN ser søknadene der organisasjonen er forvalter, tilbyder eller behandler
 
     Scenariomal: Se søknader ut fra organisasjonens rolle i opptaket
-      Gitt brukeren med OPPTAK_INNSYN er ansatt ved <organisasjon>
-      Og søkeren har søkt Sykepleie ved NTNU i et samordnet opptak HK-dir forvalter
-      Og UiO behandler søknadsalternativet
+      Gitt søkeren har søkt et alternativ i et samordna opptak der tilbyderen og behandleren er ulike organisasjoner
+      Og brukeren med OPPTAK_INNSYN er ansatt ved <organisasjon>
       Når brukeren med OPPTAK_INNSYN søker opp søkeren
       Så <ser> brukeren med OPPTAK_INNSYN søknaden
 
       Eksempler:
-        | organisasjon | ser      |
-        | HK-dir       | ser      |
-        | NTNU         | ser      |
-        | UiO          | ser      |
-        | UiB          | ser ikke |
+        | organisasjon                          | ser      |
+        | forvalteren av opptaket               | ser      |
+        | tilbyderen av søknadsalternativet     | ser      |
+        | behandleren av søknadsalternativet    | ser      |
+        | en organisasjon uten rolle i opptaket | ser ikke |
 
     Scenario: Se søknader i et lokalt opptak ved organisasjonen
-      Gitt brukeren med OPPTAK_INNSYN er ansatt ved NTNU
-      Og søkeren har søkt i et lokalt opptak NTNU forvalter
+      Gitt søkeren har søkt i et lokalt opptak
+      Og brukeren med OPPTAK_INNSYN er ansatt ved organisasjonen som forvalter det lokale opptaket
       Når brukeren med OPPTAK_INNSYN søker opp søkeren
       Så ser brukeren med OPPTAK_INNSYN søknaden
 
     Scenario: Ser ikke søknader i et lokalt opptak ved en annen organisasjon
-      Gitt brukeren med OPPTAK_INNSYN er ansatt ved UiO
-      Og søkeren har bare søkt i et lokalt opptak NTNU forvalter
+      Gitt søkeren har bare søkt i et lokalt opptak
+      Og brukeren med OPPTAK_INNSYN er ansatt ved en annen organisasjon enn den som forvalter det lokale opptaket
       Når brukeren med OPPTAK_INNSYN søker opp søkeren
       Så finner ikke brukeren med OPPTAK_INNSYN søkeren
 
     Scenario: Tilbyderen ser hele søknaden
-      Gitt brukeren med OPPTAK_INNSYN er ansatt ved NTNU
-      Og søkeren har søkt ett alternativ ved NTNU og ett ved UiO i et samordnet opptak
+      Gitt søkeren har søkt to alternativer i et samordna opptak, og alternativene tilbys av to ulike organisasjoner
+      Og brukeren med OPPTAK_INNSYN er ansatt ved tilbyderen av det ene søknadsalternativet
       Når brukeren med OPPTAK_INNSYN åpner søknaden
       Så ser brukeren med OPPTAK_INNSYN begge alternativene og prioriteringen mellom dem
 
@@ -77,7 +76,7 @@ Egenskap: Se søknader med OPPTAK_INNSYN
       Gitt søkeren har lastet opp en politiattest
       Når brukeren med OPPTAK_INNSYN åpner søknaden
       Så ser brukeren med OPPTAK_INNSYN at politiattesten er levert
-      Og brukeren med OPPTAK_INNSYN kan ikke åpne politiattesten
+      Og brukeren med OPPTAK_INNSYN ser ikke muligheten til å åpne politiattesten
 
   Regel: Brukeren med OPPTAK_INNSYN ser alt i søknadsbehandlingen
 
@@ -88,30 +87,31 @@ Egenskap: Se søknader med OPPTAK_INNSYN
       Og brukeren med OPPTAK_INNSYN ser praksiskalkulatoren
 
     Scenario: Se delte merknader og mangler
-      Gitt UiO behandler søknadsalternativet
-      Og UiO har registrert en delt merknad og en delt mangel i saken
-      Og brukeren med OPPTAK_INNSYN er ansatt ved NTNU, som tilbyr alternativet
+      Gitt søkeren har søkt et alternativ i et samordna opptak der tilbyderen og behandleren er ulike organisasjoner
+      Og behandleren har registrert en delt merknad og en delt mangel i saken
+      Og brukeren med OPPTAK_INNSYN er ansatt ved tilbyderen av søknadsalternativet
       Når brukeren med OPPTAK_INNSYN åpner søknaden
       Så ser brukeren med OPPTAK_INNSYN merknaden og mangelen
 
     Scenariomal: Interne merknader og mangler ses bare ved organisasjonen som registrerte dem
-      Gitt UiO behandler søknadsalternativet
-      Og UiO har registrert en intern merknad og en intern mangel i saken
+      Gitt søkeren har søkt et alternativ i et samordna opptak der tilbyderen og behandleren er ulike organisasjoner
+      Og behandleren har registrert en intern merknad og en intern mangel i saken
       Og brukeren med OPPTAK_INNSYN er ansatt ved <organisasjon>
       Når brukeren med OPPTAK_INNSYN åpner søknaden
       Så <ser> brukeren med OPPTAK_INNSYN merknaden og mangelen
 
       Eksempler:
-        | organisasjon | ser      |
-        | UiO          | ser      |
-        | NTNU         | ser ikke |
-        | HK-dir       | ser ikke |
+        | organisasjon                       | ser      |
+        | behandleren av søknadsalternativet | ser      |
+        | tilbyderen av søknadsalternativet  | ser ikke |
+        | forvalteren av opptaket            | ser ikke |
 
   Regel: Brukeren med OPPTAK_INNSYN ser de samme meldingene til søkeren som saksbehandlerne ved organisasjonen
 
     Scenariomal: Meldinger fra andre organisasjoner ses når de er delt
-      Gitt UiO har sendt en <type> melding til søkeren
-      Og brukeren med OPPTAK_INNSYN er ansatt ved NTNU, som tilbyr et av søknadsalternativene
+      Gitt søkeren har søkt et alternativ i et samordna opptak der tilbyderen og behandleren er ulike organisasjoner
+      Og behandleren har sendt en <type> melding til søkeren
+      Og brukeren med OPPTAK_INNSYN er ansatt ved tilbyderen av søknadsalternativet
       Når brukeren med OPPTAK_INNSYN åpner søknaden
       Så <ser> brukeren med OPPTAK_INNSYN meldingen
 
@@ -137,7 +137,7 @@ Egenskap: Se søknader med OPPTAK_INNSYN
 
     Scenariomal: Ingen endringer i søknad eller sak
       Når brukeren med OPPTAK_INNSYN åpner søknaden
-      Så kan ikke brukeren med OPPTAK_INNSYN <handling>
+      Så ser ikke brukeren med OPPTAK_INNSYN muligheten til å <handling>
 
       Eksempler:
         | handling                                |
