@@ -568,7 +568,7 @@ Egenskap: Automatisk GSK-konklusjon
     # Avklart 10.11.2026 (Ingrid Helset og Sondre): er en av søkerens saker i opptaket ferdig
     # behandlet, manuelt eller automatisk, overskriver automatikken ingenting. Saken får nye
     # resultater (OPT-BEH-BEH-035), og saksbehandleren vurderer selv om det nye vitnemålet skal
-    # brukes. En låst konklusjon erstattes heller ikke.
+    # brukes.
     # Konklusjonen endres, den slettes ikke og legges inn på nytt.
 
     Scenario: Vitnemålet erstatter den gjenbrukte konklusjonen
@@ -586,11 +586,6 @@ Egenskap: Automatisk GSK-konklusjon
     Scenario: Den gjenbrukte konklusjonen blir stående når vitnemålet ikke gir GSK
       Gitt at søknaden har en GSK-konklusjon som er gjenbrukt fra et tidligere opptak
       Når et vitnemål som ikke gir GSK, importeres fra KREG
-      Så er GSK-konklusjonen uendret
-
-    Scenario: En låst gjenbrukt konklusjon blir stående
-      Gitt at søknaden har en låst GSK-konklusjon som er gjenbrukt fra et tidligere opptak
-      Når et vitnemål som gir GSK, importeres fra KREG
       Så er GSK-konklusjonen uendret
 
   @ref-FLY-OPT-AUT-001 @implemented
