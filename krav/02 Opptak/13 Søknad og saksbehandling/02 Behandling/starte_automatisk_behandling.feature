@@ -45,6 +45,7 @@ Egenskap: Starte automatisk behandling
     # gir GSK, behandles saken ikke helautomatisk (OPT-BEH-BEH-025). Et vitnemål som kommer
     # etter at saken er behandlet, gir saken nye resultater (OPT-BEH-BEH-035).
 
+    @implemented
     Scenario: Saken behandles automatisk når importen har hentet søkerens vitnemål
       Gitt at den automatiske saksbehandlingen pågår i opptaket
       Og at søkeren har levert søknaden uten å ha et vitnemål i KREG
@@ -78,7 +79,7 @@ Egenskap: Starte automatisk behandling
         | Under behandling |
         | Behandlet        |
 
-  @depends-on-OPT-BEH-BEH-030 @ref-OPT-BEH-BEH-021 @ref-OPT-BEH-BEH-029 @ref-OPT-BEH-BEH-035
+  @depends-on-OPT-BEH-BEH-030 @ref-OPT-BEH-BEH-021 @ref-OPT-BEH-BEH-029 @ref-OPT-BEH-BEH-035 @implemented
   # OPT-BEH-BEH-030: «Nye og annullerte vitnemål i KREG importeres for aktive søkere»
   # OPT-BEH-BEH-035: «Saken har nye resultater når resultater importeres etter at saken er behandlet»
   Regel: Et nytt vitnemål etter at saken er behandlet, gir saken nye resultater
@@ -122,7 +123,7 @@ Egenskap: Starte automatisk behandling
       Når saksbehandleren starter den automatiske behandlingen på søkerens vitnemål
       Så har saken fortsatt grunnlaget saksbehandleren valgte
 
-  @depends-on-OPT-BEH-BEH-025
+  @depends-on-OPT-BEH-BEH-025 @implemented
   # OPT-BEH-BEH-025: «Den automatiske behandlingen setter saken til ferdig behandlet når alt er avgjort»
   Regel: Det fremgår at saken er behandlet automatisk
 

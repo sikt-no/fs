@@ -515,7 +515,7 @@ Egenskap: Automatisk GSK-konklusjon
       Når opptaksforvalteren ved organisasjonen som forvalter opptaket, starter rettingen av grunnlagskoden for løpet
       Så har GSK-konklusjonen på søknaden fortsatt grunnlagskoden KLY
 
-  @ref-OPT-BEH-BEH-032
+  @ref-OPT-BEH-BEH-032 @implemented
   Regel: Automatikken setter GSK-konklusjonen i publiserte opptak, også utenfor perioden for den automatiske saksbehandlingen
     # Avklart 09.11.2026 (Sondre, opptak !6663): GSK-konklusjonen settes når vitnemålet importeres
     # fra KREG, i alle publiserte opptak, også før den automatiske saksbehandlingen starter og etter
@@ -559,7 +559,7 @@ Egenskap: Automatisk GSK-konklusjon
       Når vitnemålet importeres fra KREG
       Så får søknaden ingen GSK-konklusjon fra vitnemålet
 
-  @ref-OPT-BEH-BEH-035
+  @ref-OPT-BEH-BEH-035 @implemented
   Regel: Vitnemålet erstatter en gjenbrukt konklusjon
     # Avklart 10.11.2026 (Ingrid Helset, sjekket med HK-dir): har søknaden en konklusjon som er
     # gjenbrukt fra et tidligere opptak, og søkeren får et vitnemål som gir GSK, erstatter
@@ -619,15 +619,14 @@ Egenskap: Automatisk GSK-konklusjon
   # saksbehandling, og kan bli flyttet til et eget krav når kravstrukturen bygges ut.
   # At saksbehandleren ser søkerens tidligere GSK-konklusjoner og henter én inn i
   # opptaket når automatikken ikke har satt noen (STEK-443), skal bli et eget krav.
+  @implemented
   Regel: Saksbehandleren endrer GSK-konklusjonen
 
-    @implemented
     Scenario: Overskrive positiv konklusjon med negativ konklusjon
       Gitt at søknaden har en positiv GSK-konklusjon
       Når saksbehandleren setter en negativ GSK-konklusjon
       Så er GSK-konklusjonen på søknaden negativ
 
-    @implemented
     Scenario: Legge til positiv konklusjon når ingen finnes
       Gitt at søknaden ikke har noen GSK-konklusjon
       Når saksbehandleren legger til en positiv GSK-konklusjon
@@ -675,7 +674,7 @@ Egenskap: Automatisk GSK-konklusjon
       Når vitnemålet annulleres
       Så er GSK-konklusjonen på søknaden uendret
 
-    @depends-on-OPT-BEH-BEH-030 @ref-OPT-BEH-BEH-033
+    @depends-on-OPT-BEH-BEH-030 @ref-OPT-BEH-BEH-033 @implemented
     # OPT-BEH-BEH-030: «Nye og annullerte vitnemål i KREG importeres for aktive søkere»
     Scenario: Annulleringen oppdages uten at søkeren endrer søknaden
       # Avklart 06.11.2026 (økt med fagfolk): importen av VGS-vitnemål fra KREG spør KREG om alle
@@ -688,6 +687,7 @@ Egenskap: Automatisk GSK-konklusjon
       Når vitnemålet annulleres i KREG
       Så får saken taggen "Vitnemål annullert"
 
+  @implemented
   Regel: Sporbarhet
     # Søkerens innsyn: avklart 2026-10-13 at det er utenfor dette kravet om søkeren
     # skal kunne se om GSK-konklusjonen er satt automatisk eller manuelt. Søkeren kan

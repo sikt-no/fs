@@ -118,9 +118,9 @@ Egenskap: Importere resultater fra KREG
       Når søkerens resultater importeres på nytt
       Så er det importerte vitnemålet fortsatt annullert
 
+  @implemented
   Regel: Søknaden behandles videre når resultatene ikke kan hentes
 
-    @implemented
     Scenario: Søker uten fødselsnummer og D-nummer får ingen resultater importert
       Gitt at søkeren verken har fødselsnummer eller D-nummer
       Når søkeren sender inn søknaden
@@ -149,12 +149,14 @@ Egenskap: Importere resultater fra KREG
     # Saken behandles ikke automatisk på nytt (OPT-BEH-BEH-032). Når vitnemålet annulleres, gjelder OPT-BEH-BEH-034.
     # Varselet til saksbehandleren om nytt vitnemål står i OPT-BEH-BEH-021.
 
+    @implemented
     Scenario: Søkeren får vitnemålet etter at søknaden er levert
       Gitt at søkeren har levert søknaden uten å ha et vitnemål i KREG
       Og at opptaket ikke er avsluttet
       Når KREG får et vitnemål for søkeren
       Så er vitnemålet importert uten at søkeren har endret søknaden
 
+    @implemented
     Scenario: Vitnemålene hentes én gang for søkeren med søknader i flere opptak
       Gitt at søkeren har søknader i to opptak som ikke er avsluttet
       Når importen av VGS-vitnemål fra KREG kjører
@@ -165,6 +167,7 @@ Egenskap: Importere resultater fra KREG
       Når importen av VGS-vitnemål fra KREG kjører
       Så hentes ingen VGS-dokumenter for søkeren fra KREG
 
+    @implemented
     Scenario: Vitnemålet annulleres og erstattes av et nytt etter at opptakssystemet har behandlet søknaden
       Gitt at opptakssystemet har behandlet søknaden på søkerens importerte vitnemål
       Og at opptaket ikke er avsluttet
@@ -173,6 +176,7 @@ Egenskap: Importere resultater fra KREG
       Så er det importerte vitnemålet annullert
       Og det nye vitnemålet er importert
 
+    @implemented
     Scenario: Vitnemålet annulleres uten at det kommer et nytt, etter at opptakssystemet har behandlet søknaden
       Gitt at opptakssystemet har behandlet søknaden på søkerens importerte vitnemål
       Og at opptaket ikke er avsluttet
