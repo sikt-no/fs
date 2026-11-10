@@ -13,11 +13,13 @@
 # Kode i dag (fs-admin GSKCard, fs-plattform GskVedtakService): konklusjonen er én rad per søker
 # og opptak, og en endring overskriver raden, så tidligere versjoner bevares ikke. Den første
 # konklusjonen kan ikke være negativ. Saksbehandleren kan ikke annullere en konklusjon i FS Admin.
-# Bare organisasjonen som endret sist, lagres, og det finnes ikke noe varsel ved endring.
+# Bare organisasjonen som endret sist, lagres. Hver lagring har den samme bekreftelsen
+# («Er du helt sikker?»), uten eget varsel når en eksisterende konklusjon eller en konklusjon
+# satt av en annen organisasjon endres. Uten tilgang vises konklusjonen skrivebeskyttet.
 @OPT-BEH-BEH-042 @must @draft @ref-OPT-BEH-BEH-015
 Egenskap: Sette GSK-konklusjon manuelt
   Som saksbehandler
-  ønsker jeg å vurdere og sette GSK-konklusjonen når søkeren ikke har fått den automatisk
+  ønsker jeg å vurdere, sette og rette GSK-konklusjonen når den ikke er satt automatisk, eller er feil
   slik at søknaden kan behandles videre på riktig grunnlag.
 
   GSK-konklusjonen er det første saksbehandleren tar stilling til i saken. Saksbehandleren
@@ -77,30 +79,41 @@ Egenskap: Sette GSK-konklusjon manuelt
       Så har søknaden en negativ GSK-konklusjon med mangelkoden FAG
 
     Scenario: Endre negativ konklusjon til positiv
-      Gitt at søknaden har en negativ GSK-konklusjon
+      Gitt at søknaden har en negativ GSK-konklusjon som saksbehandleren har satt i opptaket
       Når saksbehandleren endrer GSK-konklusjonen til positiv med grunnlagskoden KLS
       Så har søknaden en positiv GSK-konklusjon med grunnlagskoden KLS
 
     Scenario: Endre grunnlagskoden
       # Sektor ber om dette for blant annet feilsatte IMM-vedtak (PFS 4593713169).
-      Gitt at søknaden har en positiv GSK-konklusjon med grunnlagskoden RFA
+      Gitt at søknaden har en positiv GSK-konklusjon med grunnlagskoden RFA, som saksbehandleren har satt i opptaket
       Når saksbehandleren endrer grunnlagskoden til KLS
       Så har søknaden en positiv GSK-konklusjon med grunnlagskoden KLS
 
     Scenario: Grunnlagsdatoen følger den siste endringen
-      Gitt at søknaden har en GSK-konklusjon med grunnlagsdatoen 2027-04-20
+      Gitt at søknaden har en GSK-konklusjon med grunnlagsdatoen 2027-04-20, som saksbehandleren har satt i opptaket
       Når saksbehandleren endrer GSK-konklusjonen 2027-05-03
       Så er grunnlagsdatoen 2027-05-03
 
+    Scenario: Den forrige konklusjonen bevares når konklusjonen endres
+      # Krav 6a.
+      Gitt at søknaden har en positiv GSK-konklusjon med grunnlagskoden RFA, som saksbehandleren har satt i opptaket
+      Når saksbehandleren endrer grunnlagskoden til KLS
+      Så er konklusjonen med grunnlagskoden RFA bevart som en tidligere konklusjon
+
+    @openquestion
     Scenario: Saksbehandleren får varsel før en eksisterende konklusjon endres
       # Krav 4a.
-      Gitt at søknaden har en GSK-konklusjon
+      # ÅPNE SPØRSMÅL:
+      # - Gjelder varselet alle endringer, eller bare når søkeren har en konklusjon fra et
+      #   tidligere opptak? Krav 4a står under søkere med tidligere konklusjoner, og krav 2 sier
+      #   at konklusjonen kan endres uten begrensninger i opptaket.
+      Gitt at søkeren har en GSK-konklusjon fra et tidligere opptak
       Når saksbehandleren endrer GSK-konklusjonen
       Så ser saksbehandleren et varsel om at en eksisterende GSK-konklusjon endres
       Og konklusjonen endres først når saksbehandleren bekrefter
 
     Scenario: Saksbehandleren angrer endringen
-      Gitt at søknaden har en GSK-konklusjon
+      Gitt at søknaden har en GSK-konklusjon som saksbehandleren har satt i opptaket
       Og at saksbehandleren endrer GSK-konklusjonen
       Når saksbehandleren avbryter endringen
       Så er GSK-konklusjonen på søknaden uendret
@@ -131,7 +144,7 @@ Egenskap: Sette GSK-konklusjon manuelt
       Så ser saksbehandleren hvilken organisasjon som endret konklusjonen, og datoen for endringen
 
     @openquestion
-    Scenario: Den andre organisasjonen ser at konklusjonen er endret
+    Scenario: Organisasjonen som satte konklusjonen, ser at den er endret
       # Krav 3c og 3d.
       # ÅPNE SPØRSMÅL:
       # - Hvilken status ser den andre organisasjonen i søknadslisten og på søknaden, og når
@@ -141,17 +154,27 @@ Egenskap: Sette GSK-konklusjon manuelt
       Gitt at søknaden har saker ved to saksbehandlende organisasjoner
       Og at GSK-konklusjonen er satt av den ene organisasjonen
       Når saksbehandleren ved den andre organisasjonen endrer GSK-konklusjonen
-      Så ser saksbehandleren ved den første organisasjonen at konklusjonen er endret, i søknadslisten og på søknaden
+      Så ser saksbehandleren ved organisasjonen som satte konklusjonen, at den er endret, i søknadslisten og på søknaden
 
+    @openquestion
     Scenario: Saksbehandleren uten tilgang til saken ser ikke muligheten til å endre konklusjonen
+      # Står ikke i kildene. Følger mønsteret om at manglende tilgang skjuler elementet.
+      # ÅPNE SPØRSMÅL:
+      # - Skal saksbehandleren uten tilgang se konklusjonen (som i dag, skrivebeskyttet), og bare
+      #   ikke muligheten til å endre den?
       Gitt at saksbehandleren ikke har tilgang til å behandle saken
       Når saksbehandleren ser på GSK-konklusjonen
       Så ser ikke saksbehandleren muligheten til å endre GSK-konklusjonen
 
   Regel: Den siste GSK-konklusjonen gjelder
 
+    @openquestion
     Scenario: Den siste konklusjonen er den gjeldende
       # Krav 4.
+      # ÅPNE SPØRSMÅL:
+      # - Henger på om konklusjonen lagres på søkeren (se spørsmålene under beskrivelsen). I
+      #   OPT-BEH-BEH-015 får søknaden ingen konklusjon når den siste tidligere er negativ
+      #   («Bare den siste tidligere konklusjonen gjenbrukes»). Er det det samme?
       Gitt at søkeren har en positiv GSK-konklusjon fra 2024
       Og at søkeren har en negativ GSK-konklusjon fra 2025
       Når saksbehandleren ser på GSK-konklusjonen
@@ -213,6 +236,7 @@ Egenskap: Sette GSK-konklusjon manuelt
       Men konklusjonen er ikke annullert før saksbehandleren bekrefter
 
     Scenario: Annulleringen krever en årsak
+      # Fra skissen (10119:38745) og koden, ikke fra Confluence.
       Gitt at søknaden har en positiv GSK-konklusjon
       Når saksbehandleren vil annullere konklusjonen uten å velge en årsak til annullering
       Så kan saksbehandleren ikke bekrefte annulleringen
