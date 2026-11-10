@@ -115,6 +115,9 @@ person, ikke bare til en Feide-bruker.
 Hver rad er én tildeling, så «Fjern tildeling» fjerner rollen for organisasjonen og miljøet på
 raden. Brukerens øvrige tildelinger av rollen står urørt.
 
+### Regel: Rader med arvet rolle har også «Fjern tildeling»
+Alle radene har handlingen, også der rollen er arvet gjennom en annen rolle.
+
 ### Regel: Stedkoder og tidsbegrensning settes alltid per bruker
 Dialogen har ingen felt for dem. De settes for tildelingen på detaljsiden for personen
 (BRU-PER-GRU-005 og BRU-PER-GRU-006).

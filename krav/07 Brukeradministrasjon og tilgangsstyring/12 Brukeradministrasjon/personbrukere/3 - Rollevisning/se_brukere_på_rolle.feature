@@ -47,41 +47,41 @@ Egenskap: Se brukere som har en spesifikk rolle
     Når brukeradministrator åpner rollens oversiktsside
     Så vises ikke brukeren
 
-  @draft
+  @in-progress
   Scenario: En bruker med rollen for to organisasjoner står på to rader
     Gitt at en bruker har rollen aktivt tildelt for to organisasjoner brukeradministratoren administrerer
     Når brukeradministrator åpner rollens oversiktsside
     Så står brukeren på to rader, én for hver organisasjon tildelingen gjelder for
 
-  @draft
+  @in-progress
   Scenario: Antallet på rollens oversiktsside teller tildelinger
     Gitt at rollen bare er tildelt én bruker
     Og brukeren har rollen aktivt tildelt for to organisasjoner brukeradministratoren administrerer
     Når brukeradministrator åpner rollens oversiktsside
     Så viser rollens oversiktsside 2 som antall treff
 
-  @draft
+  @in-progress
   Scenario: Filtrere tildelingene på organisasjon
     Gitt at brukeradministrator er på rollens oversiktsside
     Når brukeradministrator velger en organisasjon i organisasjonsfilteret
     Så vises bare tildelingene som gjelder for den valgte organisasjonen
 
-  @draft
+  @in-progress
   Scenario: Filtrere tildelingene på miljø uten å velge organisasjon
     Gitt at brukeradministrator er på rollens oversiktsside
     Og brukeradministrator har ikke valgt noen organisasjon i organisasjonsfilteret
     Når brukeradministrator velger et miljø i miljøfilteret
     Så vises bare tildelingene i det valgte miljøet
 
-  @draft @openquestion
-  Scenario: Miljøfilteret tilbyr miljøene rollen har tildelinger i
-    # ÅPNE SPØRSMÅL:
-    # - Gjelder det miljøene til tildelingene brukeradministratoren kan se på siden, eller alle
-    #   tildelingene av rollen? Et miljø som bare har tildelinger brukeradministratoren ikke kan
-    #   se, ville avsløre at slike tildelinger finnes.
-    Gitt at rollen har tildelinger i miljøene test og review
+  @in-progress
+  Scenario: Miljøfilteret tilbyr miljøene som er synlige i listen
+    # AVKLART 10.11.2026 (Kjetil): Miljøfilteret tilbyr alle miljøene som er synlige i listen, ikke
+    # alle miljøene rollen har tildelinger i.
+    Gitt at tildelingene brukeradministrator ser på rollens oversiktsside, gjelder i miljøene test og review
+    Og rollen har også en tildeling i miljøet production som brukeradministrator ikke kan se
     Når brukeradministrator åpner miljøfilteret på rollens oversiktsside
     Så kan brukeradministrator velge test og review
+    Men brukeradministrator kan ikke velge production
 
   @draft
   Scenario: Søke fram en rolle

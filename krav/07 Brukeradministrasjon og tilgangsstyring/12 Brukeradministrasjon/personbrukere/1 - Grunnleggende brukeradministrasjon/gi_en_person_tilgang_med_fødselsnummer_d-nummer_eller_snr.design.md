@@ -74,8 +74,8 @@ før det slås opp, og manglende rett avvises før personen slås opp.
 
 ### Regel: Nummeret vises bare når navnet mangler
 Nummeret slettes fra skjemaets tilstand når dialogen lukkes. Det legges ikke i URL-en, i
-snackbaren eller i loggmeldinger i klienten. Når navnet til personen mangler, viser listen på
-rollens oversiktsside og detaljsiden for personen nummeret i navnets plass. Det krever at API-et
+snackbaren eller i loggmeldinger i klienten. Når navnet til personen mangler, viser brukeroversikten,
+listen på rollens oversiktsside og detaljsiden for personen nummeret i navnets plass. Det krever at API-et
 gir nummeret for personer uten navn. Når navnet er kjent, henter ingen av sidene nummeret.
 
 ### Regel: Nummeret må ha gyldige kontrollsifre

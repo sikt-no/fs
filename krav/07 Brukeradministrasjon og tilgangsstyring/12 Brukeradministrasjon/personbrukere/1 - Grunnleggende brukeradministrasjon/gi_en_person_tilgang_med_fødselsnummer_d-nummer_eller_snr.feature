@@ -23,8 +23,8 @@ Egenskap: Gi en person tilgang med fødselsnummer, D-nummer eller SNR
   Svaret er det samme uansett om personen fantes fra før, og det avslører ikke hvilke
   tildelinger personen har i andre organisasjoner. Personen vises med navn. Navnet til en person
   som ikke fantes fra før, kommer fra personens første pålogging. Er navnet ikke kjent, vises
-  nummeret i stedet for navnet på rollens oversiktsside og på detaljsiden for personen. Ellers
-  vises ikke nummeret i grensesnittet etterpå.
+  nummeret i stedet for navnet i brukeroversikten, på rollens oversiktsside og på detaljsiden for
+  personen. Ellers vises ikke nummeret i grensesnittet etterpå.
 
   Kravet erstatter «Registrere en personbruker uten Feide-konto». Blokkene fra den modellen står
   nederst, merket med forslag til workshopen. Påloggingen med ID-porten er dekket av
@@ -133,8 +133,7 @@ Egenskap: Gi en person tilgang med fødselsnummer, D-nummer eller SNR
       Men brukeradministratoren ser ikke tildelingen i organisasjonen brukeradministratoren ikke administrerer
 
   Regel: Nummeret vises bare når navnet mangler
-    Om brukeroversikten også viser nummeret når navnet mangler, er et åpent spørsmål i
-    BRU-PER-GRU-001 («Fødselsnummer vises ikke i listen»).
+    # AVKLART 10.11.2026 (Kjetil): Brukeroversikten viser også nummeret når navnet mangler.
 
     Scenariomal: Nummeret vises i stedet for navnet når navnet mangler
       Gitt brukeradministratoren har gitt en person som ikke fantes fra før, en rolle og oppgitt fødselsnummeret
@@ -144,6 +143,7 @@ Egenskap: Gi en person tilgang med fødselsnummer, D-nummer eller SNR
 
       Eksempler:
         | sted                       |
+        | brukeroversikten           |
         | rollens oversiktsside      |
         | detaljsiden for personen   |
 
@@ -303,12 +303,11 @@ Egenskap: Gi en person tilgang med fødselsnummer, D-nummer eller SNR
   Regel: Navnet hentes fra påloggingen
     Navnet til en person som ikke fantes fra før, kommer fra personens første pålogging.
     Brukeradministratoren oppgir ikke navnet, og det hentes ikke fra Folkeregisteret. Feide
-    oppgir navnet ved pålogging. Er navnet ikke kjent, vises «Navn ikke kjent» i
-    brukeroversikten, og nummeret på rollens oversiktsside og detaljsiden for personen (regelen
-    «Nummeret vises bare når navnet mangler»). Det gjelder også en person som har logget inn,
+    oppgir navnet ved pålogging. Er navnet ikke kjent, vises nummeret i stedet
+    (regelen «Nummeret vises bare når navnet mangler»). Det gjelder også en person som har logget inn,
     men der påloggingen ikke oppga navnet.
 
-    Teksten er nøytral og sier ikke om personen har logget inn. En person som har logget inn før,
+    Visningen sier ikke om personen har logget inn. En person som har logget inn før,
     vises likevel med navn straks tildelingen er gitt. Et manglende navn kan derfor antyde at
     personen ikke har logget inn før.
 
@@ -319,13 +318,13 @@ Egenskap: Gi en person tilgang med fødselsnummer, D-nummer eller SNR
       Gitt brukeradministratoren har gitt en person som ikke fantes fra før, en rolle og oppgitt fødselsnummeret
       Og personen har ikke logget inn
       Når brukeradministratoren ser personen i brukeroversikten
-      Så vises navnet som «Navn ikke kjent»
+      Så vises personens fødselsnummer i stedet for navnet
 
     Scenario: Navnet er ikke kjent når påloggingen ikke oppgir navnet
       Gitt brukeradministratoren har gitt en person som ikke fantes fra før, en rolle og oppgitt fødselsnummeret
       Og personen har logget inn med en påloggingsmåte som ikke oppga navnet
       Når brukeradministratoren ser personen i brukeroversikten
-      Så vises navnet som «Navn ikke kjent»
+      Så vises personens fødselsnummer i stedet for navnet
 
     Scenario: Navnet vises etter første pålogging med Feide
       Gitt brukeradministratoren har gitt en person som ikke fantes fra før, en rolle og oppgitt fødselsnummeret
@@ -345,7 +344,6 @@ Egenskap: Gi en person tilgang med fødselsnummer, D-nummer eller SNR
       Når brukeradministratoren ser detaljsiden for personen
       Så vises personens fødselsnummer i stedet for navnet
       Og brukeradministratoren ser tildelingene personen har fått
-      Og personen vises med «Navn ikke kjent» i brukeroversikten
 
     Scenario: Feil identifikasjon viser seg som en person som aldri logger inn
       Gitt brukeradministratoren har gitt en person en rolle og oppgitt feil fødselsnummer

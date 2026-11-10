@@ -53,36 +53,15 @@ Egenskap: Listevisning og søk i personbrukere
       Og serveren avgjør hva som er en aktiv rolle
 
     @draft @openquestion
-    Scenario: Se liste over personbrukere
-      # Listen viser bare personer. Feide-brukerne som er koblet til personen, og Feide-ID-ene
-      # deres, vises bare på detaljsiden (BRU-PER-GRU-014).
-      # ÅPNE SPØRSMÅL:
-      # - Hva står i kolonnen «Hjemorganisasjoner» for en person som ikke er koblet til noen
-      #   Feide-bruker?
-      # - Skal testpersoner merkes med en egen kolonne eller ved navnet? Se «En testperson er
-      #   merket i listen».
-      # - Personer kan ikke deaktiveres i API-et ennå. Skal status vises for personer før det er på
-      #   plass?
-      Når brukeradministratoren åpner brukeroversikten
-      Så ser brukeradministratoren en liste over alle personbrukere
-      Og listen er sortert etter navn i stigende rekkefølge
-      Og hvert innslag viser følgende informasjon:
-        | felt               |
-        | Navn               |
-        | Hjemorganisasjoner |
-        | Status             |
-      Og «Hjemorganisasjoner» viser hjemorganisasjonene til Feide-brukerne personen er koblet til, hver organisasjon én gang
-
-    @draft @openquestion
     Scenario: Fødselsnummer vises ikke i listen
       # ÅPNE SPØRSMÅL:
       # - Er det riktig at brukeradministratoren ikke skal kunne søke på fødselsnummer, D-nummer
       #   eller SNR i listen? Nummeret er ikke tilgjengelig i API-et, verken som felt eller som
       #   filter. Brukeradministratoren oppgir nummeret bare når hen gir en person tilgang
       #   (BRU-PER-GRU-013).
-      # - Rollens oversiktsside og detaljsiden for personen viser nummeret i stedet for navnet når
-      #   navnet mangler (BRU-PER-GRU-013, regelen «Nummeret vises bare når navnet mangler»). Skal
-      #   listen også vise nummeret når navnet mangler, eller «Navn ikke kjent»?
+      # AVKLART 10.11.2026 (Kjetil): Listen viser nummeret i stedet for navnet når navnet mangler,
+      # som rollens oversiktsside og detaljsiden (BRU-PER-GRU-013, regelen «Nummeret vises bare
+      # når navnet mangler»).
       Gitt navnet til personbrukeren er kjent
       Når brukeradministratoren åpner brukeroversikten
       Så vises ikke personbrukerens fødselsnummer, D-nummer eller SNR

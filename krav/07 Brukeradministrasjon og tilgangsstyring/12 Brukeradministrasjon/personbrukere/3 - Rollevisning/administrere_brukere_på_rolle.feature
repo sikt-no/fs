@@ -16,22 +16,10 @@ Egenskap: Administrere brukere på en spesifikk rolle
   (BRU-PER-GRU-003). Organisasjon og miljø velges på samme måte som når roller tildeles fra
   detaljsiden for en personbruker.
 
-  @draft
-  Scenario: Legge til en bruker på en rolle
-    # AVKLART 10.11.2026 (Kjetil): Brukere legges til én om gangen. Å legge til flere brukere i én
-    # operasjon kommer i et senere krav.
-    Gitt at brukeradministrator er på rollens oversiktsside
-    Når brukeradministrator legger til en bruker
-    Så skal rollen være tildelt brukeren
-    Og endringen skal være sporbar i både bruker- og rollehistorikk
-
-  @draft @openquestion
+  @in-progress
   Scenario: Fjerne en tildeling fra rollens oversiktsside
-    # AVKLART 10.11.2026 (Kjetil): Tildelinger fjernes én om gangen. Å fjerne flere i én operasjon
-    # kommer i et senere krav.
-    # ÅPNE SPØRSMÅL:
-    # - Rollens oversiktsside viser også tildelinger der rollen er arvet gjennom en annen rolle.
-    #   Har de raden «Fjern tildeling», eller fjernes bare direkte tildelinger herfra?
+    # AVKLART 10.11.2026 (Kjetil): Rollen gis og fjernes for én person om gangen. Å gi eller fjerne
+    # for flere i én operasjon kommer i et senere krav.
     Gitt at brukeradministrator er på rollens oversiktsside
     Og en bruker har rollen aktivt tildelt for en organisasjon og et miljø
     Når brukeradministrator velger «Fjern tildeling» på raden for tildelingen
@@ -85,7 +73,17 @@ Egenskap: Administrere brukere på en spesifikk rolle
       Når brukeradministrator åpner detaljsiden for personen
       Så kan brukeradministrator tildele personen flere roller der
 
-  @draft @depends-on-BRU-PER-GRU-005 @depends-on-BRU-PER-GRU-006
+  @in-progress
+  Regel: Rader med arvet rolle har også «Fjern tildeling»
+    # AVKLART 10.11.2026 (Kjetil): Også en rad der rollen er arvet gjennom en annen rolle, har
+    # «Fjern tildeling».
+
+    Scenario: En rad med arvet rolle har «Fjern tildeling»
+      Gitt at en bruker har rollen arvet gjennom en annen rolle for en organisasjon og et miljø
+      Når brukeradministrator ser raden for tildelingen på rollens oversiktsside
+      Så har raden «Fjern tildeling»
+
+  @in-progress @depends-on-BRU-PER-GRU-005 @depends-on-BRU-PER-GRU-006
   Regel: Stedkoder og tidsbegrensning settes alltid per bruker
     # AVKLART 10.11.2026 (Kjetil): Alt settes alltid per bruker. Rollen har ingen stedkoder eller
     # tidsbegrensning som brukerne arver.

@@ -110,10 +110,11 @@ Antall treff i listen er antallet tildelinger, så det stemmer med antallet rade
 ### Scenario: Filtrere tildelingene på miljø uten å velge organisasjon
 Miljøfilteret er ikke låst til en organisasjon er valgt.
 
-### Scenario: Miljøfilteret tilbyr miljøene rollen har tildelinger i
-Valgene er miljøene rollen har tildelinger i, for eksempel test og review, ikke miljøene
-brukeradministratoren kan tildele i (`mineTildelingsmiljoer`). Det krever en kilde for miljøene
-til rollens tildelinger.
+### Scenario: Miljøfilteret tilbyr miljøene som er synlige i listen
+Valgene er miljøene til tildelingene brukeradministratoren ser i listen, for eksempel test og
+review, ikke miljøene brukeradministratoren kan tildele i (`mineTildelingsmiljoer`). Et miljø
+med bare tildelinger brukeradministratoren ikke kan se, tilbys ikke. Det krever en kilde for
+miljøene til de synlige tildelingene, ikke bare den innlastede siden av listen.
 
 ## Åpne designspørsmål
 
