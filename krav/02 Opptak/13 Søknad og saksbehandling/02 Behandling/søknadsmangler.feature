@@ -505,3 +505,20 @@ Egenskap: Søknadsmangler
       Når saksbehandleren ved Universitetet i Oslo velger "DUA" som filter i listen over saker
       Så vises saken til "Kari Nordmann"
       Men saken til "Ola Nordmann" vises ikke
+
+  # Avklart 2026-11-10 (svar 10): mangler kan være interne, som merknader. En mangel er delt med de andre
+  # organisasjonene på søknaden, med mindre organisasjonen som registrerte den, har merket den som intern.
+  # Regelen «Organisasjonene som behandler søknaden ser manglene i alle sakene» gjelder da de delte manglene.
+  @draft
+  Regel: En mangel kan merkes som intern, og ses da bare av organisasjonen som registrerte den
+
+    Scenario: En intern mangel ses ikke av en annen saksbehandlende organisasjon
+      Gitt at søknaden har saker hos "Universitetet i Oslo" og "UiT Norges arktiske universitet"
+      Og at saken hos "Universitetet i Oslo" har mangelen "DUA" merket som intern
+      Når saksbehandleren ved UiT Norges arktiske universitet åpner søknaden
+      Så ser saksbehandleren ikke mangelen "DUA"
+
+    Scenario: Søkeren ser ikke interne mangler
+      Gitt at saken hos "Universitetet i Oslo" har mangelen "DUA" merket som intern
+      Når søkeren ser manglene på søknaden sin
+      Så ser søkeren ikke mangelen "DUA"

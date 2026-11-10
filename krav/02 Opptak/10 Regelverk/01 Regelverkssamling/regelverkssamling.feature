@@ -68,3 +68,13 @@ Egenskap: Regelverkssamling
       Og jeg ser oversikt over kvotetyper
       Og jeg ser oversikt over grunnlag
       Og jeg ser oversikt over mangelkoder
+
+  # Avklart 2026-11-10 (svar 16): for at brukerne ikke skal drukne i andres regelverkssamlinger, vises
+  # regelverket ved organisasjonen brukeren er ansatt ved, først. Om det løses med sortering eller filter, er åpent.
+  @draft
+  Regel: Regelverkssamlingene ved organisasjonen brukeren er ansatt ved, vises først
+
+    Scenario: Regelverkssamlingene ved organisasjonen jeg er ansatt ved, står øverst
+      Gitt at det finnes regelverkssamlinger ved organisasjonen jeg er ansatt ved og ved andre organisasjoner
+      Når jeg åpner regelverksoversikten
+      Så står regelverkssamlingene ved organisasjonen jeg er ansatt ved, først
