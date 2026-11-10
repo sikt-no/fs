@@ -1,5 +1,5 @@
 # language: no
-# BEGREPER (2026-11-10): Bytt «regelverksforvalter» med «opptaksforvalter» (handlingskoden MODIFISERE_REGELVERK) når fila likevel endres. Se krav/02 Opptak/begreper.md.
+# BEGREPER (2026-11-10): Bytt «regelverksforvalter» med «bruker med MODIFISERE_REGELVERK» når fila likevel endres. Se krav/02 Opptak/begreper.md.
 # Jira: SHI-691
 @OPT-OPT-UTD-013 @must @implemented
 Egenskap: Kvoteflyt registreres ikke på utdanningstilbudet

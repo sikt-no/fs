@@ -30,7 +30,7 @@ I et lokalt opptak er én organisasjon forvalter, tilbyder og behandler. En orga
 | **opptaksforvalter** | OPPTAK_FORVALTER, med handlingskoden MODIFISERE_REGELVERK | Forvalter opptak og utdanningstilbud, og oppretter og administrerer regelverket for organisasjonen. Handler på søkerens vegne når organisasjonen er forvalter |
 | **saksbehandler** | OPPTAK_SAKSBEHANDLER | Behandler søknader når organisasjonen er behandler. Har innsyn når organisasjonen er tilbyder |
 | **dokumentforvalter** | OPPTAK_DOKUMENTASJON | Laster opp og sletter dokumentasjon på søkerens vegne når organisasjonen er forvalter |
-| **førstelinje** | OPPTAK_INNSYN | Svarer søkere. Ser, men endrer ingenting |
+| **bruker med OPPTAK_INNSYN** | OPPTAK_INNSYN | Svarer søkere. Ser, men endrer ingenting |
 
 Andre aktører: **søker**, **bruker uten tilganger** (innlogget uten roller, også integrasjoner uten roller), **integrasjon** (maskinbruker med roller) og **Sikt-brukerstøtte**.
 
@@ -51,7 +51,7 @@ Status: ✅ står i kravet · 🟡 står delvis · ❌ mangler · ✏️ kravet 
 |---|---|---|---|---|
 | **Opptak og innstillinger** | Forvalter: alt. Tilbyder og behandler: frister og innstillinger. Alle andre: det som er publisert | Opptaksforvalter hos forvalter. Ingen når opptaket er deaktivert | `@OPT-OVO-SAM-001`, `@OPT-OVO-FRI-001`, `@OPT-OVO-GRU-001` | 🟡 Deaktivert opptak og brukere uten tilganger mangler (R7, R14, R15) |
 | **Utdanningstilbud og kvoter** | Forvalter: alle. Tilbyder: tilbudene den tilbyr. Behandler: krav, poeng og kvoter på tilbudene den behandler. Alle andre: etter publisering | Opptaksforvalter hos forvalter: alle. Opptaksforvalter hos tilbyder: tilbudene organisasjonen tilbyr, innen fristene | `@OPT-OPT-UTD-001`, `@OPT-OPT-UTD-002`, `@OPT-OPT-UTD-004` | 🟡 Behandlerens lesing mangler (R8) |
-| **Regelverk** | Opptaksforvaltere, saksbehandlere og førstelinje: alt regelverk. Regelverket ved brukerens organisasjon vises først. Søkere og brukere uten tilganger: ikke | Opptaksforvalter (MODIFISERE_REGELVERK) ved organisasjonen som eier regelverkssamlingen. Kopierer bare til organisasjonen opptaksforvalteren er ansatt ved. Det finnes ingen egen regelverksforvalter | `@OPT-REG-SAM-001`, `@OPT-REG-SAM-002` (PR 996) | ✏️ PR 996 må få med førstelinje og sorteringen (R9) |
+| **Regelverk** | Opptaksforvaltere, saksbehandlere og brukere med OPPTAK_INNSYN: alt regelverk. Regelverket ved brukerens organisasjon vises først. Søkere og brukere uten tilganger: ikke | Bruker med MODIFISERE_REGELVERK (opptaksforvalter) ved organisasjonen som eier regelverkssamlingen. Kopierer bare til organisasjonen brukeren er ansatt ved | `@OPT-REG-SAM-001`, `@OPT-REG-SAM-002` (PR 996) | ✏️ PR 996 må få med OPPTAK_INNSYN og sorteringen (R9) |
 | **Personopplysninger** | Forvalter, tilbyder og behandler: personer med en søknad de har tilknytning til. Fortrolig adresse: bare søkeren | Kommer fra Folkeregisteret og KRR. Søkeren eller opptaksforvalter hos forvalter endrer bare for personer som ikke finnes der | – | ❌ (R2) |
 | **Personsøk uten søknad** | Opptaksforvalter hos forvalter, for å opprette søknad. Viser det samme som for en søker med søknad, men ikke fortrolig adresse | – | `@OPT-SØK-SØK-002` (`@skip`) | ❌ (R2) |
 | **Søknad** | Forvalter, tilbyder og behandler: hele søknaden, også de andre alternativene | Søkeren: fram til plasstildeling. Opptaksforvalter hos forvalter: på søkerens vegne | `@OPT-SØK-SØK-008`, `@OPT-SØK-SØK-009`, `@OPT-BEH-BEH-011` | 🟡 Handling på søkerens vegne mangler (R1, R12) |
@@ -63,17 +63,17 @@ Status: ✅ står i kravet · 🟡 står delvis · ❌ mangler · ✏️ kravet 
 | **Merknader** | Delte: forvalter, tilbyder og behandler. Interne: bare organisasjonen som skrev dem. Søkeren: ingen | Organisasjonen som skrev merknaden | – | ❌ (R6) |
 | **Mangler** | Som merknader. Søkeren ser delte mangler når de er publisert | Saksbehandler hos behandler | `@OPT-BEH-BEH-008` | ✏️ Skillet mellom interne og delte mangler mangler |
 | **Meldinger til søker** | Søkeren: alle meldinger til søkeren. Forvalter, tilbyder og behandler: delte meldinger, og interne meldinger organisasjonen har sendt. Delt er standard | Søkeren kan ikke endre. Avsenderen velger per melding om den er intern | `@OPT-SØK-SØK-010`, `@OPT-OVO-TEK-001` | ❌ (R5) |
-| **Resultat av plasstildeling** | Forvalter: alt. Saksbehandler hos tilbyder og behandler: tilbudene og sakene organisasjonen har, også før publisering. Førstelinje og søker: etter publisering. Søkertall følger det samme | Opptaksforvalter hos forvalter kjører og publiserer | `@OPT-PLA-RES-001`, `@OPT-PLA-RES-002`, `@OPT-PLA-RES-003` | ✏️ `@OPT-PLA-RES-003` sier at saksbehandler ikke ser resultatet før publisering (R10) |
+| **Resultat av plasstildeling** | Forvalter: alt. Saksbehandler hos tilbyder og behandler: tilbudene og sakene organisasjonen har, også før publisering. Brukere med OPPTAK_INNSYN og søker: etter publisering. Søkertall følger det samme | Opptaksforvalter hos forvalter kjører og publiserer | `@OPT-PLA-RES-001`, `@OPT-PLA-RES-002`, `@OPT-PLA-RES-003` | ✏️ `@OPT-PLA-RES-003` sier at saksbehandler ikke ser resultatet før publisering (R10) |
 | **Poenggrenser** | Forvalter, tilbyder og behandler: hele tiden. Søker og brukere uten tilganger: etter publisering, når tilbudet viser den. Tidlig opptak: tilbydere ser ikke hverandres | Tidlig opptak: tilbyder innen fristen. Opptaksforvalter hos forvalter: alltid | `@OPT-OPT-UTD-004`, `@OPT-OPT-UTD-029` | 🟡 (R11) |
 | **Tekster til søkere** | Opptaksforvalter og saksbehandler hos forvalter, tilbyder og behandler, for søkere organisasjonen har ansvar for | Opptaksforvalter hos forvalter: alle. Tilbyder og behandler: tekster som gjelder det de tilbyr eller behandler | `@OPT-OVO-TEK-001` | ❌ (R16). Generiske tekster er ikke avklart |
 | **Endringslogg** | Som det loggen gjelder. Søkeren ser hvilken organisasjon, ikke navnet på saksbehandleren | Ingen | `@OPT-OVO-LOG-001`, `@OPT-BEH-BEH-016`, `@OPT-OPT-UTD-019` | ❌ (R13) |
-| **Uttrekk av sakslista** | Saksbehandler og opptaksforvalter, for sakene de ser. Ikke førstelinje. Brukeren oppgir formål og bekrefter sikker lagring. Fødselsnummer bare når brukeren velger det | – | – | ❌ |
+| **Uttrekk av sakslista** | Saksbehandler og opptaksforvalter, for sakene de ser. Ikke brukere med OPPTAK_INNSYN. Brukeren oppgir formål og bekrefter sikker lagring. Fødselsnummer bare når brukeren velger det | – | – | ❌ |
 
 ## Aktører med egne krav
 
 | Aktør | Regel | Krav | Status |
 |---|---|---|---|
-| **Førstelinje** | Ser søknad og behandling der organisasjonen er forvalter, tilbyder eller behandler. Endrer ingenting | `@OPT-BEH-BEH-043` (`innsyn_for_førstelinjen.feature`) | ❌ Nytt |
+| **Bruker med OPPTAK_INNSYN** | Ser søknad og behandling der organisasjonen er forvalter, tilbyder eller behandler. Endrer ingenting | `@OPT-BEH-BEH-043` (`se_søknader_med_opptak_innsyn.feature`) | ❌ Nytt |
 | **Bruker uten tilganger** | Bare det som er publisert: opptak, utdanningstilbud, frister og studieplasser når opptaket er publisert, poenggrenser når plasstildelingen er publisert | – | ❌ (R15) |
 | **Integrasjon** | Som en person med de samme rollene ved samme organisasjon | – | ❌ |
 | **Sikt-brukerstøtte** | Innsyn på tvers av organisasjoner for feilsøking, få navngitte ansatte, innsynet logges | – | ❌ Eget spor |

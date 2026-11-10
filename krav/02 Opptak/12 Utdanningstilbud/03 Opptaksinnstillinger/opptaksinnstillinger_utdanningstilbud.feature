@@ -1,5 +1,5 @@
 # language: no
-# BEGREPER (2026-11-10): Bytt «opptaksforvalter ved forvaltende organisasjon» med «opptaksforvalter hos forvalteren», «opptaksforvalter ved deltakende organisasjon» med «opptaksforvalter hos tilbyderen», «forvaltende organisasjon» med «forvalter», «regelverksforvalter» med «opptaksforvalter» (handlingskoden MODIFISERE_REGELVERK) når fila likevel endres. Se krav/02 Opptak/begreper.md.
+# BEGREPER (2026-11-10): Bytt «opptaksforvalter ved forvaltende organisasjon» med «opptaksforvalter hos forvalteren», «opptaksforvalter ved deltakende organisasjon» med «opptaksforvalter hos tilbyderen», «forvaltende organisasjon» med «forvalter», «regelverksforvalter» med «bruker med MODIFISERE_REGELVERK» når fila likevel endres. Se krav/02 Opptak/begreper.md.
 # GitHub: #597
 @OPT-OPT-UTD-004 @must @draft @scope-utdanningstilbud-2027
 Egenskap: Opptaksinnstillinger per utdanningstilbud

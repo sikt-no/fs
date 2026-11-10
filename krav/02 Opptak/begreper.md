@@ -16,11 +16,11 @@ Denne listen sammenstiller begreper brukt i kravene (`krav/02 Opptak/`), design-
 
 | Begrep i krav | Definisjon | Begrepskatalog | Gammel FS | Merknad |
 |---------------|------------|----------------|-----------|---------|
-| opptaksforvalter | Brukerrollen som forvalter opptak og utdanningstilbud, og som oppretter og administrerer regelverket for organisasjonen. Hva rollen gir i et opptak, avhenger av om organisasjonen er forvalter, tilbyder eller behandler der | – | – | Presisert 2026-11-10. OPPTAK_FORVALTER. Trenger handlingskoden MODIFISERE_REGELVERK for å endre regelverk. Erstatter «regelverksforvalter». ⚠️ Ikke det samme som organisasjonsrollen *forvalter* |
+| opptaksforvalter | Brukerrollen som forvalter opptak og utdanningstilbud, og som oppretter og administrerer regelverket for organisasjonen. Hva rollen gir i et opptak, avhenger av om organisasjonen er forvalter, tilbyder eller behandler der | – | – | Presisert 2026-11-10. OPPTAK_FORVALTER. Har handlingskoden MODIFISERE_REGELVERK, som gir rett til å endre regelverk. ⚠️ Ikke det samme som organisasjonsrollen *forvalter* |
 | opptakets forvalter | Den som forvalter opptaket | – | – | ⚠️ Utgår 2026-11-10. Erstattes av «forvalter» |
 | opptaksforvalter ved forvaltende organisasjon | Opptaksforvalter i organisasjonen som forvalter opptaket | – | – | ⚠️ Utgår 2026-11-10. Erstattes av «opptaksforvalter hos forvalteren» |
 | opptaksforvalter ved deltakende organisasjon | Opptaksforvalter ved en organisasjon som deltar i et opptak en annen organisasjon forvalter | – | – | ⚠️ Utgår 2026-11-10. Erstattes av «opptaksforvalter hos tilbyderen» |
-| regelverksforvalter | Den som forvalter regelverket i regelverkssamlingen | – | – | ⚠️ Utgår 2026-11-10. Er ikke egen rolle. Erstattes av «opptaksforvalter» ved organisasjonen som eier regelverkssamlingen, med handlingskoden MODIFISERE_REGELVERK |
+| regelverksforvalter | Den som forvalter regelverket i regelverkssamlingen | – | – | ⚠️ Utgår 2026-11-10. Er ikke egen rolle. Erstattes av MODIFISERE_REGELVERK, handlingskoden som gir rett til å opprette og endre regelverket ved organisasjonen som eier regelverkssamlingen. Opptaksforvalter har den. Skriv «bruker med MODIFISERE_REGELVERK» |
 | opptakseier | Organisasjonen som oppretter og vedlikeholder (forvalter) et opptak | – | – | ⚠️ Utgår 2026-11-10. Erstattes av «forvalter» |
 | saksbehandler | Brukerrollen som behandler søknader når organisasjonen er behandler, og har innsyn når organisasjonen er tilbyder eller forvalter | – | Saksbehandler | Presisert 2026-11-10. OPPTAK_SAKSBEHANDLER |
 | saksbehandlende organisasjon | Organisasjonen som saksbehandler et søknadsalternativ | – | – | ⚠️ Utgår 2026-11-10. Erstattes av «behandler» |
@@ -29,7 +29,7 @@ Denne listen sammenstiller begreper brukt i kravene (`krav/02 Opptak/`), design-
 | behandler | Organisasjonens rolle for et søknadsalternativ når den saksbehandler det. Søknaden blir til én sak hos hver behandler | – | – | Ny term 2026-11-10. Erstatter «saksbehandlende organisasjon». B-rolle i rolleforslaget 2026-10-12 |
 | tilknytning | At organisasjonen er forvalter, tilbyder eller behandler på en søknad. Tilknytningen avgjør om organisasjonen ser søknaden | – | – | Ny term 2026-11-10. Se `tilgang.md` |
 | dokumentforvalter | Brukerrollen som laster opp og sletter dokumentasjon på søkerens vegne når organisasjonen er forvalter | – | – | Ny term 2026-11-10. OPPTAK_DOKUMENTASJON (TAKE-470) |
-| førstelinje | Brukerrollen for ansatte som svarer søkere. Ser søknaden og behandlingen der organisasjonen er forvalter, tilbyder eller behandler, men endrer ingenting | – | – | Ny term 2026-11-10. OPPTAK_INNSYN (TAKE-469). Ikke «veileder» |
+| OPPTAK_INNSYN | Brukerrollen for ansatte som svarer søkere. Ser søknaden og behandlingen der organisasjonen er forvalter, tilbyder eller behandler, men endrer ingenting | – | – | Ny term 2026-11-10 (TAKE-469). Brukes i kravene i stedet for «førstelinje» og «veileder». Skriv «bruker med OPPTAK_INNSYN» |
 | søker | «Person som søker utdanning, eller har levert søknad, i ett eller flere opptak» | [søker](https://fs.sikt.no/domenekunnskap/begreper/soker/) (utkast) | Søker | OK |
 
 ## Opptak og struktur
@@ -234,7 +234,7 @@ Denne listen sammenstiller begreper brukt i kravene (`krav/02 Opptak/`), design-
 
 Følgende begreper brukes i kravene, men finnes ikke (enda) i begrepskatalogen på fs.sikt.no:
 
-- opptaksforvalter (brukerrolle), dokumentforvalter, førstelinje
+- opptaksforvalter (brukerrolle), dokumentforvalter, OPPTAK_INNSYN
 - forvalter, tilbyder, behandler (organisasjonens rolle i et opptak), tilknytning
 - deltakende organisasjon
 - studierett

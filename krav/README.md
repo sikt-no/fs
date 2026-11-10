@@ -226,7 +226,7 @@ En feature har høyst én prioritet. *(sjekkes automatisk)*
 **Hvor tilgangsreglene står**
 
 - Tilgang som gjelder én funksjon, står i kravet til funksjonen, med `@tilgang` på regelen. Eksempel: at opptaksforvalter hos tilbyderen ikke kan fjerne utdanningstilbud en annen organisasjon tilbyr, står i `fjerne_utdanningstilbud.feature`.
-- Innsyn som gjelder på tvers av funksjoner, får en egen fil: `tilgang_til_<data>.feature` eller `innsyn_for_<aktør>.feature`. Eksempler: `tilgang_til_regelverk.feature`, `innsyn_for_førstelinjen.feature`.
+- Innsyn som gjelder på tvers av funksjoner, får en egen fil: `tilgang_til_<data>.feature` eller `se_<data>_med_<rolle>.feature`. Eksempler: `tilgang_til_regelverk.feature`, `se_søknader_med_opptak_innsyn.feature`.
 - Et domene som har tilgangsregler, har en oversikt i `krav/<NN Domene>/tilgang.md`: hvem som ser og endrer hva, med Feature-ID-en til kravet. Oversikten oppdateres i samme PR som kravet.
 
 **Hvordan tilgangsregler skrives**
@@ -636,7 +636,7 @@ Bruk ikke `# TODO:` for åpne spørsmål. *(sjekkes automatisk)* FS Kravforvaltn
 ## Aktører
 
 - søker, student, administrator
-- I opptak: opptaksforvalter, saksbehandler, dokumentforvalter, førstelinje
+- I opptak: opptaksforvalter, saksbehandler, dokumentforvalter, bruker med OPPTAK_INNSYN
 - Organisasjonens rolle i et opptak: forvalter, tilbyder, behandler
 
 Se `krav/02 Opptak/begreper.md` og `krav/02 Opptak/tilgang.md`.

@@ -1,7 +1,7 @@
 # language: no
 @OPT-BEH-BEH-043 @must @draft @ref-OPT-BEH-BEH-011 @ref-OPT-BEH-DOK-001 @ref-OPT-REG-SAM-002
-Egenskap: Innsyn i søknader for førstelinjen
-  Som førstelinje
+Egenskap: Se søknader med OPPTAK_INNSYN
+  Som bruker med rollen OPPTAK_INNSYN
   ønsker jeg å se søknadene og behandlingen til søkerne organisasjonen jeg er ansatt ved har ansvar for
   slik at jeg kan svare søkerne uten å sende dem videre til saksbehandlerne.
 
@@ -12,17 +12,17 @@ Egenskap: Innsyn i søknader for førstelinjen
   # Koden i dag (TAKE-469): SE_SØKNAD ved én organisasjon gir lesing av alle søknader i alle opptak.
 
   Bakgrunn:
-    Gitt førstelinjen har rollen OPPTAK_INNSYN ved organisasjonen sin
+    Gitt brukeren har rollen OPPTAK_INNSYN ved organisasjonen sin
 
   @tilgang
-  Regel: Førstelinjen ser søknadene der organisasjonen er forvalter, tilbyder eller behandler
+  Regel: Brukeren med OPPTAK_INNSYN ser søknadene der organisasjonen er forvalter, tilbyder eller behandler
 
     Scenariomal: Se søknader ut fra organisasjonens rolle i opptaket
-      Gitt førstelinjen er ansatt ved <organisasjon>
+      Gitt brukeren med OPPTAK_INNSYN er ansatt ved <organisasjon>
       Og søkeren har søkt Sykepleie ved NTNU i et samordnet opptak HK-dir forvalter
       Og UiO behandler søknadsalternativet
-      Når førstelinjen søker opp søkeren
-      Så <ser> førstelinjen søknaden
+      Når brukeren med OPPTAK_INNSYN søker opp søkeren
+      Så <ser> brukeren med OPPTAK_INNSYN søknaden
 
       Eksempler:
         | organisasjon | ser      |
@@ -32,78 +32,78 @@ Egenskap: Innsyn i søknader for førstelinjen
         | UiB          | ser ikke |
 
     Scenario: Se søknader i et lokalt opptak ved organisasjonen
-      Gitt førstelinjen er ansatt ved NTNU
+      Gitt brukeren med OPPTAK_INNSYN er ansatt ved NTNU
       Og søkeren har søkt i et lokalt opptak NTNU forvalter
-      Når førstelinjen søker opp søkeren
-      Så ser førstelinjen søknaden
+      Når brukeren med OPPTAK_INNSYN søker opp søkeren
+      Så ser brukeren med OPPTAK_INNSYN søknaden
 
     Scenario: Ser ikke søknader i et lokalt opptak ved en annen organisasjon
-      Gitt førstelinjen er ansatt ved UiO
+      Gitt brukeren med OPPTAK_INNSYN er ansatt ved UiO
       Og søkeren har bare søkt i et lokalt opptak NTNU forvalter
-      Når førstelinjen søker opp søkeren
-      Så finner ikke førstelinjen søkeren
+      Når brukeren med OPPTAK_INNSYN søker opp søkeren
+      Så finner ikke brukeren med OPPTAK_INNSYN søkeren
 
     Scenario: Tilbyderen ser hele søknaden
-      Gitt førstelinjen er ansatt ved NTNU
+      Gitt brukeren med OPPTAK_INNSYN er ansatt ved NTNU
       Og søkeren har søkt ett alternativ ved NTNU og ett ved UiO i et samordnet opptak
-      Når førstelinjen åpner søknaden
-      Så ser førstelinjen begge alternativene og prioriteringen mellom dem
+      Når brukeren med OPPTAK_INNSYN åpner søknaden
+      Så ser brukeren med OPPTAK_INNSYN begge alternativene og prioriteringen mellom dem
 
   @tilgang
-  Regel: Førstelinjen ser bare personer som har en søknad førstelinjen ser
+  Regel: Brukeren med OPPTAK_INNSYN ser bare personer som har en søknad brukeren ser
 
     Scenario: Finner ikke personer uten søknad
       Gitt at en person ikke har noen søknad
-      Når førstelinjen søker etter personen
-      Så finner ikke førstelinjen personen
+      Når brukeren med OPPTAK_INNSYN søker etter personen
+      Så finner ikke brukeren med OPPTAK_INNSYN personen
 
     Scenario: Fortrolig adresse vises ikke
       Gitt søkeren har fortrolig adresse
-      Når førstelinjen åpner søknaden
-      Så ser ikke førstelinjen adressen til søkeren
+      Når brukeren med OPPTAK_INNSYN åpner søknaden
+      Så ser ikke brukeren med OPPTAK_INNSYN adressen til søkeren
 
   @tilgang
-  Regel: Førstelinjen ser søknaden med dokumentasjon og digitale resultater
+  Regel: Brukeren med OPPTAK_INNSYN ser søknaden med dokumentasjon og digitale resultater
 
     Scenario: Se innholdet i søknaden
-      Når førstelinjen åpner søknaden
-      Så ser førstelinjen opptaket, søknadsnummeret og søknadsalternativene med prioritering
-      Og førstelinjen ser utdanningsbakgrunnen søkeren har valgt
-      Og førstelinjen ser dokumentasjonen søkeren har lastet opp
-      Og førstelinjen ser de digitale resultatene i søknaden
+      Når brukeren med OPPTAK_INNSYN åpner søknaden
+      Så ser brukeren med OPPTAK_INNSYN opptaket, søknadsnummeret og søknadsalternativene med prioritering
+      Og brukeren med OPPTAK_INNSYN ser utdanningsbakgrunnen søkeren har valgt
+      Og brukeren med OPPTAK_INNSYN ser dokumentasjonen søkeren har lastet opp
+      Og brukeren med OPPTAK_INNSYN ser de digitale resultatene i søknaden
 
     Scenario: Innsyn i dokumentasjon logges
-      Når førstelinjen åpner et dokument søkeren har lastet opp
-      Så logges det at førstelinjen har sett dokumentet
+      Når brukeren med OPPTAK_INNSYN åpner et dokument søkeren har lastet opp
+      Så logges det at brukeren med OPPTAK_INNSYN har sett dokumentet
 
     Scenario: Ser at politiattesten er levert, men ikke innholdet
       Gitt søkeren har lastet opp en politiattest
-      Når førstelinjen åpner søknaden
-      Så ser førstelinjen at politiattesten er levert
-      Og førstelinjen kan ikke åpne politiattesten
+      Når brukeren med OPPTAK_INNSYN åpner søknaden
+      Så ser brukeren med OPPTAK_INNSYN at politiattesten er levert
+      Og brukeren med OPPTAK_INNSYN kan ikke åpne politiattesten
 
   @tilgang
-  Regel: Førstelinjen ser alt i søknadsbehandlingen
+  Regel: Brukeren med OPPTAK_INNSYN ser alt i søknadsbehandlingen
 
     Scenario: Se behandlingen av søknadsalternativene
-      Når førstelinjen åpner søknaden
-      Så ser førstelinjen behandlingsstatusen og hvilken organisasjon som behandler hvert søknadsalternativ
-      Og førstelinjen ser poengsummen og kvalifiseringen
-      Og førstelinjen ser praksiskalkulatoren
+      Når brukeren med OPPTAK_INNSYN åpner søknaden
+      Så ser brukeren med OPPTAK_INNSYN behandlingsstatusen og hvilken organisasjon som behandler hvert søknadsalternativ
+      Og brukeren med OPPTAK_INNSYN ser poengsummen og kvalifiseringen
+      Og brukeren med OPPTAK_INNSYN ser praksiskalkulatoren
 
     Scenario: Se delte merknader og mangler
       Gitt UiO behandler søknadsalternativet
       Og UiO har registrert en delt merknad og en delt mangel i saken
-      Og førstelinjen er ansatt ved NTNU, som tilbyr alternativet
-      Når førstelinjen åpner søknaden
-      Så ser førstelinjen merknaden og mangelen
+      Og brukeren med OPPTAK_INNSYN er ansatt ved NTNU, som tilbyr alternativet
+      Når brukeren med OPPTAK_INNSYN åpner søknaden
+      Så ser brukeren med OPPTAK_INNSYN merknaden og mangelen
 
     Scenariomal: Interne merknader og mangler ses bare ved organisasjonen som registrerte dem
       Gitt UiO behandler søknadsalternativet
       Og UiO har registrert en intern merknad og en intern mangel i saken
-      Og førstelinjen er ansatt ved <organisasjon>
-      Når førstelinjen åpner søknaden
-      Så <ser> førstelinjen merknaden og mangelen
+      Og brukeren med OPPTAK_INNSYN er ansatt ved <organisasjon>
+      Når brukeren med OPPTAK_INNSYN åpner søknaden
+      Så <ser> brukeren med OPPTAK_INNSYN merknaden og mangelen
 
       Eksempler:
         | organisasjon | ser      |
@@ -112,13 +112,13 @@ Egenskap: Innsyn i søknader for førstelinjen
         | HK-dir       | ser ikke |
 
   @tilgang
-  Regel: Førstelinjen ser de samme meldingene til søkeren som saksbehandlerne ved organisasjonen
+  Regel: Brukeren med OPPTAK_INNSYN ser de samme meldingene til søkeren som saksbehandlerne ved organisasjonen
 
     Scenariomal: Meldinger fra andre organisasjoner ses når de er delt
       Gitt UiO har sendt en <type> melding til søkeren
-      Og førstelinjen er ansatt ved NTNU, som tilbyr et av søknadsalternativene
-      Når førstelinjen åpner søknaden
-      Så <ser> førstelinjen meldingen
+      Og brukeren med OPPTAK_INNSYN er ansatt ved NTNU, som tilbyr et av søknadsalternativene
+      Når brukeren med OPPTAK_INNSYN åpner søknaden
+      Så <ser> brukeren med OPPTAK_INNSYN meldingen
 
       Eksempler:
         | type   | ser      |
@@ -126,25 +126,25 @@ Egenskap: Innsyn i søknader for førstelinjen
         | intern | ser ikke |
 
   @tilgang
-  Regel: Førstelinjen ser resultatet først når det er publisert
+  Regel: Brukeren med OPPTAK_INNSYN ser resultatet først når det er publisert
 
     Scenario: Se tilbud og ventelistenummer etter publisering
       Gitt plasstildelingsrunden er publisert
       Og søkeren har fått tilbud på ett alternativ og står på venteliste på et annet
-      Når førstelinjen åpner søknaden
-      Så ser førstelinjen tilbudet, ventelistenummeret og svaret søkeren har gitt
+      Når brukeren med OPPTAK_INNSYN åpner søknaden
+      Så ser brukeren med OPPTAK_INNSYN tilbudet, ventelistenummeret og svaret søkeren har gitt
 
     Scenario: Ser ikke resultatet før det er publisert
       Gitt plasstildelingen er kjørt, men ikke publisert
-      Når førstelinjen åpner søknaden
-      Så ser ikke førstelinjen resultatet
+      Når brukeren med OPPTAK_INNSYN åpner søknaden
+      Så ser ikke brukeren med OPPTAK_INNSYN resultatet
 
   @tilgang
-  Regel: Førstelinjen kan ikke endre noe
+  Regel: Brukeren med OPPTAK_INNSYN kan ikke endre noe
 
     Scenariomal: Ingen endringer i søknad eller sak
-      Når førstelinjen åpner søknaden
-      Så kan ikke førstelinjen <handling>
+      Når brukeren med OPPTAK_INNSYN åpner søknaden
+      Så kan ikke brukeren med OPPTAK_INNSYN <handling>
 
       Eksempler:
         | handling                                |
@@ -158,6 +158,6 @@ Egenskap: Innsyn i søknader for førstelinjen
         | ta ut sakslista                         |
 
     Scenario: Endringer avvises også i API-et
-      Gitt en applikasjon handler for førstelinjen
+      Gitt en applikasjon handler for brukeren med OPPTAK_INNSYN
       Når applikasjonen forsøker å endre søknaden gjennom API-et
       Så avvises endringen
