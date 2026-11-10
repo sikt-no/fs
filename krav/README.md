@@ -214,44 +214,33 @@ Ved ny feature: sjekk eksisterende features i samme mappe for å finne neste led
 
 En feature har høyst én prioritet. *(sjekkes automatisk)*
 
-### Tilgang
+### Roller
 
-`@tilgang` settes på en `Regel:` som sier hvem som ser eller endrer noe: hvilken rolle, ved hvilken organisasjon, og når. Taggen gjør at tilgangsreglene kan finnes og telles på tvers av kravene (`grep -r @tilgang krav/`), og at FS Kravforvaltning kan filtrere på dem.
+Hvem som får gjøre hva, skal kunne leses ut av kravene. Det gjelder alle krav, ikke bare krav om tilgang.
 
-- Taggen settes på `Regel:`-linja, ikke på `Egenskap:` eller på enkeltscenarioer.
-- Taggen er ikke en status, og kan stå sammen med `@draft`, `@openquestion` og `@deprecated`.
-- En regel om hva søkeren ser i Min kompetanse, er en tilgangsregel når den skjuler noe for søkeren (for eksempel interne poeng), ikke når den bare beskriver visningen.
-
-**Hvor tilgangsreglene står**
-
-- Hvem som får gjøre hva, skal kunne leses ut av funksjonskravene. Tilgangen står i kravet til funksjonen, med rollen og organisasjonen i stegene. Eksempel: at opptaksforvalter hos tilbyderen ikke kan fjerne utdanningstilbud en annen organisasjon tilbyr, står i `fjerne_utdanningstilbud.feature`.
-- Den som *ikke* får gjøre det, står i samme regel, som et eget scenario eller en egen eksempelrad. Lag ikke egne tilgangsscenarioer eller egne tilgangsfiler.
+- Kravet sier hvilken rolle som gjør handlingen, med rollekoden fra rollekatalogen: «Bare OPPTAK_FORVALTER kan trekke en søknad på søkerens vegne». Står rollen i `Som …`-linja eller i regeltittelen, gjelder den for alt under.
+- Har organisasjonen betydning, skrives organisasjonens rolle med ord: **forvalter**, **tilbyder** eller **behandler**, ikke F, T og B. «Bare OPPTAK_FORVALTER hos forvalteren …», «OPPTAK_SAKSBEHANDLER hos behandleren …».
+- Den som *ikke* får gjøre det, står i samme regel, som et eget scenario eller en egen eksempelrad, og bare når det gir et annet utfall. Lag ikke egne tilgangsscenarioer eller tilgangsfiler.
+- Regelen gjelder i API-et også, ikke bare i skjermbildene.
 - Arbeidet med å rette tilgangen i opptak, og lista over krav som mangler eller må rettes, står i scopet [`tilgang-i-opptak-2027`](../tasks/opptak/tilgang-i-opptak-2027/scope.md).
-
-**Hvordan tilgangsregler skrives**
-
-- Skriv organisasjonens rolle i opptaket med ord: **forvalter**, **tilbyder** og **behandler**, ikke F, T og B. Skriv «opptaksforvalter hos forvalteren», «saksbehandler hos behandleren».
-- Ta med en organisasjon som *ikke* har tilgang, i scenarioet. En tilgangsregel er først beskrevet når det er vist hvem som ikke ser.
-- Tilgangsregler gjelder i API-et også, ikke bare i skjermbildene. Ett scenario kan vise at API-et avviser.
 
 Eksempel:
 
 ```gherkin
-  @tilgang
-  Regel: Bare opptaksforvalter hos forvalteren kan trekke en søknad på søkerens vegne
+  Regel: Bare OPPTAK_FORVALTER hos forvalteren kan trekke en søknad på søkerens vegne
 
-    Scenariomal: Trekke søknaden på søkerens vegne
+    Scenario: Opptaksforvalter hos forvalteren trekker søknaden
       Gitt søkeren har søkt Sykepleie ved NTNU i Samordna opptak, som HK-dir forvalter
-      Og UiO behandler søknadsalternativet
-      Når opptaksforvalter ved <organisasjon> forsøker å trekke søknaden
-      Så <utfall>
+      Når opptaksforvalteren ved HK-dir trekker søknaden på søkerens vegne
+      Så er søknaden trukket
 
-      Eksempler:
-        | organisasjon | utfall              |
-        | HK-dir       | er søknaden trukket |
-        | NTNU         | avvises det         |
-        | UiO          | avvises det         |
+    Scenario: Opptaksforvalter hos tilbyderen kan ikke trekke søknaden
+      Gitt søkeren har søkt Sykepleie ved NTNU i Samordna opptak, som HK-dir forvalter
+      Når opptaksforvalteren ved NTNU forsøker å trekke søknaden på søkerens vegne
+      Så avvises det
 ```
+
+**Ikke avklart: taggen `@rolle-<slug>`.** Skal rollebruken kunne leses maskinelt, for eksempel for å finne alle krav en rolle trengs i, eller hvilken rolle en test må logge inn med? I så fall får kravene `@rolle-<slug>`, for eksempel `@rolle-opptak-forvalter`. Tagger arves, så taggen settes på det høyeste nivået der den gjelder for alt under (`Egenskap:`, `Regel:`, `Scenario:` eller `Eksempler:`). Trengs det ikke, holder det at rollen står i teksten.
 
 ### Kravstatus
 

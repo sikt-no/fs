@@ -71,7 +71,8 @@ MoSCoW er et forslag ut fra møtet 2026-11-10 og må bekreftes av produkteier. M
 
 ## Åpne spørsmål
 
-- [ ] Skal `@rolle-<slug>` stå på `Scenario:` eller på `Eksempler:`? Mats avklarer.
+- [ ] Skal rollebruken kunne leses maskinelt med taggen `@rolle-<slug>` (for eksempel `@rolle-opptak-forvalter`)? Tagger arves, så taggen settes på det høyeste nivået der den gjelder for alt under. Trengs det ikke, holder det at rollen står i teksten. Se *Tags → Roller* i `krav/README.md`. @matsgm avklarer.
+- [ ] Alle krav skal si hvilken rolle som gjør handlingen, også de enkle. Hvordan og når rettes de kravene som ikke gjør det i dag? Det går på tvers av domener og er større enn dette scopet.
 - [ ] Eier, team og Jira-epic for scopet.
 - [ ] Frist: må bølge 1 være på plass før søknaden åpner for opptak 2027?
 - [ ] Ferdig-kriterium: sikkerhetstest gjennom API-et, der en bruker og en integrasjon ved en organisasjon uten tilknytning ikke får noe fra noen av tabellene, i både samordna og lokalt opptak?
@@ -89,4 +90,5 @@ Append-only. Ny linje på toppen ved hver hendelse.
 
 | Dato       | Hendelse | Av | Lenke til review |
 |------------|----------|----|------------------|
+| 2026-11-10 | `@tilgang` er erstattet av at alle krav sier rollen. Om `@rolle-<slug>` skal brukes, er åpent | @karensikt | – |
 | 2026-11-10 | Opprettet fra avklaringsmøtet 2026-11-10. Lista over hva som mangler, er flyttet hit fra `krav/02 Opptak/tilgang.md` | @karensikt | – |

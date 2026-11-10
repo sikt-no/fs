@@ -14,7 +14,6 @@ Egenskap: Se søknader med OPPTAK_INNSYN
   Bakgrunn:
     Gitt brukeren har rollen OPPTAK_INNSYN ved organisasjonen sin
 
-  @tilgang
   Regel: Brukeren med OPPTAK_INNSYN ser søknadene der organisasjonen er forvalter, tilbyder eller behandler
 
     Scenariomal: Se søknader ut fra organisasjonens rolle i opptaket
@@ -49,7 +48,6 @@ Egenskap: Se søknader med OPPTAK_INNSYN
       Når brukeren med OPPTAK_INNSYN åpner søknaden
       Så ser brukeren med OPPTAK_INNSYN begge alternativene og prioriteringen mellom dem
 
-  @tilgang
   Regel: Brukeren med OPPTAK_INNSYN ser bare personer som har en søknad brukeren ser
 
     Scenario: Finner ikke personer uten søknad
@@ -62,7 +60,6 @@ Egenskap: Se søknader med OPPTAK_INNSYN
       Når brukeren med OPPTAK_INNSYN åpner søknaden
       Så ser ikke brukeren med OPPTAK_INNSYN adressen til søkeren
 
-  @tilgang
   Regel: Brukeren med OPPTAK_INNSYN ser søknaden med dokumentasjon og digitale resultater
 
     Scenario: Se innholdet i søknaden
@@ -82,7 +79,6 @@ Egenskap: Se søknader med OPPTAK_INNSYN
       Så ser brukeren med OPPTAK_INNSYN at politiattesten er levert
       Og brukeren med OPPTAK_INNSYN kan ikke åpne politiattesten
 
-  @tilgang
   Regel: Brukeren med OPPTAK_INNSYN ser alt i søknadsbehandlingen
 
     Scenario: Se behandlingen av søknadsalternativene
@@ -111,7 +107,6 @@ Egenskap: Se søknader med OPPTAK_INNSYN
         | NTNU         | ser ikke |
         | HK-dir       | ser ikke |
 
-  @tilgang
   Regel: Brukeren med OPPTAK_INNSYN ser de samme meldingene til søkeren som saksbehandlerne ved organisasjonen
 
     Scenariomal: Meldinger fra andre organisasjoner ses når de er delt
@@ -125,7 +120,6 @@ Egenskap: Se søknader med OPPTAK_INNSYN
         | delt   | ser      |
         | intern | ser ikke |
 
-  @tilgang
   Regel: Brukeren med OPPTAK_INNSYN ser resultatet først når det er publisert
 
     Scenario: Se tilbud og ventelistenummer etter publisering
@@ -139,7 +133,6 @@ Egenskap: Se søknader med OPPTAK_INNSYN
       Når brukeren med OPPTAK_INNSYN åpner søknaden
       Så ser ikke brukeren med OPPTAK_INNSYN resultatet
 
-  @tilgang
   Regel: Brukeren med OPPTAK_INNSYN kan ikke endre noe
 
     Scenariomal: Ingen endringer i søknad eller sak
