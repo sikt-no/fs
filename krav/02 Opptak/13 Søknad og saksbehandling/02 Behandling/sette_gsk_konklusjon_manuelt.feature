@@ -39,9 +39,6 @@ Egenskap: Sette GSK-konklusjon manuelt
   #   konklusjonen deles på tvers av opptak og år, og tidligere konklusjoner vises i dag selv om
   #   grunnlagskoden ikke er i regelverkssamlingen opptaket bruker. Hvor skal grunnlagskodene for
   #   GSK ligge, og hvilke kan saksbehandleren velge?
-  # - Skal saksbehandleren få et varsel før en eksisterende konklusjon, eller en konklusjon satt
-  #   av en annen organisasjon, endres (akseptansekrav 3b og 4a)? Varselet er ikke i skissen, og
-  #   designerne ser videre på det.
 
   @ref-OPT-REG-GRU-001
   Regel: Saksbehandleren setter GSK-konklusjonen med en grunnlagskode
@@ -61,15 +58,6 @@ Egenskap: Sette GSK-konklusjon manuelt
       Gitt at søkeren ikke har noen GSK-konklusjon
       Når saksbehandleren setter GSK-konklusjonen
       Så viser GSK-konklusjonen organisasjonen saksbehandleren er ved, og datoen den ble satt
-
-    @openquestion
-    Scenario: Studentgrunnlagene kan ikke velges som grunnlagskode
-      # Avklart 10.11.2026: studentgrunnlagene velges i et annet steg i saksbehandlingen.
-      # ÅPNE SPØRSMÅL:
-      # - Skal bekreftes med Shiitake.
-      Gitt at søkeren ikke har noen GSK-konklusjon
-      Når saksbehandleren setter GSK-konklusjonen
-      Så kan saksbehandleren ikke velge studentgrunnlagene REA, FOR og DSP som grunnlagskode
 
   @ref-OPT-BEH-BEH-008
   Regel: Manglende generell studiekompetanse registreres som en mangel
@@ -172,8 +160,9 @@ Egenskap: Sette GSK-konklusjon manuelt
 
   Regel: Organisasjonen som satte konklusjonen, og HK-dir kan annullere den
     # Akseptansekrav 5: annulleringen skal kreve aktiv bekreftelse, men være enklere enn i dagens
-    # løsning. Avklart 10.11.2026: årsaken velges fra et kodeverk. Det finnes et kodeverk for
-    # annulleringsårsaker i SODA, som kanskje må gjenskapes.
+    # løsning. Avklart 10.11.2026: årsaken velges fra en liste (kodeverket for annulleringsårsaker
+    # i SODA, som kanskje må gjenskapes), og er påkrevd. Det er ingen begrunnelse i fritekst, så
+    # fritekstfeltet «Begrunnelse» i skissen skal ikke være med.
 
     Scenario: Annullere konklusjonen
       Gitt at saksbehandleren ved organisasjonen som satte GSK-konklusjonen, ser på konklusjonen
@@ -211,11 +200,7 @@ Egenskap: Sette GSK-konklusjon manuelt
       Så ser saksbehandleren den nåværende konklusjonen og må bekrefte annulleringen
       Men konklusjonen er ikke annullert før saksbehandleren bekrefter
 
-    @openquestion
     Scenario: Annulleringen krever en årsak
-      # ÅPNE SPØRSMÅL:
-      # - Skissen har både årsak og et fritekstfelt for begrunnelse. Er begrunnelsen i fritekst
-      #   påkrevd i tillegg til årsaken, eller valgfri?
       Gitt at saksbehandleren ved organisasjonen som satte GSK-konklusjonen, ser på konklusjonen
       Når saksbehandleren vil annullere konklusjonen uten å velge en årsak til annullering
       Så kan saksbehandleren ikke bekrefte annulleringen
