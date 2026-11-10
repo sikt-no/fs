@@ -559,7 +559,7 @@ Egenskap: Automatisk GSK-konklusjon
       Når vitnemålet importeres fra KREG
       Så får søknaden ingen GSK-konklusjon fra vitnemålet
 
-  @ref-OPT-BEH-BEH-035
+  @ref-OPT-BEH-BEH-035 @implemented
   Regel: Vitnemålet erstatter en gjenbrukt konklusjon
     # Avklart 10.11.2026 (Ingrid Helset, sjekket med HK-dir): har søknaden en konklusjon som er
     # gjenbrukt fra et tidligere opptak, og søkeren får et vitnemål som gir GSK, erstatter
@@ -570,6 +570,10 @@ Egenskap: Automatisk GSK-konklusjon
     # resultater (OPT-BEH-BEH-035), og saksbehandleren vurderer selv om det nye vitnemålet skal
     # brukes.
     # Konklusjonen endres, den slettes ikke og legges inn på nytt.
+    # Avklart 10.11.2026 (Sondre): kommer et nytt vitnemål i samme henting som et tidligere vitnemål
+    # annulleres, kan konklusjonen bli erstattet selv om saken var ferdig behandlet. Det er greit:
+    # søkeren får mest sannsynlig samme konklusjon, og en ny positiv konklusjon gjør ingen forskjell.
+    # Det annullerte vitnemålet håndteres etter OPT-BEH-BEH-034.
 
     Scenario: Vitnemålet erstatter den gjenbrukte konklusjonen
       Gitt at søknaden har en GSK-konklusjon som er gjenbrukt fra et tidligere opptak
