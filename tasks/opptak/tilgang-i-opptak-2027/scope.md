@@ -13,7 +13,7 @@ Rette tilgangen i opptak så den følger kravene: hvem som ser og endrer hva, i 
 
 **Kort fortalt:** Tilgangen i opptak er for åpen i dag. En rolle ved én organisasjon gir lesing og skriving av alle søknader og personer i alle opptak, og endringsloggen kan endres og tømmes gjennom API-et. Databasen tillater altså at personopplysninger leses på tvers av læresteder. Kartleggingen gjelder bare RLS i databasen, ikke API-et eller FS Admin, og tilgangene er hentet fra et lokalt oppsett. Det er ikke påvist at noen har sett data de ikke skulle.
 
-**Advarsel:** Hvis utviklerne bekrefter at API-et faktisk gir ut data på tvers av læresteder i produksjon, er det en sak for personvernombudet uansett hva scopet blir.
+**Advarsel:** Hvis utviklerne bekrefter at API-et i produksjon gir ut personopplysninger på tvers av læresteder som ikke skal deles, er det en sak for personvernombudet uansett hva scopet blir. Noe skal deles: tilbyderen ser hele søknaden, og behandlerne på samme søknad ser hverandres vurdering og poeng.
 
 Vi anbefaler å rette organisasjonsgrensen for søknadsdata (Must) først, og at den er på plass før søknaden åpner for opptak 2027.
 
@@ -39,12 +39,12 @@ Vi anbefaler å rette organisasjonsgrensen for søknadsdata (Must) først, og at
 3. Eier og team for kravvalideringen, RLS i fs-plattform, rollene i tilgangsstyring og FS Admin.
 4. Ferdig-kriterium for Must: en sikkerhetstest gjennom API-et viser at en bruker og en integrasjon ved en organisasjon uten tilknytning ikke får noe, i både samordna og lokalt opptak.
 5. Hvem som varsler integrasjonene som bruker den åpne tilgangen i dag (Politihøgskolen, NetNordic, analyseplattformen, utdanning.no), før Must og Should settes i drift.
-6. Om personvernombudet skal vurdere om det er et avvik at databasen i dag tillater at personopplysninger leses på tvers av læresteder. Forslag: ja, når utviklerne har sjekket om det også gjelder API-et i produksjon (punkt 7).
+6. Om personvernombudet skal vurdere om det er et avvik at databasen i dag tillater at personopplysninger leses på tvers av læresteder. Forslag: ja, når utviklerne har sjekket om API-et i produksjon gir ut data som ikke skal deles (punkt 7).
 7. Hvem som sjekker RLS og tilgangsstyring mot fs-plattform slik den er i dag, og når. Forslag: utviklerne på opptak (for eksempel Lars), før RLS-workshopen. Det gjelder RLS i opptaksskjemaene, og hvilke handlingskoder rollene gir i test og produksjon.
 
 **Risiko og avhengigheter**
 
-- Hvis API-et i produksjon gir ut data på tvers av læresteder, er det en sak for personvernombudet uansett hva scopet blir.
+- Hvis API-et i produksjon gir ut personopplysninger på tvers av læresteder som ikke skal deles, er det en sak for personvernombudet uansett hva scopet blir.
 - Integrasjoner som bruker den åpne tilgangen, kan slutte å virke når den strammes inn.
 - Rollene OPPTAK_INNSYN (TAKE-469) og OPPTAK_DOKUMENTASJON (TAKE-470) finnes ikke i tilgangsstyring, og ingen har lest hvilke handlingskoder de andre rollene gir i test og produksjon.
 - «RLS i dag» er kartlagt 04.11.2026 og må sjekkes av utviklerne mot fs-plattform før arbeidet fordeles (punkt 7).
@@ -226,6 +226,7 @@ Append-only. Ny linje på toppen ved hver hendelse.
 
 | Dato       | Hendelse | Av | Lenke til review |
 |------------|----------|----|------------------|
+| 2026-11-10 | Advarselen gjelder bare personopplysninger som ikke skal deles på tvers. Også på møtesiden | @karensikt | – |
 | 2026-11-10 | «Databasen tillater at personopplysninger leses på tvers av læresteder» i stedet for «lekker», med forbehold og advarsel. Også på møtesiden | @karensikt | – |
 | 2026-11-10 | Punkt 7: utviklerne sjekker RLS og tilgangsstyring mot fs-plattform i dag. Også på møtesiden på Confluence | @karensikt | – |
 | 2026-11-10 | Reglene for Should og Could er skrevet inn (`@draft`). Ny del *Anbefaling til prosjektleder* | @karensikt | – |
