@@ -28,7 +28,8 @@ Egenskap: Sette GSK-konklusjon manuelt
   personen, ser konklusjonene, og den som har tilgang til å endre personen, kan endre dem. Det
   er den siste konklusjonen som gjelder. Konklusjonen kan endres fritt til opptaket er historisk,
   også når den er satt automatisk, og tidligere konklusjoner bevares og kan ses. En positiv
-  konklusjon kan annulleres av organisasjonen som satte den, og av HK-dir.
+  konklusjon kan annulleres av organisasjonen som satte den, og av HK-dir. En konklusjon som er
+  satt automatisk, kan alle saksbehandlende organisasjoner annullere.
 
   Det finnes ingen negativ GSK-konklusjon. Har søkeren ikke dokumentert generell
   studiekompetanse, registrerer saksbehandleren en mangel, som andre mangler
@@ -162,7 +163,7 @@ Egenskap: Sette GSK-konklusjon manuelt
     # Akseptansekrav 5: annulleringen skal kreve aktiv bekreftelse, men være enklere enn i dagens
     # løsning. Avklart 10.11.2026: årsaken velges fra en liste (kodeverket for annulleringsårsaker
     # i SODA, som kanskje må gjenskapes), og er påkrevd. Begrunnelsen skrives i fritekst, som i
-    # skissen, og er ikke påkrevd.
+    # skissen, og er valgfri (bekreftet av Sofie 10.11.2026).
 
     Scenario: Annullere konklusjonen
       Gitt at saksbehandleren ved organisasjonen som satte GSK-konklusjonen, ser på konklusjonen
@@ -183,14 +184,11 @@ Egenskap: Sette GSK-konklusjon manuelt
       Når saksbehandleren ved den andre organisasjonen ser på GSK-konklusjonen
       Så ser ikke saksbehandleren muligheten til å annullere konklusjonen
 
-    @openquestion
-    Scenario: Annullere en konklusjon som er satt automatisk
-      # Skissen, «Automatisk behandlet», har «Annuller konklusjon».
-      # ÅPNE SPØRSMÅL:
-      # - En automatisk konklusjon er ikke satt av noen organisasjon. Er det bare HK-dir som kan
-      #   annullere den, eller også de saksbehandlende organisasjonene?
+    Scenario: Alle saksbehandlende organisasjoner kan annullere en konklusjon som er satt automatisk
+      # Skissen, «Automatisk behandlet». Avklart 10.11.2026 (Sofie): en automatisk konklusjon er
+      # ikke satt av noen organisasjon, så alle kan annullere den.
       Gitt at søkeren har fått GSK-konklusjonen automatisk
-      Når saksbehandleren ved HK-dir annullerer konklusjonen med en årsak til annullering
+      Når saksbehandleren ved en saksbehandlende organisasjon annullerer konklusjonen med en årsak til annullering
       Og saksbehandleren bekrefter annulleringen
       Så er GSK-konklusjonen annullert
 
