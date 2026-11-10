@@ -74,14 +74,15 @@ Egenskap: Administrere brukere på en spesifikk rolle
       Så kan brukeradministrator tildele personen flere roller der
 
   @in-progress
-  Regel: Rader med arvet rolle har også «Fjern tildeling»
-    # AVKLART 10.11.2026 (Kjetil): Også en rad der rollen er arvet gjennom en annen rolle, har
+  Regel: Rader med arvet rolle har ikke «Fjern tildeling»
+    En arvet rolle fjernes der den er gitt: ved å fjerne rollen den arves gjennom.
+    # AVKLART 10.11.2026 (Kjetil): En rad der rollen er arvet gjennom en annen rolle, har ikke
     # «Fjern tildeling».
 
-    Scenario: En rad med arvet rolle har «Fjern tildeling»
+    Scenario: En rad med arvet rolle har ikke «Fjern tildeling»
       Gitt at en bruker har rollen arvet gjennom en annen rolle for en organisasjon og et miljø
       Når brukeradministrator ser raden for tildelingen på rollens oversiktsside
-      Så har raden «Fjern tildeling»
+      Så har raden ikke «Fjern tildeling»
 
   @in-progress @depends-on-BRU-PER-GRU-005 @depends-on-BRU-PER-GRU-006
   Regel: Stedkoder og tidsbegrensning settes alltid per bruker
