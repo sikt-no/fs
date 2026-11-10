@@ -21,22 +21,19 @@ Egenskap: Importere resultater fra KREG
   # Avklart 30.10.2026: resultater fra høyere utdanning importeres også, men i et eget krav
   # (OPT-BEH-BEH-038). Tilleggspoeng for høyere utdanning (OPT-BEH-BEH-028) trenger dem.
 
-  @ref-FLY-OPT-AUT-001 @ref-OPT-BEH-BEH-032
+  @ref-FLY-OPT-AUT-001 @ref-OPT-BEH-BEH-032 @implemented
   Regel: Resultatene hentes når saken er opprettet
 
-    @implemented
     Scenario: Resultatene hentes når søkeren sender inn søknaden
       Gitt at søkeren har et vitnemål i KREG
       Når søkeren sender inn søknaden
       Så er vitnemålet importert
 
-    @implemented
     Scenario: Resultatene hentes når søknaden registreres på vegne av søkeren
       Gitt at søkeren har et vitnemål i KREG
       Når saksbehandleren registrerer søknaden på vegne av søkeren
       Så er vitnemålet importert
 
-    @implemented
     Scenario: Resultatene hentes når en endring av søknaden gir en ny sak
       # Avklart 03.11.2026: resultatene hentes på nytt hver gang søknaden endres, også når
       # endringen ikke gir en ny sak. Det dekker hullet til importen av VGS-vitnemål fra KREG
@@ -46,7 +43,6 @@ Egenskap: Importere resultater fra KREG
       Når søkeren legger til et studieønske som saksbehandles hos en ny organisasjon
       Så er det nye vitnemålet importert
 
-    @implemented
     Scenario: Resultatene hentes først når saken er opprettet
       # Avklart 29.10.2026: uten sak er det ikke noe å behandle. Koden gjør dette i dag.
       Gitt at opptaket mangler behandlertildelingsregel
@@ -55,7 +51,7 @@ Egenskap: Importere resultater fra KREG
       Så er vitnemålet ikke importert før saken er opprettet
 
     Scenario: Resultatene hentes med D-nummer når søkeren ikke har fødselsnummer
-      # Avklart 03.11.2026. Kode i dag: bare fødselsnummer slås opp. KREG tar imot D-nummer.
+      # Avklart 03.11.2026: KREG tar imot D-nummer.
       # D-nummeret brukes også når resultatene hentes på nytt, i importen av VGS-vitnemål fra KREG
       # (OPT-BEH-BEH-032).
       Gitt at søkeren har D-nummer og ikke fødselsnummer
@@ -123,12 +119,6 @@ Egenskap: Importere resultater fra KREG
       Så er det importerte vitnemålet fortsatt annullert
 
   Regel: Søknaden behandles videre når resultatene ikke kan hentes
-
-    @deprecated
-    Scenario: Søker uten fødselsnummer får ingen resultater importert
-      Gitt at søkeren ikke har fødselsnummer
-      Når søkeren sender inn søknaden
-      Så er ingen resultater importert fra KREG
 
     @implemented
     Scenario: Søker uten fødselsnummer og D-nummer får ingen resultater importert
