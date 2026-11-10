@@ -1,5 +1,5 @@
 # language: no
-# Generert av fs-testcaser-cdp 2026-11-09
+# Generert av fs-testcaser-cdp 2026-11-09. Rettet 2026-11-10 etter kjøringen (Klargjøring K steg 5 og Poengsum P)
 # Krav: krav/02 Opptak/13 Søknad og saksbehandling/02 Behandling/gi_tilbudsgaranti_ved_tidlig_opptak.feature @ 9e267353 (blob a409c3e78fbabcdb46286c0e2d0163e9243154c2)
 #
 # Bare scenarioene som er levert, er med: regelen «Opptaksforvalter gjennomfører tidligopptaket», to scenarioer
@@ -19,8 +19,13 @@
 #   1. Bytt til «opptak-saksbehandler-behandlende-tidlig-opptak» i «Overstyrt bruker», og last inn siden på nytt.
 #   2. Gå til «Opptak», velg «opptak-tidlig-opptak», og velg «Gå til søknader».
 #   3. Søk på søkeren, og åpne saken.
-#   4. Velg steget «Tidlig opptak», og velg konklusjonen der søkeren deltar i «Konklusjon». «Konklusjonen er lagret» vises.
-#   5. Velg «Merk som behandlet» til saken har statusen «Behandlet». [Sjekk begrep]
+#   4. Velg steget «1. Tidlig opptak», og velg konklusjonen der søkeren deltar i «Konklusjon». «Konklusjonen er lagret» vises.
+#   5. Velg «Behandlet» i «Behandlingsstatus». Last inn siden på nytt: «Behandlingsstatus» står som «Behandlet».
+#
+# Poengsum P (søkerens poengsum til et utdanningstilbud):
+#   1. Som «opptak-saksbehandler-behandlende-tidlig-opptak», åpne saken til søkeren, og velg steget «7. Oppsummering».
+#   2. Under utdanningstilbudet, les «Poeng» i tabellen «Poengsum per kvote og grunnlag» (kvoten ORD). Det er P.
+#   Steget «5. Poeng» viser poengradene, ikke poengsummen per kvote, og kan stå som «Ingen poengberegning».
 #
 # Gjennomføring G (opptaksforvalteren gjennomfører tidligopptaket):
 #   1. Bytt til «opptak-forvalter-forvaltende» i «Overstyrt bruker», og last inn siden på nytt.
@@ -41,7 +46,7 @@ Egenskap: Gi tilbudsgaranti ved tidlig opptak
     @endrer-data
     Scenariomal: Tilbudsgaranti ut fra poenggrensen
       Gitt jeg tar en ubrukt søker fra «sak-tidlig-opptak-kvalifisert»
-      Og jeg leser søkerens poengsum P til «utdanningstilbud-tidlig-opptak» i saken
+      Og jeg leser søkerens poengsum P til «utdanningstilbud-tidlig-opptak» i saken (som i Poengsum P)
       Og jeg er logget inn som «opptak-forvalter-forvaltende»
       Og jeg har åpnet fanen «Tidlig opptak» under «Plasstildeling» i «opptak-tidlig-opptak»
       Og jeg noterer verdien i «Poenggrense tidlig opptak for <utdanningstilbud-tidlig-opptak>»
@@ -62,7 +67,7 @@ Egenskap: Gi tilbudsgaranti ved tidlig opptak
     @utledet @endrer-data
     Scenario: Opptaksforvalter gjennomfører tidligopptaket: poengsummen er 0,1 under poenggrensen
       Gitt jeg tar en ubrukt søker fra «sak-tidlig-opptak-kvalifisert»
-      Og jeg leser søkerens poengsum P til «utdanningstilbud-tidlig-opptak» i saken
+      Og jeg leser søkerens poengsum P til «utdanningstilbud-tidlig-opptak» i saken (som i Poengsum P)
       Og jeg er logget inn som «opptak-forvalter-forvaltende»
       Og jeg har åpnet fanen «Tidlig opptak» under «Plasstildeling» i «opptak-tidlig-opptak»
       Og jeg noterer verdien i «Poenggrense tidlig opptak for <utdanningstilbud-tidlig-opptak>»
@@ -117,7 +122,7 @@ Egenskap: Gi tilbudsgaranti ved tidlig opptak
     @endrer-data
     Scenariomal: Tilbudsgaranti på det høyest prioriterte søknadsalternativet
       Gitt jeg tar en ubrukt søker fra «sak-tidlig-opptak-kvalifisert»
-      Og jeg leser søkerens poengsum P til «utdanningstilbud-tidlig-opptak» i saken
+      Og jeg leser søkerens poengsum P til «utdanningstilbud-tidlig-opptak» i saken (som i Poengsum P)
       Og jeg er logget inn som «opptak-forvalter-forvaltende»
       Og jeg har åpnet fanen «Tidlig opptak» under «Plasstildeling» i «opptak-tidlig-opptak»
       Og jeg noterer verdien i «Poenggrense tidlig opptak for <utdanningstilbud-tidlig-opptak>»
@@ -153,7 +158,7 @@ Egenskap: Gi tilbudsgaranti ved tidlig opptak
     @ref-OPT-SØK-SØK-016 @endrer-data
     Scenario: Reservert studieplass gir tilbudsgaranti uten poenggrense
       Gitt jeg tar en ubrukt søker fra «sak-tidlig-opptak-kvalifisert»
-      Og jeg leser søkerens poengsum P til «utdanningstilbud-tidlig-opptak» i saken
+      Og jeg leser søkerens poengsum P til «utdanningstilbud-tidlig-opptak» i saken (som i Poengsum P)
       Og jeg velger «tilbudsgarantitype-reservert-studieplass-behandler» i «Tilbudsgaranti fra behandler» for «utdanningstilbud-tidlig-opptak», og «Tilbudsgaranti lagret» vises
       Og jeg er logget inn som «opptak-forvalter-forvaltende»
       Og jeg har åpnet fanen «Tidlig opptak» under «Plasstildeling» i «opptak-tidlig-opptak»
@@ -258,7 +263,7 @@ Egenskap: Gi tilbudsgaranti ved tidlig opptak
     @endrer-data
     Scenario: Tidligopptakstilbud fra tilbyder går foran poengsummen
       Gitt jeg tar en ubrukt søker fra «sak-tidlig-opptak-kvalifisert»
-      Og jeg leser søkerens poengsum P til «utdanningstilbud-tidlig-opptak» i saken
+      Og jeg leser søkerens poengsum P til «utdanningstilbud-tidlig-opptak» i saken (som i Poengsum P)
       Og jeg er logget inn som «opptak-forvalter-forvaltende»
       Og jeg har åpnet fanen «Tidlig opptak» under «Plasstildeling» i «opptak-tidlig-opptak»
       Og jeg noterer verdien i «Poenggrense tidlig opptak for <utdanningstilbud-tidlig-opptak>», skriver P + 5 der, og velger «Lagre poenggrenser»
@@ -322,7 +327,7 @@ Egenskap: Gi tilbudsgaranti ved tidlig opptak
     @endrer-data
     Scenario: En ny gjennomføring fjerner ikke tilbudsgarantien
       Gitt jeg tar en ubrukt søker fra «sak-tidlig-opptak-kvalifisert»
-      Og jeg leser søkerens poengsum P til «utdanningstilbud-tidlig-opptak» i saken
+      Og jeg leser søkerens poengsum P til «utdanningstilbud-tidlig-opptak» i saken (som i Poengsum P)
       Og poenggrensen for «utdanningstilbud-tidlig-opptak» i fanen «Tidlig opptak» er lavere enn P
       Og jeg gjør søkerens sak klar som i Klargjøring K
       Og jeg gjennomfører tidligopptaket som i Gjennomføring G
@@ -339,14 +344,14 @@ Egenskap: Gi tilbudsgaranti ved tidlig opptak
       Og jeg gjør søkerens sak klar som i Klargjøring K, men hopper over steg 5, så saken ikke har statusen «Behandlet»
       Og jeg gjennomfører tidligopptaket som i Gjennomføring G
       Og «tilbudsgarantitype-tidlig-opptak» står ikke under «Tilbudsgaranti fra forvalter» for «utdanningstilbud-tidlig-opptak» i saken til søkeren (som i S)
-      Og jeg velger «Merk som behandlet» til saken har statusen «Behandlet»
+      Og jeg velger «Behandlet» i «Behandlingsstatus» i saken til søkeren, og «Behandlingsstatus» står som «Behandlet» etter at siden er lastet inn på nytt
       Når jeg gjennomfører tidligopptaket som i Gjennomføring G
       Så står «tilbudsgarantitype-tidlig-opptak» under «Tilbudsgaranti fra forvalter» for «utdanningstilbud-tidlig-opptak» i saken til søkeren (som i S)
 
     @endrer-data
     Scenario: Tilbudsgarantien flyttes til et høyere prioritert søknadsalternativ ved ny gjennomføring
       Gitt jeg tar en ubrukt søker fra «sak-tidlig-opptak-kvalifisert»
-      Og jeg leser søkerens poengsum P til «utdanningstilbud-tidlig-opptak» i saken
+      Og jeg leser søkerens poengsum P til «utdanningstilbud-tidlig-opptak» i saken (som i Poengsum P)
       Og jeg er logget inn som «opptak-forvalter-forvaltende»
       Og jeg har åpnet fanen «Tidlig opptak» under «Plasstildeling» i «opptak-tidlig-opptak»
       Og jeg noterer verdien i «Poenggrense tidlig opptak for <utdanningstilbud-tidlig-opptak>», skriver P + 5 der, og velger «Lagre poenggrenser»
@@ -380,7 +385,7 @@ Egenskap: Gi tilbudsgaranti ved tidlig opptak
     @endrer-data
     Scenariomal: Tilbudsgaranti ut fra poenggrensen eller medianen fra forrige opptak
       Gitt jeg tar en ubrukt søker fra «<søker>»
-      Og jeg leser søkerens poengsum P til «utdanningstilbud-tidlig-opptak-med-median» i saken
+      Og jeg leser søkerens poengsum P til «utdanningstilbud-tidlig-opptak-med-median» i saken (som i Poengsum P)
       Og jeg er logget inn som «opptak-forvalter-forvaltende»
       Og jeg har åpnet fanen «Tidlig opptak» under «Plasstildeling» i «opptak-tidlig-opptak»
       Og «Median i fjor» for «utdanningstilbud-tidlig-opptak-med-median» viser en median
