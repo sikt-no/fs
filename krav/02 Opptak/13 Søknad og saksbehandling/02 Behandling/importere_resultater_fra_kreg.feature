@@ -136,9 +136,12 @@ Egenskap: Importere resultater fra KREG
       Når importen av VGS-vitnemål fra KREG kjører etter at KREG svarer igjen
       Så er søkerens vitnemål importert
 
-  @ref-OPT-BEH-BEH-021 @ref-FLY-OPT-VIT-001 @ref-OPT-BEH-BEH-032 @ref-OPT-BEH-BEH-035 @ref-OPT-BEH-BEH-015
+  @ref-OPT-BEH-BEH-021 @ref-FLY-OPT-VIT-001 @ref-OPT-BEH-BEH-032 @ref-OPT-BEH-BEH-035 @ref-OPT-BEH-BEH-015 @implemented
   Regel: Nye og annullerte vitnemål i KREG importeres for aktive søkere
-    # En aktiv søker har minst én søknad som ikke er trukket, i et opptak som ikke er avsluttet.
+    # En aktiv søker har minst én aktiv sak i et opptak som er publisert.
+    # Avklart 10.11.2026 (Sondre): det er ikke noe poeng å hente vitnemål for saker som ikke er
+    # aktive. Blir saken aktiv igjen, gir det en søknadshendelse, og vitnemålene hentes på nytt
+    # («Resultatene hentes når saken er opprettet»).
     # Avklart 29.10.2026: nytt vitnemål og annullering tas inn. Opphevet annullering og endringer i
     # et vitnemål som er importert, tas ikke inn.
     # Jobben for nye vitnemål (OPT-BEH-BEH-033) går gjennom alle aktive søkere, og henter
@@ -148,14 +151,12 @@ Egenskap: Importere resultater fra KREG
     # Saken behandles ikke automatisk på nytt (OPT-BEH-BEH-032). Når vitnemålet annulleres, gjelder OPT-BEH-BEH-034.
     # Varselet til saksbehandleren om nytt vitnemål står i OPT-BEH-BEH-021.
 
-    @implemented
     Scenario: Søkeren får vitnemålet etter at søknaden er levert
       Gitt at søkeren har levert søknaden uten å ha et vitnemål i KREG
       Og at opptaket ikke er avsluttet
       Når KREG får et vitnemål for søkeren
       Så er vitnemålet importert uten at søkeren har endret søknaden
 
-    @implemented
     Scenario: Vitnemålene hentes én gang for søkeren med søknader i flere opptak
       Gitt at søkeren har søknader i to opptak som ikke er avsluttet
       Når importen av VGS-vitnemål fra KREG kjører
@@ -167,11 +168,10 @@ Egenskap: Importere resultater fra KREG
       Så hentes ingen VGS-dokumenter for søkeren fra KREG
 
       Eksempler:
-        | grunn                                           |
-        | søkeren har trukket alle søknadene sine         |
-        | alle opptakene søkeren har søkt i, er avsluttet |
+        | grunn                                          |
+        | søkeren har ingen aktiv sak                    |
+        | opptaket søkeren har søkt i, er ikke publisert |
 
-    @implemented
     Scenario: Vitnemålet annulleres og erstattes av et nytt etter at opptakssystemet har behandlet søknaden
       Gitt at opptakssystemet har behandlet søknaden på søkerens importerte vitnemål
       Og at opptaket ikke er avsluttet
@@ -180,7 +180,6 @@ Egenskap: Importere resultater fra KREG
       Så er det importerte vitnemålet annullert
       Og det nye vitnemålet er importert
 
-    @implemented
     Scenario: Vitnemålet annulleres uten at det kommer et nytt, etter at opptakssystemet har behandlet søknaden
       Gitt at opptakssystemet har behandlet søknaden på søkerens importerte vitnemål
       Og at opptaket ikke er avsluttet
