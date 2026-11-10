@@ -515,35 +515,36 @@ Egenskap: Automatisk GSK-konklusjon
       Når opptaksforvalteren ved organisasjonen som forvalter opptaket, starter rettingen av grunnlagskoden for løpet
       Så har GSK-konklusjonen på søknaden fortsatt grunnlagskoden KLY
 
-  @draft @depends-on-OPT-OVO-FRI-001
-  # OPT-OVO-FRI-001: «Opptaksforvalter kan sette når den automatiske saksbehandlingen starter og avsluttes»
-  Regel: Automatikken setter GSK-konklusjonen bare mens den automatiske saksbehandlingen pågår
-    # Avklart 2026-11-03. Hendelsene er de samme som i OPT-BEH-BEH-032. Importen av vitnemålet og
-    # GSK-vitnemålsberegningen kjører uansett.
-    # Avklart 2026-11-05: den automatiske saksbehandlingen pågår bare mens opptaket er publisert.
-    # Hendelsene avgrenser perioden. Er de ikke satt, pågår den så lenge opptaket er publisert. Et
-    # upublisert eller historisk opptak behandles ikke automatisk.
-    # Avklart 2026-11-05: publiseres opptaket igjen etter at det er avpublisert, behandles sakene
-    # automatisk (OPT-BEH-BEH-032), og GSK-konklusjonen settes da etter regelen «GSK-konklusjonen
-    # settes også når den automatiske behandlingen kjører».
-    # Avklart 2026-11-03: når saksbehandleren starter den automatiske behandlingen selv, settes
-    # GSK-konklusjonen også utenfor perioden (OPT-BEH-BEH-032).
+  @ref-OPT-BEH-BEH-032
+  Regel: Automatikken setter GSK-konklusjonen i publiserte opptak, også utenfor perioden for den automatiske saksbehandlingen
+    # Avklart 09.11.2026 (Sondre, opptak !6663): GSK-konklusjonen settes når vitnemålet importeres
+    # fra KREG, i alle publiserte opptak, også før den automatiske saksbehandlingen starter og etter
+    # at den er avsluttet. Det kan komme suppleringsopptak etter at opptaket har kjørt. Bare resten
+    # av den automatiske behandlingen følger perioden opptaksforvalteren setter (OPT-BEH-BEH-032).
+    # Erstatter avklaringen 2026-11-03 om at automatikken setter konklusjonen bare mens den
+    # automatiske saksbehandlingen pågår.
+    # Avklart 2026-11-05: et upublisert eller historisk opptak får ingen automatisk konklusjon.
+    # Konklusjonen settes bare der den mangler (se «Automatikken setter bare positive
+    # konklusjoner, og bare der ingen finnes»). En ferdig behandlet sak har som regel en
+    # konklusjon, og den røres ikke.
 
-    Scenario: Ingen automatisk konklusjon før den automatiske saksbehandlingen starter
+    Scenario: Automatisk konklusjon før den automatiske saksbehandlingen starter
       Gitt at «Automatisk saksbehandling starter» er "2027-04-16 08:00" i opptaket
       Og at søknaden ikke har noen GSK-konklusjon
       Og at søkeren har et vitnemål som gir GSK
       Når vitnemålet importeres fra KREG 2027-04-15 kl. 10:00
-      Så får søknaden ingen GSK-konklusjon fra vitnemålet
+      Så får søknaden en positiv GSK-konklusjon
+      Men saken behandles ikke automatisk
 
-    Scenario: Ingen automatisk konklusjon etter at den automatiske saksbehandlingen er avsluttet
+    Scenario: Automatisk konklusjon etter at den automatiske saksbehandlingen er avsluttet
       Gitt at «Automatisk saksbehandling avsluttes» er "2027-07-15 12:00" i opptaket
       Og at søknaden ikke har noen GSK-konklusjon
       Og at søkeren har et vitnemål som gir GSK
       Når vitnemålet importeres fra KREG 2027-07-15 kl. 12:01
-      Så får søknaden ingen GSK-konklusjon fra vitnemålet
+      Så får søknaden en positiv GSK-konklusjon
+      Men saken behandles ikke automatisk
 
-    Scenario: Den automatiske saksbehandlingen pågår mens opptaket er publisert når hendelsene ikke er satt
+    Scenario: Automatisk konklusjon når opptaket er publisert og hendelsene ikke er satt
       Gitt at opptaket ikke har hendelsene for den automatiske saksbehandlingen
       Og at opptaket er publisert
       Og at søknaden ikke har noen GSK-konklusjon
@@ -552,12 +553,40 @@ Egenskap: Automatisk GSK-konklusjon
       Så får søknaden en positiv GSK-konklusjon
 
     Scenario: Ingen automatisk konklusjon når opptaket er upublisert
-      Gitt at opptaket ikke har hendelsene for den automatiske saksbehandlingen
-      Og at opptaket er upublisert
+      Gitt at opptaket er upublisert
       Og at søknaden ikke har noen GSK-konklusjon
       Og at søkeren har et vitnemål som gir GSK
       Når vitnemålet importeres fra KREG
       Så får søknaden ingen GSK-konklusjon fra vitnemålet
+
+  @ref-OPT-BEH-BEH-035
+  Regel: Vitnemålet erstatter en gjenbrukt konklusjon
+    # Avklart 10.11.2026 (Ingrid Helset, sjekket med HK-dir): har søknaden en konklusjon som er
+    # gjenbrukt fra et tidligere opptak, og søkeren får et vitnemål som gir GSK, erstatter
+    # vitnemålet den gjenbrukte konklusjonen. Det er et unntak fra at en konklusjon som finnes, ikke
+    # overskrives. En konklusjon fra et vitnemål overskrives ikke av et nytt vitnemål.
+    # Avklart 10.11.2026 (Ingrid Helset og Sondre): er en av søkerens saker i opptaket ferdig
+    # behandlet, manuelt eller automatisk, overskriver automatikken ingenting. Saken får nye
+    # resultater (OPT-BEH-BEH-035), og saksbehandleren vurderer selv om det nye vitnemålet skal
+    # brukes.
+    # Konklusjonen endres, den slettes ikke og legges inn på nytt.
+
+    Scenario: Vitnemålet erstatter den gjenbrukte konklusjonen
+      Gitt at søknaden har en GSK-konklusjon som er gjenbrukt fra et tidligere opptak
+      Og at ingen av søkerens saker i opptaket er ferdig behandlet
+      Når et vitnemål som gir GSK, importeres fra KREG
+      Så bygger GSK-konklusjonen på vitnemålet
+
+    Scenario: Den gjenbrukte konklusjonen blir stående når saken er ferdig behandlet
+      Gitt at søknaden har en GSK-konklusjon som er gjenbrukt fra et tidligere opptak
+      Og at saken er ferdig behandlet
+      Når et vitnemål som gir GSK, importeres fra KREG
+      Så er GSK-konklusjonen uendret
+
+    Scenario: Den gjenbrukte konklusjonen blir stående når vitnemålet ikke gir GSK
+      Gitt at søknaden har en GSK-konklusjon som er gjenbrukt fra et tidligere opptak
+      Når et vitnemål som ikke gir GSK, importeres fra KREG
+      Så er GSK-konklusjonen uendret
 
   @ref-FLY-OPT-AUT-001 @implemented
   Regel: GSK-konklusjonen settes også når den automatiske behandlingen kjører
