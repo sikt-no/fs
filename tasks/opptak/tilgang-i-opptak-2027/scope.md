@@ -36,12 +36,13 @@ Rette tilgangen i opptak så den følger kravene: hvem som ser og endrer hva, i 
 4. Ferdig-kriterium for Must: en sikkerhetstest gjennom API-et viser at en bruker og en integrasjon ved en organisasjon uten tilknytning ikke får noe, i både samordna og lokalt opptak.
 5. Hvem som varsler integrasjonene som bruker den åpne tilgangen i dag (Politihøgskolen, NetNordic, analyseplattformen, utdanning.no), før Must og Should settes i drift.
 6. Om personvernombudet skal vurdere om lekkasjen mellom læresteder i dag er et avvik.
+7. Hvem som sjekker RLS og tilgangsstyring mot fs-plattform slik den er i dag, og når. Forslag: utviklerne på opptak (for eksempel Lars), før RLS-workshopen. Det gjelder RLS i opptaksskjemaene, og hvilke handlingskoder rollene gir i test og produksjon.
 
 **Risiko og avhengigheter**
 
 - Integrasjoner som bruker den åpne tilgangen, kan slutte å virke når den strammes inn.
 - Rollene OPPTAK_INNSYN (TAKE-469) og OPPTAK_DOKUMENTASJON (TAKE-470) finnes ikke i tilgangsstyring, og ingen har lest hvilke handlingskoder de andre rollene gir i test og produksjon.
-- «RLS i dag» er kartlagt 04.11.2026 og må sjekkes mot fs-plattform før arbeidet fordeles.
+- «RLS i dag» er kartlagt 04.11.2026 og må sjekkes av utviklerne mot fs-plattform før arbeidet fordeles (punkt 7).
 - Mange av reglene står i krav som hører til andre scopes (meldinger, plasstildeling, tilbudsgaranti, registrere praksis, opprette opptak, utdanningstilbud). Eierne av dem må vite om endringene.
 
 ## Mål
@@ -148,7 +149,7 @@ Reglene R1–R16 i spec-en «Krav til RLS» er utledet fra kravene og svarene om
 
 ## Plan
 
-1. **Sjekk RLS mot fs-plattform i dag.** Oppdater «RLS i dag» over. Lars.
+1. **Utviklerne sjekker RLS og tilgangsstyring mot fs-plattform i dag** (punkt 7 under *Anbefaling til prosjektleder*), og oppdaterer «RLS i dag» over.
 2. **Kravene for Must inn i krav-repoet** (tabellen under), med rollebegrepene i stegene og relasjonen (forvalter, tilbyder, behandler) i eksemplene. Reglene og scenarioene utledes fra spec-en og svarene 10.11.
 3. **Valider kravene for Must** med `fs-krav`, så de blir `@planned`.
 4. **Tilgangsstyring:** opprett OPPTAK_INNSYN (TAKE-469) og OPPTAK_DOKUMENTASJON (TAKE-470), gi opptaksforvalter MODIFISERE_REGELVERK, og les hvilke handlingskoder rollene gir i test og produksjon.
@@ -203,6 +204,7 @@ Flere av kravene hører til andre scopes. Reglene legges inn der, og scopet her 
 - [ ] Frist: må bølge 1 være på plass før søknaden åpner for opptak 2027?
 - [ ] Ferdig-kriterium: sikkerhetstest gjennom API-et, der en bruker og en integrasjon ved en organisasjon uten tilknytning ikke får noe fra noen av tabellene, i både samordna og lokalt opptak?
 - [ ] Hvilke integrasjoner bruker den åpne tilgangen i dag (Politihøgskolen, NetNordic, analyseplattformen, utdanning.no), og hva slutter å virke når tilgangen strammes inn?
+- [ ] Hvem sjekker RLS og tilgangsstyring mot fs-plattform slik den er i dag, og når? Forslag: utviklerne på opptak, før RLS-workshopen.
 - [ ] Er tilgangene (grants) i RLS-oversikten de samme i produksjon?
 - [ ] Skal personvernombudet vurdere om lekkasjen mellom læresteder i dag er et avvik?
 - [x] `@OPT-BEH-BEH-043` er gjort om til «Se søknaden til en søker», for alle rollene som ser søknaden (2026-11-10).
@@ -219,6 +221,7 @@ Append-only. Ny linje på toppen ved hver hendelse.
 
 | Dato       | Hendelse | Av | Lenke til review |
 |------------|----------|----|------------------|
+| 2026-11-10 | Punkt 7: utviklerne sjekker RLS og tilgangsstyring mot fs-plattform i dag. Også på møtesiden på Confluence | @karensikt | – |
 | 2026-11-10 | Reglene for Should og Could er skrevet inn (`@draft`). Ny del *Anbefaling til prosjektleder* | @karensikt | – |
 | 2026-11-10 | Reglene for Must er skrevet inn i kravfilene (`@draft`), unntatt GSK-konklusjonen, som hører til PR 1003 | @karensikt | – |
 | 2026-11-10 | *Mangler* følger nå R1–R16 i spec-en, med endringene 10.11. Ny *Plan*, med kravene som skal inn i krav-repoet | @karensikt | – |
