@@ -138,8 +138,7 @@ Egenskap: Importere resultater fra KREG
 
   @ref-OPT-BEH-BEH-021 @ref-FLY-OPT-VIT-001 @ref-OPT-BEH-BEH-032 @ref-OPT-BEH-BEH-035 @ref-OPT-BEH-BEH-015
   Regel: Nye og annullerte vitnemål i KREG importeres for aktive søkere
-    # Gjelder aktive søkere: søkere med en søknad som ikke er trukket, i et opptak som ikke er
-    # avsluttet.
+    # En aktiv søker har minst én søknad som ikke er trukket, i et opptak som ikke er avsluttet.
     # Avklart 29.10.2026: nytt vitnemål og annullering tas inn. Opphevet annullering og endringer i
     # et vitnemål som er importert, tas ikke inn.
     # Jobben for nye vitnemål (OPT-BEH-BEH-033) går gjennom alle aktive søkere, og henter
@@ -162,10 +161,15 @@ Egenskap: Importere resultater fra KREG
       Når importen av VGS-vitnemål fra KREG kjører
       Så hentes søkerens VGS-dokumenter fra KREG én gang
 
-    Scenario: Vitnemålene hentes ikke for søkeren som ikke er aktiv
-      Gitt at søkeren ikke har noen søknad som ikke er trukket, i et opptak som ikke er avsluttet
+    Scenariomal: Vitnemålene hentes ikke for søkeren som ikke er aktiv
+      Gitt at <grunn>
       Når importen av VGS-vitnemål fra KREG kjører
       Så hentes ingen VGS-dokumenter for søkeren fra KREG
+
+      Eksempler:
+        | grunn                                           |
+        | søkeren har trukket alle søknadene sine         |
+        | alle opptakene søkeren har søkt i, er avsluttet |
 
     @implemented
     Scenario: Vitnemålet annulleres og erstattes av et nytt etter at opptakssystemet har behandlet søknaden
