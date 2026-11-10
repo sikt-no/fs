@@ -80,7 +80,7 @@ for GRU-013.
 | Feltfeil, nummer | Nummeret har ikke 11 siffer | «Nummeret må ha 11 siffer.» | – | Personen finnes ikke i løsningen |
 | Primærknapp | Alltid / mens operasjonen pågår | «Gi rollen» / «Gir rollen …» | per tilstand | Personen finnes ikke i løsningen |
 | Sekundærknapp | Alltid | «Avbryt» | – | – |
-| Handling på raden | Rader der rollen er tildelt direkte | «Fjern tildeling» | – | Fjerne en tildeling fra rollens oversiktsside |
+| Handling på raden | Rader der rollen er tildelt direkte, ikke arvet og ikke gjennom en organisasjonssamling | «Fjern tildeling» | – | Fjerne en tildeling fra rollens oversiktsside |
 
 **Skisser:** ingen skisser finnes.
 
@@ -118,6 +118,11 @@ raden. Brukerens øvrige tildelinger av rollen står urørt.
 ### Regel: Rader med arvet rolle har ikke «Fjern tildeling»
 Handlingen vises bare på rader der rollen er tildelt direkte. En arvet rolle fjernes ved å fjerne
 rollen den arves gjennom. API-et avviser også fjerning av en arvet tildeling (`ARVET`).
+
+### Regel: Rader med rolle gitt gjennom en organisasjonssamling har ikke «Fjern tildeling»
+Handlingen vises ikke på rader der rollen er gitt gjennom en organisasjonssamling. Tildelingen
+trekkes tilbake for hele samlingen der den er gitt. API-et avviser fjerning for én organisasjon
+(`SAMLING`).
 
 ### Regel: Stedkoder og tidsbegrensning settes alltid per bruker
 Dialogen har ingen felt for dem. De settes for tildelingen på detaljsiden for personen

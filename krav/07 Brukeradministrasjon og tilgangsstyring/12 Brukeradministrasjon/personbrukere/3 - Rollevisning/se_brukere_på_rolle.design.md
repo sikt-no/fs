@@ -39,7 +39,7 @@ Forslag til ruter, etter mønsteret for personbrukere: `/tilgangsstyring/roller`
     (BRU-PER-GRU-013, regelen «Nummeret vises bare når navnet mangler»).
   - «Gjelder for organisasjon» (organisasjonen tildelingen gjelder for)
   - «Miljø» (miljøet tildelingen gjelder)
-- Rader der rollen er tildelt direkte, har handlingen «Fjern tildeling». Rader med arvet rolle har den ikke (BRU-PER-ROL-002).
+- Rader der rollen er tildelt direkte, har handlingen «Fjern tildeling». Rader med arvet rolle, eller med rolle gitt gjennom en organisasjonssamling, har den ikke (BRU-PER-ROL-002).
 - Radene lenker ikke til detaljsiden for brukeren.
 - Antall treff teller tildelinger, ikke brukere.
 - Filtre: organisasjon og miljø. Miljøfilteret kan brukes uten at en organisasjon er valgt.
@@ -81,7 +81,7 @@ tildeling»). Dette er fasiten for tekstene.
 | Rollens oversiktsside | Ingen brukere brukeradministratoren kan se, har rollen | «Ingen brukere du har tilgang til, har denne rollen.» | – | Vise tildelingene av en rolle |
 | Kolonneoverskrift | Alltid | «Gjelder for organisasjon» (finnes i fs-admin) | – | Vise tildelingene av en rolle |
 | Navnekolonnen | Navnet til personen er ikke kjent | Personens fødselsnummer, D-nummer eller SNR | – | GRU-013: Nummeret vises i stedet for navnet når navnet mangler |
-| Handling på raden | Rader der rollen er tildelt direkte | «Fjern tildeling» | – | ROL-002: Fjerne en tildeling fra rollens oversiktsside |
+| Handling på raden | Rader der rollen er tildelt direkte, ikke arvet og ikke gjennom en organisasjonssamling | «Fjern tildeling» | – | ROL-002: Fjerne en tildeling fra rollens oversiktsside |
 
 **Skisser:** ingen skisser finnes.
 

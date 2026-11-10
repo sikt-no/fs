@@ -84,6 +84,18 @@ Egenskap: Administrere brukere på en spesifikk rolle
       Når brukeradministrator ser raden for tildelingen på rollens oversiktsside
       Så har raden ikke «Fjern tildeling»
 
+  @in-progress
+  Regel: Rader med rolle gitt gjennom en organisasjonssamling har ikke «Fjern tildeling»
+    En tildeling gitt gjennom en organisasjonssamling trekkes tilbake for hele samlingen, der den
+    er gitt, ikke for én organisasjon fra rollesiden.
+    # AVKLART 10.11.2026 (Kjetil): En rad der rollen er gitt gjennom en organisasjonssamling, har
+    # ikke «Fjern tildeling».
+
+    Scenario: En rad med rolle gitt gjennom en organisasjonssamling har ikke «Fjern tildeling»
+      Gitt at en bruker har rollen gjennom en organisasjonssamling som organisasjonen er med i
+      Når brukeradministrator ser raden for tildelingen på rollens oversiktsside
+      Så har raden ikke «Fjern tildeling»
+
   @in-progress @depends-on-BRU-PER-GRU-005 @depends-on-BRU-PER-GRU-006
   Regel: Stedkoder og tidsbegrensning settes alltid per bruker
     # AVKLART 10.11.2026 (Kjetil): Alt settes alltid per bruker. Rollen har ingen stedkoder eller
