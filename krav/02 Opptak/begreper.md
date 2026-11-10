@@ -27,7 +27,7 @@ Denne listen sammenstiller begreper brukt i kravene (`krav/02 Opptak/`), design-
 | tilbyder | Organisasjonens rolle i et opptak når den tilbyr utdanningstilbudet et søknadsalternativ gjelder | – | – | Utvidet 2026-11-10: tilbyder er en rolle i opptaket, ikke bare et lærested. T-rolle i rolleforslaget 2026-10-12 |
 | forvalter | Organisasjonens rolle i et opptak når den forvalter (eier) opptaket. I samordna opptak HK-dir, i lokale opptak lærestedet selv. Et opptak har én forvalter | – | – | Ny term 2026-11-10. Erstatter «opptakets forvalter», «forvaltende organisasjon» og «opptakseier». F-rolle i rolleforslaget 2026-10-12. ⚠️ Ikke det samme som brukerrollen *opptaksforvalter* |
 | behandler | Organisasjonens rolle for et søknadsalternativ når den saksbehandler det. Søknaden blir til én sak hos hver behandler | – | – | Ny term 2026-11-10. Erstatter «saksbehandlende organisasjon». B-rolle i rolleforslaget 2026-10-12 |
-| tilknytning | At organisasjonen er forvalter, tilbyder eller behandler på en søknad. Tilknytningen avgjør om organisasjonen ser søknaden | – | – | Ny term 2026-11-10. Se `tilgang.md` |
+| tilknytning | At organisasjonen er forvalter, tilbyder eller behandler på en søknad. Tilknytningen avgjør om organisasjonen ser søknaden | – | – | Ny term 2026-11-10 |
 | dokumentforvalter | Brukerrollen som laster opp og sletter dokumentasjon på søkerens vegne når organisasjonen er forvalter | – | – | Ny term 2026-11-10. OPPTAK_DOKUMENTASJON (TAKE-470) |
 | OPPTAK_INNSYN | Brukerrollen for ansatte som svarer søkere. Ser søknaden og behandlingen der organisasjonen er forvalter, tilbyder eller behandler, men endrer ingenting | – | – | Ny term 2026-11-10 (TAKE-469). Brukes i kravene i stedet for «førstelinje» og «veileder». Skriv «bruker med OPPTAK_INNSYN» |
 | søker | «Person som søker utdanning, eller har levert søknad, i ett eller flere opptak» | [søker](https://fs.sikt.no/domenekunnskap/begreper/soker/) (utkast) | Søker | OK |
@@ -179,7 +179,7 @@ Denne listen sammenstiller begreper brukt i kravene (`krav/02 Opptak/`), design-
 | behandlertildelingsregel | En eller flere regler for hvordan søknader skal fordeles til saksbehandlende organisasjoner i et samordna opptak | – | ✅ Avklart 2026-10-22: «behandlertildelingsregel», som i FS Admin. Erstatter «saksbehandlertildelingsregel» (avklart 2026-10-09). Rettet i kravene |
 | vedtak / vedtaksbrev | Den formelle avgjørelsen på søknaden, og brevet søkeren får med den | – | OK |
 | mangelkode | Kode for hva søkeren mangler for å være kvalifisert | – | Gammel FS: Kompetansemangler (SFA, SNU, SÆR) |
-| intern / delt | En merknad, mangel eller melding er **delt** med forvalter, tilbyder og behandler på søknaden, med mindre organisasjonen som registrerte den, har merket den som **intern**. En intern ses bare av den organisasjonen. Delt er standard | – | Ny term 2026-11-10. Se `tilgang.md` |
+| intern / delt | En merknad, mangel eller melding er **delt** med forvalter, tilbyder og behandler på søknaden, med mindre organisasjonen som registrerte den, har merket den som **intern**. En intern ses bare av den organisasjonen. Delt er standard | – | Ny term 2026-11-10 |
 
 ---
 

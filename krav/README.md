@@ -129,7 +129,6 @@ Gherkin er et språk som alle andre, og må skrives godt for å være nyttig og 
 
 - Filnavn skrives i snake_case: `se_søknad.feature`, `lage_opptak.feature`. *(sjekkes automatisk)*
 - Navnet beskriver funksjonaliteten eller prosessen med et verb og et substantiv.
-- `tilgang.md` i et domene er oversikten over tilgangsreglene i domenet. Se *Tags → Tilgang*.
 
 ## Mappestruktur
 
@@ -219,15 +218,15 @@ En feature har høyst én prioritet. *(sjekkes automatisk)*
 
 `@tilgang` settes på en `Regel:` som sier hvem som ser eller endrer noe: hvilken rolle, ved hvilken organisasjon, og når. Taggen gjør at tilgangsreglene kan finnes og telles på tvers av kravene (`grep -r @tilgang krav/`), og at FS Kravforvaltning kan filtrere på dem.
 
-- Taggen settes på `Regel:`-linja, ikke på `Egenskap:` eller på enkeltscenarioer. Et krav som bare handler om tilgang, har taggen på alle reglene.
+- Taggen settes på `Regel:`-linja, ikke på `Egenskap:` eller på enkeltscenarioer.
 - Taggen er ikke en status, og kan stå sammen med `@draft`, `@openquestion` og `@deprecated`.
 - En regel om hva søkeren ser i Min kompetanse, er en tilgangsregel når den skjuler noe for søkeren (for eksempel interne poeng), ikke når den bare beskriver visningen.
 
 **Hvor tilgangsreglene står**
 
-- Tilgang som gjelder én funksjon, står i kravet til funksjonen, med `@tilgang` på regelen. Eksempel: at opptaksforvalter hos tilbyderen ikke kan fjerne utdanningstilbud en annen organisasjon tilbyr, står i `fjerne_utdanningstilbud.feature`.
-- Innsyn som gjelder på tvers av funksjoner, får en egen fil: `tilgang_til_<data>.feature` eller `se_<data>_med_<rolle>.feature`. Eksempler: `tilgang_til_regelverk.feature`, `se_søknader_med_opptak_innsyn.feature`.
-- Et domene som har tilgangsregler, har en oversikt i `krav/<NN Domene>/tilgang.md`: hvem som ser og endrer hva, med Feature-ID-en til kravet. Oversikten oppdateres i samme PR som kravet.
+- Hvem som får gjøre hva, skal kunne leses ut av funksjonskravene. Tilgangen står i kravet til funksjonen, med rollen og organisasjonen i stegene. Eksempel: at opptaksforvalter hos tilbyderen ikke kan fjerne utdanningstilbud en annen organisasjon tilbyr, står i `fjerne_utdanningstilbud.feature`.
+- Den som *ikke* får gjøre det, står i samme regel, som et eget scenario eller en egen eksempelrad. Lag ikke egne tilgangsscenarioer eller egne tilgangsfiler.
+- Arbeidet med å rette tilgangen i opptak, og lista over krav som mangler eller må rettes, står i scopet [`tilgang-i-opptak-2027`](../tasks/opptak/tilgang-i-opptak-2027/scope.md).
 
 **Hvordan tilgangsregler skrives**
 
@@ -639,7 +638,7 @@ Bruk ikke `# TODO:` for åpne spørsmål. *(sjekkes automatisk)* FS Kravforvaltn
 - I opptak: opptaksforvalter, saksbehandler, dokumentforvalter, bruker med OPPTAK_INNSYN
 - Organisasjonens rolle i et opptak: forvalter, tilbyder, behandler
 
-Se `krav/02 Opptak/begreper.md` og `krav/02 Opptak/tilgang.md`.
+Se `krav/02 Opptak/begreper.md`.
 
 ## Terminologi
 

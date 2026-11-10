@@ -8,7 +8,7 @@ Egenskap: Se søknader med OPPTAK_INNSYN
   # Rollen er OPPTAK_INNSYN (rolleforslaget 2026-10-12, TAKE-469). Avklart i møte 2026-11-10.
   # Erstatter kort_om_søknad (@OPT-BEH-BEH-002), som avvikles.
   # Brukerrollen tildeles ved en organisasjon. Hva den gir i et opptak, avhenger av om organisasjonen er
-  # forvalter, tilbyder eller behandler der (se begreper.md og tilgang.md). I et lokalt opptak er én organisasjon alle tre.
+  # forvalter, tilbyder eller behandler der (se begreper.md). I et lokalt opptak er én organisasjon alle tre.
   # Koden i dag (TAKE-469): SE_SØKNAD ved én organisasjon gir lesing av alle søknader i alle opptak.
 
   Bakgrunn:
