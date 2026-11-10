@@ -36,7 +36,13 @@
 |---|---|---|---|---|---|---|
 | F1 | `@TST-OPT-BEH-BEH-001` (alle scenarioene med Gjennomføring G) | Feil | «Kjør tidligopptak» vises ikke for opptaksforvalteren ved HK-dir. Knappen krever fire roller ved organisasjonen som forvalter opptaket (`KJOR_TIDLIGOPPTAK_ROLLER` i fs-admin: `FS-ADMIN_OPPTAK_TILBGARANTI_GI_VIA_OPPTAK`, `FS-ADMIN_SE_SØKNADSBEHANDLING`, `FS-ADMIN_MODIFISERE_OPPTAK`, `FS-ADMIN_SE_OPPTAK`), og OPPTAK_FORVALTER gir ikke `FS-ADMIN_SE_SØKNADSBEHANDLING`. Gjennomføringen i API-et (`settTilbudsgarantiFraTidligopptak`) virker for den samme personaen (prøvekjøringen 2026-11-09 og 2026-11-10) | Opptaksforvalteren kan prøvekjøre og gjennomføre tidligopptaket (regelen «Opptaksforvalter gjennomfører tidligopptaket»). Testplanen, forutsetning 4: «bekreft at ORDENTLIG RUNDSKRIV • OPPTAK_FORVALTER (HK-DIR) har alle de fire tilgangene fs-admin krever» | Velg ORDENTLIG RUNDSKRIV • OPPTAK_FORVALTER (HK-DIR) i «Overstyrt bruker», gå til opptak 34, «Plasstildeling», fanen «Tidlig opptak». Slå på «Debug» og se rollene | `debug-roller.png` (lokalt, ikke i git) |
 
-Om dette er en feil i rollekatalogen (OPPTAK_FORVALTER skulle gitt `FS-ADMIN_SE_SØKNADSBEHANDLING`), i fs-admin (knappen krever en rolle forvalteren ikke trenger), eller i miljøfila (en annen persona skal brukes), avgjøres av teamet.
+Rollekatalogen i TEST (lest med `tilgangsrollerGittRollekoder` og `alleImpliserteRoller` i tilgangsstyring, 2026-11-10):
+
+- OPPTAK_FORVALTER gir privilegiet `SE_SØKNADSBEHANDLING` (subgraf), men ikke flaterollen `FS-ADMIN_SE_SØKNADSBEHANDLING` (fs-admin). Den gir de tre andre rollene knappen krever.
+- OPPTAK_SAKSBEHANDLER gir `FS-ADMIN_SE_SØKNADSBEHANDLING`, men ikke `FS-ADMIN_OPPTAK_TILBGARANTI_GI_VIA_OPPTAK`.
+- Ingen av de to rollene alene gir alle fire. Kravet til rollene i knappen kom med `f480d771d` i fs-admin (2026-11-04, STEK-489).
+
+Det er to måter å rette det på, og teamet avgjør hvilken: OPPTAK_FORVALTER impliserer også `FS-ADMIN_SE_SØKNADSBEHANDLING` i rollekatalogen (navnerommet `fs-admin`, forvaltet av FS Admin-teamet), eller knappen i fs-admin krever ikke `FS-ADMIN_SE_SØKNADSBEHANDLING`. API-et krever bare `OPPTAK_TILBGARANTI_GI_VIA_OPPTAK`.
 
 ## Å rette i testene og miljøfila
 
