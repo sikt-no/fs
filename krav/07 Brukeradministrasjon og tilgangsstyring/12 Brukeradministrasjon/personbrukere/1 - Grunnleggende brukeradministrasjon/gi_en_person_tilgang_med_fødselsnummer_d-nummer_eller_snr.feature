@@ -7,7 +7,7 @@ Egenskap: Gi en person tilgang med fødselsnummer, D-nummer eller SNR
   slik at personen får tilgang i FS uansett om hen har Feide-konto, har tilganger i andre organisasjoner eller ikke finnes i løsningen fra før.
 
   Personbrukeren er personen, identifisert med fødselsnummer, D-nummer eller SNR. Feide og
-  ID-porten er påloggingsmåter: når personen logger inn, finnes hen ut fra nummeret, uansett
+  ID-porten er påloggingsmåter: når personen logger inn, gjenkjennes hen på nummeret, uansett
   hvilken påloggingsmåte hen bruker. En brukeradministrator ser en person gjennom en aktiv
   tildeling i en organisasjon og et miljø brukeradministratoren har rett i, eller gjennom
   hjemorganisasjonen til en Feide-bruker personen er koblet til. Andre personer er usynlige for
@@ -21,9 +21,10 @@ Egenskap: Gi en person tilgang med fødselsnummer, D-nummer eller SNR
   uansett om de logger inn med Feide eller ID-porten.
 
   Svaret er det samme uansett om personen fantes fra før, og det avslører ikke hvilke
-  tildelinger personen har i andre organisasjoner. Nummeret vises ikke i grensesnittet etterpå.
-  Personen vises med navn. Navnet til en person som ikke fantes fra før, kommer fra personens
-  første pålogging. Er navnet ikke kjent, vises «Navn ikke kjent».
+  tildelinger personen har i andre organisasjoner. Personen vises med navn. Navnet til en person
+  som ikke fantes fra før, kommer fra personens første pålogging. Er navnet ikke kjent, vises
+  nummeret i stedet for navnet på rollens oversiktsside og på detaljsiden for personen. Ellers
+  vises ikke nummeret i grensesnittet etterpå.
 
   Kravet erstatter «Registrere en personbruker uten Feide-konto». Blokkene fra den modellen står
   nederst, merket med forslag til workshopen. Påloggingen med ID-porten er dekket av
@@ -41,11 +42,17 @@ Egenskap: Gi en person tilgang med fødselsnummer, D-nummer eller SNR
     #   rollen, mens de øvrige rollene ligger igjen på Feide-brukeren til de flyttes. Hvordan
     #   vises de rollene på personens detaljside? Se regelen om flytting i BRU-PER-GRU-014.
 
-    Scenario: Personen finnes ikke i løsningen
-      Gitt det finnes ingen person med fødselsnummeret i løsningen
-      Når brukeradministratoren gir personen en rolle for en organisasjon og et miljø og oppgir fødselsnummeret
+    Scenariomal: Personen finnes ikke i løsningen
+      Gitt det finnes ingen person med nummeret i løsningen
+      Når brukeradministratoren gir personen en rolle for en organisasjon og et miljø og oppgir personens <nummertype>
       Så har personen rollen for organisasjonen og miljøet
       Og brukeradministratoren ser personen i brukeroversikten
+
+      Eksempler:
+        | nummertype     |
+        | fødselsnummer  |
+        | D-nummer       |
+        | SNR            |
 
     Scenario: Personen har tildelinger bare i organisasjoner brukeradministratoren ikke administrerer
       Gitt personen har aktive tildelinger bare i organisasjoner brukeradministratoren ikke administrerer
@@ -74,17 +81,6 @@ Egenskap: Gi en person tilgang med fødselsnummer, D-nummer eller SNR
       Så har personen rollen for organisasjonen og miljøet
       Og brukeradministratoren ser personen i brukeroversikten
 
-    Scenariomal: Personen identifiseres med fødselsnummer, D-nummer eller SNR
-      Gitt det finnes ingen person med nummeret i løsningen
-      Når brukeradministratoren gir personen en rolle for en organisasjon og et miljø og oppgir personens <nummertype>
-      Så har personen rollen for organisasjonen og miljøet
-
-      Eksempler:
-        | nummertype     |
-        | fødselsnummer  |
-        | D-nummer       |
-        | SNR            |
-
     Scenario: Flere tilganger legges til fra brukersiden etter den første rollen
       Gitt brukeradministratoren har gitt personen den første rollen og oppgitt fødselsnummeret
       Når brukeradministratoren åpner personen i brukeroversikten
@@ -98,7 +94,7 @@ Egenskap: Gi en person tilgang med fødselsnummer, D-nummer eller SNR
       Og det opprettes ingen person i databasen
 
   @draft @openquestion
-  Regel: Personen kan finnes uten at nummeret oppgis
+  Regel: Personen kan få tilgang uten at nummeret oppgis
     Brukeradministratoren kan finne en person som ikke har tilganger fra før, uten å oppgi
     fødselsnummer, D-nummer eller SNR, og gi hen en rolle.
 
@@ -112,7 +108,7 @@ Egenskap: Gi en person tilgang med fødselsnummer, D-nummer eller SNR
     # - Kan et treff avsløre at personen har tildelinger i andre organisasjoner? Se regelen
     #   «Svaret avslører ikke om personen fantes fra før».
 
-    Scenario: Finne personen uten å oppgi nummeret
+    Scenario: Gi personen tilgang uten å oppgi nummeret
       Gitt personen er registrert ved institusjonen
       Og personen har ingen tilganger
       Når brukeradministratoren finner personen og gir hen en rolle for en organisasjon og et miljø
@@ -123,19 +119,11 @@ Egenskap: Gi en person tilgang med fødselsnummer, D-nummer eller SNR
     Navnet er bare kjent for en person som har logget inn før. Beskjeden viser derfor ikke navnet,
     for da ville den avsløre at personen fantes fra før.
 
-    Scenariomal: Svaret er det samme uansett hva som fantes fra før
-      Gitt personen <utgangspunkt>
+    Scenario: Beskjeden er den samme uansett hva som fantes fra før
+      Gitt personen finnes fra før i løsningen
       Når brukeradministratoren gir personen en rolle for en organisasjon og et miljø og oppgir fødselsnummeret
-      Så får brukeradministratoren beskjed om at personen har fått rollen
-      Og beskjeden sier ikke om personen fantes i løsningen fra før
-
-      Eksempler:
-        | utgangspunkt                                                                         |
-        | finnes ikke i løsningen                                                              |
-        | har aktive tildelinger bare i organisasjoner brukeradministratoren ikke administrerer |
-        | har en aktiv tildeling i en organisasjon brukeradministratoren administrerer          |
-        | har Feide-konto og har logget inn med Feide tidligere                                |
-        | har ingen aktive tildelinger lenger                                                  |
+      Så får brukeradministratoren den samme beskjeden om at personen har fått rollen som når personen ikke finnes i løsningen
+      Og beskjeden har ikke personens navn
 
     Scenario: Tildelinger i andre organisasjoner vises ikke
       Gitt personen har en aktiv tildeling i en organisasjon brukeradministratoren ikke administrerer
@@ -144,12 +132,27 @@ Egenskap: Gi en person tilgang med fødselsnummer, D-nummer eller SNR
       Så ser brukeradministratoren rollen brukeradministratoren ga
       Men brukeradministratoren ser ikke tildelingen i organisasjonen brukeradministratoren ikke administrerer
 
-  Regel: Nummeret vises ikke etterpå
+  Regel: Nummeret vises bare når navnet mangler
+    Om brukeroversikten også viser nummeret når navnet mangler, er et åpent spørsmål i
+    BRU-PER-GRU-001 («Fødselsnummer vises ikke i listen»).
 
-    Scenariomal: Nummeret vises ikke etter at tilgangen er gitt
-      Gitt brukeradministratoren har gitt personen en rolle og oppgitt fødselsnummeret
+    Scenariomal: Nummeret vises i stedet for navnet når navnet mangler
+      Gitt brukeradministratoren har gitt en person som ikke fantes fra før, en rolle og oppgitt fødselsnummeret
+      Og navnet til personen er ikke kjent
       Når brukeradministratoren ser personen på <sted>
-      Så vises ikke personens fødselsnummer
+      Så vises personens fødselsnummer i stedet for navnet
+
+      Eksempler:
+        | sted                       |
+        | rollens oversiktsside      |
+        | detaljsiden for personen   |
+
+    Scenariomal: Nummeret vises ikke når navnet er kjent
+      Gitt brukeradministratoren har gitt personen en rolle og oppgitt fødselsnummeret
+      Og navnet til personen er kjent
+      Når brukeradministratoren ser personen på <sted>
+      Så vises personens navn
+      Og personens fødselsnummer vises ikke
 
       Eksempler:
         | sted                       |
@@ -300,8 +303,10 @@ Egenskap: Gi en person tilgang med fødselsnummer, D-nummer eller SNR
   Regel: Navnet hentes fra påloggingen
     Navnet til en person som ikke fantes fra før, kommer fra personens første pålogging.
     Brukeradministratoren oppgir ikke navnet, og det hentes ikke fra Folkeregisteret. Feide
-    oppgir navnet ved pålogging. Er navnet ikke kjent, vises «Navn ikke kjent». Det gjelder også
-    en person som har logget inn, men der påloggingen ikke oppga navnet.
+    oppgir navnet ved pålogging. Er navnet ikke kjent, vises «Navn ikke kjent» i
+    brukeroversikten, og nummeret på rollens oversiktsside og detaljsiden for personen (regelen
+    «Nummeret vises bare når navnet mangler»). Det gjelder også en person som har logget inn,
+    men der påloggingen ikke oppga navnet.
 
     Teksten er nøytral og sier ikke om personen har logget inn. En person som har logget inn før,
     vises likevel med navn straks tildelingen er gitt. Et manglende navn kan derfor antyde at
@@ -338,7 +343,7 @@ Egenskap: Gi en person tilgang med fødselsnummer, D-nummer eller SNR
       Gitt brukeradministratoren har gitt en person som ikke fantes fra før, en rolle og oppgitt fødselsnummeret
       Og personen har ikke logget inn
       Når brukeradministratoren ser detaljsiden for personen
-      Så vises navnet som «Navn ikke kjent»
+      Så vises personens fødselsnummer i stedet for navnet
       Og brukeradministratoren ser tildelingene personen har fått
       Og personen vises med «Navn ikke kjent» i brukeroversikten
 
@@ -347,7 +352,7 @@ Egenskap: Gi en person tilgang med fødselsnummer, D-nummer eller SNR
       Og ingen person med det oppgitte fødselsnummeret har logget inn
       Når den riktige personen logger inn
       Så har den riktige personen ikke tilgangene rollen gir
-      Og personen som fikk rollen, vises fortsatt med «Navn ikke kjent»
+      Og personen som fikk rollen, vises fortsatt uten navn
       Og tilstanden består til brukeradministratoren fjerner tildelingen
 
   @draft

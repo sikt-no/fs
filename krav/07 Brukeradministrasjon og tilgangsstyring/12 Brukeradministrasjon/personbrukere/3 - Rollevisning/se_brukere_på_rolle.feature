@@ -13,6 +13,10 @@ Egenskap: Se brukere som har en spesifikk rolle
   «Aktivt tildelt» betyr at rollen er aktiv nå, enten den er tildelt direkte eller arvet gjennom en
   annen rolle.
 
+  Rollens oversiktsside viser tildelingene av rollen, ikke brukerne: én rad per tildeling. En
+  bruker som har rollen for flere organisasjoner eller i flere miljøer, står på én rad for hver
+  tildeling.
+
   @must
   Scenario: Åpne en rolle fra rolleoversikten
     Gitt at brukeradministrator er i rolleoversikten
@@ -26,11 +30,16 @@ Egenskap: Se brukere som har en spesifikk rolle
     Så vises bare rollene brukeradministratoren har rett til å tildele
 
   @must
-  Scenario: Vise brukere som har en aktiv rolle
-    Gitt at en rolle er tildelt flere brukere
+  Scenario: Vise tildelingene av en rolle
+    Gitt at en rolle er aktivt tildelt flere brukere
     Når brukeradministrator åpner rollens oversiktsside
-    Så vises brukerne med rollen aktivt tildelt som brukeradministratoren ellers kan se
-    Og brukere som har rollen arvet gjennom en annen rolle, vises også
+    Så vises én rad for hver aktive tildeling av rollen til brukere brukeradministratoren ellers kan se
+    Og tildelinger der rollen er arvet gjennom en annen rolle, vises også
+    Og hver rad viser følgende informasjon:
+      | felt                     |
+      | Navn                     |
+      | Gjelder for organisasjon |
+      | Miljø                    |
 
   @must
   Scenario: Brukere brukeradministratoren ellers ikke kan se, vises ikke
@@ -38,12 +47,41 @@ Egenskap: Se brukere som har en spesifikk rolle
     Når brukeradministrator åpner rollens oversiktsside
     Så vises ikke brukeren
 
-  @must
-  Scenario: Åpne brukersiden fra rollens oversiktsside
-    Gitt at brukeradministrator ser en bruker i listen på rollens oversiktsside
-    Når brukeradministrator velger brukeren
-    Så åpnes brukersiden for brukeren
-    Og brukeradministrator kan tildele brukeren flere roller der
+  @draft
+  Scenario: En bruker med rollen for to organisasjoner står på to rader
+    Gitt at en bruker har rollen aktivt tildelt for to organisasjoner brukeradministratoren administrerer
+    Når brukeradministrator åpner rollens oversiktsside
+    Så står brukeren på to rader, én for hver organisasjon tildelingen gjelder for
+
+  @draft
+  Scenario: Antallet på rollens oversiktsside teller tildelinger
+    Gitt at rollen bare er tildelt én bruker
+    Og brukeren har rollen aktivt tildelt for to organisasjoner brukeradministratoren administrerer
+    Når brukeradministrator åpner rollens oversiktsside
+    Så viser rollens oversiktsside 2 som antall treff
+
+  @draft
+  Scenario: Filtrere tildelingene på organisasjon
+    Gitt at brukeradministrator er på rollens oversiktsside
+    Når brukeradministrator velger en organisasjon i organisasjonsfilteret
+    Så vises bare tildelingene som gjelder for den valgte organisasjonen
+
+  @draft
+  Scenario: Filtrere tildelingene på miljø uten å velge organisasjon
+    Gitt at brukeradministrator er på rollens oversiktsside
+    Og brukeradministrator har ikke valgt noen organisasjon i organisasjonsfilteret
+    Når brukeradministrator velger et miljø i miljøfilteret
+    Så vises bare tildelingene i det valgte miljøet
+
+  @draft @openquestion
+  Scenario: Miljøfilteret tilbyr miljøene rollen har tildelinger i
+    # ÅPNE SPØRSMÅL:
+    # - Gjelder det miljøene til tildelingene brukeradministratoren kan se på siden, eller alle
+    #   tildelingene av rollen? Et miljø som bare har tildelinger brukeradministratoren ikke kan
+    #   se, ville avsløre at slike tildelinger finnes.
+    Gitt at rollen har tildelinger i miljøene test og review
+    Når brukeradministrator åpner miljøfilteret på rollens oversiktsside
+    Så kan brukeradministrator velge test og review
 
   @draft
   Scenario: Søke fram en rolle
@@ -52,10 +90,9 @@ Egenskap: Se brukere som har en spesifikk rolle
     Så skal matchende roller vises i søkeresultatet
 
 # ÅPNE SPØRSMÅL:
-# Scenarioene merket @must viser brukere som har rollen aktiv nå, direkte eller arvet. Spørsmålene under
-# gjelder utvidelser av listen.
-# - Skal listen være filtrerbar på organisasjon, stedkode, eller status (aktiv/inaktiv)?
+# Scenarioene merket @must viser tildelinger som er aktive nå, direkte eller arvet. Spørsmålene
+# under gjelder utvidelser av listen.
+# - Skal listen også være filtrerbar på stedkode eller status (aktiv/inaktiv)? Filter på
+#   organisasjon og miljø er AVKLART 10.11.2026 (Kjetil), se scenarioene over.
 # - Skal man kunne se brukere som har hatt rollen historisk (ikke bare aktive)? Eller skal det gå via BRU-PER-HIS-002?
-# - Hvilke felt vises per bruker i listen — navn, Feide-ID, organisasjon, tildelt dato? Forslaget
-#   står i se_brukere_på_rolle.design.md.
 # - Skal listen kunne eksporteres?

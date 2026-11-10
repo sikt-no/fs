@@ -47,7 +47,7 @@ Tekstene er godkjent av Kjetil 09.10.2026. Dette er fasiten for tekstene.
 
 | Hvor | Når vises den | Tekst | Variasjoner | Scenario |
 |------|---------------|-------|-------------|----------|
-| Snackbar | Tildelingen er gitt | «Personen har fått rollen {rollekode}.» | `{rollekode}`. Teksten er den samme uansett om personen fantes fra før, og har ikke navnet | Svaret er det samme uansett hva som fantes fra før |
+| Snackbar | Tildelingen er gitt | «Personen har fått rollen {rollekode}.» | `{rollekode}`. Teksten er den samme uansett om personen fantes fra før, og har ikke navnet | Beskjeden er den samme uansett hva som fantes fra før |
 | Feltfeil under nummerfeltet | Nummeret har ugyldige kontrollsifre | «Nummeret er ikke et gyldig fødselsnummer, D-nummer eller SNR. Sjekk at det er skrevet riktig.» | Den samme teksten for alle tre nummertypene, fordi et ugyldig nummer ikke kan plasseres i en type | Nummer med ugyldige kontrollsifre avvises |
 | Feltfeil under nummerfeltet | Nummeret er et FS-generert nummer | «Nummeret er et FS-generert nummer og kan ikke brukes. Bruk personens fødselsnummer, D-nummer eller SNR.» | – | FS-generert nummer avvises |
 | Feltfeil under nummerfeltet | Nummeret tilhører en testperson, og miljøet er et ekte miljø | «En testperson kan ikke få tilgang i et ekte miljø. Velg et testmiljø.» | – | Testperson får ikke tilgang i et ekte miljø |
@@ -68,14 +68,15 @@ På rollesiden er rollen gitt. Organisasjon og miljø må være valgt før «Gi 
 (feltfeilen «Velg organisasjon og miljø.» i BRU-PER-ROL-002).
 
 ### Regel: Svaret avslører ikke om personen fantes fra før
-Beskjeden er den samme i alle utgangspunktene i scenariomalen, og har ikke navnet. Feilene
+Beskjeden er den samme uansett om personen fantes fra før, og har ikke navnet. Feilene
 skiller heller ikke mellom en person som finnes og en som ikke finnes: et ugyldig nummer avvises
 før det slås opp, og manglende rett avvises før personen slås opp.
 
-### Regel: Nummeret vises ikke etterpå
+### Regel: Nummeret vises bare når navnet mangler
 Nummeret slettes fra skjemaets tilstand når dialogen lukkes. Det legges ikke i URL-en, i
-snackbaren eller i loggmeldinger i klienten. Listen på rollens oversiktsside, brukeroversikten
-og detaljsiden henter ikke nummeret.
+snackbaren eller i loggmeldinger i klienten. Når navnet til personen mangler, viser listen på
+rollens oversiktsside og detaljsiden for personen nummeret i navnets plass. Det krever at API-et
+gir nummeret for personer uten navn. Når navnet er kjent, henter ingen av sidene nummeret.
 
 ### Regel: Nummeret må ha gyldige kontrollsifre
 Klienten sjekker kontrollsifrene før innsending, så feilen kommer straks. API-et sjekker det

@@ -14,7 +14,7 @@ Egenskap: Forvalte en person i brukeradministrasjonen
   eller gjennom en aktiv tildeling. En person som bare logger inn med ID-porten, har ingen
   hjemorganisasjon, og da er det tildelingene alene som knytter hen til organisasjoner. Den
   første tildelingen gis med fødselsnummer, D-nummer eller SNR (BRU-PER-GRU-013). Nummeret vises
-  ikke i grensesnittet.
+  bare når navnet mangler (BRU-PER-GRU-013).
 
   Kravet ble skrevet for «personbrukere uten Feide-konto». Scenarioene som fortsatt sier det,
   gjelder nå personer. Scenarioer som bygger på at personen er knyttet til en påloggingsmåte, er
@@ -65,7 +65,10 @@ Egenskap: Forvalte en person i brukeradministrasjonen
       Og det fremgår at personbrukeren logger inn med ID-porten og ikke har Feide-ID
 
   @draft @openquestion
-  Regel: Personen vises med navn, ikke med nummer
+  Regel: Personen vises med navn
+    Når nummeret vises i stedet for navnet, står i BRU-PER-GRU-013, regelen «Nummeret vises bare
+    når navnet mangler».
+
     # ÅPNE SPØRSMÅL:
     # - Hvordan merkes en testperson i listen og på detaljsiden: egen kolonne, en merkelapp ved
     #   navnet, eller et filter?
@@ -77,12 +80,10 @@ Egenskap: Forvalte en person i brukeradministrasjonen
       Når brukeradministratoren åpner brukeroversikten
       Så ser brukeradministratoren personen i listen sammen med øvrige personbrukere
       Og brukeradministratoren ser personens navn
-      Men personens fødselsnummer, D-nummer eller SNR vises ikke
 
     Scenario: Se detaljer for en person
       Når brukeradministratoren ser detaljsiden for en person
       Så ser brukeradministratoren personens navn
-      Men personens fødselsnummer, D-nummer eller SNR vises ikke
 
     Scenario: Personen vises med alle organisasjonene hen er knyttet til
       Gitt en person har tildelinger i én organisasjon

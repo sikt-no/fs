@@ -16,26 +16,26 @@ Egenskap: Administrere brukere på en spesifikk rolle
   (BRU-PER-GRU-003). Organisasjon og miljø velges på samme måte som når roller tildeles fra
   detaljsiden for en personbruker.
 
-  @draft @openquestion
+  @draft
   Scenario: Legge til en bruker på en rolle
-    # ÅPNE SPØRSMÅL:
-    # - Skal det være mulig å legge til flere brukere i én batch-operasjon?
-    # - Hvilke valideringer kjøres (organisasjonstilhørighet, taushetserklæring, eksisterende konfliktrolle)?
-    # - Skal stedkoder og tidsbegrensning settes per bruker, eller arves fra rollen?
-    # - Hva skjer hvis rollen er "delt" (BRU-PER-DEL-001) — kan vi legge til brukere fra andre organisasjoner?
+    # AVKLART 10.11.2026 (Kjetil): Brukere legges til én om gangen. Å legge til flere brukere i én
+    # operasjon kommer i et senere krav.
     Gitt at brukeradministrator er på rollens oversiktsside
     Når brukeradministrator legger til en bruker
     Så skal rollen være tildelt brukeren
     Og endringen skal være sporbar i både bruker- og rollehistorikk
 
   @draft @openquestion
-  Scenario: Fjerne en bruker fra en rolle
+  Scenario: Fjerne en tildeling fra rollens oversiktsside
+    # AVKLART 10.11.2026 (Kjetil): Tildelinger fjernes én om gangen. Å fjerne flere i én operasjon
+    # kommer i et senere krav.
     # ÅPNE SPØRSMÅL:
-    # - Skal det være mulig å fjerne flere brukere i én batch-operasjon?
+    # - Rollens oversiktsside viser også tildelinger der rollen er arvet gjennom en annen rolle.
+    #   Har de raden «Fjern tildeling», eller fjernes bare direkte tildelinger herfra?
     Gitt at brukeradministrator er på rollens oversiktsside
-    Og brukeren har rollen aktivt tildelt
-    Når brukeradministrator fjerner brukeren fra rollen
-    Så skal rollen ikke lenger være tildelt brukeren
+    Og en bruker har rollen aktivt tildelt for en organisasjon og et miljø
+    Når brukeradministrator velger «Fjern tildeling» på raden for tildelingen
+    Så er rollen ikke lenger tildelt brukeren for organisasjonen og miljøet
     Og endringen skal være sporbar
 
   @must
@@ -85,7 +85,17 @@ Egenskap: Administrere brukere på en spesifikk rolle
       Når brukeradministrator åpner detaljsiden for personen
       Så kan brukeradministrator tildele personen flere roller der
 
-# ÅPNE SPØRSMÅL:
-# - Forholdet til BRU-PER-GRU-003 — overlapper administrasjon fra rolle-siden med tildeling fra
-#   bruker-siden? Skal det være konsistent UX? Avklart for regelen merket @must: organisasjon og
-#   miljø velges som på detaljsiden. Gjelder fortsatt for å legge til og fjerne andre brukere.
+  @draft @depends-on-BRU-PER-GRU-005 @depends-on-BRU-PER-GRU-006
+  Regel: Stedkoder og tidsbegrensning settes alltid per bruker
+    # AVKLART 10.11.2026 (Kjetil): Alt settes alltid per bruker. Rollen har ingen stedkoder eller
+    # tidsbegrensning som brukerne arver.
+
+    Scenario: Rollen gis fra rollesiden uten stedkoder og tidsbegrensning
+      Gitt at brukeradministrator er på rollens oversiktsside
+      Når brukeradministrator gir rollen til en person for en organisasjon og et miljø og oppgir fødselsnummeret
+      Så settes verken stedkoder eller tidsbegrensning for tildelingen i operasjonen
+
+    Scenario: Stedkoder og tidsbegrensning settes på detaljsiden for personen
+      Gitt at brukeradministrator har gitt rollen til en person fra rollens oversiktsside
+      Når brukeradministrator åpner detaljsiden for personen
+      Så kan brukeradministrator sette stedkoder og tidsbegrensning for tildelingen der

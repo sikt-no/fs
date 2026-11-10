@@ -3,15 +3,15 @@
 **Relatert feature:** [`administrere_brukere_på_rolle.feature`](./administrere_brukere_på_rolle.feature)
 
 Detaljene gjelder regelen merket `@must`, «Gi rollen til en person med fødselsnummer, D-nummer
-eller SNR». Reglene for selve tildelingen og tekstene som hører til dem, står i
+eller SNR», og «Fjern tildeling» på radene. Reglene for selve tildelingen og tekstene som hører til dem, står i
 [`gi_en_person_tilgang_med_fødselsnummer_d-nummer_eller_snr.design.md`](../1%20-%20Grunnleggende%20brukeradministrasjon/gi_en_person_tilgang_med_fødselsnummer_d-nummer_eller_snr.design.md).
 Det finnes ingen skisser. Detaljene bygger på «Tildel roller»-dialogen på detaljsiden for en
 personbruker (`TildelRolleModal` i fs-admin).
 
 ## Overordnet UI-mønster
 
-En dialog (`FSModal`, liten) som åpnes fra knappen «Gi rollen til en person» på rollens
-oversiktsside. Dialogen har samme oppbygning som «Tildel roller»: overskrift, felter, en
+En dialog (`FSModal`, liten) som åpnes fra knappen «Gi rollen til en person» i listens flate
+på rollens oversiktsside. Dialogen har samme oppbygning som «Tildel roller»: overskrift, felter, en
 tilbakemeldingsflate og knapper i bunnen.
 
 ## Komponenter og layout
@@ -27,6 +27,8 @@ tilbakemeldingsflate og knapper i bunnen.
      organisasjon er valgt, som i «Tildel roller».
   3. **Fødselsnummer, D-nummer eller SNR** (tekstfelt): 11 siffer, numerisk tastatur på mobil.
      Ikke autofullføring (`autocomplete="off"`).
+- Dialogen har ingen felt for stedkoder eller tidsbegrensning (regelen «Stedkoder og
+  tidsbegrensning settes alltid per bruker»).
 - **Knapper:** «Avbryt» (sekundær) og «Gi rollen» (primær).
 
 ## Interaksjonsmønstre
@@ -38,11 +40,12 @@ Personen står da i listen.
 
 ### Sekundære handlinger
 - «Avbryt», X og Escape lukker dialogen uten å gi rollen.
-- Flere roller gis etterpå fra detaljsiden for personen. Personen er klikkbar i listen, og
-  snackbaren kan lenke dit (se åpne designspørsmål).
+- Flere roller gis etterpå fra detaljsiden for personen, som åpnes fra brukeroversikten.
+  Radene på rollens oversiktsside lenker ikke dit, og snackbaren har ingen lenke.
+- «Fjern tildeling» på en rad fjerner den ene tildelingen. Listen lastes på nytt.
 
 ### Navigasjon
-- **Inn:** Knappen «Gi rollen til en person» på rollens oversiktsside.
+- **Inn:** Knappen «Gi rollen til en person» i listens flate på rollens oversiktsside.
 - **Ut (suksess):** Tilbake til rollens oversiktsside, med personen i listen.
 - **Ut (avbryt):** Tilbake til rollens oversiktsside, ingen endring.
 
@@ -70,13 +73,14 @@ for GRU-013.
 | Feltetikett | Alltid | «Organisasjon» | – | Valglisten for organisasjon er begrenset til organisasjoner brukeradministratoren administrerer |
 | Feltetikett | Alltid | «Miljø» | – | Valglisten for miljø er begrenset til miljøer brukeradministratoren administrerer |
 | Feltetikett | Alltid | «Fødselsnummer, D-nummer eller SNR» | – | Personen finnes ikke i løsningen |
-| Hjelpetekst under nummerfeltet | Alltid | «11 siffer. Nummeret vises ikke etter at rollen er gitt.» | – | Personen finnes ikke i løsningen |
+| Hjelpetekst under nummerfeltet | Alltid | «11 siffer.» (forslag 10.11.2026, ikke godkjent: den godkjente teksten sa at nummeret ikke vises etter at rollen er gitt, og det gjelder ikke når navnet mangler) | – | Personen finnes ikke i løsningen |
 | Plassholder i valglistene | Ingenting valgt | «Ikke valgt» (finnes i fs-admin) | – | – |
 | Feltfeil, organisasjon eller miljø | Innsending uten organisasjon eller miljø | «Velg organisasjon og miljø.» (finnes i fs-admin som hjelpetekst) | – | Personen kan ikke legges til uten en rolle (GRU-013) |
 | Feltfeil, nummer | Innsending uten nummer | «Oppgi fødselsnummer, D-nummer eller SNR.» | – | Personen finnes ikke i løsningen |
 | Feltfeil, nummer | Nummeret har ikke 11 siffer | «Nummeret må ha 11 siffer.» | – | Personen finnes ikke i løsningen |
 | Primærknapp | Alltid / mens operasjonen pågår | «Gi rollen» / «Gir rollen …» | per tilstand | Personen finnes ikke i løsningen |
 | Sekundærknapp | Alltid | «Avbryt» | – | – |
+| Handling på raden | Alltid | «Fjern tildeling» | – | Fjerne en tildeling fra rollens oversiktsside |
 
 **Skisser:** ingen skisser finnes.
 
@@ -84,7 +88,7 @@ for GRU-013.
 
 ### Scenario: Personen finnes ikke i løsningen
 Operasjonen oppretter personen og gir rollen i én operasjon. Svaret har den nå synlige personen,
-så klienten kan vise hen i listen og lenke til detaljsiden uten å slå opp på nummer.
+så klienten kan vise hen i listen uten å slå opp på nummer.
 
 ### Scenario: Personen finnes, men brukeradministratoren ser hen ikke
 Klienten gjør ingenting annerledes. Svaret og beskjeden er de samme som når personen ikke
@@ -107,10 +111,16 @@ Dialogen har ikke noe rollefelt.
 Detaljsiden for personen har «Tildel roller» (BRU-PER-GRU-003). Den må kunne tildele til en
 person, ikke bare til en Feide-bruker.
 
-## Åpne designspørsmål
+### Scenario: Fjerne en tildeling fra rollens oversiktsside
+Hver rad er én tildeling, så «Fjern tildeling» fjerner rollen for organisasjonen og miljøet på
+raden. Brukerens øvrige tildelinger av rollen står urørt.
 
-- [ ] Skal snackbaren ved suksess ha en lenke til detaljsiden for personen («Åpne personen»), så
-      brukeradministratoren kan gi flere roller med en gang? Snackbaren i fs-admin har i dag bare
-      tekst.
-- [ ] Skal nummeret skjules mens det skrives (som et passordfelt), eller vises som vanlig tekst
-      til dialogen lukkes?
+### Regel: Stedkoder og tidsbegrensning settes alltid per bruker
+Dialogen har ingen felt for dem. De settes for tildelingen på detaljsiden for personen
+(BRU-PER-GRU-005 og BRU-PER-GRU-006).
+
+## Avklarte designspørsmål
+
+- Snackbaren ved suksess har ingen lenke til detaljsiden for personen. Avklart 09.10.2026
+  (Kjetil).
+- Nummerfeltet vises som vanlig tekst, ikke maskert. Avklart 09.10.2026 (Kjetil).

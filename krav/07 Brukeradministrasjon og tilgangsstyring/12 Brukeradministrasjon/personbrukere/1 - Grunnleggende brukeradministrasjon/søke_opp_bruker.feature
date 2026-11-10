@@ -76,12 +76,16 @@ Egenskap: Listevisning og søk i personbrukere
     @draft @openquestion
     Scenario: Fødselsnummer vises ikke i listen
       # ÅPNE SPØRSMÅL:
-      # - Er det riktig at brukeradministratoren ikke skal kunne finne en person i listen med
-      #   fødselsnummer, D-nummer eller SNR? Nummeret er ikke tilgjengelig i API-et, verken som
-      #   felt eller som filter. En person finnes med nummeret bare ved å gi hen tilgang
+      # - Er det riktig at brukeradministratoren ikke skal kunne søke på fødselsnummer, D-nummer
+      #   eller SNR i listen? Nummeret er ikke tilgjengelig i API-et, verken som felt eller som
+      #   filter. Brukeradministratoren oppgir nummeret bare når hen gir en person tilgang
       #   (BRU-PER-GRU-013).
+      # - Rollens oversiktsside og detaljsiden for personen viser nummeret i stedet for navnet når
+      #   navnet mangler (BRU-PER-GRU-013, regelen «Nummeret vises bare når navnet mangler»). Skal
+      #   listen også vise nummeret når navnet mangler, eller «Navn ikke kjent»?
+      Gitt navnet til personbrukeren er kjent
       Når brukeradministratoren åpner brukeroversikten
-      Så vises ikke personbrukernes fødselsnummer, D-nummer eller SNR
+      Så vises ikke personbrukerens fødselsnummer, D-nummer eller SNR
       Og brukeradministratoren kan ikke søke på fødselsnummer, D-nummer eller SNR
 
     @draft @openquestion
