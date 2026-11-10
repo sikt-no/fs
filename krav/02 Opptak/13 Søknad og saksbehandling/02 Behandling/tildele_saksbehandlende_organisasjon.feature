@@ -1,4 +1,5 @@
 # language: no
+# BEGREPER (2026-11-10): Bytt «opptaksforvalter ved forvaltende organisasjon» med «opptaksforvalter hos forvalteren», «forvaltende organisasjon» med «forvalter», «saksbehandlende organisasjon» med «behandler» når fila likevel endres. Se krav/02 Opptak/begreper.md.
 # GitHub: #207
 @OPT-BEH-BEH-011 @must @in-progress
 Egenskap: Tildele saksbehandlende organisasjon

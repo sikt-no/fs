@@ -1,4 +1,5 @@
 # language: no
+# BEGREPER (2026-11-10): Bytt «opptakets forvalter» med «forvalter» når fila likevel endres. Se krav/02 Opptak/begreper.md.
 @OPT-PLA-SVA-002 @should @draft @scope-plasstildeling-2027
 Egenskap: Varsler og meldinger i plasstildelingen
   Som opptaksforvalter

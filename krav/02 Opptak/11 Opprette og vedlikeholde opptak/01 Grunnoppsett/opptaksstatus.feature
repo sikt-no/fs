@@ -1,4 +1,5 @@
 # language: no
+# BEGREPER (2026-11-10): Bytt «opptaksforvalter ved forvaltende organisasjon» med «opptaksforvalter hos forvalteren», «opptaksforvalter ved deltakende organisasjon» med «opptaksforvalter hos tilbyderen» når fila likevel endres. Se krav/02 Opptak/begreper.md.
 @OPT-OVO-GRU-004 @must @implemented
 Egenskap: Status på opptaket
   Som opptaksforvalter

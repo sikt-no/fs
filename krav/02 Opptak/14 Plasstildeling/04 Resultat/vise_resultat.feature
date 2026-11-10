@@ -1,4 +1,5 @@
 # language: no
+# BEGREPER (2026-11-10): Bytt «opptaksforvalter ved deltakende organisasjon» med «opptaksforvalter hos tilbyderen», «opptakets forvalter» med «forvalter», «saksbehandlende organisasjon» med «behandler» når fila likevel endres. Se krav/02 Opptak/begreper.md.
 # GitHub: #585
 @OPT-PLA-RES-001 @must @draft @scope-plasstildeling-2027
 Egenskap: Se resultatet av plasstildelingen før publisering

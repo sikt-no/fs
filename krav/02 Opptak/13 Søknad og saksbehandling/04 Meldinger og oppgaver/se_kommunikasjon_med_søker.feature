@@ -1,4 +1,5 @@
 # language: no
+# BEGREPER (2026-11-10): Bytt «saksbehandlende organisasjon» med «behandler» når fila likevel endres. Se krav/02 Opptak/begreper.md.
 @OPT-SØK-MEL-004 @should @draft @scope-meldinger-varslinger-og-oppgaver
 Egenskap: Se kommunikasjon med søker
   Som saksbehandler ved saksbehandlende organisasjon

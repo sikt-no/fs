@@ -129,6 +129,7 @@ Gherkin er et språk som alle andre, og må skrives godt for å være nyttig og 
 
 - Filnavn skrives i snake_case: `se_søknad.feature`, `lage_opptak.feature`. *(sjekkes automatisk)*
 - Navnet beskriver funksjonaliteten eller prosessen med et verb og et substantiv.
+- `tilgang.md` i et domene er oversikten over tilgangsreglene i domenet. Se *Tags → Tilgang*.
 
 ## Mappestruktur
 
@@ -213,6 +214,45 @@ Ved ny feature: sjekk eksisterende features i samme mappe for å finne neste led
 - `@must` / `@should` / `@could` / `@wont`
 
 En feature har høyst én prioritet. *(sjekkes automatisk)*
+
+### Tilgang
+
+`@tilgang` settes på en `Regel:` som sier hvem som ser eller endrer noe: hvilken rolle, ved hvilken organisasjon, og når. Taggen gjør at tilgangsreglene kan finnes og telles på tvers av kravene (`grep -r @tilgang krav/`), og at FS Kravforvaltning kan filtrere på dem.
+
+- Taggen settes på `Regel:`-linja, ikke på `Egenskap:` eller på enkeltscenarioer. Et krav som bare handler om tilgang, har taggen på alle reglene.
+- Taggen er ikke en status, og kan stå sammen med `@draft`, `@openquestion` og `@deprecated`.
+- En regel om hva søkeren ser i Min kompetanse, er en tilgangsregel når den skjuler noe for søkeren (for eksempel interne poeng), ikke når den bare beskriver visningen.
+
+**Hvor tilgangsreglene står**
+
+- Tilgang som gjelder én funksjon, står i kravet til funksjonen, med `@tilgang` på regelen. Eksempel: at opptaksforvalter hos tilbyderen ikke kan fjerne utdanningstilbud en annen organisasjon tilbyr, står i `fjerne_utdanningstilbud.feature`.
+- Innsyn som gjelder på tvers av funksjoner, får en egen fil: `tilgang_til_<data>.feature` eller `innsyn_for_<aktør>.feature`. Eksempler: `tilgang_til_regelverk.feature`, `innsyn_for_førstelinjen.feature`.
+- Et domene som har tilgangsregler, har en oversikt i `krav/<NN Domene>/tilgang.md`: hvem som ser og endrer hva, med Feature-ID-en til kravet. Oversikten oppdateres i samme PR som kravet.
+
+**Hvordan tilgangsregler skrives**
+
+- Skriv organisasjonens rolle i opptaket med ord: **forvalter**, **tilbyder** og **behandler**, ikke F, T og B. Skriv «opptaksforvalter hos forvalteren», «saksbehandler hos behandleren».
+- Ta med en organisasjon som *ikke* har tilgang, i scenarioet. En tilgangsregel er først beskrevet når det er vist hvem som ikke ser.
+- Tilgangsregler gjelder i API-et også, ikke bare i skjermbildene. Ett scenario kan vise at API-et avviser.
+
+Eksempel:
+
+```gherkin
+  @tilgang
+  Regel: Bare opptaksforvalter hos forvalteren kan trekke en søknad på søkerens vegne
+
+    Scenariomal: Trekke søknaden på søkerens vegne
+      Gitt søkeren har søkt Sykepleie ved NTNU i Samordna opptak, som HK-dir forvalter
+      Og UiO behandler søknadsalternativet
+      Når opptaksforvalter ved <organisasjon> forsøker å trekke søknaden
+      Så <utfall>
+
+      Eksempler:
+        | organisasjon | utfall              |
+        | HK-dir       | er søknaden trukket |
+        | NTNU         | avvises det         |
+        | UiO          | avvises det         |
+```
 
 ### Kravstatus
 
@@ -595,7 +635,11 @@ Bruk ikke `# TODO:` for åpne spørsmål. *(sjekkes automatisk)* FS Kravforvaltn
 
 ## Aktører
 
-- administrator, søker, student, saksbehandler
+- søker, student, administrator
+- I opptak: opptaksforvalter, saksbehandler, dokumentforvalter, førstelinje
+- Organisasjonens rolle i et opptak: forvalter, tilbyder, behandler
+
+Se `krav/02 Opptak/begreper.md` og `krav/02 Opptak/tilgang.md`.
 
 ## Terminologi
 

@@ -1,4 +1,5 @@
 # language: no
+# BEGREPER (2026-11-10): Bytt «opptaksforvalter ved forvaltende organisasjon» med «opptaksforvalter hos forvalteren», «forvaltende organisasjon» med «forvalter», «saksbehandlende organisasjon» med «behandler» når fila likevel endres. Se krav/02 Opptak/begreper.md.
 @FLY-OPT-SAK-001 @must @planned @e2e
 Egenskap: Saksbehandlertildeling
   Fra opptaket settes opp, til riktig organisasjon har saken. Opptaksforvalteren ved forvaltende

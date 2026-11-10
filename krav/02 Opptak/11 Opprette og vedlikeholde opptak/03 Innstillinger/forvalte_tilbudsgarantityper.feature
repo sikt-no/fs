@@ -1,4 +1,5 @@
 # language: no
+# BEGREPER (2026-11-10): Bytt «opptakseier» med «forvalter» når fila likevel endres. Se krav/02 Opptak/begreper.md.
 # Kilde: Jira STEK-349 «Opptakseier må kunne forvalte tilbudsgarantitypene knyttet til et opptak».
 # Hvordan tilbudsgarantitypene brukes, står i
 # 13 Søknad og saksbehandling/02 Behandling/gi_tilbudsgaranti.feature (OPT-BEH-BEH-010).
