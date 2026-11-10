@@ -30,7 +30,7 @@ INSERT INTO plan VALUES
   ('TRIST RYGG','tidlig-opptak-kvalifisert'), ('FORMBAR JUICE','tidlig-opptak-kvalifisert'),
   ('TRU KJETTING','tidlig-opptak-kvalifisert'), ('UROMANTISK PLASMA','tidlig-opptak-kvalifisert'),
   ('UFORNUFTIG GRAF','tidlig-opptak-kvalifisert'), ('MISFORNØYD SKRIVEMASKIN','tidlig-opptak-kvalifisert'),
-  ('SKAPENDE HUND','tidlig-opptak-kvalifisert'), ('AKUSTISK ELG','tidlig-opptak-kvalifisert'),
+  ('MISFORNØYD AMBASSADE','tidlig-opptak-kvalifisert'), ('AKUSTISK ELG','tidlig-opptak-kvalifisert'),
   ('VOKAL ADRESSAT','tidlig-opptak-kvalifisert'), ('OVEREKSPONERT STOKK','tidlig-opptak-kvalifisert'),
   ('FIKTIV MOTVIND','tidlig-opptak-kvalifisert'), ('UVITENDE BJØRNUNGE','tidlig-opptak-kvalifisert'),
   ('UKONTROVERSIELL ORIDÉ','tidlig-opptak-kvalifisert'), ('MUNTER JORDBÆR','tidlig-opptak-kvalifisert'),

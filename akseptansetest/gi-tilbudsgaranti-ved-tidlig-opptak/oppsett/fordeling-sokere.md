@@ -6,11 +6,11 @@ Søkerne er fra spørring 5 i [`finn-testdata.sql`](finn-testdata.sql), kjørt m
 
 ## Hvor mange per kjøring
 
-Én kjøring bruker 42 søkere (hvert scenario og hvert eksempel i en scenariomal tar sin egen). Forslaget har 62, så det er reserve til omkjøringer, og 28 til overs til en ny kjøring.
+Én kjøring bruker 42 søkere (hvert scenario og hvert eksempel i en scenariomal tar sin egen). Forslaget har 62, så det er reserve til omkjøringer, og 27 til overs til en ny kjøring.
 
 | Liste | Per kjøring | I lista | Søkere |
 |---|---|---|---|
-| `sak-tidlig-opptak-kvalifisert` | 24 | 30 | Økologisk Badering, Gretten Pedal, Trist Rygg, Formbar Juice, Tru Kjetting, Uromantisk Plasma, Ufornuftig Graf, Misfornøyd Skrivemaskin, Skapende Hund, Akustisk Elg, Vokal Adressat, Overeksponert Stokk, Fiktiv Motvind, Uvitende Bjørnunge, Ukontroversiell Oridé, Munter Jordbær, Rød Nattergal, Innesluttet Turistby, Lattermild Altmuligmann, Kvadratisk Opplag, Spretten Laks, Straffet Trapp, Uklar Artikkel, Uttrykksfull Port, Viktig Ringdue, Konkret Fobi, Mye Behandling, Klok Netthinne, Robust Skatoll, Idiotsikker Matte |
+| `sak-tidlig-opptak-kvalifisert` | 24 | 30 | Økologisk Badering, Gretten Pedal, Trist Rygg, Formbar Juice, Tru Kjetting, Uromantisk Plasma, Ufornuftig Graf, Misfornøyd Skrivemaskin, Misfornøyd Ambassade, Akustisk Elg, Vokal Adressat, Overeksponert Stokk, Fiktiv Motvind, Uvitende Bjørnunge, Ukontroversiell Oridé, Munter Jordbær, Rød Nattergal, Innesluttet Turistby, Lattermild Altmuligmann, Kvadratisk Opplag, Spretten Laks, Straffet Trapp, Uklar Artikkel, Uttrykksfull Port, Viktig Ringdue, Konkret Fobi, Mye Behandling, Klok Netthinne, Robust Skatoll, Idiotsikker Matte |
 | `sak-tidlig-opptak-ikke-kvalifisert` | 2 | 3 | Kranglete Artisjokk, Solid Sverm, Fyldig Revebjelle |
 | `sak-tidlig-opptak-kvalifisering-ikke-vurdert` | 1 | 2 | Eksemplarisk Bevegelse, Tørst Halvkule |
 | `sak-tidlig-opptak-grunnlag-kvalifisert-og-ikke-kvalifisert` | 1 | 2 | Famøs Tunge, Smart Glose |
@@ -26,7 +26,15 @@ Søkerne er fra spørring 5 i [`finn-testdata.sql`](finn-testdata.sql), kjørt m
 | `sak-tidlig-opptak-uten-median` | 1 | 2 | Motvillig Brøkdel, Filosofisk Liste |
 | `sak-tidlig-opptak-to-saker` | 1 | 2 | Gild Galleri, Vertikal Branngate |
 
-Til overs (28, Øvrige Edelstein er brukt i prøven under): Misfornøyd Ambassade, Trist Muffins, Diskret Breiflabb, Opprett Kone, Raffinert Føll, Nøytral Busstopp, Freidig Bris, Akademisk Gallium, Konsentrisk Øy, Kry Omelett, Kompleks Corner, Observant Vevstol, Eksplosiv Hei, Toårig Påkjenning, Parodisk Hale, Fin Såpe, Underfundig Sild, Normal Diva, Plutselig Mandag, Overbevisende Abbor, Unyttig Fiskebolle, Lys Kamera, Refleksiv Sommerferie, Velkommen Desimal, Sta Jukeboks, Beskjeden Rosin, Fiolett Bokhylle, Nonfigurativ Tja.
+Til overs (27; Øvrige Edelstein er brukt i prøven under, og Misfornøyd Ambassade erstatter Skapende Hund): Trist Muffins, Diskret Breiflabb, Opprett Kone, Raffinert Føll, Nøytral Busstopp, Freidig Bris, Akademisk Gallium, Konsentrisk Øy, Kry Omelett, Kompleks Corner, Observant Vevstol, Eksplosiv Hei, Toårig Påkjenning, Parodisk Hale, Fin Såpe, Underfundig Sild, Normal Diva, Plutselig Mandag, Overbevisende Abbor, Unyttig Fiskebolle, Lys Kamera, Refleksiv Sommerferie, Velkommen Desimal, Sta Jukeboks, Beskjeden Rosin, Fiolett Bokhylle, Nonfigurativ Tja.
+
+## Søknadene er laget (2026-11-10)
+
+Agenten laget søknadene i TEST 2026-11-10, gjennom API-et Min kompetanse bruker, som testsøkeren (`Sudo-Fodselsnr`): utdanningstilbudene i studiekurven i rekkefølgen under, søknaden startet og sendt, og søknad om tidlig opptak med grunnlaget `I_JOBB` (unntatt `uten-soknad-om-tidlig-opptak`). Søknadsnumrene er 34-1004197 til 34-1004258. Prioriteringen og søknaden om tidlig opptak er sjekket i svaret for hver søker.
+
+- **Skapende Hund** hadde alt en søknad i opptak 34 (34-1004195, levert 2026-11-09 kl. 14.37, uten søknad om tidlig opptak), som ingen av oss har laget. Søkeren er byttet med Misfornøyd Ambassade fra «Til overs» (34-1004258), i lista over og i SQL-skriptet.
+- Utdanningstilbudene i TEST: 99 Datateknikk ingeniør, 111 Elektronisk systemingeniør, 100 Paramedisin, 101 Medisin (UiT) og 172 Bachelorstudium i arbeids- og velferdsfag.
+- Kvalifiseringen og poengsummen mangler til SQL-skriptet er kjørt.
 
 ## Slik gjøres søkerne klare
 
