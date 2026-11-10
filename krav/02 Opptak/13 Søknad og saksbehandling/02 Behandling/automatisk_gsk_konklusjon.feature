@@ -561,12 +561,14 @@ Egenskap: Automatisk GSK-konklusjon
 
   @ref-OPT-BEH-BEH-035
   Regel: Vitnemålet erstatter en gjenbrukt konklusjon
-    # Avklart 09.11.2026 (Sondre, opptak !6663): har søknaden en konklusjon som er gjenbrukt fra
-    # et tidligere opptak, og søkeren får et vitnemål som gir GSK, erstatter vitnemålet den
-    # gjenbrukte konklusjonen. Det er et unntak fra at en konklusjon som finnes, ikke overskrives.
-    # Avklart 10.11.2026 (Sondre): er en av søkerens saker i opptaket ferdig behandlet, erstattes
-    # ikke konklusjonen. Saken får nye resultater (OPT-BEH-BEH-035), og saksbehandleren velger
-    # selv om det nye vitnemålet skal brukes. En låst konklusjon erstattes heller ikke.
+    # Avklart 10.11.2026 (Ingrid Helset, sjekket med HK-dir): har søknaden en konklusjon som er
+    # gjenbrukt fra et tidligere opptak, og søkeren får et vitnemål som gir GSK, erstatter
+    # vitnemålet den gjenbrukte konklusjonen. Det er et unntak fra at en konklusjon som finnes, ikke
+    # overskrives. En konklusjon fra et vitnemål overskrives ikke av et nytt vitnemål.
+    # Avklart 10.11.2026 (Ingrid Helset og Sondre): er en av søkerens saker i opptaket ferdig
+    # behandlet, manuelt eller automatisk, overskriver automatikken ingenting. Saken får nye
+    # resultater (OPT-BEH-BEH-035), og saksbehandleren vurderer selv om det nye vitnemålet skal
+    # brukes. En låst konklusjon erstattes heller ikke.
     # Konklusjonen endres, den slettes ikke og legges inn på nytt.
 
     Scenario: Vitnemålet erstatter den gjenbrukte konklusjonen
