@@ -18,12 +18,14 @@ Egenskap: Forvalte rundetyper i regelverkssamlingen
 
     Scenario: Legge til en rundetype
       Når regelverksforvalter legger til rundetypen "Supplering" i regelverkssamlingen "UHG2027" med disse innstillingene
-        | Innstilling                                       | Verdi |
-        | Tilbud gir bortfall på lavere prioriteter         | ja    |
-        | Kompensasjonstilbud ved opprykk                   | ja    |
-        | Bygger på forrige publiserte plasstildelingsrunde | ja    |
-        | Bare én i opptaket                                | nei   |
-        | Kan åpnes for ledige studieplasser                | ja    |
+        | Innstilling                                                                 | Verdi |
+        | Tilbud gir bortfall på lavere prioriteter                                   | ja    |
+        | Kompensasjonstilbud ved opprykk                                             | ja    |
+        | Bygger på forrige publiserte plasstildelingsrunde                           | ja    |
+        | Bare én i opptaket                                                          | nei   |
+        | Kan åpnes for ledige studieplasser                                          | ja    |
+        | Standardverdi for taket for antall tilbud per søker                         | 1     |
+        | Standardverdi for taket for antall tilbud på ledige studieplasser per søker | 10    |
       Så har regelverkssamlingen "UHG2027" rundetypen "Supplering" med innstillingene
 
   Regel: Kompensasjonstilbud ved opprykk krever bortfall og at plasstildelingsrunden bygger på forrige

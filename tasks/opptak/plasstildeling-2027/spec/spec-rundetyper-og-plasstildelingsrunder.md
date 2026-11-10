@@ -70,6 +70,7 @@ Første kjøring holdt alle tre kravene tilbake. De ble rettet med `fs-krav`, og
 
 - 2026-11-04 (tilbakemelding på PR #907): I `forvalte_runder.feature` er scenarioet «Rundetypen kan ikke åpnes for ledige studieplasser» fjernet, fordi alle tre rundetypene har innstillingen. Taket for antall tilbud per søker gjelder også med bortfall: bortfallet gjelder prioritetene under det laveste tilbudet (virkningen står i `gjennomføre_plasstildeling.feature`). Standardverdien 10 for taket på ledige studieplasser gjelder alle tre rundetypene. Aktøren i bakgrunnen er «opptakets forvalter». Hvor lærestedet ser resultatet etter perioden, er et åpent spørsmål i `vise_resultat.feature`.
 - Prototypen v88 er ikke lagret i repoet (tilbakemelding på PR #907: repoet er offentlig).
+- 2026-11-05 (TAKE-484): Standardverdiene for takene er innstillinger på rundetypen i `bruke_rundetyper.feature` (`@OPT-REG-RUN-001`), ikke verdier i koden. Taket for antall tilbud per søker har standardverdien 1 i hovedtildeling og supplering og 10 i etterfylling, og taket for antall tilbud på ledige studieplasser per søker har 10 i alle tre. Rundetypene har nå sju innstillinger. Begge reglene om takene i `forvalte_runder.feature` har fått `@depends-on-OPT-REG-RUN-001`. Runden får takene med standardverdiene, og opptaksforvalter kan endre dem på runden, som før. `forvalte_rundetyper.feature` (`@draft`) har de samme innstillingene.
 
 ## Åpne spørsmål
 
