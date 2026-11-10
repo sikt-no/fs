@@ -7,11 +7,15 @@
 - **Eier**: –
 - **Siste oppdatering**: 2026-11-10
 
-Rette tilgangen i opptak så den følger kravene: hvem som ser og endrer hva, i FS Admin, Min kompetanse og API-et. I dag er tilgangen for åpen, og personopplysninger lekker mellom læresteder.
+Rette tilgangen i opptak så den følger kravene: hvem som ser og endrer hva, i FS Admin, Min kompetanse og API-et. I dag er tilgangen for åpen: databasen tillater at personopplysninger leses på tvers av læresteder.
 
 ## Anbefaling til prosjektleder
 
-**Kort fortalt:** Tilgangen i opptak er for åpen i dag. En rolle ved én organisasjon gir lesing og skriving av alle søknader og personer i alle opptak, og endringsloggen kan endres og tømmes gjennom API-et. Vi anbefaler å rette organisasjonsgrensen for søknadsdata (Must) først, og at den er på plass før søknaden åpner for opptak 2027.
+**Kort fortalt:** Tilgangen i opptak er for åpen i dag. En rolle ved én organisasjon gir lesing og skriving av alle søknader og personer i alle opptak, og endringsloggen kan endres og tømmes gjennom API-et. Databasen tillater altså at personopplysninger leses på tvers av læresteder. Kartleggingen gjelder bare RLS i databasen, ikke API-et eller FS Admin, og tilgangene er hentet fra et lokalt oppsett. Det er ikke påvist at noen har sett data de ikke skulle.
+
+**Advarsel:** Hvis utviklerne bekrefter at API-et faktisk gir ut data på tvers av læresteder i produksjon, er det en sak for personvernombudet uansett hva scopet blir.
+
+Vi anbefaler å rette organisasjonsgrensen for søknadsdata (Must) først, og at den er på plass før søknaden åpner for opptak 2027.
 
 **Status 2026-11-10**
 
@@ -35,11 +39,12 @@ Rette tilgangen i opptak så den følger kravene: hvem som ser og endrer hva, i 
 3. Eier og team for kravvalideringen, RLS i fs-plattform, rollene i tilgangsstyring og FS Admin.
 4. Ferdig-kriterium for Must: en sikkerhetstest gjennom API-et viser at en bruker og en integrasjon ved en organisasjon uten tilknytning ikke får noe, i både samordna og lokalt opptak.
 5. Hvem som varsler integrasjonene som bruker den åpne tilgangen i dag (Politihøgskolen, NetNordic, analyseplattformen, utdanning.no), før Must og Should settes i drift.
-6. Om personvernombudet skal vurdere om lekkasjen mellom læresteder i dag er et avvik.
+6. Om personvernombudet skal vurdere om det er et avvik at databasen i dag tillater at personopplysninger leses på tvers av læresteder. Forslag: ja, når utviklerne har sjekket om det også gjelder API-et i produksjon (punkt 7).
 7. Hvem som sjekker RLS og tilgangsstyring mot fs-plattform slik den er i dag, og når. Forslag: utviklerne på opptak (for eksempel Lars), før RLS-workshopen. Det gjelder RLS i opptaksskjemaene, og hvilke handlingskoder rollene gir i test og produksjon.
 
 **Risiko og avhengigheter**
 
+- Hvis API-et i produksjon gir ut data på tvers av læresteder, er det en sak for personvernombudet uansett hva scopet blir.
 - Integrasjoner som bruker den åpne tilgangen, kan slutte å virke når den strammes inn.
 - Rollene OPPTAK_INNSYN (TAKE-469) og OPPTAK_DOKUMENTASJON (TAKE-470) finnes ikke i tilgangsstyring, og ingen har lest hvilke handlingskoder de andre rollene gir i test og produksjon.
 - «RLS i dag» er kartlagt 04.11.2026 og må sjekkes av utviklerne mot fs-plattform før arbeidet fordeles (punkt 7).
@@ -157,7 +162,7 @@ Reglene R1–R16 i spec-en «Krav til RLS» er utledet fra kravene og svarene om
 6. **Implementer Must.** Ferdig når en sikkerhetstest gjennom API-et viser at en bruker og en integrasjon ved en organisasjon uten tilknytning ikke får noe, i både samordna og lokalt opptak.
 7. **Kravene for Should inn i krav-repoet**, valider og implementer. Deretter Could.
 
-Ved siden av: kartlegg integrasjonene som bruker den åpne tilgangen (før steg 6), og avklar med personvernombudet om lekkasjen i dag er et avvik.
+Ved siden av: kartlegg integrasjonene som bruker den åpne tilgangen (før steg 6), og avklar med personvernombudet om det er et avvik at databasen i dag tillater at personopplysninger leses på tvers av læresteder.
 
 ### Kravene som skal inn i krav-repoet
 
@@ -206,7 +211,7 @@ Flere av kravene hører til andre scopes. Reglene legges inn der, og scopet her 
 - [ ] Hvilke integrasjoner bruker den åpne tilgangen i dag (Politihøgskolen, NetNordic, analyseplattformen, utdanning.no), og hva slutter å virke når tilgangen strammes inn?
 - [ ] Hvem sjekker RLS og tilgangsstyring mot fs-plattform slik den er i dag, og når? Forslag: utviklerne på opptak, før RLS-workshopen.
 - [ ] Er tilgangene (grants) i RLS-oversikten de samme i produksjon?
-- [ ] Skal personvernombudet vurdere om lekkasjen mellom læresteder i dag er et avvik?
+- [ ] Skal personvernombudet vurdere om det er et avvik at databasen i dag tillater at personopplysninger leses på tvers av læresteder?
 - [x] `@OPT-BEH-BEH-043` er gjort om til «Se søknaden til en søker», for alle rollene som ser søknaden (2026-11-10).
 - [ ] Hvor lenge kan søkeren slette et opplastet dokument (R12)? I dag to timer, kanskje én.
 - [ ] Hvilke handlingskoder gir rollene i tilgangsstyring i test og produksjon? Tabellen *Brukerroller i opptak* i `begreper.md` har bare MODIFISERE_REGELVERK (opptaksforvalter) og SE_SØKNAD (opptaksinformatør, foreløpig).
@@ -221,6 +226,7 @@ Append-only. Ny linje på toppen ved hver hendelse.
 
 | Dato       | Hendelse | Av | Lenke til review |
 |------------|----------|----|------------------|
+| 2026-11-10 | «Databasen tillater at personopplysninger leses på tvers av læresteder» i stedet for «lekker», med forbehold og advarsel. Også på møtesiden | @karensikt | – |
 | 2026-11-10 | Punkt 7: utviklerne sjekker RLS og tilgangsstyring mot fs-plattform i dag. Også på møtesiden på Confluence | @karensikt | – |
 | 2026-11-10 | Reglene for Should og Could er skrevet inn (`@draft`). Ny del *Anbefaling til prosjektleder* | @karensikt | – |
 | 2026-11-10 | Reglene for Must er skrevet inn i kravfilene (`@draft`), unntatt GSK-konklusjonen, som hører til PR 1003 | @karensikt | – |
