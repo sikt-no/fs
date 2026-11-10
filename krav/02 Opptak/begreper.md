@@ -16,21 +16,30 @@ Denne listen sammenstiller begreper brukt i kravene (`krav/02 Opptak/`), design-
 
 | Begrep i krav | Definisjon | Begrepskatalog | Gammel FS | Merknad |
 |---------------|------------|----------------|-----------|---------|
-| opptaksforvalter | Brukerrollen som forvalter opptak og utdanningstilbud, og som oppretter og administrerer regelverket for organisasjonen. Hva rollen gir i et opptak, avhenger av om organisasjonen er forvalter, tilbyder eller behandler der | – | – | Presisert 2026-11-10. OPPTAK_FORVALTER. Har handlingskoden MODIFISERE_REGELVERK, som gir rett til å endre regelverk. ⚠️ Ikke det samme som organisasjonsrollen *forvalter* |
 | opptakets forvalter | Den som forvalter opptaket | – | – | ⚠️ Utgår 2026-11-10. Erstattes av «forvalter» |
 | opptaksforvalter ved forvaltende organisasjon | Opptaksforvalter i organisasjonen som forvalter opptaket | – | – | ⚠️ Utgår 2026-11-10. Erstattes av «opptaksforvalter hos forvalteren» |
 | opptaksforvalter ved deltakende organisasjon | Opptaksforvalter ved en organisasjon som deltar i et opptak en annen organisasjon forvalter | – | – | ⚠️ Utgår 2026-11-10. Erstattes av «opptaksforvalter hos tilbyderen» |
-| regelverksforvalter | Den som forvalter regelverket i regelverkssamlingen | – | – | ⚠️ Utgår 2026-11-10. Er ikke egen rolle. Erstattes av MODIFISERE_REGELVERK, handlingskoden som gir rett til å opprette og endre regelverket ved organisasjonen som eier regelverkssamlingen. Opptaksforvalter har den. Skriv «bruker med MODIFISERE_REGELVERK» |
+| regelverksforvalter | Den som forvalter regelverket i regelverkssamlingen | – | – | ⚠️ Utgår 2026-11-10. Er ikke egen rolle. Erstattes av «opptaksforvalter», som har handlingskoden MODIFISERE_REGELVERK (se *Brukerroller i opptak*) |
 | opptakseier | Organisasjonen som oppretter og vedlikeholder (forvalter) et opptak | – | – | ⚠️ Utgår 2026-11-10. Erstattes av «forvalter» |
-| saksbehandler | Brukerrollen som behandler søknader når organisasjonen er behandler, og har innsyn når organisasjonen er tilbyder eller forvalter | – | Saksbehandler | Presisert 2026-11-10. OPPTAK_SAKSBEHANDLER |
 | saksbehandlende organisasjon | Organisasjonen som saksbehandler et søknadsalternativ | – | – | ⚠️ Utgår 2026-11-10. Erstattes av «behandler» |
 | tilbyder | Organisasjonens rolle i et opptak når den tilbyr utdanningstilbudet et søknadsalternativ gjelder | – | – | Utvidet 2026-11-10: tilbyder er en rolle i opptaket, ikke bare et lærested. T-rolle i rolleforslaget 2026-10-12 |
 | forvalter | Organisasjonens rolle i et opptak når den forvalter (eier) opptaket. I samordna opptak HK-dir, i lokale opptak lærestedet selv. Et opptak har én forvalter | – | – | Ny term 2026-11-10. Erstatter «opptakets forvalter», «forvaltende organisasjon» og «opptakseier». F-rolle i rolleforslaget 2026-10-12. ⚠️ Ikke det samme som brukerrollen *opptaksforvalter* |
 | behandler | Organisasjonens rolle for et søknadsalternativ når den saksbehandler det. Søknaden blir til én sak hos hver behandler | – | – | Ny term 2026-11-10. Erstatter «saksbehandlende organisasjon». B-rolle i rolleforslaget 2026-10-12 |
 | tilknytning | At organisasjonen er forvalter, tilbyder eller behandler på en søknad. Tilknytningen avgjør om organisasjonen ser søknaden | – | – | Ny term 2026-11-10 |
-| dokumentforvalter | Brukerrollen som laster opp og sletter dokumentasjon på søkerens vegne når organisasjonen er forvalter | – | – | Ny term 2026-11-10. OPPTAK_DOKUMENTASJON (TAKE-470) |
-| OPPTAK_INNSYN | Brukerrollen for ansatte som svarer søkere. Ser søknaden og behandlingen der organisasjonen er forvalter, tilbyder eller behandler, men endrer ingenting | – | – | Ny term 2026-11-10 (TAKE-469). Brukes i kravene i stedet for «førstelinje» og «veileder». Skriv «bruker med OPPTAK_INNSYN» |
 | søker | «Person som søker utdanning, eller har levert søknad, i ett eller flere opptak» | [søker](https://fs.sikt.no/domenekunnskap/begreper/soker/) (utkast) | Søker | OK |
+
+## Brukerroller i opptak
+
+Stegene i kravene bruker begrepet. Rollekoden står bare her (se *Gode scenarioer* i `krav/README.md`: kodeverdier hører ikke hjemme i steg og titler). En brukerrolle tildeles ved en organisasjon. Hva den gir i et opptak, avhenger av om organisasjonen er forvalter, tilbyder eller behandler der.
+
+| Begrep i krav | Rollekode | Tildeles ved | Gir handlingskodene | Merknad |
+|---------------|-----------|--------------|---------------------|---------|
+| opptaksforvalter | OPPTAK_FORVALTER | organisasjonen | MODIFISERE_REGELVERK (avklart 2026-11-10). Resten er ikke kartlagt | Forvalter opptak og utdanningstilbud, og oppretter og administrerer regelverket for organisasjonen. Erstatter «regelverksforvalter». ⚠️ Ikke det samme som organisasjonsrollen *forvalter* |
+| saksbehandler | OPPTAK_SAKSBEHANDLER | organisasjonen | Ikke kartlagt | Behandler søknader når organisasjonen er behandler, og har innsyn når organisasjonen er tilbyder eller forvalter |
+| dokumentforvalter | OPPTAK_DOKUMENTASJON | organisasjonen | Ikke kartlagt | Laster opp og sletter dokumentasjon på søkerens vegne når organisasjonen er forvalter. TAKE-470 |
+| opptaksinformatør | OPPTAK_INNSYN | organisasjonen | SE_SØKNAD (foreløpig, TAKE-469) | Ansatte i førstelinjen som svarer søkere om opptak. Ser søknaden og behandlingen der organisasjonen er forvalter, tilbyder eller behandler, og endrer ingenting. Rollen gjelder bare opptak: ved et lærested har førstelinjen også tilgang til studieinformasjon, med roller i andre domener, mens førstelinjen ved HK-dir, som bare er forvalter i opptak og aldri tilbyder, bare har denne rollen. Ikke «førstelinje» eller «veileder» i kravene |
+
+Hvilke handlingskoder rollene gir, står i tilgangsstyring og er ikke kartlagt for opptak. Se scopet `tilgang-i-opptak-2027`.
 
 ## Opptak og struktur
 
@@ -234,7 +243,7 @@ Denne listen sammenstiller begreper brukt i kravene (`krav/02 Opptak/`), design-
 
 Følgende begreper brukes i kravene, men finnes ikke (enda) i begrepskatalogen på fs.sikt.no:
 
-- opptaksforvalter (brukerrolle), dokumentforvalter, OPPTAK_INNSYN
+- opptaksforvalter, saksbehandler, dokumentforvalter, opptaksinformatør (brukerroller)
 - forvalter, tilbyder, behandler (organisasjonens rolle i et opptak), tilknytning
 - deltakende organisasjon
 - studierett

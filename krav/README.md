@@ -218,8 +218,8 @@ En feature har høyst én prioritet. *(sjekkes automatisk)*
 
 Hvem som får gjøre hva, skal kunne leses ut av kravene. Det gjelder alle krav, ikke bare krav om tilgang.
 
-- Kravet sier hvilken rolle som gjør handlingen, med rollekoden fra rollekatalogen: «Bare OPPTAK_FORVALTER kan trekke en søknad på søkerens vegne». Står rollen i `Som …`-linja eller i regeltittelen, gjelder den for alt under.
-- Har organisasjonen betydning, skrives organisasjonens rolle med ord: **forvalter**, **tilbyder** eller **behandler**, ikke F, T og B. «Bare OPPTAK_FORVALTER hos forvalteren …», «OPPTAK_SAKSBEHANDLER hos behandleren …».
+- Kravet sier hvilken rolle som gjør handlingen, med begrepet for rollen: «Bare opptaksforvalter kan trekke en søknad på søkerens vegne». Rollekoden (OPPTAK_FORVALTER) står ikke i stegene, men i tabellen over brukerroller i domenets begrepsliste (se *Gode scenarioer*). Står rollen i `Som …`-linja eller i regeltittelen, gjelder den for alt under.
+- Har organisasjonen betydning, skrives organisasjonens rolle med ord: **forvalter**, **tilbyder** eller **behandler**, ikke F, T og B. «Bare opptaksforvalter hos forvalteren …», «saksbehandler hos behandleren …».
 - Den som *ikke* får gjøre det, står i samme regel, som et eget scenario eller en egen eksempelrad, og bare når det gir et annet utfall. Lag ikke egne tilgangsscenarioer eller tilgangsfiler.
 - Skriv relasjonen, ikke organisasjonsnavnet, når det er relasjonen som avgjør utfallet (se *Gode scenarioer*): «forvalteren», «tilbyderen», «behandleren», «en organisasjon uten rolle i opptaket». Ta med både feil organisasjon og feil rolle. Ett steg, «Gitt jeg er <rolle> hos <organisasjonens rolle> i opptaket», dekker alle rollene.
 - Regelen gjelder i API-et også, ikke bare i skjermbildene.
@@ -228,7 +228,7 @@ Hvem som får gjøre hva, skal kunne leses ut av kravene. Det gjelder alle krav,
 Eksempel:
 
 ```gherkin
-  Regel: Bare OPPTAK_FORVALTER hos forvalteren kan trekke en søknad på søkerens vegne
+  Regel: Bare opptaksforvalter hos forvalteren kan trekke en søknad på søkerens vegne
 
     Scenariomal: Trekke søknaden på søkerens vegne
       Gitt jeg er <rolle> hos <organisasjonens rolle> i opptaket
@@ -236,12 +236,12 @@ Eksempel:
       Så <utfall>
 
       Eksempler:
-        | rolle                | organisasjonens rolle                 | utfall              |
-        | OPPTAK_FORVALTER     | forvalteren                           | er søknaden trukket |
-        | OPPTAK_FORVALTER     | tilbyderen                            | avvises det         |
-        | OPPTAK_FORVALTER     | behandleren                           | avvises det         |
-        | OPPTAK_SAKSBEHANDLER | forvalteren                           | avvises det         |
-        | OPPTAK_FORVALTER     | en organisasjon uten rolle            | avvises det         |
+        | rolle            | organisasjonens rolle      | utfall              |
+        | opptaksforvalter | forvalteren                | er søknaden trukket |
+        | opptaksforvalter | tilbyderen                 | avvises det         |
+        | opptaksforvalter | behandleren                | avvises det         |
+        | saksbehandler    | forvalteren                | avvises det         |
+        | opptaksforvalter | en organisasjon uten rolle | avvises det         |
 ```
 
 **Ikke avklart: taggen `@rolle-<slug>`.** Skal rollebruken kunne leses maskinelt, for eksempel for å finne alle krav en rolle trengs i, eller hvilken rolle en test må logge inn med? I så fall får kravene `@rolle-<slug>`, for eksempel `@rolle-opptak-forvalter`. Tagger arves, så taggen settes på det høyeste nivået der den gjelder for alt under (`Egenskap:`, `Regel:`, `Scenario:` eller `Eksempler:`). Trengs det ikke, holder det at rollen står i teksten.
@@ -628,7 +628,7 @@ Bruk ikke `# TODO:` for åpne spørsmål. *(sjekkes automatisk)* FS Kravforvaltn
 ## Aktører
 
 - søker, student, administrator
-- I opptak: opptaksforvalter, saksbehandler, dokumentforvalter, bruker med OPPTAK_INNSYN
+- I opptak: opptaksforvalter, saksbehandler, dokumentforvalter, opptaksinformatør (rollekodene står i `krav/02 Opptak/begreper.md`)
 - Organisasjonens rolle i et opptak: forvalter, tilbyder, behandler
 
 Se `krav/02 Opptak/begreper.md`.

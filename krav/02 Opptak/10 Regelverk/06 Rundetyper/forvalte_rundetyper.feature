@@ -1,5 +1,5 @@
 # language: no
-# BEGREPER (2026-11-10): Bytt «regelverksforvalter» med «bruker med MODIFISERE_REGELVERK» når fila likevel endres. Se krav/02 Opptak/begreper.md.
+# BEGREPER (2026-11-10): Bytt «regelverksforvalter» med «opptaksforvalter» når fila likevel endres. Se krav/02 Opptak/begreper.md.
 # GitHub: #216
 @OPT-REG-RUN-002 @could @draft
 Egenskap: Forvalte rundetyper i regelverkssamlingen
