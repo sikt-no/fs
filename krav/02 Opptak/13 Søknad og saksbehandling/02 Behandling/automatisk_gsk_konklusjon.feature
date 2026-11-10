@@ -559,7 +559,7 @@ Egenskap: Automatisk GSK-konklusjon
       Når vitnemålet importeres fra KREG
       Så får søknaden ingen GSK-konklusjon fra vitnemålet
 
-  @ref-OPT-BEH-BEH-035 @implemented
+  @ref-OPT-BEH-BEH-035
   Regel: Vitnemålet erstatter en gjenbrukt konklusjon
     # Avklart 10.11.2026 (Ingrid Helset, sjekket med HK-dir): har søknaden en konklusjon som er
     # gjenbrukt fra et tidligere opptak, og søkeren får et vitnemål som gir GSK, erstatter

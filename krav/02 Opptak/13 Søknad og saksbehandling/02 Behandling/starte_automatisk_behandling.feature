@@ -79,7 +79,7 @@ Egenskap: Starte automatisk behandling
         | Under behandling |
         | Behandlet        |
 
-  @depends-on-OPT-BEH-BEH-030 @ref-OPT-BEH-BEH-021 @ref-OPT-BEH-BEH-029 @ref-OPT-BEH-BEH-035 @implemented
+  @depends-on-OPT-BEH-BEH-030 @ref-OPT-BEH-BEH-021 @ref-OPT-BEH-BEH-029 @ref-OPT-BEH-BEH-035
   # OPT-BEH-BEH-030: «Nye og annullerte vitnemål i KREG importeres for aktive søkere»
   # OPT-BEH-BEH-035: «Saken har nye resultater når resultater importeres etter at saken er behandlet»
   Regel: Et nytt vitnemål etter at saken er behandlet, gir saken nye resultater
@@ -89,6 +89,7 @@ Egenskap: Starte automatisk behandling
     # annullert» (OPT-BEH-BEH-034) og varselet om at grunnlaget saksbehandleren har valgt, er
     # utdatert (OPT-BEH-BEH-021), kommer i tillegg, fordi de sier noe mer.
 
+    @implemented
     Scenario: Saken behandles ikke automatisk på nytt når det kommer et nytt vitnemål
       Gitt at den automatiske saksbehandlingen pågår i opptaket
       Og at saken er behandlet automatisk på søkerens vitnemål
