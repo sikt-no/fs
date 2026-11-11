@@ -118,7 +118,7 @@ Et funn med alvorlighetsgraden «Stopper» gir ikke godkjent, men resten av test
 | 1. Testplan | (denne siden) | Laget | 2026-11-04 |
 | 2. Agentisk funksjonstest | [testrapport-agentisk-2026-11-05.md](https://sikt.atlassian.net/wiki/spaces/STUDIEADM/pages/5173837827/Testrapport+agentisk+funksjonstest+Saksbehandlertildeling+runde+2+2026-11-05), [kjøringen](kjoring-2026-11-04-1510/resultat.md) | Venter på gjennomgang (89 bestått, 5 ikke bestått, 11 ikke testet av 105) | 2026-11-05 |
 | 3. Intern akseptansetest | [testcaser-intern.md](https://sikt.atlassian.net/wiki/spaces/STUDIEADM/pages/5173018630/Intern+akseptansetest+Saksbehandlertildeling+runde+2) | Klar til test (når testrapporten for fase 2 er gått gjennom) | 2026-11-05 |
-| 3. Intern akseptansetest, runde 3 | [Intern akseptansetest – Saksbehandlertildeling, runde 3](https://sikt.atlassian.net/wiki/spaces/STUDIEADM/pages/5187895334) | Klar til test når fs-admin MR !3362 og STEK-687 er ute i testmiljøet | 2026-11-11 |
+| 3. Intern akseptansetest, runde 3 | [Intern akseptansetest – Saksbehandlertildeling, runde 3](https://sikt.atlassian.net/wiki/spaces/STUDIEADM/pages/5187895334) | Klar til test. Testdata satt opp i «HÅK1 er KUL» 11.11.2026. Del 3 (tilbyderen ser dokumentet) venter på STEK-687 | 2026-11-11 |
 | 4. Ekstern akseptansetest | – | Ikke aktuell | |
 
 Testrapportene (verifisering, agentisk, intern og ekstern) står som undersider, og lenken står i raden for fasen.
