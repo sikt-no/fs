@@ -196,6 +196,8 @@ Egenskap: Automatisk GSK-konklusjon
       # Avklart 2026-11-04 (Sondre, opptak !6566): behandlingsstatusen på saken spiller ingen
       # rolle. Statusen endres ikke av konklusjonen, som for resten av den automatiske
       # behandlingen (OPT-BEH-BEH-029).
+      # Avklart 11.11.2026 (Sondre, opptak !6678): er en av søkerens saker i opptaket ferdig
+      # behandlet, gjør importen ingenting, heller ikke når søknaden mangler GSK-konklusjon.
       Gitt at saken har behandlingsstatusen "<status>"
       Og at søknaden ikke har noen GSK-konklusjon
       Og at søkeren har et vitnemål som gir GSK
@@ -207,7 +209,6 @@ Egenskap: Automatisk GSK-konklusjon
         | status           |
         | Ikke behandlet   |
         | Under behandling |
-        | Behandlet        |
 
     Scenario: Søknaden får grunnlagskoden for løpet når opptakssystemet er uenig med skolen
       # Avklart 2026-11-02: grunnlagskoden gis fra løpet uansett hva opptakssystemets påstand er
