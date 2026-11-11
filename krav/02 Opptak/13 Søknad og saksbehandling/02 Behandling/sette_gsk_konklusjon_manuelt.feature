@@ -59,8 +59,14 @@ Egenskap: Sette GSK-konklusjon manuelt
       Når saksbehandleren setter GSK-konklusjonen
       Så viser GSK-konklusjonen organisasjonen saksbehandleren er ved, og datoen den ble satt
 
-  @ref-OPT-BEH-BEH-008
+  @openquestion @ref-OPT-BEH-BEH-008
   Regel: Manglende generell studiekompetanse registreres som en mangel
+    # ÅPNE SPØRSMÅL:
+    # - OPT-BEH-BEH-015 lagrer negative konklusjoner (avklart 13.10.2026), fordi de stopper
+    #   gjenbruken av eldre positive konklusjoner. Er en negativ konklusjon der det samme som en
+    #   annullert konklusjon her? Finnes det negative konklusjoner i gjenbrukstabellene fra SODA
+    #   som automatikken må håndtere? Og gjenbrukes en positiv konklusjon neste år når
+    #   saksbehandleren bare registrerer en mangel, uten å annullere den?
 
     Scenario: Ingen negativ GSK-konklusjon
       # Avklart 10.11.2026.

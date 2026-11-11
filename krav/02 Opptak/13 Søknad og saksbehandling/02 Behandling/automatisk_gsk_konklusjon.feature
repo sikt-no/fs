@@ -590,7 +590,7 @@ Egenskap: Automatisk GSK-konklusjon
   # saksbehandling, og kan bli flyttet til et eget krav når kravstrukturen bygges ut.
   # At saksbehandleren ser søkerens tidligere GSK-konklusjoner og henter én inn i
   # opptaket når automatikken ikke har satt noen (STEK-443), skal bli et eget krav.
-  # Manuell GSK-konklusjon beskrives i OPT-BEH-BEH-042, som er utkast.
+  # Manuell GSK-konklusjon beskrives i OPT-BEH-BEH-042.
   @ref-OPT-BEH-BEH-042
   Regel: Saksbehandleren endrer GSK-konklusjonen
 
