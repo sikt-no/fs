@@ -4,75 +4,73 @@
 
 ## Overordnet UI-mønster
 
-Kvoteprioriteten er en seksjon i fanen «Kvoteprioritet og plassflyt» i regelverkssamlingen (Regelverk › Regelverksamlinger › `<kode>`). Fanene i regelverkssamlingen er: Kompetanseregelverk, Rangeringsregelverk, Kvotetyper, **Kvoteprioritet og plassflyt**, Grunnlag og Mangelkoder. Fanen har to seksjoner over hverandre: «Kvoteprioritet» øverst og «Standard plassflyt» under (se [`sette_plassflyt.design.md`](./sette_plassflyt.design.md)).
+Kvoteprioriteten vises i kvotetypelista (Regelverk › Regelverksamlinger › en regelverkssamling › fanen «Kvotetyper»), og settes i modalen «Ranger kvotetypene». Modalen åpnes med knappen «Kvoteprioritet» i headeren til kvotetypelista, ved siden av «Plassflyt» (se [`sette_plassflyt.design.md`](./sette_plassflyt.design.md)) og «Ny kvote». Modalen er `FSModal` (medium, kan minimeres).
 
-Siden følger mønsteret for regelverkssamlingen i fs-admin: brødsmuler, et kort øverst med kode, navn, status og eier, fanene, og seksjoner med lese- og redigeringsmodus (`DataFieldSection`).
+Modalen henter alle kvotetypene i regelverkssamlingen, fordi en rangering må ha med alle.
 
 ## Komponenter og layout
 
-- **Seksjonen** «Kvoteprioritet» (h2), med en kort forklaring under overskriften.
-- **Varsel** (`GuidePanel`, advarsel) øverst i seksjonen når kvotetyper mangler kvoteprioritet.
-- **Lista «Rangerte kvotetyper»** (h3), med kolonnene Prioritet, Kode og Navn. Prioriteten er 1 til antall rangerte, i rekkefølge. I redigering er lista en `OrderList` med dra-håndtak og «Flytt opp/ned», og knappen «Fjern fra rangeringen» på hver rad.
-- **Lista «Uten kvoteprioritet»** (h3), med kolonnene Kode, Navn og Status. Status er taggen «Mangler kvoteprioritet» (advarsel). I redigering har hver rad knappen «Legg til i rangeringen», som legger kvotetypen nederst i rangeringen.
-- Kode og navn står i hver sin kolonne.
+- **Kolonnen «Kvoteprioritet»** i kvotetypelista: kvoteprioriteten som tall, eller taggen «Mangler kvoteprioritet» (advarsel). Kolonnen vises for alle som ser lista.
+- **Modalen:**
+  - **Forklaring** øverst.
+  - **Varsel** (`GuidePanel`, advarsel) når kvotetyper mangler kvoteprioritet.
+  - **Lista «Rangerte kvotetyper»** (`OrderList`, h2), med kolonnene Prioritet, Kode, Navn og Handling. Prioriteten er 1 til antall rangerte, i rekkefølge. Rekkefølgen endres med dra-håndtak eller «Flytt opp/ned». Hver rad har knappen «Fjern fra rangeringen».
+  - **Lista «Uten kvoteprioritet»** (`ActionList`, h2), med kolonnene Kode, Navn, Status og Handling, sortert på kode. Status er taggen «Mangler kvoteprioritet» (advarsel). Hver rad har knappen «Legg til i rangeringen», som legger kvotetypen nederst i rangeringen.
+  - Når en kvotetype flyttes mellom listene, flyttes fokus til knappen på samme kvotetype i den andre lista.
 
 ## Interaksjonsmønstre
 
 ### Primærhandling
-«Rediger» (subtle) øverst til høyre i seksjonen. I redigering: «Avbryt» (neutral) og «Lagre» (strong). Taggen «Redigerer» vises ved overskriften.
+«Lagre» (strong) i bunnen av modalen, ved siden av «Avbryt» (subtle). Lagre er av mens kvotetypene hentes og mens det lagres. Modalen kan ikke lukkes mens det lagres. Lagring sender alle kvotetypene: de rangerte med 1 til antall rangerte, de andre uten kvoteprioritet.
 
 ### Sekundære handlinger
 - Dra en kvotetype, eller «Flytt opp/ned», for å endre rekkefølgen. Kvotetypen som mister plassen, skyves ett trinn ned.
 - «Legg til i rangeringen» og «Fjern fra rangeringen».
 
 ### Navigasjon
-Fra Regelverk › Regelverksamlinger › en regelverkssamling › fanen «Kvoteprioritet og plassflyt».
+Fra Regelverk › Regelverksamlinger › en regelverkssamling › fanen «Kvotetyper» › «Kvoteprioritet».
 
 ### Tilgang
-Bare brukere med rollen `FS_ADMIN_MODIFISERE_REGELVERK` i organisasjonen som eier regelverkssamlingen, kan redigere. Andre ser seksjonen i lesevisning: «Rediger» skjules, og taggen «Lesevisning» vises i stedet (`design-patterns-for-krav.md`).
+Bare rollen `FS_ADMIN_MODIFISERE_REGELVERK` i organisasjonen som eier regelverkssamlingen, ser knappen «Kvoteprioritet». Har brukeren ikke rollen i det hele tatt, viser headeren «Du har ikke tilgang til å opprette» i stedet for knappene. Andre ser kvoteprioriteten i kolonnen i kvotetypelista, men ikke rangeringen i modalen.
 
 ## Tilstander
 
 | Tilstand | UI-håndtering |
 |----------|---------------|
-| Laster | `Skeleton` i seksjonen |
-| Feil ved henting | `LayoutMessage` (kritisk) i stedet for hele siden |
+| Laster | `Skeleton` i modalen, og Lagre er av |
+| Feil ved henting | `Alert` (kritisk) i modalen |
 | Første gang (ingen kvoteprioritet satt) | Alle kvotetypene står i «Uten kvoteprioritet». «Rangerte kvotetyper» er tom, og varselet viser antallet |
-| Noen kvotetyper mangler kvoteprioritet | Varselet øverst, og taggen på hver rad. Lagre er ikke sperret |
+| Noen kvotetyper mangler kvoteprioritet | Varselet i modalen, taggen på raden i modalen, og taggen i kolonnen i kvotetypelista. Lagre er ikke sperret |
 | Alle har kvoteprioritet | «Uten kvoteprioritet» viser at alle har kvoteprioritet. Ikke noe varsel |
-| Feil ved lagring | `Alert` (kritisk) i seksjonen, med teksten under |
-| Lagret | Snackbar |
+| Feil ved lagring | `Alert` (kritisk) i bunnen av modalen |
+| Lagret | Snackbar, og modalen lukkes |
 
 ## Tekster
 
-Dette er fasiten for tekstene, også når en skisse viser noe annet.
+Dette er fasiten for tekstene, også når en skisse viser noe annet. Feilmeldinger fra API-et vises med tekstene her, ikke med meldingen fra serveren. Tekstene står i fs-admin, `src/common/messages/nb/regelverk.json` (`KvoteinnstillingerButtons`, `KvoteprioritetModal` og `KvotetyperResultList`) og `common.json`.
 
 | Hvor | Når vises den | Tekst | Variasjoner | Scenario |
 |------|---------------|-------|-------------|----------|
-| Fanen | Alltid | «Kvoteprioritet og plassflyt» | – | – |
-| Seksjonen, under overskriften | Alltid | «Søkere som konkurrerer i flere kvoter på samme utdanningstilbud, får først tilbud i kvoten med høyest prioritet. 1 er høyest.» | – | Alle kvotetypene i regelverkssamlingen rangeres |
-| Varsel øverst i seksjonen | Når kvotetyper mangler kvoteprioritet | «{antall} kvotetype mangler kvoteprioritet. Kvoteprioriteten kan lagres likevel.» | Entall: «1 kvotetype mangler», flertall: «{antall} kvotetyper mangler» | Varsel om kvotetyper uten kvoteprioritet, Første gang står kvotetypene uten kvoteprioritet, Ny kvotetype i regelverkssamlingen kommer inn uten kvoteprioritet |
+| Knapp i headeren til kvotetypelista | Med redigeringstilgang | «Kvoteprioritet» | – | Alle kvotetypene i regelverkssamlingen rangeres |
+| Kolonne i kvotetypelista | Alltid | «Kvoteprioritet» | Verdien er kvoteprioriteten som tall | Sette kvoteprioritet i regelverkssamlingen |
+| Tagg i kolonnen i kvotetypelista | Kvotetypen mangler kvoteprioritet | «Mangler kvoteprioritet» | – | Varsel om kvotetyper uten kvoteprioritet |
+| Overskrift i modalen | Alltid | «Ranger kvotetypene» | – | Alle kvotetypene i regelverkssamlingen rangeres |
+| Forklaring øverst i modalen | Alltid | «Søkere som konkurrerer i flere kvoter på samme utdanningstilbud, får først tilbud i kvoten med høyest prioritet. 1 er høyest.» | – | Alle kvotetypene i regelverkssamlingen rangeres |
+| Varsel øverst i modalen | Kvotetyper mangler kvoteprioritet | «{antall} kvotetype mangler kvoteprioritet. Kvoteprioriteten kan lagres likevel.» | Entall: «1 kvotetype mangler», flertall: «{antall} kvotetyper mangler» | Varsel om kvotetyper uten kvoteprioritet, Første gang står kvotetypene uten kvoteprioritet, Ny kvotetype i regelverkssamlingen kommer inn uten kvoteprioritet |
 | Tagg på raden i «Uten kvoteprioritet» | Kvotetypen mangler kvoteprioritet | «Mangler kvoteprioritet» | – | Varsel om kvotetyper uten kvoteprioritet |
-| «Rangerte kvotetyper», tom | Ingen kvotetyper har kvoteprioritet | «Ingen kvotetyper har kvoteprioritet» | I redigering i tillegg: «Legg til kvotetyper fra listen «Uten kvoteprioritet».» | Første gang står kvotetypene uten kvoteprioritet |
+| «Rangerte kvotetyper», tom | Ingen kvotetyper har kvoteprioritet | «Ingen kvotetyper har kvoteprioritet» | Forslag under: «Legg til kvotetyper fra listen «Uten kvoteprioritet».» | Første gang står kvotetypene uten kvoteprioritet |
 | «Uten kvoteprioritet», tom | Alle har kvoteprioritet | «Alle kvotetypene har kvoteprioritet» | – | Sette kvoteprioritet i regelverkssamlingen |
-| Knapp på rad, redigering | «Uten kvoteprioritet» | «Legg til i rangeringen» | Skjermleser: «Legg til i rangeringen: {kode}» | Sette kvoteprioritet i regelverkssamlingen |
-| Knapp på rad, redigering | «Rangerte kvotetyper» | «Fjern fra rangeringen» | Skjermleser: «Fjern fra rangeringen: {kode}» | – |
-| Rangeringslisten, redigering | Dra eller «Flytt opp/ned» | Skjermleser: «Flytt {kode} opp», «Flytt {kode} ned», «{kode} flyttet til posisjon {n} av {m}.» | – | Kvotetypen som mister plassen, skyves ett trinn ned |
-| Alert ved lagring | To kvotetyper har samme kvoteprioritet | «To kvotetyper kan ikke ha samme kvoteprioritet.» | – | Kvotetypen som mister plassen, skyves ett trinn ned |
-| Alert ved lagring | Kvoteprioriteten er ikke et helt tall fra 1 til antall kvotetyper | «Kvoteprioriteten må være et helt tall fra 1 til antall kvotetyper i regelverkssamlingen.» | – | Ugyldig kvoteprioritet |
-| Alert ved lagring | Brukeren har ikke tilgang | «Du har ikke tilgang til å endre kvoteprioriteten i denne regelverkssamlingen.» | – | – |
-| Alert ved lagring | Nettverksfeil eller ukjent feil | «Kunne ikke lagre Kvoteprioritet» | – | – |
+| Knapp på rad | «Uten kvoteprioritet» | «Legg til i rangeringen» | Skjermleser: «Legg til i rangeringen: {kode}» | Sette kvoteprioritet i regelverkssamlingen |
+| Knapp på rad | «Rangerte kvotetyper» | «Fjern fra rangeringen» | Skjermleser: «Fjern fra rangeringen: {kode}» | – |
+| Rangeringslisten | Dra eller «Flytt opp/ned» | Standardtekstene i `OrderList` | Radene har koden som navn for skjermleseren | Kvotetypen som mister plassen, skyves ett trinn ned |
+| Alert | Henting feiler | «Kunne ikke hente kvotetypene. Lukk og prøv igjen.» | – | – |
+| Alert i bunnen av modalen | API-et avviser uten tilgang | «Du har ikke tilgang til å endre kvoteprioriteten i denne regelverkssamlingen.» | – | – |
+| Alert i bunnen av modalen | Ugyldig kvoteprioritet, nettverksfeil eller ukjent feil | «Kunne ikke lagre Kvoteprioritet» | – | Ugyldig kvoteprioritet |
 | Snackbar | Lagret | «Endringer lagret i Kvoteprioritet» | – | Sette kvoteprioritet i regelverkssamlingen |
-| Tagg ved overskriften | Uten redigeringstilgang | «Lesevisning» | Forklaring: «Endringer kan kun utføres av bruker med redigeringstilgang og tilhørighet til organisasjonen som opprettet innholdet» | – |
-| Feil ved henting | Siden kan ikke hentes | «Kunne ikke hente kvoteprioritet og plassflyt» | Beskrivelse: «Prøv å laste siden på nytt. Hvis feilen vedvarer, ta kontakt med brukerstøtte.» | – |
 
-**Skisser:** tekstene er sjekket mot utkastet i fs-admin (branchen `poc-pattern-skills`, `266400461`, `src/common/messages/nb/regelverk.json` og `common.json`), som er gjeldende design, og mot Figma-skissen «Kvoteprioritet» ([`screenshot.png`](../../../../tasks/opptak/kvoter-i-opptaket-2027/spec/krav-input/sketches/figma/kvoteprioritet/screenshot.png)).
+**Skisser:** tekstene og oppsettet er skrevet etter koden i fs-admin (branchen `maada/TAKE-468-feat-kvoteflyt`, 2026-11-11), som teamet har bestemt er fasit for designet. Figma-skissen «Kvoteprioritet» ([`screenshot.png`](../../../../tasks/opptak/kvoter-i-opptaket-2027/spec/krav-input/sketches/figma/kvoteprioritet/screenshot.png)) er utdatert: den viser innstillingen på opptaket, tall som 4 og 12, og varselteksten «1 av 3 kvoter mangler kvoteprioritetstall».
 
-Avvik fra utkastet, avklart 2026-10-26:
-- Forklaringen under overskriften er ny. Den erstatter teksten i Figma-skissen.
-- Feilteksten for ugyldig kvoteprioritet sier «antall kvotetyper i regelverkssamlingen», ikke «antall rangerte kvotetyper».
-
-Utdatert i Figma-skissen: innstillingen på opptaket (den er i regelverkssamlingen), tall som 4 og 12 (tallene er 1 til antall kvotetyper), og varselteksten «1 av 3 kvoter mangler kvoteprioritetstall».
+Endret 2026-11-11 (teamet): kvoteprioriteten er i en modal fra kvotetypelista og en kolonne i lista, ikke en seksjon i fanen «Kvoteprioritet og plassflyt». Det er ingen lesevisning av rangeringen, og ingen egne feiltekster for to like tall eller tall utenfor 1 til antall kvotetyper.
 
 ## Per-scenario detaljer
 
@@ -80,14 +78,16 @@ Utdatert i Figma-skissen: innstillingen på opptaket (den er i regelverkssamling
 Alle kvotetypene står i «Uten kvoteprioritet», sortert på kode, og ingen står i tilfeldig rekkefølge i rangeringen.
 
 ### Scenario: Ny kvotetype i regelverkssamlingen kommer inn uten kvoteprioritet
-En ny kvotetype får aldri kvoteprioritet når den opprettes, heller ikke via API-et. Den står i «Uten kvoteprioritet» til regelverksforvalteren har lagt den til i rangeringen.
+En ny kvotetype får aldri kvoteprioritet når den opprettes. Den står med taggen i kvotetypelista, og i «Uten kvoteprioritet» i modalen, til den er lagt til i rangeringen.
 
 ### Scenario: Kvotetypen som mister plassen, skyves ett trinn ned
 Gir seg av rangeringslisten: når en kvotetype flyttes til en plass, skyves de andre ned. Det lagres som tallene 1 til antall rangerte.
 
 ### Scenariomal: Ugyldig kvoteprioritet
-Skjermbildet kan ikke lage ugyldige tall. API-et avviser tall som ikke er hele tall fra 1 til antall kvotetyper i regelverkssamlingen, og to like tall.
+Skjermbildet kan ikke lage ugyldige tall. Avviser API-et kvoteprioriteten, vises den generelle feilteksten.
 
 ## Åpne designspørsmål
 
 Ingen.
+
+Avklart 2026-11-11 (produkteier): knappen, kolonnen og taggen i kvotetypelista heter «Kvoteprioritet», som i kravet og begrepslista. Kvoterangering er rangeringsmetoden i kvoten (se `kvoterregelverk.feature`), som i lista heter «Rangering av søkere i kvote».

@@ -44,8 +44,10 @@ Egenskap: Sette standard plassflyt i regelverkssamlingen
       Og opptaksforvalter lagrer plassflyten
       Så har regelverkssamlingen "UHG 2027" standard plassflyt
 
-  # AVKLART 2026-10-19 (gjeldende skisse): Hovedkvoten velges for seg, og er kvoten ledige plasser til slutt
-  # havner i. Kvotene som er koblet, sender ledige plasser videre i en kjede som ender i hovedkvoten.
+  # AVKLART 2026-11-11 (produkteier): Hovedkvoten er kvoten ledige plasser til slutt havner i. Kvotene som er
+  # koblet, sender ledige plasser videre i en kjede som ender i hovedkvoten. Om hovedkvoten velges for seg eller
+  # regnes ut fra kjedene, er en implementasjonsdetalj, se sette_plassflyt.design.md. Erstatter avklaringen
+  # 2026-10-19 om at hovedkvoten velges for seg.
   Regel: Regelverkssamlingen har én hovedkvote
 
     Scenario: Velge hovedkvote i regelverkssamlingen
