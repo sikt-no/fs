@@ -1,4 +1,5 @@
 # language: no
+# BEGREPER (2026-11-10): Bytt «opptaksforvalter ved forvaltende organisasjon» med «opptaksforvalter hos forvalteren», «forvaltende organisasjon» med «forvalter» når fila likevel endres. Se krav/02 Opptak/begreper.md.
 @OPT-OVO-FRI-001 @must @in-progress @scope-opprette-opptak-2027
 Egenskap: Frister og hendelser for opptak
   Som opptaksforvalter ved forvaltende organisasjon

@@ -1,4 +1,5 @@
 # language: no
+# BEGREPER (2026-11-10): Bytt «forvaltende organisasjon» med «forvalter», «saksbehandlende organisasjon» med «behandler» når fila likevel endres. Se krav/02 Opptak/begreper.md.
 # GitHub: #413
 @OPT-BEH-BEH-008 @must @in-progress @scope-meldinger-varslinger-og-oppgaver
 Egenskap: Søknadsmangler

@@ -1,4 +1,5 @@
 # language: no
+# BEGREPER (2026-11-10): Bytt «saksbehandlende organisasjon» med «behandler» når fila likevel endres. Se krav/02 Opptak/begreper.md.
 # GitHub: #413
 # Reglene er skilt ut fra OPT-BEH-BEH-008 (søknadsmangler.feature) 2026-11-02, så de kan leveres
 # med den automatiske saksbehandlingen uten resten av søknadsmangler.

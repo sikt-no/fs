@@ -1,4 +1,5 @@
 # language: no
+# BEGREPER (2026-11-10): Bytt «opptaksforvalter ved forvaltende organisasjon» med «opptaksforvalter hos forvalteren» når fila likevel endres. Se krav/02 Opptak/begreper.md.
 # GitHub: #456
 @OPT-BEH-BEH-014 @must @in-progress @scope-tidlig-opptak
 Egenskap: Publisere svar på tidlig opptak
