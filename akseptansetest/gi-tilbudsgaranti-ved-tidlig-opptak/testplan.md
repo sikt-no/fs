@@ -116,7 +116,8 @@ Testansvarlig skriver beslutningen og begrunnelsen i sluttrapporten. Rettede fun
 | 1. Testrapport – verifisering | [testrapport-verifisering-2026-11-09.md](testrapport-verifisering-2026-11-09.md) · [Confluence](https://sikt.atlassian.net/wiki/spaces/STUDIEADM/pages/5181767779) | Klar, med forbehold: de 25 leverte scenarioene kan testes | 2026-11-09 |
 | 1. Testplan | (denne siden) | Laget | 2026-11-09 |
 | 2. Agentisk funksjonstest – testcaser (`fs-testcaser-cdp`) | [`cdp-tester/02 Opptak/13 Søknad og saksbehandling/02 Behandling/`](../../cdp-tester/02%20Opptak/13%20S%C3%B8knad%20og%20saksbehandling/02%20Behandling/gi_tilbudsgaranti_ved_tidlig_opptak.feature) | Laget (søkerne og flere testdata i miljøfila må fylles ut før kjøringen) | 2026-11-09 |
-| 2. Agentisk funksjonstest | – | Venter | |
+| 2. Agentisk funksjonstest – kjøring | [kjoring-2026-11-11-1057/resultat.md](kjoring-2026-11-11-1057/resultat.md) (prøven [kjoring-2026-11-10-1440](kjoring-2026-11-10-1440/resultat.md) stoppet på F1, som er rettet) | Kjørt: 40 bestått, 5 ikke testet, av 45 | 2026-11-11 |
+| 2. Testrapport – agentisk funksjonstest | [testrapport-agentisk-2026-11-11.md](testrapport-agentisk-2026-11-11.md) | Venter på gjennomgang | 2026-11-11 |
 | 3. Intern akseptansetest | – | Venter | |
 | 4. Ekstern akseptansetest | – | [Fylles ut: Venter eller Ikke aktuell] | |
 
