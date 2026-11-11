@@ -220,9 +220,9 @@ Hvem som får gjøre hva, skal kunne leses ut av kravene. Det gjelder alle krav,
 
 - Kravet sier hvilken rolle som gjør handlingen, med begrepet for rollen: «Bare opptaksforvalter kan trekke en søknad på søkerens vegne». Rollekoden (OPPTAK_FORVALTER) står ikke i stegene, men i tabellen over brukerroller i domenets begrepsliste (se *Gode scenarioer*). Står rollen i `Som …`-linja eller i regeltittelen, gjelder den for alt under.
 - Har organisasjonen betydning, skrives organisasjonens rolle med ord: **forvalter**, **tilbyder** eller **behandler**, ikke F, T og B. «Bare opptaksforvalter hos forvalteren …», «saksbehandler hos behandleren …».
-- Den som *ikke* får gjøre det, står i samme regel, som et eget scenario eller en egen eksempelrad, og bare når det gir et annet utfall. Lag ikke egne tilgangsscenarioer eller tilgangsfiler.
-- Skriv relasjonen, ikke organisasjonsnavnet, når det er relasjonen som avgjør utfallet (se *Gode scenarioer*): «forvalteren», «tilbyderen», «behandleren», «en organisasjon uten rolle i opptaket». Ta med både feil organisasjon og feil rolle. Ett steg, «Gitt jeg er <rolle> hos <organisasjonens rolle> i opptaket», dekker alle rollene.
-- Regelen gjelder i API-et også, ikke bare i skjermbildene.
+- Den som ikke er nevnt i en regel, får ikke gjøre det ([`@FEL-TIL-GRU-001`](10%20Felleskrav/12%20Tilgang/01%20Grunnregler/ingen_tilgang_uten_regel.feature)). Kravet trenger derfor ikke liste opp alle som ikke får lov. Ta med den som ikke får lov, i samme regel bare når grensen er uventet: samme brukerrolle hos en annen organisasjonsrolle, en annen brukerrolle hos den samme organisasjonen, eller en rolle som ser, men ikke endrer. Lag ikke egne tilgangsscenarioer eller tilgangsfiler.
+- Skriv relasjonen, ikke organisasjonsnavnet, når det er relasjonen som avgjør utfallet (se *Gode scenarioer*): «forvalteren», «tilbyderen», «behandleren», «en organisasjon uten rolle i opptaket». Ett steg, «Gitt jeg er <rolle> hos <organisasjonens rolle> i opptaket», dekker alle rollene.
+- Regelen gjelder i API-et også, ikke bare i skjermbildene. Det står i felleskravet, og trenger ikke gjentas i hvert krav.
 - Arbeidet med å rette tilgangen i opptak, og lista over krav som mangler eller må rettes, står i scopet [`tilgang-i-opptak-2027`](../tasks/opptak/tilgang-i-opptak-2027/scope.md).
 
 Eksempel:
@@ -241,7 +241,6 @@ Eksempel:
         | opptaksforvalter | tilbyderen                 | avvises det         |
         | opptaksforvalter | behandleren                | avvises det         |
         | saksbehandler    | forvalteren                | avvises det         |
-        | opptaksforvalter | en organisasjon uten rolle | avvises det         |
 ```
 
 **Ikke avklart: taggen `@rolle-<slug>`.** Skal rollebruken kunne leses maskinelt, for eksempel for å finne alle krav en rolle trengs i, eller hvilken rolle en test må logge inn med? I så fall får kravene `@rolle-<slug>`, for eksempel `@rolle-opptak-forvalter`. Tagger arves, så taggen settes på det høyeste nivået der den gjelder for alt under (`Egenskap:`, `Regel:`, `Scenario:` eller `Eksempler:`). Trengs det ikke, holder det at rollen står i teksten.
