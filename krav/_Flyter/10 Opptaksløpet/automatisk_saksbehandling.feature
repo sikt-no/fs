@@ -1,4 +1,5 @@
 # language: no
+# BEGREPER (2026-11-10): Bytt «saksbehandlende organisasjon» med «behandler» når fila likevel endres. Se krav/02 Opptak/begreper.md.
 @FLY-OPT-AUT-001 @must @planned @e2e @depends-on-FLY-OPT-SAK-001
 Egenskap: Automatisk saksbehandling
   Fra søknaden er blitt en sak hos den saksbehandlende organisasjonen, til saken er ferdig

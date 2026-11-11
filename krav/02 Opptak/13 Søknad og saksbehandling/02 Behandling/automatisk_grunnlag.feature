@@ -1,4 +1,5 @@
 # language: no
+# BEGREPER (2026-11-10): Bytt «saksbehandlende organisasjon» med «behandler» når fila likevel endres. Se krav/02 Opptak/begreper.md.
 #
 # Kilder: Jira STEK-252 (automatisk setting av grunnlag, del av epic STEK-218) og
 # STEK-296. Funksjonaliteten finnes i fs-plattform (opptak-service, autosak:
@@ -116,7 +117,7 @@ Egenskap: Automatisk grunnlag
       Når søknaden behandles automatisk
       Så får ikke saken grunnlaget
 
-  @depends-on-OPT-BEH-BEH-015 @ref-FLY-OPT-AUT-001
+  @depends-on-OPT-BEH-BEH-015 @ref-FLY-OPT-AUT-001 @implemented
   Regel: Ingen automatisk grunnlag uten ett vitnemål som gir generell studiekompetanse
     # Ett vitnemål er nok, også når søkeren har lastet opp et kompetansebevis.
     # Har søkeren flere vitnemål, stopper den automatiske behandlingen til
@@ -135,7 +136,6 @@ Egenskap: Automatisk grunnlag
         | vitnemålet ikke gir generell studiekompetanse               |
         | ingen av grunnlagene i regelverket passer til søkeren       |
 
-    @implemented
     # Avklart 06.11.2026: kompetansebevis kommer ikke fra KREG, så raden om kompetansebevis er tatt ut.
     Scenariomal: Ingen grunnlag settes automatisk når <grunn>
       Gitt at <grunn>
@@ -148,7 +148,6 @@ Egenskap: Automatisk grunnlag
         | vitnemålet ikke gir generell studiekompetanse         |
         | ingen av grunnlagene i regelverket passer til søkeren |
 
-    @implemented
     Scenario: Søker med flere vitnemål behandles ikke automatisk
       Gitt at søkeren har to elektroniske vitnemål som ikke er annullert
       Og at saksbehandleren ikke har valgt ett av vitnemålene
@@ -156,7 +155,6 @@ Egenskap: Automatisk grunnlag
       Så blir søknaden ikke behandlet automatisk
       Og saken får ingen grunnlag automatisk
 
-    @implemented
     Scenario: Opplastet kompetansebevis stopper ikke automatikken
       # Avklart 06.11.2026: kompetansebevis kommer bare som dokumenter søkeren laster opp, ikke
       # fra KREG. Saksbehandleren finner sakene med filteret «Ubehandlet opplastet dok.» i
@@ -166,7 +164,6 @@ Egenskap: Automatisk grunnlag
       Når søknaden behandles automatisk
       Så får saken grunnlaget ut fra vitnemålet
 
-    @implemented
     Scenario: Annullert vitnemål teller ikke
       Gitt at søkeren har to elektroniske vitnemål
       Og at det ene vitnemålet er annullert
@@ -174,7 +171,6 @@ Egenskap: Automatisk grunnlag
       Når søknaden behandles automatisk
       Så får saken grunnlaget ut fra vitnemålet som ikke er annullert
 
-    @implemented
     Scenario: Grunnlaget settes etter GSK-konklusjonen
       Gitt at søkeren har ett elektronisk vitnemål som gir generell studiekompetanse
       Og at søknaden ikke har noen GSK-konklusjon
@@ -182,10 +178,9 @@ Egenskap: Automatisk grunnlag
       Så får søknaden GSK-konklusjonen fra vitnemålet
       Og saken får grunnlaget ut fra vitnemålet
 
-  @ref-FLY-OPT-AUT-001
+  @ref-FLY-OPT-AUT-001 @implemented
   Regel: Grunnlaget settes når den automatiske behandlingen kjører
 
-    @implemented
     Scenario: Hver sak i søknaden får grunnlaget når den automatiske behandlingen kjører for saken
       # Avklart 06.11.2026: erstatter «Automatikken setter grunnlaget i alle sakene i søknaden».
       Gitt at søknaden har saker hos to saksbehandlende organisasjoner
@@ -194,19 +189,20 @@ Egenskap: Automatisk grunnlag
       Så får saken hos den ene saksbehandlende organisasjonen grunnlaget automatisk
       Men saken hos den andre saksbehandlende organisasjonen får ikke grunnlaget før den automatiske behandlingen kjører for den saken
 
-    @implemented
     Scenario: Grunnlaget settes av den automatiske behandlingen
       Gitt at søkeren har ett elektronisk vitnemål som gir generell studiekompetanse
       Når den automatiske behandlingen kjøres for søknaden
       Så får saken grunnlaget automatisk
 
-    @draft @openquestion
+  @draft @openquestion
+  Regel: Grunnlaget kan settes fra utdanningstilbudet når søknadsalternativet opprettes
+    # ÅPNE SPØRSMÅL:
+    # - FS-klienten kan sette et grunnlag fra studieprogrammet når
+    #   søknadsalternativet opprettes («Aut.kvalgrunnlag»). Skal det
+    #   videreføres? Avgjøres når lokale opptak tas inn (30.10.2026). Gjelder ikke
+    #   den automatiske behandlingen.
+
     Scenario: Grunnlag fra utdanningstilbudet når søknadsalternativet opprettes
-      # ÅPNE SPØRSMÅL:
-      # - FS-klienten kan sette et grunnlag fra studieprogrammet når
-      #   søknadsalternativet opprettes («Aut.kvalgrunnlag»). Skal det
-      #   videreføres? Avgjøres når lokale opptak tas inn (30.10.2026). Gjelder ikke
-      #   den helautomatiske flyten.
       Gitt at utdanningstilbudet har et grunnlag som skal settes automatisk
       Når søkeren søker på utdanningstilbudet
       Så får saken grunnlaget fra utdanningstilbudet

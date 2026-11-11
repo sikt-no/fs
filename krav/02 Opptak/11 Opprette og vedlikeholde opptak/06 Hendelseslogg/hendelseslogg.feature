@@ -1,4 +1,5 @@
 # language: no
+# BEGREPER (2026-11-10): Bytt «opptaksforvalter ved forvaltende organisasjon» med «opptaksforvalter hos forvalteren», «opptaksforvalter ved deltakende organisasjon» med «opptaksforvalter hos tilbyderen», «forvaltende organisasjon» med «forvalter» når fila likevel endres. Se krav/02 Opptak/begreper.md.
 @OPT-OVO-LOG-001 @should @draft @scope-opprette-opptak-2027
 Egenskap: Hendelseslogg for opptak
   Som opptaksforvalter ved forvaltende organisasjon
@@ -122,10 +123,31 @@ Egenskap: Hendelseslogg for opptak
       Så ser opptaksforvalter en kronologisk liste over alle hendelser i opptaket
       Og hver hendelse viser handling, entitet, felt, verdien før og etter, rolle, organisasjon og tidspunkt
 
+  # Avklart 2026-11-10 (R13 i spec-en «Krav til RLS»): tilbyderen ser hendelsene på utdanningstilbudene den tilbyr,
+  # og endringer på opptaket. Ingen kan endre eller slette en hendelse.
+  Regel: Tilbyderen ser hendelsene på utdanningstilbudene organisasjonen tilbyr
+
+    Scenariomal: Se hendelsene ut fra organisasjonens rolle
+      Gitt opptaksforvalteren ved forvalteren av opptaket har endret antall tilbud som skal gis i "Sykepleie, høst 2027"
+      Og jeg er opptaksforvalter ved <organisasjon>
+      Når jeg åpner hendelsesloggen for opptaket
+      Så <ser> jeg hendelsen
+
+      Eksempler:
+        | organisasjon                                          | ser      |
+        | forvalteren av opptaket                               | ser      |
+        | tilbyderen av "Sykepleie, høst 2027"                  | ser      |
+        | en annen deltaker, som ikke tilbyr utdanningstilbudet | ser ikke |
+
+  Regel: Ingen kan endre eller slette en hendelse
+
+    Scenario: Endring av hendelsesloggen avvises i API-et
+      Gitt en integrasjon har rollen opptaksforvalter ved forvalteren av opptaket
+      Når integrasjonen forsøker å endre eller slette en hendelse gjennom API-et
+      Så avvises det
+
 # ÅPNE SPØRSMÅL:
-# - Hvem andre har behov for å se hendelsesloggen: opptaksforvalter ved deltakende organisasjon
-#   (for egne utdanningstilbud), saksbehandler, support og drift, revisjon eller klagebehandling?
-# - Skal loggen være uforanderlig, slik at ingen kan endre eller slette en hendelse?
+# - Hvem andre har behov for å se hendelsesloggen: saksbehandler, support og drift, revisjon eller klagebehandling?
 # - Hvor lenge skal hendelsene oppbevares?
 # - Hva står som rolle og organisasjon når systemet eller en jobb gjør endringen?
 # - Skal loggen kunne filtreres (for eksempel på entitet, rolle eller organisasjon) og eksporteres?

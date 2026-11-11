@@ -156,31 +156,37 @@ Egenskap: Velge fag per poengvariant
       # plass til andre poenggivende fag. Når taket er nådd, kan ikke flere
       # karakterer tas med.
 
-    @ref-OPT-BEH-BEH-020
-    Scenario: Kravelementene vurderes per poengvariant
+    @ref-OPT-BEH-BEH-020 @openquestion
+    # ÅPNE SPØRSMÅL:
+    # - Fagene velges per poengvariant, men kravelementene vurderes per
+    #   grunnlag. Hvilke fag legges til grunn for vurderingen når
+    #   poengvariantene på samme grunnlag har ulikt fagvalg? Spørsmålet står
+    #   også i OPT-BEH-BEH-020, som eier vurderingen av kravelementene.
+    Scenario: Kravelementene vurderes per grunnlag
       Gitt søkeren har tatt et fag som privatist etter fylte 21 år
       Og faget dekker et kravelement
-      Når jeg velger faget i poengvariantene for ordinær kvote og for kvoten for førstegangsvitnemål
-      Så oppfyller faget kravelementet i poengvarianten for ordinær kvote
-      Men faget oppfyller ikke kravelementet i poengvarianten for kvoten for førstegangsvitnemål
-      # AVKLART 03.11.2026: kvalifiseringen vurderes per poengvariant, ut fra
-      # vitnemålet og fagene som er valgt for den, slik FS-klienten gjør. Ny
-      # stack avgjør i dag kvalifiseringen per grunnlag (OPT-BEH-BEH-020), og
-      # den automatiske kvalifiseringen må følge med. Spørsmålet ble flyttet
-      # hit fra OPT-BEH-BEH-020 30.10.2026.
+      Når kravelementene vurderes
+      Så oppfyller faget kravelementet på grunnlaget for ordinær kvote
+      Men faget oppfyller ikke kravelementet på grunnlaget for kvoten for førstegangsvitnemål
+      # AVKLART 05.11.2026: kravelementene og kvalifiseringen vurderes per
+      # grunnlag, ikke per poengvariant, også i vitnemålsbehandleren. Det er
+      # det samme som i den automatiske vurderingen (OPT-BEH-BEH-020,
+      # «Om søkeren er kvalifisert, avgjøres per grunnlag»). Marit Bjørnerud
+      # Rønning skrev på siden med åpne spørsmål 04.11.2026 at det er gjort om
+      # til per grunnlag. Erstatter avklaringen 03.11.2026 og scenarioet
+      # «Kravelementene vurderes per poengvariant».
 
-    @draft @openquestion
-    # ÅPNE SPØRSMÅL:
-    # - Skal poengene lagres for en poengvariant der søkeren ikke oppfyller
-    #   de spesielle opptakskravene? FS-klienten lagrer ikke poeng for
-    #   poengvarianten, og gir en advarsel (teknisk beskrivelse av
-    #   vitnemålsbehandling, G. M. Vangen, lest 03.11.2026). Ikke avklart
-    #   med teamet.
     Scenario: Ingen poeng lagres for en poengvariant der søkeren ikke er kvalifisert
-      Gitt søkeren oppfyller ikke de spesielle opptakskravene i en poengvariant
+      Gitt søkeren oppfyller ikke de spesielle opptakskravene på grunnlaget en poengvariant hører til
       Når jeg velger å lagre grunnlaget
-      Så ser jeg at søkeren ikke er kvalifisert i poengvarianten
+      Så ser jeg at søkeren ikke er kvalifisert på grunnlaget
       Og poengene for poengvarianten er ikke lagret
+      # AVKLART 05.11.2026: poengene lagres ikke for en poengvariant der
+      # søkeren ikke oppfyller de spesielle opptakskravene, slik FS-klienten
+      # gjør (teknisk beskrivelse av vitnemålsbehandling, G. M. Vangen).
+      # Besvart av Marit Bjørnerud Rønning og Ingrid Grimstad Helset på siden
+      # med åpne spørsmål 04.11.2026. Kvalifiseringen avgjøres per grunnlag
+      # (avklart 05.11.2026, «Kravelementene vurderes per grunnlag»).
 
     Scenario: Bruke fagvalget fra én poengvariant i andre poengvarianter
       Gitt jeg har valgt fagene i én poengvariant

@@ -259,3 +259,23 @@ Egenskap: Endre fag i grunnlaget
       # automatisk_kvalifisering.feature («Saksbehandlerens vurdering av et
       # kravelement endres ikke av automatikken»). Regelen er validert, og
       # hører til L4a på linje med resten av kravet.
+
+  @draft @openquestion @ref-OPT-BEH-BEH-027
+  Regel: Saksbehandleren kan ta et fag ut av kontrollene
+    # Flyttet fra beregne_gsk_fra_vitnemål.feature (@OPT-BEH-BEH-027) 10.11.2026. Regelen hører
+    # til vitnemålsbehandlingen, ikke til den automatiske beregningen: en sak som behandles
+    # helautomatisk, har ingen saksbehandler som kan ta et fag ut av kontrollene (avklart
+    # 06.11.2026). Kontrollmotoren teller bare fag som er med i kontrollene, så
+    # GSK-vitnemålsberegningen (OPT-BEH-BEH-027) følger markeringen.
+    # Kode i dag: kontrollmotoren teller bare aktive fag, men alle fag fra KREG er alltid aktive,
+    # og saksbehandleren kan ikke ta et fag ut.
+    # ÅPNE SPØRSMÅL:
+    # - Skal saksbehandleren kunne ta et fag ut av kontrollene, og hvordan skiller det seg fra
+    #   fagstatusen som kommer fra KREG og NVB (fagstatuskode, for eksempel P for privatist)?
+    #   Spørsmålet stod i OPT-BEH-BEH-027 fra 30.10.2026.
+
+    Scenario: Fag som er tatt ut av kontrollene, oppfyller ikke et delkrav
+      Gitt vitnemålet har samfunnsfag (SAF1001)
+      Og jeg har tatt faget ut av kontrollene
+      Når GSK-vitnemålsberegningen kjører for vitnemålet
+      Så er delkravet for samfunnsfag ikke oppfylt

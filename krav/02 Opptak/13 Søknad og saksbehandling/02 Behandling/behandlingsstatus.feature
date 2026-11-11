@@ -1,4 +1,5 @@
 # language: no
+# BEGREPER (2026-11-10): Bytt «saksbehandlende organisasjon» med «behandler» når fila likevel endres. Se krav/02 Opptak/begreper.md.
 # Jira: STEK-253
 @OPT-BEH-BEH-029 @must @in-progress @scope-automatisk-ferdigbehandling @ref-OPT-BEH-BEH-008 @ref-OPT-PLA-TIL-001
 Egenskap: Behandlingsstatus

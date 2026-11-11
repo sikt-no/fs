@@ -140,6 +140,21 @@ Egenskap: Opprette et opptak
       Når opptaksforvalter oppretter et nytt opptak basert på "Samordna opptak 2026"
       Så kopieres innstillinger fra det tidligere opptaket som utgangspunkt
 
+  # Avklart 2026-11-10 (R7 i spec-en «Krav til RLS»): forvalteren av opptaket kan ikke gi opptaket bort.
+  # I dag kan forvalteren sette en annen organisasjon som eier.
+  @draft
+  Regel: Forvalteren av opptaket kan ikke endres
+
+    Scenario: Opptaksforvalteren kan ikke gjøre en annen organisasjon til forvalter
+      Gitt at opptaket "Samordna opptak 2027" forvaltes av HK-dir
+      Når opptaksforvalteren ved HK-dir åpner opptaket
+      Så ser opptaksforvalteren ikke muligheten til å endre hvem som forvalter opptaket
+
+    Scenario: Endring av forvalteren avvises i API-et
+      Gitt at opptaket "Samordna opptak 2027" forvaltes av HK-dir
+      Når en integrasjon forsøker å endre hvem som forvalter opptaket gjennom API-et
+      Så avvises det
+
   # Regelen om å deaktivere et opptak er flyttet til opptaksstatus.feature (2026-10-28), der opptaket gjøres historisk.
 
   # Hendelseslogg er flyttet til 06 Hendelseslogg/hendelseslogg.feature fordi den venter på generell løsning. Må gjennomgås mht hva som logges.

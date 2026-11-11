@@ -1,5 +1,11 @@
 # krav-viewer
 
+## 1.13.0
+
+### Minor Changes
+
+- ddcdb56: Claude-panelet kan logge inn Claude Code. Er Claude Code ikke logget inn, viser panelet «Logg inn», som kjører `claude auth login` i terminalen i panelet. `/login` sendt som melding gjør det samme.
+
 ## 1.12.0
 
 ### Minor Changes

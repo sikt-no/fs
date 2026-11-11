@@ -1,4 +1,5 @@
 # language: no
+# BEGREPER (2026-11-10): Bytt «regelverksforvalter» med «opptaksforvalter» når fila likevel endres. Se krav/02 Opptak/begreper.md.
 # GitHub: #216, #598
 @OPT-REG-KVO-003 @must @in-progress @scope-kvoter-i-opptaket-2027 @ref-OPT-PLA-INN-002 @ref-OPT-OPT-UTD-004
 Egenskap: Sette standard plassflyt i regelverkssamlingen
@@ -75,39 +76,33 @@ Egenskap: Sette standard plassflyt i regelverkssamlingen
       Så er plassflyten lagret
       Og regelverksforvalter ser et varsel på kvotetypen "Idrett (IDRETT)" om at plassflyten mangler
 
-  # AVKLART 2026-10-21 (produkteier): En SPEV-kvote er en kvotetype med rangeringsmetoden SPEV (spesiell vurdering,
-  # se kvoterregelverk.feature). Den er et venterom for søkere som får tilbudsgaranti, har ingen egne plasser, og
-  # tilbudene i den tas fra hovedkvoten. Hva plasstildelingen gjør, står i
-  # 14 Plasstildeling/03 Tildeling/gjennomføre_plasstildeling.feature.
-  Regel: En SPEV-kvote kan bare ha hovedkvoten som mottaker
+  # AVKLART 2026-11-11 (produkteier): En kvotetype uten plasser er ikke med i plassflyten. Den har ingen plasser
+  # å avgi, og tilbudene i den tas fra hovedkvoten. Den sender ikke ledige plasser videre, kan ikke være
+  # hovedkvote, og kan ikke ta imot ledige plasser. Erstatter avklaringen 2026-11-06 om at kvotetypen kobles
+  # til hovedkvoten. Kravet bruker ikke SPEV som eksempel, se opprette_ventekvote.feature.
+  # Hva plasstildelingen gjør, står i 14 Plasstildeling/03 Tildeling/gjennomføre_plasstildeling.feature.
+  Regel: En kvotetype uten plasser er ikke med i plassflyten
 
-    Scenario: Koble en SPEV-kvote til hovedkvoten
-      Gitt at kvotetypen "Spesiell vurdering (SPEV)" har rangeringsmetoden SPEV
-      Og at "Ordinær kvote (ORD)" er hovedkvoten i standard plassflyt i regelverkssamlingen
-      Når regelverksforvalter kobler "Spesiell vurdering (SPEV)" til "Ordinær kvote (ORD)"
-      Og regelverksforvalter lagrer plassflyten
-      Så sender "Spesiell vurdering (SPEV)" ledige plasser til "Ordinær kvote (ORD)" i standard plassflyt
+    Scenario: En kvotetype uten plasser sender ikke ledige plasser videre
+      Gitt at kvotetypen "Ventekvote (VENT)" er uten plasser
+      Når regelverksforvalter setter standard plassflyt i regelverkssamlingen "UHG 2027"
+      Så kan regelverksforvalter ikke velge mottaker for "Ventekvote (VENT)"
 
-    Scenario: En SPEV-kvote kan ikke kobles til en annen kvote enn hovedkvoten
-      Gitt at kvotetypen "Spesiell vurdering (SPEV)" har rangeringsmetoden SPEV
-      Og at "Ordinær kvote (ORD)" er hovedkvoten i standard plassflyt i regelverkssamlingen
-      Når regelverksforvalter vil koble "Spesiell vurdering (SPEV)" til "Førstegangsvitnemål (ORDF)"
-      Så kan regelverksforvalter ikke koble "Spesiell vurdering (SPEV)" til "Førstegangsvitnemål (ORDF)"
-      Og regelverksforvalter ser at en SPEV-kvote bare kan kobles til hovedkvoten
-
-  # AVKLART 2026-10-26 (produkteier): En SPEV-kvote har ingen egne plasser, og tilbudene i den tas fra
-  # hovedkvoten. Den kan derfor ikke være hovedkvote, og ingen kvote kan sende ledige plasser til den.
-  Regel: En SPEV-kvote kan ikke være hovedkvote eller mottaker for andre kvoter
-
-    Scenario: En SPEV-kvote kan ikke velges som hovedkvote
-      Gitt at kvotetypen "Spesiell vurdering (SPEV)" har rangeringsmetoden SPEV
+    Scenario: En kvotetype uten plasser kan ikke velges som hovedkvote
+      Gitt at kvotetypen "Ventekvote (VENT)" er uten plasser
       Når regelverksforvalter velger hovedkvote i standard plassflyt i regelverkssamlingen
-      Så kan regelverksforvalter ikke velge "Spesiell vurdering (SPEV)" som hovedkvote
+      Så kan regelverksforvalter ikke velge "Ventekvote (VENT)" som hovedkvote
 
-    Scenario: En kvote kan ikke sende ledige plasser til en SPEV-kvote
-      Gitt at kvotetypen "Spesiell vurdering (SPEV)" har rangeringsmetoden SPEV
+    Scenario: En kvote kan ikke sende ledige plasser til en kvotetype uten plasser
+      Gitt at kvotetypen "Ventekvote (VENT)" er uten plasser
       Når regelverksforvalter velger mottaker for "Førstegangsvitnemål (ORDF)" i standard plassflyt
-      Så kan regelverksforvalter ikke velge "Spesiell vurdering (SPEV)" som mottaker
+      Så kan regelverksforvalter ikke velge "Ventekvote (VENT)" som mottaker
+
+    Scenario: Ingen varsel om plassflyt for en kvotetype uten plasser
+      Gitt at regelverkssamlingen "UHG 2027" har kvotetypen "Ventekvote (VENT)" uten plasser
+      Når regelverksforvalter lagrer plassflyten
+      Så er plassflyten lagret
+      Og regelverksforvalter ser ikke et varsel på kvotetypen "Ventekvote (VENT)" om at plassflyten mangler
 
   Regel: Plassflyten kan ikke gå i ring
 

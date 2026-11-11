@@ -1,4 +1,5 @@
 # language: no
+# BEGREPER (2026-11-10): Bytt «opptaksforvalter ved forvaltende organisasjon» med «opptaksforvalter hos forvalteren», «opptaksforvalter ved deltakende organisasjon» med «opptaksforvalter hos tilbyderen», «forvaltende organisasjon» med «forvalter», «regelverksforvalter» med «opptaksforvalter» når fila likevel endres. Se krav/02 Opptak/begreper.md.
 # GitHub: #597
 @OPT-OPT-UTD-004 @must @draft @scope-utdanningstilbud-2027
 Egenskap: Opptaksinnstillinger per utdanningstilbud
@@ -105,6 +106,8 @@ Egenskap: Opptaksinnstillinger per utdanningstilbud
 
     # AVKLART 2026-10-21 (produkteier): En kvotetype kan ikke brukes av utdanningstilbud før den har
     # kvoteprioritet og er koblet til plassflyten i regelverkssamlingen.
+    # AVKLART 2026-11-11 (produkteier): En kvotetype uten plasser er ikke med i plassflyten, og trenger bare
+    # kvoteprioritet, se 10 Regelverk/04 Kvoter/sette_plassflyt.feature.
     Scenariomal: Kvotetype uten <mangler> kan ikke legges til
       Gitt at kvotetypen "Idrett (IDRETT)" i regelverkssamlingen for opptaket mangler <mangler>
       Når opptaksforvalter ved lærestedet vil legge til "Idrett (IDRETT)" på utdanningstilbudet "Idrett, høst 2027"
@@ -114,6 +117,12 @@ Egenskap: Opptaksinnstillinger per utdanningstilbud
         | mangler         |
         | kvoteprioritet  |
         | plassflyt       |
+
+    Scenario: Kvotetype uten plasser kan legges til uten plassflyt
+      Gitt at kvotetypen "Ventekvote (VENT)" er uten plasser
+      Og at kvotetypen "Ventekvote (VENT)" har kvoteprioritet i regelverkssamlingen for opptaket
+      Når opptaksforvalter ved lærestedet legger til "Ventekvote (VENT)" på utdanningstilbudet "Sykepleie, høst 2027"
+      Så har utdanningstilbudet "Sykepleie, høst 2027" utdanningskvoten "Ventekvote (VENT)"
 
     Scenario: Regelverksforvalter legger til en kvotetype i regelverkssamlingen
       Gitt at regelverksforvalter er ved forvaltende organisasjon "HK-dir"
@@ -258,6 +267,16 @@ Egenskap: Opptaksinnstillinger per utdanningstilbud
   # ÅPNE SPØRSMÅL:
   # - Er det lov å overstyre visning av poenggrenser og ventelistenummer
   #   for søkere i samordna opptak? Bør dette være opptaksinnstillinger i stedet?
+  # Avklart 2026-11-10 (R11, spørsmål 79): lærestedene trenger ikke se hverandres poenggrenser for tidlig opptak.
+  Regel: Tilbyderne ser ikke hverandres poenggrenser for tidlig opptak
+
+    Scenario: Opptaksforvalteren hos en tilbyder ser ikke poenggrensen en annen tilbyder har satt
+      Gitt at opptaket har aktivert tidlig opptak
+      Og at en annen tilbyder har satt poenggrensen for tidlig opptak på "Sykepleie, høst 2027"
+      Når opptaksforvalter ved deltakende organisasjon ser utdanningstilbudene i opptaket
+      Så ser opptaksforvalter ved deltakende organisasjon ikke poenggrensen for tidlig opptak på "Sykepleie, høst 2027"
+      Men opptaksforvalter ved forvaltende organisasjon ser poenggrensen
+
   Regel: Opptaksforvalter kan styre visning av poenggrense og ventelistenummer
 
     Scenario: Velge å vise poenggrense for søker

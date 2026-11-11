@@ -166,6 +166,20 @@ export async function findClaude(env: NodeJS.ProcessEnv = process.env): Promise<
   return null;
 }
 
+/**
+ * Innloggingen fra `claude auth status --json`. `loggedIn` er `null` når den ikke kan leses (eldre Claude Code uten
+ * `auth`, eller noe annet gikk galt), og da viser panelet ingenting om innlogging.
+ */
+export function parseAuthStatus(stdout: string): { loggedIn: boolean | null; account: string | null } {
+  try {
+    const j = JSON.parse(stdout.trim()) as { loggedIn?: unknown; email?: unknown };
+    if (typeof j?.loggedIn !== 'boolean') return { loggedIn: null, account: null };
+    return { loggedIn: j.loggedIn, account: j.loggedIn && typeof j.email === 'string' && j.email ? j.email : null };
+  } catch {
+    return { loggedIn: null, account: null };
+  }
+}
+
 /** Gyldige skill-navn, også fra plugins (`plugin:skill`) */
 export const SKILL_NAME = /^[\w.-]+(:[\w.-]+)?$/;
 
@@ -584,10 +598,16 @@ export class ClaudeRunner {
 
   async status(): Promise<ClaudeStatus> {
     const bin = await this.find();
-    if (!bin) return { available: false, path: null, version: null };
-    const version = await exec(bin, ['--version'], { timeout: 10000, shell: bin.endsWith('.cmd') })
-      .then(r => r.stdout.trim(), () => null);
-    return { available: true, path: bin, version };
+    if (!bin) return { available: false, path: null, version: null, loggedIn: null, account: null };
+    const base = this.opts.env ?? process.env;
+    // Som i run: npm-installasjoner trenger node fra mappa claude ligger i
+    const opts = { timeout: 10000, shell: bin.endsWith('.cmd'), env: { ...base, PATH: [dirname(bin), base.PATH].filter(Boolean).join(delimiter) } };
+    const [version, auth] = await Promise.all([
+      exec(bin, ['--version'], opts).then(r => r.stdout.trim(), () => null),
+      // Avslutter med en annen kode enn 0 når brukeren ikke er logget inn, men skriver JSON-en likevel
+      exec(bin, ['auth', 'status', '--json'], opts).then(r => r.stdout, (e: { stdout?: unknown }) => (typeof e?.stdout === 'string' ? e.stdout : '')),
+    ]);
+    return { available: true, path: bin, version, ...parseAuthStatus(auth) };
   }
 
   async run(req: ClaudeRunRequest): Promise<{ runId: string }> {
