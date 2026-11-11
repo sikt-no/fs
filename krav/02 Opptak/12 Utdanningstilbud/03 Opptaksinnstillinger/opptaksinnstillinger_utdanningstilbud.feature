@@ -105,6 +105,8 @@ Egenskap: Opptaksinnstillinger per utdanningstilbud
 
     # AVKLART 2026-10-21 (produkteier): En kvotetype kan ikke brukes av utdanningstilbud før den har
     # kvoteprioritet og er koblet til plassflyten i regelverkssamlingen.
+    # AVKLART 2026-11-11 (produkteier): En kvotetype uten plasser er ikke med i plassflyten, og trenger bare
+    # kvoteprioritet, se 10 Regelverk/04 Kvoter/sette_plassflyt.feature.
     Scenariomal: Kvotetype uten <mangler> kan ikke legges til
       Gitt at kvotetypen "Idrett (IDRETT)" i regelverkssamlingen for opptaket mangler <mangler>
       Når opptaksforvalter ved lærestedet vil legge til "Idrett (IDRETT)" på utdanningstilbudet "Idrett, høst 2027"
@@ -114,6 +116,12 @@ Egenskap: Opptaksinnstillinger per utdanningstilbud
         | mangler         |
         | kvoteprioritet  |
         | plassflyt       |
+
+    Scenario: Kvotetype uten plasser kan legges til uten plassflyt
+      Gitt at kvotetypen "Ventekvote (VENT)" er uten plasser
+      Og at kvotetypen "Ventekvote (VENT)" har kvoteprioritet i regelverkssamlingen for opptaket
+      Når opptaksforvalter ved lærestedet legger til "Ventekvote (VENT)" på utdanningstilbudet "Sykepleie, høst 2027"
+      Så har utdanningstilbudet "Sykepleie, høst 2027" utdanningskvoten "Ventekvote (VENT)"
 
     Scenario: Regelverksforvalter legger til en kvotetype i regelverkssamlingen
       Gitt at regelverksforvalter er ved forvaltende organisasjon "HK-dir"
