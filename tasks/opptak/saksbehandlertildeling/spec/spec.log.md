@@ -12,3 +12,7 @@ History of skill invocations for this spec. Append-only — never edit past entr
 - 2026-10-23 — `fs-verify` ended (success) — delvis levert: 11 deler @implemented, 49/56 funnet, 7 ikke funnet (utsatt: STEK-579, STEK-576, søkeren), verify-2026-10-23-1041.md
 - 2026-11-06 — `fs-specify-delta` started — commit 9b754ac
 - 2026-11-06 — `fs-specify-delta` ended (success) — wrote spec-changes-2026-11-06-9b754ac.md, 0 lagt til / 1 endret (5 nye scenarioer) / 0 fjernet, 5 deler retagget @in-progress, 3 åpne spørsmål
+- 2026-11-06 — `fs-verify` started — spec-changes-2026-11-06-9b754ac.md, 5 @in-progress-deler, 0 @deprecated · omfang: @in-progress, @deprecated (fra spesifikasjonen) · avhengigheter: ingen
+- 2026-11-06 — `fs-verify` ended (aborted) — rapporten ble ikke skrevet; erstattet av kjøringen 2026-11-11
+- 2026-11-11 — `fs-verify` started — spec-changes-2026-11-06-9b754ac.md, 5 @in-progress-deler, 0 @deprecated · omfang: @in-progress, @deprecated (fra spesifikasjonen) · avhengigheter: ingen
+- 2026-11-11 — `fs-verify` ended (success) — 2 deler levert (@in-progress fjernet), 2/5 funnet, 3 ikke funnet (2 i åpen MR !3362, 1 ikke bygget, fikk @openquestion), verify-2026-11-11-0945.md

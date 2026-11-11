@@ -468,7 +468,6 @@ Egenskap: Tildele saksbehandlende organisasjon
       Når "Informatikk, UiO" flyttes fra "Universitetet i Oslo" til "HK-dir"
       Så ser ikke saksbehandleren ved HK-dir den interne merknaden
 
-    @in-progress
     Scenario: Organisasjonen søknadsalternativet flyttes til, ser dokumentene søkeren har lastet opp
       Gitt at søkeren har lastet opp et vitnemål til søknaden
       Og at "Informatikk, UiO" er fordelt til "Universitetet i Oslo"
@@ -506,7 +505,6 @@ Egenskap: Tildele saksbehandlende organisasjon
       # AVKLART 05.11.2026 i den interne akseptansetesten: saksbehandleren skal se hele søknaden når hen står
       # i en sak. Saksbehandlingen av søknadsalternativene i andre saker vises ikke.
 
-    @in-progress
     Scenario: Saksbehandleren ser dokumentene søkeren har lastet opp
       Gitt at søkeren har lastet opp et vitnemål til søknaden
       Når saksbehandleren ved Universitetet i Oslo åpner saken hos "Universitetet i Oslo"
@@ -552,8 +550,11 @@ Egenskap: Tildele saksbehandlende organisasjon
       # AVKLART 05.11.2026 i den interne akseptansetesten: tilbyderen skal se hele søknaden, men saksbehandlingen
       # bare for søknadsalternativene til utdanningstilbudene sine.
 
-    @in-progress
+    @in-progress @openquestion
     Scenario: Tilbyderen ser dokumentene søkeren har lastet opp
+      # ÅPNE SPØRSMÅL:
+      # - Ikke bygget (verifisert 11.11.2026): dokumentene kan bare leses av organisasjonen til saken dokumentet
+      #   ligger på, og av opptaksforvalteren. Skal tilbyderen se dokumentene (ny sak), eller tas scenarioet ut?
       Gitt at "Historie, UiT" er fordelt til "Universitetet i Oslo"
       Og at søkeren har lastet opp et vitnemål til søknaden
       Når saksbehandleren ved UiT Norges arktiske universitet åpner saken med "Historie, UiT"
