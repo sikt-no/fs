@@ -563,7 +563,7 @@ Egenskap: Automatisk GSK-konklusjon
       Når vitnemålet importeres fra KREG
       Så får søknaden ingen GSK-konklusjon fra vitnemålet
 
-  @ref-OPT-BEH-BEH-035 @implemented
+  @ref-OPT-BEH-BEH-035
   Regel: Vitnemålet erstatter en gjenbrukt konklusjon
     # Avklart 10.11.2026 (Ingrid Helset, sjekket med HK-dir): har søknaden en konklusjon som er
     # gjenbrukt fra et tidligere opptak, og søkeren får et vitnemål som gir GSK, erstatter
@@ -579,21 +579,33 @@ Egenskap: Automatisk GSK-konklusjon
     # søkeren får mest sannsynlig samme konklusjon, og en ny positiv konklusjon gjør ingen forskjell.
     # Det annullerte vitnemålet håndteres etter OPT-BEH-BEH-034.
 
+    @implemented
     Scenario: Vitnemålet erstatter den gjenbrukte konklusjonen
       Gitt at søknaden har en GSK-konklusjon som er gjenbrukt fra et tidligere opptak
       Og at ingen av søkerens saker i opptaket er ferdig behandlet
       Når et vitnemål som gir GSK, importeres fra KREG
       Så bygger GSK-konklusjonen på vitnemålet
 
+    @implemented
     Scenario: Den gjenbrukte konklusjonen blir stående når saken er ferdig behandlet
       Gitt at søknaden har en GSK-konklusjon som er gjenbrukt fra et tidligere opptak
       Og at saken er ferdig behandlet
       Når et vitnemål som gir GSK, importeres fra KREG
       Så er GSK-konklusjonen uendret
 
+    @implemented
     Scenario: Den gjenbrukte konklusjonen blir stående når vitnemålet ikke gir GSK
       Gitt at søknaden har en GSK-konklusjon som er gjenbrukt fra et tidligere opptak
       Når et vitnemål som ikke gir GSK, importeres fra KREG
+      Så er GSK-konklusjonen uendret
+
+    Scenario: En gjenbrukt konklusjon som en saksbehandler satte, blir stående
+      # Avklart 11.11.2026 etter review av PR #1003: automatikken overskriver aldri en konklusjon en
+      # saksbehandler har satt, heller ikke når den er gjenbrukt fra et tidligere opptak (OPT-BEH-BEH-042).
+      Gitt at søknaden har en GSK-konklusjon som er gjenbrukt fra et tidligere opptak
+      Og at en saksbehandler satte konklusjonen i det tidligere opptaket
+      Og at ingen av søkerens saker i opptaket er ferdig behandlet
+      Når et vitnemål som gir GSK, importeres fra KREG
       Så er GSK-konklusjonen uendret
 
   @ref-FLY-OPT-AUT-001 @implemented
@@ -624,17 +636,13 @@ Egenskap: Automatisk GSK-konklusjon
       Så er GSK-konklusjonen på søknaden uendret
 
   # Manuell GSK-konklusjon står i OPT-BEH-BEH-042 (avklart 11.11.2026, review av PR #1003).
-  # «Legge til positiv konklusjon når ingen finnes» og «Bare positive konklusjoner kan legges til
-  # når ingen finnes» er flyttet dit, som «Sette GSK-konklusjon» og «Ingen negativ
-  # GSK-konklusjon». At saksbehandleren ser søkerens tidligere GSK-konklusjoner og henter én inn
-  # i opptaket når automatikken ikke har satt noen (STEK-443), skal bli et eget krav.
-  @implemented @ref-OPT-BEH-BEH-042
-  Regel: Saksbehandleren endrer GSK-konklusjonen
-
-    Scenario: Overskrive positiv konklusjon med negativ konklusjon
-      Gitt at søknaden har en positiv GSK-konklusjon
-      Når saksbehandleren setter en negativ GSK-konklusjon
-      Så er GSK-konklusjonen på søknaden negativ
+  # Regelen «Saksbehandleren endrer GSK-konklusjonen» er flyttet dit. «Legge til positiv
+  # konklusjon når ingen finnes» og «Bare positive konklusjoner kan legges til når ingen finnes»
+  # er «Sette GSK-konklusjon» og «Ingen negativ konklusjon når søknaden ikke har noen konklusjon».
+  # «Overskrive positiv konklusjon med negativ konklusjon» er regelen «En negativ GSK-konklusjon
+  # settes bare over en positiv konklusjon som er satt automatisk». At saksbehandleren ser
+  # søkerens tidligere GSK-konklusjoner og henter én inn i opptaket når automatikken ikke har satt
+  # noen (STEK-443), skal bli et eget krav.
 
   @ref-FLY-OPT-VIT-001 @ref-OPT-BEH-BEH-034
   Regel: Annullert vitnemål
