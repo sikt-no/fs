@@ -16,12 +16,13 @@
   | 3 | `@OPT-BEH-BEH-011` | Tilbyderen kan ikke endre saksbehandlingen; Tilbyderen ser alle søknadsalternativene på søknaden; Tilbyderen ser dokumentene søkeren har lastet opp | 1, 2, 3, 4, 5 |
   | 4 | `@OPT-BEH-BEH-011` | Opptaksforvalteren ved HK-dir ser sakene hos alle saksbehandlende organisasjoner | 1 |
   | 5 | `@OPT-BEH-BEH-011` | Søkeren ser saksbehandlende organisasjon, men ikke sakene | – |
+  | 6 | `@OPT-BEH-BEH-011` | Saksbehandlerens endring til utenlandsk utdanningsbakgrunn når fristen ikke har gått ut; Organisasjonen søknadsalternativet flyttes til, får en ubehandlet sak; Organisasjonen søknadsalternativet flyttes til, ser dokumentene søkeren har lastet opp | – (ikke testet av fagperson før) |
 
   Funn 6 (tilbudsgaranti) er tatt ut: det hører ikke til saksbehandlertildelingen, og var trolig testdata (testopptaket hadde ingen tilbudsgarantityper).
 
 ---
 
-Kort runde, ca. 30 minutter. Den sjekker at funnene fra runde 2 er rettet, og at tildelingen virker fra søknad til sak. Alt skjer i testopptaket «HÅK1 er KUL» (testmiljøet ble nullstilt etter runde 2, og «HÅK1 er KUL 2» finnes ikke lenger). Testbrukeren velges i «Overstyrt bruker» øverst i FS Admin.
+Kort runde, ca. 40 minutter. Den sjekker at funnene fra runde 2 er rettet, og at tildelingen virker fra søknad til sak. Alt skjer i testopptaket «HÅK1 er KUL» (testmiljøet ble nullstilt etter runde 2, og «HÅK1 er KUL 2» finnes ikke lenger). Testbrukeren velges i «Overstyrt bruker» øverst i FS Admin.
 
 Fyll ut «Faktisk resultat» og «Status» (Bestått, Ikke bestått eller Ikke testet). Funn skrives nederst. Fordelingen tar opptil et minutt.
 
@@ -33,6 +34,7 @@ Satt opp 11.11.2026.
 | --- | --- |
 | Søknad | 41-1004261, sendt fra Min kompetanse av en TestID-søker, med ett opplastet dokument (vitnemal-test-runde3.pdf). Studieønsker: 1 Ergoterapi (UiT), 2 Geologi (NTNU), 3 Filosofi (UiO) |
 | Studieønske for tilbyderen (del 3) | Ergoterapi – bachelor (UiT). Regelen UITUIO («UiT saksbehandles av UiO (runde 3)») gjør at UiO saksbehandler det på vegne av UiT |
+| Flytting (del 6) | Filosofi har regelen UTLHK («Utenlandsk til HK-dir (runde 3)»): UiO saksbehandler, men utenlandsk utdanningsbakgrunn fordeles til HK-dir. Prøvd 11.11.2026 på søknad 41-1004262 (Prøve Flytting): Filosofi ble flyttet til en ny sak hos HK-dir |
 
 ## Testcaser
 
@@ -43,6 +45,7 @@ Satt opp 11.11.2026.
 | 3 | Som saksbehandler ved UiT (KORT DOMPAP • OPPTAK_SAKSBEHANDLER (UIT)), tilbyderen av Ergoterapi: åpne saken for søknad 41-1004261, og gå gjennom den. | Ingen knapper eller redigering du ikke kan bruke, heller ikke for mangler. Du ser alle studieønskene og dokumentet, men kan ikke endre noe |  |  |
 | 4 | Som opptaksforvalter (ORDENTLIG RUNDSKRIV • OPPTAK_FORVALTER (HK-DIR)): åpne sakene for søknad 41-1004261. | Du ser saken, men ingen knapper du ikke kan bruke |  |  |
 | 5 | Logg inn i Min kompetanse (test) med ID-porten → TestID → «Hent tilfeldig person». Søk på Ergoterapi og Filosofi i «HÅK1 er KUL», og send søknaden. Vent et minutt, og åpne søknaden. | Du ser hvem som saksbehandler hvert studieønske, men ingen saker eller saksbehandlere. Teksten er forståelig |  |  |
+| 6 | Gjør denne til slutt. Som saksbehandler ved UiO: åpne saken for søknad 41-1004261, og endre utdanningsbakgrunnen til «Utenlandsk videregående skole» (bekreft i dialogen). Vent et minutt. Se på sakene for søknaden som opptaksforvalter, og åpne den nye saken som saksbehandler ved HK-dir (ORDENTLIG RUNDSKRIV • OPPTAK_SAKSBEHANDLER (HK-DIR)). | Filosofi er flyttet til en ny sak hos HK-dir, som er «Ikke behandlet». HK-dir ser dokumentet søkeren lastet opp. Ergoterapi er fortsatt hos UiO. Vurder om det er tydelig for UiO og HK-dir hva som har skjedd |  |  |
 
 ## Funn
 
