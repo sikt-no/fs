@@ -12,11 +12,12 @@
 # karakterrader uten fag, er en kalkulator uten fagkode: den gir
 # karakterpoeng, men ikke realfagspoeng, språkpoeng eller kravelementer.
 #
-# Reglene for beregning og lagring fra L3 («Poengene beregnes fortløpende og lagres når grunnlaget er klart»,
-# flyttet fra L2 30.10.2026) gjelder også her (avklart 03.11.2026, endret
-# 04.11.2026): poengene beregnes på nytt hver gang grunnlaget endres, en
-# endring lagres når saksbehandleren velger å lagre grunnlaget, og endringer
-# hører til vitnemålet de er gjort for. Regelen for leserettighet står i
+# Reglene for beregning og lagring i L2 («Poengene
+# beregnes og lagres når saksbehandleren bruker dem») gjelder også her
+# (avklart 03.11.2026, endret 11.11.2026): saksbehandleren beregner poengene
+# uten å lagre, og grunnlaget kontrolleres, poengene beregnes og alt lagres
+# når saksbehandleren velger å bruke poengene. Endringer hører til
+# vitnemålet de er gjort for. Regelen for leserettighet står i
 # vitnemålsbehandling.md.
 #
 @OPT-BEH-BEH-037 @must @planned
@@ -204,20 +205,20 @@ Egenskap: Legge inn vitnemål manuelt
     Scenario: Endre et manuelt innlagt fag
       Gitt jeg har lagt inn et fag manuelt
       Når jeg endrer fagkode, omfang eller karakter på faget
-      Og jeg velger å lagre grunnlaget
+      Og jeg velger å bruke poengene
       Så er endringen lagret
       Og poengene er beregnet på nytt
-      # Endret 04.11.2026: poengene beregnes når faget endres, og endringen
-      # lagres når saksbehandleren velger å lagre grunnlaget, som i L3.
+      # Endret 11.11.2026: endringen lagres, og poengene beregnes, når
+      # saksbehandleren velger å bruke poengene, som i L2.
 
     Scenario: Fjerne et manuelt innlagt fag
       Gitt jeg har lagt inn et fag manuelt
       Når jeg fjerner faget
-      Og jeg velger å lagre grunnlaget
+      Og jeg velger å bruke poengene
       Så inngår faget ikke lenger i beregningsgrunnlaget
       Og poengene er beregnet på nytt
-      # Endret 04.11.2026: poengene beregnes når faget fjernes, og endringen
-      # lagres når saksbehandleren velger å lagre grunnlaget, som i L3.
+      # Endret 11.11.2026: endringen lagres, og poengene beregnes, når
+      # saksbehandleren velger å bruke poengene, som i L2.
 
     # AVKLART 08.10.2026: skjemaet for manuelt innlagte fag håndhever ikke
     # hvilke karaktertyper faget kan ha. Saksbehandleren har ansvaret for at
@@ -243,7 +244,7 @@ Egenskap: Legge inn vitnemål manuelt
       Gitt jeg legger inn et fag i kalkulatoren
       Når jeg legger inn <karakter> som <karaktertype>
       Så ser jeg at karakteren må være et heltall fra 1 til 6
-      Og jeg kan ikke lagre grunnlaget før karakteren er rettet
+      Og jeg kan ikke bruke poengene før karakteren er rettet
 
       Eksempler:
         | karakter | karaktertype                 |
@@ -297,5 +298,5 @@ Egenskap: Legge inn vitnemål manuelt
       Når jeg velger å legge inn vitnemålet manuelt igjen
       Så er fagene jeg la inn, der igjen
       # AVKLART 03.11.2026: kalkulatoren regnes som et eget vitnemål, og
-      # endringene huskes på samme måte som i L2 («Endringer på et vitnemål
+      # endringene huskes på samme måte som i L3 («Endringer på et vitnemål
       # huskes når jeg bytter tilbake»).
