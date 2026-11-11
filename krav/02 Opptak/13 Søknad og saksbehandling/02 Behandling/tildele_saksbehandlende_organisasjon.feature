@@ -465,6 +465,34 @@ Egenskap: Tildele saksbehandlende organisasjon
       Når saksbehandleren ved HK-dir åpner søknaden
       Så ser saksbehandleren bare saken hos "HK-dir"
 
+  # Avklart 2026-11-10 (svar 20 og 7b): behandlerne ser vurderingen og poengene i hverandres saker på samme
+  # søknad, også praksiskalkulatoren, men endrer bare saken sin. Når regelen er validert, får scenarioene over
+  # som sier at saksbehandleren bare ser saken hos organisasjonen sin, @deprecated.
+  @draft
+  Regel: Saksbehandlende organisasjoner på samme søknad ser vurderingen og poengene i hverandres saker
+
+    Scenario: Saksbehandleren ser vurderingen i saken hos en annen saksbehandlende organisasjon
+      Gitt at søknaden har saker hos "Universitetet i Oslo" og "UiT Norges arktiske universitet"
+      Når saksbehandleren ved Universitetet i Oslo åpner søknaden
+      Så ser saksbehandleren vurderingen, poengene og praksiskalkulatoren i saken hos "UiT Norges arktiske universitet"
+      Men saksbehandleren ser ikke muligheten til å endre saken hos "UiT Norges arktiske universitet"
+
+  # Avklart 2026-11-10 (R3 i spec-en «Krav til RLS»): den gamle saksbehandlende organisasjonen beholder innsynet
+  # etter flytting bare når den tilbyr utdanningstilbudet.
+  @draft
+  Regel: Den gamle saksbehandlende organisasjonen ser ikke saken etter at den er flyttet, med mindre den er tilbyder
+
+    Scenario: Den gamle saksbehandlende organisasjonen ser ikke saken etter flytting
+      Gitt at "Historie, UiT" er flyttet fra "Universitetet i Oslo" til "HK-dir"
+      Og søknaden har ikke andre søknadsalternativer ved "Universitetet i Oslo"
+      Når saksbehandleren ved Universitetet i Oslo søker opp søkeren
+      Så finner ikke saksbehandleren søknaden
+
+    Scenario: Tilbyderen ser saken etter at den er flyttet
+      Gitt at "Historie, UiT" er flyttet fra "UiT Norges arktiske universitet" til "Universitetet i Oslo"
+      Når saksbehandleren ved UiT Norges arktiske universitet ser søknadsalternativene til utdanningstilbudene ved UiT
+      Så ser saksbehandleren "Historie, UiT" og saksbehandlingen "Universitetet i Oslo" har gjort
+
   @implemented
   Regel: Opptaksforvalteren ved forvaltende organisasjon ser alle sakene i opptaket
 

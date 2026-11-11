@@ -112,6 +112,8 @@ Egenskap: Håndtere dokumentasjon i søknaden
       # ÅPNE SPØRSMÅL:
       # - Kan søkeren slette etter innsending? Til hvilken frist, og hva ser
       #   saksbehandleren etterpå?
+      # Delvis avklart 2026-11-10 (R12 i spec-en «Krav til RLS», spørsmål 15): søkeren kan slette et opplastet dokument
+      # bare en kort tid etter opplasting, i dag to timer, kanskje én time. Lengden er ikke bestemt.
       Gitt jeg har lastet opp dokumentasjon på en søknad som er sendt inn
       Når jeg sletter dokumentasjonen
       Så ser jeg ikke lenger dokumentasjonen på søknaden

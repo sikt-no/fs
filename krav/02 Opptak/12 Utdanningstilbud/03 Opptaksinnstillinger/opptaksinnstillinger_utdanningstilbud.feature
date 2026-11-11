@@ -267,6 +267,16 @@ Egenskap: Opptaksinnstillinger per utdanningstilbud
   # ÅPNE SPØRSMÅL:
   # - Er det lov å overstyre visning av poenggrenser og ventelistenummer
   #   for søkere i samordna opptak? Bør dette være opptaksinnstillinger i stedet?
+  # Avklart 2026-11-10 (R11, spørsmål 79): lærestedene trenger ikke se hverandres poenggrenser for tidlig opptak.
+  Regel: Tilbyderne ser ikke hverandres poenggrenser for tidlig opptak
+
+    Scenario: Opptaksforvalteren hos en tilbyder ser ikke poenggrensen en annen tilbyder har satt
+      Gitt at opptaket har aktivert tidlig opptak
+      Og at en annen tilbyder har satt poenggrensen for tidlig opptak på "Sykepleie, høst 2027"
+      Når opptaksforvalter ved deltakende organisasjon ser utdanningstilbudene i opptaket
+      Så ser opptaksforvalter ved deltakende organisasjon ikke poenggrensen for tidlig opptak på "Sykepleie, høst 2027"
+      Men opptaksforvalter ved forvaltende organisasjon ser poenggrensen
+
   Regel: Opptaksforvalter kan styre visning av poenggrense og ventelistenummer
 
     Scenario: Velge å vise poenggrense for søker

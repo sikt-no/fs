@@ -126,3 +126,14 @@ Egenskap: Listevisning og søk i utdanningstilbud i opptaket
       Når opptaksforvalter filtrerer på utdanningstilbud med poenggrense for tidlig opptak
       Så ser opptaksforvalter utdanningstilbudet "Sykepleie, høst 2027"
       Men opptaksforvalter ser ikke utdanningstilbudet "Vernepleie, høst 2027"
+
+  # Avklart 2026-11-10 (R8 i spec-en «Krav til RLS», svar 39): behandleren leser kravene, poengene og kvotene på
+  # utdanningstilbudene den behandler søknader til, men endrer dem ikke.
+  @draft
+  Regel: Behandleren ser kravene og kvotene på utdanningstilbudene den behandler søknader til
+
+    Scenario: Saksbehandleren hos behandleren ser utdanningstilbudet, men kan ikke endre det
+      Gitt at "Universitetet i Oslo" behandler søknader til utdanningstilbudet "Sykepleie, høst 2027", som en annen organisasjon tilbyr
+      Når saksbehandleren ved Universitetet i Oslo åpner utdanningstilbudet "Sykepleie, høst 2027"
+      Så ser saksbehandleren kravene, poengberegningen og kvotene
+      Men saksbehandleren ser ikke muligheten til å endre utdanningstilbudet
