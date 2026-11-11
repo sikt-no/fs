@@ -19,7 +19,7 @@ Søknaden får GSK-konklusjonen automatisk når vitnemålet har «GSK OK» fra K
 
 ### Utenfor scope (`@draft`)
 
-- **`beregne_gsk_fra_vitnemål.feature` — regel `Fag som saksbehandleren har tatt ut av kontrollene, telles ikke med`** — venter på: hva fagstatusen er, og hvem som setter den. Kravet for fagstatusen er ikke skrevet.
+- **Regelen om fag som saksbehandleren har tatt ut av kontrollene** er flyttet fra `beregne_gsk_fra_vitnemål.feature` til `endre_fag_i_grunnlaget.feature` (`@OPT-BEH-BEH-023`, vitnemålsbehandlingen) 10.11.2026, og er ikke lenger i dette scopet.
 - **`automatisk_gsk_konklusjon.feature` — scenario `Opptaksforvalteren ved organisasjonen som forvalter opptaket, får varsel om et løp som mangler i listen over løp`** og **`Opptaksforvalteren ved organisasjonen som forvalter opptaket, får ett varsel per løp som mangler i listen over løp`** — venter på: hvor i FS Admin opptaksforvalteren får varselet. Avklart 06.11.2026: varselet går til opptaksforvalteren ved organisasjonen som forvalter opptaket, med ett varsel per løp.
 - **`automatisk_gsk_konklusjon.feature` — scenario `Opptaksforvalteren ved organisasjonen som forvalter opptaket, får varsel om et løp uten grunnlagskode`** — venter på: hvor i FS Admin opptaksforvalteren får varselet.
 - **`håndtere_annullert_vitnemål.feature` — regel `Saken får en merknad om det annullerte vitnemålet`** — venter på: hvordan systemet skal skrive en merknad på saken. I dag kan bare en innlogget person skrive merknader.

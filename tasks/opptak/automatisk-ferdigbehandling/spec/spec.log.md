@@ -4,3 +4,5 @@
 - 2026-11-06 — `fs-verify-agent-teams` ended (success) — 0 krav og 6 deler retagget (025, 029, 036 delvis levert), regelen i OPT-OVO-GRU-001 blir stående, kontrollen endret 5 resultater · rapport: akseptansetest/automatisk-ferdigbehandling/verify-2026-11-06-1128.md
 - 2026-11-06 — `fs-verify-agent-teams` started — bare delene endret i PR #970 og #971 (7 feature-filer, 9 scenarioer, 5 @deprecated-deler), 2 finnere
 - 2026-11-06 — `fs-verify-agent-teams` ended (success) — 7 funnet, 1 usikker (018), 1 ikke funnet (039), @deprecated om kompetansebevis finnes fortsatt, kontrollen endret 6 resultater, 7 deler retagget @implemented (018, 019, 020, 036) · rapport: akseptansetest/automatisk-grunnlag-og-poeng/verify-endrede-krav-2026-11-06-1345.md
+- 2026-11-09 — `fs-verify` started — @in-progress i scopet · omfang: @in-progress (flytene kjøres etter retaggingen) · avhengigheter: 1 nivå, bare status
+- 2026-11-09 — `fs-verify` ended (success) — 1 scenario i 025 @implemented (025 11/17), 029 7/11 (3 i !6643/!3372), 036 15/28, kontrollen endret 3 resultater · rapport: akseptansetest/automatisk-ferdigbehandling/verify-2026-11-09-1239.md
