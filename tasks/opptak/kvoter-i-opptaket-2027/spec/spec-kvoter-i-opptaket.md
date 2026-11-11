@@ -73,6 +73,8 @@ Regelverksforvalteren ved organisasjonen som eier regelverkssamlingen, rangerer 
 
 **Endret etter retaggingen (2026-11-06):** reglene om SPEV-kvoter i `sette_plassflyt.feature` gjelder nå en kvotetype uten plasser (som ventekvoten i `opprette_ventekvote.feature`), og kravet bruker ikke SPEV som eksempel. Reglene er de samme: en kvotetype uten plasser kan bare ha hovedkvoten som mottaker, og kan ikke være hovedkvote eller mottaker for andre kvoter. Utkastet og koden må sjekke flagget «uten plasser», ikke rangeringsmetoden. MR !6602 i fs-plattform gjør det for hovedkvote og mottaker, men sjekker ikke at kvotetypen bare sender til hovedkvoten. Tekstene i `sette_plassflyt.design.md` er oppdatert.
 
+**Endret etter retaggingen (2026-11-11):** en kvotetype uten plasser er ikke med i plassflyten. Den har ingen plasser å avgi. Regelen i `sette_plassflyt.feature` heter nå «En kvotetype uten plasser er ikke med i plassflyten»: kvotetypen sender ikke ledige plasser videre (ingen mottaker, heller ikke hovedkvoten), kan ikke være hovedkvote eller mottaker, og får ikke varselet om at plassflyten mangler. Det erstatter at den bare kan ha hovedkvoten som mottaker. Ventekvoten får fortsatt kvoteprioritet (`opprette_ventekvote.feature`), og kan legges på utdanningstilbud uten plassflyt (`opptaksinnstillinger_utdanningstilbud.feature`). Frontend (fs-admin) og API-et (MR !6602 i fs-plattform) er laget etter den gamle regelen, og må gås opp mot kravet. `sette_plassflyt.design.md` er ikke oppdatert ennå.
+
 ## Åpne spørsmål
 
 Ingen.

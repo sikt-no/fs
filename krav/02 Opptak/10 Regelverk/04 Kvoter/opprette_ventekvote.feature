@@ -71,16 +71,16 @@ Egenskap: Opprette ventekvote for søkere uten poeng
       Og søkere med grunnlaget "Realkompetanse (REAL)" eller "Uten poeng (HUP)" kan plasseres i "Ventekvote (VENT)"
 
   @depends-on-OPT-REG-KVO-003 @depends-on-OPT-REG-KVO-004
-  Regel: Ventekvoten får kvoteprioritet og kobles til hovedkvoten i plassflyten
-    # AVKLART 2026-11-06 (produkteier): Ventekvoten har ingen plasser, så kvoteprioriteten og koblingen til
-    # hovedkvoten i plassflyten har ingen annen virkning enn at kvotetypen følger standardoppsettet for
-    # kvotetyper. En kvotetype kan ikke legges på utdanningstilbud før den har begge.
+  Regel: Ventekvoten får kvoteprioritet, men er ikke med i plassflyten
+    # AVKLART 2026-11-06 (produkteier): Ventekvoten har ingen plasser, så kvoteprioriteten har ingen annen
+    # virkning enn at kvotetypen følger standardoppsettet for kvotetyper. En kvotetype kan ikke legges på
+    # utdanningstilbud før den har kvoteprioritet.
+    # AVKLART 2026-11-11 (produkteier): En kvotetype uten plasser er ikke med i plassflyten, se
+    # sette_plassflyt.feature. Erstatter at ventekvoten kobles til hovedkvoten.
 
-    Scenario: Gi ventekvoten kvoteprioritet og koble den til hovedkvoten
-      Gitt at "Ordinær kvote (ORD)" er hovedkvoten i standard plassflyt i regelverkssamlingen
-      Og at kvotetypen "Ventekvote (VENT)" er opprettet uten plasser
+    Scenario: Gi ventekvoten kvoteprioritet
+      Gitt at kvotetypen "Ventekvote (VENT)" er opprettet uten plasser
       Når opptaksforvalteren gir "Ventekvote (VENT)" kvoteprioritet 4 i regelverkssamlingen
-      Og opptaksforvalteren kobler "Ventekvote (VENT)" til "Ordinær kvote (ORD)" i standard plassflyt
       Så følger "Ventekvote (VENT)" standardoppsettet for kvotetyper
       Og kan "Ventekvote (VENT)" legges på utdanningstilbudene i opptaket
 
