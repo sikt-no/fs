@@ -1,6 +1,6 @@
 # Kjøring 2026-11-11 10:57: Gi tilbudsgaranti ved tidlig opptak
 
-- **Startet av**: Jens Peter Thomassen, etter at rollen til opptaksforvalteren var rettet (funn F1 i [kjøringen 2026-11-10](../kjoring-2026-11-10-1440/resultat.md)). Alle scenarioene i testen, kjørt 2026-11-11 (de fra «Prøvekjøre tidligopptaket» er fra kjøringen 2026-11-10 tatt på nytt)
+- **Startet av**: Jens Peter Thomassen, etter at rollen til opptaksforvalteren var rettet (funn F1 i [kjøringen 2026-11-10](../kjoring-2026-11-10-1440/resultat.md)). Alle scenarioene i testen, kjørt 2026-11-11
 - **Miljøfil**: [test.md](../../../cdp-tester/_Milj%C3%B8er/test.md), personaer sist sjekket 2026-11-04
 - **Miljø**: https://test-fsadmin.sikt.no, opptak 34 (`opptak-tidlig-opptak`)
 - **Kravstatus**: `@OPT-BEH-BEH-007`: `@in-progress` (delvis levert). Scenarioene i kjøringen er levert (`@implemented`)
