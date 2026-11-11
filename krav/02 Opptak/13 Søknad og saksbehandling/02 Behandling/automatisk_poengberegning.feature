@@ -85,16 +85,9 @@ Egenskap: Automatisk beregning av vitnemålspoeng
     # Har søkeren flere vitnemål, eller gir vitnemålet ikke generell studiekompetanse, får saken
     # ikke grunnlag automatisk, og uten grunnlag beregnes ingen poeng (OPT-BEH-BEH-019,
     # OPT-BEH-BEH-039). Endret 09.11.2026.
-    Scenariomal: Ingen automatiske vitnemålspoeng når <grunn>
-      Gitt at <grunn>
-      Når vitnemålspoengene beregnes automatisk
-      Så får saken ingen vitnemålspoeng beregnet automatisk
-      Og det fremgår at søkeren ikke har ett entydig vitnemål
-
-      Eksempler:
-        | grunn                                 |
-        | søkerens eneste vitnemål er annullert |
-        | søkeren ikke har noe vitnemål         |
+    # Scenariomalen «Ingen automatiske vitnemålspoeng når <grunn>» er fjernet 11.11.2026. Uten
+    # vitnemål, eller med annullert vitnemål, får saken ikke grunnlag, og dermed ingen poengtyper
+    # å vise en forklaring på (OPT-BEH-BEH-019, OPT-BEH-BEH-034).
 
     @implemented
     Scenario: Opplastet kompetansebevis hindrer ikke beregningen
