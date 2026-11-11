@@ -430,12 +430,14 @@ Egenskap: Automatisk GSK-konklusjon
       Når søknaden opprettes
       Så får søknaden ingen GSK-konklusjon fra tidligere opptak
 
-  @ref-FLY-OPT-AUT-001 @implemented
+  @ref-FLY-OPT-AUT-001
   Regel: Automatikken setter bare positive konklusjoner, og bare der ingen finnes
     # Om en konklusjon automatikken satte med KLY eller RFA fordi løpet manglet i listen over løp,
     # skal rettes når løpet legges inn, er åpent. Se regelen «Grunnlagskoden rettes når løpet er
     # lagt inn i listen over løp».
+    # En annullert konklusjon regnes som ingen konklusjon.
 
+    @implemented
     Scenario: Ingen grunnlag for generell studiekompetanse
       Gitt at søknaden ikke får GSK-konklusjon fra vitnemålet
       Og at søkeren ikke har noen positiv GSK-konklusjon fra et tidligere opptak
@@ -443,16 +445,26 @@ Egenskap: Automatisk GSK-konklusjon
       Så får søknaden ingen GSK-konklusjon
       Og generell studiekompetanse vurderes manuelt
 
+    @implemented
     Scenario: Konklusjon på søknaden overskrives ikke
       Gitt at søknaden har en GSK-konklusjon, satt av en hvilken som helst organisasjon i opptaket
       Og at søkeren har et vitnemål som gir generell studiekompetanse
       Når vitnemålet importeres fra KREG
       Så er GSK-konklusjonen på søknaden uendret
 
+    @implemented
     Scenario: Systemet setter aldri en negativ konklusjon
       Gitt at søkeren ikke har noe grunnlag for generell studiekompetanse
       Når søknaden opprettes
       Så får søknaden ingen negativ GSK-konklusjon
+
+    Scenario: Automatikken kan sette en ny konklusjon etter annulleringen
+      # Flyttet hit fra OPT-BEH-BEH-042 (review av PR #1003). Avklart 10.11.2026: både
+      # saksbehandleren og automatikken kan sette en ny konklusjon etter annulleringen.
+      Gitt at GSK-konklusjonen på søknaden er annullert
+      Og at søkeren har et vitnemål som gir GSK
+      Når den automatiske behandlingen kjører for opptaket
+      Så får søknaden en positiv GSK-konklusjon
 
   @ref-OPT-BEH-BEH-026 @draft @openquestion
   Regel: Grunnlagskoden rettes når løpet er lagt inn i listen over løp
@@ -611,11 +623,11 @@ Egenskap: Automatisk GSK-konklusjon
       Når den automatiske behandlingen kjører for opptaket
       Så er GSK-konklusjonen på søknaden uendret
 
-  # Reglene for manuell endring ligger i grenselandet mellom automatisk og manuell
-  # saksbehandling, og kan bli flyttet til et eget krav når kravstrukturen bygges ut.
-  # At saksbehandleren ser søkerens tidligere GSK-konklusjoner og henter én inn i
-  # opptaket når automatikken ikke har satt noen (STEK-443), skal bli et eget krav.
-  # Manuell GSK-konklusjon beskrives i OPT-BEH-BEH-042.
+  # Manuell GSK-konklusjon står i OPT-BEH-BEH-042 (avklart 11.11.2026, review av PR #1003).
+  # «Legge til positiv konklusjon når ingen finnes» og «Bare positive konklusjoner kan legges til
+  # når ingen finnes» er flyttet dit, som «Sette GSK-konklusjon» og «Ingen negativ
+  # GSK-konklusjon». At saksbehandleren ser søkerens tidligere GSK-konklusjoner og henter én inn
+  # i opptaket når automatikken ikke har satt noen (STEK-443), skal bli et eget krav.
   @implemented @ref-OPT-BEH-BEH-042
   Regel: Saksbehandleren endrer GSK-konklusjonen
 
@@ -623,16 +635,6 @@ Egenskap: Automatisk GSK-konklusjon
       Gitt at søknaden har en positiv GSK-konklusjon
       Når saksbehandleren setter en negativ GSK-konklusjon
       Så er GSK-konklusjonen på søknaden negativ
-
-    Scenario: Legge til positiv konklusjon når ingen finnes
-      Gitt at søknaden ikke har noen GSK-konklusjon
-      Når saksbehandleren legger til en positiv GSK-konklusjon
-      Så er GSK-konklusjonen på søknaden positiv
-
-    Scenario: Bare positive konklusjoner kan legges til når ingen finnes
-      Gitt at søknaden ikke har noen GSK-konklusjon
-      Når saksbehandleren legger til en GSK-konklusjon
-      Så kan saksbehandleren bare velge positive GSK-konklusjoner
 
   @ref-FLY-OPT-VIT-001 @ref-OPT-BEH-BEH-034
   Regel: Annullert vitnemål

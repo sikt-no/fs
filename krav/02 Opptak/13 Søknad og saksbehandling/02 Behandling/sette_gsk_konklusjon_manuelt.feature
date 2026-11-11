@@ -7,13 +7,21 @@
 # etter tilbakemeldingene om flyten. De eldre skissene gjelder ikke.
 # Avklart i møte 10.11.2026 (Marit, Sofie, Erik), svar i PR #1003.
 #
-# Den automatiske GSK-konklusjonen står i OPT-BEH-BEH-015. Der står også at automatikken
-# aldri overskriver en konklusjon som finnes (akseptansekrav 7).
+# Den automatiske GSK-konklusjonen står i OPT-BEH-BEH-015, som en del av den automatiske
+# saksbehandlingen. Der står også at automatikken aldri overskriver en konklusjon som finnes
+# (akseptansekrav 7). Avklart 11.11.2026 etter review av PR #1003: det manuelle står i dette
+# kravet, og det automatiske i OPT-BEH-BEH-015.
 #
 # Kode i dag (fs-admin GSKCard, fs-plattform GskVedtakService): konklusjonen er én rad per søker
 # og opptak, og en endring overskriver raden, så tidligere versjoner bevares ikke. Saksbehandleren
-# kan sette «Ikke kvalifisert» med mangelkode, og kan ikke annullere en konklusjon i FS Admin.
-# Bare organisasjonen som endret sist, lagres. Tilgangen følger saken, ikke personen.
+# kan sette «Ikke kvalifisert» med mangelkode. API-et kan annullere en konklusjon, med årsak fra
+# kodeverket for annulleringsårsaker i opptak, men bare når vitnemålet konklusjonen bygger på, er
+# annullert. Det finnes ikke i FS Admin, og annulleringen endrer raden, så det finnes ingen
+# historikk. Grunnlagskodene er en fast liste i opptaksbasen (generell_studiekompetanse.grunnlagstype),
+# lik for alle opptak, og ikke grunnlagene i regelverkssamlingen. Bare organisasjonen som endret
+# sist, lagres. Tilgangen følger saken, ikke personen. Flagget som låser en konklusjon
+# (laasGskVedtak), er ikke i bruk og skal fjernes. Låsen i dette kravet kommer fra statusen på
+# opptaket.
 @OPT-BEH-BEH-042 @must @planned @ref-OPT-BEH-BEH-015
 Egenskap: Sette GSK-konklusjon manuelt
   Som saksbehandler
@@ -35,13 +43,13 @@ Egenskap: Sette GSK-konklusjon manuelt
   studiekompetanse, registrerer saksbehandleren en mangel, som andre mangler
   (OPT-BEH-BEH-008).
 
-  @openquestion @ref-OPT-REG-GRU-001
+  @openquestion
   Regel: Saksbehandleren setter GSK-konklusjonen med en grunnlagskode
     # ÅPNE SPØRSMÅL:
-    # - Grunnlagskodene for GSK settes i regelverkssamlingen (OPT-REG-GRU-001). Det blir feil når
-    #   konklusjonen deles på tvers av opptak og år, og tidligere konklusjoner vises i dag selv om
-    #   grunnlagskoden ikke er i regelverkssamlingen opptaket bruker. Hvor skal grunnlagskodene for
-    #   GSK ligge, og hvilke kan saksbehandleren velge?
+    # - Grunnlagskodene for GSK er i dag en fast liste, lik for alle opptak og år. De er ikke
+    #   grunnlagene i regelverkssamlingen (OPT-REG-GRU-001), som GSK-konklusjonen ikke bruker. Skal
+    #   saksbehandleren kunne velge alle kodene i lista, og hvem skal forvalte den? I dag kan den
+    #   bare endres av utviklerne.
 
     Scenario: Sette GSK-konklusjon
       Gitt at søkeren ikke har noen GSK-konklusjon
@@ -77,7 +85,8 @@ Egenskap: Sette GSK-konklusjon manuelt
   @ref-OPT-OVO-GRU-004
   Regel: Saksbehandleren kan endre GSK-konklusjonen til opptaket er historisk
     # Avklart 10.11.2026: konklusjonen låses omtrent når opptaket arkiveres. I kravene om status
-    # på opptaket (OPT-OVO-GRU-004) er det når opptaket gjøres historisk.
+    # på opptaket (OPT-OVO-GRU-004) er det når opptaket gjøres historisk. OPT-BEH-BEH-015 og
+    # OPT-BEH-BEH-034 kaller det samme et avsluttet opptak.
 
     Scenario: Endre grunnlagskoden
       # Sektor ber om dette for blant annet feilsatte IMM-vedtak (PFS 4593713169).
@@ -166,8 +175,8 @@ Egenskap: Sette GSK-konklusjon manuelt
 
   Regel: Organisasjonen som satte konklusjonen, og HK-dir kan annullere den
     # Akseptansekrav 5: annulleringen skal kreve aktiv bekreftelse, men være enklere enn i dagens
-    # løsning. Avklart 10.11.2026: årsaken velges fra en liste (kodeverket for annulleringsårsaker
-    # i SODA, som kanskje må gjenskapes), og er påkrevd. Begrunnelsen skrives i fritekst, som i
+    # løsning. Avklart 10.11.2026: årsaken velges fra en liste (kodeverket for annulleringsårsaker,
+    # som finnes i opptak fra før), og er påkrevd. Begrunnelsen skrives i fritekst, som i
     # skissen, og er valgfri (bekreftet av Sofie 10.11.2026).
 
     Scenario: Annullere konklusjonen
@@ -221,13 +230,8 @@ Egenskap: Sette GSK-konklusjon manuelt
       Så er årsaken og begrunnelsen bevart med den annullerte konklusjonen
 
     Scenario: Ny konklusjon etter annulleringen
-      # Avklart 10.11.2026: både saksbehandleren og automatikken kan sette en ny konklusjon.
+      # Avklart 10.11.2026: både saksbehandleren og automatikken kan sette en ny konklusjon. At
+      # automatikken kan det, står i OPT-BEH-BEH-015.
       Gitt at søkerens GSK-konklusjon er annullert
       Når saksbehandleren setter GSK-konklusjonen med grunnlagskoden KLS
       Så har søkeren en GSK-konklusjon med grunnlagskoden KLS
-
-    Scenario: Automatikken kan sette en ny konklusjon etter annulleringen
-      Gitt at søkerens GSK-konklusjon er annullert
-      Og at søkeren har et vitnemål som gir GSK
-      Når den automatiske behandlingen kjører for opptaket
-      Så får søkeren en GSK-konklusjon fra vitnemålet
