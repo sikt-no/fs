@@ -137,9 +137,9 @@ Egenskap: Listevisning og søk i utdanningstilbud
       Så filtreres listen til utdanningstilbud der navnet, lærestedet eller studiestedet matcher søket
 
     @depends-on-OPT-OPT-UTD-017
-    Scenario: Fritekst-søk på søkeord
-      # Søkeordene settes av opptaksforvalter på utdanningstilbudet.
-      Gitt at utdanningstilbudet "Profesjonsstudiet i medisin, høst 2027" har søkeordet "lege"
+    Scenario: Fritekst-søk på søketagg
+      # Søketaggene velges av opptaksforvalter på utdanningstilbudet, fra kodesettet.
+      Gitt at utdanningstilbudet "Profesjonsstudiet i medisin, høst 2027" har søketaggen "lege"
       Når søkeren søker med fritekst på "lege"
       Så vises utdanningstilbudet "Profesjonsstudiet i medisin, høst 2027" i listen
 
@@ -149,7 +149,7 @@ Egenskap: Listevisning og søk i utdanningstilbud
 
     @ref-OPT-OPT-UTD-017
     Scenariomal: Søket tåler skrivemåter som avviker fra navnet
-      # Bøyningsformer og skrivefeil dekkes av søkeordene.
+      # Bøyningsformer og skrivefeil dekkes av søketaggene.
       # å/æ/ø ↔ aa/ae/oe begge veier er standard translitterasjon etter ICAO Doc 9303.
       Når søkeren søker med fritekst på "<søketekst>"
       Så vises utdanningstilbudet "<utdanningstilbud>" i listen
