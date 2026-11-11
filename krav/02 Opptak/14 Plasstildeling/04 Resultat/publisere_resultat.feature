@@ -72,6 +72,16 @@ Egenskap: Publisere resultatet til søkerne
       Når plasstildelingen er publisert
       Så ser søkerne ikke poenggrensen for "Sykepleie, høst 2027"
 
+    # AVKLART 2026-11-11 (produkteier): Om søkeren ser poengene, settes på kvotetypen, se
+    # 10 Regelverk/04 Kvoter/kvoterregelverk.feature. Søkeren med tilbudsgaranti blir i ventekvoten, og bare
+    # plassen tas fra hovedkvoten (gjennomføre_plasstildeling.feature), så poengene er skjult også i tilbudet.
+    Scenario: Poengene skjules for søker i en kvote som skjuler poengene
+      Gitt at kvotetypen "Ventekvote (VENT)" skjuler poengene for søkeren
+      Og at søkeren "Kari Nordmann" med grunnlaget "Realkompetanse (REAL)" er vurdert i "Ventekvote (VENT)" og i en kvote med opptaksprøvepoeng
+      Når plasstildelingen er publisert
+      Så ser ikke søkeren poengene i "Ventekvote (VENT)"
+      Men søkeren ser opptaksprøvepoengene
+
     @openquestion
     Scenario: Søker ser bare tilbudet når en annen utdanningskvote er kansellert
       # ÅPNE SPØRSMÅL:
