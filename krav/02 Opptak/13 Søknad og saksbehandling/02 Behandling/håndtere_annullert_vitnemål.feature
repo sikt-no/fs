@@ -78,11 +78,12 @@ Egenskap: Håndtere annullert vitnemål
       Så får saken taggen "Vitnemål annullert"
       Og saksbehandleren ser taggen "Vitnemål annullert" på saken i sakslisten
 
-  @draft @openquestion
+  @draft
   Regel: Saken får en merknad om det annullerte vitnemålet
-    # ÅPNE SPØRSMÅL:
-    # - Hvordan skal systemet skrive en merknad på saken? I dag kan bare en innlogget person
-    #   skrive merknader. Skal merknaden vises som skrevet av «Opptakssystemet»?
+    # Avklart 10.11.2026 (Sondre): systemet skriver merknaden selv, uten en innlogget person som
+    # forfatter, på samme måte som systemet legger inn mangelen for GSK som fullføres i vår
+    # (OPT-BEH-BEH-036). Merknaden er merket som registrert automatisk, vises som skrevet av
+    # «Opptakssystemet», og kan ikke endres eller slettes av saksbehandleren.
 
     Scenario: Merknaden viser vitnemålet og hva det er brukt til
       Gitt at vitnemålet er brukt i poengene og GSK-konklusjonen i saken

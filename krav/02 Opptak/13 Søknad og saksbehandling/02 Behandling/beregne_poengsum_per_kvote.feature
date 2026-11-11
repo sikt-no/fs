@@ -4,7 +4,7 @@
 # KvotesumV2Service viser den høyeste poengsummen per kvote i saksbehandlingen (kvotesummerV2 i
 # fs-admin). Poengtypene og poengene i dem står i OPT-BEH-BEH-018 og OPT-BEH-BEH-028, og
 # kvoteplasseringen i OPT-BEH-BEH-012.
-@OPT-BEH-BEH-031 @must @in-progress @scope-automatisk-kvalifisering-og-poengsum @ref-OPT-BEH-BEH-012 @ref-OPT-BEH-BEH-018 @ref-OPT-BEH-BEH-028
+@OPT-BEH-BEH-031 @must @implemented @scope-automatisk-kvalifisering-og-poengsum @ref-OPT-BEH-BEH-012 @ref-OPT-BEH-BEH-018 @ref-OPT-BEH-BEH-028
 Egenskap: Beregne poengsum per kvote
   Som saksbehandler
   ønsker jeg at søkerens poengsum regnes ut for hver kvote søkeren er plassert i
@@ -18,7 +18,7 @@ Egenskap: Beregne poengsum per kvote
   Bakgrunn:
     Gitt at søkeren har en søknad i opptaket
 
-  @ref-FLY-OPT-AUT-001 @implemented
+  @ref-FLY-OPT-AUT-001
   Regel: Søkeren får en poengsum for hver kvote og hvert grunnlag kvoten er koblet til
 
     Scenario: Poengsum for grunnlaget kvoten er koblet til
@@ -41,7 +41,7 @@ Egenskap: Beregne poengsum per kvote
       Når poengsummen regnes ut
       Så har søkeren ingen poengsum i kvotetypen søkeren ikke er plassert i
 
-  @depends-on-OPT-REG-KVO-001 @depends-on-OPT-REG-RAN-002 @ref-FLY-OPT-AUT-001 @implemented
+  @depends-on-OPT-REG-KVO-001 @depends-on-OPT-REG-RAN-002 @ref-FLY-OPT-AUT-001
   # OPT-REG-KVO-001: «En kvotetype kan ha en default poengformel»
   Regel: Poengsummen regnes ut med poengformelen til kvotetypen
     # Poengformelen til kvotetypen settes i regelverket, og poengformlene opprettes i OPT-REG-RAN-002.
@@ -52,7 +52,7 @@ Egenskap: Beregne poengsum per kvote
       Når poengsummen regnes ut
       Så er poengsummen i kvotetypen 49
 
-  @ref-FLY-OPT-AUT-001 @implemented
+  @ref-FLY-OPT-AUT-001
   Regel: Bare grunnlag søkeren er kvalifisert på, gir poengsum
     # Avklart 2026-10-29: søkeren får bare poengsum på grunnlag søkeren er kvalifisert på for
     # kompetanseregelverket.
@@ -66,7 +66,6 @@ Egenskap: Beregne poengsum per kvote
   @ref-FLY-OPT-AUT-001
   Regel: Poengsummen regnes ut på nytt når det den bygger på, endres
 
-    @implemented
     Scenariomal: Poengsummen regnes ut på nytt når <endring>
       Gitt at søkeren har en poengsum i en kvotetype
       Når <endring>
@@ -85,7 +84,7 @@ Egenskap: Beregne poengsum per kvote
       Når poengsummen regnes ut på nytt uten at den endres
       Så har endringsloggen ikke fått noe nytt innslag for poengsummen
 
-  @ref-FLY-OPT-AUT-001 @implemented
+  @ref-FLY-OPT-AUT-001
   Regel: En poengsum som ikke kan regnes ut, stopper ikke de andre
 
     Scenario: Poengsummen i de andre kvotene regnes ut når én kvote feiler
@@ -113,7 +112,7 @@ Egenskap: Beregne poengsum per kvote
       Når saken ikke lenger har noe grunnlag
       Så har søkeren ingen poengsum
 
-  @ref-OPT-PLA-TIL-002 @ref-FLY-OPT-AUT-001 @implemented
+  @ref-OPT-PLA-TIL-002 @ref-FLY-OPT-AUT-001
   Regel: Saksbehandleren ser den høyeste poengsummen per kvote for hvert søknadsalternativ
     # Plasstildelingen bruker den samme poengsummen («Søkeren rangeres etter den høyeste
     # poengsummen i utdanningskvoten» i OPT-PLA-TIL-002).

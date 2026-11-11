@@ -168,7 +168,7 @@ Egenskap: Automatisk vurdering av spesielle opptakskrav
       Så har fagkravet Fysikk 1 ingen karakter
       Og saksbehandleren ser at fagkravet må vurderes manuelt
 
-  @depends-on-OPT-BEH-BEH-004 @ref-FLY-OPT-AUT-001
+  @depends-on-OPT-BEH-BEH-004 @ref-FLY-OPT-AUT-001 @implemented
   Regel: Kravelementene vurderes bare mot ett entydig vitnemål
     # Har søkeren flere vitnemål, velger saksbehandleren vitnemålet først (OPT-BEH-BEH-039).
 
@@ -185,7 +185,6 @@ Egenskap: Automatisk vurdering av spesielle opptakskrav
         | søkerens eneste elektroniske dokument er et kompetansebevis                                              |
         | søkeren ikke har noe elektronisk vitnemål                                                                |
 
-    @implemented
     # Avklart 06.11.2026: kompetansebevis kommer ikke fra KREG, så raden om kompetansebevis er tatt ut.
     Scenariomal: Ingen automatisk vurdering når <grunn>
       Gitt at <grunn>
@@ -198,7 +197,6 @@ Egenskap: Automatisk vurdering av spesielle opptakskrav
         | søkeren har flere elektroniske vitnemål som ikke er annullert, og saksbehandleren ikke har valgt vitnemål |
         | søkeren ikke har noe elektronisk vitnemål                                                                |
 
-    @implemented
     Scenario: Opplastet kompetansebevis stopper ikke vurderingen
       # Avklart 06.11.2026: kompetansebevis kommer bare som dokumenter søkeren laster opp, ikke
       # fra KREG. Saksbehandleren finner sakene med filteret «Ubehandlet opplastet dok.» i
@@ -310,6 +308,7 @@ Egenskap: Automatisk vurdering av spesielle opptakskrav
       Så er fagkravet Fysikk 1 vurdert automatisk
       Og vurderingen av Matematikk R1 er uendret
 
+    @implemented
     Scenario: Nullstilt kravelement kan vurderes automatisk igjen
       Gitt at saksbehandleren har satt at fagkravet Norsk er oppfylt, med karakteren 4
       Når saksbehandleren nullstiller karakteren og vurderingen av fagkravet Norsk

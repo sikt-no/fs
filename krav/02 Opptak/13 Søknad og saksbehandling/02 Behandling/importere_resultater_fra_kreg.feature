@@ -21,22 +21,19 @@ Egenskap: Importere resultater fra KREG
   # Avklart 30.10.2026: resultater fra høyere utdanning importeres også, men i et eget krav
   # (OPT-BEH-BEH-038). Tilleggspoeng for høyere utdanning (OPT-BEH-BEH-028) trenger dem.
 
-  @ref-FLY-OPT-AUT-001 @ref-OPT-BEH-BEH-032
+  @ref-FLY-OPT-AUT-001 @ref-OPT-BEH-BEH-032 @implemented
   Regel: Resultatene hentes når saken er opprettet
 
-    @implemented
     Scenario: Resultatene hentes når søkeren sender inn søknaden
       Gitt at søkeren har et vitnemål i KREG
       Når søkeren sender inn søknaden
       Så er vitnemålet importert
 
-    @implemented
     Scenario: Resultatene hentes når søknaden registreres på vegne av søkeren
       Gitt at søkeren har et vitnemål i KREG
       Når saksbehandleren registrerer søknaden på vegne av søkeren
       Så er vitnemålet importert
 
-    @implemented
     Scenario: Resultatene hentes når en endring av søknaden gir en ny sak
       # Avklart 03.11.2026: resultatene hentes på nytt hver gang søknaden endres, også når
       # endringen ikke gir en ny sak. Det dekker hullet til importen av VGS-vitnemål fra KREG
@@ -46,7 +43,6 @@ Egenskap: Importere resultater fra KREG
       Når søkeren legger til et studieønske som saksbehandles hos en ny organisasjon
       Så er det nye vitnemålet importert
 
-    @implemented
     Scenario: Resultatene hentes først når saken er opprettet
       # Avklart 29.10.2026: uten sak er det ikke noe å behandle. Koden gjør dette i dag.
       Gitt at opptaket mangler behandlertildelingsregel
@@ -55,7 +51,7 @@ Egenskap: Importere resultater fra KREG
       Så er vitnemålet ikke importert før saken er opprettet
 
     Scenario: Resultatene hentes med D-nummer når søkeren ikke har fødselsnummer
-      # Avklart 03.11.2026. Kode i dag: bare fødselsnummer slås opp. KREG tar imot D-nummer.
+      # Avklart 03.11.2026: KREG tar imot D-nummer.
       # D-nummeret brukes også når resultatene hentes på nytt, i importen av VGS-vitnemål fra KREG
       # (OPT-BEH-BEH-032).
       Gitt at søkeren har D-nummer og ikke fødselsnummer
@@ -122,15 +118,9 @@ Egenskap: Importere resultater fra KREG
       Når søkerens resultater importeres på nytt
       Så er det importerte vitnemålet fortsatt annullert
 
+  @implemented
   Regel: Søknaden behandles videre når resultatene ikke kan hentes
 
-    @deprecated
-    Scenario: Søker uten fødselsnummer får ingen resultater importert
-      Gitt at søkeren ikke har fødselsnummer
-      Når søkeren sender inn søknaden
-      Så er ingen resultater importert fra KREG
-
-    @implemented
     Scenario: Søker uten fødselsnummer og D-nummer får ingen resultater importert
       Gitt at søkeren verken har fødselsnummer eller D-nummer
       Når søkeren sender inn søknaden
@@ -146,10 +136,12 @@ Egenskap: Importere resultater fra KREG
       Når importen av VGS-vitnemål fra KREG kjører etter at KREG svarer igjen
       Så er søkerens vitnemål importert
 
-  @ref-OPT-BEH-BEH-021 @ref-FLY-OPT-VIT-001 @ref-OPT-BEH-BEH-032 @ref-OPT-BEH-BEH-035 @ref-OPT-BEH-BEH-015
+  @ref-OPT-BEH-BEH-021 @ref-FLY-OPT-VIT-001 @ref-OPT-BEH-BEH-032 @ref-OPT-BEH-BEH-035 @ref-OPT-BEH-BEH-015 @implemented
   Regel: Nye og annullerte vitnemål i KREG importeres for aktive søkere
-    # Gjelder aktive søkere: søkere med en søknad som ikke er trukket, i et opptak som ikke er
-    # avsluttet.
+    # En aktiv søker har minst én aktiv sak i et opptak som er publisert.
+    # Avklart 10.11.2026 (Sondre): det er ikke noe poeng å hente vitnemål for saker som ikke er
+    # aktive. Blir saken aktiv igjen, gir det en søknadshendelse, og vitnemålene hentes på nytt
+    # («Resultatene hentes når saken er opprettet»).
     # Avklart 29.10.2026: nytt vitnemål og annullering tas inn. Opphevet annullering og endringer i
     # et vitnemål som er importert, tas ikke inn.
     # Jobben for nye vitnemål (OPT-BEH-BEH-033) går gjennom alle aktive søkere, og henter
@@ -170,10 +162,15 @@ Egenskap: Importere resultater fra KREG
       Når importen av VGS-vitnemål fra KREG kjører
       Så hentes søkerens VGS-dokumenter fra KREG én gang
 
-    Scenario: Vitnemålene hentes ikke for søkeren som ikke er aktiv
-      Gitt at søkeren ikke har noen søknad som ikke er trukket, i et opptak som ikke er avsluttet
+    Scenariomal: Vitnemålene hentes ikke for søkeren som ikke er aktiv
+      Gitt at <grunn>
       Når importen av VGS-vitnemål fra KREG kjører
       Så hentes ingen VGS-dokumenter for søkeren fra KREG
+
+      Eksempler:
+        | grunn                                          |
+        | søkeren har ingen aktiv sak                    |
+        | opptaket søkeren har søkt i, er ikke publisert |
 
     Scenario: Vitnemålet annulleres og erstattes av et nytt etter at opptakssystemet har behandlet søknaden
       Gitt at opptakssystemet har behandlet søknaden på søkerens importerte vitnemål
