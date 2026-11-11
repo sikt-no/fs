@@ -94,7 +94,7 @@ MoSCoW er et forslag ut fra møtet 2026-11-10 og må bekreftes av produkteier. M
 | `@OPT-OVO-SAM-001` — Regel: I et lokalt opptak kan ikke andre organisasjoner legges til [samordna_opptak.feature](../../../krav/02%20Opptak/11%20Opprette%20og%20vedlikeholde%20opptak/02%20Samordning/samordna_opptak.feature) | Should | – | – | R7. Opptaket er lukket for andre til det er publisert. Ingen ny API-regel her: svar 19 gjelder data, og avklaringen 2026-10-12 om at API-et ikke trenger å sperre, står (larsssikt i #1009) |
 | `@OPT-SØK-SØK-013` [finne_studier.feature](../../../krav/02%20Opptak/13%20S%C3%B8knad%20og%20saksbehandling/01%20S%C3%B8knad/finne_studier.feature) — Regel: Bare publiserte opptak og utdanningstilbud vises for brukere og integrasjoner uten roller | Should | – | – | R15. Bare publiserte data (svar 18). Bølge 2 |
 | `@OPT-OPT-UTD-001` — Regel: Opptaksforvalter ved deltakende organisasjon ser kun utdanningstilbud organisasjonen tilbyr [listevisning_utdanningstilbud.feature](../../../krav/02%20Opptak/12%20Utdanningstilbud/02%20Utdanningstilbud%20i%20opptak/listevisning_utdanningstilbud.feature) | Should | – | – | R8. Behandleren leser krav, poeng og kvoter på tilbudene den behandler. Ingen ser upubliserte tilbud uten tilknytning |
-| `@OPT-REG-SAM-002` tilgang_til_regelverk.feature (PR 996) | Should | – | – | R9. Opptaksinformatører leser regelverket (svar 14). Saksbehandler bare ser (svar 17). Bare opptaksforvalter (MODIFISERE_REGELVERK) endrer |
+| `@OPT-REG-SAM-001` regelverkssamling.feature (PR 996) | Should | – | – | R9. Opptaksinformatører leser regelverket (svar 14). Saksbehandler bare ser (svar 17). Bare opptaksforvalter (MODIFISERE_REGELVERK) endrer |
 | `@OPT-OPT-UTD-004` — Regel: Deltakende organisasjon kan ikke endre poenggrensen for tidlig opptak etter fristen [opptaksinnstillinger_utdanningstilbud.feature](../../../krav/02%20Opptak/12%20Utdanningstilbud/03%20Opptaksinnstillinger/opptaksinnstillinger_utdanningstilbud.feature) | Should | – | – | R11. Poenggrenser er skjult for søkere og brukere uten roller til de er publisert. Tilbydere ser ikke hverandres poenggrenser for tidlig opptak |
 | `@OPT-BEH-BEH-044` [skrive_merknad_i_saken.feature](../../../krav/02%20Opptak/13%20S%C3%B8knad%20og%20saksbehandling/02%20Behandling/skrive_merknad_i_saken.feature) | Should | – | – | R6. Delt er standard. Interne ses bare av organisasjonen som skrev dem (svar 10) |
 | `@OPT-BEH-BEH-008` — Regel: Organisasjonene som behandler søknaden ser manglene i alle sakene, men endrer bare manglene i saken sin [søknadsmangler.feature](../../../krav/02%20Opptak/13%20S%C3%B8knad%20og%20saksbehandling/02%20Behandling/s%C3%B8knadsmangler.feature) | Should | – | – | Rettes: interne og delte mangler (svar 10) |
@@ -107,7 +107,7 @@ MoSCoW er et forslag ut fra møtet 2026-11-10 og må bekreftes av produkteier. M
 | `@OPT-SØK-SØK-007` [svare_på_tilbud.feature](../../../krav/02%20Opptak/13%20S%C3%B8knad%20og%20saksbehandling/01%20S%C3%B8knad/svare_p%C3%A5_tilbud.feature), `@OPT-SØK-SØK-019` [håndtere_dokumentasjon_i_søknad.feature](../../../krav/02%20Opptak/13%20S%C3%B8knad%20og%20saksbehandling/01%20S%C3%B8knad/h%C3%A5ndtere_dokumentasjon_i_s%C3%B8knad.feature) | Should | – | – | R12. Søkeren trekker fram til plasstildeling, sletter opplastede dokumenter bare kort tid etter opplasting, og kan ikke endre resultatkoder eller behandler |
 | Nytt krav, ikke skrevet: Sikt-brukerstøtte | Should | – | – | Eget spor: få navngitte ansatte, innsyn på tvers av organisasjoner for feilsøking, innsynet logges (svar 32) |
 | `@OPT-BEH-BEH-045` [ta_ut_sakslista.feature](../../../krav/02%20Opptak/13%20S%C3%B8knad%20og%20saksbehandling/02%20Behandling/ta_ut_sakslista.feature) | Could | – | – | Formål og bekreftelse før uttrekk. Fødselsnummer bare når brukeren velger det. Saksbehandlere og opptaksforvaltere, ikke opptaksinformatører (svar 25, 30) |
-| `@OPT-REG-SAM-001` [regelverkssamling.feature](../../../krav/02%20Opptak/10%20Regelverk/01%20Regelverkssamling/regelverkssamling.feature) — Regel: Regelverkssamlingene ved organisasjonen brukeren er ansatt ved, vises først | Could | – | – | Regelverket ved brukerens organisasjon vises først (svar 16) |
+| `@OPT-REG-SAM-001` [regelverkssamling.feature](../../../krav/02%20Opptak/10%20Regelverk/01%20Regelverkssamling/regelverkssamling.feature) — Regel: Regelverkssamlingene ved organisasjonen brukeren er ansatt ved, vises først (PR 996) | Could | – | – | Regelverket ved brukerens organisasjon vises først (svar 16) |
 | `@OPT-SØK-MEL-001` [sende_melding_til_søker.feature](../../../krav/02%20Opptak/13%20S%C3%B8knad%20og%20saksbehandling/04%20Meldinger%20og%20oppgaver/sende_melding_til_s%C3%B8ker.feature) — Regel: Hvem som endrer tekstene til søkerne, følger organisasjonens rolle i opptaket | Could | – | – | R16. Hvem ser og endrer tekster (svar 31) |
 | `@OPT-OVO-GRU-001` — Regel: Opptaksforvalter kan deaktivere et opptak [opprett_opptak.feature](../../../krav/02%20Opptak/11%20Opprette%20og%20vedlikeholde%20opptak/01%20Grunnoppsett/opprett_opptak.feature) | Could | – | – | R14. Et deaktivert opptak kan leses, men ikke endres. Regelen er `Won't` i opprette-opptak-2027 |
 | Nytt krav, ikke skrevet: se Min kompetanse som søkeren | Won't | – | – | Utenfor 2027 (svar 32) |
@@ -193,7 +193,7 @@ Flere av kravene hører til andre scopes. Reglene legges inn der, og scopet her 
 | R6 | `@OPT-BEH-BEH-008` søknadsmangler.feature | Rettes: interne og delte mangler. ✅ Skrevet | Should |
 | R7 | `@OPT-OVO-SAM-001` samordna_opptak.feature, `@OPT-OVO-GRU-001` opprett_opptak.feature | Opptaket er lukket til det er publisert. Eieren kan ikke endres. Regelen om at API-et avviser deltakere i lokale opptak er tatt ut igjen. ✅ Skrevet | Should |
 | R8 | `@OPT-OPT-UTD-001` listevisning_utdanningstilbud.feature | Behandleren leser krav, poeng og kvoter på tilbudene den behandler. ✅ Skrevet | Should |
-| R9 | `@OPT-REG-SAM-002` (PR 996) | Opptaksinformatøren leser regelverket. Saksbehandler bare ser. Bør flyttes inn i `@OPT-REG-SAM-001`, etter README-en. ⏳ Gjøres i PR 996 | Should |
+| R9 | `@OPT-REG-SAM-001` regelverkssamling.feature (PR 996) | Opptaksinformatøren leser regelverket. Saksbehandler og opptaksinformatør ser, men endrer ikke. Det egne kravet `@OPT-REG-SAM-002` er tatt ut. ✅ Skrevet | Should |
 | R11 | `@OPT-OPT-UTD-004`, `@OPT-OPT-UTD-029` | Skjult til publisering. Tilbydere ser ikke hverandres poenggrenser for tidlig opptak. ✅ Skrevet | Should |
 | R12 | `@OPT-SØK-SØK-008` trekke_søknad.feature, `@OPT-SØK-SØK-019` håndtere_dokumentasjon_i_søknad.feature, `@OPT-SØK-SØK-007` svare_på_tilbud.feature | Trekke fram til plasstildeling. Slette dokumenter bare kort tid etter opplasting. Søkeren endrer ikke resultatkoder eller behandler. ✅ Skrevet | Should |
 | R15 | `@OPT-SØK-SØK-013` finne_studier.feature, `@OPT-SØK-SØK-015` se_utdanningstilbud.feature | Brukere og integrasjoner uten roller ser bare publiserte data. ✅ Skrevet | Should |
@@ -201,7 +201,7 @@ Flere av kravene hører til andre scopes. Reglene legges inn der, og scopet her 
 | R14 | `@OPT-OVO-GRU-004` opptaksstatus.feature | Et historisk opptak kan leses, men ikke endres, heller ikke i API-et. Regelen står i opptaksstatus.feature, der deaktivering nå heter historisk. ✅ Skrevet | Could |
 | R16 | `@OPT-SØK-MEL-001` sende_melding_til_søker.feature | Hvem ser og endrer tekster til søkere. ✅ Skrevet | Could |
 | Uttrekk | `@OPT-BEH-BEH-045` ta_ut_sakslista.feature (nytt) | Formål, bekreftelse og fødselsnummer som aktivt valg. Saksbehandlere og opptaksforvaltere. ✅ Skrevet | Could |
-| Sortering | `@OPT-REG-SAM-001` regelverkssamling.feature | Regelverket ved brukerens organisasjon vises først. ✅ Skrevet | Could |
+| Sortering | `@OPT-REG-SAM-001` regelverkssamling.feature (PR 996) | Regelverket ved brukerens organisasjon vises først. ✅ Skrevet | Could |
 
 ## Åpne spørsmål
 
@@ -228,6 +228,7 @@ Append-only. Ny linje på toppen ved hver hendelse.
 
 | Dato       | Hendelse | Av | Lenke til review |
 |------------|----------|----|------------------|
+| 2026-11-11 | Regelverket (R9), med sorteringen, er samlet i PR 996, i `@OPT-REG-SAM-001` | @karensikt | #996 |
 | 2026-11-11 | Etter review: felleskrav om at ingen har tilgang uten en regel (`@FEL-TIL-GRU-001`), nei-rader for organisasjoner uten rolle fjernet der felleskravet dekker dem, og API-regelen i `@OPT-OVO-SAM-001` tatt ut | @karensikt | #1009 |
 | 2026-11-10 | Advarselen gjelder bare personopplysninger som ikke skal deles på tvers. Også på møtesiden | @karensikt | – |
 | 2026-11-10 | «Databasen tillater at personopplysninger leses på tvers av læresteder» i stedet for «lekker», med forbehold og advarsel. Også på møtesiden | @karensikt | – |
