@@ -9,7 +9,7 @@ Fra Jens Peter Thomassen til Daniel Sachse, 2026-11-11, mens Jens Peter er på f
 | 1. Verifisering | 25 av 27 scenarioer funnet. Kravet er delvis levert (`@in-progress`). Kontrollert av Daniel 2026-11-09 | [testrapport-verifisering-2026-11-09.md](testrapport-verifisering-2026-11-09.md) · [Confluence](https://sikt.atlassian.net/wiki/spaces/STUDIEADM/pages/5181767779) |
 | 1. Testplan | Laget og publisert | [testplan.md](testplan.md) · [Confluence](https://sikt.atlassian.net/wiki/spaces/STUDIEADM/pages/5181997074) |
 | 2. Agentisk funksjonstest | Kjørt 2026-11-11 i TEST: 40 bestått, 5 ikke testet, av 45. Ingen nye funn | [kjoring-2026-11-11-1057/resultat.md](kjoring-2026-11-11-1057/resultat.md) |
-| 2. Testrapport – agentisk | **Venter på gjennomgang av testansvarlig** | [testrapport-agentisk-2026-11-11.md](testrapport-agentisk-2026-11-11.md) · Confluence (lenken står i metadataene i fila) |
+| 2. Testrapport – agentisk | **Venter på gjennomgang av testansvarlig** | [testrapport-agentisk-2026-11-11.md](testrapport-agentisk-2026-11-11.md) · [Confluence](https://sikt.atlassian.net/wiki/spaces/STUDIEADM/pages/5187174452) |
 | 3. Intern akseptansetest | Ikke startet | – |
 | 4. Ekstern akseptansetest | Ikke avgjort om den er aktuell | – |
 

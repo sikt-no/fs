@@ -6,7 +6,7 @@
 - **Scope**: @scope-tidlig-opptak
 - **Grunnlag**: [`kjoring-2026-11-11-1057/resultat.md`](kjoring-2026-11-11-1057/resultat.md), lest 2026-11-11. Prøven [`kjoring-2026-11-10-1440`](kjoring-2026-11-10-1440/resultat.md) (3 testcaser ikke testet på grunn av F1) er ikke talt med: alle testcasene er kjørt på nytt 2026-11-11, etter at F1 var rettet
 - **Branch**: `testplan/beh-007-tidligopptak` (PR #989), oppdatert mot origin, 92 commits bak main (fortsatt uten å hente main)
-- **Confluence**: –
+- **Confluence**: https://sikt.atlassian.net/wiki/spaces/STUDIEADM/pages/5187174452
 - **Laget**: 2026-11-11 av fs-testrapport
 
 ---

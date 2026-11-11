@@ -117,7 +117,7 @@ Testansvarlig skriver beslutningen og begrunnelsen i sluttrapporten. Rettede fun
 | 1. Testplan | (denne siden) | Laget | 2026-11-09 |
 | 2. Agentisk funksjonstest – testcaser (`fs-testcaser-cdp`) | [`cdp-tester/02 Opptak/13 Søknad og saksbehandling/02 Behandling/`](../../cdp-tester/02%20Opptak/13%20S%C3%B8knad%20og%20saksbehandling/02%20Behandling/gi_tilbudsgaranti_ved_tidlig_opptak.feature) | Laget (søkerne og flere testdata i miljøfila må fylles ut før kjøringen) | 2026-11-09 |
 | 2. Agentisk funksjonstest – kjøring | [kjoring-2026-11-11-1057/resultat.md](kjoring-2026-11-11-1057/resultat.md) (prøven [kjoring-2026-11-10-1440](kjoring-2026-11-10-1440/resultat.md) stoppet på F1, som er rettet) | Kjørt: 40 bestått, 5 ikke testet, av 45 | 2026-11-11 |
-| 2. Testrapport – agentisk funksjonstest | [testrapport-agentisk-2026-11-11.md](testrapport-agentisk-2026-11-11.md) | Venter på gjennomgang | 2026-11-11 |
+| 2. Testrapport – agentisk funksjonstest | [testrapport-agentisk-2026-11-11.md](testrapport-agentisk-2026-11-11.md) · [Confluence](https://sikt.atlassian.net/wiki/spaces/STUDIEADM/pages/5187174452) | Venter på gjennomgang | 2026-11-11 |
 | 3. Intern akseptansetest | – | Venter | |
 | 4. Ekstern akseptansetest | – | [Fylles ut: Venter eller Ikke aktuell] | |
 
@@ -128,9 +128,10 @@ Testrapportene (verifisering, agentisk, intern og ekstern) står som undersider,
 | Vedlegg | Lenke |
 |---|---|
 | Verifiseringsrapporten (fase 1) | [Verifisering – Gi tilbudsgaranti ved tidlig opptak – 2026-11-09 11:36](https://sikt.atlassian.net/wiki/spaces/STUDIEADM/pages/5180653598) · [verify-gi_tilbudsgaranti_ved_tidlig_opptak-2026-11-09-1136.md](../../krav/02%20Opptak/13%20S%C3%B8knad%20og%20saksbehandling/02%20Behandling/verify-gi_tilbudsgaranti_ved_tidlig_opptak-2026-11-09-1136.md) · [teamvisning](https://claude.ai/artifact/GBzMJsMvjP5xXAUvb6MCKE) |
-| Agentisk testrapport (fase 2) | – |
+| Agentisk testrapport (fase 2) | [Testrapport – agentisk funksjonstest – Gi tilbudsgaranti ved tidlig opptak](https://sikt.atlassian.net/wiki/spaces/STUDIEADM/pages/5187174452) · [testrapport-agentisk-2026-11-11.md](testrapport-agentisk-2026-11-11.md) |
 | Testcasene for fase 2 | [`cdp-tester/02 Opptak/13 Søknad og saksbehandling/02 Behandling/`](../../cdp-tester/02%20Opptak/13%20S%C3%B8knad%20og%20saksbehandling/02%20Behandling/gi_tilbudsgaranti_ved_tidlig_opptak.feature) |
 | Testcasene for fase 3 | – |
+| Overlevering (2026-11-11) | [overlevering-2026-11-11.md](overlevering-2026-11-11.md): hvor testen er, hva som gjenstår, testdataene og hvordan den agentiske testen kjøres |
 
 ## Læring
 
