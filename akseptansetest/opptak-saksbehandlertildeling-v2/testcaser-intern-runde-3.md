@@ -73,7 +73,7 @@ Intern akseptansetest av «Saksbehandlertildeling», runde 3. Testbrukerne og te
 
 | Scenario | Hvorfor | Når det kan testes |
 | --- | --- | --- |
-| Tilbyderen ser dokumentene søkeren har lastet opp (funn 5) | Ikke bygget. Scenarioet har et åpent spørsmål: ny sak, eller ta det ut av kravet | Når spørsmålet er avklart, og det eventuelt er bygget |
+| Tilbyderen ser dokumentene søkeren har lastet opp (funn 5) | Ikke bygget. Følges opp i [STEK-687](https://sikt.atlassian.net/browse/STEK-687), der personvernet avklares | Når spørsmålet er avklart, og det eventuelt er bygget |
 
 ## Ikke med i denne runden
 

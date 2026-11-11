@@ -554,7 +554,8 @@ Egenskap: Tildele saksbehandlende organisasjon
     Scenario: Tilbyderen ser dokumentene søkeren har lastet opp
       # ÅPNE SPØRSMÅL:
       # - Ikke bygget (verifisert 11.11.2026): dokumentene kan bare leses av organisasjonen til saken dokumentet
-      #   ligger på, og av opptaksforvalteren. Skal tilbyderen se dokumentene (ny sak), eller tas scenarioet ut?
+      #   ligger på, og av opptaksforvalteren. Skal tilbyderen se dokumentene, eller tas scenarioet ut?
+      #   Følges opp i STEK-687 (personvern avklares der).
       Gitt at "Historie, UiT" er fordelt til "Universitetet i Oslo"
       Og at søkeren har lastet opp et vitnemål til søknaden
       Når saksbehandleren ved UiT Norges arktiske universitet åpner saken med "Historie, UiT"
