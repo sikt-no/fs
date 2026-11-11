@@ -1,5 +1,4 @@
 # language: no
-# BEGREPER (2026-11-10): Bytt «opptakets forvalter» med «forvalter» når fila likevel endres. Se krav/02 Opptak/begreper.md.
 # GitHub: #586
 @OPT-PLA-RES-002 @must @draft @scope-plasstildeling-2027
 Egenskap: Publisere resultatet til søkerne
@@ -16,7 +15,7 @@ Egenskap: Publisere resultatet til søkerne
   # Status i kode: delvis. Ventelistenummeret når ikke fram til søkeren.
 
   Bakgrunn:
-    Gitt at opptakets forvalter er innlogget
+    Gitt at opptaksforvalter hos forvalteren er innlogget
     Og at plasstildelingsrunden "Hovedrunde" i opptaket "Samordna opptak 2027" har en plasstildeling som ikke er publisert
 
   Regel: Søkerne ser ikke resultatet før det er publisert

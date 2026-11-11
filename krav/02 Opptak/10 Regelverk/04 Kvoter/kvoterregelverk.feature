@@ -159,7 +159,7 @@ Egenskap: Kvotetype
         | IV     | individuell vurdering (uten poengberegning) |
         | IH     | individuell helhetsvurdering                |
 
-  @draft @scope-spesialvurdering-2027
+  @planned @scope-spesialvurdering-2027
   Regel: En kvotetype kan skjule poengene for søkeren
     # AVKLART 2026-11-11 (produkteier): Om søkeren ser poengene, kan avhenge av kvoten, ikke bare grunnlaget.
     # Søkeren kan bli vurdert på samme grunnlag i en kvote som skjuler poengene (ventekvoten) og i en kvote

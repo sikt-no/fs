@@ -41,7 +41,6 @@ Egenskap: Opprette ventekvote for søkere uten poeng
         | Realkompetanse (REAL) |
         | Uten poeng (HUP)      |
 
-  @draft
   Regel: Ventekvoten skjuler poengene for søkeren
     # Søkeren ser poengene i svaret når resultatet av plasstildelingen er publisert, se
     # 14 Plasstildeling/04 Resultat/publisere_resultat.feature.
