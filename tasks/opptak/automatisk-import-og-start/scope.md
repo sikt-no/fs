@@ -47,6 +47,7 @@ Append-only. Ny linje på toppen ved hver hendelse.
 
 | Dato       | Hendelse | Av | Lenke til review |
 |------------|----------|----|------------------|
+| 2026-11-10 | D-nummer levert (fs-plattform !6648): `@OPT-BEH-BEH-030` «Resultatene hentes når saken er opprettet» og `@OPT-BEH-BEH-032` «Behandlingen kjører for hver ny sak saksbehandlertildelingen oppretter» er `@implemented`. Det utdaterte scenarioet «Søker uten fødselsnummer får ingen resultater importert» er slettet | @sondre-i-sikt | – |
 | 2026-11-09 | `@OPT-BEH-BEH-032`: regelen «Saken viser hvorfor den ikke kunne behandles automatisk» er slettet, det er ikke et krav. `status_automatisk_behandlet` skal bety at saken er ferdig behandlet automatisk. `@OPT-BEH-BEH-030`: ny henting når KREG ikke svarte, skjer ved neste kjøring av importjobben | @sondre-i-sikt | – |
 | 2026-11-06 | `@OPT-BEH-BEH-032`: et nytt vitnemål etter at saken er behandlet, gir saken nye resultater (`@OPT-BEH-BEH-035`, henvisning, ikke avhengighet). `@OPT-BEH-BEH-033`: importen én gang i døgnet holder også for annulleringer. Fra økta med fagfolk 06.11.2026 (PR #966) | @JøranIndseth | – |
 | 2026-11-05 | `@OPT-BEH-BEH-033`: Sikt får ett samlet varsel per kjøring når importen feiler, og regelen om at opptaksforvalteren starter en jobb selv er slettet (importen kjører neste natt). Fra gjennomgangen av flyten automatisk saksbehandling | @JøranIndseth | – |

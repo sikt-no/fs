@@ -27,8 +27,9 @@ Egenskap: Legge inn vitnemål manuelt
 
   Saksbehandleren legger inn fagene i en kalkulator. Kalkulatoren er ikke et
   komplett vitnemål: den har bare fagene og karakterene som trengs for å
-  beregne poengene, og ingen av opplysningene er påkrevd. Kravelementene
-  vurderes under spesielle opptakskrav, ikke i kalkulatoren.
+  beregne poengene, og ingen av opplysningene er påkrevd. Når vitnemålet er
+  lagt inn, ligger det under vitnemålene og behandles som et elektronisk
+  vitnemål. Kravelementene vurderes under spesielle opptakskrav.
 
   Bakgrunn:
     Gitt jeg er innlogget i løsningen
@@ -57,7 +58,8 @@ Egenskap: Legge inn vitnemål manuelt
       # (utstedt dato, førstegangsvitnemål, GSK), og ingen av feltene er
       # påkrevd. Feltene er de samme som i skissen «Steg 2 Grunnlag – Legg inn
       # vitnemål manuelt». Kravelementer er ikke en del av kalkulatoren, men
-      # vurderes under spesielle opptakskrav.
+      # vurderes under spesielle opptakskrav, som for et elektronisk
+      # vitnemål.
 
     Scenario: Legge inn vitnemålet uten at søkeren har elektronisk vitnemål
       Gitt søkeren ikke har elektroniske vitnemål
@@ -125,6 +127,17 @@ Egenskap: Legge inn vitnemål manuelt
     #   Begge spørsmålene sjekkes med Geir Magne Vangen, som skrev den
     #   tekniske beskrivelsen av FS-klienten, eller i FS-klientens kode
     #   (w_fagkonverterer). Avtalt 04.11.2026.
+    #   Innspill på siden med åpne spørsmål 04.–05.11.2026, ikke avklart:
+    #   Geir Magne Vangen skriver at tabellen nvb_fagekv (fagkode, faggruppe)
+    #   lar saksbehandleren legge inn fag fra én reform som tillegg på et
+    #   dokument fra en annen, at dataene kommer med NVB-importen fra SODA,
+    #   og at den neppe er vedlikeholdt på lenge. Ingrid Grimstad Helset
+    #   skriver at kontrollmotoren i NVB (som Team Puff bygger på nytt) har
+    #   lister over fagkoder som dekker fagkrav og studiekompetansekrav, at
+    #   Sikt vedlikeholder listene og HK-dir bestemmer innholdet, og at det
+    #   ikke er det samme som hvilke fag som tilsvarer hverandre på tvers av
+    #   reformer. Det har Utdanningsdirektoratet oversikter over. Ellers
+    #   vurderer saksbehandleren selv hvilke fag som tilsvarer hverandre.
     Scenario: Konvertere et utgått fag til faget i en nyere reform
       Gitt jeg har lagt inn et fag fra en tidligere reform manuelt
       Og faget har et tilsvarende fag i en nyere reform
@@ -163,6 +176,21 @@ Egenskap: Legge inn vitnemål manuelt
       # bare legge karakteren i snittet. Begrensningen skal være synlig i
       # øyeblikket saksbehandleren velger fritekst, ikke oppdages senere når
       # et poeng mangler.
+
+    Scenario: Legge inn en fagkode som ikke finnes i fagkodeverket
+      Gitt søkeren har dokumentasjon på et fag med en fagkode som ikke finnes i fagkodeverket
+      Når jeg legger inn fagkoden, fagnavnet og karakteren
+      Så er faget lagt inn med fagkoden
+      Og faget inngår i snittet
+      Men faget inngår ikke i realfagspoeng, språkpoeng eller kravelementvurdering
+      Og det fremgår for meg at fagkoden ikke finnes i fagkodeverket
+      # AVKLART 05.11.2026: saksbehandleren kan legge inn ukjente fagkoder.
+      # Innspill fra Ingrid Grimstad Helset på siden med åpne spørsmål
+      # 05.11.2026. Kontrollmotoren kjenner ikke fagkoden, så faget har den
+      # samme begrensningen som et fag uten fagkode. Saksbehandleren kan
+      # markere at faget gir realfagspoeng eller språkpoeng, eller dekker et
+      # kravelement (L4a, «Saksbehandleren kan overstyre kontrollmotoren for
+      # et fag»).
 
     Scenario: Manuelt innlagte fag skilles fra elektroniske
       Gitt jeg har lagt inn et fag manuelt
