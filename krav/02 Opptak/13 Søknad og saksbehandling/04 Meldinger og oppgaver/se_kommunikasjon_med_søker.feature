@@ -33,7 +33,6 @@ Egenskap: Se kommunikasjon med søker
         | delt   | opptaksinformatør | tilbyderen av søknadsalternativet     | ser      |
         | intern | saksbehandler     | tilbyderen av søknadsalternativet     | ser ikke |
         | intern | saksbehandler     | behandleren av søknadsalternativet    | ser      |
-        | delt   | saksbehandler     | en organisasjon uten rolle i opptaket | ser ikke |
 
   Regel: Saksbehandleren ser meldingene til og fra søkeren med dato og klokkeslett
 

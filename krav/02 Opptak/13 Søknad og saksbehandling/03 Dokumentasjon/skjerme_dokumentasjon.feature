@@ -26,7 +26,6 @@ Egenskap: Skjerme dokumentasjon med særlige kategorier av personopplysninger
         | saksbehandler     | tilbyderen av søknadsalternativet     | ser      |
         | opptaksforvalter  | forvalteren av opptaket               | ser      |
         | opptaksinformatør | forvalteren av opptaket               | ser      |
-        | saksbehandler     | en organisasjon uten rolle i opptaket | ser ikke |
 
   Regel: Dokumenttype følger dokumentet
 

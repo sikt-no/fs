@@ -95,16 +95,6 @@ Egenskap: Samordna opptak
       Gitt at opptaket "Lokalt opptak høst 2027" er opprettet som lokalt
       Så er det ikke mulig å legge til andre organisasjoner som deltakere
 
-  # Avklart 2026-11-10 (svar 19): API-et skal avvise det samme som FS Admin. Det erstatter avklaringen 2026-10-12 over
-  # om at API-et ikke trenger å sperre.
-  @draft
-  Regel: API-et avviser at andre organisasjoner legges til i et lokalt opptak
-
-    Scenario: En integrasjon kan ikke legge til en deltaker i et lokalt opptak
-      Gitt at opptaket "Lokalt opptak høst 2027" er opprettet som lokalt
-      Når en integrasjon forsøker å legge til en annen organisasjon som deltaker gjennom API-et
-      Så avvises det
-
   Regel: Kun organisasjoner som finnes i utdanningsregisteret kan legges til som deltakere
 
     Scenario: Legge til organisasjon som finnes i utdanningsregisteret

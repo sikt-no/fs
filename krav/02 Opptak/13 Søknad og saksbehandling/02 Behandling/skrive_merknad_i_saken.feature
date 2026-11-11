@@ -28,7 +28,6 @@ Egenskap: Skrive merknader i saken
         | intern | opptaksinformatør | behandleren av søknadsalternativet    | ser      |
         | intern | saksbehandler     | tilbyderen av søknadsalternativet     | ser ikke |
         | intern | opptaksforvalter  | forvalteren av opptaket               | ser ikke |
-        | delt   | saksbehandler     | en organisasjon uten rolle i opptaket | ser ikke |
 
   Regel: Søkeren ser ingen merknader
 

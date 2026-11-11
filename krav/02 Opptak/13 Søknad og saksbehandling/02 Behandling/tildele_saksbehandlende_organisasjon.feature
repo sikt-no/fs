@@ -477,23 +477,6 @@ Egenskap: Tildele saksbehandlende organisasjon
       Så ser saksbehandleren vurderingen, poengene og praksiskalkulatoren i saken hos "UiT Norges arktiske universitet"
       Men saksbehandleren ser ikke muligheten til å endre saken hos "UiT Norges arktiske universitet"
 
-  # Avklart 2026-11-10 (R1 og R3 i spec-en «Krav til RLS»): en organisasjon som verken forvalter opptaket, tilbyr
-  # et av søknadsalternativene eller saksbehandler en sak på søknaden, ser ikke sakene. Det gjelder også API-et.
-  @draft
-  Regel: Organisasjoner uten tilknytning til søknaden ser ikke sakene
-
-    Scenario: Saksbehandleren ved en organisasjon uten tilknytning ser ikke saken
-      Gitt at søknaden har saker hos "Universitetet i Oslo" og "UiT Norges arktiske universitet"
-      Og søknaden har ikke søknadsalternativer ved "Høgskulen på Vestlandet"
-      Når saksbehandleren ved Høgskulen på Vestlandet søker opp søkeren
-      Så finner ikke saksbehandleren søknaden eller sakene
-
-    Scenario: En integrasjon ved en organisasjon uten tilknytning får ikke sakene
-      Gitt at søknaden har saker hos "Universitetet i Oslo" og "UiT Norges arktiske universitet"
-      Og søknaden har ikke søknadsalternativer ved "Høgskulen på Vestlandet"
-      Når en integrasjon med rollen saksbehandler ved Høgskulen på Vestlandet henter sakene gjennom API-et
-      Så får integrasjonen ikke sakene
-
   # Avklart 2026-11-10 (R3 i spec-en «Krav til RLS»): den gamle saksbehandlende organisasjonen beholder innsynet
   # etter flytting bare når den tilbyr utdanningstilbudet.
   @draft

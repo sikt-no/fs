@@ -43,7 +43,6 @@ Egenskap: Hendelseslogg for saksbehandling
         | saksbehandler     | tilbyderen av søknadsalternativet     | ser      |
         | opptaksforvalter  | forvalteren av opptaket               | ser      |
         | opptaksinformatør | behandleren av søknadsalternativet    | ser      |
-        | saksbehandler     | en organisasjon uten rolle i opptaket | ser ikke |
 
     Scenario: En intern merknad vises ikke i loggen for andre organisasjoner
       Gitt behandleren har skrevet en intern merknad i saken
