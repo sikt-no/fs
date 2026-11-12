@@ -310,7 +310,8 @@ export function currentChat(cs: Conversations): Conversation | null {
  * `continuesFrom`: samtalen den nye fortsetter fra (vises i den tomme samtalen).
  */
 export function createConversation(cs: Conversations, id: string, now: number, skill: string | null = null, continuesFrom: string | null = null): Conversations {
-  const empty = cs.list.find(c => !c.chat.items.length && !c.chat.runId);
+  // En terminaløkt (f.eks. «Logg inn») eller en utførekjøring har ingen meldinger, men er ikke en tom samtale
+  const empty = cs.list.find(c => !c.chat.items.length && !c.chat.runId && !c.chat.terminal && !c.chat.target);
   if (empty) {
     if (!continuesFrom) return { ...cs, current: empty.id };
     const chat = { ...empty.chat, skill, continuesFrom };
