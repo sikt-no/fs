@@ -90,12 +90,10 @@ Egenskap: Sette standard plassflyt i regelverkssamlingen
   # hovedkvote, og kan ikke ta imot ledige plasser. Erstatter avklaringen 2026-11-06 om at kvotetypen kobles
   # til hovedkvoten. Kravet bruker ikke SPEV som eksempel, se opprette_ventekvote.feature.
   # Hva plasstildelingen gjør, står i 14 Plasstildeling/03 Tildeling/gjennomføre_plasstildeling.feature.
+  # AVKLART 2026-11-12 (produkteier, etter tilbakemelding fra backend): Scenarioet om at kvotetypen ikke sender
+  # ledige plasser videre er fjernet. Kvotetypen har ingen plasser å sende, så en mottaker ville ikke hatt noen
+  # virkning. At den ikke har mottaker i skjermbildet, står i sette_plassflyt.design.md.
   Regel: En kvotetype uten plasser er ikke med i plassflyten
-
-    Scenario: En kvotetype uten plasser sender ikke ledige plasser videre
-      Gitt at kvotetypen "Ventekvote (VENT)" er uten plasser
-      Når opptaksforvalter setter standard plassflyt i regelverkssamlingen "UHG 2027"
-      Så kan opptaksforvalter ikke velge mottaker for "Ventekvote (VENT)"
 
     Scenario: En kvotetype uten plasser kan ikke være hovedkvote
       Gitt at kvotetypen "Ventekvote (VENT)" er uten plasser

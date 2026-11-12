@@ -64,7 +64,7 @@ Dette er fasiten for tekstene, også når en skisse viser noe annet. Feilmelding
 | Forklaring øverst i modalen | Alltid | «Bestem hvor ledige plasser går når en kvote ikke blir fylt. Hver kvote kan sende til én annen kvote, og flere kvoter kan sende til samme kvote. Kvoten en kjede ender i, er hovedkvoten. En kvote uten plasser er ikke med i plassflyten.» | – | Sette standard plassflyt i regelverkssamlingen |
 | Mottakerfeltet | Ingen mottaker | «Ikke valgt» | – | Varsel om kvotetyper som ikke er koblet til plassflyten |
 | Mottakerfeltet, skjermleser | Alltid | «Mottaker for {kode}» | – | – |
-| Mottaker for en kvotetype uten plasser | Alltid | «–» | – | En kvotetype uten plasser sender ikke ledige plasser videre |
+| Mottaker for en kvotetype uten plasser | Alltid | «–» | – | – (regelen «En kvotetype uten plasser er ikke med i plassflyten») |
 | Tagg i Status | Kvoten en kjede ender i | «Hovedkvote» | – | Hovedkvoten er kvoten kjedene ender i |
 | Tagg i Status | Kvotetypen er uten plasser | «Ikke med i plassflyten» | – | Ingen varsel om plassflyt for en kvotetype uten plasser |
 | Tagg i Status | Kvotetypen verken sender eller tar imot ledige plasser | «Ikke koblet til plassflyten» | – | Varsel om kvotetyper som ikke er koblet til plassflyten |
