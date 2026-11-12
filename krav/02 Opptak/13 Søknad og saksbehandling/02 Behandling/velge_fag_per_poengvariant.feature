@@ -5,14 +5,13 @@
 # vitnemålsbehandling.feature 08.10.2026. Kilder, bakgrunn, avgrensninger og
 # oversikten over leveransene står i vitnemålsbehandling.md i samme mappe.
 #
-# Bygger på L2 (velge_vitnemål_som_grunnlag.feature). Her ligger reglene for
-# kvoten for førstegangsvitnemål, som er den vanskeligste enkeltbiten i hele
-# initiativet.
+# Bygger på L2. Her ligger reglene for kvoten for førstegangsvitnemål, som
+# er den vanskeligste enkeltbiten i hele initiativet.
 #
 # Feature-ID-en er endret fra @OPT-BEH-BEH-007 til @OPT-BEH-BEH-022, fordi
 # gi_tilbudsgaranti_ved_tidlig_opptak.feature også bruker 007 (26.10.2026).
 #
-@OPT-BEH-BEH-022 @must @planned
+@OPT-BEH-BEH-022 @must @planned @depends-on-OPT-BEH-BEH-004
 Egenskap: Velge fag per poengvariant
   Som saksbehandler i opptak
   ønsker jeg å velge hvilket vitnemål og hvilke fag som skal telle i hver poengvariant
@@ -53,23 +52,29 @@ Egenskap: Velge fag per poengvariant
         | År                 |
         | Standpunktkarakter |
         | Eksamenskarakter   |
-        | Fagstatus          |
+        | Eksamensform       |
       # Feltene er verifisert mot NVB_VGDOKFAG og mot KregFag i
-      # hentKompetansebevis: fagkode, fagnavn, fagOmfang, aar, terminkode,
-      # fagstatuskode og vurdering.
+      # hentKompetansebevis: fagkode, fagnavn, fagOmfang, aar, terminkode
+      # og vurdering.
       #
       # AVKLART 11.11.2026 (gjennomgang med domeneekspertene): «År» er
       # visningsnavnet for året og terminen faget er tatt.
+      #
+      # AVKLART 12.11.2026 (skissen «Steg 2 Grunnlag – Behandle e-vitnemål»):
+      # Fagstatus er tatt ut, og Eksamensform er lagt til, som i skissen.
 
     Scenario: Se opprinnelig og forbedret karakter samtidig
       Gitt vitnemålet har et fag søkeren har forbedret
       Når jeg ser fagene på vitnemålet
       Så ser jeg både den opprinnelige og den forbedrede karakteren for faget
-      Og det fremgår hvilken av dem som inngår i beregningen
       # Verifisert i FS-klienten: dm_vitnemalbehandl_vmfag selvjoiner
       # NVB_VGDOKFAG mot seg selv på samme fagkode med ulik status_forbedring,
       # og viser radene som kolonneparet «Opprinnelig / Forbedret».
       # Designskissen i Confluence har samme kolonnepar.
+      #
+      # AVKLART 12.11.2026 (skissen «Steg 2 Grunnlag – Behandle e-vitnemål»):
+      # steget «Og det fremgår hvilken av dem som inngår i beregningen» er
+      # tatt ut.
 
     Scenario: Se merknader på et fag
       Gitt et fag på vitnemålet har en merknad
