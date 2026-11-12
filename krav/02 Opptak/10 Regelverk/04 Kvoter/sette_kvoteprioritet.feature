@@ -1,9 +1,8 @@
 # language: no
-# BEGREPER (2026-11-10): Bytt «regelverksforvalter» med «opptaksforvalter» når fila likevel endres. Se krav/02 Opptak/begreper.md.
 # GitHub: #216
 @OPT-REG-KVO-004 @must @in-progress @scope-kvoter-i-opptaket-2027 @ref-OPT-PLA-TIL-002 @ref-OPT-OPT-UTD-004
 Egenskap: Sette kvoteprioritet i regelverkssamlingen
-  Som regelverksforvalter ved organisasjonen som eier regelverkssamlingen
+  Som opptaksforvalter ved organisasjonen som eier regelverkssamlingen
   ønsker jeg å rangere kvotetypene i regelverkssamlingen med kvoteprioritet
   slik at søkere som konkurrerer i flere kvoter, først får tilbud i kvoten som er høyest prioritert.
 
@@ -38,33 +37,33 @@ Egenskap: Sette kvoteprioritet i regelverkssamlingen
   # til regelverket): https://www.figma.com/design/dlG13wATArPvG69oePHPeL/FS-Admin---Gjeldende-skisser?node-id=5299-11637
 
   Bakgrunn:
-    Gitt at regelverksforvalter ved organisasjonen som eier regelverkssamlingen er innlogget
+    Gitt at opptaksforvalter ved organisasjonen som eier regelverkssamlingen er innlogget
     Og at regelverkssamlingen "UHG 2027" har kvotetypene "Samisk førstegangsvitnemål (SAMF)", "Førstegangsvitnemål (ORDF)" og "Ordinær kvote (ORD)"
 
   Regel: Kvoteprioriteten settes i regelverkssamlingen
 
     Scenario: Alle kvotetypene i regelverkssamlingen rangeres
-      Når regelverksforvalter åpner kvoteprioriteten i regelverkssamlingen "UHG 2027"
-      Så ser regelverksforvalter kvotetypene "Samisk førstegangsvitnemål (SAMF)", "Førstegangsvitnemål (ORDF)" og "Ordinær kvote (ORD)"
+      Når opptaksforvalter åpner kvoteprioriteten i regelverkssamlingen "UHG 2027"
+      Så ser opptaksforvalter kvotetypene "Samisk førstegangsvitnemål (SAMF)", "Førstegangsvitnemål (ORDF)" og "Ordinær kvote (ORD)"
 
     # AVKLART 2026-10-21 (produkteier): Første gang står kvotetypene uten nummer, ikke i tilfeldig rekkefølge.
     Scenario: Første gang står kvotetypene uten kvoteprioritet
       Gitt at kvoteprioriteten i regelverkssamlingen ikke er satt
-      Når regelverksforvalter åpner kvoteprioriteten i regelverkssamlingen "UHG 2027"
+      Når opptaksforvalter åpner kvoteprioriteten i regelverkssamlingen "UHG 2027"
       Så står kvotetypene "Samisk førstegangsvitnemål (SAMF)", "Førstegangsvitnemål (ORDF)" og "Ordinær kvote (ORD)" uten kvoteprioritet
-      Og regelverksforvalter må sette kvoteprioriteten for hver kvotetype
+      Og opptaksforvalter må sette kvoteprioriteten for hver kvotetype
 
     # AVKLART 2026-10-21 (produkteier): En ny kvotetype kommer inn uten nummer, ikke nederst i rekkefølgen.
-    # Regelverksforvalter må aktivt ta stilling til hvilken kvoteprioritet kvotetypen skal ha.
+    # Opptaksforvalter må aktivt ta stilling til hvilken kvoteprioritet kvotetypen skal ha.
     Scenario: Ny kvotetype i regelverkssamlingen kommer inn uten kvoteprioritet
       Gitt at kvoteprioriteten er 1 for "Samisk førstegangsvitnemål (SAMF)", 2 for "Førstegangsvitnemål (ORDF)" og 3 for "Ordinær kvote (ORD)"
       Når kvotetypen "Idrett (IDRETT)" legges til i regelverkssamlingen "UHG 2027"
       Så har "Idrett (IDRETT)" ingen kvoteprioritet i regelverkssamlingen
-      Og regelverksforvalter må sette kvoteprioriteten for "Idrett (IDRETT)"
+      Og opptaksforvalter må sette kvoteprioriteten for "Idrett (IDRETT)"
 
     Scenario: Sette kvoteprioritet i regelverkssamlingen
-      Når regelverksforvalter setter kvoteprioritet 1 for "Samisk førstegangsvitnemål (SAMF)", 2 for "Førstegangsvitnemål (ORDF)" og 3 for "Ordinær kvote (ORD)"
-      Og regelverksforvalter lagrer kvoteprioriteten
+      Når opptaksforvalter setter kvoteprioritet 1 for "Samisk førstegangsvitnemål (SAMF)", 2 for "Førstegangsvitnemål (ORDF)" og 3 for "Ordinær kvote (ORD)"
+      Og opptaksforvalter lagrer kvoteprioriteten
       Så har regelverkssamlingen "UHG 2027" kvoteprioritet 1 for "Samisk førstegangsvitnemål (SAMF)", 2 for "Førstegangsvitnemål (ORDF)" og 3 for "Ordinær kvote (ORD)"
 
   # AVKLART 2026-10-21 (produkteier): Kvoteprioriteten kan lagres selv om kvotetyper står uten kvoteprioritet,
@@ -78,9 +77,9 @@ Egenskap: Sette kvoteprioritet i regelverkssamlingen
 
     Scenario: Varsel om kvotetyper uten kvoteprioritet
       Gitt at "Idrett (IDRETT)" ikke har kvoteprioritet i regelverkssamlingen "UHG 2027"
-      Når regelverksforvalter lagrer kvotetypen
+      Når opptaksforvalter lagrer kvotetypen
       Så er kvotetypen lagret uten kvoteprioritet
-      Og regelverksforvalter ser et varsel på kvotetypen "Idrett (IDRETT)" om at kvoteprioritet mangler
+      Og opptaksforvalter ser et varsel på kvotetypen "Idrett (IDRETT)" om at kvoteprioritet mangler
 
   # Regelen «Søkeren får tilbud i kvoten som er høyest prioritert i opptaket» er flyttet 2026-10-19 til
   # 14 Plasstildeling/03 Tildeling/gjennomføre_plasstildeling.feature, der virkningen av kvoteprioriteten står.
@@ -94,7 +93,7 @@ Egenskap: Sette kvoteprioritet i regelverkssamlingen
 
     Scenario: Kvotetypen som mister plassen, skyves ett trinn ned
       Gitt at kvoteprioriteten er 1 for "Samisk førstegangsvitnemål (SAMF)", 2 for "Førstegangsvitnemål (ORDF)" og 3 for "Ordinær kvote (ORD)"
-      Når regelverksforvalter setter kvoteprioritet 1 for "Førstegangsvitnemål (ORDF)"
+      Når opptaksforvalter setter kvoteprioritet 1 for "Førstegangsvitnemål (ORDF)"
       Så er kvoteprioriteten i regelverkssamlingen
         | kvotetype                         | kvoteprioritet |
         | Førstegangsvitnemål (ORDF)        | 1              |
@@ -102,7 +101,7 @@ Egenskap: Sette kvoteprioritet i regelverkssamlingen
         | Ordinær kvote (ORD)               | 3              |
 
     Scenariomal: Ugyldig kvoteprioritet
-      Når regelverksforvalter setter kvoteprioritet <verdi> for "Ordinær kvote (ORD)"
+      Når opptaksforvalter setter kvoteprioritet <verdi> for "Ordinær kvote (ORD)"
       Så blir kvoteprioriteten ikke lagret
 
       Eksempler:

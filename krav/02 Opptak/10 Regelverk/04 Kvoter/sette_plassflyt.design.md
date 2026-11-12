@@ -65,12 +65,12 @@ Dette er fasiten for tekstene, også når en skisse viser noe annet. Feilmelding
 | Mottakerfeltet | Ingen mottaker | «Ikke valgt» | – | Varsel om kvotetyper som ikke er koblet til plassflyten |
 | Mottakerfeltet, skjermleser | Alltid | «Mottaker for {kode}» | – | – |
 | Mottaker for en kvotetype uten plasser | Alltid | «–» | – | En kvotetype uten plasser sender ikke ledige plasser videre |
-| Tagg i Status | Kvoten en kjede ender i | «Hovedkvote» | – | Velge hovedkvote i regelverkssamlingen |
+| Tagg i Status | Kvoten en kjede ender i | «Hovedkvote» | – | Hovedkvoten er kvoten kjedene ender i |
 | Tagg i Status | Kvotetypen er uten plasser | «Ikke med i plassflyten» | – | Ingen varsel om plassflyt for en kvotetype uten plasser |
 | Tagg i Status | Kvotetypen verken sender eller tar imot ledige plasser | «Ikke koblet til plassflyten» | – | Varsel om kvotetyper som ikke er koblet til plassflyten |
 | Varsel øverst i lista | Kvotetyper er ikke koblet | «Disse kvotetypene er ikke koblet til plassflyten: {kvotetyper}.» | `{kvotetyper}` = kodene, skilt med komma. Kvotetyper uten plasser er ikke med | Varsel om kvotetyper som ikke er koblet til plassflyten |
 | Alert øverst i innholdet | Lagring uten hovedkvote | «Regelverkssamlingen må ha en hovedkvote. Koble minst én kvote til kvoten som skal være hovedkvote.» | – | Plassflyten kan ikke lagres uten hovedkvote |
-| Alert øverst i innholdet | Lagring med flere hovedkvoter | «Plassflyten kan bare ha én hovedkvote, men kjedene ender i {kvotetyper}. Koble kvotene slik at alle kjedene ender i samme kvote.» | `{kvotetyper}` = kodene, skilt med komma | Velge hovedkvote i regelverkssamlingen |
+| Alert øverst i innholdet | Lagring med flere hovedkvoter | «Plassflyten kan bare ha én hovedkvote, men kjedene ender i {kvotetyper}. Koble kvotene slik at alle kjedene ender i samme kvote.» | `{kvotetyper}` = kodene, skilt med komma | Plassflyten kan ikke lagres med flere hovedkvoter |
 | Alert i bunnen av modalen | Plassflyten går i ring | «Plassflyten kan ikke gå i ring: {kvotetyper}.» | `{kvotetyper}` = kjeden, f.eks. «SAM → NN → SAM» | Sirkulær plassflyt |
 | Feltfeil på hver rad i ringen | Plassflyten går i ring | «Inngår i en ring.» | – | Sirkulær plassflyt |
 | Tom liste | Ingen kvotetyper | «Ingen kvotetyper funnet» | – | – |
@@ -85,7 +85,7 @@ Endret 2026-11-11 (teamet): plassflyten er i en modal fra kvotetypelista, ikke e
 
 ## Per-scenario detaljer
 
-### Scenario: Velge hovedkvote i regelverkssamlingen
+### Scenario: Hovedkvoten er kvoten kjedene ender i
 Brukeren gjør en kvote til hovedkvote ved å la de andre kvotene sende ledige plasser til den, og la den selv stå på «Ikke valgt». Kvoten får taggen «Hovedkvote».
 
 ### Scenario: Plassflyten kan ikke lagres uten hovedkvote
