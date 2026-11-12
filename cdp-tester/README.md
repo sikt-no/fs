@@ -1,6 +1,6 @@
 # CDP-tester
 
-Varige tester som en agent kjører i Chrome mot et testmiljø, i den agentiske funksjonstesten (fase 2 i [teststrategien (forslag)](https://sikt.atlassian.net/wiki/spaces/STUDIEADM/pages/5145100326)). De er skrevet som Gherkin, og kan brukes av flere verktøy. Agenten i fase 2 kjører dem med `cdp`-skillen (`.claude/skills/cdp`). De er ikke krav: kravene i [`krav/`](../krav/README.md) sier *hva* som skal gjelde, og her står *hvordan* det sjekkes i skjermen, med skjermens ord og konkrete verdier. Testene lages og oppdateres med skillen `fs-testcaser-cdp`, fra kravene. De kjenner ikke til testplaner eller akseptansetester: en testplan kan velge hvilke tester som lages og kjøres, men testene og `README.md`-ene her viser aldri til den.
+Varige tester som en agent kjører i Chrome mot et testmiljø, i den agentiske funksjonstesten (fase 2 i [teststrategien (forslag)](https://sikt.atlassian.net/wiki/spaces/STUDIEADM/pages/5145100326)). De er skrevet som Gherkin, og kan brukes av flere verktøy. Agenten i fase 2 kjører dem med Vibium (se *Vibium*). De er ikke krav: kravene i [`krav/`](../krav/README.md) sier *hva* som skal gjelde, og her står *hvordan* det sjekkes i skjermen, med skjermens ord og konkrete verdier. Testene lages og oppdateres med skillen `fs-testcaser-cdp`, fra kravene. De kjenner ikke til testplaner eller akseptansetester: en testplan kan velge hvilke tester som lages og kjøres, men testene og `README.md`-ene her viser aldri til den.
 
 Testene dekker alle scenarioene som er `@implemented`, pluss testcaser agenten utleder fra reglene: negativ testing, obligatoriske felt og grenseverdier. Roller, tilgangsstyring og datakonsistens verifiseres i koden i fase 1 (`fs-verify`). Scenarioene i kravet testes som de står, også synlighet for en rolle, men det lages ikke egne testcaser for roller og tilgang.
 
@@ -126,18 +126,19 @@ Personaene og tildelingene endres i fs-admin og tilgangsstyring, uavhengig av te
 
 Skriv aldri fødselsnummeret i fila: personaen velges i menyen.
 
-## `cdp`-skillen
+## Vibium
 
-Testene kjøres med `cdp`-skillen (`.claude/skills/cdp`, CLI-en `browser-harness-js`). `fs-testcaser-cdp` trenger den ikke for å lage eller oppdatere testene, bare for å kjøre dem.
+Testene kjøres med [Vibium](https://github.com/VibiumDev/vibium): CLI-en `vibium` og skillen `browser`. Vibium styrer nettleseren med WebDriver BiDi, og starter sin egen nettleser i stedet for å koble til den du bruker ellers. `fs-testcaser-cdp` trenger ikke Vibium for å lage eller oppdatere testene, bare for å kjøre dem. Navnet `cdp-tester` er fra verktøyet testene ble kjørt med før. Testene er de samme.
 
-Skillen er ikke en del av repoet. Hver bruker installerer den fra GitHub-repoet [`browser-use/browser-harness-js`](https://github.com/browser-use/browser-harness-js). Den legges i `.agents/skills/cdp`, med `.claude/skills/cdp` som symlenke dit, og `skills-lock.json` sier hvilken versjon som er installert. Alle tre er ignorert av git (`.gitignore`).
+Vibium er ikke en del av repoet. Hver bruker installerer det selv, med en fast versjon, så alle kjører den samme:
 
-1. Første kall med `browser-harness-js` installerer `bun` automatisk (laster ned og kjører et installasjonsskript fra bun.sh, og legger `~/.bun/bin` til i `~/.zshrc`). Vil du ikke det, sett `BROWSER_HARNESS_SKIP_BUN_INSTALL=1` og installer `bun` selv. CLI-en ligger ikke på PATH: kall den med full sti (`.claude/skills/cdp/sdk/browser-harness-js`), eller lag en symlenke som `cdp`-skillen beskriver.
-2. Åpne `chrome://inspect/#remote-debugging` i Chrome, huk av «Discover network targets», og klikk **Allow** når Chrome spør.
-3. Bruk en egen Chrome-profil til testingen (`--user-data-dir`), ikke den du bruker ellers. `cdp`-skillen kobler til Chrome-en som kjører, og agenten kan da lese alle cookies i profilen, også for andre tjenester. Logg inn selv. Testbrukeren byttes i «Overstyrt bruker» øverst til høyre i FS Admin, som er normalen i TEST, med personaen i miljøfila.
-4. Avslutt med `browser-harness-js --stop` når kjøringen er ferdig. Serveren lytter uautentisert på `127.0.0.1:9876`.
+1. Installer CLI-en: `npm install -g vibium@26.8.21`, og kjør `vibium setup` (laster ned Chrome hvis den mangler). `vibium ready browser --json` sjekker installasjonen.
+2. Installer skillen: `npx skills add https://github.com/VibiumDev/vibium`. Den legges i `.agents/skills/`, med `.claude/skills/browser` og `.claude/skills/check` som symlenker dit, og `skills-lock.json` sier hvilken versjon som er installert. Alt er ignorert av git (`.gitignore`). Bare `browser` brukes i kjøringen (se *Regler for kjøringen*).
+3. Start nettleseren med en egen profil til testingen, så innloggingen varer mellom kommandoene og kjøringene: `vibium --session fs-test --user-data-dir ~/.vibium/fs-test daemon start`. Bruk den samme `--session` og `--user-data-dir` i alle kommandoene i kjøringen (eller `VIBIUM_SESSION=fs-test`). Profilen inneholder bare innloggingen i testmiljøet.
+4. Logg inn selv, i vinduet Vibium åpner (det er synlig). Testbrukeren byttes i «Overstyrt bruker» øverst til høyre i FS Admin, som er normalen i TEST, med personaen i miljøfila.
+5. Avslutt med `vibium --session fs-test daemon stop` når kjøringen er ferdig.
 
-`cdp`-skillen har ingen egne sikkerhetsregler. Reglene for kjøringen står under, i *Regler for kjøringen*.
+Vibium har ingen egne sikkerhetsregler for testmiljøet. Reglene for kjøringen står under, i *Regler for kjøringen*.
 
 ## Kjøring og resultat
 
@@ -149,18 +150,18 @@ Agenten foreslår status, og kan aldri godkjenne en leveranse. En tester bekreft
 
 ### Regler for kjøringen
 
-`cdp`-skillen har ingen sikkerhetsregler. Disse gjelder for agenten som kjører testene:
+Disse gjelder for agenten som kjører testene:
 
 - **Miljø-guard.** Før første handling: sjekk at URL-en er FS Admin i miljøfila, og avbryt hvis den er produksjon eller et annet domene enn FS Admin og Feide.
 - **Kravene er de samme.** Sammenlign blob-hashen i headeren med kravfila nå (`git rev-parse origin/main:<sti>`). Er den ulik, si det, og foreslå å oppdatere testene først (`fs-testcaser-cdp`). Er et krav ikke `@implemented` (les taggen), står det i resultatet: scenarioer som ikke er levert, vil trolig ikke bestå.
 - **Miljøfila er oppdatert.** Er «Personaer sist sjekket» mer enn en måned gammel, eller mangler en nøkkel testene bruker, si det før kjøringen (se *Vedlikehold av miljøfila*).
 - **Data som endres.** Testene endrer bare data som er laget i kjøringen (av oppsettet eller scenarioet selv). Scenarioene med `@endrer-data` setter dataene fra oppsettet tilbake, så de andre scenarioene finner dem i utgangstilstanden. Testbrukerne, grunndataene og data fra andre kjøringer endres aldri.
-- **Forbudte kall.** Aldri `Fetch.*`, `Network.setCookie(s)`, `Storage.clear*` eller `clearBrowserCookies`, og aldri `handleJavaScriptDialog({accept:true})` uten at scenarioet sier hva dialogen er (eksemplene i `dialogs.md` aksepterer alt).
-- **Tilkobling.** `cdp`-skillen kobler til brukerens kjørende Chrome, og agenten ser alle cookies i profilen. Bruk en egen Chrome-profil til testingen, og la brukeren logge inn selv.
-- **Bytte testbruker.** Agenten bytter i «Overstyrt bruker» til personaen nøkkelen er koblet til i miljøfila, før hvert scenario der testbrukeren er en annen, og sjekker at riktig persona er valgt før første steg, også når forrige scenario sluttet som en annen. Med Feide-innlogging per testbruker er bytte av testbruker bytte av profil. Bytt aldri testbruker ved å endre cookies.
+- **Forbudte kommandoer.** Aldri `vibium cookies <navn> <verdi>`, `vibium cookies clear`, `vibium storage restore` eller `vibium content`, og aldri `vibium dialog accept` uten at scenarioet sier hva dialogen er. Aldri `vibium run`, `vibium check` eller `vibium find` med en vision-modell: de sender skjerminnholdet til en egen AI-leverandør (`VIBIUM_AI_*`), og `run` finner sin egen vei, som bryter med R14. Aldri `vibium record stop --upload`.
+- **Tilkobling og innlogging.** Bruk nettleseren Vibium starter, med den egne profilen til testingen (se *Vibium*), aldri profilen du bruker ellers eller `vibium start <url>` mot en annen nettleser. La brukeren logge inn selv, og lagre aldri innloggingen i en fil (`vibium storage -o`).
+- **Bytte testbruker.** Agenten bytter i «Overstyrt bruker» til personaen nøkkelen er koblet til i miljøfila, før hvert scenario der testbrukeren er en annen, og sjekker at riktig persona er valgt før første steg, også når forrige scenario sluttet som en annen. Med Feide-innlogging per testbruker har hver testbruker sin egen `--session` og `--user-data-dir`, og bytte av testbruker er bytte av sesjon. Bytt aldri testbruker ved å endre cookies.
 - **Følg stegene slik de står** (R14 i [`testcase-regler.md`](../.claude/references/akseptansetest/testcase-regler.md)). Virker ikke et steg, eller finnes ikke en verdi, er det et funn, og testcasen blir «Ikke testet». Agenten prøver seg ikke fram en annen vei.
 - **Verdier som ikke stemmer.** Finnes ikke en verdi fra miljøfila i miljøet, er testcasen «Ikke testet», og resultatet foreslår endringen i miljøfila. Agenten endrer ikke miljøfila under kjøringen.
-- **Bevis.** Tekst og DOM (`Runtime.evaluate`) er primærbevis, skjermbilder sekundære. Tell rader i skjermen, ikke via GraphQL: et direkte API-kall kan gi flere rader enn løsningen viser. Skriv aldri til `/tmp`.
+- **Bevis.** Tekst og DOM (`vibium text`, `vibium eval`, `vibium a11y-tree`) er primærbevis, skjermbilder (`vibium screenshot -o <kjøringsmappa>/<fil>.png`) sekundære. Et opptak (`vibium record start`/`stop -o <kjøringsmappa>/<fil>.zip`) kan legges ved, og er ignorert av git som skjermbildene. Tell rader i skjermen, ikke via GraphQL: et direkte API-kall kan gi flere rader enn løsningen viser. Skriv aldri til `/tmp`.
 - **Kjente mangler** er ikke en del av testene. Gir den som starter kjøringen en liste over kjente mangler, sjekkes sakene før kjøringen, og de står i resultatet. Ellers er et scenario som ikke består, et funn.
 - **Funn.** Et funn har typen «Feil» eller «Kravet dekker ikke» (en `@utledet` testcase der kravet ikke sier noe om tilfellet), og alvorlighetsgrad fra testansvarlig ([`alvorlighetsgrad.md`](../.claude/references/akseptansetest/alvorlighetsgrad.md)). «Kravet dekker ikke» avklares i kravet (`fs-krav`), ikke bare i testen.
-- **Installasjon.** Mangler `cdp`-skillen, `bun` eller `browser-harness-js`, vis veiledningen i *`cdp`-skillen*, og installer ikke noe uten at brukeren sier ja.
+- **Installasjon.** Mangler `vibium` eller `browser`-skillen, eller er versjonen en annen enn i *Vibium*, vis veiledningen der, og installer ikke noe uten at brukeren sier ja.

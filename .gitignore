@@ -51,10 +51,13 @@ akseptansetest/**/kjoring-*/*
 cdp-tester/**/kjoring-*/*
 !cdp-tester/**/kjoring-*/resultat.md
 
-# cdp-skillen installeres av hver bruker, og er ikke en del av repoet (se cdp-tester/README.md).
-# .claude/skills/cdp er en symlenke til .agents/skills/cdp
+# Vibium-skillene installeres av hver bruker, og er ikke en del av repoet (se cdp-tester/README.md).
+# .claude/skills/browser og .claude/skills/check er symlenker til .agents/skills/
 .agents/
 skills-lock.json
+.claude/skills/browser
+.claude/skills/check
+# Den gamle cdp-skillen, for dem som har den installert
 .claude/skills/cdp
 
 # Lokale arbeidsnotater
