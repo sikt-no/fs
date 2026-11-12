@@ -277,9 +277,10 @@ Egenskap: Automatisk vurdering av spesielle opptakskrav
     #   nederst i steg 2, under fagene. Grått betyr at den ikke hører til
     #   vitnemålsbehandleren. Hvem lager den, og skal den stå der eller
     #   lenger opp?
-    # - Hvilke fag legges til grunn for vurderingen når poengvariantene på
-    #   samme grunnlag har ulikt fagvalg i vitnemålsbehandleren
-    #   (OPT-BEH-BEH-022, «Kravelementene vurderes per grunnlag»)?
+    # AVKLART 11.11.2026: når poengvariantene på samme grunnlag har ulikt
+    # fagvalg, kontrolleres kravelementene mot vitnemålet og fagene i
+    # poengvarianten saksbehandleren lagrer (OPT-BEH-BEH-022, «Kravelementene
+    # kontrolleres mot fagene i poengvarianten som lagres»).
 
     Scenario: Vurdere kravelementene i grunnlaget
       Gitt saksbehandleren har lagt et vitnemål til grunn i vitnemålsbehandleren
