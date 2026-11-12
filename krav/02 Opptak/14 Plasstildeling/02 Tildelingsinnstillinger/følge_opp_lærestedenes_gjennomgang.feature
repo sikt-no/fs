@@ -1,4 +1,5 @@
 # language: no
+# BEGREPER (2026-11-10): Bytt «opptakets forvalter» med «forvalter» når fila likevel endres. Se krav/02 Opptak/begreper.md.
 @OPT-PLA-INN-004 @could @draft @scope-plasstildeling-2027 @depends-on-OPT-PLA-INN-001
 Egenskap: Følge opp lærestedenes gjennomgang av antall tilbud
   Som opptaksforvalter ved organisasjonen som forvalter opptaket

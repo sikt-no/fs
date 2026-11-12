@@ -1,4 +1,5 @@
 # language: no
+# BEGREPER (2026-11-10): Bytt «opptaksforvalter ved forvaltende organisasjon» med «opptaksforvalter hos forvalteren», «opptaksforvalter ved deltakende organisasjon» med «opptaksforvalter hos tilbyderen», «forvaltende organisasjon» med «forvalter», «opptakseier» med «forvalter» når fila likevel endres. Se krav/02 Opptak/begreper.md.
 # GitHub: #595
 # Jira: SHI-709
 @OPT-OPT-UTD-003 @must @in-progress @scope-utdanningstilbud-2027 @ref-OPT-OPT-UTD-006

@@ -159,6 +159,22 @@ Egenskap: Kvotetype
         | IV     | individuell vurdering (uten poengberegning) |
         | IH     | individuell helhetsvurdering                |
 
+  @planned @scope-spesialvurdering-2027
+  Regel: En kvotetype kan skjule poengene for søkeren
+    # AVKLART 2026-11-11 (produkteier): Om søkeren ser poengene, kan avhenge av kvoten, ikke bare grunnlaget.
+    # Søkeren kan bli vurdert på samme grunnlag i en kvote som skjuler poengene (ventekvoten) og i en kvote
+    # som viser dem (opptaksprøvepoeng). Innstillingen på grunnlaget finnes fortsatt, se grunnlag.feature.
+    # Søkeren ser poengene i svaret når resultatet av plasstildelingen er publisert, se
+    # 14 Plasstildeling/04 Resultat/publisere_resultat.feature.
+
+    Scenario: Kvotetypen viser poengene for søkeren som standard
+      Når opptaksforvalteren oppretter kvotetypen "Førstegangsvitnemål (ORDF)"
+      Så vises poengene i kvotetypen "Førstegangsvitnemål (ORDF)" for søkeren
+
+    Scenario: Skjule poengene i kvotetypen for søkeren
+      Når opptaksforvalteren angir at poengene i kvotetypen "Ventekvote (VENT)" skal skjules for søkeren
+      Så er kvotetypen "Ventekvote (VENT)" lagret med skjulte poeng
+
   Regel: En kvotetype kan slettes når den ikke er i bruk
 
     Scenario: Slette kvotetype

@@ -6,8 +6,8 @@ Egenskap: Opptaksinnstillinger per utdanningstilbud
   ønsker jeg å sette opptaksinnstillinger per utdanningstilbud
   slik at hvert utdanningstilbud har riktige regler for søknadsbehandling og plasstildeling.
 
-  # Opptaksforvalter ved deltakende organisasjon kan sette innstillinger på egne utdanningstilbud.
-  # Opptaksforvalter ved forvaltende organisasjon kan sette innstillinger på alle utdanningstilbud.
+  # Opptaksforvalter hos tilbyderen kan sette innstillinger på egne utdanningstilbud.
+  # Opptaksforvalter hos forvalteren kan sette innstillinger på alle utdanningstilbud.
   # Innstillinger for flere utdanningstilbud av gangen står i sette_innstillinger_for_flere_utdanningstilbud.feature (#599).
   # Antall studieplasser står i sette_studieplasser_og_antall_tilbud.feature (#596).
   # Tidlig søknadsfrist og dokumentasjonsfrist står i 04 Behandle et utdanningstilbud/sette_tidlig_søknadsfrist.feature (SHI-708).
@@ -45,7 +45,7 @@ Egenskap: Opptaksinnstillinger per utdanningstilbud
 
     @openquestion
     # ÅPNE SPØRSMÅL:
-    # - Skal kun opptaksforvalter ved forvaltende organisasjon få lov å opprette nye
+    # - Skal kun opptaksforvalter hos forvalteren få lov å opprette nye
     #   kompetanseregelverk og rangeringsregelverk? Skal opptaksforvalter ved deltakende
     #   organisasjon bare få bruke eksisterende regelverk i samordna opptak?
     Scenario: Rettigheter for oppretting av nye regelverk
@@ -58,7 +58,7 @@ Egenskap: Opptaksinnstillinger per utdanningstilbud
   # som absolutte tall per utdanningskvote for hvert utdanningstilbud i hver plasstildelingsrunde, se
   # 14 Plasstildeling/02 Tildelingsinnstillinger/antall_tilbud_som_skal_gis.feature.
   # AVKLART 2026-10-16 (produktleder): Bare organisasjonen som har opprettet regelverket, kan endre det.
-  # I samordna opptak kan forvaltende organisasjon legge til kvoter i regelverkssamlingen som er knyttet
+  # I samordna opptak kan forvalteren legge til kvoter i regelverkssamlingen som er knyttet
   # til opptaket.
   # AVKLART 2026-10-21 (produkteier): Lærestedet velger hvilke av kvotetypene i regelverkssamlingen som gjelder
   # for utdanningstilbudene sine, og kan legge til og fjerne utdanningskvoter. Utdanningstilbudet får ikke alle
@@ -123,10 +123,10 @@ Egenskap: Opptaksinnstillinger per utdanningstilbud
       Når opptaksforvalter ved lærestedet legger til "Ventekvote (VENT)" på utdanningstilbudet "Sykepleie, høst 2027"
       Så har utdanningstilbudet "Sykepleie, høst 2027" utdanningskvoten "Ventekvote (VENT)"
 
-    Scenario: Regelverksforvalter legger til en kvotetype i regelverkssamlingen
-      Gitt at regelverksforvalter er ved forvaltende organisasjon "HK-dir"
+    Scenario: Opptaksforvalter legger til en kvotetype i regelverkssamlingen
+      Gitt at opptaksforvalter er hos forvalteren "HK-dir"
       Og at HK-dir har opprettet regelverkssamlingen "UHG 2027"
-      Når regelverksforvalter legger til kvotetypen "Samisk språkkompetanse (SAM)" i regelverkssamlingen "UHG 2027"
+      Når opptaksforvalter legger til kvotetypen "Samisk språkkompetanse (SAM)" i regelverkssamlingen "UHG 2027"
       Så har regelverkssamlingen "UHG 2027" kvotetypen "Samisk språkkompetanse (SAM)"
 
   # AVKLART 2026-10-21 (produkteier): Utdanningskvotene følger kvoteprioriteten og plassflyten som er satt i
@@ -230,15 +230,15 @@ Egenskap: Opptaksinnstillinger per utdanningstilbud
     # 11 Opprette og vedlikeholde opptak/04 Frister/frister_og_hendelser.feature.
     # Lagt til 2026-10-19 etter akseptansetesten av opprette og vedlikeholde opptak.
     # AVKLART 2026-10-15 (Q12, TAKE-409): Fristen hindrer deltakende organisasjoner i å endre poenggrensene
-    # etter fristen. Forvaltende organisasjon kan fortsatt endre poenggrensene.
+    # etter fristen. Forvalteren kan fortsatt endre poenggrensene.
 
     Scenario: Lærestedet kan ikke endre poenggrensen for tidlig opptak etter fristen
       Gitt at opptaket har aktivert tidlig opptak
       Og at fristen for å sette poenggrenser for tidlig opptak er "2027-02-15 23:59"
       Og at fristen er ute
-      Når opptaksforvalter ved deltakende organisasjon vil endre poenggrensen for tidlig opptak på "Sykepleie, høst 2027"
-      Så kan opptaksforvalter ved deltakende organisasjon ikke endre poenggrensen
-      Men opptaksforvalter ved forvaltende organisasjon kan fortsatt endre poenggrensen
+      Når opptaksforvalter hos tilbyderen vil endre poenggrensen for tidlig opptak på "Sykepleie, høst 2027"
+      Så kan opptaksforvalter hos tilbyderen ikke endre poenggrensen
+      Men opptaksforvalter hos forvalteren kan fortsatt endre poenggrensen
 
   # AVKLART 2026-10-08: Det finnes ingen innstilling for hvilke plasstildelingsrunder utdanningstilbudet deltar i.
   # Et utdanningstilbud er ute av en plasstildelingsrunde når det ikke er satt antall tilbud som skal gis for plasstildelingsrunden,
@@ -266,6 +266,16 @@ Egenskap: Opptaksinnstillinger per utdanningstilbud
   # ÅPNE SPØRSMÅL:
   # - Er det lov å overstyre visning av poenggrenser og ventelistenummer
   #   for søkere i samordna opptak? Bør dette være opptaksinnstillinger i stedet?
+  # Avklart 2026-11-10 (R11, spørsmål 79): lærestedene trenger ikke se hverandres poenggrenser for tidlig opptak.
+  Regel: Tilbyderne ser ikke hverandres poenggrenser for tidlig opptak
+
+    Scenario: Opptaksforvalteren hos en tilbyder ser ikke poenggrensen en annen tilbyder har satt
+      Gitt at opptaket har aktivert tidlig opptak
+      Og at en annen tilbyder har satt poenggrensen for tidlig opptak på "Sykepleie, høst 2027"
+      Når opptaksforvalter hos tilbyderen ser utdanningstilbudene i opptaket
+      Så ser opptaksforvalter hos tilbyderen ikke poenggrensen for tidlig opptak på "Sykepleie, høst 2027"
+      Men opptaksforvalter hos forvalteren ser poenggrensen
+
   Regel: Opptaksforvalter kan styre visning av poenggrense og ventelistenummer
 
     Scenario: Velge å vise poenggrense for søker

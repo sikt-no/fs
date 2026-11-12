@@ -1,4 +1,5 @@
 # language: no
+# BEGREPER (2026-11-10): Bytt «saksbehandlende organisasjon» med «behandler» når fila likevel endres. Se krav/02 Opptak/begreper.md.
 #
 # Kilder: Jira STEK-252 (automatisk setting av grunnlag, del av epic STEK-218) og
 # STEK-296. Funksjonaliteten finnes i fs-plattform (opptak-service, autosak:

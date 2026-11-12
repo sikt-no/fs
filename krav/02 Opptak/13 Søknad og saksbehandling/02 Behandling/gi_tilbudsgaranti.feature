@@ -1,4 +1,5 @@
 # language: no
+# BEGREPER (2026-11-10): Bytt «saksbehandlende organisasjon» med «behandler» når fila likevel endres. Se krav/02 Opptak/begreper.md.
 # GitHub: #512
 #
 # KILDER
@@ -101,6 +102,22 @@ Egenskap: Gi tilbudsgaranti
       Gitt søknaden kan ikke poengberegnes
       Når tilbyder setter tilbudsgaranti på "Sykepleie, høst 2027"
       Så har søkeren tilbudsgaranti fra tilbyder på "Sykepleie, høst 2027"
+
+  # Avklart 2026-11-10 (spørsmål 82 i spec-en «Krav til RLS», R3): tilbudsgarantien fra opptaksforvalteren settes
+  # bare maskinelt. Når regelen er validert, må eksempelraden for opptaksforvalter i «Sette tilbudsgaranti i feltet
+  # for rollen» avvikles, og kravet om hvordan den maskinelle tilbudsgarantien settes, finnes.
+  @draft
+  Regel: Tilbudsgarantien fra opptaksforvalteren settes bare maskinelt
+
+    Scenario: Opptaksforvalteren ser ikke muligheten til å sette tilbudsgaranti manuelt
+      Gitt jeg er opptaksforvalter ved forvalteren av opptaket
+      Når jeg ser på "Sykepleie, høst 2027" i saken
+      Så ser jeg ikke muligheten til å sette tilbudsgaranti fra opptaksforvalter
+
+    Scenario: Manuell tilbudsgaranti fra opptaksforvalteren avvises i API-et
+      Gitt en integrasjon har rollen opptaksforvalter ved forvalteren av opptaket
+      Når integrasjonen forsøker å sette tilbudsgaranti fra opptaksforvalter gjennom API-et
+      Så avvises det
 
   Regel: Tilbudsgarantien kan endres og fjernes av rollen som satte den
 

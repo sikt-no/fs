@@ -1,4 +1,5 @@
 # language: no
+# BEGREPER (2026-11-10): Bytt «opptakets forvalter» med «forvalter» når fila likevel endres. Se krav/02 Opptak/begreper.md.
 # GitHub: #216
 @OPT-PLA-RUN-002 @must @in-progress @scope-plasstildeling-2027 @depends-on-OPT-PLA-RUN-001
 Egenskap: Listevisning og søk i plasstildelingsrunder

@@ -1,6 +1,6 @@
 # Begrepsliste — Opptak
 
-Siste oppdatering: 2026-11-03
+Siste oppdatering: 2026-11-10
 
 Denne listen sammenstiller begreper brukt i kravene (`krav/02 Opptak/`), design-filene og begrepskatalogen på [fs.sikt.no](https://fs.sikt.no/domenekunnskap/begreper/). Målet er konsistent begrepsbruk på tvers av krav, kode, API og brukergrensesnitt.
 
@@ -16,16 +16,30 @@ Denne listen sammenstiller begreper brukt i kravene (`krav/02 Opptak/`), design-
 
 | Begrep i krav | Definisjon | Begrepskatalog | Gammel FS | Merknad |
 |---------------|------------|----------------|-----------|---------|
-| opptaksforvalter | Rollen som får lov til å opprette og vedlikeholde opptak og opptaksinnstillinger for en organisasjon | – | – | Ny rolle i nytt opptak. Heter opptaksforvalter i koden. Ikke i begrepskatalogen enda |
-| opptakets forvalter | Erstatter «forvaltende organisasjon» og «opptaksforvalter ved forvaltende organisasjon»: den som forvalter opptaket. I samordna opptak HK-dir, i lokale opptak lærestedet selv | – | – | Ny term 2026-10-24, foreløpig bare i `14 Plasstildeling`. ⚠️ `@openquestion`, se *Åpne spørsmål* nederst |
-| opptaksforvalter ved forvaltende organisasjon | Opptaksforvalter i organisasjonen som eier opptaket. I samordna opptak HK-dir, i lokale opptak lærestedet selv | – | – | Spesifisering av opptaksforvalter |
-| opptaksforvalter ved deltakende organisasjon | Opptaksforvalter ved et lærested som deltar i et opptak som en annen organisasjon forvalter. Setter opp egne utdanningstilbud, for eksempel antall tilbud som skal gis | – | – | Spesifisering av opptaksforvalter |
-| regelverksforvalter | Forretningsrolle: regelverksforvalter ved organisasjonen som eier regelverkssamlingen. Forvalter regelverket i regelverkssamlingen, for eksempel kvotetyper, kvoteprioritet, plassflyt og rundetyper. Bare organisasjonen som har opprettet regelverket, kan endre det | – | – | Ny term 2026-10-24. Definisjonen er den samme som i kvotekravene (`sette_kvoteprioritet.feature`, `sette_plassflyt.feature`) og i `forvalte_rundetyper.feature` |
-| opptakseier | Organisasjonen som oppretter og vedlikeholder (forvalter) et opptak. Opptakseieren har ansatte som er opptaksforvaltere | – | – | ✅ Avklart 2026-10-09. Samme organisasjon som «forvaltende organisasjon». ⚠️ Se «opptakets forvalter» |
-| saksbehandler | Person som behandler søknader: vurderer dokumentasjon, setter grunnlag og regner ut poeng. Kvalitetssikrer også resultatet av plasstildelingen | – | Saksbehandler | Brukes generelt i kravene; bør presiseres |
-| saksbehandlende organisasjon | Organisasjonen som har ansvaret for å saksbehandle et søknadsalternativ, og som får tilgang til saken. Er organisasjonen med behandlerrolle for søknadsalternativet (i koden og tilbudsgaranti-kravet også «B-rolle»). Søknaden blir til én sak hos hver saksbehandlende organisasjon | – | – | Ny term (`tildele_saksbehandlende_organisasjon.feature`). Ansvaret ligger hos organisasjonen, ikke hos en enkelt saksbehandler |
-| tilbyder | Lærestedet som tilbyr utdanningstilbudet søknadsalternativet gjelder | – | – | Ny term (`tildele_saksbehandlende_organisasjon.feature`) |
+| opptakets forvalter | Den som forvalter opptaket | – | – | ⚠️ Utgår 2026-11-10. Erstattes av «forvalter» |
+| opptaksforvalter ved forvaltende organisasjon | Opptaksforvalter i organisasjonen som forvalter opptaket | – | – | ⚠️ Utgår 2026-11-10. Erstattes av «opptaksforvalter hos forvalteren» |
+| opptaksforvalter ved deltakende organisasjon | Opptaksforvalter ved en organisasjon som deltar i et opptak en annen organisasjon forvalter | – | – | ⚠️ Utgår 2026-11-10. Erstattes av «opptaksforvalter hos tilbyderen» |
+| regelverksforvalter | Den som forvalter regelverket i regelverkssamlingen | – | – | ⚠️ Utgår 2026-11-10. Er ikke egen rolle. Erstattes av «opptaksforvalter», som har handlingskoden MODIFISERE_REGELVERK (se *Brukerroller i opptak*) |
+| opptakseier | Organisasjonen som oppretter og vedlikeholder (forvalter) et opptak | – | – | ⚠️ Utgår 2026-11-10. Erstattes av «forvalter» |
+| saksbehandlende organisasjon | Organisasjonen som saksbehandler et søknadsalternativ | – | – | ⚠️ Utgår 2026-11-10. Erstattes av «behandler» |
+| tilbyder | Organisasjonens rolle i et opptak når den tilbyr utdanningstilbudet et søknadsalternativ gjelder | – | – | Utvidet 2026-11-10: tilbyder er en rolle i opptaket, ikke bare et lærested. T-rolle i rolleforslaget 2026-10-12 |
+| forvalter | Organisasjonens rolle i et opptak når den forvalter (eier) opptaket. I samordna opptak HK-dir, i lokale opptak lærestedet selv. Et opptak har én forvalter | – | – | Ny term 2026-11-10. Erstatter «opptakets forvalter», «forvaltende organisasjon» og «opptakseier». F-rolle i rolleforslaget 2026-10-12. ⚠️ Ikke det samme som brukerrollen *opptaksforvalter* |
+| behandler | Organisasjonens rolle for et søknadsalternativ når den saksbehandler det. Søknaden blir til én sak hos hver behandler | – | – | Ny term 2026-11-10. Erstatter «saksbehandlende organisasjon». B-rolle i rolleforslaget 2026-10-12 |
+| tilknytning | At organisasjonen er forvalter, tilbyder eller behandler på en søknad. Tilknytningen avgjør om organisasjonen ser søknaden | – | – | Ny term 2026-11-10 |
 | søker | «Person som søker utdanning, eller har levert søknad, i ett eller flere opptak» | [søker](https://fs.sikt.no/domenekunnskap/begreper/soker/) (utkast) | Søker | OK |
+
+## Brukerroller i opptak
+
+Stegene i kravene bruker begrepet. Rollekoden står bare her (se *Gode scenarioer* i `krav/README.md`: kodeverdier hører ikke hjemme i steg og titler). En brukerrolle tildeles ved en organisasjon. Hva den gir i et opptak, avhenger av om organisasjonen er forvalter, tilbyder eller behandler der.
+
+| Begrep i krav | Rollekode | Tildeles ved | Gir handlingskodene | Merknad |
+|---------------|-----------|--------------|---------------------|---------|
+| opptaksforvalter | OPPTAK_FORVALTER | organisasjonen | MODIFISERE_REGELVERK (avklart 2026-11-10). Resten er ikke kartlagt | Forvalter opptak og utdanningstilbud, og oppretter og administrerer regelverket for organisasjonen. Erstatter «regelverksforvalter». ⚠️ Ikke det samme som organisasjonsrollen *forvalter* |
+| saksbehandler | OPPTAK_SAKSBEHANDLER | organisasjonen | Ikke kartlagt | Behandler søknader når organisasjonen er behandler, og har innsyn når organisasjonen er tilbyder eller forvalter |
+| dokumentforvalter | OPPTAK_DOKUMENTASJON | organisasjonen | Ikke kartlagt | Laster opp og sletter dokumentasjon på søkerens vegne når organisasjonen er forvalter. TAKE-470 |
+| opptaksinformatør | OPPTAK_INNSYN | organisasjonen | SE_SØKNAD (foreløpig, TAKE-469) | Ansatte i førstelinjen som svarer søkere om opptak. Ser søknaden og behandlingen der organisasjonen er forvalter, tilbyder eller behandler, og endrer ingenting. Rollen gjelder bare opptak: ved et lærested har førstelinjen også tilgang til studieinformasjon, med roller i andre domener, mens førstelinjen ved HK-dir, som bare er forvalter i opptak og aldri tilbyder, bare har denne rollen. Ikke «førstelinje» eller «veileder» i kravene |
+
+Hvilke handlingskoder rollene gir, står i tilgangsstyring og er ikke kartlagt for opptak. Se scopet `tilgang-i-opptak-2027`.
 
 ## Opptak og struktur
 
@@ -36,8 +50,8 @@ Denne listen sammenstiller begreper brukt i kravene (`krav/02 Opptak/`), design-
 | lokalt opptak | Opptak som et lærested forvalter selv, der lærestedet er den eneste organisasjonen | – | Lokalt opptak | OK |
 | opptakstype | «Kategorisering av opptak med utdanningstilbud som har relativt like opptaksregler» | [opptakstype](https://fs.sikt.no/domenekunnskap/begreper/opptakstype/) | Opptakstype | OK |
 | tidlig opptak | Tidlig behandling av og tilbud til søkere i et opptak. Søkerne får ikke tildelt studierett tidligere enn andre søkere av den grunn: det reelle opptaket til utdanningen er ikke gjennomført. Løses med tilbudsgaranti i rundene som kjøres, ikke som en egen runde | – | Tidligopptak | ✅ Avklart: «tidlig opptak» (to ord) er riktig. ✅ Avklart 2026-10-09: definisjonen, og at det ikke er en rundetype |
-| forvaltende organisasjon | Organisasjonen som forvalter og eier opptaket, altså opptakseieren | – | – | ⚠️ Utgår 2026-10-24: for tungt. Erstattes av «opptakets forvalter». Rettet i `14 Plasstildeling`, resten venter på det åpne spørsmålet |
-| deltakende organisasjon | Organisasjon som deltar i et opptak som en annen organisasjon forvalter, med egne utdanningstilbud | – | – | ✅ Avklart: «deltakende» er riktig. Krav som bruker «deltagende» bør rettes |
+| forvaltende organisasjon | Organisasjonen som forvalter og eier opptaket | – | – | ⚠️ Utgår 2026-11-10. Erstattes av «forvalter» |
+| deltakende organisasjon | Organisasjon som er tilbyder eller behandler i et opptak den ikke forvalter | – | – | ✅ Beholdes. Presisert 2026-11-10 |
 | lærested | «Organisasjon som tilbyr utdanning» | [lærested](https://fs.sikt.no/domenekunnskap/begreper/larested/) (aktiv) | Institusjon / Lærested | OK |
 | organisasjon | Generelt begrep for alle typer registrerte enheter | – | Institusjon | Nytt generelt begrep som erstatter «institusjon» (se `krav/README.md` terminologi) |
 | hendelseslogg | Logg over endringer på opptaket og det som hører til det, med hvem (rolle og organisasjon), hva, når, og verdien før og etter | – | – | Ny term (`hendelseslogg.feature`) |
@@ -174,6 +188,7 @@ Denne listen sammenstiller begreper brukt i kravene (`krav/02 Opptak/`), design-
 | behandlertildelingsregel | En eller flere regler for hvordan søknader skal fordeles til saksbehandlende organisasjoner i et samordna opptak | – | ✅ Avklart 2026-10-22: «behandlertildelingsregel», som i FS Admin. Erstatter «saksbehandlertildelingsregel» (avklart 2026-10-09). Rettet i kravene |
 | vedtak / vedtaksbrev | Den formelle avgjørelsen på søknaden, og brevet søkeren får med den | – | OK |
 | mangelkode | Kode for hva søkeren mangler for å være kvalifisert | – | Gammel FS: Kompetansemangler (SFA, SNU, SÆR) |
+| intern / delt | En merknad, mangel eller melding er **delt** med forvalter, tilbyder og behandler på søknaden, med mindre organisasjonen som registrerte den, har merket den som **intern**. En intern ses bare av den organisasjonen. Delt er standard | – | Ny term 2026-11-10 |
 
 ---
 
@@ -228,9 +243,9 @@ Denne listen sammenstiller begreper brukt i kravene (`krav/02 Opptak/`), design-
 
 Følgende begreper brukes i kravene, men finnes ikke (enda) i begrepskatalogen på fs.sikt.no:
 
-- opptaksforvalter (ny rolle), opptakets forvalter, opptakseier, regelverksforvalter (forretningsrolle)
-- forvaltende organisasjon / deltakende organisasjon
-- saksbehandlende organisasjon, tilbyder
+- opptaksforvalter, saksbehandler, dokumentforvalter, opptaksinformatør (brukerroller)
+- forvalter, tilbyder, behandler (organisasjonens rolle i et opptak), tilknytning
+- deltakende organisasjon
 - studierett
 - tidlig opptak
 - kravelement
@@ -251,14 +266,12 @@ Følgende begreper brukes i kravene, men finnes ikke (enda) i begrepskatalogen p
 
 Sto som manglende i forrige versjon av lista, men finnes nå i katalogen: opptak, etterfylling, kvoteprioritet, plassflyt, opptaksrunde, poenggrense, kapasitet, antall plasser, overbooking, kvalifisert søker.
 
-## Åpne spørsmål
+## Organisasjonens rolle i opptaket (avklart 2026-11-10)
 
-### Opptakets forvalter `@openquestion`
+Tidligere åpent spørsmål om «opptakets forvalter».
 
-«Forvaltende organisasjon» er for tungt, og skal ikke brukes videre (2026-10-24). Det erstattes av «opptakets forvalter». «Opptakets eier» er mer selvforklarende, men «forvalter» ligger nærmere rollen i koden, opptaksforvalter.
+Organisasjonens rolle i opptaket heter **forvalter**, og de to andre rollene **tilbyder** og **behandler**. Personen er **opptaksforvalter**. «Opptakets forvalter», «forvaltende organisasjon», «opptakseier» og «saksbehandlende organisasjon» utgår. At «forvalter» og «opptaksforvalter» kan forveksles, er en kjent risiko.
 
-ÅPNE SPØRSMÅL:
-
-- Er «opptakets forvalter» organisasjonen som forvalter opptaket, eller opptaksforvalteren der? Svaret avgjør hvordan «opptaksforvalter ved forvaltende organisasjon» skrives om i resten av opptakskravene: «opptaksforvalter ved opptakets forvalter» (organisasjonen) eller «opptakets forvalter» (personen).
-- Skal «opptakseier» (avklart 2026-10-09) utgå når «opptakets forvalter» er avklart?
-- Endringen er gjort i `14 Plasstildeling`, der «opptakets forvalter» kan leses begge veier. «Forvaltende organisasjon» står fortsatt i 17 kravfiler i `11 Opprette og vedlikeholde opptak`, `12 Utdanningstilbud`, `13 Søknad og saksbehandling` og `krav/_Flyter/10 Opptaksløpet/saksbehandlertildeling.feature`. De rettes når spørsmålet er besvart.
+- «Opptaksforvalter ved forvaltende organisasjon» skrives «opptaksforvalter hos forvalteren».
+- «Opptaksforvalter ved deltakende organisasjon» skrives «opptaksforvalter hos tilbyderen».
+- Kravfilene rettes når de likevel endres. Filene som bruker de gamle begrepene, har en `# BEGREPER:`-kommentar øverst som sier hva som skal byttes.

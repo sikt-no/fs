@@ -1,4 +1,5 @@
 # language: no
+# BEGREPER (2026-11-10): Bytt «saksbehandlende organisasjon» med «behandler» når fila likevel endres. Se krav/02 Opptak/begreper.md.
 #
 # Grovutkast 21.10.2026. Kildene er samlet, men ingen regel er gjennomgått med
 # produkteier eller Team Puff. Reglene bygger på dagens FS-klient, koden i ny

@@ -147,6 +147,10 @@ Egenskap: Velge vitnemål som grunnlag for poengberegningen
       # AVKLART 21.10.2026: bare poengvariantene som gjelder
       # søknadsalternativene i saken, skal vises. Simuleringen fant at poeng
       # fra andre saker i samme søknad ble vist (F1, STEK-593).
+      # AVKLART 10.11.2026 (svar 20): behandlerne ser vurderingen og poengene i hverandres saker på samme søknad,
+      # men i saken hos den andre organisasjonen, ikke i grunnlaget i sin egen sak. Scenarioet over står derfor.
+      # Innsynet står i @OPT-BEH-BEH-011, regelen «Saksbehandlende organisasjoner på samme søknad ser vurderingen
+      # og poengene i hverandres saker».
 
     Scenario: Se hvilket vitnemål et poeng bygger på
       Gitt poengene er beregnet fra et vitnemål

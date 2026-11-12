@@ -76,3 +76,16 @@ Egenskap: Svare på tilbud om studieplass
         | AVSLÅTT_INTET_SVAR    |
         | GODTATT_MEN_ANNULLERT |
         | INTET_SVAR            |
+
+  # Avklart 2026-11-10 (R12 i spec-en «Krav til RLS»): i dag kan søkeren endre resultatkoden og hvem som behandler
+  # søknaden gjennom API-et. Søkeren skal bare kunne svare på tilbudet.
+  @draft
+  Regel: Søkeren kan ikke endre resultatet eller hvem som behandler søknaden
+
+    Scenario: Endring av resultatet avvises i API-et
+      Når søkeren forsøker å endre resultatet på søknadsalternativet gjennom API-et
+      Så avvises det
+
+    Scenario: Endring av hvem som behandler søknaden avvises i API-et
+      Når søkeren forsøker å endre hvilken organisasjon som behandler søknadsalternativet gjennom API-et
+      Så avvises det
