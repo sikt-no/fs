@@ -75,6 +75,8 @@ Dette er ikke funn i løsningen, men det røyktesten skulle vise.
 | V5 | Innloggingen: Feide-skjemaet ble fylt ut med `eval` (V1), siden innloggingen ikke er et teststeg | Bør erstattes med `press` når V1 er avklart, eller med en rettet versjon av Vibium |
 | V6 | Dokumentasjonen på GitHub (`main`) beskriver kommandoer som ikke finnes i 26.8.21: `setup`, `ready`, `run`, `--user-data-dir`, `find --all`. I 26.8.21 er `check` å huke av en boks | README er skrevet etter 26.8.21 |
 
+**Årsaken til V1 (funnet etter kjøringen, 2026-11-12):** Vibium-issue [#482](https://github.com/VibiumDev/vibium/issues/482). I 26.8.21 ignorerer `fill`, `type`, `geolocation` og `sleep` flagget `--session`, og går til standardsesjonen. Med `VIBIUM_SESSION` virker `fill` og `type` (prøvd lokalt). Det forklarer også V5, og den ekstra standardsesjonen med Chrome som startet under kjøringen.
+
 ## Å bekrefte
 
 Foreslått status er agentens forslag. En tester bekrefter den, og testansvarlig går gjennom alle funn og tar stikkprøver av de beståtte testcasene før `fs-testrapport` (agentisk) teller. Agenten har ikke fylt ut «Status» på testcasene eller i testrapporten, og kan ikke godkjenne leveransen.
