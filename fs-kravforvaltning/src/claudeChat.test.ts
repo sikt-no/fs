@@ -318,3 +318,11 @@ test('terminal-samtale: lagres med økten, avsluttes én gang, og leses tilbake'
   const back = restoreConversations(JSON.parse(JSON.stringify(cs)), []);
   assert.deepEqual(back.list[0].chat.terminal, { id: 't1', mode: 'execute', repo: 'fs-admin' });
 });
+
+test('ny samtale gjenbruker ikke en terminal-samtale eller en utførekjøring uten meldinger', () => {
+  const login = createTerminalConversation(NO_CONVERSATIONS, 'l', 1, { id: 't', mode: 'login', exited: true, code: 0 }, 'Logg inn på Claude Code');
+  const cs = createConversation(login, 'n', 2);
+  assert.equal(cs.current, 'n');
+  assert.equal(cs.list.length, 2);
+  assert.equal(cs.list[0].chat.terminal, undefined);
+});
