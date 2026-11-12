@@ -42,7 +42,7 @@ Egenskap: Velge utdanningsbakgrunn i søknad
     # vet utdanningsbakgrunnen fra før. Søkeren velger selv. Unntaket er preutfylling fra
     # elektronisk vitnemål, se «Utdanningsbakgrunn preutfylles fra søkerens vitnemål».
     Scenario: Ingen utdanningsbakgrunn er valgt på forhånd
-      Gitt at søkeren ikke har elektronisk vitnemål i kompetanseregisteret
+      Gitt at søkeren ikke har elektronisk vitnemål fra norsk videregående opplæring
       Når søkeren skal velge utdanningsbakgrunn i søknaden
       Så er ingen utdanningsbakgrunn valgt i søknaden
 
@@ -132,12 +132,11 @@ Egenskap: Velge utdanningsbakgrunn i søknad
     # AVKLART 2026-10-27 (planleggingsmøte): Hvilke vitnemålstyper som gir hvilken
     # utdanningsbakgrunn, er en forretningsregel som ligger fast i backend. Opptaksforvalteren
     # bestemmer det ikke.
-    # AVKLART 2026-11-12 (TOT-2635): Preutfyllingen løses som i dag: elektronisk vitnemål gir
-    # «Norsk videregående skole».
+    # AVKLART 2026-11-12 (TOT-2635): Har søkeren elektronisk vitnemål fra norsk videregående
+    # opplæring, er «Norsk videregående skole» preutfylt.
 
     Scenario: Utdanningsbakgrunn preutfylles fra vitnemål
-      Gitt at vitnemålstypen "Studieforberedende" er koblet til utdanningsbakgrunnen "Norsk videregående skole"
-      Og at søkeren har et elektronisk studieforberedende vitnemål i kompetanseregisteret
+      Gitt at søkeren har elektronisk vitnemål fra norsk videregående opplæring
       Når søkeren skal velge utdanningsbakgrunn i søknaden
       Så er "Norsk videregående skole" preutfylt som utdanningsbakgrunn i søknaden
 
