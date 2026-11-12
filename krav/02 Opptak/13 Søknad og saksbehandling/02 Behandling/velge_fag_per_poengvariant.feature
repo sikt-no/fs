@@ -397,7 +397,7 @@ Egenskap: Velge fag per poengvariant
         | realfagspoeng |
         | språkpoeng    |
       # AVKLART 07.10.2026: saksbehandleren kan legge inn realfagspoeng selv
-      # på poengvarianten, i tillegg til å markere fag med forsøkskode (L4a, endre_fag_i_grunnlaget.feature).
+      # på poengvarianten. Det dekker også fag med forsøkskode i R94 (endret 12.11.2026: markeringen av fag i L4a er fjernet).
       # Poengene låses på samme måte som når grunnlaget velges, og kan låses
       # opp med «Låse opp et poeng».
       #

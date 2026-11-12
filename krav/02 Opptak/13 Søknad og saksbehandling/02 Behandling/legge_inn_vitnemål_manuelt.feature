@@ -112,11 +112,12 @@ Egenskap: Legge inn vitnemål manuelt
       #
       # AVKLART 04.11.2026: saksbehandleren kan både velge det utgåtte faget
       # som det er, og konvertere det til faget i en nyere reform («Konvertere
-      # et utgått fag til faget i en nyere reform»). Velges det utgåtte faget,
-      # kan saksbehandleren markere at det gir realfagspoeng eller
-      # språkpoeng, eller dekker et kravelement, når kontrollmotoren ikke
-      # kjenner det igjen (L4a, «Saksbehandleren kan overstyre kontrollmotoren
-      # for et fag»).
+      # et utgått fag til faget i en nyere reform»).
+      #
+      # Endret 12.11.2026: regelen i L4a om å markere at et fag gir
+      # realfagspoeng eller språkpoeng, eller dekker et kravelement, er
+      # fjernet. Den handlet om spesielle opptakskrav, som er utenfor
+      # vitnemålsbehandleren.
 
     @draft @could @openquestion
     # ÅPNE SPØRSMÅL:
@@ -188,10 +189,7 @@ Egenskap: Legge inn vitnemål manuelt
       # AVKLART 05.11.2026: saksbehandleren kan legge inn ukjente fagkoder.
       # Innspill fra Ingrid Grimstad Helset på siden med åpne spørsmål
       # 05.11.2026. Kontrollmotoren kjenner ikke fagkoden, så faget har den
-      # samme begrensningen som et fag uten fagkode. Saksbehandleren kan
-      # markere at faget gir realfagspoeng eller språkpoeng, eller dekker et
-      # kravelement (L4a, «Saksbehandleren kan overstyre kontrollmotoren for
-      # et fag»).
+      # samme begrensningen som et fag uten fagkode.
 
     Scenario: Manuelt innlagte fag skilles fra elektroniske
       Gitt jeg har lagt inn et fag manuelt
@@ -232,31 +230,41 @@ Egenskap: Legge inn vitnemål manuelt
     # kan gå inn i snittet uten at løsningen oppdager det.
     #
     # Dette gjelder hvilke karaktertyper et fag kan ha. Hvilke verdier en
-    # karakter kan ha, står i regelen «Karakterer legges inn som heltall fra 1
-    # til 6».
+    # karakter kan ha, står i regelen «Karakterer legges inn fra 1,00 til
+    # 6,00 med høyst to desimaler».
 
-  Regel: Karakterer legges inn som heltall fra 1 til 6
+  Regel: Karakterer legges inn fra 1,00 til 6,00 med høyst to desimaler
 
     Bakgrunn:
       Gitt jeg har rettighet til å se og endre søknadsbehandling ved organisasjonen som behandler saken
 
-    Scenariomal: Karakter som ikke er et heltall fra 1 til 6, kan ikke legges inn
+    Scenario: Legge inn en karakter med desimaler i kalkulatoren
+      Gitt jeg legger inn et fag i kalkulatoren
+      Når jeg legger inn 4,57 som standpunktkarakter
+      Så har faget standpunktkarakteren 4,57
+
+    Scenariomal: Karakter som ikke er fra 1,00 til 6,00 med høyst to desimaler, kan ikke legges inn
       Gitt jeg legger inn et fag i kalkulatoren
       Når jeg legger inn <karakter> som <karaktertype>
-      Så ser jeg at karakteren må være et heltall fra 1 til 6
+      Så ser jeg at karakteren må være fra 1,00 til 6,00, med høyst to desimaler
       Og jeg kan ikke bruke poengene før karakteren er rettet
 
       Eksempler:
         | karakter | karaktertype                 |
-        | 0        | standpunktkarakter           |
-        | 7        | eksamenskarakter             |
-        | 4,5      | forbedret standpunktkarakter |
+        | 0,99     | standpunktkarakter           |
+        | 6,01     | eksamenskarakter             |
+        | 4,567    | forbedret standpunktkarakter |
         | B        | forbedret eksamenskarakter   |
-      # AVKLART 03.11.2026: bare heltall fra 1 til 6 kan legges inn, i alle
-      # karakterfeltene. Det er viktig for utenlandske vitnemål:
-      # saksbehandleren regner om karakterene selv før de legges inn, og
-      # løsningen regner ikke om. Teksten på beskjeden hører i
+      # AVKLART 03.11.2026: løsningen regner ikke om karakterer. Det er viktig
+      # for utenlandske vitnemål: saksbehandleren regner om karakterene selv
+      # før de legges inn. Teksten på beskjeden hører i
       # legge_inn_vitnemål_manuelt.design.md.
+      #
+      # AVKLART 12.11.2026 (gjennomgang med domeneekspertene): alle
+      # karakterfeltene i kalkulatoren kan ha karakter fra 1,00 til 6,00, med
+      # høyst to desimaler, som tilleggsfag i L4a. Grenseverdiene 1,00 og 6,00
+      # er gyldige. Erstatter avklaringen 03.11.2026 om bare heltall fra 1 til
+      # 6. Regelen het «Karakterer legges inn som heltall fra 1 til 6».
 
     Scenario: Legge inn et fag som er bestått uten tallkarakter
       Gitt søkeren har dokumentasjon på et fag som er bestått uten tallkarakter
