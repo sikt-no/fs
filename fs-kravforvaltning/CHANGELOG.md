@@ -1,5 +1,11 @@
 # krav-viewer
 
+## 1.13.1
+
+### Patch Changes
+
+- 18f5f9c: «Ny samtale» etter innlogging i Claude-panelet åpner en ny samtale. Før ble innloggingsterminalen valgt på nytt, så ingenting skjedde.
+
 ## 1.13.0
 
 ### Minor Changes
