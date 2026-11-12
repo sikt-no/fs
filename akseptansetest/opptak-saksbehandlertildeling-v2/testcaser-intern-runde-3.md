@@ -54,6 +54,21 @@ Velges i «Overstyrt bruker» øverst i FS Admin.
 | 5 | 1) Logg inn i Min kompetanse (test): ID-porten → TestID → «Hent tilfeldig person». 2) Søk på Ergoterapi og Filosofi i «HÅK1 er KUL», og send. 3) Vent et minutt, og åpne søknaden. | Du ser hvem som saksbehandler hvert studieønske, men ingen saker. Teksten er forståelig |  |  |
 | 6 | Gjør denne til slutt. 1) UiO: åpne saken for 41-1004261, og endre utdanningsbakgrunn til «Utenlandsk videregående skole». Bekreft i dialogen. 2) Vent et minutt. 3) Forvalter: se på sakene. 4) HK-dir: åpne den nye saken. | Filosofi er i en ny sak hos HK-dir, «Ikke behandlet», og HK-dir ser dokumentet. Ergoterapi er fortsatt hos UiO |  |  |
 
+## Del 6 på nytt
+
+Del 6 feilet fordi Filosofi hadde fått regelen «Ordinær tildeling» før testen. Den regelen har ikke unntak for utenlandsk utdanningsbakgrunn, så det var riktig at ingenting ble flyttet. Del 6 testes derfor på nytt med en ny søknad. Ikke endre reglene på Filosofi eller Musikkvitenskap underveis. Endringen må gjøres før fristen for å endre utdanningsbakgrunn, 09.12.2026 kl. 23:59.
+
+| Hva | Verdi |
+| --- | --- |
+| Søknad | 41-1004272 (søker Prøve Del Seks), utdanningsbakgrunn «Norsk videregående skole». Studieønsker: 1 Filosofi (UiO), 2 Musikkvitenskap (UiO). Begge er hos UiO, i én sak |
+| Filosofi | Regelen «Utenlandsk til HK-dir (runde 3)» (UTLHK): utenlandsk utdanningsbakgrunn går til HK-dir |
+| Musikkvitenskap | Regelen «Ordinær tildeling» (ORD): ingen unntak for utdanningsbakgrunn, så den blir hos UiO |
+| Dokument | Søknaden har ikke noe opplastet dokument, så det testes ikke her om HK-dir ser dokumentet |
+
+| Del | Hva du gjør | Forventet resultat | Faktisk resultat | Status |
+| --- | --- | --- | --- | --- |
+| 6 | 1) Forvalter: Utdanningstilbud → Filosofi. Sjekk at saksbehandlertildelingsregelen er «Utenlandsk til HK-dir (runde 3)». 2) Forvalter: Saker → søk på 41-1004272. Sjekk at søknaden bare har én sak, hos UiO. 3) UiO: åpne saken for 41-1004272, og endre utdanningsbakgrunn til «Utenlandsk videregående skole». Bekreft i dialogen. 4) Vent et minutt, og last siden på nytt. 5) UiO: åpne «Søknadsalternativer» i skuffen. 6) Forvalter: Saker → søk på 41-1004272. | Filosofi har «B-rolle: HK-DIR» og «Behandles i en annen sak». Musikkvitenskap er fortsatt hos UiO. Søknaden har to saker: én hos UiO og én ny hos HK-dir, «Ikke behandlet» |  |  |
+
 ## Funn
 
 | # | Del | Hva skjedde | Hva var forventet | Alvorlighetsgrad | Sak |
