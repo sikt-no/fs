@@ -86,6 +86,7 @@ Egenskap: Automatiske tilleggspoeng
     # Avklart 04.11.2026: resultatene merker et innpasset emne som innpasset, med lærestedet det kommer fra,
     # så emnet telles bare én gang, med studiepoengene fra lærestedet der det ble tatt.
 
+    @implemented
     Scenariomal: Poeng for høyere utdanning
       Gitt at poengtypen for poeng for høyere utdanning er knyttet til algoritmen for høyere utdanning
       Og at tjenesten for resultater fra høyere utdanning gir søkeren <studiepoeng> studiepoeng
@@ -101,12 +102,14 @@ Egenskap: Automatiske tilleggspoeng
         | 60          | 2     |
         | 120         | 2     |
 
+    @implemented
     Scenario: Poengene for høyere utdanning viser hvor mange studiepoeng de er regnet ut for
       Gitt at søkeren har bestått emner på 45 studiepoeng
       Og at poengtypen for poeng for høyere utdanning er knyttet til algoritmen for høyere utdanning
       Når saken får et grunnlag
       Så viser poengene for høyere utdanning at de er regnet ut for 45 studiepoeng
 
+    @implemented
     Scenario: Søker uten resultater fra høyere utdanning får 0 poeng
       Gitt at poengtypen for poeng for høyere utdanning er knyttet til algoritmen for høyere utdanning
       Og at søkeren ikke har resultater fra høyere utdanning
@@ -120,6 +123,7 @@ Egenskap: Automatiske tilleggspoeng
       Når saken får et grunnlag
       Så har saken 1 poeng for høyere utdanning
 
+    @implemented
     Scenario: Fagskolepoeng teller ikke
       Gitt at poengtypen for poeng for høyere utdanning er knyttet til algoritmen for høyere utdanning
       Og at søkeren har bestått emner på 30 studiepoeng i høyere utdanning
@@ -127,6 +131,7 @@ Egenskap: Automatiske tilleggspoeng
       Når saken får et grunnlag
       Så har saken 1 poeng for høyere utdanning
 
+    @implemented
     Scenario: Innpassede emner telles bare én gang
       Gitt at poengtypen for poeng for høyere utdanning er knyttet til algoritmen for høyere utdanning
       Og at søkeren har bestått emner på 40 studiepoeng ved lærestedet der emnene ble tatt
@@ -135,6 +140,7 @@ Egenskap: Automatiske tilleggspoeng
       Når saken får et grunnlag
       Så har saken 1 poeng for høyere utdanning
 
+    @implemented
     Scenario: Innpassede emner telles med studiepoengene fra lærestedet der de ble tatt
       Gitt at poengtypen for poeng for høyere utdanning er knyttet til algoritmen for høyere utdanning
       Og at søkeren har bestått emner på 30 studiepoeng ved lærestedet der emnene ble tatt
@@ -142,6 +148,7 @@ Egenskap: Automatiske tilleggspoeng
       Når saken får et grunnlag
       Så har saken 1 poeng for høyere utdanning
 
+    @implemented
     Scenario: Studiepoengene telles når poengene regnes ut
       Gitt at poengtypen for poeng for høyere utdanning er knyttet til algoritmen for høyere utdanning
       Og at søkeren hadde bestått emner på 50 studiepoeng da søknaden ble sendt inn
