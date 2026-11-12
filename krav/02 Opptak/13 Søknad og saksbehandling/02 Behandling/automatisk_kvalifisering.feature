@@ -292,6 +292,7 @@ Egenskap: Automatisk vurdering av spesielle opptakskrav
       Når saksbehandleren går til spesielle opptakskrav
       Så ser saksbehandleren vurderingen fra grunnlaget
 
+  @implemented
   Regel: Saksbehandlerens vurdering av et kravelement endres ikke av automatikken
     # Kravelementet låses når saksbehandleren registrerer en karakter eller en
     # vurdering på det. Det finnes ikke et eget valg for å låse kravelementet
@@ -299,40 +300,34 @@ Egenskap: Automatisk vurdering av spesielle opptakskrav
     # saksbehandleren bare ser på, er ikke låst. Låsen gjelder ett kravelement,
     # ikke hele saken.
 
-    @implemented
     Scenario: Saksbehandleren overstyrer vurderingen automatikken har satt
       Gitt at søknaden har fagkravet Fysikk 1, vurdert automatisk som ikke oppfylt
       Når saksbehandleren setter at fagkravet Fysikk 1 er oppfylt
       Så er fagkravet Fysikk 1 oppfylt
       Og fagkravet Fysikk 1 er låst mot automatisk vurdering
 
-    @implemented
     Scenario: Saksbehandleren overstyrer karakteren som automatikken har satt
       Gitt at søknaden har fagkravet Fysikk 1, vurdert automatisk med karakteren 4
       Når saksbehandleren setter karakteren 5 på fagkravet Fysikk 1
       Så har fagkravet Fysikk 1 karakteren 5
       Og fagkravet Fysikk 1 er låst mot automatisk vurdering
 
-    @implemented
     Scenario: Kravelement som saksbehandleren vurderer, låses
       Gitt at søknaden har et kravelement som er vurdert automatisk
       Når saksbehandleren endrer vurderingen av kravelementet
       Så er kravelementet låst mot automatisk vurdering
 
-    @implemented
     Scenario: Kravelement som saksbehandleren bare ser på, vurderes automatisk igjen
       Gitt at søknaden har et kravelement som er vurdert automatisk
       Og at saksbehandleren har sett på kravelementet uten å endre vurderingen
       Når søknaden behandles automatisk
       Så er kravelementet vurdert automatisk på nytt
 
-    @implemented
     Scenario: Låst kravelement vurderes ikke på nytt
       Gitt at søknaden har et kravelement som er låst mot automatisk vurdering
       Når søknaden behandles automatisk
       Så er vurderingen av kravelementet uendret
 
-    @implemented
     Scenario: Andre kravelementer vurderes selv om saksbehandleren har vurdert ett
       Gitt at saksbehandleren har vurdert Matematikk R1 på søknaden
       Og at søknaden har fagkravet Fysikk 1, koblet til en kravkode som kan vurderes automatisk
@@ -340,7 +335,6 @@ Egenskap: Automatisk vurdering av spesielle opptakskrav
       Så er fagkravet Fysikk 1 vurdert automatisk
       Og vurderingen av Matematikk R1 er uendret
 
-    @implemented
     Scenario: Nullstilt kravelement kan vurderes automatisk igjen
       Gitt at saksbehandleren har satt at fagkravet Norsk er oppfylt, med karakteren 4
       Når saksbehandleren nullstiller karakteren og vurderingen av fagkravet Norsk
@@ -361,7 +355,6 @@ Egenskap: Automatisk vurdering av spesielle opptakskrav
       Så er det vurdert automatisk om fagkravet Norsk er oppfylt
       Og fagkravet Norsk har karakteren 4, som saksbehandleren satte
 
-    @implemented
     Scenario: Unntak per grunnlag endres ikke
       Gitt at saksbehandleren har lagt inn et unntak for et kravelement på et grunnlag
       Når søknaden behandles automatisk

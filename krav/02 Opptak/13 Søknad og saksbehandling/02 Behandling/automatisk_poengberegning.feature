@@ -62,7 +62,7 @@ Egenskap: Automatisk beregning av vitnemålspoeng
       Når vitnemålspoengene beregnes automatisk
       Så har karakterpoenget ett desimal
 
-  @ref-FLY-OPT-AUT-001
+  @ref-FLY-OPT-AUT-001 @implemented
   Regel: Skolepoeng settes sammen av karakterpoeng, realfagspoeng og språkpoeng
     # Skolepoeng er karakterpoeng pluss realfagspoeng og språkpoeng, der de to siste til sammen teller høyst 4.
 
