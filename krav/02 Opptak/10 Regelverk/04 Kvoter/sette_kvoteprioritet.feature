@@ -18,8 +18,11 @@ Egenskap: Sette kvoteprioritet i regelverkssamlingen
   # https://www.figma.com/design/LmoNQlmAuE2FlE0fUo5GoO/FS-Admin---Seksjon-Opptak?node-id=22399-113465
   # og mockupen v12: https://fs.sikt.no/design-sketches/plassflyt-v1.12.html#kvoteprioritet
   # AVKLART 2026-10-15: Kvoteprioriteten er en rangering av kvotetypene i regelverkssamlingen, og alle er med.
-  # Hver kvotetype har sitt eget tall, fra 1 til antall kvotetyper i regelverkssamlingen. Likt tall og
-  # loddtrekning gjelder ikke, og grensen 0–25 i mockupen v12 gjelder ikke.
+  # Hver kvotetype har sitt eget tall. Likt tall og loddtrekning gjelder ikke, og grensen 0–25 i mockupen v12
+  # gjelder ikke.
+  # AVKLART 2026-11-12 (produkteier, etter tilbakemelding fra backend): Alle kvotetypene som til enhver tid er i
+  # regelverkssamlingen, skal ha en kvoteprioritet. Tallet er et helt tall fra 1, og har ingen øvre grense. Det er
+  # rekkefølgen som gjelder. Det erstatter at tallet er fra 1 til antall kvotetyper (avklart 2026-10-15).
   # Kvoteprioriteten settes sammen med plassflyten, se sette_plassflyt.feature.
   # AVKLART 2026-10-15: Kvoteprioriteten kan ikke overstyres per utdanningstilbud. Utdanningstilbudet viser
   # kvoteprioriteten for utdanningskvotene som er knyttet til det, se
@@ -84,7 +87,7 @@ Egenskap: Sette kvoteprioritet i regelverkssamlingen
   # Regelen «Søkeren får tilbud i kvoten som er høyest prioritert i opptaket» er flyttet 2026-10-19 til
   # 14 Plasstildeling/03 Tildeling/gjennomføre_plasstildeling.feature, der virkningen av kvoteprioriteten står.
 
-  Regel: Kvotetypene rangeres fra 1 til antall kvotetyper i regelverkssamlingen
+  Regel: Hver kvotetype i regelverkssamlingen har sin egen kvoteprioritet
 
     # AVKLART 2026-10-16: En kvotetype har aldri samme prioritet som en annen. Den står alltid over eller under,
     # aldri ved siden av.
@@ -107,5 +110,4 @@ Egenskap: Sette kvoteprioritet i regelverkssamlingen
       Eksempler:
         | verdi |
         | 0     |
-        | 4     |
         | 2,5   |

@@ -70,7 +70,7 @@ Dette er fasiten for tekstene, også når en skisse viser noe annet. Feilmelding
 
 **Skisser:** tekstene og oppsettet er skrevet etter koden i fs-admin (branchen `maada/TAKE-468-feat-kvoteflyt`, 2026-11-11), som teamet har bestemt er fasit for designet. Figma-skissen «Kvoteprioritet» ([`screenshot.png`](../../../../tasks/opptak/kvoter-i-opptaket-2027/spec/krav-input/sketches/figma/kvoteprioritet/screenshot.png)) er utdatert: den viser innstillingen på opptaket, tall som 4 og 12, og varselteksten «1 av 3 kvoter mangler kvoteprioritetstall».
 
-Endret 2026-11-11 (teamet): kvoteprioriteten er i en modal fra kvotetypelista og en kolonne i lista, ikke en seksjon i fanen «Kvoteprioritet og plassflyt». Det er ingen lesevisning av rangeringen, og ingen egne feiltekster for to like tall eller tall utenfor 1 til antall kvotetyper.
+Endret 2026-11-11 (teamet): kvoteprioriteten er i en modal fra kvotetypelista og en kolonne i lista, ikke en seksjon i fanen «Kvoteprioritet og plassflyt». Det er ingen lesevisning av rangeringen, og ingen egne feiltekster for to like tall eller ugyldige tall.
 
 ## Per-scenario detaljer
 
