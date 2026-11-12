@@ -11,7 +11,7 @@ Modalen henter alle kvotetypene i regelverkssamlingen, fordi API-et krever hele 
 ## Komponenter og layout
 
 - **Forklaring** øverst i modalen.
-- **Varsel** (`Alert`, kritisk) øverst i innholdet når plassflyten ikke har nøyaktig én hovedkvote, etter at brukeren har prøvd å lagre.
+- **Varsel** (`Alert`, kritisk) øverst i innholdet når kjedene ender i flere hovedkvoter, etter at brukeren har prøvd å lagre.
 - **Varsel** (`GuidePanel`, advarsel) når kvotetyper ikke er koblet til plassflyten, med kodene.
 - **Lista «Kvotetyper»** (`ActionList`, h2), med kolonnene Kode, Navn, Mottaker og Status.
   - Mottaker: ett nedtrekk per kvotetype, med «Ikke valgt» som første valg. Valgene viser bare koden. Hovedkvoten har også nedtrekk, med «Ikke valgt».
@@ -21,7 +21,7 @@ Modalen henter alle kvotetypene i regelverkssamlingen, fordi API-et krever hele 
 
 ## Hovedkvoten
 
-Hovedkvoten velges ikke i et eget felt. Den er kvoten kjedene ender i: den tar imot ledige plasser og sender dem ikke videre. Den vises med taggen «Hovedkvote» i Status. Plassflyten kan bare lagres med nøyaktig én hovedkvote: minst én kvote må sende til en annen, og alle kjedene må ende i samme kvote. API-et regner ut hovedkvoten på samme måte.
+Hovedkvoten velges ikke i et eget felt. Den er kvoten kjedene ender i: den tar imot ledige plasser og sender dem ikke videre. Den vises med taggen «Hovedkvote» i Status. Plassflyten kan ikke lagres med flere hovedkvoter: alle kjedene må ende i samme kvote. Er ingen kvoter koblet, har plassflyten ingen hovedkvote, og den kan lagres. API-et regner ut hovedkvoten på samme måte.
 
 ## Interaksjonsmønstre
 
@@ -47,9 +47,9 @@ Bare rollen `FS_ADMIN_MODIFISERE_REGELVERK` i organisasjonen som eier regelverks
 | Feil ved henting | `Alert` (kritisk) i modalen |
 | Ingen kvotetyper | Tom liste med «Ingen kvotetyper funnet» |
 | Kvotetyper ikke koblet | Varselet og taggen på raden. Lagre er ikke sperret |
-| Ingen hovedkvote | `Alert` øverst i innholdet. Lagring stoppes |
+| Ingen kvoter koblet | Ingen tagg «Hovedkvote». Alle kvotetypene får varselet og taggen. Lagre er ikke sperret |
 | Flere hovedkvoter | `Alert` øverst i innholdet, med kodene. Lagring stoppes |
-| Plassflyten går i ring | `Alert` i bunnen av modalen med kjeden, og feiltekst på hver rad i ringen. Lagring stoppes. Ved ring vises ikke feilen om hovedkvoten i tillegg |
+| Plassflyten går i ring | `Alert` i bunnen av modalen med kjeden, og feiltekst på hver rad i ringen. Lagring stoppes |
 | Feil ved lagring | `Alert` (kritisk) i bunnen av modalen |
 | Lagret | Snackbar, og modalen lukkes |
 
@@ -69,7 +69,6 @@ Dette er fasiten for tekstene, også når en skisse viser noe annet. Feilmelding
 | Tagg i Status | Kvotetypen er uten plasser | «Ikke med i plassflyten» | – | Ingen varsel om plassflyt for en kvotetype uten plasser |
 | Tagg i Status | Kvotetypen verken sender eller tar imot ledige plasser | «Ikke koblet til plassflyten» | – | Varsel om kvotetyper som ikke er koblet til plassflyten |
 | Varsel øverst i lista | Kvotetyper er ikke koblet | «Disse kvotetypene er ikke koblet til plassflyten: {kvotetyper}.» | `{kvotetyper}` = kodene, skilt med komma. Kvotetyper uten plasser er ikke med | Varsel om kvotetyper som ikke er koblet til plassflyten |
-| Alert øverst i innholdet | Lagring uten hovedkvote | «Regelverkssamlingen må ha en hovedkvote. Koble minst én kvote til kvoten som skal være hovedkvote.» | – | Plassflyten kan ikke lagres uten hovedkvote |
 | Alert øverst i innholdet | Lagring med flere hovedkvoter | «Plassflyten kan bare ha én hovedkvote, men kjedene ender i {kvotetyper}. Koble kvotene slik at alle kjedene ender i samme kvote.» | `{kvotetyper}` = kodene, skilt med komma | Plassflyten kan ikke lagres med flere hovedkvoter |
 | Alert i bunnen av modalen | Plassflyten går i ring | «Plassflyten kan ikke gå i ring: {kvotetyper}.» | `{kvotetyper}` = kjeden, f.eks. «SAM → NN → SAM» | Sirkulær plassflyt |
 | Feltfeil på hver rad i ringen | Plassflyten går i ring | «Inngår i en ring.» | – | Sirkulær plassflyt |
@@ -88,8 +87,8 @@ Endret 2026-11-11 (teamet): plassflyten er i en modal fra kvotetypelista, ikke e
 ### Scenario: Hovedkvoten er kvoten kjedene ender i
 Brukeren gjør en kvote til hovedkvote ved å la de andre kvotene sende ledige plasser til den, og la den selv stå på «Ikke valgt». Kvoten får taggen «Hovedkvote».
 
-### Scenario: Plassflyten kan ikke lagres uten hovedkvote
-Er ingen kvoter koblet, stoppes lagringen med feilen om hovedkvoten. Det gjelder også en regelverkssamling med bare én kvotetype.
+### Regel: Regelverkssamlingen har én hovedkvote
+Er ingen kvoter koblet, kan plassflyten lagres uten hovedkvote. Alle kvotetypene får da taggen «Ikke koblet til plassflyten» og står i varselet. Det gjelder også en regelverkssamling med bare én kvotetype.
 
 ### Scenario: Sirkulær plassflyt
 Nedtrekket tilbyr ikke valg som lager en ring, så ringen kan bare komme fra lagrede data. Den oppdages før lagring, og API-et avviser den også.
@@ -99,4 +98,4 @@ Kvotetypen har ikke noe mottakerfelt, står ikke blant mottakerne til andre kvot
 
 ## Åpne designspørsmål
 
-- [ ] En regelverkssamling med bare én kvotetype kan ikke lagre plassflyten, fordi den ikke har noe å koble. Kravet sier ikke hva som skal skje da.
+- [x] En regelverkssamling med bare én kvotetype kan ikke lagre plassflyten, fordi den ikke har noe å koble. Avklart 2026-11-12: en tom plassflyt kan lagres, se regelen om hovedkvoten.

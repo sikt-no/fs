@@ -48,6 +48,11 @@ Egenskap: Sette standard plassflyt i regelverkssamlingen
   # koblet, sender ledige plasser videre i en kjede som ender i hovedkvoten. Om hovedkvoten velges for seg eller
   # regnes ut fra kjedene, er en implementasjonsdetalj, se sette_plassflyt.design.md. Erstatter avklaringen
   # 2026-10-19 om at hovedkvoten velges for seg.
+  # AVKLART 2026-11-12 (produkteier, etter tilbakemelding fra backend): Er minst én kvote koblet, og plassflyten
+  # ikke går i ring, finnes det alltid en kvote kjedene ender i. Plassflyten er bare uten hovedkvote når ingen
+  # kvoter er koblet, og den kan da lagres. Kvotetypene får varselet om at plassflyten mangler, og kan ikke brukes
+  # før de er koblet. Det gjelder også en regelverkssamling med bare én kvotetype. Scenarioet «Plassflyten kan ikke
+  # lagres uten hovedkvote» er fjernet.
   Regel: Regelverkssamlingen har én hovedkvote
 
     Scenario: Hovedkvoten er kvoten kjedene ender i
@@ -55,12 +60,6 @@ Egenskap: Sette standard plassflyt i regelverkssamlingen
       Og at "Ordinær kvote (ORD)" ikke sender ledige plasser videre
       Når opptaksforvalter lagrer plassflyten
       Så er "Ordinær kvote (ORD)" hovedkvote i standard plassflyt i regelverkssamlingen
-
-    Scenario: Plassflyten kan ikke lagres uten hovedkvote
-      Gitt at ingen kvoter sender ledige plasser videre i standard plassflyt i regelverkssamlingen
-      Når opptaksforvalter lagrer plassflyten
-      Så blir plassflyten ikke lagret
-      Og opptaksforvalter får beskjed om at regelverkssamlingen må ha en hovedkvote
 
     Scenario: Plassflyten kan ikke lagres med flere hovedkvoter
       Gitt at "Førstegangsvitnemål (ORDF)" sender ledige plasser til "Ordinær kvote (ORD)" i standard plassflyt i regelverkssamlingen
