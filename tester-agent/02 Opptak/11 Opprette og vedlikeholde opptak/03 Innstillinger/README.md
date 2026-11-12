@@ -1,4 +1,4 @@
-# CDP-tester: Innstillinger
+# Agenttester: Innstillinger
 
 Tester for kravet [innstillinger.feature](../../../../krav/02%20Opptak/11%20Opprette%20og%20vedlikeholde%20opptak/03%20Innstillinger/innstillinger.feature) (`@OPT-OVO-INN-001`), i `innstillinger.feature` i denne mappa.
 

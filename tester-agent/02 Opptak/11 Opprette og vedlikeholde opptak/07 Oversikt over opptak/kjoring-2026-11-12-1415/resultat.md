@@ -5,7 +5,7 @@
 - **Miljø**: https://test-fsadmin.sikt.no. Flagget `opptak-filter-organisasjon` er `[Fylles ut]` i miljøfila
 - **Kravstatus**: Alle `@implemented`
 - **Utdaterte tester**: Ingen (blob `e52dde99` er den samme som kravfila på `origin/main`)
-- **Tester**: `cdp-tester/02 Opptak/11 Opprette og vedlikeholde opptak/07 Oversikt over opptak/listevisning_og_sok_i_opptak.feature`
+- **Tester**: `tester-agent/02 Opptak/11 Opprette og vedlikeholde opptak/07 Oversikt over opptak/listevisning_og_sok_i_opptak.feature`
 - **Slik er testen kjørt**: stegene er fulgt slik de står (R14). Virket ikke et steg, eller fantes ikke en verdi, er testcasen «Ikke testet», med det som ble sett i «Faktisk resultat». Når ordene i et steg ikke er de samme som i skjermen, men det bare finnes ett valg som passer, er det valget tatt, og det står i raden
 - **Kjente mangler**: Ingen
 - **Krav**: commit `4724ca41`

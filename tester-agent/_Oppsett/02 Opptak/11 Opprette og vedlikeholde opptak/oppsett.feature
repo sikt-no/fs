@@ -1,5 +1,5 @@
 # language: no
-# Oppsett for testene i cdp-tester/02 Opptak/11 Opprette og vedlikeholde opptak/ (samme sti under _Oppsett/)
+# Oppsett for testene i tester-agent/02 Opptak/11 Opprette og vedlikeholde opptak/ (samme sti under _Oppsett/)
 #
 # Kjøres først i hver kjøring, før testene i mappa. Lager testdataene testene bruker, gjennom FS Admin, med
 # {KJØRING} i navnene. Testdataene i TEST kan slettes eller nullstilles når som helst, så testene bygger aldri

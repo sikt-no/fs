@@ -1,4 +1,4 @@
-# CDP-tester
+# Agenttester
 
 Varige tester som en agent kjører i Chrome mot et testmiljø, i den agentiske funksjonstesten (fase 2 i [teststrategien (forslag)](https://sikt.atlassian.net/wiki/spaces/STUDIEADM/pages/5145100326)). De er skrevet som Gherkin, og kan brukes av flere verktøy. Agenten i fase 2 kjører dem med Vibium (se *Vibium*). De er ikke krav: kravene i [`krav/`](../krav/README.md) sier *hva* som skal gjelde, og her står *hvordan* det sjekkes i skjermen, med skjermens ord og konkrete verdier. Testene lages og oppdateres med skillen `fs-testcaser-cdp`, fra kravene. De kjenner ikke til testplaner eller akseptansetester: en testplan kan velge hvilke tester som lages og kjøres, men testene og `README.md`-ene her viser aldri til den.
 
@@ -9,8 +9,10 @@ Mappa ligger ved siden av `krav/` og ikke under den, fordi konvensjonene for kra
 ## Struktur
 
 ```
-cdp-tester/
+tester-agent/
 ├── README.md                                   # dette dokumentet
+├── package.json, package-lock.json, .mise.toml # Vibium og Node (se Vibium)
+├── .env.example                                # Feide-testbrukeren (kopieres til .env, som er ignorert)
 ├── _Løp/<NN Prosess>/<test>.feature            # tester på tvers av domener
 ├── _Miljøer/<miljø>.md                         # personaene og grunndataene for ett testmiljø (se Miljøfila)
 ├── _Oppsett/<sti speilet fra krav/>/oppsett.feature  # lager testdataene i hver kjøring (se Oppsettet)
@@ -37,7 +39,7 @@ cdp-tester/
 - **Datoer i forhold til testdagen.** `{DATO:+N}` er datoen N dager etter dagen kjøringen starter, og `{DATO:-N}` N dager før. Fristene står slik, så tilstanden er den samme uansett når testen kjøres.
 - **Organisasjoner som nøkler.** Et steg som trenger organisasjonen til en testbruker eller et testdata, bruker `{ORG:<nøkkel>}` (forkortelsen), `{ORGNAVN:<nøkkel>}` (navnet på bokmål) eller `{ORGKODE:<nøkkel>}` (organisasjonskoden): `Og jeg velger «Fjern {ORG:opptak-forvalter-deltakende}»`. Agenten slår dem opp i miljøfila: forkortelsen, navnet og koden står på personaen nøkkelen er koblet til, eller på testdataene. `{KJØRING}` er tidspunktet for kjøringen. Ingen navn på organisasjoner i stegene, bortsett fra det skjermen alltid viser, uansett miljø.
 - **Miljø står ikke i filene.** URL, versjon og feature-flagg står i miljøfila. Det er alltid et testmiljø, aldri produksjon.
-- **Bare det som varer.** Testene og `README.md` i mappa skal kunne kjøres om et halvt år. De har ikke status for kravet eller leveransen, kjente mangler, saker med status, resultater fra verifiseringen eller en kjøring, henvisninger til en testplan eller testcaser i den, eller verdier som bare gjelder ett miljø. Verdiene står i miljøfila, og resten i resultatet av kjøringen eller utenfor `cdp-tester/`. Kommentarer om hvordan et steg tas, hva skjermen viser, og avklaringer og åpne spørsmål i kravet er greit: de følger kravet, og blob-hashen i headeren sier når de er utdaterte.
+- **Bare det som varer.** Testene og `README.md` i mappa skal kunne kjøres om et halvt år. De har ikke status for kravet eller leveransen, kjente mangler, saker med status, resultater fra verifiseringen eller en kjøring, henvisninger til en testplan eller testcaser i den, eller verdier som bare gjelder ett miljø. Verdiene står i miljøfila, og resten i resultatet av kjøringen eller utenfor `tester-agent/`. Kommentarer om hvordan et steg tas, hva skjermen viser, og avklaringer og åpne spørsmål i kravet er greit: de følger kravet, og blob-hashen i headeren sier når de er utdaterte.
 - **Ingen kravstatus.** Filene har ingen `@draft`, `@planned`, `@in-progress`, `@implemented` eller `@deprecated`, og ingen `@scope-`.
 
 ## Referanser til kravene
@@ -56,7 +58,7 @@ Egenskap: <tittelen i kravet>
 - `@TST-…` er testens egen ID: `@TST-<DOM>-<SUB>-<KAP>-NNN` for en speilet sti, `@TST-<prosess>-<test>-NNN` for `_Løp` (samme formater som Feature-ID og `@FLY-`).
 - Headeren har kravfila, commiten og blob-hashen (`git rev-parse origin/main:<sti>`). Er hashen ikke lik kravfilas nå, er testen utdatert, og `fs-testcaser-cdp` viser forskjellen som en diff i stedet for å skrive over.
 
-Finn testene for et krav: `grep -rn "@depends-on-<Feature-ID>" cdp-tester/`.
+Finn testene for et krav: `grep -rn "@depends-on-<Feature-ID>" tester-agent/`.
 
 ## «Krever» i README.md
 
@@ -128,21 +130,22 @@ Skriv aldri fødselsnummeret i fila: personaen velges i menyen.
 
 ## Vibium
 
-Testene kjøres med [Vibium](https://github.com/VibiumDev/vibium), CLI-en `vibium`. Vibium styrer nettleseren med WebDriver BiDi, og starter sin egen nettleser (Chrome for Testing, med en midlertidig profil) i stedet for å koble til den du bruker ellers. CLI-en snakker med nettleseren gjennom en lokal socket, ikke en åpen port. `fs-testcaser-cdp` trenger ikke Vibium for å lage eller oppdatere testene, bare for å kjøre dem. Navnet `cdp-tester` er fra verktøyet testene ble kjørt med før. Testene er de samme.
+Testene kjøres med [Vibium](https://github.com/VibiumDev/vibium), CLI-en `vibium`. Vibium styrer nettleseren med WebDriver BiDi, og starter sin egen nettleser (Chrome for Testing, med en midlertidig profil) i stedet for å koble til den du bruker ellers. CLI-en snakker med nettleseren gjennom en lokal socket, ikke en åpen port. `fs-testcaser-cdp` trenger ikke Vibium for å lage eller oppdatere testene, bare for å kjøre dem.
 
-Vibium er ikke en del av repoet. Hver bruker installerer det selv, med en fast versjon, så alle kjører den samme. Kommandoene under gjelder versjonen her. Dokumentasjonen på GitHub (`main`) beskriver også kommandoer som ikke er sluppet ennå (`setup`, `ready`, `run`, `--user-data-dir`).
+Vibium installeres i denne mappa, med versjonen i `package.json` og `package-lock.json`, så alle kjører den samme. Ingenting installeres globalt. Kommandoene kjøres fra `tester-agent/`, med `npx vibium …` (eller `npm run …`). De gjelder versjonen her: dokumentasjonen på GitHub (`main`) beskriver også kommandoer som ikke er sluppet ennå (`setup`, `ready`, `run`, `--user-data-dir`).
 
-1. Installer CLI-en: `npm install -g vibium@26.8.21`. npm kjører ikke installasjonsskriptet uten at du sier ja, så last ned Chrome for Testing selv: `vibium install`. `vibium paths` viser hvor den ligger (`~/Library/Caches/vibium` på macOS).
-2. Skillen er valgfri: `vibium add-skill` legger den i `~/.claude/skills/vibe-check/`, utenfor repoet. Agenten kan også bruke CLI-en direkte (`vibium --help`).
-3. Start nettleseren i en egen sesjon til testingen: `vibium --session fs-test daemon start --idle-timeout 0`. Profilen er midlertidig, så innloggingen varer så lenge nettleseren kjører. Uten `--idle-timeout 0` stopper den etter 30 minutter uten kommandoer, og da må du logge inn på nytt. Bruk den samme `--session` i alle kommandoene i kjøringen (eller `VIBIUM_SESSION=fs-test`).
-4. Logg inn med Feide-testbrukeren, i vinduet Vibium åpner (det er synlig): «Logg inn med Feide», «Feide test users», brukernavn og passord. Brukernavnet og passordet står i `tester-agent/.env` (`FS_ADMIN_USERNAME` og `FS_ADMIN_PASSWORD`, de samme som i `tester/.env.example`), som er ignorert av git. Agenten kan logge inn, eller du kan gjøre det selv. FS Admin logger ut etter en stund, og varsler 10 minutter før. Testbrukeren byttes i «Overstyrt bruker» øverst til høyre i FS Admin, som er normalen i TEST, med personaen i miljøfila.
-5. Avslutt med `vibium --session fs-test daemon stop` når kjøringen er ferdig. Profilen og innloggingen slettes.
+1. Installer: `cd tester-agent && ~/.local/bin/mise exec -- npm install` (Node fra `.mise.toml`). npm kjører ikke installasjonsskriptet til Vibium uten at du sier ja, så last ned Chrome for Testing med `npm run vibium:install`. `npx vibium paths` viser hvor den ligger (`~/Library/Caches/vibium` på macOS, delt mellom klonene).
+2. Kopier `.env.example` til `.env`, som er ignorert av git.
+3. Skillen er valgfri: `npx vibium add-skill` legger den i `~/.claude/skills/vibe-check/`, utenfor repoet. Agenten kan også bruke CLI-en direkte (`npx vibium --help`).
+4. Start nettleseren i en egen sesjon til testingen: `npm run vibium:start` (`vibium --session fs-test daemon start --idle-timeout 0`, og åpner FS Admin i TEST). Profilen er midlertidig, så innloggingen varer så lenge nettleseren kjører. Uten `--idle-timeout 0` stopper den etter 30 minutter uten kommandoer, og da må du logge inn på nytt. Bruk den samme `--session` i alle kommandoene i kjøringen (eller `VIBIUM_SESSION=fs-test`).
+5. Logg inn med Feide-testbrukeren, i vinduet Vibium åpner (det er synlig): «Logg inn med Feide», «Feide test users», brukernavn og passord. Brukernavnet og passordet står i `.env` (`FS_ADMIN_USERNAME` og `FS_ADMIN_PASSWORD`, de samme som i `tester/.env.example`). Agenten kan logge inn, eller du kan gjøre det selv. FS Admin logger ut etter en stund, og varsler 10 minutter før. Testbrukeren byttes i «Overstyrt bruker» øverst til høyre i FS Admin, som er normalen i TEST, med personaen i miljøfila.
+6. Avslutt med `npm run vibium:stop` når kjøringen er ferdig. Profilen og innloggingen slettes.
 
 Vibium har ingen egne sikkerhetsregler for testmiljøet. Reglene for kjøringen står under, i *Regler for kjøringen*.
 
 ## Kjøring og resultat
 
-Testene kjøres av en agent, mot miljøfila for testmiljøet. Oppsettet for mappa kjøres først, og agenten skriver det som er laget, i «Kjøringens testdata» i resultatet. Kjører flere agenter samme kjøring, bruker de det samme oppsettet. Den som starter kjøringen, sier hvilke tester som kjøres (en mappe, en fil eller en liste) og hvor resultatet legges. Sier den ikke noe, legges resultatet ved testene: `cdp-tester/<mappa med testene>/kjoring-<YYYY-MM-DD-HHMM>/resultat.md`, eller i den nærmeste felles mappa når kjøringen går over flere. Hører kjøringen til en akseptansetest, sier [`akseptansetest/README.md`](../akseptansetest/README.md) hvor resultatet legges.
+Testene kjøres av en agent, mot miljøfila for testmiljøet. Oppsettet for mappa kjøres først, og agenten skriver det som er laget, i «Kjøringens testdata» i resultatet. Kjører flere agenter samme kjøring, bruker de det samme oppsettet. Den som starter kjøringen, sier hvilke tester som kjøres (en mappe, en fil eller en liste) og hvor resultatet legges. Sier den ikke noe, legges resultatet ved testene: `tester-agent/<mappa med testene>/kjoring-<YYYY-MM-DD-HHMM>/resultat.md`, eller i den nærmeste felles mappa når kjøringen går over flere. Hører kjøringen til en akseptansetest, sier [`akseptansetest/README.md`](../akseptansetest/README.md) hvor resultatet legges.
 
 Resultatet følger malen i [`mal-cdp.md`](../.claude/skills/fs-testcaser-cdp/references/mal-cdp.md) (*Resultat av en kjøring*). Bevisene er steg, input, faktisk resultat og skjermbilde eller logg for hver testcase. Skjermbildene legges i samme mappe, men er ignorert av git (`.gitignore`): bare `resultat.md` committes. Resultatet lagres i Confluence når brukeren sier ja.
 
@@ -166,4 +169,4 @@ Disse gjelder for agenten som kjører testene:
 - **Bevis.** Tekst og DOM (`vibium text`, `vibium eval`, `vibium a11y-tree`) er primærbevis, skjermbilder (`vibium screenshot -o <kjøringsmappa>/<fil>.png`) sekundære. Et opptak (`vibium record start` og `vibium record stop`, lagret i kjøringsmappa) kan legges ved, og er ignorert av git som skjermbildene. Tell rader i skjermen, ikke via GraphQL: et direkte API-kall kan gi flere rader enn løsningen viser. Skriv aldri til `/tmp`.
 - **Kjente mangler** er ikke en del av testene. Gir den som starter kjøringen en liste over kjente mangler, sjekkes sakene før kjøringen, og de står i resultatet. Ellers er et scenario som ikke består, et funn.
 - **Funn.** Et funn har typen «Feil» eller «Kravet dekker ikke» (en `@utledet` testcase der kravet ikke sier noe om tilfellet), og alvorlighetsgrad fra testansvarlig ([`alvorlighetsgrad.md`](../.claude/references/akseptansetest/alvorlighetsgrad.md)). «Kravet dekker ikke» avklares i kravet (`fs-krav`), ikke bare i testen.
-- **Installasjon.** Mangler `vibium` eller Chrome for Testing (`vibium is-installed`), eller er versjonen (`vibium version`) en annen enn i *Vibium*, vis veiledningen der, og installer ikke noe uten at brukeren sier ja.
+- **Installasjon.** Mangler `node_modules` i `tester-agent/` eller Chrome for Testing (`npx vibium is-installed`), eller er versjonen (`npx vibium version`) en annen enn i `package.json`, vis veiledningen der, og installer ikke noe uten at brukeren sier ja.

@@ -1,4 +1,4 @@
-# CDP-tester: Frister
+# Agenttester: Frister
 
 Tester for kravet [frister_og_hendelser.feature](../../../../krav/02%20Opptak/11%20Opprette%20og%20vedlikeholde%20opptak/04%20Frister/frister_og_hendelser.feature) (`@OPT-OVO-FRI-001`), i `frister_og_hendelser.feature` i denne mappa.
 

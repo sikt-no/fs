@@ -300,4 +300,4 @@ Ingen.
 - **Åpent spørsmål:** `@OPT-BEH-BEH-011` «Søknaden får én sak per saksbehandlende organisasjon» — «Når søknadsalternativene er fordelt» er en tilstand, ikke en handling. Hvilken handling er det?
 - **Åpent spørsmål:** `@OPT-BEH-BEH-011` «Søknadsalternativene flyttes når utdanningsbakgrunnen endres …» — Gjelder fristen også søkerens egen endring? Skal regelen ha `@depends-on-OPT-OVO-FRI-001`?
 - **Åpent spørsmål:** `@OPT-BEH-BEH-011` «Flyttet søknadsalternativ vises som overført …» (`@draft @openquestion`) — Skal statusen «Overført» og uleste dokumenter være med, og i så fall her eller i et eget krav?
-- **Ingen `@e2e` for flyten:** det finnes ingen test for overleveringene, verken i `tester/steps/`, `cdp-tester/` eller kode-repoene. Ingen av de fem kravene har step definitions i `tester/steps/`.
+- **Ingen `@e2e` for flyten:** det finnes ingen test for overleveringene, verken i `tester/steps/`, `tester-agent/` eller kode-repoene. Ingen av de fem kravene har step definitions i `tester/steps/`.

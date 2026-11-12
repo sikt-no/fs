@@ -71,7 +71,7 @@ Sjekk at testdataene finnes i testmiljøet før testcasene skrives (R15 i `testc
 
 ## 2. Del 1, 3 og 4: det fase 2 ikke klarte, opplevelsen og risikoen
 
-**Del 1: det fase 2 ikke klarte.** Les `resultat.md` fra den siste kjøringen av den agentiske testen i `akseptansetest/<slug>/kjoring-*/` (og «Kjøringens testdata»), og list testcasene med foreslått status «Ikke testet», med grunnen fra «Faktisk resultat». Hver av dem blir en testcase her, med de samme stegene som i testen i `cdp-tester/`, skrevet om etter malen (testbrukerne fra testplanen i stedet for nøklene). Er grunnen en feil i løsningen (ikke data eller et steg agenten ikke fikk til), står den som funn i den agentiske rapporten, og testcasen tas bare med når testansvarlig vil. Mangler data testene ikke kan lage, står det i «Testdata» som `[Fylles ut: …]`.
+**Del 1: det fase 2 ikke klarte.** Les `resultat.md` fra den siste kjøringen av den agentiske testen i `akseptansetest/<slug>/kjoring-*/` (og «Kjøringens testdata»), og list testcasene med foreslått status «Ikke testet», med grunnen fra «Faktisk resultat». Hver av dem blir en testcase her, med de samme stegene som i testen i `tester-agent/`, skrevet om etter malen (testbrukerne fra testplanen i stedet for nøklene). Er grunnen en feil i løsningen (ikke data eller et steg agenten ikke fikk til), står den som funn i den agentiske rapporten, og testcasen tas bare med når testansvarlig vil. Mangler data testene ikke kan lage, står det i «Testdata» som `[Fylles ut: …]`.
 
 **Del 3: opplevelse og helhet.** Foreslå testcaser for det bare et menneske kan vurdere, per skjerm eller oppgave i leveransen:
 
@@ -112,7 +112,7 @@ For hvert krav som er med, les:
 - skissene i `spec/krav-input/**/sketches/` i scope-mappa
 - kodeklonene (fs-admin for saksbehandlere og forvaltere, min-kompetanse for søkeren): menyene, rutene, knappene, feltene, hvilke felt som er obligatoriske, og forhåndsutfylte verdier. Spør om stien til klonene hvis de mangler (som i *Kodeklonene* i `fs-verify`).
 - **lista over obligatoriske felt**, laget eksplisitt per skjema, fra koden (for opptak: `missingFields` i `src/common/messages/nb/opptak.json` i fs-admin), med standardverdiene (R5). Den brukes i steg 4 (svakheter i kravet) og i sjekk 6 i `testcase-regler.md`.
-- stegene og ordene i den agentiske testen (`cdp-tester/`, og `kjoring-*/resultat.md`) når den finnes: de er sjekket mot skjermen.
+- stegene og ordene i den agentiske testen (`tester-agent/`, og `kjoring-*/resultat.md`) når den finnes: de er sjekket mot skjermen.
 
 Uten kode merkes stegene der ordene er usikre, `[Sjekk begrep]`.
 

@@ -1,4 +1,4 @@
-# CDP-tester: Samordning
+# Agenttester: Samordning
 
 Tester for kravet [samordna_opptak.feature](../../../../krav/02%20Opptak/11%20Opprette%20og%20vedlikeholde%20opptak/02%20Samordning/samordna_opptak.feature) (`@OPT-OVO-SAM-001`), i `samordna_opptak.feature` i denne mappa.
 

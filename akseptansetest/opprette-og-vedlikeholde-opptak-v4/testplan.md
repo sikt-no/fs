@@ -155,7 +155,7 @@ Testrapportene (verifisering, agentisk, intern og ekstern) står som undersider,
 |---|---|
 | Verifiseringsrapporten (fase 1) | [Verifisering – Opprette og vedlikeholde opptak v3 – 2026-10-28 12:38](https://sikt.atlassian.net/wiki/spaces/STUDIEADM/pages/5153554433) · [verify-2026-10-28-1238.md](../opprette-opptak-2027/verify-2026-10-28-1238.md) |
 | Agentisk testrapport (fase 2) | [Testrapport – agentisk funksjonstest – Opprette og vedlikeholde opptak v4](https://sikt.atlassian.net/wiki/spaces/STUDIEADM/pages/5158567942) · [testrapport-agentisk-2026-10-30.md](testrapport-agentisk-2026-10-30.md) |
-| Testcasene for fase 2 | [`cdp-tester/02 Opptak/11 Opprette og vedlikeholde opptak/`](../../cdp-tester/02%20Opptak/11%20Opprette%20og%20vedlikeholde%20opptak/), og [oppsettet](../../cdp-tester/_Oppsett/02%20Opptak/11%20Opprette%20og%20vedlikeholde%20opptak/oppsett.feature) |
+| Testcasene for fase 2 | [`tester-agent/02 Opptak/11 Opprette og vedlikeholde opptak/`](../../tester-agent/02%20Opptak/11%20Opprette%20og%20vedlikeholde%20opptak/), og [oppsettet](../../tester-agent/_Oppsett/02%20Opptak/11%20Opprette%20og%20vedlikeholde%20opptak/oppsett.feature) |
 | Testcasene for fase 3 | – |
 | Forrige testløp | [Testplan versjon 3](https://sikt.atlassian.net/wiki/spaces/STUDIEADM/pages/5150965860), [testplan versjon 1](https://sikt.atlassian.net/wiki/spaces/STUDIEADM/pages/5128028165), [intern akseptansetest 22.10](https://sikt.atlassian.net/wiki/spaces/STUDIEADM/pages/5127209099), [ekstern akseptansetest](https://sikt.atlassian.net/wiki/spaces/STUDIEADM/pages/5137334279). Kjøringen av Opprette et opptak 27.10 (versjon 2, arkivert): `akseptansetest/opprette-og-vedlikeholde-opptak-v2/kjoring-2026-10-27-1200/` |
 

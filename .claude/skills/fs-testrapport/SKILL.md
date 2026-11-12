@@ -53,7 +53,7 @@ Sjekk at branchen i dette repoet er oppdatert mot origin og main, som beskrevet 
 **Agentisk:**
 
 - Den nyeste kjøringen: `akseptansetest/<slug>/kjoring-<YYYY-MM-DD-HHMM>/resultat.md` (flere kjøringer: spør hvilken, eller ta den nyeste og si det). Bevisene ligger i samme mappe (skjermbilder er ikke i git, og resultatet viser til dem som «lokalt, ikke i git»), og er primærbevis sammen med tekst og DOM i `resultat.md`.
-- `testcaser-cdp` (testcasene fra `fs-testcaser-cdp`, i `cdp-tester/` og i testplanen), for å koble hver testcase til kravet, regelen og teknikken (grenseverdi, ekvivalensklasse, beslutningstabell, tilstandsovergang).
+- `testcaser-cdp` (testcasene fra `fs-testcaser-cdp`, i `tester-agent/` og i testplanen), for å koble hver testcase til kravet, regelen og teknikken (grenseverdi, ekvivalensklasse, beslutningstabell, tilstandsovergang).
 - «Regler uten scenario» i testplanen og verify-rapporten: er hver regel testet?
 - `@openquestion` i kravene i «Omfang», som under verifisering.
 - Resultatet fra agenten er et forslag. Testansvarlig har ikke nødvendigvis gått gjennom det ennå: «Gjennomgått av testansvarlig» står `[Fylles ut av testansvarlig]`, og er et vilkår for at inngangskriteriet er oppfylt.

@@ -1,6 +1,6 @@
 # Confluence i testflyten
 
-Felles for `fs-testplan`, `fs-testcaser-cdp`, `fs-testcaser-intern`, `fs-testcaser-ekstern`, `fs-testrapport` og Confluence-steget i `fs-verify`. Testplanen er hovedsiden for en leveranse, og alle de andre sidene er undersider til den. Testplanen viser omfanget av testcasene som skal lages (seksjonen «Testcaser som skal lages»), ikke selve testcasene: testcasene, resultatene fra kjøringene og testrapportene står på undersidene (eller i `cdp-tester/` for fase 2), og testplanen lenker til dem fra «Status i flyten» og «Vedlegg». Verifiseringen kommer før testplanen, så undersiden «Verifisering – …» lages av `fs-testplan` når testplanen opprettes, og av `fs-verify` når den kjøres på nytt med en testplan som finnes.
+Felles for `fs-testplan`, `fs-testcaser-cdp`, `fs-testcaser-intern`, `fs-testcaser-ekstern`, `fs-testrapport` og Confluence-steget i `fs-verify`. Testplanen er hovedsiden for en leveranse, og alle de andre sidene er undersider til den. Testplanen viser omfanget av testcasene som skal lages (seksjonen «Testcaser som skal lages»), ikke selve testcasene: testcasene, resultatene fra kjøringene og testrapportene står på undersidene (eller i `tester-agent/` for fase 2), og testplanen lenker til dem fra «Status i flyten» og «Vedlegg». Verifiseringen kommer før testplanen, så undersiden «Verifisering – …» lages av `fs-testplan` når testplanen opprettes, og av `fs-verify` når den kjøres på nytt med en testplan som finnes.
 
 ## Verktøy
 
@@ -34,7 +34,7 @@ Teststrategi for FS – fra krav til akseptanse (forslag) (5145100326)
 
 - **Testplanen er delt i fire sider:** hovedsiden «Testplan – <leveranse>» og undersidene «Omfang», «Testcaser og testdata» og «Sporbarhet» (*Hovedsiden og undersidene* i `mal-testplan.md` i `fs-testplan`). Verktøyet kan bare skrive en hel side om gangen, og en stor side kan bli avvist eller avkuttet, så hver del står på sin egen side, og en endring skrives bare til siden den gjelder. Seksjonsnavnene er de samme som før: «Omfang i testplanen» er seksjonen «Omfang» på undersiden «Omfang», og «Testdata» står på «Testcaser og testdata».
 - **Hovedsiden starter med «Innhold»:** makroen `toc` (overskriftene på siden, `maxLevel` 2) og makroen `children` (alle undersidene, også testrapportene og testsidene), og så tabellen over de tre undersidene fra malen, med lenker. HTML for makroene: `<div data-type="extension" data-extension-key="toc" data-extension-type="com.atlassian.confluence.macro.core" data-parameters='{"macroParams":{"maxLevel":{"value":"2"}},"macroMetadata":{"schemaVersion":{"value":"1"},"title":"Table of Contents"}}'></div>` og det samme med `data-extension-key="children"` og `"macroParams":{"all":{"value":"true"}}`.
-- **Testcasene i fase 2** ligger i repoet (`cdp-tester/`, Gherkin), og har ingen egen side. Resultatene fra kjøringen (`akseptansetest/<slug>/kjoring-<dato>/resultat.md`) står i «Testrapport – agentisk funksjonstest», med testcasene, teknikken, resultatet og funnene. Bildene ligger lokalt, ikke i git, og legges ikke i Confluence uten at brukeren ber om det.
+- **Testcasene i fase 2** ligger i repoet (`tester-agent/`, Gherkin), og har ingen egen side. Resultatene fra kjøringen (`akseptansetest/<slug>/kjoring-<dato>/resultat.md`) står i «Testrapport – agentisk funksjonstest», med testcasene, teknikken, resultatet og funnene. Bildene ligger lokalt, ikke i git, og legges ikke i Confluence uten at brukeren ber om det.
 - **Flytbeskrivelser til partene** er flytene fra den interne testen, uten tekniske ord, og rapportene fra fase 2 og 3, slik at partene ser hva som er testet. Siden lages bare når brukeren sier ja, og bare for leveranser som er godkjent internt.
 
 - **Foreldresiden til testplanen** er alltid [Testplaner](https://sikt.atlassian.net/wiki/spaces/STUDIEADM/pages/5126062121/Testplaner) (`5126062121`, rommet `STUDIEADM`). Spør ikke om foreldresiden. Alle de andre sidene er undersider til testplanen.
@@ -95,7 +95,7 @@ Testplanen har en tabell med fasene. `fs-testplan` fyller ut raden for verifiser
 | 1. Verifisering (`fs-verify`) | <lenke> | Alt funnet / <N> ikke funnet, <N> usikker / Ikke kjørt | <dato> |
 | 1. Testrapport – verifisering | <lenke> | Klar / Ikke klar for agentisk funksjonstest | <dato> |
 | 1. Testplan | (denne siden) | Laget | <dato> |
-| 2. Agentisk funksjonstest – testcaser (`fs-testcaser-cdp`) | `cdp-tester/<sti>` | Ikke laget / Laget / Oppdatert | <dato> |
+| 2. Agentisk funksjonstest – testcaser (`fs-testcaser-cdp`) | `tester-agent/<sti>` | Ikke laget / Laget / Oppdatert | <dato> |
 | 2. Agentisk funksjonstest – kjøring | `kjoring-<dato>/resultat.md` | Venter / Kjørt / Kjørt med funn | <dato> |
 | 2. Testrapport – agentisk funksjonstest | <lenke> | Klar / Ikke klar for intern akseptansetest / Venter på gjennomgang | <dato> |
 | 3. Intern akseptansetest | <lenke> | Klar til test / Pågår / Ferdig | <dato> |

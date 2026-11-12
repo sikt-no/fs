@@ -69,7 +69,7 @@ Følg så referansene, ett nivå (se *Referanser* og *Flyter* i `krav/README.md`
 
 - **Kravene som bygger på et treff:** `Grep` på `@depends-on-<ID>` i `krav/`. Les ankeret (`@ref-<deres ID>` på delene i treffet): bygger de bare på deler endringen ikke rører, tas de ikke med.
 - **Flytene:** `Grep` på `@depends-on-<ID>` i `krav/_Flyter/`. Endrer endringen en tilstand som overleveres (noe ett krav lager og et annet bruker), tas flyten med.
-- **CDP-testene:** `Grep` på `@depends-on-<ID>` i `cdp-tester/`. De må sjekkes når atferden i et treff endres.
+- **Agenttestene:** `Grep` på `@depends-on-<ID>` i `tester-agent/`. De må sjekkes når atferden i et treff endres.
 
 ## Steg 3: Sorter treffene
 
@@ -82,7 +82,7 @@ Hvert treff er en `Regel:` eller et `Scenario:`/`Scenariomal:`, med statusen (ta
 | **Fjerner** | Endringen fjerner kode for et krav | `@deprecated` er riktig, ellers et funn | `fs-verify` sletter `@deprecated` når koden er borte. Fjernes kode for et krav som ikke er `@deprecated`, er det et funn |
 | **Berører** | Endringen rører koden for scenarioet, men atferden er den samme (refaktorering, feilretting innenfor det kravet sier) | alle | Regresjon: scenarioet og testene bør sjekkes |
 | **Kravet dekker ikke** | Atferd i endringen som ingen regel eller scenario beskriver | – | Forslag til regel for `fs-krav`, i kravet atferden hører til |
-| **Avhengig** | Krav, flyter og CDP-tester som bygger på et treff i gruppene over | alle | Sjekkes når endringen er merget |
+| **Avhengig** | Krav, flyter og agenttester som bygger på et treff i gruppene over | alle | Sjekkes når endringen er merget |
 
 - En feilretting som får koden til å gjøre det kravet allerede sier, er *Berører*, ikke *Endrer levert atferd*. Si i treffet at endringen retter koden mot kravet.
 - `@draft`-deler og `@draft @openquestion`-deler er ikke klare. Implementerer endringen en slik del, er det et funn: koden er skrevet før kravet er avklart.

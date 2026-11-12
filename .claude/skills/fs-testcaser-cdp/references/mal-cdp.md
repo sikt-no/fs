@@ -1,10 +1,10 @@
-# Maler: CDP-tester
+# Maler: agenttester
 
-Fire filer (fase 2, den agentiske funksjonstesten): testfila (`<test>.feature`), oppsettet (`_Oppsett/<sti>/oppsett.feature`), `README.md` i mappa («Krever»), og resultatet av en kjøring (`resultat.md`). Konvensjonene står i [`cdp-tester/README.md`](../../../../cdp-tester/README.md).
+Fire filer (fase 2, den agentiske funksjonstesten): testfila (`<test>.feature`), oppsettet (`_Oppsett/<sti>/oppsett.feature`), `README.md` i mappa («Krever»), og resultatet av en kjøring (`resultat.md`). Konvensjonene står i [`tester-agent/README.md`](../../../../tester-agent/README.md).
 
 ## Testfila
 
-`cdp-tester/<kravets sti under krav/>/<samme filnavn som kravet>.feature`
+`tester-agent/<kravets sti under krav/>/<samme filnavn som kravet>.feature`
 
 ```gherkin
 # language: no
@@ -62,15 +62,15 @@ Egenskap: <tittelen i kravet>
 - Ingen `@draft`, `@planned`, `@in-progress`, `@implemented`, `@deprecated` eller `@scope-`.
 - Ingen navn, Feide-ID, `testbruker <nr>`, passord eller URL til miljøet.
 - Organisasjoner i stegene som `{ORG:<nøkkel>}`, `{ORGNAVN:<nøkkel>}` eller `{ORGKODE:<nøkkel>}`, slått opp i miljøfila: `Og jeg velger «Fjern {ORG:opptak-forvalter-deltakende}»`.
-- Bare det som varer: ingen kravstatus, kjente mangler, saker med status, datoer fra verifiseringen eller kjøringer, henvisninger til en testplan eller testcaser i den, eller verdier fra ett miljø (se «Bare det som varer» i `cdp-tester/README.md`).
+- Bare det som varer: ingen kravstatus, kjente mangler, saker med status, datoer fra verifiseringen eller kjøringer, henvisninger til en testplan eller testcaser i den, eller verdier fra ett miljø (se «Bare det som varer» i `tester-agent/README.md`).
 
 ## Oppsettet
 
-`cdp-tester/_Oppsett/<samme sti som testene>/oppsett.feature`. Ett scenario per testdata-nøkkel testene i mappa bruker.
+`tester-agent/_Oppsett/<samme sti som testene>/oppsett.feature`. Ett scenario per testdata-nøkkel testene i mappa bruker.
 
 ```gherkin
 # language: no
-# Oppsett for testene i cdp-tester/<sti>/ (samme sti under _Oppsett/)
+# Oppsett for testene i tester-agent/<sti>/ (samme sti under _Oppsett/)
 #
 # Kjøres først i hver kjøring. Lager testdataene gjennom løsningen, med {KJØRING} i navnene. Agenten skriver
 # navnet og URL-en til det som er laget, i «Kjøringens testdata» i resultat.md. Feiler et scenario, får nøkkelen
@@ -96,10 +96,10 @@ Egenskap: Oppsett for <kapabiliteten eller sub-domenet>
 
 ## README.md i mappa
 
-`cdp-tester/<sti>/README.md`. Ikke noe mer enn dette: det som gjelder alle testene, står i `cdp-tester/README.md`, og hva nøklene krever, står i miljøfila.
+`tester-agent/<sti>/README.md`. Ikke noe mer enn dette: det som gjelder alle testene, står i `tester-agent/README.md`, og hva nøklene krever, står i miljøfila.
 
 ```markdown
-# CDP-tester: <kapabiliteten>
+# Agenttester: <kapabiliteten>
 
 Tester for kravet [<fil>.feature](<relativ lenke til kravfila>) (`@<Feature-ID>`), i `<fil>.feature` i denne mappa.
 
@@ -114,7 +114,7 @@ Tester for kravet [<fil>.feature](<relativ lenke til kravfila>) (`@<Feature-ID>`
 
 ## Resultat av en kjøring
 
-Der den som starter kjøringen sier, ellers `cdp-tester/<mappa med testene>/kjoring-<YYYY-MM-DD-HHMM>/resultat.md` (se *Kjøring og resultat* i `cdp-tester/README.md`). Skjermbilder i samme mappe, men ignorert av git (`.gitignore`): bare `resultat.md` committes, så «Bevis» viser til bildene som «lokalt, ikke i git».
+Der den som starter kjøringen sier, ellers `tester-agent/<mappa med testene>/kjoring-<YYYY-MM-DD-HHMM>/resultat.md` (se *Kjøring og resultat* i `tester-agent/README.md`). Skjermbilder i samme mappe, men ignorert av git (`.gitignore`): bare `resultat.md` committes, så «Bevis» viser til bildene som «lokalt, ikke i git».
 
 ```markdown
 # Kjøring <YYYY-MM-DD HH:MM>: <leveranse eller kapabilitet>
@@ -124,7 +124,7 @@ Der den som starter kjøringen sier, ellers `cdp-tester/<mappa med testene>/kjor
 - **Miljø**: <URL, versjon, flagg>   (fra miljøfila)
 - **Kravstatus**: <Feature-ID: status, når et krav ikke er `@implemented`> | Alle `@implemented`
 - **Utdaterte tester**: <testfil: blob-hashen er ulik kravfila> | Ingen
-- **Tester**: <filene i cdp-tester/ som er kjørt>
+- **Tester**: <filene i tester-agent/ som er kjørt>
 - **Slik er testen kjørt**: stegene er fulgt slik de står (R14). Virket ikke et steg, eller fantes ikke en verdi, er testcasen «Ikke testet», med det som ble sett i «Faktisk resultat»
 - **Kjente mangler**: <sak: status sjekket <dato>, testcasene> | Ingen   (R16, bare når den som starter kjøringen har gitt en liste)
 - **Krav**: commit `<sha>`

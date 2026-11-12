@@ -1,4 +1,4 @@
-# CDP-tester: Oversikt over opptak
+# Agenttester: Oversikt over opptak
 
 Tester for kravet [listevisning_og_sok_i_opptak.feature](../../../../krav/02%20Opptak/11%20Opprette%20og%20vedlikeholde%20opptak/07%20Oversikt%20over%20opptak/listevisning_og_sok_i_opptak.feature) (`@OPT-OVO-OVE-001`), i `listevisning_og_sok_i_opptak.feature` i denne mappa.
 

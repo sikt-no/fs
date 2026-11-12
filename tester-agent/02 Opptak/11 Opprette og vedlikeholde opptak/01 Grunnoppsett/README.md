@@ -1,4 +1,4 @@
-# CDP-tester: Grunnoppsett
+# Agenttester: Grunnoppsett
 
 Tester for kravet [opprett_opptak.feature](../../../../krav/02%20Opptak/11%20Opprette%20og%20vedlikeholde%20opptak/01%20Grunnoppsett/opprett_opptak.feature) (`@OPT-OVO-GRU-001`), i `opprett_opptak.feature` i denne mappa.
 

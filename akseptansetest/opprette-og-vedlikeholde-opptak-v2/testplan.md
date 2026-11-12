@@ -247,7 +247,7 @@ Omfanget av testcasene, ikke testcasene selv. `fs-testcaser-cdp` lager testcasen
 | `@OPT-OVO-OVE-001` | Søk og filtrering av opptak | 4 | Søk på navn med små og store bokstaver, på nynorsk og engelsk, og del av navnet. Søk uten treff | ekvivalensklasser |
 | | Regler uten scenario som testes (se over) | – | 7 regler: navnelengde, bare mellomrom, tall større enn 0, URL, unntak fra poenglikhet, delvis dato, søket i «Inviter» | grenseverdianalyse, ekvivalensklasser |
 
-Testcasene står i `cdp-tester/02 Opptak/11 Opprette og vedlikeholde opptak/` når de er laget. Utledede testcaser lages bare der regelen har verdier eller betingelser å teste.
+Testcasene står i `tester-agent/02 Opptak/11 Opprette og vedlikeholde opptak/` når de er laget. Utledede testcaser lages bare der regelen har verdier eller betingelser å teste.
 
 ### Fase 3: intern akseptansetest
 
@@ -359,7 +359,7 @@ Testrapportene (verifisering, agentisk, intern og ekstern) står som undersider,
 |---|---|
 | Verifiseringsrapporten (fase 1) | Se «Status i flyten» |
 | Agentisk testrapport (fase 2) | – |
-| Testcasene for fase 2 | – (`cdp-tester/02 Opptak/11 Opprette og vedlikeholde opptak/` når de er laget). CDP-kjøringene av de interne testcasene 26.10 (Opus og Sonnet) er forsøk, ikke fase 2: [sammenligning](https://sikt.atlassian.net/wiki/spaces/STUDIEADM/pages/5144346655) |
+| Testcasene for fase 2 | – (`tester-agent/02 Opptak/11 Opprette og vedlikeholde opptak/` når de er laget). CDP-kjøringene av de interne testcasene 26.10 (Opus og Sonnet) er forsøk, ikke fase 2: [sammenligning](https://sikt.atlassian.net/wiki/spaces/STUDIEADM/pages/5144346655) |
 | Testcasene for fase 3 | – |
 | Forrige testløp (versjon 1) | [Testplan](https://sikt.atlassian.net/wiki/spaces/STUDIEADM/pages/5128028165), [intern akseptansetest 22.10](https://sikt.atlassian.net/wiki/spaces/STUDIEADM/pages/5127209099), [ekstern akseptansetest](https://sikt.atlassian.net/wiki/spaces/STUDIEADM/pages/5137334279) |
 

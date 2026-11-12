@@ -14,7 +14,7 @@ Omfanget av testcasene, ikke testcasene selv. `fs-testcaser-cdp` lager testcasen
 
 ### Fase 2: agentisk funksjonstest
 
-Testene finnes fra før i [`cdp-tester/02 Opptak/11 Opprette og vedlikeholde opptak/`](../../cdp-tester/02%20Opptak/11%20Opprette%20og%20vedlikeholde%20opptak/), oppdatert med `fs-testcaser-cdp` 29.10.2026. Alle fem testene stemmer med kravene på `origin/main` (blob-hashen i headeren): Opprette et opptak og Samordna opptak fra commit `0f010d4`, Listevisning fra `bd5f00b`, Innstillinger fra `270d681` og Frister fra `0ec4b48`. Testdataene lages av [oppsettet](../../cdp-tester/_Oppsett/02%20Opptak/11%20Opprette%20og%20vedlikeholde%20opptak/oppsett.feature), som kjøres først.
+Testene finnes fra før i [`tester-agent/02 Opptak/11 Opprette og vedlikeholde opptak/`](../../tester-agent/02%20Opptak/11%20Opprette%20og%20vedlikeholde%20opptak/), oppdatert med `fs-testcaser-cdp` 29.10.2026. Alle fem testene stemmer med kravene på `origin/main` (blob-hashen i headeren): Opprette et opptak og Samordna opptak fra commit `0f010d4`, Listevisning fra `bd5f00b`, Innstillinger fra `270d681` og Frister fra `0ec4b48`. Testdataene lages av [oppsettet](../../tester-agent/_Oppsett/02%20Opptak/11%20Opprette%20og%20vedlikeholde%20opptak/oppsett.feature), som kjøres først.
 
 | Krav | Regel | Scenarioer | Utledede testcaser | Teknikk |
 |---|---|---|---|---|
@@ -76,7 +76,7 @@ I tillegg til flytene og oppgavene har den interne testen tre deler. Testansvarl
 
 ## Testbrukere
 
-Fra [test.md](../../cdp-tester/_Miljøer/test.md), personaer sist sjekket 2026-10-28.
+Fra [test.md](../../tester-agent/_Miljøer/test.md), personaer sist sjekket 2026-10-28.
 
 | Nr | Nøkkel | Navn | Rolle | Organisasjon | Innlogging | Start-URL | Brukes til |
 |---|---|---|---|---|---|---|---|
@@ -105,7 +105,7 @@ Fra tilgangsradene i [verify-2026-10-28-1238.md](../opprette-opptak-2027/verify-
 
 ## Testdata
 
-Data i testmiljøet kan slettes eller nullstilles når som helst, så testene lager testdataene sine selv. Oppsettet ([`_Oppsett/02 Opptak/11 Opprette og vedlikeholde opptak/oppsett.feature`](../../cdp-tester/_Oppsett/02%20Opptak/11%20Opprette%20og%20vedlikeholde%20opptak/oppsett.feature)) kjøres først i hver kjøring, og lager opptakene gjennom FS Admin, med kjøringen i navnet og fristene i forhold til testdagen. Navnene står i «Kjøringens testdata» i resultatet. Bare grunndataene og det testene ikke kan lage, må finnes i TEST. Verdiene for dem er fra [test.md](../../cdp-tester/_Miljøer/test.md), 2026-10-29. Testdata er syntetiske.
+Data i testmiljøet kan slettes eller nullstilles når som helst, så testene lager testdataene sine selv. Oppsettet ([`_Oppsett/02 Opptak/11 Opprette og vedlikeholde opptak/oppsett.feature`](../../tester-agent/_Oppsett/02%20Opptak/11%20Opprette%20og%20vedlikeholde%20opptak/oppsett.feature)) kjøres først i hver kjøring, og lager opptakene gjennom FS Admin, med kjøringen i navnet og fristene i forhold til testdagen. Navnene står i «Kjøringens testdata» i resultatet. Bare grunndataene og det testene ikke kan lage, må finnes i TEST. Verdiene for dem er fra [test.md](../../tester-agent/_Miljøer/test.md), 2026-10-29. Testdata er syntetiske.
 
 **Lages av oppsettet**
 
