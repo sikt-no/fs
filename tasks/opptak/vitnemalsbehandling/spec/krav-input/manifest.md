@@ -1,8 +1,8 @@
 # Manifest — krav-input
 
 - **Kildemappe:** `krav/02 Opptak/13 Søknad og saksbehandling/02 Behandling/`
-- **Hentet:** 2026-10-28 (L1 og L2), 2026-11-11 (L3)
-- **HEAD:** `ef68c3a` (branch `main`, L1 og L2), `8aca38be` (branch `krav/vitnemalsbehandling-l3-l4-eksperter`, L3)
+- **Hentet:** 2026-10-28 (L1 og L2), 2026-11-11 og 2026-11-12 (L3)
+- **HEAD:** `ef68c3a` (branch `main`, L1 og L2), `d98b4e3f` (branch `fs-spec-test-l3`, L3, 2026-11-12; første kjøring `8aca38be`)
 
 ## Filer med i scope
 
@@ -12,9 +12,9 @@ Kravene kopieres ikke. Kravet slik det var da spesifikasjonen ble laget, finnes 
 |---|---|---|---|
 | `krav/02 Opptak/13 Søknad og saksbehandling/02 Behandling/vise_elektroniske_vitnemål.feature` | `@OPT-BEH-BEH-005` | `@must @in-progress` | `spec-vise-elektroniske-vitnemal.md` |
 | `krav/02 Opptak/13 Søknad og saksbehandling/02 Behandling/velge_vitnemål_som_grunnlag.feature` | `@OPT-BEH-BEH-004` | `@must @in-progress` | `spec-velge-vitnemal-som-grunnlag.md` |
-| `krav/02 Opptak/13 Søknad og saksbehandling/02 Behandling/velge_fag_per_poengvariant.feature` | `@OPT-BEH-BEH-022` | `@must @planned` (holdt tilbake, ikke retagget) | `spec-velge-fag-per-poengvariant.md` |
+| `krav/02 Opptak/13 Søknad og saksbehandling/02 Behandling/velge_fag_per_poengvariant.feature` | `@OPT-BEH-BEH-022` | `@must @planned` → `@in-progress` 2026-11-12 | `spec-velge-fag-per-poengvariant.md` |
 
-Begge ble satt til `@in-progress` for hånd 21.10.2026 (commit `ccafff0`), etter beslutning i teamet. L3 er holdt tilbake som `@planned` 2026-11-11, fordi to skisseavvik krever endringer i kravteksten. Ingen av kravene har `@draft`- eller `@deprecated`-deler.
+Begge ble satt til `@in-progress` for hånd 21.10.2026 (commit `ccafff0`), etter beslutning i teamet. L3 ble holdt tilbake som `@planned` 2026-11-11, fordi to skisseavvik krevde endringer i kravteksten, og ble retagget `@in-progress` 2026-11-12 etter `fs-krav`. Ingen av kravene har `@draft`- eller `@deprecated`-deler.
 
 `local/` inneholder en råkopi av L1 fra 2026-09-30. Den er utdatert og brukes ikke lenger.
 
@@ -25,7 +25,7 @@ Begge ble satt til `@in-progress` for hånd 21.10.2026 (commit `ccafff0`), etter
 - **URL:** https://www.figma.com/design/dlG13wATArPvG69oePHPeL/FS-Admin---Gjeldende-skisser?node-id=5163-50347
 - **fileKey:** `dlG13wATArPvG69oePHPeL`
 - **Node:** `5163:50347`, rammen «Steg 2 Grunnlag - Behandle e-vitnemål» (1933×5147). Samme ramme som `gjeldende-skisser/sub-frames/01-…`, hentet på nytt med detaljutsnitt.
-- **Hentet:** 2026-11-11
+- **Hentet:** 2026-11-11 (validert på nytt mot de lagrede artefaktene 2026-11-12, uten ny henting)
 - **Lagrede artefakter** (`sketches/figma/steg-2-grunnlag-behandle-e-vitnemal/`):
   - `screenshot.png`: hele rammen (902×2400)
   - `sub-frames/01-kvalifisering-og-poengberegning-per-poengvariant.png` (node `5163:50500`)
