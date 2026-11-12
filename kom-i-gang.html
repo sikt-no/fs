@@ -435,7 +435,7 @@ footer .inner{padding-block:24px 48px;display:flex;flex-direction:column;gap:6px
           <span style="font-size:15px;font-weight:700;color:var(--fg)">Akseptansetesten</span>
           <div style="display:flex;flex-wrap:wrap;align-items:center;gap:6px">
             <span class="pill">fs-testplan</span><span style="color:var(--accent)">→</span>
-            <span class="pill">fs-testcaser-cdp</span><span style="color:var(--accent)">→</span>
+            <span class="pill">fs-testcaser-agent</span><span style="color:var(--accent)">→</span>
             <span class="pill">fs-testrapport</span><span style="color:var(--accent)">→</span>
             <span class="pill">fs-testcaser-intern</span><span style="color:var(--accent)">→</span>
             <span class="pill">fs-testrapport</span><span style="color:var(--accent)">→</span>
@@ -770,7 +770,7 @@ footer .inner{padding-block:24px 48px;display:flex;flex-direction:column;gap:6px
       <h2>Lag testplanen</h2>
     </div>
     <div class="body">
-      <p>Testplanen planlegger testingen: hvilke krav og flyter som testes, omfanget av testcasene som skal lages, av hvem, hvor og når, og når fasene er ferdige. Kravene er kriteriene for godkjent. Den lager ikke selve testcasene: fs-testcaser-cdp lager testcasene for den agentiske testen, og fs-testcaser-intern flyttestene. Leveransen er et scope, en oppgave, en mappe under <code>krav/</code> eller feature-filer. fs-testplan finner kravene, scenarioene i gating-settet og den nyeste verify-rapporten, og foreslår fs-verify først når rapporten mangler eller er eldre enn kravene.</p>
+      <p>Testplanen planlegger testingen: hvilke krav og flyter som testes, omfanget av testcasene som skal lages, av hvem, hvor og når, og når fasene er ferdige. Kravene er kriteriene for godkjent. Den lager ikke selve testcasene: fs-testcaser-agent lager testcasene for den agentiske testen, og fs-testcaser-intern flyttestene. Leveransen er et scope, en oppgave, en mappe under <code>krav/</code> eller feature-filer. fs-testplan finner kravene, scenarioene i gating-settet og den nyeste verify-rapporten, og foreslår fs-verify først når rapporten mangler eller er eldre enn kravene.</p>
       <div class="box">
         <h3>Teamet blir spurt om</h3>
         <ol class="small">
@@ -863,7 +863,7 @@ footer .inner{padding-block:24px 48px;display:flex;flex-direction:column;gap:6px
       <h2>Agentisk funksjonstest</h2>
     </div>
     <div class="body">
-      <p>Her skjer mesteparten av den funksjonelle testingen: en agent kjører testene i Chrome mot testmiljøet, og bekrefter at hver funksjon virker som kravet sier, med gyldige og ugyldige data. fs-testcaser-cdp lager testene som varige Gherkin-filer i <code>tester-agent/</code>, og <code>cdp</code>-skillen kjører dem. Testansvarlig har ansvaret for at agenten blir kjørt og tester riktig, men selve kjøringen kan gjøres av andre.</p>
+      <p>Her skjer mesteparten av den funksjonelle testingen: en agent kjører testene i Chrome mot testmiljøet, og bekrefter at hver funksjon virker som kravet sier, med gyldige og ugyldige data. fs-testcaser-agent lager testene som varige Gherkin-filer i <code>tester-agent/</code>, og <code>cdp</code>-skillen kjører dem. Testansvarlig har ansvaret for at agenten blir kjørt og tester riktig, men selve kjøringen kan gjøres av andre.</p>
       <div class="cols">
         <div class="box"><h3>Hva testes</h3><ul class="small"><li>Alle scenarioer som er <code>@implemented</code>, slik de står. En scenariomal gir én test per eksempel.</li><li>Testcaser agenten utleder fra reglene, også reglene fs-verify fant uten scenario.</li><li>Negativ testing: ugyldige verdier, feil format, feil rekkefølge, data som ikke finnes eller er slettet.</li><li>Hvert obligatorisk felt tomt, med bare mellomrom og med for lang verdi, og feilmeldingen kontrolleres.</li></ul></div>
         <div class="box"><h3>Teknikk og bevis</h3><ul class="small"><li>Agenten velger teknikk per regel (grenseverdier, ekvivalensklasser, beslutningstabeller, tilstandsoverganger) og skriver hvilken som er brukt.</li><li>Hver test lagrer steg, input, faktisk resultat og skjermbilde eller logg, så et menneske kan etterprøve den. Bildene ligger i <code>akseptansetest/&lt;slug&gt;/</code>, og er ignorert av git.</li></ul></div>
@@ -877,7 +877,7 @@ footer .inner{padding-block:24px 48px;display:flex;flex-direction:column;gap:6px
     </div>
     <aside class="facts">
       <dl>
-        <div><dt>Skills</dt><dd><div class="pills"><span class="pill">fs-testcaser-cdp</span><span class="pill">cdp</span><span class="pill">fs-testrapport</span></div></dd></div>
+        <div><dt>Skills</dt><dd><div class="pills"><span class="pill">fs-testcaser-agent</span><span class="pill">cdp</span><span class="pill">fs-testrapport</span></div></dd></div>
         <div><dt>Hvem</dt><dd>En agent kjører. Teamet og testansvarlig går gjennom testene før og funnene etterpå.</dd></div>
         <div><dt>Filer</dt><dd><code>tester-agent/&lt;kravets sti&gt;/&lt;navn&gt;.feature</code><br><code>tester-agent/_Miljøer/&lt;miljø&gt;.md</code><br><code>kjoring-&lt;dato&gt;-&lt;HHMM&gt;/resultat.md</code><br><code>testrapport-agentisk-&lt;dato&gt;.md</code></dd></div>
         <div><dt>Endrer aldri</dt><dd>Kravene i <code>krav/</code></dd></div>

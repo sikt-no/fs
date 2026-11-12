@@ -1,5 +1,5 @@
 # language: no
-# Generert av fs-testcaser-cdp 2026-10-27
+# Generert av fs-testcaser-agent 2026-10-27
 # Krav: krav/02 Opptak/11 Opprette og vedlikeholde opptak/02 Samordning/samordna_opptak.feature @ 0f010d4 (blob 9968d5973c3b7be7ad719edefccd45e29f22a969)
 #
 # «Åpne opptaket «<nøkkel>»» betyr: gå til «Opptak», skriv navnet på opptaket (fra miljøfila) i «Opptaksnavn», og velg opptaket i lista.

@@ -99,9 +99,9 @@ Klart når testansvarlig har logget inn som testbruker og ser testdataene.
 | 3 | Oppsettet kjører uten feil i starten av kjøringen | Venter: ikke kjørt ennå. Opptak kan ikke slettes, så opptakene oppsettet og testene lager, blir liggende, med kjøringen i navnet |
 | 4 | Testbrukerne finnes i rollene ved organisasjonene kravene gjelder (tilgangsmatrisen) | Personaene for testbruker 1–4 er bekreftet 28.10. [Fylles ut av teamet: at `OPPTAK_FORVALTER` ved NTNU gir `MEDLEM_OPPTAK`] |
 | 5 | `fs-verify` har funnet alle scenarioene, og en annen person har kontrollert rapporten. Åpne spørsmål stopper ikke, og står i «Åpne spørsmål» | Nei (avvik, se over): 76 av 84 funnet, 5 ikke funnet, 3 usikre (28.10.2026). Kontrollert av `fs-verify-kontroll`. Venter på kontroll av en person |
-| 6 | De agentiske testcasene (`fs-testcaser-cdp`) og oppsettet er laget, og testansvarlig og teamet har gått gjennom dem før kjøringen | Laget og oppdatert 29.10.2026. Venter på gjennomgang |
+| 6 | De agentiske testcasene (`fs-testcaser-agent`) og oppsettet er laget, og testansvarlig og teamet har gått gjennom dem før kjøringen | Laget og oppdatert 29.10.2026. Venter på gjennomgang |
 | 7 | Testcasene for den interne akseptansetesten (`fs-testcaser-intern`) er laget og gått gjennom av testansvarlig | Venter |
-| 8 | Testansvarlig er logget inn i FS Admin i en egen Chrome-profil til testingen, CDP-agenten kan bytte til hver testbruker i «Overstyrt bruker», og nøklene i testbrukere og testdata er utfylt | Radene i «Overstyrt bruker» er utfylt for alle fire testbrukerne. [Fylles ut av teamet: verdiene for grunndataene som mangler] |
+| 8 | Agenten er logget inn i FS Admin med Feide-testbrukeren (`tester-agent/.env`), i nettleseren Vibium starter, i en egen sesjon til testingen, kan bytte til hver testbruker i «Overstyrt bruker», og nøklene i testbrukere og testdata er utfylt | Radene i «Overstyrt bruker» er utfylt for alle fire testbrukerne. [Fylles ut av teamet: verdiene for grunndataene som mangler] |
 | 9 | Testansvarlig har logget inn som testbruker og ser testdataene | [Fylles ut av testansvarlig] |
 
 ## Kriterier for godkjent

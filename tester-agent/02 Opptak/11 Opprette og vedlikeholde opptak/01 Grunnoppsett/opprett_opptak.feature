@@ -1,5 +1,5 @@
 # language: no
-# Generert av fs-testcaser-cdp 2026-10-27, oppdatert 2026-11-02
+# Generert av fs-testcaser-agent 2026-10-27, oppdatert 2026-11-02
 # Krav: krav/02 Opptak/11 Opprette og vedlikeholde opptak/01 Grunnoppsett/opprett_opptak.feature @ 2bd63446 (blob 91ef0766b3026983828dbfa2a4f969a236c0ee7f)
 #
 # {KJØRING} byttes ut med dato og klokkeslett når kjøringen starter, for eksempel «2026-10-28 0930».

@@ -199,7 +199,7 @@ Testansvarlig skriver beslutningen og begrunnelsen i sluttrapporten. Rettede fun
 | 2. Testplan | (denne siden) | Laget | 2026-10-23 |
 | 3. Testrapport – verifisering | – | Venter | |
 | 4. Intern akseptansetest | [Intern akseptansetest – Utdanningstilbud i samordna opptak 2027](https://sikt.atlassian.net/wiki/spaces/STUDIEADM/pages/5136613418) | Klar til test | 2026-10-23 |
-| 4b. CDP-kjøring (valgfri) | – | Ikke aktuell | |
+| 4b. Kjøring av agenttestene (valgfri) | – | Ikke aktuell | |
 | 5. Testrapport – intern | – | Venter | |
 | 6. Ekstern akseptansetest | – | Venter | |
 | 7. Testrapport – ekstern | – | Venter | |

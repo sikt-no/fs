@@ -8,7 +8,7 @@ Fire filer (fase 2, den agentiske funksjonstesten): testfila (`<test>.feature`),
 
 ```gherkin
 # language: no
-# Generert av fs-testcaser-cdp <YYYY-MM-DD>
+# Generert av fs-testcaser-agent <YYYY-MM-DD>
 # Krav: krav/<sti>/<fil>.feature @ <commit> (blob <hash>)
 @TST-<DOM>-<SUB>-<KAP>-NNN @depends-on-<Feature-ID>
 Egenskap: <tittelen i kravet>

@@ -1,6 +1,6 @@
 # Roller og testdata
 
-Felles for skillene som trenger testbrukere og testdata: `fs-testplan` (som planlegger dem i testplanen) og `fs-testcaser-cdp` (som slår dem opp, og spør når de mangler). Spørsmålene står bare her, så de to ikke kommer ut av takt. `fs-testcaser-intern` og `fs-testcaser-ekstern` leser tabellene i testplanen, og stiller ikke spørsmålene selv.
+Felles for skillene som trenger testbrukere og testdata: `fs-testplan` (som planlegger dem i testplanen) og `fs-testcaser-agent` (som slår dem opp, og spør når de mangler). Spørsmålene står bare her, så de to ikke kommer ut av takt. `fs-testcaser-intern` og `fs-testcaser-ekstern` leser tabellene i testplanen, og stiller ikke spørsmålene selv.
 
 ## Hvor svarene står
 

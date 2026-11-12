@@ -10,7 +10,7 @@ Testcasene som skal lages, testbrukerne og testdataene for «Se søkerens elektr
 
 ## Testcaser som skal lages
 
-Omfanget av testcasene, ikke testcasene selv. `fs-testcaser-cdp` lager testcasene for fase 2 ut fra tabellen, og `fs-testcaser-intern` testcasene for fase 3. Teamet og testansvarlig går gjennom omfanget før testcasene lages.
+Omfanget av testcasene, ikke testcasene selv. `fs-testcaser-agent` lager testcasene for fase 2 ut fra tabellen, og `fs-testcaser-intern` testcasene for fase 3. Teamet og testansvarlig går gjennom omfanget før testcasene lages.
 
 ### Fase 2: agentisk funksjonstest
 

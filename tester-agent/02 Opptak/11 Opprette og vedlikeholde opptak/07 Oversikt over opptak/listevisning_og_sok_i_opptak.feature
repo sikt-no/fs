@@ -1,5 +1,5 @@
 # language: no
-# Generert av fs-testcaser-cdp 2026-10-29, oppdatert 2026-11-02
+# Generert av fs-testcaser-agent 2026-10-29, oppdatert 2026-11-02
 # Krav: krav/02 Opptak/11 Opprette og vedlikeholde opptak/07 Oversikt over opptak/listevisning_og_sok_i_opptak.feature @ 13b6fd83 (blob e52dde99406564f7c286439d1069a908eca25abf)
 #
 # «Status»-filteret har også «Arkivert», som ikke er med i kravet.

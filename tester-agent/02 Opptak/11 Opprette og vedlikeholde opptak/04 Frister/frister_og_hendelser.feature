@@ -1,5 +1,5 @@
 # language: no
-# Generert av fs-testcaser-cdp 2026-10-29, oppdatert 2026-11-02
+# Generert av fs-testcaser-agent 2026-10-29, oppdatert 2026-11-02
 # Krav: krav/02 Opptak/11 Opprette og vedlikeholde opptak/04 Frister/frister_og_hendelser.feature @ 2bd63446 (blob 57a7c58cc7181fca765d752a9afd1c2e8e313ace)
 #
 # Elleve regler har et åpent spørsmål om @ref- til kravet der fristen brukes. Spørsmålene endrer ikke hva som testes.

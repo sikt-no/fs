@@ -1,6 +1,6 @@
 # Agenttester
 
-Varige tester som en agent kjører i Chrome mot et testmiljø, i den agentiske funksjonstesten (fase 2 i [teststrategien (forslag)](https://sikt.atlassian.net/wiki/spaces/STUDIEADM/pages/5145100326)). De er skrevet som Gherkin, og kan brukes av flere verktøy. Agenten i fase 2 kjører dem med Vibium (se *Vibium*). De er ikke krav: kravene i [`krav/`](../krav/README.md) sier *hva* som skal gjelde, og her står *hvordan* det sjekkes i skjermen, med skjermens ord og konkrete verdier. Testene lages og oppdateres med skillen `fs-testcaser-cdp`, fra kravene. De kjenner ikke til testplaner eller akseptansetester: en testplan kan velge hvilke tester som lages og kjøres, men testene og `README.md`-ene her viser aldri til den.
+Varige tester som en agent kjører i Chrome mot et testmiljø, i den agentiske funksjonstesten (fase 2 i [teststrategien (forslag)](https://sikt.atlassian.net/wiki/spaces/STUDIEADM/pages/5145100326)). De er skrevet som Gherkin, og kan brukes av flere verktøy. Agenten i fase 2 kjører dem med Vibium (se *Vibium*). De er ikke krav: kravene i [`krav/`](../krav/README.md) sier *hva* som skal gjelde, og her står *hvordan* det sjekkes i skjermen, med skjermens ord og konkrete verdier. Testene lages og oppdateres med skillen `fs-testcaser-agent`, fra kravene. De kjenner ikke til testplaner eller akseptansetester: en testplan kan velge hvilke tester som lages og kjøres, men testene og `README.md`-ene her viser aldri til den.
 
 Testene dekker alle scenarioene som er `@implemented`, pluss testcaser agenten utleder fra reglene: negativ testing, obligatoriske felt og grenseverdier. Roller, tilgangsstyring og datakonsistens verifiseres i koden i fase 1 (`fs-verify`). Scenarioene i kravet testes som de står, også synlighet for en rolle, men det lages ikke egne testcaser for roller og tilgang.
 
@@ -48,7 +48,7 @@ Hver test peker på kravet den sjekker, med taggene fra [`krav/README.md`](../kr
 
 ```gherkin
 # language: no
-# Generert av fs-testcaser-cdp <YYYY-MM-DD>
+# Generert av fs-testcaser-agent <YYYY-MM-DD>
 # Krav: krav/<sti>/<fil>.feature @ <commit> (blob <hash>)
 @TST-<DOM>-<SUB>-<KAP>-NNN @depends-on-<Feature-ID>
 Egenskap: <tittelen i kravet>
@@ -56,7 +56,7 @@ Egenskap: <tittelen i kravet>
 
 - `@depends-on-<Feature-ID>` på `Egenskap:` (gjelder hele fila), eller på `Regel:`/`Scenario:` når en del bygger på andre krav. Testen må sjekkes når kravet endres, og det er det taggen sier. `@ref-<Feature-ID>` for et krav testen bare bruker som forutsetning.
 - `@TST-…` er testens egen ID: `@TST-<DOM>-<SUB>-<KAP>-NNN` for en speilet sti, `@TST-<prosess>-<test>-NNN` for `_Løp` (samme formater som Feature-ID og `@FLY-`).
-- Headeren har kravfila, commiten og blob-hashen (`git rev-parse origin/main:<sti>`). Er hashen ikke lik kravfilas nå, er testen utdatert, og `fs-testcaser-cdp` viser forskjellen som en diff i stedet for å skrive over.
+- Headeren har kravfila, commiten og blob-hashen (`git rev-parse origin/main:<sti>`). Er hashen ikke lik kravfilas nå, er testen utdatert, og `fs-testcaser-agent` viser forskjellen som en diff i stedet for å skrive over.
 
 Finn testene for et krav: `grep -rn "@depends-on-<Feature-ID>" tester-agent/`.
 
@@ -99,7 +99,7 @@ Alle scenarioene i gating-settet blir tester. Mangler testdataene i et miljø, e
 - **Testdata:** `Nøkkel | Verdi i <miljø> | Søk/URL | Utgangstilstand | Sjekket`. Bare grunndata (kodeverk, organisasjoner, regelverkssamlinger) og data testene ikke kan lage gjennom løsningen. Verdien er det testen skriver eller søker på i miljøet, og utgangstilstanden er det testen forutsetter. Testdataene oppsettet lager, står ikke her, men i oppsettet.
 - Ingen passord, hemmeligheter eller fødselsnumre, og bare Feide testbrukere og syntetiske personer.
 - En nøkkel har samme betydning i alle miljøfilene. Mangler en verdi, står den som `[Fylles ut]`, og scenarioene som bruker den, blir «Ikke testet» i kjøringen.
-- `fs-testcaser-cdp` legger nye nøkler inn i fila når brukeren sier ja. En kjøring som finner at en verdi ikke stemmer, sier det i resultatet, og foreslår endringen.
+- `fs-testcaser-agent` legger nye nøkler inn i fila når brukeren sier ja. En kjøring som finner at en verdi ikke stemmer, sier det i resultatet, og foreslår endringen.
 
 ### Vedlikehold av miljøfila
 
@@ -130,7 +130,7 @@ Skriv aldri fødselsnummeret i fila: personaen velges i menyen.
 
 ## Vibium
 
-Testene kjøres med [Vibium](https://github.com/VibiumDev/vibium), CLI-en `vibium`. Vibium styrer nettleseren med WebDriver BiDi, og starter sin egen nettleser (Chrome for Testing, med en midlertidig profil) i stedet for å koble til den du bruker ellers. CLI-en snakker med nettleseren gjennom en lokal socket, ikke en åpen port. `fs-testcaser-cdp` trenger ikke Vibium for å lage eller oppdatere testene, bare for å kjøre dem.
+Testene kjøres med [Vibium](https://github.com/VibiumDev/vibium), CLI-en `vibium`. Vibium styrer nettleseren med WebDriver BiDi, og starter sin egen nettleser (Chrome for Testing, med en midlertidig profil) i stedet for å koble til den du bruker ellers. CLI-en snakker med nettleseren gjennom en lokal socket, ikke en åpen port. `fs-testcaser-agent` trenger ikke Vibium for å lage eller oppdatere testene, bare for å kjøre dem.
 
 Vibium installeres i denne mappa, med versjonen i `package.json` og `package-lock.json`, så alle kjører den samme. Ingenting installeres globalt. Kommandoene kjøres fra `tester-agent/`, med `npx vibium …` (eller `npm run …`). De gjelder versjonen her: dokumentasjonen på GitHub (`main`) beskriver også kommandoer som ikke er sluppet ennå (`setup`, `ready`, `run`, `--user-data-dir`).
 
@@ -147,7 +147,7 @@ Vibium har ingen egne sikkerhetsregler for testmiljøet. Reglene for kjøringen 
 
 Testene kjøres av en agent, mot miljøfila for testmiljøet. Oppsettet for mappa kjøres først, og agenten skriver det som er laget, i «Kjøringens testdata» i resultatet. Kjører flere agenter samme kjøring, bruker de det samme oppsettet. Den som starter kjøringen, sier hvilke tester som kjøres (en mappe, en fil eller en liste) og hvor resultatet legges. Sier den ikke noe, legges resultatet ved testene: `tester-agent/<mappa med testene>/kjoring-<YYYY-MM-DD-HHMM>/resultat.md`, eller i den nærmeste felles mappa når kjøringen går over flere. Hører kjøringen til en akseptansetest, sier [`akseptansetest/README.md`](../akseptansetest/README.md) hvor resultatet legges.
 
-Resultatet følger malen i [`mal-cdp.md`](../.claude/skills/fs-testcaser-cdp/references/mal-cdp.md) (*Resultat av en kjøring*). Bevisene er steg, input, faktisk resultat og skjermbilde eller logg for hver testcase. Skjermbildene legges i samme mappe, men er ignorert av git (`.gitignore`): bare `resultat.md` committes. Resultatet lagres i Confluence når brukeren sier ja.
+Resultatet følger malen i [`mal-agent.md`](../.claude/skills/fs-testcaser-agent/references/mal-agent.md) (*Resultat av en kjøring*). Bevisene er steg, input, faktisk resultat og skjermbilde eller logg for hver testcase. Skjermbildene legges i samme mappe, men er ignorert av git (`.gitignore`): bare `resultat.md` committes. Resultatet lagres i Confluence når brukeren sier ja.
 
 Agenten foreslår status, og kan aldri godkjenne en leveranse. En tester bekrefter foreslått status, og testansvarlig går gjennom alle funn og tar stikkprøver av de beståtte testcasene, etter en risikovurdering. Agenten fyller aldri ut «Status» på testcasene eller i en testrapport.
 
@@ -156,7 +156,7 @@ Agenten foreslår status, og kan aldri godkjenne en leveranse. En tester bekreft
 Disse gjelder for agenten som kjører testene:
 
 - **Miljø-guard.** Før første handling: sjekk at URL-en er FS Admin i miljøfila, og avbryt hvis den er produksjon eller et annet domene enn FS Admin og Feide.
-- **Kravene er de samme.** Sammenlign blob-hashen i headeren med kravfila nå (`git rev-parse origin/main:<sti>`). Er den ulik, si det, og foreslå å oppdatere testene først (`fs-testcaser-cdp`). Er et krav ikke `@implemented` (les taggen), står det i resultatet: scenarioer som ikke er levert, vil trolig ikke bestå.
+- **Kravene er de samme.** Sammenlign blob-hashen i headeren med kravfila nå (`git rev-parse origin/main:<sti>`). Er den ulik, si det, og foreslå å oppdatere testene først (`fs-testcaser-agent`). Er et krav ikke `@implemented` (les taggen), står det i resultatet: scenarioer som ikke er levert, vil trolig ikke bestå.
 - **Miljøfila er oppdatert.** Er «Personaer sist sjekket» mer enn en måned gammel, eller mangler en nøkkel testene bruker, si det før kjøringen (se *Vedlikehold av miljøfila*).
 - **Data som endres.** Testene endrer bare data som er laget i kjøringen (av oppsettet eller scenarioet selv). Scenarioene med `@endrer-data` setter dataene fra oppsettet tilbake, så de andre scenarioene finner dem i utgangstilstanden. Testbrukerne, grunndataene og data fra andre kjøringer endres aldri.
 - **Forbudte kommandoer.** Aldri `vibium cookies <navn> <verdi>`, `vibium cookies clear`, `vibium storage restore` eller `vibium content`, og aldri `vibium dialog accept` uten at scenarioet sier hva dialogen er. Aldri `vibium serve` eller `vibium mcp`: kjøringen bruker bare CLI-en. Får en senere versjon kommandoer som sender skjerminnholdet til en AI-leverandør (`vibium run`, `VIBIUM_AI_*` på `main`), brukes de ikke: de finner sin egen vei, som bryter med R14.

@@ -275,7 +275,7 @@ Agenten har ikke endret miljøfila. Forslag til `tester-agent/_Miljøer/test.md`
 
 ## Endringer i testene (forslag)
 
-Til `fs-testcaser-cdp`. Testene er ikke endret.
+Til `fs-testcaser-agent`. Testene er ikke endret.
 
 - **Samme navn i oppsettet og testen:** «Opprette et samordna opptak» (Utfylling A) og `opptak-samordna-uten-utdanningstilbud` (Utfylling O) bruker begge «Samordna opptak 2027 (test {KJØRING})». Søket gir to rader, så «Åpne opptaket «<nøkkel>»» er tvetydig. Gi et av dem et eget navn.
 - **Ordene i skjermen:** opptakstypen heter «Samordna opptak til grunnstudier ved universiteter og høyskoler», og fagskoletypen «Samordna opptak til høyere yrkesfaglig utdanning». Filteret viser kodene «HYU», «LOKAL», «TEST_IT», «UHG» og «UHM». «Administreres av» står på detaljsiden for andre organisasjoner, og som «Administrator:» på redigeringssiden. Antallet står som «N rader i listen», ikke «Viser N av M rader». «Fjern» på et kort med avvikende frister spør ikke «Er du sikker?».

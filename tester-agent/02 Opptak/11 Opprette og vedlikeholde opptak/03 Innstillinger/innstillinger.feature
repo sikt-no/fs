@@ -1,5 +1,5 @@
 # language: no
-# Generert av fs-testcaser-cdp 2026-10-29
+# Generert av fs-testcaser-agent 2026-10-29
 # Krav: krav/02 Opptak/11 Opprette og vedlikeholde opptak/03 Innstillinger/innstillinger.feature @ 270d681 (blob 52882573877cb58be74c8f8b00d91cd020457ef5)
 #
 # {KJØRING} byttes ut med dato og klokkeslett når kjøringen starter. Opptak kan ikke slettes, så opptak testen oppretter, har {KJØRING} i navnet.

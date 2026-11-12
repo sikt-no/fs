@@ -10,11 +10,11 @@ Testcasene som skal lages, testbrukerne og testdataene for «Opprette og vedlike
 
 ## Testcaser som skal lages
 
-Omfanget av testcasene, ikke testcasene selv. `fs-testcaser-cdp` lager testcasene for fase 2 ut fra tabellen, og `fs-testcaser-intern` testcasene for fase 3. Teamet og testansvarlig går gjennom omfanget før testcasene lages.
+Omfanget av testcasene, ikke testcasene selv. `fs-testcaser-agent` lager testcasene for fase 2 ut fra tabellen, og `fs-testcaser-intern` testcasene for fase 3. Teamet og testansvarlig går gjennom omfanget før testcasene lages.
 
 ### Fase 2: agentisk funksjonstest
 
-Testene finnes fra før i [`tester-agent/02 Opptak/11 Opprette og vedlikeholde opptak/`](../../tester-agent/02%20Opptak/11%20Opprette%20og%20vedlikeholde%20opptak/), oppdatert med `fs-testcaser-cdp` 29.10.2026. Alle fem testene stemmer med kravene på `origin/main` (blob-hashen i headeren): Opprette et opptak og Samordna opptak fra commit `0f010d4`, Listevisning fra `bd5f00b`, Innstillinger fra `270d681` og Frister fra `0ec4b48`. Testdataene lages av [oppsettet](../../tester-agent/_Oppsett/02%20Opptak/11%20Opprette%20og%20vedlikeholde%20opptak/oppsett.feature), som kjøres først.
+Testene finnes fra før i [`tester-agent/02 Opptak/11 Opprette og vedlikeholde opptak/`](../../tester-agent/02%20Opptak/11%20Opprette%20og%20vedlikeholde%20opptak/), oppdatert med `fs-testcaser-agent` 29.10.2026. Alle fem testene stemmer med kravene på `origin/main` (blob-hashen i headeren): Opprette et opptak og Samordna opptak fra commit `0f010d4`, Listevisning fra `bd5f00b`, Innstillinger fra `270d681` og Frister fra `0ec4b48`. Testdataene lages av [oppsettet](../../tester-agent/_Oppsett/02%20Opptak/11%20Opprette%20og%20vedlikeholde%20opptak/oppsett.feature), som kjøres først.
 
 | Krav | Regel | Scenarioer | Utledede testcaser | Teknikk |
 |---|---|---|---|---|

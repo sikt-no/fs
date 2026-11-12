@@ -1,6 +1,6 @@
 # Regler for testcasene
 
-Gjelder testcasene i fase 2, 3 og 4 i teststrategien (forslag): den agentiske funksjonstesten (`fs-testcaser-cdp`), den interne akseptansetesten (`fs-testcaser-intern`) og den eksterne (`fs-testcaser-ekstern`). Reglene er sjekklista før et utkast vises fram. Målet er at den som kjører testcasen (agenten eller testeren) kommer til forventet resultat uten å kjenne løsningen fra før.
+Gjelder testcasene i fase 2, 3 og 4 i teststrategien (forslag): den agentiske funksjonstesten (`fs-testcaser-agent`), den interne akseptansetesten (`fs-testcaser-intern`) og den eksterne (`fs-testcaser-ekstern`). Reglene er sjekklista før et utkast vises fram. Målet er at den som kjører testcasen (agenten eller testeren) kommer til forventet resultat uten å kjenne løsningen fra før.
 
 Reglene bygger på [teststrategien (forslag)](https://sikt.atlassian.net/wiki/spaces/STUDIEADM/pages/5145100326) og erfaringene fra de første akseptansetestene (praksiskalkulatoren og opprette og vedlikeholde opptak, oktober 2026).
 

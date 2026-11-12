@@ -204,7 +204,7 @@ Verify-rapportene for leveransen er laget før `fs-verify` rapporterte regler i 
 
 ## Testcaser som skal lages
 
-Omfanget av testcasene, ikke testcasene selv. `fs-testcaser-cdp` lager testcasene for fase 2 ut fra tabellen, og `fs-testcaser-intern` testcasene for fase 3. Teamet og testansvarlig går gjennom omfanget før testcasene lages.
+Omfanget av testcasene, ikke testcasene selv. `fs-testcaser-agent` lager testcasene for fase 2 ut fra tabellen, og `fs-testcaser-intern` testcasene for fase 3. Teamet og testansvarlig går gjennom omfanget før testcasene lages.
 
 ### Fase 2: agentisk funksjonstest
 
@@ -303,9 +303,9 @@ Klart når testansvarlig har logget inn som testbruker og ser testdataene.
 | 3 | Testdataene kan settes tilbake før hver kjøring | Nei: opptak kan ikke slettes. Opptakene testene oppretter, blir liggende, og får kjøringen i navnet |
 | 4 | Testbrukerne finnes i rollene ved organisasjonene kravene gjelder (tilgangsmatrisen) | [Fylles ut av teamet]. Testbruker 2 trenger `MEDLEM_OPPTAK` når TAKE-423 er merget |
 | 5 | `fs-verify` har funnet alle scenarioene, og en annen person har kontrollert rapporten. Åpne spørsmål stopper ikke, og står i «Åpne spørsmål» | Nei (avvik, se over): 3 av 5 krav er `@implemented`. Samordna opptak 10 av 15 og Frister 23 av 25 (22.10), regelen i Opprette et opptak 0 av 1 (21.10), og regelen om trekkfrist er ikke verifisert. Kontrollert av `fs-verify-kontroll`. Venter på kontroll av en person |
-| 6 | De agentiske testcasene (`fs-testcaser-cdp`) er laget, og testansvarlig og teamet har gått gjennom dem før kjøringen | Venter |
+| 6 | De agentiske testcasene (`fs-testcaser-agent`) er laget, og testansvarlig og teamet har gått gjennom dem før kjøringen | Venter |
 | 7 | Testcasene for den interne akseptansetesten (`fs-testcaser-intern`) er laget og gått gjennom av testansvarlig | Venter |
-| 8 | Testansvarlig er logget inn i FS Admin i en egen Chrome-profil til testingen, CDP-agenten kan bytte til hver testbruker i «Overstyrt bruker», og nøklene i testbrukere og testdata er utfylt | Verdiene i «Overstyrt bruker» er utfylt for alle fire testbrukerne. [Fylles ut av teamet: nøklene i testdata] |
+| 8 | Agenten er logget inn i FS Admin med Feide-testbrukeren (`tester-agent/.env`), i nettleseren Vibium starter, i en egen sesjon til testingen, kan bytte til hver testbruker i «Overstyrt bruker», og nøklene i testbrukere og testdata er utfylt | Verdiene i «Overstyrt bruker» er utfylt for alle fire testbrukerne. [Fylles ut av teamet: nøklene i testdata] |
 | 9 | Testansvarlig har logget inn som testbruker og ser testdataene | [Fylles ut av testansvarlig] |
 
 ## Kriterier for godkjent

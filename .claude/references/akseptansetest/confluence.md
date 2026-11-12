@@ -1,6 +1,6 @@
 # Confluence i testflyten
 
-Felles for `fs-testplan`, `fs-testcaser-cdp`, `fs-testcaser-intern`, `fs-testcaser-ekstern`, `fs-testrapport` og Confluence-steget i `fs-verify`. Testplanen er hovedsiden for en leveranse, og alle de andre sidene er undersider til den. Testplanen viser omfanget av testcasene som skal lages (seksjonen «Testcaser som skal lages»), ikke selve testcasene: testcasene, resultatene fra kjøringene og testrapportene står på undersidene (eller i `tester-agent/` for fase 2), og testplanen lenker til dem fra «Status i flyten» og «Vedlegg». Verifiseringen kommer før testplanen, så undersiden «Verifisering – …» lages av `fs-testplan` når testplanen opprettes, og av `fs-verify` når den kjøres på nytt med en testplan som finnes.
+Felles for `fs-testplan`, `fs-testcaser-agent`, `fs-testcaser-intern`, `fs-testcaser-ekstern`, `fs-testrapport` og Confluence-steget i `fs-verify`. Testplanen er hovedsiden for en leveranse, og alle de andre sidene er undersider til den. Testplanen viser omfanget av testcasene som skal lages (seksjonen «Testcaser som skal lages»), ikke selve testcasene: testcasene, resultatene fra kjøringene og testrapportene står på undersidene (eller i `tester-agent/` for fase 2), og testplanen lenker til dem fra «Status i flyten» og «Vedlegg». Verifiseringen kommer før testplanen, så undersiden «Verifisering – …» lages av `fs-testplan` når testplanen opprettes, og av `fs-verify` når den kjøres på nytt med en testplan som finnes.
 
 ## Verktøy
 
@@ -95,7 +95,7 @@ Testplanen har en tabell med fasene. `fs-testplan` fyller ut raden for verifiser
 | 1. Verifisering (`fs-verify`) | <lenke> | Alt funnet / <N> ikke funnet, <N> usikker / Ikke kjørt | <dato> |
 | 1. Testrapport – verifisering | <lenke> | Klar / Ikke klar for agentisk funksjonstest | <dato> |
 | 1. Testplan | (denne siden) | Laget | <dato> |
-| 2. Agentisk funksjonstest – testcaser (`fs-testcaser-cdp`) | `tester-agent/<sti>` | Ikke laget / Laget / Oppdatert | <dato> |
+| 2. Agentisk funksjonstest – testcaser (`fs-testcaser-agent`) | `tester-agent/<sti>` | Ikke laget / Laget / Oppdatert | <dato> |
 | 2. Agentisk funksjonstest – kjøring | `kjoring-<dato>/resultat.md` | Venter / Kjørt / Kjørt med funn | <dato> |
 | 2. Testrapport – agentisk funksjonstest | <lenke> | Klar / Ikke klar for intern akseptansetest / Venter på gjennomgang | <dato> |
 | 3. Intern akseptansetest | <lenke> | Klar til test / Pågår / Ferdig | <dato> |
