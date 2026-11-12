@@ -18,34 +18,7 @@ rekkefølgen i fila er kallrekkefølgen.
 
 ---
 
-## 2. Branchen er bak main
-
-**Spørsmål:** Branchen krav/vitnemalsbehandling-l3-l4-eksperter er oppdatert mot origin, men 23 commits bak main. Ingen av dem rører kravfila eller scopet vitnemalsbehandling (bare tasks/opptak/tilgang-i-opptak-2027 og tilgangskrav). Fortsette?
-
-**Alternativer:**
-- Fortsett — Fortsett på branchen som den er.
-- Avbryt — Stopp, så du kan oppdatere branchen mot main først.
-
-**Svar:** Fortsett
-
----
-
-## 3. Kodeklonene er bak main
-
-**Spørsmål:** Kodeklonene fs-admin og fs-plattform står på main, og er begge 132 commits bak origin/main (fs-admin har en lokal endring i package-lock.json, som ikke hindrer pull --ff-only så lenge den ikke kolliderer). Hente før kodesjekken?
-
-**Alternativer:**
-- Hent nå — git pull --ff-only i begge klonene, så kodesjekken leser oppdatert kode.
-- Fortsett uten — Sjekk mot koden slik den er lokalt, og noter det i spec-en.
-- Avbryt — Stopp kjøringen.
-
-**Svar:** Other
-
-**Fritekst:** Du kan rulle tilbake den lokale endringen i package-lock.json og kjøre vanlig pull for å oppdatere
-
----
-
-## 4. Kodeavvik: forbedring, tillegg og valgbar lagres ikke
+## 2. Kodeavvik: forbedring, tillegg og valgbar lagres ikke
 
 **Spørsmål:** Kravet @OPT-BEH-BEH-022 sier at saksbehandleren ser opprinnelig og forbedret karakter for samme fag samtidig, at tilleggsfag er utenfor beregningen til de velges, og at bare fag merket som valgbare kan velges bort. Koden har ikke grunnlaget for det: kompetanse.vgs_dokument_fag har primærnøkkel (vgdoknr, fagkode), så et fag kan bare stå én gang per vitnemål, og verken forbedring, tillegg eller valgbar lagres (fs-plattform/opptak/opptak-migrations/…/V176__kompetanse_vgs.sql:144 og V271). KREG har opplysningene (status_forbedring/status_tillegg i nvb2.vgdokfag, faginfokode på KregFag i kreg-graphql schema.graphql:553). Hva skal vi gjøre?
 
@@ -58,7 +31,7 @@ rekkefølgen i fila er kallrekkefølgen.
 
 ---
 
-## 5. Finnes det skisser for L3?
+## 3. Finnes det skisser for L3?
 
 **Spørsmål:** Finnes det skisser (mockups, wireframes, Figma, bilder, PDF) for L3 (velge_fag_per_poengvariant.feature)? Den lagrede skissen «Gjeldende skisser» (Figma, node 5163-45344, hentet 28.10.2026) har radioknapp per poengvariant og avkrysning per fag.
 
@@ -72,7 +45,7 @@ rekkefølgen i fila er kallrekkefølgen.
 
 ---
 
-## 6. Hvilken skisse gjelder for L3?
+## 4. Hvilken skisse gjelder for L3?
 
 **Spørsmål:** Hvilken skisse gjelder for L3? Skriv lenken (Figma-URL med node-id) eller filstien under «Other», gjerne med en kort tittel.
 
@@ -86,7 +59,7 @@ rekkefølgen i fila er kallrekkefølgen.
 
 ---
 
-## 7. Skisseavvik: vitnemålet per poengvariant
+## 5. Skisseavvik: vitnemålet per poengvariant
 
 **Spørsmål:** Avvik 1 av 3: kravet @OPT-BEH-BEH-022 sier i «Legge ulikt vitnemål til grunn for ulike poengvarianter»: «Og det fremgår hvilket vitnemål hver poengvariant bygger på». Skissen «Steg 2 Grunnlag – Behandle e-vitnemål» (node 5163-50347) har ingen vitnemålskolonne i tabellen «Kvalifisering og poengberegning». Den viser bare vitnemålet for poengvariantene som er valgt (radioknappen under «Vitnemål»). Hva skal vi gjøre?
 
@@ -102,7 +75,7 @@ rekkefølgen i fila er kallrekkefølgen.
 
 ---
 
-## 8. Skisseavvik: Fagstatus og Eks.form
+## 6. Skisseavvik: Fagstatus og Eks.form
 
 **Spørsmål:** Avvik 1 av 2: kravet @OPT-BEH-BEH-022 («Se fagene på vitnemålet») har feltene Fagkode, Fagnavn, Omfang, År, Standpunktkarakter, Eksamenskarakter og Fagstatus. Fagtabellen i skissen (node 5163-50584) mangler Fagstatus (elev eller privatist), og har «Eks.form», som kravet ikke har. Fagstatus avgjør også scenarioet om privatist etter fylte 21 år. Hva skal vi gjøre?
 
@@ -118,7 +91,7 @@ rekkefølgen i fila er kallrekkefølgen.
 
 ---
 
-## 9. Skisseavvik: hvilken karakter inngår
+## 7. Skisseavvik: hvilken karakter inngår
 
 **Spørsmål:** Avvik 2 av 2: kravet @OPT-BEH-BEH-022 («Se opprinnelig og forbedret karakter samtidig») sier: «Og det fremgår hvilken av dem som inngår i beregningen». Skissen viser begge karakterene i kolonnene Opprinnelig og Forbedret, men ikke hvilken som inngår. Hva skal vi gjøre?
 
@@ -134,7 +107,7 @@ rekkefølgen i fila er kallrekkefølgen.
 
 ---
 
-## 10. Retagging og implementasjonsdetaljer
+## 8. Retagging og implementasjonsdetaljer
 
 **Spørsmål 1:** Begge skisseavvikene gjør at kravteksten i @OPT-BEH-BEH-022 må endres (Fagstatus ut og Eks.form inn, og at det går fram hvilken karakter som inngår først etter «Beregn poeng»). Skal kravet retagges @planned → @in-progress nå?
 
@@ -154,7 +127,7 @@ rekkefølgen i fila er kallrekkefølgen.
 
 ---
 
-## 11. Etter spec-en
+## 9. Etter spec-en
 
 **Spørsmål:** Spec-en for L3 er skrevet (tasks/opptak/vitnemalsbehandling/spec/spec-velge-fag-per-poengvariant.md), med et forslag til «Omfang» og 6 åpne spørsmål. Hva vil du gjøre nå?
 
