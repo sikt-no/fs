@@ -98,7 +98,7 @@ Klart når testansvarlig har logget inn som testbruker og ser testdataene.
 | 5 | `fs-verify` har funnet alle scenarioene, og en annen person har kontrollert rapporten. Åpne spørsmål stopper ikke, og står i «Åpne spørsmål» | <fra verify-rapporten, eller «Venter»> |
 | 6 | De agentiske testcasene (`fs-testcaser-cdp`) er laget, og testansvarlig og teamet har gått gjennom dem før kjøringen | Venter |
 | 7 | Flyttestcasene for den interne akseptansetesten (`fs-testcaser-intern`) er laget og gått gjennom av testansvarlig | Venter |
-| 8 | Testansvarlig er logget inn i FS Admin i nettleseren Vibium starter, med en egen profil til testingen, agenten kan bytte til hver testbruker i «Overstyrt bruker», og nøklene i testbrukere og testdata er utfylt | [Fylles ut av teamet] |
+| 8 | Testansvarlig er logget inn i FS Admin i nettleseren Vibium starter, i en egen sesjon til testingen, agenten kan bytte til hver testbruker i «Overstyrt bruker», og nøklene i testbrukere og testdata er utfylt | [Fylles ut av teamet] |
 | 9 | Testansvarlig har logget inn som testbruker og ser testdataene | [Fylles ut av testansvarlig] |
 | 10 | <Kjent brudd i flyten «<tittel>»: <bruddet, med saken> er løst> | <Venter / Løst>   (én rad per kjent brudd, bare når flyten har det, nummerert etter de andre radene) |
 
