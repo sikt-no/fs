@@ -29,11 +29,13 @@ Egenskap: Endre fag i grunnlaget
   slik at søkere med kompetansebevis, forbedringer eller fritak blir riktig poengberegnet.
 
   Ikke alt grunnlaget står riktig på det elektroniske vitnemålet. Noen fag
-  står på et kompetansebevis, er forbedret, er ført som fritatt, eller
-  overlapper med fag på et annet dokument. Saksbehandleren kan legge til og
-  endre slike fag, men bare slik en regel tillater. Saksbehandleren kan ikke
-  sette sammen et vitnemål søkeren ikke har. Fag som bare finnes i opplastet
-  dokumentasjon, legges inn i L4b (legge_inn_vitnemål_manuelt.feature).
+  står på et kompetansebevis, er forbedret eller er ført som fritatt.
+  Saksbehandleren kan legge til og endre slike fag, men bare slik en regel
+  tillater. Saksbehandleren kan ikke sette sammen et vitnemål søkeren ikke
+  har. Fag som bare finnes i opplastet dokumentasjon, legges inn i L4b
+  (legge_inn_vitnemål_manuelt.feature). Fag på et yrkesfaglig vitnemål som
+  overlapper med påbygging til generell studiekompetanse, håndteres i L4c
+  (behandle_yrkesfaglig_vitnemål_med_påbygging.feature).
 
   Bakgrunn:
     Gitt jeg er innlogget i løsningen
@@ -57,25 +59,12 @@ Egenskap: Endre fag i grunnlaget
     Bakgrunn:
       Gitt jeg har rettighet til å se og endre søknadsbehandling ved organisasjonen som behandler saken
 
-    Scenario: Fag som overlapper med påbygging, legges inn som forbedring
-      Gitt søkeren har et yrkesfaglig vitnemål
-      Og søkeren har påbygging til generell studiekompetanse på et kompetansebevis
-      Og jeg har vurdert at et fag i påbyggingen overlapper med et fag på vitnemålet
-      Når jeg legger inn karakteren fra påbyggingen som forbedring på faget på vitnemålet
-      Så teller karakteren fra påbyggingen i stedet for den tidligere karakteren
-      # AVKLART 12.11.2026 (gjennomgang med domeneekspertene): fag som
-      # overlapper med påbyggingen, strykes ikke. Saksbehandleren legger
-      # karakteren inn som forbedring på faget på vitnemålet. Hvilke fag som
-      # overlapper, også timetallene for matematikk (224) og naturfag (140), er
-      # saksbehandlerens vurdering. Erstatter «Stryke et fag som overlapper med
-      # påbygging på kompetansebevis» og avklaringen 03.11.2026 om at fagene
-      # fra påbyggingen legges inn under tilleggsfag.
-      #
-      # AVKLART 07.10.2026: hvilke fag som overlapper, er saksbehandlerens
-      # vurdering, fordi reglene har mange unntak. Hovedreglene: norsk
-      # hentes fra kompetansebeviset. Matematikk og naturfag hentes fra
-      # kompetansebeviset bare når faget er ført med henholdsvis 224 og 140
-      # timer samlet der.
+    # «Stryke et fag som overlapper med påbygging på kompetansebevis» er flyttet
+    # til L4c (behandle_yrkesfaglig_vitnemål_med_påbygging.feature,
+    # @OPT-BEH-BEH-046) 12.11.2026, i gjennomgangen med domeneekspertene.
+    # Scenarioet ble samme dag endret til «Fag som overlapper med påbygging,
+    # legges inn som forbedring», men det viste seg å være feil, og endringen
+    # er rullet tilbake.
 
     Scenario: Legge inn en forbedring på et fag på vitnemålet
       Gitt jeg har lagt et vitnemål til grunn
