@@ -16,3 +16,5 @@ History of skill invocations for this spec. Append-only — never edit past entr
 - 2026-11-06 — `fs-verify` ended (aborted) — rapporten ble ikke skrevet; erstattet av kjøringen 2026-11-11
 - 2026-11-11 — `fs-verify` started — spec-changes-2026-11-06-9b754ac.md, 5 @in-progress-deler, 0 @deprecated · omfang: @in-progress, @deprecated (fra spesifikasjonen) · avhengigheter: ingen
 - 2026-11-11 — `fs-verify` ended (success) — 2 deler levert (@in-progress fjernet), 2/5 funnet, 3 ikke funnet (2 i åpen MR !3362, 1 ikke bygget, fikk @openquestion), verify-2026-11-11-0945.md
+- 2026-11-12 — `fs-verify` started — spec-changes-2026-11-06-9b754ac.md, 3 @in-progress-deler, 0 @deprecated · omfang: @in-progress, @deprecated (fra spesifikasjonen) · avhengigheter: ingen
+- 2026-11-12 — `fs-verify` ended (success) — 3 deler levert (@in-progress fjernet), 3/3 funnet (2 avgjort av brukeren), verify-2026-11-12-1400.md

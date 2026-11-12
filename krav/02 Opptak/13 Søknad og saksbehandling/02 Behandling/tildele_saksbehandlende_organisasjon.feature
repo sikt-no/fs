@@ -495,7 +495,6 @@ Egenskap: Tildele saksbehandlende organisasjon
       Når saksbehandleren ved HK-dir åpner søknaden
       Så ser saksbehandleren bare saken hos "HK-dir"
 
-    @in-progress
     Scenario: Saksbehandleren ser alle søknadsalternativene på søknaden
       Gitt at søkeren har søkt "Informatikk, UiO" og "Historie, UiT" i den rekkefølgen
       Og at "Informatikk, UiO" er fordelt til "Universitetet i Oslo" og "Historie, UiT" til "UiT Norges arktiske universitet"
@@ -540,7 +539,6 @@ Egenskap: Tildele saksbehandlende organisasjon
       # sette tilbudsgaranti. AVKLART 04.11.2026: tilbyderen ser ikke dokumentene i saken. Endres 05.11.2026:
       # tilbyderen skal se dokumentene søkeren har lastet opp (se «Tilbyderen ser dokumentene søkeren har lastet opp»).
 
-    @in-progress
     Scenario: Tilbyderen ser alle søknadsalternativene på søknaden
       Gitt at søkeren har søkt "Informatikk, UiO", "Historie, UiT" og "Sykepleie, NTNU" i den rekkefølgen
       Og at alle søknadsalternativene er fordelt til "Universitetet i Oslo"
@@ -550,14 +548,10 @@ Egenskap: Tildele saksbehandlende organisasjon
       # AVKLART 05.11.2026 i den interne akseptansetesten: tilbyderen skal se hele søknaden, men saksbehandlingen
       # bare for søknadsalternativene til utdanningstilbudene sine.
 
-    @in-progress @openquestion
     Scenario: Tilbyderen ser dokumentene søkeren har lastet opp
-      # ÅPNE SPØRSMÅL:
-      # - Ikke bygget (verifisert 11.11.2026): dokumentene kan bare leses av organisasjonen til saken dokumentet
-      #   ligger på, og av opptaksforvalteren. Skal tilbyderen se dokumentene, eller tas scenarioet ut?
-      #   Følges opp i STEK-687 (personvern avklares der).
       Gitt at "Historie, UiT" er fordelt til "Universitetet i Oslo"
       Og at søkeren har lastet opp et vitnemål til søknaden
       Når saksbehandleren ved UiT Norges arktiske universitet åpner saken med "Historie, UiT"
       Så ser saksbehandleren vitnemålet
       Men saksbehandleren kan ikke endre eller slette vitnemålet
+      # AVKLART 12.11.2026 i STEK-687: tilbyderen ser dokumentene i saken, men kan ikke endre dem.
