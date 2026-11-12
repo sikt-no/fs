@@ -3,7 +3,7 @@
 Nøklene i testene i `cdp-tester/`, slått opp for TEST. Fila er det eneste stedet verdiene slås opp når testene kjøres, og den sier hvilke testpersoner og roller som finnes i FS Admin i TEST. Konvensjonene og vedlikeholdet står i [`cdp-tester/README.md`](../README.md) (*Miljøfila*).
 
 - **FS Admin**: https://test-fsadmin.sikt.no
-- **Innlogging**: testansvarlig logger inn selv, i nettleseren Vibium starter, i en egen sesjon til testingen (se *Vibium* i [`cdp-tester/README.md`](../README.md)). Testbrukeren byttes i «Overstyrt bruker» øverst til høyre i FS Admin
+- **Innlogging**: Feide-testbrukeren i `tester-agent/.env` (ikke i git), i nettleseren Vibium starter, i en egen sesjon til testingen (se *Vibium* i [`cdp-tester/README.md`](../README.md)). Testbrukeren byttes i «Overstyrt bruker» øverst til høyre i FS Admin
 - **Kan settes tilbake**: nei, og data i TEST kan slettes eller nullstilles når som helst. Testene lager dataene sine selv, i oppsettet i [`../_Oppsett/`](../_Oppsett/), i hver kjøring. Opptak kan ikke slettes: opptakene testene og oppsettet oppretter, blir liggende, og har kjøringen i navnet (`{KJØRING}`)
 - **Personaer sist sjekket**: 2026-11-04, mot `testpersoner` i TEST (personavelgeren i fs-admin `origin/main` `2f2ddf24e`)
 
