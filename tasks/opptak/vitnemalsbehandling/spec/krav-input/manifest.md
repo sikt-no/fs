@@ -1,8 +1,8 @@
 # Manifest — krav-input
 
 - **Kildemappe:** `krav/02 Opptak/13 Søknad og saksbehandling/02 Behandling/`
-- **Hentet:** 2026-10-28
-- **HEAD:** `ef68c3a` (branch `main`)
+- **Hentet:** 2026-10-28 (L1 og L2), 2026-11-11 (L3)
+- **HEAD:** `ef68c3a` (branch `main`, L1 og L2), `8aca38be` (branch `krav/vitnemalsbehandling-l3-l4-eksperter`, L3)
 
 ## Filer med i scope
 
@@ -12,12 +12,30 @@ Kravene kopieres ikke. Kravet slik det var da spesifikasjonen ble laget, finnes 
 |---|---|---|---|
 | `krav/02 Opptak/13 Søknad og saksbehandling/02 Behandling/vise_elektroniske_vitnemål.feature` | `@OPT-BEH-BEH-005` | `@must @in-progress` | `spec-vise-elektroniske-vitnemal.md` |
 | `krav/02 Opptak/13 Søknad og saksbehandling/02 Behandling/velge_vitnemål_som_grunnlag.feature` | `@OPT-BEH-BEH-004` | `@must @in-progress` | `spec-velge-vitnemal-som-grunnlag.md` |
+| `krav/02 Opptak/13 Søknad og saksbehandling/02 Behandling/velge_fag_per_poengvariant.feature` | `@OPT-BEH-BEH-022` | `@must @planned` (holdt tilbake, ikke retagget) | `spec-velge-fag-per-poengvariant.md` |
 
-Begge ble satt til `@in-progress` for hånd 21.10.2026 (commit `ccafff0`), etter beslutning i teamet. Ingen av kravene har `@draft`- eller `@deprecated`-deler.
+Begge ble satt til `@in-progress` for hånd 21.10.2026 (commit `ccafff0`), etter beslutning i teamet. L3 er holdt tilbake som `@planned` 2026-11-11, fordi to skisseavvik krever endringer i kravteksten. Ingen av kravene har `@draft`- eller `@deprecated`-deler.
 
 `local/` inneholder en råkopi av L1 fra 2026-09-30. Den er utdatert og brukes ikke lenger.
 
 ## Skisser
+
+### Figma: Steg 2 Grunnlag – Behandle e-vitnemål (L3, fra 2026-11-11)
+
+- **URL:** https://www.figma.com/design/dlG13wATArPvG69oePHPeL/FS-Admin---Gjeldende-skisser?node-id=5163-50347
+- **fileKey:** `dlG13wATArPvG69oePHPeL`
+- **Node:** `5163:50347`, rammen «Steg 2 Grunnlag - Behandle e-vitnemål» (1933×5147). Samme ramme som `gjeldende-skisser/sub-frames/01-…`, hentet på nytt med detaljutsnitt.
+- **Hentet:** 2026-11-11
+- **Lagrede artefakter** (`sketches/figma/steg-2-grunnlag-behandle-e-vitnemal/`):
+  - `screenshot.png`: hele rammen (902×2400)
+  - `sub-frames/01-kvalifisering-og-poengberegning-per-poengvariant.png` (node `5163:50500`)
+  - `sub-frames/02-poeng-for-vitnemalsutvalg.png` (node `5163:50498`): «Beregn poeng», «Bruk poeng» og poengfeltene
+  - `sub-frames/03-vitnemal-og-fag.png` (node `5163:50584`): vitnemålsutvalget med fagene, Opprinnelig/Forbedret og Merknad
+  - `sub-frames/04-tilleggsfag.png` (node `5163:50842`)
+- **Hoppet over:**
+  - `get_metadata`: hentet, men for stort til å lagres som `design-context.md` (155 000 tegn). Brukt til å finne rammene og tekstene.
+  - `get_design_context`, `get_variable_defs` og `download_assets`: valideringen gjelder innhold, ikke kode eller designvariabler.
+  - «Grunnlag» (`5163:50430`), «Melding om mangel» (`5163:50440`) og «Fagprofil»/«Spesielle opptakskrav» (`5163:51041`): utenfor L3.
 
 ### Figma: Gjeldende skisser, «Nyeste skisser» (brukes fra 2026-10-21)
 
