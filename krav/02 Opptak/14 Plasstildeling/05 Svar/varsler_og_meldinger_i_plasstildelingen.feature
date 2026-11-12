@@ -1,4 +1,5 @@
 # language: no
+# BEGREPER (2026-11-10): Bytt «opptakets forvalter» med «forvalter» når fila likevel endres. Se krav/02 Opptak/begreper.md.
 @OPT-PLA-SVA-002 @should @draft @scope-plasstildeling-2027
 Egenskap: Varsler og meldinger i plasstildelingen
   Som opptaksforvalter
@@ -9,25 +10,8 @@ Egenskap: Varsler og meldinger i plasstildelingen
   # håndtere_svar_fra_søker.feature og publisere_resultat.feature, så varslene og meldingene kan leveres
   # etter det som er @must. I dag sender HK-dir dem på e-post utenfor løsningen.
 
-  @openquestion @depends-on-OPT-PLA-RUN-001
-  Regel: Lærestedene varsles når perioden for å endre antall tilbud åpner
-    # ÅPNE SPØRSMÅL:
-    # - Hvem ved lærestedet får varselet? Brukertesten nevnte opptaksansvarlig eller stedfortreder, og HK-dir har lister
-    #   over kontaktpersonene. Skal kontaktpunktene for opptak ligge i løsningen, eventuelt i 09 Organisasjon?
-    #   Se også HK-9307 (dele informasjon med lærestedene i løsningen).
-    # Lagt til 2026-10-28 etter brukertestene med HK-dir (oktober 2026): «Varsel om når periode åpner er gull»,
-    # «Varsle lærested på nytt – melding mellom saksbehandlere» og «Varsler og oppgaver er mye enklere enn e-post».
-    # AVKLART 2026-10-28 (produkteier): Varselet er en melding i FS Admin, ikke en e-post.
-
-    Scenario: Lærestedene varsles når perioden åpner
-      Gitt at perioden for å endre antall tilbud som skal gis i plasstildelingsrunden "Hovedrunde" er "2027-06-01 08:00" – "2027-07-10 16:00"
-      Når klokka er "2027-06-01 08:00"
-      Så får lærestedene som deltar i opptaket, et varsel om at de kan sette antall tilbud som skal gis i "Hovedrunde"
-
-    Scenario: Opptakets forvalter varsler et lærested på nytt
-      Gitt at "Universitetet i Bergen" mangler antall tilbud som skal gis i plasstildelingsrunden "Hovedrunde"
-      Når opptakets forvalter varsler "Universitetet i Bergen" på nytt
-      Så får "Universitetet i Bergen" et nytt varsel om å sette antall tilbud som skal gis i "Hovedrunde"
+  # Regelen «Lærestedene varsles når perioden for å endre antall tilbud åpner» er flyttet 2026-11-02 til
+  # 02 Tildelingsinnstillinger/følge_opp_lærestedenes_gjennomgang.feature (Could, produkteier).
 
   @depends-on-OPT-PLA-RUN-001
   Regel: Søkere med ubesvart tilbud får påminnelse om svarfristen
@@ -38,6 +22,13 @@ Egenskap: Varsler og meldinger i plasstildelingen
       Gitt at plasstildelingsrunden "Hovedrunde" har svarfrist "2027-07-20 23:59"
       Når opptaksforvalter setter påminnelse om svarfrist til "2027-07-18 09:00"
       Så får søkere med ubesvart tilbud i plasstildelingsrunden en påminnelse "2027-07-18 09:00"
+
+    # AVKLART 2026-11-02 (produkteier, prototypen v88): Påminnelsen må komme før svarfristen.
+    Scenario: Påminnelsen kommer etter svarfristen
+      Gitt at plasstildelingsrunden "Hovedrunde" har svarfrist "2027-07-20 23:59"
+      Når opptaksforvalter setter påminnelse om svarfrist til "2027-07-21 09:00"
+      Så blir påminnelsen ikke lagret
+      Og opptaksforvalter får beskjed om at påminnelsen må komme før svarfristen
 
   @depends-on-OPT-PLA-RUN-001 @depends-on-OPT-PLA-SVA-001
   Regel: Søkeren får melding når svarfristen flyttes

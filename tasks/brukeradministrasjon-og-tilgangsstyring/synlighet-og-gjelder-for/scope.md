@@ -22,7 +22,7 @@
 
 - [#659](https://github.com/sikt-no/fs/pull/659) — synlighet for personbrukere fra andre organisasjoner bygger på roller
 - [#667](https://github.com/sikt-no/fs/pull/667) — «Gjelder for» i stedet for «Organisasjon» på roller
-- [Verifisering 2026-10-14](../../../krav/07%20Brukeradministrasjon%20og%20tilgangsstyring/12%20Brukeradministrasjon/personbrukere/1%20-%20Grunnleggende%20brukeradministrasjon/verify-1%20-%20Grunnleggende%20brukeradministrasjon-2026-10-14-1544.md) — hva som gjenstår i fs-plattform og fs-admin per krav
+- [Verifisering 2026-10-14](https://github.com/sikt-no/fs/blob/58b2807625e1509db236be28b4f16ff753b6858d/krav/07%20Brukeradministrasjon%20og%20tilgangsstyring/12%20Brukeradministrasjon/personbrukere/1%20-%20Grunnleggende%20brukeradministrasjon/verify-1%20-%20Grunnleggende%20brukeradministrasjon-2026-10-14-1544.md) — hva som gjenstår i fs-plattform og fs-admin per krav (slettet fra repoet, lenken går til siste versjon i git)
 
 ## Krav
 

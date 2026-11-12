@@ -10,3 +10,5 @@ History of skill invocations for this spec. Append-only — never edit past entr
 - 2026-10-30 — `fs-specify-delta` ended (success) — wrote spec-changes-2026-10-30-krav-sok-011-kvittering-tidlig-opptak.md, 2 lagt til / 0 endret / 0 fjernet / 1 skal fjernes, 2 scenarioer retagget @in-progress, ingen skisse, ingen implementasjonsdetaljer
 - 2026-11-02 — `fs-verify` started — 2 @in-progress (deler), 1 @deprecated (del) i @OPT-SØK-SØK-011 · omfang: @in-progress, @deprecated · avhengigheter: 1 nivå, bare status
 - 2026-11-02 — `fs-verify` ended (success) — 2 deler levert (@in-progress fjernet), 1 scenario slettet (@deprecated), 0 @deprecated finnes fortsatt i koden · verify-2026-11-02-1236.md
+- 2026-11-02 — `fs-specify` started — oppdatering etter endring i OPT-BEH-BEH-007 og OPT-OPT-UTD-004 (krav/beh-007-referanser, c899d3b)
+- 2026-11-02 — `fs-specify` ended (success) — oppdaterte spec-tidlig-opptak.md på stedet: ny _Avhengigheter_ (UTD-004 @draft, OVO-INN-001 og BEH-010 @implemented), STEK-623 flyttet til _Løst_, 2 linjer i _Endringer etter innhenting_; 0 retagget (alle allerede @in-progress), skisser og manifest uendret

@@ -1,4 +1,5 @@
 # language: no
+# BEGREPER (2026-11-10): Bytt «opptaksforvalter ved deltakende organisasjon» med «opptaksforvalter hos tilbyderen», «opptakets forvalter» med «forvalter», «saksbehandlende organisasjon» med «behandler» når fila likevel endres. Se krav/02 Opptak/begreper.md.
 # GitHub: #216
 @OPT-PLA-TIL-001 @must @draft @scope-plasstildeling-2027
 Egenskap: Starte en plasstildeling
@@ -83,6 +84,14 @@ Egenskap: Starte en plasstildeling
       Når opptaksforvalter starter en ny plasstildeling i "Hovedrunde"
       Så beregnes en ny plasstildeling fra oppdatert grunnlag
       Og den forrige plasstildelingen er fortsatt tilgjengelig
+
+    # Avklart 05.11.2026 (gjennomgangen av flyten automatisk saksbehandling): bare én beregning på
+    # nytt eller plasstildeling i opptaket om gangen.
+    Scenario: Opptaksforvalter kan ikke starte en plasstildeling mens en beregning på nytt kjører
+      Gitt at en beregning på nytt i "Samordna opptak 2027" ikke er ferdig
+      Når opptaksforvalter starter en plasstildeling i "Hovedrunde"
+      Så starter ikke plasstildelingen
+      Og opptaksforvalter får beskjed om at en beregning på nytt kjører
 
   # Flyttet hit fra OPT-BEH-BEH-008 2026-11-02: mangler hindrer ikke kvalifiseringen, men noen
   # mangler skal hindre at søkeren får tilbud om studieplass.

@@ -1,11 +1,12 @@
 import initial from 'virtual:krav';
 import initialGit from 'virtual:krav-git';
 import initialTasks from 'virtual:krav-tasks';
+import initialVerify from 'virtual:krav-verify';
 import repoRoot from 'virtual:krav-root';
 import type { Api, ApiMethod, Boot } from '../shared/api';
 
 /** Hendelsene backenden sender til rendereren */
-export type KravEvent = 'krav:update' | 'krav:git' | 'krav:tasks' | 'krav:focus' | 'krav:blur' | 'krav:claude' | 'krav:pty' | 'krav:connect' | 'krav:disconnect' | 'krav:app-update';
+export type KravEvent = 'krav:update' | 'krav:git' | 'krav:tasks' | 'krav:verify' | 'krav:focus' | 'krav:blur' | 'krav:claude' | 'krav:pty' | 'krav:connect' | 'krav:disconnect' | 'krav:app-update';
 
 /** Broen preload-skriptet i desktop-appen legger på `window.krav` (se electron/preload.ts) */
 export interface KravBridge {
@@ -59,7 +60,7 @@ function vite(): Transport {
   return {
     kind: hot ? 'vite' : 'static',
     live: !!hot,
-    boot: async () => ({ entries: initial, git: initialGit, tasks: initialTasks, editable: !!hot, repoRoot: hot ? repoRoot : null }),
+    boot: async () => ({ entries: initial, git: initialGit, tasks: initialTasks, verify: initialVerify, editable: !!hot, repoRoot: hot ? repoRoot : null }),
     on(event, fn) {
       if (!hot) return () => {};
       const name = alias[event] ?? event;
@@ -81,3 +82,14 @@ function vite(): Transport {
 }
 
 export const transport: Transport = typeof window !== 'undefined' && window.krav ? electron(window.krav) : vite();
+
+/**
+ * Rapportvisningen (`verify-*.html`) ved siden av en verify-rapport: fra disk i dev-serveren og desktop-appen, og
+ * fra bygget på GitHub Pages, der den ligger ved siden av index.html med samme sti (`generateBundle` i server/kravPlugin.ts)
+ */
+export async function reportHtml(path: string): Promise<string> {
+  if (transport.kind !== 'static') return transport.call('readReport', path);
+  const res = await fetch('./' + path.split('/').map(encodeURIComponent).join('/'));
+  if (!res.ok) throw new Error(`Fant ikke ${path} (${res.status})`);
+  return res.text();
+}

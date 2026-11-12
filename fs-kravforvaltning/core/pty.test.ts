@@ -75,6 +75,20 @@ test('terminalArgs: tom prompt, prompt som ser ut som et flagg og ukjent modus a
   assert.throws(() => terminalArgs({ mode: 'annet' as 'verify', prompt: 'x' }, ctx), /Ukjent modus/);
 });
 
+test('terminalArgs: login kjører claude auth login i kravrepoet, uten prompt og flagg', () => {
+  assert.deepEqual(terminalArgs({ mode: 'login', prompt: '' }, ctx), { cwd: tmp, args: ['auth', 'login'] });
+  assert.deepEqual(terminalArgs({ mode: 'login', prompt: '--ignoreres' }, ctx).args, ['auth', 'login'], 'prompten brukes ikke');
+});
+
+test('PtyRunner: login starter claude auth login uten MCP-konfig og innstillinger', async () => {
+  const { spawn, calls } = fakeSpawn();
+  const r = new PtyRunner(tmp, { bin: async () => '/usr/local/bin/claude', spawn, env: { PATH: '/usr/bin', HOME: home }, home });
+  const { id } = await r.start({ mode: 'login', prompt: '' });
+  assert.deepEqual(calls[0].args, ['auth', 'login']);
+  assert.equal(calls[0].opts.cwd, tmp);
+  assert.ok(r.kill(id));
+});
+
 /** En falsk pty: husker kallet, og lar testen sende utdata og avslutte */
 function fakeSpawn() {
   const calls: { file: string; args: string[]; opts: Parameters<PtySpawn>[2]; written: string[]; sizes: [number, number][]; killed: boolean; data?: (d: string) => void; exit?: (e: { exitCode: number }) => void }[] = [];

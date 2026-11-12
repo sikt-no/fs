@@ -67,7 +67,7 @@ Finn så flytene som går gjennom kravene, fasene i hver flyt, og om hele flyten
 
 ### Tilgangsradene
 
-Les tilgangsradene fra `## Tilgang og datakonsistens` i verify-rapporten (rolle × organisasjon × opprette/lese/endre/slette). De er tilgangsmatrisen testbrukerne foreslås fra (steg 3).
+Les tilgangsradene fra `## Tilgang og datakonsistens` i verify-rapporten, fra begge tabellene (`### Avvik` og `### Stemmer`; eldre rapporter har én tabell) (rolle × organisasjon × opprette/lese/endre/slette). De er tilgangsmatrisen testbrukerne foreslås fra (steg 3).
 
 ### Verifiseringen
 
@@ -81,7 +81,7 @@ Finnes flere rapporter (for ulike spesifikasjoner, scopes eller mapper), ta den 
 1. **Finnes det en rapport?** Nei: si at verifiseringen er fase 1, og spør (`AskUserQuestion`): «Kjør `fs-verify` først» (anbefalt, eller `fs-verify-agent-teams` når det er mange feature-filer), «Lag testplanen likevel» eller «Avbryt». Ved «Kjør `fs-verify` først»: stopp, og si hvilken kilde verifiseringen skal kjøres på (den samme som testplanen).
 2. **Er den nyere enn kravene?** Sammenlign datoen med siste commit på kravfilene (`git log -1 --format=%cs -- <filene>`). Er et krav endret etter rapporten, eller er det kommet krav i kilden som ikke er med i rapporten, si hvilke, og spør på samme måte. Uten Bash: sammenlign bare kravene i rapporten med kravene i kilden, og si at datoene ikke er sjekket.
 3. **Har den flytene?** Gjelder bare flyter som ikke er `@implemented` (en `@implemented` flyt er verifisert fra før). Har en slik flyt med leverte faser ingen rader i `## Fremdrift for flyter` og `## Scenarioer` i rapporten, er overleveringene ikke verifisert. Spør på samme måte om `fs-verify` skal kjøres først (på den samme kilden, eller på flyten). Lages testplanen likevel, står overleveringene i flyten i «Ikke med i denne testen» med «overleveringen er ikke verifisert».
-4. **Hva fant den?** Krav og deler der rapporten har `ikke funnet` eller `usikker`, står i «Venter på verifisering», med hva som mangler (fra `## Ikke levert` og `## Oppfølging`). Statusen i kravfila gjelder: er et krav `@implemented`, er det med i «Omfang», også om en eldre rapport sa noe annet. Er det delvis levert, står det i «Omfang» med de leverte delene, og delene som ikke er levert, i «Venter på verifisering».
+4. **Hva fant den?** Krav og deler der rapporten har `ikke funnet` eller `usikker`, står i «Venter på verifisering», med hva som mangler: radene med `ikke funnet` og `usikker` i `## Scenarioer` (med beviset og repo-merket), *Blir stående* og *Kan leveres når det er avklart* i `## Forslag til endringer`, og `## Andre funn` (i eldre rapporter `## Oppfølging oppsummert`, `## Oppfølging` eller `## Ikke levert`). Statusen i kravfila gjelder: er et krav `@implemented`, er det med i «Omfang», også om en eldre rapport sa noe annet. Er det delvis levert, står det i «Omfang» med de leverte delene, og delene som ikke er levert, i «Venter på verifisering».
 
 Vis oversikten før du spør teamet: verify-rapporten (dato, resultat), kravene per gruppe, status, antall scenarioer som skal testes (de leverte i gating-settet), flytene (faser levert, faser i leveransen, scenarioer som kan testes), det som venter på verifisering, og det som ikke er med. Er ingen av kravene `@implemented` eller delvis levert, si det, og spør om testplanen skal lages likevel.
 

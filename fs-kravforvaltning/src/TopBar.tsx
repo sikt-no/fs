@@ -2,16 +2,17 @@ import { useEffect, useRef, useState } from 'preact/hooks';
 import { vscodeUrl } from './vscode';
 
 export type Theme = 'light' | 'dark';
-export type Mode = 'krav' | 'avvik' | 'scopes' | 'flyter';
-/** Visningene som kan vises i menyen (designet «Menyvalg»). Krav og Flyter er alltid med, Avvik og Scopes er skjult til de velges */
-export type Optional = 'avvik' | 'scopes';
+export type Mode = 'krav' | 'avvik' | 'scopes' | 'flyter' | 'verifisering';
+/** Visningene som kan vises i menyen (designet «Menyvalg»). Krav og Flyter er alltid med, Avvik og Scopes er skjult til de velges, og Verifisering er med til den skjules */
+export type Optional = 'avvik' | 'scopes' | 'verifisering';
 export type MenuShow = Record<Optional, boolean>;
-export const MENU_DEFAULT: MenuShow = { avvik: false, scopes: false };
+export const MENU_DEFAULT: MenuShow = { avvik: false, scopes: false, verifisering: true };
 
 /** Menyvalgene som er lagret, også fra før Oppgaver het Scopes (`oppgaver`) */
 export const migrateMenu = (saved: Record<string, boolean>): MenuShow => ({
   avvik: saved.avvik ?? MENU_DEFAULT.avvik,
   scopes: saved.scopes ?? saved.oppgaver ?? MENU_DEFAULT.scopes,
+  verifisering: saved.verifisering ?? MENU_DEFAULT.verifisering,
 });
 
 interface Props {
@@ -37,6 +38,10 @@ interface Props {
   flowPath: string | null;
   /** Antall flyter i krav/_Flyter, vist på Flyter-knappen */
   nFlows: number;
+  /** Rapporten som er valgt i Verifisering, `null` når ingen er valgt */
+  reportPath: string | null;
+  /** Antall verify-rapporter, vist på Verifisering-knappen */
+  nReports: number;
   /** Hvilke av Avvik og Scopes som vises i menyen, og tannhjulet som endrer det */
   menu: MenuShow;
   onMenu: (m: MenuShow) => void;
@@ -55,9 +60,13 @@ interface Props {
   repoRoot: string | null;
 }
 
-export function TopBar({ path, connected, theme, onTheme, treeHidden, onToggleTree, tocHidden, onToggleToc, onHome, mode, onMode, nBad, nActive, oCrumbs, flowPath, nFlows, menu, onMenu, specState, claude, onClaude, onUpdate, pulling, appUpdate, repoRoot }: Props) {
+export function TopBar({ path, connected, theme, onTheme, treeHidden, onToggleTree, tocHidden, onToggleToc, onHome, mode, onMode, nBad, nActive, oCrumbs, flowPath, nFlows, reportPath, nReports, menu, onMenu, specState, claude, onClaude, onUpdate, pulling, appUpdate, repoRoot }: Props) {
   const parts =
-    mode === 'avvik' ? ['krav', '#/avvik'] : mode === 'scopes' ? oCrumbs : mode === 'flyter' ? (flowPath ? flowPath.split('/') : ['krav', '#/flyter']) : path ? path.split('/') : [];
+    mode === 'avvik' ? ['krav', '#/avvik']
+    : mode === 'scopes' ? oCrumbs
+    : mode === 'flyter' ? (flowPath ? flowPath.split('/') : ['krav', '#/flyter'])
+    : mode === 'verifisering' ? (reportPath ? reportPath.split('/') : ['#/verifisering'])
+    : path ? path.split('/') : [];
   return (
     <header class="topbar">
       {/* Venstrepanelet: filtreet i Krav, mappene med avvik i Avvik, flytene i Flyter */}
@@ -90,6 +99,11 @@ export function TopBar({ path, connected, theme, onTheme, treeHidden, onToggleTr
         <button aria-pressed={mode === 'flyter'} onClick={() => onMode('flyter')} title={`${nFlows} flyter i krav/_Flyter`}>
           Flyter<span class="badge neutral">{nFlows}</span>
         </button>
+        {menu.verifisering && (
+          <button aria-pressed={mode === 'verifisering'} onClick={() => onMode('verifisering')} title={`${nReports} verify-rapporter i krav/, tasks/ og akseptansetest/`}>
+            Verifisering<span class="badge neutral">{nReports}</span>
+          </button>
+        )}
       </div>
       <MenuGear menu={menu} onMenu={onMenu} />
       <nav class="crumbs" aria-label="Sti">
@@ -198,6 +212,7 @@ const MENU_ITEMS: { key: Mode; label: string; locked?: boolean }[] = [
   { key: 'avvik', label: 'Avvik' },
   { key: 'scopes', label: 'Scopes' },
   { key: 'flyter', label: 'Flyter', locked: true },
+  { key: 'verifisering', label: 'Verifisering' },
 ];
 
 /** Tannhjulet rett etter menyen: velg hvilke visninger som vises. Lukkes med klikk utenfor eller Esc */

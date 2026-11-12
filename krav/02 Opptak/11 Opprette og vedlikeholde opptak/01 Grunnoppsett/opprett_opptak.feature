@@ -54,9 +54,20 @@ Egenskap: Opprette et opptak
       Men opptaksforvalter setter ikke opptakstype
       Så kan opptaket ikke lagres
 
-  @draft @depends-on-OPT-BEH-BEH-036
+  @planned @ref-OPT-REG-SAM-001
+  # Kilde: MR !3361 i fs-admin (TAKE-474). Det samme gjelder når regelverkssamlingen endres, se innstillinger.feature.
+  Regel: Opptaksforvalter kan bare knytte til regelverkssamlinger fra organisasjonen opptaksforvalteren er opptaksforvalter ved
+
+    Scenario: Regelverkssamlinger fra andre organisasjoner kan ikke knyttes til opptaket
+      Gitt at det finnes en regelverkssamling ved en annen organisasjon enn organisasjonen opptaksforvalter er opptaksforvalter ved
+      Når opptaksforvalter oppretter et nytt opptak
+      Så kan opptaksforvalter ikke knytte regelverkssamlingen ved den andre organisasjonen til opptaket
+
+  @planned @scope-automatisk-ferdigbehandling @depends-on-OPT-BEH-BEH-036
   # OPT-BEH-BEH-036: «Mangelen for generell studiekompetanse som fullføres i vår settes og sjekkes ut automatisk»
   # Avklart 30.10.2026: advarselen stopper ikke lagringen.
+  # Avklart 05.11.2026 (#951): advarselen på oversikten over mangelkodene (OPT-BEH-BEH-036) holder
+  # ikke alene. Den som har glemt å merke mangelkoden, åpner neppe den oversikten.
   Regel: Opptaksforvalter får en advarsel når regelverkssamlingen mangler mangelkode for generell studiekompetanse som fullføres i vår
 
     Scenario: Advarsel når ingen mangelkode er merket for generell studiekompetanse som fullføres i vår
@@ -128,6 +139,21 @@ Egenskap: Opprette et opptak
       Gitt at opptaket "Samordna opptak 2026" finnes med innstillinger, frister og fellestekster
       Når opptaksforvalter oppretter et nytt opptak basert på "Samordna opptak 2026"
       Så kopieres innstillinger fra det tidligere opptaket som utgangspunkt
+
+  # Avklart 2026-11-10 (R7 i spec-en «Krav til RLS»): forvalteren av opptaket kan ikke gi opptaket bort.
+  # I dag kan forvalteren sette en annen organisasjon som eier.
+  @draft
+  Regel: Forvalteren av opptaket kan ikke endres
+
+    Scenario: Opptaksforvalteren kan ikke gjøre en annen organisasjon til forvalter
+      Gitt at opptaket "Samordna opptak 2027" forvaltes av HK-dir
+      Når opptaksforvalteren ved HK-dir åpner opptaket
+      Så ser opptaksforvalteren ikke muligheten til å endre hvem som forvalter opptaket
+
+    Scenario: Endring av forvalteren avvises i API-et
+      Gitt at opptaket "Samordna opptak 2027" forvaltes av HK-dir
+      Når en integrasjon forsøker å endre hvem som forvalter opptaket gjennom API-et
+      Så avvises det
 
   # Regelen om å deaktivere et opptak er flyttet til opptaksstatus.feature (2026-10-28), der opptaket gjøres historisk.
 

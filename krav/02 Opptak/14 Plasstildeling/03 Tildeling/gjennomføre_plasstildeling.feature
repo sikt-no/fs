@@ -247,23 +247,25 @@ Egenskap: Gjennomføre plasstildeling
       Når plasstildelingen gjennomføres
       Så får søkeren tilbud på "Sykepleie, høst 2027"
 
-    # AVKLART 2026-10-21 (produkteier): En SPEV-kvote (kvotetype med rangeringsmetoden SPEV) er et venterom for
-    # søkere som får tilbudsgaranti. Den har ingen egne plasser, og tilbudene i den tas fra hovedkvoten. I
-    # plassflyten kan den bare ha hovedkvoten som mottaker, se 10 Regelverk/04 Kvoter/sette_plassflyt.feature.
-    Scenario: Tilbud i SPEV-kvoten tas fra hovedkvoten
-      Gitt at utdanningstilbudet "Sykepleie, høst 2027" har utdanningskvotene "Spesiell vurdering (SPEV)" og "Ordinær kvote (ORD)"
+    # AVKLART 2026-10-21 (produkteier): En kvotetype uten plasser, som ventekvoten i
+    # 10 Regelverk/04 Kvoter/opprette_ventekvote.feature, er et venterom for søkere som får tilbudsgaranti.
+    # Den har ingen egne plasser, og tilbudene i den tas fra hovedkvoten. Skrevet om fra SPEV-kvoten 2026-11-11.
+    # AVKLART 2026-11-11 (produkteier): Søkeren blir i ventekvoten, og er kvalifisert og rangert der. Bare plassen
+    # tas fra hovedkvoten, i plasstildelingen. Kvotetypen er ikke med i plassflyten (sette_plassflyt.feature).
+    Scenario: Tilbud i en kvotetype uten plasser tas fra hovedkvoten
+      Gitt at utdanningstilbudet "Sykepleie, høst 2027" har utdanningskvotene "Ventekvote (VENT)" og "Ordinær kvote (ORD)"
       Og at "Ordinær kvote (ORD)" er hovedkvoten, og det skal gis 100 tilbud i den
       Og at søknaden til "Ola Nordmann" på "Sykepleie, høst 2027" har en tilbudsgaranti som gir tilbud
-      Og at søknaden venter i "Spesiell vurdering (SPEV)"
+      Og at søknaden venter i "Ventekvote (VENT)"
       Når plasstildelingen gjennomføres
-      Så får søkeren tilbud i "Spesiell vurdering (SPEV)"
+      Så får søkeren tilbud i "Ventekvote (VENT)"
       Og tilbudet teller som ett av de 100 tilbudene i "Ordinær kvote (ORD)"
 
-    Scenario: SPEV-kvoten har ingen egne plasser
-      Gitt at utdanningstilbudet "Sykepleie, høst 2027" har utdanningskvoten "Spesiell vurdering (SPEV)"
-      Og at ingen søkere med tilbudsgaranti venter i "Spesiell vurdering (SPEV)"
+    Scenario: En kvotetype uten plasser har ingen egne plasser
+      Gitt at utdanningstilbudet "Sykepleie, høst 2027" har utdanningskvoten "Ventekvote (VENT)"
+      Og at ingen søkere med tilbudsgaranti venter i "Ventekvote (VENT)"
       Når plasstildelingen gjennomføres
-      Så gis det ingen tilbud i "Spesiell vurdering (SPEV)"
+      Så gis det ingen tilbud i "Ventekvote (VENT)"
 
     Scenario: Tilbudsgaranti som ikke gir tilbud
       Gitt at søknaden til "Ola Nordmann" på "Sykepleie, høst 2027" har en tilbudsgaranti som ikke gir tilbud
@@ -286,8 +288,8 @@ Egenskap: Gjennomføre plasstildeling
   Regel: Innstillingene for plasstildelingsrunden avgjør hva som skjer med lavere prioriteter og tidligere tilbud
 
     # Endret 2026-10-24: Plasstildelingen leser innstillingene plasstildelingsrunden har fra rundetypen,
-    # og ser aldri på hvilken rundetype det er. Rundetypene i samordna opptak, med innstillingene, står i
-    # regelverkssamlingen (10 Regelverk/06 Rundetyper/bruke_rundetyper.feature).
+    # og ser aldri på hvilken rundetype det er. Rundetypene, med innstillingene, er felles for alle opptak
+    # (10 Regelverk/06 Rundetyper/bruke_rundetyper.feature, endret 2026-11-04).
     # Tabellen over hva hver rundetype innebar, er flyttet dit.
     # AVKLART 2026-10-14: Tilbud, venteliste og avslag finnes alltid. Bortfall finnes bare når tilbud gir
     # bortfall på lavere prioriteter. Rangeringen er poeng og rangering i alle plasstildelingsrunder.
@@ -307,9 +309,24 @@ Egenskap: Gjennomføre plasstildeling
 
     Scenario: Tilbud gir bortfall på lavere prioriteter
       Gitt at plasstildelingsrunden har innstillingen "Tilbud gir bortfall på lavere prioriteter"
+      Og at taket for antall tilbud per søker i plasstildelingsrunden er 1
       Og at søkeren "Kari Nordmann" får tilbud på prioritet 1
       Når plasstildelingen gjennomføres
       Så får søkeren bortfall på alle lavere prioriteter
+
+    # AVKLART 2026-11-04 (produkteier, tilbakemelding på PR #907): Er taket for antall tilbud per søker høyere enn 1,
+    # kan søkeren få så mange ordinære tilbud som taket sier, også når tilbud gir bortfall. Bortfallet gjelder da
+    # prioritetene under det laveste tilbudet når søkeren har fått så mange tilbud som taket sier. Prioriteter over det
+    # laveste tilbudet, der søkeren står på venteliste, beholdes. Taket settes på plasstildelingsrunden
+    # (01 Runder/forvalte_runder.feature).
+    Scenario: Bortfall under det siste tilbudet søkeren kan få
+      Gitt at plasstildelingsrunden har innstillingen "Tilbud gir bortfall på lavere prioriteter"
+      Og at taket for antall tilbud per søker i plasstildelingsrunden er 3
+      Og at søkeren "Kari Nordmann" får tilbud på prioritet 1, 2 og 4, og står på venteliste til prioritet 3
+      Når plasstildelingen gjennomføres
+      Så har søkeren tilbud på prioritet 1, 2 og 4
+      Og søkeren står fortsatt på venteliste til prioritet 3
+      Og søkeren får bortfall på prioritet 5 og alle lavere prioriteter
 
     # AVKLART 2026-10-14: Uten bortfall kan søkeren ha flere ordinære tilbud, og må velge ett.
     Scenario: Søkeren kan ha flere ordinære tilbud uten bortfall

@@ -19,9 +19,9 @@ Søknaden får GSK-konklusjonen automatisk når vitnemålet har «GSK OK» fra K
 
 ### Utenfor scope (`@draft`)
 
-- **`beregne_gsk_fra_vitnemål.feature` — regel `Fag som saksbehandleren har tatt ut av kontrollene, telles ikke med`** — venter på: hva fagstatusen er, og hvem som setter den. Kravet for fagstatusen er ikke skrevet.
-- **`automatisk_gsk_konklusjon.feature` — scenario `Opptaksforvalteren får varsel om et løp som mangler i listen over løp`** — venter på: hvor i FS Admin opptaksforvalteren får varselet, og om det er ett varsel per løp eller ett per vitnemål med løpet.
-- **`automatisk_gsk_konklusjon.feature` — scenario `Opptaksforvalteren får varsel om et løp uten grunnlagskode`** — venter på: hvor i FS Admin opptaksforvalteren får varselet.
+- **Regelen om fag som saksbehandleren har tatt ut av kontrollene** er flyttet fra `beregne_gsk_fra_vitnemål.feature` til `endre_fag_i_grunnlaget.feature` (`@OPT-BEH-BEH-023`, vitnemålsbehandlingen) 10.11.2026, og er ikke lenger i dette scopet.
+- **`automatisk_gsk_konklusjon.feature` — scenario `Opptaksforvalteren ved organisasjonen som forvalter opptaket, får varsel om et løp som mangler i listen over løp`** og **`Opptaksforvalteren ved organisasjonen som forvalter opptaket, får ett varsel per løp som mangler i listen over løp`** — venter på: hvor i FS Admin opptaksforvalteren får varselet. Avklart 06.11.2026: varselet går til opptaksforvalteren ved organisasjonen som forvalter opptaket, med ett varsel per løp.
+- **`automatisk_gsk_konklusjon.feature` — scenario `Opptaksforvalteren ved organisasjonen som forvalter opptaket, får varsel om et løp uten grunnlagskode`** — venter på: hvor i FS Admin opptaksforvalteren får varselet.
 - **`håndtere_annullert_vitnemål.feature` — regel `Saken får en merknad om det annullerte vitnemålet`** — venter på: hvordan systemet skal skrive en merknad på saken. I dag kan bare en innlogget person skrive merknader.
 
 ## Skisser
@@ -34,7 +34,7 @@ Søknaden får GSK-konklusjonen automatisk når vitnemålet har «GSK OK» fra K
 - **Dekker krav:** `automatisk_gsk_konklusjon.feature` (scenario: `Saksbehandleren ser at opptakssystemet er uenig med skolen når vitnemålet <skolen> GSK OK fra KREG`)
 - **Valideringsstatus:** `OK` — skissen viser et «!» ved antallet på «Vitnemålsbehandling» og en tekst under vitnemålsnummeret, som kommentaren i scenarioet. Teksten i skissen er en plassholder.
 
-Ingen skisse for resten: varslene til opptaksforvalteren er ikke avklart, 034 bruker taggene og behandlingsstatusen som fs-admin viser i dag, og resten er backend.
+Ingen skisse for resten: varslene til opptaksforvalteren ved organisasjonen som forvalter opptaket, er ikke avklart, 034 bruker taggene og behandlingsstatusen som fs-admin viser i dag, og resten er backend.
 
 ## Kodesjekk
 
@@ -44,7 +44,7 @@ Ingen skisse for resten: varslene til opptaksforvalteren er ikke avklart, 034 br
 - `@OPT-BEH-BEH-015`, `@OPT-BEH-BEH-027`: kravet sier at et løp uten grunnlagskode gir KLY eller RFA, også i den automatiske behandlingen. Koden gjør det bare når saksbehandleren starter kontrollen (`GskKonklusjonEvaluator.java:61`, `GskVedtakAutoService.java:89` sender `false`). Koden skal endres.
 - `@OPT-BEH-BEH-015`: kravet sier at opptakssystemets påstand beregnes når vitnemålet importeres, og lagres på vitnemålet med tidspunkt og beregning. Koden beregner bare i den automatiske behandlingen, og lagrer bare skolens påstand (`fs-plattform/opptak/opptak-service/src/main/java/no/sikt/fs/opptak/vgs/KregVgsParser.java:104`). Koden skal endres.
 - `@OPT-BEH-BEH-015`: kravet sier at konklusjonen står når vitnemålet annulleres. Koden trekker den tilbake, også i andre og avsluttede opptak (`fs-plattform/opptak/opptak-service/src/main/java/no/sikt/fs/opptak/autosak/gsk/GskVedtakTilbakekallingService.java:64-90`). Koden skal endres.
-- `@OPT-BEH-BEH-015`: varslene til saksbehandleren og opptaksforvalteren finnes ikke i koden.
+- `@OPT-BEH-BEH-015`: varslene til saksbehandleren og opptaksforvalteren ved organisasjonen som forvalter opptaket, finnes ikke i koden.
 
 - `@OPT-BEH-BEH-034`: ingen kode går fra et annullert vitnemål til sakene der det er brukt. Annulleringen lagres (`VgsLagringService`, `ANNULLERING_OPPDATERT`), men `HentVgsVitnemaalService` bruker den ikke. Sjekken av om vitnemålet er brukt i poeng, kravelementer eller GSK finnes i fs-plattform !6456 (STEK-551, `VgsDokumentConditions.bruktIBeregningPaaOpptaket`), men er ikke tilgjengelig utenfor pakken, og sier ikke hva vitnemålet er brukt til. Koden skal endres, og bygges oppå !6456.
 - `@OPT-BEH-BEH-034`: tagger er fritekst per opptak og organisasjon, uten systemtagger (`TaggService`, `TaggRepo`). Systemet må lage taggen «Vitnemål annullert» når den mangler. Jobben som henter vitnemål, kjører med RLS-bypass (`SoknadshendelseJobb`), så den kan sette taggen.
@@ -63,7 +63,7 @@ Ingen skisse for resten: varslene til opptaksforvalteren er ikke avklart, 034 br
 
 ## Åpne spørsmål
 
-- [ ] Hvordan oppdager opptakssystemet at et vitnemål er annullert, når søkeren ikke endrer søknaden? I dag hentes vitnemålene bare når søkeren blir tildelt. Det krever abonnement på endringer i KREG, eller en jobb som jevnlig sjekker vitnemålene som er i bruk. Egen oppgave i dette scopet. (`@OPT-BEH-BEH-015`, `@OPT-BEH-BEH-034`)
+- [x] Hvordan oppdager opptakssystemet at et vitnemål er annullert, når søkeren ikke endrer søknaden? Avklart 06.11.2026: importen av VGS-vitnemål fra KREG spør KREG om alle aktive søkere én gang i døgnet (`@OPT-BEH-BEH-030`, `@OPT-BEH-BEH-033`), og den hører til scopet `automatisk-import-og-start`. Scenarioet i `@OPT-BEH-BEH-015` bygger på den. (`@OPT-BEH-BEH-015`, `@OPT-BEH-BEH-034`)
 - [ ] Teksten i varselet om uenighet mangler (`vise_elektroniske_vitnemål.design.md`, «Varsel når opptakssystemet er uenig med skolen om GSK»). Implementasjonsdetaljer for resten av `automatisk_gsk_konklusjon.feature` mangler.
 
 ## Rute

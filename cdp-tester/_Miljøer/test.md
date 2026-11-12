@@ -6,7 +6,7 @@ Nøklene i testene i `cdp-tester/`, slått opp for TEST. Fila er det eneste sted
 - **Innlogging**: testansvarlig logger inn selv, i en egen Chrome-profil til testingen. Testbrukeren byttes i «Overstyrt bruker» øverst til høyre i FS Admin
 - **Min kompetanse (test)**: https://test.minkompetanse.no. Søkeren `soker-visning` logger agenten inn slik: «Logg inn med ID-porten» → «TestID» → «Hent tilfeldig person» → «Autentiser». Det gir en ny syntetisk testperson, uten passord, hver gang. Fødselsnummeret skrives aldri ned
 - **Kan settes tilbake**: nei, og data i TEST kan slettes eller nullstilles når som helst. Testene lager dataene sine selv, i oppsettet i [`../_Oppsett/`](../_Oppsett/), i hver kjøring. Opptak kan ikke slettes: opptakene testene og oppsettet oppretter, blir liggende, og har kjøringen i navnet (`{KJØRING}`)
-- **Personaer sist sjekket**: 2026-10-28, mot `TEST_PERSONAS` i fs-admin (`origin/main` `cc62931b7`). Tildelingene er bekreftet med `testpersoner` for personaene som har dato i «Bekreftet»
+- **Personaer sist sjekket**: 2026-11-04, mot `testpersoner` i TEST (personavelgeren i fs-admin `origin/main` `2f2ddf24e`)
 
 ## Feature-flagg
 
@@ -17,57 +17,64 @@ Nøklene i testene i `cdp-tester/`, slått opp for TEST. Fila er det eneste sted
 
 ## Personaer
 
-Alle personaene i «Overstyrt bruker» i TEST: `TEST_PERSONAS` i fs-admin (`src/common/lib/persona/constants/testPersonas.ts`). Raden er skrevet nøyaktig som i menyen. «Deklarerte roller» er forretningsrollene personaen ber om. «Tildelinger i TEST» er det `testpersoner` gir, etter utvidelsen i rollekatalogen. Organisasjonen og forkortelsen er de i organisasjonsregisteret når personaen er bekreftet, og det er dem testene bruker (`{ORG:<nøkkel>}`). `–` er ikke bekreftet ennå.
+Alle radene i «Overstyrt bruker» i TEST. Siden BAT-369 (fs-admin `8e842f777`, 2026-10-30) henter velgeren personaene fra spørringen `testpersoner` i tilgangsstyringen, ikke fra `TEST_PERSONAS`, og lager én rad per tildeling (person, rolle og organisasjon). En person med flere roller har derfor flere rader, og hver rad gir bare den ene rollen (og rollene den gir i rollekatalogen). Raden er `<FORNAVN> <ETTERNAVN> • <rolle> (<forkortelse, ellers navnet på organisasjonen>)`, skrevet nøyaktig som i menyen. Organisasjonen og forkortelsen er de i organisasjonsregisteret, og det er dem testene bruker (`{ORG:<nøkkel>}`).
 
-| Rad i «Overstyrt bruker» | Deklarerte roller | Organisasjon | Organisasjonskode | Forkortelse | Tildelinger i TEST | Bekreftet |
-|---|---|---|---|---|---|---|
-| ANSVARSFULL FOTKREM • BRUKERADMINISTRATOR (Sikt testhøyskole) | `BRUKERADMINISTRATOR` | Sikt testhøyskole | 7777 | – | – | – |
-| MUNTER TRIKK • APPLIKASJONSADMINISTRATOR (Sikt testhøyskole) | `APPLIKASJONSADMINISTRATOR` | Sikt testhøyskole | 7777 | – | – | – |
-| ANSVARSFULL FOTKREM • OPPTAK_FORVALTER (NTNU) | `OPPTAK_FORVALTER` | Norges teknisk-naturvitenskapelige universitet | 194 | NTNU | `OPPTAK_FORVALTER`, `OPPTAKSFORVALTER`, `OPPTAK_SAKSBEHANDLER`, `OPPTAKSØKNADSBEHANDLER` | 2026-10-28 |
-| ANSVARSFULL FOTKREM • OPPTAK_SAKSBEHANDLER (NTNU) | `OPPTAK_SAKSBEHANDLER` | Norges teknisk-naturvitenskapelige universitet | 194 | – | – | – |
-| KORT DOMPAP • OPPTAK_FORVALTER (UiO) | `OPPTAK_FORVALTER` | Universitetet i Oslo | 185 | – | – | – |
-| KORT DOMPAP • OPPTAK_SAKSBEHANDLER (UiO) | `OPPTAK_SAKSBEHANDLER` | Universitetet i Oslo | 185 | – | – | – |
-| KORT DOMPAP • OPPTAK_FORVALTER_OG_UTDANNINGSADMINISTRATOR (UiO) | `OPPTAK_FORVALTER`, `UTDANNINGSREGISTERET_ADMINISTRATOR` | Universitetet i Oslo | 185 | – | – | – |
-| KORT DOMPAP • OPPTAK_FORVALTER (UiT) | `OPPTAK_FORVALTER` | Universitetet i Tromsø | 186 | – | – | – |
-| KORT DOMPAP • OPPTAK_SAKSBEHANDLER (UiT) | `OPPTAK_SAKSBEHANDLER` | Universitetet i Tromsø | 186 | – | – | – |
-| KORT DOMPAP • OPPTAK_FORVALTER_OG_UTDANNINGSADMINISTRATOR (UiT) | `OPPTAK_FORVALTER`, `UTDANNINGSREGISTERET_ADMINISTRATOR` | Universitetet i Tromsø | 186 | – | – | – |
-| KORT DOMPAP • OPPTAK_FORVALTER, flere organisasjoner (UiO) | `OPPTAK_FORVALTER` (185); `OPPTAK_FORVALTER` (194) | Universitetet i Oslo | 185 | – | – | – |
-| KORT DOMPAP • OPPTAK_SAKSBEHANDLER, flere organisasjoner (UiO) | `OPPTAK_SAKSBEHANDLER` (185); `OPPTAK_SAKSBEHANDLER` (194) | Universitetet i Oslo | 185 | – | – | – |
-| RU BRØDSKIVE • OPPTAK_FORVALTER (HVL) | `OPPTAK_FORVALTER` | Høgskulen på Vestlandet | 203 | HVL | `OPPTAK_FORVALTER`, `OPPTAKSFORVALTER`, `OPPTAK_SAKSBEHANDLER`, `OPPTAKSØKNADSBEHANDLER` | 2026-10-28 |
-| RU BRØDSKIVE • OPPTAK_SAKSBEHANDLER (HVL) | `OPPTAK_SAKSBEHANDLER` | Høgskulen på Vestlandet | 203 | – | – | – |
-| TALEFØR ELV • OPPTAK_FORVALTER (Fagskolen Vestfold og Telemark) | `OPPTAK_FORVALTER` | Fagskolen i Vestfold og Telemark | 20418 | FVT | `OPPTAK_FORVALTER`, `OPPTAKSFORVALTER`, `OPPTAK_SAKSBEHANDLER`, `OPPTAKSØKNADSBEHANDLER` | 2026-10-28 |
-| TALEFØR ELV • OPPTAK_SAKSBEHANDLER (Fagskolen Vestfold og Telemark) | `OPPTAK_SAKSBEHANDLER` | Fagskolen Vestfold og Telemark | 20418 | – | – | – |
-| GLAD LAKS • OPPTAK_FORVALTER (NMBU) | `OPPTAK_FORVALTER` | Norges miljø- og biovitenskapelige universitet | 192 | – | – | – |
-| MODIG SYLTETØY • OPPTAK_SAKSBEHANDLER (NMBU) | `OPPTAK_SAKSBEHANDLER` | Norges miljø- og biovitenskapelige universitet | 192 | – | – | – |
-| RASK PARAPLY • OPPTAK_FORVALTER (PHS) | `OPPTAK_FORVALTER` | Politihøgskolen | 233 | – | – | – |
-| STILLE FJELL • OPPTAK_SAKSBEHANDLER (PHS) | `OPPTAK_SAKSBEHANDLER` | Politihøgskolen | 233 | – | – | – |
-| VENNLIG SKOG • OPPTAK_FORVALTER (HiØ) | `OPPTAK_FORVALTER` | Høgskolen i Østfold | 224 | – | – | – |
-| TRAVEL KAFFE • OPPTAK_SAKSBEHANDLER (HiØ) | `OPPTAK_SAKSBEHANDLER` | Høgskolen i Østfold | 224 | – | – | – |
-| KREATIV PENSEL • OPPTAK_FORVALTER (Einar Granum Kunstfagskole) | `OPPTAK_FORVALTER` | Einar Granum Kunstfagskole | 20402 | – | – | – |
-| LYSTIG STAFFELI • OPPTAK_SAKSBEHANDLER (Einar Granum Kunstfagskole) | `OPPTAK_SAKSBEHANDLER` | Einar Granum Kunstfagskole | 20402 | – | – | – |
-| NORDLIG VINTER • OPPTAK_FORVALTER (Fagskolen i Nord) | `OPPTAK_FORVALTER` | Fagskolen i Nord | 20733 | – | – | – |
-| IVRIG SNØFONN • OPPTAK_SAKSBEHANDLER (Fagskolen i Nord) | `OPPTAK_SAKSBEHANDLER` | Fagskolen i Nord | 20733 | – | – | – |
-| TRYGG BRYGGE • OPPTAK_FORVALTER (Fagskolen Oslo) | `OPPTAK_FORVALTER` | Fagskolen Oslo | 1647 | – | – | – |
-| BLID SPORVOGN • OPPTAK_SAKSBEHANDLER (Fagskolen Oslo) | `OPPTAK_SAKSBEHANDLER` | Fagskolen Oslo | 1647 | – | – | – |
-| SINDIG BOREPLATTFORM • OPPTAK_FORVALTER (Fagskolen Rogaland) | `OPPTAK_FORVALTER` | Fagskolen Rogaland | 20392 | – | – | – |
-| FRISK HAVBRIS • OPPTAK_SAKSBEHANDLER (Fagskolen Rogaland) | `OPPTAK_SAKSBEHANDLER` | Fagskolen Rogaland | 20392 | – | – | – |
-| RUNDT TØMMER • OPPTAK_FORVALTER (Fagskolen Innlandet) | `OPPTAK_FORVALTER` | Fagskolen Innlandet | 1646 | – | – | – |
-| GLIMRENDE ELG • OPPTAK_SAKSBEHANDLER (Fagskolen Innlandet) | `OPPTAK_SAKSBEHANDLER` | Fagskolen Innlandet | 1646 | – | – | – |
-| PRESIS SKINNE • OPPTAK_FORVALTER (Norsk fagskole for lokomotivførere) | `OPPTAK_FORVALTER` | Norsk fagskole for lokomotivførere | 20389 | – | – | – |
-| ROLIG PERRONG • OPPTAK_SAKSBEHANDLER (Norsk fagskole for lokomotivførere) | `OPPTAK_SAKSBEHANDLER` | Norsk fagskole for lokomotivførere | 20389 | – | – | – |
-| KJAPP LAKSEMERD • OPPTAK_FORVALTER (Trøndelag høyere yrkesfagskole) | `OPPTAK_FORVALTER` | Trøndelag høyere yrkesfagskole | 21177 | – | – | – |
-| MILD FJORD • OPPTAK_SAKSBEHANDLER (Trøndelag høyere yrkesfagskole) | `OPPTAK_SAKSBEHANDLER` | Trøndelag høyere yrkesfagskole | 21177 | – | – | – |
-| ORDENTLIG RUNDSKRIV • OPPTAK_FORVALTER (HK-DIR) | `OPPTAK_FORVALTER` | Direktoratet for høyere utdanning og kompetanse | 20827 | HK-DIR | – | – |
-| ORDENTLIG RUNDSKRIV • OPPTAK_SAKSBEHANDLER (HK-DIR) | `OPPTAK_SAKSBEHANDLER` | Direktoratet for høyere utdanning og kompetanse | 20827 | HK-DIR | – | – |
-| SPRELSK KOMPASS • OPPTAK_SAKSBEHANDLER (Fagskolen Vestfold og Telemark) | `OPPTAK_SAKSBEHANDLER` | Fagskolen Vestfold og Telemark | 20418 | – | – | – |
-| MUNTER TRIKK • OPPTAK_SAKSBEHANDLER (UiO) | `OPPTAK_SAKSBEHANDLER` | Universitetet i Oslo | 185 | – | – | – |
-| KLAR NORDLYS • OPPTAK_SAKSBEHANDLER (UiT) | `OPPTAK_SAKSBEHANDLER` | Universitetet i Tromsø | 186 | – | – | – |
-| NØYE TANNHJUL • OPPTAK_SAKSBEHANDLER (NTNU) | `OPPTAK_SAKSBEHANDLER` | Norges teknisk-naturvitenskapelige universitet | 194 | – | – | – |
-| VÅT REGNJAKKE • OPPTAK_SAKSBEHANDLER (HVL) | `OPPTAK_SAKSBEHANDLER` | Høgskulen på Vestlandet | 203 | – | – | – |
-| GRUNDIG PROTOKOLL • OPPTAK_SAKSBEHANDLER (HK-DIR) | `OPPTAK_SAKSBEHANDLER` | Direktoratet for høyere utdanning og kompetanse | 20827 | – | – | – |
+| Rad i «Overstyrt bruker» | Rolle | Organisasjon | Organisasjonskode | Forkortelse |
+|---|---|---|---|---|
+| SPED AGENT • OPPTAK_SAKSBEHANDLER (UIT) | `OPPTAK_SAKSBEHANDLER` | UiT Norges arktiske universitet | 186 | UIT |
+| AKTIV BACON • SIS_SAKSBEHANDLER (SIKT_THS) | `SIS_SAKSBEHANDLER` | Sikt Testhøyskole | 7777 | SIKT_THS |
+| SINDIG BOREPLATTFORM • OPPTAK_FORVALTER (FIR) | `OPPTAK_FORVALTER` | Fagskolen Rogaland | 20392 | FIR |
+| TRYGG BRYGGE • OPPTAK_FORVALTER (FO) | `OPPTAK_FORVALTER` | Fagskolen Oslo | 1647 | FO |
+| RU BRØDSKIVE • OPPTAK_FORVALTER (HVL) | `OPPTAK_FORVALTER` | Høgskulen på Vestlandet | 203 | HVL |
+| RU BRØDSKIVE • OPPTAK_SAKSBEHANDLER (HVL) | `OPPTAK_SAKSBEHANDLER` | Høgskulen på Vestlandet | 203 | HVL |
+| KORT DOMPAP • OPPTAK_FORVALTER (UIO) | `OPPTAK_FORVALTER` | Universitetet i Oslo | 185 | UIO |
+| KORT DOMPAP • OPPTAK_SAKSBEHANDLER (UIO) | `OPPTAK_SAKSBEHANDLER` | Universitetet i Oslo | 185 | UIO |
+| KORT DOMPAP • UTDANNINGSREGISTERET_ADMINISTRATOR (UIO) | `UTDANNINGSREGISTERET_ADMINISTRATOR` | Universitetet i Oslo | 185 | UIO |
+| KORT DOMPAP • OPPTAK_FORVALTER (UIT) | `OPPTAK_FORVALTER` | UiT Norges arktiske universitet | 186 | UIT |
+| KORT DOMPAP • OPPTAK_SAKSBEHANDLER (UIT) | `OPPTAK_SAKSBEHANDLER` | UiT Norges arktiske universitet | 186 | UIT |
+| KORT DOMPAP • UTDANNINGSREGISTERET_ADMINISTRATOR (UIT) | `UTDANNINGSREGISTERET_ADMINISTRATOR` | UiT Norges arktiske universitet | 186 | UIT |
+| KORT DOMPAP • OPPTAK_FORVALTER (NTNU) | `OPPTAK_FORVALTER` | Norges teknisk-naturvitenskapelige universitet | 194 | NTNU |
+| KORT DOMPAP • OPPTAK_SAKSBEHANDLER (NTNU) | `OPPTAK_SAKSBEHANDLER` | Norges teknisk-naturvitenskapelige universitet | 194 | NTNU |
+| GLIMRENDE ELG • OPPTAK_SAKSBEHANDLER (FSGJØVIK) | `OPPTAK_SAKSBEHANDLER` | Fagskolen Innlandet | 1646 | FSGJØVIK |
+| TALEFØR ELV • OPPTAK_FORVALTER (FVT) | `OPPTAK_FORVALTER` | Fagskolen i Vestfold og Telemark | 20418 | FVT |
+| TALEFØR ELV • OPPTAK_SAKSBEHANDLER (FVT) | `OPPTAK_SAKSBEHANDLER` | Fagskolen i Vestfold og Telemark | 20418 | FVT |
+| ROLIG FASTLANDSFORBINDELSE • OPPTAK_SAKSBEHANDLER (UIO) | `OPPTAK_SAKSBEHANDLER` | Universitetet i Oslo | 185 | UIO |
+| STILLE FJELL • OPPTAK_SAKSBEHANDLER (PHS) | `OPPTAK_SAKSBEHANDLER` | Politihøgskolen | 233 | PHS |
+| MILD FJORD • OPPTAK_SAKSBEHANDLER (TRØ) | `OPPTAK_SAKSBEHANDLER` | Trøndelag høyere yrkesfagskole | 21177 | TRØ |
+| ANSVARSFULL FOTKREM • OPPTAK_FORVALTER (NTNU) | `OPPTAK_FORVALTER` | Norges teknisk-naturvitenskapelige universitet | 194 | NTNU |
+| ANSVARSFULL FOTKREM • OPPTAK_SAKSBEHANDLER (NTNU) | `OPPTAK_SAKSBEHANDLER` | Norges teknisk-naturvitenskapelige universitet | 194 | NTNU |
+| ANSVARSFULL FOTKREM • BRUKER_ADMINISTRATOR (SIKT_THS) | `BRUKER_ADMINISTRATOR` | Sikt Testhøyskole | 7777 | SIKT_THS |
+| UNØYAKTIG GALLIUM • OPPTAK_SAKSBEHANDLER (UIT) | `OPPTAK_SAKSBEHANDLER` | UiT Norges arktiske universitet | 186 | UIT |
+| ALFABETISK GLOBUS • OPPTAK_SAKSBEHANDLER (UIT) | `OPPTAK_SAKSBEHANDLER` | UiT Norges arktiske universitet | 186 | UIT |
+| FRISK HAVBRIS • OPPTAK_SAKSBEHANDLER (FIR) | `OPPTAK_SAKSBEHANDLER` | Fagskolen Rogaland | 20392 | FIR |
+| TRAVEL KAFFE • OPPTAK_SAKSBEHANDLER (HIØ) | `OPPTAK_SAKSBEHANDLER` | Høgskolen i Østfold | 224 | HIØ |
+| SPRELSK KOMPASS • OPPTAK_SAKSBEHANDLER (FVT) | `OPPTAK_SAKSBEHANDLER` | Fagskolen i Vestfold og Telemark | 20418 | FVT |
+| GLAD LAKS • OPPTAK_FORVALTER (NMBU) | `OPPTAK_FORVALTER` | Norges miljø- og biovitenskapelige universitet | 192 | NMBU |
+| KJAPP LAKSEMERD • OPPTAK_FORVALTER (TRØ) | `OPPTAK_FORVALTER` | Trøndelag høyere yrkesfagskole | 21177 | TRØ |
+| FUNKSJONELL MENY • OPPTAK_SAKSBEHANDLER (UIT) | `OPPTAK_SAKSBEHANDLER` | UiT Norges arktiske universitet | 186 | UIT |
+| KLAR NORDLYS • OPPTAK_SAKSBEHANDLER (UIT) | `OPPTAK_SAKSBEHANDLER` | UiT Norges arktiske universitet | 186 | UIT |
+| RASK PARAPLY • OPPTAK_FORVALTER (PHS) | `OPPTAK_FORVALTER` | Politihøgskolen | 233 | PHS |
+| KREATIV PENSEL • OPPTAK_FORVALTER (EGK) | `OPPTAK_FORVALTER` | Einar Granum Kunstfagskole | 20402 | EGK |
+| ROLIG PERRONG • OPPTAK_SAKSBEHANDLER (LOK) | `OPPTAK_SAKSBEHANDLER` | Norsk fagskole for lokomotivførere | 20389 | LOK |
+| GRUNDIG PROTOKOLL • OPPTAK_SAKSBEHANDLER (HK-DIR) | `OPPTAK_SAKSBEHANDLER` | Direktoratet for høyere utdanning og kompetanse | 20827 | HK-DIR |
+| VÅT REGNJAKKE • OPPTAK_SAKSBEHANDLER (HVL) | `OPPTAK_SAKSBEHANDLER` | Høgskulen på Vestlandet | 203 | HVL |
+| ORDENTLIG RUNDSKRIV • OPPTAK_FORVALTER (HK-DIR) | `OPPTAK_FORVALTER` | Direktoratet for høyere utdanning og kompetanse | 20827 | HK-DIR |
+| ORDENTLIG RUNDSKRIV • OPPTAK_SAKSBEHANDLER (HK-DIR) | `OPPTAK_SAKSBEHANDLER` | Direktoratet for høyere utdanning og kompetanse | 20827 | HK-DIR |
+| PRESIS SKINNE • OPPTAK_FORVALTER (LOK) | `OPPTAK_FORVALTER` | Norsk fagskole for lokomotivførere | 20389 | LOK |
+| VENNLIG SKOG • OPPTAK_FORVALTER (HIØ) | `OPPTAK_FORVALTER` | Høgskolen i Østfold | 224 | HIØ |
+| IVRIG SNØFONN • OPPTAK_SAKSBEHANDLER (FSKNORD) | `OPPTAK_SAKSBEHANDLER` | Fagskolen i Nord | 20733 | FSKNORD |
+| BLID SPORVOGN • OPPTAK_SAKSBEHANDLER (FO) | `OPPTAK_SAKSBEHANDLER` | Fagskolen Oslo | 1647 | FO |
+| LYSTIG STAFFELI • OPPTAK_SAKSBEHANDLER (EGK) | `OPPTAK_SAKSBEHANDLER` | Einar Granum Kunstfagskole | 20402 | EGK |
+| MODIG SYLTETØY • OPPTAK_SAKSBEHANDLER (NMBU) | `OPPTAK_SAKSBEHANDLER` | Norges miljø- og biovitenskapelige universitet | 192 | NMBU |
+| NØYE TANNHJUL • OPPTAK_SAKSBEHANDLER (NTNU) | `OPPTAK_SAKSBEHANDLER` | Norges teknisk-naturvitenskapelige universitet | 194 | NTNU |
+| MUNTER TRIKK • OPPTAK_SAKSBEHANDLER (UIO) | `OPPTAK_SAKSBEHANDLER` | Universitetet i Oslo | 185 | UIO |
+| MUNTER TRIKK • APPLIKASJONSADMINISTRATOR (SIKT_THS) | `APPLIKASJONSADMINISTRATOR` | Sikt Testhøyskole | 7777 | SIKT_THS |
+| RUNDT TØMMER • OPPTAK_FORVALTER (FSGJØVIK) | `OPPTAK_FORVALTER` | Fagskolen Innlandet | 1646 | FSGJØVIK |
+| NORDLIG VINTER • OPPTAK_FORVALTER (FSKNORD) | `OPPTAK_FORVALTER` | Fagskolen i Nord | 20733 | FSKNORD |
 
+- Raden har én rolle. En testbruker som trenger to roller (for eksempel `OPPTAK_FORVALTER` og `OPPTAK_SAKSBEHANDLER`), får bare begge når rollekatalogen gir den ene fra den andre. Det er ikke sjekket.
 - `MEDLEM_OPPTAK`, som deltakeren trenger for å legge til utdanningstilbud (fs-plattform, V469), er ikke tildelt direkte. Den må komme fra rollekatalogen (`tilgangsroller`). [Fylles ut: bekreft at `OPPTAK_FORVALTER` gir `MEDLEM_OPPTAK`]
-- Menyen viser forkortelsen fra `TEST_PERSONAS`, som kan skrives annerledes enn i organisasjonsregisteret (HK-dir og HK-DIR). Organisasjonsregisteret har «HK-DIR», men skjermen viser «HK-dir» i lista over opptak og som «Administrator: HK-dir» og «Administreres av HK-dir» (sett 2026-10-29).
+- Menyen viser forkortelsen fra organisasjonsregisteret, «HK-DIR» (sett 2026-11-03). Resten av skjermen viser «HK-dir» i lista over opptak og som «Administrator: HK-dir» og «Administreres av HK-dir» (sett 2026-10-29).
 
 ## Testbrukere
 
@@ -77,11 +84,11 @@ Nøkkelen i testene, hva testen krever av testbrukeren (uavhengig av miljøet), 
 |---|---|---|
 | `opptak-forvalter-forvaltende` | `OPPTAK_FORVALTER` og `OPPTAK_SAKSBEHANDLER` ved organisasjonen som forvalter samordna opptak | ORDENTLIG RUNDSKRIV • OPPTAK_FORVALTER (HK-DIR) |
 | `opptak-forvalter-deltakende` | `OPPTAK_FORVALTER` ved et universitet eller en høyskole som er deltaker i `opptak-samordna-med-utdanningstilbud`. Trenger `MEDLEM_OPPTAK` for å legge til utdanningstilbud (fs-plattform, V469). Den er ikke tildelt direkte, og må komme fra rollekatalogen (se under «Personaer») | ANSVARSFULL FOTKREM • OPPTAK_FORVALTER (NTNU) |
-| `opptak-forvalter-ikke-deltakende` | `OPPTAK_FORVALTER` ved en organisasjon som ikke er deltaker i testdata-opptakene | TALEFØR ELV • OPPTAK_FORVALTER (Fagskolen Vestfold og Telemark) |
+| `opptak-forvalter-ikke-deltakende` | `OPPTAK_FORVALTER` ved en organisasjon som ikke er deltaker i testdata-opptakene | TALEFØR ELV • OPPTAK_FORVALTER (FVT) |
 | `opptak-forvalter-lokalt` | `OPPTAK_FORVALTER` ved et lærested med lokalt opptak | RU BRØDSKIVE • OPPTAK_FORVALTER (HVL) |
-| `opptak-saksbehandler-saksbehandlende` | `OPPTAK_SAKSBEHANDLER` ved et lærested som er deltaker i `opptak-samordna-saksbehandlertildeling`, og som er saksbehandlende organisasjon for søknadene i testen | KORT DOMPAP • OPPTAK_SAKSBEHANDLER (UiO) |
+| `opptak-saksbehandler-saksbehandlende` | `OPPTAK_SAKSBEHANDLER` ved et lærested som er deltaker i `opptak-samordna-saksbehandlertildeling`, og som er saksbehandlende organisasjon for søknadene i testen | KORT DOMPAP • OPPTAK_SAKSBEHANDLER (UIO) |
 | `opptak-saksbehandler-forvaltende` | `OPPTAK_SAKSBEHANDLER`, uten `OPPTAK_FORVALTER`, ved organisasjonen som forvalter `opptak-samordna-saksbehandlertildeling` | GRUNDIG PROTOKOLL • OPPTAK_SAKSBEHANDLER (HK-DIR) |
-| `opptak-saksbehandler-tilbyder` | `OPPTAK_SAKSBEHANDLER` ved et annet lærested som er deltaker i `opptak-samordna-saksbehandlertildeling`, og som tilbyr et utdanningstilbud en annen organisasjon saksbehandler | KORT DOMPAP • OPPTAK_SAKSBEHANDLER (UiT) |
+| `opptak-saksbehandler-tilbyder` | `OPPTAK_SAKSBEHANDLER` ved et annet lærested som er deltaker i `opptak-samordna-saksbehandlertildeling`, og som tilbyr et utdanningstilbud en annen organisasjon saksbehandler | KORT DOMPAP • OPPTAK_SAKSBEHANDLER (UIT) |
 | `opptak-forvalter-deltakende-annen` | `OPPTAK_FORVALTER` ved en annen deltaker i `opptak-samordna-saksbehandlertildeling` enn `opptak-forvalter-deltakende`. Brukes bare som organisasjon (`{ORG:…}`) | RU BRØDSKIVE • OPPTAK_FORVALTER (HVL) |
 | `soker-1` | En ny person, opprettet med søknaden på vegne av søkeren i FS Admin («Opprett søknad»), med ID-type «Passnummer». Aldri fødselsnummer. Brukes til søknaden med norsk utdanningsbakgrunn. Høyst fem søkere i hele kjøringen | Ny person «Testsøker Norsk …», opprettet i kjøringen |
 | `soker-2` | En ny person, opprettet med søknaden på vegne av søkeren i FS Admin («Opprett søknad»), med ID-type «Passnummer». Aldri fødselsnummer. Brukes til søknaden med utenlandsk utdanningsbakgrunn. Høyst fem søkere i hele kjøringen | Ny person «Test{KJØRING} Soker2», opprettet i kjøringen |
@@ -89,6 +96,9 @@ Nøkkelen i testene, hva testen krever av testbrukeren (uavhengig av miljøet), 
 | `soker-4` | En ny person, opprettet med søknaden på vegne av søkeren i FS Admin («Opprett søknad»), med ID-type «Passnummer». Aldri fødselsnummer. Brukes til søknaden med realkompetanse. Høyst fem søkere i hele kjøringen | Ny person «Test{KJØRING} Soker4», opprettet i kjøringen |
 | `soker-5` | En ny person, opprettet med søknaden på vegne av søkeren i FS Admin («Opprett søknad»), med ID-type «Passnummer». Aldri fødselsnummer. Brukes til endring og flytting, og sender søknaden på nytt i scenarioene. Høyst fem søkere i hele kjøringen | Ny person «Test{KJØRING} Soker5», opprettet i kjøringen |
 | `soker-visning` | En syntetisk testperson som logger inn selv i Min kompetanse (test) med ID-porten, og sender søknaden der. Brukes bare til søkerens visning av saksbehandlende organisasjon | Ny tilfeldig person i TestID (ID-porten test), hentet i kjøringen |
+| `opptak-saksbehandler-behandlende` | `OPPTAK_SAKSBEHANDLER` med SE- eller MODIFISERE_SØKNADSBEHANDLING ved organisasjonen som behandler sakene i `opptak-vitnemalsbehandling`. [Fylles ut: bekreft at sakene behandles av NTNU, og at `OPPTAK_SAKSBEHANDLER` gir SE_SØKNADSBEHANDLING i rollekatalogen] | KORT DOMPAP • OPPTAK_SAKSBEHANDLER (NTNU) |
+| `opptak-saksbehandler-behandlende-annen` | En annen `OPPTAK_SAKSBEHANDLER` ved samme organisasjon som `opptak-saksbehandler-behandlende`, som saken kan tilordnes | NØYE TANNHJUL • OPPTAK_SAKSBEHANDLER (NTNU) |
+| `opptak-saksbehandler-annen-organisasjon` | `OPPTAK_SAKSBEHANDLER` ved en organisasjon som ikke behandler sakene i `opptak-vitnemalsbehandling`, og som verken er opptaksforvalter for opptaket eller tilbyder av et søknadsalternativ | GLIMRENDE ELG • OPPTAK_SAKSBEHANDLER (FSGJØVIK) |
 
 ## Testdata
 
@@ -122,3 +132,9 @@ Bare grunndata og data testene ikke kan lage gjennom løsningen. Testdataene opp
 | `frist-utdanningsbakgrunn` | Settes i «Rediger opptak» → «Saksbehandling» → «Endre utdanningsbakgrunn» i `opptak-samordna-saksbehandlertildeling` | «Rediger opptak» | Fristen kan flyttes til før eller etter testdagen (STEK-659 er lukket) | 2026-11-04 |
 | `tilbudsgarantityper` | **Finnes ikke.** Saken viser «Ingen tilgjengelige tilbudsgarantier» («Tilbudsgaranti fra behandler», «fra tilbyder» og «fra forvalter» står som «Ikke valgt») | Saken → «Søknadsalternativer» | Opptaket har tilbudsgarantityper. Typene settes per opptak, og bare en utvikler kan legge dem inn. 30.10 viste saken «Ingen tilgjengelige tilbudsgarantier» | 2026-11-04 |
 | `ledige-studieplasser-apnet` | Opptaket har «Tilbyr ledige studieplasser: Ja». Fristen «Åpner for søking» under «Ledige studieplasser» er flyttet til 2026-11-04 15:00 (var 2026-12-02 00:00; «Publiseres på nettsiden» er 2026-12-01, «Stenger for søking» 2026-12-11). Hvilke utdanningstilbud som tilbyr ledige studieplasser, vises ikke på tilbudet | «Rediger opptak» | Ledige studieplasser har åpnet, og utdanningstilbudene `tilbud-saksbehandlende-tilbyder` og `tilbud-deltakende-laerested` tilbyr ledige studieplasser | 2026-11-04 |
+| `opptak-vitnemalsbehandling` | Opptaket `T3BwdGFrOjYy` (opptak 62) | https://test-fsadmin.sikt.no/opptak/T3BwdGFrOjYy | Opptak med saker der søkerne har elektroniske vitnemål fra KREG. [Fylles ut: navnet på opptaket og organisasjonen som behandler sakene] | 2026-11-05 |
+| `sak-to-elektroniske-vitnemal` | Sak 1004255-1 i `opptak-vitnemalsbehandling` | Søk på søknadskoden i «Søknadsbehandling» | Søkeren har to elektroniske vitnemål (ett førstegangsvitnemål) | 2026-11-05 |
+| `sak-uten-elektroniske-vitnemal` | Sak 1004221-1 i `opptak-vitnemalsbehandling` | Søk på søknadskoden i «Søknadsbehandling» | Søkeren har ingen elektroniske vitnemål | 2026-11-05 |
+| `sak-vitnemal-uten-poeng` | [Fylles ut] | Søk på søknadskoden i «Søknadsbehandling» | Søkeren har et elektronisk vitnemål som poengberegningen ikke kan gi karakter-, realfags- eller språkpoeng for (f.eks. et kompetansebevis eller et vitnemål med ugyldige karakterer) | – |
+| `sak-annullert-vitnemal-brukt` | **Finnes ikke** | Søk på søknadskoden i «Søknadsbehandling» | Søkeren har et annullert vitnemål som er grunnlaget for et poeng på saken i opptaket | 2026-11-05 |
+| `sak-annullert-vitnemal-ikke-brukt` | Sak 1004220-1 i `opptak-vitnemalsbehandling` (ikke bekreftet at vitnemålet er annullert) | Søk på søknadskoden i «Søknadsbehandling» | Søkeren har et annullert vitnemål som ikke er brukt i en beregning på opptaket | – |

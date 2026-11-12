@@ -5,7 +5,7 @@
 - **Initiativ**: [#199](https://github.com/sikt-no/fs/issues/199)
 - **Jira**: –
 - **Eier**: –
-- **Siste oppdatering**: 2026-11-03
+- **Siste oppdatering**: 2026-11-06
 
 ## Mål
 
@@ -17,6 +17,7 @@
 - De andre leveransene i flyten: `automatisk-import-og-start`, `automatisk-gsk-konklusjon`, `automatisk-kvalifisering-og-poengsum`, `automatisk-ferdigbehandling` og `beregne-automatisk-pa-nytt`.
 - De to `@wont`-fasene i flyten: to identiske vitnemål som regnes som ett, og automatisk dobbeltrangering.
 - Regelverket poengene bygger på (`@OPT-REG-RAN-001`, `@OPT-REG-RAN-002`), som er levert.
+- Søkere med flere vitnemål behandles manuelt, og tas ut av scopet (statusmøtet 2026-11-04). Scenarioene «Grunnlag fra vitnemålet saksbehandleren har valgt» og «Sammensatt vitnemål gir ikke grunnlaget som krever førstegangsvitnemål» er flyttet fra `@OPT-BEH-BEH-019`. Saken behandles automatisk på vitnemålet saksbehandleren velger. Det er skilt ut i `@OPT-BEH-BEH-039` [behandle_automatisk_på_valgt_vitnemål.feature](../../../krav/02%20Opptak/13%20S%C3%B8knad%20og%20saksbehandling/02%20Behandling/behandle_automatisk_p%C3%A5_valgt_vitnem%C3%A5l.feature), som er `@must` og ikke har scope ennå. Valget av vitnemål som grunnlag for poengberegningen i vitnemålsbehandleren (`@OPT-BEH-BEH-004`) er et annet valg.
 
 ## Kilder
 
@@ -25,6 +26,7 @@
 - [FOL-34](https://sikt.atlassian.net/browse/FOL-34) grunnlag, [FOL-36](https://sikt.atlassian.net/browse/FOL-36) poengberegning av elektronisk vitnemål og [FOL-39](https://sikt.atlassian.net/browse/FOL-39) tilleggspoeng — initiativene i milepælsplanen
 - [STEK-514](https://sikt.atlassian.net/browse/STEK-514) og [STEK-507](https://sikt.atlassian.net/browse/STEK-507) — feil i automatisk grunnlag og tilleggspoeng
 - [Oppdelingen av flyten](https://claude.ai/artifact/XSScgR8ixj1HJ8kFK5fyso) — alternativ 1, besluttet 2026-11-02
+- [Status per 4. november 2026](https://sikt.atlassian.net/wiki/spaces/STUDIEADM/pages/5169545237) — status for leveransene i flyten, med kommentarene fra statusmøtet
 
 ## Krav
 
@@ -32,11 +34,13 @@
 |---|---|---|---|---|
 | `@OPT-BEH-BEH-019` [automatisk_grunnlag.feature](../../../krav/02%20Opptak/13%20S%C3%B8knad%20og%20saksbehandling/02%20Behandling/automatisk_grunnlag.feature) | Must | – | – | Scenarioet om endringsloggen kan ikke leveres før den nye sporingsloggen finnes. Endringsloggen er stoppet (BAT-324, 29.10.2026) |
 | `@OPT-BEH-BEH-018` [automatisk_poengberegning.feature](../../../krav/02%20Opptak/13%20S%C3%B8knad%20og%20saksbehandling/02%20Behandling/automatisk_poengberegning.feature) | Must | – | – | |
-| `@OPT-BEH-BEH-028` [automatiske_tilleggspoeng.feature](../../../krav/02%20Opptak/13%20S%C3%B8knad%20og%20saksbehandling/02%20Behandling/automatiske_tilleggspoeng.feature) | Must | – | – | |
+| `@OPT-BEH-BEH-028` [automatiske_tilleggspoeng.feature](../../../krav/02%20Opptak/13%20S%C3%B8knad%20og%20saksbehandling/02%20Behandling/automatiske_tilleggspoeng.feature) | Must | – | – | Poeng for høyere utdanning kan bygges med mocket input, men kan ikke leveres før importen av resultater fra høyere utdanning (`@OPT-BEH-BEH-038`) er levert (2026-11-04) |
+| `@OPT-BEH-BEH-038` [importere_resultater_fra_høyere_utdanning.feature](../../../krav/02%20Opptak/13%20S%C3%B8knad%20og%20saksbehandling/02%20Behandling/importere_resultater_fra_h%C3%B8yere_utdanning.feature) | Must | – | – | Importen av resultater fra høyere utdanning, fra en annen tjeneste enn KREG. Poeng for høyere utdanning i `@OPT-BEH-BEH-028` kan ikke leveres før importen. Jobben som starter importen, står i `@OPT-BEH-BEH-033` (scopet `automatisk-import-og-start`). Kravet er `@draft` |
 
 ## Åpne spørsmål
 
 - [ ] Scopet har ingen Jira-sak. Avklares senere.
+- [ ] `@OPT-BEH-BEH-038` må valideres med `fs-krav`.
 
 ## Statuslogg
 
@@ -44,5 +48,9 @@ Append-only. Ny linje på toppen ved hver hendelse.
 
 | Dato       | Hendelse | Av | Lenke til review |
 |------------|----------|----|------------------|
+| 2026-11-06 | `@OPT-BEH-BEH-018`: et filter i saksoversikten holder for å finne saker som er behandlet automatisk. Om filteret skal skille helautomatisk behandling, er åpent. Fra økta med fagfolk 06.11.2026 (PR #966) | @JøranIndseth | – |
+| 2026-11-05 | `@OPT-BEH-BEH-038` er tatt inn i scopet. `@OPT-BEH-BEH-028` trenger importen for poeng for høyere utdanning, og fasen om tilleggspoeng i `@FLY-OPT-AUT-001` bygger på kravet gjennom 028. Kravet hørte ikke til noe scope. Fra gjennomgangen av flyten automatisk saksbehandling og reviewen av PR #948 | @JøranIndseth | [#948](https://github.com/sikt-no/fs/pull/948) |
+| 2026-11-04 | Scenarioene om grunnlag fra valgt vitnemål og fra sammensatt vitnemål i `@OPT-BEH-BEH-019` er skilt ut i `@OPT-BEH-BEH-039` (Behandle automatisk på vitnemålet saksbehandleren velger), `@must` uten scope. Fra reviewen av PR #931 | @JøranIndseth | [#931](https://github.com/sikt-no/fs/pull/931) |
+| 2026-11-04 | Søkere med flere vitnemål tatt ut av scopet, og poeng for høyere utdanning kan bygges med mocket input (statusmøtet, se Kilder) | @JøranIndseth | – |
 | 2026-11-03 | Scenarioene om endringsloggen og saksloggen i `@OPT-BEH-BEH-019` er blokkert til den nye sporingsloggen finnes. Endringsloggen i opptak er stoppet (BAT-324, V480 i fs-plattform), så kravene blir ikke `@implemented` før da | @JøranIndseth | – |
 | 2026-11-02 | Opprettet med fs-scope, som leveranse 3 av 6 i flyten automatisk saksbehandling | @JøranIndseth | – |

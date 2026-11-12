@@ -11,9 +11,7 @@
 # vitnemålet gir GSK når den er ja (@OPT-BEH-BEH-015). Beregningen her er en kontroll av
 # skolens påstand, og gir grunnlagskoden. Er den uenig med skolen, får saksbehandleren et
 # varsel, men den automatiske behandlingen stopper ikke. KREG har ingen egen påstand om GSK.
-# Koden stopper i dag automatikken når kontrollmotoren er uenig med skolen. Det er et avvik
-# fra kravet.
-@OPT-BEH-BEH-027 @must @in-progress @scope-automatisk-gsk-konklusjon @ref-OPT-BEH-BEH-015
+@OPT-BEH-BEH-027 @must @implemented @scope-automatisk-gsk-konklusjon @ref-OPT-BEH-BEH-015
 Egenskap: Beregne GSK fra vitnemål
   Som saksbehandler
   ønsker jeg at opptakssystemet beregner sin egen påstand om generell studiekompetanse for et vitnemål
@@ -32,22 +30,7 @@ Egenskap: Beregne GSK fra vitnemål
   står i @OPT-BEH-BEH-015. Det gjelder også annullerte vitnemål, vitnemål uten
   utstedelsesdato og kompetansebevis.
 
-  @draft @openquestion
-  Regel: Fag som saksbehandleren har tatt ut av kontrollene, telles ikke med
-    # Fagresultatene på vitnemålet har en fagstatus. Saksbehandleren bruker den til å
-    # angi om et fag skal være med i kontrollene av vitnemålet. Avklart 2026-10-27 at
-    # fagstatusen hører til et annet krav, og at kontrollene må følge den.
-    # ÅPNE SPØRSMÅL:
-    # - Hva fagstatusen er, og hvem som setter den, er uklart (30.10.2026). Regelen holdes
-    #   utenfor til det er forklart. Den gjelder ikke den helautomatiske flyten.
-    # - Kravet for fagstatusen er ikke skrevet. Når det finnes, får regelen
-    #   @depends-on- til det.
-
-    Scenario: Fag som er tatt ut av kontrollene, oppfyller ikke et delkrav
-      Gitt at vitnemålet har samfunnsfag (SAF1001)
-      Og at saksbehandleren har tatt faget ut av kontrollene
-      Når GSK-vitnemålsberegningen kjører for vitnemålet
-      Så er delkravet for samfunnsfag ikke oppfylt
+  At saksbehandleren kan ta et fag ut av kontrollene, står i @OPT-BEH-BEH-023.
 
   Regel: Reformen på vitnemålet avgjør hvilke delkrav som gjelder
 

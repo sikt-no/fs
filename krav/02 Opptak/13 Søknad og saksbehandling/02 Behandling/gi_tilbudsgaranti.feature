@@ -1,4 +1,5 @@
 # language: no
+# BEGREPER (2026-11-10): Bytt «saksbehandlende organisasjon» med «behandler» når fila likevel endres. Se krav/02 Opptak/begreper.md.
 # GitHub: #512
 #
 # KILDER
@@ -65,12 +66,7 @@ Egenskap: Gi tilbudsgaranti
   ønsker jeg å gi søkeren tilbudsgaranti på et søknadsalternativ etter en individuell vurdering
   slik at søkeren får tilbud på søknadsalternativet uavhengig av den ordinære rangeringen.
 
-  @openquestion
   Regel: Saksbehandler, tilbyder og opptaksforvalter kan sette tilbudsgaranti manuelt
-    # ÅPNE SPØRSMÅL:
-    # - Kommentarene øverst viser til gi_tilbudsgaranti_ved_tidlig_opptak.feature (OPT-BEH-BEH-007) i
-    #   fritekst, som avgrensning og som unntaket fra manuell tilbudsgaranti. Skal kravet ha
-    #   @ref-OPT-BEH-BEH-007 på Egenskap-linja?
 
     Scenariomal: Sette tilbudsgaranti i feltet for rollen
       Gitt tilbudsgarantitypen "<type>" kan brukes av <rolle>
@@ -106,6 +102,22 @@ Egenskap: Gi tilbudsgaranti
       Gitt søknaden kan ikke poengberegnes
       Når tilbyder setter tilbudsgaranti på "Sykepleie, høst 2027"
       Så har søkeren tilbudsgaranti fra tilbyder på "Sykepleie, høst 2027"
+
+  # Avklart 2026-11-10 (spørsmål 82 i spec-en «Krav til RLS», R3): tilbudsgarantien fra opptaksforvalteren settes
+  # bare maskinelt. Når regelen er validert, må eksempelraden for opptaksforvalter i «Sette tilbudsgaranti i feltet
+  # for rollen» avvikles, og kravet om hvordan den maskinelle tilbudsgarantien settes, finnes.
+  @draft
+  Regel: Tilbudsgarantien fra opptaksforvalteren settes bare maskinelt
+
+    Scenario: Opptaksforvalteren ser ikke muligheten til å sette tilbudsgaranti manuelt
+      Gitt jeg er opptaksforvalter ved forvalteren av opptaket
+      Når jeg ser på "Sykepleie, høst 2027" i saken
+      Så ser jeg ikke muligheten til å sette tilbudsgaranti fra opptaksforvalter
+
+    Scenario: Manuell tilbudsgaranti fra opptaksforvalteren avvises i API-et
+      Gitt en integrasjon har rollen opptaksforvalter ved forvalteren av opptaket
+      Når integrasjonen forsøker å sette tilbudsgaranti fra opptaksforvalter gjennom API-et
+      Så avvises det
 
   Regel: Tilbudsgarantien kan endres og fjernes av rollen som satte den
 

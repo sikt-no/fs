@@ -5,14 +5,13 @@
 # vitnemålsbehandling.feature 08.10.2026. Kilder, bakgrunn, avgrensninger og
 # oversikten over leveransene står i vitnemålsbehandling.md i samme mappe.
 #
-# Bygger på L2 (velge_vitnemål_som_grunnlag.feature). Her ligger reglene for
-# kvoten for førstegangsvitnemål, som er den vanskeligste enkeltbiten i hele
-# initiativet.
+# Bygger på L2. Her ligger reglene for kvoten for førstegangsvitnemål, som
+# er den vanskeligste enkeltbiten i hele initiativet.
 #
 # Feature-ID-en er endret fra @OPT-BEH-BEH-007 til @OPT-BEH-BEH-022, fordi
 # gi_tilbudsgaranti_ved_tidlig_opptak.feature også bruker 007 (26.10.2026).
 #
-@OPT-BEH-BEH-022 @must @draft
+@OPT-BEH-BEH-022 @must @in-progress @depends-on-OPT-BEH-BEH-004
 Egenskap: Velge fag per poengvariant
   Som saksbehandler i opptak
   ønsker jeg å velge hvilket vitnemål og hvilke fag som skal telle i hver poengvariant
@@ -27,10 +26,12 @@ Egenskap: Velge fag per poengvariant
   Hvilken poengvariant som hører til hvilken kvote og hvilket
   søknadsalternativ, står i regelverket.
 
-  # AVKLART 03.11.2026: reglene for beregning og lagring fra L2 gjelder også
-  # her. Poengene beregnes når saksbehandleren velger det, en endring lagres
-  # først når poengene er beregnet uten feil, og endringer hører til
-  # vitnemålet de er gjort for. Regelen for leserettighet står i
+  # AVKLART 03.11.2026, endret 11.11.2026: reglene for beregning og lagring
+  # står i L2 (velge_vitnemål_som_grunnlag.feature, «Poengene beregnes og
+  # lagres når saksbehandleren bruker dem»), og gjelder også her.
+  # Saksbehandleren beregner poengene uten å lagre, og grunnlaget
+  # kontrolleres, poengene beregnes og alt lagres når saksbehandleren velger
+  # å bruke poengene. Endringer hører til vitnemålet de er gjort for. Regelen for leserettighet står i
   # vitnemålsbehandling.md. Rettigheten til å endre står derfor i Bakgrunn
   # under reglene der saksbehandleren endrer noe, som i L2.
 
@@ -51,20 +52,29 @@ Egenskap: Velge fag per poengvariant
         | År                 |
         | Standpunktkarakter |
         | Eksamenskarakter   |
-        | Fagstatus          |
+        | Eksamensform       |
       # Feltene er verifisert mot NVB_VGDOKFAG og mot KregFag i
-      # hentKompetansebevis: fagkode, fagnavn, fagOmfang, aar, terminkode,
-      # fagstatuskode og vurdering.
+      # hentKompetansebevis: fagkode, fagnavn, fagOmfang, aar, terminkode
+      # og vurdering.
+      #
+      # AVKLART 11.11.2026 (gjennomgang med domeneekspertene): «År» er
+      # visningsnavnet for året og terminen faget er tatt.
+      #
+      # AVKLART 12.11.2026 (skissen «Steg 2 Grunnlag – Behandle e-vitnemål»):
+      # Fagstatus er tatt ut, og Eksamensform er lagt til, som i skissen.
 
     Scenario: Se opprinnelig og forbedret karakter samtidig
       Gitt vitnemålet har et fag søkeren har forbedret
       Når jeg ser fagene på vitnemålet
       Så ser jeg både den opprinnelige og den forbedrede karakteren for faget
-      Og det fremgår hvilken av dem som inngår i beregningen
       # Verifisert i FS-klienten: dm_vitnemalbehandl_vmfag selvjoiner
       # NVB_VGDOKFAG mot seg selv på samme fagkode med ulik status_forbedring,
       # og viser radene som kolonneparet «Opprinnelig / Forbedret».
       # Designskissen i Confluence har samme kolonnepar.
+      #
+      # AVKLART 12.11.2026 (skissen «Steg 2 Grunnlag – Behandle e-vitnemål»):
+      # steget «Og det fremgår hvilken av dem som inngår i beregningen» er
+      # tatt ut.
 
     Scenario: Se merknader på et fag
       Gitt et fag på vitnemålet har en merknad
@@ -74,6 +84,9 @@ Egenskap: Velge fag per poengvariant
       # Merknader forklarer f.eks. fritak eller særskilt vurderingsform, og er
       # nødvendige for at saksbehandleren skal forstå hvorfor et fag ser ut
       # som det gjør.
+      #
+      # AVKLART 11.11.2026 (gjennomgang med domeneekspertene): at et fag er
+      # fordypningsfag, vises som en merknad på faget.
 
   Regel: Vitnemålet kan velges per poengvariant
 
@@ -109,31 +122,28 @@ Egenskap: Velge fag per poengvariant
       # akseptert, fordi de svarer på ulike spørsmål: GSK om kvalifisering,
       # poeng om rangering.
 
-    @openquestion
-    # ÅPNE SPØRSMÅL:
-    # - Hva avgjør om et vitnemål kan legges til grunn for en poengvariant?
-    #   Bare kvoteregelen (i kvoten for førstegangsvitnemål må vitnemålet
-    #   være et førstegangsvitnemål uten forbedringer), regelverket for
-    #   opptaket (hvilke vitnemål eller grunnlag hver poengvariant gjelder
-    #   for), eller begge deler? I FS-klienten står det i en egen tabell
-    #   (POENGVARIANTVITNEMAL), som ikke føres for hånd i nye FS.
-    #   (Fra gjennomgangen 03.11.2026.)
-    # - Ifølge den tekniske beskrivelsen av vitnemålsbehandling i
-    #   FS-klienten (G. M. Vangen, lest 03.11.2026) lagrer
-    #   POENGVARIANTVITNEMAL bare hvilket vitnemål saksbehandleren har valgt
-    #   for hver poengvariant. Tabellen er altså ikke en regel for hvilke
-    #   vitnemål som er gyldige, og kommentaren under scenarioet bygger
-    #   trolig på en feiltolkning. Skal scenarioet fjernes, eller skrives om
-    #   til bare kvoteregelen (se «Tilleggsfag kan ikke velges i
-    #   poengvarianten for førstegangsvitnemål»)?
-    Scenario: Et vitnemål gjelder ikke alle poengvarianter
-      Gitt søkeren har et vitnemål som ikke er gyldig for alle poengvarianter
-      Når jeg velger vitnemålet
-      Så kan jeg bare legge det til grunn for poengvariantene det gjelder for
-      # Verifisert i FS-klienten: f_hentvitnemalpoengvariant slår opp
-      # POENGVARIANTVITNEMAL på (vgdoknr, poengvariant) og returnerer 0 når
-      # kombinasjonen ikke finnes. Et vitnemål er altså ikke universelt
-      # gyldig.
+    Scenario: Endringer på et vitnemål gjelder ikke for et annet vitnemål
+      Gitt jeg har lagt et vitnemål til grunn
+      Og jeg har gjort endringer i grunnlaget for vitnemålet
+      Når jeg velger et annet vitnemål
+      Så er endringene jeg gjorde for det forrige vitnemålet, ikke brukt i grunnlaget
+      # AVKLART 21.10.2026: hver redigering hører til vitnemålet den er gjort
+      # for. Fra L3 gjelder det poeng saksbehandleren har lagt inn selv
+      # («Legge inn <poengtype> selv på en poengvariant», flyttet fra L2
+      # 11.11.2026) og fagvalg, og fra L4 manuelt innlagte eller endrede fag.
+
+    Scenario: Endringer på et vitnemål huskes når jeg bytter tilbake
+      Gitt jeg har gjort endringer i grunnlaget for et vitnemål
+      Og jeg har byttet til et annet vitnemål
+      Når jeg velger det forrige vitnemålet igjen
+      Så er endringene jeg gjorde for det forrige vitnemålet, brukt i grunnlaget igjen
+      # AVKLART 21.10.2026: redigeringene skal huskes når saksbehandleren
+      # bytter vitnemål, så de ikke må gjøres på nytt.
+      #
+      # AVKLART 11.11.2026 (gjennomgang med domeneekspertene): de to
+      # scenarioene over er flyttet hit fra L2, fordi saksbehandleren først kan
+      # gjøre endringer på et vitnemål i L3 (poeng lagt inn selv, fagvalg) og
+      # L4 (endrede og manuelt innlagte fag).
 
   Regel: Fagvalget gjøres per poengvariant
 
@@ -144,7 +154,7 @@ Egenskap: Velge fag per poengvariant
       Gitt jeg har lagt et vitnemål til grunn
       Og jeg behandler en bestemt poengvariant
       Når jeg velger hvilke fag som skal telle
-      Og jeg velger å beregne poengene
+      Og jeg velger å bruke poengene
       Så er poengene for den poengvarianten beregnet fra de valgte fagene
       Og fagvalget er lagret på poengvarianten
       # Fagvalget låser poenget mot automatisk reberegning på samme måte som
@@ -170,7 +180,11 @@ Egenskap: Velge fag per poengvariant
       Og søknadsalternativene bruker hver sin poengvariant
       Når jeg velger fag for hver av poengvariantene
       Så beregnes hver poengvariant fra fagene jeg valgte for den
-      Og jeg ser hvilke søknadsalternativer hver poengsum gjelder for
+      Og jeg ser hvilke kompetansekrav hver poengsum gjelder for
+      # AVKLART 11.11.2026 (gjennomgang med domeneekspertene): saksbehandleren
+      # ser hvilke kompetansekrav hver poengsum gjelder for, ikke hvilke
+      # søknadsalternativer.
+      #
       # AVKLART 08.10.2026: ulik poengsum per søknadsalternativ (VPL i FS)
       # håndteres med fagvalget per poengvariant. Hvilken poengvariant et
       # søknadsalternativ bruker, står i regelverket.
@@ -182,54 +196,71 @@ Egenskap: Velge fag per poengvariant
       # karakterer tas med.
 
     @ref-OPT-BEH-BEH-020
-    Scenario: Kravelementene vurderes per poengvariant
+    Scenario: Kravelementene vurderes per grunnlag
       Gitt søkeren har tatt et fag som privatist etter fylte 21 år
       Og faget dekker et kravelement
-      Og jeg har valgt faget i poengvariantene for ordinær kvote og for kvoten for førstegangsvitnemål
-      Når jeg velger å beregne poengene
-      Så oppfyller faget kravelementet i poengvarianten for ordinær kvote
-      Men faget oppfyller ikke kravelementet i poengvarianten for kvoten for førstegangsvitnemål
-      # AVKLART 03.11.2026: kvalifiseringen vurderes per poengvariant, ut fra
-      # vitnemålet og fagene som er valgt for den, slik FS-klienten gjør. Ny
-      # stack avgjør i dag kvalifiseringen per grunnlag (OPT-BEH-BEH-020), og
-      # den automatiske kvalifiseringen må følge med. Spørsmålet ble flyttet
-      # hit fra OPT-BEH-BEH-020 30.10.2026.
+      Når kravelementene vurderes
+      Så oppfyller faget kravelementet på grunnlaget for ordinær kvote
+      Men faget oppfyller ikke kravelementet på grunnlaget for kvoten for førstegangsvitnemål
+      # AVKLART 05.11.2026: kravelementene og kvalifiseringen vurderes per
+      # grunnlag, ikke per poengvariant, også i vitnemålsbehandleren. Det er
+      # det samme som i den automatiske vurderingen (OPT-BEH-BEH-020,
+      # «Om søkeren er kvalifisert, avgjøres per grunnlag»). Marit Bjørnerud
+      # Rønning skrev på siden med åpne spørsmål 04.11.2026 at det er gjort om
+      # til per grunnlag. Erstatter avklaringen 03.11.2026 og scenarioet
+      # «Kravelementene vurderes per poengvariant».
 
-    @openquestion
-    # ÅPNE SPØRSMÅL:
-    # - Skal poengene lagres for en poengvariant der søkeren ikke oppfyller
-    #   de spesielle opptakskravene? FS-klienten lagrer ikke poeng for
-    #   poengvarianten, og gir en advarsel (teknisk beskrivelse av
-    #   vitnemålsbehandling, G. M. Vangen, lest 03.11.2026). Ikke avklart
-    #   med teamet.
+    @ref-OPT-BEH-BEH-020
+    Scenario: Kravelementene kontrolleres mot fagene i poengvarianten som lagres
+      Gitt jeg har valgt vitnemål og fag for en poengvariant
+      Når jeg velger å bruke poengene
+      Så er kravelementene kontrollert mot vitnemålet og fagene som er valgt i poengvarianten
+      # AVKLART 11.11.2026 (gjennomgang med domeneekspertene): når
+      # saksbehandleren lagrer en poengvariant, kontrollerer kontrollmotoren
+      # fagsammensetningen i den poengvarianten. Det trengs ikke et eget valg
+      # av fag for kravelementene. Kvalifiseringen gjelder fortsatt per
+      # grunnlag. Lukker spørsmålet om hvilke fag som legges til grunn når
+      # poengvariantene på samme grunnlag har ulikt fagvalg.
+
     Scenario: Ingen poeng lagres for en poengvariant der søkeren ikke er kvalifisert
-      Gitt søkeren oppfyller ikke de spesielle opptakskravene i en poengvariant
-      Når jeg velger å beregne poengene
-      Så ser jeg at søkeren ikke er kvalifisert i poengvarianten
-      Og poengene for poengvarianten er ikke lagret
+      Gitt søkeren oppfyller ikke de spesielle opptakskravene på grunnlaget en poengvariant hører til
+      Når jeg velger å bruke poengene
+      Så ser jeg at søkeren ikke er kvalifisert på grunnlaget
+      Og fagvalget for poengvarianten er lagret
+      Men poengene for poengvarianten er ikke lagret
+      # AVKLART 11.11.2026 (gjennomgang med domeneekspertene): fagvalget
+      # lagres, men ikke poengene.
+      #
+      # AVKLART 05.11.2026: poengene lagres ikke for en poengvariant der
+      # søkeren ikke oppfyller de spesielle opptakskravene, slik FS-klienten
+      # gjør (teknisk beskrivelse av vitnemålsbehandling, G. M. Vangen).
+      # Besvart av Marit Bjørnerud Rønning og Ingrid Grimstad Helset på siden
+      # med åpne spørsmål 04.11.2026. Kvalifiseringen avgjøres per grunnlag
+      # (avklart 05.11.2026, «Kravelementene vurderes per grunnlag»).
 
-    @openquestion
-    # ÅPNE SPØRSMÅL:
-    # - Skal saksbehandleren kunne bruke fagvalget fra én poengvariant i
-    #   andre poengvarianter, så det ikke må gjøres på nytt i hver av dem?
-    #   FS-klienten har et valg for å kopiere en beregning til andre
-    #   poengvarianter og grunnlag (teknisk beskrivelse av
-    #   vitnemålsbehandling, G. M. Vangen, lest 03.11.2026). Gjelder
-    #   kvoteregelen da også (ingen tilleggsfag i kvoten for
-    #   førstegangsvitnemål)?
-    Scenario: Bruke fagvalget fra én poengvariant i andre poengvarianter
-      Gitt jeg har valgt fagene i én poengvariant
-      Når jeg velger å bruke det samme fagvalget i de andre poengvariantene
-      Og jeg velger å beregne poengene
-      Så har de andre poengvariantene det samme fagvalget
+    Scenario: Bruke vitnemålet og fagvalget fra én poengvariant i andre poengvarianter
+      Gitt jeg har valgt vitnemål og fag i én poengvariant
+      Når jeg velger hvilke andre poengvarianter vitnemålet og fagvalget skal brukes på
+      Så har poengvariantene jeg valgte, det samme vitnemålet og det samme fagvalget
       Men tilleggsfag er ikke valgt i poengvarianten for kvoten for førstegangsvitnemål
+      # AVKLART 11.11.2026 (gjennomgang med domeneekspertene): saksbehandleren
+      # velger hvilke poengvarianter vitnemålet og fagvalget skal brukes på, og
+      # både vitnemålet og fagvalget brukes. Het «Bruke fagvalget fra én
+      # poengvariant i andre poengvarianter», og kopierte bare fagvalget til
+      # alle de andre poengvariantene.
+      #
+      # AVKLART 04.11.2026: saksbehandleren kan bruke fagvalget fra én
+      # poengvariant i de andre, så det ikke må gjøres på nytt i hver av dem.
+      # Kvoteregelen gjelder fortsatt: tilleggsfag blir ikke valgt i
+      # poengvarianten for kvoten for førstegangsvitnemål. Forslaget kom fra
+      # FS-klienten, som kan kopiere en beregning til andre poengvarianter og
+      # grunnlag (teknisk beskrivelse av vitnemålsbehandling, G. M. Vangen).
 
-    @openquestion
-    # ÅPNE SPØRSMÅL:
-    # - Følger tilleggsfag som saksbehandleren legger til for hånd (L4a,
-    #   «Legge til et nytt fag under tilleggsfag»), de samme reglene som
-    #   tilleggsfagene som står på vitnemålet, også i kvoten for
-    #   førstegangsvitnemål? (Fra gjennomgangen 03.11.2026.)
+    # AVKLART 04.11.2026: tilleggsfag som saksbehandleren legger til for hånd
+    # (L4a, «Legge til et nytt fag under tilleggsfag»), følger de samme
+    # reglene som tilleggsfagene som står på vitnemålet: de teller ikke før
+    # de er valgt i en poengvariant, og gir det samme varselet i kvoten for
+    # førstegangsvitnemål (endret 11.11.2026).
     Scenario: Tilleggsfag teller ikke før det aktivt velges
       Gitt vitnemålet har et tilleggsfag
       Og jeg har ikke tatt stilling til tilleggsfaget
@@ -248,33 +279,58 @@ Egenskap: Velge fag per poengvariant
       # dm_vitnemalbehandl_vmfag_tillegg bruker rå TVAR.status_valgt, altså
       # ikke med. Forskjellen ser ut som en tilfeldighet, og videreføres ikke.
 
-    Scenario: Tilleggsfag kan ikke velges i poengvarianten for førstegangsvitnemål
-      Gitt søkeren har et førstegangsvitnemål med et tilleggsfag
-      Når jeg behandler poengvarianten for kvoten for førstegangsvitnemål
-      Så ser jeg ikke muligheten til å velge tilleggsfaget
+    Scenariomal: Varsel om forbedringer i poengvarianten for førstegangsvitnemål når jeg <handling>
+      Gitt grunnlaget for poengvarianten for kvoten for førstegangsvitnemål har forbedringer
+      Når jeg velger å <handling>
+      Så ser jeg et varsel om at forbedringer som hovedregel ikke teller i kvoten for førstegangsvitnemål
+      Men <resultat>
+
+      Eksempler:
+        | handling         | resultat                                           |
+        | beregne poengene | poengene er beregnet med forbedringene             |
+        | bruke poengene   | grunnlaget og poengene er lagret med forbedringene |
+      # AVKLART 11.11.2026 (gjennomgang med domeneekspertene): erstatter
+      # «Tilleggsfag kan ikke velges i poengvarianten for førstegangsvitnemål».
+      # Forbedringer er tilleggsfag og forbedrede karakterer. Saksbehandleren
+      # kan legge dem til i poengvarianten for kvoten for førstegangsvitnemål,
+      # og får et varsel som ikke stopper noe, når poengene beregnes og brukes.
+      # Om et unntak gjelder (R2, poenggivende fag på yrkesfagsløpet), er
+      # saksbehandlerens vurdering. Avviker fra FS-klienten, der grunnlaget VOV
+      # ikke tillater tillegg. Teksten hører i
+      # velge_fag_per_poengvariant.design.md.
+      #
       # AVKLART 07.10.2026: nye fag og forbedringer teller bare i ordinær
       # kvote, aldri i kvoten for førstegangsvitnemål (Samordna opptaks wiki,
       # sidene «Kvoter» og «Poengberegning norske søkere»). Søkeren konkurrerer
       # i begge kvotene med hver sin poengsum, og mister ikke kvoten fordi et
       # tilleggsfag velges i ordinær kvote. Dette erstatter begrunnelsen fra
       # 21.09.2026, som sa at søkeren kunne slås ut av kvoten. Unntakene står
-      # i de to scenarioene under.
+      # i de to scenarioene under. Fra 11.11.2026 er hovedregelen et varsel,
+      # ikke en sperre.
       #
       # Hvilken poengvariant som hører til hvilken kvote, står i regelverket.
       #
       # Verifisert i FS-klienten: f_forbedretvitnemal(vgdoknr, poengvariant)
       # returnerer 1 når vitnemålet har et valgt tilleggsfag for akkurat den
       # poengvarianten. Valget er altså per poengvariant, og det er derfor
-      # det kan hindres i én poengvariant og tillates i en annen.
+      # varselet kan gjelde én poengvariant og ikke en annen.
       #
-      # Et vitnemål med forbedringer kan ikke legges til grunn for
-      # poengvarianten for førstegangsvitnemål. Det dekkes av «Et vitnemål
-      # gjelder ikke alle poengvarianter».
+      # Et vitnemål med forbedringer kan legges til grunn for poengvarianten
+      # for førstegangsvitnemål, med det samme varselet (endret 11.11.2026,
+      # var en sperre).
+      #
+      # AVKLART 04.11.2026: «Et vitnemål gjelder ikke alle poengvarianter» er
+      # fjernet. Det bygde på at tabellen POENGVARIANTVITNEMAL i FS-klienten
+      # sier hvilke vitnemål som gjelder for hver poengvariant. Ifølge den
+      # tekniske beskrivelsen av vitnemålsbehandling (G. M. Vangen) lagrer
+      # tabellen bare hvilket vitnemål saksbehandleren har valgt. Den eneste
+      # regelen er kvoteregelen i dette scenarioet, som fra 11.11.2026 er et
+      # varsel.
       #
       # Bekreftet i den tekniske beskrivelsen av vitnemålsbehandling i
       # FS-klienten (G. M. Vangen, lest 03.11.2026): grunnlaget VOV tillater
       # ikke tillegg («Det er ikke anledning å velge tillegg for grunnlag
-      # VOV»).
+      # VOV»). Det videreføres ikke (11.11.2026).
 
     Scenario: Tilleggsfag kan velges i ordinær kvote
       Gitt søkeren har et førstegangsvitnemål med et tilleggsfag
@@ -286,10 +342,17 @@ Egenskap: Velge fag per poengvariant
       Gitt søkeren har et førstegangsvitnemål
       Og søkeren har matematikk R2 på et kompetansebevis
       Og jeg har vurdert at R2 er tatt innen normal tid
-      Når jeg behandler poengvarianten for kvoten for førstegangsvitnemål
-      Så kan jeg velge R2 fra kompetansebeviset
+      Når jeg velger R2 for poengvarianten for kvoten for førstegangsvitnemål
+      Så inngår R2 i beregningen for poengvarianten
       # AVKLART 07.10.2026: om et unntak gjelder, er saksbehandlerens
-      # vurdering, og det er vitnemålsbehandleren som håndhever unntakene.
+      # vurdering.
+      #
+      # AVKLART 11.11.2026 (gjennomgang med domeneekspertene): løsningen
+      # håndhever ikke unntakene. Saksbehandleren kan velge forbedringer i
+      # poengvarianten for førstegangsvitnemål for alle søkere, og får varselet
+      # i «Varsel om forbedringer i poengvarianten for førstegangsvitnemål når
+      # jeg <handling>». Dette scenarioet og det neste er eksempler på når
+      # saksbehandleren bruker forbedringen likevel.
       #
       # Unntaket finnes fordi R2 ikke kan føres på samme vitnemål som
       # S-matematikk (Samordna opptaks wiki, «Kvoter»).
@@ -301,69 +364,85 @@ Egenskap: Velge fag per poengvariant
       Gitt søkeren kvalifiserer til kvoten for førstegangsvitnemål med yrkesfaglig vitnemål og studiekompetansefagene
       Og søkeren har et fag som gir språk- eller realfagspoeng
       Og jeg har vurdert at faget er tatt senest det semesteret søkeren oppnådde generell studiekompetanse
-      Når jeg behandler poengvarianten for kvoten for førstegangsvitnemål
-      Så kan jeg velge faget
+      Når jeg velger faget for poengvarianten for kvoten for førstegangsvitnemål
+      Så inngår faget i beregningen for poengvarianten
       # Samordna opptaks wiki, «Kvoter»: fag som gir språk- eller
       # realfagspoeng, tatt samtidig med studiekompetansefagene, kan tas med
       # i kvoten for førstegangsvitnemål.
 
-  Regel: Poengene beregnes når grunnlaget er klart
+  # Reglene for beregning og lagring står i L2 (velge_vitnemål_som_grunnlag.feature,
+  # «Poengene beregnes og lagres når saksbehandleren bruker dem»), og gjelder
+  # også her. Regelen var her fra 30.10.2026, og ble flyttet tilbake til L2
+  # 11.11.2026 (gjennomgang av L3 og L4 med domeneekspertene).
 
-    # Poengene beregnes av kontrollmotoren i opptak, i samme løsning. Når
-    # saksbehandleren setter sammen grunnlaget (poengvariant, fag, forbedringer
-    # og tilleggsfag), beregnes og lagres poengene først når saksbehandleren
-    # sier at grunnlaget er klart, så sakens poeng aldri bygger på et grunnlag
-    # som er halvveis satt sammen.
-    #
-    # Flyttet hit fra L2 (velge_vitnemål_som_grunnlag.feature) 30.10.2026. I
-    # L2 beregnes og lagres poengene med en gang saksbehandleren velger et
-    # vitnemål.
+  Regel: Saksbehandleren kan legge inn poeng selv på en poengvariant
 
-    Scenario: Poengene er tomme til jeg beregner dem
+    # AVKLART 11.11.2026 (gjennomgang med domeneekspertene): saksbehandleren
+    # blir ikke spurt om poeng saksbehandleren har lagt inn selv, skal
+    # beholdes. Endres grunnlaget for poengvarianten, gjelder regelen i L2: de
+    # lagrede poengene står til saksbehandleren beregner eller bruker
+    # poengene på nytt («De lagrede poengene vises til jeg beregner på nytt»).
+    # Scenariomalen «Velge om <poengtype> jeg har lagt inn selv, skal
+    # beholdes» (avklart 04.11.2026, etter spørsmål fra domeneekspertene
+    # 22.10.2026) er fjernet.
+
+    Bakgrunn:
+      Gitt jeg har rettighet til å se og endre søknadsbehandling ved organisasjonen som behandler saken
+
+    Scenariomal: Legge inn <poengtype> selv på en poengvariant
       Gitt jeg har lagt et vitnemål til grunn
-      Når jeg endrer grunnlaget for en poengvariant
-      Så er poengene på poengvarianten ikke beregnet på nytt
-      Og poengene på poengvarianten vises tomme
-      Og endringen i grunnlaget er ikke lagret ennå
-      # AVKLART 21.10.2026: poengene beregnes ikke av seg selv når grunnlaget
-      # endres. Saksbehandleren må velge å beregne dem, og fram til da står
-      # feltene tomme. Hvordan saksbehandleren velger å beregne, hører i
-      # implementasjonsdetaljene.
+      Når jeg legger inn <poengtype> selv på en poengvariant
+      Og jeg velger å bruke poengene
+      Så er verdien jeg la inn for <poengtype>, brukt for poengvarianten
+      Og alle poengene på poengvarianten er låst mot automatisk reberegning
 
-    Scenario: Beregne poengene fra det endrede grunnlaget
-      Gitt jeg har endret grunnlaget for en poengvariant
-      Når jeg velger å beregne poengene
-      Så er poengene på poengvarianten beregnet på nytt fra det endrede grunnlaget
-      Og endringen i grunnlaget er lagret
+      Eksempler:
+        | poengtype     |
+        | karakterpoeng |
+        | realfagspoeng |
+        | språkpoeng    |
+      # AVKLART 07.10.2026: saksbehandleren kan legge inn realfagspoeng selv
+      # på poengvarianten, i tillegg til å markere fag med forsøkskode (L4a, endre_fag_i_grunnlaget.feature).
+      # Poengene låses på samme måte som når grunnlaget velges, og kan låses
+      # opp med «Låse opp et poeng».
+      #
+      # AVKLART 21.10.2026: utvidet fra bare realfagspoeng til alle tre
+      # poengtypene som vises. Det er alle poengene på poengvarianten som låses, ikke bare
+      # poengtypen saksbehandleren la inn. Steget «Og det fremgår at
+      # <poengtype> er satt av en saksbehandler» er tatt ut, se «Se hvilket
+      # vitnemål et poeng bygger på».
+      #
+      # Endret 30.10.2026: verdien lagres når saksbehandleren legger den inn,
+      # som valget av vitnemål.
+      #
+      # AVKLART 11.11.2026 (gjennomgang med domeneekspertene): flyttet hit fra
+      # L2 (velge_vitnemål_som_grunnlag.feature). Verdien er en del av
+      # grunnlaget, og lagres når saksbehandleren velger å bruke poengene, som
+      # resten av grunnlaget (L2, «Poengene beregnes og lagres når
+      # saksbehandleren bruker dem»). Erstatter endringen 30.10.2026.
 
-    Scenario: Advarsel om endringer som ikke er lagret
-      Gitt jeg har endret grunnlaget for en poengvariant
-      Og jeg har ikke beregnet poengene etter endringen
-      Når jeg går fra saken
-      Så blir jeg advart om at endringen i grunnlaget ikke er lagret
-      Og jeg kan velge å bli på saken
-      # AVKLART 21.10.2026: endringen lagres først når poengene er beregnet.
-      # Saksbehandleren skal derfor advares før de forlater saken med
-      # endringer som ikke er lagret. Utformingen av advarselen hører i
-      # implementasjonsdetaljene.
+    Scenariomal: Ugyldig verdi for <poengtype> stoppes
+      Gitt jeg har lagt et vitnemål til grunn
+      Når jeg legger inn en ugyldig verdi for <poengtype> på en poengvariant
+      Så ser jeg at verdien er ugyldig
+      Og jeg kan ikke bruke poengene før verdien er rettet
 
-    @openquestion
-    Scenario: Poeng jeg har lagt inn selv, når poengene beregnes på nytt
-      Gitt jeg har lagt inn karakterpoeng selv på en poengvariant
-      Og jeg har endret grunnlaget for poengvarianten
-      Når jeg velger å beregne poengene
-      Så er poengene på poengvarianten beregnet på nytt fra det endrede grunnlaget
-      # ÅPNE SPØRSMÅL:
-      # - Skal en verdi saksbehandleren har lagt inn selv, overskrives når
-      #   saksbehandleren senere velger å beregne poengene på nytt? Låsen
-      #   gjelder den automatiske poengberegningen, ikke beregningen
-      #   saksbehandleren starter selv. Spørsmålet kom fra domeneekspertene
-      #   22.10.2026: en lagret verdi skal ikke overstyres av automatikken, men
-      #   når saksbehandleren aktivt beregner, må systemet kunne overstyre den.
-      #   Flyttet hit fra L2 30.10.2026. Så-steget er et forslag.
-      # - «Velge hvilke fag som skal telle» sier at poengene beregnes og
-      #   fagvalget lagres når fagene velges. Skal det i stedet skje når
-      #   saksbehandleren velger å beregne poengene?
+      Eksempler:
+        | poengtype     |
+        | karakterpoeng |
+        | realfagspoeng |
+        | språkpoeng    |
+      # AVKLART 21.10.2026: skjemaet skal stoppe ugyldige verdier, både for
+      # realfagspoeng og språkpoeng. Grensene, for eksempel taket på
+      # realfagspoeng, står på poengtypen i opptak, så skjemaet må få dem
+      # derfra. Utformingen av beskjeden hører i
+      # velge_vitnemål_som_grunnlag.design.md.
+      #
+      # AVKLART 11.11.2026 (gjennomgang med domeneekspertene): flyttet hit fra
+      # L2 sammen med «Legge inn <poengtype> selv på en poengvariant», og
+      # karakterpoeng er lagt til i eksemplene. Verdien lagres når
+      # saksbehandleren bruker poengene, så en ugyldig verdi stopper at
+      # poengene kan brukes, som karakterregelen i L4a og L4b.
 
   Regel: Saksbehandleren kan bare endre fagvalget slik en regel tillater
 
@@ -406,22 +485,27 @@ Egenskap: Velge fag per poengvariant
       Så må 1P være med
       Og jeg kan velge 2P, R1 eller begge i tillegg
 
-    @openquestion
-    # ÅPNE SPØRSMÅL:
-    # - Kompetansebevis er opplastede dokumenter (avklart 03.11.2026). Skal
-    #   saksbehandleren punsje alle studiekompetansefagene i kalkulatoren
-    #   (L4b), eller velge ett vitnemål og legge til fagene fra de andre
-    #   dokumentene under tilleggsfag (L4a)?
-    #   Innspill fra FS-klienten (teknisk beskrivelse av vitnemålsbehandling,
-    #   G. M. Vangen, lest 03.11.2026): i grunnlaget for 23/5-regelen (PRA)
-    #   velger saksbehandleren fagene på det elektroniske vitnemålet, og
-    #   legger til fag fra søkerens andre elektroniske vitnemål som tillegg.
-    #   Det taler for det andre alternativet (L4a), se «Hente et tilleggsfag
-    #   fra et annet elektronisk vitnemål» i endre_fag_i_grunnlaget.feature.
-    Scenario: Hente studiekompetansefag fra flere dokumenter etter 23/6-regelen
+    @ref-OPT-BEH-BEH-023
+    Scenario: Studiekompetansefag fra andre dokumenter legges inn under tilleggsfag etter 23/6-regelen
       Gitt søkeren rangeres etter 23/6-regelen
-      Og studiekompetansefagene er dokumentert på flere vitnemål og kompetansebevis
+      Og søkeren har et elektronisk vitnemål
+      Og noen av studiekompetansefagene er dokumentert på andre dokumenter
+      Når jeg legger det elektroniske vitnemålet til grunn
+      Så kan jeg legge inn studiekompetansefagene fra de andre dokumentene manuelt under tilleggsfag
+      # AVKLART 04.11.2026: finnes det et elektronisk vitnemål, legges det til
+      # grunn, og studiekompetansefagene fra de andre dokumentene legges inn
+      # manuelt under tilleggsfag (L4a, «Legge til et nytt fag under
+      # tilleggsfag»). Slik gjør også FS-klienten i grunnlaget for
+      # 23/5-regelen (teknisk beskrivelse av vitnemålsbehandling,
+      # G. M. Vangen). 23/6-regelen er det eneste stedet der fag kan hentes
+      # fritt fra ulike dokumenter. Erstatter «Hente studiekompetansefag fra
+      # flere dokumenter etter 23/6-regelen».
+
+    @ref-OPT-BEH-BEH-037
+    Scenario: Alle studiekompetansefag legges inn i kalkulatoren etter 23/6-regelen når det ikke finnes elektronisk vitnemål
+      Gitt søkeren rangeres etter 23/6-regelen
+      Og søkeren ikke har elektroniske vitnemål
       Når jeg setter sammen grunnlaget
-      Så kan jeg hente hvert studiekompetansefag fra det dokumentet det står på
-      # 23/6-regelen er det eneste stedet der fag kan hentes fritt fra
-      # ulike dokumenter.
+      Så legger jeg inn alle studiekompetansefagene manuelt i kalkulatoren
+      # AVKLART 04.11.2026: finnes det ikke et elektronisk vitnemål, legges
+      # alle fagene inn manuelt i kalkulatoren (L4b).
