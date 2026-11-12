@@ -39,7 +39,7 @@ Stegene i kravene bruker begrepet. Rollekoden står bare her (se *Gode scenarioe
 | dokumentforvalter | OPPTAK_DOKUMENTASJON | organisasjonen | Ikke kartlagt | Laster opp og sletter dokumentasjon på søkerens vegne når organisasjonen er forvalter. TAKE-470 |
 | opptaksinformatør | OPPTAK_INNSYN | organisasjonen | SE_SØKNAD (foreløpig, TAKE-469) | Ansatte i førstelinjen som svarer søkere om opptak. Ser søknaden og behandlingen der organisasjonen er forvalter, tilbyder eller behandler, og endrer ingenting. Rollen gjelder bare opptak: ved et lærested har førstelinjen også tilgang til studieinformasjon, med roller i andre domener, mens førstelinjen ved HK-dir, som bare er forvalter i opptak og aldri tilbyder, bare har denne rollen. Ikke «førstelinje» eller «veileder» i kravene |
 
-Hvilke handlingskoder rollene gir, står i tilgangsstyring og er ikke kartlagt for opptak. Se scopet `tilgang-i-opptak-2027`.
+Hvilke handlingskoder rollene gir, står i tilgangsstyring og er ikke kartlagt for opptak. Hva rollene får se og endre ut fra kravene, står i [`tilgangsmatrise.md`](tilgangsmatrise.md).
 
 ## Opptak og struktur
 
