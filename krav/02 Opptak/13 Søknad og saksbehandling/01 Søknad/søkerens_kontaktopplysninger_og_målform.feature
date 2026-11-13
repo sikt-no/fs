@@ -36,7 +36,6 @@ Egenskap: Søkerens kontaktopplysninger og målform
       Så er søkeren registrert med målformen nynorsk
 
   Regel: Opplysningene fra KRR er ferske
-    # AVKLART (Håkon Hjelde Wold 13.11.2026)
 
     Scenario: Opplysningene fra KRR hentes på nytt når de er 30 dager gamle
       Gitt at søkeren finnes i KRR
@@ -59,8 +58,8 @@ Egenskap: Søkerens kontaktopplysninger og målform
     #
     # AVKLART (Tina Lund Ravndal 13.11.2026): valgene er bokmål og nynorsk. Engelsk er ikke et valg i de samordna
     # opptakene, og samisk trengs ikke.
-    # AVKLART (Håkon Hjelde Wold 13.11.2026): søkerne som ikke finnes i KRR, er søkerne som ikke logger inn med
-    # ID-porten eller Feide, og som registrerer seg i OPT-SØK-SØK-020 (#965).
+    # Søkerne som ikke finnes i KRR, er søkerne som ikke logger inn med ID-porten eller Feide, og som registrerer seg
+    # i OPT-SØK-SØK-020 (#965).
 
     Scenario: Søkeren som ikke finnes i KRR, velger målform ved registrering
       Gitt at søkeren ikke finnes i KRR
