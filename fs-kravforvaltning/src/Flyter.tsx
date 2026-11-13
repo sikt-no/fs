@@ -2,6 +2,8 @@
 // Den valgte flyten vises som tidslinje (oversiktsflyten som svømmebane), med kravene hver fase bygger på og kjeden
 // av @depends-on- under dem, til nivået brukeren velger. Logikken er rene funksjoner i flows.ts.
 import type { JSX } from 'preact';
+import { lazy, Suspense } from 'preact/compat';
+import { Dot, phaseLook, STC, stColor } from './flowLook';
 import { useEffect, useMemo, useRef, useState } from 'preact/hooks';
 import type { Status } from '../shared/model';
 import {
@@ -33,6 +35,7 @@ import {
   type FlowIndex,
   type FlowPhase,
   type Focus,
+  type FlowTab,
   type FlowWarning,
   type Follow,
   type Handover,
@@ -44,8 +47,12 @@ interface Props {
   /** Flyten som er valgt, `null` for startsiden */
   path: string | null;
   depth: Depth;
-  onSelect: (path: string | null) => void;
+  /** Velger en flyt (null: startsiden), eventuelt på en fase, som da vises i «Fasene» */
+  onSelect: (path: string | null, phase?: number) => void;
   onDepth: (d: Depth) => void;
+  /** Fanen som er valgt. Den står i ruta (`fane=…`), huskes, og følger med når en annen flyt velges */
+  tab: FlowTab;
+  onTab: (t: FlowTab) => void;
   /** Fasen som skal vises (fra «Fase N i <flyt>» i Krav); `seq` gjør at samme fase kan vises igjen */
   goPhase?: { n: number; seq: number } | null;
   /** Åpner en fil i Krav, eventuelt på en linje */
@@ -54,18 +61,12 @@ interface Props {
   outlineHidden: boolean;
 }
 
-type Tab = 'phases' | 'krav' | 'dom' | 'mx';
+type Tab = FlowTab;
+// Kartet bruker React Flow, og lastes først når fanen åpnes
+const FlowMap = lazy(() => import('./FlowMap'));
 type Sort = 'level' | 'status' | 'domain';
 
-const STC: Record<Status, string> = {
-  draft: 'var(--st-draft)',
-  planned: 'var(--st-planned)',
-  'in-progress': 'var(--st-in-progress)',
-  implemented: 'var(--st-implemented)',
-  deprecated: 'var(--st-deprecated)',
-};
 const ORDER: (Status | 'none')[] = ['implemented', 'in-progress', 'planned', 'draft', 'deprecated', 'none'];
-const stColor = (s: Status | null) => (s ? STC[s] : 'var(--st-none)');
 const chip = (ix: FlowIndex, id: string) => (!exists(ix, id) ? { c: 'var(--err)', l: 'finnes ikke' } : { c: stColor(statusOf(ix, id)), l: statusOf(ix, id) ?? 'ingen status' });
 const KW: Record<string, string> = { Gitt: 'var(--k-gitt)', Når: 'var(--k-naar)', Så: 'var(--k-saa)' };
 /** Hva som er levert av kravet: «hele kravet», «3 av 9 regler», eller `null` når ingenting er levert */
@@ -87,17 +88,7 @@ const depthText = (d: Depth) => (d === 1 ? '1 nivå' : d === Infinity ? 'alle ni
 const nivå = (n: number) => n + (n === 1 ? ' nivå' : ' nivåer');
 const coll = new Intl.Collator('nb', { numeric: true });
 
-/** Fargen og etiketten på fasen. Fasen uten krav er stiplet */
-function phaseLook(s: PhaseStatus, overview: boolean) {
-  if (s === 'missing') return { c: 'var(--muted)', fill: 'transparent', dashed: true, l: overview ? 'mangler flyt' : 'mangler krav' };
-  if (s === 'broken') return { c: 'var(--err)', fill: 'var(--err)', dashed: false, l: 'finnes ikke' };
-  return { c: STC[s], fill: STC[s], dashed: false, l: s === 'implemented' ? 'levert' : s };
-}
-
-const Dot = ({ c, fill = c, dashed = false, z = 7 }: { c: string; fill?: string; dashed?: boolean; z?: number }) => (
-  <span class="fl-dot" style={{ width: z + 'px', height: z + 'px', background: fill, border: `1.5px ${dashed ? 'dashed' : 'solid'} ${c}` }} />
-);
-const St = ({ c, l }: { c: string; l: string }) => (
+const St =({ c, l }: { c: string; l: string }) => (
   <span class="fl-st">
     <Dot c={c} />
     {l}
@@ -155,12 +146,11 @@ const WARN_LABEL: Record<FlowWarning['kind'], string> = {
   break: 'kjent brudd',
 };
 
-export function Flyter({ ix, path, depth, onSelect, onDepth, goPhase, onOpen, sideHidden, outlineHidden }: Props) {
+export function Flyter({ ix, path, depth, onSelect, onDepth, tab, onTab: setTab, goPhase, onOpen, sideHidden, outlineHidden }: Props) {
   const flow = path ? (ix.flows.find(f => f.path === path) ?? null) : null;
   const [q, setQ] = useState('');
   const [closed, setClosed] = useState<Record<string, boolean>>({});
   const [follow, setFollow] = useState<Follow>('part');
-  const [tab, setTab] = useState<Tab>('phases');
   const [sort, setSort] = useState<Sort>('level');
   const [fold, setFold] = useState<Record<string, boolean>>({});
   const [oqOpen, setOqOpen] = useState<Record<number, boolean>>({});
@@ -171,9 +161,8 @@ export function Flyter({ ix, path, depth, onSelect, onDepth, goPhase, onOpen, si
   const [from, setFrom] = useState<{ path: string; title: string; phase: number; to: string } | null>(null);
   const mainRef = useRef<HTMLElement>(null);
 
-  // Ny flyt: tilbake til fasene, og øverst
+  // Ny flyt: øverst. Fanen blir den samme (main.tsx)
   useEffect(() => {
-    setTab('phases');
     setHl(null);
     mainRef.current?.scrollTo({ top: 0 });
   }, [path]);
@@ -218,8 +207,8 @@ export function Flyter({ ix, path, depth, onSelect, onDepth, goPhase, onOpen, si
   };
   const openFlow = (f: Flow, phase?: number, fromPhase?: number) => {
     setFrom(fromPhase && flow ? { path: flow.path, title: flow.title, phase: fromPhase, to: f.path } : null);
-    onSelect(f.path);
-    if (phase) setTimeout(() => scrollToPhase(phase), 80);
+    // Med en fase åpnes flyten på «Fasene», på fasen (goPhase fra main.tsx). Ellers følger fanen med
+    onSelect(f.path, phase);
   };
   /** Åpner kravet i Krav, på delen fasen bygger på når den er kjent (ankeret, ellers regelen i kommentaren) */
   const openKrav = (id: string, focus?: Focus) => {
@@ -501,6 +490,58 @@ function FlowView(p: ViewProps) {
 
   return (
     <>
+      <div class="fl-toolbar">
+        <div class="fl-titlebar">
+          {p.crumbs}
+          <span class="mono id">@{flow.id}</span>
+          <St c={flow.status ? STC[flow.status] : 'var(--st-none)'} l={flow.status ?? 'ingen status'} />
+        </div>
+        <div class="fl-tabs" role="tablist" aria-label="Visninger av flyten">
+          {(
+            [
+              { v: 'details', l: 'Detaljer', n: '' },
+              { v: 'phases', l: 'Fasene', n: String(flow.phases.length) },
+              { v: 'krav', l: 'Kravene i flyten', n: String(list.length) },
+              { v: 'dom', l: 'Per domene', n: String(domCount) },
+              { v: 'mx', l: 'Matrise', n: '' },
+              { v: 'map', l: 'Kart', n: '' },
+            ] as const
+          ).map(t => (
+            <button key={t.v} role="tab" aria-selected={tab === t.v} onClick={() => p.setTab(t.v)}>
+              {t.l}
+              {t.n && <span class="n mono">{t.n}</span>}
+            </button>
+          ))}
+        </div>
+        <div class="fl-opts">
+          <div class="fl-ctl">
+            <span class="lbl">Avhengigheter</span>
+            <Seg
+              label="Avhengigheter: hvor mange nivåer med @depends-on- som vises"
+              cur={depth}
+              set={p.onDepth}
+              opts={[1, 2, 3, Infinity].map(v => ({ v, l: v === 1 ? '1 nivå' : v === Infinity ? 'Alle' : String(v), n: countLabel(v), title: v === 1 ? 'Kravene fasene bygger på' : 'Også kravene de kravene bygger på' }))}
+            />
+          </div>
+          <div class="fl-ctl">
+            <span class="lbl">Følg</span>
+            <Seg
+              label="Følg: hvilken del av kravet som følges"
+              cur={follow}
+              set={p.setFollow}
+              opts={[
+                { v: 'part', l: 'Bare delen fasen bygger på' },
+                { v: 'whole', l: 'Hele kravet' },
+              ]}
+            />
+          </div>
+          <span class="fl-sum">
+            Viser <b>{depth === 1 ? 'kravene fasene bygger på direkte' : depth === Infinity ? 'hele kjeden av krav' : `krav i ${depth} nivåer`}</b>, og{' '}
+            <b>{follow === 'part' ? 'bare delen fasen bygger på' : 'hele kravet'}</b>.{levelMsg && ' ' + levelMsg}
+          </span>
+        </div>
+      </div>
+
       {flow.error && (
         <div class="fl-alert err" role="alert">
           <span>
@@ -509,8 +550,8 @@ function FlowView(p: ViewProps) {
           <span class="mono small">{flow.error}</span>
         </div>
       )}
+      {tab === 'details' && (
       <div class="fl-head">
-        {p.crumbs}
         <div class="fl-title">
           <div class="fl-tags mono">
             <span class="id">@{flow.id}</span>
@@ -622,52 +663,17 @@ function FlowView(p: ViewProps) {
           </div>
         </div>
       </div>
-
-      <div class="fl-toolbar">
-        <div class="fl-tabs" role="tablist">
-          {(
-            [
-              { v: 'phases', l: 'Fasene', n: String(flow.phases.length) },
-              { v: 'krav', l: 'Kravene i flyten', n: String(list.length) },
-              { v: 'dom', l: 'Per domene', n: String(domCount) },
-              { v: 'mx', l: 'Matrise', n: '' },
-            ] as const
-          ).map(t => (
-            <button key={t.v} role="tab" aria-selected={tab === t.v} onClick={() => p.setTab(t.v)}>
-              {t.l}
-              {t.n && <span class="n mono">{t.n}</span>}
-            </button>
-          ))}
-        </div>
-        <span class="vsep" />
-        <div class="fl-ctl">
-          <span>Nivåer</span>
-          <Seg
-            label="Nivåer av avhengigheter"
-            cur={depth}
-            set={p.onDepth}
-            opts={[1, 2, 3, Infinity].map(v => ({ v, l: v === 1 ? '1 nivå' : v === Infinity ? 'Alle' : String(v), n: countLabel(v), title: v === 1 ? 'Kravene fasene bygger på' : 'Også kravene de kravene bygger på' }))}
-          />
-        </div>
-        <div class="fl-ctl">
-          <span>Følg</span>
-          <Seg
-            label="Hvilken del av kravet som følges"
-            cur={follow}
-            set={p.setFollow}
-            opts={[
-              { v: 'part', l: 'Bare delen fasen bygger på' },
-              { v: 'whole', l: 'Hele kravet' },
-            ]}
-          />
-        </div>
-        {levelMsg && <span class="muted small">{levelMsg}</span>}
-      </div>
+      )}
 
       {tab === 'phases' && <Phases {...p} tree={tree} />}
       {tab === 'krav' && <KravTab {...p} tree={tree} list={list} intro={`Det som må være levert for at flyten skal virke, til ${depthText(depth)}${followT}.`} />}
       {tab === 'dom' && <DomTab ix={ix} list={list} follow={follow} onOpen={p.onOpen} intro={`Kravene flyten bygger på, til ${depthText(depth)}${followT}, samlet per domene og sub-domene. Hvert sub-domene er et team som kan levere til flyten.`} />}
       {tab === 'mx' && <MatrixTab ix={ix} flow={flow} list={list} toPhase={p.toPhase} depth={depth} follow={follow} />}
+      {tab === 'map' && (
+        <Suspense fallback={<div class="fl-mapwrap fl-maploading muted">Laster kartet …</div>}>
+          <FlowMap ix={ix} flow={flow} tree={tree} depth={depth} follow={follow} toPhase={p.toPhase} openKrav={p.openKrav} />
+        </Suspense>
+      )}
     </>
   );
 }

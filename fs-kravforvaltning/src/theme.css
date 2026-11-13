@@ -1397,20 +1397,68 @@ body.resizing iframe, body.resizing .main { pointer-events: none; }
 .fl-headmeta > span { display: flex; align-items: center; gap: 8px; }
 .fl-q { font-size: 11px; padding: 0 5px; border-radius: 3px; border: 1px solid var(--warn); color: var(--warn); flex-shrink: 0; }
 
-/* Verktøylinja */
-.fl-toolbar { position: sticky; top: 0; z-index: 3; background: var(--bg); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); padding: 9px 32px; display: flex; flex-wrap: wrap; align-items: center; gap: 10px 20px; }
-.fl-tabs { display: flex; gap: 2px; }
-.fl-tabs button { border: 0; background: transparent; color: var(--muted); font-size: 13px; font-weight: 500; padding: 5px 11px; border-radius: 5px; cursor: pointer; display: flex; gap: 6px; align-items: center; }
-.fl-tabs button[aria-selected="true"] { background: var(--surface); color: var(--ink); }
-.fl-tabs .n { font-size: 11px; color: var(--muted); }
-.fl-toolbar .vsep { width: 1px; height: 20px; background: var(--line2); }
+/* Verktøylinja, øverst på siden for én flyt: navnet på flyten, fanene på én rad (med strek under den valgte), og
+   valgene på en egen rad under, med navn og et
+   sammendrag av hva som vises (forslaget «Flytkart», claude.ai) */
+.fl-toolbar { position: sticky; top: 0; z-index: 3; background: var(--bg); border-bottom: 1px solid var(--line); }
+.fl-titlebar { display: flex; align-items: center; flex-wrap: wrap; gap: 6px 14px; padding: 12px 32px 4px; }
+.fl-titlebar .fl-crumbs { font-size: 13px; }
+.fl-titlebar .fl-crumbs .cur { color: var(--ink); font-size: 15px; font-weight: 600; }
+.fl-titlebar .id { font-size: 12px; color: var(--ink2); }
+.fl-tabs { display: flex; flex-wrap: wrap; gap: 4px; padding: 0 32px; border-bottom: 1px solid var(--line2); }
+.fl-tabs button { position: relative; border: 0; background: transparent; color: var(--ink2); font-size: 14px; font-weight: 500; padding: 10px 12px 11px; border-radius: 5px 5px 0 0; cursor: pointer; display: flex; gap: 8px; align-items: center; white-space: nowrap; }
+.fl-tabs button:hover { background: var(--sunken); color: var(--ink); }
+.fl-tabs button[aria-selected="true"] { color: var(--ink); font-weight: 600; }
+.fl-tabs button[aria-selected="true"]::after { content: ""; position: absolute; left: 8px; right: 8px; bottom: -1px; height: 3px; border-radius: 2px 2px 0 0; background: var(--acc); }
+.fl-tabs .n { font-size: 11px; font-weight: 500; padding: 1px 6px; border-radius: 8px; background: var(--line); color: var(--ink2); }
+.fl-tabs button[aria-selected="true"] .n { background: var(--acc-soft); color: var(--acc-ink); }
+.fl-opts { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 22px; padding: 10px 32px; background: var(--panel); }
+.fl-opts .lbl { font-size: 12.5px; font-weight: 600; color: var(--ink); }
+.fl-sum { font-size: 12.5px; color: var(--ink2); margin-left: auto; }
+.fl-sum b { color: var(--ink); font-weight: 600; }
 .fl-ctl { display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--muted); }
 .fl-ctl.right { margin-left: auto; }
-.fl-seg { display: flex; border: 1px solid var(--line2); border-radius: 5px; overflow: hidden; }
-.fl-seg button { border: 0; background: var(--surface); color: var(--ink2); font-size: 12px; padding: 4px 10px; cursor: pointer; display: flex; align-items: center; gap: 6px; white-space: nowrap; }
+.fl-seg { display: flex; border: 1px solid var(--line2); border-radius: 5px; overflow: hidden; background: var(--surface); }
+.fl-seg button { border: 0; background: transparent; color: var(--ink2); font-size: 12.5px; padding: 5px 11px; cursor: pointer; display: flex; align-items: center; gap: 6px; white-space: nowrap; }
 .fl-seg button + button { border-left: 1px solid var(--line2); }
-.fl-seg button[aria-checked="true"] { background: var(--acc-soft); color: var(--acc-ink); }
-.fl-seg .n { font: 10.5px var(--mono); opacity: .75; }
+.fl-seg button:hover { background: var(--sunken); color: var(--ink); }
+.fl-seg button[aria-checked="true"] { background: var(--acc); color: var(--surface); font-weight: 500; }
+.fl-seg .n { font: 10.5px var(--mono); opacity: .8; }
+
+/* Kartet (fanen «Kart», FlowMap.tsx): fasene til venstre, kravene i én kolonne per nivå */
+.fl-mapwrap { height: max(480px, calc(100vh - 210px)); position: relative; border-bottom: 1px solid var(--line); }
+.fl-maploading { display: grid; place-content: center; font-size: 13px; }
+.fl-mapwrap .react-flow { background: var(--bg); }
+.fl-mapwrap .react-flow__handle { opacity: 0; width: 6px; height: 6px; min-width: 0; min-height: 0; border: 0; }
+.fl-mapwrap .react-flow__controls { box-shadow: none; border: 1px solid var(--line2); border-radius: 5px; overflow: hidden; }
+.fl-mapwrap .react-flow__controls-button { background: var(--surface); border-bottom: 1px solid var(--line); color: var(--ink2); fill: var(--ink2); }
+.fl-mapwrap .react-flow__controls-button:hover { background: var(--sunken); }
+.fl-mapwrap .react-flow__minimap { background: var(--surface); border: 1px solid var(--line); border-radius: 6px; }
+.fl-mapwrap .react-flow__edge-text { font: 11px var(--mono); fill: var(--ink2); }
+.fl-mapwrap .react-flow__edge-textbg { fill: var(--bg); }
+.fl-maplegend { display: flex; gap: 14px; font-size: 12px; color: var(--ink2); background: var(--surface); border: 1px solid var(--line); border-radius: 6px; padding: 5px 10px; }
+.fl-maplegend span { display: flex; align-items: center; gap: 6px; }
+.fl-mn { color: var(--ink); background: var(--surface); border: 1px solid var(--line2); border-radius: 6px; overflow: hidden; cursor: pointer; transition: border-color .12s, box-shadow .12s, opacity .12s; }
+.fl-mn:hover, .fl-mn.hl { border-color: var(--acc); box-shadow: 0 0 0 2px var(--sel); }
+.fl-mn.dim { opacity: .35; }
+.fl-mn-phase .hd { display: flex; align-items: center; gap: 8px; padding: 6px 10px; background: var(--k-rule-soft); font: 600 11px var(--mono); letter-spacing: .1em; text-transform: uppercase; }
+.fl-mn-phase .hd .lbl { margin-left: auto; display: flex; align-items: center; gap: 6px; letter-spacing: 0; text-transform: none; font-weight: 500; color: var(--ink2); }
+.fl-mn-phase .bd { padding: 8px 10px 10px; font-size: 13.5px; line-height: 1.35; font-weight: 500; text-wrap: pretty; }
+.fl-mn-phase .ft { display: flex; gap: 6px; flex-wrap: wrap; padding: 0 10px 8px; }
+.fl-mn-phase .chip { font: 11px var(--mono); padding: 1px 6px; border-radius: 3px; background: var(--acc-soft); color: var(--acc-ink); }
+.fl-mn-phase .chip.oq { background: var(--warn-soft); color: var(--ink); }
+.fl-mn-phase.missing { border: 1px dashed var(--muted); }
+.fl-mn-krav .dom { background: var(--sunken); border-bottom: 1px solid var(--line); padding: 5px 10px; font: 11px/1.35 var(--mono); color: var(--ink2); }
+.fl-mn-krav .dom b { display: block; font-weight: 600; color: var(--ink); }
+.fl-mn-krav.isflow .dom { background: var(--k-feat); border-color: var(--k-feat); color: var(--on-k); }
+.fl-mn-krav.isflow .dom b { color: var(--on-k); }
+.fl-mn-krav.broken { border-color: var(--err); }
+.fl-mn-krav.broken .dom { background: var(--err-soft); }
+.fl-mn-krav .kbody { display: grid; grid-template-columns: 12px 1fr auto; gap: 2px 8px; align-items: center; padding: 7px 10px 8px; }
+.fl-mn-krav .id { font-size: 12px; color: var(--acc-ink); }
+.fl-mn-krav .kst { font-size: 11px; color: var(--muted); white-space: nowrap; }
+.fl-mn-krav .t { grid-column: 2 / 4; font-size: 12.5px; line-height: 1.35; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.fl-mn-krav .ring { grid-column: 2 / 4; justify-self: start; font-size: 10.5px; padding: 0 5px; border-radius: 3px; border: 1px solid var(--warn); color: var(--warn); }
 
 /* Fasene: tidslinje, eller svømmebane for oversiktsflyten */
 .fl-phases { padding: 22px 32px 80px; display: flex; }
@@ -1566,7 +1614,8 @@ body.resizing iframe, body.resizing .main { pointer-events: none; }
 @media (max-width: 760px) {
   .flyter, .flyter.noside, .flyter.nooutline { grid-template-columns: minmax(0, 1fr); }
   .fl-side { display: none; }
-  .fl-head, .fl-toolbar, .fl-tab { padding-left: 16px; padding-right: 16px; }
+  .fl-head, .fl-titlebar, .fl-tabs, .fl-opts, .fl-tab { padding-left: 16px; padding-right: 16px; }
+  .fl-sum { margin-left: 0; }
   .fl-phases { padding-left: 16px; padding-right: 16px; }
   .fl-phases.lane { flex-direction: column; }
   .fl-flowrow, .fl-flowrow.ov { grid-template-columns: minmax(0, 1fr); padding-left: 16px; }
