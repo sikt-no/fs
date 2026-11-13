@@ -25,7 +25,6 @@ Egenskap: Administrere brukere på en spesifikk rolle
     # Det samme gjelder i valglisten på personbrukerens side (BRU-PER-GRU-003).
     # ÅPNE SPØRSMÅL:
     # - Skal API-et også avvise at en utgått rolle gis, eller gjelder regelen bare i skjermbildet? (fs-admin MR !3431 skjuler valget, og avvisningen i API-et er varslet i en senere MR)
-    # - Skal referansen være @ref-BRU-PER-GRU-003, eller @depends-on-BRU-PER-GRU-010, der det avgjøres hva «utgått» betyr?
 
     Scenario: Siden for en utgått rolle sier at rollen er utgått
       Gitt en forretningsrolle er markert som utgått i rollekatalogen
