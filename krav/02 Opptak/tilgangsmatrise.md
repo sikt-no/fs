@@ -41,7 +41,7 @@ To er Could:
 - `@OPT-SØK-MEL-001`, regelen «Hvem som endrer tekstene til søkerne, følger organisasjonens rolle i opptaket»
 - `@OPT-BEH-BEH-045`, uttrekk av sakslista
 
-Prioriteten på egenskapen gjelder hele kravet. Står en tilgangsregel i et krav med en annen prioritet, gjelder prioriteten her for regelen. Det gjelder `@OPT-OPT-UTD-029` (Should): regelen «Søkere og brukere uten roller ser poenggrensen først når plasstildelingen er publisert» er Must.
+Kravene med disse reglene er `@must`, unntatt `@OPT-BEH-BEH-045`. `@OPT-OPT-UTD-029` var Should, og er endret til Must.
 
 ## Søknaden og personopplysningene
 
