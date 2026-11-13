@@ -55,12 +55,12 @@ Egenskap: Søkerens kontaktopplysninger og målform
   @openquestion
   Regel: Søkeren som ikke finnes i KRR, velger målform ved registrering
     # ÅPNE SPØRSMÅL:
-    # - Søkere med fødselsnummer (ID-porten, Feide) som ikke finnes i KRR, har ikke noe registreringssteg i
-    #   OPT-SØK-SØK-020 (#965). Hvor velger de målform?
     # - Er målform et obligatorisk felt ved registrering, eller har den en standardverdi?
     #
     # AVKLART (Tina Lund Ravndal 13.11.2026): valgene er bokmål og nynorsk. Engelsk er ikke et valg i de samordna
     # opptakene, og samisk trengs ikke.
+    # AVKLART (Håkon Hjelde Wold 13.11.2026): søkerne som ikke finnes i KRR, er søkerne som ikke logger inn med
+    # ID-porten eller Feide, og som registrerer seg i OPT-SØK-SØK-020 (#965).
 
     Scenario: Søkeren som ikke finnes i KRR, velger målform ved registrering
       Gitt at søkeren ikke finnes i KRR
