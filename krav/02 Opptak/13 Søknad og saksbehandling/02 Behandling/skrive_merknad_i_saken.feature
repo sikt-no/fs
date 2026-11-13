@@ -1,5 +1,5 @@
 # language: no
-@OPT-BEH-BEH-044 @should @draft @ref-OPT-BEH-BEH-011 @ref-OPT-BEH-BEH-043
+@OPT-BEH-BEH-044 @must @draft @ref-OPT-BEH-BEH-011 @ref-OPT-BEH-BEH-043
 Egenskap: Skrive merknader i saken
   Som saksbehandler
   ønsker jeg å skrive merknader i saken, enten til de andre organisasjonene på søknaden eller bare til kollegene mine
