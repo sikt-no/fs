@@ -5,6 +5,15 @@ med verktøyene i MCP-en **fs-rollekatalog**. Den kommer med pluginen `sta-devel
 `sta-plugin-marketplace`, og oppsettet står i README-en ved MCP-en. Verktøyene er bare lesende, og
 kontrakten står i `KONTRAKT.md` ved MCP-en.
 
+## Spør først
+
+Verktøyene krever i dag studieadm-cli og VPN, og mange har ikke det. Bruk dem derfor aldri uten å ha spurt.
+
+- **Finnes ikke verktøyene** (MCP-en er ikke lastet), fortsett uten, og ikke spør.
+- **Ellers spør én gang**, før første oppslag i kjøringen, med `AskUserQuestion`: «Skal jeg slå opp rollene i rollekatalogen? Det krever studieadm-cli og VPN, og kan åpne Feide-innlogging i nettleseren.» Valgene er «Ja, slå opp» og «Nei, fortsett uten». Hopper brukeren over, regn det som «Nei».
+- **Svaret gjelder resten av kjøringen.** Ved «Nei» gjelder regelen for når verktøyene ikke svarer (under).
+- **Agenter spør aldri.** Skillen som starter dem, sier i oppgaven om de skal bruke rollekatalogen.
+
 ## Rolle eller tilgang
 
 Alle koder ligger i et navnerom, og navneromstypen avgjør hva koden er:
@@ -41,7 +50,7 @@ Prefikset står bare her, i `allowed-tools` i fs-krav-avvik, i `tools` i `.claud
 - **`utgatte_treff`:** navnet er navnet på en utgått rolle, ofte det gamle navnet på en rolle som er erstattet. Bruk den aktive rollen i `rolle` eller `forslag`.
 - **Utgåtte roller** (`utgatt` er satt) skal ikke brukes i nye krav eller testbrukere.
 - **Miljø:** katalogen er den samme i alle miljøer. Bruk standardmiljøet (`production`) med mindre brukeren ber om noe annet.
-- **Svarer ikke verktøyene** (MCP-en mangler, ikke innlogget): si det, og fortsett uten. Rollene som ikke er bekreftet, skrives som `[Fylles ut: …]`. Gjett aldri rollenavn eller hva en rolle gir.
+- **Svarer ikke verktøyene** (MCP-en mangler, ikke innlogget, eller brukeren sa nei): si det, og fortsett uten. Rollene som ikke er bekreftet, skrives som `[Fylles ut: …]`. Gjett aldri rollenavn eller hva en rolle gir.
 
 ## RLS og FS Admin: hva katalogen ikke vet
 

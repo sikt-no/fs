@@ -69,7 +69,7 @@ Modusene kan kjedes: fullføring avdekker ofte behov for nye scenarios eller nye
 Hvis brukeren allerede har jobbet med et initiativ i denne samtalen, bruk det uten å spørre på nytt. Ellers, spør brukeren om det scopet ikke svarer på:
 
 - Hva heter initiativet / hvilken funksjonalitet skal spesifiseres?
-- Hvem er aktørene? Slå opp aktørene som er roller, med `finn_roller` i rollekatalogen ([`.claude/references/rollekatalog.md`](../../references/rollekatalog.md)), og bruk visningsnavnet til rollen som finnes.
+- Hvem er aktørene? Slå opp aktørene som er roller, med `finn_roller` i rollekatalogen når brukeren har sagt ja (*Spør først* i [`.claude/references/rollekatalog.md`](../../references/rollekatalog.md)), og bruk visningsnavnet til rollen som finnes.
 - Hvilket domene hører dette til? (se `krav/` for eksisterende domener)
 - **Bygger kravet på kode, schema, skisser eller FS-klienten** (også når det står i scopet)? Følg da *Krav fra kode, skisser eller FS-klienten* i `krav/README.md`.
 - **Hører kravet til et GitHub-issue?** (f.eks. `#1234`). Valgfritt: svarer brukeren "nei" eller "hopp over", skrives fila uten `# GitHub:`-linje.
@@ -329,7 +329,7 @@ Ta ett draft-krav om gangen. For hvert:
 3. **Oppsummer for brukeren** hva som mangler eller er uavklart:
    - Åpne spørsmål som ikke er besvart
    - Skisse-pregede scenarios uten konkrete data / forventet resultat
-   - Uklare feltlister, rolle-navn, feilmeldinger, forretningsregler. Kjør `sjekk_rollenavn` på rollenavnene i `Som …` og stegene ([`.claude/references/rollekatalog.md`](../../references/rollekatalog.md)): `sannsynlig`, `tvetydig`, `feil_type` og `ukjent` er spørsmål til brukeren
+   - Uklare feltlister, rolle-navn, feilmeldinger, forretningsregler. Har brukeren sagt ja til rollekatalogen, kjør `sjekk_rollenavn` på rollenavnene i `Som …` og stegene ([`.claude/references/rollekatalog.md`](../../references/rollekatalog.md)): `sannsynlig`, `tvetydig`, `feil_type` og `ukjent` er spørsmål til brukeren
    - Avvik fra *Gode scenarioer* og *Terminologi* i `krav/README.md`
    - Manglende `Bakgrunn:` der det ville redusert duplisering
    - Referanser: `@depends-on-` og `@ref-` til ID-er som ikke finnes, og referanser som står i fritekst i kommentarene (se *Referanser mellom krav* under). Spør om de skal bli tagger

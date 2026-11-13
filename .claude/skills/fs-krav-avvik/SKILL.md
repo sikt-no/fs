@@ -68,13 +68,13 @@ Brukeren oppgir en mappe eller fil under `krav/`. Mangler den, spør. Finn filen
    - **Regel gjentatt i flyten:** et scenario som beskriver en valideringsregel, en feilmelding eller felter som står i kravet fasen bygger på, i stedet for overleveringen. Les kravet før du melder det.
    - **Flyt som faller på terskelen:** flyten går ikke over minst to sub-domener eller domener (les mappene til kravene i `@depends-on-`), eller har ingen overlevering. Foreslå referanser mellom kravene i stedet.
    - Funnene her er alltid *trenger avklaring*, og rettes med `fs-krav` (modus E for flyter).
-8. **Roller** ([`.claude/references/rollekatalog.md`](../../references/rollekatalog.md)). Samle rollenavnene i fila: aktøren i `Som …`, rollen i steg som «jeg er innlogget som …», «jeg har rollen …» og «… har ikke …-rollen», og koden i `forretningsrollen "…"`. Kjør `sjekk_rollenavn` på alle i ett kall.
+8. **Roller** ([`.claude/references/rollekatalog.md`](../../references/rollekatalog.md)). Spør først (*Spør først* i referansen). Samle rollenavnene i fila: aktøren i `Som …`, rollen i steg som «jeg er innlogget som …», «jeg har rollen …» og «… har ikke …-rollen», og koden i `forretningsrollen "…"`. Kjør `sjekk_rollenavn` på alle i ett kall.
    - `finnes`: ikke avvik. Står koden i et steg og ikke i testdata, gjelder punkt 4.
    - `sannsynlig`: *bare ordlyd* når visningsnavnet bare skiller seg i skrivemåte. Ellers *trenger avklaring*, med rollen som forslag.
    - `tvetydig` og `ukjent`: *trenger avklaring*, med forslagene.
-   - `feil_type`: *trenger avklaring*. Kravet nevner en tilgang som en rolle; foreslå forretningsrollen fra `roller_som_gir`.
+   - `feil_type`: *trenger avklaring*. Kravet nevner en tilgang som en rolle; foreslå en av forretningsrollene i `gis_av`.
    - Er rollen utgått (`utgatt`), *trenger avklaring*.
-   - Svarer ikke rollekatalogen, si det i rapporten og hopp over punktet.
+   - Sa brukeren nei, eller svarer ikke rollekatalogen, si det i rapporten og hopp over punktet.
 
 ## Klassifiser hvert funn
 
