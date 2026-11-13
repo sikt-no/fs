@@ -171,7 +171,8 @@ Egenskap: Automatisk vurdering av spesielle opptakskrav
 
   @depends-on-OPT-BEH-BEH-004 @ref-FLY-OPT-AUT-001 @implemented
   Regel: Kravelementene vurderes bare mot ett entydig vitnemål
-    # Har søkeren flere vitnemål, velger saksbehandleren vitnemålet først (OPT-BEH-BEH-039).
+    # Har søkeren flere ulike vitnemål, velger saksbehandleren vitnemålet først (OPT-BEH-BEH-039).
+    # To identiske vitnemål regnes som ett vitnemål.
 
     @deprecated
     Scenariomal: Ingen automatisk vurdering når <grunn> (avvikles)
@@ -194,9 +195,9 @@ Egenskap: Automatisk vurdering av spesielle opptakskrav
       Så er kravelementet ikke vurdert
 
       Eksempler:
-        | grunn                                                                                                    |
-        | søkeren har flere elektroniske vitnemål som ikke er annullert, og saksbehandleren ikke har valgt vitnemål |
-        | søkeren ikke har noe elektronisk vitnemål                                                                |
+        | grunn                                                                                                          |
+        | søkeren har flere ulike elektroniske vitnemål som ikke er annullert, og saksbehandleren ikke har valgt vitnemål |
+        | søkeren ikke har noe elektronisk vitnemål                                                                      |
 
     Scenario: Opplastet kompetansebevis stopper ikke vurderingen
       # Avklart 06.11.2026: kompetansebevis kommer bare som dokumenter søkeren laster opp, ikke

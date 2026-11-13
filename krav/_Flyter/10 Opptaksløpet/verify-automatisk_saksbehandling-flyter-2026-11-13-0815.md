@@ -31,7 +31,7 @@ Tallene for hele kjøringen, regnet ut fra tabellene under.
 - Forslag: 0 kan leveres, 0 delvis levert, 0 kan slettes, 7 kan leveres når det er avklart, 4 blir stående
 - Tilgang og datakonsistens: ingen rader (bare flyter og avhengigheter i omfanget)
 - Regler i koden uten scenario: 0
-- Endringer gjort: 1 krav og 5 deler fikk ny status, og 4 krav ble rettet (019, 025, 028 og AUT-001), 0 filer og 0 blokker slettet
+- Endringer gjort: 1 krav og 5 deler fikk ny status, og 5 krav ble rettet (019, 020, 025, 028 og AUT-001), 0 filer og 0 blokker slettet
 - Åpne spørsmål: 1 regel og 3 scenarioer i gating-settet, 0 utenfor gating (`@draft`)
 
 ## Forslag til endringer
@@ -67,6 +67,7 @@ Det som er endret i kravfilene og i resultatet: i kjøringen (det sikre, når br
 | `@OPT-BEH-BEH-039` | Regel: Har søkeren flere vitnemål, behandles saken automatisk på vitnemålet saksbehandleren velger | `@implemented` på delen | Begge scenarioene funnet i fs-plattform og fs-admin (!3415) og bekreftet av kontrollen. `@draft`-scenarioet om sammensatt vitnemål under regelen står urørt |
 | `@OPT-BEH-BEH-039` | Scenario: Grunnlag fra vitnemålet saksbehandleren har valgt; Scenario: Vitnemålspoeng fra vitnemålet saksbehandleren har valgt; Scenario: Kravelementene vurderes mot vitnemålet saksbehandleren har valgt | `@implemented` på delene | Brukeren: det samme for den andre VAL-fasen. Funnet i fs-plattform og bekreftet av kontrollen. «Sammensatt vitnemål …» står urørt, så regelen og VAL-fasen er fortsatt ikke levert, og fasen venter også på `@FLY-OPT-AUT-001` |
 | `@FLY-OPT-VAL-001` | Scenario: Saken behandles automatisk på vitnemålet saksbehandleren velger | `ikke funnet` → `funnet` | Fasen er levert etter taggingen over, og overleveringen er funnet i begge repoene |
+| `@OPT-BEH-BEH-020` | Scenariomal: Ingen automatisk vurdering når <grunn> | rettet på stedet: «flere ulike elektroniske vitnemål» i `Eksempler`, og kommentaren under regelen | Brukeren: raden var usikker fordi to identiske vitnemål regnes som ett (!6741). Rettet som 019. `usikker` → `funnet` |
 | `@OPT-BEH-BEH-028` | Regel: Poeng for høyere utdanning regnes ut fra søkerens studiepoeng | `@implemented` på regelen (fra scenarioene), og avklaring på «Bare beståtte emner teller» | Brukeren: tjenesten for resultater fra høyere utdanning gir bare gyldige resultater, så backenden trenger ikke å filtrere. Scenarioet er levert. `ikke funnet` → `funnet`. AUT-fasen «Søknaden får tilleggspoeng …» er dermed levert, og overleveringen er funnet |
 | `@OPT-BEH-BEH-019` | Scenario: Søker med flere ulike vitnemål behandles ikke automatisk | rettet på stedet (tittel, `Gitt` og kommentaren under regelen) | Brukeren: «to ulike vitnemål». Koden (!6741) regner identiske vitnemål som ett, og det er levert. Rettet på stedet fordi koden allerede gjør det teksten nå sier. `usikker` → `funnet` |
 | `@OPT-BEH-BEH-025` | Scenario: Saken behandles ikke helautomatisk før saksbehandleren har valgt vitnemål; Scenario: To identiske vitnemål regnes som ett vitnemål (nytt) | «to ulike vitnemål» i `Gitt`, og nytt scenario under den leverte regelen (ingen statustag) | Brukeren: 025 eier regelen om identiske vitnemål, og den er levert |
@@ -152,7 +153,7 @@ Scenarioene i kravene fasene bygger på (delene ankeret peker på), per flyt og 
 | `@FLY-OPT-AUT-001` | `@OPT-REG-RAN-001` | Rangeringsregelverk | `@implemented` | 5/5 | – | – | – |
 | `@FLY-OPT-AUT-001` | `@OPT-REG-RAN-002` | Poengberegning | `@implemented` | 10/10 | – | – | – |
 | `@FLY-OPT-AUT-001` | `@OPT-BEH-BEH-028` | Automatiske tilleggspoeng | `@in-progress` | 20/20 | 20/20 | – | – |
-| `@FLY-OPT-AUT-001` | `@OPT-BEH-BEH-020` | Automatisk vurdering av spesielle opptakskrav | `@in-progress` | 18/18 | 17/18 | – | «Ingen automatisk vurdering når <grunn>» (`:190`, usikker) |
+| `@FLY-OPT-AUT-001` | `@OPT-BEH-BEH-020` | Automatisk vurdering av spesielle opptakskrav | `@in-progress` | 18/18 | 18/18 | – | – |
 | `@FLY-OPT-AUT-001` | `@OPT-BEH-BEH-012` | Automatisk kvoteplassering | `@implemented` | 8/8 | 8/8 | – | – |
 | `@FLY-OPT-AUT-001` | `@OPT-REG-KVO-002` | Kvotespørsmål | `@implemented` | 7/7 | – | – | – |
 | `@FLY-OPT-AUT-001` | `@OPT-BEH-BEH-031` | Beregne poengsum per kvote | `@implemented` | 13/13 | 12/13 | – | «Uendret poengsum gir ikke nytt innslag i endringsloggen» (`:82`, usikker) |
@@ -169,7 +170,7 @@ Scenarioene i kravene fasene bygger på (delene ankeret peker på), per flyt og 
 | `@FLY-OPT-SAM-001` | `@OPT-BEH-BEH-039` | Behandle automatisk på vitnemålet saksbehandleren velger | `@in-progress` | 0/2 | 0/1 | «Saken behandles automatisk på et sammensatt vitnemål» (`:54`, ikke sjekket i koden); «Sammensatt vitnemål gir ikke grunnlaget som krever førstegangsvitnemål» (`:95`, ikke funnet) | – |
 | `@FLY-OPT-SAM-001` | `@OPT-BEH-BEH-019` | Automatisk grunnlag | `@in-progress` | 7/7 | 7/7 | – | – |
 
-`@FLY-OPT-AUT-001`: 214 av 226 scenarioer i 18 krav er levert, og 186 av 203 er funnet i koden (23 har bare status fra taggene).
+`@FLY-OPT-AUT-001`: 214 av 226 scenarioer i 18 krav er levert, og 187 av 203 er funnet i koden (23 har bare status fra taggene).
 `@FLY-OPT-VIT-001`: 41 av 42 scenarioer i 5 krav er levert, og 41 av 42 er funnet i koden.
 `@FLY-OPT-VAL-001`: 5 av 6 scenarioer i 1 krav er levert, og 5 av 6 er funnet i koden.
 `@FLY-OPT-SAM-001`: 7 av 9 scenarioer i 2 krav er levert, og 7 av 8 er funnet i koden (1 har bare status fra taggene).
@@ -191,7 +192,7 @@ Kravene som kravene i scope bygger på (`@depends-on-`), med statusen deres. Avh
 | `@FLY-OPT-AUT-001` | `@OPT-REG-RAN-001` Rangeringsregelverk | 1 | `@implemented` | – | bare status |
 | `@FLY-OPT-AUT-001` | `@OPT-REG-RAN-002` Poengberegning | 1 | `@implemented` | – | bare status |
 | `@FLY-OPT-AUT-001` | `@OPT-BEH-BEH-028` Automatiske tilleggspoeng | 1 | `@in-progress` | 20/20 | ankrene: fire regler; «Bare beståtte emner teller» avklart 13.11.2026 |
-| `@FLY-OPT-AUT-001` | `@OPT-BEH-BEH-020` Automatisk vurdering av spesielle opptakskrav | 1 | `@in-progress` | 17/18 | ankrene: fire regler; 1 usikker (identiske vitnemål) |
+| `@FLY-OPT-AUT-001` | `@OPT-BEH-BEH-020` Automatisk vurdering av spesielle opptakskrav | 1 | `@in-progress` | 18/18 | ankrene: fire regler |
 | `@FLY-OPT-AUT-001` | `@OPT-BEH-BEH-012` Automatisk kvoteplassering | 1 | `@implemented` | 8/8 | ankrene: tre regler |
 | `@FLY-OPT-AUT-001` | `@OPT-REG-KVO-002` Kvotespørsmål | 1 | `@implemented` | – | bare status |
 | `@FLY-OPT-AUT-001` | `@OPT-BEH-BEH-031` Beregne poengsum per kvote | 1 | `@implemented` | 12/13 | hele kravet; 1 usikker (endringsloggen) |
@@ -355,7 +356,7 @@ Stiforkortelser i tabellen som ikke står over: `SYNC` = `P/saksbehandling/GskFu
 | `@OPT-BEH-BEH-020` | Kravelementer fra en annen sak i søknaden vurderes ikke i saken | funnet | P ✓ · A – — P/saksbehandling/KvalifikasjonsgrunnlagOppdateringService.java:172; KvalifiseringKravelementV2OppdateringService.java:90; AKV:113 |
 | `@OPT-BEH-BEH-020` | Kravelement vurderes mot vitnemål fra R94 | funnet | P ✓ · A – — P/autosak/kontrollmotor/Kravelementer.java:393, L64 |
 | `@OPT-BEH-BEH-020` | Ugyldig karakter må vurderes manuelt | funnet | P ✓ · A ✓ — AKV:171, L222; fs-admin/src/domains/soknadsbehandling/features/KravlisteStudierCard/components/AutomatiskVurdering.tsx:24 |
-| `@OPT-BEH-BEH-020` | Ingen automatisk vurdering når <grunn> | usikker | P ~ · A – — AKV:92 dekker «ikke noe elektronisk vitnemål»; men etter !6741 brukes ett av flere identiske vitnemål (AutomatikkensVitnemaal.java:115, velgBlantIdentiske L182), så raden «flere elektroniske vitnemål … ikke valgt» gir vurdering når vitnemålene er like; kravet sier ikke noe om identiske |
+| `@OPT-BEH-BEH-020` | Ingen automatisk vurdering når <grunn> | funnet | P ✓ · A – — raden om flere vitnemål er rettet til «flere ulike elektroniske vitnemål» i denne kjøringen. Ulike vitnemål og ingen valgt gir ikke noe vitnemål: P/autosak/AutomatikkensVitnemaal.java:185-186 (velgBlantIdentiske) → AKV:92-94; ingen vitnemål: AutomatikkensVitnemaal.java:71-73 → AKV:92-94 |
 | `@OPT-BEH-BEH-020` | Opplastet kompetansebevis stopper ikke vurderingen | funnet | P ✓ · A – — P/autosak/AutomatikkensVitnemaal.java:102; AKV:250 |
 | `@OPT-BEH-BEH-020` | Kvalifisert når alle kravelementene i en kravliste er oppfylt | funnet | P ✓ · A – — KE:157, L150 |
 | `@OPT-BEH-BEH-020` | Kvalifisert når én av kravlistene er oppfylt | funnet | P ✓ · A – — KE:162, L312 |
@@ -516,7 +517,6 @@ Det som må følges opp, og som ikke står i de andre tabellene: det kravet ikke
 | Type | Feature-ID | Gjelder | Hva |
 | --- | --- | --- | --- |
 | Kravet er bak koden | `@FLY-OPT-AUT-001` | «Kjent brudd» i beskrivelsen (`krav/_Flyter/10 Opptaksløpet/automatisk_saksbehandling.feature:29-35`) | Alle fire kjente brudd er rettet på main: manglene publiseres når saken blir ferdig behandlet (`P/autosak/FerdigbehandlingService.java:78`), påstanden om GSK beregnes og lagres på vitnemålet ved import (`P/vgs/HentVgsVitnemaalService.java:218-228` → `P/autosak/gsk/GskPaastandService.java:29-40`), uenighet stopper ikke og vises som varsel (`P/autosak/gsk/GskKonklusjonEvaluator.java:58-76`, `A/VitnemalsbehandlingSection/VitnemalsbehandlingSection.tsx:86,111,172-174`), og behandlingen starter etter importen (`P/autosak/KregImportService.java:109-110`). Fjern kommentarene med `fs-krav` |
-| Kravet er bak koden | `@OPT-BEH-BEH-020` | «Ingen automatisk vurdering når <grunn>» (`automatisk_kvalifisering.feature:190`) | Raden «flere elektroniske vitnemål …, og saksbehandleren ikke har valgt vitnemål» bør si «ulike», som i 019 og 025: identiske vitnemål gir vurdering (`P/autosak/AutomatikkensVitnemaal.java:115,182`). Ikke rettet i denne kjøringen |
 | Kravet er bak koden | `@OPT-BEH-BEH-027` | Kommentaren under «Løp uten grunnlagskode i listen over løp» (`beregne_gsk_fra_vitnemål.feature:385-387`) | «Kode i dag: bare når saksbehandleren starter kontrollen» er utdatert: påstanden beregnes ved import (`P/vgs/HentVgsVitnemaalService.java:210,221-234`) |
 | Kravet er bak koden | `@OPT-BEH-BEH-039` | Kommentaren «Ikke bygget i dag» (`behandle_automatisk_på_valgt_vitnemål.feature:86`) | Utdatert etter !6741: `P/regelverk/kvalifisering/AutomatiskKravelementVurderingService.java:249-251` |
 | Kontrollen endret | `@OPT-BEH-BEH-025` | «Den automatiske behandlingen publiserer manglene når saken blir ferdig behandlet» | funnet → usikker: fs-plattform publiserer (`P/autosak/FerdigbehandlingService.java:78`), men `Så` sier at søkeren ser manglene i Min kompetanse, og min-kompetanse er ikke med i kjøringen |
