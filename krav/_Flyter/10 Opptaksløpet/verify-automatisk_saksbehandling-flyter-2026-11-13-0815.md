@@ -154,7 +154,7 @@ Scenarioene i kravene fasene bygger på (delene ankeret peker på), per flyt og 
 | Flyt | Krav | Egenskap | Status | Levert | Funnet i koden | Ikke levert | Levert, men ikke funnet i koden |
 | --- | --- | --- | --- | --- | --- | --- | --- |
 | `@FLY-OPT-AUT-001` | `@OPT-BEH-BEH-030` | Importere resultater fra KREG | `@implemented` | 8/8 | 8/8 | – | – |
-| `@FLY-OPT-AUT-001` | `@OPT-BEH-BEH-032` | Starte automatisk behandling | `@in-progress` | 2/2 | 2/2 | – | – |
+| `@FLY-OPT-AUT-001` | `@OPT-BEH-BEH-032` | Starte automatisk behandling | `@implemented` | 2/2 | 2/2 | – | – |
 | `@FLY-OPT-AUT-001` | `@OPT-BEH-BEH-015` | Automatisk GSK-konklusjon | `@in-progress` | 36/37 | 36/37 | «Automatikken kan sette en ny konklusjon etter annulleringen» (`:462`, ikke funnet) | – |
 | `@FLY-OPT-AUT-001` | `@OPT-BEH-BEH-027` | Beregne GSK fra vitnemål | `@implemented` | 27/27 | 27/27 | – | – |
 | `@FLY-OPT-AUT-001` | `@OPT-BEH-BEH-025` | Ferdigbehandle en sak | `@in-progress` | 8/8 | 8/8 | – | – |
@@ -174,7 +174,7 @@ Scenarioene i kravene fasene bygger på (delene ankeret peker på), per flyt og 
 | `@FLY-OPT-VIT-001` | `@OPT-BEH-BEH-033` | Kjøre jobbene i opptak | `@planned` | 0/1 | 0/1 | «Jobbplanleggeren starter <jobb>» (`:30`, ikke funnet) | – |
 | `@FLY-OPT-VIT-001` | `@OPT-BEH-BEH-030` | Importere resultater fra KREG | `@implemented` | 11/11 | 11/11 | – | – |
 | `@FLY-OPT-VIT-001` | `@OPT-BEH-BEH-015` | Automatisk GSK-konklusjon | `@in-progress` | 22/22 | 22/22 | – | – |
-| `@FLY-OPT-VIT-001` | `@OPT-BEH-BEH-032` | Starte automatisk behandling | `@in-progress` | 1/1 | 1/1 | – | – |
+| `@FLY-OPT-VIT-001` | `@OPT-BEH-BEH-032` | Starte automatisk behandling | `@implemented` | 1/1 | 1/1 | – | – |
 | `@FLY-OPT-VIT-001` | `@OPT-BEH-BEH-034` | Håndtere annullert vitnemål | `@implemented` | 7/7 | 7/7 | – | – |
 | `@FLY-OPT-VAL-001` | `@OPT-BEH-BEH-039` | Behandle automatisk på vitnemålet saksbehandleren velger | `@in-progress` | 5/6 | 5/6 | «Sammensatt vitnemål gir ikke grunnlaget som krever førstegangsvitnemål» (`:95`, ikke funnet) | – |
 | `@FLY-OPT-SAM-001` | `@OPT-BEH-BEH-039` | Behandle automatisk på vitnemålet saksbehandleren velger | `@in-progress` | 0/2 | 0/1 | «Saken behandles automatisk på et sammensatt vitnemål» (`:54`, ikke sjekket i koden); «Sammensatt vitnemål gir ikke grunnlaget som krever førstegangsvitnemål» (`:95`, ikke funnet) | – |

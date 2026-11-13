@@ -1,6 +1,6 @@
 # language: no
 # BEGREPER (2026-11-10): Bytt «opptaksforvalter ved forvaltende organisasjon» med «opptaksforvalter hos forvalteren», «saksbehandlende organisasjon» med «behandler» når fila likevel endres. Se krav/02 Opptak/begreper.md.
-@OPT-BEH-BEH-032 @must @in-progress @scope-automatisk-import-og-start @ref-OPT-BEH-BEH-025 @ref-OPT-BEH-BEH-033 @ref-OPT-BEH-BEH-035
+@OPT-BEH-BEH-032 @must @implemented @scope-automatisk-import-og-start @ref-OPT-BEH-BEH-025 @ref-OPT-BEH-BEH-033 @ref-OPT-BEH-BEH-035
 Egenskap: Starte automatisk behandling
   Som saksbehandler
   ønsker jeg at den automatiske behandlingen starter av seg selv for hver ny sak
@@ -25,7 +25,7 @@ Egenskap: Starte automatisk behandling
   # Saksbehandleren velger vitnemålet når søkeren har flere vitnemål, i
   # OPT-BEH-BEH-039.
 
-  @depends-on-OPT-BEH-BEH-011 @depends-on-OPT-BEH-BEH-030 @ref-FLY-OPT-AUT-001 @implemented
+  @depends-on-OPT-BEH-BEH-011 @depends-on-OPT-BEH-BEH-030 @ref-FLY-OPT-AUT-001
   # OPT-BEH-BEH-011: «Søknadsalternativene fordeles når søknaden sendes inn eller endres, og fordelingen ligger fast»
   # OPT-BEH-BEH-030: «Resultatene hentes når saken er opprettet»
   Regel: Behandlingen kjører for hver ny sak saksbehandlertildelingen oppretter
@@ -37,7 +37,7 @@ Egenskap: Starte automatisk behandling
       Når saksbehandlertildelingen har opprettet saken
       Så behandles saken automatisk når resultatene er importert
 
-  @depends-on-OPT-BEH-BEH-030 @ref-FLY-OPT-VIT-001 @ref-FLY-OPT-AUT-001 @ref-OPT-BEH-BEH-025 @implemented
+  @depends-on-OPT-BEH-BEH-030 @ref-FLY-OPT-VIT-001 @ref-FLY-OPT-AUT-001 @ref-OPT-BEH-BEH-025
   # OPT-BEH-BEH-030: «Nye og annullerte vitnemål i KREG importeres for aktive søkere»
   Regel: Behandlingen kjører når importen har hentet vitnemålene til en søker uten vitnemål
     # Avklart 05.11.2026 (Geir, #951): behandlingen starter når importen har hentet alle
@@ -55,7 +55,6 @@ Egenskap: Starte automatisk behandling
       Når importen av VGS-vitnemål fra KREG kjører
       Så behandles saken automatisk når vitnemålet er importert
 
-  @implemented
   Regel: Behandlingen starter av seg selv bare for saker som ikke er behandlet
     # Avklart 2026-11-02: har saksbehandleren begynt på saken, eller er saken ferdig behandlet,
     # starter ikke behandlingen av seg selv. Saksbehandleren kan starte den (se «Saksbehandleren
@@ -83,7 +82,6 @@ Egenskap: Starte automatisk behandling
     # annullert» (OPT-BEH-BEH-034) og varselet om at grunnlaget saksbehandleren har valgt, er
     # utdatert (OPT-BEH-BEH-021), kommer i tillegg, fordi de sier noe mer.
 
-    @implemented
     Scenario: Saken behandles ikke automatisk på nytt når det kommer et nytt vitnemål
       Gitt at den automatiske saksbehandlingen pågår i opptaket
       Og at saken er behandlet automatisk på søkerens vitnemål
@@ -91,7 +89,6 @@ Egenskap: Starte automatisk behandling
       Når importen av VGS-vitnemål fra KREG kjører
       Så behandles ikke saken automatisk på nytt
 
-  @implemented
   Regel: Saksbehandleren starter den automatiske behandlingen for en sak
     # Avklart 29.10.2026: det trengs ingen mulighet til å velge flere saker i sakslisten og
     # starte behandlingen for dem. Behandlingen starter av seg selv.
@@ -108,7 +105,7 @@ Egenskap: Starte automatisk behandling
       Når saksbehandleren vil starte den automatiske behandlingen
       Så kan saksbehandleren ikke starte behandlingen for saken
 
-  @ref-OPT-BEH-BEH-019 @ref-OPT-BEH-BEH-020 @ref-OPT-BEH-BEH-018 @implemented
+  @ref-OPT-BEH-BEH-019 @ref-OPT-BEH-BEH-020 @ref-OPT-BEH-BEH-018
   Regel: Det saksbehandleren har gjort, endres ikke av automatikken
     # Reglene for hvert steg står i kravene til grunnlaget, poengene og kravelementene.
 
@@ -118,7 +115,7 @@ Egenskap: Starte automatisk behandling
       Når saksbehandleren starter den automatiske behandlingen på søkerens vitnemål
       Så har saken fortsatt grunnlaget saksbehandleren valgte
 
-  @depends-on-OPT-BEH-BEH-025 @implemented
+  @depends-on-OPT-BEH-BEH-025
   # OPT-BEH-BEH-025: «Den automatiske behandlingen setter saken til ferdig behandlet når alt er avgjort»
   Regel: Det fremgår at saken er behandlet automatisk
 
