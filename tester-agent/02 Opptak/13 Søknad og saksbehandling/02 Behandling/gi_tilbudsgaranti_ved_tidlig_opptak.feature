@@ -1,7 +1,8 @@
 # language: no
 # Generert av fs-testcaser-cdp 2026-11-09. Rettet 2026-11-10 etter kjøringen (Klargjøring K steg 5 og Poengsum P), og 2026-11-13
 # (testdataene for «Annen tilbudsgaranti på et høyere prioritert …» og en søker med to saker). Oppdatert av fs-testcaser-agent
-# 2026-11-13 (fire nye scenarioer i kravet, og dialogen etter gjennomføringen)
+# 2026-11-13 (fire nye scenarioer i kravet, og dialogen etter gjennomføringen). Rettet 2026-11-13 etter kjøringen
+# (dialogen om mangler i Klargjøring K steg 5, og S leses av opptaksforvalteren)
 # Krav: krav/02 Opptak/13 Søknad og saksbehandling/02 Behandling/gi_tilbudsgaranti_ved_tidlig_opptak.feature @ 93a20ea5 (blob e6c37f576c871930d5f7ef54f19c4973aaa92f0b)
 #
 # Scenarioene som er utkast (@draft), er ikke med.
@@ -24,7 +25,8 @@
 #   2. Gå til «Opptak», velg «opptak-tidlig-opptak», og velg «Gå til søknader».
 #   3. Søk på søkeren, og åpne saken.
 #   4. Velg steget «1. Tidlig opptak», og velg konklusjonen der søkeren deltar i «Konklusjon». «Konklusjonen er lagret» vises.
-#   5. Velg «Behandlet» i «Behandlingsstatus». Last inn siden på nytt: «Behandlingsstatus» står som «Behandlet».
+#   5. Velg «Behandlet» i «Behandlingsstatus». Viser dialogen «Søkeren ser ikke alle manglene ennå», velg «Publiser og
+#      sett til Behandlet». Last inn siden på nytt: «Behandlingsstatus» står som «Behandlet».
 #
 # Poengsum P (søkerens poengsum til et utdanningstilbud):
 #   1. Som «opptak-saksbehandler-behandlende-tidlig-opptak», åpne saken til søkeren, og velg steget «7. Oppsummering».
@@ -43,8 +45,9 @@
 # under «Gå til søknader» som «opptak-saksbehandler-behandlende-tidlig-opptak-andre» omtrent hvert 30. sekund, til saken
 # finnes, og ellers i inntil 2 minutter. Finnes den ikke da, er testcasen «Ikke testet».
 #
-# Se tilbudsgarantien S: som «opptak-saksbehandler-behandlende-tidlig-opptak», åpne saken til søkeren på nytt
-# (last inn siden), og les «Tilbudsgaranti fra forvalter» for hvert søknadsalternativ i saken.
+# Se tilbudsgarantien S: som «opptak-forvalter-forvaltende», åpne saken til søkeren på nytt (last inn siden), velg
+# «Søknadsalternativer», åpne hvert søknadsalternativ, og les «Tilbudsgaranti fra forvalter» (og «Tilbudsgaranti fra
+# tilbyder» når scenarioet sier det).
 @TST-OPT-BEH-BEH-001 @depends-on-OPT-BEH-BEH-007
 Egenskap: Gi tilbudsgaranti ved tidlig opptak
   Tester at opptaksforvalteren kan prøvekjøre og gjennomføre tidligopptaket, og at søkerne som deltar og har nok
