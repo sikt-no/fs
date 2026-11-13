@@ -1,5 +1,5 @@
 # language: no
-@OPT-SØK-SØK-021 @must @draft
+@OPT-SØK-SØK-021 @must @draft @ref-OPT-BEH-BEH-043
 Egenskap: Søkerens kontaktopplysninger og målform
   Som søker
   ønsker jeg at opptak bruker kontaktopplysningene og målformen jeg har registrert i Kontakt- og reservasjonsregisteret (KRR)
@@ -20,7 +20,12 @@ Egenskap: Søkerens kontaktopplysninger og målform
   # Saksbehandlerens visning av kontaktinformasjonen står i OPT-BEH-BEH-043 (se_søknaden_til_en_søker.feature).
   # Svarer til HK-9433 (innhenting og informasjon om personopplysninger for ID-porten-søker).
 
+  @openquestion
   Regel: Kontaktopplysningene og målformen hentes fra KRR når søkeren logger inn
+    # ÅPNE SPØRSMÅL:
+    # - Hvor ferske må opplysningene være når SMS og e-post sendes til søkere som ikke har logget inn nylig?
+    #   I dag synkroniseres de hver 30. dag. FS-klienten slår i tillegg opp i KRR ved utsending.
+
 
     Scenario: Søkeren som finnes i KRR, får kontaktopplysningene og målformen fra KRR
       Gitt at søkeren finnes i KRR med målform nynorsk

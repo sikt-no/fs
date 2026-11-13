@@ -42,13 +42,13 @@ Egenskap: Se og endre egne person- og kontaktopplysninger
       | astrid aga | mamma              | bodhild aga   |
       | per ulv    | jeg er syk         | bodhild aga   |
 
+  @ref-OPT-SØK-SØK-021
   Scenariomal: Se og endre Språk og målform
     Når "<person>" legger til <språk og målform>
     Så ser "<person>" oppdatert <språk og målform> 
     # Mulig det bør være to forskjellige steg for person og administrator, siden de er i forskjellige brukerflater.
     Så ser "<administrator>" oppdatert <språk og målform>
 
-    # Målformen til søkere er bokmål eller nynorsk, se OPT-SØK-SØK-021.
     Eksempler:
       | person      | språk og målform | administrator |
       | Ola Normann | Norsk bokmål     | bodhild aga§  |
