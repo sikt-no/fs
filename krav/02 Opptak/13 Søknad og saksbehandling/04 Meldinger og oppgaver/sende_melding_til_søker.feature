@@ -1,5 +1,4 @@
 # language: no
-# BEGREPER (2026-11-10): Bytt «saksbehandlende organisasjon» med «behandler» når fila likevel endres. Se krav/02 Opptak/begreper.md.
 @OPT-SØK-MEL-001 @must @draft @scope-meldinger-varslinger-og-oppgaver
 Egenskap: Sende melding til søker
   Som saksbehandler ved saksbehandlende organisasjon
@@ -65,39 +64,6 @@ Egenskap: Sende melding til søker
 
   @openquestion
   Regel: Opptaksforvalteren forvalter tekstene til meldingene
-
-  # Avklart 2026-11-10 (svar 22): valget gjelder per melding. Standard er at meldingen er delt med de andre
-  # organisasjonene på søknaden. Søkeren ser meldingen uansett.
-  Regel: Avsenderen velger om meldingen er intern
-
-    Scenario: En melding er delt som standard
-      Gitt søknaden er i et samordna opptak der tilbyderen og behandleren er ulike organisasjoner
-      Og jeg er saksbehandler ved behandleren av søknadsalternativet
-      Når jeg sender en melding til søkeren uten å merke den som intern
-      Så ser saksbehandleren ved tilbyderen meldingen
-      Og opptaksforvalteren ved forvalteren ser meldingen
-
-    Scenario: En intern melding ses bare av organisasjonen som sendte den
-      Gitt søknaden er i et samordna opptak der tilbyderen og behandleren er ulike organisasjoner
-      Og jeg er saksbehandler ved behandleren av søknadsalternativet
-      Når jeg sender en melding til søkeren og merker den som intern
-      Så ser ikke saksbehandleren ved tilbyderen meldingen
-      Men søkeren ser meldingen
-
-  # Avklart 2026-11-10 (R16, svar 31): forvalteren endrer alle tekstene i opptaket. Tilbyderen og behandleren endrer
-  # bare tekstene som gjelder det organisasjonen tilbyr eller behandler.
-  @openquestion
-  Regel: Hvem som endrer tekstene til søkerne, følger organisasjonens rolle i opptaket
     # ÅPNE SPØRSMÅL:
-    # - Hvem ser og endrer generiske tekster, som ikke gjelder bestemte søkere eller utdanningstilbud (svar 31)?
-
-    Scenariomal: Endre tekstene til søkerne ut fra organisasjonens rolle
-      Gitt jeg er opptaksforvalter ved <organisasjon>
-      Når jeg vil endre <tekst>
-      Så <utfall>
-
-      Eksempler:
-        | organisasjon                     | tekst                                                     | utfall                                       |
-        | forvalteren av opptaket          | teksten om et utdanningstilbud en annen organisasjon tilbyr | kan jeg endre teksten                        |
-        | tilbyderen av utdanningstilbudet | teksten om utdanningstilbudet organisasjonen tilbyr       | kan jeg endre teksten                        |
-        | tilbyderen av utdanningstilbudet | teksten om et utdanningstilbud en annen organisasjon tilbyr | ser jeg ikke muligheten til å endre teksten |
+    # - Det er ikke planlagt nå at opptaksforvalteren skal forvalte tekstene til meldingene.
+    #   Skal opptaksforvalteren kunne gjøre det på sikt?
