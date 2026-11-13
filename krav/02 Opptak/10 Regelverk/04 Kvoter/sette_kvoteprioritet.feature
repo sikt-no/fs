@@ -84,6 +84,14 @@ Egenskap: Sette kvoteprioritet i regelverkssamlingen
       Så er kvotetypen lagret uten kvoteprioritet
       Og opptaksforvalter ser et varsel på kvotetypen "Idrett (IDRETT)" om at kvoteprioritet mangler
 
+    # AVKLART 2026-11-13 (produkteier): Har regelverkssamlingen bare én kvotetype, er det ingenting å rangere.
+    # Kvotetypen trenger ingen kvoteprioritet, regnes som rangert og kan brukes av utdanningstilbud og i
+    # plasstildelingen. Den får ikke varselet. Se også sette_plassflyt.feature.
+    Scenario: Den eneste kvotetypen trenger ikke kvoteprioritet
+      Gitt at regelverkssamlingen "UHG 2027" bare har kvotetypen "Ordinær kvote (ORD)"
+      Så kan "Ordinær kvote (ORD)" brukes uten kvoteprioritet
+      Og opptaksforvalter ser ikke et varsel på kvotetypen "Ordinær kvote (ORD)" om at kvoteprioritet mangler
+
   # Regelen «Søkeren får tilbud i kvoten som er høyest prioritert i opptaket» er flyttet 2026-10-19 til
   # 14 Plasstildeling/03 Tildeling/gjennomføre_plasstildeling.feature, der virkningen av kvoteprioriteten står.
 
