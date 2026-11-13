@@ -136,19 +136,17 @@ Egenskap: Beregne automatisk på nytt
       Når saksbehandleren filtrerer sakene på taggen "Regelverk endret"
       Så ser saksbehandleren saken
 
-  @depends-on-OPT-BEH-BEH-025 @ref-FLY-OPT-AUT-001
+  @depends-on-OPT-BEH-BEH-025 @ref-FLY-OPT-AUT-001 @implemented
   Regel: Bare saker som er ferdig behandlet, beregnes på nytt
     # Saker som ikke er behandlet eller er under behandling, beregnes ikke på nytt. De blir
     # beregnet når de blir behandlet. Saker som er ferdig behandlet, forblir ferdig behandlet.
 
-    @implemented
     Scenario: Saken er fortsatt ferdig behandlet etter at poengene er beregnet på nytt
       Gitt at saken er ferdig behandlet
       Når opptaksforvalteren beregner på nytt for søknadsalternativene med rangeringsregelverket som er rettet
       Så har søknadsalternativet poengsum for søkeren etter det rettede rangeringsregelverket
       Og saken er fortsatt ferdig behandlet
 
-    @implemented
     Scenariomal: En sak med behandlingsstatusen "<status>" beregnes ikke på nytt
       Gitt at saken har behandlingsstatusen "<status>"
       Når opptaksforvalteren beregner på nytt for søknadsalternativene med rangeringsregelverket som er rettet
@@ -162,7 +160,10 @@ Egenskap: Beregne automatisk på nytt
     @depends-on-OPT-BEH-BEH-036
     # OPT-BEH-BEH-036: «Saken får automatiske mangeltekster når søkeren ikke er kvalifisert»
     Scenario: Søkeren ser den nye mangelteksten i en sak som er ferdig behandlet
-      Gitt at saken er ferdig behandlet
+      # Avklart 13.11.2026: gjelder bare saker den automatiske behandlingen har satt til ferdig
+      # behandlet. I saker saksbehandleren har behandlet, beregnes kravelementene ikke på nytt, så
+      # det kommer ingen ny mangeltekst. Saken får taggen «Regelverk endret».
+      Gitt at den automatiske behandlingen har satt saken til ferdig behandlet
       Og at søkeren er kvalifisert for søknadsalternativet
       Og at en feil i kontrollmotoren er rettet, så vitnemålet til søkeren ikke lenger oppfyller et kravelement
       Når opptaksforvalteren beregner på nytt for søknadsalternativene med kravelementet
@@ -170,10 +171,10 @@ Egenskap: Beregne automatisk på nytt
       Og søkeren ser den automatiske mangelteksten for kravelementet i Min kompetanse
       Og saken er fortsatt ferdig behandlet
 
-    @depends-on-OPT-BEH-BEH-036 @implemented
+    @depends-on-OPT-BEH-BEH-036
     # OPT-BEH-BEH-036: «Saken får automatiske mangeltekster når søkeren ikke er kvalifisert»
     Scenario: Den automatiske mangelteksten slettes når søkeren blir kvalifisert etter beregningen
-      Gitt at saken er ferdig behandlet
+      Gitt at den automatiske behandlingen har satt saken til ferdig behandlet
       Og at saken har en automatisk mangeltekst for et kravelement fordi søkeren ikke er kvalifisert for søknadsalternativet
       Og at en feil i kontrollmotoren er rettet, så vitnemålet til søkeren oppfyller kravelementet
       Når opptaksforvalteren beregner på nytt for søknadsalternativene med kravelementet
