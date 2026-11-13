@@ -20,12 +20,8 @@ Egenskap: Søkerens kontaktopplysninger og målform
   # Saksbehandlerens visning av kontaktinformasjonen står i OPT-BEH-BEH-043 (se_søknaden_til_en_søker.feature).
   # Svarer til HK-9433 (innhenting og informasjon om personopplysninger for ID-porten-søker).
 
-  @openquestion
   Regel: Kontaktopplysningene og målformen hentes fra KRR når søkeren logger inn
-    # ÅPNE SPØRSMÅL:
-    # - Hvor ferske må opplysningene være når SMS og e-post sendes til søkere som ikke har logget inn nylig?
-    #   I dag synkroniseres de hver 30. dag. FS-klienten slår i tillegg opp i KRR ved utsending.
-
+    # AVKLART (Håkon Hjelde Wold 13.11.2026): opplysningene fra KRR kan være opptil 30 dager gamle.
 
     Scenario: Søkeren som finnes i KRR, får kontaktopplysningene og målformen fra KRR
       Gitt at søkeren finnes i KRR med målform nynorsk
@@ -39,6 +35,12 @@ Egenskap: Søkerens kontaktopplysninger og målform
       Og at søkeren har endret målformen til nynorsk i KRR
       Når søkeren logger inn i Min kompetanse
       Så er søkeren registrert med målformen nynorsk
+
+    Scenario: Opplysningene fra KRR er ikke eldre enn 30 dager
+      Gitt at søkeren finnes i KRR
+      Og at søkeren ikke har logget inn i Min kompetanse på 30 dager
+      Når det har gått 30 dager siden opplysningene sist ble hentet fra KRR
+      Så hentes kontaktopplysningene og målformen til søkeren fra KRR på nytt
 
   Regel: Søkeren som finnes i KRR, endrer kontaktopplysningene og målformen i KRR
 
