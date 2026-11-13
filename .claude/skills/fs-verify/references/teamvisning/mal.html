@@ -373,7 +373,7 @@ footer dd { margin: 0; min-width: 0; overflow-wrap: anywhere; }
     var el = document.getElementById('flyter');
     function sum(list, key) { return list.reduce(function (a, k) { return k[key] ? [a[0] + k[key][0], a[1] + k[key][1]] : a; }, [0, 0]); }
     function pct(x) { return x[1] ? Math.round(100 * x[0] / x[1]) : 0; }
-    function item(text, g, label) { return '<li>' + glyph(g, label) + '<span>' + md(text) + '</span></li>'; }
+    function item(text, g, label, extra) { return '<li>' + glyph(g, label) + '<span>' + md(text) + (extra || '') + '</span></li>'; }
     el.innerHTML = '<h2>Kravene flytene bygger på</h2>' + F.map(function (f) {
       var lev = sum(f.krav, 'levert'), fun = sum(f.krav, 'funnet');
       var ukjent = lev[1] - fun[1];
@@ -385,7 +385,7 @@ footer dd { margin: 0; min-width: 0; overflow-wrap: anywhere; }
         return '<div class="fk' + (done ? ' done' : '') + '"><div class="fkh"><span class="t" title="@' + esc(k.id) + '">' + esc(k.title) + ' <span class="kid">@' + esc(k.id) + ' · ' + esc(k.status) + '</span></span>' +
           '<span class="fkn">' + k.levert[0] + '/' + k.levert[1] + ' levert' + (k.funnet ? ' · ' + k.funnet[0] + '/' + k.funnet[1] + ' funnet i koden' : ' · ikke sjekket i koden') + '</span></div>' +
           (done ? '' : '<ul>' + k.ikkeLevert.map(function (s) { return item(s, '✗', 'ikke levert'); }).join('') +
-            k.ikkeFunnet.map(function (s) { return item(s + ' <span class="chip part">levert, men ikke funnet i koden</span>', '~', 'levert, men ikke funnet i koden'); }).join('') + '</ul>') + '</div>';
+            k.ikkeFunnet.map(function (s) { return item(s, '~', 'levert, men ikke funnet i koden', ' <span class="chip part">levert, men ikke funnet i koden</span>'); }).join('') + '</ul>') + '</div>';
       }).join('');
       return '<details class="flyt"><summary><div class="fh"><h3>' + esc(f.title) + ' <span class="kid">@' + esc(f.id) + '</span></h3>' +
         (f.faser ? '<span class="chip ' + (f.faser[0] === f.faser[1] ? 'ok' : 'part') + '">' + f.faser[0] + ' av ' + f.faser[1] + ' faser levert</span>' : '') + '</div>' +
