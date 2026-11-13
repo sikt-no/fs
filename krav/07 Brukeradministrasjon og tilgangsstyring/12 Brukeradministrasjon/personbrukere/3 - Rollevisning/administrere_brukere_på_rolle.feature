@@ -1,7 +1,7 @@
 # language: no
 # GitHub: #492
 # Kilde: Brukerhistorie BH6 (temp/brukerhistorier.md)
-@BRU-PER-ROL-002 @in-progress
+@BRU-PER-ROL-002 @must @in-progress
 Egenskap: Administrere brukere på en spesifikk rolle
   Som brukeradministrator
   ønsker jeg å finne fram én spesifikk rolle og kunne legge til eller fjerne brukere på rollen
@@ -42,8 +42,3 @@ Egenskap: Administrere brukere på en spesifikk rolle
 # AVKLART 13.11.2026:
 # - Brukere legges til og fjernes fra rollen én om gangen, ikke flere i én operasjon.
 # - Det kjøres ingen valideringer (organisasjonstilhørighet, taushetserklæring eller konfliktrolle) når en bruker legges til på rollen.
-
-# ÅPNE SPØRSMÅL:
-# - Skal stedkoder og tidsbegrensning settes per bruker, eller arves fra rollen?
-# - Hva skjer hvis rollen er "delt" (BRU-PER-DEL-001) — kan vi legge til brukere fra andre organisasjoner?
-# - Forholdet til BRU-PER-GRU-003 — overlapper administrasjon fra rolle-siden med tildeling fra bruker-siden? Skal det være konsistent UX?
