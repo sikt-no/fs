@@ -4,7 +4,7 @@ Hvem som får se og endre hva i opptak, slik kravene sier det i dag. Matrisen er
 
 Tilgangsreglene er ikke et eget scope. De tas inn når et team jobber med funksjonaliteten som bruker dem. Endres en tilgangsregel i et krav, oppdateres matrisen i samme PR.
 
-Sist oppdatert: 2026-11-12, fra `main`.
+Sist oppdatert: 2026-11-13, fra `main`.
 
 ## Slik leses matrisen
 
@@ -31,6 +31,17 @@ Sist oppdatert: 2026-11-12, fra `main`.
 **Status** er taggen på regelen, ellers på egenskapen. Det meste er `@draft`, altså ikke validert. Et åpent spørsmål står som ❓ og er listet under *Åpne spørsmål*.
 
 **Integrasjoner** får det samme som en ansatt med de samme rollene ved samme organisasjon, aldri mer. API-et gir aldri mer enn FS Admin ([`@FEL-TIL-GRU-001`](#kravene)).
+
+## Prioritet
+
+Tilgangsreglene som ble skrevet i PR 1009, er Must, også dem som var Should, og regelen om at et historisk opptak avviser endringer, også i API-et (`@OPT-OVO-GRU-004`). Avklart av produkteier 2026-11-13.
+
+To er Could:
+
+- `@OPT-SØK-MEL-001`, regelen «Hvem som endrer tekstene til søkerne, følger organisasjonens rolle i opptaket»
+- `@OPT-BEH-BEH-045`, uttrekk av sakslista
+
+Prioriteten på egenskapen gjelder hele kravet. Står en tilgangsregel i et krav med en annen prioritet, gjelder prioriteten her for regelen. Det gjelder `@OPT-OPT-UTD-029` (Should): regelen «Søkere og brukere uten roller ser poenggrensen først når plasstildelingen er publisert» er Must.
 
 ## Søknaden og personopplysningene
 
