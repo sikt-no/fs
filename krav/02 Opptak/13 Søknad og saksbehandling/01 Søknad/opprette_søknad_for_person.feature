@@ -1,8 +1,8 @@
 # language: no
 @OPT-SØK-SØK-002 @must @draft
-Egenskap: Registrere og endre søknad på søkerens vegne
+Egenskap: Registrere, endre og trekke søknad på søkerens vegne
   Som opptaksforvalter hos forvalteren
-  ønsker jeg å registrere og endre en søknad på søkerens vegne
+  ønsker jeg å registrere, endre og trekke en søknad på søkerens vegne
   slik at søkere som ikke kan registrere eller endre søknaden selv, likevel kan søke opptak.
 
   Noen søkere kan ikke registrere søknaden selv, for eksempel fordi de ikke har norsk eID,
@@ -14,8 +14,9 @@ Egenskap: Registrere og endre søknad på søkerens vegne
   # Kilde: utkastene «Registrere søknad på vegne av søker» og «Endre søknad på vegne av søker»
   # fra fagperson i opptak, november 2026. De to er slått sammen her, og erstatter den forrige
   # versjonen av kravet. Feltene for en søker uten fødselsnummer er tatt med fra den forrige versjonen.
+  # Saksbehandlers overstyring av utdanningsbakgrunnen er et eget krav.
 
-  Regel: Bare opptaksforvalter hos forvalteren kan registrere og endre en søknad på søkerens vegne
+  Regel: Bare opptaksforvalter hos forvalteren kan registrere, endre og trekke en søknad på søkerens vegne
 
     Scenariomal: Registrere en søknad på søkerens vegne
       Gitt jeg er <rolle> hos <organisasjonens rolle> i opptaket
@@ -43,6 +44,20 @@ Egenskap: Registrere og endre søknad på søkerens vegne
         | saksbehandler     | behandleren           | ser jeg ikke muligheten til å endre søknaden |
         | saksbehandler     | forvalteren           | ser jeg ikke muligheten til å endre søknaden |
         | opptaksinformatør | forvalteren           | ser jeg ikke muligheten til å endre søknaden |
+
+    Scenariomal: Trekke en søknad på søkerens vegne
+      Gitt søkeren har en søknad i et samordna opptak der tilbyderen og behandleren er ulike organisasjoner
+      Og jeg er <rolle> hos <organisasjonens rolle> i opptaket
+      Når jeg vil trekke søknaden på søkerens vegne
+      Så <utfall>
+
+      Eksempler:
+        | rolle             | organisasjonens rolle | utfall                                        |
+        | opptaksforvalter  | forvalteren           | kan jeg trekke søknaden                       |
+        | opptaksforvalter  | tilbyderen            | ser jeg ikke muligheten til å trekke søknaden |
+        | saksbehandler     | behandleren           | ser jeg ikke muligheten til å trekke søknaden |
+        | saksbehandler     | forvalteren           | ser jeg ikke muligheten til å trekke søknaden |
+        | opptaksinformatør | forvalteren           | ser jeg ikke muligheten til å trekke søknaden |
 
   Regel: Opptaksforvalteren kan registrere og endre søknaden også etter søknadsfristen
 
@@ -87,7 +102,10 @@ Egenskap: Registrere og endre søknad på søkerens vegne
       Så avvises endringen
       Og jeg får beskjed om at opptaket ikke lenger er i bruk
 
+  @openquestion
   Regel: Søkeren slås opp før søknaden registreres
+    # ÅPNE SPØRSMÅL:
+    # - Kan søkeren også slås opp på d-nummer, eller bare på fødselsnummer?
 
     Scenario: Personoppslaget kommer før registreringen
       Når jeg begynner å registrere en søknad på søkerens vegne
@@ -262,6 +280,7 @@ Egenskap: Registrere og endre søknad på søkerens vegne
         | handling      |
         | registrert    |
         | endret        |
+        | trukket       |
         | gjenopprettet |
 
   @openquestion
@@ -336,22 +355,13 @@ Egenskap: Registrere og endre søknad på søkerens vegne
     Scenario: Endre personopplysningene til en søker med alternativ innlogging
       Gitt søkeren har en profil med alternativ innlogging
       Når jeg endrer personopplysningene på søknaden
-      Så er endringen lagret på profilen
+      Så er endringen lagret
 
   @depends-on-OPT-SØK-SØK-010
   Regel: Søkeren får en kvittering i Min kompetanse når opptaksforvalteren har gjort noe på søkerens vegne
-    # Kvitteringen er en melding i Mine meldinger, og står i @OPT-SØK-SØK-010.
-
-    Scenariomal: Kvittering når søknaden er <hendelse>
-      Når jeg har <hendelse> søknaden på søkerens vegne
-      Så får søkeren en kvittering i Min kompetanse om at søknaden er <hendelse>
-
-      Eksempler:
-        | hendelse      |
-        | registrert    |
-        | endret        |
-        | trukket       |
-        | gjenopprettet |
+    # Kvitteringen er en melding i Mine meldinger. Kvitteringen når søknaden er registrert, endret,
+    # trukket eller gjenopprettet på søkerens vegne, står i @OPT-SØK-SØK-010
+    # («Søkeren får kvittering for saksbehandlerens endringer»).
 
     Scenario: Kvittering når personopplysningene er endret
       Gitt søkeren har en profil med alternativ innlogging
