@@ -387,7 +387,9 @@ Egenskap: Automatisk GSK-konklusjon
     # konklusjon med «ikke kvalifisert», kopieres den vurderingen aldri, men den stopper
     # gjenbruken av eldre positive konklusjoner. Derfor må negative konklusjoner lagres
     # som konklusjoner. Det avviker fra Confluence v2, der negative konklusjoner bare er
-    # mangler og ikke bevares.
+    # mangler og ikke bevares. Avklart 13.11.2026 (OPT-BEH-BEH-042): saksbehandleren setter ikke
+    # lenger en negativ konklusjon, men annullerer. Negative konklusjoner kommer da fra
+    # gjenbruksbasen.
     # Den siste konklusjonen: avklart 2026-10-26 at det er konklusjonen som ble satt
     # sist, også når søkeren har flere konklusjoner fra samme år og termin, fra ulike
     # organisasjoner.
@@ -665,9 +667,10 @@ Egenskap: Automatisk GSK-konklusjon
   # Regelen «Saksbehandleren endrer GSK-konklusjonen» er flyttet dit. «Legge til positiv
   # konklusjon når ingen finnes» og «Bare positive konklusjoner kan legges til når ingen finnes»
   # er «Sette GSK-konklusjon» og «Ingen negativ konklusjon når søknaden ikke har noen konklusjon».
-  # «Overskrive positiv konklusjon med negativ konklusjon» er regelen «En negativ GSK-konklusjon
-  # settes bare over en positiv konklusjon som er satt automatisk». At saksbehandleren ser
-  # søkerens tidligere GSK-konklusjoner og henter én inn i opptaket når automatikken ikke har satt
+  # «Overskrive positiv konklusjon med negativ konklusjon» er erstattet av regelen
+  # «Saksbehandleren setter ikke en negativ GSK-konklusjon» (avklart 13.11.2026): en feil positiv
+  # konklusjon annulleres. At saksbehandleren ser søkerens tidligere GSK-konklusjoner, står i
+  # OPT-BEH-BEH-042. At saksbehandleren henter én inn i opptaket når automatikken ikke har satt
   # noen (STEK-443), skal bli et eget krav.
 
   @ref-FLY-OPT-VIT-001 @ref-OPT-BEH-BEH-034
