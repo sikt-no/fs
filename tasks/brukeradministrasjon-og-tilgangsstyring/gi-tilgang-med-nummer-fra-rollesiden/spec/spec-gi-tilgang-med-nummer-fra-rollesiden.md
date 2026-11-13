@@ -122,11 +122,14 @@ Spesifikasjonen over er fra 07.10.2026 og er ikke skrevet om.
 
 Kjetils avklaringer 13.11.2026, lagt inn som AVKLART i kravene:
 
-- **Delegeringstaket** begrenser rolleoversikten og valgene for organisasjon og miljø i dialogen,
-  som i «Tildel roller» (BRU-PER-GRU-003). ROL-001: «Rolleoversikten viser bare roller
+- **Delegeringstaket** (korrigert samme dag): rolleoversikten viser alle rollene, også for den
+  som bare kan lese, og er ikke begrenset av delegeringstaket. Bare en rolle i delegeringstaket
+  kan gis, og valgene for organisasjon og miljø i dialogen er begrenset til der den er det, som i
+  «Tildel roller» (BRU-PER-GRU-003). En rolle utenfor delegeringstaket kan ses, men ikke gis. ROL-001: «Rolleoversikten viser bare roller
   brukeradministratoren har rett til å tildele» heter nå «Rolleoversikten viser bare roller i
-  delegeringstaket». ROL-002: nytt scenario «Organisasjon og miljø kan bare velges der rollen er
-  i delegeringstaket».
+  delegeringstaket», og etter korrigeringen «Rolleoversikten viser alle rollene». ROL-002: nye
+  scenarioer «Organisasjon og miljø kan bare velges der rollen er i delegeringstaket» og «En
+  rolle utenfor delegeringstaket kan ses, men ikke gis».
 - **Leserett:** en brukeradministrator med bare leserett ser rollene, listen og filtrene, men kan
   ikke gi eller fjerne. «Rolleoversikten er tom uten rett til å tildele» er erstattet av
   «Brukeradministrator med bare leserett ser rollene» (ROL-001). ROL-002: nytt scenario
@@ -147,7 +150,7 @@ Kjetils avklaringer 13.11.2026, lagt inn som AVKLART i kravene:
   brukeradministratoren har rett til å tildele i både organisasjonen og miljøet (ROL-002: nytt
   scenario om «Fjern tildeling» og retten i organisasjonen og miljøet).
 - **De siste fire, også avklart 13.11.2026:** «Søke fram en rolle» beholdes (ikke lenger
-  `@draft @openquestion`). Teksten for tom rolleoversikt er «Du har ingen roller du kan se.» for
+  `@draft @openquestion`). Teksten for tom rolleoversikt, når det ikke finnes noen roller å vise, er «Du har ingen roller du kan se.» for
   både den som kan tildele og den som bare kan lese, fordi listen viser de samme rollene for
   begge; den erstatter «Du har ingen roller du kan tildele.». Snackbaren «Tildelingen er
   fjernet.» er godkjent. Den nye regelen for det første kontrollsifferet (BAT-433) må være på

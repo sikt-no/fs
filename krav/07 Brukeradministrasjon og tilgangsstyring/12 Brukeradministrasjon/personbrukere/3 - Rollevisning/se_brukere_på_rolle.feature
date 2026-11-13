@@ -27,14 +27,14 @@ Egenskap: Se brukere som har en spesifikk rolle
     Så åpnes rollens oversiktsside
 
   @must
-  Scenario: Rolleoversikten viser bare roller i delegeringstaket
+  Scenario: Rolleoversikten viser alle rollene
     # AVKLART 05.11.2026 (Kjetil, fs-admin !3046): Rolleoversikten har ikke filter på
     # organisasjon og miljø.
-    # AVKLART 13.11.2026 (Kjetil): Rollesiden begrenses av delegeringstaket, som valglisten i
-    # «Tildel roller» (BRU-PER-GRU-003).
+    # AVKLART 13.11.2026 (Kjetil), korrigert: Alle rollene vises i rolleoversikten, også de som
+    # ikke er i delegeringstaket. Bare roller i delegeringstaket kan gis (BRU-PER-ROL-002).
     Gitt at en rolle ikke er i delegeringstaket til noen applikasjon i organisasjonene og miljøene brukeradministrator administrerer
     Når brukeradministrator åpner rolleoversikten
-    Så vises ikke rollen
+    Så vises rollen
 
   @must
   Scenario: Brukeradministrator med bare leserett ser rollene
@@ -42,7 +42,7 @@ Egenskap: Se brukere som har en spesifikk rolle
     # tildelingene og filtrene, men kan ikke gi rollen eller fjerne tildelinger.
     Gitt at brukeradministrator har bare leserett i brukeradministrasjonen
     Når brukeradministrator åpner rolleoversikten
-    Så vises rollene i delegeringstaket
+    Så vises de samme rollene som for den som kan tildele
     Og brukeradministrator kan åpne rollens oversiktsside og se tildelingene der
 
   @must

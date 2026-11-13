@@ -44,8 +44,10 @@ Egenskap: Administrere brukere på en spesifikk rolle
 
   @must
   Regel: Gi rollen til en person med fødselsnummer, D-nummer eller SNR
-    # AVKLART 13.11.2026 (Kjetil): Valgene for organisasjon og miljø er begrenset av
-    # delegeringstaket, som valglisten i «Tildel roller» (BRU-PER-GRU-003). En utgått rolle kan
+    # AVKLART 13.11.2026 (Kjetil), korrigert: Rollen kan bare gis når den er i
+    # delegeringstaket, og valgene for organisasjon og miljø er begrenset til der den er det, som
+    # valglisten i «Tildel roller» (BRU-PER-GRU-003). En rolle utenfor delegeringstaket kan ses,
+    # men ikke gis. En utgått rolle kan
     # aldri gis, heller ikke fra rollesiden, men den kan ses (regelen «En utgått rolle kan ikke gis
     # fra siden for rollen»).
 
@@ -88,6 +90,12 @@ Egenskap: Administrere brukere på en spesifikk rolle
       Og rollen er ikke i delegeringstaket til noen applikasjon for en organisasjon og et miljø brukeradministrator administrerer
       Når brukeradministrator skal gi rollen til en person med fødselsnummer
       Så kan brukeradministrator ikke velge den organisasjonen og det miljøet sammen
+
+    Scenario: En rolle utenfor delegeringstaket kan ses, men ikke gis
+      Gitt at rollen ikke er i delegeringstaket til noen applikasjon i organisasjonene og miljøene brukeradministrator kan tildele i
+      Når brukeradministrator åpner rollens oversiktsside
+      Så kan brukeradministrator ikke gi rollen til en person
+      Men brukeradministrator ser tildelingene av rollen
 
     Scenario: Bare rollen på siden gis
       Gitt at brukeradministrator er på rollens oversiktsside

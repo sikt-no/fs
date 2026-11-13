@@ -11,8 +11,8 @@ og er sjekket mot fs-admin !3046 og fs-plattform !6706 13.11.2026.
 
 To nye sider under Tilgangsstyring i FS Admin, ved siden av «Personbrukere» og «Applikasjoner»:
 
-- **Rolleoversikten**: en liste over rollene i delegeringstaket i organisasjonene og miljøene
-  brukeradministratoren administrerer, også for den som bare kan lese.
+- **Rolleoversikten**: en liste over alle rollene, også for den som bare kan lese. Den er ikke
+  begrenset av delegeringstaket; det er bare det å gi rollen (BRU-PER-ROL-002).
 - **Rollens oversiktsside**: en detaljside for én rolle, med listen over de aktive
   tildelingene av rollen til brukere brukeradministratoren ellers kan se. Herfra gis rollen til
   en person med fødselsnummer, D-nummer eller SNR, og tildelinger fjernes (se
@@ -27,8 +27,8 @@ personbrukere.
 
 - Samme listekomponent som personbrukere-listen (`NavigationList` med `ListItemCell`).
 - Én rad per rolle. Kolonner: «Rolle» (rollekoden) og «Beskrivelse».
-- Bare roller (navnerom av typen forretning), ikke tilganger, og bare roller i delegeringstaket.
-  Sortert på rollekode, stigende.
+- Alle roller (navnerom av typen forretning), ikke tilganger. Delegeringstaket begrenser ikke
+  listen. Sortert på rollekode, stigende.
 - En utgått rolle har merkelappen «Utgått» ved rollekoden.
 - Filtre: søk på rollekode eller beskrivelse, og valget «Utgåtte roller» («Skjul utgåtte», som
   er standard, eller «Vis utgåtte»). Ingen filter på organisasjon og miljø.
@@ -38,8 +38,9 @@ personbrukere.
 - Overskrift: rollekoden, med beskrivelsen under.
 - Listen har ingen egen overskrift.
 - Knappen «Gi rollen til en person» ligger i listens egen flate, som handlingselement for
-  listen. Den åpner dialogen fra BRU-PER-ROL-002. Den vises ikke for en utgått rolle, og ikke
-  for den som bare kan lese.
+  listen. Den åpner dialogen fra BRU-PER-ROL-002. Den vises bare når rollen er i
+  delegeringstaket for minst én organisasjon og ett miljø brukeradministratoren kan tildele i, og
+  ikke for en utgått rolle eller for den som bare kan lese.
 - Liste over tildelingene, med samme listekomponent. Én rad per tildeling av rollen. Kolonner:
   - «Navn». Mangler navnet, vises personens fødselsnummer, D-nummer eller SNR i stedet
     (BRU-PER-GRU-013, regelen «Nummeret vises bare når navnet mangler»).
@@ -71,7 +72,7 @@ Velge en rolle i rolleoversikten åpner rollens oversiktsside.
 | Tilstand | UI-håndtering |
 |----------|---------------|
 | Laster | Samme lasteindikator som personbrukere-listen |
-| Tom rolleoversikt | Ingen roller er i delegeringstaket i organisasjonene og miljøene brukeradministratoren administrerer. Teksten under |
+| Tom rolleoversikt | Det finnes ingen roller å vise (uten filter). Teksten under |
 | Tom rolleoversikt med filter | Ingen roller passer filteret. Teksten under |
 | Tom liste på rollens oversiktsside | Ingen brukere brukeradministratoren kan se, har rollen aktivt tildelt. Teksten under. Knappen «Gi rollen til en person» vises fortsatt |
 | Tom liste med filter | Ingen tildelinger passer filteret. Teksten under |
@@ -89,7 +90,7 @@ tekstene. Tekstene merket «fra fs-admin !3046, ikke godkjent» er bygget, men i
 |------|---------------|-------|-------------|----------|
 | Menypunkt og sidetittel | Alltid | «Roller» | – | Åpne en rolle fra rolleoversikten |
 | Kort på Tilgangsstyring-siden | Alltid | «Roller», «Se rollene du kan tildele, og hvem som har dem. Herfra gir du en rolle til en person med fødselsnummer, D-nummer eller SNR.», knappen «Gå til roller» (fra fs-admin !3046, ikke godkjent) | – | Åpne en rolle fra rolleoversikten |
-| Rolleoversikten | Ingen roller i delegeringstaket | «Du har ingen roller du kan se.» | Den samme teksten for den som kan tildele og den som bare kan lese, fordi listen viser de samme rollene for begge |  Rolleoversikten viser bare roller i delegeringstaket |
+| Rolleoversikten | Det finnes ingen roller å vise, uten filter | «Du har ingen roller du kan se.» | Den samme teksten for den som kan tildele og den som bare kan lese, fordi listen viser de samme rollene for begge. Med filter brukes «Ingen roller funnet» | Rolleoversikten viser alle rollene |
 | Rolleoversikten, filter | Alltid | «Rolle eller beskrivelse» (fra fs-admin !3046, ikke godkjent) | – | Søke fram en rolle |
 | Rolleoversikten, filter | Alltid | «Utgåtte roller», med valgene «Skjul utgåtte» og «Vis utgåtte» (fra fs-admin !3046, ikke godkjent) | – | Utgåtte roller vises ikke i rolleoversikten som standard |
 | Rolleoversikten, ved rollekoden | Rollen er utgått | «Utgått» (fra fs-admin !3046, ikke godkjent) | – | En utgått rolle er merket når utgåtte roller vises |
@@ -112,14 +113,13 @@ tekstene. Tekstene merket «fra fs-admin !3046, ikke godkjent» er bygget, men i
 Hele raden er klikkbar, som i personbrukere-listen. Menypunktet og kortet vises for den som har
 lesetilgang til brukeradministrasjon, som «Personbrukere».
 
-### Scenario: Rolleoversikten viser bare roller i delegeringstaket
-Utvalget gjøres av API-et. Klienten filtrerer ikke selv. Listen har rollene som er i
-delegeringstaket til en applikasjon i minst én av organisasjonene og miljøene der
-brukeradministratoren har brukeradministrator-rollen, som valglisten for rolle i «Tildel roller»
-(BRU-PER-GRU-003). I dag gir `mineTildelbareTilgangsroller` hele rollekatalogen til den som har
-rett til å tildele i minst én organisasjon og ett miljø, og `skjulUtenforTak` virker bare for én
-organisasjon og ett miljø. API-et trenger en kilde som gir rollene i delegeringstaket på tvers av
-organisasjonene og miljøene, også for den som bare kan lese.
+### Scenario: Rolleoversikten viser alle rollene
+Listen har alle forretningsrollene, også de som ikke er i delegeringstaket, sortert på rollekode.
+Utgåtte roller er skjult til brukeradministratoren velger «Vis utgåtte». I dag gir
+`mineTildelbareTilgangsroller` hele rollekatalogen bare til den som har rett til å tildele i
+minst én organisasjon og ett miljø, og en tom liste ellers. Den som bare kan lese, trenger en
+kilde som også gir rollene. Delegeringstaket avgjør bare om rollen kan gis fra rollens
+oversiktsside (BRU-PER-ROL-002).
 
 ### Scenario: Brukeradministrator med bare leserett ser rollene
 Den som bare kan lese, ser rolleoversikten, rollens oversiktsside, listen og filtrene, men ikke
@@ -168,8 +168,11 @@ Et tomt søkefelt sendes som ingen filtrering.
 ## Avklarte designspørsmål
 
 - Teksten for tom rolleoversikt er «Du har ingen roller du kan se.», for både den som kan
-  tildele og den som bare kan lese. Den erstatter «Du har ingen roller du kan tildele.».
-  Avklart 13.11.2026 (Kjetil).
+  tildele og den som bare kan lese. Den erstatter «Du har ingen roller du kan tildele.». Siden
+  rolleoversikten viser alle rollene, gjelder den bare når det ikke finnes noen roller å vise.
+  Avklart 13.11.2026 (Kjetil), korrigert samme dag.
+- Rolleoversikten er ikke begrenset av delegeringstaket; bare det å gi rollen er det. Avklart
+  13.11.2026 (Kjetil), korrigert samme dag.
 - Søket på rollekode og beskrivelse beholdes. Avklart 13.11.2026 (Kjetil).
 
 - Listen viser bare personer. Feide-brukere står ikke i listen før tildelingene er flyttet til

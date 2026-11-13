@@ -76,7 +76,7 @@ hentes på nytt. Personen står da i listen.
 
 | Tilstand | UI-håndtering |
 |----------|---------------|
-| Knappen vises | Brukeradministratoren har rett til å tildele personer i minst én organisasjon, og rollen er ikke utgått. Knappen vises også når listen er tom. Med bare leserett vises den ikke |
+| Knappen vises | Rollen er i delegeringstaket for minst én organisasjon og ett miljø der brukeradministratoren har rett til å tildele personer, og rollen er ikke utgått. Knappen vises også når listen er tom. Med bare leserett vises den ikke |
 | Åpning | Organisasjon er valgt når det bare finnes én organisasjon å velge; ellers er feltene tomme. Nummerfeltet er tomt |
 | Validering | Feltfeil under feltet ved innsending. Mellomrom i nummeret fjernes, og nummeret sjekkes for 11 siffer, FS-generert serie og kontrollsifre i klienten før innsending. API-et sjekker det på nytt |
 | Sender | «Gi rollen» viser «Gir rollen …» og er deaktivert |
@@ -94,7 +94,7 @@ suksess) står i implementasjonsdetaljene for GRU-013.
 
 | Hvor | Når vises den | Tekst | Variasjoner | Scenario |
 |------|---------------|-------|-------------|----------|
-| Knapp på rollens oversiktsside | Brukeradministratoren har rett til å tildele personer i minst én organisasjon, og rollen er ikke utgått | «Gi rollen til en person» | – | Personen finnes ikke i løsningen |
+| Knapp på rollens oversiktsside | Rollen er i delegeringstaket der brukeradministratoren har rett til å tildele personer, og rollen er ikke utgått | «Gi rollen til en person» | – | Personen finnes ikke i løsningen |
 | Dialogens overskrift | Dialogen er åpen | «Gi rollen til en person» | – | Personen finnes ikke i løsningen |
 | Under overskriften | Dialogen er åpen | «Rolle: {rollekode}» | `{rollekode}` | Bare rollen på siden gis |
 | Feltetikett | Alltid | «Organisasjon» | – | Valglisten for organisasjon er begrenset til organisasjoner brukeradministratoren administrerer |
@@ -141,6 +141,12 @@ rollen er i delegeringstaket.
 ### Scenario: Organisasjon og miljø kan bare velges der rollen er i delegeringstaket
 Se «Komponenter og layout». En kombinasjon der rollen ikke er i delegeringstaket, tilbys ikke,
 slik valglisten for rolle i «Tildel roller» ikke tilbyr en rolle utenfor delegeringstaket.
+
+### Scenario: En rolle utenfor delegeringstaket kan ses, men ikke gis
+Rolleoversikten viser alle rollene (BRU-PER-ROL-001). Er rollen ikke i delegeringstaket for noen
+organisasjon og noe miljø der brukeradministratoren har rett til å tildele personer, vises ikke
+knappen «Gi rollen til en person». Listen over tildelingene og «Fjern tildeling» vises som for
+andre roller. Avklart 13.11.2026 (Kjetil), korrigert samme dag.
 
 ### Regel: En utgått rolle kan ikke gis fra siden for rollen
 Rollens oversiktsside sier at rollen er utgått, og knappen «Gi rollen til en person» vises ikke.
