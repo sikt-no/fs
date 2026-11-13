@@ -143,7 +143,7 @@ Regelverket hører til organisasjonen som eier regelverkssamlingen, ikke til opp
 |---|---|---|---|---|---|
 | Se regelverkssamlingene ved alle organisasjoner | Ja | Ja | Ja | `@OPT-REG-SAM-001` | `@planned` |
 | Opprette, endre, kopiere og slette regelverkssamlinger | Ja: ved organisasjonen som eier samlingen | Nei | Nei | `@OPT-REG-SAM-001` | `@planned` |
-| Opprette eller kopiere til en annen organisasjon | Nei | Nei | Nei | `@OPT-REG-SAM-001` | `@planned` |
+| Opprette eller kopiere til en annen organisasjon | Nei | Nei | Nei | `@OPT-REG-SAM-001` | `@implemented` |
 | Forvalte kvoter, kvoteprioritet, plassflyt, krav, rangering og grunnlag | Ja (står bare i `Som`-linja) | – | – | `@OPT-REG-KVO-*`, `@OPT-REG-KRA-*`, `@OPT-REG-RAN-*`, `@OPT-REG-GRU-001` | ulik |
 
 ## Motsetninger og hull

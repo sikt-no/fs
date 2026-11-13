@@ -54,7 +54,6 @@ Egenskap: Regelverkssamling
   # Avklart 2026-11-13 (produkteier): det løses med et filter på organisasjon, ikke med at regelverkssamlingene ved
   # organisasjonen brukeren er ansatt ved, står først. Lista er sortert etter kode. Erstatter regelen
   # «Regelverkssamlingene ved organisasjonen brukeren er ansatt ved, vises først», som ikke var levert.
-  @planned
   Regel: Regelverkssamlingene kan filtreres på organisasjonen som eier dem
 
     Scenario: Filtrere på organisasjon
@@ -77,7 +76,6 @@ Egenskap: Regelverkssamling
       Og den eies av organisasjonen jeg er opptaksforvalter ved
 
     # Avklart av produkteier 2026-11-09.
-    @planned
     Scenario: Kan ikke opprette regelverkssamling for en annen organisasjon
       Når jeg oppretter en ny regelverkssamling
       Så ser jeg ikke muligheten til å velge en annen organisasjon som eier enn organisasjonen jeg er opptaksforvalter ved
@@ -98,7 +96,6 @@ Egenskap: Regelverkssamling
       Og endringer i originalen påvirker ikke kopien
 
     # Avklart av produkteier 2026-11-09.
-    @planned
     Scenario: Kan ikke kopiere regelverkssamling til en annen organisasjon
       Gitt at regelverkssamlingen "UHG2027" eies av HK-dir
       Når jeg kopierer regelverkssamlingen
