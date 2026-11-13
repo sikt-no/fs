@@ -100,3 +100,22 @@ Ingen krav ble holdt tilbake.
 ## Rute
 
 fs-plattform → fs-admin
+
+## Endringer i kravene 13.11.2026
+
+Kravene er sjekket mot fs-admin !3046 (`745859dd`) og fs-plattform main (`26848c4f`), med !6706.
+Spesifikasjonen over er fra 07.10.2026 og er ikke skrevet om.
+
+- **`BRU-PER-ROL-001`:** «Rolleoversikten viser bare roller …» sier nå at retten gjelder for en
+  organisasjon og et miljø, og at hele rollekatalogen vises; nytt scenario for tom rolleoversikt.
+  Nye scenarioer: tildelinger i en organisasjon brukeradministratoren ikke administrerer, vises
+  ikke; organisasjonsfilteret (`@openquestion`); søk på navn (`@draft @openquestion`); utgåtte
+  roller skjules som standard (`@draft @openquestion`) og er merket. «Søke fram en rolle» søker
+  på rollekode og beskrivelse (`@draft @openquestion`). Tildelinger gjennom en
+  organisasjonssamling vises.
+- **`BRU-PER-ROL-002`:** bare implementasjonsdetaljene er endret: kildene for valglistene,
+  bekreftelsen før «Fjern tildeling» med tekster, og når knappen og handlingen vises.
+- **`BRU-PER-GRU-013`:** nytt scenario «Beskjeden er den samme når personen allerede har rollen».
+  «Rolle brukeradministratoren ikke har rett til å tildele» heter nå «Organisasjon og miljø
+  brukeradministratoren ikke har rett til å tildele i». Åpne spørsmål om nummeret som ennå ikke
+  er i API-et, og om kontrollsifferregelen fra 2032 (BAT-433).

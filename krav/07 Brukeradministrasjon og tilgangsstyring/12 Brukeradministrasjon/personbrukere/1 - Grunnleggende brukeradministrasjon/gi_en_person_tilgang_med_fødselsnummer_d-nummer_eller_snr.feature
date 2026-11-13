@@ -125,6 +125,12 @@ Egenskap: Gi en person tilgang med fødselsnummer, D-nummer eller SNR
       Så får brukeradministratoren den samme beskjeden om at personen har fått rollen som når personen ikke finnes i løsningen
       Og beskjeden har ikke personens navn
 
+    Scenario: Beskjeden er den samme når personen allerede har rollen
+      Gitt personen har allerede rollen tildelt direkte for organisasjonen og miljøet
+      Når brukeradministratoren gir personen rollen for organisasjonen og miljøet og oppgir fødselsnummeret
+      Så har personen fortsatt én tildeling av rollen for organisasjonen og miljøet
+      Og brukeradministratoren får den samme beskjeden om at personen har fått rollen
+
     Scenario: Tildelinger i andre organisasjoner vises ikke
       Gitt personen har en aktiv tildeling i en organisasjon brukeradministratoren ikke administrerer
       Når brukeradministratoren gir personen en rolle og oppgir fødselsnummeret
@@ -132,8 +138,13 @@ Egenskap: Gi en person tilgang med fødselsnummer, D-nummer eller SNR
       Så ser brukeradministratoren rollen brukeradministratoren ga
       Men brukeradministratoren ser ikke tildelingen i organisasjonen brukeradministratoren ikke administrerer
 
+  @openquestion
   Regel: Nummeret vises bare når navnet mangler
     # AVKLART 10.11.2026 (Kjetil): Brukeroversikten viser også nummeret når navnet mangler.
+    # ÅPNE SPØRSMÅL:
+    # - API-et gir ikke nummeret i dag. Det venter på en personvernavklaring av hvem som kan se
+    #   nummeret (fs-admin !3046 og fs-plattform !6706, 11.11.2026). Til da viser FS Admin «Navn
+    #   ikke kjent» i stedet for nummeret. Hvem tar avklaringen, og når?
 
     Scenariomal: Nummeret vises i stedet for navnet når navnet mangler
       Gitt brukeradministratoren har gitt en person som ikke fantes fra før, en rolle og oppgitt fødselsnummeret
@@ -183,10 +194,18 @@ Egenskap: Gi en person tilgang med fødselsnummer, D-nummer eller SNR
       Når personen logger inn
       Så finnes det fortsatt bare én person med fødselsnummeret
 
+  @openquestion
   Regel: Nummeret må ha gyldige kontrollsifre
     SNR har en egen personnummerserie, atskilt fra de fiktive numrene FS' egen generator lager
     (måned +50 og personnummer fra 70000 og oppover). Løsningen kan derfor skille et SNR fra dem.
     Et FS-generert nummer avvises med en egen beskjed, også når kontrollsifrene er gyldige.
+    Nummeret må ha 11 siffer. Løsningen sjekker de to kontrollsifrene med mod 11, likt for
+    fødselsnummer, D-nummer og SNR.
+
+    # ÅPNE SPØRSMÅL:
+    # - Skatteetaten endrer regelen for det første kontrollsifferet fra 2032 (BAT-433). Verken
+    #   API-et eller FS Admin har den nye regelen, så et nummer som bare er gyldig etter den, blir
+    #   avvist som ugyldig. Når må det være på plass?
 
     Scenariomal: Nummer med ugyldige kontrollsifre avvises
       Gitt brukeradministratoren oppgir et <nummertype> med ugyldige kontrollsifre
@@ -232,7 +251,9 @@ Egenskap: Gi en person tilgang med fødselsnummer, D-nummer eller SNR
 
   Regel: Brukeradministratoren kan bare gi roller hen har rett til å tildele
     Alle med brukeradministrator-rollen kan gi tilgang med fødselsnummer, D-nummer eller SNR. Det
-    kreves ingen egen rettighet.
+    kreves ingen egen rettighet. Retten til å tildele gjelder for en organisasjon og et miljø, ikke
+    for en enkelt rolle: den som har retten i en organisasjon og et miljø, kan gi alle rollene i
+    rollekatalogen der. Mangler retten, avvises tildelingen før personen slås opp.
 
     Scenario: Brukeradministrator gir tilgang med nummer uten egen rettighet
       Gitt brukeradministratoren har brukeradministrator-rollen for en organisasjon i et miljø
@@ -240,8 +261,8 @@ Egenskap: Gi en person tilgang med fødselsnummer, D-nummer eller SNR
       Når brukeradministratoren gir personen en rolle for organisasjonen og miljøet og oppgir fødselsnummeret
       Så har personen rollen for organisasjonen og miljøet
 
-    Scenario: Rolle brukeradministratoren ikke har rett til å tildele
-      Gitt brukeradministratoren har ikke rett til å tildele rollen for organisasjonen og miljøet
+    Scenario: Organisasjon og miljø brukeradministratoren ikke har rett til å tildele i
+      Gitt brukeradministratoren har ikke rett til å tildele i organisasjonen og miljøet
       Når brukeradministratoren forsøker å gi personen rollen og oppgir fødselsnummeret
       Så får personen ingen tildeling
       Og det opprettes ingen person i databasen
@@ -374,7 +395,8 @@ Egenskap: Gi en person tilgang med fødselsnummer, D-nummer eller SNR
 # ÅPNE SPØRSMÅL:
 # - Oppdateres navnet ved senere pålogginger hvis personen bytter navn, eller står navnet slik
 #   det var ved første pålogging? Juristen godkjente 21.09 at navnet hentes fra påloggingen,
-#   men ikke hvor ofte det leses.
+#   men ikke hvor ofte det leses. I dag får personen navnet fra Feide bare når navnet mangler, og
+#   et navn som står, beholdes.
 # - Skal en personbruker uten Feide-konto kunne slettes, eller er deaktivering (BRU-PER-GRU-014)
 #   eneste utvei når hen ikke lenger skal ha tilgang?
 # - Scenariet «Personen har logget inn med Feide tidligere» forutsetter at
