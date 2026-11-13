@@ -1,6 +1,6 @@
 # Versjoner og release av FS Kravforvaltning
 
-Desktop-appen bygges for macOS og Windows av GitHub Actions, og legges ved en GitHub-release sammen med endringsloggen. Appen oppdaterer seg selv fra releasene (se *Automatisk oppdatering*). Linux er tatt ut av bygget foreløpig (se *Linux*). Versjonen og endringsloggen styres med [Changesets](https://changesets.dev).
+Desktop-appen bygges for macOS av GitHub Actions, og legges ved en GitHub-release sammen med endringsloggen. Appen oppdaterer seg selv fra releasene (se *Automatisk oppdatering*). Windows og Linux er tatt ut av bygget foreløpig (se *Windows* og *Linux*). Versjonen og endringsloggen styres med [Changesets](https://changesets.dev).
 
 ## Når du endrer appen
 
@@ -28,10 +28,10 @@ En merge til `main` starter ingenting. En release er to kjøringer: den første 
 1. **Finnes det changesets**, lager workflowen versjons-commiten på branchen `changeset-release/main`. Den bumper `version` i `package.json` og `package-lock.json`, skriver endringene inn i `CHANGELOG.md` og sletter changeset-filene. Finnes PR-en *«fs-kravforvaltning: ny versjon»* fra branchen, oppdateres den hver gang workflowen kjøres, med changesetene som er på `main` da. Finnes den ikke, må den lages for hånd (se *Versjons-PR-en*).
 2. **Når den PR-en er merget, kjøres workflowen en gang til.** Da finnes det ingen changesets, og versjonen i `package.json` har ingen release, så
    - lages en draft-release `fs-kravforvaltning-v<versjon>` med endringene for versjonen fra `CHANGELOG.md`
-   - bygges appen for macOS og Windows, og filene lastes opp til releasen:
+   - bygges appen for macOS, og filene lastes opp til releasen:
      - `fs-kravforvaltning-<versjon>-mac-arm64.dmg`, for første installasjon på macOS
      - `fs-kravforvaltning-<versjon>-mac-arm64.zip`, med `.blockmap`, og `latest-mac.yml`, som appen oppdaterer seg fra på macOS
-     - `fs-kravforvaltning-<versjon>-win-x64.exe`, med `.blockmap`, og `latest.yml`. `.exe`-en er både for første installasjon og det appen oppdaterer seg fra på Windows
+     - (når Windows er med igjen) `fs-kravforvaltning-<versjon>-win-x64.exe`, med `.blockmap`, og `latest.yml`. `.exe`-en er både for første installasjon og det appen oppdaterer seg fra på Windows
    - publiseres releasen når filene er lastet opp. Feiler bygget, blir releasen stående som draft, og neste kjøring (eller *Re-run failed jobs*) bygger den ferdig.
 3. En kjøring når versjonen allerede har en publisert release (og ingen changesets), gjør ingenting.
 
@@ -69,7 +69,7 @@ Linux er tatt ut av bygget foreløpig. Den står kommentert ut, ikke slettet, s�
 
 Steget i workflowen som bare gjelder Linux (`Bygg node-pty`), står igjen, og trenger ingen endring. `electron/updater.ts` er ikke macOS-spesifikk, så oppdateringen virker på Linux (AppImage) når bygget kommer tilbake.
 
-Windows var også tatt ut fra 1.2.0, og er tatt inn igjen. Brukere som har installert Windows-versjonen av 1.1.0 eller eldre, må installere den nye versjonen for hånd én gang: de gamle versjonene kan ikke oppdatere seg selv. Det samme gjelder Linux-versjonen når den kommer tilbake.
+Windows var også tatt ut fra 1.2.0, ble tatt inn igjen, og er tatt ut på nytt fra 1.15.0 (se *Windows*). Brukere som har installert Windows-versjonen av 1.1.0 eller eldre, må installere den nye versjonen for hånd én gang: de gamle versjonene kan ikke oppdatere seg selv. Det samme gjelder Linux-versjonen når den kommer tilbake.
 
 ## Oppsett i GitHub (én gang)
 
@@ -149,7 +149,9 @@ Slett `.p12`-fila etterpå, eller legg den i en passordhvelv. Sertifikatet gjeld
 
 ### Windows
 
-Windows-appen er ikke signert, og SmartScreen kan advare mot `.exe`-en, både ved installasjon og ved oppdatering (**Mer informasjon → Kjør likevel**). Dette står i release-notatene. Steget `Pakk` i workflowen setter `CSC_IDENTITY_AUTO_DISCOVERY=false`, så electron-builder ikke prøver å signere. Signering krever et kodesigneringssertifikat, for eksempel Azure Trusted Signing (`win.azureSignOptions` i `electron-builder.yml`, og secrets til Azure i workflowen).
+**Windows er tatt ut av bygget fra 1.15.0**, fordi bygget ikke virker uten et sertifikat til signeringen. Raden for `windows-latest` i matrisen og linja om Windows under *Installasjon* i release-notatet står kommentert ut i `.github/workflows/kravforvaltning-release.yml`. Tas Windows inn igjen, fjernes kommentartegnene der, og stegene som gjelder Windows (`runner.os`), står igjen. Brukere som har Windows-versjonen, får ikke nye versjoner så lenge den er ute.
+
+Da Windows var med, var appen ikke signert, og SmartScreen kunne advare mot `.exe`-en, både ved installasjon og ved oppdatering (**Mer informasjon → Kjør likevel**). Det sto i release-notatene. Steget `Pakk` i workflowen setter `CSC_IDENTITY_AUTO_DISCOVERY=false`, så electron-builder ikke prøver å signere. Signering krever et kodesigneringssertifikat, for eksempel Azure Trusted Signing (`win.azureSignOptions` i `electron-builder.yml`, og secrets til Azure i workflowen).
 
 ## Bygge lokalt
 
