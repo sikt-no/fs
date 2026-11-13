@@ -19,7 +19,7 @@ Testplanen (`akseptansetest/<slug>/testplan.md`) har to tabeller (se `fs-testpla
 - **Testdata:** tilstanden, ikke verdien: `opptak-samordna-uten-utdanningstilbud`, `regelverkssamling-samordna`, ikke `regelverkssamling-uhg-2027`.
 - **Aldri** navnet på en organisasjon, en person, et år eller et nummer i nøkkelen (ikke `-hkdir`, `-ntnu`, `-2027`). Krever scenarioet noe av organisasjonen (for eksempel at den er en fagskole), står det som en egenskap i beskrivelsen i «Krever», ikke i nøkkelen.
 
-**Aldri passord eller hemmeligheter** i testplanen eller miljøfila. `Innlogging` er raden testbrukeren har i «Overstyrt bruker» (nedtrekksmenyen øverst til høyre i FS Admin, normalen i TEST), skrevet nøyaktig som i menyen: `<NAVN> • <rolle> (<organisasjon>)`, for eksempel `ANSVARSFULL FOTKREM • OPPTAK_FORVALTER (NTNU)`. Navnet alene er ikke nok: samme person kan ha flere roller og organisasjoner. Logger testbrukeren inn for seg, er `Innlogging` navnet på Chrome-profilen eller Feide-ID-en.
+**Aldri passord eller hemmeligheter** i testplanen eller miljøfila. `Innlogging` er raden testbrukeren har i «Overstyrt bruker» (nedtrekksmenyen øverst til høyre i FS Admin, normalen i TEST), skrevet nøyaktig som i menyen: `<NAVN> • <rolle> (<organisasjon>)`, for eksempel `ANSVARSFULL FOTKREM • OPPTAK_FORVALTER (NTNU)`. Navnet alene er ikke nok: samme person kan ha flere roller og organisasjoner. Logger testbrukeren inn for seg, er `Innlogging` Feide-ID-en, eller «TestID» for en søker i Min kompetanse.
 
 ## Finne rollene og foreslå testbrukere
 
