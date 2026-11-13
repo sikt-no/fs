@@ -10,7 +10,7 @@
 # uendret.
 # Flyttet 06.11.2026 fra OPT-BEH-BEH-018: «Vitnemålspoeng fra vitnemålet saksbehandleren har
 # valgt», validert og uendret.
-@OPT-BEH-BEH-039 @must @planned @ref-OPT-BEH-BEH-004 @ref-OPT-BEH-BEH-025 @ref-OPT-BEH-BEH-032
+@OPT-BEH-BEH-039 @must @in-progress @ref-OPT-BEH-BEH-004 @ref-OPT-BEH-BEH-025 @ref-OPT-BEH-BEH-032
 Egenskap: Behandle automatisk på vitnemålet saksbehandleren velger
   Som saksbehandler
   ønsker jeg at saken behandles automatisk på vitnemålet jeg velger når søkeren har flere vitnemål
@@ -31,7 +31,7 @@ Egenskap: Behandle automatisk på vitnemålet saksbehandleren velger
     Gitt at søknaden til "Kari Nordmann" har en sak hos "Universitetet i Oslo"
     Og at "Kari Nordmann" har vitnemålene "Vitnemål 2024" og "Vitnemål 2025", som begge gir GSK
 
-  @ref-OPT-BEH-BEH-015 @ref-FLY-OPT-VAL-001
+  @ref-OPT-BEH-BEH-015 @ref-FLY-OPT-VAL-001 @implemented
   # OPT-BEH-BEH-015: «Konklusjon på søknaden fra vitnemålet»
   Regel: Har søkeren flere vitnemål, behandles saken automatisk på vitnemålet saksbehandleren velger
     # Saksbehandleren velger vitnemålet når den automatiske behandlingen startes på det.
@@ -65,6 +65,7 @@ Egenskap: Behandle automatisk på vitnemålet saksbehandleren velger
   # OPT-BEH-BEH-018: «Ingen automatisk beregning uten ett entydig vitnemål»
   Regel: Grunnlaget, poengene og kravelementene avgjøres på vitnemålet saksbehandleren har valgt
 
+    @implemented
     Scenario: Grunnlag fra vitnemålet saksbehandleren har valgt
       Gitt at saksbehandleren har valgt "Vitnemål 2025"
       Når søknaden behandles automatisk
@@ -75,13 +76,14 @@ Egenskap: Behandle automatisk på vitnemålet saksbehandleren velger
     # det. Et nytt vitnemål gir saken nye resultater (OPT-BEH-BEH-035), og saken behandles ikke
     # automatisk på nytt (OPT-BEH-BEH-032).
 
-    @ref-OPT-BEH-BEH-025
+    @ref-OPT-BEH-BEH-025 @implemented
     Scenario: Vitnemålspoeng fra vitnemålet saksbehandleren har valgt
       Gitt at søkeren har to vitnemål som ikke er annullert, ett fra 2024 og ett fra 2025
       Og at saksbehandleren har valgt vitnemålet fra 2025
       Når vitnemålspoengene beregnes automatisk
       Så har poengtypene fått poeng beregnet fra vitnemålet fra 2025
 
+    @implemented
     Scenario: Kravelementene vurderes mot vitnemålet saksbehandleren har valgt
       # Ikke bygget i dag: koden vurderer bare når søkeren har ett vitnemål.
       Gitt at saksbehandleren har valgt "Vitnemål 2025"
