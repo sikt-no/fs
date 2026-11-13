@@ -56,10 +56,9 @@ Egenskap: Behandlingsstatus
         | Behandlet        | Under behandling |
         | Behandlet        | Ikke behandlet   |
 
-  @ref-FLY-OPT-AUT-001
+  @ref-FLY-OPT-AUT-001 @implemented
   Regel: Saken kan bare bli Behandlet når den har minst én mangel eller ett grunnlag
 
-    @implemented
     Scenariomal: Sette saken til Behandlet fra <fra> når saken har <innhold>
       Gitt at saken har behandlingsstatusen "<fra>"
       Og at saken har <innhold>
@@ -78,7 +77,7 @@ Egenskap: Behandlingsstatus
       Så har saken fortsatt behandlingsstatusen "Under behandling"
       Og saksbehandleren ser at saken må ha minst én mangel eller ett grunnlag for å bli "Behandlet"
 
-  @ref-OPT-BEH-BEH-032 @ref-OPT-BEH-BEH-025
+  @ref-OPT-BEH-BEH-032 @ref-OPT-BEH-BEH-025 @implemented
   Regel: Saken blir Under behandling når saksbehandleren endrer vurderingen
     # Avklart 2026-11-03: behandlingsstatusen endres ikke før saksbehandleren gjør en endring i
     # saken. Å se på saken eller et dokument er ikke en endring.
@@ -101,7 +100,6 @@ Egenskap: Behandlingsstatus
         | Behandlet      | endrer svaret på et kvotespørsmål     |
         | Ikke behandlet | registrerer en mangel                 |
 
-    @implemented
     Scenariomal: Behandlingsstatusen endres ikke når saksbehandleren <handling>
       Gitt at saken har behandlingsstatusen "Behandlet"
       Når saksbehandleren <handling>
@@ -112,7 +110,6 @@ Egenskap: Behandlingsstatus
         | skriver en merknad                         |
         | tilordner saken til en annen saksbehandler |
 
-    @implemented
     Scenario: Å markere et dokument som lest endrer ikke statusen på en sak som er Behandlet
       Gitt at saken har behandlingsstatusen "Behandlet"
       Når saksbehandleren markerer et dokument i saken som lest
@@ -123,7 +120,6 @@ Egenskap: Behandlingsstatus
       Når saksbehandleren markerer et dokument i saken som lest
       Så har saken fortsatt behandlingsstatusen "Ikke behandlet"
 
-    @implemented
     Scenariomal: Behandlingsstatusen <status> endres ikke når saksbehandleren åpner saken
       Gitt at saken har behandlingsstatusen "<status>"
       Når saksbehandleren åpner saken
@@ -134,7 +130,6 @@ Egenskap: Behandlingsstatus
         | Ikke behandlet |
         | Behandlet      |
 
-    @implemented
     Scenario: Ny dokumentasjon endrer ikke behandlingsstatusen
       Gitt at saken har behandlingsstatusen "Behandlet"
       Når det kommer ny dokumentasjon i saken
