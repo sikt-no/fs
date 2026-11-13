@@ -160,6 +160,9 @@ Egenskap: Beregne automatisk på nytt
     @depends-on-OPT-BEH-BEH-036
     # OPT-BEH-BEH-036: «Saken får automatiske mangeltekster når søkeren ikke er kvalifisert»
     Scenario: Søkeren ser den nye mangelteksten i en sak som er ferdig behandlet
+      # Avklart 13.11.2026: gjelder bare saker den automatiske behandlingen har satt til ferdig
+      # behandlet. I saker saksbehandleren har behandlet, beregnes kravelementene ikke på nytt, så
+      # det kommer ingen ny mangeltekst. Saken får taggen «Regelverk endret».
       Gitt at den automatiske behandlingen har satt saken til ferdig behandlet
       Og at søkeren er kvalifisert for søknadsalternativet
       Og at en feil i kontrollmotoren er rettet, så vitnemålet til søkeren ikke lenger oppfyller et kravelement

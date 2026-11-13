@@ -136,6 +136,7 @@ Egenskap: Behandlingsstatus
 
   @ref-OPT-BEH-BEH-016 @deprecated
   Regel: Saksloggen viser endringene i behandlingsstatusen
+    # Avklart 13.11.2026: teamet ønsker ikke saksloggen. Den ble stoppet med V480 (BAT-324).
 
     Scenariomal: Saksloggen viser endring av behandlingsstatus når <årsak>
       Gitt at saken har behandlingsstatusen "Ikke behandlet"

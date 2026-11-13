@@ -61,6 +61,9 @@ Egenskap: Ferdigbehandle en sak
       Så behandles ikke saken helautomatisk
 
     Scenario: To identiske vitnemål regnes som ett vitnemål
+      # Avklart 13.11.2026: to vitnemål er identiske når de har samme reform, avgangsår, omfang
+      # og GSK OK, og de samme fagene med karakterer, merknadene og programområdene. Er bare det
+      # ene et førstegangsvitnemål, brukes det, ellers vitnemålet med senest utstedelsesdato.
       Gitt at søkeren har to identiske vitnemål som gir GSK
       Når søknaden behandles automatisk
       Så behandles saken helautomatisk på ett av vitnemålene

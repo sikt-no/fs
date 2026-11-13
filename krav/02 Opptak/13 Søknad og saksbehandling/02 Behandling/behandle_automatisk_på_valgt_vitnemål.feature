@@ -85,7 +85,6 @@ Egenskap: Behandle automatisk på vitnemålet saksbehandleren velger
 
     @implemented
     Scenario: Kravelementene vurderes mot vitnemålet saksbehandleren har valgt
-      # Ikke bygget i dag: koden vurderer bare når søkeren har ett vitnemål.
       Gitt at saksbehandleren har valgt "Vitnemål 2025"
       Og at søknaden har et kravelement som er koblet til vitnemålet
       Når søknaden behandles automatisk
