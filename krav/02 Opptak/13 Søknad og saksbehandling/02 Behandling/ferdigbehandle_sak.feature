@@ -56,9 +56,14 @@ Egenskap: Ferdigbehandle en sak
       Så behandles ikke saken helautomatisk
 
     Scenario: Saken behandles ikke helautomatisk før saksbehandleren har valgt vitnemål
-      Gitt at søkeren har to vitnemål som gir GSK
+      Gitt at søkeren har to ulike vitnemål som gir GSK
       Når søknaden behandles automatisk
       Så behandles ikke saken helautomatisk
+
+    Scenario: To identiske vitnemål regnes som ett vitnemål
+      Gitt at søkeren har to identiske vitnemål som gir GSK
+      Når søknaden behandles automatisk
+      Så behandles saken helautomatisk på ett av vitnemålene
 
     Scenario: Saken behandles ikke helautomatisk når søkeren har flere vitnemål, og bare ett gir GSK
       # Avklart 30.10.2026: det andre vitnemålet kan ha fag som gir søkeren flere poeng, så

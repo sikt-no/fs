@@ -12,7 +12,7 @@
 - **Team:** 4 finnere (`fs-verify-krav`), 4 kontrollører (`fs-verify-kontroll`)
 - **Skjermbilder:** nei
 
-Gating-sett: alle scenarioene, minus `@demo`, for `@FLY-OPT-VAL-001` og `@FLY-OPT-SAM-001` (verifisert uansett status), og de som ikke er tagget `@draft`, `@deprecated` eller `@demo` for resten. Fasene med `@wont` i `@FLY-OPT-AUT-001` er holdt utenfor.
+Gating-sett: alle scenarioene, minus `@demo`, for `@FLY-OPT-VAL-001` og `@FLY-OPT-SAM-001` (verifisert uansett status), og de som ikke er tagget `@draft`, `@deprecated` eller `@demo` for resten. Fasen med `@wont` i `@FLY-OPT-AUT-001` er holdt utenfor.
 
 Stiene er forkortet:
 
@@ -26,12 +26,12 @@ Stiene er forkortet:
 
 Tallene for hele kjøringen, regnet ut fra tabellene under.
 
-- Scenarioer: 21 funnet, 15 ikke funnet, 0 usikker, av 36
+- Scenarioer: 22 funnet, 15 ikke funnet, 0 usikker, av 37
 - Mangler: fs-plattform 6 scenarioer, fs-admin 4, min-kompetanse ikke med i kjøringen
 - Forslag: 0 kan leveres, 0 delvis levert, 0 kan slettes, 9 kan leveres når det er avklart, 4 blir stående
 - Tilgang og datakonsistens: ingen rader (bare flyter og avhengigheter i omfanget)
 - Regler i koden uten scenario: 0
-- Endringer gjort: 1 krav og 4 deler fikk ny status, 0 filer og 0 blokker slettet
+- Endringer gjort: 1 krav og 4 deler fikk ny status, og 3 krav ble rettet (019, 025 og AUT-001), 0 filer og 0 blokker slettet
 - Åpne spørsmål: 1 regel og 3 scenarioer i gating-settet, 0 utenfor gating (`@draft`)
 
 ## Forslag til endringer
@@ -52,7 +52,7 @@ Hva som kan endres i kravene, ut fra resultatene. *Kan leveres* og *Delvis lever
 
 **Blir stående**
 
-- `@FLY-OPT-AUT-001` — Automatisk saksbehandling (`@planned`, 12/19 funnet): 11 av 17 faser levert. 7 scenarioer er ikke funnet fordi fasen ikke er levert: «Søknaden får GSK-konklusjonen …», «Søknaden får tilleggspoeng …», «Saken får mangeltekster …», «Mangelen for GSK som fullføres i vår …», «Saken blir ferdig behandlet …» (2 scenarioer) og «Søknadsalternativene beregnes på nytt …».
+- `@FLY-OPT-AUT-001` — Automatisk saksbehandling (`@planned`, 13/20 funnet): 12 av 18 faser levert. 7 scenarioer er ikke funnet fordi fasen ikke er levert: «Søknaden får GSK-konklusjonen …», «Søknaden får tilleggspoeng …», «Saken får mangeltekster …», «Mangelen for GSK som fullføres i vår …», «Saken blir ferdig behandlet …» (2 scenarioer) og «Søknadsalternativene beregnes på nytt …».
 - `@FLY-OPT-VIT-001` — Importere VGS-vitnemål fra KREG (`@planned`, 8/9 funnet): 6 av 7 faser levert. «Importen starter når jobbplanleggeren kjører jobben» er ikke funnet: fasen er ikke levert, fordi `@OPT-BEH-BEH-033` er `@planned`.
 - `@FLY-OPT-VAL-001` — Automatisk saksbehandling på vitnemålet saksbehandleren velger (`@draft`, 1/2 funnet): 1 av 2 faser levert. «Saken er ferdig behandlet på det valgte vitnemålet» venter på `@FLY-OPT-AUT-001` og regelen om grunnlag, poeng og kravelementer i `@OPT-BEH-BEH-039`. Flyten er `@draft`, og må valideres med `fs-krav` før den kan få ny status.
 - `@FLY-OPT-SAM-001` — Automatisk saksbehandling på sammensatt vitnemål (`@draft`, 0/6 funnet): 0 av 4 faser levert, og én fase mangler krav. Sammensatt vitnemål finnes ikke i koden · mangler i fs-plattform (5), fs-admin (4).
@@ -69,6 +69,9 @@ Det som er endret i kravfilene og i resultatet: i kjøringen (det sikre, når br
 | `@OPT-BEH-BEH-039` | Regel: Har søkeren flere vitnemål, behandles saken automatisk på vitnemålet saksbehandleren velger | `@implemented` på delen | Begge scenarioene funnet i fs-plattform og fs-admin (!3415) og bekreftet av kontrollen. `@draft`-scenarioet om sammensatt vitnemål under regelen står urørt |
 | `@OPT-BEH-BEH-039` | Scenario: Grunnlag fra vitnemålet saksbehandleren har valgt; Scenario: Vitnemålspoeng fra vitnemålet saksbehandleren har valgt; Scenario: Kravelementene vurderes mot vitnemålet saksbehandleren har valgt | `@implemented` på delene | Brukeren: det samme for den andre VAL-fasen. Funnet i fs-plattform og bekreftet av kontrollen. «Sammensatt vitnemål …» står urørt, så regelen og VAL-fasen er fortsatt ikke levert, og fasen venter også på `@FLY-OPT-AUT-001` |
 | `@FLY-OPT-VAL-001` | Scenario: Saken behandles automatisk på vitnemålet saksbehandleren velger | `ikke funnet` → `funnet` | Fasen er levert etter taggingen over, og overleveringen er funnet i begge repoene |
+| `@OPT-BEH-BEH-019` | Scenario: Søker med flere ulike vitnemål behandles ikke automatisk | rettet på stedet (tittel, `Gitt` og kommentaren under regelen) | Brukeren: «to ulike vitnemål». Koden (!6741) regner identiske vitnemål som ett, og det er levert. Rettet på stedet fordi koden allerede gjør det teksten nå sier. `usikker` → `funnet` |
+| `@OPT-BEH-BEH-025` | Scenario: Saken behandles ikke helautomatisk før saksbehandleren har valgt vitnemål; Scenario: To identiske vitnemål regnes som ett vitnemål (nytt) | «to ulike vitnemål» i `Gitt`, og nytt scenario under den leverte regelen (ingen statustag) | Brukeren: 025 eier regelen om identiske vitnemål, og den er levert |
+| `@FLY-OPT-AUT-001` | Regel: To identiske vitnemål reknes som ett vitnemål | `@wont` og `@openquestion` fjernet, `@depends-on-OPT-BEH-BEH-025` lagt til; kommentaren om `@wont`-fasene rettet | Brukeren: fasen er levert. Fasen er levert, og overleveringen er funnet i koden |
 | `@OPT-BEH-BEH-036` | Scenario: Saksbehandleren ser de automatiske mangeltekstene sammen med de registrerte manglene | `ikke funnet` → `funnet` | fs-admin !3421 ble merget 09:11 (e76a4e3fc, det samme som ble kontrollert på branchen). Kravfila er ikke endret |
 | `@OPT-BEH-BEH-036` | Scenario: Saksbehandleren kan ikke endre en automatisk mangeltekst | `usikker` → `funnet` | Samme: teksten vises nå, skrivebeskyttet. Kravfila er ikke endret |
 | `@OPT-BEH-BEH-029` | Scenario: Saksloggen viser endring av behandlingsstatus når <årsak> | ingen | Brukeren spurte om !3421 løser saksloggen. Den gjør ikke det: ingen kode skriver saksloggen etter V480 |
@@ -81,7 +84,7 @@ Hvor mange scenarioer som er funnet i hvert krav, og hvor mange som mangler i hv
 
 | Feature-ID | Egenskap | Funnet | Mangler i P | Mangler i A | Mangler i M | Hva som gjenstår |
 | --- | --- | --- | --- | --- | --- | --- |
-| `@FLY-OPT-AUT-001` | Automatisk saksbehandling | 12/19 | 0 | – | – | 6 faser venter på kravene de bygger på (7 scenarioer, «fasen er ikke levert») |
+| `@FLY-OPT-AUT-001` | Automatisk saksbehandling | 13/20 | 0 | – | – | 6 faser venter på kravene de bygger på (7 scenarioer, «fasen er ikke levert») |
 | `@FLY-OPT-VIT-001` | Importere VGS-vitnemål fra KREG | 8/9 | 0 | – | – | Fasen om jobbplanleggeren venter på `@OPT-BEH-BEH-033` |
 | `@FLY-OPT-VAL-001` | Automatisk saksbehandling på vitnemålet saksbehandleren velger | 1/2 | 0 | 0 | – | Fasen «Resten av saken …» venter på `@FLY-OPT-AUT-001` og regelen om grunnlag, poeng og kravelementer i `@OPT-BEH-BEH-039` |
 | `@FLY-OPT-SAM-001` | Automatisk saksbehandling på sammensatt vitnemål | 0/6 | 6 | 4 | – | Sammensatt vitnemål finnes ikke, og én fase mangler krav |
@@ -101,7 +104,7 @@ Hvilke faser i flyten som er levert, ut fra statusen på delene av kravene fasen
 | `@FLY-OPT-AUT-001` | Søknaden får GSK-konklusjonen når vitnemålet importeres fra KREG | `@OPT-BEH-BEH-015` (`@in-progress`, Regel: Automatikken setter bare positive konklusjoner … ikke levert: «Automatikken kan sette en ny konklusjon etter annulleringen»), `@OPT-BEH-BEH-027` (`@implemented`) | nei |
 | `@FLY-OPT-AUT-001` | Den automatiske behandlingen setter GSK-konklusjonen der den mangler | `@OPT-BEH-BEH-015` (`@in-progress`, Regel: GSK-konklusjonen settes også når den automatiske behandlingen kjører levert) | ja |
 | `@FLY-OPT-AUT-001` | Vitnemålet som gir GSK, avgjør om saken behandles helautomatisk | `@OPT-BEH-BEH-015` (`@in-progress`, Regel: Vitnemålet gir GSK når det har GSK OK fra KREG levert), `@OPT-BEH-BEH-025` (`@in-progress`, Regel: Bare saker der søkeren har ett vitnemål … levert) | ja |
-| `@FLY-OPT-AUT-001` | To identiske vitnemål reknes som ett vitnemål (`@wont`) | – | mangler krav |
+| `@FLY-OPT-AUT-001` | To identiske vitnemål reknes som ett vitnemål | `@OPT-BEH-BEH-025` (`@in-progress`, Regel: Bare saker der søkeren har ett vitnemål, og vitnemålet gir GSK, behandles helautomatisk levert; scenarioet «To identiske vitnemål regnes som ett vitnemål» lagt til i denne kjøringen) | ja |
 | `@FLY-OPT-AUT-001` | Saken får grunnlag fra vitnemålet | `@OPT-BEH-BEH-019` (`@in-progress`, tre regler levert) | ja |
 | `@FLY-OPT-AUT-001` | Poengene beregnes fra grunnlaget og rangeringsregelverket | `@OPT-BEH-BEH-018` (`@in-progress`, tre regler levert), `@OPT-REG-RAN-001` (`@implemented`), `@OPT-REG-RAN-002` (`@implemented`) | ja |
 | `@FLY-OPT-AUT-001` | Søknaden får tilleggspoeng når grunnlaget er satt | `@OPT-BEH-BEH-028` (`@in-progress`, Regel: Poeng for høyere utdanning … ikke levert: «Bare beståtte emner teller») | nei |
@@ -129,7 +132,7 @@ Hvilke faser i flyten som er levert, ut fra statusen på delene av kravene fasen
 | `@FLY-OPT-SAM-001` | Søknaden får ikke grunnlaget for førstegangsvitnemål på det sammensatte vitnemålet | `@OPT-BEH-BEH-019` (`@in-progress`, Regel: Grunnlaget velges ut fra egenskapene … levert), `@OPT-BEH-BEH-039` (`@planned`) | nei |
 | `@FLY-OPT-SAM-001` | Resten av saken behandles som i den automatiske saksbehandlingen | `@FLY-OPT-AUT-001` (`@planned`) | nei |
 
-`@FLY-OPT-AUT-001`: 11 av 17 faser levert (2 faser med `@wont` er ikke telt med).
+`@FLY-OPT-AUT-001`: 12 av 18 faser levert (fasen med `@wont` er ikke telt med).
 `@FLY-OPT-VIT-001`: 6 av 7 faser levert.
 `@FLY-OPT-VAL-001`: 1 av 2 faser levert.
 `@FLY-OPT-SAM-001`: 0 av 4 faser levert.
@@ -144,8 +147,8 @@ Scenarioene i kravene fasene bygger på (delene ankeret peker på), per flyt og 
 | `@FLY-OPT-AUT-001` | `@OPT-BEH-BEH-032` | Starte automatisk behandling | `@in-progress` | 2/2 | 2/2 | – | – |
 | `@FLY-OPT-AUT-001` | `@OPT-BEH-BEH-015` | Automatisk GSK-konklusjon | `@in-progress` | 36/37 | 36/37 | «Automatikken kan sette en ny konklusjon etter annulleringen» (`:462`, ikke funnet) | – |
 | `@FLY-OPT-AUT-001` | `@OPT-BEH-BEH-027` | Beregne GSK fra vitnemål | `@implemented` | 27/27 | 27/27 | – | – |
-| `@FLY-OPT-AUT-001` | `@OPT-BEH-BEH-025` | Ferdigbehandle en sak | `@in-progress` | 6/7 | 6/7 | «Den automatiske behandlingen publiserer manglene når saken blir ferdig behandlet» (`:96`, usikker) | – |
-| `@FLY-OPT-AUT-001` | `@OPT-BEH-BEH-019` | Automatisk grunnlag | `@in-progress` | 14/14 | 13/14 | – | «Søker med flere vitnemål behandles ikke automatisk» (`:151`, usikker) |
+| `@FLY-OPT-AUT-001` | `@OPT-BEH-BEH-025` | Ferdigbehandle en sak | `@in-progress` | 7/8 | 7/8 | «Den automatiske behandlingen publiserer manglene når saken blir ferdig behandlet» (`:101`, usikker) | – |
+| `@FLY-OPT-AUT-001` | `@OPT-BEH-BEH-019` | Automatisk grunnlag | `@in-progress` | 14/14 | 14/14 | – | – |
 | `@FLY-OPT-AUT-001` | `@OPT-BEH-BEH-018` | Automatisk beregning av vitnemålspoeng | `@in-progress` | 5/5 | 5/5 | – | – |
 | `@FLY-OPT-AUT-001` | `@OPT-REG-RAN-001` | Rangeringsregelverk | `@implemented` | 5/5 | – | – | – |
 | `@FLY-OPT-AUT-001` | `@OPT-REG-RAN-002` | Poengberegning | `@implemented` | 10/10 | – | – | – |
@@ -167,7 +170,7 @@ Scenarioene i kravene fasene bygger på (delene ankeret peker på), per flyt og 
 | `@FLY-OPT-SAM-001` | `@OPT-BEH-BEH-039` | Behandle automatisk på vitnemålet saksbehandleren velger | `@in-progress` | 0/2 | 0/1 | «Saken behandles automatisk på et sammensatt vitnemål» (`:54`, ikke sjekket i koden); «Sammensatt vitnemål gir ikke grunnlaget som krever førstegangsvitnemål» (`:95`, ikke funnet) | – |
 | `@FLY-OPT-SAM-001` | `@OPT-BEH-BEH-019` | Automatisk grunnlag | `@in-progress` | 7/7 | 7/7 | – | – |
 
-`@FLY-OPT-AUT-001`: 211 av 225 scenarioer i 18 krav er levert, og 182 av 202 er funnet i koden (23 har bare status fra taggene).
+`@FLY-OPT-AUT-001`: 212 av 226 scenarioer i 18 krav er levert, og 184 av 203 er funnet i koden (23 har bare status fra taggene).
 `@FLY-OPT-VIT-001`: 41 av 42 scenarioer i 5 krav er levert, og 41 av 42 er funnet i koden.
 `@FLY-OPT-VAL-001`: 5 av 6 scenarioer i 1 krav er levert, og 5 av 6 er funnet i koden.
 `@FLY-OPT-SAM-001`: 7 av 9 scenarioer i 2 krav er levert, og 7 av 8 er funnet i koden (1 har bare status fra taggene).
@@ -183,8 +186,8 @@ Kravene som kravene i scope bygger på (`@depends-on-`), med statusen deres. Avh
 | `@FLY-OPT-AUT-001`, `@FLY-OPT-VIT-001` | `@OPT-BEH-BEH-032` Starte automatisk behandling | 1 | `@in-progress` | 2/2 | ankrene: to regler |
 | `@FLY-OPT-AUT-001`, `@FLY-OPT-VIT-001` | `@OPT-BEH-BEH-015` Automatisk GSK-konklusjon | 1 | `@in-progress` | 40/41 | ankrene: sju regler |
 | `@FLY-OPT-AUT-001` | `@OPT-BEH-BEH-027` Beregne GSK fra vitnemål | 1 | `@implemented` | 27/27 | hele kravet |
-| `@FLY-OPT-AUT-001` | `@OPT-BEH-BEH-025` Ferdigbehandle en sak | 1 | `@in-progress` | 6/7 | ankrene: to regler; 1 usikker (Min kompetanse) |
-| `@FLY-OPT-AUT-001`, `@FLY-OPT-SAM-001` | `@OPT-BEH-BEH-019` Automatisk grunnlag | 1 | `@in-progress` | 13/14 | ankrene: tre regler; 1 usikker (identiske vitnemål) |
+| `@FLY-OPT-AUT-001` | `@OPT-BEH-BEH-025` Ferdigbehandle en sak | 1 | `@in-progress` | 7/8 | ankrene: to regler; 1 usikker (Min kompetanse) |
+| `@FLY-OPT-AUT-001`, `@FLY-OPT-SAM-001` | `@OPT-BEH-BEH-019` Automatisk grunnlag | 1 | `@in-progress` | 14/14 | ankrene: tre regler |
 | `@FLY-OPT-AUT-001` | `@OPT-BEH-BEH-018` Automatisk beregning av vitnemålspoeng | 1 | `@in-progress` | 5/5 | ankrene: tre regler |
 | `@FLY-OPT-AUT-001` | `@OPT-REG-RAN-001` Rangeringsregelverk | 1 | `@implemented` | – | bare status |
 | `@FLY-OPT-AUT-001` | `@OPT-REG-RAN-002` Poengberegning | 1 | `@implemented` | – | bare status |
@@ -299,6 +302,7 @@ Stiforkortelser i tabellen som ikke står over: `SYNC` = `P/saksbehandling/GskFu
 | `@OPT-BEH-BEH-025` | Saken behandles helautomatisk når søkeren har ett vitnemål, og vitnemålet gir GSK | funnet | P ✓ · A – — P/autosak/FerdigbehandlingService.java:89-104; AutomatikkensVitnemaal.java:108-114; AutomatiskSaksbehandlingService.java:170-204 |
 | `@OPT-BEH-BEH-025` | Saken behandles ikke helautomatisk når ingen vitnemål gir GSK | funnet | P ✓ · A – — FerdigbehandlingService.java:99-103, L64-67 |
 | `@OPT-BEH-BEH-025` | Saken behandles ikke helautomatisk før saksbehandleren har valgt vitnemål | funnet | P ✓ · A – — P/autosak/AutomatiskBehandlingEtterImportService.java:134-143; SetteGrunnlagService.java:111-117. NB: to identiske vitnemål regnes som ett (AutomatikkensVitnemaal.java:168-197) — scenarioet sier ikke «ulike» |
+| `@OPT-BEH-BEH-025` | To identiske vitnemål regnes som ett vitnemål | funnet | P ✓ · A – — scenarioet er lagt til i denne kjøringen; P/autosak/AutomatikkensVitnemaal.java:108-116,168-197 (velgBlantIdentiske), P/autosak/FerdigbehandlingService.java:89-104 (bekreftet av kontrollen for 025 og AUT) |
 | `@OPT-BEH-BEH-025` | Saken behandles ikke helautomatisk når søkeren har flere vitnemål, og bare ett gir GSK | funnet | P ✓ · A – — AutomatikkensVitnemaal.java:58-61,175-179; AutomatiskBehandlingEtterImportService.java:141-143; FerdigbehandlingService.java:99 |
 | `@OPT-BEH-BEH-025` | Saken er ferdig behandlet når den automatiske behandlingen har avgjort alt | funnet | P ✓ · A – — FerdigbehandlingService.java:63-80, L106-118; AutomatiskSaksbehandlingService.java:204,312-314 |
 | `@OPT-BEH-BEH-025` | Saken er ferdig behandlet selv om kravelementene ga mangeltekst | funnet | P ✓ · A – — P/regelverk/kvalifisering/KvalifiseringOppdateringService.java:203-217; FerdigbehandlingService.java:133-138 |
@@ -311,7 +315,7 @@ Stiforkortelser i tabellen som ikke står over: `SYNC` = `P/saksbehandling/GskFu
 | `@OPT-BEH-BEH-019` | Bare grunnlag i regelverket til utdanningstilbudene i søknaden kan settes | funnet | P ✓ · A – — P/autosak/SetteGrunnlagService.java:136 |
 | `@OPT-BEH-BEH-019` | Grunnlag som ikke er aktivt, settes ikke | funnet | P ✓ · A – — P/autosak/SetteGrunnlagService.java:256 |
 | `@OPT-BEH-BEH-019` | Ingen grunnlag settes automatisk når <grunn> | funnet | P ✓ · A – — P/autosak/SetteGrunnlagService.java:112 (L119, L130, L174–183) |
-| `@OPT-BEH-BEH-019` | Søker med flere vitnemål behandles ikke automatisk | usikker | P ~ · A – — P/autosak/SetteGrunnlagService.java:113 FlereVitnemaalException; men etter !6741 velger AutomatikkensVitnemaal.java:115 (velgBlantIdentiske L182) ett vitnemål når alle er identiske — kravet sier ikke noe om identiske vitnemål |
+| `@OPT-BEH-BEH-019` | Søker med flere ulike vitnemål behandles ikke automatisk | funnet | P ✓ · A – — scenarioet er rettet til «ulike» i denne kjøringen. P/autosak/SetteGrunnlagService.java:113 FlereVitnemaalException; men etter !6741 velger AutomatikkensVitnemaal.java:115 (velgBlantIdentiske L182) ett vitnemål når alle er identiske — kravet sier ikke noe om identiske vitnemål |
 | `@OPT-BEH-BEH-019` | Opplastet kompetansebevis stopper ikke automatikken | funnet | P ✓ · A – — P/autosak/AutomatikkensVitnemaal.java:102 |
 | `@OPT-BEH-BEH-019` | Annullert vitnemål teller ikke | funnet | P ✓ · A – — P/vgs/VgsDokumentConditions.java:28 |
 | `@OPT-BEH-BEH-019` | Grunnlaget settes etter GSK-konklusjonen | funnet | P ✓ · A – — P/autosak/AutomatiskSaksbehandlingService.java:136 |
@@ -464,6 +468,7 @@ Resultatet for hvert scenario i gating-settet etter kontrollen, med beviset i ko
 | `@FLY-OPT-AUT-001` | Saken behandles automatisk når vitnemålet er importert | funnet | P ✓ · A – — lages: `P/autosak/KregImportService.java:74-76` · brukes: `P/autosak/KregImportService.java:93,109-110` → `P/autosak/AutomatiskBehandlingEtterImportService.java:70-93,108-111` |
 | `@FLY-OPT-AUT-001` | Søknaden uten GSK-konklusjon får konklusjonen i kjøringen | funnet | P ✓ · A – — lages: `P/vgs/KregVgsParser.java:104` · brukes: `P/autosak/AutomatiskSaksbehandlingService.java:135-136,240-247` → `P/autosak/gsk/GskVedtakAutoService.java:68-84,268-269,302-306` |
 | `@FLY-OPT-AUT-001` | Saken behandles helautomatisk på vitnemålet som gir GSK | funnet | P ✓ · A – — lages: `P/autosak/AutomatiskSaksbehandlingService.java:170,214-223` · brukes: `P/autosak/SetteGrunnlagService.java:111-131`, `P/autosak/FerdigbehandlingService.java:89-103` |
+| `@FLY-OPT-AUT-001` | Saken behandles helautomatisk når søkeren har to identiske vitnemål | funnet | P ✓ · A – — lages: `P/vgs/HentVgsVitnemaalService.java:190-211` (begge vitnemålene importeres) · brukes: `P/autosak/AutomatikkensVitnemaal.java:108-116,168-197` (`velgBlantIdentiske` velger ett) → `P/autosak/FerdigbehandlingService.java:89-103` |
 | `@FLY-OPT-AUT-001` | Saken får grunnlag | funnet | P ✓ · A – — lages: `P/autosak/AutomatiskSaksbehandlingService.java:170,214-223` · brukes: `P/autosak/SetteGrunnlagService.java:111-133,186-204` |
 | `@FLY-OPT-AUT-001` | Søknadsalternativet får poengsum | funnet | P ✓ · A – — lages: `P/autosak/SetteGrunnlagService.java:186-204` · brukes: `P/saksbehandling/PropageringService.java:105-108` → `P/regelverk/poeng/AutomatiskPoengberegningService.java:41-115` |
 | `@FLY-OPT-AUT-001` | Kravelementet er vurdert mot vitnemålet | funnet | P ✓ · A – — lages: `P/regelverk/kvalifisering/KvalifiseringKravelementV2OppdateringService.java:41-90` · brukes: `P/regelverk/kvalifisering/AutomatiskKravelementVurderingService.java:100-116,180-198` |
@@ -488,12 +493,12 @@ Hvor mange regler og scenarioer i hvert krav som har `@openquestion`. Spørsmål
 
 | Feature-ID | Egenskap | Regler | Scenarioer | Utenfor gating (`@draft`) |
 | --- | --- | --- | --- | --- |
-| `@FLY-OPT-AUT-001` | Automatisk saksbehandling | 0 av 17 | 0 av 19 | 0 |
+| `@FLY-OPT-AUT-001` | Automatisk saksbehandling | 0 av 18 | 0 av 20 | 0 |
 | `@FLY-OPT-VIT-001` | Importere VGS-vitnemål fra KREG | 0 av 7 | 0 av 9 | 0 |
 | `@FLY-OPT-VAL-001` | Automatisk saksbehandling på vitnemålet saksbehandleren velger | 0 av 2 | 0 av 2 | 0 |
 | `@FLY-OPT-SAM-001` | Automatisk saksbehandling på sammensatt vitnemål | 1 av 4 | 3 av 6 | 0 |
 
-De to fasene med `@wont` i `@FLY-OPT-AUT-001` har `@openquestion`, men er holdt utenfor gating-settet og ikke telt med.
+Fasen med `@wont` i `@FLY-OPT-AUT-001` (dobbeltrangering etter 23/5-regelen) har `@openquestion`, men er holdt utenfor gating-settet og ikke telt med.
 
 ## Åpne MR-er og brancher
 
@@ -512,10 +517,7 @@ Det som må følges opp, og som ikke står i de andre tabellene: det kravet ikke
 | Type | Feature-ID | Gjelder | Hva |
 | --- | --- | --- | --- |
 | Kravet er bak koden | `@FLY-OPT-AUT-001` | «Kjent brudd» i beskrivelsen (`krav/_Flyter/10 Opptaksløpet/automatisk_saksbehandling.feature:29-35`) | Alle fire kjente brudd er rettet på main: manglene publiseres når saken blir ferdig behandlet (`P/autosak/FerdigbehandlingService.java:78`), påstanden om GSK beregnes og lagres på vitnemålet ved import (`P/vgs/HentVgsVitnemaalService.java:218-228` → `P/autosak/gsk/GskPaastandService.java:29-40`), uenighet stopper ikke og vises som varsel (`P/autosak/gsk/GskKonklusjonEvaluator.java:58-76`, `A/VitnemalsbehandlingSection/VitnemalsbehandlingSection.tsx:86,111,172-174`), og behandlingen starter etter importen (`P/autosak/KregImportService.java:109-110`). Fjern kommentarene med `fs-krav` |
-| Kravet er bak koden | `@FLY-OPT-AUT-001` | `@wont`-fasen «To identiske vitnemål reknes som ett vitnemål» (`:100`) | Koden finnes på main fra !6741: `P/autosak/AutomatikkensVitnemaal.java:108-116,168-197` (`velgBlantIdentiske`). Fasen er utenfor scope i første fase, men saker med to identiske vitnemål behandles helautomatisk i dag |
-| Kravet er bak koden | `@OPT-BEH-BEH-019` | «Søker med flere vitnemål behandles ikke automatisk» (`automatisk_grunnlag.feature:151`) | To identiske vitnemål regnes som ett og gir grunnlag (`P/autosak/AutomatikkensVitnemaal.java:115,182`). Kravet bør si «ulike vitnemål», eller regelen om identiske vitnemål få et eget krav (åpent spørsmål i AUT `:103`) |
-| Kravet er bak koden | `@OPT-BEH-BEH-020` | «Ingen automatisk vurdering når <grunn>» (`automatisk_kvalifisering.feature:190`) | Samme som over: identiske vitnemål gir vurdering |
-| Kravet er bak koden | `@OPT-BEH-BEH-025` | «Saken behandles ikke helautomatisk før saksbehandleren har valgt vitnemål» | Samme som over: kravet bør si «to ulike vitnemål» |
+| Kravet er bak koden | `@OPT-BEH-BEH-020` | «Ingen automatisk vurdering når <grunn>» (`automatisk_kvalifisering.feature:190`) | Raden «flere elektroniske vitnemål …, og saksbehandleren ikke har valgt vitnemål» bør si «ulike», som i 019 og 025: identiske vitnemål gir vurdering (`P/autosak/AutomatikkensVitnemaal.java:115,182`). Ikke rettet i denne kjøringen |
 | Kravet er bak koden | `@OPT-BEH-BEH-027` | Kommentaren under «Løp uten grunnlagskode i listen over løp» (`beregne_gsk_fra_vitnemål.feature:385-387`) | «Kode i dag: bare når saksbehandleren starter kontrollen» er utdatert: påstanden beregnes ved import (`P/vgs/HentVgsVitnemaalService.java:210,221-234`) |
 | Kravet er bak koden | `@OPT-BEH-BEH-039` | Kommentaren «Ikke bygget i dag» (`behandle_automatisk_på_valgt_vitnemål.feature:86`) | Utdatert etter !6741: `P/regelverk/kvalifisering/AutomatiskKravelementVurderingService.java:249-251` |
 | Kontrollen endret | `@OPT-BEH-BEH-025` | «Den automatiske behandlingen publiserer manglene når saken blir ferdig behandlet» | funnet → usikker: fs-plattform publiserer (`P/autosak/FerdigbehandlingService.java:78`), men `Så` sier at søkeren ser manglene i Min kompetanse, og min-kompetanse er ikke med i kjøringen |
@@ -544,4 +546,4 @@ Det som må følges opp, og som ikke står i de andre tabellene: det kravet ikke
 | Merknad | `@FLY-OPT-VAL-001` | Mutationen med `vitnemaalId` og knappen | Mutationen ligger i experimental-skjemaet (`P-skjema/saksbehandling/automatisk-saksbehandling.graphqls:205`), ikke i produksjonskontrakten, og knappen i fs-admin er bak flagget `automatisk-soknadsbehandling-trigger` (på i test, review og utvikling) |
 | Merknad | `@OPT-BEH-BEH-036` | «Saksbehandleren kan ikke slette den automatiske mangelen» | fs-admin skjuler knappen (`A/SakDrawer/components/ManglerCard/Mangel/Mangel.tsx:146`), men API-et avviser ikke slettingen (`P/saksbehandling/SakMangelService.java:56-58`), mot felleskravet om at regelen også gjelder i API-et |
 | Merknad | `@OPT-BEH-BEH-036` | «Søkeren ser ikke mangelteksten når søknadsalternativet er fjernet» | `P/saksbehandling/KvalifikasjonsgrunnlagOppdateringService.java:104-122` kan slette grunnlagsraden med teksten, mot «saken har fortsatt den automatiske mangelteksten» |
-| Merknad | `@FLY-OPT-AUT-001` | Fasene med `@wont` | Holdt utenfor gating-settet (MoSCoW Won't, utenfor scope i første fase). Scenarioet «Saken behandles helautomatisk når søkeren har to identiske vitnemål» (`:106`) er derfor ikke telt |
+| Merknad | `@FLY-OPT-AUT-001` | Fasen med `@wont` | «Søknaden dobbeltrangeres automatisk etter 23/5-regelen» er holdt utenfor gating-settet (MoSCoW Won't, utenfor scope i første fase) |
