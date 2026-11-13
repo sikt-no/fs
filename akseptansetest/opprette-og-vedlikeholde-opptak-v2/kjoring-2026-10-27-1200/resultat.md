@@ -2,7 +2,7 @@
 
 - **Testplan**: [testplan.md](../testplan.md)
 - **Miljø**: TEST, https://test-fsadmin.sikt.no/opptak (versjon og feature-flagg ikke notert). Testbruker byttet i «Overstyrt bruker»: «Ordentlig rundskriv» (HK-dir) og «Ru Brødskive» (HVL, OPPTAK_FORVALTER). Egen Chrome-profil (port 9223), innlogget med Feide av brukeren
-- **Tester**: `cdp-tester/02 Opptak/11 Opprette og vedlikeholde opptak/01 Grunnoppsett/opprett_opptak.feature`
+- **Tester**: `tester-agent/02 Opptak/11 Opprette og vedlikeholde opptak/01 Grunnoppsett/opprett_opptak.feature`
 - **Slik er testen kjørt**: stegene er fulgt slik de står (R14). Virket ikke et steg, er det beskrevet i «Faktisk resultat»
 - **Kjente mangler**: Ingen sjekket i denne kjøringen
 - **Krav**: commit `0f010d4` (fra headeren i testfila)

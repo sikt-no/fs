@@ -119,8 +119,8 @@ html,body{margin:0;height:100%;background:#0E1628;color:#F7F6F2;font-family:'IBM
       <div style="display:flex; flex-direction:column; gap:6px; flex:1; padding:20px; background:#ffffff; border:1px solid #e1ded6; border-radius:16px">
         <p style="font-family:'IBM Plex Sans', Arial, sans-serif; font-size:24px; font-weight:600; color:#b4481a">Fase 2</p>
         <h3 style="font-family:'IBM Plex Sans', Arial, sans-serif; font-size:28px; font-weight:600; color:#14213d">Agentisk test</h3>
-        <p style="font-family:'IBM Plex Mono', 'Courier New', monospace; font-size:24px; font-weight:600; color:#2f6fb0">/fs-testcaser-<br>cdp</p>
-        <p style="font-family:'IBM Plex Sans', Arial, sans-serif; font-size:24px; line-height:1.4; color:#4a5568">cdp-tester/ og oppsettet</p>
+        <p style="font-family:'IBM Plex Mono', 'Courier New', monospace; font-size:24px; font-weight:600; color:#2f6fb0">/fs-testcaser-<br>agent</p>
+        <p style="font-family:'IBM Plex Sans', Arial, sans-serif; font-size:24px; line-height:1.4; color:#4a5568">tester-agent/ og oppsettet</p>
       </div>
       <x-shape kind="arrow-right" style="width:28px; height:18px; align-self:center; background:#c9c3b4"></x-shape>
       <div style="display:flex; flex-direction:column; gap:6px; flex:1; padding:20px; background:#ffffff; border:1px solid #e1ded6; border-radius:16px">
@@ -145,7 +145,7 @@ html,body{margin:0;height:100%;background:#0E1628;color:#F7F6F2;font-family:'IBM
       </div>
     </div>
   </div>
-  <aside>Samme bilde som side 2 i den korte presentasjonen, med skillen for hvert steg og hva den skriver. Øverst er statusen kravet har etter steget. /fs-specify-delta gjør det samme som /fs-specify for en endring, og /fs-verify-agent-teams det samme som /fs-verify, parallelt, når det er mange feature-filer. /fs-krav-avvik ser etter avvik som krever skjønn, og /fs-implementasjonsdetaljer skriver design.md når /fs-specify trenger den. Fase 1 er planen: /fs-verify og så /fs-testplan. Testene i fase 2 lager testdataene sine selv, i et oppsett i cdp-tester/_Oppsett/. Fase 3 har fire deler: det agenten ikke klarte, flyter og avhengigheter, opplevelse og helhet, og det med høyest risiko. Testrapporten fra /fs-testrapport lages etter hver fase, og agenten foreslår bare et utfall. Alle fs-skillene sjekker først at branchen er oppdatert mot main, også i kodeklonene de leser.</aside>
+  <aside>Samme bilde som side 2 i den korte presentasjonen, med skillen for hvert steg og hva den skriver. Øverst er statusen kravet har etter steget. /fs-specify-delta gjør det samme som /fs-specify for en endring, og /fs-verify-agent-teams det samme som /fs-verify, parallelt, når det er mange feature-filer. /fs-krav-avvik ser etter avvik som krever skjønn, og /fs-implementasjonsdetaljer skriver design.md når /fs-specify trenger den. Fase 1 er planen: /fs-verify og så /fs-testplan. Testene i fase 2 lager testdataene sine selv, i et oppsett i tester-agent/_Oppsett/. Fase 3 har fire deler: det agenten ikke klarte, flyter og avhengigheter, opplevelse og helhet, og det med høyest risiko. Testrapporten fra /fs-testrapport lages etter hver fase, og agenten foreslår bare et utfall. Alle fs-skillene sjekker først at branchen er oppdatert mot main, også i kodeklonene de leser.</aside>
 </section>
 </div>
 <div class="slide">
@@ -172,7 +172,7 @@ html,body{margin:0;height:100%;background:#0E1628;color:#F7F6F2;font-family:'IBM
 <p style="font-size:24px;font-weight:600;color:#B4481A">Per fase</p>
 <h3 style="font-size:32px;font-weight:600;color:#14213D">Testcasene</h3>
 <p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:24px;font-weight:600;color:#2F6FB0">/fs-testcaser-*</p>
-<p style="font-size:24px;line-height:1.4;color:#4A5568">Agentisk (cdp), intern og ekstern, etter omfanget i testplanen.</p>
+<p style="font-size:24px;line-height:1.4;color:#4A5568">Agentisk, intern og ekstern, etter omfanget i testplanen.</p>
 </div>
 <x-shape kind="arrow-right" style="width:40px;height:22px;align-self:center;background:#C9C3B4"></x-shape>
 <div style="flex:1;display:flex;flex-direction:column;gap:12px;background:#FFFFFF;padding:32px;border:1px solid #E1DED6;border-radius:16px">
@@ -343,7 +343,7 @@ html,body{margin:0;height:100%;background:#0E1628;color:#F7F6F2;font-family:'IBM
 <div style="display:flex;flex-direction:column;gap:16px">
 <div style="display:flex;justify-content:space-between;align-items:center">
 <p style="font-size:24px;font-weight:600;letter-spacing:3px;text-transform:uppercase;color:#B4481A">Fase 2 · Agentisk funksjonstest</p>
-<p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:30px;font-weight:600;color:#2F6FB0">/fs-testcaser-cdp</p>
+<p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:30px;font-weight:600;color:#2F6FB0">/fs-testcaser-agent</p>
 </div>
 <h2 style="font-family:'Source Serif 4', Georgia, serif;font-size:72px;font-weight:600;line-height:1.1;color:#14213D">Mesteparten av funksjonstestingen</h2>
 </div>
@@ -369,7 +369,7 @@ html,body{margin:0;height:100%;background:#0E1628;color:#F7F6F2;font-family:'IBM
 <p style="width:280px;font-size:28px;font-weight:600;color:#F0A070">Ferdig når</p>
 <p style="flex:1;font-size:26px;line-height:1.4;color:#F7F6F2">Alle testcasene er kjørt, ingen «Stopper»-funn står åpne, og testansvarlig har gått gjennom rapporten. Det er inngangskriteriet til fase 3.</p>
 </div>
-<aside>Selve kjøringen kan gjøres av andre enn testansvarlig. Teamet og testansvarlig går gjennom omfanget i testplanen og testcasene før kjøringen, og funnene etterpå. Testbrukerne finnes i rollene scenarioene nevner, ved organisasjonene kravet gjelder, og antallet bestemmes ut fra tilgangsmatrisen fra fs-verify. CDP står for Chrome DevTools Protocol, som agenten bruker til å styre nettleseren. Testene er varige og ligger i cdp-tester/. Kjøringen hører til leveransen, og havner i akseptansetest/&lt;slug&gt;/kjoring-&lt;dato&gt;/. Eksempel: den agentiske testen av «Opprette et opptak» 27. oktober hadde 22 av 23 bestått.</aside>
+<aside>Selve kjøringen kan gjøres av andre enn testansvarlig. Teamet og testansvarlig går gjennom omfanget i testplanen og testcasene før kjøringen, og funnene etterpå. Testbrukerne finnes i rollene scenarioene nevner, ved organisasjonene kravet gjelder, og antallet bestemmes ut fra tilgangsmatrisen fra fs-verify. Agenten styrer nettleseren med Vibium, og logger inn med Feide-testbrukeren. Testene er varige og ligger i tester-agent/. Kjøringen hører til leveransen, og havner i akseptansetest/&lt;slug&gt;/kjoring-&lt;dato&gt;/. Eksempel: den agentiske testen av «Opprette et opptak» 27. oktober hadde 22 av 23 bestått.</aside>
 </section>
 </div>
 <div class="slide">
@@ -646,7 +646,7 @@ html,body{margin:0;height:100%;background:#0E1628;color:#F7F6F2;font-family:'IBM
 <p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:24px;color:#2F6FB0">testcaser-ekstern.md</p>
 <p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:24px;color:#2F6FB0">testrapport-&lt;nivå&gt;-&lt;dato&gt;.md</p>
 </div>
-<p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:24px;font-weight:600;color:#14213D">cdp-tester/ <span style="color:#4A5568">· de varige testene i fase 2</span></p>
+<p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:24px;font-weight:600;color:#14213D">tester-agent/ <span style="color:#4A5568">· de varige testene i fase 2</span></p>
 </div>
 <div style="flex:1;display:flex;flex-direction:column;gap:10px;background:#FFFFFF;padding:32px 36px;border:1px solid #E1DED6;border-radius:16px">
 <h3 style="font-size:24px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:#B4481A">I Confluence</h3>

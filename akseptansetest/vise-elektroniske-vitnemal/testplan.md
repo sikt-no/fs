@@ -70,9 +70,9 @@ Klart når testansvarlig har logget inn som testbruker og ser testdataene.
 | 3 | Testdataene kan settes tilbake før hver kjøring | Nei (miljøfila). Søkerne med vitnemål fra KREG kan ikke lages av testene |
 | 4 | Testbrukerne finnes i rollene ved organisasjonene kravene gjelder (tilgangsmatrisen) | [Fylles ut av teamet: bekreft at sakene i opptak 62 behandles av NTNU, og at `OPPTAK_SAKSBEHANDLER` gir SE_SØKNADSBEHANDLING] |
 | 5 | `fs-verify` har funnet alle scenarioene, og en annen person har kontrollert rapporten. Åpne spørsmål stopper ikke, og står i «Åpne spørsmål» | Venter: 1 ikke funnet, 2 usikker (2026-11-05). Menneskelig kontroll er ikke gjort |
-| 6 | De agentiske testcasene (`fs-testcaser-cdp`) er laget, og testansvarlig og teamet har gått gjennom dem før kjøringen | Venter |
+| 6 | De agentiske testcasene (`fs-testcaser-agent`) er laget, og testansvarlig og teamet har gått gjennom dem før kjøringen | Venter |
 | 7 | Flyttestcasene for den interne akseptansetesten (`fs-testcaser-intern`) er laget og gått gjennom av testansvarlig | Venter |
-| 8 | Testansvarlig er logget inn i FS Admin i en egen Chrome-profil til testingen, CDP-agenten kan bytte til hver testbruker i «Overstyrt bruker», og nøklene i testbrukere og testdata er utfylt | [Fylles ut av teamet] |
+| 8 | Agenten er logget inn i FS Admin med Feide-testbrukeren (`tester-agent/.env`), i nettleseren Vibium starter, i en egen sesjon til testingen, kan bytte til hver testbruker i «Overstyrt bruker», og nøklene i testbrukere og testdata er utfylt | [Fylles ut av teamet] |
 | 9 | Testansvarlig har logget inn som testbruker og ser testdataene | [Fylles ut av testansvarlig] |
 
 ## Kriterier for godkjent

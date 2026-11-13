@@ -1,7 +1,7 @@
 # Kjøring 2026-11-04 15:10: Oppsett for tildele saksbehandlende organisasjon (@OPT-BEH-BEH-011)
 
-- **Startet av**: testansvarlig, oppsettet for `cdp-tester/02 Opptak/13 Søknad og saksbehandling/02 Behandling/`
-- **Miljøfil**: [test.md](../../../cdp-tester/_Miljøer/test.md), personaer sist sjekket 2026-10-28
+- **Startet av**: testansvarlig, oppsettet for `tester-agent/02 Opptak/13 Søknad og saksbehandling/02 Behandling/`
+- **Miljøfil**: [test.md](../../../tester-agent/_Miljøer/test.md), personaer sist sjekket 2026-10-28
 - **Miljø**: https://test-fsadmin.sikt.no og https://test.minkompetanse.no, opptaket `opptak-samordna-saksbehandlertildeling` (`T3BwdGFrOjkx`)
 - **Kravstatus**: ikke sjekket i denne omgangen (bare oppsettet)
 - **Utdaterte tester**: ikke sjekket i denne omgangen

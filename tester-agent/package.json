@@ -1,0 +1,14 @@
+{
+  "name": "tester-agent",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Varige tester for den agentiske funksjonstesten, kjørt med Vibium (se README.md)",
+  "scripts": {
+    "vibium:install": "vibium install",
+    "vibium:start": "vibium --session fs-test daemon start --idle-timeout 0 && vibium --session fs-test go https://test-fsadmin.sikt.no",
+    "vibium:stop": "vibium --session fs-test daemon stop"
+  },
+  "devDependencies": {
+    "vibium": "26.8.21"
+  }
+}

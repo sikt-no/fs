@@ -1,14 +1,14 @@
 # Kjøring 2026-10-29 13:22: Opprette og vedlikeholde opptak
 
 - **Startet av**: Mats Gimming Myhre, med `/cdp` og testplanen [Testplan – Opprette og vedlikeholde opptak v4](../testplan.md) («Omfang»: de fem kravene i `@scope-opprette-opptak-2027`)
-- **Miljøfil**: [test.md](../../../cdp-tester/_Miljøer/test.md), personaer sist sjekket 2026-10-28
+- **Miljøfil**: [test.md](../../../tester-agent/_Miljøer/test.md), personaer sist sjekket 2026-10-28
 - **Miljø**: TEST, https://test-fsadmin.sikt.no. Versjonen er ikke lest fra skjermen. Flagg: `opptak-opprett-samordna` på (merket «Feature flag: opptak-opprett-samordna» i skjermen 29.10). `opptak-filter-organisasjon`: ikke i panelet, se «Endringer i miljøfila»
 - **Kravstatus**: `@OPT-OVO-SAM-001` `@in-progress`, `@OPT-OVO-FRI-001` `@in-progress`, `@OPT-OVO-GRU-001` `@implemented` med én regel `@in-progress`. Scenarioer som ikke er levert, vil trolig ikke bestå
 - **Utdaterte tester**: Ingen (blob-hashen i headeren er lik kravfila på `origin/main` for alle fem)
-- **Tester**: `cdp-tester/02 Opptak/11 Opprette og vedlikeholde opptak/` (5 filer, 109 scenarioer, 147 med eksemplene i scenariomalene talt hver for seg), etter `cdp-tester/_Oppsett/02 Opptak/11 Opprette og vedlikeholde opptak/oppsett.feature`
+- **Tester**: `tester-agent/02 Opptak/11 Opprette og vedlikeholde opptak/` (5 filer, 109 scenarioer, 147 med eksemplene i scenariomalene talt hver for seg), etter `tester-agent/_Oppsett/02 Opptak/11 Opprette og vedlikeholde opptak/oppsett.feature`
 - **Slik er testen kjørt**: stegene er fulgt slik de står (R14). Virket ikke et steg, eller fantes ikke en verdi, er testcasen «Ikke testet», med det som ble sett i «Faktisk resultat». Finnes ikke en verdi fra miljøfila i TEST, er testcasen «Ikke testet», og resultatet foreslår en endring i miljøfila. Når ordene i et steg ikke er de samme som i skjermen, men det bare finnes ett valg som passer, er det valget tatt, og det står i raden. Rader med «Bestått» som bygger på en slik oversettelse, bør gås gjennom først: opptakstypen i Utfylling A og O (UHG, alle rader som bruker utfyllingene), «Samordna opptak til høyere yrkesfaglig utdanning» for «… til fagskoler» (INN «Endre opptakstype …»), «Videregående steinerskole» for «Steinerskole» (oppsettet, INN «Fjerne en utdanningsbakgrunn …» og «Den siste utdanningsbakgrunnen …»), og «47 rader i listen» for «Viser N av M rader» (OVE «Alle opptak er lastet inn»)
 - **Kjente mangler** (fra «Kjente begrensninger» i testplanen, sjekket i Jira 2026-10-29): TAKE-436 Won't do (trekkfristen blir værende), TAKE-450 Won't do (taket for antall tilbud, testplanen sier det er tatt ut av FS Admin på main), TAKE-414 Backlog (første svarfrist), TAKE-447 Blokkert (lenken til saksbehandlertildelingen), TAKE-454 In Review og TAKE-457 In Progress (utkast, ikke med), TOT-2586 To Do (åpent spørsmål)
-- **Krav**: commit `3d8fba3`. `origin/main` er 3 commits foran, men de rører ikke de fem kravfilene eller `cdp-tester/`
+- **Krav**: commit `3d8fba3`. `origin/main` er 3 commits foran, men de rører ikke de fem kravfilene eller `tester-agent/`
 - **Kjørt av**: Claude (Opus 5.5) med `cdp`-skillen, for Mats Gimming Myhre, i en egen Chrome-profil (`~/chrome-fs-test`)
 - **Oppsett**: `_Oppsett/02 Opptak/11 Opprette og vedlikeholde opptak/oppsett.feature` fra arbeidskopien (ikke committet: scenarioet `opptak-oversikt-flere-typer` er nytt), kjørt fra 13:22. 2 av 6 nøkler laget: `opptak-lokalt` (mangler `regelverkssamling-lokalt`), `opptak-samordna-med-utdanningstilbud` og `opptak-samordna-tilbud-med-tidlig-opptak` (mangler `utdanningstilbud-deltakende`) og `opptak-oversikt-flere-typer` (bygger på `opptak-lokalt`) feilet
 - **Hoppet over**: Ingen. De 44 `@endrer-data`-scenarioene er kjørt etter avtale med den som startet kjøringen: miljøfila sier «Kan settes tilbake: nei», men scenarioene endrer bare opptak laget i kjøringen
@@ -259,7 +259,7 @@ Feil i agentens automatisering, ikke i løsningen. Ingen av dem førte til data 
 
 ## Endringer i miljøfila (forslag)
 
-Agenten har ikke endret miljøfila. Forslag til `cdp-tester/_Miljøer/test.md`:
+Agenten har ikke endret miljøfila. Forslag til `tester-agent/_Miljøer/test.md`:
 
 | Nøkkel eller felt | I miljøfila | Sett i TEST 29.10.2026 | Forslag |
 |---|---|---|---|
@@ -275,7 +275,7 @@ Agenten har ikke endret miljøfila. Forslag til `cdp-tester/_Miljøer/test.md`:
 
 ## Endringer i testene (forslag)
 
-Til `fs-testcaser-cdp`. Testene er ikke endret.
+Til `fs-testcaser-agent`. Testene er ikke endret.
 
 - **Samme navn i oppsettet og testen:** «Opprette et samordna opptak» (Utfylling A) og `opptak-samordna-uten-utdanningstilbud` (Utfylling O) bruker begge «Samordna opptak 2027 (test {KJØRING})». Søket gir to rader, så «Åpne opptaket «<nøkkel>»» er tvetydig. Gi et av dem et eget navn.
 - **Ordene i skjermen:** opptakstypen heter «Samordna opptak til grunnstudier ved universiteter og høyskoler», og fagskoletypen «Samordna opptak til høyere yrkesfaglig utdanning». Filteret viser kodene «HYU», «LOKAL», «TEST_IT», «UHG» og «UHM». «Administreres av» står på detaljsiden for andre organisasjoner, og som «Administrator:» på redigeringssiden. Antallet står som «N rader i listen», ikke «Viser N av M rader». «Fjern» på et kort med avvikende frister spør ikke «Er du sikker?».

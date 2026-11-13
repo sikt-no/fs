@@ -6,11 +6,11 @@
 
 ---
 
-Testcasene som skal lages, testbrukerne og testdataene for «Se søkerens elektroniske vitnemål». Siden synkes med testene i `cdp-tester/` og miljøfila (*Synk med testene og miljøfila* i `fs-testplan`). Testplanen: Testplan – Se søkerens elektroniske vitnemål.
+Testcasene som skal lages, testbrukerne og testdataene for «Se søkerens elektroniske vitnemål». Siden synkes med testene i `tester-agent/` og miljøfila (*Synk med testene og miljøfila* i `fs-testplan`). Testplanen: Testplan – Se søkerens elektroniske vitnemål.
 
 ## Testcaser som skal lages
 
-Omfanget av testcasene, ikke testcasene selv. `fs-testcaser-cdp` lager testcasene for fase 2 ut fra tabellen, og `fs-testcaser-intern` testcasene for fase 3. Teamet og testansvarlig går gjennom omfanget før testcasene lages.
+Omfanget av testcasene, ikke testcasene selv. `fs-testcaser-agent` lager testcasene for fase 2 ut fra tabellen, og `fs-testcaser-intern` testcasene for fase 3. Teamet og testansvarlig går gjennom omfanget før testcasene lages.
 
 ### Fase 2: agentisk funksjonstest
 
@@ -19,7 +19,7 @@ Omfanget av testcasene, ikke testcasene selv. `fs-testcaser-cdp` lager testcasen
 | `@OPT-BEH-BEH-005` | Søkerens elektroniske vitnemål vises | 6 | Annullert × brukt i en beregning (poeng, kravelement-vurdering, GSK-konklusjon, ikke brukt): bare de brukte vises, markert «Annullert», med varselet over tabellen og poengene. Sortering når to vitnemål har samme utstedelsesdato, og når datoen mangler. «-» for ukjent GSK og førstegangsvitnemål. Poeng med én desimal. Telleren når et annullert vitnemål vises. Teksten om uenighet om GSK vises ikke for et annullert vitnemål | beslutningstabell / ekvivalensklasser |
 | `@OPT-BEH-BEH-005` | Innsyn styres av rettighet, ikke av hvem som har tatt saken | 3 | – (tilgang er verifisert i koden i fase 1) | – |
 
-Testcasene står i `cdp-tester/02 Opptak/13 Søknad og saksbehandling/02 Behandling/` når de er laget. Finnes testene fra før, står de her som de er, og lages testene etter testplanen, synkes tabellen med `fs-testplan` (*Synk med testene og miljøfila*). Utledede testcaser lages bare der regelen har verdier eller betingelser å teste.
+Testcasene står i `tester-agent/02 Opptak/13 Søknad og saksbehandling/02 Behandling/` når de er laget. Finnes testene fra før, står de her som de er, og lages testene etter testplanen, synkes tabellen med `fs-testplan` (*Synk med testene og miljøfila*). Utledede testcaser lages bare der regelen har verdier eller betingelser å teste.
 
 ### Fase 3: intern akseptansetest
 
@@ -39,7 +39,7 @@ I tillegg til flytene har den interne testen tre deler (*Fase 3* i `akseptansete
 
 ## Testbrukere
 
-Fra [test.md](../../cdp-tester/_Miljøer/test.md), 2026-11-05.
+Fra [test.md](../../tester-agent/_Miljøer/test.md), 2026-11-05.
 
 | Nr | Nøkkel | Navn | Rolle | Organisasjon | Innlogging | Start-URL | Brukes til |
 |---|---|---|---|---|---|---|---|
@@ -63,7 +63,7 @@ Fra tilgangsradene i verify-rapporten. Den viser hvilke roller kravet har ved hv
 
 ## Testdata
 
-Testdataene testene trenger, med nøkkel. Data i testmiljøet kan slettes eller nullstilles når som helst, så testene lager dataene sine selv der det går. Søkerne med vitnemål fra KREG kan ikke lages gjennom løsningen, så de må finnes i miljøet før testen. Navnet og `Søk/URL` er fra [test.md](../../cdp-tester/_Miljøer/test.md), 2026-11-05. Testdata er syntetiske.
+Testdataene testene trenger, med nøkkel. Data i testmiljøet kan slettes eller nullstilles når som helst, så testene lager dataene sine selv der det går. Søkerne med vitnemål fra KREG kan ikke lages gjennom løsningen, så de må finnes i miljøet før testen. Navnet og `Søk/URL` er fra [test.md](../../tester-agent/_Miljøer/test.md), 2026-11-05. Testdata er syntetiske.
 
 | Hva | Nøkkel | Navn | Hvor | Søk/URL | Utgangstilstand | Brukes av |
 |---|---|---|---|---|---|---|
