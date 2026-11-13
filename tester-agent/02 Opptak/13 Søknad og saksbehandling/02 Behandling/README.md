@@ -49,20 +49,20 @@ Tester for kravet [gi_tilbudsgaranti_ved_tidlig_opptak.feature](../../../../krav
 | `utdanningsbakgrunner-godkjente` | testdata | utdanningsbakgrunnene søkerne velger |
 | `opptak-saksbehandler-behandlende-tidlig-opptak` | testbruker | alle scenarioer (Klargjøring K og S) |
 | `opptak-saksbehandler-behandlende-tidlig-opptak-andre` | testbruker | den utledede om en søker med to saker (den andre saken) |
-| `opptak-tilbyder-behandlende` | testbruker | «Tidligopptakstilbud fra tilbyder går foran poengsummen», «Tidligopptakstilbud fra tilbyder gjelder uansett konklusjon og poengsum», «Sette tilbudsgaranti når søkeren ikke deltar i tidligopptaket», og den utledede om tidligopptakstilbud uten søknad om tidlig opptak |
+| `opptak-tilbyder-behandlende` | testbruker | «Tidligopptakstilbud fra tilbyder går foran poengsummen», «Tidligopptakstilbud fra tilbyder gjelder uansett konklusjon og poengsum», «Sette tilbudsgaranti når søkeren ikke deltar i tidligopptaket», «Tidligopptakstilbud fra tilbyder gjelder også uten søknad om tidlig opptak» |
 | `soker-tidlig-opptak` | testbruker | den utledede om et trukket søknadsalternativ |
 | `poenggrenser-tidlig-opptak` | testdata (oppsett) | alle scenarioer |
 | `opptak-tidlig-opptak` | testdata | alle scenarioer |
 | `utdanningstilbud-tidlig-opptak` | testdata | de fleste scenarioene |
 | `utdanningstilbud-tidlig-opptak-andre` | testdata | «Tilbudsgaranti på det høyest prioriterte søknadsalternativet», «Tidligopptakstilbud fra tilbyder går foran poengsummen», «Tilbudsgarantien flyttes …», og den utledede om et trukket søknadsalternativ |
-| `utdanningstilbud-tidlig-opptak-med-median` | testdata | regelen om medianen |
-| `utdanningstilbud-tidlig-opptak-uten-median` | testdata | «Ingen tilbudsgaranti uten poenggrense og uten median fra forrige opptak» |
+| `utdanningstilbud-tidlig-opptak-med-median` | testdata | regelen om medianen, også «Utdanningstilbud med median fra forrige opptak mangler ikke poenggrense» |
+| `utdanningstilbud-tidlig-opptak-uten-median` | testdata | «Ingen tilbudsgaranti uten poenggrense og uten median fra forrige opptak», «Se antall utdanningstilbud med mangelfulle innstillinger» |
 | `tilbudsgarantitype-tidlig-opptak` | testdata | alle scenarioer som gjennomfører |
 | `tilbudsgarantitype-tilbyder-tidligopptakstilbud` | testdata | scenarioene med tidligopptakstilbud fra tilbyder |
 | `tilbudsgarantitype-forvalter-gir-tilbud` | testdata | «Tilbudsgaranti fra opptaksforvalter som gir tilbud blir erstattet», «Annen tilbudsgaranti på et høyere prioritert søknadsalternativ …» |
 | `tilbudsgarantitype-forvalter-gir-ikke-tilbud` | testdata | «Tilbudsgaranti fra opptaksforvalter som ikke gir tilbud blir erstattet» |
 | `tilbudsgarantitype-reservert-studieplass-behandler` | testdata | scenarioene med reservert studieplass fra behandler |
-| `tilbudsgarantitype-reservert-studieplass-forvalter` | testdata | «Reservert studieplass fra opptaksforvalter blir erstattet» (utledet) |
+| `tilbudsgarantitype-reservert-studieplass-forvalter` | testdata | «Reservert studieplass fra opptaksforvalter blir erstattet» |
 | `opptak-tidlig-opptak-uten-tilbudsgarantitype` | testdata | «Tidligopptaket stopper uten én tilbudsgarantitype for tidlig opptak» |
 | `opptak-tidlig-opptak-to-tilbudsgarantityper` | testdata | «Tidligopptaket stopper uten én tilbudsgarantitype for tidlig opptak» |
 | `sak-tidlig-opptak-kvalifisert` | testdata | de fleste scenarioene (én søker per scenario) |
@@ -73,7 +73,7 @@ Tester for kravet [gi_tilbudsgaranti_ved_tidlig_opptak.feature](../../../../krav
 | `sak-tidlig-opptak-to-kvoter` | testdata | «Den høyeste poengsummen til søknadsalternativet gjelder» |
 | `sak-tidlig-opptak-poeng-i-kvote-uten-kvoteplassering` | testdata | den utledede om en kvote søkeren ikke skal kvoteplasseres i |
 | `sak-tidlig-opptak-uten-poengsum` | testdata | «Tidligopptakstilbud fra tilbyder gjelder uansett konklusjon og poengsum», og den utledede om manglende poengsum |
-| `sak-uten-soknad-om-tidlig-opptak` | testdata | den utledede om tidligopptakstilbud uten søknad om tidlig opptak |
+| `sak-uten-soknad-om-tidlig-opptak` | testdata | «Tidligopptakstilbud fra tilbyder gjelder også uten søknad om tidlig opptak» |
 | `sak-tidlig-opptak-median-over` | testdata | regelen om medianen |
 | `sak-tidlig-opptak-median-lik` | testdata | regelen om medianen |
 | `sak-tidlig-opptak-median-under` | testdata | regelen om medianen |

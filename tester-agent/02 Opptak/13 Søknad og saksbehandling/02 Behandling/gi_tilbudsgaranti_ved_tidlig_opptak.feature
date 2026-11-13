@@ -1,10 +1,10 @@
 # language: no
 # Generert av fs-testcaser-cdp 2026-11-09. Rettet 2026-11-10 etter kjøringen (Klargjøring K steg 5 og Poengsum P), og 2026-11-13
-# (testdataene for «Annen tilbudsgaranti på et høyere prioritert …» og en søker med to saker)
-# Krav: krav/02 Opptak/13 Søknad og saksbehandling/02 Behandling/gi_tilbudsgaranti_ved_tidlig_opptak.feature @ 9e267353 (blob a409c3e78fbabcdb46286c0e2d0163e9243154c2)
+# (testdataene for «Annen tilbudsgaranti på et høyere prioritert …» og en søker med to saker). Oppdatert av fs-testcaser-agent
+# 2026-11-13 (fire nye scenarioer i kravet, og dialogen etter gjennomføringen)
+# Krav: krav/02 Opptak/13 Søknad og saksbehandling/02 Behandling/gi_tilbudsgaranti_ved_tidlig_opptak.feature @ 93a20ea5 (blob e6c37f576c871930d5f7ef54f19c4973aaa92f0b)
 #
-# Bare scenarioene som er levert, er med: regelen «Opptaksforvalter gjennomfører tidligopptaket», to scenarioer
-# om medianen, to om utfallet og regelen om manuell tilbudsgaranti. Scenarioene som er utkast (@draft), er ikke med.
+# Scenarioene som er utkast (@draft), er ikke med.
 #
 # «Søknadsalternativ uten tilbudsgaranti går videre til ordinært opptak» er heller ikke med. Resultatet kan bare ses når
 # hovedopptaket kjøres, og det hører til plasstildelingen (@OPT-PLA-TIL-002), ikke til tidligopptaket.
@@ -36,7 +36,8 @@
 #   2. Gå til «Opptak», velg «opptak-tidlig-opptak», velg «Plasstildeling» og fanen «Tidlig opptak».
 #   3. Velg «Kjør tidligopptak». Dialogen «Kjøre tidligopptak?» viser prøvekjøringen.
 #   4. Vent til «Beregner resultatet…» er borte, og velg «Kjør tidligopptak» i dialogen.
-#   5. «Tidligopptaket er kjørt.» vises.
+#   5. Dialogen heter «Resultat for tidligopptak», og viser «Dette er resultatet etter kjøring av tidligopptaket.»
+#      Velg «Lukk».
 #
 # «Og fordelingen har delt saken (opptil 2 minutter)»: fordelingen skjer i tildelingsjobben. Agenten søker på søknadsnummeret
 # under «Gå til søknader» som «opptak-saksbehandler-behandlende-tidlig-opptak-andre» omtrent hvert 30. sekund, til saken
@@ -197,10 +198,8 @@ Egenskap: Gi tilbudsgaranti ved tidlig opptak
       Når jeg gjennomfører tidligopptaket som i Gjennomføring G
       Så står ikke «tilbudsgarantitype-tidlig-opptak» under «Tilbudsgaranti fra forvalter» for noen av søknadsalternativene i saken til søkeren (som i S)
 
-    # Teknikk: tilstandsoverganger (reservert studieplass satt av opptaksforvalteren blir erstattet).
-    # Regel i koden uten scenario.
-    @utledet
-    Scenario: Opptaksforvalter gjennomfører tidligopptaket: reservert studieplass fra opptaksforvalter blir erstattet
+    @ref-OPT-SØK-SØK-016
+    Scenario: Reservert studieplass fra opptaksforvalter blir erstattet
       Gitt jeg tar en ubrukt søker fra «sak-tidlig-opptak-kvalifisert»
       Og jeg er logget inn som «opptak-forvalter-forvaltende»
       Og jeg velger «tilbudsgarantitype-reservert-studieplass-forvalter» i «Tilbudsgaranti fra forvalter» for «utdanningstilbud-tidlig-opptak» i saken til søkeren, og «Tilbudsgaranti lagret» vises
@@ -303,15 +302,13 @@ Egenskap: Gi tilbudsgaranti ved tidlig opptak
       Så står «tilbudsgarantitype-tilbyder-tidligopptakstilbud» fortsatt under «Tilbudsgaranti fra tilbyder» for «utdanningstilbud-tidlig-opptak» i saken til søkeren (som i S)
       Og står «tilbudsgarantitype-tidlig-opptak» under «Tilbudsgaranti fra forvalter» for «utdanningstilbud-tidlig-opptak»
 
-    # Teknikk: ekvivalensklasser (søkeren har ikke søkt om tidlig opptak, men har tidligopptakstilbud).
-    # Regel i koden uten scenario. Kravet sier ikke om søkeren da skal være med (uklart om ønsket).
-    @utledet
-    Scenario: Opptaksforvalter gjennomfører tidligopptaket: tidligopptakstilbud uten søknad om tidlig opptak
+    Scenario: Tidligopptakstilbud fra tilbyder gjelder også uten søknad om tidlig opptak
       Gitt jeg tar en ubrukt søker fra «sak-uten-soknad-om-tidlig-opptak»
       Og jeg er logget inn som «opptak-tilbyder-behandlende»
       Og jeg velger «tilbudsgarantitype-tilbyder-tidligopptakstilbud» i «Tilbudsgaranti fra tilbyder» for «utdanningstilbud-tidlig-opptak» i saken til søkeren, og «Tilbudsgaranti lagret» vises
       Når jeg gjennomfører tidligopptaket som i Gjennomføring G
-      Så står «tilbudsgarantitype-tidlig-opptak» under «Tilbudsgaranti fra forvalter» for «utdanningstilbud-tidlig-opptak» i saken til søkeren (som i S)
+      Så står «tilbudsgarantitype-tilbyder-tidligopptakstilbud» fortsatt under «Tilbudsgaranti fra tilbyder» for «utdanningstilbud-tidlig-opptak» i saken til søkeren (som i S)
+      Og står «tilbudsgarantitype-tidlig-opptak» under «Tilbudsgaranti fra forvalter» for «utdanningstilbud-tidlig-opptak»
 
     Scenario: Prøvekjøre tidligopptaket
       Gitt jeg tar en ubrukt søker fra «sak-tidlig-opptak-kvalifisert»
@@ -323,7 +320,7 @@ Egenskap: Gi tilbudsgaranti ved tidlig opptak
       Og jeg gjør søkerens sak klar som i Klargjøring K
       Når jeg bytter til «opptak-forvalter-forvaltende», åpner fanen «Tidlig opptak» på nytt og velger «Kjør tidligopptak»
       Så viser «Totale tilbudsgarantier» i dialogen «Kjøre tidligopptak?» 1 mer enn tallet jeg noterte
-      Og dialogen viser «Dette er en prøvekjøring. Tallene viser hva som skjer hvis du kjører nå. Ingenting er lagret eller sendt ennå.»
+      Og dialogen viser «Tallene viser hva som skjer hvis du kjører nå. Ingenting er lagret eller sendt ennå.»
       Og jeg lukker dialogen uten å velge «Kjør tidligopptak»
       Og står ikke «tilbudsgarantitype-tidlig-opptak» under «Tilbudsgaranti fra forvalter» for noen av søknadsalternativene i saken til søkeren (som i S)
 
@@ -436,6 +433,25 @@ Egenskap: Gi tilbudsgaranti ved tidlig opptak
       Når jeg gjennomfører tidligopptaket som i Gjennomføring G
       Så står ikke «tilbudsgarantitype-tidlig-opptak» under «Tilbudsgaranti fra forvalter» for «utdanningstilbud-tidlig-opptak-uten-median» i saken til søkeren (som i S)
 
+    # Tallet gjelder hele opptaket, så forskjellen sjekkes: med poenggrensen lik medianen, og etter at den er tømt.
+    # Grensen er lik medianen, så de samme søkerne får tilbudsgaranti i begge prøvekjøringene, og varselet om kvoten
+    # (som også telles) blir det samme.
+    @endrer-data
+    Scenario: Utdanningstilbud med median fra forrige opptak mangler ikke poenggrense
+      Gitt jeg er logget inn som «opptak-forvalter-forvaltende»
+      Og jeg har åpnet fanen «Tidlig opptak» under «Plasstildeling» i «opptak-tidlig-opptak»
+      Og «Median i fjor» for «utdanningstilbud-tidlig-opptak-med-median» viser en median M
+      Og jeg noterer verdien i «Poenggrense tidlig opptak for <utdanningstilbud-tidlig-opptak-med-median>»
+      Og jeg skriver M i «Poenggrense tidlig opptak for <utdanningstilbud-tidlig-opptak-med-median>», og velger «Lagre poenggrenser»
+      Og jeg velger «Kjør tidligopptak», og noterer tallet ved «Feilkonfigurerte utdanningstilbud» i dialogen «Kjøre tidligopptak?»
+      Og jeg lukker dialogen uten å velge «Kjør tidligopptak»
+      Og jeg tømmer «Poenggrense tidlig opptak for <utdanningstilbud-tidlig-opptak-med-median>», og velger «Lagre poenggrenser»
+      Når jeg velger «Kjør tidligopptak»
+      Så viser «Feilkonfigurerte utdanningstilbud» i dialogen «Kjøre tidligopptak?» det samme tallet som jeg noterte
+      Og jeg lukker dialogen uten å velge «Kjør tidligopptak»
+      # Setter tilbake:
+      Og jeg skriver verdien jeg noterte i «Poenggrense tidlig opptak for <utdanningstilbud-tidlig-opptak-med-median>», og velger «Lagre poenggrenser»
+
   Regel: Opptaksforvalter ser utfallet av tidligopptaket
 
     # Tallet gjelder hele opptaket, også søkere fra andre tester. Derfor sjekkes forskjellen: de tre sakene
@@ -470,6 +486,27 @@ Egenskap: Gi tilbudsgaranti ved tidlig opptak
       Når jeg bytter til «opptak-forvalter-forvaltende», åpner fanen «Tidlig opptak» på nytt og velger «Kjør tidligopptak»
       Så viser «Har saker som ikke er behandlet» i dialogen 1 mindre enn tallet jeg noterte
       Og jeg lukker dialogen uten å velge «Kjør tidligopptak»
+
+    # Tallet gjelder hele opptaket, så forskjellen sjekkes: med en poenggrense, og etter at poenggrensen er tømt.
+    # Grensen er høyere enn alle søkernes poengsum, så ingen får tilbudsgaranti i noen av prøvekjøringene, og varselet
+    # om kvoten (som også telles) blir det samme. Tallet teller mangler, ikke utdanningstilbud: et utdanningstilbud
+    # med flere mangler telles flere ganger. Testen sjekker at tallet går opp med 1 når poenggrensen mangler.
+    @endrer-data
+    Scenario: Se antall utdanningstilbud med mangelfulle innstillinger
+      Gitt jeg er logget inn som «opptak-forvalter-forvaltende»
+      Og jeg har åpnet fanen «Tidlig opptak» under «Plasstildeling» i «opptak-tidlig-opptak»
+      Og «Median i fjor» for «utdanningstilbud-tidlig-opptak-uten-median» viser «-»
+      Og jeg noterer verdien i «Poenggrense tidlig opptak for <utdanningstilbud-tidlig-opptak-uten-median>»
+      Og jeg skriver 99 i «Poenggrense tidlig opptak for <utdanningstilbud-tidlig-opptak-uten-median>», og velger «Lagre poenggrenser»
+      Og jeg velger «Kjør tidligopptak», og noterer tallet ved «Feilkonfigurerte utdanningstilbud» i dialogen «Kjøre tidligopptak?»
+      Og jeg lukker dialogen uten å velge «Kjør tidligopptak»
+      Og jeg tømmer «Poenggrense tidlig opptak for <utdanningstilbud-tidlig-opptak-uten-median>», og velger «Lagre poenggrenser»
+      Når jeg velger «Kjør tidligopptak»
+      Så viser «Feilkonfigurerte utdanningstilbud» i dialogen «Kjøre tidligopptak?» 1 mer enn tallet jeg noterte
+      Og «Konfigurasjonsavvik» står ved tallet
+      Og jeg lukker dialogen uten å velge «Kjør tidligopptak»
+      # Setter tilbake:
+      Og jeg skriver verdien jeg noterte i «Poenggrense tidlig opptak for <utdanningstilbud-tidlig-opptak-uten-median>», og velger «Lagre poenggrenser»
 
     @ref-OPT-OVO-INN-004
     Scenariomal: Tidligopptaket stopper uten én tilbudsgarantitype for tidlig opptak
