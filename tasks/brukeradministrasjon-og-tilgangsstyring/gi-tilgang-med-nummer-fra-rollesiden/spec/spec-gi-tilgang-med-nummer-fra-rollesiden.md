@@ -107,7 +107,7 @@ Kravene er sjekket mot fs-admin !3046 (`745859dd`) og fs-plattform main (`26848c
 Spesifikasjonen over er fra 07.10.2026 og er ikke skrevet om.
 
 - **`BRU-PER-ROL-001`:** «Rolleoversikten viser bare roller …» sier nå at retten gjelder for en
-  organisasjon og et miljø, og at hele rollekatalogen vises; nytt scenario for tom rolleoversikt.
+  organisasjon og et miljø, ikke for en enkelt rolle; nytt scenario for tom rolleoversikt.
   Nye scenarioer: tildelinger i en organisasjon brukeradministratoren ikke administrerer, vises
   ikke; organisasjonsfilteret (`@openquestion`); søk på navn (`@draft @openquestion`); utgåtte
   roller skjules som standard (`@draft @openquestion`) og er merket. «Søke fram en rolle» søker

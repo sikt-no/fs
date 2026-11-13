@@ -26,7 +26,7 @@ Egenskap: Se brukere som har en spesifikk rolle
   @must @openquestion
   Scenario: Rolleoversikten viser bare roller brukeradministratoren har rett til å tildele
     # Retten til å tildele gjelder for en organisasjon og et miljø, ikke for en enkelt rolle
-    # (BRU-PER-GRU-013). Den som har retten et sted, kan tildele alle rollene i rollekatalogen.
+    # (BRU-PER-GRU-013).
     # AVKLART 05.11.2026 (Kjetil, fs-admin !3046): Rolleoversikten har ikke filter på
     # organisasjon og miljø.
     # ÅPNE SPØRSMÅL:

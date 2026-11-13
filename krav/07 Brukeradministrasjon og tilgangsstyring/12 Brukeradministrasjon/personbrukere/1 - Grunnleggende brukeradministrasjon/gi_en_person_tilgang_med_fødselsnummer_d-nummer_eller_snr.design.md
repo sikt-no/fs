@@ -110,8 +110,8 @@ om miljøet er ekte eller et testmiljø. Klienten viser feilen API-et gir:
 `SyntetiskPersonIEktMiljo` eller `EktePersonISyntetiskMiljo`.
 
 ### Regel: Brukeradministratoren kan bare gi roller hen har rett til å tildele
-Retten er retten til å tildele personer i organisasjonen og miljøet. API-et gir
-`ManglerTildelingsrett` når den mangler. Med retten kan alle rollene i rollekatalogen gis.
+Retten er retten til å tildele personer i organisasjonen og miljøet, ikke for en enkelt rolle.
+API-et gir `ManglerTildelingsrett` når den mangler.
 
 ## Åpne designspørsmål
 

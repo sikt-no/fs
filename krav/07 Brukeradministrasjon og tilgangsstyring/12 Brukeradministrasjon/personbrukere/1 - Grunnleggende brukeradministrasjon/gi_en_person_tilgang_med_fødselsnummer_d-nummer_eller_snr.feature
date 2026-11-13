@@ -203,7 +203,7 @@ Egenskap: Gi en person tilgang med fødselsnummer, D-nummer eller SNR
     fødselsnummer, D-nummer og SNR.
 
     # ÅPNE SPØRSMÅL:
-    # - Skatteetaten endrer regelen for det første kontrollsifferet fra 2032 (BAT-433). Verken
+    # - Regelen for det første kontrollsifferet endres fra 2032 (BAT-433). Verken
     #   API-et eller FS Admin har den nye regelen, så et nummer som bare er gyldig etter den, blir
     #   avvist som ugyldig. Når må det være på plass?
 
@@ -252,8 +252,8 @@ Egenskap: Gi en person tilgang med fødselsnummer, D-nummer eller SNR
   Regel: Brukeradministratoren kan bare gi roller hen har rett til å tildele
     Alle med brukeradministrator-rollen kan gi tilgang med fødselsnummer, D-nummer eller SNR. Det
     kreves ingen egen rettighet. Retten til å tildele gjelder for en organisasjon og et miljø, ikke
-    for en enkelt rolle: den som har retten i en organisasjon og et miljø, kan gi alle rollene i
-    rollekatalogen der. Mangler retten, avvises tildelingen før personen slås opp.
+    for en enkelt rolle. Utgåtte roller kan ikke tildeles (BRU-PER-GRU-003). Mangler retten,
+    avvises tildelingen før personen slås opp.
 
     Scenario: Brukeradministrator gir tilgang med nummer uten egen rettighet
       Gitt brukeradministratoren har brukeradministrator-rollen for en organisasjon i et miljø
