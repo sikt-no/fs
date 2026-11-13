@@ -148,44 +148,6 @@ Hvilke faser i flyten som er levert, ut fra statusen på delene av kravene fasen
 `@FLY-OPT-VAL-001`: 1 av 2 faser levert.
 `@FLY-OPT-SAM-001`: 0 av 4 faser levert.
 
-### Kravene flytene bygger på
-
-Scenarioene i kravene fasene bygger på (delene ankeret peker på), per flyt og krav. `Levert` er statusen fra taggene, og `Funnet i koden` er resultatet av verifiseringen. Fasene med `@wont` er ikke med.
-
-| Flyt | Krav | Egenskap | Status | Levert | Funnet i koden | Ikke levert | Levert, men ikke funnet i koden |
-| --- | --- | --- | --- | --- | --- | --- | --- |
-| `@FLY-OPT-AUT-001` | `@OPT-BEH-BEH-030` | Importere resultater fra KREG | `@implemented` | 8/8 | 8/8 | – | – |
-| `@FLY-OPT-AUT-001` | `@OPT-BEH-BEH-032` | Starte automatisk behandling | `@implemented` | 2/2 | 2/2 | – | – |
-| `@FLY-OPT-AUT-001` | `@OPT-BEH-BEH-015` | Automatisk GSK-konklusjon | `@in-progress` | 36/37 | 36/37 | «Automatikken kan sette en ny konklusjon etter annulleringen» (`:462`, ikke funnet) | – |
-| `@FLY-OPT-AUT-001` | `@OPT-BEH-BEH-027` | Beregne GSK fra vitnemål | `@implemented` | 27/27 | 27/27 | – | – |
-| `@FLY-OPT-AUT-001` | `@OPT-BEH-BEH-025` | Ferdigbehandle en sak | `@in-progress` | 8/8 | 8/8 | – | – |
-| `@FLY-OPT-AUT-001` | `@OPT-BEH-BEH-019` | Automatisk grunnlag | `@in-progress` | 14/14 | 14/14 | – | – |
-| `@FLY-OPT-AUT-001` | `@OPT-BEH-BEH-018` | Automatisk beregning av vitnemålspoeng | `@in-progress` | 5/5 | 5/5 | – | – |
-| `@FLY-OPT-AUT-001` | `@OPT-REG-RAN-001` | Rangeringsregelverk | `@implemented` | 5/5 | – | – | – |
-| `@FLY-OPT-AUT-001` | `@OPT-REG-RAN-002` | Poengberegning | `@implemented` | 10/10 | – | – | – |
-| `@FLY-OPT-AUT-001` | `@OPT-BEH-BEH-028` | Automatiske tilleggspoeng | `@in-progress` | 20/20 | 20/20 | – | – |
-| `@FLY-OPT-AUT-001` | `@OPT-BEH-BEH-020` | Automatisk vurdering av spesielle opptakskrav | `@in-progress` | 18/18 | 18/18 | – | – |
-| `@FLY-OPT-AUT-001` | `@OPT-BEH-BEH-012` | Automatisk kvoteplassering | `@implemented` | 8/8 | 8/8 | – | – |
-| `@FLY-OPT-AUT-001` | `@OPT-REG-KVO-002` | Kvotespørsmål | `@implemented` | 7/7 | – | – | – |
-| `@FLY-OPT-AUT-001` | `@OPT-BEH-BEH-031` | Beregne poengsum per kvote | `@implemented` | 12/12 | 12/12 | – | – |
-| `@FLY-OPT-AUT-001` | `@OPT-REG-KVO-001` | Kvotetype | `@implemented` | 1/1 | – | – | – |
-| `@FLY-OPT-AUT-001` | `@OPT-BEH-BEH-036` | Automatiske mangler | `@in-progress` | 21/28 | 20/28 | «Mangelteksten viser kravelementene som ikke er oppfylt, ordnet etter kravlistene» (`:71`, usikker); «Alle sakene i søknaden får mangel når søkeren oppgir at generell studiekompetanse fullføres i vår» (`:229`, ikke funnet); «Saken får ikke mangel når ingen mangelkode er merket» (`:236`, ikke funnet); «Opptaksforvalteren får varselet bare første gang» (`:242`, ikke funnet); «Søkeren ser den automatiske mangelen i Min kompetanse» (`:248`, usikker); «Mangelen slettes når søkeren endrer søknaden» (`:259`, ikke funnet); «Mangelen sjekkes ut når saken er behandlet helautomatisk» (`:281`, ikke funnet) | «Søkeren ser ikke mangelteksten når søknadsalternativet er fjernet» (`:122`, usikker) |
-| `@FLY-OPT-AUT-001` | `@OPT-BEH-BEH-029` | Behandlingsstatus | `@implemented` | 2/2 | 2/2 | – | – |
-| `@FLY-OPT-AUT-001` | `@OPT-BEH-BEH-026` | Beregne automatisk på nytt | `@in-progress` | 12/12 | 12/12 | – | – |
-| `@FLY-OPT-VIT-001` | `@OPT-BEH-BEH-033` | Kjøre jobbene i opptak | `@planned` | 0/1 | 0/1 | «Jobbplanleggeren starter <jobb>» (`:30`, ikke funnet) | – |
-| `@FLY-OPT-VIT-001` | `@OPT-BEH-BEH-030` | Importere resultater fra KREG | `@implemented` | 11/11 | 11/11 | – | – |
-| `@FLY-OPT-VIT-001` | `@OPT-BEH-BEH-015` | Automatisk GSK-konklusjon | `@in-progress` | 22/22 | 22/22 | – | – |
-| `@FLY-OPT-VIT-001` | `@OPT-BEH-BEH-032` | Starte automatisk behandling | `@implemented` | 1/1 | 1/1 | – | – |
-| `@FLY-OPT-VIT-001` | `@OPT-BEH-BEH-034` | Håndtere annullert vitnemål | `@implemented` | 7/7 | 7/7 | – | – |
-| `@FLY-OPT-VAL-001` | `@OPT-BEH-BEH-039` | Behandle automatisk på vitnemålet saksbehandleren velger | `@in-progress` | 5/6 | 5/6 | «Sammensatt vitnemål gir ikke grunnlaget som krever førstegangsvitnemål» (`:95`, ikke funnet) | – |
-| `@FLY-OPT-SAM-001` | `@OPT-BEH-BEH-039` | Behandle automatisk på vitnemålet saksbehandleren velger | `@in-progress` | 0/2 | 0/1 | «Saken behandles automatisk på et sammensatt vitnemål» (`:54`, ikke sjekket i koden); «Sammensatt vitnemål gir ikke grunnlaget som krever førstegangsvitnemål» (`:95`, ikke funnet) | – |
-| `@FLY-OPT-SAM-001` | `@OPT-BEH-BEH-019` | Automatisk grunnlag | `@in-progress` | 7/7 | 7/7 | – | – |
-
-`@FLY-OPT-AUT-001`: 216 av 224 scenarioer i 18 krav er levert, og 192 av 201 er funnet i koden (23 har bare status fra taggene).
-`@FLY-OPT-VIT-001`: 41 av 42 scenarioer i 5 krav er levert, og 41 av 42 er funnet i koden.
-`@FLY-OPT-VAL-001`: 5 av 6 scenarioer i 1 krav er levert, og 5 av 6 er funnet i koden.
-`@FLY-OPT-SAM-001`: 7 av 9 scenarioer i 2 krav er levert, og 7 av 8 er funnet i koden (1 har bare status fra taggene).
-
 ## Avhengigheter
 
 Kravene som kravene i scope bygger på (`@depends-on-`), med statusen deres. Avhengighetene får aldri ny status i denne kjøringen.
