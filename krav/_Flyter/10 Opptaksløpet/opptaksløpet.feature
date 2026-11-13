@@ -16,9 +16,7 @@ Egenskap: Opptaksløpet
   @depends-on-FLY-OPT-SAK-001
   Regel: Søknadsalternativene fordeles til saksbehandlende organisasjoner
 
-  @openquestion
-  # ÅPNE SPØRSMÅL:
-  # - Flyten for fasen er ikke skrevet (forslaget: tidlig_opptak.feature).
+  @depends-on-FLY-OPT-TID-001
   Regel: Søkeren får tilbudsgaranti i tidlig opptak
 
   @depends-on-FLY-OPT-AUT-001 @depends-on-FLY-OPT-VAL-001 @depends-on-FLY-OPT-SAM-001 @depends-on-FLY-OPT-VIT-001 @depends-on-FLY-OPT-DOK-001 @depends-on-FLY-OPT-FLE-001 @depends-on-FLY-OPT-MAN-001 @openquestion
