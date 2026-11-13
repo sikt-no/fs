@@ -38,6 +38,14 @@ Egenskap: Velge utdanningsbakgrunn i søknad
       Når søkeren starter en søknad i opptaket "Lokalt opptak høst 2027"
       Så er ingen utdanningsbakgrunn valgt i søknaden til "Lokalt opptak høst 2027"
 
+    # AVKLART 2026-11-12 (TOT-2635): Ingen utdanningsbakgrunn er valgt på forhånd, fordi vi ikke
+    # vet utdanningsbakgrunnen fra før. Søkeren velger selv. Unntaket er preutfylling fra
+    # elektronisk vitnemål, se «Utdanningsbakgrunn preutfylles fra søkerens vitnemål».
+    Scenario: Ingen utdanningsbakgrunn er valgt på forhånd
+      Gitt at søkeren ikke har elektronisk vitnemål fra norsk videregående opplæring
+      Når søkeren skal velge utdanningsbakgrunn i søknaden
+      Så er ingen utdanningsbakgrunn valgt i søknaden
+
     # AVKLART 2026-10-19 (S4): Det skal ikke være mulig å registrere en søknad uten utdanningsbakgrunn.
     # AVKLART 2026-11-09 (TOT-2586): Det gjelder alle opptak.
     Scenario: Søknaden kan ikke sendes inn uten utdanningsbakgrunn
@@ -46,13 +54,9 @@ Egenskap: Velge utdanningsbakgrunn i søknad
       Så kan søkeren ikke sende inn søknaden
       Og søkeren får beskjed om å velge utdanningsbakgrunn
 
-  @openquestion
-  Regel: Søkeren kan endre utdanningsbakgrunn etter at søknaden er sendt inn
-    # ÅPNE SPØRSMÅL:
-    # - Skal søkeren selv kunne endre utdanningsbakgrunnen etter at søknaden er sendt inn,
-    #   eller er det bare saksbehandleren som kan det?
-    # - Hvis søkeren kan det: til hvilken frist? Søknadsfristen, fristen for endring av
-    #   utdanningsbakgrunn (@OPT-OVO-FRI-001), eller en annen frist?
+  Regel: Søkeren kan endre utdanningsbakgrunn frem til søknadsfristen
+    # AVKLART 2026-11-12 (TOT-2635): Søkeren kan selv endre utdanningsbakgrunnen i en innsendt
+    # søknad frem til søknadsfristen, men ikke etter.
     # Kilde: HK-Dir-historiene 9467 «Endre utdanningsbakgrunn» og 9448 «Endre innsendt søknad».
     # Saksbehandlerens endring hører til søknadsbehandlingen. Hvilken organisasjon som
     # saksbehandler søknaden etter endringen, står i @OPT-BEH-BEH-011.
@@ -61,6 +65,12 @@ Egenskap: Velge utdanningsbakgrunn i søknad
       Gitt at søkeren har sendt inn søknaden med utdanningsbakgrunnen "Utenlandsk videregående skole"
       Når søkeren endrer utdanningsbakgrunnen til "Rudolf Steinerskole"
       Så er "Rudolf Steinerskole" registrert som utdanningsbakgrunn i søknaden
+
+    Scenario: Søkeren kan ikke endre utdanningsbakgrunn etter søknadsfristen
+      Gitt at søkeren har sendt inn søknaden med utdanningsbakgrunnen "Utenlandsk videregående skole"
+      Og at søknadsfristen har gått ut
+      Når søkeren vil endre utdanningsbakgrunnen i søknaden
+      Så kan søkeren ikke endre utdanningsbakgrunnen
 
   Regel: Søkeren oppgir utdanningsland når utdanningsbakgrunnen krever det
     # AVKLART 2026-10-27 (planleggingsmøte): Hvilke utdanningsbakgrunner som krever utdanningsland,
@@ -100,7 +110,7 @@ Egenskap: Velge utdanningsbakgrunn i søknad
       Så kan søkeren ikke sende inn søknaden
       Og søkeren får beskjed om å oppgi utdanningsland
 
-  @openquestion @depends-on-OPT-BEH-BEH-015
+  @could @depends-on-OPT-BEH-BEH-015
   Regel: Søkeren med GSK-konklusjon velger ikke utdanningsbakgrunn
     # AVKLART 2026-10-27 (planleggingsmøte): Steget hoppes over når søkeren har GSK-konklusjon.
     # Søkeren får ingen forklaring, siden steget ikke vises.
@@ -109,26 +119,24 @@ Egenskap: Velge utdanningsbakgrunn i søknad
     # Søkere med utenlandsk utdanning kan ha GSK-konklusjon, og søkeren med GSK-konklusjon får
     # ikke automatisk «Norsk videregående skole», siden søknaden da havner feil i
     # saksbehandlertildelingen.
-    # ÅPNE SPØRSMÅL:
-    # - Skal en utdanningsbakgrunn være valgt på forhånd i søknaden når søkeren blir spurt?
+    # AVKLART 2026-11-12 (TOT-2635): Å ta utgangspunkt i GSK-konklusjonen er nytt, trenger
+    # detaljerte krav, og er nice-to-have som ikke løses nå. Søkeren som blir spurt, får ingen
+    # utdanningsbakgrunn valgt på forhånd fra GSK-konklusjonen.
 
     Scenario: Søkeren med GSK-konklusjon blir ikke spurt om utdanningsbakgrunn
       Gitt at søkeren har en positiv GSK-konklusjon fra et tidligere opptak
       Når søkeren går gjennom søknaden
       Så blir søkeren ikke spurt om utdanningsbakgrunn
 
-  @openquestion
   Regel: Utdanningsbakgrunn preutfylles fra søkerens vitnemål
     # AVKLART 2026-10-27 (planleggingsmøte): Hvilke vitnemålstyper som gir hvilken
     # utdanningsbakgrunn, er en forretningsregel som ligger fast i backend. Opptaksforvalteren
     # bestemmer det ikke.
-    # ÅPNE SPØRSMÅL:
-    # - Trengs preutfylling fra vitnemål, når GSK-vitnemålsberegningen kjører ved vitnemålsimport
-    #   (@OPT-BEH-BEH-027) og steget da hoppes over?
+    # AVKLART 2026-11-12 (TOT-2635): Har søkeren elektronisk vitnemål fra norsk videregående
+    # opplæring, er «Norsk videregående skole» preutfylt.
 
     Scenario: Utdanningsbakgrunn preutfylles fra vitnemål
-      Gitt at vitnemålstypen "Studieforberedende" er koblet til utdanningsbakgrunnen "Norsk videregående skole"
-      Og at søkeren har et studieforberedende vitnemål i kompetanseregisteret
+      Gitt at søkeren har elektronisk vitnemål fra norsk videregående opplæring
       Når søkeren skal velge utdanningsbakgrunn i søknaden
       Så er "Norsk videregående skole" preutfylt som utdanningsbakgrunn i søknaden
 
