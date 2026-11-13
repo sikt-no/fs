@@ -119,3 +119,27 @@ Spesifikasjonen over er fra 07.10.2026 og er ikke skrevet om.
   «Rolle brukeradministratoren ikke har rett til å tildele» heter nå «Organisasjon og miljø
   brukeradministratoren ikke har rett til å tildele i». Åpne spørsmål om nummeret som ennå ikke
   er i API-et, og om kontrollsifferregelen fra 2032 (BAT-433).
+
+Kjetils avklaringer 13.11.2026, lagt inn som AVKLART i kravene:
+
+- **Delegeringstaket** begrenser rolleoversikten og valgene for organisasjon og miljø i dialogen,
+  som i «Tildel roller» (BRU-PER-GRU-003). ROL-001: «Rolleoversikten viser bare roller
+  brukeradministratoren har rett til å tildele» heter nå «Rolleoversikten viser bare roller i
+  delegeringstaket». ROL-002: nytt scenario «Organisasjon og miljø kan bare velges der rollen er
+  i delegeringstaket».
+- **Leserett:** en brukeradministrator med bare leserett ser rollene, listen og filtrene, men kan
+  ikke gi eller fjerne. «Rolleoversikten er tom uten rett til å tildele» er erstattet av
+  «Brukeradministrator med bare leserett ser rollene» (ROL-001). ROL-002: nytt scenario
+  «Brukeradministrator med bare leserett kan ikke gi eller fjerne».
+- **Utgåtte roller** er skjult som standard, med valget om å vise dem. En utgått rolle kan ses,
+  men aldri gis. ROL-002: nytt scenario «En utgått rolle kan ikke gis fra rollesiden».
+- **Feide-brukere** står ikke i listen før tildelingene er flyttet (BRU-PER-GRU-014).
+- **Søk på navn** og **organisasjonsfilteret** beholdes (ikke lenger `@draft`/`@openquestion`).
+- **Tekster godkjent:** bekreftelsen før «Fjern tildeling», antallet «tildelinger i listen»,
+  menypunktet «Roller», og at mellomrom i et innlimt nummer fjernes. Hjelpeteksten er «11 siffer.».
+- **Avvik som rettes i koden, kravene står:** nummeret vises når navnet mangler (GRU-013, ikke
+  lenger `@openquestion`), ingen synlig overskrift over listen, og «Fjern tildeling» bare der
+  brukeradministratoren har rett til å tildele i både organisasjonen og miljøet (ROL-002: nytt
+  scenario om «Fjern tildeling» og retten i organisasjonen og miljøet).
+- Fortsatt åpent: «Søke fram en rolle» (`@draft @openquestion`), BAT-433, og teksten for tom
+  rolleoversikt for den som bare kan lese.

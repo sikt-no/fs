@@ -138,13 +138,10 @@ Egenskap: Gi en person tilgang med fødselsnummer, D-nummer eller SNR
       Så ser brukeradministratoren rollen brukeradministratoren ga
       Men brukeradministratoren ser ikke tildelingen i organisasjonen brukeradministratoren ikke administrerer
 
-  @openquestion
   Regel: Nummeret vises bare når navnet mangler
     # AVKLART 10.11.2026 (Kjetil): Brukeroversikten viser også nummeret når navnet mangler.
-    # ÅPNE SPØRSMÅL:
-    # - API-et gir ikke nummeret i dag. Det venter på en personvernavklaring av hvem som kan se
-    #   nummeret (fs-admin !3046 og fs-plattform !6706, 11.11.2026). Til da viser FS Admin «Navn
-    #   ikke kjent» i stedet for nummeret. Hvem tar avklaringen, og når?
+    # AVKLART 13.11.2026 (Kjetil): Kravet står. At FS Admin viser «Navn ikke kjent» i stedet for
+    # nummeret, er et avvik som rettes i koden.
 
     Scenariomal: Nummeret vises i stedet for navnet når navnet mangler
       Gitt brukeradministratoren har gitt en person som ikke fantes fra før, en rolle og oppgitt fødselsnummeret
@@ -252,8 +249,11 @@ Egenskap: Gi en person tilgang med fødselsnummer, D-nummer eller SNR
   Regel: Brukeradministratoren kan bare gi roller hen har rett til å tildele
     Alle med brukeradministrator-rollen kan gi tilgang med fødselsnummer, D-nummer eller SNR. Det
     kreves ingen egen rettighet. Retten til å tildele gjelder for en organisasjon og et miljø, ikke
-    for en enkelt rolle. Utgåtte roller kan ikke tildeles (BRU-PER-GRU-003). Mangler retten,
-    avvises tildelingen før personen slås opp.
+    for en enkelt rolle. Utgåtte roller kan ikke tildeles, heller ikke fra rollesiden
+    (BRU-PER-GRU-003). Rollesiden tilbyr bare organisasjoner og miljøer der rollen er i
+    delegeringstaket (BRU-PER-ROL-002). Mangler retten, avvises tildelingen før personen slås opp.
+    # AVKLART 13.11.2026 (Kjetil): Rollesiden begrenses av delegeringstaket, og en utgått rolle kan
+    # aldri gis.
 
     Scenario: Brukeradministrator gir tilgang med nummer uten egen rettighet
       Gitt brukeradministratoren har brukeradministrator-rollen for en organisasjon i et miljø

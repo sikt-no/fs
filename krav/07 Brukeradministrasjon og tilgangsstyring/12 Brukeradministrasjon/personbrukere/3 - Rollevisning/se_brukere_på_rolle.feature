@@ -17,36 +17,38 @@ Egenskap: Se brukere som har en spesifikk rolle
   bruker som har rollen for flere organisasjoner eller i flere miljøer, står på én rad for hver
   tildeling.
 
+  En brukeradministrator med bare leserett ser rolleoversikten, rollens oversiktsside, listen og
+  filtrene, men kan ikke gi rollen eller fjerne tildelinger (BRU-PER-ROL-002).
+
   @must
   Scenario: Åpne en rolle fra rolleoversikten
     Gitt at brukeradministrator er i rolleoversikten
     Når brukeradministrator velger en rolle
     Så åpnes rollens oversiktsside
 
-  @must @openquestion
-  Scenario: Rolleoversikten viser bare roller brukeradministratoren har rett til å tildele
-    # Retten til å tildele gjelder for en organisasjon og et miljø, ikke for en enkelt rolle
-    # (BRU-PER-GRU-013).
+  @must
+  Scenario: Rolleoversikten viser bare roller i delegeringstaket
     # AVKLART 05.11.2026 (Kjetil, fs-admin !3046): Rolleoversikten har ikke filter på
     # organisasjon og miljø.
-    # ÅPNE SPØRSMÅL:
-    # - Rolleoversikten og valglistene i dialogen «Gi rollen til en person» er ikke begrenset av
-    #   delegeringstaket, mens valglisten i «Tildel roller» er det (BRU-PER-GRU-003). En rolle
-    #   utenfor delegeringstaket kan derfor gis fra rollesiden, men får ingen effekt der. Skal
-    #   rollesiden også begrenses av delegeringstaket, og i så fall hvordan, når rollen er gitt
-    #   og organisasjon og miljø velges i dialogen?
-    Gitt at brukeradministrator har rett til å tildele i minst én organisasjon og ett miljø
+    # AVKLART 13.11.2026 (Kjetil): Rollesiden begrenses av delegeringstaket, som valglisten i
+    # «Tildel roller» (BRU-PER-GRU-003).
+    Gitt at en rolle ikke er i delegeringstaket til noen applikasjon i organisasjonene og miljøene brukeradministrator administrerer
     Når brukeradministrator åpner rolleoversikten
-    Så vises rollene i rollekatalogen
+    Så vises ikke rollen
 
   @must
-  Scenario: Rolleoversikten er tom uten rett til å tildele
-    Gitt at brukeradministrator ikke har rett til å tildele i noen organisasjon
+  Scenario: Brukeradministrator med bare leserett ser rollene
+    # AVKLART 13.11.2026 (Kjetil): En brukeradministrator med bare leserett ser rollene,
+    # tildelingene og filtrene, men kan ikke gi rollen eller fjerne tildelinger.
+    Gitt at brukeradministrator har bare leserett i brukeradministrasjonen
     Når brukeradministrator åpner rolleoversikten
-    Så vises ingen roller
+    Så vises rollene i delegeringstaket
+    Og brukeradministrator kan åpne rollens oversiktsside og se tildelingene der
 
   @must
   Scenario: Vise tildelingene av en rolle
+    # AVKLART 13.11.2026 (Kjetil): Listen viser tildelinger til personer. En Feide-bruker som har
+    # rollen, står ikke i listen før tildelingene er flyttet til personen (BRU-PER-GRU-014).
     Gitt at en rolle er aktivt tildelt flere brukere
     Når brukeradministrator åpner rollens oversiktsside
     Så vises én rad for hver aktive tildeling av rollen til brukere brukeradministratoren ellers kan se
@@ -107,24 +109,17 @@ Egenskap: Se brukere som har en spesifikk rolle
     Så kan brukeradministrator velge test og review
     Men brukeradministrator kan ikke velge production
 
-  @openquestion
   Scenario: Organisasjonsfilteret tilbyr organisasjonene som er synlige i listen
-    # ÅPNE SPØRSMÅL:
-    # - Organisasjonsfilteret er bygget som miljøfilteret (fs-plattform !6706, 11.11.2026): det
-    #   tilbyr organisasjonene til tildelingene brukeradministrator ser, også der hen bare kan
-    #   lese. Er det riktig?
+    # AVKLART 13.11.2026 (Kjetil): Organisasjonsfilteret er som miljøfilteret, også for den som
+    # bare kan lese.
     Gitt at tildelingene brukeradministrator ser på rollens oversiktsside, gjelder for to organisasjoner
     Og rollen har også en tildeling for en tredje organisasjon som brukeradministrator ikke kan se
     Når brukeradministrator åpner organisasjonsfilteret på rollens oversiktsside
     Så kan brukeradministrator velge de to organisasjonene
     Men brukeradministrator kan ikke velge den tredje organisasjonen
 
-  @draft @openquestion
   Scenario: Søke på navn i tildelingene
-    # ÅPNE SPØRSMÅL:
-    # - Søket på navn er bygget i fs-admin !3046 (fra !3210), men verken workshopen 09.–10.11
-    #   eller andre avklaringer har tatt stilling til det. Skal det være med?
-    # - En person uten kjent navn blir ikke funnet av søket. Er det akseptabelt?
+    # AVKLART 13.11.2026 (Kjetil): Søket på navn beholdes.
     Gitt at brukeradministrator er på rollens oversiktsside
     Når brukeradministrator søker på en del av navnet til en bruker
     Så vises bare tildelingene til brukere der navnet inneholder søketeksten
@@ -138,11 +133,9 @@ Egenskap: Se brukere som har en spesifikk rolle
     Når brukeradministrator søker på en del av rollekoden eller beskrivelsen
     Så vises bare rollene der rollekoden eller beskrivelsen inneholder søketeksten
 
-  @draft @openquestion
   Scenario: Utgåtte roller vises ikke i rolleoversikten som standard
-    # ÅPNE SPØRSMÅL:
-    # - fs-admin !3046 skjuler utgåtte roller til brukeradministrator velger å vise dem. Skal
-    #   standarden være slik, og trengs valget? (spørsmål 3 i fs-admin !3210)
+    # AVKLART 13.11.2026 (Kjetil): Utgåtte roller er skjult som standard, og valget om å vise dem
+    # beholdes. En utgått rolle kan ses, men ikke gis (BRU-PER-ROL-002, BRU-PER-GRU-003).
     Gitt at en rolle er utgått
     Når brukeradministrator åpner rolleoversikten
     Så vises ikke den utgåtte rollen
@@ -161,9 +154,3 @@ Egenskap: Se brukere som har en spesifikk rolle
 #   organisasjon og miljø er AVKLART 10.11.2026 (Kjetil), se scenarioene over.
 # - Skal man kunne se brukere som har hatt rollen historisk (ikke bare aktive)? Eller skal det gå via BRU-PER-HIS-002?
 # - Skal listen kunne eksporteres?
-# - Listen viser bare tildelinger til personer (fs-plattform !6706). En Feide-bruker som har
-#   rollen, og som ikke har fått tildelingene flyttet til en person (BRU-PER-GRU-014), står ikke
-#   i listen. Er det riktig til tildelingene er flyttet?
-# - En brukeradministrator som bare kan lese, får en tom rolleoversikt og kommer ikke til rollens
-#   oversiktsside derfra, selv om listen og filtrene der viser det hen kan lese. Skal
-#   rolleoversikten også vise rollene for den som bare kan lese?

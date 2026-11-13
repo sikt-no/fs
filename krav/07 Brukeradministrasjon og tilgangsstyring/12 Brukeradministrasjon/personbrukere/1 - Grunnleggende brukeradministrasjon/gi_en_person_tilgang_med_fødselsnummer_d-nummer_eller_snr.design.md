@@ -87,12 +87,13 @@ til personen mangler, viser brukeroversikten, listen på rollens oversiktsside o
 personen nummeret i navnets plass. Det krever at API-et gir nummeret for personer uten navn.
 Når navnet er kjent, henter ingen av sidene nummeret.
 
-**Status 13.11.2026:** API-et har ikke nummeret på personen. Feltet venter på en
-personvernavklaring (fs-admin !3046, «Trenger backend» punkt 1). Til da viser FS Admin «Navn
-ikke kjent» der nummeret skal stå.
+**Status 13.11.2026:** API-et har ikke nummeret på personen ennå (fs-admin !3046, «Trenger
+backend» punkt 1), og FS Admin viser «Navn ikke kjent» der nummeret skal stå. Det er et avvik
+som rettes i koden (Kjetil, 13.11.2026); kravet står.
 
 ### Regel: Nummeret må ha gyldige kontrollsifre
-Klienten sjekker nummeret før innsending, så feilen kommer straks. Mellomrom fjernes først.
+Klienten sjekker nummeret før innsending, så feilen kommer straks. Mellomrom i et innlimt
+nummer fjernes først (godkjent av Kjetil 13.11.2026).
 Deretter sjekkes det i denne rekkefølgen: tomt felt, 11 siffer, FS-generert serie (måned 51–62
 og personnummer fra 70000), og de to kontrollsifrene (mod 11). Et FS-generert nummer får derfor
 sin egen tekst også når kontrollsifrene er gyldige.
@@ -111,10 +112,14 @@ om miljøet er ekte eller et testmiljø. Klienten viser feilen API-et gir:
 
 ### Regel: Brukeradministratoren kan bare gi roller hen har rett til å tildele
 Retten er retten til å tildele personer i organisasjonen og miljøet, ikke for en enkelt rolle.
-API-et gir `ManglerTildelingsrett` når den mangler.
+API-et gir `ManglerTildelingsrett` når den mangler. En utgått rolle kan ikke gis, og rollesiden
+tilbyr bare organisasjoner og miljøer der rollen er i delegeringstaket (se
+implementasjonsdetaljene for BRU-PER-ROL-002).
 
 ## Åpne designspørsmål
 
 - [ ] Skal snackbaren nevne organisasjonen og miljøet («… for {organisasjon} i {miljø}»)?
-- [ ] Mellomrom i et innlimt nummer fjernes før sjekk og innsending (fs-admin !3046). Er det
-      riktig?
+
+## Avklarte designspørsmål
+
+- Mellomrom i et innlimt nummer fjernes før sjekk og innsending. Avklart 13.11.2026 (Kjetil).

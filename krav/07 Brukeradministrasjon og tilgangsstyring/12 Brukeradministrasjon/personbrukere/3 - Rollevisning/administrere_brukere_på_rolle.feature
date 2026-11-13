@@ -26,8 +26,27 @@ Egenskap: Administrere brukere på en spesifikk rolle
     Så er rollen ikke lenger tildelt brukeren for organisasjonen og miljøet
     Og endringen skal være sporbar
 
+  Scenario: «Fjern tildeling» vises bare der brukeradministratoren har rett til å tildele
+    # AVKLART 13.11.2026 (Kjetil): «Fjern tildeling» vises bare når brukeradministratoren har rett
+    # til å tildele i både organisasjonen og miljøet på raden.
+    Gitt at en bruker har rollen tildelt direkte for en organisasjon og et miljø
+    Og brukeradministrator har rett til å tildele i organisasjonen, men ikke i miljøet
+    Når brukeradministrator ser raden for tildelingen på rollens oversiktsside
+    Så har raden ikke «Fjern tildeling»
+
+  Scenario: Brukeradministrator med bare leserett kan ikke gi eller fjerne
+    # AVKLART 13.11.2026 (Kjetil): En brukeradministrator med bare leserett ser rollesiden, men kan
+    # ikke gi rollen eller fjerne tildelinger.
+    Gitt at brukeradministrator har bare leserett i brukeradministrasjonen
+    Når brukeradministrator åpner rollens oversiktsside
+    Så kan brukeradministrator ikke gi rollen til en person
+    Og ingen rader har «Fjern tildeling»
+
   @must
   Regel: Gi rollen til en person med fødselsnummer, D-nummer eller SNR
+    # AVKLART 13.11.2026 (Kjetil): Valgene for organisasjon og miljø er begrenset av
+    # delegeringstaket, som valglisten i «Tildel roller» (BRU-PER-GRU-003). En utgått rolle kan
+    # aldri gis, heller ikke fra rollesiden, men den kan ses.
 
     Scenario: Personen finnes ikke i løsningen
       Gitt at brukeradministrator er på rollens oversiktsside
@@ -62,6 +81,18 @@ Egenskap: Administrere brukere på en spesifikk rolle
       Gitt at brukeradministrator er på rollens oversiktsside
       Når brukeradministrator skal gi rollen til en person med fødselsnummer
       Så kan brukeradministrator bare velge miljøer brukeradministratoren har brukeradministrator-rollen i
+
+    Scenario: Organisasjon og miljø kan bare velges der rollen er i delegeringstaket
+      Gitt at brukeradministrator er på rollens oversiktsside
+      Og rollen er ikke i delegeringstaket til noen applikasjon for en organisasjon og et miljø brukeradministrator administrerer
+      Når brukeradministrator skal gi rollen til en person med fødselsnummer
+      Så kan brukeradministrator ikke velge den organisasjonen og det miljøet sammen
+
+    Scenario: En utgått rolle kan ikke gis fra rollesiden
+      Gitt at rollen er utgått
+      Når brukeradministrator åpner rollens oversiktsside
+      Så kan brukeradministrator ikke gi rollen til en person
+      Men brukeradministrator ser tildelingene av rollen
 
     Scenario: Bare rollen på siden gis
       Gitt at brukeradministrator er på rollens oversiktsside

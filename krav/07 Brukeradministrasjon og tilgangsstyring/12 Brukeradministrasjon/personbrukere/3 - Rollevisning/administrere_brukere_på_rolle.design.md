@@ -27,11 +27,17 @@ tildelingen fjernes.
 - **Felter**, i denne rekkefølgen:
   1. **Organisasjon** (`FSCombobox`): organisasjonene der brukeradministratoren har rett til å
      tildele personer (`mineTildelingsorganisasjoner` med mottakeren `PERSONBRUKER`), som i
-     «Tildel roller». Har brukeradministratoren retten i bare én organisasjon, er den valgt og
-     feltet låst.
+     «Tildel roller», og bare de der rollen er i delegeringstaket i minst ett av miljøene. Har
+     brukeradministratoren bare én slik organisasjon, er den valgt og feltet låst.
   2. **Miljø** (`FSCombobox`): miljøene der brukeradministratoren har rett til å tildele personer
-     i den valgte organisasjonen (`mineTildelingsmiljoer` med mottakeren `PERSONBRUKER`). Låst til
-     organisasjon er valgt, og tømmes når organisasjonen byttes, som i «Tildel roller».
+     i den valgte organisasjonen (`mineTildelingsmiljoer` med mottakeren `PERSONBRUKER`), og der
+     rollen er i delegeringstaket for organisasjonen. Låst til organisasjon er valgt, og tømmes
+     når organisasjonen byttes, som i «Tildel roller».
+  - Delegeringstaket avgjøres som i «Tildel roller» (BRU-PER-GRU-003): en applikasjon har rollen
+    i delegeringstaket for organisasjonen og miljøet, direkte eller gjennom en
+    organisasjonssamling, eller en rolle i delegeringstaket gir den. I dag finnes
+    `skjulUtenforTak` bare på `mineTildelbareTilgangsroller` for én organisasjon og ett miljø
+    om gangen; valglistene trenger en kilde som gir kombinasjonene for én rolle.
   3. **Fødselsnummer, D-nummer eller SNR** (tekstfelt): 11 siffer, numerisk tastatur på mobil.
      Ikke autofullføring (`autocomplete="off"`).
 - Dialogen har ingen felt for stedkoder eller tidsbegrensning (regelen «Stedkoder og
@@ -70,41 +76,41 @@ hentes på nytt. Personen står da i listen.
 
 | Tilstand | UI-håndtering |
 |----------|---------------|
-| Knappen vises | Brukeradministratoren har rett til å tildele personer i minst én organisasjon. Knappen vises også når listen er tom |
-| Åpning | Organisasjon er valgt når brukeradministratoren har retten i bare én; ellers er feltene tomme. Nummerfeltet er tomt |
+| Knappen vises | Brukeradministratoren har rett til å tildele personer i minst én organisasjon, og rollen er ikke utgått. Knappen vises også når listen er tom. Med bare leserett vises den ikke |
+| Åpning | Organisasjon er valgt når det bare finnes én organisasjon å velge; ellers er feltene tomme. Nummerfeltet er tomt |
 | Validering | Feltfeil under feltet ved innsending. Mellomrom i nummeret fjernes, og nummeret sjekkes for 11 siffer, FS-generert serie og kontrollsifre i klienten før innsending. API-et sjekker det på nytt |
 | Sender | «Gi rollen» viser «Gir rollen …» og er deaktivert |
 | Feil | Feltfeil ved nummerfeltet for ugyldig nummer, FS-generert nummer, testperson i ekte miljø og ekte person i testmiljø. Andre feil i tilbakemeldingsflaten i dialogen. Dialogen blir stående, og feltene beholder verdiene |
 | Suksess | Dialogen lukkes, og nummeret slettes fra skjemaets tilstand. Snackbar med beskjeden |
-| «Fjern tildeling» vises | Raden er en direkte tildeling i en organisasjon der brukeradministratoren har rett til å tildele personer. Miljøet sjekkes av API-et |
+| «Fjern tildeling» vises | Raden er en direkte tildeling, og brukeradministratoren har rett til å tildele personer i både organisasjonen og miljøet på raden |
 | Fjerner | «Fjern tildeling» i bekreftelsen viser «Fjerner …» og er deaktivert |
 | Fjerning feilet | Bekreftelsen blir stående med årsaken i tilbakemeldingsflaten |
 
 ## Tekster
 
-Tekstene er godkjent av Kjetil 09.10.2026, bortsett fra der det står at de ikke er godkjent.
+Tekstene er godkjent av Kjetil 09.10.2026, og tekstene i bekreftelsen før «Fjern tildeling» og hjelpeteksten under nummerfeltet 13.11.2026, bortsett fra der det står at de ikke er godkjent.
 Tekstene for reglene i BRU-PER-GRU-013 (ugyldig nummer, testperson, rettighet og beskjeden ved
 suksess) står i implementasjonsdetaljene for GRU-013.
 
 | Hvor | Når vises den | Tekst | Variasjoner | Scenario |
 |------|---------------|-------|-------------|----------|
-| Knapp på rollens oversiktsside | Brukeradministratoren har rett til å tildele personer i minst én organisasjon | «Gi rollen til en person» | – | Personen finnes ikke i løsningen |
+| Knapp på rollens oversiktsside | Brukeradministratoren har rett til å tildele personer i minst én organisasjon, og rollen er ikke utgått | «Gi rollen til en person» | – | Personen finnes ikke i løsningen |
 | Dialogens overskrift | Dialogen er åpen | «Gi rollen til en person» | – | Personen finnes ikke i løsningen |
 | Under overskriften | Dialogen er åpen | «Rolle: {rollekode}» | `{rollekode}` | Bare rollen på siden gis |
 | Feltetikett | Alltid | «Organisasjon» | – | Valglisten for organisasjon er begrenset til organisasjoner brukeradministratoren administrerer |
 | Feltetikett | Alltid | «Miljø» | – | Valglisten for miljø er begrenset til miljøer brukeradministratoren administrerer |
 | Feltetikett | Alltid | «Fødselsnummer, D-nummer eller SNR» | – | Personen finnes ikke i løsningen |
-| Hjelpetekst under nummerfeltet | Alltid | «11 siffer.» (forslag 10.11.2026, ikke godkjent: den godkjente teksten sa at nummeret ikke vises etter at rollen er gitt, og det gjelder ikke når navnet mangler) | – | Personen finnes ikke i løsningen |
+| Hjelpetekst under nummerfeltet | Alltid | «11 siffer.» (godkjent 13.11.2026. Den tidligere teksten sa at nummeret ikke vises etter at rollen er gitt, og det gjelder ikke når navnet mangler) | – | Personen finnes ikke i løsningen |
 | Plassholder i valglistene | Ingenting valgt | «Ikke valgt» (finnes i fs-admin) | – | – |
 | Feltfeil, organisasjon eller miljø | Innsending uten organisasjon eller miljø | «Velg organisasjon og miljø.» (finnes i fs-admin som hjelpetekst) | – | Personen kan ikke legges til uten en rolle (GRU-013) |
 | Feltfeil, nummer | Innsending uten nummer | «Oppgi fødselsnummer, D-nummer eller SNR.» | – | Personen finnes ikke i løsningen |
 | Feltfeil, nummer | Nummeret har ikke 11 siffer | «Nummeret må ha 11 siffer.» | – | Personen finnes ikke i løsningen |
 | Primærknapp | Alltid / mens operasjonen pågår | «Gi rollen» / «Gir rollen …» | per tilstand | Personen finnes ikke i løsningen |
 | Sekundærknapp | Alltid | «Avbryt» | – | – |
-| Handling på raden | Direkte tildeling i en organisasjon der brukeradministratoren har rett til å tildele personer | «Fjern tildeling» | Skjermlesernavn: «Fjern tildeling: {navn}, {organisasjon}, {miljø}» | Fjerne en tildeling fra rollens oversiktsside |
-| Bekreftelsens overskrift | «Fjern tildeling» er valgt | «Fjerne tildelingen?» (fra fs-admin !3046, ikke godkjent) | – | Fjerne en tildeling fra rollens oversiktsside |
-| Bekreftelsens tekst | «Fjern tildeling» er valgt | «{navn} mister rollen {rollekode} for {organisasjon} i miljøet {miljø}. Tildelingen avsluttes, og rollen kan gis på nytt.» (fra fs-admin !3046, ikke godkjent) | `{navn}` er «Personen (navn ikke kjent)» når navnet mangler | Fjerne en tildeling fra rollens oversiktsside |
-| Bekreftelsens knapper | Alltid / mens operasjonen pågår | «Avbryt», «Fjern tildeling» / «Fjerner …» (fra fs-admin !3046, ikke godkjent) | per tilstand | Fjerne en tildeling fra rollens oversiktsside |
+| Handling på raden | Direkte tildeling i en organisasjon og et miljø der brukeradministratoren har rett til å tildele personer | «Fjern tildeling» | Skjermlesernavn: «Fjern tildeling: {navn}, {organisasjon}, {miljø}» | Fjerne en tildeling fra rollens oversiktsside |
+| Bekreftelsens overskrift | «Fjern tildeling» er valgt | «Fjerne tildelingen?» | – | Fjerne en tildeling fra rollens oversiktsside |
+| Bekreftelsens tekst | «Fjern tildeling» er valgt | «{navn} mister rollen {rollekode} for {organisasjon} i miljøet {miljø}. Tildelingen avsluttes, og rollen kan gis på nytt.» | `{navn}` er «Personen (navn ikke kjent)» når navnet mangler | Fjerne en tildeling fra rollens oversiktsside |
+| Bekreftelsens knapper | Alltid / mens operasjonen pågår | «Avbryt», «Fjern tildeling» / «Fjerner …» | per tilstand | Fjerne en tildeling fra rollens oversiktsside |
 | Snackbar | Tildelingen er fjernet | «Tildelingen er fjernet.» (fra fs-admin !3046, ikke godkjent) | «Tildelingen er fjernet — brukeren har fortsatt: {koder}» når personen fortsatt har rollen gjennom en annen rolle eller en organisasjonssamling | Fjerne en tildeling fra rollens oversiktsside |
 | Tilbakemeldingsflaten i bekreftelsen | Fjerningen feilet | Feiltekstene fra «Fjern roller» på detaljsiden for personen (finnes i fs-admin) | Én tekst per feil: mangler rett, arvet, gitt gjennom en organisasjonssamling, finnes ikke, annen feil | Fjerne en tildeling fra rollens oversiktsside |
 
@@ -129,7 +135,19 @@ Organisasjonen er valgt og feltet låst, som i «Tildel roller».
 
 ### Scenario: Valglisten for miljø er begrenset til miljøer brukeradministratoren administrerer
 Valgene er `mineTildelingsmiljoer` for den valgte organisasjonen, med mottakeren `PERSONBRUKER`:
-miljøene der brukeradministratoren har rett til å tildele personer i organisasjonen.
+miljøene der brukeradministratoren har rett til å tildele personer i organisasjonen, og der
+rollen er i delegeringstaket.
+
+### Scenario: Organisasjon og miljø kan bare velges der rollen er i delegeringstaket
+Se «Komponenter og layout». En kombinasjon der rollen ikke er i delegeringstaket, tilbys ikke,
+slik valglisten for rolle i «Tildel roller» ikke tilbyr en rolle utenfor delegeringstaket.
+
+### Scenario: En utgått rolle kan ikke gis fra rollesiden
+Knappen «Gi rollen til en person» vises ikke for en utgått rolle. Rollens oversiktsside og
+listen over tildelingene vises som for andre roller.
+
+### Scenario: Brukeradministrator med bare leserett kan ikke gi eller fjerne
+Knappen «Gi rollen til en person» og «Fjern tildeling» vises ikke. Listen og filtrene vises.
 
 ### Scenario: Bare rollen på siden gis
 Dialogen har ikke noe rollefelt.
@@ -140,9 +158,9 @@ Detaljsiden for personen har «Tildel roller» (BRU-PER-GRU-003), som også tild
 ### Scenario: Fjerne en tildeling fra rollens oversiktsside
 Hver rad er én tildeling, så «Fjern tildeling» fjerner rollen for organisasjonen og miljøet på
 raden. Brukerens øvrige tildelinger av rollen står urørt. Handlingen vises bare når
-brukeradministratoren har rett til å tildele personer i organisasjonen på raden. Klienten sjekker
-ikke miljøet; mangler retten i miljøet, avviser API-et fjerningen (`ManglerTildelingsrett`), og
-årsaken vises i bekreftelsen.
+brukeradministratoren har rett til å tildele personer i både organisasjonen og miljøet på raden
+(eget scenario i kravet).
+API-et avviser også fjerningen uten retten (`ManglerTildelingsrett`).
 
 ### Regel: Rader med arvet rolle har ikke «Fjern tildeling»
 Handlingen vises bare på rader der rollen er tildelt direkte. En arvet rolle fjernes ved å fjerne
@@ -157,17 +175,13 @@ trekkes tilbake for hele samlingen der den er gitt. API-et avviser fjerning for 
 Dialogen har ingen felt for dem. De settes for tildelingen på detaljsiden for personen
 (BRU-PER-GRU-005 og BRU-PER-GRU-006).
 
-## Åpne designspørsmål
-
-- [ ] Hjelpeteksten under nummerfeltet: fs-admin har den godkjente teksten «11 siffer. Nummeret
-      vises ikke etter at rollen er gitt.», mens forslaget over er «11 siffer.». Den godkjente
-      teksten stemmer så lenge API-et ikke gir nummeret (GRU-013, «Nummeret vises bare når navnet
-      mangler»). Hvilken skal stå?
-- [ ] Bekreftelsen før «Fjern tildeling», og tekstene i den: skal de godkjennes slik de står?
-- [ ] Skal «Fjern tildeling» også skjules når brukeradministratoren har retten i organisasjonen,
-      men ikke i miljøet på raden?
-
 ## Avklarte designspørsmål
+
+- Hjelpeteksten under nummerfeltet er «11 siffer.», fordi nummeret vises når navnet mangler.
+  Avklart 13.11.2026 (Kjetil).
+- Bekreftelsen før «Fjern tildeling» og tekstene i den er godkjent. Avklart 13.11.2026 (Kjetil).
+- «Fjern tildeling» vises bare når brukeradministratoren har rett til å tildele i både
+  organisasjonen og miljøet på raden. Avklart 13.11.2026 (Kjetil).
 
 - Snackbaren ved suksess har ingen lenke til detaljsiden for personen. Avklart 09.10.2026
   (Kjetil).
