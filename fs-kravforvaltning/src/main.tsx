@@ -10,7 +10,7 @@ import { Editor, type EditorFlush } from './Editor';
 import { fixed, NO_FILTER, type Filter } from './health';
 import { FeatureView, scenKey, stepKey } from './FeatureView';
 import { findGroups, findHits } from './find';
-import { buildFlows, flyterHash, FLOW_ROOT, parseFlyterHash, phasesOfParts, type Depth } from './flows';
+import { buildFlows, DEFAULT_TAB, flyterHash, FLOW_ROOT, parseFlyterHash, phasesOfParts, TAB_SLUG, tabOf, type Depth, type FlowTab } from './flows';
 import { Flyter } from './Flyter';
 import { headings, parseMd } from './markdown';
 import { MainBanner } from './MainBanner';
@@ -139,6 +139,8 @@ const savedDepth = (): Depth => {
   const v = load<number | 'alle'>('flowDepth', 1);
   return v === 'alle' ? Infinity : typeof v === 'number' && v >= 1 ? v : 1;
 };
+/** Fanen i Flyter brukeren valgte sist, ellers «Detaljer» */
+const savedTab = (): FlowTab => tabOf(load<string>('flowTab', TAB_SLUG[DEFAULT_TAB])) ?? DEFAULT_TAB;
 
 /** Forsiden: krav/README.md */
 const README = 'krav/README.md';
@@ -193,6 +195,8 @@ function App() {
   // Fasen Flyter skal vise når flyten åpnes fra en regel eller et scenario i Krav
   const [flowPhase, setFlowPhase] = useState<{ n: number; seq: number } | null>(null);
   const [flowDepth, setFlowDepth] = useState<Depth>(() => startFlow?.depth ?? savedDepth());
+  // Fanen i Flyter: fra ruta (`fane=…`) når en flyt er valgt, ellers den brukeren valgte sist. Den følger med til neste flyt
+  const [flowTab, setFlowTab] = useState<FlowTab>(() => (startFlow?.path ? startFlow.tab : savedTab()));
   // Hvilke av Avvik og Scopes som vises i menyen (tannhjulet etter menyen)
   const [menu, setMenu] = useState<MenuShow>(() => migrateMenu(load<Record<string, boolean>>('menu', {})));
   const [tavleSel, setTavleSel] = useState<string | null>(() => parseScopesHash(fromHash())?.sel ?? null);
@@ -291,7 +295,8 @@ function App() {
     setFind({ q: '', cur: 0, closed: {} });
   }, [current]);
   // Husk hvor brukeren er, til neste gang vieweren åpnes uten hash
-  useEffect(() => save('hash', location.hash), [current, mode, tavleSel, flowPath, flowDepth, reportSel]);
+  useEffect(() => save('hash', location.hash), [current, mode, tavleSel, flowPath, flowDepth, flowTab, reportSel]);
+  useEffect(() => save('flowTab', TAB_SLUG[flowTab]), [flowTab]);
   useEffect(() => save('flowDepth', flowDepth === Infinity ? 'alle' : flowDepth), [flowDepth]);
   // Tilbake på tavla trengs ikke båndet lenger
   useEffect(() => {
@@ -419,6 +424,7 @@ function App() {
         setFlowPath(fp);
         if (fp) setCurrent(fp);
         setFlowDepth(fl.depth ?? 1);
+        if (fp) setFlowTab(fl.tab);
       } else if (p === 'avvik') setMode('avvik');
       else if (o) {
         setMode('scopes');
@@ -657,7 +663,7 @@ function App() {
       const fp = current.startsWith(FLOW_ROOT) && entries[current]?.kind === 'feature' ? current : flowPath && entries[flowPath] ? flowPath : null;
       setMode('flyter');
       setFlowPath(fp);
-      history.pushState(null, '', flyterHash(fp, flowDepth));
+      history.pushState(null, '', flyterHash(fp, flowDepth, flowTab));
     } else if (m === 'verifisering') {
       setMode('verifisering');
       history.pushState(null, '', verifyHash(reportSel));
@@ -689,12 +695,20 @@ function App() {
     setMode('flyter');
     setFlowPath(p);
     setFlowPhase(phase ? { n: phase, seq: Date.now() } : null);
+    // Fanen følger med til neste flyt. En fase («Fase N i <flyt>» i Krav) vises i «Fasene»
+    const tab = phase ? 'phases' : flowTab;
+    setFlowTab(tab);
     if (p) setCurrent(p);
-    history.pushState(null, '', flyterHash(p, flowDepth));
+    history.pushState(null, '', flyterHash(p, flowDepth, tab));
   };
   const selectDepth = (d: Depth) => {
     setFlowDepth(d);
-    history.replaceState(null, '', flyterHash(flowPath, d));
+    history.replaceState(null, '', flyterHash(flowPath, d, flowTab));
+  };
+  const selectTab = (t: FlowTab) => {
+    if (t === flowTab) return;
+    setFlowTab(t);
+    history.replaceState(null, '', flyterHash(flowPath, flowDepth, t));
   };
   // «Vis flyten» og «Med i N flyter» i metalinja i Krav
   const flowLink = (() => {
@@ -877,9 +891,11 @@ function App() {
             ix={flows}
             path={flowPath}
             depth={flowDepth}
-            onSelect={p => void selectFlow(p)}
+            onSelect={(p, phase) => void selectFlow(p, phase)}
             goPhase={flowPhase}
             onDepth={selectDepth}
+            tab={flowTab}
+            onTab={selectTab}
             onOpen={(p, ln) => void select(p, ln)}
             sideHidden={treeHidden}
             outlineHidden={tocHidden}

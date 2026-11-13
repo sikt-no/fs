@@ -752,15 +752,29 @@ export function flowWarnings(ix: FlowIndex, f: Flow): FlowWarning[] {
 // Ruta ------------------------------------------------------------------------------------------
 
 export type Depth = number; // Infinity for alle
-/** `#/flyter`, `#/flyter/<sti>` og `#/flyter/<sti>?nivåer=2|alle`. Hashen er dekodet. `undefined` når det ikke er flytene */
-export function parseFlyterHash(h: string): { path: string | null; depth: Depth | null } | undefined {
+/** Fanene på siden for én flyt: Detaljer, Fasene, Kravene i flyten, Per domene, Matrise og Kart */
+export type FlowTab = 'details' | 'phases' | 'krav' | 'dom' | 'mx' | 'map';
+/** Fanen en flyt åpnes på før brukeren har valgt en annen */
+export const DEFAULT_TAB: FlowTab = 'details';
+/** Navnet fanen har i ruta (`fane=…`). «Detaljer» er standard, og står ikke i ruta */
+export const TAB_SLUG: Record<FlowTab, string> = { details: 'detaljer', phases: 'fasene', krav: 'krav', dom: 'domene', mx: 'matrise', map: 'kart' };
+/** Fanen fra navnet i ruta eller localStorage, `null` når navnet ikke er en fane */
+export const tabOf = (slug: string | null | undefined): FlowTab | null =>
+  (Object.keys(TAB_SLUG) as FlowTab[]).find(t => TAB_SLUG[t] === slug) ?? null;
+/**
+ * `#/flyter`, `#/flyter/<sti>` og `#/flyter/<sti>?nivåer=2|alle&fane=fasene|krav|domene|matrise|kart`. Hashen er
+ * dekodet. Uten `fane` er fanen «Detaljer». `undefined` når det ikke er flytene
+ */
+export function parseFlyterHash(h: string): { path: string | null; depth: Depth | null; tab: FlowTab } | undefined {
   const m = /^flyter(?:\/(.*?))?(?:\?(.*))?$/.exec(h);
   if (!m) return undefined;
-  const q = new URLSearchParams(m[2] ?? '').get('nivåer');
+  const params = new URLSearchParams(m[2] ?? '');
+  const q = params.get('nivåer');
   const depth = q === 'alle' ? Infinity : q && +q >= 1 ? Math.floor(+q) : null;
-  return { path: m[1] || null, depth };
+  const path = m[1] || null;
+  return { path, depth, tab: (path && tabOf(params.get('fane'))) || DEFAULT_TAB };
 }
-export function flyterHash(path: string | null, depth: Depth): string {
-  const q = depth === 1 ? '' : '?nivåer=' + (depth === Infinity ? 'alle' : depth);
-  return '#/flyter' + (path ? '/' + encodeURI(path) : '') + (path ? q : '');
+export function flyterHash(path: string | null, depth: Depth, tab: FlowTab = DEFAULT_TAB): string {
+  const params = [depth === 1 ? '' : 'nivåer=' + (depth === Infinity ? 'alle' : depth), tab === DEFAULT_TAB ? '' : 'fane=' + TAB_SLUG[tab]].filter(Boolean);
+  return '#/flyter' + (path ? '/' + encodeURI(path) + (params.length ? '?' + params.join('&') : '') : '');
 }
