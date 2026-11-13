@@ -93,21 +93,27 @@ Egenskap: Velge fag per poengvariant
     Bakgrunn:
       Gitt jeg har rettighet til å se og endre søknadsbehandling ved organisasjonen som behandler saken
 
-    # L2 lar saksbehandleren velge ett vitnemål for hele saken. Denne regelen
-    # utvider valget til hver poengvariant.
+    # Endret 13.11.2026: L2 lar saksbehandleren legge et vitnemål til grunn
+    # per poengvariantskombinasjon (poengvariant, kompetansekrav og grunnlag)
+    # (velge_vitnemål_som_grunnlag.feature, «Legge ulikt vitnemål til grunn
+    # for ulike poengvariantskombinasjoner»). Denne regelen legger til at fagvalget og
+    # endringene bygger på vitnemålet som er lagt til grunn.
     #
-    # AVKLART 03.11.2026: når L3 er levert, velges vitnemålet alltid per
-    # poengvariant. Saksbehandleren velger først poengvarianten, og så
-    # vitnemålet for den. Det finnes ikke lenger ett valg for hele saken, slik
-    # som i L2. Skissen har allerede en radioknapp per poengvariant i
-    # «Kvalifisering og poengberegning».
+    # Erstattet 13.11.2026: AVKLART 03.11.2026 sa at vitnemålet velges per
+    # poengvariant når L3 er levert, og at det ikke lenger finnes ett valg
+    # for hele saken, slik som i L2. Valget er nå per poengvariantskombinasjon allerede i
+    # L2.
 
-    Scenario: Legge ulikt vitnemål til grunn for ulike poengvarianter
+    Scenario: Fagvalget bygger på vitnemålet som er lagt til grunn for poengvariantskombinasjonen
       Gitt søkeren har to elektroniske vitnemål
-      Når jeg legger det ene vitnemålet til grunn for én poengvariant
-      Og jeg legger det andre vitnemålet til grunn for en annen poengvariant
-      Så beregnes hver poengvariant fra sitt eget vitnemål
-      Og det fremgår hvilket vitnemål hver poengvariant bygger på
+      Og jeg har lagt ulikt vitnemål til grunn for to poengvariantskombinasjoner
+      Når jeg velger fag i hver av poengvariantskombinasjonene
+      Så velger jeg blant fagene på vitnemålet som er lagt til grunn for poengvariantskombinasjonen
+      Og poengene i hver poengvariantskombinasjon er beregnet fra fagene jeg valgte
+      # Endret 13.11.2026: het «Legge ulikt vitnemål til grunn for ulike
+      # poengvarianter». Selve valget av vitnemål er flyttet til L2, og
+      # scenarioet beskriver nå det L3 legger til: fagvalget.
+      #
       # AVKLART 21.09.2026: ulikt vitnemål per poengvariant er tillatt. Det er
       # den logiske konsekvensen av at fagvalget er per poengvariant, og
       # formålet er det samme — der reglene gir et valg, å velge det som gir
@@ -145,7 +151,14 @@ Egenskap: Velge fag per poengvariant
       # gjøre endringer på et vitnemål i L3 (poeng lagt inn selv, fagvalg) og
       # L4 (endrede og manuelt innlagte fag).
 
+  @openquestion
   Regel: Fagvalget gjøres per poengvariant
+    # ÅPNE SPØRSMÅL:
+    # - Skal fagvalget gjøres per poengvariantskombinasjon (poengvariant, kompetansekrav
+    #   og grunnlag), og ikke per poengvariant? Fra 13.11.2026 legges
+    #   vitnemålet til grunn per poengvariantskombinasjon i L2, poengene lagres per
+    #   poengvariantskombinasjon, og to poengvariantskombinasjoner med samme poengvariant kan bygge på
+    #   ulike vitnemål.
 
     Bakgrunn:
       Gitt jeg har rettighet til å se og endre søknadsbehandling ved organisasjonen som behandler saken

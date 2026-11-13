@@ -18,16 +18,17 @@ Egenskap: Velge vitnemål som grunnlag for poengberegningen
   slik at søkere med flere vitnemål blir poengberegnet.
 
   Den automatiske saksbehandlingen stopper når søkeren har flere vitnemål.
-  Denne leveransen lar saksbehandleren peke ut ett vitnemål som grunnlag for
-  hele saken, og viser poengene som er beregnet fra det. Valget lagres når
-  saksbehandleren velger å bruke poengene, og låser poengene mot automatisk
-  reberegning.
+  Denne leveransen lar saksbehandleren legge et vitnemål til grunn for hver
+  poengvariantskombinasjon (poengvariant, kompetansekrav og grunnlag) i saken, og viser
+  poengene som er beregnet fra det. Poengvariantskombinasjonene kan bygge på ulike
+  vitnemål. Valget lagres når saksbehandleren velger å bruke poengene, og
+  låser poengene mot automatisk reberegning.
 
-  Valget gjelder ett vitnemål for hele saken. Å velge vitnemål og fag per
-  poengvariant kommer i L3 (velge_fag_per_poengvariant.feature), endring av
-  fag i L4a (endre_fag_i_grunnlaget.feature), og manuell inntasting av fag i
-  L4b (legge_inn_vitnemål_manuelt.feature). Visningen av
-  vitnemålene er L1 (vise_elektroniske_vitnemål.feature).
+  Valget gjelder hele vitnemålet. Å velge fag kommer i L3
+  (velge_fag_per_poengvariant.feature), endring av fag i L4a
+  (endre_fag_i_grunnlaget.feature), og manuell inntasting av fag i L4b
+  (legge_inn_vitnemål_manuelt.feature). Visningen av vitnemålene er L1
+  (vise_elektroniske_vitnemål.feature).
 
   Bakgrunn:
     Gitt jeg er innlogget i løsningen
@@ -44,10 +45,18 @@ Egenskap: Velge vitnemål som grunnlag for poengberegningen
     Bakgrunn:
       Gitt jeg har rettighet til å se og endre søknadsbehandling ved organisasjonen som behandler saken
 
+    # AVKLART 13.11.2026 (etter verify-rapporten 12.11.2026): vitnemålet
+    # legges til grunn per poengvariantskombinasjon (poengvariant, kompetansekrav og
+    # grunnlag), ikke ett vitnemål for hele saken. Saksbehandleren velger
+    # vitnemålet og hvilke poengvariantskombinasjoner det gjelder. To poengvariantskombinasjoner med
+    # samme poengvariant kan bygge på ulike vitnemål, og poengene lagres per
+    # poengvariantskombinasjon.
+
     Scenario: Velge vitnemålet som skal legges til grunn
       Gitt søkeren har flere elektroniske vitnemål
       Når jeg velger ett av vitnemålene
-      Så er det valgte vitnemålet grunnlaget for poengberegningen
+      Og jeg velger hvilke poengvariantskombinasjoner vitnemålet skal legges til grunn for
+      Så er det valgte vitnemålet grunnlaget for poengberegningen i poengvariantskombinasjonene jeg valgte
       Og poengene er beregnet fra det valgte vitnemålet
       Men valget er ikke lagret før jeg velger å bruke poengene
       # Skilt ut 08.10.2026: steget «Så vises fagene på det valgte vitnemålet»
@@ -56,9 +65,9 @@ Egenskap: Velge vitnemål som grunnlag for poengberegningen
       # velge_fag_per_poengvariant.feature).
 
     Scenario: Bytte til et annet vitnemål
-      Gitt jeg har lagt et vitnemål til grunn
-      Når jeg velger et annet vitnemål
-      Så er det nye vitnemålet grunnlaget for poengberegningen
+      Gitt jeg har lagt et vitnemål til grunn for en poengvariantskombinasjon
+      Når jeg legger et annet vitnemål til grunn for poengvariantskombinasjonen
+      Så er det nye vitnemålet grunnlaget for poengberegningen i poengvariantskombinasjonen
       Og poengene er beregnet fra det nye vitnemålet
       Men valget er ikke lagret før jeg velger å bruke poengene
       # AVKLART 11.11.2026 (gjennomgang med domeneekspertene): poengene for
@@ -69,6 +78,17 @@ Egenskap: Velge vitnemål som grunnlag for poengberegningen
       # gang. Steget «Og det fremgår hvilket vitnemål poengene nå bygger på»
       # er tatt ut, fordi det er dekket av «Se hvilket vitnemål et poeng
       # bygger på».
+
+    Scenario: Legge ulikt vitnemål til grunn for ulike poengvariantskombinasjoner
+      Gitt søkeren har to elektroniske vitnemål
+      Når jeg legger det ene vitnemålet til grunn for én poengvariantskombinasjon
+      Og jeg legger det andre vitnemålet til grunn for en annen poengvariantskombinasjon
+      Så er poengene i hver poengvariantskombinasjon beregnet fra vitnemålet som er lagt til grunn for poengvariantskombinasjonen
+      # AVKLART 13.11.2026: gjelder også poengvariantskombinasjoner med samme
+      # poengvariant. Koden for L2 velger allerede vitnemålet per poengvariantskombinasjon
+      # (verify-rapporten 12.11.2026, «Kravet er bak koden»). Hvordan fagvalget
+      # følger vitnemålet i hver poengvariantskombinasjon, står i L3
+      # (velge_fag_per_poengvariant.feature).
 
     Scenario: Et annullert vitnemål kan ikke legges til grunn
       Gitt søkeren har et annullert vitnemål
@@ -130,7 +150,7 @@ Egenskap: Velge vitnemål som grunnlag for poengberegningen
       Gitt jeg har lagt et vitnemål til grunn
       Og poengene er beregnet
       Når jeg åpner grunnlaget på søknaden
-      Så ser jeg disse poengene hver for seg for hver poengvariant
+      Så ser jeg disse poengene hver for seg for hver poengvariantskombinasjon
         | poeng          |
         | Karakterpoeng  |
         | Realfagspoeng  |
@@ -155,7 +175,7 @@ Egenskap: Velge vitnemål som grunnlag for poengberegningen
     Scenario: Se hvilket vitnemål et poeng bygger på
       Gitt poengene er beregnet fra et vitnemål
       Når jeg ser poengene
-      Så ser jeg hvilket vitnemål hvert poeng er beregnet fra
+      Så ser jeg hvilket vitnemål poengene i hver poengvariantskombinasjon er beregnet fra
       # Verifisert i ny stack: Poeng har vitnemaalsnummer,
       # statusAutomatiskUtregnet og merknadAutomatisk, der den siste sier
       # «hvilken automatisk beregning som satte verdien, og hvilket vitnemål
@@ -222,15 +242,15 @@ Egenskap: Velge vitnemål som grunnlag for poengberegningen
       Gitt jeg har rettighet til å se og endre søknadsbehandling ved organisasjonen som behandler saken
 
     Scenario: Beregne poengene uten å lagre
-      Gitt jeg har endret grunnlaget for en poengvariant
+      Gitt jeg har endret grunnlaget for en poengvariantskombinasjon
       Når jeg velger å beregne poengene
       Så ser jeg poengene beregnet fra det endrede grunnlaget
       Men grunnlaget og poengene er ikke lagret ennå
 
     Scenario: De lagrede poengene vises til jeg beregner på nytt
-      Gitt jeg har endret grunnlaget for en poengvariant
+      Gitt jeg har endret grunnlaget for en poengvariantskombinasjon
       Og jeg har ikke beregnet poengene etter endringen
-      Når jeg ser poengene på poengvarianten
+      Når jeg ser poengene på poengvariantskombinasjonen
       Så ser jeg de sist lagrede poengene uendret
       # AVKLART 11.11.2026 (gjennomgang med domeneekspertene): poengene
       # endres ikke før saksbehandleren beregner dem, og de merkes ikke som
@@ -238,14 +258,14 @@ Egenskap: Velge vitnemål som grunnlag for poengberegningen
       # til saksbehandleren beregner dem.
 
     Scenario: Bruke poengene
-      Gitt jeg har endret grunnlaget for en poengvariant
+      Gitt jeg har endret grunnlaget for en poengvariantskombinasjon
       Når jeg velger å bruke poengene
       Så er grunnlaget kontrollert av kontrollmotoren
       Og poengene er beregnet fra grunnlaget
-      Og grunnlaget og poengene er lagret på poengvarianten
+      Og grunnlaget og poengene er lagret på poengvariantskombinasjonen
 
     Scenario: Advarsel om endringer som ikke er lagret
-      Gitt jeg har endret grunnlaget for en poengvariant
+      Gitt jeg har endret grunnlaget for en poengvariantskombinasjon
       Og jeg har ikke brukt poengene etter endringen
       Når jeg går fra saken
       Så blir jeg advart om at endringen i grunnlaget ikke er lagret
@@ -316,16 +336,17 @@ Egenskap: Velge vitnemål som grunnlag for poengberegningen
       #
       # AVKLART 21.10.2026: rettigheten til å endre søknadsbehandling
       # (MODIFISERE_SØKNADSBEHANDLING) gir lov til å endre alt på saken. I L2
-      # er det å velge og bytte vitnemål, legge inn poeng selv, beregne
-      # poengene og låse opp poeng. Fra L3 og L4 kommer fagvalg og manuelt
-      # innlagte eller endrede fag i tillegg.
+      # er det å velge og bytte vitnemål, beregne og bruke poengene og låse
+      # opp poeng. Fra L3 og L4 kommer fagvalg, poeng saksbehandleren legger
+      # inn selv, og manuelt innlagte eller endrede fag i tillegg (endret
+      # 13.11.2026: å legge inn poeng selv er flyttet til L3 11.11.2026).
 
     Scenario: Saksbehandler med kun leserettighet ser grunnlaget
       Gitt jeg har rettighet til å se, men ikke til å endre, søknadsbehandling ved organisasjonen som behandler saken
       Når jeg åpner søknaden til en søker
       Så ser jeg søkerens vitnemål, det valgte grunnlaget og de beregnede poengene
       Og jeg ser hvilke valg som er gjort i grunnlaget, men kan ikke endre dem
-      Men jeg ser ikke muligheten til å beregne poengene eller legge inn poeng selv
+      Men jeg ser ikke muligheten til å beregne eller bruke poengene
       # At lesetilgang gir innsyn uten endringsmulighet er i tråd med
       # design-patterns-for-krav.md: det er *muligheten til å endre* som
       # skjules, ikke opplysningene. En saksbehandler som ser et poeng må
