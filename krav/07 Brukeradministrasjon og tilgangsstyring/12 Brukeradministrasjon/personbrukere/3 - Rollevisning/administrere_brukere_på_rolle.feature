@@ -1,7 +1,7 @@
 # language: no
 # GitHub: #492
 # Kilde: Brukerhistorie BH6 (temp/brukerhistorier.md)
-@BRU-PER-ROL-002 @in-progress
+@BRU-PER-ROL-002 @must @in-progress
 Egenskap: Administrere brukere på en spesifikk rolle
   Som brukeradministrator
   ønsker jeg å finne fram én spesifikk rolle og kunne legge til eller fjerne brukere på rollen
@@ -46,7 +46,8 @@ Egenskap: Administrere brukere på en spesifikk rolle
   Regel: Gi rollen til en person med fødselsnummer, D-nummer eller SNR
     # AVKLART 13.11.2026 (Kjetil): Valgene for organisasjon og miljø er begrenset av
     # delegeringstaket, som valglisten i «Tildel roller» (BRU-PER-GRU-003). En utgått rolle kan
-    # aldri gis, heller ikke fra rollesiden, men den kan ses.
+    # aldri gis, heller ikke fra rollesiden, men den kan ses (regelen «En utgått rolle kan ikke gis
+    # fra siden for rollen»).
 
     Scenario: Personen finnes ikke i løsningen
       Gitt at brukeradministrator er på rollens oversiktsside
@@ -87,12 +88,6 @@ Egenskap: Administrere brukere på en spesifikk rolle
       Og rollen er ikke i delegeringstaket til noen applikasjon for en organisasjon og et miljø brukeradministrator administrerer
       Når brukeradministrator skal gi rollen til en person med fødselsnummer
       Så kan brukeradministrator ikke velge den organisasjonen og det miljøet sammen
-
-    Scenario: En utgått rolle kan ikke gis fra rollesiden
-      Gitt at rollen er utgått
-      Når brukeradministrator åpner rollens oversiktsside
-      Så kan brukeradministrator ikke gi rollen til en person
-      Men brukeradministrator ser tildelingene av rollen
 
     Scenario: Bare rollen på siden gis
       Gitt at brukeradministrator er på rollens oversiktsside
@@ -141,3 +136,29 @@ Egenskap: Administrere brukere på en spesifikk rolle
       Gitt at brukeradministrator har gitt rollen til en person fra rollens oversiktsside
       Når brukeradministrator åpner detaljsiden for personen
       Så kan brukeradministrator sette stedkoder og tidsbegrensning for tildelingen der
+
+  @ref-BRU-PER-GRU-003 @openquestion
+  Regel: En utgått rolle kan ikke gis fra siden for rollen
+    # Det samme gjelder i valglisten på personbrukerens side (BRU-PER-GRU-003).
+    # AVKLART 13.11.2026 (Kjetil): En utgått rolle kan aldri gis, heller ikke fra rollesiden, men
+    # den kan ses: rollens oversiktsside og tildelingene vises som for andre roller.
+    # ÅPNE SPØRSMÅL:
+    # - Skal API-et også avvise at en utgått rolle gis, eller gjelder regelen bare i skjermbildet? (fs-admin MR !3431 skjuler valget, og avvisningen i API-et er varslet i en senere MR)
+
+    Scenario: Siden for en utgått rolle sier at rollen er utgått
+      Gitt en forretningsrolle er markert som utgått i rollekatalogen
+      Når brukeradministrator åpner rollens oversiktsside
+      Så ser brukeradministrator at rollen er utgått
+      Og brukeradministrator kan ikke gi rollen til en person
+      Men brukeradministrator ser tildelingene av rollen
+
+    Scenario: Tildelingene en utgått rolle har, kan fjernes
+      Gitt at brukeradministrator er på rollens oversiktsside
+      Og rollen er markert som utgått i rollekatalogen
+      Og brukeren har rollen aktivt tildelt
+      Når brukeradministrator fjerner brukeren fra rollen
+      Så skal rollen ikke lenger være tildelt brukeren
+
+# AVKLART 13.11.2026:
+# - Brukere legges til og fjernes fra rollen én om gangen, ikke flere i én operasjon.
+# - Det kjøres ingen valideringer (organisasjonstilhørighet, taushetserklæring eller konfliktrolle) når en bruker legges til på rollen.

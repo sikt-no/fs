@@ -132,7 +132,10 @@ Kjetils avklaringer 13.11.2026, lagt inn som AVKLART i kravene:
   «Brukeradministrator med bare leserett ser rollene» (ROL-001). ROL-002: nytt scenario
   «Brukeradministrator med bare leserett kan ikke gi eller fjerne».
 - **Utgåtte roller** er skjult som standard, med valget om å vise dem. En utgått rolle kan ses,
-  men aldri gis. ROL-002: nytt scenario «En utgått rolle kan ikke gis fra rollesiden».
+  men aldri gis. ROL-002: lagt inn i regelen «En utgått rolle kan ikke gis fra siden for rollen»
+  fra sikt-no/fs#1033 (Mats, flettet til main), som AVKLART og et ekstra steg om at
+  tildelingene vises. Vårt eget scenario «En utgått rolle kan ikke gis fra rollesiden» er tatt
+  bort, så det ikke står to ganger.
 - **Feide-brukere** står ikke i listen før tildelingene er flyttet (BRU-PER-GRU-014).
 - **Søk på navn** og **organisasjonsfilteret** beholdes (ikke lenger `@draft`/`@openquestion`).
 - **Tekster godkjent:** bekreftelsen før «Fjern tildeling», antallet «tildelinger i listen»,
