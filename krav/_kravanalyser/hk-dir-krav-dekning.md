@@ -392,7 +392,7 @@ Sortert etter område, med det som ikke er dekket først.
 | HK-10841 | Redigere personopplysninger på en søker (selvregistrerte) | Ikke dekket | – | Kravene i 05 Opplysninger om person lar administratoren se, ikke endre, søkerens personopplysninger; OPT-SØK-SØK-002 dekker bare registrering ved opprettelse av søknad. |
 | HK-9790 | Slå sammen brukere | Ikke dekket | – | Ingen krav om å slå sammen duplikate personer/brukere (bare duplikate organisasjoner i 09 Organisasjon, ORG-ADM-DUP-001). |
 | HK-9364 | Innhente brukerdata fra offentlige registre | Delvis | OPP-INT-FOL-001 — Integrasjon mot folkeregisteret (navn, fødselsnummer, adresse), `OPT-LÆR-POL-001 — Regel: Når søkeren har samtykket, sjekkes søkeren i registrene (Statens vegvesen)` | Mangler henting inn i søknadsbehandlingen generelt, førerrett fra Statens vegvesen utenom Politihøgskolen, og Helsepersonellregisteret. |
-| HK-9433 | Innhenting og informasjon om personopplysninger for ID-porten-søker | Delvis | OPP-INT-FOL-001, OPP-PRO-PRO-002 | Mangler henting fra KRR ved innlogging og informasjon/lenker om hvordan søkeren endrer navn, adresse, kontaktinfo og målform i FREG og KRR. |
+| HK-9433 | Innhenting og informasjon om personopplysninger for ID-porten-søker | Delvis | OPP-INT-FOL-001, OPP-PRO-PRO-002, OPT-SØK-SØK-021 — Søkerens kontaktopplysninger og målform | Henting av kontaktopplysninger og målform fra KRR ved innlogging, og målform for søkere uten KRR, er beskrevet som utkast (13.11.2026). Mangler informasjon/lenker om hvordan søkeren endrer navn og adresse i FREG. |
 | HK-9278 | Innsyn i egne personopplysninger | Dekket | OPP-PRO-PRO-002 — Se mine egne personopplysninger, OPP-PRO-PRO-003 | – |
 
 ### annet domene: 07 Brukeradministrasjon og tilgangsstyring

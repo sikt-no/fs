@@ -73,8 +73,8 @@ Egenskap: Se og endre egne personopplysninger
     # Mulig det bør være to forskjellige steg for person og administrator, siden de er i forskjellige brukerflater.
     Så ser "<administrator>" oppdatert <språk og målform>
 
+    # Målformen til søkere er bokmål eller nynorsk, se OPT-SØK-SØK-021.
     Eksempler:
       | person      | språk og målform | administrator |
       | Ola Normann | Norsk bokmål     | bodhild aga§  |
-      | King Arthur | Engelsk          | bodhild aga   |
       | Ivar Aasen  | Nynorsk          | bodhild aga   |
