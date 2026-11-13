@@ -10,9 +10,7 @@ Egenskap: Opptaksløpet
   # - Flyten for fasen er ikke skrevet (forslaget: klargjøre_opptaket.feature).
   Regel: Opptaket klargjøres før søknadsåpning
 
-  @openquestion
-  # ÅPNE SPØRSMÅL:
-  # - Flyten for fasen er ikke skrevet (forslaget: finne_og_søke_studier.feature).
+  @depends-on-FLY-OPT-SØK-001
   Regel: Søkeren finner studier og søker
 
   @depends-on-FLY-OPT-SAK-001
